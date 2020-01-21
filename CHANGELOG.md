@@ -3,6 +3,47 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.7.0
+
+### Security (1 change)
+
+- Update Mattermost to 5.17.3 (GitLab 12.6).
+
+### Fixed (1 change)
+
+- Check for puma when setting Geo primary. !3855
+
+### Changed (7 changes, 1 of them is from the community)
+
+- Disable Grafana Reporting & Update Check. !3793 (Stefan Schlesi)
+- Update exiftool to 11.70. !3801
+- Update gitlab-exporter to 5.1.0. !3806
+- Update jemalloc to 5.2.1. !3807
+- Update logrotate from r3-8-5 to 3.15.1. !3809
+- Use value provided as EXTERNAL_URL during installation/upgrade in gitlab.rb. !3828
+- Add grpc_latency_bucket config to praefect. !3854
+
+### Performance (2 changes)
+
+- Update Redis to 5.0.7 and redis-exporter to 1.3.4. !3392
+- Raise unicorn memory limits. !3853
+
+### Added (3 changes, 1 of them is from the community)
+
+- Add gitlab-ctl command to fetch Redis master connection details. !3811
+- Configure a maximum request duration for GitLab rails. !3830
+- Add Service Platform Metrics Grafana dashboard by updating grafana-dashboards to v1.3.0. !3843 (Ben Bodenmiller)
+
+### Other (6 changes)
+
+- Update https://git.code.sf.net/p/libpng/code from 1.6.35 to 1.6.37. !3800
+- Update rubygems/rubygems from 2.7.9 to 2.7.10. !3805
+- Update chef and chef-zero versions. !3810
+- Patch Git to get reused pack info. !3812
+- Collect NOTICE files of softwares under Apache license. !3821
+- Bump Ruby version to 2.6.5. !3827
+
+
 ## 12.6.4
 
 - No changes.
