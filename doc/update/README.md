@@ -838,7 +838,7 @@ These steps consist of:
 
 See example below:
 
-First download a GitLab 6.x.x [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
+First download a GitLab 12.x.x [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
 [EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
 package.
 
@@ -847,31 +847,30 @@ Steps:
 1. Stop GitLab:
 
    ```sh
+   # Stop GitLab and remove its supervision process
    sudo gitlab-ctl stop unicorn
    sudo gitlab-ctl stop puma
    sudo gitlab-ctl stop sidekiq
+   sudo systemctl stop gitlab-runsvdir
+   sudo systemctl disable gitlab-runsvdir
+   sudo rm /usr/lib/systemd/system/gitlab-runsvdir.service
+   sudo systemctl daemon-reload
+   sudo gitlab-ctl uninstall
    ```
 
-1. Downgrade GitLab to 6.x:
+1. Downgrade GitLab to 12.x:
 
    ```sh
    # Ubuntu
    sudo dpkg -r gitlab
-   sudo dpkg -i gitlab-6.x.x-yyy.deb
+   sudo dpkg -i gitlab-12.x.x-yyy.deb
 
    # CentOS:
    sudo rpm -e gitlab
-   sudo rpm -ivh gitlab-6.x.x-yyy.rpm
+   sudo rpm -ivh gitlab-12.x.x-yyy.rpm
    ```
 
-1. Prepare GitLab for receiving the backup restore. Due to a backup restore bug
-   in versions earlier than GitLab 6.8.0, it is needed to drop the database
-   _before_ running `gitlab-ctl reconfigure`, only if you are downgrading to
-   6.7.x or less:
-
-   ```sh
-   sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb gitlabhq_production
-   ```
+1. Prepare GitLab for receiving the backup restore.
 
 1. Reconfigure GitLab (includes database migrations):
 
