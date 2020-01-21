@@ -848,6 +848,7 @@ Steps:
 
    ```sh
    sudo gitlab-ctl stop unicorn
+   sudo gitlab-ctl stop puma
    sudo gitlab-ctl stop sidekiq
    ```
 
