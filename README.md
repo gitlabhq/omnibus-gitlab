@@ -141,6 +141,10 @@ To uninstall omnibus-gitlab, preserving your data (repositories, database, confi
 
 ```
 # Stop gitlab and remove its supervision process
+sudo systemctl stop    gitlab-runsvdir
+sudo systemctl disable gitlab-runsvdir
+sudo rm /usr/lib/systemd/system/gitlab-runsvdir.service
+sudo systemctl daemon-reload
 sudo gitlab-ctl uninstall
 
 # Debian/Ubuntu
