@@ -5,7 +5,7 @@ recommend using it in production yet.
 
 Praefect is a manager aiming to maintain replicas for each repository. Praefect
 is in active development. The goal is to achieve a highly available storage cluster,
-but this is not the case yet, so it is recommened to run Praefect on a different node
+but this is not the case yet, so it is recommended to run Praefect on a different node
 than the Gitaly nodes.
 
 ```ruby
