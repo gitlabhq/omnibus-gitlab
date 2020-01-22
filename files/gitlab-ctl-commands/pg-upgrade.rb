@@ -89,6 +89,15 @@ add_command_under_category 'pg-upgrade', 'database',
     Kernel.exit 0
   end
 
+  unless GitlabCtl::Util.progress_message(
+    "Checking if postgresql['version'] is set"
+  ) do
+    @attributes['postgresql']['version'].nil?
+  end
+    log "postgresql['version'] is set in /etc/gitlab/gitlab.rb. Not checking for a PostgreSQL upgrade"
+    Kernel.exit 0
+  end
+
   log 'Checking for a newer version of PostgreSQL to install'
   if upgrade_version && Dir.exist?("#{INST_DIR}/#{upgrade_version.major}")
     log "Upgrading PostgreSQL to #{upgrade_version}"
@@ -113,15 +122,6 @@ add_command_under_category 'pg-upgrade', 'database',
     end
   end
     log "#{link} is not linked to #{bin_file}, unable to proceed with non-standard installation"
-    Kernel.exit 1
-  end
-
-  unless GitlabCtl::Util.progress_message(
-    "Checking if postgresql['version'] is set"
-  ) do
-    @attributes['postgresql']['version'].nil?
-  end
-    log "postgresql['version'] is set in /etc/gitlab/gitlab.rb. Please remove this and run gitlab-ctl reconfigure before proceeding "
     Kernel.exit 1
   end
 
