@@ -246,7 +246,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       service = Services.enabled?('puma') ? 'puma' : 'unicorn'
       user_config = Gitlab[service]
       service_config = Gitlab['node']['gitlab'][service]
-      user_config['worker_timeout'] || service_config['worker_timeout']
+      (user_config['worker_timeout'] || service_config['worker_timeout']).to_i
     end
   end
 end unless defined?(GitlabRails) # Prevent reloading during converge, so we can test
