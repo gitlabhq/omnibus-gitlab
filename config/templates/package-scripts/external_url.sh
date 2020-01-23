@@ -38,9 +38,14 @@ set_protocol()
 }
 
 if [ -z "${EXTERNAL_URL}" ]; then
-  check_if_ec2
-  if [ $? -eq 0 ]  ; then
-    get_details_from_ec2
+  # Grab address from EC2 only if this is first installation. For upgrades,
+  # EXTERNAL_URL env variable is the only thing that may define external URL
+  # other than what is in gitlab.rb
+  if ! [ -e /etc/gitlab/gitlab.rb ] ; then
+    check_if_ec2
+    if [ $? -eq 0 ]  ; then
+      get_details_from_ec2
+    fi
   fi
 else
     set_protocol
