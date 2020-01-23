@@ -167,7 +167,7 @@ danger-review:
   except:
     refs:
       - schedules@gitlab-org/omnibus-gitlab
-      - /^[\d-]+-stable(-ee)?$/
+      - /^[\d-]+-stable(-patch-[\d]+)?$/
     variables:
       - $DEPS_PIPELINE
   script:
