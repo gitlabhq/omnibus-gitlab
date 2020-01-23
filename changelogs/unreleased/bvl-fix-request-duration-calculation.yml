@@ -1,0 +1,5 @@
+---
+title: Handle worker timeouts configured as strings
+merge_request: 3877
+author:
+type: fixed

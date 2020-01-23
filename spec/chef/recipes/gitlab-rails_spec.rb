@@ -1970,10 +1970,11 @@ describe 'gitlab::gitlab-rails' do
       using RSpec::Parameterized::TableSyntax
 
       where(:web_worker, :configured_timeout, :expected_duration) do
-        :unicorn | nil | 57
-        :unicorn | 30  | 29
-        :puma    | nil | 57
-        :puma    | 120 | 114
+        :unicorn | nil  | 57
+        :unicorn | 30   | 29
+        :unicorn | "30" | 29
+        :puma    | nil  | 57
+        :puma    | 120  | 114
       end
 
       with_them do
