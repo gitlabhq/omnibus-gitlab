@@ -568,6 +568,8 @@ default['gitlab']['gitlab-pages']['sentry_dsn'] = nil
 default['gitlab']['gitlab-pages']['sentry_environment'] = nil
 default['gitlab']['gitlab-pages']['headers'] = nil
 default['gitlab']['gitlab-pages']['api_secret_key'] = nil
+default['gitlab']['gitlab-pages']['gitlab-client-http-timeout'] = nil
+default['gitlab']['gitlab-pages']['gitlab-client-jwt-expiry'] = nil
 
 ####
 # Nginx
