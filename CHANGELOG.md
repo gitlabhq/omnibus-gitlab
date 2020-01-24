@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.7.1
+
+### Fixed (1 change)
+
+- Fetch external URL from EC2 only on fresh installations. !3878
+
+
 ## 12.7.0
 
 ### Security (1 change)

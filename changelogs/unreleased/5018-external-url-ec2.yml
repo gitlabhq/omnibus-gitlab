@@ -1,5 +1,0 @@
----
-title: Fetch external URL from EC2 only on fresh installations
-merge_request: 3878
-author:
-type: fixed
