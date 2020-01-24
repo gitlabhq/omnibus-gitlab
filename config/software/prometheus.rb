@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'prometheus'
-version = Gitlab::Version.new('prometheus', '2.13.1')
+version = Gitlab::Version.new('prometheus', '2.16.0')
 default_version version.print
 
 license 'APACHE-2.0'
@@ -31,20 +31,20 @@ skip_transitive_dependency_licensing true
 
 source git: version.remote
 
-go_source = 'github.com/prometheus/prometheus'
-relative_path "src/#{go_source}"
+relative_path 'src/github.com/prometheus/prometheus'
 
 build do
+  prometheus_source_dir = "#{Omnibus::Config.source_dir}/prometheus"
+  cwd = "#{prometheus_source_dir}/#{relative_path}"
   env = {
-    'GOPATH' => "#{Omnibus::Config.source_dir}/prometheus",
+    'GOPATH' => prometheus_source_dir,
     'GO111MODULE' => 'on',
   }
-  exporter_source_dir = "#{Omnibus::Config.source_dir}/prometheus"
-  cwd = "#{exporter_source_dir}/src/#{go_source}"
 
   prom_version = Prometheus::VersionFlags.new(version)
 
-  command "go build -mod=vendor -ldflags '#{prom_version.print_ldflags}' ./cmd/prometheus", env: env, cwd: cwd
+  make 'assets', env: env, cwd: cwd
+  command "go build -mod=vendor -tags netgo,builtinassets -ldflags '#{prom_version.print_ldflags}' ./cmd/prometheus", env: env, cwd: cwd
   copy 'prometheus', "#{install_dir}/embedded/bin/prometheus"
 
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"

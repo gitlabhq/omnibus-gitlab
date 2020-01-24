@@ -1,0 +1,5 @@
+---
+title: Upgrade Prometheus to 2.16.0
+merge_request: 3888
+author:
+type: changed
