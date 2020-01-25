@@ -151,7 +151,7 @@ is operated behind a corporate internet proxy. In `/etc/gitlab/gitlab.rb`
 supply a `mattermost['env']` with a hash value. For example:
 
 ```ruby
-mattermost['env'] = {"http_proxy" => "my_proxy", "https_proxy" => "my_proxy", "no_proxy" => "my_no_proxy"}
+mattermost['env'] = {"HTTP_PROXY" => "my_proxy", "HTTPS_PROXY" => "my_proxy", "NO_PROXY" => "my_no_proxy"}
 ```
 
 Run `sudo gitlab-ctl reconfigure` to apply the changes.
