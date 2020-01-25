@@ -617,18 +617,18 @@ instructions.
 
 You now need to nominate:
 
-- One instance for use as the **primary** "deploy node".
-- A second instance for use as the **secondary** "deploy node".
+- One instance for use as the **primary** "deploy node" on the Geo **primary** multi-node deployment.
+- One instance for use as the **secondary** "deploy node" on each Geo **secondary** multi-node deployment.
 
 Updates must be performed in the following order:
 
 1. Update Geo **primary** multi-node deployment.
-1. Update Geo **secondary** multi-node deployment.
+1. Update Geo **secondary** multi-node deployments.
 1. Post-deployment migrations and checks.
 
 #### Step 1: Updating the Geo primary multi-node deployment
 
-**On all nodes _including_ primary and secondary "deploy nodes"**
+**On all nodes _including_ the primary "deploy node"**
 
 Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
 installation only, this will prevent the upgrade from running
@@ -696,9 +696,9 @@ sudo gitlab-ctl restart sidekiq
 #### Step 2: Updating each Geo secondary multi-node deployment
 
 NOTE: **Note:**
-Only proceed if you have successfully completed all steps on the **primary** "deploy node".
+Only proceed if you have successfully completed all steps on the Geo **primary** multi-node deployment.
 
-**On all nodes _including_ primary and secondary "deploy nodes"**
+**On all nodes _including_ the secondary "deploy node"**
 
 Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
 installation only, this will prevent the upgrade from running
@@ -708,7 +708,7 @@ installation only, this will prevent the upgrade from running
 sudo touch /etc/gitlab/skip-auto-reconfigure
 ```
 
-**On all other nodes excluding the primary "deploy node"**
+**On all other nodes _excluding_ the secondary "deploy node"**
 
 1. Ensure that `geo_secondary['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
 
@@ -736,7 +736,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-**On all nodes _excluding_ the primary "deploy node"**
+**On all nodes _excluding_ the secondary "deploy node"**
 
 1. Update the GitLab package
 
