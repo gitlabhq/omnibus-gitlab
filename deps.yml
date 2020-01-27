@@ -136,13 +136,6 @@ dependencies:
         - filename: config/software/zlib.rb
           pattern: "Gitlab::Version.new\\('zlib', 'v(\\S+)'\\)"
           tag_prefix: 'v'
-      # exiftool
-      https://github.com/exiftool/exiftool.git:
-        replace_in_files:
-        - filename: config/software/exiftool.rb
-          pattern: "Gitlab::Version.new\\('exiftool', '11.(\\d+)'\\)"
-          tag_prefix: '11.'
-          semver: false
       # gitlab-exporter
       https://gitlab.com/gitlab-org/gitlab-exporter.git:
         replace_in_files:
