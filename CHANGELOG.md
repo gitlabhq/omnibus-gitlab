@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.6.5
+
+### Security (1 change)
+
+- Update Mattermost to 5.17.3 (GitLab 12.6).
+
+
 ## 12.6.4
 
 - No changes.
