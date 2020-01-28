@@ -414,7 +414,7 @@ groups:
       )
   - record: gitlab_sli:gitlab_component_saturation:ratio
     labels:
-      component: 'open_fds'
+      component: 'open_ruby_fds'
     expr: >
       max(
         max_over_time(ruby_file_descriptors[1m])
