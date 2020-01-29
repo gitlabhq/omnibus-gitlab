@@ -149,7 +149,7 @@ The steps can be summed up to:
    [check its contents](https://packages.gitlab.com/gitlab/gitlab-ee/install).
 
 1. Next, install the `gitlab-ee` package. Note that this will automatically
-   uninstall the `gitlab-ce` package on your GitLab server. Reconfigure
+   uninstall the `gitlab-ce` package on your GitLab server. `reconfigure`
    Omnibus right after the `gitlab-ee` package is installed. Make sure that you
    install the exact same GitLab version:
 
@@ -212,7 +212,7 @@ step to find the current GitLab version and then follow the steps in
 ## Zero downtime updates
 
 NOTE: **Note:**
-This is only available in GitLab 9.1.0 or newer. Skipping restarts during reconfigure with `/etc/gitlab/skip-auto-reconfigure` was added in [version 10.6](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2270). If running a version prior to 10.6, you will need to create `/etc/gitlab/skip-auto-migrations`.
+This is only available in GitLab 9.1.0 or newer. Skipping restarts during `reconfigure` with `/etc/gitlab/skip-auto-reconfigure` was added in [version 10.6](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2270). If running a version prior to 10.6, you will need to create `/etc/gitlab/skip-auto-migrations`.
 
 It's possible to upgrade to a newer version of GitLab without having to take
 your GitLab instance offline.
@@ -252,13 +252,13 @@ If you meet all the requirements above, follow these instructions in order. Ther
 
    If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
 
-1. To get the regular migrations in place, run
+1. To get the regular migrations and latest code in place, run
 
    ```sh
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-1. Once the node is updated and reconfigure finished successfully, complete the migrations with
+1. Once the node is updated and `reconfigure` finished successfully, complete the migrations with
 
    ```sh
    sudo gitlab-rake db:migrate
@@ -298,6 +298,26 @@ node throughout the process.
 
 - Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
 
+**Gitaly only nodes**
+
+- Update the GitLab package
+
+  ```sh
+  # Debian/Ubuntu
+  sudo apt-get update && sudo apt-get install gitlab-ce
+
+  # Centos/RHEL
+  sudo yum install gitlab-ce
+  ```
+
+  If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
+
+- Ensure nodes are running the latest code
+
+  ```sh
+  sudo gitlab-ctl reconfigure
+  ```
+
 **Deploy node**
 
 - Update the GitLab package
@@ -333,7 +353,7 @@ node throughout the process.
   `gitlab_rails['db_host']` and `gitlab_rails['db_port']` with the database
   master's host and port.
 
-- To get the regular database migrations in place, run
+- To get the regular database migrations and latest code in place, run
 
   ```sh
   sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
@@ -510,7 +530,7 @@ Log in to your **primary** node, executing the following:
    sudo yum install gitlab-ee
    ```
 
-1. To get the database migrations in place, run
+1. To get the database migrations and latest code in place, run
 
    ```sh
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
@@ -551,7 +571,7 @@ On each **secondary** node, executing the following:
    sudo yum install gitlab-ee
    ```
 
-1. To get the database migrations in place, run
+1. To get the database migrations and latest code in place, run
 
    ```sh
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
@@ -648,6 +668,24 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
+**On primary Gitaly only nodes**
+
+1. Update the GitLab package
+
+   ```sh
+   # Debian/Ubuntu
+   sudo apt-get update && sudo apt-get install gitlab-ee
+
+   # Centos/RHEL
+   sudo yum install gitlab-ee
+   ```
+
+1. Ensure nodes are running the latest code
+
+   ```sh
+   sudo gitlab-ctl reconfigure
+   ```
+
 **On the primary "deploy node"**
 
 1. Update the GitLab package
@@ -660,7 +698,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo yum install gitlab-ee
    ```
 
-1. To get the regular database migrations in place, run
+1. To get the regular database migrations and latest code in place, run
 
    ```sh
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
@@ -718,6 +756,24 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
+**On secondary Gitaly only nodes**
+
+1. Update the GitLab package
+
+   ```sh
+   # Debian/Ubuntu
+   sudo apt-get update && sudo apt-get install gitlab-ee
+
+   # Centos/RHEL
+   sudo yum install gitlab-ee
+   ```
+
+1. Ensure nodes are running the latest code
+
+   ```sh
+   sudo gitlab-ctl reconfigure
+   ```
+
 **On the secondary "deploy node"**
 
 1. Update the GitLab package
@@ -730,7 +786,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo yum install gitlab-ee
    ```
 
-1. To get the regular database migrations in place, run
+1. To get the regular database migrations and latest code in place, run
 
    ```sh
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
@@ -815,7 +871,7 @@ sudo gitlab-ctl restart geo-logcursor
 ## Upgrading Gitaly servers
 
 Gitaly servers must be upgraded to the newer version prior to upgrading the application server.
-This prevents the GRPC client on the application server from sending RPCs that the old Gitaly version
+This prevents the gRPC client on the application server from sending RPCs that the old Gitaly version
 does not support.
 
 ## Downgrading
