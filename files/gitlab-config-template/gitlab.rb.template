@@ -131,6 +131,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! request (default: 10)
 # gitlab_rails['webhook_timeout'] = 10
 
+### GraphQL Settings
+###! Tells the rails application how long it has to complete a GraphQL request.
+###! We suggest this value to be higher than the database timeout value
+###! and lower than the worker timeout set in unicorn/puma. (default: 30)
+# gitlab_rails['graphql_timeout'] = 30
+
 ### Trusted proxies
 ###! Customize if you have GitLab behind a reverse proxy which is running on a
 ###! different machine.
