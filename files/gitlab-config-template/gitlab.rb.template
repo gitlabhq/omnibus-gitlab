@@ -1361,10 +1361,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['auth_secret'] = nil # Generated if not present
 
 ##! GitLab API HTTP client connection timeout
-# gitlab_pages['gitlab-client-http-timeout'] = "10s"
+# gitlab_pages['gitlab_client_http_timeout'] = "10s"
 
 ##! GitLab API JWT Token expiry time"
-# gitlab_pages['gitlab-client-jwt-expiry'] = "30s"
+# gitlab_pages['gitlab_client_jwt_expiry'] = "30s"
 
 ##! Define custom gitlab-pages HTTP headers for the whole instance
 # gitlab_pages['headers'] = []
