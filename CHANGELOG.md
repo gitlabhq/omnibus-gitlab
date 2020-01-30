@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.6.6
+
+- No changes.
+
 ## 12.6.5
 
 ### Security (1 change)
