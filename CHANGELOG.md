@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.7.5
+
+### Fixed (1 change)
+
+- Fix promethues duplicate rule. !3891
+
+
 ## 12.7.4
 
 - No changes.
