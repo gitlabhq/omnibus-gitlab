@@ -12,7 +12,7 @@ end
 module GitlabCtl
   class PgUpgrade
     include GitlabCtl::Util
-    attr_accessor :base_path, :data_path, :tmp_dir, :timeout, :default_version, :upgrade_version, :psql_command
+    attr_accessor :base_path, :data_path, :tmp_dir, :timeout, :default_version, :upgrade_version, :running_version, :psql_command
     attr_writer :data_dir, :tmp_data_dir
 
     def initialize(base_path, data_path, default_version, upgrade_version, tmp_dir = nil, timeout = nil, psql_command = nil)
@@ -22,6 +22,7 @@ module GitlabCtl
       @timeout = timeout
       @default_version = default_version
       @upgrade_version = upgrade_version
+      @running_version = fetch_running_version
       @psql_command ||= "gitlab-psql"
     end
 
@@ -106,8 +107,8 @@ module GitlabCtl
       "#{base_postgresql_path}/#{upgrade_version.major}"
     end
 
-    def default_version_path
-      "#{base_postgresql_path}/#{default_version.major}"
+    def running_version_path
+      "#{base_postgresql_path}/#{running_version.major}"
     end
 
     def run_pg_upgrade
@@ -115,7 +116,7 @@ module GitlabCtl
         begin
           run_pg_command(
             "#{upgrade_version_path}/bin/pg_upgrade " \
-            "-b #{default_version_path}/bin " \
+            "-b #{running_version_path}/bin " \
             "--old-datadir=#{data_dir}  " \
             "--new-datadir=#{tmp_data_dir}.#{upgrade_version.major}  " \
             "-B #{upgrade_version_path}/bin"
@@ -127,7 +128,7 @@ module GitlabCtl
           false
         end
       end
-        raise GitlabCtl::Errors::ExecutionError 'Error upgrading the database'
+        raise GitlabCtl::Errors::ExecutionError, 'Error upgrading the database'
       end
     end
 

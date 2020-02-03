@@ -36,7 +36,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
   maintenance_mode('enable')
 
   if GitlabCtl::Util.progress_message('Checking if we need to downgrade') do
-    @db_worker.fetch_running_version == default_version
+    @db_worker.running_version == default_version
   end
     log "Already running #{default_version}"
     Kernel.exit 1
@@ -58,7 +58,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     log 'Received interrupt, not doing anything'
     Kernel.exit 0
   end
-  revert
+  revert(default_version)
   maintenance_mode('disable')
 end
 
@@ -78,11 +78,9 @@ add_command_under_category 'pg-upgrade', 'database',
   @roles = GitlabCtl::Util.roles(base_path)
   @attributes = GitlabCtl::Util.get_node_attributes(base_path)
 
-  running_version = @db_worker.fetch_running_version
-
   unless GitlabCtl::Util.progress_message(
     'Checking for an omnibus managed postgresql') do
-      !running_version.nil? && \
+      !@db_worker.running_version.nil? && \
           service_enabled?('postgresql')
     end
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
@@ -107,7 +105,7 @@ add_command_under_category 'pg-upgrade', 'database',
   end
 
   if GitlabCtl::Util.progress_message('Checking if we already upgraded') do
-    running_version == upgrade_version
+    @db_worker.running_version == upgrade_version
   end
     $stderr.puts "The latest version #{upgrade_version} is already running, nothing to do"
     Kernel.exit 0
@@ -116,7 +114,7 @@ add_command_under_category 'pg-upgrade', 'database',
   unless GitlabCtl::Util.progress_message(
     'Checking if PostgreSQL bin files are symlinked to the expected location'
   ) do
-    Dir.glob("#{INST_DIR}/#{running_version.major}/bin/*").each do |bin_file|
+    Dir.glob("#{INST_DIR}/#{@db_worker.running_version.major}/bin/*").each do |bin_file|
       link = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
       File.symlink?(link) && File.readlink(link).eql?(bin_file)
     end
@@ -364,7 +362,7 @@ end
 def cleanup_data_dir
   unless GitlabCtl::Util.progress_message('Move the old data directory out of the way') do
     run_command(
-      "mv #{@db_worker.data_dir} #{@db_worker.tmp_data_dir}.#{default_version.major}"
+      "mv #{@db_worker.data_dir} #{@db_worker.tmp_data_dir}.#{@db_worker.running_version.major}"
     )
   end
     die 'Error moving data for older version, '
@@ -411,11 +409,11 @@ def version_from_manifest(software)
 end
 
 def default_version
-  PGVersion.parse(version_from_manifest('postgresql'))
+  PGVersion.parse(version_from_manifest('postgresql_new'))
 end
 
 def upgrade_version
-  PGVersion.parse(version_from_manifest('postgresql_new'))
+  PGVersion.parse(version_from_manifest('postgresql_alpha'))
 end
 
 def create_links(version)
@@ -427,16 +425,16 @@ def create_links(version)
   end
 end
 
-def revert
+def revert(version)
   log '== Reverting =='
   run_sv_command_for_service('stop', 'postgresql')
-  if Dir.exist?("#{@db_worker.tmp_data_dir}.#{default_version.major}")
+  if Dir.exist?("#{@db_worker.tmp_data_dir}.#{version.major}")
     run_command("rm -rf #{@db_worker.data_dir}")
     run_command(
-      "mv #{@db_worker.tmp_data_dir}.#{default_version.major} #{@db_worker.data_dir}"
+      "mv #{@db_worker.tmp_data_dir}.#{version.major} #{@db_worker.data_dir}"
     )
   end
-  create_links(default_version)
+  create_links(version)
   run_sv_command_for_service('start', 'postgresql')
   log'== Reverted =='
 end
@@ -468,8 +466,8 @@ end
 def die(message)
   $stderr.puts '== Fatal error =='
   $stderr.puts message
-  revert
-  $stderr.puts "== Reverted to #{default_version}. Please check output for what went wrong =="
+  revert(@db_worker.running_version)
+  $stderr.puts "== Reverted to #{@db_worker.running_version}. Please check output for what went wrong =="
   maintenance_mode('disable')
   exit 1
 end
@@ -477,7 +475,7 @@ end
 def goodbye_message
   log '==== Upgrade has completed ===='
   log 'Please verify everything is working and run the following if so'
-  log "sudo rm -rf #{@db_worker.tmp_data_dir}.#{default_version.major}"
+  log "sudo rm -rf #{@db_worker.tmp_data_dir}.#{@db_worker.running_version.major}"
   log ""
 
   case @instance_type
