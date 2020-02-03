@@ -882,7 +882,7 @@ sudo gitlab-ctl restart geo-logcursor
    sudo gitlab-rake gitlab:geo:check
    ```
 
-**On all nodes _excluding_ the primary "deploy node"**
+**On all secondary "deploy nodes"**
 
 1. Run post-deployment database migrations, specific to the Geo database:
 
