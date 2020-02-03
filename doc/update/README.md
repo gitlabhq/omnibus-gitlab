@@ -635,18 +635,38 @@ deployment with Geo. Some steps must be performed on a particular node. This
 node will be known as the “deploy node” and is noted through the following
 instructions.
 
-You now need to nominate:
-
-- One instance for use as the **primary** "deploy node" on the Geo **primary** multi-node deployment.
-- One instance for use as the **secondary** "deploy node" on each Geo **secondary** multi-node deployment.
-
 Updates must be performed in the following order:
 
 1. Update Geo **primary** multi-node deployment.
 1. Update Geo **secondary** multi-node deployments.
 1. Post-deployment migrations and checks.
 
-#### Step 1: Updating the Geo primary multi-node deployment
+#### Step 1: Choose a "deploy node" for each deployment
+
+You now need to choose:
+
+- One instance for use as the **primary** "deploy node" on the Geo **primary** multi-node deployment.
+- One instance for use as the **secondary** "deploy node" on each Geo **secondary** multi-node deployment.
+
+Deploy nodes must be configured to be running Unicorn or Sidekiq or the `geo-logcursor` daemon. In order
+to avoid any downtime, they must not be in use during the update:
+
+- If running Unicorn, remove the deploy node from the load balancer.
+- If running Sidekiq, ensure the deploy node is not processing jobs:
+
+  ```sh
+  sudo gitlab-ctl stop sidekiq
+  ```
+
+- If running `geo-logcursor` daemon, ensure the deploy node is not processing events:
+
+  ```sh
+  sudo gitlab-ctl stop geo-logcursor
+  ```
+
+For zero-downtime, Unicorn, Sidekiq, and `geo-logcursor` must be running on other nodes during the update.
+
+#### Step 2: Updating the Geo primary multi-node deployment
 
 **On all nodes _including_ the primary "deploy node"**
 
@@ -704,6 +724,16 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
+1. If this deploy node is normally used to serve requests or process jobs,
+   then you may return it to service at this point.
+
+   - To serve requests, add the deploy node to the load balancer.
+   - To process Sidekiq jobs again, start Sidekiq:
+
+     ```sh
+     sudo gitlab-ctl start sidekiq
+     ```
+
 **On all other nodes _excluding_ the primary "deploy node"**
 
 1. Update the GitLab package
@@ -731,7 +761,7 @@ sudo gitlab-ctl hup unicorn
 sudo gitlab-ctl restart sidekiq
 ```
 
-#### Step 2: Updating each Geo secondary multi-node deployment
+#### Step 3: Updating each Geo secondary multi-node deployment
 
 NOTE: **Note:**
 Only proceed if you have successfully completed all steps on the Geo **primary** multi-node deployment.
@@ -792,6 +822,22 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
+1. If this deploy node is normally used to serve requests or perform
+   background processing, then you may return it to service at this point.
+
+   - To serve requests, add the deploy node to the load balancer.
+   - To process Sidekiq jobs again, start Sidekiq:
+
+     ```sh
+     sudo gitlab-ctl start sidekiq
+     ```
+
+   - To process Geo events again, start the `geo-logcursor` daemon:
+
+     ```sh
+     sudo gitlab-ctl start geo-logcursor
+     ```
+
 **On all nodes _excluding_ the secondary "deploy node"**
 
 1. Update the GitLab package
@@ -820,7 +866,7 @@ sudo gitlab-ctl restart sidekiq
 sudo gitlab-ctl restart geo-logcursor
 ```
 
-#### Step 3: Run post-deployment migrations and checks
+#### Step 4: Run post-deployment migrations and checks
 
 **On the primary "deploy node"**
 
