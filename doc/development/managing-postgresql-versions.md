@@ -1,11 +1,12 @@
 # Managing PostgreSQL versions
 
-Usually, we are shipping two versions of PostgreSQL. We need to support running on both versions, as well as upgrading from the older to the newer.
+Usually, we are shipping three versions of PostgreSQL. We need to support running on all versions, as well as upgrading from the older versions to the newest.
 
 ## Software definitions
 
 The software definitions are in:
 
+- `config/software/postgresql_old.rb`
 - `config/software/postgresql.rb`
 - `config/software/postgresql_new.rb`
 
@@ -15,19 +16,21 @@ The version that should be installed by default is controlled by using the 'link
 
 ## Upgrading
 
-The [`gitlab-ctl pg-upgrade` command](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-ctl-commands/pg-upgrade.rb) is used to upgrade from `postgresql` to `postgresql_new`. See our [documentation for how to use it](../settings/database.md#upgrade-packaged-postgresql-server)
+The [`gitlab-ctl pg-upgrade` command](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-ctl-commands/pg-upgrade.rb) is used to upgrade from `postgresql_old` or `postgresql` to `postgresql_new`. See our [documentation for how to use it](../settings/database.md#upgrade-packaged-postgresql-server)
 
 ## Removing an older version
 
 When it is time to remove an older version, perform the following steps:
 
-1. Run `git rm config/software/postgresql.rb`
+1. Run `git rm config/software/postgresql_old.rb`
+1. Run `git mv config/software/postgresql{,_old}.rb`
+1. Edit `config/software/postgresql_old.rb` and change name from `postgresql` to `postgresql_old`
 1. Run `git mv config/software/postgresql{_new,}.rb`
 1. Edit `config/software/postgresql.rb` and change name from `postgresql_new` to `postgresql`
 
 ## Adding a new version
 
-We currently only support shipping two versions:
+We currently support shipping three versions:
 
 1. Run `git cp config/software/postgresql{,_new}.rb`
 1. Edit `config/software/postgresql_new.rb`. Update:
