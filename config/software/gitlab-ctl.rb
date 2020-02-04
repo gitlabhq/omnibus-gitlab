@@ -68,6 +68,12 @@ done
 # As documented at http://smarden.org/runit/sv.8.html
 export SVWAIT=30
 
+if [ "$1" == "reconfigure" ] && [ "$UID" != "0" ]; then
+  echo "This command must be executed as root user"
+  exit 1
+fi
+
+
 #{install_dir}/embedded/bin/omnibus-ctl #{File.basename(install_dir)} '#{install_dir}/embedded/service/omnibus-ctl*' "$@"
       EOH
     end

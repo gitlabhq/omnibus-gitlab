@@ -1,0 +1,5 @@
+---
+title: Check root before gitlab-ctl reconfigure
+merge_request: 
+author: @amulvany
+type: changed
