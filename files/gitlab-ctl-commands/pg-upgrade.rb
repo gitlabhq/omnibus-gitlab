@@ -19,6 +19,7 @@ require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 require "#{base_path}/embedded/service/omnibus-ctl/lib/postgresql"
 
 INST_DIR = "#{base_path}/embedded/postgresql".freeze
+REVERT_VERSION_FILE = "#{INST_DIR}/version.old".freeze
 
 add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
@@ -35,19 +36,21 @@ add_command_under_category 'revert-pg-upgrade', 'database',
 
   maintenance_mode('enable')
 
+  revert_version = read_revert_version || default_version
+
   if GitlabCtl::Util.progress_message('Checking if we need to downgrade') do
-    @db_worker.running_version == default_version
+    @db_worker.running_version == revert_version
   end
-    log "Already running #{default_version}"
+    log "Already running #{revert_version}"
     Kernel.exit 1
   end
 
-  unless Dir.exist?("#{@db_worker.tmp_data_dir}.#{default_version.major}")
-    log "#{@db_worker.tmp_data_dir}.#{default_version} does not exist, cannot revert data"
+  unless Dir.exist?("#{@db_worker.tmp_data_dir}.#{revert_version.major}")
+    log "#{@db_worker.tmp_data_dir}.#{revert_version} does not exist, cannot revert data"
     log 'Will proceed with reverting the running program version only, unless you interrupt'
   end
 
-  log "Reverting database to #{default_version} in 5 seconds"
+  log "Reverting database to #{revert_version} in 5 seconds"
   log '=== WARNING ==='
   log 'This will revert the database to what it was before you upgraded, including the data.'
   log "Please hit Ctrl-C now if this isn't what you were looking for"
@@ -58,7 +61,8 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     log 'Received interrupt, not doing anything'
     Kernel.exit 0
   end
-  revert(default_version)
+  revert(revert_version)
+  clean_revert_version
   maintenance_mode('disable')
 end
 
@@ -203,6 +207,7 @@ def common_post_upgrade(disable_maintenance = true)
   end
 
   maintenance_mode('disable') if disable_maintenance
+  save_revert_version
   goodbye_message
 end
 
@@ -470,6 +475,18 @@ def die(message)
   $stderr.puts "== Reverted to #{@db_worker.running_version}. Please check output for what went wrong =="
   maintenance_mode('disable')
   exit 1
+end
+
+def read_revert_version
+  File.exist?(REVERT_VERSION_FILE) ? PGVersion.parse(File.read(REVERT_VERSION_FILE)) : nil
+end
+
+def save_revert_version
+  File.write(REVERT_VERSION_FILE, @db_worker.running_version)
+end
+
+def clean_revert_version
+  File.delete(REVERT_VERSION_FILE) if File.exist? REVERT_VERSION_FILE
 end
 
 def goodbye_message
