@@ -58,6 +58,7 @@ if EE
   dependency 'pgbouncer'
   dependency 'repmgr'
   dependency 'repmgr_pg_10'
+  dependency 'repmgr_pg_11'
   dependency 'gitlab-elasticsearch-indexer'
 end
 
