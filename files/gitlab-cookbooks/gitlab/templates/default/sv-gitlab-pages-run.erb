@@ -87,6 +87,12 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     <% if node['gitlab']['gitlab-pages']['tls_max_version'] %>
     -tls-max-version="<%= node['gitlab']['gitlab-pages']['tls_max_version'] %>" \
     <% end %>
+    <% if node['gitlab']['gitlab-pages']['gitlab_client_http_timeout'] %>
+    -gitlab-client-http-timeout="<%= node['gitlab']['gitlab-pages']['gitlab_client_http_timeout'] %>" \
+    <% end %>
+    <% if node['gitlab']['gitlab-pages']['gitlab_client_jwt_expiry'] %>
+    -gitlab-client-jwt-expiry="<%= node['gitlab']['gitlab-pages']['gitlab_client_jwt_expiry'] %>" \
+    <% end %>
     <% headers.each do |spec| %>
     -header="<%= spec %>" \
     <% end %>
