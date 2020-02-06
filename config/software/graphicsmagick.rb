@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2018 GitLab Inc.
+# Copyright:: Copyright (c) 2018-2020 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 #
 
 name 'graphicsmagick'
-default_version '1.3.33'
+default_version '1.3.34'
 
 license 'MIT'
 license_file 'Copyright.txt'
@@ -26,7 +26,7 @@ dependency 'libpng'
 dependency 'zlib'
 
 source url: "https://ftp.icm.edu.pl/pub/unix/graphics/GraphicsMagick/1.3/GraphicsMagick-#{version}.tar.gz",
-       sha256: '00ea0df7c78c903cce325f402429bcd3924168cf39277f743a0641d47c411ee8'
+       sha256: '4717f7a32d964c515d83706fd52d34e089c2ffa35f8fbf43c923ce19343cf2f4'
 
 relative_path "GraphicsMagick-#{version}"
 
