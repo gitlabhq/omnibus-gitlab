@@ -139,6 +139,24 @@ describe 'gitlab-ee::sidekiq-cluster' do
     end
   end
 
+  context 'with experimental_queue_selector set' do
+    before do
+      stub_gitlab_rb(sidekiq_cluster: {
+                       enable: true,
+                       experimental_queue_selector: true,
+                       queue_groups: ['feature_category=pages', 'feature_category=continuous_integration']
+                     })
+    end
+
+    it 'correctly renders out the sidekiq-cluster service file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/run")
+        .with_content { |content|
+          expect(content).to match(/--experimental-queue-selector/)
+          expect(content).to match(/"feature_category=pages"/)
+        }
+    end
+  end
+
   describe 'when specifying sidekiq.log_format' do
     before do
       stub_gitlab_rb(
