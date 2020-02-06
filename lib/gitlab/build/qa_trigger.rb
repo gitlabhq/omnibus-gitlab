@@ -21,8 +21,10 @@ module Build
         "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_PROJECT'),
         "variables[TOP_UPSTREAM_SOURCE_JOB]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_JOB'),
         "variables[TOP_UPSTREAM_SOURCE_SHA]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA'),
-        'variables[TOP_UPSTREAM_SOURCE_REF]' => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_REF')
-      }
+        'variables[TOP_UPSTREAM_SOURCE_REF]' => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_REF'),
+        'variables[TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID]' => Gitlab::Util.get_env('TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID'),
+        'variables[TOP_UPSTREAM_MERGE_REQUEST_IID]' => Gitlab::Util.get_env('TOP_UPSTREAM_MERGE_REQUEST_IID')
+      }.compact
     end
 
     def self.get_access_token
