@@ -1,0 +1,16 @@
+diff --git a/Makefile b/Makefile
+index cd501cf7..9061cec1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,7 @@
+ #
+ # Makefile
+ # Copyright (c) 2ndQuadrant, 2010-2017
+-
++MODULE_big = repmgr_funcs
+ HEADERS = $(wildcard *.h)
+
+ repmgrd_OBJS = dbutils.o config.o repmgrd.o log.o strutil.o
+diff --git a/modules_big.patch b/modules_big.patch
+new file mode 100644
+index 00000000..e69de29b

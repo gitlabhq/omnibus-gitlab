@@ -147,11 +147,13 @@ sudo rm /usr/lib/systemd/system/gitlab-runsvdir.service
 sudo systemctl daemon-reload
 sudo gitlab-ctl uninstall
 
+# (Replace with gitlab-ce if you have GitLab FOSS installed)
+
 # Debian/Ubuntu
-sudo dpkg -r gitlab-ce
+sudo apt remove gitlab-ee
 
 # Redhat/Centos
-sudo rpm -e gitlab-ce
+sudo yum remove gitlab-ee
 ```
 
 ### Common installation problems

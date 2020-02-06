@@ -1,5 +1,6 @@
 #
-# Copyright 2016 GitLab Inc.
+# Copyright:: Copyright (c) 2019 GitLab Inc.
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,18 +15,25 @@
 # limitations under the License.
 #
 
-name 'gitlab-exporter'
-default_version '6.0.0'
-license 'MIT'
+name 'repmgr_pg_11'
+default_version 'v3.3.2'
+
+license 'GPL-3.0'
 license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-dependency 'ruby'
-dependency 'rubygems'
-dependency 'postgresql'
+source git: "https://github.com/2ndQuadrant/repmgr.git"
+
+dependency 'postgresql_alpha'
+
+env = with_standard_compiler_flags(with_embedded_path)
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
-  gem "install gitlab-exporter --no-document --version #{version}", env: env
+  env['PATH'] = "#{install_dir}/embedded/postgresql/11/bin:#{env['PATH']}"
+
+  patch source: 'modules_big.patch', env: env
+
+  make "-j #{workers} USE_PGXS=1 all", env: env
+  make "-j #{workers} USE_PGXS=1 install", env: env
 end

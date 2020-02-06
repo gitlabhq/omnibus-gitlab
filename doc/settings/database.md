@@ -415,6 +415,9 @@ sure that PostgreSQL is set up according to the [database requirements document]
 
 1. [Seed the database](#seed-the-database-fresh-installs-only).
 
+NOTE: **Note:**
+If you're using Amazon RDS and are seeing extremely high (near 100%) CPU utilization following a major version upgrade (i.e. from `9.x` to `10.x`), running an `ANALYZE VERBOSE;` query may be necessary to recreate query plans and reduce CPU utilization on the database server(s). [Amazon recommends this](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.PostgreSQL.html) as part of a major version upgrade.
+
 ### Configuring SSL
 
 #### Require SSL

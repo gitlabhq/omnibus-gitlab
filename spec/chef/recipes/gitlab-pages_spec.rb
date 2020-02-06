@@ -46,6 +46,9 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-tls-min-version})
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-tls-max-version})
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{http_proxy})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-api-secret-key="/var/opt/gitlab/gitlab-pages/.gitlab_pages_secret"})
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-client-http-timeout})
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-client-jwt-expiry})
     end
 
     it 'correctly renders the pages log run file' do
@@ -123,6 +126,8 @@ describe 'gitlab::gitlab-pages' do
           sentry_dsn: 'https://b44a0828b72421a6d8e99efd68d44fa8@example.com/40',
           sentry_environment: 'production',
           headers: ['X-XSS-Protection: 1; mode=block', 'X-Content-Type-Options: nosniff', 'Test: Header'],
+          gitlab_client_http_timeout: "10s",
+          gitlab_client_jwt_expiry: "30s",
         }
       )
     end
@@ -162,6 +167,9 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="X-XSS-Protection: 1; mode=block"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="X-Content-Type-Options: nosniff"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="Test: Header"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-api-secret-key="/var/opt/gitlab/pages/.gitlab_pages_secret"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-client-http-timeout})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-client-jwt-expiry})
     end
 
     it 'correctly renders the pages log run file' do

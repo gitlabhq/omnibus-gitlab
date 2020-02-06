@@ -58,11 +58,16 @@ if EE
   dependency 'pgbouncer'
   dependency 'repmgr'
   dependency 'repmgr_pg_10'
+  dependency 'repmgr_pg_11'
   dependency 'gitlab-elasticsearch-indexer'
 end
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+
+  # Exclude rails directory from cache
+  cache_dir = File.join('/var/cache/omnibus/cache/git_cache', install_dir, 'info/exclude')
+  command "echo '/embedded/service/gitlab-rails' >> #{cache_dir}"
 
   command "echo $(git log --pretty=format:'%h' --abbrev=11 -n 1) > REVISION"
   # Set installation type to omnibus

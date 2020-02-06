@@ -9,6 +9,12 @@ module Build
     def invoke!(image: nil, post_comment: false)
       uri = URI("https://gitlab.com/api/v4/projects/#{CGI.escape(get_project_path)}/trigger/pipeline")
       params = get_params(image: image)
+      params_without_token = params.dup
+      params_without_token.delete('token')
+
+      puts "Triggering downstream pipeline on #{get_project_path}"
+      puts "with params #{params_without_token}"
+
       response = Net::HTTP.post_form(uri, params)
       response_body = JSON.parse(response.body)
       pipeline_id = response_body['id']

@@ -152,8 +152,6 @@ notify:slack-fail:
     - /.*-stable(-ee)?$/@gitlab-org/omnibus-gitlab
   except:
     - triggers@gitlab-org/omnibus-gitlab
-  tags:
-  - promotion
   dependencies: []
 
 notify:slack-fail:scheduled-master:
