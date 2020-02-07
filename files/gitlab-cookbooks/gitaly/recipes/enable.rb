@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+omnibus_helper = OmnibusHelper.new(node)
 
 working_dir = node['gitaly']['dir']
 log_directory = node['gitaly']['log_directory']
@@ -67,7 +68,7 @@ node.default['gitaly']['env'] = {
 
 env_dir env_directory do
   variables node['gitaly']['env']
-  notifies :restart, "service[gitaly]"
+  notifies :restart, "service[gitaly]" if omnibus_helper.should_notify?('gitaly')
 end
 
 template "Create Gitaly config.toml" do
@@ -77,7 +78,7 @@ template "Create Gitaly config.toml" do
   group account_helper.gitlab_group
   mode "0640"
   variables node['gitaly'].to_hash
-  notifies :hup, "runit_service[gitaly]"
+  notifies :hup, "runit_service[gitaly]" if omnibus_helper.should_notify?('gitaly')
 end
 
 runit_service 'gitaly' do
