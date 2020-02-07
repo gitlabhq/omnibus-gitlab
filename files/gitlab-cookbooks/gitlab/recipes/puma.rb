@@ -78,9 +78,11 @@ end
 
 runit_service svc do
   down node['gitlab'][svc]['ha']
-  restart_command "2" # Restart Puma using SIGUSR2
+  # sv-control-h handles a HUP signal and issues a SIGINT, SIGTERM
+  # to the master puma process to perform a graceful restart
+  restart_command 'hup'
   template_name 'puma'
-  control ['t']
+  control %w[t h]
   options({
     service: svc,
     user: account_helper.gitlab_user,
