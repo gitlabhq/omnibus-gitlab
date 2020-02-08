@@ -86,12 +86,12 @@ module GitlabCtl
       PGVersion.parse(File.read("#{data_dir}/PG_VERSION").strip)
     end
 
-    def running?
-      !GitlabCtl::Util.run_command('gitlab-ctl status postgresql').error?
+    def running?(service = 'postgresql')
+      !GitlabCtl::Util.run_command("gitlab-ctl status #{service}").error?
     end
 
-    def start
-      GitlabCtl::Util.run_command('gitlab-ctl start postgresql').error!
+    def start(service = 'postgresql')
+      GitlabCtl::Util.run_command("gitlab-ctl start #{service}").error!
     end
 
     def node_attributes
