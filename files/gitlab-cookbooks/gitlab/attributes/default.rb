@@ -88,6 +88,7 @@ default['gitlab']['gitlab-rails']['rake_cache_clear'] = true
 default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
 default['gitlab']['gitlab-rails']['gitlab_https'] = false
+default['gitlab']['gitlab-rails']['gitlab_ssh_user'] = nil
 default['gitlab']['gitlab-rails']['gitlab_ssh_host'] = nil
 default['gitlab']['gitlab-rails']['time_zone'] = nil
 default['gitlab']['gitlab-rails']['gitlab_email_from'] = nil

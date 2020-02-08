@@ -1,0 +1,5 @@
+---
+title: Expose ssh_user as a distinct configuration option
+merge_request: 3925
+author:
+type: added
