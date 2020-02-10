@@ -1,0 +1,5 @@
+---
+title: Update postgresql 10.9->10.11, 9.6.14->9.6.16. Resolves CVE-2019-10208.
+merge_request:
+author:
+type: security

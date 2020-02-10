@@ -16,7 +16,7 @@
 #
 
 name 'postgresql_new'
-default_version '10.9'
+default_version '10.11'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -30,8 +30,8 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '10.9' do
-  source sha256: '958b317fb007e94f3bef7e2a6641875db8f7f9d73db9f283324f3d6e8f5b0f54'
+version '10.11' do
+  source sha256: '0d5d14ff6b075655f4421038fbde3a5d7b418c26a249a187a4175600d7aecc09'
 end
 
 # PostgreSQL 10 should have a major version of 10, not 10.0.
