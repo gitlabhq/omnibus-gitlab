@@ -12,13 +12,13 @@ cd <%= node['gitlab']['gitlab-pages']['dir'] %>
 <% headers = [ node['gitlab']['gitlab-pages']['headers'] ].flatten.compact  %>
 
 exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
-    <% if node['gitlab']['gitlab-pages']['access_control'] %>
-    -config="<%= node['gitlab']['gitlab-pages']['dir'] %>/gitlab-pages-config" \
-    <% end %>
     <% if node['gitlab']['gitlab-pages']['http_proxy'] %>
     http_proxy="<%= node['gitlab']['gitlab-pages']['http_proxy'] %>" \
     <% end %>
     /opt/gitlab/embedded/bin/gitlab-pages \
+    <% if node['gitlab']['gitlab-pages']['access_control'] %>
+    -config="<%= node['gitlab']['gitlab-pages']['dir'] %>/gitlab-pages-config" \
+    <% end %>
     <% if node['gitlab']['gitlab-pages']['listen_proxy'] %>
     -listen-proxy="<%= node['gitlab']['gitlab-pages']['listen_proxy'] %>" \
     <% end %>
