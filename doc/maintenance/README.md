@@ -85,7 +85,7 @@ There are structural differences in handling of graceful restart (`gitlab-ctl hu
 1. `Unicorn` starts a new process, but continues processing requests
    on old master, it stops accepting connections once `SIGQUIT` is received,
 1. `Puma` stops accepting new connections as soon as `SIGINT` is received.
-   It finishes all running requests. The `runit` restarts the service.
+   It finishes all running requests. Then `runit` restarts the service.
 
 ## Invoking Rake tasks
 
