@@ -286,11 +286,11 @@ def promote_database
 end
 
 def geo_secondary_upgrade(tmp_dir, timeout)
-  pg_enabled? = service_enabled?('postgresql')
-  geo_pg_enabled? = service_enabled?('geo-postgresql')
+  pg_enabled = service_enabled?('postgresql')
+  geo_pg_enabled = service_enabled?('geo-postgresql')
 
   # Run the first time to link the primary postgresql instance
-  if pg_enabled?
+  if pg_enabled
     log('Upgrading the postgresql database')
     begin
       promote_database
@@ -305,28 +305,28 @@ def geo_secondary_upgrade(tmp_dir, timeout)
     common_pre_upgrade
 
     # Only disable maintenance_mode if geo-pg is not enabled
-    common_post_upgrade(!geo_pg_enabled?)
+    common_post_upgrade(!geo_pg_enabled)
   end
 
-  if geo_pg_enabled?
-    # Update the location to handle the geo-postgresql instance
-    log('Upgrading the geo-postgresql database')
-    # Secondary nodes have a replica db under /var/opt/gitlab/postgresql that needs
-    # the bin files updated and the geo tracking db under /var/opt/gitlab/geo-postgresl that needs data updated
-    data_dir = @attributes['gitlab']['geo-postgresql']['data_dir']
+  return unless geo_pg_enabled
 
-    @db_service_name = 'geo-postgresql'
-    @db_worker.data_dir = data_dir
-    @db_worker.tmp_data_dir = data_dir if @db_worker.tmp_dir.nil?
-    @db_worker.psql_command = 'gitlab-geo-psql'
-    common_pre_upgrade
-    begin
-      @db_worker.run_pg_upgrade
-    rescue GitlabCtl::Errors::ExecutionError
-      die "Error running pg_upgrade on secondary, please check logs"
-    end
-    common_post_upgrade
+  # Update the location to handle the geo-postgresql instance
+  log('Upgrading the geo-postgresql database')
+  # Secondary nodes have a replica db under /var/opt/gitlab/postgresql that needs
+  # the bin files updated and the geo tracking db under /var/opt/gitlab/geo-postgresl that needs data updated
+  data_dir = @attributes['gitlab']['geo-postgresql']['data_dir']
+
+  @db_service_name = 'geo-postgresql'
+  @db_worker.data_dir = data_dir
+  @db_worker.tmp_data_dir = data_dir if @db_worker.tmp_dir.nil?
+  @db_worker.psql_command = 'gitlab-geo-psql'
+  common_pre_upgrade
+  begin
+    @db_worker.run_pg_upgrade
+  rescue GitlabCtl::Errors::ExecutionError
+    die "Error running pg_upgrade on secondary, please check logs"
   end
+  common_post_upgrade
 end
 
 def get_locale_encoding
