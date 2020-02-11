@@ -1411,6 +1411,30 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'Environments Auto Stop Cron Worker settings' do
+      context 'when the cron pattern is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { environments_auto_stop_cron_worker_cron: '24 * * * *' })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'environments_auto_stop_cron_worker_cron' => '24 * * * *'
+            )
+          )
+        end
+      end
+
+      context 'when the cron pattern is not configured' do
+        it 'sets no value' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'environments_auto_stop_cron_worker_cron' => nil
+            )
+          )
+        end
+      end
+    end
+
     context 'Scheduled Pipeline settings' do
       context 'when the cron pattern is configured' do
         it 'sets the cron value' do
