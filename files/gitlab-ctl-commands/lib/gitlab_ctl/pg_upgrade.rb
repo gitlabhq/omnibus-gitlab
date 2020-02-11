@@ -12,17 +12,16 @@ end
 module GitlabCtl
   class PgUpgrade
     include GitlabCtl::Util
-    attr_accessor :base_path, :data_path, :tmp_dir, :timeout, :default_version, :upgrade_version, :running_version, :psql_command
+    attr_accessor :base_path, :data_path, :tmp_dir, :timeout, :target_version, :initial_version, :psql_command
     attr_writer :data_dir, :tmp_data_dir
 
-    def initialize(base_path, data_path, default_version, upgrade_version, tmp_dir = nil, timeout = nil, psql_command = nil)
+    def initialize(base_path, data_path, target_version, tmp_dir = nil, timeout = nil, psql_command = nil)
       @base_path = base_path
       @data_path = data_path
       @tmp_dir = tmp_dir
       @timeout = timeout
-      @default_version = default_version
-      @upgrade_version = upgrade_version
-      @running_version = fetch_running_version
+      @target_version = target_version
+      @initial_version = fetch_running_version
       @psql_command ||= "gitlab-psql"
     end
 
@@ -103,26 +102,26 @@ module GitlabCtl
       "#{base_path}/embedded/postgresql"
     end
 
-    def upgrade_version_path
-      "#{base_postgresql_path}/#{upgrade_version.major}"
+    def target_version_path
+      "#{base_postgresql_path}/#{target_version.major}"
     end
 
-    def running_version_path
-      "#{base_postgresql_path}/#{running_version.major}"
+    def initial_version_path
+      "#{base_postgresql_path}/#{initial_version.major}"
     end
 
     def run_pg_upgrade
       unless GitlabCtl::Util.progress_message('Upgrading the data') do
         begin
           run_pg_command(
-            "#{upgrade_version_path}/bin/pg_upgrade " \
-            "-b #{running_version_path}/bin " \
+            "#{target_version_path}/bin/pg_upgrade " \
+            "-b #{initial_version_path}/bin " \
             "--old-datadir=#{data_dir}  " \
-            "--new-datadir=#{tmp_data_dir}.#{upgrade_version.major}  " \
-            "-B #{upgrade_version_path}/bin"
+            "--new-datadir=#{tmp_data_dir}.#{target_version.major}  " \
+            "-B #{target_version_path}/bin"
           )
         rescue GitlabCtl::Errors::ExecutionError => e
-          $stderr.puts "Error upgrading the data to version #{upgrade_version}"
+          $stderr.puts "Error upgrading the data to version #{target_version}"
           $stderr.puts "STDOUT: #{e.stdout}"
           $stderr.puts "STDERR: #{e.stderr}"
           false
@@ -138,7 +137,8 @@ module GitlabCtl
           tmp_dir: nil,
           wait: true,
           skip_unregister: false,
-          timeout: nil
+          timeout: nil,
+          target_version: nil
         }
 
         OptionParser.new do |opts|
@@ -150,13 +150,17 @@ module GitlabCtl
             options[:wait] = false
           end
 
-          opts.on('-s', '--skip-unregister', 'Skip the attempt to unregister an HA secondary node. No-op in non-HA scenarios.') do
+          opts.on('-s', '--skip-unregister', 'Skip the attempt to unregister an HA secondary node. No-op in non-HA scenarios') do
             options[:skip_unregister] = true
           end
 
           opts.on('-TTIMEOUT', '--timeout=TIMEOUT', 'Timeout in milliseconds for the execution of the underlying commands') do |t|
             i = t.to_i
             options[:timeout] = i.positive? ? i : nil
+          end
+
+          opts.on('-VVERSION', '--target-version=VERSION', 'The explicit major version to upgrade or downgrade to') do |v|
+            options[:target_version] = v
           end
         end.parse!(args)
 

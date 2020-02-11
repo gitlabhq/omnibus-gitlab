@@ -10,7 +10,7 @@ describe GitlabCtl::PgUpgrade do
     allow(GitlabCtl::Util).to receive(:get_command_output).with(
       "/fakebasedir/embedded/bin/pg_ctl --version"
     ).and_return('fakeoldverision')
-    @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fake/data', 'fakeoldverision', 'fakenewversion', nil, 123)
+    @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fake/data', 'fakenewversion', nil, 123)
     allow(File).to receive(:realpath).with(
       @fake_default_dir
     ).and_return(@fake_default_dir)
