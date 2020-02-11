@@ -33,10 +33,7 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-max-conns})
 
       # By default pages access_control is disabled
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-id})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-redirect-uri})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-secret})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-secret})
+      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-config})
 
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-http})
       expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https})
@@ -70,7 +67,7 @@ describe 'gitlab::gitlab-pages' do
         pages_external_url: 'https://pages.example.com',
         gitlab_pages: {
           log_verbose: true,
-          auth_secret: 'auth_secret',
+          auth_secret: 'auth-secret',
           access_control: true
         }
       )
@@ -91,8 +88,10 @@ describe 'gitlab::gitlab-pages' do
       chef_run.ruby_block('authorize pages with gitlab').block.call
       chef_run.ruby_block('re-populate GitLab Pages configuration options').block.call
 
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-id=app_id})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-secret=app_secret})
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content(%r{auth-client-id=app_id})
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content(%r{auth-client-secret=app_secret})
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content(%r{auth-redirect-uri=https://projects.pages.example.com/auth})
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content(%r{auth-secret=auth-secret})
     end
   end
 
@@ -118,6 +117,7 @@ describe 'gitlab::gitlab-pages' do
           gitlab_id: 'app_id',
           gitlab_secret: 'app_secret',
           auth_secret: 'auth_secret',
+          auth_redirect_uri: 'https://projects.pages.example.com/auth',
           access_control: true,
           insecure_ciphers: true,
           tls_min_version: "tls1.0",
@@ -158,11 +158,7 @@ describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-max-conns=7500})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-daemon-inplace-chroot=true})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-log-format})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-log-verbose})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-id=app_id})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-redirect-uri="https://projects.pages.example.com/auth"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-secret=app_secret})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-secret=auth_secret})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-config})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-insecure-ciphers})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-tls-min-version="tls1.0"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-tls-max-version="tls1.2"})
@@ -178,6 +174,13 @@ describe 'gitlab::gitlab-pages' do
 
     it 'correctly renders the pages log run file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/log/run").with_content(%r{exec svlogd -tt /var/log/gitlab/gitlab-pages})
+    end
+
+    it 'correctly renders the Pages config file' do
+      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-client-id=app_id})
+      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-client-secret=app_secret})
+      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-redirect-uri=https://projects.pages.example.com/auth})
+      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-secret=auth_secret})
     end
 
     it 'deletes old admin.secret file' do
@@ -236,10 +239,14 @@ describe 'gitlab::gitlab-pages' do
 
     it 'correctly renders the pages service run file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run")
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-id=})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-redirect-uri=})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-client-secret=})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-auth-secret=})
+      expect(chef_run).not_to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-client-id=app_id})
+      expect(chef_run).not_to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-client-secret=app_secret})
+      expect(chef_run).not_to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-redirect-uri='https://projects.pages.example.com/auth'})
+      expect(chef_run).not_to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-secret=auth_secret})
+    end
+
+    it 'does not render the Pages config file' do
+      expect(chef_run).not_to render_file("/var/opt/gitlab/pages/.gitlab_pages_config")
     end
   end
 

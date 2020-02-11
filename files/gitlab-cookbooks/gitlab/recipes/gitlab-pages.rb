@@ -67,6 +67,24 @@ template File.join(working_dir, ".gitlab_pages_secret") do
   notifies :restart, "service[gitlab-pages]"
 end
 
+template File.join(working_dir, "gitlab-pages-config") do
+  source "gitlab-pages-config.erb"
+  owner 'root'
+  group account_helper.gitlab_group
+  mode "0640"
+  variables(
+    lazy do
+      {
+        auth_client_id: node['gitlab']['gitlab-pages']['gitlab_id'],
+        auth_client_secret: node['gitlab']['gitlab-pages']['gitlab_secret'],
+        auth_redirect_uri: node['gitlab']['gitlab-pages']['auth_redirect_uri'],
+        auth_secret: node['gitlab']['gitlab-pages']['auth_secret']
+      }
+    end
+  )
+  notifies :restart, "service[gitlab-pages]"
+end
+
 runit_service 'gitlab-pages' do
   options({
     log_directory: log_directory
