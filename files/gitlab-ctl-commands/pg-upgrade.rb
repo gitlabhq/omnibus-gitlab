@@ -19,16 +19,18 @@ require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 require "#{base_path}/embedded/service/omnibus-ctl/lib/postgresql"
 
 INST_DIR = "#{base_path}/embedded/postgresql".freeze
+REVERT_VERSION_FILE = "#{data_path}/postgresql-version.old".freeze
 
 add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            2 do |_cmd_name|
   options = GitlabCtl::PgUpgrade.parse_options(ARGV)
+  revert_version = lookup_version(options[:target_version], read_revert_version || old_version)
+
   @db_worker = GitlabCtl::PgUpgrade.new(
     base_path,
     data_path,
-    default_version,
-    upgrade_version,
+    revert_version,
     options[:tmp_dir],
     options[:timeout]
   )
@@ -36,18 +38,18 @@ add_command_under_category 'revert-pg-upgrade', 'database',
   maintenance_mode('enable')
 
   if GitlabCtl::Util.progress_message('Checking if we need to downgrade') do
-    @db_worker.fetch_running_version == default_version
+    @db_worker.initial_version == revert_version
   end
-    log "Already running #{default_version}"
+    log "Already running #{revert_version}"
     Kernel.exit 1
   end
 
-  unless Dir.exist?("#{@db_worker.tmp_data_dir}.#{default_version.major}")
-    log "#{@db_worker.tmp_data_dir}.#{default_version} does not exist, cannot revert data"
+  unless Dir.exist?("#{@db_worker.tmp_data_dir}.#{revert_version.major}")
+    log "#{@db_worker.tmp_data_dir}.#{revert_version} does not exist, cannot revert data"
     log 'Will proceed with reverting the running program version only, unless you interrupt'
   end
 
-  log "Reverting database to #{default_version} in 5 seconds"
+  log "Reverting database to #{revert_version} in 5 seconds"
   log '=== WARNING ==='
   log 'This will revert the database to what it was before you upgraded, including the data.'
   log "Please hit Ctrl-C now if this isn't what you were looking for"
@@ -58,7 +60,8 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     log 'Received interrupt, not doing anything'
     Kernel.exit 0
   end
-  revert
+  revert(revert_version)
+  clean_revert_version
   maintenance_mode('disable')
 end
 
@@ -69,8 +72,7 @@ add_command_under_category 'pg-upgrade', 'database',
   @db_worker = GitlabCtl::PgUpgrade.new(
     base_path,
     data_path,
-    default_version,
-    upgrade_version,
+    lookup_version(options[:target_version], default_version),
     options[:tmp_dir],
     options[:timeout]
   )
@@ -78,11 +80,9 @@ add_command_under_category 'pg-upgrade', 'database',
   @roles = GitlabCtl::Util.roles(base_path)
   @attributes = GitlabCtl::Util.get_node_attributes(base_path)
 
-  running_version = @db_worker.fetch_running_version
-
   unless GitlabCtl::Util.progress_message(
     'Checking for an omnibus managed postgresql') do
-      !running_version.nil? && \
+      !@db_worker.initial_version.nil? && \
           service_enabled?('postgresql')
     end
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
@@ -98,25 +98,25 @@ add_command_under_category 'pg-upgrade', 'database',
     Kernel.exit 0
   end
 
-  log 'Checking for a newer version of PostgreSQL to install'
-  if upgrade_version && Dir.exist?("#{INST_DIR}/#{upgrade_version.major}")
-    log "Upgrading PostgreSQL to #{upgrade_version}"
-  else
-    $stderr.puts 'No new version of PostgreSQL installed, nothing to upgrade to'
+  if GitlabCtl::Util.progress_message('Checking if we already upgraded') do
+    @db_worker.initial_version.major.to_f >= @db_worker.target_version.major.to_f
+  end
+    $stderr.puts "The latest version #{@db_worker.initial_version} is already running, nothing to do"
     Kernel.exit 0
   end
 
-  if GitlabCtl::Util.progress_message('Checking if we already upgraded') do
-    running_version == upgrade_version
-  end
-    $stderr.puts "The latest version #{upgrade_version} is already running, nothing to do"
+  log 'Checking for a newer version of PostgreSQL to install'
+  if @db_worker.target_version && Dir.exist?("#{INST_DIR}/#{@db_worker.target_version.major}")
+    log "Upgrading PostgreSQL to #{@db_worker.target_version}"
+  else
+    $stderr.puts 'No new version of PostgreSQL installed, nothing to upgrade to'
     Kernel.exit 0
   end
 
   unless GitlabCtl::Util.progress_message(
     'Checking if PostgreSQL bin files are symlinked to the expected location'
   ) do
-    Dir.glob("#{INST_DIR}/#{running_version.major}/bin/*").each do |bin_file|
+    Dir.glob("#{INST_DIR}/#{@db_worker.initial_version.major}/bin/*").each do |bin_file|
       link = "#{base_path}/embedded/bin/#{File.basename(bin_file)}"
       File.symlink?(link) && File.readlink(link).eql?(bin_file)
     end
@@ -183,7 +183,7 @@ def common_pre_upgrade
   @db_worker.tmp_data_dir
 
   stop_database
-  create_links(upgrade_version)
+  create_links(@db_worker.target_version)
   create_temp_data_dir
   initialize_new_db(locale, collate, encoding)
 end
@@ -324,10 +324,10 @@ def create_temp_data_dir
   unless GitlabCtl::Util.progress_message('Creating temporary data directory') do
     begin
       @db_worker.run_pg_command(
-        "mkdir -p #{@db_worker.tmp_data_dir}.#{upgrade_version.major}"
+        "mkdir -p #{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major}"
       )
     rescue GitlabCtl::Errors::ExecutionError => e
-      log "Error creating new directory: #{@db_worker.tmp_data_dir}.#{upgrade_version.major}"
+      log "Error creating new directory: #{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major}"
       log "STDOUT: #{e.stdout}"
       log "STDERR: #{e.stderr}"
       false
@@ -343,15 +343,15 @@ def initialize_new_db(locale, collate, encoding)
   unless GitlabCtl::Util.progress_message('Initializing the new database') do
     begin
       @db_worker.run_pg_command(
-        "#{@db_worker.upgrade_version_path}/bin/initdb " \
-        "-D #{@db_worker.tmp_data_dir}.#{upgrade_version.major} " \
+        "#{@db_worker.target_version_path}/bin/initdb " \
+        "-D #{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major} " \
         "--locale #{locale} " \
         "--encoding #{encoding} " \
         " --lc-collate=#{collate} " \
         "--lc-ctype=#{locale}"
       )
     rescue GitlabCtl::Errors::ExecutionError => e
-      log "Error initializing database for #{upgrade_version}"
+      log "Error initializing database for #{@db_worker.target_version}"
       log "STDOUT: #{e.stdout}"
       log "STDERR: #{e.stderr}"
       die 'Please check the output and try again'
@@ -364,7 +364,7 @@ end
 def cleanup_data_dir
   unless GitlabCtl::Util.progress_message('Move the old data directory out of the way') do
     run_command(
-      "mv #{@db_worker.data_dir} #{@db_worker.tmp_data_dir}.#{default_version.major}"
+      "mv #{@db_worker.data_dir} #{@db_worker.tmp_data_dir}.#{@db_worker.initial_version.major}"
     )
   end
     die 'Error moving data for older version, '
@@ -372,10 +372,16 @@ def cleanup_data_dir
 
   unless GitlabCtl::Util.progress_message('Rename the new data directory') do
     run_command(
-      "mv #{@db_worker.tmp_data_dir}.#{upgrade_version.major} #{@db_worker.data_dir}"
+      "mv #{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major} #{@db_worker.data_dir}"
     )
   end
-    die "Error moving #{@db_worker.tmp_data_dir}.#{upgrade_version.major} to #{@db_worker.data_dir}"
+    die "Error moving #{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major} to #{@db_worker.data_dir}"
+  end
+
+  unless GitlabCtl::Util.progress_message('Saving the old version information') do
+    save_revert_version
+  end
+    die
   end
 end
 
@@ -410,12 +416,31 @@ def version_from_manifest(software)
   nil
 end
 
+def old_version
+  PGVersion.parse(version_from_manifest('postgresql_old'))
+end
+
 def default_version
   PGVersion.parse(version_from_manifest('postgresql'))
 end
 
-def upgrade_version
+def new_version
   PGVersion.parse(version_from_manifest('postgresql_new'))
+end
+
+SUPPORTED_VERSIONS = [old_version, default_version, new_version].freeze
+
+def lookup_version(major_version, fallback_version)
+  return fallback_version unless major_version
+
+  target_version = SUPPORTED_VERSIONS.select { |v| v.major == major_version }
+
+  if target_version.empty?
+    log "The specified major version #{major_version} is not supported. Choose from one of #{SUPPORTED_VERSIONS.map(&:major).join(', ')}."
+    Kernel.exit 1
+  else
+    target_version[0]
+  end
 end
 
 def create_links(version)
@@ -427,16 +452,16 @@ def create_links(version)
   end
 end
 
-def revert
+def revert(version)
   log '== Reverting =='
   run_sv_command_for_service('stop', 'postgresql')
-  if Dir.exist?("#{@db_worker.tmp_data_dir}.#{default_version.major}")
+  if Dir.exist?("#{@db_worker.tmp_data_dir}.#{version.major}")
     run_command("rm -rf #{@db_worker.data_dir}")
     run_command(
-      "mv #{@db_worker.tmp_data_dir}.#{default_version.major} #{@db_worker.data_dir}"
+      "mv #{@db_worker.tmp_data_dir}.#{version.major} #{@db_worker.data_dir}"
     )
   end
-  create_links(default_version)
+  create_links(version)
   run_sv_command_for_service('start', 'postgresql')
   log'== Reverted =='
 end
@@ -468,16 +493,29 @@ end
 def die(message)
   $stderr.puts '== Fatal error =='
   $stderr.puts message
-  revert
-  $stderr.puts "== Reverted to #{default_version}. Please check output for what went wrong =="
+  revert(@db_worker.initial_version)
+  $stderr.puts "== Reverted to #{@db_worker.initial_version}. Please check output for what went wrong =="
   maintenance_mode('disable')
   exit 1
+end
+
+def read_revert_version
+  File.exist?(REVERT_VERSION_FILE) ? PGVersion.parse(File.read(REVERT_VERSION_FILE)) : nil
+end
+
+def save_revert_version
+  File.write(REVERT_VERSION_FILE, @db_worker.initial_version)
+end
+
+def clean_revert_version
+  File.delete(REVERT_VERSION_FILE) if File.exist? REVERT_VERSION_FILE
 end
 
 def goodbye_message
   log '==== Upgrade has completed ===='
   log 'Please verify everything is working and run the following if so'
-  log "sudo rm -rf #{@db_worker.tmp_data_dir}.#{default_version.major}"
+  log "sudo rm -rf #{@db_worker.tmp_data_dir}.#{@db_worker.initial_version.major}"
+  log "sudo rm -f #{REVERT_VERSION_FILE}"
   log ""
 
   case @instance_type

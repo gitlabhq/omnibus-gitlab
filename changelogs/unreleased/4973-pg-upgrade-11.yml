@@ -1,0 +1,5 @@
+---
+title: Add support for PostgreSQL 11 to gitlab-ctl pg-upgrade
+merge_request: 3907
+author:
+type: changed
