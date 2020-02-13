@@ -70,6 +70,10 @@ omnibus-gitlab repository.
 - Bump Ruby version to 2.6.5. !3827
 
 
+## 12.6.7
+
+- No changes.
+
 ## 12.6.6
 
 - No changes.
