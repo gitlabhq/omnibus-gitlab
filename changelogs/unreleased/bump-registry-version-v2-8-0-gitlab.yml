@@ -1,0 +1,5 @@
+---
+title: Bump Container Registry to v2.8.0-gitlab
+merge_request: 3929
+author:
+type: changed
