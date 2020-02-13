@@ -194,6 +194,7 @@
   - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
   - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
   - bundle exec rake aws:process
+  allow_failure: true
   tags:
   - docker-builder
   when: manual
@@ -205,6 +206,7 @@
 .aws_marketplace_release: &aws_marketplace_release
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   stage: aws-marketplace-release
+  allow_failure: true
   when: manual
   script:
     - curl --request POST
