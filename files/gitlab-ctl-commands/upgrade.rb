@@ -217,8 +217,14 @@ def pg_upgrade_check
 
   version = File.read(pg_version_file) if File.exist?(pg_version_file)
   new_version = File.readlines(manifest_file).grep(/postgresql_new/).first&.split&.[](1) if File.exist?(manifest_file)
+  File.exist?("/var/opt/gitlab/bootstrapped")
 
-  return unless new_version && (!version || new_version !~ /^#{version}/)
+  # Print when fresh install - Always
+  # Print when upgrade
+  #  - when we have a database and its not already on the new version
+  is_install = !File.exist?('/var/opt/gitlab/bootstrapped')
+  outdated_db = version && new_version && new_version !~ /^#{version}/
+  return unless is_install || outdated_db
 
   puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}), but it is not yet"
   puts "enabled by default. To upgrade, please see:"
