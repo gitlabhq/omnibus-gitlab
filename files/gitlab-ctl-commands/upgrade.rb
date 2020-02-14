@@ -215,9 +215,8 @@ def pg_upgrade_check
   pg_version_file = '/var/opt/gitlab/postgresql/data/PG_VERSION'
   manifest_file = '/opt/gitlab/version-manifest.txt'
 
-  version = File.read(pg_version_file) if File.exist?(pg_version_file)
+  version = File.read(pg_version_file).strip if File.exist?(pg_version_file)
   new_version = File.readlines(manifest_file).grep(/postgresql_new/).first&.split&.[](1) if File.exist?(manifest_file)
-  File.exist?("/var/opt/gitlab/bootstrapped")
 
   # Print when fresh install - Always
   # Print when upgrade
