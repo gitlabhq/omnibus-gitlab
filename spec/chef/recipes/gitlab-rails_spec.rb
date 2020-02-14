@@ -1278,6 +1278,28 @@ describe 'gitlab::gitlab-rails' do
         end
       end
 
+      context 'when registry backfill worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { geo_secondary_registry_consistency_worker: '1 2 3 4 5' })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_secondary_registry_consistency_worker' => '1 2 3 4 5'
+            )
+          )
+        end
+      end
+
+      context 'when registry backfill worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'geo_secondary_registry_consistency_worker' => nil
+            )
+          )
+        end
+      end
+
       context 'when geo prune event log worker is configured' do
         it 'sets the cron value' do
           stub_gitlab_rb(gitlab_rails: { geo_prune_event_log_worker_cron: '5 4 3 2 1' })

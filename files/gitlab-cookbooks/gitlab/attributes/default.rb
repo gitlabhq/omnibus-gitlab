@@ -127,6 +127,7 @@ default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_group_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_file_download_dispatch_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_sync_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['geo_secondary_registry_consistency_worker'] = nil
 default['gitlab']['gitlab_rails']['geo_prune_event_log_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_verification_primary_batch_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_verification_secondary_scheduler_worker_cron'] = nil

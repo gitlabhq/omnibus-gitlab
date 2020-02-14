@@ -362,6 +362,13 @@ production: &base
       cron: "<%= @geo_repository_sync_worker_cron %>"
     <% end %>
 
+    # GitLab Geo registry backfill worker
+    # NOTE: This will only take effect if Geo is enabled (secondary nodes only)
+    <% unless @geo_secondary_registry_consistency_worker.nil? %>
+    geo_secondary_registry_consistency_worker:
+      cron: "<%= @geo_secondary_registry_consistency_worker %>"
+    <% end %>
+
     # GitLab Geo file download dispatch worker
     # NOTE: This will only take effect if Geo is enabled
     <% unless @geo_file_download_dispatch_worker_cron.nil? %>
