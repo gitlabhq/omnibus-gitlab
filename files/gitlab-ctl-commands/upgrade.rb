@@ -218,11 +218,11 @@ def pg_upgrade_check
   version = File.read(pg_version_file) if File.exist?(pg_version_file)
   new_version = File.readlines(manifest_file).grep(/postgresql_new/).first&.split&.[](1) if File.exist?(manifest_file)
 
-  if version && new_version && new_version !~ /^#{version}/
-    puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}), but it is not yet"
-    puts "enabled by default. To upgrade, please see:"
-    puts "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server\n\n"
-  end
+  return unless new_version && (!version || new_version !~ /^#{version}/)
+
+  puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}), but it is not yet"
+  puts "enabled by default. To upgrade, please see:"
+  puts "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server\n\n"
 end
 
 def print_welcome_and_exit
@@ -243,6 +243,7 @@ def print_welcome_and_exit
 
   puts "\nFor a comprehensive list of configuration options please see the Omnibus GitLab readme"
   puts "https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md\n\n"
+  pg_upgrade_check
   stale_files_check
   Kernel.exit 0
 end
