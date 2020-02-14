@@ -211,6 +211,20 @@ def print_gitlab_art
   puts no_color_string % "\n"
 end
 
+def pg_upgrade_check
+  pg_version_file = '/var/opt/gitlab/postgresql/data/PG_VERSION'
+  manifest_file = '/opt/gitlab/version-manifest.txt'
+
+  version = File.read(pg_version_file) if File.exist?(pg_version_file)
+  new_version = File.readlines(manifest_file).grep(/postgresql_new/).first&.split&.[](1) if File.exist?(manifest_file)
+
+  if version && new_version && new_version !~ /^#{version}/
+    puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}), but it is not yet"
+    puts "enabled by default. To upgrade, please see:"
+    puts "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server\n\n"
+  end
+end
+
 def print_welcome_and_exit
   print_tanuki_art
   print_gitlab_art
@@ -250,6 +264,7 @@ def print_upgrade_and_exit
   end
 
   puts "\n"
+  pg_upgrade_check
   stale_files_check
   Kernel.exit 0
 end
