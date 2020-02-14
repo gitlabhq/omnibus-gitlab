@@ -1,0 +1,5 @@
+---
+title: Fix prepared statements limit in database.yml
+merge_request: 3937
+author:
+type: fixed
