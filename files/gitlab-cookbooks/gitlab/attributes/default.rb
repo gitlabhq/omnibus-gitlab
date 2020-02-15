@@ -112,6 +112,7 @@ default['gitlab']['gitlab-rails']['gravatar_plain_url'] = nil
 default['gitlab']['gitlab-rails']['gravatar_ssl_url'] = nil
 default['gitlab']['gitlab-rails']['stuck_ci_jobs_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['expire_build_artifacts_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['environments_auto_stop_cron_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['pipeline_schedule_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_check_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['admin_email_worker_cron'] = nil
