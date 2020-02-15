@@ -211,7 +211,11 @@ def common_post_upgrade(disable_maintenance = true)
   run_reconfigure
 
   log "Waiting for Database to be running."
-  GitlabCtl::PostgreSQL.wait_for_postgresql(30)
+  if @db_service_name == 'geo-postgresql'
+    GitlabCtl::PostgreSQL.wait_for_postgresql(30, psql_command: 'gitlab-geo-psql')
+  else
+    GitlabCtl::PostgreSQL.wait_for_postgresql(30)
+  end
 
   unless [:pg_secondary, :geo_secondary].include?(@instance_type)
     log 'Database upgrade is complete, running analyze_new_cluster.sh'
@@ -248,7 +252,7 @@ end
 
 def configure_postgresql
   log 'Configuring PostgreSQL'
-  status = GitlabCtl::Util.chef_run('solo.rb', 'postgresql-config.json')
+  status = GitlabCtl::Util.chef_run('solo.rb', "#{@db_service_name}-config.json")
   $stdout.puts status.stdout
   if status.error?
     $stderr.puts '===STDERR==='
@@ -479,7 +483,7 @@ end
 
 def revert(version)
   log '== Reverting =='
-  run_sv_command_for_service('stop', 'postgresql')
+  run_sv_command_for_service('stop', @db_service_name)
   if Dir.exist?("#{@db_worker.tmp_data_dir}.#{version.major}")
     run_command("rm -rf #{@db_worker.data_dir}")
     run_command(
@@ -487,7 +491,7 @@ def revert(version)
     )
   end
   create_links(version)
-  run_sv_command_for_service('start', 'postgresql')
+  run_sv_command_for_service('start', @db_service_name)
   log'== Reverted =='
 end
 
