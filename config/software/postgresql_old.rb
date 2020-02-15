@@ -15,8 +15,8 @@
 # limitations under the License.
 #
 
-name 'postgresql_alpha'
-default_version '11.6'
+name 'postgresql_old'
+default_version '9.6.17'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -30,16 +30,16 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '11.6' do
-  source sha256: '49924f7ff92965fdb20c86e0696f2dc9f8553e1563124ead7beedf8910c13170'
+version '9.6.17' do
+  source sha256: 'f6e1e32d32545f97c066f3c19f4d58dfab1205c01252cf85c5c92294ace1a0c2'
 end
 
-# PostgreSQL 10 and up should have a major version of 10, not 10.0.
+# PostgreSQL 10 should have a major version of 10, not 10.0.
 # See: https://www.postgresql.org/support/versioning
 #
 # Be sure to update files/gitlab-cookbooks/postgresql/recipes/enable.rb when
 # upgrading.
-major_version = '11'
+major_version = '9.6'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
 

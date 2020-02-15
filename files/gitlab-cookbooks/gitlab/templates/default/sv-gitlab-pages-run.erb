@@ -3,7 +3,6 @@ set -e # fail on errors
 
 # Redirect stderr -> stdout
 exec 2>&1
-
 <%= render("mount_point_check.erb") %>
 
 cd <%= node['gitlab']['gitlab-pages']['dir'] %>
@@ -17,6 +16,9 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     http_proxy="<%= node['gitlab']['gitlab-pages']['http_proxy'] %>" \
     <% end %>
     /opt/gitlab/embedded/bin/gitlab-pages \
+    <% if node['gitlab']['gitlab-pages']['access_control'] %>
+    -config="<%= node['gitlab']['gitlab-pages']['dir'] %>/gitlab-pages-config" \
+    <% end %>
     <% if node['gitlab']['gitlab-pages']['listen_proxy'] %>
     -listen-proxy="<%= node['gitlab']['gitlab-pages']['listen_proxy'] %>" \
     <% end %>
@@ -72,12 +74,6 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     \
     -api-secret-key="<%= node['gitlab']['gitlab-pages']['dir'] %>/.gitlab_pages_secret" \
     \
-    <% if node['gitlab']['gitlab-pages']['access_control'] %>
-    -auth-client-id=<%= node['gitlab']['gitlab-pages']['gitlab_id'] %> \
-    -auth-client-secret=<%= node['gitlab']['gitlab-pages']['gitlab_secret'] %> \
-    -auth-redirect-uri="<%= node['gitlab']['gitlab-pages']['auth_redirect_uri'] %>" \
-    -auth-secret=<%= node['gitlab']['gitlab-pages']['auth_secret'] %> \
-    <% end %>
     <% if node['gitlab']['gitlab-pages']['insecure_ciphers'] %>
     -insecure-ciphers \
     <% end %>

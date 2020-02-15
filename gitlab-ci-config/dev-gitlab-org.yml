@@ -235,6 +235,9 @@ CentOS-6-branch:
 CentOS-7-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
+CentOS-8-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_8:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
 OpenSUSE-15.1-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.1:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -405,6 +408,9 @@ CentOS-6:
 CentOS-7:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
+CentOS-8:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_8:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
 OpenSUSE-15.1:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.1:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -487,6 +493,11 @@ CentOS-7-staging:
     - CentOS-7
     - CentOS-7-branch
   <<: *staging_upload
+# CentOS-8-staging:
+#   dependencies:
+#     - CentOS-8
+#     - CentOS-8-branch
+#   <<: *staging_upload
 OpenSUSE-15.1-staging:
   dependencies:
     - OpenSUSE-15.1
@@ -530,6 +541,10 @@ CentOS-7-release:
   dependencies:
     - CentOS-7
   <<: *production_release
+# CentOS-8-release:
+#   dependencies:
+#     - CentOS-8
+#   <<: *production_release
 OpenSUSE-15.1-release:
   dependencies:
     - OpenSUSE-15.1

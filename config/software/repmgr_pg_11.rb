@@ -25,7 +25,7 @@ skip_transitive_dependency_licensing true
 
 source git: "https://github.com/2ndQuadrant/repmgr.git"
 
-dependency 'postgresql_alpha'
+dependency 'postgresql_new'
 
 env = with_standard_compiler_flags(with_embedded_path)
 

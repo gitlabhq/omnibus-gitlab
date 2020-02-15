@@ -268,7 +268,7 @@ If you meet all the requirements above, follow these instructions in order. Ther
 
    ```sh
    sudo gitlab-ctl hup unicorn
-   sudo gitlab-ctl usr2 puma
+   sudo gitlab-ctl hup puma
    sudo gitlab-ctl restart sidekiq
    ```
 
@@ -389,7 +389,7 @@ node throughout the process.
 
   ```sh
   sudo gitlab-ctl hup unicorn
-  sudo gitlab-ctl usr2 puma
+  sudo gitlab-ctl hup puma
   sudo gitlab-ctl restart sidekiq
   ```
 
@@ -547,7 +547,7 @@ to resolve this.
 
    ```sh
    sudo gitlab-ctl hup unicorn
-   sudo gitlab-ctl usr2 puma
+   sudo gitlab-ctl hup puma
    sudo gitlab-ctl restart sidekiq
    ```
 
@@ -581,7 +581,7 @@ On each **secondary** node, executing the following:
 
    ```sh
    sudo gitlab-ctl hup unicorn
-   sudo gitlab-ctl usr2 puma
+   sudo gitlab-ctl hup puma
    sudo gitlab-ctl restart sidekiq
    sudo gitlab-ctl restart geo-logcursor
    ```

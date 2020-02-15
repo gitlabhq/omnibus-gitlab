@@ -24,6 +24,7 @@ worker_processes <%= @worker_processes %>
 # Load the Gitlab::Cluster::LifecycleEvents module
 # to notify the application of unicorn events
 require_relative "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/cluster/lifecycle_events"
+require_relative "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/log_timestamp_formatter.rb"
 
 before_exec do |server|
   Gitlab::Cluster::LifecycleEvents.do_before_master_restart
@@ -84,3 +85,7 @@ ENV['GITLAB_UNICORN_MEMORY_MIN'] = (<%= @worker_memory_limit_min %>).to_s
 ENV['GITLAB_UNICORN_MEMORY_MAX'] = (<%= @worker_memory_limit_max %>).to_s
 
 <%- end %>
+
+# Configure the default logger to use a custom formatter that formats the
+# timestamps to be in UTC and in ISO8601.3 format
+Configurator::DEFAULTS[:logger].formatter = Gitlab::LogTimestampFormatter.new

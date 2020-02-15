@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.7.6
+
+- No changes.
+
 ## 12.7.5
 
 ### Fixed (1 change)
@@ -69,6 +73,10 @@ omnibus-gitlab repository.
 - Collect NOTICE files of softwares under Apache license. !3821
 - Bump Ruby version to 2.6.5. !3827
 
+
+## 12.6.7
+
+- No changes.
 
 ## 12.6.6
 
@@ -137,6 +145,10 @@ omnibus-gitlab repository.
 - Change Puma log format to JSON. !3785
 - Update Mattermost to 5.17.1.
 
+
+## 12.5.10
+
+- No changes.
 
 ## 12.5.8
 

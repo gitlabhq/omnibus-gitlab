@@ -1885,6 +1885,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #
 # gitlab_rails['geo_file_download_dispatch_worker_cron'] = "*/10 * * * *"
 # gitlab_rails['geo_repository_sync_worker_cron'] = "*/5 * * * *"
+# gitlab_rails['geo_secondary_registry_consistency_worker'] = "* * * * *"
 # gitlab_rails['geo_prune_event_log_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['geo_repository_verification_primary_batch_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['geo_repository_verification_secondary_scheduler_worker_cron'] = "*/5 * * * *"

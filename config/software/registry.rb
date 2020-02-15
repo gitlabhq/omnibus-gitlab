@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'registry'
-version = Gitlab::Version.new('registry', 'v2.7.7-gitlab')
+version = Gitlab::Version.new('registry', 'v2.8.1-gitlab')
 
 default_version version.print(false)
 

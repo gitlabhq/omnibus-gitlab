@@ -74,6 +74,8 @@ class OhaiHelper
         '6'
       when /^7\./
         '7'
+      when /^8\./
+        '8'
       end
     end
 
