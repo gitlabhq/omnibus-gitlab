@@ -1,6 +1,6 @@
 # Database settings
 
->**Note:**
+NOTE: **Note:**
 Omnibus GitLab has a bundled PostgreSQL server and PostgreSQL is the preferred
 database for GitLab.
 
@@ -238,7 +238,7 @@ After making the changes above, an administrator should run `gitlab-ctl reconfig
 If you experience any issues in regards to the service not listening on TCP, try
 directly restarting the service with `gitlab-ctl restart postgresql`.
 
-> **Note:**
+NOTE: **Note:**
 Some included scripts of the Omnibus package, such as `gitlab-psql` expect the
 connections to Postgres to be handled over the UNIX socket, and may not function
 properly. You can enable TCP/IP without disabling UNIX sockets.
@@ -281,9 +281,11 @@ This consists of:
 
 To change the location of the PostgreSQL data
 
-**Warning**: If you have an existing database, you need to move the data to the new location first
+CAUTION: **Caution:**
+If you have an existing database, you need to move the data to the new location first
 
-**Warning**: This is an intrusive operation. It cannot be done without downtime on an existing installation
+CAUTION: **Caution:**
+This is an intrusive operation. It cannot be done without downtime on an existing installation
 
 1. Stop GitLab if this is an existing installation: `gitlab-ctl stop`.
 1. Update `postgresql['dir']` to the desired location.
@@ -292,11 +294,12 @@ To change the location of the PostgreSQL data
 
 ### Upgrade packaged PostgreSQL server
 
-**As of GitLab 11.11, PostgreSQL 9.6.X and 10.7 are shipped with Omnibus GitLab.**
+`omnibus-gitlab` provides a command `gitlab-ctl pg-upgrade` to update the packaged
+PostgreSQL server to a later version (if one is included in the package). `omnibus-gitlab`
+will automatically update PostgreSQL to the [default shipped version](../package-information/postgresql_versions.md)
+during packages, upgrades, unless specifically opted out.
 
-You can follow the instructions for manually upgrading PostgreSQL to 10.x.
-
-For GitLab 12.0 or later, we will be automatically upgrading the database to 10.x unless specifically opted out. To opt out, run
+To opt out of automatic PostgreSQL upgrade during GitLab package upgrades, run:
 
 ```shell
 sudo touch /etc/gitlab/disable-postgresql-upgrade
@@ -317,20 +320,22 @@ Before upgrading, please check the following:
 - If you recently upgraded, make sure that `sudo gitlab-ctl reconfigure` ran successfully before you proceed.
 - You will need to have sufficient disk space for two copies of your database. **Do not attempt to upgrade unless you have enough free space available.** Check your database size using `sudo du -sh /var/opt/gitlab/postgresql/data` (or update to your database path) and space available using `sudo df -h`. If the partition where the database resides does not have enough space, you can pass the argument `--tmp-dir $DIR` to the command.
 
-Please note:
-
-**This upgrade requires downtime as the database must be down while the upgrade is being performed.
+NOTE: **Note:**
+This upgrade requires downtime as the database must be down while the upgrade is being performed.
 The length of time depends on the size of your database.
 If you would rather avoid downtime, it is possible to upgrade to a new database using [Slony](http://www.slony.info/).
-Please see our [guide](https://docs.gitlab.com/ee/update/upgrading_postgresql_using_slony.html) on how to perform the upgrade.**
+Please see our [guide](https://docs.gitlab.com/ee/update/upgrading_postgresql_using_slony.html) on how to perform the upgrade.
 
 Once you have confirmed that the the above checklist is satisfied,
 you can proceed.
 To perform the upgrade, run the command:
 
-```
+```shell
 sudo gitlab-ctl pg-upgrade
 ```
+
+NOTE: **Note:**
+In GitLab 12.8 or later, you can pass the `-V 11` flag to opt in to upgrading to PostgreSQL 11.
 
 This command performs the following steps:
 
@@ -348,17 +353,70 @@ This command performs the following steps:
 Once this step is complete, verify everything is working as expected.
 
 **Once you have verified that your GitLab instance is running correctly**,
-you can remove the old database with:
+you can clean up the old database files with:
 
 ```
-sudo rm -rf /var/opt/gitlab/postgresql/data.9.6
+sudo rm -rf /var/opt/gitlab/postgresql/data.<old_version>
+sudo rm -f /var/opt/gitlab/postgresql-version.old
 ```
+
+You can find details of PostgreSQL versions shipped with various GitLab versions in
+[PostgreSQL versions shipped with Omnibus GitLab](../package-information/postgresql_versions.md).
+The following section details their update policy.
+
+#### GitLab 12.8 and later
+
+**As of GitLab 12.8, PostgreSQL 9.6.17, 10.12, and 11.7 are shipped with
+Omnibus GitLab.**
+
+Automatically during package upgrades (unless opted out) and when user manually
+runs `gitlab-ctl pg-upgrade`, `omnibus-gitlab` will still be attempting to
+upgrade the database only to 10.x, while 11.x will be available for users to
+manually upgrade to. To manually update PostgreSQL to version 11.x , the `pg-upgrade`
+command has to be passed with a version argument (`-V` or `--target-version`)
+
+```shell
+sudo gitlab-ctl pg-upgrade -V 11
+```
+
+NOTE: **Note:**
+We **DO NOT** recommend updating to PostgreSQL 11.x on GitLab instances making use of
+GitLab Geo for replication, as we have not yet completed PostgreSQL 11 testing with GitLab
+Geo. We will be [completing this work](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4975)
+in a future release.
+
+#### GitLab 12.0 and later
+
+**As of GitLab 12.0, PostgreSQL 9.6.11 and 10.7 are shipped with Omnibus
+GitLab.**
+
+On upgrades, we will be automatically upgrading the database to 10.7 unless
+specifically opted out as described above.
+
+#### GitLab 11.11 and later
+
+**As of GitLab 11.11, PostgreSQL 9.6.X and 10.7 are shipped with Omnibus
+GitLab.**
+
+Fresh installs will be getting PostgreSQL 10.7 while GitLab package upgrades
+will retain the existing version of PostgreSQL. Users can manually upgrade to
+the 10.7 using the `pg-upgrade` command as mentioned above.
 
 ### Downgrade packaged PostgreSQL server
 
-As of GitLab 10.0, the default version of PostgreSQL is 9.6.1, and 9.2.18 is no longer shipped in the package.
+On GitLab versions which ship multiple PostgreSQL versions, users can downgrade
+an already upgraded PostgreSQL version to the earlier version using the `gitlab-ctl
+revert-pg-upgrade` command. This command also supports the `-V` flag to specify
+a target version for scenarios where more than two PostgreSQL versions are shipped in
+the package (for example: GitLab 12.8 where PostgreSQL 9.6.x, 10.x, and 11.x are
+shipped).
 
-If you need to run an older version of PostgreSQL, you must downgrade GitLab to an older version.
+If the target version is not specified, it will use the version in `/var/opt/gitlab/postgresql-version.old`
+if available. Otherwise it falls back to the default version shipped with GitLab.
+
+On other GitLab versions which ship only one PostgreSQL versions, you can't
+downgrade your PostgreSQL version. You must downgrade GitLab to an older version for
+this.
 
 ### Connecting to the bundled PostgreSQL database
 
@@ -382,7 +440,8 @@ By default, GitLab is configured to use the PostgreSQL server that is included
 in Omnibus GitLab. You can also reconfigure it to use an external instance of
 PostgreSQL.
 
-**WARNING** If you are using non-packaged PostgreSQL server, you need to make
+CAUTION: **Caution:**
+If you are using non-packaged PostgreSQL server, you need to make
 sure that PostgreSQL is set up according to the [database requirements document].
 
 1. Edit `/etc/gitlab/gitlab.rb`:
@@ -515,7 +574,8 @@ correct executables by running both the [backup][rake-backup] and
 
 ### Seed the database (fresh installs only)
 
-**This is a destructive command; do not run it on an existing database!**
+CAUTION: **Caution:**
+This is a destructive command; do not run it on an existing database!
 
 ---
 
@@ -580,7 +640,7 @@ gitlab_rails['auto_migrate'] = false
 Don't forget to remove the `#` comment characters at the beginning of this
 line.
 
-**Note:**
+NOTE: **Note:**
 `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
 plain-text passwords.
 
@@ -605,7 +665,7 @@ Follow the steps below to upgrade the database nodes
 
    1. Run `gitlab-ctl reconfigure` to update the configureation.
    1. Run `sudo gitlab-ctl restart postgresql` to get PostgreSQL restarted with the new configuration.
-   1. On running `pg-upgrade` on a PG secondary node, the node will be removed
+   1. On running `pg-upgrade` on a PostgreSQL secondary node, the node will be removed
       from the cluster.
    1. Once all the secondary nodes are upgraded using `pg-upgrade`, the user
       will be left with a single-node cluster that has only the primary node.
@@ -624,7 +684,7 @@ Follow the steps below to upgrade the database nodes
    1. Run `gitlab-ctl reconfigure` to update the configureation.
    1. Run `sudo gitlab-ctl restart postgresql` to get PostgreSQL restarted with the new configuration.
    1. On a primary node, `pg-upgrade` will update the existing data to match
-      the new PG version.
+      the new PostgreSQL version.
 1. Recreate the secondary nodes by running the following command on each of them
 
    ```bash
@@ -636,6 +696,9 @@ Follow the steps below to upgrade the database nodes
    ```bash
    gitlab-ctl repmgr cluster show
    ```
+
+NOTE: **Note:**
+As of GitLab 12.8, you can opt into upgrading PostgreSQL 11 with `pg-upgrade -V 11`
 
 ### Troubleshooting upgrades in an HA cluster
 
