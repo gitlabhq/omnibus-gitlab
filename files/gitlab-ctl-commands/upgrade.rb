@@ -17,6 +17,13 @@
 
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 
+# For testing purposes, if the first path cannot be found load the second
+begin
+  require_relative '../../cookbooks/gitlab/libraries/pg_version'
+rescue LoadError
+  require_relative '../gitlab-cookbooks/gitlab/libraries/pg_version'
+end
+
 add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   # On a fresh installation, run reconfigure automatically if EXTERNAL_URL is set
   unless File.exist?("/var/opt/gitlab/bootstrapped") || external_url_unset?
@@ -213,16 +220,19 @@ end
 
 def pg_upgrade_check
   pg_version_file = '/var/opt/gitlab/postgresql/data/PG_VERSION'
-  manifest_file = '/opt/gitlab/version-manifest.txt'
+  version = PGVersion.parse(File.read(pg_version_file).strip) if File.exist?(pg_version_file)
 
-  version = File.read(pg_version_file).strip if File.exist?(pg_version_file)
-  new_version = File.readlines(manifest_file).grep(/postgresql_new/).first&.split&.[](1) if File.exist?(manifest_file)
+  manifest_file = '/opt/gitlab/version-manifest.txt'
+  if File.exist?(manifest_file)
+    manifest_entry = File.readlines(manifest_file).grep(/postgresql_new/).first
+    new_version = PGVersion.parse(manifest_entry&.split&.[](1))
+  end
 
   # Print when fresh install - Always
   # Print when upgrade
   #  - when we have a database and its not already on the new version
   is_install = !File.exist?('/var/opt/gitlab/bootstrapped')
-  outdated_db = version && new_version && new_version !~ /^#{version}/
+  outdated_db = version && new_version && new_version.major.to_f > version.major.to_f
   return unless is_install || outdated_db
 
   puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}), but it is not yet"
