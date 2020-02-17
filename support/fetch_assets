@@ -23,7 +23,7 @@ fi
 gitlab_version=$(echo "${1}" | awk '
   {
     gsub(/[^a-z0-9]/, "-")
-    gsub(/(\A-+|-+\z)/, "")
+    gsub(/(^-+|-+$)/, "")
     print substr($0, 1, 63);
   }
 ')
