@@ -103,10 +103,10 @@ backup_restore() {
   if [ -n "${registry_dir}" ]; then
     # Transfer ownership to git user to ensure that recovery won't fail on 
     # the existing registry
-    chown_registry ${gitlab_user}:${gitlab_group}
+    chown_registry ${gitlab_user}
 
     # Transfer ownership back to registry user when restore task is finished.
-    trap "chown_registry ${registry_user}:${registry_group}" EXIT
+    trap "chown_registry ${registry_user}" EXIT
   fi
 
   <%= install_dir %>/bin/gitlab-rake gitlab:backup:restore ${@}
