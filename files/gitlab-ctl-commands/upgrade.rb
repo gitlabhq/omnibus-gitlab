@@ -17,6 +17,13 @@
 
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 
+# For testing purposes, if the first path cannot be found load the second
+begin
+  require_relative '../../cookbooks/gitlab/libraries/pg_version'
+rescue LoadError
+  require_relative '../gitlab-cookbooks/gitlab/libraries/pg_version'
+end
+
 add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   # On a fresh installation, run reconfigure automatically if EXTERNAL_URL is set
   unless File.exist?("/var/opt/gitlab/bootstrapped") || external_url_unset?
@@ -211,6 +218,28 @@ def print_gitlab_art
   puts no_color_string % "\n"
 end
 
+def pg_upgrade_check
+  pg_version_file = '/var/opt/gitlab/postgresql/data/PG_VERSION'
+  version = PGVersion.parse(File.read(pg_version_file).strip) if File.exist?(pg_version_file)
+
+  manifest_file = '/opt/gitlab/version-manifest.txt'
+  if File.exist?(manifest_file)
+    manifest_entry = File.readlines(manifest_file).grep(/postgresql_new/).first
+    new_version = PGVersion.parse(manifest_entry&.split&.[](1))
+  end
+
+  # Print when fresh install - Always
+  # Print when upgrade
+  #  - when we have a database and its not already on the new version
+  is_install = !File.exist?('/var/opt/gitlab/bootstrapped')
+  outdated_db = version && new_version && new_version.major.to_f > version.major.to_f
+  return unless is_install || outdated_db
+
+  puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}), but it is not yet"
+  puts "enabled by default. To upgrade, please see:"
+  puts "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server\n\n"
+end
+
 def print_welcome_and_exit
   print_tanuki_art
   print_gitlab_art
@@ -229,6 +258,7 @@ def print_welcome_and_exit
 
   puts "\nFor a comprehensive list of configuration options please see the Omnibus GitLab readme"
   puts "https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md\n\n"
+  pg_upgrade_check
   stale_files_check
   Kernel.exit 0
 end
@@ -250,6 +280,7 @@ def print_upgrade_and_exit
   end
 
   puts "\n"
+  pg_upgrade_check
   stale_files_check
   Kernel.exit 0
 end
