@@ -4,12 +4,15 @@ property :service_name, String, name_property: true
 property :ip_address, [String, nil], default: nil
 property :port, [Integer, nil], default: nil
 property :reload_service, [TrueClass, FalseClass], default: true
+property :advertise_addr, [String, nil], default: lazy { node['consul']['configuration']['advertise_addr'] }
 
 # Combined address plus port - 0.0.0.0:1234
 property :socket_address, [String, nil], default: nil
 
 action :create do
-  if property_is_set?(:socket_address)
+  if new_resource.advertise_addr
+    ip_address = new_resource.advertise_addr
+  elsif property_is_set?(:socket_address)
     ip_address, port = new_resource.socket_address.split(':')
     ip_address = translate_address(ip_address)
   elsif property_is_set?(:ip_address) && property_is_set?(:port)
