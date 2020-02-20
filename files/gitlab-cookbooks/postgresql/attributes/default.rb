@@ -5,7 +5,6 @@ default['postgresql']['enable'] = false
 default['postgresql']['ha'] = false
 default['postgresql']['dir'] = "/var/opt/gitlab/postgresql"
 default['postgresql']['data_dir'] = nil
-default['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
 default['postgresql']['unix_socket_directory'] = nil
 default['postgresql']['username'] = "gitlab-psql"
 default['postgresql']['group'] = "gitlab-psql"
@@ -91,6 +90,14 @@ default['postgresql']['log_lock_waits'] = 1
 default['postgresql']['deadlock_timeout'] = '5s'
 default['postgresql']['track_io_timing'] = 'off'
 default['postgresql']['default_statistics_target'] = 1000
+
+# Logging settings
+default['postgresql']['log_destination'] = nil
+default['postgresql']['logging_collector'] = nil
+default['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
+default['postgresql']['log_truncate_on_rotation'] = nil
+default['postgresql']['log_rotation_age'] = nil
+default['postgresql']['log_rotation_size'] = nil
 
 # Replication settings
 default['postgresql']['sql_replication_user'] = "gitlab_replicator"

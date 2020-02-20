@@ -383,6 +383,15 @@ describe 'postgresql 9.6' do
         ).with_content(/^dynamic_shared_memory_type = /)
       end
 
+      it 'sets logging directory' do
+        expect(chef_run.node['postgresql']['log_directory'])
+          .to eq('/var/log/gitlab/postgresql')
+
+        expect(chef_run).to render_file(
+          postgresql_conf
+        ).with_content(%r(^log_directory = '/var/log/gitlab/postgresql'))
+      end
+
       it 'sets the max_locks_per_transaction setting' do
         expect(chef_run.node['postgresql']['max_locks_per_transaction'])
           .to eq(128)
@@ -390,6 +399,34 @@ describe 'postgresql 9.6' do
         expect(chef_run).to render_file(
           postgresql_conf
         ).with_content(/max_locks_per_transaction = 128/)
+      end
+
+      context 'with custom logging settings set' do
+        before do
+          stub_gitlab_rb({
+                           postgresql: {
+                             log_destination: 'csvlog',
+                             logging_collector: 'on',
+                             log_filename: 'test.log',
+                             log_file_mode: '0600',
+                             log_truncate_on_rotation: 'on',
+                             log_rotation_age: '1d',
+                             log_rotation_size: '10MB'
+                           }
+                         })
+        end
+
+        it 'sets logging parameters' do
+          expect(chef_run).to render_file(postgresql_conf).with_content { |content|
+            expect(content).to match(/log_destination = 'csvlog'/)
+            expect(content).to match(/logging_collector = on/)
+            expect(content).to match(/log_filename = 'test.log'/)
+            expect(content).to match(/log_file_mode = 0600/)
+            expect(content).to match(/log_truncate_on_rotation = on/)
+            expect(content).to match(/log_rotation_age = 1d/)
+            expect(content).to match(/log_rotation_size = 10MB/)
+          }
+        end
       end
 
       context 'when dynamic_shared_memory_type is none' do

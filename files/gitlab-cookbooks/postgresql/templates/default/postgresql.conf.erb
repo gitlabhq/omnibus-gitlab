@@ -281,6 +281,30 @@ hot_standby = <%= @hot_standby %>
 #------------------------------------------------------------------------------
 
 # - Where to Log -
+<% if @log_destination %>
+log_destination = '<%= @log_destination %>'
+<% end %>
+<% if @logging_collector %>
+logging_collector = <%= @logging_collector %>
+<% end %>
+<% if @log_directory %>
+log_directory = '<%= @log_directory %>'
+<% end %>
+<% if @log_filename %>
+log_filename = '<%= @log_filename %>'
+<% end %>
+<% if @log_file_mode %>
+log_file_mode = <%= @log_file_mode %>
+<% end %>
+<% if @log_truncate_on_rotation %>
+log_truncate_on_rotation = <%= @log_truncate_on_rotation %>
+<% end %>
+<% if @log_rotation_age %>
+log_rotation_age = <%= @log_rotation_age %>
+<% end %>
+<% if @log_rotation_size %>
+log_rotation_size = <%= @log_rotation_size %>
+<% end %>
 
 #log_destination = 'stderr'   # Valid values are combinations of
           # stderr, csvlog, syslog, and eventlog,
@@ -294,7 +318,7 @@ hot_standby = <%= @hot_standby %>
           # (change requires restart)
 
 # These are only used if logging_collector is on:
-#log_directory = 'pg_log'   # directory where log files are written,
+#log_directory = 'log'   # directory where log files are written,
           # can be absolute or relative to PGDATA
 #log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log'  # log file name pattern,
           # can include strftime() escapes

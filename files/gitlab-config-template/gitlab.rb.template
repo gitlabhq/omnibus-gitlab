@@ -883,6 +883,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['ha'] = false
 # postgresql['dir'] = "/var/opt/gitlab/postgresql"
 # postgresql['log_directory'] = "/var/log/gitlab/postgresql"
+# postgresql['log_destination'] = nil
+# postgresql['logging_collector'] = nil
+# postgresql['log_truncate_on_rotation'] = nil
+# postgresql['log_rotation_age'] = nil
+# postgresql['log_rotation_size'] = nil
 # postgresql['username'] = "gitlab-psql"
 # postgresql['group'] = "gitlab-psql"
 ##! `SQL_USER_PASSWORD_HASH` can be generated using the command `gitlab-ctl pg-password-md5 gitlab`
