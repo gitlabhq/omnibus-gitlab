@@ -276,7 +276,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = true
 gitlab_rails['gitlab_email_from'] = 'xxxx@xx.com'
 gitlab_rails['smtp_domain'] = "exmail.qq.com"
-````
+```
 
 ### NetEase Free Enterprise Email
 
@@ -293,7 +293,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = true
 gitlab_rails['gitlab_email_from'] = 'xxxx@xx.com'
 gitlab_rails['smtp_domain'] = "smtp.ym.163.com"
-````
+```
 
 ### SendGrid with username/password authentication
 
@@ -307,7 +307,7 @@ gitlab_rails['smtp_domain'] = "smtp.sendgrid.net"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
-````
+```
 
 ### SendGrid with API Key authentication
 
@@ -323,7 +323,7 @@ gitlab_rails['smtp_domain'] = "smtp.sendgrid.net"
 gitlab_rails['smtp_authentication'] = "plain"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
-````
+```
 
 Note that `smtp_user_name` must literally be set to `"apikey"`.
 The API Key you created must be entered in `smtp_password`.
@@ -342,7 +342,7 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
-````
+```
 
 ### UD Media
 
