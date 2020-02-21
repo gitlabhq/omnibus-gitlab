@@ -445,22 +445,35 @@ SLES-12:
     refs:
       - /.*ee\.\d/@gitlab/omnibus-gitlab
 
+create_omnibus_manifest:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
+  stage: prepare-assets
+  variables:
+    TERM: xterm-256color
+  script:
+    - bundle exec omnibus manifest gitlab -l nothing 2> /dev/null > version-manifest.json
+  <<: *dev-except-branches
+  <<: *except-auto-deploy-tag
+  cache: *tag-cache
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - version-manifest.json
+
 dependency_scanning:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-depscan"
-  stage: scan-dependencies
-  allow_failure: true
+  stage: package-and-image
   variables:
     TERM: xterm-256color
     REPORT_PATH: ./
   before_script: []
   script:
-    - manifest=pkg/ubuntu-xenial/*.version-manifest.json
+    - manifest=version-manifest.json
     - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s $manifest
   <<: *dev-except-branches
   <<: *except-auto-deploy-tag
-  dependencies:
-    - Ubuntu-16.04
-    - Ubuntu-16.04-branch
+  needs:
+    - create_omnibus_manifest
   artifacts:
     expire_in: 7 days
     when: on_failure
