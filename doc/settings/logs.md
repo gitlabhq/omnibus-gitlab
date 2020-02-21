@@ -137,6 +137,18 @@ sidekiq['log_format'] = 'json'
 gitlab_pages['log_format'] = 'json'
 ```
 
+NOTE: **Note** PostgreSQL does not support JSON logging without an
+external plugin. However, it does support logging in CSV format:
+
+```ruby
+postgresql['log_destination'] = 'csvlog'
+postgresql['logging_collector'] = 'on'
+```
+
+A restart of the database is required for this to take effect. For more
+details, see the [PostgreSQL
+documentation](https://www.postgresql.org/docs/current/runtime-config-logging.html).
+
 ## Text logging
 
 Customers with established log ingestion systems may not wish to use JSON
