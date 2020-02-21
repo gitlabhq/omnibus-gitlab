@@ -1,0 +1,5 @@
+---
+title: Support running pg-upgrade on geo-postgres in isolation
+merge_request: 3924
+author:
+type: fixed
