@@ -1,5 +1,0 @@
----
-title: Check root before gitlab-ctl reconfigure
-merge_request: 3913
-author: 
-type: changed
