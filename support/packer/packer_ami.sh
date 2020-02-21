@@ -5,7 +5,9 @@ TYPE=$2
 DOWNLOAD_URL=$3
 
 # Expanding the variable to get actual license file contents
-EE_LICENSE_FILE=${!4}
+if [ -n "$4" ]; then
+  EE_LICENSE_FILE=${!4}
+fi
 
 PACKER_PATH=$(pwd)/support/packer
 
