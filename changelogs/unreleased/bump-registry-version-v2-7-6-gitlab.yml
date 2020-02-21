@@ -1,5 +1,0 @@
----
-title: Bump registry to v2.7.6-gitlab from v2.7.4-gitlab
-merge_request: https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/3862
-author:
-type: changed

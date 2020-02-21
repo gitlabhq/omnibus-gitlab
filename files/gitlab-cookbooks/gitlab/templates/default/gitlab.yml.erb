@@ -287,6 +287,9 @@ production: &base
     # Remove expired build artifacts
     expire_build_artifacts_worker:
       cron:<% if @expire_build_artifacts_worker_cron %> "<%= @expire_build_artifacts_worker_cron %>"<% end %>
+    # Stop expired environments
+    environments_auto_stop_cron_worker:
+      cron:<% if @environments_auto_stop_cron_worker_cron %> "<%= @environments_auto_stop_cron_worker_cron %>"<% end %>
     # Schedule pipelines in the near future
     pipeline_schedule_worker:
       cron:<% if @pipeline_schedule_worker_cron %> "<%= @pipeline_schedule_worker_cron %>"<% end %>

@@ -1,0 +1,5 @@
+---
+title: Don't change group ownership of registry directory
+merge_request: 3931
+author: Henrik Christian Grove <grove@one.com>
+type: fixed

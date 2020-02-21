@@ -38,7 +38,7 @@ variables:
   AUTO_DEPLOY_TAG_REGEX: '^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$'
   # Default environment for auto-deploy
   AUTO_DEPLOY_ENVIRONMENT: 'pre'
-  MAX_PACKAGE_SIZE_MB: "800"
+  MAX_PACKAGE_SIZE_MB: "850"
 
 ### For services that need a docker daemon
 .docker_job: &docker_job

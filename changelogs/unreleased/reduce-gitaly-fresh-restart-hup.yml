@@ -1,5 +1,0 @@
----
-title: Don't restart and hup gitaly right after a fresh install
-merge_request: 3918
-author:
-type: changed

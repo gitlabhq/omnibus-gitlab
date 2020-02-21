@@ -1,5 +1,0 @@
----
-title: Pass GitLab Pages secrets as environment variables
-merge_request: 3689
-author:
-type: deprecated

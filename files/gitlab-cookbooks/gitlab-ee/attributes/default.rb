@@ -39,6 +39,7 @@ default['gitlab']['sidekiq-cluster']['max_concurrency'] = nil
 default['gitlab']['sidekiq-cluster']['min_concurrency'] = nil
 default['gitlab']['sidekiq-cluster']['queue_groups'] = []
 default['gitlab']['sidekiq-cluster']['negate'] = false
+default['gitlab']['sidekiq-cluster']['experimental_queue_selector'] = false
 
 ###
 # Geo: Common (primary or secondary) node configuration

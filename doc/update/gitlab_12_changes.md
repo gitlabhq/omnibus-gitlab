@@ -95,13 +95,18 @@ The default formula for calculating the number of Unicorn worker processes has b
 
 ### 12.3
 
-1. To prevent confusion with the broader GitLab Monitor feature set, the
-   GitLab Monitor tool has been renamed to GitLab Exporter. As a result, usage
-   of `gitlab_monitor[*]` keys in `gitlab.rb` file has been deprecated in favor
-   of `gitlab_exporter[*]` ones.
+To prevent confusion with the broader GitLab Monitor feature set, the GitLab Monitor
+tool has been renamed to GitLab Exporter. As a result, usage of `gitlab_monitor[*]`
+keys in `gitlab.rb` file has been deprecated in favor of `gitlab_exporter[*]` ones.
 
-   The deprecated settings will be removed in GitLab 13.0. They will continue to
-   work till then, but warnings will be displayed at the end of reconfigure run.
-   Since upgrades to 13.0 will be prevented if removed settings are found in
-   `gitlab.rb`, users who are currently using those settings are advised to
-   switch to `gitlab_exporter[*]` ones at the earliest.
+The deprecated settings will be removed in GitLab 13.0. They will continue to
+work till then, but warnings will be displayed at the end of reconfigure run.
+Since upgrades to 13.0 will be prevented if removed settings are found in `gitlab.rb`,
+users who are currently using those settings are advised to switch to `gitlab_exporter[*]`
+ones at the earliest.
+
+### 12.8
+
+PostgreSQL 11.7 is being shipped with the package in addition to 10.12 and 9.6.17.
+Both fresh installs and upgrades will still continue to use 10.12, but users can
+manually upgrade to 11.7 following the [upgrade docs](../settings/database.md#upgrade-packaged-postgresql-server).

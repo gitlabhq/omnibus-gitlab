@@ -3,6 +3,57 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.8.0
+
+### Security (2 changes, 1 of them is from the community)
+
+- Update GraphicsMagick to 1.3.34. !3905 (Takuya Noguchi)
+- Update postgresql 10.9->10.11, 9.6.14->9.6.16. Resolves CVE-2019-10208.
+
+### Fixed (2 changes)
+
+- Handle worker timeouts configured as strings. !3877
+- Fix prepared statements limit in database.yml. !3937
+
+### Deprecated (1 change)
+
+- Pass GitLab Pages secrets as environment variables. !3689
+
+### Changed (10 changes)
+
+- Update gitlab-exporter to 5.2.2. !3848
+- Bump registry to v2.7.6-gitlab from v2.7.4-gitlab. !3862
+- Bump registry to v2.7.7-gitlab from v2.7.6-gitlab. !3879
+- Update gitlab-org/gitlab-exporter from 5.2.2 to 6.0.0. !3906
+- Add support for PostgreSQL 11 to gitlab-ctl pg-upgrade. !3907
+- Check root before gitlab-ctl reconfigure. !3913
+- Don't restart and hup gitaly right after a fresh install. !3918
+- Format Unicorn timestamp logs in ISO8601.3 format. !3926
+- Bump Container Registry to v2.8.0-gitlab. !3929
+- Bump Container Registry to v2.8.1-gitlab. !3934
+
+### Added (9 changes)
+
+- Provide packages for CentOS/RHEL 8. !3748
+- Adding Vacuum Queue metrics to postgres-exporter.yaml. !3771
+- Support min_concurrency option for sidekiq-cluster. !3867
+- Add Pages -gitlab-client-http-timeout and -gitlab-client-jwt-expiry". !3886
+- Make GitLab GraphQL timeout configurable. !3916
+- Compile repmgr for PG 11. !3919
+- Support experimental_queue_selector option for sidekiq-cluster. !3920
+- Add setting for environment auto stop worker. !3927
+- Add notification on install for PG11. !3935
+
+### Other (6 changes)
+
+- Add PostgreSQL 11 as an alpha database version. !3858
+- Update monitoring components. !3874
+- Patch Git to get better pack reuse. !3896
+- Bump PostgreSQL versions to 9.6.17, 10.12, and 11.7. !3933
+- Upgrade Mattermost to 5.19.1.
+- Update Mattermost to 5.18.1.
+
+
 ## 12.7.6
 
 - No changes.
