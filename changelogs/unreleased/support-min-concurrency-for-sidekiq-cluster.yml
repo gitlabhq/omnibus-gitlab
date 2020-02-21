@@ -1,5 +1,0 @@
----
-title: Support min_concurrency option for sidekiq-cluster
-merge_request: 3867
-author:
-type: added

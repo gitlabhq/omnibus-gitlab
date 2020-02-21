@@ -1,5 +1,0 @@
----
-title: Adding Vacuum Queue metrics to postgres-exporter.yaml
-merge_request: 3771
-author:
-type: added
