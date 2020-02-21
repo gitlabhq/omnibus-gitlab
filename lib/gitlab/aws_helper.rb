@@ -11,7 +11,12 @@ class AWSHelper
 
     @version = version
     @type = type || 'ce'
-    @type = 'ee-ultimate' if @type == 'ee' && Gitlab::Util.get_env("EE_ULTIMATE_AMI") == "true"
+    release_type = Gitlab::Util.get_env('AWS_RELEASE_TYPE')
+
+    if (@type == 'ee') && release_type
+      @type = "ee-#{release_type}"
+      @license_file = "AWS_#{release_type}_LICENSE_FILE".upcase
+    end
     @clients = {}
     @download_url = Build::Info.package_download_url
   end
@@ -55,6 +60,8 @@ class AWSHelper
       "GitLab Enterprise Edition"
     elsif @type == "ee-ultimate"
       "GitLab Enterprise Edition Ultimate"
+    elsif @type == "ee-premium"
+      "GitLab Enterprise Edition Premium"
     end
   end
 
@@ -94,7 +101,7 @@ class AWSHelper
   end
 
   def create_ami
-    system(*%W[support/packer/packer_ami.sh #{@version} #{@type} #{@download_url}])
+    system(*%W[support/packer/packer_ami.sh #{@version} #{@type} #{@download_url} #{@license_file}])
   end
 
   def process

@@ -69,10 +69,19 @@ describe 'aws:process', type: :rake do
   it 'should identify ee ultimate category correctly' do
     allow(Build::Info).to receive(:edition).and_return('ee')
     allow(Gitlab::Util).to receive(:get_env).and_call_original
-    allow(Gitlab::Util).to receive(:get_env).with("EE_ULTIMATE_AMI").and_return('true')
+    allow(Gitlab::Util).to receive(:get_env).with("AWS_RELEASE_TYPE").and_return('ultimate')
     allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
 
     expect { Rake::Task['aws:process'].invoke }.to output(/Finding existing images of GitLab Enterprise Edition Ultimate/).to_stdout
+  end
+
+  it 'should identify ee premium category correctly' do
+    allow(Build::Info).to receive(:edition).and_return('ee')
+    allow(Gitlab::Util).to receive(:get_env).and_call_original
+    allow(Gitlab::Util).to receive(:get_env).with("AWS_RELEASE_TYPE").and_return('premium')
+    allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
+
+    expect { Rake::Task['aws:process'].invoke }.to output(/Finding existing images of GitLab Enterprise Edition Premium/).to_stdout
   end
 
   # it 'should delete existing smaller versioned AMIs' do
@@ -88,7 +97,7 @@ describe 'aws:process', type: :rake do
     allow(Build::Check).to receive(:is_ee?).and_return(false)
     allow(Build::Check).to receive(:match_tag?).and_return(true)
 
-    expect_any_instance_of(Kernel).to receive(:system).with(*%w[support/packer/packer_ami.sh 8.16.4 ce http://example.com])
+    expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "8.16.4", "ce", "http://example.com", ""])
     expect { Rake::Task['aws:process'].invoke }.to output(/No greater version exists. Creating AMI/).to_stdout
   end
 
