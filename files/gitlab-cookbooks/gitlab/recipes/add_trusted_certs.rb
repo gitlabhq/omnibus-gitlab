@@ -36,4 +36,5 @@ ruby_block "Move existing certs and link to #{ssl_certs_dir}" do
   only_if { cert_helper.new_certificate_added? }
   notifies :restart, "service[unicorn]" if omnibus_helper.should_notify?("unicorn")
   notifies :restart, "service[puma]" if omnibus_helper.should_notify?("puma")
+  notifies :restart, "service[gitlab-pages]" if omnibus_helper.should_notify?("gitlab-pages")
 end
