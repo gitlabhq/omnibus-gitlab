@@ -745,12 +745,17 @@ To upgrade a Geo cluster, you will need a name for the replication slot, and the
    sudo gitlab-ctl pg-upgrade
    ```
 
-1. Upgrade the `gitlab-ee` package on the Geo secondary server.
-   Or to manually upgrade PostgreSQL, run:
+1. Upgrade the `gitlab-ee` package on the Geo secondary servers.
+   Or manually upgrade PostgreSQL, run:
 
    ```shell
    sudo gitlab-ctl pg-upgrade
    ```
+
+   NOTE: **Note:**
+   In a [Geo HA](https://docs.gitlab.com/ee/administration/geo/replication/high_availability.html) setup with databases
+   managed by GitLab Omnibus, you should run the command above on both the Geo **secondary database**, and also on the
+   **tracking database**.
 
 1. Re-initialize the database on the Geo secondary server using the command
 
@@ -760,11 +765,19 @@ To upgrade a Geo cluster, you will need a name for the replication slot, and the
 
    You will be prompted for the password of the primary server.
 
+   NOTE: **Note:**
+   In a [Geo HA](https://docs.gitlab.com/ee/administration/geo/replication/high_availability.html) setup with databases
+   managed by GitLab Omnibus, the command above should be run on your Geo **secondary database**.
+
 1. Refresh the foreign tables on the Geo secondary server using the command
 
    ```shell
    sudo gitlab-rake geo:db:refresh_foreign_tables
    ```
+
+   NOTE: **Note:**
+   In a [Geo HA](https://docs.gitlab.com/ee/administration/geo/replication/high_availability.html) setup with databases
+   managed by GitLab Omnibus, the command above should be run on your Geo **tracking database**.
 
 1. Restart `unicorn`, `sidekiq`, and `geo-logcursor`.
 
@@ -775,8 +788,6 @@ To upgrade a Geo cluster, you will need a name for the replication slot, and the
    ```
 
 1. Navigate to `https://your_primary_server/admin/geo/nodes` and ensure that all nodes are healthy
-
-[added with GitLab 12.0](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4309)
 
 [rake-backup]: https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system "Backup raketask documentation"
 [Reconfigure GitLab]: https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure "Reconfigure GitLab"

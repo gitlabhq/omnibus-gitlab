@@ -33,14 +33,17 @@ build do
   command "mkdir -p #{install_dir}/embedded/cookbooks"
   sync './', "#{install_dir}/embedded/cookbooks/"
 
+  solo_recipes = %w(dna postgresql-bin postgresql-config)
+
   # If EE package, use a different master cookbook
   if EE
     cookbook_name = 'gitlab-ee'
+    solo_recipes << 'geo-postgresql-config'
   else
     delete "#{install_dir}/embedded/cookbooks/gitlab-ee"
   end
 
-  %w(dna postgresql-bin postgresql-config).each do |config|
+  solo_recipes.each do |config|
     erb dest: "#{install_dir}/embedded/cookbooks/#{config}.json",
         source: "#{config}.json.erb",
         mode: 0644,

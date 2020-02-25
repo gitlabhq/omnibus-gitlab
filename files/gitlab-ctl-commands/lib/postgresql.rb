@@ -6,12 +6,12 @@ require_relative 'gitlab_ctl/util'
 module GitlabCtl
   class PostgreSQL
     class << self
-      def wait_for_postgresql(timeout)
+      def wait_for_postgresql(timeout, psql_command: 'gitlab-psql')
         # wait for *timeout* seconds for postgresql to respond to queries
         Timeout.timeout(timeout) do
           loop do
             begin
-              results = Mixlib::ShellOut.new("gitlab-psql -l", timeout: 1800)
+              results = Mixlib::ShellOut.new("#{psql_command} -l", timeout: 1800)
               results.run_command
               results.error!
             rescue Mixlib::ShellOut::ShellCommandFailed

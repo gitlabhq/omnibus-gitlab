@@ -27,6 +27,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
   options = GitlabCtl::PgUpgrade.parse_options(ARGV)
   revert_version = lookup_version(options[:target_version], read_revert_version || old_version)
 
+  @db_service_name = 'postgresql'
   @db_worker = GitlabCtl::PgUpgrade.new(
     base_path,
     data_path,
@@ -69,6 +70,7 @@ add_command_under_category 'pg-upgrade', 'database',
                            'Upgrade the PostgreSQL DB to the latest supported version',
                            2 do |_cmd_name|
   options = GitlabCtl::PgUpgrade.parse_options(ARGV)
+  @db_service_name = 'postgresql'
   @db_worker = GitlabCtl::PgUpgrade.new(
     base_path,
     data_path,
@@ -83,7 +85,7 @@ add_command_under_category 'pg-upgrade', 'database',
   unless GitlabCtl::Util.progress_message(
     'Checking for an omnibus managed postgresql') do
       !@db_worker.initial_version.nil? && \
-          service_enabled?('postgresql')
+          (service_enabled?('postgresql') || service_enabled?('geo-postgresql'))
     end
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
     Kernel.exit 0
@@ -126,13 +128,25 @@ add_command_under_category 'pg-upgrade', 'database',
   end
 
   # The current instance needs to be running, start it if it isn't
-  unless @db_worker.running?
+  if service_enabled?('postgresql') && !@db_worker.running?
     log 'Starting the database'
 
     begin
       @db_worker.start
     rescue Mixlib::ShellOut::ShellCommandFailed => e
       log "Error starting the database. Please fix the error before continuing"
+      log e.message
+      Kernel.exit 1
+    end
+  end
+
+  if service_enabled?('geo-postgresql') && !@db_worker.running?('geo-postgresql')
+    log 'Starting the geo database'
+
+    begin
+      @db_worker.start('geo-postgresql')
+    rescue Mixlib::ShellOut::ShellCommandFailed => e
+      log "Error starting the geo database. Please fix the error before continuing"
       log e.message
       Kernel.exit 1
     end
@@ -197,7 +211,11 @@ def common_post_upgrade(disable_maintenance = true)
   run_reconfigure
 
   log "Waiting for Database to be running."
-  GitlabCtl::PostgreSQL.wait_for_postgresql(30)
+  if @db_service_name == 'geo-postgresql'
+    GitlabCtl::PostgreSQL.wait_for_postgresql(30, psql_command: 'gitlab-geo-psql')
+  else
+    GitlabCtl::PostgreSQL.wait_for_postgresql(30)
+  end
 
   unless [:pg_secondary, :geo_secondary].include?(@instance_type)
     log 'Database upgrade is complete, running analyze_new_cluster.sh'
@@ -234,7 +252,7 @@ end
 
 def configure_postgresql
   log 'Configuring PostgreSQL'
-  status = GitlabCtl::Util.chef_run('solo.rb', 'postgresql-config.json')
+  status = GitlabCtl::Util.chef_run('solo.rb', "#{@db_service_name}-config.json")
   $stdout.puts status.stdout
   if status.error?
     $stderr.puts '===STDERR==='
@@ -247,15 +265,15 @@ def configure_postgresql
 end
 
 def start_database
-  sv_progress('start', 'postgresql')
+  sv_progress('start', @db_service_name)
 end
 
 def stop_database
-  sv_progress('stop', 'postgresql')
+  sv_progress('stop', @db_service_name)
 end
 
 def restart_database
-  sv_progress('restart', 'postgresql')
+  sv_progress('restart', @db_service_name)
 end
 
 def sv_progress(action, service)
@@ -272,30 +290,41 @@ def promote_database
 end
 
 def geo_secondary_upgrade(tmp_dir, timeout)
+  pg_enabled = service_enabled?('postgresql')
+  geo_pg_enabled = service_enabled?('geo-postgresql')
+
+  # Run the first time to link the primary postgresql instance
+  if pg_enabled
+    log('Upgrading the postgresql database')
+    begin
+      promote_database
+    rescue GitlabCtl::Errors::ExecutionError
+      die "There was an error promoting the database. Please check the logs"
+    end
+
+    # Restart the database after promotion, and wait for it to be ready
+    restart_database
+    GitlabCtl::PostgreSQL.wait_for_postgresql(600)
+
+    common_pre_upgrade
+
+    # Only disable maintenance_mode if geo-pg is not enabled
+    common_post_upgrade(!geo_pg_enabled)
+  end
+
+  return unless geo_pg_enabled
+
+  # Update the location to handle the geo-postgresql instance
+  log('Upgrading the geo-postgresql database')
   # Secondary nodes have a replica db under /var/opt/gitlab/postgresql that needs
   # the bin files updated and the geo tracking db under /var/opt/gitlab/geo-postgresl that needs data updated
   data_dir = @attributes['gitlab']['geo-postgresql']['data_dir']
-  # Run the first time to link the primary postgresql instance
-  log('Upgrading the postgresql database')
-  begin
-    promote_database
-  rescue GitlabCtl::Errors::ExecutionError
-    die "There was an error promoting the database. Please check the logs"
-  end
 
-  # Restart the database after promotion, and wait for it to be ready
-  restart_database
-  GitlabCtl::PostgreSQL.wait_for_postgresql(600)
-
-  common_pre_upgrade
-  common_post_upgrade(false)
-  # Update the location to handle the geo-postgresql instance
-  log('Upgrading the geo-postgresql database')
+  @db_service_name = 'geo-postgresql'
   @db_worker.data_dir = data_dir
   @db_worker.tmp_data_dir = data_dir if @db_worker.tmp_dir.nil?
   @db_worker.psql_command = 'gitlab-geo-psql'
   common_pre_upgrade
-  sv_progress('stop', 'geo-postgresql')
   begin
     @db_worker.run_pg_upgrade
   rescue GitlabCtl::Errors::ExecutionError
@@ -454,7 +483,7 @@ end
 
 def revert(version)
   log '== Reverting =='
-  run_sv_command_for_service('stop', 'postgresql')
+  run_sv_command_for_service('stop', @db_service_name)
   if Dir.exist?("#{@db_worker.tmp_data_dir}.#{version.major}")
     run_command("rm -rf #{@db_worker.data_dir}")
     run_command(
@@ -462,7 +491,7 @@ def revert(version)
     )
   end
   create_links(version)
-  run_sv_command_for_service('start', 'postgresql')
+  run_sv_command_for_service('start', @db_service_name)
   log'== Reverted =='
 end
 
