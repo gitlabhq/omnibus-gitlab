@@ -125,5 +125,17 @@ describe 'gitlab::logrotate_folder_and_configs_spec' do
           .with_content(/my\/log\/directory\/\*\.log/)
       end
     end
+
+    context 'when services that are not supported are specified' do
+      it 'raises an error' do
+        stub_gitlab_rb(
+          logrotate: {
+            services: ['gitlab-rails', 'foo-bar']
+          }
+        )
+
+        expect { chef_run }.to raise_error("Service foo-bar was specified in logrotate['services'], but is not a valid service.")
+      end
+    end
   end
 end

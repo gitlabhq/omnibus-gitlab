@@ -86,7 +86,12 @@ class LogrotateHelper < AccountHelper
     available_settings = Gitlab.settings
 
     logged_services.each do |svc|
-      parent = available_settings[svc.tr('-', '_')][:parent]
+      # In `Gitlab.settings`, settings aren't hyphenated, but use underscores.
+      setting_name = svc.tr('-', '_')
+
+      raise "Service #{svc} was specified in logrotate['services'], but is not a valid service." unless available_settings.include?(setting_name)
+
+      parent = available_settings[setting_name][:parent]
       if parent
         log_dir = node[parent][svc]['log_directory']
         options = node['gitlab']['logging'].to_hash.merge(node[parent][svc].to_hash)
