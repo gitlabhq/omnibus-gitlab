@@ -1,0 +1,5 @@
+---
+title: Add logrotate support for services not under gitlab namespace
+merge_request: 3952
+author:
+type: added
