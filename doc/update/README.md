@@ -611,7 +611,7 @@ On each **secondary**, ensure the FDW tables are up-to-date.
 1. Refresh Foreign Data Wrapper tables
 
    ```sh
-   sudo gitlab-ctl reconfigure
+   sudo gitlab-rake geo:db:refresh_foreign_tables
    ```
 
 After updating all nodes (both **primary** and all **secondaries**), check their status:
@@ -899,7 +899,7 @@ sudo gitlab-ctl restart geo-logcursor
 1. Refresh Foreign Data Wrapper tables
 
    ```sh
-   sudo gitlab-ctl reconfigure
+   sudo gitlab-rake geo:db:refresh_foreign_tables
    ```
 
 1. Verify Geo configuration and dependencies
