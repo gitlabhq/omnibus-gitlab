@@ -105,6 +105,14 @@ Since upgrades to 13.0 will be prevented if removed settings are found in `gitla
 users who are currently using those settings are advised to switch to `gitlab_exporter[*]`
 ones at the earliest.
 
+### 12.7
+
+The Redis version packaged with Omnibus GitLab has been updated to Redis 5.0.7.
+You will need to restart Redis after the upgrade so that the new version will be
+active. To restart Redis, run `sudo gitlab-ctl restart redis`. If your instance
+has Redis HA with Sentinel, follow the upgrade steps documented in [Updating GitLab installed with the Omnibus GitLab package](https://docs.gitlab.com/omnibus/update/README.html#using-redis-ha-using-sentinel)
+to avoid downtime.
+
 ### 12.8
 
 PostgreSQL 11.7 is being shipped with the package in addition to 10.12 and 9.6.17.
