@@ -10,9 +10,7 @@ property :advertise_addr, [String, nil], default: lazy { node['consul']['configu
 property :socket_address, [String, nil], default: nil
 
 action :create do
-  if new_resource.advertise_addr
-    ip_address = new_resource.advertise_addr
-  elsif property_is_set?(:socket_address)
+  if property_is_set?(:socket_address)
     ip_address, port = new_resource.socket_address.split(':')
     ip_address = translate_address(ip_address)
   elsif property_is_set?(:ip_address) && property_is_set?(:port)
@@ -31,6 +29,11 @@ action :create do
       'port' => port.to_i
     }
   }
+
+  if property_is_set?(:advertise_addr)
+    content['service'].delete('address')
+    content['service']['advertise_addr'] = new_resource.advertise_addr
+  end
 
   # Ensure the dir exists but leave permissions to `consul::enable`
   directory node['consul']['config_dir'] do

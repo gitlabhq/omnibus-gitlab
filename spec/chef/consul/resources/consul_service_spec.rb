@@ -37,6 +37,15 @@ describe 'consul_service' do
           .not_to notify 'execute[reload consul]'
       end
     end
+
+    context 'with addvertise_addr property' do
+      let(:chef_run) { runner.converge('test_consul::consul_service_advertise_addr') }
+      
+      it 'creates the Consul service file' do
+        expect(chef_run).to render_file('/var/opt/gitlab/consul/config.d/node-exporter-service.json')
+          .with_content('{"service":{"name":"node-exporter","port":1234,"advertise_addr":"1.1.1.1"}}')
+      end
+    end
   end
 
   context 'delete' do
