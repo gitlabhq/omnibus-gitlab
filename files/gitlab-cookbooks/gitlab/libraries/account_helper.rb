@@ -86,67 +86,6 @@ class AccountHelper
     node['consul']['group']
   end
 
-  def logdir_ownership # rubocop:disable  Metrics/AbcSize
-    # TODO: Make log directory creation in all service recipes use this method
-    # instead of directly using `node` values. This will ensure we don't miss
-    # to add a service here.
-    # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4606
-    {
-      'alertmanager' => { username: prometheus_user, group: 'root' },
-      'consul' => { username: consul_user, group: consul_group },
-      'crond' => { username: 'root', group: 'root' },
-      'geo-logcursor' => { username: gitlab_user, group: gitlab_group },
-      'geo-postgresql' => { username: postgresql_user, group: postgresql_group },
-      'gitaly' => { username: gitlab_user, group: gitlab_group },
-      'gitlab-exporter' => { username: gitlab_user, group: gitlab_group },
-      'gitlab-pages' => { username: gitlab_user, group: gitlab_group },
-      'gitlab-rails' => { username: gitlab_user, group: gitlab_group },
-      'gitlab-shell' => { username: gitlab_user, group: gitlab_group },
-      'gitlab-workhorse' => { username: gitlab_user, group: gitlab_group },
-      'grafana' => { username: prometheus_user, group: prometheus_group },
-      'logrotate' => { username: 'root', group: 'root' },
-      'mailroom' => { username: gitlab_user, group: gitlab_group },
-      'mattermost' => { username: mattermost_user, group: mattermost_group },
-      'nginx' => { username: 'root', group: web_server_group },
-      'node-exporter' => { username: prometheus_user, group: prometheus_group },
-      'pgbouncer' => { username: postgresql_user, group: postgresql_group },
-      'pgbouncer-exporter' => { username: postgresql_user, group: postgresql_group },
-      'postgres-exporter' => { username: postgresql_user, group: postgresql_group },
-      'postgresql' => { username: postgresql_user, group: postgresql_group },
-      'praefect' => { username: gitlab_user, group: gitlab_group },
-      'prometheus' => { username: prometheus_user, group: prometheus_group },
-      'puma' => { username: gitlab_user, group: gitlab_group },
-      'redis' => { username: redis_user, group: redis_group },
-      'redis-exporter' => { username: redis_user, group: redis_group },
-      'registry' => { username: registry_user, group: registry_group },
-      'remote-syslog' => { username: 'root', group: 'root' },
-      'repmgr' => { username: postgresql_user, group: postgresql_group },
-      'sidekiq' => { username: gitlab_user, group: gitlab_group },
-      'sidekiq-cluster' => { username: gitlab_user, group: gitlab_group },
-      'storage-check' => { username: gitlab_user, group: gitlab_group },
-      'unicorn' => { username: gitlab_user, group: gitlab_group },
-      'sentinel' => { username: redis_user, group: redis_group }
-    }
-  end
-
-  def logdir_owner(service)
-    unless logdir_ownership.key?(service)
-      Chef::Log.warn("#{service} does not have an owner user defined for its log directory. Hence using root.")
-      return 'root'
-    end
-
-    logdir_ownership[service][:username] || 'root'
-  end
-
-  def logdir_group(service)
-    unless logdir_ownership.key?(service)
-      Chef::Log.warn("#{service} does not have an owner group defined for it log directory. Hence using root.")
-      return 'root'
-    end
-
-    logdir_ownership[service][:group] || 'root'
-  end
-
   def users
     %W(
       #{gitlab_user}
