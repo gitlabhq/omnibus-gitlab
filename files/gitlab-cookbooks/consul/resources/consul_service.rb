@@ -4,7 +4,6 @@ property :service_name, String, name_property: true
 property :ip_address, [String, nil], default: nil
 property :port, [Integer, nil], default: nil
 property :reload_service, [TrueClass, FalseClass], default: true
-property :advertise_addr, [String, nil], default: lazy { node['consul']['configuration']['advertise_addr'] }
 
 # Combined address plus port - 0.0.0.0:1234
 property :socket_address, [String, nil], default: nil
@@ -30,10 +29,8 @@ action :create do
     }
   }
 
-  if property_is_set?(:advertise_addr)
-    content['service'].delete('address')
-    content['service']['advertise_addr'] = new_resource.advertise_addr
-  end
+  # Remove address if advertise_addr is set to allow service to use underlying advertise_addr
+  content['service'].delete('address') if node['consul']['configuration']['advertise_addr']
 
   # Ensure the dir exists but leave permissions to `consul::enable`
   directory node['consul']['config_dir'] do
