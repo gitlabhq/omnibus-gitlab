@@ -280,63 +280,9 @@ hot_standby = <%= @hot_standby %>
 # ERROR REPORTING AND LOGGING
 #------------------------------------------------------------------------------
 
-# - Where to Log -
-<% if @log_destination %>
-log_destination = '<%= @log_destination %>'
-<% end %>
 <% if @logging_collector %>
 logging_collector = <%= @logging_collector %>
 <% end %>
-<% if @log_directory %>
-log_directory = '<%= @log_directory %>'
-<% end %>
-<% if @log_filename %>
-log_filename = '<%= @log_filename %>'
-<% end %>
-<% if @log_file_mode %>
-log_file_mode = <%= @log_file_mode %>
-<% end %>
-<% if @log_truncate_on_rotation %>
-log_truncate_on_rotation = <%= @log_truncate_on_rotation %>
-<% end %>
-<% if @log_rotation_age %>
-log_rotation_age = <%= @log_rotation_age %>
-<% end %>
-<% if @log_rotation_size %>
-log_rotation_size = <%= @log_rotation_size %>
-<% end %>
-
-#log_destination = 'stderr'   # Valid values are combinations of
-          # stderr, csvlog, syslog, and eventlog,
-          # depending on platform.  csvlog
-          # requires logging_collector to be on.
-
-# This is used when logging to stderr:
-#logging_collector = off    # Enable capturing of stderr and csvlog
-          # into log files. Required to be on for
-          # csvlogs.
-          # (change requires restart)
-
-# These are only used if logging_collector is on:
-#log_directory = 'log'   # directory where log files are written,
-          # can be absolute or relative to PGDATA
-#log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log'  # log file name pattern,
-          # can include strftime() escapes
-#log_file_mode = 0600     # creation mode for log files,
-          # begin with 0 to use octal notation
-#log_truncate_on_rotation = off   # If on, an existing log file with the
-          # same name as the new log file will be
-          # truncated rather than appended to.
-          # But such truncation only occurs on
-          # time-driven rotation, not on restarts
-          # or size-driven rotation.  Default is
-          # off, meaning append to existing files
-          # in all cases.
-#log_rotation_age = 1d      # Automatic rotation of logfiles will
-          # happen after that time.  0 disables.
-#log_rotation_size = 10MB   # Automatic rotation of logfiles will
-          # happen after that much log output.
-          # 0 disables.
 
 # These are relevant when logging to syslog:
 #syslog_facility = 'LOCAL0'

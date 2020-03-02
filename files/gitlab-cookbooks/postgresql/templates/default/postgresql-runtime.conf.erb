@@ -22,6 +22,29 @@ checkpoint_timeout = <%= @checkpoint_timeout %>		# range 30s-1h, default 5min
 checkpoint_completion_target = <%= @checkpoint_completion_target %>	# checkpoint target duration, 0.0 - 1.0, default 0.5
 checkpoint_warning = <%= @checkpoint_warning %>		# 0 disables, default 30s
 
+# - Logging -
+<% if @log_destination %>
+log_destination = '<%= @log_destination %>'
+<% end %>
+<% if @log_directory %>
+log_directory = '<%= @log_directory %>'
+<% end %>
+<% if @log_filename %>
+log_filename = '<%= @log_filename %>'
+<% end %>
+<% if @log_file_mode %>
+log_file_mode = <%= @log_file_mode %>
+<% end %>
+<% if @log_truncate_on_rotation %>
+log_truncate_on_rotation = <%= @log_truncate_on_rotation %>
+<% end %>
+<% if @log_rotation_age %>
+log_rotation_age = <%= @log_rotation_age %>
+<% end %>
+<% if @log_rotation_size %>
+log_rotation_size = <%= @log_rotation_size %>
+<% end %>
+
 # - Archiving -
 archive_command = '<%= @archive_command %>'   # command to use to archive a logfile segment
 archive_timeout = <%= @archive_timeout %>    # force a logfile segment switch after this

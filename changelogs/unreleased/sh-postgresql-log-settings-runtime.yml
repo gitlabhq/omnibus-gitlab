@@ -1,0 +1,5 @@
+---
+title: Move PostgreSQL runtime logging configuration to runtime.conf
+merge_request: 3955
+author:
+type: changed

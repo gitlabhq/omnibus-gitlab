@@ -388,7 +388,7 @@ describe 'postgresql 9.6' do
           .to eq('/var/log/gitlab/postgresql')
 
         expect(chef_run).to render_file(
-          postgresql_conf
+          runtime_conf
         ).with_content(%r(^log_directory = '/var/log/gitlab/postgresql'))
       end
 
@@ -418,8 +418,11 @@ describe 'postgresql 9.6' do
 
         it 'sets logging parameters' do
           expect(chef_run).to render_file(postgresql_conf).with_content { |content|
+                                expect(content).to match(/logging_collector = on/)
+                              }
+
+          expect(chef_run).to render_file(runtime_conf).with_content { |content|
             expect(content).to match(/log_destination = 'csvlog'/)
-            expect(content).to match(/logging_collector = on/)
             expect(content).to match(/log_filename = 'test.log'/)
             expect(content).to match(/log_file_mode = 0600/)
             expect(content).to match(/log_truncate_on_rotation = on/)
