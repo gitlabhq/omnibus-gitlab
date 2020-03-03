@@ -1,0 +1,5 @@
+---
+title: Allow advertise_addr to flow to consul services
+merge_request: 3948
+author:
+type: added

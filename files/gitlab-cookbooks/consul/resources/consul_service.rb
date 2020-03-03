@@ -29,6 +29,9 @@ action :create do
     }
   }
 
+  # Remove address if advertise_addr is set to allow service to use underlying advertise_addr
+  content['service'].delete('address') if node['consul']['configuration']['advertise_addr']
+
   # Ensure the dir exists but leave permissions to `consul::enable`
   directory node['consul']['config_dir'] do
     recursive true
