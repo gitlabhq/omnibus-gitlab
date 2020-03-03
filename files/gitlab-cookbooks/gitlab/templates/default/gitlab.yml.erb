@@ -406,6 +406,11 @@ production: &base
       cron: "<%= @pseudonymizer_worker_cron %>"
     <% end %>
 
+    <% unless @elastic_index_bulk_cron.nil? %>
+    elastic_index_bulk_cron_worker:
+      cron: "<%= @elastic_index_bulk_cron %>"
+    <% end %>
+
   ## Geo
   # NOTE: These settings will only take effect if Geo is enabled
   geo:
