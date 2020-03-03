@@ -829,18 +829,11 @@ are reverting to.
 
 These steps consist of:
 
-- Download the package of a target version.(example below uses GitLab 6.x.x)
 - Stop GitLab
 - Install the old package
 - Reconfigure GitLab
 - Restoring the backup
 - Starting GitLab
-
-See example below:
-
-First download a GitLab 12.x.x [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
-[EE (subscribers only)](https://gitlab.com/subscribers/gitlab-ee/blob/master/doc/install/packages.md)
-package.
 
 Steps:
 
@@ -858,16 +851,30 @@ Steps:
    sudo gitlab-ctl uninstall
    ```
 
-1. Downgrade GitLab to 12.x:
+1. Identify the GitLab version you want to downgrade to:
 
    ```sh
+   # (Replace with gitlab-ce if you have GitLab FOSS installed)
+
    # Ubuntu
-   sudo dpkg -r gitlab
-   sudo dpkg -i gitlab-12.x.x-yyy.deb
+   sudo apt-cache madison gitlab-ee
 
    # CentOS:
-   sudo rpm -e gitlab
-   sudo rpm -ivh gitlab-12.x.x-yyy.rpm
+   sudo yum --showduplicates list gitlab-ee
+   ```
+
+1. Downgrade GitLab to the desired version (for example, to downgrade to 12.0.0):
+
+   ```sh
+   # (Replace with gitlab-ce if you have GitLab FOSS installed)
+
+   # Ubuntu
+   sudo apt remove gitlab-ee
+   sudo apt install gitlab-ee=12.0.0-ee.0
+
+   # CentOS:
+   sudo yum remove gitlab-ee
+   sudo yum install gitlab-ee-12.0.0-ee.0.el7
    ```
 
 1. Prepare GitLab for receiving the backup restore.
