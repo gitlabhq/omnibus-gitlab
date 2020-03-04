@@ -1315,8 +1315,8 @@ describe 'gitlab::gitlab-rails' do
       context 'when geo prune event log worker is not configured' do
         it 'does not set the cron value' do
           expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_excluding(
-              'geo_prune_event_log_worker_cron'
+            hash_including(
+              'geo_prune_event_log_worker_cron' => nil
             )
           )
         end
