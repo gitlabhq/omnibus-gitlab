@@ -58,6 +58,13 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.18.1.
 
 
+## 12.7.7
+
+### Security (1 change)
+
+- Update postgresql 10.9->10.12, 9.6.14->9.6.17. Resolves CVE-2019-10208.
+
+
 ## 12.7.6
 
 - No changes.
