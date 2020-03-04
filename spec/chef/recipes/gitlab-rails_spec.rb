@@ -9,6 +9,8 @@ RSpec::Matchers.define :configure_gitlab_yml_using do |expected_variables|
 end
 
 describe 'gitlab::gitlab-rails' do
+  using RSpec::Parameterized::TableSyntax
+
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
   let(:redis_instances) { %w(cache queues shared_state) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
@@ -1409,26 +1411,29 @@ describe 'gitlab::gitlab-rails' do
           )
         end
       end
+    end
 
-      context 'when pseudonymizer worker is configured' do
-        it 'sets the cron value' do
-          stub_gitlab_rb(gitlab_rails: { pseudonymizer_worker_cron: '1 2 3 4 5' })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'pseudonymizer_worker_cron' => '1 2 3 4 5'
-            )
-          )
-        end
+    context 'Cron workers for other EE functionality' do
+      where(:gitlab_rb_key, :gitlab_yml_key) do
+        :pseudonymizer_worker_cron | 'pseudonymizer_worker_cron'
+        :elastic_index_bulk_cron   | 'elastic_index_bulk_cron'
       end
 
-      context 'when pseudonymizer worker is not configured' do
-        it 'does not set the cron value' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'pseudonymizer_worker_cron' => nil
-            )
-          )
+      with_them do
+        context 'when the worker is configured' do
+          it 'sets the cron value' do
+            stub_gitlab_rb(gitlab_rails: { gitlab_rb_key => '1 2 3 4 5' })
+
+            expect(chef_run)
+              .to configure_gitlab_yml_using(hash_including(gitlab_yml_key => '1 2 3 4 5'))
+          end
+        end
+
+        context 'when the worker is not configured' do
+          it 'does not set the cron value' do
+            expect(chef_run)
+              .to configure_gitlab_yml_using(hash_including(gitlab_yml_key => nil))
+          end
         end
       end
     end
@@ -2013,8 +2018,6 @@ describe 'gitlab::gitlab-rails' do
     end
 
     describe 'maximum request duration' do
-      using RSpec::Parameterized::TableSyntax
-
       where(:web_worker, :configured_timeout, :expected_duration) do
         :unicorn | nil  | 57
         :unicorn | 30   | 29

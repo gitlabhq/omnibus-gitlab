@@ -1,0 +1,5 @@
+---
+title: Add the elastic bulk indexer cron worker
+merge_request: 3965
+author:
+type: added

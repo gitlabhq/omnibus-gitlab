@@ -1900,6 +1900,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['ldap_group_sync_worker_cron'] = "0 * * * *"
 # gitlab_rails['historical_data_worker_cron'] = "0 12 * * *"
 # gitlab_rails['pseudonymizer_worker_cron'] = "0 23 * * *"
+# gitlab_rails['elastic_index_bulk_cron'] = "*/1 * * * *"
 
 ################################################################################
 ## Kerberos (EE Only)
