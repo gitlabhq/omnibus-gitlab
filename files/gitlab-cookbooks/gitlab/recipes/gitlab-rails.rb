@@ -143,10 +143,10 @@ end
 template File.join(gitlab_rails_static_etc_dir, "gitlab-rails-rc")
 
 dependent_services = []
-dependent_services << "service[mailroom]" if node['gitlab']['mailroom']['enable']
+dependent_services << "runit_service[mailroom]" if node['gitlab']['mailroom']['enable']
 
 node['gitlab']['gitlab-rails']['dependent_services'].each do |name|
-  dependent_services << "service[#{name}]" if omnibus_helper.should_notify?(name)
+  dependent_services << "runit_service[#{name}]" if omnibus_helper.should_notify?(name)
 end
 
 secret_file = File.join(gitlab_rails_etc_dir, "secret")
@@ -297,7 +297,7 @@ templatesymlink "Create a rack_attack.rb and create a symlink to Rails root" do
 end
 
 gitlab_workhorse_services = dependent_services
-gitlab_workhorse_services += ['service[gitlab-workhorse]'] if omnibus_helper.should_notify?('gitlab-workhorse')
+gitlab_workhorse_services += ['runit_service[gitlab-workhorse]'] if omnibus_helper.should_notify?('gitlab-workhorse')
 
 templatesymlink "Create a gitlab_workhorse_secret and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_workhorse_secret")
@@ -324,7 +324,7 @@ templatesymlink "Create a gitlab_shell_secret and create a symlink to Rails root
 end
 
 gitlab_pages_services = dependent_services
-gitlab_pages_services += ['service[gitlab-pages]'] if omnibus_helper.should_notify?('gitlab-pages')
+gitlab_pages_services += ['runit_service[gitlab-pages]'] if omnibus_helper.should_notify?('gitlab-pages')
 
 templatesymlink "Create a gitlab_pages_secret and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_pages_secret")

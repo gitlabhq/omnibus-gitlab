@@ -39,7 +39,7 @@ end
 
 env_dir pgbouncer_exporter_static_etc_dir do
   variables node['gitlab']['pgbouncer-exporter']['env']
-  notifies :restart, "service[pgbouncer-exporter]"
+  notifies :restart, "runit_service[pgbouncer-exporter]"
 end
 
 runit_service 'pgbouncer-exporter' do

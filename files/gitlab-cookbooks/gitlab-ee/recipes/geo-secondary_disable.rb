@@ -25,7 +25,7 @@ dependent_services = []
   unicorn
   sidekiq
 ).each do |svc|
-  dependent_services << "service[#{svc}]" if omnibus_helper.should_notify?(svc)
+  dependent_services << "runit_service[#{svc}]" if omnibus_helper.should_notify?(svc)
 end
 
 templatesymlink 'Removes database_geo.yml symlink' do

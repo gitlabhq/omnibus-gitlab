@@ -34,7 +34,7 @@ end
 
 env_dir redis_exporter_static_etc_dir do
   variables node['monitoring']['redis-exporter']['env']
-  notifies :restart, "service[redis-exporter]"
+  notifies :restart, "runit_service[redis-exporter]"
 end
 
 runtime_flags = PrometheusHelper.new(node).flags('redis-exporter')
