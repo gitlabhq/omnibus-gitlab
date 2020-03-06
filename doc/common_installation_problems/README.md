@@ -49,6 +49,28 @@ package installation.
 So, in openSUSE or SLES systems, if such a warning is displayed, it is safe to
 continue installation.
 
+## apt/yum complains about GPG signatures
+
+You already have GitLab repositories configured, and ran `apt-get update`,
+`apt-get install` or `yum install`, and saw errors like the following:
+
+```
+The following signatures couldn’t be verified because the public key is not available: NO_PUBKEY 3F01618A51312F3F
+```
+
+or
+
+```
+https://packages.gitlab.com/gitlab/gitlab-ee/el/7/x86_64/repodata/repomd.xml: [Errno -1] repomd.xml signature could not be verified for gitlab-ee
+```
+
+This is because on April 2020, GitLab changed the GPG keys used to sign
+metadata of the apt and yum repositories available through the
+[Packagecloud instance](https://packages.gitlab.com). If you see this error, it
+generally means you do not have the public keys currently used to sign
+repository metadata in your keyring. To fix this error, follow the
+[steps to fetch the new key](../update/package_signatures.md#fetching-new-keys-after-2020-04-05).
+
 ## Reconfigure shows an error: `NoMethodError - undefined method '[]=' for nil:NilClass`
 
 You ran `sudo gitlab-ctl reconfigure` or package upgrade triggered the
