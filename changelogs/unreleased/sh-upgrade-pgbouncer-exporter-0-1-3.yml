@@ -1,0 +1,5 @@
+---
+title: Upgrade pgbouncer_exporter to v0.1.3
+merge_request: 3982
+author:
+type: fixed
