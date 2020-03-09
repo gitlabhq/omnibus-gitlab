@@ -32,7 +32,8 @@ dependencies:
       https://github.com/schubergphilis/chef-acme.git:
         replace_in_files:
         - filename: config/software/chef-acme.rb
-          pattern: "version = Gitlab::Version.new\\(name, '(\\S+)'\\)"
+          pattern: "version = Gitlab::Version.new\\(name, 'v(\\S+)'\\)"
+          tag_prefix: 'v'
       # alertmanager
       https://gitlab.com/gitlab-org/build/omnibus-mirror/alertmanager.git:
         replace_in_files:
