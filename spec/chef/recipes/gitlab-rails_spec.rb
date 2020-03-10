@@ -976,10 +976,31 @@ describe 'gitlab::gitlab-rails' do
             hash_including(
               'smartcard_enabled' => true,
               'smartcard_ca_file' => '/etc/gitlab/ssl/CA.pem',
+              'smartcard_client_certificate_required_host' => nil,
               'smartcard_client_certificate_required_port' => 3444,
               'smartcard_required_for_git_access' => false
             )
           )
+        end
+
+        context 'smartcard_client_certificate_required_host is configured' do
+          it 'sets smartcard_client_certificate_required_host based on config' do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                smartcard_enabled: true,
+                smartcard_client_certificate_required_host: 'smartcard.gitlab.example.com'
+              }
+            )
+
+            expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'smartcard_enabled' => true,
+                'smartcard_ca_file' => '/etc/gitlab/ssl/CA.pem',
+                'smartcard_client_certificate_required_host' => 'smartcard.gitlab.example.com',
+                'smartcard_client_certificate_required_port' => 3444
+              )
+            )
+          end
         end
 
         context 'smartcard_required_for_git_access is enabled' do
@@ -995,6 +1016,7 @@ describe 'gitlab::gitlab-rails' do
               hash_including(
                 'smartcard_enabled' => true,
                 'smartcard_ca_file' => '/etc/gitlab/ssl/CA.pem',
+                'smartcard_client_certificate_required_host' => nil,
                 'smartcard_client_certificate_required_port' => 3444,
                 'smartcard_required_for_git_access' => true
               )
@@ -1015,6 +1037,7 @@ describe 'gitlab::gitlab-rails' do
               hash_including(
                 'smartcard_enabled' => true,
                 'smartcard_ca_file' => '/etc/gitlab/ssl/CA.pem',
+                'smartcard_client_certificate_required_host' => nil,
                 'smartcard_client_certificate_required_port' => 3444,
                 'smartcard_san_extensions' => true
               )
