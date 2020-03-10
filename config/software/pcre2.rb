@@ -15,7 +15,7 @@
 #
 
 name 'pcre2'
-default_version '10.31'
+default_version '10.34'
 
 license 'BSD-2-Clause'
 license_file 'LICENCE'
@@ -26,8 +26,8 @@ dependency 'libedit'
 dependency 'ncurses'
 dependency 'config_guess'
 
-version '10.31' do
-  source md5: '10e1a95a0f0d80759f1b3d70e92c2cda'
+version '10.34' do
+  source md5: 'e3e15cca49557a9c07a21dde2da05ea5'
 end
 
 source url: "http://downloads.sourceforge.net/project/pcre/pcre2/#{version}/pcre2-#{version}.tar.gz"
