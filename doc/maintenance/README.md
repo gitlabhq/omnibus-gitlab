@@ -161,4 +161,3 @@ To remove the page, you simply run `sudo gitlab-ctl deploy-page down`.
 As a side note, if you would like to restrict logging into GitLab and restrict
 changes to projects, you can [set projects as read-only](https://docs.gitlab.com/ee/administration/troubleshooting/gitlab_rails_cheat_sheet.html#make-a-project-read-only-can-only-be-done-in-the-console)
 , then put up the `Deploy in progress` page.
-
