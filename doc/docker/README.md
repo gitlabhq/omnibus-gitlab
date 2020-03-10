@@ -254,28 +254,34 @@ inside the container.
 If you want to use a different host port than `80` (HTTP) or `443` (HTTPS),
 you need to add a separate `--publish` directive to the `docker run` command.
 
-For example, to expose the web interface on port `8929`, and the SSH service on
-port `2289`, use the following `docker run` command:
+For example, to expose the web interface on the host's port `8929`, and the SSH service on
+port `2289`:
 
-```bash
-sudo docker run --detach \
-  --hostname gitlab.example.com \
-  --publish 8929:8929 --publish 2289:22 \
-  --name gitlab \
-  --restart always \
-  --volume /srv/gitlab/config:/etc/gitlab \
-  --volume /srv/gitlab/logs:/var/log/gitlab \
-  --volume /srv/gitlab/data:/var/opt/gitlab \
-  gitlab/gitlab-ce:latest
-```
+1. Use the following `docker run` command:
 
-NOTE: **Note:**
-The format for publishing ports is `hostPort:containerPort`. Read more in
-Docker's documentation about [exposing incoming ports][docker-ports].
+   ```shell
+   sudo docker run --detach \
+     --hostname gitlab.example.com \
+     --publish 8929:8929 --publish 2289:22 \
+     --name gitlab \
+     --restart always \
+     --volume /srv/gitlab/config:/etc/gitlab \
+     --volume /srv/gitlab/logs:/var/log/gitlab \
+     --volume /srv/gitlab/data:/var/opt/gitlab \
+     gitlab/gitlab-ce:latest
+   ```
 
-You then need to appropriately configure `gitlab.rb`:
+   NOTE: **Note:**
+   The format for publishing ports is `hostPort:containerPort`. Read more in
+   Docker's documentation about [exposing incoming ports][docker-ports].
 
-1. Set `external_url`:
+1. Enter the running container:
+
+   ```shell
+   sudo docker exec -it gitlab /bin/bash
+   ```
+
+1. Open `/etc/gitlab/gitlab.rb` with your editor and set `external_url`:
 
    ```rb
    # For HTTP
@@ -287,8 +293,10 @@ You then need to appropriately configure `gitlab.rb`:
    external_url "https://gitlab.example.com:8929"
    ```
 
+   NOTE: **Note:**
    The port specified in this URL must match the port published to the host by Docker.
-   Additionally, note that, unless the NGINX listen port is explicitly set in `nginx['listen_port']`, it will be pulled from this URL.
+   Additionally, if the NGINX listen port is not explicitly set in
+   `nginx['listen_port']`, it will be pulled from the `external_url`.
    For more information see the [NGINX documentation](../settings/nginx.md).
 
 1. Set `gitlab_shell_ssh_port`:
@@ -297,7 +305,13 @@ You then need to appropriately configure `gitlab.rb`:
    gitlab_rails['gitlab_shell_ssh_port'] = 2289
    ```
 
-Following the above example you will be able to reach GitLab from your
+1. Finally, reconfigure GitLab:
+
+   ```shell
+   gitlab-ctl reconfigure
+   ```
+
+Following the above example, you will be able to reach GitLab from your
 web browser under `<hostIP>:8929` and push using SSH under the port `2289`.
 
 A `docker-compose.yml` example that uses different ports can be found in the
