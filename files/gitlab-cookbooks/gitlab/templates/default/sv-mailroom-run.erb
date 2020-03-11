@@ -4,11 +4,9 @@ cd <%= node['gitlab']['gitlab-rails']['dir'] %>/working
 
 exec 2>&1
 
-# This is useful to see in the logs; mail_room is very quiet
-echo 'Runit: starting mail_room'
-
 exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
   -U <%= @options[:user] %>:<%= @options[:groupname] %> \
   -u <%= @options[:user] %>:<%= @options[:groupname] %> \
   /opt/gitlab/embedded/bin/bundle exec mail_room \
-    -c <%= @options[:mail_room_config] %>
+    -c <%= @options[:mail_room_config] %> \
+    --log-exit-as <%= @options[:exit_log_format] %>

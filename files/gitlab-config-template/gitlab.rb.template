@@ -220,6 +220,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ####! The file name for internal `mail_room` JSON logfile
 # gitlab_rails['incoming_email_log_file'] = "/var/log/gitlab/mailroom/mail_room_json.log"
 
+####! The format of mail_room crash logs
+# mailroom['exit_log_format'] = "plain"
+
 ### Job Artifacts
 # gitlab_rails['artifacts_enabled'] = true
 # gitlab_rails['artifacts_path'] = "/var/opt/gitlab/gitlab-rails/shared/artifacts"
