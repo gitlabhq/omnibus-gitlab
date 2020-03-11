@@ -50,6 +50,8 @@ describe 'praefect' do
       }
       expect(chef_run).not_to render_file(config_path)
       .with_content(%r{\[prometheus\]\s+grpc_latency_buckets =})
+      expect(chef_run).not_to render_file(config_path)
+      .with_content(%r{failover_enabled =})
     end
 
     context 'with custom settings' do
@@ -74,6 +76,7 @@ describe 'praefect' do
           }
         }
       end
+      let(:failover_enabled) { true }
       let(:database_host) { 'pg.internal' }
       let(:database_port) { 1234 }
       let(:database_user) { 'praefect-pg' }
@@ -97,6 +100,7 @@ describe 'praefect' do
                          prometheus_grpc_latency_buckets: prometheus_grpc_latency_buckets,
                          logging_level: log_level,
                          logging_format: log_format,
+                         failover_enabled: failover_enabled,
                          virtual_storages: virtual_storages,
                          database_host: database_host,
                          database_port: database_port,
@@ -125,6 +129,8 @@ describe 'praefect' do
           .with_content("sentry_dsn = '#{sentry_dsn}'")
         expect(chef_run).to render_file(config_path)
           .with_content("sentry_environment = '#{sentry_environment}'")
+        expect(chef_run).to render_file(config_path)
+          .with_content("failover_enabled = #{failover_enabled}")
         expect(chef_run).to render_file(config_path)
           .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
 
