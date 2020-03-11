@@ -38,6 +38,10 @@ describe 'gitlab::mailroom' do
       end
 
       it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'git', 'git'
+
+      it 'uses --log-exit-as plain' do
+        expect(chef_run).to render_file("/opt/gitlab/sv/mailroom/run").with_content(/\-\-log\-exit\-as plain/)
+      end
     end
 
     context 'custom values' do
@@ -55,5 +59,24 @@ describe 'gitlab::mailroom' do
 
       it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'foo', 'bar'
     end
+  end
+
+  context 'with specified command line values' do
+    before do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          incoming_email_enabled: true
+        },
+        mailroom: {
+          exit_log_format: "json"
+        }
+      )
+    end
+
+    it 'correctly passes the --log-exit-as ' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/mailroom/run").with_content(/\-\-log\-exit\-as json/)
+    end
+
+    it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'git', 'git'
   end
 end

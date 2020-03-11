@@ -1,0 +1,5 @@
+---
+title: Modify mail_room to output crash logs as json
+merge_request: 3960
+author:
+type: feature

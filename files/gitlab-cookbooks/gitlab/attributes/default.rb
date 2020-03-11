@@ -532,6 +532,7 @@ default['gitlab']['gitlab-workhorse']['env'] = {
 default['gitlab']['mailroom']['enable'] = false
 default['gitlab']['mailroom']['ha'] = false
 default['gitlab']['mailroom']['log_directory'] = "/var/log/gitlab/mailroom"
+default['gitlab']['mailroom']['exit_log_format'] = "plain" # If mail_room crashes, the structure of the final exception message
 
 ####
 # GitLab Pages Daemon
