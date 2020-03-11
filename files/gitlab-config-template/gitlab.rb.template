@@ -1805,6 +1805,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # praefect['enable'] = false
 # praefect['virtual_storage_name'] = "praefect"
+# praefect['failover_enabled'] = false
 # praefect['auth_token'] = ""
 # praefect['auth_transitioning'] = false
 # praefect['listen_addr'] = "localhost:2305"
