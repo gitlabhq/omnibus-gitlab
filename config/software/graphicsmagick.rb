@@ -45,20 +45,20 @@ build do
     '--without-gslib',
     '--without-jbig',
     '--without-webp',
-    '--without-jpeg',
     '--without-jp2',
     '--without-lcms2',
     '--without-lzma',
-    '--with-png',
-    "--with-sysroot=#{install_dir}/embedded",
     '--without-tiff',
     '--without-trio',
     '--without-ttf',
     '--without-umem',
     '--without-wmf',
     '--without-xml',
-    '--with-zlib',
-    '--without-x'
+    '--without-x',
+    '--with-jpeg=yes',
+    '--with-zlib=yes',
+    '--with-png=yes',
+    "--with-sysroot=#{install_dir}/embedded"
   ]
 
   command configure_command.join(' '), env: env
