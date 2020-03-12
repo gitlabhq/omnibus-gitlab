@@ -29,7 +29,7 @@ env_dir env_directory do
   variables(
     rails_env.merge(node['gitlab']['gitlab-rails']['env'])
   )
-  notifies :restart, 'service[geo-logcursor]'
+  notifies :restart, 'runit_service[geo-logcursor]'
 end
 
 directory log_directory do
@@ -56,5 +56,5 @@ dependent_services = node['gitlab']['gitlab-rails']['dependent_services']
 execute 'restart geo-logcursor' do
   command '/opt/gitlab/bin/gitlab-ctl restart geo-logcursor'
   action :nothing
-  dependent_services.map { |svc| subscribes :run, "service[#{svc}]" }
+  dependent_services.map { |svc| subscribes :run, "runit_service[#{svc}]" }
 end

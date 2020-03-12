@@ -39,7 +39,7 @@ end
 
 env_dir pgbouncer_static_etc_dir do
   variables node['gitlab']['pgbouncer']['env']
-  notifies :restart, "service[pgbouncer]"
+  notifies :restart, "runit_service[pgbouncer]"
 end
 
 template "#{node['gitlab']['pgbouncer']['data_directory']}/pg_auth" do

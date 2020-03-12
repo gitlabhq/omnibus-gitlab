@@ -210,7 +210,7 @@ describe 'gitlab-ee::geo-secondary' do
           sidekiq
           geo-logcursor
         ).each do |svc|
-          expect(templatesymlink).to notify("service[#{svc}]").to(:restart).delayed
+          expect(templatesymlink).to notify("runit_service[#{svc}]").to(:restart).delayed
         end
       end
     end

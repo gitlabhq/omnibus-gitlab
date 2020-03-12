@@ -78,7 +78,7 @@ define :unicorn_service, rails_app: nil, user: nil do
     owner "root"
     group "root"
     mode "0644"
-    notifies :restart, "service[#{svc}]" if omnibus_helper.should_notify?(svc)
+    notifies :restart, "runit_service[#{svc}]" if omnibus_helper.should_notify?(svc)
   end
 
   runit_service svc do
@@ -100,7 +100,7 @@ define :unicorn_service, rails_app: nil, user: nil do
     }.merge(params))
     log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
 
-    notifies :stop, 'service[puma]', :before
+    notifies :stop, 'runit_service[puma]', :before
   end
 
   if node['gitlab']['bootstrap']['enable']

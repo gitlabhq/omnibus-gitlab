@@ -73,7 +73,7 @@ puma_config puma_rb do
   group "root"
   mode "0644"
   action :create
-  dependent_services omnibus_helper.should_notify?(svc) ? ["service[#{svc}]"] : []
+  dependent_services omnibus_helper.should_notify?(svc) ? ["runit_service[#{svc}]"] : []
 end
 
 runit_service svc do
@@ -95,7 +95,7 @@ runit_service svc do
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
 
-  notifies :stop, 'service[unicorn]', :before
+  notifies :stop, 'runit_service[unicorn]', :before
 end
 
 if node['gitlab']['bootstrap']['enable']

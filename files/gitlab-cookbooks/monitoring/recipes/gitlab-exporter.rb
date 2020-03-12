@@ -60,7 +60,7 @@ template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
   source "gitlab-exporter.yml.erb"
   owner gitlab_user
   mode "0600"
-  notifies :restart, "service[gitlab-exporter]"
+  notifies :restart, "runit_service[gitlab-exporter]"
   variables(
     probe_sidekiq: node['monitoring']['gitlab-exporter']['probe_sidekiq'],
     redis_url: redis_url,
@@ -72,7 +72,7 @@ end
 # If a version of ruby changes restart gitlab-exporter
 file File.join(gitlab_exporter_dir, 'RUBY_VERSION') do
   content VersionHelper.version('/opt/gitlab/embedded/bin/ruby --version')
-  notifies :restart, 'service[gitlab-exporter]'
+  notifies :restart, 'runit_service[gitlab-exporter]'
 end
 
 runit_service "gitlab-exporter" do

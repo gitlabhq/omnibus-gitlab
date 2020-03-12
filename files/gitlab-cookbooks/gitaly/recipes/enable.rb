@@ -68,7 +68,7 @@ node.default['gitaly']['env'] = {
 
 env_dir env_directory do
   variables node['gitaly']['env']
-  notifies :restart, "service[gitaly]" if omnibus_helper.should_notify?('gitaly')
+  notifies :restart, "runit_service[gitaly]" if omnibus_helper.should_notify?('gitaly')
 end
 
 template "Create Gitaly config.toml" do

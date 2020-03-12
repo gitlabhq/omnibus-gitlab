@@ -60,7 +60,7 @@ template postgresql_config do
   helper(:pg_helper) { geo_pg_helper }
   variables(node['gitlab']['geo-postgresql'].to_hash)
   cookbook 'postgresql'
-  notifies :restart, 'service[geo-postgresql]', :immediately if should_notify
+  notifies :restart, 'runit_service[geo-postgresql]', :immediately if should_notify
 end
 
 template postgresql_runtime_config do
@@ -81,7 +81,7 @@ template pg_hba_config do
   mode '0644'
   variables(lazy { node['gitlab']['geo-postgresql'].to_hash })
   cookbook 'postgresql'
-  notifies :restart, 'service[geo-postgresql]', :immediately if should_notify
+  notifies :restart, 'runit_service[geo-postgresql]', :immediately if should_notify
 end
 
 template File.join(node['gitlab']['geo-postgresql']['data_dir'], 'pg_ident.conf') do
@@ -89,7 +89,7 @@ template File.join(node['gitlab']['geo-postgresql']['data_dir'], 'pg_ident.conf'
   mode '0644'
   variables(node['gitlab']['geo-postgresql'].to_hash)
   cookbook 'postgresql'
-  notifies :restart, 'service[geo-postgresql]', :immediately if should_notify
+  notifies :restart, 'runit_service[geo-postgresql]', :immediately if should_notify
 end
 
 runit_service 'geo-postgresql' do

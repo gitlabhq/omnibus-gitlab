@@ -34,7 +34,7 @@ end
 template File.join(remote_syslog_dir, "remote_syslog.yml") do
   mode "0644"
   variables(node['gitlab']['remote-syslog'].to_hash)
-  notifies :restart, 'service[remote-syslog]' if omnibus_helper.should_notify?("remote-syslog")
+  notifies :restart, 'runit_service[remote-syslog]' if omnibus_helper.should_notify?("remote-syslog")
 end
 
 runit_service "remote-syslog" do

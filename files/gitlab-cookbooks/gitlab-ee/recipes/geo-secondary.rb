@@ -29,7 +29,7 @@ dependent_services = []
   sidekiq
   geo-logcursor
 ).each do |svc|
-  dependent_services << "service[#{svc}]" if omnibus_helper.should_notify?(svc)
+  dependent_services << "runit_service[#{svc}]" if omnibus_helper.should_notify?(svc)
 end
 
 templatesymlink 'Create a database_geo.yml and create a symlink to Rails root' do
