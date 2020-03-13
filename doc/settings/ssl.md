@@ -72,7 +72,7 @@ to worry about setting up wildcard certificates.
 
 #### Automatic Let's Encrypt Renewal
 
-> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2433) in [GitLab](https://about.gitlab.com/pricing/) 10.7.
+> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/2433) in [GitLab](https://about.gitlab.com/pricing/) 10.7.
 
 CAUTION: **Caution:**
 Administrators installing or upgrading to GitLab 12.1 or later and plan on using
