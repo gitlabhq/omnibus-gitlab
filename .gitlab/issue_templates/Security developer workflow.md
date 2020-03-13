@@ -1,7 +1,7 @@
 <!--
 # Read me first!
 
-Create this issue under https://dev.gitlab.org/gitlab/gitlabhq
+Create this issue under https://gitlab.com/gitlab-org/security/omnibus-gitlab/
 
 Set the title to: `Description of the original issue`
 -->
@@ -10,9 +10,9 @@ Set the title to: `Description of the original issue`
 
 - [ ] Read the [security process for developers] if you are not familiar with it.
 - [ ] Link to the original issue adding it to the [links section](#links)
-- [ ] Run `scripts/security-harness` in the CE, EE, and/or Omnibus to prevent pushing to any remote besides `dev.gitlab.org`
+- [ ] Run `scripts/security-harness` to prevent pushing to any remote besides `security/omnibus-gitlab`
 - [ ] Create a new branch prefixing it with `security-`
-- [ ] Create a MR targeting `dev.gitlab.org` `master`
+- [ ] Create a MR targeting `master` on [`security/omnibus-gitlab`](https://gitlab.com/gitlab-org/security/omnibus-gitlab)
 - [ ] Add a link to this issue in the original security issue on `gitlab.com`.
 
 #### Backports
@@ -25,11 +25,9 @@ Set the title to: `Description of the original issue`
       complete those.
 - [ ] Make sure all MRs have a link in the [links section](#links)
 
-[secpick documentation]: https://gitlab.com/gitlab-org/release/docs/blob/master/general/security/developer.md#secpick-script
-
 #### Documentation and final details
 
-- [ ] Check the topic on #security to see when the next release is going to happen and add a link to the [links section](#links)
+- [ ] Check the topic on #releases to see when the next release is going to happen and add a link next to **Security Release Tracking issue** in the [links section](#links)
 - [ ] Add links to this issue and your MRs in the description of the security release issue
 - [ ] Find out the versions affected (the Git history of the files affected may help you with this) and add them to the [details section](#details)
 - [ ] Fill in any upgrade notes that users may need to take into account in the [details section](#details)
@@ -44,15 +42,11 @@ Set the title to: `Description of the original issue`
 | Description | Link |
 | -------- | -------- |
 | Original issue   | #TODO  |
-| Security release issue   | #TODO  |
+| Security Release tracking issue | #TODO  |
 | `master` MR | !TODO   |
-| `master` MR (EE) | !TODO   |
 | `Backport X.Y` MR | !TODO   |
 | `Backport X.Y` MR | !TODO   |
 | `Backport X.Y` MR | !TODO   |
-| `Backport X.Y` MR (EE) | !TODO   |
-| `Backport X.Y` MR (EE) | !TODO   |
-| `Backport X.Y` MR (EE) | !TODO   |
 
 #### Details
 
@@ -65,6 +59,7 @@ Set the title to: `Description of the original issue`
 | Thanks | | |
 
 [security process for developers]: https://gitlab.com/gitlab-org/release/docs/blob/master/general/security/developer.md
+[secpick documentation]: https://gitlab.com/gitlab-org/release/docs/blob/master/general/security/developer.md#secpick-script
 [RM list]:  https://about.gitlab.com/release-managers/
 
 /label ~security

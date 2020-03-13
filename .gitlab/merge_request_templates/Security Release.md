@@ -1,6 +1,6 @@
 <!--
 # README first!
-This MR should be created on `dev.gitlab.org`.
+This MR should be created on https://gitlab.com/gitlab-org/security/omnibus-gitlab/
 
 See [the general developer security release guidelines](https://gitlab.com/gitlab-org/release/docs/blob/master/general/security/developer.md).
 
@@ -15,7 +15,7 @@ targets master.
 
 ## Developer checklist
 
-- [ ] Link to the developer security workflow issue on `dev.gitlab.org`
+- [ ] Link to the developer security workflow issue on [`security/omnibus-gitlab`](https://gitlab.com/gitlab-org/security/omnibus-gitlab)
 - [ ] MR targets `master`, or `X-Y-stable` for backports
 - [ ] Milestone is set for the version this MR applies to
 - [ ] Title of this MR is the same as for all backports
