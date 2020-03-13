@@ -36,6 +36,8 @@ puma_working_dir = File.join(rails_home, "working")
 puma_log_dir = node['gitlab'][svc]['log_directory']
 puma_rb = File.join(puma_etc_dir, "puma.rb")
 
+node.default['gitlab'][svc]['worker_processes'] = Puma.workers unless node['gitlab'][svc]['worker_processes']
+
 [
   puma_log_dir,
   File.dirname(puma_pidfile)
