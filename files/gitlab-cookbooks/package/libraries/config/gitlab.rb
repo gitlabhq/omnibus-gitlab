@@ -72,8 +72,7 @@ module Gitlab
   ## Attributes under node['gitlab']
   attribute_block 'gitlab' do
     # EE attributes
-    ee_attribute('sidekiq_cluster', priority: 20).use { SidekiqCluster }
-    ee_attribute('geo_postgresql',  priority: 20).use { GeoPostgresql }
+    ee_attribute('geo_postgresql', priority: 20).use { GeoPostgresql }
     ee_attribute('geo_secondary')
     ee_attribute('geo_logcursor')
     ee_attribute('sentinel').use { Sentinel }
@@ -102,6 +101,7 @@ module Gitlab
     attribute('user')
     attribute('gitlab_ci')
     attribute('sidekiq')
+    attribute('sidekiq_cluster').use { SidekiqCluster }
     attribute('mattermost_nginx')
     attribute('pages_nginx')
     attribute('registry_nginx')
