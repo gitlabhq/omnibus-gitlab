@@ -376,6 +376,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Docs: https://docs.gitlab.com/ee/administration/auth/smartcard.html
 # gitlab_rails['smartcard_enabled'] = false
 # gitlab_rails['smartcard_ca_file'] = "/etc/gitlab/ssl/CA.pem"
+# gitlab_rails['smartcard_client_certificate_required_host'] = 'smartcard.gitlab.example.com'
 # gitlab_rails['smartcard_client_certificate_required_port'] = 3444
 # gitlab_rails['smartcard_required_for_git_access'] = false
 # gitlab_rails['smartcard_san_extensions'] = false
