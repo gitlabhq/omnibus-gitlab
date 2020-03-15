@@ -133,6 +133,7 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   unicorn
   puma
   sidekiq
+  sidekiq-cluster
   gitlab-workhorse
   mailroom
   nginx
