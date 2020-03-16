@@ -470,6 +470,16 @@ default['gitlab']['sidekiq']['metrics_enabled'] = true
 default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"
 default['gitlab']['sidekiq']['listen_port'] = 8082
 
+# Settings applicable for running sidekiq-cluster under the hood
+# this is experimental
+default['gitlab']['sidekiq']['cluster'] = false
+default['gitlab']['sidekiq']['experimental_queue_selector'] = false
+default['gitlab']['sidekiq']['interval'] = nil
+default['gitlab']['sidekiq']['max_concurrency'] = nil
+default['gitlab']['sidekiq']['min_concurrency'] = nil
+default['gitlab']['sidekiq']['negate'] = false
+default['gitlab']['sidekiq']['queue_groups'] = ['*']
+
 ####
 # Sidekiq Cluster
 ####
