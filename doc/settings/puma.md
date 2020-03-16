@@ -1,8 +1,5 @@
 # Puma
 
-NOTE: **Note** Puma support is EXPERIMENTAL at this time. We do not
-recommend using it in production yet.
-
 Puma is a multi-threaded HTTP 1.1 server for Ruby applications. To
 enable Puma, be sure to disable Unicorn:
 
