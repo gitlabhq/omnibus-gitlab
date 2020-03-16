@@ -3,7 +3,7 @@
 > Introduced in GitLab EE 10.1.0
 
 NOTE: **Note:**
-The majority of these roles will only work on an [Enterprise Edition](https://about.gitlab.com/product/) installation of GitLab.
+The majority of these roles will only work on an [Enterprise Edition](https://about.gitlab.com/install/ce-or-ee/) installation of GitLab.
 
 Omnibus GitLab includes various software components/services to support running GitLab in
 a high availability configuration. By default, some of these supporting services
@@ -111,7 +111,7 @@ Documentation on the usage of the Postgres Roles can be found in [Configuring Po
   Enables the PgBouncer and Consul services on the machine
 
   *By default, enables no other services.*
-  
+
 - **consul_role**
 
   Enables the Consul service on the machine
