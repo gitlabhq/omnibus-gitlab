@@ -40,6 +40,37 @@ puma['max_threads'] = 1
 
 To force Rugged usage with multi-threaded Puma, which is not recommended, you can use a [feature flag](https://docs.gitlab.com/ee/development/gitaly.html#legacy-rugged-code).
 
+## Converting Unicorn settings to Puma
+
+If you are still running Unicorn and would like to switch to Puma, server configuration
+will _not_ carry over automatically. The table below summarizes which Unicorn configuration keys
+correspond to those in Puma, and which ones have no corresponding counterpart.
+
+<!-- markdownlint-disable MD044 -->
+| Unicorn                            | Puma                             |
+| ---------------------------------- | -------------------------------- |
+| unicorn[`enable`]                  | puma[`enable`]                   |
+| unicorn[`worker_timeout`]          | puma[`worker_timeout`]           |
+| unicorn[`worker_processes`]        | puma[`worker_processes`]         |
+| n/a                                | puma[`ha`]                       |
+| n/a                                | puma[`min_threads`]              |
+| n/a                                | puma[`max_threads`]              |
+| unicorn[`listen`]                  | puma[`listen`]                   |
+| unicorn[`port`]                    | puma[`port`]                     |
+| unicorn[`socket`]                  | puma[`socket`]                   |
+| unicorn[`pidfile`]                 | puma[`pidfile`]                  |
+| unicorn[`tcp_nopush`]              | n/a                              |
+| unicorn[`backlog_socket`]          | n/a                              |
+| unicorn[`somaxconn`]               | n/a                              |
+| n/a                                | puma[`state_path`]               |
+| unicorn[`log_directory`]           | puma[`log_directory`]            |
+| unicorn[`worker_memory_limit_min`] | n/a                              |
+| unicorn[`worker_memory_limit_max`] | puma[`per_worker_max_memory_mb`] |
+| unicorn[`exporter_enabled`]        | puma[`exporter_enabled`]         |
+| unicorn[`exporter_address`]        | puma[`exporter_address`]         |
+| unicorn[`exporter_port`]           | puma[`exporter_port`]            |
+<!-- markdownlint-enable MD044 -->
+
 ## Puma Worker Killer
 
 By default, the [Puma Worker
