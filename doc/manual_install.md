@@ -4,6 +4,10 @@
 
 We recommend downloading and installing GitLab using the official [package repository](https://about.gitlab.com/install/). If you prefer, you can download and install an Omnibus GitLab package manually below.
 
+## Requirements
+
+Before installing GitLab, it is of critical importance to review the system [requirements](https://docs.gitlab.com/ee/install/requirements.html). The system requirements include details on the minimum hardware, software, database, and additional requirements to support GitLab.
+
 ## Downloading a GitLab Package
 
 All GitLab packages are posted to our [package server](https://packages.gitlab.com/gitlab/) and can be downloaded. We maintain five repos:
