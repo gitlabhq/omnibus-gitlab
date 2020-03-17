@@ -24,6 +24,22 @@ puma['max_threads'] = 4
 
 For more details, see the [Puma documentation](https://github.com/puma/puma#configuration).
 
+## Puma with Rugged
+
+For GitLab installations with slower NFS drives, [Direct Git Access](https://docs.gitlab.com/ee/administration/gitaly/#direct-git-access-in-gitlab-rails)(using [Rugged](https://github.com/libgit2/rugged)) can provide improved performance. Previously when using [Unicorn](unicorn.md) this feature was automatically enabled when available, unless otherwise disabled by a [feature flag](https://docs.gitlab.com/ee/development/gitaly.html#legacy-rugged-code).
+
+Due to the multi-threading model of Puma, Direct Git Access [negatively impacts Puma performance](https://docs.gitlab.com/ee/administration/operations/puma.html#performance-caveat-when-using-puma-with-rugged), and is automatically disabled when the thread count is greater than 1. If you still need to use Rugged,
+it is recommended to set the number of Puma threads to be 1.
+
+```ruby
+puma['worker_processes'] = 4 # same value as `unicorn['worker_processes']`
+puma['worker_timeout'] = 60
+puma['min_threads'] = 1
+puma['max_threads'] = 1
+```
+
+To force Rugged usage with multi-threaded Puma, which is not recommended, you can use a [feature flag](https://docs.gitlab.com/ee/development/gitaly.html#legacy-rugged-code).
+
 ## Puma Worker Killer
 
 By default, the [Puma Worker
