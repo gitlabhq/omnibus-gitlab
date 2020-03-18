@@ -81,6 +81,16 @@ nginx['logrotate_size'] = "200M"
 logrotate['enable'] = false
 ```
 
+### Run logrotate manually
+
+Logrotate is a scheduled job but it can also be triggered on-demand.
+
+To manually trigger GitLab log rotation with `logrotate`, use the following command:
+
+```bash
+/opt/gitlab/embedded/sbin/logrotate -fv /var/opt/gitlab/logrotate/logrotate.d -s /var/opt/gitlab/logrotate/logrotate.conf
+```
+
 ## UDP log forwarding
 
 In case you have a central server where all your infra logs are gathered,
