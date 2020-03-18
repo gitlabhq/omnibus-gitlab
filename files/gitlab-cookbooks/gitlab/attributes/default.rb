@@ -350,6 +350,7 @@ default['gitlab']['gitlab-rails']['db_sslca'] = nil
 default['gitlab']['gitlab-rails']['db_prepared_statements'] = false
 default['gitlab']['gitlab-rails']['db_statements_limit'] = 1000
 default['gitlab']['gitlab-rails']['db_fdw'] = nil
+default['gitlab']['gitlab-rails']['db_statement_timeout'] = nil
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil
