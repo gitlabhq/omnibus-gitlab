@@ -118,3 +118,9 @@ to avoid downtime.
 PostgreSQL 11.7 is being shipped with the package in addition to 10.12 and 9.6.17.
 Both fresh installs and upgrades will still continue to use 10.12, but users can
 manually upgrade to 11.7 following the [upgrade docs](../settings/database.md#upgrade-packaged-postgresql-server).
+
+### 12.9
+
+[Puma](https://github.com/puma/puma) is now available as an alternative web server to Unicorn.
+If you are migrating from Unicorn, refer to [converting Unicorn settings to Puma](../settings/puma.md#converting-unicorn-settings-to-puma)
+to make sure your web server settings carry over correctly.
