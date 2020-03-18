@@ -45,14 +45,14 @@ been removed:
 
 1. Mattermost related configurations - Support for most of the Mattermost
    related configuration have been removed, except for the essential ones that
-   are needed for GitLab-Mattermost integration. [Check out the official documentation for details](https://docs.gitlab.com/omnibus/gitlab-mattermost/#upgrading-gitlab-mattermost-from-versions-prior-to-11-0)
+   are needed for GitLab-Mattermost integration. [Check out the official documentation for details](../gitlab-mattermost/README.md#upgrading-gitlab-mattermost-from-versions-prior-to-110)
 
 1. Legacy `git_data_dir` configuration, which was used to set location of where
    data was to be stored. It has been now replaced with `git_data_dirs`
-   configuration. [Check out the official documentation for details](https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory)
+   configuration. [Check out the official documentation for details](../settings/configuration.md#storing-git-data-in-an-alternative-directory)
 
 1. Old format of `git_data_dirs` configuration has been replaced with a new
-   format, allowing much more fine grain control. [Check out the official documentation for details](https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory)
+   format, allowing much more fine grain control. [Check out the official documentation for details](../settings/configuration.md#storing-git-data-in-an-alternative-directory)
 
 ## Changes introduced in minor versions
 
@@ -72,7 +72,7 @@ Rack Attack is disabled by default. To continue using Rack Attack, you must [ena
 
    For users looking for preserving the Prometheus version 1 data, a command
    line tool is provided to upgrade their Prometheus service and migrate data to
-   the format supported by new Prometheus version.  This tool can be invoked
+   the format supported by new Prometheus version. This tool can be invoked
    using the following command:
 
    ```bash
@@ -81,7 +81,7 @@ Rack Attack is disabled by default. To continue using Rack Attack, you must [ena
 
    This tool will convert existing data to a format supported by the latest
    Prometheus version. Depending on the volume of data, this process can take
-   hours.  If users do not want to migrate the data, but start with a clean
+   hours. If users do not want to migrate the data, but start with a clean
    database, they can pass `--skip-data-migration` flag to the above command.
 
    NOTE: **Note**: Prometheus service will be stopped during the migration process.

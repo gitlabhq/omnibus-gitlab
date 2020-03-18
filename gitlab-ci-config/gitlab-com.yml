@@ -135,6 +135,8 @@ docs-lint:
   before_script: []
   <<: *dedicated-runner
   script:
+    # Lint prose
+    - vale --minAlertLevel error doc
     # Lint Markdown
     - markdownlint --config .markdownlint.json 'doc/**/*.md'
     # Prepare docs for build

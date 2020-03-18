@@ -8,7 +8,7 @@ When upgrading to a new major version, remember to first [check for background m
 Prometheus 1.x was deprecated in GitLab 11.4, and
 Prometheus 2.8.1 was installed by default on new installations. Users updating
 from older versions of GitLab could manually upgrade Prometheus data using the
-[`gitlab-ctl prometheus-upgrade`](https://docs.gitlab.com/omnibus/update/gitlab_11_changes.html#114)
+[`gitlab-ctl prometheus-upgrade`](gitlab_11_changes.md#114)
 command provided. You can view current Prometheus version in use from the
 instances Prometheus `/status` page.
 
@@ -16,7 +16,7 @@ With GitLab 12.0, support for Prometheus 1.x is completely removed, and as part
 of the upgrade process, Prometheus binaries will be updated to version 2.8.1.
 Existing data from Prometheus 1.x installation WILL NOT be migrated as part of
 this automatic upgrade, and users who wish to retain that data should
-[manually upgrade Prometheus version](https://docs.gitlab.com/omnibus/update/gitlab_11_changes.html#114)
+[manually upgrade Prometheus version](gitlab_11_changes.md#114)
 before upgrading to GitLab 12.0
 
 For users who use `/etc/gitlab/skip-auto-reconfigure` file to skip automatic
@@ -110,7 +110,7 @@ ones at the earliest.
 The Redis version packaged with Omnibus GitLab has been updated to Redis 5.0.7.
 You will need to restart Redis after the upgrade so that the new version will be
 active. To restart Redis, run `sudo gitlab-ctl restart redis`. If your instance
-has Redis HA with Sentinel, follow the upgrade steps documented in [Updating GitLab installed with the Omnibus GitLab package](https://docs.gitlab.com/omnibus/update/README.html#using-redis-ha-using-sentinel)
+has Redis HA with Sentinel, follow the upgrade steps documented in [Updating GitLab installed with the Omnibus GitLab package](README.md#using-redis-ha-using-sentinel)
 to avoid downtime.
 
 ### 12.8

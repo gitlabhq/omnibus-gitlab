@@ -284,7 +284,7 @@ you've completed these steps.
 
 #### Using PostgreSQL HA
 
-Pick a node to be the `Deploy Node`.  It can be any node, but it must be the same
+Pick a node to be the `Deploy Node`. It can be any node, but it must be the same
 node throughout the process.
 
 **Deploy node**
