@@ -169,7 +169,7 @@ gitlabhq_production=> SELECT * FROM pg_stat_ssl;
 
 Rows that have `t` listed under the `ssl` column are enabled.
 
-### Configure packaged PostreSQL server to listen on TCP/IP
+### Configure packaged PostgreSQL server to listen on TCP/IP
 
 The packaged PostgreSQL server can be configured to listen for TCP/IP connections,
 with the caveat that some non-critical scripts expect UNIX sockets and may misbehave.
@@ -645,6 +645,24 @@ NOTE: **Note:**
 plain-text passwords.
 
 The next time a reconfigure is triggered, the migration steps will not be performed.
+
+### Setting client statement_timeout
+
+The amount time that Rails will wait for a database transaction to complete
+before timing out can now be adjusted with the `gitlab_rails['db_statement_timeout']`
+setting. Some things to note:
+
+1. If `gitlab_rails['db_statement_timeout']` is not specified, GitLab checks if `postgresql['statement_timeout']` is present . If so, this is used.
+1. If neither of them are present, a default value of `60000` (60 seconds) is used.
+
+Edit `/etc/gitlab/gitlab.rb`:
+
+```ruby
+gitlab_rails['db_statement_timeout'] = 45000
+```
+
+In this case the client `statement_timeout` is set to 45 seconds. The value
+is specified in milliseconds.
 
 ## Packaged PostgreSQL deployed in an HA/Geo Cluster
 
