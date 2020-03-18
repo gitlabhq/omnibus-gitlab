@@ -807,8 +807,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # puma['ha'] = false
 # puma['worker_timeout'] = 60
 # puma['worker_processes'] = 2
-# puma['min_threads'] = 1
-# puma['max_threads'] = 16
+# puma['min_threads'] = 4
+# puma['max_threads'] = 4
 
 ### Advanced settings
 # puma['listen'] = '127.0.0.1'
