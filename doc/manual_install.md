@@ -33,10 +33,10 @@ With the desired package downloaded, use your systems package management tool to
 
 Change `http://gitlab.example.com` to the URL at which you want to access your GitLab instance. Installation will automatically configure and start GitLab at that URL.
 
-> **Note:** Enabling HTTPS will require [additional configuration](settings/nginx.html#enable-https) to specify the certificates.
+> **Note:** Enabling HTTPS will require [additional configuration](settings/nginx.md#enable-https) to specify the certificates.
 
 ## Browse to the hostname and login
 
 On your first visit, you'll be redirected to a password reset screen. Provide the password for the initial administrator account and you will be redirected back to the login screen. Use the default account's username `root` to login.
 
-See our [documentation for detailed instructions on installing and configuration](https://docs.gitlab.com/omnibus/README.html#installation-and-configuration-using-omnibus-package).
+See our [documentation for detailed instructions on installing and configuration](README.md#installation-and-configuration-using-omnibus-package).

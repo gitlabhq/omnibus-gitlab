@@ -20,7 +20,7 @@ These defauts are noted in the package [defaults document](defaults.md).
 ## Checking the versions of bundled software
 
 Once the Omnibus GitLab package is installed, all versions of the bundled
-libraries are  located in `/opt/gitlab/version-manifest.txt`.
+libraries are located in `/opt/gitlab/version-manifest.txt`.
 
 If you don't have the package installed, you can always check the Omnibus GitLab
 [source repository], specifically the [config directory].

@@ -3,7 +3,7 @@
 From version 10.0 GitLab requires the version of PostgreSQL to be 9.6 or
 higher.
 
-Check out [docs on upgrading packaged PostgreSQL server](https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server)
+Check out [docs on upgrading packaged PostgreSQL server](../settings/database.md#upgrade-packaged-postgresql-server)
 for details.
 
 - For users running versions below 8.15 and using PostgreSQL bundled with

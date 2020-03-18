@@ -32,8 +32,8 @@ This assumes that `gitlab-shell` is located in `/home/git`.
 ## Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place
 
 It is also possible to upgrade a source GitLab installation to Omnibus GitLab
-in-place.  Below we assume you are using PostgreSQL on Ubuntu, and that you
-have an Omnibus GitLab package matching your current GitLab version.  We also
+in-place. Below we assume you are using PostgreSQL on Ubuntu, and that you
+have an Omnibus GitLab package matching your current GitLab version. We also
 assume that your source installation of GitLab uses all the default paths and
 users.
 

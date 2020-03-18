@@ -649,7 +649,7 @@ details.
 GitLab 12.2 added support for [CSP and nonces with inline
 JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
 It is [not configured on by default
-yet](https://gitlab.com/gitlab-org/gitlab/issues/30720).  An example
+yet](https://gitlab.com/gitlab-org/gitlab/issues/30720). An example
 configuration that will work for most installations of GitLab is below:
 
 ```ruby
