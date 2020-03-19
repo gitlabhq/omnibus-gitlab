@@ -699,7 +699,7 @@ AWS-CE-Release:
 
 AWS-EE-Ultimate-Release:
   variables:
-    AWS_LISTING_NAME: "GitLab Ultimate - 5 User Pack"
+    AWS_LISTING_NAME: "GitLab Ultimate"
   extends: .aws_marketplace_release
 
 AWS-EE-Premium-Release:
