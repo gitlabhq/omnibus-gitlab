@@ -229,6 +229,19 @@ To activate GitLab client support for SSL, do the following:
 If you are using custom SSL certificates for Redis, be sure to add them
 to the [trusted certificates](../settings/ssl.md#install-custom-public-certificates).
 
+## Lazy freeing
+
+Redis 4 introduced [lazy freeing](http://antirez.com/news/93). This can improve performance when freeing large values.
+
+This setting defaults to `false`. To enable it, you can use:
+
+```ruby
+redis['lazyfree_lazy_eviction'] = true
+redis['lazyfree_lazy_expire'] = true
+redis['lazyfree_lazy_server_del'] = true
+redis['replica_lazy_flush'] = true
+```
+
 ## Common Troubleshooting
 
 ### x509: certificate signed by unknown authority
