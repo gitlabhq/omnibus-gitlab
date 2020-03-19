@@ -23,6 +23,8 @@ describe 'redis' do
           expect(content).to match(/^maxmemory-samples 5/)
           expect(content).to match(/^tcp-backlog 511/)
           expect(content).to match(/^rename-command KEYS ""$/)
+          expect(content).to match(/^lazyfree-lazy-eviction no$/)
+          expect(content).to match(/^lazyfree-lazy-expire no$/)
           expect(content).not_to match(/^slaveof/)
         }
     end
@@ -211,6 +213,24 @@ describe 'redis' do
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content { |content|
           expect(content).not_to match(/^rename-command/)
+        }
+    end
+  end
+
+  context 'with lazy eviction enabled' do
+    before do
+      stub_gitlab_rb(
+        redis: {
+          lazyfree_lazy_eviction: true
+        }
+      )
+    end
+
+    it 'creates redis config with lazyfree-lazy-eviction yes' do
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content { |content|
+          expect(content).to match(/^lazyfree-lazy-eviction yes$/)
+          expect(content).to match(/^lazyfree-lazy-expire no$/)
         }
     end
   end
