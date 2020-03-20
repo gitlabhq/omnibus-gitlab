@@ -20,11 +20,9 @@ version = Gitlab::Version.new('libjpeg-turbo', '2.0.4')
 
 default_version version.print(false)
 
-
 license 'BSD-3-Clause'
 license_file 'LICENSE.md'
 license_file 'README.ijg'
-
 
 dependency 'zlib'
 
