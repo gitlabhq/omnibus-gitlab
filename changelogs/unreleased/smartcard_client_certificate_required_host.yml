@@ -1,5 +1,0 @@
----
-title: Add smartcard_client_certificate_required_host to gitlab.rb
-merge_request: 3985
-author:
-type: added

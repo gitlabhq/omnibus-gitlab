@@ -3,6 +3,45 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.9.0 (2020-03-22)
+
+### Fixed (5 changes, 1 of them is from the community)
+
+- Support running pg-upgrade on geo-postgres in isolation. !3924
+- Don't change group ownership of registry directory. !3931 (Henrik Christian Grove <grove@one.com>)
+- Fix fetch_assets script for branch names with -z. !3941
+- Upgrade pgbouncer_exporter to v0.1.3. !3982
+- Fixes case when Geo secondary db changes do not restart the dependent services. !4002
+
+### Changed (5 changes, 1 of them is from the community)
+
+- Restart GitLab Pages when new CA certs installed. !3842 (Ben Bodenmiller)
+- Make PostgreSQL log settings configurable. !3949
+- Move PostgreSQL runtime logging configuration to runtime.conf. !3955
+- Update chef-acme to 4.1.1. !3980
+- Bump Container Registry to v2.8.2-gitlab. !3996
+
+### Added (8 changes)
+
+- Build AMIs for GitLab Premium. !3841
+- Expose ssh_user as a distinct configuration option. !3925
+- Allow advertise_addr to flow to consul services. !3948
+- Add logrotate support for services not under gitlab namespace. !3952
+- Add the elastic bulk indexer cron worker. !3965
+- Geo: Symlink gitlab-pg-ctl command for Geo failover for HA. !3976
+- Add smartcard_client_certificate_required_host to gitlab.rb. !3985
+- Add failover_enabled top level option in praefect. !3987
+
+### Other (6 changes)
+
+- Add docs about PG 11 being available. !3936
+- Update gitlab-org/gitlab-exporter from 6.0.0 to 6.1.0. !3940
+- Adds documentation note about updating environment variables for Puma. !3944
+- Use the updated gitlab-depscan tool that allows whitelisting CVEs. !3947
+- Modify mail_room to output crash logs as json. !3960
+- Update Mattermost to 5.20.1.
+
+
 ## 12.8.7 (2020-03-16)
 
 - No changes.
