@@ -1,0 +1,5 @@
+---
+title: Use structure.sql instead of schema.rb
+merge_request: 3969
+author:
+type: other
