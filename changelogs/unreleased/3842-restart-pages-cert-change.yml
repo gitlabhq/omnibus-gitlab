@@ -1,5 +1,0 @@
----
-title: Restart GitLab Pages when new CA certs installed
-merge_request: 3842
-author: Ben Bodenmiller
-type: changed

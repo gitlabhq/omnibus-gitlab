@@ -1,5 +1,0 @@
----
-title: 'Geo: Symlink gitlab-pg-ctl command for Geo failover for HA'
-merge_request: 3976
-author:
-type: added

@@ -1,5 +1,0 @@
----
-title: Fix fetch_assets script for branch names with -z
-merge_request: 3941
-author:
-type: fixed
