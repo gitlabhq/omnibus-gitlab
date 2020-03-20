@@ -1,0 +1,5 @@
+---
+title: Configures logrotate service for puma
+merge_request:
+author:
+type: fixed
