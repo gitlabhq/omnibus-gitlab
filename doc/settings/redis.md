@@ -291,7 +291,7 @@ configured to use it.
 1. Check that the server is actually listening to the port via SSL.
    For example:
 
-   ```sh
+   ```shell
    /opt/gitlab/embedded/bin/openssl s_client -connect redis-server:6379
    ```
 
@@ -306,3 +306,25 @@ configured to use it.
 1. If `redis://` is present instead of `rediss://`, the `redis_ssl`
    parameter may not have been configured properly, or the reconfigure
    step may not have been run.
+
+### Connecting to Redis via the CLI
+
+When connecting to Redis for troubleshooting you can use:
+
+- Redis via Unix domain sockets:
+  
+  ```shell
+  /opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket
+  ```
+
+- Redis via TCP:
+
+  ```shell
+  /opt/gitlab/embedded/bin/redis-cli -h 127.0.0.1 -p 6379
+  ```
+
+- Password to authenticate to Redis if required:
+
+  ```shell
+  /opt/gitlab/embedded/bin/redis-cli -h 127.0.0.1 -p 6379 -a <password>
+  ```
