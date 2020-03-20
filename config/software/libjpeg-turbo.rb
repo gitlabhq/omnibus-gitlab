@@ -35,7 +35,7 @@ build do
     'cmake',
     '-G"Unix Makefiles"',
     '-DREQUIRE_SIMD=1',
-    "CMAKE_INSTALL_PREFIX=#{install_dir}/embedded",
+    "-DCMAKE_INSTALL_PREFIX=#{install_dir}/embedded"
   ]
 
   command configure_command.join(' '), env: env
