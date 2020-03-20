@@ -23,6 +23,7 @@ license_file 'Copyright.txt'
 skip_transitive_dependency_licensing true
 
 dependency 'libpng'
+dependency 'libjpeg-turbo'
 dependency 'zlib'
 
 source url: "https://ftp.icm.edu.pl/pub/unix/graphics/GraphicsMagick/1.3/GraphicsMagick-#{version}.tar.gz",
