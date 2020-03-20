@@ -212,7 +212,7 @@ step to find the current GitLab version and then follow the steps in
 ## Zero downtime updates
 
 NOTE: **Note:**
-This is only available in GitLab 9.1.0 or newer. Skipping restarts during `reconfigure` with `/etc/gitlab/skip-auto-reconfigure` was added in [version 10.6](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2270). If running a version prior to 10.6, you will need to create `/etc/gitlab/skip-auto-migrations`.
+This is only available in GitLab 9.1.0 or newer. Skipping restarts during `reconfigure` with `/etc/gitlab/skip-auto-reconfigure` was added in [version 10.6](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/2270). If running a version prior to 10.6, you will need to create `/etc/gitlab/skip-auto-migrations`.
 
 It's possible to upgrade to a newer version of GitLab without having to take
 your GitLab instance offline.
@@ -224,13 +224,16 @@ If you meet all the requirements above, follow these instructions in order. Ther
 
 | Deployment type                                                 | Description                                       |
 | --------------------------------------------------------------- | ------------------------------------------------  |
-| [Single](#single-deployment)                                    | GitLab CE/EE on a single node                     |
+| [Single-node](#single-node-deployment)                               | GitLab CE/EE on a single node                     |
 | [Multi-node / PG HA](#using-postgresql-ha)                      | GitLab CE/EE using HA architecture for PostgreSQL |
 | [Multi-node / Redis HA](#using-redis-ha-using-sentinel)         | GitLab CE/EE using HA architecture for Redis      |
 | [Geo](#geo-deployment)                                          | GitLab EE with Geo enabled                        |
 | [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo) | GitLab CE/EE on multiple nodes                    |
 
-### Single deployment
+### Single-node deployment
+
+CAUTION: **Caution:**
+While it is possible to minimize downtime on a single-node instance by following these instructions, it is not possible to always achieve true zero downtime updates. Users may see some connections timeout or be refused for a few minutes, depending on which services need to restart.
 
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
@@ -281,7 +284,7 @@ you've completed these steps.
 
 #### Using PostgreSQL HA
 
-Pick a node to be the `Deploy Node`.  It can be any node, but it must be the same
+Pick a node to be the `Deploy Node`. It can be any node, but it must be the same
 node throughout the process.
 
 **Deploy node**

@@ -222,7 +222,7 @@ Keep in mind that the Git user must have access to the system so please review
 your security settings at `/etc/security/access.conf` and make sure the Git user
 is not blocked.
 
-## Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
+## Postgres error `FATAL:  could not create shared memory segment: Cannot allocate memory`
 
 The packaged Postgres instance will try to allocate 25% of total memory as
 shared memory. On some Linux (virtual) servers, there is less shared memory
@@ -245,7 +245,7 @@ postgresql['shared_buffers'] = "100MB"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-## Postgres error 'FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied'
+## Postgres error `FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied`
 
 By default, Postgres will try to detect the shared memory type to use. If you don't
 have shared memory enabled, you might see this error in `/var/log/gitlab/postgresql/current`.
@@ -380,7 +380,7 @@ Redis, Mattermost) are isolated from each other using Unix user
 accounts. Creating and managing these user accounts requires root
 access. By default, Omnibus GitLab will create the required Unix
 accounts during `gitlab-ctl reconfigure` but that behavior can be
-[disabled](../settings/configuration.html#disable-user-and-group-account-management).
+[disabled](../settings/configuration.md#disable-user-and-group-account-management).
 
 In principle Omnibus GitLab could do with only 2 user accounts (one
 for GitLab and one for Mattermost) if we give each application its own
@@ -618,7 +618,7 @@ will need to switch to using `no_root_squash` in your NFS exports on the NFS ser
 This applies to operating systems using systemd (e.g. Ubuntu 16.04+, CentOS, etc.).
 
 Since GitLab 11.2, the `gitlab-runsvdir` starts during the `multi-user.target`
-instead of `basic.target`.  If you are having trouble starting this service
+instead of `basic.target`. If you are having trouble starting this service
 after upgrading GitLab, you may need to check that your system has properly
 booted all the required services for `multi-user.target` via the command:
 

@@ -88,6 +88,7 @@ default['gitlab']['gitlab-rails']['rake_cache_clear'] = true
 default['gitlab']['gitlab-rails']['gitlab_host'] = node['fqdn']
 default['gitlab']['gitlab-rails']['gitlab_port'] = 80
 default['gitlab']['gitlab-rails']['gitlab_https'] = false
+default['gitlab']['gitlab-rails']['gitlab_ssh_user'] = nil
 default['gitlab']['gitlab-rails']['gitlab_ssh_host'] = nil
 default['gitlab']['gitlab-rails']['time_zone'] = nil
 default['gitlab']['gitlab-rails']['gitlab_email_from'] = nil
@@ -256,6 +257,7 @@ default['gitlab']['gitlab-rails']['ldap_active_directory'] = nil
 
 default['gitlab']['gitlab-rails']['smartcard_enabled'] = false
 default['gitlab']['gitlab-rails']['smartcard_ca_file'] = "/etc/gitlab/ssl/CA.pem"
+default['gitlab']['gitlab-rails']['smartcard_client_certificate_required_host'] = nil
 default['gitlab']['gitlab-rails']['smartcard_client_certificate_required_port'] = 3444
 default['gitlab']['gitlab-rails']['smartcard_required_for_git_access'] = false
 default['gitlab']['gitlab-rails']['smartcard_san_extensions'] = false
@@ -348,6 +350,7 @@ default['gitlab']['gitlab-rails']['db_sslca'] = nil
 default['gitlab']['gitlab-rails']['db_prepared_statements'] = false
 default['gitlab']['gitlab-rails']['db_statements_limit'] = 1000
 default['gitlab']['gitlab-rails']['db_fdw'] = nil
+default['gitlab']['gitlab-rails']['db_statement_timeout'] = nil
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil
@@ -446,9 +449,9 @@ default['gitlab']['puma']['pidfile'] = "#{node['package']['install-dir']}/var/pu
 default['gitlab']['puma']['state_path'] = "#{node['package']['install-dir']}/var/puma/puma.state"
 default['gitlab']['puma']['worker_timeout'] = 60
 default['gitlab']['puma']['per_worker_max_memory_mb'] = nil
-default['gitlab']['puma']['worker_processes'] = 2
-default['gitlab']['puma']['min_threads'] = 1
-default['gitlab']['puma']['max_threads'] = 16
+default['gitlab']['puma']['worker_processes'] = nil
+default['gitlab']['puma']['min_threads'] = 4
+default['gitlab']['puma']['max_threads'] = 4
 default['gitlab']['puma']['exporter_enabled'] = false
 default['gitlab']['puma']['exporter_address'] = "127.0.0.1"
 default['gitlab']['puma']['exporter_port'] = 8083
@@ -466,6 +469,19 @@ default['gitlab']['sidekiq']['metrics_enabled'] = true
 # Sidekiq http listener
 default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"
 default['gitlab']['sidekiq']['listen_port'] = 8082
+
+####
+# Sidekiq Cluster
+####
+default['gitlab']['sidekiq-cluster']['enable'] = false
+default['gitlab']['sidekiq-cluster']['ha'] = false
+default['gitlab']['sidekiq-cluster']['log_directory'] = "/var/log/gitlab/sidekiq-cluster"
+default['gitlab']['sidekiq-cluster']['interval'] = nil
+default['gitlab']['sidekiq-cluster']['max_concurrency'] = nil
+default['gitlab']['sidekiq-cluster']['min_concurrency'] = nil
+default['gitlab']['sidekiq-cluster']['queue_groups'] = []
+default['gitlab']['sidekiq-cluster']['negate'] = false
+default['gitlab']['sidekiq-cluster']['experimental_queue_selector'] = false
 
 ###
 # gitlab-shell

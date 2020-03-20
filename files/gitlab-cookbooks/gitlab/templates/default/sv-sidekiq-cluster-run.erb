@@ -10,7 +10,7 @@ exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
   -u <%= @options[:user] %>:<%= @options[:groupname] %> \
   /usr/bin/env \
     prometheus_multiproc_dir="${prometheus_run_dir}" \
-    /opt/gitlab/embedded/service/gitlab-rails/ee/bin/sidekiq-cluster \
+    /opt/gitlab/embedded/service/gitlab-rails/bin/sidekiq-cluster \
       -e <%= node['gitlab']['gitlab-rails']['environment'] %> \
       -r /opt/gitlab/embedded/service/gitlab-rails \
       <% if node['gitlab']['sidekiq-cluster']['interval'] %>

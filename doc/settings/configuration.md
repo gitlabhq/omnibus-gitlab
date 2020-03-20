@@ -57,7 +57,8 @@ pass it specifically to the installation command as
 
 NOTE: **Note:**
 Relative URL support in Omnibus GitLab is **experimental** and was
-[introduced][590] in version 8.5. For source installations there is a
+[introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/590)
+in version 8.5. For source installations there is a
 [separate document](https://docs.gitlab.com/ee/install/relative_url.html).
 
 ---
@@ -147,8 +148,6 @@ User and path might be different if you changed the defaults of
 `user['username']`, `user['group']` and `gitlab_rails['dir']` in `gitlab.rb`.
 In that case, make sure that the `chown` command above is run with the right
 username and group.
-
-[590]: https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/590 "Merge request - Relative url support for omnibus installations"
 
 ## Loading external configuration file from non-root user
 
@@ -650,7 +649,7 @@ details.
 GitLab 12.2 added support for [CSP and nonces with inline
 JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
 It is [not configured on by default
-yet](https://gitlab.com/gitlab-org/gitlab/issues/30720).  An example
+yet](https://gitlab.com/gitlab-org/gitlab/issues/30720). An example
 configuration that will work for most installations of GitLab is below:
 
 ```ruby

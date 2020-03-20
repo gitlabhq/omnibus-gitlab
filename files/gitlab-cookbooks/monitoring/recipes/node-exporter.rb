@@ -39,7 +39,7 @@ end
 
 env_dir node_exporter_static_etc_dir do
   variables node['monitoring']['node-exporter']['env']
-  notifies :restart, "service[node-exporter]"
+  notifies :restart, "runit_service[node-exporter]"
 end
 
 directory textfile_dir do

@@ -17,7 +17,7 @@ describe 'crond_job' do
 
       it 'should notify the service' do
         expect(chef_run.file("prefix/delete"))
-          .to notify("service[crond]").to(:restart)
+          .to notify("runit_service[crond]").to(:restart)
       end
     end
 
@@ -33,7 +33,7 @@ describe 'crond_job' do
 
       it 'should notify the service' do
         expect(chef_run.file("prefix/minimal"))
-          .to notify("service[crond]").to(:restart)
+          .to notify("runit_service[crond]").to(:restart)
       end
     end
   end
@@ -54,7 +54,7 @@ describe 'crond_job' do
 
       it 'should not try and notify the service' do
         expect(chef_run.file("prefix/delete"))
-          .not_to notify("service[crond]")
+          .not_to notify("runit_service[crond]")
       end
     end
 

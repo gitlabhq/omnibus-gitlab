@@ -23,6 +23,10 @@ production: &base
     # Otherwise, ssh host will be set to the `host:` value above
     ssh_host: <%= @gitlab_ssh_host %>
 
+    # If your ssh user differs from the system user, you need to specify it here
+    # Set it to an empty string to omit the username from any ssh url altogether
+    ssh_user: <%= quote(@gitlab_ssh_user) %>
+
     # WARNING: See config/application.rb under "Relative url support" for the list of
     # other files that need to be changed for relative url support
     relative_url_root: <%= @gitlab_relative_url %>
@@ -493,7 +497,9 @@ production: &base
     # Path to a file containing a CA certificate
     ca_file: <%= quote(@smartcard_ca_file) %>
 
-    # Port where the client side certificate is requested by the webserver (NGINX/Apache)
+    # Host and port where the client side certificate is requested by the
+    # webserver (NGINX/Apache)
+    client_certificate_required_host: <%= @smartcard_client_certificate_required_host %>
     client_certificate_required_port: <%= @smartcard_client_certificate_required_port %>
 
     # Browser session with smartcard sign-in is required for Git access

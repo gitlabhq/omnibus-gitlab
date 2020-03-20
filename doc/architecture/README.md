@@ -161,7 +161,7 @@ The cache mechanism can be summarised as follows:
    1. If cache has been dirtied, break the loop.
    1. Else, checkout the snapshot.
 1. If there are remaining dependencies:
-   1. For each remaining  dependency:
+   1. For each remaining dependency:
       1. Build the dependency.
       1. Create a snapshot and commit it.
 1. Push back the new build cache to CI cache.

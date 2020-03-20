@@ -1,9 +1,9 @@
 # Setting custom environment variables
 
 If necessary you can set custom environment variables to be used by Unicorn,
-Sidekiq, Rails and Rake via `/etc/gitlab/gitlab.rb`.  This can be useful in
+Sidekiq, Rails and Rake via `/etc/gitlab/gitlab.rb`. This can be useful in
 situations where you need to use a proxy to access the internet and need to
-clone externally hosted repositories directly into GitLab.  In
+clone externally hosted repositories directly into GitLab. In
 `/etc/gitlab/gitlab.rb` supply a `gitlab_rails['env']` with a hash value. For
 example:
 

@@ -1,12 +1,12 @@
 require 'chef_helper'
 
-describe 'gitlab-ee::sidekiq-cluster' do
+describe 'gitlab::sidekiq-cluster' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       step_into: %w(runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04.json'
     )
-    runner.converge('gitlab-ee::default')
+    runner.converge('gitlab::default')
   end
 
   before do

@@ -124,7 +124,7 @@ end
 
 env_dir mattermost_env_dir do
   variables lazy { MattermostHelper.get_env_variables(node).merge(node['mattermost']['env']) }
-  notifies :restart, "service[mattermost]"
+  notifies :restart, "runit_service[mattermost]"
 end
 
 runit_service "mattermost" do

@@ -60,6 +60,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/gitlab.yml.md
 ################################################################################
 # gitlab_rails['gitlab_ssh_host'] = 'ssh.host_example.com'
+# gitlab_rails['gitlab_ssh_user'] = ''
 # gitlab_rails['time_zone'] = 'UTC'
 
 ### Request duration
@@ -112,7 +113,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Periodically executed jobs, to self-heal Gitlab, do external
 ###! synchronizations, etc.
 ###! Docs: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
-###!       https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts:expire_in
+###!       https://docs.gitlab.com/ee/ci/yaml/README.html#artifactsexpire_in
 # gitlab_rails['stuck_ci_jobs_worker_cron'] = "0 0 * * *"
 # gitlab_rails['expire_build_artifacts_worker_cron'] = "50 * * * *"
 # gitlab_rails['environments_auto_stop_cron_worker_cron'] = "24 * * * *"
@@ -375,6 +376,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Docs: https://docs.gitlab.com/ee/administration/auth/smartcard.html
 # gitlab_rails['smartcard_enabled'] = false
 # gitlab_rails['smartcard_ca_file'] = "/etc/gitlab/ssl/CA.pem"
+# gitlab_rails['smartcard_client_certificate_required_host'] = 'smartcard.gitlab.example.com'
 # gitlab_rails['smartcard_client_certificate_required_port'] = 3444
 # gitlab_rails['smartcard_required_for_git_access'] = false
 # gitlab_rails['smartcard_san_extensions'] = false
@@ -805,8 +807,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # puma['ha'] = false
 # puma['worker_timeout'] = 60
 # puma['worker_processes'] = 2
-# puma['min_threads'] = 1
-# puma['max_threads'] = 16
+# puma['min_threads'] = 4
+# puma['max_threads'] = 4
 
 ### Advanced settings
 # puma['listen'] = '127.0.0.1'

@@ -128,13 +128,15 @@ rubocop:
     - gems
 
 docs-lint:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-docs-lint"
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs:lint"
   stage: check
   cache: {}
   dependencies: []
   before_script: []
   <<: *dedicated-runner
   script:
+    # Lint prose
+    - vale --minAlertLevel error doc
     # Lint Markdown
     - markdownlint --config .markdownlint.json 'doc/**/*.md'
     # Prepare docs for build

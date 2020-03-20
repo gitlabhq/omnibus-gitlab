@@ -1,5 +1,5 @@
 #
-## Copyright:: Copyright (c) 2014 GitLab.com
+## Copyright:: Copyright (c) 2014-2020 GitLab Inc.
 ## License:: Apache License, Version 2.0
 ##
 ## Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 
 name 'python-docutils'
 
-default_version '0.13.1'
+default_version '0.16'
 
 license 'Public-Domain'
 license_file 'COPYING.txt'

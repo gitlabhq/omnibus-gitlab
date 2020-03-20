@@ -44,7 +44,7 @@ end
 
 env_dir alertmanager_static_etc_dir do
   variables node['monitoring']['alertmanager']['env']
-  notifies :restart, "service[alertmanager]"
+  notifies :restart, "runit_service[alertmanager]"
 end
 
 configuration = {
@@ -63,7 +63,7 @@ file 'Alertmanager config' do
   content Prometheus.hash_to_yaml(configuration)
   owner prometheus_user
   mode '0644'
-  notifies :restart, 'service[alertmanager]'
+  notifies :restart, 'runit_service[alertmanager]'
 end
 
 runtime_flags = PrometheusHelper.new(node).kingpin_flags('alertmanager')

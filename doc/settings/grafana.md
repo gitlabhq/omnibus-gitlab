@@ -112,7 +112,7 @@ To update it, you can use the following command:
 gitlab-ctl set-grafana-password
 ```
 
-See the [Grafana CLI documentation](https://grafana.com/docs/administration/cli/#reset-admin-password)
+See the [Grafana CLI documentation](https://grafana.com/docs/grafana/latest/administration/cli/#reset-admin-password)
 for more information.
 
 ## Dashboards
@@ -127,7 +127,7 @@ that are tailored for Omnibus installations.
 
 ## Grafana metrics
 
-Grafana can provide [metrics to be scraped by Prometheus](https://grafana.com/docs/administration/metrics/).
+Grafana can provide [metrics to be scraped by Prometheus](https://grafana.com/docs/grafana/latest/administration/metrics/).
 
 By default, the metrics API is disabled in the bundled Grafana instance.
 

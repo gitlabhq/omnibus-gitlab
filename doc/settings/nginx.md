@@ -327,7 +327,7 @@ nginx['listen_addresses'] = ["0.0.0.0", "[::]"] # listen on all IPv4 and IPv6 ad
 By default NGINX will listen on the port specified in `external_url` or
 implicitly use the right port (80 for HTTP, 443 for HTTPS). If you are running
 GitLab behind a reverse proxy, you may want to override the listen port to
-something else.  For example, to use port 8081:
+something else. For example, to use port 8081:
 
 ```ruby
 nginx['listen_port'] = 8081
@@ -336,7 +336,7 @@ nginx['listen_port'] = 8081
 ## Supporting proxied SSL
 
 By default NGINX will auto-detect whether to use SSL if `external_url`
-contains `https://`.  If you are running GitLab behind a reverse proxy, you
+contains `https://`. If you are running GitLab behind a reverse proxy, you
 may wish to terminate SSL at another proxy server or load balancer. To do this,
 be sure the `external_url` contains `https://` and apply the following
 configuration to `gitlab.rb`:
@@ -782,9 +782,9 @@ systems `sudo service nginx restart`).
 
 Make sure you don't have the `proxy_set_header` configuration in
 `nginx['custom_gitlab_server_config']` settings and instead use the
-['proxy_set_headers'](https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl) configuration in your `gitlab.rb` file.
+['proxy_set_headers'](#supporting-proxied-ssl) configuration in your `gitlab.rb` file.
 
-### javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
+### `javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure`
 
 Starting with GitLab 10, the Omnibus GitLab package no longer supports TLSv1 protocol by default.
 This can cause connection issues with some older Java based IDE clients when interacting with
