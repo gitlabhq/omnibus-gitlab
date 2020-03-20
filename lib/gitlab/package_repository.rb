@@ -82,9 +82,9 @@ class PackageRepository
       platform = platform_name.tr("-", "/") # "ubuntu/xenial"
       target_repository = repository || target # staging override or the rest, eg. "unstable"
 
-      # If we detect Enterprise Linux, upload the same package
+      # If we detect Enterprise Linux 6/7, upload the same package
       # to Scientific and Oracle Linux repositories
-      if platform.start_with?("el/")
+      if platform.match?(/^el\/[6,7]/)
         %w(scientific ol).each do |distro|
           platform_path = platform.gsub('el', distro)
 

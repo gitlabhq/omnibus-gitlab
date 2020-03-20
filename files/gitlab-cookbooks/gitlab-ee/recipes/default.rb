@@ -21,7 +21,6 @@ include_recipe 'gitlab::default'
 
 %w[
   sentinel
-  sidekiq-cluster
   geo-postgresql
   geo-logcursor
   pgbouncer

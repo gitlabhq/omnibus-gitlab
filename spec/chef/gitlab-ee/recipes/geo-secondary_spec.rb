@@ -204,13 +204,31 @@ describe 'gitlab-ee::geo-secondary' do
         )
       end
 
-      it 'template triggers notifications' do
+      it 'template triggers dependent services notifications' do
+        expect(templatesymlink).to notify('ruby_block[Restart geo-secondary dependent services]').to(:run).delayed
+      end
+    end
+
+    describe 'Restart geo-secondary dependent services' do
+      let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+
+      let(:ruby_block) { chef_run.ruby_block('Restart geo-secondary dependent services') }
+
+      it 'does not run' do
+        expect(chef_run).not_to run_ruby_block('Restart geo-secondary dependent services')
+        expect(ruby_block).to do_nothing
+      end
+
+      it 'ruby_block triggers dependent services notifications' do
+        allow(ruby_block).to receive(:notifies)
+        ruby_block.block.call
+
         %w(
           unicorn
           sidekiq
           geo-logcursor
         ).each do |svc|
-          expect(templatesymlink).to notify("service[#{svc}]").to(:restart).delayed
+          expect(ruby_block).to have_received(:notifies).with(:restart, "runit_service[#{svc}]")
         end
       end
     end

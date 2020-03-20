@@ -3,6 +3,26 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.8.7 (2020-03-16)
+
+- No changes.
+
+## 12.8.6 (2020-03-11)
+
+- No changes.
+
+## 12.8.5
+
+- No changes.
+
+## 12.8.4
+
+- No changes.
+
+## 12.8.3
+
+- No changes.
+
 ## 12.8.1
 
 - No changes.
@@ -56,6 +76,13 @@ omnibus-gitlab repository.
 - Bump PostgreSQL versions to 9.6.17, 10.12, and 11.7. !3933
 - Upgrade Mattermost to 5.19.1.
 - Update Mattermost to 5.18.1.
+
+
+## 12.7.7
+
+### Security (1 change)
+
+- Update postgresql 10.9->10.12, 9.6.14->9.6.17. Resolves CVE-2019-10208.
 
 
 ## 12.7.6

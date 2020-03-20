@@ -19,6 +19,11 @@ socket_path = '<%= @socket_path %>'
 prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
 <% end %>
 
+<% if @failover_enabled %>
+# Enables automatic failover
+failover_enabled = <%= @failover_enabled %>
+<% end %>
+
 [sentry]
 <% if @sentry_dsn %>
 # Optional: emit errors to Sentry

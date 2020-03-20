@@ -23,14 +23,7 @@ gitlab_rails_source_dir = '/opt/gitlab/embedded/service/gitlab-rails'
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
-dependent_services = []
-%w(
-  unicorn
-  sidekiq
-  geo-logcursor
-).each do |svc|
-  dependent_services << "service[#{svc}]" if omnibus_helper.should_notify?(svc)
-end
+dependent_services = %w(unicorn sidekiq geo-logcursor)
 
 templatesymlink 'Create a database_geo.yml and create a symlink to Rails root' do
   link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')
@@ -41,7 +34,16 @@ templatesymlink 'Create a database_geo.yml and create a symlink to Rails root' d
   group account_helper.gitlab_group
   mode '0640'
   variables node['gitlab']['geo-secondary'].to_hash
-  dependent_services.each { |svc| notifies :restart, svc }
+  notifies :run, 'ruby_block[Restart geo-secondary dependent services]'
+end
+
+ruby_block 'Restart geo-secondary dependent services' do
+  block do
+    dependent_services.each do |svc|
+      notifies :restart, "runit_service[#{svc}]" if omnibus_helper.should_notify?(svc)
+    end
+  end
+  action :nothing
 end
 
 # Make schema.rb writable for when we run `rake geo:db:migrate`

@@ -20,6 +20,7 @@ group = AccountHelper.new(node).gitlab_group
 
 GITLAB_RAILS_SOURCE_DIR = '/opt/gitlab/embedded/service/gitlab-rails'.freeze
 
+exit_log_format = node['gitlab']['mailroom']['exit_log_format']
 mailroom_log_dir = node['gitlab']['mailroom']['log_directory']
 mail_room_config = File.join(GITLAB_RAILS_SOURCE_DIR, 'config', 'mail_room.yml')
 
@@ -35,7 +36,8 @@ runit_service 'mailroom' do
     user: user,
     groupname: group,
     log_directory: mailroom_log_dir,
-    mail_room_config: mail_room_config
+    mail_room_config: mail_room_config,
+    exit_log_format: exit_log_format
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['mailroom'].to_hash)
 end

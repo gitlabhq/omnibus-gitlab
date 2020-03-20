@@ -56,7 +56,7 @@ In `files/gitlab-cookbooks/package/libraries/config/gitlab.rb` you will find the
 `attribute` methods.
 
 If your service exists within the attributes for the GitLab cookbook, you should
-add it within the `attribute_block('gitlab')` block.  Otherwise, if your service
+add it within the `attribute_block('gitlab')` block. Otherwise, if your service
 has its own cookbook, add it above.
 
 Add your service as an attribute, using an underscore to separate words, **even if you

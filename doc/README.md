@@ -33,9 +33,9 @@ This section describes the commonly used configuration settings. Check
 
 - [Installing GitLab](https://about.gitlab.com/install/)
   - [Manually downloading and installing a GitLab package](manual_install.md)
-- [Setting up a domain name/URL](https://docs.gitlab.com/omnibus/settings/configuration.html#configuring-the-external-url-for-gitlab) for the GitLab Instance so that it can be accessed easily
-- [Enabling HTTPS](https://docs.gitlab.com/omnibus/settings/nginx.html#enable-https)
-- [Enabling notification emails](https://docs.gitlab.com/omnibus/settings/smtp.html#smtp-settings)
+- [Setting up a domain name/URL](settings/configuration.md#configuring-the-external-url-for-gitlab) for the GitLab Instance so that it can be accessed easily
+- [Enabling HTTPS](settings/nginx.md#enable-https)
+- [Enabling notification emails](settings/smtp.md#smtp-settings)
 - [Enabling replying via email](https://docs.gitlab.com/ee/administration/reply_by_email.html#set-it-up)
   - [Installing and configuring postfix](https://docs.gitlab.com/ee/administration/reply_by_email_postfix_setup.html)
 - [Enabling container registry on GitLab](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-domain-configuration)
@@ -74,8 +74,8 @@ to work best with the available resources. Check out the [documentation](setting
 - [Changing the name of the Git user group](settings/configuration.md#changing-the-name-of-the-git-user--group)
 - [Specify numeric user and group identifiers](settings/configuration.md#specify-numeric-user-and-group-identifiers)
 - [Only start Omnibus GitLab services after a given filesystem is mounted](settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted)
-- [Disable user and group account management](settings/configuration.html#disable-user-and-group-account-management)
-- [Disable storage directory management](settings/configuration.html#disable-storage-directories-management)
+- [Disable user and group account management](settings/configuration.md#disable-user-and-group-account-management)
+- [Disable storage directory management](settings/configuration.md#disable-storage-directories-management)
 - [Configuring Rack attack](settings/configuration.md#configuring-rack-attack)
 - [SMTP](settings/smtp.md)
 - [NGINX](settings/nginx.md)

@@ -15,7 +15,7 @@ Administrators can enable secure http using any method supported by a GitLab ser
 |-|-|-|
 | Primary GitLab Instance Domain | [Yes](nginx.md#manually-configuring-https) | [Yes](#lets-encrypt-integration) |
 | Container Registry | [Yes](https://docs.gitlab.com/ee/administration/packages/container_registry.html#configure-container-registry-under-its-own-domain) | [Yes](#lets-encrypt-integration) |
-| Mattermost | [Yes](https://docs.gitlab.com/omnibus/gitlab-mattermost/README.html#running-gitlab-mattermost-with-https) | [Yes](#lets-encrypt-integration) |
+| Mattermost | [Yes](../gitlab-mattermost/README.md#running-gitlab-mattermost-with-https) | [Yes](#lets-encrypt-integration) |
 | GitLab Pages | [Yes](https://docs.gitlab.com/ee/administration/pages/#wildcard-domains-with-tls-support) | No |
 
 ### Let's Encrypt Integration
@@ -72,7 +72,7 @@ to worry about setting up wildcard certificates.
 
 #### Automatic Let's Encrypt Renewal
 
-> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2433) in [GitLab](https://about.gitlab.com/pricing/) 10.7.
+> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/2433) in [GitLab](https://about.gitlab.com/pricing/) 10.7.
 
 CAUTION: **Caution:**
 Administrators installing or upgrading to GitLab 12.1 or later and plan on using

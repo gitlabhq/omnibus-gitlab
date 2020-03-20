@@ -58,5 +58,5 @@ ruby_block "Link postgresql bin files to the correct version" do
   only_if do
     !File.exist?(File.join(node['postgresql']['data_dir'], "PG_VERSION")) || pg_helper.version.major !~ /^#{pg_helper.database_version}/ || !node['postgresql']['version'].nil?
   end
-  notifies :restart, 'service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && resource_exists['service[postgresql]']
+  notifies :restart, 'runit_service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && resource_exists['runit_service[postgresql]']
 end

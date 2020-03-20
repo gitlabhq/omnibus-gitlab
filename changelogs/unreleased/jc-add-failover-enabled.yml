@@ -1,0 +1,5 @@
+---
+title: Add failover_enabled top level option in praefect
+merge_request: 3987
+author:
+type: added

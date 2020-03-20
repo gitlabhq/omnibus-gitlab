@@ -46,8 +46,9 @@ Installation instructions for Minishift can be found at <https://docs.okd.io/lat
 ### Docker oc cluster up
 
 NOTE: **Note:**
-The information listed below may be out of date. See <https://docs.okd.io/latest/getting_started/administrators.html>
-for more recent information regarding cluster setup.
+The information listed below may be out of date. See
+[OKD documentation](https://docs.okd.io/latest/welcome/index.html) for more recent information
+regarding cluster setup.
 
 If you have Docker installed, you can setup OpenShift Origin on your local machine: <https://github.com/openshift/origin/blob/77bf0a926c045142570bb50a9a83086a370506a8/docs/cluster_up_down.md>
 

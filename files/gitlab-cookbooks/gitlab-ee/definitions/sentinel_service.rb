@@ -80,7 +80,7 @@ define :sentinel_service, config_path: nil, redis_configuration: {}, sentinel_co
           sentinel: sentinel.to_hash
         }
       )
-      notifies :restart, 'service[sentinel]', :immediately if omnibus_helper.should_notify?('redis')
+      notifies :restart, 'runit_service[sentinel]', :immediately if omnibus_helper.should_notify?('redis')
       only_if { config_path }
     end
 

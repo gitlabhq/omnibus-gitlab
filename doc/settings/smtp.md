@@ -94,7 +94,7 @@ gitlab_rails['smtp_password'] = "8b6ffrmle180"
 gitlab_rails['smtp_domain'] = "mg.gitlab.com"
 ```
 
-### Amazon SES
+### Amazon Simple Email System (AWS SES)
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -106,6 +106,8 @@ gitlab_rails['smtp_domain'] = "yourdomain.com"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
+
+Make sure to permit egress through port 587 in your ACL and security group.
 
 ### Mandrill
 

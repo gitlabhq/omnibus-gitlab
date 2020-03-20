@@ -976,10 +976,31 @@ describe 'gitlab::gitlab-rails' do
             hash_including(
               'smartcard_enabled' => true,
               'smartcard_ca_file' => '/etc/gitlab/ssl/CA.pem',
+              'smartcard_client_certificate_required_host' => nil,
               'smartcard_client_certificate_required_port' => 3444,
               'smartcard_required_for_git_access' => false
             )
           )
+        end
+
+        context 'smartcard_client_certificate_required_host is configured' do
+          it 'sets smartcard_client_certificate_required_host based on config' do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                smartcard_enabled: true,
+                smartcard_client_certificate_required_host: 'smartcard.gitlab.example.com'
+              }
+            )
+
+            expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'smartcard_enabled' => true,
+                'smartcard_ca_file' => '/etc/gitlab/ssl/CA.pem',
+                'smartcard_client_certificate_required_host' => 'smartcard.gitlab.example.com',
+                'smartcard_client_certificate_required_port' => 3444
+              )
+            )
+          end
         end
 
         context 'smartcard_required_for_git_access is enabled' do
@@ -995,6 +1016,7 @@ describe 'gitlab::gitlab-rails' do
               hash_including(
                 'smartcard_enabled' => true,
                 'smartcard_ca_file' => '/etc/gitlab/ssl/CA.pem',
+                'smartcard_client_certificate_required_host' => nil,
                 'smartcard_client_certificate_required_port' => 3444,
                 'smartcard_required_for_git_access' => true
               )
@@ -1015,6 +1037,7 @@ describe 'gitlab::gitlab-rails' do
               hash_including(
                 'smartcard_enabled' => true,
                 'smartcard_ca_file' => '/etc/gitlab/ssl/CA.pem',
+                'smartcard_client_certificate_required_host' => nil,
                 'smartcard_client_certificate_required_port' => 3444,
                 'smartcard_san_extensions' => true
               )
@@ -1219,8 +1242,8 @@ describe 'gitlab::gitlab-rails' do
         let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab.yml and create a symlink to Rails root') }
 
         it 'template triggers notifications' do
-          expect(templatesymlink).not_to notify('service[sidekiq]').to(:restart).delayed
-          expect(templatesymlink).to notify('service[sidekiq-cluster]').to(:restart).delayed
+          expect(templatesymlink).not_to notify('runit_service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[sidekiq-cluster]').to(:restart).delayed
         end
       end
     end
@@ -2150,6 +2173,7 @@ describe 'gitlab::gitlab-rails' do
     end
 
     describe 'database.yml' do
+      let(:config_file) { '/var/opt/gitlab/gitlab-rails/etc/database.yml' }
       let(:templatesymlink) { chef_run.templatesymlink('Create a database.yml and create a symlink to Rails root') }
 
       context 'by default' do
@@ -2173,10 +2197,10 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'template triggers notifications' do
-          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
-          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
-          expect(templatesymlink).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink).not_to notify('service[nginx]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).not_to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink).not_to notify('runit_service[nginx]').to(:restart).delayed
         end
       end
 
@@ -2223,10 +2247,10 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'template triggers notifications' do
-            expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
-            expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
-            expect(templatesymlink).not_to notify('service[gitlab-workhorse]').to(:restart).delayed
-            expect(templatesymlink).not_to notify('service[nginx]').to(:restart).delayed
+            expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+            expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
+            expect(templatesymlink).not_to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
+            expect(templatesymlink).not_to notify('runit_service[nginx]').to(:restart).delayed
           end
         end
 
@@ -2322,6 +2346,67 @@ describe 'gitlab::gitlab-rails' do
           end
         end
       end
+
+      describe 'statement_timeout' do
+        let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+
+        context 'default values' do
+          it 'uses server side statement_timeout value for client also' do
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_statement_timeout' => '60000'
+              )
+            )
+
+            expect(chef_run).to render_file(config_file).with_content { |content|
+              expect(content).to match(%r(statement_timeout: 60000$))
+            }
+          end
+        end
+
+        context 'custom value for server side statement_timeout' do
+          before do
+            stub_gitlab_rb(
+              'postgresql' => {
+                'statement_timeout' => '65000'
+              }
+            )
+          end
+
+          it 'uses server side statement_timeout value for client also' do
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_statement_timeout' => '65000'
+              )
+            )
+
+            expect(chef_run).to render_file(config_file).with_content { |content|
+              expect(content).to match(%r(statement_timeout: 65000$))
+            }
+          end
+        end
+
+        context 'custom value for client side statement_timeout' do
+          before do
+            stub_gitlab_rb(
+              'postgresql' => { 'statement_timeout' => '65000' },
+              'gitlab_rails' => { 'db_statement_timeout' => '70000' }
+            )
+          end
+
+          it 'uses specified client side statement_timeout value' do
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_statement_timeout' => '70000'
+              )
+            )
+
+            expect(chef_run).to render_file(config_file).with_content { |content|
+              expect(content).to match(%r(statement_timeout: 70000$))
+            }
+          end
+        end
+      end
     end
 
     describe 'gitlab_workhorse_secret' do
@@ -2341,9 +2426,9 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'template triggers notifications' do
-          expect(templatesymlink).to notify('service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
-          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
         end
       end
 
@@ -2371,9 +2456,9 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'template triggers notifications' do
-          expect(templatesymlink).to notify('service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
-          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
         end
       end
     end
@@ -2426,9 +2511,9 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'template triggers notifications' do
-          expect(templatesymlink).to notify('service[gitlab-pages]').to(:restart).delayed
-          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
-          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[gitlab-pages]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
         end
       end
 
@@ -2462,9 +2547,9 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'template triggers notifications' do
-          expect(templatesymlink).to notify('service[gitlab-pages]').to(:restart).delayed
-          expect(templatesymlink).to notify('service[unicorn]').to(:restart).delayed
-          expect(templatesymlink).to notify('service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[gitlab-pages]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
         end
       end
     end

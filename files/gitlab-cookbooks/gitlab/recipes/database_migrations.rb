@@ -24,10 +24,10 @@ initial_license_file = node['gitlab']['gitlab-rails']['initial_license_file'] ||
 initial_runner_token = node['gitlab']['gitlab-rails']['initial_shared_runners_registration_token']
 
 dependent_services = []
-dependent_services << "service[unicorn]" if omnibus_helper.should_notify?("unicorn")
-dependent_services << "service[puma]" if omnibus_helper.should_notify?("puma")
-dependent_services << "service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
-dependent_services << "service[sidekiq-cluster]" if omnibus_helper.should_notify?("sidekiq-cluster")
+dependent_services << "runit_service[unicorn]" if omnibus_helper.should_notify?("unicorn")
+dependent_services << "runit_service[puma]" if omnibus_helper.should_notify?("puma")
+dependent_services << "runit_service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
+dependent_services << "runit_service[sidekiq-cluster]" if omnibus_helper.should_notify?("sidekiq-cluster")
 
 connection_attributes = %w(
   db_adapter

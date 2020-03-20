@@ -50,7 +50,7 @@ end
 
 env_dir prometheus_static_etc_dir do
   variables node['monitoring']['prometheus']['env']
-  notifies :restart, "service[prometheus]"
+  notifies :restart, "runit_service[prometheus]"
 end
 
 configuration = Prometheus.hash_to_yaml({

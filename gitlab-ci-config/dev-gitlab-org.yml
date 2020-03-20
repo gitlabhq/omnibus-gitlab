@@ -15,6 +15,9 @@
 .dev-tag-only: &dev-tag-only
   only:
     - tags@gitlab/omnibus-gitlab
+
+.dev-tag-only-except-auto-deploy: &dev-tag-only-except-auto-deploy
+  <<: *dev-tag-only
   <<: *except-auto-deploy-tag
 
 .dev-ee-tag-only: &dev-ee-tag-only
@@ -116,7 +119,7 @@
     - bundle exec rake build:component_shas
   tags:
   - docker-builder
-  <<: *dev-tag-only
+  <<: *dev-tag-only-except-auto-deploy
   artifacts: *package-artifacts-release
   dependencies:
     - fetch-assets
@@ -152,7 +155,7 @@
   retry: 2
   tags:
   - promotion
-  <<: *dev-tag-only
+  <<: *dev-tag-only-except-auto-deploy
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -164,7 +167,7 @@
   script:
     - bundle exec rake repository:upload:production
   retry: 2
-  <<: *dev-tag-only
+  <<: *dev-tag-only-except-auto-deploy
   when: manual
   cache: *tag-cache
   tags:
@@ -176,7 +179,7 @@
     RASPBERRY_REPO: "raspberry-pi2"
   stage: raspbian-release
   retry: 2
-  <<: *dev-tag-only
+  <<: *dev-tag-only-except-auto-deploy
   except:
     refs:
       - /.*ee\.\d/
@@ -198,7 +201,7 @@
   tags:
   - docker-builder
   when: manual
-  <<: *dev-tag-only
+  <<: *dev-tag-only-except-auto-deploy
   cache: *tag-cache
   dependencies: []
   retry: 1
@@ -371,9 +374,6 @@ Docker-QA:
   - docker-builder
   dependencies: []
   retry: 1
-  # Also build for auto-deploy tags
-  except:
-    variables: []
 
 ###########################################################
 ## Upload and deploy to staging or preprod for GitLab.com
@@ -497,7 +497,7 @@ Docker:
 Docker-measure-memory:
   extends: .measure_memory_script_artifacts
   stage: metrics
-  <<: *dev-tag-only
+  <<: *dev-tag-only-except-auto-deploy
   when: manual
   tags:
   - docker-builder
@@ -599,7 +599,7 @@ Docker-Release:
   stage: package-and-image-release
   script:
     - bundle exec rake release:docker
-  <<: *dev-tag-only
+  <<: *dev-tag-only-except-auto-deploy
   cache: *tag-cache
   dependencies: []
   when: manual
@@ -631,7 +631,7 @@ QA-Tag:
     paths:
     - screenshots/
   allow_failure: true
-  <<: *dev-tag-only
+  <<: *dev-tag-only-except-auto-deploy
   tags:
   - docker-builder
   cache: *tag-cache
@@ -648,7 +648,7 @@ upgrade:
     - bundle exec rake metrics:upgrade_package
   allow_failure: true
   when: manual
-  <<: *dev-tag-only
+  <<: *dev-tag-only-except-auto-deploy
   tags:
   - docker-builder
   cache: *tag-cache
@@ -661,7 +661,7 @@ license-upload:
     - bundle exec rake license:upload
   allow_failure: true
   when: manual
-  <<: *dev-tag-only
+  <<: *dev-tag-only-except-auto-deploy
   tags:
   - docker-builder
   cache: *tag-cache
@@ -699,7 +699,7 @@ AWS-CE-Release:
 
 AWS-EE-Ultimate-Release:
   variables:
-    AWS_LISTING_NAME: "GitLab Ultimate - 5 User Pack"
+    AWS_LISTING_NAME: "GitLab Ultimate"
   extends: .aws_marketplace_release
 
 AWS-EE-Premium-Release:

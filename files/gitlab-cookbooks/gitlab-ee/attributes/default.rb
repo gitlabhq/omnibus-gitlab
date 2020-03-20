@@ -28,19 +28,6 @@ default['gitlab']['sentinel']['down_after_milliseconds'] = 10000
 default['gitlab']['sentinel']['failover_timeout'] = 60000
 default['gitlab']['sentinel']['myid'] = nil
 
-####
-# Sidekiq Cluster
-####
-default['gitlab']['sidekiq-cluster']['enable'] = false
-default['gitlab']['sidekiq-cluster']['ha'] = false
-default['gitlab']['sidekiq-cluster']['log_directory'] = "/var/log/gitlab/sidekiq-cluster"
-default['gitlab']['sidekiq-cluster']['interval'] = nil
-default['gitlab']['sidekiq-cluster']['max_concurrency'] = nil
-default['gitlab']['sidekiq-cluster']['min_concurrency'] = nil
-default['gitlab']['sidekiq-cluster']['queue_groups'] = []
-default['gitlab']['sidekiq-cluster']['negate'] = false
-default['gitlab']['sidekiq-cluster']['experimental_queue_selector'] = false
-
 ###
 # Geo: Common (primary or secondary) node configuration
 ###
