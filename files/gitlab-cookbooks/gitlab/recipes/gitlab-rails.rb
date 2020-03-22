@@ -383,8 +383,8 @@ link legacy_sidekiq_log_file do
   not_if { File.exist?(legacy_sidekiq_log_file) }
 end
 
-# Make schema.rb writable for when we run `rake db:migrate`
-file "/opt/gitlab/embedded/service/gitlab-rails/db/schema.rb" do
+# Make structure.sql writable for when we run `rake db:migrate`
+file "/opt/gitlab/embedded/service/gitlab-rails/db/structure.sql" do
   owner gitlab_user
 end
 
