@@ -1,0 +1,5 @@
+---
+title: Update openssl/openssl from 1.1.1d to 1.1.1e
+merge_request: 4019
+author:
+type: security
