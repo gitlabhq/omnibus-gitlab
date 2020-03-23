@@ -1087,6 +1087,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 #####! Set to [''] to clear previously set values
 # redis['save'] = [ '900 1', '300 10', '60 10000' ]
 
+#####! Redis lazy freeing
+#####! Defaults to false
+# redis['lazyfree_lazy_eviction'] = true
+# redis['lazyfree_lazy_expire'] = true
+# redis['lazyfree_lazy_server_del'] = true
+# redis['replica_lazy_flush'] = true
+
 ################################################################################
 ## GitLab Web server
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#using-a-non-bundled-web-server

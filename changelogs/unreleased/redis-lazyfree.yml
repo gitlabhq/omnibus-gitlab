@@ -1,0 +1,5 @@
+---
+title: 'redis: introduce options for lazy freeing'
+merge_request: 4008
+author:
+type: added
