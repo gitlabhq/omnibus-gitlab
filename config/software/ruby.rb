@@ -100,6 +100,8 @@ else # including linux
 end
 
 build do
+  env['CFLAGS'] << ' -fno-omit-frame-pointer'
+
   # AIX needs /opt/freeware/bin only for patch
   patch_env = env.dup
   patch_env['PATH'] = "/opt/freeware/bin:#{env['PATH']}" if aix?
