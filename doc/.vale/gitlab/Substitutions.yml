@@ -11,3 +11,4 @@ swap:
   GitLabber: GitLab team member
   self hosted: self-managed
   self-hosted: self-managed
+  postgres: PostgreSQL

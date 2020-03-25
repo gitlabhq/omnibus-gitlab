@@ -43,7 +43,7 @@ roles ['geo_primary_role']
 
 - **application_role**
 
-  The GitLab App role is used to easily configure an instance where only GitLab is running. Redis, Postgres, and Consul services are disabled by default.
+  The GitLab App role is used to easily configure an instance where only GitLab is running. Redis, PostgreSQL, and Consul services are disabled by default.
 
 ### Redis Server Roles
 
@@ -96,9 +96,9 @@ Monitoring roles are used to setup monitoring of HA installs. Additional documen
 
   Enables Prometheus, Alertmanager, and Grafana.
 
-### Postgres Roles
+### PostgreSQL Roles
 
-Documentation on the usage of the Postgres Roles can be found in [Configuring Postgres HA](https://docs.gitlab.com/ee/administration/high_availability/database.html#configure-using-omnibus-for-high-availability)
+Documentation on the usage of the PostgreSQL Roles can be found in [Configuring PostgreSQL HA](https://docs.gitlab.com/ee/administration/high_availability/database.html#configure-using-omnibus-for-high-availability)
 
 - **postgres_role**
 

@@ -222,11 +222,11 @@ Keep in mind that the Git user must have access to the system so please review
 your security settings at `/etc/security/access.conf` and make sure the Git user
 is not blocked.
 
-## Postgres error `FATAL:  could not create shared memory segment: Cannot allocate memory`
+## PostgreSQL error `FATAL:  could not create shared memory segment: Cannot allocate memory`
 
-The packaged Postgres instance will try to allocate 25% of total memory as
+The packaged PostgreSQL instance will try to allocate 25% of total memory as
 shared memory. On some Linux (virtual) servers, there is less shared memory
-available, which will prevent Postgres from starting. In
+available, which will prevent PostgreSQL from starting. In
 `/var/log/gitlab/postgresql/current`:
 
 ```
@@ -236,7 +236,7 @@ available, which will prevent Postgres from starting. In
   1888  2014-08-08_16:28:43.71004       The PostgreSQL documentation contains more information about shared memory configuration.
 ```
 
-You can manually lower the amount of shared memory Postgres tries to allocate
+You can manually lower the amount of shared memory PostgreSQL tries to allocate
 in `/etc/gitlab/gitlab.rb`:
 
 ```ruby
@@ -245,9 +245,9 @@ postgresql['shared_buffers'] = "100MB"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-## Postgres error `FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied`
+## PostgreSQL error `FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied`
 
-By default, Postgres will try to detect the shared memory type to use. If you don't
+By default, PostgreSQL will try to detect the shared memory type to use. If you don't
 have shared memory enabled, you might see this error in `/var/log/gitlab/postgresql/current`.
 To fix this, you can disable PostgreSQL's shared memory detection. Set the
 following value in `/etc/gitlab/gitlab.rb`:
@@ -375,7 +375,7 @@ updates.
 
 ### Isolation between Omnibus services
 
-Bundled services in Omnibus GitLab (GitLab itself, NGINX, Postgres,
+Bundled services in Omnibus GitLab (GitLab itself, NGINX, PostgreSQL,
 Redis, Mattermost) are isolated from each other using Unix user
 accounts. Creating and managing these user accounts requires root
 access. By default, Omnibus GitLab will create the required Unix
@@ -384,7 +384,7 @@ accounts during `gitlab-ctl reconfigure` but that behavior can be
 
 In principle Omnibus GitLab could do with only 2 user accounts (one
 for GitLab and one for Mattermost) if we give each application its own
-runit (runsvdir), Postgres and Redis process. But this would be a
+runit (runsvdir), PostgreSQL and Redis process. But this would be a
 major change in the `gitlab-ctl reconfigure` Chef code and it would
 probably create major upgrade pain for all existing Omnibus GitLab
 installations. (We would probably have to rearrange the directory
@@ -393,7 +393,7 @@ structure under `/var/opt/gitlab`.)
 ### Tweaking the operating system for better performance
 
 During `gitlab-ctl reconfigure` we set and install several sysctl
-tweaks to improve Postgres performance and increase connection limits.
+tweaks to improve PostgreSQL performance and increase connection limits.
 This can only be done with root access.
 
 ## `gitlab-rake assets:precompile` fails with 'Permission denied'
