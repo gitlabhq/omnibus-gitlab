@@ -240,7 +240,7 @@ directly restarting the service with `gitlab-ctl restart postgresql`.
 
 NOTE: **Note:**
 Some included scripts of the Omnibus package, such as `gitlab-psql` expect the
-connections to Postgres to be handled over the UNIX socket, and may not function
+connections to PostgreSQL to be handled over the UNIX socket, and may not function
 properly. You can enable TCP/IP without disabling UNIX sockets.
 
 ### Enabling PostgreSQL WAL (Write Ahead Log) Archiving
@@ -428,7 +428,7 @@ connect as the application user:
 sudo gitlab-rails dbconsole
 ```
 
-or as a Postgres superuser:
+or as a PostgreSQL superuser:
 
 ```bash
 sudo gitlab-psql -d gitlabhq_production

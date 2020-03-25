@@ -159,7 +159,7 @@ Run `sudo gitlab-ctl reconfigure` to apply the changes.
 ### Connecting to the bundled PostgreSQL database
 
 If you need to connect to the bundled PostgreSQL database and are using the default Omnibus GitLab database configuration, you can connect as
-the Postgres superuser:
+the PostgreSQL superuser:
 
 ```
 sudo gitlab-psql -d mattermost_production
