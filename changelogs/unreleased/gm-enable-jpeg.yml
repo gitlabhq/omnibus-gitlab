@@ -1,0 +1,5 @@
+---
+title: Include libjpeg-turbo to enable jpeg support in graphicsmagick
+merge_request: 4027
+author:
+type: added

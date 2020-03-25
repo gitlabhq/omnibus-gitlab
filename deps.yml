@@ -142,6 +142,11 @@ dependencies:
         replace_in_files:
         - filename: config/software/gitlab-exporter.rb
           pattern: "default_version '(\\S+)'"
+      #libjpeg-turbo
+      https://github.com/libjpeg-turbo/libjpeg-turbo.git:
+        replace_in_files:
+        - filename: config/software/libjpeg-turbo.rb
+          pattern: "Gitlab::Version.new\\('libjpeg-turbo', '(\\S+)'\\)"
 
       # deps that need updated filtering to work https://github.com/dropseed/deps-git/issues/2
       # krb5
