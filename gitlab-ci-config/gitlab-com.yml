@@ -102,6 +102,27 @@
     variables:
       - $DEPS_PIPELINE
 
+.review-docs:
+  image: ruby:2.6-alpine
+  stage: post-test
+  cache: {}
+  dependencies: []
+  before_script:
+    - gem install gitlab --no-doc
+    # We need to download the script rather than clone the repo since the
+    # review-docs-cleanup job will not be able to run when the branch gets
+    # deleted (when merging the MR).
+    - apk add --update openssl
+    - wget https://gitlab.com/gitlab-org/gitlab/-/raw/master/scripts/trigger-build-docs
+    - chmod 755 trigger-build-docs
+  variables:
+    GIT_STRATEGY: none
+    DOCS_REVIEW_APPS_DOMAIN: 178.62.207.141.nip.io
+  when: manual
+  only:
+    refs:
+      - branches@gitlab-org/omnibus-gitlab
+
 ###########################
 #     Branch pipeline     #
 ###########################
@@ -156,6 +177,29 @@ docs-lint:
       - /./@gitlab-org/build/omnibus-gitlab-mirror
     variables:
       - $DEPS_PIPELINE
+
+# Trigger a docs build in gitlab-docs
+# Useful to preview the docs changes live
+# https://docs.gitlab.com/ee/development/documentation/index.html#previewing-the-changes-live
+review-docs-deploy:
+  extends:
+    - .review-docs
+  environment:
+    name: review-docs/$CI_COMMIT_REF_SLUG
+    url: http://docs-preview-omnibus-$CI_COMMIT_REF_SLUG.$DOCS_REVIEW_APPS_DOMAIN/omnibus
+    on_stop: review-docs-cleanup
+  script:
+    - ./trigger-build-docs deploy
+
+# Cleanup remote environment of gitlab-docs
+review-docs-cleanup:
+  extends:
+    - .review-docs
+  environment:
+    name: review-docs/$CI_COMMIT_REF_SLUG
+    action: stop
+  script:
+    - ./trigger-build-docs cleanup
 
 danger-review:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
