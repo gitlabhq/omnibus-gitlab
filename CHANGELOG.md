@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.9.1 (2020-03-26)
+
+### Security (1 change)
+
+- Bump pcre2 version to 10.34.
+
+
 ## 12.9.0 (2020-03-22)
 
 ### Fixed (5 changes, 1 of them is from the community)
