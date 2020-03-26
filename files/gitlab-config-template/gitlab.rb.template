@@ -840,6 +840,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['listen_address'] = "localhost"
 # sidekiq['listen_port'] = 8082
 
+### Experimental Sidekiq Cluster settings
+###! These settings allow starting `sidekiq-cluster` instead of sidekiq.
+###! Docs: https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#using-sidekiq-cluster-by-default-experimental
+# sidekiq['cluster'] = false
+# sidekiq['experimental_queue_selector'] = false
+# sidekiq['interval'] = nil
+# sidekiq['max_concurrency'] = nil
+# sidekiq['min_concurrency'] = nil
+# sidekiq['negate'] = false
+# sidekiq['queue_groups'] = ['*']
+
 ################################################################################
 ## gitlab-shell
 ################################################################################
