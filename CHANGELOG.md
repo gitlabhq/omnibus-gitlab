@@ -124,6 +124,13 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.18.1.
 
 
+## 12.7.8 (2020-03-26)
+
+### Security (1 change)
+
+- Bump pcre2 version to 10.34.
+
+
 ## 12.7.7
 
 ### Security (1 change)
