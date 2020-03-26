@@ -21,13 +21,13 @@ script specified in the installation instructions.
 | Fingerprint   | `F640 3F65 44A3 8863 DAA0  B6E0 3F01 618A 5131 2F3F` |
 | Expiry        | `2022-03-02`                                         |
 
-This key is active from **2020-04-05**. Existing users who already have
+This key is active from **2020-04-06**. Existing users who already have
 configured GitLab's apt/yum package repositories will have to fetch and add this
 key to their trusted keyring again to continue installing packages from those
 repositories without apt/yum complaining about mismatches, which is described
 below.
 
-#### Fetching new keys before 2020-04-05
+#### Fetching new keys before 2020-04-06
 
 ```bash
 # Download the new key
@@ -41,7 +41,7 @@ $ sudo apt-key add /tmp/omnibus_gitlab_gpg.key
 $ sudo rpm --import /tmp/omnibus_gitlab_gpg.key
 ```
 
-#### Fetching new keys after 2020-04-05
+#### Fetching new keys after 2020-04-06
 
 To fetch the latest repository signing key, users can run the `curl` command
 used to add GitLab repository, as mentioned in the [install page](https://about.gitlab.com/install),

@@ -69,7 +69,7 @@ metadata of the apt and yum repositories available through the
 [Packagecloud instance](https://packages.gitlab.com). If you see this error, it
 generally means you do not have the public keys currently used to sign
 repository metadata in your keyring. To fix this error, follow the
-[steps to fetch the new key](../update/package_signatures.md#fetching-new-keys-after-2020-04-05).
+[steps to fetch the new key](../update/package_signatures.md#fetching-new-keys-after-2020-04-06).
 
 ## Reconfigure shows an error: `NoMethodError - undefined method '[]=' for nil:NilClass`
 
