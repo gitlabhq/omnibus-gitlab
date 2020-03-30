@@ -33,7 +33,7 @@ NOTE: **Note:**
 After you change the external URL, it is recommended that you also
 [invalidate the Markdown cache](https://docs.gitlab.com/ee/administration/invalidate_markdown_cache.html).
 
-Please see our [DNS documentation](dns.md) for more details about the use of DNS in a self hosted GitLab instance.
+Please see our [DNS documentation](dns.md) for more details about the use of DNS in a self-managed GitLab instance.
 
 ### Specifying the external URL at the time of installation
 
