@@ -308,6 +308,24 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
+### Terraform state
+###! Docs: https://docs.gitlab.com/ee/administration/terraform_state
+# gitlab_rails['terraform_state_enabled'] = true
+# gitlab_rails['terraform_state_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/terraform_state"
+# gitlab_rails['terraform_state_object_store_enabled'] = false
+# gitlab_rails['terraform_state_object_store_remote_directory'] = "terraform_state"
+# gitlab_rails['terraform_state_object_store_connection'] = {
+#   'provider' => 'AWS',
+#   'region' => 'eu-west-1',
+#   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
+#   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
+#   # # The below options configure an S3 compatible host instead of AWS
+#   # 'host' => 's3.amazonaws.com',
+#   # 'aws_signature_version' => 4, # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com', # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
+#   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
+# }
+
 ### Impersonation settings
 # gitlab_rails['impersonation_enabled'] = true
 

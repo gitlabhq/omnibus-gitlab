@@ -208,6 +208,11 @@ default['gitlab']['gitlab-rails']['dependency_proxy_object_store_background_uplo
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_remote_directory'] = 'dependency_proxy'
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_connection'] = {}
+default['gitlab']['gitlab-rails']['terraform_state_enabled'] = nil
+default['gitlab']['gitlab-rails']['terraform_state_storage_path'] = nil
+default['gitlab']['gitlab-rails']['terraform_state_object_store_enabled'] = false
+default['gitlab']['gitlab-rails']['terraform_state_object_store_remote_directory'] = 'terraform_state'
+default['gitlab']['gitlab-rails']['terraform_state_object_store_connection'] = {}
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['prevent_ldap_sign_in'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
