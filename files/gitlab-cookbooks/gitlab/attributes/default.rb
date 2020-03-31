@@ -225,6 +225,7 @@ default['gitlab']['gitlab-rails']['registry_path'] = nil
 default['gitlab']['gitlab-rails']['registry_issuer'] = "omnibus-gitlab-issuer"
 default['gitlab']['gitlab-rails']['registry_notification_secret'] = nil
 default['gitlab']['gitlab-rails']['impersonation_enabled'] = nil
+default['gitlab']['gitlab-rails']['seat_link_enabled'] = true
 default['gitlab']['gitlab-rails']['sentry_enabled'] = false
 default['gitlab']['gitlab-rails']['sentry_dsn'] = nil
 default['gitlab']['gitlab-rails']['sentry_clientside_dsn'] = nil
@@ -713,7 +714,7 @@ default['gitlab']['logrotate']['enable'] = false
 default['gitlab']['logrotate']['ha'] = false
 default['gitlab']['logrotate']['dir'] = "/var/opt/gitlab/logrotate"
 default['gitlab']['logrotate']['log_directory'] = "/var/log/gitlab/logrotate"
-default['gitlab']['logrotate']['services'] = %w(nginx unicorn gitlab-rails gitlab-shell gitlab-workhorse gitlab-pages)
+default['gitlab']['logrotate']['services'] = %w(nginx puma unicorn gitlab-rails gitlab-shell gitlab-workhorse gitlab-pages)
 default['gitlab']['logrotate']['pre_sleep'] = 600 # sleep 10 minutes before rotating after start-up
 default['gitlab']['logrotate']['post_sleep'] = 3000 # wait 50 minutes after rotating
 
