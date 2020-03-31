@@ -15,6 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+# Launching a sidekiq-cluster process from the sidekiq configuration is
+# delegated to the sidekiq-cluster recipe.
+return if node['gitlab']['sidekiq']['cluster']
+
 account_helper = AccountHelper.new(node)
 
 sidekiq_service 'sidekiq' do

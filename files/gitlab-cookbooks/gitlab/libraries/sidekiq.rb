@@ -22,7 +22,7 @@ module Sidekiq
                                  queue_groups).freeze
 
     def parse_variables
-      return unless Gitlab['node']['gitlab']['sidekiq']['enable']
+      return if Gitlab['sidekiq']['enable'] == false
       # We only need to do special things when people are migrating
       # to sidekiq cluster
       return unless Gitlab['sidekiq']['cluster']
