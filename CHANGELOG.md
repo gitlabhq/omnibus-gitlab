@@ -3,6 +3,21 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.9.2 (2020-03-31)
+
+### Fixed (1 change)
+
+- Configures logrotate service for puma. !4024
+
+### Added (1 change)
+
+- Allow setting in seat_link_enabled in gitlab.rb. !4042
+
+### Other (1 change)
+
+- Update Mattermost to 5.20.2.
+
+
 ## 12.9.1 (2020-03-26)
 
 ### Security (1 change)
