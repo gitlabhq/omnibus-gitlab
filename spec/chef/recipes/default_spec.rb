@@ -25,7 +25,7 @@ describe 'gitlab::default' do
 
     gitconfig_hash = {
       "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
-      "pack" => ["threads = 1"],
+      "pack" => ["threads = 1", "useSparse = true"],
       "repack" => ["writeBitmaps = true"],
       "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
       "core" => ['alternateRefsCommand="exit 0 #"', "fsyncObjectFiles = true"]
