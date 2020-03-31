@@ -1,0 +1,5 @@
+---
+title: Default to pg11 in GitLab 12.10
+merge_request: 4046
+author:
+type: changed
