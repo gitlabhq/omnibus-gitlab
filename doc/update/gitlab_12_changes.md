@@ -124,3 +124,21 @@ manually upgrade to 11.7 following the [upgrade docs](../settings/database.md#up
 [Puma](https://github.com/puma/puma) is now available as an alternative web server to Unicorn.
 If you are migrating from Unicorn, refer to [converting Unicorn settings to Puma](../settings/puma.md#converting-unicorn-settings-to-puma)
 to make sure your web server settings carry over correctly.
+
+### 12.10
+
+NOTE: **NOTE:**
+PostgreSQL 9.6 and PostgreSQL 10 will be removed from the Omnibus package in the next release: GitLab 13.0. The minimum
+supported PostgreSQL version will be 11. In order to upgrade to GitLab 13.0, you will need to be upgrading from 12.10, and
+already using a PostgreSQL 11 database.
+
+PostgreSQL will automatically be upgraded to 11.x unless specifically opted
+out during the upgrade. To opt out you must execute the following before
+performing the upgrade of GitLab.
+
+```bash
+sudo touch /etc/gitlab/disable-postgresql-upgrade
+```
+
+Further details and procedures for upgrading can be
+found in the [Database Settings notes](../settings/database.md#upgrade-packaged-postgresql-server).

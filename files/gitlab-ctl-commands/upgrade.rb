@@ -228,15 +228,12 @@ def pg_upgrade_check
     new_version = PGVersion.parse(manifest_entry&.split&.[](1))
   end
 
-  # Print when fresh install - Always
   # Print when upgrade
   #  - when we have a database and its not already on the new version
-  is_install = !File.exist?('/var/opt/gitlab/bootstrapped')
   outdated_db = version && new_version && new_version.major.to_f > version.major.to_f
-  return unless is_install || outdated_db
+  return unless outdated_db
 
-  puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}), but it is not yet"
-  puts "enabled by default. To upgrade, please see:"
+  puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}), To upgrade, please see:"
   puts "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server\n\n"
 end
 

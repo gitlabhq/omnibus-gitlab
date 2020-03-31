@@ -18,7 +18,7 @@ Thus you have two options for database servers to use with Omnibus GitLab:
 Omnibus automatically enables SSL on the PostgreSQL server, but it will accept
 both encrypted and unencrypted connections by default. Enforcing SSL requires
 using the `hostssl` configuration in `pg_hba.conf`. See
-<https://www.postgresql.org/docs/9.6/auth-pg-hba-conf.html>
+<https://www.postgresql.org/docs/11/auth-pg-hba-conf.html>
 for more details.
 
 SSL support depends on a number of files:
@@ -335,7 +335,8 @@ sudo gitlab-ctl pg-upgrade
 ```
 
 NOTE: **Note:**
-In GitLab 12.8 or later, you can pass the `-V 11` flag to opt in to upgrading to PostgreSQL 11.
+In GitLab 12.8 or later, you can pass the `-V 11` flag to to upgrading to PostgreSQL 11. PostgreSQL 11 became the default for
+pg-upgrade in GitLab 12.10.
 
 This command performs the following steps:
 
@@ -364,6 +365,13 @@ You can find details of PostgreSQL versions shipped with various GitLab versions
 [PostgreSQL versions shipped with Omnibus GitLab](../package-information/postgresql_versions.md).
 The following section details their update policy.
 
+#### GitLab 12.10 and later
+
+On upgrades, we will be automatically upgrading the database to 11.x unless
+specifically opted out as described above.
+
+Users can also manually upgrade using `gitlab-ctl pg-upgrade`.
+
 #### GitLab 12.8 and later
 
 **As of GitLab 12.8, PostgreSQL 9.6.17, 10.12, and 11.7 are shipped with
@@ -378,12 +386,6 @@ command has to be passed with a version argument (`-V` or `--target-version`)
 ```shell
 sudo gitlab-ctl pg-upgrade -V 11
 ```
-
-NOTE: **Note:**
-We **DO NOT** recommend updating to PostgreSQL 11.x on GitLab instances making use of
-GitLab Geo for replication, as we have not yet completed PostgreSQL 11 testing with GitLab
-Geo. We will be [completing this work](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4975)
-in a future release.
 
 #### GitLab 12.0 and later
 
