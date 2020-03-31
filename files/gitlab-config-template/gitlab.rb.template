@@ -1343,6 +1343,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
 #  "repack" => ["writeBitmaps = true"],
 #  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
+#  "core" => ['alternateRefsCommand="exit 0 #"', "fsyncObjectFiles = true"]
 # }
 
 ################################################################################
