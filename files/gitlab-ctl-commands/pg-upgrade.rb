@@ -25,7 +25,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            2 do |_cmd_name|
   options = GitlabCtl::PgUpgrade.parse_options(ARGV)
-  revert_version = lookup_version(options[:target_version], read_revert_version || old_version)
+  revert_version = lookup_version(options[:target_version], read_revert_version || default_version)
 
   @db_service_name = 'postgresql'
   @db_worker = GitlabCtl::PgUpgrade.new(
@@ -74,7 +74,7 @@ add_command_under_category 'pg-upgrade', 'database',
   @db_worker = GitlabCtl::PgUpgrade.new(
     base_path,
     data_path,
-    lookup_version(options[:target_version], default_version),
+    lookup_version(options[:target_version], new_version),
     options[:tmp_dir],
     options[:timeout]
   )
