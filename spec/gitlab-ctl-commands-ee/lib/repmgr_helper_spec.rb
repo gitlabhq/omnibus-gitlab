@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands-ee/lib')
 
 require 'repmgr'
 
-describe Repmgr do
+describe RepmgrHandler do
   let(:repmgr_base_cmd) { '/opt/gitlab/embedded/bin/repmgr  -f /var/opt/gitlab/postgresql/repmgr.conf' }
   let(:public_attributes) { { 'postgresql' => { 'dir' => '/var/opt/gitlab/postgresql' } } }
   let(:shellout) do
@@ -25,7 +25,7 @@ describe Repmgr do
     allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return(public_attributes)
   end
 
-  describe Repmgr::Standby do
+  describe RepmgrHandler::Standby do
     context '#follow' do
       it 'calls repmgr with the correct arguments' do
         expect(Mixlib::ShellOut).to receive(:new).with(
@@ -88,7 +88,7 @@ describe Repmgr do
     end
   end
 
-  describe Repmgr::Cluster do
+  describe RepmgrHandler::Cluster do
     context '#show' do
       it 'should call the correct command' do
         expect(Mixlib::ShellOut).to receive(:new).with(
@@ -100,7 +100,7 @@ describe Repmgr do
     end
   end
 
-  describe Repmgr::Master do
+  describe RepmgrHandler::Master do
     context '#register' do
       it 'should register the master node' do
         expect(Mixlib::ShellOut).to receive(:new).with(
@@ -113,7 +113,7 @@ describe Repmgr do
 
     context '#remove' do
       it 'should run as the current user by default' do
-        expect(Repmgr::Base).to receive(:cmd).with(
+        expect(RepmgrHandler::Base).to receive(:cmd).with(
           "/opt/gitlab/embedded/bin/psql -qt -d gitlab_repmgr -h 127.0.0.1 -p 5432 -c \"DELETE FROM repmgr_gitlab_cluster.repl_nodes WHERE name='fake_node'\" -U fakeuser",
           'fakeuser'
         ).and_return('foo')
@@ -121,7 +121,7 @@ describe Repmgr do
       end
 
       it 'should connect as a different user when specified' do
-        expect(Repmgr::Base).to receive(:cmd).with(
+        expect(RepmgrHandler::Base).to receive(:cmd).with(
           "/opt/gitlab/embedded/bin/psql -qt -d gitlab_repmgr -h 127.0.0.1 -p 5432 -c \"DELETE FROM repmgr_gitlab_cluster.repl_nodes WHERE name='fake_node'\" -U fakeuser2",
           'fakeuser'
         ).and_return('foo')
@@ -130,7 +130,7 @@ describe Repmgr do
     end
   end
 
-  describe Repmgr::Events do
+  describe RepmgrHandler::Events do
     let(:args) do
       [
         nil, nil, nil, 1, 'fake_event', '1', 'fake timestamp', 'fake details'
@@ -153,7 +153,7 @@ describe Repmgr do
         real_event = [
           nil, nil, nil, 1, 'repmgrd-failover-promote', '1', 'real timestamp', 'node 1 promoted to master; old master 2 marked as failed'
         ]
-        expect(Consul::Kv).to receive(:put).with('gitlab/ha/postgresql/failed_masters/2')
+        expect(ConsulHandler::Kv).to receive(:put).with('gitlab/ha/postgresql/failed_masters/2')
         described_class.send(:fire, real_event)
       end
     end

@@ -4,11 +4,11 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands-ee/lib')
 
 require 'consul'
 
-describe Consul do
+describe ConsulHandler do
   describe '#initialize' do
     it 'creates instance based on args' do
-      instance = Consul.new([nil, nil, 'consul', 'kv', 'set'], 'rspec')
-      expect(instance.command).to eq(Consul::Kv)
+      instance = ConsulHandler.new([nil, nil, 'consul', 'kv', 'set'], 'rspec')
+      expect(instance.command).to eq(ConsulHandler::Kv)
       expect(instance.subcommand).to eq('set')
       expect(instance.input).to eq('rspec')
     end
@@ -16,7 +16,7 @@ describe Consul do
 
   describe '#execute' do
     it 'calls the method on command' do
-      instance = Consul.new([nil, nil, 'consul', 'kv', 'set'], 'rspec')
+      instance = ConsulHandler.new([nil, nil, 'consul', 'kv', 'set'], 'rspec')
       instance.command = spy
       expect(instance.command).to receive(:set).with('rspec')
       instance.execute
@@ -24,7 +24,7 @@ describe Consul do
   end
 end
 
-describe Consul::Kv do
+describe ConsulHandler::Kv do
   let(:consul_cmd) { '/opt/gitlab/embedded/bin/consul' }
 
   it 'allows nil values' do
