@@ -130,6 +130,7 @@ fetch-assets:
       - $DEPS_PIPELINE
       # Format of the auto-deploy tag
       - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
+      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
 include:
   - '/gitlab-ci-config/gitlab-com.yml'
