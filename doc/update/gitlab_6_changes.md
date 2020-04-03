@@ -10,7 +10,7 @@ First, download the latest [CE](https://packages.gitlab.com/gitlab/gitlab-ce) or
 [EE (license key required)](https://about.gitlab.com/install/)
 package to your GitLab server.
 
-1. Stop services, but leave postgres running for the database migrations and
+1. Stop services, but leave PostgreSQL running for the database migrations and
    create a backup:
 
    ```sh

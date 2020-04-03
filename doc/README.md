@@ -21,7 +21,7 @@ Omnibus GitLab is a way to package different services and tools required to run 
 ### Prerequisites
 
 - [Installation Requirements](https://docs.gitlab.com/ee/install/requirements.html)
-- If you want to access your GitLab instance via a domain name, like mygitlabinstance.com, make sure the domain correctly points to the IP of the server where GitLab is being installed. You can check this using the command `host mygitlabinstance.com`
+- If you want to access your GitLab instance via a domain name, like `mygitlabinstance.com`, make sure the domain correctly points to the IP of the server where GitLab is being installed. You can check this using the command `host mygitlabinstance.com`. See our [DNS documentation for more details](settings/dns.md)
 - If you want to use HTTPS on your GitLab instance, make sure you have the SSL certificates for the domain ready. (Note that certain components like Container Registry which can have their own subdomains requires certificates for those subdomains also)
 - If you want to send notification emails, install and configure a mail server (MTA) like sendmail. Alternatively, you can use other third party SMTP servers, which is described below.
 
@@ -63,7 +63,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [Starting and stopping](maintenance/README.md#starting-and-stopping)
 - [Invoking Rake tasks](maintenance/README.md#invoking-rake-tasks)
 - [Starting a Rails console session](maintenance/README.md#starting-a-rails-console-session)
-- [Starting a Postgres superuser psql session](maintenance/README.md#starting-a-postgres-superuser-psql-session)
+- [Starting a PostgreSQL superuser psql session](maintenance/README.md#starting-a-postgresql-superuser-psql-session)
 - [Container registry garbage collection](maintenance/README.md#container-registry-garbage-collection)
 
 ## Configuring
@@ -115,7 +115,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [Reconfigure freezes at ruby_block[supervise_redis_sleep] action run](common_installation_problems/README.md#reconfigure-freezes-at-ruby_blocksupervise_redis_sleep-action-run).
 - [TCP ports for GitLab services are already taken](common_installation_problems/README.md#tcp-ports-for-gitlab-services-are-already-taken).
 - [Git SSH access stops working on SELinux-enabled systems](common_installation_problems/README.md#selinux-enabled-systems).
-- [Postgres error `FATAL:  could not create shared memory segment: Cannot allocate memory`](common_installation_problems/README.md#postgres-error-fatal--could-not-create-shared-memory-segment-cannot-allocate-memory).
+- [PostgreSQL error `FATAL:  could not create shared memory segment: Cannot allocate memory`](common_installation_problems/README.md#postgresql-error-fatal--could-not-create-shared-memory-segment-cannot-allocate-memory).
 - [Reconfigure complains about the GLIBC version](common_installation_problems/README.md#reconfigure-complains-about-the-glibc-version).
 - [Reconfigure fails to create the Git user](common_installation_problems/README.md#reconfigure-fails-to-create-the-git-user).
 - [Failed to modify kernel parameters with sysctl](common_installation_problems/README.md#failed-to-modify-kernel-parameters-with-sysctl).

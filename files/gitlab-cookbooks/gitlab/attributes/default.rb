@@ -208,6 +208,11 @@ default['gitlab']['gitlab-rails']['dependency_proxy_object_store_background_uplo
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_proxy_download'] = false
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_remote_directory'] = 'dependency_proxy'
 default['gitlab']['gitlab-rails']['dependency_proxy_object_store_connection'] = {}
+default['gitlab']['gitlab-rails']['terraform_state_enabled'] = nil
+default['gitlab']['gitlab-rails']['terraform_state_storage_path'] = nil
+default['gitlab']['gitlab-rails']['terraform_state_object_store_enabled'] = false
+default['gitlab']['gitlab-rails']['terraform_state_object_store_remote_directory'] = 'terraform_state'
+default['gitlab']['gitlab-rails']['terraform_state_object_store_connection'] = {}
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['prevent_ldap_sign_in'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []
@@ -225,6 +230,7 @@ default['gitlab']['gitlab-rails']['registry_path'] = nil
 default['gitlab']['gitlab-rails']['registry_issuer'] = "omnibus-gitlab-issuer"
 default['gitlab']['gitlab-rails']['registry_notification_secret'] = nil
 default['gitlab']['gitlab-rails']['impersonation_enabled'] = nil
+default['gitlab']['gitlab-rails']['seat_link_enabled'] = true
 default['gitlab']['gitlab-rails']['sentry_enabled'] = false
 default['gitlab']['gitlab-rails']['sentry_dsn'] = nil
 default['gitlab']['gitlab-rails']['sentry_clientside_dsn'] = nil
@@ -469,6 +475,16 @@ default['gitlab']['sidekiq']['metrics_enabled'] = true
 # Sidekiq http listener
 default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"
 default['gitlab']['sidekiq']['listen_port'] = 8082
+
+# Settings applicable for running sidekiq-cluster under the hood
+# this is experimental
+default['gitlab']['sidekiq']['cluster'] = false
+default['gitlab']['sidekiq']['experimental_queue_selector'] = false
+default['gitlab']['sidekiq']['interval'] = nil
+default['gitlab']['sidekiq']['max_concurrency'] = nil
+default['gitlab']['sidekiq']['min_concurrency'] = nil
+default['gitlab']['sidekiq']['negate'] = false
+default['gitlab']['sidekiq']['queue_groups'] = ['*']
 
 ####
 # Sidekiq Cluster

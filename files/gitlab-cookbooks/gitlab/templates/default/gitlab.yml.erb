@@ -117,6 +117,10 @@ production: &base
 
     usage_ping_enabled: <%= @usage_ping_enabled %>
 
+    # Seat link setting
+    # When disabled the customer instances would not send seat link information via cron service everyday. (default: true)
+    seat_link_enabled: <%= @seat_link_enabled %>
+
   ## Reply by email
   # Allow users to comment on issues and merge requests by replying to notification emails.
   # For documentation on how to set this up, see https://docs.gitlab.com/ee/administration/reply_by_email.html
@@ -235,6 +239,16 @@ production: &base
       proxy_download: <%= @dependency_proxy_object_store_proxy_download %>
       remote_directory: <%= quote(@dependency_proxy_object_store_remote_directory) %>
       connection: <%= @dependency_proxy_object_store_connection.to_json %>
+
+  ## Terraform state
+  terraform_state:
+    enabled: <%= @terraform_state_enabled %>
+    # The location where terraform state files are stored (default: shared/terraform_state).
+    storage_path: <%= @terraform_state_storage_path %>
+    object_store:
+      enabled: <%= @terraform_state_object_store_enabled %>
+      remote_directory: <%= quote(@terraform_state_object_store_remote_directory) %>
+      connection: <%= @terraform_state_object_store_connection.to_json %>
 
   ## Container Registry
   registry:

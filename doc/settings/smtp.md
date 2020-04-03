@@ -855,6 +855,23 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 gitlab_rails['gitlab_email_from'] = 'your-user@your-domain.de'
 ```
 
+### AWS Workmail
+
+From the [AWS workmail documentation](https://docs.aws.amazon.com/workmail/latest/userguide/using_IMAP_client.html):
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.server"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "smtp user"
+gitlab_rails['smtp_password'] = "smtp password"
+gitlab_rails['smtp_domain'] = "example.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = false
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge

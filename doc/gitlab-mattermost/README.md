@@ -159,7 +159,7 @@ Run `sudo gitlab-ctl reconfigure` to apply the changes.
 ### Connecting to the bundled PostgreSQL database
 
 If you need to connect to the bundled PostgreSQL database and are using the default Omnibus GitLab database configuration, you can connect as
-the Postgres superuser:
+the PostgreSQL superuser:
 
 ```
 sudo gitlab-psql -d mattermost_production
@@ -264,6 +264,7 @@ Below is a list of Mattermost versions for GitLab 11.10 and later:
 | 12.7 | 5.18 |
 | 12.8 | 5.19 |
 | 12.9 | 5.20 |
+| 12.10 | 5.21 |
 
 Starting with GitLab 11.0, GitLab Mattermost can be upgraded through the regular Omnibus GitLab update process. When upgrading previous versions of
 GitLab that process can only be used if Mattermost configuration settings have not been changed outside of GitLab (i.e., no changes to Mattermost's `config.json`

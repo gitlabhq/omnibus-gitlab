@@ -5,16 +5,16 @@ module Build
   class QATrigger
     extend Trigger
 
-    QA_PROJECT_PATH = 'gitlab-org/gitlab-qa'.freeze
+    QA_PROJECT_MIRROR_PATH = 'gitlab-org/gitlab-qa-mirror'.freeze
 
     def self.get_project_path
-      QA_PROJECT_PATH
+      QA_PROJECT_MIRROR_PATH
     end
 
     def self.get_params(image: nil)
       {
         "ref" => Gitlab::Util.get_env('QA_BRANCH') || 'master',
-        "token" => Gitlab::Util.get_env('QA_TRIGGER_TOKEN'),
+        "token" => Gitlab::Util.get_env('CI_JOB_TOKEN'),
         "variables[RELEASE]" => image,
         "variables[TRIGGERED_USER]" => Gitlab::Util.get_env("TRIGGERED_USER") || Gitlab::Util.get_env("GITLAB_USER_NAME"),
         "variables[TRIGGER_SOURCE]" => Gitlab::Util.get_env('CI_JOB_URL'),

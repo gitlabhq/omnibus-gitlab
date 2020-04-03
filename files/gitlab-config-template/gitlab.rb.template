@@ -308,11 +308,33 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
 
+### Terraform state
+###! Docs: https://docs.gitlab.com/ee/administration/terraform_state
+# gitlab_rails['terraform_state_enabled'] = true
+# gitlab_rails['terraform_state_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/terraform_state"
+# gitlab_rails['terraform_state_object_store_enabled'] = false
+# gitlab_rails['terraform_state_object_store_remote_directory'] = "terraform_state"
+# gitlab_rails['terraform_state_object_store_connection'] = {
+#   'provider' => 'AWS',
+#   'region' => 'eu-west-1',
+#   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
+#   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
+#   # # The below options configure an S3 compatible host instead of AWS
+#   # 'host' => 's3.amazonaws.com',
+#   # 'aws_signature_version' => 4, # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com', # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
+#   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
+# }
+
 ### Impersonation settings
 # gitlab_rails['impersonation_enabled'] = true
 
 ### Usage Statistics
 # gitlab_rails['usage_ping_enabled'] = true
+
+### Seat Link setting
+###! Docs: https://docs.gitlab.com/ee/subscriptions/index.html#seat-link
+# gitlab_rails['seat_link_enabled'] = true
 
 ### GitLab Mattermost
 ###! These settings are void if Mattermost is installed on the same omnibus
@@ -840,6 +862,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['listen_address'] = "localhost"
 # sidekiq['listen_port'] = 8082
 
+### Experimental Sidekiq Cluster settings
+###! These settings allow starting `sidekiq-cluster` instead of sidekiq.
+###! Docs: https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#using-sidekiq-cluster-by-default-experimental
+# sidekiq['cluster'] = false
+# sidekiq['experimental_queue_selector'] = false
+# sidekiq['interval'] = nil
+# sidekiq['max_concurrency'] = nil
+# sidekiq['min_concurrency'] = nil
+# sidekiq['negate'] = false
+# sidekiq['queue_groups'] = ['*']
+
 ################################################################################
 ## gitlab-shell
 ################################################################################
@@ -1310,6 +1343,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
 #  "repack" => ["writeBitmaps = true"],
 #  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
+#  "core" => ['alternateRefsCommand="exit 0 #"', "fsyncObjectFiles = true"]
 # }
 
 ################################################################################

@@ -114,9 +114,9 @@ sudo gitlab-rails console
 
 This will only work after you have run `gitlab-ctl reconfigure` at least once.
 
-## Starting a Postgres superuser psql session
+## Starting a PostgreSQL superuser psql session
 
-If you need superuser access to the bundled Postgres service you can
+If you need superuser access to the bundled PostgreSQL service you can
 use the `gitlab-psql` command. It takes the same arguments as the
 regular `psql` command.
 
@@ -127,10 +127,10 @@ sudo gitlab-psql -d gitlabhq_production
 
 This will only work after you have run `gitlab-ctl reconfigure` at
 least once. The `gitlab-psql` command cannot be used to connect to a
-remote Postgres server, nor to connect to a local non-Omnibus Postgres
+remote PostgreSQL server, nor to connect to a local non-Omnibus PostgreSQL
 server.
 
-### Starting a Postgres superuser psql session in Geo tracking database
+### Starting a PostgreSQL superuser psql session in Geo tracking database
 
 Similar to the previous command, if you need superuser access to the bundled
 Geo tracking database (`geo-postgresql`), you can use the `gitlab-geo-psql`.

@@ -5,6 +5,13 @@
 # Templates #
 #############
 
+.regular-dev-branches-only: &regular-dev-branches-only
+  only:
+    - branches@gitlab/omnibus-gitlab
+  except:
+    variables:
+      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
+
 .except-auto-deploy-tag: &except-auto-deploy-tag
   except:
     variables:
@@ -69,8 +76,7 @@
     - bundle exec rspec --color --format RspecJunitFormatter --out junit_ci_rspec.xml --format documentation ci_build_specs
   tags:
   - docker-builder
-  only:
-    - branches@gitlab/omnibus-gitlab
+  <<: *regular-dev-branches-only
   artifacts:
     <<: *package-artifacts
     reports:
@@ -93,6 +99,7 @@
     variables:
       - $ee == "true"
       - $NIGHTLY == "true"
+      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
   artifacts: *package-artifacts
   retry: 1
 
@@ -279,8 +286,7 @@ Docker-branch:
   - bundle exec rake docker:build:image
   - bundle exec rake docker:push:staging
   - bundle exec rake docker:push:nightly
-  only:
-    - branches@gitlab/omnibus-gitlab
+  <<: *regular-dev-branches-only
   tags:
   - docker-builder
   cache: *branch-cache
@@ -311,8 +317,7 @@ QA-Master:
     paths:
     - screenshots/
   allow_failure: true
-  only:
-    - branches@gitlab/omnibus-gitlab
+  <<: *regular-dev-branches-only
   tags:
   - docker-builder
   cache: *branch-cache
@@ -544,9 +549,6 @@ SLES-12-staging:
   dependencies:
     - SLES-12
     - SLES-12-branch
-  only:
-    refs:
-      - branches@gitlab/omnibus-gitlab
   <<: *staging_upload
 
 ### Package releases

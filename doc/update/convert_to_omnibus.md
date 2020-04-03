@@ -67,9 +67,9 @@ external_url 'http://gitlab.example.com'
 # We assume your repositories are in /home/git/repositories (default for source installs)
 git_data_dirs({ 'default' => { 'path' => '/home/git' } })
 
-# Re-use the Postgres that is already running on your system
+# Re-use the PostgreSQL that is already running on your system
 postgresql['enable'] = false
-# This db_host setting is for Debian Postgres packages
+# This db_host setting is for Debian PostgreSQL packages
 gitlab_rails['db_host'] = '/var/run/postgresql/'
 gitlab_rails['db_port'] = 5432
 # We assume you called the GitLab DB user 'git'
@@ -110,5 +110,5 @@ to 12.1.
 To convert to PostgreSQL and use the built-in server, follow the steps:
 
 - [Create a backup of the non-Omnibus MySQL installation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
-- [Export and convert the existing MySQL database in the GitLab backup file](https://docs.gitlab.com/ee/update/mysql_to_postgresql.html#converting-a-gitlab-backup-file-from-mysql-to-postgres)
+- [Export and convert the existing MySQL database in the GitLab backup file](https://docs.gitlab.com/ee/update/mysql_to_postgresql.html)
 - [Restore this in the Omnibus installation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-installations)

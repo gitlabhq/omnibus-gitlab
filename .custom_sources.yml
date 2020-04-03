@@ -94,6 +94,9 @@ libre2:
 libpng:
   remote: "git@dev.gitlab.org:omnibus-mirror/libpng.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/libpng.git"
+libjpeg-turbo:
+  remote: "git@dev.gitlab.org:omnibus-mirror/libjpeg-turbo.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/libjpeg-turbo.git"
 exiftool:
   remote: "git@dev.gitlab.org:omnibus-mirror/exiftool.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/exiftool.git"
