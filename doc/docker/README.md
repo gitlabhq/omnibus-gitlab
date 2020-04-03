@@ -211,6 +211,8 @@ To upgrade GitLab to a new version you have to:
 
 On the first run, GitLab will reconfigure and update itself.
 
+NOTE: **Note:** Refer to the GitLab version [Upgrade Recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations) when upgrading between major versions.
+
 ### Use tagged versions of GitLab
 
 We provide tagged versions of GitLab Docker images.
