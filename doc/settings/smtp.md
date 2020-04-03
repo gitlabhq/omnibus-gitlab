@@ -872,6 +872,20 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
+### Open Telekom Cloud
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "login-cloud.mms.t-systems-service.com"
+gitlab_rails['smtp_port'] = 25
+gitlab_rails['smtp_domain'] = "yourdomain"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_user_name'] = "username"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['gitlab_email_from'] = 'gitlab@yourdomain'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
