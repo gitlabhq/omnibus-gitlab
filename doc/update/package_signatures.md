@@ -44,7 +44,7 @@ $ sudo rpm --import /tmp/omnibus_gitlab_gpg.key
 #### Fetching new keys after 2020-04-06
 
 To fetch the latest repository signing key, users can run the `curl` command
-used to add GitLab repository, as mentioned in the [install page](https://about.gitlab.com/install),
+used to add GitLab repository, as mentioned in the [install page](https://about.gitlab.com/install/),
 again. It will fetch the new key and add it to the user's keyring.
 
 Or, users can manually fetch and add the new key using the following commands
