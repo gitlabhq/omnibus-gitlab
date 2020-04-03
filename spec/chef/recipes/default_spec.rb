@@ -25,10 +25,14 @@ describe 'gitlab::default' do
 
     gitconfig_hash = {
       "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
-      "pack" => ["threads = 1"],
+      "pack" => ["threads = 1", "useSparse = true"],
       "repack" => ["writeBitmaps = true"],
       "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
-      "core" => ['alternateRefsCommand="exit 0 #"', "fsyncObjectFiles = true"]
+      "core" => [
+        'alternateRefsCommand="exit 0 #"',
+        "fsyncObjectFiles = true"
+      ],
+      "fetch" => ["writeCommitGraph = true"]
     }
 
     expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
@@ -50,7 +54,11 @@ describe 'gitlab::default' do
       "pack" => ["threads = 2"],
       "repack" => ["writeBitmaps = true"],
       "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
-      "core" => ['alternateRefsCommand="exit 0 #"', "fsyncObjectFiles = true"]
+      "core" => [
+        'alternateRefsCommand="exit 0 #"',
+        "fsyncObjectFiles = true"
+      ],
+      "fetch" => ["writeCommitGraph = true"]
     }
 
     expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
