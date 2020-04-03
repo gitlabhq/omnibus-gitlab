@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
-runit_service "sidekiq-cluster" do
+service = OmnibusHelper.new(node).sidekiq_cluster_service_name
+
+runit_service service do
   action :disable
 end

@@ -51,4 +51,24 @@ describe 'gitlab::sidekiq' do
 
     it_behaves_like "enabled runit service", "sidekiq", "root", "root", "foo", "bar"
   end
+
+  context 'when enabling sidekiq-cluster through the sidekiq configuration' do
+    before do
+      stub_gitlab_rb(
+        sidekiq: {
+          cluster: true
+        }
+      )
+    end
+
+    it 'renders the sidekiq-service file with sidekiq-cluster content', :aggregate_failures do
+      expect(chef_run).to(render_file("/opt/gitlab/sv/sidekiq/run").with_content do |content|
+        expect(content).to match(%r{bin/sidekiq-cluster})
+        expect(content).to match(%r{prometheus_run_dir='\/run\/gitlab\/sidekiq'})
+      end)
+    end
+
+    it_behaves_like "enabled runit service", "sidekiq", "root", "root", "git", "git"
+    it_behaves_like "disabled runit service", "sidekiq-cluster"
+  end
 end
