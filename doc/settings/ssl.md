@@ -237,7 +237,7 @@ If you see this message, you will need to install perl with your distribution's 
 
 If you inspect the certificate itself, then look for the string `TRUSTED`:
 
-```
+```plaintext
 -----BEGIN TRUSTED CERTIFICATE-----
 ...
 -----END TRUSTED CERTIFICATE-----

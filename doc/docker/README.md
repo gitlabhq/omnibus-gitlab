@@ -495,7 +495,7 @@ preserved correctly. There's script that fixes permissions for all files.
 To fix your container, simply execute `update-permissions` and restart the
 container afterwards:
 
-```
+```shell
 sudo docker exec gitlab update-permissions
 sudo docker restart gitlab
 ```

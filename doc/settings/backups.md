@@ -35,7 +35,7 @@ Enter the command to create a compressed tar file containing the contents of
 `/etc/gitlab/`. For example, schedule the backup to run every morning after a
 weekday, Tuesday (day 2) through Saturday (day 6):
 
-```
+```plaintext
 15 04 * * 2-6  gitlab-ctl backup-etc && cd /etc/gitlab/config_backup && cp $(ls -t | head -n1) /secret/gitlab/backups/
 ```
 

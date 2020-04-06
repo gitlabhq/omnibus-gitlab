@@ -23,19 +23,19 @@ follows
    file. Make sure you substitute that value to `${BUILDER_IMAGE_REVISION}`
    in the following commands.
 
-   ```
+   ```shell
    docker pull registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION}
    ```
 
 1. Start the container and enter its shell:
 
-   ```
+   ```shell
    docker run -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION} bash
    ```
 
 1. Clone the Omnibus GitLab source and change to the cloned directory:
 
-   ```
+   ```shell
    git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git ~/omnibus-gitlab
    cd ~/omnibus-gitlab
    ```
@@ -60,13 +60,13 @@ follows
    1. To compile your own, set the `COMPILE_ASSETS` environment variable to `true`
 1. Install the dependencies and generate binaries:
 
-   ```
+   ```shell
    bundle install --path .bundle --binstubs
    ```
 
 1. Run the build command to initiate a build process:
 
-   ```
+   ```shell
    bin/omnibus build gitlab
    ```
 

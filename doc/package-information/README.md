@@ -49,7 +49,7 @@ template contained in the package.
 
 To view a diff between your configuration file and the latest version, run:
 
-```
+```shell
 sudo gitlab-ctl diff-config
 ```
 
@@ -68,13 +68,13 @@ run.
 
 Depending on the init system, this `WARNING` can be one of:
 
-```
+```plaintext
 /sbin/init: unrecognized option '--version'
 ```
 
 when the underlying init system *IS NOT* upstart.
 
-```
+```plaintext
   -.mount loaded active mounted   /
 ```
 
