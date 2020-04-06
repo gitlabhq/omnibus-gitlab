@@ -19,3 +19,8 @@
 redis_service do
   socket_group AccountHelper.new(node).gitlab_group
 end
+
+template "/opt/gitlab/etc/gitlab-redis-cli-rc" do
+  owner 'root'
+  group 'root'
+end
