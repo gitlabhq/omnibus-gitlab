@@ -6,7 +6,7 @@ Below you can find the most common issues users encounter when installing Omnibu
 
 `apt-get install` outputs something like:
 
-```
+```plaintext
 E: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/pool/trusty/main/g/gitlab-ce/gitlab-ce_8.1.0-ce.0_amd64.deb  Hash Sum mismatch
 ```
 
@@ -36,7 +36,7 @@ authenticity and integrity of the packages that are distributed to the users.
 However, the package manager used in openSUSE and SLES operating systems may
 sometime raise false warnings with these signatures, similar to
 
-```
+```plaintext
 File 'repomd.xml' from repository 'gitlab_gitlab-ce' is signed with an unknown key '14219A96E15E78F4'. Continue? [yes/no] (no):
 File 'repomd.xml' from repository 'gitlab_gitlab-ce' is signed with an unknown key '14219A96E15E78F4'. Continue? [yes/no] (no): yes
 ```
@@ -54,13 +54,13 @@ continue installation.
 You already have GitLab repositories configured, and ran `apt-get update`,
 `apt-get install` or `yum install`, and saw errors like the following:
 
-```
+```plaintext
 The following signatures couldn’t be verified because the public key is not available: NO_PUBKEY 3F01618A51312F3F
 ```
 
 or
 
-```
+```plaintext
 https://packages.gitlab.com/gitlab/gitlab-ee/el/7/x86_64/repodata/repomd.xml: [Errno -1] repomd.xml signature could not be verified for gitlab-ee
 ```
 
@@ -76,7 +76,7 @@ repository metadata in your keyring. To fix this error, follow the
 You ran `sudo gitlab-ctl reconfigure` or package upgrade triggered the
 reconfigure which produced error similar to:
 
-```
+```plaintext
 ================================================================================
 Recipe Compile Error in /opt/gitlab/embedded/cookbooks/cache/cookbooks/gitlab/recipes/default.rb
 ================================================================================
@@ -147,7 +147,7 @@ To troubleshoot this error:
 
 1. If you see the message, continue to the next step:
 
-   ```
+   ```plaintext
    ls: cannot access /opt/gitlab/sv/redis/supervise: No such file or directory
    ```
 
@@ -193,7 +193,7 @@ around it by manually performing the appropriate installation steps for your
 particular init system. For instance, to manually set up `gitlab-runsvdir` with
 Upstart, you can do the following:
 
-```
+```shell
 sudo cp /opt/gitlab/embedded/cookbooks/runit/files/default/gitlab-runsvdir.conf /etc/init/
 sudo initctl start gitlab-runsvdir
 sudo gitlab-ctl reconfigure # Resume gitlab-ctl reconfigure
@@ -251,7 +251,7 @@ shared memory. On some Linux (virtual) servers, there is less shared memory
 available, which will prevent PostgreSQL from starting. In
 `/var/log/gitlab/postgresql/current`:
 
-```
+```plaintext
   1885  2014-08-08_16:28:43.71000 FATAL:  could not create shared memory segment: Cannot allocate memory
   1886  2014-08-08_16:28:43.71002 DETAIL:  Failed system call was shmget(key=5432001, size=1126563840, 03600).
   1887  2014-08-08_16:28:43.71003 HINT:  This error usually means that PostgreSQL's request for a shared memory segment exceeded available memory or swap space, or exceeded your kernel's SHMALL parameter.  You can either reduce the request size or reconfigure the kernel with larger SHMALL.  To reduce the request size (currently 1126563840 bytes), reduce PostgreSQL's shared memory usage, perhaps by reducing shared_buffers or max_connections.
@@ -282,7 +282,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ## Reconfigure complains about the GLIBC version
 
-```
+```shell
 $ gitlab-ctl reconfigure
 /opt/gitlab/embedded/bin/ruby: /lib64/libc.so.6: version `GLIBC_2.14' not found (required by /opt/gitlab/embedded/lib/libruby.so.2.1)
 /opt/gitlab/embedded/bin/ruby: /lib64/libc.so.6: version `GLIBC_2.17' not found (required by /opt/gitlab/embedded/lib/libruby.so.2.1)
@@ -305,7 +305,7 @@ system user weakens the security of your system.
 
 If sysctl cannot modify the kernel parameters you could possibly get an error with the following stack trace:
 
-```
+```plaintext
  * execute[sysctl] action run
 ================================================================================
 Error executing action `run` on resource 'execute[sysctl]'
@@ -327,7 +327,7 @@ There is a reported workaround described in [this issue](https://gitlab.com/gitl
 
 Another variation of this error reports the file system is read-only and shows following stack trace:
 
-```
+```plaintext
  * execute[load sysctl conf] action run
     [execute] sysctl: setting key "kernel.shmall": Read-only file system
               sysctl: setting key "kernel.shmmax": Read-only file system
@@ -351,7 +351,7 @@ This error is also reported to occur in virtual machines only, and the recommend
 
 Also note you may need to repeat this process for a couple other lines, e.g. reconfigure will fail 3 times and you will eventually have added something like this to `/etc/sysctl.conf`:
 
-```
+```plaintext
 kernel.shmall = 4194304
 kernel.sem = 250 32000 32 262
 net.core.somaxconn = 1024
@@ -360,7 +360,7 @@ kernel.shmmax = 17179869184
 
 Tip: You may find it easier to look at the line in the Chef output than to find the file (since the file is different for each error). See the last line of this snippet.
 
-```
+```plaintext
 * file[create /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf kernel.shmall] action create
   - create new file /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf
   - update content in file /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf from none to 6d765d
@@ -549,7 +549,7 @@ and it also doesn't have a way of enabling the extension.
 To fix this issue, you'll need to first install the `pg_trgm` extension.
 The extension is located in the `postgresql-contrib` package. For Debian:
 
-```
+```shell
 sudo apt-get install postgresql-contrib
 ```
 
@@ -558,20 +558,20 @@ extension.
 
 1. Access `psql` as superuser:
 
-   ```
+   ```shell
    sudo gitlab-psql -d gitlabhq_production
    ```
 
 1. Enable the extension:
 
-   ```
+   ```plaintext
    CREATE EXTENSION pg_trgm;
    \q
    ```
 
 1. Now run migrations again:
 
-   ```
+   ```shell
    sudo gitlab-rake db:migrate
    ```
 
@@ -582,7 +582,7 @@ above, and finally restart the container.
 
 1. Access the container:
 
-   ```
+   ```shell
    docker exec -it gitlab bash
    ```
 
@@ -590,7 +590,7 @@ above, and finally restart the container.
 
 1. Restart the container:
 
-   ```
+   ```shell
    docker restart gitlab
    ```
 
@@ -617,7 +617,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ## Reconfigure fails due to "'root' cannot chown" with NFS root_squash
 
-```
+```shell
 $ gitlab-ctl reconfigure
     ================================================================================
     Error executing action `run` on resource 'ruby_block[directory resource: /gitlab-data/git-data]'
@@ -650,7 +650,7 @@ systemctl -t target
 
 If everything is working properly, the output should show look something like this:
 
-```
+```plaintext
 UNIT                   LOAD   ACTIVE SUB    DESCRIPTION
 basic.target           loaded active active Basic System
 cloud-config.target    loaded active active Cloud-config availability
@@ -686,7 +686,7 @@ To show all installed unit files use 'systemctl list-unit-files'.
 Every line should show `loaded active active`. As seen in the line below, if
 you see `inactive dead`, this means there may be something wrong:
 
-```
+```plaintext
 multi-user.target      loaded inactive dead   start Multi-User System
 ```
 
@@ -700,7 +700,7 @@ If you see a `running` job, a service may be stuck and thus blocking GitLab
 from starting. For example, some users have had trouble with Plymouth not
 starting:
 
-```
+```plaintext
   1 graphical.target                     start waiting
 107 plymouth-quit-wait.service           start running
   2 multi-user.target                    start waiting
@@ -747,7 +747,7 @@ To fix this, users can make use of `package['systemd_wanted_by']` and
 proper ordering and run `sudo gitlab-ctl reconfigure`. After reconfigure has
 completed, restart `gitlab-runsvdir` service for changes to take effect.
 
-```
+```shell
 sudo systemctl restart gitlab-runsvdir
 ```
 

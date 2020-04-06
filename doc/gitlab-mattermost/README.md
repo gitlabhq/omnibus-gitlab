@@ -109,7 +109,7 @@ authorization. This can be done in the **Settings > Applications** area of GitLa
 
 Navigate to the **Settings > Applications** area in GitLab. Create a new application and for the **Redirect URI** use the following (replace `http` with `https` if you use HTTPS):
 
-```
+```plaintext
 http://mattermost.example.com/signup/gitlab/complete
 http://mattermost.example.com/login/gitlab/complete
 ```
@@ -119,7 +119,7 @@ Note that you do not need to select any options under **Scopes**. Choose **Save 
 Once the application is created you will be provided with an `Application ID` and `Secret`. One other piece of information needed is the URL of GitLab instance.
 Return to the server running GitLab Mattermost and edit the `/etc/gitlab/gitlab.rb` configuration file as follows using the values you received above:
 
-```
+```ruby
 mattermost['gitlab_enable'] = true
 mattermost['gitlab_id'] = "12345656"
 mattermost['gitlab_secret'] = "123456789"
@@ -161,7 +161,7 @@ Run `sudo gitlab-ctl reconfigure` to apply the changes.
 If you need to connect to the bundled PostgreSQL database and are using the default Omnibus GitLab database configuration, you can connect as
 the PostgreSQL superuser:
 
-```
+```shell
 sudo gitlab-psql -d mattermost_production
 ```
 
@@ -177,7 +177,7 @@ sudo -i -u gitlab-psql -- /opt/gitlab/embedded/bin/pg_dump -h /var/opt/gitlab/po
 
 To use the [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html), ensure that you are in the `/opt/gitlab/embedded/service/mattermost` directory when you run the CLI commands and that you specify the location of the configuration file. The executable is `/opt/gitlab/embedded/bin/mattermost`.
 
-```
+```shell
 cd /opt/gitlab/embedded/service/mattermost
 
 sudo /opt/gitlab/embedded/bin/chpst -e /opt/gitlab/etc/mattermost/env -P -U mattermost:mattermost -u mattermost:mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json version
@@ -193,8 +193,8 @@ Then source `~/.zshrc` or `~/.bashrc` with `source ~/.zshrc` or `source ~/.bashr
 
 If successful, you can now run any Mattermost CLI command with your new shell alias `mattermost-cli`:
 
-```
-mattermost-cli version
+```shell
+$ mattermost-cli version
 [sudo] password for username:
 {"level":"info","ts":1569614421.9058893,"caller":"utils/i18n.go:83","msg":"Loaded system translations for 'en' from '/opt/gitlab/embedded/service/mattermost/i18n/en.json'"}
 {"level":"info","ts":1569614421.9062793,"caller":"app/server_app_adapters.go:58","msg":"Server is initializing..."}

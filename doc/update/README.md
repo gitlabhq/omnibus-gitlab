@@ -430,7 +430,7 @@ the address of the current Redis primary.
 - If your application node is running GitLab 12.7.0 or later, you can use the
 following command to get address of current Redis primary
 
-  ```
+  ```shell
   sudo gitlab-ctl get-redis-master
   ```
 
@@ -438,17 +438,17 @@ following command to get address of current Redis primary
   will have to run the underlying `redis-cli` command (which `get-redis-master`
   command uses) to fetch information about the primary.
 
-    1. Get the address of one of the sentinel nodes specified as
-       `gitlab_rails['redis_sentinels']` in `/etc/gitlab/gitlab.rb`
+  1. Get the address of one of the sentinel nodes specified as
+     `gitlab_rails['redis_sentinels']` in `/etc/gitlab/gitlab.rb`
 
-    1. Get the Redis master name specified as `redis['master_name']` in
-       `/etc/gitlab/gitlab.rb`
+  1. Get the Redis master name specified as `redis['master_name']` in
+     `/etc/gitlab/gitlab.rb`
 
-    1. Run the following command
+  1. Run the following command
 
-        ```
-        sudo /opt/gitlab/embedded/bin/redis-cli -h <sentinel host> -p <sentinel port> SENTINEL get-master-addr-by-name <redis master name>
-        ```
+     ```shell
+     sudo /opt/gitlab/embedded/bin/redis-cli -h <sentinel host> -p <sentinel port> SENTINEL get-master-addr-by-name <redis master name>
+     ```
 
 ##### In the Redis secondary nodes
 
@@ -460,7 +460,7 @@ following command to get address of current Redis primary
 1. If reconfigure warns about a pending Redis/Sentinel restart, restart the
    corresponding service
 
-   ```
+   ```shell
    sudo gitlab-ctl restart redis
    sudo gitlab-ctl restart sentinel
    ```
@@ -474,7 +474,7 @@ failover is complete, we can go ahead and upgrade the original primary node.
 1. Stop Redis service in Redis primary node so that it fails over to a secondary
    node
 
-   ```
+   ```shell
    sudo gitlab-ctl stop redis
    ```
 
@@ -485,7 +485,7 @@ failover is complete, we can go ahead and upgrade the original primary node.
 1. Start Redis again in that node, so that it starts following the current
    primary node.
 
-   ```
+   ```shell
    sudo gitlab-ctl start redis
    ```
 
@@ -497,7 +497,7 @@ failover is complete, we can go ahead and upgrade the original primary node.
 1. If reconfigure warns about a pending Redis/Sentinel restart, restart the
    corresponding service
 
-   ```
+   ```shell
    sudo gitlab-ctl restart redis
    sudo gitlab-ctl restart sentinel
    ```

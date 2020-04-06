@@ -61,7 +61,7 @@ log data that is not captured by runit, such as `gitlab-rails/production.log`
 and `nginx/gitlab_access.log`. You can configure logrotate via
 `/etc/gitlab/gitlab.rb`.
 
-```
+```ruby
 # Below are some of the default settings
 logging['logrotate_frequency'] = "daily" # rotate logs daily
 logging['logrotate_maxsize'] = nil # logs will be rotated when they grow bigger than size specified for `maxsize`, even before the specified time interval (daily, weekly, monthly, or yearly)
@@ -103,7 +103,7 @@ logging['udp_log_shipping_port'] = 1514 # Optional, defaults to 514 (syslog)
 
 Example log messages:
 
-```
+```plaintext
 Jun 26 06:33:46 ubuntu1204-test production.log: Started GET "/root/my-project/import" for 127.0.0.1 at 2014-06-26 06:33:46 -0700
 Jun 26 06:33:46 ubuntu1204-test production.log: Processing by ProjectsController#import as HTML
 Jun 26 06:33:46 ubuntu1204-test production.log: Parameters: {"id"=>"root/my-project"}
@@ -122,7 +122,7 @@ in `/etc/gitlab/gitlab.rb` - see
 [the NGINX documentation](http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format)
 for format details.
 
-```
+```ruby
 nginx['log_format'] = 'my format string $foo $bar'
 mattermost_nginx['log_format'] = 'my format string $foo $bar'
 ```

@@ -15,14 +15,14 @@ You will store `.patch` files that contain the changes in a specific
 directory structure and with the help of the `patch` DSL method, will apply
 the file(s) to reflect the desired changes:
 
-```
+```plaintext
 config/patches/<software-name>
 ```
 
 As example, for a patch that will be applied during the execution of
 `gitlab-rails`, you will store `.patch` files in:
 
-```
+```plaintext
 config/patches/gitlab-rails
 ```
 

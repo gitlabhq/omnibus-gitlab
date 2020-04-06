@@ -89,7 +89,7 @@ When the reconfigure finishes, your GitLab instance should be reachable at `http
 If you are using a firewall you may have to open port 443 to allow inbound
 HTTPS traffic.
 
-```
+```shell
 # UFW example (Debian, Ubuntu)
 sudo ufw allow https
 
@@ -149,7 +149,7 @@ NGINX proxy headers that are assumed to be sane in most environments.
 
 For example, Omnibus GitLab will set:
 
-```
+```plaintext
   "X-Forwarded-Proto" => "https",
   "X-Forwarded-Ssl" => "on"
 ```
@@ -297,7 +297,7 @@ will have to perform the following steps:
    TCP Port. To allow GitLab Workhorse to listen on TCP (by default port 8181)
    edit `/etc/gitlab/gitlab.rb`:
 
-   ```
+   ```ruby
    gitlab_workhorse['listen_network'] = "tcp"
    gitlab_workhorse['listen_addr'] = "127.0.0.1:8181"
    ```
@@ -572,7 +572,7 @@ exists, for reconfigure to succeed.
 Then, in your custom Passenger/NGINX installation, create the following site
 configuration file:
 
-```
+```plaintext
 upstream gitlab-workhorse {
   server unix://var/opt/gitlab/gitlab-workhorse/socket fail_timeout=0;
 }
@@ -701,7 +701,7 @@ Don't forget to update `git.example.com` in the above example to be your server 
 
 **Note:** If you wind up with a 403 forbidden, it's possible that you haven't enabled passenger in `/etc/nginx/nginx.conf`, to do so simply uncomment:
 
-```
+```plaintext
 # include /etc/nginx/passenger.conf;
 ```
 
@@ -713,7 +713,7 @@ By default you will have an NGINX health-check endpoint configured at `127.0.0.1
 
 ### The following information will be displayed
 
-```
+```plaintext
 Active connections: 1
 server accepts handled requests
  18 18 36
@@ -795,7 +795,7 @@ in [this user comment](https://gitlab.com/gitlab-org/gitlab-foss/issues/624#note
 If it is not possible to make this server change, you can default back to the old
 behavior by changing the values in your `/etc/gitlab/gitlab.rb`:
 
-```
+```ruby
 nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3"
 ```
 

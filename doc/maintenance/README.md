@@ -6,7 +6,7 @@ The following commands can be run after installation.
 
 Run `sudo gitlab-ctl status`; the output should look like this:
 
-```
+```plaintext
 run: nginx: (pid 972) 7s; run: log: (pid 971) 7s
 run: postgresql: (pid 962) 7s; run: log: (pid 959) 7s
 run: redis: (pid 964) 7s; run: log: (pid 963) 7s

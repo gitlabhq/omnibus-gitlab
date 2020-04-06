@@ -70,7 +70,7 @@ If you have Docker installed, you can setup OpenShift Origin on your local machi
 1. Create some Persistent Volumes for GitLab to use.
    - Create a file with the following:
 
-    ```
+    ```yaml
     apiVersion: v1
     kind: PersistentVolume
     metadata:

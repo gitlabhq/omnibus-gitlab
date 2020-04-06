@@ -73,7 +73,7 @@ If you were using monitoring related node attributes like
 `gitlab.rb` file for configuring other settings, they are now under `monitoring`
 key and should be renamed. The replacements are as follows
 
-```
+```plaintext
 # Existing usage in gitlab.rb => Replacement
 
 * node['gitlab']['prometheus'] => node['monitoring']['prometheus']

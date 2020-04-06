@@ -254,7 +254,7 @@ check whether this is an issue:
 
 1. If you see messages that look like:
 
-   ```
+   ```plaintext
    2018-11-14_05:52:16.71123 time="2018-11-14T05:52:16Z" level=info msg="redis: dialing" address="redis-server:6379" scheme=rediss
    2018-11-14_05:52:16.74397 time="2018-11-14T05:52:16Z" level=error msg="unknown error" error="keywatcher: x509: certificate signed by unknown authority"
    ```
@@ -277,7 +277,7 @@ troubleshoot this error:
 
 1. If you see messages that look like:
 
-   ```
+   ```plaintext
    2018-11-14_06:18:43.81636 time="2018-11-14T06:18:43Z" level=info msg="redis: dialing" address="redis-server:6379" scheme=rediss
    2018-11-14_06:18:43.86929 time="2018-11-14T06:18:43Z" level=error msg="unknown error" error="keywatcher: pubsub receive: NOAUTH Authentication required."
    ```
@@ -325,7 +325,7 @@ configured to use it.
 When connecting to Redis for troubleshooting you can use:
 
 - Redis via Unix domain sockets:
-  
+
   ```shell
   /opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket
   ```
