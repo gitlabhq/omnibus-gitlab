@@ -1,0 +1,5 @@
+---
+title: Fixes sysctl error on reconfigure after reinstall
+merge_request: 3921
+author:
+type: fixed
