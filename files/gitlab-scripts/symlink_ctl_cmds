@@ -11,6 +11,7 @@ usr_bin_symlinks=(
   "${DEST_DIR}/embedded/bin/gitlab-pg-ctl"
   "${DEST_DIR}/bin/gitlab-geo-psql"
   "${DEST_DIR}/bin/gitlab-backup"
+  "${DEST_DIR}/bin/gitlab-redis-cli"
 )
 
 error_exit()

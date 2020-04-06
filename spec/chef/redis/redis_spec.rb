@@ -8,6 +8,15 @@ describe 'redis' do
   end
 
   context 'by default' do
+    let(:gitlab_redis_cli_rc) do
+      <<-EOF
+redis_dir='/var/opt/gitlab/redis'
+redis_host='127.0.0.1'
+redis_port='0'
+redis_socket='/var/opt/gitlab/redis/redis.socket'
+      EOF
+    end
+
     it 'creates redis config with default values' do
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content { |content|
@@ -34,6 +43,11 @@ describe 'redis' do
     end
 
     it_behaves_like 'enabled runit service', 'redis', 'root', 'root', 'gitlab-redis', 'gitlab-redis'
+
+    it 'creates gitlab-redis-cli-rc' do
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-redis-cli-rc')
+        .with_content(gitlab_redis_cli_rc)
+    end
 
     describe 'pending restart check' do
       context 'when running version is same as installed version' do
@@ -155,6 +169,15 @@ describe 'redis' do
     let(:master_ip) { '10.0.0.0' }
     let(:master_port) { 6371 }
 
+    let(:gitlab_redis_cli_rc) do
+      <<-EOF
+redis_dir='/var/opt/gitlab/redis'
+redis_host='1.2.3.4'
+redis_port='6370'
+redis_socket=''
+      EOF
+    end
+
     before do
       stub_gitlab_rb(
         redis: {
@@ -172,6 +195,11 @@ describe 'redis' do
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^slaveof #{master_ip} #{master_port}/)
     end
+
+    it 'creates gitlab-redis-cli-rc' do
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-redis-cli-rc')
+        .with_content(gitlab_redis_cli_rc)
+    end
   end
 
   context 'in HA mode with Sentinels' do
@@ -179,6 +207,15 @@ describe 'redis' do
     let(:redis_port) { 6370 }
     let(:master_ip) { '10.0.0.0' }
     let(:master_port) { 6371 }
+
+    let(:gitlab_redis_cli_rc) do
+      <<-EOF
+redis_dir='/var/opt/gitlab/redis'
+redis_host='1.2.3.4'
+redis_port='6370'
+redis_socket=''
+      EOF
+    end
 
     before do
       stub_gitlab_rb(
@@ -197,6 +234,11 @@ describe 'redis' do
     it 'omits slaveof' do
       expect(chef_run).not_to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content(/^slaveof/)
+    end
+
+    it 'creates gitlab-redis-cli-rc' do
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-redis-cli-rc')
+        .with_content(gitlab_redis_cli_rc)
     end
   end
 
