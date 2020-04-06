@@ -215,6 +215,25 @@ templatesymlink "Create a resque.yml and create a symlink to Rails root" do
   dependent_services.each { |svc| notifies :restart, svc }
 end
 
+templatesymlink "Create a cable.yml and create a symlink to Rails root" do
+  url = node['gitlab']['gitlab-rails']['redis_actioncable_instance']
+  sentinels = node['gitlab']['gitlab-rails']['redis_actioncable_sentinels']
+
+  if url.nil?
+    url = redis_url
+    sentinels = redis_sentinels
+  end
+
+  link_from File.join(gitlab_rails_source_dir, "config/cable.yml")
+  link_to File.join(gitlab_rails_etc_dir, "cable.yml")
+  source "cable.yml.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(redis_url: url, redis_sentinels: sentinels)
+  dependent_services.each { |svc| notifies :restart, svc }
+end
+
 %w(cache queues shared_state).each do |instance|
   filename = "redis.#{instance}.yml"
   url = node['gitlab']['gitlab-rails']["redis_#{instance}_instance"]

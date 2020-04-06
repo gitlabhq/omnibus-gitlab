@@ -1,0 +1,11 @@
+production:
+  adapter: redis
+  url: <%= @redis_url %>
+  <% unless @redis_sentinels.empty? %>
+  sentinels:
+    <% @redis_sentinels.each do |sentinel| %>
+    -
+      host: <%= sentinel['host'] %>
+      port: <%= sentinel['port'] %>
+    <% end %>
+  <% end %>
