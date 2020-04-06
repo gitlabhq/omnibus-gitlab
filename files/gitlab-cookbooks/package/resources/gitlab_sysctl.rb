@@ -34,17 +34,19 @@ action :create do
   file "create /opt/gitlab/embedded/etc/#{conf_name} #{new_resource.name}" do
     path "/opt/gitlab/embedded/etc/#{conf_name}"
     content "#{new_resource.name} = #{new_resource.value}\n"
-    notifies :run, "execute[load sysctl conf #{new_resource.name}]", :immediately
+    notifies :run, "execute[load sysctl conf #{new_resource.name}]"
+    notifies :run, "execute[reload all sysctl conf]"
   end
 
   link "/etc/sysctl.d/#{conf_name}" do
     to "/opt/gitlab/embedded/etc/#{conf_name}"
-    notifies :run, "execute[load sysctl conf #{new_resource.name}]", :immediately
+    notifies :run, "execute[load sysctl conf #{new_resource.name}]"
+    notifies :run, "execute[reload all sysctl conf]"
   end
 
   # Load the settings right away
   execute "load sysctl conf #{new_resource.name}" do
-    command "sysctl -e --system"
+    command "sysctl -e -p /opt/gitlab/embedded/etc/#{conf_name}"
     action :nothing
   end
 end

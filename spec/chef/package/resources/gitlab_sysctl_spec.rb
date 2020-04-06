@@ -2,7 +2,7 @@ require 'chef_helper'
 
 describe 'sysctl' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(gitlab_sysctl)) }
-  let(:chef_run) { runner.converge("test_package::gitlab_sysctl_create") }
+  let(:chef_run) { runner.converge("package::sysctl", "test_package::gitlab_sysctl_create") }
   let(:conf) { '90-omnibus-gitlab-foo.conf' }
 
   it 'creates sysctl.d directory for the service' do
@@ -13,7 +13,7 @@ describe 'sysctl' do
     expect(chef_run).to create_file("create /opt/gitlab/embedded/etc/#{conf} foo").with_content("foo = 15000\n")
 
     resource = chef_run.file("create /opt/gitlab/embedded/etc/#{conf} foo")
-    expect(resource).to notify("execute[load sysctl conf foo]").to(:run).immediately
+    expect(resource).to notify("execute[load sysctl conf foo]").to(:run).delayed
   end
 
   it 'links conf file to /etc/sysctl.d location' do
@@ -22,7 +22,7 @@ describe 'sysctl' do
 
   it 'loaded the settings' do
     resource = chef_run.execute('load sysctl conf foo')
-    expect(resource.command).to eq('sysctl -e --system')
+    expect(resource.command).to eq("sysctl -e -p /opt/gitlab/embedded/etc/#{conf}")
     expect(resource).to do_nothing
   end
 end
