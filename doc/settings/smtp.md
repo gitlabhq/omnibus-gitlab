@@ -872,6 +872,22 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
+### Uberspace 6
+
+From the [Uberspace Wiki](https://wiki.uberspace.de/mail#tldr):
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "<your-host>.uberspace.de"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "<your-user>@<your-domain>"
+gitlab_rails['smtp_password'] = "<your-password>"
+gitlab_rails['smtp_domain'] = "<your-domain>"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
