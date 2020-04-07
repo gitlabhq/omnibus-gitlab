@@ -757,6 +757,9 @@ To upgrade a Geo cluster, you will need a name for the replication slot, and the
    sudo gitlab-ctl pg-upgrade
    ```
 
+   NOTE: **Note:**
+   As of GitLab 12.8, you can opt into upgrading PostgreSQL 11 with `pg-upgrade -V 11`
+
 1. Upgrade the `gitlab-ee` package on the Geo secondary servers.
    Or manually upgrade PostgreSQL, run:
 
