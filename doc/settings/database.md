@@ -750,6 +750,11 @@ To upgrade a Geo cluster, you will need a name for the replication slot, and the
    sudo gitlab-psql -qt -c 'select slot_name from pg_replication_slots'
    ```
 
+   NOTE: **Note:**
+   In a [Geo HA](https://docs.gitlab.com/ee/administration/geo/replication/high_availability.html) setup with databases
+   managed by GitLab Omnibus, you should run the command above on the primary's
+   database node.
+
 1. Upgrade the `gitlab-ee` package on the Geo primary server.
    Or to manually upgrade PostgreSQL, run:
 
