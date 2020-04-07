@@ -19,9 +19,9 @@ omnibus_helper = OmnibusHelper.new(node)
 
 working_dir = node['praefect']['dir']
 log_directory = node['praefect']['log_directory']
+env_directory = node['praefect']['env_directory']
+wrapper_path = node['praefect']['wrapper_path']
 config_path = File.join(working_dir, "config.toml")
-
-json_logging = node['praefect']['logging_format'].eql?('json')
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -36,6 +36,11 @@ directory log_directory do
 end
 
 omnibus_helper.is_deprecated_praefect_config?
+
+env_dir env_directory do
+  variables node['praefect']['env']
+  notifies :restart, "runit_service[praefect]" if omnibus_helper.should_notify?('praefect')
+end
 
 template "Create praefect config.toml" do
   path config_path
@@ -52,9 +57,11 @@ runit_service 'praefect' do
     user: account_helper.gitlab_user,
     groupname: account_helper.gitlab_group,
     working_dir: working_dir,
+    env_dir: env_directory,
+    wrapper_path: wrapper_path,
     config_path: config_path,
     log_directory: log_directory,
-    json_logging: json_logging
+    json_logging: Praefect.json_logging?(node)
   }.merge(params))
 
   log_options node['gitlab']['logging'].to_hash.merge(node['praefect'].to_hash)

@@ -13,5 +13,9 @@ module Praefect
         raise "nodes of a Praefect virtual_storage must be a hash" unless nodes.is_a?(Hash)
       end
     end
+
+    def json_logging?(node)
+      node['praefect']['logging_format'].eql?('json')
+    end
   end
 end

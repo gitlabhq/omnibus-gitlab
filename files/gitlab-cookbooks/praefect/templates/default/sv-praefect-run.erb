@@ -6,6 +6,7 @@ exec 2>&1
 
 cd <%= @options[:working_dir] %>
 
-exec chpst -P -U <%= @options[:user] %>:<%= @options[:groupname] %> \
+exec chpst -e <%= @options[:env_dir] %> -P \
+  -U <%= @options[:user] %>:<%= @options[:groupname] %> \
   -u <%= @options[:user] %>:<%= @options[:groupname] %> \
-  /opt/gitlab/embedded/bin/praefect -config <%= @options[:config_path] %>
+  <%= @options[:wrapper_path] %> /opt/gitlab/embedded/bin/praefect -config <%= @options[:config_path] %>
