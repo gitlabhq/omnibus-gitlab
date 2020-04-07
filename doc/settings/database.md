@@ -788,8 +788,8 @@ To upgrade a Geo cluster, you will need a name for the replication slot, and the
    ```
 
    NOTE: **Note:**
-   In a [Geo HA](https://docs.gitlab.com/ee/administration/geo/replication/high_availability.html) setup with databases
-   managed by GitLab Omnibus, the command above should be run on your Geo **tracking database**.
+   In a [Geo HA](https://docs.gitlab.com/ee/administration/geo/replication/high_availability.html) setup, the command above should be run on an
+   application node (any node running `unicorn`, `sidekiq`, or `geo-logcursor`).
 
 1. Restart `unicorn`, `sidekiq`, and `geo-logcursor`.
 
