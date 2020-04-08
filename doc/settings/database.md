@@ -728,21 +728,46 @@ HINT:  Free one or increase max_replication_slots.
 
 ### Upgrading a Geo instance
 
+Since Geo depends on PostgreSQL streaming replication by default, there are
+additional considerations when upgrading GitLab and/or when upgrading
+PostgreSQL described below.
+
 CAUTION: **Caution:**
 If you are running a Geo installation using PostgreSQL 9.6.x, please upgrade to GitLab 12.4 or newer. Older versions were affected [by an issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4692) that could cause automatic upgrades of the PostgreSQL database to fail on the secondary. This issue is now fixed.
 
-As of GitLab 12.1, `gitlab-ctl pg-upgrade` can automatically upgrade the database on your Geo servers.
+#### Caveats when upgrading PostgreSQL with Geo
 
-NOTE: **Note:**
-Due to how PostgreSQL replication works, this cannot be done without the need to resynchronize your secondary database server. Therefore, this upgrade cannot be done without downtime.
+CAUTION: **Caution:**
+When using Geo, upgrading PostgreSQL **requires downtime on all secondaries**.
 
-If you want to skip the automatic upgrade, before you install 12.1 or newer, run the following:
+When using Geo, upgrading PostgreSQL **requires downtime on all secondaries**
+because it requires re-initializing PostgreSQL replication to Geo
+**secondaries**. This is due to the way PostgreSQL streaming replication works.
+Re-initializing replication copies all data from the primary again, so it can
+take a long time depending mostly on the size of the database and available
+bandwidth.
+
+Furthermore, as of GitLab 12.1, GitLab package upgrades automatically try to
+upgrade PostgreSQL to the current default version. From GitLab 12.1 to GitLab
+12.9, the default version of PostgreSQL is 10.x.
+
+We strongly recommend disabling automatic upgrades of PostgreSQL and
+manually upgrading PostgreSQL separately from upgrading the GitLab package.
+
+You can disable automatic upgrades of PostgreSQL by running the following on
+all nodes running `postgresql` or `geo-postgresql`:
 
 ```shell
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
-To upgrade a Geo cluster, you will need a name for the replication slot, and the password to connect to the primary server.
+To avoid any unintended downtime, regardless of your GitLab upgrade approach,
+consider creating the above file on all nodes.
+
+#### How to upgrade PostgreSQL when using Geo
+
+To upgrade PostgreSQL, you will need the name of the replication slot, and the
+replication user's password.
 
 1. Find the existing name of the replication slot name on the primary node, run:
 
@@ -754,6 +779,9 @@ To upgrade a Geo cluster, you will need a name for the replication slot, and the
    In a [Geo HA](https://docs.gitlab.com/ee/administration/geo/replication/high_availability.html) setup with databases
    managed by GitLab Omnibus, you should run the command above on the primary's
    database node.
+
+1. Gather the replication user's password. It was set while setting up Geo in
+   [Step 1. Configure the primary server](https://docs.gitlab.com/ee/administration/geo/replication/database.html#step-1-configure-the-primary-server).
 
 1. Upgrade the `gitlab-ee` package on the Geo primary server.
    Or to manually upgrade PostgreSQL, run:
