@@ -745,7 +745,9 @@ because it requires re-initializing PostgreSQL replication to Geo
 **secondaries**. This is due to the way PostgreSQL streaming replication works.
 Re-initializing replication copies all data from the primary again, so it can
 take a long time depending mostly on the size of the database and available
-bandwidth.
+bandwidth. See
+[PostgreSQL documentation](https://www.postgresql.org/docs/current/pgupgrade.html)
+for more.
 
 Furthermore, as of GitLab 12.1, GitLab package upgrades automatically try to
 upgrade PostgreSQL to the current default version. From GitLab 12.1 to GitLab
