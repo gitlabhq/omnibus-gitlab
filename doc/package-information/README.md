@@ -23,11 +23,12 @@ Once the Omnibus GitLab package is installed, all versions of the bundled
 libraries are located in `/opt/gitlab/version-manifest.txt`.
 
 If you don't have the package installed, you can always check the Omnibus GitLab
-[source repository], specifically the [config directory].
+[source repository](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master), specifically the
+[config directory](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/config).
 
 For example, if you take a look at the `8-6-stable` branch, you can conclude that
-8.6 packages were running [ruby 2.1.8]. Or, that 8.5 packages were bundled
-with [NGINX 1.9.0].
+8.6 packages were running [Ruby 2.1.8](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/8-6-stable/config/projects/gitlab.rb#L48).
+Or, that 8.5 packages were bundled with [NGINX 1.9.0](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/8-5-stable/config/software/nginx.rb#L20).
 
 ## Signatures of GitLab, Inc. provided packages
 
@@ -82,8 +83,3 @@ when the underlying init system *IS* systemd.
 
 These warnings _can be safely ignored_. They are not suppressed because this
 allows everyone to debug possible detection issues faster.
-
-[source repository]: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master
-[config directory]: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/config
-[ruby 2.1.8]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/8-6-stable/config/projects/gitlab.rb#L48
-[nginx 1.9.0]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/8-5-stable/config/software/nginx.rb#L20

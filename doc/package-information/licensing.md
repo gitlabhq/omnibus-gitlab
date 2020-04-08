@@ -10,7 +10,7 @@ Starting with version 8.11, the Omnibus GitLab package contains license
 information of all software that is bundled within the package.
 
 After installing the package, licenses for each individual bundled library
-can be be found in `/opt/gitlab/LICENSES` directory.
+can be found in `/opt/gitlab/LICENSES` directory.
 
 There is also one `LICENSE` file which contains all licenses compiled together.
 This compiled license can be found in `/opt/gitlab/LICENSE` file.

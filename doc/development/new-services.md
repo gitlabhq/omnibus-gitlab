@@ -137,7 +137,7 @@ is created. Render any configuration files needed for your service into your wor
 directory.
 
 Near the end of the recipe you will want to make a call to the runit service definition
-to define your recipe. In order for this work work you will need to have created
+to define your recipe. In order for this work you will need to have created
 a run file in the cookbooks `templates/default` directory. These filenames start
 with `sv-` followed by the service name, followed by the runit action name.
 
