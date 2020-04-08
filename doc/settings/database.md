@@ -769,22 +769,18 @@ consider creating the above file on all nodes.
 To upgrade PostgreSQL, you will need the name of the replication slot, and the
 replication user's password.
 
-1. Find the existing name of the replication slot name on the primary node, run:
+1. Find the name of the existing replication slot on the Geo primary's database
+   node, run:
 
    ```shell
    sudo gitlab-psql -qt -c 'select slot_name from pg_replication_slots'
    ```
 
-   NOTE: **Note:**
-   In a [Geo HA](https://docs.gitlab.com/ee/administration/geo/replication/high_availability.html) setup with databases
-   managed by GitLab Omnibus, you should run the command above on the primary's
-   database node.
-
 1. Gather the replication user's password. It was set while setting up Geo in
    [Step 1. Configure the primary server](https://docs.gitlab.com/ee/administration/geo/replication/database.html#step-1-configure-the-primary-server).
 
-1. Upgrade the `gitlab-ee` package on the Geo primary server.
-   Or to manually upgrade PostgreSQL, run:
+1. Upgrade the `gitlab-ee` package on the Geo primary nodes.
+   Or to manually upgrade PostgreSQL, run on the Geo primary's database node:
 
    ```shell
    sudo gitlab-ctl pg-upgrade
@@ -794,38 +790,30 @@ replication user's password.
    As of GitLab 12.8, you can opt into upgrading PostgreSQL 11 with `pg-upgrade -V 11`
 
 1. Upgrade the `gitlab-ee` package on the Geo secondary servers.
-   Or manually upgrade PostgreSQL, run:
+   Or manually upgrade PostgreSQL, run on the Geo **secondary database** and
+   also on the **tracking database**:
 
    ```shell
    sudo gitlab-ctl pg-upgrade
    ```
 
-   NOTE: **Note:**
-   In a [Geo HA](https://docs.gitlab.com/ee/administration/geo/replication/high_availability.html) setup with databases
-   managed by GitLab Omnibus, you should run the command above on both the Geo **secondary database**, and also on the
-   **tracking database**.
-
-1. Re-initialize the database on the Geo secondary server using the command
+1. Restart the database replication on the Geo **secondary database** using the
+   command:
 
    ```shell
    sudo gitlab-ctl replicate-geo-database --slot-name=SECONDARY_SLOT_NAME --host=PRIMARY_HOST_NAME
    ```
 
-   You will be prompted for the password of the primary server.
+   You will be prompted for the replication user's password of the primary
+   server.
 
-   NOTE: **Note:**
-   In a [Geo HA](https://docs.gitlab.com/ee/administration/geo/replication/high_availability.html) setup with databases
-   managed by GitLab Omnibus, the command above should be run on your Geo **secondary database**.
-
-1. Refresh the foreign tables on the Geo secondary server using the command
+1. Refresh the foreign tables on the Geo secondary server by running this
+   command on an application node (any node running `unicorn`, `sidekiq`, or
+   `geo-logcursor`).
 
    ```shell
    sudo gitlab-rake geo:db:refresh_foreign_tables
    ```
-
-   NOTE: **Note:**
-   In a [Geo HA](https://docs.gitlab.com/ee/administration/geo/replication/high_availability.html) setup, the command above should be run on an
-   application node (any node running `unicorn`, `sidekiq`, or `geo-logcursor`).
 
 1. Restart `unicorn`, `sidekiq`, and `geo-logcursor`.
 
