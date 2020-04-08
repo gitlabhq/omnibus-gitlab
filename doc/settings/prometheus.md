@@ -4,7 +4,7 @@
 
 Prometheus supports reading and writing to remote services.
 
-To configure a remote remote read or write service, you can include the following in `gitlab.rb`.
+To configure a remote read or write service, you can include the following in `gitlab.rb`.
 
 ```ruby
 prometheus['remote_write'] = [

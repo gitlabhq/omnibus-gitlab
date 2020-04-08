@@ -5,7 +5,7 @@ Kubernetes Helm charts for OpenShift also. Check out [release documentation for
 the charts](https://gitlab.com/charts/gitlab/blob/master/doc/development/release.md)
 for details.
 
-New GitLab templates for OpenShift are prepared as part of our our [cloud image release process](README.md#updating-cloud-images)
+New GitLab templates for OpenShift are prepared as part of our [cloud image release process](README.md#updating-cloud-images).
 
 ## Update the template to latest GitLab release
 

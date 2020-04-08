@@ -326,7 +326,7 @@ The length of time depends on the size of your database.
 If you would rather avoid downtime, it is possible to upgrade to a new database using [Slony](https://www.slony.info/).
 Please see our [guide](https://docs.gitlab.com/ee/update/upgrading_postgresql_using_slony.html) on how to perform the upgrade.
 
-Once you have confirmed that the the above checklist is satisfied,
+Once you have confirmed that the above checklist is satisfied,
 you can proceed.
 To perform the upgrade, run the command:
 
