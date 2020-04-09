@@ -140,5 +140,9 @@ performing the upgrade of GitLab.
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
-Further details and procedures for upgrading can be
+NOTE: **NOTE:**
+For PG-HA environments, all secondary databases will be unregistered from the primary during the PostgreSQL upgrade, and will
+need to be re-setup one the primary and secondary nodes have the updated PostgreSQL version.
+
+Further details and procedures for upgrading PostgreSQL after install if you initially opted out can be
 found in the [Database Settings notes](../settings/database.md#upgrade-packaged-postgresql-server).
