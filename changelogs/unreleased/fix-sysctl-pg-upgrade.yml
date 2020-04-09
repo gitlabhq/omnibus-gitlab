@@ -1,0 +1,5 @@
+---
+title: Fix pg-upgrade error during sysctl commands
+merge_request: 4080
+author:
+type: fixed

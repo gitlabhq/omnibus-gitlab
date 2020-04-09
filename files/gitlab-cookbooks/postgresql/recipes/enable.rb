@@ -64,6 +64,8 @@ PATH=#{node['postgresql']['user_path']}
   EOH
 end
 
+include_recipe "package::sysctl"
+
 gitlab_sysctl "kernel.shmmax" do
   value node['postgresql']['shmmax']
 end
