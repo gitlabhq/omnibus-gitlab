@@ -182,6 +182,19 @@ describe 'gitlab::gitlab-rails' do
         }
       end
 
+      it 'creates cable.yml with the same settings' do
+        expect(chef_run).to create_templatesymlink('Create a cable.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            redis_url: URI('unix:/var/opt/gitlab/redis/redis.socket'),
+            redis_sentinels: []
+          )
+        )
+
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/cable.yml').with_content { |content|
+          expect(content).to match(%r(url: unix:/var/opt/gitlab/redis/redis.socket$))
+        }
+      end
+
       it 'does not render the separate instance configurations' do
         redis_instances.each do |instance|
           expect(chef_run).not_to render_file("#{config_dir}redis.#{instance}.yml")
@@ -243,6 +256,11 @@ describe 'gitlab::gitlab-rails' do
             redis_shared_state_sentinels: [
               { host: 'shared_state', port: '1234' },
               { host: 'shared_state', port: '3456' }
+            ],
+            redis_actioncable_instance: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
+            redis_actioncable_sentinels: [
+              { host: 'actioncable', port: '1234' },
+              { host: 'actioncable', port: '3456' }
             ]
           }
         )
@@ -260,6 +278,15 @@ describe 'gitlab::gitlab-rails' do
 
       it 'still renders the default configuration file' do
         expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root')
+      end
+
+      it 'creates cable.yml with custom settings' do
+        expect(chef_run).to create_templatesymlink('Create a cable.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            redis_url: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
+            redis_sentinels: [{ 'host' => 'actioncable', 'port' => '1234' }, { 'host' => 'actioncable', 'port' => '3456' }]
+          )
+        )
       end
     end
   end

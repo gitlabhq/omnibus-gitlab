@@ -1,7 +1,7 @@
 cluster=<%= @cluster %>
 node=<%= @node_number %>
 node_name=<%= @node_name %>
-conninfo='host=<%= @host %> port=<%= @port %> user=<%= @user %> dbname=<%= @database %> sslmode=<%= @sslmode %> sslcompression=<%= @sslcompression %>'
+conninfo='host=<%= @host %> port=<%= @port %> user=<%= @username %> dbname=<%= @database %> sslmode=<%= @sslmode %> sslcompression=<%= @sslcompression %>'
 
 <% if @upstream_node %>
 upstream_node=<%= @upstream_node %>

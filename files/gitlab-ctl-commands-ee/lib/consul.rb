@@ -2,7 +2,7 @@ require 'mixlib/shellout'
 
 require_relative 'repmgr'
 
-class Consul
+class ConsulHandler
   WatcherError = Class.new(StandardError)
 
   attr_accessor :command, :subcommand, :input
@@ -47,7 +47,7 @@ class Consul
       def handle_failed_master(input)
         return if input.chomp.eql?('null')
 
-        node = Repmgr::Node.new
+        node = RepmgrHandler::Node.new
         unless node.is_master?
           # wait 5 seconds for the actual master node to handle the removal
           sleep 5
@@ -57,17 +57,17 @@ class Consul
         begin
           data = JSON.parse(input)
         rescue JSON::ParserError
-          raise Consul::WatcherError, "Invalid input detected: '#{input}'"
+          raise ConsulHandler::WatcherError, "Invalid input detected: '#{input}'"
         end
 
         data.each do |fm|
           node_id = fm['Key'].split('/').last
           begin
-            Repmgr::Master.remove(node_id: node_id, user: 'gitlab-consul')
+            RepmgrHandler::Master.remove(node_id: node_id, user: 'gitlab-consul')
           rescue StandardError
-            Consul::Kv.put(fm['Key'])
+            ConsulHandler::Kv.put(fm['Key'])
           else
-            Consul::Kv.delete(fm['Key'])
+            ConsulHandler::Kv.delete(fm['Key'])
           end
         end
       end

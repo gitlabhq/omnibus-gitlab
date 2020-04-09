@@ -16,7 +16,7 @@
 #
 account_helper = AccountHelper.new(node)
 repmgr_helper = RepmgrHelper.new(node)
-replication_user = node['repmgr']['user']
+replication_user = node['repmgr']['username']
 repmgr_conf = "#{node['postgresql']['dir']}/repmgr.conf"
 
 pg_helper = PgHelper.new(node)

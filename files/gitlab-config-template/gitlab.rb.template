@@ -610,6 +610,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_queues_sentinels'] = nil
 # gitlab_rails['redis_shared_state_instance'] = nil
 # gitlab_rails['redis_shared_sentinels'] = nil
+# gitlab_rails['redis_actioncable_instance'] = nil
+# gitlab_rails['redis_actioncable_sentinels'] = nil
 
 ### GitLab email server settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/smtp.html
@@ -2294,7 +2296,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # repmgr['node_number'] = nil
 # repmgr['port'] = 5432
 # repmgr['trust_auth_cidr_addresses'] = []
-# repmgr['user'] = 'gitlab_repmgr'
+# repmgr['username'] = 'gitlab_repmgr'
 # repmgr['sslmode'] = 'prefer'
 # repmgr['sslcompression'] = 0
 # repmgr['failover'] = 'automatic'
@@ -2339,7 +2341,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 # consul['enable'] = false
 # consul['dir'] = '/var/opt/gitlab/consul'
-# consul['user'] = 'gitlab-consul'
+# consul['username'] = 'gitlab-consul'
 # consul['group'] = 'gitlab-consul'
 # consul['config_file'] = '/var/opt/gitlab/consul/config.json'
 # consul['config_dir'] = '/var/opt/gitlab/consul/config.d'
