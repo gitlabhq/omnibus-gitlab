@@ -22,7 +22,7 @@ runit_service 'consul' do
             data_dir: node['consul']['data_dir'],
             dir: node['consul']['dir'],
             log_directory: node['consul']['log_directory'],
-            user: node['consul']['user'],
+            user: node['consul']['username'],
             groupname: node['consul']['group'],
             env_dir: node['consul']['env_directory']
           })

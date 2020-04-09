@@ -71,6 +71,18 @@ module Gitlab
             deprecation: '12.4',
             removal: '13.0',
             note: 'It is now configured via the admin area. Please see https://docs.gitlab.com/ee/user/admin_area/settings/protected_paths.html for details.'
+          },
+          {
+            config_keys: %w(repmgr user),
+            deprecation: '12.10',
+            removal: '13.0',
+            note: "Use repmgr['username'] instead."
+          },
+          {
+            config_keys: %w(consul user),
+            deprecation: '12.10',
+            removal: '13.0',
+            note: "Use consul['username'] instead."
           }
         ]
 

@@ -17,6 +17,6 @@
 require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/consul"
 
 add_command_under_category('consul', 'consul', 'Interact with the gitlab-consul cluster', 2) do
-  consul = Consul.new(ARGV, $stdin.gets)
+  consul = ConsulHandler.new(ARGV, $stdin.gets)
   consul.execute
 end

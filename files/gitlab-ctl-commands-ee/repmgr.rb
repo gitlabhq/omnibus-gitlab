@@ -12,7 +12,7 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
   end
   # We only need the arguments if we're performing an action which needs to
   # know the primary node
-  repmgr_options = Repmgr.parse_options(ARGV)
+  repmgr_options = RepmgrHandler.parse_options(ARGV)
 
   # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
   # configure on an existing installation
@@ -24,7 +24,7 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
   repmgr_args = begin
                   {
                     primary: repmgr_primary,
-                    user: repmgr_options[:user] || node_attributes['repmgr']['user'],
+                    user: repmgr_options[:user] || node_attributes['repmgr']['username'],
                     database: node_attributes['repmgr']['database'],
                     directory: postgresql_directory,
                     verbose: repmgr_options[:verbose],
@@ -37,7 +37,7 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
                   exit 1
                 end
   begin
-    repmgr_obj = Repmgr.new(repmgr_command, repmgr_subcommand, repmgr_args)
+    repmgr_obj = RepmgrHandler.new(repmgr_command, repmgr_subcommand, repmgr_args)
     results = repmgr_obj.execute
   rescue Mixlib::ShellOut::ShellCommandFailed
     exit 1
@@ -55,21 +55,21 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
 end
 
 add_command_under_category('repmgr-check-master', 'database', 'Check if the current node is the repmgr master', 2) do
-  node = Repmgr::Node.new
+  node = RepmgrHandler::Node.new
   begin
     if node.is_master?
       Kernel.exit 0
     else
       Kernel.exit 1
     end
-  rescue Repmgr::MasterError => e
+  rescue RepmgrHandler::MasterError => e
     $stderr.puts "Error checking for master: #{e}"
     Kernel.exit 3
   end
 end
 
 add_command_under_category('repmgr-event-handler', 'database', 'Handle events from rpmgrd actions', 2) do
-  Repmgr::Events.fire(ARGV)
+  RepmgrHandler::Events.fire(ARGV)
 end
 
 def repmgr_help

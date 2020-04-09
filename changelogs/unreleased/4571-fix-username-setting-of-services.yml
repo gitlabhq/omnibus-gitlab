@@ -1,0 +1,5 @@
+---
+title: Deprecate user attributes of consul and repmgr in favor of username
+merge_request: 3489
+author:
+type: deprecated
