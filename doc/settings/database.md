@@ -335,7 +335,7 @@ sudo gitlab-ctl pg-upgrade
 ```
 
 NOTE: **Note:**
-In GitLab 12.8 or later, you can pass the `-V 11` flag to to upgrading to PostgreSQL 11. PostgreSQL 11 became the default for
+In GitLab 12.8 or later, you can pass the `-V 11` flag to upgrading to PostgreSQL 11. PostgreSQL 11 became the default for
 pg-upgrade in GitLab 12.10.
 
 This command performs the following steps:
