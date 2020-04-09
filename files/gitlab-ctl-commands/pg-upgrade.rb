@@ -25,7 +25,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            2 do |_cmd_name|
   options = GitlabCtl::PgUpgrade.parse_options(ARGV)
-  revert_version = lookup_version(options[:target_version], read_revert_version || default_version)
+  revert_version = lookup_version(options[:target_version], read_revert_version || old_version)
 
   @db_service_name = 'postgresql'
   @db_worker = GitlabCtl::PgUpgrade.new(
@@ -74,7 +74,7 @@ add_command_under_category 'pg-upgrade', 'database',
   @db_worker = GitlabCtl::PgUpgrade.new(
     base_path,
     data_path,
-    lookup_version(options[:target_version], new_version),
+    lookup_version(options[:target_version], default_version),
     options[:tmp_dir],
     options[:timeout]
   )
@@ -445,19 +445,19 @@ def version_from_manifest(software)
   nil
 end
 
-def old_version
+def older_version
   PGVersion.parse(version_from_manifest('postgresql_old'))
 end
 
-def default_version
+def old_version
   PGVersion.parse(version_from_manifest('postgresql'))
 end
 
-def new_version
+def default_version
   PGVersion.parse(version_from_manifest('postgresql_new'))
 end
 
-SUPPORTED_VERSIONS = [old_version, default_version, new_version].freeze
+SUPPORTED_VERSIONS = [older_version, old_version, default_version].freeze
 
 def lookup_version(major_version, fallback_version)
   return fallback_version unless major_version
