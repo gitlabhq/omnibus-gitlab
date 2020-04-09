@@ -375,6 +375,8 @@ default['gitlab']['gitlab-rails']['redis_queues_instance'] = nil
 default['gitlab']['gitlab-rails']['redis_queues_sentinels'] = []
 default['gitlab']['gitlab-rails']['redis_shared_state_instance'] = nil
 default['gitlab']['gitlab-rails']['redis_shared_state_sentinels'] = []
+default['gitlab']['gitlab-rails']['redis_actioncable_instance'] = nil
+default['gitlab']['gitlab-rails']['redis_actioncable_sentinels'] = []
 
 default['gitlab']['gitlab-rails']['smtp_enable'] = false
 default['gitlab']['gitlab-rails']['smtp_address'] = nil

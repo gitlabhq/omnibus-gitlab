@@ -126,7 +126,14 @@ redis['tcp_keepalive'] = "300"
 
 ## Running with multiple Redis instances
 
-GitLab includes support for running with separate Redis instances for different persistence classes, currently: cache, queues, and shared_state.
+GitLab includes support for running with separate Redis instances for different persistence classes, currently: cache, queues, shared_state and actioncable.
+
+| Instance     | Purpose                                         |
+| ------------ | ----------------------------------------------- |
+| cache        | Store cached data                               |
+| queues       | Store Sidekiq background jobs                   |
+| shared_state | Store session-related and other persistent data |
+| actioncable  | Pub/Sub queue backend for ActionCable           |
 
 1. Create a dedicated instance for each persistence class as per the instructions in [Setting up a Redis-only server](#setting-up-a-redis-only-server)
 1. Set the appropriate variable in `/etc/gitlab/gitlab.rb` for each instance you are using:
@@ -135,6 +142,7 @@ GitLab includes support for running with separate Redis instances for different 
    gitlab_rails['redis_cache_instance'] = REDIS_CACHE_URL
    gitlab_rails['redis_queues_instance'] = REDIS_QUEUES_URL
    gitlab_rails['redis_shared_state_instance'] = REDIS_SHARED_STATE_URL
+   gitlab_rails['redis_actioncable_instance'] = REDIS_ACTIONCABLE_URL
    ```
 
    **Note**: Redis URLs should be in the format: `redis://:PASSWORD@REDIS_HOST:PORT/2`
@@ -156,7 +164,7 @@ For details on configuring Redis Sentinel, see
 
 Using multiple Redis instances allows you to configure Redis as a [Least
 Recently Used cache](https://redis.io/topics/lru-cache). Note you should only
-do this for the Redis cache class; the Redis queues and shared state cache
+do this for the Redis cache instance; the Redis queues and shared state instances
 should never be configured as an LRU, since they contain data (e.g. Sidekiq
 jobs) that is expected to be persistent.
 
