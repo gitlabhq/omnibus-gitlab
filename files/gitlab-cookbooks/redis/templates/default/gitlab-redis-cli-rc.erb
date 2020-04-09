@@ -1,0 +1,4 @@
+redis_dir='<%= node['redis']['dir'] %>'
+redis_host='<%= node['redis']['bind'] %>'
+redis_port='<%= node['redis']['port'] %>'
+redis_socket='<%= node['redis']['unixsocket'] if node['redis']['unixsocket'] %>'

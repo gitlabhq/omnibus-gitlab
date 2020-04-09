@@ -29,6 +29,22 @@ Using a native Docker install instead of Docker Toolbox is recommended in order 
 CAUTION: **Caution:**
 We do not officially support running on Docker for Windows. There are known issues with volume permissions, and potentially other unknown issues. If you are trying to run on Docker for Windows, please see our [getting help page](https://about.gitlab.com/get-help/) for links to community resources (IRC, forum, etc) to seek help from other users.
 
+## Set the installation folder
+
+Configure a new enviroment variable `$GITLAB_HOME` pointing to the folder where the configuration, logs and data files will reside. Ensure that the folder exists and appropriate permission have been granted.
+
+For Linux users set the path to `/srv`
+
+```bash
+export GITLAB_HOME=/srv
+```
+
+For Mac OS users, use the user's `$HOME` folder.
+
+```bash
+export GITLAB_HOME=$HOME
+```
+
 ## Run the image
 
 Run the image:
@@ -39,15 +55,15 @@ sudo docker run --detach \
   --publish 443:443 --publish 80:80 --publish 22:22 \
   --name gitlab \
   --restart always \
-  --volume /srv/gitlab/config:/etc/gitlab \
-  --volume /srv/gitlab/logs:/var/log/gitlab \
-  --volume /srv/gitlab/data:/var/opt/gitlab \
+  --volume $GITLAB_HOME/gitlab/config:/etc/gitlab \
+  --volume $GITLAB_HOME/gitlab/logs:/var/log/gitlab \
+  --volume $GITLAB_HOME/gitlab/data:/var/opt/gitlab \
   gitlab/gitlab-ce:latest
 ```
 
 This will download and start a GitLab CE container and publish ports needed to
 access SSH, HTTP and HTTPS. All GitLab data will be stored as subdirectories of
-`/srv/gitlab/`. The container will automatically `restart` after a system reboot.
+`$GITLAB_HOME/gitlab`. The container will automatically `restart` after a system reboot.
 
 You can now login to the web interface as explained in
 [After starting a container](#after-starting-a-container).
@@ -60,9 +76,9 @@ sudo docker run --detach \
   --publish 443:443 --publish 80:80 --publish 22:22 \
   --name gitlab \
   --restart always \
-  --volume /srv/gitlab/config:/etc/gitlab:Z \
-  --volume /srv/gitlab/logs:/var/log/gitlab:Z \
-  --volume /srv/gitlab/data:/var/opt/gitlab:Z \
+  --volume $GITLAB_HOME/gitlab/config:/etc/gitlab:Z \
+  --volume $GITLAB_HOME/gitlab/logs:/var/log/gitlab:Z \
+  --volume $GITLAB_HOME/gitlab/data:/var/opt/gitlab:Z \
   gitlab/gitlab-ce:latest
 ```
 
@@ -81,9 +97,9 @@ The GitLab container uses host mounted volumes to store persistent data:
 
 | Local location | Container location | Usage |
 | -------------- | ------------------ | ----- |
-| `/srv/gitlab/data`  | `/var/opt/gitlab` | For storing application data |
-| `/srv/gitlab/logs`  | `/var/log/gitlab` | For storing logs |
-| `/srv/gitlab/config`| `/etc/gitlab`     | For storing the GitLab configuration files |
+| `$GITLAB_HOME/gitlab/data`  | `/var/opt/gitlab` | For storing application data |
+| `$GITLAB_HOME/gitlab/logs`  | `/var/log/gitlab` | For storing logs |
+| `$GITLAB_HOME/gitlab/config`| `/etc/gitlab`     | For storing the GitLab configuration files |
 
 You can fine tune these directories to meet your requirements.
 
@@ -149,9 +165,9 @@ sudo docker run --detach \
   --publish 443:443 --publish 80:80 --publish 22:22 \
   --name gitlab \
   --restart always \
-  --volume /srv/gitlab/config:/etc/gitlab \
-  --volume /srv/gitlab/logs:/var/log/gitlab \
-  --volume /srv/gitlab/data:/var/opt/gitlab \
+  --volume $GITLAB_HOME/gitlab/config:/etc/gitlab \
+  --volume $GITLAB_HOME/gitlab/logs:/var/log/gitlab \
+  --volume $GITLAB_HOME/gitlab/data:/var/opt/gitlab \
   gitlab/gitlab-ce:latest
 ```
 
@@ -203,13 +219,15 @@ To upgrade GitLab to a new version you have to:
    --publish 443:443 --publish 80:80 --publish 22:22 \
    --name gitlab \
    --restart always \
-   --volume /srv/gitlab/config:/etc/gitlab \
-   --volume /srv/gitlab/logs:/var/log/gitlab \
-   --volume /srv/gitlab/data:/var/opt/gitlab \
+   --volume $GITLAB_HOME/gitlab/config:/etc/gitlab \
+   --volume $GITLAB_HOME/gitlab/logs:/var/log/gitlab \
+   --volume $GITLAB_HOME/gitlab/data:/var/opt/gitlab \
    gitlab/gitlab-ce:latest
    ```
 
 On the first run, GitLab will reconfigure and update itself.
+
+NOTE: **Note:** Refer to the GitLab version [Upgrade Recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations) when upgrading between major versions.
 
 ### Use tagged versions of GitLab
 
@@ -238,9 +256,9 @@ sudo docker run --detach \
   --publish 198.51.100.1:22:22 \
   --name gitlab \
   --restart always \
-  --volume /srv/gitlab/config:/etc/gitlab \
-  --volume /srv/gitlab/logs:/var/log/gitlab \
-  --volume /srv/gitlab/data:/var/opt/gitlab \
+  --volume $GITLAB_HOME/gitlab/config:/etc/gitlab \
+  --volume $GITLAB_HOME/gitlab/logs:/var/log/gitlab \
+  --volume $GITLAB_HOME/gitlab/data:/var/opt/gitlab \
   gitlab/gitlab-ce:latest
 ```
 
@@ -265,9 +283,9 @@ port `2289`:
      --publish 8929:8929 --publish 2289:22 \
      --name gitlab \
      --restart always \
-     --volume /srv/gitlab/config:/etc/gitlab \
-     --volume /srv/gitlab/logs:/var/log/gitlab \
-     --volume /srv/gitlab/data:/var/opt/gitlab \
+     --volume $GITLAB_HOME/gitlab/config:/etc/gitlab \
+     --volume $GITLAB_HOME/gitlab/logs:/var/log/gitlab \
+     --volume $GITLAB_HOME/gitlab/data:/var/opt/gitlab \
      gitlab/gitlab-ce:latest
    ```
 
@@ -357,9 +375,9 @@ Docker-based GitLab installation.
        - '443:443'
        - '22:22'
      volumes:
-       - '/srv/gitlab/config:/etc/gitlab'
-       - '/srv/gitlab/logs:/var/log/gitlab'
-       - '/srv/gitlab/data:/var/opt/gitlab'
+       - '$GITLAB_HOME/gitlab/config:/etc/gitlab'
+       - '$GITLAB_HOME/gitlab/logs:/var/log/gitlab'
+       - '$GITLAB_HOME/gitlab/data:/var/opt/gitlab'
    ```
 
 1. Make sure you are in the same directory as `docker-compose.yml` and run
@@ -385,9 +403,9 @@ web:
     - '8929:8929'
     - '2224:22'
   volumes:
-    - '/srv/gitlab/config:/etc/gitlab'
-    - '/srv/gitlab/logs:/var/log/gitlab'
-    - '/srv/gitlab/data:/var/opt/gitlab'
+    - '$GITLAB_HOME/gitlab/config:/etc/gitlab'
+    - '$GITLAB_HOME/gitlab/logs:/var/log/gitlab'
+    - '$GITLAB_HOME/gitlab/data:/var/opt/gitlab'
 ```
 
 This is the same as using `--publish 8929:8929 --publish 2224:22`.
@@ -423,9 +441,9 @@ Here's an example that deploys GitLab with four runners as a [stack](https://doc
          - "80:80"
          - "443:443"
        volumes:
-         - /srv/gitlab/data:/var/opt/gitlab
-         - /srv/gitlab/logs:/var/log/gitlab
-         - /srv/gitlab/config:/etc/gitlab
+         - $GITLAB_HOME/gitlab/data:/var/opt/gitlab
+         - $GITLAB_HOME/gitlab/logs:/var/log/gitlab
+         - $GITLAB_HOME/gitlab/config:/etc/gitlab
        environment:
          GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
        configs:
@@ -493,7 +511,7 @@ preserved correctly. There's script that fixes permissions for all files.
 To fix your container, simply execute `update-permissions` and restart the
 container afterwards:
 
-```
+```shell
 sudo docker exec gitlab update-permissions
 sudo docker restart gitlab
 ```
@@ -523,8 +541,8 @@ Docker Toolbox's boot2docker.
 If you are using file ACLs on the docker host, the `docker`[^1] group requires full access to the volumes in order for GitLab to work.
 
 ```bash
-$ getfacl /srv/gitlab
-# file: /srv/gitlab
+$ getfacl $GITLAB_HOME/gitlab
+# file: $GITLAB_HOME/gitlab
 # owner: XXXX
 # group: XXXX
 user::rwx
@@ -541,7 +559,7 @@ default:other::r-x
 If these are not correct, set them with:
 
 ```bash
-sudo setfacl -mR default:group:docker:rwx /srv/gitlab
+sudo setfacl -mR default:group:docker:rwx $GITLAB_HOME/gitlab
 ```
 
 [^1]: `docker` is the default group, if you've changed this, update your commands accordingly.

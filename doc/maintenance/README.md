@@ -6,7 +6,7 @@ The following commands can be run after installation.
 
 Run `sudo gitlab-ctl status`; the output should look like this:
 
-```
+```plaintext
 run: nginx: (pid 972) 7s; run: log: (pid 971) 7s
 run: postgresql: (pid 962) 7s; run: log: (pid 959) 7s
 run: redis: (pid 964) 7s; run: log: (pid 963) 7s
@@ -103,16 +103,8 @@ the user or the `RAILS_ENV` environment variable; this is taken care of by the
 
 ## Starting a Rails console session
 
-If you need access to a Rails production console for your GitLab installation
-you can start one with the command below. Please be warned that it is very easy
-to inadvertently modify, corrupt or destroy data from the console.
-
-```shell
-# start a Rails console for GitLab
-sudo gitlab-rails console
-```
-
-This will only work after you have run `gitlab-ctl reconfigure` at least once.
+This content has been moved to the
+[GitLab debugging tips documentation](https://docs.gitlab.com/ee/administration/troubleshooting/debug.html#starting-a-rails-console-session).
 
 ## Starting a PostgreSQL superuser psql session
 

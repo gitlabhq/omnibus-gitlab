@@ -28,7 +28,7 @@ name 'git'
 # - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/.gitlab-ci.yml
 # - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/system_check/app/git_version_check.rb
 # - https://gitlab.com/gitlab-org/build/CNG/blob/master/ci_files/variables.yml
-default_version '2.24.1'
+default_version '2.26.0'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -43,33 +43,19 @@ dependency 'pcre2'
 dependency 'libiconv'
 
 source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: 'ad5334956301c86841eb1e5b1bb20884a6bad89a10a6762c958220c7cf64da02'
+       sha256: 'aa168c2318e7187cd295a645f7370cc6d71a324aafc932f80f00c780b6a26bed'
 
 relative_path "git-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  # Patch series to Rewrite packfile reuse code
+  # Optionally add patches to apply to Git sources here, like this:
   #
-  # See https://github.com/chriscool/git/commits/gh-pack-reuse44
-  # And https://public-inbox.org/git/20191218112547.4974-1-chriscool@tuxfamily.org/
+  # patch source: 'v4-0001-builtin-pack-objects-report-reused-packfile-objec.patch'
+  # patch source: 'v4-0002-packfile-expose-get_delta_base.patch'
   #
-  # Hopefully the patch series will be merged into Git v2.26.0 and these patches
-  # won't be needed anymore.
-
-  patch source: 'v4-0001-builtin-pack-objects-report-reused-packfile-objec.patch'
-  patch source: 'v4-0002-packfile-expose-get_delta_base.patch'
-  patch source: 'v4-0003-ewah-bitmap-introduce-bitmap_word_alloc.patch'
-  patch source: 'v4-0004-pack-bitmap-introduce-bitmap_walk_contains.patch'
-  patch source: 'v4-0005-pack-bitmap-uninteresting-oid-can-be-outside-bitm.patch'
-  patch source: 'v4-0006-pack-bitmap-simplify-bitmap_has_oid_in_uninterest.patch'
-  patch source: 'v4-0007-csum-file-introduce-hashfile_total.patch'
-  patch source: 'v4-0008-pack-objects-introduce-pack.allowPackReuse.patch'
-  patch source: 'v4-0009-builtin-pack-objects-introduce-obj_is_packed.patch'
-  patch source: 'v4-0010-pack-objects-improve-partial-packfile-reuse.patch'
-  patch source: 'v4-0011-pack-objects-add-checks-for-duplicate-objects.patch'
-  patch source: 'v4-0012-pack-bitmap-don-t-rely-on-bitmap_git-reuse_object.patch'
+  # Patch files should be in config/patches/git/
 
   block do
     File.open(File.join(project_dir, 'config.mak'), 'a') do |file|

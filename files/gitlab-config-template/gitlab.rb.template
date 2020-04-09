@@ -332,6 +332,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Usage Statistics
 # gitlab_rails['usage_ping_enabled'] = true
 
+### Seat Link setting
+###! Docs: https://docs.gitlab.com/ee/subscriptions/index.html#seat-link
+# gitlab_rails['seat_link_enabled'] = true
+
 ### GitLab Mattermost
 ###! These settings are void if Mattermost is installed on the same omnibus
 ###! install
@@ -1335,10 +1339,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! { "receive" => ["fsckObjects = true"], "alias" => ["st = status", "co = checkout"] }
 
 # omnibus_gitconfig['system'] = {
-#  "pack" => ["threads = 1"],
+#  "pack" => ["threads = 1", "useSparse = true"],
 #  "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
 #  "repack" => ["writeBitmaps = true"],
 #  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
+#  "core" => [
+#    'alternateRefsCommand="exit 0 #"',
+#    "fsyncObjectFiles = true"
+#  ],
+#  "fetch" => ["writeCommitGraph = true"]
 # }
 
 ################################################################################

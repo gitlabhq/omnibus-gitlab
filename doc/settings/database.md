@@ -127,7 +127,7 @@ gitlab-rails dbconsole
 
 At startup, you should see a banner as the following:
 
-```
+```plaintext
 psql (9.6.5)
 SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: on)
 Type "help" for help.
@@ -141,7 +141,7 @@ SELECT * FROM pg_stat_ssl;
 
 For example:
 
-```
+```plaintext
 gitlabhq_production=> SELECT * FROM pg_stat_ssl;
   pid  | ssl | version |           cipher            | bits | compression | clientdn
 -------+-----+---------+-----------------------------+------+-------------+----------
@@ -225,7 +225,7 @@ over the network, several settings must be configured.
   above. This is not required if you are connecting to `127.0.0.1` and have configured
   `postgresql['trust_auth_cidr_addresses']` to include it.
 
-```
+```ruby
 gitlab_rails['db_host'] = '127.0.0.1'
 gitlab_rails['db_port'] = 5432
 gitlab_rails['db_username'] = "gitlab"
@@ -326,7 +326,7 @@ The length of time depends on the size of your database.
 If you would rather avoid downtime, it is possible to upgrade to a new database using [Slony](https://www.slony.info/).
 Please see our [guide](https://docs.gitlab.com/ee/update/upgrading_postgresql_using_slony.html) on how to perform the upgrade.
 
-Once you have confirmed that the the above checklist is satisfied,
+Once you have confirmed that the above checklist is satisfied,
 you can proceed.
 To perform the upgrade, run the command:
 
@@ -356,7 +356,7 @@ Once this step is complete, verify everything is working as expected.
 **Once you have verified that your GitLab instance is running correctly**,
 you can clean up the old database files with:
 
-```
+```shell
 sudo rm -rf /var/opt/gitlab/postgresql/data.<old_version>
 sudo rm -f /var/opt/gitlab/postgresql-version.old
 ```
@@ -536,7 +536,7 @@ both the root and intermediate certificates.
 
 ### Backup and restore a non-packaged PostgreSQL database
 
-When using the [rake backup create and restore task][rake-backup], GitLab will
+When using the [Rake backup create and restore task][rake-backup], GitLab will
 attempt to use the packaged `pg_dump` command to create a database backup file
 and the packaged `psql` command to restore a backup. This will only work if
 they are the correct versions. Check the versions of the packaged `pg_dump` and
@@ -563,7 +563,7 @@ these steps, using the correct path to the location you installed the new tools:
 
 1. Check the versions:
 
-   ```
+   ```shell
    /opt/gitlab/bin/pg_dump --version
    /opt/gitlab/bin/psql --version
    ```
@@ -611,7 +611,7 @@ gitlab_rails['initial_shared_runners_registration_token'] = 'token'
 
 If you see errors similar to the following in your `production/sidekiq` log:
 
-```
+```plaintext
 ActiveRecord::StatementInvalid PG::TRSerializationFailure: ERROR:  could not serialize access due to concurrent update
 ```
 

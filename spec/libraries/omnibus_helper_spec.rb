@@ -97,6 +97,34 @@ describe OmnibusHelper do
         expect(subject.service_enabled?('another_service')).to be_falsey
       end
     end
+
+    context 'sidekiq-cluster service migration' do
+      context 'when sidekiq-cluster is enabled through the old configuration' do
+        before do
+          chef_run.node.normal['gitlab']['sidekiq-cluster']['enable'] = true
+          chef_run.node.normal['gitlab']['sidekiq']['enable'] = true
+          chef_run.node.normal['gitlab']['sidekiq']['cluster'] = false
+        end
+
+        it 'reports both sidekiq and sidekiq-cluster as enabled' do
+          expect(subject.service_enabled?('sidekiq')).to be_truthy
+          expect(subject.service_enabled?('sidekiq-cluster')).to be_truthy
+        end
+      end
+
+      context 'when sidekiq-cluster is enabled through the sidekiq configuration' do
+        before do
+          chef_run.node.normal['gitlab']['sidekiq']['enable'] = false
+          chef_run.node.normal['gitlab']['sidekiq-cluster']['enable'] = true
+          chef_run.node.normal['gitlab']['sidekiq']['cluster'] = true
+        end
+
+        it 'reports only the sidekiq service as enabled' do
+          expect(subject.service_enabled?('sidekiq')).to be_truthy
+          expect(subject.service_enabled?('sidekiq-cluster')).to be_falsy
+        end
+      end
+    end
   end
 
   describe '#is_managed_and_offline?' do
@@ -301,6 +329,22 @@ describe OmnibusHelper do
           described_class.check_locale
         end
       end
+    end
+  end
+
+  describe '#sidekiq_cluster_name' do
+    let(:chef_run) { converge_config }
+
+    it "returns 'sidekiq' if the service was enabled through sidekiq configuration" do
+      stub_gitlab_rb(sidekiq: { cluster: true })
+
+      expect(subject.sidekiq_cluster_service_name).to eq('sidekiq')
+    end
+
+    it "returns 'sidekiq-cluster' if the service was enabled through old configuration" do
+      stub_gitlab_rb(sidekiq_cluster: { enable: true, queue_groups: ['*'] })
+
+      expect(subject.sidekiq_cluster_service_name).to eq('sidekiq-cluster')
     end
   end
 end

@@ -44,7 +44,7 @@ $ sudo rpm --import /tmp/omnibus_gitlab_gpg.key
 #### Fetching new keys after 2020-04-06
 
 To fetch the latest repository signing key, users can run the `curl` command
-used to add GitLab repository, as mentioned in the [install page](https://about.gitlab.com/install),
+used to add GitLab repository, as mentioned in the [install page](https://about.gitlab.com/install/),
 again. It will fetch the new key and add it to the user's keyring.
 
 Or, users can manually fetch and add the new key using the following commands
@@ -98,14 +98,14 @@ The simplest method of checking if package signature checking is active on an ex
 - Check if the repository file exist: `file /etc/yum.repos.d/gitlab_gitlab-ce.repo`
 - Check that signature checking is active: `grep gpgcheck /etc/yum.repos.d/gitlab_gitlab-ce.repo` should output
 
-  ```
+  ```plaintext
   repo_gpgcheck=1
   gpgcheck=1
   ```
 
   or
 
-  ```
+  ```plaintext
   repo_gpgcheck=1
   pkg_gpgcheck=1
   ```
@@ -120,44 +120,44 @@ The `rpm` tool and related package managers (`yum`,`zypper`) directly support th
 
 1. Enable GPG checking of the packages
 
-   ```
-   # sed -i'' 's/^gpgcheck=0/gpgcheck=1/' /etc/yum.repos.d/gitlab_gitlab-ce.repo
+   ```shell
+   sudo sed -i'' 's/^gpgcheck=0/gpgcheck=1/' /etc/yum.repos.d/gitlab_gitlab-ce.repo
    ```
 
 1. Add the package signing public key to the `gpgkey` list:
    Edit `/etc/yum.repos.d/gitlab_gitlab-ce.repo`, changing `gpgkey` to read:
 
-   ```
+   ```plaintext
    gpgkey=https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey
            https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
    ```
 
 1. Tell `yum` to refresh the cache for the repository
 
-   ```
-   # yum -q makecache -y --disablerepo='*' --enablerepo='gitlab_gitlab-ce'
+   ```shell
+   sudo yum -q makecache -y --disablerepo='*' --enablerepo='gitlab_gitlab-ce'
    ```
 
 ##### Zypper (SuSE/SLES)
 
 1. Enable GPG checking of the packages
 
-   ```
-   # sed -i'' 's/pkg_gpgcheck=0/pkg_gpgcheck=1/' /etc/zypp/repos.d/gitlab_gitlab-ce.repo
+   ```shell
+   sudo sed -i'' 's/pkg_gpgcheck=0/pkg_gpgcheck=1/' /etc/zypp/repos.d/gitlab_gitlab-ce.repo
    ```
 
 1. Add the package signing public key to the `gpgkey` list:
    Edit `/etc/zypp/repos.d/gitlab_gitlab-ce.repo`, changing `gpgkey` to read:
 
-   ```
+   ```plaintext
    gpgkey=https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey
            https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
    ```
 
 1. Tell `zypper` to refresh the repository and import the keys
 
-   ```
-   # zypper --gpg-auto-import-keys refresh gitlab_gitlab-ce
+   ```shell
+   sudo zypper --gpg-auto-import-keys refresh gitlab_gitlab-ce
    ```
 
 #### Manual Verification
@@ -212,7 +212,7 @@ Configuring a policy and keyring for `debsigs` can be complicated, so GitLab pro
 
 To use this script, you will need to download the public key and the script.
 
-```
+```shell
 curl -JLO  https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 curl -JLO https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/scripts/gitlab-debsigs.sh
 chmod +x gitlab-debsigs.sh

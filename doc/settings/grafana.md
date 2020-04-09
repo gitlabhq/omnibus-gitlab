@@ -16,7 +16,7 @@ GitLab SSO is available by default. However, to access the admin account, you
 need to enable login using username/password. For that, add the following line
 to `/etc/gitlab/gitlab.rb` file and [reconfigure]:
 
-```
+```ruby
 grafana['disable_login_form'] = false
 ```
 
@@ -31,7 +31,7 @@ Also, to access the admin account, you have to [enable login using username and 
 To specify an admin password, add the following line to `/etc/gitlab/gitlab.rb`
 file and [reconfigure]:
 
-```
+```ruby
 grafana['admin_password'] = 'foobar'
 ```
 

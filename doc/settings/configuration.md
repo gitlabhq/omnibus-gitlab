@@ -379,7 +379,7 @@ In order to move an existing home directory, GitLab services will need to be sto
 
 1. Stop GitLab
 
-   ```
+   ```shell
    gitlab-ctl stop
    ```
 
@@ -398,13 +398,13 @@ In order to move an existing home directory, GitLab services will need to be sto
 
 1. Change the home directory. If you had existing data you will need to manually copy/rsync it to these new locations.
 
-   ```
+   ```shell
    usermod -d /path/to/home USER
    ```
 
 1. Change the configuration setting in your `gitlab.rb`
 
-   ```
+   ```ruby
    user['home'] = "/var/opt/custom-gitlab"
    ```
 
@@ -423,14 +423,14 @@ In order to move an existing home directory, GitLab services will need to be sto
 
 1. Run a reconfigure
 
-   ```
+   ```shell
    gitlab-ctl reconfigure
    ```
 
 If the runnit service is not stopped and the home directories are not manually
 moved for the user, GitLab will encounter an error while reconfiguring:
 
-```
+```plaintext
 account[GitLab user and group] (gitlab::users line 28) had an error: Mixlib::ShellOut::ShellCommandFailed: linux_user[GitLab user and group] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/package/resources/account.rb line 51) had an error: Mixlib::ShellOut::ShellCommandFailed: Expected process to exit with [0], but received '8'
 ---- Begin output of ["usermod", "-d", "/var/opt/gitlab", "git"] ----
 STDOUT:
@@ -519,7 +519,7 @@ runtime directory.
 During `reconfigure`, package will check if `/run` is a `tmpfs` mount.
 If it is not, warning will be printed:
 
-```
+```plaintext
 Runtime directory '/run' is not a tmpfs mount.
 ```
 
@@ -527,7 +527,7 @@ and Rails metrics will be disabled.
 
 To enable Rails metrics again, create a `tmpfs` mount and specify it in `/etc/gitlab/gitlab.rb`:
 
-```
+```ruby
 runtime_dir '/path/to/tmpfs'
 ```
 

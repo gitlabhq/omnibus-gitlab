@@ -4,9 +4,9 @@
 
 Prometheus supports reading and writing to remote services.
 
-To configure a remote remote read or write service, you can include the following in `gitlab.rb`.
+To configure a remote read or write service, you can include the following in `gitlab.rb`.
 
-```
+```ruby
 prometheus['remote_write'] = [
   {
     url: 'https://some-remote-write-service.example.com',
@@ -38,13 +38,13 @@ To override the default rules, you can change the default list in `gitlab.rb.`.
 
 No rules:
 
-```
+```ruby
 prometheus['rules_files'] = []
 ```
 
 Custom list:
 
-```
+```ruby
 prometheus['rules_files'] = ['/path/to/rules/*.rules', '/path/to/single/file.rules']
 ```
 
@@ -56,7 +56,7 @@ Additional metrics collectors are enabled by default. For example, `mountstats` 
 
 To disable the `mountstats` collector, adjust `gitlab.rb` with the following setting and run `gitlab-ctl reconfigure`:
 
-```
+```ruby
 node_exporter['flags'] = {
   'collector.mountstats' => false,
 }

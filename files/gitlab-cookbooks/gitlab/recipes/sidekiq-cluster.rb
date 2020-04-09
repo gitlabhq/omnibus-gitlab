@@ -15,9 +15,10 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
-log_directory = node['gitlab']['sidekiq-cluster']['log_directory']
+service = OmnibusHelper.new(node).sidekiq_cluster_service_name
 
-metrics_dir = File.join(node['gitlab']['runtime-dir'].to_s, 'gitlab/sidekiq-cluster') unless node['gitlab']['runtime-dir'].nil?
+log_directory = node['gitlab']['sidekiq-cluster']['log_directory']
+metrics_dir = File.join(node['gitlab']['runtime-dir'].to_s, "gitlab/#{service}") unless node['gitlab']['runtime-dir'].nil?
 
 directory log_directory do
   owner account_helper.gitlab_user
@@ -25,7 +26,12 @@ directory log_directory do
   recursive true
 end
 
-runit_service 'sidekiq-cluster' do
+# The service wrapping `sidekiq-cluster` will be called `sidekiq` in case it was
+# enabled from the `sidekiq` configuration.
+#
+# This indirection will be removed once sidekiq-cluster becomes the only way to
+# start sidekiq in omnibus: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/240
+runit_service service do
   down node['gitlab']['sidekiq-cluster']['ha']
   template_name 'sidekiq-cluster'
   options({
@@ -41,5 +47,14 @@ end
 if node['gitlab']['bootstrap']['enable']
   execute "/opt/gitlab/bin/gitlab-ctl start sidekiq-cluster" do
     retries 20
+  end
+end
+
+if service != 'sidekiq-cluster'
+  # The service that's being started is called sidekiq, disable `sidekiq-cluster`
+  # if it was still running. We don't allow cluster configuration through sidekiq
+  # in combination with a `sidekiq-cluster` service.
+  runit_service 'sidekiq-cluster' do
+    action :disable
   end
 end

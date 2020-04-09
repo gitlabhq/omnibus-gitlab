@@ -1,6 +1,5 @@
 #
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
-# Copyright:: Copyright (c) 2014 GitLab.com
+# Copyright:: Copyright (c) 2020 GitLab Inc
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-redis_service do
-  socket_group AccountHelper.new(node).gitlab_group
-end
-
-template "/opt/gitlab/etc/gitlab-redis-cli-rc" do
-  owner 'root'
-  group 'root'
+# ReLoad all sysctl settings
+execute "reload all sysctl conf" do
+  command "sysctl -e --system"
+  action :nothing
 end

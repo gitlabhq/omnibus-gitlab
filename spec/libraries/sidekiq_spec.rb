@@ -85,5 +85,14 @@ describe Sidekiq do
 
       expect { chef_run }.to raise_error(/Sidekiq cluster configured/)
     end
+
+    it 'does nothing when sidekiq was explicitly disabled' do
+      stub_gitlab_rb(
+        { sidekiq: { enable: false, cluster: true } }
+      )
+
+      expect(chef_run.node['gitlab']['sidekiq']['enable']).to eq(false)
+      expect(chef_run.node['gitlab']['sidekiq-cluster']['enable']).to eq(false)
+    end
   end
 end
