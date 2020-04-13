@@ -17,6 +17,8 @@ account_helper = AccountHelper.new(node)
 postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
 
+include_recipe 'postgresql::directory_locations'
+
 account "Postgresql user and group" do
   username postgresql_username
   uid node['postgresql']['uid']
