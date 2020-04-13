@@ -29,15 +29,10 @@ pg_helper = PgHelper.new(node)
 
 include_recipe 'postgresql::user'
 
-[
-  node['postgresql']['dir'],
-  node['postgresql']['home']
-].each do |dir|
-  directory dir do
-    owner postgresql_username
-    mode "0755"
-    recursive true
-  end
+directory node['postgresql']['dir'] do
+  owner postgresql_username
+  mode "0755"
+  recursive true
 end
 
 [
@@ -54,14 +49,6 @@ end
 link postgresql_data_dir_symlink do
   to node['postgresql']['data_dir']
   not_if { node['postgresql']['data_dir'] == postgresql_data_dir_symlink }
-end
-
-file File.join(node['postgresql']['home'], ".profile") do
-  owner postgresql_username
-  mode "0600"
-  content <<-EOH
-PATH=#{node['postgresql']['user_path']}
-  EOH
 end
 
 include_recipe "package::sysctl"

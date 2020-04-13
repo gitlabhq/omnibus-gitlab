@@ -27,3 +27,17 @@ account "Postgresql user and group" do
   home node['postgresql']['home']
   manage node['gitlab']['manage-accounts']['enable']
 end
+
+directory node['postgresql']['home'] do
+  owner postgresql_username
+  mode "0755"
+  recursive true
+end
+
+file File.join(node['postgresql']['home'], ".profile") do
+  owner postgresql_username
+  mode "0600"
+  content <<-EOH
+PATH=#{node['postgresql']['user_path']}
+  EOH
+end
