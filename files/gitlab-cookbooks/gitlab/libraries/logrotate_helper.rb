@@ -24,7 +24,7 @@ class LogrotateHelper < AccountHelper
     # to add a service here.
     # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4606
     {
-      'alertmanager' => { username: prometheus_user, group: 'root' },
+      'alertmanager' => { username: prometheus_user, group: prometheus_user },
       'consul' => { username: consul_user, group: consul_group },
       'crond' => { username: 'root', group: 'root' },
       'geo-logcursor' => { username: gitlab_user, group: gitlab_group },
@@ -39,7 +39,7 @@ class LogrotateHelper < AccountHelper
       'logrotate' => { username: 'root', group: 'root' },
       'mailroom' => { username: gitlab_user, group: gitlab_group },
       'mattermost' => { username: mattermost_user, group: mattermost_group },
-      'nginx' => { username: 'root', group: web_server_group },
+      'nginx' => { username: 'root', group: 'root' },
       'node-exporter' => { username: prometheus_user, group: prometheus_group },
       'pgbouncer' => { username: postgresql_user, group: postgresql_group },
       'pgbouncer-exporter' => { username: postgresql_user, group: postgresql_group },
