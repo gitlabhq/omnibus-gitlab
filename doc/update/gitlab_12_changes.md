@@ -124,3 +124,9 @@ manually upgrade to 11.7 following the [upgrade docs](../settings/database.md#up
 [Puma](https://github.com/puma/puma) is now available as an alternative web server to Unicorn.
 If you are migrating from Unicorn, refer to [converting Unicorn settings to Puma](../settings/puma.md#converting-unicorn-settings-to-puma)
 to make sure your web server settings carry over correctly.
+
+### 12.10
+
+PostgreSQL 11.7 is now the default included database used for fresh installs. 
+Upgrades will continue to use 10.12, but users can manually upgrade to 11.7
+following the [upgrade docs](../settings/database.md#upgrade-packaged-postgresql-server).

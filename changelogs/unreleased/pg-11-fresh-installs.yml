@@ -1,0 +1,5 @@
+---
+title: Default to PG 11 for fresh installs
+merge_request: 4099
+author:
+type: changed

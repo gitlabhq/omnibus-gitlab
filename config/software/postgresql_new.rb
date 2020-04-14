@@ -36,9 +36,6 @@ end
 
 # PostgreSQL 10 and up should have a major version of 10, not 10.0.
 # See: https://www.postgresql.org/support/versioning
-#
-# Be sure to update files/gitlab-cookbooks/postgresql/recipes/enable.rb when
-# upgrading.
 major_version = '11'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
@@ -60,6 +57,12 @@ build do
 
   make "world -j #{workers}", env: env
   make 'install-world', env: env
+
+  block 'link bin files' do
+    Dir.glob("#{prefix}/bin/*").each do |bin_file|
+      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
+    end
+  end
 end
 
 # exclude headers and static libraries from package
