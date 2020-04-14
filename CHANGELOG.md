@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.9.3 (2020-04-14)
+
+### Fixed (1 change)
+
+- Upgrade to OpenSSL v1.1.1f. !4087
+
+
 ## 12.9.2 (2020-03-31)
 
 ### Fixed (1 change)
