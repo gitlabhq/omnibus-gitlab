@@ -24,7 +24,7 @@ skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
 
-source url: "https://ftp.openbsd.org/pub/OpenBSD/distfiles/popt-#{version}.tar.gz",
+source url: "https://ftp.osuosl.org/pub/blfs/conglomeration/popt/popt-#{version}.tar.gz",
        md5: '3743beefa3dd6247a73f8f7a32c14c33'
 
 relative_path "popt-#{version}"
