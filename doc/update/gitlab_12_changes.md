@@ -127,6 +127,6 @@ to make sure your web server settings carry over correctly.
 
 ### 12.10
 
-PostgreSQL 11.7 is now the default included database used for fresh installs. 
+PostgreSQL 11.7 is now the default included database used for fresh installs.
 Upgrades will continue to use 10.12, but users can manually upgrade to 11.7
 following the [upgrade docs](../settings/database.md#upgrade-packaged-postgresql-server).
