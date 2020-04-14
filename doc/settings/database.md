@@ -795,6 +795,12 @@ replication user's password.
    Or manually upgrade PostgreSQL, run on the Geo **secondary database** and
    also on the **tracking database**:
 
+   NOTE: **Note:**
+   Please wait for the **primary database** to finish upgrading before
+   beginning this step, so the secondary can remain ready as a backup.
+   Afterward, you can upgrade the **tracking database** in parallel with the
+   **secondary database**.
+
    ```shell
    sudo gitlab-ctl pg-upgrade
    ```
