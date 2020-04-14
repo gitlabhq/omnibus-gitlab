@@ -28,6 +28,8 @@ skip_transitive_dependency_licensing true
 
 arch, sha = if ohai['platform'] == 'debian' && /armv/.match?(ohai['kernel']['machine'])
               %w[armv7 9a4d26bc6c87b9d973e3b6225c254cf1056d3ab8170cde096a7d76ed349c921f]
+            elsif /aarch64/.match?(ohai['kernel']['machine'])
+              %w[arm64 86ead48d7f1f4a5ec04b2d5544425a9d7657c731e66d3722b5a301ddb60f4923]
             else
               %w[amd64 0104bfe14444cea2fa3f021b9a75fc78f66434f2ca8f3d0bdd422d108ce682e7]
             end
