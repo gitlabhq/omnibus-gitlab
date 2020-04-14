@@ -745,7 +745,8 @@ because it requires re-initializing PostgreSQL replication to Geo
 **secondaries**. This is due to the way PostgreSQL streaming replication works.
 Re-initializing replication copies all data from the primary again, so it can
 take a long time depending mostly on the size of the database and available
-bandwidth. See
+bandwidth. For example, at a transfer speed of 30 Mbps, and a database size of
+100 GB, resynchronization could take approximately 8 hours. See
 [PostgreSQL documentation](https://www.postgresql.org/docs/current/pgupgrade.html)
 for more.
 
