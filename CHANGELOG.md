@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.9.3 (2020-04-14)
+
+### Fixed (1 change)
+
+- Upgrade to OpenSSL v1.1.1f. !4087
+
+
 ## 12.9.2 (2020-03-31)
 
 ### Fixed (1 change)
@@ -62,6 +69,13 @@ omnibus-gitlab repository.
 - Use the updated gitlab-depscan tool that allows whitelisting CVEs. !3947
 - Modify mail_room to output crash logs as json. !3960
 - Update Mattermost to 5.20.1.
+
+
+## 12.8.9 (2020-04-14)
+
+### Fixed (1 change)
+
+- Upgrade to OpenSSL v1.1.1f. !4088
 
 
 ## 12.8.7 (2020-03-16)
@@ -137,6 +151,13 @@ omnibus-gitlab repository.
 - Bump PostgreSQL versions to 9.6.17, 10.12, and 11.7. !3933
 - Upgrade Mattermost to 5.19.1.
 - Update Mattermost to 5.18.1.
+
+
+## 12.7.9 (2020-04-14)
+
+### Fixed (1 change)
+
+- Upgrade to OpenSSL v1.1.1f. !4089
 
 
 ## 12.7.8 (2020-03-26)
