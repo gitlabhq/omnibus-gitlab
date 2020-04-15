@@ -300,6 +300,10 @@ When you reconfigure, there are common scenarios under which Let's Encrypt may f
 
 You can test your domain using the [Let's Debug](https://letsdebug.net/) diagnostic tool. It can help you figure out why you can't issue a Let's Encrypt certificate.
 
+### Additional troubleshooting
+
+For additional troubleshooting steps, see [Troubleshooting SSL](https://docs.gitlab.com/ee/administration/troubleshooting/ssl.html).
+
 ## Details on how GitLab and SSL work
 
 GitLab-Omnibus includes its own library of OpenSSL and links all compiled
