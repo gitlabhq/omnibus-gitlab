@@ -1,5 +1,0 @@
-#!<%= install_dir %>/embedded/bin/ruby --disable-gems
-# Fix the PATH so that gitlab-shell can find git-upload-pack and friends.
-ENV['PATH'] = '<%= install_dir %>/bin:<%= install_dir %>/embedded/bin:' + ENV['PATH']
-
-<%= script %>

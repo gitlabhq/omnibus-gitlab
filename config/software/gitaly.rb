@@ -58,6 +58,19 @@ build do
 
   make "install PREFIX=#{install_dir}/embedded", env: env
 
+  block 'disable RubyGems in gitlab-shell hooks' do
+    hooks_source_dir = File.join(ruby_build_dir, "gitlab-shell", "hooks")
+    hooks_dest_dir = File.join(ruby_install_dir, "gitlab-shell", "hooks")
+    env_shebang = '#!/usr/bin/env ruby'
+    `grep -r -l '^#{env_shebang}' #{hooks_source_dir}`.split("\n").each do |ruby_script|
+      script = File.read(ruby_script)
+      erb dest: ruby_script.sub(hooks_source_dir, hooks_dest_dir),
+          source: 'gitlab_shell_hooks_wrapper.erb',
+          mode: 0755,
+          vars: { script: script, install_dir: install_dir }
+    end
+  end
+
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
   copy "license.csv", "#{install_dir}/licenses/gitaly.csv"
 end
