@@ -167,7 +167,7 @@ be retained by setting the following in `/etc/gitlab/gitlab.rb` and then
 running `gitlab-ctl reconfigure` afterward:
 
 ```ruby
-gitaly['logging_format'] = 'default'
+gitaly['logging_format'] = ''
 gitlab_shell['log_format'] = nil
 gitlab_workhorse['log_format'] = nil
 registry['log_formatter'] = 'text'
