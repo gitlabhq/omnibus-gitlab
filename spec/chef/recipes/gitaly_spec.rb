@@ -42,6 +42,14 @@ describe 'gitaly' do
     }
   end
 
+  let(:gitlab_url) { 'http://localhost:3000' }
+  let(:custom_hooks_dir) { '/path/to/custom/hooks' }
+  let(:user) { 'user123' }
+  let(:password) { 'password321' }
+  let(:ca_file) { '/path/to/ca_file' }
+  let(:ca_path) { '/path/to/ca_path' }
+  let(:self_signed_cert) { true }
+  let(:read_timeout) { 123 }
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
@@ -149,6 +157,18 @@ describe 'gitaly' do
           open_files_ulimit: open_files_ulimit,
           ruby_rugged_git_config_search_path: ruby_rugged_git_config_search_path
         },
+        gitlab_shell: {
+          gitlab_url: gitlab_url,
+          custom_hooks_dir: custom_hooks_dir,
+          http_settings: {
+            read_timeout: read_timeout,
+            user: user,
+            password: password,
+            ca_file: ca_file,
+            ca_path: ca_path,
+            self_signed_cert: self_signed_cert
+          }
+        },
         user: {
           username: 'foo',
           group: 'bar'
@@ -192,6 +212,20 @@ describe 'gitaly' do
         %r{num_workers = #{ruby_num_workers}},
       ].map(&:to_s).join('\s+'))
 
+      gitlab_shell_section = Regexp.new([
+        %r{\[gitlab-shell\]},
+        %r{dir = "/opt/gitlab/embedded/service/gitlab-shell"},
+        %r{gitlab_url = '#{Regexp.escape(gitlab_url)}'},
+        %r{custom_hooks_dir = '#{Regexp.escape(custom_hooks_dir)}'},
+        %r{\[gitlab-shell.http-settings\]},
+        %r{read_timeout = #{read_timeout}},
+        %r{user = '#{Regexp.escape(user)}'},
+        %r{password = '#{Regexp.escape(password)}'},
+        %r{ca_file = '#{Regexp.escape(ca_file)}'},
+        %r{ca_path = '#{Regexp.escape(ca_path)}'},
+        %r{self_signed_cert = #{self_signed_cert}},
+      ].map(&:to_s).join('\s+'))
+
       expect(chef_run).to render_file(config_path).with_content { |content|
         expect(content).to include("tls_listen_addr = 'localhost:8888'")
         expect(content).to include("certificate_path = '/path/to/cert.pem'")
@@ -203,6 +237,7 @@ describe 'gitaly' do
         expect(content).to match(%r{\[auth\]\s+token = '#{Regexp.escape(auth_token)}'\s+transitioning = true})
         expect(content).to match(gitaly_ruby_section)
         expect(content).to match(%r{\[git\]\s+catfile_cache_size = 50})
+        expect(content).to match(gitlab_shell_section)
       }
     end
 
