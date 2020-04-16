@@ -752,12 +752,12 @@ for more.
 
 #### Disabling automatic PostgreSQL upgrades
 
-From GitLab 12.1, GitLab package upgrades automatically try to
-upgrade PostgreSQL to the current default version. From GitLab 12.1 to GitLab
-12.9, the default version of PostgreSQL is 10.x.
+From GitLab 12.1 through GitLab 12.9, GitLab package upgrades automatically try
+to upgrade PostgreSQL to version 10.x. In GitLab 12.10+, upgrades of PostgreSQL do not happen automatically when using Geo.
 
-We strongly recommend disabling automatic upgrades of PostgreSQL and
-manually upgrading PostgreSQL separately from upgrading the GitLab package.
+Before upgrading to GitLab 12.1 through GitLab 12.9, we strongly recommend
+disabling automatic upgrades of PostgreSQL and manually upgrading PostgreSQL
+separately from upgrading the GitLab package to avoid any unintended downtime.
 
 You can disable automatic upgrades of PostgreSQL by running the following on
 all nodes running `postgresql` or `geo-postgresql`:
@@ -765,9 +765,6 @@ all nodes running `postgresql` or `geo-postgresql`:
 ```shell
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
-
-To avoid any unintended downtime, regardless of your GitLab upgrade approach,
-consider creating the above file on all nodes.
 
 #### How to upgrade PostgreSQL when using Geo
 
@@ -784,8 +781,8 @@ replication user's password.
 1. Gather the replication user's password. It was set while setting up Geo in
    [Step 1. Configure the primary server](https://docs.gitlab.com/ee/administration/geo/replication/database.html#step-1-configure-the-primary-server).
 
-1. Upgrade the `gitlab-ee` package on the Geo primary nodes.
-   Or to manually upgrade PostgreSQL, run on the Geo primary's database node:
+1. Manually upgrade PostgreSQL on the Geo primary. Run on the Geo primary's
+   database node:
 
    ```shell
    sudo gitlab-ctl pg-upgrade
@@ -794,9 +791,8 @@ replication user's password.
    NOTE: **Note:**
    As of GitLab 12.8, you can opt into upgrading PostgreSQL 11 with `pg-upgrade -V 11`
 
-1. Upgrade the `gitlab-ee` package on the Geo secondary servers.
-   Or manually upgrade PostgreSQL, run on the Geo **secondary database** and
-   also on the **tracking database**:
+1. Manually upgrade PostgreSQL on the Geo secondaries. Run on the Geo
+   **secondary database** and also on the **tracking database**:
 
    NOTE: **Note:**
    Please wait for the **primary database** to finish upgrading before
