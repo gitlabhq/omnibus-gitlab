@@ -1,0 +1,5 @@
+---
+title: Skip pg-upgrade during update of Geo nodes
+merge_request: 4113
+author:
+type: changed
