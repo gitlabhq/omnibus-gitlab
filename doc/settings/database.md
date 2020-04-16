@@ -750,7 +750,9 @@ bandwidth. For example, at a transfer speed of 30 Mbps, and a database size of
 [PostgreSQL documentation](https://www.postgresql.org/docs/current/pgupgrade.html)
 for more.
 
-Furthermore, as of GitLab 12.1, GitLab package upgrades automatically try to
+#### Disabling automatic PostgreSQL upgrades
+
+From GitLab 12.1, GitLab package upgrades automatically try to
 upgrade PostgreSQL to the current default version. From GitLab 12.1 to GitLab
 12.9, the default version of PostgreSQL is 10.x.
 
