@@ -133,6 +133,7 @@ supported PostgreSQL version will be 11. In order to upgrade to GitLab 13.0, you
 already using a PostgreSQL 11 database.
 
 PostgreSQL will automatically be upgraded to 11.x except for the following cases:
+
 - you are running the database in high_availability using repmgr.
 - your database nodes are part of GitLab Geo configuration.
 - you have specifically opted out using the `/etc/gitlab/disable-postgresql-upgrade` file outlined below.

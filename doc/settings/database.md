@@ -371,6 +371,7 @@ The default PostgrSQL version is set to 11.x, and an automatic upgrade of the
 database is done on package upgrades for installs with a single database node.
 
 The automatic upgrade is skipped in any of the following cases:
+
 - you are running the database in high_availability using repmgr.
 - your database nodes are part of GitLab Geo configuration.
 - you have specifically opted out using the `/etc/gitlab/disable-postgresql-upgrade` file outlined above.
