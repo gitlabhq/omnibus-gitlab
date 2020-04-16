@@ -65,7 +65,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     print_upgrade_and_exit
   end
 
-  if postgresql_upgrade_disabled? || geo_detected?
+  if postgresql_upgrade_disabled? || geo_detected? || repmgr_detected?
     log ''
     log '==='
     log 'Skipping automatic PostgreSQL upgrade'
@@ -295,9 +295,15 @@ def geo_detected?
   (GitlabCtl::Util.roles(base_path) & %w[geo-primary geo-secondary]).any? || service_enabled?('geo-postgresql')
 end
 
+def repmgr_detected?
+  service_enabled?('repmgrd')
+end
+
 def pg_upgrade_doc_url
   if geo_detected?
     'https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-geo-instance'
+  elsif repmgr_detected?
+    'https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-gitlab-ha-cluster'
   else
     'https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
   end
