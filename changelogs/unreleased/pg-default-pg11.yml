@@ -1,5 +1,5 @@
 ---
-title: Default to pg11 in GitLab 12.10
+title: Set PG 11 as the default for pg-upgrade, and update automatically
 merge_request: 4046
 author:
 type: changed
