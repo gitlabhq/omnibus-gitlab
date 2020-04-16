@@ -18,7 +18,7 @@ Thus you have two options for database servers to use with Omnibus GitLab:
 Omnibus automatically enables SSL on the PostgreSQL server, but it will accept
 both encrypted and unencrypted connections by default. Enforcing SSL requires
 using the `hostssl` configuration in `pg_hba.conf`. See
-<https://www.postgresql.org/docs/9.6/auth-pg-hba-conf.html>
+<https://www.postgresql.org/docs/11/auth-pg-hba-conf.html>
 for more details.
 
 SSL support depends on a number of files:
@@ -378,12 +378,6 @@ command has to be passed with a version argument (`-V` or `--target-version`)
 ```shell
 sudo gitlab-ctl pg-upgrade -V 11
 ```
-
-NOTE: **Note:**
-We **DO NOT** recommend updating to PostgreSQL 11.x on GitLab instances making use of
-GitLab Geo for replication, as we have not yet completed PostgreSQL 11 testing with GitLab
-Geo. We will be [completing this work](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4975)
-in a future release.
 
 #### GitLab 12.0 and later
 

@@ -917,3 +917,16 @@ send a test email:
 ```ruby
 Notify.test_email('destination_email@address.com', 'Message Subject', 'Message Body').deliver_now
 ```
+
+## Disable all outgoing email
+
+NOTE: **Note:**
+This will disable **all** outgoing email from your GitLab instance, including but not limited to notification emails, direct mentions, and password reset emails.
+
+In order to disable **all** outgoing email, you can edit or add the following line to `/etc/gitlab/gitlab.rb`:
+
+```ruby
+gitlab_rails['gitlab_email_enabled'] = false
+```
+
+Run `sudo gitlab-ctl reconfigure` for the change to take effect.
