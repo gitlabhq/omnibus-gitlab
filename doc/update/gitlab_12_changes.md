@@ -132,17 +132,16 @@ PostgreSQL 9.6 and PostgreSQL 10 will be removed from the Omnibus package in the
 supported PostgreSQL version will be 11. In order to upgrade to GitLab 13.0, you will need to be upgrading from 12.10, and
 already using a PostgreSQL 11 database.
 
-PostgreSQL will automatically be upgraded to 11.x unless specifically opted
-out during the upgrade. To opt out you must execute the following before
-performing the upgrade of GitLab.
+PostgreSQL will automatically be upgraded to 11.x except for the following cases:
+- you are running the database in high_availability using repmgr.
+- your database nodes are part of GitLab Geo configuration.
+- you have specifically opted out using the `/etc/gitlab/disable-postgresql-upgrade` file outlined below.
+
+To opt out you must execute the following before performing the upgrade of GitLab.
 
 ```bash
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
-NOTE: **NOTE:**
-For PG-HA environments, all secondary databases will be unregistered from the primary during the PostgreSQL upgrade, and will
-need to be re-setup one the primary and secondary nodes have the updated PostgreSQL version.
-
-Further details and procedures for upgrading PostgreSQL after install if you initially opted out can be
+Further details and procedures for upgrading PostgreSQL after install if not completed automatically can be
 found in the [Database Settings notes](../settings/database.md#upgrade-packaged-postgresql-server).

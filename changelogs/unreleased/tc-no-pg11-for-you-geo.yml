@@ -1,5 +1,5 @@
 ---
-title: Skip pg-upgrade during update of Geo nodes
-merge_request: 4113
+title: Skip pg-upgrade during update of Geo and PG HA nodes
+merge_request: 4115
 author:
 type: changed
