@@ -19,9 +19,12 @@ socket_path = '<%= @socket_path %>'
 prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
 <% end %>
 
-<% if @failover_enabled %>
-# Enables automatic failover
-failover_enabled = <%= @failover_enabled %>
+[failover]
+<% unless @failover_enabled.nil? %>
+enabled = <%= @failover_enabled %>
+<% end %>
+<% if @failover_election_strategy %>
+election_strategy = '<%= @failover_election_strategy %>'
 <% end %>
 
 [sentry]

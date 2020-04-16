@@ -553,7 +553,7 @@ describe 'nginx' do
 
   describe 'logrotate settings' do
     context 'default values' do
-      it_behaves_like 'configured logrotate service', 'nginx', 'root', 'gitlab-www'
+      it_behaves_like 'configured logrotate service', 'nginx', 'root', 'root'
     end
 
     context 'specified username and group' do
@@ -566,7 +566,7 @@ describe 'nginx' do
         )
       end
 
-      it_behaves_like 'configured logrotate service', 'nginx', 'root', 'bar'
+      it_behaves_like 'configured logrotate service', 'nginx', 'root', 'root'
     end
   end
 

@@ -233,7 +233,7 @@ def pg_upgrade_check
   outdated_db = version && new_version && new_version.major.to_f > version.major.to_f
   return unless outdated_db
 
-  puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}), To upgrade, please see:"
+  puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}). To upgrade, please see:"
   puts "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server\n\n"
 end
 

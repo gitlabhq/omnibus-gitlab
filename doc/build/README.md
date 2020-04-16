@@ -13,6 +13,8 @@ You create a platform-specific package using the `build` command:
 bin/omnibus build gitlab
 ```
 
+NOTE: **Note**: By default, the build process attempts to download sources from `dev.gitlab.org`, which is only available to GitLab employees. If you would like to pull from publically available sources, set the environment variable `ALTERNATIVE_SOURCES=true`
+
 The platform/architecture type of the package created will match the platform
 where the `build project` command is invoked. So running this command on say a
 MacBook Pro will generate a Mac OS X specific package. After the build
