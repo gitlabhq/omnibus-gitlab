@@ -37,7 +37,8 @@ module GitlabCtl
       # default to computing the data_dir from the info we have.
       data_dir = node_attributes.dig(:gitlab, :postgresql, :data_dir) || node_attributes.dig(:postgresql, :data_dir) || File.join(pg_base_dir, "data")
 
-      @data_dir = File.realpath(data_dir)
+      @data_dir = data_dir
+      @data_dir = File.realpath(data_dir) if File.exist?(data_dir)
     end
 
     def tmp_data_dir

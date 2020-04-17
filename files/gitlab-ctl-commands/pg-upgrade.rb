@@ -53,21 +53,23 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     geo_db_worker.psql_command = 'gitlab-geo-psql'
   end
 
-  maintenance_mode('enable')
-
   if GitlabCtl::Util.progress_message('Checking if we need to downgrade') do
-    (!pg_enabled || db_worker.fetch_data_version == revert_version) && \
-        (!geo_pg_enabled || geo_db_worker.fetch_data_version == revert_version) && \
+    (!pg_enabled || db_worker.fetch_data_version == revert_version.major) && \
+        (!geo_pg_enabled || geo_db_worker.fetch_data_version == revert_version.major) && \
         db_worker.initial_version == revert_version
   end
     log "Already running #{revert_version}"
     Kernel.exit 1
   end
 
-  if !Dir.exist?("#{db_worker.tmp_data_dir}.#{revert_version.major}") && !Dir.exist?("#{geo_db_worker.tmp_data_dir}.#{revert_version.major}")
-    log "#{db_worker.tmp_data_dir}.#{revert_version} does not exist, cannot revert data"
-    log "#{geo_db_worker.tmp_data_dir}.#{revert_version} does not exist, cannot revert data" if geo_pg_enabled
-    log 'Will proceed with reverting the running program version only, unless you interrupt'
+  maintenance_mode('enable')
+
+  unless Dir.exist?("#{db_worker.tmp_data_dir}.#{revert_version.major}")
+    if !geo_pg_enabled || !Dir.exist?("#{geo_db_worker.tmp_data_dir}.#{revert_version.major}")
+      log "#{db_worker.tmp_data_dir}.#{revert_version.major} does not exist, cannot revert data"
+      log "#{geo_db_worker.tmp_data_dir}.#{revert_version.major} does not exist, cannot revert data" if geo_pg_enabled
+      log 'Will proceed with reverting the running program version only, unless you interrupt'
+    end
   end
 
   log "Reverting database to #{revert_version} in 5 seconds"
