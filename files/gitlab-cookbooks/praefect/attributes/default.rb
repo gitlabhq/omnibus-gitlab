@@ -23,5 +23,3 @@ default['praefect']['database_sslmode'] = nil
 default['praefect']['database_sslcert'] = nil
 default['praefect']['database_sslkey'] = nil
 default['praefect']['database_sslrootcert'] = nil
-default['praefect']['env']['GITALY_PID_FILE'] = File.join(node['praefect']['dir'], "praefect.pid")
-default['praefect']['env']['WRAPPER_JSON_LOGGING'] = Praefect.json_logging?(node).to_s

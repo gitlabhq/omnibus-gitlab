@@ -177,6 +177,11 @@ describe 'praefect' do
         expect(chef_run).to render_file(config_path).with_content(database_section)
       end
 
+      it 'renders the env dir files correctly' do
+        expect(chef_run).to render_file(File.join(env_dir, "WRAPPER_JSON_LOGGING"))
+          .with_content('false')
+      end
+
       context 'with virtual_storages as an array' do
         let(:virtual_storages) { [{ name: 'default', 'nodes' => [{ storage: 'praefect1', address: 'tcp://node1.internal', primary: true, token: "praefect1-token" }] }] }
 

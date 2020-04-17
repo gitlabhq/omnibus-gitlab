@@ -21,6 +21,7 @@ working_dir = node['praefect']['dir']
 log_directory = node['praefect']['log_directory']
 env_directory = node['praefect']['env_directory']
 wrapper_path = node['praefect']['wrapper_path']
+json_logging = node['praefect']['logging_format'].eql?('json')
 config_path = File.join(working_dir, "config.toml")
 
 directory working_dir do
@@ -36,6 +37,12 @@ directory log_directory do
 end
 
 omnibus_helper.is_deprecated_praefect_config?
+
+node.default['praefect']['env'] = {
+  # wrapper script parameters
+  'GITALY_PID_FILE' => File.join(node['praefect']['dir'], "praefect.pid"),
+  'WRAPPER_JSON_LOGGING' => json_logging
+}
 
 env_dir env_directory do
   variables node['praefect']['env']
@@ -61,7 +68,7 @@ runit_service 'praefect' do
     wrapper_path: wrapper_path,
     config_path: config_path,
     log_directory: log_directory,
-    json_logging: Praefect.json_logging?(node)
+    json_logging: json_logging
   }.merge(params))
 
   log_options node['gitlab']['logging'].to_hash.merge(node['praefect'].to_hash)
