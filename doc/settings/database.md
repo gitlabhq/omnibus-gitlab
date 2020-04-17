@@ -367,7 +367,7 @@ The following section details their update policy.
 
 #### GitLab 12.10 and later
 
-The default PostgrSQL version is set to 11.x, and an automatic upgrade of the
+The default PostgreSQL version is set to 11.x, and an automatic upgrade of the
 database is done on package upgrades for installs with a single database node.
 
 The automatic upgrade is skipped in any of the following cases:
