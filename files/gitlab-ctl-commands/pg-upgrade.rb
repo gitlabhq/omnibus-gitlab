@@ -181,7 +181,7 @@ add_command_under_category 'pg-upgrade', 'database',
     log 'Detected a GEO primary node'
     @instance_type = :geo_primary
     general_upgrade
-  elsif @roles.include?('geo-secondary')
+  elsif @roles.include?('geo-secondary') || service_enabled?('geo-postgresql')
     log 'Detected a GEO secondary node'
     @instance_type = :geo_secondary
     geo_secondary_upgrade(options[:tmp_dir], options[:timeout])
