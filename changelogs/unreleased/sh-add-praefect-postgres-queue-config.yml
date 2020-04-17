@@ -1,0 +1,5 @@
+---
+title: Add Praefect config for enabling PostgreSQL-backed queue
+merge_request: 4096
+author:
+type: added
