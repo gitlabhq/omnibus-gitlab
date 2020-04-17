@@ -167,7 +167,7 @@ add_command_under_category 'pg-upgrade', 'database',
 
   if service_enabled?('repmgrd')
     log "Detected an HA cluster."
-    node = Repmgr::Node.new
+    node = RepmgrHandler::Node.new
     if node.is_master?
       log "Primary node detected."
       @instance_type = :pg_primary
