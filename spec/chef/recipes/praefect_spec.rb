@@ -1,6 +1,6 @@
 require 'chef_helper'
 describe 'praefect' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab::default') }
   let(:prometheus_grpc_latency_buckets) do
     '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]'
   end
@@ -15,6 +15,7 @@ describe 'praefect' do
 
   context 'when praefect is enabled' do
     let(:config_path) { '/var/opt/gitlab/praefect/config.toml' }
+    let(:env_dir) { '/opt/gitlab/etc/praefect/env' }
     let(:auth_transitioning) { false }
 
     before do
@@ -56,6 +57,19 @@ describe 'praefect' do
       .with_content(%r{\[failover\]\s+enabled = false})
       expect(chef_run).to render_file(config_path)
       .with_content("postgres_queue_enabled = false")
+    end
+
+    it 'renders the env dir files' do
+      expect(chef_run).to render_file(File.join(env_dir, "GITALY_PID_FILE"))
+        .with_content('/var/opt/gitlab/praefect/praefect.pid')
+      expect(chef_run).to render_file(File.join(env_dir, "WRAPPER_JSON_LOGGING"))
+        .with_content('true')
+    end
+
+    it 'renders the service run file with wrapper' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/praefect/run')
+        .with_content('/opt/gitlab/embedded/bin/gitaly-wrapper /opt/gitlab/embedded/bin/praefect')
+        .with_content('exec chpst -e /opt/gitlab/etc/praefect/env')
     end
 
     context 'with custom settings' do
@@ -173,6 +187,11 @@ describe 'praefect' do
         ].map(&:to_s).join('\n'))
 
         expect(chef_run).to render_file(config_path).with_content(database_section)
+      end
+
+      it 'renders the env dir files correctly' do
+        expect(chef_run).to render_file(File.join(env_dir, "WRAPPER_JSON_LOGGING"))
+          .with_content('false')
       end
 
       context 'with virtual_storages as an array' do

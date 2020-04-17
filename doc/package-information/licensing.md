@@ -57,3 +57,17 @@ in the same way. Such as with `git` and `rsync`. See the [GNU License FAQ](https
 ### libjpeg-turbo - BSD 3-clause license
 
 This software is based in part on the work of the Independent JPEG Group.
+
+## Trademark Usage
+
+Within the GitLab documentation, reference to third party technology(ies) and/or trademarks of third party entities, may be made. The inclusion of reference to third party technology and/or entities is solely for the purposes of example(s) of how GitLab software may interact with, or be used in conjunction with, such third party technology.
+All trademarks, materials, documentation, and other intellectual property remain the property of any/all such third party.
+
+### Trademark Requirements
+
+Use of GitLab Trademarks must be in compliance with the standards set forth in [our guidelines](https://about.gitlab.com/handbook/marketing/brand-and-digital-design/#gitlab-trademark--logo-guidelines) (as updated from time to time).
+CHEF® and all Chef marks are owned by Chef Software, Inc. and must be used in accordance with the [Chef Trademark policy](https://www.chef.io/trademark-policy/) (as updated from time to time) located at.
+
+When using a GitLab or 3rd party trademark in documentation, include the (R) symbol in the first instance, for example, "Chef(R) is used for configuring...." You may omit the symbol in subsequent instances.
+
+If a trademark owner requires a particular notice or trademark requirement, such notice or requirement should be stated above.
