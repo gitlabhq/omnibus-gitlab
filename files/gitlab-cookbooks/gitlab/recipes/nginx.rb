@@ -159,6 +159,21 @@ template gitlab_rails_http_conf do
   action gitlab_rails_enabled ? :create : :delete
 end
 
+gitlab_rails_smartcard_nginx_vars = {
+  listen_port: node['gitlab']['gitlab-rails']['smartcard_client_certificate_required_port'],
+  ssl_client_certificate: node['gitlab']['gitlab-rails']['smartcard_ca_file'],
+  ssl_verify_client: 'on',
+  ssl_verify_depth: 2,
+  proxy_set_headers: nginx_vars['proxy_set_headers'].merge(
+    {
+      'X-SSL-Client-Certificate' => '$ssl_client_cert'
+    }
+  ),
+  redirect_http_to_https: node['gitlab']['nginx']['redirect_http_to_https']
+}
+
+gitlab_rails_smartcard_nginx_vars['fqdn'] = node['gitlab']['gitlab-rails']['smartcard_client_certificate_required_host'] unless node['gitlab']['gitlab-rails']['smartcard_client_certificate_required_host'].nil?
+
 template gitlab_rails_smartcard_http_conf do
   source "nginx-gitlab-http.conf.erb"
   owner "root"
@@ -167,20 +182,7 @@ template gitlab_rails_smartcard_http_conf do
   variables(
     # lazy evaluate here since letsencrypt::enable sets redirect_http_to_https to true
     lazy do
-      nginx_gitlab_http_vars.merge(
-        {
-          listen_port: node['gitlab']['gitlab-rails']['smartcard_client_certificate_required_port'],
-          ssl_client_certificate: node['gitlab']['gitlab-rails']['smartcard_ca_file'],
-          ssl_verify_client: 'on',
-          ssl_verify_depth: 2,
-          proxy_set_headers: nginx_vars['proxy_set_headers'].merge(
-            {
-              'X-SSL-Client-Certificate' => '$ssl_client_cert'
-            }
-          ),
-          redirect_http_to_https: node['gitlab']['nginx']['redirect_http_to_https']
-        }
-      )
+      nginx_gitlab_http_vars.merge(gitlab_rails_smartcard_nginx_vars)
     end
   )
   notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")
