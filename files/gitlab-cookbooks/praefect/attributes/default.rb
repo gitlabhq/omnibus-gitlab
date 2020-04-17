@@ -6,6 +6,7 @@ default['praefect']['auth_transitioning'] = false
 default['praefect']['dir'] = "/var/opt/gitlab/praefect"
 default['praefect']['log_directory'] = "/var/log/gitlab/praefect"
 default['praefect']['listen_addr'] = "localhost:2305"
+default['praefect']['postgres_queue_enabled'] = false
 default['praefect']['prometheus_grpc_latency_buckets'] = nil
 default['praefect']['prometheus_listen_addr'] = "localhost:9652"
 default['praefect']['logging_level'] = nil

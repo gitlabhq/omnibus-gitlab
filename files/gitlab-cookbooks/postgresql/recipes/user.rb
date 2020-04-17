@@ -17,6 +17,8 @@ account_helper = AccountHelper.new(node)
 postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
 
+include_recipe 'postgresql::directory_locations'
+
 account "Postgresql user and group" do
   username postgresql_username
   uid node['postgresql']['uid']
@@ -26,4 +28,18 @@ account "Postgresql user and group" do
   shell node['postgresql']['shell']
   home node['postgresql']['home']
   manage node['gitlab']['manage-accounts']['enable']
+end
+
+directory node['postgresql']['home'] do
+  owner postgresql_username
+  mode "0755"
+  recursive true
+end
+
+file File.join(node['postgresql']['home'], ".profile") do
+  owner postgresql_username
+  mode "0600"
+  content <<-EOH
+PATH=#{node['postgresql']['user_path']}
+  EOH
 end

@@ -1,0 +1,5 @@
+---
+title: Set server_name for smartcard NGINX server context
+merge_request: 4105
+author:
+type: added

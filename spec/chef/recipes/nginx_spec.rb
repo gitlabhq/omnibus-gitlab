@@ -382,7 +382,10 @@ describe 'nginx' do
       end
 
       it 'listens on a separate port' do
-        expect(chef_run).to render_file(gitlab_smartcard_http_config).with_content('listen *:3444 ssl http2')
+        expect(chef_run).to render_file(gitlab_smartcard_http_config).with_content { |content|
+          expect(content).to include('server_name fauxhai.local;')
+          expect(content).to include('listen *:3444 ssl http2;')
+        }
       end
 
       it 'requires client side certificate' do
@@ -395,6 +398,25 @@ describe 'nginx' do
 
       it 'forwards client side certificate in header' do
         expect(chef_run).to render_file(gitlab_smartcard_http_config).with_content('proxy_set_header X-SSL-Client-Certificate')
+      end
+
+      context 'when smartcard_client_certificate_required_host is set' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              smartcard_enabled: true,
+              smartcard_client_certificate_required_host: 'smartcard.fauxhai.local'
+            },
+            nginx: { listen_https: true }
+          )
+        end
+
+        it 'sets smartcard nginx server name' do
+          expect(chef_run).to render_file(gitlab_smartcard_http_config).with_content { |content|
+            expect(content).to include('server_name smartcard.fauxhai.local;')
+            expect(content).to include('listen *:3444 ssl http2;')
+          }
+        end
       end
     end
 
