@@ -127,7 +127,7 @@ module GitlabCtl
           false
         end
       end
-        raise GitlabCtl::Errors::ExecutionError, 'Error upgrading the database'
+        raise GitlabCtl::Errors::ExecutionError, 'run_pg_upgrade', '', 'Error upgrading the database'
       end
     end
 
