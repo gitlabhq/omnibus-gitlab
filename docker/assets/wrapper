@@ -8,7 +8,7 @@ function sigterm_handler() {
 }
 
 function failed_pg_upgrade() {
-    echo 'Upgrading the existing database to 10 failed and was reverted.'
+    echo 'Upgrading the existing database failed and was reverted.'
     echo 'Please check the output, and open an issue at:'
     echo 'https://gitlab.com/gitlab-org/omnibus-gitlab/issues'
     echo 'If you would like to restart the instance without attempting to'

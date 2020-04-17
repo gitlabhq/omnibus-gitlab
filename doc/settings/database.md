@@ -335,7 +335,8 @@ sudo gitlab-ctl pg-upgrade
 ```
 
 NOTE: **Note:**
-In GitLab 12.8 or later, you can pass the `-V 11` flag to opt in to upgrading to PostgreSQL 11.
+In GitLab 12.8 or later, you can pass the `-V 11` flag to upgrading to PostgreSQL 11. PostgreSQL 11 became the default for
+pg-upgrade in GitLab 12.10.
 
 This command performs the following steps:
 
@@ -363,6 +364,19 @@ sudo rm -f /var/opt/gitlab/postgresql-version.old
 You can find details of PostgreSQL versions shipped with various GitLab versions in
 [PostgreSQL versions shipped with Omnibus GitLab](../package-information/postgresql_versions.md).
 The following section details their update policy.
+
+#### GitLab 12.10 and later
+
+The default PostgreSQL version is set to 11.x, and an automatic upgrade of the
+database is done on package upgrades for installs with a single database node.
+
+The automatic upgrade is skipped in any of the following cases:
+
+- you are running the database in high_availability using repmgr.
+- your database nodes are part of GitLab Geo configuration.
+- you have specifically opted out using the `/etc/gitlab/disable-postgresql-upgrade` file outlined above.
+
+Users can manually upgrade using `gitlab-ctl pg-upgrade`.
 
 #### GitLab 12.8 and later
 
