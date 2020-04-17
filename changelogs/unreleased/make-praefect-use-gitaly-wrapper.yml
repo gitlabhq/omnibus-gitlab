@@ -1,0 +1,6 @@
+---
+title: Adds gitlab-wrapper to praefect runit service to allow setting environment
+  variables and graceful restarts
+merge_request: 4068
+author:
+type: added
