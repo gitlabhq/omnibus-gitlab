@@ -35,7 +35,7 @@ resource_exists = proc do |name|
   end
 end
 
-geo_db_version = omnibus_helper.service_enabled?('geo-postgresql') && geo_pg_helper.database_version
+geo_db_version = omnibus_helper.service_dir_enabled?('geo-postgresql') && geo_pg_helper.database_version
 db_version = node['postgresql']['version'] || pg_helper.database_version || geo_db_version
 db_path = db_version && Dir.glob("#{postgresql_install_dir}/#{db_version}*").min
 
@@ -60,7 +60,7 @@ ruby_block "Link postgresql bin files to the correct version" do
   only_if do
     !File.exist?(File.join(node['postgresql']['data_dir'], "PG_VERSION")) || \
       pg_helper.version.major !~ /^#{pg_helper.database_version}/ || \
-      (omnibus_helper.service_enabled?('geo-postgresql') && geo_pg_helper.version.major !~ /^#{geo_pg_helper.database_version}/) || \
+      (omnibus_helper.service_dir_enabled?('geo-postgresql') && geo_pg_helper.version.major !~ /^#{geo_pg_helper.database_version}/) || \
       !node['postgresql']['version'].nil?
   end
   notifies :restart, 'runit_service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && resource_exists['runit_service[postgresql]']
