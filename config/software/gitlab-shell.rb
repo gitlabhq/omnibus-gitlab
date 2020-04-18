@@ -35,15 +35,4 @@ build do
   command "mkdir -p #{install_dir}/embedded/service/gitlab-shell"
   command 'make build', env: env
   sync './', "#{install_dir}/embedded/service/gitlab-shell/", exclude: ['.git', '.gitignore', 'go', 'go_build']
-
-  block do
-    env_shebang = '#!/usr/bin/env ruby'
-    `grep -r -l '^#{env_shebang}' #{project_dir}`.split("\n").each do |ruby_script|
-      script = File.read(ruby_script)
-      erb dest: ruby_script.sub(project_dir, "#{install_dir}/embedded/service/gitlab-shell"),
-          source: 'ruby_script_wrapper.erb',
-          mode: 0755,
-          vars: { script: script, install_dir: install_dir }
-    end
-  end
 end
