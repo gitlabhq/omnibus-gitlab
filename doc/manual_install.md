@@ -39,4 +39,4 @@ Change `http://gitlab.example.com` to the URL at which you want to access your G
 
 On your first visit, you'll be redirected to a password reset screen. Provide the password for the initial administrator account and you will be redirected back to the login screen. Use the default account's username `root` to login.
 
-See our [documentation for detailed instructions on installing and configuration](installation/index.md#installation-and-configuration-using-omnibus-package).
+See our [documentation for detailed instructions on installing and configuration](installation/index.md#installation-and-configuration).
