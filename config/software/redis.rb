@@ -22,7 +22,7 @@ license_file 'COPYING'
 skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
-version = Gitlab::Version.new('redis', '5.0.7')
+version = Gitlab::Version.new('redis', '5.0.9')
 default_version version.print(false)
 
 source git: version.remote
