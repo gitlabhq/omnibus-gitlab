@@ -65,11 +65,11 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     print_upgrade_and_exit
   end
 
-  if File.exist?('/etc/gitlab/disable-postgresql-upgrade')
+  if postgresql_upgrade_disabled? || geo_detected? || repmgr_detected?
     log ''
     log '==='
     log 'Skipping automatic PostgreSQL upgrade'
-    log 'Please see https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
+    log "Please see #{pg_upgrade_doc_url}"
     log 'for details on how to manually upgrade the PostgreSQL server'
     log '==='
     log ''
@@ -228,15 +228,12 @@ def pg_upgrade_check
     new_version = PGVersion.parse(manifest_entry&.split&.[](1))
   end
 
-  # Print when fresh install - Always
   # Print when upgrade
   #  - when we have a database and its not already on the new version
-  is_install = !File.exist?('/var/opt/gitlab/bootstrapped')
   outdated_db = version && new_version && new_version.major.to_f > version.major.to_f
-  return unless is_install || outdated_db
+  return unless outdated_db
 
-  puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}), but it is not yet"
-  puts "enabled by default. To upgrade, please see:"
+  puts "\nGitLab now ships with a newer version of PostgreSQL (#{new_version}). To upgrade, please see:"
   puts "https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server\n\n"
 end
 
@@ -288,4 +285,26 @@ end
 # Check if user already provided URL where GitLab should run
 def external_url_unset?
   ENV['EXTERNAL_URL'].nil? || ENV['EXTERNAL_URL'].empty? || ENV['EXTERNAL_URL'] == "http://gitlab.example.com"
+end
+
+def postgresql_upgrade_disabled?
+  File.exist?('/etc/gitlab/disable-postgresql-upgrade')
+end
+
+def geo_detected?
+  (GitlabCtl::Util.roles(base_path) & %w[geo-primary geo-secondary]).any? || service_enabled?('geo-postgresql')
+end
+
+def repmgr_detected?
+  service_enabled?('repmgrd')
+end
+
+def pg_upgrade_doc_url
+  if geo_detected?
+    'https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-geo-instance'
+  elsif repmgr_detected?
+    'https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-gitlab-ha-cluster'
+  else
+    'https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
+  end
 end
