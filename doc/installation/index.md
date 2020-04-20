@@ -22,23 +22,23 @@ comments: false
 These configuration settings are commonly used when configuring GitLab Omnibus.
 For a complete list of settings, see the [README](../README.md#configuring) file.
 
-- [Installing GitLab](https://about.gitlab.com/install/)
-  - [Manually downloading and installing a GitLab package](../manual_install.md)
+- [Installing GitLab](https://about.gitlab.com/install/).
+  - [Manually downloading and installing a GitLab package](../manual_install.md).
 - [Setting up a domain name/URL](../settings/configuration.md#configuring-the-external-url-for-gitlab)
   for the GitLab Instance so that it can be accessed easily.
-- [Enabling HTTPS](../settings/nginx.md#enable-https)
-- [Enabling notification emails](../settings/smtp.md#smtp-settings)
-- [Enabling replying via email](https://docs.gitlab.com/ee/administration/reply_by_email.html#set-it-up)
-  - [Installing and configuring postfix](https://docs.gitlab.com/ee/administration/reply_by_email_postfix_setup.html)
-- [Enabling container registry on GitLab](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-domain-configuration)
+- [Enabling HTTPS](../settings/nginx.md#enable-https).
+- [Enabling notification emails](../settings/smtp.md#smtp-settings).
+- [Enabling replying via email](https://docs.gitlab.com/ee/administration/reply_by_email.html#set-it-up).
+  - [Installing and configuring postfix](https://docs.gitlab.com/ee/administration/reply_by_email_postfix_setup.html).
+- [Enabling container registry on GitLab](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-domain-configuration).
   - You will require SSL certificates for the domain used for container registry.
-- [Enabling GitLab Pages](https://docs.gitlab.com/ee/administration/pages/)
+- [Enabling GitLab Pages](https://docs.gitlab.com/ee/administration/pages/).
   - If you want HTTPS enabled, you will have to get wildcard certificates.
-- [Enabling Elasticsearch](https://docs.gitlab.com/ee/integration/elasticsearch.html)
+- [Enabling Elasticsearch](https://docs.gitlab.com/ee/integration/elasticsearch.html).
 - [GitLab Mattermost](../gitlab-mattermost/README.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
 - [GitLab Prometheus](https://docs.gitlab.com/ee/administration/monitoring/performance/prometheus.html)
   Set up the Prometheus monitoring included in the Omnibus GitLab package.
-- [GitLab High Availability Roles](../roles/README.md)
+- [GitLab High Availability Roles](../roles/README.md).
 
 ## Using docker image
 
