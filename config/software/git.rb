@@ -74,6 +74,7 @@ NO_GETTEXT=YesPlease
 NO_PYTHON=YesPlease
 NO_INSTALL_HARDLINKS=YesPlease
 NO_R_TO_GCC_LINKER=YesPlease
+CFLAGS=-fno-omit-frame-pointer
       EOH
     end
   end
