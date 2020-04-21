@@ -1,0 +1,5 @@
+---
+title: Env dir content should not be displayed by chef
+merge_request: 4119
+author:
+type: fixed
