@@ -1,5 +1,0 @@
----
-title: Update gitlab.rb.template with gitconfig defaults
-merge_request: 4049
-author:
-type: other

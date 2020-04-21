@@ -1,5 +1,0 @@
----
-title: Allow database timeout to be configured for the Rails app
-merge_request: 3844
-author:
-type: added

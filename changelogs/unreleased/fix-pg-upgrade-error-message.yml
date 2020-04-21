@@ -1,5 +1,0 @@
----
-title: Fix pg-upgrade error format exception
-merge_request: 4090
-author:
-type: fixed

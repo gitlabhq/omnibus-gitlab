@@ -1,5 +1,0 @@
----
-title: Build AMIs for all tags except RC and auto-deploy ones
-merge_request: 4036
-author:
-type: other
