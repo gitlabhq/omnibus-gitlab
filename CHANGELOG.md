@@ -3,6 +3,66 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.10.0 (2020-04-22)
+
+### Security (1 change)
+
+- Update openssl/openssl from 1.1.1d to 1.1.1e. !4019
+
+### Fixed (5 changes)
+
+- Fixes sysctl error on reconfigure after reinstall. !3921
+- Fix pg-upgrade error during sysctl commands. !4080
+- Fix pg-upgrade error format exception. !4090
+- Fixed pg upgrade for seperate geo tracking db. !4091
+- Fix repmgr failure during pg-upgrade. !4117
+
+### Deprecated (1 change)
+
+- Deprecate user attributes of consul and repmgr in favor of username. !3489
+
+### Changed (4 changes)
+
+- Upgrade Prometheus to 2.16.0. !3888
+- Bump Container Registry to v2.9.0-gitlab. !4071
+- Default to PG 11 for fresh installs. !4099
+- Set PG 11 as the default for pg-upgrade, and update automatically. !4115
+
+### Performance (2 changes, 1 of them is from the community)
+
+- Adjust Puma worker tuning. !4000
+- Add more optimized gitconfig. !4050 (Son Luong Ngoc <sluongng@gmail.com)
+
+### Added (12 changes)
+
+- Allow database timeout to be configured for the Rails app. !3844
+- Add storage setting for terraform state. !3983
+- Allow enabling experimental sidekiq-cluster. !4006
+- redis: introduce options for lazy freeing. !4008
+- Introduce gitlab-redis-cli. !4020
+- Include libjpeg-turbo to enable jpeg support in graphicsmagick. !4027
+- Add configuration for Praefect election strategy. !4048
+- Generate ActionCable configuration file. !4066
+- Adds gitlab-wrapper to praefect runit service to allow setting environment variables and graceful restarts. !4068
+- Update Grafana to include Praefect dashboards. !4084
+- Add Praefect config for enabling PostgreSQL-backed queue. !4096
+- Set server_name for smartcard NGINX server context. !4105
+
+### Other (11 changes, 1 of them is from the community)
+
+- Update logrotate version to 3.16.0. !3961
+- Use structure.sql instead of schema.rb. !3969
+- Update docutils from 0.13.1 to 0.16. !4017 (Takuya Noguchi)
+- Use Go 1.13.9 to build components. !4025
+- Build AMIs for all tags except RC and auto-deploy ones. !4036
+- Upgrade to Git 2.26.0. !4039
+- Update gitlab.rb.template with gitconfig defaults. !4049
+- Update gitlab-exporter from 6.1.0 to 7.0.1. !4065
+- Upgrade to Git 2.26.2. !4127
+- Upgrade Mattermost to 5.21.0.
+- Upgrade to Git 2.26.1.
+
+
 ## 12.9.4 (2020-04-16)
 
 ### Other (1 change)

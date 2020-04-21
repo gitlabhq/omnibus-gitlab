@@ -1,5 +1,0 @@
----
-title: Fixed pg upgrade for seperate geo tracking db
-merge_request: 4091
-author:
-type: fixed

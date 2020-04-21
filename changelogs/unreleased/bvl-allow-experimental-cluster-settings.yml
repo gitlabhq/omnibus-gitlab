@@ -1,5 +1,0 @@
----
-title: Allow enabling experimental sidekiq-cluster
-merge_request: 4006
-author:
-type: added
