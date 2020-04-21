@@ -29,6 +29,7 @@ action :create do
     deleted_env_vars = existing_files - new_resource.variables.keys - %w(. ..)
     deleted_env_vars.each do |deleted_var|
       file ::File.join(new_resource.name, deleted_var) do
+        sensitive true
         action :delete
       end
     end
@@ -40,6 +41,7 @@ action :create do
 
   new_resource.variables.each do |key, value|
     file ::File.join(new_resource.name, key) do
+      sensitive true
       content value.to_s
     end
   end
