@@ -1,0 +1,5 @@
+---
+title: Remove crond job if Let's Encrypt autorenew is disabled
+merge_request: 4075
+author:
+type: fixed
