@@ -1,0 +1,5 @@
+---
+title: Remove sensitive info from Docker image
+merge_request:
+author:
+type: security
