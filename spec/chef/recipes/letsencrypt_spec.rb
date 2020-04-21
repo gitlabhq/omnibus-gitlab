@@ -151,6 +151,10 @@ server {
           expect(chef_run).not_to include_recipe('crond::enable')
         end
 
+        it 'removes the letsencrypt-renew cronjob' do
+          expect(chef_run).to delete_crond_job('letsencrypt-renew')
+        end
+
         it 'warns that we do not setup automatic renewal' do
           expect(LoggingHelper).to receive(:warning).with(/does not setup/)
           chef_run.ruby_block('display_le_message').block.call

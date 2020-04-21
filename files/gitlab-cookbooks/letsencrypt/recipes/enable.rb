@@ -46,6 +46,10 @@ if node['letsencrypt']['auto_renew']
     day_of_month node['letsencrypt']['auto_renew_day_of_month']
     command "/opt/gitlab/bin/gitlab-ctl renew-le-certs"
   end
+else
+  crond_job 'letsencrypt-renew' do
+    action :delete
+  end
 end
 
 ruby_block 'display_le_message' do
