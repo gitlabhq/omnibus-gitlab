@@ -66,6 +66,7 @@ production: &base
       enabled: <%= @gitlab_email_smime_enabled %>
       key_file: <%= @gitlab_email_smime_key_file %>
       cert_file: <%= @gitlab_email_smime_cert_file %>
+      ca_certs_file: <%= @gitlab_email_smime_ca_certs_file %>
 
     # Email server smtp settings are in [a separate file](initializers/smtp_settings.rb.sample).
 

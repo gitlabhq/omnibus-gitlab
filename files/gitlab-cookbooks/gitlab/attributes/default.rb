@@ -101,6 +101,7 @@ default['gitlab']['gitlab-rails']['gitlab_email_subject_suffix'] = nil
 default['gitlab']['gitlab-rails']['gitlab_email_smime_enabled'] = false
 default['gitlab']['gitlab-rails']['gitlab_email_smime_key_file'] = '/etc/gitlab/ssl/gitlab_smime.key'
 default['gitlab']['gitlab-rails']['gitlab_email_smime_cert_file'] = '/etc/gitlab/ssl/gitlab_smime.crt'
+default['gitlab']['gitlab-rails']['gitlab_email_smime_ca_certs_file'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_can_create_group'] = nil
 default['gitlab']['gitlab-rails']['gitlab_username_changing_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_default_theme'] = nil

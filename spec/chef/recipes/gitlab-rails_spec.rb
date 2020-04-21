@@ -2732,7 +2732,8 @@ describe 'gitlab::gitlab-rails' do
           hash_including(
             'gitlab_email_smime_enabled' => true,
             'gitlab_email_smime_key_file' => '/etc/gitlab/ssl/gitlab_smime.key',
-            'gitlab_email_smime_cert_file' => '/etc/gitlab/ssl/gitlab_smime.crt'
+            'gitlab_email_smime_cert_file' => '/etc/gitlab/ssl/gitlab_smime.crt',
+            'gitlab_email_smime_ca_certs_file' => nil
           )
         )
       end
@@ -2742,7 +2743,8 @@ describe 'gitlab::gitlab-rails' do
           gitlab_rails: {
             gitlab_email_smime_enabled: true,
             gitlab_email_smime_key_file: '/etc/gitlab/ssl/custom_gitlab_smime.key',
-            gitlab_email_smime_cert_file: '/etc/gitlab/ssl/custom_gitlab_smime.crt'
+            gitlab_email_smime_cert_file: '/etc/gitlab/ssl/custom_gitlab_smime.crt',
+            gitlab_email_smime_ca_certs_file: '/etc/gitlab/ssl/custom_gitlab_smime_cas.crt'
           }
         )
 
@@ -2750,7 +2752,8 @@ describe 'gitlab::gitlab-rails' do
           hash_including(
             'gitlab_email_smime_enabled' => true,
             'gitlab_email_smime_key_file' => '/etc/gitlab/ssl/custom_gitlab_smime.key',
-            'gitlab_email_smime_cert_file' => '/etc/gitlab/ssl/custom_gitlab_smime.crt'
+            'gitlab_email_smime_cert_file' => '/etc/gitlab/ssl/custom_gitlab_smime.crt',
+            'gitlab_email_smime_ca_certs_file' => '/etc/gitlab/ssl/custom_gitlab_smime_cas.crt'
           )
         )
       end
