@@ -10,13 +10,5 @@ fi
 
 <%= external_url_script %>
 
-case "$1" in
-  0)
-    # RPM install/upgrade
-    ${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
-    EXTERNAL_URL=${EXTERNAL_URL} ${DEST_DIR}/bin/gitlab-ctl upgrade
-    ;;
-  *)
-    # Noop.
-    ;;
-esac
+${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
+EXTERNAL_URL=${EXTERNAL_URL} ${DEST_DIR}/bin/gitlab-ctl upgrade
