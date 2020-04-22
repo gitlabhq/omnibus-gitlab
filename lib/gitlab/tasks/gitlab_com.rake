@@ -14,8 +14,7 @@ namespace :gitlab_com do
     end
 
     if !Build::Check.is_auto_deploy? && !Build::Check.is_latest_tag?
-      latest_tag = Build::Info.latest_tag
-      puts "#{latest_tag} is not the latest tag, not doing anything."
+      puts "Running on tag #{Build::Info.current_git_tag} which is not the latest tag: #{Build::Info.latest_tag}."
       exit
     end
 

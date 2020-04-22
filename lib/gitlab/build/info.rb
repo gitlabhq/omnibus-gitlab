@@ -189,7 +189,7 @@ module Build
       end
 
       def current_git_tag
-        `git describe --exact-match 2>/dev/null`
+        `git describe --exact-match 2>/dev/null`.chomp
       end
 
       def image_reference
