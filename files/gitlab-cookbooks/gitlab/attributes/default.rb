@@ -475,19 +475,19 @@ default['gitlab']['sidekiq']['enable'] = false
 default['gitlab']['sidekiq']['ha'] = false
 default['gitlab']['sidekiq']['log_directory'] = "/var/log/gitlab/sidekiq"
 default['gitlab']['sidekiq']['log_format'] = "json"
-default['gitlab']['sidekiq']['shutdown_timeout'] = 4
+default['gitlab']['sidekiq']['shutdown_timeout'] = 25
 default['gitlab']['sidekiq']['concurrency'] = 25
 default['gitlab']['sidekiq']['metrics_enabled'] = true
+
 # Sidekiq http listener
 default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"
 default['gitlab']['sidekiq']['listen_port'] = 8082
 
-# Settings applicable for running sidekiq-cluster under the hood
-# this is experimental
-default['gitlab']['sidekiq']['cluster'] = false
+# Cluster specific settings
+default['gitlab']['sidekiq']['cluster'] = true
 default['gitlab']['sidekiq']['experimental_queue_selector'] = false
 default['gitlab']['sidekiq']['interval'] = nil
-default['gitlab']['sidekiq']['max_concurrency'] = nil
+default['gitlab']['sidekiq']['max_concurrency'] = 50
 default['gitlab']['sidekiq']['min_concurrency'] = nil
 default['gitlab']['sidekiq']['negate'] = false
 default['gitlab']['sidekiq']['queue_groups'] = ['*']
@@ -495,6 +495,8 @@ default['gitlab']['sidekiq']['queue_groups'] = ['*']
 ####
 # Sidekiq Cluster
 ####
+# This will be removed in 14.0
+# https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/198
 default['gitlab']['sidekiq-cluster']['enable'] = false
 default['gitlab']['sidekiq-cluster']['ha'] = false
 default['gitlab']['sidekiq-cluster']['log_directory'] = "/var/log/gitlab/sidekiq-cluster"
