@@ -152,7 +152,7 @@ unused layers, the registry includes a garbage collect command.
 
 ## Restrict users from logging into GitLab
 
-If you need to temporaly restrict users from logging into GitLab, you can use
+If you need to temporarily restrict users from logging into GitLab, you can use
 `sudo gitlab-ctl deploy-page up`. When a user goes to your GitLab URL, they
 will be shown an arbitrary `Deploy in progress` page.
 
