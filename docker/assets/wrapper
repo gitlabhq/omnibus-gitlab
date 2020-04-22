@@ -58,7 +58,7 @@ echo "Configure GitLab for your system by editing /etc/gitlab/gitlab.rb file"
 echo "And restart this container to reload settings."
 echo "To do it use docker exec:"
 echo
-echo "  docker exec -it gitlab vim /etc/gitlab/gitlab.rb"
+echo "  docker exec -it gitlab vi /etc/gitlab/gitlab.rb"
 echo "  docker restart gitlab"
 echo
 echo "For a comprehensive list of configuration options please see the Omnibus GitLab readme"
