@@ -22,6 +22,7 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
+dependency 'config_guess'
 dependency 'libtool' if aix?
 dependency 'patch' if solaris2?
 
@@ -91,6 +92,8 @@ build do
   patch source: 'patch-ncurses_tinfo_lib__baudrate.c', plevel: 0 if openbsd?
 
   patch source: 'v5.9.ppc64le-configure.patch', plevel: 1 if version == '5.9' && ppc64le?
+
+  update_config_guess
 
   configure_command = [
     './configure',
