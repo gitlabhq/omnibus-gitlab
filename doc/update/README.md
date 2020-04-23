@@ -52,6 +52,9 @@ For safety reasons, you should maintain an up-to-date backup on your own if you 
 NOTE: **Note**
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
+NOTE: **Note**
+Unless you are following the steps in [Zero downtime updates](https://docs.gitlab.com/omnibus/update/README.html#zero-downtime-updates), users of your instance will not be able to access the GitLab application while the update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.  
+
 ### Updating using the official repositories
 
 If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.com/install/?version=ce)
