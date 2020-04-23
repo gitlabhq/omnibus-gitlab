@@ -191,7 +191,7 @@ The following settings are affected in the `postgresql` block:
   `127.0.0.1/24` or even `127.0.0.1/32`.
 - `sql_user` controls the expected username for MD5 authentication. This defaults
   to `gitlab`, and is not a required setting.
-- `sql_user_password` sets the password that PostgrSQL will accept for MD5
+- `sql_user_password` sets the password that PostgreSQL will accept for MD5
   authentication. Replace `securesqlpassword` in the example below with an acceptable
   password.
 
