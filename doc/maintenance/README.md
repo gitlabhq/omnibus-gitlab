@@ -141,3 +141,15 @@ Container Registry can use considerable amounts of disk space. To clear up
 unused layers, the registry includes a garbage collect command.
 
 [Read on how to use the Container Registry garbage collection.](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-garbage-collection)
+
+## Restrict users from logging into GitLab
+
+If you need to temporarily restrict users from logging into GitLab, you can use
+`sudo gitlab-ctl deploy-page up`. When a user goes to your GitLab URL, they
+will be shown an arbitrary `Deploy in progress` page.
+
+To remove the page, you simply run `sudo gitlab-ctl deploy-page down`. You can also check the status of the deploy page with `sudo gitlab-ctl deploy-page status`.
+
+As a side note, if you would like to restrict logging into GitLab and restrict
+changes to projects, you can [set projects as read-only](https://docs.gitlab.com/ee/administration/troubleshooting/gitlab_rails_cheat_sheet.html#make-a-project-read-only-can-only-be-done-in-the-console)
+, then put up the `Deploy in progress` page.
