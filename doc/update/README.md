@@ -9,7 +9,7 @@ If you are upgrading from a non-Omnibus installation to an Omnibus installation,
 
 It's important to ensure that any background migrations have been fully completed
 before upgrading to a new major version. To see the current size of the `background_migration` queue,
-[check for background migrations before upgrading](#checking-for-background-migrations-before-upgrading).
+[check for background migrations before upgrading](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
 Updating to major versions might need some manual intervention. For more info,
 check the version your are updating to:
@@ -53,7 +53,7 @@ NOTE: **Note**
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
 NOTE: **Note**
-Unless you are following the steps in [Zero downtime updates](https://docs.gitlab.com/omnibus/update/README.html#zero-downtime-updates), users of your instance will not be able to access the GitLab application while the update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.  
+Unless you are following the steps in [Zero downtime updates](#zero-downtime-updates), your GitLab application will not be available to users while an update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.  
 
 ### Updating using the official repositories
 
