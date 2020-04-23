@@ -22,8 +22,8 @@ module GitlabCtl
             end
           end
         end
-      rescue Timeout::TimeoutError
-        raise TimeoutError("Timed out waiting for PostgreSQL to start")
+      rescue Timeout::Error
+        raise Timeout::Error, "Timed out waiting for PostgreSQL to start"
       end
 
       def postgresql_username
