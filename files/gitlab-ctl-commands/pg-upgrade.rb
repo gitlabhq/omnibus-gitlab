@@ -97,6 +97,7 @@ add_command_under_category 'pg-upgrade', 'database',
     @attributes['postgresql']['version'].nil?
   end
     log "postgresql['version'] is set in /etc/gitlab/gitlab.rb. Not checking for a PostgreSQL upgrade"
+    deprecation_message if @attributes['postgresql']['version'].to_f < '11'.to_f
     Kernel.exit 0
   end
 
@@ -114,6 +115,8 @@ add_command_under_category 'pg-upgrade', 'database',
     $stderr.puts 'No new version of PostgreSQL installed, nothing to upgrade to'
     Kernel.exit 0
   end
+
+  deprecation_message if @db_worker.target_version.major.to_f < '11'.to_f
 
   unless GitlabCtl::Util.progress_message(
     'Checking if PostgreSQL bin files are symlinked to the expected location'
@@ -568,4 +571,12 @@ def goodbye_message
     log 'been shut down. After the secondary has been upgraded, it needs to be re-initialized'
     log 'Please see the instructions at https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-geo-instance'
   end
+end
+
+def deprecation_message
+  log '=== WARNING ==='
+  log 'Note that PostgreSQL 11 will become the minimum required PostgreSQL version in GitLab 13.0 (May 2020).'
+  log 'PostgreSQL 9.6 and PostgreSQL 10 will be removed in GitLab 13.0.'
+  log 'To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
+  log '=== WARNING ==='
 end
