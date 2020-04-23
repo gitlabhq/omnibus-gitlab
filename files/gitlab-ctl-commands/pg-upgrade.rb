@@ -233,7 +233,7 @@ def ha_secondary_upgrade(options)
     log "Not attempting to unregister secondary node due to --skip-unregister flag"
   else
     log "Unregistering secondary node from cluster"
-    Repmgr::Standby.unregister({})
+    RepmgrHandler::Standby.unregister({})
   end
 
   common_pre_upgrade
