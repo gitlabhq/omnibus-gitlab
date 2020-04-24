@@ -2388,3 +2388,41 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     handler: 'failover_pgbouncer'
 #   }
 # }
+################################################################################
+# Service desk email settings (EEP only)
+################################################################################
+### Service desk email
+###! Allow users to create new service desk issues by sending an email to
+###! service desk address.
+###! Docs: https://docs.gitlab.com/ee/administration/reply_by_email.html
+# gitlab_rails['service_desk_email_enabled'] = false
+
+#### Service Desk Mailbox Settings (via `mail_room`)
+#### Service Desk Email Address
+####! The email address including the `%{key}` placeholder that will be replaced
+####! to reference the item being replied to.
+####! **The placeholder can be omitted but if present, it must appear in the
+####!   "user" part of the address (before the `@`).**
+# gitlab_rails['service_desk_email_address'] = "contact_project+%{key}@gmail.com"
+
+#### Service Desk Email account username
+####! **With third party providers, this is usually the full email address.**
+####! **With self-hosted email servers, this is usually the user part of the
+####!   email address.**
+# gitlab_rails['service_desk_email_email'] = "contact_project@gmail.com"
+
+#### Service Desk Email account password
+# gitlab_rails['service_desk_email_password'] = "[REDACTED]"
+
+####! The mailbox where service desk mail will end up. Usually "inbox".
+# gitlab_rails['service_desk_email_mailbox_name'] = "inbox"
+####! The IDLE command timeout.
+# gitlab_rails['service_desk_email_idle_timeout'] = 60
+####! The file name for internal `mail_room` JSON logfile
+# gitlab_rails['service_desk_email_log_file'] = "/var/log/gitlab/mailroom/mail_room_json.log"
+
+#### Service Desk IMAP Settings
+# gitlab_rails['service_desk_email_host'] = "imap.gmail.com"
+# gitlab_rails['service_desk_email_port'] = 993
+# gitlab_rails['service_desk_email_ssl'] = true
+# gitlab_rails['service_desk_email_start_tls'] = false
