@@ -1,5 +1,0 @@
----
-title: Print a deprecation notice for postgres upgrades if <11
-merge_request: 4054
-author:
-type: deprecated
