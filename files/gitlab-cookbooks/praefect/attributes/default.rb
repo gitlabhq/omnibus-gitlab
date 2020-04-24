@@ -16,6 +16,7 @@ default['praefect']['logging_format'] = 'json'
 default['praefect']['sentry_dsn'] = nil
 default['praefect']['sentry_environment'] = nil
 default['praefect']['virtual_storages'] = {}
+default['praefect']['auto_migrate'] = true
 default['praefect']['database_host'] = nil
 default['praefect']['database_port'] = nil
 default['praefect']['database_user'] = nil

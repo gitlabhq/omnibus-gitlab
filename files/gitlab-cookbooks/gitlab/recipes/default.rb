@@ -127,6 +127,8 @@ end
 
 include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable'] && !node['gitlab']['pgbouncer']['enable']
 
+include_recipe "praefect::database_migrations" if node['praefect']['enable'] && node['praefect']['auto_migrate']
+
 # Always create logrotate folders and configs, even if the service is not enabled.
 # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/508
 include_recipe "gitlab::logrotate_folders_and_configs"

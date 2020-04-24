@@ -210,5 +210,19 @@ describe 'praefect' do
         end
       end
     end
+
+    describe 'database migrations' do
+      it 'runs the migrations' do
+        expect(chef_run).to run_bash('migrate praefect database')
+      end
+
+      context 'with auto_migrate off' do
+        before { stub_gitlab_rb(praefect: { auto_migrate: false }) }
+
+        it 'skips running the migrations' do
+          expect(chef_run).not_to run_bash('migrate praefect database')
+        end
+      end
+    end
   end
 end
