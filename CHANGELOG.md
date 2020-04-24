@@ -3,6 +3,20 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.10.1 (2020-04-24)
+
+### Fixed (4 changes)
+
+- Rhel/centos8 rpm changed the arg input to posttrans. !4093
+- Ensure the pg bin files fallback for geo-postgresql. !4118
+- Prevent gitlab upgrades from GitLab 11.x. !4138
+- Rename Repmgr to RepmgrHandler in HA pg-upgrade scenario. !4146
+
+### Deprecated (1 change)
+
+- Print a deprecation notice for postgres upgrades if <11. !4054
+
+
 ## 12.10.0 (2020-04-22)
 
 ### Security (1 change)

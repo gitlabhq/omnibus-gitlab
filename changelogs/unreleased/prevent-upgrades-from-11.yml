@@ -1,5 +1,0 @@
----
-title: Prevent gitlab upgrades from GitLab 11.x
-merge_request: 4138
-author:
-type: fixed
