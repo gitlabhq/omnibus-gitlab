@@ -282,6 +282,69 @@ you've completed these steps.
 
 ### Multi-node / HA deployment
 
+#### Praefect (Gitaly HA)
+
+Praefect is the GitLab component responsible for make Gitaly highly
+available. It has its own PostgreSQL database, independent of the rest
+of the application.
+
+Before you update the main application you need to update Praefect.
+Out of your Praefect nodes, pick one to be your Praefect deploy node.
+This is where you will install the new Omnibus package first and run
+database migrations.
+
+**Praefect deploy node**
+
+- Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
+  installation only, this will prevent the upgrade from running
+  `gitlab-ctl reconfigure` and restarting GitLab before database migrations have been applied:
+
+  ```sh
+  sudo touch /etc/gitlab/skip-auto-reconfigure
+  ```
+
+- Ensure that `praefect['auto_migrate'] = true` is set in `/etc/gitlab/gitlab.rb`
+
+**All other Praefect nodes (not the Praefect deploy node)**
+
+- Ensure that `praefect['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
+
+**Praefect deploy node**
+
+- Update the GitLab package:
+
+  ```sh
+  # Debian/Ubuntu
+  sudo apt-get update && sudo apt-get install gitlab-ce
+
+  # Centos/RHEL
+  sudo yum install gitlab-ce
+  ```
+
+  If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
+
+- To apply the Praefect database migrations and restart Praefect, run:
+
+  ```sh
+  sudo gitlab-ctl reconfigure
+  ```
+
+**All other Praefect nodes (not the Praefect deploy node)**
+
+- Update the GitLab package:
+
+  ```sh
+  sudo apt-get update && sudo apt-get install gitlab-ce
+  ```
+
+  If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
+
+- Ensure nodes are running the latest code:
+
+  ```sh
+  sudo gitlab-ctl reconfigure
+  ```
+
 #### Using PostgreSQL HA
 
 Pick a node to be the `Deploy Node`. It can be any node, but it must be the same
@@ -291,7 +354,7 @@ node throughout the process.
 
 - Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
   installation only, this will prevent the upgrade from running
-  `gitlab-ctl reconfigure` and automatically running database migrations
+  `gitlab-ctl reconfigure` and restarting GitLab before database migrations have been applied.
 
   ```sh
   sudo touch /etc/gitlab/skip-auto-reconfigure

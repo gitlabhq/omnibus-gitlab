@@ -1891,6 +1891,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 # praefect['sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
 # praefect['sentry_environment'] = "production"
+# praefect['auto_migrate'] = true
 # praefect['database_host'] = 'postgres.internal'
 # praefect['database_port'] = 5432
 # praefect['database_user'] = 'praefect'
