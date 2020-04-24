@@ -1,0 +1,5 @@
+---
+title: Ensure the pg bin files fallback for geo-postgresql
+merge_request: 4118
+author:
+type: fixed

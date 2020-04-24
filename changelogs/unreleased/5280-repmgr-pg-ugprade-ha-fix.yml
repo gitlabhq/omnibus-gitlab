@@ -1,0 +1,5 @@
+---
+title: Rename Repmgr to RepmgrHandler in HA pg-upgrade scenario
+merge_request: 4146
+author:
+type: fixed

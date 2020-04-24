@@ -1,0 +1,5 @@
+---
+title: Rhel/centos8 rpm changed the arg input to posttrans
+merge_request: 4093
+author:
+type: fixed

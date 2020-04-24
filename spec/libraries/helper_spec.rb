@@ -110,6 +110,7 @@ describe OmnibusHelper do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    allow(File).to receive(:symlink?).with(any_args).and_call_original
   end
 
   context 'service is currently enabled, bootstrapped and is running' do
