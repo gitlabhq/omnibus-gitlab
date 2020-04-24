@@ -305,17 +305,6 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   notifies :run, 'execute[clear the gitlab-rails cache]'
 end
 
-templatesymlink "Create a rack_attack.rb and create a symlink to Rails root" do
-  link_from File.join(gitlab_rails_source_dir, "config/initializers/rack_attack.rb")
-  link_to File.join(gitlab_rails_etc_dir, "rack_attack.rb")
-  source "rack_attack.rb.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables(node['gitlab']['gitlab-rails'].to_hash)
-  dependent_services.each { |svc| notifies :restart, svc }
-end
-
 gitlab_workhorse_services = dependent_services
 gitlab_workhorse_services += ['runit_service[gitlab-workhorse]'] if omnibus_helper.should_notify?('gitlab-workhorse')
 

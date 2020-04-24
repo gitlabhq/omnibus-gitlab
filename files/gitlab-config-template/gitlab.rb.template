@@ -537,8 +537,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### GitLab application settings
 # gitlab_rails['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
-# gitlab_rails['rate_limit_requests_per_period'] = 10
-# gitlab_rails['rate_limit_period'] = 60
 
 #### Change the initial default admin password and shared runner registration tokens.
 ####! **Only applicable on initial setup, changing these settings after database
