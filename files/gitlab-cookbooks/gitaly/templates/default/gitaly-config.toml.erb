@@ -98,6 +98,35 @@ rugged_git_config_search_path = "<%= @ruby_rugged_git_config_search_path %>"
 
 [gitlab-shell]
 dir = "/opt/gitlab/embedded/service/gitlab-shell"
+<% if @gitlab_shell['gitlab_url'] %>
+gitlab_url = '<%= @gitlab_shell['gitlab_url'] %>'
+<% end %>
+<% if @gitlab_shell['custom_hooks_dir'] %>
+custom_hooks_dir = '<%= @gitlab_shell['custom_hooks_dir'] %>'
+<% end %>
+<% if @gitlab_shell['http_settings'] %>
+<% http_settings = @gitlab_shell['http_settings'] %>
+[gitlab-shell.http-settings]
+<% if http_settings['read_timeout'] %>
+read_timeout = <%= http_settings['read_timeout'] %>
+<% end %>
+<% if http_settings['user'] %>
+user = '<%= http_settings['user'] %>'
+<% end %>
+<% if http_settings['password'] %>
+password = '<%= http_settings['password'] %>'
+<% end %>
+<% if http_settings['ca_file'] %>
+ca_file = '<%= http_settings['ca_file'] %>'
+<% end %>
+<% if http_settings['ca_path'] %>
+ca_path = '<%= http_settings['ca_path'] %>'
+<% end %>
+<% if http_settings['self_signed_cert'] %>
+self_signed_cert = <%= http_settings['self_signed_cert'] %>
+<% end %>
+<% end %>
+
 <% if @concurrency %>
   <% @concurrency.each do |endpoint| %>
 
