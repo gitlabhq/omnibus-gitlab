@@ -28,6 +28,31 @@ describe 'gitlab::mailroom' do
   end
 
   describe 'when enabled' do
+    context 'when only service_desk_email enabled' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            service_desk_email_enabled: true
+          }
+        )
+      end
+
+      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'git', 'git'
+    end
+
+    context 'when both service_desk_email and incoming_email enabled' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            incoming_email_enabled: true,
+            service_desk_email_enabled: true
+          }
+        )
+      end
+
+      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'git', 'git'
+    end
+
     context 'default values' do
       before do
         stub_gitlab_rb(

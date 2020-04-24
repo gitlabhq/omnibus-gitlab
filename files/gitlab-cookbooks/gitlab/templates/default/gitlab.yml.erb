@@ -155,6 +155,39 @@ production: &base
     # file path of internal `mail_room` JSON logs
     log_path: <%= @incoming_email_log_file %>
 
+  ## Service desk email
+  # Allow users to use a separate service desk address
+  # For documentation on how to set this up, see http://doc.gitlab.com/ce/administration/reply_by_email.html
+  service_desk_email:
+    enabled: <%= @service_desk_email_enabled %>
+
+    # The email address including the `%{key}` placeholder that will be replaced to reference the item being replied to.
+    # The placeholder can be omitted but if present, it must appear in the "user" part of the address (before the `@`).
+    address: <%= quote(@service_desk_email_address) %>
+
+    # Email account username
+    # With third party providers, this is usually the full email address.
+    # With self-hosted email servers, this is usually the user part of the email address.
+    user: <%= quote(@service_desk_email_email) %>
+    # Email account password
+    password: <%= quote(@service_desk_email_password) %>
+
+    # IMAP server host
+    host: <%= quote(@service_desk_email_host) %>
+    # IMAP server port
+    port: <%= @service_desk_email_port %>
+    # Whether the IMAP server uses SSL
+    ssl: <%= @service_desk_email_ssl %>
+    # Whether the IMAP server uses StartTLS
+    start_tls: <%= @service_desk_email_start_tls %>
+
+    # The mailbox where incoming mail will end up. Usually "inbox".
+    mailbox: <%= quote(@service_desk_email_mailbox_name) %>
+    # The IDLE command timeout.
+    idle_timeout: <%= @service_desk_email_idle_timeout %>
+    # file path of internal `mail_room` JSON logs
+    log_path: <%= @service_desk_email_log_file %>
+
   ## Build Artifacts
   artifacts:
     enabled: <%= @artifacts_enabled %>

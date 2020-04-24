@@ -18,11 +18,17 @@
 module IncomingEmail
   class << self
     def parse_variables
-      parse_incoming_email
+      parse_incoming_email || parse_service_desk_email
     end
 
     def parse_incoming_email
       return unless Gitlab['gitlab_rails']['incoming_email_enabled']
+
+      Gitlab['mailroom']['enable'] = true if Gitlab['mailroom']['enable'].nil?
+    end
+
+    def parse_service_desk_email
+      return unless Gitlab['gitlab_rails']['service_desk_email_enabled']
 
       Gitlab['mailroom']['enable'] = true if Gitlab['mailroom']['enable'].nil?
     end

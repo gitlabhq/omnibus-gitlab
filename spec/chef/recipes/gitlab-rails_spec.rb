@@ -2678,11 +2678,11 @@ describe 'gitlab::gitlab-rails' do
     end
   end
 
-  shared_examples 'exposes the correct incoming email log file location' do |incoming_mail_logfile_path, mailroom_log_directory, result|
+  shared_examples 'exposes the correct mail_room log file location' do |mail_config_key, mail_logfile_path, mailroom_log_directory, result|
     before do
       stub_gitlab_rb(
         gitlab_rails: {
-          incoming_email_log_file: incoming_mail_logfile_path,
+          mail_config_key => mail_logfile_path,
         },
         mailroom: {
           log_directory: mailroom_log_directory
@@ -2690,10 +2690,10 @@ describe 'gitlab::gitlab-rails' do
       )
     end
 
-    it 'exposes the incoming email log file location' do
+    it 'exposes the mail_room email log file location' do
       expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
         hash_including(
-          'incoming_email_log_file' => result
+          mail_config_key => result
         )
       )
     end
@@ -2702,19 +2702,39 @@ describe 'gitlab::gitlab-rails' do
   context 'incoming email settings' do
     context 'Structured logging is enabled' do
       context 'uses the default if nothing is specified' do
-        it_behaves_like 'exposes the correct incoming email log file location', nil, nil, '/var/log/gitlab/mailroom/mail_room_json.log'
+        it_behaves_like 'exposes the correct mail_room log file location', 'incoming_email_log_file', nil, nil, '/var/log/gitlab/mailroom/mail_room_json.log'
       end
 
       context 'uses the default log file name if it is not provided' do
-        it_behaves_like 'exposes the correct incoming email log file location', nil, '/var/log/some_other_directory', '/var/log/some_other_directory/mail_room_json.log'
+        it_behaves_like 'exposes the correct mail_room log file location', 'incoming_email_log_file', nil, '/var/log/some_other_directory', '/var/log/some_other_directory/mail_room_json.log'
       end
 
       context 'uses a relative filename if mailroom log directory is not provided' do
-        it_behaves_like 'exposes the correct incoming email log file location', '/var/log/gitlab/mailroom/mail_room_json.log', nil, '/var/log/gitlab/mailroom/mail_room_json.log'
+        it_behaves_like 'exposes the correct mail_room log file location', 'incoming_email_log_file', '/var/log/gitlab/mailroom/mail_room_json.log', nil, '/var/log/gitlab/mailroom/mail_room_json.log'
       end
 
       context "uses the specified pathname for the logfile even if it's different from the mail_room directory" do
-        it_behaves_like 'exposes the correct incoming email log file location', '/var/log/gitlab/mailroom/some_file.log', '/var/log/custom_directory/for_mailroom', '/var/log/gitlab/mailroom/some_file.log'
+        it_behaves_like 'exposes the correct mail_room log file location', 'incoming_email_log_file', '/var/log/gitlab/mailroom/some_file.log', '/var/log/custom_directory/for_mailroom', '/var/log/gitlab/mailroom/some_file.log'
+      end
+    end
+  end
+
+  context 'service desk email settings' do
+    context 'Structured logging is enabled' do
+      context 'uses the default if nothing is specified' do
+        it_behaves_like 'exposes the correct mail_room log file location', 'service_desk_email_log_file', nil, nil, '/var/log/gitlab/mailroom/mail_room_json.log'
+      end
+
+      context 'uses the default log file name if it is not provided' do
+        it_behaves_like 'exposes the correct mail_room log file location', 'service_desk_email_log_file', nil, '/var/log/some_other_directory', '/var/log/some_other_directory/mail_room_json.log'
+      end
+
+      context 'uses a relative filename if mailroom log directory is not provided' do
+        it_behaves_like 'exposes the correct mail_room log file location', 'service_desk_email_log_file', '/var/log/gitlab/mailroom/mail_room_json.log', nil, '/var/log/gitlab/mailroom/mail_room_json.log'
+      end
+
+      context "uses the specified pathname for the logfile even if it's different from the mail_room directory" do
+        it_behaves_like 'exposes the correct mail_room log file location', 'service_desk_email_log_file', '/var/log/gitlab/mailroom/some_file.log', '/var/log/custom_directory/for_mailroom', '/var/log/gitlab/mailroom/some_file.log'
       end
     end
   end
