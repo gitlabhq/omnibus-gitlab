@@ -20,3 +20,4 @@ tags
 gitlab-licenses/*
 public/*
 config/projects/simple.rb
+.markdownlintrc
