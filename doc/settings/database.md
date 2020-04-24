@@ -828,6 +828,10 @@ replication user's password.
    You will be prompted for the replication user's password of the primary
    server.
 
+1. [Reconfigure GitLab][] on the Geo **secondary database** to update the
+   `pg_hba.conf` file. This is needed because `replicate-geo-database`
+   replicates the primary's file to the secondary.
+
 1. Refresh the foreign tables on the Geo secondary server by running this
    command on an application node (any node running `unicorn`, `sidekiq`, or
    `geo-logcursor`).
