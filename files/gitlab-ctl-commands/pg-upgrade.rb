@@ -215,9 +215,9 @@ def common_post_upgrade(disable_maintenance = true)
 
   log "Waiting for Database to be running."
   if @db_service_name == 'geo-postgresql'
-    GitlabCtl::PostgreSQL.wait_for_postgresql(30, psql_command: 'gitlab-geo-psql')
+    GitlabCtl::PostgreSQL.wait_for_postgresql(120, psql_command: 'gitlab-geo-psql')
   else
-    GitlabCtl::PostgreSQL.wait_for_postgresql(30)
+    GitlabCtl::PostgreSQL.wait_for_postgresql(120)
   end
 
   unless [:pg_secondary, :geo_secondary].include?(@instance_type)
