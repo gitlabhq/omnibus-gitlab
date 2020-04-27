@@ -44,9 +44,9 @@ module Gitlab
   attribute('registry',    priority: 20).use { Registry }
   attribute('redis',       priority: 20).use { Redis }
   attribute('postgresql',  priority: 20).use { Postgresql }
-  attribute('repmgr').use { Repmgr }
+  attribute('repmgr')
   attribute('repmgrd')
-  attribute('consul').use { Consul }
+  attribute('consul')
   attribute('gitaly').use { Gitaly }
   attribute('praefect').use { Praefect }
   attribute('mattermost',  priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
