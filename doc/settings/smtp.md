@@ -448,10 +448,9 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 
 ### GoDaddy (TLS)
 
-
-*  European servers: smtpout.europe.secureserver.net
-*  Asian servers: smtpout.asia.securesevers.net
-*  Global (US) servers: smtpout.secureserver.net
+- European servers: smtpout.europe.secureserver.net
+- Asian servers: smtpout.asia.securesevers.net
+- Global (US) servers: smtpout.secureserver.net
 
 ```ruby
 gitlab_rails['gitlab_email_from'] = 'username@domain.com'
