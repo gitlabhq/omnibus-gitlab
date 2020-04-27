@@ -28,7 +28,6 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       parse_external_url
       parse_directories
       parse_gitlab_trusted_proxies
-      parse_rack_attack_protected_paths
       parse_incoming_email_logfile
       parse_service_desk_email_logfile
       parse_maximum_request_duration
@@ -207,28 +206,6 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
     def parse_gitlab_trusted_proxies
       Gitlab['nginx']['real_ip_trusted_addresses'] ||= Gitlab['node']['gitlab']['nginx']['real_ip_trusted_addresses']
       Gitlab['gitlab_rails']['trusted_proxies'] ||= Gitlab['nginx']['real_ip_trusted_addresses']
-    end
-
-    def parse_rack_attack_protected_paths
-      # Fixing common user's input mistakes for rake attack protected paths
-      return unless Gitlab['gitlab_rails']['rack_attack_protected_paths']
-
-      # append leading slash if missing
-      Gitlab['gitlab_rails']['rack_attack_protected_paths'].map! do |path|
-        path.start_with?('/') ? path : '/' + path
-      end
-
-      # append urls to the list but without relative_url
-      return unless Gitlab['gitlab_rails']['gitlab_relative_url']
-
-      paths_without_relative_url = []
-      Gitlab['gitlab_rails']['rack_attack_protected_paths'].each do |path|
-        if path.start_with?(Gitlab['gitlab_rails']['gitlab_relative_url'] + '/')
-          stripped_path = path.sub(Gitlab['gitlab_rails']['gitlab_relative_url'], '')
-          paths_without_relative_url.push(stripped_path)
-        end
-      end
-      Gitlab['gitlab_rails']['rack_attack_protected_paths'].concat(paths_without_relative_url)
     end
 
     def parse_incoming_email_logfile

@@ -573,50 +573,6 @@ gitlab_rails['rack_attack_git_basic_auth'] = {
 }
 ```
 
-### Setting up paths to be protected by Rack Attack
-
-NOTE: **Note:**
-Omnibus protected paths throttle is deprecated and is scheduled for removal in
-GitLab 13.0. Please refer to [Migrating settings from GitLab 12.3 and earlier](https://docs.gitlab.com/ee/user/admin_area/settings/protected_paths.html#migrate-settings-from-gitlab-123-and-earlier) guideline.
-
-If you want to change default protected paths
-set `gitlab_rails['rack_attack_protected_paths']` in config file.
-
-**Warning** This action will overwrite
-list provided by Omnibus GitLab:
-
-```ruby
-gitlab_rails['rack_attack_protected_paths'] = [
-  '/users/password',
-  '/users/sign_in',
-  '/api/#{API::API.version}/session.json',
-  '/api/#{API::API.version}/session',
-  '/users',
-  '/users/confirmation',
-  '/unsubscribes/',
-  '/import/github/personal_access_token'
-]
-```
-
-NOTE: **Note:**
-All paths are relative to the GitLab url. Do not include [relative URL](configuration.md#configuring-a-relative-url-for-gitlab) if you set it up.
-
-**Warning** If path contains variables which need to be
-interpolated by rails(ex. `#{API::API.version}`)
-then you need to escape curly brackets or use single quoted string.
-For example `"/api/#\{API::API.version\}/session.json"` or `'/api/#{API::API.version}/session.json'`
-
-### Setting up throttling for 'paths to be protected'
-
-Use next options to control throttling 'limit' and 'period':
-
-```ruby
-gitlab_rails['rate_limit_requests_per_period'] = 10
-gitlab_rails['rate_limit_period'] = 60
-```
-
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
-
 ## Disable impersonation
 
 Disabling impersonation is documented in
