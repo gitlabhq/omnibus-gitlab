@@ -87,6 +87,9 @@ module Build
           when :success
             puts "Pipeline succeeded in #{duration} minutes!"
             break
+          when :scheduled
+            puts "After #{duration} minutes, pipeline is currently paused and scheduled to continue later. Considering it a successful pipeline."
+            break
           else
             raise "Pipeline did not succeed!"
           end
