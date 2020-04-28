@@ -422,7 +422,7 @@ shipped).
 If the target version is not specified, it will use the version in `/var/opt/gitlab/postgresql-version.old`
 if available. Otherwise it falls back to the default version shipped with GitLab.
 
-On other GitLab versions which ship only one PostgreSQL versions, you can't
+On other GitLab versions which ship only one PostgreSQL version, you can't
 downgrade your PostgreSQL version. You must downgrade GitLab to an older version for
 this.
 
