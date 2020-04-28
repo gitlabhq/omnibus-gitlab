@@ -74,6 +74,17 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       Gitlab['gitlab_rails']['secret_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['otp_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['openid_connect_signing_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
+
+      if Gitlab['gitlab_rails']['ci_jwt_signing_key']
+        begin
+          key = OpenSSL::PKey::RSA.new(Gitlab['gitlab_rails']['ci_jwt_signing_key'])
+          raise 'ci_jwt_signing_key: The provided key is not private RSA key' unless key.private?
+        rescue OpenSSL::PKey::RSAError
+          raise 'ci_jwt_signing_key: The provided key is not valid RSA key'
+        end
+      else
+        Gitlab['gitlab_rails']['ci_jwt_signing_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
+      end
     end
 
     def parse_external_url
