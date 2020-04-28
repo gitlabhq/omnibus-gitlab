@@ -368,7 +368,7 @@ The following section details their update policy.
 #### GitLab 12.10 and later
 
 The default PostgreSQL version is set to 11.x, and an automatic upgrade of the
-database is done on package upgrades for installs with a single database node.
+database is done on package upgrades for installs that are not using repmgr or Geo.
 
 The automatic upgrade is skipped in any of the following cases:
 
@@ -376,7 +376,7 @@ The automatic upgrade is skipped in any of the following cases:
 - your database nodes are part of GitLab Geo configuration.
 - you have specifically opted out using the `/etc/gitlab/disable-postgresql-upgrade` file outlined above.
 
-Users can manually upgrade using `gitlab-ctl pg-upgrade`.
+Users can manually upgrade using `gitlab-ctl pg-upgrade`. To upgrade PostgreSQL on installs with HA or Geo, see [Packaged PostgreSQL deployed in an HA/Geo Cluster](Packaged PostgreSQL deployed in an HA/Geo Cluster).
 
 #### GitLab 12.8 and later
 
