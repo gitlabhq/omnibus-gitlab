@@ -446,9 +446,33 @@ gitlab_rails['smtp_tls'] = false
 gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 ```
 
-### GoDaddy (No TLS)
+### GoDaddy (TLS)
+
+- European servers: smtpout.europe.secureserver.net
+- Asian servers: smtpout.asia.securesevers.net
+- Global (US) servers: smtpout.secureserver.net
 
 ```ruby
+gitlab_rails['gitlab_email_from'] = 'username@domain.com'
+
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtpout.secureserver.net"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "username@domain.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "domain.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+```
+
+### GoDaddy (No TLS)
+
+See TLS entry for mail servers.
+
+```ruby
+gitlab_rails['gitlab_email_from'] = 'username@domain.com'
+
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtpout.secureserver.net"
 gitlab_rails['smtp_port'] = 80
