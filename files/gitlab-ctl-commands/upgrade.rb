@@ -49,16 +49,6 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     log 'Could not update PostgreSQL executables.'
   end
 
-  # TODO: Remove in 13.0, by which everyone would've reset their Grafana.
-  # Issue: https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4891
-  unless GitlabCtl::Util.progress_message('Checking if Grafana needs to be reset') do
-    command = %W(#{base_path}/bin/gitlab-ctl reset-grafana)
-    status = run_command(command.join(' '))
-    status.success?
-  end
-    log 'Failed to check if Grafana needs to be reset.'
-  end
-
   auto_migrations_skip_file = "#{etc_path}/skip-auto-reconfigure"
   if File.exist?(auto_migrations_skip_file)
     log "Found #{auto_migrations_skip_file}, exiting..."

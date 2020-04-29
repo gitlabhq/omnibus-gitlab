@@ -74,7 +74,7 @@ directory grafana_provisioning_notifiers_dir do
 end
 
 file File.join(grafana_dir, 'CVE_reset_status') do
-  content '0'
+  action :delete
 end
 
 link File.join(grafana_dir, 'conf') do
