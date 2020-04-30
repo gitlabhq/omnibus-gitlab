@@ -942,6 +942,36 @@ send a test email:
 Notify.test_email('destination_email@address.com', 'Message Subject', 'Message Body').deliver_now
 ```
 
+## Troubleshooting SSL/TLS
+
+Many users run into the following error after configuring SMTP:
+
+```plaintext
+OpenSSL::SSL::SSLError (SSL_connect returned=1 errno=0 state=error: wrong version number)
+```
+
+This error is usually due to incorrect settings:
+
+- If your SMTP provider is using port 25 or 587, SMTP connections start
+**unencrypted** but can be upgraded via
+[STARTTLS](https://en.wikipedia.org/wiki/Opportunistic_TLS). Be sure the
+following settings are set:
+
+  ```ruby
+  gitlab_rails['smtp_enable_starttls_auto'] = true
+  gitlab_rails['smtp_tls'] = false # This is the default and can be omitted
+  gitlab_rails['smtp_ssl'] = false # This is the default and can be omitted
+  ```
+
+- If your SMTP provider is using port 465, SMTP connections start
+**encrypted** over TLS. Ensure the following line is present:
+
+  ```ruby
+  gitlab_rails['smtp_tls'] = true
+  ```
+
+For more details, read [about the confusion over SMTP ports, TLS, and STARTTLS](https://www.fastmail.com/help/technical/ssltlsstarttls.html).
+
 ## Disable all outgoing email
 
 NOTE: **Note:**
