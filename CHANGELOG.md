@@ -3,6 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.9.5 (2020-04-30)
+
+### Security (2 changes)
+
+- Backport change for updating openssl/openssl from 1f to 1g.
+- Remove sensitive info from Docker image.
+
+### Other (1 change)
+
+- Upgrade to Git 2.24.3. !4128
+
+
 ## 12.9.4 (2020-04-17)
 
 ### Other (1 change)
