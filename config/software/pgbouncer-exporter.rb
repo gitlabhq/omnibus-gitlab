@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'pgbouncer-exporter'
-version = Gitlab::Version.new('pgbouncer-exporter', '0.1.3-gitlab')
+version = Gitlab::Version.new('pgbouncer-exporter', '0.2.0')
 default_version version.print
 
 license 'MIT'
@@ -30,7 +30,7 @@ skip_transitive_dependency_licensing true
 
 source git: version.remote
 
-go_source = 'github.com/stanhu/pgbouncer_exporter'
+go_source = 'github.com/prometheus-community/pgbouncer_exporter'
 relative_path "src/#{go_source}"
 
 build do
