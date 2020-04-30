@@ -44,7 +44,7 @@ variables:
   ASSET_SYNC_EXISTING_REMOTE_FILES: "keep"
   ASSET_SYNC_GZIP_COMPRESSION: "true"
   ASSET_PATH: "assets-${CI_COMMIT_REF_SLUG}"
-  COMPILE_ASSETS: "true"
+  COMPILE_ASSETS: "false"
   RUBY_IMAGE: "ruby:2.5"
   BUNDLE_PATH__SYSTEM: "false"
   # Format of the auto-deploy tag for auto-deploy builds.
