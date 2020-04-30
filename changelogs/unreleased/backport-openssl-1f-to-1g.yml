@@ -1,5 +1,0 @@
----
-title: Backport change for updating openssl/openssl from 1f to 1g
-merge_request:
-author:
-type: security
