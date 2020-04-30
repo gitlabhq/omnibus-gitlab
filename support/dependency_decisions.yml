@@ -725,3 +725,24 @@
     :why: https://github.com/shurcooL/httpfs/blob/master/LICENSE
     :versions: []
     :when: 2019-09-05 12:30:45.324383443 Z
+- - :license
+  - google.golang.org/protobuf/internal
+  - BSD-3-Clause
+  - :who: Balasankar C
+    :why: https://pkg.go.dev/mod/google.golang.org/protobuf?tab=licenses
+    :versions: []
+    :when: 2020-04-30 11:07:33.738945273 Z
+- - :license
+  - google.golang.org/protobuf/proto
+  - BSD-3-Clause
+  - :who: Balasankar C
+    :why: https://pkg.go.dev/mod/google.golang.org/protobuf?tab=licenses
+    :versions: []
+    :when: 2020-04-30 11:07:45.852841003 Z
+- - :license
+  - google.golang.org/protobuf/types
+  - BSD-3-Clause
+  - :who: Balasankar C
+    :why: https://pkg.go.dev/mod/google.golang.org/protobuf?tab=licenses
+    :versions: []
+    :when: 2020-04-30 11:07:51.306158180 Z
