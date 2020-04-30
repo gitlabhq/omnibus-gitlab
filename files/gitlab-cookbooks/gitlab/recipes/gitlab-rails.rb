@@ -400,10 +400,11 @@ end
   end
 end
 
+# This cleans up a symlink that's no longer used.
+# This can be removed for: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5360
 legacy_sidekiq_log_file = File.join(gitlab_rails_log_dir, 'sidekiq.log')
-link legacy_sidekiq_log_file do
-  to File.join(node['gitlab']['sidekiq']['log_directory'], 'current')
-  not_if { File.exist?(legacy_sidekiq_log_file) }
+file legacy_sidekiq_log_file do
+  action :delete
 end
 
 # Make structure.sql writable for when we run `rake db:migrate`
