@@ -1,0 +1,5 @@
+---
+title: Add Prometheus rules for Puma
+merge_request: 4177
+author:
+type: added

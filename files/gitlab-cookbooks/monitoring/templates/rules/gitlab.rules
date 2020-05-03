@@ -10,6 +10,14 @@ groups:
       count by (instance) (
         ruby_memory_bytes
       )
+  - record: instance:puma_utilization:ratio
+    expr: >
+      sum by (instance) (
+        puma_active_connections
+      ) /
+      sum by (instance) (
+        puma_max_threads
+      )
   - record: job_grpc:grpc_server_handled_total:rate5m
     expr: >
       sum by (job, grpc_code, grpc_method, grpc_service, grpc_type) (
@@ -45,12 +53,24 @@ groups:
       description: Unicorn instance {{ $labels.instance }} is queueing requests with
         an average of {{ $value | printf "%.1f" }} over the last 30 minutes.
       summary: Unicorn is queueing requests
+  - alert: PumaQueueing
+    expr: avg_over_time(puma_queued_connections[30m]) > 1
+    annotations:
+      description: Puma instance {{ $labels.instance }} is queueing requests with
+        an average of {{ $value | printf "%.1f" }} over the last 30 minutes.
+      summary: Puma is queueing requests
   - alert: HighUnicornUtilization
     expr: instance:unicorn_utilization:ratio * 100 > 90
     for: 60m
     annotations:
       description: Unicorn instance {{ $labels.instance }} has more than 90% worker utilization ({{ $value | printf "%.1f" }}%) over the last 60 minutes.
       summary: Unicorn is has high utilization
+  - alert: HighPumaUtilization
+    expr: instance:puma_utilization:ratio * 100 > 90
+    for: 60m
+    annotations:
+      description: Puma instance {{ $labels.instance }} has more than 90% thread utilization ({{ $value | printf "%.1f" }}%) over the last 60 minutes.
+      summary: Puma is has high utilization
   - alert: SidekiqJobsQueuing
     expr: sum by (name) (sidekiq_queue_size) > 0
     for: 60m
