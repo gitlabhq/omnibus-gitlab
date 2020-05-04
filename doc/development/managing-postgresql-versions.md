@@ -68,11 +68,11 @@ For removals, perform the following steps:
 
 ### Testing
 1.  GitLab runs on the new version of PostgreSQL
-2.  3. Test running GitLab on the new PostgreSQL version at the 10k reference architecture scale and check for performance regressions.
+2.  Test running GitLab on the new PostgreSQL version at the 10k reference architecture scale and check for performance regressions.
 
 Test upgrades and fresh installs for the following environments:
 
-2. Single node
+1. Single node
 3. Install with a separate database node managed by Omnibus
 3. HA database cluster with 3 or more database nodes in the cluster
 2. Geo installations with a single node primary and single node secondary (postgresql and geo-postgresql on the same secondary node)
