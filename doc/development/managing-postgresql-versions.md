@@ -1,6 +1,6 @@
 # Managing PostgreSQL versions
 
-The PostgreSQL Global Development Group typically releases [one major version of PostgreSQL each year](https://www.postgresql.org/support/versioning/), usually in the third quarter. Our goal is to add support for the newest PostgreSQL release in the next major release of GitLab, and to support two versions of PostgreSQL at any given time. This means that in each major release of GitLab, we will remove the oldest version of PostgreSQL that we support, bump the minimally required PostgreSQL version up by one major version, and add optional support for the newest PostgreSQL version. 
+The PostgreSQL Global Development Group typically releases [one major version of PostgreSQL each year](https://www.postgresql.org/support/versioning/), usually in the third quarter. Our goal is to add support for the newest PostgreSQL release in the next major release of GitLab, and to support two versions of PostgreSQL at any given time. This means that in each major release of GitLab, we will remove the oldest version of PostgreSQL that we support, bump the minimally required PostgreSQL version up by one major version, and add support for the newest PostgreSQL version. 
 
 ### Example
 
