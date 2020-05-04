@@ -63,7 +63,7 @@ For removals, perform the following steps:
 5. Add the new PostgreSQL version to the full test suite
 6. Run a nightly test of the `gitlab-org/gitlab` repo against the new version of PostgreSQL
 1. Ensure that the package build includes both versions of PostgreSQL.
-2. For Helm installs, update the default postgres chart version if the default is changing.
+2. For Helm installs, update the default PostgreSQL chart version if the default is changing.
 4. Update user documentation
 
 ### Testing
@@ -75,7 +75,7 @@ Test upgrades and fresh installs for the following environments:
 1. Single node
 3. Install with a separate database node managed by Omnibus
 3. HA database cluster with 3 or more database nodes in the cluster
-2. Geo installations with a single node primary and single node secondary (postgresql and geo-postgresql on the same secondary node)
+2. Geo installations with a single node primary and single node secondary (`postgresql` and `geo-postgresql` on the same secondary node)
 2. Geo installations with a HA database cluster on the primary
 3. Geo installations with a separate tracking database on the secondary
 4. Helm installs
