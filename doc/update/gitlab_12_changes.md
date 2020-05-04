@@ -113,6 +113,15 @@ active. To restart Redis, run `sudo gitlab-ctl restart redis`. If your instance
 has Redis HA with Sentinel, follow the upgrade steps documented in [Updating GitLab installed with the Omnibus GitLab package](README.md#using-redis-ha-using-sentinel)
 to avoid downtime.
 
+Unicorn memory limits should also be adjusted to the following values:
+
+```ruby
+unicorn['worker_memory_limit_min'] = "1024 * 1 << 20"
+unicorn['worker_memory_limit_max'] = "1280 * 1 << 20"
+```
+
+See our documentation on [unicorn-worker-killer](https://docs.gitlab.com/ee/administration/operations/unicorn.html#unicorn-worker-killer) for more information.
+
 ### 12.8
 
 PostgreSQL 11.7 is being shipped with the package in addition to 10.12 and 9.6.17.
