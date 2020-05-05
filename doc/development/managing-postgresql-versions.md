@@ -98,4 +98,5 @@ If the minimally required version is changing:
 If the above tests are manual, we risk missing a breaking change that is introduced after the manual tests have been performed. We should automate as many of these tests as possible.
 
 ## Known issues
-*  Geo uses streaming replication, which requires that the entire secondary database be resynched after a major PostgreSQL upgrade. This can cause hours or days of downtime, and as such, we do not recommend auto upgrades for Geo customers. Starting in 12.10, automatic PostgreSQL upgrades are disabled if Geo is detected.
+
+Geo uses streaming replication, which requires that the entire secondary database be resynced after a major PostgreSQL upgrade. This can cause hours or days of downtime, and as such, we do not recommend auto upgrades for Geo customers. Starting in 12.10, automatic PostgreSQL upgrades are disabled if Geo is detected.
