@@ -62,11 +62,11 @@ For removals, perform the following steps:
    1. `major_version` if necessary
 
 
-5. Add the new PostgreSQL version to the full test suite
-6. Run a nightly test of the `gitlab-org/gitlab` repo against the new version of PostgreSQL
+1. Add the new PostgreSQL version to the full test suite.
+1. Run a nightly test of the `gitlab-org/gitlab` repo against the new version of PostgreSQL.
 1. Ensure that the package build includes both versions of PostgreSQL.
-2. For Helm installs, update the default PostgreSQL chart version if the default is changing.
-4. Update user documentation
+1. For Helm installs, update the default PostgreSQL chart version if the default is changing.
+1. Update user documentation.
 
 ### Testing
 1.  GitLab runs on the new version of PostgreSQL
