@@ -36,11 +36,12 @@ The [`gitlab-ctl pg-upgrade` command](https://gitlab.com/gitlab-org/omnibus-gitl
 ## Removing an older version
 
 When it is time to remove an older version, create an epic with issues to track the following:
-1.  Remove the old version from Omnibus
-2.  Remove the old version from the Helm install
-3.  To minimize CI costs, remove the older version from test suites. (Before doing this, check that .com is not using the old version still)
-4.  Remove references to that version of PostgreSQL in the GitLab user documentation
-5.  Start printing deprecation notices in the release post three GitLab versions before a major PostgreSQL version is removed. If the PostgreSQL version is a version that will be removed within three releases, print deprecation notices in the Admin UI and during the GitLab upgrade process, regardless of whether it is an Omnibus-managed PostgreSQL database or an external database. 
+
+1. Remove the old version from Omnibus.
+1. Remove the old version from the Helm install.
+1. To minimize CI costs, remove the older version from test suites (before doing this, check that .com is not using the old version still).
+1. Remove references to that version of PostgreSQL in the GitLab user documentation.
+1. Start printing deprecation notices in the release post three GitLab versions before a major PostgreSQL version is removed. If the PostgreSQL version is a version that will be removed within three releases, print deprecation notices in the Admin UI and during the GitLab upgrade process, regardless of whether it is an Omnibus-managed PostgreSQL database or an external database.
 
 For removals, perform the following steps:
 
