@@ -412,6 +412,11 @@ the 10.7 using the `pg-upgrade` command as mentioned above.
 
 ### Downgrade packaged PostgreSQL server
 
+DANGER: **Danger:**
+This operation will revert your current database, *including its data*, to its state
+before your last upgrade. Be sure to create a backup before attempting to downgrade
+your packaged PostgreSQL database.
+
 On GitLab versions which ship multiple PostgreSQL versions, users can downgrade
 an already upgraded PostgreSQL version to the earlier version using the `gitlab-ctl
 revert-pg-upgrade` command. This command also supports the `-V` flag to specify
