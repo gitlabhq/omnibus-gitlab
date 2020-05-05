@@ -1,0 +1,5 @@
+---
+title: Remove support for user attributes for Repmgr and Consul
+merge_request: 4153
+author:
+type: removed

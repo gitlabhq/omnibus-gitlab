@@ -66,18 +66,6 @@ module Gitlab
             removal: '13.0',
             note: "Use gitlab_exporter['probe_sidekiq'] instead."
           },
-          {
-            config_keys: %w(repmgr user),
-            deprecation: '12.10',
-            removal: '13.0',
-            note: "Use repmgr['username'] instead."
-          },
-          {
-            config_keys: %w(consul user),
-            deprecation: '12.10',
-            removal: '13.0',
-            note: "Use consul['username'] instead."
-          }
         ]
 
         deprecations
