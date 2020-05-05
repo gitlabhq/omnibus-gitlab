@@ -75,16 +75,16 @@ For removals, perform the following steps:
 
 Test upgrades and fresh installs for the following environments:
 
-1. Single node
-3. Install with a separate database node managed by Omnibus
-3. HA database cluster with 3 or more database nodes in the cluster
-2. Geo installations with a single node primary and single node secondary (`postgresql` and `geo-postgresql` on the same secondary node)
-2. Geo installations with a HA database cluster on the primary
-3. Geo installations with a separate tracking database on the secondary
-4. Helm installs
-2. After testing that upgrades to the newest version work, confirm that `revert-pg-upgrade` successfully downgrades to the previously used version, including on a Geo secondary standalone tracking database. 
-3. If the default PostgreSQL version changes, test GitLab upgrades with external PostgreSQL databases.
-4. Back up and restore
+1. Single node.
+1. Install with a separate database node managed by Omnibus.
+1. HA database cluster with 3 or more database nodes in the cluster.
+1. Geo installations with a single node primary and single node secondary (`postgresql` and `geo-postgresql` on the same secondary node).
+1. Geo installations with a HA database cluster on the primary.
+1. Geo installations with a separate tracking database on the secondary.
+1. Helm installs.
+1. After testing that upgrades to the newest version work, confirm that `revert-pg-upgrade` successfully downgrades to the previously used version, including on a Geo secondary standalone tracking database.
+1. If the default PostgreSQL version changes, test GitLab upgrades with external PostgreSQL databases.
+1. Back up and restore.
 
 If the default PostgreSQL version is changing:
 1. Auto upgrades on a single node install, separate database node, HA cluster
