@@ -92,7 +92,8 @@ If the default PostgreSQL version is changing:
 1. Geo installs are not auto upgraded.
 
 If the minimally required version is changing:
-1.  GitLab upgrade errors out if an old version of Omnibus-managed PostgreSQL is still installed
+
+1. GitLab upgrade errors out if an old version of Omnibus-managed PostgreSQL is still installed.
 
 If the above tests are manual, we risk missing a breaking change that is introduced after the manual tests have been performed. We should automate as many of these tests as possible.
 
