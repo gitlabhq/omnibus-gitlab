@@ -164,7 +164,7 @@ If using a custom certificate chain, the root and/or intermediate certificates m
 
 1. `SSL certificate problem: unable to get local issuer certificate`
 
-    This error indicates the the client cannot get the root CA. To fix this, you can either [trust the root CA](#install-custom-public-certificates) of the server you are trying to connect to on the client or [modify the certificate](nginx.md#manually-configuring-https) to present the full chained certificate on the server you are trying to connect to.
+    This error indicates the client cannot get the root CA. To fix this, you can either [trust the root CA](#install-custom-public-certificates) of the server you are trying to connect to on the client or [modify the certificate](nginx.md#manually-configuring-https) to present the full chained certificate on the server you are trying to connect to.
 
     NOTE: **Note:**
     It is recommended to use the full certificate chain in order to prevent SSL errors when clients connect. The full certificate chain order should consist of the server certificate first, followed by all intermediate certificates, with the root CA last.
