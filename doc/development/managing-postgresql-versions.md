@@ -69,8 +69,9 @@ For removals, perform the following steps:
 1. Update user documentation.
 
 ### Testing
-1.  GitLab runs on the new version of PostgreSQL
-2.  Test running GitLab on the new PostgreSQL version at the 10k reference architecture scale and check for performance regressions.
+
+1. GitLab runs on the new version of PostgreSQL.
+1. Test running GitLab on the new PostgreSQL version at the 10k reference architecture scale and check for performance regressions.
 
 Test upgrades and fresh installs for the following environments:
 
