@@ -805,3 +805,24 @@ nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3"
 [http2 whitepaper]: https://assets.wp.nginx.com/wp-content/uploads/2015/09/NGINX_HTTP2_White_Paper_v4.pdf?_ga=1.127086286.212780517.1454411744
 [http2 cipher blacklist]: https://tools.ietf.org/html/rfc7540#appendix-A
 [nginx-cookbook]: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb
+
+### Mismatch between private key and certificate
+
+If you see `x509 certificate routines:X509_check_private_key:key values mismatch)` in the NGINX logs (`/var/log/gitlab/nginx/current` by default for Omnibus), there is a mismatch between your private key and certificate.
+
+To fix this, you will need to match the correct private key with your certificate.
+
+To ensure you have the correct key and certificate, you can ensure that the modulus of the private key and certificate match:
+
+```shell
+/opt/gitlab/embedded/bin/openssl rsa -in /etc/gitlab/ssl/gitlab.example.com.key -noout -modulus | openssl sha1
+
+/opt/gitlab/embedded/bin/openssl x509 -in /etc/gitlab/ssl/gitlab.example.com.crt -noout -modulus| openssl sha1
+```
+
+Once you verify that they match, you will need to reconfigure and reload NGINX:
+
+```shell
+sudo gitlab-ctl reconfigure
+sudo gitlab-ctl hup nginx
+```
