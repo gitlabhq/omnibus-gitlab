@@ -157,7 +157,7 @@ postgresql['logging_collector'] = 'on'
 
 A restart of the database is required for this to take effect. For more
 details, see the [PostgreSQL
-documentation](https://www.postgresql.org/docs/current/runtime-config-logging.html).
+documentation](https://www.postgresql.org/docs/11/runtime-config-logging.html).
 
 ## Text logging
 
