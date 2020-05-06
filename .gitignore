@@ -12,6 +12,7 @@ vendor/cookbooks
 build.txt
 Vagrantfile
 .idea
+.vscode
 *.log
 docker/RELEASE
 *.swp

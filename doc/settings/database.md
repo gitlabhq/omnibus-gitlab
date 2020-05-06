@@ -39,7 +39,7 @@ the permissions of the files for you, but you *must* ensure that the
 `gitlab-psql` can access the directory the files are placed in, if the paths
 are customized.
 
-For more details, see the [PostgreSQL documentation](https://www.postgresql.org/docs/9.6/ssl-tcp.html).
+For more details, see the [PostgreSQL documentation](https://www.postgresql.org/docs/11/ssl-tcp.html).
 
 Note that `server.crt` and `server.key` may be different from the default SSL
 certificates used to access GitLab. For example, suppose the external hostname
@@ -474,7 +474,7 @@ sure that PostgreSQL is set up according to the [database requirements document]
 
    - `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
      plain-text passwords.
-   - PostgreSQL allows to listen on [multiple addresses](https://www.postgresql.org/docs/9.6/runtime-config-connection.html)
+   - PostgreSQL allows to listen on [multiple addresses](https://www.postgresql.org/docs/11/runtime-config-connection.html)
 
      If you use multiple addresses in `gitlab_rails['db_host']`, comma-separated, the first address in the list will be used for connection.
 
@@ -761,7 +761,7 @@ Re-initializing replication copies all data from the primary again, so it can
 take a long time depending mostly on the size of the database and available
 bandwidth. For example, at a transfer speed of 30 Mbps, and a database size of
 100 GB, resynchronization could take approximately 8 hours. See
-[PostgreSQL documentation](https://www.postgresql.org/docs/current/pgupgrade.html)
+[PostgreSQL documentation](https://www.postgresql.org/docs/11/pgupgrade.html)
 for more.
 
 #### Disabling automatic PostgreSQL upgrades
