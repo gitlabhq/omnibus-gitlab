@@ -18,7 +18,7 @@ service if it is not already included in the project.
 ## Add a top-level configuration object for the service
 
 The cookbooks and recipes located in `files/gitlab-cookbooks` are what get run during
-`gitlab-ctl reconfigure` in instances where the GitLab Omnibus package has been
+`gitlab-ctl reconfigure` in instances where the Omnibus GitLab package has been
 installed. This is where we will need to add the settings for a new service.
 
 ### Define the default attributes
@@ -39,15 +39,15 @@ default['gitlab']['best-service']['log_directory'] = '/var/log/gitlab/best-servi
 - `default` is how you define basic cookbook attributes.
 - `['gitlab']` contains the cookbook name.
 - `['best-service']` is the name of your service, at this level we use hyphens to separate words.
-- `enable`, `dir`, and `log_directory` are our config settings, and we use underscores to separate words at this and deeper levels.
-- `/var/opt/gitlab` is where the working directory and config files for the services are placed.
+- `enable`, `dir`, and `log_directory` are our configuration settings, and we use underscores to separate words at this and deeper levels.
+- `/var/opt/gitlab` is where the working directory and configuration files for the services are placed.
 - `/var/log/gitlab` is where logs are written to for the GitLab package.
 
 Define all your settings that you want configurable in the package here. Default
 them to `nil` if you need to calculate their defaults based on other settings for
 now.
 
-### Create a config Mash for your service
+### Create a configuration Mash for your service
 
 In order for user to be able to configure your service from `/etc/gitlab/gitlab.rb`
 you will need to add a top level Mash for the service.
@@ -74,12 +74,12 @@ ee_attribute('best_service')
 
 ### Add service configuration to the settings template
 
-We maintain a [global config template](../architecture/README.md#global-gitlab-configuration-template)
+We maintain a [global configuration template](../architecture/README.md#global-gitlab-configuration-template)
 where examples of how to configure the services are available, commented out.
 
 This file becomes the `/etc/gitlab/gitlab.rb` on fresh installs of the package.
 
-Once you want to expose your service's config to user for them to change, add it
+Once you want to expose your service's configuration to users for them to change, add it
 to this file. `files/gitlab-config-template/gitlab.rb.template`
 
 ```ruby
@@ -208,7 +208,7 @@ end
 
 ## Additional configuration parsing for the service
 
-If you want to populate certain config options based on other options being set
+If you want to populate certain configuration options based on other options being set
 by the user, we add a library for your service to parse variables.
 
 The library should be added as `files/gitlab-cookbooks/<cookbook name>/libraries/<service-name>.rb`
@@ -225,7 +225,7 @@ module BestService
 end
 ```
 
-We then need to have the GitLab config call your parse_variables method.
+We then need to have the GitLab configuration call your parse_variables method.
 
 Go into `files/gitlab-cookbooks/package/libraries/config/gitlab.rb` and update
 your attribute to use the library.

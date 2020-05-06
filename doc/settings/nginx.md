@@ -35,7 +35,7 @@ By default, Omnibus GitLab does not use HTTPS. If you want to enable HTTPS for
 
 ### Warning
 
-The NGINX config will tell browsers and clients to only communicate with your
+The NGINX configuration will tell browsers and clients to only communicate with your
 GitLab instance over a secure connection for the next 24 months. By enabling
 HTTPS you'll need to provide a secure connection to your instance for at least
 the next 24 months.
@@ -103,7 +103,7 @@ sudo systemctl reload firewalld
 
 ## Redirect `HTTP` requests to `HTTPS`
 
-By default, when you specify an external_url starting with 'https', NGINX will
+By default, when you specify an `external_url` starting with 'https', NGINX will
 no longer listen for unencrypted HTTP traffic on port 80. If you want to
 redirect all HTTP traffic to HTTPS you can use the `redirect_http_to_https`
 setting.
@@ -116,7 +116,7 @@ nginx['redirect_http_to_https'] = true
 ## Change the default port and the SSL certificate locations
 
 If you need to use an HTTPS port other than the default (443), just specify it
-as part of the external_url.
+as part of the `external_url`.
 
 ```ruby
 external_url "https://gitlab.example.com:2443"
@@ -221,7 +221,7 @@ be presented with `INADEQUATE_SECURITY` error in your browser.
 Consider removing the offending ciphers from the cipher list. Changing ciphers
 is only necessary if you have a very specific custom setup.
 
-For more info on why you would want to have http2 protocol enabled, check out
+For more information on why you would want to have http2 protocol enabled, check out
 the [http2 whitepaper].
 
 If changing the ciphers is not an option you can disable http2 support by
@@ -409,9 +409,9 @@ Note that setting this to `origin` or `no-referrer` would break some features in
 
 - <https://www.w3.org/TR/referrer-policy/>
 
-## Disabling GZIP compression
+## Disabling Gzip compression
 
-By default, GitLab enables GZIP compression for text data over 10240 bytes. To
+By default, GitLab enables Gzip compression for text data over 10240 bytes. To
 disable this behavior:
 
 ```ruby
@@ -487,15 +487,15 @@ This inserts the defined string into the end of the `server` block of
   proxy_pass http://gitlab-workhorse;
   ```
 
-  in the string or in the included NGINX config. Without these, any sub-location
+  in the string or in the included NGINX configuration. Without these, any sub-location
   will return a 404. See
   [GitLab CE Issue #30619](https://gitlab.com/gitlab-org/gitlab-foss/issues/30619).
 - You cannot add the root `/` location or the `/assets` location as those already
   exist in `gitlab-http.conf`.
 
-## Inserting custom settings into the NGINX config
+## Inserting custom settings into the NGINX configuration
 
-If you need to add custom settings into the NGINX config, for example to include
+If you need to add custom settings into the NGINX configuration, for example to include
 existing server blocks, you can use the following setting.
 
 ```ruby

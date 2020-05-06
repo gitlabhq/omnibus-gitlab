@@ -13,7 +13,7 @@ We have a few core goals with these packages:
 1. Support for a wide variety of operating systems
 1. Wide support of cloud service providers
 
-## GitLab Omnibus Architecture
+## Omnibus GitLab Architecture
 
 GitLab in its core is a Ruby on Rails project. However, GitLab as a whole
 application is more complex and has multiple components. If these components are

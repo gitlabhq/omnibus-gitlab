@@ -274,8 +274,14 @@ If you are upgrading to at least GitLab 11.0 or have only configured Mattermost 
 
 If this is not the case, there are two options:
 
-1. Update [`gitlab.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template#L706) with the changes done to `config.json`. This might require adding some parameters as not all settings in `config.json` are available in `gitlab.rb`. Once complete, GitLab omnibus should be able to upgrade GitLab Mattermost from one version to the next.
-1. Migrate Mattermost outside of the directory controlled by GitLab omnibus so it can be administered and upgraded independently. Follow the [Mattermost Migration Guide](https://docs.mattermost.com/administration/migrating.html) to move your Mattermost configuration settings and data to another directory or server independent from GitLab Omnibus.
+1. Update [`gitlab.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template#L706)
+   with the changes done to `config.json`. This might require adding some parameters as not all
+   settings in `config.json` are available in `gitlab.rb`. Once complete, Omnibus GitLab should be
+   able to upgrade GitLab Mattermost from one version to the next.
+1. Migrate Mattermost outside of the directory controlled by Omnibus GitLab so it can be administered
+   and upgraded independently. Follow the [Mattermost Migration Guide](https://docs.mattermost.com/administration/migrating.html)
+   to move your Mattermost configuration settings and data to another directory or server independent
+   from Omnibus GitLab.
 
 For a complete list of upgrade notices and special considerations for older versions, see the [Mattermost documentation](https://docs.mattermost.com/administration/important-upgrade-notes.html).
 
