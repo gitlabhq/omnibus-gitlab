@@ -22,3 +22,4 @@ gitlab-licenses/*
 public/*
 config/projects/simple.rb
 .markdownlintrc
+.DS_Store
