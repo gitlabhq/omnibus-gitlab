@@ -19,7 +19,7 @@ comments: false
 
 ## Installation and Configuration
 
-These configuration settings are commonly used when configuring GitLab Omnibus.
+These configuration settings are commonly used when configuring Omnibus GitLab.
 For a complete list of settings, see the [README](../README.md#configuring) file.
 
 - [Installing GitLab](https://about.gitlab.com/install/).

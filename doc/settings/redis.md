@@ -36,7 +36,7 @@ redis['bind'] = '127.0.0.1'
 ## Setting up a Redis-only server
 
 If you'd like to setup a separate Redis server (e.g. in the case of scaling
-issues) for use with GitLab you can do so using GitLab Omnibus.
+issues) for use with GitLab you can do so using Omnibus GitLab.
 
 ### Setting up the Redis Node
 
@@ -45,7 +45,7 @@ issues) for use with GitLab you can do so using GitLab Omnibus.
 > information. We recommend using a combination of a Redis password and tight
 > firewall rules to secure your Redis service.
 
-1. Download/install GitLab Omnibus using **steps 1 and 2** from
+1. Download/install Omnibus GitLab using **steps 1 and 2** from
    [GitLab downloads](https://about.gitlab.com/install/). Do not complete other
    steps on the download page.
 1. Create/edit `/etc/gitlab/gitlab.rb` and use the following configuration.
@@ -95,7 +95,7 @@ issues) for use with GitLab you can do so using GitLab Omnibus.
 Google Cloud Memorystore [does not support the Redis `CLIENT`
 command.](https://cloud.google.com/memorystore/docs/reference/redis-configs#blocked)
 By default Sidekiq will attempt to set the `CLIENT` for debugging
-purposes. This can be disabled via this config setting:
+purposes. This can be disabled via this configuration setting:
 
 ```ruby
 gitlab_rails['redis_enable_client'] = false
@@ -252,7 +252,7 @@ redis['replica_lazy_flush'] = true
 
 ## Common Troubleshooting
 
-### x509: certificate signed by unknown authority
+### `x509: certificate signed by unknown authority`
 
 This error message suggests that the SSL certificates have not been
 properly added to the list of trusted certificates for the server. To

@@ -8,7 +8,7 @@ GitLab supports only PostgreSQL database management system.
 
 Thus you have two options for database servers to use with Omnibus GitLab:
 
-- Use the packaged PostgreSQL server included with GitLab Omnibus (no configuration required, recommended)
+- Use the packaged PostgreSQL server included with Omnibus GitLab (no configuration required, recommended)
 - Use an [external PostgreSQL server](#using-a-non-packaged-postgresql-database-management-server)
 
 ## Using the PostgreSQL Database Service shipped with Omnibus GitLab
@@ -593,7 +593,7 @@ This is a destructive command; do not run it on an existing database!
 ---
 
 Omnibus GitLab will not automatically seed your external database. Run the
-following command to import the schema and create the first admin user:
+following command to import the schema and create the first administration user:
 
 ```shell
 # Remove 'sudo' if you are the 'git' user
@@ -634,7 +634,7 @@ GitLab application expects `read committed` to be configured.
 This `default_transaction_isolation` configuration is set in your
 `postgresql.conf` file. You will need to restart/reload the database once you
 changed the configuration. This configuration comes by default in the packaged
-PostgreSQL server included with GitLab Omnibus.
+PostgreSQL server included with Omnibus GitLab.
 
 ## Application Settings for the Database
 
@@ -694,7 +694,7 @@ Follow the steps below to upgrade the database nodes
    postgresql['max_replication_slots'] = X
     ```
 
-   1. Run `gitlab-ctl reconfigure` to update the configureation.
+   1. Run `gitlab-ctl reconfigure` to update the configuration.
    1. Run `sudo gitlab-ctl restart postgresql` to get PostgreSQL restarted with the new configuration.
    1. On running `pg-upgrade` on a PostgreSQL secondary node, the node will be removed
       from the cluster.
@@ -712,7 +712,7 @@ Follow the steps below to upgrade the database nodes
    postgresql['max_replication_slots'] = X
     ```
 
-   1. Run `gitlab-ctl reconfigure` to update the configureation.
+   1. Run `gitlab-ctl reconfigure` to update the configuration.
    1. Run `sudo gitlab-ctl restart postgresql` to get PostgreSQL restarted with the new configuration.
    1. On a primary node, `pg-upgrade` will update the existing data to match
       the new PostgreSQL version.

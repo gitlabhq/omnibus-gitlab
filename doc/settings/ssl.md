@@ -176,7 +176,7 @@ If using a custom certificate chain, the root and/or intermediate certificates m
 1. `certificate signed by unknown authority`
 
     This error indicates that the client does not trust the certificate or CA. To fix this error, the client connecting to server will need to [trust the certificate or CA](#install-custom-public-certificates).
-  
+
 1. `SSL certificate problem: self signed certificate in certificate chain`
 
     This error indicates that the client does not trust the certificate or CA. To fix this error, the client connecting to server will need to [trust the certificate or CA](#install-custom-public-certificates).
@@ -208,7 +208,7 @@ with the correct path in your operating environment.
 ERROR: Not a certificate: /opt/gitlab/embedded/ssl/certs/FILE. Move it from /opt/gitlab/embedded/ssl/certs to a different location and reconfigure again.
 ```
 
-Check `/opt/gitlab/embedded/ssl/certs` and remove any files other than `README.md` that aren't valid x509 certificates.
+Check `/opt/gitlab/embedded/ssl/certs` and remove any files other than `README.md` that aren't valid X.509 certificates.
 
 NOTE: **Under the Hood**
 Running `gitlab-ctl reconfigure` constructs symlinks named from the subject hashes
