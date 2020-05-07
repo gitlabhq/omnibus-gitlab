@@ -138,9 +138,8 @@ sudo gitlab-geo-psql -d gitlabhq_geo_production
 ## Container Registry garbage collection
 
 Container Registry can use considerable amounts of disk space. To clear up
-unused layers, the registry includes a garbage collect command.
-
-[Read on how to use the Container Registry garbage collection.](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-garbage-collection)
+unused layers, the registry includes a
+[garbage collect command](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-garbage-collection).
 
 ## Restrict users from logging into GitLab
 
