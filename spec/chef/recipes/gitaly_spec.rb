@@ -62,11 +62,13 @@ describe 'gitaly' do
       expect(chef_run).to create_directory('/var/log/gitlab/gitaly').with(user: 'git', mode: '0700')
     end
 
-    it 'creates a default VERSION file' do
-      expect(chef_run).to create_file('/var/opt/gitlab/gitaly/VERSION').with(
-        user: nil,
-        group: nil
+    it 'creates a default VERSION file and restarts service' do
+      expect(chef_run).to create_version_file('Create version file for Gitaly').with(
+        version_file_path: '/var/opt/gitlab/gitaly/VERSION',
+        version_check_cmd: '/opt/gitlab/embedded/bin/gitaly --version'
       )
+
+      expect(chef_run.version_file('Create version file for Gitaly')).to notify('runit_service[gitaly]').to(:hup)
     end
 
     it 'populates gitaly config.toml with defaults' do

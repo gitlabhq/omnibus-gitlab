@@ -89,7 +89,8 @@ runit_service 'registry' do
   log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
 end
 
-file File.join(working_dir, "VERSION") do
-  content VersionHelper.version("/opt/gitlab/embedded/bin/registry --version")
+version_file 'Create version file for Registry' do
+  version_file_path File.join(working_dir, 'VERSION')
+  version_check_cmd '/opt/gitlab/embedded/bin/registry --version'
   notifies :restart, "runit_service[registry]"
 end

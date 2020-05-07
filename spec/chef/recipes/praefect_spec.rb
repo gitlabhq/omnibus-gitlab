@@ -29,11 +29,13 @@ describe 'praefect' do
       expect(chef_run).to create_directory('/var/opt/gitlab/praefect').with(user: 'git', mode: '0700')
     end
 
-    it 'creates a default VERSION file' do
-      expect(chef_run).to create_file('/var/opt/gitlab/praefect/VERSION').with(
-        user: nil,
-        group: nil
+    it 'creates a default VERSION file and sends hup to service' do
+      expect(chef_run).to create_version_file('Create Praefect version file').with(
+        version_file_path: '/var/opt/gitlab/praefect/VERSION',
+        version_check_cmd: '/opt/gitlab/embedded/bin/praefect --version'
       )
+
+      expect(chef_run.version_file('Create Praefect version file')).to notify('runit_service[praefect]').to(:hup)
     end
 
     it 'renders the config.toml' do

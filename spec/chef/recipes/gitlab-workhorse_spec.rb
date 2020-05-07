@@ -14,6 +14,17 @@ describe 'gitlab::gitlab-workhorse' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
+  context 'by default' do
+    it 'creates a default VERSION file and restarts service' do
+      expect(chef_run).to create_version_file('Create version file for Workhorse').with(
+        version_file_path: '/var/opt/gitlab/gitlab-workhorse/VERSION',
+        version_check_cmd: '/opt/gitlab/embedded/bin/gitlab-workhorse --version'
+      )
+
+      expect(chef_run.version_file('Create version file for Workhorse')).to notify('runit_service[gitlab-workhorse]').to(:restart)
+    end
+  end
+
   context 'user and group' do
     context 'default values' do
       it_behaves_like "enabled runit service", "gitlab-workhorse", "root", "root", "git", "git"

@@ -16,6 +16,15 @@ describe 'monitoring::gitlab-exporter' do
       )
     end
 
+    it 'creates a default VERSION file and restarts service' do
+      expect(chef_run).to create_version_file('Create version file for GitLab-Exporter').with(
+        version_file_path: '/var/opt/gitlab/gitlab-exporter/RUBY_VERSION',
+        version_check_cmd: '/opt/gitlab/embedded/bin/ruby --version'
+      )
+
+      expect(chef_run.version_file('Create version file for GitLab-Exporter')).to notify('runit_service[gitlab-exporter]').to(:restart)
+    end
+
     it_behaves_like 'enabled runit service', 'gitlab-exporter', 'root', 'root', 'git', 'git'
 
     it 'populates the files with expected configuration' do
