@@ -86,14 +86,14 @@ describe Gitlab::DockerImageMemoryMeasurer do
     end
   end
 
-  describe '.status_ok?' do
+  describe '.legacy_readiness_format_status_ok?' do
     let(:debug_output_dir) { nil }
 
     context 'given non hash value' do
       let(:hash) { nil }
 
       it 'return false' do
-        expect(measurer.status_ok?(hash)).to be false
+        expect(measurer.legacy_readiness_format_status_ok?(hash)).to be false
       end
     end
 
@@ -101,7 +101,7 @@ describe Gitlab::DockerImageMemoryMeasurer do
       let(:hash) { {} }
 
       it 'return false' do
-        expect(measurer.status_ok?(hash)).to be false
+        expect(measurer.legacy_readiness_format_status_ok?(hash)).to be false
       end
     end
 
@@ -109,7 +109,7 @@ describe Gitlab::DockerImageMemoryMeasurer do
       let(:hash) { { 'db_check' => { 'status' => 'ok' }, 'redis_check' => { 'status' => 'ok' } } }
 
       it 'return true' do
-        expect(measurer.status_ok?(hash)).to be true
+        expect(measurer.legacy_readiness_format_status_ok?(hash)).to be true
       end
     end
 
@@ -117,8 +117,93 @@ describe Gitlab::DockerImageMemoryMeasurer do
       let(:hash) { { 'db_check' => { 'status' => 'failed' }, 'redis_check' => { 'status' => 'ok' } } }
 
       it 'return false' do
-        expect(measurer.status_ok?(hash)).to be false
+        expect(measurer.legacy_readiness_format_status_ok?(hash)).to be false
       end
+    end
+  end
+
+  describe '.new_readiness_format_status_ok?' do
+    let(:debug_output_dir) { nil }
+
+    context 'given non hash value' do
+      let(:hash) { nil }
+
+      it 'return false' do
+        expect(measurer.new_readiness_format_status_ok?(hash)).to be false
+      end
+    end
+
+    context 'given empty hash' do
+      let(:hash) { {} }
+
+      it 'return false' do
+        expect(measurer.new_readiness_format_status_ok?(hash)).to be false
+      end
+    end
+
+    context 'given hash missing status' do
+      let(:hash) { { 'master_check' => [{ 'status' => 'ok' }] } }
+
+      it 'return false' do
+        expect(measurer.new_readiness_format_status_ok?(hash)).to be false
+      end
+    end
+
+    context 'given hash missing master check status' do
+      let(:hash) { { 'status' => 'ok' } }
+
+      it 'return false' do
+        expect(measurer.new_readiness_format_status_ok?(hash)).to be false
+      end
+    end
+
+    context 'given valid hash with all status ok' do
+      let(:hash) { { 'status' => 'ok', 'master_check' => [{ 'status' => 'ok' }] } }
+
+      it 'return true' do
+        expect(measurer.new_readiness_format_status_ok?(hash)).to be true
+      end
+    end
+
+    context 'given valid hash with status not ok' do
+      let(:hash) { { 'status' => 'failed', 'master_check' => [{ 'status' => 'ok' }] } }
+
+      it 'return false' do
+        expect(measurer.new_readiness_format_status_ok?(hash)).to be false
+      end
+    end
+
+    context 'given valid hash with master check status not ok' do
+      let(:hash) { { 'status' => 'ok', 'master_check' => [{ 'status' => 'failed' }] } }
+
+      it 'return false' do
+        expect(measurer.new_readiness_format_status_ok?(hash)).to be false
+      end
+    end
+  end
+
+  describe '.status_ok?' do
+    let(:debug_output_dir) { nil }
+
+    it 'returns true with successful legacy format status check' do
+      allow(measurer).to receive(:legacy_readiness_format_status_ok?).and_return(true)
+      allow(measurer).to receive(:new_readiness_format_status_ok?).and_return(false)
+
+      expect(measurer.status_ok?(hash)).to be true
+    end
+
+    it 'returns true with successful new format status check' do
+      allow(measurer).to receive(:legacy_readiness_format_status_ok?).and_return(false)
+      allow(measurer).to receive(:new_readiness_format_status_ok?).and_return(true)
+
+      expect(measurer.status_ok?(hash)).to be true
+    end
+
+    it 'returns false when both new and legacy format status check fail' do
+      allow(measurer).to receive(:legacy_readiness_format_status_ok?).and_return(false)
+      allow(measurer).to receive(:new_readiness_format_status_ok?).and_return(false)
+
+      expect(measurer.status_ok?(hash)).to be false
     end
   end
 
@@ -129,7 +214,7 @@ describe Gitlab::DockerImageMemoryMeasurer do
     let(:response) { 'response' }
     let(:status_ok_return) { 'status_ok_return' }
 
-    it 'return whatever status_ok? result' do
+    it 'return whatever new_readiness_format_status_ok? result' do
       expect(HTTP).to receive(:get).with(url).and_return(http_return)
       allow(JSON).to receive(:parse).with(http_return).and_return(response)
       expect(measurer).to receive(:status_ok?).with(response).and_return(status_ok_return)

@@ -93,7 +93,7 @@ module Gitlab
       end
     end
 
-    def status_ok?(hash)
+    def legacy_readiness_format_status_ok?(hash)
       return false unless hash.is_a?(Hash) && !hash.empty?
 
       status_ok = true
@@ -102,6 +102,16 @@ module Gitlab
       end
 
       status_ok
+    end
+
+    def new_readiness_format_status_ok?(hash)
+      hash['status'] == 'ok' && hash['master_check'].include?({ 'status' => 'ok' })
+    rescue StandardError
+      false
+    end
+
+    def status_ok?(hash)
+      new_readiness_format_status_ok?(hash) || legacy_readiness_format_status_ok?(hash)
     end
 
     def check_gitlab_ready(url)
