@@ -413,7 +413,7 @@ default['gitlab']['gitlab-rails']['monitoring_whitelist'] = ['127.0.0.0/8', '::1
 default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
 default['gitlab']['gitlab-rails']['shutdown_blackout_seconds'] = 10
 # Default dependent services to restart in the event that files-of-interest change
-default['gitlab']['gitlab-rails']['dependent_services'] = %w{unicorn puma sidekiq sidekiq-cluster}
+default['gitlab']['gitlab-rails']['dependent_services'] = %w{unicorn puma actioncable sidekiq sidekiq-cluster}
 
 ###
 # Unleash
@@ -467,6 +467,25 @@ default['gitlab']['puma']['max_threads'] = 4
 default['gitlab']['puma']['exporter_enabled'] = false
 default['gitlab']['puma']['exporter_address'] = "127.0.0.1"
 default['gitlab']['puma']['exporter_port'] = 8083
+
+####
+# ActionCable
+####
+default['gitlab']['actioncable']['enable'] = false
+default['gitlab']['actioncable']['ha'] = false
+default['gitlab']['actioncable']['log_directory'] = "/var/log/gitlab/actioncable"
+default['gitlab']['actioncable']['listen'] = "127.0.0.1"
+default['gitlab']['actioncable']['port'] = 8081
+default['gitlab']['actioncable']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab_actioncable.socket'
+# Path to the puma server Process ID file
+# defaults to /opt/gitlab/var/actioncable/actioncable.pid. The install-dir path is set at build time
+default['gitlab']['actioncable']['pidfile'] = "#{node['package']['install-dir']}/var/actioncable/actioncable.pid"
+default['gitlab']['actioncable']['state_path'] = "#{node['package']['install-dir']}/var/actioncable/actioncable.state"
+default['gitlab']['actioncable']['worker_timeout'] = 60
+default['gitlab']['actioncable']['per_worker_max_memory_mb'] = nil
+default['gitlab']['actioncable']['worker_processes'] = 2
+default['gitlab']['actioncable']['min_threads'] = 4
+default['gitlab']['actioncable']['max_threads'] = 4
 
 ####
 # Sidekiq

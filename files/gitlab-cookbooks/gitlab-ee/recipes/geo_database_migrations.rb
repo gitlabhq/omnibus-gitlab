@@ -21,6 +21,7 @@ gitlab_geo_helper = GitlabGeoHelper.new(node)
 dependent_services = []
 dependent_services << "runit_service[unicorn]" if omnibus_helper.should_notify?("unicorn")
 dependent_services << "runit_service[puma]" if omnibus_helper.should_notify?("puma")
+dependent_services << "runit_service[actioncable]" if omnibus_helper.should_notify?("actioncable")
 dependent_services << "runit_service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
 
 bash 'migrate gitlab-geo tracking database' do

@@ -35,6 +35,7 @@ describe 'gitlab-ee::geo-database-migrations' do
         sidekiq-cluster
         unicorn
         puma
+        actioncable
         gitaly
         geo-postgresql
         gitlab-pages

@@ -73,6 +73,8 @@ describe 'gitlab::puma with Ubuntu 16.04' do
 
     it 'renders the puma.rb file' do
       expect(chef_run).to create_puma_config('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with(
+        tag: 'gitlab-puma-worker',
+        rackup: 'config.ru',
         environment: 'production',
         pid: '/opt/gitlab/var/puma/puma.pid',
         state_path: '/opt/gitlab/var/puma/puma.state',
