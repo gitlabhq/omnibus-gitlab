@@ -50,8 +50,9 @@ end
 end
 
 # If no internal_api_url is specified, default to the IP/port Unicorn listens on
+webserver_service = WebServerHelper.service_name
 api_url = node['gitlab']['gitlab-rails']['internal_api_url']
-api_url ||= "http://#{node['gitlab']['unicorn']['listen']}:#{node['gitlab']['unicorn']['port']}#{node['gitlab']['unicorn']['relative_url']}"
+api_url ||= "http://#{node['gitlab'][webserver_service]['listen']}:#{node['gitlab'][webserver_service]['port']}#{node['gitlab'][webserver_service]['relative_url']}"
 
 templatesymlink "Create a config.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_shell_dir, "config.yml")

@@ -18,3 +18,4 @@
 - [SMTP](smtp.md)
 - [SSL](ssl.md)
 - [Unicorn](unicorn.md)
+- [Puma](puma.md)

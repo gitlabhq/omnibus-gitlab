@@ -103,7 +103,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       unless ["", "/"].include?(uri.path)
         relative_url = uri.path.chomp("/")
         Gitlab['gitlab_rails']['gitlab_relative_url'] ||= relative_url
-        Gitlab['unicorn']['relative_url'] ||= relative_url
+        Gitlab[WebServerHelper.service_name]['relative_url'] ||= relative_url
         Gitlab['gitlab_workhorse']['relative_url'] ||= relative_url
       end
 
@@ -241,7 +241,7 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
     end
 
     def worker_timeout
-      service = Services.enabled?('puma') ? 'puma' : 'unicorn'
+      service = WebServerHelper.service_name
       user_config = Gitlab[service]
       service_config = Gitlab['node']['gitlab'][service]
       (user_config['worker_timeout'] || service_config['worker_timeout']).to_i

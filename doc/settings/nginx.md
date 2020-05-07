@@ -542,7 +542,7 @@ the omnibus packages.
 ### Configuration
 
 First, you'll need to setup your `/etc/gitlab/gitlab.rb` to disable the built-in
-NGINX and Unicorn:
+NGINX and Puma:
 
 ```ruby
 # Define the external url
@@ -551,8 +551,8 @@ external_url 'http://git.example.com'
 # Disable the built-in nginx
 nginx['enable'] = false
 
-# Disable the built-in unicorn
-unicorn['enable'] = false
+# Disable the built-in puma
+puma['enable'] = false
 
 # Set the internal API URL
 gitlab_rails['internal_api_url'] = 'http://git.example.com'

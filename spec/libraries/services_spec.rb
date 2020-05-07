@@ -8,7 +8,7 @@ describe Services do
 
     it 'returns the gitlab service list' do
       chef_run
-      expect(Services.service_list).to have_key('unicorn')
+      expect(Services.service_list).to have_key('puma')
       expect(Services.service_list).not_to have_key('sentinel')
     end
   end
@@ -18,7 +18,7 @@ describe Services do
 
     it 'returns the gitlab service list including gitlab-ee items' do
       chef_run
-      expect(Services.service_list).to have_key('unicorn')
+      expect(Services.service_list).to have_key('puma')
       expect(Services.service_list).to have_key('sentinel')
     end
   end
@@ -203,7 +203,7 @@ describe Services do
         expect(node['monitoring']['redis-exporter']['enable']).to be false
 
         Services.enable_group('rails')
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
         expect(node['monitoring']['gitlab-exporter']['enable']).to be true
       end
 
@@ -211,7 +211,7 @@ describe Services do
         Services.disable_group('monitoring')
         Services.enable_group('rails', except: 'monitoring')
         expect(node['monitoring']['gitlab-exporter']['enable']).to be false
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
 
         Services.enable_group('monitoring')
         Services.disable_group('redis', except: 'monitoring')
@@ -229,14 +229,14 @@ describe Services do
 
         Services.enable_group('rails', 'monitoring')
         expect(node['monitoring']['redis-exporter']['enable']).to be true
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
       end
 
       it 'supports single exceptions' do
         Services.disable_group('monitoring')
         Services.enable_group('redis', 'rails', except: 'monitoring')
         expect(node['redis']['enable']).to be true
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
         expect(node['monitoring']['gitlab-exporter']['enable']).to be false
         expect(node['monitoring']['redis-exporter']['enable']).to be false
 
@@ -252,7 +252,7 @@ describe Services do
         Services.enable_group('rails', 'monitoring', except: ['redis', Services::SYSTEM_GROUP])
         expect(node['monitoring']['redis-exporter']['enable']).to be false
         expect(node['monitoring']['node-exporter']['enable']).to be false
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
 
         Services.enable_group('sidekiq', 'monitoring')
         Services.disable_group('rails', 'postgres', except: %w(sidekiq monitoring))
@@ -281,7 +281,7 @@ describe Services do
       it 'enables all others' do
         Services.disable_group('monitoring')
         Services.enable_group(Services::ALL_GROUPS, except: 'monitoring')
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
         expect(node['monitoring']['gitlab-exporter']['enable']).to be false
       end
 
@@ -299,7 +299,7 @@ describe Services do
       it 'enables all others' do
         Services.disable_group('redis', 'rails')
         Services.enable_group(Services::ALL_GROUPS, except: %w(redis rails))
-        expect(node['gitlab']['unicorn']['enable']).to be false
+        expect(node['gitlab']['puma']['enable']).to be false
         expect(node['monitoring']['node-exporter']['enable']).to be true
         expect(node['monitoring']['redis-exporter']['enable']).to be false
       end

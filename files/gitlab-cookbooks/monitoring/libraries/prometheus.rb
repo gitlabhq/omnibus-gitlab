@@ -371,16 +371,11 @@ module Prometheus
     end
 
     def rails_scrape_configs
-      if Services.enabled?('unicorn') || service_discovery
-        default_config = Gitlab['node']['gitlab']['unicorn'].to_hash
-        user_config = Gitlab['unicorn']
-      elsif Services.enabled?('puma') || service_discovery
-        default_config = Gitlab['node']['gitlab']['puma'].to_hash
-        user_config = Gitlab['puma']
-      else
-        # Don't add scrape config if puma and unicorn explicitly disabled
-        return
-      end
+      return unless WebServerHelper.enabled? || service_discovery
+
+      webserver_service = WebServerHelper.service_name
+      default_config = Gitlab['node']['gitlab'][webserver_service].to_hash
+      user_config = Gitlab[webserver_service]
 
       if service_discovery
         scrape_config = {

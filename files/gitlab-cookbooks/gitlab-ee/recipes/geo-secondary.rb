@@ -23,7 +23,7 @@ gitlab_rails_source_dir = '/opt/gitlab/embedded/service/gitlab-rails'
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
-dependent_services = %w(unicorn sidekiq geo-logcursor)
+dependent_services = %w(unicorn puma sidekiq geo-logcursor)
 
 templatesymlink 'Create a database_geo.yml and create a symlink to Rails root' do
   link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')

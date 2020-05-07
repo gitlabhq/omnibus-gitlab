@@ -182,6 +182,7 @@ module Gitlab
 
     def component_command_patterns
       {
+        'puma' => /gitlab-puma-worker/,
         'unicorn' => /(^unicorn master)|(^unicorn worker)/,
         'sidekiq' => /^sidekiq /,
         'gitaly' => /(^\/opt\/gitlab\/embedded\/bin\/gitaly)|(^ruby \/opt\/gitlab\/embedded\/service\/gitaly-ruby\/bin\/gitaly-ruby)/,

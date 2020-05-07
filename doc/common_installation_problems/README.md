@@ -201,16 +201,16 @@ sudo gitlab-ctl reconfigure # Resume gitlab-ctl reconfigure
 
 ## TCP ports for GitLab services are already taken
 
-By default, Unicorn listens at TCP address 127.0.0.1:8080. NGINX
+By default, Puma listens at TCP address 127.0.0.1:8080. NGINX
 listens on port 80 (HTTP) and/or 443 (HTTPS) on all interfaces.
 
-The ports for Redis, PostgreSQL and Unicorn can be overridden in
+The ports for Redis, PostgreSQL and Puma can be overridden in
 `/etc/gitlab/gitlab.rb` as follows:
 
 ```ruby
 redis['port'] = 1234
 postgresql['port'] = 2345
-unicorn['port'] = 3456
+puma['port'] = 3456
 ```
 
 For NGINX port changes please see [`settings/nginx.md`](../settings/nginx.md).

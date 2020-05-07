@@ -48,6 +48,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [SMTP](settings/smtp.md)
 - [NGINX](settings/nginx.md)
 - [LDAP](settings/ldap.md)
+- [Puma](settings/puma.md)
 - [Unicorn](settings/unicorn.md)
 - [Redis](settings/redis.md)
 - [Logs](settings/logs.md)

@@ -727,7 +727,7 @@ default['gitlab']['remote-syslog']['dir'] = "/var/opt/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
-default['gitlab']['remote-syslog']['services'] = %w(redis nginx unicorn gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect)
+default['gitlab']['remote-syslog']['services'] = %w(redis nginx puma unicorn gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect)
 
 ###
 # Logrotate

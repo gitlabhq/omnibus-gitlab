@@ -502,7 +502,7 @@ def maintenance_mode(command)
   # In order for the deploy page to work, we need nginx, unicorn, redis, and
   # gitlab-workhorse running
   # We'll manage postgresql during the upgrade process
-  omit_services = %w(postgresql geo-postgresql nginx unicorn redis gitlab-workhorse)
+  omit_services = %w(postgresql geo-postgresql nginx unicorn puma redis gitlab-workhorse)
   if command.eql?('enable')
     dp_cmd = 'up'
     sv_cmd = 'stop'

@@ -11,6 +11,10 @@ describe 'gitlab::unicorn' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    stub_gitlab_rb(
+      unicorn: { enable: true },
+      puma: { enable: false }
+    )
   end
 
   context 'when unicorn is enabled' do
@@ -24,6 +28,8 @@ describe 'gitlab::unicorn' do
       context 'specified username and group' do
         before do
           stub_gitlab_rb(
+            unicorn: { enable: true },
+            puma: { enable: false },
             user: {
               username: 'foo',
               group: 'bar'
@@ -61,6 +67,8 @@ describe 'gitlab::unicorn' do
   context 'with custom user and group' do
     before do
       stub_gitlab_rb(
+        unicorn: { enable: true },
+        puma: { enable: false },
         user: {
           username: 'foo',
           group: 'bar'
@@ -73,7 +81,11 @@ describe 'gitlab::unicorn' do
 
   context 'with custom runtime_dir' do
     before do
-      stub_gitlab_rb(runtime_dir: '/tmp/test-dir')
+      stub_gitlab_rb(
+        unicorn: { enable: true },
+        puma: { enable: false },
+        runtime_dir: '/tmp/test-dir'
+      )
     end
 
     it 'uses the user-specific runtime_dir' do
@@ -97,6 +109,10 @@ describe 'gitlab::unicorn' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    stub_gitlab_rb(
+      unicorn: { enable: true },
+      puma: { enable: false }
+    )
   end
 
   context 'when unicorn is enabled on a node with no /run or /dev/shm tmpfs' do
@@ -123,6 +139,10 @@ describe 'gitlab::unicorn' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    stub_gitlab_rb(
+      unicorn: { enable: true },
+      puma: { enable: false }
+    )
   end
 
   context 'when unicorn is enabled on a node with a /dev/shm tmpfs' do
@@ -149,6 +169,10 @@ describe 'gitlab::unicorn' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    stub_gitlab_rb(
+      unicorn: { enable: true },
+      puma: { enable: false }
+    )
   end
 
   context 'when unicorn is enabled' do
