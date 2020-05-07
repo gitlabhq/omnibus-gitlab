@@ -80,8 +80,9 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
-file File.join(working_dir, "VERSION") do
-  content VersionHelper.version("/opt/gitlab/embedded/bin/praefect --version")
+version_file 'Create Praefect version file' do
+  version_file_path File.join(working_dir, 'VERSION')
+  version_check_cmd '/opt/gitlab/embedded/bin/praefect --version'
   notifies :hup, "runit_service[praefect]"
 end
 

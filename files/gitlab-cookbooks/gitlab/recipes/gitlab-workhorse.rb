@@ -60,8 +60,9 @@ consul_service 'workhorse' do
   reload_service false unless node['consul']['enable']
 end
 
-file File.join(working_dir, "VERSION") do
-  content VersionHelper.version("/opt/gitlab/embedded/bin/gitlab-workhorse --version")
+version_file 'Create version file for Workhorse' do
+  version_file_path File.join(working_dir, 'VERSION')
+  version_check_cmd '/opt/gitlab/embedded/bin/gitlab-workhorse --version'
   notifies :restart, "runit_service[gitlab-workhorse]"
 end
 

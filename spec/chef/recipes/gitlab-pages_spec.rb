@@ -15,6 +15,15 @@ describe 'gitlab::gitlab-pages' do
       )
     end
 
+    it 'creates a default VERSION file and restarts service' do
+      expect(chef_run).to create_version_file('Create version file for Gitlab Pages').with(
+        version_file_path: '/var/opt/gitlab/gitlab-pages/VERSION',
+        version_check_cmd: '/opt/gitlab/embedded/bin/gitlab-pages --version'
+      )
+
+      expect(chef_run.version_file('Create version file for Gitlab Pages')).to notify('runit_service[gitlab-pages]').to(:restart)
+    end
+
     it 'correctly renders the pages service run file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-server="https://gitlab.example.com"})
 

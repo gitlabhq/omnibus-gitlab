@@ -410,8 +410,9 @@ end
 
 # If a version of ruby changes restart dependent services. Otherwise, services like
 # unicorn will fail to reload until restarted
-file File.join(gitlab_rails_dir, "RUBY_VERSION") do
-  content VersionHelper.version("/opt/gitlab/embedded/bin/ruby --version")
+version_file 'Create version file for Rails' do
+  version_file_path File.join(gitlab_rails_dir, 'RUBY_VERSION')
+  version_check_cmd '/opt/gitlab/embedded/bin/ruby --version'
   dependent_services.each { |svc| notifies :restart, svc }
 end
 

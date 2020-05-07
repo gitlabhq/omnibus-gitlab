@@ -48,8 +48,9 @@ ruby_block "re-populate GitLab Pages configuration options" do
   end
 end
 
-file File.join(working_dir, "VERSION") do
-  content VersionHelper.version("/opt/gitlab/embedded/bin/gitlab-pages -version")
+version_file 'Create version file for Gitlab Pages' do
+  version_file_path File.join(working_dir, 'VERSION')
+  version_check_cmd '/opt/gitlab/embedded/bin/gitlab-pages --version'
   notifies :restart, "runit_service[gitlab-pages]"
 end
 

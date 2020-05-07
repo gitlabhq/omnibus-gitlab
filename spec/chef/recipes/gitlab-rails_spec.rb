@@ -34,6 +34,20 @@ describe 'gitlab::gitlab-rails' do
     allow(File).to receive(:symlink?).and_call_original
   end
 
+  context 'with defaults' do
+    it 'creates a default VERSION file and restarts services' do
+      expect(chef_run).to create_version_file('Create version file for Rails').with(
+        version_file_path: '/var/opt/gitlab/gitlab-rails/RUBY_VERSION',
+        version_check_cmd: '/opt/gitlab/embedded/bin/ruby --version'
+      )
+
+      dependent_services = []
+      dependent_services.each do |svc|
+        expect(chef_run.version_file('Create version file for Rails')).to notify("runit_service[#{svc}]").to(:restart)
+      end
+    end
+  end
+
   context 'when manage-storage-directories is disabled' do
     cached(:chef_run) do
       RSpec::Mocks.with_temporary_scope do

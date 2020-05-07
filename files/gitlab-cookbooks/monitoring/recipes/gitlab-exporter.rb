@@ -69,10 +69,10 @@ template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
   )
 end
 
-# If a version of ruby changes restart gitlab-exporter
-file File.join(gitlab_exporter_dir, 'RUBY_VERSION') do
-  content VersionHelper.version('/opt/gitlab/embedded/bin/ruby --version')
-  notifies :restart, 'runit_service[gitlab-exporter]'
+version_file 'Create version file for GitLab-Exporter' do
+  version_file_path File.join(gitlab_exporter_dir, 'RUBY_VERSION')
+  version_check_cmd '/opt/gitlab/embedded/bin/ruby --version'
+  notifies :restart, "runit_service[gitlab-exporter]"
 end
 
 runit_service "gitlab-exporter" do
