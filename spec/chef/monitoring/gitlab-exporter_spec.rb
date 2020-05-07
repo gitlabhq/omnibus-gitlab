@@ -118,14 +118,4 @@ describe 'monitoring::gitlab-exporter' do
         .with_content(/exec svlogd -tt foo/)
     end
   end
-
-  context 'when gitlab-exporter is enabled, using legacy gitlab_monitor entry' do
-    before do
-      stub_gitlab_rb(
-        gitlab_monitor: { enable: true }
-      )
-    end
-
-    it_behaves_like 'enabled runit service', 'gitlab-exporter', 'root', 'root', 'git', 'git'
-  end
 end
