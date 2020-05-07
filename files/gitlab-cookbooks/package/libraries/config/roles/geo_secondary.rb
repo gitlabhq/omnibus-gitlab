@@ -29,11 +29,12 @@ module GeoSecondaryRole
     Gitlab['postgresql']['hot_standby'] ||= 'on'
     Gitlab['gitlab_rails']['auto_migrate'] ||= false
     Gitlab['gitlab_rails']['enable'] = rails_needed? if Gitlab['gitlab_rails']['enable'].nil?
-    Gitlab['unicorn']['worker_processes'] ||= number_of_worker_processes
+    Gitlab[WebServerHelper.service_name]['worker_processes'] ||= number_of_worker_processes
   end
 
   def self.rails_needed?
     Gitlab['unicorn']['enable'] ||
+      Gitlab['puma']['enable'] ||
       Gitlab['sidekiq']['enable'] ||
       Gitlab['sidekiq_cluster']['enable'] ||
       Gitlab['gitaly']['enable'] ||
@@ -45,6 +46,10 @@ module GeoSecondaryRole
   # 400MB, so free up 1.2GB.  But maintain our 2 worker minimum. #2858
   def self.number_of_worker_processes
     memory = Gitlab['node']['memory']['total'].to_i - 1258291
-    Unicorn.workers(memory)
+    if WebServerHelper.service_name == 'unicorn'
+      Unicorn.workers(memory)
+    else
+      Puma.workers(memory)
+    end
   end
 end

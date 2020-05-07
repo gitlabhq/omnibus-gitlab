@@ -14,6 +14,7 @@ before upgrading to a new major version. To see the current size of the `backgro
 Updating to major versions might need some manual intervention. For more info,
 check the version your are updating to:
 
+- [GitLab 13](gitlab_13_changes.md)
 - [GitLab 12](gitlab_12_changes.md)
 - [GitLab 11](gitlab_11_changes.md)
 - [GitLab 10](gitlab_10_changes.md)
@@ -270,10 +271,9 @@ While it is possible to minimize downtime on a single-node instance by following
    sudo gitlab-rake db:migrate
    ```
 
-1. Hot reload `unicorn`, `puma` and `sidekiq` services
+1. Hot reload `puma` (or `unicorn`) and `sidekiq` services
 
    ```sh
-   sudo gitlab-ctl hup unicorn
    sudo gitlab-ctl hup puma
    sudo gitlab-ctl restart sidekiq
    ```
@@ -452,12 +452,11 @@ node throughout the process.
   sudo gitlab-rake db:migrate
   ```
 
-**For nodes that run Unicorn, Puma or Sidekiq**
+**For nodes that run Puma/Unicorn or Sidekiq**
 
-- Hot reload `unicorn`, `puma` and `sidekiq` services
+- Hot reload `puma` (or `unicorn`) and `sidekiq` services
 
   ```sh
-  sudo gitlab-ctl hup unicorn
   sudo gitlab-ctl hup puma
   sudo gitlab-ctl restart sidekiq
   ```
@@ -612,10 +611,9 @@ point, you can check out the
 [Geo troubleshooting documentation](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#geo-database-has-an-outdated-fdw-remote-schema-error)
 to resolve this.
 
-1. Hot reload `unicorn`, `puma` and `sidekiq` services
+1. Hot reload `puma` (or `unicorn`) and `sidekiq` services
 
    ```sh
-   sudo gitlab-ctl hup unicorn
    sudo gitlab-ctl hup puma
    sudo gitlab-ctl restart sidekiq
    ```
@@ -646,10 +644,9 @@ On each **secondary** node, executing the following:
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-1. Hot reload `unicorn`, `puma`, `sidekiq` and restart `geo-logcursor` services
+1. Hot reload `puma` (or `unicorn`), `sidekiq` and restart `geo-logcursor` services
 
    ```sh
-   sudo gitlab-ctl hup unicorn
    sudo gitlab-ctl hup puma
    sudo gitlab-ctl restart sidekiq
    sudo gitlab-ctl restart geo-logcursor
@@ -717,10 +714,10 @@ You now need to choose:
 - One instance for use as the **primary** "deploy node" on the Geo **primary** multi-node deployment.
 - One instance for use as the **secondary** "deploy node" on each Geo **secondary** multi-node deployment.
 
-Deploy nodes must be configured to be running Unicorn or Sidekiq or the `geo-logcursor` daemon. In order
+Deploy nodes must be configured to be running Puma/Unicorn or Sidekiq or the `geo-logcursor` daemon. In order
 to avoid any downtime, they must not be in use during the update:
 
-- If running Unicorn, remove the deploy node from the load balancer.
+- If running Puma/Unicorn, remove the deploy node from the load balancer.
 - If running Sidekiq, ensure the deploy node is not processing jobs:
 
   ```sh
@@ -733,7 +730,7 @@ to avoid any downtime, they must not be in use during the update:
   sudo gitlab-ctl stop geo-logcursor
   ```
 
-For zero-downtime, Unicorn, Sidekiq, and `geo-logcursor` must be running on other nodes during the update.
+For zero-downtime, Puma/Unicorn, Sidekiq, and `geo-logcursor` must be running on other nodes during the update.
 
 #### Step 2: Updating the Geo primary multi-node deployment
 
@@ -821,12 +818,12 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
-**For all nodes that run Unicorn or Sidekiq**
+**For all nodes that run Puma/Unicorn or Sidekiq**
 
-Hot reload `unicorn` and `sidekiq` services:
+Hot reload `puma` (or `unicorn`) and `sidekiq` services:
 
 ```sh
-sudo gitlab-ctl hup unicorn
+sudo gitlab-ctl hup puma
 sudo gitlab-ctl restart sidekiq
 ```
 
@@ -925,12 +922,12 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
-**For all nodes that run Unicorn, Sidekiq, or the `geo-logcursor` daemon**
+**For all nodes that run Puma/Unicorn, Sidekiq, or the `geo-logcursor` daemon**
 
-Hot reload `unicorn`, `sidekiq` and ``geo-logcursor`` services:
+Hot reload `puma` (or `unicorn`), `sidekiq` and ``geo-logcursor`` services:
 
 ```sh
-sudo gitlab-ctl hup unicorn
+sudo gitlab-ctl hup puma
 sudo gitlab-ctl restart sidekiq
 sudo gitlab-ctl restart geo-logcursor
 ```
@@ -1012,8 +1009,7 @@ Steps:
 
    ```sh
    # Stop GitLab and remove its supervision process
-   sudo gitlab-ctl stop unicorn
-   sudo gitlab-ctl stop puma
+   sudo gitlab-ctl stop puma  # or unicorn
    sudo gitlab-ctl stop sidekiq
    sudo systemctl stop gitlab-runsvdir
    sudo systemctl disable gitlab-runsvdir

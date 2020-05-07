@@ -14,7 +14,7 @@ by default:
 | <a name="gitlab-shell"></a>        GitLab Shell        | Yes           | Port             | X           | 22                                     |
 | <a name="postgresql"></a>          PostgreSQL          | Yes           | Socket           | Port (5432) | X                                      |
 | <a name="redis"></a>               Redis               | Yes           | Socket           | Port (6379) | X                                      |
-| <a name="unicorn"></a>             Unicorn             | Yes           | Socket           | Port (8080) | X                                      |
+| <a name="puma"></a>                Puma                | Yes           | Socket           | Port (8080) | X                                      |
 | <a name="gitlab-workhorse"></a>    GitLab Workhorse    | Yes           | Socket           | Port (8181) | X                                      |
 | <a name="nginx-status"></a>        NGINX status        | Yes           | Port             | X           | 8060                                   |
 | <a name="prometheus"></a>          Prometheus          | Yes           | Port             | X           | 9090                                   |
@@ -24,6 +24,7 @@ by default:
 | <a name="pgbouncer-exporter"></a>  PgBouncer exporter  | No            | Port             | X           | 9188                                   |
 | <a name="gitlab-exporter"></a>     GitLab Exporter     | Yes           | Port             | X           | 9168                                   |
 | <a name="sidekiq-exporter"></a>    Sidekiq exporter    | Yes           | Port             | X           | 8082                                   |
+| <a name="unicorn"></a>             Unicorn             | No            | Socket           | Port (8080) | X                                      |
 | <a name="unicorn-exporter"></a>    Unicorn exporter    | No            | Port             | X           | 8083                                   |
 | <a name="puma-exporter"></a>       Puma exporter       | No            | Port             | X           | 8083                                   |
 | <a name="geo-postgresql"></a>      Geo PostgreSQL      | No            | Socket           | Port (5431) | X                                      |

@@ -1,5 +1,21 @@
 # Unicorn settings
 
+NOTE: **Note:**
+Starting with GitLab 13.0, Puma is the default web server and Unicorn has been
+disabled by default.
+
+## Enabling Unicorn
+
+To use Unicorn instead of Puma, add the following to `/etc/gitlab/gitlab.rb` and
+run `sudo gitlab-ctl reconfigure`
+
+```ruby
+puma['enable'] = false
+unicorn['enable'] = true
+```
+
+### Adjusting workers or timeout
+
 If you need to adjust the Unicorn timeout or the number of workers you can use
 the following settings in `/etc/gitlab/gitlab.rb`.
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.

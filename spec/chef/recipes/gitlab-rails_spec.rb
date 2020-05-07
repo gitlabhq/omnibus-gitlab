@@ -1691,7 +1691,7 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'enabled for Unicorn' do
-          stub_gitlab_rb(unicorn: { enable: true, exporter_enabled: true })
+          stub_gitlab_rb(unicorn: { enable: true, exporter_enabled: true }, puma: { enable: false })
 
           expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
             yaml_data = YAML.safe_load(content, [], [], true)
@@ -1705,7 +1705,7 @@ describe 'gitlab::gitlab-rails' do
       context 'when Puma is enabled' do
         before do
           stub_gitlab_rb(
-            puma: { enable: true }
+            unicorn: { enable: true }
           )
         end
 
@@ -2282,7 +2282,7 @@ describe 'gitlab::gitlab-rails' do
         redis
         redis-exporter
         sidekiq
-        unicorn
+        puma
         gitaly
       ).map { |svc| stub_should_notify?(svc, true) }
     end
@@ -2312,7 +2312,7 @@ describe 'gitlab::gitlab-rails' do
         end
 
         it 'template triggers notifications' do
-          expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
           expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
           expect(templatesymlink).not_to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
           expect(templatesymlink).not_to notify('runit_service[nginx]').to(:restart).delayed
@@ -2362,7 +2362,7 @@ describe 'gitlab::gitlab-rails' do
           end
 
           it 'template triggers notifications' do
-            expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+            expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
             expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
             expect(templatesymlink).not_to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
             expect(templatesymlink).not_to notify('runit_service[nginx]').to(:restart).delayed
@@ -2542,7 +2542,7 @@ describe 'gitlab::gitlab-rails' do
 
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
           expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
         end
       end
@@ -2572,7 +2572,7 @@ describe 'gitlab::gitlab-rails' do
 
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
-          expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
           expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
         end
       end
@@ -2627,7 +2627,7 @@ describe 'gitlab::gitlab-rails' do
 
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('runit_service[gitlab-pages]').to(:restart).delayed
-          expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
           expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
         end
       end
@@ -2663,7 +2663,7 @@ describe 'gitlab::gitlab-rails' do
 
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('runit_service[gitlab-pages]').to(:restart).delayed
-          expect(templatesymlink).to notify('runit_service[unicorn]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
           expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
         end
       end

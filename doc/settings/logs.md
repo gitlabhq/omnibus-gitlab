@@ -31,7 +31,7 @@ you want to place elsewhere:
 ```ruby
 # For example:
 gitlab_rails['log_directory'] = "/var/log/gitlab/gitlab-rails"
-unicorn['log_directory'] = "/var/log/gitlab/unicorn"
+puma['log_directory'] = "/var/log/gitlab/puma"
 registry['log_directory'] = "/var/log/gitlab/registry"
 ...
 ```

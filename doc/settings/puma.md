@@ -1,27 +1,13 @@
 # Puma
 
-Puma is a multi-threaded HTTP 1.1 server for Ruby applications. From GitLab 12.9, Puma has replaced
-Unicorn as the default web server.
+NOTE: **Note:**
+Starting with GitLab 13.0, Puma is the default web server and Unicorn has been
+disabled by default.
 
-To configure Puma:
+## Configuring Puma settings
 
 1. Determine suitable Puma worker and thread settings. For details, see [Puma settings](https://docs.gitlab.com/ee/install/requirements.html#puma-settings).
 1. Convert custom Unicorn settings to the equivalent Puma settings (if applicable). For details, see [Converting Unicorn settings to Puma](#converting-unicorn-settings-to-puma).
-1. Edit the Puma settings file `/etc/gitlab/gitlab.rb`, then reconfigure Puma.
-   1. Disable Unicorn:
-
-      ```ruby
-      unicorn['enable'] = false
-      ```
-
-   1. Enable Puma:
-
-      ```ruby
-      puma['enable'] = true
-      ```
-
-   1. Edit other settings as desired.
-
 1. Reconfigure GitLab so the above changes take effect.
 
    ```shell

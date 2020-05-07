@@ -18,7 +18,7 @@ Once you have installed the GitLab package, you should change the following sett
 
 ```ruby
 # Reduce the number of running workers to the minimum in order to reduce memory usage
-unicorn['worker_processes'] = 2
+puma['worker_processes'] = 2
 sidekiq['concurrency'] = 9
 
 # Turn off monitoring to reduce idle cpu and disk usage

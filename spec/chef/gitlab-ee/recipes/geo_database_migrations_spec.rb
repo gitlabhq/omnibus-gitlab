@@ -54,7 +54,7 @@ describe 'gitlab-ee::geo-database-migrations' do
       it 'restarts services' do
         allow_any_instance_of(GitlabGeoHelper).to receive(:migrated?).and_return(false)
 
-        expect(bash_block).to notify('runit_service[unicorn]').to(:restart)
+        expect(bash_block).to notify('runit_service[puma]').to(:restart)
         expect(bash_block).to notify('runit_service[sidekiq]').to(:restart)
       end
     end

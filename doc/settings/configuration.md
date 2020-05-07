@@ -88,10 +88,11 @@ recommend 4GB RAM, and 4 or 8 CPU cores.
 Follow the steps below to enable relative URL in GitLab:
 
 1. (Optional) If you run short on resources, you can temporarily free up some
-   memory by shutting down Unicorn and Sidekiq with the following command:
+   memory by shutting down Puma (or Unicorn) and Sidekiq with the following
+   command:
 
    ```shell
-   sudo gitlab-ctl stop unicorn
+   sudo gitlab-ctl stop puma
    sudo gitlab-ctl stop sidekiq
    ```
 
@@ -110,7 +111,7 @@ Follow the steps below to enable relative URL in GitLab:
    sudo gitlab-ctl reconfigure
    ```
 
-1. Restart the services so that Unicorn and Sidekiq picks up the changes
+1. Restart the services so that Sidekiq picks up the changes
 
    ```shell
    sudo gitlab-ctl restart
@@ -121,12 +122,16 @@ If you stumble upon any issues, see the [troubleshooting section](#relative-url-
 ### Disable relative URL in GitLab
 
 To disable the relative URL, follow the same steps as above and set up the
-`external_url` to a one that doesn't contain a relative path. You may need to
-explicitly restart Unicorn after the reconfigure task is done:
+`external_url` to a one that doesn't contain a relative path. If you are using
+Unicorn, you may need to explicitly restart it after the reconfigure task is
+done:
 
 ```shell
 sudo gitlab-ctl restart unicorn
 ```
+
+Puma already gets a full restart during reconfigure, so an explicit one is not
+needed.
 
 If you stumble upon any issues, see the [troubleshooting section](#relative-url-troubleshooting).
 
@@ -495,7 +500,7 @@ Enabling this setting will prevent the creation of the following directories:
 
 ## Only start Omnibus GitLab services after a given filesystem is mounted
 
-If you want to prevent Omnibus GitLab services (NGINX, Redis, Unicorn etc.)
+If you want to prevent Omnibus GitLab services (NGINX, Redis, Puma etc.)
 from starting before a given filesystem is mounted, add the following to
 `/etc/gitlab/gitlab.rb`:
 
@@ -509,7 +514,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 ## Configuring runtime directory
 
 When Prometheus monitoring is enabled, GitLab Exporter will conduct measurements
-of each Unicorn process (Rails metrics). Every Unicorn process will need to write
+of each Puma process (Rails metrics). Every Puma process will need to write
 a metrics file to a temporary location for each controller request.
 Prometheus will then collect all these files and process their values.
 
@@ -678,6 +683,10 @@ See [SMTP configuration documentation](smtp.md).
 ## OmniAuth (Google, Twitter, GitHub login)
 
 See [OmniAuth documentation](https://docs.gitlab.com/ee/integration/omniauth.html).
+
+## Adjusting Puma settings
+
+See [Puma documentation](puma.md)
 
 ## Adjusting Unicorn settings
 

@@ -3,7 +3,7 @@
 Upgrading from non-Omnibus installations has not been tested by GitLab.com.
 
 Please be advised that you lose your settings in files such as `gitlab.yml`,
-`unicorn.rb` and `smtp_settings.rb`. You will have to
+`puma.rb` and `smtp_settings.rb`. You will have to
 [configure those settings in `/etc/gitlab/gitlab.rb`](../README.md#configuring).
 
 ## Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup

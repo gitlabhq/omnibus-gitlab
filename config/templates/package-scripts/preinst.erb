@@ -89,7 +89,7 @@ main() {
     return
   fi
 
-  if [ -d ${DEST_DIR}/service/unicorn ] && [ ! -e "${skip_backup_file}" ] ; then
+  if ( [ -d ${DEST_DIR}/service/unicorn ] || [ -d ${DEST_DIR}/service/puma ] ) && [ ! -e "${skip_backup_file}" ] ; then
     notify "Automatically backing up only the GitLab SQL database (excluding everything else!)"
     if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads,builds,artifacts,lfs,registry,pages ; then
       backup_failed "Database"

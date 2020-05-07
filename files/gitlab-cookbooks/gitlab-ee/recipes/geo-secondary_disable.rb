@@ -22,6 +22,7 @@ gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
 dependent_services = []
 %w(
+  puma
   unicorn
   sidekiq
 ).each do |svc|
