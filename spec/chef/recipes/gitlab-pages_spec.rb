@@ -188,22 +188,6 @@ describe 'gitlab::gitlab-pages' do
     end
   end
 
-  context 'with auth-server set' do
-    before do
-      stub_gitlab_rb(
-        external_url: 'https://gitlab.example.com',
-        pages_external_url: 'https://pages.example.com',
-        gitlab_pages: {
-          auth_server: "https://authserver.example.com"
-        }
-      )
-    end
-
-    it 'defaults gitlab-server to auth-server' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-server="https://authserver.example.com"})
-    end
-  end
-
   context 'with artifacts server disabled' do
     before do
       stub_gitlab_rb(

@@ -602,7 +602,6 @@ default['gitlab']['gitlab-pages']['access_control'] = false
 default['gitlab']['gitlab-pages']['gitlab_id'] = nil
 default['gitlab']['gitlab-pages']['gitlab_secret'] = nil
 default['gitlab']['gitlab-pages']['auth_redirect_uri'] = nil
-default['gitlab']['gitlab-pages']['auth_server'] = nil # DEPRECATED, should be removed in 13.0
 default['gitlab']['gitlab-pages']['auth_secret'] = nil
 default['gitlab']['gitlab-pages']['insecure_ciphers'] = false
 default['gitlab']['gitlab-pages']['tls_min_version'] = nil
@@ -803,13 +802,3 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
 default['gitlab']['storage-check']['enable'] = false
 default['gitlab']['storage-check']['target'] = nil
 default['gitlab']['storage-check']['log_directory'] = '/var/log/gitlab/storage-check'
-
-# TODO: Remove Monitoring Dreprecations in GitLab 13
-# https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4687
-default['gitlab']['prometheus'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['prometheus'].to_h }, "node['gitlab']['prometheus']", "node['monitoring']['prometheus']")
-default['gitlab']['alertmanager'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['alertmanager'].to_h }, "node['gitlab']['alertmanager']", "node['monitoring']['alertmanager']")
-default['gitlab']['redis-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['redis-exporter'].to_h }, "node['gitlab']['redis-exporter']", "node['monitoring']['redis-exporter']")
-default['gitlab']['node-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['node-exporter'].to_h }, "node['gitlab']['node-exporter']", "node['monitoring']['node-exporter']")
-default['gitlab']['postgres-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['postgres-exporter'].to_h }, "node['gitlab']['postgres-exporter']", "node['monitoring']['postgres-exporter']")
-default['gitlab']['gitlab-monitor'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['gitlab-monitor'] .to_h }, "node['gitlab']['gitlab-monitor']", "node['monitoring']['gitlab-monitor']")
-default['gitlab']['grafana'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['grafana'].to_h }, "node['gitlab']['grafana']", "node['monitoring']['grafana']")
