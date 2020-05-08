@@ -72,6 +72,9 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     \
     -gitlab-server="<%= node['gitlab']['gitlab-pages']['gitlab_server'] %>" \
     \
+    <% if node['gitlab']['gitlab-pages']['internal_gitlab_server'] %>
+    -internal-gitlab-server="<%= node['gitlab']['gitlab-pages']['internal_gitlab_server'] %>" \
+    <% end %>
     -api-secret-key="<%= node['gitlab']['gitlab-pages']['dir'] %>/.gitlab_pages_secret" \
     \
     <% if node['gitlab']['gitlab-pages']['insecure_ciphers'] %>
