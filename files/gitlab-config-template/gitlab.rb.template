@@ -722,6 +722,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['sentry_environment'] = 'production'
 
 ################################################################################
+## CI_JOB_JWT
+################################################################################
+##! RSA private key used to sign CI_JOB_JWT
+# gitlab_rails['ci_jwt_signing_key'] = nil # Will be generated if not set.
+
+################################################################################
 ## GitLab Workhorse
 ##! Docs: https://gitlab.com/gitlab-org/gitlab-workhorse/blob/master/README.md
 ################################################################################
