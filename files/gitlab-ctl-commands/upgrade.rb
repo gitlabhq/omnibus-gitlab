@@ -210,6 +210,7 @@ end
 
 def pg_upgrade_check
   return unless postgresql_detected?
+
   pg_version_file = '/var/opt/gitlab/postgresql/data/PG_VERSION'
   version = PGVersion.parse(File.read(pg_version_file).strip) if File.exist?(pg_version_file)
 
