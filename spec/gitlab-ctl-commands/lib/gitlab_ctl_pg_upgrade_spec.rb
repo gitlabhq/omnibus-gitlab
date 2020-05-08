@@ -11,9 +11,6 @@ describe GitlabCtl::PgUpgrade do
       "/fakebasedir/embedded/bin/pg_ctl --version"
     ).and_return('fakeoldverision')
     @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fake/data', 'fakenewversion', nil, 123)
-    allow(File).to receive(:realpath).with(
-      @fake_default_dir
-    ).and_return(@fake_default_dir)
   end
 
   it 'should create a new object' do
@@ -72,7 +69,6 @@ describe GitlabCtl::PgUpgrade do
             }
           }
         })
-      allow(File).to receive(:realpath).with('randomdir').and_return('randomdir')
 
       expect(@dbw.data_dir).to eq('randomdir')
     end
@@ -90,7 +86,6 @@ describe GitlabCtl::PgUpgrade do
             }
           }
         })
-      allow(File).to receive(:realpath).with('parentdir/data').and_return('parentdir/data')
 
       expect(@dbw.data_dir).to eq('parentdir/data')
     end
