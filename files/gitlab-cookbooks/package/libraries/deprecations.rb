@@ -24,6 +24,12 @@ module Gitlab
             removal: '14.0',
             note: "Please see https://docs.gitlab.com/omnibus/settings/database.html#store-postgresql-data-in-a-different-directory for how to use postgresql['dir']"
           },
+          {
+            config_keys: %w(gitlab sidekiq cluster),
+            deprecation: '13.0',
+            removal: '14.0',
+            note: "Running sidekiq directly is deprecated. Please see https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html for how to use sidekiq-cluster."
+          }
         ]
 
         deprecations
