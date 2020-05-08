@@ -197,6 +197,23 @@ describe 'gitlab::gitlab-pages' do
     end
   end
 
+  context 'with internal-gitlab-server set' do
+    before do
+      stub_gitlab_rb(
+        external_url: 'https://gitlab.example.com',
+        pages_external_url: 'https://pages.example.com',
+        gitlab_pages: {
+          internal_gitlab_server: "https://int.gitlab.example.com"
+        }
+      )
+    end
+
+    it 'populates config file with provided value' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-server="https://gitlab.example.com"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-internal-gitlab-server="https://int.gitlab.example.com"})
+    end
+  end
+
   context 'with artifacts server disabled' do
     before do
       stub_gitlab_rb(
