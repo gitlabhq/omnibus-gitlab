@@ -864,24 +864,34 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## GitLab Sidekiq
 ################################################################################
 
+##! GitLab allows one to start multiple sidekiq processes. These
+##! processes can be used to consume a dedicated set of queues. This
+##! can be used to ensure certain queues are able to handle additional workload.
+##! https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html
+
 # sidekiq['log_directory'] = "/var/log/gitlab/sidekiq"
 # sidekiq['log_format'] = "json"
 # sidekiq['shutdown_timeout'] = 4
-# sidekiq['concurrency'] = 25
+# sidekiq['cluster'] = true
+# sidekiq['experimental_queue_selector'] = false
+# sidekiq['interval'] = nil
+# sidekiq['max_concurrency'] = 50
+# sidekiq['min_concurrency'] = nil
+
+##! Each entry in the queue_groups array denotes a group of queues that have to be processed by a
+##! Sidekiq process. Multiple queues can be processed by the same process by
+##! separating them with a comma within the group entry, a `*` will process all queues
+
+# sidekiq['queue_groups'] = ['*']
+
+##! If negate is enabled then sidekiq-cluster will process all the queues that
+##! don't match those in queue_groups.
+
+# sidekiq['negate'] = false
+
 # sidekiq['metrics_enabled'] = true
 # sidekiq['listen_address'] = "localhost"
 # sidekiq['listen_port'] = 8082
-
-### Experimental Sidekiq Cluster settings
-###! These settings allow starting `sidekiq-cluster` instead of sidekiq.
-###! Docs: https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#using-sidekiq-cluster-by-default-experimental
-# sidekiq['cluster'] = false
-# sidekiq['experimental_queue_selector'] = false
-# sidekiq['interval'] = nil
-# sidekiq['max_concurrency'] = nil
-# sidekiq['min_concurrency'] = nil
-# sidekiq['negate'] = false
-# sidekiq['queue_groups'] = ['*']
 
 ################################################################################
 ## gitlab-shell
@@ -2093,37 +2103,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##!   the slaves will be reconfigured by the Sentinels anyway, but not with
 ##!   the exact parallel-syncs progression as specified.
 # sentinel['failover_timeout'] = 60000
-
-################################################################################
-## GitLab Sidekiq Cluster (EE only)
-################################################################################
-
-##! GitLab Enterprise Edition allows one to start an extra set of Sidekiq processes
-##! besides the default one. These processes can be used to consume a dedicated set
-##! of queues. This can be used to ensure certain queues always have dedicated
-##! workers, no matter the amount of jobs that need to be processed.
-
-# sidekiq_cluster['enable'] = false
-# sidekiq_cluster['ha'] = false
-# sidekiq_cluster['log_directory'] = "/var/log/gitlab/sidekiq-cluster"
-# sidekiq_cluster['interval'] = 5 # The number of seconds to wait between worker checks
-# sidekiq_cluster['max_concurrency'] = 50 # The maximum number of threads each Sidekiq process should run
-# sidekiq_cluster['min_concurrency'] = 0 # The minimum number of threads each Sidekiq process should run
-
-##! Each entry in the queue_groups array denotes a group of queues that have to be processed by a
-##! Sidekiq process. Multiple queues can be processed by the same process by
-##! separating them with a comma within the group entry
-
-# sidekiq_cluster['queue_groups'] = [
-#   "process_commit,post_receive",
-#   "gitlab_shell"
-# ]
-#
-
-##! If negate is enabled then sidekiq-cluster will process all the queues that
-##! don't match those in queue_groups.
-
-# sidekiq_cluster['negate'] = false
 
 ################################################################################
 ## Additional Database Settings (EE only)

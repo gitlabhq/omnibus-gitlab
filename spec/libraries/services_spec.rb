@@ -257,7 +257,8 @@ describe Services do
         Services.enable_group('sidekiq', 'monitoring')
         Services.disable_group('rails', 'postgres', except: %w(sidekiq monitoring))
         expect(node['gitlab']['gitlab-workhorse']['enable']).to be false
-        expect(node['gitlab']['sidekiq']['enable']).to be true
+        # The sidekiq group enables sidekiq-cluster by default
+        expect(node['gitlab']['sidekiq-cluster']['enable']).to be true
         expect(node['postgresql']['enable']).to be false
         expect(node['monitoring']['postgres-exporter']['enable']).to be true
       end
@@ -309,7 +310,8 @@ describe Services do
         Services.disable_group(Services::ALL_GROUPS, except: %w(redis rails))
         expect(node['monitoring']['prometheus']['enable']).to be false
         expect(node['redis']['enable']).to be true
-        expect(node['gitlab']['sidekiq']['enable']).to be true
+        # Sidekiq enables sidekiq-cluster by default
+        expect(node['gitlab']['sidekiq-cluster']['enable']).to be true
       end
     end
   end
