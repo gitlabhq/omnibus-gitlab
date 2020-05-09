@@ -155,6 +155,9 @@ production: &base
     # file path of internal `mail_room` JSON logs
     log_path: <%= @incoming_email_log_file %>
 
+    # Whether to expunge (permanently remove) messages from the mailbox when they are deleted after delivery
+    expunge_deleted: <%= @incoming_email_expunge_deleted %>
+
   ## Service desk email
   # Allow users to use a separate service desk address
   # For documentation on how to set this up, see http://doc.gitlab.com/ce/administration/reply_by_email.html
