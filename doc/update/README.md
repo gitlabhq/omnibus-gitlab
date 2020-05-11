@@ -234,6 +234,11 @@ If you meet all the requirements above, follow these instructions in order. Ther
 | [Geo](#geo-deployment)                                          | GitLab EE with Geo enabled                        |
 | [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo) | GitLab CE/EE on multiple nodes                    |
 
+Each type of deployment will require that you hot reload the `puma` (or `unicorn`) and `sidekiq` processes on all nodes running these
+services after you've upgraded. The reason for this is that those processes each load the GitLab Rails application which reads and loads
+the database schema into memory when starting up. Each of these processes will need to be reloaded (or restarted in the case of `sidekiq`)
+to re-read any database changes that have been made by post-deployment migrations.
+
 ### Single-node deployment
 
 CAUTION: **Caution:**
