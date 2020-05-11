@@ -36,7 +36,7 @@ to work best with the available resources. Check out the [documentation](setting
 
 ## Configuring
 
-- [Configuring the external url](settings/configuration.md#configuring-the-external-url-for-gitlab)
+- [Configuring the external URL](settings/configuration.md#configuring-the-external-url-for-gitlab)
 - [Configuring a relative URL for GitLab (experimental)](settings/configuration.md#configuring-a-relative-url-for-gitlab)
 - [Storing Git data in an alternative directory](settings/configuration.md#storing-git-data-in-an-alternative-directory)
 - [Changing the name of the Git user group](settings/configuration.md#changing-the-name-of-the-git-user--group)

@@ -605,7 +605,7 @@ you can add more RAM to improve performance.
 
 ## NGINX error: 'could not build server_names_hash, you should increase server_names_hash_bucket_size'
 
-If your external url for GitLab is longer than the default bucket size (64 bytes),
+If your external URL for GitLab is longer than the default bucket size (64 bytes),
 NGINX may stop working and show this error in the logs. To allow larger server
 names, double the bucket size in `/etc/gitlab/gitlab.rb`:
 
