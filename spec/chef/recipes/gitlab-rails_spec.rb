@@ -2448,46 +2448,24 @@ describe 'gitlab::gitlab-rails' do
         end
       end
 
-      describe 'statement_timeout' do
+      describe 'client side statement_timeout' do
         let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
         context 'default values' do
-          it 'uses server side statement_timeout value for client also' do
+          it 'does not set a default value' do
             expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
               hash_including(
-                'db_statement_timeout' => '60000'
+                'db_statement_timeout' => nil
               )
             )
 
             expect(chef_run).to render_file(config_file).with_content { |content|
-              expect(content).to match(%r(statement_timeout: 60000$))
+              expect(content).to match(%r(statement_timeout: $))
             }
           end
         end
 
-        context 'custom value for server side statement_timeout' do
-          before do
-            stub_gitlab_rb(
-              'postgresql' => {
-                'statement_timeout' => '65000'
-              }
-            )
-          end
-
-          it 'uses server side statement_timeout value for client also' do
-            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
-              hash_including(
-                'db_statement_timeout' => '65000'
-              )
-            )
-
-            expect(chef_run).to render_file(config_file).with_content { |content|
-              expect(content).to match(%r(statement_timeout: 65000$))
-            }
-          end
-        end
-
-        context 'custom value for client side statement_timeout' do
+        context 'custom value' do
           before do
             stub_gitlab_rb(
               'postgresql' => { 'statement_timeout' => '65000' },

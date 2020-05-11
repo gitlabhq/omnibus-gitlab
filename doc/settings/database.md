@@ -658,10 +658,7 @@ The next time a reconfigure is triggered, the migration steps will not be perfor
 
 The amount time that Rails will wait for a database transaction to complete
 before timing out can now be adjusted with the `gitlab_rails['db_statement_timeout']`
-setting. Some things to note:
-
-1. If `gitlab_rails['db_statement_timeout']` is not specified, GitLab checks if `postgresql['statement_timeout']` is present . If so, this is used.
-1. If neither of them are present, a default value of `60000` (60 seconds) is used.
+setting. By default, this setting is not used.
 
 Edit `/etc/gitlab/gitlab.rb`:
 
