@@ -39,6 +39,7 @@ end
 omnibus_helper.is_deprecated_praefect_config?
 
 node.default['praefect']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
   # wrapper script parameters
   'GITALY_PID_FILE' => File.join(node['praefect']['dir'], "praefect.pid"),
   'WRAPPER_JSON_LOGGING' => json_logging

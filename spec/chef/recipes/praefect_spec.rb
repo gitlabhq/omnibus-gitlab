@@ -66,6 +66,8 @@ describe 'praefect' do
         .with_content('/var/opt/gitlab/praefect/praefect.pid')
       expect(chef_run).to render_file(File.join(env_dir, "WRAPPER_JSON_LOGGING"))
         .with_content('true')
+      expect(chef_run).to render_file(File.join(env_dir, "SSL_CERT_DIR"))
+        .with_content('/opt/gitlab/embedded/ssl/certs/')
     end
 
     it 'renders the service run file with wrapper' do
