@@ -31,7 +31,6 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       parse_incoming_email_logfile
       parse_service_desk_email_logfile
       parse_maximum_request_duration
-      parse_db_statement_timeout
     end
 
     def parse_directories
@@ -239,12 +238,6 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
       return if Gitlab['gitlab_rails']['max_request_duration_seconds'] < worker_timeout
 
       raise "The maximum request duration needs to be smaller than the worker timeout (#{worker_timeout}s)"
-    end
-
-    def parse_db_statement_timeout
-      # If not set explicitly by user, set client side timeout to either user
-      # specified server side timeout or to default value of server side timeout
-      Gitlab['gitlab_rails']['db_statement_timeout'] ||= Gitlab['postgresql']['statement_timeout'] || Gitlab['node']['postgresql']['statement_timeout']
     end
 
     def public_path
