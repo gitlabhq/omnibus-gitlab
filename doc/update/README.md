@@ -54,7 +54,7 @@ NOTE: **Note**
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
 NOTE: **Note**
-Unless you are following the steps in [Zero downtime updates](#zero-downtime-updates), your GitLab application will not be available to users while an update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.  
+Unless you are following the steps in [Zero downtime updates](#zero-downtime-updates), your GitLab application will not be available to users while an update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.
 
 ### Updating using the official repositories
 
@@ -1087,7 +1087,7 @@ In `/etc/gitlab/gitlab.rb`:
 gitlab_ci['gitlab_server'] = { "url" => 'http://gitlab.example.com', "app_id" => '12345678', "app_secret" => 'QWERTY12345' }
 ```
 
-Where `url` is the url to the GitLab instance.
+Where `url` is the URL to the GitLab instance.
 
 Make sure to run `sudo gitlab-ctl reconfigure` after saving the configuration.
 

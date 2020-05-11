@@ -372,9 +372,9 @@ you forget this step. For more information, see:
 ## Setting HTTP Strict Transport Security
 
 By default GitLab enables Strict Transport Security which informs browsers that
-they should only contact the website using HTTPS. When browser visits
-GitLab instance even once it will remember to no longer attempt insecure connections
-even when user is explicitly entering `http://` url. Such url will be automatically redirected by the browser to `https://` variant.
+they should only contact the website using HTTPS. When a browser visits a
+GitLab instance even once, it will remember to no longer attempt insecure connections,
+even when the user is explicitly entering a `http://` URL. Such a URL will be automatically redirected by the browser to `https://` variant.
 
 ```ruby
 nginx['hsts_max_age'] = 31536000
@@ -697,7 +697,7 @@ server {
 }
 ```
 
-Don't forget to update `git.example.com` in the above example to be your server url.
+Don't forget to update `git.example.com` in the above example to be your server URL.
 
 **Note:** If you wind up with a 403 forbidden, it's possible that you haven't enabled passenger in `/etc/nginx/nginx.conf`, to do so simply uncomment:
 

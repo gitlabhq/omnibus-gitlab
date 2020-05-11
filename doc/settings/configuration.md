@@ -138,7 +138,7 @@ If you stumble upon any issues, see the [troubleshooting section](#relative-url-
 ### Relative URL troubleshooting
 
 If you notice any issues with GitLab assets appearing broken after moving to a
-relative url configuration (like missing images or unresponsive components)
+relative URL configuration (like missing images or unresponsive components),
 please raise an issue in [GitLab](https://gitlab.com/gitlab-org/gitlab)
 with the `Frontend` label.
 
