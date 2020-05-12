@@ -2163,7 +2163,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Unleash
-##! Docs: https://docs.gitlab.com/ee/user/project/operations/feature_flags.html
+##! These settings are for GitLab internal use.
+##! They are used to control feature flags during GitLab development.
+##! Docs: https://docs.gitlab.com/ee/development/feature_flags
 ################################################################################
 # gitlab_rails['feature_flags_unleash_enabled'] = false
 # gitlab_rails['feature_flags_unleash_url'] = nil
