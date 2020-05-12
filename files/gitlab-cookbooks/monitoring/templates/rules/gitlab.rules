@@ -8,7 +8,7 @@ groups:
         unicorn_active_connections
       ) /
       count by (instance) (
-        ruby_memory_bytes
+        ruby_process_resident_memory_bytes
       )
   - record: instance:puma_utilization:ratio
     expr: >
