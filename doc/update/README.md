@@ -228,7 +228,7 @@ If you meet all the requirements above, follow these instructions in order. Ther
 
 | Deployment type                                                 | Description                                       |
 | --------------------------------------------------------------- | ------------------------------------------------  |
-| [Single-node](#single-node-deployment)                               | GitLab CE/EE on a single node                     |
+| [Single-node](#single-node-deployment)                          | GitLab CE/EE on a single node                     |
 | [Multi-node / PG HA](#using-postgresql-ha)                      | GitLab CE/EE using HA architecture for PostgreSQL |
 | [Multi-node / Redis HA](#using-redis-ha-using-sentinel)         | GitLab CE/EE using HA architecture for Redis      |
 | [Geo](#geo-deployment)                                          | GitLab EE with Geo enabled                        |
@@ -242,7 +242,15 @@ to re-read any database changes that have been made by post-deployment migration
 ### Single-node deployment
 
 CAUTION: **Caution:**
-While it is possible to minimize downtime on a single-node instance by following these instructions, it is not possible to always achieve true zero downtime updates. Users may see some connections timeout or be refused for a few minutes, depending on which services need to restart.
+Zero down-time updates are not possible when using Puma, since Puma always
+requires a complete restart. This is because the [phased restart](https://github.com/puma/puma/blob/master/README.md#clustered-mode)
+feature of Puma does not work with the way it is configured in GitLab's
+all-in-one packages (cluster-mode with app preloading).
+
+CAUTION: **Caution:** While it is possible to minimize downtime on a single-node
+instance by following these instructions, it is not possible to always achieve
+true zero downtime updates. Users may see some connections timeout or be refused
+for a few minutes, depending on which services need to restart.
 
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
@@ -276,10 +284,10 @@ While it is possible to minimize downtime on a single-node instance by following
    sudo gitlab-rake db:migrate
    ```
 
-1. Hot reload `puma` (or `unicorn`) and `sidekiq` services
+1. Hot reload `unicorn` (or `puma`) and `sidekiq` services
 
    ```sh
-   sudo gitlab-ctl hup puma
+   sudo gitlab-ctl hup unicorn
    sudo gitlab-ctl restart sidekiq
    ```
 
@@ -289,6 +297,91 @@ sure you remove `/etc/gitlab/skip-auto-reconfigure` after
 you've completed these steps.
 
 ### Multi-node / HA deployment
+
+#### Using a load balancer in front of web (Puma/Unicorn) nodes
+
+With Puma, single node zero-downtime updates are no longer possible. To achieve
+HA with zero-downtime updates, at least two nodes are required to be used with a
+load balancer which distributes the connections properly across both nodes.
+
+The load balancer in front of the application nodes must be configured to check
+proper health check endpoints to check if the service is accepting traffic or
+not. For Puma and Unicorn, the `/-/readiness` endpoint should be used, while
+`/readiness` endpoint can be used for Sidekiq and other services.
+
+Upgrades on web (Puma/Unicorn) nodes must be done in a rolling manner, one after
+another, ensuring at least one node is always up to serve traffic. This is
+required to ensure zero-downtime.
+
+Both Puma and Unicorn will enter a blackout period as part of the upgrade,
+during which they continue to accept connections but will mark their respective
+health check endpoints to be unhealthy. On seeing this, the load balancer should
+disconnect them gracefully.
+
+Both Puma and Unicorn will restart only after completing all the currently
+processing requests. This ensures data and service integrity. Once they have
+restarted, the health check end points will be marked healthy.
+
+The nodes must be updated in the following order to update an HA instance using
+load balancer to latest GitLab version.
+
+1. Select one application node as a deploy node and complete the following steps
+   on it:
+
+    1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. This will
+       prevent the upgrade from running `gitlab-ctl reconfigure` and
+       automatically running database migrations:
+
+        ```shell
+        sudo touch /etc/gitlab/skip-auto-reconfigure
+        ```
+
+    1. Update the GitLab package:
+
+       ```shell
+       # Debian/Ubuntu
+       sudo apt-get update && sudo apt-get install gitlab-ce
+
+       # Centos/RHEL
+       sudo yum install gitlab-ce
+       ```
+
+       If you are an Enterprise Edition user, replace `gitlab-ce` with
+       `gitlab-ee` in the above command.
+
+    1. Get the regular migrations and latest code in place:
+
+       ```shell
+       sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
+       ```
+
+    1. Ensure services use the latest code:
+
+       ```shell
+       sudo gitlab-ctl hup puma
+       sudo gitlab-ctl restart sidekiq
+       ```
+
+1. Complete the following steps on the other Puma/Unicorn/Sidekiq nodes, one
+   after another. Always ensure at least one of such nodes is up and running,
+   and connected to the load balancer before proceeding to the next node.
+
+    1. Update the GitLab package and ensure a `reconfigure` is run as part of
+       it. If not (due to `/etc/gitlab/skip-auto-reconfigure` file being
+       present), run `sudo gitlab-ctl reconfigure` manually.
+
+    1. Ensure services use latest code:
+
+       ```shell
+       sudo gitlab-ctl hup puma
+       sudo gitlab-ctl restart sidekiq
+       ```
+
+1. On the deploy node, run the post-deployment migrations:
+
+      ```shell
+      sudo gitlab-rake db:migrate
+      ```
 
 #### Praefect (Gitaly HA)
 
