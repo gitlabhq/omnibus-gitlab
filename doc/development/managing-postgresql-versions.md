@@ -11,7 +11,7 @@ The PostgreSQL Global Development Group typically releases [one major version of
 
 We need to support running GitLab on both supported versions, as well as upgrading from the older versions to the newest.
 
-NOTE: **Note:** GitLab 13.0 to 13.3 will only have support for one version of PostgreSQL (11). This is an exception to the plan outlined above. 
+NOTE: **Note:** GitLab 13.0 to 13.3 will only have support for one version of PostgreSQL (11). This is an exception to the plan outlined above.
 
 ## Software definitions
 
@@ -60,7 +60,6 @@ For removals, perform the following steps:
    1. `default_version` to the new version
    1. `version` to have the new version, and the `sha256`
    1. `major_version` if necessary
-
 
 1. Add the new PostgreSQL version to the full test suite.
 1. Run a nightly test of the `gitlab-org/gitlab` repo against the new version of PostgreSQL.
