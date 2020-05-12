@@ -64,7 +64,7 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
       context 'when running version is different than installed version' do
         before do
           allow_any_instance_of(RedisHelper).to receive(:running_version).and_return('3.2.12')
-          allow_any_instance_of(RedisHelper).to receive(:installed_version).and_return('5.0.7')
+          allow_any_instance_of(RedisHelper).to receive(:installed_version).and_return('5.0.9')
         end
 
         it 'raises a warning' do
