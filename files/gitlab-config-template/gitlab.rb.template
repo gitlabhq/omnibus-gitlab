@@ -222,6 +222,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['incoming_email_idle_timeout'] = 60
 ####! The file name for internal `mail_room` JSON logfile
 # gitlab_rails['incoming_email_log_file'] = "/var/log/gitlab/mailroom/mail_room_json.log"
+####! Permanently remove messages from the mailbox when they are deleted after delivery
+# gitlab_rails['incoming_email_expunge_deleted'] = false
 
 ####! The format of mail_room crash logs
 # mailroom['exit_log_format'] = "plain"
