@@ -70,14 +70,3 @@ bash "migrate gitlab-rails database" do
   not_if "(test -f #{db_migrate_status_file}) && (cat #{db_migrate_status_file} | grep -Fx 0)"
   only_if { node['gitlab']['gitlab-rails']['auto_migrate'] }
 end
-
-# TODO: Remove in GitLab 13.0. By then, all the log files should have correct
-# permissions.
-log_files_list = Dir.glob("#{node['gitlab']['gitlab-rails']['log_directory']}/gitlab-rails-db-migrate*log*")
-
-bash "set ownership of old migration log files" do
-  code <<-EOH
-    chown #{account_helper.gitlab_user}:#{account_helper.gitlab_group} #{log_files_list.join(' ')}
-  EOH
-  not_if { log_files_list.empty? }
-end
