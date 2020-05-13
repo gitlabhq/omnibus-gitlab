@@ -2122,39 +2122,6 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'rack attack protected paths migration to Admin Area settings' do
-      context 'when rack_attack_admin_area_protected_paths_enabled is true' do
-        it 'admin_area_protected_paths_enabled is set to true' do
-          stub_gitlab_rb(gitlab_rails: { rack_attack_admin_area_protected_paths_enabled: true })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including('rack_attack_admin_area_protected_paths_enabled' => true)
-          )
-          expect(chef_run).to render_file(gitlab_yml_path).with_content(/rack_attack:\s+git_basic_auth:\s+admin_area_protected_paths_enabled: true/)
-        end
-      end
-
-      context 'when rack_attack_admin_area_protected_paths_enabled is false' do
-        it 'admin_area_protected_paths_enabled is set to false' do
-          stub_gitlab_rb(gitlab_rails: { rack_attack_admin_area_protected_paths_enabled: false })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including('rack_attack_admin_area_protected_paths_enabled' => false)
-          )
-          expect(chef_run).to render_file(gitlab_yml_path).with_content(/rack_attack:\s+git_basic_auth:\s+admin_area_protected_paths_enabled: false/)
-        end
-      end
-
-      context 'when rack_attack_admin_area_protected_paths_enabled is not set' do
-        it 'admin_area_protected_paths_enabled is left nil' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including('rack_attack_admin_area_protected_paths_enabled' => nil)
-          )
-          expect(chef_run).to render_file(gitlab_yml_path).with_content(/rack_attack:\s+git_basic_auth:\s+admin_area_protected_paths_enabled: $/)
-        end
-      end
-    end
-
     describe 'maximum request duration' do
       where(:web_worker, :configured_timeout, :expected_duration) do
         :unicorn | nil  | 57
