@@ -145,7 +145,7 @@ GitLab includes support for running with separate Redis instances for different 
    gitlab_rails['redis_actioncable_instance'] = REDIS_ACTIONCABLE_URL
    ```
 
-   **Note**: Redis URLs should be in the format: `redis://:PASSWORD@REDIS_HOST:PORT/2`
+   **Note**: Redis URLs should be in the format: `redis://PASSWORD@REDIS_HOST:PORT/2`
 
    Where:
 
