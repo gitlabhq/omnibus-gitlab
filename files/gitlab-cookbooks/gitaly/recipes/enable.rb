@@ -71,6 +71,11 @@ env_dir env_directory do
   notifies :restart, "runit_service[gitaly]" if omnibus_helper.should_notify?('gitaly')
 end
 
+# If no internal_api_url is specified, default to the IP/port Unicorn listens on
+webserver_service = WebServerHelper.service_name
+gitlab_url = node['gitlab']['gitlab-rails']['internal_api_url']
+gitlab_url ||= "http://#{node['gitlab'][webserver_service]['listen']}:#{node['gitlab'][webserver_service]['port']}#{node['gitlab'][webserver_service]['relative_url']}"
+
 template "Create Gitaly config.toml" do
   path config_path
   source "gitaly-config.toml.erb"
@@ -78,7 +83,8 @@ template "Create Gitaly config.toml" do
   group account_helper.gitlab_group
   mode "0640"
   variables node['gitaly'].to_hash.merge(
-    { gitlab_shell: node['gitlab']['gitlab-shell'].to_hash }
+    { gitlab_shell: node['gitlab']['gitlab-shell'].to_hash,
+      gitlab_url: gitlab_url }
   )
   notifies :hup, "runit_service[gitaly]" if omnibus_helper.should_notify?('gitaly')
 end
