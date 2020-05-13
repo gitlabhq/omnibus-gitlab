@@ -41,9 +41,7 @@ dependency 'libxslt'
 dependency 'curl'
 dependency 'rsync'
 dependency 'libicu'
-dependency 'postgresql_old'
 dependency 'postgresql'
-dependency 'postgresql_new'
 dependency 'python-docutils'
 dependency 'krb5'
 dependency 'registry'
@@ -57,8 +55,6 @@ dependency 'exiftool'
 if EE
   dependency 'pgbouncer'
   dependency 'repmgr'
-  dependency 'repmgr_pg_10'
-  dependency 'repmgr_pg_11'
   dependency 'gitlab-elasticsearch-indexer'
 end
 

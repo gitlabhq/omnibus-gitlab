@@ -482,7 +482,7 @@ def version_from_manifest(software)
 end
 
 def older_version
-  PGVersion.parse(version_from_manifest('postgresql_old'))
+  PGVersion.parse(version_from_manifest('postgresql_old')) || PGVersion.parse(version_from_manifest('postgresql'))
 end
 
 def old_version
@@ -490,7 +490,7 @@ def old_version
 end
 
 def default_version
-  PGVersion.parse(version_from_manifest('postgresql_new'))
+  PGVersion.parse(version_from_manifest('postgresql_new')) || PGVersion.parse(version_from_manifest('postgresql'))
 end
 
 SUPPORTED_VERSIONS = [older_version, old_version, default_version].freeze
