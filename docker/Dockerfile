@@ -18,6 +18,13 @@ RUN apt-get update -q \
 
 # Use BusyBox
 ENV EDITOR /bin/vi
+RUN busybox --install \
+    && { \
+        echo '#!/bin/sh'; \
+        echo '/bin/vi "$@"'; \
+    } > /usr/local/bin/busybox-editor \
+    && chmod +x /usr/local/bin/busybox-editor \
+    && update-alternatives --install /usr/bin/editor editor /usr/local/bin/busybox-editor 1
 
 # Remove MOTD
 RUN rm -rf /etc/update-motd.d /etc/motd /etc/motd.dynamic
