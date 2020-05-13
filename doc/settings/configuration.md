@@ -13,12 +13,12 @@ all the options of the template as of installation listed in
 
 NOTE: **Note:**
 Before you change the external URL, you should check if you have
-previously defined a custom **Home page URL** or **After sign out path** under
+previously defined a custom **Home page URL** or **After sign out a path** under
 **Admin Area > Settings > General > Sign-in restrictions**. If URLs have been
 defined, either update them or remove them completely. Both of these settings
 might cause unintentional redirecting after configuring a new external URL.
 
-In order for GitLab to display correct repository clone links to your users
+For GitLab to display correct repository clone links to your users,
 it needs to know the URL under which it is reached by your users, e.g.
 `http://gitlab.example.com`. Add or edit the following line in
 `/etc/gitlab/gitlab.rb`:
@@ -37,14 +37,14 @@ Please see our [DNS documentation](dns.md) for more details about the use of DNS
 
 ### Specifying the external URL at the time of installation
 
-To make it easier to get a GitLab instance up and running with minimum number of
-commands, `omnibus-gitlab` supports the use of an environment variable
-`EXTERNAL_URL` during the package installation. On detecting presence of this
-environment variable, its value will be written as `external_url` in the
+To make it easier to get a GitLab instance up and running with the minimum
+number of commands, `omnibus-gitlab` supports the use of an environment variable
+`EXTERNAL_URL` during the package installation. On detecting the presence of
+this environment variable, its value will be written as `external_url` in the
 `gitlab.rb` file as part of package installation (or upgrade).
 
 NOTE: **Note:**
-`EXTERNAL_URL` environment variable only has effect during installation/upgrade
+`EXTERNAL_URL` environment variable only affects installation/upgrade
 of packages. For regular `sudo gitlab-ctl reconfigure` runs, the value present
 in `/etc/gitlab/gitlab.rb` will be used.
 
@@ -60,16 +60,16 @@ pass it specifically to the installation command as
 NOTE: **Note:**
 Relative URL support in Omnibus GitLab is **experimental** and was
 [introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/590)
-in version 8.5. For source installations there is a
+in version 8.5. For source installations, there is a
 [separate document](https://docs.gitlab.com/ee/install/relative_url.html).
 
 ---
 
 While it is recommended to install GitLab in its own (sub)domain, sometimes
 this is not possible due to a variety of reasons. In that case, GitLab can also
-be installed under a relative URL, for example `https://example.com/gitlab`.
+be installed under a relative URL, for example, `https://example.com/gitlab`.
 
-Note that by changing the URL, all remote URLS will change, so you'll have to
+Note that by changing the URL, all remote URLs will change, so you'll have to
 manually edit them in any local repository that points to your GitLab instance.
 
 ### Relative URL requirements
@@ -77,9 +77,9 @@ manually edit them in any local repository that points to your GitLab instance.
 _Starting with 8.17 packages, there is **no need to recompile assets**._
 
 The Omnibus GitLab package is shipped with pre-compiled assets (CSS, JavaScript,
-fonts, etc.). If you are running a package _prior to 8.17_ and you configure
+fonts, etc.). If you are running a package _before 8.17_ and you configure
 Omnibus with a relative URL, the assets will need to be recompiled, which is a
-task which consumes a lot of CPU and memory resources. To avoid out-of-memory
+task that consumes a lot of CPU and memory resources. To avoid out-of-memory
 errors, you should have at least 2GB of RAM available on your system, while we
 recommend 4GB RAM, and 4 or 8 CPU cores.
 
@@ -142,7 +142,7 @@ relative URL configuration (like missing images or unresponsive components),
 please raise an issue in [GitLab](https://gitlab.com/gitlab-org/gitlab)
 with the `Frontend` label.
 
-If you are running a version _prior to 8.17_ and for some reason the asset
+If you are running a version _before 8.17_ and for some reason, the asset
 compilation step fails (i.e. the server runs out of memory), you can execute
 the task manually after you addressed the issue (e.g. add swap):
 
@@ -161,9 +161,9 @@ username and group.
 Omnibus GitLab package loads all configuration from `/etc/gitlab/gitlab.rb` file.
 This file has strict file permissions and is owned by the `root` user. The reason for strict permissions
 and ownership is that `/etc/gitlab/gitlab.rb` is being executed as Ruby code by the `root` user during `gitlab-ctl reconfigure`. This means
-that users who have write access to `/etc/gitlab/gitlab.rb` can add configuration that will be executed as code by `root`.
+that users who have to write access to `/etc/gitlab/gitlab.rb` can add configuration that will be executed as code by `root`.
 
-In certain organizations it is allowed to have access to the configuration files but not as the root user.
+In certain organizations, it is allowed to have access to the configuration files but not as the root user.
 You can include an external configuration file inside `/etc/gitlab/gitlab.rb` by specifying the path to the file:
 
 ```ruby
@@ -232,7 +232,7 @@ sudo gitlab-ctl start
 
 By default, Omnibus GitLab uses the user name `git` for Git GitLab Shell login,
 ownership of the Git data itself, and SSH URL generation on the web interface.
-Similarly, `git` group is used for group ownership of the Git data.
+Similarly, the `git` group is used for group ownership of the Git data.
 
 We do not recommend changing the user/group of an existing installation because it can cause unpredictable side-effects.
 If you still want to do change the user and group, you can do so by adding the following lines to
@@ -271,17 +271,17 @@ Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 By default, Omnibus GitLab takes care of creating system user and group accounts
 as well as keeping the information updated.
 These system accounts run various components of the package.
-Most users do not need to change this behaviour.
+Most users do not need to change this behavior.
 However, if your system accounts are managed by other software, eg. LDAP, you
 might need to disable account management done by the package.
 
-In order to disable user and group accounts management, in `/etc/gitlab/gitlab.rb` set:
+To disable user and group accounts management, in `/etc/gitlab/gitlab.rb` set:
 
 ```ruby
 manage_accounts['enable'] = false
 ```
 
-**Warning** Omnibus GitLab still expects users and groups to exist on the system where Omnibus GitLab package is installed.
+**Warning** Omnibus GitLab still expects users and groups to exist on the system where the Omnibus GitLab package is installed.
 
 By default, Omnibus GitLab package expects that following users exist:
 
@@ -380,7 +380,7 @@ is set in local disk (ie not NFS) for better performance. When setting it in
 NFS, Git requests will need to make another network request to read the Git
 configuration and will increase latency in Git operations.
 
-In order to move an existing home directory, GitLab services will need to be stopped and some downtime is required.
+To move an existing home directory, GitLab services will need to be stopped and some downtime is required.
 
 1. Stop GitLab
 
@@ -453,15 +453,15 @@ issue.
 The Omnibus GitLab package takes care of creating all the necessary directories
 with the correct ownership and permissions, as well as keeping this updated.
 
-Some of these directories will hold large amount of data so in certain setups,
-these directories will most likely be mounted on a NFS (or some other) share.
+Some of these directories will hold to large amounts of data so in certain setups,
+these directories will most likely be mounted on an NFS (or some other) share.
 
-Some types of mounts won't allow automatic creation of directories by root user
+Some types of mounts won't allow automatic creation of directories by the root user
  (default user for initial setup), eg. NFS with `root_squash` enabled on the
 share. To work around this the Omnibus GitLab package will attempt to create
 these directories using the directory's owner user.
 
-If you have the `/etc/gitlab` directory mounted, you can turn off management of
+If you have the `/etc/gitlab` directory mounted, you can turn off the management of
 that directory.
 
 In `/etc/gitlab/gitlab.rb` set:
@@ -473,7 +473,7 @@ manage_storage_directories['manage_etc'] = false
 If you are mounting all GitLab's storage directories, each on a separate mount,
 you should completely disable the management of storage directories.
 
-In order to disable management of these directories,
+To disable management of these directories,
 in `/etc/gitlab/gitlab.rb` set:
 
 ```ruby
@@ -500,7 +500,7 @@ Enabling this setting will prevent the creation of the following directories:
 
 ## Only start Omnibus GitLab services after a given filesystem is mounted
 
-If you want to prevent Omnibus GitLab services (NGINX, Redis, Puma etc.)
+If you want to prevent Omnibus GitLab services (NGINX, Redis, Puma, etc.)
 from starting before a given filesystem is mounted, add the following to
 `/etc/gitlab/gitlab.rb`:
 
@@ -518,11 +518,11 @@ of each Puma process (Rails metrics). Every Puma process will need to write
 a metrics file to a temporary location for each controller request.
 Prometheus will then collect all these files and process their values.
 
-In order to avoid creating disk I/O, the Omnibus GitLab package will use a
+To avoid creating disk I/O, the Omnibus GitLab package will use a
 runtime directory.
 
-During `reconfigure`, package will check if `/run` is a `tmpfs` mount.
-If it is not, warning will be printed:
+During `reconfigure`, the package will check if `/run` is a `tmpfs` mount.
+If it is not, the warning will be printed:
 
 ```plaintext
 Runtime directory '/run' is not a tmpfs mount.
@@ -543,20 +543,20 @@ Run `sudo gitlab-ctl reconfigure` for the settings to take effect.
 
 ## Configuring Rack Attack
 
-To prevent abusive clients doing damage, GitLab uses the Rack Attack gem.
+To prevent abusive clients from doing damage, GitLab uses the Rack Attack gem.
 Check [this page](https://docs.gitlab.com/ee/security/rack_attack.html)
 for more information.
 
 ## Disabling automatic cache cleaning during installation
 
-If you have large GitLab installation, you might not want to run `rake cache:clean` task.
-As it can take long time to finish. By default, cache clear task will run automatically
+If you have large GitLab installation, you might not want to run a `rake cache:clean` task.
+As it can take a long time to finish. By default, the cache clear task will run automatically
 during reconfigure.
 
 Edit `/etc/gitlab/gitlab.rb`:
 
 ```ruby
-# This is advanced feature used by large gitlab deployments where loading
+# This is an advanced feature used by large gitlab deployments where loading
 # whole RAILS env takes a lot of time.
 gitlab_rails['rake_cache_clear'] = false
 ```
@@ -587,7 +587,7 @@ Disabling impersonation is documented in
 
 [Sentry](https://sentry.io) is an error reporting and logging tool which can be
 used as SaaS or on premise. It's Open Source and you can browse it's source code
-repositiories [here](https://github.com/getsentry).
+repositories [here](https://github.com/getsentry).
 
 The following settings can be used to configure Sentry:
 
