@@ -527,13 +527,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'bantime' => 3600
 # }
 
-# Prioritize the Admin Area protected paths throttle settings over the
-# deprecated Omnibus-managed protected paths throttle. This allows you to keep
-# gitlab_rails['rack_attack_git_basic_auth'] enabled to run the Git and
-# container registry failed authentication ban.
-# See https://gitlab.com/gitlab-org/gitlab/issues/37093
-# gitlab_rails['rack_attack_admin_area_protected_paths_enabled'] = true
-
 ###! **We do not recommend changing these directories.**
 # gitlab_rails['dir'] = "/var/opt/gitlab/gitlab-rails"
 # gitlab_rails['log_directory'] = "/var/log/gitlab/gitlab-rails"

@@ -784,7 +784,6 @@ production: &base
 
   rack_attack:
     git_basic_auth: <%= @rack_attack_git_basic_auth.to_json if @rack_attack_git_basic_auth %>
-    admin_area_protected_paths_enabled: <%= @rack_attack_admin_area_protected_paths_enabled %>
 
 
 development:

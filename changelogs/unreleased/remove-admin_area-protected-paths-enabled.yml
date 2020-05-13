@@ -1,0 +1,5 @@
+---
+title: Remove flag to set protected paths from gitlab.rb
+merge_request: 4207
+author:
+type: removed
