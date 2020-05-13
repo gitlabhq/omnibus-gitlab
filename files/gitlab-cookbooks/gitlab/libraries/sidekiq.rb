@@ -38,7 +38,17 @@ module Sidekiq
         MSG
       end
 
-      return if Gitlab['sidekiq']['enable'] == false
+      # If user had explicitly turned off sidekiq, let's stop processing here.
+      return if user_settings['enable'] == false
+
+      # When sidekiq is enabled by a role (DEFAULT_ROLE, for example),
+      # Gitlab['node']['sidekiq']['enable'] gets set to `true`. If that didn't
+      # happen, and user didn't explicitly turn on sidekiq, let's stop
+      # processing here. If not, we will inadvertantly enable sidekiq_cluster
+      # few lines below, which will cause the `sidekiq-cluster` recipe to run
+      # and the `sidekiq` runit_service resource to get created and hence
+      # sidekiq service to run in places it is not expected to.
+      return if defaults['enable'] == false && user_settings['enable'] != true
 
       # The cluster feature was explicitly disabled, fallback to the regular sidekiq
       if Gitlab['sidekiq']['cluster'] == false

@@ -95,4 +95,43 @@ describe Sidekiq do
     expect(chef_run.node['gitlab']['sidekiq']['enable']).to eq(false)
     expect(chef_run.node['gitlab']['sidekiq-cluster']['enable']).to eq(false)
   end
+
+  describe 'used with roles' do
+    context 'when using a default role' do
+      it 'runs a sidekiq service' do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com'
+        )
+
+        expect(chef_run).not_to include_recipe('gitlab::sidekiq')
+        expect(chef_run).to include_recipe('gitlab::sidekiq-cluster')
+        expect(chef_run).to enable_runit_service('sidekiq')
+        expect(chef_run).not_to enable_runit_service('sidekiq-cluster')
+      end
+    end
+
+    context 'when using a non-default role' do
+      it 'does not run a sidekiq service by default' do
+        stub_gitlab_rb(
+          roles: ['redis_sentinel_role']
+        )
+
+        expect(chef_run).not_to include_recipe('gitlab::sidekiq-cluster')
+        expect(chef_run).not_to include_recipe('gitlab::sidekiq')
+        expect(chef_run).not_to enable_runit_service('sidekiq')
+        expect(chef_run).not_to enable_runit_service('sidekiq-cluster')
+      end
+
+      it 'runs a sidekiq service if explicitly enabled' do
+        stub_gitlab_rb(
+          roles: ['redis_sentinel_role'],
+          sidekiq: { enable: true }
+        )
+
+        expect(chef_run).not_to include_recipe('gitlab::sidekiq')
+        expect(chef_run).to include_recipe('gitlab::sidekiq-cluster')
+        expect(chef_run).to enable_runit_service('sidekiq')
+      end
+    end
+  end
 end
