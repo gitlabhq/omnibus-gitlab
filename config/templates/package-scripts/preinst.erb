@@ -57,7 +57,7 @@ upgrade_check() {
 }
 
 pg_check() {
-  PG_MIN_VERSION=9.6
+  PG_MIN_VERSION=11
 
   # Fetch the currently running version from the database
   # If this doesn't work, assume this isn't a database node
@@ -75,8 +75,8 @@ pg_check() {
   # float, so that we can do numerical comparison.
   if ! $(echo ${running_version} | awk -v PG_MIN_VERSION="$PG_MIN_VERSION" '$NF+0 < PG_MIN_VERSION {exit 1}'); then
     notify
-    notify "Your version of PostgreSQL is no longer supported. Please upgrade your PostgreSQL version."
-    notify "Check https://docs.gitlab.com/omnibus/update/#updating-gitlab-10-0-or-newer for details."
+    notify "Your version of PostgreSQL is no longer supported. Please upgrade your PostgreSQL version to ${PG_MIN_VERSION}."
+    notify "Check https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server for details."
     notify ""
     notify "Upgrade failed. Retry the upgrade after upgrading your PostgreSQL version."
     exit 1
