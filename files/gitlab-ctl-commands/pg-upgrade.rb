@@ -459,16 +459,17 @@ def run_reconfigure
 end
 
 def analyze_cluster
-  user_home = @attributes.dig(:gitlab, :postgresql, :home) || @attributes.dig(:postgresql, :home)
-  analyze_script = File.join(File.realpath(user_home), 'analyze_new_cluster.sh')
+  pg_username = @attributes.dig(:gitlab, :postgresql, :username) || @attributes.dig(:postgresql, :username)
+  pg_host =  @attributes.dig(:gitlab, :postgresql, :unix_socket_directory) || @attributes.dig(:postgresql, :unix_socket_directory)
+  analyze_cmd = "#{@db_worker.target_version_path}/bin/vacuumdb --all --analyze-in-stages -h #{pg_host}"
   begin
-    @db_worker.run_pg_command("/bin/sh #{analyze_script}")
+    @db_worker.run_pg_command(analyze_cmd)
   rescue GitlabCtl::Errors::ExecutionError => e
-    log 'Error running analyze_new_cluster.sh'
+    log "Error running #{analyze_cmd}"
     log "STDOUT: #{e.stdout}"
     log "STDERR: #{e.stderr}"
     log 'Please check the output, and rerun the command if needed:'
-    log "/bin/sh #{analyze_script}"
+    log "su - #{pg_username} -c \"#{analyze_cmd}\""
     log 'If the error persists, please open an issue at: '
     log 'https://gitlab.com/gitlab-org/omnibus-gitlab/issues'
   end
