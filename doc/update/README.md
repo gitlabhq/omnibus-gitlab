@@ -1229,3 +1229,37 @@ To avoid this issue, either:
 
 - Use the same instructions provided in the [Updating using a manually downloaded package](#updating-using-a-manually-downloaded-package) section.
 - Temporarily disable obsoletion checking in yum by adding `--setopt=obsoletes=0` to the options given to the command.
+
+### 500 error when accessing Project > Settings > Repository on Omnibus installs
+
+In situations where a GitLab instance has been migrated from CE > EE > CE and then back to EE, some Omnibus installations get the below error when viewing a projects repository settings.
+
+```bash
+Processing by Projects::Settings::RepositoryController#show as HTML
+  Parameters: {"namespace_id"=>"<namespace_id>", "project_id"=>"<project_id>"}
+Completed 500 Internal Server Error in 62ms (ActiveRecord: 4.7ms | Elasticsearch: 0.0ms | Allocations: 14583)
+
+NoMethodError (undefined method `commit_message_negative_regex' for #<PushRule:0x00007fbddf4229b8>
+Did you mean?  commit_message_regex_change):
+```
+
+This error is caused by an EE feature being added to a CE instance on the initial move to EE.
+Once the instance is moved back to CE then is upgraded to EE again, the `push_rules` table already exists in the database and a migration is unable to add the `commit_message_regex_change` column.
+
+This results in the [backport migration of EE tables](https://gitlab.com/gitlab-org/gitlab/-/blob/cf00e431024018ddd82158f8a9210f113d0f4dbc/db/migrate/20190402150158_backport_enterprise_schema.rb#L1619) not working correctly. The backport migration assumes that certain tables in the database do not exisit when running CE.
+
+To fix this issue, manually add the missing `commit_message_negative_regex` column and restart GitLab:
+
+```bash
+# Access psql
+sudo gitlab-rails dbconsole
+
+# Add the missing column
+ALTER TABLE push_rules ADD COLUMN commit_message_negative_regex VARCHAR;
+
+# Exit psql
+\q
+
+# Restart GitLab
+sudo gitlab-ctl restart
+```
