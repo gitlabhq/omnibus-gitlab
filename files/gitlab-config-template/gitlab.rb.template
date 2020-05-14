@@ -1822,7 +1822,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['env_directory'] = "/opt/gitlab/etc/gitaly/env"
 # gitaly['env'] = {
 #  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin",
-#  'HOME' => '/var/opt/gitlab'
+#  'HOME' => '/var/opt/gitlab',
+#  'TZ' => ':/etc/localtime',
+#  'PYTHONPATH' => "/opt/gitlab/embedded/lib/python3.7/site-packages",
+#  'ICU_DATA' => "/opt/gitlab/embedded/share/icu/current",
+#  'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/",
+#  'WRAPPER_JSON_LOGGING' => true
 # }
 
 ##! internal_socket_dir is the directory that will contain internal gitaly sockets,
@@ -1867,6 +1872,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # praefect['enable'] = false
+# praefect['dir'] = "/var/opt/gitlab/praefect"
+# praefect['log_directory'] = "/var/log/gitlab/praefect"
+# praefect['env_directory'] = "/opt/gitlab/etc/praefect/env"
+# praefect['env'] = {
+#  'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/",
+#  'GITALY_PID_FILE' => "/var/opt/gitlab/praefect/praefect.pid",
+#  'WRAPPER_JSON_LOGGING' => true
+# }
+# praefect['wrapper_path'] = "/opt/gitlab/embedded/bin/gitaly-wrapper"
 # praefect['virtual_storage_name'] = "praefect"
 # praefect['failover_enabled'] = false
 # praefect['failover_election_strategy'] = 'local'

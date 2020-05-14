@@ -6,6 +6,7 @@ default['praefect']['auth_transitioning'] = false
 default['praefect']['dir'] = "/var/opt/gitlab/praefect"
 default['praefect']['log_directory'] = "/var/log/gitlab/praefect"
 default['praefect']['env_directory'] = "/opt/gitlab/etc/praefect/env"
+# default['praefect']['env'] is set in ../recipes/enable.rb
 default['praefect']['wrapper_path'] = "/opt/gitlab/embedded/bin/gitaly-wrapper"
 default['praefect']['listen_addr'] = "localhost:2305"
 default['praefect']['postgres_queue_enabled'] = false
