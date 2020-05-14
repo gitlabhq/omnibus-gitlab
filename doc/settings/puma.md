@@ -48,10 +48,17 @@ correspond to those in Puma, and which ones have no corresponding counterpart.
 ## Puma Worker Killer
 
 By default, the [Puma Worker Killer](https://github.com/schneems/puma_worker_killer) will restart
-a worker if it exceeds a [memory limit](https://gitlab.com/gitlab-org/gitlab/blob/master/lib%2Fgitlab%2Fcluster%2Fpuma_worker_killer_initializer.rb).
+a worker if it exceeds a [memory limit](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/cluster/puma_worker_killer_initializer.rb). Additionally, rolling restarts of
+Puma workers are performed every 12 hours.
 
 To change the memory limit setting:
 
 ```ruby
 puma['per_worker_max_memory_mb'] = 850
 ```
+
+## Worker timeout
+
+Unlike Unicorn, the `puma['worker_timeout']` setting does not set maximum request duration.
+A [timeout of 60 seconds](https://gitlab.com/gitlab-org/gitlab/-/blob/master/config/initializers/rack_timeout.rb)
+is used when Puma is enabled. This limit is not configurable.
