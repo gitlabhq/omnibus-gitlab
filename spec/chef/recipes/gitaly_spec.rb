@@ -129,6 +129,11 @@ describe 'gitaly' do
       expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/log/run')
         .with_content(/exec svlogd \/var\/log\/gitlab\/gitaly/)
     end
+
+    it 'populates gitaly config.toml with gitlab-shell values' do
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[gitlab-shell\]\s+dir = "/opt/gitlab/embedded/service/gitlab-shell"\s+gitlab_url = 'http://127.0.0.1:8080'})
+    end
   end
 
   context 'with user settings' do
@@ -159,8 +164,10 @@ describe 'gitaly' do
           open_files_ulimit: open_files_ulimit,
           ruby_rugged_git_config_search_path: ruby_rugged_git_config_search_path
         },
+        gitlab_rails: {
+          internal_api_url: gitlab_url
+        },
         gitlab_shell: {
-          gitlab_url: gitlab_url,
           custom_hooks_dir: custom_hooks_dir,
           http_settings: {
             read_timeout: read_timeout,
