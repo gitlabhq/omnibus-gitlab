@@ -57,6 +57,9 @@ build do
   #
   # Patch files should be in config/patches/git/
 
+  # Fix for https://gitlab.com/gitlab-org/git/-/issues/61
+  patch source: 'v3-0001-upload-pack-clear-filter_options-for-each-v2-fetc.patch'
+
   block do
     File.open(File.join(project_dir, 'config.mak'), 'a') do |file|
       file.print <<-EOH
