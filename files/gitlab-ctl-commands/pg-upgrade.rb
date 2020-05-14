@@ -460,7 +460,7 @@ end
 
 def analyze_cluster
   pg_username = @attributes.dig(:gitlab, :postgresql, :username) || @attributes.dig(:postgresql, :username)
-  pg_host =  @attributes.dig(:gitlab, :postgresql, :unix_socket_directory) || @attributes.dig(:postgresql, :unix_socket_directory)
+  pg_host = @attributes.dig(:gitlab, :postgresql, :unix_socket_directory) || @attributes.dig(:postgresql, :unix_socket_directory)
   analyze_cmd = "#{@db_worker.target_version_path}/bin/vacuumdb --all --analyze-in-stages -h #{pg_host}"
   begin
     @db_worker.run_pg_command(analyze_cmd)
