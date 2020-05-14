@@ -79,7 +79,7 @@ describe 'gitlab::actioncable with Ubuntu 16.04' do
         pid: '/opt/gitlab/var/actioncable/actioncable.pid',
         state_path: '/opt/gitlab/var/actioncable/actioncable.state',
         listen_socket: '/var/opt/gitlab/gitlab-rails/sockets/gitlab_actioncable.socket',
-        listen_tcp: '127.0.0.1:8081',
+        listen_tcp: '127.0.0.1:8280',
         working_directory: '/var/opt/gitlab/gitlab-rails/working',
         worker_processes: 2,
         min_threads: 4,
