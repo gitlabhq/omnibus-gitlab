@@ -1,0 +1,5 @@
+---
+title: Fix tracking db revert from pg-upgrade
+merge_request: 4116
+author:
+type: fixed

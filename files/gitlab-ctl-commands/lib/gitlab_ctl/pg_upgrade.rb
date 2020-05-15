@@ -35,9 +35,10 @@ module GitlabCtl
       # If an explicit data_dir exists, that trumps everything, at least until
       # 13.0 when it will be removed. If there isn't one for any reason, we
       # default to computing the data_dir from the info we have.
-      data_dir = node_attributes.dig(:gitlab, :postgresql, :data_dir) || node_attributes.dig(:postgresql, :data_dir) || File.join(pg_base_dir, "data")
+      @data_dir = node_attributes.dig(:gitlab, :postgresql, :data_dir) || node_attributes.dig(:postgresql, :data_dir) || File.join(pg_base_dir, "data")
 
-      @data_dir = File.realpath(data_dir)
+      @data_dir = File.realpath(@data_dir) if File.exist?(@data_dir)
+      @data_dir
     end
 
     def tmp_data_dir
@@ -127,7 +128,9 @@ module GitlabCtl
           false
         end
       end
-        raise GitlabCtl::Errors::ExecutionError, 'run_pg_upgrade', '', 'Error upgrading the database'
+        raise GitlabCtl::Errors::ExecutionError.new(
+          'run_pg_upgrade', '', 'Error upgrading the database'
+        )
       end
     end
 
