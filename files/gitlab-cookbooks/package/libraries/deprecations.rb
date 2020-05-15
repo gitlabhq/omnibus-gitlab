@@ -29,6 +29,18 @@ module Gitlab
             deprecation: '13.0',
             removal: '14.0',
             note: "Running sidekiq directly is deprecated. Please see https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html for how to use sidekiq-cluster."
+          },
+          {
+            config_keys: %w(roles redis-slave enable),
+            deprecation: '13.0',
+            removal: '14.0',
+            note: 'Use redis_replica_role instead.'
+          },
+          {
+            config_keys: %w(redis client_output_buffer_limit_slave),
+            deprecation: '13.0',
+            removal: '14.0',
+            note: 'Use client_output_buffer_limit_replica instead'
           }
         ]
 
@@ -95,6 +107,8 @@ module Gitlab
           config_keys.shift if ATTRIBUTE_BLOCKS.include?(config_keys[0])
           key = if config_keys.length == 1
                   config_keys[0].tr("-", "_")
+                elsif config_keys.first.eql?('roles')
+                  "#{config_keys[1].tr('-', '_')}_role"
                 else
                   "#{config_keys[0].tr('-', '_')}['#{config_keys.drop(1).join("']['")}']"
                 end

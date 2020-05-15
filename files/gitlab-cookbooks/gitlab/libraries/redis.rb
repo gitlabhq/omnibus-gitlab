@@ -33,20 +33,21 @@ module Redis
         parse_redis_daemon! unless RedisHelper::Checks.has_sentinels?
       end
 
-      Gitlab['redis']['master'] = false if Gitlab['redis_slave_role']['enable']
+      Gitlab['redis']['client_output_buffer_limit_replica'] ||= Gitlab['redis']['client_output_buffer_limit_slave']
+      Gitlab['redis']['master'] = false if RedisHelper::Checks.replica_role?
 
       # When announce-ip is defined and announce-port not, infer the later from the main redis_port
-      # This functionality makes sense for redis slaves but with sentinel, the redis role can swap
-      # We introduce the option regardless the user defined de redis node as master or slave
+      # This functionality makes sense for redis replicas but with sentinel, the redis role can swap
+      # We introduce the option regardless the user defined de redis node as master or replica
       Gitlab['redis']['announce_port'] ||= Gitlab['redis']['port'] if Gitlab['redis']['announce_ip']
 
-      Gitlab['redis']['master_password'] ||= Gitlab['redis']['password'] if redis_managed? && (RedisHelper::Checks.sentinel_daemon_enabled? || RedisHelper::Checks.is_redis_slave? || Gitlab['redis_master_role']['enable'])
+      Gitlab['redis']['master_password'] ||= Gitlab['redis']['password'] if redis_managed? && (RedisHelper::Checks.sentinel_daemon_enabled? || RedisHelper::Checks.is_redis_replica? || Gitlab['redis_master_role']['enable'])
 
       Gitlab['redis']['rename_commands'] ||= {
         'KEYS' => ''
       }
 
-      return unless RedisHelper::Checks.sentinel_daemon_enabled? || RedisHelper::Checks.is_redis_slave?
+      return unless RedisHelper::Checks.sentinel_daemon_enabled? || RedisHelper::Checks.is_redis_replica?
 
       raise "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
       raise "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']

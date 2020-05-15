@@ -31,6 +31,7 @@ default['redis']['master_port'] = 6379
 default['redis']['master_password'] = nil
 default['redis']['client_output_buffer_limit_normal'] = "0 0 0"
 default['redis']['client_output_buffer_limit_slave'] = "256mb 64mb 60"
+default['redis']['client_output_buffer_limit_replica'] = "256mb 64mb 60"
 default['redis']['client_output_buffer_limit_pubsub'] = "32mb 8mb 60"
 default['redis']['save'] = ['900 1', '300 10', '60 10000']
 
