@@ -1,5 +1,0 @@
----
-title: Ignore the PG_VERSION value if database is not enabled
-merge_request: 4136
-author:
-type: fixed

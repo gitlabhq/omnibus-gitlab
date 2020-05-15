@@ -3,6 +3,20 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.10.6 (2020-05-15)
+
+### Fixed (4 changes)
+
+- Fix tracking db revert from pg-upgrade. !4116
+- Ignore the PG_VERSION value if database is not enabled. !4136
+- Fix pg-upgrade wrong number of args error. !4189
+- Only print pg upgrade message when postgres is actually enabled. !4209
+
+### Changed (1 change)
+
+- Do not set a default value for client side database statement timeout. !4154
+
+
 ## 12.10.5 (2020-05-13)
 
 - No changes.
