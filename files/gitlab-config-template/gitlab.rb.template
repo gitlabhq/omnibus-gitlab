@@ -1768,6 +1768,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # grafana['metrics_enabled'] = false
 # grafana['metrics_basic_auth_username'] = 'grafana_metrics' # default: nil
 # grafana['metrics_basic_auth_password'] = 'please_set_a_unique_password' # default: nil
+# grafana['alerting_enabled'] = false
 
 ### Dashboards
 #
