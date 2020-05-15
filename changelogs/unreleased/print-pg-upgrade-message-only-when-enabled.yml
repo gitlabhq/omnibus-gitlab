@@ -1,5 +1,0 @@
----
-title: Only print pg upgrade message when postgres is actually enabled
-merge_request: 4209
-author:
-type: fixed

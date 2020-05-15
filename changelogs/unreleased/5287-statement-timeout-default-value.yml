@@ -1,5 +1,0 @@
----
-title: Do not set a default value for client side database statement timeout
-merge_request: 4154
-author:
-type: changed
