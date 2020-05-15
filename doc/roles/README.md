@@ -61,7 +61,7 @@ Documentation on the use of the Redis Roles can be found in [Configuring Redis H
 
   *By default, enables no other services.*
 
-- **redis_slave_role**
+- **redis_replica_role**
 
   Enables the Redis service and monitoring
 

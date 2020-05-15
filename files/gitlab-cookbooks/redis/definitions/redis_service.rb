@@ -51,7 +51,7 @@ define :redis_service, socket_group: nil do
   end
 
   redis_config = File.join(redis_dir, 'redis.conf')
-  is_slave = node['redis']['master_ip'] &&
+  is_replica = node['redis']['master_ip'] &&
     node['redis']['master_port'] &&
     !node['redis']['master']
 
@@ -59,7 +59,7 @@ define :redis_service, socket_group: nil do
     source "redis.conf.erb"
     owner redis_user
     mode "0644"
-    variables(node['redis'].to_hash.merge({ is_slave: is_slave }))
+    variables(node['redis'].to_hash.merge({ is_replica: is_replica }))
     notifies :restart, 'runit_service[redis]', :immediately if omnibus_helper.should_notify?('redis')
   end
 

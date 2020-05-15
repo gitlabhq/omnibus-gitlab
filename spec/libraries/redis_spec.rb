@@ -87,10 +87,10 @@ describe 'Redis' do
         end
       end
 
-      context 'when with redis_slave_role enabled' do
+      context 'when with redis_replica_role enabled' do
         before do
           stub_gitlab_rb(
-            redis_slave_role: {
+            redis_replica_role: {
               enable: true
             },
             redis: {
@@ -128,7 +128,7 @@ describe 'Redis' do
         end
       end
 
-      context 'when redis is a slave' do
+      context 'when redis is a replica' do
         before do
           stub_gitlab_rb(
             redis: {
@@ -190,7 +190,7 @@ describe 'Redis' do
         let(:master_password) { 'anotherPASSWORD' }
         before do
           stub_gitlab_rb(
-            redis_slave_role: {
+            redis_replica_role: {
               enable: true
             },
             redis: {

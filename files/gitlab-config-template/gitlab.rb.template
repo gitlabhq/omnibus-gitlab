@@ -31,7 +31,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Roles for multi-instance GitLab
 ##! The default is to have no roles enabled, which results in GitLab running as an all-in-one instance.
 ##! Options:
-##!   redis_sentinel_role redis_master_role redis_slave_role geo_primary_role geo_secondary_role
+##!   redis_sentinel_role redis_master_role redis_replica_role geo_primary_role geo_secondary_role
 ##!   postgres_role consul_role application_role monitoring_role
 ##! For more details on each role, see:
 ##! https://docs.gitlab.com/omnibus/roles/README.html#roles
@@ -1087,11 +1087,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 #
 
 ###! **To enable only Redis service in this machine, uncomment
-###!   one of the lines below (choose master or slave instance types).**
+###!   one of the lines below (choose master or replica instance types).**
 ###! Docs: https://docs.gitlab.com/omnibus/settings/redis.html
 ###!       https://docs.gitlab.com/ee/administration/high_availability/redis.html
 # redis_master_role['enable'] = true
-# redis_slave_role['enable'] = true
+# redis_replica_role['enable'] = true
 
 ### Redis TCP support (will disable UNIX socket transport)
 # redis['bind'] = '0.0.0.0' # or specify an IP to bind to a single one
@@ -1099,35 +1099,35 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['password'] = 'redis-password-goes-here'
 
 ### Redis Sentinel support
-###! **You need a master slave Redis replication to be able to do failover**
+###! **You need a master replica Redis replication to be able to do failover**
 ###! **Please read the documentation before enabling it to understand the
 ###!   caveats:**
 ###! Docs: https://docs.gitlab.com/ee/administration/high_availability/redis.html
 
 ### Replication support
-#### Slave Redis instance
+#### Replica Redis instance
 # redis['master'] = false # by default this is true
 
-#### Slave and Sentinel shared configuration
+#### Replica and Sentinel shared configuration
 ####! **Both need to point to the master Redis instance to get replication and
 ####!   heartbeat monitoring**
 # redis['master_name'] = 'gitlab-redis'
 # redis['master_ip'] = nil
 # redis['master_port'] = 6379
 
-#### Support to run redis slaves in a Docker or NAT environment
+#### Support to run redis replicas in a Docker or NAT environment
 ####! Docs: https://redis.io/topics/replication#configuring-replication-in-docker-and-nat
 # redis['announce_ip'] = nil
 # redis['announce_port'] = nil
 
 ####! **Master password should have the same value defined in
 ####!   redis['password'] to enable the instance to transition to/from
-####!   master/slave in a failover event.**
+####!   master/replica in a failover event.**
 # redis['master_password'] = 'redis-password-goes-here'
 
-####! Increase these values when your slaves can't catch up with master
+####! Increase these values when your replicas can't catch up with master
 # redis['client_output_buffer_limit_normal'] = '0 0 0'
-# redis['client_output_buffer_limit_slave'] = '256mb 64mb 60'
+# redis['client_output_buffer_limit_replica'] = '256mb 64mb 60'
 # redis['client_output_buffer_limit_pubsub'] = '32mb 8mb 60'
 
 #####! Redis snapshotting frequency
@@ -2098,18 +2098,18 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##!   already tried against the same master by a given Sentinel, is two
 ##!   times the failover timeout.
 ##!
-##! - The time needed for a slave replicating to a wrong master according
+##! - The time needed for a replica replicating to a wrong master according
 ##!   to a Sentinel current configuration, to be forced to replicate
 ##!   with the right master, is exactly the failover timeout (counting since
 ##!   the moment a Sentinel detected the misconfiguration).
 ##!
 ##! - The time needed to cancel a failover that is already in progress but
-##!   did not produced any configuration change (SLAVEOF NO ONE yet not
-##!   acknowledged by the promoted slave).
+##!   did not produced any configuration change (REPLICAOF NO ONE yet not
+##!   acknowledged by the promoted replica).
 ##!
-##! - The maximum time a failover in progress waits for all the slaves to be
-##!   reconfigured as slaves of the new master. However even after this time
-##!   the slaves will be reconfigured by the Sentinels anyway, but not with
+##! - The maximum time a failover in progress waits for all the replicas to be
+##!   reconfigured as replicas of the new master. However even after this time
+##!   the replicas will be reconfigured by the Sentinels anyway, but not with
 ##!   the exact parallel-syncs progression as specified.
 # sentinel['failover_timeout'] = 60000
 
