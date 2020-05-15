@@ -17,6 +17,10 @@ omnibus-gitlab repository.
 - Do not set a default value for client side database statement timeout. !4154
 
 
+## 12.10.6 (2020-05-15)
+
+- No changes.
+
 ## 12.10.5 (2020-05-13)
 
 - No changes.
