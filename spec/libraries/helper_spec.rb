@@ -89,6 +89,7 @@ describe OmnibusHelper do
     %w(
       unicorn
       puma
+      actioncable
       sidekiq
       sidekiq-cluster
       gitlab-workhorse

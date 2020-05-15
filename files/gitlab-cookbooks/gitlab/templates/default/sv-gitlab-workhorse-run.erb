@@ -17,6 +17,10 @@ exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
     -listenAddr <%= node['gitlab']['gitlab-workhorse']['listen_addr'] %> \
     -authBackend <%= node['gitlab']['gitlab-workhorse']['auth_backend'] %><%= node['gitlab']['gitlab-workhorse']['relative_url'] %> \
     -authSocket <%= node['gitlab']['gitlab-workhorse']['auth_socket'] %> \
+    <% if node['gitlab']['actioncable']['enable'] %>
+    -cableBackend <%= node['gitlab']['gitlab-workhorse']['cable_backend'] %><%= node['gitlab']['gitlab-workhorse']['relative_url'] %> \
+    -cableSocket <%= node['gitlab']['gitlab-workhorse']['cable_socket'] %> \
+    <% end %>
     -documentRoot /opt/gitlab/embedded/service/gitlab-rails/public \
     -pprofListenAddr <%= node['gitlab']['gitlab-workhorse']['pprof_listen_addr'] %>\
     <% if node['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] %>

@@ -756,6 +756,11 @@ production: &base
   shutdown:
     blackout_seconds: <%= @shutdown_blackout_seconds %>
 
+  ## ActionCable settings
+  action_cable:
+    # Number of threads used to process ActionCable connection callbacks and channel actions
+    worker_pool_size: <%= @actioncable['worker_pool_size'] %>
+
   ## Prometheus settings
   # Do not modify these settings here. They should be modified in /etc/gitlab/gitlab.rb
   # if you installed GitLab via Omnibus.

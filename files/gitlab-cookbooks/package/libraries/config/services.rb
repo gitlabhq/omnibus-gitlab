@@ -43,6 +43,7 @@ module Services
     service 'crond'
     service 'praefect'
     service 'unicorn'
+    service 'actioncable'
   end
 
   # Define the services included in the EE edition of GitLab

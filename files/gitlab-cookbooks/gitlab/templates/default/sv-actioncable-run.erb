@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Let runit capture all script error messages
+exec 2>&1
+
+<%= render("make_metrics_rundir.erb") %>
+<%= render("mount_point_check.erb") %>
+
+exec chpst -P \
+  -u <%= @options[:user] %>:<%= @options[:groupname] %> \
+  -U <%= @options[:user] %>:<%= @options[:groupname] %> \
+  -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env \
+  /usr/bin/env \
+    prometheus_multiproc_dir="${prometheus_run_dir}" \
+    /opt/gitlab/embedded/bin/bundle exec puma -C <%= @options[:puma_rb] %>

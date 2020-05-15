@@ -298,6 +298,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       sidekiq: node['gitlab']['sidekiq'],
       unicorn: node['gitlab']['unicorn'],
       puma: node['gitlab']['puma'],
+      actioncable: node['gitlab']['actioncable'],
       gitlab_shell_authorized_keys_file: node['gitlab']['gitlab-shell']['auth_file'],
       prometheus: node['monitoring']['prometheus']
     )

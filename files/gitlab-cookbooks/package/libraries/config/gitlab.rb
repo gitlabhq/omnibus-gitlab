@@ -84,6 +84,7 @@ module Gitlab
     attribute('logging',          priority: 20).use { Logging }
     attribute('unicorn',          priority: 20).use { Unicorn }
     attribute('puma',             priority: 20).use { Puma }
+    attribute('actioncable',      priority: 20).use { ActionCable }
     attribute('mailroom',         priority: 20).use { IncomingEmail }
     attribute('gitlab_pages',     priority: 20).use { GitlabPages }
     attribute('storage_check',    priority: 30).use { StorageCheck }

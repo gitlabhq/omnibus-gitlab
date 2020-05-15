@@ -85,11 +85,12 @@ include_recipe "gitlab::selinux"
 # add trusted certs recipe
 include_recipe "gitlab::add_trusted_certs"
 
-# Create dummy unicorn and sidekiq services to receive notifications, in case
+# Create dummy services to receive notifications, in case
 # the corresponding service recipe is not loaded below.
 %w(
   unicorn
   puma
+  actioncable
   sidekiq
   mailroom
 ).each do |dummy|
@@ -137,6 +138,7 @@ include_recipe "gitlab::logrotate_folders_and_configs"
 %w[
   unicorn
   puma
+  actioncable
   sidekiq
   sidekiq-cluster
   gitlab-workhorse

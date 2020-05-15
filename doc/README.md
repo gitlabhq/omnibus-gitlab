@@ -50,6 +50,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [LDAP](settings/ldap.md)
 - [Puma](settings/puma.md)
 - [Unicorn](settings/unicorn.md)
+- [ActionCable](settings/actioncable.md)
 - [Redis](settings/redis.md)
 - [Logs](settings/logs.md)
 - [Database](settings/database.md)

@@ -183,6 +183,7 @@ describe 'gitlab-ee::geo-secondary' do
         sidekiq-cluster
         unicorn
         puma
+        actioncable
         gitaly
         geo-postgresql
         gitlab-pages
