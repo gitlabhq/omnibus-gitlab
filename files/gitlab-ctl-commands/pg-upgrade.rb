@@ -254,7 +254,7 @@ def common_post_upgrade(disable_maintenance = true)
   end
 
   unless [:pg_secondary, :geo_secondary].include?(@instance_type)
-    log 'Database upgrade is complete, running dbvacuum analyze'
+    log 'Database upgrade is complete, running vacuumdb analyze'
     analyze_cluster
   end
 
