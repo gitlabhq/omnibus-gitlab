@@ -22,10 +22,10 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 # Date of the file is in a comment at the start, or in the changelog
-default_version '2019.01.23'
+default_version '2020.01.01'
 
-version '2019.01.23' do
-  source md5: 'fccbe6cec7a76e3351ad32e305184787'
+version '2020.01.01' do
+  source md5: 'c726ae88fd600aa26df1d30f42b51fec'
 end
 
 # Source URL looks like https://curl.haxx.se/ca/cacert-2018-01-17.pem. The
