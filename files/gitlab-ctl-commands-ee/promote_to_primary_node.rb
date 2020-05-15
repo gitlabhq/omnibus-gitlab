@@ -26,12 +26,16 @@ def get_ctl_options
   OptionParser.new do |opts|
     opts.banner = "Usage: gitlab-ctl promote-to-primary-node [options]"
 
-    opts.on('-p', '--[no-]confirm-primary-is-down', 'Do not ask a confirmation that primary is down') do |p|
+    opts.on('-p', '--[no-]confirm-primary-is-down', 'Do not ask for confirmation that primary is down') do |p|
       options[:confirm_primary_is_down] = p
     end
 
-    opts.on('-c', '--[no-]confirm-removing-keys', 'Do not ask a confirmation about removing keys') do |c|
+    opts.on('-c', '--[no-]confirm-removing-keys', 'Do not ask for confirmation about removing keys') do |c|
       options[:confirm_removing_keys] = c
+    end
+
+    opts.on('-m', '--skip-preflight-checks', 'Do not ask for confirmation if manual checks ran') do |c|
+      options[:skip_preflight_checks] = m
     end
   end.parse!(ARGV.dup)
 
