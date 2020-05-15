@@ -129,3 +129,4 @@ default['monitoring']['grafana']['env'] = {
 default['monitoring']['grafana']['metrics_enabled'] = false
 default['monitoring']['grafana']['metrics_basic_auth_username'] = nil
 default['monitoring']['grafana']['metrics_basic_auth_password'] = nil
+default['monitoring']['grafana']['alerting_enabled'] = false
