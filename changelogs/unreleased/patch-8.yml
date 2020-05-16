@@ -1,0 +1,5 @@
+---
+title: Disabling vts status module should keep gitlab-workhorse upstream
+merge_request: 4233
+author: Ovv
+type: fixed
