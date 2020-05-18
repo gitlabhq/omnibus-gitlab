@@ -383,11 +383,11 @@ load balancer to latest GitLab version.
       sudo gitlab-rake db:migrate
       ```
 
-#### Praefect (Gitaly HA)
+#### Gitaly Cluster
 
-Praefect is the GitLab component responsible for make Gitaly highly
-available. It has its own PostgreSQL database, independent of the rest
-of the application.
+[Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) is built using
+Gitaly and the Praefect component. It has its own PostgreSQL database, independent of the rest of
+the application.
 
 Before you update the main application you need to update Praefect.
 Out of your Praefect nodes, pick one to be your Praefect deploy node.
