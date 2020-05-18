@@ -3,11 +3,6 @@ files:
   <% log_dir = node['gitlab'].has_key?(service) ? node['gitlab'][service]['log_directory'] : node[service]['log_directory'] %>
   - <%= File.join(log_dir, "*.log") %>
 <% end %>
-exclude_files:
-  # /var/log/gitlab-rails/sidekiq.log is a symlink to /var/log/sidekiq/current,
-  # which should already be being shipped off-site by svlogd. Exclude it from
-  # remote_syslog to avoid duplicate log entries on the syslog server.
-  - <%= File.join(node['gitlab']['gitlab-rails']['log_directory'], "sidekiq.log") %>
 destination:
   host: <%= @destination_host %>
   port: <%= @destination_port %>
