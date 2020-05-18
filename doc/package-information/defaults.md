@@ -15,7 +15,7 @@ by default:
 | <a name="postgresql"></a>          PostgreSQL          | Yes           | Socket           | Port (5432) | X                                      |
 | <a name="redis"></a>               Redis               | Yes           | Socket           | Port (6379) | X                                      |
 | <a name="puma"></a>                Puma                | Yes           | Socket           | Port (8080) | X                                      |
-| <a name="actioncable"></a>         ActionCable         | Yes           | Socket           | Port (8280) | X                                      |
+| <a name="actioncable"></a>         ActionCable         | No            | Socket           | Port (8280) | X                                      |
 | <a name="gitlab-workhorse"></a>    GitLab Workhorse    | Yes           | Socket           | Port (8181) | X                                      |
 | <a name="nginx-status"></a>        NGINX status        | Yes           | Port             | X           | 8060                                   |
 | <a name="prometheus"></a>          Prometheus          | Yes           | Port             | X           | 9090                                   |
