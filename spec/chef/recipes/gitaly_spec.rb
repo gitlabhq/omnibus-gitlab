@@ -132,7 +132,12 @@ describe 'gitaly' do
 
     it 'populates gitaly config.toml with gitlab-shell values' do
       expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[gitlab-shell\]\s+dir = "/opt/gitlab/embedded/service/gitlab-shell"\s+gitlab_url = 'http://127.0.0.1:8080'})
+        .with_content(%r{\[gitlab-shell\]\s+dir = "/opt/gitlab/embedded/service/gitlab-shell"})
+    end
+
+    it 'populates gitaly config.toml with gitlab values' do
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[gitlab\]\s+url = 'http://127.0.0.1:8080'})
     end
   end
 
@@ -224,15 +229,23 @@ describe 'gitaly' do
       gitlab_shell_section = Regexp.new([
         %r{\[gitlab-shell\]},
         %r{dir = "/opt/gitlab/embedded/service/gitlab-shell"},
-        %r{gitlab_url = '#{Regexp.escape(gitlab_url)}'},
-        %r{custom_hooks_dir = '#{Regexp.escape(custom_hooks_dir)}'},
-        %r{\[gitlab-shell.http-settings\]},
+      ].map(&:to_s).join('\s+'))
+
+      gitlab_section = Regexp.new([
+        %r{\[gitlab\]},
+        %r{url = '#{Regexp.escape(gitlab_url)}'},
+        %r{\[gitlab.http-settings\]},
         %r{read_timeout = #{read_timeout}},
         %r{user = '#{Regexp.escape(user)}'},
         %r{password = '#{Regexp.escape(password)}'},
         %r{ca_file = '#{Regexp.escape(ca_file)}'},
         %r{ca_path = '#{Regexp.escape(ca_path)}'},
         %r{self_signed_cert = #{self_signed_cert}},
+      ].map(&:to_s).join('\s+'))
+
+      hooks_section = Regexp.new([
+        %r{\[hooks\]},
+        %r{custom_hooks_dir = '#{Regexp.escape(custom_hooks_dir)}'},
       ].map(&:to_s).join('\s+'))
 
       expect(chef_run).to render_file(config_path).with_content { |content|
@@ -247,6 +260,8 @@ describe 'gitaly' do
         expect(content).to match(gitaly_ruby_section)
         expect(content).to match(%r{\[git\]\s+catfile_cache_size = 50})
         expect(content).to match(gitlab_shell_section)
+        expect(content).to match(gitlab_section)
+        expect(content).to match(hooks_section)
       }
     end
 

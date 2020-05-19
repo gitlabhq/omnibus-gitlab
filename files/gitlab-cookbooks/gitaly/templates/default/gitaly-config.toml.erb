@@ -98,15 +98,14 @@ rugged_git_config_search_path = "<%= @ruby_rugged_git_config_search_path %>"
 
 [gitlab-shell]
 dir = "/opt/gitlab/embedded/service/gitlab-shell"
+
+[gitlab]
 <% if @gitlab_url %>
-gitlab_url = '<%= @gitlab_url %>'
-<% end %>
-<% if @gitlab_shell['custom_hooks_dir'] %>
-custom_hooks_dir = '<%= @gitlab_shell['custom_hooks_dir'] %>'
+url = '<%= @gitlab_url %>'
 <% end %>
 <% if @gitlab_shell['http_settings'] %>
 <% http_settings = @gitlab_shell['http_settings'] %>
-[gitlab-shell.http-settings]
+[gitlab.http-settings]
 <% if http_settings['read_timeout'] %>
 read_timeout = <%= http_settings['read_timeout'] %>
 <% end %>
@@ -126,6 +125,12 @@ ca_path = '<%= http_settings['ca_path'] %>'
 self_signed_cert = <%= http_settings['self_signed_cert'] %>
 <% end %>
 <% end %>
+
+[hooks]
+<% if @gitlab_shell['custom_hooks_dir'] %>
+custom_hooks_dir = '<%= @gitlab_shell['custom_hooks_dir'] %>'
+<% end %>
+
 
 <% if @concurrency %>
   <% @concurrency.each do |endpoint| %>
