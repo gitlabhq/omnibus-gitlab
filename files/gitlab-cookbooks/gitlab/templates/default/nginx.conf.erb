@@ -74,12 +74,12 @@ http {
   <% if @status['vts_enable'] -%>
   # Enable vts status module.
   vhost_traffic_status_zone;
+  <% end -%>
 
   upstream gitlab-workhorse {
     server <%= "unix:" if node['gitlab']['gitlab-workhorse']['listen_network'] == "unix" %><%= node['gitlab']['gitlab-workhorse']['listen_addr'] %>;
   }
 
-  <% end -%>
   <% if @gitlab_http_config %>
   include <%= @gitlab_http_config %>;
   <% end %>
