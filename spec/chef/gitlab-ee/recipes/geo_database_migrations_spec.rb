@@ -19,6 +19,8 @@ describe 'gitlab-ee::geo-database-migrations' do
       allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).and_return(false)
       stub_gitlab_rb(geo_secondary_role: { enable: true })
 
+      # Make sure other calls to `File.symlink?` are allowed.
+      allow(File).to receive(:symlink?).and_call_original
       %w(
         alertmanager
         gitlab-exporter

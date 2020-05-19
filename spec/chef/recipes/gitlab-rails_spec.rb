@@ -2769,4 +2769,18 @@ describe 'gitlab::gitlab-rails' do
       it_behaves_like 'configured logrotate service', 'gitlab-pages', 'foo', 'bar'
     end
   end
+
+  describe 'cleaning up the legacy sidekiq log symlink' do
+    it 'removes the link if it existed' do
+      allow(File).to receive(:symlink?).with('/var/log/gitlab/gitlab-rails/sidekiq.log') { true }
+
+      expect(chef_run).to delete_link('/var/log/gitlab/gitlab-rails/sidekiq.log')
+    end
+
+    it 'does nothing if it did not exist' do
+      allow(File).to receive(:symlink?).with('/var/log/gitlab/gitlab-rails/sidekiq.log') { false }
+
+      expect(chef_run).not_to delete_link('/var/log/gitlab/gitlab-rails/sidekiq.log')
+    end
+  end
 end
