@@ -13,6 +13,7 @@ Input arguments:
 1. Name of the command.
 1. Category of the command. It should be string consisting of only characters and "-". If the category does not exist, it will be added. Default categories are "general" and "service-management" (if the latter is enabled).
 1. Description. This will be outputted below the command name when the help command is run.
+1. Arity. Always set to `2`, due to [a bug in `omnibus-ctl`](https://github.com/chef/omnibus-ctl#add_command_under_categorystring-string-string-int-ruby_block).
 1. Ruby block. Ruby code to be executed when your command is run (arguments to that command will be passed into the block).
 
 ## add_command(string, string, int, ruby_block)
