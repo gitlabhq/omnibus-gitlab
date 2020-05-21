@@ -1,5 +1,0 @@
----
-title: Rename slave to replica in the omnibus-gitlab Redis configuration
-merge_request: 4168
-author:
-type: other

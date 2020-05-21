@@ -1,5 +1,0 @@
----
-title: Enable sidekiq-cluster by default
-merge_request: 4140
-author:
-type: added

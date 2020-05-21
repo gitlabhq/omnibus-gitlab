@@ -1,5 +1,0 @@
----
-title: Enable frame pointer in Git compile options
-merge_request: 4134
-author:
-type: performance

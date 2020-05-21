@@ -1,5 +1,0 @@
----
-title: upgrade redis to 5.0.9
-merge_request: 4126
-author:
-type: performance

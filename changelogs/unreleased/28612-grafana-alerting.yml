@@ -1,5 +1,0 @@
----
-title: Allow enabling of grafana alerting in omnibus-gitlab
-merge_request: 4229
-author: msschl
-type: added

@@ -3,6 +3,78 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.0.0 (2020-05-22)
+
+### Security (2 changes)
+
+- Update Ruby to 2.6.6.
+- Upgrade Openssl to 1.1.1.g.
+
+### Removed (6 changes)
+
+- Remove old settings for gitlab-monitor, pages auth-server, and other components. !4139
+- Remove support for protected paths throttling via Rack attack. !4149
+- Remove support for user attributes for Repmgr and Consul. !4153
+- Remove Grafana reset during upgrades. !4155
+- Remove PostgreSQL 9.6 and 10. !4186
+- Remove flag to set protected paths from gitlab.rb. !4207
+
+### Fixed (10 changes, 2 of them are from the community)
+
+- Remove crond job if Let's Encrypt autorenew is disabled. !4075
+- Install `less` to fix #5257. !4112 (Yannic Haupenthal)
+- Env dir content should not be displayed by chef. !4119
+- Fix geo timeout issue with pg-upgrade. !4148
+- Upgrade to pgbouncer_exporter v0.2.0. !4167
+- Update gitlab exporter to 7.0.2. !4178
+- Set gitlab_url from gitlab_rails attributes. !4225
+- Fix dbvacuum on pgupgrade. !4227
+- Bump version of `gitlab-exporter` gem. !4232
+- Disabling vts status module should keep gitlab-workhorse upstream. !4233 (Ovv)
+
+### Changed (4 changes, 1 of them is from the community)
+
+- Provide and implement a custom resource for restarting a daemon when the version changes. !3958 (Mitch Nielsen)
+- Enable Puma by default instead of Unicorn. !4141
+- List all existing roles as options in gitlab.rb. !4192
+- Bump Container Registry to v2.9.1-gitlab. !4197
+
+### Performance (5 changes)
+
+- Enable frame pointer in Ruby compile options. !4030
+- Disable RubyGems for Gitaly gitlab-shell hooks. !4103
+- upgrade redis to 5.0.9. !4126
+- Enable frame pointer in Git compile options. !4134
+- Update nginx gzip settings. !4200
+
+### Added (13 changes, 3 of them are from the community)
+
+- Add service_desk_email configuration. !3963
+- Add new extra CAs configuration file to smime email signing. !4085 (Diego Louzán)
+- Write gitlab shell configs to gitaly's config. !4110
+- Enable sidekiq-cluster by default. !4140
+- Add support for RSA private key for signing CI json web tokens. !4158
+- gitlab-pages: introduce internal_gitlab_server parameter. !4174
+- Add Prometheus rules for Puma. !4177
+- Copy AMIs to all regions we have access to. !4185
+- Add experimental support for ActionCable. !4204
+- Add expunge deleted messages option to mailroom. !4211 (Diego Louzán)
+- Add SSL_CERT_DIR to praefect's env. !4216
+- Allow enabling of grafana alerting in omnibus-gitlab. !4229 (msschl)
+- Update Praefect Grafana dashboards. !4241
+
+### Other (8 changes, 1 of them is from the community)
+
+- Make GitLab 12.10 the minimum version to upgrade to 13.0. !4111
+- Update links to PostgreSQL docs, point to version 11. !4150
+- Rename slave to replica in the omnibus-gitlab Redis configuration. !4168
+- Add troubleshooting doc for SMTP settings. !4170
+- Update documentation link and comments in Unleash settings. !4191
+- Patch Git to fix partial clone bug. !4217
+- Update CA certificate bundle. !4230
+- Update Mattermost to 5.22.2. (Harrison Healey)
+
+
 ## 12.10.6 (2020-05-15)
 
 ### Fixed (4 changes)
