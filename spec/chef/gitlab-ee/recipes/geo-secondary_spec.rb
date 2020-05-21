@@ -167,6 +167,8 @@ describe 'gitlab-ee::geo-secondary' do
     before do
       stub_gitlab_rb(geo_secondary_role: { enable: true })
 
+      # Make sure other calls to `File.symlink?` are allowed.
+      allow(File).to receive(:symlink?).and_call_original
       %w(
         alertmanager
         gitlab-exporter

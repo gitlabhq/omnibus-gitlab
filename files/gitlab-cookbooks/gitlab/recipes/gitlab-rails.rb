@@ -402,8 +402,8 @@ end
 
 legacy_sidekiq_log_file = File.join(gitlab_rails_log_dir, 'sidekiq.log')
 link legacy_sidekiq_log_file do
-  to File.join(node['gitlab']['sidekiq']['log_directory'], 'current')
-  not_if { File.exist?(legacy_sidekiq_log_file) }
+  action :delete
+  only_if { File.symlink?(legacy_sidekiq_log_file) }
 end
 
 # Make structure.sql writable for when we run `rake db:migrate`
