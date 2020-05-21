@@ -1,0 +1,5 @@
+---
+title: Fix nginx duplicate MIME type warning
+merge_request: 4251
+author:
+type: fixed
