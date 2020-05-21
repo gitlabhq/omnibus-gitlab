@@ -102,9 +102,9 @@ With these files in hand, enable SSL:
 
 1. Add the following to `/etc/gitlab/gitlab.rb`:
 
-```ruby
-postgresql['ssl'] = 'off'
-```
+   ```ruby
+   postgresql['ssl'] = 'off'
+   ```
 
 1. [Reconfigure GitLab][] to apply the configuration changes.
 
