@@ -1,5 +1,0 @@
----
-title: Remove support for protected paths throttling via Rack attack
-merge_request: 4149
-author:
-type: removed

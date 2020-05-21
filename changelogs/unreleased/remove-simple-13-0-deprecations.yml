@@ -1,5 +1,0 @@
----
-title: Remove old settings for gitlab-monitor, pages auth-server, and other components
-merge_request: 4139
-author:
-type: removed

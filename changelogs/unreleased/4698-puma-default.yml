@@ -1,5 +1,0 @@
----
-title: Enable Puma by default instead of Unicorn
-merge_request: 4141
-author:
-type: changed

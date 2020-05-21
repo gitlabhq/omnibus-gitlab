@@ -1,5 +1,0 @@
----
-title: Add SSL_CERT_DIR to praefect's env
-merge_request: 4216
-author:
-type: added

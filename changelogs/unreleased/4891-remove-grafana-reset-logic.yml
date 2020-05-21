@@ -1,5 +1,0 @@
----
-title: Remove Grafana reset during upgrades
-merge_request: 4155
-author:
-type: removed

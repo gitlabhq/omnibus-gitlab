@@ -1,5 +1,0 @@
----
-title: Update nginx gzip settings
-merge_request: 4200
-author:
-type: performance

@@ -1,5 +1,0 @@
----
-title: Remove PostgreSQL 9.6 and 10
-merge_request: 4186
-author:
-type: removed

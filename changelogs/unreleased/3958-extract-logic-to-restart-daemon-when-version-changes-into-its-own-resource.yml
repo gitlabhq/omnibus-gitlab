@@ -1,5 +1,0 @@
----
-title: Provide and implement a custom resource for restarting a daemon when the version changes
-merge_request: 3958
-author: Mitch Nielsen
-type: changed
