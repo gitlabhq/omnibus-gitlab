@@ -1,0 +1,5 @@
+---
+title: Add command promotion-preflight-checks to run before promoting to primary node
+merge_request: 4246
+author:
+type: added

@@ -27,26 +27,7 @@ module Geo
     def run_preflight_checks
       return true if @options[:skip_preflight_checks]
 
-      puts
-      puts 'Ensure you have completed the following manual '\
-        'preflight checks:'
-      puts '- Check if you need to migrate to Object Storage'
-      puts '- Review configuration of each secondary node'
-      puts '- Run system checks'
-      puts '- Check that secrets match between nodes'
-      puts '- Ensure Geo replication is up-to-date'
-      puts '- Verify the integrity of replicated data'
-      puts '- Notify users of scheduled maintenance'
-      puts 'Please read https://docs.gitlab.com/ee/administration/geo/'\
-        'disaster_recovery/planned_failover.html#preflight-checks'
-      puts
-      puts 'Did you perform all manual preflight checks (y/n)?'.color(:green)
-
-      return if STDIN.gets.chomp.casecmp('y').zero?
-
-      raise 'ERROR: Manual preflight checks were not performed! '\
-        'Please read https://docs.gitlab.com/ee/administration/geo/'\
-        'disaster_recovery/planned_failover.html#preflight-checks'.color(:red)
+      PromotionPreflightChecks.new.execute
     end
 
     def make_sure_primary_is_down
