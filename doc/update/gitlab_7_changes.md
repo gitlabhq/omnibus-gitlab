@@ -26,7 +26,7 @@ If you do not want the DB-only backup, automatic start/stop and DB migrations
 to be performed automatically please run the following command before upgrading
 your GitLab instance:
 
-```sh
+```shell
 sudo touch /etc/gitlab/skip-auto-reconfigure
 ```
 

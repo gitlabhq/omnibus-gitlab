@@ -20,11 +20,11 @@ application is more complex and has multiple components. If these components are
 not present or are incorrectly configured, GitLab will not work or it will work
 unpredictably.
 
-The [GitLab Architecture Overview] shows some of these components and how they
+The [GitLab Architecture Overview](https://docs.gitlab.com/ee/development/architecture.html#gitlab-architecture-overview) shows some of these components and how they
 interact. Each of these components needs to be configured and kept up to date.
 
 Most of the components also have external dependencies. For example, the Rails
-application depends on a number of [rubygems]. Some of these dependencies also
+application depends on a number of [Ruby gems](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/Gemfile.lock). Some of these dependencies also
 have their own external dependencies which need to be present on the Operating
 System in order for them to function correctly.
 
@@ -86,14 +86,14 @@ There are two things to keep in mind before going down this route:
    when using a library version that is not tested by majority of users.
 1. Omnibus package also allows shutting off of any services that you do not need,
    if you need to run a component independently. For example, you can use a
-   [non-bundled PG database] with the omnibus package.
+   [non-bundled PostgreSQL database](../settings/database.md#using-a-non-packaged-postgresql-database-management-server) with the omnibus package.
 
 Keep in mind that a non-standard solution like the omnibus package
 might be a better fit when the application has a number of moving parts.
 
 ## Docker image with multiple services
 
-[GitLab Docker image] is based on the omnibus package.
+[GitLab Docker image](../docker/README.md#gitlab-docker-images) is based on the omnibus package.
 
 Considering that container spawned from this image contains multiple processes,
 these types of containers are also referred to as 'fat containers'.
@@ -107,8 +107,3 @@ what was noted above:
    can be more complex and might not be required for a given install.
 
 This method is useful for organizations just getting started with containers and schedulers, and may not be ready for a more complex installation. This method is a great introduction, and will work well for smaller organizations.
-
-[GitLab Architecture Overview]: https://docs.gitlab.com/ee/development/architecture.html#gitlab-architecture-overview
-[rubygems]: https://gitlab.com/gitlab-org/gitlab-foss/blob/master/Gemfile.lock
-[non-bundled PG database]: https://docs.gitlab.com/omnibus/settings/database.html#using-a-non-packaged-postgresql-database-management-server
-[GitLab Docker image]: https://docs.gitlab.com/omnibus/docker/README.html#gitlab-docker-images

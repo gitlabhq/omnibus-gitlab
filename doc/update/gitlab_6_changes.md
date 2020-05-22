@@ -13,7 +13,7 @@ package to your GitLab server.
 1. Stop services, but leave PostgreSQL running for the database migrations and
    create a backup:
 
-   ```sh
+   ```shell
    sudo gitlab-ctl stop unicorn
    sudo gitlab-ctl stop sidekiq
    sudo gitlab-ctl stop nginx
@@ -22,7 +22,7 @@ package to your GitLab server.
 
 1. Install the latest package:
 
-   ```sh
+   ```shell
    # Debian/Ubuntu:
    sudo dpkg -i gitlab_x.x.x-omnibus.xxx.deb
 
@@ -33,7 +33,7 @@ package to your GitLab server.
 1. Reconfigure GitLab (includes running database migrations) and restart all
    services:
 
-   ```sh
+   ```shell
    sudo gitlab-ctl reconfigure
    sudo gitlab-ctl restart
    ```
@@ -45,7 +45,7 @@ package to your GitLab server.
 
 1. Stop Unicorn and Sidekiq so we can do database migrations:
 
-   ```sh
+   ```shell
    sudo gitlab-ctl stop unicorn
    sudo gitlab-ctl stop sidekiq
    ```

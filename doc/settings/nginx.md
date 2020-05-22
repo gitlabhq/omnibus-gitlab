@@ -55,7 +55,7 @@ To enable HTTPS for the domain `gitlab.example.com`:
 
 1. Create the `/etc/gitlab/ssl` directory and copy your key and certificate there:
 
-   ```sh
+   ```shell
    sudo mkdir -p /etc/gitlab/ssl
    sudo chmod 755 /etc/gitlab/ssl
    sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
@@ -74,13 +74,13 @@ To enable HTTPS for the domain `gitlab.example.com`:
    the password when you reconfigure GitLab. In that case, Omnibus GitLab will
    fail silently with no error messages. To remove the password from the key, run:
 
-   ```sh
+   ```shell
    openssl rsa -in certificate_before.key -out certificate_after.key
    ```
 
 1. Now, reconfigure GitLab:
 
-   ```sh
+   ```shell
    sudo gitlab-ctl reconfigure
    ```
 
@@ -209,20 +209,20 @@ for the changes to take effect.
 
 By default, when you specify that your GitLab instance should be reachable
 through HTTPS by specifying `external_url "https://gitlab.example.com"`,
-[http2 protocol] is also enabled.
+[http2 protocol](https://tools.ietf.org/html/rfc7540) is also enabled.
 
 The Omnibus GitLab package sets required ssl_ciphers that are compatible with
 http2 protocol.
 
 If you are specifying custom ssl_ciphers in your configuration and a cipher is
-in [http2 cipher blacklist], once you try to reach your GitLab instance you will
+in [http2 cipher blacklist](https://tools.ietf.org/html/rfc7540#appendix-A), once you try to reach your GitLab instance you will
 be presented with `INADEQUATE_SECURITY` error in your browser.
 
 Consider removing the offending ciphers from the cipher list. Changing ciphers
 is only necessary if you have a very specific custom setup.
 
 For more information on why you would want to have http2 protocol enabled, check out
-the [http2 whitepaper].
+the [http2 whitepaper](https://assets.wp.nginx.com/wp-content/uploads/2015/09/NGINX_HTTP2_White_Paper_v4.pdf?_ga=1.127086286.212780517.1454411744).
 
 If changing the ciphers is not an option you can disable http2 support by
 specifying in `/etc/gitlab/gitlab.rb`:
@@ -272,7 +272,7 @@ will have to perform the following steps:
 
    Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-   *Note: if you are using SELinux and your web server runs under a restricted SELinux profile you may have to [loosen the restrictions on your web server][selinuxmod].*
+   *Note: if you are using SELinux and your web server runs under a restricted SELinux profile you may have to [loosen the restrictions on your web server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).*
 
    *Note: make sure that the webserver user has the correct permissions on all directories used by external web-server, otherwise you will receive `failed (XX: Permission denied) while reading upstream` errors.
 
@@ -306,7 +306,7 @@ will have to perform the following steps:
 
 1. **Download the right web server configs**
 
-   Go to [GitLab recipes repository][recipes-web] and look for the omnibus
+   Go to [GitLab recipes repository](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server) and look for the omnibus
    configs in the webserver directory of your choice. Make sure you pick the
    right configuration file depending whether you choose to serve GitLab with
    SSL or not. The only thing you need to change is `YOUR_SERVER_FQDN` with
@@ -769,9 +769,9 @@ sudo usermod -aG gitlab-www www-data
 ## Templates
 
 Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
-(although this could be enabled) these files are mostly identical to :
+(although this could be enabled) these files are mostly identical to:
 
-- [bundled GitLab NGINX configuration][nginx-cookbook]
+- [Bundled GitLab NGINX configuration](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb)
 
 Don't forget to restart NGINX to load the new configuration (on Debian-based
 systems `sudo service nginx restart`).
@@ -798,13 +798,6 @@ behavior by changing the values in your `/etc/gitlab/gitlab.rb`:
 ```ruby
 nginx['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3"
 ```
-
-[recipes-web]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server
-[selinuxmod]: https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications
-[http2 protocol]: https://tools.ietf.org/html/rfc7540
-[http2 whitepaper]: https://assets.wp.nginx.com/wp-content/uploads/2015/09/NGINX_HTTP2_White_Paper_v4.pdf?_ga=1.127086286.212780517.1454411744
-[http2 cipher blacklist]: https://tools.ietf.org/html/rfc7540#appendix-A
-[nginx-cookbook]: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb
 
 ### Mismatch between private key and certificate
 

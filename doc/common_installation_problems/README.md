@@ -12,7 +12,7 @@ E: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/pool/trus
 
 Please run the following to fix this:
 
-```sh
+```shell
 sudo rm -rf /var/lib/apt/lists/partial/*
 sudo apt-get update
 sudo apt-get clean
@@ -22,7 +22,7 @@ See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnib
 
 Another workaround is to download the package manually by selecting the correct package from the [CE packages](https://packages.gitlab.com/gitlab/gitlab-ce) or [EE packages](https://packages.gitlab.com/gitlab/gitlab-ee) repository:
 
-```sh
+```shell
 curl -LJO https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gitlab-ce_8.1.0-ce.0_amd64.deb/download
 dpkg -i gitlab-ce_8.1.0-ce.0_amd64.deb
 ```
@@ -127,7 +127,7 @@ not used in your GitLab instance yet.
 If necessary, you can modify the 'From' field of the emails sent by GitLab with
 the following setting in `/etc/gitlab/gitlab.rb`:
 
-```rb
+```ruby
 gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 ```
 
@@ -141,7 +141,7 @@ To troubleshoot this error:
 
 1. First check that the runit directory exists:
 
-   ```sh
+   ```shell
    ls -al /opt/gitlab/sv/redis/supervise
    ```
 
@@ -154,19 +154,19 @@ To troubleshoot this error:
 1. Restart the runit server.
    Using systemctl (Debian => 9 - Stretch):
 
-   ```sh
+   ```shell
    sudo systemctl restart gitlab-runsvdir
    ```
 
    Using upstart (Ubuntu <= 14.04):
 
-   ```sh
+   ```shell
    sudo initctl restart gitlab-runsvdir
    ```
 
    Using systemd (CentOS, Ubuntu >= 16.04):
 
-   ```sh
+   ```shell
    systemctl restart gitlab-runsvdir.service
    ```
 
@@ -179,7 +179,7 @@ makes the wrong decision, it will later hang at
 `ruby_block[supervise_redis_sleep] action run`.
 
 The choice of init system is currently made in [the embedded runit
-cookbook][runit-cookbook]  by essentially
+cookbook](https://gitlab.com/gitlab-org/build/omnibus-mirror/runit-cookbook/blob/master/recipes/default.rb) by essentially
 looking at the output of `uname -a`, `/etc/issue` and others. This mechanism
 can make the wrong decision in situations such as:
 
@@ -471,7 +471,7 @@ Try cleaning the old Redis session by following the [documentation here.](https:
 
 When trying to install GitLab using the apt repo if you receive an error similar to:
 
-```bash
+```shell
 W: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/DISTRO/dists/CODENAME/main/source/Sources  The requested URL returned error: 403
 ```
 
@@ -479,7 +479,7 @@ check if there is a repository cacher in front of your server, like for example 
 
 Add the following line to apt-cacher-ng config(eg. in  `/etc/apt-cacher-ng/acng.conf`):
 
-```bash
+```shell
 PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com|*\.cloudfront\.net)
 ```
 
@@ -489,7 +489,7 @@ Read more about `apt-cacher-ng` and the reasons why this change is needed [on th
 
 If you are installing GitLab in an isolated network with custom certificate authorities or using self-signed certificate make sure that the certificate can be reached by GitLab. Not doing so will cause errors like:
 
-```bash
+```shell
 Faraday::SSLError (SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed)
 ```
 
@@ -514,7 +514,7 @@ You can increase the default timeout value by setting the value in `/etc/gitlab/
 gitlab_workhorse['proxy_headers_timeout'] = "2m0s"
 ```
 
-Save the file and [reconfigure GitLab][] for the changes to take effect.
+Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure) for the changes to take effect.
 
 ## The change you wanted was rejected
 
@@ -522,7 +522,7 @@ Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
 for your environment.
 
-See [Change the default proxy headers section of NGINX doc][] for details on
+See [Change the default proxy headers section of NGINX doc](../settings/nginx.md) for details on
 how to override the default headers.
 
 ## Can't verify CSRF token authenticity Completed 422 Unprocessable
@@ -531,7 +531,7 @@ Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
 for your environment.
 
-See [Change the default proxy headers section of NGINX doc][] for details on
+See [Change the default proxy headers section of NGINX doc](../settings/nginx.md) for details on
 how to override the default headers.
 
 ## Extension missing pg_trgm
@@ -644,7 +644,7 @@ instead of `basic.target`. If you are having trouble starting this service
 after upgrading GitLab, you may need to check that your system has properly
 booted all the required services for `multi-user.target` via the command:
 
-```bash
+```shell
 systemctl -t target
 ```
 
@@ -692,7 +692,7 @@ multi-user.target      loaded inactive dead   start Multi-User System
 
 To examine which jobs may be queued by systemd, run:
 
-```bash
+```shell
 systemctl list-jobs
 ```
 
@@ -729,7 +729,7 @@ package['detect_init'] = false
 If using this configuration, runit service must be started before running
 `gitlab-ctl reconfigure`, using the `runsvdir-start` command:
 
-```bash
+```shell
 /opt/gitlab/embedded/bin/runsvdir-start &
 ```
 
@@ -750,9 +750,3 @@ completed, restart `gitlab-runsvdir` service for changes to take effect.
 ```shell
 sudo systemctl restart gitlab-runsvdir
 ```
-
-[certificate link shell script]: https://gitlab.com/snippets/6285
-[script source]: https://www.madboa.com/geek/openssl/#verify-new
-[Change the default proxy headers section of nginx doc]: ../settings/nginx.md
-[reconfigure GitLab]: https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
-[runit-cookbook]: https://gitlab.com/gitlab-org/build/omnibus-mirror/runit-cookbook/blob/master/recipes/default.rb

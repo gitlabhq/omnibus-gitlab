@@ -12,7 +12,7 @@ GitLab compliant out of the box with the PCI DSS 3.1 standard.
 
 - **Git-Credential-Manager** - support since **1.14.0**
 - **Git on Red Hat Enterprise Linux 6** - support since **6.8**
-- **Git on Red Hat Enteprirse Linux 7** - support since **7.2**
+- **Git on Red Hat Enterprise Linux 7** - support since **7.2**
 - **JGit / Java** - support since **JDK 7**
 - **Visual Studio** - support since version **2017**
 
@@ -75,7 +75,7 @@ Rack Attack is disabled by default. To continue using Rack Attack, you must [ena
    the format supported by new Prometheus version. This tool can be invoked
    using the following command:
 
-   ```bash
+   ```shell
    sudo gitlab-ctl prometheus-upgrade
    ```
 

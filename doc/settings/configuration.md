@@ -285,7 +285,7 @@ manage_accounts['enable'] = false
 
 By default, Omnibus GitLab package expects that following users exist:
 
-```bash
+```shell
 # GitLab user (required)
 git
 
@@ -313,7 +313,7 @@ gitlab-consul
 
 By default, Omnibus GitLab package expects that following groups exist:
 
-```bash
+```shell
 # GitLab group (required)
 git
 
