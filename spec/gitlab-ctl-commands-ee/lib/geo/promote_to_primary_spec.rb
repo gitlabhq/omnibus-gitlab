@@ -5,11 +5,10 @@ $LOAD_PATH << './files/gitlab-ctl-commands/lib'
 
 require 'fileutils'
 require 'geo/promote_to_primary'
-require 'fileutils'
 require 'gitlab_ctl/util'
 
 describe Geo::PromoteToPrimary, '#execute' do
-  subject(:command) { described_class.new(nil, {}) }
+  subject(:command) { described_class.new(nil, { skip_preflight_checks: true }) }
 
   let(:temp_directory) { Dir.mktmpdir }
   let(:gitlab_config_path) { File.join(temp_directory, 'gitlab.rb') }
@@ -21,6 +20,54 @@ describe Geo::PromoteToPrimary, '#execute' do
 
   after do
     FileUtils.rm_rf(temp_directory)
+  end
+
+  describe '#run_preflight_checks' do
+    subject(:run_preflight_checks) do
+      described_class.new(nil, options).send(:run_preflight_checks)
+    end
+
+    let(:confirmation) { 'y' }
+
+    before do
+      allow(STDIN).to receive(:gets).and_return(confirmation)
+    end
+
+    context 'when `--skip-preflight-checks` is passed' do
+      let(:options) { { skip_preflight_checks: true } }
+      let(:confirmation) { 'n' }
+
+      it 'does not raise error' do
+        expect { run_preflight_checks }.not_to raise_error
+      end
+    end
+
+    context 'when `--skip-preflight-checks` is not passed' do
+      let(:options) { {} }
+
+      it 'prints preflight check instructions' do
+        expect { run_preflight_checks }.to output(
+          /Ensure you have completed the following manual preflight checks/)
+          .to_stdout
+      end
+
+      context 'when confirmation is accepted' do
+        it 'does not raise an error' do
+          expect { run_preflight_checks }.to_not raise_error
+        end
+      end
+
+      context 'when confirmation is not accepted' do
+        let(:confirmation) { 'n' }
+
+        it 'raises error' do
+          expect { run_preflight_checks }.to raise_error(
+            RuntimeError,
+            /ERROR: Manual preflight checks were not performed/
+          )
+        end
+      end
+    end
   end
 
   context 'when confirmation is accepted' do

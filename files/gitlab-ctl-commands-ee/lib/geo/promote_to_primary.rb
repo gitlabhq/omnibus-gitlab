@@ -9,6 +9,8 @@ module Geo
     end
 
     def execute
+      run_preflight_checks
+
       make_sure_primary_is_down
 
       promote_postgresql_to_primary
@@ -21,6 +23,31 @@ module Geo
     end
 
     private
+
+    def run_preflight_checks
+      return true if @options[:skip_preflight_checks]
+
+      puts
+      puts 'Ensure you have completed the following manual '\
+        'preflight checks:'
+      puts '- Check if you need to migrate to Object Storage'
+      puts '- Review configuration of each secondary node'
+      puts '- Run system checks'
+      puts '- Check that secrets match between nodes'
+      puts '- Ensure Geo replication is up-to-date'
+      puts '- Verify the integrity of replicated data'
+      puts '- Notify users of scheduled maintenance'
+      puts 'Please read https://docs.gitlab.com/ee/administration/geo/'\
+        'disaster_recovery/planned_failover.html#preflight-checks'
+      puts
+      puts 'Did you perform all manual preflight checks (y/n)?'.color(:green)
+
+      return if STDIN.gets.chomp.casecmp('y').zero?
+
+      raise 'ERROR: Manual preflight checks were not performed! '\
+        'Please read https://docs.gitlab.com/ee/administration/geo/'\
+        'disaster_recovery/planned_failover.html#preflight-checks'.color(:red)
+    end
 
     def make_sure_primary_is_down
       return true if @options[:confirm_primary_is_down]
