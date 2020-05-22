@@ -7,9 +7,9 @@ describe 'gitlab-ctl promote-to-primary-node' do
   before do
     allow_any_instance_of(Omnibus::Ctl).to receive(:require).and_call_original
     allow_any_instance_of(Omnibus::Ctl).to receive(:require).with(
-      '/opt/testing-ctl/embedded/service/omnibus-ctl-ee/lib/geo/promote_to_primary'
+      '/opt/testing-ctl/embedded/service/omnibus-ctl-ee/lib/geo/promote_to_primary_node'
     ) do
-      require_relative('../../files/gitlab-ctl-commands-ee/lib/geo/promote_to_primary')
+      require_relative('../../files/gitlab-ctl-commands-ee/lib/geo/promote_to_primary_node')
     end
 
     ctl.load_file('files/gitlab-ctl-commands-ee/promote_to_primary_node.rb')
@@ -25,7 +25,7 @@ describe 'gitlab-ctl promote-to-primary-node' do
     oldargv = ARGV
     ARGV = [] # rubocop:disable Style/MutableConstant
 
-    expect_any_instance_of(Geo::PromoteToPrimary).to receive(:execute)
+    expect_any_instance_of(Geo::PromoteToPrimaryNode).to receive(:execute)
 
     ctl.promote_to_primary_node
 

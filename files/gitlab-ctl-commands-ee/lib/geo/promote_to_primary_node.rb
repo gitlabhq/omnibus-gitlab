@@ -2,7 +2,7 @@ require 'io/console'
 require 'rainbow/ext/string'
 
 module Geo
-  class PromoteToPrimary
+  class PromoteToPrimaryNode
     def initialize(base_path, options)
       @base_path = base_path
       @options = options

@@ -1,4 +1,4 @@
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/promote_to_primary"
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/promote_to_primary_node"
 
 #
 # Copyright:: Copyright (c) 2017 GitLab Inc.
@@ -18,7 +18,7 @@ require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/promote_to_primary
 #
 
 add_command_under_category('promote-to-primary-node', 'gitlab-geo', 'Promote to primary node', 2) do |cmd_name, *args|
-  Geo::PromoteToPrimary.new(base_path, get_ctl_options).execute
+  Geo::PromoteToPrimaryNode.new(base_path, get_ctl_options).execute
 end
 
 def get_ctl_options
