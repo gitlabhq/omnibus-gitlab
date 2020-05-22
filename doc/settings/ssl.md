@@ -102,11 +102,11 @@ letsencrypt['auto_renew'] = false
 
 Renew **Let's Encrypt** certificates manually using ***one*** of the following commands:
 
-```sh
+```shell
 sudo gitlab-ctl reconfigure
 ```
 
-```sh
+```shell
 sudo gitlab-ctl renew-le-certs
 ```
 
@@ -204,7 +204,7 @@ with the correct path in your operating environment.
 
 ### Reconfigure Fails Due to Certificates
 
-```sh
+```shell
 ERROR: Not a certificate: /opt/gitlab/embedded/ssl/certs/FILE. Move it from /opt/gitlab/embedded/ssl/certs to a different location and reconfigure again.
 ```
 
@@ -235,21 +235,21 @@ means there may be one of four issues:
 
 Test the certificate's validity using the commands below:
 
-```sh
+```shell
 /opt/gitlab/embedded/bin/openssl x509 -in /etc/gitlab/trusted-certs/example.pem -text -noout
 /opt/gitlab/embedded/bin/openssl x509 -inform DER -in /etc/gitlab/trusted-certs/example.der -text -noout
 ```
 
 Invalid certificate files produce the following output:
 
-```sh
+```shell
 unable to load certificate
 140663131141784:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:701:Expecting: TRUSTED CERTIFICATE
 ```
 
 To test if `c_rehash` is not symlinking the certificate due to a missing perl interpreter:
 
-```sh
+```shell
 $ /opt/gitlab/embedded/bin/c_rehash /etc/gitlab/trusted-certs
 bash: /opt/gitlab/embedded/bin/c_rehash: /usr/bin/perl: bad interpreter: No such file or directory
 ```
@@ -279,7 +279,7 @@ certificates have already been added.
 
 To resolve, delete the trusted certificates directory hash:
 
-```sh
+```shell
 rm /var/opt/gitlab/trusted-certs-directory-hash
 ```
 
@@ -292,7 +292,7 @@ The initial implementation of **Let's Encrypt** integration only used the certif
 
 Starting in 10.5.4, the full certificate chain will be used. For installs which are already using a certificate, the switchover will not happen until the renewal logic indicates the certificate is near expiration. To force it sooner, run the following
 
-```sh
+```shell
 # rm /etc/gitlab/ssl/HOSTNAME*
 # gitlab-ctl reconfigure
 ```
@@ -305,17 +305,17 @@ When you reconfigure, there are common scenarios under which Let's Encrypt may f
 
 1. Let's Encrypt may fail if your server isn't able to reach the Let's Encrypt verification servers or vice versa:
 
-    ```sh
-    letsencrypt_certificate[gitlab.domain.com] (letsencrypt::http_authorization line 3) had an error: RuntimeError: acme_certificate[staging]  (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 20) had an error: RuntimeError: [gitlab.domain.com] Validation failed for domain gitlab.domain.com
-    ```
+   ```shell
+   letsencrypt_certificate[gitlab.domain.com] (letsencrypt::http_authorization line 3) had an error: RuntimeError: acme_certificate[staging]  (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 20) had an error: RuntimeError: [gitlab.domain.com] Validation failed for domain gitlab.domain.com
+   ```
 
     If you run into issues reconfiguring GitLab due to Let's Encrypt [make sure you have ports 80 and 443 open and accessible](#lets-encrypt-integration).
 
 1. Your domain's Certification Authority Authorization (CAA) record does not allow Let's Encrypt to issue a certificate for your domain. Look for the following error in the reconfigure output:
 
-    ```sh
-    letsencrypt_certificate[gitlab.domain.net] (letsencrypt::http_authorization line 5) had an error: RuntimeError: acme_certificate[staging]   (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 25) had an error: RuntimeError: ruby_block[create certificate for gitlab.domain.net] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/acme/resources/certificate.rb line 108) had an error: RuntimeError: [gitlab.domain.com] Validation failed, unable to request certificate
-    ```
+   ```shell
+   letsencrypt_certificate[gitlab.domain.net] (letsencrypt::http_authorization line 5) had an error: RuntimeError: acme_certificate[staging]   (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 25) had an error: RuntimeError: ruby_block[create certificate for gitlab.domain.net] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/acme/resources/certificate.rb line 108) had an error: RuntimeError: [gitlab.domain.com] Validation failed, unable to request certificate
+   ```
 
 1. If you're using a test domain such as `gitlab.example.com`, without a certificate, you'll see the `unable to request certificate` error shown above. In that case, disable Let's Encrypt by setting `letsencrypt['enable'] = false` in `/etc/gitlab/gitlab.rb`.
 
@@ -337,7 +337,7 @@ using the [c_rehash](https://www.openssl.org/docs/man1.1.0/man1/c_rehash.html)
 tool. For example, let's suppose we add `customcacert.pem` to
 `/etc/gitlab/trusted-certs/`:
 
-```sh
+```shell
 $ sudo ls -al /opt/gitlab/embedded/ssl/certs
 total 272
 drwxr-xr-x 2 root root   4096 Jul 12 04:19 .

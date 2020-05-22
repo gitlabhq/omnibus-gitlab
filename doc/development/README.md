@@ -36,7 +36,7 @@ writing specs can be skipped. However, an issue to implement the tests
 
 To run tests, execute the following command (you may have to run `bundle install` before running it)
 
-```sh
+```shell
 bundle exec rspec
 ```
 

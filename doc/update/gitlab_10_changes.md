@@ -13,12 +13,12 @@ for details.
   automatically during previous upgrades, can run the following command to
   update the bundled PostgreSQL to 9.6
 
-  ```sh
+  ```shell
   sudo gitlab-ctl pg-upgrade
   ```
 
 You can check the PostgreSQL version with:
 
-```sh
+```shell
 /opt/gitlab/embedded/bin/psql --version
 ```

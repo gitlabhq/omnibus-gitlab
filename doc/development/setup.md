@@ -16,13 +16,13 @@ up a Build Environment](../build/prepare-build-environment.md).
 
    1. Pulling a Debian Jessie image
 
-      ```sh
+      ```shell
       docker pull debian:jessie
       ```
 
    1. Running docker image with a shell prompt
 
-      ```sh
+      ```shell
       docker run -it debian:jessie bash
       ```
 
@@ -34,7 +34,7 @@ up a Build Environment](../build/prepare-build-environment.md).
    Basic tools used for developing Omnibus GitLab may be installed using the
    following command
 
-   ```sh
+   ```shell
    sudo apt-get install git
    ```
 
@@ -55,7 +55,7 @@ up a Build Environment](../build/prepare-build-environment.md).
 
    Get the source code of Omnibus GitLab from the [repository on GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab)
 
-   ```sh
+   ```shell
    git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git ~/omnibus-gitlab
    ```
 
@@ -69,7 +69,7 @@ up a Build Environment](../build/prepare-build-environment.md).
    installation. This involves backing up of the existing cookbooks directory
    and symlinking the directory where we make modifications to its location.
 
-   ```sh
+   ```shell
    sudo mv /opt/gitlab/embedded/cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab.$(date +%s)
    sudo ln -s ~/omnibus-gitlab/files/gitlab-cookbooks/gitlab /opt/gitlab/embedded/cookbooks/gitlab
    ```
@@ -78,7 +78,7 @@ up a Build Environment](../build/prepare-build-environment.md).
 
    Before running `reconfigure`, you need to start runsv.
 
-   ```sh
+   ```shell
    /opt/gitlab/embedded/bin/runsvdir-start &
    ```
 
@@ -100,25 +100,25 @@ This ensures that your new work is behaving as expected, and not breaking anythi
 
 1. Clone the [GitLab EE](https://gitlab.com/gitlab-org/gitlab) repository
 
-   ```sh
+   ```shell
    git clone git@gitlab.com:gitlab-org/gitlab.git
    ```
 
 1. Change to the `qa` directory
 
-   ```sh
+   ```shell
    cd gitlab-ee/qa
    ```
 
 1. Install the required gems
 
-   ```sh
+   ```shell
    bundle install
    ```
 
 1. Run the tests
 
-   ```sh
+   ```shell
    GITLAB_USERNAME=$USERNAME GITLAB_PASSWORD=$PASSWORD bundle exec bin/qa Test::Instance $DEV_INSTANCE_URL
    ```
 

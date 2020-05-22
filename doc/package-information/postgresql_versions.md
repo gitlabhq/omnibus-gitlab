@@ -2,14 +2,14 @@
 
 NOTE: **Note:**
 This table lists only GitLab versions where a significant change happened in the
-package regarding PG versions, not all.
+package regarding PostgreSQL versions, not all.
 
 Read more about update policies and warnings in the PostgreSQL
 [upgrade docs](../settings/database.md#upgrade-packaged-postgresql-server).
 
 | GitLab version | PostgreSQL versions | Default version for fresh installs | Default version for upgrades | Notes |
 | -------------- | --------------------- | ---------------------------------- | ---------------------------- | ----- |
-| 13.0 | 11.7 | 11.7 | 11.7 | Package upgrades aborted if users not running PG 11 already |
+| 13.0 | 11.7 | 11.7 | 11.7 | Package upgrades aborted if users not running PostgreSQL 11 already |
 | 12.10 | 9.6.17, 10.12, and 11.7 | 11.7 | 11.7 | Package upgrades automatically performed PostgreSQL upgrade for nodes that are not part of a Geo or repmgr cluster. |
 | 12.8 | 9.6.17, 10.12, and 11.7 | 10.12 | 10.12 | Users can manually upgrade to 11.7 following the upgrade docs. |
 | 12.0 | 9.6.11 and 10.7 | 10.7 | 10.7 | Package upgrades automatically performed PostgreSQL upgrade. |

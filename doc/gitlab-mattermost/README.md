@@ -25,7 +25,7 @@ GitLab Mattermost is disabled by default. To enable it:
 
 1. Reconfigure GitLab:
 
-   ```sh
+   ```shell
    sudo gitlab-ctl reconfigure
    ```
 
@@ -50,7 +50,7 @@ While using the System Console is recommended, you can also configure Mattermost
 
 Place the SSL certificate and SSL certificate key inside `/etc/gitlab/ssl`. If the directory doesn't exist, create it:
 
-```bash
+```shell
 sudo mkdir -p /etc/gitlab/ssl
 sudo chmod 755 /etc/gitlab/ssl
 sudo cp mattermost.gitlab.example.key mattermost.gitlab.example.crt /etc/gitlab/ssl/
@@ -169,7 +169,7 @@ sudo gitlab-psql -d mattermost_production
 
 If you need to back up the bundled PostgreSQL database and are using the default Omnibus GitLab database configuration, you can back up using this command:
 
-```sh
+```shell
 sudo -i -u gitlab-psql -- /opt/gitlab/embedded/bin/pg_dump -h /var/opt/gitlab/postgresql mattermost_production | gzip > mattermost_dbdump_$(date --rfc-3339=date).sql.gz
 ```
 

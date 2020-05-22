@@ -57,7 +57,7 @@ PostgreSQL will automatically be upgraded to 10.x unless specifically opted
 out during the upgrade. To opt out you must execute the following before
 performing the upgrade of GitLab.
 
-```bash
+```shell
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
@@ -149,7 +149,7 @@ PostgreSQL will automatically be upgraded to 11.x except for the following cases
 
 To opt out you must execute the following before performing the upgrade of GitLab.
 
-```bash
+```shell
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 

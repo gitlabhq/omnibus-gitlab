@@ -93,7 +93,7 @@ Logrotate is a scheduled job but it can also be triggered on-demand.
 
 To manually trigger GitLab log rotation with `logrotate`, use the following command:
 
-```bash
+```shell
 /opt/gitlab/embedded/sbin/logrotate -fv -s /var/opt/gitlab/logrotate/logrotate.status /var/opt/gitlab/logrotate/logrotate.conf
 ```
 
@@ -180,5 +180,3 @@ registry['log_formatter'] = 'text'
 sidekiq['log_format'] = 'default'
 gitlab_pages['log_format'] = 'text'
 ```
-
-[ee]: https://about.gitlab.com/gitlab-ee/

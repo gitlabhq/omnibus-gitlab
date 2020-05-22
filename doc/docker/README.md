@@ -158,7 +158,7 @@ Below is another `docker-compose.yml` example with GitLab running on a custom
 HTTP and SSH port. Notice how the `GITLAB_OMNIBUS_CONFIG` variables match the
 `ports` section:
 
-```yml
+```yaml
 web:
   image: 'gitlab/gitlab-ce:latest'
   restart: always
@@ -194,7 +194,7 @@ Here's an example that deploys GitLab with four runners as a [stack](https://doc
 1. [Set up a Docker swarm](https://docs.docker.com/engine/swarm/swarm-tutorial/).
 1. Create a `docker-compose.yml` file:
 
-   ```yml
+   ```yaml
    version: "3.6"
    services:
      gitlab:
@@ -239,7 +239,7 @@ Here's an example that deploys GitLab with four runners as a [stack](https://doc
 
 1. Create a `root_password.txt` file:
 
-   ```text
+   ```plaintext
    MySuperSecretAndSecurePass0rd!
    ```
 
@@ -394,7 +394,7 @@ port `2289`:
 
 1. Open `/etc/gitlab/gitlab.rb` with your editor and set `external_url`:
 
-   ```rb
+   ```ruby
    # For HTTP
    external_url "http://gitlab.example.com:8929"
 
@@ -412,7 +412,7 @@ port `2289`:
 
 1. Set `gitlab_shell_ssh_port`:
 
-   ```rb
+   ```ruby
    gitlab_rails['gitlab_shell_ssh_port'] = 2289
    ```
 
