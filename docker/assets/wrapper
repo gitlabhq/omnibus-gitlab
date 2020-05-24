@@ -120,8 +120,6 @@ if [ "${GITLAB_SKIP_PG_UPGRADE}" != true ]; then
     gitlab-ctl pg-upgrade -w || failed_pg_upgrade
 fi
 
-gitlab-ctl reset-grafana
-
 if [ -n "${GITLAB_POST_RECONFIGURE_SCRIPT+x}" ]; then
   echo "Running Post Reconfigure Script..."
   eval "${GITLAB_POST_RECONFIGURE_SCRIPT}"
