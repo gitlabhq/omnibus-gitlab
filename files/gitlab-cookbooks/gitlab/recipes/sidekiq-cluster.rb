@@ -50,6 +50,13 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
+consul_service service do
+  action Prometheus.service_discovery_action
+  ip_address node['gitlab'][service]['listen_address']
+  port node['gitlab'][service]['listen_port']
+  reload_service false unless node['consul']['enable']
+end
+
 if service != 'sidekiq-cluster'
   # The service that's being started is called sidekiq, disable `sidekiq-cluster`
   # if it was still running. We don't allow cluster configuration through sidekiq
