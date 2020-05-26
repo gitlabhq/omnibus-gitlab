@@ -44,7 +44,6 @@ describe 'praefect' do
         'listen_addr' => 'localhost:2305',
         'logging' => { 'format' => 'json' },
         'prometheus_listen_addr' => 'localhost:9652',
-        'postgres_queue_enabled' => false,
         'sentry' => {},
         'database' => {},
         'failover' => { 'enabled' => false, 'election_strategy' => 'local', 'read_only_after_failover' => false }
@@ -57,8 +56,6 @@ describe 'praefect' do
       .with_content(%r{\[prometheus\]\s+grpc_latency_buckets =})
       expect(chef_run).to render_file(config_path)
       .with_content(%r{\[failover\]\s+enabled = false\s+election_strategy = 'local'\s+read_only_after_failover = false})
-      expect(chef_run).to render_file(config_path)
-      .with_content("postgres_queue_enabled = false")
     end
 
     it 'renders the env dir files' do
@@ -101,7 +98,6 @@ describe 'praefect' do
       let(:failover_enabled) { true }
       let(:failover_election_strategy) { 'sql' }
       let(:failover_read_only_after_failover) { true }
-      let(:postgres_queue_enabled) { true }
       let(:database_host) { 'pg.internal' }
       let(:database_port) { 1234 }
       let(:database_user) { 'praefect-pg' }
@@ -128,7 +124,6 @@ describe 'praefect' do
                          failover_enabled: failover_enabled,
                          failover_election_strategy: failover_election_strategy,
                          failover_read_only_after_failover: failover_read_only_after_failover,
-                         postgres_queue_enabled: postgres_queue_enabled,
                          virtual_storages: virtual_storages,
                          database_host: database_host,
                          database_port: database_port,
@@ -157,8 +152,6 @@ describe 'praefect' do
           .with_content("sentry_dsn = '#{sentry_dsn}'")
         expect(chef_run).to render_file(config_path)
           .with_content("sentry_environment = '#{sentry_environment}'")
-        expect(chef_run).to render_file(config_path)
-          .with_content("postgres_queue_enabled = true")
         expect(chef_run).to render_file(config_path)
           .with_content("read_only_after_failover = true")
         expect(chef_run).to render_file(config_path)
