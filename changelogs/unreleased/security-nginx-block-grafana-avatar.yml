@@ -1,0 +1,5 @@
+---
+title: Block requests to the grafana avatar endpoint
+merge_request:
+author:
+type: security
