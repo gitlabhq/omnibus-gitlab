@@ -34,6 +34,7 @@ build do
   configure_command = [
     'cmake',
     '-G"Unix Makefiles"',
+    "-DCMAKE_INSTALL_LIBDIR:PATH=lib", # ensure lib64 isn't used
     "-DCMAKE_INSTALL_PREFIX=#{install_dir}/embedded"
   ]
 
