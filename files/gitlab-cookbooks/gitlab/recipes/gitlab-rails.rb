@@ -307,18 +307,6 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   notifies :run, 'execute[clear the gitlab-rails cache]'
 end
 
-# Explicitly deleting rack_attack.rb file and link that was used prior to
-# version 13.0
-# TODO: Delete in 13.1, since to upgrade to 13.1, users must already be in 13.0
-# and this would've been done.
-link File.join(gitlab_rails_source_dir, "config/initializers/rack_attack.rb") do
-  action :delete
-end
-
-file File.join(gitlab_rails_etc_dir, "rack_attack.rb") do
-  action :delete
-end
-
 gitlab_workhorse_services = dependent_services
 gitlab_workhorse_services += ['runit_service[gitlab-workhorse]'] if omnibus_helper.should_notify?('gitlab-workhorse')
 
