@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'qa', type: :rake do
   let(:gitlab_registry_image_address) { 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce-qa' }
   let(:gitlab_version) { '10.2.0' }
+  let(:commit_sha) { 'abcd1234' }
   let(:image_tag) { 'omnibus-12345' }
   let(:version_manifest) { { "software": { "gitlab-rails": { "locked_version": "123445" } } } }
 
@@ -82,11 +83,13 @@ describe 'qa', type: :rake do
         Rake::Task['qa:push:staging'].reenable
 
         allow(Build::Info).to receive(:gitlab_version).and_return(gitlab_version)
+        allow(Build::Info).to receive(:commit_sha).and_return(commit_sha)
       end
 
       it 'pushes staging images correctly' do
         stub_is_auto_deploy(false)
         expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(gitlab_version)
+        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(commit_sha)
 
         Rake::Task['qa:push:staging'].invoke
       end
@@ -96,6 +99,7 @@ describe 'qa', type: :rake do
         allow(Build::Info).to receive(:current_git_tag).and_return('12.0.12345+5159f2949cb.59c9fa631')
 
         expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with('12.0-5159f2949cb')
+        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(commit_sha)
 
         Rake::Task['qa:push:staging'].invoke
       end

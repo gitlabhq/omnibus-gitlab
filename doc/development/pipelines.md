@@ -225,7 +225,7 @@ This job builds a GitLab Docker image using the package built during the Ubuntu
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on branch and nightly pipelines.
 
-#### `QA-Master`
+#### `QA-branch`
 
 This job builds a GitLab QA Docker image from the [qa directory in the Rails
 codebase](https://gitlab.com/gitlab-org/gitlab/blob/master/qa/Dockerfile).

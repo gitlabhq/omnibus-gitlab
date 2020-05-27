@@ -306,7 +306,7 @@ Docker-branch-measure-memory:
   cache: *branch-cache
   dependencies: []
 
-QA-Master:
+QA-branch:
   extends: .docker_job
   stage: package-and-image
   variables:
@@ -314,6 +314,7 @@ QA-Master:
   script:
     - bundle exec rake qa:build
     - bundle exec rake qa:push:nightly
+    - bundle exec rake qa:push:staging
   artifacts:
     when: on_failure
     expire_in: 7d
