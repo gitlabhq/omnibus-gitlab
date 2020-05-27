@@ -202,6 +202,26 @@ module Build
           abort 'unknown pipeline type: only support triggered/nightly/tag pipeline'
         end
       end
+
+      def deploy_env
+        key = if Build::Check.is_auto_deploy_tag?
+                'AUTO_DEPLOY_ENVIRONMENT'
+              elsif Build::Check.is_rc_tag?
+                'PATCH_DEPLOY_ENVIRONMENT'
+              elsif Build::Check.is_latest_tag?
+                'RELEASE_DEPLOY_ENVIRONMENT'
+              end
+
+        return nil if key.nil?
+
+        env = Gitlab::Util.get_env(key)
+
+        abort "Unable to determine which environment to deploy too, #{key} is empty" unless env
+
+        puts "Ready to send trigger for environment(s): #{env}"
+
+        env
+      end
     end
   end
 end
