@@ -4,10 +4,10 @@ $LOAD_PATH << './files/gitlab-ctl-commands-ee/lib'
 $LOAD_PATH << './files/gitlab-ctl-commands/lib'
 
 require 'fileutils'
-require 'geo/promote_to_primary'
+require 'geo/promote_to_primary_node'
 require 'gitlab_ctl/util'
 
-describe Geo::PromoteToPrimary, '#execute' do
+describe Geo::PromoteToPrimaryNode, '#execute' do
   subject(:command) { described_class.new(nil, { skip_preflight_checks: true }) }
 
   let(:temp_directory) { Dir.mktmpdir }
