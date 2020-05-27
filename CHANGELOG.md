@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.0.1 (2020-05-27)
+
+### Security (1 change)
+
+- Block requests to the grafana avatar endpoint.
+
+
 ## 13.0.0 (2020-05-22)
 
 ### Security (2 changes)
