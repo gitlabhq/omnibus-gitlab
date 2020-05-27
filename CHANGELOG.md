@@ -82,6 +82,14 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.22.2. (Harrison Healey)
 
 
+## 12.10.7 (2020-05-27)
+
+### Security (2 changes)
+
+- Block requests to the grafana avatar endpoint.
+- Update Ruby to 2.6.6.
+
+
 ## 12.10.6 (2020-05-15)
 
 ### Fixed (4 changes)
