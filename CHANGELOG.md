@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.0.1 (2020-05-27)
+
+### Security (1 change)
+
+- Block requests to the grafana avatar endpoint.
+
+
 ## 13.0.0 (2020-05-22)
 
 ### Security (2 changes)
@@ -73,6 +80,14 @@ omnibus-gitlab repository.
 - Patch Git to fix partial clone bug. !4217
 - Update CA certificate bundle. !4230
 - Update Mattermost to 5.22.2. (Harrison Healey)
+
+
+## 12.10.7 (2020-05-27)
+
+### Security (2 changes)
+
+- Block requests to the grafana avatar endpoint.
+- Update Ruby to 2.6.6.
 
 
 ## 12.10.6 (2020-05-15)
@@ -185,6 +200,14 @@ omnibus-gitlab repository.
 - Upgrade to Git 2.26.2. !4127
 - Upgrade Mattermost to 5.21.0.
 - Upgrade to Git 2.26.1.
+
+
+## 12.9.8 (2020-05-27)
+
+### Security (2 changes)
+
+- Block requests to the grafana avatar endpoint.
+- Update Ruby to 2.6.6.
 
 
 ## 12.9.6 (2020-05-05)
