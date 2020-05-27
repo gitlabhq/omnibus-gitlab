@@ -202,6 +202,14 @@ omnibus-gitlab repository.
 - Upgrade to Git 2.26.1.
 
 
+## 12.9.8 (2020-05-27)
+
+### Security (2 changes)
+
+- Block requests to the grafana avatar endpoint.
+- Update Ruby to 2.6.6.
+
+
 ## 12.9.6 (2020-05-05)
 
 - No changes.
