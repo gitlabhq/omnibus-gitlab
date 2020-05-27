@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.9.8 (2020-05-27)
+
+### Security (2 changes)
+
+- Block requests to the grafana avatar endpoint.
+- Update Ruby to 2.6.6.
+
+
 ## 12.9.7 (2020-05-13)
 
 - No changes.
