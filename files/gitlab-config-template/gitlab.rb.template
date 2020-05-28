@@ -1253,7 +1253,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['gzip_http_version'] = "1.0"
 # nginx['gzip_comp_level'] = "2"
 # nginx['gzip_proxied'] = "any"
-# nginx['gzip_types'] = [ "text/html", "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
+# nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
 # nginx['keepalive_timeout'] = 65
 # nginx['cache_max_size'] = '5000m'
 # nginx['server_names_hash_bucket_size'] = 64
