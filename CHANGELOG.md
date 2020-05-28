@@ -3,6 +3,22 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.0.2 (2020-05-28)
+
+### Security (1 change)
+
+- Update Ruby to 2.6.6.
+
+### Fixed (2 changes)
+
+- Fix nginx duplicate MIME type warning. !4251
+- Do not run Grafana reset during docker startup. !4264
+
+### Added (1 change)
+
+- Update Praefect Grafana dashboards. !4241
+
+
 ## 13.0.1 (2020-05-27)
 
 ### Security (1 change)
