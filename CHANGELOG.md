@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 12.10.8 (2020-05-28)
+
+### Fixed (1 change)
+
+- Fix dbvacuum on pgupgrade. !4227
+
+
 ## 12.10.7 (2020-05-27)
 
 ### Security (2 changes)
