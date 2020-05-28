@@ -292,7 +292,7 @@ For more options about configuring GitLab, check the
 ### Pre-configure Docker container
 
 You can pre-configure the GitLab Docker image by adding the environment
-variable `GITLAB_OMNIBUS_CONFIG` to docker run command. This variable can
+variable `GITLAB_OMNIBUS_CONFIG` to Docker run command. This variable can
 contain any `gitlab.rb` setting and will be evaluated before loading the
 container's `gitlab.rb` file. That way you can easily configure GitLab's
 external URL, make any database configuration or any other option from the
@@ -426,7 +426,7 @@ Following the above example, you will be able to reach GitLab from your
 web browser under `<hostIP>:8929` and push using SSH under the port `2289`.
 
 A `docker-compose.yml` example that uses different ports can be found in the
-[docker-compose](#install-gitlab-using-docker-compose) section.
+[Docker compose](#install-gitlab-using-docker-compose) section.
 
 ## Update
 
@@ -566,7 +566,7 @@ Docker Toolbox's boot2docker.
 
 ### Linux ACL issues
 
-If you are using file ACLs on the docker host, the `docker` group requires full access to the volumes in order for GitLab to work:
+If you are using file ACLs on the Docker host, the `docker` group requires full access to the volumes in order for GitLab to work:
 
 ```shell
 getfacl $GITLAB_HOME/gitlab
