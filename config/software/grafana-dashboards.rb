@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-version = Gitlab::Version.new('grafana-dashboards', '1.5.0')
+version = Gitlab::Version.new('grafana-dashboards', '1.6.0')
 
 name 'grafana-dashboards'
 default_version version.print
