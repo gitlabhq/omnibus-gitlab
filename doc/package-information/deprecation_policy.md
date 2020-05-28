@@ -41,7 +41,7 @@ Deprecation procedure is similar for both `sensitive` and `regular` configuratio
 
 Common steps:
 
-1. Create an issue at the [Omnibus GitLab issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab/issues) with details on deprecation type and other necessary information. Apply the label `deprecation`.
+1. Create an issue at the [Omnibus GitLab issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues) with details on deprecation type and other necessary information. Apply the label `deprecation`.
 1. Decide on the removal target for the deprecated configuration
 1. Formulate deprecation notice for each item as noted in [Notice section](#notice)
 
