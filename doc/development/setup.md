@@ -9,10 +9,10 @@ up a Build Environment](../build/prepare-build-environment.md).
 
    To provide isolation and to prevent rebuilding of the package for each and
    every change, it is preferred to use a Container for development. The
-   following example uses docker on a Debian host with a Debian Jessie image.
+   following example uses Docker on a Debian host with a Debian Jessie image.
    The steps are similar for other OSs; only the commands differ.
 
-   1. Install docker for your OS as per [official Docker installation docs](https://docs.docker.com/install/).
+   1. Install Docker for your OS as per [official Docker installation docs](https://docs.docker.com/install/).
 
    1. Pulling a Debian Jessie image
 
@@ -20,14 +20,14 @@ up a Build Environment](../build/prepare-build-environment.md).
       docker pull debian:jessie
       ```
 
-   1. Running docker image with a shell prompt
+   1. Running Docker image with a shell prompt
 
       ```shell
       docker run -it debian:jessie bash
       ```
 
-    This will cause the docker to run the jessie image and you will fall into a
-    bash prompt, where the following steps are applied to.
+      This will cause the Docker to run the jessie image and you will fall into a
+      bash prompt, where the following steps are applied to.
 
 1. Install basic necessary tools
 

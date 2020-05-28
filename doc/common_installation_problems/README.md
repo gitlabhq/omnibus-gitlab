@@ -713,10 +713,10 @@ starting:
 
 In this case, consider uninstalling Plymouth.
 
-## Init daemon detection in non-docker container
+## Init daemon detection in non-Docker container
 
-In docker containers, GitLab package detects existence of `/.dockerenv` file and
-skips automatic detection of an init system. However, in non-docker containers
+In Docker containers, GitLab package detects existence of `/.dockerenv` file and
+skips automatic detection of an init system. However, in non-Docker containers
 (like containerd, cri-o, etc.), that file does not exist and package falls back
 to sysvinit, and this can cause issues with installation. To prevent this, users
 can explicitly disable init daemon detection by adding the following setting in
