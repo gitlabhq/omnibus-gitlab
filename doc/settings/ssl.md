@@ -30,7 +30,7 @@ GitLab can be integrated with [Let's Encrypt](https://letsencrypt.org).
 
 NOTE: **Note**: In order for Let's Encrypt verification to work correctly, ports 80 and 443 will
 need to be accessible to the Let's Encrypt servers that run the validation. Also note that the validation
-currently [does not work with non-standard ports](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3580).
+currently [does not work with non-standard ports](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3580).
 
 CAUTION: **Caution:**
 Administrators installing or upgrading to GitLab 10.7 or later and do not plan on using
@@ -149,14 +149,14 @@ at the bottom of this page.
 
 NOTE: **Note:**
 A perl interpreter is required for `c_rehash` dependency to properly symlink the certificates.
-[Perl is currently not bundled in Omnibus GitLab](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2275).
+[Perl is currently not bundled in Omnibus GitLab](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/2275).
 
 1. Generate the ***PEM*** or ***DER*** encoded public certificate from your private key certificate.
 1. Copy the public certificate file only into the `/etc/gitlab/trusted-certs` directory.
 1. Run `gitlab-ctl reconfigure`.
 
 CAUTION: **Caution:**
-If using a custom certificate chain, the root and/or intermediate certificates must be put into separate files in `/etc/gitlab/trusted-certs` [due to `c_rehash` creating a hash for the first certificate only](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/1425).
+If using a custom certificate chain, the root and/or intermediate certificates must be put into separate files in `/etc/gitlab/trusted-certs` [due to `c_rehash` creating a hash for the first certificate only](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/1425).
 
 ## Troubleshooting
 
@@ -184,13 +184,13 @@ If using a custom certificate chain, the root and/or intermediate certificates m
 ### Git-LFS and other embedded services written in ***golang*** report custom certificate signed by unknown authority
 
 NOTE: **Note:**
-In GitLab 11.5, the following workaround is no longer necessary, embedded golang apps now [use the standard GitLab certificate directory automatically](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3701).
+In GitLab 11.5, the following workaround is no longer necessary, embedded golang apps now [use the standard GitLab certificate directory automatically](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3701).
 
 The `gitlab-workhorse` and other services written in ***golang*** use the **crypto/tls** library from ***golang***
 instead of **OpenSSL**.
 
 Add the following entry in `/etc/gitlab/gitlab.rb` to work around the
-[issue as reported](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3701):
+[issue as reported](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3701):
 
 ```ruby
 gitlab_workhorse['env'] = {

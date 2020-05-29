@@ -489,7 +489,7 @@ This inserts the defined string into the end of the `server` block of
 
   in the string or in the included NGINX configuration. Without these, any sub-location
   will return a 404. See
-  [GitLab CE Issue #30619](https://gitlab.com/gitlab-org/gitlab-foss/issues/30619).
+  [GitLab CE Issue #30619](https://gitlab.com/gitlab-org/gitlab-foss/-/issues/30619).
 - You cannot add the root `/` location or the `/assets` location as those already
   exist in `gitlab-http.conf`.
 
@@ -790,7 +790,7 @@ Starting with GitLab 10, the Omnibus GitLab package no longer supports TLSv1 pro
 This can cause connection issues with some older Java based IDE clients when interacting with
 your GitLab instance.
 We strongly urge you to upgrade ciphers on your server, similar to what was mentioned
-in [this user comment](https://gitlab.com/gitlab-org/gitlab-foss/issues/624#note_299061).
+in [this user comment](https://gitlab.com/gitlab-org/gitlab-foss/-/issues/624#note_299061).
 
 If it is not possible to make this server change, you can default back to the old
 behavior by changing the values in your `/etc/gitlab/gitlab.rb`:

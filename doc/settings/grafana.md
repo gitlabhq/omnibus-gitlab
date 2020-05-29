@@ -1,6 +1,6 @@
 # Grafana Dashboard Service
 
-> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3487) in GitLab 11.9.
+> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3487) in GitLab 11.9.
 
 [Grafana](https://grafana.com/) is a powerful dashboard building system that
 you can use to visualize performance metrics from the [embedded Prometheus](prometheus.md)
@@ -117,7 +117,7 @@ for more information.
 
 ## Dashboards
 
-Starting with [GitLab 11.10](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4180), dashboards for monitoring Omnibus GitLab will be pre-loaded and available on initial login.
+Starting with [GitLab 11.10](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4180), dashboards for monitoring Omnibus GitLab will be pre-loaded and available on initial login.
 
 For earlier versions of GitLab, you can manually import the
 [pre-built dashboards](https://gitlab.com/gitlab-org/grafana-dashboards/tree/master/omnibus)
