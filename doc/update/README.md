@@ -1090,30 +1090,26 @@ This section contains general information on how to revert to an earlier version
 of a package.
 
 NOTE: **Note:**
-This guide assumes that you have a backup archive created under the version you
+It is always a good idea to have a backup created under the version you
 are reverting to.
 
 These steps consist of:
 
-- Stop GitLab
-- Install the old package
-- Reconfigure GitLab
-- Restoring the backup
+- Stopping GitLab
+- Installing the old package
+- Reconfiguring GitLab
 - Starting GitLab
+- (optional) Restoring the backup in case something went wrong
 
 Steps:
 
 1. Stop GitLab:
 
    ```shell
-   # Stop GitLab and remove its supervision process
-   sudo gitlab-ctl stop puma  # or unicorn
+   sudo gitlab-ctl stop puma  # if you have Puma
+   sudo gitlab-ctl stop unicorn  # if you have Unicorn
    sudo gitlab-ctl stop sidekiq
    sudo systemctl stop gitlab-runsvdir
-   sudo systemctl disable gitlab-runsvdir
-   sudo rm /usr/lib/systemd/system/gitlab-runsvdir.service
-   sudo systemctl daemon-reload
-   sudo gitlab-ctl uninstall
    ```
 
 1. Identify the GitLab version you want to downgrade to:
@@ -1134,15 +1130,11 @@ Steps:
    # (Replace with gitlab-ce if you have GitLab FOSS installed)
 
    # Ubuntu
-   sudo apt remove gitlab-ee
    sudo apt install gitlab-ee=12.0.0-ee.0
 
    # CentOS:
-   sudo yum remove gitlab-ee
    sudo yum install gitlab-ee-12.0.0-ee.0.el7
    ```
-
-1. Prepare GitLab for receiving the backup restore.
 
 1. Reconfigure GitLab (includes database migrations):
 
@@ -1150,18 +1142,17 @@ Steps:
    sudo gitlab-ctl reconfigure
    ```
 
-1. Restore your backup:
-
-    ```shell
-    sudo gitlab-backup restore BACKUP=12345 # where 12345 is your backup timestamp
-    ```
-
-    NOTE: **Note**
-    For GitLab 12.1 and earlier, use `gitlab-rake gitlab:backup:restore`.
-
 1. Start GitLab:
 
    ```shell
+   sudo gitlab-ctl start
+   ```
+
+1. (optional) Restore your backup if something went wrong:
+
+   ```shell
+   sudo gitlab-ctl stop
+   sudo gitlab-backup restore BACKUP=12345 # where 12345 is your backup timestamp
    sudo gitlab-ctl start
    ```
 
