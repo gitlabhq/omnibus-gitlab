@@ -33,7 +33,7 @@ describe 'monitoring::postgres-exporter' do
   end
 
   context 'when postgres-exporter is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/postgres-exporter/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/postgres-exporter/log/config') }
 
     before do
       stub_gitlab_rb(

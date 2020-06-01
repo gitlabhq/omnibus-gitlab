@@ -42,7 +42,7 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
       expect(chef_run).to create_account('user and group for redis').with(username: 'gitlab-redis', groupname: 'gitlab-redis')
     end
 
-    it_behaves_like 'enabled runit service', 'redis', 'root', 'root', 'gitlab-redis', 'gitlab-redis'
+    it_behaves_like 'enabled runit service', 'redis', 'root', 'root'
 
     it 'creates gitlab-redis-cli-rc' do
       expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-redis-cli-rc')
@@ -131,7 +131,7 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
       expect(chef_run).to create_account('user and group for redis').with(username: 'foo', groupname: 'bar')
     end
 
-    it_behaves_like 'enabled runit service', 'redis', 'root', 'root', 'foo', 'bar'
+    it_behaves_like 'enabled runit service', 'redis', 'root', 'root'
   end
 
   context 'with snapshotting disabled' do

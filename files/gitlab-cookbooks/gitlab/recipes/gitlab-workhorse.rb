@@ -47,7 +47,7 @@ env_dir workhorse_env_dir do
 end
 
 runit_service 'gitlab-workhorse' do
-  down node['gitlab']['gitlab-workhorse']['ha']
+  start_down node['gitlab']['gitlab-workhorse']['ha']
   options({
     log_directory: log_directory
   }.merge(params))

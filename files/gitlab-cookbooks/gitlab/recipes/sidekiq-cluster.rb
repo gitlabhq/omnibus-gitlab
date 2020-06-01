@@ -32,7 +32,7 @@ end
 # This indirection will be removed once sidekiq-cluster becomes the only way to
 # start sidekiq in omnibus: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/240
 runit_service service do
-  down node['gitlab']['sidekiq-cluster']['ha']
+  start_down node['gitlab']['sidekiq-cluster']['ha']
   template_name 'sidekiq-cluster'
   options({
     user: account_helper.gitlab_user,

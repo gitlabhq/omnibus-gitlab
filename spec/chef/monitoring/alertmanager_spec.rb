@@ -29,7 +29,7 @@ describe 'monitoring::alertmanager' do
   end
 
   context 'when alertmanager is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/alertmanager/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/alertmanager/log/config') }
 
     before do
       stub_gitlab_rb(

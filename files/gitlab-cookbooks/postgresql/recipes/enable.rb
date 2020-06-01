@@ -109,7 +109,7 @@ postgresql_config 'gitlab' do
 end
 
 runit_service "postgresql" do
-  down node['postgresql']['ha']
+  start_down node['postgresql']['ha']
   supervisor_owner postgresql_username
   supervisor_group postgresql_group
   restart_on_update false

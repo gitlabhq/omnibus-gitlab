@@ -32,7 +32,7 @@ describe 'monitoring::redis-exporter' do
   end
 
   context 'when redis-exporter is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/redis-exporter/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/redis-exporter/log/config') }
 
     before do
       stub_gitlab_rb(
