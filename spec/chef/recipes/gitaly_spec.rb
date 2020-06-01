@@ -55,7 +55,7 @@ describe 'gitaly' do
   end
 
   context 'by default' do
-    it_behaves_like "enabled runit service", "gitaly", "root", "root", "git", "git"
+    it_behaves_like "enabled runit service", "gitaly", "root", "root"
 
     it 'creates expected directories with correct permissions' do
       expect(chef_run).to create_directory('/var/opt/gitlab/gitaly').with(user: 'git', mode: '0700')
@@ -190,7 +190,7 @@ describe 'gitaly' do
       )
     end
 
-    it_behaves_like "enabled runit service", "gitaly", "root", "root", "foo", "bar"
+    it_behaves_like "enabled runit service", "gitaly", "root", "root"
 
     it 'creates expected directories with correct permissions' do
       expect(chef_run).to create_directory(internal_socket_dir).with(user: 'foo', mode: '0700')

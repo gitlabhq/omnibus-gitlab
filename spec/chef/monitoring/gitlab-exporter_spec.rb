@@ -8,7 +8,7 @@ describe 'monitoring::gitlab-exporter' do
   end
 
   context 'when gitlab-exporter is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/gitlab-exporter/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/gitlab-exporter/log/config') }
 
     before do
       stub_gitlab_rb(
@@ -25,7 +25,7 @@ describe 'monitoring::gitlab-exporter' do
       expect(chef_run.version_file('Create version file for GitLab-Exporter')).to notify('runit_service[gitlab-exporter]').to(:restart)
     end
 
-    it_behaves_like 'enabled runit service', 'gitlab-exporter', 'root', 'root', 'git', 'git'
+    it_behaves_like 'enabled runit service', 'gitlab-exporter', 'root', 'root'
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload_log_service]')
@@ -72,11 +72,11 @@ describe 'monitoring::gitlab-exporter' do
       )
     end
 
-    it_behaves_like 'enabled runit service', 'gitlab-exporter', 'root', 'root', 'foo', 'bar'
+    it_behaves_like 'enabled runit service', 'gitlab-exporter', 'root', 'root'
   end
 
   context 'when gitlab-exporter is enabled and postgres is disabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/gitlab-exporter/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/gitlab-exporter/log/config') }
 
     before do
       stub_gitlab_rb(

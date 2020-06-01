@@ -17,7 +17,7 @@ describe 'gitlab::puma with Ubuntu 16.04' do
   end
 
   context 'when puma is enabled' do
-    it_behaves_like 'enabled runit service', 'puma', 'root', 'root', 'git', 'git'
+    it_behaves_like 'enabled runit service', 'puma', 'root', 'root'
 
     describe 'logrotate settings' do
       context 'default values' do
@@ -138,7 +138,7 @@ describe 'gitlab::puma with Ubuntu 16.04' do
       )
     end
 
-    it_behaves_like 'enabled runit service', 'puma', 'root', 'root', 'foo', 'bar'
+    it_behaves_like 'enabled runit service', 'puma', 'root', 'root'
   end
 
   context 'with custom runtime_dir' do
@@ -179,7 +179,7 @@ describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
   end
 
   context 'when puma is enabled on a node with no /run or /dev/shm tmpfs' do
-    it_behaves_like 'enabled runit service', 'puma', 'root', 'root', 'git', 'git'
+    it_behaves_like 'enabled runit service', 'puma', 'root', 'root'
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/puma/run')
@@ -213,7 +213,7 @@ describe 'gitlab::puma Ubuntu 16.04 Docker' do
   end
 
   context 'when puma is enabled on a node with a /dev/shm tmpfs' do
-    it_behaves_like 'enabled runit service', 'puma', 'root', 'root', 'git', 'git'
+    it_behaves_like 'enabled runit service', 'puma', 'root', 'root'
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/puma/run')

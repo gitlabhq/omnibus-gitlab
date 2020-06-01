@@ -82,10 +82,10 @@ define :unicorn_service, rails_app: nil, user: nil do
   end
 
   runit_service svc do
-    down node['gitlab'][svc]['ha']
+    start_down node['gitlab'][svc]['ha']
     # unicorn-worker-wrapper receives a HUP and issues a SIGUSR2 and QUIT
     # to the master unicorn process
-    restart_command 'hup'
+    restart_command_name 'hup'
     template_name 'unicorn'
     control ['t']
     options({

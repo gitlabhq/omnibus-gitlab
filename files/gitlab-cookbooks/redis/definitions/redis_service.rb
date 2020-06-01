@@ -64,7 +64,7 @@ define :redis_service, socket_group: nil do
   end
 
   runit_service 'redis' do
-    down node['redis']['ha']
+    start_down node['redis']['ha']
     template_name 'redis'
     options({
       service: 'redis',

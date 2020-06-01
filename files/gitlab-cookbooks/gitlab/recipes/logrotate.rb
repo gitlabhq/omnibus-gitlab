@@ -16,7 +16,7 @@
 #
 
 runit_service "logrotate" do
-  down node['gitlab']['logrotate']['ha']
+  start_down node['gitlab']['logrotate']['ha']
   control ['t']
   options({
     log_directory: node['gitlab']['logrotate']['log_directory']

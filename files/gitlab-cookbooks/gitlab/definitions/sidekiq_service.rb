@@ -32,7 +32,7 @@ define :sidekiq_service, rails_app: nil, user: nil do
   end
 
   runit_service svc do
-    down node['gitlab'][svc]['ha']
+    start_down node['gitlab'][svc]['ha']
     template_name 'sidekiq'
     options({
       rails_app: rails_app,

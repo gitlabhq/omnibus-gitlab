@@ -8,7 +8,7 @@ describe 'gitlab::logrotate' do
   end
 
   context 'when logrotate is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/logrotate/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/logrotate/log/config') }
 
     it_behaves_like "enabled runit service", "logrotate", "root", "root"
 
@@ -25,13 +25,13 @@ describe 'gitlab::logrotate' do
       expect(chef_run).to render_file('/opt/gitlab/sv/logrotate/log/run')
         .with_content(/exec svlogd -tt \/var\/log\/gitlab\/logrotate/)
 
-      expect(chef_run).to render_file('/var/log/gitlab/logrotate/config')
+      expect(chef_run).to render_file('/opt/gitlab/sv/logrotate/log/config')
         .with_content(/s209715200/)
-      expect(chef_run).to render_file('/var/log/gitlab/logrotate/config')
+      expect(chef_run).to render_file('/opt/gitlab/sv/logrotate/log/config')
         .with_content(/n30/)
-      expect(chef_run).to render_file('/var/log/gitlab/logrotate/config')
+      expect(chef_run).to render_file('/opt/gitlab/sv/logrotate/log/config')
         .with_content(/t86400/)
-      expect(chef_run).to render_file('/var/log/gitlab/logrotate/config')
+      expect(chef_run).to render_file('/opt/gitlab/sv/logrotate/log/config')
         .with_content(/!gzip/)
     end
 

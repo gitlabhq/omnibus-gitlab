@@ -29,7 +29,7 @@ describe 'gitlab::sidekiq-cluster' do
                      })
     end
 
-    it_behaves_like "enabled runit service", "sidekiq-cluster", "root", "root", "git", "git"
+    it_behaves_like "enabled runit service", "sidekiq-cluster", "root", "root"
   end
 
   context 'with custom user and group values' do
@@ -46,7 +46,7 @@ describe 'gitlab::sidekiq-cluster' do
       )
     end
 
-    it_behaves_like "enabled runit service", "sidekiq-cluster", "root", "root", "foo", "bar"
+    it_behaves_like "enabled runit service", "sidekiq-cluster", "root", "root"
   end
 
   context 'with queue_groups set' do
