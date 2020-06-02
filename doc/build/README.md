@@ -20,6 +20,42 @@ where the `build project` command is invoked. So running this command on say a
 MacBook Pro will generate a Mac OS X specific package. After the build
 completes packages will be available in `pkg/`.
 
+#### Platform-specific build via pipelines
+
+We use Dockerfiles in the [Omnibus GitLab Builder](https://gitlab.com/gitlab-org/gitlab-omnibus-builder) project to provide the build environment for platform-specific packaging. If you are modifying one of these build environments and want to test your changes to ensure that the packaging still works, you can follow these steps:
+
+  1. Commit your change to the [Omnibus GitLab Builder](https://gitlab.com/gitlab-org/gitlab-omnibus-builder) project, and confirm that the pipeline completes successfully. [Here is an example pipeline](https://dev.gitlab.org/cookbooks/gitlab-omnibus-builder/pipelines/155519).
+     - Note: As you can tell from this link, a commit to `gitlab.com/gitlab-org/gitlab-omnibus-builder` will trigger a pipeline in `dev.gitlab.org/cookbooks/gitlab-omnibus-builder`, because the latter is a mirror. We rely on the `dev.gitlab.com` pipeline for generating the build environment images for some platforms. Others are also available on the `gitlab.org` pipelines.
+  1. In the pipeline mentioned above, note the image name and tag pushed from the relevant job in the `test` stage (for this example, the job name is `debian_10 test`).
+  1. Create a branch off of `master` from [Omnibus GitLab in dev](https://dev.gitlab.org/gitlab/omnibus-gitlab) and confirm that it creates a new pipeline.
+    - Note: You can immediately cancel the running pipeline as we will need to trigger it with specific variables.
+  1. [Trigger a new pipeline](https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/new) for your branch (created in the step above) with the following variables:
+     - `BUILDER_IMAGE_REGISTRY=${IMAGE_NAME}` (for example: `dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/staging`)
+     - `BUILDER_IMAGE_REVISION=${IMAGE_TAG}` (for example: `debian-change-branch`)
+     - `ee=true` (only if you need to build GitLab EE; for example, you would not set this for a Raspberry Pi build)
+  1. Ensure that the OS-specific package is uploaded in the relevant job for the `package-and-image` stage.
+     - For example, the `Debian-10-branch` [job](https://dev.gitlab.org/gitlab/omnibus-gitlab/-/jobs/7955045) shows the .deb in the logs: `https://omnibus-builds.s3.amazonaws.com/debian-buster/gitlab-ce_13.0.3%2Brfbranch.156562.e150c78b-0_amd64.deb`
+
+The package will be available to download from GitLab for 1 day. We will use `curl` in the next section to download this artifact into our target system.
+
+#### Testing platform-specific packages
+
+Once you have a platform-specific package built, you can follow the steps below to test that it works on the target platform.
+
+  1. Launch an instance of the target platform (preferably in a virtual machine or on bare-metal).
+  1. Prepare your system with the relevant dependencies using the [platform-specific installation instructions](https://about.gitlab.com/install/).
+  1. Download the platform-specific package from the job mentioned [above](#platform-specific-build-via-pipelines) using `curl`:
+
+     ```shell
+     curl --header 'Private-Token: ${PERSONAL_ACCESS_TOKEN}' \
+       -o ${PACKAGE_NAME_AND_EXTENSION} \
+       -L "https://dev.gitlab.org/api/v4/projects/${PROJECT_ID}/jobs/${JOB_ID}/artifacts/${PACKAGE_PATH}"
+     ```
+
+  1. Follow the installation instructions for [manually downloading and installing a GitLab package](../manual_install.md#installing-the-gitlab-package).
+
+You should now have a running instance of GitLab using the package you downloaded. If you want to perform further testing, you can run [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa) against the instance.
+
 ### Clean
 
 You can clean up all temporary files generated during the build process with
