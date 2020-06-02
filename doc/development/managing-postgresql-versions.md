@@ -48,3 +48,8 @@ Additionally, ensure that:
 
 1. The package build includes both versions of PostgreSQL
 1. Running `gitlab-ctl pg-upgrade` works
+
+### The case of `libpq`
+
+Some modules, including `pyscopg2`, depend on PostgreSQL client library, i.e. `libpq`. It should be always linked to the
+latest bundled version. By using the latest version we rely on backward compatibility of `libpq`.
