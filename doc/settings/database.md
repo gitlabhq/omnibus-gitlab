@@ -605,7 +605,7 @@ restore the database to a later version of PostgreSQL.
 
 This example demonstrates upgrading from a database host running PostgreSQL 10 to another database host running PostgreSQL 11 and incurs downtime.
 
-1. Spin up a new PostgreSQL 11 database server that is set up according to the [database requirements].
+1. Spin up a new PostgreSQL 11 database server that is set up according to the [database requirements](https://docs.gitlab.com/ee/install/requirements.html#database).
 
 1. You should ensure that the latest versions of `pg_dump` and `pg_restore`
    are being used on the GitLab Rails instance. Edit `/etc/gitlab/gitlab.rb`
