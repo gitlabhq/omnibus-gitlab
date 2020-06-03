@@ -1,13 +1,15 @@
 require 'chef_helper'
 
 describe 'gitlab::gitlab-pages' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
   context 'with defaults' do
+    let(:env_dir) { '/opt/gitlab/etc/gitlab-pages/env' }
+
     before do
       stub_gitlab_rb(
         external_url: 'https://gitlab.example.com',
@@ -22,6 +24,11 @@ describe 'gitlab::gitlab-pages' do
       )
 
       expect(chef_run.version_file('Create version file for Gitlab Pages')).to notify('runit_service[gitlab-pages]').to(:restart)
+    end
+
+    it 'renders the env dir files' do
+      expect(chef_run).to render_file(File.join(env_dir, "SSL_CERT_FILE"))
+        .with_content('/opt/gitlab/embedded/ssl/certs/cacert.pem')
     end
 
     it 'correctly renders the pages service run file' do
@@ -105,6 +112,8 @@ describe 'gitlab::gitlab-pages' do
   end
 
   context 'with user settings' do
+    let(:env_dir) { '/opt/gitlab/etc/gitlab-pages/env' }
+
     before do
       stub_gitlab_rb(
         external_url: 'https://gitlab.example.com',
@@ -137,12 +146,22 @@ describe 'gitlab::gitlab-pages' do
           headers: ['X-XSS-Protection: 1; mode=block', 'X-Content-Type-Options: nosniff', 'Test: Header'],
           gitlab_client_http_timeout: "10s",
           gitlab_client_jwt_expiry: "30s",
+          env: {
+            GITLAB_CONTINUOUS_PROFILING: "stackdriver?service=gitlab-pages",
+          },
         }
       )
     end
 
     it 'skip authorize pages with gitlab when id and secret exists' do
       expect(chef_run).not_to run_ruby_block('authorize pages with gitlab')
+    end
+
+    it 'renders the env dir files' do
+      expect(chef_run).to render_file(File.join(env_dir, "GITLAB_CONTINUOUS_PROFILING"))
+        .with_content('stackdriver?service=gitlab-pages')
+      expect(chef_run).to render_file(File.join(env_dir, "SSL_CERT_FILE"))
+        .with_content('/opt/gitlab/embedded/ssl/certs/cacert.pem')
     end
 
     it 'correctly renders the pages service run file' do

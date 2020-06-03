@@ -15,9 +15,11 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+omnibus_helper = OmnibusHelper.new(node)
 
 working_dir = node['gitlab']['gitlab-pages']['dir']
 log_directory = node['gitlab']['gitlab-pages']['log_directory']
+env_directory = node['gitlab']['gitlab-pages']['env_directory']
 gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
 
 [
@@ -86,9 +88,19 @@ template File.join(working_dir, "gitlab-pages-config") do
   notifies :restart, "runit_service[gitlab-pages]"
 end
 
+node.default['gitlab']['gitlab-pages']['env'] = {
+  'SSL_CERT_FILE' => "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem",
+}
+
+env_dir env_directory do
+  variables node['gitlab']['gitlab-pages']['env']
+  notifies :restart, "runit_service[gitlab-pages]" if omnibus_helper.should_notify?('gitlab-pages')
+end
+
 runit_service 'gitlab-pages' do
   options({
-    log_directory: log_directory
+    log_directory: log_directory,
+    env_dir: env_directory,
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-pages'].to_hash)
 end
