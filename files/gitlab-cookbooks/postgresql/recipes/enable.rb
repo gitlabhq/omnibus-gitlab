@@ -171,6 +171,11 @@ postgresql_extension 'pg_trgm' do
   action :enable
 end
 
+postgresql_extension 'btree_gist' do
+  database database_name
+  action :enable
+end
+
 ruby_block 'warn pending postgresql restart' do
   block do
     message = <<~MESSAGE
