@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.0.4 (2020-06-03)
+
+- No changes.
+
 ## 13.0.3 (2020-05-29)
 
 - No changes.
@@ -228,6 +232,10 @@ omnibus-gitlab repository.
 - Upgrade Mattermost to 5.21.0.
 - Upgrade to Git 2.26.1.
 
+
+## 12.9.9 (2020-06-03)
+
+- No changes.
 
 ## 12.9.8 (2020-05-27)
 
