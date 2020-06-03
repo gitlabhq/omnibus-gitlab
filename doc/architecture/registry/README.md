@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Architecture of GitLab Container Registry
 
 The GitLab registry is what users use to store their own Docker images.

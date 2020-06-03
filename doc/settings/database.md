@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Database settings
 
 NOTE: **Note:**
@@ -593,8 +599,8 @@ correct executables by running both the [backup](https://docs.gitlab.com/ee/rake
 Before upgrading, check the [GitLab and PostgreSQL version compatibility table](../package-information/postgresql_versions.md) to determine your upgrade path.
 When using GitLab backup/restore you **must** keep the same version of GitLab so upgrade PostgreSQL first then GitLab.
 
-[Rake backup create and restore task][rake-backup] can be used to backup and
-The [backup and restore Rake task][rake-backup] can be used to back up and
+[Rake backup create and restore task](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-a-previously-created-backup) can be used to backup and
+The [backup and restore Rake task](https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system) can be used to back up and
 restore the database to a later version of PostgreSQL.
 
 This example demonstrates upgrading from a database host running PostgreSQL 10 to another database host running PostgreSQL 11 and incurs downtime.
@@ -617,7 +623,7 @@ This example demonstrates upgrading from a database host running PostgreSQL 10 t
 
 1. Stop GitLab (note that this step will cause downtime):
 
-   ```sh
+   ```shell
    sudo gitlab-ctl stop
    ```
 
@@ -640,13 +646,13 @@ the PostgreSQL database 11 host.
 
 1. Restore the database using the database backup file created earlier, and make sure to answer **no** when asked "This task will now rebuild the authorized_keys file":
 
-   ```sh
+   ```shell
    sudo gitlab-backup restore BACKUP=<database-backup-filename>
    ```
 
 1. Start GitLab:
 
-   ```sh
+   ```shell
    sudo gitlab-ctl start
    ```
 

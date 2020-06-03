@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Creating Patches
 
 It can happen that you may need to manually modify an external dependency for it
