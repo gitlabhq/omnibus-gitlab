@@ -86,6 +86,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_username_changing_enabled'] = true
 
 ### Default Theme
+### Available values:
+##! `1`  for Indigo
+##! `2`  for Dark
+##! `3`  for Light
+##! `4`  for Blue
+##! `5`  for Green
+##! `6`  for Light Indigo
+##! `7`  for Light Blue
+##! `8`  for Light Green
+##! `9`  for Red
+##! `10` for Light Red
 # gitlab_rails['gitlab_default_theme'] = 2
 
 ### Default project feature settings
