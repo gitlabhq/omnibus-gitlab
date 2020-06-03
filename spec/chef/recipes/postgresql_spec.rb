@@ -589,6 +589,16 @@ describe 'postgresql 9.6' do
       expect(chef_run).not_to run_execute('enable pg_trgm extension')
     end
 
+    it 'creates the btree_gist extension when it is possible' do
+      allow_any_instance_of(PgHelper).to receive(:extension_can_be_enabled?).with('btree_gist', 'gitlabhq_production').and_return(true)
+      expect(chef_run).to enable_postgresql_extension('btree_gist')
+    end
+
+    it 'does not create the btree_gist extension if it is not possible' do
+      allow_any_instance_of(PgHelper).to receive(:extension_can_be_enabled?).with('btree_gist', 'gitlabhq_production').and_return(false)
+      expect(chef_run).not_to run_execute('enable btree_gist extension')
+    end
+
     context 'running version differs from installed version' do
       before do
         allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('9.2.18'))
