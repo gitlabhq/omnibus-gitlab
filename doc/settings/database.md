@@ -588,6 +588,68 @@ After this is done, ensure that the backup and restore tasks are using the
 correct executables by running both the [backup](https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system) and
 [restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-a-previously-created-backup) tasks.
 
+### Upgrade a non-packaged PostgreSQL database
+
+Before upgrading, check the [GitLab and PostgreSQL version compatibility table](../package-information/postgresql_versions.md) to determine your upgrade path.
+When using GitLab backup/restore you **must** keep the same version of GitLab so upgrade PostgreSQL first then GitLab.
+
+[Rake backup create and restore task][rake-backup] can be used to backup and
+The [backup and restore Rake task][rake-backup] can be used to back up and
+restore the database to a later version of PostgreSQL.
+
+This example demonstrates upgrading from a database host running PostgreSQL 10 to another database host running PostgreSQL 11 and incurs downtime.
+
+1. Spin up a new PostgreSQL 11 database server that is set up according to the [database requirements].
+
+1. You should ensure that the latest versions of `pg_dump` and `pg_restore`
+   are being used on the GitLab Rails instance. Edit `/etc/gitlab/gitlab.rb`
+   and specify the `postgresql['version']` to set them to version 11:
+
+    ```ruby
+    postgresql['version'] = 11
+    ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+1. Stop GitLab (note that this step will cause downtime):
+
+   ```sh
+   sudo gitlab-ctl stop
+   ```
+
+1. Run the backup Rake task using the SKIP options to back up only the database. Make a note of the backup file name, you'll use it later to restore:
+
+   ```shell
+   sudo gitlab-backup create SKIP=repositories,uploads,builds,artifacts,lfs,pages,registry
+   ```
+
+1. Shutdown the PostgreSQL 10 database host.
+
+1. Edit `/etc/gitlab/gitlab.rb` and update the `gitlab_rails['db_host']` setting to point to
+the PostgreSQL database 11 host.
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+1. Restore the database using the database backup file created earlier, and make sure to answer **no** when asked "This task will now rebuild the authorized_keys file":
+
+   ```sh
+   sudo gitlab-backup restore BACKUP=<database-backup-filename>
+   ```
+
+1. Start GitLab:
+
+   ```sh
+   sudo gitlab-ctl start
+   ```
+
 ### Seed the database (fresh installs only)
 
 CAUTION: **Caution:**
