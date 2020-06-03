@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Managing PostgreSQL versions
 
 Usually, we are shipping three versions of PostgreSQL. We need to support running on all versions, as well as upgrading from the older versions to the newest.
