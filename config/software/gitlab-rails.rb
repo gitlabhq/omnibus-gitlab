@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -58,6 +59,9 @@ if EE
   dependency 'gitlab-elasticsearch-indexer'
 end
 
+# libatomic is a runtime_dependency of the grpc gem for armhf platforms
+whitelist_file /grpc_c\.so/ if OhaiHelper.os_platform == 'raspbian'
+
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
@@ -91,6 +95,7 @@ build do
   bundle 'config build.rugged --no-use-system-libraries', env: env
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
+  bundle 'config build.grpc --with-cflags="-latomic" --with-ldflags="-latomic"', env: env if OhaiHelper.os_platform == 'raspbian'
   bundle "install --without #{bundle_without.join(' ')} --jobs #{workers} --retry 5", env: env
 
   block 'correct omniauth-jwt permissions' do

@@ -332,6 +332,9 @@ QA-branch:
 Raspberry-Pi-2-Stretch-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_branch_build
+Raspberry-Pi-2-Buster-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_branch_build
 
 # This job runs only on nightly EE builds
 HA-Validate-Nightly:
@@ -683,10 +686,17 @@ HA-Validate-Tagged:
 Raspberry-Pi-2-Stretch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_tag_build
+Raspberry-Pi-2-Buster:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_tag_build
 
 Raspberry-Pi-2-Stretch-release:
   dependencies:
     - Raspberry-Pi-2-Stretch
+  <<: *raspbian_release
+Raspberry-Pi-2-Buster-release:
+  dependencies:
+    - Raspberry-Pi-2-Buster
   <<: *raspbian_release
 
 AWS-CE-Release:
