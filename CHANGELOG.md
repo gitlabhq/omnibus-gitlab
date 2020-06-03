@@ -233,6 +233,10 @@ omnibus-gitlab repository.
 - Upgrade to Git 2.26.1.
 
 
+## 12.9.9 (2020-06-03)
+
+- No changes.
+
 ## 12.9.8 (2020-05-27)
 
 ### Security (2 changes)
