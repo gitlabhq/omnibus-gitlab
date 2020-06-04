@@ -1,4 +1,5 @@
 require 'yaml'
+require 'uri'
 
 require_relative "util.rb"
 
@@ -10,6 +11,7 @@ module Gitlab
       @read_version = version || get_software_version
       @project_root = File.join(File.dirname(__dir__), '../')
       @software_sources = Gitlab::Util.get_env("ALTERNATIVE_SOURCES").to_s == "true" ? "alternative" : "remote"
+      @security_sources = Gitlab::Util.get_env("SECURITY_SOURCES").to_s == "true" ? "security" : nil
     end
 
     def get_software_version
@@ -82,13 +84,26 @@ module Gitlab
 
     def remote
       filepath = File.expand_path(".custom_sources.yml", @project_root)
-      software = YAML.load_file(filepath)[@software]
+      sources = YAML.load_file(filepath)[@software]
 
-      if software
-        software[@software_sources]
+      if sources
+        security_source = attach_remote_credential(sources[@security_sources])
+        security_source || sources[@software_sources]
       else
         ""
       end
+    end
+
+    def attach_remote_credential(url)
+      return unless url
+
+      uri = URI.parse(url)
+      uri.user = "gitlab-ci-token"
+      uri.password = Gitlab::Util.get_env("CI_JOB_TOKEN")
+      uri.to_s
+    rescue URI::InvalidURIError
+      # Git may use scp address which is not valid URI. Ignore it
+      url
     end
   end
 end

@@ -1,9 +1,11 @@
 gitlab-rails:
   remote: "git@dev.gitlab.org:gitlab/gitlabhq.git"
   alternative: "https://gitlab.com/gitlab-org/gitlab-foss.git"
+  security: "https://gitlab.com/gitlab-org/security/gitlab-foss.git"
 gitlab-rails-ee:
   remote: "git@dev.gitlab.org:gitlab/gitlab-ee.git"
   alternative: "https://gitlab.com/gitlab-org/gitlab.git"
+  security: "https://gitlab.com/gitlab-org/security/gitlab.git"
 gitlab-shell:
   remote: "git@dev.gitlab.org:gitlab/gitlab-shell.git"
   alternative: "https://gitlab.com/gitlab-org/gitlab-shell.git"
