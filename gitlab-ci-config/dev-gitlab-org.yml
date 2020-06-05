@@ -467,6 +467,9 @@ create_omnibus_manifest:
 dependency_scanning:
   image: "registry.gitlab.com/joernchen/cve-search:latest"
   stage: package-and-image
+  services:
+    - name: mongo:bionic
+      alias: mongo
   variables:
     TERM: xterm-256color
     REPORT_PATH: ./
@@ -475,7 +478,7 @@ dependency_scanning:
     - wget https://gitlab.com/joernchen/gitlab-depscan/-/raw/js/add-data/data/mongo_dump.tar.gz
     - mkdir /dump
     - tar --strip-components=1 -C /dump -xvf mongo_dump.tar.gz
-    - mongod > /dev/null 2>&1 &
+    # - mongod > /dev/null 2>&1 &
     - sleep 10
     - mongorestore /dump
     - python3 /app/sbin/db_updater.py -v
