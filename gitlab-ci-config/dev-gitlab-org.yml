@@ -485,7 +485,7 @@ dependency_scanning:
     - sleep 10
     - manifest=version-manifest.json
     - curl -sSL https://gitlab.com/joernchen/gitlab-depscan/-/raw/js/add-data/gitlab-depscan.sh|bash
-  <<: *dev-except-branches
+  # <<: *dev-except-branches
   <<: *except-auto-deploy-tag
   needs:
     - create_omnibus_manifest
