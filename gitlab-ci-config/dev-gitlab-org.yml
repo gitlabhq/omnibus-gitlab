@@ -481,7 +481,7 @@ dependency_scanning:
     - "printf '[Mongo]\nHost: mongo\n' > /app/etc/configuration.ini"
     # - mongod > /dev/null 2>&1 &
     # - sleep 10
-    - mongorestore /dump
+    - mongorestore --host mongo /dump
     - python3 /app/sbin/db_updater.py -v
     - python3 /app/web/index.py > /dev/null 2>&1 &
     - sleep 10
