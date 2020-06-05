@@ -46,7 +46,9 @@ describe 'praefect' do
         'prometheus_listen_addr' => 'localhost:9652',
         'sentry' => {},
         'database' => {},
-        'failover' => { 'enabled' => false, 'election_strategy' => 'local', 'read_only_after_failover' => false }
+        'failover' => { 'enabled' => false,
+                        'election_strategy' => 'sql',
+                        'read_only_after_failover' => true }
       }
 
       expect(chef_run).to render_file(config_path).with_content { |content|
@@ -55,7 +57,7 @@ describe 'praefect' do
       expect(chef_run).not_to render_file(config_path)
       .with_content(%r{\[prometheus\]\s+grpc_latency_buckets =})
       expect(chef_run).to render_file(config_path)
-      .with_content(%r{\[failover\]\s+enabled = false\s+election_strategy = 'local'\s+read_only_after_failover = false})
+      .with_content(%r{\[failover\]\s+enabled = false\s+election_strategy = 'sql'\s+read_only_after_failover = true})
     end
 
     it 'renders the env dir files' do
@@ -96,7 +98,7 @@ describe 'praefect' do
         }
       end
       let(:failover_enabled) { true }
-      let(:failover_election_strategy) { 'sql' }
+      let(:failover_election_strategy) { 'local' }
       let(:failover_read_only_after_failover) { true }
       let(:database_host) { 'pg.internal' }
       let(:database_port) { 1234 }
@@ -155,9 +157,7 @@ describe 'praefect' do
         expect(chef_run).to render_file(config_path)
           .with_content("read_only_after_failover = true")
         expect(chef_run).to render_file(config_path)
-          .with_content(%r{\[failover\]\s+enabled = true\s+election_strategy = 'sql'\s+read_only_after_failover = true})
-        expect(chef_run).to render_file(config_path)
-          .with_content(%r{election_strategy = '#{failover_election_strategy}'})
+          .with_content(%r{\[failover\]\s+enabled = true\s+election_strategy = 'local'\s+read_only_after_failover = true})
         expect(chef_run).to render_file(config_path)
           .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
 
