@@ -478,7 +478,7 @@ dependency_scanning:
     - mongod > /dev/null 2>&1 &
     - sleep 10
     - mongorestore /dump
-    - python3 /app/sbin/db_updater.py -v
+    # - python3 /app/sbin/db_updater.py -v
     - python3 /app/web/index.py > /dev/null 2>&1 &
     - sleep 10
     - manifest=version-manifest.json
