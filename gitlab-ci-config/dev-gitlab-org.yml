@@ -465,7 +465,7 @@ create_omnibus_manifest:
       - version-manifest.json
 
 dependency_scanning:
-  image: "registry.gitlab.com/joernchen/cve-search:latest"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-cve-search"
   stage: package-and-image
   services:
     - name: mongo:bionic
@@ -478,10 +478,8 @@ dependency_scanning:
     - wget https://gitlab.com/joernchen/gitlab-depscan/-/raw/js/add-data/data/mongo_dump.tar.gz
     - mkdir /dump
     - tar --strip-components=1 -C /dump -xvf mongo_dump.tar.gz
-    - "printf '[Mongo]\nHost: mongo\n' > /app/etc/configuration.ini"
-    # - mongod > /dev/null 2>&1 &
-    # - sleep 10
     - mongorestore --host mongo /dump
+    - "printf '[Mongo]\nHost: mongo\n' > /app/etc/configuration.ini"
     - python3 /app/sbin/db_updater.py -v
     - python3 /app/web/index.py > /dev/null 2>&1 &
     - sleep 10
