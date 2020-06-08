@@ -93,7 +93,7 @@ node.default['gitlab']['gitlab-pages']['env'] = {
 }
 
 node.default['gitlab']['gitlab-pages']['env']['http_proxy'] = node['gitlab']['gitlab-pages']['http_proxy'] \
-	  unless node['gitlab']['gitlab-pages']['http_proxy'].nil?
+  unless node['gitlab']['gitlab-pages']['http_proxy'].nil?
 
 env_dir env_directory do
   variables node['gitlab']['gitlab-pages']['env']
