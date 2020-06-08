@@ -1404,9 +1404,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Listen for requests forwarded by reverse proxy
 # gitlab_pages['listen_proxy'] = "localhost:8090"
 
-##! Configure GitLab Pages to use an HTTP Proxy
-# gitlab_pages['http_proxy'] = "http://example:8080"
-
 # gitlab_pages['redirect_http'] = true
 # gitlab_pages['use_http2'] = true
 # gitlab_pages['dir'] = "/var/opt/gitlab/gitlab-pages"

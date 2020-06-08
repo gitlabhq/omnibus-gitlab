@@ -148,6 +148,7 @@ describe 'gitlab::gitlab-pages' do
           gitlab_client_jwt_expiry: "30s",
           env: {
             GITLAB_CONTINUOUS_PROFILING: "stackdriver?service=gitlab-pages",
+            http_proxy: "http://example:8081/"
           },
         }
       )
@@ -162,6 +163,8 @@ describe 'gitlab::gitlab-pages' do
         .with_content('stackdriver?service=gitlab-pages')
       expect(chef_run).to render_file(File.join(env_dir, "SSL_CERT_FILE"))
         .with_content('/opt/gitlab/embedded/ssl/certs/cacert.pem')
+      expect(chef_run).to render_file(File.join(env_dir, "http_proxy"))
+        .with_content('http://example:8081/')
     end
 
     it 'correctly renders the pages service run file' do
@@ -213,6 +216,23 @@ describe 'gitlab::gitlab-pages' do
 
     it 'deletes old admin.secret file' do
       expect(chef_run).to delete_file("/var/opt/gitlab/pages/admin.secret")
+    end
+  end
+
+  context 'with a deprecated http_proxy value specified' do
+    let(:env_dir) { '/opt/gitlab/etc/gitlab-pages/env' }
+
+    before do
+      stub_gitlab_rb(
+        external_url: 'https://gitlab.example.com',
+        pages_external_url: 'https://pages.example.com',
+        gitlab_pages: { http_proxy: "http://example:8080" }
+      )
+    end
+
+    it 'renders the env dir files' do
+      expect(chef_run).to render_file(File.join(env_dir, "http_proxy"))
+        .with_content('http://example:8080')
     end
   end
 
@@ -276,20 +296,6 @@ describe 'gitlab::gitlab-pages' do
 
     it 'does not render the Pages config file' do
       expect(chef_run).not_to render_file("/var/opt/gitlab/pages/.gitlab_pages_config")
-    end
-  end
-
-  context 'with a http proxy value specified' do
-    before do
-      stub_gitlab_rb(
-        external_url: 'https://gitlab.example.com',
-        pages_external_url: 'https://pages.example.com',
-        gitlab_pages: { http_proxy: "http://example:8080" }
-      )
-    end
-
-    it 'correctly renders the pages service run file' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{http_proxy="http://example:8080"})
     end
   end
 
