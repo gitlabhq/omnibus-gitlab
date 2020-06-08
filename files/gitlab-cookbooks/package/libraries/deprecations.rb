@@ -43,10 +43,10 @@ module Gitlab
             note: 'Use client_output_buffer_limit_replica instead'
           },
           {
-           config_keys: %w(gitlab gitlab-pages http_proxy),
-           deprecation: '13.1',
-           removal: '14.0',
-           note: "Set gitlab_pages['env']['http_proxy'] instead. See https://docs.gitlab.com/omnibus/settings/environment-variables.html"
+            config_keys: %w(gitlab gitlab-pages http_proxy),
+            deprecation: '13.1',
+            removal: '14.0',
+            note: "Set gitlab_pages['env']['http_proxy'] instead. See https://docs.gitlab.com/omnibus/settings/environment-variables.html"
           }
         ]
 
