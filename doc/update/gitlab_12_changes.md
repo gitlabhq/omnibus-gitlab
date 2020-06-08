@@ -145,7 +145,7 @@ to make sure your web server settings carry over correctly.
 NOTE: **NOTE:**
 PostgreSQL 9.6 and PostgreSQL 10 will be removed from the Omnibus package in the next release: GitLab 13.0. The minimum
 supported PostgreSQL version will be 11. In order to upgrade to GitLab 13.0, you will need to be upgrading from 12.10, and
-already using a PostgreSQL 11 database.
+already using a PostgreSQL 11 database. For more information, please see which [PostgreSQL versions are shipped with an Omnibus install](../package-information/postgresql_versions.md).
 
 PostgreSQL will automatically be upgraded to 11.x except for the following cases:
 
