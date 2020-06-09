@@ -473,9 +473,9 @@ dependency_scanning:
   variables:
     TERM: xterm-256color
     REPORT_PATH: ./
-  before_script: []
-  script:
-    - wget https://gitlab.com/joernchen/gitlab-depscan/-/raw/js/add-data/data/mongo_dump.tar.gz
+  before_script:
+    - apk add --no-cache bats
+    - wget https://storage.googleapis.com/gitlab-depscan/mongo_dump.tar.gz
     - mkdir /dump
     - tar --strip-components=1 -C /dump -xvf mongo_dump.tar.gz
     - mongorestore --host mongo /dump
@@ -483,8 +483,8 @@ dependency_scanning:
     - python3 /app/sbin/db_updater.py -v
     - python3 /app/web/index.py > /dev/null 2>&1 &
     - sleep 10
-    - manifest=version-manifest.json
-    - curl -sSL https://gitlab.com/joernchen/gitlab-depscan/-/raw/js/add-data/gitlab-depscan.sh|bash -s $manifest
+  script:
+    - curl -sSL https://gitlab.com/joernchen/gitlab-depscan/-/raw/js/add-data/gitlab-depscan.sh|bash -s version-manifest.json
   needs:
     - create_omnibus_manifest
   artifacts:
