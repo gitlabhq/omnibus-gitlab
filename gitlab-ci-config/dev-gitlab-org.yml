@@ -484,7 +484,7 @@ dependency_scanning:
     - python3 /app/web/index.py > /dev/null 2>&1 &
     - sleep 10
   script:
-    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/-/raw/js/use-localhost/gitlab-depscan.sh|bash -s version-manifest.json
+    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s version-manifest.json
   needs:
     - create_omnibus_manifest
   artifacts:
