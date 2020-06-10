@@ -476,7 +476,6 @@ dependency_scanning:
     TERM: xterm-256color
     REPORT_PATH: ./
   before_script:
-    - apk add --no-cache bats
     - wget https://storage.googleapis.com/gitlab-depscan/mongo_dump.tar.gz
     - mkdir /dump
     - tar --strip-components=1 -C /dump -xvf mongo_dump.tar.gz
