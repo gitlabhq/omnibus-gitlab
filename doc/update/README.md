@@ -1095,17 +1095,19 @@ does not support.
 This section contains general information on how to revert to an earlier version
 of a package.
 
-NOTE: **Note:**
-It is always a good idea to have a backup created under the version you
-are reverting to.
+CAUTION: **Warning:**
+You must at least have a database backup created under the version you are
+downgrading to. Ideally, you should have a
+[full backup archive](https://docs.gitlab.com/ee/raketasks/backup_restore.html#back-up-gitlab)
+on hand.
 
 These steps consist of:
 
 - Stopping GitLab
 - Installing the old package
 - Reconfiguring GitLab
+- Restoring the backup
 - Starting GitLab
-- (optional) Restoring the backup in case something went wrong
 
 Steps:
 
@@ -1148,17 +1150,17 @@ Steps:
    sudo gitlab-ctl reconfigure
    ```
 
-1. Start GitLab:
-
-   ```shell
-   sudo gitlab-ctl start
-   ```
-
-1. (optional) Restore your backup if something went wrong:
+1. Restore your backup:
 
    ```shell
    sudo gitlab-ctl stop
    sudo gitlab-backup restore BACKUP=12345 # where 12345 is your backup timestamp
+   sudo gitlab-ctl start
+   ```
+
+1. Start GitLab:
+
+   ```shell
    sudo gitlab-ctl start
    ```
 
