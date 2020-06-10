@@ -36,6 +36,7 @@ end
 %w(
   consul
   repmgr
+  patroni
 ).each do |service|
   if node[service]['enable']
     include_recipe "#{service}::enable"

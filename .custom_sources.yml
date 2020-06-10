@@ -124,3 +124,6 @@ ohai:
 redis:
   remote: "git@dev.gitlab.org:omnibus-mirror/redis.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/redis.git"
+psycopg2:
+  remote: "git@dev.gitlab.org:omnibus-mirror/psycopg2.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/psycopg2.git"

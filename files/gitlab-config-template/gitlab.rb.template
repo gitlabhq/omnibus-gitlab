@@ -938,6 +938,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['enable'] = true
 # postgresql['listen_address'] = nil
 # postgresql['port'] = 5432
+
+## Only used when Patroni is enabled. This is the port that PostgreSQL responds to other
+## cluster members. This port is used by Patroni to advertize the PostgreSQL connection
+## endpoint to the cluster. By default it is the same as postgresql['port'].
+# postgresql['connect_port'] = 5432
+
 # postgresql['data_dir'] = "/var/opt/gitlab/postgresql/data"
 
 ##! **recommend value is 1/4 of total RAM, up to 14GB.**
@@ -2349,6 +2355,63 @@ external_url 'GENERATED_EXTERNAL_URL'
 # repmgr['master_response_timeout'] = 60
 # repmgr['daemon'] = true
 # repmgrd['enable'] = true
+
+################################################################################
+# Patroni (EE only)
+#
+# NOTICE: Patroni is an experimental feature and subject to change.
+#
+################################################################################
+# patroni['enable'] = false
+
+# patroni['dir'] = '/var/opt/gitlab/patroni'
+# patroni['data_dir'] = '/var/opt/gitlab/patroni/data'
+# patroni['ctl_command'] = '/opt/gitlab/embedded/bin/patronictl'
+
+# patroni['scope'] = 'gitlab-postgresql-ha'
+# patroni['name'] = nil
+
+# patroni['log_directory'] = '/var/log/gitlab/patroni'
+# patroni['log_level'] = 'INFO'
+
+# patroni['consul']['url'] = 'http://127.0.0.1:8500'
+# patroni['consul']['service_check_interval'] = '10s'
+# patroni['consul']['register_service'] = false
+# patroni['consul']['checks'] = []
+
+## Bootstrap settings
+# patroni['loop_wait'] = 10
+# patroni['ttl'] = 30
+# patroni['retry_timeout'] = 10
+# patroni['maximum_lag_on_failover'] = 1_048_576
+# patroni['max_timelines_history'] = 0
+# patroni['master_start_timeout'] = 300
+
+## PostgreSQL configuration override
+# patroni['postgresql']['wal_level'] = 'replica'
+# patroni['postgresql']['hot_standby'] = 'on'
+# patroni['postgresql']['wal_keep_segments'] = 8
+# patroni['postgresql']['max_wal_senders'] = 5
+# patroni['postgresql']['max_replication_slots'] = 5
+# patroni['postgresql']['checkpoint_timeout'] = 30
+
+# patroni['use_pg_rewind'] = false
+# patroni['use_slots'] = true
+
+## The address and port that Patroni API binds to and listens on.
+# patroni['listen_address'] = nil
+# patroni['port'] = '8008'
+
+## The address of the Patroni node that is advertized to other cluster
+## members to communicate with its API and PostgreSQL. If it is not specified,
+## it tries to use the first available private IP and falls back to the default
+## network interface.
+# patroni['connect_address'] = nil
+
+## The port that Patroni API responds to other cluster members. This port is
+## advertized and by default is the same as patroni['port'].
+# patroni['connect_port'] = '8008'
+
 
 ################################################################################
 # Consul (EEP only)

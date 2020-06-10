@@ -48,6 +48,7 @@ module Gitlab
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul')
+  attribute('patroni').use { Patroni }
   attribute('gitaly').use { Gitaly }
   attribute('praefect').use { Praefect }
   attribute('mattermost',  priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box

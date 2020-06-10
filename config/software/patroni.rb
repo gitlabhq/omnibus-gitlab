@@ -1,4 +1,5 @@
-# Copyright:: Copyright (c) 2017 GitLab Inc.
+#
+# Copyright:: Copyright (c) 2020 GitLab Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +15,22 @@
 # limitations under the License.
 #
 
-module PostgresRole
-  def self.load_role
-    return unless Gitlab['postgres_role']['enable']
+name 'patroni'
+default_version '1.6.4'
 
-    Gitlab['repmgr']['enable'] = true if !Gitlab['patroni']['enable'] && Gitlab['repmgr']['enable'].nil?
-    Services.enable_group('postgres_role')
-  end
+license 'MIT'
+license_file 'LICENSE'
+
+skip_transitive_dependency_licensing true
+
+dependency 'python3'
+dependency 'postgresql'
+dependency 'psycopg2'
+
+build do
+  env = with_standard_compiler_flags(with_embedded_path)
+
+  patch source: "add-license-file.patch"
+
+  command "#{install_dir}/embedded/bin/pip3 install patroni[consul]==#{version}", env: env
 end
