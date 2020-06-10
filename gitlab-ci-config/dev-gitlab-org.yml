@@ -458,6 +458,8 @@ create_omnibus_manifest:
     TERM: xterm-256color
   script:
     - bundle exec omnibus manifest gitlab -l nothing 2> /dev/null > version-manifest.json
+  <<: *dev-except-branches
+  <<: *except-auto-deploy-tag
   cache: *tag-cache
   artifacts:
     expire_in: 7 days
@@ -485,6 +487,8 @@ dependency_scanning:
     - sleep 10
   script:
     - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s version-manifest.json
+  <<: *dev-except-branches
+  <<: *except-auto-deploy-tag
   needs:
     - create_omnibus_manifest
   artifacts:
