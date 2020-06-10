@@ -3,7 +3,7 @@ require 'chef_helper'
 describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(unicorn_service unicorn_config runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04.json'
     )
     runner.converge('gitlab::default')
@@ -101,7 +101,7 @@ end
 describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(unicorn_service unicorn_config runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04-no-run-tmpfs.json'
     )
     runner.converge('gitlab::default')
@@ -131,7 +131,7 @@ end
 describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(unicorn_service unicorn_config runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04-docker.json'
     )
     runner.converge('gitlab::default')
@@ -161,7 +161,7 @@ end
 describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(unicorn_service unicorn_config runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04-more-cpus.json'
     )
     runner.converge('gitlab::default')
