@@ -19,6 +19,7 @@ default['postgresql']['sql_user'] = "gitlab"
 default['postgresql']['sql_user_password'] = nil
 default['postgresql']['sql_mattermost_user'] = "gitlab_mattermost"
 default['postgresql']['port'] = 5432
+default['postgresql']['connect_port'] = nil
 # Postgres allow multi listen_address, comma-separated values.
 # If used, first address from the list will be use for connection
 default['postgresql']['listen_address'] = nil

@@ -77,6 +77,9 @@ local   all         all                               peer map=gitlab
 
 <% @trust_auth_cidr_addresses.each do |cidr| %>
 host    all         all         <%= cidr %>           trust
+  <% if @sql_replication_user %>
+host    replication <%= @sql_replication_user %> <%= cidr %>     trust
+  <% end %>
 <% end %>
 
 <% @md5_auth_cidr_addresses.each do |cidr| %>

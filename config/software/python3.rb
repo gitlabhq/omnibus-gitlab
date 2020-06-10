@@ -32,6 +32,7 @@ dependency 'openssl'
 dependency 'bzip2'
 dependency 'libffi'
 dependency 'liblzma'
+dependency 'libyaml'
 
 license 'Python-2.0'
 license_file 'LICENSE'

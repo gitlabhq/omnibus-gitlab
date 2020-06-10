@@ -50,6 +50,7 @@ by default:
 | <a name="mattermost-web"></a>      Mattermost          | No            | Port             | X           | 80 or 443                              |
 | <a name="pgbouncer"></a>           PgBouncer           | No            | Port             | X           | 6432                                   |
 | <a name="consul"></a>              Consul              | No            | Port             | X           | 8300, 8500                             |
+| <a name="patroni"></a>             Patroni             | No            | Port             | X           | 8008                                   |
 
 Legend:
 
