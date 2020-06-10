@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.0.6 (2020-06-10)
+
+- No changes.
+
 ## 13.0.5 (2020-06-04)
 
 - No changes.
@@ -109,6 +113,10 @@ omnibus-gitlab repository.
 - Update CA certificate bundle. !4230
 - Update Mattermost to 5.22.2. (Harrison Healey)
 
+
+## 12.10.11 (2020-06-10)
+
+- No changes.
 
 ## 12.10.8 (2020-05-28)
 
@@ -236,6 +244,10 @@ omnibus-gitlab repository.
 - Upgrade Mattermost to 5.21.0.
 - Upgrade to Git 2.26.1.
 
+
+## 12.9.10 (2020-06-10)
+
+- No changes.
 
 ## 12.9.9 (2020-06-03)
 
