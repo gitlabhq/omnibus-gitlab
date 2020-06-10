@@ -3,10 +3,27 @@ require 'net/http'
 require 'optparse'
 
 module Patroni
-  ClientError = Class.new(StandardError)
+  USAGE ||= <<~EOS.freeze
+    Usage:
+      gitlab-ctl patroni [options] command [options]
+
+    GLOBAL OPTIONS:
+      -h, --help      Usage help
+      -q, --quiet     Silent or quiet mode
+      -v, --verbose   Verbose or debug mode
+
+    COMMANDS:
+      bootstrap       Bootstraps the node
+      check-leader    Check if the current node is the Patroni leader
+      check-replica   Check if the current node is a Patroni replica
+      members         List the cluster members
+      pause           Disable auto failover
+      resume          Resume auto failover
+      failover        Failover to a replica
+      switchover      Switchover to a replica
+  EOS
 
   def self.parse_options(args)
-    # throw away arguments that initiated this command
     loop do
       break if args.shift == 'patroni'
     end
@@ -22,13 +39,15 @@ module Patroni
         options[:verbose] = v
       end
       opts.on('-h', '--help', 'Usage help') do
-        warn usage
-        Kernel.exit 1
+        Utils.warn_and_exit usage
       end
     end
 
     commands = {
       'bootstrap' => OptionParser.new do |opts|
+        opts.on('-h', '--help', 'Prints this help') do
+          Utils.warn_and_exit opts
+        end
         opts.on('--scope=SCOPE', 'Name of the cluster to be bootstrapped') do |scope|
           options[:scope] = scope
         end
@@ -36,42 +55,79 @@ module Patroni
           options[:datadir] = datadir
         end
       end,
-      'check-leader' => OptionParser.new,
-      'check-replica' => OptionParser.new,
+      'check-leader' => OptionParser.new do |opts|
+        opts.on('-h', '--help', 'Prints this help') do
+          Utils.warn_and_exit opts
+        end
+      end,
+      'check-replica' => OptionParser.new do |opts|
+        opts.on('-h', '--help', 'Prints this help') do
+          Utils.warn_and_exit opts
+        end
+      end,
+      'members' => OptionParser.new do |opts|
+        opts.on('-h', '--help', 'Prints this help') do
+          Utils.warn_and_exit opts
+        end
+      end,
+      'pause' => OptionParser.new do |opts|
+        opts.on('-h', '--help', 'Prints this help') do
+          Utils.warn_and_exit opts
+        end
+        opts.on('-w', '--wait', 'Wait until pause is applied on all nodes') do |w|
+          options[:wait] = w
+        end
+      end,
+      'resume' => OptionParser.new do |opts|
+        opts.on('-h', '--help', 'Prints this help') do
+          Utils.warn_and_exit opts
+        end
+        opts.on('-w', '--wait', 'Wait until pause is cleared on all nodes') do |w|
+          options[:wait] = w
+        end
+      end,
+      'failover' => OptionParser.new do |opts|
+        opts.on('-h', '--help', 'Prints this help') do
+          Utils.warn_and_exit opts
+        end
+        opts.on('--master [MASTER]', 'The name of the current master') do |m|
+          options[:master] = m
+        end
+        opts.on('--candidate [CANDIDATE]', 'The name of the candidate') do |c|
+          options[:candidate] = c
+        end
+      end,
+      'switchover' => OptionParser.new do |opts|
+        opts.on('-h', '--help', 'Prints this help') do
+          Utils.warn_and_exit opts
+        end
+        opts.on('--master [MASTER]', 'The name of the current master') do |m|
+          options[:master] = m
+        end
+        opts.on('--candidate [CANDIDATE]', 'The name of the candidate') do |c|
+          options[:candidate] = c
+        end
+        opts.on('--scheduled [SCHEDULED]', 'Schedule of switchover') do |t|
+          options[:scheduled] = t
+        end
+      end
     }
 
     global.order! args
-
     command = args.shift
 
-    raise OptionParser::ParseError, "unspecified Patroni command" \
+    raise OptionParser::ParseError, "Patroni command is not specified." \
       if command.nil? || command.empty?
 
-    raise OptionParser::ParseError, "unknown Patroni command: #{command}" \
+    raise OptionParser::ParseError, "Unknown Patroni command: #{command}" \
       unless commands.key? command
 
     options[:command] = command
     commands[command].order! args
-
     options
   end
 
   def self.usage
-    <<-USAGE
-
-Usage:
-  gitlab-ctl patroni [options] command [options]
-
-  GLOBAL OPTIONS:
-    -h, --help      Usage help
-    -q, --quiet     Silent or quiet mode
-    -v, --verbose   Verbose or debug mode
-
-  COMMANDS:
-    bootstrap       Bootstraps the node
-    check-leader    Check if the current node is the Patroni leader
-    check-replica   Check if the current node is a Patroni replica
-
     USAGE
   end
 
@@ -91,6 +147,53 @@ Usage:
   def self.replica?(options)
     Client.new.replica?
   end
+
+  def self.members(options)
+    Utils.patronictl('list')
+  end
+
+  def self.pause(options)
+    command = %w(pause)
+    command << '-w' if options[:wait]
+    Utils.patronictl(command)
+  end
+
+  def self.resume(options)
+    command = %w(resume)
+    command << '-w' if options[:wait]
+    Utils.patronictl(command)
+  end
+
+  def self.failover(options)
+    command = %w(failover)
+    command << "--master #{options[:master]}" if options[:master]
+    command << "--candidate #{options[:candidate]}" if options[:candidate]
+    Utils.patronictl(command)
+  end
+
+  def self.switchover(options)
+    command = %w(switchover)
+    command << "--master #{options[:master]}" if options[:master]
+    command << "--candidate #{options[:candidate]}" if options[:candidate]
+    command << "--scheduled #{options[:scheduled]}" if options[:scheduled]
+    Utils.patronictl(command)
+  end
+
+  class Utils
+    def self.patronictl(cmd, user = 'root')
+      attributes = GitlabCtl::Util.get_public_node_attributes
+      GitlabCtl::Util.run_command(
+        "/opt/gitlab/embedded/bin/patronictl -c #{attributes['patroni']['config_dir']}/patroni.yaml #{cmd.respond_to?(:join) ? cmd.join(' ') : cmd.to_s}",
+        user: user)
+    end
+
+    def self.warn_and_exit(msg, code = 0)
+      Kernel.warn msg
+      Kernel.exit(code)
+    end
+  end
+
+  ClientError = Class.new(StandardError)
 
   class Client
     attr_accessor :uri
