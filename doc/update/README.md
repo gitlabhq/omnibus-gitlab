@@ -232,13 +232,13 @@ Verify that you can upgrade with no downtime by checking the
 
 If you meet all the requirements above, follow these instructions in order. There are three sets of steps, depending on your deployment type:
 
-| Deployment type                                                 | Description                                       |
-| --------------------------------------------------------------- | ------------------------------------------------  |
-| [Single-node](#single-node-deployment)                          | GitLab CE/EE on a single node                     |
-| [Multi-node / PostgreSQL HA](#using-postgresql-ha)              | GitLab CE/EE using HA architecture for PostgreSQL |
-| [Multi-node / Redis HA](#using-redis-ha-using-sentinel)         | GitLab CE/EE using HA architecture for Redis      |
-| [Geo](#geo-deployment)                                          | GitLab EE with Geo enabled                        |
-| [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo) | GitLab CE/EE on multiple nodes                    |
+| Deployment type                                                              | Description                                       |
+| ---------------------------------------------------------------------------- | ------------------------------------------------  |
+| [Single-node](#single-node-deployment)                                       | GitLab CE/EE on a single node                     |
+| [Multi-node / PostgreSQL HA](#using-postgresql-ha)                           | GitLab CE/EE using HA architecture for PostgreSQL |
+| [Multi-node / Redis HA](#using-redis-ha-using-sentinel-premium-only)         | GitLab CE/EE using HA architecture for Redis      |
+| [Geo](#geo-deployment-premium-only)                                          | GitLab EE with Geo enabled                        |
+| [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo-premium-only) | GitLab CE/EE on multiple nodes                    |
 
 Each type of deployment will require that you hot reload the `puma` (or `unicorn`) and `sidekiq` processes on all nodes running these
 services after you've upgraded. The reason for this is that those processes each load the GitLab Rails application which reads and loads
@@ -579,7 +579,7 @@ sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
 setting `gitlab_rails['auto_migrate'] = false` in
 `/etc/gitlab/gitlab.rb` after you've completed these steps.
 
-#### Using Redis HA (using Sentinel)
+#### Using Redis HA (using Sentinel) **(PREMIUM ONLY)**
 
 Package upgrades may involve version updates to the bundled Redis service. On
 instances using [Redis HA](https://docs.gitlab.com/ee/administration/high_availability/redis.html),
@@ -676,7 +676,7 @@ failover is complete, we can go ahead and upgrade the original primary node.
 Install the package for new version and follow regular package upgrade
 procedure.
 
-### Geo deployment
+### Geo deployment **(PREMIUM ONLY)**
 
 NOTE: **Note:**
 The order of steps is important. While following these steps, make
@@ -798,7 +798,7 @@ sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
 setting `gitlab_rails['auto_migrate'] = false` in
 `/etc/gitlab/gitlab.rb` after you've completed these steps.
 
-### Multi-node / HA deployment with Geo
+### Multi-node / HA deployment with Geo **(PREMIUM ONLY)**
 
 This section describes the steps required to upgrade a multi-node / HA
 deployment with Geo. Some steps must be performed on a particular node. This

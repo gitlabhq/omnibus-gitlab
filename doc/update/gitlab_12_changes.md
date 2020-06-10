@@ -116,7 +116,7 @@ ones at the earliest.
 The Redis version packaged with Omnibus GitLab has been updated to Redis 5.0.7.
 You will need to restart Redis after the upgrade so that the new version will be
 active. To restart Redis, run `sudo gitlab-ctl restart redis`. If your instance
-has Redis HA with Sentinel, follow the upgrade steps documented in [Updating GitLab installed with the Omnibus GitLab package](README.md#using-redis-ha-using-sentinel)
+has Redis HA with Sentinel, follow the upgrade steps documented in [Updating GitLab installed with the Omnibus GitLab package](README.md#using-redis-ha-using-sentinel-premium-only)
 to avoid downtime.
 
 Unicorn memory limits should also be adjusted to the following values:
