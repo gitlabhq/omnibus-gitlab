@@ -37,6 +37,11 @@ gitlab_workhorse['env'] = {
     "https_proxy" => "http://USERNAME:PASSWORD@example.com:8080"
 }
 
+gitlab_pages['env'] = {
+    "http_proxy" => "http://USERNAME:PASSWORD@example.com:8080",
+    "https_proxy" => "http://USERNAME:PASSWORD@example.com:8080"
+}
+
 # If you use the docker registry
 registry['env'] = {
     "http_proxy" => "http://USERNAME:PASSWORD@example.com:8080",
