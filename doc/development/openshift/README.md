@@ -29,7 +29,7 @@ The first thing you need to interact with OpenShift Origin, are the `oc` client 
 
 Next you need to setup an OpenShift Origin environment. To setup the environment you can use the production installer
 on a cloud machine, use minishift on your local machine (uses kvm or xhyve), or setup an instance
-using Docker for the master, and your own machine as the slave using `oc cluster up`
+using Docker for the primary, and your own machine as the secondary using `oc cluster up`
 
 ### Minishift
 
@@ -138,7 +138,7 @@ If you have Docker installed, you can setup OpenShift Origin on your local machi
 
 ### Production Ansible Installer
 
-You can use OpenShift's Ansible installer to set up OpenShift masters and slaves in Digital Ocean. Follow the [advanced install docs](https://docs.openshift.com/container-platform/3.7/install_config/install/advanced_install.html).
+You can use OpenShift's Ansible installer to set up OpenShift primaries and secondaries in Digital Ocean. Follow the [advanced install docs](https://docs.openshift.com/container-platform/3.7/install_config/install/advanced_install.html).
 
 You can find the Ansible playbooks at: <https://github.com/openshift/openshift-ansible>
 
