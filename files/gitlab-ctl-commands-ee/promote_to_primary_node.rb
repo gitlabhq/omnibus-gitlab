@@ -37,6 +37,10 @@ def get_ctl_options
     opts.on('-m', '--skip-preflight-checks', 'Do not ask for confirmation if manual checks ran') do |m|
       options[:skip_preflight_checks] = m
     end
+
+    opts.on('-f', '--force', 'Proceed even if preflight checks fail') do |f|
+      options[:force] = f
+    end
   end.parse!(ARGV.dup)
 
   options

@@ -23,4 +23,8 @@ describe 'gitlab-ctl promote-to-primary-node' do
   it_behaves_like 'geo promotion command accepts option',
                   '--skip-preflight-checks',
                   { skip_preflight_checks: true }
+
+  it_behaves_like 'geo promotion command accepts option',
+                  '--force',
+                  { force: true }
 end
