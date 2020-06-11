@@ -16,7 +16,9 @@ exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
     -listenUmask <%= node['gitlab']['gitlab-workhorse']['listen_umask'] %> \
     -listenAddr <%= node['gitlab']['gitlab-workhorse']['listen_addr'] %> \
     -authBackend <%= node['gitlab']['gitlab-workhorse']['auth_backend'] %><%= node['gitlab']['gitlab-workhorse']['relative_url'] %> \
-    -authSocket <%= node['gitlab']['gitlab-workhorse']['auth_socket'] %> \
+    <% if Gitlab['gitlab_workhorse']['auth_socket'] %>
+    -authSocket <%= Gitlab['gitlab_workhorse']['auth_socket'] %> \
+    <% end %>
     <% if node['gitlab']['actioncable']['enable'] %>
     -cableBackend <%= node['gitlab']['gitlab-workhorse']['cable_backend'] %><%= node['gitlab']['gitlab-workhorse']['relative_url'] %> \
     -cableSocket <%= node['gitlab']['gitlab-workhorse']['cable_socket'] %> \

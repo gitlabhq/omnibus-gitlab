@@ -17,9 +17,27 @@
 
 module GitlabWorkhorse
   class << self
+    def parse_variables
+      Gitlab['gitlab_workhorse']['auth_socket'] = nil if !auth_socket_specified? && auth_backend_specified?
+    end
+
     def parse_secrets
       # gitlab-workhorse expects exactly 32 bytes, encoded with base64
       Gitlab['gitlab_workhorse']['secret_token'] ||= SecureRandom.base64(32)
+    end
+
+    private
+
+    def auth_socket_specified?
+      auth_socket = Gitlab['gitlab_workhorse']['auth_socket']
+
+      !auth_socket&.empty? && auth_socket != "''"
+    end
+
+    def auth_backend_specified?
+      auth_backend = Gitlab['gitlab_workhorse']['auth_backend']
+
+      !auth_backend&.empty? && auth_backend != "''"
     end
   end
 end
