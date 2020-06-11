@@ -32,7 +32,7 @@ end
 # This indirection will be removed once sidekiq-cluster becomes the only way to
 # start sidekiq in omnibus: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/240
 runit_service service do
-  down node['gitlab']['sidekiq-cluster']['ha']
+  start_down node['gitlab']['sidekiq-cluster']['ha']
   template_name 'sidekiq-cluster'
   options({
     user: account_helper.gitlab_user,
@@ -48,6 +48,13 @@ if node['gitlab']['bootstrap']['enable']
   execute "/opt/gitlab/bin/gitlab-ctl start sidekiq-cluster" do
     retries 20
   end
+end
+
+consul_service service do
+  action Prometheus.service_discovery_action
+  ip_address node['gitlab'][service]['listen_address']
+  port node['gitlab'][service]['listen_port']
+  reload_service false unless node['consul']['enable']
 end
 
 if service != 'sidekiq-cluster'

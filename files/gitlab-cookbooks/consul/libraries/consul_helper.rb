@@ -45,4 +45,27 @@ class ConsulHelper
     end
     config.to_json
   end
+
+  def postgresql_service_config
+    return node['consul']['service_config']['postgresql'] || {} unless node['consul']['service_config'].nil?
+
+    ha_solution = Gitlab['patroni']['enable'] ? 'patroni' : 'repmgr'
+    cfg = {
+      'service' => {
+        'name' => node['consul']['internal']['postgresql_service_name'],
+        'address' => '',
+        'port' => node['postgresql']['port'],
+        'check' => {
+          'id': "service:#{node['consul']['internal']['postgresql_service_name']}",
+          'interval' => node['consul']['internal']['postgresql_service_check_interval'],
+          'status': node['consul']['internal']['postgresql_service_check_status'],
+          'args': node['consul']['internal']["postgresql_service_check_args_#{ha_solution}"]
+        }
+      }
+    }
+
+    cfg['watches'] = node['consul']['internal']['postgresql_watches_repmgr'] if ha_solution == 'repmgr'
+
+    cfg
+  end
 end

@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Working with public_attributes.json
 
 Chef stores a copy of a nodes attributes at the end of a reconfigure in `/opt/gitlab/embedded/nodes/$NODE_NAME.json`. Due to the sensitive nature of some of the attributes, it is only readable by the root user. To work around this, we've created a file (defaults to `/var/opt/gitlab/public_attributes.json`) which contains a set of attributes we've whitelisted for use of non-root services. This file is recreated on every run of `gitlab-ctl reconfigure`.

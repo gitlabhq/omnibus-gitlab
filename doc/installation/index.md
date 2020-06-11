@@ -1,4 +1,7 @@
 ---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 comments: false
 ---
 
@@ -40,7 +43,7 @@ For a complete list of settings, see the [README](../README.md#configuring) file
   Set up the Prometheus monitoring included in the Omnibus GitLab package.
 - [GitLab High Availability Roles](../roles/README.md).
 
-## Using docker image
+## Using Docker image
 
-You can also use the docker images provided by GitLab to install and configure a GitLab instance.
+You can also use the Docker images provided by GitLab to install and configure a GitLab instance.
 Check the [documentation](../docker/README.md) to know more.

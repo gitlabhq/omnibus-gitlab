@@ -39,7 +39,7 @@ describe 'monitoring::grafana' do
   end
 
   context 'when grafana is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/grafana/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/grafana/log/config') }
 
     before do
       stub_gitlab_rb(

@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # DNS settings
 
 While it is possible to run a GitLab instance using only IP addresses, it can be beneficial to use DNS for interacting with a GitLab instance from remote nodes. Depending on the features you want to take advantage of, multiple DNS entries may be necessary. Any of these DNS entries should be of type A, AAAA, or CNAME. This depends on the underlying architecture of the instance you are using.

@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Updating GitLab installed with the Omnibus GitLab package
 
 See the [upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
@@ -226,13 +232,13 @@ Verify that you can upgrade with no downtime by checking the
 
 If you meet all the requirements above, follow these instructions in order. There are three sets of steps, depending on your deployment type:
 
-| Deployment type                                                 | Description                                       |
-| --------------------------------------------------------------- | ------------------------------------------------  |
-| [Single-node](#single-node-deployment)                          | GitLab CE/EE on a single node                     |
-| [Multi-node / PostgreSQL HA](#using-postgresql-ha)              | GitLab CE/EE using HA architecture for PostgreSQL |
-| [Multi-node / Redis HA](#using-redis-ha-using-sentinel)         | GitLab CE/EE using HA architecture for Redis      |
-| [Geo](#geo-deployment)                                          | GitLab EE with Geo enabled                        |
-| [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo) | GitLab CE/EE on multiple nodes                    |
+| Deployment type                                                              | Description                                       |
+| ---------------------------------------------------------------------------- | ------------------------------------------------  |
+| [Single-node](#single-node-deployment)                                       | GitLab CE/EE on a single node                     |
+| [Multi-node / PostgreSQL HA](#using-postgresql-ha)                           | GitLab CE/EE using HA architecture for PostgreSQL |
+| [Multi-node / Redis HA](#using-redis-ha-using-sentinel-premium-only)         | GitLab CE/EE using HA architecture for Redis      |
+| [Geo](#geo-deployment-premium-only)                                          | GitLab EE with Geo enabled                        |
+| [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo-premium-only) | GitLab CE/EE on multiple nodes                    |
 
 Each type of deployment will require that you hot reload the `puma` (or `unicorn`) and `sidekiq` processes on all nodes running these
 services after you've upgraded. The reason for this is that those processes each load the GitLab Rails application which reads and loads
@@ -573,7 +579,7 @@ sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
 setting `gitlab_rails['auto_migrate'] = false` in
 `/etc/gitlab/gitlab.rb` after you've completed these steps.
 
-#### Using Redis HA (using Sentinel)
+#### Using Redis HA (using Sentinel) **(PREMIUM ONLY)**
 
 Package upgrades may involve version updates to the bundled Redis service. On
 instances using [Redis HA](https://docs.gitlab.com/ee/administration/high_availability/redis.html),
@@ -670,7 +676,7 @@ failover is complete, we can go ahead and upgrade the original primary node.
 Install the package for new version and follow regular package upgrade
 procedure.
 
-### Geo deployment
+### Geo deployment **(PREMIUM ONLY)**
 
 NOTE: **Note:**
 The order of steps is important. While following these steps, make
@@ -792,7 +798,7 @@ sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
 setting `gitlab_rails['auto_migrate'] = false` in
 `/etc/gitlab/gitlab.rb` after you've completed these steps.
 
-### Multi-node / HA deployment with Geo
+### Multi-node / HA deployment with Geo **(PREMIUM ONLY)**
 
 This section describes the steps required to upgrade a multi-node / HA
 deployment with Geo. Some steps must be performed on a particular node. This
@@ -1089,15 +1095,17 @@ does not support.
 This section contains general information on how to revert to an earlier version
 of a package.
 
-NOTE: **Note:**
-This guide assumes that you have a backup archive created under the version you
-are reverting to.
+CAUTION: **Warning:**
+You must at least have a database backup created under the version you are
+downgrading to. Ideally, you should have a
+[full backup archive](https://docs.gitlab.com/ee/raketasks/backup_restore.html#back-up-gitlab)
+on hand.
 
 These steps consist of:
 
-- Stop GitLab
-- Install the old package
-- Reconfigure GitLab
+- Stopping GitLab
+- Installing the old package
+- Reconfiguring GitLab
 - Restoring the backup
 - Starting GitLab
 
@@ -1106,14 +1114,10 @@ Steps:
 1. Stop GitLab:
 
    ```shell
-   # Stop GitLab and remove its supervision process
-   sudo gitlab-ctl stop puma  # or unicorn
+   sudo gitlab-ctl stop puma  # if you have Puma
+   sudo gitlab-ctl stop unicorn  # if you have Unicorn
    sudo gitlab-ctl stop sidekiq
    sudo systemctl stop gitlab-runsvdir
-   sudo systemctl disable gitlab-runsvdir
-   sudo rm /usr/lib/systemd/system/gitlab-runsvdir.service
-   sudo systemctl daemon-reload
-   sudo gitlab-ctl uninstall
    ```
 
 1. Identify the GitLab version you want to downgrade to:
@@ -1134,15 +1138,11 @@ Steps:
    # (Replace with gitlab-ce if you have GitLab FOSS installed)
 
    # Ubuntu
-   sudo apt remove gitlab-ee
    sudo apt install gitlab-ee=12.0.0-ee.0
 
    # CentOS:
-   sudo yum remove gitlab-ee
    sudo yum install gitlab-ee-12.0.0-ee.0.el7
    ```
-
-1. Prepare GitLab for receiving the backup restore.
 
 1. Reconfigure GitLab (includes database migrations):
 
@@ -1152,12 +1152,11 @@ Steps:
 
 1. Restore your backup:
 
-    ```shell
-    sudo gitlab-backup restore BACKUP=12345 # where 12345 is your backup timestamp
-    ```
-
-    NOTE: **Note**
-    For GitLab 12.1 and earlier, use `gitlab-rake gitlab:backup:restore`.
+   ```shell
+   sudo gitlab-ctl stop
+   sudo gitlab-backup restore BACKUP=12345 # where 12345 is your backup timestamp
+   sudo gitlab-ctl start
+   ```
 
 1. Start GitLab:
 

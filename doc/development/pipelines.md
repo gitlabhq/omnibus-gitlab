@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # CI Pipelines
 
 `omnibus-gitlab` CI pipeline is a moderately complex one with pipelines split
@@ -37,9 +43,9 @@ In [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab), there
 
 In [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab), there are two scheduled pipelines
 
-1. `CE nightly` - Pipeline to build nightly packages and docker images for
+1. `CE nightly` - Pipeline to build nightly packages and Docker images for
    GitLab CE
-1. `EE nightly` - Pipeline to build nightly packages and docker images for
+1. `EE nightly` - Pipeline to build nightly packages and Docker images for
    GitLab EE
 
 Other mirrors doesn't have any scheduled pipelines
@@ -63,7 +69,7 @@ This pipeline is intended to give the developers a package and an image to test
 their changes in addition to automatically doing a QA run against these
 artifacts. It also provides an option to do a QA run against an HA instance spun
 up using these artifacts, and to run a memory measurement job to measure the
-resource usage by GitLab using the docker image.
+resource usage by GitLab using the Docker image.
 
 ## CI Jobs
 
@@ -139,7 +145,7 @@ tag pipelines.
 
 This is a manual job which when played triggers a pipeline in the [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) to
 run a package build and QA for development purposes. This can be used by
-developers to get a package or docker image for testing, or to run a full QA
+developers to get a package or Docker image for testing, or to run a full QA
 suite against their MR's changes.
 
 This job is run only on [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and [Security mirror](https://gitlab.com/gitlab-org/security/omnibus-gitlab) on branch
@@ -157,7 +163,7 @@ pipelines.
 For building packages, we make use of the Rails assets that are already compiled
 by the [GitLab](https://gitlab.com/gitlab-org/gitlab) or
 [GitLab-FOSS](https://gitlab.com/gitlab-org/gitlab-foss) pipelines. Those
-pipelines push it as a docker image, which we pull in here and copy the assets
+pipelines push it as a Docker image, which we pull in here and copy the assets
 themselves to a predefined location.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on branch, tag and

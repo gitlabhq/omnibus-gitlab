@@ -13,7 +13,7 @@ describe 'monitoring::node-exporter' do
   end
 
   context 'when node-exporter is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/node-exporter/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/node-exporter/log/config') }
 
     before do
       stub_gitlab_rb(

@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Database settings
 
 NOTE: **Note:**
@@ -490,9 +496,6 @@ sure that PostgreSQL is set up according to the [database requirements document]
 
 1. [Seed the database](#seed-the-database-fresh-installs-only).
 
-NOTE: **Note:**
-If you're using Amazon RDS and are seeing extremely high (near 100%) CPU utilization following a major version upgrade (i.e. from `9.x` to `10.x`), running an `ANALYZE VERBOSE;` query may be necessary to recreate query plans and reduce CPU utilization on the database server(s). [Amazon recommends this](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.PostgreSQL.html) as part of a major version upgrade.
-
 ### Configuring SSL
 
 #### Require SSL
@@ -587,6 +590,70 @@ these steps, using the correct path to the location you installed the new tools:
 After this is done, ensure that the backup and restore tasks are using the
 correct executables by running both the [backup](https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system) and
 [restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-a-previously-created-backup) tasks.
+
+### Upgrade a non-packaged PostgreSQL database
+
+NOTE: **Note:**
+If you're using Amazon RDS and are seeing extremely high (near 100%) CPU utilization following a major version upgrade (i.e. from `10.x` to `11.x`), running an `ANALYZE VERBOSE;` query may be necessary to recreate query plans and reduce CPU utilization on the database server(s). [Amazon recommends this](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.PostgreSQL.html) as part of a major version upgrade.
+
+Before upgrading, check the [GitLab and PostgreSQL version compatibility table](../package-information/postgresql_versions.md) to determine your upgrade path.
+When using GitLab backup/restore you **must** keep the same version of GitLab so upgrade PostgreSQL first then GitLab.
+
+The [backup and restore Rake task](https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system) can be used to back up and
+restore the database to a later version of PostgreSQL.
+
+This example demonstrates upgrading from a database host running PostgreSQL 10 to another database host running PostgreSQL 11 and incurs downtime.
+
+1. Spin up a new PostgreSQL 11 database server that is set up according to the [database requirements](https://docs.gitlab.com/ee/install/requirements.html#database).
+
+1. You should ensure that the latest versions of `pg_dump` and `pg_restore`
+   are being used on the GitLab Rails instance. Edit `/etc/gitlab/gitlab.rb`
+   and specify the `postgresql['version']` to set them to version 11:
+
+    ```ruby
+    postgresql['version'] = 11
+    ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+1. Stop GitLab (note that this step will cause downtime):
+
+   ```shell
+   sudo gitlab-ctl stop
+   ```
+
+1. Run the backup Rake task using the SKIP options to back up only the database. Make a note of the backup file name, you'll use it later to restore:
+
+   ```shell
+   sudo gitlab-backup create SKIP=repositories,uploads,builds,artifacts,lfs,pages,registry
+   ```
+
+1. Shutdown the PostgreSQL 10 database host.
+
+1. Edit `/etc/gitlab/gitlab.rb` and update the `gitlab_rails['db_host']` setting to point to
+the PostgreSQL database 11 host.
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+1. Restore the database using the database backup file created earlier, and make sure to answer **no** when asked "This task will now rebuild the authorized_keys file":
+
+   ```shell
+   sudo gitlab-backup restore BACKUP=<database-backup-filename>
+   ```
+
+1. Start GitLab:
+
+   ```shell
+   sudo gitlab-ctl start
+   ```
 
 ### Seed the database (fresh installs only)
 
@@ -752,7 +819,7 @@ additional considerations when upgrading GitLab and/or when upgrading
 PostgreSQL described below.
 
 CAUTION: **Caution:**
-If you are running a Geo installation using PostgreSQL 9.6.x, please upgrade to GitLab 12.4 or newer. Older versions were affected [by an issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4692) that could cause automatic upgrades of the PostgreSQL database to fail on the secondary. This issue is now fixed.
+If you are running a Geo installation using PostgreSQL 9.6.x, please upgrade to GitLab 12.4 or newer. Older versions were affected [by an issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4692) that could cause automatic upgrades of the PostgreSQL database to fail on the secondary. This issue is now fixed.
 
 #### Caveats when upgrading PostgreSQL with Geo
 
@@ -797,6 +864,9 @@ replication user's password.
    sudo gitlab-psql -qt -c 'select slot_name from pg_replication_slots'
    ```
 
+   NOTE: **Note:**
+   If you can't find your `slot_name` here, or there is no output returned, your Geo secondaries may not be healthy. In that case, make sure that [the secondaries are healthy and replication is working](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#check-the-health-of-the-secondary-node).
+
 1. Gather the replication user's password. It was set while setting up Geo in
    [Step 1. Configure the primary server](https://docs.gitlab.com/ee/administration/geo/replication/database.html#step-1-configure-the-primary-server).
 
@@ -830,7 +900,7 @@ replication user's password.
    sudo gitlab-ctl replicate-geo-database --slot-name=SECONDARY_SLOT_NAME --host=PRIMARY_HOST_NAME
    ```
 
-   You will be prompted for the replication user's password of the primary
+   You will be prompted for the replication user's password of the primary. Replace `SECONDARY_SLOT_NAME` with the slot name retrieved from the first step above.
    server.
 
 1. [Reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure) on the Geo **secondary database** to update the

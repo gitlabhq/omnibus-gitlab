@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Configuration options
 
 GitLab is configured by setting the relevant options in
@@ -27,7 +33,11 @@ it needs to know the URL under which it is reached by your users, e.g.
 external_url "http://gitlab.example.com"
 ```
 
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+for the change to take effect, run:
+
+```shell
+sudo gitlab-ctl reconfigure
+```
 
 NOTE: **Note:**
 After you change the external URL, it is recommended that you also
@@ -52,8 +62,11 @@ NOTE: **Note:**
 As part of package updates, if you have `EXTERNAL_URL` variable set
 inadvertently, it will replace the existing value in `/etc/gitlab/gitlab.rb`
 without any warning. So, it is recommended not to set the variable globally, but
-pass it specifically to the installation command as
-`sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee`
+pass it specifically to the installation command:
+
+```shell
+sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee
+```
 
 ## Configuring a relative URL for GitLab
 
@@ -612,7 +625,7 @@ details.
 GitLab 12.2 added support for [CSP and nonces with inline
 JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
 It is [not configured on by default
-yet](https://gitlab.com/gitlab-org/gitlab/issues/30720). An example
+yet](https://gitlab.com/gitlab-org/gitlab/-/issues/30720). An example
 configuration that will work for most installations of GitLab is below:
 
 ```ruby

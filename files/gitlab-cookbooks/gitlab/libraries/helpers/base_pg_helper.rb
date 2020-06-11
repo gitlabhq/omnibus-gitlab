@@ -214,6 +214,8 @@ class BasePgHelper < BaseHelper
               "|grep -x t"])
   end
 
+  alias_method :is_replica?, :is_slave?
+
   def is_offline_or_readonly?
     !is_running? || is_slave?
   end
@@ -296,6 +298,41 @@ class BasePgHelper < BaseHelper
 
   def service_cmd
     raise NotImplementedError
+  end
+
+  def delegated?
+    # When Patroni is enabled, the configuration of PostgreSQL instance must be delegated to it.
+    # PostgreSQL cookbook skips some of the steps that are must be done either during or after
+    # Patroni bootstraping.
+    Gitlab['patroni']['enable'] && !Gitlab['repmgr']['enable']
+  end
+
+  def config_dir
+    Gitlab['patroni']['enable'] ? node['patroni']['data_dir'] : node['postgresql']['data_dir']
+  end
+
+  def postgresql_config
+    ::File.join(config_dir, "postgresql#{Gitlab['patroni']['enable'] ? '.base' : ''}.conf")
+  end
+
+  def postgresql_runtime_config
+    ::File.join(config_dir, 'runtime.conf')
+  end
+
+  def pg_hba_config
+    ::File.join(config_dir, 'pg_hba.conf')
+  end
+
+  def pg_ident_config
+    ::File.join(config_dir, 'pg_ident.conf')
+  end
+
+  def ssl_cert_file
+    ::File.join(config_dir, node['postgresql']['ssl_cert_file'])
+  end
+
+  def ssl_key_file
+    ::File.join(config_dir, node['postgresql']['ssl_key_file'])
   end
 
   private

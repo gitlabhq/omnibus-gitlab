@@ -1,5 +1,0 @@
----
-title: Do not run Grafana reset during docker startup
-merge_request: 4264
-author:
-type: fixed

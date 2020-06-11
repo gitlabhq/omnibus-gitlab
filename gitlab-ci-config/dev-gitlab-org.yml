@@ -332,6 +332,9 @@ QA-branch:
 Raspberry-Pi-2-Stretch-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_branch_build
+Raspberry-Pi-2-Buster-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_branch_build
 
 # This job runs only on nightly EE builds
 HA-Validate-Nightly:
@@ -464,15 +467,24 @@ create_omnibus_manifest:
       - version-manifest.json
 
 dependency_scanning:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-depscan"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-cve-search"
   stage: package-and-image
+  services:
+    - name: mongo:bionic
+      alias: mongo
   variables:
     TERM: xterm-256color
     REPORT_PATH: ./
-  before_script: []
+  before_script:
+    - wget https://storage.googleapis.com/gitlab-depscan/mongo_dump.tar.gz
+    - mkdir /dump
+    - tar --strip-components=1 -C /dump -xf mongo_dump.tar.gz
+    - mongorestore --host mongo /dump
+    - "printf '[Mongo]\nHost: mongo\n' > /app/etc/configuration.ini"
+    - python3 /app/web/index.py > /dev/null 2>&1 &
+    - python3 /app/sbin/db_updater.py -v
   script:
-    - manifest=version-manifest.json
-    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s $manifest
+    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s version-manifest.json
   <<: *dev-except-branches
   <<: *except-auto-deploy-tag
   needs:
@@ -683,10 +695,17 @@ HA-Validate-Tagged:
 Raspberry-Pi-2-Stretch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_tag_build
+Raspberry-Pi-2-Buster:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_tag_build
 
 Raspberry-Pi-2-Stretch-release:
   dependencies:
     - Raspberry-Pi-2-Stretch
+  <<: *raspbian_release
+Raspberry-Pi-2-Buster-release:
+  dependencies:
+    - Raspberry-Pi-2-Buster
   <<: *raspbian_release
 
 AWS-CE-Release:

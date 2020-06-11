@@ -3,6 +3,38 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.0.6 (2020-06-10)
+
+- No changes.
+
+## 13.0.5 (2020-06-04)
+
+- No changes.
+
+## 13.0.4 (2020-06-03)
+
+- No changes.
+
+## 13.0.3 (2020-05-29)
+
+- No changes.
+
+## 13.0.2 (2020-05-28)
+
+### Security (1 change)
+
+- Update Ruby to 2.6.6.
+
+### Fixed (2 changes)
+
+- Fix nginx duplicate MIME type warning. !4251
+- Do not run Grafana reset during docker startup. !4264
+
+### Added (1 change)
+
+- Update Praefect Grafana dashboards. !4241
+
+
 ## 13.0.1 (2020-05-27)
 
 ### Security (1 change)
@@ -80,6 +112,17 @@ omnibus-gitlab repository.
 - Patch Git to fix partial clone bug. !4217
 - Update CA certificate bundle. !4230
 - Update Mattermost to 5.22.2. (Harrison Healey)
+
+
+## 12.10.11 (2020-06-10)
+
+- No changes.
+
+## 12.10.8 (2020-05-28)
+
+### Fixed (1 change)
+
+- Fix dbvacuum on pgupgrade. !4227
 
 
 ## 12.10.7 (2020-05-27)
@@ -201,6 +244,14 @@ omnibus-gitlab repository.
 - Upgrade Mattermost to 5.21.0.
 - Upgrade to Git 2.26.1.
 
+
+## 12.9.10 (2020-06-10)
+
+- No changes.
+
+## 12.9.9 (2020-06-03)
+
+- No changes.
 
 ## 12.9.8 (2020-05-27)
 

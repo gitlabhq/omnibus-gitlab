@@ -190,7 +190,7 @@ describe 'monitoring::prometheus' do
   end
 
   context 'when prometheus is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/prometheus/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/prometheus/log/config') }
 
     before do
       stub_gitlab_rb(
@@ -210,7 +210,7 @@ describe 'monitoring::prometheus' do
       )
     end
 
-    it_behaves_like 'enabled runit service', 'prometheus', 'root', 'root', 'gitlab-prometheus', 'gitlab-prometheus'
+    it_behaves_like 'enabled runit service', 'prometheus', 'root', 'root'
 
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/prometheus/env').with_variables(default_vars)

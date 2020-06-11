@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # SMTP settings
 
 If you would rather send application email via an SMTP server instead of via
@@ -924,6 +930,18 @@ gitlab_rails['smtp_domain'] = "<your-domain>"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
+```
+
+### Tipimail
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = 'smtp.tipimail.com'
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = 'username'
+gitlab_rails['smtp_password'] = 'password'
+gitlab_rails['smtp_authentication'] = 'login'
+gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
 ### More examples are welcome

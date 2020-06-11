@@ -17,10 +17,10 @@
 #
 
 name 'mattermost'
-default_version '5.22.2'
+default_version '5.23.1'
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
-       md5: '5d72de38d2c6165fff6546b625a981f4'
+       md5: 'cc4cbec11facf45003ecf11d11779607'
 
 relative_path 'mattermost'
 

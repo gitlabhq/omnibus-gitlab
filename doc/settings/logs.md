@@ -6,6 +6,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Omnibus GitLab Logs
 
+GitLab includes an [advanced log system](https://docs.gitlab.com/ee/administration/logs.html) where every service and component within GitLab will output system logs. Here are the Omnibus configuration settings and tools for managing these logs.
+
 ## Tail logs in a console on the server
 
 If you want to 'tail', i.e. view live log updates of GitLab logs you can use
@@ -20,6 +22,15 @@ sudo gitlab-ctl tail gitlab-rails
 
 # Drill down to an individual file
 sudo gitlab-ctl tail nginx/gitlab_error.log
+```
+
+### Tail logs in a console and save to a file
+
+Oftentimes, it is useful to both display the logs in the console and save them to a file for later debugging/analysis. You can use the [`tee`](https://en.wikipedia.org/wiki/Tee_(command)) utility to accomplish this.
+
+```shell
+# Use 'tee' to tail all the logs to STDOUT and write to a file at the same time
+sudo gitlab-ctl tail | tee --append /tmp/gitlab_tail.log
 ```
 
 ## Configure default log directories
@@ -61,11 +72,11 @@ nginx['svlogd_prefix'] = "nginx"
 
 ## Logrotate
 
-Starting with Omnibus GitLab 7.4 there is a built-in logrotate service in
-Omnibus GitLab. This service will rotate, compress and eventually delete the
-log data that is not captured by runit, such as `gitlab-rails/production.log`
-and `nginx/gitlab_access.log`. You can configure logrotate via
-`/etc/gitlab/gitlab.rb`.
+Omnibus GitLab includes a built-in logrotate service. This service
+will rotate, compress and eventually delete the log data that is
+not captured by runit, such as `gitlab-rails/production.log` and
+`nginx/gitlab_access.log`. You can configure logrotate
+via `/etc/gitlab/gitlab.rb`:
 
 ```ruby
 # Below are some of the default settings
@@ -87,6 +98,9 @@ nginx['logrotate_size'] = "200M"
 logrotate['enable'] = false
 ```
 
+NOTE: **Note:** Currently the Gitaly-specific [GitLab Shell log](https://docs.gitlab.com/ee/administration/logs.html#gitlab-shelllog) is not rotated by logrotate.
+See [Issue #4938](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4938) for more details.
+
 ### Run logrotate manually
 
 Logrotate is a scheduled job but it can also be triggered on-demand.
@@ -99,13 +113,17 @@ To manually trigger GitLab log rotation with `logrotate`, use the following comm
 
 ## UDP log forwarding
 
-In case you have a central server where all your infra logs are gathered,
-you can configure Omnibus GitLab to send syslog-ish log messages via UDP:
+Omnibus GitLab can utilize the UDP logging feature in svlogd as well as sending non-svlogd logs to a syslog-compatible remote system using UDP.
+To configure Omnibus GitLab to send syslog-protocol messages via UDP, use the following settings:
 
 ```ruby
 logging['udp_log_shipping_host'] = '1.2.3.4' # Your syslog server
+# logging['udp_log_shipping_hostname'] = nil # Optional, defaults the system hostname
 logging['udp_log_shipping_port'] = 1514 # Optional, defaults to 514 (syslog)
 ```
+
+NOTE: **Note:** Setting `udp_log_shipping_host` will [add a `svlogd_prefix`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/logging.rb)
+for the specified hostname and service for each of the [runit-managed](../architecture/README.md#runit) services.
 
 Example log messages:
 
@@ -136,22 +154,9 @@ mattermost_nginx['log_format'] = 'my format string $foo $bar'
 ## JSON logging
 
 Structured logs can be exported via JSON to be parsed by Elasticsearch,
-Splunk, or another log management system. Some components already write JSON logs
-by default (e.g. see [GitLab CE logging
-documentation](https://docs.gitlab.com/ee/administration/logs.html)),
-but until GitLab 12.0 other GitLab components may be using an
-unstructured format. To enable JSON logging for all GitLab components in
-versions prior to GitLab 12.0 add these lines to `/etc/gitlab/gitlab.rb` and
-run `gitlab-ctl reconfigure`:
-
-```ruby
-gitaly['logging_format'] = 'json'
-gitlab_shell['log_format'] = 'json'
-gitlab_workhorse['log_format'] = 'json'
-registry['log_formatter'] = 'json'
-sidekiq['log_format'] = 'json'
-gitlab_pages['log_format'] = 'json'
-```
+Splunk, or another log management system.
+[Beginning in Omnibus GitLab 12.0](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4102),
+the JSON format is enabled by default for all services that support it.
 
 NOTE: **Note** PostgreSQL does not support JSON logging without an
 external plugin. However, it does support logging in CSV format:
@@ -167,16 +172,17 @@ documentation](https://www.postgresql.org/docs/11/runtime-config-logging.html).
 
 ## Text logging
 
-Customers with established log ingestion systems may not wish to use JSON
-logs after they become default in GitLab version 12.0. The old behavior may
-be retained by setting the following in `/etc/gitlab/gitlab.rb` and then
-running `gitlab-ctl reconfigure` afterward:
+Customers with established log ingestion systems may not wish to use the JSON
+log format. Text formatting can be configured by setting the following
+in `/etc/gitlab/gitlab.rb` and then running `gitlab-ctl reconfigure` afterward:
 
 ```ruby
 gitaly['logging_format'] = ''
-gitlab_shell['log_format'] = nil
-gitlab_workhorse['log_format'] = nil
+gitlab_shell['log_format'] = 'text'
+gitlab_workhorse['log_format'] = 'text'
 registry['log_formatter'] = 'text'
 sidekiq['log_format'] = 'default'
 gitlab_pages['log_format'] = 'text'
 ```
+
+NOTE: **Note:** There are a few variations in attribute names for the log format depending on the service involved (for example, Container Registry uses `log_formatter`, Gitaly and Praefect both use `logging_format`). See [Issue #4280](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4280) for more details.

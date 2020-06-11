@@ -19,6 +19,7 @@ module Postgresql
   class << self
     def parse_variables
       parse_postgresql_settings
+      parse_connect_port
       parse_multi_db_host_addresses
       parse_mattermost_postgresql_settings
     end
@@ -79,6 +80,10 @@ module Postgresql
 
       value_from_attributes = "user=#{user} host=#{host} port=#{port} dbname=#{database_name}"
       Gitlab['mattermost']['sql_data_source'] = value_from_gitlab_rb || value_from_attributes
+    end
+
+    def parse_connect_port
+      Gitlab['postgresql']['connect_port'] ||= Gitlab['postgresql']['port'] || Gitlab['node']['postgresql']['port']
     end
 
     def postgresql_managed?

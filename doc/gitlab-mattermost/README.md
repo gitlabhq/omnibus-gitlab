@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # GitLab Mattermost
 
 NOTE: **Note:** This document applies to GitLab 11.0 and later.
@@ -183,7 +189,7 @@ cd /opt/gitlab/embedded/service/mattermost
 sudo /opt/gitlab/embedded/bin/chpst -e /opt/gitlab/etc/mattermost/env -P -U mattermost:mattermost -u mattermost:mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json version
 ```
 
-Until [#4745](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4745) has been implemented, the command requires quite of bit typing and is hard to remember, so let's make a bash/zsh alias to make it a bit easier to remember. Add the following to your `~/.bashrc` or `~/.zshrc` file:
+Until [#4745](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4745) has been implemented, the command requires quite of bit typing and is hard to remember, so let's make a bash/zsh alias to make it a bit easier to remember. Add the following to your `~/.bashrc` or `~/.zshrc` file:
 
 ```shell
 alias mattermost-cli="cd /opt/gitlab/embedded/service/mattermost && sudo /opt/gitlab/embedded/bin/chpst -e /opt/gitlab/etc/mattermost/env -P -U mattermost:mattermost -u mattermost:mattermost /opt/gitlab/embedded/bin/mattermost --config=/var/opt/gitlab/mattermost/config.json $1"
@@ -265,6 +271,7 @@ Below is a list of Mattermost versions for GitLab 11.10 and later:
 | 12.9 | 5.20 |
 | 12.10 | 5.21 |
 | 13.0 | 5.22 |
+| 13.1 | 5.23 |
 
 Starting with GitLab 11.0, GitLab Mattermost can be upgraded through the regular Omnibus GitLab update process. When upgrading previous versions of
 GitLab that process can only be used if Mattermost configuration settings have not been changed outside of GitLab (i.e., no changes to Mattermost's `config.json`
@@ -414,4 +421,4 @@ For help and support around your GitLab Mattermost deployment please see:
 - [Troubleshooting Forum](https://forum.mattermost.org/t/how-to-use-the-troubleshooting-forum/150) for configuration questions and issues.
 - [Troubleshooting FAQ](https://docs.mattermost.com/install/troubleshooting.html).
 - [Mattermost GitLab Issues Support Handbook](https://docs.mattermost.com/process/support.html?highlight=omnibus#gitlab-issues).
-- [GitLab Mattermost issue tracker](https://gitlab.com/gitlab-org/gitlab-mattermost/issues) for verified bugs with repro steps.
+- [GitLab Mattermost issue tracker](https://gitlab.com/gitlab-org/gitlab-mattermost/-/issues) for verified bugs with repro steps.

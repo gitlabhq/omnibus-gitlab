@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Package defaults
 
 Unless configuration is specified in the `/etc/gitlab/gitlab.rb` file,
@@ -44,6 +50,7 @@ by default:
 | <a name="mattermost-web"></a>      Mattermost          | No            | Port             | X           | 80 or 443                              |
 | <a name="pgbouncer"></a>           PgBouncer           | No            | Port             | X           | 6432                                   |
 | <a name="consul"></a>              Consul              | No            | Port             | X           | 8300, 8500                             |
+| <a name="patroni"></a>             Patroni             | No            | Port             | X           | 8008                                   |
 
 Legend:
 

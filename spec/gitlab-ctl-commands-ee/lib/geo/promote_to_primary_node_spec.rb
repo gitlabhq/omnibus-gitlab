@@ -1,14 +1,13 @@
 require 'spec_helper'
-
-$LOAD_PATH << './files/gitlab-ctl-commands-ee/lib'
-$LOAD_PATH << './files/gitlab-ctl-commands/lib'
-
 require 'fileutils'
 require 'geo/promote_to_primary_node'
+require 'geo/promotion_preflight_checks'
 require 'gitlab_ctl/util'
 
 describe Geo::PromoteToPrimaryNode, '#execute' do
-  subject(:command) { described_class.new(nil, { skip_preflight_checks: true }) }
+  let(:options) { { skip_preflight_checks: true } }
+
+  subject(:command) { described_class.new(nil, options) }
 
   let(:temp_directory) { Dir.mktmpdir }
   let(:gitlab_config_path) { File.join(temp_directory, 'gitlab.rb') }
@@ -23,49 +22,29 @@ describe Geo::PromoteToPrimaryNode, '#execute' do
   end
 
   describe '#run_preflight_checks' do
-    subject(:run_preflight_checks) do
-      described_class.new(nil, options).send(:run_preflight_checks)
-    end
-
-    let(:confirmation) { 'y' }
-
     before do
-      allow(STDIN).to receive(:gets).and_return(confirmation)
+      allow(STDIN).to receive(:gets).and_return('y')
+      allow(command).to receive(:promote_postgresql_to_primary).and_return(true)
+      allow(command).to receive(:reconfigure).and_return(true)
+      allow(command).to receive(:promote_to_primary).and_return(true)
+      allow(command).to receive(:success_message).and_return(true)
     end
 
     context 'when `--skip-preflight-checks` is passed' do
-      let(:options) { { skip_preflight_checks: true } }
-      let(:confirmation) { 'n' }
+      it 'does not run execute promotion preflight checks' do
+        expect(Geo::PromotionPreflightChecks).not_to receive(:execute)
 
-      it 'does not raise error' do
-        expect { run_preflight_checks }.not_to raise_error
+        command.execute
       end
     end
 
     context 'when `--skip-preflight-checks` is not passed' do
       let(:options) { {} }
 
-      it 'prints preflight check instructions' do
-        expect { run_preflight_checks }.to output(
-          /Ensure you have completed the following manual preflight checks/)
-          .to_stdout
-      end
+      it 'runs promotion preflight checks' do
+        expect_any_instance_of(Geo::PromotionPreflightChecks).to receive(:execute)
 
-      context 'when confirmation is accepted' do
-        it 'does not raise an error' do
-          expect { run_preflight_checks }.to_not raise_error
-        end
-      end
-
-      context 'when confirmation is not accepted' do
-        let(:confirmation) { 'n' }
-
-        it 'raises error' do
-          expect { run_preflight_checks }.to raise_error(
-            RuntimeError,
-            /ERROR: Manual preflight checks were not performed/
-          )
-        end
+        command.execute
       end
     end
   end

@@ -19,10 +19,6 @@ socket_path = '<%= @socket_path %>'
 prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
 <% end %>
 
-<% unless @postgres_queue_enabled.nil? %>
-postgres_queue_enabled = <%= @postgres_queue_enabled %>
-<% end %>
-
 [failover]
 <% unless @failover_enabled.nil? %>
 enabled = <%= @failover_enabled %>

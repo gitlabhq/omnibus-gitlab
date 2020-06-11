@@ -1,0 +1,4 @@
+#!/bin/sh
+exec 2>&1
+<%= render("mount_point_check.erb", cookbook: 'gitlab') %>
+exec chpst -P -U <%= @options[:user] %>:<%= @options[:groupname] %> -u <%= @options[:user] %>:<%= @options[:groupname] %> /opt/gitlab/embedded/bin/patroni <%= @options[:patroni_config_file] %>

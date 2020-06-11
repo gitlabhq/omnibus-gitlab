@@ -7,7 +7,10 @@ require 'gitlab/util'
 require 'rspec-parameterized'
 
 # Load support libraries to provide common convenience methods for our tests
-Dir[File.join(__dir__, 'support/*.rb')].each { |f| require f }
+Dir["./spec/support/**/*.rb"].each { |f| require f }
+
+$LOAD_PATH << './files/gitlab-ctl-commands-ee/lib'
+$LOAD_PATH << './files/gitlab-ctl-commands/lib'
 
 Knapsack::Adapters::RSpecAdapter.bind if Gitlab::Util.get_env('USE_KNAPSACK')
 

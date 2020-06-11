@@ -39,7 +39,7 @@ directory log_directory do
 end
 
 runit_service 'geo-logcursor' do
-  down node['gitlab']['geo-logcursor']['ha']
+  start_down node['gitlab']['geo-logcursor']['ha']
   options({
     user: account_helper.gitlab_user,
     working_dir: working_dir,
