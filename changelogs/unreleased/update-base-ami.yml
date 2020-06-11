@@ -1,0 +1,5 @@
+---
+title: Use latest Ubuntu AMI as base for our AMIs
+merge_request: 4308
+author:
+type: other
