@@ -478,7 +478,7 @@ dependency_scanning:
   before_script:
     - wget https://storage.googleapis.com/gitlab-depscan/mongo_dump.tar.gz
     - mkdir /dump
-    - tar --strip-components=1 -C /dump -xvf mongo_dump.tar.gz
+    - tar --strip-components=1 -C /dump -xf mongo_dump.tar.gz
     - mongorestore --host mongo /dump
     - "printf '[Mongo]\nHost: mongo\n' > /app/etc/configuration.ini"
     - python3 /app/sbin/db_updater.py -v
