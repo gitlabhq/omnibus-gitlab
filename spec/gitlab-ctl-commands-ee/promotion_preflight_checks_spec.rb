@@ -12,4 +12,8 @@ describe 'gitlab-ctl promotion-preflight-checks' do
   include_context 'ctl'
 
   it_behaves_like 'gitlab geo promotion commands'
+
+  it_behaves_like 'geo promotion command accepts option',
+                  '--confirm-primary-is-down',
+                  { confirm_primary_is_down: true }
 end
