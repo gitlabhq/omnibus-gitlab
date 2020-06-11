@@ -12,6 +12,8 @@ module Geo
       begin
         confirm_manual_checks
         confirm_primary_is_down
+
+        check_replication_verification_status
       rescue RuntimeError => e
         puts e.message
         exit 1
@@ -30,8 +32,6 @@ module Geo
       puts '- Review configuration of each secondary node'
       puts '- Run system checks'
       puts '- Check that secrets match between nodes'
-      puts '- Ensure Geo replication is up-to-date'
-      puts '- Verify the integrity of replicated data'
       puts '- Notify users of scheduled maintenance'
       puts 'Please read https://docs.gitlab.com/ee/administration/geo/'\
         'disaster_recovery/planned_failover.html#preflight-checks'
@@ -67,9 +67,26 @@ module Geo
       raise 'ERROR: Primary node must be down.'.color(:red)
     end
 
+    def check_replication_verification_status
+      puts
+      puts 'Running gitlab-rake gitlab:geo:'\
+        'check_replication_verification_status...'.color(:yellow)
+      puts
+
+      status = run_command('gitlab-rake geo:check_replication_verification_status')
+      puts status.stdout
+
+      raise 'ERROR: Replication/verification is incomplete.' if status.error?
+    end
+
     def success_message
       puts
-      puts 'All preflight checks have passed. This node can now be promoted.'.color(:green)
+      puts 'All preflight checks have passed.'\
+        ' This node can now be promoted.'.color(:green)
+    end
+
+    def run_command(cmd)
+      GitlabCtl::Util.run_command(cmd, live: true)
     end
   end
 end

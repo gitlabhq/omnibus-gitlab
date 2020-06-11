@@ -1,0 +1,6 @@
+---
+title: 'Geo: Check if replication/verification is up-to-date in promotion preflight
+  checks'
+merge_request: 4314
+author:
+type: changed
