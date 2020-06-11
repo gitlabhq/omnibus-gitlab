@@ -481,9 +481,8 @@ dependency_scanning:
     - tar --strip-components=1 -C /dump -xf mongo_dump.tar.gz
     - mongorestore --host mongo /dump
     - "printf '[Mongo]\nHost: mongo\n' > /app/etc/configuration.ini"
-    - python3 /app/sbin/db_updater.py -v
     - python3 /app/web/index.py > /dev/null 2>&1 &
-    - sleep 10
+    - python3 /app/sbin/db_updater.py -v
   script:
     - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s version-manifest.json
   <<: *dev-except-branches
