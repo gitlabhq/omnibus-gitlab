@@ -12,6 +12,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [Creating patches](creating-patches.md)
 - [Repositories, branches and CI pipelines](pipelines.md)
 - [Release process](../release/README.md)
+- [Handling broken master pipelines](broken_master.md)
 - [Building your own package](../build/README.md)
 - [Building a package from a custom branch](../build/team_member_docs.md#i-have-an-mr-in-the-omnibus-gitlab-project-and-want-a-package-or-docker-image-to-test-it)
 - [Adding deprecation messages](adding-deprecation-messages.md)
