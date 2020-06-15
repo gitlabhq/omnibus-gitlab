@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'redis' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(redis_service runit_service)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -15,6 +15,10 @@ redis_host='127.0.0.1'
 redis_port='0'
 redis_socket='/var/opt/gitlab/redis/redis.socket'
       EOF
+    end
+
+    it 'enables the redis service' do
+      expect(chef_run).to create_redis_service('redis')
     end
 
     it 'creates redis config with default values' do
