@@ -1,9 +1,15 @@
 require 'spec_helper'
 require 'geo/promotion_preflight_checks'
 
+RSpec.shared_context 'promotion-preflight-checks' do
+  let(:command_name) { 'promotion-preflight-checks' }
+  let(:klass) { Geo::PromotionPreflightChecks }
+  let(:command_script) { 'promotion_preflight_checks' }
+end
+
 describe 'gitlab-ctl promotion-preflight-checks' do
-  include_examples 'gitlab geo commands',
-                   'promotion-preflight-checks',
-                   Geo::PromotionPreflightChecks,
-                   'promotion_preflight_checks'
+  include_context 'promotion-preflight-checks'
+  include_context 'ctl'
+
+  it_behaves_like 'gitlab geo promotion commands'
 end
