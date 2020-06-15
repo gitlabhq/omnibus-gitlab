@@ -42,6 +42,12 @@ CVE-2019-13232
 # gnupg/2.2.10
 CVE-2019-13050
 CVE-2018-1000858
+## https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5211
+CVE-2019-14855
 
 # postgresql/9.6.14
 CVE-2019-9193
+
+# grafana/6.3.5
+## https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5437
+CVE-2020-12458
