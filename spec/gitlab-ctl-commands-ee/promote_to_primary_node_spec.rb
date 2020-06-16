@@ -1,9 +1,26 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'geo/promote_to_primary_node'
 
 describe 'gitlab-ctl promote-to-primary-node' do
-  include_examples 'gitlab geo commands',
-                   'promote-to-primary-node',
-                   Geo::PromoteToPrimaryNode,
-                   'promote_to_primary_node'
+  let(:klass) { Geo::PromoteToPrimaryNode }
+  let(:command_name) { 'promote-to-primary-node' }
+  let(:command_script) { 'promote_to_primary_node' }
+
+  include_context 'ctl'
+
+  it_behaves_like 'gitlab geo promotion commands', 'promote-to-primary-node'
+
+  it_behaves_like 'geo promotion command accepts option',
+                  '--confirm-primary-is-down',
+                  { confirm_primary_is_down: true }
+
+  it_behaves_like 'geo promotion command accepts option',
+                  '--confirm-removing-keys',
+                  { confirm_removing_keys: true }
+
+  it_behaves_like 'geo promotion command accepts option',
+                  '--skip-preflight-checks',
+                  { skip_preflight_checks: true }
 end

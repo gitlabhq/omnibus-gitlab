@@ -34,7 +34,7 @@ def get_ctl_options
       options[:confirm_removing_keys] = c
     end
 
-    opts.on('-m', '--skip-preflight-checks', 'Do not ask for confirmation if manual checks ran') do |c|
+    opts.on('-m', '--skip-preflight-checks', 'Do not ask for confirmation if manual checks ran') do |m|
       options[:skip_preflight_checks] = m
     end
   end.parse!(ARGV.dup)
