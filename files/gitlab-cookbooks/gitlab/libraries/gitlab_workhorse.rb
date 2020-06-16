@@ -31,13 +31,13 @@ module GitlabWorkhorse
     def auth_socket_specified?
       auth_socket = Gitlab['gitlab_workhorse']['auth_socket']
 
-      !auth_socket&.empty? && auth_socket != "''"
+      !auth_socket&.empty?
     end
 
     def auth_backend_specified?
       auth_backend = Gitlab['gitlab_workhorse']['auth_backend']
 
-      !auth_backend&.empty? && auth_backend != "''"
+      !auth_backend&.empty?
     end
   end
 end

@@ -77,8 +77,36 @@ describe 'gitlab::gitlab-workhorse' do
     end
   end
 
-  context "without auth socket" do
-    context 'with auth_socket disabled' do
+  context 'auth_socket and auth_backend' do
+    context 'with only auth_socket specified' do
+      context "auth_socket set to legacy '' value" do
+        before do
+          stub_gitlab_rb(gitlab_workhorse: { auth_socket: "''" })
+        end
+
+        it 'includes both authSocket and authBackend arguments' do
+          expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content { |content|
+            expect(content).to match(%r(-authSocket /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket))
+            expect(content).to match(%r(-authBackend http://localhost:8080))
+          }
+        end
+      end
+    end
+
+    context 'with only auth_backend specified' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { auth_backend: 'https://test.example.com:8080' })
+      end
+
+      it 'omits authSocket argument' do
+        expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content { |content|
+          expect(content).not_to match(/\-authSocket/)
+          expect(content).to match(%r(-authBackend https://test.example.com:8080))
+        }
+      end
+    end
+
+    context "with nil auth_socket" do
       before do
         stub_gitlab_rb(gitlab_workhorse: { auth_socket: nil })
       end
@@ -101,6 +129,19 @@ describe 'gitlab::gitlab-workhorse' do
             expect(content).to match(%r(-authBackend https://test.example.com:8080))
           }
         end
+      end
+    end
+
+    context 'with auth_backend and auth_socket set' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { auth_socket: '/tmp/test.socket', auth_backend: 'https://test.example.com:8080' })
+      end
+
+      it 'includes both authSocket and authBackend arguments' do
+        expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content { |content|
+          expect(content).to match(%r(-authSocket /tmp/test.socket))
+          expect(content).to match(%r(-authBackend https://test.example.com:8080))
+        }
       end
     end
   end
