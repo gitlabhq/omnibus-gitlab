@@ -18,6 +18,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [Adding an attribute to public_attributes.json](public-attributes.md)
 - [Adding a `gitlab-ctl` command](gitlab-ctl-commands.md)
 - [Managing PostgreSQL versions](managing-postgresql-versions.md)
+- [Upgrading the bundled Chef version](upgrading-chef.md)
 
 ## Setting up development environment
 
