@@ -4,9 +4,10 @@ require 'geo/promotion_preflight_checks'
 require 'gitlab_ctl/util'
 
 describe Geo::PromotionPreflightChecks, '#execute' do
-  subject(:command) { described_class.new }
-
   let(:confirmation) { 'y' }
+  let(:options) { { confirm_primary_is_down: true } }
+
+  subject(:command) { described_class.new(nil, options) }
 
   before do
     allow(STDIN).to receive(:gets).and_return(confirmation)
@@ -18,13 +19,13 @@ describe Geo::PromotionPreflightChecks, '#execute' do
       .to_stdout
   end
 
-  context 'when confirmation is accepted' do
+  context 'when manual checks are confirmed' do
     it 'does not raise an error' do
       expect { command.execute }.to_not raise_error
     end
   end
 
-  context 'when confirmation is not accepted' do
+  context 'when manual checks are not confirmed' do
     let(:confirmation) { 'n' }
 
     around do |example|
@@ -36,6 +37,55 @@ describe Geo::PromotionPreflightChecks, '#execute' do
       expect { command.execute }.to output(
         /ERROR: Manual preflight checks were not performed/
       ).to_stdout
+    end
+  end
+
+  describe 'option --confirm-primary-is-down' do
+    before do
+      allow(command).to receive(:confirm_manual_checks).and_return(true)
+    end
+
+    context 'when the option is not passed' do
+      let(:options) { {} }
+      let(:confirmation) { 'n' }
+
+      around do |example|
+        example.run
+      rescue SystemExit
+      end
+
+      it 'asks user for confirmation' do
+        expect { command.execute }.to output(
+          /Is primary down? (N\/y)/)
+          .to_stdout
+      end
+
+      it 'prints an error message when user doesn not select y/Y' do
+        expect { command.execute }.to output(
+          /ERROR: Primary node must be down./)
+          .to_stdout
+      end
+    end
+
+    context 'when the option is passed' do
+      it 'does not ask user for confirmation' do
+        expect { command.execute }.not_to output(
+          /Is primary down? (N\/y)/)
+          .to_stdout
+      end
+    end
+  end
+
+  context 'when all checks pass' do
+    before do
+      allow(command).to receive(:confirm_manual_checks).and_return(true)
+      allow(command).to receive(:confirm_primary_is_down).and_return(true)
+    end
+
+    it 'prints a success message' do
+      expect { command.execute }.to output(
+        /All preflight checks have passed. This node can now be promoted./)
+        .to_stdout
     end
   end
 end

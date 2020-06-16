@@ -21,6 +21,14 @@ describe Geo::PromoteToPrimaryNode, '#execute' do
     FileUtils.rm_rf(temp_directory)
   end
 
+  shared_examples 'runs promotion preflight checks' do |expected_args|
+    it do
+      expect_any_instance_of(Geo::PromotionPreflightChecks).to receive(:execute)
+
+      command.execute
+    end
+  end
+
   describe '#run_preflight_checks' do
     before do
       allow(STDIN).to receive(:gets).and_return('y')
@@ -32,24 +40,37 @@ describe Geo::PromoteToPrimaryNode, '#execute' do
 
     context 'when `--skip-preflight-checks` is passed' do
       it 'does not run execute promotion preflight checks' do
-        expect(Geo::PromotionPreflightChecks).not_to receive(:execute)
+        expect_any_instance_of(Geo::PromotionPreflightChecks).not_to receive(:execute)
 
         command.execute
       end
     end
 
     context 'when `--skip-preflight-checks` is not passed' do
-      let(:options) { {} }
+      context 'when --confirm-primary-is-down is not passed' do
+        let(:options) { {} }
 
-      it 'runs promotion preflight checks' do
-        expect_any_instance_of(Geo::PromotionPreflightChecks).to receive(:execute)
+        it_behaves_like 'runs promotion preflight checks',
+                        '--no-confirm-primary-is-down'
+      end
 
-        command.execute
+      context 'when --no-confirm-primary-is-down is passed' do
+        let(:options) { { confirm_primary_is_down: false } }
+
+        it_behaves_like 'runs promotion preflight checks',
+                        '--no-confirm-primary-is-down'
+      end
+
+      context 'when --confirm-primary-is-down is passed' do
+        let(:options) { { confirm_primary_is_down: true } }
+
+        it_behaves_like 'runs promotion preflight checks',
+                        '--confirm-primary-is-down'
       end
     end
   end
 
-  context 'when confirmation is accepted' do
+  context 'when preflight checks pass' do
     before do
       allow(STDIN).to receive(:gets).and_return('y')
     end
@@ -65,15 +86,13 @@ describe Geo::PromoteToPrimaryNode, '#execute' do
     end
   end
 
-  context 'when confirmation is refused' do
+  context 'when preflight checks fail' do
     before do
       allow(STDIN).to receive(:gets).and_return('n')
     end
 
-    it 'calls all the subcommands' do
-      is_expected.not_to receive(:run_command)
-
-      expect { command.execute }.to raise_error RuntimeError, 'Exited because primary node must be down'
+    it 'raises an error' do
+      expect { command.execute }.to raise_error
     end
   end
 end

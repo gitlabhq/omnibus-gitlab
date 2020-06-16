@@ -11,8 +11,6 @@ module Geo
     def execute
       run_preflight_checks
 
-      make_sure_primary_is_down
-
       promote_postgresql_to_primary
 
       reconfigure
@@ -27,23 +25,7 @@ module Geo
     def run_preflight_checks
       return true if @options[:skip_preflight_checks]
 
-      PromotionPreflightChecks.new.execute
-    end
-
-    def make_sure_primary_is_down
-      return true if @options[:confirm_primary_is_down]
-
-      puts
-      puts '---------------------------------------'.color(:yellow)
-      puts 'WARNING: Make sure your primary is down'.color(:yellow)
-      puts 'If you have more than one secondary please see https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.html#promoting-secondary-geo-replica-in-multi-secondary-configurations'.color(:yellow)
-      puts 'There may be data saved to the primary that was not been replicated to the secondary before the primary went offline. This data should be treated as lost if you proceed.'.color(:yellow)
-      puts '---------------------------------------'.color(:yellow)
-      puts
-
-      print '*** Are you sure? (N/y): '.color(:green)
-
-      raise 'Exited because primary node must be down' unless STDIN.gets.chomp.casecmp('y').zero?
+      PromotionPreflightChecks.new(@base_path, @options).execute
     end
 
     def promote_postgresql_to_primary
@@ -51,7 +33,7 @@ module Geo
       puts 'Promoting the PostgreSQL to primary...'.color(:yellow)
       puts
 
-      run_command("/opt/gitlab/embedded/bin/gitlab-pg-ctl promote", live: true).error!
+      run_command('/opt/gitlab/embedded/bin/gitlab-pg-ctl promote', live: true).error!
     end
 
     def reconfigure
