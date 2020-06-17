@@ -13,7 +13,7 @@ then
   ee_project="gitlab-ee"
 fi
 
-if [ -n "${TOP_UPSTREAM_SOURCE_PROJECT}" ]
+if [[ -n "${TOP_UPSTREAM_SOURCE_PROJECT}" && "${TOP_UPSTREAM_SOURCE_PROJECT}" =~ gitlab-org/(security/)?gitlab ]]
 then
   project_path="${TOP_UPSTREAM_SOURCE_PROJECT}"
 elif ${curdir}/is_gitlab_ee.sh
