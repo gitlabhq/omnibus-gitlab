@@ -85,6 +85,7 @@
   stage: trigger-package
   when: manual
   script:
+    - support/wait_for_sha
     - bundle exec rake build:trigger
   only:
     - branches@gitlab-org/omnibus-gitlab
