@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo -n "Waiting for SHA ${CI_COMMIT_SHA} to be available on omnibus-gitlab-mirror: "
+
+while ! $(curl -s -f --header "PRIVATE-TOKEN: ${GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN}" "https://gitlab.com/api/v4/projects/${OMNIBUS_GITLAB_MIRROR_ID}/repository/commits/${CI_COMMIT_SHA}" > /dev/null 2>&1 ); do
+  echo -n ".";
+  sleep 30s
+done
+
+echo "Found"
