@@ -25,7 +25,7 @@ module GitlabCtl
 
       puts "Running configuration backup\nCreating configuration backup archive: #{archive_name}"
 
-      command = %W(tar --absolute-names --verbose --create --file #{archive_path}
+      command = %W(tar --absolute-names --dereference --verbose --create --file #{archive_path}
                    --exclude #{etc_backup_path} -- #{etc_path})
       status = system(*command)
 
