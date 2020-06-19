@@ -496,6 +496,32 @@ sure that PostgreSQL is set up according to the [database requirements document]
 
 1. [Seed the database](#seed-the-database-fresh-installs-only).
 
+### UNIX socket configuration for non-packaged PostgreSQL
+
+If you want to use your system's PostgreSQL server (installed on the same machine as GitLab)
+instead of the one bundled with GitLab, you can do so by using a UNIX socket:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   # Disable the built-in Postgres
+   postgresql['enable'] = false
+
+   # Fill in the connection details for database.yml
+   gitlab_rails['db_adapter'] = 'postgresql'
+   gitlab_rails['db_encoding'] = 'utf8'
+   # The path where the socket lives
+   gitlab_rails['db_host'] = '/var/run/postgresql/'
+   ```
+
+   NOTE: **Note:** `gitlab_rails['db_socket']` is a setting for Mysql and it won't have any effect on PostgreSQL.
+
+1. Reconfigure GitLab for the changes to take effect:
+
+   ```ruby
+   sudo gitlab-ctl-reconfigure
+   ```
+
 ### Configuring SSL
 
 #### Require SSL
