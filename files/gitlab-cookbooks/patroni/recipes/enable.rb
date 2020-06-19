@@ -93,6 +93,15 @@ runit_service 'patroni' do
   log_options node['gitlab']['logging'].to_hash.merge(node['patroni'].to_hash)
 end
 
+ruby_block 'wait for node bootsrap to complete' do
+  block do
+    Timeout.timeout(30) do
+      sleep 1 until patroni_helper.node_status == 'running'
+    end
+  end
+  action :run
+end
+
 execute 'update dynamic configuration settings' do
   command "#{patroni_helper.ctl_command} -c #{patroni_config_file} edit-config --force --replace #{dcs_config_file}"
   only_if { patroni_helper.node_status == 'running' }
@@ -120,4 +129,12 @@ postgresql_user sql_replication_user do
   not_if { pg_helper.is_replica? }
 end
 
-include_recipe "postgresql::disable"
+return unless omnibus_helper.service_dir_enabled?('postgresql')
+
+execute 'signal to restart postgresql' do
+  command "#{patroni_helper.ctl_command} -c #{patroni_config_file} restart --force #{node['patroni']['scope']} #{node['patroni']['name']}"
+  not_if { patroni_helper.repmgr_active? }
+  only_if { patroni_helper.node_status == 'running' }
+end
+
+include_recipe 'postgresql::disable'
