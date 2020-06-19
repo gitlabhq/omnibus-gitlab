@@ -3,6 +3,48 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.1.0 (2020-06-22)
+
+### Removed (1 change)
+
+- Praefect configuration: remove postgres_queue_enabled. !4267
+
+### Fixed (1 change)
+
+- Enable consul service for sidekiq-cluster. !4266
+
+### Changed (8 changes)
+
+- Move hook values to [hooks] and gitlab connection values to [gitlab] in gitaly.toml. !4243
+- Geo - Confirm if primary can be contacted after manual preflight checks. !4260
+- gitlab.rb example template should show puma default. !4268
+- Praefect: Enable SQL failover by default. !4271
+- Update gitlab-exporter to 7.0.4. !4272
+- Enable btree_gist postgres extension. !4274
+- Update parser gem version. !4275
+- Make it possible to disable Workhorse -authSocket argument. !4324
+
+### Added (6 changes)
+
+- Add Patroni to Omnibus. !3984
+- Add libtiff as a dependency. !4047
+- Add command promotion-preflight-checks to run before promoting to primary node. !4246
+- Allow enabling Praefect read-only mode through gitlab.rb. !4250
+- Upgrade Grafana dashboards to v1.6.0. !4278
+- Add capability to supply env vars to gitlab-pages. !4296
+
+### Other (8 changes)
+
+- Build and release packages for Raspberry Pi Buster. !3953
+- Add (optional) list of manual checks to promote_to_primary script. !4231
+- Update nginx to stable version 1.18.0. !4242
+- Stop deleting rack attack files. !4269
+- Mark 13.0 as minimum version required to upgrade to 13.x. !4270
+- Upgrade to Git 2.27.0. !4294
+- Use latest Ubuntu AMI as base for our AMIs. !4308
+- Update Mattermost to 5.23.1.
+
+
 ## 13.0.6 (2020-06-10)
 
 - No changes.

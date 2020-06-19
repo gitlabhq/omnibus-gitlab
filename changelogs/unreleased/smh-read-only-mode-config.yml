@@ -1,5 +1,0 @@
----
-title: Allow enabling Praefect read-only mode through gitlab.rb
-merge_request: 4250
-author:
-type: added
