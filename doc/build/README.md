@@ -58,7 +58,7 @@ Once you have a platform-specific package built, you can follow the steps below 
        -L "https://dev.gitlab.org/api/v4/projects/${PROJECT_ID}/jobs/${JOB_ID}/artifacts/${PACKAGE_PATH}"
      ```
 
-  1. Follow the installation instructions for [manually downloading and installing a GitLab package](../manual_install.md#installing-the-gitlab-package).
+  1. Follow the installation instructions for [manually downloading and installing a GitLab package](../manual_install.md).
 
 You should now have a running instance of GitLab using the package you downloaded. If you want to perform further testing, you can run [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa) against the instance.
 

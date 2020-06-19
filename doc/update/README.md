@@ -85,26 +85,7 @@ the above commands.
 ### Updating using a manually downloaded package
 
 If for some reason you don't use the official repositories, it is possible to
-download the package and install it manually.
-
-1. Visit the [Community Edition repository](https://packages.gitlab.com/gitlab/gitlab-ce)
-   or the [Enterprise Edition repository](https://packages.gitlab.com/gitlab/gitlab-ee)
-   depending on the edition you already have installed.
-1. Find the package version you wish to install and click on it.
-1. Click the 'Download' button in the upper right corner to download the package.
-1. Once the GitLab package is downloaded, install it using the following
-   commands, replacing `XXX` with the Omnibus GitLab version you downloaded:
-
-   ```shell
-   # Debian/Ubuntu
-   dpkg -i gitlab-ce-XXX.deb
-
-   # CentOS/RHEL
-   rpm -Uvh gitlab-ce-XXX.rpm
-   ```
-
-   If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee`
-   in the above commands.
+[download the package and install it manually](../manual_install.md).
 
 ## Updating Community Edition to Enterprise Edition
 
