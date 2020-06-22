@@ -1903,6 +1903,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # praefect['auth_token'] = ""
 # praefect['auth_transitioning'] = false
 # praefect['listen_addr'] = "localhost:2305"
+# praefect['tls_listen_addr'] = "localhost:3305"
+# praefect['certificate_path'] = "/var/opt/gitlab/prafect/certificate.pem"
+# praefect['key_path'] = "/var/opt/gitlab/prafect/key.pem"
 # praefect['prometheus_listen_addr'] = "localhost:9652"
 # praefect['prometheus_grpc_latency_buckets'] = "[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]"
 # praefect['logging_level'] = "warn"

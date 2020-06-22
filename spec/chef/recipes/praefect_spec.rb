@@ -82,6 +82,9 @@ describe 'praefect' do
       let(:sentry_dsn) { 'https://my_key:my_secret@sentry.io/test_project' }
       let(:sentry_environment) { 'production' }
       let(:listen_addr) { 'localhost:4444' }
+      let(:tls_listen_addr) { 'localhost:5555' }
+      let(:certificate_path) { '/path/to/cert.pem' }
+      let(:key_path) { '/path/to/key.pem' }
       let(:prom_addr) { 'localhost:1234' }
       let(:log_level) { 'debug' }
       let(:log_format) { 'text' }
@@ -119,6 +122,9 @@ describe 'praefect' do
                          sentry_dsn: sentry_dsn,
                          sentry_environment: sentry_environment,
                          listen_addr: listen_addr,
+                         tls_listen_addr: tls_listen_addr,
+                         certificate_path: certificate_path,
+                         key_path: key_path,
                          prometheus_listen_addr: prom_addr,
                          prometheus_grpc_latency_buckets: prometheus_grpc_latency_buckets,
                          logging_level: log_level,
@@ -142,6 +148,8 @@ describe 'praefect' do
       it 'renders the config.toml' do
         expect(chef_run).to render_file(config_path)
           .with_content("listen_addr = '#{listen_addr}'")
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{^tls_listen_addr = '#{tls_listen_addr}'\n\[tls\]\ncertificate_path = '#{certificate_path}'\nkey_path = '#{key_path}'\n})
         expect(chef_run).to render_file(config_path)
           .with_content("socket_path = '#{socket_path}'")
         expect(chef_run).to render_file(config_path)
