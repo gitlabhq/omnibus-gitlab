@@ -81,7 +81,7 @@
   retry: 1
 
 .trigger-job: &trigger-job
-  image: "ruby:2.4"
+  image: "ruby:2.6"
   stage: trigger-package
   when: manual
   script:
@@ -377,7 +377,7 @@ Trigger:qa-test:
 
 Trigger:ha-validate:
   stage: trigger-ha-validate
-  image: "ruby:2.4"
+  image: "ruby:2.6"
   when: manual
   script:
       - bundle exec rake qa:ha:validate
