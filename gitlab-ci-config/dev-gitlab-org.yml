@@ -275,8 +275,11 @@ CentOS-8-branch:
 OpenSUSE-15.1-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.1:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
-SLES-12-branch:
+SLES-12.2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+SLES-12.5-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 
 Docker-branch:
@@ -444,8 +447,14 @@ CentOS-8:
 OpenSUSE-15.1:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.1:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
-SLES-12:
+SLES-12.2:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  only:
+    refs:
+      - /.*ee\.\d/@gitlab/omnibus-gitlab
+SLES-12.5:
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
   only:
     refs:
@@ -555,10 +564,15 @@ OpenSUSE-15.1-staging:
     - OpenSUSE-15.1
     - OpenSUSE-15.1-branch
   <<: *staging_upload
-SLES-12-staging:
+SLES-12.2-staging:
   dependencies:
-    - SLES-12
-    - SLES-12-branch
+    - SLES-12.2
+    - SLES-12.2-branch
+  <<: *staging_upload
+SLES-12.5-staging:
+  dependencies:
+    - SLES-12.5
+    - SLES-12.5-branch
   <<: *staging_upload
 
 ### Package releases
@@ -598,9 +612,16 @@ OpenSUSE-15.1-release:
   dependencies:
     - OpenSUSE-15.1
   <<: *production_release
-SLES-12-release:
+SLES-12.2-release:
   dependencies:
-    - SLES-12
+    - SLES-12.2
+  only:
+    refs:
+      - /.*ee\.\d/@gitlab/omnibus-gitlab
+  <<: *production_release
+SLES-12.5-release:
+  dependencies:
+    - SLES-12.5
   only:
     refs:
       - /.*ee\.\d/@gitlab/omnibus-gitlab
