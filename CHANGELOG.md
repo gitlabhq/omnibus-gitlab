@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.1.1 (2020-06-23)
+
+### Fixed (1 change)
+
+- Manually disable copy_file_range() on RedHat kernels. !4346
+
+### Added (1 change)
+
+- Update to Grafana 7. !4297
+
+
 ## 13.1.0 (2020-06-22)
 
 ### Removed (1 change)
