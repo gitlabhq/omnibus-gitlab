@@ -93,3 +93,15 @@ action :create do
     end
   end
 end
+
+action :restart do
+  runit_service new_resource.svc do
+    action :restart
+  end
+end
+
+action :stop do
+  runit_service new_resource.svc do
+    action :stop
+  end
+end

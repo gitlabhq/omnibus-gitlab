@@ -22,7 +22,6 @@ gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
 dependent_services = []
 %w(
-  puma
   unicorn
   sidekiq
 ).each do |svc|
@@ -33,6 +32,7 @@ templatesymlink 'Removes database_geo.yml symlink' do
   link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')
   link_to File.join(gitlab_rails_etc_dir, 'database_geo.yml')
   dependent_services.each { |svc| notifies :restart, svc }
+  notifies :restart, "unicorn_service[unicorn]" if omnibus_helper.should_notify?('unicorn')
 
   action :delete
 end
