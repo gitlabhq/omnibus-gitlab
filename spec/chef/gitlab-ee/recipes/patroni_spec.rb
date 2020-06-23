@@ -230,4 +230,54 @@ describe 'patroni cookbook' do
       }
     end
   end
+
+  context 'when building a cluster' do
+    before do
+      stub_gitlab_rb(
+        roles: %w(postgres_role),
+        patroni: {
+          enable: true
+        }
+      )
+    end
+
+    context 'from scratch' do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(false)
+      end
+
+      it 'should enable patroni service and skip disabling postgresql runit service' do
+        expect(chef_run).to enable_runit_service('patroni')
+        expect(chef_run).not_to disable_runit_service('postgresql')
+      end
+    end
+
+    context 'switching from repmgr' do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(true)
+        allow_any_instance_of(PatroniHelper).to receive(:node_status).and_return('running')
+        allow_any_instance_of(PatroniHelper).to receive(:repmgr_active?).and_return(true)
+      end
+
+      it 'should not signal to node to restart postgresql but must disable its runit service' do
+        expect(chef_run).to enable_runit_service('patroni')
+        expect(chef_run).to disable_runit_service('postgresql')
+        expect(chef_run).not_to run_execute('signal to restart postgresql')
+      end
+    end
+
+    context 'converting a standalone instance to a cluster member' do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(true)
+        allow_any_instance_of(PatroniHelper).to receive(:node_status).and_return('running')
+        allow_any_instance_of(PatroniHelper).to receive(:repmgr_active?).and_return(false)
+      end
+
+      it 'should signal to node to restart postgresql and disable its runit service' do
+        expect(chef_run).to enable_runit_service('patroni')
+        expect(chef_run).to disable_runit_service('postgresql')
+        expect(chef_run).to run_execute('signal to restart postgresql')
+      end
+    end
+  end
 end
