@@ -105,3 +105,9 @@ action :stop do
     action :stop
   end
 end
+
+action :disable do
+  runit_service new_resource.svc do
+    action :disable
+  end
+end
