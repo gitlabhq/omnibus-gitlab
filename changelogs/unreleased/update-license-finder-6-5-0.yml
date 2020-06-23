@@ -1,0 +1,5 @@
+---
+title: Update builder image to 0.0.65, to pick up license_finder update
+merge_request: 4338
+author:
+type: other
