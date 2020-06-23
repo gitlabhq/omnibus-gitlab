@@ -632,13 +632,20 @@ This example demonstrates upgrading from a database host running PostgreSQL 10 t
 
 1. Spin up a new PostgreSQL 11 database server that is set up according to the [database requirements](https://docs.gitlab.com/ee/install/requirements.html#database).
 
-1. You should ensure that the latest versions of `pg_dump` and `pg_restore`
-   are being used on the GitLab Rails instance. Edit `/etc/gitlab/gitlab.rb`
-   and specify the `postgresql['version']` to set them to version 11:
+1. You should ensure that the compatible versions of `pg_dump` and `pg_restore`
+   are being used on the GitLab Rails instance. To amend GitLab configuration, edit `/etc/gitlab/gitlab.rb`
+   and specify the value of `postgresql['version']`:
 
     ```ruby
     postgresql['version'] = 11
     ```
+
+  NOTE: **Note:**
+  Connecting to PostgreSQL v12 (alongside with amending `postgresql['version'] = 12`) will currently break the [GitLab Backup/Restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html) functionality unless the v12 client binaries are available on the file system. More on this topic can be found under [backup and restore a non-packaged database](#backup-and-restore-a-non-packaged-postgresql-database).
+  This problem with missing v12 client binaries will be tackled in this epic: [Add support for PostgreSQL 12](https://gitlab.com/groups/gitlab-org/-/epics/2374).
+
+  NOTE: **Note:**
+  If configuring a version number whose binaries are unavailable on the file system, GitLab/Rails will use the default database's version binaries (default as per [GitLab and PostgreSQL version compatibility table](../package-information/postgresql_versions.md)).
 
 1. Reconfigure GitLab:
 
