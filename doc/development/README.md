@@ -10,7 +10,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [Omnibus GitLab Architecture](../architecture/README.md)
 - [Adding a new Service to Omnibus GitLab](new-services.md)
 - [Creating patches](creating-patches.md)
-- [Pipelines and CI jobs](pipelines.md)
+- [Repositories, branches and CI pipelines](pipelines.md)
 - [Release process](../release/README.md)
 - [Building your own package](../build/README.md)
 - [Building a package from a custom branch](../build/README.md#building-a-package-from-a-custom-branch)
