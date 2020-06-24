@@ -143,6 +143,12 @@ build do
     patch source: 'ruby-fix-reserve-stack-segfault.patch', plevel: 1, env: patch_env
   end
 
+  # copy_file_range() has been disabled on recent RedHat kernels:
+  # 1. https://gitlab.com/gitlab-org/gitlab/-/issues/218999
+  # 2. https://bugs.ruby-lang.org/issues/16965
+  # 3. https://bugzilla.redhat.com/show_bug.cgi?id=1783554
+  patch source: 'ruby-disable-copy-file-range.patch', plevel: 1, env: patch_env if centos? || rhel?
+
   configure_command = ['--with-out-ext=dbm,readline',
                        '--enable-shared',
                        '--disable-install-doc',
