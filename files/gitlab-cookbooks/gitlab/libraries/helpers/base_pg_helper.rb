@@ -328,11 +328,11 @@ class BasePgHelper < BaseHelper
   end
 
   def ssl_cert_file
-    ::File.join(config_dir, node['postgresql']['ssl_cert_file'])
+    ::File.absolute_path(node['postgresql']['ssl_cert_file'], config_dir)
   end
 
   def ssl_key_file
-    ::File.join(config_dir, node['postgresql']['ssl_key_file'])
+    ::File.absolute_path(node['postgresql']['ssl_key_file'], config_dir)
   end
 
   private

@@ -1,0 +1,5 @@
+---
+title: Absolute SSL path should work for postgres recipe
+merge_request: 4356
+author:
+type: fixed
