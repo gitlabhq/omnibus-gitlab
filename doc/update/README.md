@@ -903,7 +903,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
-**For all nodes that run Puma/Unicorn or Sidekiq**
+**For all nodes that run Puma/Unicorn or Sidekiq _including_ the primary "deploy node"**
 
 Hot reload `puma` (or `unicorn`) and `sidekiq` services:
 
@@ -1007,7 +1007,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
-**For all nodes that run Puma/Unicorn, Sidekiq, or the `geo-logcursor` daemon**
+**For all nodes that run Puma/Unicorn, Sidekiq, or the `geo-logcursor` daemon _including_ the secondary "deploy node"**
 
 Hot reload `puma` (or `unicorn`), `sidekiq` and ``geo-logcursor`` services:
 
