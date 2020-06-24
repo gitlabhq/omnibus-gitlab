@@ -11,7 +11,6 @@ property :pid
 property :stderr_path
 property :stdout_path
 property :relative_url
-property :notifies_services
 property :owner
 property :group
 property :mode
@@ -40,6 +39,5 @@ action :create do
     group new_resource.group if new_resource.group
     mode new_resource.mode if new_resource.mode
     variables new_resource.to_hash
-    notifies(*new_resource.notifies_services) if new_resource.notifies_services
   end
 end

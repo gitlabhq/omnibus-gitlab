@@ -97,7 +97,7 @@ runit_service svc do
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab'][svc].to_hash)
 
-  notifies :stop, 'runit_service[unicorn]', :before
+  notifies :stop, 'unicorn_service[unicorn]', :before
 end
 
 if node['gitlab']['bootstrap']['enable']
