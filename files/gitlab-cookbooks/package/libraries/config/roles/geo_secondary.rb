@@ -28,17 +28,25 @@ module GeoSecondaryRole
     Gitlab['postgresql']['max_standby_streaming_delay'] ||= '60s'
     Gitlab['postgresql']['hot_standby'] ||= 'on'
     Gitlab['gitlab_rails']['auto_migrate'] ||= false
-    Gitlab['gitlab_rails']['enable'] = rails_needed? if Gitlab['gitlab_rails']['enable'].nil?
+    Gitlab['gitlab_rails']['enable'] = rails_needed?
     Gitlab[WebServerHelper.service_name]['worker_processes'] ||= number_of_worker_processes
   end
 
   def self.rails_needed?
-    Gitlab['unicorn']['enable'] ||
-      Gitlab['puma']['enable'] ||
-      Gitlab['sidekiq']['enable'] ||
-      Gitlab['sidekiq_cluster']['enable'] ||
-      Gitlab['gitaly']['enable'] ||
-      Gitlab['geo_logcursor']['enable']
+    return Gitlab['gitlab_rails']['enable'] unless Gitlab['gitlab_rails']['enable'].nil?
+
+    # If a service is explicitly set, it will be set in Gitlab[svc]['enable'].
+    # If it us auto-enabled, it will be set to true in Gitlab[:node][svc]['enable']
+    %w(unicorn puma sidekiq sidekiq_cluster geo_logcursor).each do |svc|
+      # If the service is explicitly enabled
+      return true if Gitlab[svc]['enable']
+      # If the service is auto-enabled, and not explicitly disabled
+      return true if Gitlab[:node]['gitlab'][svc.tr('_', '-')]['enable'] && Gitlab[svc]['enable'].nil?
+    end
+
+    return true if Gitlab['gitaly']['enable'] || (Gitlab[:node]['gitaly']['enable'] && Gitlab['gitaly']['enable'].nil?)
+
+    false
   end
 
   # running as a secondary requires several additional processes (geo-postgresql, geo-logcursor, etc).

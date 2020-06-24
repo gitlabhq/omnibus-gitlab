@@ -25,11 +25,11 @@ RSpec.configure do |config|
   platform, version = *ohai_data.values_at('platform', 'platform_version')
 
   begin
-    Fauxhai.mock(platform: platform, version: version)
+    Fauxhai.mock(platform: platform, version: version) { nil }
   rescue Fauxhai::Exception::InvalidPlatform
-    puts "Platform #{platform} #{version} not supported. Falling back to ubuntu 14.04"
+    puts "Platform #{platform} #{version} not supported. Falling back to ubuntu 16.04"
     platform = 'ubuntu'
-    version = '14.04'
+    version = '16.04'
   end
 
   config.platform = platform

@@ -126,7 +126,7 @@ include_recipe 'postgresql::bin'
   end
 end
 
-include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable'] && !node['gitlab']['pgbouncer']['enable']
+include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable'] && !(node['gitlab'].key?('pgbouncer') && node['gitlab']['pgbouncer']['enable'])
 
 include_recipe "praefect::database_migrations" if node['praefect']['enable'] && node['praefect']['auto_migrate']
 
