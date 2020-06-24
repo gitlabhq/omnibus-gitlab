@@ -150,6 +150,8 @@ node['gitlab']['gitlab-rails']['dependent_services'].each do |name|
   dependent_services << "runit_service[#{name}]" if omnibus_helper.should_notify?(name)
 end
 
+dependent_services << "unicorn_service[unicorn]" if omnibus_helper.should_notify?('unicorn')
+
 secret_file = File.join(gitlab_rails_etc_dir, "secret")
 secret_symlink = File.join(gitlab_rails_source_dir, ".secret")
 otp_key_base = node['gitlab']['gitlab-rails']['otp_key_base']
