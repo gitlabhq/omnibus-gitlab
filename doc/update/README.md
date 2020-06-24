@@ -4,18 +4,31 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Updating GitLab installed with the Omnibus GitLab package
+# Update GitLab installed with the Omnibus GitLab package
 
-See the [upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
-for suggestions on when to upgrade.
-If you are upgrading from a non-Omnibus installation to an Omnibus installation,
-[check this guide](convert_to_omnibus.md).
+Before following these instructions, note the following:
 
-## Version specific changes
+- [Upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+  has suggestions on when to upgrade.
+- If you are upgrading from a non-Omnibus installation to an Omnibus installation, see
+  [Upgrading from a non-Omnibus installation to an Omnibus installation](convert_to_omnibus.md).
+
+CAUTION: **Caution:**
+If you aren't [using the current major version](#mandatory-upgrade-paths-for-version-upgrades),
+you **must** follow the
+[upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+when updating to the current version.
+
+## Version-specific changes
 
 It's important to ensure that any background migrations have been fully completed
 before upgrading to a new major version. To see the current size of the `background_migration` queue,
 [check for background migrations before upgrading](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
+We recommend performing upgrades between major and minor releases no more than once per
+week, to allow time for background migrations to finish. Decrease the time required to
+complete these migrations by increasing the number of
+[Sidekiq workers](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html)
+that can process jobs in the `background_migration` queue.
 
 Updating to major versions might need some manual intervention. For more info,
 check the version your are updating to:
@@ -32,8 +45,8 @@ check the version your are updating to:
 
 From version 10.8 onwards, upgrade paths are enforced for version upgrades by
 default. This restricts performing direct upgrades that skip major versions (for
-example 10.3 to 12.7 in one jump) which can result in breakage of the GitLab
-installations due to multiple reasons like deprecated or removed configuration
+example 10.3 to 12.7 in one jump) that **can break GitLab
+installations** due to multiple reasons like deprecated or removed configuration
 settings, upgrade of internal tools and libraries etc. Users will have to follow
 the [official upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
 while upgrading their GitLab instances.
@@ -42,8 +55,8 @@ while upgrading their GitLab instances.
 
 There are two ways to update Omnibus GitLab:
 
-- Using the official repositories
-- Manually download the package
+- [Using the official repositories](#updating-using-the-official-repositories).
+- [Using a manually downloaded package](#updating-using-a-manually-downloaded-package).
 
 Both will automatically back up the GitLab database before installing a newer
 GitLab version. You may skip this automatic backup by creating an empty file
@@ -68,33 +81,76 @@ If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.co
 or [Enterprise Edition](https://about.gitlab.com/install/), then the
 official GitLab repository should have already been set up for you.
 
-To update to a newer GitLab version, all you have to do is:
+To update to a newer GitLab version, run:
 
-```shell
-# Debian/Ubuntu
-sudo apt-get update
-sudo apt-get install gitlab-ce
+- For GitLab Community Edition:
 
-# Centos/RHEL
-sudo yum install gitlab-ce
-```
+  ```shell
+  # Debian/Ubuntu
+  sudo apt-get update
+  sudo apt-get install gitlab-ce
 
-If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in
-the above commands.
+  # Centos/RHEL
+  sudo yum install gitlab-ce
+  ```
+
+- For GitLab Enterprise Edition:
+
+  ```shell
+  # Debian/Ubuntu
+  sudo apt-get update
+  sudo apt-get install gitlab-ee
+
+  # Centos/RHEL
+  sudo yum install gitlab-ee
+  ```
 
 ### Updating using a manually downloaded package
 
 If for some reason you don't use the official repositories, it is possible to
 [download the package and install it manually](../manual_install.md).
 
+1. Depending on the edition you already have installed, visit either:
+
+   - The [Community Edition repository](https://packages.gitlab.com/gitlab/gitlab-ce).
+   - The [Enterprise Edition repository](https://packages.gitlab.com/gitlab/gitlab-ee).
+
+1. Select the package of the version you want to install.
+1. Click **Download** to download the package.
+1. After the GitLab package is downloaded, install it using the following commands:
+
+   - For GitLab Community Edition:
+
+     ```shell
+     # GitLab Community Edition
+     # Debian/Ubuntu
+     dpkg -i gitlab-ce-<version>.deb
+
+     # CentOS/RHEL
+     rpm -Uvh gitlab-ce-<version>.rpm
+     ```
+
+   - For GitLab Enterprise Edition:
+
+     ```shell
+     # Debian/Ubuntu
+     dpkg -i gitlab-ee-<version>.deb
+
+     # CentOS/RHEL
+     rpm -Uvh gitlab-ee-<version>.rpm
+     ```
+
 ## Updating Community Edition to Enterprise Edition
 
 To upgrade an existing GitLab Community Edition (CE) server, installed using the
 Omnibus packages, to GitLab Enterprise Edition (EE), all you have to do is
 install the EE package on top of CE. While upgrading from the same version of
-CE to EE is not explicitly necessary, and any standard upgrade jump (i.e. 8.0
-to 8.7) should work, in the following steps we assume that you are upgrading the
-same versions.
+CE to EE is not explicitly necessary, and any standard upgrade jump (i.e. 12.0
+to 12.1) should work, in the following steps we assume that you are upgrading the
+same versions as it is recommended that you first **upgrade to the same EE version**.
+
+CAUTION: **Caution:**
+When updating to EE from CE, avoid reverting back to CE if you plan on going to EE again in the future. Doing so can cause [database issues](#500-error-when-accessing-project--settings--repository-on-omnibus-installs) that may require Support intervention.
 
 The steps can be summed up to:
 
@@ -106,8 +162,8 @@ The steps can be summed up to:
    sudo apt-cache policy gitlab-ce | grep Installed
    ```
 
-   The output should be similar to: `Installed: 8.6.7-ce.0`. In that case,
-   the equivalent Enterprise Edition version will be: `8.6.7-ee.0`. Write this
+   The output should be similar to: `Installed: 13.0.4-ce.0`. In that case,
+   the equivalent Enterprise Edition version will be: `13.0.4-ee.0`. Write this
    value down.
 
    **For CentOS/RHEL**
@@ -116,9 +172,9 @@ The steps can be summed up to:
    sudo rpm -q gitlab-ce
    ```
 
-   The output should be similar to: `gitlab-ce-8.6.7-ce.0.el7.x86_64`. In that
+   The output should be similar to: `gitlab-ce-13.0.4-ce.0.el8.x86_64`. In that
    case, the equivalent Enterprise Edition version will be:
-   `gitlab-ee-8.6.7-ee.0.el7.x86_64`. Write this value down.
+   `gitlab-ee-13.0.4-ee.0.el8.x86_64`. Write this value down.
 
 1. Add the `gitlab-ee` [Apt or Yum repository](https://packages.gitlab.com/gitlab/gitlab-ee/install):
 
@@ -141,8 +197,8 @@ The steps can be summed up to:
 
 1. Next, install the `gitlab-ee` package. Note that this will automatically
    uninstall the `gitlab-ce` package on your GitLab server. `reconfigure`
-   Omnibus right after the `gitlab-ee` package is installed. Make sure that you
-   install the exact same GitLab version:
+   Omnibus right after the `gitlab-ee` package is installed. **Make sure that you
+   install the exact same GitLab version**:
 
    **For Debian/Ubuntu**
 
@@ -151,7 +207,7 @@ The steps can be summed up to:
    sudo apt-get update
 
    ## Install the package using the version you wrote down from step 1
-   sudo apt-get install gitlab-ee=8.6.7-ee.0
+   sudo apt-get install gitlab-ee=13.0.4-ee.0
 
    ## Reconfigure GitLab
    sudo gitlab-ctl reconfigure
@@ -161,17 +217,17 @@ The steps can be summed up to:
 
    ```shell
    ## Install the package using the version you wrote down from step 1
-   sudo yum install gitlab-ee-8.6.7-ee.0.el7.x86_64
+   sudo yum install gitlab-ee-13.0.4-ee.0.el8.x86_64
 
    ## Reconfigure GitLab
    sudo gitlab-ctl reconfigure
    ```
 
-   NOTE: **Note:**
-   If you want to upgrade to EE and at the same time also update GitLab to the
-   latest version, you can omit the version check in the above commands. For
-   Debian/Ubuntu that would be `sudo apt-get install gitlab-ee` and for
-   CentOS/RHEL `sudo yum install gitlab-ee`.
+    NOTE: **Note:**
+   To upgrade to EE and also update GitLab to the latest version at the same time, you
+   can omit version information from the commands above. That is, run
+   `sudo apt-get install gitlab-ee` or `sudo yum install gitlab-ee` depending on your
+   distribution.
 
 1. Now go to the GitLab admin panel of your server (`/admin/license/new`) and
    upload your license file.
@@ -213,10 +269,11 @@ Verify that you can upgrade with no downtime by checking the
 
 If you meet all the requirements above, follow these instructions in order. There are three sets of steps, depending on your deployment type:
 
-| Deployment type                                                              | Description                                       |
-| ---------------------------------------------------------------------------- | ------------------------------------------------  |
-| [Single-node](#single-node-deployment)                                       | GitLab CE/EE on a single node                     |
-| [Multi-node / PostgreSQL HA](#using-postgresql-ha)                           | GitLab CE/EE using HA architecture for PostgreSQL |
+| Deployment type                                                 | Description                                       |
+| --------------------------------------------------------------- | ------------------------------------------------  |
+| [Single-node](#single-node-deployment)                          | GitLab CE/EE on a single node                     |
+| [Gitaly Cluster](#gitaly-cluster)                               | GitLab CE/EE using HA architecture for Gitaly Cluster             |
+| [Multi-node / PostgreSQL HA](#using-postgresql-ha)              | GitLab CE/EE using HA architecture for PostgreSQL |
 | [Multi-node / Redis HA](#using-redis-ha-using-sentinel-premium-only)         | GitLab CE/EE using HA architecture for Redis      |
 | [Geo](#geo-deployment-premium-only)                                          | GitLab EE with Geo enabled                        |
 | [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo-premium-only) | GitLab CE/EE on multiple nodes                    |
@@ -228,16 +285,19 @@ to re-read any database changes that have been made by post-deployment migration
 
 ### Single-node deployment
 
-CAUTION: **Caution:**
-Zero down-time updates are not possible when using Puma, since Puma always
-requires a complete restart. This is because the [phased restart](https://github.com/puma/puma/blob/master/README.md#clustered-mode)
-feature of Puma does not work with the way it is configured in GitLab's
-all-in-one packages (cluster-mode with app preloading).
+Before following these instructions, note the following **important** information:
 
-CAUTION: **Caution:** While it is possible to minimize downtime on a single-node
-instance by following these instructions, it is not possible to always achieve
-true zero downtime updates. Users may see some connections timeout or be refused
-for a few minutes, depending on which services need to restart.
+- On single-node Omnibus deployments, zero down-time updates are not possible when
+  using Puma because Puma always requires a complete restart (Puma replaced Unicorn as
+  the default in GitLab 13.0 unless
+  [specifically disabled](../settings/unicorn.md#enabling-unicorn)). This is because the
+  [phased restart](https://github.com/puma/puma/blob/master/README.md#clustered-mode)
+  feature of Puma does not work with the way it is configured in GitLab's all-in-one
+  packages (cluster-mode with app preloading).
+- While it is possible to minimize downtime on a single-node instance by following
+  these instructions, **it is not possible to always achieve true zero downtime
+  updates**. Users may see some connections timeout or be refused for a few minutes,
+  depending on which services need to restart.
 
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
@@ -247,17 +307,33 @@ for a few minutes, depending on which services need to restart.
    sudo touch /etc/gitlab/skip-auto-reconfigure
    ```
 
-1. Update the GitLab package
+1. Update the GitLab package:
 
-   ```shell
-   # Debian/Ubuntu
-   sudo apt-get update && sudo apt-get install gitlab-ce
+   - For GitLab Community Edition:
 
-   # Centos/RHEL
-   sudo yum install gitlab-ce
-   ```
+     ```shell
+     # Debian/Ubuntu
+     sudo apt-get update
+     sudo apt-get install gitlab-ce
 
-   If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
+     # Centos/RHEL
+     sudo yum install gitlab-ce
+     ```
+
+   - For GitLab Enterprise Edition:
+
+     ```shell
+     # Debian/Ubuntu
+     sudo apt-get update
+     sudo apt-get install gitlab-ee
+
+     # Centos/RHEL
+     sudo yum install gitlab-ee
+     ```
+
+   NOTE : **Note**
+   The above commands use the latest version of GitLab. Use a version-specific package
+   to update to an older version.
 
 1. To get the regular migrations and latest code in place, run
 
@@ -572,7 +648,7 @@ HA.
 
 According to [official Redis docs](https://redis.io/topics/admin#upgrading-or-restarting-a-redis-instance-without-downtime),
 the easiest way to update an HA instance using Sentinel is to upgrade the
-secondaries one after the other, performa a manual failover from current
+secondaries one after the other, perform a manual failover from current
 primary (running old version) to a recently upgraded secondary (running a new
 version), and then upgrade the original primary. For this, we need to know
 the address of the current Redis primary.
@@ -1082,9 +1158,17 @@ downgrading to. Ideally, you should have a
 [full backup archive](https://docs.gitlab.com/ee/raketasks/backup_restore.html#back-up-gitlab)
 on hand.
 
+The example below demonstrates the downgrade procedure when downgrading between minor
+and patch versions (for example, from 13.0.6 to 13.0.5).
+
+When downgrading between major versions, take into account the
+[specific version changes](#version-specific-changes) that occurred when you upgraded
+to the major version you are downgrading from.
+
 These steps consist of:
 
 - Stopping GitLab
+- Removing the current package
 - Installing the old package
 - Reconfiguring GitLab
 - Restoring the backup
@@ -1092,13 +1176,23 @@ These steps consist of:
 
 Steps:
 
-1. Stop GitLab:
+1. Stop GitLab and remove the current package:
 
    ```shell
-   sudo gitlab-ctl stop puma  # if you have Puma
-   sudo gitlab-ctl stop unicorn  # if you have Unicorn
+   # If running Puma
+   sudo gitlab-ctl stop puma
+
+    # If running Unicorn
+   sudo gitlab-ctl stop unicorn
+
+   # Stop sidekiq
    sudo gitlab-ctl stop sidekiq
-   sudo systemctl stop gitlab-runsvdir
+
+   # If on Ubuntu: remove the current package
+   sudo dpkg -r gitlab-ee
+
+   # If on Centos: remove the current package
+   sudo yum remove gitlab-ee
    ```
 
 1. Identify the GitLab version you want to downgrade to:
@@ -1113,19 +1207,19 @@ Steps:
    sudo yum --showduplicates list gitlab-ee
    ```
 
-1. Downgrade GitLab to the desired version (for example, to downgrade to 12.0.0):
+1. Downgrade GitLab to the desired version (for example, to GitLab 13.0.5):
 
    ```shell
    # (Replace with gitlab-ce if you have GitLab FOSS installed)
 
    # Ubuntu
-   sudo apt install gitlab-ee=12.0.0-ee.0
+   sudo apt install gitlab-ee=13.0.5-ee.0
 
    # CentOS:
-   sudo yum install gitlab-ee-12.0.0-ee.0.el7
+   sudo yum install gitlab-ee-13.0.5-ee.0.el8
    ```
 
-1. Reconfigure GitLab (includes database migrations):
+1. Reconfigure GitLab:
 
    ```shell
    sudo gitlab-ctl reconfigure
@@ -1134,15 +1228,22 @@ Steps:
 1. Restore your backup:
 
    ```shell
-   sudo gitlab-ctl stop
-   sudo gitlab-backup restore BACKUP=12345 # where 12345 is your backup timestamp
-   sudo gitlab-ctl start
+   # Restore your backup and reconfigure
+   sudo gitlab-backup restore BACKUP=XXXXXXXXXX_2020_XX_XX_13.0.5-ee
+   sudo gitlab-ctl reconfigure
    ```
 
-1. Start GitLab:
+1. Restart GitLab:
 
    ```shell
-   sudo gitlab-ctl start
+   sudo gitlab-ctl restart
+   ```
+
+1. Check GitLab:
+
+   ```shell
+   # It may take a few seconds for Sidekiq and gitlab-shell to start
+   sudo gitlab-rake gitlab:check SANITIZE=true
    ```
 
 ## Updating GitLab CI from prior `5.4.0` to version `7.14` via Omnibus GitLab
