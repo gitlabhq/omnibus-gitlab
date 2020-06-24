@@ -191,7 +191,7 @@ describe 'nginx' do
     end
 
     it 'disables Connection header' do
-      expect_headers = nginx_headers({ "Host" => "nohost.example.com", "X-Forwarded-Proto" => "https", "X-Forwarded-Ssl" => "on", "Connection" => nil })
+      expect_headers = nginx_headers({ "Host" => "nohost.example.com", "X-Forwarded-Proto" => "https", "X-Forwarded-Ssl" => "on" })
       set_headers = { "Host" => "nohost.example.com", "Connection" => nil }
       stub_gitlab_rb(
         "nginx" => { proxy_set_headers: set_headers },

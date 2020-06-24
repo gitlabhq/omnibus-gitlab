@@ -34,8 +34,8 @@ gitlab_rails_shared_cache_dir = File.join(node['gitlab']['gitlab-rails']['shared
 upgrade_status_dir = File.join(gitlab_rails_dir, "upgrade-status")
 
 # Set path to the private key used for communication between registry and Gitlab.
-node.default['gitlab']['gitlab-rails']['registry_key_path'] = File.join(gitlab_rails_etc_dir, "gitlab-registry.key")
-node.default['gitlab']['gitlab-rails']['db_host'] ||= node['postgresql']['dir']
+node.normal['gitlab']['gitlab-rails']['registry_key_path'] = File.join(gitlab_rails_etc_dir, "gitlab-registry.key") if node['gitlab']['gitlab-rails']['registry_key_path'].nil?
+node.normal['gitlab']['gitlab-rails']['db_host'] = node['postgresql']['dir'] if node['gitlab']['gitlab-rails']['db_host'].nil?
 
 gitlab_user = account_helper.gitlab_user
 gitlab_group = account_helper.gitlab_group

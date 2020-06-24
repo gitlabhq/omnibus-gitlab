@@ -4,7 +4,7 @@ describe Services do
   before { allow(Gitlab).to receive(:[]).and_call_original }
 
   describe 'when using the gitlab cookbook' do
-    cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
     it 'returns the gitlab service list' do
       chef_run
@@ -14,7 +14,7 @@ describe Services do
   end
 
   describe 'when using the gitlab-ee cookbook' do
-    cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
     it 'returns the gitlab service list including gitlab-ee items' do
       chef_run
@@ -28,14 +28,14 @@ describe Services do
   end
 
   describe 'service' do
-    cached(:runner) { ChefSpec::SoloRunner.new }
+    let(:runner) { ChefSpec::SoloRunner.new }
     let(:chef_run) { runner.converge('gitlab::config') }
     let(:node) { runner.node }
 
     before { Services.add_services('gitlab', Services::BaseServices.list) }
 
     context 'when using user values that conflict with service settings' do
-      cached!(:runner) { ChefSpec::SoloRunner.new { |node| Gitlab[:node] = node } }
+      let!(:runner) { ChefSpec::SoloRunner.new { |node| Gitlab[:node] = node } }
 
       it 'node service settings are overridden by gitlab.rb changes' do
         stub_gitlab_rb(redis: { enable: true }, mattermost: { enable: false })
@@ -174,7 +174,7 @@ describe Services do
   end
 
   describe 'group' do
-    cached(:runner) { ChefSpec::SoloRunner.new }
+    let(:runner) { ChefSpec::SoloRunner.new }
     let(:chef_run) { runner.converge('gitlab::config') }
     let(:node) { runner.node }
 

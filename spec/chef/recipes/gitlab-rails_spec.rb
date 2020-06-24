@@ -2634,6 +2634,24 @@ describe 'gitlab::gitlab-rails' do
       it 'generates gitlab-registry.key file' do
         expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/gitlab-registry.key").with_content(/\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m)
       end
+
+      context 'with non-default values' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              registry_key_path: '/fake/path'
+            }
+          )
+        end
+
+        it 'renders gitlab.yml correctly' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'registry_key_path' => '/fake/path'
+            )
+          )
+        end
+      end
     end
   end
 
