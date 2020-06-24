@@ -22,7 +22,7 @@ gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
 dependent_services = []
 %w(
-  unicorn
+  puma
   sidekiq
 ).each do |svc|
   dependent_services << "runit_service[#{svc}]" if omnibus_helper.should_notify?(svc)
