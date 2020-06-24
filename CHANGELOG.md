@@ -167,6 +167,14 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.22.2. (Harrison Healey)
 
 
+## 12.10.12 (2020-06-24)
+
+### Fixed (2 changes)
+
+- Fix geo timeout issue with pg-upgrade. !4148
+- Manually disable copy_file_range() on RedHat kernels. !4346
+
+
 ## 12.10.11 (2020-06-10)
 
 - No changes.
