@@ -62,7 +62,7 @@ action :create do
     owner "root"
     group "root"
     mode "0644"
-    notifies_services :restart, "runit_service[#{new_resource.svc}]" if omnibus_helper.should_notify?(new_resource.svc)
+    notifies :restart, "runit_service[#{new_resource.svc}]" if omnibus_helper.should_notify?(new_resource.svc)
   end
 
   runit_service new_resource.svc do
