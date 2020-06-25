@@ -1,0 +1,5 @@
+---
+title: Manually disable copy_file_range() on RedHat kernels
+merge_request: 4346
+author:
+type: fixed
