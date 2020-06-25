@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.0.7 (2020-06-25)
+
+### Fixed (2 changes)
+
+- Fix geo timeout issue with pg-upgrade. !4148
+- Manually disable copy_file_range() on RedHat kernels. !4346
+
+
 ## 13.0.6 (2020-06-10)
 
 - No changes.
