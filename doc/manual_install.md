@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Manually Downloading and Installing a GitLab Package
+# Manually download and install a GitLab package
 
 NOTE: **Note:**
 The [package repository](https://about.gitlab.com/install/) is recommended over
@@ -26,11 +26,12 @@ additional requirements to support GitLab.
 All GitLab packages are posted to GitLab's [package server](https://packages.gitlab.com/gitlab/)
 and can be downloaded. Five repositories are maintained:
 
-- [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee): for official Enterprise Edition releases
-- [GitLab CE](https://packages.gitlab.com/gitlab/gitlab-ce): for official Community Edition releases
-- [Unstable](https://packages.gitlab.com/gitlab/unstable): for release candidates and other unstable versions
-- [Nighty Builds](https://packages.gitlab.com/gitlab/nightly-builds): for nightly builds
-- [Raspberry Pi](https://packages.gitlab.com/gitlab/raspberry-pi2): for official Community Edition releases built for [Raspberry Pi](https://www.raspberrypi.org) packages
+- [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee): for official
+  [Enterprise Edition](https://about.gitlab.com/pricing/) releases.
+- [GitLab CE](https://packages.gitlab.com/gitlab/gitlab-ce): for official Community Edition releases.
+- [Unstable](https://packages.gitlab.com/gitlab/unstable): for release candidates and other unstable versions.
+- [Nighty Builds](https://packages.gitlab.com/gitlab/nightly-builds): for nightly builds.
+- [Raspberry Pi](https://packages.gitlab.com/gitlab/raspberry-pi2): for official Community Edition releases built for [Raspberry Pi](https://www.raspberrypi.org) packages.
 
 To download GitLab:
 
@@ -46,31 +47,34 @@ To download GitLab:
 
 ## Install or update a GitLab Package
 
-Once the GitLab package is downloaded, install it using the following
-commands, replacing `XXX` with the GitLab package version you downloaded:
+After the GitLab package is downloaded, install it using the following commands:
 
-NOTE: **Note:**
-If you are an [Enterprise Edition](https://about.gitlab.com/pricing/) user,
-replace `gitlab-ce` with `gitlab-ee` in the commands below.
-
-- DEB based (Ubuntu, Debian, Raspberry Pi):
+- For GitLab Community Edition:
 
   ```shell
-  sudo dpkg -i gitlab-ce-XXX.deb
+  # GitLab Community Edition
+  # Debian/Ubuntu
+  dpkg -i gitlab-ce-<version>.deb
+
+  # CentOS/RHEL
+  rpm -Uvh gitlab-ce-<version>.rpm
   ```
 
-- RPM based (CentOS, RHEL, Oracle, Scientific, openSUSE, SLES):
+- For GitLab [Enterprise Edition](https://about.gitlab.com/pricing/):
 
   ```shell
-  sudo rpm -i gitlab-ce-XXX.rpm
+  # Debian/Ubuntu
+  dpkg -i gitlab-ee-<version>.deb
+
+  # CentOS/RHEL
+  rpm -Uvh gitlab-ee-<version>.rpm
   ```
 
 TIP: **Tip:**
 If you are installing for the first time, you can pass the
-`EXTERNAL_URL="http://gitlab.example.com"` variable to set your preferred
-domain name. Change `http://gitlab.example.com` to the URL at which you want to access your
-GitLab instance. Installation will automatically configure and start GitLab at that URL.
-Enabling HTTPS will require [additional configuration](settings/nginx.md#enable-https) to specify the certificates.
+`EXTERNAL_URL="<GitLab URL>"` variable to set your preferred domain name. Installation will
+automatically configure and start GitLab at that URL. Enabling HTTPS requires
+[additional configuration](settings/nginx.md#enable-https) to specify the certificates.
 
 ## Browse to the hostname and login
 
