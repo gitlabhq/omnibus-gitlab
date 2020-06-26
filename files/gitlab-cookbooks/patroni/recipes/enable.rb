@@ -83,7 +83,6 @@ runit_service 'patroni' do
   supervisor_owner account_helper.postgresql_user
   supervisor_group account_helper.postgresql_group
   restart_on_update false
-  control(['t'])
   options({
     user: account_helper.postgresql_user,
     groupname: account_helper.postgresql_group,
