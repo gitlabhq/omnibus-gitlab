@@ -45,7 +45,7 @@ permission to both merge, and push to protected branches.
 
 NOTE: **Note:** Developers get access to `master` branch in QA mirror because
 that's required to run a triggered pipeline against the branch. There is an
-[open issue](https://gitlab.com/gitlab-org/gitlab/issues/24585) to change this
+[open issue](https://gitlab.com/gitlab-org/gitlab/-/issues/24585) to change this
 situation.
 
 ### Protected Tags
@@ -128,8 +128,8 @@ environments - will be part of this pipeline.
 ### Triggered pipelines
 
 We use triggered pipelines to run a "package-and-qa" pipeline in the [QA
-mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror). These can be triggered either from a pipeline in the [Development
-mirror] or [GitLab project](https://gitlab.com/gitlab-org/gitlab).
+mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror). These can be triggered either from a pipeline in the
+[Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) or [GitLab project](https://gitlab.com/gitlab-org/gitlab).
 
 This pipeline is intended to give the developers a package and an image to test
 their changes in addition to automatically doing a QA run against these
@@ -443,7 +443,7 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 
 This job compiles the license information of all the dependencies from the
 package and uploads it to the S3 bucket. This is used by
-[`Generate license pages`] scheduled job in [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) to populate the
+[`pages`](#pages) scheduled job in [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) to populate the
 [License collection webpage](http://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html).
 
 ## Housekeeping Jobs

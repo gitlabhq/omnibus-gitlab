@@ -39,6 +39,7 @@ exceptions:
   - LDAPS
   - LESS
   - LFS
+  - LRU
   - NFS
   - NGINX
   - NOTE
@@ -48,6 +49,7 @@ exceptions:
   - POST
   - PUT
   - RPC
+  - RAM
   - RSA
   - RSS
   - SAML
@@ -58,11 +60,13 @@ exceptions:
   - SSH
   - SSL
   - SSO
+  - TCP
   - TIP
   - TLS
   - TODO
   - TOML
   - UNIX
+  - USB
   - URI
   - URL
   - VPC

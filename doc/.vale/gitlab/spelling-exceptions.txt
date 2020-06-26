@@ -227,6 +227,7 @@ memoization
 memoize
 memoized
 memoizing
+Memorystore
 mergeable
 Microsoft
 middleware
@@ -312,6 +313,7 @@ Qualys
 Rackspace
 Raketask
 Raketasks
+Raspbian
 reachability
 rebase
 rebased
@@ -392,6 +394,7 @@ storages
 strace
 strikethrough
 strikethroughs
+stunnel
 subpath
 subfolder
 subfolders
