@@ -1316,28 +1316,34 @@ describe 'gitlab::gitlab-rails' do
     end
 
     context 'Sidekiq log_format' do
-      it 'sets the Sidekiq log_format to json' do
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            sidekiq: hash_including(
-              'log_format' => 'json'
+      context 'json' do
+        it 'sets the Sidekiq log_format to json' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              sidekiq: hash_including(
+                'log_format' => 'json'
+              )
             )
           )
-        )
-        expect(chef_run).not_to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/-tt/)
+          expect(chef_run).not_to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/-tt/)
+        end
       end
 
-      it 'sets the Sidekiq log_format to default' do
-        stub_gitlab_rb(sidekiq: { log_format: 'default' })
+      context 'default' do
+        let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink sidekiq_service runit_service)).converge('gitlab::default') }
 
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            sidekiq: hash_including(
-              'log_format' => 'default'
+        it 'sets the Sidekiq log_format to default' do
+          stub_gitlab_rb(sidekiq: { log_format: 'default' })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              sidekiq: hash_including(
+                'log_format' => 'default'
+              )
             )
           )
-        )
-        expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/svlogd -tt/)
+          expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/svlogd -tt/)
+        end
       end
     end
 
@@ -1357,8 +1363,8 @@ describe 'gitlab::gitlab-rails' do
         let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab.yml and create a symlink to Rails root') }
 
         it 'template triggers notifications' do
-          expect(templatesymlink).not_to notify('runit_service[sidekiq]').to(:restart).delayed
-          expect(templatesymlink).to notify('runit_service[sidekiq-cluster]').to(:restart).delayed
+          expect(templatesymlink).not_to notify('sidekiq_service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq-cluster]').to(:restart).delayed
         end
       end
     end
@@ -2280,7 +2286,7 @@ describe 'gitlab::gitlab-rails' do
 
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
-          expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
           expect(templatesymlink).not_to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
           expect(templatesymlink).not_to notify('runit_service[nginx]').to(:restart).delayed
         end
@@ -2330,7 +2336,7 @@ describe 'gitlab::gitlab-rails' do
 
           it 'template triggers notifications' do
             expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
-            expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
+            expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
             expect(templatesymlink).not_to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
             expect(templatesymlink).not_to notify('runit_service[nginx]').to(:restart).delayed
           end
@@ -2488,7 +2494,7 @@ describe 'gitlab::gitlab-rails' do
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
           expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
-          expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
         end
       end
 
@@ -2518,7 +2524,7 @@ describe 'gitlab::gitlab-rails' do
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
           expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
-          expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
         end
       end
     end
@@ -2573,7 +2579,7 @@ describe 'gitlab::gitlab-rails' do
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('runit_service[gitlab-pages]').to(:restart).delayed
           expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
-          expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
         end
       end
 
@@ -2609,7 +2615,7 @@ describe 'gitlab::gitlab-rails' do
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('runit_service[gitlab-pages]').to(:restart).delayed
           expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
-          expect(templatesymlink).to notify('runit_service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
         end
       end
     end

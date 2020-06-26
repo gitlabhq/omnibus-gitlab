@@ -105,8 +105,8 @@ describe Sidekiq do
 
         expect(chef_run).not_to include_recipe('gitlab::sidekiq')
         expect(chef_run).to include_recipe('gitlab::sidekiq-cluster')
-        expect(chef_run).to enable_runit_service('sidekiq')
-        expect(chef_run).not_to enable_runit_service('sidekiq-cluster')
+        expect(chef_run).to enable_sidekiq_service('sidekiq')
+        expect(chef_run).not_to enable_sidekiq_service('sidekiq-cluster')
       end
     end
 
@@ -115,11 +115,10 @@ describe Sidekiq do
         stub_gitlab_rb(
           roles: ['redis_sentinel_role']
         )
-
         expect(chef_run).not_to include_recipe('gitlab::sidekiq-cluster')
         expect(chef_run).not_to include_recipe('gitlab::sidekiq')
-        expect(chef_run).not_to enable_runit_service('sidekiq')
-        expect(chef_run).not_to enable_runit_service('sidekiq-cluster')
+        expect(chef_run).not_to enable_sidekiq_service('sidekiq')
+        expect(chef_run).not_to enable_sidekiq_service('sidekiq-cluster')
       end
 
       it 'runs a sidekiq service if explicitly enabled' do
@@ -130,7 +129,7 @@ describe Sidekiq do
 
         expect(chef_run).not_to include_recipe('gitlab::sidekiq')
         expect(chef_run).to include_recipe('gitlab::sidekiq-cluster')
-        expect(chef_run).to enable_runit_service('sidekiq')
+        expect(chef_run).to enable_sidekiq_service('sidekiq')
       end
     end
   end
