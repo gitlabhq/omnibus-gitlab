@@ -34,7 +34,7 @@ supported.
 
 ### Install GitLab via the official repository
 
-Visit the [installation page](https://about.gitlab.com/install), choose
+Visit the [installation page](https://about.gitlab.com/install/), choose
 Raspberry Pi OS, and follow the instructions to install GitLab.
 
 ### Manually download GitLab

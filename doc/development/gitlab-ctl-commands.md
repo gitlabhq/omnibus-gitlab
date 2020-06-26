@@ -12,7 +12,7 @@ There are two main functions you will use to add commands (<https://github.com/c
 
 ## add_command_under_category(string, string, string, int, ruby_block)
 
-This method will add a new command to your ctl under a category, useful for grouping similar commands together logically in help output.
+This method will add a new command to your `gitlab-ctl` under a category, useful for grouping similar commands together logically in help output.
 
 Input arguments:
 
@@ -24,6 +24,6 @@ Input arguments:
 
 ## add_command(string, string, int, ruby_block)
 
-This method will add a new command to your ctl without a category. It will be displayed above all categories when the help command is called.
+This method will add a new command to your `gitlab-ctl` without a category. It will be displayed above all categories when the help command is called.
 
 Input arguments are the same as `add_command_under_category` except 2 doesn't exist.
