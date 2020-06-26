@@ -256,7 +256,7 @@ describe 'patroni cookbook' do
       before do
         allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(true)
         allow_any_instance_of(PatroniHelper).to receive(:node_status).and_return('running')
-        allow_any_instance_of(PatroniHelper).to receive(:repmgr_active?).and_return(true)
+        allow_any_instance_of(PatroniHelper).to receive(:repmgr_data_present?).and_return(true)
       end
 
       it 'should not signal to node to restart postgresql but must disable its runit service' do
@@ -270,7 +270,7 @@ describe 'patroni cookbook' do
       before do
         allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(true)
         allow_any_instance_of(PatroniHelper).to receive(:node_status).and_return('running')
-        allow_any_instance_of(PatroniHelper).to receive(:repmgr_active?).and_return(false)
+        allow_any_instance_of(PatroniHelper).to receive(:repmgr_data_present?).and_return(false)
       end
 
       it 'should signal to node to restart postgresql and disable its runit service' do
