@@ -20,19 +20,14 @@ gitlab_rails_source_dir = '/opt/gitlab/embedded/service/gitlab-rails'
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
-dependent_services = []
-%w(
-  puma
-  sidekiq
-).each do |svc|
-  dependent_services << "runit_service[#{svc}]" if omnibus_helper.should_notify?(svc)
-end
+dependent_services = %w(puma unicorn sidekiq sidekiq-cluster)
 
 templatesymlink 'Removes database_geo.yml symlink' do
   link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')
   link_to File.join(gitlab_rails_etc_dir, 'database_geo.yml')
-  dependent_services.each { |svc| notifies :restart, svc }
-  notifies :restart, "unicorn_service[unicorn]" if omnibus_helper.should_notify?('unicorn')
+  dependent_services.each do |svc|
+    notifies :restart, omnibus_helper.restart_service_resource(svc) if omnibus_helper.should_notify?(svc)
+  end
 
   action :delete
 end

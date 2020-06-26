@@ -23,7 +23,7 @@ gitlab_rails_source_dir = '/opt/gitlab/embedded/service/gitlab-rails'
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
-dependent_services = %w(puma sidekiq geo-logcursor)
+dependent_services = %w(unicorn puma geo-logcursor sidekiq sidekiq-cluster)
 
 templatesymlink 'Create a database_geo.yml and create a symlink to Rails root' do
   link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')
@@ -40,9 +40,8 @@ end
 ruby_block 'Restart geo-secondary dependent services' do
   block do
     dependent_services.each do |svc|
-      notifies :restart, "runit_service[#{svc}]" if omnibus_helper.should_notify?(svc)
+      notifies :restart, omnibus_helper.restart_service_resource(svc) if omnibus_helper.should_notify?(svc)
     end
-    notifies :restart, "unicorn_service[unicorn]" if omnibus_helper.should_notify?('unicorn')
   end
   action :nothing
 end

@@ -198,6 +198,13 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
     node['gitlab']['sidekiq']['cluster'] ? 'sidekiq' : 'sidekiq-cluster'
   end
 
+  def restart_service_resource(service)
+    return "sidekiq_service[#{service}]" if %w(sidekiq sidekiq-cluster).include?(service)
+    return "unicorn_service[#{service}]" if %w(unicorn).include?(service)
+
+    "runit_service[#{service}]"
+  end
+
   private
 
   def sidekiq_service_enabled?
