@@ -239,6 +239,30 @@ external_url 'GENERATED_EXTERNAL_URL'
 ####! The format of mail_room crash logs
 # mailroom['exit_log_format'] = "plain"
 
+### Consolidated (simplified) object storage configuration
+###! This uses a single credential for object storage with multiple buckets.
+###! It also enables Workhorse to upload files directly with its own S3 client
+###! instead of using pre-signed URLs.
+###!
+###! This configuration will only take effect if the object_store
+###! sections are not defined within the types. For example, enabling
+###! gitlab_rails['artifacts_object_store_enabled'] or
+###! gitlab_rails['lfs_object_store_enabled'] will prevent the
+###! consolidated settings from being used.
+###!
+###! Be sure to use different buckets for each type of object.
+###! Docs: https://docs.gitlab.com/ee/administration/object_storage.html
+gitlab_rails['object_store']['enabled'] = false
+gitlab_rails['object_store']['connection'] = {}
+gitlab_rails['object_store']['proxy_download'] = false
+gitlab_rails['object_store']['objects']['artifacts']['bucket'] = nil
+gitlab_rails['object_store']['objects']['external_diffs']['bucket'] = nil
+gitlab_rails['object_store']['objects']['lfs']['bucket'] = nil
+gitlab_rails['object_store']['objects']['uploads']['bucket'] = nil
+gitlab_rails['object_store']['objects']['packages']['bucket'] = nil
+gitlab_rails['object_store']['objects']['dependency_proxy']['bucket'] = nil
+gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
+
 ### Job Artifacts
 # gitlab_rails['artifacts_enabled'] = true
 # gitlab_rails['artifacts_path'] = "/var/opt/gitlab/gitlab-rails/shared/artifacts"

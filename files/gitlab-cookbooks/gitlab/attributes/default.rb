@@ -162,6 +162,27 @@ default['gitlab']['gitlab-rails']['service_desk_email_password'] = nil
 default['gitlab']['gitlab-rails']['service_desk_email_mailbox_name'] = "inbox"
 default['gitlab']['gitlab-rails']['service_desk_email_idle_timeout'] = nil
 default['gitlab']['gitlab-rails']['service_desk_email_log_file'] = "/var/log/gitlab/mailroom/mail_room_json.log" # file path of internal `mail_room` JSON logs
+
+# Consolidated object storage config
+default['gitlab']['gitlab-rails']['object_store']['enabled'] = false
+default['gitlab']['gitlab-rails']['object_store']['connection'] = {}
+default['gitlab']['gitlab-rails']['object_store']['proxy_download'] = false
+default['gitlab']['gitlab-rails']['object_store']['objects'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['artifacts'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['artifacts']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['external_diffs'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['external_diffs']['bucket'] = false
+default['gitlab']['gitlab-rails']['object_store']['objects']['lfs'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['lfs']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['uploads'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['uploads']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['packages'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['packages']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state']['bucket'] = nil
+
 default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
 default['gitlab']['gitlab-rails']['artifacts_object_store_enabled'] = false
