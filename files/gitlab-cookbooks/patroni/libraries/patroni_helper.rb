@@ -33,6 +33,12 @@ class PatroniHelper < BaseHelper
     do_shell_out(cmd).stdout.chomp.strip
   end
 
+  def repmgr_data_present?
+    cmd = "/opt/gitlab/embedded/bin/repmgr -f #{node['postgresql']['dir']}/repmgr.conf cluster show"
+    status = do_shell_out(cmd, node['postgresql']['username'])
+    status.exitstatus.zero?
+  end
+
   def dynamic_settings
     dcs = {
       'postgresql' => {

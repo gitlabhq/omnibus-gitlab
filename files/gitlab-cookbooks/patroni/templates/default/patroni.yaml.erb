@@ -1,7 +1,7 @@
 name: <%= @name %>
 scope: <%= @scope %>
 log:
-  level: <%= @log_level %>
+  level: <%= @log_level.upcase %>
 consul:
 <% @consul.each do |name, value| %>
   <%= name %>: <%= value %>
