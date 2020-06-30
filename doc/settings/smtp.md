@@ -944,6 +944,24 @@ gitlab_rails['smtp_authentication'] = 'login'
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
+### Netcup
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = '<your-host>.netcup.net'
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "<your-gitlab-domain>"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+# Netcup is picky about the usage of GitLab's TLD instead of the subdomain (if you use one).
+# If this is not set up correctly, the scheduled emails will fail. For example, if
+# GitLab's domain name is 'gitlab.example.com', the following setting should be set to
+# 'gitlab@example.com'.
+gitlab_rails['gitlab_email_from'] = "gitlab@<your-top-level-domain>"
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
