@@ -983,6 +983,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### SSL settings
 # See https://www.postgresql.org/docs/11/static/runtime-config-connection.html#GUC-SSL-CERT-FILE for more details
 # postgresql['ssl'] = 'on'
+# postgresql['hostssl'] = false
 # postgresql['ssl_ciphers'] = 'HIGH:MEDIUM:+3DES:!aNULL:!SSLv3:!TLSv1'
 # postgresql['ssl_cert_file'] = 'server.crt'
 # postgresql['ssl_key_file'] = 'server.key'
