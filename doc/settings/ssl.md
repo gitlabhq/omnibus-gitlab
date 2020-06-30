@@ -166,6 +166,56 @@ If using a custom certificate chain, the root and/or intermediate certificates m
 
 ## Troubleshooting
 
+### Useful OpenSSL Debugging Commands
+
+Sometimes it's helpful to get a better picture of the SSL certificate chain by viewing it directly
+at the source. These commands are part of the standard OpenSSL library of tools for diagnostics and
+debugging.
+
+NOTE: **Note:**
+GitLab includes its own [custom-compiled version of OpenSSL](#details-on-how-gitlab-and-ssl-work)
+that all GitLab libraries are linked against. It's important to run the following commands using
+this OpenSSL version.
+
+- Perform a test connection to the host over HTTPS. Replace `HOSTNAME` with your GitLab URL
+  (excluding HTTPS), and replace `port` with the port that serves HTTPS connections (usually 443):
+  
+  ```shell
+  echo | /opt/gitlab/embedded/bin/openssl s_client -connect HOSTNAME:port
+  ```  
+  
+  The `echo` command sends a null request to the server, causing it to close the connection rather
+  than wait for additional input. You can use the same command to test remote hosts (for example, a
+  server hosting an external repository), by replacing `HOSTNAME:port` with the remote host's domain
+  and port number.
+
+  This command's output shows you the certificate chain, any public certificates the server
+  presents, along with validation or connection errors if they occur. This makes for a quick check
+  for any immediate issues with your SSL settings.
+
+- View a certificate's details in text form using `x509`. Be sure to replace
+  `/path/to/certificate.crt` with the certificate's path:
+
+  ```shell
+  /opt/gitlab/embedded/bin/openssl x509 -in /path/to/certificate.crt -text -noout
+  ```
+
+  For example, GitLab automatically fetches and places certificates acquired from Let's Encrypt at
+  `/etc/gitlab/ssl/hostname.crt`. You can use the `x509` command with that path to quickly display
+  the certificate's information (for example, the hostname, issuer, validity period, and more).
+
+  If there's a problem with the certificate, [an error occurs](#custom-certificates-missing-or-skipped).
+
+- Fetch a certificate from a server and decode it. This combines both of the above commands to fetch
+  the server's SSL certificate and decode it to text:
+
+  ```shell
+  echo | /opt/gitlab/embedded/bin/openssl s_client -connect HOSTNAME:port | /opt/gitlab/embedded/bin/openssl x509 -text -noout
+  ```
+
+See the [troubleshooting SSL documentation](https://docs.gitlab.com/ee/administration/troubleshooting/ssl.html)
+for more examples of troubleshooting SSL problems with OpenSSL.
+
 ### Common SSL errors
 
 1. `SSL certificate problem: unable to get local issuer certificate`
@@ -196,7 +246,7 @@ The `gitlab-workhorse` and other services written in ***golang*** use the **cryp
 instead of **OpenSSL**.
 
 Add the following entry in `/etc/gitlab/gitlab.rb` to work around the
-[issue as reported](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3701):
+[issue as reported](https://gitlab.com/gitlab-org/gitlab-workhorse/-/issues/177#note_90203818):
 
 ```ruby
 gitlab_workhorse['env'] = {
@@ -299,8 +349,8 @@ The initial implementation of **Let's Encrypt** integration only used the certif
 Starting in 10.5.4, the full certificate chain will be used. For installs which are already using a certificate, the switchover will not happen until the renewal logic indicates the certificate is near expiration. To force it sooner, run the following
 
 ```shell
-# rm /etc/gitlab/ssl/HOSTNAME*
-# gitlab-ctl reconfigure
+rm /etc/gitlab/ssl/HOSTNAME*
+gitlab-ctl reconfigure
 ```
 
 Where HOSTNAME is the hostname of the certificate.
