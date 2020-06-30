@@ -745,6 +745,17 @@ describe 'postgresql 9.6' do
         .with_content('local   all         all                               peer map=gitlab')
     end
 
+    it 'prefers hostssl when configured in pg_hba.conf' do
+      stub_gitlab_rb(
+        postgresql: {
+          hostssl: true,
+          trust_auth_cidr_addresses: ['127.0.0.1/32']
+        }
+      )
+      expect(chef_run).to render_file(pg_hba_conf)
+        .with_content('hostssl    all         all         127.0.0.1/32           trust')
+    end
+
     it 'adds users custom entries to pg_hba.conf' do
       stub_gitlab_rb(
         postgresql: {

@@ -211,6 +211,9 @@ postgresql['sql_user'] = "gitlab"
 ##! SQL_USER_PASSWORD_HASH can be generated using the command `gitlab-ctl pg-password-md5 gitlab`,
 ##! where `gitlab` is the name of the SQL user that connects to GitLab.
 postgresql['sql_user_password'] = "SQL_USER_PASSWORD_HASH"
+
+# force ssl on all connections defined in trust_auth_cidr_addresses and md5_auth_cidr_addresses
+postgresql['hostssl'] = true
 ```
 
 Any client or GitLab service which will connect over the network will need to
