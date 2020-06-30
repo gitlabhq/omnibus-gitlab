@@ -468,7 +468,7 @@ def analyze_cluster
     log "Error running #{analyze_cmd}"
     log "STDOUT: #{e.stdout}"
     log "STDERR: #{e.stderr}"
-    log 'Please check the output, and rerun the command if needed:'
+    log 'Please check the output, and rerun the command as root or with sudo if needed:'
     log "sudo su - #{pg_username} -c \"#{analyze_cmd}\""
     log 'If the error persists, please open an issue at: '
     log 'https://gitlab.com/gitlab-org/omnibus-gitlab/issues'
