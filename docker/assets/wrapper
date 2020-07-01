@@ -44,6 +44,39 @@ function detect_unclean_start() {
     set -e
 }
 
+function docker_upgrade_check() {
+  version_file="/var/opt/gitlab/gitlab-rails/VERSION"
+  new_version_file="/opt/gitlab/embedded/service/gitlab-rails/VERSION"
+
+  # If this file doesn't exist, then this is a fresh install
+  if [ ! -e "${version_file}" ]
+  then
+      return 0
+  fi
+
+  # Make sure this is a valid ugprade path
+  # Follows https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations
+  min_version=13.0
+
+  old_version=$(cat "${version_file}")
+  old_major_version=$(echo "${old_version}" | cut -d. -f1)
+
+  new_version=$(cat "${new_version_file}")
+  new_major_version=$(echo "${new_version}" | cut -d. -f1)
+  new_minor_version=$(echo "${new_version}" | cut -d. -f2)
+
+  if [ "${old_major_version}" -lt "${new_major_version}" ]
+  then
+      if [ "${min_version}" != "${new_major_version}.${new_minor_version}" ] 
+      then
+        echo "It seems you are upgrading from major version ${old_major_version} to major version ${new_major_version}."
+        echo "It is required to upgrade to the latest ${min_version}.x version first before proceeding."
+        echo "Please follow the upgrade documentation at https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations"
+        return 1
+      fi
+  fi
+}
+
 trap "sigterm_handler; exit" TERM
 
 source /RELEASE
@@ -73,6 +106,9 @@ sleep 3s
 
 # Run unclean start detection & cleanup
 detect_unclean_start
+
+# Check if this is a valid upgrade path
+docker_upgrade_check
 
 # Copy gitlab.rb for the first time
 if [[ ! -e /etc/gitlab/gitlab.rb ]]; then
