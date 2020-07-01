@@ -14,7 +14,7 @@ class BasePgHelper < BaseHelper
   PG_ESCAPED_BACKSLASH_PATTERN ||= /\\{2}/.freeze
 
   def is_running?
-    OmnibusHelper.new(node).service_up?(service_name)
+    OmnibusHelper.new(node).service_up?(service_name) || (delegated? && ready?)
   end
 
   def is_managed_and_offline?
@@ -305,6 +305,10 @@ class BasePgHelper < BaseHelper
     # PostgreSQL cookbook skips some of the steps that are must be done either during or after
     # Patroni bootstraping.
     Gitlab['patroni']['enable'] && !Gitlab['repmgr']['enable']
+  end
+
+  def ready?
+    psql_cmd(%w(-d template1 -c 'SELECT 1;'))
   end
 
   def config_dir

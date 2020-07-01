@@ -28,7 +28,6 @@ bootstrap:
   method: gitlab_ctl
   gitlab_ctl:
     command: /opt/gitlab/bin/gitlab-ctl patroni bootstrap
-  post_bootstrap: <%= @post_bootstrap %>
 restapi:
   listen: <%= @listen_address %>:<%= @port %>
   connect_address: <%= @connect_address %>:<%= @connect_port %>
