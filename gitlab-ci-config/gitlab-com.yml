@@ -227,6 +227,7 @@ Debian 10 knapsack: *prepare_knapsack
 OpenSUSE 15.1 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
 Ubuntu 18.04 knapsack: *prepare_knapsack
+Ubuntu 20.04 knapsack: *prepare_knapsack
 
 Ubuntu 16.04 specs:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
@@ -240,6 +241,12 @@ Ubuntu 18.04 specs :
   parallel: 6
   dependencies:
   - Ubuntu 18.04 knapsack
+Ubuntu 20.04 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-focal"
+  extends: .spec_template
+  parallel: 6
+  dependencies:
+  - Ubuntu 20.04 knapsack
 Debian 8 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
   extends: .spec_template

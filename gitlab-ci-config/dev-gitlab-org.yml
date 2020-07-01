@@ -263,6 +263,9 @@ Debian-9-branch:
 Debian-10-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
+Ubuntu-20.04-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
 CentOS-6-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -435,6 +438,9 @@ Debian-9:
 Debian-10:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
+Ubuntu-20.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
 CentOS-6:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -544,6 +550,11 @@ Debian-10-staging:
     - Debian-10
     - Debian-10-branch
   <<: *staging_upload
+Ubuntu-20.04-staging:
+  dependencies:
+    - Ubuntu-20.04
+    - Ubuntu-20.04-branch
+  <<: *staging_upload
 CentOS-6-staging:
   dependencies:
     - CentOS-6
@@ -583,6 +594,10 @@ Ubuntu-16.04-release:
 Ubuntu-18.04-release:
   dependencies:
     - Ubuntu-18.04
+  <<: *production_release
+Ubuntu-20.04-release:
+  dependencies:
+    - Ubuntu-20.04
   <<: *production_release
 Debian-8-release:
   dependencies:
