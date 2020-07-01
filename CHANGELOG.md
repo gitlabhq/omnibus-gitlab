@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.1.2 (2020-07-01)
+
+### Security (1 change)
+
+- Update PCRE to version 8.44.
+
+
 ## 13.1.1 (2020-06-23)
 
 ### Fixed (1 change)
@@ -54,6 +61,13 @@ omnibus-gitlab repository.
 - Upgrade to Git 2.27.0. !4294
 - Use latest Ubuntu AMI as base for our AMIs. !4308
 - Update Mattermost to 5.23.1.
+
+
+## 13.0.8 (2020-07-01)
+
+### Security (1 change)
+
+- Update PCRE to version 8.44.
 
 
 ## 13.0.7 (2020-06-25)
@@ -173,6 +187,13 @@ omnibus-gitlab repository.
 - Patch Git to fix partial clone bug. !4217
 - Update CA certificate bundle. !4230
 - Update Mattermost to 5.22.2. (Harrison Healey)
+
+
+## 12.10.13 (2020-07-01)
+
+### Security (1 change)
+
+- Update PCRE to version 8.44.
 
 
 ## 12.10.12 (2020-06-24)
