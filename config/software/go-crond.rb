@@ -15,7 +15,7 @@
 #
 
 name 'go-crond'
-version = Gitlab::Version.new('go-crond', '0.6.1')
+version = Gitlab::Version.new('go-crond', '20.7.0')
 default_version version.print(false)
 
 license 'BSD-2-Clause'
