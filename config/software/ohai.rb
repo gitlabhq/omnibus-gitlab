@@ -17,7 +17,7 @@
 name 'ohai'
 # The version here should be in agreement with /Gemfile.lock so that our rspec
 # testing stays consistent with the package contents.
-default_version '15.9.1'
+default_version '15.12.0'
 
 license 'Apache-2.0'
 license_file 'LICENSE'
