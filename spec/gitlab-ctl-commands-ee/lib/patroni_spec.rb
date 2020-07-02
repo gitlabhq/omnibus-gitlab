@@ -10,14 +10,14 @@ describe 'Patroni' do
   additional_commands = %w(members pause resume failover switchover)
   all_commands = core_commands + additional_commands
   command_lines = {
-    'bootstrap' => %w(--scope=SCOPE --datadir=DATADIR),
+    'bootstrap' => %w(--srcdir=SRCDIR --scope=SCOPE --datadir=DATADIR),
     'pause' => %w(-w),
     'resume' => %w(--wait),
     'failover' => %w(--master MASTER --candidate CANDIDATE),
     'switchover' => %w(--master MASTER --candidate CANDIDATE --scheduled SCHEDULED)
   }
   command_options = {
-    'bootstrap' => { scope: 'SCOPE', datadir: 'DATADIR' },
+    'bootstrap' => { srcdir: 'SRCDIR', scope: 'SCOPE', datadir: 'DATADIR' },
     'pause' => { wait: true },
     'resume' => { wait: true },
     'failover' => { master: 'MASTER', candidate: 'CANDIDATE' },
@@ -94,12 +94,11 @@ describe 'Patroni' do
   describe '#copy_config' do
     before do
       allow(FileUtils).to receive(:cp_r)
-      allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'patroni' => { 'data_dir' => '/fake' } })
     end
 
     it 'should call initdb command with the specified options' do
       Patroni.copy_config(command_options['bootstrap'])
-      expect(FileUtils).to have_received(:cp_r).with('/fake/.', 'DATADIR')
+      expect(FileUtils).to have_received(:cp_r).with('SRCDIR/.', 'DATADIR')
     end
   end
 

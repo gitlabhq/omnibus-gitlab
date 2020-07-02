@@ -23,6 +23,7 @@ module Patroni
       switchover      Switchover to a replica
   EOS
 
+  # rubocop:disable Metrics/AbcSize
   def self.parse_options(args)
     loop do
       break if args.shift == 'patroni'
@@ -53,6 +54,9 @@ module Patroni
         end
         opts.on('--datadir=DATADIR', 'Path to the data directory of the cluster instance to be bootstrapped') do |datadir|
           options[:datadir] = datadir
+        end
+        opts.on('--srcdir=SRCDIR', 'Path to the configuration source directory') do |srcdir|
+          options[:srcdir] = srcdir
         end
       end,
       'check-leader' => OptionParser.new do |opts|
@@ -126,6 +130,7 @@ module Patroni
     commands[command].order! args
     options
   end
+  # rubocop:enable Metrics/AbcSize
 
   def self.usage
     USAGE
@@ -136,8 +141,7 @@ module Patroni
   end
 
   def self.copy_config(options)
-    attributes = GitlabCtl::Util.get_public_node_attributes
-    FileUtils.cp_r "#{attributes['patroni']['data_dir']}/.", options[:datadir]
+    FileUtils.cp_r "#{options[:srcdir]}/.", options[:datadir]
   end
 
   def self.leader?(options)

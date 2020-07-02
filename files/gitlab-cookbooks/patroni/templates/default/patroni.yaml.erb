@@ -27,7 +27,7 @@ bootstrap:
   dcs: <%= patroni_helper.dynamic_settings.to_json %>
   method: gitlab_ctl
   gitlab_ctl:
-    command: /opt/gitlab/bin/gitlab-ctl patroni bootstrap
+    command: /opt/gitlab/bin/gitlab-ctl patroni bootstrap --srcdir=<%= @data_dir %>
 restapi:
   listen: <%= @listen_address %>:<%= @port %>
   connect_address: <%= @connect_address %>:<%= @connect_port %>
