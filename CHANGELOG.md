@@ -197,6 +197,10 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.22.2. (Harrison Healey)
 
 
+## 12.10.14 (2020-07-06)
+
+- No changes.
+
 ## 12.10.13 (2020-07-01)
 
 ### Security (1 change)
