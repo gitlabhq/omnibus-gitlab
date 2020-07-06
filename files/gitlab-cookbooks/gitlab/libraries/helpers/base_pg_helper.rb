@@ -14,7 +14,8 @@ class BasePgHelper < BaseHelper
   PG_ESCAPED_BACKSLASH_PATTERN ||= /\\{2}/.freeze
 
   def is_running?
-    OmnibusHelper.new(node).service_up?(service_name) || (delegated? && ready?)
+    omnibus_helper = OmnibusHelper.new(node)
+    omnibus_helper.service_up?(service_name) || (delegated? && omnibus_helper.service_up?(delegate_service_name) && ready?)
   end
 
   def is_managed_and_offline?
@@ -214,7 +215,7 @@ class BasePgHelper < BaseHelper
               "|grep -x t"])
   end
 
-  alias_method :is_replica?, :is_slave?
+  alias_method :replica?, :is_slave?
 
   def is_offline_or_readonly?
     !is_running? || is_slave?
@@ -298,6 +299,10 @@ class BasePgHelper < BaseHelper
 
   def service_cmd
     raise NotImplementedError
+  end
+
+  def delegate_service_name
+    'patroni'
   end
 
   def delegated?

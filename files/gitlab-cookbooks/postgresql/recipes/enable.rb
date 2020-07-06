@@ -145,7 +145,11 @@ end
 # privileges.
 ###
 
-include_recipe 'postgresql::database_objects'
+database_objects 'postgresql' do
+  pg_helper pg_helper
+  account_helper account_helper
+  not_if { pg_helper.replica? }
+end
 
 ruby_block 'warn pending postgresql restart' do
   block do

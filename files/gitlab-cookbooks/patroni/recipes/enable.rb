@@ -95,17 +95,27 @@ ruby_block 'wait for postgresql to start' do
       sleep 2 until pg_helper.ready?
     end
   end
-  action :run
 end
 
-include_recipe 'postgresql::database_objects'
+database_objects 'patroni' do
+  pg_helper pg_helper
+  account_helper account_helper
+  not_if { pg_helper.replica? }
+end
 
-return unless omnibus_helper.service_dir_enabled?('postgresql')
+pgbouncer_user 'patroni' do
+  pg_helper pg_helper
+  user node['postgresql']['pgbouncer_user']
+  password node['postgresql']['pgbouncer_user_password'] || ''
+  database node['gitlab']['gitlab-rails']['db_database']
+  add_auth_function node.default['gitlab']['pgbouncer']['auth_query'].eql?(node['gitlab']['pgbouncer']['auth_query'])
+  not_if { pg_helper.replica? }
+end
 
 execute 'signal to restart postgresql' do
   command "#{patroni_helper.ctl_command} -c #{patroni_config_file} restart --force #{node['patroni']['scope']} #{node['patroni']['name']}"
   not_if { patroni_helper.repmgr_data_present? }
-  only_if { patroni_helper.node_status == 'running' }
+  only_if { omnibus_helper.service_dir_enabled?('postgresql') && patroni_helper.node_status == 'running' }
   notifies :run, 'ruby_block[wait for node bootstrap to complete]', :before
 end
 

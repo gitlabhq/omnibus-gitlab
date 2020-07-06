@@ -7,7 +7,7 @@ describe 'patroni cookbook' do
   end
 
   let(:chef_run) do
-    ChefSpec::SoloRunner.new.converge('gitlab-ee::default')
+    ChefSpec::SoloRunner.new(step_into: %w(database_objects)).converge('gitlab-ee::default')
   end
 
   it 'should be disabled by default' do
@@ -95,7 +95,7 @@ describe 'patroni cookbook' do
           },
           method: 'gitlab_ctl',
           gitlab_ctl: {
-            command: '/opt/gitlab/bin/gitlab-ctl patroni bootstrap'
+            command: '/opt/gitlab/bin/gitlab-ctl patroni bootstrap --srcdir=/var/opt/gitlab/patroni/data'
           }
         },
         restapi: {
@@ -123,7 +123,7 @@ describe 'patroni cookbook' do
       expect(chef_run).not_to run_execute(/(start|reload) postgresql/)
     end
 
-    it 'should create database objects (roles, databses, extension)', focus: true do
+    it 'should create database objects (roles, databses, extension)' do
       expect(chef_run).not_to run_execute('/opt/gitlab/embedded/bin/initdb -D /var/opt/gitlab/postgresql/data -E UTF8')
       expect(chef_run).to create_postgresql_user('gitlab')
       expect(chef_run).to create_postgresql_user('gitlab_replicator')
@@ -233,9 +233,9 @@ describe 'patroni cookbook' do
         allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(false)
       end
 
-      it 'should enable patroni service and skip disabling postgresql runit service' do
+      it 'should enable patroni service and disable postgresql runit service' do
         expect(chef_run).to enable_runit_service('patroni')
-        expect(chef_run).not_to disable_runit_service('postgresql')
+        expect(chef_run).to disable_runit_service('postgresql')
       end
     end
 
@@ -264,6 +264,21 @@ describe 'patroni cookbook' do
         expect(chef_run).to enable_runit_service('patroni')
         expect(chef_run).to disable_runit_service('postgresql')
         expect(chef_run).to run_execute('signal to restart postgresql')
+      end
+    end
+
+    context 'on a replica' do
+      before do
+        allow_any_instance_of(PgHelper).to receive(:replica?).and_return(true)
+      end
+
+      it 'should not create database objects' do
+        expect(chef_run).not_to create_postgresql_user('gitlab')
+        expect(chef_run).not_to create_postgresql_user('gitlab_replicator')
+        expect(chef_run).not_to create_pgbouncer_user('patroni')
+        expect(chef_run).not_to run_execute('create gitlabhq_production database')
+        expect(chef_run).not_to enable_postgresql_extension('pg_trgm')
+        expect(chef_run).not_to enable_postgresql_extension('btree_gist')
       end
     end
   end
