@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.1.3 (2020-07-06)
+
+- No changes.
+
 ## 13.1.2 (2020-07-01)
 
 ### Security (1 change)
@@ -62,6 +66,10 @@ omnibus-gitlab repository.
 - Use latest Ubuntu AMI as base for our AMIs. !4308
 - Update Mattermost to 5.23.1.
 
+
+## 13.0.9 (2020-07-06)
+
+- No changes.
 
 ## 13.0.8 (2020-07-01)
 
@@ -188,6 +196,10 @@ omnibus-gitlab repository.
 - Update CA certificate bundle. !4230
 - Update Mattermost to 5.22.2. (Harrison Healey)
 
+
+## 12.10.14 (2020-07-06)
+
+- No changes.
 
 ## 12.10.13 (2020-07-01)
 

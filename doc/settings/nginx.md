@@ -329,7 +329,11 @@ By default NGINX will accept incoming connections on all local IPv4 addresses.
 You can change the list of addresses in `/etc/gitlab/gitlab.rb`.
 
 ```ruby
-nginx['listen_addresses'] = ["0.0.0.0", "[::]"] # listen on all IPv4 and IPv6 addresses
+ # Listen on all IPv4 and IPv6 addresses
+nginx['listen_addresses'] = ["0.0.0.0", "[::]"]
+registry_nginx['listen_addresses'] = ['*', '[::]']
+mattermost_nginx['listen_addresses'] = ['*', '[::]']
+pages_nginx['listen_addresses'] = ['*', '[::]']
 ```
 
 ## Setting the NGINX listen port
