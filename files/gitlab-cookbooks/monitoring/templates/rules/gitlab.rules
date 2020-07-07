@@ -508,3 +508,11 @@ groups:
       count by (instance, job) (
         {__name__ =~ "(ruby_){0,1}process_start_time_seconds", job != "gitlab_exporter_process"}
       )
+  - record: gitlab_usage_ping:node_service_app_server_workers:sum
+    labels:
+      server: puma
+    expr: sum by (instance, job) (puma_workers)
+  - record: gitlab_usage_ping:node_service_app_server_workers:sum
+    labels:
+      server: unicorn
+    expr: sum by (instance, job) (unicorn_workers)

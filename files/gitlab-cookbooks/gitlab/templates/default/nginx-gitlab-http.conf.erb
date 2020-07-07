@@ -142,7 +142,7 @@ server {
   gzip_http_version <%= @gzip_http_version %>;
   gzip_vary on;
   gzip_disable "msie6";
-  gzip_min_length 10240;
+  gzip_min_length 250;
   gzip_proxied <%= @gzip_proxied %>;
   gzip_types <%= @gzip_types.join(' ') %>;
 <% end %>

@@ -81,7 +81,7 @@
   retry: 1
 
 .trigger-job: &trigger-job
-  image: "ruby:2.6"
+  image: "${RUBY_IMAGE}"
   stage: trigger-package
   when: manual
   script:
@@ -135,7 +135,7 @@ Trigger:ee-package:
 
 rubocop:
   stage: check
-  image: ruby:2.6
+  image: "${RUBY_IMAGE}"
   before_script:
     - bundle install -j $(nproc) --binstubs --path gems --without default test
   script:
@@ -384,7 +384,7 @@ Trigger:qa-test:
 
 Trigger:ha-validate:
   stage: trigger-ha-validate
-  image: "ruby:2.6"
+  image: "${RUBY_IMAGE}"
   when: manual
   script:
       - bundle exec rake qa:ha:validate
