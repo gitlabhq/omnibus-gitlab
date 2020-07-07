@@ -1,5 +1,0 @@
----
-title: Set SSL_CERT_DIR for gitlab-pages to fix problem with custom CA certs
-merge_request: 4289
-author: Jonathon Reinhart @JonathonReinhart
-type: fixed
