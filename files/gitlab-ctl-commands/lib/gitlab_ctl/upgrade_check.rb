@@ -1,5 +1,3 @@
-require 'semverse'
-
 module GitlabCtl
   class UpgradeCheck
     MIN_VERSION = '13.0'.freeze
@@ -9,11 +7,12 @@ module GitlabCtl
         # If old_version is nil, this is a fresh install
         return true if ov.nil?
 
-        old_version = Semverse::Version.new(ov)
-        new_version = Semverse::Version.new(nv)
+        old_version_major = ov.split('.').first
+        old_version_minor = ov.split('.')[0..1].join('.')
+        new_version_major = nv.split('.').first
 
-        if old_version.major < new_version.major
-          return false if old_version.minor != MIN_VERSION
+        if old_version_major < new_version_major
+          return false if old_version_minor != MIN_VERSION
         end
 
         true
