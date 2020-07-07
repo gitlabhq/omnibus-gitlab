@@ -38,13 +38,13 @@ fi
 
 upgrade_check() {
   # If this succeeds, then gitlab-ctl upgrade-check exists, and passed
-  if gitlab-ctl upgrade-check ; then
+  if ctl_results=$(gitlab-ctl upgrade-check) ; then
     return 0
   fi
 
   # gitlab-ctl exits 1, and the first line is "I don't know that command."
   # if a command doesn't exist
-  found=$(echo ${ctl_results} | tail -n 1)
+  found=$(echo "${ctl_results}" | tail -n 1)
   if [ "${found}" != "I don't know that command." ] ; then
     exit 1
   fi
