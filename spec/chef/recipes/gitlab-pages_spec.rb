@@ -27,8 +27,8 @@ describe 'gitlab::gitlab-pages' do
     end
 
     it 'renders the env dir files' do
-      expect(chef_run).to render_file(File.join(env_dir, "SSL_CERT_DIR"))
-        .with_content('/opt/gitlab/embedded/ssl/certs')
+      expect(chef_run).to render_file(File.join(env_dir, "SSL_CERT_FILE"))
+        .with_content('/opt/gitlab/embedded/ssl/certs/cacert.pem')
     end
 
     it 'correctly renders the pages service run file' do
@@ -161,8 +161,8 @@ describe 'gitlab::gitlab-pages' do
     it 'renders the env dir files' do
       expect(chef_run).to render_file(File.join(env_dir, "GITLAB_CONTINUOUS_PROFILING"))
         .with_content('stackdriver?service=gitlab-pages')
-      expect(chef_run).to render_file(File.join(env_dir, "SSL_CERT_DIR"))
-        .with_content('/opt/gitlab/embedded/ssl/certs')
+      expect(chef_run).to render_file(File.join(env_dir, "SSL_CERT_FILE"))
+        .with_content('/opt/gitlab/embedded/ssl/certs/cacert.pem')
       expect(chef_run).to render_file(File.join(env_dir, "http_proxy"))
         .with_content('http://example:8081/')
     end
