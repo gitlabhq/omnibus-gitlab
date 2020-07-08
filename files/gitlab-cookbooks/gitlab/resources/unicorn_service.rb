@@ -62,7 +62,7 @@ action :create do
     owner "root"
     group "root"
     mode "0644"
-    notifies_services :restart, "runit_service[#{new_resource.svc}]" if omnibus_helper.should_notify?(new_resource.svc)
+    notifies :restart, "runit_service[#{new_resource.svc}]" if omnibus_helper.should_notify?(new_resource.svc)
   end
 
   runit_service new_resource.svc do
@@ -91,5 +91,23 @@ action :create do
     execute "/opt/gitlab/bin/gitlab-ctl start #{new_resource.svc}" do
       retries 20
     end
+  end
+end
+
+action :restart do
+  runit_service new_resource.svc do
+    action :restart
+  end
+end
+
+action :stop do
+  runit_service new_resource.svc do
+    action :stop
+  end
+end
+
+action :disable do
+  runit_service new_resource.svc do
+    action :disable
   end
 end
