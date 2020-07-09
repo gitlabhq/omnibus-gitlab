@@ -16,7 +16,7 @@
 
 name 'libjpeg-turbo'
 
-version = Gitlab::Version.new('libjpeg-turbo', '2.0.4')
+version = Gitlab::Version.new('libjpeg-turbo', '2.0.5')
 
 default_version version.print(false)
 
