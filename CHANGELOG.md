@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.0.10 (2020-07-09)
+
+### Performance (1 change, 1 of them is from the community)
+
+- Run vacuumdb with 2 commands simultaneously. !4373 (Ben Bodenmiller @bbodenmiller)
+
+
 ## 13.0.9 (2020-07-06)
 
 - No changes.
