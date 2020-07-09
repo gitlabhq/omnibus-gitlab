@@ -1,5 +1,0 @@
----
-title: Run vacuumdb with 2 commands simultaneously
-merge_request: 4373
-author: Ben Bodenmiller @bbodenmiller
-type: performance
