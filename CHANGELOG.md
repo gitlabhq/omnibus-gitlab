@@ -3,6 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.1.4 (2020-07-09)
+
+### Fixed (2 changes)
+
+- Ensure we are properly restarting the unicorn service. !4354
+- Absolute SSL path should work for postgres recipe. !4356
+
+### Performance (1 change, 1 of them is from the community)
+
+- Run vacuumdb with 2 commands simultaneously. !4373 (Ben Bodenmiller @bbodenmiller)
+
+
 ## 13.1.3 (2020-07-06)
 
 - No changes.
