@@ -663,6 +663,16 @@ Improperly configuring the CSP rules could prevent GitLab from working
 properly. Before rolling out a policy, you may also want to change
 `report_only` to `true` to test the configuration.
 
+## Setting initial root password on installation
+
+The initial password for the user `root` can be set at the installation time with the environment variable `GITLAB_ROOT_PASSWORD.
+
+For example:
+
+```shell
+GITLAB_ROOT_PASSWORD="<strongpassword>" EXTERNAL_URL="http://gitlab.exmaple.com" apt install gitlab-ee
+```
+
 ## Setting up LDAP sign-in
 
 See [LDAP setup documentation](ldap.md).
