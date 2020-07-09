@@ -724,7 +724,7 @@ describe 'postgresql 9.6' do
 
     context 'when database is a secondary' do
       before do
-        allow_any_instance_of(PgHelper).to receive(:is_slave?).and_return(true)
+        allow_any_instance_of(PgHelper).to receive(:is_standby?).and_return(true)
       end
 
       it 'should not create users' do

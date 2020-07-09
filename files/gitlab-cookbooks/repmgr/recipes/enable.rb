@@ -40,7 +40,7 @@ end
 
 postgresql_user replication_user do
   options %w(SUPERUSER)
-  not_if { pg_helper.is_slave? }
+  not_if { pg_helper.is_standby? }
 end
 
 postgresql_database node['repmgr']['database'] do
