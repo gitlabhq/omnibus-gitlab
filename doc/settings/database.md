@@ -422,7 +422,7 @@ Fresh installs will be getting PostgreSQL 10.7 while GitLab package upgrades
 will retain the existing version of PostgreSQL. Users can manually upgrade to
 the 10.7 using the `pg-upgrade` command as mentioned above.
 
-### Downgrade packaged PostgreSQL server
+### Revert packaged PostgreSQL server to previous version
 
 DANGER: **Danger:**
 This operation will revert your current database, *including its data*, to its state
@@ -721,6 +721,20 @@ before running the `gitlab:setup` command:
 ```ruby
 gitlab_rails['initial_shared_runners_registration_token'] = 'token'
 ```
+
+### Pin the packaged PostgreSQL version (fresh installs only)
+
+NOTE: **Note:**
+GitLab 13.0 only ships with PostgreSQL 11.0. Support for PostgreSQL 12.0 is [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374).
+
+Omnibus GitLab will initialize PostgreSQL with the [default version](../package-information/postgresql_versions.md).
+
+To initialize PostgreSQL with a non-default version, you can set `postgresql['version']` to one of the [packaged PostgreSQL versions](../package-information/postgresql_versions.md) prior to the initial reconfigure.
+
+CAUTION: **Caution:**
+Setting `postgresql['version']` while using the Omnibus packaged PostgreSQL after the initial reconfigure will
+throw errors about the data directory being initialized on a different version of PostgreSQL. If this is encountered,
+see [Revert packaged PostgreSQL server to previous version](#revert-packaged-postgresql-server-to-previous-version).
 
 ### Troubleshooting
 
