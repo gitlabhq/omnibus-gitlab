@@ -466,6 +466,7 @@ production: &base
     # GitLab Geo migrated local files clean up worker
     # NOTE: This will only take effect if Geo is enabled (secondary nodes only)
     <% unless @geo_migrated_local_files_clean_up_worker_cron.nil? %>
+    <% LoggingHelper.deprecation "gitlab_rails['geo_migrated_local_files_clean_up_worker_cron'] options is deprecated and will be removed in Gitlab 14.0." %>
     geo_migrated_local_files_clean_up_worker:
       cron: "<%= @geo_migrated_local_files_clean_up_worker_cron %>"
     <% end %>
