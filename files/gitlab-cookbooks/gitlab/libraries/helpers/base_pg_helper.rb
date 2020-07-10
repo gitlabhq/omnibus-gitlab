@@ -209,9 +209,14 @@ class BasePgHelper < BaseHelper
   end
 
   def is_standby?
-    psql_cmd(["-d 'template1'",
-              "-c 'select pg_is_in_recovery()' -A",
-              "|grep -x t"])
+    results = psql_cmd('template1', 'select pg_is_in_recovery()')
+    if results.error?
+      message = %(Error checking database status. If this instance is expected to be a standby database, there is nothing to do. Otherwise, check the database and re-run reconfigure)
+      LoggingHelper.warning(message)
+      return true
+    end
+
+    results.stdout.strip.eql?('t')
   end
 
   alias_method :is_replica?, :is_standby?
