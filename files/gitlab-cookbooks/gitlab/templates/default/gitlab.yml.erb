@@ -158,6 +158,21 @@ production: &base
     # Whether to expunge (permanently remove) messages from the mailbox when they are deleted after delivery
     expunge_deleted: <%= @incoming_email_expunge_deleted %>
 
+  <%- if @object_store['enabled'] -%>
+  ## Consolidated object store config
+  # This uses a single credential for object storage with multiple buckets.
+  # It also enables Workhorse to upload files directly with its own S3 client
+  # instead of using pre-signed URLs.
+  #
+  # This will only take effect if the object_store sections are not defined
+  # within the types (e.g. artifacts.object_store, lfs.object_store, etc.).
+  object_store:
+     enabled: <%= @object_store['enabled'] %>
+     proxy_download: <%= @object_store['proxy_download'] %>
+     connection: <%= @object_store['connection'].to_json %>
+     objects: <%= @object_store['objects'].to_json %>
+  <%- end -%>
+
   ## Service desk email
   # Allow users to use a separate service desk address
   # For documentation on how to set this up, see http://doc.gitlab.com/ce/administration/reply_by_email.html

@@ -395,6 +395,35 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'consolidated object store settings' do
+      include_context 'object storage config'
+
+      let(:aws_connection_data) { JSON.parse(aws_connection_hash.to_json, symbolize_names: true) }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            object_store: {
+              enabled: true,
+              connection: aws_connection_hash,
+              objects: object_config
+            }
+          }
+        )
+      end
+
+      it 'generates proper YAML' do
+        expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+          yaml_data = YAML.safe_load(content, [], [], true, symbolize_names: true)
+          config = yaml_data[:production]
+
+          expect(config[:object_store][:enabled]).to be true
+          expect(config[:object_store][:connection]).to eq(aws_connection_data)
+          expect(config[:object_store][:objects]).to eq(object_config)
+        }
+      end
+    end
+
     context 'for settings regarding object storage for artifacts' do
       it 'allows not setting any values' do
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
