@@ -2119,13 +2119,11 @@ describe 'gitlab::gitlab-rails' do
       it 'sets the default values' do
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
           hash_including(
-            prometheus: hash_including(
-              enable: true,
-              listen_address: 'localhost:9090'
-            )
+            prometheus_available: true,
+            prometheus_server_address: 'localhost:9090'
           )
         )
-        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:\s+enable: true\s+listen_address: "localhost:9090"/)
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: true\s+listen_address: "localhost:9090"(\s+#.*)*\s+server_address: "localhost:9090"/)
       end
 
       it 'allows the values to be changed' do
@@ -2133,13 +2131,11 @@ describe 'gitlab::gitlab-rails' do
 
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
           hash_including(
-            prometheus: hash_including(
-              enable: false,
-              listen_address: '192.168.1.1:8080'
-            )
+            prometheus_available: false,
+            prometheus_server_address: '192.168.1.1:8080'
           )
         )
-        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:\s+enable: false\s+listen_address: "192.168.1.1:8080"/)
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: false\s+listen_address: "192.168.1.1:8080"(\s+#.*)*\s+server_address: "192.168.1.1:8080"/)
       end
 
       it 'handles symbols' do
@@ -2147,13 +2143,51 @@ describe 'gitlab::gitlab-rails' do
 
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
           hash_including(
-            prometheus: hash_including(
-              enable: false,
-              listen_address: :':8080'
-            )
+            prometheus_available: false,
+            prometheus_server_address: :':8080'
           )
         )
-        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:\s+enable: false\s+listen_address: ":8080"/)
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: false\s+listen_address: ":8080"(\s+#.*)*\s+server_address: ":8080"/)
+      end
+
+      context 'prometheus on another server' do
+        before do
+          stub_gitlab_rb(gitlab_rails: { prometheus_address: '101.8.10.12:7070' })
+        end
+
+        it 'sets the prometheus listen address' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              prometheus_available: true,
+              prometheus_server_address: '101.8.10.12:7070'
+            )
+          )
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: true\s+listen_address: "101.8.10.12:7070"(\s+#.*)*\s+server_address: "101.8.10.12:7070"/)
+        end
+
+        it 'overrides the prometheus enable to true' do
+          stub_gitlab_rb(prometheus: { enable: false })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              prometheus_available: true,
+              prometheus_server_address: '101.8.10.12:7070'
+            )
+          )
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: true\s+listen_address: "101.8.10.12:7070"(\s+#.*)*\s+server_address: "101.8.10.12:7070"/)
+        end
+
+        it 'overrides the prometheus listen address' do
+          stub_gitlab_rb(prometheus: { enable: false, listen_address: '192.168.1.1:8080' })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              prometheus_available: true,
+              prometheus_server_address: '101.8.10.12:7070'
+            )
+          )
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: true\s+listen_address: "101.8.10.12:7070"(\s+#.*)*\s+server_address: "101.8.10.12:7070"/)
+        end
       end
     end
 

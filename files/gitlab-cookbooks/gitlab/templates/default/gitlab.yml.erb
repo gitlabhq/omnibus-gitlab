@@ -783,8 +783,12 @@ production: &base
   # yourself, and then update the values here.
   # https://docs.gitlab.com/ee/administration/monitoring/prometheus/
   prometheus:
-    enable: <%= @prometheus['enable'] %>
-    listen_address: "<%= @prometheus['listen_address'] %>"
+    # Do not use `enable` and `listen_address` in any new code, as they are deprecated. Use `server_address` instead.
+    # https://gitlab.com/gitlab-org/gitlab/-/issues/227111
+    enable: <%= @prometheus_available %>
+    listen_address: "<%= @prometheus_server_address %>"
+    # IP address(including listen port) of Prometheus server
+    server_address: "<%= @prometheus_server_address %>"
 
   #
   # 5. Extra customization

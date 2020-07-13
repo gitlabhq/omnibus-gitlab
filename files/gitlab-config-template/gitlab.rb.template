@@ -1674,6 +1674,15 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 
 ##! Advanced settings. Should be changed only if absolutely needed.
 # prometheus['listen_address'] = 'localhost:9090'
+#
+
+################################################################################
+###! **Only needed if Prometheus and Rails are not on the same server.**
+### For example, in a multi-node architecture, Prometheus will be installed on the monitoring node, while Rails will be on the Rails node.
+### https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html#using-an-external-prometheus-server
+### This value should be the address at which Prometheus is available to GitLab Rails(Puma/Unicorn, Sidekiq) node.
+################################################################################
+# gitlab_rails['prometheus_address'] = 'your.prom:9090'
 
 ################################################################################
 ## Prometheus Alertmanager
