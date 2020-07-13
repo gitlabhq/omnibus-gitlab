@@ -1,0 +1,5 @@
+---
+title: Add deprecation message for Geo::MigratedLocalFilesCleanUpWorker config options
+merge_request: 4401
+author:
+type: other
