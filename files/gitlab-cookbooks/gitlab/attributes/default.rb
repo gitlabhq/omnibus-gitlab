@@ -444,6 +444,11 @@ default['gitlab']['gitlab-rails']['feature_flags_unleash_url'] = nil
 default['gitlab']['gitlab-rails']['feature_flags_unleash_app_name'] = nil
 default['gitlab']['gitlab-rails']['feature_flags_unleash_instance_id'] = nil
 
+###
+# Prometheus
+###
+default['gitlab']['gitlab-rails']['prometheus_address'] = nil
+
 ####
 # Unicorn
 ####
