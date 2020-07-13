@@ -209,7 +209,7 @@ class BasePgHelper < BaseHelper
   end
 
   def is_standby?
-    results = psql_cmd('template1', 'select pg_is_in_recovery()')
+    results = psql_query_raw('template1', 'select pg_is_in_recovery()')
     if results.error?
       message = %(Error checking database status. If this instance is expected to be a standby database, there is nothing to do. Otherwise, check the database and re-run reconfigure)
       LoggingHelper.warning(message)
@@ -258,10 +258,21 @@ class BasePgHelper < BaseHelper
     success?(cmd)
   end
 
+  # Return the results of a psql query
+  # - db_name: Name of the database to query
+  # - query: SQL query to run
   def psql_query(db_name, query)
+    psql_query_raw(db_name, query).stdout.chomp
+  end
+
+  # Get the Mixlib::Shellout object containing the command results.
+  # Allows for more fine grained error handling
+  # - db_name: Name of the database to query
+  # - query: SQL query to run
+  def psql_query_raw(db_name, query)
     do_shell_out(
       %(/opt/gitlab/bin/#{service_cmd} -d '#{db_name}' -c "#{query}" -tA)
-    ).stdout.chomp
+    )
   end
 
   def version
