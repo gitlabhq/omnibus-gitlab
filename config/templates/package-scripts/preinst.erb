@@ -38,7 +38,7 @@ fi
 
 upgrade_check() {
   # If this succeeds, then gitlab-ctl upgrade-check exists, and passed
-  if ctl_results=$(gitlab-ctl upgrade-check) ; then
+  if ctl_results=$(gitlab-ctl upgrade-check "${OLD_VERSION_STRING}" "${NEW_MAJOR_VERSION}.${NEW_MINOR_VERSION}") ; then
     return 0
   fi
 
