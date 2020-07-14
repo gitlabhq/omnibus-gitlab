@@ -46,7 +46,9 @@ end
 # Options may have changed in the previous step
 ruby_block "re-populate GitLab Pages configuration options" do
   block do
-    node.consume_attributes(Gitlab.hyphenate_config_keys)
+    node.consume_attributes(
+      { 'gitlab' => { 'gitlab-pages' => Gitlab.hyphenate_config_keys['gitlab']['gitlab-pages'] } }
+    )
   end
 end
 
