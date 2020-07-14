@@ -17,10 +17,6 @@ describe 'gitlab-ctl promote-to-primary-node' do
                   { confirm_primary_is_down: true }
 
   it_behaves_like 'geo promotion command accepts option',
-                  '--confirm-removing-keys',
-                  { confirm_removing_keys: true }
-
-  it_behaves_like 'geo promotion command accepts option',
                   '--skip-preflight-checks',
                   { skip_preflight_checks: true }
 end
