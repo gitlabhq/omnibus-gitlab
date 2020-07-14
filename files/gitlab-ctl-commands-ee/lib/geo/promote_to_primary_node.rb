@@ -25,7 +25,25 @@ module Geo
     def run_preflight_checks
       return true if @options[:skip_preflight_checks]
 
-      PromotionPreflightChecks.new(@base_path, @options).execute
+      begin
+        PromotionPreflightChecks.new(@base_path, @options).execute
+      rescue SystemExit => e
+        raise e unless @options[:force]
+
+        confirm_proceed_after_preflight_checks_fail
+      end
+    end
+
+    def confirm_proceed_after_preflight_checks_fail
+      puts
+      puts 'WARNING: Preflight checks failed but you are running this in '\
+        'force mode. If you proceed data loss may happen. '\
+        'This may be desired in case of an actual disaster.'\
+        'Are you sure you want to proceed? (y/n)'.color(:yellow)
+
+      return if STDIN.gets.chomp.casecmp('y').zero?
+
+      exit 1
     end
 
     def promote_postgresql_to_primary
