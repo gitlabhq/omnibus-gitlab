@@ -37,6 +37,18 @@ fi
 }
 
 upgrade_check() {
+  # If this succeeds, then gitlab-ctl upgrade-check exists, and passed
+  if ctl_results=$(gitlab-ctl upgrade-check "${OLD_VERSION_STRING}" "${NEW_MAJOR_VERSION}.${NEW_MINOR_VERSION}") ; then
+    return 0
+  fi
+
+  # gitlab-ctl exits 1, and the first line is "I don't know that command."
+  # if a command doesn't exist
+  found=$(echo "${ctl_results}" | head -n 1)
+  if [ "${found}" != "I don't know that command." ] ; then
+    exit 1
+  fi
+
   if [ -n "${OLD_VERSION_STRING}" ] ; then
     # Minimum version from which jumps are permitted to current version.
     # Follows https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations
