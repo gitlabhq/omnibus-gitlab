@@ -18,7 +18,7 @@ describe Geo::PromotionPreflightChecks, '#execute' do
     end
 
     allow(command).to receive(:run_command).with(
-      'gitlab-rake geo:check_replication_verification_status')
+      'gitlab-rake gitlab:geo:check_replication_verification_status')
       .and_return(shell_out_object)
   end
 
@@ -35,12 +35,12 @@ describe Geo::PromotionPreflightChecks, '#execute' do
 
     it 'runs `check_replication_verification_status` task' do
       is_expected.to receive(:run_command).with(
-        'gitlab-rake geo:check_replication_verification_status').once
+        'gitlab-rake gitlab:geo:check_replication_verification_status').once
 
       command.execute
     end
 
-    context 'when geo:check_replication_verification_status fails' do
+    context 'when gitlab:geo:check_replication_verification_status fails' do
       around do |example|
         example.run
       rescue SystemExit
@@ -53,7 +53,7 @@ describe Geo::PromotionPreflightChecks, '#execute' do
         end
 
         allow(command).to receive(:run_command).with(
-          'gitlab-rake geo:check_replication_verification_status')
+          'gitlab-rake gitlab:geo:check_replication_verification_status')
           .once
           .and_return(shell_out_object)
       end
@@ -70,7 +70,7 @@ describe Geo::PromotionPreflightChecks, '#execute' do
       end
     end
 
-    context 'when geo:check_replication_verification_status passes' do
+    context 'when gitlab:geo:check_replication_verification_status passes' do
       it 'prints a success message' do
         expect { command.execute }.to output(
           /All preflight checks have passed. This node can now be promoted./)

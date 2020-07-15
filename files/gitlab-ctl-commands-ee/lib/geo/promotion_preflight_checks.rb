@@ -73,7 +73,7 @@ module Geo
         'check_replication_verification_status...'.color(:yellow)
       puts
 
-      status = run_command('gitlab-rake geo:check_replication_verification_status')
+      status = run_command('gitlab-rake gitlab:geo:check_replication_verification_status')
       puts status.stdout
 
       raise 'ERROR: Replication/verification is incomplete.' if status.error?
