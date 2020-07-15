@@ -14,7 +14,8 @@ class BasePgHelper < BaseHelper
   PG_ESCAPED_BACKSLASH_PATTERN ||= /\\{2}/.freeze
 
   def is_running?
-    OmnibusHelper.new(node).service_up?(service_name)
+    omnibus_helper = OmnibusHelper.new(node)
+    omnibus_helper.service_up?(service_name) || (delegated? && omnibus_helper.service_up?(delegate_service_name) && ready?)
   end
 
   def is_managed_and_offline?
@@ -214,7 +215,7 @@ class BasePgHelper < BaseHelper
               "|grep -x t"])
   end
 
-  alias_method :is_replica?, :is_standby?
+  alias_method :replica?, :is_standby?
 
   def is_offline_or_readonly?
     !is_running? || is_standby?
@@ -300,11 +301,19 @@ class BasePgHelper < BaseHelper
     raise NotImplementedError
   end
 
+  def delegate_service_name
+    'patroni'
+  end
+
   def delegated?
     # When Patroni is enabled, the configuration of PostgreSQL instance must be delegated to it.
     # PostgreSQL cookbook skips some of the steps that are must be done either during or after
     # Patroni bootstraping.
     Gitlab['patroni']['enable'] && !Gitlab['repmgr']['enable']
+  end
+
+  def ready?
+    psql_cmd(%w(-d template1 -c 'SELECT 1;'))
   end
 
   def config_dir

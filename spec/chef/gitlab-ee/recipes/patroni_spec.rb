@@ -7,7 +7,7 @@ describe 'patroni cookbook' do
   end
 
   let(:chef_run) do
-    ChefSpec::SoloRunner.new.converge('gitlab-ee::default')
+    ChefSpec::SoloRunner.new(step_into: %w(database_objects)).converge('gitlab-ee::default')
   end
 
   it 'should be disabled by default' do
@@ -33,9 +33,13 @@ describe 'patroni cookbook' do
         roles: %w(postgres_role),
         patroni: {
           enable: true
+        },
+        postgresql: {
+          pgbouncer_user_password: ''
         }
       )
       allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(true)
+      allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
       allow_any_instance_of(PgHelper).to receive(:bootstrapped?).and_return(false)
     end
 
@@ -94,9 +98,8 @@ describe 'patroni cookbook' do
           },
           method: 'gitlab_ctl',
           gitlab_ctl: {
-            command: '/opt/gitlab/bin/gitlab-ctl patroni bootstrap'
-          },
-          post_bootstrap: '/var/opt/gitlab/patroni/post-bootstrap'
+            command: '/opt/gitlab/bin/gitlab-ctl patroni bootstrap --srcdir=/var/opt/gitlab/patroni/data'
+          }
         },
         restapi: {
           listen: :'8008',
@@ -120,26 +123,22 @@ describe 'patroni cookbook' do
     it 'should skip standalone postgresql configuration' do
       expect(chef_run).to create_postgresql_config('gitlab')
       expect(chef_run.postgresql_config('gitlab')).not_to notify('execute[start postgresql]').to(:run)
-      expect(chef_run).not_to run_execute('/opt/gitlab/embedded/bin/initdb -D /var/opt/gilab/postgresql/data -E UTF8')
-      expect(chef_run).not_to run_execute('create gitlabhq_production database')
-      expect(chef_run).not_to enable_postgresql_extension('pg_trgm')
       expect(chef_run).not_to run_execute(/(start|reload) postgresql/)
+    end
+
+    it 'should create database objects (roles, databses, extension)', focus: true do
+      expect(chef_run).not_to run_execute('/opt/gitlab/embedded/bin/initdb -D /var/opt/gitlab/postgresql/data -E UTF8')
       expect(chef_run).to create_postgresql_user('gitlab')
       expect(chef_run).to create_postgresql_user('gitlab_replicator')
+      expect(chef_run).to create_pgbouncer_user('rails')
+      expect(chef_run).to run_execute('create gitlabhq_production database')
+      expect(chef_run).to enable_postgresql_extension('pg_trgm')
+      expect(chef_run).to enable_postgresql_extension('btree_gist')
     end
 
     it 'should create patroni configuration file' do
       expect(chef_run).to render_file('/var/opt/gitlab/patroni/patroni.yaml').with_content { |content|
         expect(YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)).to eq(default_patroni_config)
-      }
-    end
-
-    it 'should create patroni post-bootstrap script' do
-      expect(chef_run).to render_file('/var/opt/gitlab/patroni/post-bootstrap').with_content { |content|
-        expect(content).to match(/^GITLAB_DATABASE_NAME='gitlabhq_production'$/)
-        expect(content).to match(/^GITLAB_SQL_USER='gitlab'$/)
-        expect(content).to match(/^GITLAB_PGBOUNCER_USER='pgbouncer'$/)
-        expect(content).to match(/^GITLAB_AUTH_FUNCTION='\s*CREATE OR REPLACE FUNCTION public\.pg_shadow_lookup/)
       }
     end
   end
@@ -180,15 +179,6 @@ describe 'patroni cookbook' do
           }
         }
       )
-    end
-
-    it 'should create patroni post-bootstrap script' do
-      expect(chef_run).to render_file('/var/opt/gitlab/patroni/post-bootstrap').with_content { |content|
-        expect(content).to match(/^GITLAB_SQL_USER='test_sql_user'$/)
-        expect(content).to match(/^GITLAB_SQL_USER_PASSWORD='md532596e8376077c3ef8d5cf52f15279ba'$/)
-        expect(content).to match(/^GITLAB_PGBOUNCER_USER='test_pgbouncer_user'$/)
-        expect(content).to match(/^GITLAB_PGBOUNCER_PASSWORD='md53b244bd6e459bc406013417367587d41'$/)
-      }
     end
 
     it 'should be reflected in patroni configuration file' do
@@ -246,9 +236,9 @@ describe 'patroni cookbook' do
         allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(false)
       end
 
-      it 'should enable patroni service and skip disabling postgresql runit service' do
+      it 'should enable patroni service and disable postgresql runit service' do
         expect(chef_run).to enable_runit_service('patroni')
-        expect(chef_run).not_to disable_runit_service('postgresql')
+        expect(chef_run).to disable_runit_service('postgresql')
       end
     end
 
@@ -277,6 +267,21 @@ describe 'patroni cookbook' do
         expect(chef_run).to enable_runit_service('patroni')
         expect(chef_run).to disable_runit_service('postgresql')
         expect(chef_run).to run_execute('signal to restart postgresql')
+      end
+    end
+
+    context 'on a replica' do
+      before do
+        allow_any_instance_of(PgHelper).to receive(:replica?).and_return(true)
+      end
+
+      it 'should not create database objects' do
+        expect(chef_run).not_to create_postgresql_user('gitlab')
+        expect(chef_run).not_to create_postgresql_user('gitlab_replicator')
+        expect(chef_run).not_to create_pgbouncer_user('patroni')
+        expect(chef_run).not_to run_execute('create gitlabhq_production database')
+        expect(chef_run).not_to enable_postgresql_extension('pg_trgm')
+        expect(chef_run).not_to enable_postgresql_extension('btree_gist')
       end
     end
   end

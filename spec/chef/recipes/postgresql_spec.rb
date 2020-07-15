@@ -320,7 +320,7 @@ psql_port='5432'
 end
 
 describe 'postgresql 9.6' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config database_objects)).converge('gitlab::default') }
   let(:postgresql_conf) { '/var/opt/gitlab/postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
 
@@ -725,6 +725,7 @@ describe 'postgresql 9.6' do
     context 'when database is a secondary' do
       before do
         allow_any_instance_of(PgHelper).to receive(:is_standby?).and_return(true)
+        allow_any_instance_of(PgHelper).to receive(:replica?).and_return(true)
       end
 
       it 'should not create users' do
