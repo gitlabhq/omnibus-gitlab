@@ -38,14 +38,14 @@ default:
 variables:
   BUILDER_IMAGE_REGISTRY: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder"
   PUBLIC_BUILDER_IMAGE_REGISTRY: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder"
-  BUILDER_IMAGE_REVISION: "0.0.66"
+  BUILDER_IMAGE_REVISION: "0.0.67"
   # The registry to pull the assets image from
   ASSET_REGISTRY: "${CI_REGISTRY}"
   ASSET_SYNC_EXISTING_REMOTE_FILES: "keep"
   ASSET_SYNC_GZIP_COMPRESSION: "true"
   ASSET_PATH: "assets-${CI_COMMIT_REF_SLUG}"
   COMPILE_ASSETS: "false"
-  RUBY_IMAGE: "ruby:2.5"
+  RUBY_IMAGE: "ruby:2.6"
   BUNDLE_PATH__SYSTEM: "false"
   # Format of the auto-deploy tag for auto-deploy builds.
   # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging

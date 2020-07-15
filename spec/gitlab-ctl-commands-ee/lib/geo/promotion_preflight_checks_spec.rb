@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'fileutils'
 require 'geo/promotion_preflight_checks'
 require 'gitlab_ctl/util'
 
@@ -11,6 +10,16 @@ describe Geo::PromotionPreflightChecks, '#execute' do
 
   before do
     allow(STDIN).to receive(:gets).and_return(confirmation)
+    allow(command).to receive(:run_command).with(any_args)
+
+    shell_out_object = double.tap do |shell_out_object|
+      allow(shell_out_object).to receive(:stdout).and_return('SUCCESS')
+      allow(shell_out_object).to receive(:error?).and_return(false)
+    end
+
+    allow(command).to receive(:run_command).with(
+      'gitlab-rake geo:check_replication_verification_status')
+      .and_return(shell_out_object)
   end
 
   it 'prints preflight check instructions' do
@@ -22,6 +31,51 @@ describe Geo::PromotionPreflightChecks, '#execute' do
   context 'when manual checks are confirmed' do
     it 'does not raise an error' do
       expect { command.execute }.to_not raise_error
+    end
+
+    it 'runs `check_replication_verification_status` task' do
+      is_expected.to receive(:run_command).with(
+        'gitlab-rake geo:check_replication_verification_status').once
+
+      command.execute
+    end
+
+    context 'when geo:check_replication_verification_status fails' do
+      around do |example|
+        example.run
+      rescue SystemExit
+      end
+
+      before do
+        shell_out_object = double.tap do |shell_out_object|
+          allow(shell_out_object).to receive(:stdout).and_return('error message')
+          allow(shell_out_object).to receive(:error?).and_return(true)
+        end
+
+        allow(command).to receive(:run_command).with(
+          'gitlab-rake geo:check_replication_verification_status')
+          .once
+          .and_return(shell_out_object)
+      end
+
+      it 'prints error message when rake task errors' do
+        expect { command.execute }.to output(
+          /error message\nERROR: Replication\/verification is incomplete./).to_stdout
+      end
+
+      it 'exits with 1 when rake task errors' do
+        expect { command.execute }.to raise_error(SystemExit) do |error|
+          expect(error.status).to eq(1)
+        end
+      end
+    end
+
+    context 'when geo:check_replication_verification_status passes' do
+      it 'prints a success message' do
+        expect { command.execute }.to output(
+          /All preflight checks have passed. This node can now be promoted./)
+          .to_stdout
+      end
     end
   end
 

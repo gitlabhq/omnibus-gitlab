@@ -52,6 +52,8 @@ class OhaiHelper
         'xenial'
       when /^18\.04/
         'bionic'
+      when /^20\.04/
+        'focal'
       end
     end
 

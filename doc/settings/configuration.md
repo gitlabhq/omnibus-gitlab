@@ -599,7 +599,7 @@ Disabling impersonation is documented in
 ## Error Reporting and Logging with Sentry
 
 [Sentry](https://sentry.io) is an error reporting and logging tool which can be
-used as SaaS or on premise. It's Open Source and you can browse it's source code
+used as SaaS or on premise. It's Open Source and you can browse its source code
 repositories [here](https://github.com/getsentry).
 
 The following settings can be used to configure Sentry:
@@ -614,6 +614,22 @@ gitlab_rails['sentry_environment'] = 'production'
 The [Sentry Environment](https://docs.sentry.io/enriching-error-data/environments/)
 can be used to track errors and issues across several deployed GitLab
 environments, e.g. lab, development, staging, production.
+
+To set custom [Sentry
+tags](https://docs.sentry.io/enriching-error-data/additional-data/#tags--context)
+on every event sent from a particular server, the `GITLAB_SENTRY_EXTRA_TAGS`
+environment variable can be set. This is a JSON-encoded hash representing any
+tags that should be passed to Sentry for all exceptions from that server.
+
+For instance, setting:
+
+```ruby
+gitlab_rails['env'] = {
+  'GITLAB_SENTRY_EXTRA_TAGS' => '{"stage": "main"}'
+}
+```
+
+Would add the 'stage' tag with a value of 'main'.
 
 ## Content Security Policy
 
@@ -646,6 +662,16 @@ gitlab_rails['content_security_policy'] = {
 Improperly configuring the CSP rules could prevent GitLab from working
 properly. Before rolling out a policy, you may also want to change
 `report_only` to `true` to test the configuration.
+
+## Setting initial root password on installation
+
+The initial password for the user `root` can be set at the installation time with the environment variable `GITLAB_ROOT_PASSWORD.
+
+For example:
+
+```shell
+GITLAB_ROOT_PASSWORD="<strongpassword>" EXTERNAL_URL="http://gitlab.exmaple.com" apt install gitlab-ee
+```
 
 ## Setting up LDAP sign-in
 

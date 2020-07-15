@@ -158,6 +158,21 @@ production: &base
     # Whether to expunge (permanently remove) messages from the mailbox when they are deleted after delivery
     expunge_deleted: <%= @incoming_email_expunge_deleted %>
 
+  <%- if @object_store['enabled'] -%>
+  ## Consolidated object store config
+  # This uses a single credential for object storage with multiple buckets.
+  # It also enables Workhorse to upload files directly with its own S3 client
+  # instead of using pre-signed URLs.
+  #
+  # This will only take effect if the object_store sections are not defined
+  # within the types (e.g. artifacts.object_store, lfs.object_store, etc.).
+  object_store:
+     enabled: <%= @object_store['enabled'] %>
+     proxy_download: <%= @object_store['proxy_download'] %>
+     connection: <%= @object_store['connection'].to_json %>
+     objects: <%= @object_store['objects'].to_json %>
+  <%- end -%>
+
   ## Service desk email
   # Allow users to use a separate service desk address
   # For documentation on how to set this up, see http://doc.gitlab.com/ce/administration/reply_by_email.html
@@ -451,6 +466,7 @@ production: &base
     # GitLab Geo migrated local files clean up worker
     # NOTE: This will only take effect if Geo is enabled (secondary nodes only)
     <% unless @geo_migrated_local_files_clean_up_worker_cron.nil? %>
+    <% LoggingHelper.deprecation "gitlab_rails['geo_migrated_local_files_clean_up_worker_cron'] options is deprecated and will be removed in Gitlab 14.0." %>
     geo_migrated_local_files_clean_up_worker:
       cron: "<%= @geo_migrated_local_files_clean_up_worker_cron %>"
     <% end %>
@@ -768,8 +784,12 @@ production: &base
   # yourself, and then update the values here.
   # https://docs.gitlab.com/ee/administration/monitoring/prometheus/
   prometheus:
-    enable: <%= @prometheus['enable'] %>
-    listen_address: "<%= @prometheus['listen_address'] %>"
+    # Do not use `enable` and `listen_address` in any new code, as they are deprecated. Use `server_address` instead.
+    # https://gitlab.com/gitlab-org/gitlab/-/issues/227111
+    enable: <%= @prometheus_available %>
+    listen_address: "<%= @prometheus_server_address %>"
+    # IP address(including listen port) of Prometheus server
+    server_address: "<%= @prometheus_server_address %>"
 
   #
   # 5. Extra customization

@@ -46,14 +46,14 @@ describe 'patroni cookbook' do
     let(:default_patroni_config) do
       {
         name: 'fauxhai.local',
-        scope: 'gitlab-postgresql-ha',
+        scope: 'postgresql-ha',
         log: {
           level: 'INFO'
         },
         consul: {
           url: 'http://127.0.0.1:8500',
           service_check_interval: '10s',
-          register_service: false,
+          register_service: true,
           checks: [],
         },
         postgresql: {

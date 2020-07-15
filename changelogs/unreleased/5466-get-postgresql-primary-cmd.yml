@@ -1,0 +1,5 @@
+---
+title: Add get-postgresql-primary command to gitlab-ctl
+merge_request: 4383
+author:
+type: added

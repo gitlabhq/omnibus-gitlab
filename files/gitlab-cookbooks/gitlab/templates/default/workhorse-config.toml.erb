@@ -7,3 +7,13 @@ Sentinel = <%= @sentinels.map{ |sentinel| "tcp://#{sentinel['host']}:#{sentinel[
 SentinelMaster = "<%= @sentinel_master %>"
 Password = "<%= @master_password %>"
 <% end %>
+
+<%- if @object_store['enabled'] && @object_store_provider == 'AWS' %>
+[object_storage]
+  enabled = true
+  provider = "<%= @object_store_provider %>"
+
+[object_storage.s3]
+  aws_access_key_id = "<%= @object_store.dig('connection', 'aws_access_key_id') %>"
+  aws_secret_access_key = "<%= @object_store.dig('connection', 'aws_secret_access_key') %>"
+<%- end %>

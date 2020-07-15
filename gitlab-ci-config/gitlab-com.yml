@@ -81,7 +81,7 @@
   retry: 1
 
 .trigger-job: &trigger-job
-  image: "ruby:2.6"
+  image: "${RUBY_IMAGE}"
   stage: trigger-package
   when: manual
   script:
@@ -135,7 +135,7 @@ Trigger:ee-package:
 
 rubocop:
   stage: check
-  image: ruby:2.6
+  image: "${RUBY_IMAGE}"
   before_script:
     - bundle install -j $(nproc) --binstubs --path gems --without default test
   script:
@@ -227,6 +227,7 @@ Debian 10 knapsack: *prepare_knapsack
 OpenSUSE 15.1 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
 Ubuntu 18.04 knapsack: *prepare_knapsack
+Ubuntu 20.04 knapsack: *prepare_knapsack
 
 Ubuntu 16.04 specs:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
@@ -240,6 +241,12 @@ Ubuntu 18.04 specs :
   parallel: 6
   dependencies:
   - Ubuntu 18.04 knapsack
+Ubuntu 20.04 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-focal"
+  extends: .spec_template
+  parallel: 6
+  dependencies:
+  - Ubuntu 20.04 knapsack
 Debian 8 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
   extends: .spec_template
@@ -377,7 +384,7 @@ Trigger:qa-test:
 
 Trigger:ha-validate:
   stage: trigger-ha-validate
-  image: "ruby:2.6"
+  image: "${RUBY_IMAGE}"
   when: manual
   script:
       - bundle exec rake qa:ha:validate

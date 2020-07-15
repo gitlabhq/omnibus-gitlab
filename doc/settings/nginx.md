@@ -114,6 +114,8 @@ no longer listen for unencrypted HTTP traffic on port 80. If you want to
 redirect all HTTP traffic to HTTPS you can use the `redirect_http_to_https`
 setting.
 
+NOTE: **Note:** This behavior is enabled by default.
+
 ```ruby
 external_url "https://gitlab.example.com"
 nginx['redirect_http_to_https'] = true
@@ -240,6 +242,8 @@ nginx['http2_enabled'] = false
 Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
 for the changes to take effect.
 
+NOTE: **Note:** The `http2` setting only works for the main GitLab application and not for the other services.
+
 ## Using a non-bundled web-server
 
 By default, Omnibus GitLab installs GitLab with bundled NGINX.
@@ -325,7 +329,11 @@ By default NGINX will accept incoming connections on all local IPv4 addresses.
 You can change the list of addresses in `/etc/gitlab/gitlab.rb`.
 
 ```ruby
-nginx['listen_addresses'] = ["0.0.0.0", "[::]"] # listen on all IPv4 and IPv6 addresses
+ # Listen on all IPv4 and IPv6 addresses
+nginx['listen_addresses'] = ["0.0.0.0", "[::]"]
+registry_nginx['listen_addresses'] = ['*', '[::]']
+mattermost_nginx['listen_addresses'] = ['*', '[::]']
+pages_nginx['listen_addresses'] = ['*', '[::]']
 ```
 
 ## Setting the NGINX listen port
@@ -392,6 +400,8 @@ Setting `max_age` to 0 will disable this feature. For more information see:
 
 - <https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/>
 
+NOTE: **Note:** The HSTS settings only work for the main GitLab application and not for the other services.
+
 ## Setting the Referrer-Policy header
 
 By default, GitLab sets the `Referrer-Policy` header to `strict-origin-when-cross-origin` on all responses.
@@ -423,6 +433,8 @@ disable this behavior:
 ```ruby
 nginx['gzip_enabled'] = false
 ```
+
+NOTE: **Note:** The `gzip` setting only works for the main GitLab application and not for the other services.
 
 ## Using custom SSL ciphers
 
@@ -544,6 +556,10 @@ NGINX.
 In some cases you may want to host GitLab using an existing Passenger/NGINX
 installation but still have the convenience of updating and installing using
 the omnibus packages.
+
+NOTE: **Note:** When disabling NGINX, you won't be able to access
+other services included by Omnibus, like Grafana, Mattermost, etc. unless
+you manually add them in `nginx.conf`.
 
 ### Configuration
 
@@ -699,6 +715,11 @@ server {
     add_header Cache-Control public;
   }
 
+  ## To access Grafana
+  location /-/grafana/ {
+    proxy_pass http://localhost:3000/;
+  }
+
   error_page 502 /502.html;
 }
 ```
@@ -745,7 +766,6 @@ nginx['status'] = {
   "fqdn" => "dev.example.com",
   "port" => 9999,
   "options" => {
-    "stub_status" => "on", # Turn on stats
     "access_log" => "on", # Disable logs for stats
     "allow" => "127.0.0.1", # Only allow access from localhost
     "deny" => "all" # Deny access to anyone else

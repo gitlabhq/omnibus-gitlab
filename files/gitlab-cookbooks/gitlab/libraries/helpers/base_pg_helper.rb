@@ -48,7 +48,7 @@ class BasePgHelper < BaseHelper
 
   def extension_can_be_enabled?(extension_name, db_name)
     is_running? &&
-      !is_slave? &&
+      !is_standby? &&
       extension_exists?(extension_name) &&
       database_exists?(db_name) &&
       !extension_enabled?(extension_name, db_name)
@@ -209,16 +209,16 @@ class BasePgHelper < BaseHelper
     end
   end
 
-  def is_slave?
+  def is_standby?
     psql_cmd(["-d 'template1'",
               "-c 'select pg_is_in_recovery()' -A",
               "|grep -x t"])
   end
 
-  alias_method :replica?, :is_slave?
+  alias_method :replica?, :is_standby?
 
   def is_offline_or_readonly?
-    !is_running? || is_slave?
+    !is_running? || is_standby?
   end
 
   # Returns an array of function names for the given database

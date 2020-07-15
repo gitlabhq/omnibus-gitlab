@@ -1,0 +1,5 @@
+---
+title: Add setting to specify external Prometheus address to the rails application
+merge_request: 4309
+author:
+type: other
