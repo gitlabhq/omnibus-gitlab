@@ -33,6 +33,9 @@ describe 'patroni cookbook' do
         roles: %w(postgres_role),
         patroni: {
           enable: true
+        },
+        postgresql: {
+          pgbouncer_user_password: ''
         }
       )
       allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(true)
@@ -123,11 +126,11 @@ describe 'patroni cookbook' do
       expect(chef_run).not_to run_execute(/(start|reload) postgresql/)
     end
 
-    it 'should create database objects (roles, databses, extension)' do
+    it 'should create database objects (roles, databses, extension)', focus: true do
       expect(chef_run).not_to run_execute('/opt/gitlab/embedded/bin/initdb -D /var/opt/gitlab/postgresql/data -E UTF8')
       expect(chef_run).to create_postgresql_user('gitlab')
       expect(chef_run).to create_postgresql_user('gitlab_replicator')
-      expect(chef_run).to create_pgbouncer_user('patroni')
+      expect(chef_run).to create_pgbouncer_user('rails')
       expect(chef_run).to run_execute('create gitlabhq_production database')
       expect(chef_run).to enable_postgresql_extension('pg_trgm')
       expect(chef_run).to enable_postgresql_extension('btree_gist')
