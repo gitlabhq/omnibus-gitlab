@@ -208,15 +208,19 @@ class BasePgHelper < BaseHelper
     end
   end
 
-  def is_standby?
-    results = psql_query_raw('template1', 'select pg_is_in_recovery()')
-    if results.error?
-      message = %(Error checking database status. If this instance is expected to be a standby database, there is nothing to do. Otherwise, check the database and re-run reconfigure)
-      LoggingHelper.warning(message)
-      return true
-    end
+  def node_attributes
+    return node['gitlab'][service_name] if node['gitlab'].key?(service_name)
 
-    results.stdout.strip.eql?('t')
+    node[service_name]
+  end
+
+  def is_standby?
+    # PostgreSQL <= 11 uses recovery.conf to configure a standby node.
+    # PostgreSQL 12 switched to the .signal files
+    %w(recovery.conf recovery.signal standby.signal).each do |standby_file|
+      return true if ::File.exist?(::File.join(node_attributes['dir'], 'data', standby_file))
+    end
+    false
   end
 
   alias_method :is_replica?, :is_standby?

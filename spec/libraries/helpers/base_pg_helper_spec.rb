@@ -327,23 +327,23 @@ describe BasePgHelper do
   end
 
   describe '#is_standby?' do
+    let(:recovery_files) { %w(recovery.conf recovery.signal standby.signal) }
+
     it 'returns true for a standby instance' do
-      results = double(stdout: 't', error?: false)
-      allow(subject).to receive(:psql_query_raw).and_return(results)
+      recovery_files.each do |f|
+        allow(File).to receive(:exist?)
+          .with("/var/opt/gitlab/postgresql/data/#{f}").and_return(true)
+      end
+
       expect(subject.is_standby?).to be true
     end
 
     it 'returns false for a primary instance' do
-      results = double(stdout: 'f', error?: false)
-      allow(subject).to receive(:psql_query_raw).and_return(results)
+      recovery_files.each do |f|
+        allow(File).to receive(:exist?)
+          .with("/var/opt/gitlab/postgresql/data/#{f}").and_return(false)
+      end
       expect(subject.is_standby?).to be false
-    end
-
-    it 'returns true and prints a warning if there is a query error' do
-      results = double(error?: true)
-      allow(subject).to receive(:psql_query_raw).and_return(results)
-      expect(LoggingHelper).to receive(:warning).with(/Error checking database status/)
-      expect(subject.is_standby?).to be true
     end
   end
 end
