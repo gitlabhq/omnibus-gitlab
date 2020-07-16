@@ -9,6 +9,9 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 The GitLab Docker images are monolithic images of GitLab running all the necessary
 services in a single container.
 
+NOTE: **Note:**
+The Docker images do not include a mail transport agent (MTA). The recommended solution is to add an MTA, such as Postfix or Sendmail, running in a separate container. Alternatively, install an MTA directly in the GitLab container, but this adds maintenance overhead as you'll likely need to reinstall the MTA after every upgrade of restart.
+
 Both GitLab CE and EE are in Docker Hub:
 
 - [GitLab CE Docker image](https://hub.docker.com/r/gitlab/gitlab-ce/)
