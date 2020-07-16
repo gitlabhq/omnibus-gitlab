@@ -36,7 +36,7 @@ describe GitlabCtl::Backup do
 
     it 'should use proper tar command' do
       expect_any_instance_of(Kernel).to receive(:system).with(
-        *%W(tar --absolute-names --verbose --create --file /etc/gitlab/config_backup/#{@archive_name}
+        *%W(tar --absolute-names --dereference --verbose --create --file /etc/gitlab/config_backup/#{@archive_name}
             --exclude /etc/gitlab/config_backup -- /etc/gitlab)
       )
       GitlabCtl::Backup.perform
