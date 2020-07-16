@@ -41,6 +41,7 @@ describe 'patroni cookbook' do
       allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(true)
       allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
       allow_any_instance_of(PgHelper).to receive(:bootstrapped?).and_return(false)
+      allow_any_instance_of(PgHelper).to receive(:is_replica?).and_return(false)
     end
 
     let(:default_patroni_config) do

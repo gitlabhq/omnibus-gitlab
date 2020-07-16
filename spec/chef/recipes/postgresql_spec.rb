@@ -709,6 +709,8 @@ describe 'postgresql 9.6' do
           }
         }
       )
+
+      allow_any_instance_of(PgHelper).to receive(:is_standby?).and_return(false)
     end
 
     it 'should set a password for sql_user when sql_user_password is set' do

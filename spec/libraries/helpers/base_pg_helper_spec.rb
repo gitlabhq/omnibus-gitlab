@@ -325,4 +325,25 @@ describe BasePgHelper do
       expect(result).to eq("SET user 'gitlab', ADD password 'mypass'")
     end
   end
+
+  describe '#is_standby?' do
+    let(:recovery_files) { %w(recovery.conf recovery.signal standby.signal) }
+
+    it 'returns true for a standby instance' do
+      recovery_files.each do |f|
+        allow(File).to receive(:exist?)
+          .with("/var/opt/gitlab/postgresql/data/#{f}").and_return(true)
+      end
+
+      expect(subject.is_standby?).to be true
+    end
+
+    it 'returns false for a primary instance' do
+      recovery_files.each do |f|
+        allow(File).to receive(:exist?)
+          .with("/var/opt/gitlab/postgresql/data/#{f}").and_return(false)
+      end
+      expect(subject.is_standby?).to be false
+    end
+  end
 end

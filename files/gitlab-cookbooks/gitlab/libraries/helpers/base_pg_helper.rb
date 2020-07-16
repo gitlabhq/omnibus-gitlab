@@ -209,10 +209,19 @@ class BasePgHelper < BaseHelper
     end
   end
 
+  def node_attributes
+    return node['gitlab'][service_name] if node['gitlab'].key?(service_name)
+
+    node[service_name]
+  end
+
   def is_standby?
-    psql_cmd(["-d 'template1'",
-              "-c 'select pg_is_in_recovery()' -A",
-              "|grep -x t"])
+    # PostgreSQL <= 11 uses recovery.conf to configure a standby node.
+    # PostgreSQL 12 switched to the .signal files
+    %w(recovery.conf recovery.signal standby.signal).each do |standby_file|
+      return true if ::File.exist?(::File.join(node_attributes['dir'], 'data', standby_file))
+    end
+    false
   end
 
   alias_method :replica?, :is_standby?
@@ -254,10 +263,21 @@ class BasePgHelper < BaseHelper
     success?(cmd)
   end
 
+  # Return the results of a psql query
+  # - db_name: Name of the database to query
+  # - query: SQL query to run
   def psql_query(db_name, query)
+    psql_query_raw(db_name, query).stdout.chomp
+  end
+
+  # Get the Mixlib::Shellout object containing the command results.
+  # Allows for more fine grained error handling
+  # - db_name: Name of the database to query
+  # - query: SQL query to run
+  def psql_query_raw(db_name, query)
     do_shell_out(
       %(/opt/gitlab/bin/#{service_cmd} -d '#{db_name}' -c "#{query}" -tA)
-    ).stdout.chomp
+    )
   end
 
   def version
