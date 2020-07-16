@@ -321,6 +321,7 @@ default['gitlab']['gitlab-rails']['omniauth_auto_sign_in_with_provider'] = nil
 default['gitlab']['gitlab-rails']['omniauth_block_auto_created_users'] = nil
 default['gitlab']['gitlab-rails']['omniauth_auto_link_ldap_user'] = nil
 default['gitlab']['gitlab-rails']['omniauth_auto_link_saml_user'] = nil
+default['gitlab']['gitlab-rails']['omniauth_auto_link_user'] = nil
 default['gitlab']['gitlab-rails']['omniauth_external_providers'] = nil
 default['gitlab']['gitlab-rails']['omniauth_providers'] = []
 default['gitlab']['gitlab-rails']['omniauth_allow_bypass_two_factor'] = nil
