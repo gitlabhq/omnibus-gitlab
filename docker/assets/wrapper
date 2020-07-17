@@ -122,9 +122,13 @@ GITLAB_OMNIBUS_CONFIG= /opt/gitlab/embedded/bin/runsvdir-start &
 echo "Configuring GitLab..."
 gitlab-ctl reconfigure
 
+# This must be false when the opt-in PostgreSQL version is the default for pg-upgrade,
+# otherwise it must be true.
+ATTEMPT_AUTO_PG_UPGRADE='true'
+
 # Make sure PostgreSQL is at the latest version.
 # If it fails, print a message with a workaround and exit
-if [ "${GITLAB_SKIP_PG_UPGRADE}" != true ]; then
+if [ "${GITLAB_SKIP_PG_UPGRADE}" != 'true' -a "${ATTEMPT_AUTO_PG_UPGRADE}" != 'false' ]; then
     gitlab-ctl pg-upgrade -w || failed_pg_upgrade
 fi
 
