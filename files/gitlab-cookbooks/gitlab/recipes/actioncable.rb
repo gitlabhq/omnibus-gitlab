@@ -36,6 +36,8 @@ puma_working_dir = File.join(rails_home, "working")
 puma_log_dir = node['gitlab'][svc]['log_directory']
 puma_rb = File.join(puma_etc_dir, "puma_actioncable.rb")
 
+actioncable_worker_pool_size = node['gitlab'][svc]['worker_pool_size']
+
 [
   puma_log_dir,
   File.dirname(puma_pidfile)
@@ -92,6 +94,7 @@ runit_service svc do
     rails_app: rails_app,
     puma_rb: puma_rb,
     log_directory: puma_log_dir,
+    actioncable_worker_pool_size: actioncable_worker_pool_size,
     metrics_dir: metrics_dir,
     clean_metrics_dir: false
   }.merge(params))

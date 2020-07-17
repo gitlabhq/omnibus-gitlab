@@ -511,6 +511,7 @@ default['gitlab']['actioncable']['per_worker_max_memory_mb'] = nil
 default['gitlab']['actioncable']['worker_processes'] = 2
 default['gitlab']['actioncable']['min_threads'] = 4
 default['gitlab']['actioncable']['max_threads'] = 4
+default['gitlab']['actioncable']['in_app'] = false
 default['gitlab']['actioncable']['worker_pool_size'] = 4
 
 ####

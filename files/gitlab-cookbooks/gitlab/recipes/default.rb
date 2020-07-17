@@ -138,7 +138,6 @@ include_recipe "gitlab::logrotate_folders_and_configs"
 %w[
   unicorn
   puma
-  actioncable
   sidekiq
   sidekiq-cluster
   gitlab-workhorse
@@ -155,6 +154,12 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   else
     include_recipe "gitlab::#{service}_disable"
   end
+end
+
+if node['gitlab']['actioncable']['enable'] && !node['gitlab']['actioncable']['in_app']
+  include_recipe "gitlab::actioncable"
+else
+  include_recipe "gitlab::actioncable_disable"
 end
 
 %w(

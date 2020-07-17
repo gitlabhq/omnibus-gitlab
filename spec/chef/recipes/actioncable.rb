@@ -11,7 +11,7 @@ describe 'gitlab::actioncable with Ubuntu 16.04' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(actioncable: { enable: true })
+    stub_gitlab_rb(actioncable: { enable: true, worker_pool_size: 7 })
     stub_default_should_notify?(true)
     stub_should_notify?('actioncable', true)
   end
@@ -67,6 +67,7 @@ describe 'gitlab::actioncable with Ubuntu 16.04' do
           expect(content).to match(/chmod 0700 \/run\/gitlab\/actioncable/)
           expect(content).to match(/chown git \/run\/gitlab\/actioncable/)
           expect(content).to match(/export prometheus_run_dir=\'\/run\/gitlab\/actioncable\'/)
+          expect(content).to match(/ACTION_CABLE_WORKER_POOL_SIZE=4/)
           expect(content).to match(%r(/opt/gitlab/embedded/bin/bundle exec puma -C /var/opt/gitlab/gitlab-rails/etc/puma_actioncable.rb))
         }
     end

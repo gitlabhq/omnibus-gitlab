@@ -162,6 +162,33 @@ describe 'gitlab::puma with Ubuntu 16.04' do
         }
     end
   end
+
+  context 'with ActionCable in-app enabled' do
+    before do
+      stub_gitlab_rb(
+        actioncable: {
+          enable: true,
+          in_app: true,
+          worker_pool_size: 7
+        },
+        puma: {
+          enable: true
+        },
+        unicorn: {
+          enable: false
+        }
+      )
+    end
+
+    it 'renders the runit configuration with ActionCable environment variables' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/puma/run')
+        .with_content { |content|
+          expect(content).to match(/ACTION_CABLE_IN_APP=true/)
+          expect(content).to match(/ACTION_CABLE_WORKER_POOL_SIZE=7/)
+          expect(content).to match(%r(/opt/gitlab/embedded/bin/bundle exec puma -C /var/opt/gitlab/gitlab-rails/etc/puma.rb))
+        }
+    end
+  end
 end
 
 describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
