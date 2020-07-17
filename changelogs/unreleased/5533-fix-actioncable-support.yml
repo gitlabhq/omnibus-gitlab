@@ -1,0 +1,5 @@
+---
+title: Make actioncable recipe and control files match new runit requirement
+merge_request: 4419
+author:
+type: fixed
