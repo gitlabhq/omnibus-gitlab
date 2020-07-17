@@ -81,7 +81,7 @@ puma_config puma_rb do
 end
 
 runit_service svc do
-  down node['gitlab'][svc]['ha']
+  start_down node['gitlab'][svc]['ha']
   # sv-control-h handles a HUP signal and issues a SIGINT, SIGTERM
   # to the master puma process to perform a graceful restart
   restart_command 'hup'
