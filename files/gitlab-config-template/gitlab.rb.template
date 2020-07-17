@@ -1489,6 +1489,11 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 ##! Shared secret used for authentication between Pages and GitLab
 # gitlab_pages['api_secret_key'] = nil # Will be generated if not set. Base64 encoded and exactly 32 bytes long.
 
+# gitlab_pages['env_directory'] = "/opt/gitlab/etc/gitlab-pages/env"
+# gitlab_pages['env'] = {
+#   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+# }
+
 ################################################################################
 ## GitLab Pages NGINX
 ################################################################################
