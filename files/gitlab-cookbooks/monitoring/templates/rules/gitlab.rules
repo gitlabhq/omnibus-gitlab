@@ -491,9 +491,9 @@ groups:
   # Node level metrics
   #
   - record: gitlab_usage_ping:node_cpus:count
-    expr: count (node_cpu_seconds_total{mode="idle"}) by (instance)
-  - record: gitlab_usage_ping:node_memory_total_bytes:avg
-    expr: avg (node_memory_MemTotal_bytes) by (instance)
+    expr: max (instance:node_cpus:count) by (instance)
+  - record: gitlab_usage_ping:node_memory_total_bytes:max
+    expr: max (node_memory_MemTotal_bytes) by (instance)
   ### 
   # Service level metrics
   #
