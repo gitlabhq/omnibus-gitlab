@@ -59,13 +59,13 @@ class OhaiHelper
 
     def get_debian_version
       case ohai['platform_version']
-      when /^7\./
+      when /^7/
         'wheezy'
-      when /^8\./
+      when /^8/
         'jessie'
-      when /^9\./
+      when /^9/
         'stretch'
-      when /^10\./
+      when /^10/
         'buster'
       end
     end
