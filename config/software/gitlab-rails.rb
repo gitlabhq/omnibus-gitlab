@@ -61,8 +61,8 @@ if EE
   dependency 'gitlab-elasticsearch-indexer'
 end
 
-# libatomic is a runtime_dependency of the grpc gem for armhf platforms
-whitelist_file /grpc_c\.so/ if OhaiHelper.os_platform == 'raspbian'
+# libatomic is a runtime_dependency of the grpc gem for armhf/aarch64 platforms
+whitelist_file /grpc_c\.so/ if OhaiHelper.arm?
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

@@ -133,5 +133,20 @@ class OhaiHelper
         ohai['platform']
       end
     end
+
+    def armhf?
+      # armv* (Arm 32-bit)
+      /armv/.match?(ohai['kernel']['machine'])
+    end
+
+    def arm64?
+      # AArch64 (Arm 64-bit)
+      /aarch64/.match?(ohai['kernel']['machine'])
+    end
+
+    def arm?
+      # Any Arm (32-bit or 64-bit)
+      (armhf? || arm64?)
+    end
   end
 end
