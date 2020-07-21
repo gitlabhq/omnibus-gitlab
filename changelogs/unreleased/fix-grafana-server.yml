@@ -1,5 +1,0 @@
----
-title: Grafana Server SHOULD have serve_from_sub_path set to true
-merge_request: 4160
-author:
-type: fixed

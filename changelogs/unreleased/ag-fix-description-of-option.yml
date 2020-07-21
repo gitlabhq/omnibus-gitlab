@@ -1,5 +1,0 @@
----
-title: 'Geo: Remove confirm-removing-keys option from promote-to-primary-node command'
-merge_request: 4403
-author:
-type: changed

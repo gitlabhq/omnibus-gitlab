@@ -1,5 +1,0 @@
----
-title: Lower gzip compression threshold
-merge_request: 4387
-author:
-type: performance

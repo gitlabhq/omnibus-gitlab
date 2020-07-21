@@ -1,5 +1,0 @@
----
-title: Allow patroni to receive the term signal
-merge_request: 4366
-author:
-type: fixed
