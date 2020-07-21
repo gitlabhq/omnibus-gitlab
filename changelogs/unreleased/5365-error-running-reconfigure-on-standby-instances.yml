@@ -1,5 +1,0 @@
----
-title: Handle a down server when checking if a database is in standby
-merge_request: 4404
-author:
-type: fixed
