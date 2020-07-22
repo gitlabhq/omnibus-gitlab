@@ -372,7 +372,6 @@ gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "example.com"
 gitlab_rails['smtp_port'] = 25
 gitlab_rails['smtp_domain'] = "example.com"
-gitlab_rails['smtp_authentication'] = false
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
