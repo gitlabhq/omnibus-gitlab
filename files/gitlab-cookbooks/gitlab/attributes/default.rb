@@ -664,6 +664,7 @@ default['gitlab']['gitlab-pages']['headers'] = nil
 default['gitlab']['gitlab-pages']['api_secret_key'] = nil
 default['gitlab']['gitlab-pages']['gitlab_client_http_timeout'] = nil
 default['gitlab']['gitlab-pages']['gitlab_client_jwt_expiry'] = nil
+default['gitlab']['gitlab-pages']['domain_config_source'] = nil
 default['gitlab']['gitlab-pages']['env_directory'] = '/opt/gitlab/etc/gitlab-pages/env'
 
 ####
