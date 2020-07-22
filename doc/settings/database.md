@@ -348,7 +348,7 @@ sudo gitlab-ctl pg-upgrade
 
 NOTE: **Note:**
 In GitLab 12.8 or later, you can pass the `-V 11` flag to upgrade to PostgreSQL 11. PostgreSQL 11 became the default for
-`pg-upgrade` in GitLab 12.10. As of GitLab 13.2, PostgreSQL 12 is shipped with Omnibus GitLab but PostgreSQL 11 is still
+`pg-upgrade` in GitLab 12.10. As of GitLab 13.3, PostgreSQL 12 is shipped with Omnibus GitLab but PostgreSQL 11 is still
 the default for `pg-upgrade`. You can pass `-V 12` flag to upgrade to PostgreSQL 12.
 
 This command performs the following steps:
@@ -384,7 +384,7 @@ The default PostgreSQL version is set to 11.x, and an automatic upgrade of the
 database is done on package upgrades for installs that are not using repmgr or Geo.
 
 NOTE: **Note:**
-As of GitLab 13.2, PostgreSQL 11.7 and 12.3 are both shipped with Omnibus GitLab. GitLab still uses PostgreSQL 11 by default.
+As of GitLab 13.3, PostgreSQL 11.7 and 12.3 are both shipped with Omnibus GitLab. GitLab still uses PostgreSQL 11 by default.
 During package upgrade, the database will not automatically upgraded to PostgreSQL 12. If you want to upgrade to PostgreSQL
 12, you must run `pg-upgrade` manually and pass `-V 12` command argument.
 
@@ -655,7 +655,7 @@ This example demonstrates upgrading from a database host running PostgreSQL 10 t
 
   NOTE: **Note:**
   Connecting to PostgreSQL 12 (alongside with amending `postgresql['version'] = 12`) will currently break the [GitLab Backup/Restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html)functionality unless the v12 client binaries are available on the file system. More on this topic can be found under [backup and restore a non-packaged database](#backup-and-restore-a-non-packaged-postgresql-database).
-  This problem with missing 12 client binaries is partially resolved in GitLab 13.2 where PostgreSQL 12 is shipped with Omnibus GitLab. This problem will be tackled in this epic: [Add support for PostgreSQL 12](https://gitlab.com/groups/gitlab-org/-/epics/2374).
+  This problem with missing 12 client binaries is partially resolved in GitLab 13.3 where PostgreSQL 12 is shipped with Omnibus GitLab. This problem will be tackled in this epic: [Add support for PostgreSQL 12](https://gitlab.com/groups/gitlab-org/-/epics/2374).
 
   NOTE: **Note:**
   If configuring a version number whose binaries are unavailable on the file system, GitLab/Rails will use the default database's version binaries (default as per [GitLab and PostgreSQL version compatibility table](../package-information/postgresql_versions.md)).
@@ -735,7 +735,7 @@ gitlab_rails['initial_shared_runners_registration_token'] = 'token'
 ### Pin the packaged PostgreSQL version (fresh installs only)
 
 NOTE: **Note:**
-GitLab 13.0 only ships with PostgreSQL 11. PostgreSQL 12 is only available from GitLab 13.2 onward. The current
+GitLab 13.0 only ships with PostgreSQL 11. PostgreSQL 12 is only available from GitLab 13.3 onward. The current
 support for PostgreSQL 12 is limited to single database node installation. [Fault-tolerant PostgreSQL deployments](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html),
 and Geo installations are not supported and [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374) for the future releases.
 
@@ -743,7 +743,7 @@ Omnibus GitLab will initialize PostgreSQL with the [default version](../package-
 
 To initialize PostgreSQL with a non-default version, you can set `postgresql['version']` to the major version one of
 the [packaged PostgreSQL versions](../package-information/postgresql_versions.md) prior to the initial reconfigure.
-For example, starting GitLab 13.2 you can use `postgresql['version'] = 12` to opt in to use PostgreSQL 12.
+For example, starting GitLab 13.3 you can use `postgresql['version'] = 12` to opt in to use PostgreSQL 12.
 
 CAUTION: **Caution:**
 Setting `postgresql['version']` while using the Omnibus packaged PostgreSQL after the initial reconfigure will
@@ -863,7 +863,7 @@ NOTE: **Note:**
 As of GitLab 12.8, you can opt into upgrading PostgreSQL 11 with `pg-upgrade -V 11`
 
 NOTE: **Note:**
-As of GitLab 13.2, PostgreSQL 12 is shipped with Omnibus GitLab. However, the current support for is limited to
+As of GitLab 13.3, PostgreSQL 12 is shipped with Omnibus GitLab. However, the current support for is limited to
 single database node installation. [Fault-tolerant PostgreSQL deployments](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html),
 and Geo installations are not supported and [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374) for the future releases.
 
