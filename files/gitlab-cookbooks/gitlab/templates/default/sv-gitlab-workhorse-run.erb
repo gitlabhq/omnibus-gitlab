@@ -19,7 +19,7 @@ exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
     <% if node['gitlab']['gitlab-workhorse']['auth_socket'] %>
     -authSocket <%= node['gitlab']['gitlab-workhorse']['auth_socket'] %> \
     <% end %>
-    <% if node['gitlab']['actioncable']['enable'] %>
+    <% if node['gitlab']['actioncable']['enable'] && !node['gitlab']['actioncable']['in_app'] %>
     -cableBackend <%= node['gitlab']['gitlab-workhorse']['cable_backend'] %><%= node['gitlab']['gitlab-workhorse']['relative_url'] %> \
     -cableSocket <%= node['gitlab']['gitlab-workhorse']['cable_socket'] %> \
     <% end %>

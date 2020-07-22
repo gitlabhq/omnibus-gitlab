@@ -35,7 +35,6 @@ version '11.7' do
 end
 
 major_version = '11'
-libpq = 'libpq.so.5'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
 
@@ -62,8 +61,6 @@ build do
       link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
     end
   end
-
-  link "#{prefix}/lib/#{libpq}", "#{install_dir}/embedded/lib/#{libpq}"
 end
 
 # exclude headers and static libraries from package

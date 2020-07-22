@@ -239,6 +239,30 @@ external_url 'GENERATED_EXTERNAL_URL'
 ####! The format of mail_room crash logs
 # mailroom['exit_log_format'] = "plain"
 
+### Consolidated (simplified) object storage configuration
+###! This uses a single credential for object storage with multiple buckets.
+###! It also enables Workhorse to upload files directly with its own S3 client
+###! instead of using pre-signed URLs.
+###!
+###! This configuration will only take effect if the object_store
+###! sections are not defined within the types. For example, enabling
+###! gitlab_rails['artifacts_object_store_enabled'] or
+###! gitlab_rails['lfs_object_store_enabled'] will prevent the
+###! consolidated settings from being used.
+###!
+###! Be sure to use different buckets for each type of object.
+###! Docs: https://docs.gitlab.com/ee/administration/object_storage.html
+gitlab_rails['object_store']['enabled'] = false
+gitlab_rails['object_store']['connection'] = {}
+gitlab_rails['object_store']['proxy_download'] = false
+gitlab_rails['object_store']['objects']['artifacts']['bucket'] = nil
+gitlab_rails['object_store']['objects']['external_diffs']['bucket'] = nil
+gitlab_rails['object_store']['objects']['lfs']['bucket'] = nil
+gitlab_rails['object_store']['objects']['uploads']['bucket'] = nil
+gitlab_rails['object_store']['objects']['packages']['bucket'] = nil
+gitlab_rails['object_store']['objects']['dependency_proxy']['bucket'] = nil
+gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
+
 ### Job Artifacts
 # gitlab_rails['artifacts_enabled'] = true
 # gitlab_rails['artifacts_path'] = "/var/opt/gitlab/gitlab-rails/shared/artifacts"
@@ -1465,6 +1489,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Shared secret used for authentication between Pages and GitLab
 # gitlab_pages['api_secret_key'] = nil # Will be generated if not set. Base64 encoded and exactly 32 bytes long.
 
+# gitlab_pages['env_directory'] = "/opt/gitlab/etc/gitlab-pages/env"
+# gitlab_pages['env'] = {
+#   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+# }
+
 ################################################################################
 ## GitLab Pages NGINX
 ################################################################################
@@ -1650,6 +1679,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Advanced settings. Should be changed only if absolutely needed.
 # prometheus['listen_address'] = 'localhost:9090'
+#
+
+################################################################################
+###! **Only needed if Prometheus and Rails are not on the same server.**
+### For example, in a multi-node architecture, Prometheus will be installed on the monitoring node, while Rails will be on the Rails node.
+### https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html#using-an-external-prometheus-server
+### This value should be the address at which Prometheus is available to GitLab Rails(Puma/Unicorn, Sidekiq) node.
+################################################################################
+# gitlab_rails['prometheus_address'] = 'your.prom:9090'
 
 ################################################################################
 ## Prometheus Alertmanager
@@ -1998,7 +2036,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['geo_prune_event_log_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['geo_repository_verification_primary_batch_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['geo_repository_verification_secondary_scheduler_worker_cron'] = "*/5 * * * *"
-# gitlab_rails['geo_migrated_local_files_clean_up_worker_cron'] = "15 */6 * * *"
 # gitlab_rails['ldap_sync_worker_cron'] = "30 1 * * *"
 # gitlab_rails['ldap_group_sync_worker_cron'] = "0 * * * *"
 # gitlab_rails['historical_data_worker_cron'] = "0 12 * * *"

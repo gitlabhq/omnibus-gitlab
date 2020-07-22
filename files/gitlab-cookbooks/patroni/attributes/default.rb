@@ -3,7 +3,7 @@ default['patroni']['enable'] = false
 default['patroni']['dir'] = '/var/opt/gitlab/patroni'
 default['patroni']['data_dir'] = '/var/opt/gitlab/patroni/data'
 
-default['patroni']['scope'] = 'gitlab-postgresql-ha'
+default['patroni']['scope'] = 'postgresql-ha'
 default['patroni']['name'] = node.name
 
 default['patroni']['log_directory'] = '/var/log/gitlab/patroni'
@@ -11,7 +11,7 @@ default['patroni']['log_level'] = 'INFO'
 
 default['patroni']['consul']['url'] = 'http://127.0.0.1:8500'
 default['patroni']['consul']['service_check_interval'] = '10s'
-default['patroni']['consul']['register_service'] = false
+default['patroni']['consul']['register_service'] = true
 default['patroni']['consul']['checks'] = []
 
 default['patroni']['loop_wait'] = 10

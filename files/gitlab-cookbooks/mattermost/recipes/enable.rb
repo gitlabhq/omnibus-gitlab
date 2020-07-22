@@ -107,7 +107,9 @@ end
 
 ruby_block "populate mattermost configuration options" do
   block do
-    node.consume_attributes(Gitlab.hyphenate_config_keys)
+    node.consume_attributes(
+      { 'mattermost' => Gitlab.hyphenate_config_keys['mattermost'] }
+    )
   end
 end
 

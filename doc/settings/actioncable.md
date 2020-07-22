@@ -6,14 +6,19 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # ActionCable
 
-ActionCable is run as a separate Puma server that only handles websocket connections.
-
 NOTE: **Note:** ActionCable is **experimental** and the features that use this service are behind feature flags.
 
 This service is disabled by default. To enable:
 
 ```ruby
 actioncable['enable'] = true
+```
+
+By default, ActionCable is run as a separate Puma server that only handles websocket connections. To run ActionCable on
+the existing web server:
+
+```ruby
+actioncable['in_app'] = true
 ```
 
 ## Configuring the worker pool size

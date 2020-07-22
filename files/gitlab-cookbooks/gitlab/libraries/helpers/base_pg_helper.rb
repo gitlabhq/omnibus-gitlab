@@ -14,7 +14,8 @@ class BasePgHelper < BaseHelper
   PG_ESCAPED_BACKSLASH_PATTERN ||= /\\{2}/.freeze
 
   def is_running?
-    OmnibusHelper.new(node).service_up?(service_name)
+    omnibus_helper = OmnibusHelper.new(node)
+    omnibus_helper.service_up?(service_name) || (delegated? && omnibus_helper.service_up?(delegate_service_name) && ready?)
   end
 
   def is_managed_and_offline?
@@ -47,7 +48,7 @@ class BasePgHelper < BaseHelper
 
   def extension_can_be_enabled?(extension_name, db_name)
     is_running? &&
-      !is_slave? &&
+      !is_standby? &&
       extension_exists?(extension_name) &&
       database_exists?(db_name) &&
       !extension_enabled?(extension_name, db_name)
@@ -208,16 +209,25 @@ class BasePgHelper < BaseHelper
     end
   end
 
-  def is_slave?
-    psql_cmd(["-d 'template1'",
-              "-c 'select pg_is_in_recovery()' -A",
-              "|grep -x t"])
+  def node_attributes
+    return node['gitlab'][service_name] if node['gitlab'].key?(service_name)
+
+    node[service_name]
   end
 
-  alias_method :is_replica?, :is_slave?
+  def is_standby?
+    # PostgreSQL <= 11 uses recovery.conf to configure a standby node.
+    # PostgreSQL 12 switched to the .signal files
+    %w(recovery.conf recovery.signal standby.signal).each do |standby_file|
+      return true if ::File.exist?(::File.join(node_attributes['dir'], 'data', standby_file))
+    end
+    false
+  end
+
+  alias_method :replica?, :is_standby?
 
   def is_offline_or_readonly?
-    !is_running? || is_slave?
+    !is_running? || is_standby?
   end
 
   # Returns an array of function names for the given database
@@ -253,10 +263,21 @@ class BasePgHelper < BaseHelper
     success?(cmd)
   end
 
+  # Return the results of a psql query
+  # - db_name: Name of the database to query
+  # - query: SQL query to run
   def psql_query(db_name, query)
+    psql_query_raw(db_name, query).stdout.chomp
+  end
+
+  # Get the Mixlib::Shellout object containing the command results.
+  # Allows for more fine grained error handling
+  # - db_name: Name of the database to query
+  # - query: SQL query to run
+  def psql_query_raw(db_name, query)
     do_shell_out(
       %(/opt/gitlab/bin/#{service_cmd} -d '#{db_name}' -c "#{query}" -tA)
-    ).stdout.chomp
+    )
   end
 
   def version
@@ -300,11 +321,19 @@ class BasePgHelper < BaseHelper
     raise NotImplementedError
   end
 
+  def delegate_service_name
+    'patroni'
+  end
+
   def delegated?
     # When Patroni is enabled, the configuration of PostgreSQL instance must be delegated to it.
     # PostgreSQL cookbook skips some of the steps that are must be done either during or after
     # Patroni bootstraping.
     Gitlab['patroni']['enable'] && !Gitlab['repmgr']['enable']
+  end
+
+  def ready?
+    psql_cmd(%w(-d template1 -c 'SELECT 1;'))
   end
 
   def config_dir

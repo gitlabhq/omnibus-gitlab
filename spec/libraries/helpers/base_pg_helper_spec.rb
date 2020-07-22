@@ -99,7 +99,7 @@ describe BasePgHelper do
   describe '#extension_can_be_enabled?' do
     before do
       allow(subject).to receive(:is_running?).and_return(true)
-      allow(subject).to receive(:is_slave?).and_return(false)
+      allow(subject).to receive(:is_standby?).and_return(false)
       allow(subject).to receive(:extension_exists?).and_return(true)
       allow(subject).to receive(:database_exists?).and_return(true)
       allow(subject).to receive(:extension_enabled?).and_return(false)
@@ -115,7 +115,7 @@ describe BasePgHelper do
     end
 
     it 'cannot be done on a slave' do
-      allow(subject).to receive(:is_slave?).and_return(true)
+      allow(subject).to receive(:is_standby?).and_return(true)
       expect(subject.extension_can_be_enabled?('extension', 'db')).to be_falsey
     end
 
@@ -323,6 +323,27 @@ describe BasePgHelper do
 
       result = subject.fdw_user_mapping_update_options(resource)
       expect(result).to eq("SET user 'gitlab', ADD password 'mypass'")
+    end
+  end
+
+  describe '#is_standby?' do
+    let(:recovery_files) { %w(recovery.conf recovery.signal standby.signal) }
+
+    it 'returns true for a standby instance' do
+      recovery_files.each do |f|
+        allow(File).to receive(:exist?)
+          .with("/var/opt/gitlab/postgresql/data/#{f}").and_return(true)
+      end
+
+      expect(subject.is_standby?).to be true
+    end
+
+    it 'returns false for a primary instance' do
+      recovery_files.each do |f|
+        allow(File).to receive(:exist?)
+          .with("/var/opt/gitlab/postgresql/data/#{f}").and_return(false)
+      end
+      expect(subject.is_standby?).to be false
     end
   end
 end

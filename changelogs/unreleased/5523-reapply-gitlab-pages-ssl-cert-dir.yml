@@ -1,0 +1,5 @@
+---
+title: Re-apply gitlab-pages SSL_CERT_DIR change
+merge_request: 4411
+author:
+type: fixed

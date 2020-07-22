@@ -1,5 +1,0 @@
----
-title: Convert a standalone PostgreSQL to a Patroni member
-merge_request: 4350
-author:
-type: fixed

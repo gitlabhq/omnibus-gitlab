@@ -136,7 +136,6 @@ default['gitlab']['gitlab-rails']['geo_secondary_registry_consistency_worker'] =
 default['gitlab']['gitlab-rails']['geo_prune_event_log_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_verification_primary_batch_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_verification_secondary_scheduler_worker_cron'] = nil
-default['gitlab']['gitlab-rails']['geo_migrated_local_files_clean_up_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['pseudonymizer_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['elastic_index_bulk_cron'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_enabled'] = false
@@ -162,6 +161,27 @@ default['gitlab']['gitlab-rails']['service_desk_email_password'] = nil
 default['gitlab']['gitlab-rails']['service_desk_email_mailbox_name'] = "inbox"
 default['gitlab']['gitlab-rails']['service_desk_email_idle_timeout'] = nil
 default['gitlab']['gitlab-rails']['service_desk_email_log_file'] = "/var/log/gitlab/mailroom/mail_room_json.log" # file path of internal `mail_room` JSON logs
+
+# Consolidated object storage config
+default['gitlab']['gitlab-rails']['object_store']['enabled'] = false
+default['gitlab']['gitlab-rails']['object_store']['connection'] = {}
+default['gitlab']['gitlab-rails']['object_store']['proxy_download'] = false
+default['gitlab']['gitlab-rails']['object_store']['objects'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['artifacts'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['artifacts']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['external_diffs'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['external_diffs']['bucket'] = false
+default['gitlab']['gitlab-rails']['object_store']['objects']['lfs'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['lfs']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['uploads'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['uploads']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['packages'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['packages']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state']['bucket'] = nil
+
 default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
 default['gitlab']['gitlab-rails']['artifacts_object_store_enabled'] = false
@@ -423,6 +443,11 @@ default['gitlab']['gitlab-rails']['feature_flags_unleash_url'] = nil
 default['gitlab']['gitlab-rails']['feature_flags_unleash_app_name'] = nil
 default['gitlab']['gitlab-rails']['feature_flags_unleash_instance_id'] = nil
 
+###
+# Prometheus
+###
+default['gitlab']['gitlab-rails']['prometheus_address'] = nil
+
 ####
 # Unicorn
 ####
@@ -486,6 +511,7 @@ default['gitlab']['actioncable']['per_worker_max_memory_mb'] = nil
 default['gitlab']['actioncable']['worker_processes'] = 2
 default['gitlab']['actioncable']['min_threads'] = 4
 default['gitlab']['actioncable']['max_threads'] = 4
+default['gitlab']['actioncable']['in_app'] = false
 default['gitlab']['actioncable']['worker_pool_size'] = 4
 
 ####

@@ -74,6 +74,14 @@ sleep 3s
 # Run unclean start detection & cleanup
 detect_unclean_start
 
+# Check if this is a valid upgrade path
+# If the VERSION file doesn't exist, then this is not an upgrade
+if old_version=$(cat /var/opt/gitlab/gitlab-rails/VERSION)
+then
+    new_version=$(awk '/^gitlab-(c|e)e/ {print $NF}' /opt/gitlab/version-manifest.txt)
+    gitlab-ctl upgrade-check "${old_version}" "${new_version}"
+fi
+
 # Copy gitlab.rb for the first time
 if [[ ! -e /etc/gitlab/gitlab.rb ]]; then
 	echo "Installing gitlab.rb config..."
@@ -114,9 +122,13 @@ GITLAB_OMNIBUS_CONFIG= /opt/gitlab/embedded/bin/runsvdir-start &
 echo "Configuring GitLab..."
 gitlab-ctl reconfigure
 
+# This must be false when the opt-in PostgreSQL version is the default for pg-upgrade,
+# otherwise it must be true.
+ATTEMPT_AUTO_PG_UPGRADE='true'
+
 # Make sure PostgreSQL is at the latest version.
 # If it fails, print a message with a workaround and exit
-if [ "${GITLAB_SKIP_PG_UPGRADE}" != true ]; then
+if [ "${GITLAB_SKIP_PG_UPGRADE}" != 'true' -a "${ATTEMPT_AUTO_PG_UPGRADE}" != 'false' ]; then
     gitlab-ctl pg-upgrade -w || failed_pg_upgrade
 fi
 

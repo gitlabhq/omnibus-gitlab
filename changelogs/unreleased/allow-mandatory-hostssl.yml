@@ -1,5 +1,0 @@
----
-title: Allow forced ssl on defined cidr_addresses
-merge_request: 3724
-author:
-type: added

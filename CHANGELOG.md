@@ -3,6 +3,59 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.2.0 (2020-07-22)
+
+### Fixed (9 changes)
+
+- Grafana Server SHOULD have serve_from_sub_path set to true. !4160
+- Fix reconfigure failure with sidekiq_cluster config. !4337
+- Convert a standalone PostgreSQL to a Patroni member. !4350
+- Ensure we are properly restarting the unicorn service. !4354
+- Absolute SSL path should work for postgres recipe. !4356
+- Allow patroni to receive the term signal. !4366
+- Centralize upgrade version check in order to include docker upgrades. !4381
+- Merge Chef attributes more conservatively. !4394
+- Handle a down server when checking if a database is in standby. !4404
+
+### Changed (6 changes, 1 of them is from the community)
+
+- Geo: Check if replication/verification is up-to-date in promotion preflight checks. !4314
+- Add Commands to Pause/Resume Replication. !4331
+- Update alertmanager to 0.21.0. !4347
+- Allow backup-etc to follow symlinks. !4349 (mterhar)
+- Add --delete-untagged alias for registry-garbage-collect command. !4371
+- Geo: Remove confirm-removing-keys option from promote-to-primary-node command. !4403
+
+### Performance (1 change)
+
+- Lower gzip compression threshold. !4387
+
+### Added (7 changes)
+
+- Allow forced ssl on defined cidr_addresses. !3724
+- Add Patroni sub-commands to gitlab-ctl. !4286
+- Add Ubuntu 20.04 packaging jobs. !4344
+- Update Grafana Dashboards. !4348
+- Praefect: support of TLS. !4352
+- Support consolidated object storage configuration. !4368
+- Add get-postgresql-primary command to gitlab-ctl. !4383
+
+### Other (12 changes)
+
+- Upgrade Chef libraries to Chef 15. !4092
+- Add setting to specify external Prometheus address to the rails application. !4309
+- Geo: Add force mode to promote-to-primary-node command. !4321
+- Bump GitLab Exporter to 7.0.6. !4328
+- Update builder image to 0.0.65, to pick up license_finder update. !4338
+- Add recording rules to support Prometheus usage pings. !4343
+- Record application server type in Prometheus. !4374
+- Update webdevops/go-crond from 0.6.1 to 20.7.0. !4385
+- Update gitlab-org/gitlab-exporter from 7.0.6 to 7.1.0. !4391
+- Add deprecation message for Geo::MigratedLocalFilesCleanUpWorker config options. !4401
+- Update libjpeg-turbo/libjpeg-turbo from 2.0.4 to 2.0.5.
+- Update Mattermost to 5.24.2.
+
+
 ## 13.1.3 (2020-07-06)
 
 - No changes.
@@ -65,6 +118,13 @@ omnibus-gitlab repository.
 - Upgrade to Git 2.27.0. !4294
 - Use latest Ubuntu AMI as base for our AMIs. !4308
 - Update Mattermost to 5.23.1.
+
+
+## 13.0.10 (2020-07-09)
+
+### Performance (1 change, 1 of them is from the community)
+
+- Run vacuumdb with 2 commands simultaneously. !4373 (Ben Bodenmiller @bbodenmiller)
 
 
 ## 13.0.9 (2020-07-06)

@@ -258,5 +258,24 @@ describe 'monitoring::grafana' do
         )
       )
     end
+
+    it 'does not deduplicate attributes outside its own scope' do
+      queue_groups = ['geo,post_receive,cronjob', 'geo,post_receive,cronjob', 'geo,post_receive,cronjob']
+
+      stub_gitlab_rb(
+        grafana: {
+          metrics_enabled: true,
+        },
+        sidekiq_cluster: {
+          enable: true,
+          queue_groups: queue_groups
+        }
+      )
+
+      block = chef_run.ruby_block('populate Grafana configuration options')
+      block.block.call
+
+      expect(chef_run.node['gitlab']['sidekiq-cluster']['queue_groups']).to eq(queue_groups)
+    end
   end
 end

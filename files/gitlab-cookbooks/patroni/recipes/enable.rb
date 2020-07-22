@@ -16,7 +16,6 @@
 
 patroni_config_file = "#{node['patroni']['dir']}/patroni.yaml"
 dcs_config_file = "#{node['patroni']['dir']}/dcs.yaml"
-post_bootstrap = "#{node['patroni']['dir']}/post-bootstrap"
 
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
@@ -47,29 +46,10 @@ template patroni_config_file do
   helper(:account_helper) { account_helper }
   variables(
     node['patroni'].to_hash.merge(
-      postgresql_defaults: node['postgresql'].to_hash,
-      post_bootstrap: post_bootstrap
+      postgresql_defaults: node['postgresql'].to_hash
     )
   )
   notifies :reload, 'runit_service[patroni]', :delayed if omnibus_helper.should_notify?(patroni_helper.service_name)
-end
-
-default_auth_query = node.default['gitlab']['pgbouncer']['auth_query']
-auth_query = node['gitlab']['pgbouncer']['auth_query']
-
-template post_bootstrap do
-  source 'post-bootstrap.erb'
-  owner account_helper.postgresql_user
-  group account_helper.postgresql_group
-  mode '0700'
-  sensitive true
-  helper(:pg_helper) { pg_helper }
-  variables(
-    node['postgresql'].to_hash.merge(
-      database_name: node['gitlab']['gitlab-rails']['db_database'],
-      add_auth_function: default_auth_query.eql?(auth_query)
-    )
-  )
 end
 
 file dcs_config_file do
@@ -109,34 +89,24 @@ execute 'update dynamic configuration settings' do
   notifies :run, 'ruby_block[wait for node bootstrap to complete]', :before
 end
 
-gitlab_sql_user = node['postgresql']['sql_user']
-gitlab_sql_user_password = node['postgresql']['sql_user_password']
-sql_replication_user = node['postgresql']['sql_replication_user']
-sql_replication_password = node['postgresql']['sql_replication_password']
-
-postgresql_user gitlab_sql_user do
-  password "md5#{gitlab_sql_user_password}" unless gitlab_sql_user_password.nil?
-  action :create
-  retries 20
-  ignore_failure true
-  not_if { pg_helper.is_replica? }
+ruby_block 'wait for postgresql to start' do
+  block do
+    Timeout.timeout(30) do
+      sleep 2 until pg_helper.ready?
+    end
+  end
 end
 
-postgresql_user sql_replication_user do
-  password "md5#{sql_replication_password}" unless sql_replication_password.nil?
-  options %w(replication)
-  action :create
-  retries 20
-  ignore_failure true
-  not_if { pg_helper.is_replica? }
+database_objects 'patroni' do
+  pg_helper pg_helper
+  account_helper account_helper
+  not_if { pg_helper.replica? }
 end
-
-return unless omnibus_helper.service_dir_enabled?('postgresql')
 
 execute 'signal to restart postgresql' do
   command "#{patroni_helper.ctl_command} -c #{patroni_config_file} restart --force #{node['patroni']['scope']} #{node['patroni']['name']}"
   not_if { patroni_helper.repmgr_data_present? }
-  only_if { patroni_helper.node_status == 'running' }
+  only_if { omnibus_helper.service_dir_enabled?('postgresql') && patroni_helper.node_status == 'running' }
   notifies :run, 'ruby_block[wait for node bootstrap to complete]', :before
 end
 

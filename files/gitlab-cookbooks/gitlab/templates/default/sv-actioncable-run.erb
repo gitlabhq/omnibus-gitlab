@@ -12,4 +12,5 @@ exec chpst -P \
   -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env \
   /usr/bin/env \
     prometheus_multiproc_dir="${prometheus_run_dir}" \
+    ACTION_CABLE_WORKER_POOL_SIZE=<%= @options[:actioncable_worker_pool_size] %> \
     /opt/gitlab/embedded/bin/bundle exec puma -C <%= @options[:puma_rb] %>

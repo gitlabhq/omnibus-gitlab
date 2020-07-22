@@ -256,7 +256,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 
 ```ruby
 gitlab_rails['gitlab_email_from'] = 'user@yahoo.com'
-gitlab_rails['gitlab_email_from'] = 'user@yahoo.com'
+gitlab_rails['gitlab_email_reply_to'] = 'user@yahoo.com'
 
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.mail.yahoo.com"
@@ -372,7 +372,6 @@ gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "example.com"
 gitlab_rails['smtp_port'] = 25
 gitlab_rails['smtp_domain'] = "example.com"
-gitlab_rails['smtp_authentication'] = false
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 

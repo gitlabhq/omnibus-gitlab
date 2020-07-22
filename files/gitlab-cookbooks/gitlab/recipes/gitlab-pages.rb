@@ -46,7 +46,9 @@ end
 # Options may have changed in the previous step
 ruby_block "re-populate GitLab Pages configuration options" do
   block do
-    node.consume_attributes(Gitlab.hyphenate_config_keys)
+    node.consume_attributes(
+      { 'gitlab' => { 'gitlab-pages' => Gitlab.hyphenate_config_keys['gitlab']['gitlab-pages'] } }
+    )
   end
 end
 
@@ -89,7 +91,7 @@ template File.join(working_dir, "gitlab-pages-config") do
 end
 
 node.default['gitlab']['gitlab-pages']['env'] = {
-  'SSL_CERT_FILE' => "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem",
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
 }
 
 node.default['gitlab']['gitlab-pages']['env']['http_proxy'] = node['gitlab']['gitlab-pages']['http_proxy'] \
