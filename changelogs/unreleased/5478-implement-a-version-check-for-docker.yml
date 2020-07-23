@@ -1,0 +1,5 @@
+---
+title: Centralize upgrade version check in order to include docker upgrades
+merge_request: 4381
+author:
+type: fixed

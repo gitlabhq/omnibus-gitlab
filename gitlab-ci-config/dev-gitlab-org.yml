@@ -484,7 +484,9 @@ dependency_scanning:
     - python3 /app/web/index.py > /dev/null 2>&1 &
     - python3 /app/sbin/db_updater.py -v
   script:
-    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s version-manifest.json
+    # Temporarily hardcoding a working SHA. Check https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5530
+    # for details
+    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/cae7e018a8c18582502f60c9d24e66b3c79b45ed/gitlab-depscan.sh|bash -s version-manifest.json
   <<: *dev-except-branches
   <<: *except-auto-deploy-tag
   needs:

@@ -228,11 +228,11 @@ describe 'gitlab-ee::geo-secondary' do
 
         %w(
           puma
-          sidekiq
           geo-logcursor
         ).each do |svc|
           expect(ruby_block).to have_received(:notifies).with(:restart, "runit_service[#{svc}]")
         end
+        expect(ruby_block).to have_received(:notifies).with(:restart, "sidekiq_service[sidekiq]")
       end
     end
 
