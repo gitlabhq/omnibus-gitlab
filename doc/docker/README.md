@@ -21,8 +21,8 @@ NOTE: **Note:**
 To install GitLab on Kubernetes, take a look at
 [GitLab Helm Charts](https://docs.gitlab.com/charts/).
 
-In the following examples we are using the image of GitLab CE. To use GitLab EE
-instead of GitLab CE, replace the image name to `gitlab/gitlab-ee:latest`.
+In the following examples we are using the image of GitLab EE. To use GitLab CE
+instead of GitLab EE, replace the image name to `gitlab/gitlab-ce:latest`.
 
 If you want to use the latest RC image, use `gitlab/gitlab-ce:rc` or
 `gitlab/gitlab-ee:rc` for GitLab CE and GitLab EE respectively.
@@ -83,7 +83,7 @@ sudo docker run --detach \
   --volume $GITLAB_HOME/config:/etc/gitlab \
   --volume $GITLAB_HOME/logs:/var/log/gitlab \
   --volume $GITLAB_HOME/data:/var/opt/gitlab \
-  gitlab/gitlab-ce:latest
+  gitlab/gitlab-ee:latest
 ```
 
 This will download and start a GitLab CE container and publish ports needed to
@@ -101,7 +101,7 @@ sudo docker run --detach \
   --volume $GITLAB_HOME/config:/etc/gitlab:Z \
   --volume $GITLAB_HOME/logs:/var/log/gitlab:Z \
   --volume $GITLAB_HOME/data:/var/opt/gitlab:Z \
-  gitlab/gitlab-ce:latest
+  gitlab/gitlab-ee:latest
 ```
 
 This will ensure that the Docker process has enough permissions to create the
@@ -137,7 +137,7 @@ install, and upgrade your Docker-based GitLab installation:
 
    ```yaml
    web:
-     image: 'gitlab/gitlab-ce:latest'
+     image: 'gitlab/gitlab-ee:latest'
      restart: always
      hostname: 'gitlab.example.com'
      environment:
@@ -171,7 +171,7 @@ HTTP and SSH port. Notice how the `GITLAB_OMNIBUS_CONFIG` variables match the
 
 ```yaml
 web:
-  image: 'gitlab/gitlab-ce:latest'
+  image: 'gitlab/gitlab-ee:latest'
   restart: always
   hostname: 'gitlab.example.com'
   environment:
@@ -209,7 +209,7 @@ Here's an example that deploys GitLab with four runners as a [stack](https://doc
    version: "3.6"
    services:
      gitlab:
-       image: gitlab/gitlab-ce:latest
+       image: gitlab/gitlab-ee:latest
        ports:
          - "22:22"
          - "80:80"
@@ -326,7 +326,7 @@ sudo docker run --detach \
   --volume $GITLAB_HOME/config:/etc/gitlab \
   --volume $GITLAB_HOME/logs:/var/log/gitlab \
   --volume $GITLAB_HOME/data:/var/opt/gitlab \
-  gitlab/gitlab-ce:latest
+  gitlab/gitlab-ee:latest
 ```
 
 Note that every time you execute a `docker run` command, you need to provide
@@ -341,8 +341,8 @@ To see all available tags see:
 - [GitLab CE tags](https://hub.docker.com/r/gitlab/gitlab-ce/tags/)
 - [GitLab EE tags](https://hub.docker.com/r/gitlab/gitlab-ee/tags/)
 
-To use a specific tagged version, replace `gitlab/gitlab-ce:latest` with
-the GitLab version you want to run, for example `gitlab/gitlab-ce:12.1.3-ce.0`.
+To use a specific tagged version, replace `gitlab/gitlab-ee:latest` with
+the GitLab version you want to run, for example `gitlab/gitlab-ee:12.1.3-ce.0`.
 
 ### Run GitLab on a public IP address
 
@@ -362,7 +362,7 @@ sudo docker run --detach \
   --volume $GITLAB_HOME/config:/etc/gitlab \
   --volume $GITLAB_HOME/logs:/var/log/gitlab \
   --volume $GITLAB_HOME/data:/var/opt/gitlab \
-  gitlab/gitlab-ce:latest
+  gitlab/gitlab-ee:latest
 ```
 
 You can then access your GitLab instance at `http://198.51.100.1/` and `https://198.51.100.1/`.
@@ -389,7 +389,7 @@ port `2289`:
      --volume $GITLAB_HOME/config:/etc/gitlab \
      --volume $GITLAB_HOME/logs:/var/log/gitlab \
      --volume $GITLAB_HOME/data:/var/opt/gitlab \
-     gitlab/gitlab-ce:latest
+     gitlab/gitlab-ee:latest
    ```
 
    NOTE: **Note:**
@@ -464,7 +464,7 @@ To update GitLab that was [installed using Docker Engine](#install-gitlab-using-
 1. Pull the new image. For example, the latest GitLab CE image:
 
    ```shell
-   sudo docker pull gitlab/gitlab-ce:latest
+   sudo docker pull gitlab/gitlab-ee:latest
    ```
 
 1. Create the container once again with the
@@ -479,7 +479,7 @@ To update GitLab that was [installed using Docker Engine](#install-gitlab-using-
    --volume $GITLAB_HOME/config:/etc/gitlab \
    --volume $GITLAB_HOME/logs:/var/log/gitlab \
    --volume $GITLAB_HOME/data:/var/opt/gitlab \
-   gitlab/gitlab-ce:latest
+   gitlab/gitlab-ee:latest
    ```
 
 On the first run, GitLab will reconfigure and update itself.
