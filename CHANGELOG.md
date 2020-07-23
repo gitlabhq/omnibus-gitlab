@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.2.1 (2020-07-23)
+
+### Fixed (1 change)
+
+- Make actioncable recipe and control files match new runit requirement. !4419
+
+
 ## 13.2.0 (2020-07-22)
 
 ### Fixed (9 changes)
