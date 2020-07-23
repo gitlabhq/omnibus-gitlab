@@ -56,6 +56,15 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.24.2.
 
 
+## 13.1.5 (2020-07-23)
+
+### Fixed (3 changes)
+
+- Fix reconfigure failure with sidekiq_cluster config. !4337
+- Centralize upgrade version check in order to include docker upgrades. !4381
+- Make actioncable recipe and control files match new runit requirement. !4419
+
+
 ## 13.1.3 (2020-07-06)
 
 - No changes.
