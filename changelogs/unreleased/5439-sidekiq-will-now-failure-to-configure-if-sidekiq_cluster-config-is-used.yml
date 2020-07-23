@@ -1,5 +1,0 @@
----
-title: Fix reconfigure failure with sidekiq_cluster config
-merge_request: 4337
-author:
-type: fixed

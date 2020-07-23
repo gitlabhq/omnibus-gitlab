@@ -3,6 +3,15 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.1.5 (2020-07-23)
+
+### Fixed (3 changes)
+
+- Fix reconfigure failure with sidekiq_cluster config. !4337
+- Centralize upgrade version check in order to include docker upgrades. !4381
+- Make actioncable recipe and control files match new runit requirement. !4419
+
+
 ## 13.1.4 (2020-07-09)
 
 ### Fixed (2 changes)
