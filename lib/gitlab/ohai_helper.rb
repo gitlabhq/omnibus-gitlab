@@ -52,18 +52,20 @@ class OhaiHelper
         'xenial'
       when /^18\.04/
         'bionic'
+      when /^20\.04/
+        'focal'
       end
     end
 
     def get_debian_version
       case ohai['platform_version']
-      when /^7\./
+      when /^7/
         'wheezy'
-      when /^8\./
+      when /^8/
         'jessie'
-      when /^9\./
+      when /^9/
         'stretch'
-      when /^10\./
+      when /^10/
         'buster'
       end
     end
@@ -85,8 +87,10 @@ class OhaiHelper
 
     def get_suse_version
       case ohai['platform_version']
-      when /^12\./
+      when /^12\.2/
         '12.2'
+      when /^12\.5/
+        '12.5'
       when /^11\./
         '11.4'
       end

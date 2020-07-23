@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Configuration options
 
 GitLab is configured by setting the relevant options in
@@ -27,7 +33,11 @@ it needs to know the URL under which it is reached by your users, e.g.
 external_url "http://gitlab.example.com"
 ```
 
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+for the change to take effect, run:
+
+```shell
+sudo gitlab-ctl reconfigure
+```
 
 NOTE: **Note:**
 After you change the external URL, it is recommended that you also
@@ -52,8 +62,11 @@ NOTE: **Note:**
 As part of package updates, if you have `EXTERNAL_URL` variable set
 inadvertently, it will replace the existing value in `/etc/gitlab/gitlab.rb`
 without any warning. So, it is recommended not to set the variable globally, but
-pass it specifically to the installation command as
-`sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee`
+pass it specifically to the installation command:
+
+```shell
+sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee
+```
 
 ## Configuring a relative URL for GitLab
 
@@ -586,7 +599,7 @@ Disabling impersonation is documented in
 ## Error Reporting and Logging with Sentry
 
 [Sentry](https://sentry.io) is an error reporting and logging tool which can be
-used as SaaS or on premise. It's Open Source and you can browse it's source code
+used as SaaS or on premise. It's Open Source and you can browse its source code
 repositories [here](https://github.com/getsentry).
 
 The following settings can be used to configure Sentry:
@@ -602,6 +615,22 @@ The [Sentry Environment](https://docs.sentry.io/enriching-error-data/environment
 can be used to track errors and issues across several deployed GitLab
 environments, e.g. lab, development, staging, production.
 
+To set custom [Sentry
+tags](https://docs.sentry.io/enriching-error-data/additional-data/#tags--context)
+on every event sent from a particular server, the `GITLAB_SENTRY_EXTRA_TAGS`
+environment variable can be set. This is a JSON-encoded hash representing any
+tags that should be passed to Sentry for all exceptions from that server.
+
+For instance, setting:
+
+```ruby
+gitlab_rails['env'] = {
+  'GITLAB_SENTRY_EXTRA_TAGS' => '{"stage": "main"}'
+}
+```
+
+Would add the 'stage' tag with a value of 'main'.
+
 ## Content Security Policy
 
 Setting a Content Security Policy (CSP) can help thwart JavaScript
@@ -612,7 +641,7 @@ details.
 GitLab 12.2 added support for [CSP and nonces with inline
 JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
 It is [not configured on by default
-yet](https://gitlab.com/gitlab-org/gitlab/issues/30720). An example
+yet](https://gitlab.com/gitlab-org/gitlab/-/issues/30720). An example
 configuration that will work for most installations of GitLab is below:
 
 ```ruby
@@ -633,6 +662,16 @@ gitlab_rails['content_security_policy'] = {
 Improperly configuring the CSP rules could prevent GitLab from working
 properly. Before rolling out a policy, you may also want to change
 `report_only` to `true` to test the configuration.
+
+## Setting initial root password on installation
+
+The initial password for the user `root` can be set at the installation time with the environment variable `GITLAB_ROOT_PASSWORD.
+
+For example:
+
+```shell
+GITLAB_ROOT_PASSWORD="<strongpassword>" EXTERNAL_URL="http://gitlab.exmaple.com" apt install gitlab-ee
+```
 
 ## Setting up LDAP sign-in
 

@@ -1,4 +1,4 @@
-# Gitaly configuration file
+# Praefect configuration file
 # This file is managed by gitlab-ctl. Manual changes will be
 # erased! To change the contents below, edit /etc/gitlab/gitlab.rb
 # and run:
@@ -7,6 +7,14 @@
 <% if @listen_addr %>
 # TCP address to listen on
 listen_addr = '<%= @listen_addr %>'
+<% end %>
+
+<% if @tls_listen_addr %>
+# Optional: listen on a secure TCP socket
+tls_listen_addr = '<%= @tls_listen_addr %>'
+[tls]
+certificate_path = '<%= @certificate_path %>'
+key_path = '<%= @key_path %>'
 <% end %>
 
 <% if @socket_path %>

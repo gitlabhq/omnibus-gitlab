@@ -215,18 +215,18 @@ module GitlabRails # rubocop:disable Style/MultilineIfModifier
 
     def parse_gitlab_trusted_proxies
       Gitlab['nginx']['real_ip_trusted_addresses'] ||= Gitlab['node']['gitlab']['nginx']['real_ip_trusted_addresses']
-      Gitlab['gitlab_rails']['trusted_proxies'] ||= Gitlab['nginx']['real_ip_trusted_addresses']
+      Gitlab['gitlab_rails']['trusted_proxies'] = Gitlab['nginx']['real_ip_trusted_addresses'] if Gitlab['gitlab_rails']['trusted_proxies'].nil?
     end
 
     def parse_incoming_email_logfile
-      log_directory = Gitlab['mailroom']['log_directory']
+      log_directory = Gitlab['mailroom']['log_directory'] || Gitlab[:node]['gitlab']['mailroom']['log_directory']
       return unless log_directory
 
       Gitlab['gitlab_rails']['incoming_email_log_file'] ||= File.join(log_directory, 'mail_room_json.log')
     end
 
     def parse_service_desk_email_logfile
-      log_directory = Gitlab['mailroom']['log_directory']
+      log_directory = Gitlab['mailroom']['log_directory'] || Gitlab[:node]['gitlab']['mailroom']['log_directory']
       return unless log_directory
 
       Gitlab['gitlab_rails']['service_desk_email_log_file'] ||= File.join(log_directory, 'mail_room_json.log')

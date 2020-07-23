@@ -48,7 +48,7 @@ describe 'gitlab::mattermost' do
 
   context 'service user and group' do
     context 'default values' do
-      it_behaves_like "enabled runit service", "mattermost", "root", "root", "mattermost", "mattermost"
+      it_behaves_like "enabled runit service", "mattermost", "root", "root"
     end
 
     context 'custom user and group' do
@@ -63,7 +63,7 @@ describe 'gitlab::mattermost' do
         )
       end
 
-      it_behaves_like "enabled runit service", "mattermost", "root", "root", "foo", "bar"
+      it_behaves_like "enabled runit service", "mattermost", "root", "root"
     end
   end
 

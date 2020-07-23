@@ -47,7 +47,7 @@ env_dir workhorse_env_dir do
 end
 
 runit_service 'gitlab-workhorse' do
-  down node['gitlab']['gitlab-workhorse']['ha']
+  start_down node['gitlab']['gitlab-workhorse']['ha']
   options({
     log_directory: log_directory
   }.merge(params))
@@ -72,12 +72,14 @@ redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 redis_sentinel_master = node['redis']['master_name']
 redis_sentinel_master_password = node['redis']['master_password']
 config_file_path = File.join(working_dir, "config.toml")
+object_store = node['gitlab']['gitlab-rails']['object_store']
+object_store_provider = object_store.dig('connection', 'provider')
 
 template config_file_path do
   source "workhorse-config.toml.erb"
   owner "root"
   group account_helper.gitlab_group
   mode "0640"
-  variables(redis_url: redis_url, password: redis_password, sentinels: redis_sentinels, sentinel_master: redis_sentinel_master, master_password: redis_sentinel_master_password)
+  variables(object_store: object_store, object_store_provider: object_store_provider, redis_url: redis_url, password: redis_password, sentinels: redis_sentinels, sentinel_master: redis_sentinel_master, master_password: redis_sentinel_master_password)
   notifies :restart, "runit_service[gitlab-workhorse]"
 end

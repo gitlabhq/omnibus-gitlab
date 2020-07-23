@@ -37,9 +37,12 @@ class PgbouncerHelper < BaseHelper
         !node['gitlab'][db]['pgbouncer_user'].nil? &&
         !node['gitlab'][db]['pgbouncer_user_password'].nil?
     else
+      # User info for Patroni are stored under `postgresql` key
+      info_key = db == 'patroni' ? 'postgresql' : db
+
       node[db]['enable'] &&
-        !node[db]['pgbouncer_user'].nil? &&
-        !node[db]['pgbouncer_user_password'].nil?
+        !node[info_key]['pgbouncer_user'].nil? &&
+        !node[info_key]['pgbouncer_user_password'].nil?
     end
   end
 

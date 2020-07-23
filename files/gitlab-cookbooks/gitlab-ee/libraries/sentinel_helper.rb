@@ -7,7 +7,7 @@ class SentinelHelper
   end
 
   def myid
-    if sentinel['myid']
+    if sentinel.key?('myid') && sentinel['myid']
       restore_from_node
     else
       restore_or_generate_from_file

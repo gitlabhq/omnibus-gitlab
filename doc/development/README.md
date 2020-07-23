@@ -1,17 +1,24 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Omnibus GitLab developer documentation
 
 - [Development Setup](setup.md)
 - [Omnibus GitLab Architecture](../architecture/README.md)
 - [Adding a new Service to Omnibus GitLab](new-services.md)
 - [Creating patches](creating-patches.md)
-- [Pipelines and CI jobs](pipelines.md)
+- [Repositories, branches and CI pipelines](pipelines.md)
 - [Release process](../release/README.md)
 - [Building your own package](../build/README.md)
 - [Building a package from a custom branch](../build/README.md#building-a-package-from-a-custom-branch)
 - [Adding deprecation messages](adding-deprecation-messages.md)
-- [Adding an attribute to public_attributes.json](public-attributes.md)
+- [Adding an attribute to `public_attributes.json`](public-attributes.md)
 - [Adding a `gitlab-ctl` command](gitlab-ctl-commands.md)
 - [Managing PostgreSQL versions](managing-postgresql-versions.md)
+- [Upgrading the bundled Chef version](upgrading-chef.md)
 
 ## Setting up development environment
 

@@ -86,6 +86,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_username_changing_enabled'] = true
 
 ### Default Theme
+### Available values:
+##! `1`  for Indigo
+##! `2`  for Dark
+##! `3`  for Light
+##! `4`  for Blue
+##! `5`  for Green
+##! `6`  for Light Indigo
+##! `7`  for Light Blue
+##! `8`  for Light Green
+##! `9`  for Red
+##! `10` for Light Red
 # gitlab_rails['gitlab_default_theme'] = 2
 
 ### Default project feature settings
@@ -227,6 +238,30 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ####! The format of mail_room crash logs
 # mailroom['exit_log_format'] = "plain"
+
+### Consolidated (simplified) object storage configuration
+###! This uses a single credential for object storage with multiple buckets.
+###! It also enables Workhorse to upload files directly with its own S3 client
+###! instead of using pre-signed URLs.
+###!
+###! This configuration will only take effect if the object_store
+###! sections are not defined within the types. For example, enabling
+###! gitlab_rails['artifacts_object_store_enabled'] or
+###! gitlab_rails['lfs_object_store_enabled'] will prevent the
+###! consolidated settings from being used.
+###!
+###! Be sure to use different buckets for each type of object.
+###! Docs: https://docs.gitlab.com/ee/administration/object_storage.html
+gitlab_rails['object_store']['enabled'] = false
+gitlab_rails['object_store']['connection'] = {}
+gitlab_rails['object_store']['proxy_download'] = false
+gitlab_rails['object_store']['objects']['artifacts']['bucket'] = nil
+gitlab_rails['object_store']['objects']['external_diffs']['bucket'] = nil
+gitlab_rails['object_store']['objects']['lfs']['bucket'] = nil
+gitlab_rails['object_store']['objects']['uploads']['bucket'] = nil
+gitlab_rails['object_store']['objects']['packages']['bucket'] = nil
+gitlab_rails['object_store']['objects']['dependency_proxy']['bucket'] = nil
+gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 
 ### Job Artifacts
 # gitlab_rails['artifacts_enabled'] = true
@@ -759,7 +794,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Long polling duration for job requesting for runners
 # gitlab_workhorse['api_ci_long_polling_duration'] = "60s"
 
-##! Log format: default is text, can also be json or none.
+##! Log format: default is json, can also be text or none.
 # gitlab_workhorse['log_format'] = "json"
 
 # gitlab_workhorse['env_directory'] = "/opt/gitlab/etc/gitlab-workhorse/env"
@@ -927,6 +962,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['enable'] = true
 # postgresql['listen_address'] = nil
 # postgresql['port'] = 5432
+
+## Only used when Patroni is enabled. This is the port that PostgreSQL responds to other
+## cluster members. This port is used by Patroni to advertize the PostgreSQL connection
+## endpoint to the cluster. By default it is the same as postgresql['port'].
+# postgresql['connect_port'] = 5432
+
 # postgresql['data_dir'] = "/var/opt/gitlab/postgresql/data"
 
 ##! **recommend value is 1/4 of total RAM, up to 14GB.**
@@ -966,6 +1007,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### SSL settings
 # See https://www.postgresql.org/docs/11/static/runtime-config-connection.html#GUC-SSL-CERT-FILE for more details
 # postgresql['ssl'] = 'on'
+# postgresql['hostssl'] = false
 # postgresql['ssl_ciphers'] = 'HIGH:MEDIUM:+3DES:!aNULL:!SSLv3:!TLSv1'
 # postgresql['ssl_cert_file'] = 'server.crt'
 # postgresql['ssl_key_file'] = 'server.key'
@@ -1404,9 +1446,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Listen for requests forwarded by reverse proxy
 # gitlab_pages['listen_proxy'] = "localhost:8090"
 
-##! Configure GitLab Pages to use an HTTP Proxy
-# gitlab_pages['http_proxy'] = "http://example:8080"
-
 # gitlab_pages['redirect_http'] = true
 # gitlab_pages['use_http2'] = true
 # gitlab_pages['dir'] = "/var/opt/gitlab/gitlab-pages"
@@ -1449,6 +1488,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Shared secret used for authentication between Pages and GitLab
 # gitlab_pages['api_secret_key'] = nil # Will be generated if not set. Base64 encoded and exactly 32 bytes long.
+
+# gitlab_pages['env_directory'] = "/opt/gitlab/etc/gitlab-pages/env"
+# gitlab_pages['env'] = {
+#   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+# }
 
 ################################################################################
 ## GitLab Pages NGINX
@@ -1635,6 +1679,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Advanced settings. Should be changed only if absolutely needed.
 # prometheus['listen_address'] = 'localhost:9090'
+#
+
+################################################################################
+###! **Only needed if Prometheus and Rails are not on the same server.**
+### For example, in a multi-node architecture, Prometheus will be installed on the monitoring node, while Rails will be on the Rails node.
+### https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html#using-an-external-prometheus-server
+### This value should be the address at which Prometheus is available to GitLab Rails(Puma/Unicorn, Sidekiq) node.
+################################################################################
+# gitlab_rails['prometheus_address'] = 'your.prom:9090'
 
 ################################################################################
 ## Prometheus Alertmanager
@@ -1884,11 +1937,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # praefect['wrapper_path'] = "/opt/gitlab/embedded/bin/gitaly-wrapper"
 # praefect['virtual_storage_name'] = "praefect"
 # praefect['failover_enabled'] = false
-# praefect['failover_election_strategy'] = 'local'
-# praefect['failover_read_only_after_failover'] = false
+# praefect['failover_election_strategy'] = 'sql'
+# praefect['failover_read_only_after_failover'] = true
 # praefect['auth_token'] = ""
 # praefect['auth_transitioning'] = false
 # praefect['listen_addr'] = "localhost:2305"
+# praefect['tls_listen_addr'] = "localhost:3305"
+# praefect['certificate_path'] = "/var/opt/gitlab/prafect/certificate.pem"
+# praefect['key_path'] = "/var/opt/gitlab/prafect/key.pem"
 # praefect['prometheus_listen_addr'] = "localhost:9652"
 # praefect['prometheus_grpc_latency_buckets'] = "[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]"
 # praefect['logging_level'] = "warn"
@@ -1980,7 +2036,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['geo_prune_event_log_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['geo_repository_verification_primary_batch_worker_cron'] = "*/5 * * * *"
 # gitlab_rails['geo_repository_verification_secondary_scheduler_worker_cron'] = "*/5 * * * *"
-# gitlab_rails['geo_migrated_local_files_clean_up_worker_cron'] = "15 */6 * * *"
 # gitlab_rails['ldap_sync_worker_cron'] = "30 1 * * *"
 # gitlab_rails['ldap_group_sync_worker_cron'] = "0 * * * *"
 # gitlab_rails['historical_data_worker_cron'] = "0 12 * * *"
@@ -2338,6 +2393,63 @@ external_url 'GENERATED_EXTERNAL_URL'
 # repmgr['master_response_timeout'] = 60
 # repmgr['daemon'] = true
 # repmgrd['enable'] = true
+
+################################################################################
+# Patroni (EE only)
+#
+# NOTICE: Patroni is an experimental feature and subject to change.
+#
+################################################################################
+# patroni['enable'] = false
+
+# patroni['dir'] = '/var/opt/gitlab/patroni'
+# patroni['data_dir'] = '/var/opt/gitlab/patroni/data'
+# patroni['ctl_command'] = '/opt/gitlab/embedded/bin/patronictl'
+
+# patroni['scope'] = 'gitlab-postgresql-ha'
+# patroni['name'] = nil
+
+# patroni['log_directory'] = '/var/log/gitlab/patroni'
+# patroni['log_level'] = 'INFO'
+
+# patroni['consul']['url'] = 'http://127.0.0.1:8500'
+# patroni['consul']['service_check_interval'] = '10s'
+# patroni['consul']['register_service'] = false
+# patroni['consul']['checks'] = []
+
+## Bootstrap settings
+# patroni['loop_wait'] = 10
+# patroni['ttl'] = 30
+# patroni['retry_timeout'] = 10
+# patroni['maximum_lag_on_failover'] = 1_048_576
+# patroni['max_timelines_history'] = 0
+# patroni['master_start_timeout'] = 300
+
+## PostgreSQL configuration override
+# patroni['postgresql']['wal_level'] = 'replica'
+# patroni['postgresql']['hot_standby'] = 'on'
+# patroni['postgresql']['wal_keep_segments'] = 8
+# patroni['postgresql']['max_wal_senders'] = 5
+# patroni['postgresql']['max_replication_slots'] = 5
+# patroni['postgresql']['checkpoint_timeout'] = 30
+
+# patroni['use_pg_rewind'] = false
+# patroni['use_slots'] = true
+
+## The address and port that Patroni API binds to and listens on.
+# patroni['listen_address'] = nil
+# patroni['port'] = '8008'
+
+## The address of the Patroni node that is advertized to other cluster
+## members to communicate with its API and PostgreSQL. If it is not specified,
+## it tries to use the first available private IP and falls back to the default
+## network interface.
+# patroni['connect_address'] = nil
+
+## The port that Patroni API responds to other cluster members. This port is
+## advertized and by default is the same as patroni['port'].
+# patroni['connect_port'] = '8008'
+
 
 ################################################################################
 # Consul (EEP only)

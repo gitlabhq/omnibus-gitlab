@@ -136,7 +136,6 @@ default['gitlab']['gitlab-rails']['geo_secondary_registry_consistency_worker'] =
 default['gitlab']['gitlab-rails']['geo_prune_event_log_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_verification_primary_batch_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_verification_secondary_scheduler_worker_cron'] = nil
-default['gitlab']['gitlab-rails']['geo_migrated_local_files_clean_up_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['pseudonymizer_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['elastic_index_bulk_cron'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_enabled'] = false
@@ -162,6 +161,27 @@ default['gitlab']['gitlab-rails']['service_desk_email_password'] = nil
 default['gitlab']['gitlab-rails']['service_desk_email_mailbox_name'] = "inbox"
 default['gitlab']['gitlab-rails']['service_desk_email_idle_timeout'] = nil
 default['gitlab']['gitlab-rails']['service_desk_email_log_file'] = "/var/log/gitlab/mailroom/mail_room_json.log" # file path of internal `mail_room` JSON logs
+
+# Consolidated object storage config
+default['gitlab']['gitlab-rails']['object_store']['enabled'] = false
+default['gitlab']['gitlab-rails']['object_store']['connection'] = {}
+default['gitlab']['gitlab-rails']['object_store']['proxy_download'] = false
+default['gitlab']['gitlab-rails']['object_store']['objects'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['artifacts'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['artifacts']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['external_diffs'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['external_diffs']['bucket'] = false
+default['gitlab']['gitlab-rails']['object_store']['objects']['lfs'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['lfs']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['uploads'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['uploads']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['packages'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['packages']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state']['bucket'] = nil
+
 default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
 default['gitlab']['gitlab-rails']['artifacts_object_store_enabled'] = false
@@ -405,7 +425,7 @@ default['gitlab']['gitlab-rails']['graphql_timeout'] = nil
 default['gitlab']['gitlab-rails']['initial_root_password'] = nil
 default['gitlab']['gitlab-rails']['initial_license_file'] = nil
 default['gitlab']['gitlab-rails']['initial_shared_runners_registration_token'] = nil
-default['gitlab']['gitlab-rails']['trusted_proxies'] = nil
+default['gitlab']['gitlab-rails']['trusted_proxies'] = []
 default['gitlab']['gitlab-rails']['content_security_policy'] = nil
 
 # List of ips and subnets that are allowed to access Gitlab monitoring endpoints
@@ -413,7 +433,7 @@ default['gitlab']['gitlab-rails']['monitoring_whitelist'] = ['127.0.0.0/8', '::1
 default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
 default['gitlab']['gitlab-rails']['shutdown_blackout_seconds'] = 10
 # Default dependent services to restart in the event that files-of-interest change
-default['gitlab']['gitlab-rails']['dependent_services'] = %w{unicorn puma actioncable sidekiq sidekiq-cluster}
+default['gitlab']['gitlab-rails']['dependent_services'] = %w{puma actioncable}
 
 ###
 # Unleash
@@ -422,6 +442,11 @@ default['gitlab']['gitlab-rails']['feature_flags_unleash_enabled'] = false
 default['gitlab']['gitlab-rails']['feature_flags_unleash_url'] = nil
 default['gitlab']['gitlab-rails']['feature_flags_unleash_app_name'] = nil
 default['gitlab']['gitlab-rails']['feature_flags_unleash_instance_id'] = nil
+
+###
+# Prometheus
+###
+default['gitlab']['gitlab-rails']['prometheus_address'] = nil
 
 ####
 # Unicorn
@@ -486,6 +511,7 @@ default['gitlab']['actioncable']['per_worker_max_memory_mb'] = nil
 default['gitlab']['actioncable']['worker_processes'] = 2
 default['gitlab']['actioncable']['min_threads'] = 4
 default['gitlab']['actioncable']['max_threads'] = 4
+default['gitlab']['actioncable']['in_app'] = false
 default['gitlab']['actioncable']['worker_pool_size'] = 4
 
 ####
@@ -568,7 +594,7 @@ default['gitlab']['gitlab-workhorse']['listen_network'] = "unix"
 default['gitlab']['gitlab-workhorse']['listen_umask'] = 000
 default['gitlab']['gitlab-workhorse']['listen_addr'] = "/var/opt/gitlab/gitlab-workhorse/socket"
 default['gitlab']['gitlab-workhorse']['auth_backend'] = "http://localhost:8080"
-default['gitlab']['gitlab-workhorse']['auth_socket'] = "''" # the empty string is the default in gitlab-workhorse option parser
+default['gitlab']['gitlab-workhorse']['auth_socket'] = nil
 default['gitlab']['gitlab-workhorse']['cable_backend'] = "http://localhost:8280"
 default['gitlab']['gitlab-workhorse']['cable_socket'] = "''" # the empty string is the default in gitlab-workhorse option parser
 default['gitlab']['gitlab-workhorse']['pprof_listen_addr'] = "''" # put an empty string on the command line
@@ -638,6 +664,7 @@ default['gitlab']['gitlab-pages']['headers'] = nil
 default['gitlab']['gitlab-pages']['api_secret_key'] = nil
 default['gitlab']['gitlab-pages']['gitlab_client_http_timeout'] = nil
 default['gitlab']['gitlab-pages']['gitlab_client_jwt_expiry'] = nil
+default['gitlab']['gitlab-pages']['env_directory'] = '/opt/gitlab/etc/gitlab-pages/env'
 
 ####
 # Nginx

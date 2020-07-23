@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # SMTP settings
 
 If you would rather send application email via an SMTP server instead of via
@@ -250,7 +256,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 
 ```ruby
 gitlab_rails['gitlab_email_from'] = 'user@yahoo.com'
-gitlab_rails['gitlab_email_from'] = 'user@yahoo.com'
+gitlab_rails['gitlab_email_reply_to'] = 'user@yahoo.com'
 
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.mail.yahoo.com"
@@ -366,7 +372,6 @@ gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "example.com"
 gitlab_rails['smtp_port'] = 25
 gitlab_rails['smtp_domain'] = "example.com"
-gitlab_rails['smtp_authentication'] = false
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
@@ -924,6 +929,36 @@ gitlab_rails['smtp_domain'] = "<your-domain>"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
+```
+
+### Tipimail
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = 'smtp.tipimail.com'
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = 'username'
+gitlab_rails['smtp_password'] = 'password'
+gitlab_rails['smtp_authentication'] = 'login'
+gitlab_rails['smtp_enable_starttls_auto'] = true
+```
+
+### Netcup
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = '<your-host>.netcup.net'
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "<your-gitlab-domain>"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+# Netcup is picky about the usage of GitLab's TLD instead of the subdomain (if you use one).
+# If this is not set up correctly, the scheduled emails will fail. For example, if
+# GitLab's domain name is 'gitlab.example.com', the following setting should be set to
+# 'gitlab@example.com'.
+gitlab_rails['gitlab_email_from'] = "gitlab@<your-top-level-domain>"
 ```
 
 ### More examples are welcome

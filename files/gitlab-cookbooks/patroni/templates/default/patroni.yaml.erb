@@ -1,0 +1,33 @@
+name: <%= @name %>
+scope: <%= @scope %>
+log:
+  level: <%= @log_level.upcase %>
+consul:
+<% @consul.each do |name, value| %>
+  <%= name %>: <%= value %>
+<% end %>
+postgresql:
+  bin_dir: <%= "#{node['package']['install-dir']}/embedded/bin" %>
+  data_dir: <%= @postgresql_defaults['data_dir'] %>
+  config_dir: <%= @postgresql_defaults['data_dir'] %>
+  listen: <%= @postgresql_defaults['listen_address'] %>:<%= @postgresql_defaults['port'] %>
+  connect_address: <%= @connect_address %>:<%= @postgresql_defaults['connect_port'] %>
+  use_unix_socket: true
+  parameters:
+    unix_socket_directories: <%= @postgresql_defaults['unix_socket_directory'] %>
+  authentication:
+    superuser:
+      username: <%= account_helper.postgresql_user %>
+    replication:
+      username: <%= @postgresql_defaults['sql_replication_user'] %>
+<% if @postgresql_defaults['sql_replication_password'] %>
+      password: <%= "md5#{@postgresql_defaults['sql_replication_password']}" %>
+<% end %>
+bootstrap:
+  dcs: <%= patroni_helper.dynamic_settings.to_json %>
+  method: gitlab_ctl
+  gitlab_ctl:
+    command: /opt/gitlab/bin/gitlab-ctl patroni bootstrap --srcdir=<%= @data_dir %>
+restapi:
+  listen: <%= @listen_address %>:<%= @port %>
+  connect_address: <%= @connect_address %>:<%= @connect_port %>

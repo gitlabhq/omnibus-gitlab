@@ -139,13 +139,16 @@ server {
         end
 
         it 'does not log a warning' do
-          expect(LoggingHelper).not_to receive(:warning)
+          expect(LoggingHelper).not_to receive(:warning).with("Let's Encrypt is enabled, but external_url is using http")
           chef_run.ruby_block('display_le_message').block.call
         end
       end
 
       context 'false' do
-        before { stub_gitlab_rb(letsencrypt: { enable: true, auto_renew: false }) }
+        before do
+          stub_gitlab_rb(letsencrypt: { enable: true, auto_renew: false })
+          allow_any_instance_of(PgHelper).to receive(:is_standby?).and_return false
+        end
 
         it 'does not enable crond' do
           expect(chef_run).not_to include_recipe('crond::enable')

@@ -1,7 +1,8 @@
 require 'chef_helper'
 
 describe 'redis' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(redis_service runit_service)).converge('gitlab::default') }
+  let(:redis_conf) { '/var/opt/gitlab/redis/redis.conf' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -15,6 +16,10 @@ redis_host='127.0.0.1'
 redis_port='0'
 redis_socket='/var/opt/gitlab/redis/redis.socket'
       EOF
+    end
+
+    it 'enables the redis service' do
+      expect(chef_run).to create_redis_service('redis')
     end
 
     it 'creates redis config with default values' do
@@ -42,7 +47,7 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
       expect(chef_run).to create_account('user and group for redis').with(username: 'gitlab-redis', groupname: 'gitlab-redis')
     end
 
-    it_behaves_like 'enabled runit service', 'redis', 'root', 'root', 'gitlab-redis', 'gitlab-redis'
+    it_behaves_like 'enabled runit service', 'redis', 'root', 'root'
 
     it 'creates gitlab-redis-cli-rc' do
       expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-redis-cli-rc')
@@ -131,7 +136,7 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
       expect(chef_run).to create_account('user and group for redis').with(username: 'foo', groupname: 'bar')
     end
 
-    it_behaves_like 'enabled runit service', 'redis', 'root', 'root', 'foo', 'bar'
+    it_behaves_like 'enabled runit service', 'redis', 'root', 'root'
   end
 
   context 'with snapshotting disabled' do
@@ -283,5 +288,19 @@ redis_socket=''
     end
 
     it_behaves_like 'disabled runit service', 'redis', 'root', 'root'
+  end
+
+  context 'deprecated setting still has an effect' do
+    before do
+      stub_gitlab_rb(
+        redis: {
+          client_output_buffer_limit_slave: "fakesetting",
+        }
+      )
+    end
+
+    it 'sets the replica setting' do
+      expect(chef_run).to render_file(redis_conf).with_content("client-output-buffer-limit replica fakesetting")
+    end
   end
 end

@@ -3,7 +3,7 @@ require 'chef_helper'
 describe 'gitlab::sidekiq' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(sidekiq_service runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04.json'
     )
     runner.converge('gitlab::default')
@@ -30,7 +30,7 @@ describe 'gitlab::sidekiq' do
         }
     end
 
-    it_behaves_like "enabled runit service", "sidekiq", "root", "root", "git", "git"
+    it_behaves_like "enabled runit service", "sidekiq", "root", "root"
     it_behaves_like "disabled runit service", "sidekiq-cluster"
   end
 
@@ -52,6 +52,6 @@ describe 'gitlab::sidekiq' do
       expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/run").with_content(/\-c 35/)
     end
 
-    it_behaves_like "enabled runit service", "sidekiq", "root", "root", "foo", "bar"
+    it_behaves_like "enabled runit service", "sidekiq", "root", "root"
   end
 end

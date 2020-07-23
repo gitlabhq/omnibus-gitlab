@@ -3,6 +3,197 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.2.1 (2020-07-23)
+
+### Fixed (1 change)
+
+- Make actioncable recipe and control files match new runit requirement. !4419
+
+
+## 13.2.0 (2020-07-22)
+
+### Fixed (9 changes)
+
+- Grafana Server SHOULD have serve_from_sub_path set to true. !4160
+- Fix reconfigure failure with sidekiq_cluster config. !4337
+- Convert a standalone PostgreSQL to a Patroni member. !4350
+- Ensure we are properly restarting the unicorn service. !4354
+- Absolute SSL path should work for postgres recipe. !4356
+- Allow patroni to receive the term signal. !4366
+- Centralize upgrade version check in order to include docker upgrades. !4381
+- Merge Chef attributes more conservatively. !4394
+- Handle a down server when checking if a database is in standby. !4404
+
+### Changed (6 changes, 1 of them is from the community)
+
+- Geo: Check if replication/verification is up-to-date in promotion preflight checks. !4314
+- Add Commands to Pause/Resume Replication. !4331
+- Update alertmanager to 0.21.0. !4347
+- Allow backup-etc to follow symlinks. !4349 (mterhar)
+- Add --delete-untagged alias for registry-garbage-collect command. !4371
+- Geo: Remove confirm-removing-keys option from promote-to-primary-node command. !4403
+
+### Performance (1 change)
+
+- Lower gzip compression threshold. !4387
+
+### Added (7 changes)
+
+- Allow forced ssl on defined cidr_addresses. !3724
+- Add Patroni sub-commands to gitlab-ctl. !4286
+- Add Ubuntu 20.04 packaging jobs. !4344
+- Update Grafana Dashboards. !4348
+- Praefect: support of TLS. !4352
+- Support consolidated object storage configuration. !4368
+- Add get-postgresql-primary command to gitlab-ctl. !4383
+
+### Other (12 changes)
+
+- Upgrade Chef libraries to Chef 15. !4092
+- Add setting to specify external Prometheus address to the rails application. !4309
+- Geo: Add force mode to promote-to-primary-node command. !4321
+- Bump GitLab Exporter to 7.0.6. !4328
+- Update builder image to 0.0.65, to pick up license_finder update. !4338
+- Add recording rules to support Prometheus usage pings. !4343
+- Record application server type in Prometheus. !4374
+- Update webdevops/go-crond from 0.6.1 to 20.7.0. !4385
+- Update gitlab-org/gitlab-exporter from 7.0.6 to 7.1.0. !4391
+- Add deprecation message for Geo::MigratedLocalFilesCleanUpWorker config options. !4401
+- Update libjpeg-turbo/libjpeg-turbo from 2.0.4 to 2.0.5.
+- Update Mattermost to 5.24.2.
+
+
+## 13.1.5 (2020-07-23)
+
+### Fixed (3 changes)
+
+- Fix reconfigure failure with sidekiq_cluster config. !4337
+- Centralize upgrade version check in order to include docker upgrades. !4381
+- Make actioncable recipe and control files match new runit requirement. !4419
+
+
+## 13.1.3 (2020-07-06)
+
+- No changes.
+
+## 13.1.2 (2020-07-01)
+
+### Security (1 change)
+
+- Update PCRE to version 8.44.
+
+
+## 13.1.1 (2020-06-23)
+
+### Fixed (1 change)
+
+- Manually disable copy_file_range() on RedHat kernels. !4346
+
+### Added (1 change)
+
+- Update to Grafana 7. !4297
+
+
+## 13.1.0 (2020-06-22)
+
+### Removed (1 change)
+
+- Praefect configuration: remove postgres_queue_enabled. !4267
+
+### Fixed (1 change)
+
+- Enable consul service for sidekiq-cluster. !4266
+
+### Changed (8 changes)
+
+- Move hook values to [hooks] and gitlab connection values to [gitlab] in gitaly.toml. !4243
+- Geo - Confirm if primary can be contacted after manual preflight checks. !4260
+- gitlab.rb example template should show puma default. !4268
+- Praefect: Enable SQL failover by default. !4271
+- Update gitlab-exporter to 7.0.4. !4272
+- Enable btree_gist postgres extension. !4274
+- Update parser gem version. !4275
+- Make it possible to disable Workhorse -authSocket argument. !4324
+
+### Added (6 changes)
+
+- Add Patroni to Omnibus. !3984
+- Add libtiff as a dependency. !4047
+- Add command promotion-preflight-checks to run before promoting to primary node. !4246
+- Allow enabling Praefect read-only mode through gitlab.rb. !4250
+- Upgrade Grafana dashboards to v1.6.0. !4278
+- Add capability to supply env vars to gitlab-pages. !4296
+
+### Other (8 changes)
+
+- Build and release packages for Raspberry Pi Buster. !3953
+- Add (optional) list of manual checks to promote_to_primary script. !4231
+- Update nginx to stable version 1.18.0. !4242
+- Stop deleting rack attack files. !4269
+- Mark 13.0 as minimum version required to upgrade to 13.x. !4270
+- Upgrade to Git 2.27.0. !4294
+- Use latest Ubuntu AMI as base for our AMIs. !4308
+- Update Mattermost to 5.23.1.
+
+
+## 13.0.10 (2020-07-09)
+
+### Performance (1 change, 1 of them is from the community)
+
+- Run vacuumdb with 2 commands simultaneously. !4373 (Ben Bodenmiller @bbodenmiller)
+
+
+## 13.0.9 (2020-07-06)
+
+- No changes.
+
+## 13.0.8 (2020-07-01)
+
+### Security (1 change)
+
+- Update PCRE to version 8.44.
+
+
+## 13.0.7 (2020-06-25)
+
+### Fixed (2 changes)
+
+- Fix geo timeout issue with pg-upgrade. !4148
+- Manually disable copy_file_range() on RedHat kernels. !4346
+
+
+## 13.0.6 (2020-06-10)
+
+- No changes.
+
+## 13.0.5 (2020-06-04)
+
+- No changes.
+
+## 13.0.4 (2020-06-03)
+
+- No changes.
+
+## 13.0.3 (2020-05-29)
+
+- No changes.
+
+## 13.0.2 (2020-05-28)
+
+### Security (1 change)
+
+- Update Ruby to 2.6.6.
+
+### Fixed (2 changes)
+
+- Fix nginx duplicate MIME type warning. !4251
+- Do not run Grafana reset during docker startup. !4264
+
+### Added (1 change)
+
+- Update Praefect Grafana dashboards. !4241
+
+
 ## 13.0.1 (2020-05-27)
 
 ### Security (1 change)
@@ -80,6 +271,36 @@ omnibus-gitlab repository.
 - Patch Git to fix partial clone bug. !4217
 - Update CA certificate bundle. !4230
 - Update Mattermost to 5.22.2. (Harrison Healey)
+
+
+## 12.10.14 (2020-07-06)
+
+- No changes.
+
+## 12.10.13 (2020-07-01)
+
+### Security (1 change)
+
+- Update PCRE to version 8.44.
+
+
+## 12.10.12 (2020-06-24)
+
+### Fixed (2 changes)
+
+- Fix geo timeout issue with pg-upgrade. !4148
+- Manually disable copy_file_range() on RedHat kernels. !4346
+
+
+## 12.10.11 (2020-06-10)
+
+- No changes.
+
+## 12.10.8 (2020-05-28)
+
+### Fixed (1 change)
+
+- Fix dbvacuum on pgupgrade. !4227
 
 
 ## 12.10.7 (2020-05-27)
@@ -201,6 +422,14 @@ omnibus-gitlab repository.
 - Upgrade Mattermost to 5.21.0.
 - Upgrade to Git 2.26.1.
 
+
+## 12.9.10 (2020-06-10)
+
+- No changes.
+
+## 12.9.9 (2020-06-03)
+
+- No changes.
 
 ## 12.9.8 (2020-05-27)
 

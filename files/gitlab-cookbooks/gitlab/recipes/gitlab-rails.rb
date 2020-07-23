@@ -34,8 +34,8 @@ gitlab_rails_shared_cache_dir = File.join(node['gitlab']['gitlab-rails']['shared
 upgrade_status_dir = File.join(gitlab_rails_dir, "upgrade-status")
 
 # Set path to the private key used for communication between registry and Gitlab.
-node.default['gitlab']['gitlab-rails']['registry_key_path'] = File.join(gitlab_rails_etc_dir, "gitlab-registry.key")
-node.default['gitlab']['gitlab-rails']['db_host'] ||= node['postgresql']['dir']
+node.normal['gitlab']['gitlab-rails']['registry_key_path'] = File.join(gitlab_rails_etc_dir, "gitlab-registry.key") if node['gitlab']['gitlab-rails']['registry_key_path'].nil?
+node.normal['gitlab']['gitlab-rails']['db_host'] = node['postgresql']['dir'] if node['gitlab']['gitlab-rails']['db_host'].nil?
 
 gitlab_user = account_helper.gitlab_user
 gitlab_group = account_helper.gitlab_group
@@ -149,6 +149,10 @@ dependent_services << "runit_service[mailroom]" if node['gitlab']['mailroom']['e
 node['gitlab']['gitlab-rails']['dependent_services'].each do |name|
   dependent_services << "runit_service[#{name}]" if omnibus_helper.should_notify?(name)
 end
+
+dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify?('sidekiq')
+dependent_services << "sidekiq_service[sidekiq-cluster]" if omnibus_helper.should_notify?('sidekiq-cluster')
+dependent_services << "unicorn_service[unicorn]" if omnibus_helper.should_notify?('unicorn')
 
 secret_file = File.join(gitlab_rails_etc_dir, "secret")
 secret_symlink = File.join(gitlab_rails_source_dir, ".secret")
@@ -300,7 +304,8 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       puma: node['gitlab']['puma'],
       actioncable: node['gitlab']['actioncable'],
       gitlab_shell_authorized_keys_file: node['gitlab']['gitlab-shell']['auth_file'],
-      prometheus: node['monitoring']['prometheus']
+      prometheus_available: node['monitoring']['prometheus']['enable'] || !node['gitlab']['gitlab-rails']['prometheus_address'].nil?,
+      prometheus_server_address: node['gitlab']['gitlab-rails']['prometheus_address'] || node['monitoring']['prometheus']['listen_address']
     )
   )
   dependent_services.each { |svc| notifies :restart, svc }

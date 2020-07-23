@@ -11,8 +11,6 @@ module Geo
     def execute
       run_preflight_checks
 
-      make_sure_primary_is_down
-
       promote_postgresql_to_primary
 
       reconfigure
@@ -27,42 +25,25 @@ module Geo
     def run_preflight_checks
       return true if @options[:skip_preflight_checks]
 
+      begin
+        PromotionPreflightChecks.new(@base_path, @options).execute
+      rescue SystemExit => e
+        raise e unless @options[:force]
+
+        confirm_proceed_after_preflight_checks_fail
+      end
+    end
+
+    def confirm_proceed_after_preflight_checks_fail
       puts
-      puts 'Ensure you have completed the following manual '\
-        'preflight checks:'
-      puts '- Check if you need to migrate to Object Storage'
-      puts '- Review configuration of each secondary node'
-      puts '- Run system checks'
-      puts '- Check that secrets match between nodes'
-      puts '- Ensure Geo replication is up-to-date'
-      puts '- Verify the integrity of replicated data'
-      puts '- Notify users of scheduled maintenance'
-      puts 'Please read https://docs.gitlab.com/ee/administration/geo/'\
-        'disaster_recovery/planned_failover.html#preflight-checks'
-      puts
-      puts 'Did you perform all manual preflight checks (y/n)?'.color(:green)
+      puts 'WARNING: Preflight checks failed but you are running this in '\
+        'force mode. If you proceed data loss may happen. '\
+        'This may be desired in case of an actual disaster.'\
+        'Are you sure you want to proceed? (y/n)'.color(:yellow)
 
       return if STDIN.gets.chomp.casecmp('y').zero?
 
-      raise 'ERROR: Manual preflight checks were not performed! '\
-        'Please read https://docs.gitlab.com/ee/administration/geo/'\
-        'disaster_recovery/planned_failover.html#preflight-checks'.color(:red)
-    end
-
-    def make_sure_primary_is_down
-      return true if @options[:confirm_primary_is_down]
-
-      puts
-      puts '---------------------------------------'.color(:yellow)
-      puts 'WARNING: Make sure your primary is down'.color(:yellow)
-      puts 'If you have more than one secondary please see https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.html#promoting-secondary-geo-replica-in-multi-secondary-configurations'.color(:yellow)
-      puts 'There may be data saved to the primary that was not been replicated to the secondary before the primary went offline. This data should be treated as lost if you proceed.'.color(:yellow)
-      puts '---------------------------------------'.color(:yellow)
-      puts
-
-      print '*** Are you sure? (N/y): '.color(:green)
-
-      raise 'Exited because primary node must be down' unless STDIN.gets.chomp.casecmp('y').zero?
+      exit 1
     end
 
     def promote_postgresql_to_primary
@@ -70,7 +51,7 @@ module Geo
       puts 'Promoting the PostgreSQL to primary...'.color(:yellow)
       puts
 
-      run_command("/opt/gitlab/embedded/bin/gitlab-pg-ctl promote", live: true).error!
+      run_command('/opt/gitlab/embedded/bin/gitlab-pg-ctl promote', live: true).error!
     end
 
     def reconfigure

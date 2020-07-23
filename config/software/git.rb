@@ -28,7 +28,7 @@ name 'git'
 # - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/.gitlab-ci.yml
 # - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/system_check/app/git_version_check.rb
 # - https://gitlab.com/gitlab-org/build/CNG/blob/master/ci_files/variables.yml
-default_version '2.26.2'
+default_version '2.27.0'
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -43,7 +43,7 @@ dependency 'pcre2'
 dependency 'libiconv'
 
 source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: 'e1c17777528f55696815ef33587b1d20f5eec246669f3b839d15dbfffad9c121'
+       sha256: '77ded85cbe42b1ffdc2578b460a1ef5d23bcbc6683eabcafbb0d394dffe2e787'
 
 relative_path "git-#{version}"
 
@@ -56,9 +56,6 @@ build do
   # patch source: 'v4-0002-packfile-expose-get_delta_base.patch'
   #
   # Patch files should be in config/patches/git/
-
-  # Fix for https://gitlab.com/gitlab-org/git/-/issues/61
-  patch source: 'v3-0001-upload-pack-clear-filter_options-for-each-v2-fetc.patch'
 
   block do
     File.open(File.join(project_dir, 'config.mak'), 'a') do |file|

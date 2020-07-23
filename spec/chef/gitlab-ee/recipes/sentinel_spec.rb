@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 describe 'gitlab::redis' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(sentinel_service runit_service)).converge('gitlab-ee::default') }
   let(:redis_master_ip) { '1.1.1.1' }
   let(:redis_announce_ip) { '10.10.10.10' }
   let(:redis_master_password) { 'blahblahblah' }
@@ -24,7 +24,7 @@ describe 'gitlab::redis' do
       )
     end
 
-    it_behaves_like 'disabled runit service', 'sentinel', 'root', 'root', 'gitlab-redis', 'gitlab-redis'
+    it_behaves_like 'disabled runit service', 'sentinel', 'root', 'root'
   end
 
   describe 'When sentinel is enabled' do
@@ -45,7 +45,7 @@ describe 'gitlab::redis' do
         expect(chef_run).to create_account('user and group for sentinel').with(username: 'gitlab-redis', groupname: 'gitlab-redis')
       end
 
-      it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root', 'gitlab-redis', 'gitlab-redis'
+      it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
     end
 
     context 'user specified values' do
@@ -67,7 +67,7 @@ describe 'gitlab::redis' do
         expect(chef_run).to create_account('user and group for sentinel').with(username: 'foo', groupname: 'bar')
       end
 
-      it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root', 'foo', 'bar'
+      it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
     end
   end
 end

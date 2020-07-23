@@ -126,7 +126,7 @@ include_recipe 'postgresql::bin'
   end
 end
 
-include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable'] && !node['gitlab']['pgbouncer']['enable']
+include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable'] && !(node['gitlab'].key?('pgbouncer') && node['gitlab']['pgbouncer']['enable'])
 
 include_recipe "praefect::database_migrations" if node['praefect']['enable'] && node['praefect']['auto_migrate']
 
@@ -138,7 +138,6 @@ include_recipe "gitlab::logrotate_folders_and_configs"
 %w[
   unicorn
   puma
-  actioncable
   sidekiq
   sidekiq-cluster
   gitlab-workhorse
@@ -155,6 +154,12 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   else
     include_recipe "gitlab::#{service}_disable"
   end
+end
+
+if node['gitlab']['actioncable']['enable'] && !node['gitlab']['actioncable']['in_app']
+  include_recipe "gitlab::actioncable"
+else
+  include_recipe "gitlab::actioncable_disable"
 end
 
 %w(

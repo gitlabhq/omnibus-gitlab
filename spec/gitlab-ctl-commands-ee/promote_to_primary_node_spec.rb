@@ -1,34 +1,26 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
-require 'omnibus-ctl'
+require 'geo/promote_to_primary_node'
 
 describe 'gitlab-ctl promote-to-primary-node' do
-  subject(:ctl) { Omnibus::Ctl.new('testing-ctl') }
+  let(:klass) { Geo::PromoteToPrimaryNode }
+  let(:command_name) { 'promote-to-primary-node' }
+  let(:command_script) { 'promote_to_primary_node' }
 
-  before do
-    allow_any_instance_of(Omnibus::Ctl).to receive(:require).and_call_original
-    allow_any_instance_of(Omnibus::Ctl).to receive(:require).with(
-      '/opt/testing-ctl/embedded/service/omnibus-ctl-ee/lib/geo/promote_to_primary_node'
-    ) do
-      require_relative('../../files/gitlab-ctl-commands-ee/lib/geo/promote_to_primary_node')
-    end
+  include_context 'ctl'
 
-    ctl.load_file('files/gitlab-ctl-commands-ee/promote_to_primary_node.rb')
-  end
+  it_behaves_like 'gitlab geo promotion commands', 'promote-to-primary-node'
 
-  it 'appends a geo replication command' do
-    expect(subject.get_all_commands_hash).to include('promote-to-primary-node')
-  end
+  it_behaves_like 'geo promotion command accepts option',
+                  '--confirm-primary-is-down',
+                  { confirm_primary_is_down: true }
 
-  it 'executes the command when called' do
-    # ARGV contains the commands that were passed to rspec, which are
-    # invalid for the omnibus-ctl commands
-    oldargv = ARGV
-    ARGV = [] # rubocop:disable Style/MutableConstant
+  it_behaves_like 'geo promotion command accepts option',
+                  '--skip-preflight-checks',
+                  { skip_preflight_checks: true }
 
-    expect_any_instance_of(Geo::PromoteToPrimaryNode).to receive(:execute)
-
-    ctl.promote_to_primary_node
-
-    ARGV = oldargv
-  end
+  it_behaves_like 'geo promotion command accepts option',
+                  '--force',
+                  { force: true }
 end

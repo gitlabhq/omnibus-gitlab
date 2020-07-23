@@ -128,6 +128,7 @@ describe 'gitlab-ee::geo-secondary' do
 
       context 'when geo_secondary["auto_migrate"] is true' do
         it 'runs the migrations' do
+          expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
           expect(chef_run).to run_bash('migrate gitlab-geo tracking database')
         end
       end
@@ -183,7 +184,6 @@ describe 'gitlab-ee::geo-secondary' do
         redis-exporter
         sidekiq
         sidekiq-cluster
-        unicorn
         puma
         actioncable
         gitaly
@@ -228,11 +228,11 @@ describe 'gitlab-ee::geo-secondary' do
 
         %w(
           puma
-          sidekiq
           geo-logcursor
         ).each do |svc|
           expect(ruby_block).to have_received(:notifies).with(:restart, "runit_service[#{svc}]")
         end
+        expect(ruby_block).to have_received(:notifies).with(:restart, "sidekiq_service[sidekiq]")
       end
     end
 
@@ -251,8 +251,11 @@ describe 'gitlab-ee::geo-secondary' do
       it 'does not include the Geo database migrations recipe if Rails not needed' do
         stub_gitlab_rb(geo_secondary_role: { enable: true },
                        nginx: { enable: false },
+                       unicorn: { enable: false },
                        puma: { enable: false },
                        sidekiq: { enable: false },
+                       sidekiq_cluster: { enable: false },
+                       gitaly: { enable: false },
                        postgresql: { enable: false },
                        geo_logcursor: { enable: false },
                        redis: { enable: true })
@@ -266,6 +269,43 @@ describe 'gitlab-ee::geo-secondary' do
 
       it 'runs the migrations' do
         expect(chef_run).to run_bash('migrate gitlab-geo tracking database')
+      end
+    end
+
+    describe 'rails_needed?' do
+      let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default') }
+
+      context 'manually enabled services' do
+        before do
+          stub_gitlab_rb(
+            unicorn: { enable: true },
+            # Everything but unicorn is disabled
+            puma: { enable: false },
+            sidekiq: { enable: false },
+            sidekiq_cluster: { enable: false },
+            geo_logcursor: { enable: false },
+            gitaly: { enable: false }
+          )
+        end
+
+        it 'should need rails' do
+          expect(chef_run).to include_recipe('gitlab::gitlab-rails')
+        end
+      end
+
+      context 'manually disabled services' do
+        before do
+          stub_gitlab_rb(
+            gitaly: { enable: false },
+            puma: { enable: false },
+            sidekiq: { enable: false },
+            geo_logcursor: { enable: false }
+          )
+        end
+
+        it 'should not need rails' do
+          expect(chef_run).not_to include_recipe('gitlab::gitlab-rails')
+        end
       end
     end
   end

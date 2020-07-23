@@ -90,7 +90,7 @@ template "Create Gitaly config.toml" do
 end
 
 runit_service 'gitaly' do
-  down node['gitaly']['ha']
+  start_down node['gitaly']['ha']
   options({
     user: account_helper.gitlab_user,
     groupname: account_helper.gitlab_group,

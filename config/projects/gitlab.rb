@@ -89,6 +89,7 @@ dependency 'chef-zero'
 dependency 'awesome_print'
 dependency 'ohai'
 dependency 'chef-gem'
+dependency 'chef-bin'
 dependency 'remote-syslog'
 dependency 'logrotate'
 dependency 'runit'
@@ -224,6 +225,11 @@ resources_path "#{Omnibus::Config.project_root}/resources"
 # so we will grab them from an excluded folder
 package_scripts_path "#{install_dir}/.package_util/package-scripts"
 exclude '.package_util'
+
+# Exclude Python cache and distribution info
+exclude 'embedded/lib/python*/**/*.dist-info'
+exclude 'embedded/lib/python*/**/*.egg-info'
+exclude 'embedded/lib/python*/**/__pycache__'
 
 package_user 'root'
 package_group 'root'

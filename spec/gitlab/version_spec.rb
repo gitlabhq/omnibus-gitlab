@@ -42,6 +42,51 @@ describe Gitlab::Version do
         expect(subject.remote).to eq('https://gitlab.com/gitlab-org/gitlab.git')
       end
     end
+
+    context 'with SECURITY_SOURCES env variable explicitly set' do
+      before do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with("SECURITY_SOURCES").and_return("true")
+        allow(ENV).to receive(:[]).with("CI_JOB_TOKEN").and_return("CJT")
+      end
+
+      context 'when security source is defined for the software' do
+        let(:software) { 'gitlab-rails-ee' }
+
+        it 'returns "security" link attached with credential from custom_sources yml' do
+          expect(subject.remote).to eq('https://gitlab-ci-token:CJT@gitlab.com/gitlab-org/security/gitlab.git')
+        end
+
+        context 'when "security" link is in not URI compliant' do
+          before do
+            allow(YAML).to receive(:load_file)
+              .and_return(software => { "security" => "git@dev.gitlab.org:gitlab/gitlab-ee.git" })
+          end
+
+          it 'returns "security" link without attaching credential' do
+            expect(subject.remote).to eq("git@dev.gitlab.org:gitlab/gitlab-ee.git")
+          end
+        end
+      end
+
+      context 'when security source is not defined for the software' do
+        let(:software) { 'prometheus' }
+
+        it 'returns "remote" link from custom_sources yml' do
+          allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("false")
+
+          expect(subject.remote).to eq('git@dev.gitlab.org:omnibus-mirror/prometheus.git')
+        end
+
+        context 'with ALTERNATIVE_SOURCES env variable explicitly set' do
+          it 'returns "alternative" link from custom_sources yml' do
+            allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("true")
+
+            expect(subject.remote).to eq('https://gitlab.com/gitlab-org/build/omnibus-mirror/prometheus.git')
+          end
+        end
+      end
+    end
   end
 
   describe :print do

@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Configuring Redis
 
 ## Running Redis on the application server
@@ -93,7 +99,7 @@ issues) for use with GitLab you can do so using Omnibus GitLab.
 ### Using Google Cloud Memorystore
 
 Google Cloud Memorystore [does not support the Redis `CLIENT`
-command.](https://cloud.google.com/memorystore/docs/reference/redis-configs#blocked)
+command](https://cloud.google.com/memorystore/docs/redis/redis-configs).
 By default Sidekiq will attempt to set the `CLIENT` for debugging
 purposes. This can be disabled via this configuration setting:
 
@@ -104,9 +110,9 @@ gitlab_rails['redis_enable_client'] = false
 ## Increasing the number of Redis connections beyond the default
 
 By default Redis will only accept 10,000 client connections. If you need
-more that 10,000 connections set the 'maxclients' attribute to suite your needs.
-Be advised that adjusting the maxclients attribute means that you will also need
-to take into account your systems settings for fs.file-max (i.e. "sysctl -w fs.file-max=20000")
+more that 10,000 connections set the `maxclients` attribute to suit your needs.
+Be advised that adjusting the `maxclients` attribute means that you will also need
+to take into account your systems settings for `fs.file-max` (for example `sysctl -w fs.file-max=20000`)
 
 ```ruby
 redis['maxclients'] = 20000
@@ -114,9 +120,9 @@ redis['maxclients'] = 20000
 
 ## Tuning the TCP stack for Redis
 
-The following settings are to enable a more performant Redis server instance. 'tcp_timeout' is
-a value set in seconds that the Redis server waits before terminating an IDLE TCP connection.
-The 'tcp_keepalive' is a tunable setting in seconds to TCP ACKs to clients in absence of
+The following settings are to enable a more performant Redis server instance. `tcp_timeout` is
+a value set in seconds that the Redis server waits before terminating an idle TCP connection.
+The `tcp_keepalive` is a tunable setting in seconds to TCP ACKs to clients in absence of
 communication.
 
 ```ruby
@@ -126,14 +132,14 @@ redis['tcp_keepalive'] = "300"
 
 ## Running with multiple Redis instances
 
-GitLab includes support for running with separate Redis instances for different persistence classes, currently: cache, queues, shared_state and actioncable.
+GitLab includes support for running with separate Redis instances for different persistence classes, currently: `cache`, `queues`, `shared_state` and `actioncable`.
 
-| Instance     | Purpose                                         |
-| ------------ | ----------------------------------------------- |
-| cache        | Store cached data                               |
-| queues       | Store Sidekiq background jobs                   |
-| shared_state | Store session-related and other persistent data |
-| actioncable  | Pub/Sub queue backend for ActionCable           |
+| Instance       | Purpose                                         |
+| -------------- | ----------------------------------------------- |
+| `cache`        | Store cached data                               |
+| `queues`       | Store Sidekiq background jobs                   |
+| `shared_state` | Store session-related and other persistent data |
+| `actioncable`  | Pub/Sub queue backend for ActionCable           |
 
 1. Create a dedicated instance for each persistence class as per the instructions in [Setting up a Redis-only server](#setting-up-a-redis-only-server)
 1. Set the appropriate variable in `/etc/gitlab/gitlab.rb` for each instance you are using:

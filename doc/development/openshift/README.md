@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Omnibus GitLab Development Setup
 
 ## Requirements
@@ -23,7 +29,7 @@ The first thing you need to interact with OpenShift Origin, are the `oc` client 
 
 Next you need to setup an OpenShift Origin environment. To setup the environment you can use the production installer
 on a cloud machine, use minishift on your local machine (uses kvm or xhyve), or setup an instance
-using Docker for the master, and your own machine as the slave using `oc cluster up`
+using Docker for the primary, and your own machine as the secondary using `oc cluster up`
 
 ### Minishift
 
@@ -132,7 +138,7 @@ If you have Docker installed, you can setup OpenShift Origin on your local machi
 
 ### Production Ansible Installer
 
-You can use OpenShift's Ansible installer to set up OpenShift masters and slaves in Digital Ocean. Follow the [advanced install docs](https://docs.openshift.com/container-platform/3.7/install_config/install/advanced_install.html).
+You can use OpenShift's Ansible installer to set up OpenShift primaries and secondaries in Digital Ocean. Follow the [advanced install docs](https://docs.openshift.com/container-platform/3.7/install_config/install/advanced_install.html).
 
 You can find the Ansible playbooks at: <https://github.com/openshift/openshift-ansible>
 
@@ -147,7 +153,7 @@ And you need to setup persistent volumes. See 3 and 4 of the [oc cluster up step
 
 ## Add the GitLab template to OpenShift
 
-**`Note`** This section is deprecated. Check [the open issue to for more details](https://gitlab.com/gitlab-org/distribution/team-tasks/issues/263).
+**`Note`** This section is deprecated. Check [the open issue to for more details](https://gitlab.com/gitlab-org/distribution/team-tasks/-/issues/263).
 
 Add the GitLab template to OpenShift (The next release of the VM includes GitLab, so this may not be required):
 

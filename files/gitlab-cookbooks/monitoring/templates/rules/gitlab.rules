@@ -471,3 +471,48 @@ groups:
   - record: gitlab_sli:gitlab_component_saturation:ratio:sapdex:avg_over_time_1w:predict_linear_30d
     expr: >
       predict_linear(gitlab_sli:gitlab_component_saturation:ratio:sapdex:avg_over_time_1w[1w], 86400 * 30)
+
+###
+# Metrics used by Usage Ping reports. These are primarily for self-managed installations.
+# See https://docs.gitlab.com/ee/development/telemetry/usage_ping.html#prometheus-queries
+#
+- name: GitLab Usage Ping
+  interval: 5m
+  rules:
+  ###
+  # Application wide metrics
+  #
+  - record: gitlab_usage_ping:ops:rate5m
+    labels:
+      service: workhorse
+      component: http_requests
+    expr: sum (rate (gitlab_workhorse_http_requests_total[5m]))
+  ###
+  # Node level metrics
+  #
+  - record: gitlab_usage_ping:node_cpus:count
+    expr: count (node_cpu_seconds_total{mode="idle"}) by (instance)
+  - record: gitlab_usage_ping:node_memory_total_bytes:avg
+    expr: avg (node_memory_MemTotal_bytes) by (instance)
+  ### 
+  # Service level metrics
+  #
+  - record: gitlab_usage_ping:node_service_process_resident_memory_bytes:avg
+    expr: avg by (instance, job) ({__name__ =~ "(ruby_){0,1}process_resident_memory_bytes", job != "gitlab_exporter_process"})
+  - record: gitlab_usage_ping:node_service_process_unique_memory_bytes:avg
+    expr: avg by (instance, job) ({__name__ =~ "(ruby_){0,1}process_unique_memory_bytes", job != "gitlab_exporter_process"})
+  - record: gitlab_usage_ping:node_service_process_proportional_memory_bytes:avg
+    expr: avg by (instance, job) ({__name__ =~ "(ruby_){0,1}process_proportional_memory_bytes", job != "gitlab_exporter_process"})
+  - record: gitlab_usage_ping:node_service_process:count
+    expr: >
+      count by (instance, job) (
+        {__name__ =~ "(ruby_){0,1}process_start_time_seconds", job != "gitlab_exporter_process"}
+      )
+  - record: gitlab_usage_ping:node_service_app_server_workers:sum
+    labels:
+      server: puma
+    expr: sum by (instance, job) (puma_workers)
+  - record: gitlab_usage_ping:node_service_app_server_workers:sum
+    labels:
+      server: unicorn
+    expr: sum by (instance, job) (unicorn_workers)

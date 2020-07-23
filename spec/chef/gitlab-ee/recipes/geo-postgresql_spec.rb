@@ -83,7 +83,7 @@ describe 'geo postgresql 9.2' do
       ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default')
     end
 
-    it_behaves_like 'enabled runit service', 'geo-postgresql', 'root', 'root', 'gitlab-psql', 'gitlab-psql'
+    it_behaves_like 'enabled runit service', 'geo-postgresql', 'root', 'root'
 
     it 'includes the postgresql::bin recipe' do
       expect(chef_run).to include_recipe('postgresql::bin')
@@ -232,7 +232,7 @@ describe 'geo postgresql 9.2' do
       ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default')
     end
 
-    it_behaves_like 'enabled runit service', 'geo-postgresql', 'root', 'root', 'foo', 'bar'
+    it_behaves_like 'enabled runit service', 'geo-postgresql', 'root', 'root'
 
     it 'correctly sets the shared_preload_libraries setting' do
       expect(chef_run.node['gitlab']['geo-postgresql']['shared_preload_libraries']).to eql('pg_stat_statements')

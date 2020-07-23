@@ -1,5 +1,0 @@
----
-title: Move hook values to [hooks] and gitlab connection values to [gitlab] in gitaly.toml
-merge_request: 4243
-author:
-type: changed

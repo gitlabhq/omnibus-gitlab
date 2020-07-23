@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Setting custom environment variables
 
 If necessary you can set custom environment variables to be used by Puma,
@@ -23,10 +29,15 @@ might be required if you are behind a proxy:
 gitaly['env'] = {
     "http_proxy" => "http://USERNAME:PASSWORD@example.com:8080",
     "https_proxy" => "http://USERNAME:PASSWORD@example.com:8080",
-    "no_proxy" => "unix"  # Workaround for https://gitlab.com/gitlab-org/gitaly/issues/1447
+    "no_proxy" => "unix"  # Workaround for https://gitlab.com/gitlab-org/gitaly/-/issues/1447
 }
 
 gitlab_workhorse['env'] = {
+    "http_proxy" => "http://USERNAME:PASSWORD@example.com:8080",
+    "https_proxy" => "http://USERNAME:PASSWORD@example.com:8080"
+}
+
+gitlab_pages['env'] = {
     "http_proxy" => "http://USERNAME:PASSWORD@example.com:8080",
     "https_proxy" => "http://USERNAME:PASSWORD@example.com:8080"
 }
@@ -42,7 +53,7 @@ NOTE: **Note:** The `no_proxy` entry for Gitaly is needed in GitLab 11.6
 and newer if a proxy is defined and Gitaly is listening on a UNIX
 socket, which it is by default. It appears to be a limitation in the
 gRPC client library. See [the Gitaly
-issue](https://gitlab.com/gitlab-org/gitaly/issues/1447) for more
+issue](https://gitlab.com/gitlab-org/gitaly/-/issues/1447) for more
 details.
 
 NOTE: **Note:** GitLab 11.6 and newer will attempt to use HTTP Basic

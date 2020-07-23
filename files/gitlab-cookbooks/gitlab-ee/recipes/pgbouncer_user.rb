@@ -32,7 +32,7 @@ if pgb_helper.create_pgbouncer_user?('geo-postgresql')
   end
 end
 
-if pgb_helper.create_pgbouncer_user?('postgresql')
+if pgb_helper.create_pgbouncer_user?('postgresql') || pgb_helper.create_pgbouncer_user?('patroni')
   pgbouncer_user 'rails' do
     pg_helper PgHelper.new(node)
     user node['postgresql']['pgbouncer_user']

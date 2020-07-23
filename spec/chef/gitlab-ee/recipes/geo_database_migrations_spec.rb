@@ -58,20 +58,21 @@ describe 'gitlab-ee::geo-database-migrations' do
         allow_any_instance_of(GitlabGeoHelper).to receive(:migrated?).and_return(false)
 
         expect(bash_block).to notify('runit_service[puma]').to(:restart)
-        expect(bash_block).to notify('runit_service[sidekiq]').to(:restart)
+        expect(bash_block).to notify('sidekiq_service[sidekiq]').to(:restart)
       end
     end
 
     context 'places the log file' do
       it 'in a default location' do
         path = Regexp.escape('/var/log/gitlab/gitlab-rails/gitlab-geo-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log')
+        expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
         expect(bash_block.code).to match(/#{path}/)
       end
 
       it 'in a custom location' do
-        stub_gitlab_rb(gitlab_rails: { log_directory: '/tmp' })
-
         path = '/tmp/gitlab-geo-db-migrate-'
+        stub_gitlab_rb(gitlab_rails: { log_directory: '/tmp' })
+        expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
         expect(bash_block.code).to match(/#{path}/)
       end
     end
@@ -82,6 +83,7 @@ describe 'gitlab-ee::geo-database-migrations' do
       end
 
       it 'skips running the migrations' do
+        expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
         expect(chef_run).not_to run_bash(name)
       end
     end

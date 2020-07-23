@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Managing PostgreSQL versions
 
 Usually, we are shipping three versions of PostgreSQL. We need to support running on all versions, as well as upgrading from the older versions to the newest.
@@ -48,3 +54,8 @@ Additionally, ensure that:
 
 1. The package build includes both versions of PostgreSQL
 1. Running `gitlab-ctl pg-upgrade` works
+
+### The case of `libpq`
+
+Some modules, including `pyscopg2`, depend on PostgreSQL client library, i.e. `libpq`. It should be always linked to the
+latest bundled version. By using the latest version we rely on backward compatibility of `libpq`.

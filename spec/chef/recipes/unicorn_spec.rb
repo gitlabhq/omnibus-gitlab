@@ -3,7 +3,7 @@ require 'chef_helper'
 describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(unicorn_service unicorn_config runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04.json'
     )
     runner.converge('gitlab::default')
@@ -18,7 +18,7 @@ describe 'gitlab::unicorn' do
   end
 
   context 'when unicorn is enabled' do
-    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root', 'git', 'git'
+    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root'
 
     describe 'logrotate settings' do
       context 'default values' do
@@ -76,7 +76,7 @@ describe 'gitlab::unicorn' do
       )
     end
 
-    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root', 'foo', 'bar'
+    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root'
   end
 
   context 'with custom runtime_dir' do
@@ -101,7 +101,7 @@ end
 describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(unicorn_service unicorn_config runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04-no-run-tmpfs.json'
     )
     runner.converge('gitlab::default')
@@ -116,7 +116,7 @@ describe 'gitlab::unicorn' do
   end
 
   context 'when unicorn is enabled on a node with no /run or /dev/shm tmpfs' do
-    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root', 'git', 'git'
+    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root'
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/unicorn/run')
@@ -131,7 +131,7 @@ end
 describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(unicorn_service unicorn_config runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04-docker.json'
     )
     runner.converge('gitlab::default')
@@ -146,7 +146,7 @@ describe 'gitlab::unicorn' do
   end
 
   context 'when unicorn is enabled on a node with a /dev/shm tmpfs' do
-    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root', 'git', 'git'
+    it_behaves_like 'enabled runit service', 'unicorn', 'root', 'root'
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/unicorn/run')
@@ -161,7 +161,7 @@ end
 describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(unicorn_service unicorn_config runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04-more-cpus.json'
     )
     runner.converge('gitlab::default')

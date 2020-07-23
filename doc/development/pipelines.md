@@ -1,4 +1,10 @@
-# CI Pipelines
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
+# Repositories, branches, and CI pipelines
 
 `omnibus-gitlab` CI pipeline is a moderately complex one with pipelines split
 between all the mirrors of the project:
@@ -8,6 +14,72 @@ between all the mirrors of the project:
 1. [Security mirror](https://gitlab.com/gitlab-org/security/omnibus-gitlab) for security development.
 1. [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) for developers to run a package build and QA for development
    purposes.
+
+## Branch and tag protection
+
+### Protected branches
+
+NOTE: **Note:** Unless specified otherwise, the listed users/groups have
+permission to both merge, and push to protected branches.
+
+1. Development repository
+    1. `master`: Maintainers, [Delivery team](https://gitlab.com/gitlab-org/delivery)
+    1. `*-stable` : [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+    1. `*-stable-ee` : [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+    1. `*-auto-deploy-*` : Maintainers, [`delivery` group](https://gitlab.com/gitlab-org/delivery), [`managers` group](https://gitlab.com/gitlab-org/release/managers)
+
+1. Release mirror:
+    1. `master`: Maintainers
+    1. `*-stable` : Maintainers
+    1. `*-stable-ee` : Maintainers
+    1. `*-auto-deploy-*` : Maintainers
+
+1. Security mirror:
+    1. `master`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+    1. `*-stable`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+    1. `*-stable-ee`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+    1. `*-auto-deploy-*`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+
+1. QA mirror:
+    1. `master`: Developers (Merge only), Maintainers
+
+NOTE: **Note:** Developers get access to `master` branch in QA mirror because
+that's required to run a triggered pipeline against the branch. There is an
+[open issue](https://gitlab.com/gitlab-org/gitlab/-/issues/24585) to change this
+situation.
+
+### Protected Tags
+
+NOTE: **Note:** Unless specified otherwise, the listed users/groups have
+permission to both merge, and push to protected tags.
+
+1. Development repository:
+    1. `*` : Maintainers, [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+
+1. Release mirror:
+    1. `*`: Maintainers
+
+1. Security mirror: Nil
+
+1. QA mirror: Nil
+
+## Mirroring between repositories
+
+Most of the development happens in the [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab)
+and security related changes go to [Security mirror](https://gitlab.com/gitlab-org/security/omnibus-gitlab).
+These changes then gets mirrored to [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab)
+and [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror). The
+following diagram describes what all gets mirrored between each of these
+repositories.
+
+```mermaid
+graph TD
+  A[Development repository] -->|Protected branches| B[Security mirror]
+  A[Development repository] -->|Protected branches| C[Release mirror]
+  A[Development repository] -->|All branches| D[QA mirror]
+  B[Security mirror] -->|Protected branches| C[Release mirror]
+  B[Security mirror] -->|All branches| D[QA mirror]
+```
 
 ## Types of pipelines
 
@@ -56,8 +128,8 @@ environments - will be part of this pipeline.
 ### Triggered pipelines
 
 We use triggered pipelines to run a "package-and-qa" pipeline in the [QA
-mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror). These can be triggered either from a pipeline in the [Development
-mirror] or [GitLab project](https://gitlab.com/gitlab-org/gitlab).
+mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror). These can be triggered either from a pipeline in the
+[Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) or [GitLab project](https://gitlab.com/gitlab-org/gitlab).
 
 This pipeline is intended to give the developers a package and an image to test
 their changes in addition to automatically doing a QA run against these
@@ -371,7 +443,7 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 
 This job compiles the license information of all the dependencies from the
 package and uploads it to the S3 bucket. This is used by
-[`Generate license pages`] scheduled job in [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) to populate the
+[`pages`](#pages) scheduled job in [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) to populate the
 [License collection webpage](http://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html).
 
 ## Housekeeping Jobs

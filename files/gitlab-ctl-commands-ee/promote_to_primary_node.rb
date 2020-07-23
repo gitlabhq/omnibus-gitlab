@@ -30,12 +30,12 @@ def get_ctl_options
       options[:confirm_primary_is_down] = p
     end
 
-    opts.on('-c', '--[no-]confirm-removing-keys', 'Do not ask for confirmation about removing keys') do |c|
-      options[:confirm_removing_keys] = c
+    opts.on('-m', '--skip-preflight-checks', 'Perform promotion without running any preflight checks') do |m|
+      options[:skip_preflight_checks] = m
     end
 
-    opts.on('-m', '--skip-preflight-checks', 'Do not ask for confirmation if manual checks ran') do |c|
-      options[:skip_preflight_checks] = m
+    opts.on('-f', '--force', 'Proceed even if preflight checks fail') do |f|
+      options[:force] = f
     end
   end.parse!(ARGV.dup)
 

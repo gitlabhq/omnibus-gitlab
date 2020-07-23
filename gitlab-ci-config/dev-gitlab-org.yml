@@ -263,6 +263,9 @@ Debian-9-branch:
 Debian-10-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
+Ubuntu-20.04-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
 CentOS-6-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -275,8 +278,11 @@ CentOS-8-branch:
 OpenSUSE-15.1-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.1:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
-SLES-12-branch:
+SLES-12.2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+SLES-12.5-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 
 Docker-branch:
@@ -331,6 +337,9 @@ QA-branch:
 
 Raspberry-Pi-2-Stretch-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_branch_build
+Raspberry-Pi-2-Buster-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_branch_build
 
 # This job runs only on nightly EE builds
@@ -429,6 +438,9 @@ Debian-9:
 Debian-10:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
+Ubuntu-20.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
 CentOS-6:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -441,8 +453,14 @@ CentOS-8:
 OpenSUSE-15.1:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.1:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
-SLES-12:
+SLES-12.2:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  only:
+    refs:
+      - /.*ee\.\d/@gitlab/omnibus-gitlab
+SLES-12.5:
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
   only:
     refs:
@@ -464,15 +482,26 @@ create_omnibus_manifest:
       - version-manifest.json
 
 dependency_scanning:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-depscan"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-cve-search"
   stage: package-and-image
+  services:
+    - name: mongo:bionic
+      alias: mongo
   variables:
     TERM: xterm-256color
     REPORT_PATH: ./
-  before_script: []
+  before_script:
+    - wget https://storage.googleapis.com/gitlab-depscan/mongo_dump.tar.gz
+    - mkdir /dump
+    - tar --strip-components=1 -C /dump -xf mongo_dump.tar.gz
+    - mongorestore --host mongo /dump
+    - "printf '[Mongo]\nHost: mongo\n' > /app/etc/configuration.ini"
+    - python3 /app/web/index.py > /dev/null 2>&1 &
+    - python3 /app/sbin/db_updater.py -v
   script:
-    - manifest=version-manifest.json
-    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s $manifest
+    # Temporarily hardcoding a working SHA. Check https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5530
+    # for details
+    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/cae7e018a8c18582502f60c9d24e66b3c79b45ed/gitlab-depscan.sh|bash -s version-manifest.json
   <<: *dev-except-branches
   <<: *except-auto-deploy-tag
   needs:
@@ -523,6 +552,11 @@ Debian-10-staging:
     - Debian-10
     - Debian-10-branch
   <<: *staging_upload
+Ubuntu-20.04-staging:
+  dependencies:
+    - Ubuntu-20.04
+    - Ubuntu-20.04-branch
+  <<: *staging_upload
 CentOS-6-staging:
   dependencies:
     - CentOS-6
@@ -543,10 +577,15 @@ OpenSUSE-15.1-staging:
     - OpenSUSE-15.1
     - OpenSUSE-15.1-branch
   <<: *staging_upload
-SLES-12-staging:
+SLES-12.2-staging:
   dependencies:
-    - SLES-12
-    - SLES-12-branch
+    - SLES-12.2
+    - SLES-12.2-branch
+  <<: *staging_upload
+SLES-12.5-staging:
+  dependencies:
+    - SLES-12.5
+    - SLES-12.5-branch
   <<: *staging_upload
 
 ### Package releases
@@ -557,6 +596,10 @@ Ubuntu-16.04-release:
 Ubuntu-18.04-release:
   dependencies:
     - Ubuntu-18.04
+  <<: *production_release
+Ubuntu-20.04-release:
+  dependencies:
+    - Ubuntu-20.04
   <<: *production_release
 Debian-8-release:
   dependencies:
@@ -586,9 +629,16 @@ OpenSUSE-15.1-release:
   dependencies:
     - OpenSUSE-15.1
   <<: *production_release
-SLES-12-release:
+SLES-12.2-release:
   dependencies:
-    - SLES-12
+    - SLES-12.2
+  only:
+    refs:
+      - /.*ee\.\d/@gitlab/omnibus-gitlab
+  <<: *production_release
+SLES-12.5-release:
+  dependencies:
+    - SLES-12.5
   only:
     refs:
       - /.*ee\.\d/@gitlab/omnibus-gitlab
@@ -683,10 +733,17 @@ HA-Validate-Tagged:
 Raspberry-Pi-2-Stretch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_tag_build
+Raspberry-Pi-2-Buster:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
+  <<: *rpi_tag_build
 
 Raspberry-Pi-2-Stretch-release:
   dependencies:
     - Raspberry-Pi-2-Stretch
+  <<: *raspbian_release
+Raspberry-Pi-2-Buster-release:
+  dependencies:
+    - Raspberry-Pi-2-Buster
   <<: *raspbian_release
 
 AWS-CE-Release:

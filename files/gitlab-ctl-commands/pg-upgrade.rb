@@ -25,7 +25,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            2 do |_cmd_name|
   options = GitlabCtl::PgUpgrade.parse_options(ARGV)
-  revert_version = lookup_version(options[:target_version], read_revert_version || old_version)
+  revert_version = lookup_version(options[:target_version], read_revert_version || default_version)
 
   @attributes = GitlabCtl::Util.get_node_attributes(base_path)
   pg_enabled = service_enabled?('postgresql')
@@ -130,7 +130,7 @@ add_command_under_category 'pg-upgrade', 'database',
     @attributes['postgresql']['version'].nil?
   end
     log "postgresql['version'] is set in /etc/gitlab/gitlab.rb. Not checking for a PostgreSQL upgrade"
-    deprecation_message if @attributes['postgresql']['version'].to_f < '11'.to_f
+    deprecation_message if @attributes['postgresql']['version'].to_f < 11
     Kernel.exit 0
   end
 
@@ -149,7 +149,7 @@ add_command_under_category 'pg-upgrade', 'database',
     Kernel.exit 0
   end
 
-  deprecation_message if @db_worker.target_version.major.to_f < '11'.to_f
+  deprecation_message if @db_worker.target_version.major.to_f < 11
 
   unless GitlabCtl::Util.progress_message(
     'Checking if PostgreSQL bin files are symlinked to the expected location'
@@ -461,15 +461,15 @@ end
 def analyze_cluster
   pg_username = @attributes.dig(:gitlab, :postgresql, :username) || @attributes.dig(:postgresql, :username)
   pg_host = @attributes.dig(:gitlab, :postgresql, :unix_socket_directory) || @attributes.dig(:postgresql, :unix_socket_directory)
-  analyze_cmd = "#{@db_worker.target_version_path}/bin/vacuumdb --all --analyze-in-stages -h #{pg_host}"
+  analyze_cmd = "#{@db_worker.target_version_path}/bin/vacuumdb -j2 --all --analyze-in-stages -h #{pg_host}"
   begin
     @db_worker.run_pg_command(analyze_cmd)
   rescue GitlabCtl::Errors::ExecutionError => e
     log "Error running #{analyze_cmd}"
     log "STDOUT: #{e.stdout}"
     log "STDERR: #{e.stderr}"
-    log 'Please check the output, and rerun the command if needed:'
-    log "su - #{pg_username} -c \"#{analyze_cmd}\""
+    log 'Please check the output, and rerun the command as root or with sudo if needed:'
+    log "sudo su - #{pg_username} -c \"#{analyze_cmd}\""
     log 'If the error persists, please open an issue at: '
     log 'https://gitlab.com/gitlab-org/omnibus-gitlab/issues'
   end
@@ -482,19 +482,19 @@ def version_from_manifest(software)
   nil
 end
 
-def older_version
+def old_version
   PGVersion.parse(version_from_manifest('postgresql_old')) || PGVersion.parse(version_from_manifest('postgresql'))
 end
 
-def old_version
+def default_version
   PGVersion.parse(version_from_manifest('postgresql'))
 end
 
-def default_version
+def new_version
   PGVersion.parse(version_from_manifest('postgresql_new')) || PGVersion.parse(version_from_manifest('postgresql'))
 end
 
-SUPPORTED_VERSIONS = [older_version, old_version, default_version].freeze
+SUPPORTED_VERSIONS = [old_version, default_version, new_version].freeze
 
 def lookup_version(major_version, fallback_version)
   return fallback_version unless major_version
@@ -502,7 +502,7 @@ def lookup_version(major_version, fallback_version)
   target_version = SUPPORTED_VERSIONS.select { |v| v.major == major_version }
 
   if target_version.empty?
-    log "The specified major version #{major_version} is not supported. Choose from one of #{SUPPORTED_VERSIONS.map(&:major).join(', ')}."
+    log "The specified major version #{major_version} is not supported. Choose from one of #{SUPPORTED_VERSIONS.map(&:major).uniq.join(', ')}."
     Kernel.exit 1
   else
     target_version[0]

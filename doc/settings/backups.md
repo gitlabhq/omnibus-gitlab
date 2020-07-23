@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Backups
 
 ## Backup and restore Omnibus GitLab configuration
@@ -38,12 +44,6 @@ weekday, Tuesday (day 2) through Saturday (day 6):
 ```plaintext
 15 04 * * 2-6  gitlab-ctl backup-etc && cd /etc/gitlab/config_backup && cp $(ls -t | head -n1) /secret/gitlab/backups/
 ```
-
-[cron is rather particular](http://www.pantz.org/software/cron/croninfo.html)
-about the cron table. Note:
-
-- The empty line after the command
-- The escaped percent character:  \%
 
 You can extract the .tar file as follows.
 

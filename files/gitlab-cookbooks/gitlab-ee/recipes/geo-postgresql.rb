@@ -93,7 +93,7 @@ template File.join(node['gitlab']['geo-postgresql']['data_dir'], 'pg_ident.conf'
 end
 
 runit_service 'geo-postgresql' do
-  down node['gitlab']['geo-postgresql']['ha']
+  start_down node['gitlab']['geo-postgresql']['ha']
   restart_on_update false
   control(['t'])
   options({
