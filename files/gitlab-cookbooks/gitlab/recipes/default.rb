@@ -178,7 +178,11 @@ include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable']
 # Recipe which handles all prometheus related services
 include_recipe "monitoring"
 
-include_recipe 'letsencrypt::enable' if node['letsencrypt']['enable']
+if node['letsencrypt']['enable']
+  include_recipe 'letsencrypt::enable'
+else
+  include_recipe 'letsencrypt::disable'
+end
 
 OmnibusHelper.is_deprecated_os?
 
