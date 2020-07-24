@@ -109,8 +109,8 @@
     # review-docs-cleanup job will not be able to run when the branch gets
     # deleted (when merging the MR).
     - apk add --update openssl
-    - wget https://gitlab.com/gitlab-org/gitlab/-/raw/master/scripts/trigger-build-docs
-    - chmod 755 trigger-build-docs
+    - wget https://gitlab.com/gitlab-org/gitlab/-/raw/master/scripts/trigger-build
+    - chmod 755 trigger-build
   variables:
     GIT_STRATEGY: none
     DOCS_REVIEW_APPS_DOMAIN: 178.62.207.141.nip.io
@@ -187,7 +187,7 @@ review-docs-deploy:
     url: http://docs-preview-omnibus-$CI_COMMIT_REF_SLUG.$DOCS_REVIEW_APPS_DOMAIN/omnibus
     on_stop: review-docs-cleanup
   script:
-    - ./trigger-build-docs deploy
+    - ./trigger-build docs deploy
 
 # Cleanup remote environment of gitlab-docs
 review-docs-cleanup:
@@ -197,7 +197,7 @@ review-docs-cleanup:
     name: review-docs/$CI_COMMIT_REF_SLUG
     action: stop
   script:
-    - ./trigger-build-docs cleanup
+    - ./trigger-build docs cleanup
 
 danger-review:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
