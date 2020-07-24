@@ -9,7 +9,7 @@ RSpec.shared_context 'object storage config' do
       dependency_proxy: { bucket: 'dependency_proxy' },
       external_diffs: { bucket: 'external_diffs' },
       packages: { bucket: 'packages' },
-      terraform_state: { enabled: false, bucket: 'terraform_state' },
+      terraform_state: { enabled: false, bucket: 'terraform' },
       uploads: { bucket: 'uploads' }
     }
   end

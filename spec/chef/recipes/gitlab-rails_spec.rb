@@ -699,7 +699,7 @@ describe 'gitlab::gitlab-rails' do
           hash_including(
             'terraform_state_storage_path' => '/var/opt/gitlab/gitlab-rails/shared/terraform_state',
             'terraform_state_object_store_enabled' => false,
-            'terraform_state_object_store_remote_directory' => 'terraform_state'
+            'terraform_state_object_store_remote_directory' => 'terraform'
           )
         )
       end
