@@ -18,6 +18,7 @@ describe 'enabling letsencrypt' do
     it 'false' do
       allow(LetsEncrypt).to receive(:should_auto_enable?).and_return(false)
 
+      expect(chef_run).to include_recipe('letsencrypt::disable')
       expect(chef_run).not_to include_recipe('letsencrypt::enable')
     end
   end
@@ -150,7 +151,8 @@ server {
           allow_any_instance_of(PgHelper).to receive(:is_standby?).and_return false
         end
 
-        it 'does not enable crond' do
+        it 'disables crond' do
+          expect(chef_run).to include_recipe('crond::disable')
           expect(chef_run).not_to include_recipe('crond::enable')
         end
 
