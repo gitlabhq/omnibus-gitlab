@@ -27,7 +27,7 @@ module Build
       end
 
       def self.get_params(image: nil)
-        qa_image = image || "registry.gitlab.com/#{Build::Info::OMNIBUS_PROJECT_MIRROR_PATH}/gitlab-ee-qa:omnibus-#{Gitlab::Util.get_env('CI_COMMIT_SHA')}"
+        qa_image = image || "registry.gitlab.com/#{Build::Info::OMNIBUS_PROJECT_MIRROR_PATH}/gitlab-ee-qa:#{Build::Info.docker_tag}"
         {
           'ref' => 'master',
           'token' => Gitlab::Util.get_env('HA_VALIDATE_TOKEN'),
