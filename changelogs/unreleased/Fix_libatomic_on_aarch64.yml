@@ -1,0 +1,5 @@
+---
+title: libatomic is required on both armhf and aarch64
+merge_request:
+author:
+type: fixed
