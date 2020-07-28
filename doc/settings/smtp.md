@@ -961,6 +961,22 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['gitlab_email_from'] = "gitlab@<your-top-level-domain>"
 ```
 
+### Mail-in-a-Box
+
+```ruby
+gitlab_rails['gitlab_email_enabled'] = true
+gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
+
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = 'box.example.com'
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username@example.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "<your-gitlab-domain>"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
