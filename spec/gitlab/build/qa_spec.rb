@@ -20,7 +20,8 @@ describe Build::QA do
   describe '.clone_gitlab_rails' do
     it 'calls the git command' do
       allow(Build::Info).to receive(:package).and_return("gitlab-ee")
-      allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("false")
+      allow(::Gitlab::Version).to receive(:sources_channel).and_return('remote')
+
       expect(described_class).to receive(:system).with(*%w[rm -rf /tmp/gitlab])
       expect(described_class).to receive(:system).with(*%w[git clone git@dev.gitlab.org:gitlab/gitlab-ee.git /tmp/gitlab])
 
@@ -34,6 +35,7 @@ describe Build::QA do
       allow(Build::Info).to receive(:gitlab_version).and_return("9.0.0")
       allow(Build::Check).to receive(:on_tag?).and_return(true)
       stub_is_auto_deploy(false)
+
       expect(described_class).to receive(:system).with(*%w[git --git-dir=/tmp/gitlab/.git --work-tree=/tmp/gitlab checkout --quiet v9.0.0])
 
       Build::QA.checkout_gitlab_rails
