@@ -1484,7 +1484,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_pages['gitlab_client_jwt_expiry'] = "30s"
 
 ##! Domain configuration source, defaults to disk if set to nil
-# gitlab_pages['domain_config_source] = nil
+# gitlab_pages['domain_config_source'] = nil
 
 ##! Define custom gitlab-pages HTTP headers for the whole instance
 # gitlab_pages['headers'] = []
