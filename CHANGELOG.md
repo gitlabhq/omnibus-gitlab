@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.2.2 (2020-07-29)
+
+### Fixed (1 change)
+
+- Disable crond if LetsEncrypt disabled. !4434
+
+
 ## 13.2.1 (2020-07-23)
 
 ### Fixed (1 change)
