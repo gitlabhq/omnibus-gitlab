@@ -1,5 +1,0 @@
----
-title: Disable crond if LetsEncrypt disabled
-merge_request: 4434
-author:
-type: fixed
