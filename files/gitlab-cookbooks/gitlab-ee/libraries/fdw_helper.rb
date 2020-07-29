@@ -1,4 +1,4 @@
-class FdwHelper # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(GitlabGeoHelper)` at the end of the class definition)
+class FdwHelper
   FOREIGN_SCHEMA = 'gitlab_secondary'.freeze
   DEFAULT_SCHEMA = 'public'.freeze
 

@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-module DefaultRole # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(DefaultRole)` at the end of the class definition)
+module DefaultRole
   class << self
     def load_role
       # Default role is only enabled if no other service role is enabled

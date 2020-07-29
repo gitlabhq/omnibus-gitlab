@@ -71,3 +71,6 @@ Cop/AvoidUsingEnv:
     - docker/**/*
     - lib/gitlab/util.rb
     - spec/gitlab/util_spec.rb
+
+Style/MultilineIfModifier:
+  Enabled: false

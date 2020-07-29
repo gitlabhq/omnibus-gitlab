@@ -1,4 +1,4 @@
-class GitlabGeoHelper # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(GitlabGeoHelper)` at the end of the class definition)
+class GitlabGeoHelper
   REVISION_FILE ||= '/opt/gitlab/embedded/service/gitlab-rails/REVISION'.freeze
 
   attr_reader :node
