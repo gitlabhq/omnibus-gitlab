@@ -6,9 +6,6 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Praefect
 
-NOTE: **Note** Praefect support is EXPERIMENTAL at this time. We do not
-recommend using it in production yet.
-
 Praefect is a manager aiming to maintain replicas for each repository. Praefect
 is in active development. The goal is to achieve a highly available storage cluster,
 but this is not the case yet, so it is recommended to run Praefect on a different node
