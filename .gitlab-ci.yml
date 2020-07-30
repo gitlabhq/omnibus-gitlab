@@ -36,7 +36,11 @@ default:
     - gitlab-org
 
 variables:
-  BUILDER_IMAGE_REGISTRY: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder"
+  # BUILDER_IMAGE_REGISTRY is set to
+  # `dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder` in the project
+  # settings of omnibus-gitlab mirror in dev.gitlab.org so that builds there
+  # will use images from that registry and not depend on GitLab.com
+  BUILDER_IMAGE_REGISTRY: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder"
   PUBLIC_BUILDER_IMAGE_REGISTRY: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder"
   BUILDER_IMAGE_REVISION: "0.0.67"
   # The registry to pull the assets image from
