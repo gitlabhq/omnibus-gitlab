@@ -105,7 +105,7 @@ module Build
         # CE repo - In com it is gitlab-foss, in dev it is gitlabhq
         # EE repo - In com it is gitlab, in dev it is gitlab-ee
 
-        if Gitlab::Util.get_env('ALTERNATIVE_SOURCES').to_s == "true"
+        if Gitlab::Version.alternative_channel?
           domain = "https://gitlab.com/gitlab-org"
           project = package == "gitlab-ce" ? "gitlab-foss" : "gitlab"
         else
