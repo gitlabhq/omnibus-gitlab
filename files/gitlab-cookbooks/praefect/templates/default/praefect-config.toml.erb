@@ -34,7 +34,6 @@ enabled = <%= @failover_enabled %>
 <% if @failover_election_strategy %>
 election_strategy = '<%= @failover_election_strategy %>'
 <% end %>
-read_only_after_failover = <%= @failover_read_only_after_failover %>
 
 [sentry]
 <% if @sentry_dsn %>
