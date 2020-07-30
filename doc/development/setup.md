@@ -57,6 +57,10 @@ up a Build Environment](../build/prepare-build-environment.md).
    For the time being, consider the date of pushing (which is available next
    to the package name in the repository page) to find the latest package version.
 
+   NOTE: **Note:**
+   On Ubuntu Xenial, you may have to install tzdata. This
+   [issue is reported in #4769](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4679).
+
 1. Getting source of Omnibus GitLab
 
    Get the source code of Omnibus GitLab from the [repository on GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab)
