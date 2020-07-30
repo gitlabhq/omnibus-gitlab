@@ -65,7 +65,7 @@ module Build
       end
 
       def docker_tag
-        Info.release_version.tr('+', '-')
+        Gitlab::Util.get_env('IMAGE_TAG') || Info.release_version.tr('+', '-')
       end
 
       def gitlab_version
@@ -190,14 +190,7 @@ module Build
       end
 
       def image_reference
-        if Gitlab::Util.get_env('CI_PROJECT_PATH') == OMNIBUS_PROJECT_MIRROR_PATH && %w[trigger pipeline].include?(Gitlab::Util.get_env('CI_PIPELINE_SOURCE'))
-          "#{Build::GitlabImage.gitlab_registry_image_address}:#{Gitlab::Util.get_env('IMAGE_TAG')}"
-        elsif Build::Check.is_nightly? || Build::Check.on_tag?
-          # We push nightly images to both dockerhub and gitlab registry
-          "#{Build::GitlabImage.gitlab_registry_image_address}:#{Info.docker_tag}"
-        else
-          abort 'unknown pipeline type: only support triggered/nightly/tag pipeline'
-        end
+        "#{Build::GitlabImage.gitlab_registry_image_address}:#{Info.docker_tag}"
       end
 
       def deploy_env

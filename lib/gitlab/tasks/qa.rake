@@ -53,13 +53,13 @@ namespace :qa do
 
     desc "Push triggered version of gitlab-{ce,ee}-qa to the GitLab registry"
     task :triggered do
-      Build::QAImage.tag_and_push_to_gitlab_registry(Gitlab::Util.get_env('IMAGE_TAG'))
+      Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.docker_tag)
     end
   end
 
   desc "Run QA tests"
   task :test do
-    image_address = Build::GitlabImage.gitlab_registry_image_address(tag: Gitlab::Util.get_env('IMAGE_TAG'))
+    image_address = Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info.docker_tag)
     Build::QATrigger.invoke!(image: image_address, post_comment: true).wait!
   end
 

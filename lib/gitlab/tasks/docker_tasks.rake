@@ -56,7 +56,7 @@ namespace :docker do
 
     desc "Push triggered Docker Image to GitLab Registry"
     task :triggered do
-      Build::GitlabImage.tag_and_push_to_gitlab_registry(Gitlab::Util.get_env('IMAGE_TAG'))
+      Build::GitlabImage.tag_and_push_to_gitlab_registry(Build::Info.docker_tag)
     end
   end
 

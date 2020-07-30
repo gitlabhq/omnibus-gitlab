@@ -19,7 +19,6 @@ module Build
         "variables[BUILDER_IMAGE_REGISTRY]" => Gitlab::Util.get_env('BUILDER_IMAGE_REGISTRY'),
         "variables[PUBLIC_BUILDER_IMAGE_REGISTRY]" => Gitlab::Util.get_env('PUBLIC_BUILDER_IMAGE_REGISTRY'),
         "variables[COMPILE_ASSETS]" => Gitlab::Util.get_env('COMPILE_ASSETS'),
-        "variables[IMAGE_TAG]" => Build::Info.docker_tag,
         "variables[ee]" => Gitlab::Util.get_env("ee") || "false",
         "variables[TRIGGERED_USER]" => Gitlab::Util.get_env("TRIGGERED_USER") || Gitlab::Util.get_env("GITLAB_USER_NAME"),
         "variables[TRIGGER_SOURCE]" => Gitlab::Util.get_env('CI_JOB_URL'),

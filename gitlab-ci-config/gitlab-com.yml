@@ -341,12 +341,6 @@ Trigger:gitlab-docker:
   stage: trigger-docker
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
-    # While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
-    # variable, which will be used to tag the final Docker image.
-    # So, if IMAGE_TAG variable is empty, it means the trigger happened from
-    # either CE or EE repository. In that case, we can use the GITLAB_VERSION
-    # variable as IMAGE_TAG.
-    - if [ -z "${IMAGE_TAG}" ]; then export IMAGE_TAG=${GITLAB_VERSION}; fi
     - bundle exec rake docker:build:image
     - bundle exec rake docker:push:triggered
   <<: *com-trigger-only
@@ -363,8 +357,6 @@ Trigger:qa-docker:
   stage: trigger-docker
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
-    # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
-    - if [ -z "$IMAGE_TAG" ]; then export IMAGE_TAG=$GITLAB_VERSION; fi
     - bundle exec rake qa:build
     - bundle exec rake qa:push:triggered
   <<: *com-trigger-only
@@ -376,8 +368,6 @@ Trigger:qa-test:
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
-    # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
-    - if [ -z "$IMAGE_TAG" ]; then export IMAGE_TAG=$GITLAB_VERSION; fi
     - bundle exec rake qa:test
   <<: *com-trigger-only
   dependencies: []

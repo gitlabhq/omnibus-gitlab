@@ -66,6 +66,11 @@ RSpec.describe Build::Info do
     it 'returns package version when regular build' do
       expect(described_class.docker_tag).to eq('12.121.12-ce.1')
     end
+
+    it 'respects IMAGE_TAG if set' do
+      allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return('foobar')
+      expect(described_class.docker_tag).to eq('foobar')
+    end
   end
 
   # Specs for latest_tag and for latest_stable_tag are really useful since we
@@ -205,60 +210,6 @@ RSpec.describe Build::Info do
       allow(ENV).to receive(:[]).with('CI_COMMIT_TAG').and_return('xyz')
 
       expect { described_class.major_minor_version_and_rails_ref }.to raise_error(RuntimeError, /Invalid auto-deploy version 'xyz'/)
-    end
-  end
-
-  describe '.image_reference' do
-    before do
-      allow(ENV).to receive(:[]).and_call_original
-      allow(ENV).to receive(:[]).with('IMAGE_TAG').and_return('foo')
-      allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('mock.gitlab.com/omnibus')
-      allow(Build::Info).to receive(:docker_tag).and_return('bar')
-    end
-
-    context 'On a triggered pipeline' do
-      before do
-        allow(ENV).to receive(:[]).with('CI_PROJECT_PATH').and_return('gitlab-org/build/omnibus-gitlab-mirror')
-        allow(ENV).to receive(:[]).with('CI_PIPELINE_SOURCE').and_return('trigger')
-      end
-
-      it 'returns image reference correctly' do
-        expect(described_class.image_reference).to eq("mock.gitlab.com/omnibus:foo")
-      end
-    end
-
-    context 'On a nightly pipeline' do
-      before do
-        allow(Build::Check).to receive(:is_nightly?).and_return(true)
-      end
-
-      it 'returns image reference correctly' do
-        expect(described_class.image_reference).to eq("mock.gitlab.com/omnibus:bar")
-      end
-    end
-
-    context 'On a tag pipeline' do
-      before do
-        allow(Build::Check).to receive(:is_nightly?).and_return(false)
-        allow(Build::Check).to receive(:on_tag?).and_return(true)
-      end
-
-      it 'returns image reference correctly' do
-        expect(described_class.image_reference).to eq("mock.gitlab.com/omnibus:bar")
-      end
-    end
-
-    context 'On a regular pipeline' do
-      before do
-        allow(Build::Check).to receive(:is_nightly?).and_return(false)
-        allow(Build::Check).to receive(:on_tag?).and_return(false)
-      end
-
-      it 'raises error' do
-        expect { described_class.image_reference }
-          .to raise_error(SystemExit,
-                          /unknown pipeline type: only support triggered\/nightly\/tag pipeline/)
-      end
     end
   end
 
