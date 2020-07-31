@@ -89,6 +89,9 @@ exec chpst -e <%= @options[:env_dir] %> \
     <% if node['gitlab']['gitlab-pages']['gitlab_client_jwt_expiry'] %>
     -gitlab-client-jwt-expiry="<%= node['gitlab']['gitlab-pages']['gitlab_client_jwt_expiry'] %>" \
     <% end %>
+    <% if node['gitlab']['gitlab-pages']['domain_config_source'] %>
+    -domain-config-source="<%= node['gitlab']['gitlab-pages']['domain_config_source'] %>" \
+    <% end %>
     <% headers.each do |spec| %>
     -header="<%= spec %>" \
     <% end %>
