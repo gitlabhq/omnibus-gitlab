@@ -397,8 +397,9 @@ The automatic upgrade is skipped in any of the following cases:
 Users can manually upgrade using `gitlab-ctl pg-upgrade`. To upgrade PostgreSQL on installs with HA or Geo, see [Packaged PostgreSQL deployed in an HA/Geo Cluster](#packaged-postgresql-deployed-in-an-hageo-cluster).
 
 NOTE: **Note:**
-The current support for PostgreSQL 12 is limited to single database node installation. [Fault-tolerant PostgreSQL deployments](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html),
-and Geo installations are not supported and [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374) for the future releases.
+PostgreSQL 12 is not supported on Geo deployments and is [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374)
+for the future releases. The [fault-tolerant PostgreSQL 12 deployment](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html)
+is only possible using Patroni. Repmgr is no longer supported for PostgreSQL 12.
 
 #### GitLab 12.8 and later
 
@@ -735,9 +736,10 @@ gitlab_rails['initial_shared_runners_registration_token'] = 'token'
 ### Pin the packaged PostgreSQL version (fresh installs only)
 
 NOTE: **Note:**
-GitLab 13.0 only ships with PostgreSQL 11. PostgreSQL 12 is only available from GitLab 13.3 onward. The current
-support for PostgreSQL 12 is limited to single database node installation. [Fault-tolerant PostgreSQL deployments](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html),
-and Geo installations are not supported and [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374) for the future releases.
+GitLab 13.0 only ships with PostgreSQL 11. PostgreSQL 12 is only available from GitLab 13.3 onward.
+PostgreSQL 12 is not supported on Geo deployments and is [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374)
+for the future releases. The [fault-tolerant PostgreSQL 12 deployment](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html)
+is only possible using Patroni. Repmgr is no longer supported for PostgreSQL 12.
 
 Omnibus GitLab will initialize PostgreSQL with the [default version](../package-information/postgresql_versions.md).
 
