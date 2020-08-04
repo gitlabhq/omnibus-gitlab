@@ -13,7 +13,7 @@ leverage it to build packages.
 ## I have an MR in `gitlab-org/gitlab` project and want a package or Docker image to test it
 
 In the CI pipeline corresponding to your MR, play the `package-and-qa` job in
-the `qa` stage. This will triggre a downstream pipeline in `omnibus-gitlab`'s
+the `qa` stage. This will trigger a downstream pipeline in `omnibus-gitlab`'s
 [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) which
 will get you an Ubuntu 16.04 package and an all-in-one Docker image for testing.
 It will also run trigger a `gitlab-qa` run using these artifacts too.
