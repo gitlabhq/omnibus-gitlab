@@ -28,7 +28,7 @@ module Geo
     def resume
       puts '* Resume replication'.color(:green)
 
-      query = run_query('pg_wal_replay_resume();')
+      query = run_query('SELECT pg_wal_replay_resume();')
       raise PsqlError, "Unable to resume postgres replication #{query.stdout.strip}" if query.error?
 
       task = run_task('geo:replication:resume')
