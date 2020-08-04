@@ -977,6 +977,29 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
+### NIFCLOUD ESS
+
+[SMTP Interface](https://pfs.nifcloud.com/spec/ess/smtp.htm).
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.ess.nifcloud.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "SMTP user name"
+gitlab_rails['smtp_password'] = "SMTP user password"
+gitlab_rails['smtp_domain'] = "smtp.ess.nifcloud.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+
+gitlab_rails['gitlab_email_from'] = 'username@example.com'
+gitlab_rails['gitlab_email_reply_to'] = 'username@example.com'
+```
+
+Check the SMTP user name and SMTP user password from the ESS [dashboard](https://pfs.nifcloud.com/help/ess/dashboard.htm).
+`gitlab_email_from` and `gitlab_email_reply_to` must be ESS authenticated sender email addresses.
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
