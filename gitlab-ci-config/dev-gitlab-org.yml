@@ -477,7 +477,7 @@ dependency_scanning:
   before_script: []
   script:
     - manifest=version-manifest.json
-    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/master/gitlab-depscan.sh|bash -s $manifest
+    - curl -sSL https://gitlab.com/gitlab-org/security-products/gitlab-depscan/raw/cae7e018a8c18582502f60c9d24e66b3c79b45ed/gitlab-depscan.sh|bash -s $manifest
   <<: *dev-except-branches
   <<: *except-auto-deploy-tag
   needs:
