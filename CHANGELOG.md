@@ -5,7 +5,7 @@ omnibus-gitlab repository.
 
 ## 13.0.11 (2020-08-05)
 
-- No changes.
+This version has been skipped due to packaging problems.
 
 ## 13.0.10 (2020-07-09)
 
