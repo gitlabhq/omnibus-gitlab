@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.2.3 (2020-08-05)
+
+- No changes.
+
 ## 13.2.2 (2020-07-29)
 
 ### Fixed (1 change)
@@ -69,6 +73,10 @@ omnibus-gitlab repository.
 - Update libjpeg-turbo/libjpeg-turbo from 2.0.4 to 2.0.5.
 - Update Mattermost to 5.24.2.
 
+
+## 13.1.6 (2020-08-05)
+
+- No changes.
 
 ## 13.1.5 (2020-07-23)
 
@@ -142,6 +150,14 @@ omnibus-gitlab repository.
 - Use latest Ubuntu AMI as base for our AMIs. !4308
 - Update Mattermost to 5.23.1.
 
+
+## 13.0.12 (2020-08-05)
+
+- No changes.
+
+## 13.0.11 (2020-08-05)
+
+This version has been skipped due to packaging problems.
 
 ## 13.0.10 (2020-07-09)
 
