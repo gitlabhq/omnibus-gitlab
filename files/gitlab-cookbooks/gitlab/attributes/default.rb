@@ -121,6 +121,7 @@ default['gitlab']['gitlab-rails']['pipeline_schedule_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_check_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['admin_email_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['personal_access_tokens_expiring_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['personal_access_tokens_expired_notification_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ci_archive_traces_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['pages_domain_verification_cron_worker'] = nil

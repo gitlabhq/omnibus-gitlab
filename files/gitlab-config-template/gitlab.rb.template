@@ -135,6 +135,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['repository_check_worker_cron'] = "20 * * * *"
 # gitlab_rails['admin_email_worker_cron'] = "0 0 * * 0"
 # gitlab_rails['personal_access_tokens_expiring_worker_cron'] = "0 1 * * *"
+# gitlab_rails['personal_access_tokens_expired_notification_worker_cron'] = "0 2 * * *"
 # gitlab_rails['repository_archive_cache_worker_cron'] = "0 * * * *"
 # gitlab_rails['pages_domain_verification_cron_worker'] = "*/15 * * * *"
 # gitlab_rails['pages_domain_ssl_renewal_cron_worker'] = "*/10 * * * *"
