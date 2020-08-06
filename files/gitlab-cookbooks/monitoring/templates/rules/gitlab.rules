@@ -332,15 +332,7 @@ groups:
   - record: gitlab_sli:gitlab_component_saturation:ratio
     labels:
       component: 'memory'
-    expr: >
-      max (
-       1 -
-       (
-         node_memory_MemAvailable_bytes or
-         (node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes)
-       ) /
-       node_memory_MemTotal_bytes
-      )
+    expr: max (instance:node_memory_utilization:ratio)
 
   - record: gitlab_sli:gitlab_component_saturation:ratio
     labels:
@@ -494,6 +486,10 @@ groups:
     expr: max (instance:node_cpus:count) by (instance)
   - record: gitlab_usage_ping:node_memory_total_bytes:max
     expr: max (node_memory_MemTotal_bytes) by (instance)
+  - record: gitlab_usage_ping:node_cpu_utilization:avg
+    expr: avg (instance:node_cpu_utilization:ratio) by (instance)
+  - record: gitlab_usage_ping:node_memory_utilization:avg
+    expr: avg (instance:node_memory_utilization:ratio) by (instance)
   ### 
   # Service level metrics
   #
