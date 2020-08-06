@@ -808,12 +808,6 @@ On each **secondary**, ensure the FDW tables are up-to-date.
 1. Wait for the **primary** migrations to replicate. You can find "Data
    replication lag" for each node listed on `Admin Area > Geo`.
 
-1. Refresh Foreign Data Wrapper tables
-
-   ```shell
-   sudo gitlab-rake geo:db:refresh_foreign_tables
-   ```
-
 After updating all nodes (both **primary** and all **secondaries**), check their status:
 
 - Verify Geo configuration and dependencies
@@ -1093,14 +1087,7 @@ sudo gitlab-ctl restart geo-logcursor
 1. Wait for the **primary** migrations to finish.
 
 1. Wait for the **primary** migrations to replicate. You can find "Data
-   replication lag" for each node listed on `Admin Area > Geo`. These wait steps
-   help ensure the FDW tables are up-to-date.
-
-1. Refresh Foreign Data Wrapper tables
-
-   ```shell
-   sudo gitlab-rake geo:db:refresh_foreign_tables
-   ```
+   replication lag" for each node listed on `Admin Area > Geo`.
 
 1. Verify Geo configuration and dependencies
 

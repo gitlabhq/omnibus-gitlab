@@ -1,0 +1,5 @@
+---
+title: Does not refresh the foreign tables on the Geo secondary server
+merge_request: 4475
+author:
+type: removed

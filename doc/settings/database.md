@@ -978,14 +978,6 @@ replication user's password.
    `pg_hba.conf` file. This is needed because `replicate-geo-database`
    replicates the primary's file to the secondary.
 
-1. Refresh the foreign tables on the Geo secondary server by running this
-   command on an application node (any node running `puma`/`unicorn`, `sidekiq`, or
-   `geo-logcursor`).
-
-   ```shell
-   sudo gitlab-rake geo:db:refresh_foreign_tables
-   ```
-
 1. Restart `puma` (or `unicorn`), `sidekiq`, and `geo-logcursor`.
 
    ```shell
