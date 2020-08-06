@@ -22,4 +22,4 @@ Information on how to verify GitLab package signatures can be found in [Package 
 
 ## GPG Signature Management
 
-Information on how GitLab manages GPG keys for package signing can be found in [the runbooks](https://gitlab.com/gitlab-com/runbooks/blob/master/howto/manage-package-signing-keys.md).
+Information on how GitLab manages GPG keys for package signing can be found in [the runbooks](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/packaging/manage-package-signing-keys.md).
