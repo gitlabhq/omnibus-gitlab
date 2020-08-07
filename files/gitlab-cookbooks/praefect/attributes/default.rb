@@ -1,7 +1,7 @@
 default['praefect']['enable'] = false
 default['praefect']['failover_enabled'] = false
 default['praefect']['failover_election_strategy'] = 'sql'
-default['praefect']['failover_read_only_after_failover'] = true
+default['praefect']['failover_read_only_after_failover'] = nil
 default['praefect']['auth_token'] = nil
 default['praefect']['auth_transitioning'] = false
 default['praefect']['dir'] = "/var/opt/gitlab/praefect"

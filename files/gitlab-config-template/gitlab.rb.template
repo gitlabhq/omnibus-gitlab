@@ -1945,7 +1945,6 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # praefect['virtual_storage_name'] = "praefect"
 # praefect['failover_enabled'] = false
 # praefect['failover_election_strategy'] = 'sql'
-# praefect['failover_read_only_after_failover'] = true
 # praefect['auth_token'] = ""
 # praefect['auth_transitioning'] = false
 # praefect['listen_addr'] = "localhost:2305"
