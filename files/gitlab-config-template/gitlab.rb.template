@@ -2,8 +2,11 @@
 ##! This file is generated during initial installation and **is not** modified
 ##! during upgrades.
 ##! Check out the latest version of this file to know about the different
-##! settings that can be configured by this file, which may be found at:
-##! https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/files/gitlab-config-template/gitlab.rb.template
+##! settings that can be configured, when they were introduced and why:
+##! https://gitlab.com/gitlab-org/omnibus-gitlab/blame/master/files/gitlab-config-template/gitlab.rb.template
+
+##! Locally, the complete template corresponding to the installed version can be found at:
+##! /opt/gitlab/etc/gitlab.rb.template
 
 ##! You can run `gitlab-ctl diff-config` to compare the contents of the current gitlab.rb with
 ##! the gitlab.rb.template from the currently running version.
