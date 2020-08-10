@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # GitLab 13 specific changes
 
-NOTE: **Note**
+NOTE: **Note:**
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
 ## Puma becoming default web server instead of Unicorn

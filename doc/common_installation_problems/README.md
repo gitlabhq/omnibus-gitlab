@@ -111,19 +111,18 @@ Try [specifying](../settings/configuration.md#configuring-the-external-url-for-g
 `/etc/gitlab/gitlab.rb`. Also check your firewall settings; port 80 (HTTP) or
 443 (HTTPS) might be closed on your GitLab server.
 
-> **Note:**
-> Specifying the `external_url` for GitLab, or any other bundled service
-> (Registry and Mattermost) doesn't follow the `key=value` format that other
-> parts of `gitlab.rb` follow. Make sure that you have them set in the following
-> format:
->
-> ```ruby
-> external_url "https://gitlab.example.com"
-> registry_external_url "https://registry.example.com"
-> mattermost_external_url "https://mattermost.example.com"
-> ```
->
-> **Don't add the equal sign (`=`) between `external_url` and the value.**
+Note that specifying the `external_url` for GitLab, or any other bundled service (Registry and
+Mattermost) doesn't follow the `key=value` format that other parts of `gitlab.rb` follow. Make sure
+that you have them set in the following format:
+
+```ruby
+external_url "https://gitlab.example.com"
+registry_external_url "https://registry.example.com"
+mattermost_external_url "https://mattermost.example.com"
+```
+
+NOTE: **Note:**
+Don't add the equal sign (`=`) between `external_url` and the value.
 
 ## Emails are not being delivered
 
