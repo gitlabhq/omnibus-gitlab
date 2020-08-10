@@ -67,4 +67,5 @@ Note that if you are using NFS (Network File System), files will be carried
 over a network which will require, based on implementation, ports `111` and
 `2049` to be open.
 
-NOTE: **Note:** In some cases, the GitLab Registry will be automatically enabled by default. Please see [our documentation](https://docs.gitlab.com/ee/administration/packages/container_registry.html) for more details
+NOTE: **Note:**
+In some cases, the GitLab Registry will be automatically enabled by default. Please see [our documentation](https://docs.gitlab.com/ee/administration/packages/container_registry.html) for more details

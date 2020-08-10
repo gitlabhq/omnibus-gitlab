@@ -49,20 +49,24 @@ registry['env'] = {
 }
 ```
 
-NOTE: **Note:** The `no_proxy` entry for Gitaly is needed in GitLab 11.6
+NOTE: **Note:**
+The `no_proxy` entry for Gitaly is needed in GitLab 11.6
 and newer if a proxy is defined and Gitaly is listening on a UNIX
 socket, which it is by default. It appears to be a limitation in the
 gRPC client library. See [the Gitaly
 issue](https://gitlab.com/gitlab-org/gitaly/-/issues/1447) for more
 details.
 
-NOTE: **Note:** GitLab 11.6 and newer will attempt to use HTTP Basic
+NOTE: **Note:**
+GitLab 11.6 and newer will attempt to use HTTP Basic
 Authentication when a username and password is included in the proxy
 URL. Older GitLab versions will omit the authentication details.
 
-NOTE: **Note:** Proxy settings use the `.` syntax for globing.
+NOTE: **Note:**
+Proxy settings use the `.` syntax for globing.
 
-NOTE: **Note:** Proxy URL values should generally be `http://` only, unless
+NOTE: **Note:**
+Proxy URL values should generally be `http://` only, unless
 your proxy has its own SSL certificate and SSL enabled. This means, even for
 the `https_proxy` value, you should usually specify a value as
 `http://USERNAME:PASSWORD@example.com:8080`.
@@ -72,7 +76,8 @@ the `https_proxy` value, you should usually specify a value as
 Any change made to the environment variables **requires a hard restart** after
 reconfigure for it to take effect.
 
-NOTE: **Note**: During a hard restart, your GitLab instance will be down until the
+NOTE: **Note:**
+During a hard restart, your GitLab instance will be down until the
 services are back up.
 
 For configurations where Puma is enabled, only a reconfigure is necessary since

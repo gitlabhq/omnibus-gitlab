@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # GitLab 12 specific changes
 
-NOTE: **Note**
+NOTE: **Note:**
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
 ## Prometheus 1.x Removal
@@ -143,7 +143,7 @@ to make sure your web server settings carry over correctly.
 
 ### 12.10
 
-NOTE: **NOTE:**
+NOTE: **Note:**
 PostgreSQL 9.6 and PostgreSQL 10 will be removed from the Omnibus package in the next release: GitLab 13.0. The minimum
 supported PostgreSQL version will be 11. In order to upgrade to GitLab 13.0, you will need to be upgrading from 12.10, and
 already using a PostgreSQL 11 database. For more information, please see which [PostgreSQL versions are shipped with an Omnibus install](../package-information/postgresql_versions.md).

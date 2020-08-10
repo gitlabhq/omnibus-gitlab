@@ -69,10 +69,10 @@ sudo touch /etc/gitlab/skip-auto-backup
 NOTE: **Note:**
 For safety reasons, you should maintain an up-to-date backup on your own if you plan to use this flag.
 
-NOTE: **Note**
+NOTE: **Note:**
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
-NOTE: **Note**
+NOTE: **Note:**
 Unless you are following the steps in [Zero downtime updates](#zero-downtime-updates), your GitLab application will not be available to users while an update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.
 
 ### Update using the official repositories
@@ -304,7 +304,7 @@ Before following these instructions, note the following **important** informatio
      sudo yum install gitlab-ee
      ```
 
-   NOTE: **Note**
+   NOTE: **Note:**
    The above commands use the latest version of GitLab. Use a version-specific package
    to update to an older version.
 

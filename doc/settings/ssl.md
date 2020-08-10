@@ -34,7 +34,8 @@ GitLab can be integrated with [Let's Encrypt](https://letsencrypt.org).
 > - Enabled by default in GitLab 10.7 and later if `external_url` is set with
 >   the *https* protocol and no certificates are configured.
 
-NOTE: **Note**: In order for Let's Encrypt verification to work correctly, ports 80 and 443 will
+NOTE: **Note:**
+In order for Let's Encrypt verification to work correctly, ports 80 and 443 will
 need to be accessible to the Let's Encrypt servers that run the validation. Also note that the validation
 currently [does not work with non-standard ports](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3580).
 
@@ -51,7 +52,7 @@ external_url "https://gitlab.example.com"         # Must use https protocol
 letsencrypt['contact_emails'] = ['foo@email.com'] # Optional
 ```
 
-TIP: **Maintenance Tip**
+TIP: **Tip:**
 Certificates issued by **Let's Encrypt** expire every ninety days. The optional `contact_emails`
 setting causes an expiration alert to be sent to the configured address when that expiration date approaches.
 
@@ -68,7 +69,7 @@ mattermost_external_url "https://mattermost.example.com" # mattermost, must use 
 #registry_nginx['ssl_certificate'] = "path/to/cert"      # Must be absent or commented out
 ```
 
-NOTE: **Under the Hood**
+NOTE: **Note:**
 The **Let's Encrypt** certificate is created with the GitLab primary
 instance as the primary name on the certificate. Additional services
 such as the registry are added as alternate names to the same
@@ -122,7 +123,7 @@ If you plan to use your own **Let's Encrypt** certificate you must set `letsencr
 in `/etc/gitlab/gitlab.rb` to disable integration. **Otherwise the certificate
 could be overwritten due to the renewal.**
 
-TIP: **Tip**
+TIP: **Tip:**
 The above commands require root privileges and only generate a renewal if the certificate is close to expiration.
 [Consider the upstream rate limits](https://letsencrypt.org/docs/rate-limits/) if encountering an error during renewal.
 
@@ -142,10 +143,10 @@ certificate authenticity.
 Omnibus GitLab supports connections to external services with
 self-signed certificates.
 
-NOTE: **Compatibility Note**
+NOTE: **Note:**
 Custom certificates were introduced in GitLab 8.9.
 
-TIP: **Further Reading**
+TIP: **Tip:**
 For installations that use self-signed certificates, Omnibus-GitLab
 provides a way to manage these certificates. For more technical details how
 this works, see the [details](#details-on-how-gitlab-and-ssl-work)
@@ -179,11 +180,11 @@ this OpenSSL version.
 
 - Perform a test connection to the host over HTTPS. Replace `HOSTNAME` with your GitLab URL
   (excluding HTTPS), and replace `port` with the port that serves HTTPS connections (usually 443):
-  
+
   ```shell
   echo | /opt/gitlab/embedded/bin/openssl s_client -connect HOSTNAME:port
-  ```  
-  
+  ```
+
   The `echo` command sends a null request to the server, causing it to close the connection rather
   than wait for additional input. You can use the same command to test remote hosts (for example, a
   server hosting an external repository), by replacing `HOSTNAME:port` with the remote host's domain
@@ -266,7 +267,7 @@ ERROR: Not a certificate: /opt/gitlab/embedded/ssl/certs/FILE. Move it from /opt
 
 Check `/opt/gitlab/embedded/ssl/certs` and remove any files other than `README.md` that aren't valid X.509 certificates.
 
-NOTE: **Under the Hood**
+NOTE: **Note:**
 Running `gitlab-ctl reconfigure` constructs symlinks named from the subject hashes
 of your custom public certificates and places them in `/opt/gitlab/embedded/ssl/certs/`.
 Broken symlinks in `/opt/gitlab/embedded/ssl/certs/` will be automatically removed.

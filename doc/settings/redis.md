@@ -46,10 +46,10 @@ issues) for use with GitLab you can do so using Omnibus GitLab.
 
 ### Setting up the Redis Node
 
-> **Note:** Redis does not require authentication by default. See
-> [Redis Security](https://redis.io/topics/security) documentation for more
-> information. We recommend using a combination of a Redis password and tight
-> firewall rules to secure your Redis service.
+NOTE: **Note:**
+Redis does not require authentication by default. See [Redis Security](https://redis.io/topics/security)
+documentation for more information. We recommend using a combination of a Redis password and tight
+firewall rules to secure your Redis service.
 
 1. Download/install Omnibus GitLab using **steps 1 and 2** from
    [GitLab downloads](https://about.gitlab.com/install/). Do not complete other
@@ -72,9 +72,10 @@ issues) for use with GitLab you can do so using Omnibus GitLab.
    gitlab_rails['auto_migrate'] = false
    ```
 
-   > **Note:** The `redis_master_role['enable']` option is only available as of
-   > GitLab 8.14, see [`gitlab_rails.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/gitlab_rails.rb)
-   > to understand which services are automatically disabled via that option.
+   NOTE: **Note:**
+   The `redis_master_role['enable']` option is only available as of GitLab 8.14, see
+   [`gitlab_rails.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/gitlab_rails.rb)
+   to understand which services are automatically disabled via that option.
 
 1. Run `sudo gitlab-ctl reconfigure` to install and configure Redis.
 
