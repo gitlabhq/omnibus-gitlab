@@ -46,7 +46,7 @@ RSpec.describe 'praefect' do
         'prometheus_listen_addr' => 'localhost:9652',
         'sentry' => {},
         'database' => {},
-        'failover' => { 'enabled' => false,
+        'failover' => { 'enabled' => true,
                         'election_strategy' => 'sql' }
       }
 
@@ -56,7 +56,7 @@ RSpec.describe 'praefect' do
       expect(chef_run).not_to render_file(config_path)
       .with_content(%r{\[prometheus\]\s+grpc_latency_buckets =})
       expect(chef_run).to render_file(config_path)
-      .with_content(%r{\[failover\]\s+enabled = false\s+election_strategy = 'sql'})
+      .with_content(%r{\[failover\]\s+enabled = true\s+election_strategy = 'sql'})
     end
 
     it 'renders the env dir files' do
