@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'geo/promotion_preflight_checks'
 require 'gitlab_ctl/util'
 
-describe Geo::PromotionPreflightChecks, '#execute' do
+RSpec.describe Geo::PromotionPreflightChecks, '#execute' do
   let(:confirmation) { 'y' }
   let(:options) { { confirm_primary_is_down: true } }
 

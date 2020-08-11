@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
 
 require 'gitlab_ctl'
 
-describe GitlabCtl::PgUpgrade do
+RSpec.describe GitlabCtl::PgUpgrade do
   before do
     @fake_default_dir = '/fake/data/postgresql/data'
     allow(GitlabCtl::Util).to receive(:get_command_output).with(

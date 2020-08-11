@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe PgbouncerHelper do
+RSpec.describe PgbouncerHelper do
   cached(:chef_run) { converge_config }
   let(:node) { chef_run.node }
   subject { described_class.new(node) }

@@ -1,5 +1,5 @@
 require 'chef_helper'
-describe 'praefect' do
+RSpec.describe 'praefect' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab::default') }
   let(:prometheus_grpc_latency_buckets) do
     '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]'

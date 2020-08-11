@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab-ee::geo' do
+RSpec.describe 'gitlab-ee::geo' do
   let(:node) { chef_run.node }
 
   before do

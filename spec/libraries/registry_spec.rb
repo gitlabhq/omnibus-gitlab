@@ -1,7 +1,7 @@
 require 'chef_helper'
 require_relative '../../files/gitlab-cookbooks/gitlab/libraries/registry'
 
-describe Registry do
+RSpec.describe Registry do
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end

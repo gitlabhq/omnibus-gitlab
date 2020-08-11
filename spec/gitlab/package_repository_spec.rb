@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'gitlab/package_repository'
 require 'gitlab/util'
 
-describe PackageRepository do
+RSpec.describe PackageRepository do
   let(:repo) { PackageRepository.new }
 
   before do

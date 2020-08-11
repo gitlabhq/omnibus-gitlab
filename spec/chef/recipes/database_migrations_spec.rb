@@ -6,7 +6,7 @@ require 'chef_helper'
 # to the bash block.
 #
 
-describe 'gitlab::database-migrations' do
+RSpec.describe 'gitlab::database-migrations' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
   before do

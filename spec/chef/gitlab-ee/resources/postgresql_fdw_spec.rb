@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'postgresql_fdw' do
+RSpec.describe 'postgresql_fdw' do
   let(:runner) do
     ChefSpec::SoloRunner.new(step_into: %w(postgresql_fdw))
   end

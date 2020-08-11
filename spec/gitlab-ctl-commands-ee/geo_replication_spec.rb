@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'omnibus-ctl'
 
-describe 'gitlab-ctl geo-replication' do
+RSpec.describe 'gitlab-ctl geo-replication' do
   let(:toggle_command) { double(Geo::ReplicationToggleCommand) }
 
   subject { Omnibus::Ctl.new('testing-ctl') }

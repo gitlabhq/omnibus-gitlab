@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'registry recipe' do
+RSpec.describe 'registry recipe' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
 
   before do
@@ -177,7 +177,7 @@ describe 'registry recipe' do
   end
 end
 
-describe 'registry' do
+RSpec.describe 'registry' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {
@@ -447,7 +447,7 @@ describe 'registry' do
   end
 end
 
-describe 'auto enabling registry' do
+RSpec.describe 'auto enabling registry' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:registry_config) { '/var/opt/gitlab/registry/config.yml' }
   let(:nginx_config) { '/var/opt/gitlab/nginx/conf/gitlab-registry.conf' }

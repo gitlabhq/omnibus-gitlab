@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab-ee::geo-secondary' do
+RSpec.describe 'gitlab-ee::geo-secondary' do
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end

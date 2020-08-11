@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
 
 require 'gitlab_ctl'
 
-describe GitlabCtl::Util do
+RSpec.describe GitlabCtl::Util do
   context 'when there is no TTY available' do
     before do
       allow(STDIN).to receive(:tty?).and_return(false)

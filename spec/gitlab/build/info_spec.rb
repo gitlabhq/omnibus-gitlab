@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'gitlab/build/info'
 require 'gitlab/build/gitlab_image'
 
-describe Build::Info do
+RSpec.describe Build::Info do
   before do
     allow(ENV).to receive(:[]).and_call_original
   end

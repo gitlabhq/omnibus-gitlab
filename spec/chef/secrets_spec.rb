@@ -1,7 +1,7 @@
 require 'chef_helper'
 require 'base64'
 
-describe 'secrets' do
+RSpec.describe 'secrets' do
   let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
 
   HEX_KEY = /\h{128}/.freeze

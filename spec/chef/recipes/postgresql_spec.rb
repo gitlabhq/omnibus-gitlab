@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'postgresql 9.2' do
+RSpec.describe 'postgresql 9.2' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config)).converge('gitlab::default') }
   let(:postgresql_data_dir) { '/var/opt/gitlab/postgresql/data' }
   let(:postgresql_ssl_cert) { File.join(postgresql_data_dir, 'server.crt') }
@@ -319,7 +319,7 @@ psql_port='5432'
   end
 end
 
-describe 'postgresql 9.6' do
+RSpec.describe 'postgresql 9.6' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config database_objects)).converge('gitlab::default') }
   let(:postgresql_conf) { '/var/opt/gitlab/postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
@@ -795,7 +795,7 @@ describe 'postgresql 9.6' do
   end
 end
 
-describe 'postgresql::bin' do
+RSpec.describe 'postgresql::bin' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
   before do
@@ -885,7 +885,7 @@ describe 'postgresql::bin' do
   end
 end
 
-describe 'postgresql dir and homedir' do
+RSpec.describe 'postgresql dir and homedir' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config)).converge('gitlab::default') }
 
   before do

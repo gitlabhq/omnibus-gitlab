@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitaly' do
+RSpec.describe 'gitaly' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:config_path) { '/var/opt/gitlab/gitaly/config.toml' }
   let(:gitaly_config) { chef_run.template(config_path) }
@@ -454,7 +454,7 @@ describe 'gitaly' do
   end
 end
 
-describe 'gitaly::git_data_dirs' do
+RSpec.describe 'gitaly::git_data_dirs' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
   before do

@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::sidekiq' do
+RSpec.describe 'gitlab::sidekiq' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       step_into: %w(sidekiq_service runit_service),

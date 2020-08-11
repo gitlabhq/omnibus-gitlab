@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'consul' do
+RSpec.describe 'consul' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
   let(:consul_conf) { '/var/opt/gitlab/consul/config.json' }
 

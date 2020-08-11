@@ -6,7 +6,7 @@ $LOAD_PATH << './files/gitlab-ctl-commands/lib'
 require 'geo/replication'
 require 'gitlab_ctl/util'
 
-describe Geo::Replication, '#execute' do
+RSpec.describe Geo::Replication, '#execute' do
   let(:command) { spy('command spy', error?: false) }
   let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: '/var/opt/gitlab/postgresql/data') }
   let(:file) { spy('file spy') }

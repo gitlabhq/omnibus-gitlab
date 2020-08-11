@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands-ee/lib')
 
 require 'repmgr'
 
-describe RepmgrHandler do
+RSpec.describe RepmgrHandler do
   let(:repmgr_base_cmd) { '/opt/gitlab/embedded/bin/repmgr  -f /var/opt/gitlab/postgresql/repmgr.conf' }
   let(:public_attributes) { { 'postgresql' => { 'dir' => '/var/opt/gitlab/postgresql' } } }
   let(:shellout) do

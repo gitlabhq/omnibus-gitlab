@@ -8,7 +8,7 @@ RSpec::Matchers.define :configure_gitlab_yml_using do |expected_variables|
   end
 end
 
-describe 'gitlab::gitlab-rails' do
+RSpec.describe 'gitlab::gitlab-rails' do
   using RSpec::Parameterized::TableSyntax
 
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }

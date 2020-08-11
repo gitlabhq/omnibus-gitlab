@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'postgresql_schema' do
+RSpec.describe 'postgresql_schema' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(postgresql_schema)) }
 
   context 'create' do
