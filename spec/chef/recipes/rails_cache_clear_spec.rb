@@ -5,7 +5,7 @@ require 'chef_helper'
 # We just test if we use proper command and that we can change default
 # attribute value with gilab.rb setting.
 
-describe 'gitlab::rails-cache-clear' do
+RSpec.describe 'gitlab::rails-cache-clear' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
   before do

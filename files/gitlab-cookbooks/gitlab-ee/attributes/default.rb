@@ -44,7 +44,6 @@ default['gitlab']['geo-secondary']['db_adapter'] = "postgresql"
 default['gitlab']['geo-secondary']['db_encoding'] = "unicode"
 default['gitlab']['geo-secondary']['db_collation'] = nil
 default['gitlab']['geo-secondary']['db_database'] = "gitlabhq_geo_production"
-default['gitlab']['geo-secondary']['db_pool'] = 1
 default['gitlab']['geo-secondary']['db_username'] = "gitlab_geo"
 default['gitlab']['geo-secondary']['db_password'] = nil
 default['gitlab']['geo-secondary']['db_load_balancing'] = { 'hosts' => [] }

@@ -9,7 +9,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 Development of Omnibus GitLab maybe done using an existing package available
 from [Downloads page](https://about.gitlab.com/install/). To know how to setup
 a build environment to build these packages and use them, please read [Setting
-up a Build Environment](../build/prepare-build-environment.md).
+up a Build Environment](../build/build_package.md#preparing-a-build-environment)
 
 1. Set up a container
 
@@ -56,6 +56,10 @@ up a Build Environment](../build/prepare-build-environment.md).
    confusion. This [issue is reported in #864](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/864).
    For the time being, consider the date of pushing (which is available next
    to the package name in the repository page) to find the latest package version.
+
+   NOTE: **Note:**
+   On Ubuntu Xenial, you may have to install tzdata. This
+   [issue is reported in #4769](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4679).
 
 1. Getting source of Omnibus GitLab
 

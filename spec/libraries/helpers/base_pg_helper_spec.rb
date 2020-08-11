@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe BasePgHelper do
+RSpec.describe BasePgHelper do
   cached(:chef_run) { converge_config }
   let(:node) { chef_run.node }
   subject { described_class.new(node) }

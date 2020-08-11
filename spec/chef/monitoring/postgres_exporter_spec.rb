@@ -1,11 +1,11 @@
 require 'chef_helper'
 
-describe 'monitoring::postgres-exporter' do
+RSpec.describe 'monitoring::postgres-exporter' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:node) { chef_run.node }
   let(:default_vars) do
     {
-      'DATA_SOURCE_NAME' => 'user=gitlab-psql host=/var/opt/gitlab/postgresql database=postgres',
+      'DATA_SOURCE_NAME' => 'host=/var/opt/gitlab/postgresql user=gitlab-psql database=gitlabhq_production',
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
     }
   end
@@ -29,6 +29,41 @@ describe 'monitoring::postgres-exporter' do
       stub_gitlab_rb(postgres_exporter: { enable: true })
 
       expect(node['monitoring']['postgres-exporter']['enable']).to eq true
+    end
+
+    it 'uses gitlab-rails db_host for the database host if postgres-exporter is explicitly enabled' do
+      stub_gitlab_rb(
+        postgres_exporter: { enable: true },
+        gitlab_rails: {
+          db_host: '10.0.0.1',
+          db_port: '4242',
+          db_username: 'foo',
+          db_password: 'bar',
+          db_database: 'baz'
+        }
+      )
+
+      expect(node['monitoring']['postgres-exporter']['env']['DATA_SOURCE_NAME'])
+        .to eq "host=10.0.0.1 port=4242 user=foo password=bar database=baz"
+    end
+  end
+
+  context 'when postgres is enabled locally' do
+    before do
+      stub_gitlab_rb(
+        postgresql: { enable: true }
+      )
+    end
+
+    it 'uses the local postgres dir for the database host' do
+      stub_gitlab_rb(
+        postgres_exporter: { enable: true },
+        gitlab_rails: { db_host: '10.0.0.1' },
+        postgresql: { dir: '/dir/to/postgresql' }
+      )
+
+      expect(node['monitoring']['postgres-exporter']['env']['DATA_SOURCE_NAME'])
+        .to eq "host=/dir/to/postgresql user=gitlab-psql database=gitlabhq_production"
     end
   end
 
@@ -137,7 +172,8 @@ describe 'monitoring::postgres-exporter' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/postgres-exporter/env').with_variables(
         default_vars.merge(
           {
-            'DATA_SOURCE_NAME' => 'user=gitlab-psql host=/var/opt/gitlab/postgresql database=postgres sslmode=require',
+            'DATA_SOURCE_NAME' => 'host=/var/opt/gitlab/postgresql user=gitlab-psql '\
+                                  'database=gitlabhq_production sslmode=require',
             'USER_SETTING' => 'asdf1234'
           }
         )

@@ -16,7 +16,7 @@
 
 require 'chef_helper'
 
-describe 'gitlab-ee::pgbouncer_user' do
+RSpec.describe 'gitlab-ee::pgbouncer_user' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
   before do
     allow(Gitlab).to receive(:[]).and_call_original

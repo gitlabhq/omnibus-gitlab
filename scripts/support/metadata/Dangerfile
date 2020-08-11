@@ -1,5 +1,18 @@
 # rubocop:disable Style/SignalException
 
+THROUGHPUT_LABELS = [
+  'Community contribution',
+  'security',
+  'bug',
+  'feature',
+  'feature::addition',
+  'feature::maintenance',
+  'tooling',
+  'tooling::pipelines',
+  'tooling::workflow',
+  'documentation'
+].freeze
+
 fail "Please provide a proper merge request description." if gitlab.mr_body.size < 5
 
 fail "Please add labels to this merge request." if gitlab.mr_labels.empty?
@@ -19,7 +32,6 @@ if gitlab.branch_for_base != "master" && !has_pick_into_stable_label
   warn "Most of the time, all merge requests should target `master`. Otherwise, please set the relevant `Pick into X.Y` label."
 end
 
-THROUGHPUT_LABELS = ['Community contribution', 'security', 'bug', 'feature', 'backstage', 'documentation'].freeze
 if (gitlab.mr_labels & THROUGHPUT_LABELS).empty?
   warn "This merge request is missing any [throughput labels](https://about.gitlab.com/handbook/engineering/management/throughput)."
 end

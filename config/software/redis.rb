@@ -28,8 +28,8 @@ default_version version.print(false)
 
 source git: version.remote
 
-# libatomic is a runtime_dependency of redis for armhf platforms
-if OhaiHelper.os_platform == 'raspbian'
+# libatomic is a runtime_dependency of redis for armhf/aarch64 platforms
+if OhaiHelper.arm?
   whitelist_file "#{install_dir}/embedded/bin/redis-benchmark"
   whitelist_file "#{install_dir}/embedded/bin/redis-check-aof"
   whitelist_file "#{install_dir}/embedded/bin/redis-check-rdb"

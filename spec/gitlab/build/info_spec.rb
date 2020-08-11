@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'gitlab/build/info'
 require 'gitlab/build/gitlab_image'
 
-describe Build::Info do
+RSpec.describe Build::Info do
   before do
     allow(ENV).to receive(:[]).and_call_original
   end
@@ -147,9 +147,9 @@ describe Build::Info do
   end
 
   describe '.gitlab_rails repo' do
-    describe 'ALTERNATIVE_SOURCES variable specified' do
+    describe 'with alternative sources channel selected' do
       before do
-        allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("true")
+        allow(::Gitlab::Version).to receive(:sources_channel).and_return('alternative')
       end
 
       it 'returns public mirror for GitLab CE' do
@@ -162,10 +162,11 @@ describe Build::Info do
       end
     end
 
-    describe 'ALTERNATIVE_SOURCES variable not specified' do
+    describe 'with default sources channel' do
       before do
-        allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("false")
+        allow(::Gitlab::Version).to receive(:sources_channel).and_return('remote')
       end
+
       it 'returns dev repo for GitLab CE' do
         allow(Build::Info).to receive(:package).and_return("gitlab-ce")
         expect(described_class.gitlab_rails_repo).to eq("git@dev.gitlab.org:gitlab/gitlabhq.git")

@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'geo postgresql 9.2' do
+RSpec.describe 'geo postgresql 9.2' do
   let(:postgresql_conf) { '/var/opt/gitlab/geo-postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/geo-postgresql/data/runtime.conf' }
 
@@ -276,7 +276,7 @@ describe 'geo postgresql 9.2' do
   end
 end
 
-describe 'geo postgresql 9.6' do
+RSpec.describe 'geo postgresql 9.6' do
   let(:postgresql_conf) { '/var/opt/gitlab/geo-postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/geo-postgresql/data/runtime.conf' }
 
@@ -589,12 +589,6 @@ describe 'geo postgresql 9.6' do
       expect(chef_run).to create_postgresql_fdw_user_mapping('gitlab_secondary').with(params)
     end
 
-    context 'when secondary database is empty' do
-      it 'does not refreshes foreign table definition' do
-        expect(chef_run).not_to run_execute('refresh foreign table definition')
-      end
-    end
-
     context 'when a custom external FDW user is used' do
       let(:chef_run) do
         stub_gitlab_rb(
@@ -609,7 +603,6 @@ describe 'geo postgresql 9.6' do
           }
         )
 
-        allow_any_instance_of(FdwHelper).to receive(:fdw_can_refresh?).and_return(true)
         ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default')
       end
 
@@ -621,40 +614,6 @@ describe 'geo postgresql 9.6' do
           external_password: 'my-fdw-password'
         }
         expect(chef_run).to create_postgresql_fdw_user_mapping('gitlab_secondary').with(params)
-      end
-    end
-
-    context 'when foreign tables need to be refreshed' do
-      let(:chef_run) do
-        stub_gitlab_rb(
-          geo_postgresql: {
-            enable: true
-          }
-        )
-
-        allow_any_instance_of(FdwHelper).to receive(:fdw_can_refresh?).and_return(true)
-        ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default')
-      end
-
-      it 'refreshes foreign table definition' do
-        expect(chef_run).to run_execute('refresh foreign table definition')
-      end
-    end
-
-    context 'when foreign tables do not need to be refreshed' do
-      let(:chef_run) do
-        stub_gitlab_rb(
-          geo_postgresql: {
-            enable: true
-          }
-        )
-
-        allow_any_instance_of(FdwHelper).to receive(:fdw_can_refresh?).and_return(false)
-        ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default')
-      end
-
-      it 'refreshes foreign table definition' do
-        expect(chef_run).not_to run_execute('refresh foreign table definition')
       end
     end
 

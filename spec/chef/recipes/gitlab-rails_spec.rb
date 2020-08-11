@@ -8,7 +8,7 @@ RSpec::Matchers.define :configure_gitlab_yml_using do |expected_variables|
   end
 end
 
-describe 'gitlab::gitlab-rails' do
+RSpec.describe 'gitlab::gitlab-rails' do
   using RSpec::Parameterized::TableSyntax
 
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
@@ -699,7 +699,7 @@ describe 'gitlab::gitlab-rails' do
           hash_including(
             'terraform_state_storage_path' => '/var/opt/gitlab/gitlab-rails/shared/terraform_state',
             'terraform_state_object_store_enabled' => false,
-            'terraform_state_object_store_remote_directory' => 'terraform_state'
+            'terraform_state_object_store_remote_directory' => 'terraform'
           )
         )
       end
@@ -1420,6 +1420,34 @@ describe 'gitlab::gitlab-rails' do
           expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
             hash_including(
               'personal_access_tokens_expiring_worker_cron' => nil
+            )
+          )
+        end
+      end
+    end
+
+    context 'personal access token expired notification worker settings' do
+      let(:chef_run) do
+        ChefSpec::SoloRunner.new.converge('gitlab-ee::default')
+      end
+
+      context 'when worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { personal_access_tokens_expired_notification_worker_cron: '1 2 3 4 5' })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'personal_access_tokens_expired_notification_worker_cron' => '1 2 3 4 5'
+            )
+          )
+        end
+      end
+
+      context 'when worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'personal_access_tokens_expired_notification_worker_cron' => nil
             )
           )
         end

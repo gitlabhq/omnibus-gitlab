@@ -6,7 +6,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # GitLab Mattermost
 
-NOTE: **Note:** This document applies to GitLab 11.0 and later.
+NOTE: **Note:**
+This document applies to GitLab 11.0 and later.
 
 You can run a [GitLab Mattermost](https://gitlab.com/gitlab-org/gitlab-mattermost)
 service on your GitLab server.

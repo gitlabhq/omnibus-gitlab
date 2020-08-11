@@ -17,11 +17,7 @@
 require_relative 'nginx.rb'
 require_relative '../../gitaly/libraries/gitaly.rb'
 
-module GitlabRails # rubocop:disable Style/MultilineIfModifier
-  # The guard clause at the end of this module is used only to get the tests
-  # running. It prevents reloading of the module during converging, so tests
-  # pass. Hence, disabling the cop.
-
+module GitlabRails
   class << self
     def parse_variables
       parse_database_adapter

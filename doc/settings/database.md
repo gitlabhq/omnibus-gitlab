@@ -317,9 +317,9 @@ To opt out of automatic PostgreSQL upgrade during GitLab package upgrades, run:
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
-If you want to manually upgrade without upgrading GitLab, you can follow these instructions:
+If you want to manually upgrade without upgrading GitLab, you can follow these instructions.
 
-**Note:**
+Take note of the following:
 
 - Please fully read this section before running any commands.
 - Please plan ahead as upgrade involves downtime.
@@ -397,8 +397,9 @@ The automatic upgrade is skipped in any of the following cases:
 Users can manually upgrade using `gitlab-ctl pg-upgrade`. To upgrade PostgreSQL on installs with HA or Geo, see [Packaged PostgreSQL deployed in an HA/Geo Cluster](#packaged-postgresql-deployed-in-an-hageo-cluster).
 
 NOTE: **Note:**
-The current support for PostgreSQL 12 is limited to single database node installation. [Fault-tolerant PostgreSQL deployments](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html),
-and Geo installations are not supported and [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374) for the future releases.
+PostgreSQL 12 is not supported on Geo deployments and is [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374)
+for the future releases. The [fault-tolerant PostgreSQL 12 deployment](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html)
+is only possible using Patroni. Repmgr is no longer supported for PostgreSQL 12.
 
 #### GitLab 12.8 and later
 
@@ -497,7 +498,7 @@ sure that PostgreSQL is set up according to the [database requirements document]
    Don't forget to remove the `#` comment characters at the beginning of these
    lines.
 
-   **Note:**
+   Note that:
 
    - `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
      plain-text passwords.
@@ -527,7 +528,8 @@ instead of the one bundled with GitLab, you can do so by using a UNIX socket:
    gitlab_rails['db_host'] = '/var/run/postgresql/'
    ```
 
-   NOTE: **Note:** `gitlab_rails['db_socket']` is a setting for Mysql and it won't have any effect on PostgreSQL.
+   NOTE: **Note:**
+   `gitlab_rails['db_socket']` is a setting for Mysql and it won't have any effect on PostgreSQL.
 
 1. Reconfigure GitLab for the changes to take effect:
 
@@ -735,9 +737,10 @@ gitlab_rails['initial_shared_runners_registration_token'] = 'token'
 ### Pin the packaged PostgreSQL version (fresh installs only)
 
 NOTE: **Note:**
-GitLab 13.0 only ships with PostgreSQL 11. PostgreSQL 12 is only available from GitLab 13.3 onward. The current
-support for PostgreSQL 12 is limited to single database node installation. [Fault-tolerant PostgreSQL deployments](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html),
-and Geo installations are not supported and [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374) for the future releases.
+GitLab 13.0 only ships with PostgreSQL 11. PostgreSQL 12 is only available from GitLab 13.3 onward.
+PostgreSQL 12 is not supported on Geo deployments and is [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374)
+for the future releases. The [fault-tolerant PostgreSQL 12 deployment](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html)
+is only possible using Patroni. Repmgr is no longer supported for PostgreSQL 12.
 
 Omnibus GitLab will initialize PostgreSQL with the [default version](../package-information/postgresql_versions.md).
 
@@ -975,14 +978,6 @@ replication user's password.
 1. [Reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure) on the Geo **secondary database** to update the
    `pg_hba.conf` file. This is needed because `replicate-geo-database`
    replicates the primary's file to the secondary.
-
-1. Refresh the foreign tables on the Geo secondary server by running this
-   command on an application node (any node running `puma`/`unicorn`, `sidekiq`, or
-   `geo-logcursor`).
-
-   ```shell
-   sudo gitlab-rake geo:db:refresh_foreign_tables
-   ```
 
 1. Restart `puma` (or `unicorn`), `sidekiq`, and `geo-logcursor`.
 

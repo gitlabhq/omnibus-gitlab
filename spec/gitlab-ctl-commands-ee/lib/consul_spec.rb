@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands-ee/lib')
 
 require 'consul'
 
-describe ConsulHandler do
+RSpec.describe ConsulHandler do
   describe '#initialize' do
     it 'creates instance based on args' do
       instance = ConsulHandler.new([nil, nil, 'consul', 'kv', 'set'], 'rspec')
@@ -24,7 +24,7 @@ describe ConsulHandler do
   end
 end
 
-describe ConsulHandler::Kv do
+RSpec.describe ConsulHandler::Kv do
   let(:consul_cmd) { '/opt/gitlab/embedded/bin/consul' }
 
   it 'allows nil values' do

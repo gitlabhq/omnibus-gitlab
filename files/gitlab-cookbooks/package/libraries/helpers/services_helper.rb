@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-module Services # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(Services)` at the end of the class definition)
+module Services
   ALL_SERVICES = 'all'.freeze
   ALL_GROUPS = 'all-groups'.freeze
   SYSTEM_GROUP = 'system'.freeze

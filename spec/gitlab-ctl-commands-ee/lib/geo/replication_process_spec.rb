@@ -6,10 +6,12 @@ $LOAD_PATH << './files/gitlab-ctl-commands/lib'
 require 'geo/replication_process'
 require 'gitlab_ctl/util'
 
-describe Geo::ReplicationProcess do
+RSpec.describe Geo::ReplicationProcess do
   let(:error_text) { 'AN ERROR' }
   let(:good_status) { double('Command status', error?: false) }
   let(:bad_status) { double('Command status', error?: true, stdout: error_text) }
+  let(:pause_cmd) { %r{gitlab-psql .* -c 'SELECT pg_wal_replay_pause\(\);'} }
+  let(:resume_cmd) { %r{gitlab-psql .* -c 'SELECT pg_wal_replay_resume\(\);'} }
   let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: '/var/opt/gitlab/postgresql/data') }
   let(:db_name) { 'gitlab_db_name' }
   let(:options) do
@@ -23,7 +25,7 @@ describe Geo::ReplicationProcess do
   describe '#pause' do
     it 'logs a message if the rake task throws an error' do
       expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake geo:replication:pause/).and_return(bad_status)
-      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-psql/).and_return(good_status)
+      expect(GitlabCtl::Util).to receive(:run_command).with(pause_cmd).and_return(good_status)
 
       expect do
         subject.pause
@@ -32,7 +34,7 @@ describe Geo::ReplicationProcess do
 
     it 'raises an exception if unable to pause replication' do
       expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake geo:replication:pause/).and_return(good_status)
-      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-psql/).and_return(bad_status)
+      expect(GitlabCtl::Util).to receive(:run_command).with(pause_cmd).and_return(bad_status)
 
       expect do
         subject.pause
@@ -48,8 +50,8 @@ describe Geo::ReplicationProcess do
   end
 
   describe '#resume' do
-    it 'raises an exception if unable to pause pg replication' do
-      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-psql/).and_return(bad_status)
+    it 'raises an exception if unable to resume pg replication' do
+      expect(GitlabCtl::Util).to receive(:run_command).with(resume_cmd).and_return(bad_status)
 
       expect do
         subject.resume
@@ -58,7 +60,7 @@ describe Geo::ReplicationProcess do
 
     it 'raises an error if rake task to resume fails' do
       expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake geo:replication:resume/).and_return(bad_status)
-      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-psql/).and_return(good_status)
+      expect(GitlabCtl::Util).to receive(:run_command).with(resume_cmd).and_return(good_status)
 
       expect do
         subject.resume

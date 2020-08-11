@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
 
 require 'postgresql'
 
-describe GitlabCtl::PostgreSQL do
+RSpec.describe GitlabCtl::PostgreSQL do
   describe "#postgresql_usernamename" do
     context 'when using legacy configuration' do
       before do

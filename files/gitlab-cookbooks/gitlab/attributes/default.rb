@@ -121,6 +121,7 @@ default['gitlab']['gitlab-rails']['pipeline_schedule_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_check_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['admin_email_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['personal_access_tokens_expiring_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['personal_access_tokens_expired_notification_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ci_archive_traces_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['pages_domain_verification_cron_worker'] = nil
@@ -246,7 +247,7 @@ default['gitlab']['gitlab-rails']['dependency_proxy_object_store_connection'] = 
 default['gitlab']['gitlab-rails']['terraform_state_enabled'] = nil
 default['gitlab']['gitlab-rails']['terraform_state_storage_path'] = nil
 default['gitlab']['gitlab-rails']['terraform_state_object_store_enabled'] = false
-default['gitlab']['gitlab-rails']['terraform_state_object_store_remote_directory'] = 'terraform_state'
+default['gitlab']['gitlab-rails']['terraform_state_object_store_remote_directory'] = 'terraform'
 default['gitlab']['gitlab-rails']['terraform_state_object_store_connection'] = {}
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['prevent_ldap_sign_in'] = false
@@ -363,7 +364,6 @@ default['gitlab']['gitlab-rails']['db_adapter'] = "postgresql"
 default['gitlab']['gitlab-rails']['db_encoding'] = "unicode"
 default['gitlab']['gitlab-rails']['db_collation'] = nil
 default['gitlab']['gitlab-rails']['db_database'] = "gitlabhq_production"
-default['gitlab']['gitlab-rails']['db_pool'] = 1
 default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
 default['gitlab']['gitlab-rails']['db_password'] = nil
 default['gitlab']['gitlab-rails']['db_load_balancing'] = { 'hosts' => [] }
@@ -664,6 +664,7 @@ default['gitlab']['gitlab-pages']['headers'] = nil
 default['gitlab']['gitlab-pages']['api_secret_key'] = nil
 default['gitlab']['gitlab-pages']['gitlab_client_http_timeout'] = nil
 default['gitlab']['gitlab-pages']['gitlab_client_jwt_expiry'] = nil
+default['gitlab']['gitlab-pages']['domain_config_source'] = nil
 default['gitlab']['gitlab-pages']['env_directory'] = '/opt/gitlab/etc/gitlab-pages/env'
 
 ####

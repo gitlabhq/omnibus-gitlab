@@ -6,7 +6,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands-ee/lib')
 require 'gitlab_ctl/util'
 require 'postgresql/ee'
 
-describe GitlabCtl::PostgreSQL::EE do
+RSpec.describe GitlabCtl::PostgreSQL::EE do
   describe "#get_primary" do
     context 'when Consul disabled' do
       before do

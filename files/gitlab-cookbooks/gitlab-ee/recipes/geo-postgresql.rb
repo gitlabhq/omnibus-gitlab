@@ -183,13 +183,6 @@ if node['gitlab']['geo-postgresql']['enable']
     only_if { fdw_helper.fdw_enabled? && !fdw_helper.fdw_password.nil? }
   end
 
-  execute 'refresh foreign table definition' do
-    command '/opt/gitlab/bin/gitlab-rake geo:db:refresh_foreign_tables'
-    returns [0, 1]
-
-    only_if { fdw_helper.fdw_can_refresh? }
-  end
-
   ruby_block 'warn pending geo-postgresql restart' do
     block do
       message = <<~MESSAGE

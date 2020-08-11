@@ -1,5 +1,5 @@
 require 'chef_helper'
-describe 'praefect' do
+RSpec.describe 'praefect' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab::default') }
   let(:prometheus_grpc_latency_buckets) do
     '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]'
@@ -46,7 +46,8 @@ describe 'praefect' do
         'prometheus_listen_addr' => 'localhost:9652',
         'sentry' => {},
         'database' => {},
-        'failover' => { 'enabled' => true, 'election_strategy' => 'sql', 'read_only_after_failover' => true }
+        'failover' => { 'enabled' => true,
+                        'election_strategy' => 'sql' }
       }
 
       expect(chef_run).to render_file(config_path).with_content { |content|
@@ -55,7 +56,7 @@ describe 'praefect' do
       expect(chef_run).not_to render_file(config_path)
       .with_content(%r{\[prometheus\]\s+grpc_latency_buckets =})
       expect(chef_run).to render_file(config_path)
-      .with_content(%r{\[failover\]\s+enabled = true\s+election_strategy = 'sql'\s+read_only_after_failover = true})
+      .with_content(%r{\[failover\]\s+enabled = true\s+election_strategy = 'sql'})
     end
 
     it 'renders the env dir files' do
@@ -100,7 +101,6 @@ describe 'praefect' do
       end
       let(:failover_enabled) { true }
       let(:failover_election_strategy) { 'local' }
-      let(:failover_read_only_after_failover) { true }
       let(:database_host) { 'pg.internal' }
       let(:database_port) { 1234 }
       let(:database_user) { 'praefect-pg' }
@@ -129,7 +129,6 @@ describe 'praefect' do
                          logging_format: log_format,
                          failover_enabled: failover_enabled,
                          failover_election_strategy: failover_election_strategy,
-                         failover_read_only_after_failover: failover_read_only_after_failover,
                          virtual_storages: virtual_storages,
                          database_host: database_host,
                          database_port: database_port,
@@ -161,9 +160,7 @@ describe 'praefect' do
         expect(chef_run).to render_file(config_path)
           .with_content("sentry_environment = '#{sentry_environment}'")
         expect(chef_run).to render_file(config_path)
-          .with_content("read_only_after_failover = true")
-        expect(chef_run).to render_file(config_path)
-          .with_content(%r{\[failover\]\s+enabled = true\s+election_strategy = 'local'\s+read_only_after_failover = true})
+          .with_content(%r{\[failover\]\s+enabled = true\s+election_strategy = 'local'})
         expect(chef_run).to render_file(config_path)
           .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
 

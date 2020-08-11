@@ -61,8 +61,8 @@ if EE
   dependency 'gitlab-elasticsearch-indexer'
 end
 
-# libatomic is a runtime_dependency of the grpc gem for armhf platforms
-whitelist_file /grpc_c\.so/ if OhaiHelper.os_platform == 'raspbian'
+# libatomic is a runtime_dependency of the grpc gem for armhf/aarch64 platforms
+whitelist_file /grpc_c\.so/ if OhaiHelper.arm?
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
@@ -75,21 +75,10 @@ build do
   # Set installation type to omnibus
   command "echo 'omnibus-gitlab' > INSTALLATION_TYPE"
 
-  block 'installs sassc gem in CentOS 6 with custom compiler' do
+  block 'use a custom compiler (gcc 6.3 instead of 4.4.7) in CentOS 6' do
     next unless ohai['platform'] == 'centos' && ohai['platform_version'].start_with?('6.')
 
-    sassc_version = shellout!(%(#{embedded_bin('ruby')} -e "require 'bundler'; puts Bundler.definition.resolve['sassc'].first&.version"),
-                              env: env).stdout.chomp
-
-    next if sassc_version.empty?
-
-    env_custom_cc = {
-      'CC' => '/opt/rh/devtoolset-6/root/usr/bin/gcc',
-      'CPP' => '/opt/rh/devtoolset-6/root/usr/bin/cpp',
-      'CXX' => '/opt/rh/devtoolset-6/root/usr/bin/c++'
-    }
-
-    shellout!("#{embedded_bin('gem')} install sassc --version #{sassc_version}", env: env_custom_cc)
+    env['PATH'] = "/opt/rh/devtoolset-6/root/usr/bin:#{env['PATH']}"
   end
 
   bundle_without = %w(development test)

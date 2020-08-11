@@ -20,4 +20,6 @@ RSpec.configure do |config|
 
   config.include(GitlabSpec::Macros)
   config.include ExpectOffense
+
+  config.disable_monkey_patching!
 end

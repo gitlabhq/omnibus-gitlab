@@ -1,7 +1,85 @@
 require 'spec_helper'
 require 'gitlab/version'
 
-describe Gitlab::Version do
+RSpec.describe Gitlab::Version do
+  describe '.sources_channel' do
+    subject { described_class }
+
+    context 'with ALTERNATIVE_SOURCES=true' do
+      it 'returns "alternative"' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('ALTERNATIVE_SOURCES').and_return('true')
+
+        expect(subject.sources_channel).to eq('alternative')
+      end
+    end
+
+    context 'with SECURITY_SOURCES=true' do
+      it 'returns "security"' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('SECURITY_SOURCES').and_return('true')
+
+        expect(subject.sources_channel).to eq('security')
+      end
+
+      it 'ignores ALTERNATIVE_SOURCES=true and still return "security"' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('ALTERNATIVE_SOURCES').and_return('true')
+        allow(ENV).to receive(:[]).with('SECURITY_SOURCES').and_return('true')
+
+        expect(subject.sources_channel).to eq('security')
+      end
+    end
+
+    context 'with neither ALTERNATIVE_SOURCES or SECURITY_SOURCES set true' do
+      it 'returns "remote"' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('ALTERNATIVE_SOURCES').and_return('false')
+        allow(ENV).to receive(:[]).with('SECURITY_SOURCES').and_return('false')
+
+        expect(subject.sources_channel).to eq('remote')
+      end
+    end
+  end
+
+  describe '.fallback_sources_channel' do
+    subject { described_class }
+
+    context 'with ALTERNATIVE_SOURCES=true' do
+      it 'returns "alternative"' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('ALTERNATIVE_SOURCES').and_return('true')
+
+        expect(subject.fallback_sources_channel).to eq('alternative')
+      end
+    end
+
+    context 'with ALTERNATIVE_SOURCES not set true' do
+      it 'returns "remote"' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('ALTERNATIVE_SOURCES').and_return('false')
+
+        expect(subject.fallback_sources_channel).to eq('remote')
+      end
+    end
+  end
+
+  describe '.security_channel?' do
+    subject { described_class }
+
+    it 'returns true when sources_channel is set for security' do
+      mock_sources_channel('security')
+
+      expect(subject.security_channel?).to be_truthy
+    end
+
+    it 'returns false when sources_channel is not set for security' do
+      mock_sources_channel
+
+      expect(subject.security_channel?).to be_falsey
+    end
+  end
+
   describe :remote do
     subject { Gitlab::Version.new(software) }
 
@@ -9,8 +87,8 @@ describe Gitlab::Version do
       let(:software) { 'gitlab-rails-ee' }
 
       it 'returns a link from custom_sources yml' do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("false")
+        mock_sources_channel
+
         expect(subject.remote).to eq('git@dev.gitlab.org:gitlab/gitlab-ee.git')
       end
     end
@@ -23,31 +101,31 @@ describe Gitlab::Version do
       end
     end
 
-    context 'without ALTERNATIVE_SOURCES env variable explicitly set' do
+    context 'with default fallback' do
       let(:software) { 'gitlab-rails-ee' }
 
       it 'returns "remote" link from custom_sources yml' do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("false")
+        mock_sources_channel
+
         expect(subject.remote).to eq('git@dev.gitlab.org:gitlab/gitlab-ee.git')
       end
     end
 
-    context 'with ALTERNATIVE_SOURCES env variable explicitly set' do
+    context 'with alternative fallback' do
       let(:software) { 'gitlab-rails-ee' }
 
       it 'returns "alternative" link from custom_sources yml' do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("true")
+        mock_sources_channel('alternative')
+
         expect(subject.remote).to eq('https://gitlab.com/gitlab-org/gitlab.git')
       end
     end
 
-    context 'with SECURITY_SOURCES env variable explicitly set' do
+    context 'with security source channel selected' do
       before do
         allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with("SECURITY_SOURCES").and_return("true")
         allow(ENV).to receive(:[]).with("CI_JOB_TOKEN").and_return("CJT")
+        mock_sources_channel('security')
       end
 
       context 'when security source is defined for the software' do
@@ -73,14 +151,14 @@ describe Gitlab::Version do
         let(:software) { 'prometheus' }
 
         it 'returns "remote" link from custom_sources yml' do
-          allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("false")
+          mock_fallback_channel
 
           expect(subject.remote).to eq('git@dev.gitlab.org:omnibus-mirror/prometheus.git')
         end
 
-        context 'with ALTERNATIVE_SOURCES env variable explicitly set' do
+        context 'with alternative fallback' do
           it 'returns "alternative" link from custom_sources yml' do
-            allow(ENV).to receive(:[]).with("ALTERNATIVE_SOURCES").and_return("true")
+            mock_fallback_channel('alternative')
 
             expect(subject.remote).to eq('https://gitlab.com/gitlab-org/build/omnibus-mirror/prometheus.git')
           end
@@ -214,5 +292,13 @@ describe Gitlab::Version do
         expect(subject.print).to eq("v1.2.3")
       end
     end
+  end
+
+  def mock_sources_channel(channel = 'remote')
+    allow(::Gitlab::Version).to receive(:sources_channel).and_return(channel)
+  end
+
+  def mock_fallback_channel(channel = 'remote')
+    allow(::Gitlab::Version).to receive(:fallback_sources_channel).and_return(channel)
   end
 end

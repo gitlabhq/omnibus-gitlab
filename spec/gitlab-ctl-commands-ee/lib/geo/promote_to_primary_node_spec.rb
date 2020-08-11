@@ -4,7 +4,7 @@ require 'geo/promote_to_primary_node'
 require 'geo/promotion_preflight_checks'
 require 'gitlab_ctl/util'
 
-describe Geo::PromoteToPrimaryNode, '#execute' do
+RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
   let(:options) { { skip_preflight_checks: true } }
 
   subject(:command) { described_class.new(nil, options) }

@@ -1,7 +1,7 @@
 require 'chef_helper'
 require 'pry'
 
-describe Sidekiq do
+RSpec.describe Sidekiq do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   before { allow(Gitlab).to receive(:[]).and_call_original }
 

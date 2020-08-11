@@ -1,7 +1,7 @@
 require 'spec_helper'
 require_relative '../../../lib/gitlab/docker_operations.rb'
 
-describe 'docker', type: :rake do
+RSpec.describe 'docker', type: :rake do
   before :all do
     Rake.application.rake_require 'gitlab/tasks/docker_tasks'
   end
@@ -127,7 +127,7 @@ describe 'docker', type: :rake do
   end
 end
 
-describe 'docker_operations' do
+RSpec.describe 'docker_operations' do
   describe 'without docker operations timeout variable' do
     it 'sets default value as timeout' do
       DockerOperations.set_timeout

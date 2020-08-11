@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe LetsEncrypt do
+RSpec.describe LetsEncrypt do
   subject { ::LetsEncrypt }
 
   before do
