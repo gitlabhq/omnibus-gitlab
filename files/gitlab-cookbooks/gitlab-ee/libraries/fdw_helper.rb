@@ -31,18 +31,4 @@ class FdwHelper
   def fdw_port
     node['gitlab']['gitlab-rails']['db_port']
   end
-
-  def pg_hba_entries
-    entries = []
-    node['postgresql']['md5_auth_cidr_addresses'].each do |cidr|
-      entries.push({
-                     type: 'host',
-                     database: fdw_dbname,
-                     user: fdw_user,
-                     cidr: cidr,
-                     method: 'md5'
-                   })
-    end
-    entries
-  end
 end unless defined?(FdwHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922
