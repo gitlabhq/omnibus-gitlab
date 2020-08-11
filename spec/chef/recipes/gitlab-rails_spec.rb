@@ -2350,8 +2350,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
               'db_prepared_statements' => false,
               'db_sslcompression' => 0,
               'db_sslcert' => nil,
-              'db_sslkey' => nil,
-              'db_fdw' => nil
+              'db_sslkey' => nil
             )
           )
         end
@@ -2467,20 +2466,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
             expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
               hash_including(
                 'db_sslcompression' => 1
-              )
-            )
-          end
-        end
-
-        context 'when fdw is specified' do
-          before do
-            stub_gitlab_rb(gitlab_rails: { db_fdw: true })
-          end
-
-          it 'uses provided value in database.yml' do
-            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
-              hash_including(
-                'db_fdw' => true
               )
             )
           end
