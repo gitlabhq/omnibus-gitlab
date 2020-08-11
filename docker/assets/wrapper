@@ -129,7 +129,7 @@ ATTEMPT_AUTO_PG_UPGRADE='true'
 # Make sure PostgreSQL is at the latest version.
 # If it fails, print a message with a workaround and exit
 if [ "${GITLAB_SKIP_PG_UPGRADE}" != 'true' -a "${ATTEMPT_AUTO_PG_UPGRADE}" != 'false' ]; then
-    gitlab-ctl pg-upgrade -w || failed_pg_upgrade
+    gitlab-ctl pg-upgrade -w --skip-disk-check || failed_pg_upgrade
 fi
 
 if [ -n "${GITLAB_POST_RECONFIGURE_SCRIPT+x}" ]; then
