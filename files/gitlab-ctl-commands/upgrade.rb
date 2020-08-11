@@ -141,7 +141,7 @@ def run_pg_upgrade
     log ''
   else
     unless GitlabCtl::Util.progress_message('Checking if a newer PostgreSQL version is available and attempting automatic upgrade to it') do
-      command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
+      command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w --skip-disk-check)
       status = run_command(command.join(' '))
       status.success?
     end

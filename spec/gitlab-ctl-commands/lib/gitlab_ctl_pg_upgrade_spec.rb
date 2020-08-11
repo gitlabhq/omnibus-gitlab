@@ -90,4 +90,34 @@ RSpec.describe GitlabCtl::PgUpgrade do
       expect(@dbw.data_dir).to eq('parentdir/data')
     end
   end
+
+  context 'when determining if there is enough free space to perform an upgrade' do
+    before do
+      allow(GitlabCtl::Util).to receive(:parse_json_file).and_return({ 'default' => {} })
+    end
+
+    it 'detects when there is not enough available disk space for upgrade' do
+      allow(GitlabCtl::Util).to receive(:get_command_output).with(
+        "du -s --block-size=1m #{@dbw.data_dir}", nil, 123
+      ).and_return("200000\n#{@dbw.data_dir}")
+
+      allow(GitlabCtl::Util).to receive(:get_command_output).with(
+        "df -P --block-size=1m #{@dbw.data_dir} | awk '{print $4}'", nil, 123
+      ).and_return("Available\n300000")
+
+      expect(@dbw.enough_free_space?(@dbw.data_dir)).to eq(false)
+    end
+
+    it 'detects when there is enough available disk space for upgrade' do
+      allow(GitlabCtl::Util).to receive(:get_command_output).with(
+        "du -s --block-size=1m #{@dbw.data_dir}", nil, 123
+      ).and_return("200000\n#{@dbw.data_dir}")
+
+      allow(GitlabCtl::Util).to receive(:get_command_output).with(
+        "df -P --block-size=1m #{@dbw.data_dir} | awk '{print $4}'", nil, 123
+      ).and_return("Available\n450000")
+
+      expect(@dbw.enough_free_space?(@dbw.data_dir)).to eq(true)
+    end
+  end
 end
