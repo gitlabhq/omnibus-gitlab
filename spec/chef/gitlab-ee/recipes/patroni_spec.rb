@@ -1,7 +1,7 @@
 require 'chef_helper'
 require 'yaml'
 
-describe 'patroni cookbook' do
+RSpec.describe 'patroni cookbook' do
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end

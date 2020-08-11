@@ -6,7 +6,7 @@ require 'chef_helper'
 # to the bash block.
 #
 
-describe 'gitlab-ee::geo-database-migrations' do
+RSpec.describe 'gitlab-ee::geo-database-migrations' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
   let(:name) { 'migrate gitlab-geo tracking database' }
 

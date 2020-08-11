@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'postgresql_query' do
+RSpec.describe 'postgresql_query' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(postgresql_extension)) }
 
   context 'run' do

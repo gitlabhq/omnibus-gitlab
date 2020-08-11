@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'redis' do
+RSpec.describe 'redis' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(redis_service runit_service)).converge('gitlab::default') }
   let(:redis_conf) { '/var/opt/gitlab/redis/redis.conf' }
 

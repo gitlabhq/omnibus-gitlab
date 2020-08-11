@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/version'
 
-describe Gitlab::Version do
+RSpec.describe Gitlab::Version do
   describe '.sources_channel' do
     subject { described_class }
 

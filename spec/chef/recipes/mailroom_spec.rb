@@ -16,7 +16,7 @@
 
 require 'chef_helper'
 
-describe 'gitlab::mailroom' do
+RSpec.describe 'gitlab::mailroom' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
 
   before do

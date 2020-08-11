@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'geo postgresql 9.2' do
+RSpec.describe 'geo postgresql 9.2' do
   let(:postgresql_conf) { '/var/opt/gitlab/geo-postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/geo-postgresql/data/runtime.conf' }
 
@@ -276,7 +276,7 @@ describe 'geo postgresql 9.2' do
   end
 end
 
-describe 'geo postgresql 9.6' do
+RSpec.describe 'geo postgresql 9.6' do
   let(:postgresql_conf) { '/var/opt/gitlab/geo-postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/geo-postgresql/data/runtime.conf' }
 

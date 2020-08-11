@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/build/gitlab_image'
 
-describe Build::GitlabImage do
+RSpec.describe Build::GitlabImage do
   before do
     allow(Build::Info).to receive(:package).and_return('gitlab-ce')
   end

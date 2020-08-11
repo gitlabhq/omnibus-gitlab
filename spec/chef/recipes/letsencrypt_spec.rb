@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'enabling letsencrypt' do
+RSpec.describe 'enabling letsencrypt' do
   before do
     allow(Gitlab).to receive(:[]).and_call_original
     stub_gitlab_rb(external_url: 'https://fakehost.example.com')
@@ -38,7 +38,7 @@ describe 'enabling letsencrypt' do
   end
 end
 
-describe 'letsencrypt::enable' do
+RSpec.describe 'letsencrypt::enable' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   let(:node) { chef_run.node }
 
@@ -185,7 +185,7 @@ server {
 end
 
 # This should work standalone for renewal purposes
-describe 'letsencrypt::renew' do
+RSpec.describe 'letsencrypt::renew' do
   let(:chef_run) do
     ChefSpec::SoloRunner.converge('gitlab::letsencrypt_renew')
   end

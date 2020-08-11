@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::users' do
+RSpec.describe 'gitlab::users' do
   let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::users') }
 
   before do

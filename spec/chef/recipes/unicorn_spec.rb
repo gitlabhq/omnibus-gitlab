@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::unicorn' do
+RSpec.describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       step_into: %w(unicorn_service unicorn_config runit_service),
@@ -98,7 +98,7 @@ describe 'gitlab::unicorn' do
   end
 end
 
-describe 'gitlab::unicorn' do
+RSpec.describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       step_into: %w(unicorn_service unicorn_config runit_service),
@@ -128,7 +128,7 @@ describe 'gitlab::unicorn' do
   end
 end
 
-describe 'gitlab::unicorn' do
+RSpec.describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       step_into: %w(unicorn_service unicorn_config runit_service),
@@ -158,7 +158,7 @@ describe 'gitlab::unicorn' do
   end
 end
 
-describe 'gitlab::unicorn' do
+RSpec.describe 'gitlab::unicorn' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       step_into: %w(unicorn_service unicorn_config runit_service),

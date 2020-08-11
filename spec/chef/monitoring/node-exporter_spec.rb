@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'monitoring::node-exporter' do
+RSpec.describe 'monitoring::node-exporter' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {

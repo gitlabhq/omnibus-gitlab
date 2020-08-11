@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'consul_service' do
+RSpec.describe 'consul_service' do
   let(:runner) do
     ChefSpec::SoloRunner.new(step_into: %w(consul_service))
   end

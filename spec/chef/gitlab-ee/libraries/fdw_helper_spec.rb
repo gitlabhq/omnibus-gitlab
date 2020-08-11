@@ -1,7 +1,7 @@
 require_relative '../../../../files/gitlab-cookbooks/gitlab-ee/libraries/fdw_helper.rb'
 require 'chef_helper'
 
-describe FdwHelper do
+RSpec.describe FdwHelper do
   let(:chef_run) { converge_config(is_ee: true) }
   subject { described_class.new(chef_run.node) }
 

@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::gitlab-pages' do
+RSpec.describe 'gitlab::gitlab-pages' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab::default') }
 
   before do

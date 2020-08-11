@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::mattermost' do
+RSpec.describe 'gitlab::mattermost' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {

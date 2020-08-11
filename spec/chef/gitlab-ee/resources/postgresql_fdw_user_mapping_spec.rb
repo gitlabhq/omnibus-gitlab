@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'postgresql_fdw_user_mapping' do
+RSpec.describe 'postgresql_fdw_user_mapping' do
   let(:runner) do
     ChefSpec::SoloRunner.new(step_into: %w(postgresql_fdw_user_mapping))
   end

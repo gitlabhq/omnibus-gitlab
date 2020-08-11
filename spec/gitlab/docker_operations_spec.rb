@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/docker_operations'
 
-describe DockerOperations do
+RSpec.describe DockerOperations do
   describe '.set_timeout' do
     context 'when ENV["DOCKER_TIMEOUT"] is not set' do
       it 'uses a default timeout value' do

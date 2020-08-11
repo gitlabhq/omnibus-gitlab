@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'geo/promote_to_primary_node'
 
-describe 'gitlab-ctl promote-to-primary-node' do
+RSpec.describe 'gitlab-ctl promote-to-primary-node' do
   let(:klass) { Geo::PromoteToPrimaryNode }
   let(:command_name) { 'promote-to-primary-node' }
   let(:command_script) { 'promote_to_primary_node' }

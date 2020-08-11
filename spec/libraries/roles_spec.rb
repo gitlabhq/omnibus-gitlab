@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'GitLabRoles' do
+RSpec.describe 'GitLabRoles' do
   before do
     allow(Gitlab).to receive(:[]).and_call_original
     allow(Services).to receive(:enable_group).and_call_original

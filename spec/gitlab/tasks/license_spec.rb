@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'license:check', type: :rake do
+RSpec.describe 'license:check', type: :rake do
   let(:f) { double("Mocked file object") }
 
   before :all do

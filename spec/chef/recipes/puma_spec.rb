@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::puma with Ubuntu 16.04' do
+RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       step_into: %w(runit_service),
@@ -191,7 +191,7 @@ describe 'gitlab::puma with Ubuntu 16.04' do
   end
 end
 
-describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
+RSpec.describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       path: 'spec/fixtures/fauxhai/ubuntu/16.04-no-run-tmpfs.json',
@@ -218,7 +218,7 @@ describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
   end
 end
 
-describe 'gitlab::puma Ubuntu 16.04 Docker' do
+RSpec.describe 'gitlab::puma Ubuntu 16.04 Docker' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       path: 'spec/fixtures/fauxhai/ubuntu/16.04-docker.json',
@@ -252,7 +252,7 @@ describe 'gitlab::puma Ubuntu 16.04 Docker' do
   end
 end
 
-describe 'gitlab::puma with more CPUs' do
+RSpec.describe 'gitlab::puma with more CPUs' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       step_into: %w(runit_service),

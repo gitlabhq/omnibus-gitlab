@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/build/ha_validate/trigger'
 
-describe Build::HA::ValidateTrigger do
+RSpec.describe Build::HA::ValidateTrigger do
   before do
     allow(ENV).to receive(:[]).and_call_original
     allow(ENV).to receive(:[]).with('CI_COMMIT_SHA').and_return('11111111111111111')

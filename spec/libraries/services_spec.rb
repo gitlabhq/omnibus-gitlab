@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe Services do
+RSpec.describe Services do
   before { allow(Gitlab).to receive(:[]).and_call_original }
 
   describe 'when using the gitlab cookbook' do

@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'sysctl' do
+RSpec.describe 'sysctl' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(gitlab_sysctl)) }
   let(:chef_run) { runner.converge("package::sysctl", "test_package::gitlab_sysctl_create") }
   let(:conf) { '90-omnibus-gitlab-foo.conf' }

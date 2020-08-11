@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
 
 require 'gitlab_ctl'
 
-describe GitlabCtl::Backup do
+RSpec.describe GitlabCtl::Backup do
   let(:backup_dir_path) { '/etc/gitlab/config_backup' }
 
   before do

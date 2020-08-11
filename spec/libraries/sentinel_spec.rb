@@ -2,7 +2,7 @@
 # are the ones we expect
 require 'chef_helper'
 
-describe 'Sentinel' do
+RSpec.describe 'Sentinel' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config') }
   let(:node) { chef_run.node }
   subject { ::Sentinel }
