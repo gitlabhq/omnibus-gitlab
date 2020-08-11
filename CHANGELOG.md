@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.2.4 (2020-08-11)
+
+### Fixed (1 change)
+
+- Fix Geo replication resuming. !4461
+
+
 ## 13.2.3 (2020-08-05)
 
 - No changes.
