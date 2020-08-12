@@ -51,6 +51,19 @@ Custom list:
 prometheus['rules_files'] = ['/path/to/rules/*.rules', '/path/to/single/file.rules']
 ```
 
+## External labels
+
+To set [external labels](https://prometheus.io/docs/prometheus/latest/configuration/configuration/):
+
+```ruby
+prometheus['external_labels'] = {
+    'region' => 'us-west-2',
+    'source' => 'omnibus',
+}
+```
+
+No external labels are set by default.
+
 ## node_exporter
 
 The node_exporter provides system level metrics.
