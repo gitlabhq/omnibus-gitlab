@@ -166,6 +166,7 @@ default['gitlab']['gitlab-rails']['service_desk_email_log_file'] = "/var/log/git
 # Consolidated object storage config
 default['gitlab']['gitlab-rails']['object_store']['enabled'] = false
 default['gitlab']['gitlab-rails']['object_store']['connection'] = {}
+default['gitlab']['gitlab-rails']['object_store']['storage_options'] = {}
 default['gitlab']['gitlab-rails']['object_store']['proxy_download'] = false
 default['gitlab']['gitlab-rails']['object_store']['objects'] = {}
 default['gitlab']['gitlab-rails']['object_store']['objects']['artifacts'] = {}

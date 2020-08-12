@@ -258,6 +258,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Docs: https://docs.gitlab.com/ee/administration/object_storage.html
 gitlab_rails['object_store']['enabled'] = false
 gitlab_rails['object_store']['connection'] = {}
+gitlab_rails['object_store']['storage_options'] = {}
 gitlab_rails['object_store']['proxy_download'] = false
 gitlab_rails['object_store']['objects']['artifacts']['bucket'] = nil
 gitlab_rails['object_store']['objects']['external_diffs']['bucket'] = nil

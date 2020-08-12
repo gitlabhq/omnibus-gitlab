@@ -399,6 +399,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
       include_context 'object storage config'
 
       let(:aws_connection_data) { JSON.parse(aws_connection_hash.to_json, symbolize_names: true) }
+      let(:aws_storage_options) { JSON.parse(aws_storage_options_hash.to_json, symbolize_names: true) }
 
       before do
         stub_gitlab_rb(
@@ -406,6 +407,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
             object_store: {
               enabled: true,
               connection: aws_connection_hash,
+              storage_options: aws_storage_options_hash,
               objects: object_config
             }
           }
@@ -419,6 +421,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
           expect(config[:object_store][:enabled]).to be true
           expect(config[:object_store][:connection]).to eq(aws_connection_data)
+          expect(config[:object_store][:storage_options]).to eq(aws_storage_options)
           expect(config[:object_store][:objects]).to eq(object_config)
         }
       end
