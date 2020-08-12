@@ -5,6 +5,7 @@ prometheus_yml_output = <<-PROMYML
   global:
     scrape_interval: 15s
     scrape_timeout: 15s
+    external_labels: {}
   remote_read: []
   remote_write: []
   rule_files:
