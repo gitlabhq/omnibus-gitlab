@@ -8,8 +8,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 ## Using an alternate local Redis instance
 
-Omnibus GitLab bundles Redis by default. If you wish to point the GitLab
-application at your own ***locally*** running Redis instance:
+Omnibus GitLab includes Redis by default. To direct the GitLab
+application to your own *locally* running Redis instance:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
@@ -126,10 +126,10 @@ Redis 5.x does NOT support SSL out of the box. However, you can encrypt a
 Redis connection using [stunnel](https://redislabs.com/blog/stunnel-secure-redis-ssl/).
 AWS ElasticCache also supports Redis over SSL.
 
-SSL support comes with a few limitations:
+Support for SSL has the following limitations:
 
-- Omnibus GitLab does NOT ship with `stunnel` or other tools to provide encryption
-  for the Redis server. However, GitLab does provide client support via
+- Omnibus GitLab doesn't include `stunnel` or other tools to provide encryption
+  for the Redis server. However, GitLab does provide client support by using
   the `rediss://` (as opposed to `redis://`) URL scheme.
 - Omnibus GitLab bundles Redis Sentinel 5.0.x which does NOT support SSL.
   If you use Redis Sentinel, do not activate client support for SSL.
@@ -153,7 +153,7 @@ To activate GitLab client support for SSL:
 
 ## SSL certificates
 
-If you are using custom SSL certificates for Redis, be sure to add them
+If you're using custom SSL certificates for Redis, be sure to add them
 to the [trusted certificates](../settings/ssl.md#install-custom-public-certificates).
 
 ## Renamed commands
