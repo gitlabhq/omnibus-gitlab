@@ -738,13 +738,6 @@ Log in to your **primary** node, executing the following:
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-NOTE: **Note:**
-After this step you can get an outdated FDW remote schema on your
-secondary nodes. While it is not important to worry about at this
-point, you can check out the
-[Geo troubleshooting documentation](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#geo-database-has-an-outdated-fdw-remote-schema-error)
-to resolve this.
-
 1. Hot reload `puma` (or `unicorn`) and `sidekiq` services
 
    ```shell
@@ -800,13 +793,6 @@ the update on the **primary** node:
    ```shell
    sudo gitlab-rake db:migrate
    ```
-
-On each **secondary**, ensure the FDW tables are up-to-date.
-
-1. Wait for the **primary** migrations to finish.
-
-1. Wait for the **primary** migrations to replicate. You can find "Data
-   replication lag" for each node listed on `Admin Area > Geo`.
 
 After updating all nodes (both **primary** and all **secondaries**), check their status:
 

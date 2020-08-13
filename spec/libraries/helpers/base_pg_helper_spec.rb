@@ -294,38 +294,6 @@ RSpec.describe BasePgHelper do
     end
   end
 
-  describe '#fdw_external_password_exists?' do
-    it 'returns true when the password exists in the options hash' do
-      expect(subject).to receive(:psql_query).and_return('{user=gitlab,password=foo}')
-
-      expect(subject.fdw_external_password_exists?('gitlab_geo', 'gitlab_secondary', 'gitlabhq_geo_production')).to be_truthy
-    end
-
-    it 'returns false when the password does not exist in the options hash' do
-      expect(subject).to receive(:psql_query).and_return('{user=gitlab}')
-
-      expect(subject.fdw_external_password_exists?('gitlab_geo', 'gitlab_secondary', 'gitlabhq_geo_production')).to be_falsey
-    end
-  end
-
-  describe '#fdw_user_mapping_update_options' do
-    let(:resource) { double(:resource, db_user: 'gitlab_geo', server_name: 'gitlab_secondary', db_name: 'gitlabhq_geo_production', external_user: 'gitlab', external_password: 'mypass') }
-
-    it 'SETs the desired password when the password exists' do
-      expect(subject).to receive(:fdw_external_password_exists?).and_return(true)
-
-      result = subject.fdw_user_mapping_update_options(resource)
-      expect(result).to eq("SET user 'gitlab', SET password 'mypass'")
-    end
-
-    it 'ADDs the desired password when the password does not exist' do
-      expect(subject).to receive(:fdw_external_password_exists?).and_return(false)
-
-      result = subject.fdw_user_mapping_update_options(resource)
-      expect(result).to eq("SET user 'gitlab', ADD password 'mypass'")
-    end
-  end
-
   describe '#is_standby?' do
     let(:recovery_files) { %w(recovery.conf recovery.signal standby.signal) }
 

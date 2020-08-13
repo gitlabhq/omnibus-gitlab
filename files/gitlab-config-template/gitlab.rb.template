@@ -2220,7 +2220,6 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # geo_secondary['db_sslcompression'] = 0
 # geo_secondary['db_sslrootcert'] = nil
 # geo_secondary['db_sslca'] = nil
-# geo_secondary['db_fdw'] = true
 
 ################################################################################
 ## GitLab Geo Secondary Tracking Database (EE only)

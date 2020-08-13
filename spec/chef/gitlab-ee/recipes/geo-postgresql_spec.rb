@@ -184,13 +184,6 @@ RSpec.describe 'geo postgresql 9.2' do
         end
       end
     end
-
-    it 'does not create foreign table mapping' do
-      expect(chef_run).not_to create_postgresql_schema('gitlab_secondary')
-      expect(chef_run).not_to create_postgresql_fdw('gitlab_secondary')
-      expect(chef_run).not_to create_postgresql_fdw_user_mapping('gitlab_secondary')
-      expect(chef_run).not_to run_execute('refresh foreign table definition')
-    end
   end
 
   context 'when a SQL user password is set' do
@@ -525,15 +518,12 @@ RSpec.describe 'geo postgresql 9.6' do
       ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default')
     end
 
-    it 'does not setup foreign table mapping' do
-      expect(chef_run).not_to create_postgresql_schema('gitlab_secondary')
-      expect(chef_run).not_to create_postgresql_fdw('gitlab_secondary')
-      expect(chef_run).not_to create_postgresql_fdw_user_mapping('gitlab_secondary')
-      expect(chef_run).not_to run_execute('refresh foreign table definition')
+    it 'deletes the postgresql fdw server in the geo-postgresql database' do
+      expect(chef_run).to delete_postgresql_fdw('gitlab_secondary')
     end
   end
 
-  context 'FDW support' do
+  context 'FDW is enabled' do
     cached(:chef_run) do
       RSpec::Mocks.with_temporary_scope do
         stub_gitlab_rb(
@@ -542,7 +532,8 @@ RSpec.describe 'geo postgresql 9.6' do
             sql_user: 'mygeodbuser'
           },
           geo_secondary: {
-            db_database: 'gitlab_geodb'
+            db_database: 'gitlab_geodb',
+            db_fdw: true
           },
           gitlab_rails: {
             db_host: '10.0.0.1',
@@ -559,16 +550,7 @@ RSpec.describe 'geo postgresql 9.6' do
       ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default')
     end
 
-    it 'creates gitlab_secondary schema' do
-      params = {
-        schema: 'gitlab_secondary',
-        database: 'gitlab_geodb',
-        owner: 'mygeodbuser'
-      }
-      expect(chef_run).to create_postgresql_schema('gitlab_secondary').with(params)
-    end
-
-    it 'creates a postgresql fdw connection in the geo-postgresql database' do
+    it 'deletes the postgresql fdw server in the geo-postgresql database' do
       params = {
         db_name: 'gitlab_geodb',
         external_host: '10.0.0.1',
@@ -576,45 +558,7 @@ RSpec.describe 'geo postgresql 9.6' do
         external_name: 'gitlab_myorg'
       }
 
-      expect(chef_run).to create_postgresql_fdw('gitlab_secondary').with(params)
-    end
-
-    it 'creates a postgresql fdw user mapping in the geo-postgresql database' do
-      params = {
-        db_user: 'mygeodbuser',
-        db_name: 'gitlab_geodb',
-        external_user: 'mydbuser',
-        external_password: 'custompass'
-      }
-      expect(chef_run).to create_postgresql_fdw_user_mapping('gitlab_secondary').with(params)
-    end
-
-    context 'when a custom external FDW user is used' do
-      let(:chef_run) do
-        stub_gitlab_rb(
-          geo_postgresql: {
-            enable: true,
-            sql_user: 'mygeodbuser',
-            fdw_external_user: 'fdw_user',
-            fdw_external_password: 'my-fdw-password'
-          },
-          geo_secondary: {
-            db_database: 'gitlab_geodb',
-          }
-        )
-
-        ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default')
-      end
-
-      it 'creates a mapping with custom external user' do
-        params = {
-          db_user: 'mygeodbuser',
-          db_name: 'gitlab_geodb',
-          external_user: 'fdw_user',
-          external_password: 'my-fdw-password'
-        }
-        expect(chef_run).to create_postgresql_fdw_user_mapping('gitlab_secondary').with(params)
-      end
+      expect(chef_run).to delete_postgresql_fdw('gitlab_secondary').with(params)
     end
 
     context 'when secondary database is not managed' do
@@ -649,10 +593,8 @@ RSpec.describe 'geo postgresql 9.6' do
         ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default')
       end
 
-      it 'creates foreign table mapping' do
-        expect(chef_run).to create_postgresql_schema('gitlab_secondary')
-        expect(chef_run).to create_postgresql_fdw('gitlab_secondary')
-        expect(chef_run).to create_postgresql_fdw_user_mapping('gitlab_secondary')
+      it 'deletes the postgresql fdw server in the geo-postgresql database' do
+        expect(chef_run).to delete_postgresql_fdw('gitlab_secondary')
       end
     end
   end
