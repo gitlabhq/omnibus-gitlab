@@ -29,6 +29,20 @@ if RedhatHelper.system_is_rhel7?
   end
 end
 
+if RedhatHelper.system_is_rhel8?
+  ssh_keygen_module = 'gitlab-7.2.0-ssh-keygen'
+  execute "semodule -i /opt/gitlab/embedded/selinux/rhel/7/#{ssh_keygen_module}.pp" do
+    not_if "getenforce | grep Disabled"
+    not_if "semodule -l | grep '^#{ssh_keygen_module}\\s'"
+  end
+
+  authorized_keys_module = 'gitlab-10.5.0-ssh-authorized-keys'
+  execute "semodule -i /opt/gitlab/embedded/selinux/rhel/7/#{authorized_keys_module}.pp" do
+    not_if "getenforce | grep Disabled"
+    not_if "semodule -l | grep '^#{authorized_keys_module}\\s'"
+  end
+end
+
 # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the
 # git_user is valid.
 bash "Set proper security context on ssh files for selinux" do
