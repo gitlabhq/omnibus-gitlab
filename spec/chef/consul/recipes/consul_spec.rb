@@ -24,8 +24,7 @@ RSpec.describe 'consul' do
         consul: {
           enable: true,
           config_dir: '/fake/config.d',
-          data_dir: '/fake/data',
-          services: %w(postgresql)
+          data_dir: '/fake/data'
         }
       )
     end
@@ -41,8 +40,8 @@ RSpec.describe 'consul' do
         expect(chef_run).to create_account('Consul user and group').with(username: 'gitlab-consul', groupname: 'gitlab-consul')
       end
 
-      it 'includes the postgresql_service recipe' do
-        expect(chef_run).to include_recipe('consul::service_postgresql')
+      it 'includes the configure_services recipe' do
+        expect(chef_run).to include_recipe('consul::configure_services')
       end
 
       it 'only enables the agent by default' do
@@ -135,126 +134,6 @@ RSpec.describe 'consul' do
           expect(content).to match(%r{"bootstrap_expect":3})
         }
       end
-    end
-  end
-
-  describe 'consul::service_postgresql' do
-    let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
-
-    before do
-      allow(Gitlab).to receive(:[]).and_call_original
-    end
-
-    context 'default' do
-      before do
-        stub_gitlab_rb(
-          consul: {
-            enable: true,
-            services: %w(postgresql)
-          }
-        )
-      end
-
-      it 'renders the service configuration file' do
-        rendered = {
-          'service' => {
-            'name' => 'postgresql',
-            'address' => '',
-            'port' => 5432,
-            'check' => {
-              'id' => 'service:postgresql',
-              'args' => ["/opt/gitlab/bin/gitlab-ctl", "repmgr-check-master"],
-              'interval' => '10s',
-              'status' => 'failing'
-            }
-          },
-          'watches' => [
-            {
-              'type' => 'keyprefix',
-              'prefix' => 'gitlab/ha/postgresql/failed_masters/',
-              'args' => ["/opt/gitlab/bin/gitlab-ctl", "consul", "watchers", "handle-failed-master"]
-            }
-          ]
-        }
-        expect(chef_run).to render_file('/var/opt/gitlab/consul/config.d/postgresql_service.json').with_content { |content|
-          expect(JSON.parse(content)).to eq(rendered)
-        }
-      end
-    end
-
-    context 'when patroni is enabled' do
-      before do
-        stub_gitlab_rb(
-          patroni: {
-            enable: true
-          },
-          consul: {
-            enable: true,
-            services: %w(postgresql)
-          }
-        )
-      end
-
-      it 'renders the service configuration file' do
-        rendered = {
-          'service' => {
-            'name' => 'postgresql',
-            'address' => '',
-            'port' => 5432,
-            'check' => {
-              'id' => 'service:postgresql',
-              'args' => ['/opt/gitlab/bin/gitlab-ctl', 'patroni', 'check-leader'],
-              'interval' => '10s',
-              'status' => 'failing'
-            }
-          }
-        }
-        expect(chef_run).to render_file('/var/opt/gitlab/consul/config.d/postgresql_service.json').with_content { |content|
-          expect(JSON.parse(content)).to eq(rendered)
-        }
-      end
-    end
-  end
-
-  describe 'consul::watchers' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
-    let(:watcher_conf) { '/var/opt/gitlab/consul/config.d/watcher_postgresql.json' }
-    let(:watcher_check) { '/var/opt/gitlab/consul/scripts/failover_pgbouncer' }
-
-    before do
-      allow(Gitlab).to receive(:[]).and_call_original
-      stub_gitlab_rb(
-        consul: {
-          enable: true,
-          watchers: %w(
-            postgresql
-          )
-        }
-      )
-    end
-
-    it 'includes the watcher recipe' do
-      expect(chef_run).to include_recipe('consul::watchers')
-    end
-
-    it 'creates the watcher config file' do
-      rendered = {
-        'watches' => [
-          {
-            'type' => 'service',
-            'service' => 'postgresql',
-            'args' => [watcher_check]
-          }
-        ]
-      }
-
-      expect(chef_run).to render_file(watcher_conf).with_content { |content|
-        expect(JSON.parse(content)).to eq(rendered)
-      }
-    end
-
-    it 'creates the watcher handler file' do
-      expect(chef_run).to render_file(watcher_check)
     end
   end
 end
