@@ -73,7 +73,8 @@ redis_sentinel_master = node['redis']['master_name']
 redis_sentinel_master_password = node['redis']['master_password']
 config_file_path = File.join(working_dir, "config.toml")
 object_store = node['gitlab']['gitlab-rails']['object_store']
-object_store_provider = object_store.dig('connection', 'provider')
+provider = object_store.dig('connection', 'provider')
+object_store_provider = provider if %w(AWS AzureRM).include?(provider)
 
 template config_file_path do
   source "workhorse-config.toml.erb"
