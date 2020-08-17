@@ -78,7 +78,7 @@ build do
   block 'use a custom compiler (gcc 6.3 instead of 4.4.7) in CentOS 6' do
     next unless ohai['platform'] == 'centos' && ohai['platform_version'].start_with?('6.')
 
-    env['PATH'] = "/opt/rh/devtoolset-6/root/usr/bin:#{env['PATH']}"
+    env['PATH'] = "/opt/rh/devtoolset-7/root/usr/bin:#{env['PATH']}"
   end
 
   bundle_without = %w(development test)
