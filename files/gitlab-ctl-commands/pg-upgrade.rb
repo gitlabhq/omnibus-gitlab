@@ -24,7 +24,13 @@ REVERT_VERSION_FILE = "#{data_path}/postgresql-version.old".freeze
 add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            2 do |_cmd_name|
-  options = GitlabCtl::PgUpgrade.parse_options(ARGV)
+  begin
+    options = GitlabCtl::PgUpgrade.parse_options(ARGV)
+  rescue ArgumentError => e
+    log "Command line parameter error: #{e.message}"
+    Kernel.exit 64
+  end
+
   revert_version = lookup_version(options[:target_version], read_revert_version || default_version)
 
   @attributes = GitlabCtl::Util.get_node_attributes(base_path)

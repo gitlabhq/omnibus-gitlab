@@ -1,4 +1,6 @@
 require 'optparse'
+require 'mixlib/shellout'
+
 require_relative 'util'
 require_relative '../gitlab_ctl'
 
@@ -178,8 +180,8 @@ module GitlabCtl
             options[:skip_unregister] = true
           end
 
-          opts.on('-TTIMEOUT', '--timeout=TIMEOUT', 'Timeout in milliseconds for the execution of the underlying commands') do |t|
-            i = t.to_i
+          opts.on('-TTIMEOUT', '--timeout=TIMEOUT', 'Timeout in milliseconds for the execution of the underlying commands. Accepts duration format such as 1d2h3m4s5ms.') do |t|
+            i = GitlabCtl::Util.parse_duration(t)
             options[:timeout] = i.positive? ? i : nil
           end
 
