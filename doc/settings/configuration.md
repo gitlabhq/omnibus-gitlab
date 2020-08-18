@@ -611,7 +611,7 @@ gitlab_rails['sentry_clientside_dsn'] = 'https://<key>@sentry.io/<project>'
 gitlab_rails['sentry_environment'] = 'production'
 ```
 
-The [Sentry Environment](https://docs.sentry.io/enriching-error-data/environments/)
+The [Sentry Environment](https://docs.sentry.io/product/sentry-basics/environments/)
 can be used to track errors and issues across several deployed GitLab
 environments, e.g. lab, development, staging, production.
 
