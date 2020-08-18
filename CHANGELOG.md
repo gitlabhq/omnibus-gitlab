@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.2.6 (2020-08-18)
+
+- No changes.
+
+## 13.2.5 (2020-08-17)
+
+- No changes.
+
 ## 13.2.4 (2020-08-11)
 
 ### Fixed (1 change)
@@ -81,6 +89,14 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.24.2.
 
 
+## 13.1.8 (2020-08-18)
+
+- No changes.
+
+## 13.1.7 (2020-08-17)
+
+- No changes.
+
 ## 13.1.6 (2020-08-05)
 
 - No changes.
@@ -157,6 +173,14 @@ omnibus-gitlab repository.
 - Use latest Ubuntu AMI as base for our AMIs. !4308
 - Update Mattermost to 5.23.1.
 
+
+## 13.0.14 (2020-08-18)
+
+- No changes.
+
+## 13.0.13 (2020-08-17)
+
+- No changes.
 
 ## 13.0.12 (2020-08-05)
 
