@@ -313,7 +313,7 @@ during package upgrades, unless specifically [opted out](#opt-out-of-automatic-p
 
 CAUTION: **Before upgrading:**
 It is important that you fully read this section before running any commands.
-This upgrade requires downtime as the database must be down while the upgrade is being performed.
+For single node installations, this upgrade requires downtime as the database must be down while the upgrade is being performed.
 The length of time depends on the size of your database.
 If you would rather avoid downtime, it is possible to upgrade to a new database
 [using Slony](https://docs.gitlab.com/ee/update/upgrading_postgresql_using_slony.html).
@@ -336,8 +336,9 @@ sudo gitlab-ctl pg-upgrade
 ```
 
 TIP: **Tip:**
-`pg-upgrade` can take arguments. Run `gitlab-ctl pg-upgrade -h` to see the full
-list.
+`pg-upgrade` can take arguments, for example, you can set the timeout for the
+execution of the underlying commands (`--timeout=1d2h3m4s5ms`).
+Run `gitlab-ctl pg-upgrade -h` to see the full list.
 
 `gitlab-ctl pg-upgrade` performs the following steps:
 
