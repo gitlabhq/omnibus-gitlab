@@ -254,9 +254,6 @@ Ubuntu-18.04-branch:
   stage: gitlab_com:package
   extends: .branch_template
 
-Debian-8-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
 Debian-9-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -335,9 +332,6 @@ QA-branch:
     - Ubuntu-16.04-branch
   retry: 1
 
-Raspberry-Pi-2-Stretch-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
-  <<: *rpi_branch_build
 Raspberry-Pi-2-Buster-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_branch_build
@@ -429,9 +423,6 @@ Ubuntu-18.04-staging:
   <<: *dev-except-branches
 
 ### Package builds
-Debian-8:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_8:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
 Debian-9:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -539,11 +530,6 @@ Docker-measure-memory:
   dependencies: []
 
 ### Staging uploads
-Debian-8-staging:
-  dependencies:
-    - Debian-8
-    - Debian-8-branch
-  <<: *staging_upload
 Debian-9-staging:
   dependencies:
     - Debian-9
@@ -602,10 +588,6 @@ Ubuntu-18.04-release:
 Ubuntu-20.04-release:
   dependencies:
     - Ubuntu-20.04
-  <<: *production_release
-Debian-8-release:
-  dependencies:
-    - Debian-8
   <<: *production_release
 Debian-9-release:
   dependencies:
@@ -732,17 +714,10 @@ HA-Validate-Tagged:
   dependencies: []
   allow_failure: true
 
-Raspberry-Pi-2-Stretch:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_9:${BUILDER_IMAGE_REVISION}"
-  <<: *rpi_tag_build
 Raspberry-Pi-2-Buster:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
   <<: *rpi_tag_build
 
-Raspberry-Pi-2-Stretch-release:
-  dependencies:
-    - Raspberry-Pi-2-Stretch
-  <<: *raspbian_release
 Raspberry-Pi-2-Buster-release:
   dependencies:
     - Raspberry-Pi-2-Buster
