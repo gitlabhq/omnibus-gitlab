@@ -308,14 +308,15 @@ This is an intrusive operation. It cannot be done without downtime on an existin
 
 Omnibus GitLab provides the `gitlab-ctl pg-upgrade` command to update the packaged
 PostgreSQL server to a later version (if one is included in the package). This
-will automatically update PostgreSQL to the [default shipped version](../package-information/postgresql_versions.md)
+automatically updates PostgreSQL to the [default shipped version](../package-information/postgresql_versions.md)
 during package upgrades, unless specifically [opted out](#opt-out-of-automatic-postgresql-upgrades).
 
 CAUTION: **Before upgrading:**
-It is important that you fully read this section before running any commands.
-For single node installations, this upgrade requires downtime as the database must be down while the upgrade is being performed.
+It's important that you fully read this section before running any commands.
+For single node installations, this upgrade needs downtime, as the database must be down while the
+upgrade is being performed.
 The length of time depends on the size of your database.
-If you would rather avoid downtime, it is possible to upgrade to a new database
+If you would rather avoid downtime, it's possible to upgrade to a new database
 [using Slony](https://docs.gitlab.com/ee/update/upgrading_postgresql_using_slony.html).
 
 TIP: **Tip:**
@@ -324,12 +325,19 @@ with a full description at the [Omnibus GitLab issue tracker](https://gitlab.com
 
 To upgrade the PostgreSQL version, make sure that:
 
-- You're currently running the latest version of GitLab and it is working.
-- If you recently upgraded, `sudo gitlab-ctl reconfigure` ran successfully before you proceed.
-- You have sufficient disk space for two copies of your database. **Do not attempt to upgrade unless you have enough free space available.** Check your database size using `sudo du -sh /var/opt/gitlab/postgresql/data` (or update to your database path) and space available using `sudo df -h`. If the partition where the database resides does not have enough space, you can pass the argument `--tmp-dir $DIR` to the command. GitLab 13.3 includes an automatic check of the available disk space and aborts the upgrade operation if the requirements are not met.
+- You're running the latest version of GitLab and it's working.
+- If you recently upgraded, you ran `sudo gitlab-ctl reconfigure` successfully before you proceed.
+- You have sufficient disk space for two copies of your database.
+  **Do not attempt to upgrade unless you have enough free space available.**
 
-Once you have confirmed that the above checklist is satisfied,
-you can proceed with the upgrade:
+  - Check your database size using `sudo du -sh /var/opt/gitlab/postgresql/data`(or update to your
+  database path).
+  - Check the space available using `sudo df -h`. If the partition where the database resides does
+    not have enough space, you can pass the argument `--tmp-dir $DIR` to the command.
+    GitLab 13.3 includes an automatic check of the available disk space and aborts the upgrade if
+    the requirements are not met.
+
+After you confirm that the above checklist is satisfied, you can proceed with the upgrade:
 
 ```shell
 sudo gitlab-ctl pg-upgrade
@@ -354,9 +362,9 @@ Run `gitlab-ctl pg-upgrade -h` to see the full list.
 1. Starts the remaining services and removes the deploy page.
 1. If any errors are detected during this process, it reverts to the old version of the database.
 
-Once the upgrade is complete, verify everything is working as expected.
+After the upgrade is complete, verify that everything is working as expected.
 
-**Once you have verified that your GitLab instance is running correctly**,
+**After you have verified that your GitLab instance is running correctly**,
 you can clean up the old database files:
 
 ```shell
@@ -378,9 +386,9 @@ sudo touch /etc/gitlab/disable-postgresql-upgrade
 
 #### GitLab 13.3 and later
 
-As of GitLab 13.3, PostgreSQL 11.7 and 12.3 are both shipped with Omnibus GitLab, while GitLab still uses PostgreSQL 11 by default.
-During a package upgrade, the database will not automatically upgraded to PostgreSQL 12. If you want to upgrade to PostgreSQL
-12, you must do it manually:
+As of GitLab 13.3, PostgreSQL 11.7 and 12.3 are both shipped with Omnibus GitLab, while GitLab still
+uses PostgreSQL 11 by default. During a package upgrade, the database is not automatically upgraded
+to PostgreSQL 12. If you want to upgrade to PostgreSQL 12, you must do it manually:
 
 ```shell
 sudo gitlab-ctl pg-upgrade -V 12
