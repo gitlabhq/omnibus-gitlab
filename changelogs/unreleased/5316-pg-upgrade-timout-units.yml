@@ -1,5 +1,0 @@
----
-title: Support units other than milliseconds for the pg-upgrade timeout option
-merge_request: 4493
-author:
-type: added

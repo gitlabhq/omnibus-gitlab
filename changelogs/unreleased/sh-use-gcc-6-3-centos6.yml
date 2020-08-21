@@ -1,5 +1,0 @@
----
-title: Use gcc v6.3 for CentOS 6 to build Rails C extensions
-merge_request: 4466
-author:
-type: other
