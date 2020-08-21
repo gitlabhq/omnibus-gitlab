@@ -1318,7 +1318,6 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 #  "port" => 9999,
 #  "vts_enable" => true,
 #  "options" => {
-#    "stub_status" => "on", # Turn on stats
 #    "server_tokens" => "off", # Don't show the version of NGINX
 #    "access_log" => "off", # Disable logs for stats
 #    "allow" => "127.0.0.1", # Only allow access from localhost
