@@ -21,7 +21,7 @@ when updating to the current version.
 
 ## Background migrations
 
-CAUTION: **Caution:**
+DANGER: **Danger:**
 It's important to ensure that any background migrations have been fully completed
 before upgrading to a new major version. Upgrading before background migrations have
 finished may lead to data corruption.
