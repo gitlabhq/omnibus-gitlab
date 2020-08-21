@@ -98,7 +98,8 @@ nginx['logrotate_size'] = "200M"
 logrotate['enable'] = false
 ```
 
-NOTE: **Note:** Currently the Gitaly-specific [GitLab Shell log](https://docs.gitlab.com/ee/administration/logs.html#gitlab-shelllog) is not rotated by logrotate.
+NOTE: **Note:**
+Currently the Gitaly-specific [GitLab Shell log](https://docs.gitlab.com/ee/administration/logs.html#gitlab-shelllog) is not rotated by logrotate.
 See [Issue #4938](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4938) for more details.
 
 ### Run logrotate manually
@@ -122,7 +123,8 @@ logging['udp_log_shipping_host'] = '1.2.3.4' # Your syslog server
 logging['udp_log_shipping_port'] = 1514 # Optional, defaults to 514 (syslog)
 ```
 
-NOTE: **Note:** Setting `udp_log_shipping_host` will [add a `svlogd_prefix`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/logging.rb)
+NOTE: **Note:**
+Setting `udp_log_shipping_host` will [add a `svlogd_prefix`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/logging.rb)
 for the specified hostname and service for each of the [runit-managed](../architecture/README.md#runit) services.
 
 Example log messages:
@@ -158,7 +160,8 @@ Splunk, or another log management system.
 [Beginning in Omnibus GitLab 12.0](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4102),
 the JSON format is enabled by default for all services that support it.
 
-NOTE: **Note** PostgreSQL does not support JSON logging without an
+NOTE: **Note:**
+PostgreSQL does not support JSON logging without an
 external plugin. However, it does support logging in CSV format:
 
 ```ruby
@@ -185,4 +188,5 @@ sidekiq['log_format'] = 'default'
 gitlab_pages['log_format'] = 'text'
 ```
 
-NOTE: **Note:** There are a few variations in attribute names for the log format depending on the service involved (for example, Container Registry uses `log_formatter`, Gitaly and Praefect both use `logging_format`). See [Issue #4280](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4280) for more details.
+NOTE: **Note:**
+There are a few variations in attribute names for the log format depending on the service involved (for example, Container Registry uses `log_formatter`, Gitaly and Praefect both use `logging_format`). See [Issue #4280](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4280) for more details.

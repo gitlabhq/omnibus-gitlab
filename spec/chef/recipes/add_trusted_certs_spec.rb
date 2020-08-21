@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'add_trusted_certs recipe' do
+RSpec.describe 'add_trusted_certs recipe' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   let(:cert_helper) { CertificateHelper.new('/etc/gitlab/trusted-certs', '/opt/gitlab/embedded/ssl/certs', '/var/opt/gitlab') }
 

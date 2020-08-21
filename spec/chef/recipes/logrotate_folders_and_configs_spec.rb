@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::logrotate_folder_and_configs_spec' do
+RSpec.describe 'gitlab::logrotate_folder_and_configs_spec' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
   before do

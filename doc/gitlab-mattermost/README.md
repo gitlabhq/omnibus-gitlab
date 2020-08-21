@@ -6,7 +6,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # GitLab Mattermost
 
-NOTE: **Note:** This document applies to GitLab 11.0 and later.
+NOTE: **Note:**
+This document applies to GitLab 11.0 and later.
 
 You can run a [GitLab Mattermost](https://gitlab.com/gitlab-org/gitlab-mattermost)
 service on your GitLab server.
@@ -273,6 +274,7 @@ Below is a list of Mattermost versions for GitLab 11.10 and later:
 | 13.0 | 5.22 |
 | 13.1 | 5.23 |
 | 13.2 | 5.24 |
+| 13.3 | 5.25 |
 
 Starting with GitLab 11.0, GitLab Mattermost can be upgraded through the regular Omnibus GitLab update process. When upgrading previous versions of
 GitLab that process can only be used if Mattermost configuration settings have not been changed outside of GitLab (i.e., no changes to Mattermost's `config.json`

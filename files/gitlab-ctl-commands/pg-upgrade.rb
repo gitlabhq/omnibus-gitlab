@@ -24,7 +24,13 @@ REVERT_VERSION_FILE = "#{data_path}/postgresql-version.old".freeze
 add_command_under_category 'revert-pg-upgrade', 'database',
                            'Run this to revert to the previous version of the database',
                            2 do |_cmd_name|
-  options = GitlabCtl::PgUpgrade.parse_options(ARGV)
+  begin
+    options = GitlabCtl::PgUpgrade.parse_options(ARGV)
+  rescue ArgumentError => e
+    log "Command line parameter error: #{e.message}"
+    Kernel.exit 64
+  end
+
   revert_version = lookup_version(options[:target_version], read_revert_version || default_version)
 
   @attributes = GitlabCtl::Util.get_node_attributes(base_path)
@@ -150,6 +156,20 @@ add_command_under_category 'pg-upgrade', 'database',
   end
 
   deprecation_message if @db_worker.target_version.major.to_f < 11
+
+  unless options[:skip_disk_check]
+    [@db_worker.data_dir, @db_worker.tmp_dir].compact.uniq.each do |dir|
+      unless GitlabCtl::Util.progress_message(
+        "Checking if disk for directory #{dir} has enough free space for PostgreSQL upgrade"
+      ) do
+        @db_worker.enough_free_space?(dir)
+      end
+        log "Upgrade requires #{@db_worker.space_needed(dir)}MB, but only #{@db_worker.space_free(dir)}MB is free."
+        Kernel.exit 1
+      end
+      next
+    end
+  end
 
   unless GitlabCtl::Util.progress_message(
     'Checking if PostgreSQL bin files are symlinked to the expected location'

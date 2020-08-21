@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'postgresql_config' do
+RSpec.describe 'postgresql_config' do
   let(:runner) do
     ChefSpec::SoloRunner.new(step_into: %w(postgresql_config)) do |node|
       node.normal['postgresql']['data_dir'] = '/fakedir'

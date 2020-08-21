@@ -99,21 +99,14 @@ module Build
       end
 
       def gitlab_rails_repo
-        # For normal builds, QA build happens from the gitlab repositories in dev.
-        # For triggered builds, they are not available and their gitlab.com mirrors
-        # have to be used.
-        # CE repo - In com it is gitlab-foss, in dev it is gitlabhq
-        # EE repo - In com it is gitlab, in dev it is gitlab-ee
+        gitlab_rails =
+          if package == "gitlab-ce"
+            "gitlab-rails"
+          else
+            "gitlab-rails-ee"
+          end
 
-        if Gitlab::Version.alternative_channel?
-          domain = "https://gitlab.com/gitlab-org"
-          project = package == "gitlab-ce" ? "gitlab-foss" : "gitlab"
-        else
-          domain = "git@dev.gitlab.org:gitlab"
-          project = package == "gitlab-ce" ? "gitlabhq" : "gitlab-ee"
-        end
-
-        "#{domain}/#{project}.git"
+        Gitlab::Version.new(gitlab_rails).remote
       end
 
       def edition

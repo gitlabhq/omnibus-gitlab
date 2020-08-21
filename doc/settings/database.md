@@ -317,9 +317,9 @@ To opt out of automatic PostgreSQL upgrade during GitLab package upgrades, run:
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
-If you want to manually upgrade without upgrading GitLab, you can follow these instructions:
+If you want to manually upgrade without upgrading GitLab, you can follow these instructions.
 
-**Note:**
+Take note of the following:
 
 - Please fully read this section before running any commands.
 - Please plan ahead as upgrade involves downtime.
@@ -498,7 +498,7 @@ sure that PostgreSQL is set up according to the [database requirements document]
    Don't forget to remove the `#` comment characters at the beginning of these
    lines.
 
-   **Note:**
+   Note that:
 
    - `/etc/gitlab/gitlab.rb` should have file permissions `0600` because it contains
      plain-text passwords.
@@ -528,7 +528,8 @@ instead of the one bundled with GitLab, you can do so by using a UNIX socket:
    gitlab_rails['db_host'] = '/var/run/postgresql/'
    ```
 
-   NOTE: **Note:** `gitlab_rails['db_socket']` is a setting for Mysql and it won't have any effect on PostgreSQL.
+   NOTE: **Note:**
+   `gitlab_rails['db_socket']` is a setting for Mysql and it won't have any effect on PostgreSQL.
 
 1. Reconfigure GitLab for the changes to take effect:
 
@@ -977,14 +978,6 @@ replication user's password.
 1. [Reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure) on the Geo **secondary database** to update the
    `pg_hba.conf` file. This is needed because `replicate-geo-database`
    replicates the primary's file to the secondary.
-
-1. Refresh the foreign tables on the Geo secondary server by running this
-   command on an application node (any node running `puma`/`unicorn`, `sidekiq`, or
-   `geo-logcursor`).
-
-   ```shell
-   sudo gitlab-rake geo:db:refresh_foreign_tables
-   ```
 
 1. Restart `puma` (or `unicorn`), `sidekiq`, and `geo-logcursor`.
 

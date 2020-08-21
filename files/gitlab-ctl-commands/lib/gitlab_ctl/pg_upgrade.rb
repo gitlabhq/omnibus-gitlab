@@ -1,4 +1,6 @@
 require 'optparse'
+require 'mixlib/shellout'
+
 require_relative 'util'
 require_relative '../gitlab_ctl'
 
@@ -45,6 +47,26 @@ module GitlabCtl
       return @tmp_data_dir if @tmp_data_dir
 
       @tmp_data_dir = @tmp_dir ? "#{@tmp_dir}/data" : data_dir
+    end
+
+    def enough_free_space?(dir)
+      space_needed(dir) <= space_free(dir)
+    end
+
+    def space_needed(dir)
+      space_used = GitlabCtl::Util.get_command_output(
+        "du -s --block-size=1m #{dir}", nil, @timeout
+      ).split.first.to_i
+
+      space_used * 2
+    end
+
+    def space_free(dir)
+      space_available = GitlabCtl::Util.get_command_output(
+        "df -P --block-size=1m #{dir} | awk '{print $4}'", nil, @timeout
+      ).split.last.to_i
+
+      (space_available * 0.9).to_i
     end
 
     def run_pg_command(command)
@@ -141,7 +163,8 @@ module GitlabCtl
           wait: true,
           skip_unregister: false,
           timeout: nil,
-          target_version: nil
+          target_version: nil,
+          skip_disk_check: false
         }
 
         OptionParser.new do |opts|
@@ -157,13 +180,17 @@ module GitlabCtl
             options[:skip_unregister] = true
           end
 
-          opts.on('-TTIMEOUT', '--timeout=TIMEOUT', 'Timeout in milliseconds for the execution of the underlying commands') do |t|
-            i = t.to_i
+          opts.on('-TTIMEOUT', '--timeout=TIMEOUT', 'Timeout in milliseconds for the execution of the underlying commands. Accepts duration format such as 1d2h3m4s5ms.') do |t|
+            i = GitlabCtl::Util.parse_duration(t)
             options[:timeout] = i.positive? ? i : nil
           end
 
           opts.on('-VVERSION', '--target-version=VERSION', 'The explicit major version to upgrade or downgrade to') do |v|
             options[:target_version] = v
+          end
+
+          opts.on('--skip-disk-check', 'Skip checking that there is enough free disk space to perform upgrade') do
+            options[:skip_disk_check] = true
           end
         end.parse!(args)
 

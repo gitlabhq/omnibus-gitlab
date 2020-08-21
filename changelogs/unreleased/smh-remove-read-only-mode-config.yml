@@ -1,0 +1,5 @@
+---
+title: Remove read-only config toggle from Praefect
+merge_request: 4462
+author:
+type: changed

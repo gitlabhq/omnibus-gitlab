@@ -126,62 +126,6 @@ class BasePgHelper < BaseHelper
               "| grep -x #{server_name}"])
   end
 
-  def fdw_user_mapping_exists?(user, server_name, db_name)
-    psql_cmd(["-d '#{db_name}'",
-              %(-c "select usename from pg_user_mappings where srvname='#{server_name}'" -tA),
-              "| grep -x #{user}"])
-  end
-
-  def fdw_user_has_server_privilege?(user, server_name, db_name, permission)
-    psql_cmd(["-d '#{db_name}'",
-              %(-c "select has_server_privilege('#{user}', '#{server_name}', '#{permission}');" -tA),
-              "| grep -x t"])
-  end
-
-  def fdw_server_options_changed?(server_name, db_name, options = {})
-    options = stringify_hash_values(options)
-    raw_content = psql_query(db_name, "SELECT srvoptions FROM pg_foreign_server WHERE srvname='#{server_name}'")
-    server_options = parse_pghash(raw_content)
-
-    # return whether options is not a subset of server_options
-    # this allows us to ignore additional params on server and look only to the ones informed in the method
-    !(options <= server_options)
-  end
-
-  def fdw_user_mapping_changed?(user, server_name, db_name, options = {})
-    current_options = fdw_user_mapping_current_options(user, server_name, db_name)
-
-    # return whether options is not a subset of current_options
-    # this allows us to ignore additional params on server and look only to the ones informed in the method
-    !(options <= current_options)
-  end
-
-  # Returns the desired FDW user mapping options, not including parentheses
-  #
-  # `resource` must respond to FDW user mapping properties:
-  #   db_user
-  #   server_name
-  #   db_name
-  #   external_user
-  #   external_password
-  def fdw_user_mapping_update_options(resource)
-    has_password = fdw_external_password_exists?(resource.db_user, resource.server_name, resource.db_name)
-    password_action = has_password ? 'SET' : 'ADD'
-
-    "SET user '#{resource.external_user}', #{password_action} password '#{resource.external_password}'"
-  end
-
-  # Returns whether the user mapping has a password set
-  def fdw_external_password_exists?(user, server_name, db_name)
-    fdw_user_mapping_current_options(user, server_name, db_name).key?(:password)
-  end
-
-  def fdw_user_mapping_current_options(user, server_name, db_name)
-    raw_content = psql_query(db_name, "SELECT umoptions FROM pg_user_mappings WHERE srvname='#{server_name}' AND usename='#{user}'")
-
-    parse_pghash(raw_content)
-  end
-
   def user_hashed_password(db_user)
     db_user_safe = db_user.scan(/[a-z_][a-z0-9_-]*[$]?/).first
     psql_query('template1', "SELECT passwd FROM pg_shadow WHERE usename='#{db_user_safe}'")

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/build/qa_image'
 
-describe Build::QAImage do
+RSpec.describe Build::QAImage do
   before do
     allow(Build::GitlabImage).to receive(:dockerhub_image_name).and_return('gitlab/gitlab-ce')
     allow(Build::GitlabImage).to receive(:gitlab_registry_image_name).and_return('gitlab-ce')

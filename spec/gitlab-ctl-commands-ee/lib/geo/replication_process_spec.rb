@@ -6,7 +6,7 @@ $LOAD_PATH << './files/gitlab-ctl-commands/lib'
 require 'geo/replication_process'
 require 'gitlab_ctl/util'
 
-describe Geo::ReplicationProcess do
+RSpec.describe Geo::ReplicationProcess do
   let(:error_text) { 'AN ERROR' }
   let(:good_status) { double('Command status', error?: false) }
   let(:bad_status) { double('Command status', error?: true, stdout: error_text) }

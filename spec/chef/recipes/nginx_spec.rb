@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::nginx' do
+RSpec.describe 'gitlab::nginx' do
   let(:chef_runner) do
     ChefSpec::SoloRunner.new(step_into: %w(runit_service)) do |node|
       node.normal['gitlab']['nginx']['enable'] = true
@@ -68,7 +68,7 @@ describe 'gitlab::nginx' do
   end
 end
 
-describe 'nginx' do
+RSpec.describe 'nginx' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   subject { chef_run }
 

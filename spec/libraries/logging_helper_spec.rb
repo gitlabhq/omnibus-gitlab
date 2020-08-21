@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe LoggingHelper do
+RSpec.describe LoggingHelper do
   let(:log) { spy('Chef::Log') }
 
   before do

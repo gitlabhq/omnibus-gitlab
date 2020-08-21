@@ -6,97 +6,71 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Configuring Redis
 
-## Running Redis on the application server
+## Using an alternate local Redis instance
 
-### Using an alternate local Redis Instance
+Omnibus GitLab includes Redis by default. To direct the GitLab
+application to your own *locally* running Redis instance:
 
-Omnibus GitLab provides an instance of Redis by default. Administrators who
-wish to point the GitLab application at their own ***locally*** running Redis
-instance should make the following changes in `gitlab.rb`. Run
-`gitlab-ctl reconfigure` for the changes to take effect.
-
-```ruby
-redis['enable'] = false
-
-# Redis via TCP
-gitlab_rails['redis_host'] = '127.0.0.1'
-gitlab_rails['redis_port'] = 6379
-
-# OR Redis via Unix domain sockets
-gitlab_rails['redis_socket'] = '/tmp/redis.sock' # defaults to /var/opt/gitlab/redis/redis.socket
-
-# Password to Authenticate to alternate local Redis if required
-gitlab_rails['redis_password'] = 'Redis Password'
-```
-
-### Making a bundled Redis instance reachable via TCP
-
-Use the following settings if you want to make one of the Redis instances
-managed by Omnibus GitLab reachable via TCP.
-
-```ruby
-redis['port'] = 6379
-redis['bind'] = '127.0.0.1'
-```
-
-## Setting up a Redis-only server
-
-If you'd like to setup a separate Redis server (e.g. in the case of scaling
-issues) for use with GitLab you can do so using Omnibus GitLab.
-
-### Setting up the Redis Node
-
-> **Note:** Redis does not require authentication by default. See
-> [Redis Security](https://redis.io/topics/security) documentation for more
-> information. We recommend using a combination of a Redis password and tight
-> firewall rules to secure your Redis service.
-
-1. Download/install Omnibus GitLab using **steps 1 and 2** from
-   [GitLab downloads](https://about.gitlab.com/install/). Do not complete other
-   steps on the download page.
-1. Create/edit `/etc/gitlab/gitlab.rb` and use the following configuration.
+1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   # Disable all services except Redis
-   redis_master_role['enable'] = true
-
-   # Redis configuration
-   redis['port'] = 6379
-   redis['bind'] = '0.0.0.0'
-
-   # If you wish to use Redis authentication (recommended)
-   redis['password'] = 'Redis Password'
-
-   # Disable automatic database migrations
-   #   Only the primary GitLab application server should handle migrations
-   gitlab_rails['auto_migrate'] = false
-   ```
-
-   > **Note:** The `redis_master_role['enable']` option is only available as of
-   > GitLab 8.14, see [`gitlab_rails.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/gitlab_rails.rb)
-   > to understand which services are automatically disabled via that option.
-
-1. Run `sudo gitlab-ctl reconfigure` to install and configure Redis.
-
-### Configuring the GitLab Application Node
-
-1. The following settings point the GitLab application at the external Redis
-   service:
-
-   ```ruby
+   # Disable the bundled Redis
    redis['enable'] = false
 
-   gitlab_rails['redis_host'] = 'redis.example.com'
+   # Redis via TCP
+   gitlab_rails['redis_host'] = '127.0.0.1'
    gitlab_rails['redis_port'] = 6379
 
-   # Required if Redis authentication is configured on the Redis node
-   gitlab_rails['redis_password'] = 'Redis Password'
+   # OR Redis via Unix domain sockets
+   gitlab_rails['redis_socket'] = '/tmp/redis.sock' # defaults to /var/opt/gitlab/redis/redis.socket
+
+   # Password to Authenticate to alternate local Redis if required
+   gitlab_rails['redis_password'] = '<redis_password>'
    ```
 
-1. Run `sudo gitlab-ctl reconfigure` to configure the application to use the
-   external Redis node.
+1. Reconfigure GitLab for the changes to take effect:
 
-### Using Google Cloud Memorystore
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+## Making the bundled Redis reachable via TCP
+
+Use the following settings if you want to make the Redis instance
+managed by Omnibus GitLab reachable via TCP:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   redis['port'] = 6379
+   redis['bind'] = '127.0.0.1'
+   ```
+
+1. Save the file and reconfigure GitLab for the changes to take effect:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+## Setting up a Redis-only server using Omnibus GitLab
+
+If you'd like to set up Redis in a separate server than the GitLab application,
+you can use the
+[bundled Redis in Omnibus GitLab](https://docs.gitlab.com/ee/administration/redis/standalone.html).
+
+## Running with multiple Redis instances
+
+See <https://docs.gitlab.com/ee/administration/redis/replication_and_failover.html#running-multiple-redis-clusters>.
+
+## Redis Sentinel
+
+See <https://docs.gitlab.com/ee/administration/redis/replication_and_failover.html>.
+
+## Using Redis in a failover setup
+
+See <https://docs.gitlab.com/ee/administration/redis/replication_and_failover.html>.
+
+## Using Google Cloud Memorystore
 
 Google Cloud Memorystore [does not support the Redis `CLIENT`
 command](https://cloud.google.com/memorystore/docs/redis/redis-configs).
@@ -130,42 +104,6 @@ redis['tcp_timeout'] = "60"
 redis['tcp_keepalive'] = "300"
 ```
 
-## Running with multiple Redis instances
-
-GitLab includes support for running with separate Redis instances for different persistence classes, currently: `cache`, `queues`, `shared_state` and `actioncable`.
-
-| Instance       | Purpose                                         |
-| -------------- | ----------------------------------------------- |
-| `cache`        | Store cached data                               |
-| `queues`       | Store Sidekiq background jobs                   |
-| `shared_state` | Store session-related and other persistent data |
-| `actioncable`  | Pub/Sub queue backend for ActionCable           |
-
-1. Create a dedicated instance for each persistence class as per the instructions in [Setting up a Redis-only server](#setting-up-a-redis-only-server)
-1. Set the appropriate variable in `/etc/gitlab/gitlab.rb` for each instance you are using:
-
-   ```ruby
-   gitlab_rails['redis_cache_instance'] = REDIS_CACHE_URL
-   gitlab_rails['redis_queues_instance'] = REDIS_QUEUES_URL
-   gitlab_rails['redis_shared_state_instance'] = REDIS_SHARED_STATE_URL
-   gitlab_rails['redis_actioncable_instance'] = REDIS_ACTIONCABLE_URL
-   ```
-
-   **Note**: Redis URLs should be in the format: `redis://PASSWORD@REDIS_HOST:PORT/2`
-
-   Where:
-
-   - PASSWORD is the plaintext password for the Redis instance
-   - REDIS_HOST is the hostname or IP address of the host
-   - REDIS_PORT is the port Redis is listening on, the default is 6379
-
-1. Run `gitlab-ctl reconfigure`
-
-## Redis Sentinel
-
-For details on configuring Redis Sentinel, see
-<https://docs.gitlab.com/ee/administration/high_availability/redis.html>.
-
 ## Setting the Redis Cache instance as an LRU
 
 Using multiple Redis instances allows you to configure Redis as a [Least
@@ -182,15 +120,41 @@ redis['maxmemory_policy'] = "allkeys-lru"
 redis['maxmemory_samples'] = 5
 ```
 
-## Using a Redis HA setup
-
-See <https://docs.gitlab.com/ee/administration/high_availability/redis.html>.
-
 ## Using Secure Sockets Layer (SSL)
 
-Redis v3.2.x does NOT support SSL out of the box. However, you can encrypt a
+Redis 5.x does NOT support SSL out of the box. However, you can encrypt a
 Redis connection using [stunnel](https://redislabs.com/blog/stunnel-secure-redis-ssl/).
 AWS ElasticCache also supports Redis over SSL.
+
+Support for SSL has the following limitations:
+
+- Omnibus GitLab doesn't include `stunnel` or other tools to provide encryption
+  for the Redis server. However, GitLab does provide client support by using
+  the `rediss://` (as opposed to `redis://`) URL scheme.
+- Omnibus GitLab bundles Redis Sentinel 5.0.x which does NOT support SSL.
+  If you use Redis Sentinel, do not activate client support for SSL.
+  [Redis 6 supports SSL](https://redis.io/topics/encryption), and you can
+  configure it to work with GitLab only as an
+  [external service](https://docs.gitlab.com/ee/administration/redis/replication_and_failover_external.html).
+
+To activate GitLab client support for SSL:
+
+1. Add the following line to `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['redis_ssl'] = true
+   ```
+
+1. Reconfigure GitLab for the changes to take effect:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+## SSL certificates
+
+If you're using custom SSL certificates for Redis, be sure to add them
+to the [trusted certificates](../settings/ssl.md#install-custom-public-certificates).
 
 ## Renamed commands
 
@@ -208,40 +172,12 @@ redis['rename_commands'] = {
 - `OTHER_COMMAND` is the command you want to modify
 - `VALUE` should be one of:
   1. A new command name.
-  1. '', which completely disables the command
+  1. `''`, which completely disables the command.
 
 To disable this functionality:
 
 1. Set `redis['rename_commands'] = {}` in your `/etc/gitlab/gitlab.rb` file
 1. Run `sudo gitlab-ctl reconfigure`
-
-### Limitations
-
-- GitLab does NOT ship with stunnel or other tools to provide encryption
-  for the Redis server. However, GitLab does provide client support via
-  the `rediss://` (as opposed to `redis://`) URL scheme.
-
-- Redis Sentinel does NOT support SSL yet. If you use Redis Sentinel, do
-  not activate client support for SSL. [This pull
-  request](https://github.com/antirez/redis/pull/4855) may bring native
-  support to Redis 6.0.
-
-### Activating SSL (client settings)
-
-To activate GitLab client support for SSL, do the following:
-
-1. Add the following line to `/etc/gitlab/gitlab.rb`:
-
-   ```ruby
-   gitlab_rails['redis_ssl'] = true
-   ```
-
-1. Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
-
-## SSL certificates
-
-If you are using custom SSL certificates for Redis, be sure to add them
-to the [trusted certificates](../settings/ssl.md#install-custom-public-certificates).
 
 ## Lazy freeing
 
@@ -256,7 +192,7 @@ redis['lazyfree_lazy_server_del'] = true
 redis['replica_lazy_flush'] = true
 ```
 
-## Common Troubleshooting
+## Troubleshooting
 
 ### `x509: certificate signed by unknown authority`
 

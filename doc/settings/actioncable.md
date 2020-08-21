@@ -6,7 +6,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # ActionCable
 
-NOTE: **Note:** ActionCable is **experimental** and the features that use this service are behind feature flags.
+NOTE: **Note:**
+ActionCable is **experimental** and the features that use this service are behind feature flags.
 
 This service is disabled by default. To enable:
 

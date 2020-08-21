@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/build/qa'
 
-describe Build::QA do
+RSpec.describe Build::QA do
   describe '.repo_path' do
     it 'returns correct location' do
       expect(described_class.repo_path).to eq("/tmp/gitlab")

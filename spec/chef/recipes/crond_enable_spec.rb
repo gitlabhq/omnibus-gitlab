@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'crond::enable' do
+RSpec.describe 'crond::enable' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('crond::enable') }
 
   it "should create a log directory" do

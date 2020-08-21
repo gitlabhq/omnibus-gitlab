@@ -5,7 +5,7 @@ require 'optparse'
 require_relative('../../../files/gitlab-ctl-commands/lib/gitlab_ctl')
 require_relative('../../../files/gitlab-ctl-commands-ee/lib/patroni')
 
-describe 'Patroni' do
+RSpec.describe 'Patroni' do
   core_commands = %w(bootstrap check-leader check-replica)
   additional_commands = %w(members pause resume failover switchover)
   all_commands = core_commands + additional_commands

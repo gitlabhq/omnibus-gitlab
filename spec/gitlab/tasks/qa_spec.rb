@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'qa', type: :rake do
+RSpec.describe 'qa', type: :rake do
   let(:gitlab_registry_image_address) { 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce-qa' }
   let(:gitlab_version) { '10.2.0' }
   let(:commit_sha) { 'abcd1234' }

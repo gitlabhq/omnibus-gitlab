@@ -12,6 +12,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [Creating patches](creating-patches.md)
 - [Repositories, branches and CI pipelines](pipelines.md)
 - [Release process](../release/README.md)
+- [Handling broken master pipelines](broken_master.md)
 - [Building your own package](../build/README.md)
 - [Building a package from a custom branch](../build/team_member_docs.md#i-have-an-mr-in-the-omnibus-gitlab-project-and-want-a-package-or-docker-image-to-test-it)
 - [Adding deprecation messages](adding-deprecation-messages.md)
@@ -69,7 +70,8 @@ their applicability:
 1. If Merge Request introduces change in user facing configuration, update to [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
 1. [Changelog entry](https://docs.gitlab.com/ee/development/changelog.html) to inform about the change, if necessary.
 
-**Note:** Ensure shared runners are enabled for your fork in order for our automated tests to run:
+NOTE: **Note:**
+Ensure shared runners are enabled for your fork in order for our automated tests to run:
 
 1. Go to Settings -> CI/CD
 1. Expand Runners settings

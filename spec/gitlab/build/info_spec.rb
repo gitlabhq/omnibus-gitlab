@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'gitlab/build/info'
 require 'gitlab/build/gitlab_image'
 
-describe Build::Info do
+RSpec.describe Build::Info do
   before do
     allow(ENV).to receive(:[]).and_call_original
   end
@@ -174,6 +174,22 @@ describe Build::Info do
       it 'returns dev repo for GitLab EE' do
         allow(Build::Info).to receive(:package).and_return("gitlab-ee")
         expect(described_class.gitlab_rails_repo).to eq("git@dev.gitlab.org:gitlab/gitlab-ee.git")
+      end
+    end
+
+    describe 'with security sources channel selected' do
+      before do
+        allow(::Gitlab::Version).to receive(:sources_channel).and_return('security')
+        allow(ENV).to receive(:[]).with('CI_JOB_TOKEN').and_return('CJT')
+      end
+
+      it 'returns security mirror for GitLab CE with attached credential' do
+        allow(Build::Info).to receive(:package).and_return("gitlab-ce")
+        expect(described_class.gitlab_rails_repo).to eq("https://gitlab-ci-token:CJT@gitlab.com/gitlab-org/security/gitlab-foss.git")
+      end
+      it 'returns security mirror for GitLab EE with attached credential' do
+        allow(Build::Info).to receive(:package).and_return("gitlab-ee")
+        expect(described_class.gitlab_rails_repo).to eq("https://gitlab-ci-token:CJT@gitlab.com/gitlab-org/security/gitlab.git")
       end
     end
   end

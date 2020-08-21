@@ -10,7 +10,7 @@ If you would rather send application email via an SMTP server instead of via
 Sendmail, add the following configuration information to
 `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
 
->**Warning:**
+CAUTION: **Caution:**
 Your `smtp_password` should not contain any String delimiters used in
 Ruby or YAML (f.e. `'`) to avoid unexpected behavior during the processing of
 config settings.
@@ -62,7 +62,7 @@ gitlab_rails['smtp_force_ssl'] = false
 
 ### Gmail
 
->**Note:**
+NOTE: **Note:**
 Gmail has [strict sending limits](https://support.google.com/a/answer/166852)
 that can impair functionality as your organization grows. We strongly recommend using a
 transactional service like [SendGrid](https://sendgrid.com/) or [Mailgun](https://www.mailgun.com/)
@@ -976,6 +976,29 @@ gitlab_rails['smtp_domain'] = "<your-gitlab-domain>"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
+
+### NIFCLOUD ESS
+
+[SMTP Interface](https://pfs.nifcloud.com/spec/ess/smtp.htm).
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.ess.nifcloud.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "SMTP user name"
+gitlab_rails['smtp_password'] = "SMTP user password"
+gitlab_rails['smtp_domain'] = "smtp.ess.nifcloud.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+
+gitlab_rails['gitlab_email_from'] = 'username@example.com'
+gitlab_rails['gitlab_email_reply_to'] = 'username@example.com'
+```
+
+Check the SMTP user name and SMTP user password from the ESS [dashboard](https://pfs.nifcloud.com/help/ess/dashboard.htm).
+`gitlab_email_from` and `gitlab_email_reply_to` must be ESS authenticated sender email addresses.
 
 ### More examples are welcome
 

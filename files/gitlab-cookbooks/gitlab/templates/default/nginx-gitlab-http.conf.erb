@@ -173,11 +173,6 @@ server {
     proxy_pass http://<%= node['monitoring']['grafana']['http_addr'] %>:<%= node['monitoring']['grafana']['http_port'] %>/;
   }
 
-  location <%= File.join(@path, '-/grafana/avatar') %> {
-    deny all;
-    return 404;
-  }
-
   <% end -%>
 
   # health checks configuration

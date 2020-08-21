@@ -8,7 +8,7 @@ RSpec::Matchers.define :configure_gitlab_yml_using do |expected_variables|
   end
 end
 
-describe 'gitlab::gitlab-rails' do
+RSpec.describe 'gitlab::gitlab-rails' do
   using RSpec::Parameterized::TableSyntax
 
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
@@ -399,6 +399,7 @@ describe 'gitlab::gitlab-rails' do
       include_context 'object storage config'
 
       let(:aws_connection_data) { JSON.parse(aws_connection_hash.to_json, symbolize_names: true) }
+      let(:aws_storage_options) { JSON.parse(aws_storage_options_hash.to_json, symbolize_names: true) }
 
       before do
         stub_gitlab_rb(
@@ -406,6 +407,7 @@ describe 'gitlab::gitlab-rails' do
             object_store: {
               enabled: true,
               connection: aws_connection_hash,
+              storage_options: aws_storage_options_hash,
               objects: object_config
             }
           }
@@ -419,6 +421,7 @@ describe 'gitlab::gitlab-rails' do
 
           expect(config[:object_store][:enabled]).to be true
           expect(config[:object_store][:connection]).to eq(aws_connection_data)
+          expect(config[:object_store][:storage_options]).to eq(aws_storage_options)
           expect(config[:object_store][:objects]).to eq(object_config)
         }
       end
@@ -1426,6 +1429,34 @@ describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'personal access token expired notification worker settings' do
+      let(:chef_run) do
+        ChefSpec::SoloRunner.new.converge('gitlab-ee::default')
+      end
+
+      context 'when worker is configured' do
+        it 'sets the cron value' do
+          stub_gitlab_rb(gitlab_rails: { personal_access_tokens_expired_notification_worker_cron: '1 2 3 4 5' })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'personal_access_tokens_expired_notification_worker_cron' => '1 2 3 4 5'
+            )
+          )
+        end
+      end
+
+      context 'when worker is not configured' do
+        it 'does not set the cron value' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'personal_access_tokens_expired_notification_worker_cron' => nil
+            )
+          )
+        end
+      end
+    end
+
     context 'GitLab Geo settings' do
       let(:chef_run) do
         ChefSpec::SoloRunner.new.converge('gitlab-ee::default')
@@ -2319,8 +2350,7 @@ describe 'gitlab::gitlab-rails' do
               'db_prepared_statements' => false,
               'db_sslcompression' => 0,
               'db_sslcert' => nil,
-              'db_sslkey' => nil,
-              'db_fdw' => nil
+              'db_sslkey' => nil
             )
           )
         end
@@ -2436,20 +2466,6 @@ describe 'gitlab::gitlab-rails' do
             expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
               hash_including(
                 'db_sslcompression' => 1
-              )
-            )
-          end
-        end
-
-        context 'when fdw is specified' do
-          before do
-            stub_gitlab_rb(gitlab_rails: { db_fdw: true })
-          end
-
-          it 'uses provided value in database.yml' do
-            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
-              hash_including(
-                'db_fdw' => true
               )
             )
           end

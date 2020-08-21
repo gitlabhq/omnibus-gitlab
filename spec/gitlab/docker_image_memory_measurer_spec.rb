@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/docker_image_memory_measurer'
 
-describe Gitlab::DockerImageMemoryMeasurer do
+RSpec.describe Gitlab::DockerImageMemoryMeasurer do
   let(:image_reference) { 'mocked_image_reference' }
   let(:measurer) { described_class.new(image_reference, debug_output_dir) }
   let(:delete_debug_output_dir) { FileUtils.remove_dir(debug_output_dir, true) }

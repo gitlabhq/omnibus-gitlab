@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/build/check'
 
-describe Build::Check do
+RSpec.describe Build::Check do
   before do
     allow(ENV).to receive(:[]).and_call_original
   end

@@ -6,7 +6,7 @@ version_check_cmd = 'echo 1.0.0-test'
 # Collect version as the custom resource would
 version = VersionHelper.version(version_check_cmd)
 
-describe 'version_file' do
+RSpec.describe 'version_file' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(version_file)) }
   let(:chef_run) { runner.converge("test_package::version_file_create") }
 

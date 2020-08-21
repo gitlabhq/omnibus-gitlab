@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'account' do
+RSpec.describe 'account' do
   let(:runner) do
     ChefSpec::SoloRunner.new(step_into: %w(account))
   end

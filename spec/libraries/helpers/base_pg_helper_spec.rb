@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe BasePgHelper do
+RSpec.describe BasePgHelper do
   cached(:chef_run) { converge_config }
   let(:node) { chef_run.node }
   subject { described_class.new(node) }
@@ -291,38 +291,6 @@ describe BasePgHelper do
 
       stub_service_failure_status('postgresql', true)
       expect(subject.is_managed_and_offline?).to be_falsey
-    end
-  end
-
-  describe '#fdw_external_password_exists?' do
-    it 'returns true when the password exists in the options hash' do
-      expect(subject).to receive(:psql_query).and_return('{user=gitlab,password=foo}')
-
-      expect(subject.fdw_external_password_exists?('gitlab_geo', 'gitlab_secondary', 'gitlabhq_geo_production')).to be_truthy
-    end
-
-    it 'returns false when the password does not exist in the options hash' do
-      expect(subject).to receive(:psql_query).and_return('{user=gitlab}')
-
-      expect(subject.fdw_external_password_exists?('gitlab_geo', 'gitlab_secondary', 'gitlabhq_geo_production')).to be_falsey
-    end
-  end
-
-  describe '#fdw_user_mapping_update_options' do
-    let(:resource) { double(:resource, db_user: 'gitlab_geo', server_name: 'gitlab_secondary', db_name: 'gitlabhq_geo_production', external_user: 'gitlab', external_password: 'mypass') }
-
-    it 'SETs the desired password when the password exists' do
-      expect(subject).to receive(:fdw_external_password_exists?).and_return(true)
-
-      result = subject.fdw_user_mapping_update_options(resource)
-      expect(result).to eq("SET user 'gitlab', SET password 'mypass'")
-    end
-
-    it 'ADDs the desired password when the password does not exist' do
-      expect(subject).to receive(:fdw_external_password_exists?).and_return(false)
-
-      result = subject.fdw_user_mapping_update_options(resource)
-      expect(result).to eq("SET user 'gitlab', ADD password 'mypass'")
     end
   end
 

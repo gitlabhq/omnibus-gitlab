@@ -5,7 +5,7 @@ $LOAD_PATH << './files/gitlab-ctl-commands/lib'
 
 require 'geo/replication_toggle_command'
 
-describe Geo::ReplicationToggleCommand do
+RSpec.describe Geo::ReplicationToggleCommand do
   let(:status) { double('Command status', error?: false) }
   let(:arguments) { [] }
   let(:ctl_instance) { double('gitlab-ctl instance', base_path: '') }

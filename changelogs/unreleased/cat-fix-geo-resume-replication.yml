@@ -1,5 +1,0 @@
----
-title: Fix Geo replication resuming
-merge_request: 4461
-author:
-type: fixed

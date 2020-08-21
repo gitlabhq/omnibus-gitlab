@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/build_iteration'
 
-describe Gitlab::BuildIteration do
+RSpec.describe Gitlab::BuildIteration do
   describe :build_iteration do
     subject { Gitlab::BuildIteration.new(git_describe) }
 

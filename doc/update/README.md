@@ -69,10 +69,10 @@ sudo touch /etc/gitlab/skip-auto-backup
 NOTE: **Note:**
 For safety reasons, you should maintain an up-to-date backup on your own if you plan to use this flag.
 
-NOTE: **Note**
+NOTE: **Note:**
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
-NOTE: **Note**
+NOTE: **Note:**
 Unless you are following the steps in [Zero downtime updates](#zero-downtime-updates), your GitLab application will not be available to users while an update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.
 
 ### Update using the official repositories
@@ -304,7 +304,7 @@ Before following these instructions, note the following **important** informatio
      sudo yum install gitlab-ee
      ```
 
-   NOTE: **Note**
+   NOTE: **Note:**
    The above commands use the latest version of GitLab. Use a version-specific package
    to update to an older version.
 
@@ -738,13 +738,6 @@ Log in to your **primary** node, executing the following:
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-NOTE: **Note:**
-After this step you can get an outdated FDW remote schema on your
-secondary nodes. While it is not important to worry about at this
-point, you can check out the
-[Geo troubleshooting documentation](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#geo-database-has-an-outdated-fdw-remote-schema-error)
-to resolve this.
-
 1. Hot reload `puma` (or `unicorn`) and `sidekiq` services
 
    ```shell
@@ -799,19 +792,6 @@ the update on the **primary** node:
 
    ```shell
    sudo gitlab-rake db:migrate
-   ```
-
-On each **secondary**, ensure the FDW tables are up-to-date.
-
-1. Wait for the **primary** migrations to finish.
-
-1. Wait for the **primary** migrations to replicate. You can find "Data
-   replication lag" for each node listed on `Admin Area > Geo`.
-
-1. Refresh Foreign Data Wrapper tables
-
-   ```shell
-   sudo gitlab-rake geo:db:refresh_foreign_tables
    ```
 
 After updating all nodes (both **primary** and all **secondaries**), check their status:
@@ -1093,14 +1073,7 @@ sudo gitlab-ctl restart geo-logcursor
 1. Wait for the **primary** migrations to finish.
 
 1. Wait for the **primary** migrations to replicate. You can find "Data
-   replication lag" for each node listed on `Admin Area > Geo`. These wait steps
-   help ensure the FDW tables are up-to-date.
-
-1. Refresh Foreign Data Wrapper tables
-
-   ```shell
-   sudo gitlab-rake geo:db:refresh_foreign_tables
-   ```
+   replication lag" for each node listed on `Admin Area > Geo`.
 
 1. Verify Geo configuration and dependencies
 

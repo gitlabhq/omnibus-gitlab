@@ -16,7 +16,7 @@
 
 require 'chef_helper'
 
-describe PrometheusHelper do
+RSpec.describe PrometheusHelper do
   let(:chef_run) { ChefSpec::SoloRunner.new }
   subject { described_class.new(chef_run.node) }
 

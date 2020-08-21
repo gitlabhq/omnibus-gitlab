@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::letsencrypt' do
+RSpec.describe 'gitlab::letsencrypt' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(step_into: %(letsencrypt_certificate)).converge('gitlab::default')
   end

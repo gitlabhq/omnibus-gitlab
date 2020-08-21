@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'omnibus-ctl'
 
-describe 'gitlab-ctl' do
+RSpec.describe 'gitlab-ctl' do
   before do
     allow_any_instance_of(Omnibus::Ctl).to receive(:require).and_call_original
     allow_any_instance_of(Omnibus::Ctl).to receive(:require).with(

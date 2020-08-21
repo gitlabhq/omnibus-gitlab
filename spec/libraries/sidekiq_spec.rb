@@ -1,7 +1,7 @@
 require 'chef_helper'
 require 'pry'
 
-describe Sidekiq do
+RSpec.describe Sidekiq do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   before { allow(Gitlab).to receive(:[]).and_call_original }
 
@@ -72,6 +72,7 @@ describe Sidekiq do
           }
         }
       )
+      allow(LoggingHelper).to receive(:deprecation).and_call_original
 
       expect(LoggingHelper).to receive(:deprecation).with(a_string_including("Configuring `sidekiq_cluster[*]` directly"))
 
@@ -81,6 +82,7 @@ describe Sidekiq do
 
   it 'warns when trying to run sidekiq directly' do
     stub_gitlab_rb(sidekiq: { cluster: false })
+    allow(LoggingHelper).to receive(:deprecation).and_call_original
 
     expect(LoggingHelper).to receive(:deprecation).with(a_string_matching(/Running Sidekiq directly is deprecated/))
 

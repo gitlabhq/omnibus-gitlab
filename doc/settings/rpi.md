@@ -77,5 +77,5 @@ Pi using the USB interface.
 ### Use external services
 
 You can improve the GitLab performance on the Pi by connecting GitLab to
-[external database](database.md#using-a-non-packaged-postgresql-database-management-server)
-and [Redis](redis.md#setting-up-a-redis-only-server) instances.
+external [database](database.md#using-a-non-packaged-postgresql-database-management-server)
+and [Redis](https://docs.gitlab.com/ee/administration/redis/standalone.html) instances.

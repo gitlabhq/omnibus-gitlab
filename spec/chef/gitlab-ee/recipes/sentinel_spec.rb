@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::redis' do
+RSpec.describe 'gitlab::redis' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(sentinel_service runit_service)).converge('gitlab-ee::default') }
   let(:redis_master_ip) { '1.1.1.1' }
   let(:redis_announce_ip) { '10.10.10.10' }

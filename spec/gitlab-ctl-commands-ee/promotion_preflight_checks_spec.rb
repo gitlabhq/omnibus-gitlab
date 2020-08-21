@@ -7,7 +7,7 @@ RSpec.shared_context 'promotion-preflight-checks' do
   let(:command_script) { 'promotion_preflight_checks' }
 end
 
-describe 'gitlab-ctl promotion-preflight-checks' do
+RSpec.describe 'gitlab-ctl promotion-preflight-checks' do
   include_context 'promotion-preflight-checks'
   include_context 'ctl'
 

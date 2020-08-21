@@ -121,6 +121,7 @@ default['gitlab']['gitlab-rails']['pipeline_schedule_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_check_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['admin_email_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['personal_access_tokens_expiring_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['personal_access_tokens_expired_notification_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['repository_archive_cache_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ci_archive_traces_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['pages_domain_verification_cron_worker'] = nil
@@ -165,6 +166,7 @@ default['gitlab']['gitlab-rails']['service_desk_email_log_file'] = "/var/log/git
 # Consolidated object storage config
 default['gitlab']['gitlab-rails']['object_store']['enabled'] = false
 default['gitlab']['gitlab-rails']['object_store']['connection'] = {}
+default['gitlab']['gitlab-rails']['object_store']['storage_options'] = {}
 default['gitlab']['gitlab-rails']['object_store']['proxy_download'] = false
 default['gitlab']['gitlab-rails']['object_store']['objects'] = {}
 default['gitlab']['gitlab-rails']['object_store']['objects']['artifacts'] = {}
@@ -363,7 +365,6 @@ default['gitlab']['gitlab-rails']['db_adapter'] = "postgresql"
 default['gitlab']['gitlab-rails']['db_encoding'] = "unicode"
 default['gitlab']['gitlab-rails']['db_collation'] = nil
 default['gitlab']['gitlab-rails']['db_database'] = "gitlabhq_production"
-default['gitlab']['gitlab-rails']['db_pool'] = 1
 default['gitlab']['gitlab-rails']['db_username'] = "gitlab"
 default['gitlab']['gitlab-rails']['db_password'] = nil
 default['gitlab']['gitlab-rails']['db_load_balancing'] = { 'hosts' => [] }
@@ -379,8 +380,8 @@ default['gitlab']['gitlab-rails']['db_sslkey'] = nil
 default['gitlab']['gitlab-rails']['db_sslca'] = nil
 default['gitlab']['gitlab-rails']['db_prepared_statements'] = false
 default['gitlab']['gitlab-rails']['db_statements_limit'] = 1000
-default['gitlab']['gitlab-rails']['db_fdw'] = nil
 default['gitlab']['gitlab-rails']['db_statement_timeout'] = nil
+default['gitlab']['gitlab-rails']['db_fdw'] = nil
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil

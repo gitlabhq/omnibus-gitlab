@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands-ee/lib')
 
 require 'pgbouncer'
 
-describe Pgbouncer::Databases do
+RSpec.describe Pgbouncer::Databases do
   let(:fake_ohai) do
     {
       'gitlab' => {

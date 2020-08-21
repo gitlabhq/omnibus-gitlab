@@ -90,7 +90,8 @@ Rack Attack is disabled by default. To continue using Rack Attack, you must [ena
    hours. If users do not want to migrate the data, but start with a clean
    database, they can pass `--skip-data-migration` flag to the above command.
 
-   NOTE: **Note**: Prometheus service will be stopped during the migration process.
+   NOTE: **Note:**
+   Prometheus service will be stopped during the migration process.
 
    To know about other supported options, pass `--help` flag to the above
    command.
@@ -125,7 +126,8 @@ Rack Attack is disabled by default. To continue using Rack Attack, you must [ena
    gitlab_rails['redis_password'] = <Password to connect to Redis master>
    ```
 
-   NOTE: **Note**: In the above configuration, when a failover happens after the
+   NOTE: **Note:**
+   In the above configuration, when a failover happens after the
    master node fails, GitLab Monitor will still be probing the original master
    node, since it is specified in `gitlab.rb`. Users will have to manually update
    `gitlab.rb` to point it to the new master node.
@@ -134,8 +136,8 @@ Rack Attack is disabled by default. To continue using Rack Attack, you must [ena
    the Unicorn processes have been restarted. The restart is done automatically
    at the end of `gitlab-ctl reconfigure`, which is run by default on upgrade.
 
-   NOTE: **Note**: the application will throw 500 http errors until the Unicorn
-   restart is completed.
+   NOTE: **Note:**
+   The application will throw 500 http errors until the Unicorn restart is completed.
 
 ### 11.8
 

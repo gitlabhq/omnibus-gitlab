@@ -52,3 +52,6 @@ CVE-2019-9193
 ## https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5437
 CVE-2020-12458
 CVE-2020-12459
+
+# Entries from CVEIGNORE variable go below this line
+
