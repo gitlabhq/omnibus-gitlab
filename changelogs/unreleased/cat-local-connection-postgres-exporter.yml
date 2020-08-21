@@ -1,5 +1,0 @@
----
-title: Allow postgres-exporter to use local socket and Rails db_name
-merge_request: 4439
-author:
-type: fixed

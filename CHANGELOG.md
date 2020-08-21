@@ -3,6 +3,51 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.3.0 (2020-08-22)
+
+### Removed (3 changes)
+
+- Remove gitlab_rails['db_pool'] setting. !4426
+- Does not refresh the foreign tables on the Geo secondary server. !4475
+- Remove Foreign Data Wrapper support for Geo. !4491
+
+### Fixed (6 changes)
+
+- Re-apply gitlab-pages SSL_CERT_DIR change. !4411
+- Recording rules: Fix potential CPU overcounting problem. !4420
+- Allow postgres-exporter to use local socket and Rails db_name. !4439
+- Revert Block requests to the grafana avatar endpoint. !4484
+- Add rhel 8 to helper and selinux files. !4501
+- libatomic is required on both armhf and aarch64.
+
+### Changed (4 changes)
+
+- Update chef dependencies to 15.15.22. !4384
+- Update Praefect defaults. !4416
+- Remove read-only config toggle from Praefect. !4462
+- Bump Container Registry to v2.10.1-gitlab. !4480
+
+### Added (9 changes)
+
+- Add PostgreSQL 12 support. !4399
+- Add support for ActionCable in-app mode. !4407
+- Upgrade Grafana Dashboard to v1.8.0. !4409
+- Add free space check to pre-flight for pg-upgrade. !4421
+- Add -domain-config-source for GitLab Pages. !4428
+- Add cron settings for expired PAT notification. !4465
+- Add support for configuring AWS server side encryption. !4469
+- Upgrade Git to v2.28.0. !4483
+- Support units other than milliseconds for the pg-upgrade timeout option. !4493
+
+### Other (5 changes)
+
+- Use S3-compatible remote directory for Terraform state storage. !4412
+- Record average CPU and memory utilization for Usage Ping. !4455
+- Use gcc v6.3 for CentOS 6 to build Rails C extensions. !4466
+- Use new CMake for building libgit2 as part of Gitaly build. !4468
+- Update Mattermost to 5.25.3.
+
+
 ## 13.2.6 (2020-08-18)
 
 - No changes.

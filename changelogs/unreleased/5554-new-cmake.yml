@@ -1,5 +1,0 @@
----
-title: Use new CMake for building libgit2 as part of Gitaly build
-merge_request: 4468
-author:
-type: other

@@ -1,5 +1,0 @@
----
-title: Remove gitlab_rails['db_pool'] setting
-merge_request: 4426
-author:
-type: removed
