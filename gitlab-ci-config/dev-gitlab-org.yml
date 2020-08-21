@@ -287,7 +287,7 @@ SLES-12.5-branch:
 
 
 Ubuntu-20.04-arm-branch:
-  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/staging/ubuntu_20.04_arm64:dj-test-arm64"
+  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/staging/ubuntu_20.04_arm64:gypsophlia-gitlab-omnibus-builder-ubuntu20-04-arm64"
   <<: *branch_build
   tags:
   - docker-arm-builder
