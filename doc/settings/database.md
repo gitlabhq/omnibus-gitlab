@@ -374,7 +374,6 @@ sudo rm -f /var/opt/gitlab/postgresql-version.old
 
 You can find details of PostgreSQL versions shipped with various GitLab versions in
 [PostgreSQL versions shipped with Omnibus GitLab](../package-information/postgresql_versions.md).
-The following section details their update policy.
 
 #### Opt out of automatic PostgreSQL upgrades
 
