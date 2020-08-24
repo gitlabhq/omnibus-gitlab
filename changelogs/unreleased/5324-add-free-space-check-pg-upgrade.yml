@@ -1,5 +1,0 @@
----
-title: Add free space check to pre-flight for pg-upgrade
-merge_request: 4421
-author:
-type: added

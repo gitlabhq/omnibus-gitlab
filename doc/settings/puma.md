@@ -68,4 +68,12 @@ puma['per_worker_max_memory_mb'] = 850
 
 Unlike Unicorn, the `puma['worker_timeout']` setting does not set maximum request duration.
 A [timeout of 60 seconds](https://gitlab.com/gitlab-org/gitlab/-/blob/master/config/initializers/rack_timeout.rb)
-is used when Puma is enabled. This limit is not configurable.
+is used when Puma is enabled.
+
+To change this timeout, change the following setting in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+gitlab_rails['env'] = {
+   'GITLAB_RAILS_RACK_TIMEOUT' => 600
+ }
+```

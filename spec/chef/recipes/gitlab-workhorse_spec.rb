@@ -156,23 +156,46 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
   context 'consolidated object store settings' do
     include_context 'object storage config'
 
-    before do
-      stub_gitlab_rb(
-        gitlab_rails: {
-          object_store: {
-            enabled: true,
-            connection: aws_connection_hash,
-            objects: object_config
+    context 'with S3 config' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            object_store: {
+              enabled: true,
+              connection: aws_connection_hash,
+              objects: object_config
+            }
           }
+        )
+      end
+
+      it 'includes S3 credentials' do
+        expect(chef_run).to render_file(config_file).with_content { |content|
+          expect(content).to match(/\[object_storage\]\n  provider = "AWS"\n/m)
+          expect(content).to match(/\[object_storage.s3\]\n  aws_access_key_id = "AKIAKIAKI"\n  aws_secret_access_key = "secret123"\n/m)
         }
-      )
+      end
     end
 
-    it 'includes S3 credentials' do
-      expect(chef_run).to render_file(config_file).with_content { |content|
-        expect(content).to match(/\[object_storage\]\n  enabled = true\n  provider = "AWS"\n/m)
-        expect(content).to match(/\[object_storage.s3\]\n  aws_access_key_id = "AKIAKIAKI"\n  aws_secret_access_key = "secret123"\n/m)
-      }
+    context 'with Azure config' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            object_store: {
+              enabled: true,
+              connection: azure_connection_hash,
+              objects: object_config
+            }
+          }
+        )
+      end
+
+      it 'includes Azure credentials' do
+        expect(chef_run).to render_file(config_file).with_content { |content|
+          expect(content).to match(/\[object_storage\]\n  provider = "AzureRM"\n/m)
+          expect(content).to match(/\[object_storage.azurerm\]\n  azure_storage_account_name = "testaccount"\n  azure_storage_access_key = "1234abcd"\n/m)
+        }
+      end
     end
   end
 

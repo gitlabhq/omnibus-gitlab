@@ -19,11 +19,18 @@ you **must** follow the
 [upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
 when updating to the current version.
 
+## Background migrations
+
+DANGER: **Danger:**
+It's important to ensure that any background migrations have been fully completed
+before upgrading to a new major version. Upgrading before background migrations have
+finished may lead to data corruption.
+
+To see the current size of the `background_migration` queue,
+[check for background migrations before upgrading](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading). 
+
 ## Version-specific changes
 
-It's important to ensure that any background migrations have been fully completed
-before upgrading to a new major version. To see the current size of the `background_migration` queue,
-[check for background migrations before upgrading](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 We recommend performing upgrades between major and minor releases no more than once per
 week, to allow time for background migrations to finish. Decrease the time required to
 complete these migrations by increasing the number of

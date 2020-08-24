@@ -1,5 +1,0 @@
----
-title: 'Recording rules: Fix potential CPU overcounting problem'
-merge_request: 4420
-author:
-type: fixed

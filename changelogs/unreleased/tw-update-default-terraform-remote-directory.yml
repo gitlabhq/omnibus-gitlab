@@ -1,5 +1,0 @@
----
-title: Use S3-compatible remote directory for Terraform state storage
-merge_request: 4412
-author:
-type: other
