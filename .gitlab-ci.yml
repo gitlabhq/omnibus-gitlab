@@ -23,12 +23,20 @@ stages:
 
 workflow:
   rules:
-    # For branches, create a pipeline.
-    # FIXME: We should change the following to `- if: 'CI_MERGE_REQUEST_IID'`
+    # Do not create a pipeline on branch push to QA mirror
+    - if: '$CI_PROJECT_NAME == "omnibus-gitlab-mirror" && $CI_PIPELINE_SOURCE == "push"'
+      when: never
+    # No pipeline on auto-deploy branches as a tag will definitely follow
+    - if: '$CI_COMMIT_BRANCH =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/'
+      when: never
+    # For all other branches, create a pipeline. We are explicitly specifying
+    # this so that this rule gets matched earlier before MR pipelines gets
+    # triggered, thus causing two pipelines for a branch push - a regular one
+    # and a detached one. If we ever decide not to run pipelines on branch
+    # pushes that doesn't cause an MR, we can change the following to
+    # $CI_MERGE_REQUEST_IID
     - if: '$CI_COMMIT_BRANCH'
-    # For `master` branch, create a pipeline (this includes on schedules, pushes, merges, etc.).
-    - if: '$CI_COMMIT_BRANCH == "master"'
-    # For tags, create a pipeline.
+    # For tags, always create a pipeline.
     - if: '$CI_COMMIT_TAG'
 
 default:
@@ -136,21 +144,17 @@ fetch-assets:
   artifacts:
     paths:
       - ${ASSET_PATH}
-  only:
-    refs:
-      - schedules@gitlab-org/omnibus-gitlab
-      - branches@gitlab/omnibus-gitlab
-      - tags@gitlab/omnibus-gitlab
-      - triggers
-      - pipelines
-  except:
-    variables:
-      - $COMPILE_ASSETS == "true"
-      - $DEPS_PIPELINE
-      # Format of the auto-deploy tag
-      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
-      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
-
+  rules:
+    - if: '$COMPILE_ASSETS == "true"'
+      when: never
+    - if: '$DEPS_PIPELINE'
+      when: never
+    - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/'
+      when: never
+    # Run on dev.gitlab.org (except auto-deploy tag covered above) and
+    # multi-project pipelines on omnibus-gitlab-mirror
+    - if: '$CI_PROJECT_PATH == "gitlab/omnibus-gitlab"'
+    - if: '$CI_PIPELINE_SOURCE == "pipeline" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
 include:
   - '/gitlab-ci-config/gitlab-com.yml'
   - '/gitlab-ci-config/dev-gitlab-org.yml'
