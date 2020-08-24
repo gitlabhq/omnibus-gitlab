@@ -135,6 +135,7 @@ RSpec.describe 'qa', type: :rake do
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_MERGE_REQUEST_IID').and_return("12121")
       allow(DockerOperations).to receive(:build).and_return(true)
       allow(Build::QA).to receive(:get_gitlab_repo).and_return("/tmp/gitlab.1234/qa")
+      allow(Build::Info).to receive(:release_version).and_return('13.2.0+ce.0')
       allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return("registry.gitlab.com/gitlab-ce:latest")
       allow(Build::GitlabImage).to receive(:tag_and_push_to_gitlab_registry).and_return(true)
       allow(Build::QAImage).to receive(:gitlab_registry_image_address).and_return(gitlab_registry_image_address)
