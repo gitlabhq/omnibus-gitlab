@@ -1708,8 +1708,8 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # alertmanager['log_directory'] = '/var/log/gitlab/alertmanager'
 # alertmanager['admin_email'] = 'admin@example.com'
 # alertmanager['flags'] = {
-#   'web.listen-address' => "localhost:9093"
-#   'storage.path' => "/var/opt/gitlab/alertmanager/data"
+#   'web.listen-address' => "localhost:9093",
+#   'storage.path' => "/var/opt/gitlab/alertmanager/data",
 #   'config.file' => "/var/opt/gitlab/alertmanager/alertmanager.yml"
 # }
 # alertmanager['env_directory'] = '/opt/gitlab/etc/alertmanager/env'
