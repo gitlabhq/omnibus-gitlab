@@ -37,16 +37,16 @@ page](https://about.gitlab.com/install/).
 
 The following lists the currently supported OSs and their possible EOL dates.
 
-| OS Version       | First supported GitLab version | OS EOL        | Details                                                      |
-| ---------------- | ------------------------------ | ------------- | ------------------------------------------------------------ |
-| CentOS 6         | GitLab CE / GitLab EE 7.10.0   | November 2020 | <https://wiki.centos.org/About/Product>                      |
-| CentOS 7         | GitLab CE / GitLab EE 7.10.0   | June 2024     | <https://wiki.centos.org/About/Product>                      |
-| CentOS 8         | GitLab CE / GitLab EE 12.8.1   | May 2029      | <https://wiki.centos.org/About/Product>                      |
-| Debian 9         | GitLab CE / GitLab EE 9.3.0    | 2022          | <https://wiki.debian.org/DebianReleases#Production_Releases> |
-| Debian 10        | GitLab CE / GitLab EE 12.2.0   | TBD           | <https://wiki.debian.org/DebianReleases#Production_Releases> |
-| OpenSUSE 15.1    | GitLab CE / GitLab EE 12.4.0   | Nov 2020      | <https://en.opensuse.org/Lifetime>                           |
-| SLES 12          | GitLab EE 9.0.0                | Oct 2027      | <https://www.suse.com/lifecycle/>                            |
-| Ubuntu 16.04     | GitLab CE / GitLab EE 8.7.1    | April 2021    | <https://wiki.ubuntu.com/Releases>                           |
-| Ubuntu 18.04     | GitLab CE / GitLab EE 10.7.0   | April 2023    | <https://wiki.ubuntu.com/Releases>                           |
-| Ubuntu 20.04     | GitLab CE / GitLab EE 13.2.0   | April 2025    | <https://wiki.ubuntu.com/Releases>                           |
-| Raspbian Buster  | GitLab CE 12.2.0               | 2022          | <https://wiki.debian.org/DebianReleases#Production_Releases> |
+| OS Version       | First supported GitLab version | Arch          | OS EOL        | Details                                                      |
+| ---------------- | ------------------------------ | ------------- | ------------- | ------------------------------------------------------------ |
+| CentOS 6         | GitLab CE / GitLab EE 7.10.0   | x86_64        | November 2020 | <https://wiki.centos.org/About/Product>                      |
+| CentOS 7         | GitLab CE / GitLab EE 7.10.0   | x86_64        | June 2024     | <https://wiki.centos.org/About/Product>                      |
+| CentOS 8         | GitLab CE / GitLab EE 12.8.1   | x86_64        | May 2029      | <https://wiki.centos.org/About/Product>                      |
+| Debian 9         | GitLab CE / GitLab EE 9.3.0    | amd64         | 2022          | <https://wiki.debian.org/DebianReleases#Production_Releases> |
+| Debian 10        | GitLab CE / GitLab EE 12.2.0   | amd64         | TBD           | <https://wiki.debian.org/DebianReleases#Production_Releases> |
+| OpenSUSE 15.1    | GitLab CE / GitLab EE 12.4.0   | x86_64        | Nov 2020      | <https://en.opensuse.org/Lifetime>                           |
+| SLES 12          | GitLab EE 9.0.0                | x86_64        | Oct 2027      | <https://www.suse.com/lifecycle/>                            |
+| Ubuntu 16.04     | GitLab CE / GitLab EE 8.7.1    | amd64         | April 2021    | <https://wiki.ubuntu.com/Releases>                           |
+| Ubuntu 18.04     | GitLab CE / GitLab EE 10.7.0   | amd64         | April 2023    | <https://wiki.ubuntu.com/Releases>                           |
+| Ubuntu 20.04     | GitLab CE / GitLab EE 13.2.0   | amd64, arm64  | April 2025    | <https://wiki.ubuntu.com/Releases>                           |
+| Raspbian Buster  | GitLab CE 12.2.0               | armhf         | 2022          | <https://wiki.debian.org/DebianReleases#Production_Releases> |
