@@ -230,7 +230,7 @@ sudo rsync -av /var/opt/gitlab/git-data/repositories /mnt/nas/git-data/
 
 # Start the necessary processes and run reconfigure to fix permissions
 # if necessary
-sudo gitlab-ctl upgrade
+sudo gitlab-ctl reconfigure
 
 # Double-check directory layout in /mnt/nas/git-data. Expected output:
 # repositories
@@ -240,6 +240,11 @@ sudo ls /mnt/nas/git-data/
 # the web interface.
 sudo gitlab-ctl start
 ```
+
+If you're not looking to move all repositories, but instead want to move specific
+projects between existing repository storages, use the
+[Edit Project API](https://docs.gitlab.com/ee/api/projects.html#edit-project)
+endpoint and specify the `repository_storage` attribute.
 
 ## Changing the name of the Git user / group
 
