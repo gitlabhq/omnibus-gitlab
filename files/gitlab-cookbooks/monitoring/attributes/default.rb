@@ -21,6 +21,7 @@ default['monitoring']['prometheus']['rules_directory'] = "/var/opt/gitlab/promet
 default['monitoring']['prometheus']['scrape_interval'] = 15
 default['monitoring']['prometheus']['scrape_timeout'] = 15
 default['monitoring']['prometheus']['scrape_configs'] = []
+default['monitoring']['prometheus']['external_labels'] = {}
 default['monitoring']['prometheus']['listen_address'] = 'localhost:9090'
 default['monitoring']['prometheus']['alertmanagers'] = nil
 

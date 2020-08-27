@@ -57,6 +57,7 @@ configuration = Prometheus.hash_to_yaml({
                                           'global' => {
                                             'scrape_interval' => "#{node['monitoring']['prometheus']['scrape_interval']}s",
                                             'scrape_timeout' => "#{node['monitoring']['prometheus']['scrape_timeout']}s",
+                                            'external_labels' => node['monitoring']['prometheus']['external_labels'],
                                           },
                                           'remote_read' => node['monitoring']['prometheus']['remote_read'],
                                           'remote_write' => node['monitoring']['prometheus']['remote_write'],
