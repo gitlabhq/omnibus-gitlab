@@ -901,7 +901,7 @@ additional considerations when upgrading GitLab and/or when upgrading
 PostgreSQL described below.
 
 CAUTION: **Caution:**
-If you are running a Geo installation using PostgreSQL 9.6.x, please upgrade to GitLab 12.4 or newer. Older versions were affected [by an issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4692) that could cause automatic upgrades of the PostgreSQL database to fail on the secondary. This issue is now fixed.
+If you are running a Geo installation using PostgreSQL 9.6.x, please upgrade to GitLab 12.4 or newer. Older versions were affected [by an issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4692) that could cause automatic upgrades of the PostgreSQL database to fail on the secondary. See [Disabling automatic PostgreSQL upgrades](#disabling-automatic-postgresql-upgrades) to workaround the issue. This issue is now fixed.
 
 #### Caveats when upgrading PostgreSQL with Geo
 
