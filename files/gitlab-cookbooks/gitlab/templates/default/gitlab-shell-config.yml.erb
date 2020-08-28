@@ -6,7 +6,11 @@
 user: <%= @user %>
 
 # Url to gitlab instance. Used for api calls. May but need not end with a slash.
-gitlab_url: "<%= @api_url %>"
+gitlab_url: "<%= @gitlab_url %>"
+
+<% if @gitlab_relative_path %>
+gitlab_relative_url_root: <%= @gitlab_relative_path %>
+<% end %>
 
 http_settings:
   <%= @http_settings.to_json if @http_settings %>
