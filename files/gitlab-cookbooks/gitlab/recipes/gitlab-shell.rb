@@ -49,10 +49,15 @@ end
   end
 end
 
-# If no internal_api_url is specified, default to the IP/port Unicorn listens on
-webserver_service = WebServerHelper.service_name
-api_url = node['gitlab']['gitlab-rails']['internal_api_url']
-api_url ||= "http://#{node['gitlab'][webserver_service]['listen']}:#{node['gitlab'][webserver_service]['port']}#{node['gitlab'][webserver_service]['relative_url']}"
+gitlab_url = node['gitlab']['gitlab-rails']['internal_api_url']
+
+# If no internal_api_url is specified, default to workhorse settings
+use_socket = node['gitlab']['gitlab-workhorse']['listen_network'] == "unix"
+workhorse_url = node['gitlab']['gitlab-workhorse']['listen_addr']
+relative_path = Gitlab['gitlab_workhorse']['relative_url']
+
+gitlab_url ||= use_socket ? "http+unix://#{ERB::Util.url_encode(workhorse_url)}" : "http://#{workhorse_url}#{relative_path}"
+gitlab_relative_path = relative_path || '' if use_socket
 
 templatesymlink "Create a config.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_shell_dir, "config.yml")
@@ -63,7 +68,8 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
   group git_group
   variables({
               user: git_user,
-              api_url: api_url,
+              gitlab_url: gitlab_url,
+              gitlab_relative_path: gitlab_relative_path,
               authorized_keys: authorized_keys,
               log_file: File.join(log_directory, "gitlab-shell.log"),
               log_level: node['gitlab']['gitlab-shell']['log_level'],
