@@ -401,6 +401,26 @@ RSpec.describe 'postgresql 9.6' do
         ).with_content(/max_locks_per_transaction = 128/)
       end
 
+      context 'with geo_secondary_role enabled' do
+        before { stub_gitlab_rb(geo_secondary_role: { enable: true }) }
+
+        it 'includes gitlab-geo.conf in postgresql.conf' do
+          expect(chef_run).to render_file(postgresql_conf)
+            .with_content(/include_if_exists 'gitlab-geo.conf'/)
+        end
+      end
+
+      context 'with geo_secondary_role disabled' do
+        before { stub_gitlab_rb(geo_secondary_role: { enable: false }) }
+
+        it 'does not gitlab-geo.conf in postgresql.conf' do
+          expect(chef_run).to render_file(postgresql_conf)
+            .with_content { |content|
+              expect(content).not_to match('gitlab-geo.conf')
+            }
+        end
+      end
+
       context 'with custom logging settings set' do
         before do
           stub_gitlab_rb({

@@ -25,6 +25,14 @@ module Geo
       @postgresql_user ||= GitlabCtl::PostgreSQL.postgresql_username
     end
 
+    def postgresql_group
+      @postgresql_group ||= GitlabCtl::PostgreSQL.postgresql_group
+    end
+
+    def postgresql_version
+      @postgresql_version ||= GitlabCtl::PostgreSQL.postgresql_version(data_path)
+    end
+
     def check_gitlab_active?
       return unless gitlab_is_active?
 
@@ -104,14 +112,13 @@ module Geo
       run_command(pg_basebackup_command,
                   live: true, timeout: @options[:backup_timeout])
 
-      puts "* Writing recovery.conf file with sslmode=#{@options[:sslmode]} and sslcompression=#{@options[:sslcompression]}".color(:green)
-      create_recovery_file!
-
       puts '* Restoring postgresql.conf'.color(:green)
       run_command("mv #{data_path}/postgresql/postgresql.conf #{data_path}/postgresql/data/")
 
+      write_replication_settings!
+
       puts '* Setting ownership permissions in PostgreSQL data directory'.color(:green)
-      run_command("chown -R #{postgresql_user}:#{postgresql_user} #{data_path}/postgresql/data")
+      run_command("chown -R #{postgresql_user}:#{postgresql_group} #{data_path}/postgresql/data")
 
       puts '* Starting PostgreSQL and all GitLab services'.color(:green)
       run_command('gitlab-ctl start')
@@ -125,6 +132,17 @@ module Geo
 
       puts "* Creating replication slot #{@options[:slot_name]}".color(:green)
       create_replication_slot!
+    end
+
+    def write_replication_settings!
+      if postgresql_version >= 12
+        puts "* PostgreSQL 12 or newer. Writing settings to postgresql.conf and creating standby.signal".color(:green)
+        write_recovery_settings!
+        create_standby_file!
+      else
+        puts "* Writing recovery.conf file with sslmode=#{@options[:sslmode]} and sslcompression=#{@options[:sslcompression]}".color(:green)
+        create_recovery_file!
+      end
     end
 
     private
@@ -144,7 +162,27 @@ module Geo
         EOF
                   )
       end
-      run_command("chown #{postgresql_user} #{@pgpass}")
+      run_command("chown #{postgresql_user}:#{postgresql_group} #{@pgpass}")
+    end
+
+    def write_recovery_settings!
+      geo_conf_file = "#{data_path}/postgresql/data/gitlab-geo.conf"
+      File.open(geo_conf_file, 0640) do |file|
+        settings = <<~EOF
+          # - Added by GitLab Omnibus for Geo replication -
+          recovery_target_timeline = '#{@options[:recovery_target_timeline]}'
+          primary_conninfo = 'host=#{@options[:host]} port=#{@options[:port]} user=#{@options[:user]} password=#{@options[:password]} sslmode=#{@options[:sslmode]} sslcompression=#{@options[:sslcompression]}'
+        EOF
+
+        file.write(settings)
+        file.write("primary_slot_name = '#{@options[:slot_name]}'\n") if @options[:slot_name]
+      end
+    end
+
+    def create_standby_file!
+      standby_file = "#{data_path}/postgresql/data/standby.signal"
+      File.write(standby_file, "")
+      run_command("chown #{postgresql_user}:#{postgresql_group} #{standby_file}")
     end
 
     def create_recovery_file!
@@ -158,7 +196,7 @@ module Geo
                   )
         file.write("primary_slot_name = '#{@options[:slot_name]}'\n") if @options[:slot_name]
       end
-      run_command("chown #{postgresql_user} #{recovery_file}")
+      run_command("chown #{postgresql_user}:#{postgresql_group} #{recovery_file}")
     end
 
     def ask_pass
