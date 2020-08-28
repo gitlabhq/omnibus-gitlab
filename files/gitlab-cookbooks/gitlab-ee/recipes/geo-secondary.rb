@@ -17,7 +17,11 @@
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
+pg_helper = PgHelper.new(node)
+
 gitlab_user = account_helper.gitlab_user
+postgresql_username = account_helper.postgresql_user
+postgresql_group = account_helper.postgresql_group
 
 gitlab_rails_source_dir = '/opt/gitlab/embedded/service/gitlab-rails'
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
@@ -49,4 +53,13 @@ end
 # Make schema.rb writable for when we run `rake geo:db:migrate`
 file '/opt/gitlab/embedded/service/gitlab-rails/ee/db/geo/schema.rb' do
   owner gitlab_user
+end
+
+# This is included by postgresql.conf for replication settings in PostgreSQL 12 and higher
+if node['postgresql']['enable']
+  file pg_helper.geo_config do
+    owner postgresql_username
+    group postgresql_group
+    mode 0640
+  end
 end

@@ -300,6 +300,10 @@ class BasePgHelper < BaseHelper
     ::File.join(config_dir, 'pg_ident.conf')
   end
 
+  def geo_config
+    ::File.join(config_dir, 'gitlab-geo.conf')
+  end
+
   def ssl_cert_file
     ::File.absolute_path(node['postgresql']['ssl_cert_file'], config_dir)
   end

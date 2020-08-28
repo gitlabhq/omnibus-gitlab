@@ -212,6 +212,26 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
       end
     end
 
+    describe 'PostgreSQL gitlab-geo.conf', focus: true do
+      let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+      let(:geo_conf) { '/var/opt/gitlab/postgresql/data/gitlab-geo.conf' }
+      let(:postgresql_conf) { '/var/opt/gitlab/postgresql/data/postgresql.conf' }
+
+      context 'when postgresql enabled on the node' do
+        it 'renders gitlab-geo.conf' do
+          expect(chef_run).to render_file(geo_conf)
+        end
+      end
+
+      context 'when postgresql disabled on the node' do
+        before { stub_gitlab_rb(postgresql: { enable: false }) }
+
+        it 'does not render gitlab-geo.conf' do
+          expect(chef_run).not_to render_file(geo_conf)
+        end
+      end
+    end
+
     describe 'Restart geo-secondary dependent services' do
       let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
