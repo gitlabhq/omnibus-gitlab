@@ -61,9 +61,7 @@ file "#{node['consul']['dir']}/config.json" do
   notifies :run, 'execute[reload consul]'
 end
 
-node['consul']['services'].each do |service|
-  include_recipe "consul::service_#{service}"
-end
+include_recipe 'consul::configure_services'
 
 include_recipe 'consul::watchers'
 
