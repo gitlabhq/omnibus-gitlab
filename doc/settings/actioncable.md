@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # ActionCable
 
 NOTE: **Note:**
-ActionCable is **experimental** and the features that use this service are behind feature flags.
+ActionCable is **experimental**, and enabling it in the in-app mode also enables experimental features.
 
 This service is disabled by default. To enable:
 
@@ -16,11 +16,13 @@ actioncable['enable'] = true
 ```
 
 By default, ActionCable is run as a separate Puma server that only handles websocket connections. To run ActionCable on
-the existing web server:
+the existing Puma web server:
 
 ```ruby
 actioncable['in_app'] = true
 ```
+
+Note: Action Cable is currently not supported for the Unicorn web server in GitLab.
 
 ## Configuring the worker pool size
 
