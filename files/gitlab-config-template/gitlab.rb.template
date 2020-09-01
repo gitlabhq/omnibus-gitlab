@@ -2451,6 +2451,11 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # patroni['use_pg_rewind'] = false
 # patroni['use_slots'] = true
 
+## Permanent replication slots for Streaming Replication
+# patroni['replication_slots'] = {
+#   'geo_secondary' => { 'type' => 'physical' }
+# }
+
 ## The address and port that Patroni API binds to and listens on.
 # patroni['listen_address'] = nil
 # patroni['port'] = '8008'

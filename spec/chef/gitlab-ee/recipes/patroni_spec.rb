@@ -96,6 +96,7 @@ RSpec.describe 'patroni cookbook' do
                 checkpoint_timeout: 30,
               },
             },
+            slots: {},
           },
           method: 'gitlab_ctl',
           gitlab_ctl: {
@@ -170,6 +171,9 @@ RSpec.describe 'patroni cookbook' do
           use_pg_rewind: true,
           connect_address: '1.2.3.4',
           connect_port: 18008,
+          replication_slots: {
+            'geo_secondary' => { 'type' => 'physical' }
+          },
           consul: {
             service_check_interval: '20s'
           },
@@ -185,6 +189,7 @@ RSpec.describe 'patroni cookbook' do
     it 'should be reflected in patroni configuration file' do
       expect(chef_run).to render_file('/var/opt/gitlab/patroni/patroni.yaml').with_content { |content|
         cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
         expect(cfg).to include(
           name: 'test-node-name',
           scope: 'test-scope',
@@ -207,13 +212,40 @@ RSpec.describe 'patroni cookbook' do
         expect(cfg[:bootstrap][:dcs]).to include(
           loop_wait: 20,
           ttl: 60,
-          master_start_timeout: 600
+          master_start_timeout: 600,
+          slots: {
+            geo_secondary: { type: 'physical' }
+          }
         )
         expect(cfg[:bootstrap][:dcs][:postgresql]).to include(
           use_slots: false,
           use_pg_rewind: true
         )
         expect(cfg[:bootstrap][:dcs][:postgresql][:parameters]).to include(
+          wal_keep_segments: 16,
+          max_wal_senders: 4,
+          max_replication_slots: 4
+        )
+      }
+    end
+
+    it 'should reflect into dcs config file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/patroni/dcs.yaml').with_content { |content|
+        cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
+        expect(cfg).to include(
+          loop_wait: 20,
+          ttl: 60,
+          master_start_timeout: 600,
+          slots: {
+            geo_secondary: { type: 'physical' }
+          }
+        )
+        expect(cfg[:postgresql]).to include(
+          use_slots: false,
+          use_pg_rewind: true
+        )
+        expect(cfg[:postgresql][:parameters]).to include(
           wal_keep_segments: 16,
           max_wal_senders: 4,
           max_replication_slots: 4
