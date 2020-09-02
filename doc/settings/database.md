@@ -193,7 +193,7 @@ The following settings are affected in the `postgresql` block:
   connect to the server, after authentication via password.
 - `trust_auth_cidr_addresses` is a list of CIDR address blocks which are allowed
   to connect to the server, without authentication of any kind. _Be very careful
-  with this setting._ It is suggest that this be limited to the loopback address of
+  with this setting._ It is suggested that this be limited to the loopback address of
   `127.0.0.1/24` or even `127.0.0.1/32`.
 - `sql_user` controls the expected username for MD5 authentication. This defaults
   to `gitlab`, and is not a required setting.
@@ -226,7 +226,7 @@ To configure the `gitlab-rails` application to connect to the PostgreSQL databas
 over the network, several settings must be configured.
 
 - `db_host` needs to be set to the IP address of the database sever. If this is
-  on the same instance as the PostgrSQL service, this can be `127.0.0.1` and _will
+  on the same instance as the PostgreSQL service, this can be `127.0.0.1` and _will
   not require_ password authentication.
 - `db_port` sets the port on the PostgreSQL server to connect to, and _must be set_
   if `db_host` is set.
@@ -666,7 +666,7 @@ This example demonstrates upgrading from a database host running PostgreSQL 10 t
     ```
 
   NOTE: **Note:**
-  Connecting to PostgreSQL 12 (alongside with amending `postgresql['version'] = 12`) will currently break the [GitLab Backup/Restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html)functionality unless the v12 client binaries are available on the file system. More on this topic can be found under [backup and restore a non-packaged database](#backup-and-restore-a-non-packaged-postgresql-database).
+  Connecting to PostgreSQL 12 (alongside with amending `postgresql['version'] = 12`) will currently break the [GitLab Backup/Restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html) functionality unless the v12 client binaries are available on the file system. More on this topic can be found under [backup and restore a non-packaged database](#backup-and-restore-a-non-packaged-postgresql-database).
   This problem with missing 12 client binaries is partially resolved in GitLab 13.3 where PostgreSQL 12 is shipped with Omnibus GitLab. This problem will be tackled in this epic: [Add support for PostgreSQL 12](https://gitlab.com/groups/gitlab-org/-/epics/2374).
 
   NOTE: **Note:**
@@ -998,3 +998,4 @@ replication user's password.
    ```
 
 1. Navigate to `https://your_primary_server/admin/geo/nodes` and ensure that all nodes are healthy
+ 
