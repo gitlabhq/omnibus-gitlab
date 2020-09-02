@@ -127,7 +127,7 @@ RSpec.describe 'patroni cookbook' do
       expect(chef_run).not_to run_execute(/(start|reload) postgresql/)
     end
 
-    it 'should create database objects (roles, databses, extension)', focus: true do
+    it 'should create database objects (roles, databses, extension)' do
       expect(chef_run).not_to run_execute('/opt/gitlab/embedded/bin/initdb -D /var/opt/gitlab/postgresql/data -E UTF8')
       expect(chef_run).to create_postgresql_user('gitlab')
       expect(chef_run).to create_postgresql_user('gitlab_replicator')

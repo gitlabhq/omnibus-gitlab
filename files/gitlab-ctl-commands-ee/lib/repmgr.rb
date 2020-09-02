@@ -77,12 +77,7 @@ class RepmgrHandler
       end
 
       def postgresql_directory
-        # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
-        # configure on an existing installation
-        #
-        # TODO: Remove support for legacy attributes in GitLab 13.0
-        node_attributes.dig('gitlab', 'postgresql', 'dir') ||
-          node_attributes.dig('postgresql', 'dir')
+        node_attributes.dig('postgresql', 'dir')
       end
 
       def execute_psql(options)
@@ -193,12 +188,7 @@ class RepmgrHandler
       private
 
       def postgresql_data_dir
-        # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
-        # configure on an existing installation
-        #
-        # TODO: Remove support for legacy attributes in GitLab 13.0
-        node_attributes.dig('gitlab', 'postgresql', 'data_dir') ||
-          node_attributes.dig('postgresql', 'data_dir')
+        node_attributes.dig('postgresql', 'data_dir')
       end
     end
   end

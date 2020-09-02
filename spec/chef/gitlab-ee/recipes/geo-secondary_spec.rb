@@ -212,7 +212,7 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
       end
     end
 
-    describe 'PostgreSQL gitlab-geo.conf', focus: true do
+    describe 'PostgreSQL gitlab-geo.conf' do
       let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
       let(:geo_conf) { '/var/opt/gitlab/postgresql/data/gitlab-geo.conf' }
       let(:postgresql_conf) { '/var/opt/gitlab/postgresql/data/postgresql.conf' }
