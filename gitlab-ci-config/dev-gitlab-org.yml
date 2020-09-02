@@ -388,10 +388,10 @@ Ubuntu-20.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 Ubuntu-20.04-arm-branch:
-  tags:
-    - docker-arm-builder
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
+  tags:
+  - docker-arm-builder
 CentOS-6-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -555,10 +555,10 @@ Ubuntu-20.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 Ubuntu-20.04-arm:
-  tags:
-    - docker-arm-builder
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
+  tags:
+  - docker-arm-builder
 CentOS-6:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
