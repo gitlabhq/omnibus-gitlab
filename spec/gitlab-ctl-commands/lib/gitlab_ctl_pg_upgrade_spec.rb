@@ -29,10 +29,8 @@ RSpec.describe GitlabCtl::PgUpgrade do
     allow(GitlabCtl::Util).to receive(:parse_json_file).and_return(
       {
         'default' => {
-          'gitlab' => {
-            'postgresql' => {
-              'username' => 'arbitrary-user-name'
-            }
+          'postgresql' => {
+            'username' => 'arbitrary-user-name'
           }
         }
       })

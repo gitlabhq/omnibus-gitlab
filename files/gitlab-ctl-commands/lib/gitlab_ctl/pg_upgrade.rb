@@ -70,11 +70,7 @@ module GitlabCtl
     end
 
     def run_pg_command(command)
-      # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
-      # configure on an existing installation
-      #
-      # TODO: Remove support for legacy attributes in GitLab 13.0
-      pg_username = node_attributes.dig(:gitlab, :postgresql, :username) || node_attributes.dig(:postgresql, :username)
+      pg_username = node_attributes.dig(:postgresql, :username)
 
       GitlabCtl::Util.get_command_output("su - #{pg_username} -c \"#{command}\"", nil, @timeout)
     end

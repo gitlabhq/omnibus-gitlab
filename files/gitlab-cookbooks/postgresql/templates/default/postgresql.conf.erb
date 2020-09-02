@@ -475,5 +475,5 @@ max_locks_per_transaction = <%= @max_locks_per_transaction %>   # min 10
 
 include 'runtime.conf'
 <% if @geo_secondary_enabled %>
-  include_if_exists 'gitlab-geo.conf'
+include_if_exists 'gitlab-geo.conf'
 <% end %>
