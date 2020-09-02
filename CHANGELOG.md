@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.3.4 (2020-09-02)
+
+- No changes.
+
 ## 13.3.3 (2020-09-02)
 
 - No changes.
@@ -59,6 +63,10 @@ omnibus-gitlab repository.
 - Use new CMake for building libgit2 as part of Gitaly build. !4468
 - Update Mattermost to 5.25.3.
 
+
+## 13.2.8 (2020-09-02)
+
+- No changes.
 
 ## 13.2.7 (2020-09-02)
 
@@ -149,6 +157,10 @@ omnibus-gitlab repository.
 - Update libjpeg-turbo/libjpeg-turbo from 2.0.4 to 2.0.5.
 - Update Mattermost to 5.24.2.
 
+
+## 13.1.10 (2020-09-02)
+
+- No changes.
 
 ## 13.1.9 (2020-09-02)
 
