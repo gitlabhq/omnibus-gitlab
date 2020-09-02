@@ -387,6 +387,11 @@ Debian-10-branch:
 Ubuntu-20.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
+Ubuntu-20.04-arm-branch:
+  tags:
+    - docker-arm-builder
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
 CentOS-6-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -407,13 +412,6 @@ SLES-12.5-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
   <<: *dev-ee-branch-only
-
-
-Ubuntu-20.04-arm-branch:
-  image: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/staging/ubuntu_20.04_arm64:gypsophlia-gitlab-omnibus-builder-ubuntu20-04-arm64"
-  <<: *branch_build
-  tags:
-  - docker-arm-builder
 
 Docker-branch:
   extends: .docker_job
@@ -556,6 +554,11 @@ Debian-10:
 Ubuntu-20.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
+Ubuntu-20.04-arm:
+  tags:
+    - docker-arm-builder
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
 CentOS-6:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -662,6 +665,11 @@ Ubuntu-20.04-staging:
     - Ubuntu-20.04
     - Ubuntu-20.04-branch
   <<: *staging_upload
+Ubuntu-20.04-arm-staging:
+  dependencies:
+    - Ubuntu-20.04-arm
+    - Ubuntu-20.04-arm-branch
+  <<: *staging_upload
 CentOS-6-staging:
   dependencies:
     - CentOS-6
@@ -707,6 +715,10 @@ Ubuntu-18.04-release:
 Ubuntu-20.04-release:
   dependencies:
     - Ubuntu-20.04
+  <<: *production_release
+Ubuntu-20.04-arm-release:
+  dependencies:
+    - Ubuntu-20.04-arm
   <<: *production_release
 Debian-9-release:
   dependencies:
