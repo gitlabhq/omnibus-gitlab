@@ -221,7 +221,7 @@ def pg_upgrade_check
   return unless File.exist?(manifest_file)
 
   # If postgresql_new doesn't exist, we are shipping only one PG version. This
-  # check becomes irrelevent then, and we return early.
+  # check becomes irrelevant then, and we return early.
   manifest_entry = File.readlines(manifest_file).grep(/postgresql_new/).first
   return unless manifest_entry
 
