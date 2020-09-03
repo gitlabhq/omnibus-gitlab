@@ -505,7 +505,7 @@ This version has been skipped due to packaging problems.
 - Fixes sysctl error on reconfigure after reinstall. !3921
 - Fix pg-upgrade error during sysctl commands. !4080
 - Fix pg-upgrade error format exception. !4090
-- Fixed pg upgrade for seperate geo tracking db. !4091
+- Fixed pg upgrade for separate geo tracking db. !4091
 - Fix repmgr failure during pg-upgrade. !4117
 
 ### Deprecated (1 change)
@@ -787,7 +787,7 @@ This version has been skipped due to packaging problems.
 
 ### Fixed (1 change)
 
-- Fix promethues duplicate rule. !3891
+- Fix prometheus duplicate rule. !3891
 
 
 ## 12.7.4
@@ -1055,7 +1055,7 @@ This version has been skipped due to packaging problems.
 
 - Nginx responds to health checks with correct content types. !3594
 - Fix pg-upgrade handling of secondary database nodes. !3631
-- Do not cleanup old gitlab-monitor directory if explicitely using it. !3634
+- Do not cleanup old gitlab-monitor directory if explicitly using it. !3634
 - Resolve "Reconfigure skips Geo DB migrations if Geo DB is not running on the same machine". !3635
 - Fix database replication bootstrap with `gitlab-ctl repmgr standby setup`. !3636
 - Ensure user's gitconfig contains system's core options. !3648
@@ -1167,7 +1167,7 @@ This version has been skipped due to packaging problems.
 - Add option to allow some provider bypass two factor. !3543 (Dodocat)
 - [Geo]Configuration for Docker Registry Replication. !3549
 - Make gitaly open files ulimit configurable. !3560
-- Add smartcard_san_extentions to gitlab.rb. !3566
+- Add smartcard_san_extensions to gitlab.rb. !3566
 
 ### Other (8 changes, 1 of them is from the community)
 
@@ -1394,7 +1394,7 @@ This version has been skipped due to packaging problems.
 - Use PostgreSQL username from node attribute file in gitlab-ctl command. !3352
 - gitaly: prometheus not working with tls enabled. !3353 (Roger Meier)
 - Support pg-upgrade on dbs with collate and ctype values that differ from each other. !3371
-- Properly check whether postgres is enabled when doing pg-ugprade. !3381
+- Properly check whether postgres is enabled when doing pg-upgrade. !3381
 - Bring back the option to use the authorized keyfile in docker. !3388
 - Get prometheus home directory from node attributes. !3395
 - Create the uploads_storage_path directory. !3396
@@ -1449,7 +1449,7 @@ This version has been skipped due to packaging problems.
 ### Fixed (5 changes)
 
 - Support pg-upgrade on dbs with collate and ctype values that differ from each other. !3371
-- Properly check whether postgres is enabled when doing pg-ugprade. !3381
+- Properly check whether postgres is enabled when doing pg-upgrade. !3381
 - Use armv7 build of Grafana in RPi package. !3401
 - Fix error with repmgr and PostgreSQL 9. !3417
 - Enable specifying --path in bundle install on Ruby docker images. !3432
@@ -1473,7 +1473,7 @@ This version has been skipped due to packaging problems.
 ### Fixed (5 changes)
 
 - Support pg-upgrade on dbs with collate and ctype values that differ from each other. !3371
-- Properly check whether postgres is enabled when doing pg-ugprade. !3381
+- Properly check whether postgres is enabled when doing pg-upgrade. !3381
 - Use armv7 build of Grafana in RPi package. !3401
 - Fix error with repmgr and PostgreSQL 9. !3417
 - Enable specifying --path in bundle install on Ruby docker images. !3432
@@ -2317,7 +2317,7 @@ This version has been skipped due to packaging problems.
 
 - Geo: promoting secondary node into primary doesnt remove `database_geo.yml` #3463
 - Only create gitlab-consul database user after repmgr database has been created
-- Make migrations during upgrade only stop unecessary services
+- Make migrations during upgrade only stop unnecessary services
 
 ## 10.7.3
 
@@ -2694,7 +2694,7 @@ This version has been skipped due to packaging problems.
 - Build and configure gitaly-ruby
 - Added support for PostgreSQL's "idle_in_transaction_session_timeout" setting
 - UDP log shipping as part of CE
-- Bump Git verison to 2.13.5
+- Bump Git version to 2.13.5
 - Added Consul service in EE
 - Update gitlab-elasticsearch-indexr to v0.2.1 11a2e7fd
 - Add configuration options for handling repository storage failures
@@ -2918,8 +2918,8 @@ This version has been skipped due to packaging problems.
 ## 9.0.1
 
 - Allow configuration of prepared statement caching in Rails 169891c2
-- Default redis promethues exporter to off if redis is not managed locally 63056441
-- Default postgres promethues exporter to off if postgres is not managed locally 63056441
+- Default redis prometheus exporter to off if redis is not managed locally 63056441
+- Default postgres prometheus exporter to off if postgres is not managed locally 63056441
 - Default pages http to https redirect to off 1ece2480
 - Make HSTS easier to configure, and the docs on it accurate 4ba90ff8
 - Move the automatic PG Upgrade to happen after migrations have run 8cf38d43
@@ -3818,7 +3818,7 @@ are not the same (O Schwede) c4e83c5
 
 ## 8.2.1
 
-- Expose artifacs configuration options 4aca77a5ae78a836cc9f3be060afacc3c4e72a28
+- Expose artifacts configuration options 4aca77a5ae78a836cc9f3be060afacc3c4e72a28
 - Display deploy page on all pages b362ee7d70851c291ff0d090fd75ef550c5c5baa
 
 ## 8.2.0
@@ -3856,7 +3856,7 @@ are not the same (O Schwede) c4e83c5
 - Using sv to check for service status e7b00e4a5d8f0195d9a3f59a6d398a6d0dba3773
 - Set kernel.sem for postgres connections dff749b36a929f9a7dfc128b60f3d53cf2464ed8
 - Use ruby 2.1.7 6fb46c4db9e5daf8a724f5c389b56ea8d918b36e
-- Add backup encription option for AWS backups 8562644f3dfe44b6faed35f8e0769a0b7c202569
+- Add backup encryption option for AWS backups 8562644f3dfe44b6faed35f8e0769a0b7c202569
 - Update git to 2.6.1 b379c1060a6af314209b86161ea44c8467c5a49f
 - Update gitlab-git-http-server to 0.3.0 737815fd22a71f1b94379a1a11d8b82367cc7b3a
 - Move incoming email settings to gitlab.yml 9d8673e221ad869199d633c7feccab167a64df6d
