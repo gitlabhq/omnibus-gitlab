@@ -1,6 +1,6 @@
 #
 # Copyright:: Copyright (c) 2013-2014 Chef Software, Inc.
-# Copyright:: Copyright (c) 2016 GitLab B.V.
+# Copyright:: Copyright (c) 2016-2020 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ name 'python3'
 # files/gitlab-cookbooks/gitlab/attributes/default.rb
 # spec/chef/recipes/gitaly_spec.rb
 # spec/chef/recipes/gitlab-rails_spec.rb
-default_version '3.7.3'
+default_version '3.7.9'
 
 dependency 'libedit'
 dependency 'ncurses'
@@ -40,7 +40,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       sha256: 'd62e3015f2f89c970ac52343976b406694931742fbde2fed8d1ce8ebb4e1f8ff'
+       sha256: '39b018bc7d8a165e59aa827d9ae45c45901739b0bbb13721e4f973f3521c166a'
 
 relative_path "Python-#{version}"
 
