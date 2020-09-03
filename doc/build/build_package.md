@@ -58,7 +58,7 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
    environment. One such optimization is reusing the pre-compiled Rails assets
    that is built by GitLab's CI pipeline. To know how to leverage this in your
    builds, check [Fetch upstream assets](#fetch-upstream-assets) section. Or,
-   you can choose to compile the assets during the pacakge build by setting the
+   you can choose to compile the assets during the package build by setting the
    `COMPILE_ASSETS` environment variable.
 
    ```shell
