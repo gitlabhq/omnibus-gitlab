@@ -15,13 +15,14 @@
 #
 
 name 'gnupg'
-default_version '2.2.10'
+default_version '2.2.22'
 
 dependency 'libassuan'
 dependency 'npth'
 dependency 'libgcrypt'
 dependency 'libksba'
 dependency 'zlib'
+dependency 'bzip2'
 
 license 'LGPL-2.1'
 license_file 'COPYING.LGPL3'
@@ -29,7 +30,7 @@ license_file 'COPYING.LGPL3'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-#{version}.tar.bz2",
-       sha256: '799dd37a86a1448732e339bd20440f4f5ee6e69755f6fd7a73ee8af30840c915'
+       sha256: '7c1370565e1910b9d8c4e0fb57b9de34aa062ec7bb91abad5803d791f38d855b'
 
 relative_path "gnupg-#{version}"
 
