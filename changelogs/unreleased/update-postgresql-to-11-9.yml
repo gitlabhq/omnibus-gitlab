@@ -1,0 +1,5 @@
+---
+title: Update PostgreSQL 11 from 11.7 to 11.9
+merge_request: 4545
+author: Takuya Noguchi
+type: security
