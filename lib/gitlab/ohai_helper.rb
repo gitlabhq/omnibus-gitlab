@@ -4,14 +4,16 @@ class OhaiHelper
   class << self
     # This prints something like 'ubuntu-xenial'
     def platform_dir
-      os, codename = fetch_os_with_codename
+      os, codename, arch = fetch_os_with_codename
+
+      return "#{os}-#{codename}-#{arch}" if arm64?
 
       "#{os}-#{codename}"
     end
 
     # This prints something like 'ubuntu/xenial'; used for packagecloud uploads
     def repo_string
-      os, codename = fetch_os_with_codename
+      os, codename, _ = fetch_os_with_codename
 
       "#{os}/#{codename}"
     end
@@ -19,10 +21,11 @@ class OhaiHelper
     def fetch_os_with_codename
       os = os_platform
       version = os_platform_version
+      arch = ohai['kernel']['machine']
 
       abort "Unsupported OS: #{ohai.values_at('platform', 'platform_version').inspect}" if (os == :unknown) || (version == :unknown)
 
-      [os, version]
+      [os, version, arch]
     end
 
     def os_platform
