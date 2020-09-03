@@ -15,6 +15,8 @@ default['patroni']['max_timelines_history'] = 0
 default['patroni']['master_start_timeout'] = 300
 default['patroni']['use_pg_rewind'] = false
 default['patroni']['use_slots'] = true
+default['patroni']['replication_user'] = node['postgresql']['sql_replication_user']
+default['patroni']['replication_password'] = nil
 default['patroni']['replication_slots'] = {}
 
 # Standby cluster replication settings
