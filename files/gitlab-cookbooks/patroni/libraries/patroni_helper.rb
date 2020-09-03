@@ -3,6 +3,7 @@ class PatroniHelper < BaseHelper
 
   DCS_ATTRIBUTES ||= %w(loop_wait ttl retry_timeout maximum_lag_on_failover max_timelines_history master_start_timeout).freeze
   DCS_POSTGRESQL_ATTRIBUTES ||= %w(use_pg_rewind use_slots).freeze
+  DCS_STANDBY_CLUSTER_ATTRIBUTES ||= %w(host port primary_slot_name).freeze
 
   attr_reader :node
 
@@ -61,6 +62,14 @@ class PatroniHelper < BaseHelper
 
     node['patroni']['replication_slots'].each do |slot_name, options|
       dcs['slots'][slot_name] = parse_replication_slots_options(options)
+    end
+
+    if node['patroni']['standby_cluster']['enable']
+      dcs['standby_cluster'] = {}
+
+      DCS_STANDBY_CLUSTER_ATTRIBUTES.each do |key|
+        dcs['standby_cluster'][key] = node['patroni']['standby_cluster'][key]
+      end
     end
 
     dcs
