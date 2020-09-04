@@ -12,20 +12,14 @@ services in a single container.
 NOTE: **Note:**
 The Docker images do not include a mail transport agent (MTA). The recommended solution is to add an MTA, such as Postfix or Sendmail, running in a separate container. Alternatively, install an MTA directly in the GitLab container, but this adds maintenance overhead as you'll likely need to reinstall the MTA after every upgrade of restart.
 
-Both GitLab CE and EE are in Docker Hub:
-
-- [GitLab CE Docker image](https://hub.docker.com/r/gitlab/gitlab-ce/)
-- [GitLab EE Docker image](https://hub.docker.com/r/gitlab/gitlab-ee/)
-
 NOTE: **Note:**
 To install GitLab on Kubernetes, take a look at
 [GitLab Helm Charts](https://docs.gitlab.com/charts/).
 
-In the following examples we are using the image of GitLab EE. To use GitLab CE
-instead of GitLab EE, replace the image name to `gitlab/gitlab-ce:latest`.
+- [GitLab Docker image in Docker Hub](https://hub.docker.com/r/gitlab/gitlab-ee/)
 
-If you want to use the latest RC image, use `gitlab/gitlab-ce:rc` or
-`gitlab/gitlab-ee:rc` for GitLab CE and GitLab EE respectively.
+In the following examples, if you want to use the latest RC image, use
+`gitlab/gitlab-ee:rc` instead.
 
 Docker installation is required, see the [official installation docs](https://docs.docker.com/install/).
 
@@ -86,7 +80,7 @@ sudo docker run --detach \
   gitlab/gitlab-ee:latest
 ```
 
-This will download and start a GitLab CE container and publish ports needed to
+This will download and start a GitLab container and publish ports needed to
 access SSH, HTTP and HTTPS. All GitLab data will be stored as subdirectories of
 `$GITLAB_HOME`. The container will automatically `restart` after a system reboot.
 
@@ -513,6 +507,12 @@ docker exec -t <container name> gitlab-backup create
 ```
 
 Read more on how to [back up and restore GitLab](https://docs.gitlab.com/ee/raketasks/backup_restore.html).
+
+## Installing GitLab Community Edition
+
+[GitLab CE Docker image](https://hub.docker.com/r/gitlab/gitlab-ce/)
+
+To install the Community Edition, replace `ee` with `ce` in the commands on this page. 
 
 ## Troubleshooting
 
