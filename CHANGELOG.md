@@ -71,6 +71,13 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.25.3.
 
 
+## 13.2.9 (2020-09-04)
+
+### Fixed (1 change)
+
+- Add rhel 8 to helper and selinux files. !4501
+
+
 ## 13.2.8 (2020-09-02)
 
 - No changes.
