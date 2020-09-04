@@ -1,5 +1,0 @@
----
-title: Fix geo fdw deprecation message
-merge_request: 4528
-author:
-type: fixed

@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.3.5 (2020-09-04)
+
+### Fixed (1 change)
+
+- Fix geo fdw deprecation message. !4528
+
+
 ## 13.3.4 (2020-09-02)
 
 - No changes.
