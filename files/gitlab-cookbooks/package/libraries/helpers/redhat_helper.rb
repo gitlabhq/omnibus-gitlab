@@ -3,6 +3,10 @@ class RedhatHelper
     platform_family == 'rhel' && platform_version =~ /7\./
   end
 
+  def self.system_is_rhel8?
+    platform_family == 'rhel' && platform_version =~ /8\./
+  end
+
   def self.platform_family
     case platform
     when /oracle/, /centos/, /redhat/, /scientific/, /enterpriseenterprise/, /amazon/, /xenserver/, /cloudlinux/, /ibm_powerkvm/, /parallels/

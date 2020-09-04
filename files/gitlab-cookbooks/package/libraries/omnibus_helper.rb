@@ -101,7 +101,10 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
   def self.deprecated_os_list
     # This hash follows the format `'ohai-slug' => 'EOL version'
     # example: deprecated_os = { 'raspbian-8' => 'GitLab 11.8' }
-    { 'opensuseleap-15.0' => 'GitLab 12.6' }
+    {
+      'raspbian-9' => 'GitLab 13.4',
+      'debian-8' => 'GitLab 13.4'
+    }
   end
 
   def self.is_deprecated_os?
@@ -122,7 +125,7 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
 
     message = <<~EOS
       Your OS, #{os_string}, will be deprecated soon.
-      Staring with #{deprecated_os[matching_list.first]}, packages will not be built for it.
+      Starting with #{deprecated_os[matching_list.first]}, packages will not be built for it.
     EOS
 
     LoggingHelper.deprecation(message)
