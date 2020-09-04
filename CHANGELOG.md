@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.2.9 (2020-09-04)
+
+### Fixed (1 change)
+
+- Add rhel 8 to helper and selinux files. !4501
+
+
 ## 13.2.8 (2020-09-02)
 
 - No changes.
