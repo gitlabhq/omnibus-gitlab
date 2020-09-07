@@ -254,9 +254,9 @@ If you meet all the requirements above, follow these instructions in order. Ther
 | [Single-node](#single-node-deployment)                          | GitLab CE/EE on a single node                     |
 | [Gitaly Cluster](#gitaly-cluster)                               | GitLab CE/EE using HA architecture for Gitaly Cluster             |
 | [Multi-node / PostgreSQL HA](#use-postgresql-ha)                | GitLab CE/EE using HA architecture for PostgreSQL |
-| [Multi-node / Redis HA](#use-redis-ha-using-sentinel-premium-only)           | GitLab CE/EE using HA architecture for Redis |
-| [Geo](#geo-deployment-premium-only)                                          | GitLab EE with Geo enabled                        |
-| [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo-premium-only) | GitLab CE/EE on multiple nodes                    |
+| [Multi-node / Redis HA](#use-redis-ha-using-sentinel)           | GitLab CE/EE using HA architecture for Redis |
+| [Geo](#geo-deployment)                                          | GitLab EE with Geo enabled                        |
+| [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo) | GitLab CE/EE on multiple nodes                    |
 
 Each type of deployment will require that you hot reload the `puma` (or `unicorn`) and `sidekiq` processes on all nodes running these
 services after you've upgraded. The reason for this is that those processes each load the GitLab Rails application which reads and loads
