@@ -2200,6 +2200,85 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'Consul settings' do
+      it 'sets the default values' do
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            consul_api_url: nil
+          )
+        )
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(/consul:(\s+#.*)*\s+api_url: ""/)
+      end
+
+      context 'with changed configuration values' do
+        it 'sets default address and port' do
+          stub_gitlab_rb(consul: { enable: true })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              consul_api_url: 'http://localhost:8500'
+            )
+          )
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/consul:(\s+#.*)*\s+api_url: "http:\/\/localhost:8500"/)
+        end
+
+        it 'allows address to be overwritten by client_addr' do
+          stub_gitlab_rb(consul: { enable: true, configuration: { client_addr: '10.0.0.1' } })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              consul_api_url: 'http://10.0.0.1:8500'
+            )
+          )
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/consul:(\s+#.*)*\s+api_url: "http:\/\/10.0.0.1:8500"/)
+        end
+
+        it 'allows address to be overwritten by addresses' do
+          stub_gitlab_rb(consul: { enable: true, configuration: { client_addr: '10.0.0.1', addresses: { http: '192.168.0.1' } } })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              consul_api_url: 'http://192.168.0.1:8500'
+            )
+          )
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/consul:(\s+#.*)*\s+api_url: "http:\/\/192.168.0.1:8500"/)
+        end
+
+        it 'allows port to be overwritten' do
+          stub_gitlab_rb(consul: { enable: true, configuration: { ports: { http: 18500 } } })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              consul_api_url: 'http://localhost:18500'
+            )
+          )
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/consul:(\s+#.*)*\s+api_url: "http:\/\/localhost:18500"/)
+        end
+
+        it 'disables http port by negative port number' do
+          stub_gitlab_rb(consul: { enable: true, configuration: { ports: { http: -1, https: 8501 } } })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              consul_api_url: 'https://localhost:8501'
+            )
+          )
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/consul:(\s+#.*)*\s+api_url: "https:\/\/localhost:8501"/)
+        end
+
+        it 'allows address and port to be overwritten together' do
+          stub_gitlab_rb(consul: { enable: true, configuration: { client_addr: '10.0.0.1', addresses: { https: '192.168.0.1' }, ports: { http: -1, https: 18501 } } })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              consul_api_url: 'https://192.168.0.1:18501'
+            )
+          )
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/consul:(\s+#.*)*\s+api_url: "https:\/\/192.168.0.1:18501"/)
+        end
+      end
+    end
+
     describe 'maximum request duration' do
       where(:web_worker, :configured_timeout, :expected_duration) do
         :unicorn | nil  | 57

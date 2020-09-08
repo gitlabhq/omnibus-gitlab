@@ -52,6 +52,31 @@ class ConsulHelper
     config.to_json
   end
 
+  def api_url
+    %w[https http].each do |scheme|
+      port = api_port(scheme)
+
+      # Positive value means enabled API port(https://www.consul.io/docs/agent/options#ports)
+      return "#{scheme}://#{api_address(scheme)}:#{port}" if port.positive?
+    end
+  end
+
+  def api_port(scheme)
+    default_port = { 'http' => 8500, 'https' => -1 }
+
+    node.dig('consul', 'configuration', 'ports', scheme) || default_port[scheme]
+  end
+
+  def api_address(scheme)
+    default_address = 'localhost'
+    config_address = node.dig('consul', 'configuration', 'addresses', scheme) || node.dig('consul', 'configuration', 'client_addr')
+
+    config_address.nil? || IPAddr.new(config_address).to_i.zero? ? default_address : config_address
+  rescue IPAddr::InvalidAddressError
+    # Have a best try when config address is invalid IP, such as a list of addresses
+    default_address
+  end
+
   def postgresql_service_config
     return node['consul']['service_config']['postgresql'] || {} unless node['consul']['service_config'].nil?
 
