@@ -152,11 +152,11 @@ RSpec.describe 'patroni cookbook' do
         postgresql: {
           username: 'test_psql_user',
           sql_user: 'test_sql_user',
-          sql_user_password: '32596e8376077c3ef8d5cf52f15279ba',
+          sql_user_password: 'dbda601b8d4dc3d1697ef84dbbb8e61b',
           sql_replication_user: 'test_sql_replication_user',
-          sql_replication_password: '5b3e5a380c8fe8f8180d396be021951a',
+          sql_replication_password: '48e84afb4b268128ac14f7c66fc7af42',
           pgbouncer_user: 'test_pgbouncer_user',
-          pgbouncer_user_password: '3b244bd6e459bc406013417367587d41',
+          pgbouncer_user_password: '2bc94731612abb74aea7805a41dfcb09',
           connect_port: 15432,
         },
         patroni: {
@@ -171,6 +171,7 @@ RSpec.describe 'patroni cookbook' do
           use_pg_rewind: true,
           connect_address: '1.2.3.4',
           connect_port: 18008,
+          replication_password: 'fakepassword',
           replication_slots: {
             'geo_secondary' => { 'type' => 'physical' }
           },
@@ -205,7 +206,7 @@ RSpec.describe 'patroni cookbook' do
           },
           replication: {
             username: 'test_sql_replication_user',
-            password: 'md55b3e5a380c8fe8f8180d396be021951a'
+            password: 'fakepassword'
           }
         )
         expect(cfg[:restapi][:connect_address]).to eq('1.2.3.4:18008')
