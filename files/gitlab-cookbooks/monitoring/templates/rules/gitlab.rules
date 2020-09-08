@@ -479,6 +479,24 @@ groups:
       service: workhorse
       component: http_requests
     expr: sum (rate (gitlab_workhorse_http_requests_total[5m]))
+
+  # Database Primary Performance Indicator: Query apdex
+  # Target -> 100ms
+  # Tolerable -> 250ms
+  - record: gitlab_usage_ping:sql_duration_apdex:ratio_rate5m
+    expr: >
+      (
+        sum(rate(gitlab_sql_duration_seconds_bucket{le="0.1"}[5m]))
+        +
+        sum(rate(gitlab_sql_duration_seconds_bucket{le="0.25"}[5m]))
+      )
+      /
+      2
+      /
+      (
+        sum(rate(gitlab_sql_duration_seconds_count[5m])) > 0
+      )
+
   ###
   # Node level metrics
   #
@@ -490,7 +508,8 @@ groups:
     expr: avg (instance:node_cpu_utilization:ratio) by (instance)
   - record: gitlab_usage_ping:node_memory_utilization:avg
     expr: avg (instance:node_memory_utilization:ratio) by (instance)
-  ### 
+
+  ###
   # Service level metrics
   #
   - record: gitlab_usage_ping:node_service_process_resident_memory_bytes:avg
