@@ -790,6 +790,10 @@ production: &base
     # IP address(including listen port) of Prometheus server
     server_address: "<%= @prometheus_server_address %>"
 
+  ## Consul settings
+  consul:
+    api_url: "<%= @consul_api_url %>"
+
   #
   # 5. Extra customization
   # ==========================
