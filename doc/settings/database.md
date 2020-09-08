@@ -808,7 +808,7 @@ The next time a reconfigure is triggered, the migration steps will not be perfor
 
 ### Setting client statement_timeout
 
-The amount time that Rails will wait for a database transaction to complete
+The amount of time that Rails will wait for a database transaction to complete
 before timing out can now be adjusted with the `gitlab_rails['db_statement_timeout']`
 setting. By default, this setting is not used.
 
