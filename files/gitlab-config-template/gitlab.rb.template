@@ -611,6 +611,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_rails['db_sslkey'] = nil
 # gitlab_rails['db_prepared_statements'] = false
 # gitlab_rails['db_statements_limit'] = 1000
+# gitlab_rails['db_connect_timeout'] = nil
 
 
 ### GitLab Redis settings
