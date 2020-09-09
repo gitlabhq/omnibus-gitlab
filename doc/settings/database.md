@@ -808,7 +808,7 @@ The next time a reconfigure is triggered, the migration steps will not be perfor
 
 ### Setting client statement_timeout
 
-The amount time that Rails will wait for a database transaction to complete
+The amount of time that Rails will wait for a database transaction to complete
 before timing out can now be adjusted with the `gitlab_rails['db_statement_timeout']`
 setting. By default, this setting is not used.
 
@@ -820,6 +820,25 @@ gitlab_rails['db_statement_timeout'] = 45000
 
 In this case the client `statement_timeout` is set to 45 seconds. The value
 is specified in milliseconds.
+
+### Setting connection timeout
+
+The amount of time that Rails will wait for a PostgreSQL connection attempt to succeed
+before timing out can be adjusted with the `gitlab_rails['db_connect_timeout']`
+setting. By default, this setting is not used.
+
+Edit `/etc/gitlab/gitlab.rb`:
+
+```ruby
+gitlab_rails['db_connect_timeout'] = 5
+```
+
+In this case the client `connect_timeout` is set to 5 seconds. The value
+is specified in seconds. A minimum value of 2 seconds applies. Setting this to `<= 0`
+or not specifying the setting at all disables the timeout.
+
+NOTE: **Note:**
+After changing timeout settings, please run `gitlab-ctl reconfigure` to update the configuration.
 
 ## Packaged PostgreSQL deployed in an HA/Geo Cluster
 

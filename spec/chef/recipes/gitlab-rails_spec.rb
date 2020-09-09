@@ -2609,6 +2609,44 @@ RSpec.describe 'gitlab::gitlab-rails' do
           end
         end
       end
+
+      describe 'client side connect_timeout' do
+        let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+
+        context 'default values' do
+          it 'does not set a default value' do
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_connect_timeout' => nil
+              )
+            )
+
+            expect(chef_run).to render_file(config_file).with_content { |content|
+              expect(content).to match(%r(connect_timeout: $))
+            }
+          end
+        end
+
+        context 'custom value' do
+          before do
+            stub_gitlab_rb(
+              'gitlab_rails' => { 'db_connect_timeout' => '5' }
+            )
+          end
+
+          it 'uses specified client side statement_timeout value' do
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_connect_timeout' => '5'
+              )
+            )
+
+            expect(chef_run).to render_file(config_file).with_content { |content|
+              expect(content).to match(%r(connect_timeout: 5$))
+            }
+          end
+        end
+      end
     end
 
     describe 'gitlab_workhorse_secret' do
