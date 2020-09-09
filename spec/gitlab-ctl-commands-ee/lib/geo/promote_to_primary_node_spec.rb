@@ -13,8 +13,8 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
   let(:gitlab_config_path) { File.join(temp_directory, 'gitlab.rb') }
 
   before do
-    allow(command).to receive(:puts)
-    allow(command).to receive(:print)
+    allow($stdout).to receive(:puts)
+    allow($stdout).to receive(:print)
 
     allow(command).to receive(:run_command).with(any_args)
   end
@@ -67,16 +67,40 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
   context 'when preflight checks pass' do
     before do
       allow(STDIN).to receive(:gets).and_return('y')
+
+      allow_any_instance_of(Geo::PromotionPreflightChecks).to receive(
+        :execute).and_return(true)
+
+      allow(command).to receive(:promote_postgresql_to_primary).and_return(true)
+      allow(command).to receive(:reconfigure).and_return(true)
+      allow(command).to receive(:promote_to_primary).and_return(true)
+      allow(command).to receive(:success_message).and_return(true)
     end
 
-    it 'calls all the subcommands' do
-      is_expected.to receive(:run_command).with('gitlab-ctl reconfigure', live: true).once
-      is_expected.to receive(:run_command).with('gitlab-rake geo:set_secondary_as_primary', live: true).once
+    context 'when running in force mode' do
+      let(:options) { { force: true } }
 
-      shell_out_object = double.tap { |shell_out_object| expect(shell_out_object).to receive(:error!) }
-      is_expected.to receive(:run_command).with("/opt/gitlab/embedded/bin/gitlab-pg-ctl promote", live: true).once.and_return(shell_out_object)
+      it 'does not ask for final confirmation' do
+        expect { command.execute }.not_to output(
+          /WARNING\: Secondary will now be promoted to primary./).to_stdout
+      end
+    end
 
-      command.execute
+    context 'when not running in force mode' do
+      let(:options) { { force: false } }
+
+      it 'asks for confirmation' do
+        expect { command.execute }.to output(
+          /WARNING\: Secondary will now be promoted to primary./).to_stdout
+      end
+
+      context 'when final confirmation is given' do
+        it 'calls the next subcommand' do
+          expect(command).to receive(:promote_postgresql_to_primary)
+
+          command.execute
+        end
+      end
     end
   end
 
