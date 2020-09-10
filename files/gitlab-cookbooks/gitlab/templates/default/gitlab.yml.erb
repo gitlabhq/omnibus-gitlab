@@ -647,6 +647,13 @@ production: &base
     # (default: false)
     auto_link_saml_user: <%= @omniauth_auto_link_saml_user.to_json %>
 
+    # Allow users with existing accounts to sign in and auto link their account via OmniAuth
+    # login, without having to do a manual login first and manually add OmniAuth. Links on email.
+    # Define the allowed providers using an array, e.g. ["saml", "twitter"], or as true/false to
+    # allow all providers or none.
+    # (default: false)
+    auto_link_user: <%= @omniauth_auto_link_user.to_json %>
+
     # Set different Omniauth providers as external so that all users creating accounts
     # via these providers will not be able to have access to internal projects. You
     # will need to use the full name of the provider, like `google_oauth2` for Google.
