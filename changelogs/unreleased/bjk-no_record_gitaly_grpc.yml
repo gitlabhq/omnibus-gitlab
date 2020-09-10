@@ -1,0 +1,5 @@
+---
+title: Inline Gitaly gRPC recording rule
+merge_request: 4561
+author:
+type: performance
