@@ -1345,6 +1345,45 @@ RSpec.describe 'gitlab::gitlab-rails' do
           )
         end
       end
+
+      context 'auto link user for providers is configured ' do
+        it 'auto_link_user configured as true' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_auto_link_user: true })
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_auto_link_user' => true
+            )
+          )
+        end
+
+        it 'auto_link_user configured as false' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_auto_link_user: false })
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_auto_link_user' => false
+            )
+          )
+        end
+
+        it 'auto_link_user configured as [\'foo\']' do
+          stub_gitlab_rb(gitlab_rails: { omniauth_auto_link_user: ['foo'] })
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_auto_link_user' => ['foo']
+            )
+          )
+        end
+      end
+
+      context 'auto link user for providers is not configured' do
+        it 'sets auto_link_user to []' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'omniauth_auto_link_user' => nil
+            )
+          )
+        end
+      end
     end
 
     context 'Sidekiq log_format' do
