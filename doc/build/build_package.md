@@ -38,7 +38,7 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
    directory in it:
 
    ```shell
-   docker run -v ~/omnibus-gitlab:~/omnibus-gitlab -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION} bash
+   docker run -v ~/omnibus-gitlab:~/omnibus-gitlab -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_10:${BUILDER_IMAGE_REVISION} bash
    ```
 
 1. By default, `omnibus-gitlab` will choose GitLab's internal repositories from
@@ -54,7 +54,7 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
    [`.custom_sources.yml`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/.custom_sources.yml)
    file.
 
-1. By default, `omnibus-gitlab` codebse is optimized to be used in a CI
+1. By default, `omnibus-gitlab` codebase is optimized to be used in a CI
    environment. One such optimization is reusing the pre-compiled Rails assets
    that is built by GitLab's CI pipeline. To know how to leverage this in your
    builds, check [Fetch upstream assets](#fetch-upstream-assets) section. Or,
@@ -68,6 +68,7 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
 1. Install the libraries and other dependencies:
 
    ```shell
+   cd ~/omnibus-gitlab
    bundle install --path .bundle --binstubs
    ```
 
@@ -102,7 +103,7 @@ again, and thus save time:
    it:
 
    ```shell
-   docker run -v ~/omnibus-gitlab:~/omnibus-gitlab -v ~/gitlab-assets:/gitlab-assets -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_9:${BUILDER_IMAGE_REVISION} bash
+   docker run -v ~/omnibus-gitlab:~/omnibus-gitlab -v ~/gitlab-assets:/gitlab-assets -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_10:${BUILDER_IMAGE_REVISION} bash
    ```
 
 1. Instead of setting `COMPILE_ASSETS` to true, set the path where assets can be
