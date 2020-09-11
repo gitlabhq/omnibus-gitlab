@@ -1,0 +1,5 @@
+---
+title: Reload PostgreSQL configuration when Patroni is enabled
+merge_request: 4548
+author:
+type: fixed
