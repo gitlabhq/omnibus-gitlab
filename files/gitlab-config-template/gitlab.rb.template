@@ -1935,6 +1935,11 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 #     'max_per_repo' => 5
 #   }
 # ]
+#
+# gitaly['daily_maintenance_start_hour'] = 22
+# gitaly['daily_maintenance_start_minute'] = 30
+# gitaly['daily_maintenance_duration'] = '30m'
+# gitaly['daily_maintenance_storages'] = ["default"]
 
 ################################################################################
 ## Praefect

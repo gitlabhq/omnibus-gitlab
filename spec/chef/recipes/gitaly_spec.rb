@@ -50,6 +50,10 @@ RSpec.describe 'gitaly' do
   let(:ca_path) { '/path/to/ca_path' }
   let(:self_signed_cert) { true }
   let(:read_timeout) { 123 }
+  let(:daily_maintenance_start_hour) { 21 }
+  let(:daily_maintenance_start_minute) { 9 }
+  let(:daily_maintenance_duration) { '45m' }
+  let(:daily_maintenance_storages) { ["default"] }
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
@@ -113,6 +117,8 @@ RSpec.describe 'gitaly' do
         .with_content(%r{\[logging\]\s+level})
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{catfile_cache_size})
+      expect(chef_run).not_to render_file(config_path)
+        .with_content(%r{\[daily_maintenance\]})
     end
 
     it 'populates gitaly config.toml with default storages' do
@@ -167,7 +173,11 @@ RSpec.describe 'gitaly' do
           ruby_num_workers: ruby_num_workers,
           git_catfile_cache_size: git_catfile_cache_size,
           open_files_ulimit: open_files_ulimit,
-          ruby_rugged_git_config_search_path: ruby_rugged_git_config_search_path
+          ruby_rugged_git_config_search_path: ruby_rugged_git_config_search_path,
+          daily_maintenance_start_hour: daily_maintenance_start_hour,
+          daily_maintenance_start_minute: daily_maintenance_start_minute,
+          daily_maintenance_duration: daily_maintenance_duration,
+          daily_maintenance_storages: daily_maintenance_storages
         },
         gitlab_rails: {
           internal_api_url: gitlab_url
@@ -248,6 +258,14 @@ RSpec.describe 'gitaly' do
         %r{custom_hooks_dir = '#{Regexp.escape(custom_hooks_dir)}'},
       ].map(&:to_s).join('\s+'))
 
+      maintenance_section = Regexp.new([
+        %r{\[daily_maintenance\]},
+        %r{start_hour = #{daily_maintenance_start_hour}},
+        %r{start_minute = #{daily_maintenance_start_minute}},
+        %r{duration = '#{daily_maintenance_duration}'},
+        %r{storages = #{Regexp.escape(daily_maintenance_storages.to_s)}},
+      ].map(&:to_s).join('\s+'))
+
       expect(chef_run).to render_file(config_path).with_content { |content|
         expect(content).to include("tls_listen_addr = 'localhost:8888'")
         expect(content).to include("certificate_path = '/path/to/cert.pem'")
@@ -262,6 +280,7 @@ RSpec.describe 'gitaly' do
         expect(content).to match(gitlab_shell_section)
         expect(content).to match(gitlab_section)
         expect(content).to match(hooks_section)
+        expect(content).to match(maintenance_section)
       }
     end
 
