@@ -46,6 +46,7 @@ RSpec.describe 'praefect' do
         'prometheus_listen_addr' => 'localhost:9652',
         'sentry' => {},
         'database' => {},
+        'reconciliation' => {},
         'failover' => { 'enabled' => true,
                         'election_strategy' => 'sql' }
       }
@@ -110,6 +111,9 @@ RSpec.describe 'praefect' do
       let(:database_sslcert) { '/path/to/client-cert' }
       let(:database_sslkey) { '/path/to/client-key' }
       let(:database_sslrootcert) { '/path/to/rootcert' }
+      let(:database_sslrootcert) { '/path/to/rootcert' }
+      let(:reconciliation_scheduling_interval) { '1m' }
+      let(:reconciliation_histogram_buckets) { '[1.0, 2.0]' }
 
       before do
         stub_gitlab_rb(praefect: {
@@ -139,10 +143,23 @@ RSpec.describe 'praefect' do
                          database_sslcert: database_sslcert,
                          database_sslkey: database_sslkey,
                          database_sslrootcert: database_sslrootcert,
+                         reconciliation_scheduling_interval: reconciliation_scheduling_interval,
+                         reconciliation_histogram_buckets: reconciliation_histogram_buckets
                        })
       end
 
       it 'renders the config.toml' do
+        expect(chef_run).to render_file(config_path).with_content { |content|
+          expect(Tomlrb.parse(content)).to include(
+            {
+              'reconciliation' => {
+                'scheduling_interval' => '1m',
+                'histogram_buckets' => [1.0, 2.0]
+              }
+            }
+          )
+        }
+
         expect(chef_run).to render_file(config_path)
           .with_content("listen_addr = '#{listen_addr}'")
         expect(chef_run).to render_file(config_path)
@@ -163,7 +180,6 @@ RSpec.describe 'praefect' do
           .with_content(%r{\[failover\]\s+enabled = true\s+election_strategy = 'local'})
         expect(chef_run).to render_file(config_path)
           .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
-
         expect(chef_run).to render_file(config_path)
           .with_content(%r{^\[auth\]\ntoken = '#{auth_token}'\ntransitioning = #{auth_transitioning}\n})
 

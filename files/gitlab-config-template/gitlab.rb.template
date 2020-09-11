@@ -1994,6 +1994,8 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # praefect['database_sslcert'] = '/path/to/client-cert'
 # praefect['database_sslkey'] = '/path/to/client-key'
 # praefect['database_sslrootcert'] = '/path/to/rootcert'
+# praefect['reconciliation_scheduling_interval'] = '5m'
+# praefect['reconciliation_histogram_buckets'] = '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0]'
 
 ################################################################################
 # Storage check

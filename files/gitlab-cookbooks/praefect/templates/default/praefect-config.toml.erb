@@ -27,6 +27,10 @@ socket_path = '<%= @socket_path %>'
 prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
 <% end %>
 
+[reconciliation]
+<%= "scheduling_interval = '#{@reconciliation_scheduling_interval}'" if @reconciliation_scheduling_interval %>
+<%= "histogram_buckets = #{@reconciliation_histogram_buckets}" if @reconciliation_histogram_buckets %>
+
 [failover]
 <% unless @failover_enabled.nil? %>
 enabled = <%= @failover_enabled %>
