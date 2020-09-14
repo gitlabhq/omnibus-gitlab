@@ -1,0 +1,5 @@
+---
+title: Fix missing gitlab-geo.conf when initiating replication
+merge_request: 4556
+author:
+type: fixed
