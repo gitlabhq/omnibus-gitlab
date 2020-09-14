@@ -167,7 +167,7 @@ module Geo
 
     def write_recovery_settings!
       geo_conf_file = "#{data_path}/postgresql/data/gitlab-geo.conf"
-      File.open(geo_conf_file, 0640) do |file|
+      File.open(geo_conf_file, "w", 0640) do |file|
         settings = <<~EOF
           # - Added by GitLab Omnibus for Geo replication -
           recovery_target_timeline = '#{@options[:recovery_target_timeline]}'
