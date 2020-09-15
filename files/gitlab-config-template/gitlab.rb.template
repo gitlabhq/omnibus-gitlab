@@ -929,6 +929,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # sidekiq['negate'] = false
 
 # sidekiq['metrics_enabled'] = true
+# sidekiq['exporter_log_enabled'] = false
 # sidekiq['listen_address'] = "localhost"
 # sidekiq['listen_port'] = 8082
 
