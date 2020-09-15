@@ -2085,6 +2085,30 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'Update CI Platform Metrics daily cron job settings' do
+      context 'when the cron pattern is configured' do
+        it 'sets the value' do
+          stub_gitlab_rb(gitlab_rails: { ci_platform_metrics_update_cron_worker: '47 9 * * *' })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'ci_platform_metrics_update_cron_worker' => '47 9 * * *'
+            )
+          )
+        end
+      end
+
+      context 'when the cron pattern is not configured' do
+        it ' sets no value' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'ci_platform_metrics_update_cron_worker' => nil
+            )
+          )
+        end
+      end
+    end
+
     context 'Geo settings' do
       it 'sets the geo_node_name variable' do
         stub_gitlab_rb(gitlab_rails: { geo_node_name: 'the name of the node' })
