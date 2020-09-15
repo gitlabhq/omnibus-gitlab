@@ -105,7 +105,9 @@ module Pgbouncer
     end
 
     def running?
-      GitlabCtl::Util.run_command('gitlab-ctl status pgbouncer').error?
+      true if show_databases
+    rescue GitlabCtl::Errors::ExecutionError
+      false
     end
 
     def database_paused?
