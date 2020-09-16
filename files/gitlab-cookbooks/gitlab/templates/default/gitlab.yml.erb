@@ -490,6 +490,12 @@ production: &base
       cron: "<%= @elastic_index_bulk_cron %>"
     <% end %>
 
+    # Worker for triggering counter jobs for instance statistics
+    <% unless @analytics_instance_statistics_count_job_trigger_worker_cron.nil? %>
+    analytics_instance_statistics_count_job_trigger_worker:
+      cron: "<%= @analytics_instance_statistics_count_job_trigger_worker_cron %>"
+    <% end %>
+
   ## Geo
   # NOTE: These settings will only take effect if Geo is enabled
   geo:

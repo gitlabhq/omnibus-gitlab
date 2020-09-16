@@ -1634,6 +1634,28 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'when instance statistics counter trigger worker is configured' do
+      it 'sets the cron value' do
+        stub_gitlab_rb(gitlab_rails: { analytics_instance_statistics_count_job_trigger_worker_cron: '1 2 3 4 5' })
+
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'analytics_instance_statistics_count_job_trigger_worker_cron' => '1 2 3 4 5'
+          )
+        )
+      end
+    end
+
+    context 'when instance statistics counter trigger worker is not configured' do
+      it 'does not set the cron value' do
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            'analytics_instance_statistics_count_job_trigger_worker_cron' => nil
+          )
+        )
+      end
+    end
+
     context 'Cron workers for other EE functionality' do
       where(:gitlab_rb_key, :gitlab_yml_key) do
         :pseudonymizer_worker_cron | 'pseudonymizer_worker_cron'
