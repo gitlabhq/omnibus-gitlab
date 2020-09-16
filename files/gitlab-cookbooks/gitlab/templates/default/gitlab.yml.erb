@@ -393,6 +393,12 @@ production: &base
     pages_domain_removal_cron_worker:
       cron:<% if @pages_domain_removal_cron_worker %> "<%= @pages_domain_removal_cron_worker %>"<% end %>
 
+    # Remove unaccepted member invitations
+    <% unless @remove_unaccepted_member_invites_cron_worker.nil? %>
+    remove_unaccepted_member_invites_worker:
+      cron: "<%= @remove_unaccepted_member_invites_cron_worker %>"
+    <% end %>
+
     # Periodically migrate diffs from the database to external storage
     schedule_migrate_external_diffs_worker:
       cron:<% if @schedule_migrate_external_diffs_worker_cron %> "<%= @schedule_migrate_external_diffs_worker_cron %>"<% end %>
