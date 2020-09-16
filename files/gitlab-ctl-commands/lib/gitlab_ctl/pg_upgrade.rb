@@ -1,5 +1,6 @@
 require 'optparse'
 require 'mixlib/shellout'
+require 'rainbow'
 
 require_relative 'util'
 require_relative '../gitlab_ctl'
@@ -143,6 +144,14 @@ module GitlabCtl
           $stderr.puts "Error upgrading the data to version #{target_version}"
           $stderr.puts "STDOUT: #{e.stdout}"
           $stderr.puts "STDERR: #{e.stderr}"
+          false
+        rescue Mixlib::ShellOut::CommandTimeout
+          $stderr.puts
+          $stderr.puts "Timed out during the database upgrade.".color(:red)
+          $stderr.puts "To run with more time, remove the temporary directory #{tmp_data_dir}.#{target_version.major},".color(:red)
+          $stderr.puts "then re-run your previous command, adding the --timeout option.".color(:red)
+          $stderr.puts "See the docs for more information: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server".color(:red)
+          $stderr.puts "Or run gitlab-ctl pg-upgrade --help for usage".color(:red)
           false
         end
       end

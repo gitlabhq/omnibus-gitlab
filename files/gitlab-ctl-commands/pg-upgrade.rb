@@ -492,6 +492,10 @@ def analyze_cluster
     log "sudo su - #{pg_username} -c \"#{analyze_cmd}\""
     log 'If the error persists, please open an issue at: '
     log 'https://gitlab.com/gitlab-org/omnibus-gitlab/issues'
+  rescue Mixlib::ShellOut::CommandTimeout
+    $stderr.puts "Time out while running the analyze stage.".color(:yellow)
+    $stderr.puts "Please re-run the command manually as the #{pg_username} user".color(:yellow)
+    $stderr.puts analyze_command.color(:yellow)
   end
 end
 
