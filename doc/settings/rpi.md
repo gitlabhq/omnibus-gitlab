@@ -48,7 +48,7 @@ GitLab and install it.
 If you find that your Pi is struggling to run GitLab, you can reduce
 some running processes:
 
-1. Open `/etc/gitlab.gitlab.rb` and change the following settings:
+1. Open `/etc/gitlab/gitlab.rb` and change the following settings:
 
    ```ruby
    # Reduce the number of running workers to the minimum in order to reduce memory usage
