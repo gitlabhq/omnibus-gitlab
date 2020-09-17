@@ -1846,6 +1846,30 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'Sidekiq exporter settings' do
+      it 'exporter enabled but log disabled by default' do
+        expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+          yaml_data = YAML.safe_load(content, [], [], true)
+          expect(yaml_data['production']['monitoring']['sidekiq_exporter']).to include('enabled' => true, 'log_enabled' => false)
+        }
+      end
+
+      context 'when exporter log enabled' do
+        before do
+          stub_gitlab_rb(
+            sidekiq: { exporter_log_enabled: true }
+          )
+        end
+
+        it 'enables the log' do
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            yaml_data = YAML.safe_load(content, [], [], true)
+            expect(yaml_data['production']['monitoring']['sidekiq_exporter']).to include('enabled' => true, 'log_enabled' => true)
+          }
+        end
+      end
+    end
+
     context 'Shutdown settings' do
       context 'Blackout setting' do
         it 'default setting' do

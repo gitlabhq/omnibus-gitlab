@@ -529,6 +529,7 @@ default['gitlab']['sidekiq']['log_format'] = "json"
 default['gitlab']['sidekiq']['shutdown_timeout'] = 25
 default['gitlab']['sidekiq']['concurrency'] = 25
 default['gitlab']['sidekiq']['metrics_enabled'] = true
+default['gitlab']['sidekiq']['exporter_log_enabled'] = false
 
 # Sidekiq http listener
 default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"

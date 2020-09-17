@@ -781,6 +781,7 @@ production: &base
     # Sidekiq exporter is webserver built in to Sidekiq to expose Prometheus metrics
     sidekiq_exporter:
       enabled: <%= @sidekiq['metrics_enabled'] %>
+      log_enabled: <%= @sidekiq['exporter_log_enabled'] %>
       address: <%= @sidekiq['listen_address'] %>
       port: <%= @sidekiq['listen_port'] %>
 
