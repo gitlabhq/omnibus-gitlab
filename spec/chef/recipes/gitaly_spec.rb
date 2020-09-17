@@ -294,6 +294,16 @@ RSpec.describe 'gitaly' do
         .with_content(/exec svlogd -tt \/var\/log\/gitlab\/gitaly/)
     end
 
+    context 'when using multiple maintenance storage entries' do
+      let(:daily_maintenance_storages) { %w(storage0 storage1 storage2) }
+
+      it 'renders daily_maintenance with multiple storage entries' do
+        expect(chef_run).to render_file(config_path).with_content { |content|
+          expect(content).to include("storages = #{daily_maintenance_storages}")
+        }
+      end
+    end
+
     context 'when using gitaly storage configuration' do
       before do
         stub_gitlab_rb(
