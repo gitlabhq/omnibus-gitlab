@@ -9,14 +9,6 @@
 listen_addr = '<%= @listen_addr %>'
 <% end %>
 
-<% if @tls_listen_addr %>
-# Optional: listen on a secure TCP socket
-tls_listen_addr = '<%= @tls_listen_addr %>'
-[tls]
-certificate_path = '<%= @certificate_path %>'
-key_path = '<%= @key_path %>'
-<% end %>
-
 <% if @socket_path %>
 # # Praefect can listen on a socket when placed on the same machine as all clients
 socket_path = '<%= @socket_path %>'
@@ -25,6 +17,14 @@ socket_path = '<%= @socket_path %>'
 <% if @prometheus_listen_addr %>
 # Optional: export metrics via Prometheus
 prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
+<% end %>
+
+<% if @tls_listen_addr %>
+# Optional: listen on a secure TCP socket
+tls_listen_addr = '<%= @tls_listen_addr %>'
+[tls]
+certificate_path = '<%= @certificate_path %>'
+key_path = '<%= @key_path %>'
 <% end %>
 
 [reconciliation]

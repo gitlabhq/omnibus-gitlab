@@ -1,0 +1,5 @@
+---
+title: Move TLS below Prometheus in Praefect config
+merge_request: 4575
+author:
+type: fixed
