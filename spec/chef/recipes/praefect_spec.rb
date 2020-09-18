@@ -102,8 +102,8 @@ RSpec.describe 'praefect' do
       end
       let(:failover_enabled) { true }
       let(:failover_election_strategy) { 'local' }
-      let(:database_host) { 'pg.internal' }
-      let(:database_port) { 1234 }
+      let(:database_host) { 'pg.external' }
+      let(:database_port) { 2234 }
       let(:database_user) { 'praefect-pg' }
       let(:database_password) { 'praefect-pg-pass' }
       let(:database_dbname) { 'praefect_production' }
@@ -112,6 +112,8 @@ RSpec.describe 'praefect' do
       let(:database_sslkey) { '/path/to/client-key' }
       let(:database_sslrootcert) { '/path/to/rootcert' }
       let(:database_sslrootcert) { '/path/to/rootcert' }
+      let(:database_host_no_proxy) { 'pg.internal' }
+      let(:database_port_no_proxy) { 1234 }
       let(:reconciliation_scheduling_interval) { '1m' }
       let(:reconciliation_histogram_buckets) { '[1.0, 2.0]' }
 
@@ -143,6 +145,8 @@ RSpec.describe 'praefect' do
                          database_sslcert: database_sslcert,
                          database_sslkey: database_sslkey,
                          database_sslrootcert: database_sslrootcert,
+                         database_host_no_proxy: database_host_no_proxy,
+                         database_port_no_proxy: database_port_no_proxy,
                          reconciliation_scheduling_interval: reconciliation_scheduling_interval,
                          reconciliation_histogram_buckets: reconciliation_histogram_buckets
                        })
@@ -204,6 +208,8 @@ RSpec.describe 'praefect' do
           %r{sslcert = '#{database_sslcert}'},
           %r{sslkey = '#{database_sslkey}'},
           %r{sslrootcert = '#{database_sslrootcert}'},
+          %r{host_no_proxy = '#{database_host_no_proxy}'},
+          %r{port_no_proxy = #{database_port_no_proxy}},
         ].map(&:to_s).join('\n'))
 
         expect(chef_run).to render_file(config_path).with_content(database_section)
