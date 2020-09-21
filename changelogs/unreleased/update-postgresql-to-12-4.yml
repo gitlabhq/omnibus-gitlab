@@ -1,5 +1,0 @@
----
-title: Update PostgreSQL 12 from 12.3 to 12.4
-merge_request: 4546
-author: Takuya Noguchi
-type: security

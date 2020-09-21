@@ -1,5 +1,0 @@
----
-title: Add prometheus recording rule for database query Apdex
-merge_request: 4489
-author:
-type: other

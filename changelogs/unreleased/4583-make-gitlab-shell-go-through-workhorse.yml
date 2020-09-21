@@ -1,5 +1,0 @@
----
-title: Make gitlab-shell go through Workhorse
-merge_request: 4498
-author:
-type: changed

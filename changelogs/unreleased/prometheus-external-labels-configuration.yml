@@ -1,5 +1,0 @@
----
-title: Allow Prometheus external_labels to be configured
-merge_request: 4494
-author: Chris Weyl @rsrchboy
-type: changed

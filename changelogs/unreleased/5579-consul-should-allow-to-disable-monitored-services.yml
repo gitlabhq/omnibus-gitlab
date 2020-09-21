@@ -1,5 +1,0 @@
----
-title: Added ability to disable a previously enabled consul service
-merge_request: 4502
-author:
-type: changed
