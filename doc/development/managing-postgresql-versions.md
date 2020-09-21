@@ -79,7 +79,7 @@ Test upgrades and fresh installs for the following environments:
 1. HA database cluster with 3 or more database nodes in the cluster.
 1. Geo installations with a single node primary and single node secondary (`postgresql` and `geo-postgresql` on the same secondary node).
 1. Geo installations with a HA database cluster on the primary.
-1. Geo installations with a separate tracking database on the secondary.
+1. Geo installations with a separate database and a separate tracking database on the secondary.
 1. Helm installs.
 1. After testing that upgrades to the newest version work, confirm that `revert-pg-upgrade` successfully downgrades to the previously used version, including on a Geo secondary standalone tracking database.
 1. If the default PostgreSQL version changes, test GitLab upgrades with external PostgreSQL databases.
