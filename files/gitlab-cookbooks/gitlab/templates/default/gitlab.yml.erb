@@ -496,6 +496,12 @@ production: &base
       cron: "<%= @analytics_instance_statistics_count_job_trigger_worker_cron %>"
     <% end %>
 
+    # Worker for triggering member invitation reminder emails
+    <% unless @member_invitation_reminder_emails_worker_cron.nil? %>
+    member_invitation_reminder_emails_worker:
+      cron: "<%= @member_invitation_reminder_emails_worker_cron %>"
+    <% end %>
+
   ## Geo
   # NOTE: These settings will only take effect if Geo is enabled
   geo:

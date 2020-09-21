@@ -139,6 +139,7 @@ default['gitlab']['gitlab-rails']['geo_prune_event_log_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_verification_primary_batch_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_verification_secondary_scheduler_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['analytics_instance_statistics_count_job_trigger_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['member_invitation_reminder_emails_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['pseudonymizer_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['elastic_index_bulk_cron'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_enabled'] = false
