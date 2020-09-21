@@ -74,8 +74,8 @@ module Gitlab
           },
           {
             config_keys: %w(praefect virtual_storages primary),
-            deprecation: '13.3',
-            removal: '13.4',
+            deprecation: '13.4',
+            removal: '14.0',
             note: "Praefect no longer supports statically designating primary Gitaly nodes."
           }
         ]
