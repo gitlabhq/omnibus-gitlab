@@ -3,6 +3,58 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.4.0 (2020-09-22)
+
+### Security (3 changes, 3 of them are from the community)
+
+- Update Python to 3.7.9. !4544 (Takuya Noguchi)
+- Update PostgreSQL 11 from 11.7 to 11.9. !4545 (Takuya Noguchi)
+- Update PostgreSQL 12 from 12.3 to 12.4. !4546 (Takuya Noguchi)
+
+### Fixed (6 changes, 2 of them are from the community)
+
+- Remove stub_status => on from nginx status on gitlab.rb config file. !4500 (Kelvin Jasperson)
+- fix: remove useless query string match and disable buffering for artifacts. !4516 (Chieh-Min Wang)
+- Reload PostgreSQL configuration when Patroni is enabled. !4548
+- Fix missing gitlab-geo.conf when initiating replication. !4556
+- Improve pgbouncer running? method. !4557
+- Move TLS below Prometheus in Praefect config. !4575
+
+### Changed (8 changes, 1 of them is from the community)
+
+- Allow Prometheus external_labels to be configured. !4494 (Chris Weyl @rsrchboy)
+- Update replicate-geo-database to support PostgreSQL 12. !4495
+- Make gitlab-shell go through Workhorse. !4498
+- Added ability to disable a previously enabled consul service. !4502
+- Geo: Add final confirmation for promotion to primary. !4523
+- Upgrade GnuPG related software. !4525
+- Add guidance for setting the timeout value for PG upgrades. !4563
+- Add option to enable Sidekiq Exporter logs. !4573
+
+### Performance (1 change)
+
+- Inline Gitaly gRPC recording rule. !4561
+
+### Added (6 changes)
+
+- Add auto_link_user setting. !4415
+- Add arm64 package for ubuntu 20.04. !4478
+- Add Azure Blob Storage configuration. !4505
+- Build openSUSE 15.1 arm64. !4535
+- Add PostgreSQL connect_timeout parameter. !4555
+- Add Praefect reconciliation config options. !4571
+
+### Other (7 changes)
+
+- Update Prometheus components. !4303
+- Expose Consul api_url to gitlab.yml. !4482
+- Add prometheus recording rule for database query Apdex. !4489
+- Cron worker settings for CI platform target metrics. !4526
+- Address TODOs for removing legacy attribute support. !4533
+- Add instance statistics cron worker. !4567
+- Update Mattermost to 5.26.2.
+
+
 ## 13.3.6 (2020-09-14)
 
 - No changes.

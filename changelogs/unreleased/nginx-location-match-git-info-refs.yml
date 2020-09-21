@@ -1,5 +1,0 @@
----
-title: 'fix: remove useless query string match and disable buffering for artifacts'
-merge_request: 4516
-author: Chieh-Min Wang
-type: fixed

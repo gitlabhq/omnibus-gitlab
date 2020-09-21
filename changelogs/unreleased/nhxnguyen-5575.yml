@@ -1,5 +1,0 @@
----
-title: 'Update replicate-geo-database to support PostgreSQL 12'
-merge_request: 4495
-author:
-type: changed
