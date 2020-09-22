@@ -711,13 +711,13 @@ SLES-12.2-staging:
     - SLES-12.2
     - SLES-12.2-branch
   <<: *staging_upload
-  <<: *dev-ee-tag-only-manual
+  <<: *dev-ee-tag-only
 SLES-12.5-staging:
   dependencies:
     - SLES-12.5
     - SLES-12.5-branch
   <<: *staging_upload
-  <<: *dev-ee-tag-only-manual
+  <<: *dev-ee-tag-only
 
 ### Package releases
 Ubuntu-16.04-release:
