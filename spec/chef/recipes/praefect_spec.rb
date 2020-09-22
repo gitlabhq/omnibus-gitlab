@@ -92,10 +92,10 @@ RSpec.describe 'praefect' do
       let(:virtual_storages) do
         {
           'default' => {
-            'praefect1' => { address: 'tcp://node1.internal', primary: true, token: "praefect1-token" },
-            'praefect2' => { address: 'tcp://node2.internal', primary: 'true', token: "praefect2-token" },
-            'praefect3' => { address: 'tcp://node3.internal', primary: false, token: "praefect3-token" },
-            'praefect4' => { address: 'tcp://node4.internal', primary: 'false', token: "praefect4-token" },
+            'praefect1' => { address: 'tcp://node1.internal', token: "praefect1-token" },
+            'praefect2' => { address: 'tcp://node2.internal', token: "praefect2-token" },
+            'praefect3' => { address: 'tcp://node3.internal', token: "praefect3-token" },
+            'praefect4' => { address: 'tcp://node4.internal', token: "praefect4-token" },
             'praefect5' => { address: 'tcp://node5.internal', token: "praefect5-token" }
           }
         }
@@ -186,10 +186,8 @@ RSpec.describe 'praefect' do
         virtual_storages.each do |name, nodes|
           expect(chef_run).to render_file(config_path).with_content(%r{^\[\[virtual_storage\]\]\nname = '#{name}'\n})
           nodes.each do |storage, node|
-            expect_primary = primaries.include?(storage)
-
             expect(chef_run).to render_file(config_path)
-              .with_content(%r{^\[\[virtual_storage.node\]\]\nstorage = '#{storage}'\naddress = '#{node[:address]}'\ntoken = '#{node[:token]}'\nprimary = #{expect_primary}\n})
+              .with_content(%r{^\[\[virtual_storage.node\]\]\nstorage = '#{storage}'\naddress = '#{node[:address]}'\ntoken = '#{node[:token]}'\n})
           end
         end
 
@@ -215,7 +213,7 @@ RSpec.describe 'praefect' do
       end
 
       context 'with virtual_storages as an array' do
-        let(:virtual_storages) { [{ name: 'default', 'nodes' => [{ storage: 'praefect1', address: 'tcp://node1.internal', primary: true, token: "praefect1-token" }] }] }
+        let(:virtual_storages) { [{ name: 'default', 'nodes' => [{ storage: 'praefect1', address: 'tcp://node1.internal', token: "praefect1-token" }] }] }
 
         it 'raises an error' do
           expect { chef_run }.to raise_error("Praefect virtual_storages must be a hash")
@@ -223,7 +221,7 @@ RSpec.describe 'praefect' do
       end
 
       context 'with nodes within virtual_storages as an array' do
-        let(:virtual_storages) { { 'default' => [{ storage: 'praefect1', address: 'tcp://node1.internal', primary: true, token: "praefect1-token" }] } }
+        let(:virtual_storages) { { 'default' => [{ storage: 'praefect1', address: 'tcp://node1.internal', token: "praefect1-token" }] } }
 
         it 'raises an error' do
           expect { chef_run }.to raise_error("nodes of a Praefect virtual_storage must be a hash")
