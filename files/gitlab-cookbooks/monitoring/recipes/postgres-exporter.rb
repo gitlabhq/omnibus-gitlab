@@ -65,7 +65,7 @@ runit_service 'postgres-exporter' do
 end
 
 template File.join(postgres_exporter_dir, 'queries.yaml') do
-  source 'postgres-queries.yaml'
+  source 'postgres-queries.yaml.erb'
   owner postgresql_user
   mode '0644'
   notifies :restart, 'runit_service[postgres-exporter]'

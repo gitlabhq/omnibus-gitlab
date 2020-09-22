@@ -1839,6 +1839,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
 # postgres_exporter['sslmode'] = nil
+# postgres_exporter['per_table_stats'] = false
 
 ################################################################################
 ## Prometheus PgBouncer exporter (EE only)
