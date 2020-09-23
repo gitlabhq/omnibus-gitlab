@@ -1,5 +1,5 @@
 <!-- After merging changes to this template, update the `Default description template for merge requests` -->
-<!-- found uner Settings - General Merge Requests -->
+<!-- found under Settings - General Merge Requests -->
 ## What does this MR do?
 
 <!-- Briefly describe what this MR is about. -->
