@@ -30,3 +30,7 @@ default['gitaly']['ruby_restart_delay'] = nil
 default['gitaly']['ruby_num_workers'] = nil
 default['gitaly']['ruby_rugged_git_config_search_path'] = "/opt/gitlab/embedded/etc"
 default['gitaly']['concurrency'] = nil
+default['gitaly']['daily_maintenance_start_hour'] = nil
+default['gitaly']['daily_maintenance_start_minute'] = nil
+default['gitaly']['daily_maintenance_duration'] = nil
+default['gitaly']['daily_maintenance_storages'] = nil
