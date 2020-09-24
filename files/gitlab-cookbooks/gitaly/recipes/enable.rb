@@ -71,15 +71,7 @@ env_dir env_directory do
   notifies :restart, "runit_service[gitaly]" if omnibus_helper.should_notify?('gitaly')
 end
 
-webserver_service = WebServerHelper.service_name
-gitlab_url = node['gitlab']['gitlab-rails']['internal_api_url']
-
-# If no internal_api_url is specified, default to Workhorse settings
-use_socket = node['gitlab']['gitlab-workhorse']['listen_network'] == "unix"
-workhorse_url = node['gitlab']['gitlab-workhorse']['listen_addr']
-relative_path = Gitlab['gitlab_workhorse']['relative_url']
-gitlab_url ||= use_socket ? "http+unix://#{ERB::Util.url_encode(workhorse_url)}" : "http://#{workhorse_url}#{relative_path}"
-gitlab_relative_path = relative_path || '' if use_socket
+gitlab_url, gitlab_relative_path = WebServerHelper.internal_api_url(node)
 
 template "Create Gitaly config.toml" do
   path config_path
@@ -90,8 +82,7 @@ template "Create Gitaly config.toml" do
   variables node['gitaly'].to_hash.merge(
     { gitlab_shell: node['gitlab']['gitlab-shell'].to_hash,
       gitlab_url: gitlab_url,
-      gitlab_relative_path: gitlab_relative_path,
-    }
+      gitlab_relative_path: gitlab_relative_path }
   )
   notifies :hup, "runit_service[gitaly]" if omnibus_helper.should_notify?('gitaly')
 end

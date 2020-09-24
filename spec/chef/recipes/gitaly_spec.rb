@@ -43,7 +43,7 @@ RSpec.describe 'gitaly' do
   end
 
   let(:gitlab_url) { 'http://localhost:3000' }
-  let(:workhorse_addr) { 'localhost:3000' }
+  let(:workhorse_addr) { 'localhost:4000' }
   let(:custom_hooks_dir) { '/path/to/custom/hooks' }
   let(:user) { 'user123' }
   let(:password) { 'password321' }

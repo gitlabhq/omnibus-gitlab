@@ -49,15 +49,7 @@ end
   end
 end
 
-gitlab_url = node['gitlab']['gitlab-rails']['internal_api_url']
-
-# If no internal_api_url is specified, default to workhorse settings
-use_socket = node['gitlab']['gitlab-workhorse']['listen_network'] == "unix"
-workhorse_url = node['gitlab']['gitlab-workhorse']['listen_addr']
-relative_path = Gitlab['gitlab_workhorse']['relative_url']
-
-gitlab_url ||= use_socket ? "http+unix://#{ERB::Util.url_encode(workhorse_url)}" : "http://#{workhorse_url}#{relative_path}"
-gitlab_relative_path = relative_path || '' if use_socket
+gitlab_url, gitlab_relative_path = WebServerHelper.internal_api_url(node)
 
 templatesymlink "Create a config.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_shell_dir, "config.yml")
