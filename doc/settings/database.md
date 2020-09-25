@@ -847,6 +847,11 @@ After changing timeout settings, please run `gitlab-ctl reconfigure` to update t
 If [PostgreSQL is configured for high availability](https://docs.gitlab.com/ee/administration/high_availability/database.html),
 `pg-upgrade` should be run all the nodes running PostgreSQL. Other nodes can be
 skipped, but must be running the same GitLab version as the database nodes.
+
+NOTE: **Note:**
+The following instructions are valid for a fault tolerant setup with repmgr. To upgrade PostgreSQL version in a
+Patroni cluster see [Upgrading PostgreSQL major version in a Patroni cluster](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#upgrading-postgresql-major-version-in-a-patroni-cluster).
+
 Follow the steps below to upgrade the database nodes
 
 1. Secondary nodes must be upgraded before the primary node.

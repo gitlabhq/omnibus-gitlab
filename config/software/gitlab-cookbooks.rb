@@ -39,6 +39,7 @@ build do
   if EE
     cookbook_name = 'gitlab-ee'
     solo_recipes << 'geo-postgresql-config'
+    solo_recipes << 'patroni-config'
   else
     delete "#{install_dir}/embedded/cookbooks/gitlab-ee"
   end

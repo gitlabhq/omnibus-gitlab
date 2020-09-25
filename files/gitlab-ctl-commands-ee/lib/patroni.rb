@@ -207,6 +207,14 @@ module Patroni
       @uri = URI("http://#{@attributes['patroni']['api_address']}")
     end
 
+    def up?
+      get('/') do
+        return true
+      end
+    rescue StandardError
+      false
+    end
+
     def leader?
       get('/leader') do |response|
         response.code == '200'
@@ -216,6 +224,12 @@ module Patroni
     def replica?
       get('/replica') do |response|
         response.code == '200'
+      end
+    end
+
+    def cluster_status
+      get('/cluster') do |response|
+        response.code == '200' ? JSON.parse(response.body, symbolize_names: true) : {}
       end
     end
 
