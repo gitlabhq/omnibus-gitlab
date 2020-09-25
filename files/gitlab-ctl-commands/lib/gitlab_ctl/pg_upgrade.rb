@@ -169,7 +169,9 @@ module GitlabCtl
           skip_unregister: false,
           timeout: nil,
           target_version: nil,
-          skip_disk_check: false
+          skip_disk_check: false,
+          leader: nil,
+          replica: nil
         }
 
         OptionParser.new do |opts|
@@ -196,6 +198,16 @@ module GitlabCtl
 
           opts.on('--skip-disk-check', 'Skip checking that there is enough free disk space to perform upgrade') do
             options[:skip_disk_check] = true
+          end
+
+          opts.on('--leader', 'Patroni only. Force leader upgrade procedure.') do
+            options[:leader] = true
+            options[:replica] = false
+          end
+
+          opts.on('--replica', 'Patroni only. Force replica upgrade procedure.') do
+            options[:replica] = true
+            options[:leader] = false
           end
         end.parse!(args)
 

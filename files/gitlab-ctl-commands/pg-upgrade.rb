@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+require 'rainbow'
+
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 require "#{base_path}/embedded/service/omnibus-ctl/lib/postgresql"
 
@@ -34,10 +36,11 @@ add_command_under_category 'revert-pg-upgrade', 'database',
   revert_version = lookup_version(options[:target_version], read_revert_version || default_version)
 
   @attributes = GitlabCtl::Util.get_node_attributes(base_path)
+  patroni_enabled = service_enabled?('patroni')
   pg_enabled = service_enabled?('postgresql')
   geo_pg_enabled = service_enabled?('geo-postgresql')
 
-  @db_service_name = 'postgresql'
+  @db_service_name = patroni_enabled ? 'patroni' : 'postgresql'
   db_worker = GitlabCtl::PgUpgrade.new(
     base_path,
     data_path,
@@ -60,7 +63,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
   end
 
   if GitlabCtl::Util.progress_message('Checking if we need to downgrade') do
-    (!pg_enabled || db_worker.fetch_data_version == revert_version.major) && \
+    (!(pg_enabled || patroni_enabled) || db_worker.fetch_data_version == revert_version.major) && \
         (!geo_pg_enabled || geo_db_worker.fetch_data_version == revert_version.major) && \
         db_worker.initial_version == revert_version
   end
@@ -90,7 +93,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     Kernel.exit 0
   end
 
-  if pg_enabled
+  if pg_enabled || patroni_enabled
     @db_worker = db_worker
     revert(revert_version)
   end
@@ -109,7 +112,11 @@ add_command_under_category 'pg-upgrade', 'database',
                            'Upgrade the PostgreSQL DB to the latest supported version',
                            2 do |_cmd_name|
   options = GitlabCtl::PgUpgrade.parse_options(ARGV)
-  @db_service_name = 'postgresql'
+
+  patroni_enabled = service_enabled?('patroni')
+  pg_enabled = service_enabled?('postgresql')
+
+  @db_service_name = patroni_enabled ? 'patroni' : 'postgresql'
   @db_worker = GitlabCtl::PgUpgrade.new(
     base_path,
     data_path,
@@ -124,7 +131,7 @@ add_command_under_category 'pg-upgrade', 'database',
   unless GitlabCtl::Util.progress_message(
     'Checking for an omnibus managed postgresql') do
       !@db_worker.initial_version.nil? && \
-          (service_enabled?('postgresql') || service_enabled?('geo-postgresql'))
+          (pg_enabled || patroni_enabled || service_enabled?('geo-postgresql'))
     end
     $stderr.puts 'No currently installed postgresql in the omnibus instance found.'
     Kernel.exit 0
@@ -184,7 +191,7 @@ add_command_under_category 'pg-upgrade', 'database',
   end
 
   # The current instance needs to be running, start it if it isn't
-  if service_enabled?('postgresql') && !@db_worker.running?
+  if pg_enabled && !@db_worker.running?
     log 'Starting the database'
 
     begin
@@ -208,6 +215,22 @@ add_command_under_category 'pg-upgrade', 'database',
     end
   end
 
+  if patroni_enabled
+    log 'Detected a Patroni cluster.'
+
+    @instance_type = (:patroni_leader if options[:leader]) || (:patroni_replica if options[:replica])
+    guess_patroni_node_role unless @instance_type
+
+    check_patroni_cluster_status
+
+    if @instance_type == :patroni_leader
+      log "Using #{Rainbow('leader').yellow} node upgrade procedure."
+    else
+      log "Using #{Rainbow('replica').yellow} node upgrade procedure."
+      log Rainbow('This procedure REMOVES DATA directory.').yellow
+    end
+  end
+
   if options[:wait]
     # Wait for processes to settle, and give use one last chance to change their
     # mind
@@ -221,7 +244,13 @@ add_command_under_category 'pg-upgrade', 'database',
     end
   end
 
-  if service_enabled?('repmgrd')
+  if patroni_enabled
+    if @instance_type == :patroni_leader
+      patroni_leader_upgrade
+    else
+      patroni_replica_upgrade
+    end
+  elsif service_enabled?('repmgrd')
     log "Detected an HA cluster."
     node = RepmgrHandler::Node.new
     if node.is_master?
@@ -246,11 +275,10 @@ add_command_under_category 'pg-upgrade', 'database',
   end
 end
 
-def common_pre_upgrade
-  maintenance_mode('enable')
+def common_pre_upgrade(enable_maintenance = true)
+  maintenance_mode('enable') if enable_maintenance
 
   locale, collate, encoding = get_locale_encoding
-  @db_worker.tmp_data_dir
 
   stop_database
   create_links(@db_worker.target_version)
@@ -261,10 +289,17 @@ end
 def common_post_upgrade(disable_maintenance = true)
   cleanup_data_dir
 
+  if @db_service_name == 'patroni'
+    copy_patroni_dynamic_config
+    start_database
+  end
+
   configure_postgresql
 
   log 'Running reconfigure to re-generate any dependent service configuration'
   run_reconfigure
+
+  restart_patroni_node if @db_service_name == 'patroni'
 
   log "Waiting for Database to be running."
   if @db_service_name == 'geo-postgresql'
@@ -273,7 +308,7 @@ def common_post_upgrade(disable_maintenance = true)
     GitlabCtl::PostgreSQL.wait_for_postgresql(120)
   end
 
-  unless [:pg_secondary, :geo_secondary].include?(@instance_type)
+  unless [:pg_secondary, :geo_secondary, :patroni_replica].include?(@instance_type)
     log 'Database upgrade is complete, running vacuumdb analyze'
     analyze_cluster
   end
@@ -304,6 +339,23 @@ def general_upgrade
     die "Error running pg_upgrade, please check logs"
   end
   common_post_upgrade
+end
+
+def patroni_leader_upgrade
+  common_pre_upgrade(false)
+  begin
+    @db_worker.run_pg_upgrade
+  rescue GitlabCtl::Errors::ExecutionError
+    die 'Error running pg_upgrade, please check logs'
+  end
+  remove_patroni_cluster_state
+  common_post_upgrade(false)
+end
+
+def patroni_replica_upgrade
+  stop_database
+  create_links(@db_worker.target_version)
+  common_post_upgrade(false)
 end
 
 def configure_postgresql
@@ -455,12 +507,20 @@ def cleanup_data_dir
     die 'Error moving data for older version, '
   end
 
-  unless GitlabCtl::Util.progress_message('Rename the new data directory') do
-    run_command(
-      "mv #{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major} #{@db_worker.data_dir}"
-    )
-  end
-    die "Error moving #{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major} to #{@db_worker.data_dir}"
+  if @instance_type == :patroni_replica
+    unless GitlabCtl::Util.progress_message('Recreating an empty data directory') do
+      run_command("mkdir -p #{@db_worker.data_dir}")
+    end
+      die "Error refreshing #{@db_worker.data_dir}"
+    end
+  else
+    unless GitlabCtl::Util.progress_message('Rename the new data directory') do
+      run_command(
+        "mv #{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major} #{@db_worker.data_dir}"
+      )
+    end
+      die "Error moving #{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major} to #{@db_worker.data_dir}"
+    end
   end
 
   unless GitlabCtl::Util.progress_message('Saving the old version information') do
@@ -497,6 +557,97 @@ def analyze_cluster
     $stderr.puts "Please re-run the command manually as the #{pg_username} user".color(:yellow)
     $stderr.puts analyze_command.color(:yellow)
   end
+end
+
+def guess_patroni_node_role
+  failure_cause = :none
+  unless GitlabCtl::Util.progress_message('Attempting to detect the role of this Patroni node') do
+    begin
+      node = Patroni::Client.new
+      scope = @attributes.dig(:patroni, :scope)
+      node_name = @attributes.dig(:patroni, :name)
+
+      if node.up?
+        @instance_type = :patroni_leader if node.leader?
+        @instance_type = :patroni_replica if node.replica?
+        failure_cause = :patroni_running_on_replica if @instance_type == :patroni_replica
+        @instance_type == :patroni_leader
+      else
+        leader_name = GitlabCtl::Util.get_command_output("#{base_path}/embedded/bin/consul kv get /service/#{scope}/leader").strip
+        @instance_type = node_name == leader_name ? :patroni_leader : :patroni_replica unless leader_name.nil? || leader_name.empty?
+        failure_cause = :patroni_stopped_on_leader if @instance_type == :patroni_leader
+        @instance_type == :patroni_replica
+      end
+    rescue GitlabCtl::Errors::ExecutionError => e
+      log 'Unable to get the role of the Patroni node from Consul'
+      log "STDOUT: #{e.stdout}"
+      log "STDERR: #{e.stderr}"
+      false
+    end
+  end
+    case failure_cause
+    when :patroni_running_on_replica
+      log 'Looks like that this is a replica node but the Patroni service is still running.'
+      log 'Try to stop the Patroni service before attempting the upgrade.'
+
+      die 'Patroni service is still running on the replica node.'
+    when :patroni_stopped_on_leader
+      log 'Looks like that this is the leader node but the Patroni is not running.'
+      log 'Try to start the Patroni service before attempting the upgrade.'
+
+      die 'Patroni service is not running on the leader node.'
+    else
+      log 'Unable to detect the role of this Patroni node.'
+      log 'Try to use --leader or --replica switches to specify the role manually.'
+      log 'See: https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#upgrading-postgresql-major-version-in-a-patroni-cluster'
+
+      die 'Unable to detect the role of this Patroni node.'
+    end
+  end
+end
+
+def check_patroni_cluster_status
+  # If the client can be created then it means that the
+  # required node attributes are stored correctly.
+  node = Patroni::Client.new
+
+  return unless @instance_type == :patroni_leader
+
+  die 'Patroni service is not running on the leader node.' unless node.up?
+
+  running_replica_count = 0
+  node.cluster_status[:members]&.each do |member|
+    running_replica_count += 1 if member[:state] == 'running' && member[:role] == 'replica'
+  end
+  log Rainbow("WARNING: Looks like that at least one replica node is running.\n" \
+              "         It is strongly recommended to shutdown all replicas\n" \
+              "         before upgrading the cluster.").yellow if running_replica_count.positive?
+end
+
+def remove_patroni_cluster_state
+  scope = @attributes.dig(:patroni, :scope) || ''
+  unless !scope.empty? && GitlabCtl::Util.progress_message('Wiping Patroni cluster state') do
+    run_command("#{base_path}/embedded/bin/consul kv delete -recurse /service/#{scope}/")
+  end
+    die 'Unable to wipe the cluster state'
+  end
+end
+
+def restart_patroni_node
+  name = @attributes.dig(:patroni, :name) || ''
+  scope = @attributes.dig(:patroni, :scope) || ''
+  unless !name.empty? && !scope.empty? && GitlabCtl::Util.progress_message("Restarting Patroni on this node\n") do
+    patroni_dir = @attributes.dig(:patroni, :dir) || '/var/opt/gitlab/patroni'
+    run_command("#{base_path}/embedded/bin/patronictl -c #{patroni_dir}/patroni.yaml restart --force #{scope} #{name}")
+  end
+    die 'Unable to wipe the cluster state'
+  end
+end
+
+def copy_patroni_dynamic_config
+  src = "#{@db_worker.data_dir}/patroni.dynamic.json"
+  dst = "#{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major}/patroni.dynamic.json"
+  FileUtils.copy_file(src, dst, true) if File.exist?(src) && !File.exist?(dst)
 end
 
 def version_from_manifest(software)
@@ -559,8 +710,8 @@ end
 def maintenance_mode(command)
   # In order for the deploy page to work, we need nginx, unicorn, redis, and
   # gitlab-workhorse running
-  # We'll manage postgresql during the upgrade process
-  omit_services = %w(postgresql geo-postgresql nginx unicorn puma redis gitlab-workhorse)
+  # We'll manage postgresql and patroni during the upgrade process
+  omit_services = %w(postgresql geo-postgresql patroni consul nginx unicorn puma redis gitlab-workhorse)
   if command.eql?('enable')
     dp_cmd = 'up'
     sv_cmd = 'stop'
