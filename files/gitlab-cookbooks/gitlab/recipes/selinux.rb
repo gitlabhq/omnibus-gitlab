@@ -27,6 +27,12 @@ if RedhatHelper.system_is_rhel7? || RedhatHelper.system_is_rhel8?
     not_if "getenforce | grep Disabled"
     not_if "semodule -l | grep '^#{authorized_keys_module}\\s'"
   end
+  
+  gitlab_shell_module = 'gitlab-13.5.0-gitlab-shell'
+  execute "semodule -i /opt/gitlab/embedded/selinux/rhel/7/#{gitlab_shell_module}.pp" do
+    not_if "getenforce | grep Disabled"
+    not_if "semodule -l | grep '^#{gitlab_shell_module}\\s'"
+  end
 end
 
 # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the

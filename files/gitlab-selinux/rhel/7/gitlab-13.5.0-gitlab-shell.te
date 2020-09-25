@@ -1,0 +1,16 @@
+
+module gitlab-13.5.0-gitlab-shell 1.0;
+
+require {
+	type var_log_t;
+	type var_t;
+	type sshd_t;
+	class sock_file write;
+	class file create;
+}
+
+#============= sshd_t ==============
+allow sshd_t var_log_t:file create;
+
+#!!!! WARNING: 'var_t' is a base type.
+allow sshd_t var_t:sock_file write;
