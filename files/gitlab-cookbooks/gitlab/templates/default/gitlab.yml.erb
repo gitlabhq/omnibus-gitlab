@@ -267,7 +267,7 @@ production: &base
       remote_directory: <%= quote(@uploads_object_store_remote_directory) %>
       connection: <%= @uploads_object_store_connection.to_json %>
 
-  ## Packages (EE only)
+  ## Packages
   packages:
     enabled: <%= @packages_enabled %>
     # The location where build packages are stored (default: shared/packages).
