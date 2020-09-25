@@ -1,0 +1,5 @@
+---
+title: Add selinux module for gitlab-shell
+merge_request: 4598
+author:
+type: fixed
