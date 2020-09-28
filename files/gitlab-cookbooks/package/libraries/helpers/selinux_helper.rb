@@ -8,24 +8,26 @@ class SELinuxHelper
       gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
       gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
       gitlab_shell_secret_file = File.join(gitlab_rails_etc_dir, 'gitlab_shell_secret')
+      gitlab_workhorse_sock = '/var/opt/gitlab/gitlab-workhorse/socket'
 
       # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the
       # git_user is valid.
       selinux_code = []
 
       if File.exist?(ssh_dir)
-        selinux_code << "semanage fcontext -a -t ssh_home_t '#{ssh_dir}(/.*)?'"
+        selinux_code << "semanage fcontext -a -t gitlab_shell_t '#{ssh_dir}(/.*)?'"
         selinux_code << "restorecon -R -v '#{ssh_dir}'"
       end
 
       [
         authorized_keys,
         gitlab_shell_config_file,
-        gitlab_shell_secret_file
+        gitlab_shell_secret_file,
+        gitlab_workhorse_sock
       ].each do |file|
         next unless File.exist?(file)
 
-        selinux_code << "semanage fcontext -a -t ssh_home_t '#{file}'"
+        selinux_code << "semanage fcontext -a -t gitlab_shell_t '#{file}'"
         selinux_code << "restorecon -v '#{file}'"
       end
 

@@ -1,16 +1,17 @@
 
 module gitlab-13.5.0-gitlab-shell 1.0;
 
+type gitlab_shell_t;
+
 require {
-	type var_log_t;
-	type var_t;
-	type sshd_t;
-	class sock_file write;
-	class file create;
+    type sshd_t;
+    attribute file_type;
+    class sock_file write;
+    class file { open read getattr };
 }
 
-#============= sshd_t ==============
-allow sshd_t var_log_t:file create;
-
-#!!!! WARNING: 'var_t' is a base type.
-allow sshd_t var_t:sock_file write;
+typeattribute gitlab_shell_t file_type;
+allow sshd_t gitlab_shell_t:file read;
+allow sshd_t gitlab_shell_t:file open;
+allow sshd_t gitlab_shell_t:file getattr;
+allow sshd_t gitlab_shell_t:sock_file write;
