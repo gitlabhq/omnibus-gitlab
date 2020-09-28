@@ -93,7 +93,7 @@ template File.join(node['gitlab']['geo-postgresql']['data_dir'], 'pg_ident.conf'
 end
 
 runit_service 'geo-postgresql' do
-  down node['gitlab']['geo-postgresql']['ha']
+  start_down node['gitlab']['geo-postgresql']['ha']
   restart_on_update false
   control(['t'])
   options({
@@ -131,9 +131,6 @@ geo_pg_user = node['gitlab']['geo-postgresql']['sql_user']
 geo_pg_user_password = node['gitlab']['geo-postgresql']['sql_user_password']
 geo_database_name = node['gitlab']['geo-secondary']['db_database']
 
-# set custom pg_hba entries at the secondary postgres for FDW compatibility
-node.default['postgresql']['custom_pg_hba_entries']['fdw'] = fdw_helper.pg_hba_entries if fdw_helper.fdw_enabled?
-
 if node['gitlab']['geo-postgresql']['enable']
   postgresql_user geo_pg_user do
     password "md5#{geo_pg_user_password}" unless geo_pg_user_password.nil?
@@ -155,39 +152,13 @@ if node['gitlab']['geo-postgresql']['enable']
     action :enable
   end
 
-  postgresql_schema 'gitlab_secondary' do
-    database geo_database_name
-    owner geo_pg_user
-    helper geo_pg_helper
-    action :create
-    only_if { fdw_helper.fdw_enabled? && !fdw_helper.fdw_password.nil? }
-  end
-
   postgresql_fdw 'gitlab_secondary' do
     db_name geo_database_name
     external_host fdw_helper.fdw_host
     external_port fdw_helper.fdw_port
     external_name fdw_helper.fdw_dbname
     helper geo_pg_helper
-    action :create
-    only_if { fdw_helper.fdw_enabled? && !fdw_helper.fdw_password.nil? }
-  end
-
-  postgresql_fdw_user_mapping 'gitlab_secondary' do
-    db_user geo_pg_user
-    db_name geo_database_name
-    external_user fdw_helper.fdw_user
-    external_password fdw_helper.fdw_password
-    helper geo_pg_helper
-    action :create
-    only_if { fdw_helper.fdw_enabled? && !fdw_helper.fdw_password.nil? }
-  end
-
-  execute 'refresh foreign table definition' do
-    command '/opt/gitlab/bin/gitlab-rake geo:db:refresh_foreign_tables'
-    returns [0, 1]
-
-    only_if { fdw_helper.fdw_can_refresh? }
+    action :delete
   end
 
   ruby_block 'warn pending geo-postgresql restart' do

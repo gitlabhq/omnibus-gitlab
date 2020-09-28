@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab-ee::default' do
+RSpec.describe 'gitlab-ee::default' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
   before do

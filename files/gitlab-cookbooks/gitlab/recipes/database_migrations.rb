@@ -24,10 +24,11 @@ initial_license_file = node['gitlab']['gitlab-rails']['initial_license_file'] ||
 initial_runner_token = node['gitlab']['gitlab-rails']['initial_shared_runners_registration_token']
 
 dependent_services = []
-dependent_services << "runit_service[unicorn]" if omnibus_helper.should_notify?("unicorn")
+dependent_services << "unicorn_service[unicorn]" if omnibus_helper.should_notify?("unicorn")
 dependent_services << "runit_service[puma]" if omnibus_helper.should_notify?("puma")
-dependent_services << "runit_service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
-dependent_services << "runit_service[sidekiq-cluster]" if omnibus_helper.should_notify?("sidekiq-cluster")
+dependent_services << "runit_service[actioncable]" if omnibus_helper.should_notify?("actioncable")
+dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
+dependent_services << "sidekiq_service[sidekiq-cluster]" if omnibus_helper.should_notify?("sidekiq-cluster")
 
 connection_attributes = %w(
   db_adapter
@@ -69,15 +70,4 @@ bash "migrate gitlab-rails database" do
   end
   not_if "(test -f #{db_migrate_status_file}) && (cat #{db_migrate_status_file} | grep -Fx 0)"
   only_if { node['gitlab']['gitlab-rails']['auto_migrate'] }
-end
-
-# TODO: Remove in GitLab 13.0. By then, all the log files should have correct
-# permissions.
-log_files_list = Dir.glob("#{node['gitlab']['gitlab-rails']['log_directory']}/gitlab-rails-db-migrate*log*")
-
-bash "set ownership of old migration log files" do
-  code <<-EOH
-    chown #{account_helper.gitlab_user}:#{account_helper.gitlab_group} #{log_files_list.join(' ')}
-  EOH
-  not_if { log_files_list.empty? }
 end

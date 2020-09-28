@@ -8,12 +8,15 @@ groups:
         unicorn_active_connections
       ) /
       count by (instance) (
-        ruby_memory_bytes
+        ruby_process_resident_memory_bytes
       )
-  - record: job_grpc:grpc_server_handled_total:rate5m
+  - record: instance:puma_utilization:ratio
     expr: >
-      sum by (job, grpc_code, grpc_method, grpc_service, grpc_type) (
-        rate(grpc_server_handled_total[5m])
+      sum by (instance) (
+        puma_active_connections
+      ) /
+      sum by (instance) (
+        puma_max_threads
       )
   - record: job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m
     expr: >
@@ -45,12 +48,24 @@ groups:
       description: Unicorn instance {{ $labels.instance }} is queueing requests with
         an average of {{ $value | printf "%.1f" }} over the last 30 minutes.
       summary: Unicorn is queueing requests
+  - alert: PumaQueueing
+    expr: avg_over_time(puma_queued_connections[30m]) > 1
+    annotations:
+      description: Puma instance {{ $labels.instance }} is queueing requests with
+        an average of {{ $value | printf "%.1f" }} over the last 30 minutes.
+      summary: Puma is queueing requests
   - alert: HighUnicornUtilization
     expr: instance:unicorn_utilization:ratio * 100 > 90
     for: 60m
     annotations:
       description: Unicorn instance {{ $labels.instance }} has more than 90% worker utilization ({{ $value | printf "%.1f" }}%) over the last 60 minutes.
       summary: Unicorn is has high utilization
+  - alert: HighPumaUtilization
+    expr: instance:puma_utilization:ratio * 100 > 90
+    for: 60m
+    annotations:
+      description: Puma instance {{ $labels.instance }} has more than 90% thread utilization ({{ $value | printf "%.1f" }}%) over the last 60 minutes.
+      summary: Puma is has high utilization
   - alert: SidekiqJobsQueuing
     expr: sum by (name) (sidekiq_queue_size) > 0
     for: 60m
@@ -59,16 +74,16 @@ groups:
       description: Sidekiq queue {{ $labels.name }} has {{ $value }} jobs queued for 60 minutes.
   - alert: HighgRPCResourceExhaustedRate
     expr: >
-      sum without (grpc_code) (
-        job_grpc:grpc_server_handled_total:rate5m{grpc_code="ResourceExhausted"}
+      sum without (grpc_code, grpc_method, grpc_service, grpc_type) (
+        rate(grpc_server_handled_total{grpc_code="ResourceExhausted"}[5m])
       ) /
-      sum without (grpc_code) (
-        job_grpc:grpc_server_handled_total:rate5m
+      sum without (grpc_code, grpc_method, grpc_service, grpc_type) (
+        rate(grpc_server_handled_total[5m])
       ) * 100 > 1
     for: 60m
     annotations:
       summary: High gRPC ResourceExhausted error rate
-      description: gRPC is returning more than 1% ({{ $value | printf "%.1f" }}%) ResourceExhausted errors over the last 60 minutes.
+      description: Job {{ $labels.job }} instance {{ $labels.instance }} gRPC is returning more than 1% ({{ $value | printf "%.1f" }}%) ResourceExhausted errors over the last 60 minutes.
   - alert: PostgresDatabaseDeadlocks
     expr: increase(pg_stat_database_deadlocks[5m]) > 0
     annotations:
@@ -312,15 +327,7 @@ groups:
   - record: gitlab_sli:gitlab_component_saturation:ratio
     labels:
       component: 'memory'
-    expr: >
-      max (
-       1 -
-       (
-         node_memory_MemAvailable_bytes or
-         (node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes)
-       ) /
-       node_memory_MemTotal_bytes
-      )
+    expr: max (instance:node_memory_utilization:ratio)
 
   - record: gitlab_sli:gitlab_component_saturation:ratio
     labels:
@@ -451,3 +458,71 @@ groups:
   - record: gitlab_sli:gitlab_component_saturation:ratio:sapdex:avg_over_time_1w:predict_linear_30d
     expr: >
       predict_linear(gitlab_sli:gitlab_component_saturation:ratio:sapdex:avg_over_time_1w[1w], 86400 * 30)
+
+###
+# Metrics used by Usage Ping reports. These are primarily for self-managed installations.
+# See https://docs.gitlab.com/ee/development/telemetry/usage_ping.html#prometheus-queries
+#
+- name: GitLab Usage Ping
+  interval: 5m
+  rules:
+  ###
+  # Application wide metrics
+  #
+  - record: gitlab_usage_ping:ops:rate5m
+    labels:
+      service: workhorse
+      component: http_requests
+    expr: sum (rate (gitlab_workhorse_http_requests_total[5m]))
+
+  # Database Primary Performance Indicator: Query apdex
+  # Target -> 100ms
+  # Tolerable -> 250ms
+  - record: gitlab_usage_ping:sql_duration_apdex:ratio_rate5m
+    expr: >
+      (
+        sum(rate(gitlab_sql_duration_seconds_bucket{le="0.1"}[5m]))
+        +
+        sum(rate(gitlab_sql_duration_seconds_bucket{le="0.25"}[5m]))
+      )
+      /
+      2
+      /
+      (
+        sum(rate(gitlab_sql_duration_seconds_count[5m])) > 0
+      )
+
+  ###
+  # Node level metrics
+  #
+  - record: gitlab_usage_ping:node_cpus:count
+    expr: max (instance:node_cpus:count) by (instance)
+  - record: gitlab_usage_ping:node_memory_total_bytes:max
+    expr: max (node_memory_MemTotal_bytes) by (instance)
+  - record: gitlab_usage_ping:node_cpu_utilization:avg
+    expr: avg (instance:node_cpu_utilization:ratio) by (instance)
+  - record: gitlab_usage_ping:node_memory_utilization:avg
+    expr: avg (instance:node_memory_utilization:ratio) by (instance)
+
+  ###
+  # Service level metrics
+  #
+  - record: gitlab_usage_ping:node_service_process_resident_memory_bytes:avg
+    expr: avg by (instance, job) ({__name__ =~ "(ruby_){0,1}process_resident_memory_bytes", job != "gitlab_exporter_process"})
+  - record: gitlab_usage_ping:node_service_process_unique_memory_bytes:avg
+    expr: avg by (instance, job) ({__name__ =~ "(ruby_){0,1}process_unique_memory_bytes", job != "gitlab_exporter_process"})
+  - record: gitlab_usage_ping:node_service_process_proportional_memory_bytes:avg
+    expr: avg by (instance, job) ({__name__ =~ "(ruby_){0,1}process_proportional_memory_bytes", job != "gitlab_exporter_process"})
+  - record: gitlab_usage_ping:node_service_process:count
+    expr: >
+      count by (instance, job) (
+        {__name__ =~ "(ruby_){0,1}process_start_time_seconds", job != "gitlab_exporter_process"}
+      )
+  - record: gitlab_usage_ping:node_service_app_server_workers:sum
+    labels:
+      server: puma
+    expr: sum by (instance, job) (puma_workers)
+  - record: gitlab_usage_ping:node_service_app_server_workers:sum
+    labels:
+      server: unicorn
+    expr: sum by (instance, job) (unicorn_workers)

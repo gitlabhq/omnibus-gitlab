@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe PGVersion do
+RSpec.describe PGVersion do
   context '.parse' do
     it 'returns a PGVersion class when provided a value' do
       expect(PGVersion.parse('string')).to be_a(described_class)

@@ -15,7 +15,7 @@
 #
 
 name 'libksba'
-default_version '1.3.5'
+default_version '1.4.0'
 
 dependency 'libgpg-error'
 
@@ -25,7 +25,7 @@ license_file 'COPYING.LGPLv3'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/libksba/libksba-#{version}.tar.bz2",
-       sha256: '41444fd7a6ff73a79ad9728f985e71c9ba8cd3e5e53358e70d5f066d35c1a340'
+       sha256: 'bfe6a8e91ff0f54d8a329514db406667000cb207238eded49b599761bfca41b6'
 
 relative_path "libksba-#{version}"
 

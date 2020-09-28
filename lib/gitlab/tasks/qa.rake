@@ -26,6 +26,7 @@ namespace :qa do
     task :staging do
       tag = Build::Check.is_auto_deploy? ? Build::Info.major_minor_version_and_rails_ref : Build::Info.gitlab_version
       Build::QAImage.tag_and_push_to_gitlab_registry(tag)
+      Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.commit_sha)
     end
 
     desc "Push stable version of gitlab-{ce,ee}-qa to the GitLab registry and Docker Hub"
@@ -52,30 +53,30 @@ namespace :qa do
 
     desc "Push triggered version of gitlab-{ce,ee}-qa to the GitLab registry"
     task :triggered do
-      Build::QAImage.tag_and_push_to_gitlab_registry(Gitlab::Util.get_env('IMAGE_TAG'))
+      Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.docker_tag)
     end
   end
 
   desc "Run QA tests"
   task :test do
-    image_address = Build::GitlabImage.gitlab_registry_image_address(tag: Gitlab::Util.get_env('IMAGE_TAG'))
+    image_address = Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info.docker_tag)
     Build::QATrigger.invoke!(image: image_address, post_comment: true).wait!
   end
 
   namespace :ha do
     desc "Validate HA setup"
     task :validate do
-      Build::HA::ValidateTrigger.invoke!.wait!
+      Build::HA::ValidateTrigger.invoke!.wait!(timeout: 3600 * 4)
     end
 
     desc 'Validate nightly build'
     task :nightly do
-      Build::HA::ValidateNightly.invoke!.wait!
+      Build::HA::ValidateNightly.invoke!.wait!(timeout: 3600 * 4)
     end
 
     desc 'Validate tagged build'
     task :tag do
-      Build::HA::ValidateTag.invoke!
+      Build::HA::ValidateTag.invoke!(timeout: 3600 * 4)
     end
   end
 end

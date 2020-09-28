@@ -1,16 +1,25 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Omnibus GitLab developer documentation
 
 - [Development Setup](setup.md)
 - [Omnibus GitLab Architecture](../architecture/README.md)
 - [Adding a new Service to Omnibus GitLab](new-services.md)
 - [Creating patches](creating-patches.md)
+- [Repositories, branches and CI pipelines](pipelines.md)
 - [Release process](../release/README.md)
+- [Handling broken master pipelines](broken_master.md)
 - [Building your own package](../build/README.md)
-- [Building a package from a custom branch](../build/README.md#building-a-package-from-a-custom-branch)
+- [Building a package from a custom branch](../build/team_member_docs.md#i-have-an-mr-in-the-omnibus-gitlab-project-and-want-a-package-or-docker-image-to-test-it)
 - [Adding deprecation messages](adding-deprecation-messages.md)
-- [Adding an attribute to public_attributes.json](public-attributes.md)
+- [Adding an attribute to `public_attributes.json`](public-attributes.md)
 - [Adding a `gitlab-ctl` command](gitlab-ctl-commands.md)
 - [Managing PostgreSQL versions](managing-postgresql-versions.md)
+- [Upgrading the bundled Chef version](upgrading-chef.md)
 
 ## Setting up development environment
 
@@ -35,7 +44,7 @@ writing specs can be skipped. However, an issue to implement the tests
 
 To run tests, execute the following command (you may have to run `bundle install` before running it)
 
-```sh
+```shell
 bundle exec rspec
 ```
 
@@ -61,7 +70,8 @@ their applicability:
 1. If Merge Request introduces change in user facing configuration, update to [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
 1. [Changelog entry](https://docs.gitlab.com/ee/development/changelog.html) to inform about the change, if necessary.
 
-**Note:** Ensure shared runners are enabled for your fork in order for our automated tests to run:
+NOTE: **Note:**
+Ensure shared runners are enabled for your fork in order for our automated tests to run:
 
 1. Go to Settings -> CI/CD
 1. Expand Runners settings

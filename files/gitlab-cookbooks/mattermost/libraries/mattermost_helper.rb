@@ -1,7 +1,7 @@
 require_relative '../../gitlab/libraries/helpers/authorizer_helper'
 require_relative '../../package/libraries/helpers/shell_out_helper'
 
-class MattermostHelper # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(MattermostHelper)` at the end of the class definition)
+class MattermostHelper
   extend ShellOutHelper
   extend AuthorizeHelper
 

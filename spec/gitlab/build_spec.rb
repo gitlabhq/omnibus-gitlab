@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/build'
 
-describe Build do
+RSpec.describe Build do
   describe 'cmd' do
     describe 'by default' do
       it 'runs build command with log level info' do

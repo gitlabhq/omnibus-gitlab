@@ -1,3 +1,5 @@
+<!-- After merging changes to this template, update the `Default description template for merge requests` -->
+<!-- found under Settings - General Merge Requests -->
 ## What does this MR do?
 
 <!-- Briefly describe what this MR is about. -->
@@ -10,17 +12,18 @@
 
 See [Definition of done](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/CONTRIBUTING.md#definition-of-done).
 
-- [ ] Changelog entry created. Not applicable for Documentation changes and minor changes.
-- [ ] Documentation created/updated
-- [ ] Tests added
-- [ ] Integration tests added to [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa), if applicable
-- [ ] MR targeting `master` branch
+For anything in this list which will not be completed, please provide a reason in the MR discussion
+
+### Required
+- [ ] Merge Request Title, and Description are up to date, accurate, and descriptive
+- [ ] MR targeting the appropriate branch
 - [ ] MR has a green pipeline on GitLab.com
-- [ ] Equivalent MR/issue for CNG opened if applicable
+- [ ] Pipeline is green on the [dev.gitlab.org](https://dev.gitlab.org/gitlab/omnibus-gitlab/-/pipelines) mirror for this branch if the change is touching anything besides documentation or internal cookbooks
 - [ ] `trigger-package` has a green pipeline running against latest commit
 
-### Reviewer Checklist
-
-In addition to above, reviewer must:
-
-- [ ] Pipeline is green on dev.gitlab.org if the change is not touching documentation or internal cookbooks
+### Expected (please provide an explanation if not completing)
+- [ ] Test plan indicating conditions for success has been posted and passes
+- [ ] Documentation created/updated
+- [ ] Tests added
+- [ ] Integration tests added to [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa)
+- [ ] Equivalent MR/issue for the [GitLab Chart](https://gitlab.com/gitlab-org/charts/gitlab) opened

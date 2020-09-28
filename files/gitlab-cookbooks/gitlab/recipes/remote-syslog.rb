@@ -38,7 +38,7 @@ template File.join(remote_syslog_dir, "remote_syslog.yml") do
 end
 
 runit_service "remote-syslog" do
-  down node['gitlab']['remote-syslog']['ha']
+  start_down node['gitlab']['remote-syslog']['ha']
   options({
     log_directory: remote_syslog_log_dir,
     dir: remote_syslog_dir,

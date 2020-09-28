@@ -93,6 +93,7 @@ execute 'generate databases.ini' do
     node['consul']['watchers'].include?('postgresql') &&
       File.exist?(node['gitlab']['pgbouncer']['databases_ini'])
   end
+  retries 3
 end
 
 execute 'reload pgbouncer' do

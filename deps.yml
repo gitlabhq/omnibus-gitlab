@@ -59,14 +59,14 @@ dependencies:
         - filename: config/software/chef-gem.rb
           pattern: "default_version '(\\S+)'"
           tag_prefix: 'v'
-          range: '<= 14.x'
+          range: '<= 15.x'
             # ohai
       https://github.com/chef/ohai.git:
         replace_in_files:
         - filename: config/software/ohai.rb
           pattern: "default_version '(\\S+)'"
           tag_prefix: 'v'
-          range: '<= 14.x'
+          range: '<= 15.x'
       # mixlib-log
       https://github.com/chef/mixlib-log.git:
         replace_in_files:
@@ -147,6 +147,12 @@ dependencies:
         replace_in_files:
         - filename: config/software/libjpeg-turbo.rb
           pattern: "Gitlab::Version.new\\('libjpeg-turbo', '(\\S+)'\\)"
+      #libtiff
+      https://gitlab.com/libtiff/libtiff.git:
+        replace_in_files:
+        - filename: config/software/libtiff.rb
+          pattern: "Gitlab::Version.new\\('libtiff', 'v(\\S+)'\\)"
+          tag_prefix: 'v'
 
       # deps that need updated filtering to work https://github.com/dropseed/deps-git/issues/2
       # krb5

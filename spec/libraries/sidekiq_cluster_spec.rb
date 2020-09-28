@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe SidekiqCluster do
+RSpec.describe SidekiqCluster do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   before { allow(Gitlab).to receive(:[]).and_call_original }
 
@@ -21,10 +21,8 @@ describe SidekiqCluster do
   end
 
   describe 'when sidekiq_cluster is enabled' do
-    before { stub_gitlab_rb(sidekiq_cluster: { enable: true }) }
-
     it 'allows you to set the queue_groups' do
-      stub_gitlab_rb(sidekiq_cluster: { queue_groups: ['process_commit,post_receive', 'gitlab_shell'] })
+      stub_gitlab_rb(sidekiq_cluster: { enable: true, queue_groups: ['process_commit,post_receive', 'gitlab_shell'] })
       expect(chef_run.node['gitlab']['sidekiq-cluster']['queue_groups']).to eql(['process_commit,post_receive', 'gitlab_shell'])
     end
   end

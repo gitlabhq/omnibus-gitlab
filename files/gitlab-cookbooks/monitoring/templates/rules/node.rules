@@ -16,6 +16,12 @@ groups:
   - record: instance:node_cpu_utilization:ratio
     expr: sum without(mode) (instance_mode:node_cpu_seconds:rate5m{mode!="idle"})
       / instance:node_cpus:count
+  - record: instance:node_memory_utilization:ratio
+    expr: >
+      1 - (
+        node_memory_MemAvailable_bytes or
+         (node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes)
+      ) / node_memory_MemTotal_bytes
   - record: instance:node_filesystem_avail:ratio
     expr: node_filesystem_avail_bytes / (node_filesystem_size_bytes > 0)
   - alert: FilesystemAlmostFull

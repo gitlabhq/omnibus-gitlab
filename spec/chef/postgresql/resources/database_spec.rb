@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'postgresql_database' do
+RSpec.describe 'postgresql_database' do
   let(:runner) do
     ChefSpec::SoloRunner.new(step_into: %w(postgresql_database)) do |node|
       # unix_socket_directory is normally conditionally set in postgresql::enable

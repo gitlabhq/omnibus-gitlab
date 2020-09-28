@@ -1,27 +1,20 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Puma
 
-Puma is a multi-threaded HTTP 1.1 server for Ruby applications. From GitLab 12.9, Puma has replaced
-Unicorn as the default web server.
+NOTE: **Note:**
+Starting with GitLab 13.0, Puma is the default web server and Unicorn has been
+disabled by default.
 
-To configure Puma:
+## Configuring Puma settings
 
 1. Determine suitable Puma worker and thread settings. For details, see [Puma settings](https://docs.gitlab.com/ee/install/requirements.html#puma-settings).
 1. Convert custom Unicorn settings to the equivalent Puma settings (if applicable). For details, see [Converting Unicorn settings to Puma](#converting-unicorn-settings-to-puma).
-1. Edit the Puma settings file `/etc/gitlab/gitlab.rb`, then reconfigure Puma.
-   1. Disable Unicorn:
-
-      ```ruby
-      unicorn['enable'] = false
-      ```
-
-   1. Enable Puma:
-
-      ```ruby
-      puma['enable'] = true
-      ```
-
-   1. Edit other settings as desired.
-
+1. For multi-node deployments, configure the load balancer to use the [readiness check](https://docs.gitlab.com/ee/administration/high_availability/load_balancer.html#readiness-check).
 1. Reconfigure GitLab so the above changes take effect.
 
    ```shell
@@ -62,10 +55,25 @@ correspond to those in Puma, and which ones have no corresponding counterpart.
 ## Puma Worker Killer
 
 By default, the [Puma Worker Killer](https://github.com/schneems/puma_worker_killer) will restart
-a worker if it exceeds a [memory limit](https://gitlab.com/gitlab-org/gitlab/blob/master/lib%2Fgitlab%2Fcluster%2Fpuma_worker_killer_initializer.rb).
+a worker if it exceeds a [memory limit](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/cluster/puma_worker_killer_initializer.rb). Additionally, rolling restarts of
+Puma workers are performed every 12 hours.
 
 To change the memory limit setting:
 
 ```ruby
 puma['per_worker_max_memory_mb'] = 850
+```
+
+## Worker timeout
+
+Unlike Unicorn, the `puma['worker_timeout']` setting does not set maximum request duration.
+A [timeout of 60 seconds](https://gitlab.com/gitlab-org/gitlab/-/blob/master/config/initializers/rack_timeout.rb)
+is used when Puma is enabled.
+
+To change this timeout, change the following setting in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+gitlab_rails['env'] = {
+   'GITLAB_RAILS_RACK_TIMEOUT' => 600
+ }
 ```

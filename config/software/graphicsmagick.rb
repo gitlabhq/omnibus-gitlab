@@ -24,6 +24,7 @@ skip_transitive_dependency_licensing true
 
 dependency 'libpng'
 dependency 'libjpeg-turbo'
+dependency 'libtiff'
 dependency 'zlib'
 
 source url: "https://ftp.icm.edu.pl/pub/unix/graphics/GraphicsMagick/1.3/GraphicsMagick-#{version}.tar.gz",
@@ -48,14 +49,14 @@ build do
     '--without-webp',
     '--without-jp2',
     '--without-lcms2',
-    '--without-lzma',
-    '--without-tiff',
     '--without-trio',
     '--without-ttf',
     '--without-umem',
     '--without-wmf',
     '--without-xml',
     '--without-x',
+    '--with-tiff=yes',
+    '--with-lzma=yes',
     '--with-jpeg=yes',
     '--with-zlib=yes',
     '--with-png=yes',

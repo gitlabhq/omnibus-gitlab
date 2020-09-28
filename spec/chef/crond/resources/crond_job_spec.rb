@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'crond_job' do
+RSpec.describe 'crond_job' do
   context 'crond enabled' do
     let(:runner) do
       ChefSpec::SoloRunner.new(step_into: %w(crond_job)) do |node|

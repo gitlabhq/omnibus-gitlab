@@ -1,7 +1,7 @@
 require_relative '../../../lib/gitlab/build/metrics'
 require 'chef_helper'
 
-describe Build::Metrics do
+RSpec.describe Build::Metrics do
   before do
     allow_any_instance_of(Kernel).to receive(:system).and_return(true)
     allow(Build::Info).to receive(:package_download_url).and_return("https://example.com")

@@ -20,3 +20,8 @@ service = OmnibusHelper.new(node).sidekiq_cluster_service_name
 runit_service service do
   action :disable
 end
+
+consul_service service do
+  action :delete
+  reload_service false unless node['consul']['enable']
+end

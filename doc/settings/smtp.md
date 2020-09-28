@@ -1,10 +1,16 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # SMTP settings
 
 If you would rather send application email via an SMTP server instead of via
 Sendmail, add the following configuration information to
 `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
 
->**Warning:**
+CAUTION: **Caution:**
 Your `smtp_password` should not contain any String delimiters used in
 Ruby or YAML (f.e. `'`) to avoid unexpected behavior during the processing of
 config settings.
@@ -56,7 +62,7 @@ gitlab_rails['smtp_force_ssl'] = false
 
 ### Gmail
 
->**Note:**
+NOTE: **Note:**
 Gmail has [strict sending limits](https://support.google.com/a/answer/166852)
 that can impair functionality as your organization grows. We strongly recommend using a
 transactional service like [SendGrid](https://sendgrid.com/) or [Mailgun](https://www.mailgun.com/)
@@ -250,7 +256,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 
 ```ruby
 gitlab_rails['gitlab_email_from'] = 'user@yahoo.com'
-gitlab_rails['gitlab_email_from'] = 'user@yahoo.com'
+gitlab_rails['gitlab_email_reply_to'] = 'user@yahoo.com'
 
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp.mail.yahoo.com"
@@ -366,7 +372,6 @@ gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "example.com"
 gitlab_rails['smtp_port'] = 25
 gitlab_rails['smtp_domain'] = "example.com"
-gitlab_rails['smtp_authentication'] = false
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
@@ -925,6 +930,75 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
 ```
+
+### Tipimail
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = 'smtp.tipimail.com'
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = 'username'
+gitlab_rails['smtp_password'] = 'password'
+gitlab_rails['smtp_authentication'] = 'login'
+gitlab_rails['smtp_enable_starttls_auto'] = true
+```
+
+### Netcup
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = '<your-host>.netcup.net'
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "<your-gitlab-domain>"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+# Netcup is picky about the usage of GitLab's TLD instead of the subdomain (if you use one).
+# If this is not set up correctly, the scheduled emails will fail. For example, if
+# GitLab's domain name is 'gitlab.example.com', the following setting should be set to
+# 'gitlab@example.com'.
+gitlab_rails['gitlab_email_from'] = "gitlab@<your-top-level-domain>"
+```
+
+### Mail-in-a-Box
+
+```ruby
+gitlab_rails['gitlab_email_enabled'] = true
+gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
+
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = 'box.example.com'
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username@example.com"
+gitlab_rails['smtp_password'] = "password"
+gitlab_rails['smtp_domain'] = "<your-gitlab-domain>"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+```
+
+### NIFCLOUD ESS
+
+[SMTP Interface](https://pfs.nifcloud.com/spec/ess/smtp.htm).
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.ess.nifcloud.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "SMTP user name"
+gitlab_rails['smtp_password'] = "SMTP user password"
+gitlab_rails['smtp_domain'] = "smtp.ess.nifcloud.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+
+gitlab_rails['gitlab_email_from'] = 'username@example.com'
+gitlab_rails['gitlab_email_reply_to'] = 'username@example.com'
+```
+
+Check the SMTP user name and SMTP user password from the ESS [dashboard](https://pfs.nifcloud.com/help/ess/dashboard.htm).
+`gitlab_email_from` and `gitlab_email_reply_to` must be ESS authenticated sender email addresses.
 
 ### More examples are welcome
 

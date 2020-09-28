@@ -37,10 +37,22 @@ fi
 }
 
 upgrade_check() {
+  # If this succeeds, then gitlab-ctl upgrade-check exists, and passed
+  if ctl_results=$(gitlab-ctl upgrade-check "${OLD_VERSION_STRING}" "${NEW_MAJOR_VERSION}.${NEW_MINOR_VERSION}") ; then
+    return 0
+  fi
+
+  # gitlab-ctl exits 1, and the first line is "I don't know that command."
+  # if a command doesn't exist
+  found=$(echo "${ctl_results}" | head -n 1)
+  if [ "${found}" != "I don't know that command." ] ; then
+    exit 1
+  fi
+
   if [ -n "${OLD_VERSION_STRING}" ] ; then
-    # Minimum version from which jumps are permitted to current version. This
-    # points to the last minor version from previous series.
-    MIN_VERSION=12.10
+    # Minimum version from which jumps are permitted to current version.
+    # Follows https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations
+    MIN_VERSION=13.0
 
     # Checking
     # (i) if it is a major version jump
@@ -57,7 +69,7 @@ upgrade_check() {
 }
 
 pg_check() {
-  PG_MIN_VERSION=9.6
+  PG_MIN_VERSION=11
 
   # Fetch the currently running version from the database
   # If this doesn't work, assume this isn't a database node
@@ -75,8 +87,8 @@ pg_check() {
   # float, so that we can do numerical comparison.
   if ! $(echo ${running_version} | awk -v PG_MIN_VERSION="$PG_MIN_VERSION" '$NF+0 < PG_MIN_VERSION {exit 1}'); then
     notify
-    notify "Your version of PostgreSQL is no longer supported. Please upgrade your PostgreSQL version."
-    notify "Check https://docs.gitlab.com/omnibus/update/#updating-gitlab-10-0-or-newer for details."
+    notify "Your version of PostgreSQL is no longer supported. Please upgrade your PostgreSQL version to ${PG_MIN_VERSION}."
+    notify "Check https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server for details."
     notify ""
     notify "Upgrade failed. Retry the upgrade after upgrading your PostgreSQL version."
     exit 1
@@ -89,7 +101,7 @@ main() {
     return
   fi
 
-  if [ -d ${DEST_DIR}/service/unicorn ] && [ ! -e "${skip_backup_file}" ] ; then
+  if ( [ -d ${DEST_DIR}/service/unicorn ] || [ -d ${DEST_DIR}/service/puma ] ) && [ ! -e "${skip_backup_file}" ] ; then
     notify "Automatically backing up only the GitLab SQL database (excluding everything else!)"
     if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads,builds,artifacts,lfs,registry,pages ; then
       backup_failed "Database"

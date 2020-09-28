@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe Gitaly do
+RSpec.describe Gitaly do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   before { allow(Gitlab).to receive(:[]).and_call_original }
 

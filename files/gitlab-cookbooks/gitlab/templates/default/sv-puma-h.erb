@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# This control handler is meant to be invoked by omnibus-gitlab via Runit
+
+# Let runit capture all script error messages
+exec 2>&1
+
+PID=$(cat /opt/gitlab/service/<%= @options[:service] %>/supervise/pid)
+
+readonly puma_graceful_shutdown_sec=90
+readonly puma_forceful_shutdown_sec=20
+readonly puma_kill_shutdown_sec=10
+
+echo "Received HUP from runit, sending INT signal to perform graceful restart"
+
+signal() {
+  local pid="$1"
+  local signal="$2"
+  local tries="$3"
+
+  echo "Sending $signal signal to Puma $pid..."
+  kill "-$signal" "$pid"
+
+  for i in $(seq 1 "$tries"); do
+    echo "Waiting for Puma $pid to exit ($i)..."
+    if ! kill -0 "$pid"; then
+      echo "Puma $pid did exit."
+      return 0
+    fi
+
+    sleep 1
+  done
+
+  echo "Puma $pid did not exit after $signal."
+  return 1
+}
+
+(
+  # we run it in subshell, as `runit` requires
+  # the process it runs to exit in order to reap
+  # the service
+  signal "$PID" "INT" "$puma_graceful_shutdown_sec" ||
+  signal "$PID" "TERM" "$puma_forceful_shutdown_sec" ||
+  signal "$PID" "KILL" "$puma_kill_shutdown_sec"
+) &
+
+exit 0

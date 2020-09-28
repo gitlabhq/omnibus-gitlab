@@ -16,12 +16,7 @@ module GitlabCtl
           raise GitlabCtl::Errors::ExecutionError.new(
             command, shell_out.stdout, shell_out.stderr
           )
-        rescue Mixlib::ShellOut::CommandTimeout
-          raise GitlabCtl::Errors::ExecutionError.new(
-            command, '', 'timed out'
-          )
         end
-
         shell_out.stdout
       end
 
@@ -126,6 +121,38 @@ module GitlabCtl
           $stdout.print "\r#{message}: \e[31mNOT OK\e[0m\n"
         end
         results
+      end
+
+      def warn(message)
+        $stderr.print "\r\e[33m#{message}\e[0m\n"
+      end
+
+      DURATION_UNITS = {
+        'ms' => 1,
+
+        's' => 1000,
+        'm' => 1000 * 60,
+        'h' => 1000 * 60 * 60,
+        'd' => 1000 * 60 * 60 * 24
+      }.freeze
+
+      def parse_duration(duration)
+        millis = 0
+        duration&.scan(/(?<quantity>\d+(\.\d+)?)(?<unit>[a-zA-Z]+)/)&.each do |quantity, unit|
+          multiplier = DURATION_UNITS[unit]
+          break if multiplier.nil?
+
+          millis += multiplier * quantity.to_f
+        end
+
+        begin
+          millis = Float(duration || '') if millis.zero?
+        rescue ArgumentError
+          # Translating exception
+          raise ArgumentError, "invalid value for duration: `#{duration}`"
+        end
+
+        millis.to_i
       end
     end
   end

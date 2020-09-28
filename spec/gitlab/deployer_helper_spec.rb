@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'gitlab/build'
 require 'gitlab/deployer_helper'
 
-describe DeployerHelper do
+RSpec.describe DeployerHelper do
   subject(:service) { described_class.new('some-token', 'some-env', 'some-branch') }
   describe '#trigger_deploy' do
     it 'triggers an auto deploy' do

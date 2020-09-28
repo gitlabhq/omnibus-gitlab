@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'templatesymlink' do
+RSpec.describe 'templatesymlink' do
   let(:runner) do
     ChefSpec::SoloRunner.new(step_into: %w(templatesymlink))
   end

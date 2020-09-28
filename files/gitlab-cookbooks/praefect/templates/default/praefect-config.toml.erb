@@ -1,4 +1,4 @@
-# Gitaly configuration file
+# Praefect configuration file
 # This file is managed by gitlab-ctl. Manual changes will be
 # erased! To change the contents below, edit /etc/gitlab/gitlab.rb
 # and run:
@@ -19,9 +19,17 @@ socket_path = '<%= @socket_path %>'
 prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
 <% end %>
 
-<% unless @postgres_queue_enabled.nil? %>
-postgres_queue_enabled = <%= @postgres_queue_enabled %>
+<% if @tls_listen_addr %>
+# Optional: listen on a secure TCP socket
+tls_listen_addr = '<%= @tls_listen_addr %>'
+[tls]
+certificate_path = '<%= @certificate_path %>'
+key_path = '<%= @key_path %>'
 <% end %>
+
+[reconciliation]
+<%= "scheduling_interval = '#{@reconciliation_scheduling_interval}'" if @reconciliation_scheduling_interval %>
+<%= "histogram_buckets = #{@reconciliation_histogram_buckets}" if @reconciliation_histogram_buckets %>
 
 [failover]
 <% unless @failover_enabled.nil? %>
@@ -60,7 +68,6 @@ name = '<%= name %>'
 storage = '<%= storage %>'
 address = '<%= node['address'] %>'
 token = '<%= node['token'] %>'
-primary = <%= [true, 'true'].include?(node['primary']) %>
 <% end %>
 <% end %>
 

@@ -1,19 +1,46 @@
-# Updating GitLab installed with the Omnibus GitLab package
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
 
-See the [upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
-for suggestions on when to upgrade.
-If you are upgrading from a non-Omnibus installation to an Omnibus installation,
-[check this guide](convert_to_omnibus.md).
+# Update GitLab installed with the Omnibus GitLab package
 
-## Version specific changes
+Before following these instructions, note the following:
 
+- [Upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+  has suggestions on when to upgrade.
+- If you are upgrading from a non-Omnibus installation to an Omnibus installation, see
+  [Upgrading from a non-Omnibus installation to an Omnibus installation](convert_to_omnibus.md).
+
+CAUTION: **Caution:**
+If you aren't [using the current major version](#mandatory-upgrade-paths-for-version-upgrades),
+you **must** follow the
+[upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+when updating to the current version.
+
+## Background migrations
+
+DANGER: **Danger:**
 It's important to ensure that any background migrations have been fully completed
-before upgrading to a new major version. To see the current size of the `background_migration` queue,
-[check for background migrations before upgrading](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
+before upgrading to a new major version. Upgrading before background migrations have
+finished may lead to data corruption.
 
-Updating to major versions might need some manual intervention. For more info,
+To see the current size of the `background_migration` queue,
+[check for background migrations before upgrading](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading). 
+
+## Version-specific changes
+
+We recommend performing upgrades between major and minor releases no more than once per
+week, to allow time for background migrations to finish. Decrease the time required to
+complete these migrations by increasing the number of
+[Sidekiq workers](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html)
+that can process jobs in the `background_migration` queue.
+
+Updating to major versions might need some manual intervention. For more information,
 check the version your are updating to:
 
+- [GitLab 13](gitlab_13_changes.md)
 - [GitLab 12](gitlab_12_changes.md)
 - [GitLab 11](gitlab_11_changes.md)
 - [GitLab 10](gitlab_10_changes.md)
@@ -23,10 +50,10 @@ check the version your are updating to:
 
 ## Mandatory upgrade paths for version upgrades
 
-From version 10.8 onwards, upgrade paths are enforced for version upgrades by
+From GitLab 10.8, upgrade paths are enforced for version upgrades by
 default. This restricts performing direct upgrades that skip major versions (for
-example 10.3 to 12.7 in one jump) which can result in breakage of the GitLab
-installations due to multiple reasons like deprecated or removed configuration
+example 10.3 to 12.7 in one jump) that **can break GitLab
+installations** due to multiple reasons like deprecated or removed configuration
 settings, upgrade of internal tools and libraries etc. Users will have to follow
 the [official upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
 while upgrading their GitLab instances.
@@ -35,78 +62,76 @@ while upgrading their GitLab instances.
 
 There are two ways to update Omnibus GitLab:
 
-- Using the official repositories
-- Manually download the package
+- [Using the official repositories](#update-using-the-official-repositories).
+- [Using a manually-downloaded package](#update-using-a-manually-downloaded-package).
 
 Both will automatically back up the GitLab database before installing a newer
 GitLab version. You may skip this automatic backup by creating an empty file
 at `/etc/gitlab/skip-auto-backup`:
 
-```sh
+```shell
 sudo touch /etc/gitlab/skip-auto-backup
 ```
 
 NOTE: **Note:**
 For safety reasons, you should maintain an up-to-date backup on your own if you plan to use this flag.
 
-NOTE: **Note**
+NOTE: **Note:**
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
-NOTE: **Note**
-Unless you are following the steps in [Zero downtime updates](#zero-downtime-updates), your GitLab application will not be available to users while an update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.  
+NOTE: **Note:**
+Unless you are following the steps in [Zero downtime updates](#zero-downtime-updates), your GitLab application will not be available to users while an update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.
 
-### Updating using the official repositories
+### Update using the official repositories
 
 If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.com/install/?version=ce)
 or [Enterprise Edition](https://about.gitlab.com/install/), then the
 official GitLab repository should have already been set up for you.
 
-To update to a newer GitLab version, all you have to do is:
+To update to a newer GitLab version, run:
 
-```sh
-# Debian/Ubuntu
-sudo apt-get update
-sudo apt-get install gitlab-ce
+- For GitLab Community Edition:
 
-# Centos/RHEL
-sudo yum install gitlab-ce
-```
+  ```shell
+  # Debian/Ubuntu
+  sudo apt-get update
+  sudo apt-get install gitlab-ce
 
-If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in
-the above commands.
+  # Centos/RHEL
+  sudo yum install gitlab-ce
+  ```
 
-### Updating using a manually downloaded package
+- For GitLab [Enterprise Edition](https://about.gitlab.com/pricing/):
 
-If for some reason you don't use the official repositories, it is possible to
-download the package and install it manually.
+  ```shell
+  # Debian/Ubuntu
+  sudo apt-get update
+  sudo apt-get install gitlab-ee
 
-1. Visit the [Community Edition repository](https://packages.gitlab.com/gitlab/gitlab-ce)
-   or the [Enterprise Edition repository](https://packages.gitlab.com/gitlab/gitlab-ee)
-   depending on the edition you already have installed.
-1. Find the package version you wish to install and click on it.
-1. Click the 'Download' button in the upper right corner to download the package.
-1. Once the GitLab package is downloaded, install it using the following
-   commands, replacing `XXX` with the Omnibus GitLab version you downloaded:
+  # Centos/RHEL
+  sudo yum install gitlab-ee
+  ```
 
-   ```sh
-   # Debian/Ubuntu
-   dpkg -i gitlab-ce-XXX.deb
+### Update using a manually-downloaded package
 
-   # CentOS/RHEL
-   rpm -Uvh gitlab-ce-XXX.rpm
-   ```
+If for some reason you don't use the official repositories, you can
+[download the package and install it manually](../manual_install.md).
 
-   If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee`
-   in the above commands.
+## Update Community Edition to Enterprise Edition
 
-## Updating Community Edition to Enterprise Edition
+To upgrade an existing GitLab Community Edition (CE) server installed using the Omnibus GitLab
+packages to GitLab [Enterprise Edition](https://about.gitlab.com/pricing/) (EE), you install the EE
+package on top of CE.
 
-To upgrade an existing GitLab Community Edition (CE) server, installed using the
-Omnibus packages, to GitLab Enterprise Edition (EE), all you have to do is
-install the EE package on top of CE. While upgrading from the same version of
-CE to EE is not explicitly necessary, and any standard upgrade jump (i.e. 8.0
-to 8.7) should work, in the following steps we assume that you are upgrading the
-same versions.
+Upgrading from the same version of CE to EE is not explicitly necessary, and any standard upgrade
+(for example, CE 12.0 to EE 12.1) should work. However, in the following steps we assume that
+you are upgrading the same version (for example, CE 12.1 to EE 12.1), which is **recommended**.
+
+CAUTION: **Caution:**
+When updating to EE from CE, avoid reverting back to CE if you plan on going to EE again in the
+future. Reverting back to CE can cause
+[database issues](#500-error-when-accessing-project--settings--repository-on-omnibus-installs)
+that may require Support intervention.
 
 The steps can be summed up to:
 
@@ -114,35 +139,35 @@ The steps can be summed up to:
 
    **For Debian/Ubuntu**
 
-   ```sh
+   ```shell
    sudo apt-cache policy gitlab-ce | grep Installed
    ```
 
-   The output should be similar to: `Installed: 8.6.7-ce.0`. In that case,
-   the equivalent Enterprise Edition version will be: `8.6.7-ee.0`. Write this
+   The output should be similar to: `Installed: 13.0.4-ce.0`. In that case,
+   the equivalent Enterprise Edition version will be: `13.0.4-ee.0`. Write this
    value down.
 
    **For CentOS/RHEL**
 
-   ```sh
+   ```shell
    sudo rpm -q gitlab-ce
    ```
 
-   The output should be similar to: `gitlab-ce-8.6.7-ce.0.el7.x86_64`. In that
+   The output should be similar to: `gitlab-ce-13.0.4-ce.0.el8.x86_64`. In that
    case, the equivalent Enterprise Edition version will be:
-   `gitlab-ee-8.6.7-ee.0.el7.x86_64`. Write this value down.
+   `gitlab-ee-13.0.4-ee.0.el8.x86_64`. Write this value down.
 
 1. Add the `gitlab-ee` [Apt or Yum repository](https://packages.gitlab.com/gitlab/gitlab-ee/install):
 
    **For Debian/Ubuntu**
 
-   ```sh
+   ```shell
    curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
    ```
 
    **For CentOS/RHEL**
 
-   ```sh
+   ```shell
    curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
    ```
 
@@ -153,17 +178,17 @@ The steps can be summed up to:
 
 1. Next, install the `gitlab-ee` package. Note that this will automatically
    uninstall the `gitlab-ce` package on your GitLab server. `reconfigure`
-   Omnibus right after the `gitlab-ee` package is installed. Make sure that you
-   install the exact same GitLab version:
+   Omnibus right after the `gitlab-ee` package is installed. **Make sure that you
+   install the exact same GitLab version**:
 
    **For Debian/Ubuntu**
 
-   ```sh
+   ```shell
    ## Make sure the repositories are up-to-date
    sudo apt-get update
 
    ## Install the package using the version you wrote down from step 1
-   sudo apt-get install gitlab-ee=8.6.7-ee.0
+   sudo apt-get install gitlab-ee=13.0.4-ee.0
 
    ## Reconfigure GitLab
    sudo gitlab-ctl reconfigure
@@ -171,19 +196,19 @@ The steps can be summed up to:
 
    **For CentOS/RHEL**
 
-   ```sh
+   ```shell
    ## Install the package using the version you wrote down from step 1
-   sudo yum install gitlab-ee-8.6.7-ee.0.el7.x86_64
+   sudo yum install gitlab-ee-13.0.4-ee.0.el8.x86_64
 
    ## Reconfigure GitLab
    sudo gitlab-ctl reconfigure
    ```
 
    NOTE: **Note:**
-   If you want to upgrade to EE and at the same time also update GitLab to the
-   latest version, you can omit the version check in the above commands. For
-   Debian/Ubuntu that would be `sudo apt-get install gitlab-ee` and for
-   CentOS/RHEL `sudo yum install gitlab-ee`.
+   To upgrade to EE and also update GitLab to the latest version at the same time, you
+   can omit version information from the commands above. That is, run
+   `sudo apt-get install gitlab-ee` or `sudo yum install gitlab-ee` depending on your
+   distribution.
 
 1. Now go to the GitLab admin panel of your server (`/admin/license/new`) and
    upload your license file.
@@ -193,24 +218,23 @@ The steps can be summed up to:
 
    **For Debian/Ubuntu**
 
-   ```sh
+   ```shell
    sudo rm /etc/apt/sources.list.d/gitlab_gitlab-ce.list
    ```
 
    **For CentOS/RHEL**
 
-   ```sh
+   ```shell
    sudo rm /etc/yum.repos.d/gitlab_gitlab-ce.repo
    ```
 
 That's it! You can now use GitLab Enterprise Edition! To update to a newer
-version follow the section on
-[Updating using the official repositories](#updating-using-the-official-repositories).
+version, follow [Update using the official repositories](#update-using-the-official-repositories).
 
 NOTE: **Note:**
 If you want to use `dpkg`/`rpm` instead of `apt-get`/`yum`, go through the first
-step to find the current GitLab version and then follow the steps in
-[Updating using a manually downloaded package](#updating-using-a-manually-downloaded-package).
+step to find the current GitLab version and then follow
+[Update using a manually-downloaded package](#update-using-a-manually-downloaded-package).
 
 ## Zero downtime updates
 
@@ -227,54 +251,86 @@ If you meet all the requirements above, follow these instructions in order. Ther
 
 | Deployment type                                                 | Description                                       |
 | --------------------------------------------------------------- | ------------------------------------------------  |
-| [Single-node](#single-node-deployment)                               | GitLab CE/EE on a single node                     |
-| [Multi-node / PG HA](#using-postgresql-ha)                      | GitLab CE/EE using HA architecture for PostgreSQL |
-| [Multi-node / Redis HA](#using-redis-ha-using-sentinel)         | GitLab CE/EE using HA architecture for Redis      |
+| [Single-node](#single-node-deployment)                          | GitLab CE/EE on a single node                     |
+| [Gitaly Cluster](#gitaly-cluster)                               | GitLab CE/EE using HA architecture for Gitaly Cluster             |
+| [Multi-node / PostgreSQL HA](#use-postgresql-ha)                | GitLab CE/EE using HA architecture for PostgreSQL |
+| [Multi-node / Redis HA](#use-redis-ha-using-sentinel)           | GitLab CE/EE using HA architecture for Redis |
 | [Geo](#geo-deployment)                                          | GitLab EE with Geo enabled                        |
 | [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo) | GitLab CE/EE on multiple nodes                    |
 
+Each type of deployment will require that you hot reload the `puma` (or `unicorn`) and `sidekiq` processes on all nodes running these
+services after you've upgraded. The reason for this is that those processes each load the GitLab Rails application which reads and loads
+the database schema into memory when starting up. Each of these processes will need to be reloaded (or restarted in the case of `sidekiq`)
+to re-read any database changes that have been made by post-deployment migrations.
+
 ### Single-node deployment
 
-CAUTION: **Caution:**
-While it is possible to minimize downtime on a single-node instance by following these instructions, it is not possible to always achieve true zero downtime updates. Users may see some connections timeout or be refused for a few minutes, depending on which services need to restart.
+Before following these instructions, note the following **important** information:
+
+- On single-node Omnibus deployments, zero down-time updates are not possible when
+  using Puma because Puma always requires a complete restart (Puma replaced Unicorn as
+  the default in GitLab 13.0 unless
+  [specifically disabled](../settings/unicorn.md#enabling-unicorn)). This is because the
+  [phased restart](https://github.com/puma/puma/blob/master/README.md#clustered-mode)
+  feature of Puma does not work with the way it is configured in GitLab's all-in-one
+  packages (cluster-mode with app preloading).
+- While it is possible to minimize downtime on a single-node instance by following
+  these instructions, **it is not possible to always achieve true zero downtime
+  updates**. Users may see some connections timeout or be refused for a few minutes,
+  depending on which services need to restart.
 
 1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
    installation only, this will prevent the upgrade from running
    `gitlab-ctl reconfigure` and automatically running database migrations
 
-   ```sh
+   ```shell
    sudo touch /etc/gitlab/skip-auto-reconfigure
    ```
 
-1. Update the GitLab package
+1. Update the GitLab package:
 
-   ```sh
-   # Debian/Ubuntu
-   sudo apt-get update && sudo apt-get install gitlab-ce
+   - For GitLab Community Edition:
 
-   # Centos/RHEL
-   sudo yum install gitlab-ce
-   ```
+     ```shell
+     # Debian/Ubuntu
+     sudo apt-get update
+     sudo apt-get install gitlab-ce
 
-   If you are an Enterprise Edition user, replace `gitlab-ce` with `gitlab-ee` in the above command.
+     # Centos/RHEL
+     sudo yum install gitlab-ce
+     ```
+
+   - For GitLab [Enterprise Edition](https://about.gitlab.com/pricing/):
+
+     ```shell
+     # Debian/Ubuntu
+     sudo apt-get update
+     sudo apt-get install gitlab-ee
+
+     # Centos/RHEL
+     sudo yum install gitlab-ee
+     ```
+
+   NOTE: **Note:**
+   The above commands use the latest version of GitLab. Use a version-specific package
+   to update to an older version.
 
 1. To get the regular migrations and latest code in place, run
 
-   ```sh
+   ```shell
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
 1. Once the node is updated and `reconfigure` finished successfully, complete the migrations with
 
-   ```sh
+   ```shell
    sudo gitlab-rake db:migrate
    ```
 
-1. Hot reload `unicorn`, `puma` and `sidekiq` services
+1. Hot reload `unicorn` (or `puma`) and `sidekiq` services
 
-   ```sh
+   ```shell
    sudo gitlab-ctl hup unicorn
-   sudo gitlab-ctl hup puma
    sudo gitlab-ctl restart sidekiq
    ```
 
@@ -285,11 +341,96 @@ you've completed these steps.
 
 ### Multi-node / HA deployment
 
-#### Praefect (Gitaly HA)
+#### Use a load balancer in front of web (Puma/Unicorn) nodes
 
-Praefect is the GitLab component responsible for make Gitaly highly
-available. It has its own PostgreSQL database, independent of the rest
-of the application.
+With Puma, single node zero-downtime updates are no longer possible. To achieve
+HA with zero-downtime updates, at least two nodes are required to be used with a
+load balancer which distributes the connections properly across both nodes.
+
+The load balancer in front of the application nodes must be configured to check
+proper health check endpoints to check if the service is accepting traffic or
+not. For Puma and Unicorn, the `/-/readiness` endpoint should be used, while
+`/readiness` endpoint can be used for Sidekiq and other services.
+
+Upgrades on web (Puma/Unicorn) nodes must be done in a rolling manner, one after
+another, ensuring at least one node is always up to serve traffic. This is
+required to ensure zero-downtime.
+
+Both Puma and Unicorn will enter a blackout period as part of the upgrade,
+during which they continue to accept connections but will mark their respective
+health check endpoints to be unhealthy. On seeing this, the load balancer should
+disconnect them gracefully.
+
+Both Puma and Unicorn will restart only after completing all the currently
+processing requests. This ensures data and service integrity. Once they have
+restarted, the health check end points will be marked healthy.
+
+The nodes must be updated in the following order to update an HA instance using
+load balancer to latest GitLab version.
+
+1. Select one application node as a deploy node and complete the following steps
+   on it:
+
+    1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. This will
+       prevent the upgrade from running `gitlab-ctl reconfigure` and
+       automatically running database migrations:
+
+        ```shell
+        sudo touch /etc/gitlab/skip-auto-reconfigure
+        ```
+
+    1. Update the GitLab package:
+
+       ```shell
+       # Debian/Ubuntu
+       sudo apt-get update && sudo apt-get install gitlab-ce
+
+       # Centos/RHEL
+       sudo yum install gitlab-ce
+       ```
+
+       If you are an Enterprise Edition user, replace `gitlab-ce` with
+       `gitlab-ee` in the above command.
+
+    1. Get the regular migrations and latest code in place:
+
+       ```shell
+       sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
+       ```
+
+    1. Ensure services use the latest code:
+
+       ```shell
+       sudo gitlab-ctl hup puma
+       sudo gitlab-ctl restart sidekiq
+       ```
+
+1. Complete the following steps on the other Puma/Unicorn/Sidekiq nodes, one
+   after another. Always ensure at least one of such nodes is up and running,
+   and connected to the load balancer before proceeding to the next node.
+
+    1. Update the GitLab package and ensure a `reconfigure` is run as part of
+       it. If not (due to `/etc/gitlab/skip-auto-reconfigure` file being
+       present), run `sudo gitlab-ctl reconfigure` manually.
+
+    1. Ensure services use latest code:
+
+       ```shell
+       sudo gitlab-ctl hup puma
+       sudo gitlab-ctl restart sidekiq
+       ```
+
+1. On the deploy node, run the post-deployment migrations:
+
+      ```shell
+      sudo gitlab-rake db:migrate
+      ```
+
+#### Gitaly Cluster
+
+[Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) is built using
+Gitaly and the Praefect component. It has its own PostgreSQL database, independent of the rest of
+the application.
 
 Before you update the main application you need to update Praefect.
 Out of your Praefect nodes, pick one to be your Praefect deploy node.
@@ -302,7 +443,7 @@ database migrations.
   installation only, this will prevent the upgrade from running
   `gitlab-ctl reconfigure` and restarting GitLab before database migrations have been applied:
 
-  ```sh
+  ```shell
   sudo touch /etc/gitlab/skip-auto-reconfigure
   ```
 
@@ -316,7 +457,7 @@ database migrations.
 
 - Update the GitLab package:
 
-  ```sh
+  ```shell
   # Debian/Ubuntu
   sudo apt-get update && sudo apt-get install gitlab-ce
 
@@ -328,7 +469,7 @@ database migrations.
 
 - To apply the Praefect database migrations and restart Praefect, run:
 
-  ```sh
+  ```shell
   sudo gitlab-ctl reconfigure
   ```
 
@@ -336,7 +477,7 @@ database migrations.
 
 - Update the GitLab package:
 
-  ```sh
+  ```shell
   sudo apt-get update && sudo apt-get install gitlab-ce
   ```
 
@@ -344,11 +485,11 @@ database migrations.
 
 - Ensure nodes are running the latest code:
 
-  ```sh
+  ```shell
   sudo gitlab-ctl reconfigure
   ```
 
-#### Using PostgreSQL HA
+#### Use PostgreSQL HA
 
 Pick a node to be the `Deploy Node`. It can be any node, but it must be the same
 node throughout the process.
@@ -359,7 +500,7 @@ node throughout the process.
   installation only, this will prevent the upgrade from running
   `gitlab-ctl reconfigure` and restarting GitLab before database migrations have been applied.
 
-  ```sh
+  ```shell
   sudo touch /etc/gitlab/skip-auto-reconfigure
   ```
 
@@ -371,7 +512,7 @@ node throughout the process.
 
 - Update the GitLab package
 
-  ```sh
+  ```shell
   # Debian/Ubuntu
   sudo apt-get update && sudo apt-get install gitlab-ce
 
@@ -383,7 +524,7 @@ node throughout the process.
 
 - Ensure nodes are running the latest code
 
-  ```sh
+  ```shell
   sudo gitlab-ctl reconfigure
   ```
 
@@ -391,7 +532,7 @@ node throughout the process.
 
 - Update the GitLab package
 
-  ```sh
+  ```shell
   # Debian/Ubuntu
   sudo apt-get update && sudo apt-get install gitlab-ce
 
@@ -414,7 +555,7 @@ node throughout the process.
 
   To find the master node, run the following on a database node:
 
-  ```sh
+  ```shell
   sudo gitlab-ctl repmgr cluster show
   ```
 
@@ -424,7 +565,7 @@ node throughout the process.
 
 - To get the regular database migrations and latest code in place, run
 
-  ```sh
+  ```shell
   sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
   ```
 
@@ -432,7 +573,7 @@ node throughout the process.
 
 - Update the GitLab package
 
-  ```sh
+  ```shell
   sudo apt-get update && sudo apt-get install gitlab-ce
   ```
 
@@ -440,7 +581,7 @@ node throughout the process.
 
 - Ensure nodes are running the latest code
 
-  ```sh
+  ```shell
   sudo gitlab-ctl reconfigure
   ```
 
@@ -448,16 +589,15 @@ node throughout the process.
 
 - Run post-deployment database migrations on deploy node to complete the migrations with
 
-  ```sh
+  ```shell
   sudo gitlab-rake db:migrate
   ```
 
-**For nodes that run Unicorn, Puma or Sidekiq**
+**For nodes that run Puma/Unicorn or Sidekiq**
 
-- Hot reload `unicorn`, `puma` and `sidekiq` services
+- Hot reload `puma` (or `unicorn`) and `sidekiq` services
 
-  ```sh
-  sudo gitlab-ctl hup unicorn
+  ```shell
   sudo gitlab-ctl hup puma
   sudo gitlab-ctl restart sidekiq
   ```
@@ -466,7 +606,7 @@ node throughout the process.
 
   Change your `gitlab.rb` to point back to PgBouncer and run:
 
-  ```sh
+  ```shell
   sudo gitlab-ctl reconfigure
   ```
 
@@ -476,7 +616,7 @@ sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
 setting `gitlab_rails['auto_migrate'] = false` in
 `/etc/gitlab/gitlab.rb` after you've completed these steps.
 
-#### Using Redis HA (using Sentinel)
+#### Use Redis HA (using Sentinel) **(PREMIUM ONLY)**
 
 Package upgrades may involve version updates to the bundled Redis service. On
 instances using [Redis HA](https://docs.gitlab.com/ee/administration/high_availability/redis.html),
@@ -488,7 +628,7 @@ HA.
 
 According to [official Redis docs](https://redis.io/topics/admin#upgrading-or-restarting-a-redis-instance-without-downtime),
 the easiest way to update an HA instance using Sentinel is to upgrade the
-secondaries one after the other, performa a manual failover from current
+secondaries one after the other, perform a manual failover from current
 primary (running old version) to a recently upgraded secondary (running a new
 version), and then upgrade the original primary. For this, we need to know
 the address of the current Redis primary.
@@ -573,7 +713,7 @@ failover is complete, we can go ahead and upgrade the original primary node.
 Install the package for new version and follow regular package upgrade
 procedure.
 
-### Geo deployment
+### Geo deployment **(PREMIUM ONLY)**
 
 NOTE: **Note:**
 The order of steps is important. While following these steps, make
@@ -585,13 +725,13 @@ Log in to your **primary** node, executing the following:
    installation only, this will prevent the upgrade from running
    `gitlab-ctl reconfigure` and automatically running database migrations
 
-   ```sh
+   ```shell
    sudo touch /etc/gitlab/skip-auto-reconfigure
    ```
 
 1. Update the GitLab package
 
-   ```sh
+   ```shell
    # Debian/Ubuntu
    sudo apt-get update && sudo apt-get install gitlab-ee
 
@@ -601,21 +741,13 @@ Log in to your **primary** node, executing the following:
 
 1. To get the database migrations and latest code in place, run
 
-   ```sh
+   ```shell
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-NOTE: **Note:**
-After this step you can get an outdated FDW remote schema on your
-secondary nodes. While it is not important to worry about at this
-point, you can check out the
-[Geo troubleshooting documentation](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#geo-database-has-an-outdated-fdw-remote-schema-error)
-to resolve this.
+1. Hot reload `puma` (or `unicorn`) and `sidekiq` services
 
-1. Hot reload `unicorn`, `puma` and `sidekiq` services
-
-   ```sh
-   sudo gitlab-ctl hup unicorn
+   ```shell
    sudo gitlab-ctl hup puma
    sudo gitlab-ctl restart sidekiq
    ```
@@ -626,13 +758,13 @@ On each **secondary** node, executing the following:
    installation only, this will prevent the upgrade from running
    `gitlab-ctl reconfigure` and automatically running database migrations
 
-   ```sh
+   ```shell
    sudo touch /etc/gitlab/skip-auto-reconfigure
    ```
 
 1. Update the GitLab package
 
-   ```sh
+   ```shell
    # Debian/Ubuntu
    sudo apt-get update && sudo apt-get install gitlab-ee
 
@@ -642,14 +774,13 @@ On each **secondary** node, executing the following:
 
 1. To get the database migrations and latest code in place, run
 
-   ```sh
+   ```shell
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-1. Hot reload `unicorn`, `puma`, `sidekiq` and restart `geo-logcursor` services
+1. Hot reload `puma` (or `unicorn`), `sidekiq` and restart `geo-logcursor` services
 
-   ```sh
-   sudo gitlab-ctl hup unicorn
+   ```shell
    sudo gitlab-ctl hup puma
    sudo gitlab-ctl restart sidekiq
    sudo gitlab-ctl restart geo-logcursor
@@ -657,7 +788,7 @@ On each **secondary** node, executing the following:
 
 1. Run post-deployment database migrations, specific to the Geo database
 
-   ```sh
+   ```shell
    sudo gitlab-rake geo:db:migrate
    ```
 
@@ -666,28 +797,15 @@ the update on the **primary** node:
 
 - Run post-deployment database migrations
 
-   ```sh
+   ```shell
    sudo gitlab-rake db:migrate
-   ```
-
-On each **secondary**, ensure the FDW tables are up-to-date.
-
-1. Wait for the **primary** migrations to finish.
-
-1. Wait for the **primary** migrations to replicate. You can find "Data
-   replication lag" for each node listed on `Admin Area > Geo`.
-
-1. Refresh Foreign Data Wrapper tables
-
-   ```sh
-   sudo gitlab-rake geo:db:refresh_foreign_tables
    ```
 
 After updating all nodes (both **primary** and all **secondaries**), check their status:
 
 - Verify Geo configuration and dependencies
 
-   ```sh
+   ```shell
    sudo gitlab-rake gitlab:geo:check
    ```
 
@@ -697,7 +815,7 @@ sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
 setting `gitlab_rails['auto_migrate'] = false` in
 `/etc/gitlab/gitlab.rb` after you've completed these steps.
 
-### Multi-node / HA deployment with Geo
+### Multi-node / HA deployment with Geo **(PREMIUM ONLY)**
 
 This section describes the steps required to upgrade a multi-node / HA
 deployment with Geo. Some steps must be performed on a particular node. This
@@ -717,25 +835,25 @@ You now need to choose:
 - One instance for use as the **primary** "deploy node" on the Geo **primary** multi-node deployment.
 - One instance for use as the **secondary** "deploy node" on each Geo **secondary** multi-node deployment.
 
-Deploy nodes must be configured to be running Unicorn or Sidekiq or the `geo-logcursor` daemon. In order
+Deploy nodes must be configured to be running Puma/Unicorn or Sidekiq or the `geo-logcursor` daemon. In order
 to avoid any downtime, they must not be in use during the update:
 
-- If running Unicorn, remove the deploy node from the load balancer.
+- If running Puma/Unicorn, remove the deploy node from the load balancer.
 - If running Sidekiq, ensure the deploy node is not processing jobs:
 
-  ```sh
+  ```shell
   sudo gitlab-ctl stop sidekiq
   ```
 
 - If running `geo-logcursor` daemon, ensure the deploy node is not processing events:
 
-  ```sh
+  ```shell
   sudo gitlab-ctl stop geo-logcursor
   ```
 
-For zero-downtime, Unicorn, Sidekiq, and `geo-logcursor` must be running on other nodes during the update.
+For zero-downtime, Puma/Unicorn, Sidekiq, and `geo-logcursor` must be running on other nodes during the update.
 
-#### Step 2: Updating the Geo primary multi-node deployment
+#### Step 2: Update the Geo primary multi-node deployment
 
 **On all nodes _including_ the primary "deploy node"**
 
@@ -743,7 +861,7 @@ Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
 installation only, this will prevent the upgrade from running
 `gitlab-ctl reconfigure` and automatically running database migrations.
 
-```sh
+```shell
 sudo touch /etc/gitlab/skip-auto-reconfigure
 ```
 
@@ -753,7 +871,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Ensure nodes are running the latest code
 
-   ```sh
+   ```shell
    sudo gitlab-ctl reconfigure
    ```
 
@@ -761,7 +879,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Update the GitLab package
 
-   ```sh
+   ```shell
    # Debian/Ubuntu
    sudo apt-get update && sudo apt-get install gitlab-ee
 
@@ -771,7 +889,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Ensure nodes are running the latest code
 
-   ```sh
+   ```shell
    sudo gitlab-ctl reconfigure
    ```
 
@@ -779,7 +897,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Update the GitLab package
 
-   ```sh
+   ```shell
    # Debian/Ubuntu
    sudo apt-get update && sudo apt-get install gitlab-ee
 
@@ -789,7 +907,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. To get the regular database migrations and latest code in place, run
 
-   ```sh
+   ```shell
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
@@ -799,7 +917,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    - To serve requests, add the deploy node to the load balancer.
    - To process Sidekiq jobs again, start Sidekiq:
 
-     ```sh
+     ```shell
      sudo gitlab-ctl start sidekiq
      ```
 
@@ -807,7 +925,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Update the GitLab package
 
-   ```sh
+   ```shell
    # Debian/Ubuntu
    sudo apt-get update && sudo apt-get install gitlab-ee
 
@@ -817,20 +935,20 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Ensure nodes are running the latest code
 
-   ```sh
+   ```shell
    sudo gitlab-ctl reconfigure
    ```
 
-**For all nodes that run Unicorn or Sidekiq**
+**For all nodes that run Puma/Unicorn or Sidekiq _including_ the primary "deploy node"**
 
-Hot reload `unicorn` and `sidekiq` services:
+Hot reload `puma` (or `unicorn`) and `sidekiq` services:
 
-```sh
-sudo gitlab-ctl hup unicorn
+```shell
+sudo gitlab-ctl hup puma
 sudo gitlab-ctl restart sidekiq
 ```
 
-#### Step 3: Updating each Geo secondary multi-node deployment
+#### Step 3: Update each Geo secondary multi-node deployment
 
 NOTE: **Note:**
 Only proceed if you have successfully completed all steps on the Geo **primary** multi-node deployment.
@@ -841,7 +959,7 @@ Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
 installation only, this will prevent the upgrade from running
 `gitlab-ctl reconfigure` and automatically running database migrations.
 
-```sh
+```shell
 sudo touch /etc/gitlab/skip-auto-reconfigure
 ```
 
@@ -851,7 +969,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Ensure nodes are running the latest code
 
-   ```sh
+   ```shell
    sudo gitlab-ctl reconfigure
    ```
 
@@ -859,7 +977,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Update the GitLab package
 
-   ```sh
+   ```shell
    # Debian/Ubuntu
    sudo apt-get update && sudo apt-get install gitlab-ee
 
@@ -869,7 +987,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Ensure nodes are running the latest code
 
-   ```sh
+   ```shell
    sudo gitlab-ctl reconfigure
    ```
 
@@ -877,7 +995,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Update the GitLab package
 
-   ```sh
+   ```shell
    # Debian/Ubuntu
    sudo apt-get update && sudo apt-get install gitlab-ee
 
@@ -887,7 +1005,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. To get the regular database migrations and latest code in place, run
 
-   ```sh
+   ```shell
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
@@ -897,13 +1015,13 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    - To serve requests, add the deploy node to the load balancer.
    - To process Sidekiq jobs again, start Sidekiq:
 
-     ```sh
+     ```shell
      sudo gitlab-ctl start sidekiq
      ```
 
    - To process Geo events again, start the `geo-logcursor` daemon:
 
-     ```sh
+     ```shell
      sudo gitlab-ctl start geo-logcursor
      ```
 
@@ -911,7 +1029,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Update the GitLab package
 
-   ```sh
+   ```shell
    # Debian/Ubuntu
    sudo apt-get update && sudo apt-get install gitlab-ee
 
@@ -921,16 +1039,16 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
 1. Ensure nodes are running the latest code
 
-   ```sh
+   ```shell
    sudo gitlab-ctl reconfigure
    ```
 
-**For all nodes that run Unicorn, Sidekiq, or the `geo-logcursor` daemon**
+**For all nodes that run Puma/Unicorn, Sidekiq, or the `geo-logcursor` daemon _including_ the secondary "deploy node"**
 
-Hot reload `unicorn`, `sidekiq` and ``geo-logcursor`` services:
+Hot reload `puma` (or `unicorn`), `sidekiq` and ``geo-logcursor`` services:
 
-```sh
-sudo gitlab-ctl hup unicorn
+```shell
+sudo gitlab-ctl hup puma
 sudo gitlab-ctl restart sidekiq
 sudo gitlab-ctl restart geo-logcursor
 ```
@@ -941,13 +1059,13 @@ sudo gitlab-ctl restart geo-logcursor
 
 1. Run post-deployment database migrations:
 
-   ```sh
+   ```shell
    sudo gitlab-rake db:migrate
    ```
 
 1. Verify Geo configuration and dependencies
 
-   ```sh
+   ```shell
    sudo gitlab-rake gitlab:geo:check
    ```
 
@@ -955,76 +1073,84 @@ sudo gitlab-ctl restart geo-logcursor
 
 1. Run post-deployment database migrations, specific to the Geo database:
 
-   ```sh
+   ```shell
    sudo gitlab-rake geo:db:migrate
    ```
 
 1. Wait for the **primary** migrations to finish.
 
 1. Wait for the **primary** migrations to replicate. You can find "Data
-   replication lag" for each node listed on `Admin Area > Geo`. These wait steps
-   help ensure the FDW tables are up-to-date.
-
-1. Refresh Foreign Data Wrapper tables
-
-   ```sh
-   sudo gitlab-rake geo:db:refresh_foreign_tables
-   ```
+   replication lag" for each node listed on `Admin Area > Geo`.
 
 1. Verify Geo configuration and dependencies
 
-   ```sh
+   ```shell
    sudo gitlab-rake gitlab:geo:check
    ```
 
 1. Verify Geo status
 
-   ```sh
+   ```shell
    sudo gitlab-rake geo:status
    ```
 
-## Upgrading Gitaly servers
+## Upgrade Gitaly servers
 
 Gitaly servers must be upgraded to the newer version prior to upgrading the application server.
 This prevents the gRPC client on the application server from sending RPCs that the old Gitaly version
 does not support.
 
-## Downgrading
+## Downgrade
 
 This section contains general information on how to revert to an earlier version
 of a package.
 
-NOTE: **Note:**
-This guide assumes that you have a backup archive created under the version you
-are reverting to.
+CAUTION: **Warning:**
+You must at least have a database backup created under the version you are
+downgrading to. Ideally, you should have a
+[full backup archive](https://docs.gitlab.com/ee/raketasks/backup_restore.html#back-up-gitlab)
+on hand.
+
+The example below demonstrates the downgrade procedure when downgrading between minor
+and patch versions (for example, from 13.0.6 to 13.0.5).
+
+When downgrading between major versions, take into account the
+[specific version changes](#version-specific-changes) that occurred when you upgraded
+to the major version you are downgrading from.
 
 These steps consist of:
 
-- Stop GitLab
-- Install the old package
-- Reconfigure GitLab
+- Stopping GitLab
+- Removing the current package
+- Installing the old package
+- Reconfiguring GitLab
 - Restoring the backup
 - Starting GitLab
 
 Steps:
 
-1. Stop GitLab:
+1. Stop GitLab and remove the current package:
 
-   ```sh
-   # Stop GitLab and remove its supervision process
-   sudo gitlab-ctl stop unicorn
+   ```shell
+   # If running Puma
    sudo gitlab-ctl stop puma
+
+    # If running Unicorn
+   sudo gitlab-ctl stop unicorn
+
+   # Stop sidekiq
    sudo gitlab-ctl stop sidekiq
-   sudo systemctl stop gitlab-runsvdir
-   sudo systemctl disable gitlab-runsvdir
-   sudo rm /usr/lib/systemd/system/gitlab-runsvdir.service
-   sudo systemctl daemon-reload
-   sudo gitlab-ctl uninstall
+
+   # If on Ubuntu: remove the current package
+   sudo dpkg -r gitlab-ee
+
+   # If on Centos: remove the current package
+   sudo yum remove gitlab-ee
    ```
 
 1. Identify the GitLab version you want to downgrade to:
 
-   ```sh
+   ```shell
    # (Replace with gitlab-ce if you have GitLab FOSS installed)
 
    # Ubuntu
@@ -1034,44 +1160,46 @@ Steps:
    sudo yum --showduplicates list gitlab-ee
    ```
 
-1. Downgrade GitLab to the desired version (for example, to downgrade to 12.0.0):
+1. Downgrade GitLab to the desired version (for example, to GitLab 13.0.5):
 
-   ```sh
+   ```shell
    # (Replace with gitlab-ce if you have GitLab FOSS installed)
 
    # Ubuntu
-   sudo apt remove gitlab-ee
-   sudo apt install gitlab-ee=12.0.0-ee.0
+   sudo apt install gitlab-ee=13.0.5-ee.0
 
    # CentOS:
-   sudo yum remove gitlab-ee
-   sudo yum install gitlab-ee-12.0.0-ee.0.el7
+   sudo yum install gitlab-ee-13.0.5-ee.0.el8
    ```
 
-1. Prepare GitLab for receiving the backup restore.
+1. Reconfigure GitLab:
 
-1. Reconfigure GitLab (includes database migrations):
-
-   ```sh
+   ```shell
    sudo gitlab-ctl reconfigure
    ```
 
 1. Restore your backup:
 
-    ```sh
-    sudo gitlab-backup restore BACKUP=12345 # where 12345 is your backup timestamp
-    ```
-
-    NOTE: **Note**
-    For GitLab 12.1 and earlier, use `gitlab-rake gitlab:backup:restore`.
-
-1. Start GitLab:
-
-   ```sh
-   sudo gitlab-ctl start
+   ```shell
+   # Restore your backup and reconfigure
+   sudo gitlab-backup restore BACKUP=XXXXXXXXXX_2020_XX_XX_13.0.5-ee
+   sudo gitlab-ctl reconfigure
    ```
 
-## Updating GitLab CI from prior `5.4.0` to version `7.14` via Omnibus GitLab
+1. Restart GitLab:
+
+   ```shell
+   sudo gitlab-ctl restart
+   ```
+
+1. Check GitLab:
+
+   ```shell
+   # It may take a few seconds for Sidekiq and gitlab-shell to start
+   sudo gitlab-rake gitlab:check SANITIZE=true
+   ```
+
+## Update GitLab CI from prior `5.4.0` to version `7.14` via Omnibus GitLab
 
 CAUTION: **Warning:**
 Omnibus GitLab 7.14 was the last version where CI was bundled in the package.
@@ -1091,15 +1219,15 @@ In `/etc/gitlab/gitlab.rb`:
 gitlab_ci['gitlab_server'] = { "url" => 'http://gitlab.example.com', "app_id" => '12345678', "app_secret" => 'QWERTY12345' }
 ```
 
-Where `url` is the url to the GitLab instance.
+Where `url` is the URL to the GitLab instance.
 
 Make sure to run `sudo gitlab-ctl reconfigure` after saving the configuration.
 
 ## Troubleshooting
 
-### Getting the status of a GitLab installation
+### Get the status of a GitLab installation
 
-```sh
+```shell
 sudo gitlab-ctl status
 sudo gitlab-rake gitlab:check SANITIZE=true
 ```
@@ -1111,13 +1239,13 @@ sudo gitlab-rake gitlab:check SANITIZE=true
 
 If you are using RPM and you are upgrading from GitLab Community Edition to GitLab Enterprise Edition you may get an error like this:
 
-```sh
+```shell
 package gitlab-7.5.2_omnibus.5.2.1.ci-1.el7.x86_64 (which is newer than gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64) is already installed
 ```
 
 You can override this version check with the `--oldpackage` option:
 
-```sh
+```shell
 sudo rpm -Uvh --oldpackage gitlab-7.5.2_ee.omnibus.5.2.1.ci-1.el7.x86_64.rpm
 ```
 
@@ -1127,11 +1255,47 @@ CE and EE packages are marked as obsoleting and replacing each other so that bot
 
 If you are using local RPM files to switch from CE to EE or vice versa, use `rpm` for installing the package rather than `yum`. If you try to use yum, then you may get an error like this:
 
-```text
+```plaintext
 Cannot install package gitlab-ee-11.8.3-ee.0.el6.x86_64. It is obsoleted by installed package gitlab-ce-11.8.3-ce.0.el6.x86_64
 ```
 
 To avoid this issue, either:
 
-- Use the same instructions provided in the [Updating using a manually downloaded package](#updating-using-a-manually-downloaded-package) section.
+- Use the same instructions provided in the
+  [Update using a manually-downloaded package](#update-using-a-manually-downloaded-package) section.
 - Temporarily disable obsoletion checking in yum by adding `--setopt=obsoletes=0` to the options given to the command.
+
+### 500 error when accessing Project > Settings > Repository on Omnibus installs
+
+In situations where a GitLab instance has been migrated from CE > EE > CE and then back to EE, some Omnibus installations get the below error when viewing a projects repository settings.
+
+```shell
+Processing by Projects::Settings::RepositoryController#show as HTML
+  Parameters: {"namespace_id"=>"<namespace_id>", "project_id"=>"<project_id>"}
+Completed 500 Internal Server Error in 62ms (ActiveRecord: 4.7ms | Elasticsearch: 0.0ms | Allocations: 14583)
+
+NoMethodError (undefined method `commit_message_negative_regex' for #<PushRule:0x00007fbddf4229b8>
+Did you mean?  commit_message_regex_change):
+```
+
+This error is caused by an EE feature being added to a CE instance on the initial move to EE.
+Once the instance is moved back to CE then is upgraded to EE again, the `push_rules` table already exists in the database and a migration is unable to add the `commit_message_regex_change` column.
+
+This results in the [backport migration of EE tables](https://gitlab.com/gitlab-org/gitlab/-/blob/cf00e431024018ddd82158f8a9210f113d0f4dbc/db/migrate/20190402150158_backport_enterprise_schema.rb#L1619) not working correctly.
+The backport migration assumes that certain tables in the database do not exist when running CE.
+
+To fix this issue, manually add the missing `commit_message_negative_regex` column and restart GitLab:
+
+```shell
+# Access psql
+sudo gitlab-rails dbconsole
+
+# Add the missing column
+ALTER TABLE push_rules ADD COLUMN commit_message_negative_regex VARCHAR;
+
+# Exit psql
+\q
+
+# Restart GitLab
+sudo gitlab-ctl restart
+```

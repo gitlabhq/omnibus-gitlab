@@ -1,4 +1,3 @@
-require 'aws-sdk'
 require_relative 'build/info.rb'
 require_relative 'util.rb'
 

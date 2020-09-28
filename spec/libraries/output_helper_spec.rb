@@ -1,7 +1,7 @@
 require 'spec_helper'
 require_relative '../../files/gitlab-cookbooks/package/libraries/helpers/output_helper'
 
-describe OutputHelper do
+RSpec.describe OutputHelper do
   include OutputHelper
 
   describe "#quote" do

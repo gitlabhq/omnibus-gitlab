@@ -17,6 +17,7 @@
 #
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
+consul_helper = ConsulHelper.new(node)
 
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
@@ -34,8 +35,8 @@ gitlab_rails_shared_cache_dir = File.join(node['gitlab']['gitlab-rails']['shared
 upgrade_status_dir = File.join(gitlab_rails_dir, "upgrade-status")
 
 # Set path to the private key used for communication between registry and Gitlab.
-node.default['gitlab']['gitlab-rails']['registry_key_path'] = File.join(gitlab_rails_etc_dir, "gitlab-registry.key")
-node.default['gitlab']['gitlab-rails']['db_host'] ||= node['postgresql']['dir']
+node.normal['gitlab']['gitlab-rails']['registry_key_path'] = File.join(gitlab_rails_etc_dir, "gitlab-registry.key") if node['gitlab']['gitlab-rails']['registry_key_path'].nil?
+node.normal['gitlab']['gitlab-rails']['db_host'] = node['postgresql']['dir'] if node['gitlab']['gitlab-rails']['db_host'].nil?
 
 gitlab_user = account_helper.gitlab_user
 gitlab_group = account_helper.gitlab_group
@@ -150,6 +151,10 @@ node['gitlab']['gitlab-rails']['dependent_services'].each do |name|
   dependent_services << "runit_service[#{name}]" if omnibus_helper.should_notify?(name)
 end
 
+dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify?('sidekiq')
+dependent_services << "sidekiq_service[sidekiq-cluster]" if omnibus_helper.should_notify?('sidekiq-cluster')
+dependent_services << "unicorn_service[unicorn]" if omnibus_helper.should_notify?('unicorn')
+
 secret_file = File.join(gitlab_rails_etc_dir, "secret")
 secret_symlink = File.join(gitlab_rails_source_dir, ".secret")
 otp_key_base = node['gitlab']['gitlab-rails']['otp_key_base']
@@ -199,7 +204,8 @@ templatesymlink "Create a secrets.yml and create a symlink to Rails root" do
               'db_key_base' => node['gitlab']['gitlab-rails']['db_key_base'],
               'secret_key_base' => node['gitlab']['gitlab-rails']['secret_key_base'],
               'otp_key_base' => node['gitlab']['gitlab-rails']['otp_key_base'],
-              'openid_connect_signing_key' => node['gitlab']['gitlab-rails']['openid_connect_signing_key']
+              'openid_connect_signing_key' => node['gitlab']['gitlab-rails']['openid_connect_signing_key'],
+              'ci_jwt_signing_key' => node['gitlab']['gitlab-rails']['ci_jwt_signing_key']
             } })
   dependent_services.each { |svc| notifies :restart, svc }
 end
@@ -297,8 +303,11 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       sidekiq: node['gitlab']['sidekiq'],
       unicorn: node['gitlab']['unicorn'],
       puma: node['gitlab']['puma'],
+      actioncable: node['gitlab']['actioncable'],
       gitlab_shell_authorized_keys_file: node['gitlab']['gitlab-shell']['auth_file'],
-      prometheus: node['monitoring']['prometheus']
+      prometheus_available: node['monitoring']['prometheus']['enable'] || !node['gitlab']['gitlab-rails']['prometheus_address'].nil?,
+      prometheus_server_address: node['gitlab']['gitlab-rails']['prometheus_address'] || node['monitoring']['prometheus']['listen_address'],
+      consul_api_url: node['consul']['enable'] ? consul_helper.api_url : nil
     )
   )
   dependent_services.each { |svc| notifies :restart, svc }
@@ -388,8 +397,8 @@ end
 
 legacy_sidekiq_log_file = File.join(gitlab_rails_log_dir, 'sidekiq.log')
 link legacy_sidekiq_log_file do
-  to File.join(node['gitlab']['sidekiq']['log_directory'], 'current')
-  not_if { File.exist?(legacy_sidekiq_log_file) }
+  action :delete
+  only_if { File.symlink?(legacy_sidekiq_log_file) }
 end
 
 # Make structure.sql writable for when we run `rake db:migrate`
@@ -410,8 +419,9 @@ end
 
 # If a version of ruby changes restart dependent services. Otherwise, services like
 # unicorn will fail to reload until restarted
-file File.join(gitlab_rails_dir, "RUBY_VERSION") do
-  content VersionHelper.version("/opt/gitlab/embedded/bin/ruby --version")
+version_file 'Create version file for Rails' do
+  version_file_path File.join(gitlab_rails_dir, 'RUBY_VERSION')
+  version_check_cmd '/opt/gitlab/embedded/bin/ruby --version'
   dependent_services.each { |svc| notifies :restart, svc }
 end
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require_relative '../../files/gitlab-cookbooks/package/libraries/helpers/systemd_helper'
 
-describe SystemdHelper do
+RSpec.describe SystemdHelper do
   describe '#systemd_version' do
     context 'when systemctl returns valid output' do
       before do

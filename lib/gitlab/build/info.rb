@@ -36,11 +36,15 @@ module Build
         else
           latest_git_tag = Info.latest_tag.strip
           latest_version = latest_git_tag[0, latest_git_tag.match("[+]").begin(0)]
-          commit_sha_raw = Gitlab::Util.get_env('CI_COMMIT_SHA') || `git rev-parse HEAD`.strip
-          commit_sha = commit_sha_raw[0, 8]
+          commit_sha = Build::Info.commit_sha
           ver_tag = "#{latest_version}+" + (Build::Check.is_nightly? ? "rnightly" : "rfbranch")
           [ver_tag, Gitlab::Util.get_env('CI_PIPELINE_ID'), commit_sha].compact.join('.')
         end
+      end
+
+      def commit_sha
+        commit_sha_raw = Gitlab::Util.get_env('CI_COMMIT_SHA') || `git rev-parse HEAD`.strip
+        commit_sha_raw[0, 8]
       end
 
       def release_version
@@ -61,7 +65,7 @@ module Build
       end
 
       def docker_tag
-        Info.release_version.tr('+', '-')
+        Gitlab::Util.get_env('IMAGE_TAG') || Info.release_version.tr('+', '-')
       end
 
       def gitlab_version
@@ -95,21 +99,14 @@ module Build
       end
 
       def gitlab_rails_repo
-        # For normal builds, QA build happens from the gitlab repositories in dev.
-        # For triggered builds, they are not available and their gitlab.com mirrors
-        # have to be used.
-        # CE repo - In com it is gitlab-foss, in dev it is gitlabhq
-        # EE repo - In com it is gitlab, in dev it is gitlab-ee
+        gitlab_rails =
+          if package == "gitlab-ce"
+            "gitlab-rails"
+          else
+            "gitlab-rails-ee"
+          end
 
-        if Gitlab::Util.get_env('ALTERNATIVE_SOURCES').to_s == "true"
-          domain = "https://gitlab.com/gitlab-org"
-          project = package == "gitlab-ce" ? "gitlab-foss" : "gitlab"
-        else
-          domain = "git@dev.gitlab.org:gitlab"
-          project = package == "gitlab-ce" ? "gitlabhq" : "gitlab-ee"
-        end
-
-        "#{domain}/#{project}.git"
+        Gitlab::Version.new(gitlab_rails).remote
       end
 
       def edition
@@ -193,14 +190,27 @@ module Build
       end
 
       def image_reference
-        if Gitlab::Util.get_env('CI_PROJECT_PATH') == OMNIBUS_PROJECT_MIRROR_PATH && %w[trigger pipeline].include?(Gitlab::Util.get_env('CI_PIPELINE_SOURCE'))
-          "#{Build::GitlabImage.gitlab_registry_image_address}:#{Gitlab::Util.get_env('IMAGE_TAG')}"
-        elsif Build::Check.is_nightly? || Build::Check.on_tag?
-          # We push nightly images to both dockerhub and gitlab registry
-          "#{Build::GitlabImage.gitlab_registry_image_address}:#{Info.docker_tag}"
-        else
-          abort 'unknown pipeline type: only support triggered/nightly/tag pipeline'
-        end
+        "#{Build::GitlabImage.gitlab_registry_image_address}:#{Info.docker_tag}"
+      end
+
+      def deploy_env
+        key = if Build::Check.is_auto_deploy_tag?
+                'AUTO_DEPLOY_ENVIRONMENT'
+              elsif Build::Check.is_rc_tag?
+                'PATCH_DEPLOY_ENVIRONMENT'
+              elsif Build::Check.is_latest_tag?
+                'RELEASE_DEPLOY_ENVIRONMENT'
+              end
+
+        return nil if key.nil?
+
+        env = Gitlab::Util.get_env(key)
+
+        abort "Unable to determine which environment to deploy too, #{key} is empty" unless env
+
+        puts "Ready to send trigger for environment(s): #{env}"
+
+        env
       end
     end
   end

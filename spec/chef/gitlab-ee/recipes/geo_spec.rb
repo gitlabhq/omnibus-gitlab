@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab-ee::geo' do
+RSpec.describe 'gitlab-ee::geo' do
   let(:node) { chef_run.node }
 
   before do
@@ -8,11 +8,16 @@ describe 'gitlab-ee::geo' do
   end
 
   shared_examples 'default services' do
-    it 'remain enabled' do
+    it 'remain enabled', :aggregate_failures do
       chef_run
+
       default_services = Services.find_by_group(Services::DEFAULT_GROUP).keys
+      omnibus_helper = OmnibusHelper.new(node)
+
       expect(default_services.count).to be > 0
-      default_services.each { |service| expect(Services.enabled?(service)).to be(true) }
+      default_services.each do |service|
+        expect(omnibus_helper.service_enabled?(service.tr('_', '-'))).to be(true), "#{service} was not enabled"
+      end
     end
   end
 

@@ -1,0 +1,101 @@
+---
+# Warning: gitlab.Acronyms
+#
+# Checks for unexpanded acronyms.
+#
+# For a list of all options, see https://errata-ai.gitbook.io/vale/getting-started/styles
+extends: conditional
+message: '"%s" has no definition.'
+link: https://about.gitlab.com/handbook/marketing/growth-marketing/content/editorial-team/#acronyms
+level: warning
+ignorecase: false
+# Ensures that the existence of 'first' implies the existence of 'second'.
+first: '\b([A-Z]{3,5})\b'
+second: '(?:\b[A-Z][a-z]+ )+\(([A-Z]{3,5})\)'
+# ... with the exception of these:
+exceptions:
+  - ANSI
+  - API
+  - ARN
+  - ASCII
+  - AWS
+  - CLI
+  - CNAME
+  - CORE
+  - CPU
+  - CSS
+  - CSV
+  - DAST
+  - DNS
+  - EKS
+  - FAQ
+  - FOSS
+  - GCP
+  - GDK
+  - GET
+  - GKE
+  - GNU
+  - GPG
+  - GPL
+  - HTML
+  - HTTP
+  - HTTPS
+  - IAM
+  - IBM
+  - IDE
+  - IID
+  - IRC
+  - ISO
+  - JSON
+  - LDAP
+  - LDAPS
+  - LESS
+  - LFS
+  - LRU
+  - MIME
+  - MVC
+  - NFS
+  - NGINX
+  - NOTE
+  - NPM
+  - ONLY
+  - PDF
+  - PGP
+  - PHP
+  - POST
+  - PUT
+  - RAM
+  - RPC
+  - RSA
+  - RSS
+  - RVM
+  - SAML
+  - SAST
+  - SCIM
+  - SCP
+  - SCSS
+  - SDK
+  - SHA
+  - SLA
+  - SMTP
+  - SQL
+  - SSH
+  - SSL
+  - SSO
+  - SVG
+  - SVN
+  - TCP
+  - TIP
+  - TLS
+  - TODO
+  - TOML
+  - UNIX
+  - URI
+  - URL
+  - USB
+  - UUID
+  - VPC
+  - WIP
+  - WSL
+  - XML
+  - YAML

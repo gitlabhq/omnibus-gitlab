@@ -1,7 +1,7 @@
 require 'chef_helper'
 
-describe SentinelHelper do
-  let(:chef_run) { converge_config }
+RSpec.describe SentinelHelper do
+  let(:chef_run) { converge_config(is_ee: true) }
   subject { described_class.new(chef_run.node) }
   before { allow(Gitlab).to receive(:[]).and_call_original }
 

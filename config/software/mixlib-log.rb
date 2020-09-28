@@ -17,7 +17,7 @@
 name 'mixlib-log'
 # The version here should be in agreement with /Gemfile.lock so that our rspec
 # testing stays consistent with the package contents.
-default_version '3.0.1'
+default_version '3.0.8'
 
 license 'Apache-2.0'
 license_file 'LICENSE'

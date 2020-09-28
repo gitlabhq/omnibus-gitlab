@@ -1,5 +1,5 @@
 require 'chef_helper'
-describe 'pgbouncer_user' do
+RSpec.describe 'pgbouncer_user' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: ['pgbouncer_user']) }
 
   context 'create geo' do

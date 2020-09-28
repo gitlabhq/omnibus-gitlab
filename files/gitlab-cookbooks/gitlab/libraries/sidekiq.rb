@@ -17,19 +17,48 @@
 
 module Sidekiq
   class << self
+    MIGRATION_DOCS_URL = 'https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#migrating-to-sidekiq-cluster'.freeze
+    MIGRATION_ISSUE_URL = 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/340'.freeze
     CLUSTER_ATTRIBUTE_NAMES = %w(ha log_directory experimental_queue_selector
                                  interval max_concurrency min_concurrency negate
-                                 queue_groups).freeze
+                                 queue_groups shutdown_timeout).freeze
 
     def parse_variables
-      return if Gitlab['sidekiq']['enable'] == false
-      # We only need to do special things when people are migrating
-      # to sidekiq cluster
-      return unless Gitlab['sidekiq']['cluster']
-
+      # Sidekiq cluster was manually enabled, print a warning and fall back to
+      # the old behaviour
       if Gitlab['sidekiq_cluster']['enable']
-        raise "Sidekiq cluster configured, please consider disabling it to try the "\
-              "experimental sidekiq-cluster defaults."
+        Gitlab['sidekiq']['cluster'] = false
+
+        LoggingHelper.deprecation <<~MSG
+          Using Sidekiq Cluster is now default, please move your settings over
+          to the `sidekiq[*]` config. Configuring `sidekiq_cluster[*]` directly will
+          removed in 14.0.
+          #{MIGRATION_DOCS_URL}
+          Migration issue: #{MIGRATION_ISSUE_URL}
+        MSG
+      end
+
+      # If user had explicitly turned off sidekiq, let's stop processing here.
+      return if user_settings['enable'] == false
+
+      # When sidekiq is enabled by a role (DEFAULT_ROLE, for example),
+      # Gitlab['node']['sidekiq']['enable'] gets set to `true`. If that didn't
+      # happen, and user didn't explicitly turn on sidekiq, let's stop
+      # processing here. If not, we will inadvertently enable sidekiq_cluster
+      # few lines below, which will cause the `sidekiq-cluster` recipe to run
+      # and the `sidekiq` runit_service resource to get created and hence
+      # sidekiq service to run in places it is not expected to.
+      return if defaults['enable'] == false && user_settings['enable'] != true
+
+      # The cluster feature was explicitly disabled, fallback to the regular sidekiq
+      if Gitlab['sidekiq']['cluster'] == false
+        LoggingHelper.deprecation <<~MSG
+          Running Sidekiq directly is deprecated and will be removed in Gitlab 14.0.
+          Please consider running sidekiq-cluster.
+          #{MIGRATION_DOCS_URL}
+          Migration issue: #{MIGRATION_ISSUE_URL}
+        MSG
+        return
       end
 
       Gitlab['sidekiq']['enable'] = false

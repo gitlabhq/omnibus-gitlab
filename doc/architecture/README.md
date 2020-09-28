@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Omnibus-GitLab Architecture and Components
 
 Omnibus-GitLab is a customized fork of the Omnibus project from Chef, and it uses Chef components like cookbooks and recipes to perform the task of configuring GitLab in a user's machine. [Omnibus-GitLab repository on GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab) hosts all the necessary components of Omnibus-GitLab. These include parts of Omnibus that is required to build the package, like configurations and project metadata, and the Chef related components that will be used in a user's machine after installation.

@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'postgresql_schema' do
+RSpec.describe 'postgresql_schema' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(postgresql_schema)) }
 
   context 'create' do
@@ -9,6 +9,7 @@ describe 'postgresql_schema' do
     context 'server is running' do
       before do
         allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+        allow_any_instance_of(PgHelper).to receive(:is_standby?).and_return(false)
       end
 
       it 'creates schema' do

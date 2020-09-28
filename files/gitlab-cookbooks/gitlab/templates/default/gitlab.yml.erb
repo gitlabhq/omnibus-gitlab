@@ -155,6 +155,25 @@ production: &base
     # file path of internal `mail_room` JSON logs
     log_path: <%= @incoming_email_log_file %>
 
+    # Whether to expunge (permanently remove) messages from the mailbox when they are deleted after delivery
+    expunge_deleted: <%= @incoming_email_expunge_deleted %>
+
+  <%- if @object_store['enabled'] -%>
+  ## Consolidated object store config
+  # This uses a single credential for object storage with multiple buckets.
+  # It also enables Workhorse to upload files directly with its own S3 client
+  # instead of using pre-signed URLs.
+  #
+  # This will only take effect if the object_store sections are not defined
+  # within the types (e.g. artifacts.object_store, lfs.object_store, etc.).
+  object_store:
+     enabled: <%= @object_store['enabled'] %>
+     proxy_download: <%= @object_store['proxy_download'] %>
+     connection: <%= @object_store['connection'].to_json %>
+     storage_options: <%= @object_store['storage_options'].to_json %>
+     objects: <%= @object_store['objects'].to_json %>
+  <%- end -%>
+
   ## Service desk email
   # Allow users to use a separate service desk address
   # For documentation on how to set this up, see http://doc.gitlab.com/ce/administration/reply_by_email.html
@@ -355,6 +374,9 @@ production: &base
     # Send emails about personal tokens about to expired
     personal_access_tokens_expiring_worker:
       cron:<% if @personal_access_tokens_expiring_worker_cron %> "<%= @personal_access_tokens_expiring_worker_cron %>"<% end %>
+    # Send emails about personal tokens that have expired
+    personal_access_tokens_expired_notification_worker:
+      cron:<% if @personal_access_tokens_expired_notification_worker_cron %> "<%= @personal_access_tokens_expired_notification_worker_cron %>"<% end %>
     # Remove outdated repository archives
     repository_archive_cache_worker:
       cron:<% if @repository_archive_cache_worker_cron %> "<%=  @repository_archive_cache_worker_cron %>"<% end %>
@@ -378,6 +400,10 @@ production: &base
     # Periodically migrate diffs from the database to external storage
     schedule_migrate_external_diffs_worker:
       cron:<% if @schedule_migrate_external_diffs_worker_cron %> "<%= @schedule_migrate_external_diffs_worker_cron %>"<% end %>
+
+    # Update CI Platform Metrics daily
+    ci_platform_metrics_update_cron_worker:
+      cron: <% if @ci_platform_metrics_update_cron_worker %> "<%= @ci_platform_metrics_update_cron_worker %>"<% end %>
 
     ##
     # GitLab EE only jobs:
@@ -448,6 +474,7 @@ production: &base
     # GitLab Geo migrated local files clean up worker
     # NOTE: This will only take effect if Geo is enabled (secondary nodes only)
     <% unless @geo_migrated_local_files_clean_up_worker_cron.nil? %>
+    <% LoggingHelper.deprecation "gitlab_rails['geo_migrated_local_files_clean_up_worker_cron'] options is deprecated and will be removed in Gitlab 14.0." %>
     geo_migrated_local_files_clean_up_worker:
       cron: "<%= @geo_migrated_local_files_clean_up_worker_cron %>"
     <% end %>
@@ -461,6 +488,18 @@ production: &base
     <% unless @elastic_index_bulk_cron.nil? %>
     elastic_index_bulk_cron_worker:
       cron: "<%= @elastic_index_bulk_cron %>"
+    <% end %>
+
+    # Worker for triggering counter jobs for instance statistics
+    <% unless @analytics_instance_statistics_count_job_trigger_worker_cron.nil? %>
+    analytics_instance_statistics_count_job_trigger_worker:
+      cron: "<%= @analytics_instance_statistics_count_job_trigger_worker_cron %>"
+    <% end %>
+
+    # Worker for triggering member invitation reminder emails
+    <% unless @member_invitation_reminder_emails_worker_cron.nil? %>
+    member_invitation_reminder_emails_worker:
+      cron: "<%= @member_invitation_reminder_emails_worker_cron %>"
     <% end %>
 
   ## Geo
@@ -628,6 +667,13 @@ production: &base
     # (default: false)
     auto_link_saml_user: <%= @omniauth_auto_link_saml_user.to_json %>
 
+    # Allow users with existing accounts to sign in and auto link their account via OmniAuth
+    # login, without having to do a manual login first and manually add OmniAuth. Links on email.
+    # Define the allowed providers using an array, e.g. ["saml", "twitter"], or as true/false to
+    # allow all providers or none.
+    # (default: false)
+    auto_link_user: <%= @omniauth_auto_link_user.to_json %>
+
     # Set different Omniauth providers as external so that all users creating accounts
     # via these providers will not be able to have access to internal projects. You
     # will need to use the full name of the provider, like `google_oauth2` for Google.
@@ -741,6 +787,7 @@ production: &base
     # Sidekiq exporter is webserver built in to Sidekiq to expose Prometheus metrics
     sidekiq_exporter:
       enabled: <%= @sidekiq['metrics_enabled'] %>
+      log_enabled: <%= @sidekiq['exporter_log_enabled'] %>
       address: <%= @sidekiq['listen_address'] %>
       port: <%= @sidekiq['listen_port'] %>
 
@@ -760,8 +807,16 @@ production: &base
   # yourself, and then update the values here.
   # https://docs.gitlab.com/ee/administration/monitoring/prometheus/
   prometheus:
-    enable: <%= @prometheus['enable'] %>
-    listen_address: "<%= @prometheus['listen_address'] %>"
+    # Do not use `enable` and `listen_address` in any new code, as they are deprecated. Use `server_address` instead.
+    # https://gitlab.com/gitlab-org/gitlab/-/issues/227111
+    enable: <%= @prometheus_available %>
+    listen_address: "<%= @prometheus_server_address %>"
+    # IP address(including listen port) of Prometheus server
+    server_address: "<%= @prometheus_server_address %>"
+
+  ## Consul settings
+  consul:
+    api_url: "<%= @consul_api_url %>"
 
   #
   # 5. Extra customization
@@ -781,7 +836,6 @@ production: &base
 
   rack_attack:
     git_basic_auth: <%= @rack_attack_git_basic_auth.to_json if @rack_attack_git_basic_auth %>
-    admin_area_protected_paths_enabled: <%= @rack_attack_admin_area_protected_paths_enabled %>
 
 
 development:

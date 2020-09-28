@@ -16,13 +16,11 @@
 
 name 'gpgme'
 
-# Note: gpgme versions greater than 1.11.0 were causing some issues when tried
-# to use. Check the comments in https://gitlab.com/gitlab-org/omnibus-gitlab/merge_requests/2747
-# if you are upgrading to 1.11.0 or higher.
-default_version '1.10.0'
+default_version '1.14.0'
 
 dependency 'libassuan'
 dependency 'gnupg'
+dependency 'zlib'
 
 license 'LGPL-2.1'
 license_file 'COPYING.LESSER'
@@ -30,12 +28,13 @@ license_file 'COPYING.LESSER'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-#{version}.tar.bz2",
-       sha256: '1a8fed1197c3b99c35f403066bb344a26224d292afc048cfdfc4ccd5690a0693'
+       sha256: 'cef1f710a6b0d28f5b44242713ad373702d1466dcbe512eb4e754d7f35cd4307'
 
 relative_path "gpgme-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  env['CFLAGS'] << ' -std=c99'
   command './configure ' \
     "--prefix=#{install_dir}/embedded --disable-doc --disable-languages", env: env
 

@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Common installation problems
 
 Below you can find the most common issues users encounter when installing Omnibus GitLab packages.
@@ -12,17 +18,17 @@ E: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/pool/trus
 
 Please run the following to fix this:
 
-```sh
+```shell
 sudo rm -rf /var/lib/apt/lists/partial/*
 sudo apt-get update
 sudo apt-get clean
 ```
 
-See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/628#note_1824330) and [his blog article](https://blog.packagecloud.io/eng/2016/03/21/apt-hash-sum-mismatch/) for more context.
+See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/628#note_1824330) and [his blog article](https://blog.packagecloud.io/eng/2016/03/21/apt-hash-sum-mismatch/) for more context.
 
 Another workaround is to download the package manually by selecting the correct package from the [CE packages](https://packages.gitlab.com/gitlab/gitlab-ce) or [EE packages](https://packages.gitlab.com/gitlab/gitlab-ee) repository:
 
-```sh
+```shell
 curl -LJO https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gitlab-ce_8.1.0-ce.0_amd64.deb/download
 dpkg -i gitlab-ce_8.1.0-ce.0_amd64.deb
 ```
@@ -105,19 +111,18 @@ Try [specifying](../settings/configuration.md#configuring-the-external-url-for-g
 `/etc/gitlab/gitlab.rb`. Also check your firewall settings; port 80 (HTTP) or
 443 (HTTPS) might be closed on your GitLab server.
 
-> **Note:**
-> Specifying the `external_url` for GitLab, or any other bundled service
-> (Registry and Mattermost) doesn't follow the `key=value` format that other
-> parts of `gitlab.rb` follow. Make sure that you have them set in the following
-> format:
->
-> ```ruby
-> external_url "https://gitlab.example.com"
-> registry_external_url "https://registry.example.com"
-> mattermost_external_url "https://mattermost.example.com"
-> ```
->
-> **Don't add the equal sign (`=`) between `external_url` and the value.**
+Note that specifying the `external_url` for GitLab, or any other bundled service (Registry and
+Mattermost) doesn't follow the `key=value` format that other parts of `gitlab.rb` follow. Make sure
+that you have them set in the following format:
+
+```ruby
+external_url "https://gitlab.example.com"
+registry_external_url "https://registry.example.com"
+mattermost_external_url "https://mattermost.example.com"
+```
+
+NOTE: **Note:**
+Don't add the equal sign (`=`) between `external_url` and the value.
 
 ## Emails are not being delivered
 
@@ -127,7 +132,7 @@ not used in your GitLab instance yet.
 If necessary, you can modify the 'From' field of the emails sent by GitLab with
 the following setting in `/etc/gitlab/gitlab.rb`:
 
-```rb
+```ruby
 gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 ```
 
@@ -141,7 +146,7 @@ To troubleshoot this error:
 
 1. First check that the runit directory exists:
 
-   ```sh
+   ```shell
    ls -al /opt/gitlab/sv/redis/supervise
    ```
 
@@ -154,19 +159,19 @@ To troubleshoot this error:
 1. Restart the runit server.
    Using systemctl (Debian => 9 - Stretch):
 
-   ```sh
+   ```shell
    sudo systemctl restart gitlab-runsvdir
    ```
 
    Using upstart (Ubuntu <= 14.04):
 
-   ```sh
+   ```shell
    sudo initctl restart gitlab-runsvdir
    ```
 
    Using systemd (CentOS, Ubuntu >= 16.04):
 
-   ```sh
+   ```shell
    systemctl restart gitlab-runsvdir.service
    ```
 
@@ -179,7 +184,7 @@ makes the wrong decision, it will later hang at
 `ruby_block[supervise_redis_sleep] action run`.
 
 The choice of init system is currently made in [the embedded runit
-cookbook][runit-cookbook]  by essentially
+cookbook](https://gitlab.com/gitlab-org/build/omnibus-mirror/runit-cookbook/blob/master/recipes/default.rb) by essentially
 looking at the output of `uname -a`, `/etc/issue` and others. This mechanism
 can make the wrong decision in situations such as:
 
@@ -201,16 +206,16 @@ sudo gitlab-ctl reconfigure # Resume gitlab-ctl reconfigure
 
 ## TCP ports for GitLab services are already taken
 
-By default, Unicorn listens at TCP address 127.0.0.1:8080. NGINX
+By default, Puma listens at TCP address 127.0.0.1:8080. NGINX
 listens on port 80 (HTTP) and/or 443 (HTTPS) on all interfaces.
 
-The ports for Redis, PostgreSQL and Unicorn can be overridden in
+The ports for Redis, PostgreSQL and Puma can be overridden in
 `/etc/gitlab/gitlab.rb` as follows:
 
 ```ruby
 redis['port'] = 1234
 postgresql['port'] = 2345
-unicorn['port'] = 3456
+puma['port'] = 3456
 ```
 
 For NGINX port changes please see [`settings/nginx.md`](../settings/nginx.md).
@@ -323,7 +328,7 @@ or container doesn't have access to kernel parameters.
 
 Try enabling the module on which sysctl errored out, on how to enable the module see example [here](https://serverfault.com/questions/477718/sysctl-p-etc-sysctl-conf-returns-error).
 
-There is a reported workaround described in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/361) which requires editing the GitLab' internal recipe by supplying the switch which will ignore failures. Ignoring errors can have unexpected side effects on performance of your GitLab server so it is not recommended to do so.
+There is a reported workaround described in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/361) which requires editing the GitLab' internal recipe by supplying the switch which will ignore failures. Ignoring errors can have unexpected side effects on performance of your GitLab server so it is not recommended to do so.
 
 Another variation of this error reports the file system is read-only and shows following stack trace:
 
@@ -471,7 +476,7 @@ Try cleaning the old Redis session by following the [documentation here.](https:
 
 When trying to install GitLab using the apt repo if you receive an error similar to:
 
-```bash
+```shell
 W: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/DISTRO/dists/CODENAME/main/source/Sources  The requested URL returned error: 403
 ```
 
@@ -479,7 +484,7 @@ check if there is a repository cacher in front of your server, like for example 
 
 Add the following line to apt-cacher-ng config(eg. in  `/etc/apt-cacher-ng/acng.conf`):
 
-```bash
+```shell
 PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com|*\.cloudfront\.net)
 ```
 
@@ -489,7 +494,7 @@ Read more about `apt-cacher-ng` and the reasons why this change is needed [on th
 
 If you are installing GitLab in an isolated network with custom certificate authorities or using self-signed certificate make sure that the certificate can be reached by GitLab. Not doing so will cause errors like:
 
-```bash
+```shell
 Faraday::SSLError (SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed)
 ```
 
@@ -514,7 +519,7 @@ You can increase the default timeout value by setting the value in `/etc/gitlab/
 gitlab_workhorse['proxy_headers_timeout'] = "2m0s"
 ```
 
-Save the file and [reconfigure GitLab][] for the changes to take effect.
+Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure) for the changes to take effect.
 
 ## The change you wanted was rejected
 
@@ -522,7 +527,7 @@ Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
 for your environment.
 
-See [Change the default proxy headers section of NGINX doc][] for details on
+See [Change the default proxy headers section of NGINX doc](../settings/nginx.md) for details on
 how to override the default headers.
 
 ## Can't verify CSRF token authenticity Completed 422 Unprocessable
@@ -531,7 +536,7 @@ Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
 for your environment.
 
-See [Change the default proxy headers section of NGINX doc][] for details on
+See [Change the default proxy headers section of NGINX doc](../settings/nginx.md) for details on
 how to override the default headers.
 
 ## Extension missing pg_trgm
@@ -605,7 +610,7 @@ you can add more RAM to improve performance.
 
 ## NGINX error: 'could not build server_names_hash, you should increase server_names_hash_bucket_size'
 
-If your external url for GitLab is longer than the default bucket size (64 bytes),
+If your external URL for GitLab is longer than the default bucket size (64 bytes),
 NGINX may stop working and show this error in the logs. To allow larger server
 names, double the bucket size in `/etc/gitlab/gitlab.rb`:
 
@@ -644,7 +649,7 @@ instead of `basic.target`. If you are having trouble starting this service
 after upgrading GitLab, you may need to check that your system has properly
 booted all the required services for `multi-user.target` via the command:
 
-```bash
+```shell
 systemctl -t target
 ```
 
@@ -692,7 +697,7 @@ multi-user.target      loaded inactive dead   start Multi-User System
 
 To examine which jobs may be queued by systemd, run:
 
-```bash
+```shell
 systemctl list-jobs
 ```
 
@@ -713,10 +718,10 @@ starting:
 
 In this case, consider uninstalling Plymouth.
 
-## Init daemon detection in non-docker container
+## Init daemon detection in non-Docker container
 
-In docker containers, GitLab package detects existence of `/.dockerenv` file and
-skips automatic detection of an init system. However, in non-docker containers
+In Docker containers, GitLab package detects existence of `/.dockerenv` file and
+skips automatic detection of an init system. However, in non-Docker containers
 (like containerd, cri-o, etc.), that file does not exist and package falls back
 to sysvinit, and this can cause issues with installation. To prevent this, users
 can explicitly disable init daemon detection by adding the following setting in
@@ -729,7 +734,7 @@ package['detect_init'] = false
 If using this configuration, runit service must be started before running
 `gitlab-ctl reconfigure`, using the `runsvdir-start` command:
 
-```bash
+```shell
 /opt/gitlab/embedded/bin/runsvdir-start &
 ```
 
@@ -750,9 +755,3 @@ completed, restart `gitlab-runsvdir` service for changes to take effect.
 ```shell
 sudo systemctl restart gitlab-runsvdir
 ```
-
-[certificate link shell script]: https://gitlab.com/snippets/6285
-[script source]: https://www.madboa.com/geek/openssl/#verify-new
-[Change the default proxy headers section of nginx doc]: ../settings/nginx.md
-[reconfigure GitLab]: https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure
-[runit-cookbook]: https://gitlab.com/gitlab-org/build/omnibus-mirror/runit-cookbook/blob/master/recipes/default.rb

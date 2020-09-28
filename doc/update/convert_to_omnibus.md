@@ -1,9 +1,15 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Upgrading from a non-Omnibus installation to an Omnibus installation
 
 Upgrading from non-Omnibus installations has not been tested by GitLab.com.
 
 Please be advised that you lose your settings in files such as `gitlab.yml`,
-`unicorn.rb` and `smtp_settings.rb`. You will have to
+`puma.rb` and `smtp_settings.rb`. You will have to
 [configure those settings in `/etc/gitlab/gitlab.rb`](../README.md#configuring).
 
 ## Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup
@@ -16,14 +22,14 @@ creating the backup to achieve this.
 
 After upgrading make sure that you run the check task:
 
-```sh
+```shell
 sudo gitlab-rake gitlab:check
 ```
 
 If you receive an error similar to `No such file or directory @ realpath_rec - /home/git`,
 run this one liner to fix the Git hooks path:
 
-```sh
+```shell
 find . -lname /home/git/gitlab-shell/hooks -exec sh -c 'ln -snf /opt/gitlab/embedded/service/gitlab-shell/hooks $0' {} \;
 ```
 
@@ -39,7 +45,7 @@ users.
 
 First, stop and disable GitLab, Redis and NGINX.
 
-```sh
+```shell
 # Ubuntu
 sudo service gitlab stop
 sudo update-rc.d gitlab disable
@@ -58,7 +64,7 @@ note that in the following steps, the existing home directory of the Git user
 
 Next, create a `gitlab.rb` file for your new setup:
 
-```sh
+```shell
 sudo mkdir /etc/gitlab
 sudo tee -a /etc/gitlab/gitlab.rb <<'EOF'
 # Use your own GitLab URL here
@@ -79,7 +85,7 @@ EOF
 
 Now install the Omnibus GitLab package and reconfigure it:
 
-```sh
+```shell
 sudo gitlab-ctl reconfigure
 ```
 
@@ -87,7 +93,7 @@ You are not done yet! The `gitlab-ctl reconfigure` run has changed the home
 directory of the Git user, so OpenSSH can no longer find its authorized_keys
 file. Rebuild the keys file with the following command:
 
-```sh
+```shell
 sudo gitlab-rake gitlab:shell:setup
 ```
 

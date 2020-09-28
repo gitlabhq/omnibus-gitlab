@@ -81,10 +81,11 @@
   retry: 1
 
 .trigger-job: &trigger-job
-  image: "ruby:2.4"
+  image: "${RUBY_IMAGE}"
   stage: trigger-package
   when: manual
   script:
+    - support/wait_for_sha
     - bundle exec rake build:trigger
   only:
     - branches@gitlab-org/omnibus-gitlab
@@ -108,8 +109,8 @@
     # review-docs-cleanup job will not be able to run when the branch gets
     # deleted (when merging the MR).
     - apk add --update openssl
-    - wget https://gitlab.com/gitlab-org/gitlab/-/raw/master/scripts/trigger-build-docs
-    - chmod 755 trigger-build-docs
+    - wget https://gitlab.com/gitlab-org/gitlab/-/raw/master/scripts/trigger-build
+    - chmod 755 trigger-build
   variables:
     GIT_STRATEGY: none
     DOCS_REVIEW_APPS_DOMAIN: 178.62.207.141.nip.io
@@ -134,7 +135,7 @@ Trigger:ee-package:
 
 rubocop:
   stage: check
-  image: ruby:2.6
+  image: "${RUBY_IMAGE}"
   before_script:
     - bundle install -j $(nproc) --binstubs --path gems --without default test
   script:
@@ -146,7 +147,7 @@ rubocop:
     - gems
 
 docs-lint:
-  image: "registry.gitlab.com/gitlab-org/gitlab-docs:lint"
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:vale-2.3.4-markdownlint-0.23.2"
   stage: check
   cache: {}
   dependencies: []
@@ -186,7 +187,7 @@ review-docs-deploy:
     url: http://docs-preview-omnibus-$CI_COMMIT_REF_SLUG.$DOCS_REVIEW_APPS_DOMAIN/omnibus
     on_stop: review-docs-cleanup
   script:
-    - ./trigger-build-docs deploy
+    - ./trigger-build docs deploy
 
 # Cleanup remote environment of gitlab-docs
 review-docs-cleanup:
@@ -196,7 +197,7 @@ review-docs-cleanup:
     name: review-docs/$CI_COMMIT_REF_SLUG
     action: stop
   script:
-    - ./trigger-build-docs cleanup
+    - ./trigger-build docs cleanup
 
 danger-review:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
@@ -220,12 +221,12 @@ danger-review:
 Centos 6 knapsack: *prepare_knapsack
 Centos 7 knapsack: *prepare_knapsack
 Centos 8 knapsack: *prepare_knapsack
-Debian 8 knapsack: *prepare_knapsack
 Debian 9 knapsack: *prepare_knapsack
 Debian 10 knapsack: *prepare_knapsack
 OpenSUSE 15.1 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
 Ubuntu 18.04 knapsack: *prepare_knapsack
+Ubuntu 20.04 knapsack: *prepare_knapsack
 
 Ubuntu 16.04 specs:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
@@ -239,12 +240,12 @@ Ubuntu 18.04 specs :
   parallel: 6
   dependencies:
   - Ubuntu 18.04 knapsack
-Debian 8 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jessie"
+Ubuntu 20.04 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-focal"
   extends: .spec_template
   parallel: 6
   dependencies:
-  - Debian 8 knapsack
+  - Ubuntu 20.04 knapsack
 Debian 9 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
   extends: .spec_template
@@ -333,12 +334,6 @@ Trigger:gitlab-docker:
   stage: trigger-docker
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
-    # While triggering from omnibus repo in .com, we explicitly pass IMAGE_TAG
-    # variable, which will be used to tag the final Docker image.
-    # So, if IMAGE_TAG variable is empty, it means the trigger happened from
-    # either CE or EE repository. In that case, we can use the GITLAB_VERSION
-    # variable as IMAGE_TAG.
-    - if [ -z "${IMAGE_TAG}" ]; then export IMAGE_TAG=${GITLAB_VERSION}; fi
     - bundle exec rake docker:build:image
     - bundle exec rake docker:push:triggered
   <<: *com-trigger-only
@@ -355,8 +350,6 @@ Trigger:qa-docker:
   stage: trigger-docker
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
-    # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
-    - if [ -z "$IMAGE_TAG" ]; then export IMAGE_TAG=$GITLAB_VERSION; fi
     - bundle exec rake qa:build
     - bundle exec rake qa:push:triggered
   <<: *com-trigger-only
@@ -368,15 +361,13 @@ Trigger:qa-test:
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
-    # For builds triggered from omnibus project, we are explicitly specifying IMAGE_TAG
-    - if [ -z "$IMAGE_TAG" ]; then export IMAGE_TAG=$GITLAB_VERSION; fi
     - bundle exec rake qa:test
   <<: *com-trigger-only
   dependencies: []
 
 Trigger:ha-validate:
   stage: trigger-ha-validate
-  image: "ruby:2.4"
+  image: "${RUBY_IMAGE}"
   when: manual
   script:
       - bundle exec rake qa:ha:validate

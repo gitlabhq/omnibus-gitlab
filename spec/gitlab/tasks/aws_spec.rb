@@ -32,7 +32,7 @@ class AwsDummyClass
   end
 end
 
-describe 'aws:process', type: :rake do
+RSpec.describe 'aws:process', type: :rake do
   before :all do
     Rake.application.rake_require 'gitlab/tasks/aws'
   end

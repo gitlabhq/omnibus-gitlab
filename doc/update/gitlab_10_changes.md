@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # GitLab 10 specific changes
 
 From version 10.0 GitLab requires the version of PostgreSQL to be 9.6 or
@@ -13,12 +19,12 @@ for details.
   automatically during previous upgrades, can run the following command to
   update the bundled PostgreSQL to 9.6
 
-  ```sh
+  ```shell
   sudo gitlab-ctl pg-upgrade
   ```
 
 You can check the PostgreSQL version with:
 
-```sh
+```shell
 /opt/gitlab/embedded/bin/psql --version
 ```

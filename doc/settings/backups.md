@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Backups
 
 ## Backup and restore Omnibus GitLab configuration
@@ -17,11 +23,13 @@ configuration, just run `sudo gitlab-ctl backup-etc`. It will create a tar
 archive in `/etc/gitlab/config_backup/`. Directory and backup files will be
 readable only to root.
 
-NOTE: **Note**: Running `sudo gitlab-ctl backup-etc <DIRECTORY>` will place
+NOTE: **Note:**
+Running `sudo gitlab-ctl backup-etc <DIRECTORY>` will place
 the backup in the specified directory. The directory will be created if it
 does not exist. Absolute paths are recommended.
 
-NOTE: **Note:** `backup-etc` introduced in GitLab 12.3.
+NOTE: **Note:**
+`backup-etc` introduced in GitLab 12.3.
 
 To create a daily application backup, edit the cron table for user root:
 
@@ -39,12 +47,6 @@ weekday, Tuesday (day 2) through Saturday (day 6):
 15 04 * * 2-6  gitlab-ctl backup-etc && cd /etc/gitlab/config_backup && cp $(ls -t | head -n1) /secret/gitlab/backups/
 ```
 
-[cron is rather particular](http://www.pantz.org/software/cron/croninfo.html)
-about the cron table. Note:
-
-- The empty line after the command
-- The escaped percent character:  \%
-
 You can extract the .tar file as follows.
 
 ```shell
@@ -57,7 +59,8 @@ sudo tar -xf gitlab_config_1487687824_2017_02_21.tar -C /
 Remember to run `sudo gitlab-ctl reconfigure` after restoring a configuration
 backup.
 
-NOTE: Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
+NOTE: **Note:**
+Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
 
 ### Separate configuration backups from application data
 
@@ -105,7 +108,7 @@ Backup configuration and secrets:
 docker exec -t <your container name> /bin/sh -c 'umask 0077; tar cfz /secret/gitlab/backups/$(date "+etc-gitlab-\%s.tgz") -C / etc/gitlab'
 ```
 
->**Note:**
+NOTE: **Note:**
 You need to have volumes mounted at `/secret/gitlab/backups` and `/var/opt/gitlab`
 in order to have these backups persisted outside the container.
 

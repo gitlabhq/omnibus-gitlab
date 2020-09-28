@@ -1,5 +1,0 @@
----
-title: Fix geo timeout issue with pg-upgrade
-merge_request: 4148
-author:
-type: fixed

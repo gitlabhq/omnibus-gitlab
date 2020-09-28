@@ -39,12 +39,7 @@ class PostgreSQL
     end
 
     def replication_user
-      # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
-      # configure on an existing installation
-      #
-      # TODO: Remove support for legacy attributes in GitLab 13.0
-      configured_user = (node_attributes.dig('gitlab', 'postgresql', 'sql_replication_user') ||
-          node_attributes.dig('postgresql', 'sql_replication_user')).to_s
+      configured_user = node_attributes.dig('postgresql', 'sql_replication_user').to_s
 
       configured_user.tap do |user|
         raise ArgumentError, 'Replication user not defined in `sql_replication_user`!' if user.strip.empty?

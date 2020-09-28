@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::nginx' do
+RSpec.describe 'gitlab::nginx' do
   let(:chef_runner) do
     ChefSpec::SoloRunner.new(step_into: %w(runit_service)) do |node|
       node.normal['gitlab']['nginx']['enable'] = true
@@ -68,7 +68,7 @@ describe 'gitlab::nginx' do
   end
 end
 
-describe 'nginx' do
+RSpec.describe 'nginx' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   subject { chef_run }
 
@@ -191,7 +191,7 @@ describe 'nginx' do
     end
 
     it 'disables Connection header' do
-      expect_headers = nginx_headers({ "Host" => "nohost.example.com", "X-Forwarded-Proto" => "https", "X-Forwarded-Ssl" => "on", "Connection" => nil })
+      expect_headers = nginx_headers({ "Host" => "nohost.example.com", "X-Forwarded-Proto" => "https", "X-Forwarded-Ssl" => "on" })
       set_headers = { "Host" => "nohost.example.com", "Connection" => nil }
       stub_gitlab_rb(
         "nginx" => { proxy_set_headers: set_headers },
@@ -262,7 +262,7 @@ describe 'nginx' do
 
     it 'applies nginx request_buffering path regex' do
       expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
-        expect(content).to include("location ~ (\.git/git-receive-pack$|\.git/info/refs?service=git-receive-pack$|\.git/gitlab-lfs/objects|\.git/info/lfs/objects/batch$)")
+        expect(content).to include("location ~ (/api/v\\d/jobs/\\d+/artifacts$|\\.git/git-receive-pack$|\\.git/gitlab-lfs/objects|\\.git/info/lfs/objects/batch$)")
       }
     end
 

@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'package::runit' do
+RSpec.describe 'package::runit' do
   before do
     allow(Chef::Log).to receive(:info).and_call_original
     allow(Chef::Log).to receive(:warn).and_call_original

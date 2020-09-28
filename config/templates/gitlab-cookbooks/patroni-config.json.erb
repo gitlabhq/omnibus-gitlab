@@ -1,0 +1,8 @@
+{
+  "run_list": [
+      "recipe[<%= master_cookbook %>::config]",
+      "recipe[postgresql::enable]",
+      "recipe[patroni::enable]"
+  ]
+}
+

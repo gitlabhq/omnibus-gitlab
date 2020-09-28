@@ -16,7 +16,7 @@ alertmanager_yml_output = <<-ALERTMANAGERYML
   inhibit_rules: []
 ALERTMANAGERYML
 
-describe 'monitoring::alertmanager' do
+RSpec.describe 'monitoring::alertmanager' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {
@@ -29,7 +29,7 @@ describe 'monitoring::alertmanager' do
   end
 
   context 'when alertmanager is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/alertmanager/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/alertmanager/log/config') }
 
     before do
       stub_gitlab_rb(

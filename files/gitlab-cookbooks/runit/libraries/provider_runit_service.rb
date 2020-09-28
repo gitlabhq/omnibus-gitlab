@@ -1,10 +1,10 @@
 #
 # Cookbook:: runit
-# Provider:: service
+# Provider:: runit_service
 #
 # Author:: Joshua Timberman <jtimberman@chef.io>
 # Author:: Sean OMeara <sean@sean.io>
-# Copyright:: 2011-2016, Chef Software, Inc.
+# Copyright:: 2011-2019, Chef Software Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@
 class Chef
   class Provider
     class RunitService < Chef::Provider::LWRPBase
+      provides :runit_service
+
       unless defined?(VALID_SIGNALS)
         # Mapping of valid signals with optional friendly name
         VALID_SIGNALS = Mash.new(
@@ -37,12 +39,6 @@ class Chef
           1 => :usr1,
           2 => :usr2
         )
-      end
-
-      use_inline_resources # ~FC113
-
-      def whyrun_supported?
-        true
       end
 
       # Mix in helpers from libraries/helpers.rb
@@ -84,7 +80,6 @@ class Chef
 
         # sv_templates
         if new_resource.sv_templates
-
           directory sv_dir_name do
             owner new_resource.owner unless new_resource.owner.nil?
             group new_resource.group unless new_resource.group.nil?
@@ -93,11 +88,11 @@ class Chef
             action :create
           end
 
-          template "#{sv_dir_name}/run" do
+          template ::File.join(sv_dir_name, 'run') do
             owner new_resource.owner unless new_resource.owner.nil?
             group new_resource.group unless new_resource.group.nil?
             source "sv-#{new_resource.run_template_name}-run.erb"
-            cookbook template_cookbook
+            cookbook new_resource.cookbook
             mode '0755'
             variables(options: new_resource.options)
             action :create
@@ -106,7 +101,7 @@ class Chef
 
           # log stuff
           if new_resource.log
-            directory "#{sv_dir_name}/log" do
+            directory ::File.join(sv_dir_name, 'log') do
               owner new_resource.owner unless new_resource.owner.nil?
               group new_resource.group unless new_resource.group.nil?
               mode '0755'
@@ -114,7 +109,7 @@ class Chef
               action :create
             end
 
-            directory "#{sv_dir_name}/log/main" do
+            directory ::File.join(sv_dir_name, 'log', 'main') do
               owner new_resource.owner unless new_resource.owner.nil?
               group new_resource.group unless new_resource.group.nil?
               mode '0755'
@@ -122,33 +117,22 @@ class Chef
               action :create
             end
 
-            template "#{sv_dir_name}/log/run" do
+            template ::File.join(sv_dir_name, 'log', 'config') do
               owner new_resource.owner unless new_resource.owner.nil?
               group new_resource.group unless new_resource.group.nil?
-              mode '0755'
-              source "sv-#{new_resource.log_template_name}-log-run.erb"
-              cookbook template_cookbook
-              variables(options: new_resource.options)
-              action :create
-              notifies :create, 'ruby_block[restart_log_service]'
-            end
-
-            template "#{new_resource.options[:log_directory]}/config" do
-              owner new_resource.owner unless new_resource.owner.nil?
-              group new_resource.group unless new_resource.group.nil?
-              mode '0644'
-              action :create
-              cookbook template_cookbook
+              cookbook new_resource.cookbook
               source "sv-#{new_resource.log_template_name}-log-config.erb"
               variables new_resource.log_options
               notifies :create, 'ruby_block[reload_log_service]'
               notifies :create, "ruby_block[verify_chown_persisted_on_#{new_resource.name}]", :immediately
+              mode '0644'
+              action :create
             end
 
             ruby_block "verify_chown_persisted_on_#{new_resource.name}" do
               block do
                 omnibus_helper = get_omnibus_helper
-                config_path = "#{new_resource.options[:log_directory]}/config"
+                config_path = ::File.join(sv_dir_name, 'log', 'config')
                 # Check one at a time in case either is ever not specified
                 user_matches = new_resource.owner.nil? ? true : omnibus_helper.expected_user?(config_path, new_resource.owner)
                 group_matches = new_resource.group.nil? ? true : omnibus_helper.expected_group?(config_path, new_resource.group)
@@ -157,10 +141,37 @@ class Chef
               action :nothing
             end
 
+            link ::File.join(new_resource.options[:log_directory], 'config') do
+              to ::File.join(sv_dir_name, 'log', 'config')
+            end
+
+            if new_resource.default_logger
+              template ::File.join(sv_dir_name, 'log', 'run') do
+                owner new_resource.owner unless new_resource.owner.nil?
+                group new_resource.group unless new_resource.group.nil?
+                mode '0755'
+                cookbook 'runit'
+                source 'log-run.erb'
+                variables(config: new_resource)
+                notifies :run, 'ruby_block[restart_log_service]', :delayed
+                action :create
+              end
+            else
+              template ::File.join(sv_dir_name, 'log', 'run') do
+                owner new_resource.owner unless new_resource.owner.nil?
+                group new_resource.group unless new_resource.group.nil?
+                mode '0755'
+                source "sv-#{new_resource.log_template_name}-log-run.erb"
+                cookbook new_resource.cookbook
+                variables(options: new_resource.options)
+                action :create
+                notifies :run, 'ruby_block[restart_log_service]', :delayed
+              end
+            end
           end
 
           # environment stuff
-          directory "#{sv_dir_name}/env" do
+          directory ::File.join(sv_dir_name, 'env') do
             owner new_resource.owner unless new_resource.owner.nil?
             group new_resource.group unless new_resource.group.nil?
             mode '0755'
@@ -168,11 +179,11 @@ class Chef
           end
 
           new_resource.env.map do |var, value|
-            file "#{sv_dir_name}/env/#{var}" do
+            file ::File.join(sv_dir_name, 'env', var) do
               owner new_resource.owner unless new_resource.owner.nil?
               group new_resource.group unless new_resource.group.nil?
               content value
-              sensitive true if Chef::Resource.instance_methods(false).include?(:sensitive)
+              sensitive true
               mode '0640'
               action :create
             end
@@ -185,29 +196,29 @@ class Chef
             action :run
           end
 
-          template "#{sv_dir_name}/check" do
+          template ::File.join(sv_dir_name, 'check') do
             owner new_resource.owner unless new_resource.owner.nil?
             group new_resource.group unless new_resource.group.nil?
             mode '0755'
-            cookbook template_cookbook
+            cookbook new_resource.cookbook
             source "sv-#{new_resource.check_script_template_name}-check.erb"
             variables(options: new_resource.options)
             action :create
             only_if { new_resource.check }
           end
 
-          template "#{sv_dir_name}/finish" do
+          template ::File.join(sv_dir_name, 'finish') do
             owner new_resource.owner unless new_resource.owner.nil?
             group new_resource.group unless new_resource.group.nil?
             mode '0755'
             source "sv-#{new_resource.finish_script_template_name}-finish.erb"
-            cookbook template_cookbook
+            cookbook new_resource.cookbook
             variables(options: new_resource.options) if new_resource.options.respond_to?(:has_key?)
             action :create
             only_if { new_resource.finish }
           end
 
-          directory "#{sv_dir_name}/control" do
+          directory ::File.join(sv_dir_name, 'control') do
             owner new_resource.owner unless new_resource.owner.nil?
             group new_resource.group unless new_resource.group.nil?
             mode '0755'
@@ -215,31 +226,54 @@ class Chef
           end
 
           new_resource.control.map do |signal|
-            template "#{sv_dir_name}/control/#{signal}" do
+            template ::File.join(sv_dir_name, 'control', signal) do
               owner new_resource.owner unless new_resource.owner.nil?
               group new_resource.group unless new_resource.group.nil?
               mode '0755'
-              source "sv-#{new_resource.control_template_names[signal]}-control-#{signal}.erb"
-              cookbook template_cookbook
+              source "sv-#{new_resource.control_template_names[signal]}-#{signal}.erb"
+              cookbook new_resource.cookbook
               variables(options: new_resource.options)
               action :create
             end
           end
 
-          link "#{parsed_lsb_init_dir}/#{new_resource.service_name}" do
-            to sv_bin
-            action :create
+          # lsb_init
+          if platform?('debian', 'ubuntu') && !new_resource.use_init_script_sv_link
+            ruby_block "unlink #{::File.join(new_resource.lsb_init_dir, new_resource.service_name)}" do
+              block { ::File.unlink(::File.join(new_resource.lsb_init_dir, new_resource.service_name).to_s) }
+              only_if { ::File.symlink?(::File.join(new_resource.lsb_init_dir, new_resource.service_name).to_s) }
+            end
+
+            template ::File.join(new_resource.lsb_init_dir, new_resource.service_name) do
+              owner 'root'
+              group 'root'
+              mode '0755'
+              cookbook 'runit'
+              source 'init.d.erb'
+              variables(
+                name: new_resource.service_name,
+                sv_bin: new_resource.sv_bin,
+                sv_args: sv_args,
+                init_dir: ::File.join(new_resource.lsb_init_dir, '')
+              )
+              action :create
+            end
+          else
+            link ::File.join(new_resource.lsb_init_dir, new_resource.service_name) do
+              to new_resource.sv_bin
+              action :create
+            end
           end
 
           # Create/Delete service down file
           # To prevent unexpected behavior, require users to explicitly set
           # delete_downfile to remove any down file that may already exist
           df_action = :nothing
-          df_action = if new_resource.down
-                        :create
-                      else
-                        :delete
-                      end
+          if new_resource.start_down
+            df_action = :create
+          elsif new_resource.delete_downfile
+            df_action = :delete
+          end
 
           file down_file do
             mode '0644'
@@ -250,11 +284,15 @@ class Chef
         end
       end
 
-      action :enable do
-        # FIXME: remove action_create in next major version
-        action_create
+      action :disable do
+        ruby_block "disable #{new_resource.service_name}" do
+          block { disable_service }
+          only_if { enabled? }
+        end
+      end
 
-        omnibus_helper = get_omnibus_helper
+      action :enable do
+        action_create
 
         directory new_resource.service_dir
 
@@ -271,34 +309,33 @@ class Chef
           not_if { FileTest.pipe?("#{sv_dir_name}/supervise/ok") }
         end
 
+        omnibus_helper = get_omnibus_helper
+
         # Support supervisor owner and groups http://smarden.org/runit/faq.html#user
         if new_resource.supervisor_owner || new_resource.supervisor_group
-          directory "#{service_dir_name}/supervise" do
+          directory ::File.join(service_dir_name, 'supervise') do
             mode '0755'
             action :create
           end
 
-          directory "#{service_dir_name}/log/supervise" do
+          directory ::File.join(service_dir_name, 'log', 'supervise') do
             mode '0755'
             action :create
           end
 
           %w(ok status control).each do |target|
-            supervisor_owner = new_resource.supervisor_owner || 'root'
-            supervisor_group = new_resource.supervisor_group || 'root'
-
-            file "#{sv_dir_name}/supervise/#{target}" do
-              owner supervisor_owner
-              group supervisor_group
+            file ::File.join(service_dir_name, 'supervise', target) do
+              owner new_resource.supervisor_owner || 'root'
+              group new_resource.supervisor_group || 'root'
               action :touch
-              only_if { !omnibus_helper.expected_owner?(name, supervisor_owner, supervisor_group) }
+              only_if { !omnibus_helper.expected_owner?(name, new_resource.supervisor_owner, new_resource.supervisor_group) }
             end
 
-            file "#{sv_dir_name}/log/supervise/#{target}" do
-              owner supervisor_owner
-              group supervisor_group
+            file ::File.join(service_dir_name, 'log', 'supervise', target) do
+              owner new_resource.supervisor_owner || 'root'
+              group new_resource.supervisor_group || 'root'
               action :touch
-              only_if { !omnibus_helper.expected_owner?(name, supervisor_owner, supervisor_group) }
+              only_if { !omnibus_helper.expected_owner?(name, new_resource.supervisor_owner, new_resource.supervisor_group) }
             end
           end
         end
@@ -314,9 +351,6 @@ class Chef
             Chef::Log.debug "#{new_resource} not running - nothing to do"
           end
         end
-      end
-
-      action :nothing do
       end
 
       action :restart do
@@ -352,6 +386,12 @@ class Chef
 
       action :status do
         running?
+      end
+
+      action :reload_log do
+        converge_by('reload log service') do
+          reload_log_service
+        end
       end
 
       action :disable do

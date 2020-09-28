@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'monitoring::redis-exporter' do
+RSpec.describe 'monitoring::redis-exporter' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:node) { chef_run.node }
   let(:default_vars) do
@@ -32,7 +32,7 @@ describe 'monitoring::redis-exporter' do
   end
 
   context 'when redis-exporter is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/redis-exporter/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/redis-exporter/log/config') }
 
     before do
       stub_gitlab_rb(

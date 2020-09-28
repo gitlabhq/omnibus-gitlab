@@ -16,7 +16,7 @@
 
 require 'chef_helper'
 
-describe 'gitlab::mailroom' do
+RSpec.describe 'gitlab::mailroom' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
 
   before do
@@ -37,7 +37,7 @@ describe 'gitlab::mailroom' do
         )
       end
 
-      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'git', 'git'
+      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
     end
 
     context 'when both service_desk_email and incoming_email enabled' do
@@ -50,7 +50,7 @@ describe 'gitlab::mailroom' do
         )
       end
 
-      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'git', 'git'
+      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
     end
 
     context 'default values' do
@@ -62,7 +62,7 @@ describe 'gitlab::mailroom' do
         )
       end
 
-      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'git', 'git'
+      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
 
       it 'uses --log-exit-as plain' do
         expect(chef_run).to render_file("/opt/gitlab/sv/mailroom/run").with_content(/\-\-log\-exit\-as plain/)
@@ -82,7 +82,7 @@ describe 'gitlab::mailroom' do
         )
       end
 
-      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'foo', 'bar'
+      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
     end
   end
 
@@ -102,6 +102,6 @@ describe 'gitlab::mailroom' do
       expect(chef_run).to render_file("/opt/gitlab/sv/mailroom/run").with_content(/\-\-log\-exit\-as json/)
     end
 
-    it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root', 'git', 'git'
+    it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
   end
 end

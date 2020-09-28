@@ -1,5 +1,0 @@
----
-title: Disable RubyGems for Gitaly gitlab-shell hooks
-merge_request: 4103
-author:
-type: performance

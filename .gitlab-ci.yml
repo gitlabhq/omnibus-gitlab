@@ -23,12 +23,20 @@ stages:
 
 workflow:
   rules:
-    # For branches, create a pipeline.
-    # FIXME: We should change the following to `- if: 'CI_MERGE_REQUEST_IID'`
+    # Do not create a pipeline on branch push to QA mirror
+    - if: '$CI_PROJECT_NAME == "omnibus-gitlab-mirror" && $CI_PIPELINE_SOURCE == "push"'
+      when: never
+    # No pipeline on auto-deploy branches as a tag will definitely follow
+    - if: '$CI_COMMIT_BRANCH =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/'
+      when: never
+    # For all other branches, create a pipeline. We are explicitly specifying
+    # this so that this rule gets matched earlier before MR pipelines gets
+    # triggered, thus causing two pipelines for a branch push - a regular one
+    # and a detached one. If we ever decide not to run pipelines on branch
+    # pushes that doesn't cause an MR, we can change the following to
+    # $CI_MERGE_REQUEST_IID
     - if: '$CI_COMMIT_BRANCH'
-    # For `master` branch, create a pipeline (this includes on schedules, pushes, merges, etc.).
-    - if: '$CI_COMMIT_BRANCH == "master"'
-    # For tags, create a pipeline.
+    # For tags, always create a pipeline.
     - if: '$CI_COMMIT_TAG'
 
 default:
@@ -36,16 +44,20 @@ default:
     - gitlab-org
 
 variables:
-  BUILDER_IMAGE_REGISTRY: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder"
+  # BUILDER_IMAGE_REGISTRY is set to
+  # `dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder` in the project
+  # settings of omnibus-gitlab mirror in dev.gitlab.org so that builds there
+  # will use images from that registry and not depend on GitLab.com
+  BUILDER_IMAGE_REGISTRY: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder"
   PUBLIC_BUILDER_IMAGE_REGISTRY: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder"
-  BUILDER_IMAGE_REVISION: "0.0.60"
+  BUILDER_IMAGE_REVISION: "0.0.72"
   # The registry to pull the assets image from
   ASSET_REGISTRY: "${CI_REGISTRY}"
   ASSET_SYNC_EXISTING_REMOTE_FILES: "keep"
   ASSET_SYNC_GZIP_COMPRESSION: "true"
   ASSET_PATH: "assets-${CI_COMMIT_REF_SLUG}"
   COMPILE_ASSETS: "false"
-  RUBY_IMAGE: "ruby:2.5"
+  RUBY_IMAGE: "ruby:2.6"
   BUNDLE_PATH__SYSTEM: "false"
   # Format of the auto-deploy tag for auto-deploy builds.
   # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
@@ -53,6 +65,7 @@ variables:
   # Default environment for auto-deploy
   AUTO_DEPLOY_ENVIRONMENT: 'pre'
   MAX_PACKAGE_SIZE_MB: "850"
+  OMNIBUS_GITLAB_MIRROR_ID: "14588374"
 
 ### For services that need a docker daemon
 .docker_job: &docker_job
@@ -131,21 +144,17 @@ fetch-assets:
   artifacts:
     paths:
       - ${ASSET_PATH}
-  only:
-    refs:
-      - schedules@gitlab-org/omnibus-gitlab
-      - branches@gitlab/omnibus-gitlab
-      - tags@gitlab/omnibus-gitlab
-      - triggers
-      - pipelines
-  except:
-    variables:
-      - $COMPILE_ASSETS == "true"
-      - $DEPS_PIPELINE
-      # Format of the auto-deploy tag
-      - $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/
-      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
-
+  rules:
+    - if: '$COMPILE_ASSETS == "true"'
+      when: never
+    - if: '$DEPS_PIPELINE'
+      when: never
+    - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/'
+      when: never
+    # Run on dev.gitlab.org (except auto-deploy tag covered above) and
+    # multi-project pipelines on omnibus-gitlab-mirror
+    - if: '$CI_PROJECT_PATH == "gitlab/omnibus-gitlab"'
+    - if: '$CI_PIPELINE_SOURCE == "pipeline" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
 include:
   - '/gitlab-ci-config/gitlab-com.yml'
   - '/gitlab-ci-config/dev-gitlab-org.yml'

@@ -1,15 +1,52 @@
 require 'yaml'
+require 'uri'
 
 require_relative "util.rb"
 
 module Gitlab
   class Version
+    DEFAULT_SOURCE = 'remote'.freeze
+    ALTERNATIVE_SOURCE = 'alternative'.freeze
+    SECURITY_SOURCE = 'security'.freeze
+
+    # Return which remote sources channel we are using
+    #
+    # Channels can be selected based on ENVIRONMENTAL variables
+    # It defaults to "remote", which means internal "dev" instance.
+    #
+    # Security always takes precedence.
+    #
+    # @return [String]
+    def self.sources_channel
+      return SECURITY_SOURCE if Gitlab::Util.get_env("SECURITY_SOURCES").to_s == "true"
+
+      fallback_sources_channel
+    end
+
+    # Return the fallback remote sources channel, which can be used when
+    # no security remote alternative exists
+    #
+    # @return [String]
+    def self.fallback_sources_channel
+      Gitlab::Util.get_env("ALTERNATIVE_SOURCES").to_s == "true" ? ALTERNATIVE_SOURCE : DEFAULT_SOURCE
+    end
+
+    # Whether security sources channel is selected
+    #
+    # @return [Boolean] whether we are using security channel
+    def self.security_channel?
+      sources_channel == SECURITY_SOURCE
+    end
+
+    def self.alternative_channel?
+      sources_channel == ALTERNATIVE_SOURCE
+    end
+
     def initialize(software_name, version = nil)
       @software = software_name
 
       @read_version = version || get_software_version
       @project_root = File.join(File.dirname(__dir__), '../')
-      @software_sources = Gitlab::Util.get_env("ALTERNATIVE_SOURCES").to_s == "true" ? "alternative" : "remote"
     end
 
     def get_software_version
@@ -82,13 +119,29 @@ module Gitlab
 
     def remote
       filepath = File.expand_path(".custom_sources.yml", @project_root)
-      software = YAML.load_file(filepath)[@software]
+      sources = YAML.load_file(filepath)[@software]
 
-      if software
-        software[@software_sources]
+      return "" unless sources
+
+      if ::Gitlab::Version.security_channel?
+        attach_remote_credential(sources[::Gitlab::Version.sources_channel]) || sources[::Gitlab::Version.fallback_sources_channel]
       else
-        ""
+        sources[::Gitlab::Version.sources_channel]
       end
+    end
+
+    private
+
+    def attach_remote_credential(url)
+      return unless url
+
+      uri = URI.parse(url)
+      uri.user = "gitlab-ci-token"
+      uri.password = Gitlab::Util.get_env("CI_JOB_TOKEN")
+      uri.to_s
+    rescue URI::InvalidURIError
+      # Git may use scp address which is not valid URI. Ignore it
+      url
     end
   end
 end

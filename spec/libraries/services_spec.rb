@@ -1,24 +1,24 @@
 require 'chef_helper'
 
-describe Services do
+RSpec.describe Services do
   before { allow(Gitlab).to receive(:[]).and_call_original }
 
   describe 'when using the gitlab cookbook' do
-    cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
     it 'returns the gitlab service list' do
       chef_run
-      expect(Services.service_list).to have_key('unicorn')
+      expect(Services.service_list).to have_key('puma')
       expect(Services.service_list).not_to have_key('sentinel')
     end
   end
 
   describe 'when using the gitlab-ee cookbook' do
-    cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
     it 'returns the gitlab service list including gitlab-ee items' do
       chef_run
-      expect(Services.service_list).to have_key('unicorn')
+      expect(Services.service_list).to have_key('puma')
       expect(Services.service_list).to have_key('sentinel')
     end
   end
@@ -28,14 +28,14 @@ describe Services do
   end
 
   describe 'service' do
-    cached(:runner) { ChefSpec::SoloRunner.new }
+    let(:runner) { ChefSpec::SoloRunner.new }
     let(:chef_run) { runner.converge('gitlab::config') }
     let(:node) { runner.node }
 
     before { Services.add_services('gitlab', Services::BaseServices.list) }
 
     context 'when using user values that conflict with service settings' do
-      cached!(:runner) { ChefSpec::SoloRunner.new { |node| Gitlab[:node] = node } }
+      let!(:runner) { ChefSpec::SoloRunner.new { |node| Gitlab[:node] = node } }
 
       it 'node service settings are overridden by gitlab.rb changes' do
         stub_gitlab_rb(redis: { enable: true }, mattermost: { enable: false })
@@ -174,7 +174,7 @@ describe Services do
   end
 
   describe 'group' do
-    cached(:runner) { ChefSpec::SoloRunner.new }
+    let(:runner) { ChefSpec::SoloRunner.new }
     let(:chef_run) { runner.converge('gitlab::config') }
     let(:node) { runner.node }
 
@@ -203,7 +203,7 @@ describe Services do
         expect(node['monitoring']['redis-exporter']['enable']).to be false
 
         Services.enable_group('rails')
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
         expect(node['monitoring']['gitlab-exporter']['enable']).to be true
       end
 
@@ -211,7 +211,7 @@ describe Services do
         Services.disable_group('monitoring')
         Services.enable_group('rails', except: 'monitoring')
         expect(node['monitoring']['gitlab-exporter']['enable']).to be false
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
 
         Services.enable_group('monitoring')
         Services.disable_group('redis', except: 'monitoring')
@@ -229,14 +229,14 @@ describe Services do
 
         Services.enable_group('rails', 'monitoring')
         expect(node['monitoring']['redis-exporter']['enable']).to be true
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
       end
 
       it 'supports single exceptions' do
         Services.disable_group('monitoring')
         Services.enable_group('redis', 'rails', except: 'monitoring')
         expect(node['redis']['enable']).to be true
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
         expect(node['monitoring']['gitlab-exporter']['enable']).to be false
         expect(node['monitoring']['redis-exporter']['enable']).to be false
 
@@ -252,12 +252,13 @@ describe Services do
         Services.enable_group('rails', 'monitoring', except: ['redis', Services::SYSTEM_GROUP])
         expect(node['monitoring']['redis-exporter']['enable']).to be false
         expect(node['monitoring']['node-exporter']['enable']).to be false
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
 
         Services.enable_group('sidekiq', 'monitoring')
         Services.disable_group('rails', 'postgres', except: %w(sidekiq monitoring))
         expect(node['gitlab']['gitlab-workhorse']['enable']).to be false
-        expect(node['gitlab']['sidekiq']['enable']).to be true
+        # The sidekiq group enables sidekiq-cluster by default
+        expect(node['gitlab']['sidekiq-cluster']['enable']).to be true
         expect(node['postgresql']['enable']).to be false
         expect(node['monitoring']['postgres-exporter']['enable']).to be true
       end
@@ -281,7 +282,7 @@ describe Services do
       it 'enables all others' do
         Services.disable_group('monitoring')
         Services.enable_group(Services::ALL_GROUPS, except: 'monitoring')
-        expect(node['gitlab']['unicorn']['enable']).to be true
+        expect(node['gitlab']['puma']['enable']).to be true
         expect(node['monitoring']['gitlab-exporter']['enable']).to be false
       end
 
@@ -299,7 +300,7 @@ describe Services do
       it 'enables all others' do
         Services.disable_group('redis', 'rails')
         Services.enable_group(Services::ALL_GROUPS, except: %w(redis rails))
-        expect(node['gitlab']['unicorn']['enable']).to be false
+        expect(node['gitlab']['puma']['enable']).to be false
         expect(node['monitoring']['node-exporter']['enable']).to be true
         expect(node['monitoring']['redis-exporter']['enable']).to be false
       end
@@ -309,7 +310,8 @@ describe Services do
         Services.disable_group(Services::ALL_GROUPS, except: %w(redis rails))
         expect(node['monitoring']['prometheus']['enable']).to be false
         expect(node['redis']['enable']).to be true
-        expect(node['gitlab']['sidekiq']['enable']).to be true
+        # Sidekiq enables sidekiq-cluster by default
+        expect(node['gitlab']['sidekiq-cluster']['enable']).to be true
       end
     end
   end

@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Prometheus Settings
 
 ## Remote read/write
@@ -22,14 +28,11 @@ prometheus['remote_read'] = [
 ]
 ```
 
-For more documentation on the options available, see the [remote write] and [remote read] sections of the official documentation.
-
-[remote read]: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cremote_read%3E
-[remote write]: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cremote_write%3E
+For more documentation on the options available, see the [remote write](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cremote_write%3E) and [remote read](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cremote_read%3E) sections of the official documentation.
 
 ## Rules files
 
-Prometheus allows for [recording] and [alerting] rules.
+Prometheus allows for [recording](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/) and [alerting](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) rules.
 
 Omnibus includes some [default rules files](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/monitoring/templates/rules)
 that are stored in `/var/opt/gitlab/prometheus/rules/`.
@@ -47,6 +50,19 @@ Custom list:
 ```ruby
 prometheus['rules_files'] = ['/path/to/rules/*.rules', '/path/to/single/file.rules']
 ```
+
+## External labels
+
+To set [external labels](https://prometheus.io/docs/prometheus/latest/configuration/configuration/):
+
+```ruby
+prometheus['external_labels'] = {
+    'region' => 'us-west-2',
+    'source' => 'omnibus',
+}
+```
+
+No external labels are set by default.
 
 ## node_exporter
 
@@ -67,9 +83,6 @@ For more information on available collectors, see the [upstream documentation](h
 ## Grafana dashboards
 
 [Grafana](https://grafana.com) is a powerful dashboard software for presenting
-Prometheus metrics data. GitLab Omnibus >= 11.9 includes an embedded copy.
+Prometheus metrics data. Omnibus GitLab >= 11.9 includes an embedded copy.
 
 See [the embedded Grafana documentation](grafana.md) for more information.
-
-[alerting]: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
-[recording]: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/

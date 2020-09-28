@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::gitlab-shell' do
+RSpec.describe 'gitlab::gitlab-shell' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
   before do
@@ -48,7 +48,9 @@ describe 'gitlab::gitlab-shell' do
           log_file: '/var/log/gitlab/gitlab-shell/gitlab-shell.log',
           log_format: "json",
           custom_hooks_dir: nil,
-          migration: { enabled: true, features: [] }
+          migration: { enabled: true, features: [] },
+          gitlab_url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsocket',
+          gitlab_relative_path: ''
         )
       )
     end
@@ -166,6 +168,72 @@ describe 'gitlab::gitlab-shell' do
               enabled: false,
               features: []
             }
+          )
+        )
+      end
+    end
+
+    context 'with a non-default workhorse unix socket' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket' })
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            gitlab_url: 'http+unix://%2Ffake%2Fworkhorse%2Fsocket',
+            gitlab_relative_path: ''
+          )
+        )
+      end
+    end
+
+    context 'with a tcp workhorse listener' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'http://example.com/gitlab',
+          gitlab_workhorse: {
+            listen_network: 'tcp',
+            listen_addr: 'localhost:1234'
+          }
+        )
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            gitlab_url: 'http://localhost:1234/gitlab',
+            gitlab_relative_path: nil
+          )
+        )
+      end
+    end
+
+    context 'with relative path in external_url' do
+      before do
+        stub_gitlab_rb(external_url: 'http://example.com/gitlab')
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            gitlab_url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsocket',
+            gitlab_relative_path: '/gitlab'
+          )
+        )
+      end
+    end
+
+    context 'with internal_api_url specified' do
+      before do
+        stub_gitlab_rb(gitlab_rails: { internal_api_url: 'http://localhost:8080' })
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            gitlab_url: 'http://localhost:8080',
+            gitlab_relative_path: ''
           )
         )
       end

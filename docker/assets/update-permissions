@@ -47,11 +47,13 @@ if id -u git; then
 	chown_if_exists git /var/log/gitlab/gitlab-rails
 	chown_if_exists git /var/log/gitlab/gitlab-shell
 	chown_if_exists git /var/log/gitlab/sidekiq
+	chown_if_exists git /var/log/gitlab/puma
 	chown_if_exists git /var/log/gitlab/unicorn
 
 	# Update log files
 	chown_if_exists -R git:git /var/log/gitlab/gitlab-rails/*.log
 	chown_if_exists -R git:git /var/log/gitlab/gitlab-shell/*.log
+	chown_if_exists -R git:git /var/log/gitlab/puma/*.log
 	chown_if_exists -R git:git /var/log/gitlab/unicorn/*.log
 fi
 

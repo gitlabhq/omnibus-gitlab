@@ -27,13 +27,15 @@ skip_transitive_dependency_licensing true
 
 source git: version.remote
 
-dependency 'postgresql_old'
 dependency 'postgresql'
 
 env = with_standard_compiler_flags(with_embedded_path)
 
 build do
-  env['PATH'] = "#{install_dir}/embedded/postgresql/9.6/bin:#{env['PATH']}"
+  env['PATH'] = "#{install_dir}/embedded/postgresql/11/bin:#{env['PATH']}"
+
+  patch source: 'modules_big.patch', env: env
+
   make "-j #{workers} USE_PGXS=1 all", env: env
   make "-j #{workers} USE_PGXS=1 install", env: env
 end

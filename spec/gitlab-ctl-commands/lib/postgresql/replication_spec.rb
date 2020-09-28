@@ -3,7 +3,7 @@ $LOAD_PATH << File.join(__dir__, '../../../../files/gitlab-ctl-commands/lib')
 
 require 'postgresql/replication'
 
-describe PostgreSQL::Replication do
+RSpec.describe PostgreSQL::Replication do
   let(:ctl) { spy('gitlab ctl') }
   let(:util) { spy('gitlab ctl util', error?: false) }
   let(:attributes) { spy('node attributes spy') }

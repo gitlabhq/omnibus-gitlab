@@ -1,4 +1,7 @@
 ---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 comments: false
 ---
 
@@ -36,7 +39,7 @@ to work best with the available resources. Check out the [documentation](setting
 
 ## Configuring
 
-- [Configuring the external url](settings/configuration.md#configuring-the-external-url-for-gitlab)
+- [Configuring the external URL](settings/configuration.md#configuring-the-external-url-for-gitlab)
 - [Configuring a relative URL for GitLab (experimental)](settings/configuration.md#configuring-a-relative-url-for-gitlab)
 - [Storing Git data in an alternative directory](settings/configuration.md#storing-git-data-in-an-alternative-directory)
 - [Changing the name of the Git user group](settings/configuration.md#changing-the-name-of-the-git-user--group)
@@ -48,7 +51,9 @@ to work best with the available resources. Check out the [documentation](setting
 - [SMTP](settings/smtp.md)
 - [NGINX](settings/nginx.md)
 - [LDAP](settings/ldap.md)
+- [Puma](settings/puma.md)
 - [Unicorn](settings/unicorn.md)
+- [ActionCable](settings/actioncable.md)
 - [Redis](settings/redis.md)
 - [Logs](settings/logs.md)
 - [Database](settings/database.md)
@@ -64,15 +69,15 @@ to work best with the available resources. Check out the [documentation](setting
 ## Updating
 
 - [Upgrade support policy](https://docs.gitlab.com/ee/policy/maintenance.html)
-- [Upgrade from Community Edition to Enterprise Edition](update/README.md#updating-community-edition-to-enterprise-edition)
-- [Updating to the latest version](update/README.md#updating-using-the-official-repositories)
-- [Downgrading to an earlier version](update/README.md#downgrading)
-- [Upgrading from a non-Omnibus installation to an Omnibus installation using a backup](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-using-a-backup)
-- [Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
-- [Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](update/convert_to_omnibus.md#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-68)
-- [Updating from GitLab 6.6 and higher to 7.10 or newer](update/gitlab_7_changes.md#updating-from-gitlab-66-and-higher-to-710-or-newer)
-- [Updating from GitLab 6.6.0.pre1 to 6.6.4](update/gitlab_6_changes.md#updating-from-gitlab-660pre1-to-664)
-- [Updating from GitLab CI version prior to 5.4.0 to the latest version](update/README.md#updating-gitlab-ci-from-prior-540-to-version-714-via-omnibus-gitlab)
+- [Upgrade from Community Edition to Enterprise Edition](update/README.md#update-community-edition-to-enterprise-edition)
+- [Update to the latest version](update/README.md#update-using-the-official-repositories)
+- [Downgrade to an earlier version](update/README.md#downgrade)
+- [Upgrade from a non-Omnibus installation to an Omnibus installation using a backup](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-using-a-backup)
+- [Upgrade from non-Omnibus PostgreSQL to an Omnibus installation in-place](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
+- [Upgrade from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](update/convert_to_omnibus.md#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-68)
+- [Update from GitLab 6.6 and higher to 7.10 or newer](update/gitlab_7_changes.md#updating-from-gitlab-66-and-higher-to-710-or-newer)
+- [Update from GitLab 6.6.0.pre1 to 6.6.4](update/gitlab_6_changes.md#updating-from-gitlab-660pre1-to-664)
+- [Update from GitLab CI version prior to 5.4.0 to the latest version](update/README.md#update-gitlab-ci-from-prior-540-to-version-714-via-omnibus-gitlab)
 
 ## Troubleshooting
 

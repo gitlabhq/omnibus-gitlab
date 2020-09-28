@@ -1,8 +1,24 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Package information
 
 The Omnibus GitLab package is bundled with all dependencies required for GitLab
 to function correctly. More details can be found
 at [bundling dependencies document](omnibus_packages.md).
+
+## Package Version
+
+The released package versions are in the format `MAJOR.MINOR.PATCH-EDITION.OMNIBUS_RELEASE`
+
+| Component         | Meaning | Example |
+| ---------         | ------- | ------- |
+| MAJOR.MINOR.PATCH | The GitLab version this corresponds to | 13.3.0 |
+| EDITION           | The edition of GitLab this corresponds to | ee |
+| OMNIBUS_RELEASE   | The omnibus release. Usually, this will be 0. This will be incremented if we need to build a new package without changing the GitLab version. | 0 |
 
 ## Licenses
 

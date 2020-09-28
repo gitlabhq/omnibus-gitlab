@@ -24,6 +24,7 @@ class LogrotateHelper < AccountHelper
     # to add a service here.
     # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4606
     {
+      'actioncable' => { username: gitlab_user, group: gitlab_group },
       'alertmanager' => { username: prometheus_user, group: prometheus_user },
       'consul' => { username: consul_user, group: consul_group },
       'crond' => { username: 'root', group: 'root' },

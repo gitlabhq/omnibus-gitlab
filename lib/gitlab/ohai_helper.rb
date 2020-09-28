@@ -4,14 +4,16 @@ class OhaiHelper
   class << self
     # This prints something like 'ubuntu-xenial'
     def platform_dir
-      os, codename = fetch_os_with_codename
+      os, codename, arch = fetch_os_with_codename
+
+      return "#{os}-#{codename}-#{arch}" if arm64?
 
       "#{os}-#{codename}"
     end
 
     # This prints something like 'ubuntu/xenial'; used for packagecloud uploads
     def repo_string
-      os, codename = fetch_os_with_codename
+      os, codename, _ = fetch_os_with_codename
 
       "#{os}/#{codename}"
     end
@@ -19,10 +21,11 @@ class OhaiHelper
     def fetch_os_with_codename
       os = os_platform
       version = os_platform_version
+      arch = ohai['kernel']['machine']
 
       abort "Unsupported OS: #{ohai.values_at('platform', 'platform_version').inspect}" if (os == :unknown) || (version == :unknown)
 
-      [os, version]
+      [os, version, arch]
     end
 
     def os_platform
@@ -52,18 +55,20 @@ class OhaiHelper
         'xenial'
       when /^18\.04/
         'bionic'
+      when /^20\.04/
+        'focal'
       end
     end
 
     def get_debian_version
       case ohai['platform_version']
-      when /^7\./
+      when /^7/
         'wheezy'
-      when /^8\./
+      when /^8/
         'jessie'
-      when /^9\./
+      when /^9/
         'stretch'
-      when /^10\./
+      when /^10/
         'buster'
       end
     end
@@ -85,8 +90,10 @@ class OhaiHelper
 
     def get_suse_version
       case ohai['platform_version']
-      when /^12\./
+      when /^12\.2/
         '12.2'
+      when /^12\.5/
+        '12.5'
       when /^11\./
         '11.4'
       end
@@ -128,6 +135,21 @@ class OhaiHelper
       else
         ohai['platform']
       end
+    end
+
+    def armhf?
+      # armv* (Arm 32-bit)
+      /armv/.match?(ohai['kernel']['machine'])
+    end
+
+    def arm64?
+      # AArch64 (Arm 64-bit)
+      /aarch64/.match?(ohai['kernel']['machine'])
+    end
+
+    def arm?
+      # Any Arm (32-bit or 64-bit)
+      (armhf? || arm64?)
     end
   end
 end

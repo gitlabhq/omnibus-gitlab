@@ -1,9 +1,9 @@
 require 'chef_helper'
 
-describe 'gitlab::sidekiq-cluster' do
+RSpec.describe 'gitlab::sidekiq-cluster' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(sidekiq_service runit_service),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04.json'
     )
     runner.converge('gitlab::default')
@@ -29,7 +29,7 @@ describe 'gitlab::sidekiq-cluster' do
                      })
     end
 
-    it_behaves_like "enabled runit service", "sidekiq-cluster", "root", "root", "git", "git"
+    it_behaves_like "enabled runit service", "sidekiq-cluster", "root", "root"
   end
 
   context 'with custom user and group values' do
@@ -46,7 +46,7 @@ describe 'gitlab::sidekiq-cluster' do
       )
     end
 
-    it_behaves_like "enabled runit service", "sidekiq-cluster", "root", "root", "foo", "bar"
+    it_behaves_like "enabled runit service", "sidekiq-cluster", "root", "root"
   end
 
   context 'with queue_groups set' do

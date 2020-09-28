@@ -15,7 +15,7 @@
 #
 
 name 'go-crond'
-version = Gitlab::Version.new('go-crond', '0.6.1')
+version = Gitlab::Version.new('go-crond', '20.7.0')
 default_version version.print(false)
 
 license 'BSD-2-Clause'
@@ -30,14 +30,6 @@ build do
     'GOPATH' => "#{Omnibus::Config.source_dir}/go-crond",
   }
 
-  # Install dep - maybe this should live in the builder definition?
-  command 'go get github.com/golang/dep', env: env
-  command 'go install github.com/golang/dep/cmd/dep', env: env
-
-  # Install exact versions of the dependencies
-  patch source: 'lock-dependencies.patch'
-  command "../../../../bin/dep ensure", env: env
-
-  command 'go build', env: env
+  make 'build-local', env: env
   copy 'go-crond', "#{install_dir}/embedded/bin/"
 end

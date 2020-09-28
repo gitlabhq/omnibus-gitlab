@@ -85,11 +85,12 @@ include_recipe "gitlab::selinux"
 # add trusted certs recipe
 include_recipe "gitlab::add_trusted_certs"
 
-# Create dummy unicorn and sidekiq services to receive notifications, in case
+# Create dummy services to receive notifications, in case
 # the corresponding service recipe is not loaded below.
 %w(
   unicorn
   puma
+  actioncable
   sidekiq
   mailroom
 ).each do |dummy|
@@ -125,7 +126,7 @@ include_recipe 'postgresql::bin'
   end
 end
 
-include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable'] && !node['gitlab']['pgbouncer']['enable']
+include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable'] && !(node['gitlab'].key?('pgbouncer') && node['gitlab']['pgbouncer']['enable'])
 
 include_recipe "praefect::database_migrations" if node['praefect']['enable'] && node['praefect']['auto_migrate']
 
@@ -155,6 +156,12 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   end
 end
 
+if node['gitlab']['actioncable']['enable'] && !node['gitlab']['actioncable']['in_app']
+  include_recipe "gitlab::actioncable"
+else
+  include_recipe "gitlab::actioncable_disable"
+end
+
 %w(
   registry
   mattermost
@@ -171,7 +178,11 @@ include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable']
 # Recipe which handles all prometheus related services
 include_recipe "monitoring"
 
-include_recipe 'letsencrypt::enable' if node['letsencrypt']['enable']
+if node['letsencrypt']['enable']
+  include_recipe 'letsencrypt::enable'
+else
+  include_recipe 'letsencrypt::disable'
+end
 
 OmnibusHelper.is_deprecated_os?
 

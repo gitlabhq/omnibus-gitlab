@@ -77,11 +77,13 @@ shared_examples 'enabled registry service' do
       .with_content(/exec svlogd -tt \/var\/log\/gitlab\/registry/)
   end
 
-  it 'creates a default VERSION file' do
-    expect(chef_run).to create_file('/var/opt/gitlab/registry/VERSION').with(
-      user: nil,
-      group: nil
+  it 'creates a default VERSION file and restarts service' do
+    expect(chef_run).to create_version_file('Create version file for Registry').with(
+      version_file_path: '/var/opt/gitlab/registry/VERSION',
+      version_check_cmd: '/opt/gitlab/embedded/bin/registry --version'
     )
+
+    expect(chef_run.version_file('Create version file for Registry')).to notify('runit_service[registry]').to(:restart)
   end
 
   it 'creates gitlab-rails config with default values' do

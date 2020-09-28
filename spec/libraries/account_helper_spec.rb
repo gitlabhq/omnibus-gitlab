@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe AccountHelper do
+RSpec.describe AccountHelper do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
   it 'returns a list of users' do

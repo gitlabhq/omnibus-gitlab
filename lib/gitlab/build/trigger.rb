@@ -22,7 +22,7 @@ module Build
 
       case response
       when Net::HTTPClientError, Net::HTTPServerError
-        raise "Trigger failed! The response from the trigger is: #{response}: #{response.message}"
+        raise "Trigger failed! The response from the trigger is: #{response.message}: #{response.body}"
       else
         Build::Trigger::CommitComment.post!(pipeline_url, get_access_token) if post_comment
 
@@ -68,7 +68,7 @@ module Build
 
     class Pipeline
       INTERVAL = 60 # seconds
-      MAX_DURATION = 3600 * 3 # 3 hours
+      DEFAULT_MAX_DURATION = 3600 * 3 # 3 hours
 
       def initialize(id, project_path, access_token)
         @start = Time.now.to_i
@@ -76,9 +76,9 @@ module Build
         @uri = URI("https://gitlab.com/api/v4/projects/#{CGI.escape(project_path)}/pipelines/#{id}")
       end
 
-      def wait!
+      def wait!(timeout: DEFAULT_MAX_DURATION)
         loop do
-          raise "Pipeline timed out after waiting for #{duration} minutes!" if timeout?
+          raise "Pipeline timed out after waiting for #{duration} minutes!" if timeout?(timeout)
 
           case status
           when :created, :pending, :running
@@ -98,8 +98,8 @@ module Build
         end
       end
 
-      def timeout?
-        Time.now.to_i > (@start + MAX_DURATION)
+      def timeout?(max_duration)
+        Time.now.to_i > (@start + max_duration)
       end
 
       def duration

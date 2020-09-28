@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'registry recipe' do
+RSpec.describe 'registry recipe' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
 
   before do
@@ -95,6 +95,15 @@ describe 'registry recipe' do
 
     it_behaves_like 'renders a valid YAML file', '/var/opt/gitlab/registry/config.yml'
 
+    it 'creates a default VERSION file and restarts service' do
+      expect(chef_run).to create_version_file('Create version file for Registry').with(
+        version_file_path: '/var/opt/gitlab/registry/VERSION',
+        version_check_cmd: '/opt/gitlab/embedded/bin/registry --version'
+      )
+
+      expect(chef_run.version_file('Create version file for Registry')).to notify('runit_service[registry]').to(:restart)
+    end
+
     context 'when registry storagedriver health check is disabled' do
       before { stub_gitlab_rb(registry: { health_storagedriver_enabled: false }) }
 
@@ -168,7 +177,7 @@ describe 'registry recipe' do
   end
 end
 
-describe 'registry' do
+RSpec.describe 'registry' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {
@@ -438,7 +447,7 @@ describe 'registry' do
   end
 end
 
-describe 'auto enabling registry' do
+RSpec.describe 'auto enabling registry' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:registry_config) { '/var/opt/gitlab/registry/config.yml' }
   let(:nginx_config) { '/var/opt/gitlab/nginx/conf/gitlab-registry.conf' }

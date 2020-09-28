@@ -92,7 +92,7 @@ class GeoReplicationCommand
         @options[:sslcompression] = sslcompression.to_i
       end
 
-      opts.on('--recovery-target-timeline=latest', 'Specify the PostgreSQL recovery target timeline (see https://www.postgresql.org/docs/9.6/static/recovery-target-settings.html)') do |timeline|
+      opts.on('--recovery-target-timeline=latest', 'Specify the PostgreSQL recovery target timeline (see https://www.postgresql.org/docs/11/recovery-target-settings.html)') do |timeline|
         @options[:recovery_target_timeline] = timeline
       end
 

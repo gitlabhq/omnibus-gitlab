@@ -15,9 +15,11 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+omnibus_helper = OmnibusHelper.new(node)
 
 working_dir = node['gitlab']['gitlab-pages']['dir']
 log_directory = node['gitlab']['gitlab-pages']['log_directory']
+env_directory = node['gitlab']['gitlab-pages']['env_directory']
 gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
 
 [
@@ -44,12 +46,15 @@ end
 # Options may have changed in the previous step
 ruby_block "re-populate GitLab Pages configuration options" do
   block do
-    node.consume_attributes(Gitlab.hyphenate_config_keys)
+    node.consume_attributes(
+      { 'gitlab' => { 'gitlab-pages' => Gitlab.hyphenate_config_keys['gitlab']['gitlab-pages'] } }
+    )
   end
 end
 
-file File.join(working_dir, "VERSION") do
-  content VersionHelper.version("/opt/gitlab/embedded/bin/gitlab-pages -version")
+version_file 'Create version file for Gitlab Pages' do
+  version_file_path File.join(working_dir, 'VERSION')
+  version_check_cmd '/opt/gitlab/embedded/bin/gitlab-pages --version'
   notifies :restart, "runit_service[gitlab-pages]"
 end
 
@@ -85,9 +90,22 @@ template File.join(working_dir, "gitlab-pages-config") do
   notifies :restart, "runit_service[gitlab-pages]"
 end
 
+node.default['gitlab']['gitlab-pages']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+}
+
+node.default['gitlab']['gitlab-pages']['env']['http_proxy'] = node['gitlab']['gitlab-pages']['http_proxy'] \
+  unless node['gitlab']['gitlab-pages']['http_proxy'].nil?
+
+env_dir env_directory do
+  variables node['gitlab']['gitlab-pages']['env']
+  notifies :restart, "runit_service[gitlab-pages]" if omnibus_helper.should_notify?('gitlab-pages')
+end
+
 runit_service 'gitlab-pages' do
   options({
-    log_directory: log_directory
+    log_directory: log_directory,
+    env_dir: env_directory,
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-pages'].to_hash)
 end

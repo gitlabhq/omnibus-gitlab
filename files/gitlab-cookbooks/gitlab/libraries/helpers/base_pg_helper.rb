@@ -14,7 +14,8 @@ class BasePgHelper < BaseHelper
   PG_ESCAPED_BACKSLASH_PATTERN ||= /\\{2}/.freeze
 
   def is_running?
-    OmnibusHelper.new(node).service_up?(service_name)
+    omnibus_helper = OmnibusHelper.new(node)
+    omnibus_helper.service_up?(service_name) || (delegated? && omnibus_helper.service_up?(delegate_service_name) && ready?)
   end
 
   def is_managed_and_offline?
@@ -47,7 +48,7 @@ class BasePgHelper < BaseHelper
 
   def extension_can_be_enabled?(extension_name, db_name)
     is_running? &&
-      !is_slave? &&
+      !is_standby? &&
       extension_exists?(extension_name) &&
       database_exists?(db_name) &&
       !extension_enabled?(extension_name, db_name)
@@ -125,62 +126,6 @@ class BasePgHelper < BaseHelper
               "| grep -x #{server_name}"])
   end
 
-  def fdw_user_mapping_exists?(user, server_name, db_name)
-    psql_cmd(["-d '#{db_name}'",
-              %(-c "select usename from pg_user_mappings where srvname='#{server_name}'" -tA),
-              "| grep -x #{user}"])
-  end
-
-  def fdw_user_has_server_privilege?(user, server_name, db_name, permission)
-    psql_cmd(["-d '#{db_name}'",
-              %(-c "select has_server_privilege('#{user}', '#{server_name}', '#{permission}');" -tA),
-              "| grep -x t"])
-  end
-
-  def fdw_server_options_changed?(server_name, db_name, options = {})
-    options = stringify_hash_values(options)
-    raw_content = psql_query(db_name, "SELECT srvoptions FROM pg_foreign_server WHERE srvname='#{server_name}'")
-    server_options = parse_pghash(raw_content)
-
-    # return whether options is not a subset of server_options
-    # this allows us to ignore additional params on server and look only to the ones informed in the method
-    !(options <= server_options)
-  end
-
-  def fdw_user_mapping_changed?(user, server_name, db_name, options = {})
-    current_options = fdw_user_mapping_current_options(user, server_name, db_name)
-
-    # return whether options is not a subset of current_options
-    # this allows us to ignore additional params on server and look only to the ones informed in the method
-    !(options <= current_options)
-  end
-
-  # Returns the desired FDW user mapping options, not including parentheses
-  #
-  # `resource` must respond to FDW user mapping properties:
-  #   db_user
-  #   server_name
-  #   db_name
-  #   external_user
-  #   external_password
-  def fdw_user_mapping_update_options(resource)
-    has_password = fdw_external_password_exists?(resource.db_user, resource.server_name, resource.db_name)
-    password_action = has_password ? 'SET' : 'ADD'
-
-    "SET user '#{resource.external_user}', #{password_action} password '#{resource.external_password}'"
-  end
-
-  # Returns whether the user mapping has a password set
-  def fdw_external_password_exists?(user, server_name, db_name)
-    fdw_user_mapping_current_options(user, server_name, db_name).key?(:password)
-  end
-
-  def fdw_user_mapping_current_options(user, server_name, db_name)
-    raw_content = psql_query(db_name, "SELECT umoptions FROM pg_user_mappings WHERE srvname='#{server_name}' AND usename='#{user}'")
-
-    parse_pghash(raw_content)
-  end
-
   def user_hashed_password(db_user)
     db_user_safe = db_user.scan(/[a-z_][a-z0-9_-]*[$]?/).first
     psql_query('template1', "SELECT passwd FROM pg_shadow WHERE usename='#{db_user_safe}'")
@@ -208,14 +153,25 @@ class BasePgHelper < BaseHelper
     end
   end
 
-  def is_slave?
-    psql_cmd(["-d 'template1'",
-              "-c 'select pg_is_in_recovery()' -A",
-              "|grep -x t"])
+  def node_attributes
+    return node['gitlab'][service_name] if node['gitlab'].key?(service_name)
+
+    node[service_name]
   end
 
+  def is_standby?
+    # PostgreSQL <= 11 uses recovery.conf to configure a standby node.
+    # PostgreSQL 12 switched to the .signal files
+    %w(recovery.conf recovery.signal standby.signal).each do |standby_file|
+      return true if ::File.exist?(::File.join(node_attributes['dir'], 'data', standby_file))
+    end
+    false
+  end
+
+  alias_method :replica?, :is_standby?
+
   def is_offline_or_readonly?
-    !is_running? || is_slave?
+    !is_running? || is_standby?
   end
 
   # Returns an array of function names for the given database
@@ -251,10 +207,21 @@ class BasePgHelper < BaseHelper
     success?(cmd)
   end
 
+  # Return the results of a psql query
+  # - db_name: Name of the database to query
+  # - query: SQL query to run
   def psql_query(db_name, query)
+    psql_query_raw(db_name, query).stdout.chomp
+  end
+
+  # Get the Mixlib::Shellout object containing the command results.
+  # Allows for more fine grained error handling
+  # - db_name: Name of the database to query
+  # - query: SQL query to run
+  def psql_query_raw(db_name, query)
     do_shell_out(
       %(/opt/gitlab/bin/#{service_cmd} -d '#{db_name}' -c "#{query}" -tA)
-    ).stdout.chomp
+    )
   end
 
   def version
@@ -296,6 +263,53 @@ class BasePgHelper < BaseHelper
 
   def service_cmd
     raise NotImplementedError
+  end
+
+  def delegate_service_name
+    'patroni'
+  end
+
+  def delegated?
+    # When Patroni is enabled, the configuration of PostgreSQL instance must be delegated to it.
+    # PostgreSQL cookbook skips some of the steps that are must be done either during or after
+    # Patroni bootstraping.
+    Gitlab['patroni']['enable'] && !Gitlab['repmgr']['enable']
+  end
+
+  def ready?
+    psql_cmd(%w(-d template1 -c 'SELECT 1;'))
+  end
+
+  def config_dir
+    Gitlab['patroni']['enable'] ? node['patroni']['data_dir'] : node['postgresql']['data_dir']
+  end
+
+  def postgresql_config
+    ::File.join(config_dir, "postgresql#{Gitlab['patroni']['enable'] ? '.base' : ''}.conf")
+  end
+
+  def postgresql_runtime_config
+    ::File.join(config_dir, 'runtime.conf')
+  end
+
+  def pg_hba_config
+    ::File.join(config_dir, 'pg_hba.conf')
+  end
+
+  def pg_ident_config
+    ::File.join(config_dir, 'pg_ident.conf')
+  end
+
+  def geo_config
+    ::File.join(config_dir, 'gitlab-geo.conf')
+  end
+
+  def ssl_cert_file
+    ::File.absolute_path(node['postgresql']['ssl_cert_file'], config_dir)
+  end
+
+  def ssl_key_file
+    ::File.absolute_path(node['postgresql']['ssl_key_file'], config_dir)
   end
 
   private

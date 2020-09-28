@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
 EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
@@ -41,7 +42,6 @@ dependency 'libxslt'
 dependency 'curl'
 dependency 'rsync'
 dependency 'libicu'
-dependency 'postgresql_old'
 dependency 'postgresql'
 dependency 'postgresql_new'
 dependency 'python-docutils'
@@ -57,10 +57,12 @@ dependency 'exiftool'
 if EE
   dependency 'pgbouncer'
   dependency 'repmgr'
-  dependency 'repmgr_pg_10'
-  dependency 'repmgr_pg_11'
+  dependency 'patroni'
   dependency 'gitlab-elasticsearch-indexer'
 end
+
+# libatomic is a runtime_dependency of the grpc gem for armhf/aarch64 platforms
+whitelist_file /grpc_c\.so/ if OhaiHelper.arm?
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
@@ -73,21 +75,10 @@ build do
   # Set installation type to omnibus
   command "echo 'omnibus-gitlab' > INSTALLATION_TYPE"
 
-  block 'installs sassc gem in CentOS 6 with custom compiler' do
+  block 'use a custom compiler (gcc 6.3 instead of 4.4.7) in CentOS 6' do
     next unless ohai['platform'] == 'centos' && ohai['platform_version'].start_with?('6.')
 
-    sassc_version = shellout!(%(#{embedded_bin('ruby')} -e "require 'bundler'; puts Bundler.definition.resolve['sassc'].first&.version"),
-                              env: env).stdout.chomp
-
-    next if sassc_version.empty?
-
-    env_custom_cc = {
-      'CC' => '/opt/rh/devtoolset-6/root/usr/bin/gcc',
-      'CPP' => '/opt/rh/devtoolset-6/root/usr/bin/cpp',
-      'CXX' => '/opt/rh/devtoolset-6/root/usr/bin/c++'
-    }
-
-    shellout!("#{embedded_bin('gem')} install sassc --version #{sassc_version}", env: env_custom_cc)
+    env['PATH'] = "/opt/rh/devtoolset-7/root/usr/bin:#{env['PATH']}"
   end
 
   bundle_without = %w(development test)
@@ -95,6 +86,7 @@ build do
   bundle 'config build.rugged --no-use-system-libraries', env: env
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
+  bundle 'config build.grpc --with-cflags="-latomic" --with-ldflags="-latomic"', env: env if OhaiHelper.os_platform == 'raspbian'
   bundle "install --without #{bundle_without.join(' ')} --jobs #{workers} --retry 5", env: env
 
   block 'correct omniauth-jwt permissions' do

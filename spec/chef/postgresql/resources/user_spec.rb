@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'postgresql_user' do
+RSpec.describe 'postgresql_user' do
   before do
     allow_any_instance_of(PgHelper).to receive(:is_offline_or_readonly?).and_return(false)
     allow_any_instance_of(PgHelper).to receive(:user_exists?).and_return(false, true)

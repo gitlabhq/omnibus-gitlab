@@ -16,7 +16,7 @@
 
 require 'chef_helper'
 
-describe 'gitlab::storage-check' do
+RSpec.describe 'gitlab::storage-check' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
 
   before do
@@ -35,7 +35,7 @@ describe 'gitlab::storage-check' do
         )
       end
 
-      it_behaves_like 'enabled runit service', 'storage-check', 'root', 'root', 'git', 'git'
+      it_behaves_like 'enabled runit service', 'storage-check', 'root', 'root'
     end
 
     context 'custom values' do
@@ -51,7 +51,7 @@ describe 'gitlab::storage-check' do
         )
       end
 
-      it_behaves_like 'enabled runit service', 'storage-check', 'root', 'root', 'foo', 'bar'
+      it_behaves_like 'enabled runit service', 'storage-check', 'root', 'root'
     end
   end
 end

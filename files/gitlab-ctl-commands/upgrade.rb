@@ -55,24 +55,7 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     print_upgrade_and_exit
   end
 
-  if postgresql_upgrade_disabled? || geo_detected? || repmgr_detected?
-    log ''
-    log '==='
-    log 'Skipping automatic PostgreSQL upgrade'
-    log "Please see #{pg_upgrade_doc_url}"
-    log 'for details on how to manually upgrade the PostgreSQL server'
-    log '==='
-    log ''
-  else
-    unless GitlabCtl::Util.progress_message('Ensuring PostgreSQL is updated') do
-      command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w)
-      status = run_command(command.join(' '))
-      status.success?
-    end
-      log 'Error ensuring PostgreSQL is updated. Please check the logs'
-      Kernel.exit 1
-    end
-  end
+  run_pg_upgrade
 
   # Refresh service_statuses to ensure we pick up any new services
   service_statuses = `#{base_path}/bin/gitlab-ctl status`
@@ -145,6 +128,29 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   print_upgrade_and_exit
 end
 
+def run_pg_upgrade
+  return unless attempt_auto_pg_upgrade?
+
+  if postgresql_upgrade_disabled? || geo_detected? || repmgr_detected? || patroni_detected?
+    log ''
+    log '==='
+    log 'Skipping the check for newer PostgreSQL version and automatic upgrade.'
+    log "Please see #{pg_upgrade_doc_url}"
+    log 'for details on how to manually upgrade the PostgreSQL server'
+    log '==='
+    log ''
+  else
+    unless GitlabCtl::Util.progress_message('Checking if a newer PostgreSQL version is available and attempting automatic upgrade to it') do
+      command = %W(#{base_path}/bin/gitlab-ctl pg-upgrade -w --skip-disk-check)
+      status = run_command(command.join(' '))
+      status.success?
+    end
+      log 'Error ensuring PostgreSQL is updated. Please check the logs'
+      Kernel.exit 1
+    end
+  end
+end
+
 # Check for stale files from previous/failed installs, and advise the user to remove them.
 def stale_files_check
   # The ctime will always be reflective of when the file was installed, where mtime is not being
@@ -209,25 +215,34 @@ def print_gitlab_art
 end
 
 def pg_upgrade_check
-  pg_version_file = '/var/opt/gitlab/postgresql/data/PG_VERSION'
-  version = PGVersion.parse(File.read(pg_version_file).strip) if File.exist?(pg_version_file)
+  return unless postgresql_detected?
 
   manifest_file = '/opt/gitlab/version-manifest.txt'
-  if File.exist?(manifest_file)
-    manifest_entry = File.readlines(manifest_file).grep(/postgresql_new/).first
-    new_version = PGVersion.parse(manifest_entry&.split&.[](1))
-  end
+  return unless File.exist?(manifest_file)
+
+  # If postgresql_new doesn't exist, we are shipping only one PG version. This
+  # check becomes irrelevant then, and we return early.
+  manifest_entry = File.readlines(manifest_file).grep(/postgresql_new/).first
+  return unless manifest_entry
+
+  # Skip upgrade check if we do not recommend upgrading to the new PostgreSQL version.
+  return unless recommend_pg_upgrade?
+
+  new_version = PGVersion.parse(manifest_entry&.split&.[](1))
+
+  pg_version_file = '/var/opt/gitlab/postgresql/data/PG_VERSION'
+  installed_version = PGVersion.parse(File.read(pg_version_file).strip) if File.exist?(pg_version_file)
 
   # Print when upgrade
   #  - when we have a database and its not already on the new version
-  outdated_db = version && new_version && new_version.major.to_f > version.major.to_f
+  outdated_db = installed_version && new_version && new_version.major.to_f > installed_version.major.to_f
   return unless outdated_db
 
-  puts '=== WARNING ==='
-  puts 'Note that PostgreSQL 11 will become the minimum required PostgreSQL version in GitLab 13.0 (May 2020).'
-  puts 'PostgreSQL 9.6 and PostgreSQL 10 will be removed in GitLab 13.0.'
-  puts "To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server"
-  puts '=== WARNING ==='
+  puts '=== INFO ==='
+  puts "You are currently running PostgreSQL #{installed_version}."
+  puts "GitLab now ships with a newer version of PostgreSQL (#{new_version}) and you are recommended to upgrade to it."
+  puts 'To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
+  puts '=== INFO ==='
 end
 
 def print_welcome_and_exit
@@ -292,10 +307,28 @@ def repmgr_detected?
   service_enabled?('repmgrd')
 end
 
+def patroni_detected?
+  service_enabled?('patroni')
+end
+
+def attempt_auto_pg_upgrade?
+  # This must return false when the opt-in PostgreSQL version is the default for pg-upgrade,
+  # otherwise it must be true.
+  true
+end
+
+def recommend_pg_upgrade?
+  false
+end
+
+def postgresql_detected?
+  service_enabled?('postgresql') || service_enabled?('geo-postgresql')
+end
+
 def pg_upgrade_doc_url
   if geo_detected?
     'https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-geo-instance'
-  elsif repmgr_detected?
+  elsif repmgr_detected? || patroni_detected?
     'https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-gitlab-ha-cluster'
   else
     'https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'

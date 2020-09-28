@@ -23,8 +23,7 @@ gives ssh-keygen permission to read the temporary file we create for it.
 
 ### rhel/7/gitlab-10.5.0-ssh-authorized-keys.pp
 
-To support [fast SSH key lookups via the database]
-(https://docs.gitlab.com/ee/administration/operations/fast_ssh_key_lookup.html)
+To support [fast SSH key lookups via the database](https://docs.gitlab.com/ee/administration/operations/fast_ssh_key_lookup.html)
 GitLab needs additional permissions. This SELinux module gives sshd
 permission to do the following:
 

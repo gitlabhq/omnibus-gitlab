@@ -176,17 +176,29 @@ module SettingsHelper
 
   def generate_config(node_name)
     generate_secrets(node_name)
-
     load_roles
-
     # Parse all our variables using the handlers
     sorted_settings.each do |_key, value|
       handler = value.handler
       handler.parse_variables if handler && handler.respond_to?(:parse_variables)
     end
-
     # The last step is to convert underscores to hyphens in top-level keys
-    hyphenate_config_keys
+    strip_nils(hyphenate_config_keys)
+  end
+
+  def strip_nils(attributes)
+    results = {}
+    attributes.each_pair do |key, value|
+      next if value.nil?
+
+      recursive_classes = [Hash, Gitlab::ConfigMash, ChefUtils::Mash]
+      results[key] = if recursive_classes.include?(value.class)
+                       strip_nils(value)
+                     else
+                       value
+                     end
+    end
+    results
   end
 
   private

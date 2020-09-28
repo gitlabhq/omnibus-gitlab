@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe StorageDirectoryHelper do
+RSpec.describe StorageDirectoryHelper do
   let(:success_shell) do
     shell = instance_double(Mixlib::ShellOut)
     allow(shell).to receive(:exitstatus).and_return(0)

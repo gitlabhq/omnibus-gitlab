@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::puma with Ubuntu 16.04' do
+RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       step_into: %w(runit_service),
@@ -17,7 +17,7 @@ describe 'gitlab::puma with Ubuntu 16.04' do
   end
 
   context 'when puma is enabled' do
-    it_behaves_like 'enabled runit service', 'puma', 'root', 'root', 'git', 'git'
+    it_behaves_like 'enabled runit service', 'puma', 'root', 'root'
 
     describe 'logrotate settings' do
       context 'default values' do
@@ -73,6 +73,8 @@ describe 'gitlab::puma with Ubuntu 16.04' do
 
     it 'renders the puma.rb file' do
       expect(chef_run).to create_puma_config('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with(
+        tag: 'gitlab-puma-worker',
+        rackup: 'config.ru',
         environment: 'production',
         pid: '/opt/gitlab/var/puma/puma.pid',
         state_path: '/opt/gitlab/var/puma/puma.state',
@@ -136,7 +138,7 @@ describe 'gitlab::puma with Ubuntu 16.04' do
       )
     end
 
-    it_behaves_like 'enabled runit service', 'puma', 'root', 'root', 'foo', 'bar'
+    it_behaves_like 'enabled runit service', 'puma', 'root', 'root'
   end
 
   context 'with custom runtime_dir' do
@@ -160,9 +162,36 @@ describe 'gitlab::puma with Ubuntu 16.04' do
         }
     end
   end
+
+  context 'with ActionCable in-app enabled' do
+    before do
+      stub_gitlab_rb(
+        actioncable: {
+          enable: true,
+          in_app: true,
+          worker_pool_size: 7
+        },
+        puma: {
+          enable: true
+        },
+        unicorn: {
+          enable: false
+        }
+      )
+    end
+
+    it 'renders the runit configuration with ActionCable environment variables' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/puma/run')
+        .with_content { |content|
+          expect(content).to match(/ACTION_CABLE_IN_APP=true/)
+          expect(content).to match(/ACTION_CABLE_WORKER_POOL_SIZE=7/)
+          expect(content).to match(%r(/opt/gitlab/embedded/bin/bundle exec puma -C /var/opt/gitlab/gitlab-rails/etc/puma.rb))
+        }
+    end
+  end
 end
 
-describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
+RSpec.describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       path: 'spec/fixtures/fauxhai/ubuntu/16.04-no-run-tmpfs.json',
@@ -177,7 +206,7 @@ describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
   end
 
   context 'when puma is enabled on a node with no /run or /dev/shm tmpfs' do
-    it_behaves_like 'enabled runit service', 'puma', 'root', 'root', 'git', 'git'
+    it_behaves_like 'enabled runit service', 'puma', 'root', 'root'
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/puma/run')
@@ -189,7 +218,7 @@ describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
   end
 end
 
-describe 'gitlab::puma Ubuntu 16.04 Docker' do
+RSpec.describe 'gitlab::puma Ubuntu 16.04 Docker' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       path: 'spec/fixtures/fauxhai/ubuntu/16.04-docker.json',
@@ -211,7 +240,7 @@ describe 'gitlab::puma Ubuntu 16.04 Docker' do
   end
 
   context 'when puma is enabled on a node with a /dev/shm tmpfs' do
-    it_behaves_like 'enabled runit service', 'puma', 'root', 'root', 'git', 'git'
+    it_behaves_like 'enabled runit service', 'puma', 'root', 'root'
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/puma/run')
@@ -223,7 +252,7 @@ describe 'gitlab::puma Ubuntu 16.04 Docker' do
   end
 end
 
-describe 'gitlab::puma with more CPUs' do
+RSpec.describe 'gitlab::puma with more CPUs' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
       step_into: %w(runit_service),

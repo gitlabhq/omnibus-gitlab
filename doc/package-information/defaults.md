@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Package defaults
 
 Unless configuration is specified in the `/etc/gitlab/gitlab.rb` file,
@@ -14,7 +20,8 @@ by default:
 | <a name="gitlab-shell"></a>        GitLab Shell        | Yes           | Port             | X           | 22                                     |
 | <a name="postgresql"></a>          PostgreSQL          | Yes           | Socket           | Port (5432) | X                                      |
 | <a name="redis"></a>               Redis               | Yes           | Socket           | Port (6379) | X                                      |
-| <a name="unicorn"></a>             Unicorn             | Yes           | Socket           | Port (8080) | X                                      |
+| <a name="puma"></a>                Puma                | Yes           | Socket           | Port (8080) | X                                      |
+| <a name="actioncable"></a>         ActionCable         | No            | Socket           | Port (8280) | X                                      |
 | <a name="gitlab-workhorse"></a>    GitLab Workhorse    | Yes           | Socket           | Port (8181) | X                                      |
 | <a name="nginx-status"></a>        NGINX status        | Yes           | Port             | X           | 8060                                   |
 | <a name="prometheus"></a>          Prometheus          | Yes           | Port             | X           | 9090                                   |
@@ -24,6 +31,7 @@ by default:
 | <a name="pgbouncer-exporter"></a>  PgBouncer exporter  | No            | Port             | X           | 9188                                   |
 | <a name="gitlab-exporter"></a>     GitLab Exporter     | Yes           | Port             | X           | 9168                                   |
 | <a name="sidekiq-exporter"></a>    Sidekiq exporter    | Yes           | Port             | X           | 8082                                   |
+| <a name="unicorn"></a>             Unicorn             | No            | Socket           | Port (8080) | X                                      |
 | <a name="unicorn-exporter"></a>    Unicorn exporter    | No            | Port             | X           | 8083                                   |
 | <a name="puma-exporter"></a>       Puma exporter       | No            | Port             | X           | 8083                                   |
 | <a name="geo-postgresql"></a>      Geo PostgreSQL      | No            | Socket           | Port (5431) | X                                      |
@@ -42,6 +50,7 @@ by default:
 | <a name="mattermost-web"></a>      Mattermost          | No            | Port             | X           | 80 or 443                              |
 | <a name="pgbouncer"></a>           PgBouncer           | No            | Port             | X           | 6432                                   |
 | <a name="consul"></a>              Consul              | No            | Port             | X           | 8300, 8500                             |
+| <a name="patroni"></a>             Patroni             | No            | Port             | X           | 8008                                   |
 
 Legend:
 
@@ -58,4 +67,5 @@ Note that if you are using NFS (Network File System), files will be carried
 over a network which will require, based on implementation, ports `111` and
 `2049` to be open.
 
-NOTE: **Note:** In some cases, the GitLab Registry will be automatically enabled by default. Please see [our documentation](https://docs.gitlab.com/ee/administration/packages/container_registry.html) for more details
+NOTE: **Note:**
+In some cases, the GitLab Registry will be automatically enabled by default. Please see [our documentation](https://docs.gitlab.com/ee/administration/packages/container_registry.html) for more details

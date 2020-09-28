@@ -36,7 +36,7 @@ shared_examples 'enabled runit service' do |svc_name, owner, group, username = n
       group: group,
       mode: '0755'
     )
-    expect(chef_run).to create_template("/var/log/gitlab/#{svc_name}/config").with(
+    expect(chef_run).to create_template("/opt/gitlab/sv/#{svc_name}/log/config").with(
       owner: owner,
       group: group,
       mode: '0644'
@@ -52,26 +52,51 @@ shared_examples 'enabled runit service' do |svc_name, owner, group, username = n
     end
 
     expect(chef_run).to render_file("/opt/gitlab/sv/#{svc_name}/log/run").with_content(%r{.*})
-    expect(chef_run).to render_file("/var/log/gitlab/#{svc_name}/config").with_content(%r{.*})
+    expect(chef_run).to render_file("/opt/gitlab/sv/#{svc_name}/log/config")
   end
 
   it 'verifies that file ownership persists' do
-    expect(chef_run.template("/var/log/gitlab/#{svc_name}/config")).to notify("ruby_block[verify_chown_persisted_on_#{svc_name}]")
+    expect(chef_run.template("/opt/gitlab/sv/#{svc_name}/log/config")).to notify("ruby_block[verify_chown_persisted_on_#{svc_name}]")
   end
 
   it 'raises an error when file ownership does not persist' do
+    log_config_re = /\/opt\/gitlab\/sv\/.*\/log\/config/
     allow_any_instance_of(OmnibusHelper).to receive(:expected_user?).and_return(true)
-    allow_any_instance_of(OmnibusHelper).to receive(:expected_user?).with(/\/var\/log\/gitlab\/.*\/config/, anything).and_return(false)
+    allow_any_instance_of(OmnibusHelper).to receive(:expected_user?).with(log_config_re, anything).and_return(false)
 
     allow_any_instance_of(OmnibusHelper).to receive(:expected_group?).and_return(true)
-    allow_any_instance_of(OmnibusHelper).to receive(:expected_group?).with(/\/var\/log\/gitlab\/.*\/config/, anything).and_return(false)
+    allow_any_instance_of(OmnibusHelper).to receive(:expected_group?).with(log_config_re, anything).and_return(false)
 
     block = chef_run.find_resource('ruby_block', "verify_chown_persisted_on_#{svc_name}")
-    expect { block.block.call }.to raise_error("Unable to persist filesystem ownership changes of /var/log/gitlab/#{svc_name}/config. See https://docs.gitlab.com/ee/administration/high_availability/nfs.html#recommended-options for guidance.")
+    expect { block.block.call }.to raise_error("Unable to persist filesystem ownership changes of /opt/gitlab/sv/#{svc_name}/log/config. See https://docs.gitlab.com/ee/administration/high_availability/nfs.html#recommended-options for guidance.")
   end
 
   it 'creates the symlink to the service directory' do
     expect(chef_run).to create_link("/opt/gitlab/init/#{svc_name}").with(to: '/opt/gitlab/embedded/bin/sv')
+  end
+
+  context 'gitlab customization' do
+    # These are specs related to changes we have made to the upstream runit cookbook
+    before do
+      %w(ok status control).each do |target|
+        file_name = ::File.join('/opt/gitlab/service', svc_name, 'log', 'supervise', target)
+        allow_any_instance_of(OmnibusHelper).to receive(:expected_owner?).with(file_name, username, groupname).and_return(false)
+      end
+    end
+
+    it 'sets the supervise log files with correct permissions' do
+      # For some services, we set the ownership on the sv log files to allow supervisor_owner to run commands
+      unless username.nil?
+        expect(chef_run).to create_directory("/opt/gitlab/service/#{svc_name}/log/supervise").with(mode: '0755')
+        %w(ok status control).each do |target|
+          file_name = ::File.join('/opt/gitlab/service', svc_name, 'log', 'supervise', target)
+          expect(chef_run).to touch_file(file_name).with(
+            owner: username,
+            group: groupname
+          )
+        end
+      end
+    end
   end
 end
 

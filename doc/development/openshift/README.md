@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Omnibus GitLab Development Setup
 
 ## Requirements
@@ -23,13 +29,13 @@ The first thing you need to interact with OpenShift Origin, are the `oc` client 
 
 Next you need to setup an OpenShift Origin environment. To setup the environment you can use the production installer
 on a cloud machine, use minishift on your local machine (uses kvm or xhyve), or setup an instance
-using docker for the master, and your own machine as the slave using `oc cluster up`
+using Docker for the primary, and your own machine as the secondary using `oc cluster up`
 
 ### Minishift
 
 Installation instructions for Minishift can be found at <http://docs.okd.io/3.11/minishift/getting-started/installing.html>
 
-1. Before installing Minishift you need to install the proper docker machine driver.
+1. Before installing Minishift you need to install the proper Docker machine driver.
    - For Linux, install the [kvm driver](http://docs.okd.io/3.11/minishift/getting-started/setting-up-virtualization-environment.html#setting-up-kvm-driver)
    - For Mac OSX, install the [xhyve driver](http://docs.okd.io/3.11/minishift/getting-started/setting-up-virtualization-environment.html#setting-up-xhyve-driver)
 
@@ -52,7 +58,7 @@ regarding cluster setup.
 
 If you have Docker installed, you can setup OpenShift Origin on your local machine: <https://github.com/openshift/origin/blob/77bf0a926c045142570bb50a9a83086a370506a8/docs/cluster_up_down.md>
 
-`**Note:`this currently does not start if you are using docker-ce/ee with the new version scheme (17.xx)
+`**Note:`this currently does not start if you are using `docker-ce`/`ee` with the new version scheme (17.xx)
 
 1. On your terminal call `oc cluster up  --host-data-dir='/srv/openshift'`
    - Note that oc cluster needs access to port 80 on your host, so you may need to stop any webserver while using OpenShift
@@ -132,7 +138,7 @@ If you have Docker installed, you can setup OpenShift Origin on your local machi
 
 ### Production Ansible Installer
 
-You can use OpenShift's Ansible installer to set up OpenShift masters and slaves in Digital Ocean. Follow the [advanced install docs](https://docs.openshift.com/container-platform/3.7/install_config/install/advanced_install.html).
+You can use OpenShift's Ansible installer to set up OpenShift primaries and secondaries in Digital Ocean. Follow the [advanced install docs](https://docs.openshift.com/container-platform/3.7/install_config/install/advanced_install.html).
 
 You can find the Ansible playbooks at: <https://github.com/openshift/openshift-ansible>
 
@@ -147,11 +153,11 @@ And you need to setup persistent volumes. See 3 and 4 of the [oc cluster up step
 
 ## Add the GitLab template to OpenShift
 
-**`Note`** This section is deprecated. Check [the open issue to for more details](https://gitlab.com/gitlab-org/distribution/team-tasks/issues/263).
+**`Note`** This section is deprecated. Check [the open issue to for more details](https://gitlab.com/gitlab-org/distribution/team-tasks/-/issues/263).
 
 Add the GitLab template to OpenShift (The next release of the VM includes GitLab, so this may not be required):
 
-- `oc login -u system:admin` for the docker cluster up
+- `oc login -u system:admin` for the Docker cluster up
 - From the root of your Omnibus GitLab repo, `oc create -f docker/openshift-template.json -n openshift`
 
 ## Install GitLab

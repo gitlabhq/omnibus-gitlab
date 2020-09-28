@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands-ee/lib')
 
 require 'pgbouncer'
 
-describe Pgbouncer::Databases do
+RSpec.describe Pgbouncer::Databases do
   let(:fake_ohai) do
     {
       'gitlab' => {
@@ -95,6 +95,26 @@ describe Pgbouncer::Databases do
       expect(@obj.render).to eq(
         "[databases]\n\nfake_database = \n\n"
       )
+    end
+  end
+
+  context 'with pgbouncer listening' do
+    before do
+      allow(@obj).to receive(:show_databases).and_return("nyan")
+    end
+
+    it 'should be running' do
+      expect(@obj.running?).to be true
+    end
+  end
+
+  context 'with pgbouncer not listening' do
+    before do
+      allow(@obj).to receive(:show_databases).and_raise(GitlabCtl::Errors::ExecutionError.new("nya", "nya", "neko"))
+    end
+
+    it 'should not be running' do
+      expect(@obj.running?).to be false
     end
   end
 end

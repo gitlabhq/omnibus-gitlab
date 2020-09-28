@@ -3,7 +3,7 @@ require 'rubocop'
 require_relative '../../../lib/rubocop/cop/avoid_using_env'
 require_relative '../../support/rubocop_helper.rb'
 
-describe Rubocop::Cop::AvoidUsingEnv do
+RSpec.describe Rubocop::Cop::AvoidUsingEnv do
   include CopHelper
 
   subject(:cop) { described_class.new }

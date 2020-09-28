@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
 name 'redis'
 
@@ -22,10 +23,19 @@ license_file 'COPYING'
 skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
-version = Gitlab::Version.new('redis', '5.0.7')
+version = Gitlab::Version.new('redis', '5.0.9')
 default_version version.print(false)
 
 source git: version.remote
+
+# libatomic is a runtime_dependency of redis for armhf/aarch64 platforms
+if OhaiHelper.arm?
+  whitelist_file "#{install_dir}/embedded/bin/redis-benchmark"
+  whitelist_file "#{install_dir}/embedded/bin/redis-check-aof"
+  whitelist_file "#{install_dir}/embedded/bin/redis-check-rdb"
+  whitelist_file "#{install_dir}/embedded/bin/redis-cli"
+  whitelist_file "#{install_dir}/embedded/bin/redis-server"
+end
 
 build do
   env = with_standard_compiler_flags(with_embedded_path).merge(

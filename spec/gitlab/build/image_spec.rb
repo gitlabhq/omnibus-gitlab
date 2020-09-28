@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/build/image'
 
-describe Build::Image do
+RSpec.describe Build::Image do
   ComponentImage = Class.new do
     extend Build::Image
 

@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'gitlab::mattermost' do
+RSpec.describe 'gitlab::mattermost' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {
@@ -35,9 +35,20 @@ describe 'gitlab::mattermost' do
     allow(SecretsHelper).to receive(:generate_hex).and_return('asdf1234')
   end
 
+  context 'by default' do
+    it 'creates a default VERSION file and restarts service' do
+      expect(chef_run).to create_version_file('Create version file for Mattermost').with(
+        version_file_path: '/var/opt/gitlab/mattermost/VERSION',
+        version_check_cmd: 'cat /opt/gitlab/embedded/service/mattermost/VERSION'
+      )
+
+      expect(chef_run.version_file('Create version file for Mattermost')).to notify('runit_service[mattermost]').to(:hup)
+    end
+  end
+
   context 'service user and group' do
     context 'default values' do
-      it_behaves_like "enabled runit service", "mattermost", "root", "root", "mattermost", "mattermost"
+      it_behaves_like "enabled runit service", "mattermost", "root", "root"
     end
 
     context 'custom user and group' do
@@ -52,7 +63,7 @@ describe 'gitlab::mattermost' do
         )
       end
 
-      it_behaves_like "enabled runit service", "mattermost", "root", "root", "foo", "bar"
+      it_behaves_like "enabled runit service", "mattermost", "root", "root"
     end
   end
 

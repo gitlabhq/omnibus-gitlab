@@ -7,7 +7,6 @@ production:
   encoding: <%= @db_encoding %>
   collation: <%= @db_collation %>
   database: <%= @db_database %>
-  pool: <%= @db_pool %>
   username: <%= quote(@db_username) %>
   password: <%= quote(@db_password) %>
   host: <%= quote(@db_host) %>
@@ -24,6 +23,6 @@ production:
   load_balancing: <%= @db_load_balancing.to_json %>
   prepared_statements: <%= @db_prepared_statements %>
   statement_limit: <%= @db_statements_limit %>
-  fdw: <%= @db_fdw %>
+  connect_timeout: <%= @db_connect_timeout %>
   variables:
     statement_timeout: <%= @db_statement_timeout %>

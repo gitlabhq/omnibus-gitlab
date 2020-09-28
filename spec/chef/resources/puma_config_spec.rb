@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'puma_config' do
+RSpec.describe 'puma_config' do
   let(:runner) do
     ChefSpec::SoloRunner.new(step_into: %w(puma_config))
   end

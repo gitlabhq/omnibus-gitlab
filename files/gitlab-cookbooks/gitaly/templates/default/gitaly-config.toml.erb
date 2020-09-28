@@ -98,15 +98,14 @@ rugged_git_config_search_path = "<%= @ruby_rugged_git_config_search_path %>"
 
 [gitlab-shell]
 dir = "/opt/gitlab/embedded/service/gitlab-shell"
-<% if @gitlab_shell['gitlab_url'] %>
-gitlab_url = '<%= @gitlab_shell['gitlab_url'] %>'
-<% end %>
-<% if @gitlab_shell['custom_hooks_dir'] %>
-custom_hooks_dir = '<%= @gitlab_shell['custom_hooks_dir'] %>'
+
+[gitlab]
+<% if @gitlab_url %>
+url = '<%= @gitlab_url %>'
 <% end %>
 <% if @gitlab_shell['http_settings'] %>
 <% http_settings = @gitlab_shell['http_settings'] %>
-[gitlab-shell.http-settings]
+[gitlab.http-settings]
 <% if http_settings['read_timeout'] %>
 read_timeout = <%= http_settings['read_timeout'] %>
 <% end %>
@@ -127,6 +126,12 @@ self_signed_cert = <%= http_settings['self_signed_cert'] %>
 <% end %>
 <% end %>
 
+[hooks]
+<% if @gitlab_shell['custom_hooks_dir'] %>
+custom_hooks_dir = '<%= @gitlab_shell['custom_hooks_dir'] %>'
+<% end %>
+
+
 <% if @concurrency %>
   <% @concurrency.each do |endpoint| %>
 
@@ -134,4 +139,12 @@ self_signed_cert = <%= http_settings['self_signed_cert'] %>
 rpc = "<%= endpoint['rpc'] %>"
 max_per_repo = <%= endpoint['max_per_repo'] %>
   <% end %>
+<% end %>
+
+<% if @daily_maintenance_duration %>
+[daily_maintenance]
+<%= "start_hour = #{@daily_maintenance_start_hour}" if @daily_maintenance_start_hour %>
+<%= "start_minute = #{@daily_maintenance_start_minute}" if @daily_maintenance_start_minute %>
+<%= "duration = '#{@daily_maintenance_duration}'" if @daily_maintenance_duration %>
+<%= "storages = #{@daily_maintenance_storages}" if @daily_maintenance_storages %>
 <% end %>

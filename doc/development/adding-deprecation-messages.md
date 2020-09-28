@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Adding deprecation messages
 
 We store a list of deprecations associated with it in the `list` method of
@@ -8,7 +14,7 @@ proper details.
 Note: The process described below will become obsolete soon, with our new
 deprecation management logic.
 
-As part of our [deprecation policy][] we may need to add
+As part of our [deprecation policy](../package-information/deprecation_policy.md) we may need to add
 messages to `gitlab-ctl reconfigure` that advise the user of any deprecated
 settings they are using.
 
@@ -33,5 +39,3 @@ Here's an example from the `nginx` cookbook:
 If we need to print Ruby objects, we can make use of the [`print_ruby_object`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/package/libraries/helpers/output_helper.rb#L8-10) helper method. This needs `OutputHelper` class to be
 included in your code. Take a look at [Gitaly library](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitaly/libraries/gitaly.rb)
 for an example.
-
-[deprecation policy]: https://docs.gitlab.com/omnibus/package-information/deprecation_policy.html

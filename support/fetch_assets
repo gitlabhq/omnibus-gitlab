@@ -13,11 +13,21 @@ then
   ee_project="gitlab-ee"
 fi
 
+if [[ -n "${TOP_UPSTREAM_SOURCE_PROJECT}" && "${TOP_UPSTREAM_SOURCE_PROJECT}" =~ gitlab-org/(security/)?gitlab ]]
+then
+  project_path="${TOP_UPSTREAM_SOURCE_PROJECT}"
+elif ${curdir}/is_gitlab_ee.sh
+then
+  project_path="${group_name}/${ee_project}"
+else
+  project_path="${group_name}/${ce_project}"
+fi
+
 if ${curdir}/is_gitlab_ee.sh
 then
-  assets_image="${group_name}/${ee_project}/gitlab-assets-ee"
+  assets_image="${project_path}/gitlab-assets-ee"
 else
-  assets_image="${group_name}/${ce_project}/gitlab-assets-ce"
+  assets_image="${project_path}/gitlab-assets-ce"
 fi
 
 gitlab_version=$(echo "${1}" | awk '

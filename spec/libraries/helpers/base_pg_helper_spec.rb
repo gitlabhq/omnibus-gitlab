@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe BasePgHelper do
+RSpec.describe BasePgHelper do
   cached(:chef_run) { converge_config }
   let(:node) { chef_run.node }
   subject { described_class.new(node) }
@@ -8,6 +8,44 @@ describe BasePgHelper do
   before do
     allow(subject).to receive(:service_name) { 'postgresql' }
     allow(subject).to receive(:service_cmd) { 'gitlab-psql' }
+  end
+
+  context 'when handling ssl configuration' do
+    describe 'ssl_cert_file' do
+      it 'is configured with an absolute path' do
+        absolute_path = "/my/absolute/path"
+        config_path = "MrBoots"
+        chef_run.node.normal['postgresql']['ssl_cert_file'] = absolute_path
+        chef_run.node.normal['postgresql']['data_dir'] = config_path
+        expect(subject.ssl_cert_file).to eq(absolute_path)
+      end
+
+      it 'is configured with a relative path' do
+        relative_path = "my/relative/path"
+        config_path = "/MrBoots"
+        chef_run.node.normal['postgresql']['ssl_cert_file'] = relative_path
+        chef_run.node.normal['postgresql']['data_dir'] = config_path
+        expect(subject.ssl_cert_file).to eq(File.join(config_path, relative_path))
+      end
+    end
+
+    describe 'ssl_key_file' do
+      it 'is configured with an absolute path' do
+        absolute_path = "/my/absolute/path"
+        config_path = "MrBoots"
+        chef_run.node.normal['postgresql']['ssl_key_file'] = absolute_path
+        chef_run.node.normal['postgresql']['data_dir'] = config_path
+        expect(subject.ssl_key_file).to eq(absolute_path)
+      end
+
+      it 'is configured with a relative path' do
+        relative_path = "my/relative/path"
+        config_path = "/MrBoots"
+        chef_run.node.normal['postgresql']['ssl_key_file'] = relative_path
+        chef_run.node.normal['postgresql']['data_dir'] = config_path
+        expect(subject.ssl_key_file).to eq(File.join(config_path, relative_path))
+      end
+    end
   end
 
   describe '#database_exists?' do
@@ -61,7 +99,7 @@ describe BasePgHelper do
   describe '#extension_can_be_enabled?' do
     before do
       allow(subject).to receive(:is_running?).and_return(true)
-      allow(subject).to receive(:is_slave?).and_return(false)
+      allow(subject).to receive(:is_standby?).and_return(false)
       allow(subject).to receive(:extension_exists?).and_return(true)
       allow(subject).to receive(:database_exists?).and_return(true)
       allow(subject).to receive(:extension_enabled?).and_return(false)
@@ -77,7 +115,7 @@ describe BasePgHelper do
     end
 
     it 'cannot be done on a slave' do
-      allow(subject).to receive(:is_slave?).and_return(true)
+      allow(subject).to receive(:is_standby?).and_return(true)
       expect(subject.extension_can_be_enabled?('extension', 'db')).to be_falsey
     end
 
@@ -256,35 +294,24 @@ describe BasePgHelper do
     end
   end
 
-  describe '#fdw_external_password_exists?' do
-    it 'returns true when the password exists in the options hash' do
-      expect(subject).to receive(:psql_query).and_return('{user=gitlab,password=foo}')
+  describe '#is_standby?' do
+    let(:recovery_files) { %w(recovery.conf recovery.signal standby.signal) }
 
-      expect(subject.fdw_external_password_exists?('gitlab_geo', 'gitlab_secondary', 'gitlabhq_geo_production')).to be_truthy
+    it 'returns true for a standby instance' do
+      recovery_files.each do |f|
+        allow(File).to receive(:exist?)
+          .with("/var/opt/gitlab/postgresql/data/#{f}").and_return(true)
+      end
+
+      expect(subject.is_standby?).to be true
     end
 
-    it 'returns false when the password does not exist in the options hash' do
-      expect(subject).to receive(:psql_query).and_return('{user=gitlab}')
-
-      expect(subject.fdw_external_password_exists?('gitlab_geo', 'gitlab_secondary', 'gitlabhq_geo_production')).to be_falsey
-    end
-  end
-
-  describe '#fdw_user_mapping_update_options' do
-    let(:resource) { double(:resource, db_user: 'gitlab_geo', server_name: 'gitlab_secondary', db_name: 'gitlabhq_geo_production', external_user: 'gitlab', external_password: 'mypass') }
-
-    it 'SETs the desired password when the password exists' do
-      expect(subject).to receive(:fdw_external_password_exists?).and_return(true)
-
-      result = subject.fdw_user_mapping_update_options(resource)
-      expect(result).to eq("SET user 'gitlab', SET password 'mypass'")
-    end
-
-    it 'ADDs the desired password when the password does not exist' do
-      expect(subject).to receive(:fdw_external_password_exists?).and_return(false)
-
-      result = subject.fdw_user_mapping_update_options(resource)
-      expect(result).to eq("SET user 'gitlab', ADD password 'mypass'")
+    it 'returns false for a primary instance' do
+      recovery_files.each do |f|
+        allow(File).to receive(:exist?)
+          .with("/var/opt/gitlab/postgresql/data/#{f}").and_return(false)
+      end
+      expect(subject.is_standby?).to be false
     end
   end
 end

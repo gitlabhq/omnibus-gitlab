@@ -1,7 +1,7 @@
 require 'spec_helper'
 require_relative '../../../lib/gitlab/docker_operations.rb'
 
-describe 'docker', type: :rake do
+RSpec.describe 'docker', type: :rake do
   before :all do
     Rake.application.rake_require 'gitlab/tasks/docker_tasks'
   end
@@ -120,6 +120,7 @@ describe 'docker', type: :rake do
     it 'pushes triggered images correctly' do
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('registry.gitlab.com/gitlab-org/omnibus-gitlab')
       allow(ENV).to receive(:[]).with("IMAGE_TAG").and_return("omnibus-12345")
+      allow(Build::Info).to receive(:docker_tag).and_call_original
 
       expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce:omnibus-12345')
       Rake::Task['docker:push:triggered'].invoke
@@ -127,7 +128,7 @@ describe 'docker', type: :rake do
   end
 end
 
-describe 'docker_operations' do
+RSpec.describe 'docker_operations' do
   describe 'without docker operations timeout variable' do
     it 'sets default value as timeout' do
       DockerOperations.set_timeout

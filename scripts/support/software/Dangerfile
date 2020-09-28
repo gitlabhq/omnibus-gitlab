@@ -1,4 +1,10 @@
-QA_LABELS = %w[backstage QA test].freeze
+QA_LABELS = [
+  'test',
+  'QA',
+  'tooling',
+  'tooling::pipelines',
+  'tooling::workflow',
+].freeze
 
 MESSAGE = <<~MSG.freeze
 You've made some changes to the software definitions.
@@ -18,7 +24,7 @@ LIBRARY_FILES = [
 ].freeze
 
 def qa_labels
-  QA_LABELS.map { |label| "~#{label}" }.join(', ')
+  QA_LABELS.map { |label| %(~"#{label}") }.join(', ')
 end
 
 def library_paths_requiring_review(files)

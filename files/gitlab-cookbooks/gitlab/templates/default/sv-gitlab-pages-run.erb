@@ -11,10 +11,7 @@ cd <%= node['gitlab']['gitlab-pages']['dir'] %>
 <% external_https = [ node['gitlab']['gitlab-pages']['external_https'] ].flatten.compact  %>
 <% headers = [ node['gitlab']['gitlab-pages']['headers'] ].flatten.compact  %>
 
-exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
-    <% if node['gitlab']['gitlab-pages']['http_proxy'] %>
-    http_proxy="<%= node['gitlab']['gitlab-pages']['http_proxy'] %>" \
-    <% end %>
+exec chpst -e <%= @options[:env_dir] %> \
     /opt/gitlab/embedded/bin/gitlab-pages \
     <% if node['gitlab']['gitlab-pages']['access_control'] %>
     -config="<%= node['gitlab']['gitlab-pages']['dir'] %>/gitlab-pages-config" \
@@ -72,6 +69,9 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     \
     -gitlab-server="<%= node['gitlab']['gitlab-pages']['gitlab_server'] %>" \
     \
+    <% if node['gitlab']['gitlab-pages']['internal_gitlab_server'] %>
+    -internal-gitlab-server="<%= node['gitlab']['gitlab-pages']['internal_gitlab_server'] %>" \
+    <% end %>
     -api-secret-key="<%= node['gitlab']['gitlab-pages']['dir'] %>/.gitlab_pages_secret" \
     \
     <% if node['gitlab']['gitlab-pages']['insecure_ciphers'] %>
@@ -88,6 +88,9 @@ exec /usr/bin/env SSL_CERT_FILE=/opt/gitlab/embedded/ssl/certs/cacert.pem \
     <% end %>
     <% if node['gitlab']['gitlab-pages']['gitlab_client_jwt_expiry'] %>
     -gitlab-client-jwt-expiry="<%= node['gitlab']['gitlab-pages']['gitlab_client_jwt_expiry'] %>" \
+    <% end %>
+    <% if node['gitlab']['gitlab-pages']['domain_config_source'] %>
+    -domain-config-source="<%= node['gitlab']['gitlab-pages']['domain_config_source'] %>" \
     <% end %>
     <% headers.each do |spec| %>
     -header="<%= spec %>" \

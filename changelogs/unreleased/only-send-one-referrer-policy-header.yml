@@ -1,0 +1,5 @@
+---
+title: Only send one Referrer-Policy header
+merge_request: 4584
+author:
+type: changed

@@ -5,6 +5,7 @@ prometheus_yml_output = <<-PROMYML
   global:
     scrape_interval: 15s
     scrape_timeout: 15s
+    external_labels: {}
   remote_read: []
   remote_write: []
   rule_files:
@@ -177,7 +178,7 @@ prometheus_yml_output = <<-PROMYML
         - localhost:9093
 PROMYML
 
-describe 'monitoring::prometheus' do
+RSpec.describe 'monitoring::prometheus' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {
@@ -190,7 +191,7 @@ describe 'monitoring::prometheus' do
   end
 
   context 'when prometheus is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/prometheus/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/prometheus/log/config') }
 
     before do
       stub_gitlab_rb(
@@ -210,7 +211,7 @@ describe 'monitoring::prometheus' do
       )
     end
 
-    it_behaves_like 'enabled runit service', 'prometheus', 'root', 'root', 'gitlab-prometheus', 'gitlab-prometheus'
+    it_behaves_like 'enabled runit service', 'prometheus', 'root', 'root'
 
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/prometheus/env').with_variables(default_vars)

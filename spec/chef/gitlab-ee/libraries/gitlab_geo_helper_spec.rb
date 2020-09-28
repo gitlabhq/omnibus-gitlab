@@ -1,7 +1,7 @@
 require_relative '../../../../files/gitlab-cookbooks/gitlab-ee/libraries/gitlab_geo_helper.rb'
 require 'chef_helper'
 
-describe GitlabGeoHelper do
+RSpec.describe GitlabGeoHelper do
   cached(:chef_run) { converge_config(is_ee: true) }
   subject { described_class.new(chef_run.node) }
 

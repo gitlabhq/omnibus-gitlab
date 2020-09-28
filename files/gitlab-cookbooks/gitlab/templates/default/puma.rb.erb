@@ -9,7 +9,7 @@
 # The default is "config.ru".
 #
 environment '<%= @environment %>'
-rackup '<%= @install_dir %>/embedded/service/gitlab-rails/config.ru'
+rackup '<%= @install_dir %>/embedded/service/gitlab-rails/<%= @rackup %>'
 pidfile '<%= @pid %>'
 state_path '<%= @state_path %>'
 
@@ -77,7 +77,7 @@ end
 
 preload_app!
 
-tag 'gitlab-puma-worker'
+tag '<%= @tag %>'
 
 # Verifies that all workers have checked in to the master process within
 # the given timeout. If not the worker process will be restarted. Default

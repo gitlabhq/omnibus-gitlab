@@ -31,7 +31,4 @@ build do
   patch source: "license/#{version}/add-license-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
   command "#{install_dir}/embedded/bin/pip3 install --compile docutils==#{version}", env: env
-  command "find #{install_dir}/embedded/lib/python3.7 -name '*.dist-info' -type d -print -exec rm -r {} +"
-  command "find #{install_dir}/embedded/lib/python3.7 -name '*.egg-info' -type d -print -exec rm -r {} +"
-  command "find #{install_dir}/embedded/lib/python3.7 -name '__pycache__' -type d -print -exec rm -r {} +"
 end

@@ -16,7 +16,7 @@
 #
 
 name 'postgresql_new'
-default_version '11.7'
+default_version '12.4'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -30,13 +30,12 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '11.7' do
-  source sha256: '324ae93a8846fbb6a25d562d271bc441ffa8794654c5b2839384834de220a313'
+version '12.4' do
+  source sha256: 'bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc'
 end
 
-# PostgreSQL 10 and up should have a major version of 10, not 10.0.
-# See: https://www.postgresql.org/support/versioning
-major_version = '11'
+major_version = '12'
+libpq = 'libpq.so.5'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
 
@@ -53,20 +52,15 @@ build do
           " --prefix=#{prefix}" \
           ' --with-libedit-preferred' \
           ' --with-openssl' \
-          ' --with-ossp-uuid', env: env
+          ' --with-uuid=ossp', env: env
 
   make "world -j #{workers}", env: env
   make 'install-world', env: env
 
-  block 'link bin files' do
-    Dir.glob("#{prefix}/bin/*").each do |bin_file|
-      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
-    end
-  end
+  link "#{prefix}/lib/#{libpq}", "#{install_dir}/embedded/lib/#{libpq}"
 end
 
 # exclude headers and static libraries from package
-project.exclude "embedded/bin/pg_config"
 project.exclude "embedded/postgresql/#{major_version}/include"
 project.exclude "embedded/postgresql/#{major_version}/lib/*.a"
 project.exclude "embedded/postgresql/#{major_version}/lib/pgxs"

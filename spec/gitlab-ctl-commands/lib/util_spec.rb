@@ -4,7 +4,7 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
 
 require 'gitlab_ctl'
 
-describe GitlabCtl::Util do
+RSpec.describe GitlabCtl::Util do
   context 'when there is no TTY available' do
     before do
       allow(STDIN).to receive(:tty?).and_return(false)
@@ -111,6 +111,57 @@ describe GitlabCtl::Util do
       allow(File).to receive(:read).with('/opt/gitlab/embedded/nodes/12345.json').and_return(incomplete_node_attributes)
 
       expect { GitlabCtl::Util.parse_json_file('/opt/gitlab/embedded/nodes/12345.json') }.to raise_error(GitlabCtl::Errors::NodeError, "Attributes not found in /opt/gitlab/embedded/nodes/12345.json, has reconfigure been run yet?")
+    end
+  end
+
+  describe '#parse_duration' do
+    it 'should raise error for nil, empty, or malformed inputs' do
+      expect { GitlabCtl::Util.parse_duration(nil) }.to raise_error ArgumentError, 'invalid value for duration: ``'
+      expect { GitlabCtl::Util.parse_duration('') }.to raise_error ArgumentError, 'invalid value for duration: ``'
+      expect { GitlabCtl::Util.parse_duration('foo') }.to raise_error ArgumentError, 'invalid value for duration: `foo`'
+      expect { GitlabCtl::Util.parse_duration('123foo') }.to raise_error ArgumentError, 'invalid value for duration: `123foo`'
+      expect { GitlabCtl::Util.parse_duration('foo123') }.to raise_error ArgumentError, 'invalid value for duration: `foo123`'
+    end
+
+    it 'should parse unformatted inputs into milliseconds' do
+      expect(GitlabCtl::Util.parse_duration('123')).to eq(123)
+      expect(GitlabCtl::Util.parse_duration('123.456')).to eq(123)
+    end
+
+    it 'should recognize and parse different duration units' do
+      expect(GitlabCtl::Util.parse_duration('123.456ms')).to eq(123)
+      expect(GitlabCtl::Util.parse_duration('123.456s')).to eq(123.456 * 1000)
+      expect(GitlabCtl::Util.parse_duration('123.456m')).to eq(123.456 * 1000 * 60)
+      expect(GitlabCtl::Util.parse_duration('123.456h')).to eq(123.456 * 1000 * 60 * 60)
+      expect(GitlabCtl::Util.parse_duration('123.456d')).to eq(123.456 * 1000 * 60 * 60 * 24)
+    end
+
+    it 'should parse mixed unit inputs in any order' do
+      expect(GitlabCtl::Util.parse_duration('1.1d2.2h3.3m4.4s5.5ms')).to eq(
+        1.1 * 1000 * 60 * 60 * 24 +
+        2.2 * 1000 * 60 * 60 +
+        3.3 * 1000 * 60 +
+        4.4 * 1000 +
+        5
+      )
+      expect(GitlabCtl::Util.parse_duration('5.5ms4.4s3.3m2.2h1.1d')).to eq(
+        1.1 * 1000 * 60 * 60 * 24 +
+        2.2 * 1000 * 60 * 60 +
+        3.3 * 1000 * 60 +
+        4.4 * 1000 +
+        5
+      )
+    end
+
+    it 'should break and return when input is partially valid' do
+      expect(GitlabCtl::Util.parse_duration('1h2m3foo')).to eq(
+        1 * 1000 * 60 * 60 +
+        2 * 1000 * 60
+      )
+      expect(GitlabCtl::Util.parse_duration('1h2m3')).to eq(
+        1 * 1000 * 60 * 60 +
+        2 * 1000 * 60
+      )
     end
   end
 end

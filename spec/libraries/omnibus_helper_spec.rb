@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe OmnibusHelper do
+RSpec.describe OmnibusHelper do
   cached(:chef_run) { converge_config }
   let(:node) { chef_run.node }
 

@@ -21,6 +21,7 @@ default['monitoring']['prometheus']['rules_directory'] = "/var/opt/gitlab/promet
 default['monitoring']['prometheus']['scrape_interval'] = 15
 default['monitoring']['prometheus']['scrape_timeout'] = 15
 default['monitoring']['prometheus']['scrape_configs'] = []
+default['monitoring']['prometheus']['external_labels'] = {}
 default['monitoring']['prometheus']['listen_address'] = 'localhost:9090'
 default['monitoring']['prometheus']['alertmanagers'] = nil
 
@@ -129,3 +130,4 @@ default['monitoring']['grafana']['env'] = {
 default['monitoring']['grafana']['metrics_enabled'] = false
 default['monitoring']['grafana']['metrics_basic_auth_username'] = nil
 default['monitoring']['grafana']['metrics_basic_auth_password'] = nil
+default['monitoring']['grafana']['alerting_enabled'] = false

@@ -16,7 +16,7 @@
 nginx_log_dir = node['gitlab']['nginx']['log_directory']
 
 runit_service "nginx" do
-  down node['gitlab']['nginx']['ha']
+  start_down node['gitlab']['nginx']['ha']
   options({
     log_directory: nginx_log_dir
   }.merge(params))

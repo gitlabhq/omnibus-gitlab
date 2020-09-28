@@ -1,7 +1,7 @@
 require 'spec_helper'
 require_relative '../../files/gitlab-cookbooks/package/libraries/config/gitlab'
 
-describe Gitlab do
+RSpec.describe Gitlab do
   context 'when using an attribute_block' do
     it 'sets top level attributes to the provided root' do
       Gitlab.attribute_block('gitlab') do

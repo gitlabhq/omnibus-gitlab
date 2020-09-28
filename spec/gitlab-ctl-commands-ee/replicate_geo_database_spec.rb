@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'omnibus-ctl'
 
-describe 'gitlab-ctl replicate-geo-database' do
+RSpec.describe 'gitlab-ctl replicate-geo-database' do
   subject { Omnibus::Ctl.new('testing-ctl') }
 
   let(:required_arguments) do

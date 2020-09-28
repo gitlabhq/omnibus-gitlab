@@ -1,4 +1,4 @@
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/promote_to_primary"
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/promote_to_primary_node"
 
 #
 # Copyright:: Copyright (c) 2017 GitLab Inc.
@@ -18,7 +18,7 @@ require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/promote_to_primary
 #
 
 add_command_under_category('promote-to-primary-node', 'gitlab-geo', 'Promote to primary node', 2) do |cmd_name, *args|
-  Geo::PromoteToPrimary.new(base_path, get_ctl_options).execute
+  Geo::PromoteToPrimaryNode.new(base_path, get_ctl_options).execute
 end
 
 def get_ctl_options
@@ -26,12 +26,16 @@ def get_ctl_options
   OptionParser.new do |opts|
     opts.banner = "Usage: gitlab-ctl promote-to-primary-node [options]"
 
-    opts.on('-p', '--[no-]confirm-primary-is-down', 'Do not ask a confirmation that primary is down') do |p|
+    opts.on('-p', '--[no-]confirm-primary-is-down', 'Do not ask for confirmation that primary is down') do |p|
       options[:confirm_primary_is_down] = p
     end
 
-    opts.on('-c', '--[no-]confirm-removing-keys', 'Do not ask a confirmation about removing keys') do |c|
-      options[:confirm_removing_keys] = c
+    opts.on('-m', '--skip-preflight-checks', 'Perform promotion without running any preflight checks') do |m|
+      options[:skip_preflight_checks] = m
+    end
+
+    opts.on('-f', '--force', 'Proceed even if preflight checks fail') do |f|
+      options[:force] = f
     end
   end.parse!(ARGV.dup)
 

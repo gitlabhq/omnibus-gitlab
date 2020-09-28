@@ -17,13 +17,17 @@
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
+pg_helper = PgHelper.new(node)
+
 gitlab_user = account_helper.gitlab_user
+postgresql_username = account_helper.postgresql_user
+postgresql_group = account_helper.postgresql_group
 
 gitlab_rails_source_dir = '/opt/gitlab/embedded/service/gitlab-rails'
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
-dependent_services = %w(unicorn sidekiq geo-logcursor)
+dependent_services = %w(unicorn puma geo-logcursor sidekiq sidekiq-cluster)
 
 templatesymlink 'Create a database_geo.yml and create a symlink to Rails root' do
   link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')
@@ -40,7 +44,7 @@ end
 ruby_block 'Restart geo-secondary dependent services' do
   block do
     dependent_services.each do |svc|
-      notifies :restart, "runit_service[#{svc}]" if omnibus_helper.should_notify?(svc)
+      notifies :restart, omnibus_helper.restart_service_resource(svc) if omnibus_helper.should_notify?(svc)
     end
   end
   action :nothing
@@ -49,4 +53,13 @@ end
 # Make schema.rb writable for when we run `rake geo:db:migrate`
 file '/opt/gitlab/embedded/service/gitlab-rails/ee/db/geo/schema.rb' do
   owner gitlab_user
+end
+
+# This is included by postgresql.conf for replication settings in PostgreSQL 12 and higher
+if node['postgresql']['enable']
+  file pg_helper.geo_config do
+    owner postgresql_username
+    group postgresql_group
+    mode 0640
+  end
 end

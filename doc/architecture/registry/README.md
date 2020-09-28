@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Architecture of GitLab Container Registry
 
 The GitLab registry is what users use to store their own Docker images.
@@ -9,7 +15,9 @@ on the web server (or load balancers, LB for short).
 The flow described by the diagram above:
 
 1. A user runs `docker login registry.gitlab.example` on their client. This reaches the web server (or LB) on port 443.
-1. Web server connects to the Registry backend pool (by default, using port 5000). Since the user didn’t provide a valid token the Registry returns a 401 HTTP code and the url (`token_realm` from Registry configuration) where to get one. This points to the GitLab API.
+1. Web server connects to the Registry backend pool (by default, using port 5000). Since the user
+   didn’t provide a valid token, the Registry returns a 401 HTTP code and the URL (`token_realm` from
+   Registry configuration) where to get one. This points to the GitLab API.
 1. The Docker client then connects to the GitLab API and obtains a token.
 1. The API signs the token with the registry key and hands it to the Docker client
 1. The Docker client now logs in again with the token received from the API. It can now push and pull Docker images.
@@ -44,7 +52,7 @@ Below you will find configuration options you should set in `/etc/gitlab/gitlab.
 for Registry to run separately from GitLab:
 
 - `registry['registry_http_addr']`, default [set programmatically](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/10-3-stable/files/gitlab-cookbooks/gitlab/libraries/registry.rb#L50). Needs to be reachable by web server (or LB).
-- `registry['token_realm']`, default [set programmatically](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/10-3-stable/files/gitlab-cookbooks/gitlab/libraries/registry.rb#L53). Specifies the endpoint to use to perform authentication, usually GitLab url.
+- `registry['token_realm']`, default [set programmatically](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/10-3-stable/files/gitlab-cookbooks/gitlab/libraries/registry.rb#L53). Specifies the endpoint to use to perform authentication, usually the GitLab URL.
   This endpoint needs to be reachable by user.
 - `registry['http_secret']`, [random string](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/10-3-stable/files/gitlab-cookbooks/gitlab/libraries/registry.rb#L32). A random piece of data used to sign state that may be stored with the client to protect against tampering.
 - `registry['internal_key']`, default [automatically generated](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/10-3-stable/files/gitlab-cookbooks/gitlab/recipes/gitlab-rails.rb#L113-119). Contents of the key that GitLab uses to sign the tokens. They key gets created on the Registry server, but it won't be used there.

@@ -2,7 +2,7 @@ require 'mixlib/shellout'
 require_relative 'helper'
 require_relative 'deprecations'
 
-class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we can use `unless defined?(OmnibusHelper)` at the end of the class definition)
+class OmnibusHelper
   include ShellOutHelper
   attr_reader :node
 
@@ -101,7 +101,10 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
   def self.deprecated_os_list
     # This hash follows the format `'ohai-slug' => 'EOL version'
     # example: deprecated_os = { 'raspbian-8' => 'GitLab 11.8' }
-    { 'opensuseleap-15.0' => 'GitLab 12.6' }
+    {
+      'raspbian-9' => 'GitLab 13.4',
+      'debian-8' => 'GitLab 13.4'
+    }
   end
 
   def self.is_deprecated_os?
@@ -122,7 +125,7 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
 
     message = <<~EOS
       Your OS, #{os_string}, will be deprecated soon.
-      Staring with #{deprecated_os[matching_list.first]}, packages will not be built for it.
+      Starting with #{deprecated_os[matching_list.first]}, packages will not be built for it.
     EOS
 
     LoggingHelper.deprecation(message)
@@ -196,6 +199,13 @@ class OmnibusHelper # rubocop:disable Style/MultilineIfModifier (disabled so we 
 
   def sidekiq_cluster_service_name
     node['gitlab']['sidekiq']['cluster'] ? 'sidekiq' : 'sidekiq-cluster'
+  end
+
+  def restart_service_resource(service)
+    return "sidekiq_service[#{service}]" if %w(sidekiq sidekiq-cluster).include?(service)
+    return "unicorn_service[#{service}]" if %w(unicorn).include?(service)
+
+    "runit_service[#{service}]"
   end
 
   private

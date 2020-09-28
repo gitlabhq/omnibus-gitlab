@@ -25,58 +25,58 @@ module Gitlab
             note: "Please see https://docs.gitlab.com/omnibus/settings/database.html#store-postgresql-data-in-a-different-directory for how to use postgresql['dir']"
           },
           {
-            config_keys: %w(gitlab gitlab-pages auth_server),
-            deprecation: '12.0',
-            removal: '13.0',
-            note: "Use gitlab_server instead."
+            config_keys: %w(gitlab sidekiq cluster),
+            deprecation: '13.0',
+            removal: '14.0',
+            note: "Running sidekiq directly is deprecated. Please see https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html for how to use sidekiq-cluster."
           },
           {
-            config_keys: %w(monitoring gitlab-monitor enable),
-            deprecation: '12.3',
-            removal: '13.0',
-            note: "Use gitlab_exporter['enable'] instead."
+            config_keys: %w(roles redis-slave enable),
+            deprecation: '13.0',
+            removal: '14.0',
+            note: 'Use redis_replica_role instead.'
           },
           {
-            config_keys: %w(monitoring gitlab-monitor log_directory),
-            deprecation: '12.3',
-            removal: '13.0',
-            note: "Use gitlab_exporter['log_directory'] instead."
+            config_keys: %w(redis client_output_buffer_limit_slave),
+            deprecation: '13.0',
+            removal: '14.0',
+            note: 'Use client_output_buffer_limit_replica instead'
           },
           {
-            config_keys: %w(monitoring gitlab-monitor home),
-            deprecation: '12.3',
-            removal: '13.0',
-            note: "Use gitlab_exporter['home'] instead."
+            config_keys: %w(gitlab gitlab-pages http_proxy),
+            deprecation: '13.1',
+            removal: '14.0',
+            note: "Set gitlab_pages['env']['http_proxy'] instead. See https://docs.gitlab.com/omnibus/settings/environment-variables.html"
           },
           {
-            config_keys: %w(monitoring gitlab-monitor listen_address),
-            deprecation: '12.3',
-            removal: '13.0',
-            note: "Use gitlab_exporter['listen_address'] instead."
+            config_keys: %w(praefect failover_read_only_after_failover),
+            deprecation: '13.3',
+            removal: '14.0',
+            note: "Read-only mode is repository specific and always enabled after suspected data loss. See https://docs.gitlab.com/ee/administration/gitaly/praefect.html#read-only-mode"
           },
           {
-            config_keys: %w(monitoring gitlab-monitor listen_port),
-            deprecation: '12.3',
-            removal: '13.0',
-            note: "Use gitlab_exporter['listen_port'] instead."
+            config_keys: %w(gitlab geo-secondary db_fdw),
+            deprecation: '13.3',
+            removal: '14.0',
+            note: "Geo does not require Foreign Data Wrapper (FDW) to be configured to replicate data."
           },
           {
-            config_keys: %w(monitoring gitlab-monitor probe_sidekiq),
-            deprecation: '12.3',
-            removal: '13.0',
-            note: "Use gitlab_exporter['probe_sidekiq'] instead."
+            config_keys: %w(gitlab geo-postgresql fdw_external_user),
+            deprecation: '13.3',
+            removal: '14.0',
+            note: "Geo does not require Foreign Data Wrapper (FDW) to be configured to replicate data."
           },
           {
-            config_keys: %w(repmgr user),
-            deprecation: '12.10',
-            removal: '13.0',
-            note: "Use repmgr['username'] instead."
+            config_keys: %w(gitlab geo-postgresql fdw_external_password),
+            deprecation: '13.3',
+            removal: '14.0',
+            note: "Geo does not require Foreign Data Wrapper (FDW) to be configured to replicate data."
           },
           {
-            config_keys: %w(consul user),
-            deprecation: '12.10',
-            removal: '13.0',
-            note: "Use consul['username'] instead."
+            config_keys: %w(praefect virtual_storages primary),
+            deprecation: '13.4',
+            removal: '14.0',
+            note: "Praefect no longer supports statically designating primary Gitaly nodes."
           }
         ]
 
@@ -143,6 +143,8 @@ module Gitlab
           config_keys.shift if ATTRIBUTE_BLOCKS.include?(config_keys[0])
           key = if config_keys.length == 1
                   config_keys[0].tr("-", "_")
+                elsif config_keys.first.eql?('roles')
+                  "#{config_keys[1].tr('-', '_')}_role"
                 else
                   "#{config_keys[0].tr('-', '_')}['#{config_keys.drop(1).join("']['")}']"
                 end

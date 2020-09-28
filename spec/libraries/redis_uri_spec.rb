@@ -4,7 +4,7 @@
 require 'spec_helper'
 require_relative '../../files/gitlab-cookbooks/gitlab/libraries/redis_uri.rb'
 
-describe URI::Redis do
+RSpec.describe URI::Redis do
   subject { URI('redis://localhost') }
 
   it { is_expected.to be_a(described_class) }

@@ -22,7 +22,7 @@ module Services
     # Define all gitlab cookbook services
     service 'logrotate',          groups: [DEFAULT_GROUP, SYSTEM_GROUP]
     service 'node_exporter',      groups: [DEFAULT_GROUP, SYSTEM_GROUP, 'monitoring', 'monitoring_role']
-    service 'unicorn',            groups: [DEFAULT_GROUP, 'rails']
+    service 'puma',               groups: [DEFAULT_GROUP, 'rails']
     service 'sidekiq',            groups: [DEFAULT_GROUP, 'rails', 'sidekiq']
     service 'gitlab_exporter',    groups: [DEFAULT_GROUP, 'rails', 'monitoring']
     service 'gitlab_workhorse',   groups: [DEFAULT_GROUP, 'rails']
@@ -41,8 +41,9 @@ module Services
     service 'registry'
     service 'storage_check'
     service 'crond'
-    service 'puma'
     service 'praefect'
+    service 'unicorn'
+    service 'actioncable'
   end
 
   # Define the services included in the EE edition of GitLab
@@ -53,6 +54,7 @@ module Services
     service 'pgbouncer',          groups: %w(postgres pgbouncer_role)
     service 'pgbouncer_exporter', groups: %w(pgbouncer_role)
     service 'repmgrd',            groups: %w(postgres postgres_role)
+    service 'patroni',            groups: %w(postgres)
     service 'consul',             groups: %w(consul_role ha pgbouncer_role postgres_role)
     service 'sidekiq_cluster',    groups: ['sidekiq']
   end

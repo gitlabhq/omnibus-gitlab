@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Maintenance commands
 
 The following commands can be run after installation.
@@ -11,7 +17,7 @@ run: nginx: (pid 972) 7s; run: log: (pid 971) 7s
 run: postgresql: (pid 962) 7s; run: log: (pid 959) 7s
 run: redis: (pid 964) 7s; run: log: (pid 963) 7s
 run: sidekiq: (pid 967) 7s; run: log: (pid 966) 7s
-run: unicorn: (pid 961) 7s; run: log: (pid 960) 7s
+run: puma: (pid 961) 7s; run: log: (pid 960) 7s
 ```
 
 ## Tail process logs
@@ -40,9 +46,8 @@ sudo gitlab-ctl stop
 sudo gitlab-ctl restart
 ```
 
-Note that on a single-core server it may take up to a minute to restart Unicorn
-and Sidekiq. Your GitLab instance will give a 502 error until Unicorn is up
-again.
+Note that on a single-core server it may take up to a minute to restart Puma and
+Sidekiq. Your GitLab instance will give a 502 error until Puma is up again.
 
 It is also possible to start, stop or restart individual components.
 
@@ -50,17 +55,18 @@ It is also possible to start, stop or restart individual components.
 sudo gitlab-ctl restart sidekiq
 ```
 
-Unicorn supports zero-downtime reloads. These can be triggered as follows:
-
-```shell
-sudo gitlab-ctl hup unicorn
-```
-
-If you are using Puma, Puma does support almost zero-downtime reloads.
-These can be triggered as follows:
+Puma does support almost zero-downtime reloads. These can be triggered as
+follows:
 
 ```shell
 sudo gitlab-ctl hup puma
+```
+
+If you are using Unicorn, it supports zero-downtime reloads. These can be
+triggered as follows:
+
+```shell
+sudo gitlab-ctl hup unicorn
 ```
 
 Note that you cannot use a Unicorn/Puma reload to update the Ruby runtime.
@@ -138,9 +144,8 @@ sudo gitlab-geo-psql -d gitlabhq_geo_production
 ## Container Registry garbage collection
 
 Container Registry can use considerable amounts of disk space. To clear up
-unused layers, the registry includes a garbage collect command.
-
-[Read on how to use the Container Registry garbage collection.](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-garbage-collection)
+unused layers, the registry includes a
+[garbage collect command](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-garbage-collection).
 
 ## Restrict users from logging into GitLab
 

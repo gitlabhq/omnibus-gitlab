@@ -1,7 +1,7 @@
 require 'chef_helper'
 require 'base64'
 
-describe 'secrets' do
+RSpec.describe 'secrets' do
   let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
 
   HEX_KEY = /\h{128}/.freeze
@@ -30,6 +30,7 @@ describe 'secrets' do
   context 'when /etc/gitlab exists' do
     let(:file) { double(:file) }
     let(:new_secrets) { @new_secrets }
+    let(:gitlab_rb_ci_jwt_signing_key) { SecretsHelper.generate_rsa(4096).to_pem }
 
     before do
       allow(SecretsHelper).to receive(:system)
@@ -49,7 +50,7 @@ describe 'secrets' do
       it 'writes new secrets to the file, with different values for each' do
         rails_keys = new_secrets['gitlab_rails']
         hex_keys = rails_keys.values_at('db_key_base', 'otp_key_base', 'secret_key_base')
-        rsa_keys = rails_keys.values_at('openid_connect_signing_key')
+        rsa_keys = rails_keys.values_at('openid_connect_signing_key', 'ci_jwt_signing_key')
 
         expect(rails_keys.to_a.uniq).to eq(rails_keys.to_a)
         expect(hex_keys).to all(match(HEX_KEY))
@@ -167,6 +168,7 @@ describe 'secrets' do
           )
 
           stub_gitlab_rb(gitlab_ci: { db_key_base: 'rb_ci_db_key_base' })
+
           chef_run
         end
 
@@ -191,7 +193,8 @@ describe 'secrets' do
           stub_gitlab_secrets_json(
             gitlab_rails: {
               secret_token: 'json_rails_secret_token',
-              jws_private_key: 'json_rails_jws_private_key'
+              jws_private_key: 'json_rails_jws_private_key',
+              ci_jwt_signing_key: gitlab_rb_ci_jwt_signing_key
             }
           )
 
@@ -225,7 +228,8 @@ describe 'secrets' do
                 'db_key_base' => 'rb_ci_db_key_base',
                 'secret_key_base' => 'rb_ci_db_key_base',
                 'otp_key_base' => 'json_rails_secret_token',
-                'openid_connect_signing_key' => 'json_rails_jws_private_key'
+                'openid_connect_signing_key' => 'json_rails_jws_private_key',
+                'ci_jwt_signing_key' => gitlab_rb_ci_jwt_signing_key
               }
             }
           )
@@ -260,6 +264,80 @@ describe 'secrets' do
           allow(File).to receive(:read).with(secret_file).and_return('secret_key_base')
 
           expect { chef_run }.to raise_error(RuntimeError, /otp_key_base/)
+        end
+      end
+
+      context 'ci_jwt_signing_key' do
+        let(:secrets_json_ci_jwt_signing_key) { SecretsHelper.generate_rsa(4096).to_pem }
+
+        it 'uses the key from /etc/gitlab/gitlab.rb when available' do
+          stub_gitlab_secrets_json(
+            gitlab_rails: { ci_jwt_signing_key: secrets_json_ci_jwt_signing_key }
+          )
+
+          stub_gitlab_rb(
+            gitlab_rails: { ci_jwt_signing_key: gitlab_rb_ci_jwt_signing_key }
+          )
+
+          chef_run
+
+          expect(new_secrets['gitlab_rails']['ci_jwt_signing_key']).to eq(gitlab_rb_ci_jwt_signing_key)
+        end
+
+        it 'uses the key from /etc/gitlab/gitlab-secrets.json when available' do
+          stub_gitlab_secrets_json(
+            gitlab_rails: { ci_jwt_signing_key: secrets_json_ci_jwt_signing_key }
+          )
+
+          chef_run
+
+          expect(new_secrets['gitlab_rails']['ci_jwt_signing_key']).to eq(secrets_json_ci_jwt_signing_key)
+        end
+
+        it 'rejects invalid RSA keys' do
+          stub_gitlab_secrets_json({})
+          stub_gitlab_rb(
+            gitlab_rails: { ci_jwt_signing_key: 'invalid key' }
+          )
+
+          expect { chef_run }.to raise_error('ci_jwt_signing_key: The provided key is not valid RSA key')
+        end
+
+        it 'rejects RSA public keys' do
+          public_key = SecretsHelper.generate_rsa(4096).public_key.to_pem
+
+          stub_gitlab_secrets_json({})
+          stub_gitlab_rb(
+            gitlab_rails: { ci_jwt_signing_key: public_key }
+          )
+
+          expect { chef_run }.to raise_error('ci_jwt_signing_key: The provided key is not private RSA key')
+        end
+
+        it 'writes the correct data to secrets.yml' do
+          stub_gitlab_secrets_json({})
+
+          stub_gitlab_rb(
+            gitlab_rails: {
+              db_key_base: 'rb_ci_db_key_base',
+              secret_key_base: 'rb_ci_db_key_base',
+              otp_key_base: 'json_rails_secret_token',
+              openid_connect_signing_key: 'json_rails_jws_private_key',
+              ci_jwt_signing_key: gitlab_rb_ci_jwt_signing_key
+            }
+          )
+
+          expect(chef_run).to create_templatesymlink('Create a secrets.yml and create a symlink to Rails root').with_variables(
+            'secrets' => {
+              'production' => {
+                'db_key_base' => 'rb_ci_db_key_base',
+                'secret_key_base' => 'rb_ci_db_key_base',
+                'otp_key_base' => 'json_rails_secret_token',
+                'openid_connect_signing_key' => 'json_rails_jws_private_key',
+                'ci_jwt_signing_key' => gitlab_rb_ci_jwt_signing_key
+              }
+            }
+          )
         end
       end
     end

@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Omnibus GitLab release process
 
 Our main goal is to make it clear which version of GitLab is in an omnibus
@@ -42,7 +48,7 @@ Amazon S3 bucket which stores the test packages.
 
 ## Build process
 
-GitLab Inc is using the [release-tools project] to automate the release tasks
+GitLab Inc is using the [release-tools project](https://gitlab.com/gitlab-org/release-tools/tree/master) to automate the release tasks
 for every release. When the release manager starts the release process, a couple
 of important things for Omnibus GitLab will be done:
 
@@ -74,7 +80,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
 1. If the release branch already exists, for instance because you are doing a
    patch release, make sure to pull the latest changes to your local machine:
 
-   ```sh
+   ```shell
    git pull https://gitlab.com/gitlab-org/omnibus-gitlab.git 6-6-stable # existing release branch
    ```
 
@@ -83,7 +89,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
    the download sources to <https://dev.gitlab.org/>. Use `set-revisions --ee` for an EE
    release:
 
-   ```sh
+   ```shell
    # usage: set-revisions [--ee] GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF GITALY_REF GITLAB_ELASTICSEARCH_INDEXER_REF
 
    # For GitLab CE:
@@ -95,7 +101,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
 
 1. Commit the new version to the release branch:
 
-   ```sh
+   ```shell
    git add VERSION GITLAB_SHELL_VERSION GITLAB_WORKHORSE_VERSION GITALY_SERVER_VERSION
    git commit
    ```
@@ -105,7 +111,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
    `MAJOR.MINOR.PATCH` is the GitLab version, `OTHER` can be something like `ce`,
    `ee` or `rc1` (or `rc1.ee`), and `OMNIBUS_RELEASE` is a number (starting at 0):
 
-   ```sh
+   ```shell
    git tag -a 6.6.0+ce.0 -m 'Pin GitLab to v6.6.0'
    ```
 
@@ -122,7 +128,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
 
 1. Push the branch and the tag to both <https://gitlab.com> and <https://dev.gitlab.org/>:
 
-   ```sh
+   ```shell
    git push git@gitlab.com:gitlab-org/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
    git push git@dev.gitlab.org:gitlab/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
    ```
@@ -132,7 +138,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
 ### Publishing the packages
 
 You can track the progress of package building on <https://dev.gitlab.org/gitlab/omnibus-gitlab/builds>.
-They are pushed to [packagecloud repositories] automatically after
+They are pushed to [packagecloud repositories](https://packages.gitlab.com/gitlab/) automatically after
 successful builds.
 
 ### Updating cloud images
@@ -150,6 +156,3 @@ New images should be released within 3 business days of the package release.
 Image specific release documentation:
 
 - (**Deprecated**) [OpenShift](openshift.md).
-
-[release-tools project]: https://gitlab.com/gitlab-org/release-tools/tree/master
-[packagecloud repositories]: https://packages.gitlab.com/gitlab/

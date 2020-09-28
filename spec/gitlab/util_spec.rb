@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gitlab/util'
 
-describe Gitlab::Util do
+RSpec.describe Gitlab::Util do
   describe :get_env do
     it 'strips value of env variable correctly' do
       allow(ENV).to receive(:[]).with('foo').and_return('  bar  ')

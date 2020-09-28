@@ -28,12 +28,20 @@ module GitlabCtl
 
       def postgresql_username
         node_attributes = GitlabCtl::Util.get_node_attributes
+        node_attributes.dig('postgresql', 'username').to_s
+      end
 
-        # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
-        # configure on an existing installation
-        #
-        # TODO: Remove support for legacy attributes in GitLab 13.0
-        (node_attributes.dig('gitlab', 'postgresql', 'username') || node_attributes.dig('postgresql', 'username')).to_s
+      def postgresql_group
+        node_attributes = GitlabCtl::Util.get_node_attributes
+        node_attributes.dig('postgresql', 'group')
+      end
+
+      def postgresql_version(data_path)
+        version_file = "#{data_path}/postgresql/data/PG_VERSION"
+
+        return nil unless File.exist?(version_file)
+
+        File.read(version_file).strip.to_i
       end
     end
   end

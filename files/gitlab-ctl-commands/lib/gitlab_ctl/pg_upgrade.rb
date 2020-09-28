@@ -1,4 +1,7 @@
 require 'optparse'
+require 'mixlib/shellout'
+require 'rainbow'
+
 require_relative 'util'
 require_relative '../gitlab_ctl'
 
@@ -35,9 +38,10 @@ module GitlabCtl
       # If an explicit data_dir exists, that trumps everything, at least until
       # 13.0 when it will be removed. If there isn't one for any reason, we
       # default to computing the data_dir from the info we have.
-      data_dir = node_attributes.dig(:gitlab, :postgresql, :data_dir) || node_attributes.dig(:postgresql, :data_dir) || File.join(pg_base_dir, "data")
+      @data_dir = node_attributes.dig(:gitlab, :postgresql, :data_dir) || node_attributes.dig(:postgresql, :data_dir) || File.join(pg_base_dir, "data")
 
-      @data_dir = File.realpath(data_dir)
+      @data_dir = File.realpath(@data_dir) if File.exist?(@data_dir)
+      @data_dir
     end
 
     def tmp_data_dir
@@ -46,12 +50,28 @@ module GitlabCtl
       @tmp_data_dir = @tmp_dir ? "#{@tmp_dir}/data" : data_dir
     end
 
+    def enough_free_space?(dir)
+      space_needed(dir) <= space_free(dir)
+    end
+
+    def space_needed(dir)
+      space_used = GitlabCtl::Util.get_command_output(
+        "du -s --block-size=1m #{dir}", nil, @timeout
+      ).split.first.to_i
+
+      space_used * 2
+    end
+
+    def space_free(dir)
+      space_available = GitlabCtl::Util.get_command_output(
+        "df -P --block-size=1m #{dir} | awk '{print $4}'", nil, @timeout
+      ).split.last.to_i
+
+      (space_available * 0.9).to_i
+    end
+
     def run_pg_command(command)
-      # We still need to support legacy attributes starting with `gitlab`, as they might exists before running
-      # configure on an existing installation
-      #
-      # TODO: Remove support for legacy attributes in GitLab 13.0
-      pg_username = node_attributes.dig(:gitlab, :postgresql, :username) || node_attributes.dig(:postgresql, :username)
+      pg_username = node_attributes.dig(:postgresql, :username)
 
       GitlabCtl::Util.get_command_output("su - #{pg_username} -c \"#{command}\"", nil, @timeout)
     end
@@ -125,9 +145,19 @@ module GitlabCtl
           $stderr.puts "STDOUT: #{e.stdout}"
           $stderr.puts "STDERR: #{e.stderr}"
           false
+        rescue Mixlib::ShellOut::CommandTimeout
+          $stderr.puts
+          $stderr.puts "Timed out during the database upgrade.".color(:red)
+          $stderr.puts "To run with more time, remove the temporary directory #{tmp_data_dir}.#{target_version.major},".color(:red)
+          $stderr.puts "then re-run your previous command, adding the --timeout option.".color(:red)
+          $stderr.puts "See the docs for more information: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server".color(:red)
+          $stderr.puts "Or run gitlab-ctl pg-upgrade --help for usage".color(:red)
+          false
         end
       end
-        raise GitlabCtl::Errors::ExecutionError, 'run_pg_upgrade', '', 'Error upgrading the database'
+        raise GitlabCtl::Errors::ExecutionError.new(
+          'run_pg_upgrade', '', 'Error upgrading the database'
+        )
       end
     end
 
@@ -138,7 +168,10 @@ module GitlabCtl
           wait: true,
           skip_unregister: false,
           timeout: nil,
-          target_version: nil
+          target_version: nil,
+          skip_disk_check: false,
+          leader: nil,
+          replica: nil
         }
 
         OptionParser.new do |opts|
@@ -154,13 +187,27 @@ module GitlabCtl
             options[:skip_unregister] = true
           end
 
-          opts.on('-TTIMEOUT', '--timeout=TIMEOUT', 'Timeout in milliseconds for the execution of the underlying commands') do |t|
-            i = t.to_i
+          opts.on('-TTIMEOUT', '--timeout=TIMEOUT', 'Timeout in milliseconds for the execution of the underlying commands. Accepts duration format such as 1d2h3m4s5ms.') do |t|
+            i = GitlabCtl::Util.parse_duration(t)
             options[:timeout] = i.positive? ? i : nil
           end
 
           opts.on('-VVERSION', '--target-version=VERSION', 'The explicit major version to upgrade or downgrade to') do |v|
             options[:target_version] = v
+          end
+
+          opts.on('--skip-disk-check', 'Skip checking that there is enough free disk space to perform upgrade') do
+            options[:skip_disk_check] = true
+          end
+
+          opts.on('--leader', 'Patroni only. Force leader upgrade procedure.') do
+            options[:leader] = true
+            options[:replica] = false
+          end
+
+          opts.on('--replica', 'Patroni only. Force replica upgrade procedure.') do
+            options[:replica] = true
+            options[:leader] = false
           end
         end.parse!(args)
 

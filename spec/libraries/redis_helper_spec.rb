@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe RedisHelper do
+RSpec.describe RedisHelper do
   let(:chef_run) { converge_config }
   subject { described_class.new(chef_run.node) }
 

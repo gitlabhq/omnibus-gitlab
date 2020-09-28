@@ -25,6 +25,9 @@ exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
       <% if node['gitlab']['sidekiq-cluster']['experimental_queue_selector'] %>
       --experimental-queue-selector \
       <% end %>
+      <% if node['gitlab']['sidekiq-cluster']['shutdown_timeout'] %>
+      --timeout <%= node['gitlab']['sidekiq-cluster']['shutdown_timeout'] %> \
+      <% end %>
       <% node['gitlab']['sidekiq-cluster']['queue_groups'].each do |queue| %>
         "<%= queue %>" \
       <% end %>

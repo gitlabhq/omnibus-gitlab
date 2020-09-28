@@ -90,7 +90,7 @@ class RegistryGarbageCollect
 
   def parse_options!
     OptionParser.new do |opts|
-      opts.on('-m', '--delete-manifests', 'Delete manifests that are not currently referenced via tag') do
+      opts.on('-m', '--delete-manifests', '--delete-untagged', 'Delete manifests that are not currently referenced via tag') do
         @command << "-m"
       end
     end.parse!(@args)

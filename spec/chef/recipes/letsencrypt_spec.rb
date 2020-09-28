@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'enabling letsencrypt' do
+RSpec.describe 'enabling letsencrypt' do
   before do
     allow(Gitlab).to receive(:[]).and_call_original
     stub_gitlab_rb(external_url: 'https://fakehost.example.com')
@@ -18,6 +18,7 @@ describe 'enabling letsencrypt' do
     it 'false' do
       allow(LetsEncrypt).to receive(:should_auto_enable?).and_return(false)
 
+      expect(chef_run).to include_recipe('letsencrypt::disable')
       expect(chef_run).not_to include_recipe('letsencrypt::enable')
     end
   end
@@ -37,7 +38,7 @@ describe 'enabling letsencrypt' do
   end
 end
 
-describe 'letsencrypt::enable' do
+RSpec.describe 'letsencrypt::enable' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   let(:node) { chef_run.node }
 
@@ -139,15 +140,19 @@ server {
         end
 
         it 'does not log a warning' do
-          expect(LoggingHelper).not_to receive(:warning)
+          expect(LoggingHelper).not_to receive(:warning).with("Let's Encrypt is enabled, but external_url is using http")
           chef_run.ruby_block('display_le_message').block.call
         end
       end
 
       context 'false' do
-        before { stub_gitlab_rb(letsencrypt: { enable: true, auto_renew: false }) }
+        before do
+          stub_gitlab_rb(letsencrypt: { enable: true, auto_renew: false })
+          allow_any_instance_of(PgHelper).to receive(:is_standby?).and_return false
+        end
 
-        it 'does not enable crond' do
+        it 'disables crond' do
+          expect(chef_run).to include_recipe('crond::disable')
           expect(chef_run).not_to include_recipe('crond::enable')
         end
 
@@ -180,7 +185,7 @@ server {
 end
 
 # This should work standalone for renewal purposes
-describe 'letsencrypt::renew' do
+RSpec.describe 'letsencrypt::renew' do
   let(:chef_run) do
     ChefSpec::SoloRunner.converge('gitlab::letsencrypt_renew')
   end

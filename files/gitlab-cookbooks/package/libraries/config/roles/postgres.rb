@@ -18,7 +18,7 @@ module PostgresRole
   def self.load_role
     return unless Gitlab['postgres_role']['enable']
 
-    Gitlab['repmgr']['enable'] = true if Gitlab['repmgr']['enable'].nil?
+    Gitlab['repmgr']['enable'] = true if !Gitlab['patroni']['enable'] && Gitlab['repmgr']['enable'].nil?
     Services.enable_group('postgres_role')
   end
 end

@@ -69,17 +69,17 @@ class PackageRepository
     list = []
 
     Dir.glob(PACKAGE_GLOB).each do |path|
-      platform_path = path.split("/") # ['pkg', 'ubuntu-xenial', 'gitlab-ce.deb']
+      platform_path = path.split("/") # ['pkg', 'ubuntu-xenial_aarch64', 'gitlab-ce.deb']
 
       if platform_path.size != 3
         list_dir_contents = `ls -la pkg/`
         raise "Found unexpected contents in the directory:\n #{list_dir_contents}"
       end
 
-      platform_name = platform_path[1] # "ubuntu-xenial"
+      platform_name = platform_path[1] # "ubuntu-xenial_aarch64"
       package_name = platform_path[2] # "gitlab-ce.deb"
       package_path = "#{platform_path[0]}/#{platform_name}/#{package_name}"
-      platform = platform_name.tr("-", "/") # "ubuntu/xenial"
+      platform = platform_name.gsub(/_.*/, '').tr("-", "/") # "ubuntu/xenial"
       target_repository = repository || target # staging override or the rest, eg. "unstable"
 
       # If we detect Enterprise Linux 6/7, upload the same package

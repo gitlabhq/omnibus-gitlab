@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe 'monitoring::node-exporter' do
+RSpec.describe 'monitoring::node-exporter' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {
@@ -13,7 +13,7 @@ describe 'monitoring::node-exporter' do
   end
 
   context 'when node-exporter is enabled' do
-    let(:config_template) { chef_run.template('/var/log/gitlab/node-exporter/config') }
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/node-exporter/log/config') }
 
     before do
       stub_gitlab_rb(

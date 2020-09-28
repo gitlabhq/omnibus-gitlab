@@ -89,7 +89,7 @@ class RedisHelper
         Gitlab['redis']['port'] && Gitlab['redis']['port'].positive?
       end
 
-      def is_redis_slave?
+      def is_redis_replica?
         Gitlab['redis']['master'] == false
       end
 
@@ -103,6 +103,10 @@ class RedisHelper
 
       def is_gitlab_rails_redis_tcp?
         Gitlab['gitlab_rails']['redis_host']
+      end
+
+      def replica_role?
+        Gitlab['redis_replica_role']['enable'] || Gitlab['redis_slave_role']['enable']
       end
     end
   end

@@ -39,6 +39,7 @@ end
 omnibus_helper.is_deprecated_praefect_config?
 
 node.default['praefect']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
   # wrapper script parameters
   'GITALY_PID_FILE' => File.join(node['praefect']['dir'], "praefect.pid"),
   'WRAPPER_JSON_LOGGING' => json_logging
@@ -80,8 +81,9 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
-file File.join(working_dir, "VERSION") do
-  content VersionHelper.version("/opt/gitlab/embedded/bin/praefect --version")
+version_file 'Create Praefect version file' do
+  version_file_path File.join(working_dir, 'VERSION')
+  version_check_cmd '/opt/gitlab/embedded/bin/praefect --version'
   notifies :hup, "runit_service[praefect]"
 end
 

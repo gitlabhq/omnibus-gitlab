@@ -1,7 +1,10 @@
-# Praefect
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
 
-NOTE: **Note** Praefect support is EXPERIMENTAL at this time. We do not
-recommend using it in production yet.
+# Praefect
 
 Praefect is a manager aiming to maintain replicas for each repository. Praefect
 is in active development. The goal is to achieve a highly available storage cluster,

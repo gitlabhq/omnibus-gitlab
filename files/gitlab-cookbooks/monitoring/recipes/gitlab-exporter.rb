@@ -27,19 +27,6 @@ directory gitlab_exporter_dir do
   recursive true
 end
 
-# This runit service was made obsolete in 12.3
-runit_service "gitlab-monitor" do
-  action :disable
-end
-
-# This legacy directory was made obsolete in 12.3
-if gitlab_exporter_dir != '/var/opt/gitlab/gitlab-monitor'
-  directory '/var/opt/gitlab/gitlab-monitor' do
-    action :delete
-    recursive true
-  end
-end
-
 directory gitlab_exporter_log_dir do
   owner gitlab_user
   mode "0700"
@@ -69,10 +56,10 @@ template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
   )
 end
 
-# If a version of ruby changes restart gitlab-exporter
-file File.join(gitlab_exporter_dir, 'RUBY_VERSION') do
-  content VersionHelper.version('/opt/gitlab/embedded/bin/ruby --version')
-  notifies :restart, 'runit_service[gitlab-exporter]'
+version_file 'Create version file for GitLab-Exporter' do
+  version_file_path File.join(gitlab_exporter_dir, 'RUBY_VERSION')
+  version_check_cmd '/opt/gitlab/embedded/bin/ruby --version'
+  notifies :restart, "runit_service[gitlab-exporter]"
 end
 
 runit_service "gitlab-exporter" do

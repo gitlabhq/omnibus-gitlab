@@ -57,6 +57,7 @@ configuration = Prometheus.hash_to_yaml({
                                           'global' => {
                                             'scrape_interval' => "#{node['monitoring']['prometheus']['scrape_interval']}s",
                                             'scrape_timeout' => "#{node['monitoring']['prometheus']['scrape_timeout']}s",
+                                            'external_labels' => node['monitoring']['prometheus']['external_labels'],
                                           },
                                           'remote_read' => node['monitoring']['prometheus']['remote_read'],
                                           'remote_write' => node['monitoring']['prometheus']['remote_write'],
@@ -90,7 +91,7 @@ runit_service 'prometheus' do
     env_dir: prometheus_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
-    { log_directory: node['monitoring']['prometheus']['log_directory'] }
+    { log_directory: prometheus_log_dir }
   )
 end
 

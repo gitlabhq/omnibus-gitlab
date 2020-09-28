@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-describe Prometheus do
+RSpec.describe Prometheus do
   before { Services.add_services('gitlab', Services::BaseServices.list) }
 
   it 'should return a list of known services' do
