@@ -18,7 +18,7 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] Merge Request Title, and Description are up to date, accurate, and descriptive
 - [ ] MR targeting the appropriate branch
 - [ ] MR has a green pipeline on GitLab.com
-- [ ] Pipeline is green on dev.gitlab.org if the change is touching anything besides documentation or internal cookbooks
+- [ ] Pipeline is green on the [dev.gitlab.org](https://dev.gitlab.org/gitlab/omnibus-gitlab/-/pipelines) mirror for this branch if the change is touching anything besides documentation or internal cookbooks
 - [ ] `trigger-package` has a green pipeline running against latest commit
 
 ### Expected (please provide an explanation if not completing)
