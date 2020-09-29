@@ -42,7 +42,7 @@ RSpec.describe 'gitlab::gitlab-selinux' do
                  /var/opt/gitlab/.ssh/authorized_keys
                  /var/opt/gitlab/gitlab-shell/config.yml
                  /var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret
-+                /var/opt/gitlab/gitlab-workhorse/socket)
+                 /var/opt/gitlab/gitlab-workhorse/socket)
       managed_files = files.map { |file| semanage_fcontext(file) }
 
       expect(lines).to include(*managed_files)
