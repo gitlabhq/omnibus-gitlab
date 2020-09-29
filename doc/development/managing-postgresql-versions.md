@@ -17,7 +17,8 @@ The PostgreSQL Global Development Group typically releases [one major version of
 
 We need to support running GitLab on both supported versions, as well as upgrading from the older versions to the newest.
 
-NOTE: **Note:** GitLab 13.0 to 13.3 will only have support for one version of PostgreSQL (11). This is an exception while the plan above is implemented.
+NOTE: **Note:** 
+GitLab 13.0 to 13.3 will only have support for one version of PostgreSQL (11). This is an exception while the plan above is implemented.
 
 ## Software definitions
 
