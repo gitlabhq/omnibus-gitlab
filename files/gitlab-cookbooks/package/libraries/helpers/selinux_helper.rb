@@ -8,7 +8,7 @@ class SELinuxHelper
       gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
       gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
       gitlab_shell_secret_file = File.join(gitlab_rails_etc_dir, 'gitlab_shell_secret')
-      gitlab_workhorse_sock = '/var/opt/gitlab/gitlab-workhorse/socket'
+      gitlab_workhorse_sock = node['gitlab']['gitlab-workhorse']['listen_addr']
 
       # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the
       # git_user is valid.
