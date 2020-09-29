@@ -89,6 +89,7 @@
     - bundle exec rake build:trigger
   only:
     - branches@gitlab-org/omnibus-gitlab
+    - branches@gitlab-org/security/omnibus-gitlab
   except:
     refs:
       - triggers
