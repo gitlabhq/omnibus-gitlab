@@ -103,6 +103,10 @@ dir = "/opt/gitlab/embedded/service/gitlab-shell"
 <% if @gitlab_url %>
 url = '<%= @gitlab_url %>'
 <% end %>
+<% if @gitlab_relative_path %>
+relative_url_root = '<%= @gitlab_relative_path %>'
+<% end %>
+
 <% if @gitlab_shell['http_settings'] %>
 <% http_settings = @gitlab_shell['http_settings'] %>
 [gitlab.http-settings]
