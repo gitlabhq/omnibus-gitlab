@@ -385,8 +385,8 @@ sudo touch /etc/gitlab/disable-postgresql-upgrade
 
 #### GitLab 13.3 and later
 
-As of GitLab 13.3, PostgreSQL 11.7 and 12.3 are both shipped with Omnibus GitLab, while GitLab still
-uses PostgreSQL 11 by default. During a package upgrade, the database is not automatically upgraded
+As of GitLab 13.3, PostgreSQL 11.7 and 12.3 are both shipped with Omnibus.
+During a package upgrade, the database is not automatically upgraded
 to PostgreSQL 12. If you want to upgrade to PostgreSQL 12, you must do it manually:
 
 ```shell
