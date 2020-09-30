@@ -562,8 +562,7 @@ Run `sudo gitlab-ctl reconfigure` for the settings to take effect.
 ## Configuring Rack Attack
 
 To prevent abusive clients from doing damage, GitLab uses the Rack Attack gem.
-Check [this page](https://docs.gitlab.com/ee/security/rack_attack.html)
-for more information.
+Learn how to [configure Rack Attack](https://docs.gitlab.com/ee/security/rack_attack.html).
 
 ## Disabling automatic cache cleaning during installation
 
@@ -604,8 +603,8 @@ Disabling impersonation is documented in
 ## Error Reporting and Logging with Sentry
 
 [Sentry](https://sentry.io) is an error reporting and logging tool which can be
-used as SaaS or on premise. It's Open Source and you can browse its source code
-repositories [here](https://github.com/getsentry).
+used as SaaS or on premise. It's Open Source, and you can [browse its source code
+repositories](https://github.com/getsentry).
 
 The following settings can be used to configure Sentry:
 
