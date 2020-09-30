@@ -9,8 +9,8 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
 
   subject(:command) { described_class.new(nil, options) }
 
-  let(:temp_directory) { Dir.mktmpdir }
-  let(:gitlab_config_path) { File.join(temp_directory, 'gitlab.rb') }
+  let(:config_path) { Dir.mktmpdir }
+  let(:gitlab_config_path) { File.join(config_path, 'gitlab.rb') }
 
   before do
     allow($stdout).to receive(:puts)
@@ -20,13 +20,14 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
   end
 
   after do
-    FileUtils.rm_rf(temp_directory)
+    FileUtils.rm_rf(config_path)
   end
 
   describe '#run_preflight_checks' do
     before do
       allow(STDIN).to receive(:gets).and_return('y')
 
+      allow(command).to receive(:toggle_geo_roles).and_return(true)
       allow(command).to receive(:promote_postgresql_to_primary).and_return(true)
       allow(command).to receive(:reconfigure).and_return(true)
       allow(command).to receive(:promote_to_primary).and_return(true)
@@ -64,6 +65,53 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
     end
   end
 
+  describe '#toggle_geo_roles' do
+    let(:gitlab_cluster_config_path) { File.join(config_path, 'gitlab-cluster.json') }
+
+    before do
+      stub_const('GitlabClusterHelper::CONFIG_PATH', config_path)
+      stub_const('GitlabClusterHelper::JSON_FILE', gitlab_cluster_config_path)
+
+      allow(STDIN).to receive(:gets).and_return('y')
+
+      allow(command).to receive(:run_preflight_checks).and_return(true)
+      allow(command).to receive(:promote_postgresql_to_primary).and_return(true)
+      allow(command).to receive(:reconfigure).and_return(true)
+      allow(command).to receive(:promote_to_primary).and_return(true)
+      allow(command).to receive(:success_message).and_return(true)
+    end
+
+    context 'when the cluster configuration file does not exist' do
+      it 'creates the file with the Geo primary role enabled and secondary role disabled' do
+        command.execute
+
+        expect(File.exist?(gitlab_cluster_config_path)).to eq(true)
+        expect(read_file_content(gitlab_cluster_config_path)).to eq("primary" => true, "secondary" => false)
+      end
+    end
+
+    context 'when the cluster configuration file exists' do
+      it 'disables the Geo secondary role' do
+        write_file_content(gitlab_cluster_config_path, primary: false, secondary: true)
+
+        command.execute
+
+        expect(read_file_content(gitlab_cluster_config_path)).to eq("primary" => true, "secondary" => false)
+      end
+    end
+
+    def read_file_content(fullpath)
+      JSON.parse(File.read(fullpath))
+    end
+
+    def write_file_content(fullpath, content)
+      File.open(fullpath, 'w') do |f|
+        f.write(content.to_json)
+        f.chmod(0600)
+      end
+    end
+  end
+
   context 'when preflight checks pass' do
     before do
       allow(STDIN).to receive(:gets).and_return('y')
@@ -71,6 +119,7 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
       allow_any_instance_of(Geo::PromotionPreflightChecks).to receive(
         :execute).and_return(true)
 
+      allow(command).to receive(:toggle_geo_roles).and_return(true)
       allow(command).to receive(:promote_postgresql_to_primary).and_return(true)
       allow(command).to receive(:reconfigure).and_return(true)
       allow(command).to receive(:promote_to_primary).and_return(true)
@@ -95,8 +144,12 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
       end
 
       context 'when final confirmation is given' do
-        it 'calls the next subcommand' do
+        it 'calls all the subcommands' do
+          expect(command).to receive(:toggle_geo_roles)
           expect(command).to receive(:promote_postgresql_to_primary)
+          expect(command).to receive(:reconfigure)
+          expect(command).to receive(:promote_to_primary)
+          expect(command).to receive(:success_message)
 
           command.execute
         end
@@ -141,9 +194,11 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
       it 'calls all the subcommands if user affirms' do
         allow(STDIN).to receive(:gets).and_return('y')
 
+        is_expected.to receive(:toggle_geo_roles)
         is_expected.to receive(:promote_postgresql_to_primary)
         is_expected.to receive(:reconfigure)
         is_expected.to receive(:promote_to_primary)
+        is_expected.to receive(:success_message)
 
         command.execute
       end
@@ -155,6 +210,49 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
       it 'exits with 1' do
         expect { command.execute }.to raise_error(SystemExit)
       end
+    end
+  end
+
+  context 'when writing to the cluster configuration file fail' do
+    around do |example|
+      example.run
+    rescue SystemExit
+    end
+
+    before do
+      allow(STDIN).to receive(:gets).and_return('y')
+
+      allow(command).to receive(:run_preflight_checks).and_return(true)
+
+      allow_any_instance_of(GitlabClusterHelper)
+        .to receive(:write_to_file!).and_return(false)
+    end
+
+    it 'exits with 1' do
+      expect { command.execute }.to raise_error(SystemExit)
+    end
+  end
+
+  context 'when writing to the cluster configuration file succeed' do
+    before do
+      allow(STDIN).to receive(:gets).and_return('y')
+
+      allow(command).to receive(:promote_postgresql_to_primary).and_return(true)
+      allow(command).to receive(:reconfigure).and_return(true)
+      allow(command).to receive(:promote_to_primary).and_return(true)
+      allow(command).to receive(:success_message).and_return(true)
+
+      allow_any_instance_of(GitlabClusterHelper)
+        .to receive(:write_to_file!).and_return(true)
+    end
+
+    it 'calls all the subcommands' do
+      expect(command).to receive(:promote_postgresql_to_primary)
+      expect(command).to receive(:reconfigure)
+      expect(command).to receive(:promote_to_primary)
+      expect(command).to receive(:success_message)
+
+      command.execute
     end
   end
 end

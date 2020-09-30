@@ -22,6 +22,7 @@ require 'securerandom'
 require 'uri'
 
 require_relative '../config_mash.rb'
+require_relative 'gitlab_cluster_helper'
 
 module SettingsHelper
   def self.extended(base)
@@ -153,6 +154,9 @@ module SettingsHelper
     Services.enable_group(Services::SYSTEM_GROUP)
     RolesHelper.parse_enabled
 
+    # Roles defined in the cluster configuration file overrides roles from /etc/gitlab/gitlab.rb
+    gitlab_cluster_helper.load_roles!
+
     # Load our roles
     DefaultRole.load_role
     @available_roles.each do |key, value|
@@ -202,6 +206,10 @@ module SettingsHelper
   end
 
   private
+
+  def gitlab_cluster_helper
+    @gitlab_cluster_helper ||= GitlabClusterHelper.new
+  end
 
   # Sort settings by their sequence value
   def sorted_settings
