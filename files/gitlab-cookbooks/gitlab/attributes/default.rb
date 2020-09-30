@@ -311,6 +311,7 @@ default['gitlab']['gitlab-rails']['smartcard_san_extensions'] = false
 default['gitlab']['gitlab-rails']['kerberos_enabled'] = nil
 default['gitlab']['gitlab-rails']['kerberos_keytab'] = nil
 default['gitlab']['gitlab-rails']['kerberos_service_principal_name'] = nil
+default['gitlab']['gitlab-rails']['kerberos_simple_ldap_linking_allowed_realms'] = nil
 default['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'] = nil
 default['gitlab']['gitlab-rails']['kerberos_port'] = nil
 default['gitlab']['gitlab-rails']['kerberos_https'] = nil

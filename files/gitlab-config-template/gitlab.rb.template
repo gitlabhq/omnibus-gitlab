@@ -2073,6 +2073,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_rails['kerberos_enabled'] = true
 # gitlab_rails['kerberos_keytab'] = /etc/http.keytab
 # gitlab_rails['kerberos_service_principal_name'] = HTTP/gitlab.example.com@EXAMPLE.COM
+# gitlab_rails['kerberos_simple_ldap_linking_allowed_realms'] = ['example.com','kerberos.example.com']
 # gitlab_rails['kerberos_use_dedicated_port'] = true
 # gitlab_rails['kerberos_port'] = 8443
 # gitlab_rails['kerberos_https'] = true
