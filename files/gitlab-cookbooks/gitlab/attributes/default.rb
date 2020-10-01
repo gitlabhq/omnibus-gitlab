@@ -127,6 +127,7 @@ default['gitlab']['gitlab-rails']['ci_archive_traces_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['pages_domain_verification_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['pages_domain_ssl_renewal_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['pages_domain_removal_cron_worker'] = nil
+default['gitlab']['gitlab-rails']['remove_unaccepted_member_invites_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['schedule_migrate_external_diffs_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ci_platform_metrics_update_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
