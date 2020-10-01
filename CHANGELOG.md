@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.2.10 (2020-10-01)
+
+### Security (1 change)
+
+- Add config for remove unaccepted member invites cron worker.
+
+
 ## 13.2.9 (2020-09-04)
 
 ### Fixed (1 change)
