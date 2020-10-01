@@ -1,7 +1,7 @@
 name 'chef-bin'
 # The version here should be in agreement with /Gemfile.lock so that our rspec
 # testing stays consistent with the package contents.
-default_version '15.12.22'
+default_version '15.14.0'
 
 license 'Apache-2.0'
 license_file 'LICENSE'

@@ -47,12 +47,12 @@ GEM
     binding_ninja (0.2.3)
     builder (3.2.4)
     byebug (9.0.5)
-    chef (15.12.22)
+    chef (15.14.0)
       addressable
       bcrypt_pbkdf (~> 1.0)
       bundler (>= 1.10)
-      chef-config (= 15.12.22)
-      chef-utils (= 15.12.22)
+      chef-config (= 15.14.0)
+      chef-utils (= 15.14.0)
       chef-zero (>= 14.0.11)
       diff-lcs (~> 1.2, >= 1.2.4)
       ed25519 (~> 1.2)
@@ -92,16 +92,16 @@ GEM
       mixlib-shellout (>= 2.0, < 4.0)
       paint (>= 1, < 3)
       solve (> 2.0, < 5.0)
-    chef-config (15.12.22)
+    chef-config (15.14.0)
       addressable
-      chef-utils (= 15.12.22)
+      chef-utils (= 15.14.0)
       fuzzyurl
       mixlib-config (>= 2.2.12, < 4.0)
       mixlib-shellout (>= 2.0, < 4.0)
       tomlrb (~> 1.2)
     chef-sugar (5.1.9)
-    chef-utils (15.12.22)
-    chef-zero (15.0.0)
+    chef-utils (15.14.0)
+    chef-zero (15.0.3)
       ffi-yajl (~> 2.2)
       hashie (>= 2.0, < 5.0)
       mixlib-log (>= 2.0, < 4.0)
@@ -141,7 +141,7 @@ GEM
     fauxhai-ng (8.2.0)
       net-ssh
     ffi (1.13.1)
-    ffi-libarchive (1.0.3)
+    ffi-libarchive (1.0.4)
       ffi (~> 1.0)
     ffi-yajl (2.3.3)
       libyajl2 (~> 1.2)
@@ -225,7 +225,7 @@ GEM
     minitar (0.9)
     mixlib-archive (1.0.5)
       mixlib-log
-    mixlib-authentication (3.0.6)
+    mixlib-authentication (3.0.7)
     mixlib-cli (2.1.6)
     mixlib-config (3.0.6)
       tomlrb
@@ -367,15 +367,16 @@ GEM
     toml-rb (2.0.1)
       citrus (~> 3.0, > 3.0)
     tomlrb (1.3.0)
-    train-core (3.3.6)
+    train-core (3.3.24)
       addressable (~> 2.5)
       ffi (!= 1.13.0)
       json (>= 1.8, < 3.0)
       mixlib-shellout (>= 2.0, < 4.0)
       net-scp (>= 1.2, < 4.0)
       net-ssh (>= 2.9, < 7.0)
-    train-winrm (0.2.6)
+    train-winrm (0.2.11)
       winrm (~> 2.0)
+      winrm-elevated (~> 1.2.2)
       winrm-fs (~> 1.0)
     tty-box (0.5.0)
       pastel (~> 0.7.2)
@@ -416,7 +417,11 @@ GEM
       logging (>= 1.6.1, < 3.0)
       nori (~> 2.0)
       rubyntlm (~> 0.6.0, >= 0.6.1)
-    winrm-fs (1.3.4)
+    winrm-elevated (1.2.2)
+      erubi (~> 1.8)
+      winrm (~> 2.0)
+      winrm-fs (~> 1.0)
+    winrm-fs (1.3.5)
       erubi (~> 1.8)
       logging (>= 1.6.1, < 3.0)
       rubyzip (~> 2.0)
@@ -430,7 +435,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
-  chef (~> 15.12.22)
+  chef (~> 15.14.0)
   chefspec
   docker-api
   fantaskspec
