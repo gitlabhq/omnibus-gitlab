@@ -104,7 +104,8 @@ class OmnibusHelper
     {
       'raspbian-9' => 'GitLab 13.4',
       'debian-8' => 'GitLab 13.4',
-      'centos-6' => 'GitLab 13.7'
+      'centos-6' => 'GitLab 13.7',
+      'opensuseleap-15.1' => 'GitLab 13.7'
     }
   end
 
