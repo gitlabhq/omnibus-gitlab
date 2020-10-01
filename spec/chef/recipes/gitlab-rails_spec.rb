@@ -2129,6 +2129,30 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'Remove unaccepted member invitations cron job settings' do
+      context 'when the cron pattern is configured' do
+        it 'sets the value' do
+          stub_gitlab_rb(gitlab_rails: { remove_unaccepted_member_invites_cron_worker: '1 * 3 * 5' })
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'remove_unaccepted_member_invites_cron_worker' => '1 * 3 * 5'
+            )
+          )
+        end
+      end
+
+      context 'when cron worker is not configured' do
+        it ' sets no value' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'remove_unaccepted_member_invites_cron_worker' => nil
+            )
+          )
+        end
+      end
+    end
+
     context 'External diff migration cron job settings' do
       context 'when the cron pattern is configured' do
         it 'sets the value' do
