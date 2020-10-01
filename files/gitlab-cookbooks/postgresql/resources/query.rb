@@ -1,4 +1,5 @@
 resource_name :postgresql_query
+provides :postgresql_query
 
 property :description, String, name_property: true
 property :query, String

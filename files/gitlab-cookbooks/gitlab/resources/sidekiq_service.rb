@@ -1,4 +1,5 @@
 resource_name :sidekiq_service
+provides :sidekiq_service
 
 property :rails_app, String, default: 'gitlab-rails'
 property :user, default: lazy { node['gitlab']['user']['username'] }

@@ -1,4 +1,5 @@
 resource_name :unicorn_service
+provides :unicorn_service
 
 property :rails_app
 property :svc, String, name_property: true

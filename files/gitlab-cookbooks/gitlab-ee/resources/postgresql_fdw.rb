@@ -1,4 +1,5 @@
 resource_name :postgresql_fdw
+provides :postgresql_fdw
 
 property :server_name, String, name_property: true
 property :db_name, String
