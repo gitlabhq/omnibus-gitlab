@@ -1995,8 +1995,8 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # praefect['sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
 # praefect['sentry_environment'] = "production"
 # praefect['auto_migrate'] = true
-# praefect['database_host'] = 'postgres.internal'
-# praefect['database_port'] = 5432
+# praefect['database_host'] = 'postgres.external'
+# praefect['database_port'] = 6432
 # praefect['database_user'] = 'praefect'
 # praefect['database_password'] = 'secret'
 # praefect['database_dbname'] = 'praefect_production'
@@ -2006,6 +2006,8 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # praefect['database_sslrootcert'] = '/path/to/rootcert'
 # praefect['reconciliation_scheduling_interval'] = '5m'
 # praefect['reconciliation_histogram_buckets'] = '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0]'
+# praefect['database_host_no_proxy'] = 'postgres.internal'
+# praefect['database_port_no_proxy'] = 5432
 
 ################################################################################
 # Storage check
