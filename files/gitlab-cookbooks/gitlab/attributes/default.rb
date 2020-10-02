@@ -389,6 +389,15 @@ default['gitlab']['gitlab-rails']['db_statement_timeout'] = nil
 default['gitlab']['gitlab-rails']['db_fdw'] = nil
 default['gitlab']['gitlab-rails']['db_connect_timeout'] = nil
 
+# Automatic Database Reindexing
+# See https://docs.gitlab.com/omnibus/settings/database.html#automatic-database-reindexing
+default['gitlab']['gitlab-rails']['database_reindexing']['enable'] = false
+default['gitlab']['gitlab-rails']['database_reindexing']['hour'] = '*'
+default['gitlab']['gitlab-rails']['database_reindexing']['minute'] = 0
+default['gitlab']['gitlab-rails']['database_reindexing']['month'] = '*'
+default['gitlab']['gitlab-rails']['database_reindexing']['day_of_month'] = '*'
+default['gitlab']['gitlab-rails']['database_reindexing']['day_of_week'] = '0,6'
+
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil
 default['gitlab']['gitlab-rails']['redis_ssl'] = false
