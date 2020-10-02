@@ -184,6 +184,12 @@ else
   include_recipe 'letsencrypt::disable'
 end
 
+if node['gitlab']['gitlab-rails']['database_reindexing']['enable']
+  include_recipe 'gitlab::database_reindexing_enable'
+else
+  include_recipe 'gitlab::database_reindexing_disable'
+end
+
 OmnibusHelper.is_deprecated_os?
 
 # Report on any deprecations we encountered at the end of the run

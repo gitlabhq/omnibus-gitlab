@@ -840,6 +840,39 @@ or not specifying the setting at all disables the timeout.
 NOTE: **Note:**
 After changing timeout settings, please run `gitlab-ctl reconfigure` to update the configuration.
 
+## Automatic database reindexing
+
+> [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/249662) in GitLab 13.5..
+
+Recreates database indexes in the background (called "reindexing"). This can
+be used to remove bloated space that has accumulated in indexes and helps to maintain healthy and
+efficient indexes.
+
+NOTE: **Note:**
+This is an experimental feature that is not enabled by default yet.
+
+The reindexing task can be started regularly through a cronjob. In order to configure the cronjob,
+`gitlab_rails['database_reindexing']['enable']` should be set to `true`.
+
+NOTE: **Note:**
+In a multi-node environment, this feature should only be enabled on an application host.
+The reindexing process cannot go through PgBouncer, it has to have a direct database connection.
+
+By default, this starts the cronjob every hour during weekends (likely a low-traffic time) only.
+
+Note you can change the schedule by refining the following settings:
+
+```shell
+gitlab_rails['database_reindexing']['hour'] = '*'
+gitlab_rails['database_reindexing']['minute'] = 0
+gitlab_rails['database_reindexing']['month'] = '*'
+gitlab_rails['database_reindexing']['day_of_month'] = '*'
+gitlab_rails['database_reindexing']['day_of_week'] = '0,6'
+```
+
+NOTE: **Note:**
+After changing these settings, please run `gitlab-ctl reconfigure` to update the configuration.
+
 ## Packaged PostgreSQL deployed in an HA/Geo Cluster
 
 ### Upgrading a GitLab HA cluster

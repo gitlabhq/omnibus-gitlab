@@ -151,11 +151,6 @@ server {
           allow_any_instance_of(PgHelper).to receive(:is_standby?).and_return false
         end
 
-        it 'disables crond' do
-          expect(chef_run).to include_recipe('crond::disable')
-          expect(chef_run).not_to include_recipe('crond::enable')
-        end
-
         it 'removes the letsencrypt-renew cronjob' do
           expect(chef_run).to delete_crond_job('letsencrypt-renew')
         end
