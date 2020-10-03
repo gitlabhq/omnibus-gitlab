@@ -38,7 +38,8 @@ end
 # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the
 # git_user is valid.
 bash "Set proper security context on ssh files for selinux" do
-  code SELinuxHelper.commands(node)
+  code lazy { SELinuxHelper.commands(node) }
   only_if "id -Z"
   not_if { !node['gitlab']['gitlab-rails']['enable'] }
+  action :nothing
 end

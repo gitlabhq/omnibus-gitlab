@@ -16,6 +16,7 @@
 ##
 #
 account_helper = AccountHelper.new(node)
+workhorse_helper = GitlabWorkhorseHelper.new(node)
 
 git_user = account_helper.gitlab_user
 git_group = account_helper.gitlab_group
@@ -72,6 +73,7 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
               custom_hooks_dir: node['gitlab']['gitlab-shell']['custom_hooks_dir'],
               migration: node['gitlab']['gitlab-shell']['migration'],
             })
+  notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
 end
 
 link File.join(gitlab_shell_dir, ".gitlab_shell_secret") do
@@ -83,4 +85,5 @@ file authorized_keys do
   group git_group
   mode '600'
   action :create_if_missing
+  notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
 end

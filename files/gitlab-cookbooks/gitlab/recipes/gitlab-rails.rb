@@ -339,6 +339,7 @@ templatesymlink "Create a gitlab_shell_secret and create a symlink to Rails root
   sensitive true
   variables(secret_token: node['gitlab']['gitlab-shell']['secret_token'])
   dependent_services.each { |svc| notifies :restart, svc }
+  notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
 end
 
 gitlab_pages_services = dependent_services

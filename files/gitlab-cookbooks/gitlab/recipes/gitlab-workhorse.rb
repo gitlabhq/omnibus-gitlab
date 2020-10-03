@@ -16,17 +16,28 @@
 #
 account_helper = AccountHelper.new(node)
 redis_helper = RedisHelper.new(node)
+workhorse_helper = GitlabWorkhorseHelper.new(node)
 
 working_dir = node['gitlab']['gitlab-workhorse']['dir']
 log_directory = node['gitlab']['gitlab-workhorse']['log_directory']
 gitlab_workhorse_static_etc_dir = "/opt/gitlab/etc/gitlab-workhorse"
 workhorse_env_dir = node['gitlab']['gitlab-workhorse']['env_directory']
+gitlab_workhorse_socket_dir = workhorse_helper.sockets_directory
 
 directory working_dir do
   owner account_helper.gitlab_user
   group account_helper.web_server_group
   mode '0750'
   recursive true
+end
+
+if workhorse_helper.unix_socket?
+  directory gitlab_workhorse_socket_dir do
+    owner account_helper.gitlab_user
+    group account_helper.web_server_group
+    mode '0750'
+    recursive true
+  end
 end
 
 directory log_directory do
@@ -83,4 +94,5 @@ template config_file_path do
   mode "0640"
   variables(object_store: object_store, object_store_provider: object_store_provider, redis_url: redis_url, password: redis_password, sentinels: redis_sentinels, sentinel_master: redis_sentinel_master, master_password: redis_sentinel_master_password)
   notifies :restart, "runit_service[gitlab-workhorse]"
+  notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
 end

@@ -49,7 +49,7 @@ RSpec.describe 'gitlab::gitlab-shell' do
           log_format: "json",
           custom_hooks_dir: nil,
           migration: { enabled: true, features: [] },
-          gitlab_url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsocket',
+          gitlab_url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket',
           gitlab_relative_path: ''
         )
       )
@@ -181,7 +181,7 @@ RSpec.describe 'gitlab::gitlab-shell' do
       it 'create config file with provided values' do
         expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
           hash_including(
-            gitlab_url: 'http+unix://%2Ffake%2Fworkhorse%2Fsocket',
+            gitlab_url: 'http+unix://%2Ffake%2Fworkhorse%2Fsockets%2Fsocket',
             gitlab_relative_path: ''
           )
         )
@@ -217,7 +217,7 @@ RSpec.describe 'gitlab::gitlab-shell' do
       it 'create config file with provided values' do
         expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
           hash_including(
-            gitlab_url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsocket',
+            gitlab_url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket',
             gitlab_relative_path: '/gitlab'
           )
         )

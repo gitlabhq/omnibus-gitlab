@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+workhorse_helper = GitlabWorkhorseHelper.new(node)
+
 # If nginx is disabled we will use workhorse for the healthcheck
 if node['gitlab']['nginx']['enable']
   listen_https = node['gitlab']['nginx']['listen_https']
@@ -27,7 +29,7 @@ else
   # Always use http for workhorse
   schema = 'http'
   use_socket = node['gitlab']['gitlab-workhorse']['listen_network'] == "unix"
-  host = use_socket ? 'localhost' : node['gitlab']['gitlab-workhorse']['listen_addr']
+  host = use_socket ? 'localhost' : workhorse_helper.socket_file_path
 end
 
 template "/opt/gitlab/etc/gitlab-healthcheck-rc" do
@@ -36,7 +38,7 @@ template "/opt/gitlab/etc/gitlab-healthcheck-rc" do
   variables(
     {
       use_socket: use_socket,
-      socket_path: use_socket ? node['gitlab']['gitlab-workhorse']['listen_addr'] : '',
+      socket_path: use_socket ? workhorse_helper.socket_file_path : '',
       url: "#{schema}://#{host}#{Gitlab['gitlab_rails']['gitlab_relative_url']}/help"
     }
   )

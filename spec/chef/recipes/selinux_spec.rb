@@ -2,28 +2,32 @@ require 'chef_helper'
 
 RSpec.describe 'gitlab::gitlab-selinux' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink storage_directory)).converge('gitlab::default') }
+  let(:templatesymlink) { chef_run.templatesymlink('Create a config.yml and create a symlink to Rails root') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    stub_default_should_notify?(true)
   end
 
   context 'when NOT running on selinux' do
-    before { stub_command('id -Z').and_return(false) }
+    before do
+      allow_any_instance_of(ShellOutHelper).to receive(:success?).with('id -Z').and_return(false)
+    end
 
     it 'should not run the semanage bash command' do
-      expect(chef_run).not_to run_bash('Set proper security context on ssh files for selinux')
+      expect(templatesymlink).to_not notify('bash[Set proper security context on ssh files for selinux]').delayed
     end
   end
 
   context 'when running on selinux' do
     before do
-      stub_command('id -Z').and_return('')
+      allow_any_instance_of(ShellOutHelper).to receive(:success?).with('id -Z').and_return(true)
       allow(File).to receive(:exist?).and_call_original
       allow(File).to receive(:exist?).with('/var/opt/gitlab/.ssh').and_return(true)
       allow(File).to receive(:exist?).with('/var/opt/gitlab/.ssh/authorized_keys').and_return(true)
       allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret').and_return(true)
       allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-shell/config.yml').and_return(true)
-      allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-workhorse/socket').and_return(true)
+      allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-workhorse/sockets').and_return(true)
     end
 
     let(:bash_block) { chef_run.bash('Set proper security context on ssh files for selinux') }
@@ -33,7 +37,7 @@ RSpec.describe 'gitlab::gitlab-selinux' do
     end
 
     it 'should run the semanage bash command' do
-      expect(chef_run).to run_bash('Set proper security context on ssh files for selinux')
+      expect(templatesymlink).to notify('bash[Set proper security context on ssh files for selinux]').delayed
     end
 
     it 'sets the security context of gitlab-shell files' do
@@ -42,7 +46,7 @@ RSpec.describe 'gitlab::gitlab-selinux' do
                  /var/opt/gitlab/.ssh/authorized_keys
                  /var/opt/gitlab/gitlab-shell/config.yml
                  /var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret
-                 /var/opt/gitlab/gitlab-workhorse/socket)
+                 /var/opt/gitlab/gitlab-workhorse/sockets)
       managed_files = files.map { |file| semanage_fcontext(file) }
 
       expect(lines).to include(*managed_files)
@@ -50,7 +54,7 @@ RSpec.describe 'gitlab::gitlab-selinux' do
       expect(lines).to include("restorecon -v '/var/opt/gitlab/.ssh/authorized_keys'")
       expect(lines).to include("restorecon -v '/var/opt/gitlab/gitlab-shell/config.yml'")
       expect(lines).to include("restorecon -v '/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret'")
-      expect(lines).to include("restorecon -v '/var/opt/gitlab/gitlab-workhorse/socket'")
+      expect(lines).to include("restorecon -v '/var/opt/gitlab/gitlab-workhorse/sockets'")
     end
 
     context 'when gitlab-rails is disabled' do
