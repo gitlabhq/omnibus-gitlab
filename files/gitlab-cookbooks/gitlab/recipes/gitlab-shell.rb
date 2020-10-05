@@ -16,7 +16,6 @@
 ##
 #
 account_helper = AccountHelper.new(node)
-workhorse_helper = GitlabWorkhorseHelper.new(node)
 
 git_user = account_helper.gitlab_user
 git_group = account_helper.gitlab_group
