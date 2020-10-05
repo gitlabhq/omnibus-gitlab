@@ -1299,3 +1299,7 @@ ALTER TABLE push_rules ADD COLUMN commit_message_negative_regex VARCHAR;
 # Restart GitLab
 sudo gitlab-ctl restart
 ```
+
+### Error `Failed to connect to the internal GitLab API` on a separate GitLab Pages server
+
+Please see [GitLab Pages troubleshooting](https://docs.gitlab.com/ee/administration/pages/index.html#failed-to-connect-to-the-internal-gitlab-api).
