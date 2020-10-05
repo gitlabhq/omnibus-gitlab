@@ -194,6 +194,7 @@ build do
     .git
     .gitignore
     spec
+    ee/spec
     features
     qa
     rubocop
