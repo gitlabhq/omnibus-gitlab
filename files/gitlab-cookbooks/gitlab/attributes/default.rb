@@ -187,6 +187,8 @@ default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy']
 default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy']['bucket'] = nil
 default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state'] = {}
 default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['pages'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['pages']['bucket'] = nil
 
 default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
@@ -684,6 +686,9 @@ default['gitlab']['gitlab-pages']['gitlab_client_http_timeout'] = nil
 default['gitlab']['gitlab-pages']['gitlab_client_jwt_expiry'] = nil
 default['gitlab']['gitlab-pages']['domain_config_source'] = nil
 default['gitlab']['gitlab-pages']['env_directory'] = '/opt/gitlab/etc/gitlab-pages/env'
+default['gitlab']['gitlab-pages']['object_store_enabled'] = false
+default['gitlab']['gitlab-pages']['object_store_remote_directory'] = 'pages'
+default['gitlab']['gitlab-pages']['object_store_connection'] = {}
 
 ####
 # Nginx

@@ -336,6 +336,10 @@ production: &base
     external_http: <%= @pages_external_http.to_json %>
     external_https: <%= @pages_external_https.to_json %>
     artifacts_server: <%= @pages_artifacts_server %>
+    object_store:
+      enabled: <%= @pages_object_store_enabled %>
+      remote_directory: <%= quote(@pages_object_store_remote_directory) %>
+      connection: <%= @pages_object_store_connection.to_json %>
 
   ## Gravatar
   ## For Libravatar see: https://docs.gitlab.com/ee/customization/libravatar.html

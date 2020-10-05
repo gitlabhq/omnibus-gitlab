@@ -734,6 +734,37 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'for settings regarding object storage for pages' do
+      it 'allows not setting any values' do
+        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            pages_object_store_enabled: false,
+            pages_object_store_remote_directory: 'pages'
+          )
+        )
+      end
+
+      context 'with values' do
+        before do
+          stub_gitlab_rb(gitlab_pages: {
+                           object_store_enabled: true,
+                           object_store_remote_directory: 'pagescustomdir',
+                           object_store_connection: aws_connection_hash
+                         })
+        end
+
+        it "sets the object storage values" do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              pages_object_store_enabled: true,
+              pages_object_store_remote_directory: 'pagescustomdir',
+              pages_object_store_connection: aws_connection_hash
+            )
+          )
+        end
+      end
+    end
+
     describe 'pseudonymizer settings' do
       it 'allows not setting any values' do
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
