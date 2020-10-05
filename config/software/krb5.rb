@@ -20,6 +20,7 @@ name 'krb5'
 version = Gitlab::Version.new('krb5', 'krb5-1.17')
 
 default_version version.print(false)
+display_version version.print(false).delete_prefix('krb5-')
 
 license 'MIT'
 license_file 'NOTICE'

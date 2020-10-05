@@ -15,10 +15,9 @@
 #
 
 name 'omnibus-ctl'
-# Commit SHA of v0.6.0 is used because the tag is not pushed to the upstream
-# repo.  Change it to v0.6.0 when that happens.
-version = Gitlab::Version.new('omnibus-ctl', '1b96ac486636cac987e5b464810bb3ff673a93fe')
+version = Gitlab::Version.new('omnibus-ctl', 'v0.6.0')
 default_version version.print(false)
+display_version version.print(false)
 
 license 'Apache-2.0'
 license_file 'LICENSE'

@@ -22,6 +22,7 @@ name 'registry'
 version = Gitlab::Version.new('registry', 'v2.10.1-gitlab')
 
 default_version version.print(false)
+display_version version.print(false).delete_suffix('-gitlab')
 
 license 'Apache-2.0'
 license_file 'LICENSE'
