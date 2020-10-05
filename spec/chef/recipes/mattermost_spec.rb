@@ -12,6 +12,7 @@ RSpec.describe 'gitlab::mattermost' do
       'MM_GITLABSETTINGS_SECRET' => '',
       'MM_GITLABSETTINGS_TOKENENDPOINT' => 'http://gitlab.example.com/oauth/token',
       'MM_GITLABSETTINGS_USERAPIENDPOINT' => 'http://gitlab.example.com/api/v4/user',
+      'MM_INSTALL_TYPE' => 'gitlab_omnibus',
       'MM_LOGSETTINGS_FILELOCATION' => '/var/log/gitlab/mattermost',
       'MM_PLUGINSETTINGS_CLIENTDIRECTORY' => '/var/opt/gitlab/mattermost/client-plugins',
       'MM_PLUGINSETTINGS_DIRECTORY' => '/var/opt/gitlab/mattermost/plugins',
