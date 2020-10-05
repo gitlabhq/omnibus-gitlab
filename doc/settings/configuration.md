@@ -280,6 +280,12 @@ redis['uid'] = 1236
 redis['gid'] = 1236
 web_server['uid'] = 1237
 web_server['gid'] = 1237
+registry['uid'] = 1238
+registry['gid'] = 1238
+mattermost['uid'] = 1239
+mattermost['gid'] = 1239
+prometheus['uid'] = 1240
+prometheus['gid'] = 1240
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
