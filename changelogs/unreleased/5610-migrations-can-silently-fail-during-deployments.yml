@@ -1,0 +1,5 @@
+---
+title: Exit non-zero during upgrade if reconfigure fails
+merge_request: 4591
+author:
+type: fixed
