@@ -6,28 +6,32 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # GitLab Docker images
 
-The GitLab Docker images are monolithic images of GitLab running all the necessary
-services in a single container.
+The GitLab Docker images are monolithic images of GitLab running all the
+necessary services in a single container. If you instead want to install GitLab
+on Kubernetes, see [GitLab Helm Charts](https://docs.gitlab.com/charts/).
 
-NOTE: **Note:**
-The Docker images do not include a mail transport agent (MTA). The recommended solution is to add an MTA, such as Postfix or Sendmail, running in a separate container. Alternatively, install an MTA directly in the GitLab container, but this adds maintenance overhead as you'll likely need to reinstall the MTA after every upgrade of restart.
-
-NOTE: **Note:**
-To install GitLab on Kubernetes, take a look at
-[GitLab Helm Charts](https://docs.gitlab.com/charts/).
+Find GitLab's official Docker image at:
 
 - [GitLab Docker image in Docker Hub](https://hub.docker.com/r/gitlab/gitlab-ee/)
 
+The Docker images don't include a mail transport agent (MTA). The recommended
+solution is to add an MTA (such as Postfix or Sendmail) running in a separate
+container. As another option, you can install an MTA directly in the GitLab
+container, but this adds maintenance overhead as you'll likely need to reinstall
+the MTA after every upgrade or restart.
+
 In the following examples, if you want to use the latest RC image, use
 `gitlab/gitlab-ee:rc` instead.
-
-Docker installation is required, see the [official installation docs](https://docs.docker.com/install/).
 
 CAUTION: **Caution:**
 Docker for Windows is not officially supported. There are known issues with volume
 permissions, and potentially other unknown issues. If you are trying to run on Docker
 for Windows, see the [getting help page](https://about.gitlab.com/get-help/) for links
 to community resources (IRC, forum, etc.) to seek help from other users.
+
+## Prerequisites
+
+Docker is required. See the [official installation documentation](https://docs.docker.com/install/).
 
 ## Set up the volumes location
 
@@ -49,11 +53,11 @@ export GITLAB_HOME=$HOME/gitlab
 
 The GitLab container uses host mounted volumes to store persistent data:
 
-| Local location | Container location | Usage |
-| -------------- | ------------------ | ----- |
-| `$GITLAB_HOME/data`  | `/var/opt/gitlab` | For storing application data |
-| `$GITLAB_HOME/logs`  | `/var/log/gitlab` | For storing logs |
-| `$GITLAB_HOME/config`| `/etc/gitlab`     | For storing the GitLab configuration files |
+| Local location       | Container location | Usage                                       |
+|----------------------|--------------------|---------------------------------------------|
+| `$GITLAB_HOME/data`  | `/var/opt/gitlab`  | For storing application data.               |
+| `$GITLAB_HOME/logs`  | `/var/log/gitlab`  | For storing logs.                           |
+| `$GITLAB_HOME/config`| `/etc/gitlab`      | For storing the GitLab configuration files. |
 
 ## Installation
 
@@ -101,11 +105,9 @@ sudo docker run --detach \
 This will ensure that the Docker process has enough permissions to create the
 config files in the mounted volumes.
 
-NOTE: **Note:**
-You will also need to publish your Kerberos port (e.g., `--publish 8443:8443`)
-if you are using the [Kerberos
-integration](https://docs.gitlab.com/ee/integration/kerberos.html) **(STARTER ONLY)**.
-Failure to do so will prevent Git operations via Kerberos.
+If you're using the [Kerberos integration](https://docs.gitlab.com/ee/integration/kerberos.html) **(STARTER ONLY)**,
+you must also publish your Kerberos port (for example, `--publish 8443:8443`).
+Failing to do so prevents Git operations with Kerberos.
 
 The initialization process may take a long time. You can track this
 process with:
@@ -288,24 +290,20 @@ in order to reconfigure GitLab:
 sudo docker restart gitlab
 ```
 
-NOTE: **Note:**
 GitLab will reconfigure itself whenever the container starts.
-
 For more options about configuring GitLab, check the
 [configuration documentation](../settings/configuration.md).
 
 ### Pre-configure Docker container
 
-You can pre-configure the GitLab Docker image by adding the environment
-variable `GITLAB_OMNIBUS_CONFIG` to Docker run command. This variable can
-contain any `gitlab.rb` setting and will be evaluated before loading the
-container's `gitlab.rb` file. That way you can easily configure GitLab's
-external URL, make any database configuration or any other option from the
+You can pre-configure the GitLab Docker image by adding the environment variable
+`GITLAB_OMNIBUS_CONFIG` to Docker run command. This variable can contain any
+`gitlab.rb` setting and is evaluated before the loading of the container's
+`gitlab.rb` file. This behavior allows you to configure GitLab's external URL,
+and make database configuration or any other option from the
 [Omnibus GitLab template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
-
-NOTE: **Note:**
-The settings contained in `GITLAB_OMNIBUS_CONFIG` will not be written to the
-`gitlab.rb` configuration file, they're evaluated on load.
+The settings contained in `GITLAB_OMNIBUS_CONFIG` aren't written to the
+`gitlab.rb` configuration file, and are evaluated on load.
 
 Here's an example that sets the external URL and enables LFS while starting
 the container:
@@ -409,7 +407,6 @@ port `2289`:
    external_url "https://gitlab.example.com:8929"
    ```
 
-   NOTE: **Note:**
    The port specified in this URL must match the port published to the host by Docker.
    Additionally, if the NGINX listen port is not explicitly set in
    `nginx['listen_port']`, it will be pulled from the `external_url`.
@@ -478,7 +475,6 @@ To update GitLab that was [installed using Docker Engine](#install-gitlab-using-
 
 On the first run, GitLab will reconfigure and update itself.
 
-NOTE: **Note:**
 Refer to the GitLab [Upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
 when upgrading between major versions.
 
@@ -494,7 +490,6 @@ To update GitLab that was [installed using Docker Compose](#install-gitlab-using
    docker-compose up -d
    ```
 
-   NOTE: **Note:**
    If you have used [tags](#use-tagged-versions-of-gitlab) instead, you'll need
    to first edit `docker-compose.yml`.
 
@@ -512,7 +507,8 @@ Read more on how to [back up and restore GitLab](https://docs.gitlab.com/ee/rake
 
 [GitLab CE Docker image](https://hub.docker.com/r/gitlab/gitlab-ce/)
 
-To install the Community Edition, replace `ee` with `ce` in the commands on this page. 
+To install the Community Edition, replace `ee` with `ce` in the commands on this
+page.
 
 ## Troubleshooting
 
@@ -602,5 +598,5 @@ If these are not correct, set them with:
 sudo setfacl -mR default:group:docker:rwx $GITLAB_HOME
 ```
 
-NOTE: **Note:**
-`docker` is the default group, if you've changed this, update your commands accordingly.
+The default group is `docker`. If you changed the group, be sure to update your
+commands.
