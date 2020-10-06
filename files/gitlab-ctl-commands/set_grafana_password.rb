@@ -35,7 +35,7 @@ add_command 'set-grafana-password', 'Reset admin password for Grafana', 2 do |cm
   log "Stopping Grafana for password update"
   run_sv_command_for_service('stop', 'grafana')
 
-  status = GitlabCtl::Util.run_command("/opt/gitlab/embedded/bin/grafana-cli --homepath #{home_dir} admin reset-admin-password \'#{password}\'")
+  status = GitlabCtl::Util.run_command("/opt/gitlab/embedded/bin/grafana-cli --homepath #{home_dir} admin reset-admin-password '#{password}'")
 
   log "Restarting Grafana."
   run_sv_command_for_service('start', 'grafana')
