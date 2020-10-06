@@ -7,14 +7,16 @@ require_relative('../../../files/gitlab-ctl-commands-ee/lib/patroni')
 
 RSpec.describe 'Patroni' do
   core_commands = %w(bootstrap check-leader check-replica)
-  additional_commands = %w(members pause resume failover switchover)
+  additional_commands = %w(members pause resume failover switchover restart reload)
   all_commands = core_commands + additional_commands
   command_lines = {
     'bootstrap' => %w(--srcdir=SRCDIR --scope=SCOPE --datadir=DATADIR),
     'pause' => %w(-w),
     'resume' => %w(--wait),
     'failover' => %w(--master MASTER --candidate CANDIDATE),
-    'switchover' => %w(--master MASTER --candidate CANDIDATE --scheduled SCHEDULED)
+    'switchover' => %w(--master MASTER --candidate CANDIDATE --scheduled SCHEDULED),
+    'restart' => [],
+    'reload' => []
   }
   command_options = {
     'bootstrap' => { srcdir: 'SRCDIR', scope: 'SCOPE', datadir: 'DATADIR' },
@@ -22,13 +24,17 @@ RSpec.describe 'Patroni' do
     'resume' => { wait: true },
     'failover' => { master: 'MASTER', candidate: 'CANDIDATE' },
     'switchover' => { master: 'MASTER', candidate: 'CANDIDATE', scheduled: 'SCHEDULED' },
+    'restart' => {},
+    'reload' => {}
   }
   patronictl_command = {
     'members' => 'list',
     'pause' => 'pause -w',
     'resume' => 'resume -w',
     'failover' => 'failover --master MASTER --candidate CANDIDATE',
-    'switchover' => 'switchover --master MASTER --candidate CANDIDATE --scheduled SCHEDULED'
+    'switchover' => 'switchover --master MASTER --candidate CANDIDATE --scheduled SCHEDULED',
+    'restart' => 'restart --force fake-scope fake-node',
+    'reload' => 'reload --force fake-scope fake-node'
   }
 
   describe '#parse_options' do
@@ -133,6 +139,7 @@ RSpec.describe 'Patroni' do
   describe 'additional commands' do
     before do
       allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'patroni' => { 'config_dir' => '/fake' } })
+      allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return({ 'patroni' => { 'scope' => 'fake-scope', 'name' => 'fake-node' } })
       allow(GitlabCtl::Util).to receive(:run_command)
     end
 

@@ -1,0 +1,5 @@
+---
+title: Add wrappers for Patroni restart and reload commands
+merge_request: 4601
+author:
+type: added
