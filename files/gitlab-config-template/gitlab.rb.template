@@ -73,8 +73,26 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! By default, we'll allow 95% of the the worker timeout
 # gitlab_rails['max_request_duration_seconds'] = 57
 
+### GitLab email server settings
+###! Docs: https://docs.gitlab.com/omnibus/settings/smtp.html
+###! **Use smtp instead of sendmail/postfix.**
+
+# gitlab_rails['smtp_enable'] = true
+# gitlab_rails['smtp_address'] = "smtp.server"
+# gitlab_rails['smtp_port'] = 465
+# gitlab_rails['smtp_user_name'] = "smtp user"
+# gitlab_rails['smtp_password'] = "smtp password"
+# gitlab_rails['smtp_domain'] = "example.com"
+# gitlab_rails['smtp_authentication'] = "login"
+# gitlab_rails['smtp_enable_starttls_auto'] = true
+# gitlab_rails['smtp_tls'] = false
+
 ### Email Settings
+
 # gitlab_rails['gitlab_email_enabled'] = true
+
+##! If your SMTP server does not like the default 'From: gitlab@gitlab.example.com'
+##! can change the 'From' with this setting.
 # gitlab_rails['gitlab_email_from'] = 'example@example.com'
 # gitlab_rails['gitlab_email_display_name'] = 'Example'
 # gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
@@ -654,20 +672,6 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_rails['redis_shared_sentinels'] = nil
 # gitlab_rails['redis_actioncable_instance'] = nil
 # gitlab_rails['redis_actioncable_sentinels'] = nil
-
-### GitLab email server settings
-###! Docs: https://docs.gitlab.com/omnibus/settings/smtp.html
-###! **Use smtp instead of sendmail/postfix.**
-
-# gitlab_rails['smtp_enable'] = true
-# gitlab_rails['smtp_address'] = "smtp.server"
-# gitlab_rails['smtp_port'] = 465
-# gitlab_rails['smtp_user_name'] = "smtp user"
-# gitlab_rails['smtp_password'] = "smtp password"
-# gitlab_rails['smtp_domain'] = "example.com"
-# gitlab_rails['smtp_authentication'] = "login"
-# gitlab_rails['smtp_enable_starttls_auto'] = true
-# gitlab_rails['smtp_tls'] = false
 
 ###! **Can be: 'none', 'peer', 'client_once', 'fail_if_no_peer_cert'**
 ###! Docs: http://api.rubyonrails.org/classes/ActionMailer/Base.html
