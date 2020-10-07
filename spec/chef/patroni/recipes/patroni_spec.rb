@@ -255,6 +255,70 @@ RSpec.describe 'patroni cookbook' do
     end
   end
 
+  context 'when standby cluster is enabled' do
+    before do
+      stub_gitlab_rb(
+        roles: %w(postgres_role),
+        patroni: {
+          enable: true,
+          use_pg_rewind: true,
+          replication_password: 'fakepassword',
+          standby_cluster: {
+            enable: true,
+            host: '1.2.3.4',
+            port: 5432,
+            primary_slot_name: 'geo_secondary'
+          }
+        },
+        postgresql: {
+          sql_user_password: 'a4125c87ce2572ce271cd77e0de9a0ad',
+          sql_replication_password: 'e64b415e9b9a34ac7ac6e53ae16ccacb',
+          md5_auth_cidr_addresses: '1.2.3.4/32'
+        }
+      )
+    end
+
+    it 'should be reflected in patroni configuration file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/patroni/patroni.yaml').with_content { |content|
+        cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
+        expect(cfg[:postgresql][:authentication]).to include(
+          replication: {
+            username: 'gitlab_replicator',
+            password: 'fakepassword'
+          }
+        )
+        expect(cfg[:bootstrap][:dcs]).to include(
+          standby_cluster: {
+            host: '1.2.3.4',
+            port: 5432,
+            primary_slot_name: 'geo_secondary'
+          }
+        )
+        expect(cfg[:bootstrap][:dcs][:postgresql]).to include(
+          use_pg_rewind: true
+        )
+      }
+    end
+
+    it 'should reflect into dcs config file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/patroni/dcs.yaml').with_content { |content|
+        cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
+        expect(cfg).to include(
+          standby_cluster: {
+            host: '1.2.3.4',
+            port: 5432,
+            primary_slot_name: 'geo_secondary'
+          }
+        )
+        expect(cfg[:postgresql]).to include(
+          use_pg_rewind: true
+        )
+      }
+    end
+  end
+
   context 'when building a cluster' do
     before do
       stub_gitlab_rb(
