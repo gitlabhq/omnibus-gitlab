@@ -115,6 +115,7 @@ add_command_under_category 'pg-upgrade', 'database',
 
   patroni_enabled = service_enabled?('patroni')
   pg_enabled = service_enabled?('postgresql')
+  geo_enabled = service_enabled?('geo-postgresql')
 
   @db_service_name = patroni_enabled ? 'patroni' : 'postgresql'
   @db_worker = GitlabCtl::PgUpgrade.new(
@@ -165,7 +166,11 @@ add_command_under_category 'pg-upgrade', 'database',
   deprecation_message if @db_worker.target_version.major.to_f < 11
 
   unless options[:skip_disk_check]
-    [@db_worker.data_dir, @db_worker.tmp_dir].compact.uniq.each do |dir|
+    check_dirs = [@db_worker.tmp_dir]
+    check_dirs << @db_worker.data_dir if pg_enabled || patroni_enabled
+    check_dirs << @attributes['gitlab']['geo-postgresql']['data_dir'] if geo_enabled
+
+    check_dirs.compact.uniq.each do |dir|
       unless GitlabCtl::Util.progress_message(
         "Checking if disk for directory #{dir} has enough free space for PostgreSQL upgrade"
       ) do
