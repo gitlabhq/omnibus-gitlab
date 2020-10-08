@@ -71,6 +71,11 @@ RSpec.describe 'secrets' do
         pages_shared_secret = new_secrets['gitlab_pages']['api_secret_key']
         expect(Base64.strict_decode64(pages_shared_secret).length).to eq(32)
       end
+
+      it 'generates an appropriate shared secret for gitlab-kas' do
+        kas_shared_secret = new_secrets['gitlab_kas']['api_secret_key']
+        expect(Base64.strict_decode64(kas_shared_secret).length).to eq(32)
+      end
     end
 
     context 'gitlab.rb provided gitlab_pages.api_secret_key' do
@@ -90,6 +95,26 @@ RSpec.describe 'secrets' do
 
         expect { chef_run }.not_to raise_error
         expect(new_secrets['gitlab_pages']['api_secret_key']).to eq(api_secret_key)
+      end
+    end
+
+    context 'gitlab.rb provided gitlab_kas.api_secret_key' do
+      before do
+        allow(Gitlab).to receive(:[]).and_call_original
+      end
+
+      it 'fails when provided gitlab_kas.shared_secret is not 32 bytes' do
+        stub_gitlab_rb(gitlab_kas: { api_secret_key: SecureRandom.base64(16) })
+
+        expect { chef_run }.to raise_error(RuntimeError, /gitlab_kas\['api_secret_key'\] should be exactly 32 bytes/)
+      end
+
+      it 'accepts provided gitlab_kas.api_secret_key when it is 32 bytes' do
+        api_secret_key = SecureRandom.base64(32)
+        stub_gitlab_rb(gitlab_kas: { api_secret_key: api_secret_key })
+
+        expect { chef_run }.not_to raise_error
+        expect(new_secrets['gitlab_kas']['api_secret_key']).to eq(api_secret_key)
       end
     end
 

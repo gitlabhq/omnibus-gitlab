@@ -33,6 +33,7 @@ class LogrotateHelper < AccountHelper
       'gitaly' => { username: gitlab_user, group: gitlab_group },
       'gitlab-exporter' => { username: gitlab_user, group: gitlab_group },
       'gitlab-pages' => { username: gitlab_user, group: gitlab_group },
+      'gitlab-kas' => { username: gitlab_user, group: gitlab_group },
       'gitlab-rails' => { username: gitlab_user, group: gitlab_group },
       'gitlab-shell' => { username: gitlab_user, group: gitlab_group },
       'gitlab-workhorse' => { username: gitlab_user, group: gitlab_group },

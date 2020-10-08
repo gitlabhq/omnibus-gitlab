@@ -43,6 +43,7 @@ details:
 | GITLAB_SHELL_VERSION                 | GITLAB_SHELL_VERSION                 | Git reference of the [GitLab Shell](https://gitlab.com/gitlab-org/gitlab-shell) repository.|
 | GITLAB_WORKHORSE_VERSION             | GITLAB_WORKHORSE_VERSION             | Git reference of the [GitLab Workhorse](https://gitlab.com/gitlab-org/gitlab-workhorse) repository.|
 | GITLAB_ELASTICSEARCH_INDEXER_VERSION | GITLAB_ELASTICSEARCH_INDEXER_VERSION | Git reference of the [GitLab Elasticsearch Indexer](https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer) repository. Used only in EE builds.|
+| GITLAB_KAS_VERSION                   | GITLAB_KAS_VERSION                   | Git reference of the [GitLab Kubernetes Agent Server](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent) repository.|
 
 If you are running `package-and-qa` job from a GitLab MR, `GITLAB_VERSION`
 environment variable will be set to the commit SHA corresponding to the pipeline

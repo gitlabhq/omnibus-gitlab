@@ -46,6 +46,7 @@ RSpec.describe 'gitlab::remote-syslog' do
       expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/sidekiq\/\*.log/)
       expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/gitlab-workhorse\/\*.log/)
       expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/gitlab-pages\/\*.log/)
+      expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/gitlab-kas\/\*.log/)
     end
 
     it 'creates the remote-syslog sv file without setting hostname' do

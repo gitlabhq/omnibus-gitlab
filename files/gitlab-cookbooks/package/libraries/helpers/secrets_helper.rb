@@ -77,6 +77,9 @@ class SecretsHelper
         'auth_secret' => Gitlab['gitlab_pages']['auth_secret'],
         'api_secret_key' => Gitlab['gitlab_pages']['api_secret_key']
       },
+      'gitlab_kas' => {
+        'api_secret_key' => Gitlab['gitlab_kas']['api_secret_key']
+      },
       'grafana' => {
         'secret_key' => Gitlab['grafana']['secret_key'],
         'gitlab_secret' => Gitlab['grafana']['gitlab_secret'],

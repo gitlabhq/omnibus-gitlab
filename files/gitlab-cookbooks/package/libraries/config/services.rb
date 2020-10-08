@@ -37,6 +37,7 @@ module Services
     service 'grafana',            groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
     service 'mailroom'
     service 'gitlab_pages'
+    service 'gitlab_kas'
     service 'mattermost'
     service 'registry'
     service 'storage_check'

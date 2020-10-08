@@ -22,6 +22,9 @@ gitlab-pages:
 gitlab-exporter:
   remote: "git@dev.gitlab.org:gitlab-org/gitlab-exporter.git"
   alternative: "https://gitlab.com/gitlab-org/gitlab-exporter.git"
+gitlab-kas:
+  remote: "git@dev.gitlab.org:gitlab/gitlab-agent.git"
+  alternative: "https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git"
 docker-distribution-pruner:
   remote: "git@dev.gitlab.org:gitlab/docker-distribution-pruner.git"
   alternative: "https://gitlab.com/gitlab-org/docker-distribution-pruner.git"

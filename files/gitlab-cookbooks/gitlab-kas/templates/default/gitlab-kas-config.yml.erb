@@ -1,0 +1,18 @@
+agent:
+  configuration:
+    poll_period: <%= @agent_configuration_poll_period %>s
+  gitops:
+    poll_period: <%= @agent_gitops_poll_period %>s
+    project_info_cache_ttl: <%= @agent_gitops_project_info_cache_ttl %>s
+    project_info_cache_error_ttl: <%= @agent_gitops_project_info_cache_error_ttl %>s
+  info_cache_ttl: <%= @agent_info_cache_ttl %>s
+  info_cache_error_ttl: <%= @agent_info_cache_error_ttl %>s
+gitlab:
+  address: <%= @gitlab_address %>
+  authentication_secret_file: <%= @authentication_secret_file %>
+listen:
+  address: <%= @listen_address %>
+  network: <%= @listen_network %>
+  websocket: <%= @listen_websocket %>
+metrics:
+  usage_reporting_period: <%= @metrics_usage_reporting_period %>s

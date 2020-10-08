@@ -455,6 +455,21 @@ RSpec.describe 'nginx' do
     end
   end
 
+  context 'when KAS is enabled' do
+    before do
+      stub_gitlab_rb(
+        gitlab_kas: { enable: true }
+      )
+    end
+
+    it 'applies nginx KAS proxy' do
+      expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
+        expect(content).to include('location /-/kubernetes-agent/ {')
+        expect(content).to include('proxy_pass http://localhost:8150/;')
+      }
+    end
+  end
+
   context 'when hsts is disabled' do
     before do
       stub_gitlab_rb(nginx: { hsts_max_age: 0 })

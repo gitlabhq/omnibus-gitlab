@@ -118,6 +118,7 @@ include_recipe 'postgresql::bin'
   gitaly
   praefect
   postgresql
+  gitlab-kas
 ).each do |service|
   if node[service]['enable']
     include_recipe "#{service}::enable"
@@ -165,6 +166,7 @@ end
 %w(
   registry
   mattermost
+  gitlab-kas
 ).each do |service|
   if node[service]["enable"]
     include_recipe "#{service}::enable"
