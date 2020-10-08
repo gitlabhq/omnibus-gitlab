@@ -341,7 +341,7 @@ the GitLab version you want to run, for example `gitlab/gitlab-ee:12.1.3-ce.0`.
 You can make Docker to use your IP address and forward all traffic to the
 GitLab container by modifying the `--publish` flag.
 
-To expose GitLab CE on IP `198.51.100.1`:
+To expose GitLab on IP `198.51.100.1`:
 
 ```shell
 sudo docker run --detach \
@@ -452,7 +452,7 @@ To update GitLab that was [installed using Docker Engine](#install-gitlab-using-
    sudo docker rm gitlab
    ```
 
-1. Pull the new image. For example, the latest GitLab CE image:
+1. Pull the new image. For example, the latest GitLab image:
 
    ```shell
    sudo docker pull gitlab/gitlab-ee:latest
