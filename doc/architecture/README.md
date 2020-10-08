@@ -18,43 +18,33 @@ An in-depth video walkthrough of these components is available [on YouTube](http
 
 A primary component of the omnibus architecture is a project definition file that lists the project details and dependency relations to external softwares and libraries.
 
-The main components of this project definition file are:
+The main components of this [project definition file](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/config/projects/gitlab.rb) are:
 
 1. Project metadata - name, description, etc.
 1. License details of the project.
 1. Dependency list - List of external tools and softwares which are required to build/run GitLab and sometimes their metadata.
 1. Global configuration variables used for installation of GitLab - Installation directory, system user, system group, etc.
 
-NOTE: **Note:**
-Project definition may be found at [`config/projects/gitlab.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/config/projects/gitlab.rb).
-
 ### Individual software definitions
 
 Omnibus-GitLab follows a batteries-included style of distribution. All the software, libraries and binaries necessary for the proper functioning of a GitLab instance is provided as part of the package, in an embedded format.
 
-So another one of the major components of the omnibus architecture is the software definitions and configurations. A typical software configuration consist of the 4 parts:
+So another one of the major components of the omnibus architecture is the
+[software definitions and configurations](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/config/software).
+A typical software configuration consist of the 4 parts:
 
 1. Version of the software required.
 1. License of the software.
 1. Dependencies for the software to be built/run.
 1. Commands needed to build the software and embed it inside the package.
 
-NOTE: **Note:**
-Software definitions may be found inside [config/software/](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/config/software) folder.
-
-Sometimes, softwares' source code may have to be patched in order to use it with GitLab. This may be to fix a security vulnerability, add some functionality needed for GitLab, or make it work with other component of GitLab, etc. For this purpose, Omnibus-GitLab consists of a patch directory where patches for different softwares are stored.
-
-NOTE: **Note:**
-Patches may be found inside the [config/patches](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/config/patches) folder in the repository.
+Sometimes, softwares' source code may have to be patched in order to use it with GitLab. This may be to fix a security vulnerability, add some functionality needed for GitLab, or make it work with other component of GitLab, etc. For this purpose, Omnibus-GitLab consists of a [patch directory](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/config/patches) where patches for different softwares are stored.
 
 For more extensive changes it may be more convenient to track the changes required in a branch on the mirror. The pattern to follow for this is to create a branch from an upstream tag or sha making reference to that branchpoint in the name of the branch. As an example from the omnibus codebase, `gitlab-omnibus-v5.6.10` is based on the `v5.6.10` tag of the upstream project. This allows for us to generate a comparison link like `https://gitlab.com/gitlab-org/omnibus/compare/v5.6.10...gitlab-omnibus-v5.6.10` to identify what local changes are present.
 
 ## Global GitLab configuration template
 
-Omnibus-GitLab ships with it a single configuration file that can be used to configure each and every part of the GitLab instance, which will be installed to the user's machine. This configuration file acts as the canonical source of all configuration settings that will be applied to the GitLab instance. It lists the general settings for a GitLab instance as well as various options for different components. The common structure of this file consist of configurations specified in the format `<component>['<setting>'] = <value>`. All the available options are listed in the template, but all except the ones necessary for basic working of GitLab are commented out by default. Users may uncomment them and specify corresponding values, if necessary.
-
-NOTE: **Note:**
-Global configuration template may be found at [`files/gitlab-config-template/gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
+Omnibus-GitLab ships with it a single configuration file that can be used to configure each and every part of the GitLab instance, which will be installed to the user's machine. This configuration file acts as the canonical source of all configuration settings that will be applied to the GitLab instance. It lists the general settings for a GitLab instance as well as various options for different components. The common structure of this file consist of configurations specified in the format `<component>['<setting>'] = <value>`. All the available options are listed in the [configuration template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template), but all except the ones necessary for basic working of GitLab are commented out by default. Users may uncomment them and specify corresponding values, if necessary.
 
 ## GitLab Cookbook
 
@@ -62,40 +52,25 @@ Omnibus-GitLab, as described earlier, uses many of the Chef components like cook
 
 ### Default Attributes
 
-Default attributes, as the name suggests, specifies the default values to different settings provided in the configuration file. These values act as fail-safe and get used if the user doesn't provide a value to a setting, and thus ensure a working GitLab instance with minimum user tweaking being necessary.
-
-NOTE: **Note:**
-Default attributes are defined at [`files/gitlab-cookbooks/gitlab/attributes/default.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/attributes/default.rb).
+[Default attributes](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/attributes/default.rb), as the name suggests, specifies the default values to different settings provided in the configuration file. These values act as fail-safe and get used if the user doesn't provide a value to a setting, and thus ensure a working GitLab instance with minimum user tweaking being necessary.
 
 ### Recipes
 
-Recipes do most of the heavy-lifting while installing GitLab using omnibus package as they are responsible for setting up each component of the GitLab ecosystem in a user's machine. They create necessary files, directories and links in their corresponding locations, set their permissions and owners, configure, start and stop necessary services, notify these services when files corresponding to them change, etc. A master recipe, named `default` acts as the entry point and it invokes all other necessary recipes for various components and services.
-
-NOTE: **Note:**
-Recipes may be found inside [`files/gitlab-cookbooks/gitlab/recipes`](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/recipes) folder in the repository.
+[Recipes](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/recipes) do most of the heavy-lifting while installing GitLab using omnibus package as they are responsible for setting up each component of the GitLab ecosystem in a user's machine. They create necessary files, directories and links in their corresponding locations, set their permissions and owners, configure, start and stop necessary services, notify these services when files corresponding to them change, etc. A master recipe, named `default` acts as the entry point and it invokes all other necessary recipes for various components and services.
 
 ### Definitions
 
-Definitions can be considered as global-level macros that are available across recipes. Some common uses for definitions are defining the ports used for common services, listing important directories that may be used by different recipes, etc. They define resources that may be reused by different recipes.
-
-NOTE: **Note:**
-Definitions may be found inside [`files/gitlab-cookbooks/gitlab/definitions`](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/definitions) folder in the repository.
+[Definitions](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/definitions) can be considered as global-level macros that are available across recipes. Some common uses for definitions are defining the ports used for common services, listing important directories that may be used by different recipes, etc. They define resources that may be reused by different recipes.
 
 ### Templates for configuration of components
 
-As mentioned earlier, Omnibus-GitLab provides a single configuration file to tweak all components of a GitLab instance. However, architectural design of different components may require them to have individual configuration files residing at specific locations. These configuration files have to be generated from either the values specified by the user in general configuration file or from the default values specified. Hence, Omnibus-GitLab ships with it templates of such configuration files with placeholders which may be filled by default values or values from user. The recipes do the job of completing these templates, by filling them and placing them at necessary locations.
-
-NOTE: **Note:**
-Software configuration templates may be found inside [`files/gitlab-cookbooks/gitlab/templates`](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates) folder in the repository.
+As mentioned earlier, Omnibus-GitLab provides a single configuration file to tweak all components of a GitLab instance. However, architectural design of different components may require them to have individual configuration files residing at specific locations. These configuration files have to be generated from either the values specified by the user in general configuration file or from the default values specified. Hence, Omnibus-GitLab ships with it [templates of such configuration files](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates) with placeholders which may be filled by default values or values from user. The recipes do the job of completing these templates, by filling them and placing them at necessary locations.
 
 ### General library methods
 
-Omnibus-GitLab also ships some library methods that primarily does the purpose of code reuse. This include methods to check if services are up and running, methods to check if files exist, helper methods to interact with different components, etc. They are often used in Chef recipes.
+Omnibus-GitLab also ships some [library methods](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/libraries)  that primarily does the purpose of code reuse. This include methods to check if services are up and running, methods to check if files exist, helper methods to interact with different components, etc. They are often used in Chef recipes.
 
 Of all the libraries used in Omnibus-GitLab, there are some special ones: the primary GitLab module and all the component-specific libraries that it invokes. The component specific libraries contains methods that do the job of parsing the configuration file for settings defined for their corresponding components. The primary GitLab module contains methods that co-ordinate this. It is responsible for identifying default values, invoking component-specific libraries, merging the default values and user specified values, validating them, generating additional configurations based on their initial values, etc. Every top level component that is shipped by Omnibus-GitLab package gets added to this module, so that they can be mentioned in configuration file and default attributes and get parsed correctly.
-
-NOTE: **Note:**
-Libraries may be found inside [`files/gitlab-cookbooks/gitlab/libraries`](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/libraries) folder in the repository.
 
 ### runit
 
@@ -108,17 +83,11 @@ Services are software processes that we run using the runit process init/supervi
 
 ## Additional `gitlab-ctl` commands
 
-Omnibus, by default, provides some wrapper commands like `gitlab-ctl reconfigure`, `gitlab-ctl restart`, etc.to manage the GitLab instance. There are some additional wrapper commands that targets some specific use-cases defined in the Omnibus-GitLab repository. These commands get used with the general `gitlab-ctl` command to perform certain actions like running database migrations or removing dormant accounts and similar not-so-common tasks.
-
-NOTE: **Note:**
-Additional wrapper commands may be found inside [`files/gitlab-ctl-commands`](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-ctl-commands) folder in the repository.
+Omnibus, by default, provides some wrapper commands like `gitlab-ctl reconfigure`, `gitlab-ctl restart`, etc.to manage the GitLab instance. There are some additional [wrapper commands](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-ctl-commands) that targets some specific use-cases defined in the Omnibus-GitLab repository. These commands get used with the general `gitlab-ctl` command to perform certain actions like running database migrations or removing dormant accounts and similar not-so-common tasks.
 
 ## Tests
 
-Omnibus-GitLab repository uses ChefSpec to test the cookbooks and recipes it ships. The usual strategy is to check a recipe to see if it behaves correctly in two (or more) conditions: when user doesn't specify any corresponding configuration, (i.e. when defaults are used) and when user specified configuration is used. Tests may include checking if files are generated in correct locations, services are started/stopped/notified, correct binaries are invoked, correct parameters are being passed to method invocations, etc. Recipes and library methods have tests associated with them. Omnibus-GitLab also uses some support methods or macros to help in the testing process. The tests are defined compatible for parallelization, where possible, to decrease the time required for running the entire test suite.
-
-NOTE: **Note:**
-Tests may be found inside [spec](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/spec/) folder in the repository.
+Omnibus-GitLab repository uses ChefSpec to [test the cookbooks and recipes](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/spec/) it ships. The usual strategy is to check a recipe to see if it behaves correctly in two (or more) conditions: when user doesn't specify any corresponding configuration, (i.e. when defaults are used) and when user specified configuration is used. Tests may include checking if files are generated in correct locations, services are started/stopped/notified, correct binaries are invoked, correct parameters are being passed to method invocations, etc. Recipes and library methods have tests associated with them. Omnibus-GitLab also uses some support methods or macros to help in the testing process. The tests are defined compatible for parallelization, where possible, to decrease the time required for running the entire test suite.
 
 So, of the components described above, some (software definitions, project metadata, tests, etc.) find use during the package building, in a build environment, and some (Chef cookbooks and recipes, GitLab configuration file, runit, `gitlab-ctl` commands, etc.) are used to configure the user's installed instance.
 
