@@ -797,7 +797,7 @@ default['gitlab']['remote-syslog']['dir'] = "/var/opt/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
-default['gitlab']['remote-syslog']['services'] = %w(redis nginx puma unicorn gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect)
+default['gitlab']['remote-syslog']['services'] = %w(redis nginx puma unicorn gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect gitlab-kas)
 
 ###
 # Logrotate
@@ -806,7 +806,7 @@ default['gitlab']['logrotate']['enable'] = false
 default['gitlab']['logrotate']['ha'] = false
 default['gitlab']['logrotate']['dir'] = "/var/opt/gitlab/logrotate"
 default['gitlab']['logrotate']['log_directory'] = "/var/log/gitlab/logrotate"
-default['gitlab']['logrotate']['services'] = %w(nginx puma actioncable unicorn gitlab-rails gitlab-shell gitlab-workhorse gitlab-pages)
+default['gitlab']['logrotate']['services'] = %w(nginx puma actioncable unicorn gitlab-rails gitlab-shell gitlab-workhorse gitlab-pages gitlab-kas)
 default['gitlab']['logrotate']['pre_sleep'] = 600 # sleep 10 minutes before rotating after start-up
 default['gitlab']['logrotate']['post_sleep'] = 3000 # wait 50 minutes after rotating
 

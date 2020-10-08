@@ -1536,6 +1536,38 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_ci['builds_directory'] = '/var/opt/gitlab/gitlab-ci/builds'
 
 ################################################################################
+## GitLab Kubernetes Agent Server
+##! Docs: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/blob/master/README.md
+################################################################################
+
+##! Enable GitLab KAS
+# gitlab_kas['enable'] = true
+
+##! Agent configuration for GitLab KAS
+# gitlab_kas['agent_configuration_poll_period'] = 20
+# gitlab_kas['agent_gitops_poll_period'] = 20
+# gitlab_kas['agent_gitops_project_info_cache_ttl'] = 300
+# gitlab_kas['agent_gitops_project_info_cache_error_ttl'] = 60
+# gitlab_kas['agent_info_cache_ttl'] = 300
+# gitlab_kas['agent_info_cache_error_ttl'] = 60
+
+##! Shared secret used for authentication between KAS and GitLab
+# gitlab_kas['api_secret_key'] = nil # Will be generated if not set. Base64 encoded and exactly 32 bytes long.
+
+##! Listen configuration for GitLab KAS
+# gitlab_kas['listen_address'] = 'localhost:8150'
+# gitlab_kas['listen_network'] = 'tcp'
+# gitlab_kas['listen_websocket'] = true
+
+##! Metrics configuration for GitLab KAS
+# gitlab_kas['metrics_usage_reporting_period'] = 60
+
+##! Directories for GitLab KAS
+# gitlab_kas['dir'] = '/var/opt/gitlab/gitlab-kas'
+# gitlab_kas['log_directory'] = '/var/log/gitlab/gitlab-kas'
+# gitlab_kas['env_directory'] = '/opt/gitlab/etc/gitlab-kas/env'
+
+################################################################################
 ## GitLab Mattermost
 ##! Docs: https://docs.gitlab.com/omnibus/gitlab-mattermost
 ################################################################################

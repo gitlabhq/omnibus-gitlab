@@ -67,6 +67,8 @@ module Gitlab
         Gitlab::Util.get_env("GITALY_SERVER_VERSION")
       when "gitlab-elasticsearch-indexer"
         Gitlab::Util.get_env("GITLAB_ELASTICSEARCH_INDEXER_VERSION")
+      when "gitlab-kas"
+        Gitlab::Util.get_env("GITLAB_KAS_VERSION")
       end
     end
 
@@ -91,7 +93,8 @@ module Gitlab
         "gitlab-workhorse" => "GITLAB_WORKHORSE_VERSION",
         "gitlab-pages" => "GITLAB_PAGES_VERSION",
         "gitaly" => "GITALY_SERVER_VERSION",
-        "gitlab-elasticsearch-indexer" => "GITLAB_ELASTICSEARCH_INDEXER_VERSION"
+        "gitlab-elasticsearch-indexer" => "GITLAB_ELASTICSEARCH_INDEXER_VERSION",
+        "gitlab-kas" => "GITLAB_KAS_VERSION"
       }
     end
 
