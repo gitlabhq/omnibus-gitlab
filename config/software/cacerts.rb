@@ -23,6 +23,7 @@ skip_transitive_dependency_licensing true
 
 # Date of the file is in a comment at the start, or in the changelog
 default_version '2020.01.01'
+display_version version.tr('.', '')
 
 version '2020.01.01' do
   source md5: 'c726ae88fd600aa26df1d30f42b51fec'

@@ -20,6 +20,7 @@ name 'libre2'
 
 version = Gitlab::Version.new('libre2', '2016-02-01')
 default_version version.print(false)
+display_version version.print(false).tr('-', '')
 
 license 'BSD'
 license_file 'LICENSE'
