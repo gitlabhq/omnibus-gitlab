@@ -22,7 +22,7 @@ class GitlabWorkhorseHelper < BaseHelper
     node['gitlab']['gitlab-workhorse']['listen_network'] == "unix"
   end
 
-  def socket_file_path
+  def listen_address
     return File.join(sockets_directory, socket_file_name) if unix_socket?
 
     node['gitlab']['gitlab-workhorse']['listen_addr']
