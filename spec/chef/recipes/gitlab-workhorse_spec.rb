@@ -39,6 +39,16 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     end
   end
 
+  context 'when the deprecated socket file exists' do
+    it 'includes a cleanup for the orphan socket' do
+      allow(File).to receive(:exist?).and_call_original
+      allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-workhorse/socket').and_return(true)
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content { |content|
+        expect(content).to match(%r(Removing orphaned workhorse socket at))
+      }
+    end
+  end
+
   context 'user and group' do
     context 'default values' do
       it_behaves_like "enabled runit service", "gitlab-workhorse", "root", "root"

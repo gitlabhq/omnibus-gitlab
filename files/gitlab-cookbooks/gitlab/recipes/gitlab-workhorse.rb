@@ -60,7 +60,9 @@ end
 runit_service 'gitlab-workhorse' do
   start_down node['gitlab']['gitlab-workhorse']['ha']
   options({
-    log_directory: log_directory
+    log_directory: log_directory,
+    found_orphan_socket: workhorse_helper.orphan_socket?,
+    orphan_socket_path: workhorse_helper.orphan_socket
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-workhorse'].to_hash)
 end
