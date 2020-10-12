@@ -24,3 +24,13 @@ echo "gitlab-aws-marketplace-ami" | sudo tee /opt/gitlab/embedded/service/gitlab
 sudo rm -rf /var/lib/apt/lists/*
 sudo find /root/.*history /home/*/.*history -exec rm -f {} \;
 sudo rm -f /home/ubuntu/.ssh/authorized_keys /root/.ssh/authorized_keys
+
+# Create startup scripts to set instance ID as initial password
+cat <<EOF | sudo tee /var/lib/cloud/scripts/per-instance/gitlab
+#!/bin/bash
+
+export INSTANCE_ID=\$(curl http://169.254.169.254/latest/meta-data/instance-id)
+sudo gitlab-rails runner "User.first.update!(password: '\${INSTANCE_ID}', password_confirmation: '\${INSTANCE_ID}', password_automatically_set: false)"
+EOF
+
+sudo chmod +x /var/lib/cloud/scripts/per-instance/gitlab
