@@ -174,17 +174,34 @@ RSpec.describe 'gitlab::gitlab-shell' do
     end
 
     context 'with a non-default workhorse unix socket' do
-      before do
-        stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket' })
+      context 'without sockets_directory defined' do
+        before do
+          stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket' })
+        end
+
+        it 'create config file with provided values' do
+          expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              gitlab_url: 'http+unix://%2Ffake%2Fworkhorse%2Fsocket',
+              gitlab_relative_path: ''
+            )
+          )
+        end
       end
 
-      it 'create config file with provided values' do
-        expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            gitlab_url: 'http+unix://%2Ffake%2Fworkhorse%2Fsockets%2Fsocket',
-            gitlab_relative_path: ''
+      context 'with sockets_directory defined' do
+        before do
+          stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket', 'sockets_directory': '/fake/workhorse/sockets/' })
+        end
+
+        it 'create config file with provided values' do
+          expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              gitlab_url: 'http+unix://%2Ffake%2Fworkhorse%2Fsockets%2Fsocket',
+              gitlab_relative_path: ''
+            )
           )
-        )
+        end
       end
     end
 

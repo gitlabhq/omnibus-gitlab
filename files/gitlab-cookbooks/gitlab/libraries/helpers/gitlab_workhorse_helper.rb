@@ -12,10 +12,7 @@ class GitlabWorkhorseHelper < BaseHelper
   def sockets_directory
     return unless unix_socket?
 
-    path = File.dirname(node['gitlab']['gitlab-workhorse']['listen_addr'])
-    return path if File.basename(path) == 'sockets'
-
-    File.join(path, 'sockets')
+    node['gitlab']['gitlab-workhorse']['sockets_directory']
   end
 
   def unix_socket?
@@ -26,13 +23,24 @@ class GitlabWorkhorseHelper < BaseHelper
     '/var/opt/gitlab/gitlab-workhorse/socket'
   end
 
-  def orphan_socket
+  def user_customized_socket?
     default_path = node.default['gitlab']['gitlab-workhorse']['listen_addr']
     configured_path = node['gitlab']['gitlab-workhorse']['listen_addr']
 
-    return deprecated_socket if default_path == configured_path
+    default_path != configured_path
+  end
 
-    configured_path
+  def user_customized_sockets_directory?
+    default_directory = node.default['gitlab']['gitlab-workhorse']['sockets_directory']
+    configured_directory = node['gitlab']['gitlab-workhorse']['sockets_directory']
+
+    default_directory != configured_directory
+  end
+
+  def orphan_socket
+    return deprecated_socket unless user_customized_socket?
+
+    node['gitlab']['gitlab-workhorse']['listen_addr']
   end
 
   def orphan_socket?
@@ -44,8 +52,14 @@ class GitlabWorkhorseHelper < BaseHelper
   end
 
   def listen_address
-    return File.join(sockets_directory, socket_file_name) if unix_socket?
+    return node['gitlab']['gitlab-workhorse']['listen_addr'] unless unix_socket?
 
-    node['gitlab']['gitlab-workhorse']['listen_addr']
+    selinux_socket = File.join(sockets_directory, socket_file_name)
+
+    return selinux_socket if user_customized_sockets_directory?
+
+    return node['gitlab']['gitlab-workhorse']['listen_addr'] if user_customized_socket?
+
+    selinux_socket
   end
 end

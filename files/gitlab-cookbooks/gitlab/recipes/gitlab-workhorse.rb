@@ -37,6 +37,7 @@ if workhorse_helper.unix_socket?
     group account_helper.web_server_group
     mode '0750'
     recursive true
+    not_if { workhorse_helper.user_customized_socket? && !workhorse_helper.user_customized_sockets_directory? }
   end
 end
 

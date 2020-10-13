@@ -488,13 +488,26 @@ RSpec.describe 'gitaly' do
   end
 
   context 'with a non-default workhorse unix socket' do
-    before do
-      stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket' })
+    context 'without a socket directory set' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket' })
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsocket'\s+relative_url_root = ''})
+      end
     end
 
-    it 'create config file with provided values' do
-      expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsockets%2Fsocket'\s+relative_url_root = ''})
+    context 'with a socket directory set' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket', sockets_directory: '/fake/workhorse/sockets'})
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsockets%2Fsocket'\s+relative_url_root = ''})
+      end
     end
   end
 

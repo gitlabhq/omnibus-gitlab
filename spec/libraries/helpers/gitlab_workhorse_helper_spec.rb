@@ -102,33 +102,81 @@ RSpec.describe GitlabWorkhorseHelper do
       end
     end
 
-    context 'with custom workhorse configuration' do
-      cached(:chef_run) { converge_config }
+    context 'with custom workhorse listen_addr' do
+      context 'without sockets_directory configured' do
+        cached(:chef_run) { converge_config }
 
-      before do
-        stub_gitlab_rb(
-          gitlab_workhorse: {
-            listen_network: 'unix',
-            listen_addr: deprecated_custom
-          }
-        )
-      end
+        before do
+          stub_gitlab_rb(
+            gitlab_workhorse: {
+              listen_network: 'unix',
+              listen_addr: deprecated_custom
+            }
+          )
+        end
 
-      describe '#orphan_socket' do
-        it 'returns the configured custom path' do
-          expect(subject.orphan_socket).to eq(deprecated_custom)
+        describe '#user_customized_socket?' do
+          it 'should be true when listen_addr is set' do
+            expect(subject.user_customized_socket?).to be true
+          end
+        end
+
+        describe '#user_customized_sockets_directory?' do
+          it 'should be false when the directory is default' do
+            expect(subject.user_customized_sockets_directory?).to be false
+          end
+        end
+
+        describe '#orphan_socket' do
+          it 'returns the configured custom path' do
+            expect(subject.orphan_socket).to eq(deprecated_custom)
+          end
+        end
+
+        describe '#orphan_socket?' do
+          it 'is false when the listen address is customized' do
+            allow(File).to receive(:exist?).with(deprecated_custom).and_return(true)
+            expect(subject.orphan_socket?).to be false
+          end
         end
       end
 
-      describe '#orphan_socket?' do
-        it 'true when the orphan socket exists on disk' do
-          allow(File).to receive(:exist?).with(deprecated_custom).and_return(true)
-          expect(subject.orphan_socket?).to be true
+      context 'with sockets_directory configured' do
+        cached(:chef_run) { converge_config }
+
+        before do
+          stub_gitlab_rb(
+            gitlab_workhorse: {
+              listen_network: 'unix',
+              listen_addr: deprecated_custom,
+              sockets_directory: new_custom_directory
+            }
+          )
         end
 
-        it 'false when the orphan socket does not exist on disk' do
-          allow(File).to receive(:exist?).with(deprecated_custom).and_return(true)
-          expect(subject.orphan_socket?).to be true
+        describe "#user_customized_sockets_directory?" do
+          it 'should be true when the directory has been set' do
+            expect(subject.user_customized_sockets_directory?).to be true
+          end
+        end
+
+        describe '#orphan_socket' do
+          it 'returns the configured custom path' do
+            expect(subject.orphan_socket).to eq(deprecated_custom)
+          end
+        end
+
+        describe '#orphan_socket?' do
+          it 'is true when the listen address is customized' do
+            allow(File).to receive(:exist?).with(deprecated_custom).and_return(true)
+            expect(subject.orphan_socket?).to be true
+          end
+        end
+
+        describe '#listen_address' do
+          it 'returns the path the custom directory' do
+            expect(subject.listen_address).to eq(new_custom_path)
+          end
         end
       end
     end
