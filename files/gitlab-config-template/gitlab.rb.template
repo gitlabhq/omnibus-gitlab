@@ -1036,6 +1036,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 ### Replication settings
 ###! Note, some replication settings do not require a full restart. They are documented below.
 # postgresql['wal_level'] = "hot_standby"
+# postgresql['wal_log_hints'] = 'off'
 # postgresql['max_wal_senders'] = 5
 # postgresql['max_replication_slots'] = 0
 # postgresql['max_locks_per_transaction'] = 128
