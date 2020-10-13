@@ -6,7 +6,7 @@ require 'chefspec'
 require 'ohai'
 
 # Load our cookbook libraries so we can stub them in our tests
-cookbooks = %w(package gitlab gitaly mattermost gitlab-ee letsencrypt monitoring patroni)
+cookbooks = %w(package gitlab gitaly mattermost gitlab-ee letsencrypt monitoring patroni gitlab-kas)
 cookbooks.each do |cookbook|
   Dir[File.join(__dir__, "../files/gitlab-cookbooks/#{cookbook}/libraries/**/*.rb")].each { |f| require f }
 end

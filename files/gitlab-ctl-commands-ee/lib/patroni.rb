@@ -21,6 +21,8 @@ module Patroni
       resume          Resume auto failover
       failover        Failover to a replica
       switchover      Switchover to a replica
+      restart         Restart Patroni service without triggering failover
+      reload          Reload Patroni configuration
   EOS
 
   # rubocop:disable Metrics/AbcSize
@@ -114,6 +116,16 @@ module Patroni
         opts.on('--scheduled [SCHEDULED]', 'Schedule of switchover') do |t|
           options[:scheduled] = t
         end
+      end,
+      'restart' => OptionParser.new do |opts|
+        opts.on('-h', '--help', 'Prints this help') do
+          Utils.warn_and_exit opts
+        end
+      end,
+      'reload' => OptionParser.new do |opts|
+        opts.on('-h', '--help', 'Prints this help') do
+          Utils.warn_and_exit opts
+        end
       end
     }
 
@@ -183,6 +195,16 @@ module Patroni
     Utils.patronictl(command)
   end
 
+  def self.restart(options)
+    attributes = GitlabCtl::Util.get_node_attributes
+    Utils.patronictl("restart --force #{attributes['patroni']['scope']} #{attributes['patroni']['name']}")
+  end
+
+  def self.reload(options)
+    attributes = GitlabCtl::Util.get_node_attributes
+    Utils.patronictl("reload --force #{attributes['patroni']['scope']} #{attributes['patroni']['name']}")
+  end
+
   class Utils
     def self.patronictl(cmd, user = 'root')
       attributes = GitlabCtl::Util.get_public_node_attributes
@@ -207,6 +229,14 @@ module Patroni
       @uri = URI("http://#{@attributes['patroni']['api_address']}")
     end
 
+    def up?
+      get('/') do
+        return true
+      end
+    rescue StandardError
+      false
+    end
+
     def leader?
       get('/leader') do |response|
         response.code == '200'
@@ -216,6 +246,12 @@ module Patroni
     def replica?
       get('/replica') do |response|
         response.code == '200'
+      end
+    end
+
+    def cluster_status
+      get('/cluster') do |response|
+        response.code == '200' ? JSON.parse(response.body, symbolize_names: true) : {}
       end
     end
 

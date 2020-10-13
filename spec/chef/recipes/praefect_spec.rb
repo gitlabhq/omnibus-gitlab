@@ -46,6 +46,7 @@ RSpec.describe 'praefect' do
         'prometheus_listen_addr' => 'localhost:9652',
         'sentry' => {},
         'database' => {},
+        'reconciliation' => {},
         'failover' => { 'enabled' => true,
                         'election_strategy' => 'sql' }
       }
@@ -91,18 +92,18 @@ RSpec.describe 'praefect' do
       let(:virtual_storages) do
         {
           'default' => {
-            'praefect1' => { address: 'tcp://node1.internal', primary: true, token: "praefect1-token" },
-            'praefect2' => { address: 'tcp://node2.internal', primary: 'true', token: "praefect2-token" },
-            'praefect3' => { address: 'tcp://node3.internal', primary: false, token: "praefect3-token" },
-            'praefect4' => { address: 'tcp://node4.internal', primary: 'false', token: "praefect4-token" },
+            'praefect1' => { address: 'tcp://node1.internal', token: "praefect1-token" },
+            'praefect2' => { address: 'tcp://node2.internal', token: "praefect2-token" },
+            'praefect3' => { address: 'tcp://node3.internal', token: "praefect3-token" },
+            'praefect4' => { address: 'tcp://node4.internal', token: "praefect4-token" },
             'praefect5' => { address: 'tcp://node5.internal', token: "praefect5-token" }
           }
         }
       end
       let(:failover_enabled) { true }
       let(:failover_election_strategy) { 'local' }
-      let(:database_host) { 'pg.internal' }
-      let(:database_port) { 1234 }
+      let(:database_host) { 'pg.external' }
+      let(:database_port) { 2234 }
       let(:database_user) { 'praefect-pg' }
       let(:database_password) { 'praefect-pg-pass' }
       let(:database_dbname) { 'praefect_production' }
@@ -110,6 +111,11 @@ RSpec.describe 'praefect' do
       let(:database_sslcert) { '/path/to/client-cert' }
       let(:database_sslkey) { '/path/to/client-key' }
       let(:database_sslrootcert) { '/path/to/rootcert' }
+      let(:database_sslrootcert) { '/path/to/rootcert' }
+      let(:database_host_no_proxy) { 'pg.internal' }
+      let(:database_port_no_proxy) { 1234 }
+      let(:reconciliation_scheduling_interval) { '1m' }
+      let(:reconciliation_histogram_buckets) { '[1.0, 2.0]' }
 
       before do
         stub_gitlab_rb(praefect: {
@@ -139,10 +145,25 @@ RSpec.describe 'praefect' do
                          database_sslcert: database_sslcert,
                          database_sslkey: database_sslkey,
                          database_sslrootcert: database_sslrootcert,
+                         database_host_no_proxy: database_host_no_proxy,
+                         database_port_no_proxy: database_port_no_proxy,
+                         reconciliation_scheduling_interval: reconciliation_scheduling_interval,
+                         reconciliation_histogram_buckets: reconciliation_histogram_buckets
                        })
       end
 
       it 'renders the config.toml' do
+        expect(chef_run).to render_file(config_path).with_content { |content|
+          expect(Tomlrb.parse(content)).to include(
+            {
+              'reconciliation' => {
+                'scheduling_interval' => '1m',
+                'histogram_buckets' => [1.0, 2.0]
+              }
+            }
+          )
+        }
+
         expect(chef_run).to render_file(config_path)
           .with_content("listen_addr = '#{listen_addr}'")
         expect(chef_run).to render_file(config_path)
@@ -163,17 +184,14 @@ RSpec.describe 'praefect' do
           .with_content(%r{\[failover\]\s+enabled = true\s+election_strategy = 'local'})
         expect(chef_run).to render_file(config_path)
           .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
-
         expect(chef_run).to render_file(config_path)
           .with_content(%r{^\[auth\]\ntoken = '#{auth_token}'\ntransitioning = #{auth_transitioning}\n})
 
         virtual_storages.each do |name, nodes|
           expect(chef_run).to render_file(config_path).with_content(%r{^\[\[virtual_storage\]\]\nname = '#{name}'\n})
           nodes.each do |storage, node|
-            expect_primary = primaries.include?(storage)
-
             expect(chef_run).to render_file(config_path)
-              .with_content(%r{^\[\[virtual_storage.node\]\]\nstorage = '#{storage}'\naddress = '#{node[:address]}'\ntoken = '#{node[:token]}'\nprimary = #{expect_primary}\n})
+              .with_content(%r{^\[\[virtual_storage.node\]\]\nstorage = '#{storage}'\naddress = '#{node[:address]}'\ntoken = '#{node[:token]}'\n})
           end
         end
 
@@ -188,6 +206,8 @@ RSpec.describe 'praefect' do
           %r{sslcert = '#{database_sslcert}'},
           %r{sslkey = '#{database_sslkey}'},
           %r{sslrootcert = '#{database_sslrootcert}'},
+          %r{host_no_proxy = '#{database_host_no_proxy}'},
+          %r{port_no_proxy = #{database_port_no_proxy}},
         ].map(&:to_s).join('\n'))
 
         expect(chef_run).to render_file(config_path).with_content(database_section)
@@ -199,7 +219,7 @@ RSpec.describe 'praefect' do
       end
 
       context 'with virtual_storages as an array' do
-        let(:virtual_storages) { [{ name: 'default', 'nodes' => [{ storage: 'praefect1', address: 'tcp://node1.internal', primary: true, token: "praefect1-token" }] }] }
+        let(:virtual_storages) { [{ name: 'default', 'nodes' => [{ storage: 'praefect1', address: 'tcp://node1.internal', token: "praefect1-token" }] }] }
 
         it 'raises an error' do
           expect { chef_run }.to raise_error("Praefect virtual_storages must be a hash")
@@ -207,7 +227,7 @@ RSpec.describe 'praefect' do
       end
 
       context 'with nodes within virtual_storages as an array' do
-        let(:virtual_storages) { { 'default' => [{ storage: 'praefect1', address: 'tcp://node1.internal', primary: true, token: "praefect1-token" }] } }
+        let(:virtual_storages) { { 'default' => [{ storage: 'praefect1', address: 'tcp://node1.internal', token: "praefect1-token" }] } }
 
         it 'raises an error' do
           expect { chef_run }.to raise_error("nodes of a Praefect virtual_storage must be a hash")

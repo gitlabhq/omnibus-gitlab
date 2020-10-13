@@ -97,4 +97,24 @@ RSpec.describe Pgbouncer::Databases do
       )
     end
   end
+
+  context 'with pgbouncer listening' do
+    before do
+      allow(@obj).to receive(:show_databases).and_return("nyan")
+    end
+
+    it 'should be running' do
+      expect(@obj.running?).to be true
+    end
+  end
+
+  context 'with pgbouncer not listening' do
+    before do
+      allow(@obj).to receive(:show_databases).and_raise(GitlabCtl::Errors::ExecutionError.new("nya", "nya", "neko"))
+    end
+
+    it 'should not be running' do
+      expect(@obj.running?).to be false
+    end
+  end
 end

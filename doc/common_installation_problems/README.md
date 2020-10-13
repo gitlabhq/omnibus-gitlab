@@ -326,7 +326,7 @@ Expected process to exit with [0], but received '255'
 This is unlikely to happen with non virtualized machines but on a VPS with virtualization like openVZ, container might not have the required module enabled
 or container doesn't have access to kernel parameters.
 
-Try enabling the module on which sysctl errored out, on how to enable the module see example [here](https://serverfault.com/questions/477718/sysctl-p-etc-sysctl-conf-returns-error).
+Try [enabling the module](https://serverfault.com/questions/477718/sysctl-p-etc-sysctl-conf-returns-error) on which sysctl errored out.
 
 There is a reported workaround described in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/361) which requires editing the GitLab' internal recipe by supplying the switch which will ignore failures. Ignoring errors can have unexpected side effects on performance of your GitLab server so it is not recommended to do so.
 
@@ -470,7 +470,7 @@ sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
 
 ## 'Short read or OOM loading DB' error
 
-Try cleaning the old Redis session by following the [documentation here.](https://docs.gitlab.com/ee/operations/cleaning_up_redis_sessions.html)
+Try [cleaning the old Redis session](https://docs.gitlab.com/ee/operations/cleaning_up_redis_sessions.html).
 
 ## Apt error 'The requested URL returned error: 403'
 

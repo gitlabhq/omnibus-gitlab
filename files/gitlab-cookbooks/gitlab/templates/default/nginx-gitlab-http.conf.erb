@@ -119,6 +119,9 @@ server {
   <% end %>
 
   <% if @referrer_policy %>
+  # Rails sets a default policy of strict-origin-when-cross-origin, so
+  # hide that and just send the one we've configured for nginx
+  proxy_hide_header Referrer-Policy;
   add_header Referrer-Policy <%= @referrer_policy %>;
   <% end %>
 
@@ -171,6 +174,12 @@ server {
   <% if node['monitoring']['grafana']['enable'] -%>
   location <%= File.join(@path, '-/grafana/') %> {
     proxy_pass http://<%= node['monitoring']['grafana']['http_addr'] %>:<%= node['monitoring']['grafana']['http_port'] %>/;
+  }
+
+  <% end -%>
+  <% if node['gitlab-kas']['enable'] -%>
+  location <%= File.join(@path, '-/kubernetes-agent/') %> {
+    proxy_pass http://<%= node['gitlab-kas']['listen_address'] %>/;
   }
 
   <% end -%>

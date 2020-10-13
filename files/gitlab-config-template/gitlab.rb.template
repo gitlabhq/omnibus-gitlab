@@ -73,8 +73,26 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! By default, we'll allow 95% of the the worker timeout
 # gitlab_rails['max_request_duration_seconds'] = 57
 
+### GitLab email server settings
+###! Docs: https://docs.gitlab.com/omnibus/settings/smtp.html
+###! **Use smtp instead of sendmail/postfix.**
+
+# gitlab_rails['smtp_enable'] = true
+# gitlab_rails['smtp_address'] = "smtp.server"
+# gitlab_rails['smtp_port'] = 465
+# gitlab_rails['smtp_user_name'] = "smtp user"
+# gitlab_rails['smtp_password'] = "smtp password"
+# gitlab_rails['smtp_domain'] = "example.com"
+# gitlab_rails['smtp_authentication'] = "login"
+# gitlab_rails['smtp_enable_starttls_auto'] = true
+# gitlab_rails['smtp_tls'] = false
+
 ### Email Settings
+
 # gitlab_rails['gitlab_email_enabled'] = true
+
+##! If your SMTP server does not like the default 'From: gitlab@gitlab.example.com'
+##! can change the 'From' with this setting.
 # gitlab_rails['gitlab_email_from'] = 'example@example.com'
 # gitlab_rails['gitlab_email_display_name'] = 'Example'
 # gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
@@ -143,7 +161,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['pages_domain_verification_cron_worker'] = "*/15 * * * *"
 # gitlab_rails['pages_domain_ssl_renewal_cron_worker'] = "*/10 * * * *"
 # gitlab_rails['pages_domain_removal_cron_worker'] = "47 0 * * *"
+# gitlab_rails['remove_unaccepted_member_invites_cron_worker'] = "10 15 * * *"
 # gitlab_rails['schedule_migrate_external_diffs_worker_cron'] = "15 * * * *"
+# gitlab_rails['ci_platform_metrics_update_cron_worker'] = '47 9 * * *'
+# gitlab_rails['analytics_instance_statistics_count_job_trigger_worker_cron'] = "50 23 */1 * *"
+# gitlab_rails['member_invitation_reminder_emails_worker_cron'] = "0 0 * * *"
 
 ### Webhook Settings
 ###! Number of seconds to wait for HTTP response after sending webhook HTTP POST
@@ -458,6 +480,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_rails['omniauth_block_auto_created_users'] = true
 # gitlab_rails['omniauth_auto_link_ldap_user'] = false
 # gitlab_rails['omniauth_auto_link_saml_user'] = false
+# gitlab_rails['omniauth_auto_link_user'] = ['saml']
 # gitlab_rails['omniauth_external_providers'] = ['twitter', 'google_oauth2']
 # gitlab_rails['omniauth_allow_bypass_two_factor'] = ['google_oauth2']
 # gitlab_rails['omniauth_providers'] = [
@@ -611,6 +634,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_rails['db_sslkey'] = nil
 # gitlab_rails['db_prepared_statements'] = false
 # gitlab_rails['db_statements_limit'] = 1000
+# gitlab_rails['db_connect_timeout'] = nil
 
 
 ### GitLab Redis settings
@@ -648,20 +672,6 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_rails['redis_shared_sentinels'] = nil
 # gitlab_rails['redis_actioncable_instance'] = nil
 # gitlab_rails['redis_actioncable_sentinels'] = nil
-
-### GitLab email server settings
-###! Docs: https://docs.gitlab.com/omnibus/settings/smtp.html
-###! **Use smtp instead of sendmail/postfix.**
-
-# gitlab_rails['smtp_enable'] = true
-# gitlab_rails['smtp_address'] = "smtp.server"
-# gitlab_rails['smtp_port'] = 465
-# gitlab_rails['smtp_user_name'] = "smtp user"
-# gitlab_rails['smtp_password'] = "smtp password"
-# gitlab_rails['smtp_domain'] = "example.com"
-# gitlab_rails['smtp_authentication'] = "login"
-# gitlab_rails['smtp_enable_starttls_auto'] = true
-# gitlab_rails['smtp_tls'] = false
 
 ###! **Can be: 'none', 'peer', 'client_once', 'fail_if_no_peer_cert'**
 ###! Docs: http://api.rubyonrails.org/classes/ActionMailer/Base.html
@@ -928,6 +938,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # sidekiq['negate'] = false
 
 # sidekiq['metrics_enabled'] = true
+# sidekiq['exporter_log_enabled'] = false
 # sidekiq['listen_address'] = "localhost"
 # sidekiq['listen_port'] = 8082
 
@@ -1529,6 +1540,38 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_ci['builds_directory'] = '/var/opt/gitlab/gitlab-ci/builds'
 
 ################################################################################
+## GitLab Kubernetes Agent Server
+##! Docs: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/blob/master/README.md
+################################################################################
+
+##! Enable GitLab KAS
+# gitlab_kas['enable'] = true
+
+##! Agent configuration for GitLab KAS
+# gitlab_kas['agent_configuration_poll_period'] = 20
+# gitlab_kas['agent_gitops_poll_period'] = 20
+# gitlab_kas['agent_gitops_project_info_cache_ttl'] = 300
+# gitlab_kas['agent_gitops_project_info_cache_error_ttl'] = 60
+# gitlab_kas['agent_info_cache_ttl'] = 300
+# gitlab_kas['agent_info_cache_error_ttl'] = 60
+
+##! Shared secret used for authentication between KAS and GitLab
+# gitlab_kas['api_secret_key'] = nil # Will be generated if not set. Base64 encoded and exactly 32 bytes long.
+
+##! Listen configuration for GitLab KAS
+# gitlab_kas['listen_address'] = 'localhost:8150'
+# gitlab_kas['listen_network'] = 'tcp'
+# gitlab_kas['listen_websocket'] = true
+
+##! Metrics configuration for GitLab KAS
+# gitlab_kas['metrics_usage_reporting_period'] = 60
+
+##! Directories for GitLab KAS
+# gitlab_kas['dir'] = '/var/opt/gitlab/gitlab-kas'
+# gitlab_kas['log_directory'] = '/var/log/gitlab/gitlab-kas'
+# gitlab_kas['env_directory'] = '/opt/gitlab/etc/gitlab-kas/env'
+
+################################################################################
 ## GitLab Mattermost
 ##! Docs: https://docs.gitlab.com/omnibus/gitlab-mattermost
 ################################################################################
@@ -1930,6 +1973,11 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 #     'max_per_repo' => 5
 #   }
 # ]
+#
+# gitaly['daily_maintenance_start_hour'] = 22
+# gitaly['daily_maintenance_start_minute'] = 30
+# gitaly['daily_maintenance_duration'] = '30m'
+# gitaly['daily_maintenance_storages'] = ["default"]
 
 ################################################################################
 ## Praefect
@@ -1984,8 +2032,8 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # praefect['sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
 # praefect['sentry_environment'] = "production"
 # praefect['auto_migrate'] = true
-# praefect['database_host'] = 'postgres.internal'
-# praefect['database_port'] = 5432
+# praefect['database_host'] = 'postgres.external'
+# praefect['database_port'] = 6432
 # praefect['database_user'] = 'praefect'
 # praefect['database_password'] = 'secret'
 # praefect['database_dbname'] = 'praefect_production'
@@ -1993,6 +2041,10 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # praefect['database_sslcert'] = '/path/to/client-cert'
 # praefect['database_sslkey'] = '/path/to/client-key'
 # praefect['database_sslrootcert'] = '/path/to/rootcert'
+# praefect['reconciliation_scheduling_interval'] = '5m'
+# praefect['reconciliation_histogram_buckets'] = '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0]'
+# praefect['database_host_no_proxy'] = 'postgres.internal'
+# praefect['database_port_no_proxy'] = 5432
 
 ################################################################################
 # Storage check
@@ -2060,6 +2112,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_rails['kerberos_enabled'] = true
 # gitlab_rails['kerberos_keytab'] = /etc/http.keytab
 # gitlab_rails['kerberos_service_principal_name'] = HTTP/gitlab.example.com@EXAMPLE.COM
+# gitlab_rails['kerberos_simple_ldap_linking_allowed_realms'] = ['example.com','kerberos.example.com']
 # gitlab_rails['kerberos_use_dedicated_port'] = true
 # gitlab_rails['kerberos_port'] = 8443
 # gitlab_rails['kerberos_https'] = true
@@ -2443,6 +2496,11 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 
 # patroni['use_pg_rewind'] = false
 # patroni['use_slots'] = true
+
+## Permanent replication slots for Streaming Replication
+# patroni['replication_slots'] = {
+#   'geo_secondary' => { 'type' => 'physical' }
+# }
 
 ## The address and port that Patroni API binds to and listens on.
 # patroni['listen_address'] = nil

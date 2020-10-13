@@ -118,6 +118,7 @@ include_recipe 'postgresql::bin'
   gitaly
   praefect
   postgresql
+  gitlab-kas
 ).each do |service|
   if node[service]['enable']
     include_recipe "#{service}::enable"
@@ -165,6 +166,7 @@ end
 %w(
   registry
   mattermost
+  gitlab-kas
 ).each do |service|
   if node[service]["enable"]
     include_recipe "#{service}::enable"
@@ -182,6 +184,12 @@ if node['letsencrypt']['enable']
   include_recipe 'letsencrypt::enable'
 else
   include_recipe 'letsencrypt::disable'
+end
+
+if node['gitlab']['gitlab-rails']['database_reindexing']['enable']
+  include_recipe 'gitlab::database_reindexing_enable'
+else
+  include_recipe 'gitlab::database_reindexing_disable'
 end
 
 OmnibusHelper.is_deprecated_os?

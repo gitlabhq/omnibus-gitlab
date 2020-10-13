@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+require 'rainbow/ext/string'
+
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 
 # For testing purposes, if the first path cannot be found load the second
@@ -118,7 +120,17 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
   run_command("rm -rf #{local_mode_cache_path}")
 
   log 'Reconfigure GitLab to apply migrations'
-  reconfigure(false) # sending 'false' mans "don't quit afterwards"
+  results = reconfigure
+  if results != 0
+    message = <<~EOF
+    ===
+    There was an error running gitlab-ctl reconfigure. Please check the output above for more
+    details.
+    ===
+    EOF
+    warn(message.color(:red))
+    ::Kernel.exit results
+  end
 
   log 'Restarting previously running GitLab services'
   get_all_services.each do |sv_name|
@@ -221,7 +233,7 @@ def pg_upgrade_check
   return unless File.exist?(manifest_file)
 
   # If postgresql_new doesn't exist, we are shipping only one PG version. This
-  # check becomes irrelevent then, and we return early.
+  # check becomes irrelevant then, and we return early.
   manifest_entry = File.readlines(manifest_file).grep(/postgresql_new/).first
   return unless manifest_entry
 

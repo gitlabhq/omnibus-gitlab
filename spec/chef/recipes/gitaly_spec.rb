@@ -43,6 +43,7 @@ RSpec.describe 'gitaly' do
   end
 
   let(:gitlab_url) { 'http://localhost:3000' }
+  let(:workhorse_addr) { 'localhost:4000' }
   let(:custom_hooks_dir) { '/path/to/custom/hooks' }
   let(:user) { 'user123' }
   let(:password) { 'password321' }
@@ -50,6 +51,10 @@ RSpec.describe 'gitaly' do
   let(:ca_path) { '/path/to/ca_path' }
   let(:self_signed_cert) { true }
   let(:read_timeout) { 123 }
+  let(:daily_maintenance_start_hour) { 21 }
+  let(:daily_maintenance_start_minute) { 9 }
+  let(:daily_maintenance_duration) { '45m' }
+  let(:daily_maintenance_storages) { ["default"] }
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
@@ -113,6 +118,8 @@ RSpec.describe 'gitaly' do
         .with_content(%r{\[logging\]\s+level})
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{catfile_cache_size})
+      expect(chef_run).not_to render_file(config_path)
+        .with_content(%r{\[daily_maintenance\]})
     end
 
     it 'populates gitaly config.toml with default storages' do
@@ -135,9 +142,9 @@ RSpec.describe 'gitaly' do
         .with_content(%r{\[gitlab-shell\]\s+dir = "/opt/gitlab/embedded/service/gitlab-shell"})
     end
 
-    it 'populates gitaly config.toml with gitlab values' do
+    it 'populates gitaly config.toml with gitlab-workhorse socket' do
       expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[gitlab\]\s+url = 'http://127.0.0.1:8080'})
+        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsocket'\s+relative_url_root = ''})
     end
   end
 
@@ -167,7 +174,11 @@ RSpec.describe 'gitaly' do
           ruby_num_workers: ruby_num_workers,
           git_catfile_cache_size: git_catfile_cache_size,
           open_files_ulimit: open_files_ulimit,
-          ruby_rugged_git_config_search_path: ruby_rugged_git_config_search_path
+          ruby_rugged_git_config_search_path: ruby_rugged_git_config_search_path,
+          daily_maintenance_start_hour: daily_maintenance_start_hour,
+          daily_maintenance_start_minute: daily_maintenance_start_minute,
+          daily_maintenance_duration: daily_maintenance_duration,
+          daily_maintenance_storages: daily_maintenance_storages
         },
         gitlab_rails: {
           internal_api_url: gitlab_url
@@ -182,6 +193,10 @@ RSpec.describe 'gitaly' do
             ca_path: ca_path,
             self_signed_cert: self_signed_cert
           }
+        },
+        gitlab_workhorse: {
+          listen_network: 'tcp',
+          listen_addr: workhorse_addr,
         },
         user: {
           username: 'foo',
@@ -248,6 +263,14 @@ RSpec.describe 'gitaly' do
         %r{custom_hooks_dir = '#{Regexp.escape(custom_hooks_dir)}'},
       ].map(&:to_s).join('\s+'))
 
+      maintenance_section = Regexp.new([
+        %r{\[daily_maintenance\]},
+        %r{start_hour = #{daily_maintenance_start_hour}},
+        %r{start_minute = #{daily_maintenance_start_minute}},
+        %r{duration = '#{daily_maintenance_duration}'},
+        %r{storages = #{Regexp.escape(daily_maintenance_storages.to_s)}},
+      ].map(&:to_s).join('\s+'))
+
       expect(chef_run).to render_file(config_path).with_content { |content|
         expect(content).to include("tls_listen_addr = 'localhost:8888'")
         expect(content).to include("certificate_path = '/path/to/cert.pem'")
@@ -262,6 +285,7 @@ RSpec.describe 'gitaly' do
         expect(content).to match(gitlab_shell_section)
         expect(content).to match(gitlab_section)
         expect(content).to match(hooks_section)
+        expect(content).to match(maintenance_section)
       }
     end
 
@@ -273,6 +297,16 @@ RSpec.describe 'gitaly' do
     it 'populates sv related log files' do
       expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/log/run')
         .with_content(/exec svlogd -tt \/var\/log\/gitlab\/gitaly/)
+    end
+
+    context 'when using multiple maintenance storage entries' do
+      let(:daily_maintenance_storages) { %w(storage0 storage1 storage2) }
+
+      it 'renders daily_maintenance with multiple storage entries' do
+        expect(chef_run).to render_file(config_path).with_content { |content|
+          expect(content).to include("storages = #{daily_maintenance_storages}")
+        }
+      end
     end
 
     context 'when using gitaly storage configuration' do
@@ -450,6 +484,47 @@ RSpec.describe 'gitaly' do
           }
         )
       )
+    end
+  end
+
+  context 'with a non-default workhorse unix socket' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket' })
+    end
+
+    it 'create config file with provided values' do
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsocket'\s+relative_url_root = ''})
+    end
+  end
+
+  context 'with a tcp workhorse listener' do
+    before do
+      stub_gitlab_rb(
+        external_url: 'http://example.com/gitlab',
+        gitlab_workhorse: {
+          listen_network: 'tcp',
+          listen_addr: 'localhost:1234'
+        }
+      )
+    end
+
+    it 'create config file with only the URL set' do
+      expect(chef_run).to render_file(config_path).with_content { |content|
+        expect(content).to match(%r{\[gitlab\]\s+url = 'http://localhost:1234/gitlab'})
+        expect(content).not_to match(/relative_url_root/)
+      }
+    end
+  end
+
+  context 'with relative path in external_url' do
+    before do
+      stub_gitlab_rb(external_url: 'http://example.com/gitlab')
+    end
+
+    it 'create config file with the relative_url_root set' do
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsocket'\s+relative_url_root = '/gitlab'})
     end
   end
 end

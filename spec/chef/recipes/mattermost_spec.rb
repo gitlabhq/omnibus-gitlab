@@ -12,6 +12,7 @@ RSpec.describe 'gitlab::mattermost' do
       'MM_GITLABSETTINGS_SECRET' => '',
       'MM_GITLABSETTINGS_TOKENENDPOINT' => 'http://gitlab.example.com/oauth/token',
       'MM_GITLABSETTINGS_USERAPIENDPOINT' => 'http://gitlab.example.com/api/v4/user',
+      'MM_INSTALL_TYPE' => 'gitlab_omnibus',
       'MM_LOGSETTINGS_FILELOCATION' => '/var/log/gitlab/mattermost',
       'MM_PLUGINSETTINGS_CLIENTDIRECTORY' => '/var/opt/gitlab/mattermost/client-plugins',
       'MM_PLUGINSETTINGS_DIRECTORY' => '/var/opt/gitlab/mattermost/plugins',
@@ -19,7 +20,7 @@ RSpec.describe 'gitlab::mattermost' do
       'MM_SERVICESETTINGS_ENABLEAPITEAMDELETION' => 'true',
       'MM_SERVICESETTINGS_LISTENADDRESS' => '127.0.0.1:8065',
       'MM_SERVICESETTINGS_SITEURL' => 'http://mattermost.example.com',
-      'MM_SQLSETTINGS_ATRESTENCRYPTKEY' => 'asdf1234',
+      'MM_SQLSETTINGS_ATRESTENCRYPTKEY' => 'aabbccddeeff11223344556677889900',
       'MM_SQLSETTINGS_DATASOURCE' => 'user=gitlab_mattermost host=/var/opt/gitlab/postgresql port=5432 dbname=mattermost_production',
       'MM_SQLSETTINGS_DRIVERNAME' => 'postgres',
       'MM_TEAMSETTINGS_SITENAME' => 'GitLab Mattermost',
@@ -32,7 +33,8 @@ RSpec.describe 'gitlab::mattermost' do
     stub_gitlab_rb(external_url: 'http://gitlab.example.com', mattermost_external_url: 'http://mattermost.example.com')
     allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
     allow_any_instance_of(PgHelper).to receive(:database_exists?).and_return(true)
-    allow(SecretsHelper).to receive(:generate_hex).and_return('asdf1234')
+    allow(SecretsHelper).to receive(:generate_hex).with(64).and_return('aaaabbbbccccddddeeeeffff1111222233334444555566667777888899990000')
+    allow(SecretsHelper).to receive(:generate_hex).with(16).and_return('aabbccddeeff11223344556677889900')
   end
 
   context 'by default' do

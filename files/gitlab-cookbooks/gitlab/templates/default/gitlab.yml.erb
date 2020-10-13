@@ -397,9 +397,19 @@ production: &base
     pages_domain_removal_cron_worker:
       cron:<% if @pages_domain_removal_cron_worker %> "<%= @pages_domain_removal_cron_worker %>"<% end %>
 
+    # Remove unaccepted member invitations
+    <% unless @remove_unaccepted_member_invites_cron_worker.nil? %>
+    remove_unaccepted_member_invites_worker:
+      cron: "<%= @remove_unaccepted_member_invites_cron_worker %>"
+    <% end %>
+
     # Periodically migrate diffs from the database to external storage
     schedule_migrate_external_diffs_worker:
       cron:<% if @schedule_migrate_external_diffs_worker_cron %> "<%= @schedule_migrate_external_diffs_worker_cron %>"<% end %>
+
+    # Update CI Platform Metrics daily
+    ci_platform_metrics_update_cron_worker:
+      cron: <% if @ci_platform_metrics_update_cron_worker %> "<%= @ci_platform_metrics_update_cron_worker %>"<% end %>
 
     ##
     # GitLab EE only jobs:
@@ -484,6 +494,18 @@ production: &base
     <% unless @elastic_index_bulk_cron.nil? %>
     elastic_index_bulk_cron_worker:
       cron: "<%= @elastic_index_bulk_cron %>"
+    <% end %>
+
+    # Worker for triggering counter jobs for instance statistics
+    <% unless @analytics_instance_statistics_count_job_trigger_worker_cron.nil? %>
+    analytics_instance_statistics_count_job_trigger_worker:
+      cron: "<%= @analytics_instance_statistics_count_job_trigger_worker_cron %>"
+    <% end %>
+
+    # Worker for triggering member invitation reminder emails
+    <% unless @member_invitation_reminder_emails_worker_cron.nil? %>
+    member_invitation_reminder_emails_worker:
+      cron: "<%= @member_invitation_reminder_emails_worker_cron %>"
     <% end %>
 
   ## Geo
@@ -593,6 +615,12 @@ production: &base
     # (default: accept any service name in keytab file)
     service_principal_name: <%= @kerberos_service_principal_name %>
 
+    # Kerberos realms/domains that are allowed to automatically link LDAP identities.
+    # By default, GitLab accepts a realm that matches the domain derived from the
+    # LDAP `base` DN. For example, `ou=users,dc=example,dc=com` would allow users
+    # with a realm matching `example.com`.
+    simple_ldap_linking_allowed_realms: <%= @kerberos_simple_ldap_linking_allowed_realms.to_json %>
+
     # Dedicated port: Git before 2.4 does not fall back to Basic authentication if Negotiate fails.
     # To support both Basic and Negotiate methods with older versions of Git, configure
     # nginx to proxy GitLab on an extra port (e.g. 8443) and uncomment the following lines
@@ -650,6 +678,13 @@ production: &base
     # login, without having to do a manual login first and manually add SAML
     # (default: false)
     auto_link_saml_user: <%= @omniauth_auto_link_saml_user.to_json %>
+
+    # Allow users with existing accounts to sign in and auto link their account via OmniAuth
+    # login, without having to do a manual login first and manually add OmniAuth. Links on email.
+    # Define the allowed providers using an array, e.g. ["saml", "twitter"], or as true/false to
+    # allow all providers or none.
+    # (default: false)
+    auto_link_user: <%= @omniauth_auto_link_user.to_json %>
 
     # Set different Omniauth providers as external so that all users creating accounts
     # via these providers will not be able to have access to internal projects. You
@@ -764,6 +799,7 @@ production: &base
     # Sidekiq exporter is webserver built in to Sidekiq to expose Prometheus metrics
     sidekiq_exporter:
       enabled: <%= @sidekiq['metrics_enabled'] %>
+      log_enabled: <%= @sidekiq['exporter_log_enabled'] %>
       address: <%= @sidekiq['listen_address'] %>
       port: <%= @sidekiq['listen_port'] %>
 
@@ -789,6 +825,10 @@ production: &base
     listen_address: "<%= @prometheus_server_address %>"
     # IP address(including listen port) of Prometheus server
     server_address: "<%= @prometheus_server_address %>"
+
+  ## Consul settings
+  consul:
+    api_url: "<%= @consul_api_url %>"
 
   #
   # 5. Extra customization

@@ -1,0 +1,5 @@
+---
+title: Allow configuring permanent replication slots in patroni
+merge_request: 4534
+author:
+type: added

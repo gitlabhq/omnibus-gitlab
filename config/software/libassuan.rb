@@ -15,7 +15,7 @@
 #
 
 name 'libassuan'
-default_version '2.5.1'
+default_version '2.5.3'
 
 license 'LGPL-2.1'
 license_file 'COPYING.LIB'
@@ -23,7 +23,7 @@ license_file 'COPYING.LIB'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-#{version}.tar.bz2",
-       sha256: '47f96c37b4f2aac289f0bc1bacfa8bd8b4b209a488d3d15e2229cb6cc9b26449'
+       sha256: '91bcb0403866b4e7c4bc1cc52ed4c364a9b5414b3994f718c70303f7f765e702'
 
 dependency 'libgpg-error'
 

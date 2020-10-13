@@ -103,7 +103,8 @@ class OmnibusHelper
     # example: deprecated_os = { 'raspbian-8' => 'GitLab 11.8' }
     {
       'raspbian-9' => 'GitLab 13.4',
-      'debian-8' => 'GitLab 13.4'
+      'debian-8' => 'GitLab 13.4',
+      'centos-6' => 'GitLab 13.7'
     }
   end
 

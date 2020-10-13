@@ -49,7 +49,7 @@ You've made some changes at the locations which contain user facing configuratio
 That's OK as long as you're refactoring existing code and not adding any new
 configuration. If you are adding new user facing configuration, consider adding
 to gitlab.rb.template located in files/gitlab-config-template/gitlab.rb.template .
-Otherwise, please consider adding the ~backstage label in that case.
+Otherwise, please consider adding the ~"feature::maintenance" label in that case.
 MSG
 
 warn NO_TEMPLATE_CHANGE_MESSAGE, sticky: false if !git.modified_files.include?('files/gitlab-config-template/gitlab.rb.template') && !configuration_paths_to_review.empty?

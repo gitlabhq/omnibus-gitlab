@@ -31,5 +31,9 @@ build do
 
   patch source: "add-license-file.patch"
 
+  # Version 1.0 of PrettyTable does not work with Patroni 1.6.4
+  # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5701
+  command "#{install_dir}/embedded/bin/pip3 install prettytable==0.7.2", env: env
+
   command "#{install_dir}/embedded/bin/pip3 install patroni[consul]==#{version}", env: env
 end

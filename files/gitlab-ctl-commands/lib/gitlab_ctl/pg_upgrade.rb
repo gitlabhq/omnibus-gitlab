@@ -1,5 +1,6 @@
 require 'optparse'
 require 'mixlib/shellout'
+require 'rainbow'
 
 require_relative 'util'
 require_relative '../gitlab_ctl'
@@ -144,6 +145,14 @@ module GitlabCtl
           $stderr.puts "STDOUT: #{e.stdout}"
           $stderr.puts "STDERR: #{e.stderr}"
           false
+        rescue Mixlib::ShellOut::CommandTimeout
+          $stderr.puts
+          $stderr.puts "Timed out during the database upgrade.".color(:red)
+          $stderr.puts "To run with more time, remove the temporary directory #{tmp_data_dir}.#{target_version.major},".color(:red)
+          $stderr.puts "then re-run your previous command, adding the --timeout option.".color(:red)
+          $stderr.puts "See the docs for more information: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server".color(:red)
+          $stderr.puts "Or run gitlab-ctl pg-upgrade --help for usage".color(:red)
+          false
         end
       end
         raise GitlabCtl::Errors::ExecutionError.new(
@@ -160,7 +169,9 @@ module GitlabCtl
           skip_unregister: false,
           timeout: nil,
           target_version: nil,
-          skip_disk_check: false
+          skip_disk_check: false,
+          leader: nil,
+          replica: nil
         }
 
         OptionParser.new do |opts|
@@ -187,6 +198,16 @@ module GitlabCtl
 
           opts.on('--skip-disk-check', 'Skip checking that there is enough free disk space to perform upgrade') do
             options[:skip_disk_check] = true
+          end
+
+          opts.on('--leader', 'Patroni only. Force leader upgrade procedure.') do
+            options[:leader] = true
+            options[:replica] = false
+          end
+
+          opts.on('--replica', 'Patroni only. Force replica upgrade procedure.') do
+            options[:replica] = true
+            options[:leader] = false
           end
         end.parse!(args)
 

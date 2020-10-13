@@ -97,6 +97,24 @@ ruby_block 'wait for postgresql to start' do
   end
 end
 
+execute 'reload postgresql' do
+  command "#{patroni_helper.ctl_command} -c #{patroni_config_file} reload --force #{node['patroni']['scope']} #{node['patroni']['name']}"
+  only_if { patroni_helper.node_status == 'running' }
+  action :nothing
+end
+
+Dir["#{node['patroni']['data_dir']}/*"].each do |src|
+  file "#{node['postgresql']['data_dir']}/#{File.basename(src)}" do
+    owner account_helper.postgresql_user
+    group account_helper.postgresql_group
+    mode format('%o', File.new(src).stat.mode)[-5..-1]
+    content lazy { File.open(src).read }
+    sensitive !!(File.extname(src) =~ /\.(key|crt)/)
+    only_if { patroni_helper.bootstrapped? }
+    notifies :run, 'execute[reload postgresql]', :delayed
+  end
+end
+
 database_objects 'patroni' do
   pg_helper pg_helper
   account_helper account_helper

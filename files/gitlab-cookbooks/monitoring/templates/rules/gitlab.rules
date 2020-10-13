@@ -18,11 +18,6 @@ groups:
       sum by (instance) (
         puma_max_threads
       )
-  - record: job_grpc:grpc_server_handled_total:rate5m
-    expr: >
-      sum by (job, grpc_code, grpc_method, grpc_service, grpc_type) (
-        rate(grpc_server_handled_total[5m])
-      )
   - record: job_route_method_code:gitlab_workhorse_http_request_duration_seconds_count:rate5m
     expr: >
       sum by (job, route, method, code) (
@@ -79,16 +74,16 @@ groups:
       description: Sidekiq queue {{ $labels.name }} has {{ $value }} jobs queued for 60 minutes.
   - alert: HighgRPCResourceExhaustedRate
     expr: >
-      sum without (grpc_code) (
-        job_grpc:grpc_server_handled_total:rate5m{grpc_code="ResourceExhausted"}
+      sum without (grpc_code, grpc_method, grpc_service, grpc_type) (
+        rate(grpc_server_handled_total{grpc_code="ResourceExhausted"}[5m])
       ) /
-      sum without (grpc_code) (
-        job_grpc:grpc_server_handled_total:rate5m
+      sum without (grpc_code, grpc_method, grpc_service, grpc_type) (
+        rate(grpc_server_handled_total[5m])
       ) * 100 > 1
     for: 60m
     annotations:
       summary: High gRPC ResourceExhausted error rate
-      description: gRPC is returning more than 1% ({{ $value | printf "%.1f" }}%) ResourceExhausted errors over the last 60 minutes.
+      description: Job {{ $labels.job }} instance {{ $labels.instance }} gRPC is returning more than 1% ({{ $value | printf "%.1f" }}%) ResourceExhausted errors over the last 60 minutes.
   - alert: PostgresDatabaseDeadlocks
     expr: increase(pg_stat_database_deadlocks[5m]) > 0
     annotations:
@@ -479,6 +474,24 @@ groups:
       service: workhorse
       component: http_requests
     expr: sum (rate (gitlab_workhorse_http_requests_total[5m]))
+
+  # Database Primary Performance Indicator: Query apdex
+  # Target -> 100ms
+  # Tolerable -> 250ms
+  - record: gitlab_usage_ping:sql_duration_apdex:ratio_rate5m
+    expr: >
+      (
+        sum(rate(gitlab_sql_duration_seconds_bucket{le="0.1"}[5m]))
+        +
+        sum(rate(gitlab_sql_duration_seconds_bucket{le="0.25"}[5m]))
+      )
+      /
+      2
+      /
+      (
+        sum(rate(gitlab_sql_duration_seconds_count[5m])) > 0
+      )
+
   ###
   # Node level metrics
   #
@@ -490,7 +503,8 @@ groups:
     expr: avg (instance:node_cpu_utilization:ratio) by (instance)
   - record: gitlab_usage_ping:node_memory_utilization:avg
     expr: avg (instance:node_memory_utilization:ratio) by (instance)
-  ### 
+
+  ###
   # Service level metrics
   #
   - record: gitlab_usage_ping:node_service_process_resident_memory_bytes:avg

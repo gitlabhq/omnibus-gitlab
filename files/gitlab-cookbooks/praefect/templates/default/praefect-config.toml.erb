@@ -9,14 +9,6 @@
 listen_addr = '<%= @listen_addr %>'
 <% end %>
 
-<% if @tls_listen_addr %>
-# Optional: listen on a secure TCP socket
-tls_listen_addr = '<%= @tls_listen_addr %>'
-[tls]
-certificate_path = '<%= @certificate_path %>'
-key_path = '<%= @key_path %>'
-<% end %>
-
 <% if @socket_path %>
 # # Praefect can listen on a socket when placed on the same machine as all clients
 socket_path = '<%= @socket_path %>'
@@ -26,6 +18,18 @@ socket_path = '<%= @socket_path %>'
 # Optional: export metrics via Prometheus
 prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
 <% end %>
+
+<% if @tls_listen_addr %>
+# Optional: listen on a secure TCP socket
+tls_listen_addr = '<%= @tls_listen_addr %>'
+[tls]
+certificate_path = '<%= @certificate_path %>'
+key_path = '<%= @key_path %>'
+<% end %>
+
+[reconciliation]
+<%= "scheduling_interval = '#{@reconciliation_scheduling_interval}'" if @reconciliation_scheduling_interval %>
+<%= "histogram_buckets = #{@reconciliation_histogram_buckets}" if @reconciliation_histogram_buckets %>
 
 [failover]
 <% unless @failover_enabled.nil? %>
@@ -64,7 +68,6 @@ name = '<%= name %>'
 storage = '<%= storage %>'
 address = '<%= node['address'] %>'
 token = '<%= node['token'] %>'
-primary = <%= [true, 'true'].include?(node['primary']) %>
 <% end %>
 <% end %>
 
@@ -78,7 +81,8 @@ primary = <%= [true, 'true'].include?(node['primary']) %>
 <%= "sslcert = '#{@database_sslcert}'" if @database_sslcert %>
 <%= "sslkey = '#{@database_sslkey}'" if @database_sslkey %>
 <%= "sslrootcert = '#{@database_sslrootcert}'" if @database_sslrootcert %>
-
+<%= "host_no_proxy = '#{@database_host_no_proxy}'" if @database_host_no_proxy %>
+<%= "port_no_proxy = #{@database_port_no_proxy}" if @database_port_no_proxy %>
 
 <% if @prometheus_grpc_latency_buckets %>
 # # You can optionally configure Gitaly to record histogram latencies on GRPC method calls

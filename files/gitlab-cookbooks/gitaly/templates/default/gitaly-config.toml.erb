@@ -103,6 +103,10 @@ dir = "/opt/gitlab/embedded/service/gitlab-shell"
 <% if @gitlab_url %>
 url = '<%= @gitlab_url %>'
 <% end %>
+<% if @gitlab_relative_path %>
+relative_url_root = '<%= @gitlab_relative_path %>'
+<% end %>
+
 <% if @gitlab_shell['http_settings'] %>
 <% http_settings = @gitlab_shell['http_settings'] %>
 [gitlab.http-settings]
@@ -139,4 +143,12 @@ custom_hooks_dir = '<%= @gitlab_shell['custom_hooks_dir'] %>'
 rpc = "<%= endpoint['rpc'] %>"
 max_per_repo = <%= endpoint['max_per_repo'] %>
   <% end %>
+<% end %>
+
+<% if @daily_maintenance_duration %>
+[daily_maintenance]
+<%= "start_hour = #{@daily_maintenance_start_hour}" if @daily_maintenance_start_hour %>
+<%= "start_minute = #{@daily_maintenance_start_minute}" if @daily_maintenance_start_minute %>
+<%= "duration = '#{@daily_maintenance_duration}'" if @daily_maintenance_duration %>
+<%= "storages = #{@daily_maintenance_storages}" if @daily_maintenance_storages %>
 <% end %>

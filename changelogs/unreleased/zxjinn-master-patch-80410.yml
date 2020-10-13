@@ -1,5 +1,0 @@
----
-title: Remove stub_status => on from nginx status on gitlab.rb config file
-merge_request: 4500
-author: Kelvin Jasperson
-type: fixed

@@ -34,7 +34,7 @@ other scheduled work as per our [development guidelines](https://about.gitlab.co
 
 1. If the issue is found out to be actionable for us, it goes through the
    regular scheduling process based on its severity and priority and gets
-   necessary MRs (targetting master and relevant backport stable branches).
+   necessary MRs (targeting master and relevant backport stable branches).
 
 1. Ensure the entry is removed from the `CVEIGNORE` variable once the MRs have
    been merged. This handles the edge false-negative case where a vulnerability

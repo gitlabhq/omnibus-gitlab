@@ -387,6 +387,11 @@ Debian-10-branch:
 Ubuntu-20.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
+Ubuntu-20.04-arm-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+  tags:
+  - docker-arm-builder
 CentOS-6-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -399,6 +404,19 @@ CentOS-8-branch:
 OpenSUSE-15.1-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.1:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
+OpenSUSE-15.1-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.1_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+  tags:
+  - docker-arm-builder
+OpenSUSE-15.2-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.2:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+OpenSUSE-15.2-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.2_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+  tags:
+  - docker-arm-builder
 SLES-12.2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -549,6 +567,11 @@ Debian-10:
 Ubuntu-20.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
+Ubuntu-20.04-arm:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  tags:
+  - docker-arm-builder
 CentOS-6:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -561,6 +584,21 @@ CentOS-8:
 OpenSUSE-15.1:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.1:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
+  <<: *tag_build
+OpenSUSE-15.1-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.1_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  tags:
+  - docker-arm-builder
+OpenSUSE-15.2:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.2:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  <<: *tag_build
+OpenSUSE-15.2-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.2_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  tags:
+  - docker-arm-builder
 SLES-12.2:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -655,6 +693,11 @@ Ubuntu-20.04-staging:
     - Ubuntu-20.04
     - Ubuntu-20.04-branch
   <<: *staging_upload
+Ubuntu-20.04-arm-staging:
+  dependencies:
+    - Ubuntu-20.04-arm
+    - Ubuntu-20.04-arm-branch
+  <<: *staging_upload
 CentOS-6-staging:
   dependencies:
     - CentOS-6
@@ -675,18 +718,33 @@ OpenSUSE-15.1-staging:
     - OpenSUSE-15.1
     - OpenSUSE-15.1-branch
   <<: *staging_upload
+OpenSUSE-15.1-arm64-staging:
+  dependencies:
+    - OpenSUSE-15.1-arm64
+    - OpenSUSE-15.1-arm64-branch
+  <<: *staging_upload
+OpenSUSE-15.2-staging:
+  dependencies:
+    - OpenSUSE-15.2
+    - OpenSUSE-15.2-branch
+  <<: *staging_upload
+OpenSUSE-15.2-arm64-staging:
+  dependencies:
+    - OpenSUSE-15.2-arm64
+    - OpenSUSE-15.2-arm64-branch
+  <<: *staging_upload
 SLES-12.2-staging:
   dependencies:
     - SLES-12.2
     - SLES-12.2-branch
   <<: *staging_upload
-  <<: *dev-ee-tag-only-manual
+  <<: *dev-ee-tag-only
 SLES-12.5-staging:
   dependencies:
     - SLES-12.5
     - SLES-12.5-branch
   <<: *staging_upload
-  <<: *dev-ee-tag-only-manual
+  <<: *dev-ee-tag-only
 
 ### Package releases
 Ubuntu-16.04-release:
@@ -700,6 +758,10 @@ Ubuntu-18.04-release:
 Ubuntu-20.04-release:
   dependencies:
     - Ubuntu-20.04
+  <<: *production_release
+Ubuntu-20.04-arm-release:
+  dependencies:
+    - Ubuntu-20.04-arm
   <<: *production_release
 Debian-9-release:
   dependencies:
@@ -724,6 +786,18 @@ CentOS-8-release:
 OpenSUSE-15.1-release:
   dependencies:
     - OpenSUSE-15.1
+  <<: *production_release
+OpenSUSE-15.1-arm64-release:
+  dependencies:
+    - OpenSUSE-15.1-arm64
+  <<: *production_release
+OpenSUSE-15.2-release:
+  dependencies:
+    - OpenSUSE-15.2
+  <<: *production_release
+OpenSUSE-15.2-arm64-release:
+  dependencies:
+    - OpenSUSE-15.2-arm64
   <<: *production_release
 SLES-12.2-release:
   <<: *production_release

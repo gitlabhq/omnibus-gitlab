@@ -26,6 +26,7 @@ dependency 'cacerts'
 version = Gitlab::Version.new('openssl', 'OpenSSL_1_1_1g')
 
 default_version version.print(false)
+display_version version.print(false).delete_prefix('OpenSSL_').tr('_', '.')
 
 source git: version.remote
 

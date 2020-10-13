@@ -280,6 +280,12 @@ redis['uid'] = 1236
 redis['gid'] = 1236
 web_server['uid'] = 1237
 web_server['gid'] = 1237
+registry['uid'] = 1238
+registry['gid'] = 1238
+mattermost['uid'] = 1239
+mattermost['gid'] = 1239
+prometheus['uid'] = 1240
+prometheus['gid'] = 1240
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the changes to take effect.
@@ -504,17 +510,21 @@ permissions if this setting is set.
 
 Enabling this setting will prevent the creation of the following directories:
 
-| Default location                                  | Permissions | Ownership        | Purpose |
-|---------------------------------------------------|-------------|------------------|---------|
-| `/var/opt/gitlab/git-data`                        | 0700        | `git:root`       | Holds repositories directory |
-| `/var/opt/gitlab/git-data/repositories`           | 2770        | `git:git`        | Holds Git repositories |
-| `/var/opt/gitlab/gitlab-rails/shared`             | 0751        | `git:gitlab-www` | Holds large object directories |
-| `/var/opt/gitlab/gitlab-rails/shared/artifacts`   | 0700        | `git:root`       | Holds CI artifacts |
-| `/var/opt/gitlab/gitlab-rails/shared/lfs-objects` | 0700        | `git:root`       | Holds LFS objects |
-| `/var/opt/gitlab/gitlab-rails/uploads`            | 0700        | `git:root`       | Holds user attachments |
-| `/var/opt/gitlab/gitlab-rails/shared/pages`       | 0750        | `git:gitlab-www` | Holds user pages |
-| `/var/opt/gitlab/gitlab-ci/builds`                | 0700        | `git:root`       | Holds CI build logs |
-| `/var/opt/gitlab/.ssh`                            | 0700        | `git:git`        | Holds authorized keys |
+| Default location                                       | Permissions | Ownership        | Purpose |
+|--------------------------------------------------------|-------------|------------------|---------|
+| `/var/opt/gitlab/git-data`                             | `0700`        | `git`            | Holds repositories directory |
+| `/var/opt/gitlab/git-data/repositories`                | `2770`        | `git`            | Holds Git repositories |
+| `/var/opt/gitlab/gitlab-rails/shared`                  | `0751`        | `git:gitlab-www` | Holds large object directories |
+| `/var/opt/gitlab/gitlab-rails/shared/artifacts`        | `0700`        | `git`            | Holds CI artifacts |
+| `/var/opt/gitlab/gitlab-rails/shared/external-diffs`   | `0700`        | `git`            | Holds external merge request diffs |
+| `/var/opt/gitlab/gitlab-rails/shared/lfs-objects`      | `0700`        | `git`            | Holds LFS objects |
+| `/var/opt/gitlab/gitlab-rails/shared/packages`         | `0700`        | `git`            | Holds package repository |
+| `/var/opt/gitlab/gitlab-rails/shared/dependency_proxy` | `0700`        | `git`            | Holds dependency proxy |
+| `/var/opt/gitlab/gitlab-rails/shared/terraform_state`  | `0700`        | `git`            | Holds terraform state |
+| `/var/opt/gitlab/gitlab-rails/uploads`                 | `0700`        | `git`            | Holds user attachments |
+| `/var/opt/gitlab/gitlab-rails/shared/pages`            | `0750`        | `git:gitlab-www` | Holds user pages |
+| `/var/opt/gitlab/gitlab-ci/builds`                     | `0700`        | `git`            | Holds CI build logs |
+| `/var/opt/gitlab/.ssh`                                 | `0700`        | `git:git`        | Holds authorized keys |
 
 ## Only start Omnibus GitLab services after a given filesystem is mounted
 
@@ -562,8 +572,7 @@ Run `sudo gitlab-ctl reconfigure` for the settings to take effect.
 ## Configuring Rack Attack
 
 To prevent abusive clients from doing damage, GitLab uses the Rack Attack gem.
-Check [this page](https://docs.gitlab.com/ee/security/rack_attack.html)
-for more information.
+Learn how to [configure Rack Attack](https://docs.gitlab.com/ee/security/rack_attack.html).
 
 ## Disabling automatic cache cleaning during installation
 
@@ -604,8 +613,8 @@ Disabling impersonation is documented in
 ## Error Reporting and Logging with Sentry
 
 [Sentry](https://sentry.io) is an error reporting and logging tool which can be
-used as SaaS or on premise. It's Open Source and you can browse its source code
-repositories [here](https://github.com/getsentry).
+used as SaaS or on premise. It's Open Source, and you can [browse its source code
+repositories](https://github.com/getsentry).
 
 The following settings can be used to configure Sentry:
 

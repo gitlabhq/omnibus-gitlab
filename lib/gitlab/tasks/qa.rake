@@ -66,17 +66,17 @@ namespace :qa do
   namespace :ha do
     desc "Validate HA setup"
     task :validate do
-      Build::HA::ValidateTrigger.invoke!.wait!
+      Build::HA::ValidateTrigger.invoke!.wait!(timeout: 3600 * 4)
     end
 
     desc 'Validate nightly build'
     task :nightly do
-      Build::HA::ValidateNightly.invoke!.wait!
+      Build::HA::ValidateNightly.invoke!.wait!(timeout: 3600 * 4)
     end
 
     desc 'Validate tagged build'
     task :tag do
-      Build::HA::ValidateTag.invoke!
+      Build::HA::ValidateTag.invoke!(timeout: 3600 * 4)
     end
   end
 end

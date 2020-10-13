@@ -16,12 +16,7 @@ module GitlabCtl
           raise GitlabCtl::Errors::ExecutionError.new(
             command, shell_out.stdout, shell_out.stderr
           )
-        rescue Mixlib::ShellOut::CommandTimeout
-          raise GitlabCtl::Errors::ExecutionError.new(
-            command, '', 'timed out'
-          )
         end
-
         shell_out.stdout
       end
 

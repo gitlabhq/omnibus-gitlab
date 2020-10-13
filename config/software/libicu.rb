@@ -21,6 +21,7 @@ name 'libicu'
 version = Gitlab::Version.new('libicu', 'release-57-1')
 
 default_version version.print(false)
+display_version version.print(false).delete_prefix('release-').tr('-', '.')
 
 source git: version.remote
 

@@ -195,7 +195,7 @@ and tag pipelines.
 #### `<OS_NAME> specs`
 
 Jobs that actually run `rspec` via `knapsack`. Parallelized to a count of 6
-using the [`parralel` keyword](https://docs.gitlab.com/ee/ci/yaml/#parallel)
+using the [`parallel` keyword](https://docs.gitlab.com/ee/ci/yaml/#parallel)
 
 These jobs are run only on [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and [Security mirror](https://gitlab.com/gitlab-org/security/omnibus-gitlab) on branch
 and tag pipelines.

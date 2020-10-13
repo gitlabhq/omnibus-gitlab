@@ -127,7 +127,9 @@ default['gitlab']['gitlab-rails']['ci_archive_traces_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['pages_domain_verification_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['pages_domain_ssl_renewal_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['pages_domain_removal_cron_worker'] = nil
+default['gitlab']['gitlab-rails']['remove_unaccepted_member_invites_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['schedule_migrate_external_diffs_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['ci_platform_metrics_update_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_group_sync_worker_cron'] = nil
@@ -137,6 +139,8 @@ default['gitlab']['gitlab-rails']['geo_secondary_registry_consistency_worker'] =
 default['gitlab']['gitlab-rails']['geo_prune_event_log_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_verification_primary_batch_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_verification_secondary_scheduler_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['analytics_instance_statistics_count_job_trigger_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['member_invitation_reminder_emails_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['pseudonymizer_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['elastic_index_bulk_cron'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_enabled'] = false
@@ -308,6 +312,7 @@ default['gitlab']['gitlab-rails']['smartcard_san_extensions'] = false
 default['gitlab']['gitlab-rails']['kerberos_enabled'] = nil
 default['gitlab']['gitlab-rails']['kerberos_keytab'] = nil
 default['gitlab']['gitlab-rails']['kerberos_service_principal_name'] = nil
+default['gitlab']['gitlab-rails']['kerberos_simple_ldap_linking_allowed_realms'] = nil
 default['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'] = nil
 default['gitlab']['gitlab-rails']['kerberos_port'] = nil
 default['gitlab']['gitlab-rails']['kerberos_https'] = nil
@@ -321,6 +326,7 @@ default['gitlab']['gitlab-rails']['omniauth_auto_sign_in_with_provider'] = nil
 default['gitlab']['gitlab-rails']['omniauth_block_auto_created_users'] = nil
 default['gitlab']['gitlab-rails']['omniauth_auto_link_ldap_user'] = nil
 default['gitlab']['gitlab-rails']['omniauth_auto_link_saml_user'] = nil
+default['gitlab']['gitlab-rails']['omniauth_auto_link_user'] = nil
 default['gitlab']['gitlab-rails']['omniauth_external_providers'] = nil
 default['gitlab']['gitlab-rails']['omniauth_providers'] = []
 default['gitlab']['gitlab-rails']['omniauth_allow_bypass_two_factor'] = nil
@@ -382,6 +388,16 @@ default['gitlab']['gitlab-rails']['db_prepared_statements'] = false
 default['gitlab']['gitlab-rails']['db_statements_limit'] = 1000
 default['gitlab']['gitlab-rails']['db_statement_timeout'] = nil
 default['gitlab']['gitlab-rails']['db_fdw'] = nil
+default['gitlab']['gitlab-rails']['db_connect_timeout'] = nil
+
+# Automatic Database Reindexing
+# See https://docs.gitlab.com/omnibus/settings/database.html#automatic-database-reindexing
+default['gitlab']['gitlab-rails']['database_reindexing']['enable'] = false
+default['gitlab']['gitlab-rails']['database_reindexing']['hour'] = '*'
+default['gitlab']['gitlab-rails']['database_reindexing']['minute'] = 0
+default['gitlab']['gitlab-rails']['database_reindexing']['month'] = '*'
+default['gitlab']['gitlab-rails']['database_reindexing']['day_of_month'] = '*'
+default['gitlab']['gitlab-rails']['database_reindexing']['day_of_week'] = '0,6'
 
 default['gitlab']['gitlab-rails']['redis_host'] = "127.0.0.1"
 default['gitlab']['gitlab-rails']['redis_port'] = nil
@@ -525,6 +541,7 @@ default['gitlab']['sidekiq']['log_format'] = "json"
 default['gitlab']['sidekiq']['shutdown_timeout'] = 25
 default['gitlab']['sidekiq']['concurrency'] = 25
 default['gitlab']['sidekiq']['metrics_enabled'] = true
+default['gitlab']['sidekiq']['exporter_log_enabled'] = false
 
 # Sidekiq http listener
 default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"
@@ -780,7 +797,7 @@ default['gitlab']['remote-syslog']['dir'] = "/var/opt/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
-default['gitlab']['remote-syslog']['services'] = %w(redis nginx puma unicorn gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect)
+default['gitlab']['remote-syslog']['services'] = %w(redis nginx puma unicorn gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect gitlab-kas)
 
 ###
 # Logrotate
@@ -789,7 +806,7 @@ default['gitlab']['logrotate']['enable'] = false
 default['gitlab']['logrotate']['ha'] = false
 default['gitlab']['logrotate']['dir'] = "/var/opt/gitlab/logrotate"
 default['gitlab']['logrotate']['log_directory'] = "/var/log/gitlab/logrotate"
-default['gitlab']['logrotate']['services'] = %w(nginx puma actioncable unicorn gitlab-rails gitlab-shell gitlab-workhorse gitlab-pages)
+default['gitlab']['logrotate']['services'] = %w(nginx puma actioncable unicorn gitlab-rails gitlab-shell gitlab-workhorse gitlab-pages gitlab-kas)
 default['gitlab']['logrotate']['pre_sleep'] = 600 # sleep 10 minutes before rotating after start-up
 default['gitlab']['logrotate']['post_sleep'] = 3000 # wait 50 minutes after rotating
 

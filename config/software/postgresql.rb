@@ -16,7 +16,7 @@
 #
 
 name 'postgresql'
-default_version '11.7'
+default_version '11.9'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -30,8 +30,8 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '11.7' do
-  source sha256: '324ae93a8846fbb6a25d562d271bc441ffa8794654c5b2839384834de220a313'
+version '11.9' do
+  source sha256: '35618aa72e0372091f923c42389c6febd07513157b4fbb9408371706afbb6635'
 end
 
 major_version = '11'

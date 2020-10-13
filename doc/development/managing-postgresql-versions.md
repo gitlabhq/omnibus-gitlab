@@ -6,7 +6,19 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Managing PostgreSQL versions
 
-Usually, we are shipping three versions of PostgreSQL. We need to support running on all versions, as well as upgrading from the older versions to the newest.
+The PostgreSQL Global Development Group typically releases [one major version of PostgreSQL each year](https://www.postgresql.org/support/versioning/), usually in the third quarter. Our goal is to add support for the newest PostgreSQL release in the next major release of GitLab, and to support two versions of PostgreSQL at any given time. This means that in each major release of GitLab, we will remove the oldest version of PostgreSQL that we support, bump the minimally required PostgreSQL version up by one major version, and add support for the newest PostgreSQL version.
+
+## Example
+
+1. GitLab 14.0 (May 2021) supports PostgreSQL 12 and 13, with the default version for new installs and upgrades being PostgreSQL 12.
+1. PostgreSQL 14 is released in October 2021.
+1. In GitLab 14.x, the default version for new installs and upgrades is bumped to PostgreSQL 13.
+1. In GitLab 15.0 (May 2022) we remove PostgreSQL 12, minimally require PostgreSQL 13, and add support for PostgreSQL 14.
+
+We need to support running GitLab on both supported versions, as well as upgrading from the older versions to the newest.
+
+NOTE: **Note:**
+GitLab 13.0 to 13.3 will only have support for one version of PostgreSQL (11). This is an exception while the plan above is implemented.
 
 ## Software definitions
 
@@ -30,7 +42,15 @@ The [`gitlab-ctl pg-upgrade` command](https://gitlab.com/gitlab-org/omnibus-gitl
 
 ## Removing an older version
 
-When it is time to remove an older version, perform the following steps:
+When it is time to remove an older version, create an epic with issues to track the following:
+
+1. Remove the old version from Omnibus.
+1. Remove the old version from the Helm install.
+1. To minimize CI costs, remove the older version from test suites (before doing this, check that .com is not using the old version still).
+1. Remove references to that version of PostgreSQL in the GitLab user documentation.
+1. Start printing deprecation notices in the release post three GitLab versions before a major PostgreSQL version is removed. If the PostgreSQL version is a version that will be removed within three releases, print deprecation notices in the Admin UI and during the GitLab upgrade process, regardless of whether it is an Omnibus-managed PostgreSQL database or an external database.
+
+For removals, perform the following steps:
 
 1. Run `git rm config/software/postgresql_old.rb`
 1. Run `git mv config/software/postgresql{,_old}.rb`
@@ -40,8 +60,6 @@ When it is time to remove an older version, perform the following steps:
 
 ## Adding a new version
 
-We currently support shipping three versions:
-
 1. Run `git cp config/software/postgresql{,_new}.rb`
 1. Edit `config/software/postgresql_new.rb`. Update:
 
@@ -50,7 +68,40 @@ We currently support shipping three versions:
    1. `version` to have the new version, and the `sha256`
    1. `major_version` if necessary
 
-Additionally, ensure that:
+1. Add the new PostgreSQL version to the full test suite.
+1. Run a nightly test of the `gitlab-org/gitlab` repo against the new version of PostgreSQL.
+1. Ensure that the package build includes both versions of PostgreSQL.
+1. For Helm installs, update the default PostgreSQL chart version if the default is changing.
+1. Update user documentation.
+
+### Testing
+
+1. GitLab runs on the new version of PostgreSQL.
+1. Test running GitLab on the new PostgreSQL version at the 10k reference architecture scale and check for performance regressions.
+
+Test upgrades and fresh installs for the following environments:
+
+1. Single node.
+1. Install with a separate database node managed by Omnibus.
+1. HA database cluster with 3 or more database nodes in the cluster.
+1. Geo installations with a single node primary and single node secondary (`postgresql` and `geo-postgresql` on the same secondary node).
+1. Geo installations with a HA database cluster on the primary.
+1. Geo installations with a separate database and a separate tracking database on the secondary.
+1. Helm installs.
+1. After testing that upgrades to the newest version work, confirm that `revert-pg-upgrade` successfully downgrades to the previously used version, including on a Geo secondary standalone tracking database.
+1. If the default PostgreSQL version changes, test GitLab upgrades with external PostgreSQL databases.
+1. Back up and restore.
+If the default PostgreSQL version is changing:
+
+1. Auto upgrades on a single node install, separate database node, HA cluster.
+1. Auto upgrades where an external PostgreSQL database is being used.
+1. Geo installs are not auto upgraded.
+
+If the minimally required version is changing:
+
+1. GitLab upgrade errors out if an old version of Omnibus-managed PostgreSQL is still installed.
+
+If the above tests are manual, we risk missing a breaking change that is introduced after the manual tests have been performed. We should automate as many of these tests as possible.
 
 1. The package build includes both versions of PostgreSQL
 1. Running `gitlab-ctl pg-upgrade` works
@@ -59,3 +110,7 @@ Additionally, ensure that:
 
 Some modules, including `pyscopg2`, depend on PostgreSQL client library, i.e. `libpq`. It should be always linked to the
 latest bundled version. By using the latest version we rely on backward compatibility of `libpq`.
+
+## Known issues
+
+Geo uses streaming replication, which requires that the entire secondary database be resynced after a major PostgreSQL upgrade. This can cause hours or days of downtime, and as such, we do not recommend auto upgrades for Geo customers. Starting in 12.10, automatic PostgreSQL upgrades are disabled if Geo is detected.

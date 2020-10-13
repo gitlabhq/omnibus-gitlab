@@ -44,7 +44,7 @@ module Sidekiq
       # When sidekiq is enabled by a role (DEFAULT_ROLE, for example),
       # Gitlab['node']['sidekiq']['enable'] gets set to `true`. If that didn't
       # happen, and user didn't explicitly turn on sidekiq, let's stop
-      # processing here. If not, we will inadvertantly enable sidekiq_cluster
+      # processing here. If not, we will inadvertently enable sidekiq_cluster
       # few lines below, which will cause the `sidekiq-cluster` recipe to run
       # and the `sidekiq` runit_service resource to get created and hence
       # sidekiq service to run in places it is not expected to.

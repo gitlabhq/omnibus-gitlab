@@ -43,17 +43,26 @@ class PatroniHelper < BaseHelper
     dcs = {
       'postgresql' => {
         'parameters' => {}
-      }
+      },
+      'slots' => {}
     }
+
     DCS_ATTRIBUTES.each do |key|
       dcs[key] = node['patroni'][key]
     end
+
     DCS_POSTGRESQL_ATTRIBUTES.each do |key|
       dcs['postgresql'][key] = node['patroni'][key]
     end
+
     node['patroni']['postgresql'].each do |key, value|
       dcs['postgresql']['parameters'][key] = value
     end
+
+    node['patroni']['replication_slots'].each do |slot_name, options|
+      dcs['slots'][slot_name] = parse_replication_slots_options(options)
+    end
+
     dcs
   end
 
@@ -67,6 +76,19 @@ class PatroniHelper < BaseHelper
         'log_dir' => node['patroni']['log_directory'],
         'api_address' => "#{node['patroni']['listen_address'] || '127.0.0.1'}:#{node['patroni']['port']}"
       }
+    }
+  end
+
+  private
+
+  # Parse replication slots attributes
+  #
+  # We currently support only physical replication
+  def parse_replication_slots_options(options)
+    return unless options['type'] == 'physical'
+
+    {
+      'type' => 'physical'
     }
   end
 end

@@ -45,6 +45,7 @@ module Gitlab
   attribute('registry',    priority: 20).use { Registry }
   attribute('redis',       priority: 20).use { Redis }
   attribute('postgresql',  priority: 20).use { Postgresql }
+  attribute('gitlab_kas',  priority: 20).use { GitlabKas }
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul')
