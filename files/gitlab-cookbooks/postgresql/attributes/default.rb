@@ -104,6 +104,7 @@ default['postgresql']['log_rotation_size'] = nil
 # Replication settings
 default['postgresql']['sql_replication_user'] = "gitlab_replicator"
 default['postgresql']['wal_level'] = "minimal"
+default['postgresql']['wal_log_hints'] = "off"
 default['postgresql']['max_wal_senders'] = 0
 default['postgresql']['wal_keep_segments'] = 10
 default['postgresql']['hot_standby'] = "off"

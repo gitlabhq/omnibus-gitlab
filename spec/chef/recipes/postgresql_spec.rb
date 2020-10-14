@@ -377,6 +377,14 @@ RSpec.describe 'postgresql 9.6' do
         ).with_content(/synchronous_standby_names = ''/)
       end
 
+      it 'disables wal_log_hints setting' do
+        expect(chef_run.node['postgresql']['wal_log_hints']).to eq('off')
+
+        expect(chef_run).to render_file(
+          postgresql_conf
+        ).with_content(/wal_log_hints = off/)
+      end
+
       it 'does not set dynamic_shared_memory_type by default' do
         expect(chef_run).not_to render_file(
           postgresql_conf
@@ -465,6 +473,22 @@ RSpec.describe 'postgresql 9.6' do
           expect(chef_run).to render_file(
             postgresql_conf
           ).with_content(/^dynamic_shared_memory_type = none/)
+        end
+      end
+
+      context 'when wal_log_hints is on' do
+        before do
+          stub_gitlab_rb({
+                           postgresql: {
+                             wal_log_hints: 'on'
+                           }
+                         })
+        end
+
+        it 'enables wal_log_hints' do
+          expect(chef_run).to render_file(
+            postgresql_conf
+          ).with_content(/^wal_log_hints = on/)
         end
       end
     end

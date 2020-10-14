@@ -1,0 +1,5 @@
+---
+title: Expose wal_log_hints PostgreSQL setting
+merge_request: 4642
+author:
+type: added
