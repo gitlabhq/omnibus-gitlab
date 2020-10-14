@@ -6,7 +6,11 @@ class GitlabWorkhorseHelper < BaseHelper
   def socket_file_name
     return unless unix_socket?
 
-    File.basename(node['gitlab']['gitlab-workhorse']['listen_addr'])
+    file_path = node['gitlab']['gitlab-workhorse']['listen_addr']
+
+    return File.basename(file_path) unless file_path.nil?
+
+    'socket'
   end
 
   def sockets_directory
