@@ -26,7 +26,7 @@ cat <<EOF | sudo tee /var/lib/cloud/scripts/per-instance/gitlab
 #!/bin/bash
 
 export INSTANCE_ID=\$(curl http://169.254.169.254/latest/meta-data/instance-id)
-sudo gitlab-rails runner "User.first.update!(password: '\${INSTANCE_ID}', password_confirmation: '\${INSTANCE_ID}', password_automatically_set: false)"
+sudo gitlab-rails runner "u = User.first; u.update!(password: '\${INSTANCE_ID}', password_confirmation: '\${INSTANCE_ID}', password_automatically_set: false) if u.password_automatically_set?"
 EOF
 
 sudo chmod +x /var/lib/cloud/scripts/per-instance/gitlab
