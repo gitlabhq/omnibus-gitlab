@@ -71,7 +71,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     Kernel.exit 1
   end
 
-  maintenance_mode('enable')
+  maintenance_mode('enable') unless patroni_enabled
 
   unless Dir.exist?("#{db_worker.tmp_data_dir}.#{revert_version.major}")
     if !geo_pg_enabled || !Dir.exist?("#{geo_db_worker.tmp_data_dir}.#{revert_version.major}")
@@ -79,6 +79,11 @@ add_command_under_category 'revert-pg-upgrade', 'database',
       log "#{geo_db_worker.tmp_data_dir}.#{revert_version.major} does not exist, cannot revert data" if geo_pg_enabled
       log 'Will proceed with reverting the running program version only, unless you interrupt'
     end
+  end
+
+  if patroni_enabled
+    @db_worker = db_worker
+    patroni_preflight_check(options)
   end
 
   log "Reverting database to #{revert_version} in 5 seconds"
@@ -93,7 +98,15 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     Kernel.exit 0
   end
 
-  if pg_enabled || patroni_enabled
+  if patroni_enabled
+    log '== Reverting =='
+    if @instance_type == :patroni_leader
+      patroni_leader_downgrade(revert_version)
+    else
+      patroni_replica_downgrade(revert_version)
+    end
+    log '== Reverted =='
+  elsif pg_enabled
     @db_worker = db_worker
     revert(revert_version)
   end
@@ -105,7 +118,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
   end
 
   clean_revert_version
-  maintenance_mode('disable')
+  maintenance_mode('disable') unless patroni_enabled
 end
 
 add_command_under_category 'pg-upgrade', 'database',
@@ -220,21 +233,7 @@ add_command_under_category 'pg-upgrade', 'database',
     end
   end
 
-  if patroni_enabled
-    log 'Detected a Patroni cluster.'
-
-    @instance_type = (:patroni_leader if options[:leader]) || (:patroni_replica if options[:replica])
-    guess_patroni_node_role unless @instance_type
-
-    check_patroni_cluster_status
-
-    if @instance_type == :patroni_leader
-      log "Using #{Rainbow('leader').yellow} node upgrade procedure."
-    else
-      log "Using #{Rainbow('replica').yellow} node upgrade procedure."
-      log Rainbow('This procedure REMOVES DATA directory.').yellow
-    end
-  end
+  patroni_preflight_check(options) if patroni_enabled
 
   if options[:wait]
     # Wait for processes to settle, and give use one last chance to change their
@@ -244,7 +243,7 @@ add_command_under_category 'pg-upgrade', 'database',
     log "If you do not want to upgrade the PostgreSQL server at this time, enter Ctrl-C and see the documentation for details"
     status = GitlabCtl::Util.delay_for(30)
     unless status
-      maintenance_mode('disable')
+      maintenance_mode('disable') unless patroni_enabled
       Kernel.exit(0)
     end
   end
@@ -361,6 +360,25 @@ def patroni_replica_upgrade
   stop_database
   create_links(@db_worker.target_version)
   common_post_upgrade(false)
+end
+
+def patroni_leader_downgrade(revert_version)
+  stop_database
+  create_links(revert_version)
+  revert_data_dir(revert_version)
+  remove_patroni_cluster_state
+  start_database
+  configure_postgresql
+  restart_patroni_node
+end
+
+def patroni_replica_downgrade(revert_version)
+  stop_database
+  create_links(revert_version)
+  revert_data_dir(revert_version)
+  start_database
+  configure_postgresql
+  restart_patroni_node
 end
 
 def configure_postgresql
@@ -564,6 +582,22 @@ def analyze_cluster
   end
 end
 
+def patroni_preflight_check(options)
+  log 'Detected a Patroni cluster.'
+
+  @instance_type = (:patroni_leader if options[:leader]) || (:patroni_replica if options[:replica])
+  guess_patroni_node_role unless @instance_type
+
+  check_patroni_cluster_status
+
+  if @instance_type == :patroni_leader
+    log "Using #{Rainbow('leader').yellow} node upgrade procedure."
+  else
+    log "Using #{Rainbow('replica').yellow} node upgrade procedure."
+    log Rainbow('This procedure REMOVES DATA directory.').yellow
+  end
+end
+
 def guess_patroni_node_role
   failure_cause = :none
   unless GitlabCtl::Util.progress_message('Attempting to detect the role of this Patroni node') do
@@ -701,15 +735,25 @@ end
 def revert(version)
   log '== Reverting =='
   run_sv_command_for_service('stop', @db_service_name)
-  if Dir.exist?("#{@db_worker.tmp_data_dir}.#{version.major}")
-    run_command("rm -rf #{@db_worker.data_dir}")
-    run_command(
-      "mv #{@db_worker.tmp_data_dir}.#{version.major} #{@db_worker.data_dir}"
-    )
-  end
+  revert_data_dir(version)
   create_links(version)
   run_sv_command_for_service('start', @db_service_name)
   log'== Reverted =='
+end
+
+def revert_data_dir(version)
+  if @instance_type == :patroni_replica
+    run_command("rm -rf #{@db_worker.data_dir}")
+    run_command("mkdir #{@db_worker.data_dir}")
+    return
+  end
+
+  return unless Dir.exist?("#{@db_worker.tmp_data_dir}.#{version.major}")
+
+  run_command("rm -rf #{@db_worker.data_dir}")
+  run_command(
+    "mv #{@db_worker.tmp_data_dir}.#{version.major} #{@db_worker.data_dir}"
+  )
 end
 
 def maintenance_mode(command)
@@ -741,7 +785,7 @@ def die(message)
   $stderr.puts message
   revert(@db_worker.initial_version)
   $stderr.puts "== Reverted to #{@db_worker.initial_version}. Please check output for what went wrong =="
-  maintenance_mode('disable')
+  maintenance_mode('disable') unless service_enabled?('patroni')
   exit 1
 end
 
