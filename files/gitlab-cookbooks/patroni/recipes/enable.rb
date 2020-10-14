@@ -14,9 +14,6 @@
 # limitations under the License.
 #
 
-# Re-define default values to recover any custom configuration provided by the user
-node.default['patroni']['replication_user'] = node['postgresql']['sql_replication_user']
-
 patroni_config_file = "#{node['patroni']['dir']}/patroni.yaml"
 dcs_config_file = "#{node['patroni']['dir']}/dcs.yaml"
 
