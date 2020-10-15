@@ -28,8 +28,8 @@ if node['gitlab']['nginx']['enable']
 else
   # Always use http for workhorse
   schema = 'http'
-  use_socket = node['gitlab']['gitlab-workhorse']['listen_network'] == "unix"
-  host = use_socket ? 'localhost' : workhorse_helper.listen_address
+  use_socket = workhorse_helper.unix_socket?
+  host = use_socket ? 'localhost' : node['gitlab']['gitlab-workhorse']['listen_addr']
 end
 
 template "/opt/gitlab/etc/gitlab-healthcheck-rc" do
@@ -38,7 +38,7 @@ template "/opt/gitlab/etc/gitlab-healthcheck-rc" do
   variables(
     {
       use_socket: use_socket,
-      socket_path: use_socket ? workhorse_helper.listen_address : '',
+      socket_path: use_socket ? node['gitlab']['gitlab-workhorse']['listen_addr'] : '',
       url: "#{schema}://#{host}#{Gitlab['gitlab_rails']['gitlab_relative_url']}/help"
     }
   )

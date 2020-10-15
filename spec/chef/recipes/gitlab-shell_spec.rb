@@ -191,7 +191,7 @@ RSpec.describe 'gitlab::gitlab-shell' do
 
       context 'with sockets_directory defined' do
         before do
-          stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket', 'sockets_directory': '/fake/workhorse/sockets/' })
+          stub_gitlab_rb(gitlab_workhorse: { 'sockets_directory': '/fake/workhorse/sockets/' })
         end
 
         it 'create config file with provided values' do
