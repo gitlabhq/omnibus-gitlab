@@ -1,3 +1,4 @@
+require "#{base_path}/embedded/cookbooks/package/libraries/helpers/gitlab_cluster_helper"
 require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/promote_to_primary_node"
 
 #

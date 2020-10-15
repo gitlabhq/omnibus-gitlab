@@ -10,15 +10,11 @@ module Geo
 
     def execute
       run_preflight_checks
-
       final_confirmation
-
+      toggle_geo_roles
       promote_postgresql_to_primary
-
       reconfigure
-
       promote_to_primary
-
       success_message
     end
 
@@ -57,6 +53,20 @@ module Geo
 
       return if STDIN.gets.chomp.casecmp('y').zero?
 
+      exit 1
+    end
+
+    def toggle_geo_roles
+      puts
+      puts 'Disabling the secondary role and enabling the primary in the cluster configuration file...'.color(:yellow)
+      puts
+
+      cluster_helper = GitlabClusterHelper.new
+      cluster_helper.config['primary'] = true
+      cluster_helper.config['secondary'] = false
+      return if cluster_helper.write_to_file!
+
+      puts "ERROR: Could not write to #{GitlabClusterHelper::JSON_FILE}.".color(:red)
       exit 1
     end
 
