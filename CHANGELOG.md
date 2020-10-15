@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.4.4 (2020-10-15)
+
+### Fixed (1 change)
+
+- Force install PrettyTable 0.7. !4628
+
+
 ## 13.4.3 (2020-10-06)
 
 - No changes.
