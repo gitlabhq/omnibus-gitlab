@@ -22,7 +22,7 @@ working_dir = node['gitlab']['gitlab-workhorse']['dir']
 log_directory = node['gitlab']['gitlab-workhorse']['log_directory']
 gitlab_workhorse_static_etc_dir = "/opt/gitlab/etc/gitlab-workhorse"
 workhorse_env_dir = node['gitlab']['gitlab-workhorse']['env_directory']
-gitlab_workhorse_socket_dir = workhorse_helper.sockets_directory
+gitlab_workhorse_socket_dir = node['gitlab']['gitlab-workhorse']['sockets_directory']
 
 directory working_dir do
   owner account_helper.gitlab_user
