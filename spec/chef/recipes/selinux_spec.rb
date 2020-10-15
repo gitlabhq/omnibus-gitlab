@@ -57,6 +57,28 @@ RSpec.describe 'gitlab::gitlab-selinux' do
       expect(lines).to include("restorecon -v '/var/opt/gitlab/gitlab-workhorse/sockets'")
     end
 
+    context 'and the user configured a custom workhorse sockets directory' do
+      let(:user_sockets_directory) { '/how/do/you/do' }
+      before do
+        stub_gitlab_rb(
+          gitlab_workhorse: {
+            listen_network: 'unix',
+            sockets_directory: user_sockets_directory
+          }
+        )
+      end
+
+      it 'sets the security context of a custom workhorse sockets directory' do
+        allow(File).to receive(:exist?).with(user_sockets_directory).and_return(true)
+        lines = bash_block.code.split("\n")
+        files = [user_sockets_directory]
+        managed_files = files.map { |file| semanage_fcontext(file) }
+
+        expect(lines).to include(*managed_files)
+        expect(lines).to include("restorecon -v '#{user_sockets_directory}'")
+      end
+    end
+
     context 'when gitlab-rails is disabled' do
       before do
         stub_gitlab_rb(

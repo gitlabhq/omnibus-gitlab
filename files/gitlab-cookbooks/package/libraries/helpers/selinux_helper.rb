@@ -5,8 +5,6 @@ class SELinuxHelper
     include ShellOutHelper
 
     def commands(node)
-      workhorse_helper = GitlabWorkhorseHelper.new(node)
-
       ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
       authorized_keys = node['gitlab']['gitlab-shell']['auth_file']
       gitlab_shell_var_dir = node['gitlab']['gitlab-shell']['dir']
@@ -14,6 +12,7 @@ class SELinuxHelper
       gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
       gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
       gitlab_shell_secret_file = File.join(gitlab_rails_etc_dir, 'gitlab_shell_secret')
+      gitlab_workhorse_sockets_directory = node['gitlab']['gitlab-workhorse']['sockets_directory']
 
       # If SELinux is enabled, make sure that OpenSSH thinks the .ssh directory and authorized_keys file of the
       # git_user is valid.
@@ -24,7 +23,7 @@ class SELinuxHelper
         authorized_keys,
         gitlab_shell_config_file,
         gitlab_shell_secret_file,
-        workhorse_helper.sockets_directory
+        gitlab_workhorse_sockets_directory
       ].each do |file|
         selinux_code << "semanage fcontext -a -t gitlab_shell_t '#{file}'"
         next unless File.exist?(file)
