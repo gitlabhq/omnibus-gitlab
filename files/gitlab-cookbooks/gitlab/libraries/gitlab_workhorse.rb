@@ -21,7 +21,7 @@ module GitlabWorkhorse
       Gitlab['gitlab_workhorse']['auth_socket'] = nil if !auth_socket_specified? && auth_backend_specified?
 
       user_listen_addr = Gitlab['gitlab_workhorse']['listen_addr']
-      Gitlab['gitlab_workhorse']['sockets_directory'] ||= '/var/opt/gitlab/gitlab-workhorse/sockets' unless user_listen_addr.nil?
+      Gitlab['gitlab_workhorse']['sockets_directory'] ||= '/var/opt/gitlab/gitlab-workhorse/sockets' if user_listen_addr.nil?
 
       sockets_dir = Gitlab['gitlab_workhorse']['sockets_directory']
 
