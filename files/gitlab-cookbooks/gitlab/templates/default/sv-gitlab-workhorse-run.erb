@@ -8,10 +8,10 @@ exec 2>&1
 
 cd <%= node['gitlab']['gitlab-workhorse']['dir'] %>
 
-<% if @options[:found_orphan_socket] %>
-if [ -e "<%= @options[:orphan_socket_path] %>" ]; then
-  echo "Removing orphaned workhorse socket at <%= @options[:orphan_socket_path] %>"
-  rm "<%= @options[:orphan_socket_path] %>"
+<% if File.exist?('/var/opt/gitlab/gitlab-workhorse/socket') %>
+if [ -e "/var/opt/gitlab/gitlab-workhorse/socket" ]; then
+  echo "Removing orphaned workhorse socket at '/var/opt/gitlab/gitlab-workhorse/socket'"
+  rm /var/opt/gitlab/gitlab-workhorse/socket
 fi
 <% end %>
 

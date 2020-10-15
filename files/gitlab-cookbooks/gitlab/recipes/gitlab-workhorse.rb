@@ -37,7 +37,7 @@ if workhorse_helper.unix_socket?
     group account_helper.web_server_group
     mode '0750'
     recursive true
-    not_if { workhorse_helper.user_customized_socket? && !workhorse_helper.user_customized_sockets_directory? }
+    not_if { workhorse_helper.user_customized_socket? }
   end
 end
 
@@ -61,9 +61,7 @@ end
 runit_service 'gitlab-workhorse' do
   start_down node['gitlab']['gitlab-workhorse']['ha']
   options({
-    log_directory: log_directory,
-    found_orphan_socket: workhorse_helper.orphan_socket?,
-    orphan_socket_path: workhorse_helper.orphan_socket
+    log_directory: log_directory
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-workhorse'].to_hash)
 end
