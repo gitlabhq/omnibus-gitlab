@@ -36,6 +36,7 @@ if workhorse_helper.unix_socket? && !gitlab_workhorse_socket_dir.nil?
     owner account_helper.gitlab_user
     group account_helper.web_server_group
     mode '0750'
+    notifies :restart, "runit_service[gitlab-workhorse]"
     recursive true
   end
 end
