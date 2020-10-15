@@ -31,13 +31,12 @@ directory working_dir do
   recursive true
 end
 
-if workhorse_helper.unix_socket?
+if workhorse_helper.unix_socket? && !gitlab_workhorse_socket_dir.nil?
   directory gitlab_workhorse_socket_dir do
     owner account_helper.gitlab_user
     group account_helper.web_server_group
     mode '0750'
     recursive true
-    not_if { workhorse_helper.user_customized_socket? }
   end
 end
 
