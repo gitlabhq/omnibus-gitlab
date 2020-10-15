@@ -19,12 +19,18 @@ module Puma
   class << self
     def parse_variables
       only_one_allowed!
+      parse_listen_address
     end
 
     def only_one_allowed!
       return unless Services.enabled?('unicorn') && Services.enabled?('puma')
 
       raise 'Only one web server (Puma or Unicorn) can be enabled at the same time!'
+    end
+
+    def parse_listen_address
+      puma_socket = Gitlab['puma']['socket'] || Gitlab['node']['gitlab']['puma']['socket']
+      Gitlab['gitlab_workhorse']['auth_socket'] = puma_socket if Gitlab['gitlab_workhorse']['auth_backend'].nil?
     end
 
     def workers(total_memory = Gitlab['node']['memory']['total'].to_i)
