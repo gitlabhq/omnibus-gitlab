@@ -264,6 +264,9 @@ default['gitlab']['gitlab-rails']['pages_host'] = nil
 default['gitlab']['gitlab-rails']['pages_port'] = nil
 default['gitlab']['gitlab-rails']['pages_https'] = false
 default['gitlab']['gitlab-rails']['pages_path'] = nil
+default['gitlab']['gitlab-rails']['pages_object_store_enabled'] = false
+default['gitlab']['gitlab-rails']['pages_object_store_remote_directory'] = 'pages'
+default['gitlab']['gitlab-rails']['pages_object_store_connection'] = {}
 default['gitlab']['gitlab-rails']['registry_enabled'] = false
 default['gitlab']['gitlab-rails']['registry_host'] = nil
 default['gitlab']['gitlab-rails']['registry_port'] = nil
@@ -686,9 +689,6 @@ default['gitlab']['gitlab-pages']['gitlab_client_http_timeout'] = nil
 default['gitlab']['gitlab-pages']['gitlab_client_jwt_expiry'] = nil
 default['gitlab']['gitlab-pages']['domain_config_source'] = nil
 default['gitlab']['gitlab-pages']['env_directory'] = '/opt/gitlab/etc/gitlab-pages/env'
-default['gitlab']['gitlab-pages']['object_store_enabled'] = false
-default['gitlab']['gitlab-pages']['object_store_remote_directory'] = 'pages'
-default['gitlab']['gitlab-pages']['object_store_connection'] = {}
 
 ####
 # Nginx

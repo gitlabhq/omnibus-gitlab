@@ -746,10 +746,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
       context 'with values' do
         before do
-          stub_gitlab_rb(gitlab_pages: {
-                           object_store_enabled: true,
-                           object_store_remote_directory: 'pagescustomdir',
-                           object_store_connection: aws_connection_hash
+          stub_gitlab_rb(gitlab_rails: {
+                           pages_object_store_enabled: true,
+                           pages_object_store_remote_directory: 'pagescustomdir',
+                           pages_object_store_connection: aws_connection_hash
                          })
         end
 
