@@ -11,7 +11,10 @@ require 'json'
 namespace :build do
   desc 'Start project build'
   task project: ["cache:purge", "check:no_changes"] do
+    Gitlab::Util.section_start('build:project')
     Build.exec('gitlab') || raise('Build failed')
+    Gitlab::Util.section_end
+
     Rake::Task["license:check"].invoke
     Rake::Task["build:package:move_to_platform_dir"].invoke
     Rake::Task["build:package:generate_checksums"].invoke
@@ -41,15 +44,20 @@ namespace :build do
 
     desc "Generate checksums for each file"
     task :generate_checksums do
-      files = Dir.glob('pkg/**/*.{deb,rpm}').select { |f| File.file? f }
+      Gitlab::Util.section_start('build:package:generate_checksums')
 
+      files = Dir.glob('pkg/**/*.{deb,rpm}').select { |f| File.file? f }
       files.each do |file|
         system('sha256sum', file, out: "#{file}.sha256")
       end
+
+      Gitlab::Util.section_end
     end
 
     desc "Sync packages to aws"
     task :sync do
+      Gitlab::Util.section_start('build:package:sync')
+
       release_bucket = Build::Info.release_bucket
       release_bucket_region = "eu-west-1"
       system(*%W[aws s3 sync pkg/ s3://#{release_bucket} --acl public-read --region #{release_bucket_region}])
@@ -57,6 +65,8 @@ namespace :build do
       files.each do |file|
         puts file.gsub('pkg', "https://#{release_bucket}.s3.amazonaws.com").gsub('+', '%2B')
       end
+
+      Gitlab::Util.section_end
     end
   end
 
@@ -69,7 +79,9 @@ namespace :build do
     Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_SHA', Gitlab::Util.get_env('CI_COMMIT_SHA'))
     Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_REF', Gitlab::Util.get_env('CI_COMMIT_REF_NAME'))
 
+    Gitlab::Util.section_start('build:trigger')
     Build::OmnibusTrigger.invoke!(post_comment: true).wait!
+    Gitlab::Util.section_end
   end
 
   desc 'Print the current version'
@@ -83,10 +95,14 @@ namespace :build do
     version_manifest_file = Dir.glob('pkg/**/*version-manifest.json').first
     return unless version_manifest_file
 
+    Gitlab::Util.section_start('build:component_shas')
+
     puts "#### SHAs of GitLab Components"
     json_content = JSON.parse(File.read(version_manifest_file))
     %w[gitlab-rails gitaly gitlab-pages gitlab-shell gitlab-workhorse].each do |component|
       puts "#{component} : #{json_content['software'][component]['locked_version']}"
     end
+
+    Gitlab::Util.section_end
   end
 end
