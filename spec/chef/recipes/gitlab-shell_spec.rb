@@ -90,7 +90,7 @@ RSpec.describe 'gitlab::gitlab-shell' do
     before { stub_gitlab_rb(user: { home: '/tmp/user' }) }
 
     it 'creates the ssh dir in the user\'s home directory' do
-      expect(chef_run).to create_storage_directory('/tmp/user/.ssh').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/user/.ssh').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the config file with the auth_file within user\'s ssh directory' do
@@ -106,11 +106,11 @@ RSpec.describe 'gitlab::gitlab-shell' do
     before { stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/ssh/authorized_keys' }) }
 
     it 'creates the ssh dir in the user\'s home directory' do
-      expect(chef_run).to create_storage_directory('/tmp/user/.ssh').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/user/.ssh').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the auth_file\'s parent directory' do
-      expect(chef_run).to create_storage_directory('/tmp/ssh').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/ssh').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the config file with the auth_file at the specified location' do
@@ -119,6 +119,14 @@ RSpec.describe 'gitlab::gitlab-shell' do
           authorized_keys: '/tmp/ssh/authorized_keys'
         )
       )
+    end
+  end
+
+  context 'when manage-storage-directories is disabled' do
+    before { stub_gitlab_rb(user: { home: '/tmp/user' }, manage_storage_directories: { enable: false }) }
+
+    it 'doesn\'t create the ssh dir in the user\'s home directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/user/.ssh')
     end
   end
 

@@ -513,7 +513,7 @@ Enabling this setting will prevent the creation of the following directories:
 | Default location                                       | Permissions | Ownership        | Purpose |
 |--------------------------------------------------------|-------------|------------------|---------|
 | `/var/opt/gitlab/git-data`                             | `0700`        | `git`            | Holds repositories directory |
-| `/var/opt/gitlab/git-data/repositories`                | `2770`        | `git`            | Holds Git repositories |
+| `/var/opt/gitlab/git-data/repositories`                | `2770`        | `git:git`        | Holds Git repositories |
 | `/var/opt/gitlab/gitlab-rails/shared`                  | `0751`        | `git:gitlab-www` | Holds large object directories |
 | `/var/opt/gitlab/gitlab-rails/shared/artifacts`        | `0700`        | `git`            | Holds CI artifacts |
 | `/var/opt/gitlab/gitlab-rails/shared/external-diffs`   | `0700`        | `git`            | Holds external merge request diffs |
@@ -521,8 +521,8 @@ Enabling this setting will prevent the creation of the following directories:
 | `/var/opt/gitlab/gitlab-rails/shared/packages`         | `0700`        | `git`            | Holds package repository |
 | `/var/opt/gitlab/gitlab-rails/shared/dependency_proxy` | `0700`        | `git`            | Holds dependency proxy |
 | `/var/opt/gitlab/gitlab-rails/shared/terraform_state`  | `0700`        | `git`            | Holds terraform state |
-| `/var/opt/gitlab/gitlab-rails/uploads`                 | `0700`        | `git`            | Holds user attachments |
 | `/var/opt/gitlab/gitlab-rails/shared/pages`            | `0750`        | `git:gitlab-www` | Holds user pages |
+| `/var/opt/gitlab/gitlab-rails/uploads`                 | `0700`        | `git`            | Holds user attachments |
 | `/var/opt/gitlab/gitlab-ci/builds`                     | `0700`        | `git`            | Holds CI build logs |
 | `/var/opt/gitlab/.ssh`                                 | `0700`        | `git:git`        | Holds authorized keys |
 
