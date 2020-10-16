@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+workhorse_helper = GitlabWorkhorseHelper.new(node)
+
 # If nginx is disabled we will use workhorse for the healthcheck
 if node['gitlab']['nginx']['enable']
   listen_https = node['gitlab']['nginx']['listen_https']
@@ -26,7 +28,7 @@ if node['gitlab']['nginx']['enable']
 else
   # Always use http for workhorse
   schema = 'http'
-  use_socket = node['gitlab']['gitlab-workhorse']['listen_network'] == "unix"
+  use_socket = workhorse_helper.unix_socket?
   host = use_socket ? 'localhost' : node['gitlab']['gitlab-workhorse']['listen_addr']
 end
 

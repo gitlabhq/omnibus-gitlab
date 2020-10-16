@@ -144,7 +144,7 @@ RSpec.describe 'gitaly' do
 
     it 'populates gitaly config.toml with gitlab-workhorse socket' do
       expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsocket'\s+relative_url_root = ''})
+        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket'\s+relative_url_root = ''})
     end
   end
 
@@ -488,13 +488,37 @@ RSpec.describe 'gitaly' do
   end
 
   context 'with a non-default workhorse unix socket' do
-    before do
-      stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket' })
+    context 'with only a listen address set' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket' })
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsocket'\s+relative_url_root = ''})
+      end
     end
 
-    it 'create config file with provided values' do
-      expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsocket'\s+relative_url_root = ''})
+    context 'with only a socket directory set' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { sockets_directory: '/fake/workhorse/sockets' })
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsockets%2Fsocket'\s+relative_url_root = ''})
+      end
+    end
+
+    context 'with a listen_address and a sockets_directory set' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/sockets/in/the/wind', sockets_directory: '/sockets/in/the' })
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fsockets%2Fin%2Fthe%2Fwind'\s+relative_url_root = ''})
+      end
     end
   end
 
@@ -524,7 +548,7 @@ RSpec.describe 'gitaly' do
 
     it 'create config file with the relative_url_root set' do
       expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsocket'\s+relative_url_root = '/gitlab'})
+        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket'\s+relative_url_root = '/gitlab'})
     end
   end
 end
