@@ -56,6 +56,7 @@ repositories_storages = node['gitlab']['gitlab-rails']['repositories_storages']
 repositories_storages.each do |_name, repositories_storage|
   storage_directory repositories_storage['path'] do
     owner gitlab_user
+    group gitlab_group
     mode "2770"
   end
 end

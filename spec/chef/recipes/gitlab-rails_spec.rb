@@ -53,11 +53,25 @@ RSpec.describe 'gitlab::gitlab-rails' do
       RSpec::Mocks.with_temporary_scope do
         stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared',
                                        uploads_directory: '/tmp/uploads',
-                                       builds_directory: '/tmp/builds' },
+                                       uploads_storage_path: '/tmp/uploads_storage' },
+                       gitlab_ci: { builds_directory: '/tmp/builds' },
+                       git_data_dirs: {
+                         "some_storage" => {
+                           "path" => "/tmp/git-data"
+                         }
+                       },
                        manage_storage_directories: { enable: false })
       end
 
       ChefSpec::SoloRunner.new.converge('gitlab::default')
+    end
+
+    it 'does not create the git-data directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/git-data')
+    end
+
+    it 'does not create the repositories directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/git-data/repositories')
     end
 
     it 'does not create the shared directory' do
@@ -88,16 +102,20 @@ RSpec.describe 'gitlab::gitlab-rails' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/terraform_state')
     end
 
-    it 'does not create the uploads storage directory' do
+    it 'does not create the GitLab pages directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/pages')
+    end
+
+    it 'does not create the uploads directory' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/uploads')
     end
 
     it 'does not create the ci builds directory' do
-      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/builds')
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/uploads_storage')
     end
 
-    it 'does not create the GitLab pages directory' do
-      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/pages')
+    it 'does not create the uploads storage directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/uploads_storage')
     end
   end
 
@@ -107,14 +125,27 @@ RSpec.describe 'gitlab::gitlab-rails' do
         stub_gitlab_rb(gitlab_rails: { shared_path: '/tmp/shared',
                                        uploads_directory: '/tmp/uploads',
                                        uploads_storage_path: '/tmp/uploads_storage' },
-                       gitlab_ci: { builds_directory: '/tmp/builds' })
+                       gitlab_ci: { builds_directory: '/tmp/builds' },
+                       git_data_dirs: {
+                         "some_storage" => {
+                           "path" => "/tmp/git-data"
+                         }
+                       })
       end
 
       ChefSpec::SoloRunner.converge('gitlab::default')
     end
 
+    it 'creates the git-data directory' do
+      expect(chef_run).to create_storage_directory('/tmp/git-data').with(owner: 'git', mode: '0700')
+    end
+
+    it 'creates the repositories directory' do
+      expect(chef_run).to create_storage_directory('/tmp/git-data/repositories').with(owner: 'git', group: 'git', mode: '2770')
+    end
+
     it 'creates the shared directory' do
-      expect(chef_run).to create_storage_directory('/tmp/shared').with(owner: 'git', mode: '0751')
+      expect(chef_run).to create_storage_directory('/tmp/shared').with(owner: 'git', group: 'gitlab-www', mode: '0751')
     end
 
     it 'creates the artifacts directory' do
@@ -141,16 +172,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
       expect(chef_run).to create_storage_directory('/tmp/shared/terraform_state').with(owner: 'git', mode: '0700')
     end
 
-    it 'creates the uploads directory' do
-      expect(chef_run).to create_storage_directory('/tmp/uploads').with(owner: 'git', mode: '0700')
-    end
-
-    it 'creates the ci builds directory' do
-      expect(chef_run).to create_storage_directory('/tmp/builds').with(owner: 'git', mode: '0700')
-    end
-
     it 'creates the GitLab pages directory' do
-      expect(chef_run).to create_storage_directory('/tmp/shared/pages').with(owner: 'git', mode: '0750')
+      expect(chef_run).to create_storage_directory('/tmp/shared/pages').with(owner: 'git', group: 'gitlab-www', mode: '0750')
     end
 
     it 'creates the shared tmp directory' do
@@ -159,6 +182,14 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
     it 'creates the shared cache directory' do
       expect(chef_run).to create_storage_directory('/tmp/shared/cache').with(owner: 'git', mode: '0700')
+    end
+
+    it 'creates the uploads directory' do
+      expect(chef_run).to create_storage_directory('/tmp/uploads').with(owner: 'git', mode: '0700')
+    end
+
+    it 'creates the ci builds directory' do
+      expect(chef_run).to create_storage_directory('/tmp/builds').with(owner: 'git', mode: '0700')
     end
 
     it 'creates the uploads storage directory' do
@@ -802,7 +833,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         stub_gitlab_rb(
           git_data_dirs: {
             "second_storage" => {
-              "path" => "tmp/storage"
+              "path" => "/tmp/storage"
             }
           }
         )
@@ -811,7 +842,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
           hash_including(
             'repositories_storages' => {
               'second_storage' => {
-                'path' => 'tmp/storage/repositories',
+                'path' => '/tmp/storage/repositories',
                 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket'
               }
             }
