@@ -63,6 +63,16 @@ class PatroniHelper < BaseHelper
       dcs['slots'][slot_name] = parse_replication_slots_options(options)
     end
 
+    if node['patroni']['standby_cluster']['enable']
+      dcs['standby_cluster'] = {}
+
+      node['patroni']['standby_cluster'].each do |key, value|
+        next if key == 'enable'
+
+        dcs['standby_cluster'][key] = value
+      end
+    end
+
     dcs
   end
 

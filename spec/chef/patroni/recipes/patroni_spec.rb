@@ -152,11 +152,11 @@ RSpec.describe 'patroni cookbook' do
         postgresql: {
           username: 'test_psql_user',
           sql_user: 'test_sql_user',
-          sql_user_password: '32596e8376077c3ef8d5cf52f15279ba',
+          sql_user_password: 'dbda601b8d4dc3d1697ef84dbbb8e61b',
           sql_replication_user: 'test_sql_replication_user',
-          sql_replication_password: '5b3e5a380c8fe8f8180d396be021951a',
+          sql_replication_password: '48e84afb4b268128ac14f7c66fc7af42',
           pgbouncer_user: 'test_pgbouncer_user',
-          pgbouncer_user_password: '3b244bd6e459bc406013417367587d41',
+          pgbouncer_user_password: '2bc94731612abb74aea7805a41dfcb09',
           connect_port: 15432,
         },
         patroni: {
@@ -171,6 +171,7 @@ RSpec.describe 'patroni cookbook' do
           use_pg_rewind: true,
           connect_address: '1.2.3.4',
           connect_port: 18008,
+          replication_password: 'fakepassword',
           replication_slots: {
             'geo_secondary' => { 'type' => 'physical' }
           },
@@ -205,7 +206,7 @@ RSpec.describe 'patroni cookbook' do
           },
           replication: {
             username: 'test_sql_replication_user',
-            password: 'md55b3e5a380c8fe8f8180d396be021951a'
+            password: 'fakepassword'
           }
         )
         expect(cfg[:restapi][:connect_address]).to eq('1.2.3.4:18008')
@@ -249,6 +250,70 @@ RSpec.describe 'patroni cookbook' do
           wal_keep_segments: 16,
           max_wal_senders: 4,
           max_replication_slots: 4
+        )
+      }
+    end
+  end
+
+  context 'when standby cluster is enabled' do
+    before do
+      stub_gitlab_rb(
+        roles: %w(postgres_role),
+        patroni: {
+          enable: true,
+          use_pg_rewind: true,
+          replication_password: 'fakepassword',
+          standby_cluster: {
+            enable: true,
+            host: '1.2.3.4',
+            port: 5432,
+            primary_slot_name: 'geo_secondary'
+          }
+        },
+        postgresql: {
+          sql_user_password: 'a4125c87ce2572ce271cd77e0de9a0ad',
+          sql_replication_password: 'e64b415e9b9a34ac7ac6e53ae16ccacb',
+          md5_auth_cidr_addresses: '1.2.3.4/32'
+        }
+      )
+    end
+
+    it 'should be reflected in patroni configuration file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/patroni/patroni.yaml').with_content { |content|
+        cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
+        expect(cfg[:postgresql][:authentication]).to include(
+          replication: {
+            username: 'gitlab_replicator',
+            password: 'fakepassword'
+          }
+        )
+        expect(cfg[:bootstrap][:dcs]).to include(
+          standby_cluster: {
+            host: '1.2.3.4',
+            port: 5432,
+            primary_slot_name: 'geo_secondary'
+          }
+        )
+        expect(cfg[:bootstrap][:dcs][:postgresql]).to include(
+          use_pg_rewind: true
+        )
+      }
+    end
+
+    it 'should reflect into dcs config file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/patroni/dcs.yaml').with_content { |content|
+        cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
+        expect(cfg).to include(
+          standby_cluster: {
+            host: '1.2.3.4',
+            port: 5432,
+            primary_slot_name: 'geo_secondary'
+          }
+        )
+        expect(cfg[:postgresql]).to include(
+          use_pg_rewind: true
         )
       }
     end
