@@ -168,7 +168,59 @@ gitlabhq_production=> SELECT * FROM pg_stat_ssl;
 (19 rows)
 ```
 
-Rows that have `t` listed under the `ssl` column are enabled.
+1. Rows that have `t` listed under the `ssl` column are enabled.
+1. Rows that have a value in the `clientdn` are using the `cert` authentication method
+
+#### Configure SSL client authentication
+
+Client SSL certificates can be used to authenticate to the database server. Creating the certificates
+is beyond the scope of `omnibus-gitlab`. But users who have an existing SSL certificate management solution
+can use this.
+
+##### Configure the database server
+
+1. Create a certificate and key for the server, the common name should equal the DNS name of the server
+1. Copy the server certificate, key, and CA file to the PostgreSQL server, and ensure the permissions are correct
+   1. The certificate should be owned by the database user (default: `gitlab-psql`)
+   1. The key file should be owned by the database user, and its permissions should be `0400`
+   1. The CA file should be owned by the database user, and its permissions should be `0400`
+
+   NOTE: **Note:**
+   Do not use the filenames `server.crt` or `server.key` for these files. These are reserved for internal use of `omnibus-gitlab`.
+
+1. Ensure the following is set in `gitlab.rb`.
+
+   ```ruby
+   postgresql['ssl_cert_file'] = 'PATH_TO_CERTIFICATE'
+   postgresql['ssl_key_file'] = 'PATH_TO_KEY_FILE'
+   postgresql['ssl_ca_file'] = 'PATH_TO_CA_FILE'
+   postgresql['listen_address'] = 'IP_ADDRESS'
+   postgresql['cert_auth_addresses'] = {
+   'IP_ADDRESS' => {
+     'database' => 'gitlabhq_production',
+     'user' => 'gitlab'
+   }
+   ```
+
+   `listen_address` should be set to an IP address of the server that the clients will use to connect to the database.
+   `cert_auth_addresses` should contain a list of IP addresses, and the databases and users that are allowed to connect to the database.
+1. Run `gitlab-ctl reconfigure` then `gitlab-ctl restart postgresql` in order for the new settings to take effect
+
+#### Configure the Rails client
+
+In order for the rails client to connect to the server, you will need a certficate and key with the `commonName` set to `gitlab`, that is signed by a certificate authority trusted in the CA file specified in `ssl_ca_file` on the database server.
+
+1. Configure `gitlab.rb`
+
+   ```ruby
+   gitlab_rails['db_host'] = 'IP_ADDRESS_OR_HOSTNAME_OF_DATABASE_SERVER'
+   gitlab_rails['db_sslcert'] = 'PATH_TO_CERTIFICATE_FILE'
+   gitlab_rails['db_sslkey'] = 'PATH_TO_KEY_FILE'
+   gitlab_rails['db_rootcert'] = 'PATH_TO_CA_FILE'
+   ```
+
+1. Run `gitlab-ctl reconfigure` for the rails client to use the new settings
+1. Follow the steps in [Verifying that SSL is being used](#verifying-that-ssl-is-being-used) to ensure the authentication is working.
 
 ### Configure packaged PostgreSQL server to listen on TCP/IP
 

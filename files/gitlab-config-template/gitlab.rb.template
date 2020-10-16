@@ -1048,6 +1048,12 @@ gitlab_rails['object_store']['objects']['pages']['bucket'] = nil
 # postgresql['ssl_key_file'] = 'server.key'
 # postgresql['ssl_ca_file'] = '/opt/gitlab/embedded/ssl/certs/cacert.pem'
 # postgresql['ssl_crl_file'] = nil
+# postgresql['cert_auth_addresses'] = {
+#   'ADDRESS' => {
+#     database: 'gitlabhq_production',
+#     user: 'gitlab'
+#   }
+# }
 
 ### Replication settings
 ###! Note, some replication settings do not require a full restart. They are documented below.
