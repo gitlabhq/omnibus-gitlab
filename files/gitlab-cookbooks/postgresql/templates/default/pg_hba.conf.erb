@@ -89,3 +89,6 @@ host<% if @hostssl %>ssl<% end %>    replication <%= @sql_replication_user %> <%
   <% end %>
 <% end %>
 
+<% @cert_auth_addresses.each do |addr, data| %>
+hostssl <%= data['database'] %> <%= data['user'] %> <%= addr %> cert
+<% end %>

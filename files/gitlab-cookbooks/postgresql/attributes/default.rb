@@ -34,6 +34,7 @@ default['postgresql']['ssl_cert_file'] = 'server.crt'
 default['postgresql']['ssl_key_file'] = 'server.key'
 default['postgresql']['ssl_ca_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
 default['postgresql']['ssl_crl_file'] = nil
+default['postgresql']['cert_auth_addresses'] = {}
 
 default['postgresql']['shmmax'] = /x86_64/.match?(node['kernel']['machine']) ? 17179869184 : 4294967295
 default['postgresql']['shmall'] = /x86_64/.match?(node['kernel']['machine']) ? 4194304 : 1048575

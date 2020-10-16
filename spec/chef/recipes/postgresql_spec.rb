@@ -832,6 +832,33 @@ RSpec.describe 'postgresql 9.6' do
       expect(postgresql_config).to notify('execute[reload postgresql]').to(:run).immediately
       expect(postgresql_config).to notify('execute[start postgresql]').to(:run).immediately
     end
+
+    context 'cert authentication' do
+      it 'is disabled by default' do
+        expect(chef_run).to render_file(pg_hba_conf).with_content { |content|
+          expect(content).to_not match(/cert$/)
+        }
+      end
+
+      it 'can be enabled' do
+        stub_gitlab_rb(
+          postgresql: {
+            cert_auth_addresses: {
+              '1.2.3.4/32' => {
+                database: 'fakedatabase',
+                user: 'fakeuser'
+              },
+              'fakehostname' => {
+                database: 'anotherfakedatabase',
+                user: 'anotherfakeuser'
+              },
+            }
+          }
+        )
+        expect(chef_run).to render_file(pg_hba_conf).with_content('hostssl fakedatabase fakeuser 1.2.3.4/32 cert')
+        expect(chef_run).to render_file(pg_hba_conf).with_content('hostssl anotherfakedatabase anotherfakeuser fakehostname cert')
+      end
+    end
   end
 
   it 'creates sysctl files' do
