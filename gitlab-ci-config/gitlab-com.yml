@@ -396,7 +396,7 @@ dependency_update:
 
 dependencies_io_check:
   variables:
-    ee: true
+    ee: "true"
   image: "${RUBY_IMAGE}"
   stage: trigger-package
   script:
