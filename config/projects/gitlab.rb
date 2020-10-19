@@ -214,6 +214,8 @@ exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/src/core'
 exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/src/ruby/ext'
 exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/src/ruby/spec'
 exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/third_party'
+exclude 'embedded/lib/ruby/gems/*/gems/rbtrace-*/ext/src'
+exclude 'embedded/lib/ruby/gems/*/gems/rbtrace-*/ext/dst'
 
 # Enable signing packages
 package :rpm do
