@@ -507,6 +507,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # ]
 
+### FortiAuthenticator authentication settings
+# gitlab_rails['forti_authenticator_enabled'] = false
+# gitlab_rails['forti_authenticator_host'] = 'forti_authenticator.example.com'
+# gitlab_rails['forti_authenticator_port'] = 443
+# gitlab_rails['forti_authenticator_username'] = 'admin'
+# gitlab_rails['forti_authenticator_access_token'] = 's3cr3t'
+
 ### Backup Settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/backups.html
 

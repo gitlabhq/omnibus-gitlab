@@ -724,6 +724,21 @@ production: &base
       - <%= provider.to_json %>
 <% end %>
 
+  # FortiAuthenticator settings
+  forti_authenticator:
+    # Allow using FortiAuthenticator as OTP provider
+    enabled: <%= @forti_authenticator_enabled %>
+
+    # Host and port of FortiAuthenticator instance
+    host: <%= @forti_authenticator_host %>
+    port: <%= @forti_authenticator_port %>
+
+    # Username for accessing FortiAuthenticator API
+    username: <%= quote(@forti_authenticator_username) %>
+
+    # Access token for FortiAuthenticator API
+    access_token: <%= quote(@forti_authenticator_access_token) %>
+
   # Shared file storage settings
   shared:
     path: <%= @shared_path %>

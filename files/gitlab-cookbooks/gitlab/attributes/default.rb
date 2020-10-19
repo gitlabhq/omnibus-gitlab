@@ -336,6 +336,12 @@ default['gitlab']['gitlab-rails']['omniauth_external_providers'] = nil
 default['gitlab']['gitlab-rails']['omniauth_providers'] = []
 default['gitlab']['gitlab-rails']['omniauth_allow_bypass_two_factor'] = nil
 
+default['gitlab']['gitlab-rails']['forti_authenticator_enabled'] = false
+default['gitlab']['gitlab-rails']['forti_authenticator_host'] = nil
+default['gitlab']['gitlab-rails']['forti_authenticator_port'] = 443
+default['gitlab']['gitlab-rails']['forti_authenticator_username'] = nil
+default['gitlab']['gitlab-rails']['forti_authenticator_access_token'] = nil
+
 default['gitlab']['gitlab-rails']['shared_path'] = "/var/opt/gitlab/gitlab-rails/shared"
 
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
