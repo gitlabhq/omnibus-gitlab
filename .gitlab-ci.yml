@@ -161,7 +161,7 @@ include:
 
 .notify:
   before_script:
-    - apk update && apk add git curl bash
+    - apk add --no-cache curl
   image: "alpine"
   stage: notification_fail
 
