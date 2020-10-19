@@ -1,0 +1,5 @@
+---
+title: Fix libatomic package name for RHEL/CentOS
+merge_request: 4660
+author: Hi Key @HiKey
+type: fixed
