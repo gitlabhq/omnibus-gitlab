@@ -71,6 +71,7 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
               git_trace_log_file: node['gitlab']['gitlab-shell']['git_trace_log_file'],
               custom_hooks_dir: node['gitlab']['gitlab-shell']['custom_hooks_dir'],
               migration: node['gitlab']['gitlab-shell']['migration'],
+              ssl_cert_dir: node['gitlab']['gitlab-shell']['ssl_cert_dir']
             })
   notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
 end
