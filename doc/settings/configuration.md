@@ -505,7 +505,7 @@ manage_storage_directories['enable'] = false
 ```
 
 **Warning** The Omnibus GitLab package still expects these directories to exist
-on the filesystem. It is up to the administrator to create and set correct
+on the file system. It is up to the administrator to create and set correct
 permissions if this setting is set.
 
 Enabling this setting will prevent the creation of the following directories:
@@ -526,10 +526,10 @@ Enabling this setting will prevent the creation of the following directories:
 | `/var/opt/gitlab/gitlab-ci/builds`                     | `0700`        | `git`            | Holds CI build logs |
 | `/var/opt/gitlab/.ssh`                                 | `0700`        | `git:git`        | Holds authorized keys |
 
-## Only start Omnibus GitLab services after a given filesystem is mounted
+## Only start Omnibus GitLab services after a given file system is mounted
 
 If you want to prevent Omnibus GitLab services (NGINX, Redis, Puma, etc.)
-from starting before a given filesystem is mounted, add the following to
+from starting before a given file system is mounted, add the following to
 `/etc/gitlab/gitlab.rb`:
 
 ```ruby

@@ -112,7 +112,7 @@ the user or the `RAILS_ENV` environment variable; this is taken care of by the
 This content has been moved to the
 [GitLab debugging tips documentation](https://docs.gitlab.com/ee/administration/troubleshooting/debug.html#starting-a-rails-console-session).
 
-## Starting a PostgreSQL superuser psql session
+## Starting a PostgreSQL superuser `psql` session
 
 If you need superuser access to the bundled PostgreSQL service you can
 use the `gitlab-psql` command. It takes the same arguments as the
@@ -128,7 +128,7 @@ least once. The `gitlab-psql` command cannot be used to connect to a
 remote PostgreSQL server, nor to connect to a local non-Omnibus PostgreSQL
 server.
 
-### Starting a PostgreSQL superuser psql session in Geo tracking database
+### Starting a PostgreSQL superuser `psql` session in Geo tracking database
 
 Similar to the previous command, if you need superuser access to the bundled
 Geo tracking database (`geo-postgresql`), you can use the `gitlab-geo-psql`.
