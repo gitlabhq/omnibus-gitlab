@@ -1,7 +1,7 @@
 GIT
   remote: https://dev.gitlab.org/gitlab/omnibus.git
-  revision: c33184c00a1774f8350f0f1d8cbce35b99a82fd1
-  tag: 7.0.10.02
+  revision: 996ed5ed05d97bbb0c73f2f890a1e15887a9749e
+  tag: 7.0.10.03
   specs:
     omnibus (7.0.10)
       aws-sdk-s3 (~> 1)
@@ -122,9 +122,9 @@ GEM
     declarative (0.0.10)
     declarative-option (0.1.0)
     diff-lcs (1.3)
-    docker-api (1.33.1)
-      excon (>= 0.38.0)
-      json
+    docker-api (2.0.0)
+      excon (>= 0.47.0)
+      multi_json
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
     ed25519 (1.2.4)
@@ -132,7 +132,7 @@ GEM
     equatable (0.6.1)
     erubi (1.9.0)
     erubis (2.7.0)
-    excon (0.54.0)
+    excon (0.76.0)
     fantaskspec (0.9.10)
       rake (~> 10.0)
       rspec (~> 3.0)
