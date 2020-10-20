@@ -24,12 +24,16 @@ module Gitlab
       def section_start(name, description = name)
         return unless ENV['CI']
 
+        name.tr!(':', '-')
+
         @section_name = name
         $stdout.puts "section_start:#{Time.now.to_i}:#{name}\r\e[0K#{description}"
       end
 
       def section_end(name = @section_name)
         return unless ENV['CI']
+
+        name.tr!(':', '-')
 
         $stdout.puts "section_end:#{Time.now.to_i}:#{name}\r\e[0K"
       end
