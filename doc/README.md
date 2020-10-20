@@ -25,7 +25,7 @@ For installation details, see [Installing Omnibus GitLab](installation/index.md)
 
 ## Running on a low-resource device (like a Raspberry Pi)
 
-You can run GitLab on supported low-resource computers like the Raspberry Pi 3, but you will need to tune the settings
+You can run GitLab on supported low-resource computers like the Raspberry Pi 3, but you must tune the settings
 to work best with the available resources. Check out the [documentation](settings/rpi.md) for suggestions on what to adjust.
 
 ## Maintenance
@@ -34,7 +34,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [Starting and stopping](maintenance/README.md#starting-and-stopping)
 - [Invoking Rake tasks](maintenance/README.md#invoking-rake-tasks)
 - [Starting a Rails console session](maintenance/README.md#starting-a-rails-console-session)
-- [Starting a PostgreSQL superuser psql session](maintenance/README.md#starting-a-postgresql-superuser-psql-session)
+- [Starting a PostgreSQL superuser `psql` session](maintenance/README.md#starting-a-postgresql-superuser-psql-session)
 - [Container registry garbage collection](maintenance/README.md#container-registry-garbage-collection)
 
 ## Configuring
@@ -44,7 +44,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [Storing Git data in an alternative directory](settings/configuration.md#storing-git-data-in-an-alternative-directory)
 - [Changing the name of the Git user group](settings/configuration.md#changing-the-name-of-the-git-user--group)
 - [Specify numeric user and group identifiers](settings/configuration.md#specify-numeric-user-and-group-identifiers)
-- [Only start Omnibus GitLab services after a given filesystem is mounted](settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted)
+- [Only start Omnibus GitLab services after a given file system is mounted](settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-file-system-is-mounted)
 - [Disable user and group account management](settings/configuration.md#disable-user-and-group-account-management)
 - [Disable storage directory management](settings/configuration.md#disable-storage-directories-management)
 - [Configuring Rack attack](settings/configuration.md#configuring-rack-attack)
