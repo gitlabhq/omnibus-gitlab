@@ -1,0 +1,5 @@
+---
+title: Ensure group is set before mode in storage_directory
+merge_request: 4661
+author:
+type: fixed
