@@ -47,17 +47,17 @@ class StorageDirectoryHelper
     # Manual user intervention will be required if it fails. (enabling no_root_squash)
     run_chown(path) if @target_owner != get_owner(path)
 
-    # Set the correct mode on the directory, run using the euid if target_owner
-    # has write access, otherwise use root
-    if @target_mode
-      # Prepend a 0 to force an octal set when 4 bits have been passed in. eg: 2755 or 0700
-      mode = @target_mode.length == 4 ? "0#{@target_mode}" : @target_mode
-      run_command("chmod #{mode} #{path}", use_euid: writable?(path))
-    end
-
     # Set the group on the directory, run using the euid if target_owner has
     # write access, otherwise use root
     run_command("chgrp #{@target_group} #{path}", use_euid: writable?(path)) if @target_group
+
+    # Set the correct mode on the directory, run using the euid if target_owner
+    # has write access, otherwise use root
+    return unless @target_mode
+
+    # Prepend a 0 to force an octal set when 4 bits have been passed in. eg: 2755 or 0700
+    mode = @target_mode.length == 4 ? "0#{@target_mode}" : @target_mode
+    run_command("chmod #{mode} #{path}", use_euid: writable?(path))
   end
 
   def get_owner(path)
