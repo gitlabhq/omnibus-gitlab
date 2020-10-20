@@ -50,7 +50,8 @@ RSpec.describe 'gitlab::gitlab-shell' do
           custom_hooks_dir: nil,
           migration: { enabled: true, features: [] },
           gitlab_url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket',
-          gitlab_relative_path: ''
+          gitlab_relative_path: '',
+          ssl_cert_dir: '/opt/gitlab/embedded/ssl/certs/'
         )
       )
     end
