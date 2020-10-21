@@ -66,7 +66,7 @@ If you have Docker installed, you can setup OpenShift Origin on your local machi
 1. Create a new namespace to assign storage and permissions to.
    - `oc new-project <namespace>`
 
-1. Login as system admin
+1. Log in as system administrator:
    - `oc login -u system:admin`
 
 1. In order to allow the GitLab pod to run as root you need to edit the anyuid security context:
