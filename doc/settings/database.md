@@ -143,29 +143,26 @@ SELECT * FROM pg_stat_ssl;
 For example:
 
 ```plaintext
-gitlabhq_production=> SELECT * FROM pg_stat_ssl;
-  pid  | ssl | version |           cipher            | bits | compression | clientdn
--------+-----+---------+-----------------------------+------+-------------+----------
- 47506 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
- 47509 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
- 47510 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
- 47527 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
- 47528 | f   |         |                             |      |             |
- 47537 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
- 47560 | f   |         |                             |      |             |
- 47561 | f   |         |                             |      |             |
- 47563 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
- 47564 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
- 47565 | f   |         |                             |      |             |
- 47569 | f   |         |                             |      |             |
- 47570 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
- 47573 | f   |         |                             |      |             |
- 47585 | f   |         |                             |      |             |
- 47586 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
- 47618 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
- 47628 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
- 55812 | t   | TLSv1.2 | ECDHE-RSA-AES256-GCM-SHA384 |  256 | t           |
-(19 rows)
+gitlabhq_production=> select * from pg_stat_ssl;
+ pid  | ssl | version |         cipher         | bits | compression |  clientdn
+------+-----+---------+------------------------+------+-------------+------------
+  384 | f   |         |                        |      |             |
+  386 | f   |         |                        |      |             |
+  998 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 | f           | /CN=gitlab
+  933 | f   |         |                        |      |             |
+ 1003 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 | f           | /CN=gitlab
+ 1016 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 | f           | /CN=gitlab
+ 1022 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 | f           | /CN=gitlab
+ 1211 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 | f           | /CN=gitlab
+ 1214 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 | f           | /CN=gitlab
+ 1213 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 | f           | /CN=gitlab
+ 1215 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 | f           | /CN=gitlab
+ 1252 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 | f           |
+ 1280 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 | f           | /CN=gitlab
+  382 | f   |         |                        |      |             |
+  381 | f   |         |                        |      |             |
+  383 | f   |         |                        |      |             |
+(16 rows)
 ```
 
 1. Rows that have `t` listed under the `ssl` column are enabled.
@@ -186,9 +183,10 @@ can use this.
    1. The CA file should be owned by the database user, and its permissions should be `0400`
 
    NOTE: **Note:**
-   Do not use the filenames `server.crt` or `server.key` for these files. These are reserved for internal use of `omnibus-gitlab`.
+   Don't use the filenames `server.crt` or `server.key` for these files. These
+   filenames are reserved for the internal use of `omnibus-gitlab`.
 
-1. Ensure the following is set in `gitlab.rb`.
+1. Ensure the following is set in `gitlab.rb`:
 
    ```ruby
    postgresql['ssl_cert_file'] = 'PATH_TO_CERTIFICATE'
@@ -202,9 +200,15 @@ can use this.
    }
    ```
 
-   `listen_address` should be set to an IP address of the server that the clients will use to connect to the database.
-   `cert_auth_addresses` should contain a list of IP addresses, and the databases and users that are allowed to connect to the database.
-1. Run `gitlab-ctl reconfigure` then `gitlab-ctl restart postgresql` in order for the new settings to take effect
+   Set `listen_address` as the IP address of the server that the clients will use
+   to connect to the database.
+   Ensure `cert_auth_addresses` contains a list of IP addresses, and the
+   databases and users that are allowed to connect to the database. You can use
+   CIDR notation when specifying the key for `cert_auth_addresses` to
+   incorporate an IP address range.
+
+1. Run `gitlab-ctl reconfigure`, and then `gitlab-ctl restart postgresql` for
+   the new settings to take effect.
 
 #### Configure the Rails client
 
