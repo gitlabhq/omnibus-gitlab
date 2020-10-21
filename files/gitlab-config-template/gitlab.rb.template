@@ -355,6 +355,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### GitLab uploads
 ###! Docs: https://docs.gitlab.com/ee/administration/uploads.html
+# gitlab_rails['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
 # gitlab_rails['uploads_storage_path'] = "/opt/gitlab/embedded/service/gitlab-rails/public"
 # gitlab_rails['uploads_base_dir'] = "uploads/-/system"
 # gitlab_rails['uploads_object_store_enabled'] = false
@@ -615,9 +616,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! **We do not recommend changing these directories.**
 # gitlab_rails['dir'] = "/var/opt/gitlab/gitlab-rails"
 # gitlab_rails['log_directory'] = "/var/log/gitlab/gitlab-rails"
-
-### GitLab application settings
-# gitlab_rails['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
 
 #### Change the initial default admin password and shared runner registration tokens.
 ####! **Only applicable on initial setup, changing these settings after database
