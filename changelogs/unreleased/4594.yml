@@ -1,5 +1,0 @@
----
-title: Remove EE only note for packages in gitlab.yml.erb
-merge_request: 4594
-author: Ben Bodenmiller (@bbodenmiller)
-type: fixed

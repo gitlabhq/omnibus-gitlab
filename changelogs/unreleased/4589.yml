@@ -1,5 +1,0 @@
----
-title: Explicitly set group for repositories_storages and improve manage-storage-directories tests
-merge_request: 4589
-author: Ben Bodenmiller (@bbodenmiller)
-type: other

@@ -1,5 +1,0 @@
----
-title: Update workhorse auth socket when puma uses custom socket
-merge_request: 4620
-author:
-type: fixed
