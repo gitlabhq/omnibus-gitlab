@@ -97,7 +97,10 @@ RSpec.describe 'monitoring::postgres-exporter' do
 
     it 'creates the queries.yaml file' do
       expect(chef_run).to render_file('/var/opt/gitlab/postgres-exporter/queries.yaml')
-        .with_content(/pg_replication:/)
+        .with_content { |content|
+          expect(content).to match(/pg_replication:/)
+          expect(content).not_to match(/pg_stat_user_table:/)
+        }
     end
 
     it 'creates default set of directories' do
@@ -153,6 +156,7 @@ RSpec.describe 'monitoring::postgres-exporter' do
           },
           listen_address: 'localhost:9700',
           enable: true,
+          per_table_stats: true,
           sslmode: 'require',
           env: {
             'USER_SETTING' => 'asdf1234'
@@ -166,6 +170,11 @@ RSpec.describe 'monitoring::postgres-exporter' do
         .with_content(/web.listen-address=localhost:9700/)
       expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/run')
         .with_content(/some.flag=foo/)
+    end
+
+    it 'creates the queries.yaml file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/postgres-exporter/queries.yaml')
+        .with_content(/pg_stat_user_tables:/)
     end
 
     it 'creates necessary env variable files' do
