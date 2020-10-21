@@ -1,5 +1,0 @@
----
-title: Error during docker build on package download failure
-merge_request: 4641
-author:
-type: fixed

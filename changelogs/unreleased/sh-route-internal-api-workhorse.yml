@@ -1,5 +1,0 @@
----
-title: Make Gitaly internal API calls go through Workhorse
-merge_request: 4592
-author:
-type: changed

@@ -1,5 +1,0 @@
----
-title: Configure pg-upgrade to work with patroni service
-merge_request: 4529
-author:
-type: fixed

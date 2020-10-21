@@ -1,5 +1,0 @@
----
-title: Add FortiAuthenticator configuration to gitlab.rb
-merge_request: 4645
-author:
-type: added

@@ -1,5 +1,0 @@
----
-title: Support geo data dir for pg-upgrade
-merge_request: 4603
-author:
-type: fixed

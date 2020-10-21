@@ -3,6 +3,62 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.5.0 (2020-10-22)
+
+### Fixed (10 changes, 2 of them are from the community)
+
+- Configure pg-upgrade to work with patroni service. !4529
+- Exit non-zero during upgrade if reconfigure fails. !4591
+- Remove EE only note for packages in gitlab.yml.erb. !4594 (Ben Bodenmiller (@bbodenmiller))
+- Add selinux module for gitlab-shell. !4598
+- Support geo data dir for pg-upgrade. !4603
+- Allows special characters in Grafana admin password. !4606
+- Update workhorse auth socket when puma uses custom socket. !4620
+- Error during docker build on package download failure. !4641
+- Fix onsolidated form object storage configuration template. !4656
+- Fix libatomic package name for RHEL/CentOS. !4660 (Hi Key @HiKey)
+
+### Deprecated (1 change)
+
+- Add deprecation warning for CentOS 6. !4596
+
+### Changed (6 changes)
+
+- Update Chef from 15.12.22 to 15.14.0. !4537
+- Update unixcharles/acme-client from 2.0.6 to 2.0.7. !4581
+- Only send one Referrer-Policy header. !4584
+- Make Gitaly internal API calls go through Workhorse. !4592
+- Add support for cert authentication with PostgreSQL. !4618
+- Remove extraneous rbtrace files from build. !4647
+
+### Added (14 changes)
+
+- Allow configuring permanent replication slots in patroni. !4534
+- Allow bootstrapping patroni Standby Cluster. !4558
+- Gitaly daily maintenance config. !4572
+- Add gitlab-kas to omnibus. !4579
+- Praefect configuration for database with no proxy. !4583
+- Add wrappers for Patroni restart and reload commands. !4601
+- Add database reindexing cronjob. !4602
+- Add Kerberos LDAP mapping configuration. !4608
+- Allow promotion task to alter Geo node configuration. !4609
+- Support revert-pg-upgrade for Patroni cluster nodes. !4611
+- Specify display_version for sofware without proper version string. !4622
+- Add pages object storage settings. !4623
+- Expose wal_log_hints PostgreSQL setting. !4642
+- Add FortiAuthenticator configuration to gitlab.rb. !4645
+
+### Other (7 changes, 1 of them is from the community)
+
+- Remove Praefect primary config. !4559
+- Add member invitation reminder emails cron worker. !4582
+- Explicitly set group for repositories_storages and improve manage-storage-directories tests. !4589 (Ben Bodenmiller (@bbodenmiller))
+- Remove ee/spec from final package. !4621
+- Move email configuration section closer to SMTP settings in template. !4631
+- Reduce Ubuntu 20 ARM package size. !4637
+- Update Mattermost to 5.27.0.
+
+
 ## 13.4.4 (2020-10-15)
 
 ### Fixed (1 change)
