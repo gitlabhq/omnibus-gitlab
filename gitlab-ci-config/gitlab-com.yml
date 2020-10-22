@@ -388,6 +388,8 @@ dependency_update:
       - $DEPS_PIPELINE
 
 dependencies_io_check:
+  variables:
+    ee: "true"
   image: "${RUBY_IMAGE}"
   stage: trigger-package
   script:
