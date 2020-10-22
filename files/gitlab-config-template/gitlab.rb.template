@@ -841,6 +841,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
 
+##! Resource limitations for the dynamic image scaler.
+##! Exceeding these thresholds will cause Workhorse to serve images in their original size.
+##!
+##! Maximum number of scaler processes that are allowed to execute concurrently.
+##! It is recommended for this not to exceed the number of CPUs available.
+# gitlab_workhorse['image_scaler_max_procs'] = 4
+##!
+##! Maximum file size in bytes for an image to be considered eligible for rescaling
+# gitlab_workhorse['image_scaler_max_filesize'] = 250000
+
 ################################################################################
 ## GitLab User Settings
 ##! Modify default git user.
