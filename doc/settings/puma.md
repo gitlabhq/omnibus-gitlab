@@ -14,7 +14,7 @@ disabled by default.
 
 1. Determine suitable Puma worker and thread settings. For details, see [Puma settings](https://docs.gitlab.com/ee/install/requirements.html#puma-settings).
 1. Convert custom Unicorn settings to the equivalent Puma settings (if applicable). For details, see [Converting Unicorn settings to Puma](#converting-unicorn-settings-to-puma).
-1. For multi-node deployments, configure the load balancer to use the [readiness check](https://docs.gitlab.com/ee/administration/high_availability/load_balancer.html#readiness-check).
+1. For multi-node deployments, configure the load balancer to use the [readiness check](https://docs.gitlab.com/ee/administration/load_balancer.html#readiness-check).
 1. Reconfigure GitLab so the above changes take effect.
 
    ```shell

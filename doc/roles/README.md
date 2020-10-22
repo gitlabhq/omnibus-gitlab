@@ -54,7 +54,7 @@ a `gitlab-ee` Omnibus package. It will be mentioned next to each role.
 
 ### Redis Server Roles
 
-Documentation on the use of the Redis Roles can be found in [Configuring Redis Cluster](https://docs.gitlab.com/ee/administration/high_availability/redis.html#configuring-redis-ha)
+Documentation on the use of the Redis Roles can be found in [Configuring Redis for Scaling](https://docs.gitlab.com/ee/administration/redis/index.html)
 
 - **redis_sentinel_role** (`gitlab-ee`)
 
@@ -77,7 +77,7 @@ Documentation on the use of the Redis Roles can be found in [Configuring Redis C
 ### GitLab Geo Roles
 
 The GitLab Geo roles are used when setting up the database replication for GitLab
-Geo. See the [Geo Database Documentation](https://docs.gitlab.com/ee/gitlab-geo/database.html)
+Geo. See the [Geo Database Documentation](https://docs.gitlab.com/ee/administration/geo/setup/database.html)
 for configuration steps.
 
 - **geo_primary_role** (`gitlab-ee`)
@@ -95,7 +95,7 @@ for configuration steps.
 
 ### Monitoring Roles
 
-Monitoring roles are used to setup monitoring of HA installs. Additional documentation is available in the HA [Monitoring documentation](https://docs.gitlab.com/ee/administration/high_availability/monitoring_node.html).
+Monitoring roles are used to set up monitoring of installations. For additional information, see the [Monitoring documentation](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html).
 
 - **monitoring_role** (`gitlab-ce`/`gitlab-ee`)
 
@@ -105,7 +105,7 @@ Monitoring roles are used to setup monitoring of HA installs. Additional documen
 
 ### PostgreSQL Roles
 
-Documentation on the usage of the PostgreSQL Roles can be found in [Configuring PostgreSQL multi-node](https://docs.gitlab.com/ee/administration/high_availability/database.html#configure-using-omnibus-for-high-availability)
+Documentation on the usage of the PostgreSQL Roles can be found in [Configuring PostgreSQL for Scaling](https://docs.gitlab.com/ee/administration/postgresql/index.html)
 
 - **postgres_role** (`gitlab-ce`/`gitlab-ee`)
 
