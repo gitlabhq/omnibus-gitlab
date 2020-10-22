@@ -644,6 +644,8 @@ default['gitlab']['gitlab-workhorse']['env'] = {
   'HOME' => node['gitlab']['user']['home'],
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
+default['gitlab']['gitlab-workhorse']['image_scaler_max_procs'] = [2, node['cpu']['total'].to_i / 2].max
+default['gitlab']['gitlab-workhorse']['image_scaler_max_filesize'] = 250_000
 
 ####
 # mailroom

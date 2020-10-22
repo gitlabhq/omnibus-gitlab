@@ -87,13 +87,25 @@ config_file_path = File.join(working_dir, "config.toml")
 object_store = node['gitlab']['gitlab-rails']['object_store']
 provider = object_store.dig('connection', 'provider')
 object_store_provider = provider if %w(AWS AzureRM).include?(provider)
+image_scaler_max_procs = node['gitlab']['gitlab-workhorse']['image_scaler_max_procs']
+image_scaler_max_filesize = node['gitlab']['gitlab-workhorse']['image_scaler_max_filesize']
 
 template config_file_path do
   source "workhorse-config.toml.erb"
   owner "root"
   group account_helper.gitlab_group
   mode "0640"
-  variables(object_store: object_store, object_store_provider: object_store_provider, redis_url: redis_url, password: redis_password, sentinels: redis_sentinels, sentinel_master: redis_sentinel_master, master_password: redis_sentinel_master_password)
+  variables(
+    object_store: object_store,
+    object_store_provider: object_store_provider,
+    redis_url: redis_url,
+    password: redis_password,
+    sentinels: redis_sentinels,
+    sentinel_master: redis_sentinel_master,
+    master_password: redis_sentinel_master_password,
+    image_scaler_max_procs: image_scaler_max_procs,
+    image_scaler_max_filesize: image_scaler_max_filesize
+  )
   notifies :restart, "runit_service[gitlab-workhorse]"
   notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
 end

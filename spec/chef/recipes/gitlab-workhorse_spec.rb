@@ -1,7 +1,12 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::gitlab-workhorse' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:node_cpus) { 1 }
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)) do |node|
+      node.automatic['cpu']['total'] = node_cpus
+    end.converge('gitlab::default')
+  end
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
@@ -406,6 +411,53 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_master)
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_password)
       expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
+    end
+  end
+
+  context 'image scaler' do
+    context 'with default values' do
+      it 'sets the default maximum file size' do
+        expect(chef_run).to render_file(config_file).with_content { |content|
+          expect(content).to match(/\[image_resizer\]\n  max_scaler_procs = \d+\n  max_filesize = 250000/m)
+        }
+      end
+
+      context 'when reported CPU cores are at least 4' do
+        let(:node_cpus) { 4 }
+
+        it 'sets default max procs to half the number of cores' do
+          expect(chef_run).to render_file(config_file).with_content { |content|
+            expect(content).to match(/\[image_resizer\]\n  max_scaler_procs = 2/m)
+          }
+        end
+      end
+
+      context 'when reported CPU cores are less than 4' do
+        let(:node_cpus) { 3 }
+
+        it 'pins default max procs to 2' do
+          expect(chef_run).to render_file(config_file).with_content { |content|
+            expect(content).to match(/\[image_resizer\]\n  max_scaler_procs = 2/m)
+          }
+        end
+      end
+    end
+
+    context 'with custom values' do
+      before do
+        stub_gitlab_rb(
+          gitlab_workhorse: {
+            image_scaler_max_procs: 5,
+            image_scaler_max_filesize: 1024
+          }
+        )
+      end
+
+      it 'should generate config file with the specified values' do
+        expect(chef_run).to render_file(config_file).with_content { |content|
+          expect(content).to match(/\[image_resizer\]\n  max_scaler_procs = 5\n  max_filesize = 1024/m)
+        }
+      end
     end
   end
 end
