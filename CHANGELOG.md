@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.5.1 (2020-10-22)
+
+### Fixed (1 change)
+
+- Ensure group is set before mode in storage_directory. !4661
+
+
 ## 13.5.0 (2020-10-22)
 
 ### Fixed (10 changes, 2 of them are from the community)
