@@ -1,7 +1,5 @@
 ---
-stage: Enablement
-group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+redirect_to: 'build/README.md'
 ---
 
-This document has been [moved to build/README.md](build/README.md).
+This document was moved to [another location](build/README.md)

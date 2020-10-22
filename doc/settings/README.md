@@ -16,7 +16,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [LDAP](ldap.md)
 - [Logs](logs.md)
 - [NGINX](nginx.md)
-- [Pages](https://docs.gitlab.com/ee/pages/administration.html)
+- [Pages](https://docs.gitlab.com/ee/administration/pages/index.html)
 - [Prometheus Monitoring](prometheus.md)
 - [Puma](puma.md)
 - [Raspberry Pi](rpi.md)

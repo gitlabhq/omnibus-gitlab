@@ -1,1 +1,5 @@
-Documentation moved to <https://docs.gitlab.com/ee/pages/administration.html>.
+---
+redirect_to: 'https://docs.gitlab.com/ee/administration/pages/index.html'
+---
+
+This document was moved to [another location](https://docs.gitlab.com/ee/administration/pages/index.html)

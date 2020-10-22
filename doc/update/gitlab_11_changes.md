@@ -111,7 +111,7 @@ Rack Attack is disabled by default. To continue using Rack Attack, you must [ena
 ### 11.6
 
 1. [Sidekiq probe of GitLab Monitor](https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_exporter.html)
-   will be disabled by default if GitLab is configured in [Redis HA mode](https://docs.gitlab.com/ee/administration/high_availability/redis.html).
+   will be disabled by default if GitLab is configured in [Redis for scaling](https://docs.gitlab.com/ee/administration/redis/index.html).
    To manually enable it, users can set `gitlab_monitor['probe_sidekiq'] = true`
    in `/etc/gitlab/gitlab.rb` file. However, when manually enabling it in Redis
    HA mode, users are expected to point the probe to a Redis instance connected
