@@ -1016,7 +1016,6 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['gitlab_email_from'] = 'username@sina.com'
 ```
 
-
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
