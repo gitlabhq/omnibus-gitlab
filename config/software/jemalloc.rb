@@ -40,7 +40,6 @@ build do
     env['AUTOCONF'] = '/usr/bin/autoconf268'
   end
   command ['./autogen.sh',
-           ' --enable-cc-silence',
            ' --enable-prof',
            "--prefix=#{install_dir}/embedded"].join(' '), env: env
   make "-j #{workers} build_lib", env: env
