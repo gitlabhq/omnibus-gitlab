@@ -43,7 +43,7 @@ correspond to those in Puma, and which ones have no corresponding counterpart.
 | `unicorn['pidfile']`                 | `puma['pidfile']`                  |
 | `unicorn['tcp_nopush']`              | n/a                                |
 | `unicorn['backlog_socket']`          | n/a                                |
-| `unicorn['somaxconn']`               | n/a                                |
+| `unicorn['somaxconn']`               | `puma['somaxconn']`                |
 | n/a                                  | `puma['state_path']`               |
 | `unicorn['log_directory']`           | `puma['log_directory']`            |
 | `unicorn['worker_memory_limit_min']` | n/a                                |

@@ -117,3 +117,7 @@ consul_service 'rails' do
   port node['gitlab']['puma']['port']
   reload_service false unless node['consul']['enable']
 end
+
+gitlab_sysctl "net.core.somaxconn" do
+  value node['gitlab']['puma']['somaxconn']
+end
