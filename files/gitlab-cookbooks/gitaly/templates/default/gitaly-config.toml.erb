@@ -76,6 +76,9 @@ transitioning = <%= @auth_transitioning %>
 <% if @git_catfile_cache_size %>
 catfile_cache_size = <%= @git_catfile_cache_size %>
 <% end %>
+<% if @git_bin_path %>
+bin_path = '<%= @git_bin_path %>'
+<% end %>
 
 
 [gitaly-ruby]
