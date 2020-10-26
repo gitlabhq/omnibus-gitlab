@@ -86,6 +86,10 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
         max_threads: 4
       )
     end
+
+    it 'creates sysctl files' do
+      expect(chef_run).to create_gitlab_sysctl('net.core.somaxconn').with_value(1024)
+    end
   end
 
   context 'with custom Puma settings' do
