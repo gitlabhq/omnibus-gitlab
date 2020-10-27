@@ -116,6 +116,13 @@ version_file 'Create version file for Gitaly' do
   notifies :hup, "runit_service[gitaly]"
 end
 
+# If a version of ruby changes restart gitaly-ruby
+version_file 'Create Ruby version file for Gitaly' do
+  version_file_path File.join(working_dir, 'RUBY_VERSION')
+  version_check_cmd '/opt/gitlab/embedded/bin/ruby --version'
+  notifies :hup, "runit_service[gitaly]"
+end
+
 consul_service 'gitaly' do
   action Prometheus.service_discovery_action
   socket_address node['gitaly']['prometheus_listen_addr']

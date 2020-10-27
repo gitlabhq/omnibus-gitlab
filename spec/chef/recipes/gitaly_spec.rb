@@ -77,6 +77,15 @@ RSpec.describe 'gitaly' do
       expect(chef_run.version_file('Create version file for Gitaly')).to notify('runit_service[gitaly]').to(:hup)
     end
 
+    it 'creates a default RUBY_VERSION file and restarts service' do
+      expect(chef_run).to create_version_file('Create Ruby version file for Gitaly').with(
+        version_file_path: '/var/opt/gitlab/gitaly/RUBY_VERSION',
+        version_check_cmd: '/opt/gitlab/embedded/bin/ruby --version'
+      )
+
+      expect(chef_run.version_file('Create Ruby version file for Gitaly')).to notify('runit_service[gitaly]').to(:hup)
+    end
+
     it 'populates gitaly config.toml with defaults' do
       expect(chef_run).to render_file(config_path).with_content { |content|
         expect(content).to include("socket_path = '/var/opt/gitlab/gitaly/gitaly.socket'")
