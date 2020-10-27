@@ -50,9 +50,16 @@
     "sriov_support": true,
     "ena_support": true
   }],
-  "provisioners": [{
-    "type": "shell",
-    "script": "update-script-ee.sh",
-    "environment_vars": ["DOWNLOAD_URL={{user `download_url`}}"]
-  }]
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "./ami-startup-script.sh",
+      "destination": "/home/ubuntu/ami-startup-script.sh"
+    },
+    {
+      "type": "shell",
+      "script": "update-script-ee.sh",
+      "environment_vars": ["DOWNLOAD_URL={{user `download_url`}}"]
+    }
+  ]
 }

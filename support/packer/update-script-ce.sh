@@ -8,9 +8,10 @@ sudo debconf-set-selections <<< 'postfix postfix/main_mailer_type string "Intern
 sudo apt-get install -y curl openssh-server ca-certificates postfix
 curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
 
-# Downloading package from S3 bucket and installing it
+# Downloading package from S3 bucket
 curl -o gitlab.deb "$DOWNLOAD_URL"
-sudo dpkg -i gitlab.deb
+# Explicitly passing EXTERNAL_URL to prevent automatic EC2 IP detection.
+sudo EXTERNAL_URL="http://gitlab.example.com" dpkg -i gitlab.deb
 sudo rm gitlab.deb
 
 # Set install type to aws
@@ -21,12 +22,5 @@ sudo rm -rf /var/lib/apt/lists/*
 sudo find /root/.*history /home/*/.*history -exec rm -f {} \;
 sudo rm -f /home/ubuntu/.ssh/authorized_keys /root/.ssh/authorized_keys
 
-# Create startup scripts to set instance ID as initial password
-cat <<EOF | sudo tee /var/lib/cloud/scripts/per-instance/gitlab
-#!/bin/bash
-
-export INSTANCE_ID=\$(curl http://169.254.169.254/latest/meta-data/instance-id)
-sudo gitlab-rails runner "u = User.first; u.update!(password: '\${INSTANCE_ID}', password_confirmation: '\${INSTANCE_ID}', password_automatically_set: false) if u.password_automatically_set?"
-EOF
-
+sudo mv ~/ami-startup-script.sh /var/lib/cloud/scripts/per-instance/gitlab
 sudo chmod +x /var/lib/cloud/scripts/per-instance/gitlab
