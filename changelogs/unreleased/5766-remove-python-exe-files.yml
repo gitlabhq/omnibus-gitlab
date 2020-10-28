@@ -1,0 +1,5 @@
+---
+title: Exclude exe files from Python libraries from the package
+merge_request: 4699
+author:
+type: other
