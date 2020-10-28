@@ -1,13 +1,16 @@
 require 'spec_helper'
 require 'fileutils'
 require 'geo/promote_to_primary_node'
+require 'geo/promote_db'
 require 'geo/promotion_preflight_checks'
 require 'gitlab_ctl/util'
 
 RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
   let(:options) { { skip_preflight_checks: true } }
 
-  subject(:command) { described_class.new(nil, options) }
+  let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: '/var/opt/gitlab/postgresql/data') }
+
+  subject(:command) { described_class.new(instance, options) }
 
   let(:config_path) { Dir.mktmpdir }
   let(:gitlab_config_path) { File.join(config_path, 'gitlab.rb') }
@@ -21,6 +24,23 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
 
   after do
     FileUtils.rm_rf(config_path)
+  end
+
+  describe '#promote_postgresql_to_primary' do
+    before do
+      allow(STDIN).to receive(:gets).and_return('y')
+
+      allow(command).to receive(:toggle_geo_roles).and_return(true)
+      allow(command).to receive(:reconfigure).and_return(true)
+      allow(command).to receive(:promote_to_primary).and_return(true)
+      allow(command).to receive(:success_message).and_return(true)
+    end
+
+    it 'promotes the database' do
+      expect_any_instance_of(Geo::PromoteDb).to receive(:execute)
+
+      command.execute
+    end
   end
 
   describe '#run_preflight_checks' do
@@ -58,7 +78,7 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
 
       it 'passes given options to preflight checks command' do
         expect(Geo::PromotionPreflightChecks).to receive(:new).with(
-          nil, options).and_call_original
+          '/opt/gitlab/embedded', options).and_call_original
 
         command.execute
       end
