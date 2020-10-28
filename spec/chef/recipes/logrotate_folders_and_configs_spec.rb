@@ -58,6 +58,7 @@ RSpec.describe 'gitlab::logrotate_folder_and_configs_spec' do
       expect(chef_run).to create_template('/var/opt/gitlab/logrotate/logrotate.d/gitlab-shell')
       expect(chef_run).to create_template('/var/opt/gitlab/logrotate/logrotate.d/gitlab-workhorse')
       expect(chef_run).to create_template('/var/opt/gitlab/logrotate/logrotate.d/gitlab-pages')
+      expect(chef_run).to create_template('/var/opt/gitlab/logrotate/logrotate.d/gitaly')
     end
 
     it 'populates configuration template with default values' do
