@@ -52,6 +52,7 @@ by default:
 | <a name="consul"></a>              Consul              | No            | Port             | X           | 8300, 8500                             |
 | <a name="patroni"></a>             Patroni             | No            | Port             | X           | 8008                                   |
 | <a name="gitlab-kas"></a>          GitLab KAS          | No            | Port             | X           | 8150                                   |
+| <a name="gitaly"></a>              Gitaly              | No            | Port             | X           | 8075                                   |
 
 Legend:
 
