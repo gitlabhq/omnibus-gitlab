@@ -225,6 +225,9 @@ exclude 'embedded/lib/ruby/gems/*/gems/rbtrace-*/ext/src'
 exclude 'embedded/lib/ruby/gems/*/gems/rbtrace-*/ext/dst'
 exclude 'embedded/lib/ruby/gems/*/gems/*pg_query-*/ext'
 
+# Exclude exe files from Python libraries
+exclude 'embedded/lib/python*/**/*.exe'
+
 # Enable signing packages
 package :rpm do
   signing_passphrase Gitlab::Util.get_env('GPG_PASSPHRASE')
