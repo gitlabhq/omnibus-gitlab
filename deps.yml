@@ -130,7 +130,7 @@ dependencies:
         replace_in_files:
         - filename: config/software/rubygems.rb
           pattern: "default_version '(\\S+)'"
-          range: '<= 2.x'
+          range: '<= 3.x'
       # zlib
       https://github.com/madler/zlib.git:
         replace_in_files:
