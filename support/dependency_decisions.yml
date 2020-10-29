@@ -1,5 +1,12 @@
 ---
 - - :license
+  - github.com/gomodule/redigo
+  - Apache2
+  - :who: Hossein Pursultani
+    :why: https://github.com/gomodule/redigo/blob/master/LICENSE
+    :versions: []
+    :when: 2020-10-29 22:37:48.172129109 Z
+- - :license
   - github.com/jmespath/go-jmespath
   - Apache2
   - :who: Robert Marshall
