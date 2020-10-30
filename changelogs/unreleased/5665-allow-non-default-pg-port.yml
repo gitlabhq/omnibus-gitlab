@@ -1,0 +1,5 @@
+---
+title: Add support for custom database ports to pg_upgrade
+merge_request: 4665
+author:
+type: fixed
