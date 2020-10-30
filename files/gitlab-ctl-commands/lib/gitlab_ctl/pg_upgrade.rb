@@ -15,16 +15,17 @@ end
 module GitlabCtl
   class PgUpgrade
     include GitlabCtl::Util
-    attr_accessor :base_path, :data_path, :tmp_dir, :timeout, :target_version, :initial_version, :psql_command
+    attr_accessor :base_path, :data_path, :tmp_dir, :timeout, :target_version, :initial_version, :psql_command, :port
     attr_writer :data_dir, :tmp_data_dir
 
-    def initialize(base_path, data_path, target_version, tmp_dir = nil, timeout = nil, psql_command = nil)
+    def initialize(base_path, data_path, target_version, tmp_dir = nil, timeout = nil, psql_command = nil, port = nil)
       @base_path = base_path
       @data_path = data_path
       @tmp_dir = tmp_dir
       @timeout = timeout
       @target_version = target_version
       @initial_version = fetch_running_version
+      @port = port || public_node_attributes['postgresql']['port']
       @psql_command ||= "gitlab-psql"
     end
 
@@ -118,6 +119,10 @@ module GitlabCtl
       @node_attributes ||= GitlabCtl::Util.get_node_attributes(@base_path)
     end
 
+    def public_node_attributes
+      @public_node_attributes ||= GitlabCtl::Util.get_public_node_attributes
+    end
+
     def base_postgresql_path
       "#{base_path}/embedded/postgresql"
     end
@@ -138,7 +143,7 @@ module GitlabCtl
             "-b #{initial_version_path}/bin " \
             "--old-datadir=#{data_dir}  " \
             "--new-datadir=#{tmp_data_dir}.#{target_version.major}  " \
-            "-B #{target_version_path}/bin"
+            "-B #{target_version_path}/bin "
           )
         rescue GitlabCtl::Errors::ExecutionError => e
           $stderr.puts "Error upgrading the data to version #{target_version}"
