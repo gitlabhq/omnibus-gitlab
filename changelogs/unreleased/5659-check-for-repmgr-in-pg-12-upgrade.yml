@@ -1,0 +1,5 @@
+---
+title: Ensure users are using Patroni before upgrading PG to 12
+merge_request: 4700
+author:
+type: other
