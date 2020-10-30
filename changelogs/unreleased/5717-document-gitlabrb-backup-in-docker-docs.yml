@@ -1,0 +1,5 @@
+---
+title: Add note about backing up gitlab.rb in Docker
+merge_request: 4707
+author:
+type: other

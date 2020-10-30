@@ -503,6 +503,12 @@ docker exec -t <container name> gitlab-backup create
 
 Read more on how to [back up and restore GitLab](https://docs.gitlab.com/ee/raketasks/backup_restore.html).
 
+NOTE: **Note:**
+If configuration is provided entirely via the `GITLAB_OMNIBUS_CONFIG` environment variable
+(per the ["Pre-configure Docker Container"](#pre-configure-docker-container) steps),
+meaning no configuration is set directly in the `gitlab.rb` file, then there is no need
+to back up the `gitlab.rb` file.
+
 ## Installing GitLab Community Edition
 
 [GitLab CE Docker image](https://hub.docker.com/r/gitlab/gitlab-ce/)
