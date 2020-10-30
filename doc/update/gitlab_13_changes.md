@@ -34,3 +34,10 @@ PostgreSQL 12.3 is being shipped with the package in addition to 11.7 which is s
 Both fresh installs and upgrades will still continue to use 11.7, but users can manually upgrade to 12.3 following the
 [upgrade docs](../settings/database.md#upgrade-packaged-postgresql-server). Note that PostgreSQL 12 is not supported
 for Geo deployments in GitLab 13.3 and is planned for the 13.4 release.
+
+## 13.6
+
+### PostgreSQL 12.4 support
+
+PostgreSQL 12.4 is being shipped as the default version for fresh installs.
+Users can manually upgrade to 12.4 following the  [upgrade docs](../settings/database.md#gitlab-133-and-later).
