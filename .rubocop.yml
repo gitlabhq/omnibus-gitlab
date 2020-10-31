@@ -9,7 +9,7 @@ require:
   - rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.7
   # Cop names are displayed in offense messages by default. Change behavior
   # by overriding DisplayCopNames, or by giving the `--no-display-cop-names`
   # option.

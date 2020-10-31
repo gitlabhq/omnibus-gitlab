@@ -20,6 +20,12 @@ GEM
   remote: https://rubygems.org/
   specs:
     abstract_type (0.0.7)
+    activesupport (6.0.3.4)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+      zeitwerk (~> 2.2, >= 2.2.2)
     adamantium (0.2.0)
       ice_nine (~> 0.11.0)
       memoizable (~> 0.4.0)
@@ -117,6 +123,7 @@ GEM
     concord (0.1.5)
       adamantium (~> 0.2.0)
       equalizer (~> 0.0.9)
+    concurrent-ruby (1.1.7)
     cookbook-omnifetch (0.9.1)
       mixlib-archive (>= 0.4, < 2.0)
     declarative (0.0.10)
@@ -146,11 +153,12 @@ GEM
     ffi-yajl (2.3.3)
       libyajl2 (~> 1.2)
     fuzzyurl (0.9.0)
-    gitlab-styles (2.8.0)
-      rubocop (~> 0.69.0)
+    gitlab-styles (4.3.0)
+      rubocop (~> 0.82.0)
       rubocop-gitlab-security (~> 0.1.0)
-      rubocop-performance (~> 1.1.0)
-      rubocop-rspec (~> 1.19)
+      rubocop-performance (~> 1.5.2)
+      rubocop-rails (~> 2.5)
+      rubocop-rspec (~> 1.36)
     google-api-client (0.10.3)
       addressable (~> 2.3)
       googleauth (~> 0.5)
@@ -189,11 +197,13 @@ GEM
     http_parser.rb (0.6.0)
     httpclient (2.8.3)
     hurley (0.2)
+    i18n (1.8.5)
+      concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     iniparse (1.5.0)
     iostruct (0.0.4)
     ipaddress (0.8.3)
-    jaro_winkler (1.5.3)
+    jaro_winkler (1.5.4)
     jmespath (1.4.0)
     json (2.0.2)
     json_pure (1.8.1)
@@ -223,6 +233,7 @@ GEM
     mime-types-data (3.2020.0512)
     mini_portile2 (2.3.0)
     minitar (0.9)
+    minitest (5.14.2)
     mixlib-archive (1.0.5)
       mixlib-log
     mixlib-authentication (3.0.7)
@@ -271,7 +282,7 @@ GEM
       rest-client (~> 2.0)
       thor (~> 0.18)
     paint (2.2.0)
-    parallel (1.17.0)
+    parallel (1.19.2)
     parser (2.7.1.3)
       ast (~> 2.4.0)
     pastel (0.7.4)
@@ -309,6 +320,7 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     retriable (3.1.1)
+    rexml (3.2.4)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -330,19 +342,24 @@ GEM
     rspec-support (3.9.3)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (0.69.0)
+    rubocop (0.82.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.6)
+      parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
+      rexml
       ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 1.4.0, < 1.7)
+      unicode-display_width (>= 1.4.0, < 2.0)
     rubocop-gitlab-security (0.1.1)
       rubocop (>= 0.51)
-    rubocop-performance (1.1.0)
-      rubocop (>= 0.67.0)
-    rubocop-rspec (1.34.1)
-      rubocop (>= 0.60.0)
+    rubocop-performance (1.5.2)
+      rubocop (>= 0.71.0)
+    rubocop-rails (2.6.0)
+      activesupport (>= 4.2.0)
+      rack (>= 1.1)
+      rubocop (>= 0.82.0)
+    rubocop-rspec (1.41.0)
+      rubocop (>= 0.68.1)
     ruby-progressbar (1.10.1)
     rubyntlm (0.6.2)
     rubyzip (2.3.0)
@@ -393,6 +410,8 @@ GEM
       tty-screen (~> 0.7)
       wisper (~> 2.0.0)
     tty-screen (0.8.0)
+    tzinfo (1.2.7)
+      thread_safe (~> 0.1)
     uber (0.1.0)
     unf (0.1.4)
       unf_ext
@@ -428,6 +447,7 @@ GEM
       winrm (~> 2.0)
     wisper (2.0.1)
     wmi-lite (1.0.5)
+    zeitwerk (2.4.1)
     zhexdump (0.0.2)
 
 PLATFORMS
@@ -439,7 +459,7 @@ DEPENDENCIES
   chefspec
   docker-api
   fantaskspec
-  gitlab-styles (~> 2.7)
+  gitlab-styles (~> 4.3)
   google_drive
   http
   json
@@ -454,9 +474,6 @@ DEPENDENCIES
   rspec
   rspec-parameterized
   rspec_junit_formatter
-  rubocop (~> 0.69.0)
-  rubocop-performance (~> 1.1.0)
-  rubocop-rspec (~> 1.34.1)
   thor (= 0.18.1)
 
 BUNDLED WITH
