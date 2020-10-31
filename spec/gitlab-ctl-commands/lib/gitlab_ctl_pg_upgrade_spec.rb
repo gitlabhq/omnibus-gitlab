@@ -83,6 +83,31 @@ RSpec.describe GitlabCtl::PgUpgrade do
         expect(@dbw.enough_free_space?(@dbw.data_dir)).to eq(true)
       end
     end
+
+    context 'when a failed upgrade attempt happened' do
+      before do
+        allow(GitlabCtl::Util).to receive(:parse_json_file).and_return({ 'default' => {} })
+      end
+
+      let(:target_data_dir) { "future_data_dir" }
+      describe '#upgrade_artifact_exists?' do
+        it 'returns false when the directory does not exist' do
+          expect(@dbw.upgrade_artifact_exists?(target_data_dir)).to be false
+        end
+
+        it 'returns false when the directory exists with no data' do
+          allow(File).to receive(:exist?).with(target_data_dir).and_return(true)
+          allow(Dir).to receive(:empty?).with(target_data_dir).and_return(true)
+          expect(@dbw.upgrade_artifact_exists?(target_data_dir)).to be false
+        end
+
+        it 'returns true when the directory exists with data' do
+          allow(File).to receive(:exist?).with(target_data_dir).and_return(true)
+          allow(Dir).to receive(:empty?).with(target_data_dir).and_return(false)
+          expect(@dbw.upgrade_artifact_exists?(target_data_dir)).to be true
+        end
+      end
+    end
   end
 
   it 'should use the configured port when running pg_upgrade' do
