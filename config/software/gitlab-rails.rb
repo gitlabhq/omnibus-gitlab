@@ -86,7 +86,7 @@ build do
   bundle 'config build.rugged --no-use-system-libraries', env: env
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
-  bundle 'config build.grpc --with-cflags="-latomic" --with-ldflags="-latomic"', env: env if OhaiHelper.os_platform == 'raspbian'
+  bundle 'config build.grpc --with-ldflags="-latomic"', env: env if OhaiHelper.os_platform == 'raspbian'
   bundle "install --without #{bundle_without.join(' ')} --jobs #{workers} --retry 5", env: env
 
   block 'correct omniauth-jwt permissions' do
