@@ -1,0 +1,5 @@
+---
+title: Instruct more cleary how to proceed when old failed PostgreSQL upgrades exist on disk
+merge_request: 4694
+author:
+type: added

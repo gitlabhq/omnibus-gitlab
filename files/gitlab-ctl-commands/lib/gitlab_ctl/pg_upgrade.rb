@@ -135,6 +135,12 @@ module GitlabCtl
       "#{base_postgresql_path}/#{initial_version.major}"
     end
 
+    def upgrade_artifact_exists?(path)
+      return false unless File.exist?(path)
+
+      !Dir.empty?(path)
+    end
+
     def run_pg_upgrade
       unless GitlabCtl::Util.progress_message('Upgrading the data') do
         begin
