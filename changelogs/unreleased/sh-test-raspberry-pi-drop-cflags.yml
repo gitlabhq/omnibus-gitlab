@@ -1,0 +1,5 @@
+---
+title: Drop --with-cflags gRPC argument from Raspberry Pi build
+merge_request: 4711
+author:
+type: fixed
