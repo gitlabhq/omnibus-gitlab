@@ -73,13 +73,10 @@ at `/etc/gitlab/skip-auto-backup`:
 sudo touch /etc/gitlab/skip-auto-backup
 ```
 
-NOTE: **Note:**
 For safety reasons, you should maintain an up-to-date backup on your own if you plan to use this flag.
 
-NOTE: **Note:**
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
-NOTE: **Note:**
 Unless you are following the steps in [Zero downtime updates](#zero-downtime-updates), your GitLab application will not be available to users while an update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.
 
 ### Update using the official repositories
@@ -204,12 +201,6 @@ The steps can be summed up to:
    sudo gitlab-ctl reconfigure
    ```
 
-   NOTE: **Note:**
-   To upgrade to EE and also update GitLab to the latest version at the same time, you
-   can omit version information from the commands above. That is, run
-   `sudo apt-get install gitlab-ee` or `sudo yum install gitlab-ee` depending on your
-   distribution.
-
 1. Now go to the GitLab admin panel of your server (`/admin/license/new`) and
    upload your license file.
 
@@ -237,9 +228,6 @@ step to find the current GitLab version and then follow
 [Update using a manually-downloaded package](#update-using-a-manually-downloaded-package).
 
 ## Zero downtime updates
-
-NOTE: **Note:**
-This is only available in GitLab 9.1.0 or newer. Skipping restarts during `reconfigure` with `/etc/gitlab/skip-auto-reconfigure` was added in [version 10.6](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/2270). If running a version prior to 10.6, you will need to create `/etc/gitlab/skip-auto-migrations`.
 
 It's possible to upgrade to a newer version of GitLab without having to take
 your GitLab instance offline.
@@ -311,10 +299,6 @@ Before following these instructions, note the following **important** informatio
      sudo yum install gitlab-ee
      ```
 
-   NOTE: **Note:**
-   The above commands use the latest version of GitLab. Use a version-specific package
-   to update to an older version.
-
 1. To get the regular migrations and latest code in place, run
 
    ```shell
@@ -334,7 +318,6 @@ Before following these instructions, note the following **important** informatio
    sudo gitlab-ctl restart sidekiq
    ```
 
-NOTE: **Note:**
 If you do not want to run zero downtime upgrades in the future, make
 sure you remove `/etc/gitlab/skip-auto-reconfigure` after
 you've completed these steps.
@@ -610,7 +593,6 @@ node throughout the process.
   sudo gitlab-ctl reconfigure
   ```
 
-NOTE: **Note:**
 If you do not want to run zero downtime upgrades in the future, make
 sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
 setting `gitlab_rails['auto_migrate'] = false` in
@@ -715,7 +697,6 @@ procedure.
 
 ### Geo deployment **(PREMIUM ONLY)**
 
-NOTE: **Note:**
 The order of steps is important. While following these steps, make
 sure you follow them in the right order, on the correct node.
 
@@ -809,7 +790,6 @@ After updating all nodes (both **primary** and all **secondaries**), check their
    sudo gitlab-rake gitlab:geo:check
    ```
 
-NOTE: **Note:**
 If you do not want to run zero downtime upgrades in the future, make
 sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
 setting `gitlab_rails['auto_migrate'] = false` in
@@ -950,7 +930,6 @@ sudo gitlab-ctl restart sidekiq
 
 #### Step 3: Update each Geo secondary multi-node deployment
 
-NOTE: **Note:**
 Only proceed if you have successfully completed all steps on the Geo **primary** multi-node deployment.
 
 **On all nodes _including_ the secondary "deploy node"**
