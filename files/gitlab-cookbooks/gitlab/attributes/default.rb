@@ -561,6 +561,8 @@ default['gitlab']['sidekiq']['listen_port'] = 8082
 
 # Cluster specific settings
 default['gitlab']['sidekiq']['cluster'] = true
+default['gitlab']['sidekiq']['queue_selector'] = false
+# Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
 default['gitlab']['sidekiq']['experimental_queue_selector'] = false
 default['gitlab']['sidekiq']['interval'] = nil
 default['gitlab']['sidekiq']['max_concurrency'] = 50
@@ -581,6 +583,7 @@ default['gitlab']['sidekiq-cluster']['max_concurrency'] = nil
 default['gitlab']['sidekiq-cluster']['min_concurrency'] = nil
 default['gitlab']['sidekiq-cluster']['queue_groups'] = []
 default['gitlab']['sidekiq-cluster']['negate'] = false
+# Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
 default['gitlab']['sidekiq-cluster']['experimental_queue_selector'] = false
 
 ###

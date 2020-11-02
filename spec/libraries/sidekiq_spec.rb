@@ -9,6 +9,8 @@ RSpec.describe Sidekiq do
     it 'disables sidekiq itself and enables sidekiq-cluster with the default sidekiq settings' do
       expect(chef_run.node['gitlab']['sidekiq']['enable']).to be(false)
       expect(chef_run.node['gitlab']['sidekiq-cluster']['enable']).to be(true)
+      expect(chef_run.node['gitlab']['sidekiq-cluster']['queue_selector']).to be(false)
+      # Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
       expect(chef_run.node['gitlab']['sidekiq-cluster']['experimental_queue_selector']).to be(false)
       expect(chef_run.node['gitlab']['sidekiq-cluster']['interval']).to be_nil
       expect(chef_run.node['gitlab']['sidekiq-cluster']['shutdown_timeout']).to eq(25)
