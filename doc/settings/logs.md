@@ -52,7 +52,16 @@ Run `sudo gitlab-ctl reconfigure` to configure your instance with these settings
 ## runit logs
 
 The [runit-managed](../architecture/README.md#runit) services in Omnibus GitLab generate log data using
-svlogd. See the [svlogd documentation](http://smarden.org/runit/svlogd.8.html) for more information
+`svlogd`.
+
+- Logs are written to a file called `current`.
+- Periodically, this log is compressed and renamed using the TAI64N format, for
+  example: `@400000005f8eaf6f1a80ef5c.s`.
+- The filesystem datestamp on the compressed logs will be consistent with the time
+  GitLab last wrote to that file.
+- `zmore` and `zgrep` allow viewing and searching through both compressed or uncompressed logs.
+
+Read the [svlogd documentation](http://smarden.org/runit/svlogd.8.html) for more information
 about the files it generates.
 
 You can modify svlogd settings via `/etc/gitlab/gitlab.rb` with the following settings:
@@ -72,11 +81,12 @@ nginx['svlogd_prefix'] = "nginx"
 
 ## Logrotate
 
-Omnibus GitLab includes a built-in logrotate service. This service
-will rotate, compress and eventually delete the log data that is
-not captured by runit, such as `gitlab-rails/production.log` and
+The **logrotate** service built into GitLab manages all logs
+except those captured by **runit**. This service
+will rotate, compress, and eventually delete the log data
+such as `gitlab-rails/production.log` and
 `nginx/gitlab_access.log`. You can configure logrotate
-via `/etc/gitlab/gitlab.rb`:
+with `/etc/gitlab/gitlab.rb`:
 
 ```ruby
 # Below are some of the default settings
@@ -97,6 +107,20 @@ nginx['logrotate_size'] = "200M"
 # You can also disable the built-in logrotate service if you want
 logrotate['enable'] = false
 ```
+
+Since [GitLab 13.6](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/3820),
+the logrotate service runs with a non-configurable default of `notifempty`, resolving
+the following issues:
+
+- Empty logs being rotated unnecessarily, and often many empty logs being stored.
+- One-off logs that are useful for long term troubleshooting being deleted after 30 days, such as database migration logs.
+
+Logs are now rotated and recreated by **logrotate** as needed, and one-off logs
+are only rotated when they change. With this setting in place, some tidying can be done:
+
+- Empty one-off logs such as `gitlab-rails/gitlab-rails-db-migrate*.log` can be deleted.
+- Empty logs which were rotated and compressed by older versions of GitLab. These
+  empty logs are usually 20 bytes in size.
 
 NOTE: **Note:**
 Currently the Gitaly-specific [GitLab Shell log](https://docs.gitlab.com/ee/administration/logs.html#gitlab-shelllog) is not rotated by logrotate.
