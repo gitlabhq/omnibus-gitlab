@@ -56,6 +56,7 @@
       when: never
     - <<: *if-tag
       when: manual
+      allow_failure: true
 
 .dev-tag-only-except-auto-deploy: &dev-tag-only-except-auto-deploy
   rules:
@@ -73,6 +74,7 @@
       when: never
     - <<: *if-tag
       when: manual
+      allow_failure: true
 
 .dev-tag-only-except-auto-deploy-or-rc: &dev-tag-only-except-auto-deploy-or-rc
   rules:
@@ -94,6 +96,7 @@
       when: never
     - <<: *if-tag
       when: manual
+      allow_failure: true
 
 .dev-ce-tag-only-except-rc-manual: &dev-ce-tag-only-except-rc-manual
   rules:
@@ -103,6 +106,7 @@
       when: never
     - <<: *if-ce-tag
       when: manual
+      allow_failure: true
 
 .dev-ee-tag-only-except-auto-deploy-or-rc-manual: &dev-ee-tag-only-except-auto-deploy-or-rc-manual
   rules:
@@ -114,6 +118,7 @@
       when: never
     - <<: *if-ee-tag
       when: manual
+      allow_failure: true
 
 .dev-ce-branch-only-except-nightly: &dev-ce-branch-only-except-nightly
   rules:
@@ -150,6 +155,7 @@
       when: never
     - <<: *if-ce-tag
       when: manual
+      allow_failure: true
 
 .dev-ee-tag-only: &dev-ee-tag-only
   rules:
@@ -163,6 +169,7 @@
       when: never
     - <<: *if-ee-tag
       when: manual
+      allow_failure: true
 
 .dev-tag-and-nightly: &dev-tag-and-nightly
   rules:
@@ -186,6 +193,7 @@
       when: never
     - <<: *if-nightly
       when: manual
+      allow_failure: true
 
 .dev-ee-nightly-only: &dev-ee-nightly-only
   rules:
