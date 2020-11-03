@@ -40,5 +40,5 @@ add_command_under_category('promote-to-primary-node', 'gitlab-geo', 'Promote to 
     options
   end
 
-  Geo::PromoteToPrimaryNode.new(base_path, get_ctl_options).execute
+  Geo::PromoteToPrimaryNode.new(self, get_ctl_options).execute
 end
