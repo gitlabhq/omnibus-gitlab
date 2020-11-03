@@ -3,8 +3,11 @@ require 'rainbow/ext/string'
 
 module Geo
   class PromoteToPrimaryNode
-    def initialize(base_path, options)
-      @base_path = base_path
+    attr_accessor :ctl, :base_path
+
+    def initialize(ctl, options)
+      @ctl = ctl
+      @base_path = @ctl.base_path
       @options = options
     end
 
@@ -61,11 +64,7 @@ module Geo
     end
 
     def promote_postgresql_to_primary
-      puts
-      puts 'Promoting the PostgreSQL to primary...'.color(:yellow)
-      puts
-
-      run_command('/opt/gitlab/embedded/bin/gitlab-pg-ctl promote', live: true).error!
+      Geo::PromoteDb.new(ctl).execute
     end
 
     def reconfigure
