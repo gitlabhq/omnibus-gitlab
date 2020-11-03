@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.5.3 (2020-11-03)
+
+### Fixed (1 change)
+
+- Geo: Perform point-in-time recovery before promotion of secondary node. !4636
+
+### Performance (1 change)
+
+- Set net.core.somaxconn kernel parameter for Puma. !4688
+
+
 ## 13.5.2 (2020-11-02)
 
 - No changes.
