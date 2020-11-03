@@ -35,10 +35,7 @@ gem 'google_drive'
 gem 'http'
 
 group :rubocop do
-  gem 'gitlab-styles', '~> 2.7', require: false
-  gem 'rubocop', '~> 0.69.0'
-  gem 'rubocop-performance', '~> 1.1.0'
-  gem 'rubocop-rspec', '~> 1.34.1'
+  gem 'gitlab-styles', '~> 4.3', require: false
 end
 
 group :test do
