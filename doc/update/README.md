@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 Before following these instructions, note the following:
 
-- [Upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+- [Supported upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
   has suggestions on when to upgrade.
 - If you are upgrading from a non-Omnibus installation to an Omnibus installation, see
   [Upgrading from a non-Omnibus installation to an Omnibus installation](convert_to_omnibus.md).
@@ -16,7 +16,7 @@ Before following these instructions, note the following:
 CAUTION: **Caution:**
 If you aren't [using the current major version](#mandatory-upgrade-paths-for-version-upgrades),
 you **must** follow the
-[upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+[supported upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
 when updating to the current version.
 
 ## Background migrations
@@ -55,7 +55,7 @@ default. This restricts performing direct upgrades that skip major versions (for
 example 10.3 to 12.7 in one jump) that **can break GitLab
 installations** due to multiple reasons like deprecated or removed configuration
 settings, upgrade of internal tools and libraries etc. Users will have to follow
-the [official upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+the [official upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
 while upgrading their GitLab instances.
 
 ## Updating methods
