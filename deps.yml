@@ -153,6 +153,12 @@ dependencies:
         - filename: config/software/libtiff.rb
           pattern: "Gitlab::Version.new\\('libtiff', 'v(\\S+)'\\)"
           tag_prefix: 'v'
+      # grafana
+      https://github.com/grafana/grafana.git:
+        replace_in_files:
+        - filename: config/software/grafana.rb
+          pattern: "Gitlab::Version.new\\('grafana', '(\\S+)'\\)"
+          tag_prefix: 'v'
 
       # deps that need updated filtering to work https://github.com/dropseed/deps-git/issues/2
       # krb5
