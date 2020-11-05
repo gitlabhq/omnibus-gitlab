@@ -59,6 +59,9 @@ CVE-2020-12459
 # Apache httpd 2.4.38 and not openssl. Hence, ignoring. Check details in
 # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5793#note_442221086
 CVE-2019-0190
+# False positives
+CVE-2019-1543
+CVE-2017-3736
 
 # Entries from CVEIGNORE variable go below this line
 
