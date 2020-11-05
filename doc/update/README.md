@@ -85,7 +85,18 @@ If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.co
 or [Enterprise Edition](https://about.gitlab.com/install/), then the
 official GitLab repository should have already been set up for you.
 
-To update to a newer GitLab version, run:
+To update to the newest GitLab version, run:
+
+- For GitLab [Enterprise Edition](https://about.gitlab.com/pricing/):
+
+  ```shell
+  # Debian/Ubuntu
+  sudo apt-get update
+  sudo apt-get install gitlab-ee
+
+  # Centos/RHEL
+  sudo yum install gitlab-ee
+  ```
 
 - For GitLab Community Edition:
 
@@ -98,16 +109,40 @@ To update to a newer GitLab version, run:
   sudo yum install gitlab-ce
   ```
 
-- For GitLab [Enterprise Edition](https://about.gitlab.com/pricing/):
+#### Multi-step upgrade using the official repositories
 
-  ```shell
-  # Debian/Ubuntu
-  sudo apt-get update
-  sudo apt-get install gitlab-ee
+Linux package managers default to installing the latest available version of a
+package for installation and upgrades. Upgrading directly to the latest major
+version can be problematic for older GitLab versions that require a multi-stage
+upgrade path.
 
-  # Centos/RHEL
-  sudo yum install gitlab-ee
-  ```
+When following an [upgrade path](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
+spanning multiple versions, for each upgrade, specify the intended GitLab version
+number in your package manager's install or upgrade command:
+
+1. First, identify the GitLab version number in your package manager:
+
+   ```shell
+   # Ubuntu/Debian
+   sudo apt-cache madison gitlab-ee
+   # RHEL/CentOS 6 and 7
+   yum --showduplicates list gitlab-ee
+   # RHEL/CentOS 8
+   dnf search gitlab-ee*
+   ```
+
+1. Then install the specific GitLab package:
+
+   ```shell
+   # Ubuntu/Debian
+   sudo apt upgrade gitlab-ee=12.0.12-ee.0
+   # RHEL/CentOS 6 and 7
+   yum install gitlab-ee-12.0.12-ee.0.el7
+   # RHEL/CentOS 8
+   dnf install gitlab-ee-12.0.12-ee.0.el8
+   # SUSE
+   zypper install gitlab-ee=12.0.12-ee.0
+   ```
 
 ### Update using a manually-downloaded package
 
