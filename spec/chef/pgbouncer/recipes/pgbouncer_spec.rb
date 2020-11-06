@@ -15,7 +15,7 @@
 #
 require 'chef_helper'
 
-RSpec.describe 'gitlab-ee::pgbouncer' do
+RSpec.describe 'pgbouncer' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
   let(:pgbouncer_ini) { '/var/opt/gitlab/pgbouncer/pgbouncer.ini' }
   let(:databases_json) { '/var/opt/gitlab/pgbouncer/databases.json' }
@@ -48,15 +48,11 @@ RSpec.describe 'gitlab-ee::pgbouncer' do
     end
 
     it 'includes the pgbouncer recipe' do
-      expect(chef_run).to include_recipe('gitlab-ee::pgbouncer')
+      expect(chef_run).to include_recipe('pgbouncer::enable')
     end
 
     it 'includes the postgresql user recipe' do
       expect(chef_run).to include_recipe('postgresql::user')
-    end
-
-    it 'does not include the consul recipe by default' do
-      expect(chef_run).not_to include_recipe('consul::enable')
     end
 
     it_behaves_like 'enabled runit service', 'pgbouncer', 'root', 'root'
@@ -227,20 +223,6 @@ RSpec.describe 'gitlab-ee::pgbouncer' do
           .with(user: 'fakeuser', group: 'gitlab-psql')
       end
     end
-
-    context 'consul is enabled' do
-      before do
-        stub_gitlab_rb(
-          consul: {
-            enable: true
-          }
-        )
-      end
-
-      it 'should include the consul::enable recipe' do
-        expect(chef_run).to include_recipe('consul::enable')
-      end
-    end
   end
 
   context 'authentication' do
@@ -380,7 +362,7 @@ RSpec.describe 'gitlab-ee::pgbouncer' do
       it_behaves_like 'disabled runit service', 'pgbouncer'
 
       it 'includes the pgbouncer_disable recipe' do
-        expect(chef_run).to include_recipe('gitlab-ee::pgbouncer_disable')
+        expect(chef_run).to include_recipe('pgbouncer::disable')
       end
     end
   end
@@ -405,7 +387,7 @@ RSpec.describe 'gitlab-ee::default' do
   end
 
   it 'should create the pgbouncer user on the database' do
-    expect(chef_run).to include_recipe('gitlab-ee::pgbouncer_user')
+    expect(chef_run).to include_recipe('pgbouncer::user')
     expect(chef_run).to create_pgbouncer_user('rails').with(
       password: 'fakeuserpassword'
     )

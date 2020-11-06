@@ -49,6 +49,7 @@ module Gitlab
   attribute('postgresql',   priority: 20).use { Postgresql }
   attribute('gitlab_kas',   priority: 20).use { GitlabKas }
   attribute('gitlab_pages', priority: 20).use { GitlabPages }
+  attribute('pgbouncer')
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul')
@@ -116,6 +117,5 @@ module Gitlab
     attribute('high_availability')
     attribute('web_server')
     attribute('prometheus_monitoring')
-    attribute('pgbouncer')
   end
 end
