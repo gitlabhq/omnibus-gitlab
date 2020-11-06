@@ -82,6 +82,17 @@ default['monitoring']['postgres-exporter']['sslmode'] = nil
 default['monitoring']['postgres-exporter']['per_table_stats'] = false
 
 ####
+# PgBouncer exporter
+###
+default['monitoring']['pgbouncer-exporter']['enable'] = false
+default['monitoring']['pgbouncer-exporter']['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
+default['monitoring']['pgbouncer-exporter']['listen_address'] = 'localhost:9188'
+default['monitoring']['pgbouncer-exporter']['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter/env'
+default['monitoring']['pgbouncer-exporter']['env'] = {
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+}
+
+####
 # Gitlab exporter
 ###
 default['monitoring']['gitlab-exporter']['enable'] = false

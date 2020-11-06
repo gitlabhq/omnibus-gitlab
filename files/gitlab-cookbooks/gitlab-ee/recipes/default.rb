@@ -24,7 +24,6 @@ include_recipe 'gitlab::default'
   geo-postgresql
   geo-logcursor
   pgbouncer
-  pgbouncer-exporter
 ].each do |service|
   if node['gitlab'][service]['enable']
     include_recipe "gitlab-ee::#{service}"

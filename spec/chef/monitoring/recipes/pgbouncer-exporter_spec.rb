@@ -15,7 +15,7 @@
 #
 require 'chef_helper'
 
-RSpec.describe 'gitlab-ee::pgbouncer-exporter' do
+RSpec.describe 'monitoring::pgbouncer-exporter' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
   let(:config_yaml) { '/var/opt/gitlab/pgbouncer-exporter/pgbouncer-exporter.yaml' }
   let(:default_vars) do
@@ -50,7 +50,7 @@ RSpec.describe 'gitlab-ee::pgbouncer-exporter' do
     end
 
     it 'includes the pgbouncer-exporter recipe' do
-      expect(chef_run).to include_recipe('gitlab-ee::pgbouncer-exporter')
+      expect(chef_run).to include_recipe('monitoring::pgbouncer-exporter')
     end
 
     it 'includes the postgresql user recipe' do
