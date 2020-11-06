@@ -53,5 +53,12 @@ CVE-2019-9193
 CVE-2020-12458
 CVE-2020-12459
 
+# openssl/1.1.1g
+# Doesn't apply to omnibus-gitlab. Requires openssl version 1.1.1 or later to be used with Apache HTTP Server version 2.4.37, and
+# thus for users who bring their own Apache webserver. Even so, the fix is in
+# Apache httpd 2.4.38 and not openssl. Hence, ignoring. Check details in
+# https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5793#note_442221086
+CVE-2019-0190
+
 # Entries from CVEIGNORE variable go below this line
 
