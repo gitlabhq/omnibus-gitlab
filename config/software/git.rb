@@ -33,6 +33,8 @@ default_version '2.29.0'
 license 'GPL-2.0'
 license_file 'COPYING'
 
+vendor 'git'
+
 skip_transitive_dependency_licensing true
 
 # Runtime dependency
