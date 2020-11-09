@@ -1,2 +1,0 @@
-#!/bin/sh
-exec svlogd <% unless node['gitlab']['gitlab-pages']['log_format'].eql?('json') %>-tt <% end %><%= @options[:log_directory] %>

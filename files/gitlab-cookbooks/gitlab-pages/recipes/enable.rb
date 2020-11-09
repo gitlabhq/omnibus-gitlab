@@ -17,9 +17,9 @@
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
-working_dir = node['gitlab']['gitlab-pages']['dir']
-log_directory = node['gitlab']['gitlab-pages']['log_directory']
-env_directory = node['gitlab']['gitlab-pages']['env_directory']
+working_dir = node['gitlab-pages']['dir']
+log_directory = node['gitlab-pages']['log_directory']
+env_directory = node['gitlab-pages']['env_directory']
 gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
 
 [
@@ -41,15 +41,15 @@ ruby_block "authorize pages with gitlab" do
     GitlabPages.authorize_with_gitlab
   end
 
-  not_if { node['gitlab']['gitlab-pages']['gitlab_id'] && node['gitlab']['gitlab-pages']['gitlab_secret'] }
-  only_if { node['gitlab']['gitlab-pages']['access_control'] }
+  not_if { node['gitlab-pages']['gitlab_id'] && node['gitlab-pages']['gitlab_secret'] }
+  only_if { node['gitlab-pages']['access_control'] }
 end
 
 # Options may have changed in the previous step
 ruby_block "re-populate GitLab Pages configuration options" do
   block do
     node.consume_attributes(
-      { 'gitlab' => { 'gitlab-pages' => Gitlab.hyphenate_config_keys['gitlab']['gitlab-pages'] } }
+      { 'gitlab-pages' => Gitlab.hyphenate_config_keys['gitlab-pages'] }
     )
   end
 end
@@ -70,7 +70,7 @@ template File.join(working_dir, ".gitlab_pages_secret") do
   owner 'root'
   group account_helper.gitlab_group
   mode "0640"
-  variables(secret_token: node['gitlab']['gitlab-pages']['api_secret_key'])
+  variables(secret_token: node['gitlab-pages']['api_secret_key'])
   notifies :restart, "runit_service[gitlab-pages]"
 end
 
@@ -82,29 +82,29 @@ template File.join(working_dir, "gitlab-pages-config") do
   variables(
     lazy do
       {
-        auth_client_id: node['gitlab']['gitlab-pages']['gitlab_id'],
-        auth_client_secret: node['gitlab']['gitlab-pages']['gitlab_secret'],
-        auth_redirect_uri: node['gitlab']['gitlab-pages']['auth_redirect_uri'],
-        auth_secret: node['gitlab']['gitlab-pages']['auth_secret'],
-        zip_cache_expiration: node['gitlab']['gitlab-pages']['zip_cache_expiration'],
-        zip_cache_cleanup: node['gitlab']['gitlab-pages']['zip_cache_cleanup'],
-        zip_cache_refresh: node['gitlab']['gitlab-pages']['zip_cache_refresh'],
-        zip_open_timeout: node['gitlab']['gitlab-pages']['zip_open_timeout']
+        auth_client_id: node['gitlab-pages']['gitlab_id'],
+        auth_client_secret: node['gitlab-pages']['gitlab_secret'],
+        auth_redirect_uri: node['gitlab-pages']['auth_redirect_uri'],
+        auth_secret: node['gitlab-pages']['auth_secret'],
+        zip_cache_expiration: node['gitlab-pages']['zip_cache_expiration'],
+        zip_cache_cleanup: node['gitlab-pages']['zip_cache_cleanup'],
+        zip_cache_refresh: node['gitlab-pages']['zip_cache_refresh'],
+        zip_open_timeout: node['gitlab-pages']['zip_open_timeout']
       }
     end
   )
   notifies :restart, "runit_service[gitlab-pages]"
 end
 
-node.default['gitlab']['gitlab-pages']['env'] = {
+node.default['gitlab-pages']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
 }
 
-node.default['gitlab']['gitlab-pages']['env']['http_proxy'] = node['gitlab']['gitlab-pages']['http_proxy'] \
-  unless node['gitlab']['gitlab-pages']['http_proxy'].nil?
+node.default['gitlab-pages']['env']['http_proxy'] = node['gitlab-pages']['http_proxy'] \
+  unless node['gitlab-pages']['http_proxy'].nil?
 
 env_dir env_directory do
-  variables node['gitlab']['gitlab-pages']['env']
+  variables node['gitlab-pages']['env']
   notifies :restart, "runit_service[gitlab-pages]" if omnibus_helper.should_notify?('gitlab-pages')
 end
 
@@ -113,5 +113,5 @@ runit_service 'gitlab-pages' do
     log_directory: log_directory,
     env_dir: env_directory,
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab-pages'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab-pages'].to_hash)
 end

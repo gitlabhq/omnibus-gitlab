@@ -217,7 +217,7 @@ template gitlab_pages_http_conf do
   variables(pages_nginx_vars.merge(
               {
                 pages_path: node['gitlab']['gitlab-rails']['pages_path'],
-                pages_listen_proxy: node['gitlab']['gitlab-pages']['listen_proxy']
+                pages_listen_proxy: node['gitlab-pages']['listen_proxy']
               }
             ))
   notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")

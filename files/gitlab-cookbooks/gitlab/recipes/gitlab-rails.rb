@@ -284,11 +284,11 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       gitlab_ci_all_broken_builds: node['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'],
       gitlab_ci_add_pusher: node['gitlab']['gitlab-ci']['gitlab_ci_add_pusher'],
       builds_directory: gitlab_ci_builds_dir,
-      pages_external_http: node['gitlab']['gitlab-pages']['external_http'],
-      pages_external_https: node['gitlab']['gitlab-pages']['external_https'],
-      pages_external_https_proxyv2: node['gitlab']['gitlab-pages']['external_https_proxyv2'],
-      pages_artifacts_server: node['gitlab']['gitlab-pages']['artifacts_server'],
-      pages_access_control: node['gitlab']['gitlab-pages']['access_control'],
+      pages_external_http: node['gitlab-pages']['external_http'],
+      pages_external_https: node['gitlab-pages']['external_https'],
+      pages_external_https_proxyv2: node['gitlab-pages']['external_https_proxyv2'],
+      pages_artifacts_server: node['gitlab-pages']['artifacts_server'],
+      pages_access_control: node['gitlab-pages']['access_control'],
       pages_object_store_enabled: node['gitlab']['gitlab-rails']['pages_object_store_enabled'],
       pages_object_store_remote_directory: node['gitlab']['gitlab-rails']['pages_object_store_remote_directory'],
       pages_object_store_connection: node['gitlab']['gitlab-rails']['pages_object_store_connection'],
@@ -347,9 +347,9 @@ templatesymlink "Create a gitlab_pages_secret and create a symlink to Rails root
   group 'root'
   mode "0644"
   sensitive true
-  variables(secret_token: node['gitlab']['gitlab-pages']['api_secret_key'])
+  variables(secret_token: node['gitlab-pages']['api_secret_key'])
   gitlab_pages_services.each { |svc| notifies :restart, svc }
-  only_if { node['gitlab']['gitlab-pages']['api_secret_key'] }
+  only_if { node['gitlab-pages']['api_secret_key'] }
 end
 
 gitlab_kas_services = dependent_services

@@ -43,18 +43,19 @@ module Gitlab
 
   ## Attributes directly on the node
   attribute('package').use { Package }
-  attribute('registry',    priority: 20).use { Registry }
-  attribute('redis',       priority: 20).use { Redis }
-  attribute('postgresql',  priority: 20).use { Postgresql }
-  attribute('gitlab_kas',  priority: 20).use { GitlabKas }
+  attribute('registry',     priority: 20).use { Registry }
+  attribute('redis',        priority: 20).use { Redis }
+  attribute('postgresql',   priority: 20).use { Postgresql }
+  attribute('gitlab_kas',   priority: 20).use { GitlabKas }
+  attribute('gitlab_pages', priority: 20).use { GitlabPages }
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul')
   attribute('patroni').use { Patroni }
   attribute('gitaly').use { Gitaly }
   attribute('praefect').use { Praefect }
-  attribute('mattermost',  priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
-  attribute('letsencrypt', priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry and Mattermost
+  attribute('mattermost',   priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
+  attribute('letsencrypt',  priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry and Mattermost
   attribute('crond')
   attribute('logrotate')
 
@@ -90,7 +91,6 @@ module Gitlab
     attribute('puma',             priority: 20).use { Puma }
     attribute('actioncable',      priority: 20).use { ActionCable }
     attribute('mailroom',         priority: 20).use { IncomingEmail }
-    attribute('gitlab_pages',     priority: 20).use { GitlabPages }
     attribute('storage_check',    priority: 30).use { StorageCheck }
     attribute('nginx',            priority: 40).use { Nginx } # Parse nginx last so all external_url are parsed before it
     attribute('external_url',            default: nil)
