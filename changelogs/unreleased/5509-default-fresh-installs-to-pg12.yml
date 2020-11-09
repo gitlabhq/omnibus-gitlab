@@ -1,5 +1,0 @@
----
-title: Default to PostgreSQL 12 in fresh installs
-merge_request: 4664
-author:
-type: changed
