@@ -60,7 +60,7 @@ namespace :build do
 
       release_bucket = Build::Info.release_bucket
       release_bucket_region = "eu-west-1"
-      system(*%W[aws s3 sync pkg/ s3://#{release_bucket} --acl public-read --region #{release_bucket_region}])
+      system(*%W[aws s3 sync pkg/ s3://#{release_bucket} --no-progress --acl public-read --region #{release_bucket_region}])
       files = Dir.glob('pkg/**/*').select { |f| File.file? f }
       files.each do |file|
         puts file.gsub('pkg', "https://#{release_bucket}.s3.amazonaws.com").gsub('+', '%2B')
