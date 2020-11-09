@@ -266,13 +266,13 @@ RSpec.describe Services do
       it 'ignores disable on system services' do
         Services.enable_group(Services::SYSTEM_GROUP)
         Services.disable_group(Services::SYSTEM_GROUP)
-        expect(node['gitlab']['logrotate']['enable']).to be true
+        expect(node['logrotate']['enable']).to be true
       end
 
       it 'allows forced disable on system services' do
         Services.enable_group(Services::SYSTEM_GROUP)
         Services.disable_group(Services::SYSTEM_GROUP, include_system: true)
-        expect(node['gitlab']['logrotate']['enable']).to be false
+        expect(node['logrotate']['enable']).to be false
       end
     end
 

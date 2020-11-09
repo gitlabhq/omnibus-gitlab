@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-require_relative 'account_helper'
+require_relative '../../gitlab/libraries/account_helper'
 
 class LogrotateHelper < AccountHelper
   def logdir_ownership # rubocop:disable  Metrics/AbcSize
@@ -84,7 +84,7 @@ class LogrotateHelper < AccountHelper
   def services_list
     services = {}
 
-    logged_services = node['gitlab']['logrotate']['services']
+    logged_services = node['logrotate']['services']
     available_settings = Gitlab.settings
 
     logged_services.each do |svc|
