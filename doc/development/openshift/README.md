@@ -46,7 +46,7 @@ Installation instructions for Minishift can be found at <http://docs.okd.io/3.11
 
 1. Minishift internally uses the [oc cluster up method](#docker-oc-cluster-up), so start following the directions in step 2
 
-1. You can login to the UI at `https://<your_local_minishift_ip>:8443/console/`
+1. You can log in to the UI at `https://<your_local_minishift_ip>:8443/console/`
    - Your minishift IP was shown after starting minishift, but you can also find it later by running `minishift ip`
 
 ### Docker oc cluster up

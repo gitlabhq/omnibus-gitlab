@@ -99,7 +99,7 @@ have access to Grafana:
    Where `GITLAB_APPLICATION_ID` and `GITLAB_SECRET` the application ID and its
    secret that you created in the previous step.
 
-1. Optionally, you can select a list of GitLab groups allowed to login:
+1. Optionally, you can select a list of GitLab groups allowed to log in:
 
    ```ruby
    grafana['allowed_groups'] = [my_group, group_one/group_two]

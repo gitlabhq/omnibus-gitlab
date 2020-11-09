@@ -505,7 +505,7 @@ the 10.7 using the `pg-upgrade` command as previously mentioned.
 
 ### Revert packaged PostgreSQL server to previous version
 
-DANGER: **Danger:**
+DANGER: **Warning:**
 This operation will revert your current database, _including its data_, to its state
 before your last upgrade. Be sure to create a backup before attempting to downgrade
 your packaged PostgreSQL database.
