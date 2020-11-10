@@ -80,6 +80,6 @@ automatically configure and start GitLab at that URL. Enabling HTTPS requires
 
 On your first visit, you'll be redirected to a password reset screen. Provide
 the password for the initial administrator account and you will be redirected
-back to the login screen. Use the default account's username `root` to login.
+back to the login screen. Use the default account's username `root` to log in.
 
 See our [documentation for detailed instructions on installing and configuration](installation/index.md#installation-and-configuration).
