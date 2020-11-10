@@ -86,6 +86,23 @@ class OmnibusHelper
     LoggingHelper.deprecation(msg)
   end
 
+  def print_root_account_details
+    return unless node['gitlab']['bootstrap']['enable']
+
+    initial_password_provided = ENV['GITLAB_ROOT_PASSWORD'] || node['gitlab']['gitlab-rails']['initial_root_password']
+
+    msg = if initial_password_provided
+            "Default admin account has been configured with username `root` and the password you specified in `/etc/gitlab/gitlab.rb` file."
+          else
+            <<~EOS
+              It seems you haven't specified an initial root password while configuring the GitLab instance.
+              On your first visit to  your GitLab instance, you will be presented with a screen to set a
+              password for the default admin account with username `root`.
+            EOS
+          end
+    LoggingHelper.note(msg)
+  end
+
   def self.utf8_variable?(var)
     ENV[var]&.downcase&.include?('utf-8') || ENV[var]&.downcase&.include?('utf8')
   end

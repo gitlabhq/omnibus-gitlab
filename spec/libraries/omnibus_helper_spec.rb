@@ -224,6 +224,70 @@ RSpec.describe OmnibusHelper do
     end
   end
 
+  describe '#print_root_account_details' do
+    context 'when not on first reconfigure after installation' do
+      before do
+        chef_run.node.normal['gitlab']['bootstrap']['enable'] = false
+      end
+
+      it 'does not add a note' do
+        expect(LoggingHelper).not_to receive(:note)
+
+        subject.print_root_account_details
+      end
+    end
+
+    context 'when on first reconfigure after installation' do
+      before do
+        chef_run.node.normal['gitlab']['bootstrap']['enable'] = true
+      end
+
+      context 'when initial root password not set' do
+        it 'adds a note about setting password on first visit' do
+          expect(LoggingHelper).to receive(:note).with(
+            <<~EOS
+              It seems you haven't specified an initial root password while configuring the GitLab instance.
+              On your first visit to  your GitLab instance, you will be presented with a screen to set a
+              password for the default admin account with username `root`.
+            EOS
+          )
+
+          subject.print_root_account_details
+        end
+      end
+
+      context 'when initial root password set' do
+        context 'via gitlab.rb' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: { initial_root_password: 'foobar' }
+            )
+          end
+
+          it 'adds a note about username and specified password' do
+            expect(LoggingHelper).to receive(:note).with('Default admin account has been configured with username `root` and the password you specified in `/etc/gitlab/gitlab.rb` file.')
+
+            # Intentionally not reusing subject/node/chef_run since we need the
+            # node params to be recomputed using values specified in stub_gitlab_rb
+            described_class.new(converge_config.node).print_root_account_details
+          end
+        end
+
+        context 'via env variable' do
+          before do
+            allow(ENV).to receive(:[]).with('GITLAB_ROOT_PASSWORD').and_return('foobar')
+          end
+
+          it 'adds a note about username and specified password' do
+            expect(LoggingHelper).to receive(:note).with('Default admin account has been configured with username `root` and the password you specified in `/etc/gitlab/gitlab.rb` file.')
+
+            subject.print_root_account_details
+          end
+        end
+      end
+    end
+  end
+
   describe '#check_locale' do
     let(:error_message) { "Identified encoding is not UTF-8. GitLab requires UTF-8 encoding to function properly. Please check your locale settings." }
 

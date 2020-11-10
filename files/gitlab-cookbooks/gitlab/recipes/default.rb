@@ -194,6 +194,8 @@ end
 
 OmnibusHelper.is_deprecated_os?
 
+OmnibusHelper.new(node).print_root_account_details
+
 # Report on any deprecations we encountered at the end of the run
 # There are three possible exits for a reconfigure run
 # 1. Normal chef-client run completion
