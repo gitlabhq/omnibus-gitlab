@@ -28,6 +28,14 @@ module LoggingHelper
     }
   end
 
+  # Records a message as a note, printed at the end of reconfigure
+  #
+  # @param message [String] A message to give the user
+  # @return [void]
+  def note(message)
+    log(message, kind: :note)
+  end
+
   # Records a message as deprecation, logging as we see it.
   #
   # @param message [String] A message to give the user
@@ -73,7 +81,7 @@ module LoggingHelper
 
   # Report on any messages generated during reconfigure
   def report
-    [:removal, :deprecation, :warning].each do |type|
+    [:removal, :deprecation, :warning, :note].each do |type|
       print_report(type)
     end
 
