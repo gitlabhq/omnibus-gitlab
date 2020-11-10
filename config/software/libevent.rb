@@ -18,6 +18,7 @@ name 'libevent'
 version = Gitlab::Version.new('libevent', 'release-2.1.8-stable')
 
 default_version version.print(false)
+display_version version.print(false).delete_prefix('release-').delete_suffix('-stable')
 
 dependency 'libtool'
 dependency 'openssl'
