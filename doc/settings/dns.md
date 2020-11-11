@@ -8,17 +8,22 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 While it is possible to run a GitLab instance using only IP addresses, it can be beneficial to use DNS for interacting with a GitLab instance from remote nodes. Depending on the features you want to take advantage of, multiple DNS entries may be necessary. Any of these DNS entries should be of type A, AAAA, or CNAME. This depends on the underlying architecture of the instance you are using.
 
-Adding these entries to your domain's DNS configuration is entirely dependent on your chosen provider, and out of scope for this document. Consult the documentation from your domain name registrar, hosting provider, or managed DNS provider for the most accurate guidance.
+If you don't want to take advantage of the [Let's Encrypt integration](ssl.md#lets-encrypt-integration), 
+none of these addresses need to be resolvable over the public internet. Only nodes that
+will access the GitLab instance need to be able to resolve the addresses.
 
-NOTE: **Note:**
-Unless you want to take advantage of the [Let's Encrypt integration](ssl.md#lets-encrypt-integration), it is not required that any of these addresses are resolvable over the public internet. It is only required that nodes that will access the GitLab instance be able to resolve the addresses.
+Adding these entries to your domain's DNS configuration is entirely dependent on your chosen provider, and out of scope for this document. Consult the documentation from your domain name registrar, hosting provider, or managed DNS provider for the most accurate guidance. Instructions for common DNS registrars include:
+
+- [Godaddy](https://www.godaddy.com/help/create-a-subdomain-4080)
+- [Namecheap](https://www.namecheap.com/support/knowledgebase/article.aspx/9776/2237/how-to-create-a-subdomain-for-my-domain)
+- [Gandi](https://docs.gandi.net/en/domain_names/faq/dns_records.html)
+- [Dreamhost](https://help.dreamhost.com/hc/en-us/articles/214694348-Basic-DNS-records)
 
 ## GitLab Settings
 
 Below is a list of attributes for `/etc/gitlab/gitlab.rb` that can take advantage of a corresponding DNS entry.
 
-NOTE: **Note:**
-It is possible to replace the below DNS entries with a wildcard entry in DNS. However, you will still need to provide your GitLab instance with the individual records, and this will **not** result in the Let's Encrypt integration fetching a wildcard certificate.
+While it is possible to replace the below DNS entries with a wildcard entry in DNS, you still need to provide your GitLab instance with the individual records, and this will **not** result in the Let's Encrypt integration fetching a wildcard certificate.
 
 ### `external_url`
 
