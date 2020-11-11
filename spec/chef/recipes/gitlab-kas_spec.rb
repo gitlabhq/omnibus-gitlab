@@ -37,6 +37,7 @@ RSpec.describe 'gitlab-kas' do
     it 'correctly renders the KAS config file' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  address: localhost:8150})
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  websocket: true})
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  usage_reporting_period: 60s})
     end
 
     it 'correctly renders the KAS authentication secret file' do
@@ -52,7 +53,8 @@ RSpec.describe 'gitlab-kas' do
           api_secret_key: 'QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUE=',
           enable: true,
           listen_address: 'localhost:5006',
-          listen_websocket: false
+          listen_websocket: false,
+          metrics_usage_reporting_period: '120'
         }
       )
     end
@@ -68,6 +70,7 @@ RSpec.describe 'gitlab-kas' do
     it 'correctly renders the KAS config file' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  address: localhost:5006})
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  websocket: false})
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  usage_reporting_period: 120s})
     end
 
     it 'correctly renders the KAS authentication secret file' do
