@@ -1,0 +1,5 @@
+---
+title: Support for alternative auth_types in pgbouncer
+merge_request: 4671
+author:
+type: changed

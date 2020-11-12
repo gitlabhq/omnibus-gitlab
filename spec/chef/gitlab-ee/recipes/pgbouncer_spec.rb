@@ -243,68 +243,145 @@ RSpec.describe 'gitlab-ee::pgbouncer' do
     end
   end
 
-  it 'sets up auth_hba when attributes are set' do
-    stub_gitlab_rb(
-      {
-        pgbouncer: {
-          enable: true,
-          auth_hba_file: '/fake/hba_file',
-          auth_query: 'SELECT * FROM FAKETABLE'
+  context 'authentication' do
+    let(:pg_auth) { '/var/opt/gitlab/pgbouncer/pg_auth' }
+
+    it 'sets up auth_hba when attributes are set' do
+      stub_gitlab_rb(
+        {
+          pgbouncer: {
+            enable: true,
+            auth_hba_file: '/fake/hba_file',
+            auth_query: 'SELECT * FROM FAKETABLE'
+          }
         }
+      )
+      expect(chef_run).to render_file(pgbouncer_ini).with_content { |content|
+        expect(content).to match(%r{^auth_hba_file = /fake/hba_file$})
+        expect(content).to match(/^auth_query = SELECT \* FROM FAKETABLE$/)
       }
-    )
-    expect(chef_run).to render_file(pgbouncer_ini).with_content { |content|
-      expect(content).to match(%r{^auth_hba_file = /fake/hba_file$})
-      expect(content).to match(/^auth_query = SELECT \* FROM FAKETABLE$/)
-    }
-  end
+    end
 
-  it 'does not create the user file by default' do
-    expect(chef_run).not_to render_file('/var/opt/gitlab/pgbouncer/pg_auth')
-  end
+    it 'does not create the user file by default' do
+      expect(chef_run).not_to render_file(pg_auth)
+    end
 
-  it 'creates the user file when the attributes are set' do
-    stub_gitlab_rb(
-      {
-        pgbouncer: {
-          enable: true,
-          databases: {
-            gitlabhq_production: {
-              password: 'fakemd5password',
-              user: 'fakeuser',
-              host: '127.0.0.1',
-              port: 5432
+    it 'creates the user file when the attributes are set' do
+      stub_gitlab_rb(
+        {
+          pgbouncer: {
+            enable: true,
+            databases: {
+              gitlabhq_production: {
+                password: 'fakemd5password',
+                user: 'fakeuser',
+                host: '127.0.0.1',
+                port: 5432
+              }
             }
           }
         }
-      }
-    )
-    expect(chef_run).to render_file('/var/opt/gitlab/pgbouncer/pg_auth')
-      .with_content(%r{^"fakeuser" "md5fakemd5password"$})
-  end
+      )
+      expect(chef_run).to render_file(pg_auth)
+        .with_content(%r{^"fakeuser" "md5fakemd5password"$})
+    end
 
-  it 'creates arbitrary user' do
-    stub_gitlab_rb(
-      {
+    it 'creates arbitrary user' do
+      stub_gitlab_rb(
+        {
+          pgbouncer: {
+            enable: true,
+            users: {
+              'fakeuser': {
+                'password': 'fakehash'
+              }
+            }
+          }
+        }
+      )
+      expect(chef_run).to render_file(pg_auth)
+        .with_content(%r{^"fakeuser" "md5fakehash"})
+    end
+
+    it 'supports SCRAM secrets' do
+      stub_gitlab_rb(
+        pgbouncer: {
+          enable: true,
+          auth_type: 'scram-sha-256',
+          users: {
+            'fakeuser': {
+              'password': 'REALLYFAKEHASH'
+            }
+          }
+        }
+      )
+      expect(chef_run).to render_file(pg_auth)
+        .with_content(%r{^"fakeuser" "SCRAM-SHA-256\$REALLYFAKEHASH"})
+    end
+
+    it 'supports a default auth type' do
+      stub_gitlab_rb(
+        pgbouncer: {
+          enable: true,
+          auth_type: 'scram-sha-256',
+          users: {
+            'firstfakeuser': {
+              'password': 'AREALLYFAKEHASH'
+            },
+            'secondfakeuser': {
+              'password': 'ANOTHERREALLYFAKEHASH'
+            }
+          },
+          databases: {
+            fakedb: {
+              user: 'databasefakeuser',
+              password: 'DATABASEHASH'
+            }
+          }
+        }
+      )
+      expect(chef_run).to render_file(pg_auth).with_content { |content|
+        expect(content).to match(%r{^"firstfakeuser" "SCRAM-SHA-256\$AREALLYFAKEHASH"})
+        expect(content).to match(%r{^"secondfakeuser" "SCRAM-SHA-256\$ANOTHERREALLYFAKEHASH"})
+        expect(content).to match(%r{^"databasefakeuser" "SCRAM-SHA-256\$DATABASEHASH"})
+      }
+    end
+
+    it 'supports per user auth types' do
+      stub_gitlab_rb(
         pgbouncer: {
           enable: true,
           users: {
-            'fakeuser': {
-              'password': 'fakehash'
+            'firstfakeuser': {
+              'password': 'AREALLYFAKEHASH'
+            },
+            'secondfakeuser': {
+              'password': 'ANOTHERREALLYFAKEHASH',
+              'auth_type': 'scram-sha-256'
+            }
+          },
+          databases: {
+            fakedb: {
+              user: 'databasefakeuser',
+              auth_type: 'plain',
+              password: 'DATABASEHASH'
             }
           }
         }
+      )
+      expect(chef_run).to render_file(pg_auth).with_content { |content|
+        expect(content).to match(%r{^"firstfakeuser" "md5AREALLYFAKEHASH"})
+        expect(content).to match(%r{^"secondfakeuser" "SCRAM-SHA-256\$ANOTHERREALLYFAKEHASH"})
+        expect(content).to match(%r{^"databasefakeuser" "DATABASEHASH"})
       }
-    )
-    expect(chef_run).to render_file('/var/opt/gitlab/pgbouncer/pg_auth')
-      .with_content(%r{^"fakeuser" "md5fakehash"})
-  end
+    end
 
-  context 'when disabled by default' do
-    it_behaves_like 'disabled runit service', 'pgbouncer'
+    context 'when disabled by default' do
+      it_behaves_like 'disabled runit service', 'pgbouncer'
 
-    it 'includes the pgbouncer_disable recipe' do
-      expect(chef_run).to include_recipe('gitlab-ee::pgbouncer_disable')
+      it 'includes the pgbouncer_disable recipe' do
+        expect(chef_run).to include_recipe('gitlab-ee::pgbouncer_disable')
+      end
     end
   end
 end
