@@ -44,6 +44,7 @@ end
 
 template "#{node['gitlab']['pgbouncer']['data_directory']}/pg_auth" do
   source "pg_auth.erb"
+  variables(node['gitlab']['pgbouncer'])
   helper(:pgb_helper) { pgb_helper }
 end
 
