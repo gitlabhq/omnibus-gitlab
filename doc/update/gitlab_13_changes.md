@@ -42,10 +42,3 @@ for Geo deployments in GitLab 13.3 and is planned for the 13.4 release.
 In 13.5, the default location for the workhorse socket was moved from `/var/opt/gitlab/gitlab-workhorse/socket`
 to `/var/opt/gitlab/gitlab-workhorse/sockets/socket`. If you are using your own NGINX rather than the bundled version,
 and are proxying to the workhorse socket, you will need to update your NGINX config.
-
-## 13.6
-
-### PostgreSQL 12.4 support
-
-PostgreSQL 12.4 is being shipped as the default version for fresh installs.
-Users can manually upgrade to 12.4 following the  [upgrade docs](../settings/database.md#gitlab-133-and-later).
