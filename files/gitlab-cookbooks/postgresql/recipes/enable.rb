@@ -99,7 +99,7 @@ file pg_helper.ssl_cert_file do
   content node['postgresql']['internal_certificate']
   owner postgresql_username
   group postgresql_group
-  mode 0400
+  mode lazy { node['patroni']['use_pg_rewind'] ? 0600 : 0400 }
   sensitive true
   only_if { node['postgresql']['ssl'] == 'on' }
 end
@@ -108,7 +108,7 @@ file pg_helper.ssl_key_file do
   content node['postgresql']['internal_key']
   owner postgresql_username
   group postgresql_group
-  mode 0400
+  mode lazy { node['patroni']['use_pg_rewind'] ? 0600 : 0400 }
   sensitive true
   only_if { node['postgresql']['ssl'] == 'on' }
 end
