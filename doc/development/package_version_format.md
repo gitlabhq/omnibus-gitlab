@@ -47,7 +47,7 @@ practice and is no longer relevant.
 ### Build version
 
 The build version component of the version string changes based on whether
-the package is a [a feature branch](#regular-feature-branch-builds), 
+the package is a [a feature branch](#regular-feature-branch-builds),
 [a nightly build](#nightly-builds), or a [tagged release](#tagged-release-builds).
 
 #### Regular feature branch builds

@@ -27,7 +27,7 @@ before upgrading to a new major version. Upgrading before background migrations 
 finished may lead to data corruption.
 
 To see the current size of the `background_migration` queue,
-[check for background migrations before upgrading](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading). 
+[check for background migrations before upgrading](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
 ## Version-specific changes
 
