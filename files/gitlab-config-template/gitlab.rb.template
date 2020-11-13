@@ -2508,35 +2508,55 @@ external_url 'GENERATED_EXTERNAL_URL'
 # patroni['data_dir'] = '/var/opt/gitlab/patroni/data'
 # patroni['ctl_command'] = '/opt/gitlab/embedded/bin/patronictl'
 
-# patroni['scope'] = 'gitlab-postgresql-ha'
-# patroni['name'] = nil
-
-# patroni['log_directory'] = '/var/log/gitlab/patroni'
-# patroni['log_level'] = 'INFO'
-
-# patroni['consul']['url'] = 'http://127.0.0.1:8500'
-# patroni['consul']['service_check_interval'] = '10s'
-# patroni['consul']['register_service'] = false
-# patroni['consul']['checks'] = []
-
-## Bootstrap settings
+## Patroni dynamic configuration settings
 # patroni['loop_wait'] = 10
 # patroni['ttl'] = 30
 # patroni['retry_timeout'] = 10
 # patroni['maximum_lag_on_failover'] = 1_048_576
 # patroni['max_timelines_history'] = 0
 # patroni['master_start_timeout'] = 300
+# patroni['use_pg_rewind'] = false
+# patroni['use_slots'] = true
+# patroni['replication_password'] = nil
+# patroni['replication_slots'] = {}
+
+## Standby cluster replication settings
+# patroni['standby_cluster']['enable'] = false
+# patroni['standby_cluster']['host'] = nil
+# patroni['standby_cluster']['port'] = 5432
+# patroni['standby_cluster']['primary_slot_name'] = nil
+
+## Global/Universal settings
+# patroni['scope'] = 'gitlab-postgresql-ha'
+# patroni['name'] = nil
+
+## Log settings
+# patroni['log_directory'] = '/var/log/gitlab/patroni'
+# patroni['log_level'] = 'INFO'
+
+## Consul specific settings
+# patroni['consul']['url'] = 'http://127.0.0.1:8500'
+# patroni['consul']['service_check_interval'] = '10s'
+# patroni['consul']['register_service'] = true
+# patroni['consul']['checks'] = []
 
 ## PostgreSQL configuration override
-# patroni['postgresql']['wal_level'] = 'replica'
 # patroni['postgresql']['hot_standby'] = 'on'
+
+## The following must hold the same values on all nodes.
+## Leave unassined to use PostgreSQL's default values.
+# patroni['postgresql']['wal_level'] = 'replica'
+# patroni['postgresql']['wal_log_hints'] = 'on'
+# patroni['postgresql']['max_worker_processes'] = 8
+# patroni['postgresql']['max_locks_per_transaction'] = 64
+# patroni['postgresql']['max_connections'] = 200
+# patroni['postgresql']['checkpoint_timeout'] = 30
+
+## The following can hold different values on all nodes.
+## Leave unassined to use PostgreSQL's default values.
 # patroni['postgresql']['wal_keep_segments'] = 8
 # patroni['postgresql']['max_wal_senders'] = 5
 # patroni['postgresql']['max_replication_slots'] = 5
-# patroni['postgresql']['checkpoint_timeout'] = 30
-
-# patroni['use_pg_rewind'] = false
-# patroni['use_slots'] = true
 
 ## Permanent replication slots for Streaming Replication
 # patroni['replication_slots'] = {

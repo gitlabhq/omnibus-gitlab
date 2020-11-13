@@ -92,8 +92,12 @@ RSpec.describe 'patroni cookbook' do
                 hot_standby: 'on',
                 wal_keep_segments: 8,
                 max_replication_slots: 5,
+                max_connections: 200,
+                max_locks_per_transaction: 128,
+                max_worker_processes: 8,
                 max_wal_senders: 5,
                 checkpoint_timeout: 30,
+                wal_log_hints: 'off'
               },
             },
             slots: {},
@@ -380,6 +384,125 @@ RSpec.describe 'patroni cookbook' do
         expect(chef_run).not_to run_execute('create gitlabhq_production database')
         expect(chef_run).not_to enable_postgresql_extension('pg_trgm')
         expect(chef_run).not_to enable_postgresql_extension('btree_gist')
+      end
+    end
+  end
+
+  context 'postgresql dynamic configuration' do
+    before do
+      allow(Gitlab).to receive(:[]).and_call_original
+    end
+
+    context 'with no explicit override' do
+      before do
+        stub_gitlab_rb(
+          roles: %w(postgres_role),
+          patroni: {
+            enable: true
+          }
+        )
+      end
+
+      it 'should use default values from postgresql cookbook' do
+        expect(chef_run).to render_file('/var/opt/gitlab/patroni/dcs.yaml').with_content { |content|
+          cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
+          expect(cfg[:postgresql][:use_pg_rewind]).to be(false)
+          expect(cfg[:postgresql][:parameters]).to include(
+            max_connections: 200,
+            max_locks_per_transaction: 128,
+            max_worker_processes: 8,
+            wal_log_hints: 'off'
+          )
+        }
+      end
+    end
+
+    context 'with no explicit override and non-default postgresql settings' do
+      before do
+        stub_gitlab_rb(
+          roles: %w(postgres_role),
+          patroni: {
+            enable: true,
+          },
+          postgresql: {
+            max_connections: 123,
+            max_locks_per_transaction: 321,
+            max_worker_processes: 12,
+            wal_log_hints: 'foo'
+          }
+        )
+      end
+
+      it 'should use default values from postgresql cookbook' do
+        expect(chef_run).to render_file('/var/opt/gitlab/patroni/dcs.yaml').with_content { |content|
+          cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
+          expect(cfg[:postgresql][:use_pg_rewind]).to be(false)
+          expect(cfg[:postgresql][:parameters]).to include(
+            max_connections: 123,
+            max_locks_per_transaction: 321,
+            max_worker_processes: 12,
+            wal_log_hints: 'foo'
+          )
+        }
+      end
+    end
+
+    context 'with explicit override' do
+      before do
+        stub_gitlab_rb(
+          roles: %w(postgres_role),
+          patroni: {
+            enable: true,
+            postgresql: {
+              max_connections: 100,
+              max_locks_per_transaction: 64,
+              max_worker_processes: 4,
+              wal_log_hints: 'on'
+            }
+          }
+        )
+      end
+
+      it 'should use default values from postgresql cookbook' do
+        expect(chef_run).to render_file('/var/opt/gitlab/patroni/dcs.yaml').with_content { |content|
+          cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
+          expect(cfg[:postgresql][:use_pg_rewind]).to be(false)
+          expect(cfg[:postgresql][:parameters]).to include(
+            max_connections: 100,
+            max_locks_per_transaction: 64,
+            max_worker_processes: 4,
+            wal_log_hints: 'on'
+          )
+        }
+      end
+    end
+
+    context 'when pg_rewind is enabled' do
+      before do
+        stub_gitlab_rb(
+          roles: %w(postgres_role),
+          patroni: {
+            enable: true,
+            use_pg_rewind: true
+          }
+        )
+      end
+
+      it 'should use default values from postgresql cookbook' do
+        expect(chef_run).to render_file('/var/opt/gitlab/patroni/dcs.yaml').with_content { |content|
+          cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
+          expect(cfg[:postgresql][:use_pg_rewind]).to be(true)
+          expect(cfg[:postgresql][:parameters]).to include(
+            max_connections: 200,
+            max_locks_per_transaction: 128,
+            max_worker_processes: 8,
+            wal_log_hints: 'on'
+          )
+        }
       end
     end
   end

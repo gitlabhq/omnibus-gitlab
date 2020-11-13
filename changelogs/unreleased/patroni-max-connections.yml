@@ -1,0 +1,5 @@
+---
+title: Use PostgreSQL's default values to override Patroni dynamic config
+merge_request: 4677
+author:
+type: fixed
