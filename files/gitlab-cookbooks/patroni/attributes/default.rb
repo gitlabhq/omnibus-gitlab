@@ -38,7 +38,7 @@ default['patroni']['consul']['service_check_interval'] = '10s'
 default['patroni']['consul']['register_service'] = true
 default['patroni']['consul']['checks'] = []
 
-# PostgreSQL specific settings
+# PostgreSQL configuration override
 default['patroni']['postgresql']['wal_level'] = 'replica'
 default['patroni']['postgresql']['hot_standby'] = 'on'
 default['patroni']['postgresql']['wal_keep_segments'] = 8
