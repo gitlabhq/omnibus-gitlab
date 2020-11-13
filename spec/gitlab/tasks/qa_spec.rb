@@ -135,6 +135,7 @@ RSpec.describe 'qa', type: :rake do
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_REF').and_return("master")
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID').and_return("543210")
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_MERGE_REQUEST_IID').and_return("12121")
+      allow(ENV).to receive(:[]).with('QA_BRANCH').and_return(nil)
       allow(DockerOperations).to receive(:build).and_return(true)
       allow(Build::QA).to receive(:get_gitlab_repo).and_return("/tmp/gitlab.1234/qa")
       allow(Build::Info).to receive(:release_version).and_return('13.2.0+ce.0')
