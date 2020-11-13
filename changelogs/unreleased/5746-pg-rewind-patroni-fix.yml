@@ -1,0 +1,5 @@
+---
+title: Ensure pg_rewind can be used and won't fail for Patroni
+merge_request: 4689
+author:
+type: fixed
