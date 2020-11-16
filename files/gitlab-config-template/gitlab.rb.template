@@ -953,7 +953,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['log_format'] = "json"
 # sidekiq['shutdown_timeout'] = 4
 # sidekiq['cluster'] = true
-# sidekiq['experimental_queue_selector'] = false
+# sidekiq['queue_selector'] = false
 # sidekiq['interval'] = nil
 # sidekiq['max_concurrency'] = 50
 # sidekiq['min_concurrency'] = nil

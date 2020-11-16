@@ -22,8 +22,8 @@ exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
       <% if node['gitlab']['sidekiq-cluster']['min_concurrency'] %>
       --min-concurrency <%= node['gitlab']['sidekiq-cluster']['min_concurrency'] %> \
       <% end %>
-      <% if node['gitlab']['sidekiq-cluster']['experimental_queue_selector'] %>
-      --experimental-queue-selector \
+      <% if node['gitlab']['sidekiq-cluster']['queue_selector'] || node['gitlab']['sidekiq-cluster']['experimental_queue_selector'] %>
+      --queue-selector \
       <% end %>
       <% if node['gitlab']['sidekiq-cluster']['shutdown_timeout'] %>
       --timeout <%= node['gitlab']['sidekiq-cluster']['shutdown_timeout'] %> \

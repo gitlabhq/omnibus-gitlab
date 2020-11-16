@@ -19,7 +19,8 @@ module Sidekiq
   class << self
     MIGRATION_DOCS_URL = 'https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#migrating-to-sidekiq-cluster'.freeze
     MIGRATION_ISSUE_URL = 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/340'.freeze
-    CLUSTER_ATTRIBUTE_NAMES = %w(ha log_directory experimental_queue_selector
+    # Remove experimental_queue_selector with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
+    CLUSTER_ATTRIBUTE_NAMES = %w(ha log_directory queue_selector experimental_queue_selector
                                  interval max_concurrency min_concurrency negate
                                  queue_groups shutdown_timeout).freeze
 
