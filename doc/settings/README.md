@@ -24,4 +24,3 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [SMTP](smtp.md)
 - [SSL](ssl.md)
 - [Unicorn](unicorn.md)
-- [Puma](puma.md)
