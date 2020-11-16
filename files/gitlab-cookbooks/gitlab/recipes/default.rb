@@ -133,7 +133,7 @@ include_recipe "praefect::database_migrations" if node['praefect']['enable'] && 
 
 # Always create logrotate folders and configs, even if the service is not enabled.
 # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/508
-include_recipe "gitlab::logrotate_folders_and_configs"
+include_recipe "logrotate::folders_and_configs"
 
 # Configure Services
 %w[
@@ -145,7 +145,6 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   mailroom
   nginx
   remote-syslog
-  logrotate
   bootstrap
   gitlab-pages
   storage-check
@@ -164,6 +163,7 @@ else
 end
 
 %w(
+  logrotate
   registry
   mattermost
   gitlab-kas

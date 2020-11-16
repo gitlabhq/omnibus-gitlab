@@ -15,8 +15,8 @@
 # limitations under the License.
 #
 
-logrotate_dir = node['gitlab']['logrotate']['dir']
-logrotate_log_dir = node['gitlab']['logrotate']['log_directory']
+logrotate_dir = node['logrotate']['dir']
+logrotate_log_dir = node['logrotate']['log_directory']
 logrotate_d_dir = File.join(logrotate_dir, 'logrotate.d')
 logrotate_helper = LogrotateHelper.new(node)
 
@@ -32,7 +32,7 @@ end
 
 template File.join(logrotate_dir, "logrotate.conf") do
   mode "0644"
-  variables(node['gitlab']['logrotate'].to_hash)
+  variables(node['logrotate'].to_hash)
 end
 
 logrotate_helper.services_list.each do |svc, details|

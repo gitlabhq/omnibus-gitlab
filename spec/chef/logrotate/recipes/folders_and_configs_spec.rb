@@ -9,9 +9,9 @@ RSpec.describe 'gitlab::logrotate_folder_and_configs_spec' do
 
   context 'when logrotate is enabled' do
     it 'creates default set of directories' do
-      expect(chef_run.node['gitlab']['logrotate']['dir'])
+      expect(chef_run.node['logrotate']['dir'])
         .to eql('/var/opt/gitlab/logrotate')
-      expect(chef_run.node['gitlab']['logrotate']['log_directory'])
+      expect(chef_run.node['logrotate']['log_directory'])
         .to eql('/var/log/gitlab/logrotate')
 
       expect(chef_run).to create_directory('/var/opt/gitlab/logrotate').with(
