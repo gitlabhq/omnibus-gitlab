@@ -74,8 +74,12 @@ end
 # because we add `gitlab-www` user to some groups created by that recipe
 include_recipe "gitlab::web-server"
 
+# We attempt to create and manage users/groups by default. If users wish to
+# disable it, they can set `manage_accounts['enable']` to `false`, and
+# `account` custom resource will not create them.
+include_recipe "gitlab::users"
+
 if node['gitlab']['gitlab-rails']['enable']
-  include_recipe "gitlab::users"
   include_recipe "gitlab::gitlab-shell"
   include_recipe "gitlab::gitlab-rails"
 end

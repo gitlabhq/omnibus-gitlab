@@ -34,6 +34,8 @@ gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
   end
 end
 
+include_recipe 'gitlab::rails_pages_shared_path'
+
 ruby_block "authorize pages with gitlab" do
   block do
     GitlabPages.authorize_with_gitlab

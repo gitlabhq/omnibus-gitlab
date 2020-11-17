@@ -39,6 +39,7 @@ module Gitlab
   role('postgres').use { PostgresRole }
   role('pgbouncer').use { PgbouncerRole }
   role('consul').use { ConsulRole }
+  role('pages').use { PagesRole }
 
   ## Attributes directly on the node
   attribute('package').use { Package }
