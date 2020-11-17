@@ -861,7 +861,7 @@ production: &base
 
     <% if @extra_google_tag_manager_id %>
     ## Google tag manager. Include your google_tag_manager_id to enable
-    extra_google_tag_manager_id: <%= quote(@extra_google_tag_manager_id) %>
+    google_tag_manager_id: <%= quote(@extra_google_tag_manager_id) %>
     <% end %>
 
     <% if @extra_piwik_url %>
