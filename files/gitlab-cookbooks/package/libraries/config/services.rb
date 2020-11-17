@@ -30,13 +30,13 @@ module Services
     service 'redis',              groups: [DEFAULT_GROUP, 'redis', 'redis_node']
     service 'redis_exporter',     groups: [DEFAULT_GROUP, 'redis', 'redis_node', 'monitoring']
     service 'postgresql',         groups: [DEFAULT_GROUP, 'postgres', 'postgres_role']
-    service 'nginx',              groups: [DEFAULT_GROUP]
+    service 'nginx',              groups: [DEFAULT_GROUP, 'pages_role']
     service 'prometheus',         groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
     service 'alertmanager',       groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
     service 'postgres_exporter',  groups: [DEFAULT_GROUP, 'monitoring', 'postgres', 'postgres_role']
     service 'grafana',            groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
+    service 'gitlab_pages',       groups: ['pages_role']
     service 'mailroom'
-    service 'gitlab_pages'
     service 'gitlab_kas'
     service 'mattermost'
     service 'registry'

@@ -61,13 +61,7 @@ repositories_storages.each do |_name, repositories_storage|
   end
 end
 
-# We create shared_path with 751 allowing other users to enter into the directories
-# It's needed, because by default the shared_path is used to store pages which are served by gitlab-www:gitlab-www
-storage_directory node['gitlab']['gitlab-rails']['shared_path'] do
-  owner gitlab_user
-  group account_helper.web_server_group
-  mode '0751'
-end
+include_recipe 'gitlab::rails_pages_shared_path'
 
 [
   node['gitlab']['gitlab-rails']['artifacts_path'],
@@ -91,12 +85,6 @@ storage_directory gitlab_rails_uploads_storage_path do
   owner gitlab_user
   mode '0700'
   only_if { gitlab_rails_uploads_storage_path != GitlabRails.public_path }
-end
-
-storage_directory node['gitlab']['gitlab-rails']['pages_path'] do
-  owner gitlab_user
-  group account_helper.web_server_group
-  mode '0750'
 end
 
 [

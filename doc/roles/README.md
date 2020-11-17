@@ -124,3 +124,15 @@ Documentation on the usage of the PostgreSQL Roles can be found in [Configuring 
   Enables the Consul service on the machine
 
   *By default, enables no other services.*
+
+### GitLab Pages Roles
+
+GitLab Pages roles are used to setup and configure GitLab Pages. For additional
+information, see the
+[GitLab Pages Administration documentation](https://docs.gitlab.com/ee/administration/pages)
+
+- **pages_role** (`gitlab-ce`/`gitlab-ee`)
+
+  Configures the server with a GitLab Pages instance.
+
+  By default, enables no other services.
