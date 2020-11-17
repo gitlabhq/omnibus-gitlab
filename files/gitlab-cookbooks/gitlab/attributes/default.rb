@@ -374,6 +374,7 @@ default['gitlab']['gitlab-rails']['gitlab_shell_git_timeout'] = 10800
 # defaults to /opt/gitlab/embedded/bin/git. The install-dir path is set at build time
 default['gitlab']['gitlab-rails']['git_bin_path'] = "#{node['package']['install-dir']}/embedded/bin/git"
 default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
+default['gitlab']['gitlab-rails']['extra_google_tag_manager_id'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_url'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_site_id'] = nil
 default['gitlab']['gitlab-rails']['rack_attack_git_basic_auth'] = nil

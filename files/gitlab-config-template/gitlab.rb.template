@@ -603,6 +603,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Extra customization
 # gitlab_rails['extra_google_analytics_id'] = '_your_tracking_id'
+# gitlab_rails['extra_google_tag_manager_id'] = '_your_tracking_id'
 # gitlab_rails['extra_piwik_url'] = '_your_piwik_url'
 # gitlab_rails['extra_piwik_site_id'] = '_your_piwik_site_id'
 
