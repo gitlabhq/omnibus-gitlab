@@ -10,9 +10,9 @@ agent:
 gitlab:
   address: <%= @gitlab_address %>
   authentication_secret_file: <%= @authentication_secret_file %>
-listen:
+listen_agent:
   address: <%= @listen_address %>
   network: <%= @listen_network %>
   websocket: <%= @listen_websocket %>
-metrics:
+observability:
   usage_reporting_period: <%= @metrics_usage_reporting_period %>s
