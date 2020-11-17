@@ -65,6 +65,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [SSL](settings/ssl.md)
 - [GitLab and Registry](architecture/registry/README.md)
 - [Configuring an asset proxy server](https://docs.gitlab.com/ee/security/asset_proxy.html)
+- [Image scaling](settings/image_scaling.md)
 
 ## Updating
 
