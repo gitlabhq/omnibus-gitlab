@@ -1,4 +1,5 @@
 # ncurses/5.9
+# https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5826
 CVE-2019-17594
 CVE-2019-17595
 CVE-2019-15547
@@ -16,6 +17,7 @@ CVE-2019-8325
 CVE-2019-19956
 
 # libxslt/1.1.32
+# https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5824
 CVE-2019-11068
 CVE-2019-5815
 
@@ -23,10 +25,12 @@ CVE-2019-5815
 CVE-2017-16548
 
 # bzip2/1.0.6
+# https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5825
 CVE-2019-12900
 CVE-2016-3189
 
 # unzip/6.0
+# https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5827
 CVE-2018-1000035
 CVE-2014-8139
 CVE-2014-8140
