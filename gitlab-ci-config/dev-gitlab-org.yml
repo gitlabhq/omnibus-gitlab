@@ -605,7 +605,7 @@ create_omnibus_manifest:
   variables:
     TERM: xterm-256color
   script:
-    - bundle exec omnibus manifest gitlab -l nothing 2> /dev/null > version-manifest.json
+    - bundle exec omnibus manifest gitlab -l nothing 2> /dev/null | sed -e "/^${CI_COMMIT_TAG}$/d" > version-manifest.json
   <<: *dev-nightly-and-tag-except-auto-deploy
   cache: *tag-cache
   artifacts:
