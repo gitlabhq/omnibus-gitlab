@@ -17,7 +17,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'grafana'
-version = Gitlab::Version.new('grafana', '7.3.2')
+version = Gitlab::Version.new('grafana', '7.3.3')
 default_version version.print(false)
 
 license 'APACHE-2.0'
