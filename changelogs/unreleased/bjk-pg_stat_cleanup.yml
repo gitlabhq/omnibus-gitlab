@@ -1,5 +1,0 @@
----
-title: Update postgres_exporter metrics
-merge_request: 4586
-author:
-type: performance

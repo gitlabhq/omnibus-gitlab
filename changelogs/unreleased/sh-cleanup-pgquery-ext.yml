@@ -1,5 +1,0 @@
----
-title: Clean up pg_query gem native extension directory
-merge_request: 4683
-author:
-type: other

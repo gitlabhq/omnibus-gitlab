@@ -3,6 +3,59 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.6.0 (2020-11-22)
+
+### Security (1 change)
+
+- Set instance ID as root password on AMI instance startup. !4638
+
+### Fixed (6 changes)
+
+- Add support for custom database ports to pg_upgrade. !4665
+- Use PostgreSQL's default values to override Patroni dynamic config. !4677
+- Ensure pg_rewind can be used and won't fail for Patroni. !4689
+- Restart Gitaly when Ruby version changes. !4696
+- Use license_finder on GitLab Workhorse. !4705
+- Drop --with-cflags gRPC argument from Raspberry Pi build. !4711
+
+### Changed (4 changes)
+
+- logrotate defaults: set notifempty so empty files are not rotated. !3820
+- Support for alternative auth_types in pgbouncer. !4671
+- Mark Sidekiq queue selector as no longer experimental. !4714
+- Bump Container Registry to v2.11.0-gitlab. !4741
+
+### Performance (2 changes)
+
+- Update postgres_exporter metrics. !4586
+- Update Prometheus components. !4682
+
+### Added (7 changes)
+
+- Support gitlab-shell ssl_cert_dir config setting. !4379
+- Add google_tag_manager_id configuration. !4473
+- Allow setting Gitaly's git.bin_path. !4668
+- Upgrade Git to v2.29.0. !4690
+- Instruct more cleary how to proceed when old failed PostgreSQL upgrades exist on disk. !4694
+- Display root account username at the end of first reconfigure. !4712
+- Add role for GitLab Pages. !4740
+
+### Other (12 changes)
+
+- Upgrade Ruby to v2.7.2. !4632
+- Add Image Resizer config defaults. !4639
+- Clean up pg_query gem native extension directory. !4683
+- Clean up nokogumbo extension dir. !4698
+- Exclude exe files from Python libraries from the package. !4699
+- Ensure users are using Patroni before upgrading PG to 12. !4700
+- Bump development Ruby version to v2.7.2. !4703
+- Add note about backing up gitlab.rb in Docker. !4707
+- Update Grafana version to 7.3.1. !4722
+- Update GITLAB_KAS_VERSION to 13.6.1. !4742
+- Update rake to v13. !4745
+- Update Mattermost to 5.28.1.
+
+
 ## 13.5.4 (2020-11-13)
 
 - No changes.
