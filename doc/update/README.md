@@ -920,6 +920,27 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo yum install gitlab-ee
    ```
 
+1. If you're using PgBouncer:
+
+   You'll need to bypass PgBouncer and connect directly to the database master
+   before running migrations.
+
+   Rails uses an advisory lock when attempting to run a migration to prevent
+   concurrent migrations from running on the same database. These locks are
+   not shared across transactions, resulting in `ActiveRecord::ConcurrentMigrationError`
+   and other issues when running database migrations using PgBouncer in transaction
+   pooling mode.
+
+   To find the master node, run the following on a database node:
+
+   ```shell
+   sudo gitlab-ctl repmgr cluster show
+   ```
+
+   Then, in your `gitlab.rb` file on the deploy node, update
+   `gitlab_rails['db_host']` and `gitlab_rails['db_port']` with the database
+   master's host and port.
+
 1. To get the regular database migrations and latest code in place, run
 
    ```shell
@@ -1083,6 +1104,14 @@ sudo gitlab-ctl restart geo-logcursor
    sudo gitlab-rake gitlab:geo:check
    ```
 
+1. If you're using PgBouncer:
+
+   Change your `gitlab.rb` to point back to PgBouncer and run:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+   
 **On all secondary "deploy nodes"**
 
 1. Run post-deployment database migrations, specific to the Geo database:
