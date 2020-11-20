@@ -27,4 +27,15 @@ class PgHelper < BasePgHelper
       end
     }
   end
+
+  private
+
+  def connection_info
+    build_connection_info(
+      node['gitlab']['gitlab-rails']['db_database'],
+      node['postgresql']['unix_socket_directory'],
+      node['postgresql']['port'],
+      node['postgresql']['sql_user']
+    )
+  end
 end

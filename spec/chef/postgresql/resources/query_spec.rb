@@ -3,6 +3,11 @@ require 'chef_helper'
 RSpec.describe 'postgresql_query' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: %w(postgresql_query)) }
 
+  before do
+    allow_any_instance_of(PgHelper).to receive(:is_ready?).and_return(true)
+    allow_any_instance_of(GeoPgHelper).to receive(:is_ready?).and_return(true)
+  end
+
   context 'run' do
     let(:chef_run) { runner.converge('test_postgresql::postgresql_query_run') }
 

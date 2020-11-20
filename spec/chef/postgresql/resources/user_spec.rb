@@ -6,6 +6,8 @@ RSpec.describe 'postgresql_user' do
     allow_any_instance_of(PgHelper).to receive(:user_exists?).and_return(false, true)
     allow_any_instance_of(PgHelper).to receive(:user_password_match?).and_return(false)
     allow_any_instance_of(PgHelper).to receive(:user_options_set?).and_return(false)
+    allow_any_instance_of(PgHelper).to receive(:is_ready?).and_return(true)
+    allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
   end
 
   let(:runner) { ChefSpec::SoloRunner.new(step_into: ['postgresql_user']) }
