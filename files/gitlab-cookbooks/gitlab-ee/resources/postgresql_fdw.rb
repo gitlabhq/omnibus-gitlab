@@ -6,7 +6,7 @@ property :db_name, String
 property :external_host, String
 property :external_port, Integer
 property :external_name, String
-property :helper, default: PgHelper.new(node)
+property :helper, default: lazy { PgHelper.new(node) }
 
 action :delete do
   postgresql_query "drop fdw #{new_resource.server_name} on #{new_resource.db_name}" do

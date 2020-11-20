@@ -314,4 +314,18 @@ RSpec.describe BasePgHelper do
       expect(subject.is_standby?).to be false
     end
   end
+
+  context 'when handling connection information' do
+    describe '#connection_info' do
+      it 'raises a not implemented warning' do
+        expect { subject.connection_info }.to raise_error(NotImplementedError)
+      end
+    end
+
+    describe '#build_connection_info' do
+      it 'returns a ConnectionInfo object' do
+        expect(subject.build_connection_info('dbname', 'dbhost', 'port', 'pguser')).to be_a(described_class::ConnectionInfo)
+      end
+    end
+  end
 end

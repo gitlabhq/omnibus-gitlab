@@ -123,3 +123,7 @@ default['postgresql']['archive_timeout'] = "0"
 
 # Version setting for linking binaries when bundled postgresql is not being used
 default['postgresql']['version'] = nil
+
+# Listen Check settings
+default['postgresql']['max_service_checks'] = 20
+default['postgresql']['service_check_interval'] = 5
