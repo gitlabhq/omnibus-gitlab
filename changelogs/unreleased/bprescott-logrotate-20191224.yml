@@ -1,5 +1,0 @@
----
-title: 'logrotate defaults: set notifempty so empty files are not rotated'
-merge_request: 3820
-author:
-type: changed
