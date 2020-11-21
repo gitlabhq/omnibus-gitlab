@@ -905,6 +905,24 @@ In this case the client `connect_timeout` is set to 5 seconds. The value
 is specified in seconds. A minimum value of 2 seconds applies. Setting this to `<= 0`
 or not specifying the setting at all disables the timeout.
 
+### Setting tcp controls
+
+The Rails PostgreSQL adapter provides a series of TCP connection controls
+that may be tuned to improve performance. Consult the
+[PostgreSQL upstream documentation for more information about each parameter](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-KEEPALIVES).
+
+Omnibus sets no defaults for these values and instead uses the defaults
+provided by PostgreSQL adapter. Override them in `gitlab.rb` using the
+parameters noted in the table below and then run `gitlab-ctl reconfigure`.
+
+| PostgreSQL parameter | `gitlab.rb` parameter |
+|-|-|
+| keepalives | gitlab_rails['db_keepalives'] |
+| keepalives_idle | gitlab_rails['db_keepalives_idle'] |
+| keepalives_interval | gitlab_rails['db_keepalives_interval'] |
+| keepalives_count | gitlab_rails['db_keepalives_count'] |
+| tcp_user_timeout | gitlab_rails['db_tcp_user_timeout'] |
+
 ## Automatic database reindexing
 
 > [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/249662) in GitLab 13.5.
