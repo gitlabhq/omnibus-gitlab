@@ -11,31 +11,38 @@ We store a list of deprecations associated with it in the `list` method of
 If a configuration has to be deprecated, it has to be added to that list with
 proper details.
 
-Note: The process described below will become obsolete soon, with our new
-deprecation management logic.
-
-As part of our [deprecation policy](../package-information/deprecation_policy.md) we may need to add
-messages to `gitlab-ctl reconfigure` that advise the user of any deprecated
-settings they are using.
-
-To do this we should add code that detects the use of the old setting,
-handles the value (for instance remapping it to a new setting), and notify the
-user that they have something to do with `LoggingHelper.deprecation`.
-
-Here's an example from the `nginx` cookbook:
+## Example
 
 ```ruby
-    def parse_nginx_listen_address
-      return unless Gitlab['nginx']['listen_address']
-
-      # The user specified a custom NGINX listen address with the legacy
-      # listen_address option. We have to convert it to the new
-      # listen_addresses setting.
-      LoggingHelper.deprecation "nginx['listen_address'] is deprecated. Please use nginx['listen_addresses']"
-      Gitlab['nginx']['listen_addresses'] = [Gitlab['nginx']['listen_address']]
-    end
+deprecations = [
+          {
+            config_keys: %w(gitlab postgresql data_dir),
+            deprecation: '11.6',
+            removal: '14.0',
+            note: "Please see https://docs.gitlab.com/omnibus/settings/database.html#store-postgresql-data-in-a-different-directory for how to use postgresql['dir']"
+          },
+          {
+            config_keys: %w(gitlab sidekiq cluster),
+            deprecation: '13.0',
+            removal: '14.0',
+            note: "Running sidekiq directly is deprecated. Please see https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html for how to use sidekiq-cluster."
+          },
+...
+]
 ```
 
-If we need to print Ruby objects, we can make use of the [`print_ruby_object`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/package/libraries/helpers/output_helper.rb#L8-10) helper method. This needs `OutputHelper` class to be
-included in your code. Take a look at [Gitaly library](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitaly/libraries/gitaly.rb)
-for an example.
+### `config_keys`
+
+`config_keys` represents a list of keys, which can be used to traverse the configuration hash available from `/opt/gitlab/embedded/nodes/{fqdn}.json` to reach a specific configuration. For example `%w(mattermost log_file_directory)` means `mattermost['log_file_directory']` setting. Similarly, `%w(gitlab nginx listen_addresses)` means `gitlab['nginx']['listen_addresses']`. We internally convert it to `nginx['listen_addresses']`, which is what we use in `/etc/gitlab/gitlab.rb`.
+
+### `deprecation`
+
+`deprecation` is where you set the `<major>.<minor>` version that deprecated the change. Starting in that version, running `gitlab-ctl reconfigure` will warn that the setting is being removed in the `removal` version, and it will display the provided `note`.
+
+### `removal`
+
+`removal` is where you set the `<major>.<minor>` version that will no longer support the change at all. This should almost always be a major release. The Omnibus package runs a script at the beginning of installation that ensures you don't have any removed configuration in your settings. The install will fail early, before making any changes, if it finds configuration that is no longer supported.
+
+### `note`
+
+`note` is part of the deprecation message provided to users during `gitlab-ctl reconfigure`. Use this area to inform users of how to change their settings, often by linking to new documentation, or in the case of a settings rename, telling them what the new setting name should be.
