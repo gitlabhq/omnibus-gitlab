@@ -19,6 +19,9 @@ module Puma
   class << self
     def parse_variables
       only_one_allowed!
+
+      return unless Services.enabled?('puma')
+
       parse_listen_address
     end
 

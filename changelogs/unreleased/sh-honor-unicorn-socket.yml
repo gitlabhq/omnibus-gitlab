@@ -1,0 +1,5 @@
+---
+title: Fix Unicorn custom socket not being honored by Workhorse
+merge_request: 4778
+author:
+type: fixed

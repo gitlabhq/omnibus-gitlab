@@ -64,6 +64,27 @@ RSpec.describe 'gitlab::unicorn' do
     end
   end
 
+  context 'with custom socket' do
+    before do
+      stub_gitlab_rb(
+        puma: {
+          enable: false
+        },
+        unicorn: {
+          enable: true,
+          socket: '/tmp/unicorn.socket'
+        }
+      )
+    end
+
+    it 'uses the unicorn socket' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content { |content|
+        expect(content).to match(%r(-authSocket /tmp/unicorn.socket))
+      }
+      expect(Gitlab['gitlab_workhorse']['auth_socket']).to eq('/tmp/unicorn.socket')
+    end
+  end
+
   context 'with custom user and group' do
     before do
       stub_gitlab_rb(
