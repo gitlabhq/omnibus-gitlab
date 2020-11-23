@@ -219,7 +219,6 @@ danger-review:
   script:
     - danger --fail-on-errors=true
 
-Centos 6 knapsack: *prepare_knapsack
 Centos 7 knapsack: *prepare_knapsack
 Centos 8 knapsack: *prepare_knapsack
 Debian 9 knapsack: *prepare_knapsack
@@ -259,12 +258,6 @@ Debian 10 specs :
   parallel: 6
   dependencies:
   - Debian 10 knapsack
-Centos 6 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - Centos 6 knapsack
 Centos 7 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
   extends: .spec_template

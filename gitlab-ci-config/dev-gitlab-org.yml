@@ -403,9 +403,6 @@ Ubuntu-20.04-arm-branch:
   <<: *branch_build
   tags:
   - docker-arm-builder
-CentOS-6-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
 CentOS-7-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -575,9 +572,6 @@ Ubuntu-20.04-arm:
   <<: *tag_build
   tags:
   - docker-arm-builder
-CentOS-6:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_6:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
 CentOS-7:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -680,11 +674,6 @@ Ubuntu-20.04-arm-staging:
     - Ubuntu-20.04-arm
     - Ubuntu-20.04-arm-branch
   <<: *staging_upload
-CentOS-6-staging:
-  dependencies:
-    - CentOS-6
-    - CentOS-6-branch
-  <<: *staging_upload
 CentOS-7-staging:
   dependencies:
     - CentOS-7
@@ -742,10 +731,6 @@ Debian-9-release:
 Debian-10-release:
   dependencies:
     - Debian-10
-  <<: *production_release
-CentOS-6-release:
-  dependencies:
-    - CentOS-6
   <<: *production_release
 CentOS-7-release:
   dependencies:
