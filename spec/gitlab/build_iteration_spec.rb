@@ -63,7 +63,7 @@ RSpec.describe Gitlab::BuildIteration do
       subject { Gitlab::BuildIteration.new }
 
       it 'returns 0' do
-        allow(Build::Check).to receive(:system).with(*%w[git describe --exact-match]).and_return(false)
+        allow(Build::Check).to receive(:system).with('git describe --exact-match > /dev/null 2>&1').and_return(false)
         expect(subject.build_iteration).to eq('0')
       end
     end
