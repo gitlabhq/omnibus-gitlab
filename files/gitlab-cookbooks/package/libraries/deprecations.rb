@@ -77,6 +77,19 @@ module Gitlab
             deprecation: '13.4',
             removal: '14.0',
             note: "Praefect no longer supports statically designating primary Gitaly nodes."
+          },
+          # Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
+          {
+            config_keys: %w(gitlab sidekiq-cluster experimental_queue_selector),
+            deprecation: '13.6',
+            removal: '14.0',
+            note: 'The experimental_queue_selector option is now called queue_selector.'
+          },
+          {
+            config_keys: %w(gitlab sidekiq experimental_queue_selector),
+            deprecation: '13.6',
+            removal: '14.0',
+            note: 'The experimental_queue_selector option is now called queue_selector.'
           }
         ]
 

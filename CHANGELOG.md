@@ -3,6 +3,163 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.6.1 (2020-11-23)
+
+- No changes.
+
+## 13.6.0 (2020-11-22)
+
+### Security (1 change)
+
+- Set instance ID as root password on AMI instance startup. !4638
+
+### Fixed (6 changes)
+
+- Add support for custom database ports to pg_upgrade. !4665
+- Use PostgreSQL's default values to override Patroni dynamic config. !4677
+- Ensure pg_rewind can be used and won't fail for Patroni. !4689
+- Restart Gitaly when Ruby version changes. !4696
+- Use license_finder on GitLab Workhorse. !4705
+- Drop --with-cflags gRPC argument from Raspberry Pi build. !4711
+
+### Changed (4 changes)
+
+- logrotate defaults: set notifempty so empty files are not rotated. !3820
+- Support for alternative auth_types in pgbouncer. !4671
+- Mark Sidekiq queue selector as no longer experimental. !4714
+- Bump Container Registry to v2.11.0-gitlab. !4741
+
+### Performance (2 changes)
+
+- Update postgres_exporter metrics. !4586
+- Update Prometheus components. !4682
+
+### Added (7 changes)
+
+- Support gitlab-shell ssl_cert_dir config setting. !4379
+- Add google_tag_manager_id configuration. !4473
+- Allow setting Gitaly's git.bin_path. !4668
+- Upgrade Git to v2.29.0. !4690
+- Instruct more cleary how to proceed when old failed PostgreSQL upgrades exist on disk. !4694
+- Display root account username at the end of first reconfigure. !4712
+- Add role for GitLab Pages. !4740
+
+### Other (12 changes)
+
+- Upgrade Ruby to v2.7.2. !4632
+- Add Image Resizer config defaults. !4639
+- Clean up pg_query gem native extension directory. !4683
+- Clean up nokogumbo extension dir. !4698
+- Exclude exe files from Python libraries from the package. !4699
+- Ensure users are using Patroni before upgrading PG to 12. !4700
+- Bump development Ruby version to v2.7.2. !4703
+- Add note about backing up gitlab.rb in Docker. !4707
+- Update Grafana version to 7.3.1. !4722
+- Update GITLAB_KAS_VERSION to 13.6.1. !4742
+- Update rake to v13. !4745
+- Update Mattermost to 5.28.1.
+
+
+## 13.5.4 (2020-11-13)
+
+- No changes.
+
+## 13.5.3 (2020-11-03)
+
+### Fixed (1 change)
+
+- Geo: Perform point-in-time recovery before promotion of secondary node. !4636
+
+### Performance (1 change)
+
+- Set net.core.somaxconn kernel parameter for Puma. !4688
+
+
+## 13.5.2 (2020-11-02)
+
+- No changes.
+
+## 13.5.1 (2020-10-22)
+
+### Fixed (1 change)
+
+- Ensure group is set before mode in storage_directory. !4661
+
+
+## 13.5.0 (2020-10-22)
+
+### Fixed (10 changes, 2 of them are from the community)
+
+- Configure pg-upgrade to work with patroni service. !4529
+- Exit non-zero during upgrade if reconfigure fails. !4591
+- Remove EE only note for packages in gitlab.yml.erb. !4594 (Ben Bodenmiller (@bbodenmiller))
+- Add selinux module for gitlab-shell. !4598
+- Support geo data dir for pg-upgrade. !4603
+- Allows special characters in Grafana admin password. !4606
+- Update workhorse auth socket when puma uses custom socket. !4620
+- Error during docker build on package download failure. !4641
+- Fix onsolidated form object storage configuration template. !4656
+- Fix libatomic package name for RHEL/CentOS. !4660 (Hi Key @HiKey)
+
+### Deprecated (1 change)
+
+- Add deprecation warning for CentOS 6. !4596
+
+### Changed (6 changes)
+
+- Update Chef from 15.12.22 to 15.14.0. !4537
+- Update unixcharles/acme-client from 2.0.6 to 2.0.7. !4581
+- Only send one Referrer-Policy header. !4584
+- Make Gitaly internal API calls go through Workhorse. !4592
+- Add support for cert authentication with PostgreSQL. !4618
+- Remove extraneous rbtrace files from build. !4647
+
+### Added (14 changes)
+
+- Allow configuring permanent replication slots in patroni. !4534
+- Allow bootstrapping patroni Standby Cluster. !4558
+- Gitaly daily maintenance config. !4572
+- Add gitlab-kas to omnibus. !4579
+- Praefect configuration for database with no proxy. !4583
+- Add wrappers for Patroni restart and reload commands. !4601
+- Add database reindexing cronjob. !4602
+- Add Kerberos LDAP mapping configuration. !4608
+- Allow promotion task to alter Geo node configuration. !4609
+- Support revert-pg-upgrade for Patroni cluster nodes. !4611
+- Specify display_version for sofware without proper version string. !4622
+- Add pages object storage settings. !4623
+- Expose wal_log_hints PostgreSQL setting. !4642
+- Add FortiAuthenticator configuration to gitlab.rb. !4645
+
+### Other (7 changes, 1 of them is from the community)
+
+- Remove Praefect primary config. !4559
+- Add member invitation reminder emails cron worker. !4582
+- Explicitly set group for repositories_storages and improve manage-storage-directories tests. !4589 (Ben Bodenmiller (@bbodenmiller))
+- Remove ee/spec from final package. !4621
+- Move email configuration section closer to SMTP settings in template. !4631
+- Reduce Ubuntu 20 ARM package size. !4637
+- Update Mattermost to 5.27.0.
+
+
+## 13.4.6 (2020-11-03)
+
+### Fixed (1 change)
+
+- Geo: Perform point-in-time recovery before promotion of secondary node. !4636
+
+
+## 13.4.5 (2020-11-02)
+
+- No changes.
+
+## 13.4.4 (2020-10-15)
+
+### Fixed (1 change)
+
+- Force install PrettyTable 0.7. !4628
+
+
 ## 13.4.3 (2020-10-06)
 
 - No changes.
@@ -69,6 +226,14 @@ omnibus-gitlab repository.
 - Add instance statistics cron worker. !4567
 - Update Mattermost to 5.26.2.
 
+
+## 13.3.9 (2020-11-02)
+
+- No changes.
+
+## 13.3.8 (2020-10-21)
+
+- No changes.
 
 ## 13.3.6 (2020-09-14)
 

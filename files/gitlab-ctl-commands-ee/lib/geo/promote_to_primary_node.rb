@@ -3,22 +3,21 @@ require 'rainbow/ext/string'
 
 module Geo
   class PromoteToPrimaryNode
-    def initialize(base_path, options)
-      @base_path = base_path
+    attr_accessor :ctl, :base_path
+
+    def initialize(ctl, options)
+      @ctl = ctl
+      @base_path = @ctl.base_path
       @options = options
     end
 
     def execute
       run_preflight_checks
-
       final_confirmation
-
+      toggle_geo_roles
       promote_postgresql_to_primary
-
       reconfigure
-
       promote_to_primary
-
       success_message
     end
 
@@ -60,12 +59,22 @@ module Geo
       exit 1
     end
 
-    def promote_postgresql_to_primary
+    def toggle_geo_roles
       puts
-      puts 'Promoting the PostgreSQL to primary...'.color(:yellow)
+      puts 'Disabling the secondary role and enabling the primary in the cluster configuration file...'.color(:yellow)
       puts
 
-      run_command('/opt/gitlab/embedded/bin/gitlab-pg-ctl promote', live: true).error!
+      cluster_helper = GitlabClusterHelper.new
+      cluster_helper.config['primary'] = true
+      cluster_helper.config['secondary'] = false
+      return if cluster_helper.write_to_file!
+
+      puts "ERROR: Could not write to #{GitlabClusterHelper::JSON_FILE}.".color(:red)
+      exit 1
+    end
+
+    def promote_postgresql_to_primary
+      Geo::PromoteDb.new(ctl).execute
     end
 
     def reconfigure

@@ -26,6 +26,7 @@ dependency 'zlib'
 dependency 'openssl'
 dependency 'libtool'
 
+vendor 'haxx'
 license 'MIT'
 license_file 'COPYING'
 

@@ -171,6 +171,7 @@ shared_preload_libraries = '<%= @shared_preload_libraries %>'    # (change requi
 # - Settings -
 
 wal_level = <%= @wal_level %>
+wal_log_hints = <%= @wal_log_hints %>      # also do full page writes of non-critical updates
           # (change requires restart)
 #fsync = on       # turns forced synchronization on or off
 #wal_sync_method = fsync    # the default is the first option

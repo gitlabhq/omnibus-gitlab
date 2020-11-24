@@ -15,7 +15,14 @@ default['patroni']['max_timelines_history'] = 0
 default['patroni']['master_start_timeout'] = 300
 default['patroni']['use_pg_rewind'] = false
 default['patroni']['use_slots'] = true
+default['patroni']['replication_password'] = nil
 default['patroni']['replication_slots'] = {}
+
+# Standby cluster replication settings
+default['patroni']['standby_cluster']['enable'] = false
+default['patroni']['standby_cluster']['host'] = nil
+default['patroni']['standby_cluster']['port'] = 5432
+default['patroni']['standby_cluster']['primary_slot_name'] = nil
 
 # Global/Universal settings
 default['patroni']['name'] = node.name
@@ -31,7 +38,7 @@ default['patroni']['consul']['service_check_interval'] = '10s'
 default['patroni']['consul']['register_service'] = true
 default['patroni']['consul']['checks'] = []
 
-# PostgreSQL specific settings
+# PostgreSQL configuration override
 default['patroni']['postgresql']['wal_level'] = 'replica'
 default['patroni']['postgresql']['hot_standby'] = 'on'
 default['patroni']['postgresql']['wal_keep_segments'] = 8

@@ -39,6 +39,7 @@ module Gitlab
   role('postgres').use { PostgresRole }
   role('pgbouncer').use { PgbouncerRole }
   role('consul').use { ConsulRole }
+  role('pages').use { PagesRole }
 
   ## Attributes directly on the node
   attribute('package').use { Package }
@@ -55,6 +56,7 @@ module Gitlab
   attribute('mattermost',  priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
   attribute('letsencrypt', priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry and Mattermost
   attribute('crond')
+  attribute('logrotate')
 
   # If a new attribute block is added, add it also to the class handling
   # deprecation messages at
@@ -109,7 +111,6 @@ module Gitlab
     attribute('pages_nginx')
     attribute('registry_nginx')
     attribute('remote_syslog')
-    attribute('logrotate')
     attribute('high_availability')
     attribute('web_server')
     attribute('prometheus_monitoring')

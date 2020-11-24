@@ -22,3 +22,7 @@ Password = "<%= @master_password %>"
   azure_storage_access_key = "<%= @object_store.dig('connection', 'azure_storage_access_key') %>"
 <%- end %>
 <%- end %>
+
+[image_resizer]
+  max_scaler_procs = <%= @image_scaler_max_procs %>
+  max_filesize = <%= @image_scaler_max_filesize %>

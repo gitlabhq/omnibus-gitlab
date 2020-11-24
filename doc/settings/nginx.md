@@ -598,12 +598,15 @@ exists, for reconfigure to succeed.
 
 ### Vhost (server block)
 
+NOTE: **Note:**
+GitLab 13.5 changed the default workhorse socket location from `/var/opt/gitlab/gitlab-workhorse/socket` to `/var/opt/gitlab/gitlab-workhorse/sockets/socket`. Please update the following configuration accordingly if upgrading from versions older than 13.5.
+
 Then, in your custom Passenger/NGINX installation, create the following site
 configuration file:
 
 ```plaintext
 upstream gitlab-workhorse {
-  server unix://var/opt/gitlab/gitlab-workhorse/socket fail_timeout=0;
+  server unix://var/opt/gitlab/gitlab-workhorse/sockets/socket fail_timeout=0;
 }
 
 server {

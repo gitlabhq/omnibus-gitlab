@@ -70,13 +70,13 @@ RSpec.describe 'gitlab::default' do
 
   context 'with logrotate' do
     it 'runs logrotate directory and configuration recipe by default' do
-      expect(chef_run).to include_recipe('gitlab::logrotate_folders_and_configs')
+      expect(chef_run).to include_recipe('logrotate::folders_and_configs')
     end
 
     it 'runs logrotate directory and configuration recipe when logrotate is disabled' do
       stub_gitlab_rb(logrotate: { enable: false })
 
-      expect(chef_run).to include_recipe('gitlab::logrotate_folders_and_configs')
+      expect(chef_run).to include_recipe('logrotate::folders_and_configs')
     end
   end
 

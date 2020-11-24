@@ -139,10 +139,37 @@ RSpec.describe 'gitlab::sidekiq-cluster' do
     end
   end
 
-  context 'with experimental_queue_selector set' do
+  # Simplify with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
+  [:sidekiq, :sidekiq_cluster].each do |service|
+    context "using the #{service} service" do
+      [:queue_selector, :experimental_queue_selector].each do |selector|
+        context "with #{selector} set" do
+          before do
+            stub_gitlab_rb(service => {
+                             enable: true,
+                             selector => true,
+                             queue_groups: ['feature_category=pages', 'feature_category=continuous_integration']
+                           })
+          end
+
+          it 'correctly renders out the service file' do
+            expect(chef_run).to render_file("/opt/gitlab/sv/#{service.to_s.tr('_', '-')}/run")
+                                  .with_content { |content|
+                                  expect(content).to match(/--queue-selector/)
+                                  expect(content).to match(/"feature_category=pages"/)
+                                }
+          end
+        end
+      end
+    end
+  end
+
+  # Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
+  context 'with queue_selector and experimental_queue_selector set' do
     before do
       stub_gitlab_rb(sidekiq_cluster: {
                        enable: true,
+                       queue_selector: true,
                        experimental_queue_selector: true,
                        queue_groups: ['feature_category=pages', 'feature_category=continuous_integration']
                      })
@@ -151,7 +178,7 @@ RSpec.describe 'gitlab::sidekiq-cluster' do
     it 'correctly renders out the sidekiq-cluster service file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq-cluster/run")
         .with_content { |content|
-          expect(content).to match(/--experimental-queue-selector/)
+          expect(content).to match(/--queue-selector/)
           expect(content).to match(/"feature_category=pages"/)
         }
     end

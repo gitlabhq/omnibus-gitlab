@@ -1,1 +1,5 @@
-This document was moved to [development/README.md.](development/README.md)
+---
+redirect_to: 'development/README.md'
+---
+
+This document was moved to [another location](development/README.md)

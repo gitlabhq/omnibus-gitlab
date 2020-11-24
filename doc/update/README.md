@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 Before following these instructions, note the following:
 
-- [Upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+- [Supported upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
   has suggestions on when to upgrade.
 - If you are upgrading from a non-Omnibus installation to an Omnibus installation, see
   [Upgrading from a non-Omnibus installation to an Omnibus installation](convert_to_omnibus.md).
@@ -16,18 +16,18 @@ Before following these instructions, note the following:
 CAUTION: **Caution:**
 If you aren't [using the current major version](#mandatory-upgrade-paths-for-version-upgrades),
 you **must** follow the
-[upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+[supported upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
 when updating to the current version.
 
 ## Background migrations
 
-DANGER: **Danger:**
+DANGER: **Warning:**
 It's important to ensure that any background migrations have been fully completed
 before upgrading to a new major version. Upgrading before background migrations have
 finished may lead to data corruption.
 
 To see the current size of the `background_migration` queue,
-[check for background migrations before upgrading](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading). 
+[check for background migrations before upgrading](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
 ## Version-specific changes
 
@@ -55,7 +55,7 @@ default. This restricts performing direct upgrades that skip major versions (for
 example 10.3 to 12.7 in one jump) that **can break GitLab
 installations** due to multiple reasons like deprecated or removed configuration
 settings, upgrade of internal tools and libraries etc. Users will have to follow
-the [official upgrade recommendations](https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations)
+the [official upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
 while upgrading their GitLab instances.
 
 ## Updating methods
@@ -73,13 +73,10 @@ at `/etc/gitlab/skip-auto-backup`:
 sudo touch /etc/gitlab/skip-auto-backup
 ```
 
-NOTE: **Note:**
 For safety reasons, you should maintain an up-to-date backup on your own if you plan to use this flag.
 
-NOTE: **Note:**
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
 
-NOTE: **Note:**
 Unless you are following the steps in [Zero downtime updates](#zero-downtime-updates), your GitLab application will not be available to users while an update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.
 
 ### Update using the official repositories
@@ -88,7 +85,18 @@ If you have installed Omnibus GitLab [Community Edition](https://about.gitlab.co
 or [Enterprise Edition](https://about.gitlab.com/install/), then the
 official GitLab repository should have already been set up for you.
 
-To update to a newer GitLab version, run:
+To update to the newest GitLab version, run:
+
+- For GitLab [Enterprise Edition](https://about.gitlab.com/pricing/):
+
+  ```shell
+  # Debian/Ubuntu
+  sudo apt-get update
+  sudo apt-get install gitlab-ee
+
+  # Centos/RHEL
+  sudo yum install gitlab-ee
+  ```
 
 - For GitLab Community Edition:
 
@@ -101,16 +109,40 @@ To update to a newer GitLab version, run:
   sudo yum install gitlab-ce
   ```
 
-- For GitLab [Enterprise Edition](https://about.gitlab.com/pricing/):
+#### Multi-step upgrade using the official repositories
 
-  ```shell
-  # Debian/Ubuntu
-  sudo apt-get update
-  sudo apt-get install gitlab-ee
+Linux package managers default to installing the latest available version of a
+package for installation and upgrades. Upgrading directly to the latest major
+version can be problematic for older GitLab versions that require a multi-stage
+upgrade path.
 
-  # Centos/RHEL
-  sudo yum install gitlab-ee
-  ```
+When following an [upgrade path](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
+spanning multiple versions, for each upgrade, specify the intended GitLab version
+number in your package manager's install or upgrade command:
+
+1. First, identify the GitLab version number in your package manager:
+
+   ```shell
+   # Ubuntu/Debian
+   sudo apt-cache madison gitlab-ee
+   # RHEL/CentOS 6 and 7
+   yum --showduplicates list gitlab-ee
+   # RHEL/CentOS 8
+   dnf search gitlab-ee*
+   ```
+
+1. Then install the specific GitLab package:
+
+   ```shell
+   # Ubuntu/Debian
+   sudo apt upgrade gitlab-ee=12.0.12-ee.0
+   # RHEL/CentOS 6 and 7
+   yum install gitlab-ee-12.0.12-ee.0.el7
+   # RHEL/CentOS 8
+   dnf install gitlab-ee-12.0.12-ee.0.el8
+   # SUSE
+   zypper install gitlab-ee=12.0.12-ee.0
+   ```
 
 ### Update using a manually-downloaded package
 
@@ -204,12 +236,6 @@ The steps can be summed up to:
    sudo gitlab-ctl reconfigure
    ```
 
-   NOTE: **Note:**
-   To upgrade to EE and also update GitLab to the latest version at the same time, you
-   can omit version information from the commands above. That is, run
-   `sudo apt-get install gitlab-ee` or `sudo yum install gitlab-ee` depending on your
-   distribution.
-
 1. Now go to the GitLab admin panel of your server (`/admin/license/new`) and
    upload your license file.
 
@@ -237,9 +263,6 @@ step to find the current GitLab version and then follow
 [Update using a manually-downloaded package](#update-using-a-manually-downloaded-package).
 
 ## Zero downtime updates
-
-NOTE: **Note:**
-This is only available in GitLab 9.1.0 or newer. Skipping restarts during `reconfigure` with `/etc/gitlab/skip-auto-reconfigure` was added in [version 10.6](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/2270). If running a version prior to 10.6, you will need to create `/etc/gitlab/skip-auto-migrations`.
 
 It's possible to upgrade to a newer version of GitLab without having to take
 your GitLab instance offline.
@@ -311,10 +334,6 @@ Before following these instructions, note the following **important** informatio
      sudo yum install gitlab-ee
      ```
 
-   NOTE: **Note:**
-   The above commands use the latest version of GitLab. Use a version-specific package
-   to update to an older version.
-
 1. To get the regular migrations and latest code in place, run
 
    ```shell
@@ -334,7 +353,6 @@ Before following these instructions, note the following **important** informatio
    sudo gitlab-ctl restart sidekiq
    ```
 
-NOTE: **Note:**
 If you do not want to run zero downtime upgrades in the future, make
 sure you remove `/etc/gitlab/skip-auto-reconfigure` after
 you've completed these steps.
@@ -610,7 +628,6 @@ node throughout the process.
   sudo gitlab-ctl reconfigure
   ```
 
-NOTE: **Note:**
 If you do not want to run zero downtime upgrades in the future, make
 sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
 setting `gitlab_rails['auto_migrate'] = false` in
@@ -619,7 +636,7 @@ setting `gitlab_rails['auto_migrate'] = false` in
 #### Use Redis HA (using Sentinel) **(PREMIUM ONLY)**
 
 Package upgrades may involve version updates to the bundled Redis service. On
-instances using [Redis HA](https://docs.gitlab.com/ee/administration/high_availability/redis.html),
+instances using [Redis for scaling](https://docs.gitlab.com/ee/administration/redis/index.html),
 upgrades must follow a proper order to ensure minimum downtime, as specified
 below. This doc assumes the official guides are being followed to setup Redis
 HA.
@@ -715,7 +732,6 @@ procedure.
 
 ### Geo deployment **(PREMIUM ONLY)**
 
-NOTE: **Note:**
 The order of steps is important. While following these steps, make
 sure you follow them in the right order, on the correct node.
 
@@ -809,7 +825,6 @@ After updating all nodes (both **primary** and all **secondaries**), check their
    sudo gitlab-rake gitlab:geo:check
    ```
 
-NOTE: **Note:**
 If you do not want to run zero downtime upgrades in the future, make
 sure you remove `/etc/gitlab/skip-auto-reconfigure` and revert
 setting `gitlab_rails['auto_migrate'] = false` in
@@ -905,6 +920,27 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo yum install gitlab-ee
    ```
 
+1. If you're using PgBouncer:
+
+   You'll need to bypass PgBouncer and connect directly to the database master
+   before running migrations.
+
+   Rails uses an advisory lock when attempting to run a migration to prevent
+   concurrent migrations from running on the same database. These locks are
+   not shared across transactions, resulting in `ActiveRecord::ConcurrentMigrationError`
+   and other issues when running database migrations using PgBouncer in transaction
+   pooling mode.
+
+   To find the master node, run the following on a database node:
+
+   ```shell
+   sudo gitlab-ctl repmgr cluster show
+   ```
+
+   Then, in your `gitlab.rb` file on the deploy node, update
+   `gitlab_rails['db_host']` and `gitlab_rails['db_port']` with the database
+   master's host and port.
+
 1. To get the regular database migrations and latest code in place, run
 
    ```shell
@@ -950,7 +986,6 @@ sudo gitlab-ctl restart sidekiq
 
 #### Step 3: Update each Geo secondary multi-node deployment
 
-NOTE: **Note:**
 Only proceed if you have successfully completed all steps on the Geo **primary** multi-node deployment.
 
 **On all nodes _including_ the secondary "deploy node"**
@@ -1069,6 +1104,14 @@ sudo gitlab-ctl restart geo-logcursor
    sudo gitlab-rake gitlab:geo:check
    ```
 
+1. If you're using PgBouncer:
+
+   Change your `gitlab.rb` to point back to PgBouncer and run:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+   
 **On all secondary "deploy nodes"**
 
 1. Run post-deployment database migrations, specific to the Geo database:

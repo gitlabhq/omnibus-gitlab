@@ -119,6 +119,7 @@ default['gitlab']['geo-postgresql']['default_statistics_target'] = 1000
 
 # Replication settings
 default['gitlab']['geo-postgresql']['wal_level'] = 'minimal'
+default['gitlab']['geo-postgresql']['wal_log_hints'] = 'off'
 default['gitlab']['geo-postgresql']['max_wal_senders'] = 0
 default['gitlab']['geo-postgresql']['wal_keep_segments'] = 10
 default['gitlab']['geo-postgresql']['hot_standby'] = 'off'

@@ -85,12 +85,14 @@ module Geo
 
       print_warning
       confirm_replication
+
+      @options[:password] = ask_pass
+
       create_gitlab_backup!
 
       puts '* Stopping PostgreSQL and all GitLab services'.color(:green)
       run_command('gitlab-ctl stop')
 
-      @options[:password] = ask_pass
       @pgpass = "#{data_path}/postgresql/.pgpass"
       create_pgpass_file!
 

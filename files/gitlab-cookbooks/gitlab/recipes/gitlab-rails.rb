@@ -56,17 +56,12 @@ repositories_storages = node['gitlab']['gitlab-rails']['repositories_storages']
 repositories_storages.each do |_name, repositories_storage|
   storage_directory repositories_storage['path'] do
     owner gitlab_user
+    group gitlab_group
     mode "2770"
   end
 end
 
-# We create shared_path with 751 allowing other users to enter into the directories
-# It's needed, because by default the shared_path is used to store pages which are served by gitlab-www:gitlab-www
-storage_directory node['gitlab']['gitlab-rails']['shared_path'] do
-  owner gitlab_user
-  group account_helper.web_server_group
-  mode '0751'
-end
+include_recipe 'gitlab::rails_pages_shared_path'
 
 [
   node['gitlab']['gitlab-rails']['artifacts_path'],
@@ -90,12 +85,6 @@ storage_directory gitlab_rails_uploads_storage_path do
   owner gitlab_user
   mode '0700'
   only_if { gitlab_rails_uploads_storage_path != GitlabRails.public_path }
-end
-
-storage_directory node['gitlab']['gitlab-rails']['pages_path'] do
-  owner gitlab_user
-  group account_helper.web_server_group
-  mode '0750'
 end
 
 [
@@ -298,6 +287,9 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       pages_external_https: node['gitlab']['gitlab-pages']['external_https'],
       pages_artifacts_server: node['gitlab']['gitlab-pages']['artifacts_server'],
       pages_access_control: node['gitlab']['gitlab-pages']['access_control'],
+      pages_object_store_enabled: node['gitlab']['gitlab-rails']['pages_object_store_enabled'],
+      pages_object_store_remote_directory: node['gitlab']['gitlab-rails']['pages_object_store_remote_directory'],
+      pages_object_store_connection: node['gitlab']['gitlab-rails']['pages_object_store_connection'],
       mattermost_host: mattermost_host,
       mattermost_enabled: node['mattermost']['enable'] || !mattermost_host.nil?,
       sidekiq: node['gitlab']['sidekiq'],
@@ -339,6 +331,7 @@ templatesymlink "Create a gitlab_shell_secret and create a symlink to Rails root
   sensitive true
   variables(secret_token: node['gitlab']['gitlab-shell']['secret_token'])
   dependent_services.each { |svc| notifies :restart, svc }
+  notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
 end
 
 gitlab_pages_services = dependent_services

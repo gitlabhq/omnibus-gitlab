@@ -35,6 +35,14 @@ patroni_helper = PatroniHelper.new(node)
   end
 end
 
+file dcs_config_file do
+  content YAML.dump(patroni_helper.dynamic_settings)
+  owner account_helper.postgresql_user
+  group account_helper.postgresql_group
+  mode '0600'
+  notifies :run, 'execute[update dynamic configuration settings]'
+end
+
 template patroni_config_file do
   source 'patroni.yaml.erb'
   owner account_helper.postgresql_user
@@ -50,14 +58,6 @@ template patroni_config_file do
     )
   )
   notifies :reload, 'runit_service[patroni]', :delayed if omnibus_helper.should_notify?(patroni_helper.service_name)
-end
-
-file dcs_config_file do
-  content YAML.dump(patroni_helper.dynamic_settings)
-  owner account_helper.postgresql_user
-  group account_helper.postgresql_group
-  mode '0600'
-  notifies :run, 'execute[update dynamic configuration settings]'
 end
 
 runit_service 'patroni' do
@@ -107,7 +107,7 @@ Dir["#{node['patroni']['data_dir']}/*"].each do |src|
   file "#{node['postgresql']['data_dir']}/#{File.basename(src)}" do
     owner account_helper.postgresql_user
     group account_helper.postgresql_group
-    mode format('%o', File.new(src).stat.mode)[-5..-1]
+    mode lazy { format('%o', File.new(src).stat.mode)[-5..-1] }
     content lazy { File.open(src).read }
     sensitive !!(File.extname(src) =~ /\.(key|crt)/)
     only_if { patroni_helper.bootstrapped? }

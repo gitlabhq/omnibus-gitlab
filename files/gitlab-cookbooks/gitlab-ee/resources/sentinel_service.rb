@@ -1,4 +1,5 @@
 resource_name :sentinel_service
+provides :sentinel_service
 
 property :config_path, String
 property :redis_configuration, Hash

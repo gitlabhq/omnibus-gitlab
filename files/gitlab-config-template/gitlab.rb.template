@@ -87,6 +87,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['smtp_enable_starttls_auto'] = true
 # gitlab_rails['smtp_tls'] = false
 
+###! **Can be: 'none', 'peer', 'client_once', 'fail_if_no_peer_cert'**
+###! Docs: http://api.rubyonrails.org/classes/ActionMailer/Base.html
+# gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+
+# gitlab_rails['smtp_ca_path'] = "/etc/ssl/certs"
+# gitlab_rails['smtp_ca_file'] = "/etc/ssl/certs/ca-certificates.crt"
+
 ### Email Settings
 
 # gitlab_rails['gitlab_email_enabled'] = true
@@ -149,7 +156,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Docs: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
 ###!       https://docs.gitlab.com/ee/ci/yaml/README.html#artifactsexpire_in
 # gitlab_rails['stuck_ci_jobs_worker_cron'] = "0 0 * * *"
-# gitlab_rails['expire_build_artifacts_worker_cron'] = "50 * * * *"
+# gitlab_rails['expire_build_artifacts_worker_cron'] = "*/7 * * * *"
 # gitlab_rails['environments_auto_stop_cron_worker_cron'] = "24 * * * *"
 # gitlab_rails['pipeline_schedule_worker_cron'] = "19 * * * *"
 # gitlab_rails['ci_archive_traces_cron_worker_cron'] = "17 * * * *"
@@ -278,17 +285,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!
 ###! Be sure to use different buckets for each type of object.
 ###! Docs: https://docs.gitlab.com/ee/administration/object_storage.html
-gitlab_rails['object_store']['enabled'] = false
-gitlab_rails['object_store']['connection'] = {}
-gitlab_rails['object_store']['storage_options'] = {}
-gitlab_rails['object_store']['proxy_download'] = false
-gitlab_rails['object_store']['objects']['artifacts']['bucket'] = nil
-gitlab_rails['object_store']['objects']['external_diffs']['bucket'] = nil
-gitlab_rails['object_store']['objects']['lfs']['bucket'] = nil
-gitlab_rails['object_store']['objects']['uploads']['bucket'] = nil
-gitlab_rails['object_store']['objects']['packages']['bucket'] = nil
-gitlab_rails['object_store']['objects']['dependency_proxy']['bucket'] = nil
-gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
+# gitlab_rails['object_store']['enabled'] = false
+# gitlab_rails['object_store']['connection'] = {}
+# gitlab_rails['object_store']['storage_options'] = {}
+# gitlab_rails['object_store']['proxy_download'] = false
+# gitlab_rails['object_store']['objects']['artifacts']['bucket'] = nil
+# gitlab_rails['object_store']['objects']['external_diffs']['bucket'] = nil
+# gitlab_rails['object_store']['objects']['lfs']['bucket'] = nil
+# gitlab_rails['object_store']['objects']['uploads']['bucket'] = nil
+# gitlab_rails['object_store']['objects']['packages']['bucket'] = nil
+# gitlab_rails['object_store']['objects']['dependency_proxy']['bucket'] = nil
+# gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 
 ### Job Artifacts
 # gitlab_rails['artifacts_enabled'] = true
@@ -355,6 +362,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 
 ### GitLab uploads
 ###! Docs: https://docs.gitlab.com/ee/administration/uploads.html
+# gitlab_rails['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
 # gitlab_rails['uploads_storage_path'] = "/opt/gitlab/embedded/service/gitlab-rails/public"
 # gitlab_rails['uploads_base_dir'] = "uploads/-/system"
 # gitlab_rails['uploads_object_store_enabled'] = false
@@ -381,6 +389,21 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_rails['terraform_state_object_store_enabled'] = false
 # gitlab_rails['terraform_state_object_store_remote_directory'] = "terraform"
 # gitlab_rails['terraform_state_object_store_connection'] = {
+#   'provider' => 'AWS',
+#   'region' => 'eu-west-1',
+#   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
+#   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
+#   # # The below options configure an S3 compatible host instead of AWS
+#   # 'host' => 's3.amazonaws.com',
+#   # 'aws_signature_version' => 4, # For creation of signed URLs. Set to 2 if provider does not support v4.
+#   # 'endpoint' => 'https://s3.amazonaws.com', # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
+#   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
+# }
+
+### GitLab Pages
+# gitlab_rails['pages_object_store_enabled'] = false
+# gitlab_rails['pages_object_store_remote_directory'] = "pages"
+# gitlab_rails['pages_object_store_connection'] = {
 #   'provider' => 'AWS',
 #   'region' => 'eu-west-1',
 #   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
@@ -492,6 +515,13 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 #   }
 # ]
 
+### FortiAuthenticator authentication settings
+# gitlab_rails['forti_authenticator_enabled'] = false
+# gitlab_rails['forti_authenticator_host'] = 'forti_authenticator.example.com'
+# gitlab_rails['forti_authenticator_port'] = 443
+# gitlab_rails['forti_authenticator_username'] = 'admin'
+# gitlab_rails['forti_authenticator_access_token'] = 's3cr3t'
+
 ### Backup Settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/backups.html
 
@@ -573,6 +603,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 
 ### Extra customization
 # gitlab_rails['extra_google_analytics_id'] = '_your_tracking_id'
+# gitlab_rails['extra_google_tag_manager_id'] = '_your_tracking_id'
 # gitlab_rails['extra_piwik_url'] = '_your_piwik_url'
 # gitlab_rails['extra_piwik_site_id'] = '_your_piwik_site_id'
 
@@ -593,9 +624,6 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 ###! **We do not recommend changing these directories.**
 # gitlab_rails['dir'] = "/var/opt/gitlab/gitlab-rails"
 # gitlab_rails['log_directory'] = "/var/log/gitlab/gitlab-rails"
-
-### GitLab application settings
-# gitlab_rails['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
 
 #### Change the initial default admin password and shared runner registration tokens.
 ####! **Only applicable on initial setup, changing these settings after database
@@ -672,13 +700,6 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_rails['redis_shared_sentinels'] = nil
 # gitlab_rails['redis_actioncable_instance'] = nil
 # gitlab_rails['redis_actioncable_sentinels'] = nil
-
-###! **Can be: 'none', 'peer', 'client_once', 'fail_if_no_peer_cert'**
-###! Docs: http://api.rubyonrails.org/classes/ActionMailer/Base.html
-# gitlab_rails['smtp_openssl_verify_mode'] = 'none'
-
-# gitlab_rails['smtp_ca_path'] = "/etc/ssl/certs"
-# gitlab_rails['smtp_ca_file'] = "/etc/ssl/certs/ca-certificates.crt"
 
 ################################################################################
 ## Container Registry settings
@@ -784,7 +805,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitlab_workhorse['ha'] = false
 # gitlab_workhorse['listen_network'] = "unix"
 # gitlab_workhorse['listen_umask'] = 000
-# gitlab_workhorse['listen_addr'] = "/var/opt/gitlab/gitlab-workhorse/socket"
+# gitlab_workhorse['listen_addr'] = "/var/opt/gitlab/gitlab-workhorse/sockets/socket"
 # gitlab_workhorse['auth_backend'] = "http://localhost:8080"
 
 ##! the empty string is the default in gitlab-workhorse option parser
@@ -820,6 +841,16 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 #   'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin",
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
+
+##! Resource limitations for the dynamic image scaler.
+##! Exceeding these thresholds will cause Workhorse to serve images in their original size.
+##!
+##! Maximum number of scaler processes that are allowed to execute concurrently.
+##! It is recommended for this not to exceed the number of CPUs available.
+# gitlab_workhorse['image_scaler_max_procs'] = 4
+##!
+##! Maximum file size in bytes for an image to be considered eligible for rescaling
+# gitlab_workhorse['image_scaler_max_filesize'] = 250000
 
 ################################################################################
 ## GitLab User Settings
@@ -894,6 +925,8 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # puma['listen'] = '127.0.0.1'
 # puma['port'] = 8080
 # puma['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
+# puma['somaxconn'] = 1024
+
 # puma['pidfile'] = '/opt/gitlab/var/puma/puma.pid'
 # puma['state_path'] = '/opt/gitlab/var/puma/puma.state'
 
@@ -921,7 +954,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # sidekiq['log_format'] = "json"
 # sidekiq['shutdown_timeout'] = 4
 # sidekiq['cluster'] = true
-# sidekiq['experimental_queue_selector'] = false
+# sidekiq['queue_selector'] = false
 # sidekiq['interval'] = nil
 # sidekiq['max_concurrency'] = 50
 # sidekiq['min_concurrency'] = nil
@@ -1032,10 +1065,17 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # postgresql['ssl_key_file'] = 'server.key'
 # postgresql['ssl_ca_file'] = '/opt/gitlab/embedded/ssl/certs/cacert.pem'
 # postgresql['ssl_crl_file'] = nil
+# postgresql['cert_auth_addresses'] = {
+#   'ADDRESS' => {
+#     database: 'gitlabhq_production',
+#     user: 'gitlab'
+#   }
+# }
 
 ### Replication settings
 ###! Note, some replication settings do not require a full restart. They are documented below.
 # postgresql['wal_level'] = "hot_standby"
+# postgresql['wal_log_hints'] = 'off'
 # postgresql['max_wal_senders'] = 5
 # postgresql['max_replication_slots'] = 0
 # postgresql['max_locks_per_transaction'] = 128
@@ -1817,6 +1857,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
 # postgres_exporter['sslmode'] = nil
+# postgres_exporter['per_table_stats'] = false
 
 ################################################################################
 ## Prometheus PgBouncer exporter (EE only)
@@ -1958,6 +1999,7 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # gitaly['auth_transitioning'] = false # When true, auth is logged to Prometheus but NOT enforced
 # gitaly['graceful_restart_timeout'] = '1m' # Grace time for a gitaly process to finish ongoing requests
 # gitaly['git_catfile_cache_size'] = 100 # Number of 'git cat-file' processes kept around for re-use
+# gitaly['git_bin_path'] = "/opt/gitlab/embedded/bin/git" # A custom path for the 'git' executable
 # gitaly['open_files_ulimit'] = 15000 # Maximum number of open files allowed for the gitaly process
 # gitaly['ruby_max_rss'] = 300000000 # RSS threshold in bytes for triggering a gitaly-ruby restart
 # gitaly['ruby_graceful_restart_timeout'] = '10m' # Grace time for a gitaly-ruby process to finish ongoing requests
@@ -2467,35 +2509,55 @@ gitlab_rails['object_store']['objects']['terraform_state']['bucket'] = nil
 # patroni['data_dir'] = '/var/opt/gitlab/patroni/data'
 # patroni['ctl_command'] = '/opt/gitlab/embedded/bin/patronictl'
 
-# patroni['scope'] = 'gitlab-postgresql-ha'
-# patroni['name'] = nil
-
-# patroni['log_directory'] = '/var/log/gitlab/patroni'
-# patroni['log_level'] = 'INFO'
-
-# patroni['consul']['url'] = 'http://127.0.0.1:8500'
-# patroni['consul']['service_check_interval'] = '10s'
-# patroni['consul']['register_service'] = false
-# patroni['consul']['checks'] = []
-
-## Bootstrap settings
+## Patroni dynamic configuration settings
 # patroni['loop_wait'] = 10
 # patroni['ttl'] = 30
 # patroni['retry_timeout'] = 10
 # patroni['maximum_lag_on_failover'] = 1_048_576
 # patroni['max_timelines_history'] = 0
 # patroni['master_start_timeout'] = 300
+# patroni['use_pg_rewind'] = false
+# patroni['use_slots'] = true
+# patroni['replication_password'] = nil
+# patroni['replication_slots'] = {}
+
+## Standby cluster replication settings
+# patroni['standby_cluster']['enable'] = false
+# patroni['standby_cluster']['host'] = nil
+# patroni['standby_cluster']['port'] = 5432
+# patroni['standby_cluster']['primary_slot_name'] = nil
+
+## Global/Universal settings
+# patroni['scope'] = 'gitlab-postgresql-ha'
+# patroni['name'] = nil
+
+## Log settings
+# patroni['log_directory'] = '/var/log/gitlab/patroni'
+# patroni['log_level'] = 'INFO'
+
+## Consul specific settings
+# patroni['consul']['url'] = 'http://127.0.0.1:8500'
+# patroni['consul']['service_check_interval'] = '10s'
+# patroni['consul']['register_service'] = true
+# patroni['consul']['checks'] = []
 
 ## PostgreSQL configuration override
-# patroni['postgresql']['wal_level'] = 'replica'
 # patroni['postgresql']['hot_standby'] = 'on'
+
+## The following must hold the same values on all nodes.
+## Leave unassined to use PostgreSQL's default values.
+# patroni['postgresql']['wal_level'] = 'replica'
+# patroni['postgresql']['wal_log_hints'] = 'on'
+# patroni['postgresql']['max_worker_processes'] = 8
+# patroni['postgresql']['max_locks_per_transaction'] = 64
+# patroni['postgresql']['max_connections'] = 200
+# patroni['postgresql']['checkpoint_timeout'] = 30
+
+## The following can hold different values on all nodes.
+## Leave unassined to use PostgreSQL's default values.
 # patroni['postgresql']['wal_keep_segments'] = 8
 # patroni['postgresql']['max_wal_senders'] = 5
 # patroni['postgresql']['max_replication_slots'] = 5
-# patroni['postgresql']['checkpoint_timeout'] = 30
-
-# patroni['use_pg_rewind'] = false
-# patroni['use_slots'] = true
 
 ## Permanent replication slots for Streaming Replication
 # patroni['replication_slots'] = {

@@ -4,7 +4,11 @@ require_relative '../pg_version'
 
 class BasePgHelper < BaseHelper
   include ShellOutHelper
+
   attr_reader :node
+  attr_reader :built_connection_info
+
+  ConnectionInfo = Struct.new(:dbname, :dbhost, :port, :pguser)
 
   PG_HASH_PATTERN ||= /\{(.*)\}/.freeze
   PG_HASH_PAIR_SEPARATOR ||= ','.freeze
@@ -16,6 +20,20 @@ class BasePgHelper < BaseHelper
   def is_running?
     omnibus_helper = OmnibusHelper.new(node)
     omnibus_helper.service_up?(service_name) || (delegated? && omnibus_helper.service_up?(delegate_service_name) && ready?)
+  end
+
+  def is_ready?
+    status = PgStatusHelper.new(connection_info, node)
+
+    status.ready?
+  end
+
+  def connection_info
+    raise NotImplementedError
+  end
+
+  def build_connection_info(dbname, dbhost, port, pguser)
+    @built_connection_info ||= ConnectionInfo.new(dbname, dbhost, port, pguser)
   end
 
   def is_managed_and_offline?

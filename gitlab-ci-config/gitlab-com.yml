@@ -148,7 +148,7 @@ rubocop:
     - gems
 
 docs-lint:
-  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:vale-2.3.4-markdownlint-0.23.2"
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:ruby-2.7.2-alpine-3.12-vale-2.4.3-markdownlint-0.24.0"
   stage: check
   cache: {}
   dependencies: []
@@ -219,13 +219,11 @@ danger-review:
   script:
     - danger --fail-on-errors=true
 
-Centos 6 knapsack: *prepare_knapsack
 Centos 7 knapsack: *prepare_knapsack
 Centos 8 knapsack: *prepare_knapsack
 Debian 9 knapsack: *prepare_knapsack
 Debian 10 knapsack: *prepare_knapsack
 OpenSUSE 15.1 knapsack: *prepare_knapsack
-OpenSUSE 15.2 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
 Ubuntu 18.04 knapsack: *prepare_knapsack
 Ubuntu 20.04 knapsack: *prepare_knapsack
@@ -260,12 +258,6 @@ Debian 10 specs :
   parallel: 6
   dependencies:
   - Debian 10 knapsack
-Centos 6 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos6"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - Centos 6 knapsack
 Centos 7 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
   extends: .spec_template
@@ -284,12 +276,6 @@ OpenSUSE 15.1 specs :
   parallel: 6
   dependencies:
   - OpenSUSE 15.1 knapsack
-OpenSUSE 15.2 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse15.2"
-  extends: .spec_template
-  parallel: 6
-  dependencies:
-  - OpenSUSE 15.2 knapsack
 
 update-knapsack:
   <<: *knapsack-state
@@ -395,6 +381,8 @@ dependency_update:
       - $DEPS_PIPELINE
 
 dependencies_io_check:
+  variables:
+    ee: "true"
   image: "${RUBY_IMAGE}"
   stage: trigger-package
   script:

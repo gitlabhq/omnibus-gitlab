@@ -34,6 +34,7 @@ default['postgresql']['ssl_cert_file'] = 'server.crt'
 default['postgresql']['ssl_key_file'] = 'server.key'
 default['postgresql']['ssl_ca_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
 default['postgresql']['ssl_crl_file'] = nil
+default['postgresql']['cert_auth_addresses'] = {}
 
 default['postgresql']['shmmax'] = /x86_64/.match?(node['kernel']['machine']) ? 17179869184 : 4294967295
 default['postgresql']['shmall'] = /x86_64/.match?(node['kernel']['machine']) ? 4194304 : 1048575
@@ -104,6 +105,7 @@ default['postgresql']['log_rotation_size'] = nil
 # Replication settings
 default['postgresql']['sql_replication_user'] = "gitlab_replicator"
 default['postgresql']['wal_level'] = "minimal"
+default['postgresql']['wal_log_hints'] = "off"
 default['postgresql']['max_wal_senders'] = 0
 default['postgresql']['wal_keep_segments'] = 10
 default['postgresql']['hot_standby'] = "off"
@@ -121,3 +123,7 @@ default['postgresql']['archive_timeout'] = "0"
 
 # Version setting for linking binaries when bundled postgresql is not being used
 default['postgresql']['version'] = nil
+
+# Listen Check settings
+default['postgresql']['max_service_checks'] = 20
+default['postgresql']['service_check_interval'] = 5

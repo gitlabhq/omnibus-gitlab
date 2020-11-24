@@ -79,6 +79,7 @@ default['monitoring']['postgres-exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
 default['monitoring']['postgres-exporter']['sslmode'] = nil
+default['monitoring']['postgres-exporter']['per_table_stats'] = false
 
 ####
 # Gitlab exporter

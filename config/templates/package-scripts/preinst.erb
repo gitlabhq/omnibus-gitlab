@@ -51,7 +51,7 @@ upgrade_check() {
 
   if [ -n "${OLD_VERSION_STRING}" ] ; then
     # Minimum version from which jumps are permitted to current version.
-    # Follows https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations
+    # Follows https://docs.gitlab.com/ee/update/README.html#upgrade-paths
     MIN_VERSION=13.0
 
     # Checking
@@ -61,7 +61,7 @@ upgrade_check() {
       if ! greater_version $OLD_MINOR_VERSION $MIN_VERSION; then
         notify "It seems you are upgrading from major version ${OLD_MAJOR_VERSION} to major version ${NEW_MAJOR_VERSION}."
         notify "It is required to upgrade to the latest ${MIN_VERSION}.x version first before proceeding."
-        notify "Please follow the upgrade documentation at https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations"
+        notify "Please follow the upgrade documentation at https://docs.gitlab.com/ee/update/README.html#upgrade-paths"
         exit 1
       fi
     fi

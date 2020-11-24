@@ -28,6 +28,7 @@ RSpec.describe 'gitaly' do
   let(:ruby_num_workers) { 5 }
   let(:ruby_rugged_git_config_search_path) { '/path/to/opt/gitlab/embedded/etc' }
   let(:git_catfile_cache_size) { 50 }
+  let(:git_bin_path) { '/path/to/usr/bin/git' }
   let(:open_files_ulimit) { 10000 }
   let(:default_vars) do
     {
@@ -76,6 +77,15 @@ RSpec.describe 'gitaly' do
       expect(chef_run.version_file('Create version file for Gitaly')).to notify('runit_service[gitaly]').to(:hup)
     end
 
+    it 'creates a default RUBY_VERSION file and restarts service' do
+      expect(chef_run).to create_version_file('Create Ruby version file for Gitaly').with(
+        version_file_path: '/var/opt/gitlab/gitaly/RUBY_VERSION',
+        version_check_cmd: '/opt/gitlab/embedded/bin/ruby --version'
+      )
+
+      expect(chef_run.version_file('Create Ruby version file for Gitaly')).to notify('runit_service[gitaly]').to(:hup)
+    end
+
     it 'populates gitaly config.toml with defaults' do
       expect(chef_run).to render_file(config_path).with_content { |content|
         expect(content).to include("socket_path = '/var/opt/gitlab/gitaly/gitaly.socket'")
@@ -120,6 +130,8 @@ RSpec.describe 'gitaly' do
         .with_content(%r{catfile_cache_size})
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{\[daily_maintenance\]})
+      expect(chef_run).not_to render_file(config_path)
+        .with_content('bin_path = ')
     end
 
     it 'populates gitaly config.toml with default storages' do
@@ -144,7 +156,7 @@ RSpec.describe 'gitaly' do
 
     it 'populates gitaly config.toml with gitlab-workhorse socket' do
       expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsocket'\s+relative_url_root = ''})
+        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket'\s+relative_url_root = ''})
     end
   end
 
@@ -173,6 +185,7 @@ RSpec.describe 'gitaly' do
           ruby_restart_delay: ruby_restart_delay,
           ruby_num_workers: ruby_num_workers,
           git_catfile_cache_size: git_catfile_cache_size,
+          git_bin_path: git_bin_path,
           open_files_ulimit: open_files_ulimit,
           ruby_rugged_git_config_search_path: ruby_rugged_git_config_search_path,
           daily_maintenance_start_hour: daily_maintenance_start_hour,
@@ -222,6 +235,8 @@ RSpec.describe 'gitaly' do
         .with_content("listen_addr = 'localhost:7777'")
       expect(chef_run).to render_file(config_path)
         .with_content("graceful_restart_timeout = '#{graceful_restart_timeout}'")
+      expect(chef_run).to render_file(config_path)
+        .with_content("bin_path = '#{git_bin_path}'")
 
       gitaly_logging_section = Regexp.new([
         %r{\[logging\]},
@@ -488,13 +503,37 @@ RSpec.describe 'gitaly' do
   end
 
   context 'with a non-default workhorse unix socket' do
-    before do
-      stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket' })
+    context 'with only a listen address set' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket' })
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsocket'\s+relative_url_root = ''})
+      end
     end
 
-    it 'create config file with provided values' do
-      expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsocket'\s+relative_url_root = ''})
+    context 'with only a socket directory set' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { sockets_directory: '/fake/workhorse/sockets' })
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsockets%2Fsocket'\s+relative_url_root = ''})
+      end
+    end
+
+    context 'with a listen_address and a sockets_directory set' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/sockets/in/the/wind', sockets_directory: '/sockets/in/the' })
+      end
+
+      it 'create config file with provided values' do
+        expect(chef_run).to render_file(config_path)
+          .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fsockets%2Fin%2Fthe%2Fwind'\s+relative_url_root = ''})
+      end
     end
   end
 
@@ -524,7 +563,7 @@ RSpec.describe 'gitaly' do
 
     it 'create config file with the relative_url_root set' do
       expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsocket'\s+relative_url_root = '/gitlab'})
+        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket'\s+relative_url_root = '/gitlab'})
     end
   end
 end

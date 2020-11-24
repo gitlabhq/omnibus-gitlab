@@ -1,0 +1,10 @@
+#!/bin/sh
+exec 2>&1
+
+cd <%= node['logrotate']['dir'] %>
+
+exec /opt/gitlab/embedded/bin/chpst -P /usr/bin/env \
+  dir=<%= node['logrotate']['dir'] %> \
+  pre_sleep=<%= node['logrotate']['pre_sleep'] %> \
+  post_sleep=<%= node['logrotate']['post_sleep'] %> \
+  /opt/gitlab/embedded/bin/gitlab-logrotate-wrapper

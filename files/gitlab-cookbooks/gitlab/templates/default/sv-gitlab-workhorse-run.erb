@@ -8,6 +8,13 @@ exec 2>&1
 
 cd <%= node['gitlab']['gitlab-workhorse']['dir'] %>
 
+<% if File.exist?('/var/opt/gitlab/gitlab-workhorse/socket') %>
+if [ -e "/var/opt/gitlab/gitlab-workhorse/socket" ]; then
+  echo "Removing orphaned workhorse socket at '/var/opt/gitlab/gitlab-workhorse/socket'"
+  rm /var/opt/gitlab/gitlab-workhorse/socket
+fi
+<% end %>
+
 exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
   -U <%= node['gitlab']['user']['username'] %>:<%= node['gitlab']['user']['group'] %> \
   -u <%= node['gitlab']['user']['username'] %>:<%= node['gitlab']['user']['group'] %> \

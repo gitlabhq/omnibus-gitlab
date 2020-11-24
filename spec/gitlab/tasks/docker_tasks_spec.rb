@@ -39,7 +39,7 @@ RSpec.describe 'docker', type: :rake do
 
       expect(Gitlab::DockerImageMemoryMeasurer).to receive(:new).with('dev.gitlab.org:5005/gitlab/omnibus-gitlab', 'tmp/debug_folder').and_return(mock_measurer)
       expect(mock_measurer).to receive(:measure).and_return('mock_return')
-      expect { Rake::Task['docker:measure_memory'].invoke }.to output("mock_return\n").to_stdout
+      expect { Rake::Task['docker:measure_memory'].invoke }.to output(/.*mock_return\n.*/).to_stdout
     end
 
     it 'initialize DockerImageMemoryMeasurer with correct parameters when ENV IMAGE_REFERENCE set' do
@@ -49,7 +49,7 @@ RSpec.describe 'docker', type: :rake do
 
       expect(Gitlab::DockerImageMemoryMeasurer).to receive(:new).with('env_value_image_reference', 'tmp/debug_folder').and_return(mock_measurer)
       expect(mock_measurer).to receive(:measure).and_return('mock_return')
-      expect { Rake::Task['docker:measure_memory'].invoke }.to output("mock_return\n").to_stdout
+      expect { Rake::Task['docker:measure_memory'].invoke }.to output(/.*mock_return\n.*/).to_stdout
     end
   end
 

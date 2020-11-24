@@ -72,7 +72,7 @@ RSpec.describe 'gitlab::config' do
       expect(node['monitoring']['alertmanager']['enable']).to eq true
       expect(node['monitoring']['node-exporter']['enable']).to eq true
       expect(node['monitoring']['redis-exporter']['enable']).to eq true
-      expect(node['gitlab']['logrotate']['enable']).to eq true
+      expect(node['logrotate']['enable']).to eq true
       expect(node['monitoring']['postgres-exporter']['enable']).to eq true
     end
   end
@@ -99,7 +99,7 @@ RSpec.describe 'gitlab::config' do
         expect(node['redis']['enable']).to eq false
         expect(node['monitoring']['redis-exporter']['enable']).to eq false
         expect(node['monitoring']['node-exporter']['enable']).to eq true
-        expect(node['gitlab']['logrotate']['enable']).to eq true
+        expect(node['logrotate']['enable']).to eq true
       end
 
       context 'when redis_sentinel_role is enabled with redis_master_role' do
@@ -122,7 +122,7 @@ RSpec.describe 'gitlab::config' do
           expect(node['redis']['enable']).to eq true
           expect(node['monitoring']['redis-exporter']['enable']).to eq true
           expect(node['monitoring']['node-exporter']['enable']).to eq true
-          expect(node['gitlab']['logrotate']['enable']).to eq true
+          expect(node['logrotate']['enable']).to eq true
         end
       end
 
@@ -151,7 +151,7 @@ RSpec.describe 'gitlab::config' do
           expect(node['redis']['enable']).to eq true
           expect(node['monitoring']['redis-exporter']['enable']).to eq true
           expect(node['monitoring']['node-exporter']['enable']).to eq true
-          expect(node['gitlab']['logrotate']['enable']).to eq true
+          expect(node['logrotate']['enable']).to eq true
         end
       end
     end
@@ -173,7 +173,7 @@ RSpec.describe 'gitlab::config' do
         expect(node['gitlab']['sentinel']['enable']).to eq false
         expect(node['monitoring']['redis-exporter']['enable']).to eq true
         expect(node['monitoring']['node-exporter']['enable']).to eq true
-        expect(node['gitlab']['logrotate']['enable']).to eq true
+        expect(node['logrotate']['enable']).to eq true
       end
     end
 

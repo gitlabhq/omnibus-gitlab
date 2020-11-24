@@ -1000,6 +1000,22 @@ gitlab_rails['gitlab_email_reply_to'] = 'username@example.com'
 Check the SMTP user name and SMTP user password from the ESS [dashboard](https://pfs.nifcloud.com/help/ess/dashboard.htm).
 `gitlab_email_from` and `gitlab_email_reply_to` must be ESS authenticated sender email addresses.
 
+### Sina mail
+
+User needs first to enabled SMTP through the mailbox settings via web mail interface and get the authenitication code. Check out more details in the [help page](http://help.sina.com.cn/comquestiondetail/view/1566/) of Sina mail.
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.sina.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username@sina.com"
+gitlab_rails['smtp_password'] = "authentication code"
+gitlab_rails['smtp_domain'] = "smtp.sina.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['gitlab_email_from'] = 'username@sina.com'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge

@@ -120,7 +120,7 @@ After starting a container you can visit `gitlab.example.com` (or
 `http://192.168.59.103` if you used boot2docker on macOS). It might take a while
 before the Docker container starts to respond to queries.
 The very first time you visit GitLab, you will be asked to set up the admin
-password. After you change it, you can login with username `root` and the
+password. After you change it, you can log in with username `root` and the
 password you set up.
 
 ### Install GitLab using Docker Compose
@@ -503,6 +503,12 @@ docker exec -t <container name> gitlab-backup create
 
 Read more on how to [back up and restore GitLab](https://docs.gitlab.com/ee/raketasks/backup_restore.html).
 
+NOTE: **Note:**
+If configuration is provided entirely via the `GITLAB_OMNIBUS_CONFIG` environment variable
+(per the ["Pre-configure Docker Container"](#pre-configure-docker-container) steps),
+meaning no configuration is set directly in the `gitlab.rb` file, then there is no need
+to back up the `gitlab.rb` file.
+
 ## Installing GitLab Community Edition
 
 [GitLab CE Docker image](https://hub.docker.com/r/gitlab/gitlab-ce/)
@@ -600,3 +606,30 @@ sudo setfacl -mR default:group:docker:rwx $GITLAB_HOME
 
 The default group is `docker`. If you changed the group, be sure to update your
 commands.
+
+### /dev/shm mount not having enough space in Docker container
+
+GitLab comes with a Prometheus metrics endpoint at `/-/metrics` to expose a
+variety of statistics on the health and performance of GitLab. The files
+required for this gets written to a temporary file system (like `/run` or
+`/dev/shm`).
+
+By default, Docker allocates 64Mb to the shared memory directory (mounted at
+`/dev/shm`). This is insufficient to hold all the Prometheus metrics related
+files generated, and will generate error logs like the following:
+
+```plaintext
+writing value to /dev/shm/gitlab/sidekiq/gauge_all_sidekiq_0-1.db failed with unmapped file
+writing value to /dev/shm/gitlab/sidekiq/gauge_all_sidekiq_0-1.db failed with unmapped file
+writing value to /dev/shm/gitlab/sidekiq/gauge_all_sidekiq_0-1.db failed with unmapped file
+writing value to /dev/shm/gitlab/sidekiq/histogram_sidekiq_0-0.db failed with unmapped file
+writing value to /dev/shm/gitlab/sidekiq/histogram_sidekiq_0-0.db failed with unmapped file
+writing value to /dev/shm/gitlab/sidekiq/histogram_sidekiq_0-0.db failed with unmapped file
+writing value to /dev/shm/gitlab/sidekiq/histogram_sidekiq_0-0.db failed with unmapped file
+```
+
+Other than disabling the Prometheus Metrics from the Admin page, the recommended
+solution to fix this problem is to increase the size of shm to at least 256Mb.
+If using `docker run`, this can be done by passing the flag `--shm-size 256m`.
+If using a `docker-compose.yml` file, the `shm_size` key can be used for this
+purpose.

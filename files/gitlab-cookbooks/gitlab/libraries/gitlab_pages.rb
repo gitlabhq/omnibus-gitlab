@@ -72,11 +72,11 @@ module GitlabPages
       end
 
       Gitlab['gitlab_pages']['pages_root'] ||= (Gitlab['gitlab_rails']['pages_path'] || File.join(Gitlab['gitlab_rails']['shared_path'], 'pages'))
-      Gitlab['gitlab_pages']['artifacts_server_url'] ||= Gitlab['external_url'].chomp('/') + '/api/v4'
 
       pages_uri = URI(Gitlab['pages_external_url'].to_s)
       Gitlab['gitlab_pages']['auth_redirect_uri'] ||= pages_uri.scheme + '://projects.' + pages_uri.host + '/auth'
       Gitlab['gitlab_pages']['gitlab_server'] ||= Gitlab['external_url']
+      Gitlab['gitlab_pages']['artifacts_server_url'] ||= Gitlab['gitlab_pages']['gitlab_server'].chomp('/') + '/api/v4'
     end
 
     def authorize_with_gitlab

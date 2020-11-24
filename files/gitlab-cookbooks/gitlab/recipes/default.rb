@@ -74,8 +74,12 @@ end
 # because we add `gitlab-www` user to some groups created by that recipe
 include_recipe "gitlab::web-server"
 
+# We attempt to create and manage users/groups by default. If users wish to
+# disable it, they can set `manage_accounts['enable']` to `false`, and
+# `account` custom resource will not create them.
+include_recipe "gitlab::users"
+
 if node['gitlab']['gitlab-rails']['enable']
-  include_recipe "gitlab::users"
   include_recipe "gitlab::gitlab-shell"
   include_recipe "gitlab::gitlab-rails"
 end
@@ -133,7 +137,7 @@ include_recipe "praefect::database_migrations" if node['praefect']['enable'] && 
 
 # Always create logrotate folders and configs, even if the service is not enabled.
 # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/508
-include_recipe "gitlab::logrotate_folders_and_configs"
+include_recipe "logrotate::folders_and_configs"
 
 # Configure Services
 %w[
@@ -145,7 +149,6 @@ include_recipe "gitlab::logrotate_folders_and_configs"
   mailroom
   nginx
   remote-syslog
-  logrotate
   bootstrap
   gitlab-pages
   storage-check
@@ -164,6 +167,7 @@ else
 end
 
 %w(
+  logrotate
   registry
   mattermost
   gitlab-kas
@@ -193,6 +197,8 @@ else
 end
 
 OmnibusHelper.is_deprecated_os?
+
+OmnibusHelper.new(node).print_root_account_details
 
 # Report on any deprecations we encountered at the end of the run
 # There are three possible exits for a reconfigure run

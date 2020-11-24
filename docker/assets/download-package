@@ -9,3 +9,9 @@ else
     # to authenticate to access it. Hence, we pass PRIVATE-TOKEN header.
     wget --quiet --header "PRIVATE-TOKEN: ${TRIGGER_PRIVATE_TOKEN}" ${DOWNLOAD_URL} -O /tmp/gitlab.deb
 fi
+
+results=$?
+if [ ${results} -ne 0 ]; then
+    >&2 echo "There was an error downloading ${DOWNLOAD_URL}. Please check the output for more information"
+    exit ${results}
+fi

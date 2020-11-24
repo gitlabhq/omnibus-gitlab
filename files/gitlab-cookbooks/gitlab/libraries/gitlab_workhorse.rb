@@ -19,6 +19,17 @@ module GitlabWorkhorse
   class << self
     def parse_variables
       Gitlab['gitlab_workhorse']['auth_socket'] = nil if !auth_socket_specified? && auth_backend_specified?
+
+      user_listen_addr = Gitlab['gitlab_workhorse']['listen_addr']
+      Gitlab['gitlab_workhorse']['sockets_directory'] ||= '/var/opt/gitlab/gitlab-workhorse/sockets' if user_listen_addr.nil?
+
+      sockets_dir = Gitlab['gitlab_workhorse']['sockets_directory']
+
+      default_network = Gitlab['node']['gitlab']['gitlab-workhorse']['listen_network']
+      user_network = Gitlab['gitlab_workhorse']['listen_network']
+      network = user_network || default_network
+
+      Gitlab['gitlab_workhorse']['listen_addr'] ||= File.join(sockets_dir, 'socket') if network == "unix"
     end
 
     def parse_secrets

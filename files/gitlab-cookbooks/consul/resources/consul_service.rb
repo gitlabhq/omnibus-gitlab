@@ -1,4 +1,5 @@
 resource_name :consul_service
+provides :consul_service
 
 property :service_name, String, name_property: true
 property :ip_address, [String, nil], default: nil

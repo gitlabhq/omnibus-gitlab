@@ -1,4 +1,5 @@
 resource_name :unicorn_config
+provides :unicorn_config
 
 property :listen, Hash
 property :working_directory

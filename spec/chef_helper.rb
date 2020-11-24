@@ -66,7 +66,7 @@ RSpec.configure do |config|
 
     # Default attributes are frozen;  as that's sometimes a class we really want
     # to mock, just intercept the .freeze call so mocking/unmocking still works
-    [PgHelper, GeoPgHelper, GitlabGeoHelper, OmnibusHelper].each do |helper_class|
+    [PgHelper, GeoPgHelper, PgStatusHelper, GitlabGeoHelper, OmnibusHelper].each do |helper_class|
       allow_any_instance_of(helper_class).to receive(:freeze)
     end
 

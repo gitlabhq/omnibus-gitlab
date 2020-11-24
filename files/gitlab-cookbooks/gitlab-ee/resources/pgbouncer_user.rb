@@ -1,4 +1,5 @@
 resource_name :pgbouncer_user
+provides :pgbouncer_user
 
 property :type, String, name_property: true
 property :account_helper, default: AccountHelper.new(node)

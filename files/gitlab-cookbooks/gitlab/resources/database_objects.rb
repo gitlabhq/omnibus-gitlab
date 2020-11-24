@@ -1,4 +1,5 @@
 resource_name :database_objects
+provides :database_objects
 
 property :pg_helper, [GeoPgHelper, PgHelper], required: true
 property :account_helper, [AccountHelper], required: true

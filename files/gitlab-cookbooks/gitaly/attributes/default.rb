@@ -23,6 +23,7 @@ default['gitaly']['storage'] = []
 default['gitaly']['auth_token'] = nil
 default['gitaly']['auth_transitioning'] = false
 default['gitaly']['git_catfile_cache_size'] = nil
+default['gitaly']['git_bin_path'] = nil
 default['gitaly']['open_files_ulimit'] = 15000
 default['gitaly']['ruby_max_rss'] = nil
 default['gitaly']['ruby_graceful_restart_timeout'] = nil

@@ -1,0 +1,5 @@
+---
+title: Remove CentOS 6 Builds
+merge_request: 4782
+author:
+type: deprecated

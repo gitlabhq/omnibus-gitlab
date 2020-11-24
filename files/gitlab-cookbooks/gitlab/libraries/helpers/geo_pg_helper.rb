@@ -11,4 +11,15 @@ class GeoPgHelper < BasePgHelper
   def service_cmd
     'gitlab-geo-psql'
   end
+
+  private
+
+  def connection_info
+    build_connection_info(
+      node['gitlab']['geo-secondary']['db_database'],
+      node['gitlab']['geo-postgresql']['unix_socket_directory'],
+      node['gitlab']['geo-postgresql']['port'],
+      node['gitlab']['geo-postgresql']['sql_user']
+    )
+  end
 end

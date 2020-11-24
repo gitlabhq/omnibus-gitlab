@@ -86,6 +86,10 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
         max_threads: 4
       )
     end
+
+    it 'creates sysctl files' do
+      expect(chef_run).to create_gitlab_sysctl('net.core.somaxconn').with_value(1024)
+    end
   end
 
   context 'with custom Puma settings' do
@@ -119,6 +123,10 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
         max_threads: 10,
         per_worker_max_memory_mb: 1000
       )
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content { |content|
+        expect(content).to match(%r(-authSocket /tmp/puma.socket))
+      }
+      expect(Gitlab['gitlab_workhorse']['auth_socket']).to eq('/tmp/puma.socket')
     end
   end
 

@@ -122,7 +122,7 @@ different components may require them to have individual configuration files
 residing at specific locations. These configuration files have to be generated
 from either the values specified by the user in general configuration file or
 from the default values specified. Hence, Omnibus GitLab ships with it
-[templates of such configuration files](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates) 
+[templates of such configuration files](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates)
 ith placeholders which may be filled by default values or values from user. The
 recipes do the job of completing these templates, by filling them and placing
 them at necessary locations.

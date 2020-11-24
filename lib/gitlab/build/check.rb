@@ -58,7 +58,7 @@ module Build
       end
 
       def on_tag?
-        system(*%w[git describe --exact-match])
+        system('git describe --exact-match > /dev/null 2>&1')
       end
     end
   end

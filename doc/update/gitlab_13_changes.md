@@ -34,3 +34,15 @@ PostgreSQL 12.3 is being shipped with the package in addition to 11.7 which is s
 Both fresh installs and upgrades will still continue to use 11.7, but users can manually upgrade to 12.3 following the
 [upgrade docs](../settings/database.md#upgrade-packaged-postgresql-server). Note that PostgreSQL 12 is not supported
 for Geo deployments in GitLab 13.3 and is planned for the 13.4 release.
+
+## 13.5
+
+### Default workhorse listen socket moved
+
+The path for the Workhorse socket changed from `/var/opt/gitlab/workhorse/socket` to `/var/opt/gitlab/workhorse/sockets/socket` in 13.5. This change will automatically get applied and Workhorse will be restarted during an upgrade, unless you have set your system to skip `reconfigure` (`/etc/gitlab/skip-auto-reconfigure`).
+
+If you use SELinux and have set `gitlab_workhorse['listen_addr']` to a custom socket path, some manual steps are required. If you want Omnibus to manage SELinux Contexts, set `gitlab_workhorse['sockets_directory'] = "/var/opt/my_workhorse_socket_home"` and run `gitlab-ctl reconfigure`. Alternatively, if you want to manage the SELinux Context yourself, run `semanage fcontext -a -t gitlab_shell_t '/var/opt/my_workhorse_socket_home'` and then `restorecon -v '/var/opt/my_workhorse_socket_home'`. Note that if you are managing the SELinux Context yourself, you will need to repeat these steps if you move the directory.
+
+If you are using a custom listen address but you are not using SELinux, you will not be affected by this change.
+
+If you are using your own NGINX rather than the bundled version, and are proxying to the workhorse socket, you will need to update your NGINX config.

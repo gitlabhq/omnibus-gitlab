@@ -187,6 +187,8 @@ default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy']
 default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy']['bucket'] = nil
 default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state'] = {}
 default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['pages'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['pages']['bucket'] = nil
 
 default['gitlab']['gitlab-rails']['artifacts_enabled'] = true
 default['gitlab']['gitlab-rails']['artifacts_path'] = nil
@@ -262,6 +264,9 @@ default['gitlab']['gitlab-rails']['pages_host'] = nil
 default['gitlab']['gitlab-rails']['pages_port'] = nil
 default['gitlab']['gitlab-rails']['pages_https'] = false
 default['gitlab']['gitlab-rails']['pages_path'] = nil
+default['gitlab']['gitlab-rails']['pages_object_store_enabled'] = false
+default['gitlab']['gitlab-rails']['pages_object_store_remote_directory'] = 'pages'
+default['gitlab']['gitlab-rails']['pages_object_store_connection'] = {}
 default['gitlab']['gitlab-rails']['registry_enabled'] = false
 default['gitlab']['gitlab-rails']['registry_host'] = nil
 default['gitlab']['gitlab-rails']['registry_port'] = nil
@@ -331,6 +336,12 @@ default['gitlab']['gitlab-rails']['omniauth_external_providers'] = nil
 default['gitlab']['gitlab-rails']['omniauth_providers'] = []
 default['gitlab']['gitlab-rails']['omniauth_allow_bypass_two_factor'] = nil
 
+default['gitlab']['gitlab-rails']['forti_authenticator_enabled'] = false
+default['gitlab']['gitlab-rails']['forti_authenticator_host'] = nil
+default['gitlab']['gitlab-rails']['forti_authenticator_port'] = 443
+default['gitlab']['gitlab-rails']['forti_authenticator_username'] = nil
+default['gitlab']['gitlab-rails']['forti_authenticator_access_token'] = nil
+
 default['gitlab']['gitlab-rails']['shared_path'] = "/var/opt/gitlab/gitlab-rails/shared"
 
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
@@ -363,6 +374,7 @@ default['gitlab']['gitlab-rails']['gitlab_shell_git_timeout'] = 10800
 # defaults to /opt/gitlab/embedded/bin/git. The install-dir path is set at build time
 default['gitlab']['gitlab-rails']['git_bin_path'] = "#{node['package']['install-dir']}/embedded/bin/git"
 default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
+default['gitlab']['gitlab-rails']['extra_google_tag_manager_id'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_url'] = nil
 default['gitlab']['gitlab-rails']['extra_piwik_site_id'] = nil
 default['gitlab']['gitlab-rails']['rack_attack_git_basic_auth'] = nil
@@ -497,6 +509,7 @@ default['gitlab']['puma']['log_directory'] = "/var/log/gitlab/puma"
 default['gitlab']['puma']['listen'] = "127.0.0.1"
 default['gitlab']['puma']['port'] = 8080
 default['gitlab']['puma']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
+default['gitlab']['puma']['somaxconn'] = 1024
 # Path to the puma server Process ID file
 # defaults to /opt/gitlab/var/puma/puma.pid. The install-dir path is set at build time
 default['gitlab']['puma']['pidfile'] = "#{node['package']['install-dir']}/var/puma/puma.pid"
@@ -549,6 +562,8 @@ default['gitlab']['sidekiq']['listen_port'] = 8082
 
 # Cluster specific settings
 default['gitlab']['sidekiq']['cluster'] = true
+default['gitlab']['sidekiq']['queue_selector'] = false
+# Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
 default['gitlab']['sidekiq']['experimental_queue_selector'] = false
 default['gitlab']['sidekiq']['interval'] = nil
 default['gitlab']['sidekiq']['max_concurrency'] = 50
@@ -569,6 +584,7 @@ default['gitlab']['sidekiq-cluster']['max_concurrency'] = nil
 default['gitlab']['sidekiq-cluster']['min_concurrency'] = nil
 default['gitlab']['sidekiq-cluster']['queue_groups'] = []
 default['gitlab']['sidekiq-cluster']['negate'] = false
+# Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
 default['gitlab']['sidekiq-cluster']['experimental_queue_selector'] = false
 
 ###
@@ -584,6 +600,7 @@ default['gitlab']['gitlab-shell']['auth_file'] = nil
 default['gitlab']['gitlab-shell']['git_trace_log_file'] = nil
 default['gitlab']['gitlab-shell']['custom_hooks_dir'] = nil
 default['gitlab']['gitlab-shell']['migration'] = { enabled: true, features: [] }
+default['gitlab']['gitlab-shell']['ssl_cert_dir'] = "#{node['package']['install-dir']}/embedded/ssl/certs/"
 # DEPRECATED! Not used by gitlab-shell
 default['gitlab']['gitlab-shell']['git_data_directories'] = {
   "default" => { "path" => "/var/opt/gitlab/git-data" }
@@ -610,7 +627,8 @@ default['gitlab']['gitlab-workhorse']['enable'] = false
 default['gitlab']['gitlab-workhorse']['ha'] = false
 default['gitlab']['gitlab-workhorse']['listen_network'] = "unix"
 default['gitlab']['gitlab-workhorse']['listen_umask'] = 000
-default['gitlab']['gitlab-workhorse']['listen_addr'] = "/var/opt/gitlab/gitlab-workhorse/socket"
+default['gitlab']['gitlab-workhorse']['sockets_directory'] = nil
+default['gitlab']['gitlab-workhorse']['listen_addr'] = nil
 default['gitlab']['gitlab-workhorse']['auth_backend'] = "http://localhost:8080"
 default['gitlab']['gitlab-workhorse']['auth_socket'] = nil
 default['gitlab']['gitlab-workhorse']['cable_backend'] = "http://localhost:8280"
@@ -631,6 +649,8 @@ default['gitlab']['gitlab-workhorse']['env'] = {
   'HOME' => node['gitlab']['user']['home'],
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
+default['gitlab']['gitlab-workhorse']['image_scaler_max_procs'] = [2, node['cpu']['total'].to_i / 2].max
+default['gitlab']['gitlab-workhorse']['image_scaler_max_filesize'] = 250_000
 
 ####
 # mailroom
@@ -798,17 +818,6 @@ default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-sy
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
 default['gitlab']['remote-syslog']['services'] = %w(redis nginx puma unicorn gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect gitlab-kas)
-
-###
-# Logrotate
-###
-default['gitlab']['logrotate']['enable'] = false
-default['gitlab']['logrotate']['ha'] = false
-default['gitlab']['logrotate']['dir'] = "/var/opt/gitlab/logrotate"
-default['gitlab']['logrotate']['log_directory'] = "/var/log/gitlab/logrotate"
-default['gitlab']['logrotate']['services'] = %w(nginx puma actioncable unicorn gitlab-rails gitlab-shell gitlab-workhorse gitlab-pages gitlab-kas)
-default['gitlab']['logrotate']['pre_sleep'] = 600 # sleep 10 minutes before rotating after start-up
-default['gitlab']['logrotate']['post_sleep'] = 3000 # wait 50 minutes after rotating
 
 ###
 # High Availability

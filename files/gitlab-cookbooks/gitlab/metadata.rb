@@ -10,6 +10,7 @@ recipe "gitlab", "Configures GitLab from Omnibus"
 supports "ubuntu"
 
 depends "package"
+depends 'logrotate'
 depends 'postgresql'
 depends 'redis'
 depends 'monitoring'

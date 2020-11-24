@@ -267,7 +267,7 @@ production: &base
       remote_directory: <%= quote(@uploads_object_store_remote_directory) %>
       connection: <%= @uploads_object_store_connection.to_json %>
 
-  ## Packages (EE only)
+  ## Packages
   packages:
     enabled: <%= @packages_enabled %>
     # The location where build packages are stored (default: shared/packages).
@@ -336,6 +336,10 @@ production: &base
     external_http: <%= @pages_external_http.to_json %>
     external_https: <%= @pages_external_https.to_json %>
     artifacts_server: <%= @pages_artifacts_server %>
+    object_store:
+      enabled: <%= @pages_object_store_enabled %>
+      remote_directory: <%= quote(@pages_object_store_remote_directory) %>
+      connection: <%= @pages_object_store_connection.to_json %>
 
   ## Gravatar
   ## For Libravatar see: https://docs.gitlab.com/ee/customization/libravatar.html
@@ -720,6 +724,21 @@ production: &base
       - <%= provider.to_json %>
 <% end %>
 
+  # FortiAuthenticator settings
+  forti_authenticator:
+    # Allow using FortiAuthenticator as OTP provider
+    enabled: <%= @forti_authenticator_enabled %>
+
+    # Host and port of FortiAuthenticator instance
+    host: <%= @forti_authenticator_host %>
+    port: <%= @forti_authenticator_port %>
+
+    # Username for accessing FortiAuthenticator API
+    username: <%= quote(@forti_authenticator_username) %>
+
+    # Access token for FortiAuthenticator API
+    access_token: <%= quote(@forti_authenticator_access_token) %>
+
   # Shared file storage settings
   shared:
     path: <%= @shared_path %>
@@ -838,6 +857,11 @@ production: &base
     <% if @extra_google_analytics_id %>
     ## Google analytics. Uncomment if you want it
     google_analytics_id: <%= quote(@extra_google_analytics_id) %>
+    <% end %>
+
+    <% if @extra_google_tag_manager_id %>
+    ## Google tag manager. Include your google_tag_manager_id to enable
+    google_tag_manager_id: <%= quote(@extra_google_tag_manager_id) %>
     <% end %>
 
     <% if @extra_piwik_url %>

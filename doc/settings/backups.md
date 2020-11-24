@@ -109,8 +109,17 @@ docker exec -t <your container name> /bin/sh -c 'umask 0077; tar cfz /secret/git
 ```
 
 NOTE: **Note:**
-You need to have volumes mounted at `/secret/gitlab/backups` and `/var/opt/gitlab`
-in order to have these backups persisted outside the container.
+To persist these backups outside the container, mount volumes in the following directories:
+
+1. `/secret/gitlab/backups`.
+1. `/var/opt/gitlab` for [all application data](../docker/README.md#set-up-the-volumes-location), which includes backups.
+1. `/var/opt/gitlab/backups` (optional). The `gitlab-backup` tool writes to this directory [by default](#creating-an-application-backup).
+   While this directory is nested inside `/var/opt/gitlab`, [Docker sorts these mounts](https://github.com/moby/moby/pull/8055), allowing them to work in harmony.
+
+   This configuration enables, for example:
+
+   - Application data on regular local storage (through the second mount).
+   - A backup volume on network storage (through the third mount).
 
 ## Restoring an application backup
 

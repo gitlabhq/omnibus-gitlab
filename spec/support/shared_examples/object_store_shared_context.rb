@@ -10,7 +10,8 @@ RSpec.shared_context 'object storage config' do
       external_diffs: { bucket: 'external_diffs' },
       packages: { bucket: 'packages' },
       terraform_state: { enabled: false, bucket: 'terraform' },
-      uploads: { bucket: 'uploads' }
+      uploads: { bucket: 'uploads' },
+      pages: { bucket: 'pages' }
     }
   end
   let(:aws_connection_hash) do

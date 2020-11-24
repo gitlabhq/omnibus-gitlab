@@ -64,6 +64,13 @@ RSpec.describe LoggingHelper do
     end
   end
 
+  context '.note' do
+    it 'adds the kind :note' do
+      subject.note('basic')
+      expect(subject.messages).to contain_exactly(hash_including(kind: :note))
+    end
+  end
+
   context '.report' do
     it 'prints nothing if nothing happened' do
       expect { subject.report }.not_to output.to_stdout
@@ -102,15 +109,52 @@ RSpec.describe LoggingHelper do
       expect { subject.report }.to output(/\nWarnings:\none\ntwo/).to_stdout
     end
 
-    it 'prints a removal header, removals, deprecation header, deprecations, warning header, then warnings' do
+    it 'prints a note header, then note' do
+      subject.note('one')
+      expect { subject.report }. to output(/\nNotes:\none/).to_stdout
+    end
+
+    it 'prints a note header, then notes' do
+      subject.note('one')
+      subject.note('two')
+      expect { subject.report }.to output(/\nNotes:\none\ntwo/).to_stdout
+    end
+
+    it 'prints a removal header, removals, deprecation header, deprecations, warning header, warnings, note header then notes' do
       subject.removal('one')
       subject.removal('two')
       subject.deprecation('three')
       subject.deprecation('four')
       subject.warning('five')
       subject.warning('six')
+      subject.note('seven')
+      subject.note('eight')
+
+      output = <<~EOS
+
+      Removals:
+      one
+      two
+
+
+      Deprecations:
+      three
+      four
+
+
+      Warnings:
+      five
+      six
+
+
+      Notes:
+      seven
+      eight
+
+      EOS
+
       expect { subject.report }
-        .to output(/\nRemovals:\none\ntwo\n\n\nDeprecations:\nthree\nfour\n\n\nWarnings:\nfive\nsix/).to_stdout
+        .to output(output).to_stdout
     end
   end
 end

@@ -50,21 +50,21 @@ variables:
   # will use images from that registry and not depend on GitLab.com
   BUILDER_IMAGE_REGISTRY: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder"
   PUBLIC_BUILDER_IMAGE_REGISTRY: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder"
-  BUILDER_IMAGE_REVISION: "0.0.73"
+  BUILDER_IMAGE_REVISION: "0.0.74"
   # The registry to pull the assets image from
   ASSET_REGISTRY: "${CI_REGISTRY}"
   ASSET_SYNC_EXISTING_REMOTE_FILES: "keep"
   ASSET_SYNC_GZIP_COMPRESSION: "true"
   ASSET_PATH: "assets-${CI_COMMIT_REF_SLUG}"
   COMPILE_ASSETS: "false"
-  RUBY_IMAGE: "ruby:2.6"
+  RUBY_IMAGE: "ruby:2.7"
   BUNDLE_PATH__SYSTEM: "false"
   # Format of the auto-deploy tag for auto-deploy builds.
   # https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/auto-deploy.md#auto-deploy-tagging
   AUTO_DEPLOY_TAG_REGEX: '^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$'
   # Default environment for auto-deploy
   AUTO_DEPLOY_ENVIRONMENT: 'pre'
-  MAX_PACKAGE_SIZE_MB: "850"
+  MAX_PACKAGE_SIZE_MB: "880"
   OMNIBUS_GITLAB_MIRROR_ID: "14588374"
 
 ### For services that need a docker daemon
@@ -149,19 +149,22 @@ fetch-assets:
       when: never
     - if: '$DEPS_PIPELINE'
       when: never
-    - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/'
+    # NOTE (rspeicher): Checking `$AUTO_DEPLOY_COMPILE_ASSETS` as a feature flag
+    # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5805
+    - if: '$AUTO_DEPLOY_COMPILE_ASSETS && $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/'
       when: never
     # Run on dev.gitlab.org (except auto-deploy tag covered above) and
     # multi-project pipelines on omnibus-gitlab-mirror
     - if: '$CI_PROJECT_PATH == "gitlab/omnibus-gitlab"'
     - if: '$CI_PIPELINE_SOURCE == "pipeline" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
+
 include:
   - '/gitlab-ci-config/gitlab-com.yml'
   - '/gitlab-ci-config/dev-gitlab-org.yml'
 
 .notify:
   before_script:
-    - apk update && apk add git curl bash
+    - apk add --no-cache curl
   image: "alpine"
   stage: notification_fail
 

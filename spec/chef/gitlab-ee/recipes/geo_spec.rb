@@ -48,6 +48,10 @@ RSpec.describe 'gitlab-ee::geo' do
         expect(config_attrs['wal_level']).to eq('hot_standby')
       end
 
+      it 'defines wal_log_hints' do
+        expect(config_attrs['wal_log_hints']).to eq('off')
+      end
+
       it 'defines max_wal_senders' do
         expect(config_attrs['max_wal_senders']).to eq(10)
       end
@@ -93,6 +97,10 @@ RSpec.describe 'gitlab-ee::geo' do
 
       it 'defines wal_level' do
         expect(config_attrs['wal_level']).to eq('hot_standby')
+      end
+
+      it 'defines wal_log_hints' do
+        expect(config_attrs['wal_log_hints']).to eq('off')
       end
 
       it 'defines max_wal_senders' do
