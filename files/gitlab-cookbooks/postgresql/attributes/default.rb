@@ -42,16 +42,7 @@ default['postgresql']['semmsl'] = 250
 default['postgresql']['semmns'] = 32000
 default['postgresql']['semopm'] = 32
 default['postgresql']['semmni'] = ((node['postgresql']['max_connections'].to_i / 16) + 250)
-
-# Resolves CHEF-3889
-default['postgresql']['shared_buffers'] = if (node['memory']['total'].to_i / 4) > ((node['postgresql']['shmmax'].to_i / 1024) - 2097152)
-                                            # guard against setting shared_buffers > shmmax on hosts with installed RAM > 64GB
-                                            # use 2GB less than shmmax as the default for these large memory machines
-                                            "14336MB"
-                                          else
-                                            "#{(node['memory']['total'].to_i / 4) / 1024}MB"
-                                          end
-
+default['postgresql']['shared_buffers'] = "#{(node['memory']['total'].to_i / 4) / 1024}MB"
 default['postgresql']['work_mem'] = "16MB"
 default['postgresql']['maintenance_work_mem'] = "16MB"
 default['postgresql']['effective_cache_size'] = "#{(node['memory']['total'].to_i / 2) / 1024}MB"

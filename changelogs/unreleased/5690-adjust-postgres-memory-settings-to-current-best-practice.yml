@@ -1,0 +1,5 @@
+---
+title: Adjust Postgres memory settings to current best practice
+merge_request: 4788
+author:
+type: performance
