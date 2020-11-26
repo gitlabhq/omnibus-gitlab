@@ -9,6 +9,7 @@ cd <%= node['gitlab']['gitlab-pages']['dir'] %>
 
 <% external_http = [ node['gitlab']['gitlab-pages']['external_http'] ].flatten.compact  %>
 <% external_https = [ node['gitlab']['gitlab-pages']['external_https'] ].flatten.compact  %>
+<% external_https_proxyv2 = [ node['gitlab']['gitlab-pages']['external_https_proxyv2'] ].flatten.compact  %>
 <% headers = [ node['gitlab']['gitlab-pages']['headers'] ].flatten.compact  %>
 
 exec chpst -e <%= @options[:env_dir] %> \
@@ -25,7 +26,10 @@ exec chpst -e <%= @options[:env_dir] %> \
     <% external_https.each do |spec| %>
     -listen-https="<%= spec %>" \
     <% end %>
-    <% unless external_https.empty? %>
+    <% external_https_proxyv2.each do |spec| %>
+    -listen-https-proxyv2="<%= spec %>" \
+    <% end %>
+    <% unless external_https.empty? && external_https_proxyv2.empty? %>
     -root-cert="<%= node['gitlab']['gitlab-pages']['cert'] %>" \
     -root-key="<%= node['gitlab']['gitlab-pages']['cert_key'] %>" \
     <% end %>

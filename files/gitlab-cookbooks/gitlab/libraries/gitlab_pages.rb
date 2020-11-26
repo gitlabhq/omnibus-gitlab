@@ -66,7 +66,7 @@ module GitlabPages
 
       Gitlab['gitlab_pages']['domain'] = Gitlab['gitlab_rails']['pages_host']
 
-      if Gitlab['gitlab_pages']['external_https']
+      if Gitlab['gitlab_pages']['external_https'] || Gitlab['gitlab_pages']['external_https_proxyv2']
         Gitlab['gitlab_pages']['cert'] ||= "/etc/gitlab/ssl/#{Gitlab['gitlab_pages']['domain']}.crt"
         Gitlab['gitlab_pages']['cert_key'] ||= "/etc/gitlab/ssl/#{Gitlab['gitlab_pages']['domain']}.key"
       end
