@@ -666,6 +666,7 @@ default['gitlab']['mailroom']['exit_log_format'] = "plain" # If mail_room crashe
 default['gitlab']['gitlab-pages']['enable'] = false
 default['gitlab']['gitlab-pages']['external_http'] = nil
 default['gitlab']['gitlab-pages']['external_https'] = nil
+default['gitlab']['gitlab-pages']['external_https_proxyv2'] = nil
 default['gitlab']['gitlab-pages']['listen_proxy'] = "localhost:8090"
 default['gitlab']['gitlab-pages']['gitlab_server'] = nil
 default['gitlab']['gitlab-pages']['internal_gitlab_server'] = nil

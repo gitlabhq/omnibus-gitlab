@@ -122,6 +122,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
         gitlab_pages: {
           external_http: ['external_pages.example.com', 'localhost:9000'],
           external_https: ['external_pages.example.com', 'localhost:9001'],
+          external_https_proxyv2: ['external_pages.example.com', 'localhost:9002'],
           metrics_address: 'localhost:1234',
           redirect_http: true,
           dir: '/var/opt/gitlab/pages',
@@ -184,6 +185,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-http="localhost:9000"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https="external_pages.example.com"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https="localhost:9001"})
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https-proxyv2="localhost:9002"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-key})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server="https://gitlab.elsewhere.com/api/v5"})
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server-timeout=60})
