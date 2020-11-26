@@ -63,6 +63,15 @@ add_command_under_category('patroni', 'database', 'Interact with Patroni', 2) do
       exit 3
     end
 
+  when 'reinitialize-replica'
+    begin
+      Patroni.reinitialize_replica options
+      exit 0
+    rescue StandardError => e
+      warn "Error while reinitializing replica on the current node: #{e}" unless options[:quiet]
+      exit 3
+    end
+
   else
     # Try to handle the command with fallback procedure. The command:
     #   . Must not include `_` or `?`
