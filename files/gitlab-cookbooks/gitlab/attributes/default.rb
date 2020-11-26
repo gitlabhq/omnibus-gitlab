@@ -401,6 +401,11 @@ default['gitlab']['gitlab-rails']['db_statements_limit'] = 1000
 default['gitlab']['gitlab-rails']['db_statement_timeout'] = nil
 default['gitlab']['gitlab-rails']['db_fdw'] = nil
 default['gitlab']['gitlab-rails']['db_connect_timeout'] = nil
+default['gitlab']['gitlab-rails']['db_keepalives'] = nil
+default['gitlab']['gitlab-rails']['db_keepalives_idle'] = nil
+default['gitlab']['gitlab-rails']['db_keepalives_interval'] = nil
+default['gitlab']['gitlab-rails']['db_keepalives_count'] = nil
+default['gitlab']['gitlab-rails']['db_tcp_user_timeout'] = nil
 
 # Automatic Database Reindexing
 # See https://docs.gitlab.com/omnibus/settings/database.html#automatic-database-reindexing

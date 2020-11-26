@@ -24,5 +24,10 @@ production:
   prepared_statements: <%= @db_prepared_statements %>
   statement_limit: <%= @db_statements_limit %>
   connect_timeout: <%= @db_connect_timeout %>
+  keepalives: <%= @db_keepalives %>
+  keepalives_idle: <%= @db_keepalives_idle %>
+  keepalives_interval: <%= @db_keepalives_interval %>
+  keepalives_count: <%= @db_keepalives_count %>
+  tcp_user_timeout: <%= @db_tcp_user_timeout %>
   variables:
     statement_timeout: <%= @db_statement_timeout %>
