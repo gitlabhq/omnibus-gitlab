@@ -2192,8 +2192,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 
 ################################################################################
-## Dependency proxy (EE Only)
-##! Docs: https://docs.gitlab.com/ee/administration/dependency_proxy.md
+## Dependency proxy
+##! Docs: https://docs.gitlab.com/ee/administration/packages/dependency_proxy.html
 ################################################################################
 
 # gitlab_rails['dependency_proxy_enabled'] = true
