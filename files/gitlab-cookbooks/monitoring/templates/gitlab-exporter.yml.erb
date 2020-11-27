@@ -32,6 +32,9 @@ probes:
     rows_count:
       class_name: Database::RowCountProber
       <<: *db_common
+  database_bloat:
+    class_name: Database::BloatProber
+    <<: *db_common
 <% end -%>
 
   process: &process

@@ -1,0 +1,5 @@
+---
+title: Add /database_bloat endpoint for gitlab-exporter
+merge_request: 4785
+author:
+type: added
