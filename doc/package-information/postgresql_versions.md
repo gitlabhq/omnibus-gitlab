@@ -10,6 +10,17 @@ NOTE: **Note:**
 This table lists only GitLab versions where a significant change happened in the
 package regarding PostgreSQL versions, not all.
 
+Usually, PostgreSQL versions change with major or minor GitLab releases. However, patch versions
+of Omnibus GitLab sometimes update the patch level of PostgreSQL.
+
+For example:
+
+- Omnibus 12.7.6 shipped with PostgreSQL 9.6.14 and 10.9.
+- Omnibus 12.7.7 shipped with PostgreSQL 9.6.17 and 10.12.
+
+[Find out which versions of PostgreSQL (and other components) ship with
+each Omnibus GitLab release](http://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html).
+
 Read more about update policies and warnings in the PostgreSQL
 [upgrade docs](../settings/database.md#upgrade-packaged-postgresql-server).
 
