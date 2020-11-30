@@ -663,6 +663,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['db_prepared_statements'] = false
 # gitlab_rails['db_statements_limit'] = 1000
 # gitlab_rails['db_connect_timeout'] = nil
+# gitlab_rails['db_keepalives'] = nil
+# gitlab_rails['db_keepalives_idle'] = nil
+# gitlab_rails['db_keepalives_interval'] = nil
+# gitlab_rails['db_keepalives_count'] = nil
+# gitlab_rails['db_tcp_user_timeout'] = nil
 
 
 ### GitLab Redis settings
@@ -1480,6 +1485,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Configure to expose GitLab Pages on external IP address, serving the HTTPS
 # gitlab_pages['external_https'] = []
 
+##! Configure to expose GitLab Pages on external IP address, serving the HTTPS over PROXYv2
+# gitlab_pages['external_https_proxyv2'] = []
+
 ##! Configure to use the default list of cipher suites
 # gitlab_pages['insecure_ciphers'] = false
 
@@ -2184,8 +2192,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 
 ################################################################################
-## Dependency proxy (EE Only)
-##! Docs: https://docs.gitlab.com/ee/administration/dependency_proxy.md
+## Dependency proxy
+##! Docs: https://docs.gitlab.com/ee/administration/packages/dependency_proxy.html
 ################################################################################
 
 # gitlab_rails['dependency_proxy_enabled'] = true

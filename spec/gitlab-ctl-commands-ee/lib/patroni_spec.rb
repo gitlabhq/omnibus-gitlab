@@ -6,7 +6,7 @@ require_relative('../../../files/gitlab-ctl-commands/lib/gitlab_ctl')
 require_relative('../../../files/gitlab-ctl-commands-ee/lib/patroni')
 
 RSpec.describe 'Patroni' do
-  core_commands = %w(bootstrap check-leader check-replica)
+  core_commands = %w(bootstrap check-leader check-replica reinitialize-replica)
   additional_commands = %w(members pause resume failover switchover restart reload)
   all_commands = core_commands + additional_commands
   command_lines = {
@@ -15,6 +15,7 @@ RSpec.describe 'Patroni' do
     'resume' => %w(--wait),
     'failover' => %w(--master MASTER --candidate CANDIDATE),
     'switchover' => %w(--master MASTER --candidate CANDIDATE --scheduled SCHEDULED),
+    'reinitialize-replica' => %w(--wait),
     'restart' => [],
     'reload' => []
   }
@@ -24,6 +25,7 @@ RSpec.describe 'Patroni' do
     'resume' => { wait: true },
     'failover' => { master: 'MASTER', candidate: 'CANDIDATE' },
     'switchover' => { master: 'MASTER', candidate: 'CANDIDATE', scheduled: 'SCHEDULED' },
+    'reinitialize-replica' => { wait: true },
     'restart' => {},
     'reload' => {}
   }
@@ -148,7 +150,7 @@ RSpec.describe 'Patroni' do
         Patroni.send(cmd.to_sym, command_options[cmd] || {})
         expect(GitlabCtl::Util).to have_received(:run_command).with(
           "/opt/gitlab/embedded/bin/patronictl -c /fake/patroni.yaml #{patronictl_command[cmd]}",
-          { user: 'root' })
+          { user: 'root', live: false })
       end
     end
   end

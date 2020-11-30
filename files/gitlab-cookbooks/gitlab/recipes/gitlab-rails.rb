@@ -285,6 +285,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       builds_directory: gitlab_ci_builds_dir,
       pages_external_http: node['gitlab']['gitlab-pages']['external_http'],
       pages_external_https: node['gitlab']['gitlab-pages']['external_https'],
+      pages_external_https_proxyv2: node['gitlab']['gitlab-pages']['external_https_proxyv2'],
       pages_artifacts_server: node['gitlab']['gitlab-pages']['artifacts_server'],
       pages_access_control: node['gitlab']['gitlab-pages']['access_control'],
       pages_object_store_enabled: node['gitlab']['gitlab-rails']['pages_object_store_enabled'],

@@ -1,0 +1,5 @@
+---
+title: Allow PostgreSQL adapter tcp parameter tuning
+merge_request: 4776
+author:
+type: added

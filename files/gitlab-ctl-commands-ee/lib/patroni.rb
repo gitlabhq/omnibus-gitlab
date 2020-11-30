@@ -13,16 +13,17 @@ module Patroni
       -v, --verbose   Verbose or debug mode
 
     COMMANDS:
-      bootstrap       Bootstraps the node
-      check-leader    Check if the current node is the Patroni leader
-      check-replica   Check if the current node is a Patroni replica
-      members         List the cluster members
-      pause           Disable auto failover
-      resume          Resume auto failover
-      failover        Failover to a replica
-      switchover      Switchover to a replica
-      restart         Restart Patroni service without triggering failover
-      reload          Reload Patroni configuration
+      bootstrap              Bootstraps the node
+      check-leader           Check if the current node is the Patroni leader
+      check-replica          Check if the current node is a Patroni replica
+      members                List the cluster members
+      pause                  Disable auto failover
+      resume                 Resume auto failover
+      failover               Failover to a replica
+      switchover             Switchover to a replica
+      reinitialize-replica   Reinitialize replication when in a Patroni replica
+      restart                Restart Patroni service without triggering failover
+      reload                 Reload Patroni configuration
   EOS
 
   # rubocop:disable Metrics/AbcSize
@@ -126,6 +127,14 @@ module Patroni
         opts.on('-h', '--help', 'Prints this help') do
           Utils.warn_and_exit opts
         end
+      end,
+      'reinitialize-replica' => OptionParser.new do |opts|
+        opts.on('-h', '--help', 'Prints this help') do
+          Utils.warn_and_exit opts
+        end
+        opts.on('-w', '--wait', 'Wait until reinitialization completes') do |w|
+          options[:wait] = w
+        end
       end
     }
 
@@ -205,12 +214,22 @@ module Patroni
     Utils.patronictl("reload --force #{attributes['patroni']['scope']} #{attributes['patroni']['name']}")
   end
 
+  def self.reinitialize_replica(options)
+    attributes = GitlabCtl::Util.get_node_attributes
+    command = %w(reinit)
+    command << '--force'
+    command << '--wait' if options[:wait]
+    command << attributes['patroni']['scope']
+    command << attributes['patroni']['name']
+    Utils.patronictl(command, live: true)
+  end
+
   class Utils
-    def self.patronictl(cmd, user = 'root')
+    def self.patronictl(cmd, user = 'root', live: false)
       attributes = GitlabCtl::Util.get_public_node_attributes
       GitlabCtl::Util.run_command(
         "/opt/gitlab/embedded/bin/patronictl -c #{attributes['patroni']['config_dir']}/patroni.yaml #{cmd.respond_to?(:join) ? cmd.join(' ') : cmd.to_s}",
-        user: user)
+        user: user, live: live)
     end
 
     def self.warn_and_exit(msg, code = 0)

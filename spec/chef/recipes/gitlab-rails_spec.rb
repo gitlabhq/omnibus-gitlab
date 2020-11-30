@@ -2866,40 +2866,53 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
       end
 
-      describe 'client side connect_timeout' do
+      context 'adjusting database adapter connection parameters' do
         let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
-        context 'default values' do
-          it 'does not set a default value' do
-            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
-              hash_including(
-                'db_connect_timeout' => nil
-              )
-            )
+        using RSpec::Parameterized::TableSyntax
 
-            expect(chef_run).to render_file(config_file).with_content { |content|
-              expect(content).to match(%r(connect_timeout: $))
-            }
-          end
+        where(:rb_param, :yaml_param, :default_value, :custom_value) do
+          'db_connect_timeout' | 'connect_timeout' | nil | 5
+          'db_keepalives' | 'keepalives' | nil | 1
+          'db_keepalives_idle' | 'keepalives_idle' | nil | 5
+          'db_keepalives_interval' | 'keepalives_interval' | nil | 3
+          'db_keepalives_count' | 'keepalives_count' | nil | 3
+          'db_tcp_user_timeout' | 'tcp_user_timeout' | nil | 13000
         end
 
-        context 'custom value' do
-          before do
-            stub_gitlab_rb(
-              'gitlab_rails' => { 'db_connect_timeout' => '5' }
-            )
+        with_them do
+          context 'default values' do
+            it 'does not set a default value' do
+              expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+                hash_including(
+                  rb_param => default_value
+                )
+              )
+
+              expect(chef_run).to render_file(config_file).with_content { |content|
+                expect(content).to match(%r(#{yaml_param}: $))
+              }
+            end
           end
 
-          it 'uses specified client side statement_timeout value' do
-            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
-              hash_including(
-                'db_connect_timeout' => '5'
+          context 'custom connection parameter value' do
+            before do
+              stub_gitlab_rb(
+                'gitlab_rails' => { rb_param => custom_value }
               )
-            )
+            end
 
-            expect(chef_run).to render_file(config_file).with_content { |content|
-              expect(content).to match(%r(connect_timeout: 5$))
-            }
+            it 'uses specified connection parameter value' do
+              expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+                hash_including(
+                  rb_param => custom_value
+                )
+              )
+
+              expect(chef_run).to render_file(config_file).with_content { |content|
+                expect(content).to match(%r(#{yaml_param}: #{custom_value}$))
+              }
+            end
           end
         end
       end
