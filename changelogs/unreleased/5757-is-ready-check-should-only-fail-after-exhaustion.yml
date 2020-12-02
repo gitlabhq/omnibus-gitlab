@@ -1,0 +1,5 @@
+---
+title: PostgreSQL status helper should not fail fast
+merge_request: 4798
+author:
+type: changed
