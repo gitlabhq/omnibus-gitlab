@@ -668,6 +668,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['db_keepalives_interval'] = nil
 # gitlab_rails['db_keepalives_count'] = nil
 # gitlab_rails['db_tcp_user_timeout'] = nil
+# gitlab_rails['db_application_name'] = nil
 
 
 ### GitLab Redis settings

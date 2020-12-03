@@ -29,5 +29,6 @@ production:
   keepalives_interval: <%= @db_keepalives_interval %>
   keepalives_count: <%= @db_keepalives_count %>
   tcp_user_timeout: <%= @db_tcp_user_timeout %>
+  application_name: <%= quote(@db_application_name) %>
   variables:
     statement_timeout: <%= @db_statement_timeout %>

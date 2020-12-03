@@ -2668,12 +2668,17 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
 
     describe 'database.yml' do
-      let(:config_file) { '/var/opt/gitlab/gitlab-rails/etc/database.yml' }
+      database_yml_path = '/var/opt/gitlab/gitlab-rails/etc/database.yml'
+      let(:database_yml) { chef_run.template(database_yml_path) }
+      let(:database_yml_content) { ChefSpec::Renderer.new(chef_run, database_yml).content }
+      let(:generated_yml_content) { YAML.safe_load(database_yml_content) }
+
+      let(:config_file) { database_yml_path }
       let(:templatesymlink) { chef_run.templatesymlink('Create a database.yml and create a symlink to Rails root') }
 
       context 'by default' do
         cached(:chef_run) do
-          ChefSpec::SoloRunner.new.converge('gitlab::default')
+          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
         end
 
         it 'creates the template' do
@@ -2685,7 +2690,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
               'db_prepared_statements' => false,
               'db_sslcompression' => 0,
               'db_sslcert' => nil,
-              'db_sslkey' => nil
+              'db_sslkey' => nil,
+              'db_application_name' => nil
             )
           )
         end
@@ -2696,9 +2702,46 @@ RSpec.describe 'gitlab::gitlab-rails' do
           expect(templatesymlink).not_to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
           expect(templatesymlink).not_to notify('runit_service[nginx]').to(:restart).delayed
         end
+
+        it 'renders expected YAML' do
+          expect(generated_yml_content.dig('production', 'adapter')).to eq('postgresql')
+          expect(generated_yml_content.dig('production', 'host')).to eq('/var/opt/gitlab/postgresql')
+          expect(generated_yml_content.dig('production', 'port')).to eq(5432)
+          expect(generated_yml_content.dig('production', 'application_name')).to eq(nil)
+        end
       end
 
       context 'with specific database settings' do
+        context 'with an application name set' do
+          where(:appname, :expected) do
+            ''     | ''
+            'test' | 'test'
+          end
+
+          with_them do
+            cached(:chef_run) do
+              ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+            end
+
+            before do
+              stub_gitlab_rb(
+                'gitlab_rails' => { 'db_application_name' => appname }
+              )
+            end
+
+            it 'renders expected YAML' do
+              expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+                hash_including(
+                  'db_application_name' => appname
+                )
+              )
+
+              expect(generated_yml_content.dig('production').keys).to include(*%w(adapter host port application_name))
+              expect(generated_yml_content.dig('production', 'application_name')).to eq(expected)
+            end
+          end
+        end
+
         context 'when multiple postgresql listen_address is used' do
           before do
             stub_gitlab_rb(postgresql: { listen_address: "127.0.0.1,1.1.1.1" })
