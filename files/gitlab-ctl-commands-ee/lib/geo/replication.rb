@@ -283,7 +283,7 @@ module Geo
     end
 
     def gitlab_is_active?
-      database_exists? && table_exists?('projects') && !table_empty?('projects')
+      system("gitlab-rake", "gitlab:db:active")
     end
 
     def db_name
