@@ -29,7 +29,7 @@ See [the manpage](http://manpages.ubuntu.com/manpages/bionic/man8/dphys-swapfile
 The recommended and supported way to install GitLab is by using GitLab's
 official repository.
 
-Only the [official Raspberry Pi distribution](https://www.raspberrypi.org/downloads/) is
+Only the [official Raspberry Pi distribution](https://www.raspberrypi.org/software/) is
 supported.
 
 ### Install GitLab via the official repository
