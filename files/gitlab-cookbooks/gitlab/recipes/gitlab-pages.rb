@@ -83,7 +83,11 @@ template File.join(working_dir, "gitlab-pages-config") do
         auth_client_id: node['gitlab']['gitlab-pages']['gitlab_id'],
         auth_client_secret: node['gitlab']['gitlab-pages']['gitlab_secret'],
         auth_redirect_uri: node['gitlab']['gitlab-pages']['auth_redirect_uri'],
-        auth_secret: node['gitlab']['gitlab-pages']['auth_secret']
+        auth_secret: node['gitlab']['gitlab-pages']['auth_secret'],
+        zip_cache_expiration: node['gitlab']['gitlab-pages']['zip_cache_expiration'],
+        zip_cache_cleanup: node['gitlab']['gitlab-pages']['zip_cache_cleanup'],
+        zip_cache_refresh: node['gitlab']['gitlab-pages']['zip_cache_refresh'],
+        zip_open_timeout: node['gitlab']['gitlab-pages']['zip_open_timeout']
       }
     end
   )

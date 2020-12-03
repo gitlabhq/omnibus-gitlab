@@ -148,6 +148,10 @@ RSpec.describe 'gitlab::gitlab-pages' do
           gitlab_client_http_timeout: "10s",
           gitlab_client_jwt_expiry: "30s",
           domain_config_source: "disk",
+          zip_cache_expiration: "120s",
+          zip_cache_cleanup: "1m",
+          zip_cache_refresh: "60s",
+          zip_open_timeout: "45s",
           env: {
             GITLAB_CONTINUOUS_PROFILING: "stackdriver?service=gitlab-pages",
             http_proxy: "http://example:8081/"
@@ -215,6 +219,10 @@ RSpec.describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-client-secret=app_secret})
       expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-redirect-uri=https://projects.pages.example.com/auth})
       expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-secret=auth_secret})
+      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{zip-cache-expiration=120s})
+      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{zip-cache-cleanup=1m})
+      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{zip-cache-refresh=60s})
+      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{zip-open-timeout=45s})
     end
 
     it 'deletes old admin.secret file' do

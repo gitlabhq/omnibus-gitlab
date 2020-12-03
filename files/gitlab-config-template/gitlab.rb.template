@@ -1549,6 +1549,19 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Shared secret used for authentication between Pages and GitLab
 # gitlab_pages['api_secret_key'] = nil # Will be generated if not set. Base64 encoded and exactly 32 bytes long.
 
+##! Advanced settings for serving GitLab Pages from zip archives.
+##! The recommended default values are set inside GitLab Pages.
+##! Should be changed only if absolutely needed.
+
+##! The maximum time an archive will be cached in memory.
+# gitlab_pages['zip_cache_expiration'] = "60s"
+##! Zip archive cache cleaning interval.
+# gitlab_pages['zip_cache_cleanup'] = "30s"
+##! The interval to refresh a cache archive if accessed before expiring.
+# gitlab_pages['zip_cache_refresh'] = "30s"
+##! The maximum amount of time it takes to open a zip archive from the file system or object storage.
+# gitlab_pages['zip_open_timeout'] = "30s"
+
 # gitlab_pages['env_directory'] = "/opt/gitlab/etc/gitlab-pages/env"
 # gitlab_pages['env'] = {
 #   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
