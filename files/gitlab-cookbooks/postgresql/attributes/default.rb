@@ -36,8 +36,8 @@ default['postgresql']['ssl_ca_file'] = "#{node['package']['install-dir']}/embedd
 default['postgresql']['ssl_crl_file'] = nil
 default['postgresql']['cert_auth_addresses'] = {}
 
-default['postgresql']['shmmax'] = /x86_64/.match?(node['kernel']['machine']) ? 17179869184 : 4294967295
-default['postgresql']['shmall'] = /x86_64/.match?(node['kernel']['machine']) ? 4194304 : 1048575
+default['postgresql']['shmmax'] = /x86_64|aarch64/.match?(node['kernel']['machine']) ? 17179869184 : 4294967295
+default['postgresql']['shmall'] = /x86_64|aarch64/.match?(node['kernel']['machine']) ? 4194304 : 1048575
 default['postgresql']['semmsl'] = 250
 default['postgresql']['semmns'] = 32000
 default['postgresql']['semopm'] = 32
