@@ -1111,7 +1111,7 @@ sudo gitlab-ctl restart geo-logcursor
    ```shell
    sudo gitlab-ctl reconfigure
    ```
-   
+
 **On all secondary "deploy nodes"**
 
 1. Run post-deployment database migrations, specific to the Geo database:
