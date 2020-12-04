@@ -406,6 +406,7 @@ default['gitlab']['gitlab-rails']['db_keepalives_idle'] = nil
 default['gitlab']['gitlab-rails']['db_keepalives_interval'] = nil
 default['gitlab']['gitlab-rails']['db_keepalives_count'] = nil
 default['gitlab']['gitlab-rails']['db_tcp_user_timeout'] = nil
+default['gitlab']['gitlab-rails']['db_application_name'] = nil
 
 # Automatic Database Reindexing
 # See https://docs.gitlab.com/omnibus/settings/database.html#automatic-database-reindexing
