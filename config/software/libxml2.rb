@@ -15,7 +15,7 @@
 #
 
 name 'libxml2'
-default_version '2.9.9'
+default_version '2.9.10'
 
 license 'MIT'
 license_file 'COPYING'
@@ -27,8 +27,8 @@ dependency 'libiconv'
 dependency 'liblzma'
 dependency 'config_guess'
 
-version '2.9.9' do
-  source md5: 'c04a5a0a042eaa157e8e8c9eabe76bd6'
+version '2.9.10' do
+  source sha256: 'aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f'
 end
 
 source url: "ftp://xmlsoft.org/libxml2/libxml2-#{version}.tar.gz"
@@ -37,6 +37,8 @@ relative_path "libxml2-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+
+  patch source: '50f06b3efb638efb0abd95dc62dca05ae67882c2.patch', env: env
 
   configure_command = [
     "--with-zlib=#{install_dir}/embedded",
