@@ -1,0 +1,5 @@
+---
+title: Add support for configuring database application_name for Rails
+merge_request: 4808
+author:
+type: added
