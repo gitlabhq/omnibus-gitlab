@@ -2538,6 +2538,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # patroni['max_timelines_history'] = 0
 # patroni['master_start_timeout'] = 300
 # patroni['use_pg_rewind'] = false
+# patroni['remove_data_directory_on_rewind_failure'] = false
+# patroni['remove_data_directory_on_diverged_timelines'] = false
 # patroni['use_slots'] = true
 # patroni['replication_password'] = nil
 # patroni['replication_slots'] = {}

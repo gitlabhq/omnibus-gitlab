@@ -2,7 +2,7 @@ class PatroniHelper < BaseHelper
   include ShellOutHelper
 
   DCS_ATTRIBUTES ||= %w(loop_wait ttl retry_timeout maximum_lag_on_failover max_timelines_history master_start_timeout).freeze
-  DCS_POSTGRESQL_ATTRIBUTES ||= %w(use_pg_rewind use_slots).freeze
+  DCS_POSTGRESQL_ATTRIBUTES ||= %w(use_pg_rewind use_slots remove_data_directory_on_rewind_failure remove_data_directory_on_diverged_timelines).freeze
 
   attr_reader :node
 
