@@ -38,7 +38,9 @@ other scheduled work as per our [development guidelines](https://about.gitlab.co
 
 1. Ensure the entry is removed from the `CVEIGNORE` variable once the MRs have
    been merged. This handles the edge false-negative case where a vulnerability
-   might affect multiple components and only one of them was fixed by an MR.
+   might affect multiple components and only one of them was fixed by an MR. Removing
+   an item from the `.cveignore` file can be done through a public MR to the Omnibus
+   repository.
 
 ## Raspberry Pi jobs timed out in pending state waiting to be scheduled
 
