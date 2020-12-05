@@ -78,6 +78,18 @@ module Gitlab
             removal: '14.0',
             note: "Praefect no longer supports statically designating primary Gitaly nodes."
           },
+          {
+            config_keys: %w(gitlab gitlab-rails extra_piwik_site_id),
+            deprecation: '13.7',
+            removal: '14.0',
+            note: "Piwik config keys have been renamed to reflect the rebranding to Matomo. Please update gitlab_rails['extra_piwik_site_id'] to gitlab_rails['extra_matomo_site_id']."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails extra_piwik_url),
+            deprecation: '13.7',
+            removal: '14.0',
+            note: "Piwik config keys have been renamed to reflect the rebranding to Matomo. Please update gitlab_rails['extra_piwik_url'] to gitlab_rails['extra_matomo_url']."
+          },
           # Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
           {
             config_keys: %w(gitlab sidekiq-cluster experimental_queue_selector),

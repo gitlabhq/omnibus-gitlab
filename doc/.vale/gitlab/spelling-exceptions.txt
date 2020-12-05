@@ -249,6 +249,7 @@ Makefile
 Makefiles
 Markdown
 markdownlint
+Matomo
 matcher
 matchers
 Mattermost
