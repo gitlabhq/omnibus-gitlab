@@ -375,8 +375,8 @@ default['gitlab']['gitlab-rails']['gitlab_shell_git_timeout'] = 10800
 default['gitlab']['gitlab-rails']['git_bin_path'] = "#{node['package']['install-dir']}/embedded/bin/git"
 default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
 default['gitlab']['gitlab-rails']['extra_google_tag_manager_id'] = nil
-default['gitlab']['gitlab-rails']['extra_piwik_url'] = nil
-default['gitlab']['gitlab-rails']['extra_piwik_site_id'] = nil
+default['gitlab']['gitlab-rails']['extra_matomo_url'] = nil
+default['gitlab']['gitlab-rails']['extra_matomo_site_id'] = nil
 default['gitlab']['gitlab-rails']['rack_attack_git_basic_auth'] = nil
 
 default['gitlab']['gitlab-rails']['db_adapter'] = "postgresql"
