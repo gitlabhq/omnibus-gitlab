@@ -19,6 +19,18 @@ require_relative '../../gitaly/libraries/gitaly.rb'
 
 module GitlabRails
   class << self
+    def parse_analytics_site_id
+      return unless Gitlab['gitlab_rails']['extra_piwik_site_id']
+
+      Gitlab['gitlab_rails']['extra_matomo_site_id'] = Gitlab['gitlab_rails']['extra_piwik_site_id']
+    end
+
+    def parse_analytics_url
+      return unless Gitlab['gitlab_rails']['extra_piwik_url']
+
+      Gitlab['gitlab_rails']['extra_matomo_url'] = Gitlab['gitlab_rails']['extra_piwik_url']
+    end
+
     def parse_variables
       parse_database_adapter
       parse_external_url
@@ -27,6 +39,8 @@ module GitlabRails
       parse_incoming_email_logfile
       parse_service_desk_email_logfile
       parse_maximum_request_duration
+      parse_analytics_site_id
+      parse_analytics_url
     end
 
     def parse_directories
