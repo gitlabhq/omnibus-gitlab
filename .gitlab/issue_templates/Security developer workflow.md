@@ -1,6 +1,10 @@
 <!--
 # Read me first!
 
+This process is not required to remove .cveignore entries. See
+https://docs.gitlab.com/omnibus/development/broken_master.html#dependency_scanning-job-failed-due-to-one-of-the-dependencies-being-reported-as-vulnerable
+for more details.
+
 Create this issue under https://gitlab.com/gitlab-org/security/omnibus-gitlab/
 
 Set the title to: `Description of the original issue`
