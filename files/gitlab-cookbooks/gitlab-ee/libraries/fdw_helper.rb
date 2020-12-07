@@ -31,4 +31,4 @@ class FdwHelper
   def fdw_port
     node['gitlab']['gitlab-rails']['db_port']
   end
-end unless defined?(FdwHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922
+end

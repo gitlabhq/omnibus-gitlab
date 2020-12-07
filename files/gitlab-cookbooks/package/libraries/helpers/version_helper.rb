@@ -18,4 +18,4 @@ class VersionHelper
 
     result.stdout
   end
-end unless defined?(VersionHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922
+end

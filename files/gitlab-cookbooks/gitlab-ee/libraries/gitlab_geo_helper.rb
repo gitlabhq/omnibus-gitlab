@@ -44,4 +44,4 @@ class GitlabGeoHelper
 
     Digest::MD5.hexdigest(Marshal.dump(connection_attributes))
   end
-end unless defined?(GitlabGeoHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922
+end

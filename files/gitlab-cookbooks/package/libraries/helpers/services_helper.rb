@@ -190,4 +190,4 @@ module Services
       end
     end
   end
-end unless defined?(Services) # Prevent reloading during converge, so we can test
+end
