@@ -5,9 +5,6 @@ CVE-2019-17595
 CVE-2019-15547
 CVE-2019-15548
 
-# libxml2/2.9.9
-CVE-2019-19956
-
 # libxslt/1.1.32
 # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5824
 CVE-2019-11068
