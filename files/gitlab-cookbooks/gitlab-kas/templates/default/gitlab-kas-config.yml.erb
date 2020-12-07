@@ -1,4 +1,8 @@
 agent:
+  listen:
+    address: <%= @listen_address %>
+    network: <%= @listen_network %>
+    websocket: <%= @listen_websocket %>
   configuration:
     poll_period: <%= @agent_configuration_poll_period %>s
   gitops:
@@ -10,9 +14,5 @@ agent:
 gitlab:
   address: <%= @gitlab_address %>
   authentication_secret_file: <%= @authentication_secret_file %>
-listen_agent:
-  address: <%= @listen_address %>
-  network: <%= @listen_network %>
-  websocket: <%= @listen_websocket %>
 observability:
   usage_reporting_period: <%= @metrics_usage_reporting_period %>s
