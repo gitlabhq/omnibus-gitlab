@@ -1,0 +1,5 @@
+---
+title: Increase jemalloc page size on arm64
+merge_request: 4800
+author:
+type: fixed
