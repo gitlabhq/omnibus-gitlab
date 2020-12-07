@@ -3,6 +3,15 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.6.2 (2020-12-07)
+
+### Security (3 changes)
+
+- Update GnuPG to version 2.2.23.
+- Update libxml2 to version 2.9.10.
+- Update GraphicsMagick to 1.3.35 and patch PNG vulnerability.
+
+
 ## 13.6.1 (2020-11-23)
 
 - No changes.
@@ -58,6 +67,15 @@ omnibus-gitlab repository.
 - Update GITLAB_KAS_VERSION to 13.6.1. !4742
 - Update rake to v13. !4745
 - Update Mattermost to 5.28.1.
+
+
+## 13.5.5 (2020-12-07)
+
+### Security (3 changes)
+
+- Update GnuPG to version 2.2.23.
+- Update libxml2 to version 2.9.10.
+- Update GraphicsMagick to 1.3.35 and patch PNG vulnerability.
 
 
 ## 13.5.4 (2020-11-13)
@@ -140,6 +158,15 @@ omnibus-gitlab repository.
 - Move email configuration section closer to SMTP settings in template. !4631
 - Reduce Ubuntu 20 ARM package size. !4637
 - Update Mattermost to 5.27.0.
+
+
+## 13.4.7 (2020-12-07)
+
+### Security (3 changes)
+
+- Update GnuPG to version 2.2.23.
+- Update libxml2 to version 2.9.10.
+- Update GraphicsMagick to 1.3.35 and patch PNG vulnerability.
 
 
 ## 13.4.6 (2020-11-03)
