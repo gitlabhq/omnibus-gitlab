@@ -15,7 +15,7 @@
 #
 
 name 'graphicsmagick'
-default_version '1.3.34'
+default_version '1.3.35'
 
 license 'MIT'
 license_file 'Copyright.txt'
@@ -28,12 +28,14 @@ dependency 'libtiff'
 dependency 'zlib'
 
 source url: "https://ftp.icm.edu.pl/pub/unix/graphics/GraphicsMagick/1.3/GraphicsMagick-#{version}.tar.gz",
-       sha256: '4717f7a32d964c515d83706fd52d34e089c2ffa35f8fbf43c923ce19343cf2f4'
+       sha256: 'd96d5ce2ef7e0e90166551e38742713728bfd33d6f18495a9ddda938700fc055'
 
 relative_path "GraphicsMagick-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+
+  patch source: "png-vulnerability-fix.patch"
 
   configure_command = [
     './configure',
