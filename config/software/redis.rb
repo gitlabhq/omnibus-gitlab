@@ -44,6 +44,13 @@ build do
 
   env['CFLAGS'] << ' -fno-omit-frame-pointer'
 
+  # jemallocs page size must be >= to the runtime pagesize
+  # Use large for arm/newer platforms based on debian rules:
+  # https://salsa.debian.org/debian/jemalloc/-/blob/c0a88c37a551be7d12e4863435365c9a6a51525f/debian/rules#L8-23
+  env['EXTRA_JEMALLOC_CONFIGURE_FLAGS'] = (OhaiHelper.arm64? ? '--with-lg-page=16' : '--with-lg-page=12')
+
+  patch source: 'jemalloc-extra-config-flags.patch'
+
   update_config_guess
 
   make "-j #{workers}", env: env

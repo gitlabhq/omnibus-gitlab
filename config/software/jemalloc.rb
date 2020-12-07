@@ -26,6 +26,7 @@ skip_transitive_dependency_licensing true
 
 source git: version.remote
 
+# Ensure redis is compiled first so it can build its own jemalloc
 dependency 'redis'
 
 env = with_standard_compiler_flags(with_embedded_path)
@@ -39,9 +40,19 @@ build do
     command 'sed -i -e s:autoconf:autoconf268: autogen.sh', env: env
     env['AUTOCONF'] = '/usr/bin/autoconf268'
   end
-  command ['./autogen.sh',
-           ' --enable-prof',
-           "--prefix=#{install_dir}/embedded"].join(' '), env: env
+
+  autogen_command = [
+    './autogen.sh',
+    '--enable-prof',
+    "--prefix=#{install_dir}/embedded"
+  ]
+
+  # jemallocs page size must be >= to the runtime pagesize
+  # Use large for arm/newer platforms based on debian rules:
+  # https://salsa.debian.org/debian/jemalloc/-/blob/c0a88c37a551be7d12e4863435365c9a6a51525f/debian/rules#L8-23
+  autogen_command << (OhaiHelper.arm64? ? '--with-lg-page=16' : '--with-lg-page=12')
+
+  command autogen_command.join(' '), env: env
   make "-j #{workers} build_lib", env: env
   make 'install_lib', env: env
   make 'install_bin', env: env
