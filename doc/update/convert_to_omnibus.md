@@ -12,6 +12,75 @@ Please be advised that you lose your settings in files such as `gitlab.yml`,
 `puma.rb` and `smtp_settings.rb`. You will have to
 [configure those settings in `/etc/gitlab/gitlab.rb`](../README.md#configuring).
 
+Before starting the migration, ensure that you are moving to **exactly the same version** of GitLab.
+To convert your installation to Omnibus:
+
+1. If your current GitLab installation uses MySQL, you will first need to migrate
+   your data to PostgreSQL, because starting with GitLab 12.1, PostgreSQL is the
+   only supported database management system. If you already use PostgreSQL, skip this step.
+   1. Verify the [PostgreSQL requirements and supported versions](https://docs.gitlab.com/ee/install/requirements.html#postgresql-requirements),
+   then [install PostgreSQL and create a database](https://docs.gitlab.com/ee/install/installation.html#6-database).
+   1. After the database is created, [migrate the MySQL data to PostgreSQL](https://docs.gitlab.com/ee/update/mysql_to_postgresql.html#source-installation).
+
+1. Create a backup from your current installation:
+
+   ```shell
+   cd /home/git/gitlab
+   sudo -u git -H bundle exec rake gitlab:backup:create RAILS_ENV=production
+   ```
+
+1. [Install GitLab using a Linux package](https://about.gitlab.com/install/).
+1. Copy the backup file to the directory `/var/opt/gitlab/backups/` of the new server.
+1. Restore the backup in the new installation ([detailed instructions](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-gitlab-installations)):
+
+   ```shell
+   # This command will overwrite the contents of your GitLab database!
+   sudo gitlab-backup restore BACKUP=<FILE_NAME>
+   ```
+
+   The restore will take a few minutes depending on the size of you database and Git data.
+
+1. Configure the new installation as in Omnibus GitLab all settings are stored in
+   `/etc/gitlab/gitlab.rb`. Individual settings need to be manually moved from
+   files such as `gitlab.yml`, `puma.rb` and `smtp_settings.rb`. See the
+   [`gitlab.rb` template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
+   for all available options.
+1. To finalize the configuration process, copy the secrets from the old installation
+   to the new one. GitLab uses secrets to multiple purposes, like database encryption,
+   session encryption, etc. In Omnibus GitLab all secrets are placed in a single
+   file `/etc/gitlab/gitlab-secrets.json`, whereas in source installations, the
+   secrets are placed in multiple files:
+   1. First, you need to restore secrets related to Rails. Copy the values of
+      `db_key_base`, `secret_key_base` and `otp_key_base` from
+      `/home/git/gitlab/config/secrets.yml` (GitLab source) to the equivalent
+      ones in `/etc/gitlab/gitlab-secrets.json` (Omnibus GitLab).
+   1. Then, copy the contents of `/home/git/gitlab-shell/.gitlab_shell_secret`
+      (GitLab source) to GitLab Shell's `secret_token` in
+      `/etc/gitlab/gitlab-secrets.json` (Omnibus GitLab). It will look something like:
+
+       ```json
+       {
+         "gitlab_workhorse": {
+           "secret_token": "..."
+         },
+         "gitlab_shell": {
+           "secret_token": "..."
+         },
+         "gitlab_rails": {
+           "secret_key_base": "...",
+           "db_key_base": "...",
+           "otp_key_base": "...",
+         }
+         ...
+       }
+       ```
+
+1. Reconfigure Omnibus GitLab to apply the changes:
+
+    ```shell
+    sudo gitlab-ctl reconfigure
+    ```
+
 ## Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup
 
 Upgrade by [creating a backup from the non-Omnibus install](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
