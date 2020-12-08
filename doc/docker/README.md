@@ -23,7 +23,7 @@ the MTA after every upgrade or restart.
 In the following examples, if you want to use the latest RC image, use
 `gitlab/gitlab-ee:rc` instead.
 
-CAUTION: **Caution:**
+WARNING:
 Docker for Windows is not officially supported. There are known issues with volume
 permissions, and potentially other unknown issues. If you are trying to run on Docker
 for Windows, see the [getting help page](https://about.gitlab.com/get-help/) for links
@@ -157,7 +157,7 @@ install, and upgrade your Docker-based GitLab installation:
    docker-compose up -d
    ```
 
-TIP: **Tip:**
+NOTE:
 Read the ["Pre-configure Docker container"](#pre-configure-docker-container) section
 to see how the `GITLAB_OMNIBUS_CONFIG` variable works.
 
@@ -384,7 +384,7 @@ port `2289`:
      gitlab/gitlab-ee:latest
    ```
 
-   NOTE: **Note:**
+   NOTE:
    The format for publishing ports is `hostPort:containerPort`. Read more in
    Docker's documentation about
    [exposing incoming ports](https://docs.docker.com/engine/reference/run/#/expose-incoming-ports).
@@ -503,7 +503,7 @@ docker exec -t <container name> gitlab-backup create
 
 Read more on how to [back up and restore GitLab](https://docs.gitlab.com/ee/raketasks/backup_restore.html).
 
-NOTE: **Note:**
+NOTE:
 If configuration is provided entirely via the `GITLAB_OMNIBUS_CONFIG` environment variable
 (per the ["Pre-configure Docker Container"](#pre-configure-docker-container) steps),
 meaning no configuration is set directly in the `gitlab.rb` file, then there is no need

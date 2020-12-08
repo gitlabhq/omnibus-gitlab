@@ -13,7 +13,7 @@ Before following these instructions, note the following:
 - If you are upgrading from a non-Omnibus installation to an Omnibus installation, see
   [Upgrading from a non-Omnibus installation to an Omnibus installation](convert_to_omnibus.md).
 
-CAUTION: **Caution:**
+WARNING:
 If you aren't [using the current major version](#mandatory-upgrade-paths-for-version-upgrades),
 you **must** follow the
 [supported upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
@@ -159,7 +159,7 @@ Upgrading from the same version of CE to EE is not explicitly necessary, and any
 (for example, CE 12.0 to EE 12.1) should work. However, in the following steps we assume that
 you are upgrading the same version (for example, CE 12.1 to EE 12.1), which is **recommended**.
 
-CAUTION: **Caution:**
+WARNING:
 When updating to EE from CE, avoid reverting back to CE if you plan on going to EE again in the
 future. Reverting back to CE can cause
 [database issues](#500-error-when-accessing-project--settings--repository-on-omnibus-installs)
@@ -257,7 +257,7 @@ The steps can be summed up to:
 That's it! You can now use GitLab Enterprise Edition! To update to a newer
 version, follow [Update using the official repositories](#update-using-the-official-repositories).
 
-NOTE: **Note:**
+NOTE:
 If you want to use `dpkg`/`rpm` instead of `apt-get`/`yum`, go through the first
 step to find the current GitLab version and then follow
 [Update using a manually-downloaded package](#update-using-a-manually-downloaded-package).
@@ -1148,7 +1148,7 @@ does not support.
 This section contains general information on how to revert to an earlier version
 of a package.
 
-CAUTION: **Warning:**
+WARNING:
 You must at least have a database backup created under the version you are
 downgrading to. Ideally, you should have a
 [full backup archive](https://docs.gitlab.com/ee/raketasks/backup_restore.html#back-up-gitlab)
@@ -1244,7 +1244,7 @@ Steps:
 
 ## Update GitLab CI from prior `5.4.0` to version `7.14` via Omnibus GitLab
 
-CAUTION: **Warning:**
+WARNING:
 Omnibus GitLab 7.14 was the last version where CI was bundled in the package.
 Starting from GitLab 8.0, CI was merged into GitLab, thus it's no longer a
 separate application included in the Omnibus package.

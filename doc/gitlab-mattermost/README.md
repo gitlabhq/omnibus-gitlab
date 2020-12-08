@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # GitLab Mattermost
 
-NOTE: **Note:**
+NOTE:
 This document applies to GitLab 11.0 and later.
 
 You can run a [GitLab Mattermost](https://gitlab.com/gitlab-org/gitlab-mattermost)
@@ -392,7 +392,7 @@ There are a few exceptions to this rule:
 |`mattermost['webrtc_gateway_turn_username']`|`MM_WEBRTCSETTINGS_TURN_USERNAME`|
 |`mattermost['webrtc_gateway_turn_sharedkey']`|`MM_WEBRTCSETTINGS_TURN_SHAREDKEY`|
 
-> Please note:
+NOTE:
 GitLab 11.0 no longer generates `config.json` file from the configuration specified
 in `gitlab.rb`. Users are responsible for managing this file which can be done via the
 Mattermost System Console or manually.

@@ -23,12 +23,12 @@ configuration, just run `sudo gitlab-ctl backup-etc`. It will create a tar
 archive in `/etc/gitlab/config_backup/`. Directory and backup files will be
 readable only to root.
 
-NOTE: **Note:**
+NOTE:
 Running `sudo gitlab-ctl backup-etc <DIRECTORY>` will place
 the backup in the specified directory. The directory will be created if it
 does not exist. Absolute paths are recommended.
 
-NOTE: **Note:**
+NOTE:
 `backup-etc` introduced in GitLab 12.3.
 
 To create a daily application backup, edit the cron table for user root:
@@ -59,7 +59,7 @@ sudo tar -xf gitlab_config_1487687824_2017_02_21.tar -C /
 Remember to run `sudo gitlab-ctl reconfigure` after restoring a configuration
 backup.
 
-NOTE: **Note:**
+NOTE:
 Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
 
 ### Separate configuration backups from application data
@@ -108,7 +108,7 @@ Backup configuration and secrets:
 docker exec -t <your container name> /bin/sh -c 'umask 0077; tar cfz /secret/gitlab/backups/$(date "+etc-gitlab-\%s.tgz") -C / etc/gitlab'
 ```
 
-NOTE: **Note:**
+NOTE:
 To persist these backups outside the container, mount volumes in the following directories:
 
 1. `/secret/gitlab/backups`.

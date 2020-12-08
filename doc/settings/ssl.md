@@ -34,12 +34,12 @@ GitLab can be integrated with [Let's Encrypt](https://letsencrypt.org).
 > - Enabled by default in GitLab 10.7 and later if `external_url` is set with
 >   the *https* protocol and no certificates are configured.
 
-NOTE: **Note:**
+NOTE:
 In order for Let's Encrypt verification to work correctly, ports 80 and 443 will
 need to be accessible to the Let's Encrypt servers that run the validation. Also note that the validation
 currently [does not work with non-standard ports](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3580).
 
-CAUTION: **Caution:**
+WARNING:
 Administrators installing or upgrading to GitLab 10.7 or later and do not plan on using
 **Let's Encrypt** should set `letsencrypt['enable'] = false` in `/etc/gitlab/gitlab.rb` to disable.
 
@@ -52,7 +52,7 @@ external_url "https://gitlab.example.com"         # Must use https protocol
 letsencrypt['contact_emails'] = ['foo@email.com'] # Optional
 ```
 
-TIP: **Tip:**
+NOTE:
 Certificates issued by **Let's Encrypt** expire every ninety days. The optional `contact_emails`
 setting causes an expiration alert to be sent to the configured address when that expiration date approaches.
 
@@ -69,7 +69,6 @@ mattermost_external_url "https://mattermost.example.com" # mattermost, must use 
 #registry_nginx['ssl_certificate'] = "path/to/cert"      # Must be absent or commented out
 ```
 
-NOTE: **Note:**
 The **Let's Encrypt** certificate is created with the GitLab primary
 instance as the primary name on the certificate. Additional services
 such as the registry are added as alternate names to the same
@@ -81,7 +80,7 @@ to worry about setting up wildcard certificates.
 
 > [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/2433) in [GitLab](https://about.gitlab.com/pricing/) 10.7.
 
-CAUTION: **Caution:**
+WARNING:
 Administrators installing or upgrading to GitLab 12.1 or later and plan on using
 their own **Let's Encrypt** certificate should set `letsencrypt['enable'] = false` in `/etc/gitlab/gitlab.rb` to
 disable automatic renewal. **Otherwise, a `gitlab-ctl reconfigure` may attempt to renew the
@@ -117,13 +116,13 @@ sudo gitlab-ctl reconfigure
 sudo gitlab-ctl renew-le-certs
 ```
 
-CAUTION: **Caution:**
+WARNING:
 GitLab 12.1 or later will attempt to renew any **Let's Encrypt** certificate.
 If you plan to use your own **Let's Encrypt** certificate you must set `letsencrypt['enable'] = false`
 in `/etc/gitlab/gitlab.rb` to disable integration. **Otherwise the certificate
 could be overwritten due to the renewal.**
 
-TIP: **Tip:**
+NOTE:
 The above commands require root privileges and only generate a renewal if the certificate is close to expiration.
 [Consider the upstream rate limits](https://letsencrypt.org/docs/rate-limits/) if encountering an error during renewal.
 
@@ -143,10 +142,10 @@ certificate authenticity.
 Omnibus GitLab supports connections to external services with
 self-signed certificates.
 
-NOTE: **Note:**
+NOTE:
 Custom certificates were introduced in GitLab 8.9.
 
-TIP: **Tip:**
+NOTE:
 For installations that use self-signed certificates, Omnibus-GitLab
 provides a way to manage these certificates. For more technical details how
 this works, see the [details](#details-on-how-gitlab-and-ssl-work)
@@ -154,7 +153,7 @@ at the bottom of this page.
 
 #### Install Custom Public Certificates
 
-NOTE: **Note:**
+NOTE:
 A perl interpreter is required for `c_rehash` dependency to properly symlink the certificates.
 [Perl is currently not bundled in Omnibus GitLab](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/2275).
 
@@ -162,7 +161,7 @@ A perl interpreter is required for `c_rehash` dependency to properly symlink the
 1. Copy the public certificate file only into the `/etc/gitlab/trusted-certs` directory.
 1. Run `gitlab-ctl reconfigure`.
 
-CAUTION: **Caution:**
+WARNING:
 If using a custom certificate chain, the root and/or intermediate certificates must be put into separate files in `/etc/gitlab/trusted-certs` [due to `c_rehash` creating a hash for the first certificate only](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/1425).
 
 ## Troubleshooting
@@ -173,7 +172,7 @@ Sometimes it's helpful to get a better picture of the SSL certificate chain by v
 at the source. These commands are part of the standard OpenSSL library of tools for diagnostics and
 debugging.
 
-NOTE: **Note:**
+NOTE:
 GitLab includes its own [custom-compiled version of OpenSSL](#details-on-how-gitlab-and-ssl-work)
 that all GitLab libraries are linked against. It's important to run the following commands using
 this OpenSSL version.
@@ -223,7 +222,7 @@ for more examples of troubleshooting SSL problems with OpenSSL.
 
     This error indicates the client cannot get the root CA. To fix this, you can either [trust the root CA](#install-custom-public-certificates) of the server you are trying to connect to on the client or [modify the certificate](nginx.md#manually-configuring-https) to present the full chained certificate on the server you are trying to connect to.
 
-    NOTE: **Note:**
+    NOTE:
     It is recommended to use the full certificate chain in order to prevent SSL errors when clients connect. The full certificate chain order should consist of the server certificate first, followed by all intermediate certificates, with the root CA last.
 
 1. `unable to verify the first certificate`
@@ -240,7 +239,7 @@ for more examples of troubleshooting SSL problems with OpenSSL.
 
 ### Git-LFS and other embedded services written in ***golang*** report custom certificate signed by unknown authority
 
-NOTE: **Note:**
+NOTE:
 In GitLab 11.5, the following workaround is no longer necessary, embedded golang apps now [use the standard GitLab certificate directory automatically](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3701).
 
 The `gitlab-workhorse` and other services written in ***golang*** use the **crypto/tls** library from ***golang***
@@ -255,7 +254,7 @@ gitlab_workhorse['env'] = {
 }
 ```
 
-NOTE: **Note:**
+NOTE:
 If you have installed GitLab to a path other than `/opt/gitlab/` then modify the entry above
 with the correct path in your operating environment.
 
@@ -267,7 +266,7 @@ ERROR: Not a certificate: /opt/gitlab/embedded/ssl/certs/FILE. Move it from /opt
 
 Check `/opt/gitlab/embedded/ssl/certs` and remove any files other than `README.md` that aren't valid X.509 certificates.
 
-NOTE: **Note:**
+NOTE:
 Running `gitlab-ctl reconfigure` constructs symlinks named from the subject hashes
 of your custom public certificates and places them in `/opt/gitlab/embedded/ssl/certs/`.
 Broken symlinks in `/opt/gitlab/embedded/ssl/certs/` will be automatically removed.

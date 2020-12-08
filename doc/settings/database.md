@@ -182,7 +182,7 @@ can use this.
    1. The key file should be owned by the database user, and its permissions should be `0400`
    1. The CA file should be owned by the database user, and its permissions should be `0400`
 
-   NOTE: **Note:**
+   NOTE:
    Don't use the filenames `server.crt` or `server.key` for these files. These
    filenames are reserved for the internal use of `omnibus-gitlab`.
 
@@ -350,11 +350,11 @@ This consists of:
 
 To change the location of the PostgreSQL data
 
-CAUTION: **Caution:**
+WARNING:
 If you have an existing database, you need to move the data to the new location
 first.
 
-CAUTION: **Caution:**
+WARNING:
 This is an intrusive operation. It cannot be done without downtime on an
 existing installation
 
@@ -370,14 +370,14 @@ packaged PostgreSQL server to a later version (if one is included in the
 package). This updates PostgreSQL to the [default shipped version](../package-information/postgresql_versions.md)
 during package upgrades, unless specifically [opted out](#opt-out-of-automatic-postgresql-upgrades).
 
-CAUTION: **Before upgrading:**
-It's important that you fully read this section before running any commands. For
+WARNING:
+Before upgrading, it's important that you fully read this section before running any commands. For
 single node installations, this upgrade needs downtime, as the database must be
 down while the upgrade is being performed. The length of time depends on the
 size of your database. To avoid downtime, it's possible to upgrade to a new
 database [using Slony](https://docs.gitlab.com/ee/update/upgrading_postgresql_using_slony.html).
 
-TIP: **Tip:**
+NOTE:
 If you encounter any problems during upgrade, raise an issue with a full
 description at the [Omnibus GitLab issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab).
 
@@ -403,7 +403,7 @@ the upgrade:
 sudo gitlab-ctl pg-upgrade
 ```
 
-TIP: **Tip:**
+NOTE:
 `pg-upgrade` can take arguments; for example, you can set the timeout for the
 execution of the underlying commands (`--timeout=1d2h3m4s5ms`). Run `gitlab-ctl pg-upgrade -h`
 to see the full list.
@@ -546,7 +546,7 @@ By default, GitLab is configured to use the PostgreSQL server that's included
 in Omnibus GitLab. You can also reconfigure it to use an external instance of
 PostgreSQL.
 
-CAUTION: **Caution:**
+WARNING:
 If you are using non-packaged PostgreSQL server, you need to make
 sure that PostgreSQL is set up according to the [database requirements document](https://docs.gitlab.com/ee/install/requirements.html#database).
 
@@ -728,7 +728,7 @@ The following example demonstrates upgrading from a database host running Postgr
     postgresql['version'] = 11
     ```
 
-  NOTE: **Note:**
+  NOTE:
   Connecting to PostgreSQL 12 (alongside with amending `postgresql['version'] = 12`)
   breaks the [GitLab Backup/Restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html) functionality unless the v12 client binaries are available on the file system. More on this topic can be found under [backup and restore a non-packaged database](#backup-and-restore-a-non-packaged-postgresql-database).
   This problem with missing 12 client binaries is partially resolved in GitLab 13.3,
@@ -780,7 +780,7 @@ The following example demonstrates upgrading from a database host running Postgr
 
 ### Seed the database (fresh installs only)
 
-CAUTION: **Caution:**
+WARNING:
 This is a destructive command; do not run it on an existing database.
 
 Omnibus GitLab will not seed your external database. Run the following command
@@ -809,7 +809,7 @@ gitlab_rails['initial_shared_runners_registration_token'] = 'token'
 
 ### Pin the packaged PostgreSQL version (fresh installs only)
 
-NOTE: **Note:**
+NOTE:
 GitLab 13.0 only ships with PostgreSQL 11. PostgreSQL 12 is only available from GitLab 13.3 onward.
 PostgreSQL 12 is not supported on Geo deployments and is [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374)
 for the future releases. The [fault-tolerant PostgreSQL 12 deployment](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html)
@@ -821,7 +821,7 @@ To initialize PostgreSQL with a non-default version, you can set `postgresql['ve
 the [packaged PostgreSQL versions](../package-information/postgresql_versions.md) prior to the initial reconfigure.
 For example, starting GitLab 13.3 you can use `postgresql['version'] = 12` to opt in to use PostgreSQL 12.
 
-CAUTION: **Caution:**
+WARNING:
 Setting `postgresql['version']` while using the Omnibus packaged PostgreSQL after the initial reconfigure will
 throw errors about the data directory being initialized on a different version of PostgreSQL. If this is encountered,
 see [Revert packaged PostgreSQL server to previous version](#revert-packaged-postgresql-server-to-previous-version).
@@ -927,7 +927,7 @@ parameters noted in the table below and then run `gitlab-ctl reconfigure`.
 
 > [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/249662) in GitLab 13.5.
 
-CAUTION: **Warning:**
+WARNING:
 This is an experimental feature that isn't enabled by default.
 
 Recreates database indexes in the background (called "reindexing"). This can
@@ -964,7 +964,7 @@ You can change the schedule by refining the following settings:
 
 ### Upgrading a GitLab HA cluster
 
-NOTE: **Note:**
+NOTE:
 As of GitLab 13.3, PostgreSQL 12 is shipped with Omnibus GitLab. However, the current support for is limited to
 single database node installation. [Fault-tolerant PostgreSQL deployments](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html),
 and Geo installations are not supported, but [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374) for the future releases.
@@ -1040,12 +1040,12 @@ Since Geo depends on PostgreSQL streaming replication by default, there are
 additional considerations when upgrading GitLab and/or when upgrading
 PostgreSQL described below.
 
-CAUTION: **Caution:**
+WARNING:
 If you are running a Geo installation using PostgreSQL 9.6.x, upgrade to GitLab 12.4 or newer. Older versions were affected [by an issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4692) that could cause upgrades of the PostgreSQL database to fail on the secondary. See [Disabling automatic PostgreSQL upgrades](#disabling-automatic-postgresql-upgrades) to workaround the issue. This issue is now fixed.
 
 #### Caveats when upgrading PostgreSQL with Geo
 
-CAUTION: **Caution:**
+WARNING:
 When using Geo, upgrading PostgreSQL **requires downtime on all secondaries**.
 
 When using Geo, upgrading PostgreSQL **requires downtime on all secondaries**

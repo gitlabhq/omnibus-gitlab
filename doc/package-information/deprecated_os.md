@@ -59,6 +59,6 @@ GitLab provides arm64/aarch64 packages for some supported operating systems.
 You can see if your operating system architecture is supported in the table
 above.
 
-CAUTION: **Caution:**
+WARNING:
 There are currently still some [known issues and limitation](https://gitlab.com/groups/gitlab-org/-/epics/4397)
 running GitLab on ARM.
