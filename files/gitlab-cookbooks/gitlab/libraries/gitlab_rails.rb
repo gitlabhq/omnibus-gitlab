@@ -82,6 +82,7 @@ module GitlabRails
       Gitlab['gitlab_rails']['db_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['secret_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['otp_key_base'] ||= SecretsHelper.generate_hex(64)
+      Gitlab['gitlab_rails']['encrypted_settings_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['openid_connect_signing_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
 
       if Gitlab['gitlab_rails']['ci_jwt_signing_key']

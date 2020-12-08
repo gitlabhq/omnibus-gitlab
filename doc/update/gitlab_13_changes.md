@@ -46,3 +46,11 @@ If you use SELinux and have set `gitlab_workhorse['listen_addr']` to a custom so
 If you are using a custom listen address but you are not using SELinux, you will not be affected by this change.
 
 If you are using your own NGINX rather than the bundled version, and are proxying to the workhorse socket, you will need to update your NGINX config.
+
+## 13.7
+
+### New encrypted_settings_key_base secret added to the GitLab secrets
+
+In 13.7, a new secret is generated in `/etc/gitlab/gitlab-secrets.json`. In an HA GitLab environment, secrets need to
+be the same on all nodes. Ensure this new secret is also accounted for if you are manually syncing the file across
+nodes, or manually specifying secrets in `/etc/gitlab/gitlab.rb`.
