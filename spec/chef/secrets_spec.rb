@@ -49,7 +49,7 @@ RSpec.describe 'secrets' do
 
       it 'writes new secrets to the file, with different values for each' do
         rails_keys = new_secrets['gitlab_rails']
-        hex_keys = rails_keys.values_at('db_key_base', 'otp_key_base', 'secret_key_base')
+        hex_keys = rails_keys.values_at('db_key_base', 'otp_key_base', 'secret_key_base', 'encrypted_settings_key_base')
         rsa_keys = rails_keys.values_at('openid_connect_signing_key', 'ci_jwt_signing_key')
 
         expect(rails_keys.to_a.uniq).to eq(rails_keys.to_a)
@@ -219,6 +219,7 @@ RSpec.describe 'secrets' do
             gitlab_rails: {
               secret_token: 'json_rails_secret_token',
               jws_private_key: 'json_rails_jws_private_key',
+              encrypted_settings_key_base: 'encrypted_settings_key_base',
               ci_jwt_signing_key: gitlab_rb_ci_jwt_signing_key
             }
           )
@@ -253,6 +254,7 @@ RSpec.describe 'secrets' do
                 'db_key_base' => 'rb_ci_db_key_base',
                 'secret_key_base' => 'rb_ci_db_key_base',
                 'otp_key_base' => 'json_rails_secret_token',
+                'encrypted_settings_key_base' => 'encrypted_settings_key_base',
                 'openid_connect_signing_key' => 'json_rails_jws_private_key',
                 'ci_jwt_signing_key' => gitlab_rb_ci_jwt_signing_key
               }
@@ -347,6 +349,7 @@ RSpec.describe 'secrets' do
               db_key_base: 'rb_ci_db_key_base',
               secret_key_base: 'rb_ci_db_key_base',
               otp_key_base: 'json_rails_secret_token',
+              encrypted_settings_key_base: 'encrypted_settings_key_base',
               openid_connect_signing_key: 'json_rails_jws_private_key',
               ci_jwt_signing_key: gitlab_rb_ci_jwt_signing_key
             }
@@ -358,6 +361,7 @@ RSpec.describe 'secrets' do
                 'db_key_base' => 'rb_ci_db_key_base',
                 'secret_key_base' => 'rb_ci_db_key_base',
                 'otp_key_base' => 'json_rails_secret_token',
+                'encrypted_settings_key_base' => 'encrypted_settings_key_base',
                 'openid_connect_signing_key' => 'json_rails_jws_private_key',
                 'ci_jwt_signing_key' => gitlab_rb_ci_jwt_signing_key
               }
