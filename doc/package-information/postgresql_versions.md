@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # PostgreSQL versions shipped with Omnibus GitLab
 
-NOTE: **Note:**
+NOTE:
 This table lists only GitLab versions where a significant change happened in the
 package regarding PostgreSQL versions, not all.
 

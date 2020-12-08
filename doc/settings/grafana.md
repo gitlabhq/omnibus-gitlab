@@ -17,7 +17,7 @@ automatically configured. Grafana will be available on `https://gitlab.example.c
 
 ## Enable login using username and password
 
-NOTE: **Note:**
+NOTE:
 The admin account's username is `admin`.
 
 Logging in to Grafana using username/password combo is disabled , and only
@@ -31,7 +31,7 @@ grafana['disable_login_form'] = false
 
 ## Specifying an admin password
 
-NOTE: **Note:**
+NOTE:
 The admin password must be specified before the first reconfigure after
 installation. After this, the `admin_password` setting doesn't have any effect,
 and you'll have to [reset the password manually](#resetting-the-admin-password).
@@ -78,7 +78,7 @@ To allow users to create their own accounts in Grafana:
 
 ### Using GitLab as an OAuth provider
 
-NOTE: **Note:**
+NOTE:
 If you're using GitLab 12.0 or later, this is automatically configured. You
 can skip this section.
 
@@ -107,7 +107,7 @@ have access to Grafana:
 
 1. Save the file and [reconfigure](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure) GitLab for the changes to take effect.
 
-NOTE: **Note:**
+NOTE:
 GitLab users are created with read-only Viewer privilege by default. The admin account must be used to grant additional access.
 
 ### Resetting the admin password

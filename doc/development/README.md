@@ -71,7 +71,7 @@ their applicability:
 1. If Merge Request introduces change in user facing configuration, update to [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
 1. [Changelog entry](https://docs.gitlab.com/ee/development/changelog.html) to inform about the change, if necessary.
 
-NOTE: **Note:**
+NOTE:
 Ensure shared runners are enabled for your fork in order for our automated tests to run:
 
 1. Go to Settings -> CI/CD

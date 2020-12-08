@@ -19,7 +19,7 @@ between all the mirrors of the project:
 
 ### Protected branches
 
-NOTE: **Note:**
+NOTE:
 Unless specified otherwise, the listed users/groups have permission to both merge, and push to
 protected branches.
 
@@ -44,7 +44,7 @@ protected branches.
 1. QA mirror:
     1. `master`: Developers (Merge only), Maintainers
 
-NOTE: **Note:**
+NOTE:
 Developers get access to `master` branch in QA mirror because
 that's required to run a triggered pipeline against the branch. There is an
 [open issue](https://gitlab.com/gitlab-org/gitlab/-/issues/24585) to change this
@@ -52,7 +52,7 @@ situation.
 
 ### Protected Tags
 
-NOTE: **Note:**
+NOTE:
 Unless specified otherwise, the listed users/groups have permission to both merge, and push to
 protected tags.
 
@@ -323,7 +323,7 @@ to an S3 bucket in addition to making them available as artifacts.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
-NOTE: **Note:**
+NOTE:
 Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tags.
 
 ### `<OS_NAME>-staging`
@@ -333,7 +333,7 @@ repository in [Packagecloud instance](https://packages.gitlab.com).
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
-NOTE: **Note:**
+NOTE:
 Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tags.
 
 ### `<OS_NAME>-release`
@@ -343,7 +343,7 @@ repository in [Packagecloud instance](https://packages.gitlab.com).
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
-NOTE: **Note:**
+NOTE:
 Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tags.
 
 ### `Docker`

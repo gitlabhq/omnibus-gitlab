@@ -28,7 +28,7 @@ registry_nginx['redirect_http_to_https'] = true
 mattermost_nginx['redirect_http_to_https'] = true
 ```
 
-NOTE: **Note:**
+NOTE:
 Modifying NGINX configuration should be done with care as incorrect
 or incompatible configuration may yield to unavailability of service.
 
@@ -115,7 +115,7 @@ no longer listen for unencrypted HTTP traffic on port 80. If you want to
 redirect all HTTP traffic to HTTPS you can use the `redirect_http_to_https`
 setting.
 
-NOTE: **Note:**
+NOTE:
 This behavior is enabled by default.
 
 ```ruby
@@ -244,7 +244,7 @@ nginx['http2_enabled'] = false
 Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
 for the changes to take effect.
 
-NOTE: **Note:**
+NOTE:
 The `http2` setting only works for the main GitLab application and not for the other services.
 
 ## Using a non-bundled web-server
@@ -403,7 +403,7 @@ Setting `max_age` to 0 will disable this feature. For more information see:
 
 - <https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/>
 
-NOTE: **Note:**
+NOTE:
 The HSTS settings only work for the main GitLab application and not for the other services.
 
 ## Setting the Referrer-Policy header
@@ -438,7 +438,7 @@ disable this behavior:
 nginx['gzip_enabled'] = false
 ```
 
-NOTE: **Note:**
+NOTE:
 The `gzip` setting only works for the main GitLab application and not for the other services.
 
 ## Using custom SSL ciphers
@@ -562,7 +562,7 @@ In some cases you may want to host GitLab using an existing Passenger/NGINX
 installation but still have the convenience of updating and installing using
 the omnibus packages.
 
-NOTE: **Note:**
+NOTE:
 When disabling NGINX, you won't be able to access
 other services included by Omnibus, like Grafana, Mattermost, etc. unless
 you manually add them in `nginx.conf`.
@@ -591,14 +591,14 @@ web_server['external_users'] = ['www-data']
 
 Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
-NOTE: **Note:**
+NOTE:
 If you are running a version older than 8.16.0, you will have to
 manually remove the Unicorn service file (`/opt/gitlab/service/unicorn`), if
 exists, for reconfigure to succeed.
 
 ### Vhost (server block)
 
-NOTE: **Note:**
+NOTE:
 GitLab 13.5 changed the default workhorse socket location from `/var/opt/gitlab/gitlab-workhorse/socket` to `/var/opt/gitlab/gitlab-workhorse/sockets/socket`. Please update the following configuration accordingly if upgrading from versions older than 13.5.
 
 Then, in your custom Passenger/NGINX installation, create the following site

@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Unicorn settings
 
-NOTE: **Note:**
+NOTE:
 Starting with GitLab 13.0, Puma is the default web server and Unicorn has been
 disabled by default.
 
@@ -31,9 +31,9 @@ unicorn['worker_processes'] = 3
 unicorn['worker_timeout'] = 60
 ```
 
-NOTE: **Note:**
+NOTE:
 Minimum required `worker_processes` is 2 in order for the web editor to work correctly, see [GitLab issue #14546](https://gitlab.com/gitlab-org/gitlab/-/issues/14546) for details.
 
-CAUTION: **Caution:**
+WARNING:
 Be sure to review [recommended number of Unicorn Workers](https://docs.gitlab.com/ee/install/requirements.html#unicorn-workers)
 before changing.

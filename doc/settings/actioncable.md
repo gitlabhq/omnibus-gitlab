@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # ActionCable
 
-NOTE: **Note:**
+NOTE:
 ActionCable is **experimental**, and enabling it in the in-app mode also enables experimental features.
 
 This service is disabled by default. To enable:

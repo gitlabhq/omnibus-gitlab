@@ -121,7 +121,7 @@ registry_external_url "https://registry.example.com"
 mattermost_external_url "https://mattermost.example.com"
 ```
 
-NOTE: **Note:**
+NOTE:
 Don't add the equal sign (`=`) between `external_url` and the value.
 
 ## Emails are not being delivered

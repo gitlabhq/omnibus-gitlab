@@ -57,7 +57,7 @@ up a Build Environment](../build/build_package.md#preparing-a-build-environment)
    For the time being, consider the date of pushing (which is available next
    to the package name in the repository page) to find the latest package version.
 
-   NOTE: **Note:**
+   NOTE:
    On Ubuntu Xenial, you may have to install tzdata. This
    [issue is reported in #4769](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4679).
 
