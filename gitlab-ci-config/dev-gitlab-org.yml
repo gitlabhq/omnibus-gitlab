@@ -587,7 +587,7 @@ SLES-12.2:
   <<: *tag_build
   <<: *dev-ee-tag-only
 SLES-12.5:
-  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
   <<: *dev-ee-tag-only
 
