@@ -48,15 +48,12 @@ registry['env'] = {
 }
 ```
 
-NOTE: **Note:**
 GitLab 11.6 and newer will attempt to use HTTP Basic
 Authentication when a username and password is included in the proxy
 URL. Older GitLab versions will omit the authentication details.
 
-NOTE: **Note:**
 Proxy settings use the `.` syntax for globing.
 
-NOTE: **Note:**
 Proxy URL values should generally be `http://` only, unless
 your proxy has its own SSL certificate and SSL enabled. This means, even for
 the `https_proxy` value, you should usually specify a value as
@@ -67,7 +64,7 @@ the `https_proxy` value, you should usually specify a value as
 Any change made to the environment variables **requires a hard restart** after
 reconfigure for it to take effect.
 
-NOTE: **Note:**
+NOTE:
 During a hard restart, your GitLab instance will be down until the
 services are back up.
 

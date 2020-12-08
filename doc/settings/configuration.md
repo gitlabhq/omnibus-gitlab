@@ -17,7 +17,7 @@ all the options of the template as of installation listed in
 
 ## Configuring the external URL for GitLab
 
-NOTE: **Note:**
+NOTE:
 Before you change the external URL, you should check if you have
 previously defined a custom **Home page URL** or **After sign out a path** under
 **Admin Area > Settings > General > Sign-in restrictions**. If URLs have been
@@ -39,7 +39,7 @@ for the change to take effect, run:
 sudo gitlab-ctl reconfigure
 ```
 
-NOTE: **Note:**
+NOTE:
 After you change the external URL, it is recommended that you also
 [invalidate the Markdown cache](https://docs.gitlab.com/ee/administration/invalidate_markdown_cache.html).
 
@@ -53,12 +53,12 @@ number of commands, `omnibus-gitlab` supports the use of an environment variable
 this environment variable, its value will be written as `external_url` in the
 `gitlab.rb` file as part of package installation (or upgrade).
 
-NOTE: **Note:**
+NOTE:
 `EXTERNAL_URL` environment variable only affects installation/upgrade
 of packages. For regular `sudo gitlab-ctl reconfigure` runs, the value present
 in `/etc/gitlab/gitlab.rb` will be used.
 
-NOTE: **Note:**
+NOTE:
 As part of package updates, if you have `EXTERNAL_URL` variable set
 inadvertently, it will replace the existing value in `/etc/gitlab/gitlab.rb`
 without any warning. So, it is recommended not to set the variable globally, but
@@ -70,7 +70,7 @@ sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee
 
 ## Configuring a relative URL for GitLab
 
-NOTE: **Note:**
+NOTE:
 Relative URL support in Omnibus GitLab is **experimental** and was
 [introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/590)
 in version 8.5. For source installations, there is a
@@ -398,7 +398,7 @@ redis['home'] = "/var/opt/redis-gitlab"
 
 ### Moving the home directory for a user
 
-NOTE: **Note:**
+NOTE:
 For the GitLab user, it is recommended that the home directory
 is set in local disk (ie not NFS) for better performance. When setting it in
 NFS, Git requests will need to make another network request to read the Git
@@ -564,7 +564,7 @@ To enable Rails metrics again, create a `tmpfs` mount and specify it in `/etc/gi
 runtime_dir '/path/to/tmpfs'
 ```
 
-NOTE: **Note:**
+NOTE:
 Please note that there is no `=` in the configuration.
 
 Run `sudo gitlab-ctl reconfigure` for the settings to take effect.

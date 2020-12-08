@@ -115,7 +115,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
    git tag -a 6.6.0+ce.0 -m 'Pin GitLab to v6.6.0'
    ```
 
-   CAUTION: **WARNING:**
+   WARNING:
    Do NOT use a hyphen `-` anywhere in the Omnibus GitLab tag.
 
    Examples of converting an upstream tag to an omnibus tag sequence:

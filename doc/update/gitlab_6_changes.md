@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 ## Updating from GitLab `6.6` and higher to the latest version
 
-NOTE: **Note:**
+NOTE:
 The procedure can also be used to upgrade from a CE Omnibus package to an EE
 Omnibus package.
 
