@@ -19,7 +19,7 @@ class BasePgHelper < BaseHelper
 
   def is_running?
     omnibus_helper = OmnibusHelper.new(node)
-    omnibus_helper.service_up?(service_name) || (delegated? && omnibus_helper.service_up?(delegate_service_name) && ready?)
+    omnibus_helper.service_up?(service_name) || (delegated? && omnibus_helper.service_up?(delegate_service_name) && is_ready?)
   end
 
   def is_ready?
@@ -292,10 +292,6 @@ class BasePgHelper < BaseHelper
     # PostgreSQL cookbook skips some of the steps that are must be done either during or after
     # Patroni bootstraping.
     Gitlab['patroni']['enable'] && !Gitlab['repmgr']['enable']
-  end
-
-  def ready?
-    psql_cmd(%w(-d template1 -c 'SELECT 1;'))
   end
 
   def config_dir

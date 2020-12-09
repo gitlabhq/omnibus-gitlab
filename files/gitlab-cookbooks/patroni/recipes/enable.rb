@@ -90,11 +90,7 @@ execute 'update dynamic configuration settings' do
 end
 
 ruby_block 'wait for postgresql to start' do
-  block do
-    Timeout.timeout(30) do
-      sleep 2 until pg_helper.ready?
-    end
-  end
+  block { pg_helper.is_ready? }
 end
 
 execute 'reload postgresql' do
