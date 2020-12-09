@@ -29,7 +29,8 @@ RSpec.describe PgStatusHelper do
 
       it 'raises a warning when Postgres is not responding' do
         allow(subject).to receive(:not_responding?).and_return(true)
-        expect { subject.ready? }.to raise_error(RuntimeError, 'PostgreSQL is not responding')
+        allow(subject).to receive(:remaining_service_checks).and_return(0)
+        expect { subject.ready? }.to raise_error(RuntimeError, 'PostgreSQL did not respond before service checks were exhausted')
       end
 
       it 'raises a warning when Postgres gets invalid connection parameters' do

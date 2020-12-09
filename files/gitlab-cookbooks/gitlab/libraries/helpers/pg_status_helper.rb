@@ -44,12 +44,14 @@ class PgStatusHelper
     @total_service_checks = 1
 
     until accepting_connections?
-      warning = if not_responding?
-                  "PostgreSQL is not responding"
-                elsif invalid_connection_parameters?
+      warning = if invalid_connection_parameters?
                   "PostgreSQL is not receiving the correct connection parameters"
                 elsif service_checks_exhausted?
-                  "Exhausted service checks and database is still not available"
+                  if not_responding?
+                    "PostgreSQL did not respond before service checks were exhausted"
+                  else
+                    "Exhausted service checks and database is still not available"
+                  end
                 end
       raise warning unless warning.nil?
 
