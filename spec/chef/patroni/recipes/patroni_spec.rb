@@ -89,8 +89,6 @@ RSpec.describe 'patroni cookbook' do
             postgresql: {
               use_pg_rewind: false,
               use_slots: true,
-              remove_data_directory_on_diverged_timelines: false,
-              remove_data_directory_on_rewind_failure: false,
               parameters: {
                 wal_level: 'replica',
                 hot_standby: 'on',
@@ -230,9 +228,7 @@ RSpec.describe 'patroni cookbook' do
         )
         expect(cfg[:bootstrap][:dcs][:postgresql]).to include(
           use_slots: false,
-          use_pg_rewind: true,
-          remove_data_directory_on_diverged_timelines: true,
-          remove_data_directory_on_rewind_failure: true
+          use_pg_rewind: true
         )
         expect(cfg[:bootstrap][:dcs][:postgresql][:parameters]).to include(
           wal_keep_segments: 16,
@@ -258,9 +254,7 @@ RSpec.describe 'patroni cookbook' do
         )
         expect(cfg[:postgresql]).to include(
           use_slots: false,
-          use_pg_rewind: true,
-          remove_data_directory_on_diverged_timelines: true,
-          remove_data_directory_on_rewind_failure: true
+          use_pg_rewind: true
         )
         expect(cfg[:postgresql][:parameters]).to include(
           wal_keep_segments: 16,
@@ -516,15 +510,6 @@ RSpec.describe 'patroni cookbook' do
             max_worker_processes: 8,
             wal_log_hints: 'on'
           )
-        }
-      end
-
-      it 'should set pg_rewind options to true when enabled' do
-        expect(chef_run).to render_file('/var/opt/gitlab/patroni/dcs.yaml').with_content { |content|
-          cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
-
-          expect(cfg[:postgresql][:remove_data_directory_on_diverged_timelines]).to be(true)
-          expect(cfg[:postgresql][:remove_data_directory_on_rewind_failure]).to be(true)
         }
       end
     end
