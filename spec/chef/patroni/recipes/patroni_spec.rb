@@ -179,7 +179,7 @@ RSpec.describe 'patroni cookbook' do
           connect_port: 18008,
           replication_password: 'fakepassword',
           remove_data_directory_on_diverged_timelines: true,
-          remove_data_directory_on_rewind_failure: true ,
+          remove_data_directory_on_rewind_failure: true,
           replication_slots: {
             'geo_secondary' => { 'type' => 'physical' }
           },
