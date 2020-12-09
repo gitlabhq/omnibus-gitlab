@@ -418,6 +418,12 @@ production: &base
     ##
     # GitLab EE only jobs:
 
+    # Snapshot Devops Adoption statistics
+    <% unless @analytics_devops_adoption_create_all_snapshots_worker.nil? %>
+    analytics_devops_adoption_create_all_snapshots_worker:
+      cron: "<%= @analytics_devops_adoption_create_all_snapshots_worker %>"
+    <% end %>
+
     # Snapshot active users statistics
     <% unless @historical_data_worker_cron.nil? %>
     historical_data_worker:

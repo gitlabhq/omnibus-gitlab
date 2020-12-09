@@ -131,6 +131,7 @@ default['gitlab']['gitlab-rails']['remove_unaccepted_member_invites_cron_worker'
 default['gitlab']['gitlab-rails']['schedule_migrate_external_diffs_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ci_platform_metrics_update_cron_worker'] = nil
 default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['analytics_devops_adoption_create_all_snapshots_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_group_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_file_download_dispatch_worker_cron'] = nil
