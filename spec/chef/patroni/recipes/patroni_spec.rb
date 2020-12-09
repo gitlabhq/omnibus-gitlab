@@ -75,6 +75,8 @@ RSpec.describe 'patroni cookbook' do
               username: 'gitlab_replicator'
             },
           },
+          remove_data_directory_on_diverged_timelines: false,
+          remove_data_directory_on_rewind_failure: false,
         },
         bootstrap: {
           dcs: {
@@ -176,6 +178,8 @@ RSpec.describe 'patroni cookbook' do
           connect_address: '1.2.3.4',
           connect_port: 18008,
           replication_password: 'fakepassword',
+          remove_data_directory_on_diverged_timelines: true,
+          remove_data_directory_on_rewind_failure: true,
           replication_slots: {
             'geo_secondary' => { 'type' => 'physical' }
           },
@@ -231,6 +235,8 @@ RSpec.describe 'patroni cookbook' do
           max_wal_senders: 4,
           max_replication_slots: 4
         )
+        expect(cfg[:postgresql][:remove_data_directory_on_rewind_failure]).to be true
+        expect(cfg[:postgresql][:remove_data_directory_on_diverged_timelines]).to be true
       }
     end
 
@@ -486,7 +492,9 @@ RSpec.describe 'patroni cookbook' do
           roles: %w(postgres_role),
           patroni: {
             enable: true,
-            use_pg_rewind: true
+            use_pg_rewind: true,
+            remove_data_directory_on_diverged_timelines: true,
+            remove_data_directory_on_rewind_failure: true
           }
         )
       end
