@@ -27,6 +27,8 @@ pid_file = File.join(working_dir, "gitaly.pid")
 json_logging = node['gitaly']['logging_format'].eql?('json')
 open_files_ulimit = node['gitaly']['open_files_ulimit']
 internal_socket_directory = node['gitaly']['internal_socket_dir']
+cgroups_mountpoint = node['gitaly']['cgroups_mountpoint']
+cgroups_hierarchy_root = node['gitaly']['cgroups_hierarchy_root']
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -44,6 +46,15 @@ directory internal_socket_directory do
   owner account_helper.gitlab_user
   mode '0700'
   recursive true
+end
+
+if cgroups_mountpoint && cgroups_hierarchy_root
+  %w(cpu memory).each do |resource|
+    directory File.join(cgroups_mountpoint, resource, cgroups_hierarchy_root) do
+      owner account_helper.gitlab_user
+      mode '0700'
+    end
+  end
 end
 
 # Doing this in attributes/default.rb will need gitlab cookbook to be loaded

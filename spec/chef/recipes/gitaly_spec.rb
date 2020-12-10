@@ -56,6 +56,13 @@ RSpec.describe 'gitaly' do
   let(:daily_maintenance_start_minute) { 9 }
   let(:daily_maintenance_duration) { '45m' }
   let(:daily_maintenance_storages) { ["default"] }
+  let(:cgroups_count) { 10 }
+  let(:cgroups_mountpoint) { '/sys/fs/cgroup' }
+  let(:cgroups_hierarchy_root) { 'gitaly' }
+  let(:cgroups_memory_enabled) { true }
+  let(:cgroups_memory_limit) { 1048576 }
+  let(:cgroups_cpu_enabled) { true }
+  let(:cgroups_cpu_shares) { 512 }
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
@@ -191,7 +198,14 @@ RSpec.describe 'gitaly' do
           daily_maintenance_start_hour: daily_maintenance_start_hour,
           daily_maintenance_start_minute: daily_maintenance_start_minute,
           daily_maintenance_duration: daily_maintenance_duration,
-          daily_maintenance_storages: daily_maintenance_storages
+          daily_maintenance_storages: daily_maintenance_storages,
+          cgroups_count: cgroups_count,
+          cgroups_mountpoint: cgroups_mountpoint,
+          cgroups_hierarchy_root: cgroups_hierarchy_root,
+          cgroups_memory_enabled: cgroups_memory_enabled,
+          cgroups_memory_limit: cgroups_memory_limit,
+          cgroups_cpu_enabled: cgroups_cpu_enabled,
+          cgroups_cpu_shares: cgroups_cpu_shares
         },
         gitlab_rails: {
           internal_api_url: gitlab_url
@@ -286,6 +300,25 @@ RSpec.describe 'gitaly' do
         %r{storages = #{Regexp.escape(daily_maintenance_storages.to_s)}},
       ].map(&:to_s).join('\s+'))
 
+      cgroups_section = Regexp.new([
+        %r{\[cgroups\]},
+        %r{count = #{cgroups_count}},
+        %r{mountpoint = '#{cgroups_mountpoint}'},
+        %r{hierarchy_root = '#{cgroups_hierarchy_root}'},
+      ].map(&:to_s).join('\s+'))
+
+      cgroups_memory_section = Regexp.new([
+        %r{\[cgroups\.memory\]},
+        %r{enabled = #{cgroups_memory_enabled}},
+        %r{limit = #{cgroups_memory_limit}},
+      ].map(&:to_s).join('\s+'))
+
+      cgroups_cpu_section = Regexp.new([
+        %r{\[cgroups\.cpu\]},
+        %r{enabled = #{cgroups_cpu_enabled}},
+        %r{shares = #{cgroups_cpu_shares}},
+      ].map(&:to_s).join('\s+'))
+
       expect(chef_run).to render_file(config_path).with_content { |content|
         expect(content).to include("tls_listen_addr = 'localhost:8888'")
         expect(content).to include("certificate_path = '/path/to/cert.pem'")
@@ -301,6 +334,9 @@ RSpec.describe 'gitaly' do
         expect(content).to match(gitlab_section)
         expect(content).to match(hooks_section)
         expect(content).to match(maintenance_section)
+        expect(content).to match(cgroups_section)
+        expect(content).to match(cgroups_memory_section)
+        expect(content).to match(cgroups_cpu_section)
       }
     end
 
@@ -564,6 +600,22 @@ RSpec.describe 'gitaly' do
     it 'create config file with the relative_url_root set' do
       expect(chef_run).to render_file(config_path)
         .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket'\s+relative_url_root = '/gitlab'})
+    end
+  end
+
+  context 'with cgroups mountpoint and hierarchy_root' do
+    before do
+      stub_gitlab_rb(
+        gitaly: {
+          cgroups_mountpoint: '/sys/fs/cgroup',
+          cgroups_hierarchy_root: 'gitaly'
+        }
+      )
+    end
+
+    it 'create cgroup directories under cpu and memory resources' do
+      expect(chef_run).to create_directory('/sys/fs/cgroup/cpu/gitaly').with(mode: '0700', user: 'git')
+      expect(chef_run).to create_directory('/sys/fs/cgroup/memory/gitaly').with(mode: '0700', user: 'git')
     end
   end
 end
