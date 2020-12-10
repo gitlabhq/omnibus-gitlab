@@ -1486,6 +1486,39 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'FortiToken Cloud settings' do
+      context 'FortiToken Cloud is configured' do
+        it 'exposes the FortiToken Cloud settings' do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              forti_token_cloud_enabled: true,
+              forti_token_cloud_client_id: 'forti_token_cloud_client_id',
+              forti_token_cloud_client_secret: '123s3cr3t456'
+            }
+          )
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'forti_token_cloud_enabled' => true,
+              'forti_token_cloud_client_id' => 'forti_token_cloud_client_id',
+              'forti_token_cloud_client_secret' => '123s3cr3t456'
+            )
+          )
+        end
+      end
+
+      context 'FortiToken Cloud is disabled' do
+        context 'FortiToken Cloud is not configured' do
+          it 'does not expose FortiToken Cloud settings' do
+            expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'forti_token_cloud_enabled' => false
+              )
+            )
+          end
+        end
+      end
+    end
     context 'Sidekiq log_format' do
       context 'json' do
         it 'sets the Sidekiq log_format to json' do

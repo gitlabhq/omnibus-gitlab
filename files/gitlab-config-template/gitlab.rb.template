@@ -522,6 +522,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['forti_authenticator_username'] = 'admin'
 # gitlab_rails['forti_authenticator_access_token'] = 's3cr3t'
 
+### FortiToken Cloud authentication settings
+# gitlab_rails['forti_token_cloud_enabled'] = false
+# gitlab_rails['forti_token_cloud_client_id'] = 'forti_token_cloud_client_id'
+# gitlab_rails['forti_token_cloud_client_secret'] = 's3cr3t'
+
 ### Backup Settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/backups.html
 

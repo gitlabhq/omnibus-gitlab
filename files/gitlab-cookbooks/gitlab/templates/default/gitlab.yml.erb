@@ -745,6 +745,15 @@ production: &base
     # Access token for FortiAuthenticator API
     access_token: <%= quote(@forti_authenticator_access_token) %>
 
+  # FortiToken Cloud settings
+  forti_token_cloud:
+    # Allow using FortiToken Cloud as OTP provider
+    enabled: <%= @forti_token_cloud_enabled %>
+
+    # Client ID and Secret to access FortiToken Cloud API
+    client_id: <%= quote(@forti_token_cloud_client_id) %>
+    client_secret: <%= quote(@forti_token_cloud_client_secret) %>
+
   # Shared file storage settings
   shared:
     path: <%= @shared_path %>

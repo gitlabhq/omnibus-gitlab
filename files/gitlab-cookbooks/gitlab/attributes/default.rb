@@ -343,6 +343,10 @@ default['gitlab']['gitlab-rails']['forti_authenticator_port'] = 443
 default['gitlab']['gitlab-rails']['forti_authenticator_username'] = nil
 default['gitlab']['gitlab-rails']['forti_authenticator_access_token'] = nil
 
+default['gitlab']['gitlab-rails']['forti_token_cloud_enabled'] = false
+default['gitlab']['gitlab-rails']['forti_token_cloud_client_id'] = nil
+default['gitlab']['gitlab-rails']['forti_token_cloud_client_secret'] = nil
+
 default['gitlab']['gitlab-rails']['shared_path'] = "/var/opt/gitlab/gitlab-rails/shared"
 
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
