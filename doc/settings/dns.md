@@ -19,7 +19,7 @@ Adding these entries to your domain's DNS configuration is entirely dependent on
 - [Gandi](https://docs.gandi.net/en/domain_names/faq/dns_records.html)
 - [Dreamhost](https://help.dreamhost.com/hc/en-us/articles/214694348-Basic-DNS-records)
 
-It is also possible to utilize dynamic DNS services, such as [xip.io](xip.io), for a quick and easy DNS name for non-production instances. We do not recommend these for any production or long-lived instances, as they are often [rate-limited](https://letsencrypt.org/docs/rate-limits/) by Let's Encrypt and [insecure](https://github.com/publicsuffix/list/issues/335#issuecomment-261825647). Even if you are successful on initial registration, renewals may subsequently fail.
+It is also possible to utilize dynamic DNS services, such as [xip.io](http://xip.io), for a quick and easy DNS name for non-production instances. We do not recommend these for any production or long-lived instances, as they are often [rate-limited](https://letsencrypt.org/docs/rate-limits/) by Let's Encrypt and [insecure](https://github.com/publicsuffix/list/issues/335#issuecomment-261825647). Even if you are successful on initial registration, renewals may subsequently fail.
 
 ## GitLab Settings
 
