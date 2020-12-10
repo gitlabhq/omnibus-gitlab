@@ -35,8 +35,8 @@ RSpec.describe 'gitlab-kas' do
     end
 
     it 'correctly renders the KAS config file' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  address: localhost:8150})
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  websocket: true})
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^    address: localhost:8150})
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^    websocket: true})
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  usage_reporting_period: 60s})
     end
 
@@ -68,8 +68,8 @@ RSpec.describe 'gitlab-kas' do
     end
 
     it 'correctly renders the KAS config file' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  address: localhost:5006})
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  websocket: false})
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^    address: localhost:5006})
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^    websocket: false})
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  usage_reporting_period: 120s})
     end
 
