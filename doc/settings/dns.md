@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # DNS settings
 
-While it is possible to run a GitLab instance using only IP addresses, it can be beneficial to use DNS for interacting with a GitLab instance from remote nodes. Depending on the features you want to take advantage of, multiple DNS entries may be necessary. Any of these DNS entries should be of type A, AAAA, or CNAME. This depends on the underlying architecture of the instance you are using.
+While it is possible to run a GitLab instance using only IP addresses, it is often beneficial to use DNS as it is easier for users and is required for HTTPS. Depending on the features you want to take advantage of, multiple DNS entries may be necessary. Any of these DNS entries should be of type A, AAAA, or CNAME. This depends on the underlying architecture of the instance you are using.
 
 If you don't want to take advantage of the [Let's Encrypt integration](ssl.md#lets-encrypt-integration),
 none of these addresses need to be resolvable over the public internet. Only nodes that
@@ -18,6 +18,8 @@ Adding these entries to your domain's DNS configuration is entirely dependent on
 - [Namecheap](https://www.namecheap.com/support/knowledgebase/article.aspx/9776/2237/how-to-create-a-subdomain-for-my-domain)
 - [Gandi](https://docs.gandi.net/en/domain_names/faq/dns_records.html)
 - [Dreamhost](https://help.dreamhost.com/hc/en-us/articles/214694348-Basic-DNS-records)
+
+It is also possible to utilize dynamic DNS services, such as [xip.io](xip.io), for a quick and easy DNS name for non-production instances. We do not recommend these for any production or long-lived instances, as they are often [rate-limited](https://letsencrypt.org/docs/rate-limits/) by Let's Encrypt and [insecure](https://github.com/publicsuffix/list/issues/335#issuecomment-261825647). Even if you are successful on initial registration, renewals may subsequently fail.
 
 ## GitLab Settings
 
