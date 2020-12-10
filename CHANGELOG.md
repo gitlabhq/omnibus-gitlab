@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.6.3 (2020-12-10)
+
+### Fixed (1 change)
+
+- Fix Unicorn custom socket not being honored by Workhorse. !4778
+
+
 ## 13.6.2 (2020-12-07)
 
 ### Security (3 changes)
