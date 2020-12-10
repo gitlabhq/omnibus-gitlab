@@ -236,4 +236,4 @@ class OmnibusHelper
   def sidekiq_cluster_service_enabled?
     node['gitlab']['sidekiq-cluster']['enable'] && !node['gitlab']['sidekiq']['cluster']
   end
-end unless defined?(OmnibusHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922
+end

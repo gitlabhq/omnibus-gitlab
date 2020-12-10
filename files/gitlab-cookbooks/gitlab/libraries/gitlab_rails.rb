@@ -262,4 +262,4 @@ module GitlabRails
       (user_config['worker_timeout'] || service_config['worker_timeout']).to_i
     end
   end
-end unless defined?(GitlabRails) # Prevent reloading during converge, so we can test
+end

@@ -50,4 +50,4 @@ class MattermostHelper
       'MM_INSTALL_TYPE' => 'gitlab_omnibus'
     }
   end
-end unless defined?(MattermostHelper) # Prevent reloading in chefspec: https://github.com/sethvargo/chefspec/issues/562#issuecomment-74120922
+end

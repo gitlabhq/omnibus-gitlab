@@ -30,4 +30,4 @@ module DefaultRole
       Gitlab.available_roles.select { |key, role| role[:manage_services] && Gitlab["#{key}_role"]['enable'] }.count.zero?
     end
   end
-end unless defined?(DefaultRole) # Prevent reloading during converge, so we can test
+end
