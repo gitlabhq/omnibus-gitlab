@@ -59,6 +59,19 @@ file "#{node['consul']['dir']}/config.json" do
   owner account_helper.consul_user
   mode '0600'
   notifies :run, 'execute[reload consul]'
+  notifies :run, 'ruby_block[consul config change]'
+end
+
+ruby_block 'consul config change' do
+  block do
+    message = <<~MESSAGE
+      You have made a change to the consul configuration, and the daemon was reloaded.
+      If the change isn't taking effect, restarting the consul agents may be required:
+      https://docs.gitlab.com/ee/administration/consul.html#restart-consul
+    MESSAGE
+    LoggingHelper.warning(message)
+  end
+  action :nothing
 end
 
 include_recipe 'consul::configure_services'
