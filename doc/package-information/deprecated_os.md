@@ -41,7 +41,7 @@ The following lists the currently supported OSs and their possible EOL dates.
 | ---------------- | ------------------------------ | --------------- | ------------- | ------------------------------------------------------------ |
 | CentOS 6         | GitLab CE / GitLab EE 7.10.0   | x86_64          | November 2020 | <https://wiki.centos.org/About/Product>                      |
 | CentOS 7         | GitLab CE / GitLab EE 7.10.0   | x86_64          | June 2024     | <https://wiki.centos.org/About/Product>                      |
-| CentOS 8         | GitLab CE / GitLab EE 12.8.1   | x86_64          | May 2029      | <https://wiki.centos.org/About/Product>                      |
+| CentOS 8         | GitLab CE / GitLab EE 12.8.1   | x86_64, aarch64 | May 2029      | <https://wiki.centos.org/About/Product>                      |
 | Debian 9         | GitLab CE / GitLab EE 9.3.0    | amd64           | 2022          | <https://wiki.debian.org/DebianReleases#Production_Releases> |
 | Debian 10        | GitLab CE / GitLab EE 12.2.0   | amd64           | TBD           | <https://wiki.debian.org/DebianReleases#Production_Releases> |
 | OpenSUSE 15.1    | GitLab CE / GitLab EE 12.4.0   | x86_64, aarch64 | Nov 2020      | <https://en.opensuse.org/Lifetime>                           |
