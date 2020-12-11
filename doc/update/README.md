@@ -194,13 +194,13 @@ The steps can be summed up to:
    **For Debian/Ubuntu**
 
    ```shell
-   curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
+   curl -s "https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh" | sudo bash
    ```
 
    **For CentOS/RHEL**
 
    ```shell
-   curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
+   curl -s "https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh" | sudo bash
    ```
 
    The above command will find your OS version and automatically set up the

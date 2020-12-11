@@ -37,7 +37,7 @@ below.
 
 ```shell
 # Download the new key
-curl https://gitlab-org.gitlab.io/omnibus-gitlab/gitlab_new_gpg.key -o /tmp/omnibus_gitlab_gpg.key
+curl "https://gitlab-org.gitlab.io/omnibus-gitlab/gitlab_new_gpg.key" -o /tmp/omnibus_gitlab_gpg.key
 
 # Import the key
 ## Debian/Ubuntu/Raspbian
@@ -57,7 +57,7 @@ Or, users can manually fetch and add the new key using the following commands
 
 ```shell
 # Download the new key
-curl https://packages.gitlab.com/gpg.key -o /tmp/omnibus_gitlab_gpg.key
+curl "https://packages.gitlab.com/gpg.key" -o /tmp/omnibus_gitlab_gpg.key
 
 # Import the key
 ## Debian/Ubuntu/Raspbian
@@ -185,7 +185,7 @@ The `debsig-verify` package has a [slew of dependencies](https://packages.debian
 1. Download and import the package signing public key
 
    ```shell
-   curl -JLO https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
+   curl -JLO "https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg"
    gpg --import gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
    ```
 
@@ -219,8 +219,8 @@ Configuring a policy and keyring for `debsigs` can be complicated, so GitLab pro
 To use this script, you will need to download the public key and the script.
 
 ```shell
-curl -JLO  https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
-curl -JLO https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/scripts/gitlab-debsigs.sh
+curl -JLO "https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg"
+curl -JLO "https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/scripts/gitlab-debsigs.sh"
 chmod +x gitlab-debsigs.sh
 sudo ./gitlab-debsigs.sh gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
 ```
