@@ -198,7 +198,7 @@ module Build
                 'AUTO_DEPLOY_ENVIRONMENT'
               elsif Build::Check.is_rc_tag?
                 'PATCH_DEPLOY_ENVIRONMENT'
-              elsif Build::Check.is_latest_tag?
+              elsif Build::Check.is_latest_stable_tag?
                 'RELEASE_DEPLOY_ENVIRONMENT'
               end
 

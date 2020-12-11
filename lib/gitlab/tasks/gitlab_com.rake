@@ -14,7 +14,7 @@ namespace :gitlab_com do
     deploy_env = Build::Info.deploy_env
 
     if deploy_env.nil?
-      puts 'Unable to determine which environment to deploy too, exiting...'
+      puts 'Unable to determine which environment to deploy to, exiting...'
       exit
     end
 
