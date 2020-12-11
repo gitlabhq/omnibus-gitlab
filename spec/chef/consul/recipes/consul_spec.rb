@@ -68,9 +68,10 @@ RSpec.describe 'consul' do
         expect(chef_run).to create_directory('/var/log/gitlab/consul')
       end
 
-      it 'notifies the reload action' do
+      it 'notifies other resources on configuration change' do
         config_json = chef_run.file('/var/opt/gitlab/consul/config.json')
         expect(config_json).to notify('execute[reload consul]').to(:run)
+        expect(config_json).to notify('ruby_block[consul config change]').to(:run)
       end
     end
 
