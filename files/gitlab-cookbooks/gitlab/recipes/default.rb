@@ -150,7 +150,6 @@ include_recipe "logrotate::folders_and_configs"
   nginx
   remote-syslog
   bootstrap
-  gitlab-pages
   storage-check
 ].each do |service|
   if node["gitlab"][service]["enable"]
@@ -168,6 +167,7 @@ end
 
 %w(
   logrotate
+  gitlab-pages
   registry
   mattermost
   gitlab-kas
