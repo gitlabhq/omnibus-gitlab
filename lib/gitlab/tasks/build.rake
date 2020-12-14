@@ -94,7 +94,7 @@ namespace :build do
     Gitlab::Util.section('build:component_shas') do
       puts "#### SHAs of GitLab Components"
       json_content = JSON.parse(File.read(version_manifest_file))
-      %w[gitlab-rails gitaly gitlab-pages gitlab-shell gitlab-workhorse].each do |component|
+      %w[gitlab-rails gitaly gitlab-pages gitlab-shell].each do |component|
         puts "#{component} : #{json_content['software'][component]['locked_version']}"
       end
     end
