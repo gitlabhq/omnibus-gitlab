@@ -52,7 +52,7 @@ A typical software configuration consists of the following parts:
 - Dependencies for the software to be built/run.
 - Commands needed to build the software and embed it inside the package.
 
-Sometimes, softwares' source code may have to be patched to use it with GitLab.
+Sometimes, a software's source code may have to be patched to use it with GitLab.
 This may be to fix a security vulnerability, add some functionality needed for
 GitLab, or make it work with other component of GitLab. For this purpose,
 Omnibus GitLab consists of a [patch directory](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/config/patches),
@@ -120,10 +120,10 @@ As mentioned earlier, Omnibus GitLab provides a single configuration file to
 tweak all components of a GitLab instance. However, architectural design of
 different components may require them to have individual configuration files
 residing at specific locations. These configuration files have to be generated
-from either the values specified by the user in general configuration file or
+from either the values specified by the user in the general configuration file or
 from the default values specified. Hence, Omnibus GitLab ships with it
 [templates of such configuration files](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates)
-ith placeholders which may be filled by default values or values from user. The
+with placeholders which may be filled by default values or values from user. The
 recipes do the job of completing these templates, by filling them and placing
 them at necessary locations.
 
@@ -211,11 +211,11 @@ Software artifact cache uses an Amazon S3 bucket to store the sources of the dep
 
 A second type of cache that plays an important role in our build process is the build cache. Build cache can be described as snapshots of the project tree (where the project actually gets built - `/opt/gitlab`) after each dependent software is built. Consider a project with five dependent pieces of software - A, B, C, D and E, built in that order, we're not considering the their individual dependencies. Build cache makes use of Git tags to make snapshots. After each software is built, a Git tag is computed and committed. Now, consider we made some change to the definition of software D. A, B, C and E remains the same. When we try to build again, omnibus can reuse the snapshot that was made before D was built in the previous build. Thus, the time taken to build A, B and C can be saved as it can simply checkout the snapshot that was made after C was built. Omnibus uses the snapshot just before the software which "dirtied" the cache (dirtying can happen either by a change in the software definition, a change in name/version of a previous component, or a change in version of the current component) was built. Similarly, if in a build there is a change in definition of software A, it will dirty the cache and hence A and all the following dependencies get built from scratch. If C dirties the cache, A and B gets reused and C, D and E gets built again from scratch.
 
-This cache makes sense only if it is retained across builds. For that, we use the caching mechanism of GitLab CI. We have a dedicated runner which is configured to store its internal cache in an Amazon bucket. Before each build, we pull in this cache (`restore_cache_bundle` target in out Makefile), move it to appropriate location and start the build. It gets used by the omnibus until the point of dirtying. After the build, we pack the new cache and tells CI to back it up to the Amazon bucket (`pack_cache_bundle` in our Makefile).
+This cache makes sense only if it is retained across builds. For that, we use the caching mechanism of GitLab CI. We have a dedicated runner which is configured to store its internal cache in an Amazon bucket. Before each build, we pull in this cache (`restore_cache_bundle` target in our Makefile), move it to appropriate location and start the build. It gets used by the omnibus until the point of dirtying. After the build, we pack the new cache and tells CI to back it up to the Amazon bucket (`pack_cache_bundle` in our Makefile).
 
 Both types of cache reduce the overall build time of GitLab and dependencies on external factors.
 
-The cache mechanism can be summarised as follows:
+The cache mechanism can be summarized as follows:
 
 1. For each software dependency:
    1. Parse definition to understand version and SHA256.
