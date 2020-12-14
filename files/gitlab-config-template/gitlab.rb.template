@@ -2539,7 +2539,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # patroni['maximum_lag_on_failover'] = 1_048_576
 # patroni['max_timelines_history'] = 0
 # patroni['master_start_timeout'] = 300
-# patroni['use_pg_rewind'] = false
+# patroni['use_pg_rewind'] = true
 # patroni['remove_data_directory_on_rewind_failure'] = false
 # patroni['remove_data_directory_on_diverged_timelines'] = false
 # patroni['use_slots'] = true

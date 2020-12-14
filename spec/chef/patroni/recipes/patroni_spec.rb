@@ -87,7 +87,7 @@ RSpec.describe 'patroni cookbook' do
             max_timelines_history: 0,
             master_start_timeout: 300,
             postgresql: {
-              use_pg_rewind: false,
+              use_pg_rewind: true,
               use_slots: true,
               parameters: {
                 wal_level: 'replica',
@@ -413,7 +413,7 @@ RSpec.describe 'patroni cookbook' do
         expect(chef_run).to render_file('/var/opt/gitlab/patroni/dcs.yaml').with_content { |content|
           cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
 
-          expect(cfg[:postgresql][:use_pg_rewind]).to be(false)
+          expect(cfg[:postgresql][:use_pg_rewind]).to be(true)
           expect(cfg[:postgresql][:parameters]).to include(
             max_connections: 200,
             max_locks_per_transaction: 128,
@@ -444,7 +444,7 @@ RSpec.describe 'patroni cookbook' do
         expect(chef_run).to render_file('/var/opt/gitlab/patroni/dcs.yaml').with_content { |content|
           cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
 
-          expect(cfg[:postgresql][:use_pg_rewind]).to be(false)
+          expect(cfg[:postgresql][:use_pg_rewind]).to be(true)
           expect(cfg[:postgresql][:parameters]).to include(
             max_connections: 123,
             max_locks_per_transaction: 321,
@@ -475,7 +475,7 @@ RSpec.describe 'patroni cookbook' do
         expect(chef_run).to render_file('/var/opt/gitlab/patroni/dcs.yaml').with_content { |content|
           cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
 
-          expect(cfg[:postgresql][:use_pg_rewind]).to be(false)
+          expect(cfg[:postgresql][:use_pg_rewind]).to be(true)
           expect(cfg[:postgresql][:parameters]).to include(
             max_connections: 100,
             max_locks_per_transaction: 64,
