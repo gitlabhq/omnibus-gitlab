@@ -1,0 +1,5 @@
+---
+title: Fix incorrect deprecation warning for Sidekiq experimental queue selector
+merge_request: 4839
+author:
+type: fixed

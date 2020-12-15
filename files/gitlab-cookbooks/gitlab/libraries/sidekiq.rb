@@ -19,9 +19,8 @@ module Sidekiq
   class << self
     MIGRATION_DOCS_URL = 'https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#migrating-to-sidekiq-cluster'.freeze
     MIGRATION_ISSUE_URL = 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/340'.freeze
-    # Remove experimental_queue_selector with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
-    CLUSTER_ATTRIBUTE_NAMES = %w(ha log_directory queue_selector experimental_queue_selector
-                                 interval max_concurrency min_concurrency negate
+    CLUSTER_ATTRIBUTE_NAMES = %w(ha log_directory queue_selector interval
+                                 max_concurrency min_concurrency negate
                                  queue_groups shutdown_timeout).freeze
 
     def parse_variables
@@ -101,8 +100,11 @@ module Sidekiq
     end
 
     def sidekiq_cluster_settings
-      cluster_package_defaults.slice(*CLUSTER_ATTRIBUTE_NAMES)
-        .merge(cluster_user_settings)
+      # Remove experimental_queue_selector with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
+      result = cluster_package_defaults.slice(*CLUSTER_ATTRIBUTE_NAMES).merge(cluster_user_settings)
+      result['queue_selector'] ||= user_settings['experimental_queue_selector'] unless user_settings['experimental_queue_selector'].nil?
+
+      result
     end
 
     def user_configured_cluster_concurrency?
