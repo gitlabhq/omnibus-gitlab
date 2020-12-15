@@ -257,6 +257,15 @@ def pg_upgrade_check
   puts '=== INFO ==='
 end
 
+def survey_release_version
+  manifest_file = '/opt/gitlab/version-manifest.json'
+  return unless File.exist?(manifest_file)
+
+  version_manifest = JSON.parse(File.read(manifest_file))
+  version_components = version_manifest['build_version'].split('.')
+  version_components[0, 2].join('-')
+end
+
 def print_welcome_and_exit
   print_tanuki_art
   print_gitlab_art
@@ -275,7 +284,15 @@ def print_welcome_and_exit
 
   puts "\nFor a comprehensive list of configuration options please see the Omnibus GitLab readme"
   puts "https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md\n\n"
+
   pg_upgrade_check
+
+  release_version = survey_release_version
+  if release_version
+    puts "Help us improve the installation experience, let us know how we did with a 1 minute survey:"
+    puts "https://gitlab.fra1.qualtrics.com/jfe/form/SV_6kVqZANThUQ1bZb?installation=omnibus&release=#{release_version}\n\n"
+  end
+
   stale_files_check
   Kernel.exit 0
 end
