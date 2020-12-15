@@ -26,7 +26,7 @@ See [the manpage](http://manpages.ubuntu.com/manpages/bionic/man8/dphys-swapfile
 
 ## Install GitLab
 
-The recommended and supported way to install GitLab is by using GitLab's
+The recommended and supported way to install GitLab is by using the GitLab
 official repository.
 
 Only the [official Raspberry Pi distribution](https://www.raspberrypi.org/software/) is
@@ -66,7 +66,7 @@ some running processes:
 
 ## Additional recommendations
 
-You can boost GitLab's performance with a few settings.
+You can boost GitLab performance with a few settings.
 
 ### Use a proper harddrive
 

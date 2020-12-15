@@ -295,7 +295,7 @@ Before following these instructions, note the following **important** informatio
   the default in GitLab 13.0 unless
   [specifically disabled](../settings/unicorn.md#enabling-unicorn)). This is because the
   [phased restart](https://github.com/puma/puma/blob/master/README.md#clustered-mode)
-  feature of Puma does not work with the way it is configured in GitLab's all-in-one
+  feature of Puma does not work with the way it is configured in GitLab all-in-one
   packages (cluster-mode with app preloading).
 - While it is possible to minimize downtime on a single-node instance by following
   these instructions, **it is not possible to always achieve true zero downtime

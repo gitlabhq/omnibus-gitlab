@@ -13,7 +13,7 @@ regarding these methods.
 
 ## Package repository metadata signing keys
 
-The apt and yum repositories on GitLab's packagecloud instance uses a GPG key to
+The apt and yum repositories on the GitLab packagecloud instance uses a GPG key to
 sign their metadata. This key is automatically installed by the repo setup
 script specified in the installation instructions.
 
@@ -28,7 +28,7 @@ script specified in the installation instructions.
 | Expiry        | `2022-03-02`                                         |
 
 This key is active from **2020-04-06**. Existing users who already have
-configured GitLab's apt/yum package repositories will have to fetch and add this
+configured the GitLab apt/yum package repositories will have to fetch and add this
 key to their trusted keyring again to continue installing packages from those
 repositories without apt/yum complaining about mismatches, which is described
 below.

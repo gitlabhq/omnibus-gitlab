@@ -52,7 +52,7 @@ bundle exec rspec
 ## Merge Request Guidelines
 
 If you are working on a new feature or an issue which doesn't have an entry on
-Omnibus GitLab's issue tracker, it is always a better idea to create an issue
+the Omnibus GitLab issue tracker, it is always a better idea to create an issue
 and mention that you will be working on it as this will help to prevent
 duplication of work. Also, others may be able to provide input regarding the
 issue, which can help you in your task.

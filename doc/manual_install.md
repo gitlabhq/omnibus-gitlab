@@ -23,7 +23,7 @@ additional requirements to support GitLab.
 
 ## Download a GitLab Package
 
-All GitLab packages are posted to GitLab's [package server](https://packages.gitlab.com/gitlab/)
+All GitLab packages are posted to the GitLab [package server](https://packages.gitlab.com/gitlab/)
 and can be downloaded. Five repositories are maintained:
 
 - [GitLab EE](https://packages.gitlab.com/gitlab/gitlab-ee): for official

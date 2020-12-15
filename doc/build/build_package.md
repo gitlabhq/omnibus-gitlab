@@ -41,7 +41,7 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
    docker run -v ~/omnibus-gitlab:~/omnibus-gitlab -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_10:${BUILDER_IMAGE_REVISION} bash
    ```
 
-1. By default, `omnibus-gitlab` will choose GitLab's internal repositories from
+1. By default, `omnibus-gitlab` will choose internal GitLab repositories from
    `dev.gitlab.org` to fetch sources of various GitLab components. Since this
    repository is not publicly accessible, set the environment variable
    `ALTERNATIVE_SOURCES` to `true`.
@@ -56,7 +56,7 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
 
 1. By default, `omnibus-gitlab` codebase is optimized to be used in a CI
    environment. One such optimization is reusing the pre-compiled Rails assets
-   that is built by GitLab's CI pipeline. To know how to leverage this in your
+   that is built by the GitLab CI pipeline. To know how to leverage this in your
    builds, check [Fetch upstream assets](#fetch-upstream-assets) section. Or,
    you can choose to compile the assets during the package build by setting the
    `COMPILE_ASSETS` environment variable.

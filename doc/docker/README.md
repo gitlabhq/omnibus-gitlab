@@ -10,7 +10,7 @@ The GitLab Docker images are monolithic images of GitLab running all the
 necessary services in a single container. If you instead want to install GitLab
 on Kubernetes, see [GitLab Helm Charts](https://docs.gitlab.com/charts/).
 
-Find GitLab's official Docker image at:
+Find the GitLab official Docker image at:
 
 - [GitLab Docker image in Docker Hub](https://hub.docker.com/r/gitlab/gitlab-ee/)
 
@@ -261,7 +261,7 @@ Here's an example that deploys GitLab with four runners as a [stack](https://doc
 This container uses the official Omnibus GitLab package, so all configuration
 is done in the unique configuration file `/etc/gitlab/gitlab.rb`.
 
-To access GitLab's configuration file, you can start a shell session in the
+To access the GitLab configuration file, you can start a shell session in the
 context of a running container. This will allow you to browse all directories
 and use your favorite text editor:
 
@@ -299,7 +299,7 @@ For more options about configuring GitLab, check the
 You can pre-configure the GitLab Docker image by adding the environment variable
 `GITLAB_OMNIBUS_CONFIG` to Docker run command. This variable can contain any
 `gitlab.rb` setting and is evaluated before the loading of the container's
-`gitlab.rb` file. This behavior allows you to configure GitLab's external URL,
+`gitlab.rb` file. This behavior allows you to configure the external GitLab URL,
 and make database configuration or any other option from the
 [Omnibus GitLab template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 The settings contained in `GITLAB_OMNIBUS_CONFIG` aren't written to the

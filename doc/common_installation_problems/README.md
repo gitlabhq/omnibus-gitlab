@@ -740,7 +740,7 @@ If using this configuration, runit service must be started before running
 
 ## `gitlab-ctl reconfigure` hangs while using AWS Cloudformation
 
-GitLab's systemd unit file by default uses `multi-user.target` for both `After`
+The GitLab systemd unit file by default uses `multi-user.target` for both `After`
 and `WantedBy` fields. This is done to ensure service runs after `remote-fs` and
 `network` targets, and thus GitLab will function properly.
 

@@ -209,7 +209,7 @@ Description of the options:
 - <http://nginx.org/en/docs/http/ngx_http_realip_module.html>
 
 By default, Omnibus GitLab will use the IP addresses in `real_ip_trusted_addresses`
-as GitLab's trusted proxies, which will keep users from being listed as signed
+as GitLab trusted proxies, which will keep users from being listed as signed
 in from those IPs.
 
 Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)

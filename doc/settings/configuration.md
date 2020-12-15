@@ -494,7 +494,7 @@ In `/etc/gitlab/gitlab.rb` set:
 manage_storage_directories['manage_etc'] = false
 ```
 
-If you are mounting all GitLab's storage directories, each on a separate mount,
+If you are mounting all GitLab storage directories, each on a separate mount,
 you should completely disable the management of storage directories.
 
 To disable management of these directories,

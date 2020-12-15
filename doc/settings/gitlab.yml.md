@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Changing `gitlab.yml` and application.yml settings
 
-Some of GitLab's features can be customized through
+Some GitLab features can be customized through
 [`gitlab.yml`](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/config/gitlab.yml.example). If you want to change a `gitlab.yml` setting
 with Omnibus GitLab, you need to do so via `/etc/gitlab/gitlab.rb`. The
 translation works as follows. For a complete list of available options, visit the
