@@ -49,6 +49,11 @@ If you are using your own NGINX rather than the bundled version, and are proxyin
 
 ## 13.7
 
+### PostgreSQL 12.4 support
+
+PostgreSQL 12.4 is being shipped as the default version for fresh installs.
+Users can manually upgrade to 12.4 following the  [upgrade docs](../settings/database.md#gitlab-133-and-later).
+
 ### New encrypted_settings_key_base secret added to the GitLab secrets
 
 In 13.7, a new secret is generated in `/etc/gitlab/gitlab-secrets.json`. In an HA GitLab environment, secrets need to

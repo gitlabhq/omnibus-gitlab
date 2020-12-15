@@ -326,7 +326,7 @@ end
 def attempt_auto_pg_upgrade?
   # This must return false when the opt-in PostgreSQL version is the default for pg-upgrade,
   # otherwise it must be true.
-  true
+  false
 end
 
 def recommend_pg_upgrade?

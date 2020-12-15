@@ -124,7 +124,7 @@ gitlab-ctl reconfigure
 
 # This must be false when the opt-in PostgreSQL version is the default for pg-upgrade,
 # otherwise it must be true.
-ATTEMPT_AUTO_PG_UPGRADE='true'
+ATTEMPT_AUTO_PG_UPGRADE='false'
 
 # Make sure PostgreSQL is at the latest version.
 # If it fails, print a message with a workaround and exit
