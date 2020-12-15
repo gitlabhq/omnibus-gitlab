@@ -13,7 +13,7 @@ other scheduled work as per our [development guidelines](https://about.gitlab.co
 1. Open a confidential issue in [`omnibus-gitlab` issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/)
    giving details about the vulnerability and a link to the failed job.
 
-1. Label the issue with the `security` and `For Scheduling` labels. GitLab's
+1. Label the issue with the `security` and `For Scheduling` labels. The GitLab
    Security team will be made aware of this issue, thanks to the automation in
    place by [escalator](https://gitlab.com/gitlab-com/gl-security/automation/escalator).
 

@@ -84,14 +84,14 @@ for configuration steps.
 
   Prepares the database for replication and configures the application as a Geo Primary.
 
-  *By default, enables all of GitLab's standard single node services. (NGINX, Puma, Redis, Sidekiq, etc)*
+  *By default, enables all of the GitLab standard single node services. (NGINX, Puma, Redis, Sidekiq, etc)*
 
 - **geo_secondary_role** (`gitlab-ee`)
 
   Configures the secondary database for incoming replication and flags the
   application as a Geo Secondary
 
-  *By default, enables all of GitLab's default single node services. (NGINX, Puma, Redis, Sidekiq, etc)*
+  *By default, enables all of the GitLab default single node services. (NGINX, Puma, Redis, Sidekiq, etc)*
 
 ### Monitoring Roles
 

@@ -45,7 +45,7 @@ By default, projects that use [GitLab Pages](https://docs.gitlab.com/ee/user/pro
 
 ### Auto DevOps domain
 
-If you are going to be deploying projects via GitLab's Auto DevOps, this domain can be used to deploy software. Can be defined at an instance, or cluster level. See the [specific documentation](https://docs.gitlab.com/ee/topics/autodevops/#auto-devops-base-domain) for more details.
+If you are going to be deploying projects via Auto DevOps with GitLab, this domain can be used to deploy software. Can be defined at an instance, or cluster level. See the [specific documentation](https://docs.gitlab.com/ee/topics/autodevops/#auto-devops-base-domain) for more details.
 
 ## Troubleshooting
 

@@ -1023,7 +1023,7 @@ Request to save other people time.
 
 ## Testing the SMTP configuration
 
-You can verify GitLab's ability to send emails properly using the Rails console.
+You can verify that GitLab can send emails properly using the Rails console.
 On the GitLab server, execute `gitlab-rails console` to enter the console. Then,
 you can enter the following command at the console prompt to cause GitLab to
 send a test email:
