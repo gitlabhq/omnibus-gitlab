@@ -155,3 +155,22 @@ max_per_repo = <%= endpoint['max_per_repo'] %>
 <%= "duration = '#{@daily_maintenance_duration}'" if @daily_maintenance_duration %>
 <%= "storages = #{@daily_maintenance_storages}" if @daily_maintenance_storages %>
 <% end %>
+
+<% if @cgroups_count %>
+[cgroups]
+count = <%= @cgroups_count %>
+mountpoint = '<%= @cgroups_mountpoint %>'
+hierarchy_root = '<%= @cgroups_hierarchy_root %>'
+<% end %>
+
+<% if @cgroups_memory_enabled %>
+[cgroups.memory]
+enabled = <%= @cgroups_memory_enabled %>
+limit = <%= @cgroups_memory_limit %>
+<% end %>
+
+<% if @cgroups_cpu_enabled %>
+[cgroups.cpu]
+enabled = <%= @cgroups_cpu_enabled %>
+shares = <%= @cgroups_cpu_shares %>
+<% end %>

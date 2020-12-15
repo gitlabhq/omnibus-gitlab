@@ -2047,6 +2047,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['daily_maintenance_start_minute'] = 30
 # gitaly['daily_maintenance_duration'] = '30m'
 # gitaly['daily_maintenance_storages'] = ["default"]
+# gitaly['cgroups_count'] = 10
+# gitaly['cgroups_mountpoint'] = '/sys/fs/cgroup'
+# gitaly['cgroups_hierarchy_root'] = 'gitaly'
+# gitaly['cgroups_memory_enabled'] = true
+# gitaly['cgroups_memory_limit'] = 1048576
+# gitaly['cgroups_cpu_enabled'] = true
+# gitaly['cgroups_cpu_shares'] = 512
 
 ################################################################################
 ## Praefect
