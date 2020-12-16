@@ -443,6 +443,18 @@ To opt out of automatic PostgreSQL upgrade during GitLab package upgrades, run:
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
+#### GitLab 13.7 and later
+
+As of GitLab 13.7, new installations will default to PostgreSQL 12. 
+
+Existing instances can update manually via: 
+
+```shell
+sudo gitlab-ctl pg-upgrade -V 12
+```
+
+Instances with fault-tolerant PostgreSQL 12 deployments will neede to [upgrade to Patroni](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni) first, before upgrading to PostgreSQL 12.
+
 #### GitLab 13.3 and later
 
 As of GitLab 13.3, PostgreSQL 11.7 and 12.3 are both shipped with Omnibus.
