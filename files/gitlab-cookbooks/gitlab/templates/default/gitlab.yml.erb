@@ -357,49 +357,83 @@ production: &base
   # Please read here for more information: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
   cron_jobs:
     # Flag stuck CI builds as failed
+    <% unless @stuck_ci_jobs_worker_cron.nil? %>
     stuck_ci_jobs_worker:
-      cron:<% if @stuck_ci_jobs_worker_cron %> "<%= @stuck_ci_jobs_worker_cron %>"<% end %>
+      cron: "<%= @stuck_ci_jobs_worker_cron %>"
+    <% end %>
+
     # Remove expired build artifacts
+    <% unless @expire_build_artifacts_worker_cron.nil? %>
     expire_build_artifacts_worker:
-      cron:<% if @expire_build_artifacts_worker_cron %> "<%= @expire_build_artifacts_worker_cron %>"<% end %>
+      cron: "<%= @expire_build_artifacts_worker_cron %>"
+    <% end %>
+
     # Stop expired environments
+    <% unless @environments_auto_stop_cron_worker_cron.nil? %>
     environments_auto_stop_cron_worker:
-      cron:<% if @environments_auto_stop_cron_worker_cron %> "<%= @environments_auto_stop_cron_worker_cron %>"<% end %>
+      cron: "<%= @environments_auto_stop_cron_worker_cron %>"
+    <% end %>
+
     # Schedule pipelines in the near future
+    <% unless @pipeline_schedule_worker_cron.nil? %>
     pipeline_schedule_worker:
-      cron:<% if @pipeline_schedule_worker_cron %> "<%= @pipeline_schedule_worker_cron %>"<% end %>
+      cron: "<%= @pipeline_schedule_worker_cron %>"
+    <% end %>
+
     # Periodically run 'git fsck' on all repositories. If started more than
     # once per hour you will have concurrent 'git fsck' jobs.
+    <% unless @repository_check_worker_cron.nil? %>
     repository_check_worker:
-      cron:<% if @repository_check_worker_cron %> "<%= @repository_check_worker_cron %>"<% end %>
+      cron: "<%= @repository_check_worker_cron %>"
+    <% end %>
+
     # Send admin emails once a week
+    <% unless @admin_email_worker_cron.nil? %>
     admin_email_worker:
-      cron:<% if @admin_email_worker_cron %> "<%= @admin_email_worker_cron %>"<% end %>
+      cron: "<%= @admin_email_worker_cron %>"
+    <% end %>
+
     # Send emails about personal tokens about to expired
+    <% unless @personal_access_tokens_expiring_worker_cron.nil? %>
     personal_access_tokens_expiring_worker:
-      cron:<% if @personal_access_tokens_expiring_worker_cron %> "<%= @personal_access_tokens_expiring_worker_cron %>"<% end %>
+      cron: "<%= @personal_access_tokens_expiring_worker_cron %>"
+    <% end %>
+
     # Send emails about personal tokens that have expired
+    <% unless @personal_access_tokens_expired_notification_worker_cron.nil? %>
     personal_access_tokens_expired_notification_worker:
-      cron:<% if @personal_access_tokens_expired_notification_worker_cron %> "<%= @personal_access_tokens_expired_notification_worker_cron %>"<% end %>
+      cron: "<%= @personal_access_tokens_expired_notification_worker_cron %>"
+    <% end %>
+
     # Remove outdated repository archives
+    <% unless @repository_archive_cache_worker_cron.nil? %>
     repository_archive_cache_worker:
-      cron:<% if @repository_archive_cache_worker_cron %> "<%=  @repository_archive_cache_worker_cron %>"<% end %>
+      cron: "<%=  @repository_archive_cache_worker_cron %>"
+    <% end %>
 
     # Archive live traces which have not been archived yet
+    <% unless @ci_archive_traces_cron_worker_cron.nil? %>
     ci_archive_traces_cron_worker:
-      cron:<% if @ci_archive_traces_cron_worker_cron %> "<%= @ci_archive_traces_cron_worker_cron %>"<% end %>
+      cron: "<%= @ci_archive_traces_cron_worker_cron %>"
+    <% end %>
 
     # Verify custom GitLab Pages domains
+    <% unless @pages_domain_verification_cron_worker.nil? %>
     pages_domain_verification_cron_worker:
-      cron:<% if @pages_domain_verification_cron_worker %> "<%= @pages_domain_verification_cron_worker %>"<% end %>
+      cron: "<%= @pages_domain_verification_cron_worker %>"
+    <% end %>
 
     # Obtain and renew SSL certificates for pages domain through Let's Encrypt
+    <% unless @pages_domain_ssl_renewal_cron_worker.nil? %>
     pages_domain_ssl_renewal_cron_worker:
-      cron:<% if @pages_domain_ssl_renewal_cron_worker %> "<%= @pages_domain_ssl_renewal_cron_worker %>"<% end %>
+      cron: "<%= @pages_domain_ssl_renewal_cron_worker %>"
+    <% end %>
 
     # Removes unverified pages domains
+    <% unless @pages_domain_removal_cron_worker.nil? %>
     pages_domain_removal_cron_worker:
-      cron:<% if @pages_domain_removal_cron_worker %> "<%= @pages_domain_removal_cron_worker %>"<% end %>
+      cron: "<%= @pages_domain_removal_cron_worker %>"
+    <% end %>
 
     # Remove unaccepted member invitations
     <% unless @remove_unaccepted_member_invites_cron_worker.nil? %>
@@ -408,12 +442,16 @@ production: &base
     <% end %>
 
     # Periodically migrate diffs from the database to external storage
+    <% unless @schedule_migrate_external_diffs_worker_cron.nil? %>
     schedule_migrate_external_diffs_worker:
-      cron:<% if @schedule_migrate_external_diffs_worker_cron %> "<%= @schedule_migrate_external_diffs_worker_cron %>"<% end %>
+      cron: "<%= @schedule_migrate_external_diffs_worker_cron %>"
+    <% end %>
 
     # Update CI Platform Metrics daily
+    <% unless @ci_platform_metrics_update_cron_worker.nil? %>
     ci_platform_metrics_update_cron_worker:
-      cron: <% if @ci_platform_metrics_update_cron_worker %> "<%= @ci_platform_metrics_update_cron_worker %>"<% end %>
+      cron: "<%= @ci_platform_metrics_update_cron_worker %>"
+    <% end %>
 
     ##
     # GitLab EE only jobs:
