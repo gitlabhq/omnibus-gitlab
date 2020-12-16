@@ -5,7 +5,7 @@ RSpec.describe Sidekiq do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   before { allow(Gitlab).to receive(:[]).and_call_original }
 
-  context 'with cluster enabled (default)' do
+  context 'with cluster enabled (default)', :aggregate_failures do
     it 'disables sidekiq itself and enables sidekiq-cluster with the default sidekiq settings' do
       expect(chef_run.node['gitlab']['sidekiq']['enable']).to be(false)
       expect(chef_run.node['gitlab']['sidekiq-cluster']['enable']).to be(true)
