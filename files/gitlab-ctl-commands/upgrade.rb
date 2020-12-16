@@ -347,7 +347,7 @@ def attempt_auto_pg_upgrade?
 end
 
 def recommend_pg_upgrade?
-  false
+  true
 end
 
 def postgresql_detected?
