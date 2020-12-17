@@ -91,6 +91,7 @@ end
 
 ruby_block 'wait for postgresql to start' do
   block { pg_helper.is_ready? }
+  only_if { omnibus_helper.should_notify?(patroni_helper.service_name) }
 end
 
 execute 'reload postgresql' do
