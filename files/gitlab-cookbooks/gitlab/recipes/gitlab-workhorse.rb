@@ -78,6 +78,7 @@ version_file 'Create version file for Workhorse' do
   notifies :restart, "runit_service[gitlab-workhorse]"
 end
 
+alt_document_root = node['gitlab']['gitlab-workhorse']['alt_document_root']
 _redis_host, _redis_port, redis_password = redis_helper.redis_params
 redis_url = redis_helper.redis_url.to_s
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
@@ -96,6 +97,7 @@ template config_file_path do
   group account_helper.gitlab_group
   mode "0640"
   variables(
+    alt_document_root: alt_document_root,
     object_store: object_store,
     object_store_provider: object_store_provider,
     redis_url: redis_url,
