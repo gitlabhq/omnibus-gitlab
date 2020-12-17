@@ -363,7 +363,8 @@ net.core.somaxconn = 1024
 kernel.shmmax = 17179869184
 ```
 
-Tip: You may find it easier to look at the line in the Chef output than to find the file (since the file is different for each error). See the last line of this snippet.
+You may find it easier to look at the line in the Chef output than to find the file (since the file
+is different for each error). See the last line of this snippet.
 
 ```plaintext
 * file[create /opt/gitlab/embedded/etc/90-omnibus-gitlab-kernel.shmall.conf kernel.shmall] action create
