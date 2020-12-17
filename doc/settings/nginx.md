@@ -272,7 +272,7 @@ will have to perform the following steps:
    default user is `www-data` for both Apache/NGINX whereas for RHEL/CentOS
    the NGINX user is `nginx`.
 
-   *Note: Make sure you have first installed Apache/NGINX so the webserver user is created, otherwise omnibus will fail while reconfiguring.*
+   Make sure you have first installed Apache/NGINX so the webserver user is created, otherwise omnibus will fail while reconfiguring.
 
    Let's say for example that the webserver user is `www-data`.
    In `/etc/gitlab/gitlab.rb` set:
@@ -281,13 +281,13 @@ will have to perform the following steps:
    web_server['external_users'] = ['www-data']
    ```
 
-   *Note: This setting is an array so you can specify more than one user to be added to `gitlab-www` group.*
+   This setting is an array so you can specify more than one user to be added to `gitlab-www` group.
 
    Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-   *Note: if you are using SELinux and your web server runs under a restricted SELinux profile you may have to [loosen the restrictions on your web server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).*
+   If you are using SELinux and your web server runs under a restricted SELinux profile you may have to [loosen the restrictions on your web server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).
 
-   *Note: make sure that the webserver user has the correct permissions on all directories used by external web-server, otherwise you will receive `failed (XX: Permission denied) while reading upstream` errors.
+   Make sure that the webserver user has the correct permissions on all directories used by external web-server, otherwise you will receive `failed (XX: Permission denied) while reading upstream` errors.
 
 1. **Add the non-bundled web-server to the list of trusted proxies**
 
@@ -303,8 +303,6 @@ will have to perform the following steps:
    ```
 
 1. **(Optional) Set the right GitLab Workhorse settings if using Apache**
-
-   *Note: The values below were added in GitLab 8.2, make sure you have the latest version installed.*
 
    Apache cannot connect to a UNIX socket but instead needs to connect to a
    TCP Port. To allow GitLab Workhorse to listen on TCP (by default port 8181)

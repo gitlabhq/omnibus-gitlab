@@ -22,7 +22,8 @@ the existing Puma web server:
 actioncable['in_app'] = true
 ```
 
-Note: Action Cable is currently not supported for the Unicorn web server in GitLab.
+NOTE:
+Action Cable is currently not supported for the Unicorn web server in GitLab.
 
 ## Configuring the worker pool size
 
