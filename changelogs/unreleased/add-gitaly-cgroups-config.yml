@@ -1,5 +1,0 @@
----
-title: Allow setting Gitaly cgroups configuration
-merge_request: 4837
-author:
-type: added

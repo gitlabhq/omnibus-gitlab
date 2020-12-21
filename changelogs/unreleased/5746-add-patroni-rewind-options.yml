@@ -1,5 +1,0 @@
----
-title: Add options for Patroni pg_rewind assumptions
-merge_request: 4811
-author:
-type: added

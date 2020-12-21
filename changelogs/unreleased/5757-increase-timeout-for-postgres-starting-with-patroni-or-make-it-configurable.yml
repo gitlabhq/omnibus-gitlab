@@ -1,5 +1,0 @@
----
-title: Use the configurable PostgreSQL readiness check for Patroni
-merge_request: 4787
-author:
-type: changed
