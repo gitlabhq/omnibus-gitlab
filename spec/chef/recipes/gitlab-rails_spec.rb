@@ -395,65 +395,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
           'clear the gitlab-rails cache')
       end
     end
-
-    describe 'repositories storages' do
-      it 'sets specified properties' do
-        stub_gitlab_rb(
-          git_data_dirs: {
-            "second_storage" => {
-              "path" => "/tmp/storage"
-            }
-          }
-        )
-
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'repositories_storages' => {
-              'second_storage' => {
-                'path' => '/tmp/storage/repositories',
-                'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket'
-              }
-            }
-          )
-        )
-      end
-
-      it 'sets the defaults' do
-        default_storages = {
-          'default' => {
-            'path' => '/var/opt/gitlab/git-data/repositories',
-            'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket'
-          }
-        }
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'repositories_storages' => default_storages
-          )
-        )
-      end
-
-      it 'sets path if not provided' do
-        stub_gitlab_rb(
-          {
-            git_data_dirs:
-            {
-              'default' => { 'gitaly_address' => 'tcp://gitaly.internal:8075' }
-            }
-          }
-        )
-
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'repositories_storages' => {
-              'default' => {
-                'path' => '/var/opt/gitlab/git-data/repositories',
-                'gitaly_address' => 'tcp://gitaly.internal:8075'
-              }
-            }
-          )
-        )
-      end
-    end
   end
 
   context 'with environment variables' do
