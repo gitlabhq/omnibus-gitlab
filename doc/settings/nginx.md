@@ -854,3 +854,33 @@ Once you verify that they match, you will need to reconfigure and reload NGINX:
 sudo gitlab-ctl reconfigure
 sudo gitlab-ctl hup nginx
 ```
+
+### Request Entity Too Large
+
+If you see `Request Entity Too Large` in the [NGINX logs](https://docs.gitlab.com/ee/administration/logs.html#nginx-logs),
+you will need to increase the [Client Max Body Size](http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size).
+You may encounter this error if you have increased the [Max import size](https://docs.gitlab.com/ee/user/admin_area/settings/account_and_limit_settings.html#max-import-size).
+
+To increase the `client_max_body_size`, you will need to set the value in your `/etc/gitlab/gitlab.rb`:
+
+```ruby
+nginx['client_max_body_size'] = '250m'
+```
+
+Make sure you run `sudo gitlab-ctl reconfigure` and run `sudo gitlab-ctl hup nginx` to cause NGINX to
+[reload the with the updated configuraiton](http://nginx.org/en/docs/control.html)
+To increase the `client_max_body_size`:
+
+1. Edit `/etc/gitlab/gitlab.rb` and set the preferred value:
+
+   ```ruby
+   nginx['client_max_body_size'] = '250m'
+   ```
+
+1. Reconfigure GitLab, and [hup](https://nginx.org/en/docs/control.html)
+   NGINX to cause it to reload the with the updated configuration gracefully:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   sudo gitlab-ctl hup nginx
+   ```
