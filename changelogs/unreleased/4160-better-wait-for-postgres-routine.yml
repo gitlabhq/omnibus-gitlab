@@ -1,5 +1,0 @@
----
-title: Improve PostgreSQL service status check
-merge_request: 4672
-author:
-type: fixed

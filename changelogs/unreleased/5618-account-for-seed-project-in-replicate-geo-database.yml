@@ -1,5 +1,0 @@
----
-title: Switch to gitlab:db:active for GEO replication
-merge_request: 4763
-author:
-type: fixed

@@ -3,6 +3,64 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.7.0 (2020-12-22)
+
+### Fixed (8 changes)
+
+- Improve PostgreSQL service status check. !4672
+- Switch to gitlab:db:active for GEO replication. !4763
+- Make Build::Check.on_tag? silent. !4769
+- Update Promethes and Grafana. !4774
+- Fix shmmax for arm64. !4799
+- Increase jemalloc page size on arm64. !4800
+- Exclude windows .ruby files from gems. !4838
+- Fix incorrect deprecation warning for Sidekiq experimental queue selector. !4839
+
+### Deprecated (1 change)
+
+- Remove CentOS 6 Builds. !4782
+
+### Changed (11 changes, 1 of them is from the community)
+
+- Update OpenSSL to 1.1.1h. !4593
+- Rename Piwik config items after rebranding to Matomo. !4667 (Katrin Leinweber @katrinleinweber)
+- Update libjpeg-turbo to 2.0.6. !4765
+- Default to PostgreSQL 12 in fresh installs. !4777
+- Use the configurable PostgreSQL readiness check for Patroni. !4787
+- Bump Container Registry to v2.12.0-gitlab. !4796
+- PostgreSQL status helper should not fail fast. !4798
+- Always `pg_rewind` when Patroni primary resumes. !4810
+- Update gitlab-kas to v13.7.0. !4817
+- Generate warning on consul configuration change. !4828
+- Add install survey link to package installation. !4845
+
+### Performance (2 changes)
+
+- Update gitlab-exporter to v7.1.1. !4783
+- Adjust Postgres memory settings to current best practice. !4788
+
+### Added (11 changes)
+
+- Generate encrypted_settings_key_base rails secret. !4687
+- Patroni: reinitialize-replica command. !4692
+- Add centos 8 arm64 packages. !4743
+- Add Pages zip configuration flags. !4754
+- Allow PostgreSQL adapter tcp parameter tuning. !4776
+- Add /database_bloat endpoint for gitlab-exporter. !4785
+- Add support for configuring database application_name for Rails. !4808
+- Add options for Patroni pg_rewind assumptions. !4811
+- Add devops adoption worker settings. !4812
+- Add FortiToken Cloud configuration to gitlab.rb. !4824
+- Allow setting Gitaly cgroups configuration. !4837
+
+### Other (4 changes, 1 of them is from the community)
+
+- Bump consul version to 1.6.4. !3802
+- pages: Support for HTTPS over PROXYv2 protocol. !4760
+- Use the 'main' branch for gitlab-shell nightlies. !4772
+- Update Mattermost to 5.29.1. !4807 (hmhealey)
+
+
 ## 13.6.3 (2020-12-10)
 
 ### Fixed (1 change)

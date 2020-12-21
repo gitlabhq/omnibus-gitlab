@@ -1,5 +1,0 @@
----
-title: Make Build::Check.on_tag? silent
-merge_request: 4769
-author:
-type: fixed

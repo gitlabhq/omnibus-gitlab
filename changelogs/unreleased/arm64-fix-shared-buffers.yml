@@ -1,5 +1,0 @@
----
-title: Fix shmmax for arm64
-merge_request: 4799
-author:
-type: fixed
