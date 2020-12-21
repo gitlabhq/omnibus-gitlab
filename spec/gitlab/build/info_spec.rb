@@ -254,7 +254,7 @@ RSpec.describe Build::Info do
       before do
         allow(Build::Check).to receive(:is_auto_deploy_tag?).and_return(false)
         allow(Build::Check).to receive(:is_rc_tag?).and_return(false)
-        allow(Build::Check).to receive(:is_latest_tag?).and_return(false)
+        allow(Build::Check).to receive(:is_latest_stable_tag?).and_return(false)
       end
       it 'it returns nil' do
         expect(described_class.deploy_env).to eq(nil)
