@@ -814,6 +814,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_workhorse['enable'] = true
 # gitlab_workhorse['ha'] = false
+# gitlab_workhorse['alt_document_root'] = nil
 # gitlab_workhorse['listen_network'] = "unix"
 # gitlab_workhorse['listen_umask'] = 000
 # gitlab_workhorse['listen_addr'] = "/var/opt/gitlab/gitlab-workhorse/sockets/socket"

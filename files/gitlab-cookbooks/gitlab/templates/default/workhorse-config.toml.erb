@@ -1,3 +1,7 @@
+<%- if @alt_document_root %>
+alt_document_root = "<%= @alt_document_root %>"
+<%- end %>
+
 [redis]
 <% if @sentinels.empty? %>
 URL = "<%= @redis_url %>"

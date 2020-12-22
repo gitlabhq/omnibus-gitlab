@@ -37,6 +37,12 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
       }
     end
 
+    it 'does not include alternate document root' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).not_to match(/alt_document_root/)
+      }
+    end
+
     it 'does not include object storage configs' do
       expect(chef_run).to render_file(config_file).with_content { |content|
         expect(content).not_to match(/object_storage/)
@@ -96,6 +102,18 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
           )
         end
       end
+    end
+  end
+
+  context 'with alternate document root' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: { alt_document_root: '/tmp/test' })
+    end
+
+    it 'includes alternate document root setting' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).to match(%r(alt_document_root = "/tmp/test"))
+      }
     end
   end
 

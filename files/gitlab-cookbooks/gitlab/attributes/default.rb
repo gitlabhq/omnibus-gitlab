@@ -636,6 +636,7 @@ default['gitlab']['web-server']['external_users'] = []
 
 default['gitlab']['gitlab-workhorse']['enable'] = false
 default['gitlab']['gitlab-workhorse']['ha'] = false
+default['gitlab']['gitlab-workhorse']['alt_document_root'] = nil
 default['gitlab']['gitlab-workhorse']['listen_network'] = "unix"
 default['gitlab']['gitlab-workhorse']['listen_umask'] = 000
 default['gitlab']['gitlab-workhorse']['sockets_directory'] = nil
