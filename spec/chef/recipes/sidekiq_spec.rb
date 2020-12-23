@@ -54,4 +54,24 @@ RSpec.describe 'gitlab::sidekiq' do
 
     it_behaves_like "enabled runit service", "sidekiq", "root", "root"
   end
+
+  describe 'log_format' do
+    context 'by default' do
+      it 'does not pass timestamp flag to svlogd' do
+        expect(chef_run).not_to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/-tt/)
+      end
+    end
+
+    context 'when user specifies text log format' do
+      before do
+        stub_gitlab_rb(
+          sidekiq: { log_format: 'text' }
+        )
+      end
+
+      it 'passes timestamp flag to svlogd' do
+        expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/-tt/)
+      end
+    end
+  end
 end
