@@ -6,6 +6,7 @@ default['consul']['internal']['postgresql_service_check_interval'] = '10s'
 default['consul']['internal']['postgresql_service_check_status'] = 'failing'
 default['consul']['internal']['postgresql_service_check_args_repmgr'] = ['/opt/gitlab/bin/gitlab-ctl', 'repmgr-check-master']
 default['consul']['internal']['postgresql_service_check_args_patroni'] = ['/opt/gitlab/bin/gitlab-ctl', 'patroni', 'check-leader']
+default['consul']['internal']['postgresql_service_check_args_patroni_standby_cluster'] = ['/opt/gitlab/bin/gitlab-ctl', 'patroni', 'check-standby-leader']
 default['consul']['internal']['postgresql_watches_repmgr'] = [
   {
     'type': 'keyprefix',

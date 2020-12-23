@@ -80,7 +80,8 @@ class ConsulHelper
   def postgresql_service_config
     return node['consul']['service_config']['postgresql'] || {} unless node['consul']['service_config'].nil?
 
-    ha_solution = Gitlab['patroni']['enable'] ? 'patroni' : 'repmgr'
+    ha_solution = postgresql_ha_solution
+
     cfg = {
       'service' => {
         'name' => node['consul']['internal']['postgresql_service_name'],
@@ -98,6 +99,13 @@ class ConsulHelper
     cfg['watches'] = node['consul']['internal']['postgresql_watches_repmgr'] if ha_solution == 'repmgr'
 
     cfg
+  end
+
+  def postgresql_ha_solution
+    return 'repmgr' unless Gitlab['patroni']['enable']
+    return 'patroni_standby_cluster' if Gitlab['patroni'].key?('standby_cluster') && Gitlab['patroni']['standby_cluster']['enable']
+
+    'patroni'
   end
 
   # Return a list of enabled services
