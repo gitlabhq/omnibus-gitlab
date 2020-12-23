@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.7.1 (2020-12-23)
+
+### Fixed (1 change)
+
+- Ensure patroni and consul remain up during upgrade migrations. !4854
+
+
 ## 13.7.0 (2020-12-22)
 
 ### Fixed (8 changes)

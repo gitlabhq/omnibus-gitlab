@@ -1,5 +1,0 @@
----
-title: Ensure patroni and consul remain up during upgrade migrations
-merge_request: 4854
-author:
-type: fixed
