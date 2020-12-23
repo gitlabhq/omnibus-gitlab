@@ -1594,7 +1594,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # `pages_nginx['some_setting']` and should be set separately.
 
 # Below you can find settings that are exclusive to "GitLab Pages NGINX"
-# pages_nginx['enable'] = false
+# pages_nginx['enable'] = true
 
 # gitlab_rails['pages_path'] = "/var/opt/gitlab/gitlab-rails/shared/pages"
 
