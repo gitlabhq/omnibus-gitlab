@@ -650,50 +650,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'gitlab shell settings' do
-      it 'sets default for gitlab shell authorized keys file' do
-        expect(chef_run)
-          .to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root')
-          .with_variables(
-            hash_including(
-              gitlab_shell_authorized_keys_file: '/var/opt/gitlab/.ssh/authorized_keys'
-            )
-          )
-      end
-
-      context 'gitlab_shell auth_file setting is set' do
-        before do
-          stub_gitlab_rb(gitlab_shell: { auth_file: '/tmp/authorized_keys' })
-        end
-
-        it 'sets the gitlab shell authorized keys file based on gitlab-shell auth_file config' do
-          expect(chef_run)
-            .to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root')
-            .with_variables(
-              hash_including(
-                gitlab_shell_authorized_keys_file: '/tmp/authorized_keys'
-              )
-            )
-        end
-      end
-
-      context 'gitlab_shell auth_file setting is set' do
-        before do
-          stub_gitlab_rb(user: { home: '/tmp/user' })
-        end
-
-        it 'defaults to the auth_file within the user home directory' do
-          expect(chef_run)
-            .to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root')
-            .with_variables(
-              hash_including(
-                gitlab_shell_authorized_keys_file: '/tmp/user/.ssh/authorized_keys'
-              )
-            )
-        end
-      end
-    end
-
     context 'LDAP server configuration' do
       context 'LDAP servers are configured' do
         let(:ldap_servers_config) do
@@ -1295,30 +1251,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
             yaml_data = YAML.safe_load(content, [], [], true)
             expect(yaml_data['production']['shutdown']).to include('blackout_seconds' => 20)
           }
-        end
-      end
-    end
-
-    context 'GitLab Shell settings' do
-      context 'when git_timeout is configured' do
-        it 'sets the git_timeout value' do
-          stub_gitlab_rb(gitlab_rails: { gitlab_shell_git_timeout: 1000 })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'gitlab_shell_git_timeout' => 1000
-            )
-          )
-        end
-      end
-
-      context 'when git_timeout is not configured' do
-        it 'sets git_timeout value to default' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'gitlab_shell_git_timeout' => 10800
-            )
-          )
         end
       end
     end
