@@ -63,6 +63,20 @@ add_command_under_category('patroni', 'database', 'Interact with Patroni', 2) do
       exit 3
     end
 
+  when 'check-standby-leader'
+    begin
+      if Patroni.standby_leader? options
+        warn 'I am the leader.' unless options[:quiet]
+        exit 0
+      else
+        warn 'I am not the leader.' unless options[:quiet]
+        exit 1
+      end
+    rescue StandardError => e
+      warn "Error while checking the role of the current node: #{e}" unless options[:quiet]
+      exit 3
+    end
+
   when 'reinitialize-replica'
     begin
       Patroni.reinitialize_replica options

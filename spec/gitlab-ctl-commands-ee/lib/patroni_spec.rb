@@ -6,7 +6,7 @@ require_relative('../../../files/gitlab-ctl-commands/lib/gitlab_ctl')
 require_relative('../../../files/gitlab-ctl-commands-ee/lib/patroni')
 
 RSpec.describe 'Patroni' do
-  core_commands = %w(bootstrap check-leader check-replica reinitialize-replica)
+  core_commands = %w(bootstrap check-leader check-replica check-standby-leader reinitialize-replica)
   additional_commands = %w(members pause resume failover switchover restart reload)
   all_commands = core_commands + additional_commands
   command_lines = {
@@ -110,30 +110,47 @@ RSpec.describe 'Patroni' do
     end
   end
 
-  describe '#leader? and #replica?' do
+  describe '#leader?, #replica?, and standyLeader?' do
     before do
       allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'patroni' => { 'api_address' => 'http://localhost:8009' } })
       allow_any_instance_of(Patroni::Client).to receive(:get).with('/leader').and_yield(Struct.new(:code).new(leader_status))
       allow_any_instance_of(Patroni::Client).to receive(:get).with('/replica').and_yield(Struct.new(:code).new(replica_status))
+      allow_any_instance_of(Patroni::Client).to receive(:get).with('/standby-leader').and_yield(Struct.new(:code).new(standby_leader_status))
     end
 
     context 'when node is leader' do
       let(:leader_status) { '200' }
       let(:replica_status) { '503' }
+      let(:standby_leader_status) { '503' }
 
       it 'should identify node role' do
         expect(Patroni.leader?({})).to be(true)
         expect(Patroni.replica?({})).to be(false)
+        expect(Patroni.standby_leader?({})).to be(false)
       end
     end
 
     context 'when node is replica' do
       let(:leader_status) { '503' }
       let(:replica_status) { '200' }
+      let(:standby_leader_status) { '503' }
 
       it 'should identify node role' do
         expect(Patroni.leader?({})).to be(false)
         expect(Patroni.replica?({})).to be(true)
+        expect(Patroni.standby_leader?({})).to be(false)
+      end
+    end
+
+    context 'when node is standby leader' do
+      let(:leader_status) { '503' }
+      let(:replica_status) { '503' }
+      let(:standby_leader_status) { '200' }
+
+      it 'should identify node role' do
+        expect(Patroni.leader?({})).to be(false)
+        expect(Patroni.replica?({})).to be(false)
+        expect(Patroni.standby_leader?({})).to be(true)
       end
     end
   end
