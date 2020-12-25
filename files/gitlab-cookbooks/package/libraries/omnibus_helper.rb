@@ -144,6 +144,7 @@ class OmnibusHelper
     message = <<~EOS
       Your OS, #{os_string}, will be deprecated soon.
       Starting with #{deprecated_os[matching_list.first]}, packages will not be built for it.
+      Switch or upgrade to a supported OS, see https://docs.gitlab.com/omnibus/package-information/deprecated_os.html for more information.
     EOS
 
     LoggingHelper.deprecation(message)
