@@ -16,7 +16,7 @@
 
 name 'curl'
 
-version = Gitlab::Version.new('curl', 'curl-7_59_0')
+version = Gitlab::Version.new('curl', 'curl-7_74_0')
 
 default_version version.print(false)
 display_version version.print(false).delete_prefix('curl-').tr('_', '.')
@@ -36,6 +36,7 @@ source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  env['ACLOCAL_PATH'] = "#{install_dir}/embedded/share/aclocal"
 
   if freebsd?
     # from freebsd ports - IPv6 Hostcheck patch
@@ -53,6 +54,7 @@ build do
   configure_command = [
     './configure',
     "--prefix=#{install_dir}/embedded",
+    "--disable-option-checking",
     '--disable-manual',
     '--disable-debug',
     '--enable-optimize',
@@ -60,11 +62,18 @@ build do
     '--disable-ldaps',
     '--disable-rtsp',
     '--enable-proxy',
+    "--disable-pop3",
+    "--disable-imap",
+    "--disable-smtp",
+    "--disable-gopher",
     '--disable-dependency-tracking',
     '--enable-ipv6',
-    '--without-libidn',
+    "--without-libidn2",
     '--without-gnutls',
     '--without-librtmp',
+    "--without-zsh-functions-dir",
+    "--without-fish-functions-dir",
+    "--disable-mqtt",
     '--without-libssh2',
     "--with-ssl=#{install_dir}/embedded",
     "--with-zlib=#{install_dir}/embedded",
@@ -73,7 +82,7 @@ build do
     "--with-ca-fallback"
   ]
 
-  command './buildconf', env: env
+  command "autoreconf -fi", env: env
   command configure_command.join(' '), env: env
 
   make "-j #{workers}", env: env
