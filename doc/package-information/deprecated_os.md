@@ -25,6 +25,7 @@ release for them can be found below:
 | OpenSUSE 15.0   | [December 2019](https://en.opensuse.org/Lifetime#Discontinued_distributions)       | [GitLab CE](https://packages.gitlab.com/app/gitlab/gitlab-ce/search?q=gitlab-ce-12.5&dist=opensuse%2F15.0) / [GitLab EE](https://packages.gitlab.com/app/gitlab/gitlab-ee/search?q=gitlab-ee-12.5&dist=opensuse%2F15.0) 12.5                               |
 | Raspbian Stretch | [June 2020](https://downloads.raspberrypi.org/raspbian/images/raspbian-2019-04-09/)  | [GitLab CE](https://packages.gitlab.com/app/gitlab/raspberry-pi2/search?q=gitlab-ce_13.2&dist=raspbian%2Fstretch) 13.3                                                                                                                                  |
 | Debian Jessie    | [June 2020](https://www.debian.org/News/2020/20200709)                               | [GitLab CE](https://packages.gitlab.com/app/gitlab/gitlab-ce/search?q=gitlab-ce_13.2&dist=debian%2Fjessie) / [GitLab EE](https://packages.gitlab.com/app/gitlab/gitlab-ee/search?q=gitlab-ee_13.2&dist=debian%2Fjessie) 13.3                            |
+| CentOS 6         | [November 2020](https://wiki.centos.org/About/Product)                               | [GitLab CE](https://packages.gitlab.com/app/gitlab/gitlab-ce/search?q=13.6&filter=all&filter=all&dist=el%2F6) / [GitLab EE](https://packages.gitlab.com/app/gitlab/gitlab-ee/search?q=13.6&filter=all&filter=all&dist=el%2F6) 13.6              |                                                           
 
 ## Supported Operating Systems
 
@@ -39,7 +40,6 @@ The following lists the currently supported OSs and their possible EOL dates.
 
 | OS Version       | First supported GitLab version | Arch            | OS EOL        | Details                                                      |
 | ---------------- | ------------------------------ | --------------- | ------------- | ------------------------------------------------------------ |
-| CentOS 6         | GitLab CE / GitLab EE 7.10.0   | x86_64          | November 2020 | <https://wiki.centos.org/About/Product>                      |
 | CentOS 7         | GitLab CE / GitLab EE 7.10.0   | x86_64          | June 2024     | <https://wiki.centos.org/About/Product>                      |
 | CentOS 8         | GitLab CE / GitLab EE 12.8.1   | x86_64, aarch64 | Dec 2021      | <https://wiki.centos.org/About/Product>                      |
 | Debian 9         | GitLab CE / GitLab EE 9.3.0    | amd64           | 2022          | <https://wiki.debian.org/DebianReleases#Production_Releases> |
