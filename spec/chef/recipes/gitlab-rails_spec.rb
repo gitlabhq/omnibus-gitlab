@@ -2448,7 +2448,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
             prometheus_server_address: 'localhost:9090'
           )
         )
-        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: true\s+listen_address: "localhost:9090"(\s+#.*)*\s+server_address: "localhost:9090"/)
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enabled: true\s+server_address: "localhost:9090"/)
       end
 
       it 'allows the values to be changed' do
@@ -2460,7 +2460,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
             prometheus_server_address: '192.168.1.1:8080'
           )
         )
-        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: false\s+listen_address: "192.168.1.1:8080"(\s+#.*)*\s+server_address: "192.168.1.1:8080"/)
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enabled: false\s+server_address: "192.168.1.1:8080"/)
       end
 
       it 'handles symbols' do
@@ -2472,7 +2472,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
             prometheus_server_address: :':8080'
           )
         )
-        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: false\s+listen_address: ":8080"(\s+#.*)*\s+server_address: ":8080"/)
+        expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enabled: false\s+server_address: ":8080"/)
       end
 
       context 'prometheus on another server' do
@@ -2487,7 +2487,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
               prometheus_server_address: '101.8.10.12:7070'
             )
           )
-          expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: true\s+listen_address: "101.8.10.12:7070"(\s+#.*)*\s+server_address: "101.8.10.12:7070"/)
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enabled: true\s+server_address: "101.8.10.12:7070"/)
         end
 
         it 'overrides the prometheus enable to true' do
@@ -2499,7 +2499,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
               prometheus_server_address: '101.8.10.12:7070'
             )
           )
-          expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: true\s+listen_address: "101.8.10.12:7070"(\s+#.*)*\s+server_address: "101.8.10.12:7070"/)
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enabled: true\s+server_address: "101.8.10.12:7070"/)
         end
 
         it 'overrides the prometheus listen address' do
@@ -2511,7 +2511,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
               prometheus_server_address: '101.8.10.12:7070'
             )
           )
-          expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enable: true\s+listen_address: "101.8.10.12:7070"(\s+#.*)*\s+server_address: "101.8.10.12:7070"/)
+          expect(chef_run).to render_file(gitlab_yml_path).with_content(/prometheus:(\s+#.*)*\s+enabled: true\s+server_address: "101.8.10.12:7070"/)
         end
       end
     end

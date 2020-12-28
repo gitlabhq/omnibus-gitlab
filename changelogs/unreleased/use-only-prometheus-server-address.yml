@@ -1,0 +1,5 @@
+---
+title: Remove deprecated Prometheus settings from gitlab.yml
+merge_request: 4869
+author:
+type: other
