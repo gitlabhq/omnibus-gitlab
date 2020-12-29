@@ -60,6 +60,12 @@ To enable HTTPS for the domain `gitlab.example.com`:
    external_url "https://gitlab.example.com"
    ```
 
+1. Disable Let's Encrypt in `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   letsencrypt['enable'] = false
+   ```
+
 1. Create the `/etc/gitlab/ssl` directory and copy your key and certificate there:
 
    ```shell
