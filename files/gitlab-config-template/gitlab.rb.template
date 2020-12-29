@@ -1127,8 +1127,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['default_statistics_target'] = 1000
 
 ### Available in PostgreSQL 9.6 and later
-# postgresql['min_wal_size'] = 80MB
-# postgresql['max_wal_size'] = 1GB
+# postgresql['min_wal_size'] = "80MB"
+# postgresql['max_wal_size'] = "1GB"
 
 # Backup/Archive settings
 # postgresql['archive_command'] = nil
