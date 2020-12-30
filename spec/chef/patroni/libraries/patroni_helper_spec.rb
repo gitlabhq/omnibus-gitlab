@@ -60,6 +60,34 @@ RSpec.describe PatroniHelper do
     end
   end
 
+  describe '#node_status' do
+    context 'when Patroni service is down' do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
+        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('patroni').and_return(false)
+      end
+
+      it 'returns not running' do
+        expect(helper.node_status).to eq 'not running'
+      end
+    end
+
+    context 'when Patroni service is up' do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
+        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('patroni').and_return(true)
+
+        result = spy('shellout')
+        allow(helper).to receive(:do_shell_out).and_return(result)
+        allow(result).to receive(:stdout).and_return(' running')
+      end
+
+      it 'returns running current node state' do
+        expect(helper.node_status).to eq 'running'
+      end
+    end
+  end
+
   describe '#public_attributes' do
     context 'when patroni is enabled' do
       it 'returns a hash with required keys' do
