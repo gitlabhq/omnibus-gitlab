@@ -29,7 +29,7 @@ class PatroniHelper < BaseHelper
   def node_status
     return 'not running' unless running?
 
-    cmd = "#{ctl_command} -c #{node['patroni']['dir']}/patroni.yaml list | grep #{node.name} | cut -d '|' -f 6"
+    cmd = "#{ctl_command} -c #{node['patroni']['dir']}/patroni.yaml list | grep #{node.name} | cut -d '|' -f 5"
     do_shell_out(cmd).stdout.chomp.strip
   end
 
