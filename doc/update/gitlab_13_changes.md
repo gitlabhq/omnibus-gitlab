@@ -52,6 +52,7 @@ If you are using your own NGINX rather than the bundled version, and are proxyin
 ### PostgreSQL 12.4 support
 
 PostgreSQL 12.4 is being shipped as the default version for fresh installs.
+
 Users can manually upgrade to 12.4 following the  [upgrade docs](../settings/database.md#gitlab-133-and-later).
 
 ### New encrypted_settings_key_base secret added to the GitLab secrets
@@ -59,3 +60,19 @@ Users can manually upgrade to 12.4 following the  [upgrade docs](../settings/dat
 In 13.7, a new secret is generated in `/etc/gitlab/gitlab-secrets.json`. In an HA GitLab environment, secrets need to
 be the same on all nodes. Ensure this new secret is also accounted for if you are manually syncing the file across
 nodes, or manually specifying secrets in `/etc/gitlab/gitlab.rb`.
+
+## 13.8
+
+### PostgreSQL 12.4 upgrades
+
+PostgreSQL will automatically be upgraded to 12.x except for the following cases:
+
+- you are running the database in high_availability using Repmgr or Patroni.
+- your database nodes are part of GitLab Geo configuration.
+- you have specifically opted out using the `/etc/gitlab/disable-postgresql-upgrade` file outlined below.
+
+To opt out you must execute the following before performing the upgrade of GitLab.
+
+```shell
+sudo touch /etc/gitlab/disable-postgresql-upgrade
+```

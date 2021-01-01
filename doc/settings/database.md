@@ -443,11 +443,24 @@ To opt out of automatic PostgreSQL upgrade during GitLab package upgrades, run:
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
+#### GitLab 13.8 and later
+
+The default PostgreSQL version is set to 12.x, and an upgrade of the database is
+done on package upgrades for installs that are not using repmgr or Geo.
+
+The upgrade is skipped in any of the following cases:
+
+- You're running the database in high availability using repmgr or patroni.
+- Your database nodes are part of GitLab Geo configuration.
+- You have specifically [opted out](#opt-out-of-automatic-postgresql-upgrades).
+
+To upgrade PostgreSQL on installs with HA or Geo, see [Packaged PostgreSQL deployed in an HA/Geo Cluster](#packaged-postgresql-deployed-in-an-hageo-cluster).
+
 #### GitLab 13.7 and later
 
-As of GitLab 13.7, new installations will default to PostgreSQL 12. 
+As of GitLab 13.7, new installations will default to PostgreSQL 12.
 
-Existing instances can update manually via: 
+Existing instances can update manually via:
 
 ```shell
 sudo gitlab-ctl pg-upgrade -V 12
@@ -728,24 +741,17 @@ Before proceeding with the upgrade, note the following:
   [Amazon recommends this](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.PostgreSQL.html)
   as part of a major version upgrade.
 
-The following example demonstrates upgrading from a database host running PostgreSQL 10 to another database host running PostgreSQL 11 and incurs downtime:
+The following example demonstrates upgrading from a database host running PostgreSQL 11 to another database host running PostgreSQL 12 and incurs downtime:
 
-1. Spin up a new PostgreSQL 11 database server that's set up according to the [database requirements](https://docs.gitlab.com/ee/install/requirements.html#database).
+1. Spin up a new PostgreSQL 12 database server that's set up according to the [database requirements](https://docs.gitlab.com/ee/install/requirements.html#database).
 
 1. Ensure that the compatible versions of `pg_dump` and `pg_restore` are being
    used on the GitLab Rails instance. To amend GitLab configuration, edit
    `/etc/gitlab/gitlab.rb` and specify the value of `postgresql['version']`:
 
     ```ruby
-    postgresql['version'] = 11
+    postgresql['version'] = 12
     ```
-
-  NOTE:
-  Connecting to PostgreSQL 12 (alongside with amending `postgresql['version'] = 12`)
-  breaks the [GitLab Backup/Restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html) functionality unless the v12 client binaries are available on the file system. More on this topic can be found under [backup and restore a non-packaged database](#backup-and-restore-a-non-packaged-postgresql-database).
-  This problem with missing 12 client binaries is partially resolved in GitLab 13.3,
-  where PostgreSQL 12 is shipped with Omnibus GitLab, and it's being tackled in
-  the [support for PostgreSQL 12](https://gitlab.com/groups/gitlab-org/-/epics/2374) epic.
 
 1. Reconfigure GitLab:
 
@@ -766,7 +772,7 @@ The following example demonstrates upgrading from a database host running Postgr
    sudo gitlab-backup create SKIP=repositories,uploads,builds,artifacts,lfs,pages,registry
    ```
 
-1. Shutdown the PostgreSQL 10 database host.
+1. Shutdown the PostgreSQL 11 database host.
 
 1. Edit `/etc/gitlab/gitlab.rb` and update the `gitlab_rails['db_host']` setting
    to point to the PostgreSQL database 11 host.
@@ -831,7 +837,7 @@ Omnibus GitLab will initialize PostgreSQL with the [default version](../package-
 
 To initialize PostgreSQL with a non-default version, you can set `postgresql['version']` to the major version one of
 the [packaged PostgreSQL versions](../package-information/postgresql_versions.md) prior to the initial reconfigure.
-For example, starting GitLab 13.3 you can use `postgresql['version'] = 12` to opt in to use PostgreSQL 12.
+For example, in GitLab 13.7 you can use `postgresql['version'] = 11` to use PostgreSQL 11 instead of the default of PostgreSQL 12.
 
 WARNING:
 Setting `postgresql['version']` while using the Omnibus packaged PostgreSQL after the initial reconfigure will
@@ -976,13 +982,14 @@ You can change the schedule by refining the following settings:
 
 ### Upgrading a GitLab HA cluster
 
-NOTE:
-As of GitLab 13.3, PostgreSQL 12 is shipped with Omnibus GitLab. However, the current support for is limited to
-single database node installation. [Fault-tolerant PostgreSQL deployments](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html),
-and Geo installations are not supported, but [planned](https://gitlab.com/groups/gitlab-org/-/epics/2374) for the future releases.
+To upgrade the PostgreSQL version in a Patroni cluster see [Upgrading PostgreSQL major version in a Patroni cluster](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#upgrading-postgresql-major-version-in-a-patroni-cluster).
 
-The following instructions are valid for a fault tolerant setup with repmgr. To upgrade PostgreSQL version in a
-Patroni cluster see [Upgrading PostgreSQL major version in a Patroni cluster](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#upgrading-postgresql-major-version-in-a-patroni-cluster).
+### Upgrading a GitLab HA Repmgr cluster
+
+NOTE:
+If you are upgrading to PostgreSQL 12, you need to switch from Repmgr to Patroni first see [Switching from Repmgr to Patroni](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni).
+
+These instructions are provided for upgrading a older GitLab cluster to PostgreSQL 11, when using Repmgr.
 
 If [PostgreSQL is configured for high availability](https://docs.gitlab.com/ee/administration/postgresql/index.html),
 `pg-upgrade` should be run on all the nodes running PostgreSQL. Other nodes can be
