@@ -1,0 +1,5 @@
+---
+title: Auto-upgrade to PG12 for single node installs
+merge_request: 4848
+author:
+type: changed

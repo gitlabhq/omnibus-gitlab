@@ -253,7 +253,7 @@ def pg_upgrade_check
   puts '=== INFO ==='
   puts "You are currently running PostgreSQL #{installed_version}."
   puts "GitLab now ships with a newer version of PostgreSQL (#{new_version}) and you are recommended to upgrade to it."
-  puts 'To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
+  puts "To upgrade, please see: #{pg_upgrade_doc_url}"
   puts '=== INFO ==='
 end
 
@@ -343,7 +343,7 @@ end
 def attempt_auto_pg_upgrade?
   # This must return false when the opt-in PostgreSQL version is the default for pg-upgrade,
   # otherwise it must be true.
-  false
+  true
 end
 
 def recommend_pg_upgrade?
@@ -351,14 +351,16 @@ def recommend_pg_upgrade?
 end
 
 def postgresql_detected?
-  service_enabled?('postgresql') || service_enabled?('geo-postgresql')
+  service_enabled?('postgresql') || service_enabled?('geo-postgresql') || service_enabled?('patroni')
 end
 
 def pg_upgrade_doc_url
   if geo_detected?
     'https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-geo-instance'
-  elsif repmgr_detected? || patroni_detected?
-    'https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-gitlab-ha-cluster'
+  elsif repmgr_detected?
+    'https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni'
+  elsif patroni_detected?
+    'https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#upgrading-postgresql-major-version-in-a-patroni-cluster'
   else
     'https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
   end
