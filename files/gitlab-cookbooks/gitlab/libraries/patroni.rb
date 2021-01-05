@@ -18,8 +18,21 @@ module Patroni
 
     private
 
+    POSTGRESQL_DCS_PARAMETERS ||= %w(
+      max_connections
+      max_locks_per_transaction
+      max_worker_processes
+      max_prepared_transactions
+      track_commit_timestamp
+      max_wal_senders
+      max_replication_slots
+      wal_keep_segments
+      wal_keep_size
+      checkpoint_timeout
+    ).freeze
+
     def postgresql_setting(key)
-      Gitlab['postgresql'][key] || Gitlab['node']['postgresql'][key]
+      Gitlab['postgresql'][key] || Gitlab['node']['patroni']['postgresql'][key] || Gitlab['node']['postgresql'][key]
     end
 
     # These attributes are the postgres settings that patroni manages through its DCS,
@@ -29,7 +42,7 @@ module Patroni
     # one hasn't been specified in gitlab.rb
     def parse_postgresql_overrides
       Gitlab['patroni']['postgresql'] ||= {}
-      %w(max_connections max_locks_per_transaction max_worker_processes).each do |key|
+      POSTGRESQL_DCS_PARAMETERS.each do |key|
         Gitlab['patroni']['postgresql'][key] ||= postgresql_setting(key)
       end
     end

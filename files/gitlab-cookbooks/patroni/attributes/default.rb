@@ -43,10 +43,12 @@ default['patroni']['consul']['checks'] = []
 # PostgreSQL configuration override
 default['patroni']['postgresql']['wal_level'] = 'replica'
 default['patroni']['postgresql']['hot_standby'] = 'on'
-default['patroni']['postgresql']['wal_keep_segments'] = 8
+default['patroni']['postgresql']['wal_keep_segments'] = 10
 default['patroni']['postgresql']['max_wal_senders'] = 5
 default['patroni']['postgresql']['max_replication_slots'] = 5
 default['patroni']['postgresql']['checkpoint_timeout'] = 30
+default['patroni']['postgresql']['max_prepared_transactions'] = 0
+default['patroni']['postgresql']['track_commit_timestamp'] = 'off'
 
 # Rest API settings
 default['patroni']['listen_address'] = nil
