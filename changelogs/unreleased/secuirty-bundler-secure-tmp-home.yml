@@ -1,0 +1,5 @@
+---
+title: Patch bundler to not use insecure temp directory as home
+merge_request:
+author:
+type: security
