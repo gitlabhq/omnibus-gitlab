@@ -37,4 +37,7 @@ build do
     v_opts,
     '--no-document --force'
   ].compact.join(' '), env: env
+
+  patch source: 'secure-temporary-dir-as-home.patch',
+        target: "#{install_dir}/embedded/lib/ruby/gems/2.7.0/gems/bundler-#{version}/lib/bundler.rb"
 end
