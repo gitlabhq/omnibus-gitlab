@@ -117,7 +117,7 @@ This ensures that your new work is behaving as expected, and not breaking anythi
 1. Change to the `qa` directory
 
    ```shell
-   cd gitlab-ee/qa
+   cd gitlab/qa
    ```
 
 1. Install the required gems
