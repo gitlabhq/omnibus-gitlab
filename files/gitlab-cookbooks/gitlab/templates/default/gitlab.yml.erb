@@ -758,6 +758,10 @@ production: &base
   shared:
     path: <%= @shared_path %>
 
+  # Encrypted Settings configuration
+  encrypted_settings:
+    path: <%= @encrypted_settings_path %>
+
   # Gitaly settings
   # This setting controls whether GitLab uses Gitaly
   # Eventually Gitaly use will become mandatory and

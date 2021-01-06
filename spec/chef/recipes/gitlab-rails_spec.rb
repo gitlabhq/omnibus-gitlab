@@ -172,6 +172,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
       expect(chef_run).to create_storage_directory('/tmp/shared/terraform_state').with(owner: 'git', mode: '0700')
     end
 
+    it 'creates the encrypted_settings directory' do
+      expect(chef_run).to create_storage_directory('/tmp/shared/encrypted_settings').with(owner: 'git', mode: '0700')
+    end
+
     it 'creates the GitLab pages directory' do
       expect(chef_run).to create_storage_directory('/tmp/shared/pages').with(owner: 'git', group: 'gitlab-www', mode: '0750')
     end
