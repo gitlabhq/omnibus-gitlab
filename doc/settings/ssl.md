@@ -98,6 +98,9 @@ letsencrypt['auto_renew_minute'] = "30"
 letsencrypt['auto_renew_day_of_month'] = "*/7"
 ```
 
+NOTE:
+The certificate gets renewed only if it is going to expire in 30 days. For example, if you set it to renew on the 1st of every month at 00:00 and the certificate expires on the 31st, then the certificate will expire before getting renewed.
+
 Disable automatic renewal with the following in `/etc/gitlab/gitlab.rb`:
 
 ```ruby
