@@ -23,7 +23,6 @@ omnibus_gem_version = Gitlab::Version.new('omnibus', "7.0.10.05")
 gem 'omnibus', git: omnibus_gem_version.remote, tag: omnibus_gem_version.print(false)
 gem 'chef', '~> 15.14.0'
 gem 'ohai', '~> 15.12.0'
-gem 'package_cloud'
 gem 'rainbow', '~> 2.2' # This is used by gitlab-ctl and the chef formatter
 gem 'thor', '0.18.1' # This specific version is required by package_cloud
 gem 'json'
@@ -33,6 +32,10 @@ gem 'knapsack'
 gem 'docker-api'
 gem 'google_drive'
 gem 'http'
+
+group :packagecloud, optional: true do
+  gem 'package_cloud'
+end
 
 group :rubocop do
   gem 'gitlab-styles', '~> 4.3', require: false

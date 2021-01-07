@@ -121,6 +121,9 @@ before_script:
     fi
   - bundle config set --local path 'gems'
   - bundle config set --local without 'rubocop'
+  - if [ -n "$INCLUDE_PACKAGECLOUD" ]; then
+      bundle config set --local with 'packagecloud';
+    fi
   - bundle install -j $(nproc)
   - bundle binstubs --all
   # If ALTERNATIVE_SOURCES are used, the public mirror for omnibus will be used.
