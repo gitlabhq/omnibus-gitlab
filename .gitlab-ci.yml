@@ -74,7 +74,7 @@ variables:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: tcp://docker:2375
   services:
-    - docker:19.03.0-dind
+    - docker:20.10.2-dind
   tags:
     - gitlab-org-docker
 
