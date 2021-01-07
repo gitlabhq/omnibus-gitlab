@@ -54,9 +54,7 @@
     # These jobs will not be run on dev, so we set ALTERNATIVE_SOURCES to true
     # so tests run fine on forks
     - export ALTERNATIVE_SOURCES="true";
-    - bundle config set path 'gems'
-    - bundle install -j $(nproc)
-    - bundle binstubs --all
+    - bundle install -j $(nproc) --binstubs --path gems
   script:
     - JOB_NAME=( $CI_JOB_NAME )
     - export DISTRO_NAME=${JOB_NAME[0]}
@@ -140,9 +138,7 @@ rubocop:
   stage: check
   image: "${RUBY_IMAGE}"
   before_script:
-    - bundle config set without 'default test'
-    - bundle config set path 'gems'
-    - bundle install -j $(nproc)
+    - bundle install -j $(nproc) --binstubs --path gems --without default test
   script:
     - bundle exec rubocop --parallel
   <<: *com-except-triggers

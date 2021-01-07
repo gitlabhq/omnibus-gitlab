@@ -69,8 +69,7 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
 
    ```shell
    cd ~/omnibus-gitlab
-   bundle install
-   bundle binstubs --all
+   bundle install --path .bundle --binstubs
    ```
 
 ### Fetch upstream assets
