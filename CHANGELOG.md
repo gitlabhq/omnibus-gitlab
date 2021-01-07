@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.6.4 (2021-01-07)
+
+### Security (2 changes)
+
+- Patch bundler to not use insecure temp directory as home.
+- Update curl to 7_74_0.
+
+
 ## 13.6.3 (2020-12-10)
 
 ### Fixed (1 change)
