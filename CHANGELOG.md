@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.7.2 (2021-01-07)
+
+### Security (2 changes)
+
+- Patch bundler to not use insecure temp directory as home.
+- Update curl to 7_74_0.
+
+
 ## 13.7.1 (2020-12-23)
 
 ### Fixed (1 change)
@@ -66,6 +74,14 @@ omnibus-gitlab repository.
 - pages: Support for HTTPS over PROXYv2 protocol. !4760
 - Use the 'main' branch for gitlab-shell nightlies. !4772
 - Update Mattermost to 5.29.1. !4807 (hmhealey)
+
+
+## 13.6.4 (2021-01-07)
+
+### Security (2 changes)
+
+- Patch bundler to not use insecure temp directory as home.
+- Update curl to 7_74_0.
 
 
 ## 13.6.3 (2020-12-10)
@@ -139,6 +155,14 @@ omnibus-gitlab repository.
 - Update GITLAB_KAS_VERSION to 13.6.1. !4742
 - Update rake to v13. !4745
 - Update Mattermost to 5.28.1.
+
+
+## 13.5.6 (2021-01-07)
+
+### Security (2 changes)
+
+- Patch bundler to not use insecure temp directory as home.
+- Update curl to 7_74_0.
 
 
 ## 13.5.5 (2020-12-07)
