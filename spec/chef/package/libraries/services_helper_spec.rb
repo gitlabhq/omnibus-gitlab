@@ -6,12 +6,20 @@ RSpec.describe Services do
   subject(:services) { described_class }
 
   describe '.enable_group' do
-    it 'enables services in provide groups list' do
+    before do
       chef_run.converge('gitlab::default')
+    end
 
+    it 'enables services in provide groups list' do
       expect do
         services.enable_group('pages_role')
       end.to change { services.enabled?('gitlab_pages') }.from(false).to(true)
+    end
+
+    it 'skips services that dont `exist?`' do
+      expect do
+        services.enable_group('monitoring')
+      end.not_to change { services.enabled?('pgbouncer_exporter') }
     end
   end
 
@@ -34,12 +42,20 @@ RSpec.describe Services do
   end
 
   describe '.enable' do
-    it 'enables provide service' do
+    before do
       chef_run.converge('gitlab::default')
+    end
 
+    it 'enables provide service' do
       expect do
         services.enable('gitlab_pages')
       end.to change { services.enabled?('gitlab_pages') }.from(false).to(true)
+    end
+
+    it 'skips services that dont `exist?`' do
+      expect do
+        services.enable('pgbouncer_exporter')
+      end.not_to change { services.enabled?('pgbouncer_exporter') }
     end
   end
 
@@ -183,6 +199,30 @@ RSpec.describe Services do
 
       it 'returns false when disabled via cookbooks' do
         expect(services.enabled?('mailroom')).to be_falsey
+      end
+    end
+  end
+
+  describe '.exist?' do
+    it 'returns false for non existing service' do
+      expect(services.exist?('inexistent_service')).to be_falsey
+    end
+
+    context 'with only CE services registered' do
+      it 'returns true for CE services and false for EE services' do
+        chef_run.converge('gitlab::default')
+
+        expect(services.exist?('logrotate')).to be_truthy
+        expect(services.exist?('pgbouncer_exporter')).to be_falsey
+      end
+    end
+
+    context 'with CE and EE services registered' do
+      it 'returns true for EE services registered via add_service' do
+        chef_run.converge('gitlab::default', 'gitlab-ee::default')
+
+        expect(services.exist?('logrotate')).to be_truthy
+        expect(services.exist?('pgbouncer_exporter')).to be_truthy
       end
     end
   end

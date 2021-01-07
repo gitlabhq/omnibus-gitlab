@@ -194,6 +194,14 @@ module Services
       service_status(service)
     end
 
+    # Return whether a specific service exist
+    #
+    # @note In CE distributions, some services may not exist as they are EE only
+    # @return [Boolean] whether service exist or not
+    def exist?(service)
+      !service_list[service].nil?
+    end
+
     private
 
     def cookbook_services
@@ -241,6 +249,9 @@ module Services
         # Skip if service is in exceptions list
         next if exceptions.include?(name)
 
+        # Skip if service does not *exist?*
+        next unless exist?(name)
+
         # Set the service enable config if:
         #  The current service was requested to be set
         #  OR
@@ -260,6 +271,9 @@ module Services
       service_list.each do |name, metadata|
         # Skip if service is in exceptions list
         next if (exceptions & metadata[:groups]).any?
+
+        # Skip if service does not *exist?*
+        next unless exist?(name)
 
         # Find the matching groups among our passed arguments and our current service's groups
         matching_groups = groups & metadata[:groups]
