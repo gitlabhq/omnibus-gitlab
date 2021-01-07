@@ -136,7 +136,7 @@ To manually trigger GitLab log rotation with `logrotate`, use the following comm
 /opt/gitlab/embedded/sbin/logrotate -fv -s /var/opt/gitlab/logrotate/logrotate.status /var/opt/gitlab/logrotate/logrotate.conf
 ```
 
-## UDP log forwarding
+## UDP log forwarding `**(STARTER ONLY)**`
 
 Omnibus GitLab can utilize the UDP logging feature in svlogd as well as sending non-svlogd logs to a syslog-compatible remote system using UDP.
 To configure Omnibus GitLab to send syslog-protocol messages via UDP, use the following settings:
