@@ -15,24 +15,24 @@ up a Build Environment](../build/build_package.md#preparing-a-build-environment)
 
    To provide isolation and to prevent rebuilding of the package for each and
    every change, it is preferred to use a Container for development. The
-   following example uses Docker on a Debian host with a Debian Jessie image.
+   following example uses Docker on a Debian host with a Debian 10 (Buster) image.
    The steps are similar for other OSs; only the commands differ.
 
    1. Install Docker for your OS as per [official Docker installation docs](https://docs.docker.com/install/).
 
-   1. Pulling a Debian Jessie image
+   1. Pulling a Debian Buster image
 
       ```shell
-      docker pull debian:jessie
+      docker pull debian:buster
       ```
 
    1. Running Docker image with a shell prompt
 
       ```shell
-      docker run -it debian:jessie bash
+      docker run -it debian:buster bash
       ```
 
-      This will cause the Docker to run the jessie image and you will fall into a
+      This will cause the Docker to run the buster image and you will fall into a
       bash prompt, where the following steps are applied to.
 
 1. Install basic necessary tools
@@ -117,7 +117,7 @@ This ensures that your new work is behaving as expected, and not breaking anythi
 1. Change to the `qa` directory
 
    ```shell
-   cd gitlab-ee/qa
+   cd gitlab/qa
    ```
 
 1. Install the required gems
