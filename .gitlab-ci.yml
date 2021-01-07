@@ -119,10 +119,7 @@ before_script:
       cp support/known_hosts ~/.ssh/known_hosts;
       chmod -R 0600 ~/.ssh/;
     fi
-  - bundle config set path 'gems'
-  - bundle config set without 'rubocop'
-  - bundle install -j $(nproc)
-  - bundle binstubs --all
+  - bundle install -j $(nproc) --binstubs --path gems --without rubocop
   # If ALTERNATIVE_SOURCES are used, the public mirror for omnibus will be used.
   # This will alter Gemfile.lock file. As part of the build pipeline, we are
   # checking whether the state of the repository is unchanged during the build
