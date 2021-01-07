@@ -11,7 +11,7 @@ RSpec.describe 'gitlab-ee::geo' do
     it 'remain enabled', :aggregate_failures do
       chef_run
 
-      default_services = Services.find_by_group(Services::DEFAULT_GROUP).keys
+      default_services = Services.find_by_group(Services::DEFAULT_GROUP)
       omnibus_helper = OmnibusHelper.new(node)
 
       expect(default_services.count).to be > 0

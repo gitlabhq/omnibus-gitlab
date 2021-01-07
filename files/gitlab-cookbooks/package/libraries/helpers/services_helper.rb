@@ -37,156 +37,238 @@ module Services
   class << self
     # Disables the group of services that were passed as arguments
     #
-    # Excludes the group, or array of groups, provided in the `except` argument
-    # ex: Services.disable_group('redis')
-    #     Services.disable_group('monitoring', except: ['redis', 'postgres'])
-    #     Services.disable_group(Services::ALL_GROUPS, except: 'redis')
+    # Excludes the groups provided in the *except* argument
+    # System services are ignored when disabling unless *include_system* is *true*.
+    #
+    # @example usage
+    #   Services.disable_group('redis')
+    #   Services.disable_group('monitoring', except: ['redis', 'postgres'])
+    #   Services.disable_group(Services::ALL_GROUPS, except: 'redis')
+    #
+    # @param [Array] groups
+    # @param [Array<String>, String] except
+    # @param [Boolean] include_system
     def disable_group(*groups, except: nil, include_system: false)
       exceptions = [except].flatten
       exceptions << SYSTEM_GROUP unless include_system
+
       set_service_groups_status(false, *groups, except: exceptions)
     end
 
     # Enables the group of services that were passed as arguments
     #
-    # Excludes the group, or array of groups, provided in the `except` argument
-    # ex: Services.enable_group('redis')
-    #     Services.enable_group('monitoring', except: ['redis', 'postgres'])
-    #     Services.enable_group(Services::DEFAULT_GROUP, except: 'redis')
+    # Excludes the groups provided in the *except* argument
+    #
+    # @example usage
+    #   Services.enable_group('redis')
+    #   Services.enable_group('monitoring', except: ['redis', 'postgres'])
+    #   Services.enable_group(Services::DEFAULT_GROUP, except: 'redis')
+    # @param [Array] groups
+    # @param [Array<String>, String] except
     def enable_group(*groups, except: nil)
       set_service_groups_status(true, *groups, except: except)
     end
 
     # Disables the services that were passed as arguments
     #
-    # Excludes the service, or array of services, provided in the `except` argument
-    # ex: Services.disable('mailroom')
-    #     Services.disable(Services::ALL_SERVICES, except: ['redis', 'sentinel'])
+    # Excludes the services provided in the *except* argument
+    # System services are ignored when disabling unless *include_system* is *true*.
+    #
+    # @example usage
+    #   Services.disable('mailroom')
+    #   Services.disable(Services::ALL_SERVICES, except: ['redis', 'sentinel'])
+    #
+    # @param [Array] services
+    # @param [Array<String>, String] except
+    # @param [Boolean] include_system
     def disable(*services, except: nil, include_system: false)
       # Automatically excludes system services unless `include_system: true` is passed
-      exceptions = [except].flatten
-      exceptions.concat(system_services.keys) unless include_system
+      exceptions = [*except]
+      exceptions.concat(system_services) unless include_system
 
       set_services_status(false, *services, except: exceptions)
     end
 
     # Enables the services that were passed as arguments
     #
-    # Excludes the service, or array of services, provided in the `except` argument
-    # ex: Services.enable('mailroom')
-    #     Services.enable(Services::ALL_SERVICES, except: ['monitoring'])
+    # Excludes the services provided in the *except* argument
+    #
+    # @example usage
+    #   Services.enable('mailroom')
+    #   Services.enable(Services::ALL_SERVICES, except: ['monitoring'])
+    #
+    # @param [Array] services
+    # @param [Array<String>, String] except
     def enable(*services, except: nil)
       set_services_status(true, *services, except: except)
     end
 
-    # Sets the enable status from the first argument on the services that were passed as arguments
+    # Sets the enable status on the services that were passed as arguments
     #
-    # Excludes the service, or array of services, provided in the `except` argument
-    def set_enable(*services, value, except: nil, include_system: false)
-      if value
+    # Excludes the service provided in the *except* argument.
+    # System services are ignored when disabling unless *include_system* is *true*.
+    #
+    # @param [Array] services
+    # @param [Boolean] enable
+    # @param [Array<String>, String] except
+    # @param [Boolean] include_system
+    def set_status(*services, enable, except: nil, include_system: false)
+      if enable
         enable(*services, except: except)
       else
         disable(*services, except: except, include_system: include_system)
       end
     end
 
-    # Sets the enable status from the first argument on the service groups that were passed as arguments
+    # Sets the enable status on the service groups that were passed as arguments
     #
-    # Excludes the service group, or array of service groups, provided in the `except` argument
-    def set_enable_group(*groups, value, except: nil, include_system: false)
-      if value
+    # Excludes the service groups provided in the *except* argument
+    # System services are ignored when disabling unless *include_system* is *true*.
+    #
+    # @param [Array] groups
+    # @param [Boolean] enable
+    # @param [Array<String>, String] except
+    # @param [Boolean] include_system
+    def set_group_status(*groups, enable, except: nil, include_system: false)
+      if enable
         enable_group(*groups, except: except)
       else
         disable_group(*groups, except: except, include_system: include_system)
       end
     end
 
+    # Return a list of system services
+    #
+    # @return [Array] list of services
     def system_services
       find_by_group(SYSTEM_GROUP)
     end
 
+    # Find services by group
+    #
+    # @param [String] group
+    # @return [Array] list of services
     def find_by_group(group)
-      service_list.select { |name, service| service[:groups].include?(group) }
+      service_list.select { |_, metadata| metadata[:groups].include?(group) }.keys
     end
 
+    # List known services along with its associated `groups` metadata
+    #
+    # @return [Hash]
     def service_list
-      # Merge together and cache all the service lists (from the different cookbooks)
-      @service_list ||= [{}, *cookbook_services.dup.values].inject(&:merge)
+      @service_list ||= {}
     end
 
+    # Add services from cookbooks
+    #
+    # @example usage
+    #   Services.add_services('gitlab', Services::BaseServices.list)
+    #
+    # @param [String] cookbook
+    # @param [Hash] services
     def add_services(cookbook, services)
-      # Add services from cookbooks
       cookbook_services[cookbook] = services
+      service_list.merge!(services)
     end
 
-    def reset_list
+    # Reset stored cookbooks and their related services
+    #
+    # @note This is intended to be used in test environment only!
+    def reset_list!
       @cookbook_services = nil
       @service_list = nil
     end
 
+    # Return whether a service is enabled or not
+    #
+    # If service status is set via configuration file that takes precedence, otherwise we
+    # use the computed value instead
+    #
+    # @param [String] service
+    # @return [Boolean] whether is enabled or not
     def enabled?(service)
       user_config = Gitlab[service]['enable']
 
-      # If service is enabled in user-config the user-config value is Used (in case we haven't consumed them into the node yet)
-      # And if no user-config value is found, we check the computed node value
-      if !user_config.nil?
-        user_config
-      else
-        service_status(service)
-      end
+      return user_config unless user_config.nil?
+
+      service_status(service)
     end
 
     private
 
-    def cookbook_services(value = nil)
-      @cookbook_services = value if value
+    def cookbook_services
       @cookbook_services ||= {}
     end
 
-    # Reads/Writes the service enable value in the node.default attributes
-    def service_status(service, value = nil)
-      rservice = service.tr('_', '-')
-
-      service_path = if Gitlab[:node]['monitoring']&.attribute?(rservice)
-                       ['monitoring', rservice]
-                     elsif Gitlab[:node].attribute?(rservice)
-                       [rservice]
-                     else
-                       ['gitlab', rservice]
-                     end
-
-      if value.nil?
-        Gitlab[:node].read(*service_path, 'enable')
-      else
-        Gitlab[:node].write(:default, *service_path, 'enable', value)
-      end
+    # Return whether service is enabled or not
+    #
+    # @param [String] service
+    # @return [Boolean] whether enabled or not
+    def service_status(service)
+      Gitlab[:node].read(*service_attribute_path(service), 'enable')
     end
 
+    # Set service enabled/disabled status
+    #
+    # @param [String] service
+    # @param [Boolean] enabled
+    def set_service_status(service, enabled)
+      Gitlab[:node].write(:default, *service_attribute_path(service), 'enable', enabled)
+    end
+
+    # Return internal path to manipulate service attributes
+    #
+    # @param [String] service_name
+    # @return [Array]
+    def service_attribute_path(service_name)
+      service = service_name.tr('_', '-')
+
+      return ['monitoring', service] if Gitlab[:node]['monitoring']&.attribute?(service)
+      return [service] if Gitlab[:node].attribute?(service)
+
+      ['gitlab', service]
+    end
+
+    # Set status for a list of services considering provided exceptions
+    #
+    # @param [Boolean] enable
+    # @param [Array] services
+    # @param [Array<String>, String] except
     def set_services_status(enable, *services, except: nil)
-      exceptions = [except].flatten
+      exceptions = [*except]
+
       service_list.each do |name, _|
+        # Skip if service is in exceptions list
+        next if exceptions.include?(name)
+
         # Set the service enable config if:
-        #  The current service is not in the list of exceptions
-        #  AND
-        #  The current service was requested to be set, or ALL_SERVICES was
-        #  requested, so we are setting them all
-        service_status(name, enable) if !exceptions.include?(name) && (services.include?(ALL_SERVICES) || services.include?(name))
+        #  The current service was requested to be set
+        #  OR
+        #  ALL_SERVICES was requested, so we are setting them all
+        set_service_status(name, enable) if services.include?(name) || services.include?(ALL_SERVICES)
       end
     end
 
+    # Set status for services related with provided groups considering provided exceptions
+    #
+    # @param [Boolean] enable
+    # @param [Array] groups
+    # @param [Array<String>, String] except
     def set_service_groups_status(enable, *groups, except: nil)
-      exceptions = [except].flatten
-      service_list.each do |name, service|
+      exceptions = [*except]
+
+      service_list.each do |name, metadata|
+        # Skip if service is in exceptions list
+        next if (exceptions & metadata[:groups]).any?
+
         # Find the matching groups among our passed arguments and our current service's groups
-        matching_exceptions = exceptions & service[:groups]
-        matching_groups = groups & service[:groups]
+        matching_groups = groups & metadata[:groups]
 
         # Set the service enable config if:
-        #  The current service has no matching exceptions
-        #  AND
-        #  The current service has matching groups that were requested to be set,
-        #  or ALL_GROUPS was requested, so we are setting them all
-        service_status(name, enable) if matching_exceptions.empty? && (groups.include?(ALL_GROUPS) || !matching_groups.empty?)
+        # The current service has matching groups that were requested to be set
+        # OR
+        # ALL_GROUPS was requested, so we are setting them all
+        set_service_status(name, enable) if matching_groups.any? || groups.include?(ALL_GROUPS)
       end
     end
   end
