@@ -157,6 +157,14 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.28.1.
 
 
+## 13.5.6 (2021-01-07)
+
+### Security (2 changes)
+
+- Patch bundler to not use insecure temp directory as home.
+- Update curl to 7_74_0.
+
+
 ## 13.5.5 (2020-12-07)
 
 ### Security (3 changes)
