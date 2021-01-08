@@ -73,10 +73,13 @@ module GitlabPages
 
       Gitlab['gitlab_pages']['pages_root'] ||= (Gitlab['gitlab_rails']['pages_path'] || File.join(Gitlab['gitlab_rails']['shared_path'], 'pages'))
 
-      pages_uri = URI(Gitlab['pages_external_url'].to_s)
-      Gitlab['gitlab_pages']['auth_redirect_uri'] ||= pages_uri.scheme + '://projects.' + pages_uri.host + '/auth'
       Gitlab['gitlab_pages']['gitlab_server'] ||= Gitlab['external_url']
       Gitlab['gitlab_pages']['artifacts_server_url'] ||= Gitlab['gitlab_pages']['gitlab_server'].chomp('/') + '/api/v4'
+
+      return unless Gitlab['gitlab_pages']['access_control']
+
+      pages_uri = URI(Gitlab['pages_external_url'].to_s)
+      Gitlab['gitlab_pages']['auth_redirect_uri'] ||= pages_uri.scheme + '://projects.' + pages_uri.host + '/auth'
     end
 
     def authorize_with_gitlab
@@ -98,7 +101,7 @@ module GitlabPages
     end
 
     def parse_secrets
-      Gitlab['gitlab_pages']['auth_secret'] ||= SecretsHelper.generate_hex(64)
+      Gitlab['gitlab_pages']['auth_secret'] ||= SecretsHelper.generate_hex(64) if Gitlab['gitlab_pages']['access_control']
 
       # Pages and GitLab expects exactly 32 bytes, encoded with base64
       if Gitlab['gitlab_pages']['api_secret_key']

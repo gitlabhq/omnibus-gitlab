@@ -5,11 +5,17 @@ RSpec.describe 'gitlab::gitlab-pages' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    allow(Etc).to receive(:getpwnam).with('git').and_return(spy('getpwnam spy', uid: 1000, gid: 1000))
   end
 
-  context 'with defaults' do
-    let(:env_dir) { '/opt/gitlab/etc/gitlab-pages/env' }
+  context 'with default values' do
+    it 'does not include Pages recipe' do
+      expect(chef_run).not_to include_recipe('gitlab-pages::enable')
+      expect(chef_run).to include_recipe('gitlab-pages::disable')
+    end
+  end
 
+  context 'with Pages enabled' do
     before do
       stub_gitlab_rb(
         external_url: 'https://gitlab.example.com',
@@ -17,7 +23,11 @@ RSpec.describe 'gitlab::gitlab-pages' do
       )
     end
 
-    it 'creates a default VERSION file and restarts service' do
+    it 'includes Pages recipe' do
+      expect(chef_run).to include_recipe('gitlab-pages::enable')
+    end
+
+    it 'creates a VERSION file and restarts the service' do
       expect(chef_run).to create_version_file('Create version file for Gitlab Pages').with(
         version_file_path: '/var/opt/gitlab/gitlab-pages/VERSION',
         version_check_cmd: '/opt/gitlab/embedded/bin/gitlab-pages --version'
@@ -27,307 +37,247 @@ RSpec.describe 'gitlab::gitlab-pages' do
     end
 
     it 'renders the env dir files' do
-      expect(chef_run).to render_file(File.join(env_dir, "SSL_CERT_DIR"))
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-pages/env/SSL_CERT_DIR')
         .with_content('/opt/gitlab/embedded/ssl/certs')
     end
 
-    it 'correctly renders the pages service run file' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-server="https://gitlab.example.com"})
-
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-proxy="localhost:8090"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-daemon-uid})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-daemon-gid})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-pages-root="/var/opt/gitlab/gitlab-rails/shared/pages"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-pages-domain="pages.example.com"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-redirect-http=false})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-use-http2=true})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server="https://gitlab.example.com/api/v4"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server-timeout=10})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-daemon-inplace-chroot=false})
-
-      # By default we defer to the gitlab-pages default for max-conns
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-max-conns})
-
-      # By default pages access_control is disabled
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-config})
-
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-http})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-cert})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-key})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-metrics-address})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-status-uri})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-log-format="json"})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-insecure-ciphers})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-tls-min-version})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-tls-max-version})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{http_proxy})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-api-secret-key="/var/opt/gitlab/gitlab-pages/.gitlab_pages_secret"})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-client-http-timeout})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-client-jwt-expiry})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-domain-config-source})
+    it 'renders the pages service run file' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-config="/var/opt/gitlab/gitlab-pages/gitlab-pages-config"})
     end
 
-    it 'correctly renders the pages log run file' do
+    it 'renders the pages log run file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/log/run").with_content(%r{exec svlogd /var/log/gitlab/gitlab-pages})
     end
 
     it 'deletes old admin.secret file' do
       expect(chef_run).to delete_file("/var/opt/gitlab/gitlab-pages/admin.secret")
     end
-  end
 
-  context 'with access control without id and secret' do
-    before do
-      stub_gitlab_rb(
-        external_url: 'https://gitlab.example.com',
-        pages_external_url: 'https://pages.example.com',
-        gitlab_pages: {
-          log_verbose: true,
-          auth_secret: 'auth-secret',
-          access_control: true
-        }
-      )
+    it 'renders pages config file' do
+      default_content = <<~EOS
+       pages-domain=pages.example.com
+       pages-root=/var/opt/gitlab/gitlab-rails/shared/pages
+       daemon-uid=1000
+       daemon-gid=1000
+       daemon-inplace-chroot=false
+       api-secret-key=/var/opt/gitlab/gitlab-pages/.gitlab_pages_secret
+       listen-proxy=localhost:8090
+       log-format=json
+       artifacts-server=https://gitlab.example.com/api/v4
+       artifacts-server-timeout=10
+       gitlab-server=https://gitlab.example.com
+      EOS
+
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content(default_content)
     end
 
-    it 'authorizes pages with gitlab' do
-      allow(GitlabPages).to receive(:authorize_with_gitlab) {
-        Gitlab['gitlab_pages']['gitlab_secret'] = 'app_secret'
-        Gitlab['gitlab_pages']['gitlab_id'] = 'app_id'
-      }
+    context 'when access control is enabled' do
+      context 'when access control secrets are not specified' do
+        before do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            pages_external_url: 'https://pages.example.com',
+            gitlab_pages: {
+              access_control: true,
+              auth_secret: 'auth_secret'
+            }
+          )
 
-      expect(chef_run).to run_ruby_block('authorize pages with gitlab')
-        .at_converge_time
-      expect(chef_run).to run_ruby_block('re-populate GitLab Pages configuration options')
-        .at_converge_time
-      expect(GitlabPages).to receive(:authorize_with_gitlab)
+          allow(GitlabPages).to receive(:authorize_with_gitlab) {
+            Gitlab['gitlab_pages']['gitlab_secret'] = 'app_secret'
+            Gitlab['gitlab_pages']['gitlab_id'] = 'app_id'
+          }
+        end
 
-      chef_run.ruby_block('authorize pages with gitlab').block.call
-      chef_run.ruby_block('re-populate GitLab Pages configuration options').block.call
+        it 'authorizes Pages with GitLab' do
+          expect(chef_run).to run_ruby_block('authorize pages with gitlab')
+            .at_converge_time
+          expect(chef_run).to run_ruby_block('re-populate GitLab Pages configuration options')
+            .at_converge_time
+          expect(GitlabPages).to receive(:authorize_with_gitlab)
 
-      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content(%r{auth-client-id=app_id})
-      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content(%r{auth-client-secret=app_secret})
-      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content(%r{auth-redirect-uri=https://projects.pages.example.com/auth})
-      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content(%r{auth-secret=auth-secret})
-    end
-  end
+          chef_run.ruby_block('authorize pages with gitlab').block.call
+          chef_run.ruby_block('re-populate GitLab Pages configuration options').block.call
 
-  context 'with user settings' do
-    let(:env_dir) { '/opt/gitlab/etc/gitlab-pages/env' }
+          expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content { |content|
+            expect(content).to match(%r{auth-client-id=app_id})
+            expect(content).to match(%r{auth-client-secret=app_secret})
+            expect(content).to match(%r{auth-redirect-uri=https://projects.pages.example.com/auth})
+            expect(content).to match(%r{auth-secret=auth_secret})
+          }
+        end
+      end
 
-    before do
-      stub_gitlab_rb(
-        external_url: 'https://gitlab.example.com',
-        pages_external_url: 'https://pages.example.com',
-        gitlab_pages: {
-          external_http: ['external_pages.example.com', 'localhost:9000'],
-          external_https: ['external_pages.example.com', 'localhost:9001'],
-          external_https_proxyv2: ['external_pages.example.com', 'localhost:9002'],
-          metrics_address: 'localhost:1234',
-          redirect_http: true,
-          dir: '/var/opt/gitlab/pages',
-          cert: '/etc/gitlab/pages.crt',
-          artifacts_server_url: "https://gitlab.elsewhere.com/api/v5",
-          artifacts_server_timeout: 60,
-          status_uri: '/@status',
-          max_connections: 7500,
-          inplace_chroot: true,
-          log_format: 'text',
-          log_verbose: true,
-          gitlab_id: 'app_id',
-          gitlab_secret: 'app_secret',
-          auth_secret: 'auth_secret',
-          auth_redirect_uri: 'https://projects.pages.example.com/auth',
-          access_control: true,
-          insecure_ciphers: true,
-          tls_min_version: "tls1.0",
-          tls_max_version: "tls1.2",
-          sentry_enabled: true,
-          sentry_dsn: 'https://b44a0828b72421a6d8e99efd68d44fa8@example.com/40',
-          sentry_environment: 'production',
-          headers: ['X-XSS-Protection: 1; mode=block', 'X-Content-Type-Options: nosniff', 'Test: Header'],
-          gitlab_client_http_timeout: "10s",
-          gitlab_client_jwt_expiry: "30s",
-          domain_config_source: "disk",
-          zip_cache_expiration: "120s",
-          zip_cache_cleanup: "1m",
-          zip_cache_refresh: "60s",
-          zip_open_timeout: "45s",
-          env: {
-            GITLAB_CONTINUOUS_PROFILING: "stackdriver?service=gitlab-pages",
-            http_proxy: "http://example:8081/"
-          },
-        }
-      )
+      context 'when access control secrets are specified' do
+        before do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            pages_external_url: 'https://pages.example.com',
+            gitlab_pages: {
+              access_control: true,
+              gitlab_id: 'app_id',
+              gitlab_secret: 'app_secret',
+              auth_secret: 'auth_secret',
+              auth_redirect_uri: 'https://projects.pages.example.com/auth',
+            }
+          )
+        end
+
+        it 'does not attempt to authorize with GitLab' do
+          expect(chef_run).not_to run_ruby_block('authorize pages with gitlab')
+        end
+
+        it 'renders pages config file' do
+          expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content { |content|
+            expect(content).to match(%r{auth-client-id=app_id})
+            expect(content).to match(%r{auth-client-secret=app_secret})
+            expect(content).to match(%r{auth-redirect-uri=https://projects.pages.example.com/auth})
+            expect(content).to match(%r{auth-secret=auth_secret})
+          }
+        end
+      end
     end
 
-    it 'skip authorize pages with gitlab when id and secret exists' do
-      expect(chef_run).not_to run_ruby_block('authorize pages with gitlab')
-    end
-
-    it 'renders the env dir files' do
-      expect(chef_run).to render_file(File.join(env_dir, "GITLAB_CONTINUOUS_PROFILING"))
-        .with_content('stackdriver?service=gitlab-pages')
-      expect(chef_run).to render_file(File.join(env_dir, "SSL_CERT_DIR"))
-        .with_content('/opt/gitlab/embedded/ssl/certs')
-      expect(chef_run).to render_file(File.join(env_dir, "http_proxy"))
-        .with_content('http://example:8081/')
-    end
-
-    it 'correctly renders the pages service run file' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-server="https://gitlab.example.com"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-proxy="localhost:8090"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-daemon-uid})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-daemon-gid})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-pages-root="/var/opt/gitlab/gitlab-rails/shared/pages"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-pages-domain="pages.example.com"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-redirect-http=true})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-use-http2=true})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-metrics-address="localhost:1234"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-cert="\/etc\/gitlab\/pages.crt"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-http="external_pages.example.com"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-http="localhost:9000"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https="external_pages.example.com"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https="localhost:9001"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-listen-https-proxyv2="localhost:9002"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-root-key})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server="https://gitlab.elsewhere.com/api/v5"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server-timeout=60})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-pages-status="/@status"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-max-conns=7500})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-daemon-inplace-chroot=true})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-log-format})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-config})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-insecure-ciphers})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-tls-min-version="tls1.0"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-tls-max-version="tls1.2"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-sentry-dsn="https://b44a0828b72421a6d8e99efd68d44fa8@example.com/40"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-sentry-environment="production"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="X-XSS-Protection: 1; mode=block"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="X-Content-Type-Options: nosniff"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="Test: Header"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-api-secret-key="/var/opt/gitlab/pages/.gitlab_pages_secret"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-client-http-timeout})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-client-jwt-expiry})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-domain-config-source="disk"})
-    end
-
-    it 'correctly renders the pages log run file' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/log/run").with_content(%r{exec svlogd -tt /var/log/gitlab/gitlab-pages})
-    end
-
-    it 'correctly renders the Pages config file' do
-      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-client-id=app_id})
-      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-client-secret=app_secret})
-      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-redirect-uri=https://projects.pages.example.com/auth})
-      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-secret=auth_secret})
-      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{zip-cache-expiration=120s})
-      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{zip-cache-cleanup=1m})
-      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{zip-cache-refresh=60s})
-      expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{zip-open-timeout=45s})
-    end
-
-    it 'deletes old admin.secret file' do
-      expect(chef_run).to delete_file("/var/opt/gitlab/pages/admin.secret")
-    end
-  end
-
-  context 'with a deprecated http_proxy value specified' do
-    let(:env_dir) { '/opt/gitlab/etc/gitlab-pages/env' }
-
-    before do
-      stub_gitlab_rb(
-        external_url: 'https://gitlab.example.com',
-        pages_external_url: 'https://pages.example.com',
-        gitlab_pages: { http_proxy: "http://example:8080" }
-      )
-    end
-
-    it 'renders the env dir files' do
-      expect(chef_run).to render_file(File.join(env_dir, "http_proxy"))
-        .with_content('http://example:8080')
-    end
-  end
-
-  context 'with internal-gitlab-server set' do
-    before do
-      stub_gitlab_rb(
-        external_url: 'https://gitlab.example.com',
-        pages_external_url: 'https://pages.example.com',
-        gitlab_pages: {
-          internal_gitlab_server: "https://int.gitlab.example.com"
-        }
-      )
-    end
-
-    it 'populates config file with provided value' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-gitlab-server="https://gitlab.example.com"})
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-internal-gitlab-server="https://int.gitlab.example.com"})
-    end
-  end
-
-  context 'with artifacts server disabled' do
-    before do
-      stub_gitlab_rb(
-        external_url: 'https://gitlab.example.com',
-        pages_external_url: 'https://pages.example.com',
-        gitlab_pages: {
-          artifacts_server: false,
-          artifacts_server_url: 'https://gitlab.elsewhere.com/api/v5',
-          artifacts_server_timeout: 60
-        }
-      )
-    end
-
-    it 'correctly renders the pages service run file' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run")
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server=})
-      expect(chef_run).not_to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-artifacts-server-timeout=})
-    end
-  end
-
-  context 'with access control disabled' do
-    before do
-      stub_gitlab_rb(
-        external_url: 'https://gitlab.example.com',
-        pages_external_url: 'https://pages.example.com',
-        gitlab_pages: { access_control: false }
-      )
-    end
-
-    it 'skip authorize pages with gitlab if access control disabled' do
-      expect(chef_run).not_to run_ruby_block('authorize pages with gitlab')
-    end
-
-    it 'correctly renders the pages service run file' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run")
-      expect(chef_run).not_to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-client-id=app_id})
-      expect(chef_run).not_to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-client-secret=app_secret})
-      expect(chef_run).not_to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-redirect-uri='https://projects.pages.example.com/auth'})
-      expect(chef_run).not_to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(%r{auth-secret=auth_secret})
-    end
-
-    it 'does not render the Pages config file' do
-      expect(chef_run).not_to render_file("/var/opt/gitlab/pages/.gitlab_pages_config")
-    end
-  end
-
-  describe 'logrotate settings' do
-    context 'default values' do
-      it_behaves_like 'configured logrotate service', 'gitlab-pages', 'git', 'git'
-    end
-
-    context 'specified username and group' do
+    context 'with custom values' do
       before do
         stub_gitlab_rb(
-          user: {
-            username: 'foo',
-            group: 'bar'
+          external_url: 'https://gitlab.example.com',
+          pages_external_url: 'https://pages.example.com',
+          gitlab_pages: {
+            external_http: ['external_pages.example.com', 'localhost:9000'],
+            external_https: ['external_pages.example.com', 'localhost:9001'],
+            external_https_proxyv2: ['external_pages.example.com', 'localhost:9002'],
+            metrics_address: 'localhost:1234',
+            redirect_http: true,
+            dir: '/var/opt/gitlab/pages',
+            cert: '/etc/gitlab/pages.crt',
+            artifacts_server_url: "https://gitlab.elsewhere.com/api/v5",
+            artifacts_server_timeout: 60,
+            status_uri: '/@status',
+            max_connections: 7500,
+            inplace_chroot: true,
+            log_format: 'text',
+            log_verbose: true,
+            gitlab_id: 'app_id',
+            gitlab_secret: 'app_secret',
+            auth_secret: 'auth_secret',
+            auth_redirect_uri: 'https://projects.pages.example.com/auth',
+            access_control: true,
+            insecure_ciphers: true,
+            tls_min_version: "tls1.0",
+            tls_max_version: "tls1.2",
+            sentry_enabled: true,
+            sentry_dsn: 'https://b44a0828b72421a6d8e99efd68d44fa8@example.com/40',
+            sentry_environment: 'production',
+            headers: ['X-XSS-Protection: 1; mode=block', 'X-Content-Type-Options: nosniff', 'Test: Header'],
+            gitlab_client_http_timeout: "10s",
+            gitlab_client_jwt_expiry: "30s",
+            domain_config_source: "disk",
+            zip_cache_expiration: "120s",
+            zip_cache_cleanup: "1m",
+            zip_cache_refresh: "60s",
+            zip_open_timeout: "45s",
+            internal_gitlab_server: "https://int.gitlab.example.com",
+            env: {
+              GITLAB_CONTINUOUS_PROFILING: "stackdriver?service=gitlab-pages",
+            },
           }
         )
       end
 
-      it_behaves_like 'configured logrotate service', 'gitlab-pages', 'foo', 'bar'
+      it 'renders pages config file in the specified directory' do
+        expected_content = <<~EOS
+            pages-domain=pages.example.com
+            pages-root=/var/opt/gitlab/gitlab-rails/shared/pages
+            daemon-uid=1000
+            daemon-gid=1000
+            daemon-inplace-chroot=true
+            api-secret-key=/var/opt/gitlab/pages/.gitlab_pages_secret
+            auth-client-id=app_id
+            auth-redirect-uri=https://projects.pages.example.com/auth
+            auth-client-secret=app_secret
+            auth-secret=auth_secret
+            zip-cache-expiration=120s
+            zip-cache-cleanup=1m
+            zip-cache-refresh=60s
+            zip-open-timeout=45s
+            listen-proxy=localhost:8090
+            metrics-address=localhost:1234
+            pages-status=/@status
+            max-conns=7500
+            log-format=text
+            log-verbose
+            sentry-dsn=https://b44a0828b72421a6d8e99efd68d44fa8@example.com/40
+            sentry-environment=production
+            use-http2=true
+            artifacts-server=https://gitlab.elsewhere.com/api/v5
+            artifacts-server-timeout=60
+            gitlab-server=https://gitlab.example.com
+            internal-gitlab-server=https://int.gitlab.example.com
+            insecure-ciphers
+            tls-min-version=tls1.0
+            tls-max-version=tls1.2
+            gitlab-client-http-timeout=10s
+            gitlab-client-jwt-expiry=30s
+            domain-config-source=disk
+            listen-http=external_pages.example.com,localhost:9000
+            listen-https=external_pages.example.com,localhost:9001
+            listen-https-proxyv2=external_pages.example.com,localhost:9002
+            root-cert=/etc/gitlab/pages.crt
+            root-key=/etc/gitlab/ssl/pages.example.com.key
+        EOS
+
+        expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(expected_content)
+      end
+
+      it 'specifies headers as arguments in the run file' do
+        expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="X-XSS-Protection: 1; mode=block"})
+        expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="X-Content-Type-Options: nosniff"})
+        expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="Test: Header"})
+      end
+
+      it 'renders the env dir files' do
+        expect(chef_run).to render_file("/opt/gitlab/etc/gitlab-pages/env/GITLAB_CONTINUOUS_PROFILING")
+          .with_content('stackdriver?service=gitlab-pages')
+        expect(chef_run).to render_file("/opt/gitlab/etc/gitlab-pages/env/SSL_CERT_DIR")
+          .with_content('/opt/gitlab/embedded/ssl/certs')
+      end
+
+      context 'when http_proxy is specified' do
+        before do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            pages_external_url: 'https://pages.example.com',
+            gitlab_pages: {
+              http_proxy: 'http://example:8081'
+            }
+          )
+        end
+
+        it 'renders an environment variable file with http_proxy' do
+          expect(chef_run).to render_file("/opt/gitlab/etc/gitlab-pages/env/http_proxy")
+            .with_content('http://example:8081')
+        end
+      end
+    end
+
+    describe 'logrotate settings' do
+      context 'default values' do
+        it_behaves_like 'configured logrotate service', 'gitlab-pages', 'git', 'git'
+      end
+
+      context 'specified username and group' do
+        before do
+          stub_gitlab_rb(
+            user: {
+              username: 'foo',
+              group: 'bar'
+            }
+          )
+        end
+
+        it_behaves_like 'configured logrotate service', 'gitlab-pages', 'foo', 'bar'
+      end
     end
   end
 end

@@ -1,8 +1,104 @@
-<%= "auth-client-id=#{ @auth_client_id }" if @auth_client_id %>
-<%= "auth-redirect-uri=#{ @auth_redirect_uri }" if @auth_redirect_uri %>
-<%= "auth-client-secret=#{ @auth_client_secret }" if @auth_client_secret %>
-<%= "auth-secret=#{ @auth_secret }" if @auth_secret %>
-<%= "zip-cache-expiration=#{ @zip_cache_expiration }" if @zip_cache_expiration %>
-<%= "zip-cache-cleanup=#{ @zip_cache_cleanup }" if @zip_cache_cleanup %>
-<%= "zip-cache-refresh=#{ @zip_cache_refresh }" if @zip_cache_refresh %>
-<%= "zip-open-timeout=#{ @zip_open_timeout }" if @zip_open_timeout %>
+pages-domain=<%= @domain %>
+pages-root=<%= @pages_root %>
+daemon-uid=<%= Etc.getpwnam(node['gitlab']['user']['username']).uid %>
+daemon-gid=<%= Etc.getpwnam(node['gitlab']['user']['username']).gid %>
+daemon-inplace-chroot=<%= @inplace_chroot %>
+api-secret-key=<%= @api_secret_key_path %>
+<%- if @gitlab_id -%>
+auth-client-id=<%= @gitlab_id %>
+<%- end -%>
+<%- if @auth_redirect_uri -%>
+auth-redirect-uri=<%= @auth_redirect_uri %>
+<%- end -%>
+<%- if @gitlab_secret -%>
+auth-client-secret=<%= @gitlab_secret %>
+<%- end -%>
+<%- if @auth_secret -%>
+auth-secret=<%= @auth_secret %>
+<%- end -%>
+<%- if @zip_cache_expiration -%>
+zip-cache-expiration=<%= @zip_cache_expiration %>
+<%- end -%>
+<%- if @zip_cache_cleanup-%>
+zip-cache-cleanup=<%= @zip_cache_cleanup %>
+<%- end -%>
+<%- if @zip_cache_refresh-%>
+zip-cache-refresh=<%= @zip_cache_refresh %>
+<%- end -%>
+<%- if @zip_open_timeout-%>
+zip-open-timeout=<%= @zip_open_timeout %>
+<%- end -%>
+<%- if @listen_proxy-%>
+listen-proxy=<%= @listen_proxy %>
+<%- end -%>
+<%- if @metrics_address-%>
+metrics-address=<%= @metrics_address %>
+<%- end -%>
+<%- if @status_uri -%>
+pages-status=<%= @status_uri %>
+<%- end -%>
+<%- if @max_connections -%>
+max-conns=<%= @max_connections %>
+<%- end -%>
+<%- if @log_format -%>
+log-format=<%= @log_format %>
+<%- end -%>
+<%- if @log_verbose -%>
+log-verbose
+<%- end -%>
+<%- if @sentry_enabled -%>
+<%-   if @sentry_dsn-%>
+sentry-dsn=<%= @sentry_dsn %>
+<%-   end -%>
+<%-   if @sentry_environment-%>
+sentry-environment=<%= @sentry_environment %>
+<%-   end -%>
+<%- end -%>
+<%- if @redirect_http-%>
+use-http2=<%= @redirect_http %>
+<%- end -%>
+<%- if @artifacts_server -%>
+<%-   if @artifacts_server_url-%>
+artifacts-server=<%= @artifacts_server_url %>
+<%-   end -%>
+<%-   if @artifacts_server_timeout -%>
+artifacts-server-timeout=<%= @artifacts_server_timeout %>
+<%-   end -%>
+<%- end -%>
+<%- if @gitlab_server -%>
+gitlab-server=<%= @gitlab_server %>
+<%- end -%>
+<%- if @internal_gitlab_server -%>
+internal-gitlab-server=<%= @internal_gitlab_server %>
+<%- end -%>
+<%- if @insecure_ciphers -%>
+insecure-ciphers
+<%- end -%>
+<%- if @tls_min_version -%>
+tls-min-version=<%= @tls_min_version %>
+<%- end -%>
+<%- if @tls_max_version-%>
+tls-max-version=<%= @tls_max_version %>
+<%- end -%>
+<%- if @gitlab_client_http_timeout -%>
+gitlab-client-http-timeout=<%= @gitlab_client_http_timeout %>
+<%- end -%>
+<%- if @gitlab_client_jwt_expiry -%>
+gitlab-client-jwt-expiry=<%= @gitlab_client_jwt_expiry %>
+<%- end -%>
+<%- if @domain_config_source -%>
+domain-config-source=<%= @domain_config_source %>
+<%- end -%>
+<%- unless @pages_external_http.empty? -%>
+listen-http=<%= @pages_external_http.join(',') %>
+<%- end -%>
+<%- unless @pages_external_https.empty? -%>
+listen-https=<%= @pages_external_https.join(',') %>
+<%- end -%>
+<%- unless @pages_external_https_proxyv2.empty? -%>
+listen-https-proxyv2=<%= @pages_external_https_proxyv2.join(',') %>
+<%- end -%>
+<%- unless @pages_external_https.empty? && @pages_external_https_proxyv2.empty? -%>
+root-cert=<%= @cert %>
+root-key=<%= @cert_key %>
+<%- end -%>
