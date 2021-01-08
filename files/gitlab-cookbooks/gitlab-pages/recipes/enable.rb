@@ -21,6 +21,7 @@ working_dir = node['gitlab-pages']['dir']
 log_directory = node['gitlab-pages']['log_directory']
 env_directory = node['gitlab-pages']['env_directory']
 gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
+pages_secret_path = File.join(working_dir, ".gitlab_pages_secret")
 
 [
   working_dir,
@@ -65,7 +66,7 @@ file File.join(working_dir, "admin.secret") do
   action :delete
 end
 
-template File.join(working_dir, ".gitlab_pages_secret") do
+template pages_secret_path do
   source "secret_token.erb"
   owner 'root'
   group account_helper.gitlab_group
@@ -82,15 +83,12 @@ template File.join(working_dir, "gitlab-pages-config") do
   variables(
     lazy do
       {
-        auth_client_id: node['gitlab-pages']['gitlab_id'],
-        auth_client_secret: node['gitlab-pages']['gitlab_secret'],
-        auth_redirect_uri: node['gitlab-pages']['auth_redirect_uri'],
-        auth_secret: node['gitlab-pages']['auth_secret'],
-        zip_cache_expiration: node['gitlab-pages']['zip_cache_expiration'],
-        zip_cache_cleanup: node['gitlab-pages']['zip_cache_cleanup'],
-        zip_cache_refresh: node['gitlab-pages']['zip_cache_refresh'],
-        zip_open_timeout: node['gitlab-pages']['zip_open_timeout']
-      }
+        pages_external_http: [node['gitlab-pages']['external_http']].flatten.compact,
+        pages_external_https: [node['gitlab-pages']['external_https']].flatten.compact,
+        pages_external_https_proxyv2: [node['gitlab-pages']['external_https_proxyv2']].flatten.compact,
+        pages_headers: [node['gitlab-pages']['headers']].flatten.compact,
+        api_secret_key_path: pages_secret_path
+      }.merge(node['gitlab-pages'].to_hash)
     end
   )
   notifies :restart, "runit_service[gitlab-pages]"

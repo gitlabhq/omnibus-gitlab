@@ -1,0 +1,5 @@
+---
+title: Generate Pages access control secrets only if access control is enabled
+merge_request: 4842
+author:
+type: changed
