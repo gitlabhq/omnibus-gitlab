@@ -37,21 +37,6 @@ probes:
     <<: *db_common
 <% end -%>
 
-  process: &process
-    methods:
-      - probe_stat
-      - probe_count
-    opts:
-      - pid_or_pattern: "sidekiq .* \\[.*?\\]"
-        name: sidekiq
-      - pid_or_pattern: "gitlab-puma-worker"
-        name: puma
-      - pid_or_pattern: "unicorn.* worker\\[.*?\\]"
-        name: unicorn
-      - pid_or_pattern: "git-upload-pack --stateless-rpc"
-        name: git_upload_pack
-        quantiles: true
-
 <% if @probe_sidekiq %>
   sidekiq: &sidekiq
     methods:
@@ -68,8 +53,6 @@ probes:
     multiple: true
     git_process:
       <<: *git_process
-    process:
-      <<: *process
 <% if @probe_sidekiq %>
     sidekiq:
       <<: *sidekiq

@@ -1,0 +1,5 @@
+---
+title: 'Remove `process_*` metrics from probes config'
+merge_request: 4853
+author:
+type: removed
