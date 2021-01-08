@@ -101,6 +101,7 @@ default['gitlab']['pgbouncer-exporter'] = Gitlab::Deprecations::NodeAttribute.ne
 default['monitoring']['gitlab-exporter']['enable'] = false
 default['monitoring']['gitlab-exporter']['log_directory'] = "/var/log/gitlab/gitlab-exporter"
 default['monitoring']['gitlab-exporter']['home'] = "/var/opt/gitlab/gitlab-exporter"
+default['monitoring']['gitlab-exporter']['server_name'] = 'webrick'
 default['monitoring']['gitlab-exporter']['listen_address'] = 'localhost'
 default['monitoring']['gitlab-exporter']['listen_port'] = '9168'
 default['monitoring']['gitlab-exporter']['probe_sidekiq'] = true

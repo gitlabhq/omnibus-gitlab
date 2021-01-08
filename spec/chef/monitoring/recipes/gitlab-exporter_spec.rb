@@ -38,9 +38,13 @@ RSpec.describe 'monitoring::gitlab-exporter' do
 
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
         .with_content { |content|
-          expect(content).to match(/database:/)
-          expect(content).to match(/metrics:/)
-          expect(content).to match(/rows_count/)
+          # Not disabling this Cop fails the test with:
+          # Psych::BadAlias: Unknown alias: db_common
+          settings = YAML.load(content) # rubocop:disable Security/YAMLLoad
+          expect(settings.dig('server', 'name')).to eq('webrick')
+          expect(settings.dig('probes', 'database')).not_to be_nil
+          expect(settings.dig('probes', 'metrics', 'rows_count')).not_to be_nil
+
           expect(content).to match(/host=\/var\/opt\/gitlab\/postgresql/)
           expect(content).to match(/redis_enable_client: true/)
         }
