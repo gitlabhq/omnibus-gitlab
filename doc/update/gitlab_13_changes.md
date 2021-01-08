@@ -76,3 +76,15 @@ To opt out you must execute the following before performing the upgrade of GitLa
 ```shell
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
+
+<!-- disabling this rule because it fails on gitlab-exporter -->
+<!-- markdownlint-disable MD044 -->
+### Removal of process metrics from gitlab-exporter
+
+Process-related metrics emitted from gitlab-exporter have been retired. These metrics are now exported
+from application processes directly. No further action is required, unless an installation is purely
+ingesting metrics from gitlab-exporter, which is not the default behavior. In that case,
+[change your scrape configuration](https://docs.gitlab.com/ee/administration/monitoring/prometheus/#adding-custom-scrape-configurations)
+to ingest metrics from the [application's own metrics endpoints](https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_metrics.html)
+instead.
+<!-- markdownlint-enable MD044 -->

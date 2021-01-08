@@ -41,7 +41,6 @@ RSpec.describe 'monitoring::gitlab-exporter' do
           expect(content).to match(/database:/)
           expect(content).to match(/metrics:/)
           expect(content).to match(/rows_count/)
-          expect(content).to match(/git-upload-pack/)
           expect(content).to match(/host=\/var\/opt\/gitlab\/postgresql/)
           expect(content).to match(/redis_enable_client: true/)
         }
