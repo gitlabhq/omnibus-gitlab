@@ -679,7 +679,7 @@ properly. Before rolling out a policy, you may also want to change
 
 ## Setting initial root password on installation
 
-The initial password for the user `root` can be set at the installation time with the environment variable `GITLAB_ROOT_PASSWORD.
+The initial password for the user `root` can be set at the installation time with the environment variable `GITLAB_ROOT_PASSWORD`.
 
 For example:
 
