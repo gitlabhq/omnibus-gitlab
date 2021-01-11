@@ -348,6 +348,7 @@ default['gitlab']['gitlab-rails']['forti_token_cloud_client_id'] = nil
 default['gitlab']['gitlab-rails']['forti_token_cloud_client_secret'] = nil
 
 default['gitlab']['gitlab-rails']['shared_path'] = "/var/opt/gitlab/gitlab-rails/shared"
+default['gitlab']['gitlab-rails']['encrypted_settings_path'] = nil
 
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
 default['gitlab']['gitlab-rails']['manage_backup_path'] = true
