@@ -206,7 +206,7 @@ GEM
     ipaddress (0.8.3)
     jaro_winkler (1.5.4)
     jmespath (1.4.0)
-    json (2.0.2)
+    json (2.5.1)
     json_pure (1.8.1)
     jwt (2.1.0)
     knapsack (1.17.1)
