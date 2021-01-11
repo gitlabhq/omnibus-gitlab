@@ -1,5 +1,6 @@
 #
 # Copyright 2012-2015 Chef Software, Inc.
+# Copyright 2017-2021 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,9 +25,7 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-dependency 'ruby'
 dependency 'rubygems'
-dependency 'bundler'
 
 source git: version.remote
 
