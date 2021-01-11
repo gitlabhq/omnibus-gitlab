@@ -762,7 +762,7 @@ sudo systemctl restart gitlab-runsvdir
 When starting up GitLab, if an error similar to the following is observed:
 
 ```ruby
-FATAL: Errno::EAFNOSUPPORT: Address family not supported by protocol - socket(2) 
+FATAL: Errno::EAFNOSUPPORT: Address family not supported by protocol - socket(2)
 ```
 
 Check if the hostnames in use are resolvable and **IPv4**
