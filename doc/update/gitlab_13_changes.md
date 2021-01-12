@@ -26,6 +26,30 @@ PostgreSQL 9.6 and 10 [have been removed from](https://gitlab.com/gitlab-org/omn
 the package. Follow [the documentation](../settings/database.md#upgrade-packaged-postgresql-server)
 on how to upgrade the packaged PostgreSQL server to required version.
 
+### Alertmanager moved from the `gitlab` namespace to `monitoring`
+
+In `/etc/gitlab/gitlab.rb`, change:
+
+```ruby
+alertmanager['flags'] = {
+  'cluster.advertise-address' => "127.0.0.1:9093",
+  'web.listen-address' => "#{node['gitlab']['alertmanager']['listen_address']}",
+  'storage.path' => "#{node['gitlab']['alertmanager']['home']}/data",
+  'config.file' => "#{node['gitlab']['alertmanager']['home']}/alertmanager.yml"
+}
+```
+
+to:
+
+```ruby
+alertmanager['flags'] = {
+  'cluster.advertise-address' => "127.0.0.1:9093",
+  'web.listen-address' => "#{node['monitoring']['alertmanager']['listen_address']}",
+  'storage.path' => "#{node['monitoring']['alertmanager']['home']}/data",
+  'config.file' => "#{node['monitoring']['alertmanager']['home']}/alertmanager.yml"
+}
+```
+
 ## 13.3
 
 ### PostgreSQL 12.3 support
