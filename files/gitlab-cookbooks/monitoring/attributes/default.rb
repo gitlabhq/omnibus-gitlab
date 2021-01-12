@@ -91,6 +91,9 @@ default['monitoring']['pgbouncer-exporter']['env_directory'] = '/opt/gitlab/etc/
 default['monitoring']['pgbouncer-exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
+# TODO: Remove PgBouncer exporter deprecation in GitLab 14
+# https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5926
+default['gitlab']['pgbouncer-exporter'] = Gitlab::Deprecations::NodeAttribute.new(-> { node['monitoring']['pgbouncer-exporter'].to_h }, "node['gitlab']['pgbouncer-exporter']", "node['monitoring']['pgbouncer-exporter']")
 
 ####
 # Gitlab exporter
