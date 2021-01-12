@@ -214,15 +214,15 @@
   expire_in: 7 days
 
 .branch-cache: &branch-cache
-  key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}"
+  key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}-v1"
   paths:
   - cache
   - gems
   - assets_cache
-  - .yarn-cache
+  - node_modules
 
 .tag-cache: &tag-cache
-  key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+  key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}-v1"
   <<: *branch-cache
 
 .branch_template: &branch_build

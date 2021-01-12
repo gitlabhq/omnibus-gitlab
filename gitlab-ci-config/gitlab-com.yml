@@ -340,12 +340,12 @@ Trigger:package:
     reports:
       junit: junit_ci_rspec.xml
   cache:
-    key: "Ubuntu-16.04-branch-${BUILDER_IMAGE_REVISION}"
+    key: "Ubuntu-16.04-branch-${BUILDER_IMAGE_REVISION}-v1"
     paths:
     - cache
     - gems
     - assets_cache
-    - .yarn-cache
+    - node_modules
   tags:
     - triggered-packages
 
