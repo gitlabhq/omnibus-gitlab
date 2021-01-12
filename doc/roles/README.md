@@ -129,7 +129,7 @@ Documentation on the usage of the PostgreSQL Roles can be found in [Configuring 
 
 GitLab Pages roles are used to setup and configure GitLab Pages. For additional
 information, see the
-[GitLab Pages Administration documentation](https://docs.gitlab.com/ee/administration/pages)
+[GitLab Pages Administration documentation](https://docs.gitlab.com/ee/administration/pages/index.html)
 
 - **pages_role** (`gitlab-ce`/`gitlab-ee`)
 

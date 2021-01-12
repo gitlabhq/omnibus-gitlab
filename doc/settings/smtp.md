@@ -319,7 +319,7 @@ gitlab_rails['smtp_tls'] = false
 
 ### SendGrid with API Key authentication
 
-If you don't want to supply a username/password, you can use an [API key](https://sendgrid.com/docs/API_Reference/SMTP_API/integrating_with_the_smtp_api.html#-Integrating-with-Sendgrid):
+If you don't want to supply a username/password, you can use an [API key](https://sendgrid.com/docs/for-developers/sending-email/getting-started-smtp/):
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
