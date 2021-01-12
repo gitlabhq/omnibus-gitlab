@@ -18,10 +18,10 @@
 account_helper = AccountHelper.new(node)
 pgb_helper = PgbouncerHelper.new(node)
 postgresql_user = account_helper.postgresql_user
-pgbouncer_exporter_log_dir = node['gitlab']['pgbouncer-exporter']['log_directory']
-pgbouncer_exporter_listen_address = node['gitlab']['pgbouncer-exporter']['listen_address']
+pgbouncer_exporter_log_dir = node['monitoring']['pgbouncer-exporter']['log_directory']
+pgbouncer_exporter_listen_address = node['monitoring']['pgbouncer-exporter']['listen_address']
 pgbouncer_connection_string = pgb_helper.pgbouncer_admin_config
-pgbouncer_exporter_static_etc_dir = node['gitlab']['pgbouncer-exporter']['env_directory']
+pgbouncer_exporter_static_etc_dir = node['monitoring']['pgbouncer-exporter']['env_directory']
 
 include_recipe 'postgresql::user'
 
@@ -38,7 +38,7 @@ directory pgbouncer_exporter_static_etc_dir do
 end
 
 env_dir pgbouncer_exporter_static_etc_dir do
-  variables node['gitlab']['pgbouncer-exporter']['env']
+  variables node['monitoring']['pgbouncer-exporter']['env']
   notifies :restart, "runit_service[pgbouncer-exporter]"
 end
 
@@ -50,7 +50,7 @@ runit_service 'pgbouncer-exporter' do
     log_directory: pgbouncer_exporter_log_dir,
     env_dir: pgbouncer_exporter_static_etc_dir
   )
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['pgbouncer-exporter'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['monitoring']['pgbouncer-exporter'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']

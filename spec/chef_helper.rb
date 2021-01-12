@@ -86,6 +86,6 @@ RSpec.configure do |config|
     Gitlab['geo_postgresql']['dir'] = '/var/opt/gitlab/geo-postgresql'
 
     # Clear services list before each test
-    Services.reset_list
+    Services.reset_list!
   end
 end

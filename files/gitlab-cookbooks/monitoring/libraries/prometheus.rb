@@ -25,7 +25,7 @@ require 'json'
 module Prometheus
   class << self
     def services
-      Services.find_by_group('monitoring').map { |name, _| name.tr('_', '-') }
+      Services.find_by_group('monitoring').map { |name| name.tr('_', '-') }
     end
 
     def parse_variables
@@ -45,8 +45,8 @@ module Prometheus
 
     def parse_exporter_enabled
       # Disable exporters by default if their service is not managed on this node
-      Services.set_enable('postgres_exporter', Postgresql.postgresql_managed?) if Gitlab['postgres_exporter']['enable'].nil?
-      Services.set_enable('redis_exporter', Redis.redis_managed?) if Gitlab['redis_exporter']['enable'].nil?
+      Services.set_status('postgres_exporter', Postgresql.postgresql_managed?) if Gitlab['postgres_exporter']['enable'].nil?
+      Services.set_status('redis_exporter', Redis.redis_managed?) if Gitlab['redis_exporter']['enable'].nil?
     end
 
     def parse_flags

@@ -15,7 +15,7 @@
 #
 require 'chef_helper'
 
-RSpec.describe 'gitlab-ee::pgbouncer-exporter' do
+RSpec.describe 'monitoring::pgbouncer-exporter' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
   let(:config_yaml) { '/var/opt/gitlab/pgbouncer-exporter/pgbouncer-exporter.yaml' }
   let(:default_vars) do
@@ -50,7 +50,7 @@ RSpec.describe 'gitlab-ee::pgbouncer-exporter' do
     end
 
     it 'includes the pgbouncer-exporter recipe' do
-      expect(chef_run).to include_recipe('gitlab-ee::pgbouncer-exporter')
+      expect(chef_run).to include_recipe('monitoring::pgbouncer-exporter')
     end
 
     it 'includes the postgresql user recipe' do
@@ -65,6 +65,24 @@ RSpec.describe 'gitlab-ee::pgbouncer-exporter' do
 
     it 'creates the appropriate directories' do
       expect(chef_run).to create_directory('/var/log/gitlab/pgbouncer-exporter')
+    end
+  end
+
+  describe 'attribute deprecation' do
+    before do
+      Gitlab::Deprecations::NodeAttribute.log_deprecations = true
+    end
+
+    after do
+      Gitlab::Deprecations::NodeAttribute.log_deprecations = false
+    end
+
+    it "logs deprecation for node['gitlab']['pgbouncer-exporter'] and proxies to node['monitoring']['pgbouncer-exporter']" do
+      node = chef_run.node
+
+      expect(LoggingHelper).to receive(:deprecation).with(/Accessing node\['gitlab'\]\['pgbouncer-exporter'\] is deprecated/)
+
+      expect(node['gitlab']['pgbouncer-exporter']['listen_address']).to eq(node['monitoring']['pgbouncer-exporter']['listen_address'])
     end
   end
 end
