@@ -103,6 +103,21 @@ class OmnibusHelper
     LoggingHelper.note(msg)
   end
 
+  def check_invalid_pg_ha
+    return unless Services.enabled?('repmgr') && Services.enabled?('repmgrd')
+
+    geo_pg_helper = GeoPgHelper.new(node)
+    pg_helper = PgHelper.new(node)
+
+    main_db_version = pg_helper.database_version if Services.enabled?('postgresql')
+    geo_db_version = geo_pg_helper.database_version if Services.enabled?('geo_postgresql')
+    db_version = node['postgresql']['version'] || main_db_version || geo_db_version
+
+    return unless db_version.nil? || db_version.to_f >= 12
+
+    raise 'The included Repmgr is not supported on PostgreSQL 12, please use Patroni: https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html'
+  end
+
   def self.utf8_variable?(var)
     ENV[var]&.downcase&.include?('utf-8') || ENV[var]&.downcase&.include?('utf8')
   end

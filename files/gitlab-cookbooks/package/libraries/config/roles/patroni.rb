@@ -1,4 +1,4 @@
-# Copyright:: Copyright (c) 2017 GitLab Inc.
+# Copyright:: Copyright (c) 2021 GitLab Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +14,10 @@
 # limitations under the License.
 #
 
-module PostgresRole
+module PatroniRole
   def self.load_role
-    return unless Gitlab['postgres_role']['enable']
+    return unless Gitlab['patroni_role']['enable']
 
-    Gitlab['repmgr']['enable'] = true if !Gitlab['patroni']['enable'] && !Gitlab['patroni_role']['enable'] && Gitlab['repmgr']['enable'].nil?
-    Services.enable_group('postgres_role')
+    Services.enable_group('patroni_role')
   end
 end

@@ -29,6 +29,10 @@ OmnibusHelper.check_deprecations
 OmnibusHelper.check_environment
 OmnibusHelper.check_locale
 
+# Setup additional postgresql attributes
+include_recipe 'postgresql::directory_locations'
+OmnibusHelper.new(node).check_invalid_pg_ha
+
 directory "/etc/gitlab" do
   owner "root"
   group "root"

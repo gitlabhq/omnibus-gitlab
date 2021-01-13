@@ -113,6 +113,12 @@ Documentation on the usage of the PostgreSQL Roles can be found in [Configuring 
 
   *By default, enables no other services.*
 
+- **patroni_role** (`gitlab-ee`)
+
+  Enables the PostgreSQL, patroni, and Consul services on the machine
+
+  *By default, enables no other services.*
+
 - **pgbouncer_role** (`gitlab-ee`)
 
   Enables the PgBouncer and Consul services on the machine

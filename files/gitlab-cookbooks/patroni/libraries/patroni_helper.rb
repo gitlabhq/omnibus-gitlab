@@ -77,7 +77,7 @@ class PatroniHelper < BaseHelper
   end
 
   def public_attributes
-    return {} unless Gitlab['patroni']['enable']
+    return {} unless node['patroni']['enable']
 
     {
       'patroni' => {

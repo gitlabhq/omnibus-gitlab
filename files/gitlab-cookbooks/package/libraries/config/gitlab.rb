@@ -38,6 +38,7 @@ module Gitlab
   role('monitoring').use { MonitoringRole }
   role('postgres').use { PostgresRole }
   role('pgbouncer').use { PgbouncerRole }
+  role('patroni').use { PatroniRole }
   role('consul').use { ConsulRole }
   role('pages').use { PagesRole }
 
