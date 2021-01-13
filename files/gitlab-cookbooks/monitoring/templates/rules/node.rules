@@ -25,7 +25,7 @@ groups:
   - record: instance:node_filesystem_avail:ratio
     expr: node_filesystem_avail_bytes / (node_filesystem_size_bytes > 0)
   - alert: FilesystemAlmostFull
-    expr: instance:node_filesystem_avail:ratio * 100 < 5
+    expr: instance:node_filesystem_avail:ratio * 100 < 5 and node_filesystem_avail_bytes < 10 * 1024 * 1024 * 1024
     for: 10m
     annotations:
       description: The filesystem {{ $labels.device }}:{{ $labels.mountpoint }} on
