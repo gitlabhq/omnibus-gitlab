@@ -3,7 +3,7 @@
 require 'chef_helper'
 
 RSpec.describe 'Redis' do
-  let(:chef_run) { converge_config }
+  let(:chef_run) { converge_config(is_ee: true) }
   let(:node) { chef_run.node }
   subject { ::Redis }
   before do

@@ -174,11 +174,15 @@ RSpec.describe Services do
   end
 
   describe '.enabled?' do
+    before do
+      chef_run.converge('gitlab::default')
+    end
+
     context 'when status is set via configuration file' do
       it 'returns true if set as enabled' do
-        Gitlab['consul']['enable'] = true
+        Gitlab['mailroom']['enable'] = true
 
-        expect(services.enabled?('consul')).to be_truthy
+        expect(services.enabled?('mailroom')).to be_truthy
       end
 
       it 'returns false if set as disabled' do
@@ -189,10 +193,6 @@ RSpec.describe Services do
     end
 
     context 'when status is not set via configuration file' do
-      before do
-        chef_run.converge('gitlab::default')
-      end
-
       it 'returns true when its enabled via cookbooks' do
         expect(services.enabled?('puma')).to be_truthy
       end
