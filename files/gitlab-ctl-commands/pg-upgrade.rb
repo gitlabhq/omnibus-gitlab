@@ -157,7 +157,7 @@ add_command_under_category 'pg-upgrade', 'database',
     @attributes['postgresql']['version'].nil?
   end
     log "postgresql['version'] is set in /etc/gitlab/gitlab.rb. Not checking for a PostgreSQL upgrade"
-    deprecation_message if @attributes['postgresql']['version'].to_f < 11
+    deprecation_message if @attributes['postgresql']['version'].to_f < 12
     Kernel.exit 0
   end
 
@@ -176,7 +176,7 @@ add_command_under_category 'pg-upgrade', 'database',
     Kernel.exit 0
   end
 
-  deprecation_message if @db_worker.target_version.major.to_f < 11
+  deprecation_message if @db_worker.target_version.major.to_f < 12
 
   if @db_worker.target_version.major.to_f >= 12 && service_enabled?('repmgrd')
     error_messsage = <<~EOF
@@ -848,8 +848,10 @@ end
 
 def deprecation_message
   log '=== WARNING ==='
-  log 'Note that PostgreSQL 11 will become the minimum required PostgreSQL version in GitLab 13.0 (May 2020).'
-  log 'PostgreSQL 9.6 and PostgreSQL 10 will be removed in GitLab 13.0.'
+  log "Note that PostgreSQL #{default_version.major} will become the minimum required PostgreSQL version in GitLab 14.0 (May 2021)."
+  log 'See docs for more information: https://docs.gitlab.com/omnibus/settings/database.html#gitlab-137-and-later'
+  log "PostgreSQL #{old_version.major} will be removed in GitLab 14.0."
+  log 'Please consider upgrading your PostgreSQL version soon.'
   log 'To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
   log '=== WARNING ==='
 end
