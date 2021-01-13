@@ -8,7 +8,7 @@ RSpec.describe 'postgresql_config' do
     end
   end
 
-  let(:chef_run) { runner.converge('test_postgresql::postgresql_config') }
+  let(:chef_run) { runner.converge('gitlab::config', 'test_postgresql::postgresql_config') }
 
   before do
     allow_any_instance_of(PgHelper).to receive(:postgresql_user).and_return('fakeuser')

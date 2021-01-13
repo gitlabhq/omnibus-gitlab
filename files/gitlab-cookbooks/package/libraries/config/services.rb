@@ -29,11 +29,11 @@ module Services
     service 'gitaly',             groups: [DEFAULT_GROUP, 'rails']
     service 'redis',              groups: [DEFAULT_GROUP, 'redis', 'redis_node']
     service 'redis_exporter',     groups: [DEFAULT_GROUP, 'redis', 'redis_node', 'monitoring']
-    service 'postgresql',         groups: [DEFAULT_GROUP, 'postgres', 'postgres_role']
+    service 'postgresql',         groups: [DEFAULT_GROUP, 'postgres', 'postgres_role', 'patroni_role']
     service 'nginx',              groups: [DEFAULT_GROUP, 'pages_role']
     service 'prometheus',         groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
     service 'alertmanager',       groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
-    service 'postgres_exporter',  groups: [DEFAULT_GROUP, 'monitoring', 'postgres', 'postgres_role']
+    service 'postgres_exporter',  groups: [DEFAULT_GROUP, 'monitoring', 'postgres', 'postgres_role', 'patroni_role']
     service 'grafana',            groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
     service 'gitlab_pages',       groups: ['pages_role']
     service 'mailroom'
@@ -55,8 +55,8 @@ module Services
     service 'pgbouncer',          groups: %w(postgres pgbouncer_role)
     service 'pgbouncer_exporter', groups: %w(pgbouncer_role)
     service 'repmgrd',            groups: %w(postgres postgres_role)
-    service 'patroni',            groups: %w(postgres)
-    service 'consul',             groups: %w(consul_role ha pgbouncer_role postgres_role)
+    service 'patroni',            groups: %w(postgres patroni_role)
+    service 'consul',             groups: %w(consul_role ha pgbouncer_role postgres_role patroni_role)
     service 'sidekiq_cluster',    groups: ['sidekiq']
   end
 end

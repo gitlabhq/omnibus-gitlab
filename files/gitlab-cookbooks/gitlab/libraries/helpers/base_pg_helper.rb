@@ -291,15 +291,15 @@ class BasePgHelper < BaseHelper
     # When Patroni is enabled, the configuration of PostgreSQL instance must be delegated to it.
     # PostgreSQL cookbook skips some of the steps that are must be done either during or after
     # Patroni bootstraping.
-    Gitlab['patroni']['enable'] && !Gitlab['repmgr']['enable']
+    node['patroni']['enable'] && !Gitlab['repmgr']['enable']
   end
 
   def config_dir
-    Gitlab['patroni']['enable'] ? node['patroni']['data_dir'] : node['postgresql']['data_dir']
+    node['patroni']['enable'] ? node['patroni']['data_dir'] : node['postgresql']['data_dir']
   end
 
   def postgresql_config
-    ::File.join(config_dir, "postgresql#{Gitlab['patroni']['enable'] ? '.base' : ''}.conf")
+    ::File.join(config_dir, "postgresql#{node['patroni']['enable'] ? '.base' : ''}.conf")
   end
 
   def postgresql_runtime_config

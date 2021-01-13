@@ -14,10 +14,46 @@ RSpec.describe 'patroni cookbook' do
     expect(chef_run).to include_recipe('patroni::disable')
   end
 
+  context 'when postgres_role is enabled' do
+    before do
+      stub_gitlab_rb(roles: %w(postgres_role))
+    end
+
+    it 'should be disabled while repmgr is enabled' do
+      expect(chef_run).to include_recipe('repmgr::enable')
+      expect(chef_run).to include_recipe('patroni::disable')
+    end
+  end
+
+  context 'when patroni_role is enabled' do
+    before do
+      stub_gitlab_rb(roles: %w(patroni_role))
+    end
+
+    it 'should be enabled while repmgr is disabled' do
+      expect(chef_run).to include_recipe('repmgr::disable')
+      expect(chef_run).to include_recipe('patroni::enable')
+    end
+  end
+
+  context 'when patroni_role and postgres_role is enabled' do
+    before do
+      stub_gitlab_rb(roles: %w(postgres_role patroni_role))
+    end
+
+    it 'should be enabled while repmgr is disabled' do
+      expect(chef_run).to include_recipe('repmgr::disable')
+      expect(chef_run).to include_recipe('patroni::enable')
+    end
+  end
+
   context 'when repmgr is enabled' do
     before do
       stub_gitlab_rb(
-        roles: %w(postgres_role)
+        roles: %w(postgres_role),
+        repmgr: {
+          enable: true
+        }
       )
     end
 
@@ -30,10 +66,7 @@ RSpec.describe 'patroni cookbook' do
   context 'when enabled with default config' do
     before do
       stub_gitlab_rb(
-        roles: %w(postgres_role),
-        patroni: {
-          enable: true
-        },
+        roles: %w(patroni_role),
         postgresql: {
           pgbouncer_user_password: ''
         }
