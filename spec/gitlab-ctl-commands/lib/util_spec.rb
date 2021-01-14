@@ -164,4 +164,18 @@ RSpec.describe GitlabCtl::Util do
       )
     end
   end
+
+  describe '#chef_run' do
+    it 'should accept and use custom log files' do
+      allow(described_class).to receive(:run_command).and_return('success')
+      expect(described_class).to receive(:run_command).with(/-L log_ago_and_far_away/)
+      described_class.chef_run('config', 'attributes', 'log_ago_and_far_away')
+    end
+
+    it 'should not pass the log file path unless set' do
+      allow(described_class).to receive(:run_command).and_return('success')
+      expect(described_class).not_to receive(:run_command).with(/ -L /)
+      described_class.chef_run('config', 'attributes')
+    end
+  end
 end

@@ -22,6 +22,16 @@ directory ssl_dir do
   action :create
 end
 
+# We log auto renewals to a specific place
+auto_renew_log_dir = node['letsencrypt']['auto_renew_log_directory']
+
+directory auto_renew_log_dir do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  action :create
+end
+
 # If this is the first run, then nginx won't be working due to missing certificates
 acme_selfsigned site.host do
   alt_names node['letsencrypt']['alt_names']
