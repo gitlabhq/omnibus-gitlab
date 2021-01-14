@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.7.4 (2021-01-13)
+
+- No changes.
+
 ## 13.7.3 (2021-01-08)
 
 - No changes.
@@ -79,6 +83,10 @@ omnibus-gitlab repository.
 - Use the 'main' branch for gitlab-shell nightlies. !4772
 - Update Mattermost to 5.29.1. !4807 (hmhealey)
 
+
+## 13.6.5 (2021-01-13)
+
+- No changes.
 
 ## 13.6.4 (2021-01-07)
 
@@ -160,6 +168,10 @@ omnibus-gitlab repository.
 - Update rake to v13. !4745
 - Update Mattermost to 5.28.1.
 
+
+## 13.5.7 (2021-01-13)
+
+- No changes.
 
 ## 13.5.6 (2021-01-07)
 
