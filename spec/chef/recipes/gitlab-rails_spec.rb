@@ -951,6 +951,29 @@ RSpec.describe 'gitlab::gitlab-rails' do
     context 'pages settings' do
       using RSpec::Parameterized::TableSyntax
 
+      where(:external_http, :result) do
+        nil | false
+        []  | false
+        ['localhost:9000'] | true
+      end
+
+      with_them do
+        it 'properly converts external_http to bool' do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            pages_external_url: 'https://pages.example.com',
+            gitlab_pages: {
+              external_http: external_http
+            }
+          )
+
+          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
+            yaml_data = YAML.safe_load(content, [], [], true)
+            expect(yaml_data['production']['pages']['external_http']).to eq(result)
+          }
+        end
+      end
+
       where(:external_https, :external_https_proxyv2, :result) do
         nil | nil | false
         []  | nil | false
@@ -963,7 +986,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
 
       with_them do
-        it 'properly converts empty external_https to bool' do
+        it 'properly converts external_https to bool' do
           stub_gitlab_rb(
             external_url: 'https://gitlab.example.com',
             pages_external_url: 'https://pages.example.com',
