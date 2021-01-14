@@ -2148,6 +2148,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # letsencrypt['auto_renew_hour'] = 0
 # letsencrypt['auto_renew_minute'] = nil # Should be a number or cron expression, if specified.
 # letsencrypt['auto_renew_day_of_month'] = "*/4"
+# letsencrypt['auto_renew_log_directory'] = '/var/log/gitlab/lets-encrypt'
 
 ##! Turn off automatic init system detection. To skip init detection in
 ##! non-docker containers. Recommended not to change.
