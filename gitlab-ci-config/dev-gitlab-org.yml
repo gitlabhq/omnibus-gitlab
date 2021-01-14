@@ -309,6 +309,8 @@
 .staging_upload_template: &staging_upload
   stage: staging_upload
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  variables:
+    INCLUDE_PACKAGECLOUD: "true"
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
   artifacts: *package-artifacts-release
@@ -325,6 +327,8 @@
 .production_release_template: &production_release
   stage: package-and-image-release
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  variables:
+    INCLUDE_PACKAGECLOUD: "true"
   script:
     - bundle exec rake repository:upload:production
   retry: 2
