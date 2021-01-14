@@ -2,9 +2,9 @@
 # GitLab Pages Daemon
 ####
 default['gitlab-pages']['enable'] = false
-default['gitlab-pages']['external_http'] = nil
-default['gitlab-pages']['external_https'] = nil
-default['gitlab-pages']['external_https_proxyv2'] = nil
+default['gitlab-pages']['external_http'] = []
+default['gitlab-pages']['external_https'] = []
+default['gitlab-pages']['external_https_proxyv2'] = []
 default['gitlab-pages']['listen_proxy'] = "localhost:8090"
 default['gitlab-pages']['gitlab_server'] = nil
 default['gitlab-pages']['internal_gitlab_server'] = nil
