@@ -106,7 +106,11 @@ sudo touch /etc/gitlab/disable-postgresql-upgrade
 ### Removal of process metrics from gitlab-exporter
 
 Process-related metrics emitted from gitlab-exporter have been retired. These metrics are now exported
-from application processes directly. No further action is required, unless an installation is purely
+from application processes directly.
+Similarly, process metrics for particular git processes such as `git upload-pack`,
+`git fetch`, `git cat-file`, `git gc` emitted from gitlab-exporter have been removed.
+Git-related process metrics are already being exported by Gitaly.
+No further action is required, unless an installation is purely
 ingesting metrics from gitlab-exporter, which is not the default behavior. In that case,
 [change your scrape configuration](https://docs.gitlab.com/ee/administration/monitoring/prometheus/#adding-custom-scrape-configurations)
 to ingest metrics from the [application's own metrics endpoints](https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_metrics.html)
