@@ -11,13 +11,6 @@ server:
 
 # Probes config
 probes:
-  git_process: &git_process
-    class_name: GitProcessProber # `class_name` is redundant here
-    methods:
-    - probe_git
-    opts:
-      quantiles: true
-
 <% if node['gitlab']['gitlab-rails']['db_adapter'] == 'postgresql' -%>
   # We can group multiple probes under a single endpoint by setting the `multiple` key to `true`, followed
   # by probe definitions as usual.
@@ -51,8 +44,6 @@ probes:
 
   metrics:
     multiple: true
-    git_process:
-      <<: *git_process
 <% if @probe_sidekiq %>
     sidekiq:
       <<: *sidekiq
