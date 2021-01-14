@@ -187,6 +187,8 @@ module Services
     # @param [String] service
     # @return [Boolean] whether is enabled or not
     def enabled?(service)
+      return false unless exist?(service)
+
       user_config = Gitlab[service]['enable']
 
       return user_config unless user_config.nil?
