@@ -35,4 +35,7 @@ RSpec.shared_context 'object storage config' do
       'azure_storage_access_key' => '1234abcd'
     }
   end
+
+  let(:aws_connection_data) { JSON.parse(aws_connection_hash.to_json, symbolize_names: true) }
+  let(:aws_storage_options) { JSON.parse(aws_storage_options_hash.to_json, symbolize_names: true) }
 end
