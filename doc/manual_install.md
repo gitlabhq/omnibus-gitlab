@@ -72,14 +72,14 @@ After the GitLab package is downloaded, install it using the following commands:
 
 NOTE:
 If you are installing for the first time, you have to pass the
-`EXTERNAL_URL="<GitLab URL>"` variable to set your preferred domain name. Installation will
-automatically configure and start GitLab at that URL. Enabling HTTPS requires
+`EXTERNAL_URL="<GitLab URL>"` variable to set your preferred domain name. Installation
+automatically configures and starts GitLab at that URL. Enabling HTTPS requires
 [additional configuration](settings/nginx.md#enable-https) to specify the certificates.
 
 ## Browse to the hostname and login
 
-On your first visit, you'll be redirected to a password reset screen. Provide
-the password for the initial administrator account and you will be redirected
+On your first visit, you are redirected to a password reset screen. Provide
+the password for the initial administrator account and you are redirected
 back to the login screen. Use the default account's username `root` to log in.
 
 See our [documentation for detailed instructions on installing and configuration](installation/index.md#installation-and-configuration).

@@ -151,8 +151,9 @@ rubocop:
     paths:
     - gems
 
-docs-lint:
-  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:ruby-2.7.2-alpine-3.12-vale-2.4.3-markdownlint-0.24.0"
+# Perform documentation linting on Markdown files
+docs-lint markdown:
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.12-vale-2.8.0-markdownlint-0.26.0"
   stage: check
   cache: {}
   dependencies: []
@@ -162,6 +163,24 @@ docs-lint:
     - vale --minAlertLevel error doc
     # Lint Markdown
     - markdownlint --config .markdownlint.json 'doc/**/*.md'
+  except:
+    refs:
+      - /./@gitlab/omnibus-gitlab
+      - triggers
+      - /^deps/
+      - /./@gitlab-org/build/omnibus-gitlab-mirror
+    variables:
+      - $DEPS_PIPELINE
+      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
+
+# Perform link checks on published HTML files
+docs-lint links:
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.12-ruby-2.7.2"
+  stage: check
+  cache: {}
+  dependencies: []
+  before_script: []
+  script:
     # Prepare docs for build
     - mv doc/ /tmp/gitlab-docs/content/omnibus
     - cd /tmp/gitlab-docs
