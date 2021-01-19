@@ -11,10 +11,10 @@ RSpec.describe Pgbouncer::Databases do
         'gitlab-rails' => {
           'db_database' => 'fake_database'
         },
-        'pgbouncer' => {
-          'databases_ini' => '/fakedata/pgbouncer/databases.ini',
-          'databases_json' => '/fakedata/pgbouncer/databases.json'
-        }
+      },
+      'pgbouncer' => {
+        'databases_ini' => '/fakedata/pgbouncer/databases.ini',
+        'databases_json' => '/fakedata/pgbouncer/databases.json'
       }
     }
   end

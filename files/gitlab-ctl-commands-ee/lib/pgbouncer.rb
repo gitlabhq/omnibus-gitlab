@@ -18,8 +18,8 @@ module Pgbouncer
       @attributes = GitlabCtl::Util.get_public_node_attributes
       @install_path = install_path
       @options = options
-      @ini_file = options['databases_ini'] || attributes['gitlab']['pgbouncer']['databases_ini']
-      @json_file = options['databases_json'] || attributes['gitlab']['pgbouncer']['databases_json']
+      @ini_file = options['databases_ini'] || database_ini
+      @json_file = options['databases_json'] || database_json
       @template_file = "#{@install_path}/embedded/cookbooks/gitlab-ee/templates/default/databases.ini.erb"
       @database = if attributes.key?('gitlab')
                     attributes['gitlab']['gitlab-rails']['db_database']
@@ -45,7 +45,7 @@ module Pgbouncer
         settings['port'] = options['port'] if options['port']
         settings['auth_user'] = settings.delete('user') if settings.key?('user')
         settings['auth_user'] = options['user'] if options['user']
-        settings['dbname'] =  options['pg_database'] if options['pg_database']
+        settings['dbname'] = options['pg_database'] if options['pg_database']
         settings.each do |setting, value|
           updated[db] << " #{setting}=#{value}"
         end
@@ -83,9 +83,9 @@ module Pgbouncer
 
     def build_command_line
       psql = "#{install_path}/embedded/bin/psql"
-      host = options['pg_host'] || attributes['gitlab']['pgbouncer']['listen_addr']
+      host = options['pg_host'] || listen_addr
       host = '127.0.0.1' if host.eql?('0.0.0.0')
-      port = options['pg_port'] || attributes['gitlab']['pgbouncer']['listen_port']
+      port = options['pg_port'] || listen_port
       "#{psql} -d pgbouncer -h #{host} -p #{port} -U #{options['user']}"
     end
 
@@ -170,6 +170,44 @@ module Pgbouncer
 
     def console
       exec(build_command_line)
+    end
+
+    private
+
+    def database_ini
+      # Deprecation: Remove attributes in `gitlab` in 14.0 - https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5939
+      if attributes['gitlab'].key?('pgbouncer')
+        attributes['gitlab']['pgbouncer']['databases_ini']
+      else
+        attributes['pgbouncer']['databases_ini']
+      end
+    end
+
+    def database_json
+      # Deprecation: Remove attributes in `gitlab` in 14.0 - https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5939
+      if attributes['gitlab'].key?('pgbouncer')
+        attributes['gitlab']['pgbouncer']['databases_json']
+      else
+        attributes['pgbouncer']['databases_json']
+      end
+    end
+
+    def listen_addr
+      # Deprecation: Remove attributes in `gitlab` in 14.0 - https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5939
+      if attributes['gitlab'].key?('pgbouncer')
+        attributes['gitlab']['pgbouncer']['listen_addr']
+      else
+        attributes['pgbouncer']['listen_addr']
+      end
+    end
+
+    def listen_port
+      # Deprecation: Remove attributes in `gitlab` in 14.0 - https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5939
+      if attributes.key?('gitlab')
+        attributes['gitlab']['pgbouncer']['listen_port']
+      else
+        attributes['pgbouncer']['listen_port']
+      end
     end
   end
 end
