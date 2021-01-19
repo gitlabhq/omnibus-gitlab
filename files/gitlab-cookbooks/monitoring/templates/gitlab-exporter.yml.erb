@@ -6,6 +6,7 @@ db_common: &db_common
 
 # Web server config
 server:
+  name: <%= node['monitoring']['gitlab-exporter']['server_name'] %>
   listen_address: <%= node['monitoring']['gitlab-exporter']['listen_address'] %>
   listen_port: <%= node['monitoring']['gitlab-exporter']['listen_port'] %>
 

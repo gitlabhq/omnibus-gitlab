@@ -1915,6 +1915,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_exporter['home'] = "/var/opt/gitlab/gitlab-exporter"
 
 ##! Advanced settings. Should be changed only if absolutely needed.
+# gitlab_exporter['server_name'] = 'webrick'
 # gitlab_exporter['listen_address'] = 'localhost'
 # gitlab_exporter['listen_port'] = '9168'
 
