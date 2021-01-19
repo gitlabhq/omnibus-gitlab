@@ -144,8 +144,9 @@ before_script:
 fetch-assets:
   extends: .docker_job
   stage: prepare-assets
+  before_script: []
   script:
-    - export VERSION=${GITLAB_REF_SLUG-$(bundle exec rake build:version)}
+    - export VERSION=${GITLAB_REF_SLUG-$(ruby -I. -e 'require "lib/gitlab/version"; puts Gitlab::Version.new("gitlab-rails").print')}
     - support/fetch_assets "${VERSION}"
   artifacts:
     paths:
