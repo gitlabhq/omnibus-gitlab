@@ -124,7 +124,9 @@ before_script:
   - if [ "$INCLUDE_PACKAGECLOUD" = "true" ]; then
       bundle config set --local with 'packagecloud';
     fi
+  - echo -e "section_start:`date +%s`:bundle_install[collapsed=true]\r\e[0Kbundle install -j $(nproc)"
   - bundle install -j $(nproc)
+  - echo -e "section_end:`date +%s`:bundle_install\r\e[0K"
   - bundle binstubs --all
   # If ALTERNATIVE_SOURCES are used, the public mirror for omnibus will be used.
   # This will alter Gemfile.lock file. As part of the build pipeline, we are
