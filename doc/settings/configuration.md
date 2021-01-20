@@ -576,7 +576,7 @@ Learn how to [configure Rack Attack](https://docs.gitlab.com/ee/security/rack_at
 
 ## Disabling automatic cache cleaning during installation
 
-If you have large GitLab installation, you might not want to run a `rake cache:clean` task.
+If you have large GitLab installation, you might not want to run a `rake cache:clear` task.
 As it can take a long time to finish. By default, the cache clear task will run automatically
 during reconfigure.
 
