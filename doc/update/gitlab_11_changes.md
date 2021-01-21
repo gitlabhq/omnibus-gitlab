@@ -34,7 +34,7 @@ For successfully upgrading to GitLab 11.0, users need to satisfy following
 requirements:
 
 1. Users should be running latest version in the 10.x series. At the time of
-   writing this documentation, it is GitLab 10.8.5.
+   writing this documentation, it is GitLab 10.8.7.
 
 1. The configurations that were deprecated (list below) in the 10.x series have
    been now removed. Users needs to remove them from `/etc/gitlab/gitlab.rb`. Then run `gitlab-ctl reconfigure` to apply the configuration changes.
