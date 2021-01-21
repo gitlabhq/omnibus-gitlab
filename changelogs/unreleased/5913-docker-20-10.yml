@@ -1,5 +1,0 @@
----
-title: Update Docker to 20.10 in our pipelines on CI/CD
-merge_request: 4878
-author: Takuya Noguchi
-type: other

@@ -1,5 +1,0 @@
----
-title: Add setting to change Rack server used for gitlab-exporter, bump it to 8.0.0
-merge_request: 4896
-author:
-type: changed

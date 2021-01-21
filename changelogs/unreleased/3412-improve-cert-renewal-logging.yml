@@ -1,5 +1,0 @@
----
-title: Add logging to Let's Encrypt auto renewal cron job
-merge_request: 4911
-author:
-type: added
