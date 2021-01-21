@@ -3,6 +3,63 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.8.0 (2021-01-22)
+
+### Security (1 change)
+
+- Update OpenSSL to 1.1.1i. !4830
+
+### Removed (2 changes)
+
+- Remove `process_*` metrics from probes config. !4853
+- Remove `git_process` metrics probes. !4863
+
+### Fixed (4 changes)
+
+- Patroni switchover and failover commands do not ask for user confirmation. !4909
+- Fix https and custom domains pages settings. !4919
+- Ensure EE services are considered disabled when on CE. !4927
+- Safely lookup PostgreSQL parameters in Patroni settings. !4928
+
+### Deprecated (1 change)
+
+- Deprecate node['gitlab']['pgbouncer-exporter'] in favor of node['monitoring']['pgbouncer-exporter']. !4766
+
+### Changed (10 changes)
+
+- Update logrotate to 3.17.0. !4432
+- Print PG11 deprecation notice. !4706
+- Update consul to 1.6.10. !4789
+- Update configs for Puma 5.1.0. !4803
+- Generate Pages access control secrets only if access control is enabled. !4842
+- Auto-upgrade to PG12 for single node installs. !4848
+- Switch to enabling patroni by default with new patroni role. !4851
+- Use more PostgreSQL attributes for Patroni parameters. !4857
+- Add setting to change Rack server used for gitlab-exporter, bump it to 8.0.0. !4896
+- Bump Container Registry to v2.13.1-gitlab. !4913
+
+### Performance (1 change)
+
+- Use Puma `nakayoshi_fork`. !4914
+
+### Added (5 changes)
+
+- Add support for configuring Workhorse alternate root path. !4856
+- Add Patroni check-standby-leader command. !4864
+- Expose setting for encrypted settings path. !4884
+- Add logging to Let's Encrypt auto renewal cron job. !4911
+- Add package upgrade survey link. !4931
+
+### Other (6 changes, 3 of them are from the community)
+
+- Bump Patroni to version 2.0.1. !4820
+- Remove deprecated Prometheus settings from gitlab.yml. !4869
+- Bump Grafana to 7.3.6. !4873
+- Update Docker to 20.10 in our pipelines on CI/CD. !4878 (Takuya Noguchi)
+- Use Debian 10 as examples in development docs. !4883 (Takuya Noguchi)
+- Update Mattermost to 5.30.1. !4885 (hmhealey)
+
+
 ## 13.7.4 (2021-01-13)
 
 - No changes.

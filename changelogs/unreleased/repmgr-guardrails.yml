@@ -1,5 +1,0 @@
----
-title: Switch to enabling patroni by default with new patroni role
-merge_request: 4851
-author:
-type: changed

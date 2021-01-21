@@ -1,5 +1,0 @@
----
-title: Remove `git_process` metrics probes
-merge_request: 4863
-author:
-type: removed

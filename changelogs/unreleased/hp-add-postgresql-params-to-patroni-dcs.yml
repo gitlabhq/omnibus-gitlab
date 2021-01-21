@@ -1,5 +1,0 @@
----
-title: Use more PostgreSQL attributes for Patroni parameters
-merge_request: 4857
-author:
-type: changed

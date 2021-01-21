@@ -1,5 +1,0 @@
----
-title: Ensure EE services are considered disabled when on CE
-merge_request: 4927
-author:
-type: fixed
