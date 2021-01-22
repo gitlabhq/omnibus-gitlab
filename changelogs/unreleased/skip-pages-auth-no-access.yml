@@ -1,0 +1,5 @@
+---
+title: Skip pages auth settings when access control is disabled
+merge_request: 4952
+author:
+type: fixed
