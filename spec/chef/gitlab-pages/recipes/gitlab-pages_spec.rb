@@ -71,6 +71,21 @@ RSpec.describe 'gitlab::gitlab-pages' do
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content(default_content)
     end
 
+    it 'skips rendering the auth settings when access control is disabled' do
+      stub_gitlab_rb(
+        external_url: 'https://gitlab.example.com',
+        pages_external_url: 'https://pages.example.com',
+        gitlab_pages: {
+          access_control: false,
+          auth_secret: 'auth_secret'
+        }
+      )
+
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content { |content|
+        expect(content).not_to match(%r{auth-secret=auth_secret})
+      }
+    end
+
     context 'when access control is enabled' do
       context 'when access control secrets are not specified' do
         before do

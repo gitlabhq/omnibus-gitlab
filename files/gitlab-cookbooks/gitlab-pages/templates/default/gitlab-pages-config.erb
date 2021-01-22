@@ -4,6 +4,7 @@ daemon-uid=<%= Etc.getpwnam(node['gitlab']['user']['username']).uid %>
 daemon-gid=<%= Etc.getpwnam(node['gitlab']['user']['username']).gid %>
 daemon-inplace-chroot=<%= @inplace_chroot %>
 api-secret-key=<%= @api_secret_key_path %>
+<%- if @access_control -%>
 <%- if @gitlab_id -%>
 auth-client-id=<%= @gitlab_id %>
 <%- end -%>
@@ -15,6 +16,7 @@ auth-client-secret=<%= @gitlab_secret %>
 <%- end -%>
 <%- if @auth_secret -%>
 auth-secret=<%= @auth_secret %>
+<%- end -%>
 <%- end -%>
 <%- if @zip_cache_expiration -%>
 zip-cache-expiration=<%= @zip_cache_expiration %>
