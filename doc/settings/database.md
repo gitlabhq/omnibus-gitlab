@@ -466,7 +466,7 @@ Existing instances can update manually via:
 sudo gitlab-ctl pg-upgrade -V 12
 ```
 
-Instances with fault-tolerant PostgreSQL 12 deployments will neede to [upgrade to Patroni](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni) first, before upgrading to PostgreSQL 12.
+Instances with fault-tolerant PostgreSQL 11 deployments will need to [upgrade to Patroni](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni) first, before upgrading to PostgreSQL 12.
 
 #### GitLab 13.3 and later
 
