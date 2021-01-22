@@ -116,6 +116,9 @@ production: &base
     ## Impersonation settings
     impersonation_enabled: <%= @impersonation_enabled %>
 
+    ## Application settings cache expiry in seconds. (default: 60)
+    application_settings_cache_seconds: <%= @application_settings_cache_seconds %>
+
     usage_ping_enabled: <%= @usage_ping_enabled %>
 
     # Seat link setting

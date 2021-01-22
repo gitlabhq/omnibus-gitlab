@@ -418,6 +418,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Impersonation settings
 # gitlab_rails['impersonation_enabled'] = true
 
+### Application settings cache expiry in seconds. (default: 60)
+# gitlab_rails['application_settings_cache_seconds'] = 60
+
 ### Usage Statistics
 # gitlab_rails['usage_ping_enabled'] = true
 

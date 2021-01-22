@@ -1174,6 +1174,33 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'Application settings cache expiry' do
+      context 'when a value is set' do
+        it 'exposes the set value' do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              application_settings_cache_seconds: 30
+            }
+          )
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'application_settings_cache_seconds' => 30
+            )
+          )
+        end
+      end
+      context 'when a value is not set' do
+        it 'exposes the default (nil) value' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'application_settings_cache_seconds' => nil
+            )
+          )
+        end
+      end
+    end
+
     context 'FortiToken Cloud settings' do
       context 'FortiToken Cloud is configured' do
         it 'exposes the FortiToken Cloud settings' do
