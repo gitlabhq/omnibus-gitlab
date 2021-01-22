@@ -39,6 +39,8 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
           expect(content).to match(/^rename-command KEYS ""$/)
           expect(content).to match(/^lazyfree-lazy-eviction no$/)
           expect(content).to match(/^lazyfree-lazy-expire no$/)
+          expect(content).to match(/^io-threads 1$/)
+          expect(content).to match(/^io-threads-do-reads no$/)
           expect(content).not_to match(/^replicaof/)
         }
     end
@@ -278,6 +280,25 @@ redis_socket=''
         .with_content { |content|
           expect(content).to match(/^lazyfree-lazy-eviction yes$/)
           expect(content).to match(/^lazyfree-lazy-expire no$/)
+        }
+    end
+  end
+
+  context 'with lazy eviction enabled' do
+    before do
+      stub_gitlab_rb(
+        redis: {
+          io_threads: 4,
+          io_threads_do_reads: true
+        }
+      )
+    end
+
+    it 'creates redis config with lazyfree-lazy-eviction yes' do
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content { |content|
+          expect(content).to match(/^io-threads 4$/)
+          expect(content).to match(/^io-threads-do-reads yes$/)
         }
     end
   end

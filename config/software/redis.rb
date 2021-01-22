@@ -23,7 +23,7 @@ license_file 'COPYING'
 skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
-version = Gitlab::Version.new('redis', '5.0.9')
+version = Gitlab::Version.new('redis', '6.0.10')
 default_version version.print(false)
 
 source git: version.remote
@@ -50,6 +50,15 @@ build do
   env['EXTRA_JEMALLOC_CONFIGURE_FLAGS'] = (OhaiHelper.arm64? ? '--with-lg-page=16' : '--with-lg-page=12')
 
   patch source: 'jemalloc-extra-config-flags.patch'
+
+  # We are backporting this commit from the (unstable) Redis 6.2 branch,
+  # in order to get Redis 6.0 to compile on centos7. This patch adds support
+  # for an older version of GCC.
+  #
+  # - https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/4930#note_490191430
+  # - https://github.com/redis/redis/pull/7707
+  # - https://github.com/redis/redis/commit/445a4b669a3a7232a18bf23340c5f7d580aa92c7.patch
+  patch source: 'upstream-backport-pull-request-7707.patch'
 
   update_config_guess
 

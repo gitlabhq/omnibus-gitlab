@@ -116,3 +116,22 @@ ingesting metrics from gitlab-exporter, which is not the default behavior. In th
 to ingest metrics from the [application's own metrics endpoints](https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_metrics.html)
 instead.
 <!-- markdownlint-enable MD044 -->
+
+## 13.9
+
+### Redis 6.0.10
+
+In 13.9, we are upgrading Redis from 5.0.9 to 6.0.10. This upgrade is expected
+to be fully backwards compatible.
+
+One of the new features it introduces, is threaded I/O. That can be enabled by
+setting the following values:
+
+```ruby
+redis['io_threads'] = 4
+redis['io_threads_do_reads'] = true
+```
+
+If your instance has Redis HA with Sentinel, follow the upgrade steps documented
+in [Update GitLab installed with the Omnibus GitLab package to avoid
+downtime](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/doc/update/README.md#use-redis-ha-using-sentinel).

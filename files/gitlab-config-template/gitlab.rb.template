@@ -1259,6 +1259,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['lazyfree_lazy_server_del'] = true
 # redis['replica_lazy_flush'] = true
 
+#####! Redis threaded I/O
+#####! Defaults to disabled
+# redis['io_threads'] = 4
+# redis['io_threads_do_reads'] = true
+
 ################################################################################
 ## GitLab Web server
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#using-a-non-bundled-web-server

@@ -192,6 +192,17 @@ redis['lazyfree_lazy_server_del'] = true
 redis['replica_lazy_flush'] = true
 ```
 
+## Threaded I/O
+
+Redis 6 introduced threaded I/O. This allow writes to scale across multiple cores.
+
+This setting is disabled by default. To enable it, you can use:
+
+```ruby
+redis['io_threads'] = 4
+redis['io_threads_do_reads'] = true
+```
+
 ## Troubleshooting
 
 ### `x509: certificate signed by unknown authority`
