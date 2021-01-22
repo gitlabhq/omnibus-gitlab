@@ -333,8 +333,8 @@ production: &base
     host: <%= @pages_host %>
     port: <%= @pages_port %>
     https: <%= @pages_https %>
-    external_http: <%= @pages_external_http.to_json %>
-    external_https: <%= !@pages_external_https&.empty? || !@pages_external_https_proxyv2&.empty? %>
+    external_http: <%= !@pages_external_http.empty? %>
+    external_https: <%= !@pages_external_https.empty? || !@pages_external_https_proxyv2.empty? %>
     artifacts_server: <%= @pages_artifacts_server %>
     object_store:
       enabled: <%= @pages_object_store_enabled %>
