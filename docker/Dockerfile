@@ -27,6 +27,11 @@ RUN ln -fs /dev/null /run/motd.dynamic
 # Copy assets
 COPY RELEASE /
 COPY assets/ /assets/
+# as gitlab-ci checks out with mode 666 we need to set permissions of the files we copied into the
+# container to a secure value. Issue #5956
+RUN chmod -R og-w /assets
+RUN chmod -R og-w RELEASE
+
 RUN /assets/setup
 
 # Allow to access embedded tools
