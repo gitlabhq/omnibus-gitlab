@@ -46,7 +46,9 @@ groupadd -g 992 gitlab-prometheus
 groupadd -g 991 gitlab-consul
 
 # Create accounts
-useradd -m -u 998 -g git -m -s /bin/sh -d /var/opt/gitlab git
+## The git account is created with * as crypted password as ssh treats the account as locked if it has a ! 
+## Issue #5891 https://gitlab.com/gitlab-org/omnibus-gitlab
+useradd -m -u 998 -g git -p '*' -m -s /bin/sh -d /var/opt/gitlab git
 useradd -m -u 999 -g gitlab-www -m -s /bin/false -d /var/opt/gitlab/nginx gitlab-www
 useradd -m -u 997 -g gitlab-redis -m -s /bin/false -d /var/opt/gitlab/redis gitlab-redis
 useradd -m -u 996 -g gitlab-psql -m -s /bin/sh -d /var/opt/gitlab/postgresql gitlab-psql

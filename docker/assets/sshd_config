@@ -15,9 +15,10 @@ AuthorizedKeysFile %h/.ssh/authorized_keys /gitlab-data/ssh/authorized_keys
 AuthorizedKeysCommand /opt/gitlab/embedded/service/gitlab-shell/bin/gitlab-shell-authorized-keys-check git %u %k
 AuthorizedKeysCommandUser git
 
-# Fix: User username not allowed because account is locked
 # With "UsePAM yes" the "!" is seen as a password disabled account and not fully locked so ssh public key login works
-UsePAM yes
+# Please make sure that the account is created without passwordlogin ("*" in /etc/shadow) or configure pam. 
+# Issue #5891 https://gitlab.com/gitlab-org/omnibus-gitlab
+UsePAM no
 
 # Disabling use DNS in ssh since it tends to slow connecting
 UseDNS no
