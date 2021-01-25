@@ -60,6 +60,14 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.30.1. !4885 (hmhealey)
 
 
+## 13.7.5 (2021-01-25)
+
+### Fixed (2 changes)
+
+- Patroni switchover and failover commands do not ask for user confirmation. !4909
+- Fix https and custom domains pages settings. !4919
+
+
 ## 13.7.4 (2021-01-13)
 
 - No changes.
