@@ -292,8 +292,15 @@ module Prometheus
           'targets' => [prometheus_target],
         ]
       }
+      ruby = {
+        'job_name' => 'gitlab_exporter_ruby',
+        'metrics_path' => '/ruby',
+        'static_configs' => [
+          'targets' => [prometheus_target],
+        ]
+      }
 
-      default_scrape_configs = [] << database << sidekiq << Gitlab['prometheus']['scrape_configs']
+      default_scrape_configs = [] << database << sidekiq << ruby << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 
