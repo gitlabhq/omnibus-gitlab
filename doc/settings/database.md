@@ -446,7 +446,7 @@ sudo touch /etc/gitlab/disable-postgresql-upgrade
 #### GitLab 13.8 and later
 
 The default PostgreSQL version is set to 12.x, and an upgrade of the database is
-done on package upgrades for installs that are not using repmgr or Geo.
+done automatically on package upgrades for installs that are not using repmgr or Geo.
 
 The upgrade is skipped in any of the following cases:
 
@@ -454,7 +454,7 @@ The upgrade is skipped in any of the following cases:
 - Your database nodes are part of GitLab Geo configuration.
 - You have specifically [opted out](#opt-out-of-automatic-postgresql-upgrades).
 
-To upgrade PostgreSQL on installs with HA or Geo, see [Packaged PostgreSQL deployed in an HA/Geo Cluster](#packaged-postgresql-deployed-in-an-hageo-cluster).
+Fault-tolerant and Geo installations support manual upgrades to PostgreSQL 12, see [Packaged PostgreSQL deployed in an HA/Geo Cluster](#packaged-postgresql-deployed-in-an-hageo-cluster).
 
 #### GitLab 13.7 and later
 
@@ -467,6 +467,8 @@ sudo gitlab-ctl pg-upgrade -V 12
 ```
 
 Instances with fault-tolerant PostgreSQL 11 deployments will need to [upgrade to Patroni](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni) first, before upgrading to PostgreSQL 12.
+
+Geo installations support manual upgrades to PostgreSQL 12, see [Packaged PostgreSQL deployed in an Geo Cluster](#upgrading-a-geo-instance).
 
 #### GitLab 13.3 and later
 
