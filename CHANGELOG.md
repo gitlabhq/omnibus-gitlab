@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.8.1 (2021-01-26)
+
+### Fixed (1 change)
+
+- Skip pages auth settings when access control is disabled. !4952
+
+
 ## 13.8.0 (2021-01-22)
 
 ### Security (1 change)
