@@ -43,7 +43,7 @@ By default, Omnibus GitLab does not use HTTPS. If you want to enable HTTPS for
 ### Warning
 
 The NGINX configuration will tell browsers and clients to only communicate with your
-GitLab instance over a secure connection for the next 24 months. By enabling
+GitLab instance over a secure connection for the next 365 days using [HSTS](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security). See [Setting HTTP Strict Transport Security](#setting-http-strict-transport-security) for more configuration options. By enabling
 HTTPS you'll need to provide a secure connection to your instance for at least
 the next 24 months.
 
