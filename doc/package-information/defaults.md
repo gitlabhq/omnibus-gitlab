@@ -14,7 +14,7 @@ the package will assume the defaults as noted below.
 See the table below for the list of ports that the Omnibus GitLab assigns
 by default:
 
-| Component                                             | On by default | Communicates via | Alternative | Connection port                        |
+| Component                                              | On by default | Communicates via | Alternative | Connection port                        |
 | :----------------------------------------------------: | :------------:| :--------------: | :---------: | :------------------------------------: |
 | <a name="gitlab-rails"></a>        GitLab Rails        | Yes           | Port             | X           | 80 or 443                              |
 | <a name="gitlab-shell"></a>        GitLab Shell        | Yes           | Port             | X           | 22                                     |
@@ -39,7 +39,7 @@ by default:
 | <a name="incoming-email"></a>      Incoming email      | No            | Port             | X           | 143                                    |
 | <a name="elasticsearch"></a>       Elastic search      | No            | Port             | X           | 9200                                   |
 | <a name="gitlab-pages"></a>        GitLab Pages        | No            | Port             | X           | 80 or 443                              |
-| <a name="gitlab-registry-web"></a> GitLab Registry     | No*            | Port             | X           | 80, 443 or 5050                        |
+| <a name="gitlab-registry-web"></a> GitLab Registry     | No*           | Port             | X           | 80, 443 or 5050                        |
 | <a name="gitlab-registry"></a>     GitLab Registry     | No            | Port             | X           | 5000                                   |
 | <a name="ldap"></a>                LDAP                | No            | Port             | X           | Depends on the component configuration |
 | <a name="kerberos"></a>            Kerberos            | No            | Port             | X           | 8443 or 8088                           |
