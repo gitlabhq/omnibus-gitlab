@@ -341,6 +341,7 @@
   <<: *production_release
   variables:
     RASPBERRY_REPO: "raspberry-pi2"
+    INCLUDE_PACKAGECLOUD: "true"
   stage: raspbian-release
   retry: 2
   <<: *dev-ce-tag-only-manual
