@@ -48,7 +48,14 @@
   <<: *com-except-triggers
   retry: 1
 
+.gems-cache:
+  cache:
+    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    paths:
+    - gems
+
 .spec_template:
+  extends: .gems-cache
   stage: tests
   before_script:
     # These jobs will not be run on dev, so we set ALTERNATIVE_SOURCES to true
@@ -72,17 +79,14 @@
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
     - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml --format documentation]"
   <<: *com-except-triggers
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - gems
   artifacts:
     <<: *knapsack-artifacts
     reports:
       junit: junit_rspec.xml
   retry: 1
 
-.trigger-job: &trigger-job
+.trigger-job:
+  extends: .gems-cache
   image: "${RUBY_IMAGE}"
   stage: trigger-package
   when: manual
@@ -129,14 +133,16 @@
 #     Branch pipeline     #
 ###########################
 
-Trigger:ce-package: *trigger-job
+Trigger:ce-package:
+  extends: .trigger-job
 
 Trigger:ee-package:
-  <<: *trigger-job
+  extends: .trigger-job
   variables:
     ee: "true"
 
 rubocop:
+  extends: .gems-cache
   stage: check
   image: "${RUBY_IMAGE}"
   before_script:
@@ -146,10 +152,6 @@ rubocop:
   script:
     - bundle exec rubocop --parallel
   <<: *com-except-triggers
-  cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
-    paths:
-    - gems
 
 # Perform documentation linting on Markdown files
 docs-lint markdown:
@@ -348,7 +350,9 @@ Trigger:package:
     - triggered-packages
 
 Trigger:gitlab-docker:
-  extends: .docker_job
+  extends:
+    - .docker_job
+    - .gems-cache
   stage: trigger-docker
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
@@ -364,7 +368,9 @@ Trigger:measure-memory:
   <<: *com-trigger-only
 
 Trigger:qa-docker:
-  extends: .docker_job
+  extends:
+    - .docker_job
+    - .gems-cache
   stage: trigger-docker
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
