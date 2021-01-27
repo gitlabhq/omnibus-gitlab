@@ -2,6 +2,12 @@ require 'chef_helper'
 
 RSpec.describe 'monitoring::gitlab-exporter' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:default_env_vars) do
+    {
+      'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so',
+      'MALLOC_CONF' => 'dirty_decay_ms:0,muzzy_decay_ms:0'
+    }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -26,6 +32,10 @@ RSpec.describe 'monitoring::gitlab-exporter' do
     end
 
     it_behaves_like 'enabled runit service', 'gitlab-exporter', 'root', 'root'
+
+    it 'creates necessary env variable files' do
+      expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitlab-exporter/env').with_variables(default_env_vars)
+    end
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload_log_service]')

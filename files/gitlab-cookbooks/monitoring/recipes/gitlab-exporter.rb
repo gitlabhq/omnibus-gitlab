@@ -20,6 +20,7 @@ redis_helper = RedisHelper.new(node)
 gitlab_user = account_helper.gitlab_user
 gitlab_exporter_dir = node['monitoring']['gitlab-exporter']['home']
 gitlab_exporter_log_dir = node['monitoring']['gitlab-exporter']['log_directory']
+env_directory = node['monitoring']['gitlab-exporter']['env_directory']
 
 directory gitlab_exporter_dir do
   owner gitlab_user
@@ -31,6 +32,11 @@ directory gitlab_exporter_log_dir do
   owner gitlab_user
   mode "0700"
   recursive true
+end
+
+env_dir env_directory do
+  variables node['monitoring']['gitlab-exporter']['env']
+  notifies :restart, "runit_service[gitlab-exporter]"
 end
 
 connection_string = "dbname=#{node['gitlab']['gitlab-rails']['db_database']} user=#{node['gitlab']['gitlab-rails']['db_username']}"
