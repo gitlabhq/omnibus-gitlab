@@ -14,18 +14,18 @@ Set the title to: `Description of the original issue`
 
 - [ ] Read the [security process for developers] if you are not familiar with it.
 - [ ] Mark this [issue as related] to the Security Release tracking issue. You can find it on the topic of the `#releases` Slack channel.
-- [ ] Run `scripts/security-harness` to prevent pushing to any remote besides `security/omnibus-gitlab` and `dev.gitlab.org/gitlab/omnibus-gitlab`
 - Fill out the [Links section](#links):
   - [ ] Next to **Issue on Omnibus GitLab**, add a link to the `gitlab-org/omnibus-gitlab` issue that describes the security vulnerability.
   - [ ] Next to **Security Release tracking issue**, add a link to the security release issue that will include this security issue.
 
 ### Development
 
+- [ ] Run `scripts/security-harness` to prevent pushing to any remote besides `security/omnibus-gitlab` and `dev.gitlab.org/gitlab/omnibus-gitlab`
 - [ ] Create a new branch prefixing it with `security-`
 - [ ] Create a MR targeting `master` on [`security/omnibus-gitlab`](https://gitlab.com/gitlab-org/security/omnibus-gitlab) and use the [Security Release merge request template]
 - [ ] Follow the same code review process: Assign to a reviewer, then to a maintainer.
 
-After your merge request has been approved according to our approval guidelines, you're ready to prepare the backports
+After your merge request has been approved according to our approval guidelines, and by a team member of the AppSec team, you're ready to prepare the backports
 
 #### Backports
 
@@ -35,6 +35,7 @@ After your merge request has been approved according to our approval guidelines,
    * Every merge request will have its own set of TODOs, so make sure to complete those.
 - [ ] On the "Related merge requests" section, ensure all MRs are linked to this issue.
    * This section should only list the merge requests created for this issue: One targeting `master` and the 3 backports.
+- [ ] If this issue requires less than 4 merge requests, post a message on the Security Release Tracking Issue and ping the Release Managers.
 
 #### Documentation and final details
 
