@@ -20,6 +20,7 @@
 # DO NOT change this value unless you are building your own GitLab packages
 default['package']['install-dir'] = '/opt/gitlab'
 default['package']['detect_init'] = true
+default['package']['modify_kernel_parameters'] = true
 default['package']['systemd_tasks_max'] = 4915
 
 default['package']['systemd_wanted_by'] = 'multi-user.target'

@@ -27,6 +27,8 @@ action :create do
     path "/etc/sysctl.d"
     mode "0755"
     recursive true
+
+    only_if { node['package']['modify_kernel_parameters'] }
   end
 
   conf_name = "90-omnibus-gitlab-#{new_resource.name}.conf"
@@ -36,17 +38,23 @@ action :create do
     content "#{new_resource.name} = #{new_resource.value}\n"
     notifies :run, "execute[load sysctl conf #{new_resource.name}]"
     notifies :run, "execute[reload all sysctl conf]"
+
+    only_if { node['package']['modify_kernel_parameters'] }
   end
 
   link "/etc/sysctl.d/#{conf_name}" do
     to "/opt/gitlab/embedded/etc/#{conf_name}"
     notifies :run, "execute[load sysctl conf #{new_resource.name}]"
     notifies :run, "execute[reload all sysctl conf]"
+
+    only_if { node['package']['modify_kernel_parameters'] }
   end
 
   # Load the settings right away
   execute "load sysctl conf #{new_resource.name}" do
     command "sysctl -e -p /opt/gitlab/embedded/etc/#{conf_name}"
     action :nothing
+
+    only_if { node['package']['modify_kernel_parameters'] }
   end
 end

@@ -18,4 +18,6 @@
 execute "reload all sysctl conf" do
   command "sysctl -e --system"
   action :nothing
+
+  only_if { node['package']['modify_kernel_parameters'] }
 end

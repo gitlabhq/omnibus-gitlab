@@ -2163,6 +2163,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! non-docker containers. Recommended not to change.
 # package['detect_init'] = true
 
+##! Attempt to modify kernel paramaters. To skip this in containers where the
+##! relevant file system is read-only, set the value to false.
+# package['modify_kernel_parameters'] = true
+
 ##! Specify maximum number of tasks that can be created by the systemd unit
 ##! Will be populated as TasksMax value to the unit file if user is on a systemd
 ##! version that supports it (>= 227). Will be a no-op if user is not on systemd.
