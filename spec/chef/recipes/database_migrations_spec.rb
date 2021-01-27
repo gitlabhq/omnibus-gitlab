@@ -24,6 +24,23 @@ RSpec.describe 'gitlab::database-migrations' do
       expect(chef_run).to run_bash('migrate gitlab-rails database')
     end
 
+    it 'skips outdated external databases warning by default' do
+      expect(bash_block).to notify('ruby_block[check remote PG version]').to(:run)
+      expect(chef_run.ruby_block('check remote PG version').should_skip?(:run)).to be_truthy
+    end
+
+    context 'using external db' do
+      before { stub_gitlab_rb(postgresql: { enable: false }) }
+
+      it 'warns about outdated databases' do
+        allow(GitlabRailsEnvHelper).to receive(:db_version).and_return(11)
+        expect(bash_block).to notify('ruby_block[check remote PG version]').to(:run)
+        expect(chef_run.ruby_block('check remote PG version').should_skip?(:run)).to be_falsey
+        expect(LoggingHelper).to receive(:warning).with(/Support for PostgreSQL 11 will be removed/)
+        chef_run.ruby_block('check remote PG version').block.call
+      end
+    end
+
     context 'places the log file' do
       it 'in a default location' do
         path = Regexp.escape("/var/log/gitlab/gitlab-rails/gitlab-rails-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log")

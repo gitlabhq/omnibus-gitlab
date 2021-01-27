@@ -220,6 +220,12 @@ build do
       mode: 0755,
       vars: { install_dir: install_dir }
 
+  # Create a wrapper for the ruby command, useful for e.g. `ruby -e 'command'`
+  erb dest: "#{install_dir}/bin/gitlab-ruby",
+      source: 'bundle_exec_wrapper.erb',
+      mode: 0755,
+      vars: { command: 'ruby "$@"', install_dir: install_dir }
+
   # Generate the combined license file for all gems GitLab is using
   erb dest: "#{install_dir}/embedded/bin/gitlab-gem-license-generator",
       source: 'gem_license_generator.erb',

@@ -49,6 +49,21 @@ env_variables['GITLAB_ROOT_PASSWORD'] = initial_root_password if initial_root_pa
 env_variables['GITLAB_LICENSE_FILE'] = initial_license_file if initial_license_file
 env_variables['GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN'] = initial_runner_token if initial_runner_token
 
+ruby_block "check remote PG version" do
+  block do
+    remote_db_version = GitlabRailsEnvHelper.db_version
+    if remote_db_version && remote_db_version.to_f < 12
+      LoggingHelper.warning(%q(
+        Note that PostgreSQL 12 will become the minimum required PostgreSQL version in GitLab 14.0 (May 2021).
+        Support for PostgreSQL 11 will be removed in GitLab 14.0.
+        To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server
+      ))
+    end
+  end
+  action :nothing
+  only_if { !Services.enabled?('postgresql') && !Services.enabled?('patroni') }
+end
+
 # TODO: Refactor this into a resource
 # Currently blocked due to a bug in Chef 12.6.0
 # https://github.com/chef/chef/issues/4537
@@ -65,6 +80,7 @@ bash "migrate gitlab-rails database" do
   EOH
   environment env_variables unless env_variables.empty?
   notifies :run, "execute[clear the gitlab-rails cache]", :immediately
+  notifies :run, "ruby_block[check remote PG version]", :immediately
   dependent_services.each do |svc|
     notifies :restart, svc, :immediately
   end
