@@ -4,6 +4,11 @@ require_relative "../util.rb"
 namespace :gitlab_com do
   desc 'Tasks related to gitlab.com.'
   task :deployer do
+    if Gitlab::Util.get_env('OMNIBUS_TRIGGERS_DEPLOYER') == 'false'
+      puts "OMNIBUS_TRIGGERS_DEPLOYER is disabled, exiting..."
+      exit
+    end
+
     abort "This task requires DEPLOYER_TRIGGER_TOKEN to be set" unless Gitlab::Util.get_env('DEPLOYER_TRIGGER_TOKEN')
 
     unless Build::Info.package == "gitlab-ee"
