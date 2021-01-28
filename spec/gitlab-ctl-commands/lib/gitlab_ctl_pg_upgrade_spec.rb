@@ -7,9 +7,9 @@ require 'gitlab_ctl'
 def stub_postgresql_json_attributes(config = nil)
   options = config || {}
   options['port'] ||= '5432'
-  node_data = { 'default' => { 'postgresql' => options } }
+  node_data = { postgresql: options.transform_keys(&:to_sym) }
   public_data = { 'postgresql' => options }
-  allow(GitlabCtl::Util).to receive(:parse_json_file).and_return(node_data)
+  allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return(node_data)
   allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return(public_data)
 end
 
@@ -40,7 +40,7 @@ RSpec.describe GitlabCtl::PgUpgrade do
     end
 
     it 'should set tmp_data_dir to data_dir if tmp_dir is nil on initialization' do
-      allow(GitlabCtl::Util).to receive(:parse_json_file).and_return({ 'default' => {} })
+      allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return({})
 
       expect(@dbw.tmp_data_dir).to eq(@dbw.data_dir)
     end
@@ -86,7 +86,7 @@ RSpec.describe GitlabCtl::PgUpgrade do
 
     context 'when a failed upgrade attempt happened' do
       before do
-        allow(GitlabCtl::Util).to receive(:parse_json_file).and_return({ 'default' => {} })
+        allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return({})
       end
 
       let(:target_data_dir) { "future_data_dir" }
