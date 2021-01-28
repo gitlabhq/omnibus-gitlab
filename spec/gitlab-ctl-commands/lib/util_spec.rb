@@ -178,4 +178,29 @@ RSpec.describe GitlabCtl::Util do
       described_class.chef_run('config', 'attributes')
     end
   end
+
+  describe '#get_node_attributes' do
+    context 'when node file is missing' do
+      before do
+        allow(File).to receive(:exist?).with(%r{/opt/gitlab/embedded/nodes.*json}).and_return(false)
+        allow(Dir).to receive(:glob?).with(%r{/opt/gitlab/embedded/}).and_return([])
+      end
+
+      it 'raises an error' do
+        expect { GitlabCtl::Util.get_node_attributes }.to raise_error(GitlabCtl::Errors::NodeError, "Node attributes JSON file not found in /opt/gitlab/embedded/nodes, has reconfigure been run yet?")
+      end
+    end
+  end
+
+  describe '#get_public_node_attributes' do
+    context 'when node file is missing' do
+      before do
+        allow(File).to receive(:exist?).with(%r{/var/opt/gitlab/public_attributes.json}).and_return(false)
+      end
+
+      it 'returns empty hash' do
+        expect(GitlabCtl::Util.get_public_node_attributes).to eq({})
+      end
+    end
+  end
 end

@@ -56,17 +56,19 @@ module GitlabCtl
         # as a single level Hash
         fqdn = get_fqdn
         attribute_file = File.exist?("#{base_path}/embedded/nodes/#{fqdn}.json") ? "#{base_path}/embedded/nodes/#{fqdn}.json" : Dir.glob("#{base_path}/embedded/nodes/*.json").max_by { |f| File.mtime(f) }
+
+        raise GitlabCtl::Errors::NodeError, "Node attributes JSON file not found in #{base_path}/embedded/nodes, has reconfigure been run yet?" unless attribute_file
+
         data = parse_json_file(attribute_file)
         Chef::Mixin::DeepMerge.merge(data['default'], data['normal'])
       end
 
       def get_public_node_attributes
         attribute_file = '/var/opt/gitlab/public_attributes.json'
-        begin
-          parse_json_file(attribute_file)
-        rescue Errno::ENOENT
-          {}
-        end
+
+        return {} unless File.exist?(attribute_file)
+
+        parse_json_file(attribute_file)
       end
 
       def get_password(input_text: 'Enter password: ', do_confirm: true)
