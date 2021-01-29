@@ -1,0 +1,43 @@
+From 5dd7555a496cdcffa5834429f93f17c66e5b914a Mon Sep 17 00:00:00 2001
+From: Jacob Vosmaer <jacob@gitlab.com>
+Date: Wed, 20 Jan 2021 11:04:25 -0500
+Subject: [PATCH 3/4] ls-refs.c: initialize 'prefixes' before using it
+
+Correctly initialize the "prefixes" strvec using strvec_init() instead
+of simply zeroing it via the earlier memset().
+
+There's no way to trigger a crash, since the first 'ref-prefix' command
+will initialize the strvec via the 'ALLOC_GROW' in 'strvec_push_nodup()'
+(the alloc and nr variables are already zero'd, so the call to
+ALLOC_GROW is valid).
+
+If no "ref-prefix" command was given, then the call to
+'ls-refs.c:ref_match()' will abort early after it reads the zero in
+'prefixes->nr'. Likewise, strvec_clear() will only call free() on the
+array, which is NULL, so we're safe there, too.
+
+But, all of this is dangerous and requires more reasoning than it would
+if we simply called 'strvec_init()', so do that.
+
+Signed-off-by: Jacob Vosmaer <jacob@gitlab.com>
+Signed-off-by: Taylor Blau <me@ttaylorr.com>
+Signed-off-by: Junio C Hamano <gitster@pobox.com>
+---
+ ls-refs.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/ls-refs.c b/ls-refs.c
+index a1e0b473e4..367597d447 100644
+--- a/ls-refs.c
++++ b/ls-refs.c
+@@ -90,6 +90,7 @@ int ls_refs(struct repository *r, struct strvec *keys,
+ 	struct ls_refs_data data;
+ 
+ 	memset(&data, 0, sizeof(data));
++	strvec_init(&data.prefixes);
+ 
+ 	git_config(ls_refs_config, NULL);
+ 
+-- 
+2.30.0
+
