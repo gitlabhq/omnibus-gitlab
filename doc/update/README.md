@@ -54,7 +54,7 @@ From GitLab 10.8, upgrade paths are enforced for version upgrades by
 default. This restricts performing direct upgrades that skip major versions (for
 example 10.3 to 12.7 in one jump) that **can break GitLab
 installations** due to multiple reasons like deprecated or removed configuration
-settings, upgrade of internal tools and libraries etc. Users will have to follow
+settings, upgrade of internal tools and libraries, and so on. Users must follow
 the [official upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
 while upgrading their GitLab instances.
 
