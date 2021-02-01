@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.8.2 (2021-02-01)
+
+### Security (2 changes)
+
+- Add patch for libxml2 CVE-2019-20388,CVE-2020-7595.
+- Update PG11 and PG12 minor versions.
+
+
 ## 13.8.1 (2021-01-26)
 
 ### Fixed (1 change)
