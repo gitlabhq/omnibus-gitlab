@@ -173,6 +173,15 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.29.1. !4807 (hmhealey)
 
 
+## 13.6.6 (2021-02-01)
+
+### Security (3 changes)
+
+- Update OpenSSL to 1.1.1i.
+- Update PG11 and PG12 minor versions.
+- Add patch for libxml2 CVE-2019-20388,CVE-2020-7595.
+
+
 ## 13.6.5 (2021-01-13)
 
 - No changes.
