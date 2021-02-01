@@ -39,6 +39,8 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   patch source: '50f06b3efb638efb0abd95dc62dca05ae67882c2.patch', env: env
+  patch source: 'CVE-2019-20388.patch', env: env
+  patch source: 'CVE-2020-7595.patch', env: env
 
   configure_command = [
     "--with-zlib=#{install_dir}/embedded",
