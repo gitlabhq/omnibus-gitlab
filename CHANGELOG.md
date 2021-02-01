@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.8.2 (2021-02-01)
+
+### Security (2 changes)
+
+- Add patch for libxml2 CVE-2019-20388,CVE-2020-7595.
+- Update PG11 and PG12 minor versions.
+
+
 ## 13.8.1 (2021-01-26)
 
 ### Fixed (1 change)
@@ -65,6 +73,15 @@ omnibus-gitlab repository.
 - Update Docker to 20.10 in our pipelines on CI/CD. !4878 (Takuya Noguchi)
 - Use Debian 10 as examples in development docs. !4883 (Takuya Noguchi)
 - Update Mattermost to 5.30.1. !4885 (hmhealey)
+
+
+## 13.7.6 (2021-02-01)
+
+### Security (3 changes)
+
+- Update OpenSSL to 1.1.1i.
+- Update PG11 and PG12 minor versions.
+- Add patch for libxml2 CVE-2019-20388,CVE-2020-7595.
 
 
 ## 13.7.5 (2021-01-25)
@@ -154,6 +171,15 @@ omnibus-gitlab repository.
 - pages: Support for HTTPS over PROXYv2 protocol. !4760
 - Use the 'main' branch for gitlab-shell nightlies. !4772
 - Update Mattermost to 5.29.1. !4807 (hmhealey)
+
+
+## 13.6.6 (2021-02-01)
+
+### Security (3 changes)
+
+- Update OpenSSL to 1.1.1i.
+- Update PG11 and PG12 minor versions.
+- Add patch for libxml2 CVE-2019-20388,CVE-2020-7595.
 
 
 ## 13.6.5 (2021-01-13)
