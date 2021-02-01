@@ -13,7 +13,7 @@ module Gitlab
         ENV[key] ||= value&.strip
       end
 
-      def section(name, collapsed: false)
+      def section(name, collapsed: true)
         return unless ENV['CI']
 
         name.tr!(':', '-')
