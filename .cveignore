@@ -15,6 +15,12 @@ CVE-2019-8325
 # libxml2/2.9.9
 CVE-2019-19956
 
+# libxml2/2.9.10
+# https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5866
+CVE-2019-20388
+# https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5867
+CVE-2020-7595
+
 # libxslt/1.1.32
 CVE-2019-11068
 CVE-2019-5815
@@ -64,4 +70,3 @@ CVE-2019-1543
 CVE-2017-3736
 
 # Entries from CVEIGNORE variable go below this line
-
