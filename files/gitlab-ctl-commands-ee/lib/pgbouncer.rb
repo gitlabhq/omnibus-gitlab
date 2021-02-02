@@ -203,7 +203,7 @@ module Pgbouncer
 
     def listen_port
       # Deprecation: Remove attributes in `gitlab` in 14.0 - https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5939
-      if attributes.key?('gitlab')
+      if attributes['gitlab'].key?('pgbouncer')
         attributes['gitlab']['pgbouncer']['listen_port']
       else
         attributes['pgbouncer']['listen_port']
