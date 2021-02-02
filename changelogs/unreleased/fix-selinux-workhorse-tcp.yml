@@ -1,0 +1,5 @@
+---
+title: Fix selinux nil error when workhorse is set to use tcp
+merge_request: 4978
+author:
+type: fixed

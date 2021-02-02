@@ -24,7 +24,7 @@ class SELinuxHelper
         gitlab_shell_config_file,
         gitlab_shell_secret_file,
         gitlab_workhorse_sockets_directory
-      ].each do |file|
+      ].compact.each do |file|
         selinux_code << "semanage fcontext -a -t gitlab_shell_t '#{file}'"
         next unless File.exist?(file)
 
