@@ -32,13 +32,13 @@ class AwsDummyClass
   end
 end
 
-RSpec.describe 'aws:process', type: :rake do
+RSpec.describe 'aws:ami:create', type: :rake do
   before :all do
     Rake.application.rake_require 'gitlab/tasks/aws'
   end
 
   before do
-    Rake::Task['aws:process'].reenable
+    Rake::Task['aws:ami:create'].reenable
     allow_any_instance_of(Kernel).to receive(:system).and_return(true)
   end
 
@@ -56,7 +56,7 @@ RSpec.describe 'aws:process', type: :rake do
 
       expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ce", "http://example.com", ""])
 
-      Rake::Task['aws:process'].invoke
+      Rake::Task['aws:ami:create'].invoke
     end
 
     it 'should identify ce category correctly if nothing is specified' do
@@ -65,7 +65,7 @@ RSpec.describe 'aws:process', type: :rake do
 
       expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ce", "http://example.com", ""])
 
-      Rake::Task['aws:process'].invoke
+      Rake::Task['aws:ami:create'].invoke
     end
 
     it 'should identify ee category correctly' do
@@ -74,7 +74,7 @@ RSpec.describe 'aws:process', type: :rake do
 
       expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ee", "http://example.com", ""])
 
-      Rake::Task['aws:process'].invoke
+      Rake::Task['aws:ami:create'].invoke
     end
 
     it 'should identify ee ultimate category correctly' do
@@ -85,7 +85,7 @@ RSpec.describe 'aws:process', type: :rake do
 
       expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ee-ultimate", "http://example.com", "AWS_ULTIMATE_LICENSE_FILE"])
 
-      Rake::Task['aws:process'].invoke
+      Rake::Task['aws:ami:create'].invoke
     end
 
     it 'should identify ee premium category correctly' do
@@ -96,7 +96,7 @@ RSpec.describe 'aws:process', type: :rake do
 
       expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ee-premium", "http://example.com", "AWS_PREMIUM_LICENSE_FILE"])
 
-      Rake::Task['aws:process'].invoke
+      Rake::Task['aws:ami:create'].invoke
     end
   end
 
@@ -111,7 +111,7 @@ RSpec.describe 'aws:process', type: :rake do
     it 'does not do anything' do
       expect(AWSHelper).not_to receive(:new)
 
-      Rake::Task['aws:process'].invoke
+      Rake::Task['aws:ami:create'].invoke
     end
   end
 
@@ -126,7 +126,7 @@ RSpec.describe 'aws:process', type: :rake do
     it 'does not do anything' do
       expect(AWSHelper).not_to receive(:new)
 
-      Rake::Task['aws:process'].invoke
+      Rake::Task['aws:ami:create'].invoke
     end
   end
 end

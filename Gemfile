@@ -32,6 +32,8 @@ gem 'knapsack'
 gem 'docker-api'
 gem 'google_drive'
 gem 'http'
+gem 'aws-sdk-ec2'
+gem 'aws-sdk-marketplacecatalog'
 
 group :packagecloud, optional: true do
   gem 'package_cloud'
