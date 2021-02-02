@@ -40,7 +40,13 @@ GEM
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
+    aws-sdk-ec2 (1.197.0)
+      aws-sdk-core (~> 3, >= 3.99.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-kms (1.34.1)
+      aws-sdk-core (~> 3, >= 3.99.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-marketplacecatalog (1.7.0)
       aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.68.1)
@@ -456,6 +462,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-sdk-ec2
+  aws-sdk-marketplacecatalog
   byebug
   chef (~> 15.14.0)
   chefspec
