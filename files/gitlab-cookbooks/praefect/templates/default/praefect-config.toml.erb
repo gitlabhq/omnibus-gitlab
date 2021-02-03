@@ -63,6 +63,9 @@ format = '<%= @logging_format %>'
 <% @virtual_storages.each do |name, config| %>
 [[virtual_storage]]
 name = '<%= name %>'
+<% if config['default_replication_factor'] %>
+default_replication_factor = <%= config['default_replication_factor'] %>
+<% end %>
 <% config['nodes'].each do |storage, node|  %>
 [[virtual_storage.node]]
 storage = '<%= storage %>'

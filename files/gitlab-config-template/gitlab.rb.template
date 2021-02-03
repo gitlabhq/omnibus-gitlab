@@ -2099,6 +2099,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # praefect['logging_format'] = "json"
 # praefect['virtual_storages'] = {
 #   'default' => {
+#     'default_replication_factor' => 3,
 #     'nodes' => {
 #       'praefect-internal-0' => {
 #         'address' => 'tcp://10.23.56.78:8075',

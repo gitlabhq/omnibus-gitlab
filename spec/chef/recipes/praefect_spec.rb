@@ -92,6 +92,7 @@ RSpec.describe 'praefect' do
       let(:virtual_storages) do
         {
           'default' => {
+            'default_replication_factor' => 2,
             'nodes' => {
               'praefect1' => { address: 'tcp://node1.internal', token: "praefect1-token" },
               'praefect2' => { address: 'tcp://node2.internal', token: "praefect2-token" },
@@ -205,6 +206,7 @@ RSpec.describe 'praefect' do
               'virtual_storage' => [
                 {
                   'name' => 'default',
+                  'default_replication_factor' => 2,
                   'node' => [
                     {
                       'address' => 'tcp://node1.internal',
