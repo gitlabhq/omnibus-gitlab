@@ -154,63 +154,87 @@ RSpec.describe 'praefect' do
 
       it 'renders the config.toml' do
         expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(Tomlrb.parse(content)).to include(
+          expect(Tomlrb.parse(content)).to eq(
             {
+              'auth' => {
+                'token' => 'secrettoken123',
+                'transitioning' => false
+              },
+              'database' => {
+                'dbname' => 'praefect_production',
+                'host' => 'pg.external',
+                'host_no_proxy' => 'pg.internal',
+                'password' => 'praefect-pg-pass',
+                'port' => 2234,
+                'port_no_proxy' => 1234,
+                'sslcert' => '/path/to/client-cert',
+                'sslkey' => '/path/to/client-key',
+                'sslmode' => 'require',
+                'sslrootcert' => '/path/to/rootcert',
+                'user' => 'praefect-pg'
+              },
+              'failover' => {
+                'election_strategy' => 'local',
+                'enabled' => true
+              },
+              'logging' => {
+                'format' => 'text',
+                'level' => 'debug'
+              },
+              'listen_addr' => 'localhost:4444',
+              'prometheus' => {
+                'grpc_latency_buckets' => [0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]
+              },
               'reconciliation' => {
-                'scheduling_interval' => '1m',
-                'histogram_buckets' => [1.0, 2.0]
-              }
+                'histogram_buckets' => [1.0, 2.0],
+                'scheduling_interval' => '1m'
+              },
+              'sentry' => {
+                'sentry_dsn' => 'https://my_key:my_secret@sentry.io/test_project',
+                'sentry_environment' => 'production'
+              },
+              'prometheus_listen_addr' => 'localhost:1234',
+              'socket_path' => '/var/opt/gitlab/praefect/praefect.socket',
+              'tls' => {
+                'certificate_path' => '/path/to/cert.pem',
+                'key_path' => '/path/to/key.pem'
+              },
+              'tls_listen_addr' => 'localhost:5555',
+              'virtual_storage' => [
+                {
+                  'name' => 'default',
+                  'node' => [
+                    {
+                      'address' => 'tcp://node1.internal',
+                      'storage' => 'praefect1',
+                      'token' => 'praefect1-token'
+                    },
+                    {
+                      'address' => 'tcp://node2.internal',
+                      'storage' => 'praefect2',
+                      'token' => 'praefect2-token'
+                    },
+                    {
+                      'address' => 'tcp://node3.internal',
+                      'storage' => 'praefect3',
+                      'token' => 'praefect3-token'
+                    },
+                    {
+                      'address' => 'tcp://node4.internal',
+                      'storage' => 'praefect4',
+                      'token' => 'praefect4-token'
+                    },
+                    {
+                      'address' => 'tcp://node5.internal',
+                      'storage' => 'praefect5',
+                      'token' => 'praefect5-token'
+                    }
+                  ]
+                }
+              ]
             }
           )
         }
-
-        expect(chef_run).to render_file(config_path)
-          .with_content("listen_addr = '#{listen_addr}'")
-        expect(chef_run).to render_file(config_path)
-          .with_content(%r{^tls_listen_addr = '#{tls_listen_addr}'\n\[tls\]\ncertificate_path = '#{certificate_path}'\nkey_path = '#{key_path}'\n})
-        expect(chef_run).to render_file(config_path)
-          .with_content("socket_path = '#{socket_path}'")
-        expect(chef_run).to render_file(config_path)
-          .with_content("prometheus_listen_addr = '#{prom_addr}'")
-        expect(chef_run).to render_file(config_path)
-          .with_content("level = '#{log_level}'")
-        expect(chef_run).to render_file(config_path)
-          .with_content("format = '#{log_format}'")
-        expect(chef_run).to render_file(config_path)
-          .with_content("sentry_dsn = '#{sentry_dsn}'")
-        expect(chef_run).to render_file(config_path)
-          .with_content("sentry_environment = '#{sentry_environment}'")
-        expect(chef_run).to render_file(config_path)
-          .with_content(%r{\[failover\]\s+enabled = true\s+election_strategy = 'local'})
-        expect(chef_run).to render_file(config_path)
-          .with_content(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
-        expect(chef_run).to render_file(config_path)
-          .with_content(%r{^\[auth\]\ntoken = '#{auth_token}'\ntransitioning = #{auth_transitioning}\n})
-
-        virtual_storages.each do |name, nodes|
-          expect(chef_run).to render_file(config_path).with_content(%r{^\[\[virtual_storage\]\]\nname = '#{name}'\n})
-          nodes.each do |storage, node|
-            expect(chef_run).to render_file(config_path)
-              .with_content(%r{^\[\[virtual_storage.node\]\]\nstorage = '#{storage}'\naddress = '#{node[:address]}'\ntoken = '#{node[:token]}'\n})
-          end
-        end
-
-        database_section = Regexp.new([
-          %r{\[database\]},
-          %r{host = '#{database_host}'},
-          %r{port = #{database_port}},
-          %r{user = '#{database_user}'},
-          %r{password = '#{database_password}'},
-          %r{dbname = '#{database_dbname}'},
-          %r{sslmode = '#{database_sslmode}'},
-          %r{sslcert = '#{database_sslcert}'},
-          %r{sslkey = '#{database_sslkey}'},
-          %r{sslrootcert = '#{database_sslrootcert}'},
-          %r{host_no_proxy = '#{database_host_no_proxy}'},
-          %r{port_no_proxy = #{database_port_no_proxy}},
-        ].map(&:to_s).join('\n'))
-
-        expect(chef_run).to render_file(config_path).with_content(database_section)
       end
 
       it 'renders the env dir files correctly' do
