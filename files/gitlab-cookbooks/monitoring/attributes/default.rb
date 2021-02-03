@@ -107,8 +107,12 @@ default['monitoring']['gitlab-exporter']['listen_address'] = 'localhost'
 default['monitoring']['gitlab-exporter']['listen_port'] = '9168'
 default['monitoring']['gitlab-exporter']['probe_sidekiq'] = true
 default['monitoring']['gitlab-exporter']['env'] = {
+  # See https://gitlab.com/gitlab-org/gitlab/-/issues/297241
   'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so',
-  'MALLOC_CONF' => 'dirty_decay_ms:0,muzzy_decay_ms:0'
+  'MALLOC_CONF' => 'dirty_decay_ms:0,muzzy_decay_ms:0',
+  'RUBY_GC_HEAP_INIT_SLOTS' => 80000,
+  'RUBY_GC_HEAP_FREE_SLOTS_MIN_RATIO' => 0.055,
+  'RUBY_GC_HEAP_FREE_SLOTS_MAX_RATIO' => 0.111
 }
 
 # To completely disable prometheus, and all of it's exporters, set to false
