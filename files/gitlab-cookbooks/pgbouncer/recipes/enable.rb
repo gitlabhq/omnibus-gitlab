@@ -16,18 +16,15 @@
 
 account_helper = AccountHelper.new(node)
 pgb_helper = PgbouncerHelper.new(node)
-pgbouncer_static_etc_dir = node['gitlab']['pgbouncer']['env_directory']
+pgbouncer_static_etc_dir = node['pgbouncer']['env_directory']
 
-node.default['gitlab']['pgbouncer']['unix_socket_dir'] ||= node['gitlab']['pgbouncer']['data_directory']
+node.default['pgbouncer']['unix_socket_dir'] ||= node['pgbouncer']['data_directory']
 
 include_recipe 'postgresql::user'
 
-# If consul is enabled, it needs to run before pgbouncer
-include_recipe 'consul::enable' if node['consul']['enable']
-
 [
-  node['gitlab']['pgbouncer']['log_directory'],
-  node['gitlab']['pgbouncer']['data_directory'],
+  node['pgbouncer']['log_directory'],
+  node['pgbouncer']['data_directory'],
   pgbouncer_static_etc_dir
 ].each do |dir|
   directory dir do
@@ -38,13 +35,13 @@ include_recipe 'consul::enable' if node['consul']['enable']
 end
 
 env_dir pgbouncer_static_etc_dir do
-  variables node['gitlab']['pgbouncer']['env']
+  variables node['pgbouncer']['env']
   notifies :restart, "runit_service[pgbouncer]"
 end
 
-template "#{node['gitlab']['pgbouncer']['data_directory']}/pg_auth" do
+template "#{node['pgbouncer']['data_directory']}/pg_auth" do
   source "pg_auth.erb"
-  variables(node['gitlab']['pgbouncer'])
+  variables(node['pgbouncer'])
   helper(:pgb_helper) { pgb_helper }
 end
 
@@ -52,15 +49,15 @@ runit_service 'pgbouncer' do
   options(
     username: node['postgresql']['username'],
     groupname: node['postgresql']['group'],
-    data_directory: node['gitlab']['pgbouncer']['data_directory'],
-    log_directory: node['gitlab']['pgbouncer']['log_directory'],
+    data_directory: node['pgbouncer']['data_directory'],
+    log_directory: node['pgbouncer']['log_directory'],
     env_dir: pgbouncer_static_etc_dir
   )
 end
 
-template "#{node['gitlab']['pgbouncer']['data_directory']}/pgbouncer.ini" do
+template "#{node['pgbouncer']['data_directory']}/pgbouncer.ini" do
   source "#{File.basename(name)}.erb"
-  variables lazy { node['gitlab']['pgbouncer'].to_hash }
+  variables lazy { node['pgbouncer'].to_hash }
   owner account_helper.postgresql_user
   group account_helper.postgresql_group
   mode '0600'
@@ -68,11 +65,11 @@ template "#{node['gitlab']['pgbouncer']['data_directory']}/pgbouncer.ini" do
 end
 
 file 'databases.json' do
-  path lazy { node['gitlab']['pgbouncer']['databases_json'] }
-  user lazy { node['gitlab']['pgbouncer']['databases_ini_user'] }
+  path lazy { node['pgbouncer']['databases_json'] }
+  user lazy { node['pgbouncer']['databases_ini_user'] }
   group account_helper.postgresql_group
   mode '0600'
-  content node['gitlab']['pgbouncer']['databases'].to_json
+  content node['pgbouncer']['databases'].to_json
   notifies :run, 'execute[generate databases.ini]', :immediately
 end
 
@@ -80,19 +77,19 @@ execute 'generate databases.ini' do
   command lazy {
     <<~EOF
     /opt/gitlab/bin/gitlab-ctl pgb-notify \
-     --databases-json #{node['gitlab']['pgbouncer']['databases_json']} \
-     --databases-ini #{node['gitlab']['pgbouncer']['databases_ini']} \
-     --hostuser #{node['gitlab']['pgbouncer']['databases_ini_user']} \
+     --databases-json #{node['pgbouncer']['databases_json']} \
+     --databases-ini #{node['pgbouncer']['databases_ini']} \
+     --hostuser #{node['pgbouncer']['databases_ini_user']} \
      --hostgroup #{account_helper.postgresql_group} \
-     --pg-host #{node['gitlab']['pgbouncer']['listen_addr']} \
-     --pg-port #{node['gitlab']['pgbouncer']['listen_port']} \
+     --pg-host #{node['pgbouncer']['listen_addr']} \
+     --pg-port #{node['pgbouncer']['listen_port']} \
      --user #{node['postgresql']['pgbouncer_user']}
     EOF
   }
   action :nothing
   not_if do
     node['consul']['watchers'].include?('postgresql') &&
-      File.exist?(node['gitlab']['pgbouncer']['databases_ini'])
+      File.exist?(node['pgbouncer']['databases_ini'])
   end
   retries 3
 end

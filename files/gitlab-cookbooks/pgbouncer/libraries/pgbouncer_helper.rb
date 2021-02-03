@@ -2,7 +2,7 @@ class PgbouncerHelper < BaseHelper
   attr_reader :node
 
   def database_config(database)
-    settings = node['gitlab']['pgbouncer']['databases'][database].to_hash
+    settings = node['pgbouncer']['databases'][database].to_hash
     # The recipe uses user and password for the auth_user option and the pg_auth file
     settings['auth_user'] = settings.delete('user') if settings.key?('user')
     settings.delete('password') if settings.key?('password')
@@ -13,14 +13,14 @@ class PgbouncerHelper < BaseHelper
 
   def pgbouncer_admin_config
     user = node['postgresql']['pgbouncer_user']
-    port = node['gitlab']['pgbouncer']['listen_port']
-    unix_socket_dir = node['gitlab']['pgbouncer']['data_directory']
+    port = node['pgbouncer']['listen_port']
+    unix_socket_dir = node['pgbouncer']['data_directory']
     "user=#{user} dbname=pgbouncer sslmode=disable port=#{port} host=#{unix_socket_dir}"
   end
 
   def pg_auth_users
-    results = node['gitlab']['pgbouncer']['users'].to_hash
-    node['gitlab']['pgbouncer']['databases'].each do |_db, settings|
+    results = node['pgbouncer']['users'].to_hash
+    node['pgbouncer']['databases'].each do |_db, settings|
       results[settings['user']] = { 'password' => settings['password'] }
       results[settings['user']]['auth_type'] = settings['auth_type'] if settings.key?('auth_type')
     end
@@ -66,11 +66,9 @@ class PgbouncerHelper < BaseHelper
 
   def public_attributes
     {
-      'gitlab' => {
-        'pgbouncer' => node['gitlab']['pgbouncer'].select do |key, value|
-          %w(databases_ini databases_json listen_addr listen_port).include?(key)
-        end
-      }
+      'pgbouncer' => node['pgbouncer'].select do |key, value|
+        %w(databases_ini databases_json listen_addr listen_port).include?(key)
+      end
     }
   end
 

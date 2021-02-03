@@ -35,7 +35,7 @@ end
 
 # Watcher specific settings
 if node['consul']['watchers'].include?('postgresql')
-  node.default['gitlab']['pgbouncer']['databases_ini'] = '/var/opt/gitlab/consul/databases.ini'
-  node.default['gitlab']['pgbouncer']['databases_json'] = '/var/opt/gitlab/consul/databases.json'
-  node.default['gitlab']['pgbouncer']['databases_ini_user'] = 'gitlab-consul'
+  node.default['pgbouncer']['databases_ini'] = '/var/opt/gitlab/consul/databases.ini'
+  node.default['pgbouncer']['databases_json'] = '/var/opt/gitlab/consul/databases.json'
+  node.default['pgbouncer']['databases_ini_user'] = 'gitlab-consul'
 end

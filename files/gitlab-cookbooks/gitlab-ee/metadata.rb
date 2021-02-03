@@ -15,3 +15,4 @@ depends "gitlab"
 depends 'consul'
 depends 'repmgr'
 depends 'patroni'
+depends 'pgbouncer'

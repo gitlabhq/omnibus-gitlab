@@ -10,7 +10,7 @@ RSpec.describe 'gitlab-ee::default' do
   context 'postgresql is enabled' do
     context 'pgbouncer will not connect to postgresql' do
       it 'should always include the pgbouncer_user recipe' do
-        expect(chef_run).to include_recipe('gitlab-ee::pgbouncer_user')
+        expect(chef_run).to include_recipe('pgbouncer::user')
       end
     end
 
@@ -26,7 +26,7 @@ RSpec.describe 'gitlab-ee::default' do
       end
 
       it 'should include the pgbouncer_user recipe' do
-        expect(chef_run).to include_recipe('gitlab-ee::pgbouncer_user')
+        expect(chef_run).to include_recipe('pgbouncer::user')
       end
     end
   end

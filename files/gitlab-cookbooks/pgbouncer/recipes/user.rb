@@ -18,8 +18,8 @@
 # pgbouncer will use to authenticate to the database.
 
 pgb_helper = PgbouncerHelper.new(node)
-default_auth_query = node.default['gitlab']['pgbouncer']['auth_query']
-auth_query = node['gitlab']['pgbouncer']['auth_query']
+default_auth_query = node.default['pgbouncer']['auth_query']
+auth_query = node['pgbouncer']['auth_query']
 
 if pgb_helper.create_pgbouncer_user?('geo-postgresql')
   pgbouncer_user 'geo' do

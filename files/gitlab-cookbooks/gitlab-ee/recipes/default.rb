@@ -23,7 +23,6 @@ include_recipe 'gitlab::default'
   sentinel
   geo-postgresql
   geo-logcursor
-  pgbouncer
 ].each do |service|
   if node['gitlab'][service]['enable']
     include_recipe "gitlab-ee::#{service}"
@@ -34,6 +33,7 @@ end
 
 %w(
   consul
+  pgbouncer
   repmgr
   patroni
 ).each do |service|
@@ -55,4 +55,4 @@ else
 end
 
 # Create the pgbouncer users
-include_recipe 'gitlab-ee::pgbouncer_user'
+include_recipe 'pgbouncer::user'
