@@ -4,7 +4,7 @@ require_relative "../ohai_helper.rb"
 namespace :cache do
   desc "Populate cache"
   task :populate do
-    Gitlab::Util.section('cache:populate', collapsed: true) do
+    Gitlab::Util.section('cache:populate') do
       system(*%w[bin/omnibus cache populate])
     end
   end
