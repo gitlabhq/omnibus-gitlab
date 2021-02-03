@@ -60,10 +60,10 @@ level = '<%= @logging_level %>'
 format = '<%= @logging_format %>'
 <% end %>
 
-<% @virtual_storages.each do |name, nodes| %>
+<% @virtual_storages.each do |name, config| %>
 [[virtual_storage]]
 name = '<%= name %>'
-<% nodes.each do |storage, node|  %>
+<% config['nodes'].each do |storage, node|  %>
 [[virtual_storage.node]]
 storage = '<%= storage %>'
 address = '<%= node['address'] %>'

@@ -92,10 +92,12 @@ RSpec.describe 'praefect' do
       let(:virtual_storages) do
         {
           'default' => {
-            'praefect1' => { address: 'tcp://node1.internal', token: "praefect1-token" },
-            'praefect2' => { address: 'tcp://node2.internal', token: "praefect2-token" },
-            'praefect3' => { address: 'tcp://node3.internal', token: "praefect3-token" },
-            'praefect4' => { address: 'tcp://node4.internal', token: "praefect4-token" },
+            'nodes' => {
+              'praefect1' => { address: 'tcp://node1.internal', token: "praefect1-token" },
+              'praefect2' => { address: 'tcp://node2.internal', token: "praefect2-token" },
+              'praefect3' => { address: 'tcp://node3.internal', token: "praefect3-token" },
+              'praefect4' => { address: 'tcp://node4.internal', token: "praefect4-token" }
+            },
             'praefect5' => { address: 'tcp://node5.internal', token: "praefect5-token" }
           }
         }
@@ -247,6 +249,14 @@ RSpec.describe 'praefect' do
 
         it 'raises an error' do
           expect { chef_run }.to raise_error("Praefect virtual_storages must be a hash")
+        end
+      end
+
+      context 'with duplicate virtual storage node configured via fallback' do
+        let(:virtual_storages) { { 'default' => { 'node-1' => {}, 'nodes' => { 'node-1' => {} } } } }
+
+        it 'raises an error' do
+          expect { chef_run }.to raise_error("Virtual storage 'default' contains duplicate configuration for node 'node-1'")
         end
       end
 

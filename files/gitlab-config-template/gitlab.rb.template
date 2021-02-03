@@ -2099,23 +2099,27 @@ external_url 'GENERATED_EXTERNAL_URL'
 # praefect['logging_format'] = "json"
 # praefect['virtual_storages'] = {
 #   'default' => {
-#     'praefect-internal-0' => {
-#       'address' => 'tcp://10.23.56.78:8075',
-#       'token' => 'abc123'
-#     },
-#     'praefect-internal-1' => {
-#       'address' => 'tcp://10.76.23.31:8075',
-#       'token' => 'xyz456'
+#     'nodes' => {
+#       'praefect-internal-0' => {
+#         'address' => 'tcp://10.23.56.78:8075',
+#         'token' => 'abc123'
+#       },
+#       'praefect-internal-1' => {
+#         'address' => 'tcp://10.76.23.31:8075',
+#         'token' => 'xyz456'
+#       }
 #     }
 #   },
 #   'alternative' => {
-#     'praefect-internal-2' => {
-#       'address' => 'tcp://10.34.1.16:8075',
-#       'token' => 'abc321'
-#     },
-#     'praefect-internal-3' => {
-#       'address' => 'tcp://10.23.18.6:8075',
-#       'token' => 'xyz890'
+#     'nodes' => {
+#       'praefect-internal-2' => {
+#         'address' => 'tcp://10.34.1.16:8075',
+#         'token' => 'abc321'
+#       },
+#       'praefect-internal-3' => {
+#         'address' => 'tcp://10.23.18.6:8075',
+#         'token' => 'xyz890'
+#       }
 #     }
 #   }
 # }
