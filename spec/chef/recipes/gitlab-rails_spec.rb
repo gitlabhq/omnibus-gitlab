@@ -1555,56 +1555,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'Unleash settings' do
-      it 'defaults the feature_flags_unleash_enabled variable to false' do
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'feature_flags_unleash_enabled' => false
-          )
-        )
-      end
-
-      it 'sets the feature_flags_unleash_enabled variable' do
-        stub_gitlab_rb(gitlab_rails: { feature_flags_unleash_enabled: true })
-
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'feature_flags_unleash_enabled' => true
-          )
-        )
-      end
-
-      it 'sets the feature_flags_unleash_url variable' do
-        stub_gitlab_rb(gitlab_rails: { feature_flags_unleash_url: 'some url' })
-
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'feature_flags_unleash_url' => 'some url'
-          )
-        )
-      end
-
-      it 'sets the feature_flags_unleash_app_name variable' do
-        stub_gitlab_rb(gitlab_rails: { feature_flags_unleash_app_name: 'production' })
-
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'feature_flags_unleash_app_name' => 'production'
-          )
-        )
-      end
-
-      it 'sets the feature_flags_unleash_instance_id variable' do
-        stub_gitlab_rb(gitlab_rails: { feature_flags_unleash_instance_id: 'instance_id' })
-
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'feature_flags_unleash_instance_id' => 'instance_id'
-          )
-        )
-      end
-    end
-
     context 'Prometheus self-monitoring' do
       it 'sets the default values' do
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
