@@ -80,6 +80,8 @@ build do
     env['PATH'] = "/opt/rh/devtoolset-7/root/usr/bin:#{env['PATH']}"
   end
 
+  make "install -C workhorse PREFIX=#{install_dir}/embedded"
+
   bundle_without = %w(development test)
   bundle_without << 'mysql'
   bundle 'config build.rugged --no-use-system-libraries', env: env
@@ -154,7 +156,8 @@ build do
   move "#{Omnibus::Config.source_dir}/gitlab-rails/node_modules", Omnibus::Config.project_root.to_s
 
   bundle "exec license_finder report --decisions-file=config/dependency_decisions.yml --format=csv --save=licenses.csv", env: env
-  copy 'licenses.csv', "#{install_dir}/licenses/gitlab-rails.csv"
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv", cwd: "#{Omnibus::Config.source_dir}/gitlab-rails/workhorse"
+  command "sort -u licenses.csv workhorse/license.csv > #{install_dir}/licenses/gitlab-rails.csv"
 
   # Tear down now that gitlab:assets:compile is done.
   delete 'config/gitlab.yml'
@@ -199,6 +202,7 @@ build do
     app/assets
     vendor/assets
     ee/app/assets
+    workhorse
   )
 
   # Create a wrapper for the rake tasks of the Rails app
