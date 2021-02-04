@@ -16,6 +16,7 @@
 #
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
+redis_helper = RedisHelper.new(node)
 
 working_dir = node['gitlab-kas']['dir']
 log_directory = node['gitlab-kas']['log_directory']
@@ -23,6 +24,16 @@ env_directory = node['gitlab-kas']['env_directory']
 gitlab_kas_static_etc_dir = '/opt/gitlab/etc/gitlab-kas'
 gitlab_kas_config_file = File.join(working_dir, 'gitlab-kas-config.yml')
 gitlab_kas_authentication_secret_file = File.join(working_dir, 'authentication_secret_file')
+redis_host, redis_port, redis_password = redis_helper.redis_params
+redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
+redis_sentinels_master_name = node['redis']['master_name']
+gitlab_kas_redis_password_file = File.join(working_dir, 'redis_password_file')
+redis_network = redis_helper.redis_url.scheme == 'unix' ? 'unix' : 'tcp'
+redis_address = if redis_network == 'tcp'
+                  "#{redis_host}:#{redis_port}"
+                else
+                  node['gitlab']['gitlab-rails']['redis_socket']
+                end
 
 [
   working_dir,
@@ -50,6 +61,15 @@ file gitlab_kas_authentication_secret_file do
   notifies :restart, 'runit_service[gitlab-kas]'
 end
 
+file gitlab_kas_redis_password_file do
+  content redis_password
+  owner 'root'
+  group account_helper.gitlab_group
+  mode '0640'
+  notifies :restart, 'runit_service[gitlab-kas]'
+  only_if { redis_password && !redis_password.empty? }
+end
+
 template gitlab_kas_config_file do
   source 'gitlab-kas-config.yml.erb'
   owner 'root'
@@ -57,7 +77,12 @@ template gitlab_kas_config_file do
   mode '0640'
   variables(
     node['gitlab-kas'].to_hash.merge(
-      authentication_secret_file: gitlab_kas_authentication_secret_file
+      authentication_secret_file: gitlab_kas_authentication_secret_file,
+      redis_network: redis_network,
+      redis_address: redis_address,
+      redis_password_file: redis_password ? gitlab_kas_redis_password_file : nil,
+      redis_sentinels_master_name: redis_sentinels_master_name,
+      redis_sentinels: redis_sentinels
     )
   )
   notifies :restart, 'runit_service[gitlab-kas]'

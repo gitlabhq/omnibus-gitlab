@@ -1,0 +1,5 @@
+---
+title: 'Add redis config for gitlab-kas'
+merge_request: 4974
+author:
+type: changed

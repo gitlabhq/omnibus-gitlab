@@ -16,3 +16,19 @@ gitlab:
   authentication_secret_file: <%= @authentication_secret_file %>
 observability:
   usage_reporting_period: <%= @metrics_usage_reporting_period %>s
+redis:
+  network: <%= @redis_network %>
+  <%- if @redis_password_file %>
+  password_file: <%= @redis_password_file %>
+  <%- end %>
+  <%- if @redis_sentinels.empty? %>
+  server:
+    address: '<%= @redis_address %>'
+  <%- else %>
+  sentinel:
+    master_name: <%= @redis_sentinels_master_name %>
+    addresses:
+    <%- @redis_sentinels.each do |sentinel| %>
+      - '<%= sentinel['host'] %>:<%= sentinel['port'] %>'
+    <%- end %>
+  <%- end %>
