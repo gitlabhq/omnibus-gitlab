@@ -1136,44 +1136,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'FortiAuthenticator settings' do
-      context 'FortiAuthenticator is configured' do
-        it 'exposes the FortiAuthenticator settings' do
-          stub_gitlab_rb(
-            gitlab_rails: {
-              forti_authenticator_enabled: true,
-              forti_authenticator_host: 'forti_authenticator.example.com',
-              forti_authenticator_port: 444,
-              forti_authenticator_username: 'janedoe',
-              forti_authenticator_access_token: '123s3cr3t456'
-            }
-          )
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'forti_authenticator_enabled' => true,
-              'forti_authenticator_host' => 'forti_authenticator.example.com',
-              'forti_authenticator_port' => 444,
-              'forti_authenticator_username' => 'janedoe',
-              'forti_authenticator_access_token' => '123s3cr3t456'
-            )
-          )
-        end
-      end
-
-      context 'FortiAuthenticator is disabled' do
-        context 'FortiAuthenticator is not configured' do
-          it 'does not expose FortiAuthenticator settings' do
-            expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-              hash_including(
-                'forti_authenticator_enabled' => false
-              )
-            )
-          end
-        end
-      end
-    end
-
     context 'Application settings cache expiry' do
       context 'when a value is set' do
         it 'exposes the set value' do
@@ -1201,39 +1163,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'FortiToken Cloud settings' do
-      context 'FortiToken Cloud is configured' do
-        it 'exposes the FortiToken Cloud settings' do
-          stub_gitlab_rb(
-            gitlab_rails: {
-              forti_token_cloud_enabled: true,
-              forti_token_cloud_client_id: 'forti_token_cloud_client_id',
-              forti_token_cloud_client_secret: '123s3cr3t456'
-            }
-          )
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'forti_token_cloud_enabled' => true,
-              'forti_token_cloud_client_id' => 'forti_token_cloud_client_id',
-              'forti_token_cloud_client_secret' => '123s3cr3t456'
-            )
-          )
-        end
-      end
-
-      context 'FortiToken Cloud is disabled' do
-        context 'FortiToken Cloud is not configured' do
-          it 'does not expose FortiToken Cloud settings' do
-            expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-              hash_including(
-                'forti_token_cloud_enabled' => false
-              )
-            )
-          end
-        end
-      end
-    end
     context 'Sidekiq log_format' do
       context 'json' do
         it 'sets the Sidekiq log_format to json' do

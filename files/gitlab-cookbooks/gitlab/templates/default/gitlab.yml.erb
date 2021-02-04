@@ -778,6 +778,7 @@ production: &base
     # Allow using FortiAuthenticator as OTP provider
     enabled: <%= @forti_authenticator_enabled %>
 
+    <% if @forti_authenticator_enabled %>
     # Host and port of FortiAuthenticator instance
     host: <%= @forti_authenticator_host %>
     port: <%= @forti_authenticator_port %>
@@ -787,15 +788,18 @@ production: &base
 
     # Access token for FortiAuthenticator API
     access_token: <%= quote(@forti_authenticator_access_token) %>
+    <% end %>
 
   # FortiToken Cloud settings
   forti_token_cloud:
     # Allow using FortiToken Cloud as OTP provider
     enabled: <%= @forti_token_cloud_enabled %>
 
+    <% if @forti_token_cloud_enabled %>
     # Client ID and Secret to access FortiToken Cloud API
     client_id: <%= quote(@forti_token_cloud_client_id) %>
     client_secret: <%= quote(@forti_token_cloud_client_secret) %>
+    <% end %>
 
   # Shared file storage settings
   shared:
