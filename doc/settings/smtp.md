@@ -213,6 +213,18 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 gitlab_rails['gitlab_email_from'] = 'username@yourdomain.com'
 ```
 
+### Office365 relay
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "your mx endpoint"
+gitlab_rails['smtp_port'] = 25
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_domain'] = "yourdomain.com"
+gitlab_rails['gitlab_email_from'] = 'username@yourdomain.com'
+gitlab_rails['gitlab_email_reply_to'] = 'noreply@yourdomain.com'
+```
+
 ### Online.net
 
 ```ruby
