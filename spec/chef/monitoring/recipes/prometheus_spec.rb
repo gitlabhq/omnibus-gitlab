@@ -70,6 +70,11 @@ prometheus_yml_output = <<-PROMYML
     static_configs:
     - targets:
       - localhost:9168
+  - job_name: gitlab_exporter_ruby
+    metrics_path: "/ruby"
+    static_configs:
+    - targets:
+      - localhost:9168
   - job_name: gitaly
     static_configs:
     - targets:

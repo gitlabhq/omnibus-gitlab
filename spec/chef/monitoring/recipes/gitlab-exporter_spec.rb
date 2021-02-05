@@ -53,6 +53,7 @@ RSpec.describe 'monitoring::gitlab-exporter' do
           settings = YAML.load(content) # rubocop:disable Security/YAMLLoad
           expect(settings.dig('server', 'name')).to eq('webrick')
           expect(settings.dig('probes', 'database')).not_to be_nil
+          expect(settings.dig('probes', 'ruby')).not_to be_nil
           expect(settings.dig('probes', 'metrics', 'rows_count')).not_to be_nil
 
           expect(content).to match(/host=\/var\/opt\/gitlab\/postgresql/)

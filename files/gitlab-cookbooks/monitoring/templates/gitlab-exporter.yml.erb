@@ -31,6 +31,12 @@ probes:
     <<: *db_common
 <% end -%>
 
+  ruby: &ruby
+    methods:
+      - probe_gc
+    opts:
+      quantiles: false
+
 <% if @probe_sidekiq %>
   sidekiq: &sidekiq
     methods:
@@ -45,6 +51,8 @@ probes:
 
   metrics:
     multiple: true
+    ruby:
+      <<: *ruby
 <% if @probe_sidekiq %>
     sidekiq:
       <<: *sidekiq
