@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.8.3 (2021-02-05)
+
+### Fixed (1 change)
+
+- Fix selinux nil error when workhorse is set to use tcp. !4978
+
+
 ## 13.8.2 (2021-02-01)
 
 ### Security (2 changes)
