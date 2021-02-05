@@ -59,6 +59,14 @@ build do
   #
   # Patch files should be in config/patches/git/
 
+  # Fast-track patches from
+  # https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/806, which
+  # are expected to land in 2.31.0.
+  patch source: '0001-builtin-pack-objects.c-avoid-iterating-all-refs.patch'
+  patch source: '0002-refs-expose-for_each_fullref_in_prefixes.patch'
+  patch source: '0003-ls-refs.c-initialize-prefixes-before-using-it.patch'
+  patch source: '0004-ls-refs.c-traverse-prefixes-of-disjoint-ref-prefix-s.patch'
+
   block do
     File.open(File.join(project_dir, 'config.mak'), 'a') do |file|
       file.print <<-EOH
