@@ -217,7 +217,7 @@ gitlab_rails['gitlab_email_from'] = 'username@yourdomain.com'
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
-gitlab_rails['smtp_address'] = "mx record"
+gitlab_rails['smtp_address'] = "your mx endpoint"
 gitlab_rails['smtp_port'] = 25
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_domain'] = "yourdomain.com"
