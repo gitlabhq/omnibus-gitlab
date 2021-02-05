@@ -5,7 +5,10 @@ RSpec.describe 'monitoring::gitlab-exporter' do
   let(:default_env_vars) do
     {
       'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so',
-      'MALLOC_CONF' => 'dirty_decay_ms:0,muzzy_decay_ms:0'
+      'MALLOC_CONF' => 'dirty_decay_ms:0,muzzy_decay_ms:0',
+      'RUBY_GC_HEAP_INIT_SLOTS' => 80000,
+      'RUBY_GC_HEAP_FREE_SLOTS_MIN_RATIO' => 0.055,
+      'RUBY_GC_HEAP_FREE_SLOTS_MAX_RATIO' => 0.111
     }
   end
 
