@@ -193,6 +193,7 @@ server {
   }
 
   location <%= File.join(@path, 'assets') %> {
+    add_header X-Content-Type-Options nosniff;
     proxy_cache <%= @proxy_cache %>;
     proxy_pass  http://gitlab-workhorse;
   }
