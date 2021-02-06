@@ -15,7 +15,7 @@
 #
 
 name 'libtiff'
-version = Gitlab::Version.new('libtiff', 'v4.1.0')
+version = Gitlab::Version.new('libtiff', 'v4.2.0')
 
 default_version version.print(false)
 
