@@ -171,11 +171,9 @@ update-gems-cache:
 update-trigger-package-cache:
   extends: .trigger-package-cache
   stage: update-cache
-  image: "${RUBY_IMAGE}"
-  before_script:
-    - *install-gems
-    - *build-package
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   script:
+    - *build-package
     - echo "Cache is up to date!"
   cache:
     policy: push  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
@@ -380,7 +378,6 @@ Trigger:package:
   stage: trigger-package
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
-    - *install-gems
     - *build-package
     # Renaming so we can easily generate the artifact URL
     - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
