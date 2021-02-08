@@ -1,6 +1,6 @@
 stages:
-  - update-cache
   - prepare-assets
+  - update-cache
   - trigger-package
   - trigger-docker
   - trigger-ha-validate
@@ -167,6 +167,7 @@ fetch-assets:
     # multi-project pipelines on omnibus-gitlab-mirror
     - if: '$CI_PROJECT_PATH == "gitlab/omnibus-gitlab"'
     - if: '$CI_PIPELINE_SOURCE == "pipeline" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
 
 include:
   - '/gitlab-ci-config/gitlab-com.yml'
