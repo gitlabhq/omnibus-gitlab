@@ -155,6 +155,7 @@
 update-gems-cache:
   extends: .gems-cache
   stage: update-cache
+  image: "${RUBY_IMAGE}"
   before_script:
     - *install-gems
   script:
@@ -170,6 +171,7 @@ update-gems-cache:
 update-trigger-package-cache:
   extends: .trigger-package-cache
   stage: update-cache
+  image: "${RUBY_IMAGE}"
   before_script:
     - *build-package
   script:
