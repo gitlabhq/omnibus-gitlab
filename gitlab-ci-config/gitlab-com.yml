@@ -173,6 +173,7 @@ update-trigger-package-cache:
   stage: update-cache
   image: "${RUBY_IMAGE}"
   before_script:
+    - *install-gems
     - *build-package
   script:
     - echo "Cache is up to date!"
@@ -379,6 +380,7 @@ Trigger:package:
   stage: trigger-package
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
+    - *install-gems
     - *build-package
     # Renaming so we can easily generate the artifact URL
     - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
