@@ -14,7 +14,7 @@
       - /(^docs[\/-].*|.*-docs$)/
       - /./@gitlab-org/build/omnibus-gitlab-mirror
     variables:
-      - $DEPS_PIPELINE
+      - $DEPS_PIPELINE || $CACHE_UPDATE
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
 .com-trigger-only: &com-trigger-only
@@ -27,16 +27,16 @@
   paths:
   - knapsack/
 
-.knapsack-state: &knapsack-state
+.knapsack-state:
   services: []
   cache:
     key: "knapsack"
     paths:
-    - knapsack/
+      - knapsack/
   artifacts: *knapsack-artifacts
 
 .knapsack: &prepare_knapsack
-  <<: *knapsack-state
+  extends: .knapsack-state
   stage: prepare
   before_script: []
   script:
@@ -50,9 +50,31 @@
 
 .gems-cache:
   cache:
-    key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}"
+    key: "gems-cache-${BUILDER_IMAGE_REVISION}"
     paths:
-    - gems
+      - gems
+    policy: pull
+
+.trigger-package-cache:
+  cache:
+    key: "Ubuntu-16.04-branch-${BUILDER_IMAGE_REVISION}-v1"
+    paths:
+      - cache
+      - gems
+      - assets_cache
+      - node_modules
+    policy: pull
+
+.install-gems: &install-gems
+  - bundle config set --local path 'gems'
+  - bundle install -j $(nproc)
+  - bundle binstubs --all
+
+.build-package: &build-package
+  - bundle exec rake cache:populate
+  - bundle exec rake cache:restore
+  - bundle exec rake build:project
+  - bundle exec rake cache:bundle
 
 .spec_template:
   extends: .gems-cache
@@ -61,9 +83,7 @@
     # These jobs will not be run on dev, so we set ALTERNATIVE_SOURCES to true
     # so tests run fine on forks
     - export ALTERNATIVE_SOURCES="true";
-    - bundle config set --local path 'gems'
-    - bundle install -j $(nproc)
-    - bundle binstubs --all
+    - *install-gems
   script:
     - JOB_NAME=( $CI_JOB_NAME )
     - export DISTRO_NAME=${JOB_NAME[0]}
@@ -102,7 +122,7 @@
       - /^deps/
       - /(^docs[\/-].*|.*-docs$)/
     variables:
-      - $DEPS_PIPELINE
+      - $DEPS_PIPELINE || $CACHE_UPDATE
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
 .review-docs:
@@ -129,6 +149,41 @@
     variables:
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
+#####################
+# Cache update jobs #
+#####################
+update-gems-cache:
+  extends: .gems-cache
+  stage: update-cache
+  before_script:
+    - *install-gems
+  script:
+    - echo "Cache is up to date!"
+  cache:
+    policy: push  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
+  only:
+    refs:
+      - schedules  # Jobs that take advantage of this cache are in the canonical project and the mirror one
+    variables:
+      - $CACHE_UPDATE
+
+update-trigger-package-cache:
+  extends: .trigger-package-cache
+  stage: update-cache
+  before_script:
+    - *build-package
+  script:
+    - echo "Cache is up to date!"
+  cache:
+    policy: push  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
+  tags:
+    - triggered-packages
+  only:
+    refs:
+      - schedules@gitlab-org/build/omnibus-gitlab-mirror  # Jobs that take advantage of this cache are exclusively in the mirror project
+    variables:
+      - $CACHE_UPDATE
+
 ###########################
 #     Branch pipeline     #
 ###########################
@@ -146,9 +201,7 @@ rubocop:
   stage: check
   image: "${RUBY_IMAGE}"
   before_script:
-    - bundle config set --local without 'default test'
-    - bundle config set --local path 'gems'
-    - bundle install -j $(nproc)
+    - *install-gems
   script:
     - bundle exec rubocop --parallel
   <<: *com-except-triggers
@@ -172,7 +225,7 @@ docs-lint markdown:
       - /^deps/
       - /./@gitlab-org/build/omnibus-gitlab-mirror
     variables:
-      - $DEPS_PIPELINE
+      - $DEPS_PIPELINE || $CACHE_UPDATE
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
 # Perform link checks on published HTML files
@@ -199,7 +252,7 @@ docs-lint links:
       - /^deps/
       - /./@gitlab-org/build/omnibus-gitlab-mirror
     variables:
-      - $DEPS_PIPELINE
+      - $DEPS_PIPELINE || $CACHE_UPDATE
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
 # Trigger a docs build in gitlab-docs
@@ -240,7 +293,7 @@ danger-review:
       - /^[\d-]+-stable(-patch-[\d]+)?$/
       - master
     variables:
-      - $DEPS_PIPELINE
+      - $DEPS_PIPELINE || $CACHE_UPDATE
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
   script:
     - danger --fail-on-errors=true
@@ -304,7 +357,7 @@ OpenSUSE 15.1 specs :
   - OpenSUSE 15.1 knapsack
 
 update-knapsack:
-  <<: *knapsack-state
+  extends: .knapsack-state
   image: "${RUBY_IMAGE}"
   stage: post-test
   before_script: []
@@ -319,14 +372,12 @@ update-knapsack:
 ############################
 
 Trigger:package:
+  extends: .trigger-package-cache
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: trigger-package
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
-    - bundle exec rake cache:populate
-    - bundle exec rake cache:restore
-    - bundle exec rake build:project
-    - bundle exec rake cache:bundle
+    - *build-package
     # Renaming so we can easily generate the artifact URL
     - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
     - bundle exec rspec --color --format RspecJunitFormatter --out junit_ci_rspec.xml --format documentation ci_build_specs
@@ -339,13 +390,6 @@ Trigger:package:
       - pkg/
     reports:
       junit: junit_ci_rspec.xml
-  cache:
-    key: "Ubuntu-16.04-branch-${BUILDER_IMAGE_REVISION}-v1"
-    paths:
-    - cache
-    - gems
-    - assets_cache
-    - node_modules
   tags:
     - triggered-packages
 
@@ -455,4 +499,4 @@ pages:
     - schedules@gitlab-org/omnibus-gitlab
   except:
     variables:
-      - $DEPS_PIPELINE
+      - $DEPS_PIPELINE || $CACHE_UPDATE

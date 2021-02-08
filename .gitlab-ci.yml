@@ -1,4 +1,5 @@
 stages:
+  - update-cache
   - prepare-assets
   - trigger-package
   - trigger-docker

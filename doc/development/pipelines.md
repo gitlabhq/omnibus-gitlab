@@ -451,6 +451,12 @@ package and uploads it to the S3 bucket. This is used by
 
 ## Housekeeping Jobs
 
+### `update-gems-cache` and `update-trigger-package-cache`
+
+Jobs that extends from the `.gems-cache` and `.trigger-package-cache` shared `cache` definitions only `pull` their cache.
+
+These caches are updated in scheduled pipelines by `update-gems-cache` and `update-trigger-package-cache` jobs respectively, when the `CACHE_UPDATE` exists.
+
 ### `dependency_update`
 
 This job makes use of Dependencies.io to automatically check for version updates
