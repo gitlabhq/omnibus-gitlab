@@ -33,6 +33,12 @@ external_url = if Gitlab['external_url']
                  'http://localhost'
                end
 
+grafana_reporting_enabled = if Gitlab['gitlab_rails']['usage_ping_enabled'].nil?
+                              node['monitoring']['grafana']['reporting_enabled']
+                            else
+                              node['monitoring']['grafana']['reporting_enabled'] && Gitlab['gitlab_rails']['usage_ping_enabled']
+                            end
+
 # grafana runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account
 include_recipe 'monitoring::user'
@@ -120,6 +126,7 @@ template grafana_config do
     {
       'external_url' => external_url,
       'data_path' => File.join(node['monitoring']['grafana']['home'], 'data'),
+      'grafana_reporting_enabled' => grafana_reporting_enabled,
     }.merge(node['monitoring']['grafana'])
   }
   owner prometheus_user
