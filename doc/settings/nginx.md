@@ -866,6 +866,8 @@ sudo gitlab-ctl hup nginx
 If you see `Request Entity Too Large` in the [NGINX logs](https://docs.gitlab.com/ee/administration/logs.html#nginx-logs),
 you will need to increase the [Client Max Body Size](http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size).
 You may encounter this error if you have increased the [Max import size](https://docs.gitlab.com/ee/user/admin_area/settings/account_and_limit_settings.html#max-import-size).
+In a Kubernetes-based GitLab installation, this setting is
+[named differently](https://docs.gitlab.com/charts/charts/gitlab/webservice/#proxybodysize).
 
 To increase the `client_max_body_size`, you will need to set the value in your `/etc/gitlab/gitlab.rb`:
 
