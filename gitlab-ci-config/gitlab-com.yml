@@ -57,7 +57,7 @@
 
 .trigger-package-cache:
   cache:
-    key: "Ubuntu-16.04-branch-${BUILDER_IMAGE_REVISION}-v1"
+    key: "Ubuntu-20.04-branch-${BUILDER_IMAGE_REVISION}-v1"
     paths:
       - cache
       - gems
@@ -171,7 +171,7 @@ update-gems-cache:
 update-trigger-package-cache:
   extends: .trigger-package-cache
   stage: update-cache
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   script:
     - *build-package
     - echo "Cache is up to date!"
@@ -374,13 +374,13 @@ update-knapsack:
 
 Trigger:package:
   extends: .trigger-package-cache
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   stage: trigger-package
   script:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     - *build-package
     # Renaming so we can easily generate the artifact URL
-    - mv pkg/ubuntu-xenial/*.deb pkg/ubuntu-xenial/gitlab.deb
+    - mv pkg/ubuntu-focal/*.deb pkg/ubuntu-focal/gitlab.deb
     - bundle exec rspec --color --format RspecJunitFormatter --out junit_ci_rspec.xml --format documentation ci_build_specs
     - bundle exec rake build:component_shas
   <<: *com-trigger-only

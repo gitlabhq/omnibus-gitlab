@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'gitlab/build/ha_validate/nightly'
 
 RSpec.describe Build::HA::ValidateNightly do
-  let(:expected_url) { 'https://omnibus-builds.s3.amazonaws.com/ubuntu-xenial/gitlab-ee_99.9.9%2Brfbranch-55_amd64.deb' }
+  let(:expected_url) { 'https://omnibus-builds.s3.amazonaws.com/ubuntu-focal/gitlab-ee_99.9.9%2Brfbranch-55_amd64.deb' }
 
   before do
     allow(Build::Info).to receive(:semver_version).and_return('99.9.9+rfbranch')

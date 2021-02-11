@@ -175,7 +175,7 @@ RSpec.describe PackageRepository do
       context 'with artifacts available' do
         before do
           stub_env_var('PACKAGECLOUD_USER', "gitlab")
-          allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(['pkg/ubuntu-xenial/gitlab.deb'])
+          allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(['pkg/ubuntu-focal/gitlab.deb'])
         end
 
         context 'for stable release' do
@@ -192,7 +192,7 @@ RSpec.describe PackageRepository do
 
             it 'in dry run mode prints the upload commands' do
               expect { repo.upload(nil, true) }.to output(%r{Uploading...\n}).to_stdout
-              expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/gitlab-ee/ubuntu/xenial pkg/ubuntu-xenial/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+              expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/gitlab-ee/ubuntu/focal pkg/ubuntu-focal/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
             end
           end
 
@@ -203,7 +203,7 @@ RSpec.describe PackageRepository do
 
             it 'in dry run mode prints the upload commands' do
               expect { repo.upload(nil, true) }.to output(%r{Uploading...\n}).to_stdout
-              expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/gitlab-ce/ubuntu/xenial pkg/ubuntu-xenial/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+              expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/gitlab-ce/ubuntu/focal pkg/ubuntu-focal/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
             end
           end
         end
@@ -216,7 +216,7 @@ RSpec.describe PackageRepository do
 
           it 'in dry run mode prints the upload commands' do
             expect { repo.upload(Gitlab::Util.get_env('STAGING_REPO'), true) }.to output(%r{Uploading...\n}).to_stdout
-            expect { repo.upload(Gitlab::Util.get_env('STAGING_REPO'), true) }.to output(%r{bin/package_cloud push gitlab/nightly-builds/ubuntu/xenial pkg/ubuntu-xenial/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+            expect { repo.upload(Gitlab::Util.get_env('STAGING_REPO'), true) }.to output(%r{bin/package_cloud push gitlab/nightly-builds/ubuntu/focal pkg/ubuntu-focal/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
           end
         end
 
@@ -228,7 +228,7 @@ RSpec.describe PackageRepository do
 
           it 'in dry run mode prints the upload commands' do
             expect { repo.upload(nil, true) }.to output(%r{Uploading...\n}).to_stdout
-            expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/raspi/ubuntu/xenial pkg/ubuntu-xenial/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+            expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/raspi/ubuntu/focal pkg/ubuntu-focal/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
           end
         end
       end
@@ -238,7 +238,7 @@ RSpec.describe PackageRepository do
       before do
         stub_env_var('PACKAGECLOUD_USER', "gitlab")
         set_all_env_variables
-        allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(['pkg/ubuntu-xenial/gitlab.deb', 'pkg/ubuntu-xenial/testing/gitlab.deb'])
+        allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(['pkg/ubuntu-focal/gitlab.deb', 'pkg/ubuntu-focal/testing/gitlab.deb'])
       end
 
       it 'raises an exception' do

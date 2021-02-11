@@ -425,14 +425,16 @@ Ubuntu-18.04-branch:
   stage: gitlab_com:package
   extends: .branch_template
 
+Ubuntu-20.04-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
+  stage: gitlab_com:package
+  extends: .branch_template
+
 Debian-9-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 Debian-10-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
-Ubuntu-20.04-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
 Ubuntu-20.04-arm-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
@@ -512,7 +514,7 @@ QA-branch:
   - docker-builder
   cache: *branch-cache
   dependencies:
-    - Ubuntu-16.04-branch
+    - Ubuntu-20.04-branch
   retry: 1
 
 Raspberry-Pi-2-Buster-branch:
@@ -546,6 +548,11 @@ Ubuntu-16.04:
 
 Ubuntu-18.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  stage: gitlab_com:package
+  extends: .tag_template
+
+Ubuntu-20.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
   extends: .tag_template
 
@@ -598,15 +605,20 @@ Ubuntu-18.04-staging:
     - Ubuntu-18.04-branch
   <<: *dev-nightly-and-tag-except-auto-deploy
 
+Ubuntu-20.04-staging:
+  stage: gitlab_com:upload_deploy
+  extends: .staging_upload_template
+  dependencies:
+    - Ubuntu-20.04
+    - Ubuntu-20.04-branch
+  <<: *dev-nightly-and-tag-except-auto-deploy
+
 ### Package builds
 Debian-9:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 Debian-10:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
-Ubuntu-20.04:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
 Ubuntu-20.04-arm:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
@@ -709,11 +721,6 @@ Debian-10-staging:
   dependencies:
     - Debian-10
     - Debian-10-branch
-  <<: *staging_upload
-Ubuntu-20.04-staging:
-  dependencies:
-    - Ubuntu-20.04
-    - Ubuntu-20.04-branch
   <<: *staging_upload
 Ubuntu-20.04-arm-staging:
   dependencies:
@@ -856,7 +863,7 @@ QA-Tag:
   - docker-builder
   cache: *tag-cache
   dependencies:
-    - Ubuntu-16.04
+    - Ubuntu-20.04
   retry: 1
 
 upgrade:

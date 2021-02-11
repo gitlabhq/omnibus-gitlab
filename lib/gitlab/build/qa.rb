@@ -27,7 +27,7 @@ module Build
     def self.get_gitlab_rails_sha
       # Finding out which commit was the package built from
       begin
-        version_manifest = JSON.parse(File.read("pkg/ubuntu-xenial/#{Build::Info.package}_#{Build::Info.release_version}.version-manifest.json"))
+        version_manifest = JSON.parse(File.read("pkg/ubuntu-focal/#{Build::Info.package}_#{Build::Info.release_version}.version-manifest.json"))
         version = version_manifest['software']['gitlab-rails']['locked_version']
       rescue Errno::ENOENT, JSON::ParserError
         puts "Failed to get commit from version-manifest file"
