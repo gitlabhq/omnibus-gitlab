@@ -618,6 +618,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['extra_google_tag_manager_id'] = '_your_tracking_id'
 # gitlab_rails['extra_matomo_url'] = '_your_matomo_url'
 # gitlab_rails['extra_matomo_site_id'] = '_your_matomo_site_id'
+# gitlab_rails['extra_matomo_disable_cookies'] = false
 
 ##! Docs: https://docs.gitlab.com/omnibus/settings/environment-variables.html
 # gitlab_rails['env'] = {

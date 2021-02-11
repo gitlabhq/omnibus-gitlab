@@ -392,6 +392,50 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'matomo_disable_cookies' do
+      context 'when true' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: { extra_matomo_disable_cookies: true }
+          )
+        end
+
+        it 'should set matomo_disable_cookies to true' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'extra_matomo_disable_cookies' => true
+            )
+          )
+        end
+      end
+
+      context 'when false' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: { extra_matomo_disable_cookies: false }
+          )
+        end
+
+        it 'should set matomo_disable_cookies to false' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'extra_matomo_disable_cookies' => false
+            )
+          )
+        end
+      end
+
+      context 'when absent' do
+        it 'should set matomo_disable_cookies to nil' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'extra_matomo_disable_cookies' => nil
+            )
+          )
+        end
+      end
+    end
+
     context 'when sentry is disabled' do
       it 'should set sentry variable to nil' do
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(

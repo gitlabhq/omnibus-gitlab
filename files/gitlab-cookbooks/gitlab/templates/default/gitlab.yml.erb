@@ -930,6 +930,7 @@ production: &base
     ## matomo analytics.
     matomo_url: <%= quote(@extra_matomo_url) %>
     matomo_site_id: <%= quote(@extra_matomo_site_id) %>
+    matomo_disable_cookies: <%= @extra_matomo_disable_cookies %>
     <% end %>
 
   rack_attack:
