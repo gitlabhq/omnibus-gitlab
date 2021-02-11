@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.8.4 (2021-02-11)
+
+- No changes.
+
 ## 13.8.3 (2021-02-05)
 
 ### Fixed (1 change)
@@ -81,6 +85,10 @@ omnibus-gitlab repository.
 - Use Debian 10 as examples in development docs. !4883 (Takuya Noguchi)
 - Update Mattermost to 5.30.1. !4885 (hmhealey)
 
+
+## 13.7.7 (2021-02-11)
+
+- No changes.
 
 ## 13.7.6 (2021-02-01)
 
@@ -179,6 +187,10 @@ omnibus-gitlab repository.
 - Use the 'main' branch for gitlab-shell nightlies. !4772
 - Update Mattermost to 5.29.1. !4807 (hmhealey)
 
+
+## 13.6.7 (2021-02-11)
+
+- No changes.
 
 ## 13.6.6 (2021-02-01)
 
