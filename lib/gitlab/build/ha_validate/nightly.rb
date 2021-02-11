@@ -17,7 +17,7 @@ module Build
       end
 
       def self.package_url
-        base_url = 'https://omnibus-builds.s3.amazonaws.com/ubuntu-xenial/gitlab-ee_'
+        base_url = 'https://omnibus-builds.s3.amazonaws.com/ubuntu-focal/gitlab-ee_'
         build_version = CGI.escape(Build::Info.semver_version)
         build_iteration = Gitlab::BuildIteration.new.build_iteration
         "#{base_url}#{build_version}-#{build_iteration}_amd64.deb"

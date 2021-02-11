@@ -94,7 +94,7 @@ RSpec.describe Build::Image do
         [
           "PACKAGECLOUD_REPO=download-package",
           "RELEASE_VERSION=12.121.12-ce.1",
-          "DOWNLOAD_URL=https://gitlab.com/api/v4/projects/1/jobs/1/artifacts/pkg/ubuntu-xenial/gitlab.deb",
+          "DOWNLOAD_URL=https://gitlab.com/api/v4/projects/1/jobs/1/artifacts/pkg/ubuntu-focal/gitlab.deb",
           "TRIGGER_PRIVATE_TOKEN=NOT-PRIVATE-TOKEN\n"
         ]
       end
@@ -133,7 +133,7 @@ RSpec.describe Build::Image do
       end
 
       describe 'with regular build' do
-        let(:s3_download_link) { 'https://downloads-packages.s3.amazonaws.com/ubuntu-xenial/gitlab-ee_12.121.12-ce.1_amd64.deb' }
+        let(:s3_download_link) { 'https://downloads-packages.s3.amazonaws.com/ubuntu-focal/gitlab-ee_12.121.12-ce.1_amd64.deb' }
 
         let(:release_file) do
           [

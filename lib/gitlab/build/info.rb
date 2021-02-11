@@ -130,7 +130,7 @@ module Build
       # Fetch the package from an S3 bucket
       def package_download_url
         package_filename_url_safe = Info.release_version.gsub("+", "%2B")
-        "https://#{Info.release_bucket}.s3.amazonaws.com/ubuntu-xenial/#{Info.package}_#{package_filename_url_safe}_amd64.deb"
+        "https://#{Info.release_bucket}.s3.amazonaws.com/ubuntu-focal/#{Info.package}_#{package_filename_url_safe}_amd64.deb"
       end
 
       def get_api(path, token: nil)
@@ -158,7 +158,7 @@ module Build
         return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
 
         id = fetch_artifact_url(project_id, pipeline_id)
-        "https://gitlab.com/api/v4/projects/#{Gitlab::Util.get_env('CI_PROJECT_ID')}/jobs/#{id}/artifacts/pkg/ubuntu-xenial/gitlab.deb"
+        "https://gitlab.com/api/v4/projects/#{Gitlab::Util.get_env('CI_PROJECT_ID')}/jobs/#{id}/artifacts/pkg/ubuntu-focal/gitlab.deb"
       end
 
       def tag_match_pattern

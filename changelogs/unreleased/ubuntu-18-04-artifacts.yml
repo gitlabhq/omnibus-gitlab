@@ -1,0 +1,5 @@
+---
+title: Make GitLab Docker image and AWS AMIs use Ubuntu 20.04 packages
+merge_request: 4876
+author:
+type: changed

@@ -14,7 +14,7 @@ module Build
       end
 
       def self.package_url
-        "https://downloads-packages.s3.amazonaws.com/ubuntu-xenial/gitlab-ee_#{version}_amd64.deb"
+        "https://downloads-packages.s3.amazonaws.com/ubuntu-focal/gitlab-ee_#{version}_amd64.deb"
       end
 
       def self.get_params(image: nil)
