@@ -384,6 +384,7 @@ default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
 default['gitlab']['gitlab-rails']['extra_google_tag_manager_id'] = nil
 default['gitlab']['gitlab-rails']['extra_matomo_url'] = nil
 default['gitlab']['gitlab-rails']['extra_matomo_site_id'] = nil
+default['gitlab']['gitlab-rails']['extra_matomo_disable_cookies'] = nil
 default['gitlab']['gitlab-rails']['rack_attack_git_basic_auth'] = nil
 
 default['gitlab']['gitlab-rails']['db_adapter'] = "postgresql"
