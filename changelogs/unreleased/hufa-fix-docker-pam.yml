@@ -1,0 +1,5 @@
+---
+title: configure sshd and git account so that pam is not used any longer in docker
+merge_request: 4953
+author: Fnordpol
+type: fixed
