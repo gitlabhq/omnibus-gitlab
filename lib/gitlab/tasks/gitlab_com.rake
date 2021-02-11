@@ -4,11 +4,6 @@ require_relative "../util.rb"
 namespace :gitlab_com do
   desc 'Tasks related to gitlab.com.'
   task :deployer do
-    if Gitlab::Util.get_env('OMNIBUS_TRIGGERS_DEPLOYER') == 'false'
-      puts "OMNIBUS_TRIGGERS_DEPLOYER is disabled, exiting..."
-      exit
-    end
-
     abort "This task requires DEPLOYER_TRIGGER_TOKEN to be set" unless Gitlab::Util.get_env('DEPLOYER_TRIGGER_TOKEN')
 
     unless Build::Info.package == "gitlab-ee"
@@ -25,6 +20,11 @@ namespace :gitlab_com do
 
     trigger_token = Gitlab::Util.get_env('DEPLOYER_TRIGGER_TOKEN')
     trigger_ref = Build::Check.is_auto_deploy? && Build::Check.ci_commit_tag? ? Gitlab::Util.get_env('CI_COMMIT_TAG') : :master
+
+    if Gitlab::Util.get_env('AUTO_DEPLOY_OMNIBUS_TRIGGERS_DEPLOYER') == 'false' && Build::Check.is_auto_deploy?
+      puts "AUTO_DEPLOY_OMNIBUS_TRIGGERS_DEPLOYER is disabled, exiting..."
+      exit
+    end
 
     # We do not support auto-deployments or triggered deployments
     # directly to production from the omnibus pipeline, this check is here
