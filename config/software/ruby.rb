@@ -134,6 +134,10 @@ build do
     # be fixed.
   end
 
+  # Enable custom patch created by ayufan that allows to count memory allocations
+  # per-thread. This is asked to be upstreamed as part of https://github.com/ruby/ruby/pull/3978
+  patch source: 'thread-memory-allocations-2.7.patch', plevel: 1, env: patch_env
+
   # Fix reserve stack segmentation fault when building on RHEL5 or below
   # Currently only affects 2.1.7 and 2.2.3. This patch taken from the fix
   # in Ruby trunk and expected to be included in future point releases.
