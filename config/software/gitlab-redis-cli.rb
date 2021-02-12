@@ -56,7 +56,7 @@ else
   REDIS_PARAMS="-h ${redis_host} -p ${redis_port}"
 fi
 
-export REDISCLI_AUTH="$(grep ^requirepass ${redis_dir}/redis.conf|cut -d\\" -f2)"
+export REDISCLI_AUTH="$(grep ^requirepass ${redis_dir}/redis.conf|cut -d' ' -f2 | tr -d '"')"
 exec /opt/gitlab/embedded/bin/redis-cli $REDIS_PARAMS $@
       EOH
     end
