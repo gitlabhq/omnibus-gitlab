@@ -1,5 +1,0 @@
----
-title: Emit Ruby Prometheus metrics for gitlab-exporter
-merge_request: 4958
-author:
-type: added

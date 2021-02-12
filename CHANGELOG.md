@@ -3,6 +3,44 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 42.1.1 (2021-02-12)
+
+### Security (1 change)
+
+- Add HTTP header to prevent content sniffing in /assets/* directory.
+
+### Deprecated (1 change)
+
+- Add warning message to migration nodes for PG verisons older than 12. !4918
+
+### Changed (6 changes)
+
+- Update libtiff to 4.2.0. !4859
+- Raise warning if node attribute file can't be found. !4894
+- Update logrotate to 3.18.0. !4902
+- Upgrade Redis to 6.0.10. !4930
+- Bump Container Registry to v3.0.0-gitlab. !4962
+- Add redis config for gitlab-kas. !4974
+
+### Performance (3 changes)
+
+- Bump gitlab-exporter to 10.0.0, use jemalloc allocator. !4922
+- Add Git refs performance patches. !4977
+- Tune Ruby GC for gitlab-exporter. !4987
+
+### Added (4 changes)
+
+- Add application settings cache expiry to gitlab.rb. !4938
+- Emit Ruby Prometheus metrics for gitlab-exporter. !4958
+- Add flag to disable kernel parameter modification. !4967
+- Add matomo_disable_cookies setting. !4979
+
+### Other (2 changes)
+
+- Compile workhorse as part of gitlab-rails. !4829
+- Bump Grafana version to 7.3.7. !4933
+
+
 ## 13.8.4 (2021-02-11)
 
 - No changes.

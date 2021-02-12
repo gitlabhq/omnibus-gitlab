@@ -1,6 +1,0 @@
----
-title: Update node.rules to only alert if filesystem has less than 5% and less than
-  10GB available
-merge_request: !4923
-author: @cpaulik
-type: changed

@@ -1,5 +1,0 @@
----
-title: Tune Ruby GC for gitlab-exporter
-merge_request: 4987
-author:
-type: performance

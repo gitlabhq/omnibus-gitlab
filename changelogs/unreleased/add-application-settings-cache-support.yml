@@ -1,5 +1,0 @@
----
-title: Add application settings cache expiry to gitlab.rb
-merge_request: 4938
-author:
-type: added
