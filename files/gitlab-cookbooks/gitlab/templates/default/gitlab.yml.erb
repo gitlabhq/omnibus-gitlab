@@ -559,6 +559,12 @@ production: &base
       cron: "<%= @member_invitation_reminder_emails_worker_cron %>"
     <% end %>
 
+    # Worker for the scheduled user status cleanup
+    <% unless @user_status_cleanup_batch_worker_cron.nil? %>
+    user_status_cleanup_batch_worker:
+      cron: "<%= @user_status_cleanup_batch_worker_cron %>"
+    <% end %>
+
   ## Geo
   # NOTE: These settings will only take effect if Geo is enabled
   geo:

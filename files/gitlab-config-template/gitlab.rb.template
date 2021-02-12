@@ -173,6 +173,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['ci_platform_metrics_update_cron_worker'] = '47 9 * * *'
 # gitlab_rails['analytics_instance_statistics_count_job_trigger_worker_cron'] = "50 23 */1 * *"
 # gitlab_rails['member_invitation_reminder_emails_worker_cron'] = "0 0 * * *"
+# gitlab_rails['user_status_cleanup_batch_worker_cron'] = "* * * * *"
 
 ### Webhook Settings
 ###! Number of seconds to wait for HTTP response after sending webhook HTTP POST
