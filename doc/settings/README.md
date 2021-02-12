@@ -11,6 +11,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [Configuration options](configuration.md)
 - [Database](database.md)
 - [Environment variables](environment-variables.md)
+- [Gitaly Cluster](praefect.md)
 - [`gitlab.yml`](gitlab.yml.md)
 - [Grafana](grafana.md)
 - [LDAP](ldap.md)
