@@ -1,5 +1,0 @@
----
-title: Bump gitlab-exporter to 10.0.0, use jemalloc allocator
-merge_request: 4922
-author:
-type: performance
