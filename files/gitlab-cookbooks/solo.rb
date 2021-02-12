@@ -12,6 +12,7 @@ exception_handlers << GitLabHandler::Exception.new
 report_handlers << GitLabHandler::Attributes.new
 verbose_logging false
 ssl_verify_mode :verify_peer
+fips false
 
 # Log to the reconfigure log
 log_location "#{LOG_PATH}/#{TIME}.log"

@@ -39,4 +39,9 @@ build do
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
       ' --no-document', env: env
+
+  patch source: "openssl-fips-cookbook.patch",
+        target: "#{install_dir}/embedded/lib/ruby/gems/2.7.0/gems/chef-#{version}/lib/chef/chef_fs/file_system/chef_server/cookbook_file.rb"
+  patch source: "openssl-fips-digester.patch",
+        target: "#{install_dir}/embedded/lib/ruby/gems/2.7.0/gems/chef-#{version}/lib/chef/digester.rb"
 end
