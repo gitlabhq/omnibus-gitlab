@@ -1,0 +1,5 @@
+---
+title: Add flag to disable kernel parameter modification
+merge_request: 4967
+author:
+type: added

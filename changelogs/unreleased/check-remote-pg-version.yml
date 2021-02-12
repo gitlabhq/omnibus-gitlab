@@ -1,0 +1,5 @@
+---
+title: Add warning message to migration nodes for PG verisons older than 12
+merge_request: 4918
+author:
+type: deprecated
