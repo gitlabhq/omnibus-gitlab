@@ -555,6 +555,8 @@ Ubuntu-20.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
   extends: .tag_template
+  # Also build for auto-deploy tags
+  <<: *dev-tag-only
 
 ## Build the docker image for QA
 ## This is necessary for the deployment
@@ -611,7 +613,7 @@ Ubuntu-20.04-staging:
   dependencies:
     - Ubuntu-20.04
     - Ubuntu-20.04-branch
-  <<: *dev-nightly-and-tag-except-auto-deploy
+  <<: *dev-tag-and-nightly
 
 ### Package builds
 Debian-9:
