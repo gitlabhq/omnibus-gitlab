@@ -4,26 +4,18 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Praefect
+# Gitaly Cluster
 
-Praefect is a manager aiming to maintain replicas for each repository. Praefect
-is in active development. The goal is to achieve a highly available storage cluster,
-but this is not the case yet, so it is recommended to run Praefect on a different node
-than the Gitaly nodes.
+[Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) provides
+fault-tolerant storage for repositories. It uses Praefect as a router and transaction manager for
+Gitaly.
 
-```ruby
-praefect['enable'] = true
-```
+## Enable Gitaly Cluster
 
-## Praefect settings
+By default, Gitaly Cluster is not enabled. For information on enabling Gitaly Cluster, see
+the Gitaly Cluster [setup instructions](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#setup-instructions).
 
-Praefect must be [enabled in GitLab](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#enable-the-daemon)
-before it can be used.
+## Update GitLab when Gitaly Cluster is enabled
 
-### Praefect storage nodes
-
-Praefect needs one or more Gitaly servers to store the Git data on. These
-Gitaly servers are considered Praefect `storage_nodes`
-(`praefect['storage_nodes']`). These storage nodes should be private to
-Praefect, meaning they should not be listed in `git_data_dirs` in your
-`gitlab.rb`.
+For information on updating GitLab with Gitaly Cluster enabled, see the
+[specific instructions](../update/README.md#gitaly-cluster).
