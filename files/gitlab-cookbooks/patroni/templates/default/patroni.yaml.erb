@@ -23,6 +23,8 @@ postgresql:
 <% if @replication_password %>
       password: <%= "#{@replication_password}" %>
 <% end %>
+  basebackup:
+    - no-password
   remove_data_directory_on_rewind_failure: <%= @remove_data_directory_on_rewind_failure %>
   remove_data_directory_on_diverged_timelines: <%= @remove_data_directory_on_diverged_timelines %>
 bootstrap:
