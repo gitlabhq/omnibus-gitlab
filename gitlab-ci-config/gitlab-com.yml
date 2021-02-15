@@ -168,6 +168,13 @@ update-gems-cache:
     variables:
       - $CACHE_UPDATE
 
+# We need to populate the cache for jobs with the `gitlab-org-docker` tag. Ideally, we wouldn't need this if
+# we'd use Kaniko to build the Docker images, allowing to use the `gitlab-org` tag instead of the `gitlab-org-docker` tag.
+update-gems-cache-for-docker-jobs:
+  extends:
+    - update-gems-cache
+    - .docker_job
+
 update-trigger-package-cache:
   extends: .trigger-package-cache
   stage: update-cache
