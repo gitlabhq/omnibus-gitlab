@@ -1560,8 +1560,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['gitlab_secret'] = nil # Generated if not present
 # gitlab_pages['auth_redirect_uri'] = nil # Defaults to projects subdomain of pages_external_url and + '/auth'
 # gitlab_pages['gitlab_server'] = nil # Defaults to external_url
-# gitlab_pages['internal_gitlab_server'] = nil # defaults to gitlab_server, can be changed to internal load balancer
+# gitlab_pages['internal_gitlab_server'] = nil # Defaults to gitlab_server, can be changed to internal load balancer
 # gitlab_pages['auth_secret'] = nil # Generated if not present
+# gitlab_pages['auth_scope'] = nil # Defaults to api, can be changed to read_api to increase security
 
 ##! GitLab API HTTP client connection timeout
 # gitlab_pages['gitlab_client_http_timeout'] = "10s"

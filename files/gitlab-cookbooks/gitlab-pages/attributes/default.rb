@@ -31,6 +31,7 @@ default['gitlab-pages']['gitlab_id'] = nil
 default['gitlab-pages']['gitlab_secret'] = nil
 default['gitlab-pages']['auth_redirect_uri'] = nil
 default['gitlab-pages']['auth_secret'] = nil
+default['gitlab-pages']['auth_scope'] = nil
 default['gitlab-pages']['insecure_ciphers'] = false
 default['gitlab-pages']['tls_min_version'] = nil
 default['gitlab-pages']['tls_max_version'] = nil

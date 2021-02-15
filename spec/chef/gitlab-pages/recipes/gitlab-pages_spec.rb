@@ -134,6 +134,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
               gitlab_secret: 'app_secret',
               auth_secret: 'auth_secret',
               auth_redirect_uri: 'https://projects.pages.example.com/auth',
+              auth_scope: 'read_api'
             }
           )
         end
@@ -148,6 +149,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             expect(content).to match(%r{auth-client-secret=app_secret})
             expect(content).to match(%r{auth-redirect-uri=https://projects.pages.example.com/auth})
             expect(content).to match(%r{auth-secret=auth_secret})
+            expect(content).to match(%r{auth-scope=read_api})
           }
         end
       end
@@ -177,6 +179,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             gitlab_secret: 'app_secret',
             auth_secret: 'auth_secret',
             auth_redirect_uri: 'https://projects.pages.example.com/auth',
+            auth_scope: 'read_api',
             access_control: true,
             insecure_ciphers: true,
             tls_min_version: "tls1.0",
@@ -212,6 +215,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             auth-redirect-uri=https://projects.pages.example.com/auth
             auth-client-secret=app_secret
             auth-secret=auth_secret
+            auth-scope=read_api
             zip-cache-expiration=120s
             zip-cache-cleanup=1m
             zip-cache-refresh=60s

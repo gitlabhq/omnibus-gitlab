@@ -17,6 +17,9 @@ auth-client-secret=<%= @gitlab_secret %>
 <%- if @auth_secret -%>
 auth-secret=<%= @auth_secret %>
 <%- end -%>
+<%- if @auth_scope -%>
+auth-scope=<%= @auth_scope %>
+<%- end -%>
 <%- end -%>
 <%- if @zip_cache_expiration -%>
 zip-cache-expiration=<%= @zip_cache_expiration %>
