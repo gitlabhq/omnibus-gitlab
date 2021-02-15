@@ -18,7 +18,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'node-exporter'
-version = Gitlab::Version.new('node-exporter', '1.0.1')
+version = Gitlab::Version.new('node-exporter', '1.1.1')
 default_version version.print
 
 license 'APACHE-2.0'
@@ -41,7 +41,7 @@ build do
 
   prom_version = Prometheus::VersionFlags.new(version)
 
-  command "go build -mod=vendor -ldflags '#{prom_version.print_ldflags}'", env: env
+  command "go build -ldflags '#{prom_version.print_ldflags}'", env: env
   copy 'node_exporter', "#{install_dir}/embedded/bin/"
 
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
