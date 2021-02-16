@@ -1268,9 +1268,13 @@ Make sure to run `sudo gitlab-ctl reconfigure` after saving the configuration.
 
 ## Troubleshooting
 
-### GitLab versions past 13.6 unavailable on Amazon Linux 2
+### GitLab 13.7 and later unavailable on Amazon Linux 2
 
-Amazon Linux 2 is not an [officially supported operating system](../package-information/deprecated_os.md#supported-operating-systems) but in the past the [official package installation script](https://packages.gitlab.com/gitlab/gitlab-ee/install) installed the `el/6` package repository if run on Amazon Linux. As of GitLab 13.7, we no longer provide `el/6` packages, so users will need to run the [installation script](https://packages.gitlab.com/gitlab/gitlab-ee/install) again in order to update the repo to `el/7`.
+Amazon Linux 2 is not an [officially supported operating system](../package-information/deprecated_os.md#supported-operating-systems).
+However, in past the [official package installation script](https://packages.gitlab.com/gitlab/gitlab-ee/install)
+installed the `el/6` package repository if run on Amazon Linux. From GitLab 13.7, we no longer
+provide `el/6` packages so administrators must run the [installation script](https://packages.gitlab.com/gitlab/gitlab-ee/install)
+again to update the repository to `el/7`:
 
 ```shell
 curl -s "https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh" | sudo bash

@@ -73,11 +73,11 @@ If you are using your own NGINX rather than the bundled version, and are proxyin
 
 ## 13.7
 
-### No longer providing CentOS/RHEL 6 packages
+### CentOS/RHEL 6 packages no longer provided
 
 With these operating systems reaching their end-of-life for support, we are no longer providing packages for them. See the [supported operating systems](../package-information/deprecated_os.md) page for details.
 
-This change also impacts [the packages available for Amazon Linux 2](README.md#gitlab-versions-past-136-unavailable-on-amazon-linux-2).
+This change also impacts [the packages available for Amazon Linux 2](README.md#gitlab-137-and-later-unavailable-on-amazon-linux-2).
 
 ### PostgreSQL 12.4 support
 
