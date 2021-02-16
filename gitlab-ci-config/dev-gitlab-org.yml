@@ -436,6 +436,11 @@ Debian-9-branch:
 Debian-10-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
+Debian-10-arm-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+  tags:
+  - docker-arm-builder
 Ubuntu-20.04-arm-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -622,6 +627,11 @@ Debian-9:
 Debian-10:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
+Debian-10-arm:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  tags:
+  - docker-arm-builder
 Ubuntu-20.04-arm:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -724,6 +734,11 @@ Debian-10-staging:
     - Debian-10
     - Debian-10-branch
   <<: *staging_upload
+Debian-10-arm-staging:
+  dependencies:
+    - Debian-10-arm
+    - Debian-10-arm-branch
+  <<: *staging_upload
 Ubuntu-20.04-arm-staging:
   dependencies:
     - Ubuntu-20.04-arm
@@ -791,6 +806,10 @@ Debian-9-release:
 Debian-10-release:
   dependencies:
     - Debian-10
+  <<: *production_release
+Debian-10-arm-release:
+  dependencies:
+    - Debian-10-arm
   <<: *production_release
 CentOS-7-release:
   dependencies:
