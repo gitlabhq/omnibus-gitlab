@@ -1,0 +1,13 @@
+---
+# Settings for generating changelogs using the GitLab API. See
+# https://docs.gitlab.com/ee/api/repositories.html#generate-changelog-data for
+# more information.
+categories:
+  added: Added
+  fixed: Fixed
+  changed: Changed
+  deprecated: Deprecated
+  removed: Removed
+  security: Security
+  performance: Performance
+  other: Other

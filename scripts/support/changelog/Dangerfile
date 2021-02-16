@@ -75,4 +75,21 @@ if changelog_needed
     warn "**[CHANGELOG missing](https://docs.gitlab.com/ee/development/changelog.html).**\n\n" +
       format(CREATE_CHANGELOG_MESSAGE, mr_iid: gitlab.mr_json["iid"], mr_title: mr_title, labels: presented_no_changelog_labels)
   end
+
+  message(<<~MSG)
+    We are currently testing a new approach for generating changelogs. If one or
+    more of your commits warrant a changelog entry, please add the appropriate
+    `Changelog:` Git trailer to these commits. For example:
+
+    ```
+    Add a new awesome feature
+
+    Here are the details about the feature being added.
+
+    Changelog: added
+    ```
+
+    For more information, please take look at [this
+    issue](https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/1551).
+  MSG
 end
