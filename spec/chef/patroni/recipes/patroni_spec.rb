@@ -110,6 +110,9 @@ RSpec.describe 'patroni cookbook' do
           },
           remove_data_directory_on_diverged_timelines: false,
           remove_data_directory_on_rewind_failure: false,
+          basebackup: [
+            'no-password'
+          ],
         },
         bootstrap: {
           dcs: {
