@@ -83,6 +83,7 @@ RSpec.describe 'monitoring::grafana' do
           expect(content).to match(/http_port = 3000/)
           expect(content).to match(/root_url = http:\/\/localhost\/-\/grafana/)
           expect(content).not_to match(/\[auth\.gitlab\]/)
+          expect(content).to match(/reporting_enabled = true/)
         }
     end
 
@@ -276,6 +277,35 @@ RSpec.describe 'monitoring::grafana' do
       block.block.call
 
       expect(chef_run.node['gitlab']['sidekiq-cluster']['queue_groups']).to eq(queue_groups)
+    end
+
+    it 'disables reporting when usage_ping_enabled is disabled' do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          usage_ping_enabled: false
+        }
+      )
+
+      expect(chef_run).to render_file('/var/opt/gitlab/grafana/grafana.ini')
+        .with_content { |content|
+          expect(content).to match(/reporting_enabled = false/)
+        }
+    end
+
+    it 'disables reporting when usage_ping_enabled is enabled but is explicitly disabled' do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          usage_ping_enabled: true
+        },
+        grafana: {
+          reporting_enabled: false
+        }
+      )
+
+      expect(chef_run).to render_file('/var/opt/gitlab/grafana/grafana.ini')
+        .with_content { |content|
+          expect(content).to match(/reporting_enabled = false/)
+        }
     end
   end
 end

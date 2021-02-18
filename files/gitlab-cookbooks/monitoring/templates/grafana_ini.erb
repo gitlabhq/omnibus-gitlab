@@ -136,7 +136,7 @@ log_queries =
 # No ip addresses are being tracked, only simple counters to track
 # running instances, dashboard and error counts. It is very helpful to us.
 # Change this option to false to disable reporting.
-reporting_enabled = false
+reporting_enabled = <%= @grafana_reporting_enabled %>
 
 # Set to false to disable all checks to https://grafana.net
 # for new vesions (grafana itself and plugins), check is used
