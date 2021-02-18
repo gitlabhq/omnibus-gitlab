@@ -46,13 +46,6 @@ dependencies:
         - filename: config/software/awesome_print.rb
           pattern: "default_version '(\\S+)'"
           tag_prefix: 'v'
-      # bundler
-      https://github.com/bundler/bundler.git:
-        replace_in_files:
-        - filename: config/software/bundler.rb
-          pattern: "default_version '(\\d+\\.\\d+\\.\\d+)'"
-          tag_prefix: 'v'
-          range: '<= 1.x'
       # chef-gem
       https://github.com/chef/chef.git:
         replace_in_files:
