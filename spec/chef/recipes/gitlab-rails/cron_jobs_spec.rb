@@ -45,6 +45,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'repository_check_worker'                                | 'repository_check_worker_cron'
         'schedule_migrate_external_diffs_worker'                 | 'schedule_migrate_external_diffs_worker_cron'
         'stuck_ci_jobs_worker'                                   | 'stuck_ci_jobs_worker_cron'
+        'user_status_cleanup_batch_worker'                       | 'user_status_cleanup_batch_worker_cron'
       end
 
       with_them do
