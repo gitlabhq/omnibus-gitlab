@@ -40,12 +40,6 @@ dependencies:
         - filename: config/software/alertmanager.rb
           pattern: "Gitlab::Version.new\\('alertmanager', '(\\S+)'\\)"
           tag_prefix: 'v'
-      # awesome_print
-      https://github.com/awesome-print/awesome_print.git:
-        replace_in_files:
-        - filename: config/software/awesome_print.rb
-          pattern: "default_version '(\\S+)'"
-          tag_prefix: 'v'
       # chef-gem
       https://github.com/chef/chef.git:
         replace_in_files:
