@@ -1,5 +1,0 @@
----
-title: Patch Ruby 2.7 with counting memory allocations
-merge_request:
-author:
-type: added
