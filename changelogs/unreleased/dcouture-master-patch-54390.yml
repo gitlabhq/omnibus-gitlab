@@ -1,5 +1,0 @@
----
-title: Add HTTP header to prevent content sniffing in /assets/* directory
-merge_request:
-author:
-type: security

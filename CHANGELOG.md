@@ -3,6 +3,55 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.9.0 (2021-02-22)
+
+### Security (1 change)
+
+- Add HTTP header to prevent content sniffing in /assets/* directory.
+
+### Fixed (2 changes, 1 of them is from the community)
+
+- Reconfigure nolonger errors in a FIPS environment. !4932
+- configure sshd and git account so that pam is not used any longer in docker. !4953 (Fnordpol)
+
+### Deprecated (2 changes)
+
+- Add warning message to migration nodes for PG verisons older than 12. !4918
+- Deprecate support for Ubuntu 16.04. !5006
+
+### Changed (7 changes)
+
+- Update libtiff to 4.2.0. !4859
+- Make GitLab Docker image and AWS AMIs use Ubuntu 20.04 packages. !4876
+- Raise warning if node attribute file can't be found. !4894
+- Update logrotate to 3.18.0. !4902
+- Upgrade Redis to 6.0.10. !4930
+- Bump Container Registry to v3.0.0-gitlab. !4962
+- Add redis config for gitlab-kas. !4974
+
+### Performance (3 changes)
+
+- Bump gitlab-exporter to 10.0.0, use jemalloc allocator. !4922
+- Add Git refs performance patches. !4977
+- Tune Ruby GC for gitlab-exporter. !4987
+
+### Added (6 changes)
+
+- Add application settings cache expiry to gitlab.rb. !4938
+- Emit Ruby Prometheus metrics for gitlab-exporter. !4958
+- Add flag to disable kernel parameter modification. !4967
+- Add matomo_disable_cookies setting. !4979
+- Add default replication factor configuration option to Praefect. !4988
+- Patch Ruby 2.7 with counting memory allocations.
+
+### Other (4 changes, 2 of them are from the community)
+
+- Compile workhorse as part of gitlab-rails. !4829
+- Remove Bundler 1.17.3 bundling. !4903 (Takuya Noguchi)
+- Bump Grafana version to 7.3.7. !4933
+- Update Mattermost to 5.31.1. !5003 (Harrison Healey)
+
+
 ## 13.8.4 (2021-02-11)
 
 - No changes.
