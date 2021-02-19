@@ -14,7 +14,7 @@ module Gitlab
       end
 
       def section(name, collapsed: true)
-        return unless ENV['CI']
+        return yield unless ENV['CI']
 
         name.tr!(':', '-')
 
