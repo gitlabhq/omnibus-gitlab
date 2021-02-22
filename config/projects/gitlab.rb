@@ -24,22 +24,20 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
 ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
 
-if ee
-  name 'gitlab-ee'
-  description 'GitLab Enterprise Edition '\
-    '(including NGINX, Postgres, Redis)'
-  replace 'gitlab-ce'
-  conflict 'gitlab-ce'
-else
-  name 'gitlab-ce'
-  description 'GitLab Community Edition '\
-    '(including NGINX, Postgres, Redis)'
-  replace 'gitlab-ee'
-  conflict 'gitlab-ee'
-end
+gitlab_package_name = Build::Info.package
+gitlab_package_file = File.join(Omnibus::Config.project_dir, 'gitlab', "#{gitlab_package_name}.rb")
 
-maintainer 'GitLab, Inc. <support@gitlab.com>'
-homepage 'https://about.gitlab.com/'
+# Include package specific details like package name and descrption (for gitlab-ee/gitlab-ce/etc)
+instance_eval(IO.read(gitlab_package_file), gitlab_package_file, 1)
+
+# Include all other known gitlab packages in our replace/conflict list to allow transitioning between packages
+Dir.glob(File.join(Omnibus::Config.project_dir, 'gitlab', '*.rb')).each do |filename|
+  other_package = File.basename(filename, '.rb')
+  next if other_package == gitlab_package_name
+
+  replace other_package
+  conflict other_package
+end
 
 license 'MIT'
 license_compiled_output true
