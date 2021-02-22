@@ -12,6 +12,10 @@ module Build
           is_auto_deploy?
       end
 
+      def include_ee?
+        is_ee?
+      end
+
       def match_tag?(tag)
         system(*%W[git describe --exact-match --match #{tag}])
       end
