@@ -1,0 +1,5 @@
+---
+title: Remove apt-transport-https as apt natively support https
+merge_request:
+author: Simon Deziel
+type: other
