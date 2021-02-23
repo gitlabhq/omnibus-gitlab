@@ -29,10 +29,8 @@ COPY RELEASE /
 COPY assets/ /assets/
 # as gitlab-ci checks out with mode 666 we need to set permissions of the files we copied into the
 # container to a secure value. Issue #5956
-RUN chmod -R og-w /assets
-RUN chmod -R og-w RELEASE
-
-RUN /assets/setup
+RUN chmod -R og-w /assets RELEASE ; \
+  /assets/setup
 
 # Allow to access embedded tools
 ENV PATH /opt/gitlab/embedded/bin:/opt/gitlab/bin:/assets:$PATH
