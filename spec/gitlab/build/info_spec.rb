@@ -39,6 +39,16 @@ RSpec.describe Build::Info do
       expect(described_class.release_version).to eq('12.121.12-ce.1')
     end
 
+    it 'defaults to an initial build version when there are no matching tags' do
+      allow(Build::Check).to receive(:on_tag?).and_return(false)
+      allow(Build::Check).to receive(:is_nightly?).and_return(false)
+      allow(Build::Info).to receive(:latest_tag).and_return('')
+      allow(Build::Info).to receive(:commit_sha).and_return('ffffffff')
+      stub_env_var('CI_PIPELINE_ID', '5555')
+
+      expect(described_class.release_version).to eq('0.0.1+rfbranch.5555.ffffffff-ce.1')
+    end
+
     describe 'with env variables' do
       it 'returns build version and iteration with env variable' do
         stub_env_var('USE_S3_CACHE', 'false')
