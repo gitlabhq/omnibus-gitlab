@@ -138,8 +138,11 @@ module Patroni
         opts.on('-h', '--help', 'Prints this help') do
           Utils.warn_and_exit opts
         end
-        opts.on('-w', '--wait', 'Wait until reinitialization completes') do |w|
-          options[:wait] = w
+        opts.on('--member [MEMBER]', 'The cluster member name to reinitialize') do |member|
+          options[:member] = member
+        end
+        opts.on('-w', '--wait', 'Wait until reinitialization completes') do |wait|
+          options[:wait] = wait
         end
       end
     }
@@ -232,7 +235,7 @@ module Patroni
     command << '--force'
     command << '--wait' if options[:wait]
     command << attributes['patroni']['scope']
-    command << attributes['patroni']['name']
+    command << (options[:member].nil? ? attributes['patroni']['name'] : options[:member])
     Utils.patronictl(command, live: true)
   end
 

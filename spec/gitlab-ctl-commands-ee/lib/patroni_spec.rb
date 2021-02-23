@@ -9,26 +9,30 @@ RSpec.describe 'Patroni' do
   core_commands = %w(bootstrap check-leader check-replica check-standby-leader reinitialize-replica)
   additional_commands = %w(members pause resume failover switchover restart reload)
   all_commands = core_commands + additional_commands
+
   command_lines = {
     'bootstrap' => %w(--srcdir=SRCDIR --scope=SCOPE --datadir=DATADIR),
     'pause' => %w(-w),
     'resume' => %w(--wait),
     'failover' => %w(--master MASTER --candidate CANDIDATE),
     'switchover' => %w(--master MASTER --candidate CANDIDATE --scheduled SCHEDULED),
-    'reinitialize-replica' => %w(--wait),
+    'reinitialize-replica' => %w(--wait --member MEMBER),
     'restart' => [],
     'reload' => []
   }
+
   command_options = {
     'bootstrap' => { srcdir: 'SRCDIR', scope: 'SCOPE', datadir: 'DATADIR' },
     'pause' => { wait: true },
     'resume' => { wait: true },
     'failover' => { master: 'MASTER', candidate: 'CANDIDATE' },
     'switchover' => { master: 'MASTER', candidate: 'CANDIDATE', scheduled: 'SCHEDULED' },
-    'reinitialize-replica' => { wait: true },
+    'reinitialize-replica' => { wait: true, member: 'MEMBER' },
     'restart' => {},
     'reload' => {}
+
   }
+
   patronictl_command = {
     'members' => 'list',
     'pause' => 'pause -w',
@@ -39,7 +43,7 @@ RSpec.describe 'Patroni' do
     'reload' => 'reload --force fake-scope fake-node'
   }
 
-  describe '#parse_options' do
+  describe '.parse_options' do
     before do
       allow(Patroni::Utils).to receive(:warn_and_exit).and_call_original
       allow(Kernel).to receive(:exit) { |code| raise "Kernel.exit(#{code})" }
@@ -68,6 +72,7 @@ RSpec.describe 'Patroni' do
           cmd_line = command_lines[cmd] || []
           cmd_opts = command_options[cmd] || {}
           cmd_opts[:command] = cmd
+
           expect(Patroni.parse_options(%W(patroni #{cmd}) + cmd_line)).to include(cmd_opts)
         end
       end
@@ -88,29 +93,49 @@ RSpec.describe 'Patroni' do
     end
   end
 
-  describe '#init_db' do
+  describe 'additional commands' do
+    before do
+      allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'patroni' => { 'config_dir' => '/fake' } })
+      allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return({ 'patroni' => { 'scope' => 'fake-scope', 'name' => 'fake-node' } })
+      allow(GitlabCtl::Util).to receive(:run_command)
+    end
+
+    additional_commands.each do |cmd|
+      it "should run the relevant patronictl command for #{cmd}" do
+        Patroni.send(cmd.to_sym, command_options[cmd] || {})
+
+        expect(GitlabCtl::Util).to have_received(:run_command).with(
+          "/opt/gitlab/embedded/bin/patronictl -c /fake/patroni.yaml #{patronictl_command[cmd]}",
+          user: 'root', live: false)
+      end
+    end
+  end
+
+  describe '.init_db' do
     before do
       allow(GitlabCtl::Util).to receive(:run_command)
     end
 
     it 'should call initdb command with the specified options' do
       Patroni.init_db(command_options['bootstrap'])
+
       expect(GitlabCtl::Util).to have_received(:run_command).with('/opt/gitlab/embedded/bin/initdb -D DATADIR -E UTF8')
     end
   end
 
-  describe '#copy_config' do
+  describe '.copy_config' do
     before do
       allow(FileUtils).to receive(:cp_r)
     end
 
     it 'should call initdb command with the specified options' do
       Patroni.copy_config(command_options['bootstrap'])
+
       expect(FileUtils).to have_received(:cp_r).with('SRCDIR/.', 'DATADIR')
     end
   end
 
-  describe '#leader?, #replica?, and standyLeader?' do
+  describe '.leader?, .replica?, and .standyLeader?' do
     before do
       allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'patroni' => { 'api_address' => 'http://localhost:8009' } })
       allow_any_instance_of(Patroni::Client).to receive(:get).with('/leader').and_yield(Struct.new(:code).new(leader_status))
@@ -155,19 +180,30 @@ RSpec.describe 'Patroni' do
     end
   end
 
-  describe 'additional commands' do
+  describe '.reinitialize_replica' do
     before do
       allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'patroni' => { 'config_dir' => '/fake' } })
       allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return({ 'patroni' => { 'scope' => 'fake-scope', 'name' => 'fake-node' } })
       allow(GitlabCtl::Util).to receive(:run_command)
     end
 
-    additional_commands.each do |cmd|
-      it "should run the relevant patronictl command for #{cmd}" do
-        Patroni.send(cmd.to_sym, command_options[cmd] || {})
+    context 'when member option is set' do
+      it 'calls reinit command with the specified options to reinitialize the cluster member' do
+        Patroni.reinitialize_replica(command_options['reinitialize-replica'])
+
         expect(GitlabCtl::Util).to have_received(:run_command).with(
-          "/opt/gitlab/embedded/bin/patronictl -c /fake/patroni.yaml #{patronictl_command[cmd]}",
-          { user: 'root', live: false })
+          '/opt/gitlab/embedded/bin/patronictl -c /fake/patroni.yaml reinit --force --wait fake-scope MEMBER',
+          user: 'root', live: true)
+      end
+    end
+
+    context 'when member option is not set' do
+      it 'calls reinit command with the specified options to reinitialize the current cluster member' do
+        Patroni.reinitialize_replica(command_options['reinitialize-replica'].slice(:wait))
+
+        expect(GitlabCtl::Util).to have_received(:run_command).with(
+          '/opt/gitlab/embedded/bin/patronictl -c /fake/patroni.yaml reinit --force --wait fake-scope fake-node',
+          user: 'root', live: true)
       end
     end
   end
