@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.9.1 (2021-02-23)
+
+### Fixed (1 change)
+
+- Ensure Marketplace AMIs have licenses embedded. !5031
+
+
 ## 13.9.0 (2021-02-22)
 
 ### Security (1 change)
