@@ -59,7 +59,7 @@
     {
       "type": "shell",
       "script": "update-script-ee-premium.sh",
-      "environment_vars": ["DOWNLOAD_URL={{user `download_url`}}"]
+      "environment_vars": ["DOWNLOAD_URL={{user `download_url`}}", "GITLAB_LICENSE_FILE={{user `license_file`}}"]
     }
   ]
 }
