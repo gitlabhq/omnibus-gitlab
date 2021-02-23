@@ -22,8 +22,6 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/util"
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
-ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
-
 gitlab_package_name = Build::Info.package
 gitlab_package_file = File.join(Omnibus::Config.project_dir, 'gitlab', "#{gitlab_package_name}.rb")
 
@@ -100,13 +98,14 @@ dependency 'runit'
 dependency 'go-crond'
 dependency 'docker-distribution-pruner'
 
-if ee
+if Build::Check.include_ee?
   dependency 'consul'
   dependency 'gitlab-ctl-ee'
   dependency 'gitlab-geo-psql'
   dependency 'gitlab-pg-ctl'
   dependency 'pgbouncer-exporter'
 end
+
 dependency 'mattermost'
 dependency 'prometheus'
 dependency 'alertmanager'

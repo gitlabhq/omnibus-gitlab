@@ -18,7 +18,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
-EE = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
+EE = Build::Check.include_ee?
 
 software_name = EE ? 'gitlab-rails-ee' : 'gitlab-rails'
 version = Gitlab::Version.new(software_name)

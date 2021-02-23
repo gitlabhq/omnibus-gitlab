@@ -23,7 +23,7 @@ skip_transitive_dependency_licensing true
 
 dependency 'gitlab-ctl'
 
-ee = system("#{Omnibus::Config.project_root}/support/is_gitlab_ee.sh")
+ee = Build::Check.include_ee?
 
 source path: File.expand_path(
   'files/gitlab-ctl-commands-ee', Omnibus::Config.project_root
