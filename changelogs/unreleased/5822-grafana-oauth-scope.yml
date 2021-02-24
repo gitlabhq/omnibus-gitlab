@@ -1,0 +1,5 @@
+---
+title: Set Grafana auth scope based on allowed groups
+merge_request: 5038
+author:
+type: changed

@@ -250,7 +250,7 @@ enabled = true
 allow_sign_up = <%= @gitlab_auth_sign_up %>
 client_id = <%= @gitlab_application_id %>
 client_secret = <%= @gitlab_secret %>
-scopes = api
+scopes = <%= @auth_scope %>
 auth_url = <%= @external_url %>/oauth/authorize
 token_url = <%= @external_url %>/oauth/token
 api_url = <%= @external_url %>/api/v4

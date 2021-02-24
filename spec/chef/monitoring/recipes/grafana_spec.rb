@@ -199,6 +199,7 @@ RSpec.describe 'monitoring::grafana' do
           expect(content).to match(/\[metrics\]\n#.+\nenabled = false/)
           expect(content).not_to match(/basic_auth_username/)
           expect(content).not_to match(/basic_auth_password/)
+          expect(content).to match(/scopes = read_api/)
         }
     end
 
@@ -306,6 +307,25 @@ RSpec.describe 'monitoring::grafana' do
         .with_content { |content|
           expect(content).to match(/reporting_enabled = false/)
         }
+    end
+
+    context 'without allowed_groups specified' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://trailingslash.example.com/',
+          grafana: {
+            http_addr: '0.0.0.0',
+            http_port: 3333,
+            enable: true,
+            gitlab_application_id: 'appid',
+            gitlab_secret: 'secret'
+          }
+        )
+      end
+
+      it 'sets auth scope to read_user' do
+        expect(chef_run).to render_file('/var/opt/gitlab/grafana/grafana.ini').with_content(/scopes = read_user/)
+      end
     end
   end
 end
