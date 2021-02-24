@@ -1,0 +1,5 @@
+---
+title: Update the package metadata vendor name to be GitLab, Inc.
+merge_request: 5027
+author:
+type: changed

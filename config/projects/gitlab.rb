@@ -228,10 +228,12 @@ exclude 'embedded/lib/python*/**/*.exe'
 
 # Enable signing packages
 package :rpm do
+  vendor 'GitLab, Inc. <support@gitlab.com>'
   signing_passphrase Gitlab::Util.get_env('GPG_PASSPHRASE')
 end
 
 package :deb do
+  vendor 'GitLab, Inc. <support@gitlab.com>'
   signing_passphrase Gitlab::Util.get_env('GPG_PASSPHRASE')
 end
 
