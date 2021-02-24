@@ -12,7 +12,6 @@ RUN apt-get update -q \
       ca-certificates \
       openssh-server \
       wget \
-      apt-transport-https \
       vim \
       tzdata \
       nano \
