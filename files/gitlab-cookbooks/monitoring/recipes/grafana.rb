@@ -127,6 +127,7 @@ template grafana_config do
       'external_url' => external_url,
       'data_path' => File.join(node['monitoring']['grafana']['home'], 'data'),
       'grafana_reporting_enabled' => grafana_reporting_enabled,
+      'auth_scope' => node['monitoring']['grafana']['allowed_groups'].empty? ? 'read_user' : 'read_api'
     }.merge(node['monitoring']['grafana'])
   }
   owner prometheus_user
