@@ -74,6 +74,21 @@ class OmnibusHelper
     expected_user?(file, user) && expected_group?(file, group)
   end
 
+  # Checks whether a specific resource exist in runtime
+  #
+  # @example usage
+  #   omnibus_helper.is_resource_available?('runit_service[postgresql]')
+  #
+  # @param [String] name of the resource
+  # @return [Boolean]
+  def is_resource_available?(name)
+    node.run_context.resource_collection.find(name)
+
+    true
+  rescue Chef::Exceptions::ResourceNotFound
+    false
+  end
+
   def is_deprecated_praefect_config?
     return unless node['praefect']['storage_nodes'].is_a?(Array)
 
