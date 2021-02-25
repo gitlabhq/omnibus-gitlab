@@ -15,6 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+include_recipe 'postgresql::user'
+include_recipe 'postgresql::sysctl'
+
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
@@ -24,8 +27,6 @@ postgresql_group = account_helper.postgresql_group
 postgresql_data_dir_symlink = File.join(node['postgresql']['dir'], "data")
 
 pg_helper = PgHelper.new(node)
-
-include_recipe 'postgresql::user'
 
 directory node['postgresql']['dir'] do
   owner postgresql_username
@@ -48,26 +49,6 @@ end
 link postgresql_data_dir_symlink do
   to node['postgresql']['data_dir']
   not_if { node['postgresql']['data_dir'] == postgresql_data_dir_symlink }
-end
-
-include_recipe "package::sysctl"
-
-gitlab_sysctl "kernel.shmmax" do
-  value node['postgresql']['shmmax']
-end
-
-gitlab_sysctl "kernel.shmall" do
-  value node['postgresql']['shmall']
-end
-
-sem = [
-  node['postgresql']['semmsl'],
-  node['postgresql']['semmns'],
-  node['postgresql']['semopm'],
-  node['postgresql']['semmni'],
-].join(" ")
-gitlab_sysctl "kernel.sem" do
-  value sem
 end
 
 execute "/opt/gitlab/embedded/bin/initdb -D #{node['postgresql']['data_dir']} -E UTF8" do

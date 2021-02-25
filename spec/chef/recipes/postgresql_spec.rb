@@ -23,6 +23,10 @@ RSpec.describe 'postgresql 9.2' do
     expect(chef_run).to include_recipe('postgresql::user')
   end
 
+  it 'includes postgresql::sysctl recipe' do
+    expect(chef_run).to include_recipe('postgresql::sysctl')
+  end
+
   it_behaves_like 'enabled runit service', 'postgresql', 'root', 'root', 'gitlab-psql', 'gitlab-psql'
 
   context 'renders postgresql.conf' do
@@ -846,10 +850,6 @@ RSpec.describe 'postgresql 9.6' do
         expect(chef_run).to render_file(pg_hba_conf).with_content('hostssl anotherfakedatabase anotherfakeuser fakehostname cert')
       end
     end
-  end
-
-  it 'creates sysctl files' do
-    expect(chef_run).to create_gitlab_sysctl('kernel.shmmax').with_value(17179869184)
   end
 end
 
