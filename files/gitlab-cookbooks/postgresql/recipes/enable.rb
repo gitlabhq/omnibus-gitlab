@@ -77,12 +77,6 @@ execute "/opt/gitlab/embedded/bin/initdb -D #{node['postgresql']['data_dir']} -E
   not_if { pg_helper.bootstrapped? || pg_helper.delegated? }
 end
 
-# This template is needed to make the gitlab-psql script and PgHelper work
-template "/opt/gitlab/etc/gitlab-psql-rc" do
-  owner 'root'
-  group 'root'
-end
-
 # IMPORTANT NOTE:
 #
 # When PostgreSQL configuration is delegated, e.g. to Patroni, some of the following tasks will be skipped or

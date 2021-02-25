@@ -7,14 +7,6 @@ RSpec.describe 'postgresql 9.2' do
   let(:postgresql_ssl_key) { File.join(postgresql_data_dir, 'server.key') }
   let(:postgresql_conf) { File.join(postgresql_data_dir, 'postgresql.conf') }
   let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
-  let(:gitlab_psql_rc) do
-    <<-EOF
-psql_user='gitlab-psql'
-psql_group='gitlab-psql'
-psql_host='/var/opt/gitlab/postgresql'
-psql_port='5432'
-    EOF
-  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -29,11 +21,6 @@ psql_port='5432'
 
   it 'includes the postgresql::user recipe' do
     expect(chef_run).to include_recipe('postgresql::user')
-  end
-
-  it 'creates gitlab-psql-rc' do
-    expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-psql-rc')
-      .with_content(gitlab_psql_rc)
   end
 
   it_behaves_like 'enabled runit service', 'postgresql', 'root', 'root', 'gitlab-psql', 'gitlab-psql'
@@ -868,6 +855,14 @@ end
 
 RSpec.describe 'postgresql::bin' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:gitlab_psql_rc) do
+    <<-EOF
+psql_user='gitlab-psql'
+psql_group='gitlab-psql'
+psql_host='/var/opt/gitlab/postgresql'
+psql_port='5432'
+    EOF
+  end
 
   before do
     allow(Gitlab). to receive(:[]).and_call_original
@@ -891,6 +886,11 @@ RSpec.describe 'postgresql::bin' do
 
     it 'still includes the postgresql::bin recipe' do
       expect(chef_run).to include_recipe('postgresql::bin')
+    end
+
+    it 'creates gitlab-psql-rc' do
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-psql-rc')
+        .with_content(gitlab_psql_rc)
     end
 
     # We do expect the ruby block to run, but nothing to be found
