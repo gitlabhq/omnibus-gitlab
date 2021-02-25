@@ -888,6 +888,10 @@ psql_port='5432'
       expect(chef_run).to include_recipe('postgresql::bin')
     end
 
+    it 'includes postgresql::directory_locations' do
+      expect(chef_run).to include_recipe('postgresql::directory_locations')
+    end
+
     it 'creates gitlab-psql-rc' do
       expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-psql-rc')
         .with_content(gitlab_psql_rc)

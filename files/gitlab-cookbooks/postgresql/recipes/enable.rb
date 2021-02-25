@@ -18,8 +18,6 @@
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
-include_recipe 'postgresql::directory_locations'
-
 postgresql_log_dir = node['postgresql']['log_directory']
 postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
