@@ -7,7 +7,7 @@ class PostgreSQL
     end
 
     def set_password!
-      unless @ctl.service_enabled?('postgresql')
+      unless @ctl.service_enabled?('postgresql') || @ctl.service_enabled?('patroni')
         puts 'There is no PostgreSQL instance enabled in Omnibus, exiting...'
         exit 1
       end
