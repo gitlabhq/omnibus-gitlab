@@ -32,6 +32,9 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 # can change the 'From' with this setting.
 gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
+
+# If your SMTP server is using self signed certificates you can specify a custom ca file
+gitlab_rails['smtp_ca_file'] = '/path/to/your/cacert.pem'
 ```
 
 ## Example configurations
