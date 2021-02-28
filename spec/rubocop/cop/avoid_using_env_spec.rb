@@ -1,9 +1,12 @@
 require 'spec_helper'
+require 'rubocop/rspec/cop_helper'
+require 'rubocop/rspec/expect_offense'
+
 require_relative '../../../lib/rubocop/cop/avoid_using_env'
-require_relative '../../support/rubocop_helper.rb'
 
 RSpec.describe Rubocop::Cop::AvoidUsingEnv do
   include CopHelper
+  include RuboCop::RSpec::ExpectOffense
 
   subject(:cop) { described_class.new }
 
