@@ -1519,6 +1519,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! This should be in the range 1 - 10000, defaulting to 5000.
 # gitlab_pages['max_connections'] = 5000
 
+##! Setting the propagate_correlation_id to true allows installations behind a reverse proxy
+##! generate and set a correlation ID to requests sent to GitLab Pages. If a reverse proxy
+##! sets the header value X-Request-ID, the value will be propagated in the request chain.
+# gitlab_pages['propagate_correlation_id'] = false
+
 ##! Configure to use JSON structured logging in GitLab Pages
 # gitlab_pages['log_format'] = "json"
 

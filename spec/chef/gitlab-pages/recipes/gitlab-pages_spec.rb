@@ -173,6 +173,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             status_uri: '/@status',
             max_connections: 7500,
             inplace_chroot: true,
+            propagate_correlation_id: true,
             log_format: 'text',
             log_verbose: true,
             gitlab_id: 'app_id',
@@ -224,6 +225,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             metrics-address=localhost:1234
             pages-status=/@status
             max-conns=7500
+            propagate-correlation-id=true
             log-format=text
             log-verbose
             sentry-dsn=https://b44a0828b72421a6d8e99efd68d44fa8@example.com/40
