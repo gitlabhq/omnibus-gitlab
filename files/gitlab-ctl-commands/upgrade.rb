@@ -316,6 +316,15 @@ def print_upgrade_and_exit
 
   puts "\n"
   pg_upgrade_check
+
+  if display_upgrade_survey?
+    release_version = survey_release_version
+    if release_version
+      puts "Help us improve the upgrade experience, let us know how we did with a 1 minute survey:"
+      puts "https://gitlab.fra1.qualtrics.com/jfe/form/SV_0Hwcx9ncPfygMfj?installation=omnibus&release=#{release_version}\n\n"
+    end
+  end
+
   stale_files_check
   Kernel.exit 0
 end
@@ -349,6 +358,10 @@ end
 
 def recommend_pg_upgrade?
   true
+end
+
+def display_upgrade_survey?
+  false
 end
 
 def postgresql_detected?
