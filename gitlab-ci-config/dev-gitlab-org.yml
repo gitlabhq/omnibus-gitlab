@@ -387,21 +387,6 @@
   stage: aws-marketplace-release
   allow_failure: true
   script:
-    - curl --request POST
-      --form "token=$AWS_RELEASE_TRIGGER_TOKEN"
-      --form ref=master
-      --form "variables[GITLAB_VERSION]=$CI_COMMIT_TAG"
-      --form "variables[AWS_LISTING_NAME]=$AWS_LISTING_NAME"
-      https://dev.gitlab.org/api/v4/projects/1035/trigger/pipeline
-  <<: *dev-ee-tag-only-except-auto-deploy-or-rc-manual
-  dependencies:
-    - AWS
-
-.aws_marketplace_release-automatic: &aws_marketplace_release-automatic
-  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
-  stage: aws-marketplace-release
-  allow_failure: true
-  script:
     - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
     - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
     - bundle exec rake aws:marketplace:release
@@ -936,36 +921,20 @@ AWS-CE-Release:
   variables:
     AWS_LISTING_NAME: "GitLab Community Edition"
   extends: .aws_marketplace_release
-  <<: *dev-ce-tag-only-except-rc-manual
+  needs:
+    - AWS
+  <<: *dev-ce-tag-only-except-auto-deploy-or-rc
 
 AWS-EE-Ultimate-Release:
   variables:
     AWS_LISTING_NAME: "GitLab Ultimate"
   extends: .aws_marketplace_release
+  needs:
+    - AWS-Ultimate
 
 AWS-EE-Premium-Release:
   variables:
     AWS_LISTING_NAME: "GitLab Premium"
   extends: .aws_marketplace_release
-
-AWS-CE-Release-automatic:
-  variables:
-    AWS_LISTING_NAME: "GitLab Community Edition"
-  extends: .aws_marketplace_release-automatic
-  needs:
-    - AWS
-  <<: *dev-ce-tag-only-except-auto-deploy-or-rc
-
-AWS-EE-Ultimate-Release-automatic:
-  variables:
-    AWS_LISTING_NAME: "GitLab Ultimate"
-  extends: .aws_marketplace_release-automatic
-  needs:
-    - AWS-Ultimate
-
-AWS-EE-Premium-Release-automatic:
-  variables:
-    AWS_LISTING_NAME: "GitLab Premium"
-  extends: .aws_marketplace_release-automatic
   needs:
     - AWS-Premium
