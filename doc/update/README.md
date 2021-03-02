@@ -268,7 +268,7 @@ It's possible to upgrade to a newer version of GitLab without having to take
 your GitLab instance offline.
 
 Verify that you can upgrade with no downtime by checking the
-[Upgrading without downtime section](https://docs.gitlab.com/ee/update/README.html#upgrading-without-downtime) of the update document.
+[Upgrading without downtime section](https://docs.gitlab.com/ee/update/index.html#upgrading-without-downtime) of the update document.
 
 If you meet all the requirements above, follow these instructions in order. There are three sets of steps, depending on your deployment type:
 
@@ -290,7 +290,9 @@ to re-read any database changes that have been made by post-deployment migration
 
 Before following these instructions, note the following **important** information:
 
-- On single-node Omnibus deployments, zero down-time updates are not possible when
+- You can only upgrade 1 minor release at a time. So from 13.6 to 13.7, not to 13.8.
+  If you attempt more than one minor release, the upgrade may fail.
+- On single-node Omnibus deployments, updates with no downtime are not possible when
   using Puma because Puma always requires a complete restart (Puma replaced Unicorn as
   the default in GitLab 13.0 unless
   [specifically disabled](../settings/unicorn.md#enabling-unicorn)). This is because the
@@ -358,6 +360,9 @@ sure you remove `/etc/gitlab/skip-auto-reconfigure` after
 you've completed these steps.
 
 ### Multi-node / HA deployment
+
+You can only upgrade 1 minor release at a time. So from 13.6 to 13.7, not to 13.8.
+If you attempt more than one minor release, the upgrade may fail.
 
 #### Use a load balancer in front of web (Puma/Unicorn) nodes
 

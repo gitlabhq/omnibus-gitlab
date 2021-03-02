@@ -2230,8 +2230,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['kerberos_https'] = true
 
 ################################################################################
-## Package repository (EE Only)
-##! Docs: https://docs.gitlab.com/ee/administration/maven_packages.md
+## Package repository
+##! Docs: https://docs.gitlab.com/ee/administration/packages/
 ################################################################################
 
 # gitlab_rails['packages_enabled'] = true
