@@ -1,0 +1,5 @@
+---
+title: Expose Rails allowed_hosts setting in gitlab.rb
+merge_request: 5057
+author:
+type: added

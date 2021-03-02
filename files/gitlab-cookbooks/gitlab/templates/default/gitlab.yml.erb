@@ -47,6 +47,10 @@ production: &base
     content_security_policy: <%= @content_security_policy.to_json %>
     <%- end -%>
 
+    <%- unless @allowed_hosts.empty? %>
+    allowed_hosts: <%= @allowed_hosts.to_json %>
+    <% end %>
+
     # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
     user: <%= node['gitlab']['user']['username'] %>
 

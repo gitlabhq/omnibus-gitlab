@@ -626,6 +626,30 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    describe 'Allowed hosts' do
+      include_context 'gitlab-rails'
+
+      context 'with default values' do
+        it 'do not render allowed_hosts in gitlab.yml' do
+          expect(gitlab_yml[:production][:gitlab][:allowed_hosts]).to be nil
+        end
+      end
+
+      context 'with user specified values' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              allowed_hosts: ['example.com', 'foobar.com']
+            }
+          )
+        end
+
+        it 'renders allowed_hosts in gitlab.yml' do
+          expect(gitlab_yml[:production][:gitlab][:allowed_hosts]).to eq(['example.com', 'foobar.com'])
+        end
+      end
+    end
+
     context 'pages settings' do
       using RSpec::Parameterized::TableSyntax
 
