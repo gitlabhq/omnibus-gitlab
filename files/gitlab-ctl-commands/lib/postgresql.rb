@@ -36,8 +36,10 @@ module GitlabCtl
         node_attributes.dig('postgresql', 'group')
       end
 
-      def postgresql_version(data_path)
-        version_file = "#{data_path}/postgresql/data/PG_VERSION"
+      def postgresql_version
+        node_attributes = GitlabCtl::Util.get_node_attributes
+        postgresql_dir_path = node_attributes.dig('postgresql', 'dir')
+        version_file = "#{postgresql_dir_path}/data/PG_VERSION"
 
         return nil unless File.exist?(version_file)
 

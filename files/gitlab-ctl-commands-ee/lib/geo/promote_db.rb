@@ -1,16 +1,23 @@
 require 'rainbow/ext/string'
 
+# The first path works on production, while the second path works for tests
+begin
+  require_relative '../../../omnibus-ctl/lib/gitlab_ctl/util'
+rescue LoadError
+  require_relative '../../../gitlab-ctl-commands/lib/gitlab_ctl/util'
+end
+
 module Geo
   # PromoteDb promotes standby database as usual "pg-ctl promote" but
   # if point-in-time LSN file is found, the database will be recovered to that state first
   class PromoteDb
     PITR_FILE_NAME = 'geo-pitr-file'.freeze
 
-    attr_accessor :base_path, :data_path
+    attr_accessor :base_path, :postgresql_dir_path
 
     def initialize(ctl)
       @base_path = ctl.base_path
-      @data_path = ctl.data_path
+      @postgresql_dir_path = GitlabCtl::Util.get_public_node_attributes.dig('postgresql', 'dir')
     end
 
     def execute
@@ -28,7 +35,7 @@ module Geo
     private
 
     def postgresql_version
-      @postgresql_version ||= GitlabCtl::PostgreSQL.postgresql_version(data_path)
+      @postgresql_version ||= GitlabCtl::PostgreSQL.postgresql_version
     end
 
     def recovery_to_point_in_time
@@ -50,7 +57,7 @@ module Geo
     end
 
     def lsn_from_pitr_file
-      geo_pitr_file = "#{data_path}/postgresql/data/#{PITR_FILE_NAME}"
+      geo_pitr_file = "#{postgresql_dir_path}/data/#{PITR_FILE_NAME}"
 
       return nil unless File.exist?(geo_pitr_file)
 
@@ -81,7 +88,7 @@ module Geo
     end
 
     def write_geo_config_file(settings)
-      geo_conf_file = "#{data_path}/postgresql/data/gitlab-geo.conf"
+      geo_conf_file = "#{postgresql_dir_path}/data/gitlab-geo.conf"
 
       File.open(geo_conf_file, "w", 0640) do |file|
         file.write(settings)
@@ -89,7 +96,7 @@ module Geo
     end
 
     def write_recovery_conf(settings)
-      recovery_conf = "#{data_path}/postgresql/data/recovery.conf"
+      recovery_conf = "#{postgresql_dir_path}/data/recovery.conf"
 
       File.open(recovery_conf, 'a', 0640) do |file|
         file.write(settings)
