@@ -156,6 +156,19 @@ RSpec.describe 'monitoring::grafana' do
             allowed
             also-allowed
           ],
+          smtp: {
+            enabled: true,
+            host: 'smtp_server:255',
+            user: 'testuser',
+            password: 'test',
+            cert_file: '/path/to/cert_file.crt',
+            key_file: '/path/to/key_file.key',
+            skip_verify: true,
+            from_address: 'smtp_admin@grafana.gitlab',
+            from_name: 'Grafana Gitlab SMTP',
+            ehlo_identity: 'dashboard.grafama.gitlab',
+            startTLS_policy: 'NoStartTLS'
+          },
           env: {
             'USER_SETTING' => 'asdf1234'
           },
@@ -200,6 +213,18 @@ RSpec.describe 'monitoring::grafana' do
           expect(content).not_to match(/basic_auth_username/)
           expect(content).not_to match(/basic_auth_password/)
           expect(content).to match(/scopes = read_api/)
+          # smtp configuration tests
+          expect(content).to match(/\[smtp\]\nenabled = true/)
+          expect(content).to match(/host = smtp_server:255/)
+          expect(content).to match(/user = testuser/)
+          expect(content).to match(/password = test/)
+          expect(content).to match(/cert_file = \/path\/to\/cert_file.crt/)
+          expect(content).to match(/key_file = \/path\/to\/key_file.key/)
+          expect(content).to match(/skip_verify = true/)
+          expect(content).to match(/from_address = smtp_admin@grafana.gitlab/)
+          expect(content).to match(/from_name = Grafana Gitlab SMTP/)
+          expect(content).to match(/ehlo_identity = dashboard.grafama.gitlab/)
+          expect(content).to match(/startTLS_policy = NoStartTLS/)
         }
     end
 

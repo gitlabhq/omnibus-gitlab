@@ -157,3 +157,16 @@ default['monitoring']['grafana']['metrics_basic_auth_username'] = nil
 default['monitoring']['grafana']['metrics_basic_auth_password'] = nil
 default['monitoring']['grafana']['alerting_enabled'] = false
 default['monitoring']['grafana']['reporting_enabled'] = true
+default['monitoring']['grafana']['smtp'] = {
+  'enabled' => false,
+  'host' => 'localhost:25',
+  'user' => nil,
+  'password' => nil,
+  'cert_file' => nil,
+  'key_file' => nil,
+  'skip_verify' => false,
+  'from_address' => 'admin@grafana.localhost',
+  'from_name' => 'Grafana',
+  'ehlo_identity' => 'dashboard.example.com',
+  'startTLS_policy' => nil
+}
