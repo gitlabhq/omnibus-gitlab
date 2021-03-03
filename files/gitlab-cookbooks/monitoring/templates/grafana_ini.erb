@@ -282,18 +282,11 @@ disable_login_form = <%= @disable_login_form %>
 
 #################################### SMTP / Emailing ##########################
 [smtp]
-;enabled = false
-;host = localhost:25
-;user =
-# If the password contains # or ; you have to wrap it with trippel quotes. Ex """#password;"""
-;password =
-;cert_file =
-;key_file =
-;skip_verify = false
-;from_address = admin@grafana.localhost
-;from_name = Grafana
-# EHLO identity in SMTP dialog (defaults to instance_name)
-;ehlo_identity = dashboard.example.com
+<% if @smtp.is_a?(Hash) -%>
+<% @smtp.each do |key, value| -%>
+<%= key %> = <%= value %>
+<% end -%>
+<% end -%>
 
 [emails]
 ;welcome_email_on_sign_up = false
@@ -412,4 +405,3 @@ basic_auth_password = """<%= @metrics_basic_auth_password %>"""
 [enterprise]
 # Path to a valid Grafana Enterprise license.jwt file
 ;license_path =
-

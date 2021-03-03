@@ -1,0 +1,5 @@
+---
+title: Allow custom smtp configuration for grafana in omnibus-gitlab
+merge_request: 5047
+author: msschl
+type: added

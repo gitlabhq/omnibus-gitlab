@@ -156,3 +156,31 @@ To enable Grafana's metrics API with basic authentication:
    with basic authentication. The username and password for basic authentication
    will be the `metrics_basic_auth_username` and `metrics_basic_auth_password`
    that was set in `/etc/gitlab/gitlab.rb`.
+
+## Grafana SMTP
+
+Enable SMTP to allow Grafana to send emails:
+
+```ruby
+grafana['smtp']['enabled'] = true
+```
+
+To fully customize Grafana's SMTP configuration, use the following code snippet as a starting point:
+
+```ruby
+grafana['smtp'] = {
+  'enabled' => true,
+  'host' => 'localhost:25',
+  'user' => nil,
+  'password' => nil,
+  'cert_file' => nil,
+  'key_file' => nil,
+  'skip_verify' => false,
+  'from_address' => 'admin@grafana.localhost',
+  'from_name' => 'Grafana',
+  'ehlo_identity' => 'dashboard.example.com',
+  'startTLS_policy' => nil
+}
+```
+
+For more information on Grafana's SMTP configuration see Grafana's [documentation](https://grafana.com/docs/grafana/latest/administration/configuration/#smtp).
