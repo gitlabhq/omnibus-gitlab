@@ -27,13 +27,11 @@ and Docker images, and will perform a QA run.
 
 ## I want to use specific branches or versions of various GitLab components in my build
 
-Versions of the main GitLab components like GitLab-Rails, Gitaly, GitLab Pages,
-GitLab Shell, GitLab Workhorse, GitLab Elasticsearch Indexer is controlled by
-various `*_VERSION` files in `omnibus-gitlab` repository. You can modify these
-files to point to your intended targets and the builds will use them. All of
-those files accept a branch name, a tag name, or a commit SHA as their content.
-They can also be provided via environment variables. Check the table below for
-details:
+Versions of the primary GitLab components like GitLab-Rails, Gitaly, GitLab
+Pages, GitLab Shell, GitLab Workhorse, GitLab Elasticsearch Indexer are
+controlled by various `*_VERSION` files in `omnibus-gitlab` repository and
+`*_VERSION` environment variables present during the build. Check the table
+below for details:
 
 | File name                            | Environment Variable                 | Description |
 | ------------------------------------ | ------------------------------------ | ----------- |
@@ -49,6 +47,49 @@ If you are running `package-and-qa` job from a GitLab MR, `GITLAB_VERSION`
 environment variable will be set to the commit SHA corresponding to the pipeline
 while other environment variables, if not specified, will be populated from
 their corresponding files and passed on to the triggered pipeline.
+
+NOTE:
+Environment variables take precedence over `*_VERSION` files.
+
+### Specifying a component version temporarily
+
+Temporarily specify a component version using any of the following methods:
+
+1. Edit the `*_VERSION` file, commit and push to start a pipeline, but revert
+   this change before the MR is marked ready for merge. It is recommended to
+   open an unresolved discussion on this diff in the MR so that you remember to
+   revert it.
+
+1. Set the environment variable via `.gitlab-ci.yml` file, commit and push to
+   start a pipeline, but revert this change before the MR is marked ready for
+   merge. It is recommended to open an unresolved discussion on this diff in the
+   MR so that you remember to revert it.
+
+1. Pass the environment variable as a [Git push option](https://docs.gitlab.com/ee/user/project/push_options.html#push-options-for-gitlab-cicd).
+
+    ```shell
+    git push <REMOTE> -o ci.variable="<ENV_VAR>=<VALUE>"
+
+    # Passing multiple variables
+    git push <REMOTE> -o ci.variable="<ENV_VAR_1>=<VALUE_1>" -o ci.variable="<ENV_VAR_2>=<VALUE_2>"
+    ```
+
+    **`Note`**: This works only if you have some changes to push. If remote is
+    already updated with your local branch, no new pipeline will be created.
+
+1. Manually run the pipeline from UI while specifying the environment variables.
+
+Environment variables are passed to the triggered downstream pipeline in the
+[QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) so that
+they are used during builds.
+
+Generally, environment variables are preferred over changing the `*_VERSION`
+files to avoid the extra step of reverting changes. The `*_VERSION` files are
+most efficient when repeated package builds of `omnibus-gitlab` are required,
+but the only changes happening are in GitLab components. In this case, once a
+pipeline is run after changing the `*_VERSION` files, it can be retried to build
+new packages pulling in changes from upstream component feature branch instead
+of manually running new pipelines.
 
 ## I want to use a specific mirror or fork of various GitLab components in my build
 
