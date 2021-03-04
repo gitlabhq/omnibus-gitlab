@@ -69,7 +69,7 @@ to work best with the available resources. Check out the [documentation](setting
 
 ## Updating
 
-- [Upgrade guidance](https://docs.gitlab.com/ee/update/README.html), including [supported upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths).
+- [Upgrade guidance](https://docs.gitlab.com/ee/update/index.html), including [supported upgrade paths](https://docs.gitlab.com/ee/update/index.html#upgrade-paths).
 - [Upgrade from Community Edition to Enterprise Edition](update/README.md#update-community-edition-to-enterprise-edition)
 - [Update to the latest version](update/README.md#update-using-the-official-repositories)
 - [Downgrade to an earlier version](update/README.md#downgrade)
