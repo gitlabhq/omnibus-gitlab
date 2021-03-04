@@ -76,10 +76,16 @@ module GitlabPages
       Gitlab['gitlab_pages']['gitlab_server'] ||= Gitlab['external_url']
       Gitlab['gitlab_pages']['artifacts_server_url'] ||= Gitlab['gitlab_pages']['gitlab_server'].chomp('/') + '/api/v4'
 
+      parse_auth_redirect_uri
+    end
+
+    def parse_auth_redirect_uri
       return unless Gitlab['gitlab_pages']['access_control']
+      return if Gitlab['gitlab_pages']['auth_redirect_uri']
 
       pages_uri = URI(Gitlab['pages_external_url'].to_s)
-      Gitlab['gitlab_pages']['auth_redirect_uri'] ||= pages_uri.scheme + '://projects.' + pages_uri.host + '/auth'
+      parsed_port = [80, 443].include?(pages_uri.port) ? "" : ":#{pages_uri.port}"
+      Gitlab['gitlab_pages']['auth_redirect_uri'] = pages_uri.scheme + '://projects.' + pages_uri.host + parsed_port + '/auth'
     end
 
     def authorize_with_gitlab
