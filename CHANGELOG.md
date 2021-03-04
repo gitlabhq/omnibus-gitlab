@@ -150,6 +150,10 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.30.1. !4885 (hmhealey)
 
 
+## 13.7.8 (2021-03-04)
+
+- No changes.
+
 ## 13.7.7 (2021-02-11)
 
 - No changes.
