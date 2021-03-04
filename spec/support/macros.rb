@@ -39,17 +39,29 @@ module GitlabSpec
       allow(ENV).to receive(:[]).with(var).and_return(value)
     end
 
+    def stub_is_package_version(package, value)
+      allow(File).to receive(:read).with('VERSION').and_return(value ? "1.2.3-#{package}" : '1.2.3')
+    end
+
+    def stub_is_package_env(package, value)
+      stub_env_var(package, value.nil? ? '' : value.to_s)
+    end
+
+    def stub_is_package(package, value)
+      stub_is_package_version(package, value)
+      stub_is_package_env(package, value)
+    end
+
     def stub_is_ee_version(value)
-      allow(File).to receive(:read).with('VERSION').and_return(value ? '1.2.3-ee' : '1.2.3')
+      stub_is_package_version('ee', value)
     end
 
     def stub_is_ee_env(value)
-      stub_env_var('ee', value.nil? ? '' : value.to_s)
+      stub_is_package_env('ee', value)
     end
 
     def stub_is_ee(value)
-      stub_is_ee_version(value)
-      stub_is_ee_env(value)
+      stub_is_package('ee', value)
       # Auto-deploys can not be non-EE. So, stubbing it to false for CE builds.
       # However, since not all EE builds need to be auto-deploys, stubbing it
       # to true needs to be done in a case-by-case manner.
