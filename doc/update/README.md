@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 Before following these instructions, note the following:
 
-- [Supported upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
+- [Supported upgrade paths](https://docs.gitlab.com/ee/update/index.html#upgrade-paths)
   has suggestions on when to upgrade.
 - If you are upgrading from a non-Omnibus installation to an Omnibus installation, see
   [Upgrading from a non-Omnibus installation to an Omnibus installation](convert_to_omnibus.md).
@@ -16,7 +16,7 @@ Before following these instructions, note the following:
 WARNING:
 If you aren't [using the current major version](#mandatory-upgrade-paths-for-version-upgrades),
 you **must** follow the
-[supported upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
+[supported upgrade paths](https://docs.gitlab.com/ee/update/index.html#upgrade-paths)
 when updating to the current version.
 
 ## Background migrations
@@ -55,7 +55,7 @@ default. This restricts performing direct upgrades that skip major versions (for
 example 10.3 to 12.7 in one jump) that **can break GitLab
 installations** due to multiple reasons like deprecated or removed configuration
 settings, upgrade of internal tools and libraries, and so on. Users must follow
-the [official upgrade paths](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
+the [official upgrade paths](https://docs.gitlab.com/ee/update/index.html#upgrade-paths)
 while upgrading their GitLab instances.
 
 ## Updating methods
@@ -75,7 +75,7 @@ sudo touch /etc/gitlab/skip-auto-backup
 
 For safety reasons, you should maintain an up-to-date backup on your own if you plan to use this flag.
 
-When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/README.html#checking-for-background-migrations-before-upgrading).
+When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/index.html#checking-for-background-migrations-before-upgrading).
 
 Unless you are following the steps in [Zero downtime updates](#zero-downtime-updates), your GitLab application will not be available to users while an update is in progress. They will either see a "Deploy in progress" message or a "502" error in their web browser.
 
@@ -116,7 +116,7 @@ package for installation and upgrades. Upgrading directly to the latest major
 version can be problematic for older GitLab versions that require a multi-stage
 upgrade path.
 
-When following an [upgrade path](https://docs.gitlab.com/ee/update/README.html#upgrade-paths)
+When following an [upgrade path](https://docs.gitlab.com/ee/update/index.html#upgrade-paths)
 spanning multiple versions, for each upgrade, specify the intended GitLab version
 number in your package manager's install or upgrade command:
 
