@@ -91,5 +91,7 @@ if changelog_needed
 
     For more information, please take look at [this
     issue](https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/1551).
+
+    Note: If you have created a changelog yaml file already, please do not delete it. In the first iteration of this approach, we are using both the yaml file and Git trailer.
   MSG
 end
