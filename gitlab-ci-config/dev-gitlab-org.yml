@@ -540,6 +540,8 @@ Ubuntu-18.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
   stage: gitlab_com:package
   extends: .tag_template
+  # Also build for auto-deploy tags
+  <<: *dev-tag-only
 
 Ubuntu-20.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
@@ -595,7 +597,7 @@ Ubuntu-18.04-staging:
   dependencies:
     - Ubuntu-18.04
     - Ubuntu-18.04-branch
-  <<: *dev-nightly-and-tag-except-auto-deploy
+  <<: *dev-tag-and-nightly
 
 Ubuntu-20.04-staging:
   stage: gitlab_com:upload_deploy
