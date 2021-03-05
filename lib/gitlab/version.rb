@@ -120,27 +120,56 @@ module Gitlab
       end
     end
 
-    def remote
+    def read_remote_from_env
+      remote = case @software
+               when "gitlab-rails", "gitlab-rails-ee"
+                 Gitlab::Util.get_env("GITLAB_ALTERNATIVE_REPO")
+               when "gitlab-shell"
+                 Gitlab::Util.get_env("GITLAB_SHELL_ALTERNATIVE_REPO")
+               when "gitlab-workhorse"
+                 Gitlab::Util.get_env("GITLAB_WORKHORSE_ALTERNATIVE_REPO")
+               when "gitlab-pages"
+                 Gitlab::Util.get_env("GITLAB_PAGES_ALTERNATIVE_REPO")
+               when "gitaly"
+                 Gitlab::Util.get_env("GITALY_SERVER_ALTERNATIVE_REPO")
+               when "gitlab-elasticsearch-indexer"
+                 Gitlab::Util.get_env("GITLAB_ELASTICSEARCH_INDEXER_ALTERNATIVE_REPO")
+               when "gitlab-kas"
+                 Gitlab::Util.get_env("GITLAB_KAS_ALTERNATIVE_REPO")
+               end
+
+      if remote && Gitlab::Util.get_env("ALTERNATIVE_PRIVATE_TOKEN")
+        attach_remote_credential(remote, Gitlab::Util.get_env("ALTERNATIVE_PRIVATE_TOKEN"))
+      else
+        remote
+      end
+    end
+
+    def read_remote_from_file
       filepath = File.expand_path(".custom_sources.yml", @project_root)
       sources = YAML.load_file(filepath)[@software]
 
       return "" unless sources
 
       if ::Gitlab::Version.security_channel?
-        attach_remote_credential(sources[::Gitlab::Version.sources_channel]) || sources[::Gitlab::Version.fallback_sources_channel]
+        attach_remote_credential(sources[::Gitlab::Version.sources_channel], Gitlab::Util.get_env("CI_JOB_TOKEN")) || sources[::Gitlab::Version.fallback_sources_channel]
       else
         sources[::Gitlab::Version.sources_channel]
       end
     end
 
+    def remote
+      read_remote_from_env || read_remote_from_file || ""
+    end
+
     private
 
-    def attach_remote_credential(url)
+    def attach_remote_credential(url, token)
       return unless url
 
       uri = URI.parse(url)
       uri.user = "gitlab-ci-token"
-      uri.password = Gitlab::Util.get_env("CI_JOB_TOKEN")
+      uri.password = token
       uri.to_s
     rescue URI::InvalidURIError
       # Git may use scp address which is not valid URI. Ignore it

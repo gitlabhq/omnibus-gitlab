@@ -50,6 +50,24 @@ environment variable will be set to the commit SHA corresponding to the pipeline
 while other environment variables, if not specified, will be populated from
 their corresponding files and passed on to the triggered pipeline.
 
+## I want to use a specific mirror or fork of various GitLab components in my build
+
+The repository sources for most software that Omnibus Builds can be found in
+the `.custom_sources.yml` file in the `omnibus-gitlab` repository. The main
+GitLab components can be overridden via environment variables. Check the table
+below for details:
+
+| Environment Variable                          | Description |
+| --------------------------------------------- | ----------- |
+| ALTERNATIVE_PRIVATE_TOKEN                     | An access token used if needing to pull from private repositories. |
+| GITLAB_ALTERNATIVE_REPO                       | Git repository location for the GitLab Rails application. |
+| GITLAB_SHELL_ALTERNATIVE_REPO                 | Git repository location for [GitLab Shell](https://gitlab.com/gitlab-org/gitlab-shell). |
+| GITLAB_WORKHORSE_ALTERNATIVE_REPO             | Git repository location for [GitLab Workhorse](https://gitlab.com/gitlab-org/gitlab-workhorse). |
+| GITLAB_PAGES_ALTERNATIVE_REPO                 | Git repository location for [GitLab Pages](https://gitlab.com/gitlab-org/gitlab-pages). |
+| GITALY_SERVER_ALTERNATIVE_REPO                | Git repository location for [Gitaly](https://gitlab.com/gitlab-org/gitaly). |
+| GITLAB_ELASTICSEARCH_INDEXER_ALTERNATIVE_REPO | Git repository location for [GitLab Elasticsearch Indexer](https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer). |
+| GITLAB_KAS_ALTERNATIVE_REPO                   | Git repository location for [GitLab Kubernetes Agent Server](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent). |
+
 ## Building packages for other OSs
 
 If you specifically want a package for an OS other than Ubuntu 16.04, or want to
