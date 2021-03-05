@@ -195,7 +195,7 @@ RSpec.describe Build::Info do
     describe 'with security sources channel selected' do
       before do
         allow(::Gitlab::Version).to receive(:sources_channel).and_return('security')
-        allow(ENV).to receive(:[]).with('CI_JOB_TOKEN').and_return('CJT')
+        stub_env_var('CI_JOB_TOKEN', 'CJT')
       end
 
       it 'returns security mirror for GitLab CE with attached credential' do

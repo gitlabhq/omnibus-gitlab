@@ -2,13 +2,16 @@ require 'spec_helper'
 require 'gitlab/version'
 
 RSpec.describe Gitlab::Version do
+  before do
+    allow(ENV).to receive(:[]).and_call_original
+  end
+
   describe '.sources_channel' do
     subject { described_class }
 
     context 'with ALTERNATIVE_SOURCES=true' do
       it 'returns "alternative"' do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('ALTERNATIVE_SOURCES').and_return('true')
+        stub_env_var('ALTERNATIVE_SOURCES', 'true')
 
         expect(subject.sources_channel).to eq('alternative')
       end
@@ -16,16 +19,14 @@ RSpec.describe Gitlab::Version do
 
     context 'with SECURITY_SOURCES=true' do
       it 'returns "security"' do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('SECURITY_SOURCES').and_return('true')
+        stub_env_var('SECURITY_SOURCES', 'true')
 
         expect(subject.sources_channel).to eq('security')
       end
 
       it 'ignores ALTERNATIVE_SOURCES=true and still return "security"' do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('ALTERNATIVE_SOURCES').and_return('true')
-        allow(ENV).to receive(:[]).with('SECURITY_SOURCES').and_return('true')
+        stub_env_var('ALTERNATIVE_SOURCES', 'true')
+        stub_env_var('SECURITY_SOURCES', 'true')
 
         expect(subject.sources_channel).to eq('security')
       end
@@ -33,9 +34,8 @@ RSpec.describe Gitlab::Version do
 
     context 'with neither ALTERNATIVE_SOURCES or SECURITY_SOURCES set true' do
       it 'returns "remote"' do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('ALTERNATIVE_SOURCES').and_return('false')
-        allow(ENV).to receive(:[]).with('SECURITY_SOURCES').and_return('false')
+        stub_env_var('ALTERNATIVE_SOURCES', 'false')
+        stub_env_var('SECURITY_SOURCES', 'false')
 
         expect(subject.sources_channel).to eq('remote')
       end
@@ -47,8 +47,7 @@ RSpec.describe Gitlab::Version do
 
     context 'with ALTERNATIVE_SOURCES=true' do
       it 'returns "alternative"' do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('ALTERNATIVE_SOURCES').and_return('true')
+        stub_env_var('ALTERNATIVE_SOURCES', 'true')
 
         expect(subject.fallback_sources_channel).to eq('alternative')
       end
@@ -56,8 +55,7 @@ RSpec.describe Gitlab::Version do
 
     context 'with ALTERNATIVE_SOURCES not set true' do
       it 'returns "remote"' do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('ALTERNATIVE_SOURCES').and_return('false')
+        stub_env_var('ALTERNATIVE_SOURCES', 'false')
 
         expect(subject.fallback_sources_channel).to eq('remote')
       end
@@ -121,10 +119,26 @@ RSpec.describe Gitlab::Version do
       end
     end
 
+    context 'with alternative env override' do
+      let(:software) { 'gitlab-rails-ee' }
+
+      it 'returns "alternative" link from the environment whenever present' do
+        stub_env_var('GITLAB_ALTERNATIVE_REPO', 'https://gitlab.example.com/gitlab.git')
+
+        expect(subject.remote).to eq('https://gitlab.example.com/gitlab.git')
+      end
+
+      it 'attaches credentials to alternative env links when present' do
+        stub_env_var('GITLAB_ALTERNATIVE_REPO', 'https://gitlab.example.com/gitlab.git')
+        stub_env_var('ALTERNATIVE_PRIVATE_TOKEN', 'APT')
+
+        expect(subject.remote).to eq('https://gitlab-ci-token:APT@gitlab.example.com/gitlab.git')
+      end
+    end
+
     context 'with security source channel selected' do
       before do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with("CI_JOB_TOKEN").and_return("CJT")
+        stub_env_var('CI_JOB_TOKEN', 'CJT')
         mock_sources_channel('security')
       end
 
@@ -281,8 +295,7 @@ RSpec.describe Gitlab::Version do
       let(:software) { 'gitlab-rails' }
 
       it 'identifies correct version from env variable' do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with("GITLAB_VERSION").and_return("5.6.7")
+        stub_env_var('GITLAB_VERSION', '5.6.7')
         allow(File).to receive(:read).and_return("1.2.3")
         expect(subject.print).to eq("v5.6.7")
       end
