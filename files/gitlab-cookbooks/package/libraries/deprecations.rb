@@ -102,6 +102,12 @@ module Gitlab
             deprecation: '13.6',
             removal: '14.0',
             note: 'The experimental_queue_selector option is now called queue_selector.'
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails analytics_instance_statistics_count_job_trigger_worker_cron),
+            deprecation: '13.10',
+            removal: '14.0',
+            note: 'The config have been renamed, use analytics_usage_trends_count_job_trigger_worker_cron option.'
           }
         ]
 
