@@ -99,7 +99,7 @@ gitlab_rails['smtp_port'] = 587
 gitlab_rails['smtp_authentication'] = "plain"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_user_name'] = "postmaster@mg.gitlab.com"
-gitlab_rails['smtp_password'] = "8b6ffrmle180"
+gitlab_rails['smtp_password'] = "password"
 gitlab_rails['smtp_domain'] = "mg.gitlab.com"
 ```
 
