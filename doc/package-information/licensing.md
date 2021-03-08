@@ -30,7 +30,7 @@ can be used for automated checks or validations. The file may be found at
 `/opt/gitlab/dependency_licenses.json`.
 
 Starting with version 11.3, we have also made the license information available
-online, at: <http://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html>
+online, at: <https://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html>
 
 ## Checking licenses
 

@@ -107,7 +107,7 @@ In [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab), there
 
 1. `Dependencies Update` - Pipeline to check for outdated dependencies using the
    [`dependency_update`](#dependency_update) job.
-1. `Generate license pages` - Pipeline to populate [License collection webpage](http://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html)
+1. `Generate license pages` - Pipeline to populate [License collection webpage](https://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html)
    with license information from the S3 bucket.
 
 In [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab), there are two scheduled pipelines
@@ -447,7 +447,7 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 This job compiles the license information of all the dependencies from the
 package and uploads it to the S3 bucket. This is used by
 [`pages`](#pages) scheduled job in [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) to populate the
-[License collection webpage](http://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html).
+[License collection webpage](https://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html).
 
 ## Housekeeping Jobs
 

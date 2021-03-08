@@ -134,7 +134,7 @@ that are tailored for Omnibus installations.
 
 ## Grafana metrics
 
-Grafana can provide [metrics to be scraped by Prometheus](https://grafana.com/docs/grafana/latest/administration/metrics/).
+Grafana can provide [metrics to be scraped by Prometheus](https://grafana.com/docs/grafana/latest/administration/view-server/internal-metrics/).
 
 By default, the metrics API is disabled in the bundled Grafana instance.
 
