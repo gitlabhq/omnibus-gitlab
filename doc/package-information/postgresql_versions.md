@@ -19,7 +19,7 @@ For example:
 - Omnibus 12.7.7 shipped with PostgreSQL 9.6.17 and 10.12.
 
 [Find out which versions of PostgreSQL (and other components) ship with
-each Omnibus GitLab release](http://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html).
+each Omnibus GitLab release](https://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html).
 
 Read more about update policies and warnings in the PostgreSQL
 [upgrade docs](../settings/database.md#upgrade-packaged-postgresql-server).

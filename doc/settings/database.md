@@ -1111,7 +1111,7 @@ replication user's password.
    If you can't find your `slot_name` here, or there is no output returned, your Geo secondaries may not be healthy. In that case, make sure the [secondaries are healthy and replication is working](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#check-the-health-of-the-secondary-node).
 
 1. Gather the replication user's password. It was set while setting up Geo in
-   [Step 1. Configure the primary server](https://docs.gitlab.com/ee/administration/geo/replication/database.html#step-1-configure-the-primary-server).
+   [Step 1. Configure the primary server](https://docs.gitlab.com/ee/administration/geo/setup/database.html#step-1-configure-the-primary-server).
 
 1. Manually upgrade PostgreSQL on the Geo primary. Run on the Geo primary's
    database node:
