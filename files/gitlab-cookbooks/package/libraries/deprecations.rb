@@ -108,7 +108,13 @@ module Gitlab
             deprecation: '13.10',
             removal: '14.0',
             note: 'The config have been renamed, use analytics_usage_trends_count_job_trigger_worker_cron option.'
-          }
+          },
+          {
+            config_keys: %w(gitlab-pages domain_config_source),
+            deprecation: '13.9',
+            removal: '14.0',
+            note: "Starting with GitLab 14.0, GitLab Pages only supports API-based configuration. Check https://docs.gitlab.com/ee/administration/pages/#deprecated-domain_config_source for details."
+          },
         ]
 
         deprecations
