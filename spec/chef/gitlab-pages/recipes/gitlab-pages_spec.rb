@@ -155,6 +155,23 @@ RSpec.describe 'gitlab::gitlab-pages' do
       end
     end
 
+    context 'with custom port' do
+      before do
+        stub_gitlab_rb(
+          pages_external_url: 'https://pages.example.com:8443',
+          gitlab_pages: {
+            access_control: true
+          }
+        )
+      end
+
+      it 'sets the correct port number' do
+        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content { |content|
+          expect(content).to match(%r{auth-redirect-uri=https://projects.pages.example.com:8443/auth})
+        }
+      end
+    end
+
     context 'with custom values' do
       before do
         stub_gitlab_rb(
