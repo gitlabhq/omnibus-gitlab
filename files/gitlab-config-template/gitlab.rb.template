@@ -221,6 +221,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  }
 # }
 
+### Allowed hosts
+###! Customize the `host` headers that should be catered by the Rails
+###! application. By default, everything is allowed.
+# gitlab_rails['allowed_hosts'] = []
+
 ### Monitoring settings
 ###! IP whitelist controlling access to monitoring endpoints
 # gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128']
