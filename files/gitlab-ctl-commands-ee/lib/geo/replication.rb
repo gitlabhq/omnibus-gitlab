@@ -10,13 +10,14 @@ end
 
 module Geo
   class Replication
-    attr_accessor :base_path, :data_path, :tmp_dir, :ctl
+    attr_accessor :base_path, :data_path, :postgresql_dir_path, :tmp_dir, :ctl
     attr_writer :data_dir, :tmp_data_dir
     attr_reader :options
 
     def initialize(instance, options)
       @base_path = instance.base_path
       @data_path = instance.data_path
+      @postgresql_dir_path = GitlabCtl::Util.get_public_node_attributes.dig('postgresql', 'dir')
       @ctl = instance
       @options = options
     end
@@ -30,7 +31,7 @@ module Geo
     end
 
     def postgresql_version
-      @postgresql_version ||= GitlabCtl::PostgreSQL.postgresql_version(data_path)
+      @postgresql_version ||= GitlabCtl::PostgreSQL.postgresql_version
     end
 
     def check_gitlab_active?
@@ -93,21 +94,21 @@ module Geo
       puts '* Stopping PostgreSQL and all GitLab services'.color(:green)
       run_command('gitlab-ctl stop')
 
-      @pgpass = "#{data_path}/postgresql/.pgpass"
+      @pgpass = "#{postgresql_dir_path}/.pgpass"
       create_pgpass_file!
 
       check_and_create_replication_slot!
 
-      orig_conf = "#{data_path}/postgresql/data/postgresql.conf"
+      orig_conf = "#{postgresql_dir_path}/data/postgresql.conf"
       if File.exist?(orig_conf)
         puts '* Backing up postgresql.conf'.color(:green)
-        run_command("mv #{orig_conf} #{data_path}/postgresql/")
+        run_command("mv #{orig_conf} #{postgresql_dir_path}/")
       end
 
-      bkp_dir = "#{data_path}/postgresql/data.#{Time.now.to_i}"
+      bkp_dir = "#{postgresql_dir_path}/data.#{Time.now.to_i}"
       puts "* Moving old data directory to '#{bkp_dir}'".color(:green)
 
-      run_command("mv #{data_path}/postgresql/data #{bkp_dir}")
+      run_command("mv #{postgresql_dir_path}/data #{bkp_dir}")
 
       puts "* Starting base backup as the replicator user (#{@options[:user]})".color(:green)
 
@@ -115,12 +116,12 @@ module Geo
                   live: true, timeout: @options[:backup_timeout])
 
       puts '* Restoring postgresql.conf'.color(:green)
-      run_command("mv #{data_path}/postgresql/postgresql.conf #{data_path}/postgresql/data/")
+      run_command("mv #{postgresql_dir_path}/postgresql.conf #{postgresql_dir_path}/data/")
 
       write_replication_settings!
 
       puts '* Setting ownership permissions in PostgreSQL data directory'.color(:green)
-      run_command("chown -R #{postgresql_user}:#{postgresql_group} #{data_path}/postgresql/data")
+      run_command("chown -R #{postgresql_user}:#{postgresql_group} #{postgresql_dir_path}/data")
 
       puts '* Starting PostgreSQL and all GitLab services'.color(:green)
       run_command('gitlab-ctl start')
@@ -168,7 +169,7 @@ module Geo
     end
 
     def write_recovery_settings!
-      geo_conf_file = "#{data_path}/postgresql/data/gitlab-geo.conf"
+      geo_conf_file = "#{postgresql_dir_path}/data/gitlab-geo.conf"
       File.open(geo_conf_file, "w", 0640) do |file|
         settings = <<~EOF
           # - Added by GitLab Omnibus for Geo replication -
@@ -182,13 +183,13 @@ module Geo
     end
 
     def create_standby_file!
-      standby_file = "#{data_path}/postgresql/data/standby.signal"
+      standby_file = "#{postgresql_dir_path}/data/standby.signal"
       File.write(standby_file, "")
       run_command("chown #{postgresql_user}:#{postgresql_group} #{standby_file}")
     end
 
     def create_recovery_file!
-      recovery_file = "#{data_path}/postgresql/data/recovery.conf"
+      recovery_file = "#{postgresql_dir_path}/data/recovery.conf"
       File.open(recovery_file, 'w', 0640) do |file|
         file.write(<<~EOF
           standby_mode = 'on'
@@ -227,7 +228,7 @@ module Geo
         PGPASSFILE=#{@pgpass} #{@base_path}/embedded/bin/pg_basebackup
         -h #{@options[:host]}
         -p #{@options[:port]}
-        -D #{@data_path}/postgresql/data
+        -D #{@postgresql_dir_path}/data
         -U #{@options[:user]}
         -v
         -P

@@ -3,7 +3,7 @@ require 'geo/promote_db'
 require 'gitlab_ctl/util'
 
 RSpec.describe Geo::PromoteDb, '#execute' do
-  let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: '/var/opt/gitlab/postgresql/data') }
+  let(:instance) { double(base_path: '/opt/gitlab/embedded') }
 
   subject(:command) { described_class.new(instance) }
 
@@ -21,6 +21,15 @@ RSpec.describe Geo::PromoteDb, '#execute' do
       expect(command).not_to receive(:write_recovery_settings)
 
       command.execute
+    end
+  end
+
+  context 'postgres dir is in non-default location' do
+    it 'uses the specified postgres directory when writing ' do
+      expected_dir = '/non/default/location'
+      allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'postgresql' => { 'dir' => expected_dir } })
+
+      expect(described_class.new(instance).postgresql_dir_path).to eq(expected_dir)
     end
   end
 

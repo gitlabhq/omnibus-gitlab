@@ -8,7 +8,7 @@ require 'gitlab_ctl/util'
 
 RSpec.describe Geo::Replication, '#execute' do
   let(:command) { spy('command spy', error?: false) }
-  let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: '/var/opt/gitlab/postgresql/data') }
+  let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: '/var/opt/gitlab') }
   let(:file) { spy('file spy') }
   let(:options) do
     {
@@ -26,6 +26,8 @@ RSpec.describe Geo::Replication, '#execute' do
   subject { described_class.new(instance, options) }
 
   before do
+    allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'postgresql' => { 'dir' => '/var/opt/gitlab/postgresql' } })
+
     allow(instance).to receive(:service_enabled?).and_return(true)
     allow(STDOUT).to receive(:puts)
     allow(subject).to receive(:print)
@@ -51,6 +53,13 @@ RSpec.describe Geo::Replication, '#execute' do
       .with(%r{gitlab_db_name}, anything)
 
     subject.execute
+  end
+
+  it 'uses the supplied postgres directory' do
+    expected_dir = '/non/default/location'
+    allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'postgresql' => { 'dir' => expected_dir } })
+
+    expect(described_class.new(instance, options).postgresql_dir_path).to eq(expected_dir)
   end
 
   it 'creates a recovery file' do
@@ -98,7 +107,7 @@ RSpec.describe Geo::Replication, '#execute' do
 
   context 'with a custom port' do
     let(:options) { { now: true, skip_backup: true, host: 'localhost', port: 9999, user: 'my-user', slot_name: 'foo', db_name: 'gitlab_db_name' } }
-    let(:cmd) { %q(PGPASSFILE=/var/opt/gitlab/postgresql/data/postgresql/.pgpass /opt/gitlab/embedded/bin/gitlab-psql -h localhost -p 9999 -U my-user -d gitlab_db_name -t -c "SELECT slot_name FROM pg_create_physical_replication_slot('foo');") }
+    let(:cmd) { %q(PGPASSFILE=/var/opt/gitlab/postgresql/.pgpass /opt/gitlab/embedded/bin/gitlab-psql -h localhost -p 9999 -U my-user -d gitlab_db_name -t -c "SELECT slot_name FROM pg_create_physical_replication_slot('foo');") }
     let(:status) { double(error?: false, stdout: '') }
 
     it 'executes a gitlab-psql call to check replication slots' do
@@ -119,7 +128,7 @@ RSpec.describe Geo::Replication, '#execute' do
       allow(subject).to receive(:ask_pass).and_return('mypass')
       expect(STDIN).to receive(:gets).and_return('replicate')
       expect(GitlabCtl::Util).to receive(:run_command)
-        .with("PGPASSFILE=/var/opt/gitlab/postgresql/data/postgresql/.pgpass /opt/gitlab/embedded/embedded/bin/pg_basebackup -h localhost -p 9999 -D /var/opt/gitlab/postgresql/data/postgresql/data -U my-user -v -P -X stream -S foo",
+        .with("PGPASSFILE=/var/opt/gitlab/postgresql/.pgpass /opt/gitlab/embedded/embedded/bin/pg_basebackup -h localhost -p 9999 -D /var/opt/gitlab/postgresql/data -U my-user -v -P -X stream -S foo",
               anything)
 
       subject.execute
