@@ -1,6 +1,7 @@
 require_relative 'trigger'
 require_relative 'info'
-require_relative "../util.rb"
+require_relative "../util"
+require_relative "../version"
 
 module Build
   class OmnibusTrigger
@@ -27,7 +28,17 @@ module Build
         "variables[TOP_UPSTREAM_SOURCE_SHA]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA'),
         "variables[TOP_UPSTREAM_SOURCE_REF]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_REF'),
         "variables[QA_BRANCH]" => Gitlab::Util.get_env('QA_BRANCH') || 'master'
-      }
+      }.merge(version_params)
+    end
+
+    def self.version_params
+      params = {}
+      Gitlab::Version::COMPONENTS_ENV_VARS.values.uniq.each do |version|
+        value = Gitlab::Util.get_env(version)
+        params["variables[#{version}]"] = value if value
+      end
+
+      params
     end
 
     def self.get_access_token
