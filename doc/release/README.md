@@ -90,7 +90,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
    release:
 
    ```shell
-   # usage: set-revisions [--ee] GITLAB_RAILS_REF GITLAB_SHELL_REF GITLAB_WORKHORSE_REF GITALY_REF GITLAB_ELASTICSEARCH_INDEXER_REF
+   # usage: set-revisions [--ee] GITLAB_RAILS_REF GITLAB_SHELL_REF GITALY_REF GITLAB_ELASTICSEARCH_INDEXER_REF
 
    # For GitLab CE:
    support/set-revisions v1.2.3 v1.2.3 1.2.3 1.2.3 1.2.3
@@ -102,7 +102,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
 1. Commit the new version to the release branch:
 
    ```shell
-   git add VERSION GITLAB_SHELL_VERSION GITLAB_WORKHORSE_VERSION GITALY_SERVER_VERSION
+   git add VERSION GITLAB_SHELL_VERSION GITALY_SERVER_VERSION
    git commit
    ```
 

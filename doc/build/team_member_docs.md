@@ -28,10 +28,9 @@ and Docker images, and will perform a QA run.
 ## I want to use specific branches or versions of various GitLab components in my build
 
 Versions of the primary GitLab components like GitLab-Rails, Gitaly, GitLab
-Pages, GitLab Shell, GitLab Workhorse, GitLab Elasticsearch Indexer are
-controlled by various `*_VERSION` files in `omnibus-gitlab` repository and
-`*_VERSION` environment variables present during the build. Check the table
-below for details:
+Pages, GitLab Shell, GitLab Elasticsearch Indexer are controlled by various
+`*_VERSION` files in `omnibus-gitlab` repository and `*_VERSION` environment
+variables present during the build. Check the table below for details:
 
 | File name                            | Environment Variable                 | Description |
 | ------------------------------------ | ------------------------------------ | ----------- |
@@ -39,7 +38,6 @@ below for details:
 | GITALY_SERVER_VERSION                | GITALY_SERVER_VERSION                | Git reference of the [Gitaly](https://gitlab.com/gitlab-org/gitaly) repository. |
 | GITLAB_PAGES_VERSION                 | GITLAB_PAGES_VERSION                 | Git reference of the [GitLab Pages](https://gitlab.com/gitlab-org/gitlab-pages) repository.|
 | GITLAB_SHELL_VERSION                 | GITLAB_SHELL_VERSION                 | Git reference of the [GitLab Shell](https://gitlab.com/gitlab-org/gitlab-shell) repository.|
-| GITLAB_WORKHORSE_VERSION             | GITLAB_WORKHORSE_VERSION             | Git reference of the [GitLab Workhorse](https://gitlab.com/gitlab-org/gitlab-workhorse) repository.|
 | GITLAB_ELASTICSEARCH_INDEXER_VERSION | GITLAB_ELASTICSEARCH_INDEXER_VERSION | Git reference of the [GitLab Elasticsearch Indexer](https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer) repository. Used only in EE builds.|
 | GITLAB_KAS_VERSION                   | GITLAB_KAS_VERSION                   | Git reference of the [GitLab Kubernetes Agent Server](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent) repository.|
 
@@ -103,7 +101,6 @@ below for details:
 | ALTERNATIVE_PRIVATE_TOKEN                     | An access token used if needing to pull from private repositories. |
 | GITLAB_ALTERNATIVE_REPO                       | Git repository location for the GitLab Rails application. |
 | GITLAB_SHELL_ALTERNATIVE_REPO                 | Git repository location for [GitLab Shell](https://gitlab.com/gitlab-org/gitlab-shell). |
-| GITLAB_WORKHORSE_ALTERNATIVE_REPO             | Git repository location for [GitLab Workhorse](https://gitlab.com/gitlab-org/gitlab-workhorse). |
 | GITLAB_PAGES_ALTERNATIVE_REPO                 | Git repository location for [GitLab Pages](https://gitlab.com/gitlab-org/gitlab-pages). |
 | GITALY_SERVER_ALTERNATIVE_REPO                | Git repository location for [Gitaly](https://gitlab.com/gitlab-org/gitaly). |
 | GITLAB_ELASTICSEARCH_INDEXER_ALTERNATIVE_REPO | Git repository location for [GitLab Elasticsearch Indexer](https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer). |

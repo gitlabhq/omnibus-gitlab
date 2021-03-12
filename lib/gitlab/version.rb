@@ -13,7 +13,6 @@ module Gitlab
       'gitlab-rails' => 'GITLAB_VERSION',
       'gitlab-rails-ee' => 'GITLAB_VERSION',
       'gitlab-shell' => 'GITLAB_SHELL_VERSION',
-      'gitlab-workhorse' => 'GITLAB_WORKHORSE_VERSION',
       'gitlab-pages' => 'GITLAB_PAGES_VERSION',
       'gitaly' => 'GITALY_SERVER_VERSION',
       'gitlab-elasticsearch-indexer' => 'GITLAB_ELASTICSEARCH_INDEXER_VERSION',
@@ -24,7 +23,6 @@ module Gitlab
       "gitlab-rails" => "VERSION",
       "gitlab-rails-ee" => "VERSION",
       "gitlab-shell" => "GITLAB_SHELL_VERSION",
-      "gitlab-workhorse" => "GITLAB_WORKHORSE_VERSION",
       "gitlab-pages" => "GITLAB_PAGES_VERSION",
       "gitaly" => "GITALY_SERVER_VERSION",
       "gitlab-elasticsearch-indexer" => "GITLAB_ELASTICSEARCH_INDEXER_VERSION",
@@ -120,8 +118,6 @@ module Gitlab
                  Gitlab::Util.get_env("GITLAB_ALTERNATIVE_REPO")
                when "gitlab-shell"
                  Gitlab::Util.get_env("GITLAB_SHELL_ALTERNATIVE_REPO")
-               when "gitlab-workhorse"
-                 Gitlab::Util.get_env("GITLAB_WORKHORSE_ALTERNATIVE_REPO")
                when "gitlab-pages"
                  Gitlab::Util.get_env("GITLAB_PAGES_ALTERNATIVE_REPO")
                when "gitaly"
