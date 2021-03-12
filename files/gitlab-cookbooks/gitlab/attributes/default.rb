@@ -494,6 +494,13 @@ default['gitlab']['gitlab-rails']['feature_flags_unleash_instance_id'] = nil
 ###
 default['gitlab']['gitlab-rails']['prometheus_address'] = nil
 
+###
+# GitLab KAS
+###
+default['gitlab']['gitlab-rails']['gitlab_kas_enabled'] = nil
+default['gitlab']['gitlab-rails']['gitlab_kas_external_url'] = nil
+default['gitlab']['gitlab-rails']['gitlab_kas_internal_url'] = nil
+
 ####
 # Unicorn
 ####

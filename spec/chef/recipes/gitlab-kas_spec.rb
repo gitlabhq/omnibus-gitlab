@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab-kas' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir templatesymlink)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -78,6 +78,91 @@ RSpec.describe 'gitlab-kas' do
     end
   end
 
+  describe 'gitlab.yml configuration' do
+    let(:gitlab_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml') }
+    let(:gitlab_yml_file_content) { ChefSpec::Renderer.new(chef_run, gitlab_yml_template).content }
+    let(:gitlab_yml) { YAML.safe_load(gitlab_yml_file_content, [], [], true, symbolize_names: true) }
+
+    context 'with defaults' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas: {
+            enable: true
+          }
+        )
+      end
+
+      it 'renders gitlab_kas enabled with default URLs in config/gitlab.yml' do
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          enabled: true,
+          external_url: 'wss://gitlab.example.com/-/kubernetes-agent',
+          internal_url: 'grpc://localhost:8153'
+        )
+      end
+    end
+
+    context 'when not https' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'http://gitlab.example.com',
+          gitlab_kas: {
+            enable: true
+          }
+        )
+      end
+
+      it 'has exernal URL with scheme `ws` instead of `wss`' do
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          external_url: 'ws://gitlab.example.com/-/kubernetes-agent'
+        )
+      end
+    end
+
+    context 'with custom listen addresses' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas: {
+            enable: true,
+            listen_address: 'custom-address:1234',
+            internal_api_listen_address: 'custom-api-address:9999'
+          }
+        )
+      end
+
+      it 'derives the external URL from the top level external URL, and the internal URL from the listen address' do
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          enabled: true,
+          external_url: 'wss://gitlab.example.com/-/kubernetes-agent',
+          internal_url: 'grpc://custom-api-address:9999'
+        )
+      end
+    end
+
+    context 'with explicitly configured URLs' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_rails: {
+            gitlab_kas_external_url: 'wss://kas.example.com',
+            gitlab_kas_internal_url: 'grpc://kas.internal'
+          },
+          gitlab_kas: {
+            enable: true
+          }
+        )
+      end
+
+      it 'uses the explicitly configured URL' do
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          external_url: 'wss://kas.example.com',
+          internal_url: 'grpc://kas.internal'
+        )
+      end
+    end
+  end
+
   describe 'logrotate settings' do
     context 'default values' do
       it_behaves_like 'configured logrotate service', 'gitlab-kas', 'git', 'git'
@@ -86,6 +171,7 @@ RSpec.describe 'gitlab-kas' do
     context 'specified username and group' do
       before do
         stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
           gitlab_kas: {
             enable: true
           },
@@ -104,6 +190,7 @@ RSpec.describe 'gitlab-kas' do
     context 'when there is a password' do
       before do
         stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
           gitlab_kas: { enable: true },
           gitlab_rails: { redis_password: 'the-password' }
         )
@@ -126,7 +213,10 @@ RSpec.describe 'gitlab-kas' do
 
     context 'when there is no password' do
       before do
-        stub_gitlab_rb(gitlab_kas: { enable: true })
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas: { enable: true }
+        )
       end
 
       it 'does not write password_file into the config' do
@@ -144,6 +234,7 @@ RSpec.describe 'gitlab-kas' do
     context 'without sentinel' do
       before do
         stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
           gitlab_kas: {
             enable: true
           },
@@ -173,6 +264,7 @@ RSpec.describe 'gitlab-kas' do
     context 'with sentinel' do
       before do
         stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
           gitlab_kas: {
             enable: true
           },

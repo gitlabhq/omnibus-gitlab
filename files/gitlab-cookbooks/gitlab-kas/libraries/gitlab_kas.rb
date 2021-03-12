@@ -21,10 +21,66 @@ module GitlabKas
   class << self
     def parse_variables
       parse_address
+      parse_gitlab_kas_enabled
+      parse_gitlab_kas_external_url
+      parse_gitlab_kas_internal_url
     end
 
     def parse_address
       Gitlab['gitlab_kas']['gitlab_address'] ||= Gitlab['external_url']
+    end
+
+    def parse_gitlab_kas_enabled
+      # explicitly enabled or disabled, possibly external to this Omnibus instance
+      key = 'gitlab_kas_enabled'
+      return unless Gitlab['gitlab_rails'][key].nil?
+
+      # implicitly enable if installed and gitlab integration not explicitly disabled
+      Gitlab['gitlab_rails'][key] = gitlab_kas_attr('enable')
+    end
+
+    def parse_gitlab_kas_external_url
+      key = 'gitlab_kas_external_url'
+      return unless Gitlab['gitlab_rails'][key].nil?
+
+      return unless gitlab_kas_attr('enable')
+
+      return unless Gitlab['external_url']
+
+      # For now, the default external URL is on the subpath /-/kubernetes-agent
+      # so whether to use TLS is determined from the primary external_url.
+      # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5784
+      gitlab_uri = URI(Gitlab['external_url'])
+      case gitlab_uri.scheme
+      when 'https'
+        scheme = gitlab_kas_attr('listen_websocket') ? 'wss' : 'grpcs'
+        port = gitlab_uri.port == 443 ? '' : ":#{port}"
+      when 'http'
+        scheme = gitlab_kas_attr('listen_websocket') ? 'ws' : 'grpc'
+        port = gitlab_uri.port == 80 ? '' : ":#{port}"
+      else
+        raise "external_url scheme should be 'http' or 'https', got '#{gitlab_uri.scheme}"
+      end
+
+      Gitlab['gitlab_rails'][key] = "#{scheme}://#{gitlab_uri.host}#{port}/#{gitlab_uri.path}-/kubernetes-agent"
+    end
+
+    def parse_gitlab_kas_internal_url
+      key = 'gitlab_kas_internal_url'
+      return unless Gitlab['gitlab_rails'][key].nil?
+
+      return unless gitlab_kas_attr('enable')
+
+      network = gitlab_kas_attr('internal_api_listen_network')
+      case network
+      when 'tcp'
+        scheme = 'grpc'
+      else
+        raise "gitlab_kas['internal_api_listen_network'] should be 'tcp' got '#{network}'"
+      end
+
+      address = gitlab_kas_attr('internal_api_listen_address')
+      Gitlab['gitlab_rails'][key] = "#{scheme}://#{address}"
     end
 
     def parse_secrets
@@ -33,6 +89,15 @@ module GitlabKas
 
       api_secret_key = Base64.strict_decode64(Gitlab['gitlab_kas']['api_secret_key'])
       raise "gitlab_kas['api_secret_key'] should be exactly 32 bytes" if api_secret_key.length != 32
+    end
+
+    private
+
+    def gitlab_kas_attr(key)
+      configured = Gitlab['gitlab_kas'][key]
+      return configured unless configured.nil?
+
+      Gitlab['node']['gitlab-kas'][key]
     end
   end
 end

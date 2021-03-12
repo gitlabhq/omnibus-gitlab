@@ -1637,6 +1637,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/blob/master/README.md
 ################################################################################
 
+##! Settings used by the GitLab application
+# gitlab_rails['gitlab_kas_enabled'] = true
+# gitlab_rails['gitlab_kas_external_url'] = ws://gitlab.example.com/-/kubernetes-agent
+# gitlab_rails['gitlab_kas_internal_url'] = grpc://localhost:8153
+
 ##! Enable GitLab KAS
 # gitlab_kas['enable'] = true
 
@@ -1655,6 +1660,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_kas['listen_address'] = 'localhost:8150'
 # gitlab_kas['listen_network'] = 'tcp'
 # gitlab_kas['listen_websocket'] = true
+# gitlab_kas['internal_api_listen_network'] = 'tcp'
+# gitlab_kas['internal_api_listen_address'] = 'localhost:8153'
 
 ##! Metrics configuration for GitLab KAS
 # gitlab_kas['metrics_usage_reporting_period'] = 60
