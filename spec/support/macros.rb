@@ -39,8 +39,14 @@ module GitlabSpec
       allow(ENV).to receive(:[]).with(var).and_return(value)
     end
 
-    def stub_is_package_version(package, value)
+    def stub_is_package_version(package, value = nil)
       allow(File).to receive(:read).with('VERSION').and_return(value ? "1.2.3-#{package}" : '1.2.3')
+    end
+
+    def stub_default_package_version
+      allow(File).to receive(:read).and_call_original
+      allow(ENV).to receive(:[]).and_call_original
+      stub_is_package_version('ce')
     end
 
     def stub_is_package_env(package, value)

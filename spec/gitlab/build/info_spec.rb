@@ -4,7 +4,9 @@ require 'gitlab/build/gitlab_image'
 
 RSpec.describe Build::Info do
   before do
-    allow(ENV).to receive(:[]).and_call_original
+    stub_default_package_version
+    stub_env_var('GITLAB_ALTERNATIVE_REPO', nil)
+    stub_env_var('ALTERNATIVE_PRIVATE_TOKEN', nil)
   end
 
   describe '.package' do
