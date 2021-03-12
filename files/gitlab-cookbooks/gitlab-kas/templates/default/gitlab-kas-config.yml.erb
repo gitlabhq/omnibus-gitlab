@@ -32,3 +32,9 @@ redis:
       - '<%= sentinel['host'] %>:<%= sentinel['port'] %>'
     <%- end %>
   <%- end %>
+api:
+  listen:
+    network: <%= @internal_api_listen_network %>
+    address: <%= @internal_api_listen_address %>
+    authentication_secret_file: <%= @authentication_secret_file %>
+

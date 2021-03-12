@@ -321,6 +321,12 @@ production: &base
     issuer: <%= @registry_issuer %>
     notification_secret: <%= @registry_notification_secret %>
 
+  ## Kubernetes Agent Server
+  gitlab_kas:
+    enabled: <%= @gitlab_kas_enabled %>
+    internal_url: <%= @gitlab_kas_internal_url %>
+    external_url: <%= @gitlab_kas_external_url %>
+
   ## Error Reporting and Logging with Sentry
   sentry:
     enabled: <%= @sentry_enabled %>
