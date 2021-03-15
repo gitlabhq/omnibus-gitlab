@@ -110,3 +110,21 @@ listen-https-proxyv2=<%= @pages_external_https_proxyv2.join(',') %>
 root-cert=<%= @cert %>
 root-key=<%= @cert_key %>
 <%- end -%>
+<%- if @gitlab_cache_expiry -%>
+gitlab-cache-expiry=<%= @gitlab_cache_expiry %>
+<%- end -%>
+<%- if @gitlab_cache_refresh -%>
+gitlab-cache-refresh=<%= @gitlab_cache_refresh %>
+<%- end -%>
+<%- if @gitlab_cache_cleanup -%>
+gitlab-cache-cleanup=<%= @gitlab_cache_cleanup %>
+<%- end -%>
+<%- if @gitlab_retrieval_timeout -%>
+gitlab-retrieval-timeout=<%= @gitlab_retrieval_timeout %>
+<%- end -%>
+<%- if @gitlab_retrieval_interval -%>
+gitlab-retrieval-timeout=<%= @gitlab_retrieval_interval %>
+<%- end -%>
+<%- if @gitlab_retrieval_retries -%>
+gitlab-retrieval-retries=<%= @gitlab_retrieval_retries %>
+<%- end -%>
