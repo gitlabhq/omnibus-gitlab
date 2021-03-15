@@ -111,7 +111,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
 
     it 'does not create the ci builds directory' do
-      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/uploads_storage')
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/builds')
     end
 
     it 'does not create the uploads storage directory' do
@@ -137,7 +137,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
 
     it 'creates the git-data directory' do
-      expect(chef_run).to create_storage_directory('/tmp/git-data').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/git-data').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the repositories directory' do
@@ -149,31 +149,31 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
 
     it 'creates the artifacts directory' do
-      expect(chef_run).to create_storage_directory('/tmp/shared/artifacts').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/shared/artifacts').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the external-diffs directory' do
-      expect(chef_run).to create_storage_directory('/tmp/shared/external-diffs').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/shared/external-diffs').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the lfs storage directory' do
-      expect(chef_run).to create_storage_directory('/tmp/shared/lfs-objects').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/shared/lfs-objects').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the packages directory' do
-      expect(chef_run).to create_storage_directory('/tmp/shared/packages').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/shared/packages').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the dependency_proxy directory' do
-      expect(chef_run).to create_storage_directory('/tmp/shared/dependency_proxy').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/shared/dependency_proxy').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the terraform_state directory' do
-      expect(chef_run).to create_storage_directory('/tmp/shared/terraform_state').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/shared/terraform_state').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the encrypted_settings directory' do
-      expect(chef_run).to create_storage_directory('/tmp/shared/encrypted_settings').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/shared/encrypted_settings').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the GitLab pages directory' do
@@ -181,23 +181,23 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
 
     it 'creates the shared tmp directory' do
-      expect(chef_run).to create_storage_directory('/tmp/shared/tmp').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/shared/tmp').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the shared cache directory' do
-      expect(chef_run).to create_storage_directory('/tmp/shared/cache').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/shared/cache').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the uploads directory' do
-      expect(chef_run).to create_storage_directory('/tmp/uploads').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/uploads').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the ci builds directory' do
-      expect(chef_run).to create_storage_directory('/tmp/builds').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/builds').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the uploads storage directory' do
-      expect(chef_run).to create_storage_directory('/tmp/uploads_storage').with(owner: 'git', mode: '0700')
+      expect(chef_run).to create_storage_directory('/tmp/uploads_storage').with(owner: 'git', group: 'git', mode: '0700')
     end
   end
 
