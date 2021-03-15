@@ -46,6 +46,7 @@ gitlab_group = account_helper.gitlab_group
 Mash.new(Gitlab['git_data_dirs']).each do |_name, git_data_directory|
   storage_directory git_data_directory['path'] do
     owner gitlab_user
+    group gitlab_group
     mode "0700"
   end
 end
@@ -78,12 +79,14 @@ include_recipe 'gitlab::rails_pages_shared_path'
 ].compact.each do |dir_name|
   storage_directory dir_name do
     owner gitlab_user
+    group gitlab_group
     mode '0700'
   end
 end
 
 storage_directory gitlab_rails_uploads_storage_path do
   owner gitlab_user
+  group gitlab_group
   mode '0700'
   only_if { gitlab_rails_uploads_storage_path != GitlabRails.public_path }
 end

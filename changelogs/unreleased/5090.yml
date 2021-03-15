@@ -1,0 +1,5 @@
+---
+title: Explicitly set group for GitLab data directories
+merge_request: 5090
+author: Ben Bodenmiller (@bbodenmiller)
+type: other
