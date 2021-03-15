@@ -4,6 +4,8 @@ require 'gitlab/version'
 RSpec.describe Gitlab::Version do
   before do
     allow(ENV).to receive(:[]).and_call_original
+    stub_env_var('GITLAB_ALTERNATIVE_REPO', nil)
+    stub_env_var('ALTERNATIVE_PRIVATE_TOKEN', nil)
   end
 
   describe '.sources_channel' do

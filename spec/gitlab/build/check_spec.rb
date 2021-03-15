@@ -3,7 +3,7 @@ require 'gitlab/build/check'
 
 RSpec.describe Build::Check do
   before do
-    allow(ENV).to receive(:[]).and_call_original
+    stub_default_package_version
   end
 
   describe 'is_ee?' do

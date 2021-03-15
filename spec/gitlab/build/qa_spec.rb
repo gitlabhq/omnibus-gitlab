@@ -2,6 +2,12 @@ require 'spec_helper'
 require 'gitlab/build/qa'
 
 RSpec.describe Build::QA do
+  before do
+    allow(ENV).to receive(:[]).and_call_original
+    stub_env_var('GITLAB_ALTERNATIVE_REPO', nil)
+    stub_env_var('ALTERNATIVE_PRIVATE_TOKEN', nil)
+  end
+
   describe '.repo_path' do
     it 'returns correct location' do
       expect(described_class.repo_path).to eq("/tmp/gitlab")
