@@ -1584,6 +1584,23 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Domain configuration source, defaults to disk if set to nil
 # gitlab_pages['domain_config_source'] = nil
 
+##! Advanced settings for API-based configuration for GitLab Pages.
+##! The recommended default values are set inside GitLab Pages.
+##! Should be changed only if absolutely needed.
+
+##! The maximum time a domain's configuration is stored in the cache.
+# gitlab_pages['gitlab_cache_expiry'] = "600s"
+##! The interval at which a domain's configuration is set to be due to refresh (default: 60s).
+# gitlab_pages['gitlab_cache_refresh'] = "60s"
+##! The interval at which expired items are removed from the cache (default: 60s).
+# gitlab_pages['gitlab_cache_cleanup'] = "60s"
+##! The maximum time to wait for a response from the GitLab API per request.
+# gitlab_pages['gitlab_retrieval_timeout'] = "30s"
+##! The interval to wait before retrying to resolve a domain's configuration via the GitLab API.
+# gitlab_pages['gitlab_retrieval_interval'] = "1s"
+##! The maximum number of times to retry to resolve a domain's configuration via the API
+# gitlab_pages['gitlab_retrieval_retries'] = 3
+
 ##! Define custom gitlab-pages HTTP headers for the whole instance
 # gitlab_pages['headers'] = []
 

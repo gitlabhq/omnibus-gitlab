@@ -214,6 +214,12 @@ RSpec.describe 'gitlab::gitlab-pages' do
             zip_cache_refresh: "60s",
             zip_open_timeout: "45s",
             internal_gitlab_server: "https://int.gitlab.example.com",
+            gitlab_cache_expiry: "1m",
+            gitlab_cache_refresh: "500ms",
+            gitlab_cache_cleanup: "100ms",
+            gitlab_retrieval_timeout: "3s",
+            gitlab_retrieval_interval: "500ms",
+            gitlab_retrieval_retries: 5,
             env: {
               GITLAB_CONTINUOUS_PROFILING: "stackdriver?service=gitlab-pages",
             },
@@ -263,6 +269,12 @@ RSpec.describe 'gitlab::gitlab-pages' do
             listen-https-proxyv2=external_pages.example.com,localhost:9002
             root-cert=/etc/gitlab/pages.crt
             root-key=/etc/gitlab/ssl/pages.example.com.key
+            gitlab-cache-expiry=1m
+            gitlab-cache-refresh=500ms
+            gitlab-cache-cleanup=100ms
+            gitlab-retrieval-timeout=3s
+            gitlab-retrieval-timeout=500ms
+            gitlab-retrieval-retries=5
         EOS
 
         expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(expected_content)
