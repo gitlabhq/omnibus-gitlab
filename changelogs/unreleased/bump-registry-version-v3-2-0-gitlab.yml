@@ -1,0 +1,5 @@
+---
+title: Bump Container Registry to v3.2.0-gitlab
+merge_request: 5097
+author:
+type: changed
