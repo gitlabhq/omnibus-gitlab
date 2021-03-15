@@ -23,6 +23,9 @@
 .if-ee-tag: &if-ee-tag
   if: '$CI_COMMIT_TAG =~ /^.*ee\.\d.*$/'
 
+.if-skip-release: &if-skip-release
+  if: '$SKIP_RELEASE == "true"'
+
 .if-ee-branch: &if-ee-branch
   if: '$CI_COMMIT_BRANCH =~ /^.*-ee$/'
 
@@ -38,20 +41,29 @@
 .unless-nightly: &unless-nightly
   if: '$CI_PIPELINE_SOURCE != "schedule" || $NIGHTLY != "true"'
 
+.if-skip-job: &if-skip-job
+  if: '$SKIP_JOB_REGEX && $CI_JOB_NAME =~ $SKIP_JOB_REGEX'
+
 .dev-branches-only: &dev-branches-only
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-branch
 
 .dev-tag-only: &dev-tag-only
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-tag
 
 .dev-tag-only-manual: &dev-tag-only-manual
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-tag
@@ -60,7 +72,21 @@
 
 .dev-tag-only-except-auto-deploy: &dev-tag-only-except-auto-deploy
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
+      when: never
+    - <<: *if-auto-deploy-tag
+      when: never
+    - <<: *if-tag
+
+.dev-public-release-only: &dev-public-release-only
+  rules:
+    - <<: *if-skip-job
+      when: never
+    - <<: *unless-dev
+      when: never
+    - <<: *if-skip-release
       when: never
     - <<: *if-auto-deploy-tag
       when: never
@@ -68,9 +94,13 @@
 
 .dev-tag-only-except-auto-deploy-manual: &dev-tag-only-except-auto-deploy-manual
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-auto-deploy-tag
+      when: never
+    - <<: *if-skip-release
       when: never
     - <<: *if-tag
       when: manual
@@ -78,9 +108,13 @@
 
 .dev-tag-only-except-auto-deploy-or-rc: &dev-tag-only-except-auto-deploy-or-rc
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-rc-tag
+      when: never
+    - <<: *if-skip-release
       when: never
     - <<: *if-auto-deploy-tag
       when: never
@@ -88,6 +122,8 @@
 
 .dev-ee-tag-only-except-auto-deploy-or-rc: &dev-ee-tag-only-except-auto-deploy-or-rc
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-rc-tag
@@ -98,6 +134,8 @@
 
 .dev-ce-tag-only-except-auto-deploy-or-rc: &dev-ce-tag-only-except-auto-deploy-or-rc
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-rc-tag
@@ -108,11 +146,15 @@
 
 .dev-tag-only-except-auto-deploy-or-rc-manual: &dev-tag-only-except-auto-deploy-or-rc-manual
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-rc-tag
       when: never
     - <<: *if-auto-deploy-tag
+      when: never
+    - <<: *if-skip-release
       when: never
     - <<: *if-tag
       when: manual
@@ -120,6 +162,8 @@
 
 .dev-ce-tag-only-except-rc-manual: &dev-ce-tag-only-except-rc-manual
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-rc-tag
@@ -130,6 +174,8 @@
 
 .dev-ee-tag-only-except-auto-deploy-or-rc-manual: &dev-ee-tag-only-except-auto-deploy-or-rc-manual
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-rc-tag
@@ -142,6 +188,8 @@
 
 .dev-ce-branch-only-except-nightly: &dev-ce-branch-only-except-nightly
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-ee-var
@@ -156,6 +204,8 @@
 
 .dev-ee-branch-only: &dev-ee-branch-only
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - if: '$CI_COMMIT_BRANCH == ""'
@@ -165,12 +215,16 @@
 
 .dev-ce-tag-only: &dev-ce-tag-only
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-ce-tag
 
 .dev-ce-tag-only-manual: &dev-ce-tag-only-manual
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-ce-tag
@@ -179,12 +233,16 @@
 
 .dev-ee-tag-only: &dev-ee-tag-only
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-ee-tag
 
 .dev-ee-tag-only-manual: &dev-ee-tag-only-manual
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-ee-tag
@@ -193,6 +251,8 @@
 
 .dev-tag-and-nightly: &dev-tag-and-nightly
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-tag
@@ -200,6 +260,8 @@
 
 .dev-nightly-and-tag-except-auto-deploy: &dev-nightly-and-tag-except-auto-deploy
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-auto-deploy-tag
@@ -209,6 +271,8 @@
 
 .dev-nightly-only-manual: &dev-nightly-only-manual
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *if-nightly
@@ -217,6 +281,8 @@
 
 .dev-ee-nightly-only: &dev-ee-nightly-only
   rules:
+    - <<: *if-skip-job
+      when: never
     - <<: *unless-dev
       when: never
     - <<: *unless-nightly
@@ -338,7 +404,7 @@
   retry: 2
   tags:
   - promotion
-  <<: *dev-tag-only-except-auto-deploy
+  <<: *dev-public-release-only
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -840,6 +906,7 @@ Docker-Release:
 
 AWS:
   <<: *aws_ami_build
+  <<: *dev-ce-tag-only-except-rc-manual
 
 AWS-Ultimate:
   variables:
