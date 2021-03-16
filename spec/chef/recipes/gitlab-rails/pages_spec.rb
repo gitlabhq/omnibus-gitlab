@@ -23,6 +23,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
             enabled: false,
             remote_directory: "pages"
           },
+          local_store: {
+            enabled: true,
+            path: "/var/opt/gitlab/gitlab-rails/shared/pages",
+          },
           path: "/var/opt/gitlab/gitlab-rails/shared/pages",
           port: nil
         )
@@ -65,6 +69,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
                 enabled: true,
                 remote_directory: 'foobar',
                 connection: aws_connection_data
+              },
+              local_store: {
+                enabled: true,
+                path: '/random/path'
               }
             }
           )
@@ -103,6 +111,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
                 enabled: true,
                 remote_directory: 'foobar',
                 connection: aws_connection_data
+              },
+              local_store: {
+                enabled: true,
+                path: '/random/path'
               }
             }
           )

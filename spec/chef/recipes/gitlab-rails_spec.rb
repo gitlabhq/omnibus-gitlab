@@ -578,6 +578,66 @@ RSpec.describe 'gitlab::gitlab-rails' do
           expect(gitlab_yml[:production][:gitlab][:allowed_hosts]).to eq(['example.com', 'foobar.com'])
         end
       end
+
+      context 'pages local store is not specified' do
+        it 'sets pages_local_store_enabled to true and return default path' do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            pages_external_url: 'https://pages.example.com'
+          )
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pages_path' => '/var/opt/gitlab/gitlab-rails/shared/pages',
+              'pages_local_store_enabled' => true,
+              'pages_local_store_path' => '/var/opt/gitlab/gitlab-rails/shared/pages'
+            )
+          )
+        end
+      end
+
+      context 'when pages_path is specified but not local store path' do
+        it 'returns pages_local_store path with the same value as pages_path' do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            pages_external_url: 'https://pages.example.com',
+            gitlab_rails: {
+              pages_path: '/tmp/test',
+              pages_local_store_enabled: false
+            }
+          )
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pages_path' => '/tmp/test',
+              'pages_local_store_enabled' => false,
+              'pages_local_store_path' => '/tmp/test'
+            )
+          )
+        end
+      end
+
+      context 'when pages local store path and enabled are custom' do
+        it 'returns pages_local_store path and enabled with these custom values' do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            pages_external_url: 'https://pages.example.com',
+            gitlab_rails: {
+              pages_path: '/tmp/test',
+              pages_local_store_enabled: false,
+              pages_local_store_path: '/another/path'
+            }
+          )
+
+          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              'pages_path' => '/tmp/test',
+              'pages_local_store_enabled' => false,
+              'pages_local_store_path' => '/another/path'
+            )
+          )
+        end
+      end
     end
 
     context 'LDAP server configuration' do

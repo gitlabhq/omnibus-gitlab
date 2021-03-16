@@ -353,6 +353,9 @@ production: &base
       enabled: <%= @pages_object_store_enabled %>
       remote_directory: <%= quote(@pages_object_store_remote_directory) %>
       connection: <%= @pages_object_store_connection.to_json %>
+    local_store:
+      enabled: <%= @pages_local_store_enabled %>
+      path: <%= @pages_local_store_path %>
 
   ## Gravatar
   ## For Libravatar see: https://docs.gitlab.com/ee/customization/libravatar.html
