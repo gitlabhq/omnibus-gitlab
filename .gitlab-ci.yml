@@ -67,6 +67,7 @@ variables:
   AUTO_DEPLOY_ENVIRONMENT: 'pre'
   MAX_PACKAGE_SIZE_MB: "960"
   OMNIBUS_GITLAB_MIRROR_ID: "14588374"
+  DOCS_GITLAB_REPO_SUFFIX: "omnibus"
 
 ### For services that need a docker daemon
 .docker_job: &docker_job

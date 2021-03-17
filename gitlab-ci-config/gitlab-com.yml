@@ -141,6 +141,8 @@
   variables:
     GIT_STRATEGY: none
     DOCS_REVIEW_APPS_DOMAIN: 178.62.207.141.nip.io
+    # By default, deploy the Review App using the `master` branch of the `gitlab-org/gitlab-docs` project
+    DOCS_BRANCH: master
   when: manual
   only:
     refs:
@@ -270,8 +272,11 @@ review-docs-deploy:
   extends:
     - .review-docs
   environment:
-    name: review-docs/$CI_COMMIT_REF_SLUG
-    url: http://docs-preview-omnibus-$CI_COMMIT_REF_SLUG.$DOCS_REVIEW_APPS_DOMAIN/omnibus
+    name: review-docs/branch-${CI_COMMIT_REF_SLUG}
+    # DOCS_REVIEW_APPS_DOMAIN and DOCS_GITLAB_REPO_SUFFIX are CI variables
+    # Discussion: https://gitlab.com/gitlab-org/gitlab-foss/merge_requests/14236/diffs#note_40140693
+    auto_stop_in: 2 weeks
+    url: http://${DOCS_BRANCH}-${DOCS_GITLAB_REPO_SUFFIX}-${CI_COMMIT_REF_SLUG}.${DOCS_REVIEW_APPS_DOMAIN}/${DOCS_GITLAB_REPO_SUFFIX}
     on_stop: review-docs-cleanup
   script:
     - ./trigger-build docs deploy
@@ -281,7 +286,7 @@ review-docs-cleanup:
   extends:
     - .review-docs
   environment:
-    name: review-docs/$CI_COMMIT_REF_SLUG
+    name: review-docs/branch-${CI_COMMIT_REF_SLUG}
     action: stop
   script:
     - ./trigger-build docs cleanup
