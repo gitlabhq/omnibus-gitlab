@@ -650,60 +650,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'mattermost settings' do
-      context 'mattermost is configured' do
-        it 'exposes the mattermost host' do
-          stub_gitlab_rb(mattermost: { enable: true },
-                         mattermost_external_url: 'http://mattermost.domain.com')
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              mattermost_host: 'http://mattermost.domain.com'
-            )
-          )
-        end
-      end
-
-      context 'mattermost is not configured' do
-        it 'has empty values' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              mattermost_enabled: false,
-              mattermost_host: nil
-            )
-          )
-        end
-      end
-
-      context 'mattermost on another server' do
-        it 'sets the mattermost host' do
-          stub_gitlab_rb(gitlab_rails: { mattermost_host: 'http://my.host.com' })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              mattermost_enabled: true,
-              mattermost_host: 'http://my.host.com'
-            )
-          )
-        end
-
-        context 'values set twice' do
-          it 'sets the mattermost external url' do
-            stub_gitlab_rb(mattermost: { enable: true },
-                           mattermost_external_url: 'http://my.url.com',
-                           gitlab_rails: { mattermost_host: 'http://do.not/setme' })
-
-            expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-              hash_including(
-                mattermost_enabled: true,
-                mattermost_host: 'http://my.url.com'
-              )
-            )
-          end
-        end
-      end
-    end
-
     context 'gitlab shell settings' do
       it 'sets default for gitlab shell authorized keys file' do
         expect(chef_run)
