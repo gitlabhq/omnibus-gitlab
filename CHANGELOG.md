@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.9.4 (2021-03-17)
+
+- No changes.
+
 ## 13.9.3 (2021-03-08)
 
 - No changes.
@@ -66,6 +70,10 @@ omnibus-gitlab repository.
 - Bump Grafana version to 7.3.7. !4933
 - Update Mattermost to 5.31.1. !5003 (Harrison Healey)
 
+
+## 13.8.6 (2021-03-17)
+
+- No changes.
 
 ## 13.8.5 (2021-03-04)
 
@@ -153,6 +161,10 @@ omnibus-gitlab repository.
 - Use Debian 10 as examples in development docs. !4883 (Takuya Noguchi)
 - Update Mattermost to 5.30.1. !4885 (hmhealey)
 
+
+## 13.7.9 (2021-03-17)
+
+- No changes.
 
 ## 13.7.8 (2021-03-04)
 
