@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2018-2020 GitLab Inc.
+# Copyright:: Copyright (c) 2018-2021 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 #
 
 name 'graphicsmagick'
-default_version '1.3.35'
+default_version '1.3.36'
 
 license 'MIT'
 license_file 'Copyright.txt'
@@ -27,15 +27,13 @@ dependency 'libjpeg-turbo'
 dependency 'libtiff'
 dependency 'zlib'
 
-source url: "https://ftp.icm.edu.pl/pub/unix/graphics/GraphicsMagick/1.3/GraphicsMagick-#{version}.tar.gz",
-       sha256: 'd96d5ce2ef7e0e90166551e38742713728bfd33d6f18495a9ddda938700fc055'
+source url: "https://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/#{version}/GraphicsMagick-#{version}.tar.gz",
+       sha256: '1e6723c48c4abbb31197fadf8396b2d579d97e197123edc70a4f057f0533d563'
 
 relative_path "GraphicsMagick-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-
-  patch source: "png-vulnerability-fix.patch"
 
   configure_command = [
     './configure',
