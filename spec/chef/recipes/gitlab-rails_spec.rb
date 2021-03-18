@@ -1125,46 +1125,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'Web-server settings' do
-      context 'when Puma is enabled' do
-        before do
-          stub_gitlab_rb(
-            unicorn: { enable: true }
-          )
-        end
-
-        it 'raises an exception' do
-          expect { chef_run }.to raise_error("Only one web server (Puma or Unicorn) can be enabled at the same time!")
-        end
-      end
-
-      context 'when Puma and Unicorn are enabled' do
-        before do
-          stub_gitlab_rb(
-            puma: { enable: true },
-            unicorn: { enable: true }
-          )
-        end
-
-        it 'raises an exception' do
-          expect { chef_run }.to raise_error("Only one web server (Puma or Unicorn) can be enabled at the same time!")
-        end
-      end
-
-      context 'when Puma is enabled and Unicorn explicitly disabled' do
-        before do
-          stub_gitlab_rb(
-            puma: { enable: true },
-            unicorn: { enable: false }
-          )
-        end
-
-        it 'raises an exception' do
-          expect { chef_run }.not_to raise_error
-        end
-      end
-    end
-
     context 'Sidekiq exporter settings' do
       it 'exporter enabled but log disabled by default' do
         expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
