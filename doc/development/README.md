@@ -11,6 +11,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [Adding a new Service to Omnibus GitLab](new-services.md)
 - [Creating patches](creating-patches.md)
 - [Repositories, branches and CI pipelines](pipelines.md)
+- [CI variables](ci-variables.md)
 - [Release process](../release/README.md)
 - [Handling broken master pipelines](broken_master.md)
 - [Version format of packages, Docker images and other artifacts](package_version_format.md)
