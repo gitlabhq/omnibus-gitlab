@@ -24,7 +24,6 @@ Download the JiHu Edition package that matches your distribution or installation
 - Debian 10 - `https://gitlab-omnibus-gitlab-jh.s3.amazonaws.com/debian-buster/gitlab-jh_13.10.0-rc40.jh.0_amd64.deb`
 - CentOS 7 - `https://gitlab-omnibus-gitlab-jh.s3.amazonaws.com/el-7/gitlab-jh-13.10.0-rc40.jh.0.el7.x86_64.rpm`
 - CentOS 8 - `https://gitlab-omnibus-gitlab-jh.s3.amazonaws.com/el-8/gitlab-jh-13.10.0-rc40.jh.0.el8.x86_64.rpm`
-- Docker image - `registry.gitlab.com/gitlab-jh/omnibus-gitlab/gitlab-jh:13.10.0-rc40`
 
 ## Install or update a JiHu Edition package
 
@@ -40,12 +39,6 @@ dpkg -i gitlab-jh-<version>.deb
 
 ```shell
 rpm -Uvh gitlab-jh-<version>.rpm
-```
-
-**For Docker**
-
-```shell
-docker pull registry.gitlab.com/gitlab-jh/omnibus-gitlab/gitlab-jh:<version>
 ```
 
 NOTE:
@@ -119,12 +112,6 @@ To update EE to JE:
 
    ```shell
    rpm -Uvh gitlab-jh-<version>.rpm
-   ```
-
-   **For Docker**
-
-   ```shell
-   docker pull registry.gitlab.com/gitlab-jh/omnibus-gitlab/gitlab-jh:<version>
    ```
 
 1. Go to the GitLab administration panel of your server (`/admin/license/new`) and
