@@ -3,6 +3,58 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.10.0 (2021-03-22)
+
+### Removed (2 changes)
+
+- Drop unused awesomeprint gem. !5023
+- Remove upgrade survey. !5045
+
+### Fixed (5 changes, 1 of them is from the community)
+
+- gitlab-redis-cli: fix authentication with unquoted values. !5010
+- Ensure that pg_basebackup will not ask for password. !5012
+- Geo - Fix command to work with Patroni. !5033
+- Fix postgresql['dir'] references in geo commands. !5061
+- Fix gitlab pages on alternate port. !5070 (Lee Tickett @leetickett)
+
+### Deprecated (1 change)
+
+- Deprecate gitlab_pages['domain_config_source']. !5079
+
+### Changed (10 changes, 1 of them is from the community)
+
+- Add Grafana reporting option. !5000
+- Update monitoring components. !5013
+- Add internal and external URL config for KAS. !5016
+- Add member option for command. !5025
+- Update the package metadata vendor name to be GitLab, Inc. !5027
+- Set permissions on assets that were copied into the container. !5036 (Edison Hanchell)
+- Set Grafana auth scope based on allowed groups. !5038
+- Bump Container Registry to v3.1.0-gitlab. !5054
+- Use sha256 for signing RPM packages. !5072
+- Remove recommended Pages max_connections limit. !5078
+
+### Added (6 changes, 2 of them are from the community)
+
+- Added Debian 10 ARM64 builds. !5018
+- Add GitLab Pages propagate-correlation-id configuration parameter. !5043 (Ercan Ucan)
+- Allow custom smtp configuration for grafana in omnibus-gitlab. !5047 (msschl)
+- Expose Rails allowed_hosts setting in gitlab.rb. !5057
+- Allow gitlab build remote overrides from the environment. !5067
+- Add GitLab Pages cache configuration settings. !5084
+
+### Other (7 changes, 2 of them are from the community)
+
+- Add user_status_cleanup_batch cronjob. !5009
+- Rename instance statistics count worker. !5021
+- Explicitly set group for GitLab data directories. !5090 (Ben Bodenmiller (@bbodenmiller))
+- Use builders with updated Go version. !5092
+- Enable `nakayoshi_fork` by default.
+- Update Mattermost to 5.32.1.
+- Remove apt-transport-https as apt natively support https. (Simon Deziel)
+
+
 ## 13.9.3 (2021-03-08)
 
 - No changes.

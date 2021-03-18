@@ -1,5 +1,0 @@
----
-title: Deprecate gitlab_pages['domain_config_source']
-merge_request: 5079
-author:
-type: deprecated
