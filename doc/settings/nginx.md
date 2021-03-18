@@ -486,6 +486,22 @@ These additional options NGINX supports for configuring SSL client authenticatio
 
 After making the changes run `sudo gitlab-ctl reconfigure`.
 
+## Configure `robots.txt`
+
+To configure [`robots.txt`](https://www.robotstxt.org/robotstxt.html) for your instance, specify a custom `robots.txt` file by adding a [custom NGINX configuration](#inserting-custom-nginx-settings-into-the-gitlab-server-block):
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   nginx['custom_gitlab_server_config'] = "rewrite ^/robots.txt /var/opt/gitlab/robots.txt last;"
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
 ## Inserting custom NGINX settings into the GitLab server block
 
 Please keep in mind that these custom settings may create conflicts if the
