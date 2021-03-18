@@ -1,5 +1,0 @@
----
-title: 'gitlab-redis-cli: fix authentication with unquoted values'
-merge_request: 5010
-author:
-type: fixed

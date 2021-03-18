@@ -1,5 +1,0 @@
----
-title: 'Fix postgresql[''dir''] references in geo commands'
-merge_request: 5061
-author:
-type: fixed

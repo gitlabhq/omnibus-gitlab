@@ -1,5 +1,0 @@
----
-title: Use sha256 for signing RPM packages
-merge_request: 5072
-author:
-type: changed
