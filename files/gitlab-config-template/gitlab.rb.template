@@ -1514,6 +1514,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Configure to expose GitLab Pages on external IP address, serving the HTTPS over PROXYv2
 # gitlab_pages['external_https_proxyv2'] = []
 
+##! Configure cert when using external IP address
+# gitlab_pages['cert'] = "/etc/gitlab/ssl/#{Gitlab['gitlab_pages']['domain']}.crt"
+# gitlab_pages['cert_key'] = "/etc/gitlab/ssl/#{Gitlab['gitlab_pages']['domain']}.key"
+
 ##! Configure to use the default list of cipher suites
 # gitlab_pages['insecure_ciphers'] = false
 
