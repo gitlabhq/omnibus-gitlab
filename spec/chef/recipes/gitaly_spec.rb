@@ -56,6 +56,7 @@ RSpec.describe 'gitaly' do
   let(:daily_maintenance_start_minute) { 9 }
   let(:daily_maintenance_duration) { '45m' }
   let(:daily_maintenance_storages) { ["default"] }
+  let(:daily_maintenance_disabled) { false }
   let(:cgroups_count) { 10 }
   let(:cgroups_mountpoint) { '/sys/fs/cgroup' }
   let(:cgroups_hierarchy_root) { 'gitaly' }
@@ -136,8 +137,6 @@ RSpec.describe 'gitaly' do
       expect(chef_run).not_to render_file(config_path)
         .with_content(%r{catfile_cache_size})
       expect(chef_run).not_to render_file(config_path)
-        .with_content(%r{\[daily_maintenance\]})
-      expect(chef_run).not_to render_file(config_path)
         .with_content('bin_path = ')
     end
 
@@ -199,6 +198,7 @@ RSpec.describe 'gitaly' do
           daily_maintenance_start_minute: daily_maintenance_start_minute,
           daily_maintenance_duration: daily_maintenance_duration,
           daily_maintenance_storages: daily_maintenance_storages,
+          daily_maintenance_disabled: daily_maintenance_disabled,
           cgroups_count: cgroups_count,
           cgroups_mountpoint: cgroups_mountpoint,
           cgroups_hierarchy_root: cgroups_hierarchy_root,
@@ -356,6 +356,16 @@ RSpec.describe 'gitaly' do
       it 'renders daily_maintenance with multiple storage entries' do
         expect(chef_run).to render_file(config_path).with_content { |content|
           expect(content).to include("storages = #{daily_maintenance_storages}")
+        }
+      end
+    end
+
+    context 'when maintenance is disabled' do
+      let(:daily_maintenance_disabled) { true }
+
+      it 'renders daily_maintenance with disabled set to true' do
+        expect(chef_run).to render_file(config_path).with_content { |content|
+          expect(content).to include("[daily_maintenance]\ndisabled = true\n\n")
         }
       end
     end

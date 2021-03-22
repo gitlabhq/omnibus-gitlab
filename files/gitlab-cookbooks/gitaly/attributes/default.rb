@@ -35,6 +35,7 @@ default['gitaly']['daily_maintenance_start_hour'] = nil
 default['gitaly']['daily_maintenance_start_minute'] = nil
 default['gitaly']['daily_maintenance_duration'] = nil
 default['gitaly']['daily_maintenance_storages'] = nil
+default['gitaly']['daily_maintenance_disabled'] = false
 default['gitaly']['cgroups_count'] = nil
 default['gitaly']['cgroups_mountpoint'] = nil
 default['gitaly']['cgroups_hierarchy_root'] = nil
