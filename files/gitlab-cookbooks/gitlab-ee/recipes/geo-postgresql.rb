@@ -148,7 +148,7 @@ if node['gitlab']['geo-postgresql']['enable']
 
   postgresql_extension 'pg_trgm' do
     database geo_database_name
-    helper geo_pg_helper
+    pg_helper geo_pg_helper
     action :enable
   end
 
