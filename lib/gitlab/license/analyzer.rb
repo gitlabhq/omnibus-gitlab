@@ -29,6 +29,7 @@ module License
       'domelementtype',     # BSD-2-Clause Licensed - https://github.com/fb55/domelementtype/blob/master/LICENSE
       'domhandler',         # BSD-2-Clause Licensed - https://github.com/fb55/domhandler/blob/master/LICENSE
       'domutils',           # BSD-2-Clause Licensed - https://github.com/fb55/domutils/blob/master/LICENSE
+      'net-protocol',       # BSD-2-Clause Licensed - https://github.com/ruby/net-protocol/blob/master/LICENSE.txt
       'fsevents',           # MIT Licensed - https://github.com/strongloop/fsevents/blob/master/LICENSE
       'indexof',            # MIT Licensed - https://github.com/component/indexof/blob/master/LICENSE
       'map-stream',         # MIT Licensed - https://github.com/dominictarr/map-stream/blob/master/LICENCE
