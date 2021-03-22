@@ -7,7 +7,7 @@ action :create do
   postgresql_query "create #{new_resource.schema} schema on #{new_resource.database}" do
     query "CREATE SCHEMA #{new_resource.schema} AUTHORIZATION #{new_resource.owner};"
     db_name new_resource.database
-    helper new_resource.helper
+    pg_helper new_resource.helper
 
     not_if do
       new_resource.helper.is_offline_or_readonly? ||
@@ -18,7 +18,7 @@ action :create do
   postgresql_query "modify #{new_resource.schema} schema owner on #{new_resource.database}" do
     query %(ALTER SCHEMA #{new_resource.schema} OWNER TO "#{new_resource.owner}")
     db_name new_resource.database
-    helper new_resource.helper
+    pg_helper new_resource.helper
 
     not_if do
       new_resource.helper.is_offline_or_readonly? ||
