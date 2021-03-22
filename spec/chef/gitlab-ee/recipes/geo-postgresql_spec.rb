@@ -93,6 +93,10 @@ RSpec.describe 'geo postgresql 9.2' do
       expect(chef_run).to include_recipe('postgresql::user')
     end
 
+    it 'includes the postgresql_sysctl recipe' do
+      expect(chef_run).to include_recipe('postgresql::sysctl')
+    end
+
     it 'creates the gitlab_geo role in the geo-postgresql database, without a password' do
       expect(chef_run).to create_postgresql_user('gitlab_geo').with(password: nil)
     end
