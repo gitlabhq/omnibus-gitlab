@@ -114,10 +114,6 @@ include_recipe "package::runit"
 # Make global sysctl commands available
 include_recipe "package::sysctl"
 
-# Always run the postgresql::bin recipe
-# Run before we enable postgresql for postgresql['version'] to take effect
-include_recipe 'postgresql::bin'
-
 # Configure Pre-migration services
 # Postgresql depends on Redis because of `rake db:seed_fu`
 # Gitaly and/or Praefect must be available before migrations
