@@ -1010,38 +1010,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'Sidekiq log_format' do
-      context 'json' do
-        it 'sets the Sidekiq log_format to json' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              sidekiq: hash_including(
-                'log_format' => 'json'
-              )
-            )
-          )
-          expect(chef_run).not_to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/-tt/)
-        end
-      end
-
-      context 'default' do
-        let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink sidekiq_service runit_service)).converge('gitlab::default') }
-
-        it 'sets the Sidekiq log_format to default' do
-          stub_gitlab_rb(sidekiq: { log_format: 'default' })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              sidekiq: hash_including(
-                'log_format' => 'default'
-              )
-            )
-          )
-          expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/svlogd -tt/)
-        end
-      end
-    end
-
     context 'sidekiq-cluster' do
       let(:chef_run) do
         ChefSpec::SoloRunner.new.converge('gitlab-ee::default')
