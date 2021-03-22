@@ -21,13 +21,12 @@ include_recipe 'postgresql::sysctl'
 
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
+pg_helper = PgHelper.new(node)
 
 postgresql_log_dir = node['postgresql']['log_directory']
 postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
 postgresql_data_dir_symlink = File.join(node['postgresql']['dir'], "data")
-
-pg_helper = PgHelper.new(node)
 
 directory node['postgresql']['dir'] do
   owner postgresql_username
@@ -93,61 +92,4 @@ postgresql_config 'gitlab' do
   notifies :run, 'execute[start postgresql]', :immediately if omnibus_helper.service_dir_enabled?('postgresql') && !pg_helper.delegated?
 end
 
-# Skip the following steps when PostgreSQL configuration is delegated, e.g. to Patroni
-return if pg_helper.delegated?
-
-runit_service "postgresql" do
-  start_down node['postgresql']['ha']
-  supervisor_owner postgresql_username
-  supervisor_group postgresql_group
-  restart_on_update false
-  control(['t'])
-  options({
-    log_directory: postgresql_log_dir
-  }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['postgresql'].to_hash)
-end
-
-if node['gitlab']['bootstrap']['enable']
-  execute "/opt/gitlab/bin/gitlab-ctl start postgresql" do
-    retries 20
-  end
-end
-
-###
-# Create the database, migrate it, and create the users we need, and grant them
-# privileges.
-###
-
-database_objects 'postgresql' do
-  pg_helper pg_helper
-  account_helper account_helper
-  not_if { pg_helper.replica? }
-end
-
-ruby_block 'warn pending postgresql restart' do
-  block do
-    message = <<~MESSAGE
-      The version of the running postgresql service is different than what is installed.
-      Please restart postgresql to start the new version.
-
-      sudo gitlab-ctl restart postgresql
-    MESSAGE
-    LoggingHelper.warning(message)
-  end
-  only_if { pg_helper.is_running? && pg_helper.running_version != pg_helper.version }
-end
-
-execute 'reload postgresql' do
-  command %(/opt/gitlab/bin/gitlab-ctl hup postgresql)
-  retries 20
-  action :nothing
-  only_if { pg_helper.is_running? }
-end
-
-execute 'start postgresql' do
-  command %(/opt/gitlab/bin/gitlab-ctl start postgresql)
-  retries 20
-  action :nothing
-  not_if { pg_helper.is_running? }
-end
+include_recipe 'postgresql::standalone' unless pg_helper.delegated?
