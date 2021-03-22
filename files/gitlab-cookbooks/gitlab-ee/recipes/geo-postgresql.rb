@@ -134,7 +134,7 @@ geo_database_name = node['gitlab']['geo-secondary']['db_database']
 if node['gitlab']['geo-postgresql']['enable']
   postgresql_user geo_pg_user do
     password "md5#{geo_pg_user_password}" unless geo_pg_user_password.nil?
-    helper geo_pg_helper
+    pg_helper geo_pg_helper
     action :create
   end
 

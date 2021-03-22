@@ -11,7 +11,7 @@ property :user, String, required: true
 
 action :create do
   postgresql_user new_resource.user do
-    helper new_resource.pg_helper
+    pg_helper new_resource.pg_helper
     password "md5#{new_resource.password}"
     action :create
     notifies :run, "execute[Add pgbouncer auth function]", :immediately
