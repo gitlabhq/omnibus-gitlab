@@ -48,6 +48,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'stuck_ci_jobs_worker'                                   | 'stuck_ci_jobs_worker_cron'
         'user_status_cleanup_batch_worker'                       | 'user_status_cleanup_batch_worker_cron'
         'namespaces_in_product_marketing_emails_worker'          | 'namespaces_in_product_marketing_emails_worker_cron'
+        'ssh_keys_expired_notification_worker'                   | 'ssh_keys_expired_notification_worker_cron'
+        'ssh_keys_expiring_soon_notification_worker'             | 'ssh_keys_expiring_soon_notification_worker_cron'
       end
 
       with_them do

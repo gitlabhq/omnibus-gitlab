@@ -487,6 +487,18 @@ production: &base
       cron: "<%= @ci_platform_metrics_update_cron_worker %>"
     <% end %>
 
+    # Send emails about ssh keys that have expired
+    <% unless @ssh_keys_expired_notification_worker_cron.nil? %>
+    ssh_keys_expired_notification_worker:
+      cron: "<%= @ssh_keys_expired_notification_worker_cron %>"
+    <% end %>
+
+    # Send emails about ssh keys that are expiring soon
+    <% unless @ssh_keys_expiring_soon_notification_worker_cron.nil? %>
+    ssh_keys_expiring_soon_notification_worker:
+      cron: "<%= @ssh_keys_expiring_soon_notification_worker_cron %>"
+    <% end %>
+
     ##
     # GitLab EE only jobs:
 
