@@ -142,7 +142,7 @@ if node['gitlab']['geo-postgresql']['enable']
     owner geo_pg_user
     database_port geo_pg_port
     database_socket node['gitlab']['geo-postgresql']['unix_socket_directory']
-    helper geo_pg_helper
+    pg_helper geo_pg_helper
     action :create
   end
 
