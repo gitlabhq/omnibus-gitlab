@@ -1,0 +1,5 @@
+---
+title: Disable statement timeout while running analyze for pg-upgrade
+merge_request: 5121
+author:
+type: changed
