@@ -63,6 +63,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
        api-secret-key=/var/opt/gitlab/gitlab-pages/.gitlab_pages_secret
        listen-proxy=localhost:8090
        log-format=json
+       use-http2=true
        artifacts-server=https://gitlab.example.com/api/v4
        artifacts-server-timeout=10
        gitlab-server=https://gitlab.example.com
@@ -253,6 +254,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             log-verbose
             sentry-dsn=https://b44a0828b72421a6d8e99efd68d44fa8@example.com/40
             sentry-environment=production
+            redirect-http=true
             use-http2=true
             artifacts-server=https://gitlab.elsewhere.com/api/v5
             artifacts-server-timeout=60

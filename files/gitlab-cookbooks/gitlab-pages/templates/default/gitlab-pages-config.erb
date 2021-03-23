@@ -63,7 +63,10 @@ sentry-environment=<%= @sentry_environment %>
 <%-   end -%>
 <%- end -%>
 <%- if @redirect_http-%>
-use-http2=<%= @redirect_http %>
+redirect-http=<%= @redirect_http %>
+<%- end -%>
+<%- if @use_http2-%>
+use-http2=<%= @use_http2 %>
 <%- end -%>
 <%- if @artifacts_server -%>
 <%-   if @artifacts_server_url-%>
