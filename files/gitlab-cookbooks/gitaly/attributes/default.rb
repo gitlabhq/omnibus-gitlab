@@ -43,3 +43,6 @@ default['gitaly']['cgroups_memory_enabled'] = nil
 default['gitaly']['cgroups_memory_limit'] = nil
 default['gitaly']['cgroups_cpu_enabled'] = nil
 default['gitaly']['cgroups_cpu_shares'] = nil
+default['gitaly']['pack_objects_cache_enabled'] = false
+default['gitaly']['pack_objects_cache_dir'] = nil
+default['gitaly']['pack_objects_cache_max_age'] = nil

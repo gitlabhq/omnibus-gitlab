@@ -2131,6 +2131,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['cgroups_memory_limit'] = 1048576
 # gitaly['cgroups_cpu_enabled'] = true
 # gitaly['cgroups_cpu_shares'] = 512
+# gitaly['pack_objects_cache_enabled'] = true
+# gitaly['pack_objects_cache_dir'] = '/var/opt/gitlab/git-data/repositories/+gitaly/PackObjectsCache'
+# gitaly['pack_objects_cache_max_age'] = '5m'
 
 ################################################################################
 ## Praefect
