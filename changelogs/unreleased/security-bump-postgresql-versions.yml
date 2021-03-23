@@ -1,0 +1,5 @@
+---
+title: Bump PostgreSQL versions to 11.11 and 12.6
+merge_request:
+author:
+type: security
