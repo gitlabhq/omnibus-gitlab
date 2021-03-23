@@ -40,6 +40,8 @@ class OhaiHelper
         'opensuse'
       when 'suse'
         'sles'
+      when 'amazon', 'aws', 'amzn'
+        'amazon'
       else
         :unknown
       end
@@ -99,6 +101,10 @@ class OhaiHelper
       end
     end
 
+    def get_amazon_version
+      ohai['platform_version']&.split(".")&.first
+    end
+
     def os_platform_version
       version = :unknown
 
@@ -113,6 +119,8 @@ class OhaiHelper
         version = get_opensuse_version
       when 'suse'
         version = get_suse_version
+      when 'amazon', 'aws', 'amzn'
+        version = get_amazon_version
       end
 
       version
