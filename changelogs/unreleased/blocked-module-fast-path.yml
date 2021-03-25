@@ -1,0 +1,5 @@
+---
+title: Backport BLOCKED_MODULE performance fix from Redis unstable
+merge_request: 5125
+author:
+type: performance
