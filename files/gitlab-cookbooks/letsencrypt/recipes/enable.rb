@@ -37,6 +37,7 @@ acme_selfsigned site.host do
   alt_names node['letsencrypt']['alt_names']
   crt node['gitlab']['nginx']['ssl_certificate']
   key node['gitlab']['nginx']['ssl_certificate_key']
+  key_size node['letsencrypt']['key_size']
   notifies :restart, 'runit_service[nginx]', :immediately
 end
 
