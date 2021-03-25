@@ -1,0 +1,5 @@
+---
+title: Create self-signed SSL key following gitlab.rb
+merge_request: 5083
+author: Kenneth Chu @kenneth
+type: fixed
