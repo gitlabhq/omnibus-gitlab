@@ -60,6 +60,15 @@ build do
   # - https://github.com/redis/redis/commit/445a4b669a3a7232a18bf23340c5f7d580aa92c7.patch
   patch source: 'upstream-backport-pull-request-7707.patch'
 
+  # We are backporting this patch from the (unstable) Redis 6.4 branch,
+  # in order to address a performance regression that was introduced in
+  # Redis 6.0. This performance regression primarily affects BRPOP heavy
+  # workloads, such as sidekiq.
+  #
+  # - https://github.com/redis/redis/pull/8689
+  # - https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12896
+  patch source: 'blocked-module-fast-path.patch'
+
   update_config_guess
 
   make "-j #{workers}", env: env
