@@ -16,19 +16,14 @@
 ##
 #
 
+require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+version = Gitlab::Version.new('gitaly')
+
 name 'git'
 
-# When updating the git version here, but sure to also update the following:
-# - https://gitlab.com/gitlab-org/gitaly/blob/master/README.md#installation
-# - https://gitlab.com/gitlab-org/gitaly/blob/master/.gitlab-ci.yml
-# - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/doc/install/installation.md
-# - https://gitlab.com/gitlab-org/gitlab-recipes/blob/master/install/centos/README.md
-# - https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md
-# - https://gitlab.com/gitlab-org/gitlab-build-images/blob/master/.gitlab-ci.yml
-# - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/.gitlab-ci.yml
-# - https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/system_check/app/git_version_check.rb
-# - https://gitlab.com/gitlab-org/build/CNG/blob/master/ci_files/variables.yml
-default_version '2.29.0'
+# We simply use Gitaly's version as the git version here given that Gitaly is
+# the provider of git and manages the version for us.
+default_version version.print
 
 license 'GPL-2.0'
 license_file 'COPYING'
@@ -44,51 +39,32 @@ dependency 'curl'
 dependency 'pcre2'
 dependency 'libiconv'
 
-source url: "https://www.kernel.org/pub/software/scm/git/git-#{version}.tar.gz",
-       sha256: 'fa08dc8424ef80c0f9bf307877f9e2e49f1a6049e873530d6747c2be770742ff'
-
-relative_path "git-#{version}"
+source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-
-  # Optionally add patches to apply to Git sources here, like this:
-  #
-  # patch source: 'v4-0001-builtin-pack-objects-report-reused-packfile-objec.patch'
-  # patch source: 'v4-0002-packfile-expose-get_delta_base.patch'
-  #
-  # Patch files should be in config/patches/git/
-
-  # Fast-track patches from
-  # https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/806, which
-  # are expected to land in 2.31.0.
-  patch source: '0001-builtin-pack-objects.c-avoid-iterating-all-refs.patch'
-  patch source: '0002-refs-expose-for_each_fullref_in_prefixes.patch'
-  patch source: '0003-ls-refs.c-initialize-prefixes-before-using-it.patch'
-  patch source: '0004-ls-refs.c-traverse-prefixes-of-disjoint-ref-prefix-s.patch'
 
   block do
     File.open(File.join(project_dir, 'config.mak'), 'a') do |file|
       file.print <<-EOH
 # Added by Omnibus git software definition git.rb
-CURLDIR=#{install_dir}/embedded
-ICONVDIR=#{install_dir}/embedded
-OPENSSLDIR=#{install_dir}/embedded
-ZLIB_PATH=#{install_dir}/embedded
-NEEDS_LIBICONV=YesPlease
-USE_LIBPCRE2=YesPlease
-NO_PERL=YesPlease
-NO_EXPAT=YesPlease
-NO_TCLTK=YesPlease
-NO_GETTEXT=YesPlease
-NO_PYTHON=YesPlease
-NO_INSTALL_HARDLINKS=YesPlease
-NO_R_TO_GCC_LINKER=YesPlease
-CFLAGS=-fno-omit-frame-pointer
+GIT_BUILD_OPTIONS += CURLDIR=#{install_dir}/embedded
+GIT_BUILD_OPTIONS += ICONVDIR=#{install_dir}/embedded
+GIT_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded
+GIT_BUILD_OPTIONS += ZLIB_PATH=#{install_dir}/embedded
+GIT_BUILD_OPTIONS += NEEDS_LIBICONV=YesPlease
+GIT_BUILD_OPTIONS += USE_LIBPCRE2=YesPlease
+GIT_BUILD_OPTIONS += NO_PERL=YesPlease
+GIT_BUILD_OPTIONS += NO_EXPAT=YesPlease
+GIT_BUILD_OPTIONS += NO_TCLTK=YesPlease
+GIT_BUILD_OPTIONS += NO_GETTEXT=YesPlease
+GIT_BUILD_OPTIONS += NO_PYTHON=YesPlease
+GIT_BUILD_OPTIONS += NO_INSTALL_HARDLINKS=YesPlease
+GIT_BUILD_OPTIONS += NO_R_TO_GCC_LINKER=YesPlease
+GIT_BUILD_OPTIONS += CFLAGS=-fno-omit-frame-pointer
       EOH
     end
   end
 
-  command "make -j #{workers} prefix=#{install_dir}/embedded", env: env
-  command "make install prefix=#{install_dir}/embedded", env: env
+  command "make git GIT_PREFIX=#{install_dir}/embedded", env: env
 end
