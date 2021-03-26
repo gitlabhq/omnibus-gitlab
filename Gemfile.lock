@@ -151,7 +151,7 @@ GEM
       rspec (~> 3.4)
     faraday (0.14.0)
       multipart-post (>= 1.2, < 3)
-    fauxhai-ng (8.2.0)
+    fauxhai-ng (8.7.0)
       net-ssh
     ffi (1.13.1)
     ffi-libarchive (1.0.4)
@@ -258,7 +258,7 @@ GEM
       net-ssh (>= 2.6.5, < 7.0.0)
     net-sftp (3.0.0)
       net-ssh (>= 5.0.0, < 7.0.0)
-    net-ssh (5.2.0)
+    net-ssh (6.1.0)
     net-ssh-gateway (2.0.0)
       net-ssh (>= 4.0.0)
     net-ssh-multi (1.2.1)
@@ -485,4 +485,4 @@ DEPENDENCIES
   thor (= 0.18.1)
 
 BUNDLED WITH
-   2.1.4
+   2.2.15
