@@ -1,0 +1,5 @@
+---
+title: Update gitlab-exporter to avoid query failures
+merge_request: 5123
+author:
+type: fixed
