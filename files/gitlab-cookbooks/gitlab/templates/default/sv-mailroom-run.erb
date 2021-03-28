@@ -7,6 +7,6 @@ exec 2>&1
 exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
   -U <%= @options[:user] %>:<%= @options[:groupname] %> \
   -u <%= @options[:user] %>:<%= @options[:groupname] %> \
-  /opt/gitlab/embedded/bin/bundle exec mail_room \
+  /opt/gitlab/embedded/bin/mail_room \
     -c <%= @options[:mail_room_config] %> \
     --log-exit-as <%= @options[:exit_log_format] %>
