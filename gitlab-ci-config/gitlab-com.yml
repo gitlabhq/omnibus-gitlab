@@ -434,6 +434,9 @@ Trigger:qa-docker:
     - bundle exec rake qa:build
     - bundle exec rake qa:push:triggered
   <<: *com-trigger-only
+  except:
+    variables:
+      - $SKIP_QA_DOCKER == "true"
   dependencies:
     - Trigger:package
 
