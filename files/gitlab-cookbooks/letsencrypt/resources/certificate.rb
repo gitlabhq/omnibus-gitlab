@@ -22,6 +22,21 @@ action :create do
   helper = LetsEncryptHelper.new(node)
   contact_info = helper.contact
 
+  staging_key = `/opt/gitlab/embedded/bin/openssl rsa -text -noout -in #{new_resource.key}-staging`
+  staging_key_size = staging_key.lines.grep(/Private.Key/i).first[/[0-9]* bit/].split.first.to_i
+
+  if new_resource.key_size.nil?
+    unless staging_key_size == node['acme']['key_size']
+      file "#{new_resource.key}-staging" do
+        action :delete
+      end
+    end
+  elsif staging_key_size != new_resource.key_size
+    file "#{new_resource.key}-staging" do
+      action :delete
+    end
+  end
+
   acme_certificate 'staging' do
     alt_names new_resource.alt_names unless new_resource.alt_names.empty?
     key_size new_resource.key_size unless new_resource.key_size.nil?
@@ -40,6 +55,21 @@ action :create do
   ruby_block 'reset private key' do
     block do
       node.normal['acme']['private_key'] = nil
+    end
+  end
+
+  production_key = `/opt/gitlab/embedded/bin/openssl rsa -text -noout -in #{new_resource.key}`
+  production_key_size = production_key.lines.grep(/Private.Key/i).first[/[0-9]* bit/].split.first.to_i
+
+  if new_resource.key_size.nil?
+    unless production_key_size == node['acme']['key_size']
+      file "#{new_resource.key}" do
+        action :delete
+      end
+    end
+  elsif production_key_size != new_resource.key_size
+    file "#{new_resource.key}" do
+      action :delete
     end
   end
 
