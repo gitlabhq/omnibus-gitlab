@@ -16,6 +16,7 @@ module Build
         "ref" => Gitlab::Util.get_env('QA_BRANCH') || 'master',
         "token" => Gitlab::Util.get_env('CI_JOB_TOKEN'),
         "variables[RELEASE]" => image,
+        "variables[QA_IMAGE]" => Gitlab::Util.get_env('QA_IMAGE'),
         "variables[TRIGGERED_USER]" => Gitlab::Util.get_env("TRIGGERED_USER") || Gitlab::Util.get_env("GITLAB_USER_NAME"),
         "variables[TRIGGER_SOURCE]" => Gitlab::Util.get_env('CI_JOB_URL'),
         "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_PROJECT'),
