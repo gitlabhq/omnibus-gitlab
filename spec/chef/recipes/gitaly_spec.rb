@@ -64,6 +64,9 @@ RSpec.describe 'gitaly' do
   let(:cgroups_memory_limit) { 1048576 }
   let(:cgroups_cpu_enabled) { true }
   let(:cgroups_cpu_shares) { 512 }
+  let(:pack_objects_cache_enabled) { true }
+  let(:pack_objects_cache_dir) { '/pack-objects-cache' }
+  let(:pack_objects_cache_max_age) { '10m' }
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
@@ -138,6 +141,8 @@ RSpec.describe 'gitaly' do
         .with_content(%r{catfile_cache_size})
       expect(chef_run).not_to render_file(config_path)
         .with_content('bin_path = ')
+      expect(chef_run).not_to render_file(config_path)
+        .with_content('[pack_objects_cache]')
     end
 
     it 'populates gitaly config.toml with default storages' do
@@ -205,7 +210,10 @@ RSpec.describe 'gitaly' do
           cgroups_memory_enabled: cgroups_memory_enabled,
           cgroups_memory_limit: cgroups_memory_limit,
           cgroups_cpu_enabled: cgroups_cpu_enabled,
-          cgroups_cpu_shares: cgroups_cpu_shares
+          cgroups_cpu_shares: cgroups_cpu_shares,
+          pack_objects_cache_enabled: pack_objects_cache_enabled,
+          pack_objects_cache_dir: pack_objects_cache_dir,
+          pack_objects_cache_max_age: pack_objects_cache_max_age,
         },
         gitlab_rails: {
           internal_api_url: gitlab_url
@@ -319,6 +327,12 @@ RSpec.describe 'gitaly' do
         %r{shares = #{cgroups_cpu_shares}},
       ].map(&:to_s).join('\s+'))
 
+      pack_objects_cache_section = Regexp.new([
+        %r{\[pack_objects_cache\]\nenabled = true},
+        %r{dir = '#{pack_objects_cache_dir}'},
+        %r{max_age = '#{pack_objects_cache_max_age}'},
+      ].map(&:to_s).join('\s+'))
+
       expect(chef_run).to render_file(config_path).with_content { |content|
         expect(content).to include("tls_listen_addr = 'localhost:8888'")
         expect(content).to include("certificate_path = '/path/to/cert.pem'")
@@ -337,6 +351,7 @@ RSpec.describe 'gitaly' do
         expect(content).to match(cgroups_section)
         expect(content).to match(cgroups_memory_section)
         expect(content).to match(cgroups_cpu_section)
+        expect(content).to match(pack_objects_cache_section)
       }
     end
 

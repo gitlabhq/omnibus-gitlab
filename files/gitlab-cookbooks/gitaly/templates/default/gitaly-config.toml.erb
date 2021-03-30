@@ -176,3 +176,10 @@ limit = <%= @cgroups_memory_limit %>
 enabled = <%= @cgroups_cpu_enabled %>
 shares = <%= @cgroups_cpu_shares %>
 <% end %>
+
+<% if @pack_objects_cache_enabled %>
+[pack_objects_cache]
+enabled = true
+<%= "dir = '#{@pack_objects_cache_dir}'" if @pack_objects_cache_dir %>
+<%= "max_age = '#{@pack_objects_cache_max_age}'" if @pack_objects_cache_max_age %>
+<% end %>
