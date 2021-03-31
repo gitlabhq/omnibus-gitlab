@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.9.5 (2021-03-31)
+
+### Security (2 changes)
+
+- Update openssl from 1i to 1j.
+- Bump PostgreSQL versions to 11.11 and 12.6.
+
+
 ## 13.9.4 (2021-03-17)
 
 - No changes.
