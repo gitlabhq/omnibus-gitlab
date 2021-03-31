@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.10.1 (2021-03-31)
+
+### Security (1 change)
+
+- Bump PostgreSQL versions to 11.11 and 12.6.
+
+
 ## 13.10.0 (2021-03-22)
 
 ### Removed (2 changes)
@@ -53,6 +60,14 @@ omnibus-gitlab repository.
 - Enable `nakayoshi_fork` by default.
 - Update Mattermost to 5.32.1.
 - Remove apt-transport-https as apt natively support https. (Simon Deziel)
+
+
+## 13.9.5 (2021-03-31)
+
+### Security (2 changes)
+
+- Update openssl from 1i to 1j.
+- Bump PostgreSQL versions to 11.11 and 12.6.
 
 
 ## 13.9.4 (2021-03-17)
@@ -121,6 +136,14 @@ omnibus-gitlab repository.
 - Remove Bundler 1.17.3 bundling. !4903 (Takuya Noguchi)
 - Bump Grafana version to 7.3.7. !4933
 - Update Mattermost to 5.31.1. !5003 (Harrison Healey)
+
+
+## 13.8.7 (2021-03-31)
+
+### Security (2 changes)
+
+- Update openssl from 1i to 1j.
+- Bump PostgreSQL versions to 11.11 and 12.6.
 
 
 ## 13.8.6 (2021-03-17)
