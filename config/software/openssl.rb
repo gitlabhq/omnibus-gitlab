@@ -23,7 +23,7 @@ skip_transitive_dependency_licensing true
 
 dependency 'cacerts'
 
-version = Gitlab::Version.new('openssl', 'OpenSSL_1_1_1i')
+version = Gitlab::Version.new('openssl', 'OpenSSL_1_1_1j')
 
 default_version version.print(false)
 display_version version.print(false).delete_prefix('OpenSSL_').tr('_', '.')
