@@ -106,6 +106,29 @@
       when: manual
       allow_failure: true
 
+.dev-ee-tag-only-except-auto-deploy: &dev-ee-tag-only-except-auto-deploy
+  rules:
+    - <<: *if-skip-job
+      when: never
+    - <<: *unless-dev
+      when: never
+    - <<: *if-auto-deploy-tag
+      when: never
+    - <<: *if-ee-tag
+
+.dev-ee-tag-only-except-auto-deploy-manual: &dev-ee-tag-only-except-auto-deploy-manual
+  rules:
+    - <<: *if-skip-job
+      when: never
+    - <<: *unless-dev
+      when: never
+    - <<: *if-auto-deploy-tag
+      when: never
+    - <<: *if-skip-release
+      when: never
+    - <<: *if-ee-tag
+      when: manual
+
 .dev-tag-only-except-auto-deploy-or-rc: &dev-tag-only-except-auto-deploy-or-rc
   rules:
     - <<: *if-skip-job
@@ -713,11 +736,11 @@ OpenSUSE-15.1-arm64:
 SLES-12.2:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
-  <<: *dev-ee-tag-only
+  <<: *dev-ee-tag-only-except-auto-deploy
 SLES-12.5:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
-  <<: *dev-ee-tag-only
+  <<: *dev-ee-tag-only-except-auto-deploy
 
 create_omnibus_manifest:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
@@ -827,13 +850,13 @@ SLES-12.2-staging:
     - SLES-12.2
     - SLES-12.2-branch
   <<: *staging_upload
-  <<: *dev-ee-tag-only
+  <<: *dev-ee-tag-only-except-auto-deploy
 SLES-12.5-staging:
   dependencies:
     - SLES-12.5
     - SLES-12.5-branch
   <<: *staging_upload
-  <<: *dev-ee-tag-only
+  <<: *dev-ee-tag-only-except-auto-deploy
 
 ### Package releases
 Ubuntu-16.04-release:
@@ -885,15 +908,15 @@ OpenSUSE-15.1-arm64-release:
     - OpenSUSE-15.1-arm64
   <<: *production_release
 SLES-12.2-release:
-  <<: *production_release
   dependencies:
     - SLES-12.2
-  <<: *dev-ee-tag-only-except-auto-deploy-or-rc-manual
-SLES-12.5-release:
   <<: *production_release
+  <<: *dev-ee-tag-only-except-auto-deploy-manual
+SLES-12.5-release:
   dependencies:
     - SLES-12.5
-  <<: *dev-ee-tag-only-except-auto-deploy-or-rc-manual
+  <<: *production_release
+  <<: *dev-ee-tag-only-except-auto-deploy-manual
 
 Docker-Release:
   extends: .docker_job
