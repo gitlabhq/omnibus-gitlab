@@ -78,6 +78,7 @@ These variables are required to release packages built by the pipeline.
 | AWS_PREMIUM_LICENSE_FILE                      | GitLab Premium license to use the Ultimate AWS AMIs. |
 | AWS_AMI_SECRET_ACCESS_KEY                     | Account secret for read/write access to publish the AWS AMIs. |
 | AWS_AMI_ACCESS_KEY_ID                         | Account ID for read/write access to publish the AWS AMIs. |
+| AWS_MARKETPLACE_ARN                           | AWS ARN to allow AWS Marketplace access our official AMIs. |
 
 **Available:**
 
