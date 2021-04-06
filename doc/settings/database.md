@@ -419,10 +419,25 @@ to see the full list.
 1. Moves the old database out of the way.
 1. Moves the new database to the expected location.
 1. Calls `sudo gitlab-ctl reconfigure` to do the required configuration changes and starts the new database server.
+1. Runs `ANALYZE` to generate database statistics.
 1. Starts the remaining services and removes the deploy page.
 1. If any errors are detected during this process, it reverts to the old version of the database.
 
 After the upgrade is complete, verify that everything is working as expected.
+
+If there was an error in the output while running the `ANALYZE` step, your upgrade
+will still be working, but will have poor database performance until the
+database statistics are generated. Use `gitlab-psql` to determine whether `ANALYZE` should be run manually:
+
+```shell
+sudo gitlab-psql -c "SELECT relname, last_analyze, last_autoanalyze FROM pg_stat_user_tables WHERE last_analyze IS NULL AND last_autoanalyze IS NULL;"
+```
+
+You can run `ANALYZE` manually if the query above returned any rows:
+
+```shell
+sudo gitlab-psql -c 'SET statement_timeout = 0; ANALYZE VERBOSE;'
+```
 
 _After you have verified that your GitLab instance is running correctly_, you
 can clean up the old database files:
