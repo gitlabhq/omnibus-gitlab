@@ -1,5 +1,0 @@
----
-title: Fix use_http2 & redirect_http GitLab Pages settings
-merge_request: 5116
-author: Ben Bodenmiller (@bbodenmiller)
-type: fixed

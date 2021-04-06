@@ -1,5 +1,0 @@
----
-title: Update Gitaly log permissions in Docker image
-merge_request: 5117
-author:
-type: fixed
