@@ -215,6 +215,7 @@ module GitlabRails
     def parse_pages_dir
       # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['pages_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'pages')
+      Gitlab['gitlab_rails']['pages_local_store_path'] ||= Gitlab['gitlab_rails']['pages_path']
     end
 
     def parse_repository_storage

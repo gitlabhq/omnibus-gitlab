@@ -420,6 +420,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # 'endpoint' => 'https://s3.amazonaws.com', # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
 #   # 'path_style' => false # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 # }
+# gitlab_rails['pages_local_store_enabled'] = true
+# gitlab_rails['pages_local_store_path'] = "/var/opt/gitlab/gitlab-rails/shared/pages"
 
 ### Impersonation settings
 # gitlab_rails['impersonation_enabled'] = true
