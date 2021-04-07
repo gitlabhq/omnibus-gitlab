@@ -16,6 +16,29 @@ Thus you have two options for database servers to use with Omnibus GitLab:
 
 ## Using the PostgreSQL Database Service shipped with Omnibus GitLab
 
+### Reconfigure and PostgreSQL restarts
+
+Omnibus normally restarts any service on reconfigure if config settings for that service were
+changed in the `gitlab.rb` file. PostgreSQL is unique in that some of its settings will take effect 
+with a reload (HUP), while others require PostgreSQL to be restarted. Because administrators
+frequently want more control over exactly when PostgreSQL is restarted, Omnibus has been configured
+to do a reload of PostgreSQL on reconfigure, and not a restart. This means that if you modify any 
+PostgreSQL setting that requires a restart, you will need to restart PostgreSQL manually after you 
+reconfigure.
+
+The [GitLab config template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
+identifies which PostgreSQL settings require a restart and which require only a reload. You can also
+run a query against your database to determine if any individual setting requires a restart. Start a 
+database console with `sudo gitlab-psql`, then replace `<setting name>` in the following query
+with the setting you are changing:
+
+```sql
+SELECT name,setting FROM pg_settings WHERE context = 'postmaster' AND name = '<setting name>';
+```
+
+If changing the setting will require a restart, the query will return the name of the setting and the current value
+of that setting in the running PostgreSQL instance.
+
 ### Configuring SSL
 
 Omnibus automatically enables SSL on the PostgreSQL server, but it will accept
