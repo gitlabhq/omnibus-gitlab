@@ -17,7 +17,6 @@
 require 'digest'
 
 omnibus_helper = OmnibusHelper.new(node)
-account_helper = AccountHelper.new(node)
 
 initial_root_password = node['gitlab']['gitlab-rails']['initial_root_password']
 initial_license_file = node['gitlab']['gitlab-rails']['initial_license_file'] || Dir.glob('/etc/gitlab/*.gitlab-license').first
@@ -29,20 +28,6 @@ dependent_services << "runit_service[puma]" if omnibus_helper.should_notify?("pu
 dependent_services << "runit_service[actioncable]" if omnibus_helper.should_notify?("actioncable")
 dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
 dependent_services << "sidekiq_service[sidekiq-cluster]" if omnibus_helper.should_notify?("sidekiq-cluster")
-
-connection_attributes = %w(
-  db_adapter
-  db_database
-  db_host
-  db_port
-  db_socket
-).collect { |attribute| node['gitlab']['gitlab-rails'][attribute] }
-connection_digest = Digest::MD5.hexdigest(Marshal.dump(connection_attributes))
-
-revision_file = "/opt/gitlab/embedded/service/gitlab-rails/REVISION"
-revision = IO.read(revision_file).chomp if ::File.exist?(revision_file)
-upgrade_status_dir = ::File.join(node['gitlab']['gitlab-rails']['dir'], "upgrade-status")
-db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{connection_digest}-#{revision}")
 
 env_variables = {}
 env_variables['GITLAB_ROOT_PASSWORD'] = initial_root_password if initial_root_password
@@ -64,26 +49,7 @@ ruby_block "check remote PG version" do
   only_if { !Services.enabled?('postgresql') && !Services.enabled?('patroni') }
 end
 
-# TODO: Refactor this into a resource
-# Currently blocked due to a bug in Chef 12.6.0
-# https://github.com/chef/chef/issues/4537
-bash "migrate gitlab-rails database" do
-  code <<-EOH
-    set -e
-    log_file="#{node['gitlab']['gitlab-rails']['log_directory']}/gitlab-rails-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log"
-    umask 077
-    /opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file}
-    STATUS=${PIPESTATUS[0]}
-    chown #{account_helper.gitlab_user}:#{account_helper.gitlab_group} ${log_file}
-    echo $STATUS > #{db_migrate_status_file}
-    exit $STATUS
-  EOH
-  environment env_variables unless env_variables.empty?
-  notifies :run, "execute[clear the gitlab-rails cache]", :immediately
-  notifies :run, "ruby_block[check remote PG version]", :immediately
-  dependent_services.each do |svc|
-    notifies :restart, svc, :immediately
-  end
-  not_if "(test -f #{db_migrate_status_file}) && (cat #{db_migrate_status_file} | grep -Fx 0)"
-  only_if { node['gitlab']['gitlab-rails']['auto_migrate'] }
+rails_migration "gitlab-rails" do
+  environment env_variables
+  dependent_services dependent_services
 end
