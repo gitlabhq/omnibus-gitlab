@@ -2271,7 +2271,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['historical_data_worker_cron'] = "0 12 * * *"
 # gitlab_rails['pseudonymizer_worker_cron'] = "0 23 * * *"
 # gitlab_rails['elastic_index_bulk_cron'] = "*/1 * * * *"
-# gitlab_rails['analytics_devops_adoption_create_all_snapshots_worker_cron'] = "0 4 * * *"
+# gitlab_rails['analytics_devops_adoption_create_all_snapshots_worker_cron'] = "0 4 * * 0"
 
 ################################################################################
 ## Kerberos (EE Only)
