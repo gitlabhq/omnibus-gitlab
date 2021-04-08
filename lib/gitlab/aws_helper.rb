@@ -27,21 +27,6 @@ class AWSHelper
     system(*%W[support/packer/packer_ami.sh #{@version} #{@type} #{@download_url} #{@license_file}])
   end
 
-  def marketplace_release
-    @listing_name = Gitlab::Util.get_env('AWS_LISTING_NAME')
-    set_marketplace_details
-
-    @ec2_client = Aws::EC2::Client.new(region: 'us-east-1')
-    @marketplace_client = Aws::MarketplaceCatalog::Client.new(region: 'us-east-1')
-
-    entity = find_entity
-    new_version_details = get_new_version_details(entity)
-    changeset_params = get_changeset_params(entity, new_version_details)
-    new_change_set = @marketplace_client.start_change_set(changeset_params)
-
-    puts "Changeset ID is #{new_change_set.change_set_id}"
-  end
-
   def set_marketplace_details
     case @listing_name
     when "GitLab Community Edition"
@@ -109,107 +94,91 @@ class AWSHelper
     resp.images.first
   end
 
-  def get_sources(ami_id)
-    sources = [{}]
-    sources.first['Id'] = "#{@edition} #{@version} source AMI"
-    sources.first['Resource'] = ami_id
-    sources.first['Type'] = 'Ami'
-    sources.first['OperatingSystem'] = {
-      "Name" => "UBUNTU",
-      "Version" => "16.04",
-      "Username" => "ubuntu"
-    }
+  def new_version_details(entity)
+    image = find_image
+    raise "AMI not found" unless image
 
-    sources
-  end
-
-  def get_delivery_methods(new_version_details)
-    delivery_methods = [{}]
-
-    delivery_methods.first['Id'] = "#{@edition} #{@version} Delivery"
-    delivery_methods.first['SourceId'] = "#{@edition} #{@version} source AMI"
-    delivery_methods.first['Type'] = "SingleAmi"
-    delivery_methods.first['Title'] = new_version_details['DeliveryMethods'].first['Title']
-    delivery_methods.first['Instructions'] = new_version_details['DeliveryMethods'].first['Instructions']
-    delivery_methods.first['Recommendations'] = {
-      "SecurityGroups" => new_version_details['DeliveryMethods'].first['Recommendations']['SecurityGroups']
-    }
-    delivery_methods.first['Lifecycle'] = {
-      "State" => new_version_details['DeliveryMethods'].first['Visibility']
-    }
-
-    delivery_methods
-  end
-
-  def get_provisioning_details(ami_id, details)
-    new_version_details = details['Versions'].last.dup
-
-    sources = get_sources(ami_id)
-    delivery_methods = get_delivery_methods(new_version_details)
+    ami_id = image.image_id
 
     {
-      "ProvisioningOptions" => [
+      "Version" => {
+        "VersionTitle" => "#{@edition} #{@version} Release",
+        "ReleaseNotes" => "#{@edition} #{@version} release. Visit https://about.gitlab.com/releases for details.",
+      },
+      "DeliveryOptions" => [
         {
-          "Id" => "#{@edition} #{@version} Release",
-          "VersionTitle" => "#{@edition} #{@version}",
-          "ReleaseNotes" => "#{@edition} #{@version} release. Visit https://about.gitlab.com/releases for details.",
-          "Sources" => sources,
-          "DeliveryMethods" => delivery_methods
+          "Details" => {
+            "AmiDeliveryOptionDetails" => {
+              "AmiSource" => {
+                "AmiId" => ami_id,
+                "AccessRoleArn" => Gitlab::Util.get_env('AWS_MARKETPLACE_ARN'),
+                "UserName" => "ubuntu",
+                "OperatingSystemName" => "UBUNTU",
+                "OperatingSystemVersion" => "20.04"
+              },
+              "UsageInstructions" => "https://docs.gitlab.com/ee/install/aws/",
+              "RecommendedInstanceType" => "c5.xlarge",
+              "SecurityGroups" => [
+                {
+                  "IpProtocol" => "tcp",
+                  "FromPort" => 22,
+                  "ToPort" => 22,
+                  "IpRanges" => [
+                    "0.0.0.0/0"
+                  ]
+                },
+                {
+                  "IpProtocol" => "tcp",
+                  "FromPort" => 80,
+                  "ToPort" => 80,
+                  "IpRanges" => [
+                    "0.0.0.0/0"
+                  ]
+                },
+                {
+                  "IpProtocol" => "tcp",
+                  "FromPort" => 443,
+                  "ToPort" => 443,
+                  "IpRanges" => [
+                    "0.0.0.0/0"
+                  ]
+                }
+              ]
+            }
+          }
         }
       ]
     }
   end
 
-  def get_presentation_details(details)
-    {
-      "Title" => details['Description']['Title'],
-      "ShortDescription" => details['Description']['Subtitle'],
-      "FullDescription" => details['Description']['Overview'],
-      "ManufacturerName" => details['Description']['Manufacturer'],
-      "Logo" => details['PromotionalResources']['Logo'],
-      "Videos" => details['PromotionalResources']['Videos'],
-      "Highlights" => details['Description']['Highlights'],
-      "AdditionalResources" => details['PromotionalResources']['AdditionalResources'],
-      "Support" => {
-        "ShortDescription" => details['SupportInformation']['Description'],
-      }
-    }
-  end
-
-  def get_new_version_details(entity)
-    image = find_image
-    raise "AMI not found" unless image
-
-    ami_id = image.image_id
-    details = JSON.parse(entity.details)
-    {
-      "Presentation" => get_presentation_details(details),
-      "Provisioning" => get_provisioning_details(ami_id, details)
-    }
-  end
-
-  def get_changeset_params(entity, new_version_details)
+  def get_changeset_params(entity)
     {
       catalog: "AWSMarketplace",
       change_set_name: "#{type_of_update} version update",
       change_set: [
         {
-          change_type: "UpdatePresentation",
+          change_type: "AddDeliveryOptions",
           entity: {
             identifier: entity.entity_identifier,
-            type: entity.entity_type
+            type: 'AmiProduct@1.0'
           },
-          details: JSON.dump({ "Presentation": new_version_details['Presentation'] })
-        },
-        {
-          change_type: "UpdateProvisioning",
-          entity: {
-            identifier: entity.entity_identifier,
-            type: entity.entity_type
-          },
-          details: JSON.dump({ "Provisioning": new_version_details['Provisioning'] })
+          details: JSON.dump(new_version_details(entity))
         }
       ]
     }
+  end
+
+  def marketplace_release
+    @listing_name = Gitlab::Util.get_env('AWS_LISTING_NAME')
+    set_marketplace_details
+
+    @ec2_client = Aws::EC2::Client.new(region: 'us-east-1')
+    @marketplace_client = Aws::MarketplaceCatalog::Client.new(region: 'us-east-1')
+
+    entity = find_entity
+    changeset_params = get_changeset_params(entity)
+    new_change_set = @marketplace_client.start_change_set(changeset_params)
+
+    puts "Changeset ID is #{new_change_set.change_set_id}"
   end
 end
