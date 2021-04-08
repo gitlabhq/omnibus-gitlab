@@ -92,3 +92,5 @@ consul_service 'praefect' do
   socket_address node['praefect']['prometheus_listen_addr']
   reload_service false unless node['consul']['enable']
 end
+
+include_recipe "praefect::database_migrations" if node['praefect']['auto_migrate']

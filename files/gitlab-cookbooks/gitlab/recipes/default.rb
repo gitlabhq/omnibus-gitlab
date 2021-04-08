@@ -122,10 +122,11 @@ include_recipe 'postgresql::bin'
 # Postgresql depends on Redis because of `rake db:seed_fu`
 # Gitaly and/or Praefect must be available before migrations
 %w(
+  logrotate
   redis
   gitaly
-  praefect
   postgresql
+  praefect
   gitlab-kas
 ).each do |service|
   if node[service]['enable']
@@ -136,12 +137,6 @@ include_recipe 'postgresql::bin'
 end
 
 include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['enable'] && !(node.key?('pgbouncer') && node['pgbouncer']['enable'])
-
-include_recipe "praefect::database_migrations" if node['praefect']['enable'] && node['praefect']['auto_migrate']
-
-# Always create logrotate folders and configs, even if the service is not enabled.
-# https://gitlab.com/gitlab-org/omnibus-gitlab/issues/508
-include_recipe "logrotate::folders_and_configs"
 
 # Configure Services
 %w[
@@ -170,11 +165,11 @@ else
 end
 
 %w(
-  logrotate
   gitlab-pages
   registry
   mattermost
   gitlab-kas
+  letsencrypt
 ).each do |service|
   if node[service]["enable"]
     include_recipe "#{service}::enable"
@@ -187,12 +182,6 @@ include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable']
 
 # Recipe which handles all prometheus related services
 include_recipe "monitoring"
-
-if node['letsencrypt']['enable']
-  include_recipe 'letsencrypt::enable'
-else
-  include_recipe 'letsencrypt::disable'
-end
 
 if node['gitlab']['gitlab-rails']['database_reindexing']['enable']
   include_recipe 'gitlab::database_reindexing_enable'
