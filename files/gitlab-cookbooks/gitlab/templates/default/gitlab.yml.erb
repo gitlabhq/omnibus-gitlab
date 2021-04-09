@@ -155,6 +155,12 @@ production: &base
     # Whether the IMAP server uses StartTLS
     start_tls: <%= @incoming_email_start_tls %>
 
+    # Inbox configuration (for Microsoft Graph)
+    inbox_method: <%= @incoming_email_inbox_method %>
+    <%- if @incoming_email_inbox_options %>
+    inbox_options: <%= @incoming_email_inbox_options.to_json %>
+    <%- end %>
+
     # The mailbox where incoming mail will end up. Usually "inbox".
     mailbox: <%= quote(@incoming_email_mailbox_name) %>
     # The IDLE command timeout.
@@ -206,6 +212,12 @@ production: &base
     ssl: <%= @service_desk_email_ssl %>
     # Whether the IMAP server uses StartTLS
     start_tls: <%= @service_desk_email_start_tls %>
+
+    # Inbox configuration (for Microsoft Graph)
+    inbox_method: <%= @service_desk_email_inbox_method %>
+    <%- if @service_desk_email_inbox_options %>
+    inbox_options: <%= @service_desk_email_inbox_options.to_json %>
+    <%- end %>
 
     # The mailbox where incoming mail will end up. Usually "inbox".
     mailbox: <%= quote(@service_desk_email_mailbox_name) %>

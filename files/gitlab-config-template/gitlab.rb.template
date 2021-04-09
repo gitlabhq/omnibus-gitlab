@@ -275,6 +275,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 ####! Permanently remove messages from the mailbox when they are deleted after delivery
 # gitlab_rails['incoming_email_expunge_deleted'] = false
 
+#### Inbox options (for Microsoft Graph)
+# gitlab_rails['incoming_email_inbox_method'] = 'microsoft_graph'
+# gitlab_rails['incoming_email_inbox_options'] {
+#    'tenant_id': 'YOUR-TENANT-ID',
+#    'client_id': 'YOUR-CLIENT-ID',
+#    'client_secret': 'YOUR-CLIENT-SECRET',
+#    'poll_interval': 60  # Optional
+# }
+
 ####! The format of mail_room crash logs
 # mailroom['exit_log_format'] = "plain"
 
