@@ -16,7 +16,6 @@
 #
 
 omnibus_helper = OmnibusHelper.new(node)
-gitlab_geo_helper = GitlabGeoHelper.new(node)
 
 dependent_services = []
 dependent_services << "unicorn_service[unicorn]" if omnibus_helper.should_notify?("unicorn")
@@ -24,21 +23,11 @@ dependent_services << "runit_service[puma]" if omnibus_helper.should_notify?("pu
 dependent_services << "runit_service[actioncable]" if omnibus_helper.should_notify?("actioncable")
 dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
 
-bash 'migrate gitlab-geo tracking database' do
-  code <<-EOH
-    set -e
-    log_file="#{node['gitlab']['gitlab-rails']['log_directory']}/gitlab-geo-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log"
-    umask 077
-    /opt/gitlab/bin/gitlab-rake geo:db:migrate 2>& 1 | tee ${log_file}
-    STATUS=${PIPESTATUS[0]}
-    echo $STATUS > #{gitlab_geo_helper.db_migrate_status_file}
-    exit $STATUS
-  EOH
+rails_migration "gitlab-geo tracking" do
+  migration_task 'geo:db:migrate'
+  migration_logfile_prefix 'gitlab-geo-db-migrate'
+  migration_helper GitlabGeoHelper.new(node)
 
+  dependent_services dependent_services
   notifies :run, 'execute[start geo-postgresql]', :before if omnibus_helper.should_notify?('geo-postgresql')
-  dependent_services.each do |svc|
-    notifies :restart, svc, :immediately
-  end
-  not_if { gitlab_geo_helper.migrated? }
-  only_if { node['gitlab']['geo-secondary']['auto_migrate'] }
 end

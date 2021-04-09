@@ -7,7 +7,7 @@ require 'chef_helper'
 #
 
 RSpec.describe 'gitlab-ee::geo-database-migrations' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: ['rails_migration']).converge('gitlab-ee::default') }
   let(:name) { 'migrate gitlab-geo tracking database' }
 
   before do
@@ -48,6 +48,7 @@ RSpec.describe 'gitlab-ee::geo-database-migrations' do
     let(:bash_block) { chef_run.bash(name) }
 
     it 'runs the migrations' do
+      expect(chef_run).to run_rails_migration('gitlab-geo tracking')
       expect(chef_run).to run_bash(name)
     end
 

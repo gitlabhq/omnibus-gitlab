@@ -45,11 +45,18 @@ ruby_block "check remote PG version" do
       ))
     end
   end
+
   action :nothing
   only_if { !Services.enabled?('postgresql') && !Services.enabled?('patroni') }
 end
 
 rails_migration "gitlab-rails" do
+  migration_task 'gitlab:db:configure'
+  migration_logfile_prefix 'gitlab-rails-db-migrate'
+  migration_helper RailsMigrationHelper.new(node)
+
   environment env_variables
   dependent_services dependent_services
+  notifies :run, "execute[clear the gitlab-rails cache]", :immediately
+  notifies :run, "ruby_block[check remote PG version]", :immediately
 end
