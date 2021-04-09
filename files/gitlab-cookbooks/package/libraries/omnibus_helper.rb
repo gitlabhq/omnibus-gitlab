@@ -77,11 +77,11 @@ class OmnibusHelper
   # Checks whether a specific resource exist in runtime
   #
   # @example usage
-  #   omnibus_helper.is_resource_available?('runit_service[postgresql]')
+  #   omnibus_helper.resource_available?('runit_service[postgresql]')
   #
   # @param [String] name of the resource
   # @return [Boolean]
-  def is_resource_available?(name)
+  def resource_available?(name)
     node.run_context.resource_collection.find(name)
 
     true

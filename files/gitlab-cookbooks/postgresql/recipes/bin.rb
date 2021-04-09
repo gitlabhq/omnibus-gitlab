@@ -66,7 +66,7 @@ ruby_block "Link postgresql bin files to the correct version" do
 
   # This recipe will also be called standalone so the resource won't exist in some circunstances
   # This is why we check whether it is defined in runtime or not
-  notifies :restart, 'runit_service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && omnibus_helper.is_resource_available?('runit_service[postgresql]')
+  notifies :restart, 'runit_service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && omnibus_helper.resource_available?('runit_service[postgresql]')
 end
 
 # This template is needed to make the gitlab-psql script and PgHelper work
