@@ -157,7 +157,7 @@ if node['gitlab']['geo-postgresql']['enable']
     external_host fdw_helper.fdw_host
     external_port fdw_helper.fdw_port
     external_name fdw_helper.fdw_dbname
-    helper geo_pg_helper
+    pg_helper geo_pg_helper
     action :delete
   end
 
