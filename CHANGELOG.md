@@ -69,6 +69,17 @@ omnibus-gitlab repository.
 - Remove apt-transport-https as apt natively support https. (Simon Deziel)
 
 
+## 13.9.6 (2021-04-13)
+
+### Security (1 change)
+
+- Only allow exiftool to process JPEG and TIFF files.
+
+### Fixed (1 change)
+
+- Update AWS Marketplace Release code to match new API requirements. !5146
+
+
 ## 13.9.5 (2021-03-31)
 
 ### Security (2 changes)
