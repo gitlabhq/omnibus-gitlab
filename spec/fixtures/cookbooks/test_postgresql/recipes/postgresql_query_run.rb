@@ -8,5 +8,5 @@ end
 postgresql_query 'create schema' do
   db_name 'omnibus_test'
   query "CREATE SCHEMA example AUTHORIZATION foobar;"
-  pg_helper GeoPgHelper.new(node)
+  helper GeoPgHelper.new(node)
 end

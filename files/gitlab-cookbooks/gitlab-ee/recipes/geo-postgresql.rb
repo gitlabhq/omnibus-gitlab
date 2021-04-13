@@ -134,7 +134,7 @@ geo_database_name = node['gitlab']['geo-secondary']['db_database']
 if node['gitlab']['geo-postgresql']['enable']
   postgresql_user geo_pg_user do
     password "md5#{geo_pg_user_password}" unless geo_pg_user_password.nil?
-    pg_helper geo_pg_helper
+    helper geo_pg_helper
     action :create
   end
 
@@ -142,13 +142,13 @@ if node['gitlab']['geo-postgresql']['enable']
     owner geo_pg_user
     database_port geo_pg_port
     database_socket node['gitlab']['geo-postgresql']['unix_socket_directory']
-    pg_helper geo_pg_helper
+    helper geo_pg_helper
     action :create
   end
 
   postgresql_extension 'pg_trgm' do
     database geo_database_name
-    pg_helper geo_pg_helper
+    helper geo_pg_helper
     action :enable
   end
 
@@ -157,7 +157,7 @@ if node['gitlab']['geo-postgresql']['enable']
     external_host fdw_helper.fdw_host
     external_port fdw_helper.fdw_port
     external_name fdw_helper.fdw_dbname
-    pg_helper geo_pg_helper
+    helper geo_pg_helper
     action :delete
   end
 

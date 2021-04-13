@@ -6,7 +6,7 @@ RSpec.describe 'pgbouncer_user' do
     let(:chef_run) { runner.converge('test_gitlab_ee::pgbouncer_user_create_geo') }
     it 'should create the pgbouncer user' do
       expect(chef_run).to create_postgresql_user('pgbouncer-geo').with(
-        pg_helper: an_instance_of(GeoPgHelper),
+        helper: an_instance_of(GeoPgHelper),
         username: 'pgbouncer-geo',
         password: 'md5fakepassword-geo'
       )
@@ -28,7 +28,7 @@ RSpec.describe 'pgbouncer_user' do
     let(:chef_run) { runner.converge('test_gitlab_ee::pgbouncer_user_create_rails') }
     it 'should create the pgbouncer user' do
       expect(chef_run).to create_postgresql_user('pgbouncer-rails').with(
-        pg_helper: an_instance_of(PgHelper),
+        helper: an_instance_of(PgHelper),
         username: 'pgbouncer-rails',
         password: 'md5fakepassword-rails'
       )

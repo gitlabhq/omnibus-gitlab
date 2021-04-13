@@ -1,5 +1,5 @@
 pgbouncer_user 'rails' do
-  pg_helper PgHelper.new(node)
+  helper PgHelper.new(node)
   user 'pgbouncer-rails'
   password 'fakepassword-rails'
   database 'fakedb-rails'
