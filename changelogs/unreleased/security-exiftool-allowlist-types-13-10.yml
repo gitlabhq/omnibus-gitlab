@@ -1,5 +1,0 @@
----
-title: Only allow exiftool to process JPEG and TIFF files
-merge_request:
-author:
-type: security
