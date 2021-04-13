@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.10.3 (2021-04-13)
+
+### Security (1 change)
+
+- Only allow exiftool to process JPEG and TIFF files.
+
+### Fixed (1 change)
+
+- Update AWS Marketplace Release code to match new API requirements. !5146
+
+
 ## 13.10.2 (2021-04-01)
 
 ### Fixed (1 change)
