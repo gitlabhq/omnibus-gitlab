@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.8.8 (2021-04-13)
+
+### Security (1 change)
+
+- Only allow exiftool to process JPEG and TIFF files.
+
+
 ## 13.8.7 (2021-03-31)
 
 ### Security (2 changes)
