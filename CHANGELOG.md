@@ -145,6 +145,13 @@ omnibus-gitlab repository.
 - Update Mattermost to 5.31.1. !5003 (Harrison Healey)
 
 
+## 13.8.8 (2021-04-13)
+
+### Security (1 change)
+
+- Only allow exiftool to process JPEG and TIFF files.
+
+
 ## 13.8.7 (2021-03-31)
 
 ### Security (2 changes)
