@@ -80,6 +80,7 @@ end
 
 alt_document_root = node['gitlab']['gitlab-workhorse']['alt_document_root']
 _redis_host, _redis_port, redis_password = redis_helper.redis_params
+workhorse_keywatcher = node['gitlab']['gitlab-workhorse']['workhorse_keywatcher']
 redis_url = redis_helper.redis_url.to_s
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 redis_sentinel_master = node['redis']['master_name']
@@ -100,6 +101,7 @@ template config_file_path do
     alt_document_root: alt_document_root,
     object_store: object_store,
     object_store_provider: object_store_provider,
+    workhorse_keywatcher: workhorse_keywatcher,
     redis_url: redis_url,
     password: redis_password,
     sentinels: redis_sentinels,
