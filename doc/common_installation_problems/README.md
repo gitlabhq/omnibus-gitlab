@@ -792,3 +792,30 @@ GitLab services will be unable to establish network connections.
 
 This can be resolved by fixing the DNS configurations (or `/etc/hosts`) to
 resolve the hosts to an **IPv4** address instead of **IPv6**.
+
+## `URI::InvalidComponentError (bad component(expected host component: my_url.tld)` when `external_url` contains underscores
+
+If you have set `external_url` with underscores (for example `https://my_company.example.com`), you may face the following issues with CI/CD:
+
+- It will not be possible to open project's **Settings > CI/CD** page.
+- Runners will not pick up jobs and will fail with an error 500.
+
+If that's the case, [`production.log`](https://docs.gitlab.com/ee/administration/logs.html#productionlog) will contain the following error:
+
+```plaintext
+Completed 500 Internal Server Error in 50ms (ActiveRecord: 4.9ms | Elasticsearch: 0.0ms | Allocations: 17672)
+
+URI::InvalidComponentError (bad component(expected host component): my_url.tld):
+
+lib/api/helpers/related_resources_helpers.rb:29:in `expose_url'
+ee/app/controllers/ee/projects/settings/ci_cd_controller.rb:19:in `show'
+ee/lib/gitlab/ip_address_state.rb:10:in `with'
+ee/app/controllers/ee/application_controller.rb:44:in `set_current_ip_address'
+app/controllers/application_controller.rb:486:in `set_current_admin'
+lib/gitlab/session.rb:11:in `with_session'
+app/controllers/application_controller.rb:477:in `set_session_storage'
+lib/gitlab/i18n.rb:73:in `with_locale'
+lib/gitlab/i18n.rb:79:in `with_user_locale'
+```
+
+As a workaround, avoid using underscores in `external_url`. There is an open issue about it: [Setting `external_url` with underscore results in a broken GitLab CI/CD functionality](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6077).
