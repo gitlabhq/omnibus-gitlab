@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'rubocop'
 require_relative '../../../lib/rubocop/cop/avoid_using_env'
 require_relative '../../support/rubocop_helper.rb'
 
