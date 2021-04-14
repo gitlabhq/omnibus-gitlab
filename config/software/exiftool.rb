@@ -34,6 +34,9 @@ build do
   # from the website
   patch source: 'add-license-file.patch'
 
+  # Only support JPEG and TIFF files
+  patch source: 'allowlist-types.patch'
+
   # Ensuring a bin directory exists
   command "mkdir -p #{install_dir}/embedded/bin"
 
