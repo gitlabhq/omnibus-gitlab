@@ -532,6 +532,13 @@ production: &base
       cron: "<%= @geo_secondary_registry_consistency_worker %>"
     <% end %>
 
+    # GitLab Geo Secondary Usage Data worker
+    # NOTE: This will only take effect if Geo and Usage Data are enabled (secondary nodes only)
+    <% unless @geo_secondary_usage_data_cron_worker.nil? %>
+    geo_secondary_usage_data_cron_worker:
+      cron: "<%= @geo_secondary_usage_data_cron_worker %>"
+    <% end %>
+
     # GitLab Geo file download dispatch worker
     # NOTE: This will only take effect if Geo is enabled
     <% unless @geo_file_download_dispatch_worker_cron.nil? %>
