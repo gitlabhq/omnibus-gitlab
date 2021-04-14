@@ -114,7 +114,7 @@ file pg_helper.ssl_key_file do
 end
 
 postgresql_config 'gitlab' do
-  pg_helper pg_helper
+  helper pg_helper
   notifies :run, 'execute[reload postgresql]', :immediately if omnibus_helper.should_notify?('postgresql') && !pg_helper.delegated?
   notifies :run, 'execute[start postgresql]', :immediately if omnibus_helper.service_dir_enabled?('postgresql') && !pg_helper.delegated?
 end

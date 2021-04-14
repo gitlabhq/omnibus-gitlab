@@ -1,9 +1,9 @@
 property :name, String, name_property: true
 property :username, default: lazy { node['postgresql']['username'] }
-property :pg_helper, default: lazy { PgHelper.new(node) }
+property :helper, default: lazy { PgHelper.new(node) }
 
 action :create do
-  postgresql_helper = new_resource.pg_helper
+  postgresql_helper = new_resource.helper
 
   template postgresql_helper.postgresql_config do
     geo_config = { geo_secondary_enabled: node.dig('gitlab', 'geo-secondary', 'enable') }

@@ -1,5 +1,5 @@
 pgbouncer_user 'geo' do
-  pg_helper GeoPgHelper.new(node)
+  helper GeoPgHelper.new(node)
   user 'pgbouncer-geo'
   password 'fakepassword-geo'
   database 'fakedb-geo'

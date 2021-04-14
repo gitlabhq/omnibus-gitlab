@@ -23,7 +23,7 @@ auth_query = node['pgbouncer']['auth_query']
 
 if pgb_helper.create_pgbouncer_user?('geo-postgresql')
   pgbouncer_user 'geo' do
-    pg_helper lazy { GeoPgHelper.new(node) }
+    helper lazy { GeoPgHelper.new(node) }
     user node['gitlab']['geo-postgresql']['pgbouncer_user']
     password node['gitlab']['geo-postgresql']['pgbouncer_user_password']
     database node['gitlab']['geo-secondary']['db_database']
@@ -34,7 +34,7 @@ end
 
 if pgb_helper.create_pgbouncer_user?('postgresql') || pgb_helper.create_pgbouncer_user?('patroni')
   pgbouncer_user 'rails' do
-    pg_helper lazy { PgHelper.new(node) }
+    helper lazy { PgHelper.new(node) }
     user node['postgresql']['pgbouncer_user']
     password node['postgresql']['pgbouncer_user_password']
     database node['gitlab']['gitlab-rails']['db_database']
