@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.10.3 (2021-04-13)
+
+### Security (1 change)
+
+- Only allow exiftool to process JPEG and TIFF files.
+
+### Fixed (1 change)
+
+- Update AWS Marketplace Release code to match new API requirements. !5146
+
+
 ## 13.10.2 (2021-04-01)
 
 ### Fixed (1 change)
@@ -67,6 +78,17 @@ omnibus-gitlab repository.
 - Enable `nakayoshi_fork` by default.
 - Update Mattermost to 5.32.1.
 - Remove apt-transport-https as apt natively support https. (Simon Deziel)
+
+
+## 13.9.6 (2021-04-13)
+
+### Security (1 change)
+
+- Only allow exiftool to process JPEG and TIFF files.
+
+### Fixed (1 change)
+
+- Update AWS Marketplace Release code to match new API requirements. !5146
 
 
 ## 13.9.5 (2021-03-31)
@@ -143,6 +165,13 @@ omnibus-gitlab repository.
 - Remove Bundler 1.17.3 bundling. !4903 (Takuya Noguchi)
 - Bump Grafana version to 7.3.7. !4933
 - Update Mattermost to 5.31.1. !5003 (Harrison Healey)
+
+
+## 13.8.8 (2021-04-13)
+
+### Security (1 change)
+
+- Only allow exiftool to process JPEG and TIFF files.
 
 
 ## 13.8.7 (2021-03-31)
