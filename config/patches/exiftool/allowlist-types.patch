@@ -1,0 +1,657 @@
+--- a/lib/Image/ExifTool.pm
++++ b/lib/Image/ExifTool.pm
+@@ -180,17 +180,10 @@ $defaultLang = 'en';    # default language
+ # 2) Put types with weak file signatures at end of list to avoid false matches
+ # 3) PLIST must be in this list for the binary PLIST format, although it may
+ #    cause a file to be checked twice for XML
+-@fileTypes = qw(JPEG EXV CRW DR4 TIFF GIF MRW RAF X3F JP2 PNG MIE MIFF PS PDF
+-                PSD XMP BMP BPG PPM RIFF AIFF ASF MOV MPEG Real SWF PSP FLV OGG
+-                FLAC APE MPC MKV MXF DV PMP IND PGF ICC ITC FLIR FLIF FPF LFP
+-                HTML VRD RTF FITS XCF DSS QTIF FPX PICT ZIP GZIP PLIST RAR BZ2
+-                TAR RWZ EXE EXR HDR CHM LNK WMF AVC DEX DPX RAW Font RSRC M2TS
+-                PHP PCX DCX DWF DWG WTV Torrent VCard LRI R3D AA PDB MOI ISO
+-                ALIAS JSON MP3 DICOM PCD);
++@fileTypes = qw(JPEG TIFF);
+
+ # file types that we can write (edit)
+-my @writeTypes = qw(JPEG TIFF GIF CRW MRW ORF RAF RAW PNG MIE PSD XMP PPM EPS
+-                    X3F PS PDF ICC VRD DR4 JP2 EXIF AI AIT IND MOV EXV FLIF);
++my @writeTypes = qw(JPEG TIFF);
+ my %writeTypes; # lookup for writable file types (hash filled if required)
+
+ # file extensions that we can't write for various base types
+@@ -209,319 +202,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
+ # (if extension may be more than one type, the type is a list where
+ #  the writable type should come first if it exists)
+ %fileTypeLookup = (
+-   '3FR' => ['TIFF', 'Hasselblad RAW format'],
+-   '3G2' => ['MOV',  '3rd Gen. Partnership Project 2 audio/video'],
+-   '3GP' => ['MOV',  '3rd Gen. Partnership Project audio/video'],
+-   '3GP2'=>  '3G2',
+-   '3GPP'=>  '3GP',
+-    A    => ['EXE',  'Static library'],
+-    AA   => ['AA',   'Audible Audiobook'],
+-    AAE  => ['PLIST','Apple edit information'],
+-    AAX  => ['MOV',  'Audible Enhanced Audiobook'],
+-    ACR  => ['DICOM','American College of Radiology ACR-NEMA'],
+-    ACFM => ['Font', 'Adobe Composite Font Metrics'],
+-    AFM  => ['Font', 'Adobe Font Metrics'],
+-    AMFM => ['Font', 'Adobe Multiple Master Font Metrics'],
+-    AI   => [['PDF','PS'], 'Adobe Illustrator'],
+-    AIF  =>  'AIFF',
+-    AIFC => ['AIFF', 'Audio Interchange File Format Compressed'],
+-    AIFF => ['AIFF', 'Audio Interchange File Format'],
+-    AIT  =>  'AI',
+-    ALIAS=> ['ALIAS','MacOS file alias'],
+-    APE  => ['APE',  "Monkey's Audio format"],
+-    APNG => ['PNG',  'Animated Portable Network Graphics'],
+-    ARW  => ['TIFF', 'Sony Alpha RAW format'],
+-    ARQ  => ['TIFF', 'Sony Alpha Pixel-Shift RAW format'],
+-    ASF  => ['ASF',  'Microsoft Advanced Systems Format'],
+-    AVC  => ['AVC',  'Advanced Video Connection'], # (extensions are actually _AU,_AD,_IM,_ID)
+-    AVI  => ['RIFF', 'Audio Video Interleaved'],
+-    AZW  =>  'MOBI', # (see http://wiki.mobileread.com/wiki/AZW)
+-    AZW3 =>  'MOBI',
+-    BMP  => ['BMP',  'Windows Bitmap'],
+-    BPG  => ['BPG',  'Better Portable Graphics'],
+-    BTF  => ['BTF',  'Big Tagged Image File Format'], #(unofficial)
+-    BZ2  => ['BZ2',  'BZIP2 archive'],
+-    CHM  => ['CHM',  'Microsoft Compiled HTML format'],
+-    CIFF => ['CRW',  'Camera Image File Format'],
+-    COS  => ['COS',  'Capture One Settings'],
+-    CR2  => ['TIFF', 'Canon RAW 2 format'],
+-    CR3  => ['MOV',  'Canon RAW 3 format'],
+-    CRM  => ['MOV',  'Canon RAW Movie'],
+-    CRW  => ['CRW',  'Canon RAW format'],
+-    CS1  => ['PSD',  'Sinar CaptureShop 1-Shot RAW'],
+-    DC3  =>  'DICM',
+-    DCM  =>  'DICM',
+-    DCP  => ['TIFF', 'DNG Camera Profile'],
+-    DCR  => ['TIFF', 'Kodak Digital Camera RAW'],
+-    DCX  => ['DCX',  'Multi-page PC Paintbrush'],
+-    DEX  => ['DEX',  'Dalvik Executable format'],
+-    DFONT=> ['Font', 'Macintosh Data fork Font'],
+-    DIB  => ['BMP',  'Device Independent Bitmap'],
+-    DIC  =>  'DICM',
+-    DICM => ['DICOM','Digital Imaging and Communications in Medicine'],
+-    DIVX => ['ASF',  'DivX media format'],
+-    DJV  =>  'DJVU',
+-    DJVU => ['AIFF', 'DjVu image'],
+-    DLL  => ['EXE',  'Windows Dynamic Link Library'],
+-    DNG  => ['TIFF', 'Digital Negative'],
+-    DOC  => ['FPX',  'Microsoft Word Document'],
+-    DOCM => [['ZIP','FPX'], 'Office Open XML Document Macro-enabled'],
+-    # Note: I have seen a password-protected DOCX file which was FPX-like, so I assume
+-    # that any other MS Office file could be like this too.  The only difference is
+-    # that the ZIP and FPX formats are checked first, so if this is wrong, no biggie.
+-    DOCX => [['ZIP','FPX'], 'Office Open XML Document'],
+-    DOT  => ['FPX',  'Microsoft Word Template'],
+-    DOTM => [['ZIP','FPX'], 'Office Open XML Document Template Macro-enabled'],
+-    DOTX => [['ZIP','FPX'], 'Office Open XML Document Template'],
+-    DPX  => ['DPX',  'Digital Picture Exchange' ],
+-    DR4  => ['DR4',  'Canon VRD version 4 Recipe'],
+-    DS2  => ['DSS',  'Digital Speech Standard 2'],
+-    DSS  => ['DSS',  'Digital Speech Standard'],
+-    DV   => ['DV',   'Digital Video'],
+-    DVB  => ['MOV',  'Digital Video Broadcasting'],
+-   'DVR-MS'=>['ASF', 'Microsoft Digital Video recording'],
+-    DWF  => ['DWF',  'Autodesk drawing (Design Web Format)'],
+-    DWG  => ['DWG',  'AutoCAD Drawing'],
+-    DYLIB=> ['EXE',  'Mach-O Dynamic Link Library'],
+-    EIP  => ['ZIP',  'Capture One Enhanced Image Package'],
+-    EPS  => ['EPS',  'Encapsulated PostScript Format'],
+-    EPS2 =>  'EPS',
+-    EPS3 =>  'EPS',
+-    EPSF =>  'EPS',
+-    EPUB => ['ZIP',  'Electronic Publication'],
+-    ERF  => ['TIFF', 'Epson Raw Format'],
+-    EXE  => ['EXE',  'Windows executable file'],
+-    EXR  => ['EXR', 'Open EXR'],
+-    EXIF => ['EXIF', 'Exchangable Image File Metadata'],
+-    EXV  => ['EXV',  'Exiv2 metadata'],
+-    F4A  => ['MOV',  'Adobe Flash Player 9+ Audio'],
+-    F4B  => ['MOV',  'Adobe Flash Player 9+ audio Book'],
+-    F4P  => ['MOV',  'Adobe Flash Player 9+ Protected'],
+-    F4V  => ['MOV',  'Adobe Flash Player 9+ Video'],
+-    FFF  => [['TIFF','FLIR'], 'Hasselblad Flexible File Format'],
+-    FIT  =>  'FITS',
+-    FITS => ['FITS', 'Flexible Image Transport System'],
+-    FLAC => ['FLAC', 'Free Lossless Audio Codec'],
+-    FLA  => ['FPX',  'Macromedia/Adobe Flash project'],
+-    FLIF => ['FLIF', 'Free Lossless Image Format'],
+-    FLIR => ['FLIR', 'FLIR File Format'], # (not an actual extension)
+-    FLV  => ['FLV',  'Flash Video'],
+-    FPF  => ['FPF',  'FLIR Public image Format'],
+-    FPX  => ['FPX',  'FlashPix'],
+-    GIF  => ['GIF',  'Compuserve Graphics Interchange Format'],
+-    GPR  => ['TIFF', 'GoPro RAW'],
+-    GZ   =>  'GZIP',
+-    GZIP => ['GZIP', 'GNU ZIP compressed archive'],
+-    HDP  => ['TIFF', 'Windows HD Photo'],
+-    HDR  => ['HDR',  'Radiance RGBE High Dynamic Range'],
+-    HEIC => ['MOV',  'High Efficiency Image Format still image'],
+-    HEIF => ['MOV',  'High Efficiency Image Format'],
+-    HTM  =>  'HTML',
+-    HTML => ['HTML', 'HyperText Markup Language'],
+-    ICAL =>  'ICS',
+-    ICC  => ['ICC',  'International Color Consortium'],
+-    ICM  =>  'ICC',
+-    ICS  => ['VCard','iCalendar Schedule'],
+-    IDML => ['ZIP',  'Adobe InDesign Markup Language'],
+-    IIQ  => ['TIFF', 'Phase One Intelligent Image Quality RAW'],
+-    IND  => ['IND',  'Adobe InDesign'],
+-    INDD => ['IND',  'Adobe InDesign Document'],
+-    INDT => ['IND',  'Adobe InDesign Template'],
+-    INSV => ['MOV',  'Insta360 Video'],
+-    INX  => ['XMP',  'Adobe InDesign Interchange'],
+-    ISO  => ['ISO',  'ISO 9660 disk image'],
+-    ITC  => ['ITC',  'iTunes Cover Flow'],
+-    J2C  => ['JP2',  'JPEG 2000 codestream'],
+-    J2K  =>  'J2C',
+-    JNG  => ['PNG',  'JPG Network Graphics'],
+-    JP2  => ['JP2',  'JPEG 2000 file'],
+-    # JP4? - looks like a JPEG but the image data is different
+-    JPC  =>  'J2C',
+-    JPE  =>  'JPEG',
+     JPEG => ['JPEG', 'Joint Photographic Experts Group'],
+-    JPF  =>  'JP2',
+     JPG =>   'JPEG',
+-    JPM  => ['JP2',  'JPEG 2000 compound image'],
+-    JPX  => ['JP2',  'JPEG 2000 with extensions'],
+-    JSON => ['JSON', 'JavaScript Object Notation'],
+-    JXR  => ['TIFF', 'JPEG XR'],
+-    K25  => ['TIFF', 'Kodak DC25 RAW'],
+-    KDC  => ['TIFF', 'Kodak Digital Camera RAW'],
+-    KEY  => ['ZIP',  'Apple Keynote presentation'],
+-    KTH  => ['ZIP',  'Apple Keynote Theme'],
+-    LA   => ['RIFF', 'Lossless Audio'],
+-    LFP  => ['LFP',  'Lytro Light Field Picture'],
+-    LFR  =>  'LFP', # (Light Field RAW)
+-    LNK  => ['LNK',  'Windows shortcut'],
+-    LRI  => ['LRI',  'Light RAW'],
+-    LRV  => ['MOV',  'Low-Resolution Video'],
+-    M2T  =>  'M2TS',
+-    M2TS => ['M2TS', 'MPEG-2 Transport Stream'],
+-    M2V  => ['MPEG', 'MPEG-2 Video'],
+-    M4A  => ['MOV',  'MPEG-4 Audio'],
+-    M4B  => ['MOV',  'MPEG-4 audio Book'],
+-    M4P  => ['MOV',  'MPEG-4 Protected'],
+-    M4V  => ['MOV',  'MPEG-4 Video'],
+-    MAX  => ['FPX',  '3D Studio MAX'],
+-    MEF  => ['TIFF', 'Mamiya (RAW) Electronic Format'],
+-    MIE  => ['MIE',  'Meta Information Encapsulation format'],
+-    MIF  =>  'MIFF',
+-    MIFF => ['MIFF', 'Magick Image File Format'],
+-    MKA  => ['MKV',  'Matroska Audio'],
+-    MKS  => ['MKV',  'Matroska Subtitle'],
+-    MKV  => ['MKV',  'Matroska Video'],
+-    MNG  => ['PNG',  'Multiple-image Network Graphics'],
+-    MOBI => ['PDB',  'Mobipocket electronic book'],
+-    MODD => ['PLIST','Sony Picture Motion metadata'],
+-    MOI  => ['MOI',  'MOD Information file'],
+-    MOS  => ['TIFF', 'Creo Leaf Mosaic'],
+-    MOV  => ['MOV',  'Apple QuickTime movie'],
+-    MP3  => ['MP3',  'MPEG-1 Layer 3 audio'],
+-    MP4  => ['MOV',  'MPEG-4 video'],
+-    MPC  => ['MPC',  'Musepack Audio'],
+-    MPEG => ['MPEG', 'MPEG-1 or MPEG-2 audio/video'],
+-    MPG  =>  'MPEG',
+-    MPO  => ['JPEG', 'Extended Multi-Picture format'],
+-    MQV  => ['MOV',  'Sony Mobile Quicktime Video'],
+-    MRW  => ['MRW',  'Minolta RAW format'],
+-    MTS  =>  'M2TS',
+-    MXF  => ['MXF',  'Material Exchange Format'],
+-  # NDPI => ['TIFF', 'Hamamatsu NanoZoomer Digital Pathology Image'],
+-    NEF  => ['TIFF', 'Nikon (RAW) Electronic Format'],
+-    NEWER => 'COS',
+-    NMBTEMPLATE => ['ZIP','Apple Numbers Template'],
+-    NRW  => ['TIFF', 'Nikon RAW (2)'],
+-    NUMBERS => ['ZIP','Apple Numbers spreadsheet'],
+-    O    => ['EXE',  'Relocatable Object'],
+-    ODB  => ['ZIP',  'Open Document Database'],
+-    ODC  => ['ZIP',  'Open Document Chart'],
+-    ODF  => ['ZIP',  'Open Document Formula'],
+-    ODG  => ['ZIP',  'Open Document Graphics'],
+-    ODI  => ['ZIP',  'Open Document Image'],
+-    ODP  => ['ZIP',  'Open Document Presentation'],
+-    ODS  => ['ZIP',  'Open Document Spreadsheet'],
+-    ODT  => ['ZIP',  'Open Document Text file'],
+-    OFR  => ['RIFF', 'OptimFROG audio'],
+-    OGG  => ['OGG',  'Ogg Vorbis audio file'],
+-    OGV  => ['OGG',  'Ogg Video file'],
+-    OPUS => ['OGG',  'Ogg Opus audio file'],
+-    ORF  => ['ORF',  'Olympus RAW format'],
+-    OTF  => ['Font', 'Open Type Font'],
+-    PAC  => ['RIFF', 'Lossless Predictive Audio Compression'],
+-    PAGES => ['ZIP', 'Apple Pages document'],
+-    PBM  => ['PPM',  'Portable BitMap'],
+-    PCD  => ['PCD',  'Kodak Photo CD Image Pac'],
+-    PCT  =>  'PICT',
+-    PCX  => ['PCX',  'PC Paintbrush'],
+-    PDB  => ['PDB',  'Palm Database'],
+-    PDF  => ['PDF',  'Adobe Portable Document Format'],
+-    PEF  => ['TIFF', 'Pentax (RAW) Electronic Format'],
+-    PFA  => ['Font', 'PostScript Font ASCII'],
+-    PFB  => ['Font', 'PostScript Font Binary'],
+-    PFM  => ['Font', 'Printer Font Metrics'],
+-    PGF  => ['PGF',  'Progressive Graphics File'],
+-    PGM  => ['PPM',  'Portable Gray Map'],
+-    PHP  => ['PHP',  'PHP Hypertext Preprocessor'],
+-    PHP3 =>  'PHP',
+-    PHP4 =>  'PHP',
+-    PHP5 =>  'PHP',
+-    PHPS =>  'PHP',
+-    PHTML=>  'PHP',
+-    PICT => ['PICT', 'Apple PICTure'],
+-    PLIST=> ['PLIST','Apple Property List'],
+-    PMP  => ['PMP',  'Sony DSC-F1 Cyber-Shot PMP'], # should stand for Proprietery Metadata Package ;)
+-    PNG  => ['PNG',  'Portable Network Graphics'],
+-    POT  => ['FPX',  'Microsoft PowerPoint Template'],
+-    POTM => [['ZIP','FPX'], 'Office Open XML Presentation Template Macro-enabled'],
+-    POTX => [['ZIP','FPX'], 'Office Open XML Presentation Template'],
+-    PPAM => [['ZIP','FPX'], 'Office Open XML Presentation Addin Macro-enabled'],
+-    PPAX => [['ZIP','FPX'], 'Office Open XML Presentation Addin'],
+-    PPM  => ['PPM',  'Portable Pixel Map'],
+-    PPS  => ['FPX',  'Microsoft PowerPoint Slideshow'],
+-    PPSM => [['ZIP','FPX'], 'Office Open XML Presentation Slideshow Macro-enabled'],
+-    PPSX => [['ZIP','FPX'], 'Office Open XML Presentation Slideshow'],
+-    PPT  => ['FPX',  'Microsoft PowerPoint Presentation'],
+-    PPTM => [['ZIP','FPX'], 'Office Open XML Presentation Macro-enabled'],
+-    PPTX => [['ZIP','FPX'], 'Office Open XML Presentation'],
+-    PRC  => ['PDB',  'Palm Database'],
+-    PS   => ['PS',   'PostScript'],
+-    PS2  =>  'PS',
+-    PS3  =>  'PS',
+-    PSB  => ['PSD',  'Photoshop Large Document'],
+-    PSD  => ['PSD',  'Photoshop Document'],
+-    PSDT => ['PSD',  'Photoshop Document Template'],
+-    PSP  => ['PSP',  'Paint Shop Pro'],
+-    PSPFRAME => 'PSP',
+-    PSPIMAGE => 'PSP',
+-    PSPSHAPE => 'PSP',
+-    PSPTUBE  => 'PSP',
+-    QIF  =>  'QTIF',
+-    QT   =>  'MOV',
+-    QTI  =>  'QTIF',
+-    QTIF => ['QTIF', 'QuickTime Image File'],
+-    R3D  => ['R3D',  'Redcode RAW Video'],
+-    RA   => ['Real', 'Real Audio'],
+-    RAF  => ['RAF',  'FujiFilm RAW Format'],
+-    RAM  => ['Real', 'Real Audio Metafile'],
+-    RAR  => ['RAR',  'RAR Archive'],
+-    RAW  => [['RAW','TIFF'], 'Kyocera Contax N Digital RAW or Panasonic RAW'],
+-    RIF  =>  'RIFF',
+-    RIFF => ['RIFF', 'Resource Interchange File Format'],
+-    RM   => ['Real', 'Real Media'],
+-    RMVB => ['Real', 'Real Media Variable Bitrate'],
+-    RPM  => ['Real', 'Real Media Plug-in Metafile'],
+-    RSRC => ['RSRC', 'Mac OS Resource'],
+-    RTF  => ['RTF',  'Rich Text Format'],
+-    RV   => ['Real', 'Real Video'],
+-    RW2  => ['TIFF', 'Panasonic RAW 2'],
+-    RWL  => ['TIFF', 'Leica RAW'],
+-    RWZ  => ['RWZ',  'Rawzor compressed image'],
+-    SEQ  => ['FLIR', 'FLIR image Sequence'],
+-    SKETCH => ['ZIP', 'Sketch design file'],
+-    SO   => ['EXE',  'Shared Object file'],
+-    SR2  => ['TIFF', 'Sony RAW Format 2'],
+-    SRF  => ['TIFF', 'Sony RAW Format'],
+-    SRW  => ['TIFF', 'Samsung RAW format'],
+-    SVG  => ['XMP',  'Scalable Vector Graphics'],
+-    SWF  => ['SWF',  'Shockwave Flash'],
+-    TAR  => ['TAR',  'TAR archive'],
+-    THM  => ['JPEG', 'Thumbnail'],
+-    THMX => [['ZIP','FPX'], 'Office Open XML Theme'],
+-    TIF  =>  'TIFF',
+     TIFF => ['TIFF', 'Tagged Image File Format'],
+-    TORRENT => ['Torrent', 'BitTorrent description file'],
+-    TS   =>  'M2TS',
+-    TTC  => ['Font', 'True Type Font Collection'],
+-    TTF  => ['Font', 'True Type Font'],
+-    TUB  => 'PSP',
+-    VCARD=> ['VCard','Virtual Card'],
+-    VCF  => 'VCARD',
+-    VOB  => ['MPEG', 'Video Object'],
+-    VRD  => ['VRD',  'Canon VRD Recipe Data'],
+-    VSD  => ['FPX',  'Microsoft Visio Drawing'],
+-    WAV  => ['RIFF', 'WAVeform (Windows digital audio)'],
+-    WDP  => ['TIFF', 'Windows Media Photo'],
+-    WEBM => ['MKV',  'Google Web Movie'],
+-    WEBP => ['RIFF', 'Google Web Picture'],
+-    WMA  => ['ASF',  'Windows Media Audio'],
+-    WMF  => ['WMF',  'Windows Metafile Format'],
+-    WMV  => ['ASF',  'Windows Media Video'],
+-    WV   => ['RIFF', 'WavePack lossless audio'],
+-    X3F  => ['X3F',  'Sigma RAW format'],
+-    XCF  => ['XCF',  'GIMP native image format'],
+-    XHTML=> ['HTML', 'Extensible HyperText Markup Language'],
+-    XLA  => ['FPX',  'Microsoft Excel Add-in'],
+-    XLAM => [['ZIP','FPX'], 'Office Open XML Spreadsheet Add-in Macro-enabled'],
+-    XLS  => ['FPX',  'Microsoft Excel Spreadsheet'],
+-    XLSB => [['ZIP','FPX'], 'Office Open XML Spreadsheet Binary'],
+-    XLSM => [['ZIP','FPX'], 'Office Open XML Spreadsheet Macro-enabled'],
+-    XLSX => [['ZIP','FPX'], 'Office Open XML Spreadsheet'],
+-    XLT  => ['FPX',  'Microsoft Excel Template'],
+-    XLTM => [['ZIP','FPX'], 'Office Open XML Spreadsheet Template Macro-enabled'],
+-    XLTX => [['ZIP','FPX'], 'Office Open XML Spreadsheet Template'],
+-    XMP  => ['XMP',  'Extensible Metadata Platform'],
+-    WTV  => ['WTV',  'Windows recorded TV show'],
+-    ZIP  => ['ZIP',  'ZIP archive'],
+ );
+
+ # typical extension for each file type (if different than FileType)
+--- a/lib/Image/ExifTool/AIFF.pm
++++ /dev/null
+@@ -1,312 +0,0 @@
+-#------------------------------------------------------------------------------
+-# File:         AIFF.pm
+-#
+-# Description:  Read AIFF meta information
+-#
+-# Revisions:    01/06/2006 - P. Harvey Created
+-#               09/22/2008 - PH Added DjVu support
+-#
+-# References:   1) http://developer.apple.com/documentation/QuickTime/INMAC/SOUND/imsoundmgr.30.htm#pgfId=3190
+-#               2) http://astronomy.swin.edu.au/~pbourke/dataformats/aiff/
+-#               3) http://www.mactech.com/articles/mactech/Vol.06/06.01/SANENormalized/
+-#------------------------------------------------------------------------------
+-
+-package Image::ExifTool::AIFF;
+-
+-use strict;
+-use vars qw($VERSION);
+-use Image::ExifTool qw(:DataAccess :Utils);
+-use Image::ExifTool::ID3;
+-
+-$VERSION = '1.10';
+-
+-# information for time/date-based tags (time zero is Jan 1, 1904)
+-my %timeInfo = (
+-    Groups => { 2 => 'Time' },
+-    ValueConv => 'ConvertUnixTime($val - ((66 * 365 + 17) * 24 * 3600))',
+-    PrintConv => '$self->ConvertDateTime($val)',
+-);
+-
+-# AIFF info
+-%Image::ExifTool::AIFF::Main = (
+-    GROUPS => { 2 => 'Audio' },
+-    NOTES => q{
+-        Tags extracted from Audio Interchange File Format (AIFF) files.  See
+-        L<http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/AIFF/AIFF.html> for
+-        the AIFF specification.
+-    },
+-#    FORM => 'Format',
+-    FVER => {
+-        Name => 'FormatVersion',
+-        SubDirectory => { TagTable => 'Image::ExifTool::AIFF::FormatVers' },
+-    },
+-    COMM => {
+-        Name => 'Common',
+-        SubDirectory => { TagTable => 'Image::ExifTool::AIFF::Common' },
+-    },
+-    COMT => {
+-        Name => 'Comment',
+-        SubDirectory => { TagTable => 'Image::ExifTool::AIFF::Comment' },
+-    },
+-    NAME => {
+-        Name => 'Name',
+-        ValueConv => '$self->Decode($val, "MacRoman")',
+-    },
+-    AUTH => {
+-        Name => 'Author',
+-        Groups => { 2 => 'Author' },
+-        ValueConv => '$self->Decode($val, "MacRoman")',
+-    },
+-   '(c) ' => {
+-        Name => 'Copyright',
+-        Groups => { 2 => 'Author' },
+-        ValueConv => '$self->Decode($val, "MacRoman")',
+-    },
+-    ANNO => {
+-        Name => 'Annotation',
+-        ValueConv => '$self->Decode($val, "MacRoman")',
+-    },
+-   'ID3 ' => {
+-        Name => 'ID3',
+-        SubDirectory => {
+-            TagTable => 'Image::ExifTool::ID3::Main',
+-            ProcessProc => \&Image::ExifTool::ID3::ProcessID3,
+-        },
+-    },
+-#    SSND => 'SoundData',
+-#    MARK => 'Marker',
+-#    INST => 'Instrument',
+-#    MIDI => 'MidiData',
+-#    AESD => 'AudioRecording',
+-#    APPL => 'ApplicationSpecific',
+-);
+-
+-%Image::ExifTool::AIFF::Common = (
+-    PROCESS_PROC => \&Image::ExifTool::ProcessBinaryData,
+-    GROUPS => { 2 => 'Audio' },
+-    FORMAT => 'int16u',
+-    0 => 'NumChannels',
+-    1 => { Name => 'NumSampleFrames', Format => 'int32u' },
+-    3 => 'SampleSize',
+-    4 => { Name => 'SampleRate', Format => 'extended' }, #3
+-    9 => {
+-        Name => 'CompressionType',
+-        Format => 'string[4]',
+-        PrintConv => {
+-            NONE => 'None',
+-            ACE2 => 'ACE 2-to-1',
+-            ACE8 => 'ACE 8-to-3',
+-            MAC3 => 'MAC 3-to-1',
+-            MAC6 => 'MAC 6-to-1',
+-            sowt => 'Little-endian, no compression',
+-            alaw => 'a-law',
+-            ALAW => 'A-law',
+-            ulaw => 'mu-law',
+-            ULAW => 'Mu-law',
+-           'GSM '=> 'GSM',
+-            G722 => 'G722',
+-            G726 => 'G726',
+-            G728 => 'G728',
+-        },
+-    },
+-    11 => { #PH
+-        Name => 'CompressorName',
+-        Format => 'pstring',
+-        ValueConv => '$self->Decode($val, "MacRoman")',
+-    },
+-);
+-
+-%Image::ExifTool::AIFF::FormatVers = (
+-    PROCESS_PROC => \&Image::ExifTool::ProcessBinaryData,
+-    FORMAT => 'int32u',
+-    0 => { Name => 'FormatVersionTime', %timeInfo },
+-);
+-
+-%Image::ExifTool::AIFF::Comment = (
+-    PROCESS_PROC => \&Image::ExifTool::AIFF::ProcessComment,
+-    GROUPS => { 2 => 'Audio' },
+-    0 => { Name => 'CommentTime', %timeInfo },
+-    1 => 'MarkerID',
+-    2 => {
+-        Name => 'Comment',
+-        ValueConv => '$self->Decode($val, "MacRoman")',
+-    },
+-);
+-
+-%Image::ExifTool::AIFF::Composite = (
+-    Duration => {
+-        Require => {
+-            0 => 'AIFF:SampleRate',
+-            1 => 'AIFF:NumSampleFrames',
+-        },
+-        RawConv => '($val[0] and $val[1]) ? $val[1] / $val[0] : undef',
+-        PrintConv => 'ConvertDuration($val)',
+-    },
+-);
+-
+-# add our composite tags
+-Image::ExifTool::AddCompositeTags('Image::ExifTool::AIFF');
+-
+-
+-#------------------------------------------------------------------------------
+-# Process AIFF Comment chunk
+-# Inputs: 0) ExifTool object reference, 1) DirInfo reference, 2) tag table ref
+-# Returns: 1 on success
+-sub ProcessComment($$$)
+-{
+-    my ($et, $dirInfo, $tagTablePtr) = @_;
+-    my $dataPt = $$dirInfo{DataPt};
+-    my $dirLen = $$dirInfo{DirLen};
+-    my $verbose = $et->Options('Verbose');
+-    return 0 unless $dirLen > 2;
+-    my $numComments = unpack('n',$$dataPt);
+-    my $pos = 2;
+-    my $i;
+-    $verbose and $et->VerboseDir('Comment', $numComments);
+-    for ($i=0; $i<$numComments; ++$i) {
+-        last if $pos + 8 > $dirLen;
+-        my ($time, $markerID, $size) = unpack("x${pos}Nnn", $$dataPt);
+-        $et->HandleTag($tagTablePtr, 0, $time);
+-        $et->HandleTag($tagTablePtr, 1, $markerID) if $markerID;
+-        $pos += 8;
+-        last if $pos + $size > $dirLen;
+-        my $val = substr($$dataPt, $pos, $size);
+-        $et->HandleTag($tagTablePtr, 2, $val);
+-        ++$size if $size & 0x01;    # account for padding byte if necessary
+-        $pos += $size;
+-    }
+-}
+-
+-#------------------------------------------------------------------------------
+-# Extract information from a AIFF file
+-# Inputs: 0) ExifTool object reference, 1) DirInfo reference
+-# Returns: 1 on success, 0 if this wasn't a valid AIFF file
+-sub ProcessAIFF($$)
+-{
+-    my ($et, $dirInfo) = @_;
+-    my $raf = $$dirInfo{RAF};
+-    my ($buff, $err, $tagTablePtr, $page, $type, $n);
+-
+-    # verify this is a valid AIFF file
+-    return 0 unless $raf->Read($buff, 12) == 12;
+-    my $fast3 = $$et{OPTIONS}{FastScan} && $$et{OPTIONS}{FastScan} == 3;
+-    my $pos = 12;
+-    # check for DjVu image
+-    if ($buff =~ /^AT&TFORM/) {
+-        # http://www.djvu.org/
+-        # http://djvu.sourceforge.net/specs/djvu3changes.txt
+-        my $buf2;
+-        return 0 unless $raf->Read($buf2, 4) == 4 and $buf2 =~ /^(DJVU|DJVM)/;
+-        $pos += 4;
+-        $buff = substr($buff, 4) . $buf2;
+-        $et->SetFileType('DJVU');
+-        return 1 if $fast3;
+-        $tagTablePtr = GetTagTable('Image::ExifTool::DjVu::Main');
+-        # modifiy FileType to indicate a multi-page document
+-        $$et{VALUE}{FileType} .= " (multi-page)" if $buf2 eq 'DJVM';
+-        $type = 'DjVu';
+-    } else {
+-        return 0 unless $buff =~ /^FORM....(AIF(F|C))/s;
+-        $et->SetFileType($1);
+-        return 1 if $fast3;
+-        $tagTablePtr = GetTagTable('Image::ExifTool::AIFF::Main');
+-        $type = 'AIFF';
+-    }
+-    SetByteOrder('MM');
+-    my $verbose = $et->Options('Verbose');
+-#
+-# Read through the IFF chunks
+-#
+-    for ($n=0;;++$n) {
+-        $raf->Read($buff, 8) == 8 or last;
+-        $pos += 8;
+-        my ($tag, $len) = unpack('a4N', $buff);
+-        my $tagInfo = $et->GetTagInfo($tagTablePtr, $tag);
+-        $et->VPrint(0, "AIFF '${tag}' chunk ($len bytes of data): ", $raf->Tell(),"\n");
+-        # AIFF chunks are padded to an even number of bytes
+-        my $len2 = $len + ($len & 0x01);
+-        if ($len2 > 100000000) {
+-            if ($len2 >= 0x80000000 and not $et->Options('LargeFileSupport')) {
+-                $et->Warn('End of processing at large chunk (LargeFileSupport not enabled)');
+-                last;
+-            }
+-            if ($tagInfo) {
+-                $et->Warn("Skipping large $$tagInfo{Name} chunk (> 100 MB)");
+-                undef $tagInfo;
+-            }
+-        }
+-        if ($tagInfo) {
+-            if ($$tagInfo{TypeOnly}) {
+-                $len = $len2 = 4;
+-                $page = ($page || 0) + 1;
+-                $et->VPrint(0, $$et{INDENT} . "Page $page:\n");
+-            }
+-            $raf->Read($buff, $len2) >= $len or $err=1, last;
+-            unless ($$tagInfo{SubDirectory} or $$tagInfo{Binary}) {
+-                $buff =~ s/\0+$//;  # remove trailing nulls
+-            }
+-            $et->HandleTag($tagTablePtr, $tag, $buff,
+-                DataPt => \$buff,
+-                DataPos => $pos,
+-                Start => 0,
+-                Size => $len,
+-            );
+-        } elsif (not $len) {
+-            next if ++$n < 100;
+-            $et->Warn('Aborting scan.  Too many empty chunks');
+-            last;
+-        } elsif ($verbose > 2 and $len2 < 1024000) {
+-            $raf->Read($buff, $len2) == $len2 or $err = 1, last;
+-            $et->VerboseDump(\$buff);
+-        } else {
+-            $raf->Seek($len2, 1) or $err=1, last;
+-        }
+-        $pos += $len2;
+-        $n = 0;
+-    }
+-    $err and $et->Warn("Error reading $type file (corrupted?)");
+-    return 1;
+-}
+-
+-1;  # end
+-
+-__END__
+-
+-=head1 NAME
+-
+-Image::ExifTool::AIFF - Read AIFF meta information
+-
+-=head1 SYNOPSIS
+-
+-This module is used by Image::ExifTool
+-
+-=head1 DESCRIPTION
+-
+-This module contains routines required by Image::ExifTool to extract
+-information from AIFF (Audio Interchange File Format) audio files.
+-
+-=head1 AUTHOR
+-
+-Copyright 2003-2019, Phil Harvey (phil at owl.phy.queensu.ca)
+-
+-This library is free software; you can redistribute it and/or modify it
+-under the same terms as Perl itself.
+-
+-=head1 REFERENCES
+-
+-=over 4
+-
+-=item L<http://developer.apple.com/documentation/QuickTime/INMAC/SOUND/imsoundmgr.30.htm#pgfId=3190>
+-
+-=item L<http://astronomy.swin.edu.au/~pbourke/dataformats/aiff/>
+-
+-=item L<http://www.mactech.com/articles/mactech/Vol.06/06.01/SANENormalized/>
+-
+-=back
+-
+-=head1 SEE ALSO
+-
+-L<Image::ExifTool::TagNames/AIFF Tags>,
+-L<Image::ExifTool(3pm)|Image::ExifTool>
+-
+-=cut
