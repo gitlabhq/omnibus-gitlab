@@ -37,6 +37,18 @@ gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 gitlab_rails['smtp_ca_file'] = '/path/to/your/cacert.pem'
 ```
 
+## SMTP connection pooling
+
+> [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/230717) in GitLab 13.5.
+
+You can enable SMTP connection pooling with the following setting:
+
+```ruby
+gitlab_rails['smtp_pool'] = true
+```
+
+This allows Sidekiq workers to reuse SMTP connections for multiple jobs. The maximum number of connections in the pool follows the [maximum concurrency configuration for Sidekiq](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#manage-concurrency).
+
 ## Example configurations
 
 ### SMTP on localhost

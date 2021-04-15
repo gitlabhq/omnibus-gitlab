@@ -3,10 +3,7 @@
 # and run `sudo gitlab-ctl reconfigure`.
 
 if Rails.env.production?
-  Gitlab::Application.config.action_mailer.delivery_method = :smtp
-
-  ActionMailer::Base.delivery_method = :smtp
-  ActionMailer::Base.smtp_settings = {
+  smtp_settings = {
     <% unless @smtp_authentication.nil? %>
     authentication: <%= @smtp_authentication.to_s.to_sym.inspect %>,
     <% end %>
@@ -15,4 +12,24 @@ if Rails.env.production?
     <%= "#{key}: #{value.inspect}," unless value.nil? %>
 <% end %>
   }
+
+<% if @smtp_pool %>
+  require 'mail/smtp_pool'
+
+  ActionMailer::Base.add_delivery_method :smtp_pool, Mail::SMTPPool
+
+  Gitlab::Application.config.action_mailer.delivery_method = :smtp_pool
+  ActionMailer::Base.delivery_method = :smtp_pool
+
+  ActionMailer::Base.smtp_pool_settings = {
+    pool: Mail::SMTPPool.create_pool(
+      smtp_settings.merge(pool_size: Gitlab::Runtime.max_threads)
+    )
+  }
+<% else %>
+  Gitlab::Application.config.action_mailer.delivery_method = :smtp
+  ActionMailer::Base.delivery_method = :smtp
+
+  ActionMailer::Base.smtp_settings = smtp_settings
+<% end %>
 end
