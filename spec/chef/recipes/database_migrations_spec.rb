@@ -7,7 +7,7 @@ require 'chef_helper'
 #
 
 RSpec.describe 'gitlab::database-migrations' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: ['rails_migration']).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -19,13 +19,14 @@ RSpec.describe 'gitlab::database-migrations' do
     end
 
     let(:bash_block) { chef_run.bash('migrate gitlab-rails database') }
+    let(:migration_block) { chef_run.rails_migration('gitlab-rails') }
 
     it 'runs the migrations' do
-      expect(chef_run).to run_bash('migrate gitlab-rails database')
+      expect(chef_run).to run_rails_migration('gitlab-rails')
     end
 
     it 'skips outdated external databases warning by default' do
-      expect(bash_block).to notify('ruby_block[check remote PG version]').to(:run)
+      expect(migration_block).to notify('ruby_block[check remote PG version]').to(:run)
       expect(chef_run.ruby_block('check remote PG version').should_skip?(:run)).to be_truthy
     end
 
@@ -34,9 +35,11 @@ RSpec.describe 'gitlab::database-migrations' do
 
       it 'warns about outdated databases' do
         allow(GitlabRailsEnvHelper).to receive(:db_version).and_return(11)
-        expect(bash_block).to notify('ruby_block[check remote PG version]').to(:run)
+
+        expect(migration_block).to notify('ruby_block[check remote PG version]').to(:run)
         expect(chef_run.ruby_block('check remote PG version').should_skip?(:run)).to be_falsey
         expect(LoggingHelper).to receive(:warning).with(/Support for PostgreSQL 11 will be removed/)
+
         chef_run.ruby_block('check remote PG version').block.call
       end
     end
@@ -44,12 +47,14 @@ RSpec.describe 'gitlab::database-migrations' do
     context 'places the log file' do
       it 'in a default location' do
         path = Regexp.escape("/var/log/gitlab/gitlab-rails/gitlab-rails-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log")
+
         expect(bash_block.code).to match(/#{path}/)
       end
 
       it 'in a custom location' do
         stub_gitlab_rb(gitlab_rails: { log_directory: "/tmp" })
         path = %(/tmp/gitlab-rails-db-migrate-)
+
         expect(bash_block.code).to match(/#{path}/)
       end
     end
@@ -64,7 +69,8 @@ RSpec.describe 'gitlab::database-migrations' do
 
     it 'runs with the initial_root_password in the environment' do
       stub_gitlab_rb(gitlab_rails: { initial_root_password: '123456789' })
-      expect(chef_run).to run_bash('migrate gitlab-rails database').with(
+
+      expect(chef_run).to run_rails_migration('gitlab-rails').with(
         environment: { 'GITLAB_ROOT_PASSWORD' => '123456789' }
       )
     end
@@ -73,7 +79,8 @@ RSpec.describe 'gitlab::database-migrations' do
       stub_gitlab_rb(
         gitlab_rails: { initial_root_password: '123456789', initial_shared_runners_registration_token: '987654321' }
       )
-      expect(chef_run).to run_bash('migrate gitlab-rails database').with(
+
+      expect(chef_run).to run_rails_migration('gitlab-rails').with(
         environment: {
           'GITLAB_ROOT_PASSWORD' => '123456789',
           'GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN' => '987654321'
@@ -84,8 +91,9 @@ RSpec.describe 'gitlab::database-migrations' do
     context 'initial license file' do
       it 'detects license file from /etc/gitlab' do
         allow(Dir).to receive(:glob).and_call_original
-        allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return(['/etc/gitlab/company.gitlab-license', '/etc/gitlab/company2.gitlab-license'])
-        expect(chef_run).to run_bash('migrate gitlab-rails database').with(
+        allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return(%w[/etc/gitlab/company.gitlab-license /etc/gitlab/company2.gitlab-license])
+
+        expect(chef_run).to run_rails_migration('gitlab-rails').with(
           environment: {
             'GITLAB_LICENSE_FILE' => '/etc/gitlab/company.gitlab-license'
           }
@@ -94,11 +102,13 @@ RSpec.describe 'gitlab::database-migrations' do
 
       it 'license file specified in gitlab.rb gets priority' do
         allow(Dir).to receive(:glob).and_call_original
-        allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return(['/etc/gitlab/company.gitlab-license', '/etc/gitlab/company2.gitlab-license'])
+        allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return(%w[/etc/gitlab/company.gitlab-license /etc/gitlab/company2.gitlab-license])
+
         stub_gitlab_rb(
           gitlab_rails: { initial_license_file: '/mnt/random.gitlab-license' }
         )
-        expect(chef_run).to run_bash('migrate gitlab-rails database').with(
+
+        expect(chef_run).to run_rails_migration('gitlab-rails').with(
           environment: {
             'GITLAB_LICENSE_FILE' => '/mnt/random.gitlab-license'
           }
@@ -108,26 +118,29 @@ RSpec.describe 'gitlab::database-migrations' do
       it 'Does not fail if no license file found in /etc/gitlab' do
         allow(Dir).to receive(:glob).and_call_original
         allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return([])
-        expect(chef_run).to run_bash('migrate gitlab-rails database').with(
-          environment: nil
+
+        expect(chef_run).to run_rails_migration('gitlab-rails').with(
+          environment: {}
         )
       end
     end
 
     it 'triggers the gitlab:db:configure task' do
       migrate = %(/opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file})
+
       expect(bash_block.code).to match(/#{migrate}/)
     end
 
     # NOTE: Test if we pass proper notifications to other resources
     it 'should notify rails cache clear resource' do
-      expect(chef_run.bash('migrate gitlab-rails database')).to notify(
+      expect(migration_block).to notify(
         'execute[clear the gitlab-rails cache]')
     end
 
     it 'should notify rails cache clear resource' do
       stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
-      expect(chef_run.bash('migrate gitlab-rails database')).to notify(
+
+      expect(migration_block).to notify(
         'execute[clear the gitlab-rails cache]')
     end
   end
