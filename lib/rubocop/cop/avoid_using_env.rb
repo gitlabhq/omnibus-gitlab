@@ -1,6 +1,6 @@
 module Rubocop
   module Cop
-    class AvoidUsingEnv < RuboCop::Cop::Cop
+    class AvoidUsingEnv < ::RuboCop::Cop::Cop
       MSG_GET = 'Do not use ENV directly to retrieve environment variables. Use Gitlab::Util.get_env method instead.'.freeze
       MSG_SET = 'Do not use ENV directly to set environment variables, use Gitlab::Util.set_env or Gitlab::Util.set_env_if_missing methods instead.'.freeze
 
