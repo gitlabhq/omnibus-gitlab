@@ -22,8 +22,8 @@ action :create do
   helper = LetsEncryptHelper.new(node)
   contact_info = helper.contact
 
-  staging_key = `/opt/gitlab/embedded/bin/openssl rsa -text -noout -in #{new_resource.key}-staging`
-  staging_key_size = staging_key.lines.grep(/Private.Key/i).first[/[0-9]* bit/].split.first.to_i
+  staging_key = OpenSSL::PKey::RSA.new ::File.read "#{new_resource.key}-staging"
+  staging_key_size = staging_key.to_text.split(/\n/).first[/[0-9]* bit/].split.first.to_i
 
   if new_resource.key_size.nil?
     unless staging_key_size == node['acme']['key_size']
@@ -58,8 +58,8 @@ action :create do
     end
   end
 
-  production_key = `/opt/gitlab/embedded/bin/openssl rsa -text -noout -in #{new_resource.key}`
-  production_key_size = production_key.lines.grep(/Private.Key/i).first[/[0-9]* bit/].split.first.to_i
+  production_key = OpenSSL::PKey::RSA.new ::File.read new_resource.key
+  production_key_size = production_key.to_text.split(/\n/).first[/[0-9]* bit/].split.first.to_i
 
   if new_resource.key_size.nil?
     unless production_key_size == node['acme']['key_size']
