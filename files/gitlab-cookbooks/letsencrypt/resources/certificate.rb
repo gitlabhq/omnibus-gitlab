@@ -22,24 +22,26 @@ action :create do
   helper = LetsEncryptHelper.new(node)
   contact_info = helper.contact
 
-  staging_key = OpenSSL::PKey::RSA.new ::File.read "#{new_resource.key}-staging"
-  staging_key_size = staging_key.to_text.split(/\n/).first[/[0-9]* bit/].split.first.to_i
+  if ::File.file?("#{new_resource.key}-staging")
+    staging_key = OpenSSL::PKey::RSA.new ::File.read "#{new_resource.key}-staging"
+    staging_key_size = staging_key.to_text.split(/\n/).first[/[0-9]* bit/].split.first.to_i
 
-  if new_resource.key_size.nil?
-    unless staging_key_size == node['acme']['key_size']
+    if new_resource.key_size.nil?
+      unless staging_key_size == node['acme']['key_size']
+        file "#{new_resource.key}-staging" do
+          action :delete
+        end
+        file "#{new_resource.crt}-staging" do
+          action :delete
+        end
+      end
+    elsif staging_key_size != new_resource.key_size
       file "#{new_resource.key}-staging" do
         action :delete
       end
       file "#{new_resource.crt}-staging" do
         action :delete
       end
-    end
-  elsif staging_key_size != new_resource.key_size
-    file "#{new_resource.key}-staging" do
-      action :delete
-    end
-    file "#{new_resource.crt}-staging" do
-      action :delete
     end
   end
 
@@ -64,24 +66,26 @@ action :create do
     end
   end
 
-  production_key = OpenSSL::PKey::RSA.new ::File.read new_resource.key
-  production_key_size = production_key.to_text.split(/\n/).first[/[0-9]* bit/].split.first.to_i
+  if ::File.file?(new_resource.key)
+    production_key = OpenSSL::PKey::RSA.new ::File.read new_resource.key
+    production_key_size = production_key.to_text.split(/\n/).first[/[0-9]* bit/].split.first.to_i
 
-  if new_resource.key_size.nil?
-    unless production_key_size == node['acme']['key_size']
+    if new_resource.key_size.nil?
+      unless production_key_size == node['acme']['key_size']
+        file new_resource.key do
+          action :delete
+        end
+        file new_resource.crt do
+          action :delete
+        end
+      end
+    elsif production_key_size != new_resource.key_size
       file new_resource.key do
         action :delete
       end
       file new_resource.crt do
         action :delete
       end
-    end
-  elsif production_key_size != new_resource.key_size
-    file new_resource.key do
-      action :delete
-    end
-    file new_resource.crt do
-      action :delete
     end
   end
 
