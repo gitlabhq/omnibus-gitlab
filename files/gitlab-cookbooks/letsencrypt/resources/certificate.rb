@@ -30,9 +30,15 @@ action :create do
       file "#{new_resource.key}-staging" do
         action :delete
       end
+      file "#{new_resource.crt}-staging" do
+        action :delete
+      end
     end
   elsif staging_key_size != new_resource.key_size
     file "#{new_resource.key}-staging" do
+      action :delete
+    end
+    file "#{new_resource.crt}-staging" do
       action :delete
     end
   end
@@ -66,9 +72,15 @@ action :create do
       file new_resource.key.to_s do
         action :delete
       end
+      file new_resource.crt.to_s do
+        action :delete
+      end
     end
   elsif production_key_size != new_resource.key_size
     file new_resource.key.to_s do
+      action :delete
+    end
+    file new_resource.crt.to_s do
       action :delete
     end
   end
