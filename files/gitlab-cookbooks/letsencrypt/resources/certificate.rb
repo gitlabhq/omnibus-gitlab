@@ -69,18 +69,18 @@ action :create do
 
   if new_resource.key_size.nil?
     unless production_key_size == node['acme']['key_size']
-      file new_resource.key.to_s do
+      file new_resource.key do
         action :delete
       end
-      file new_resource.crt.to_s do
+      file new_resource.crt do
         action :delete
       end
     end
   elsif production_key_size != new_resource.key_size
-    file new_resource.key.to_s do
+    file new_resource.key do
       action :delete
     end
-    file new_resource.crt.to_s do
+    file new_resource.crt do
       action :delete
     end
   end
