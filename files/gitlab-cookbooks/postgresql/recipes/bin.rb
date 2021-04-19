@@ -64,7 +64,7 @@ ruby_block "Link postgresql bin files to the correct version" do
       !node['postgresql']['version'].nil?
   end
 
-  # This recipe will also be called standalone so the resource won't exist in some circunstances
+  # This recipe will also be called standalone so the resource won't exist in some circumstances
   # This is why we check whether it is defined in runtime or not
   notifies :restart, 'runit_service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && omnibus_helper.resource_available?('runit_service[postgresql]')
 end

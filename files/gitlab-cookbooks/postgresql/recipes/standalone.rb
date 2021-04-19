@@ -23,7 +23,7 @@ if node['gitlab']['bootstrap']['enable']
 end
 
 ###
-# Create the users the database enable required extensions and grant users the required privileges
+# Create the users the database, enable required extensions, and grant users the required privileges
 ###
 database_objects 'postgresql' do
   pg_helper pg_helper
