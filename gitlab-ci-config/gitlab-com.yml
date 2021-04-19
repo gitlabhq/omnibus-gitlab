@@ -466,6 +466,15 @@ Trigger:ha-validate:
   dependencies:
     - Trigger:ee-package
 
+Trigger:RAT:
+  stage: trigger-ha-validate
+  image: "${RUBY_IMAGE}"
+  when: manual
+  script:
+    - bundle exec rake qa:rat:trigger
+  <<: *com-trigger-only
+  dependencies: []
+
 dependency_update:
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   stage: prepare

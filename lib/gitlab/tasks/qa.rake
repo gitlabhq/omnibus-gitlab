@@ -7,6 +7,7 @@ require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
 require_relative '../build/qa_trigger'
 require_relative '../build/ha_validate'
+require_relative '../build/rat'
 require_relative "../util.rb"
 
 namespace :qa do
@@ -98,6 +99,15 @@ namespace :qa do
     task :tag do
       Gitlab::Util.section('qa:ha:tag') do
         Build::HA::ValidateTag.invoke!(timeout: 3600 * 4)
+      end
+    end
+  end
+
+  namespace :rat do
+    desc "Trigger a RAT pipeline"
+    task :trigger do
+      Gitlab::Util.section('qa:rat:validate') do
+        Build::RAT::PipelineTrigger.invoke!.wait!(timeout: 3600 * 4)
       end
     end
   end
