@@ -91,7 +91,8 @@ module Build
             puts "After #{duration} minutes, pipeline is currently paused and scheduled to continue later. Considering it a successful pipeline."
             break
           else
-            raise "Pipeline did not succeed!"
+            puts "Received unhandled status: #{status}"
+            raise "Pipeline did not succeed! [#{status}]"
           end
 
           STDOUT.flush

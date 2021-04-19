@@ -209,7 +209,7 @@ RSpec.describe 'qa', type: :rake do
       allow_any_instance_of(Build::Trigger).to receive(:invoke!).and_return(qapipeline)
       allow_any_instance_of(Build::Trigger::Pipeline).to receive(:status).and_return(:failed)
 
-      expect { Rake::Task['qa:test'].invoke }.to raise_error(RuntimeError, "Pipeline did not succeed!")
+      expect { Rake::Task['qa:test'].invoke }.to raise_error(RuntimeError, /Pipeline did not succeed!/)
     end
 
     it 'times out correctly' do
