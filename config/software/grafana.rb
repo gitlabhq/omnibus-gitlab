@@ -26,7 +26,7 @@ license_file 'NOTICE.md'
 
 skip_transitive_dependency_licensing true
 
-arch, sha = if ohai['platform'] == 'debian' && /armv/.match?(ohai['kernel']['machine'])
+arch, sha = if ohai['platform'] == 'raspbian' && /armv/.match?(ohai['kernel']['machine'])
               %w[armv7 ca3e884fe4d9ebbf17456de125622e7374bc5f53034fa41c53c75df08558dc2f]
             elsif /aarch64/.match?(ohai['kernel']['machine'])
               %w[arm64 4367db18af36d2730552de7925908f35b6572ef48237d530572f5d78dfceae4e]
