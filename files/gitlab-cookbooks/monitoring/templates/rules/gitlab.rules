@@ -492,6 +492,9 @@ groups:
         sum(rate(gitlab_sql_duration_seconds_count[5m])) > 0
       )
 
+  - record: gitlab_usage_ping:gitaly_apdex:ratio_avg_over_time_5m
+    expr: avg_over_time(gitlab_sli:gitlab_component_apdex:ratio{job="gitaly"}[5m])
+
   ###
   # Node level metrics
   #
