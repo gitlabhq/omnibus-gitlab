@@ -1,7 +1,7 @@
 GIT
   remote: https://dev.gitlab.org/gitlab/omnibus.git
-  revision: 1e8b748f3b7163fc86b56e35d92954d17f7b4a6a
-  tag: 7.0.10.08
+  revision: e2d9ccb1d015615f2c173967dcc0ef10158b3579
+  tag: 7.0.10.09
   specs:
     omnibus (7.0.10)
       aws-sdk-s3 (~> 1)
@@ -223,7 +223,7 @@ GEM
       tomlrb (~> 1.2)
       tty-box (~> 0.3)
       tty-prompt (~> 0.18)
-    license_scout (1.2.9)
+    license_scout (1.2.10)
       ffi-yajl (~> 2.2)
       mixlib-shellout (>= 2.2, < 4.0)
       toml-rb (>= 1, < 3)
