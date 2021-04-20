@@ -47,6 +47,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'schedule_migrate_external_diffs_worker'                 | 'schedule_migrate_external_diffs_worker_cron'
         'stuck_ci_jobs_worker'                                   | 'stuck_ci_jobs_worker_cron'
         'user_status_cleanup_batch_worker'                       | 'user_status_cleanup_batch_worker_cron'
+        'namespaces_in_product_marketing_emails_worker'          | 'namespaces_in_product_marketing_emails_worker_cron'
       end
 
       with_them do
