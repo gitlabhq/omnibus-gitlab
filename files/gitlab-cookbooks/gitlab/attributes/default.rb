@@ -175,6 +175,7 @@ default['gitlab']['gitlab-rails']['service_desk_email_idle_timeout'] = nil
 default['gitlab']['gitlab-rails']['service_desk_email_log_file'] = "/var/log/gitlab/mailroom/mail_room_json.log" # file path of internal `mail_room` JSON logs
 default['gitlab']['gitlab-rails']['service_desk_email_inbox_method'] = "imap"
 default['gitlab']['gitlab-rails']['service_desk_email_inbox_inbox_options'] = nil
+default['gitlab']['gitlab-rails']['namespaces_in_product_marketing_emails_worker_cron'] = nil
 
 # Consolidated object storage config
 default['gitlab']['gitlab-rails']['object_store']['enabled'] = false

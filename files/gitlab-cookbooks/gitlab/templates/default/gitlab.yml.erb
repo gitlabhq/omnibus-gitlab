@@ -597,6 +597,12 @@ production: &base
       cron: "<%= @user_status_cleanup_batch_worker_cron %>"
     <% end %>
 
+    # Worker for triggering in-product marketing emails
+    <% unless @namespaces_in_product_marketing_emails_worker_cron.nil? %>
+    namespaces_in_product_marketing_emails_worker:
+      cron: "<%= @namespaces_in_product_marketing_emails_worker_cron %>"
+    <% end %>
+
   ## Geo
   # NOTE: These settings will only take effect if Geo is enabled
   geo:
