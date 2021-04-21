@@ -28,7 +28,7 @@ default_version version.print
 license 'GPL-2.0'
 license_file 'COPYING'
 
-vendor 'git'
+vendor 'gitlab'
 
 skip_transitive_dependency_licensing true
 
