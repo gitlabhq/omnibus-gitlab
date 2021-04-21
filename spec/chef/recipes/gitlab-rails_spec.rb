@@ -1022,34 +1022,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'Geo settings' do
-      it 'sets the geo_node_name variable' do
-        stub_gitlab_rb(gitlab_rails: { geo_node_name: 'the name of the node' })
-
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'geo_node_name' => 'the name of the node'
-          )
-        )
-      end
-
-      it 'sets the geo_registry_replication_enabled variable' do
-        stub_gitlab_rb(gitlab_rails: { geo_registry_replication_enabled: true })
-
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including('geo_registry_replication_enabled' => true)
-        )
-      end
-
-      it 'sets the geo_registry_replication_primary_api_url variable' do
-        stub_gitlab_rb(gitlab_rails: { geo_registry_replication_primary_api_url: true })
-
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including('geo_registry_replication_primary_api_url' => true)
-        )
-      end
-    end
-
     context 'Prometheus self-monitoring' do
       it 'sets the default values' do
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
