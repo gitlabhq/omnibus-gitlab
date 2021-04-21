@@ -1580,24 +1580,62 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
   end
 
-  context 'gitlab registry' do
-    describe 'registry is disabled' do
-      it 'does not generate gitlab-registry.key file' do
-        expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-rails/etc/gitlab-registry.key")
-      end
-    end
-
-    describe 'registry is enabled' do
-      before do
-        stub_gitlab_rb(
-          gitlab_rails: {
-            registry_enabled: true
-          }
-        )
+  describe 'GitLab Registry files' do
+    describe 'gitlab-registry.key file' do
+      context 'Registry is disabled' do
+        it 'does not generate gitlab-registry.key file' do
+          expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-rails/etc/gitlab-registry.key")
+        end
       end
 
-      it 'generates gitlab-registry.key file' do
-        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/gitlab-registry.key").with_content(/\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m)
+      context 'Registry is enabled' do
+        context 'with default configuration' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                registry_enabled: true
+              }
+            )
+          end
+
+          it 'generates key file in the default location' do
+            expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/gitlab-registry.key").with_content(/\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m)
+          end
+        end
+
+        context 'with user specified configuration' do
+          context 'when location of key file is specified' do
+            before do
+              stub_gitlab_rb(
+                gitlab_rails: {
+                  registry_enabled: true,
+                  registry_key_path: '/fake/path'
+                }
+              )
+            end
+
+            it 'generates key file in the specified location' do
+              expect(chef_run).to render_file("/fake/path").with_content(/\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m)
+            end
+          end
+
+          context 'when key content is specified' do
+            before do
+              stub_gitlab_rb(
+                gitlab_rails: {
+                  registry_enabled: true
+                },
+                registry: {
+                  internal_key: 'foobar'
+                }
+              )
+            end
+
+            it 'generates key file with specified content' do
+              expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/gitlab-registry.key").with_content('foobar')
+            end
+          end
+        end
       end
     end
   end
