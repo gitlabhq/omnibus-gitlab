@@ -2101,6 +2101,45 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
   end
 
+  context 'SMTP settings' do
+    context 'when connection pooling is not configured' do
+      it 'creates smtp_settings.rb with pooling disabled' do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            smtp_enable: true
+          }
+        )
+
+        expect(chef_run).to create_templatesymlink('Create a smtp_settings.rb and create a symlink to Rails root').with_variables(
+          hash_including(
+            'smtp_pool' => false
+          )
+        )
+      end
+    end
+
+    context 'when connection pooling is enabled' do
+      it 'creates smtp_settings.rb with pooling enabled' do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            smtp_enable: true,
+            smtp_pool: true
+          }
+        )
+
+        expect(chef_run).to create_templatesymlink('Create a smtp_settings.rb and create a symlink to Rails root').with_variables(
+          hash_including(
+            'smtp_pool' => true
+          )
+        )
+
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/smtp_settings.rb').with_content { |content|
+          expect(content).to include('ActionMailer::Base.delivery_method = :smtp_pool')
+        }
+      end
+    end
+  end
+
   describe 'logrotate settings' do
     context 'default values' do
       it_behaves_like 'configured logrotate service', 'gitlab-pages', 'git', 'git'
