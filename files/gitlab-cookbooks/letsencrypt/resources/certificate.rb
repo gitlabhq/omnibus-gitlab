@@ -24,7 +24,7 @@ action :create do
 
   if ::File.file?("#{new_resource.key}-staging")
     staging_key = OpenSSL::PKey::RSA.new ::File.read "#{new_resource.key}-staging"
-    staging_key_size = staging_key.to_text.split(/\n/).first[/[0-9]* bit/].split.first.to_i
+    staging_key_size = staging_key.n.num_bits
 
     if new_resource.key_size.nil?
       unless staging_key_size == node['acme']['key_size']
@@ -68,7 +68,7 @@ action :create do
 
   if ::File.file?(new_resource.key)
     production_key = OpenSSL::PKey::RSA.new ::File.read new_resource.key
-    production_key_size = production_key.to_text.split(/\n/).first[/[0-9]* bit/].split.first.to_i
+    production_key_size = production_key.n.num_bits
 
     if new_resource.key_size.nil?
       unless production_key_size == node['acme']['key_size']
