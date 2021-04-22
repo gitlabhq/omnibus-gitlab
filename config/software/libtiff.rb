@@ -28,6 +28,7 @@ dependency 'libtool'
 dependency 'zlib'
 dependency 'liblzma'
 dependency 'libjpeg-turbo'
+dependency 'config_guess'
 
 source git: version.remote
 
@@ -51,7 +52,12 @@ build do
       "-DCMAKE_INSTALL_PREFIX=#{install_dir}/embedded"
     ]
   else
+    # Patch the code to download config.guess and config.sub. We instead copy
+    # the ones we vendor to the correct location.
+    patch source: 'remove-config-guess-sub-download.patch'
+
     command './autogen.sh', env: env
+    update_config_guess(target: 'config')
 
     configure_command = [
       './configure',
