@@ -1049,7 +1049,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
 
    ```shell
    sudo gitlab-ctl reconfigure
-   sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-rake db:migrate
+   sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-rake geo:db:migrate
    ```
 
 1. If this deploy node is normally used to serve requests or perform
