@@ -7,14 +7,6 @@ RSpec.describe 'postgresql 9.2' do
   let(:postgresql_ssl_key) { File.join(postgresql_data_dir, 'server.key') }
   let(:postgresql_conf) { File.join(postgresql_data_dir, 'postgresql.conf') }
   let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
-  let(:gitlab_psql_rc) do
-    <<-EOF
-psql_user='gitlab-psql'
-psql_group='gitlab-psql'
-psql_host='/var/opt/gitlab/postgresql'
-psql_port='5432'
-    EOF
-  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -31,9 +23,8 @@ psql_port='5432'
     expect(chef_run).to include_recipe('postgresql::user')
   end
 
-  it 'creates gitlab-psql-rc' do
-    expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-psql-rc')
-      .with_content(gitlab_psql_rc)
+  it 'includes postgresql::sysctl recipe' do
+    expect(chef_run).to include_recipe('postgresql::sysctl')
   end
 
   it_behaves_like 'enabled runit service', 'postgresql', 'root', 'root', 'gitlab-psql', 'gitlab-psql'
@@ -860,14 +851,18 @@ RSpec.describe 'postgresql 9.6' do
       end
     end
   end
-
-  it 'creates sysctl files' do
-    expect(chef_run).to create_gitlab_sysctl('kernel.shmmax').with_value(17179869184)
-  end
 end
 
 RSpec.describe 'postgresql::bin' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:gitlab_psql_rc) do
+    <<-EOF
+psql_user='gitlab-psql'
+psql_group='gitlab-psql'
+psql_host='/var/opt/gitlab/postgresql'
+psql_port='5432'
+    EOF
+  end
 
   before do
     allow(Gitlab). to receive(:[]).and_call_original
@@ -891,6 +886,15 @@ RSpec.describe 'postgresql::bin' do
 
     it 'still includes the postgresql::bin recipe' do
       expect(chef_run).to include_recipe('postgresql::bin')
+    end
+
+    it 'includes postgresql::directory_locations' do
+      expect(chef_run).to include_recipe('postgresql::directory_locations')
+    end
+
+    it 'creates gitlab-psql-rc' do
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-psql-rc')
+        .with_content(gitlab_psql_rc)
     end
 
     # We do expect the ruby block to run, but nothing to be found
@@ -956,30 +960,32 @@ RSpec.describe 'postgresql::bin' do
   end
 end
 
-RSpec.describe 'postgresql dir and homedir' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config)).converge('gitlab::default') }
+RSpec.describe 'default directories' do
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
-  context 'when using default values for directories' do
-    it 'creates necessary directories' do
-      expect(chef_run).to create_directory('/var/opt/gitlab/postgresql').with(owner: 'gitlab-psql', mode: '0755', recursive: true)
-    end
-  end
-
-  context 'when using custom values for directories' do
-    before do
-      stub_gitlab_rb(postgresql: {
-                       dir: '/mypgdir',
-                       home: '/mypghomedir'
-                     })
+  context 'postgresql directory' do
+    context 'with default settings' do
+      it 'creates postgresql directory' do
+        expect(chef_run).to create_directory('/var/opt/gitlab/postgresql').with(owner: 'gitlab-psql', mode: '0755', recursive: true)
+      end
     end
 
-    it 'creates necessary directories' do
-      expect(chef_run).to create_directory('/mypgdir').with(owner: 'gitlab-psql', mode: '0755', recursive: true)
-      expect(chef_run).to create_directory('/mypghomedir').with(owner: 'gitlab-psql', mode: '0755', recursive: true)
+    context 'with custom settings' do
+      before do
+        stub_gitlab_rb(
+          postgresql: {
+            dir: '/mypgdir',
+            home: '/mypghomedir'
+          })
+      end
+
+      it 'creates postgresql directory with custom path' do
+        expect(chef_run).to create_directory('/mypgdir').with(owner: 'gitlab-psql', mode: '0755', recursive: true)
+      end
     end
   end
 end

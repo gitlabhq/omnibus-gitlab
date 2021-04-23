@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'chef_helper'
 
 RSpec.describe OmnibusHelper do
@@ -200,7 +202,7 @@ RSpec.describe OmnibusHelper do
 
       it 'detects deprecated config correctly' do
         expect(LoggingHelper).to receive(:deprecation)
-          .with(/Specifying Praefect storage nodes as an array is deprecated/)
+                                   .with(/Specifying Praefect storage nodes as an array is deprecated/)
 
         subject.is_deprecated_praefect_config?
       end
@@ -249,7 +251,7 @@ RSpec.describe OmnibusHelper do
               It seems you haven't specified an initial root password while configuring the GitLab instance.
               On your first visit to  your GitLab instance, you will be presented with a screen to set a
               password for the default admin account with username `root`.
-            EOS
+          EOS
           )
 
           subject.print_root_account_details
@@ -409,6 +411,19 @@ RSpec.describe OmnibusHelper do
       stub_gitlab_rb(sidekiq_cluster: { enable: true, queue_groups: ['*'] })
 
       expect(subject.sidekiq_cluster_service_name).to eq('sidekiq-cluster')
+    end
+  end
+
+  describe '.resource_available?' do
+    cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+    subject(:omnibus_helper) { described_class.new(chef_run.node) }
+
+    it 'returns false for a resource that exists but has not been loaded in runtime' do
+      expect(omnibus_helper.resource_available?('runit_service[geo-logcursor]')).to be_falsey
+    end
+
+    it 'returns true for a resource that exists and is loaded in runtime' do
+      expect(omnibus_helper.resource_available?('runit_service[logrotated]'))
     end
   end
 end

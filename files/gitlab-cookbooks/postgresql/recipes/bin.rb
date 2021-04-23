@@ -14,26 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+include_recipe 'postgresql::directory_locations'
+
 pg_helper = PgHelper.new(node)
 geo_pg_helper = GeoPgHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 postgresql_install_dir = File.join(node['package']['install-dir'], 'embedded/postgresql')
-
-include_recipe 'postgresql::directory_locations'
-
-# This recipe will also be called standalone so the resource
-# won't exist for resource collection.
-# We only have ourselves to blame here, we want DRY code this is what we get.
-# The block below is cleanest solution and
-# was found at https://gist.github.com/scalp42/7606857#gistcomment-1618630
-resource_exists = proc do |name|
-  begin
-    resources name
-    true
-  rescue Chef::Exceptions::ResourceNotFound
-    false
-  end
-end
 
 main_db_version = pg_helper.database_version if Services.enabled?('postgresql')
 geo_db_version = geo_pg_helper.database_version if Services.enabled?('geo_postgresql')
@@ -44,6 +30,7 @@ ruby_block 'check_postgresql_version' do
   block do
     LoggingHelper.warning("We do not ship client binaries for PostgreSQL #{db_version}, defaulting to #{pg_helper.version.major}")
   end
+
   not_if { node['postgresql']['version'].nil? || db_path }
 end
 
@@ -54,6 +41,7 @@ ruby_block 'check_postgresql_version_is_deprecated' do
       To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server
     ))
   end
+
   not_if { node['postgresql']['version'].nil? || node['postgresql']['version'].to_f >= 12 }
 end
 
@@ -68,11 +56,21 @@ ruby_block "Link postgresql bin files to the correct version" do
       FileUtils.ln_sf(pg_bin, "#{node['package']['install-dir']}/embedded/bin/#{File.basename(pg_bin)}")
     end
   end
+
   only_if do
     !File.exist?(File.join(node['postgresql']['data_dir'], "PG_VERSION")) || \
       pg_helper.version.major !~ /^#{pg_helper.database_version}/ || \
       (Services.enabled?('geo_postgresql') && geo_pg_helper.version.major !~ /^#{geo_pg_helper.database_version}/) || \
       !node['postgresql']['version'].nil?
   end
-  notifies :restart, 'runit_service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && resource_exists['runit_service[postgresql]']
+
+  # This recipe will also be called standalone so the resource won't exist in some circumstances
+  # This is why we check whether it is defined in runtime or not
+  notifies :restart, 'runit_service[postgresql]', :immediately if omnibus_helper.should_notify?("postgresql") && omnibus_helper.resource_available?('runit_service[postgresql]')
+end
+
+# This template is needed to make the gitlab-psql script and PgHelper work
+template "/opt/gitlab/etc/gitlab-psql-rc" do
+  owner 'root'
+  group 'root'
 end

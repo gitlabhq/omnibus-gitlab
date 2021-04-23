@@ -15,19 +15,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+include_recipe 'postgresql::bin'
+include_recipe 'postgresql::user'
+include_recipe 'postgresql::sysctl'
+
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
-
-include_recipe 'postgresql::directory_locations'
+pg_helper = PgHelper.new(node)
 
 postgresql_log_dir = node['postgresql']['log_directory']
 postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
 postgresql_data_dir_symlink = File.join(node['postgresql']['dir'], "data")
-
-pg_helper = PgHelper.new(node)
-
-include_recipe 'postgresql::user'
 
 directory node['postgresql']['dir'] do
   owner postgresql_username
@@ -52,35 +51,9 @@ link postgresql_data_dir_symlink do
   not_if { node['postgresql']['data_dir'] == postgresql_data_dir_symlink }
 end
 
-include_recipe "package::sysctl"
-
-gitlab_sysctl "kernel.shmmax" do
-  value node['postgresql']['shmmax']
-end
-
-gitlab_sysctl "kernel.shmall" do
-  value node['postgresql']['shmall']
-end
-
-sem = [
-  node['postgresql']['semmsl'],
-  node['postgresql']['semmns'],
-  node['postgresql']['semopm'],
-  node['postgresql']['semmni'],
-].join(" ")
-gitlab_sysctl "kernel.sem" do
-  value sem
-end
-
 execute "/opt/gitlab/embedded/bin/initdb -D #{node['postgresql']['data_dir']} -E UTF8" do
   user postgresql_username
   not_if { pg_helper.bootstrapped? || pg_helper.delegated? }
-end
-
-# This template is needed to make the gitlab-psql script and PgHelper work
-template "/opt/gitlab/etc/gitlab-psql-rc" do
-  owner 'root'
-  group 'root'
 end
 
 # IMPORTANT NOTE:
@@ -119,61 +92,4 @@ postgresql_config 'gitlab' do
   notifies :run, 'execute[start postgresql]', :immediately if omnibus_helper.service_dir_enabled?('postgresql') && !pg_helper.delegated?
 end
 
-# Skip the following steps when PostgreSQL configuration is delegated, e.g. to Patroni
-return if pg_helper.delegated?
-
-runit_service "postgresql" do
-  start_down node['postgresql']['ha']
-  supervisor_owner postgresql_username
-  supervisor_group postgresql_group
-  restart_on_update false
-  control(['t'])
-  options({
-    log_directory: postgresql_log_dir
-  }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['postgresql'].to_hash)
-end
-
-if node['gitlab']['bootstrap']['enable']
-  execute "/opt/gitlab/bin/gitlab-ctl start postgresql" do
-    retries 20
-  end
-end
-
-###
-# Create the database, migrate it, and create the users we need, and grant them
-# privileges.
-###
-
-database_objects 'postgresql' do
-  pg_helper pg_helper
-  account_helper account_helper
-  not_if { pg_helper.replica? }
-end
-
-ruby_block 'warn pending postgresql restart' do
-  block do
-    message = <<~MESSAGE
-      The version of the running postgresql service is different than what is installed.
-      Please restart postgresql to start the new version.
-
-      sudo gitlab-ctl restart postgresql
-    MESSAGE
-    LoggingHelper.warning(message)
-  end
-  only_if { pg_helper.is_running? && pg_helper.running_version != pg_helper.version }
-end
-
-execute 'reload postgresql' do
-  command %(/opt/gitlab/bin/gitlab-ctl hup postgresql)
-  retries 20
-  action :nothing
-  only_if { pg_helper.is_running? }
-end
-
-execute 'start postgresql' do
-  command %(/opt/gitlab/bin/gitlab-ctl start postgresql)
-  retries 20
-  action :nothing
-  not_if { pg_helper.is_running? }
-end
+include_recipe 'postgresql::standalone' unless pg_helper.delegated?

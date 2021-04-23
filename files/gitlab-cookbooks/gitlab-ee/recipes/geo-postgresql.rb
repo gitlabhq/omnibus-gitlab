@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+include_recipe 'postgresql::bin'
+
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
@@ -101,13 +103,6 @@ runit_service 'geo-postgresql' do
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo-postgresql'].to_hash)
 end
-
-# This recipe must be ran BEFORE any calls to the binaries are made
-# and AFTER the service has been defined
-# to ensure the correct running version of PostgreSQL
-# Only exception to this rule is "initdb" call few lines up because this should
-# run only on new installation at which point we expect to have correct binaries.
-include_recipe 'postgresql::bin'
 
 execute 'start geo-postgresql' do
   command '/opt/gitlab/bin/gitlab-ctl start geo-postgresql'
