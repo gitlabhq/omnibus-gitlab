@@ -1043,6 +1043,23 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['gitlab_email_from'] = 'username@sina.com'
 ```
 
+### Feishu mail
+
+Check out more details in the [help page](https://www.feishu.cn/hc/articles/360049068017) of Feishu mail.
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.feishu.cn"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "your-user@your-domain"
+gitlab_rails['gitlab_email_from'] = "username@yourdomain.com"
+gitlab_rails['smtp_domain'] = "yourdomain.com"
+gitlab_rails['smtp_password'] = "authentication code"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
