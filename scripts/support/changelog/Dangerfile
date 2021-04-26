@@ -2,8 +2,8 @@
 
 require 'yaml'
 
-def lint_commit(commit)
-  trailer = commit.message.match(/^Changelog:\s*(?<category>\w+)/)
+def check_changelog_trailer(commit)
+  trailer = commit.message.match(/^Changelog:\s*(?<category>.+)$/)
 
   return :missing if trailer.nil? || trailer[:category].nil?
 
@@ -73,7 +73,7 @@ if changelog_needed
   checked = 0
 
   git.commits.each do |commit|
-    case lint_commit(commit)
+    case check_changelog_trailer(commit)
     when :valid, :invalid
       checked += 1
     end
