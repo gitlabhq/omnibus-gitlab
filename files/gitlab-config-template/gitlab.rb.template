@@ -1576,11 +1576,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Prometheus metrics for Pages docs: https://gitlab.com/gitlab-org/gitlab-pages/#enable-prometheus-metrics
 # gitlab_pages['metrics_address'] = ":9235"
 
-##! Specifies the minimum SSL/TLS version ("ssl3", "tls1.0", "tls1.1" or "tls1.2")
-# gitlab_pages['tls_min_version'] = "ssl3"
+##! Specifies the minimum TLS version ("tls1.2" or "tls1.3")
+# gitlab_pages['tls_min_version'] = "tls1.2"
 
-##! Specifies the maximum SSL/TLS version ("ssl3", "tls1.0", "tls1.1" or "tls1.2")
-# gitlab_pages['tls_max_version'] = "tls1.2"
+##! Specifies the maximum TLS version ("tls1.2" or "tls1.3")
+# gitlab_pages['tls_max_version'] = "tls1.3"
 
 ##! Pages access control
 # gitlab_pages['access_control'] = false
