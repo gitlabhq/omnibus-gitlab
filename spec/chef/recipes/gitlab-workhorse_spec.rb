@@ -478,4 +478,36 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
       end
     end
   end
+
+  context 'with workhorse keywatcher enabled' do
+    before do
+      stub_gitlab_rb(
+        gitlab_workhorse: {
+          workhorse_keywatcher: true,
+        }
+      )
+    end
+
+    it 'should generate redis block in the configuration file' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).to match(/\[redis\]/m)
+      }
+    end
+  end
+
+  context 'with workhorse keywatcher disabled' do
+    before do
+      stub_gitlab_rb(
+        gitlab_workhorse: {
+          workhorse_keywatcher: false,
+        }
+      )
+    end
+
+    it 'should not generate redis block in the configuration file' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).not_to match(/\[redis\]/m)
+      }
+    end
+  end
 end

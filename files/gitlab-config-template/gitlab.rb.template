@@ -847,6 +847,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_workhorse['listen_addr'] = "/var/opt/gitlab/gitlab-workhorse/sockets/socket"
 # gitlab_workhorse['auth_backend'] = "http://localhost:8080"
 
+##! Enable Redis keywatcher, if this setting is not present it defaults to true
+# gitlab_workhorse['workhorse_keywatcher'] = true
+
 ##! the empty string is the default in gitlab-workhorse option parser
 # gitlab_workhorse['auth_socket'] = "''"
 
