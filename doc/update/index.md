@@ -298,9 +298,7 @@ Before following these instructions, note the following **important** informatio
   updates**. Users may see some connections timeout or be refused for a few minutes,
   depending on which services need to restart.
 
-1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
-   installation only, this will prevent the upgrade from running
-   `gitlab-ctl reconfigure` and automatically running database migrations
+1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. This prevents upgrades from running `gitlab-ctl reconfigure`, which by default automatically stops GitLab, runs all database migrations, and restarts GitLab.
 
    ```shell
    sudo touch /etc/gitlab/skip-auto-reconfigure
@@ -336,7 +334,7 @@ Before following these instructions, note the following **important** informatio
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-1. Once the node is updated and `reconfigure` finished successfully, complete the migrations with
+1. Once the node is updated and `reconfigure` finished successfully, run post-deployment migrations with
 
    ```shell
    sudo gitlab-rake db:migrate
@@ -388,9 +386,7 @@ load balancer to latest GitLab version.
 1. Select one application node as a deploy node and complete the following steps
    on it:
 
-    1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. This will
-       prevent the upgrade from running `gitlab-ctl reconfigure` and
-       automatically running database migrations:
+    1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. This prevents upgrades from running `gitlab-ctl reconfigure`, which by default automatically stops GitLab, runs all database migrations, and restarts GitLab:
 
         ```shell
         sudo touch /etc/gitlab/skip-auto-reconfigure
@@ -456,9 +452,7 @@ database migrations.
 
 **Praefect deploy node**
 
-- Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
-  installation only, this will prevent the upgrade from running
-  `gitlab-ctl reconfigure` and restarting GitLab before database migrations have been applied:
+- Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. This prevents upgrades from running `gitlab-ctl reconfigure`, which by default automatically stops GitLab, runs all database migrations, and restarts GitLab:
 
   ```shell
   sudo touch /etc/gitlab/skip-auto-reconfigure
@@ -468,7 +462,7 @@ database migrations.
 
 **All Praefect nodes _excluding_ the Praefect deploy node**
 
-- Ensure that `praefect['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
+- To prevent `reconfigure` from automatically running database migrations, ensure that `praefect['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`.
 
 **Praefect deploy node**
 
@@ -513,9 +507,7 @@ node throughout the process.
 
 **Deploy node**
 
-- Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
-  installation only, this will prevent the upgrade from running
-  `gitlab-ctl reconfigure` and restarting GitLab before database migrations have been applied.
+- Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. This prevents upgrades from running `gitlab-ctl reconfigure`, which by default automatically stops GitLab, runs all database migrations, and restarts GitLab.
 
   ```shell
   sudo touch /etc/gitlab/skip-auto-reconfigure
@@ -523,7 +515,7 @@ node throughout the process.
 
 **All nodes _including_ the Deploy node**
 
-- Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
+- To prevent `reconfigure` from automatically running database migrations, ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`.
 
 **Gitaly only nodes**
 
@@ -737,9 +729,7 @@ sure you follow them in the right order, on the correct node.
 
 Log in to your **primary** node, executing the following:
 
-1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
-   installation only, this will prevent the upgrade from running
-   `gitlab-ctl reconfigure` and automatically running database migrations
+1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. This prevents upgrades from running `gitlab-ctl reconfigure`, which by default automatically stops GitLab, runs all database migrations, and restarts GitLab.
 
    ```shell
    sudo touch /etc/gitlab/skip-auto-reconfigure
@@ -782,9 +772,7 @@ Log in to your **primary** node, executing the following:
 
 On each **secondary** node, executing the following:
 
-1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
-   installation only, this will prevent the upgrade from running
-   `gitlab-ctl reconfigure` and automatically running database migrations
+1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. This prevents upgrades from running `gitlab-ctl reconfigure`, which by default automatically stops GitLab, runs all database migrations, and restarts GitLab.
 
    ```shell
    sudo touch /etc/gitlab/skip-auto-reconfigure
@@ -896,15 +884,13 @@ For zero-downtime, Puma, Sidekiq, and `geo-logcursor` must be running on other n
 
 **On all primary nodes _including_ the primary "deploy node"**
 
-Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
-installation only, this will prevent the upgrade from running
-`gitlab-ctl reconfigure` and automatically running database migrations.
+1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. This prevents upgrades from running `gitlab-ctl reconfigure`, which by default automatically stops GitLab, runs all database migrations, and restarts GitLab.
 
 ```shell
 sudo touch /etc/gitlab/skip-auto-reconfigure
 ```
 
-1. Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`.
+1. To prevent `reconfigure` from automatically running database migrations, ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`.
 
 1. Ensure nodes are running the latest code
 
@@ -1013,15 +999,13 @@ Only proceed if you have successfully completed all steps on the Geo **primary**
 
 **On all secondary nodes _including_ the secondary "deploy node"**
 
-Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
-installation only, this will prevent the upgrade from running
-`gitlab-ctl reconfigure` and automatically running database migrations.
+1. Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. This prevents upgrades from running `gitlab-ctl reconfigure`, which by default automatically stops GitLab, runs all database migrations, and restarts GitLab.
 
 ```shell
 sudo touch /etc/gitlab/skip-auto-reconfigure
 ```
 
-1. Ensure that `geo_secondary['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
+1. To prevent `reconfigure` from automatically running database migrations, ensure that `geo_secondary['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`.
 
 1. Ensure nodes are running the latest code
 
