@@ -640,61 +640,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'LDAP server configuration' do
-      context 'LDAP servers are configured' do
-        let(:ldap_servers_config) do
-          <<-EOS
-            main:
-              label: 'LDAP Primary'
-              host: 'primary.ldap'
-              port: 389
-              uid: 'uid'
-              encryption: 'plain'
-              password: 's3cr3t'
-              base: 'dc=example,dc=com'
-              user_filter: ''
-
-            secondary:
-              label: 'LDAP Secondary'
-              host: 'secondary.ldap'
-              port: 389
-              uid: 'uid'
-              encryption: 'plain'
-              bind_dn: 'dc=example,dc=com'
-              password: 's3cr3t'
-              smartcard_auth: 'required'
-              base: ''
-              user_filter: ''
-          EOS
-        end
-
-        it 'exposes the LDAP server configuration' do
-          stub_gitlab_rb(
-            gitlab_rails: {
-              ldap_enabled: true,
-              ldap_servers: YAML.safe_load(ldap_servers_config)
-            })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              "ldap_enabled" => true,
-              "ldap_servers" => YAML.safe_load(ldap_servers_config)
-            )
-          )
-        end
-      end
-
-      context 'LDAP is not configured' do
-        it 'does not enable LDAP' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              "ldap_enabled" => false
-            )
-          )
-        end
-      end
-    end
-
     context 'when seat link is enabled' do
       it 'sets seat link to true' do
         expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
@@ -1074,40 +1019,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
             expect(yaml_data['production']['shutdown']).to include('blackout_seconds' => 20)
           }
         end
-      end
-    end
-
-    context 'GitLab LDAP settings' do
-      context 'when ldap lowercase_usernames setting is' do
-        it 'set, sets the setting value' do
-          stub_gitlab_rb(gitlab_rails: { ldap_lowercase_usernames: true })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'ldap_lowercase_usernames' => true
-            )
-          )
-        end
-
-        it 'not set, sets default value to blank' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'ldap_lowercase_usernames' => nil
-            )
-          )
-        end
-      end
-
-      it 'sets prevent_ldap_sign_in by default' do
-        expect(chef_run).to configure_gitlab_yml_using(hash_including({ 'prevent_ldap_sign_in' => false }))
-        expect(generated_yml_content['production']['ldap']).to include({ 'prevent_ldap_sign_in' => false })
-      end
-
-      it 'allows prevent_ldap_sign_in to be configured' do
-        stub_gitlab_rb(gitlab_rails: { prevent_ldap_sign_in: true })
-
-        expect(chef_run).to configure_gitlab_yml_using(hash_including({ 'prevent_ldap_sign_in' => true }))
-        expect(generated_yml_content['production']['ldap']).to include({ 'prevent_ldap_sign_in' => true })
       end
     end
 
