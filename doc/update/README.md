@@ -472,7 +472,7 @@ database migrations.
 
 - Ensure that `praefect['auto_migrate'] = true` is set in `/etc/gitlab/gitlab.rb`
 
-**All other Praefect nodes (not the Praefect deploy node)**
+**All Praefect nodes _excluding_ the Praefect deploy node**
 
 - Ensure that `praefect['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
 
@@ -496,7 +496,7 @@ database migrations.
   sudo gitlab-ctl reconfigure
   ```
 
-**All other Praefect nodes (not the Praefect deploy node)**
+**All Praefect nodes _excluding_ the Praefect deploy node**
 
 - Update the GitLab package:
 
@@ -527,7 +527,7 @@ node throughout the process.
   sudo touch /etc/gitlab/skip-auto-reconfigure
   ```
 
-**All nodes (including the Deploy node)**
+**All nodes _including_ the Deploy node**
 
 - Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
 
@@ -593,7 +593,7 @@ node throughout the process.
   sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-rake db:migrate
   ```
 
-**All other nodes (not the Deploy node)**
+**All nodes _excluding_ the Deploy node**
 
 - Update the GitLab package
 
@@ -876,7 +876,7 @@ For zero-downtime, Puma/Unicorn, Sidekiq, and `geo-logcursor` must be running on
 
 #### Step 2: Update the Geo primary multi-node deployment
 
-**On all nodes _including_ the primary "deploy node"**
+**On all primary nodes _including_ the primary "deploy node"**
 
 Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
 installation only, this will prevent the upgrade from running
@@ -885,8 +885,6 @@ installation only, this will prevent the upgrade from running
 ```shell
 sudo touch /etc/gitlab/skip-auto-reconfigure
 ```
-
-**On all other nodes _including_ the primary "deploy node"**
 
 1. Ensure that `gitlab_rails['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`.
 
@@ -964,7 +962,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
      sudo gitlab-ctl start sidekiq
      ```
 
-**On all other nodes _excluding_ the primary "deploy node"**
+**On all primary nodes _excluding_ the primary "deploy node"**
 
 1. Update the GitLab package
 
@@ -982,7 +980,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
-**For all nodes that run Puma/Unicorn or Sidekiq _including_ the primary "deploy node"**
+**For all primary nodes that run Puma/Unicorn or Sidekiq _including_ the primary "deploy node"**
 
 Hot reload `puma` (or `unicorn`) and `sidekiq` services:
 
@@ -995,7 +993,7 @@ sudo gitlab-ctl restart sidekiq
 
 Only proceed if you have successfully completed all steps on the Geo **primary** multi-node deployment.
 
-**On all nodes _including_ the secondary "deploy node"**
+**On all secondary nodes _including_ the secondary "deploy node"**
 
 Create an empty file at `/etc/gitlab/skip-auto-reconfigure`. During software
 installation only, this will prevent the upgrade from running
@@ -1004,8 +1002,6 @@ installation only, this will prevent the upgrade from running
 ```shell
 sudo touch /etc/gitlab/skip-auto-reconfigure
 ```
-
-**On all other nodes _including_ the secondary "deploy node"**
 
 1. Ensure that `geo_secondary['auto_migrate'] = false` is set in `/etc/gitlab/gitlab.rb`
 
@@ -1068,7 +1064,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
      sudo gitlab-ctl start geo-logcursor
      ```
 
-**On all nodes _excluding_ the secondary "deploy node"**
+**On all secondary nodes _excluding_ the secondary "deploy node"**
 
 1. Update the GitLab package
 
@@ -1086,7 +1082,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
-**For all nodes that run Puma/Unicorn, Sidekiq, or the `geo-logcursor` daemon _including_ the secondary "deploy node"**
+**For all secondary nodes that run Puma/Unicorn, Sidekiq, or the `geo-logcursor` daemon _including_ the secondary "deploy node"**
 
 Hot reload `puma` (or `unicorn`), `sidekiq` and ``geo-logcursor`` services:
 
@@ -1127,11 +1123,6 @@ sudo gitlab-ctl restart geo-logcursor
    ```shell
    sudo gitlab-rake geo:db:migrate
    ```
-
-1. Wait for the **primary** migrations to finish.
-
-1. Wait for the **primary** migrations to replicate. You can find "Data
-   replication lag" for each node listed on `Admin Area > Geo`.
 
 1. Verify Geo configuration and dependencies
 
