@@ -58,7 +58,7 @@ module GitlabRails
       parse_repository_storage
     end
 
-    def parse_secrets
+    def parse_secrets # rubocop:disable Metrics/AbcSize (disabled because it is false positive)
       # Blow up when the existing configuration is ambiguous, so we don't accidentally throw away important secrets
       ci_db_key_base = Gitlab['gitlab_ci']['db_key_base']
       rails_db_key_base = Gitlab['gitlab_rails']['db_key_base']
