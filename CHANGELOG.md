@@ -150,6 +150,13 @@ No changes.
 - Remove apt-transport-https as apt natively support https. (Simon Deziel)
 
 
+## 13.9.7 (2021-04-27)
+
+### Security (2 changes)
+
+- [Update Python to 3.7.10](gitlab-org/security/omnibus-gitlab@ceab316d499057d89e63524e3f368dda8622eb79) ([merge request](gitlab-org/security/omnibus-gitlab!107))
+- [Upgrade redis to 6.0.12](gitlab-org/security/omnibus-gitlab@54d594a01573ba5fbff173b0395e9e394373192a) ([merge request](gitlab-org/security/omnibus-gitlab!104))
+
 ## 13.9.6 (2021-04-13)
 
 ### Security (1 change)
