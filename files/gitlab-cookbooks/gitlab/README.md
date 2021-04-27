@@ -27,7 +27,7 @@ Generate puma.rb configuration file
 * `listen_socket`: Full path of the socket to listen on. Optional
 * `listen_tcp`: TCP address and port to listen on. Optional
 * `working_directory`: Directory to run puma from. Optional
-* `worker_timeout`: Puma wworker timeout. Default: `60`
+* `worker_timeout`: Puma worker timeout. Default: `60`
 * `per_worker_max_memory_mb`: Puma max memory per worker (in MB). Optional
 * `worker_processes, Integer`: Puma number of worker process. Default: `2`
 * `min_threads`: Puma min number of threads. Default: `4`
