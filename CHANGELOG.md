@@ -66,6 +66,13 @@ No changes.
 - [Update grafana from 7.4.2 to 7.5.1](gitlab-org/omnibus-gitlab@f24acaa0eda025c8a2982770b1a012775a2e1ecc) ([merge request](gitlab-org/omnibus-gitlab!5041))
 - [Update Mattermost to 5.33.3](gitlab-org/omnibus-gitlab@5ea328d92881bfc991582bf83bb3aba2a248aaad) ([merge request](gitlab-org/omnibus-gitlab!5151))
 
+## 13.10.4 (2021-04-27)
+
+### Security (2 changes)
+
+- [Update Python to 3.7.10](gitlab-org/security/omnibus-gitlab@f893a4a8369c8d9ce077e71a3aec756f9b5aac47) ([merge request](gitlab-org/security/omnibus-gitlab!106))
+- [Upgrade redis to 6.0.12](gitlab-org/security/omnibus-gitlab@b286c6ed65dfc1cac8c1d04545b610e8d205469b) ([merge request](gitlab-org/security/omnibus-gitlab!103))
+
 ## 13.10.3 (2021-04-13)
 
 ### Security (1 change)
