@@ -61,7 +61,7 @@ Puma workers are performed every 12 hours.
 To change the memory limit setting:
 
 ```ruby
-puma['per_worker_max_memory_mb'] = 850
+puma['per_worker_max_memory_mb'] = 1024
 ```
 
 ## Worker timeout
