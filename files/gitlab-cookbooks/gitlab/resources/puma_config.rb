@@ -5,7 +5,7 @@ property :filename, String, name_property: true
 property :tag, String, default: 'gitlab-puma-worker'
 property :rackup, String, default: 'config.ru'
 property :environment, String, default: 'production'
-property :install_dir, [String, nil], default: nil
+property :install_dir, [String, nil], default: lazy { node['package']['install-dir'] }
 property :listen_socket, [String, nil], default: nil
 property :listen_tcp, [String, nil], default: nil
 property :working_directory, [String, nil], default: nil

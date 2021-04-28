@@ -7,7 +7,7 @@ puma_config '/var/opt/gitlab/gitlab-rails/etc/puma.rb' do
   working_directory '/var/opt/gitlab/gitlab-rails/working'
   worker_processes 2
   per_worker_max_memory_mb 1000
-  install_dir '/opt/gitlab'
+  install_dir '/opt/custom/gitlab'
   cookbook 'gitlab'
 
   action :create
