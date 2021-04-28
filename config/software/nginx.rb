@@ -33,6 +33,8 @@ dependency 'openssl'
 # Include the nginx-module-vts for metrics.
 dependency 'nginx-module-vts'
 
+dependency 'ngx_security_headers'
+
 version '1.18.0' do
   source sha256: '4c373e7ab5bf91d34a4f11a0c9496561061ba5eee6020db272a17a7228d35f99'
 end
@@ -53,6 +55,7 @@ build do
            '--with-ipv6',
            '--with-debug',
            "--add-module=#{Omnibus::Config.source_dir}/nginx-module-vts",
+           "--add-module=#{Omnibus::Config.source_dir}/ngx_security_headers",
            "--with-ld-opt=-L#{install_dir}/embedded/lib",
            "--with-cc-opt=\"-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include\""].join(' ')
   command "make -j #{workers}", env: { 'LD_RUN_PATH' => "#{install_dir}/embedded/lib" }
