@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.10.4 (2021-04-27)
+
+### Security (2 changes)
+
+- [Update Python to 3.7.10](gitlab-org/security/omnibus-gitlab@f893a4a8369c8d9ce077e71a3aec756f9b5aac47) ([merge request](gitlab-org/security/omnibus-gitlab!106))
+- [Upgrade redis to 6.0.12](gitlab-org/security/omnibus-gitlab@b286c6ed65dfc1cac8c1d04545b610e8d205469b) ([merge request](gitlab-org/security/omnibus-gitlab!103))
+
 ## 13.10.3 (2021-04-13)
 
 ### Security (1 change)
