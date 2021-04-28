@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'ngx_security_headers'
 version = Gitlab::Version.new('ngx_security_headers', '0.0.9')
-default_version version.print
+default_version version.print(false)
 
 license 'BSD-2-Clause'
 license_file 'LICENSE'
