@@ -51,6 +51,9 @@ exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
     <% if node['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] %>
     -apiCiLongPollingDuration <%= node['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] %> \
     <% end %>
+    <% if node['gitlab']['gitlab-workhorse']['propagate_correlation_id'] %>
+    -propagateCorrelationID \
+    <% end %>
     <% if node['gitlab']['gitlab-workhorse']['log_format'] %>
     -logFormat <%= node['gitlab']['gitlab-workhorse']['log_format'] %> \
     <% end %>

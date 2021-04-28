@@ -678,6 +678,7 @@ default['gitlab']['gitlab-workhorse']['api_limit'] = nil
 default['gitlab']['gitlab-workhorse']['api_queue_duration'] = nil
 default['gitlab']['gitlab-workhorse']['api_queue_limit'] = nil
 default['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] = nil
+default['gitlab']['gitlab-workhorse']['propagate_correlation_id'] = false
 default['gitlab']['gitlab-workhorse']['log_format'] = "json"
 default['gitlab']['gitlab-workhorse']['env_directory'] = '/opt/gitlab/etc/gitlab-workhorse/env'
 default['gitlab']['gitlab-workhorse']['env'] = {
