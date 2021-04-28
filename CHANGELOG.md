@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.11.2 (2021-04-27)
+
+### Security (2 changes)
+
+- [Update Python to 3.7.10](gitlab-org/security/omnibus-gitlab@a2cf223f65bc6877e811fd745c40a1f5152e4dbc) ([merge request](gitlab-org/security/omnibus-gitlab!109))
+- [Upgrade redis to 6.0.12](gitlab-org/security/omnibus-gitlab@94962afe65714eb8bb8c6ecf8a0c42907b12a4eb) ([merge request](gitlab-org/security/omnibus-gitlab!108))
+
 ## 13.11.1+ee.0 (2021-04-22)
 
 No changes.
@@ -58,6 +65,13 @@ No changes.
 
 - [Update grafana from 7.4.2 to 7.5.1](gitlab-org/omnibus-gitlab@f24acaa0eda025c8a2982770b1a012775a2e1ecc) ([merge request](gitlab-org/omnibus-gitlab!5041))
 - [Update Mattermost to 5.33.3](gitlab-org/omnibus-gitlab@5ea328d92881bfc991582bf83bb3aba2a248aaad) ([merge request](gitlab-org/omnibus-gitlab!5151))
+
+## 13.10.4 (2021-04-27)
+
+### Security (2 changes)
+
+- [Update Python to 3.7.10](gitlab-org/security/omnibus-gitlab@f893a4a8369c8d9ce077e71a3aec756f9b5aac47) ([merge request](gitlab-org/security/omnibus-gitlab!106))
+- [Upgrade redis to 6.0.12](gitlab-org/security/omnibus-gitlab@b286c6ed65dfc1cac8c1d04545b610e8d205469b) ([merge request](gitlab-org/security/omnibus-gitlab!103))
 
 ## 13.10.3 (2021-04-13)
 
@@ -135,6 +149,13 @@ No changes.
 - Update Mattermost to 5.32.1.
 - Remove apt-transport-https as apt natively support https. (Simon Deziel)
 
+
+## 13.9.7 (2021-04-27)
+
+### Security (2 changes)
+
+- [Update Python to 3.7.10](gitlab-org/security/omnibus-gitlab@ceab316d499057d89e63524e3f368dda8622eb79) ([merge request](gitlab-org/security/omnibus-gitlab!107))
+- [Upgrade redis to 6.0.12](gitlab-org/security/omnibus-gitlab@54d594a01573ba5fbff173b0395e9e394373192a) ([merge request](gitlab-org/security/omnibus-gitlab!104))
 
 ## 13.9.6 (2021-04-13)
 
