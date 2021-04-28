@@ -18,7 +18,7 @@
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
-name 'nginx-module-vts'
+name 'ngx_security_headers'
 version = Gitlab::Version.new('ngx_security_headers', '0.0.9')
 default_version version.print
 
