@@ -2,9 +2,9 @@ resource_name :rails_migration
 provides :rails_migration
 
 property :migration_name, name_property: true
-property :migration_logfile_prefix
-property :migration_task
-property :migration_helper
+property :migration_logfile_prefix, String, required: true
+property :migration_task, String, required: true
+property :migration_helper, required: true
 property :environment
 property :dependent_services
 
