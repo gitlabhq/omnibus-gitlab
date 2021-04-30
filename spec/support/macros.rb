@@ -84,5 +84,11 @@ module GitlabSpec
       config_recipe = is_ee ? 'gitlab-ee::config' : 'gitlab::config'
       ChefSpec::SoloRunner.converge(config_recipe, *recipes)
     end
+
+    # Return the full path for the spec fixtures folder
+    # @return [String] full path
+    def fixture_path
+      File.join(__dir__, '../fixtures')
+    end
   end
 end
