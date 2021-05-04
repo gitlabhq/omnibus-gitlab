@@ -17,6 +17,12 @@ module Gitlab
         # Similarly, %w(gitlab nginx listen_addresses) means
         # `gitlab['nginx']['listen_addresses']`. We internally convert it to
         # nginx['listen_addresses'], which is what we use in /etc/gitlab/gitlab.rb
+        #
+        # If you need to deprecate configuration relating to a component entirely,
+        # make use of the `identify_deprecated_config` method. You can do this
+        # by adding a line like the following before the return statement of
+        # this method.
+        # deprecations += identify_deprecated_config(existing_config, ['gitlab', 'foobar'], {}, "13.12", "14.0", "Support for foobar will be removed in GitLab 14.0")
         deprecations = [
           {
             config_keys: %w(gitlab postgresql data_dir),
@@ -117,6 +123,8 @@ module Gitlab
           },
         ]
 
+        deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")
+
         deprecations
       end
 
@@ -135,10 +143,12 @@ module Gitlab
         # 4. deprecation: Version since which were the configurations deprecated
         # 5. removal: Version in which were the configurations removed
         # 6. note: General note regarding removal
+        return [] unless existing_config
+
         matching_config = existing_config.dig(*config_keys)
         return [] unless matching_config
 
-        deprecated_config = matching_config.select { |config| !allowed_keys.include?(config) }
+        deprecated_config = matching_config.reject { |config| allowed_keys.include?(config) }
         deprecated_config.keys.map do |key|
           {
             config_keys: config_keys + [key],
@@ -194,6 +204,38 @@ module Gitlab
           message += " " + deprecation[:note] if deprecation[:note]
           messages << message
         end
+
+        messages += additional_deprecations(incoming_version, existing_config, type)
+
+        messages
+      end
+
+      def additional_deprecations(incoming_version, existing_config, type)
+        messages = []
+        messages += deprecate_only_if_value(incoming_version, existing_config, type, ['gitlab', 'unicorn'], 'enable', true, '13.10', '14.0')
+
+        messages
+      end
+
+      def deprecate_only_if_value(incoming_version, existing_config, type, config_keys, key, value, deprecated_version, removed_version)
+        setting = existing_config.dig(*config_keys) || {}
+
+        # Return empty array if the setting is either nil or an empty collection (Array, Hash, etc.).
+        # `to_h` will convert `nil` to an empty array.
+        return [] if setting[key].respond_to?(:to_h) && setting[key].to_h.empty?
+
+        # Do not add messages for removals. We only handle deprecations here.
+        return [] if type == :removal && setting[key] != value
+
+        config_keys.shift if ATTRIBUTE_BLOCKS.include?(config_keys[0])
+        messages = []
+
+        if Gem::Version.new(incoming_version) >= Gem::Version.new(removed_version) && type == :removal
+          messages << "* #{config_keys[0]}[#{key}] has been deprecated since #{deprecated_version} and was removed in #{removed_version}."
+        elsif Gem::Version.new(incoming_version) >= Gem::Version.new(deprecated_version) && type == :deprecation
+          messages << "* #{config_keys[0]}[#{key}] has been deprecated since #{deprecated_version} and will be removed in #{removed_version}."
+        end
+
         messages
       end
     end
