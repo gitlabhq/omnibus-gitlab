@@ -17,6 +17,7 @@
 require 'digest'
 
 omnibus_helper = OmnibusHelper.new(node)
+migration_helper = RailsMigrationHelper.new(node)
 
 initial_root_password = node['gitlab']['gitlab-rails']['initial_root_password']
 initial_license_file = node['gitlab']['gitlab-rails']['initial_license_file'] || Dir.glob('/etc/gitlab/*.gitlab-license').first
@@ -53,10 +54,12 @@ end
 rails_migration "gitlab-rails" do
   migration_task 'gitlab:db:configure'
   migration_logfile_prefix 'gitlab-rails-db-migrate'
-  migration_helper RailsMigrationHelper.new(node)
+  migration_helper migration_helper
 
   environment env_variables
   dependent_services dependent_services
   notifies :run, "execute[clear the gitlab-rails cache]", :immediately
   notifies :run, "ruby_block[check remote PG version]", :immediately
+
+  only_if { migration_helper.attributes_node['auto_migrate'] }
 end

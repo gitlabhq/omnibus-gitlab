@@ -31,6 +31,5 @@ action :run do
     end
 
     not_if { new_resource.migration_helper.migrated? }
-    only_if { new_resource.migration_helper.attributes_node['auto_migrate'] }
   end
 end

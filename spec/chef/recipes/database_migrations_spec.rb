@@ -63,7 +63,7 @@ RSpec.describe 'gitlab::database-migrations' do
       before { stub_gitlab_rb(gitlab_rails: { auto_migrate: false }) }
 
       it 'skips running the migrations' do
-        expect(chef_run).not_to run_bash('migrate gitlab-rails database')
+        expect(chef_run).not_to run_rails_migration('gitlab-rails')
       end
     end
 

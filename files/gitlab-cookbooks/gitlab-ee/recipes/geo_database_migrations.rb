@@ -16,6 +16,7 @@
 #
 
 omnibus_helper = OmnibusHelper.new(node)
+migration_helper = GitlabGeoHelper.new(node)
 
 dependent_services = []
 dependent_services << "unicorn_service[unicorn]" if omnibus_helper.should_notify?("unicorn")
@@ -26,8 +27,10 @@ dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify
 rails_migration "gitlab-geo tracking" do
   migration_task 'geo:db:migrate'
   migration_logfile_prefix 'gitlab-geo-db-migrate'
-  migration_helper GitlabGeoHelper.new(node)
+  migration_helper migration_helper
 
   dependent_services dependent_services
   notifies :run, 'execute[start geo-postgresql]', :before if omnibus_helper.should_notify?('geo-postgresql')
+
+  only_if { migration_helper.attributes_node['auto_migrate'] }
 end

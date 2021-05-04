@@ -85,7 +85,7 @@ RSpec.describe 'gitlab-ee::geo-database-migrations' do
 
       it 'skips running the migrations' do
         expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
-        expect(chef_run).not_to run_bash(name)
+        expect(chef_run).not_to run_rails_migration('gitlab-geo tracking')
       end
     end
   end

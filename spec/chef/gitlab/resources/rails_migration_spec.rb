@@ -9,7 +9,7 @@ RSpec.describe 'rails_migration' do
   end
 
   context 'run' do
-    let(:chef_run) { runner.converge('gitlab::config', 'test_gitlab::rails_migration_run') }
+    let(:chef_run) { runner.converge('test_gitlab::rails_migration_run') }
     let(:bash_block) { chef_run.bash('migrate gitlab-test database') }
     let(:migration_block) { chef_run.rails_migration('gitlab-test') }
 
@@ -43,18 +43,6 @@ RSpec.describe 'rails_migration' do
 
       it 'doesnt execute if already migrated' do
         expect_any_instance_of(RailsMigrationHelper).to receive(:migrated?) { true }
-
-        expect(chef_run).not_to run_bash('migrate gitlab-test database')
-      end
-
-      it 'doesnt execute if auto_migrate is disabled' do
-        stub_gitlab_rb(
-          {
-            gitlab_rails: {
-              auto_migrate: false
-            }
-          }
-        )
 
         expect(chef_run).not_to run_bash('migrate gitlab-test database')
       end
