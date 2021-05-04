@@ -6,7 +6,7 @@ property :migration_logfile_prefix, String, required: true
 property :migration_task, String, required: true
 property :migration_helper, required: true
 property :environment
-property :dependent_services
+property :dependent_services, Array, default: []
 
 default_action :run
 
