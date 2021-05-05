@@ -126,6 +126,7 @@
     variables:
       - $DEPS_PIPELINE || $CACHE_UPDATE
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
+  needs: []
 
 .review-docs:
   image: "${RUBY_IMAGE}-alpine"
@@ -430,7 +431,7 @@ Trigger:gitlab-docker:
 Trigger:measure-memory:
   extends: .measure_memory_script_artifacts
   dependencies: []
-  stage: metrics
+  stage: trigger-metrics
   when: manual
   <<: *com-trigger-only
 
@@ -503,6 +504,7 @@ dependencies_io_check:
     refs:
       - triggers
       - branches@gitlab/omnibus-gitlab
+  needs: []
 
 validate_packer_changes:
   before_script: []
