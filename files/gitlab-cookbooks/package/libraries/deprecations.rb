@@ -220,6 +220,8 @@ module Gitlab
       def deprecate_only_if_value(incoming_version, existing_config, type, config_keys, key, value, deprecated_version, removed_version)
         setting = existing_config.dig(*config_keys) || {}
 
+        return [] unless setting.key?(key)
+
         # Return empty array if the setting is either nil or an empty collection (Array, Hash, etc.).
         # `to_h` will convert `nil` to an empty array.
         return [] if setting[key].respond_to?(:to_h) && setting[key].to_h.empty?
