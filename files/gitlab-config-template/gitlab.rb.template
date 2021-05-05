@@ -1400,7 +1400,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['sendfile'] = 'on'
 # nginx['tcp_nopush'] = 'on'
 # nginx['tcp_nodelay'] = 'on'
-# nginx['gzip'] = "on"
 # nginx['gzip_http_version'] = "1.0"
 # nginx['gzip_comp_level'] = "2"
 # nginx['gzip_proxied'] = "any"

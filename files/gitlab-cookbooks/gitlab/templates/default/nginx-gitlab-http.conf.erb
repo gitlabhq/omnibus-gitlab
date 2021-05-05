@@ -138,8 +138,8 @@ server {
     set $http_host_with_default $http_host;
   }
 
-<% if @gzip_enabled %>
   gzip <%= @gzip %>;
+  <% if @gzip_enabled %>
   gzip_static on;
   gzip_comp_level <%= @gzip_comp_level %>;
   gzip_http_version <%= @gzip_http_version %>;
@@ -148,7 +148,7 @@ server {
   gzip_min_length 250;
   gzip_proxied <%= @gzip_proxied %>;
   gzip_types <%= @gzip_types.join(' ') %>;
-<% end %>
+  <% end %>
 
   ## https://github.com/gitlabhq/gitlabhq/issues/694
   ## Some requests take more than 30 seconds.
