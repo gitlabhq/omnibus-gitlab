@@ -177,7 +177,7 @@ RSpec.describe 'patroni cookbook' do
       expect(chef_run).to create_postgresql_user('gitlab')
       expect(chef_run).to create_postgresql_user('gitlab_replicator')
       expect(chef_run).to create_pgbouncer_user('rails')
-      expect(chef_run).to run_execute('create gitlabhq_production database')
+      expect(chef_run).to create_postgresql_database('gitlabhq_production')
       expect(chef_run).to enable_postgresql_extension('pg_trgm')
       expect(chef_run).to enable_postgresql_extension('btree_gist')
     end
