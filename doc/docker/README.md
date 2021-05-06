@@ -633,3 +633,7 @@ solution to fix this problem is to increase the size of shm to at least 256Mb.
 If using `docker run`, this can be done by passing the flag `--shm-size 256m`.
 If using a `docker-compose.yml` file, the `shm_size` key can be used for this
 purpose.
+
+### Docker containers exhausts space due to the `json-file`
+
+Docker's [default logging driver is `json-file`](https://docs.docker.com/config/containers/logging/configure/#configure-the-default-logging-driver), which performs no log rotation by default. As a result of this lack of rotation, log files stored by the `json-file` driver can consume a significant amount of disk space for containers that generate a lot of output. This can lead to disk space exhaustion. To address this, use [journald](https://docs.docker.com/config/containers/logging/journald/) as the logging driver when available, or [another supported driver](https://docs.docker.com/config/containers/logging/configure/#supported-logging-drivers) with native rotation support.
