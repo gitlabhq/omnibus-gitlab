@@ -462,7 +462,7 @@ Trigger:qa-test:
   dependencies: []
 
 Trigger:ha-validate:
-  stage: trigger-ha-validate
+  stage: trigger-qa
   image: "${RUBY_IMAGE}"
   when: manual
   script:
@@ -472,7 +472,7 @@ Trigger:ha-validate:
     - Trigger:ee-package
 
 Trigger:RAT:
-  stage: trigger-ha-validate
+  stage: trigger-qa
   image: "${RUBY_IMAGE}"
   when: manual
   script:
