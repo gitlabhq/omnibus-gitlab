@@ -3,9 +3,9 @@ ruby_block 'test-dependent' do
 end
 
 rails_migration 'gitlab-test' do
-  migration_task 'gitlab:db:configure'
-  migration_logfile_prefix 'gitlab-test-db-migrate'
-  migration_helper RailsMigrationHelper.new(node)
+  rake_task 'gitlab:db:configure'
+  logfile_prefix 'gitlab-test-db-migrate'
+  helper RailsMigrationHelper.new(node)
 
   dependent_services ["ruby_block[test-dependent]"]
 end

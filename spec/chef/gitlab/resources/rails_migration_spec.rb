@@ -14,13 +14,13 @@ RSpec.describe 'rails_migration' do
     let(:migration_block) { chef_run.rails_migration('gitlab-test') }
 
     context 'bash script' do
-      it 'defines log file based on migration_logfile_prefix' do
+      it 'defines log file based on logfile_prefix' do
         log_file = %(log_file="/var/log/gitlab/gitlab-rails/gitlab-test-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log")
 
         expect(bash_block.code).to include(log_file)
       end
 
-      it 'triggers provided migration_task' do
+      it 'triggers provided rake_task' do
         migrate = %(/opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file})
 
         expect(bash_block.code).to match(/#{migrate}/)

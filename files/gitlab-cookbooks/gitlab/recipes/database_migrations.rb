@@ -52,9 +52,9 @@ ruby_block "check remote PG version" do
 end
 
 rails_migration "gitlab-rails" do
-  migration_task 'gitlab:db:configure'
-  migration_logfile_prefix 'gitlab-rails-db-migrate'
-  migration_helper migration_helper
+  rake_task 'gitlab:db:configure'
+  logfile_prefix 'gitlab-rails-db-migrate'
+  helper migration_helper
 
   environment env_variables
   dependent_services dependent_services

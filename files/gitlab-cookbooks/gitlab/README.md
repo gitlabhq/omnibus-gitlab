@@ -58,10 +58,10 @@ Configure runit service for running sidekiq
 
 #### properties
 
-* `migration_name` (name property): A descriptive and unique name that will be used as part of the bash resource name
-* `migration_logfile_prefix` A unique file prefix name that will be used to create migration log files. Required
-* `migration_task` A rails task that will be executed to migrate/setup the application. Required
-* `migration_helper` RailsMigrationHelper instance or a subclass of it with its required customized attributes. Required.
+* `name` (name property): A descriptive and unique name that will be used as part of the bash resource name
+* `logfile_prefix` A unique file prefix name that will be used to create migration log files. Required
+* `rake_task` A rails task that will be executed to migrate/setup the application. Required
+* `helper` RailsMigrationHelper instance or a subclass of it with its required customized attributes. Required.
 * `environment` A hash of environmental variables that needs to be set when running the rake task. Optional
 * `dependent_services` An array of chef resource references that will be notified for restart when successful. Optional
 
@@ -71,9 +71,9 @@ Run database migrations for example-product
 
 ```ruby
 rails_migration 'rails-app' do
-  migration_task 'db:migrate'
-  migration_logfile_prefix 'rails-app-db-migrate'
-  migration_helper RailsAppMigrationHelper.new(node)
+  rake_task 'db:migrate'
+  logfile_prefix 'rails-app-db-migrate'
+  helper RailsAppMigrationHelper.new(node)
   dependent_services ['runit_service[puma]']
 end
 ```

@@ -25,9 +25,9 @@ dependent_services << "runit_service[actioncable]" if omnibus_helper.should_noti
 dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
 
 rails_migration "gitlab-geo tracking" do
-  migration_task 'geo:db:migrate'
-  migration_logfile_prefix 'gitlab-geo-db-migrate'
-  migration_helper migration_helper
+  rake_task 'geo:db:migrate'
+  logfile_prefix 'gitlab-geo-db-migrate'
+  helper migration_helper
 
   dependent_services dependent_services
   notifies :run, 'execute[start geo-postgresql]', :before if omnibus_helper.should_notify?('geo-postgresql')
