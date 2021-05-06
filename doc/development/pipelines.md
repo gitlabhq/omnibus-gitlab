@@ -137,8 +137,7 @@ mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror). These can be
 This pipeline is intended to give the developers a package and an image to test
 their changes in addition to automatically doing a QA run against these
 artifacts. It also provides an option to do a QA run against an HA instance spun
-up using these artifacts, and to run a memory measurement job to measure the
-resource usage by GitLab using the Docker image.
+up using these artifacts.
 
 ## CI Jobs
 
@@ -276,13 +275,6 @@ instance in Terraform using that package and run QA against it.
 
 This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
 
-#### `Trigger:measure-memory`
-
-This manual job spins up a Docker container using the GitLab Docker image and
-measures memory usage inside it and stores the details as an artifact.
-
-This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
-
 #### `<OS_NAME>-branch`
 
 These jobs build packages for the specified OS, and pushes the resultant package
@@ -304,13 +296,6 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 
 This job builds a GitLab QA Docker image from the [qa directory in the Rails
 codebase](https://gitlab.com/gitlab-org/gitlab/blob/master/qa/Dockerfile).
-
-This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on branch and nightly pipelines.
-
-#### `Docker-branch-measure-memory`
-
-This manual job spins up a Docker container using the GitLab Docker image and
-measures memory usage inside it and stores the details as an artifact.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on branch and nightly pipelines.
 
@@ -432,13 +417,6 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 This job triggers a pipeline in the [GitLab Provisioner](https://gitlab.com/gitlab-org/distribution/gitlab-provisioner) project passing the URL
 to the Ubuntu 16.04 package built in this pipeline, which will spin up an HA
 instance in Terraform using that package and run QA against it.
-
-This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
-
-### `Docker-measure-memory`
-
-This job spins up a Docker container using the GitLab Docker image and measures
-memory usage inside it and stores the details as an artifact.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 

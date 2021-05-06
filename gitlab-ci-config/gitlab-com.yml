@@ -429,13 +429,6 @@ Trigger:gitlab-docker:
     - bundle exec rake docker:push:triggered
   <<: *com-trigger-only
 
-Trigger:measure-memory:
-  extends: .measure_memory_script_artifacts
-  dependencies: []
-  stage: trigger-metrics
-  when: manual
-  <<: *com-trigger-only
-
 Trigger:qa-docker:
   extends:
     - .docker_job
