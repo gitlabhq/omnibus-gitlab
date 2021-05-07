@@ -1,10 +1,6 @@
 stages:
   - prepare-assets
   - update-cache
-  - trigger-package
-  - trigger-docker
-  - trigger-ha-validate
-  - trigger-qa
   - check
   - prepare
   - tests
@@ -21,6 +17,11 @@ stages:
   - raspbian-release
   - aws-marketplace-release
   - notification_fail
+  - trigger-package
+  - trigger-docker
+  - trigger-ha-validate
+  - trigger-qa
+  - trigger-metrics
 
 workflow:
   rules:

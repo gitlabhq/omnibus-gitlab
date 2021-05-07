@@ -47,6 +47,8 @@
     - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json'
   <<: *com-except-triggers
   retry: 1
+  needs:
+    - rubocop
 
 .gems-cache:
   cache:
@@ -124,6 +126,8 @@
     variables:
       - $DEPS_PIPELINE || $CACHE_UPDATE
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
+  needs: []
+  timeout: 3h
 
 .review-docs:
   image: "${RUBY_IMAGE}-alpine"
@@ -215,13 +219,14 @@ rubocop:
   script:
     - bundle exec rubocop --parallel
   <<: *com-except-triggers
+  needs: []
 
 # Perform documentation linting on Markdown files
 docs-lint markdown:
   image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.13-vale-2.10.2-markdownlint-0.26.0
   stage: check
   cache: {}
-  dependencies: []
+  needs: []
   before_script: []
   script:
     # Lint prose
@@ -243,7 +248,7 @@ docs-lint links:
   image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.13-ruby-2.7.2
   stage: check
   cache: {}
-  dependencies: []
+  needs: []
   before_script: []
   script:
     # Prepare docs for build
@@ -295,7 +300,7 @@ danger-review:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
   stage: check
   cache: {}
-  dependencies: []
+  needs: []
   before_script: []
   only:
     refs:
@@ -325,55 +330,55 @@ Ubuntu 16.04 specs:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
   extends: .spec_template
   parallel: 6
-  dependencies:
+  needs:
   - Ubuntu 16.04 knapsack
 Ubuntu 18.04 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
   extends: .spec_template
   parallel: 6
-  dependencies:
+  needs:
   - Ubuntu 18.04 knapsack
 Ubuntu 20.04 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-focal"
   extends: .spec_template
   parallel: 6
-  dependencies:
+  needs:
   - Ubuntu 20.04 knapsack
 Debian 9 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
   extends: .spec_template
   parallel: 6
-  dependencies:
+  needs:
   - Debian 9 knapsack
 Debian 10 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-buster"
   extends: .spec_template
   parallel: 6
-  dependencies:
+  needs:
   - Debian 10 knapsack
 Centos 7 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
   extends: .spec_template
   parallel: 6
-  dependencies:
+  needs:
   - Centos 7 knapsack
 Centos 8 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos8"
   extends: .spec_template
   parallel: 6
-  dependencies:
+  needs:
   - Centos 8 knapsack
 OpenSUSE 15.1 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse15.1"
   extends: .spec_template
   parallel: 6
-  dependencies:
+  needs:
   - OpenSUSE 15.1 knapsack
 OpenSUSE 15.2 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse15.2"
   extends: .spec_template
   parallel: 6
-  dependencies:
+  needs:
   - OpenSUSE 15.2 knapsack
 
 update-knapsack:
@@ -427,7 +432,7 @@ Trigger:gitlab-docker:
 Trigger:measure-memory:
   extends: .measure_memory_script_artifacts
   dependencies: []
-  stage: metrics
+  stage: trigger-metrics
   when: manual
   <<: *com-trigger-only
 
@@ -457,7 +462,7 @@ Trigger:qa-test:
   dependencies: []
 
 Trigger:ha-validate:
-  stage: trigger-ha-validate
+  stage: trigger-qa
   image: "${RUBY_IMAGE}"
   when: manual
   script:
@@ -467,7 +472,7 @@ Trigger:ha-validate:
     - Trigger:ee-package
 
 Trigger:RAT:
-  stage: trigger-ha-validate
+  stage: trigger-qa
   image: "${RUBY_IMAGE}"
   when: manual
   script:
@@ -500,6 +505,7 @@ dependencies_io_check:
     refs:
       - triggers
       - branches@gitlab/omnibus-gitlab
+  needs: []
 
 validate_packer_changes:
   before_script: []
