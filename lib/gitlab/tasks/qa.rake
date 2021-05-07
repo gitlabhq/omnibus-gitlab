@@ -6,7 +6,6 @@ require_relative '../build/info'
 require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
 require_relative '../build/qa_trigger'
-require_relative '../build/ha_validate'
 require_relative '../build/rat'
 require_relative "../util.rb"
 
@@ -87,29 +86,6 @@ namespace :qa do
       image_address = Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info.docker_tag)
       Dir.chdir('letsencrypt-test') do
         system({ 'IMAGE' => image_address }, './test.sh')
-      end
-    end
-  end
-
-  namespace :ha do
-    desc "Validate HA setup"
-    task :validate do
-      Gitlab::Util.section('qa:ha:validate') do
-        Build::HA::ValidateTrigger.invoke!.wait!(timeout: 3600 * 4)
-      end
-    end
-
-    desc 'Validate nightly build'
-    task :nightly do
-      Gitlab::Util.section('qa:ha:nightly') do
-        Build::HA::ValidateNightly.invoke!.wait!(timeout: 3600 * 4)
-      end
-    end
-
-    desc 'Validate tagged build'
-    task :tag do
-      Gitlab::Util.section('qa:ha:tag') do
-        Build::HA::ValidateTag.invoke!(timeout: 3600 * 4)
       end
     end
   end

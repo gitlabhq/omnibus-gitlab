@@ -167,7 +167,6 @@ Performance/Count:
 Performance/Detect:
   Exclude:
     - 'files/gitlab-cookbooks/gitlab/libraries/patroni.rb'
-    - 'lib/gitlab/build/ha_validate/trigger.rb'
 
 # Offense count: 7
 # Cop supports --auto-correct.

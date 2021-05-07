@@ -596,16 +596,6 @@ Raspberry-Pi-2-Buster-branch:
   <<: *rpi_branch_build
 
 # This job runs only on nightly EE builds
-HA-Validate-Nightly:
-  stage: slow_jobs
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  script:
-    - '[[ -n "${NIGHTLY}" ]] || exit 0'
-    - bundle exec rake qa:ha:nightly
-  <<: *dev-ee-nightly-only
-  cache: *branch-cache
-  dependencies: []
-
 RAT-Nightly:
   stage: slow_jobs
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
@@ -1011,16 +1001,6 @@ license-upload:
   cache: *tag-cache
   dependencies:
     - Ubuntu-18.04
-
-HA-Validate-Tagged:
-  stage: slow_jobs
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  script:
-    - bundle exec rake qa:ha:tag
-  <<: *dev-ee-tag-only
-  cache: *tag-cache
-  dependencies: []
-  allow_failure: true
 
 RAT-Tag:
   stage: slow_jobs

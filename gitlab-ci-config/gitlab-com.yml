@@ -466,16 +466,6 @@ Trigger:letsencrypt-test:
   <<: *com-trigger-only
   dependencies: []
 
-Trigger:ha-validate:
-  stage: trigger-qa
-  image: "${RUBY_IMAGE}"
-  when: manual
-  script:
-      - bundle exec rake qa:ha:validate
-  <<: *com-trigger-only
-  dependencies:
-    - Trigger:ee-package
-
 Trigger:RAT:
   stage: trigger-qa
   image: "${RUBY_IMAGE}"

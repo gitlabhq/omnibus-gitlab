@@ -267,14 +267,6 @@ against up using these images
 
 This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
 
-#### `Trigger:ha-validate`
-
-This manual job triggers a pipeline in the [GitLab Provisioner](https://gitlab.com/gitlab-org/distribution/gitlab-provisioner) project passing
-the URL to the package built by `Trigger:package` job, which will spin up an HA
-instance in Terraform using that package and run QA against it.
-
-This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
-
 #### `Trigger:RAT`
 
 This manual job triggers a pipeline in the
@@ -422,14 +414,6 @@ This job runs a dependency scan on all the components of the package to check if
 any of them are vulnerable to any known vulnerabilities.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on tag and nightly pipelines.
-
-### `HA-Validate-Tagged`
-
-This job triggers a pipeline in the [GitLab Provisioner](https://gitlab.com/gitlab-org/distribution/gitlab-provisioner) project passing the URL
-to the Ubuntu 16.04 package built in this pipeline, which will spin up an HA
-instance in Terraform using that package and run QA against it.
-
-This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
 ### `RAT-Nightly`
 
