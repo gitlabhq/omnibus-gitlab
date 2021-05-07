@@ -374,8 +374,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
     # NOTE: Test if we pass proper notifications to other resources
     context 'rails cache management' do
       before do
-        allow_any_instance_of(OmnibusHelper).to receive(:not_listening?)
-          .and_return(false)
+        stub_default_not_listening?(false)
       end
 
       it 'should notify rails cache clear resource' do
