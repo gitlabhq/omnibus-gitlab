@@ -15,7 +15,7 @@ RSpec.describe 'gitlab::database-migrations' do
 
   context 'when migration should run' do
     before do
-      allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).and_return(false)
+      stub_default_not_listening?(false)
     end
 
     let(:bash_block) { chef_run.bash('migrate gitlab-rails database') }

@@ -14,6 +14,11 @@ module GitlabSpec
       allow_any_instance_of(OmnibusHelper).to receive(:success?).and_return(value)
     end
 
+    # @param [Boolean] value status whether it is listening or not
+    def stub_default_not_listening?(value)
+      allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).and_return(false)
+    end
+
     # @param [String] service internal name of the service (on-disk)
     # @param [Boolean] value status command succeed?
     def stub_service_success_status(service, value)
@@ -29,6 +34,12 @@ module GitlabSpec
     def stub_should_notify?(service, value)
       allow(File).to receive(:symlink?).with("/opt/gitlab/service/#{service}").and_return(value)
       stub_service_success_status(service, value)
+    end
+
+    # @param [String] service internal name of the service (on-disk)
+    # @param [Boolean] value status whether it is listening or not
+    def stub_not_listening?(service, value)
+      allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).with(service).and_return(value)
     end
 
     def stub_expected_owner?

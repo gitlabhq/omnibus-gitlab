@@ -16,7 +16,7 @@ RSpec.describe 'gitlab-ee::geo-database-migrations' do
 
   context 'when migration should run' do
     before do
-      allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).and_return(false)
+      stub_default_not_listening?(false)
       stub_gitlab_rb(geo_secondary_role: { enable: true })
 
       # Make sure other calls to `File.symlink?` are allowed.
