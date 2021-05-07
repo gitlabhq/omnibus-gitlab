@@ -118,19 +118,8 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
     describe 'migrations' do
       let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
-      context 'when geo_secondary["auto_migrate"] is false' do
-        it 'does not run the migrations' do
-          stub_gitlab_rb(geo_secondary: { auto_migrate: false })
-
-          expect(chef_run).not_to run_rails_migration('gitlab-geo tracking')
-        end
-      end
-
-      context 'when geo_secondary["auto_migrate"] is true' do
-        it 'runs the migrations' do
-          expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
-          expect(chef_run).to run_rails_migration('gitlab-geo tracking')
-        end
+      it 'includes the database migration recipe' do
+        expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
       end
     end
 
@@ -285,10 +274,10 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
     end
 
     describe 'migrations' do
-      let(:chef_run) { ChefSpec::SoloRunner.new(step_into: ['rails_migration']).converge('gitlab-ee::default') }
+      let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
       it 'runs the migrations' do
-        expect(chef_run).to run_bash('migrate gitlab-geo tracking database')
+        expect(chef_run).to run_rails_migration('gitlab-geo tracking')
       end
     end
 

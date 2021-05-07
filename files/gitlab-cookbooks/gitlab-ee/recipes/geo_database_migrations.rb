@@ -30,7 +30,7 @@ rails_migration "gitlab-geo tracking" do
   helper migration_helper
 
   dependent_services dependent_services
-  notifies :run, 'execute[start geo-postgresql]', :before if omnibus_helper.should_notify?('geo-postgresql')
+  notifies :run, 'execute[start geo-postgresql]', :before if omnibus_helper.service_enabled?('geo-postgresql') && omnibus_helper.not_listening?('geo-postgresql')
 
   only_if { migration_helper.attributes_node['auto_migrate'] }
 end
