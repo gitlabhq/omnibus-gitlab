@@ -606,6 +606,17 @@ HA-Validate-Nightly:
   cache: *branch-cache
   dependencies: []
 
+RAT-Nightly:
+  stage: slow_jobs
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - '[[ -n "${NIGHTLY}" ]] || exit 0'
+    - bundle exec rake qa:rat:nightly
+  <<: *dev-ee-nightly-only
+  cache: *branch-cache
+  dependencies: []
+  allow_failure: true
+
 ############################
 #     Release pipeline     #
 ############################
@@ -1006,6 +1017,16 @@ HA-Validate-Tagged:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   script:
     - bundle exec rake qa:ha:tag
+  <<: *dev-ee-tag-only
+  cache: *tag-cache
+  dependencies: []
+  allow_failure: true
+
+RAT-Tag:
+  stage: slow_jobs
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - bundle exec rake qa:rat:tag
   <<: *dev-ee-tag-only
   cache: *tag-cache
   dependencies: []

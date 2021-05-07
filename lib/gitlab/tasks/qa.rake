@@ -121,5 +121,19 @@ namespace :qa do
         Build::RAT::TriggerPipeline.invoke!.wait!(timeout: 3600 * 4)
       end
     end
+
+    desc "Trigger a RAT pipeline using nightly package"
+    task :nightly do
+      Gitlab::Util.section('qa:rat:validate') do
+        Build::RAT::NightlyPipeline.invoke!.wait!(timeout: 3600 * 4)
+      end
+    end
+
+    desc "Trigger a RAT pipeline using tag package"
+    task :tag do
+      Gitlab::Util.section('qa:rat:validate') do
+        Build::RAT::TagPipeline.invoke!.wait!(timeout: 3600 * 4)
+      end
+    end
   end
 end

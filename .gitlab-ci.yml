@@ -83,7 +83,7 @@ variables:
 
 before_script:
   - export CE_ONLY=(Raspberry)
-  - export EE_ONLY=(SLES HA-Validate)
+  - export EE_ONLY=(SLES HA-Validate RAT)
   - for job in "${CE_ONLY[@]}"; do
       if [[ "${CI_JOB_NAME}" =~ ${job} ]]; then
         if ./support/is_gitlab_ee.sh; then
