@@ -5,7 +5,7 @@ require 'cgi'
 
 module Build
   class RAT
-    class PipelineTrigger
+    class TriggerPipeline
       extend Trigger
 
       PROJECT_PATH = 'gitlab-org/distribution/reference-architecture-tester'.freeze

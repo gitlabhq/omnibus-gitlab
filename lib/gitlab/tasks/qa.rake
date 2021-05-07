@@ -118,7 +118,7 @@ namespace :qa do
     desc "Trigger a RAT pipeline"
     task :trigger do
       Gitlab::Util.section('qa:rat:validate') do
-        Build::RAT::PipelineTrigger.invoke!.wait!(timeout: 3600 * 4)
+        Build::RAT::TriggerPipeline.invoke!.wait!(timeout: 3600 * 4)
       end
     end
   end
