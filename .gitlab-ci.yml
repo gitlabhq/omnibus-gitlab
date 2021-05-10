@@ -21,7 +21,6 @@ stages:
   - trigger-docker
   - trigger-ha-validate
   - trigger-qa
-  - trigger-metrics
 
 workflow:
   rules:
@@ -80,19 +79,6 @@ variables:
     - docker:20.10.2-dind
   tags:
     - gitlab-org-docker
-
-### Measure memory usage
-.measure_memory_script_artifacts: &measure_memory_script_artifacts
-  extends: .docker_job
-  variables:
-    OUTPUT_DIR: "tmp/measure_omnibus_memory"
-  script:
-    - mkdir -p ${OUTPUT_DIR}
-    - bundle exec rake docker:measure_memory DEBUG_OUTPUT_DIR=${OUTPUT_DIR} >> "${OUTPUT_DIR}/memory_on_boot_metrics.txt"
-  allow_failure: true
-  artifacts:
-    paths:
-      - ${OUTPUT_DIR}
 
 before_script:
   - export CE_ONLY=(Raspberry)
