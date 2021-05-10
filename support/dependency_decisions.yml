@@ -44,3 +44,10 @@
     :why: https://github.com/certifi/gocertifi/blob/master/LICENSE
     :versions: []
     :when: 2020-06-22 11:37:51.306158180 Z
+- - :license
+  - github.com/go-enry/go-license-detector/v4
+  - Apache2
+  - :who: Patrick Steinhardt
+    :why: https://github.com/go-enry/go-license-detector/blob/master/LICENSE.md
+    :versions: []
+    :when: 2021-05-10 08:31:46.187391851 Z
