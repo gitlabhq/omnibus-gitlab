@@ -9,6 +9,13 @@ module Gitlab
       def list(existing_config = nil)
         # List of deprecations. Remember to convert underscores to hyphens for
         # the first level configurations (eg: gitlab_rails => gitlab-rails)
+        # Use the following structure:
+        # {
+        #   config_keys: %w(<space separated list>),
+        #   deprecation: '<version when deprecated>',
+        #   removal: '<version when to be removed>' # <link to removal issue>
+        #   note: '<Any extra notes>'
+        # }
         #
         # `config_keys` represents a list of keys, which can be used to traverse
         # the configuration hash available from /opt/gitlab/embedded/nodes/{fqdn}json
@@ -27,98 +34,97 @@ module Gitlab
           {
             config_keys: %w(gitlab postgresql data_dir),
             deprecation: '11.6',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4806
             note: "Please see https://docs.gitlab.com/omnibus/settings/database.html#store-postgresql-data-in-a-different-directory for how to use postgresql['dir']"
           },
           {
             config_keys: %w(gitlab sidekiq cluster),
             deprecation: '13.0',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6136
             note: "Running sidekiq directly is deprecated. Please see https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html for how to use sidekiq-cluster."
           },
           {
             config_keys: %w(roles redis-slave enable),
             deprecation: '13.0',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5349
             note: 'Use redis_replica_role instead.'
           },
           {
             config_keys: %w(redis client_output_buffer_limit_slave),
             deprecation: '13.0',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5349
             note: 'Use client_output_buffer_limit_replica instead'
           },
           {
             config_keys: %w(gitlab gitlab-pages http_proxy),
             deprecation: '13.1',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6137
             note: "Set gitlab_pages['env']['http_proxy'] instead. See https://docs.gitlab.com/omnibus/settings/environment-variables.html"
           },
           {
             config_keys: %w(praefect failover_read_only_after_failover),
             deprecation: '13.3',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5571
             note: "Read-only mode is repository specific and always enabled after suspected data loss. See https://docs.gitlab.com/ee/administration/gitaly/praefect.html#read-only-mode"
           },
           {
             config_keys: %w(gitlab geo-secondary db_fdw),
             deprecation: '13.3',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6138
             note: "Geo does not require Foreign Data Wrapper (FDW) to be configured to replicate data."
           },
           {
             config_keys: %w(gitlab geo-postgresql fdw_external_user),
             deprecation: '13.3',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6138
             note: "Geo does not require Foreign Data Wrapper (FDW) to be configured to replicate data."
           },
           {
             config_keys: %w(gitlab geo-postgresql fdw_external_password),
             deprecation: '13.3',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6138
             note: "Geo does not require Foreign Data Wrapper (FDW) to be configured to replicate data."
           },
           {
             config_keys: %w(praefect virtual_storages primary),
             deprecation: '13.4',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5658
             note: "Praefect no longer supports statically designating primary Gitaly nodes."
           },
           {
             config_keys: %w(gitlab gitlab-rails extra_piwik_site_id),
             deprecation: '13.7',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6139
             note: "Piwik config keys have been renamed to reflect the rebranding to Matomo. Please update gitlab_rails['extra_piwik_site_id'] to gitlab_rails['extra_matomo_site_id']."
           },
           {
             config_keys: %w(gitlab gitlab-rails extra_piwik_url),
             deprecation: '13.7',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6139
             note: "Piwik config keys have been renamed to reflect the rebranding to Matomo. Please update gitlab_rails['extra_piwik_url'] to gitlab_rails['extra_matomo_url']."
           },
-          # Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
           {
             config_keys: %w(gitlab sidekiq-cluster experimental_queue_selector),
             deprecation: '13.6',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
             note: 'The experimental_queue_selector option is now called queue_selector.'
           },
           {
             config_keys: %w(gitlab sidekiq experimental_queue_selector),
             deprecation: '13.6',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
             note: 'The experimental_queue_selector option is now called queue_selector.'
           },
           {
             config_keys: %w(gitlab gitlab-rails analytics_instance_statistics_count_job_trigger_worker_cron),
             deprecation: '13.10',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6003
             note: 'The config have been renamed, use analytics_usage_trends_count_job_trigger_worker_cron option.'
           },
           {
             config_keys: %w(gitlab-pages domain_config_source),
             deprecation: '13.9',
-            removal: '14.0',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6033
             note: "Starting with GitLab 14.0, GitLab Pages only supports API-based configuration. Check https://docs.gitlab.com/ee/administration/pages/#deprecated-domain_config_source for details."
           },
         ]
