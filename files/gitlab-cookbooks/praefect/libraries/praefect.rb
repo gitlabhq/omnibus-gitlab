@@ -18,6 +18,7 @@ module Praefect
       # keys are assumed to be nodes of the virtual storage and are moved under the 'nodes'
       # key.
       known_keys = ['default_replication_factor']
+      deprecation_logged = false
 
       virtual_storages = {}
       Gitlab['praefect']['virtual_storages'].map do |virtual_storage, config_keys|
@@ -30,6 +31,17 @@ module Praefect
           if known_keys.include? key
             config[key] = value
             next
+          end
+
+          unless deprecation_logged
+            LoggingHelper.deprecation(
+              <<~EOS
+                Configuring the Gitaly nodes directly in the virtual storage's root configuration object has
+                been deprecated in GitLab 13.12 and will no longer be supported in GitLab 15.0. Move the Gitaly
+                nodes under the 'nodes' key as described in step 6 of https://docs.gitlab.com/ee/administration/gitaly/praefect.html#praefect.
+              EOS
+            )
+            deprecation_logged = true
           end
 
           raise "Virtual storage '#{virtual_storage}' contains duplicate configuration for node '#{key}'" if config['nodes'][key]
