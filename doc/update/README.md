@@ -348,10 +348,10 @@ Before following these instructions, note the following **important** informatio
    sudo gitlab-rake db:migrate
    ```
 
-1. Hot reload `unicorn` (or `puma`) and `sidekiq` services
+1. Hot reload `puma` (or `unicorn`) and `sidekiq` services
 
    ```shell
-   sudo gitlab-ctl hup unicorn
+   sudo gitlab-ctl hup puma
    sudo gitlab-ctl restart sidekiq
    ```
 
