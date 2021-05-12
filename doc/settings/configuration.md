@@ -652,10 +652,9 @@ CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) for more
 details.
 
 GitLab 12.2 added support for [CSP and nonces with inline
-JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
-It is [not configured on by default
-yet](https://gitlab.com/gitlab-org/gitlab/-/issues/30720). An example
-configuration that will work for most installations of GitLab is below:
+JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src)
+and it is enabled by default since GitLab 13.12.
+The following configuration example will work for most GitLab installations:
 
 ```ruby
 gitlab_rails['content_security_policy'] = {
@@ -663,18 +662,28 @@ gitlab_rails['content_security_policy'] = {
     report_only: false,
     directives: {
       default_src: "'self'",
-      script_src: "'self' 'unsafe-inline' 'unsafe-eval' https://www.recaptcha.net https://apis.google.com",
-      frame_ancestor: "'self'",
+      base_uri: "'self'",
+      child_src: "'none'",
+      connect_src: "'self'",
+      font_src: "'self'",
+      form_action: "'self' https: http:",
+      frame_ancestors: "'self'",
       frame_src: "'self' https://www.recaptcha.net/ https://content.googleapis.com https://content-compute.googleapis.com https://content-cloudbilling.googleapis.com https://content-cloudresourcemanager.googleapis.com",
-      img_src: "* data: blob:",
-      style_src: "'self' 'unsafe-inline'"
+      img_src: "'self' data: blob: http: https:",
+      manifest_src: "'self'",
+      media_src: "'self'",
+      script_src: "'strict-dynamic' 'self' 'unsafe-inline' 'unsafe-eval' https://www.recaptcha.net https://apis.google.com",
+      style_src: "'self' 'unsafe-inline'",
+      worker_src: "'self'",
+      object_src: "'none'",
+      report_uri: nil
     }
 }
 ```
 
 Improperly configuring the CSP rules could prevent GitLab from working
 properly. Before rolling out a policy, you may also want to change
-`report_only` to `true` to test the configuration.
+`report_only` to `true` and set a `report_uri` to test the configuration.
 
 ## Setting initial root password on installation
 
