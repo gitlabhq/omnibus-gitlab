@@ -102,6 +102,11 @@ RSpec.describe 'gitlab::letsencrypt' do
   end
 
   context 'when NGINX is not running' do
+    before do
+      allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
+      allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('nginx').and_return(false)
+    end
+
     it 'does not attempt to create a certificate' do
       expect(chef_run).not_to create_acme_certificate('staging')
       expect(chef_run).not_to create_acme_certificate('production')
