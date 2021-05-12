@@ -258,6 +258,14 @@ RSpec.describe 'praefect' do
         let(:virtual_storages) { { 'default' => { 'node-1' => {}, 'nodes' => { 'node-1' => {} } } } }
 
         it 'raises an error' do
+          expect(LoggingHelper).to receive(:deprecation).with(
+            <<~EOS
+              Configuring the Gitaly nodes directly in the virtual storage's root configuration object has
+              been deprecated in GitLab 13.12 and will no longer be supported in GitLab 15.0. Move the Gitaly
+              nodes under the 'nodes' key as described in step 6 of https://docs.gitlab.com/ee/administration/gitaly/praefect.html#praefect.
+            EOS
+          )
+
           expect { chef_run }.to raise_error("Virtual storage 'default' contains duplicate configuration for node 'node-1'")
         end
       end
