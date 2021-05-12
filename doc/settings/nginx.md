@@ -361,7 +361,7 @@ nginx['listen_port'] = 8081
 ## External, proxy, and load balancer SSL termination
 
 By default, Omnibus GitLab auto-detects whether to use SSL if `external_url`
-contains `https://` and configures NGINX for SSL termination. 
+contains `https://` and configures NGINX for SSL termination.
 However, if configuring GitLab to run behind a reverse proxy or an external load balancer,
 some environments may want to terminate SSL outside the GitLab application. To do this,
 edit `/etc/gitlab/gitlab.rb` to prevent the bundled NGINX from handling SSL termination:
@@ -908,6 +908,29 @@ To increase the `client_max_body_size`:
 
 1. Reconfigure GitLab, and [HUP](https://nginx.org/en/docs/control.html)
    NGINX to cause it to reload with the updated configuration gracefully:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   sudo gitlab-ctl hup nginx
+   ```
+
+### Security scan is showing a "NGINX HTTP Server Detection" warning
+
+Some security scanners detect issues when they see the `Server: nginx` http header. Most scanners with this alert will
+notify as `Low` or `Info` severity. [See Nessus as an example](https://www.tenable.com/plugins/nessus/106375).
+
+We recommend ignoring this warning, as the benefit of removing the header is low, and its presence [helps support the
+NGINX project in usage statistics](https://trac.nginx.org/nginx/ticket/1644). We do provide a way to turn off the
+header with `hide_server_tokens`:
+
+1. Edit `/etc/gitlab/gitlab.rb` and set the value:
+
+   ```ruby
+   nginx['hide_server_tokens'] = 'on'
+   ```
+
+1. Reconfigure GitLab, and [hup](https://nginx.org/en/docs/control.html)
+   NGINX to cause it to reload the with the updated configuration gracefully:
 
    ```shell
    sudo gitlab-ctl reconfigure

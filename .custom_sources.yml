@@ -73,6 +73,9 @@ chef-acme:
 nginx-module-vts:
   remote: "git@dev.gitlab.org:omnibus-mirror/nginx-module-vts.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/nginx-module-vts.git"
+ngx_security_headers:
+  remote: "git@dev.gitlab.org:omnibus-mirror/ngx_security_headers.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/ngx_security_headers.git"
 grafana-dashboards:
   remote: "git@dev.gitlab.org:omnibus-mirror/grafana-dashboards.git"
   alternative: "https://gitlab.com/gitlab-org/grafana-dashboards.git"
