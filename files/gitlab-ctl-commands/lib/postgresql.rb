@@ -11,7 +11,7 @@ module GitlabCtl
         Timeout.timeout(timeout) do
           loop do
             begin
-              results = Mixlib::ShellOut.new("#{psql_command} -l", timeout: 1800)
+              results = Mixlib::ShellOut.new("#{psql_command} -d postgres -l", timeout: 1800)
               results.run_command
               results.error!
             rescue Mixlib::ShellOut::ShellCommandFailed

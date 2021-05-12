@@ -875,6 +875,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Long polling duration for job requesting for runners
 # gitlab_workhorse['api_ci_long_polling_duration'] = "60s"
 
+##! Propagate X-Request-Id if available. Workhorse will generate a random value otherwise.
+# gitlab_workhorse['propagate_correlation_id'] = false
+
 ##! Log format: default is json, can also be text or none.
 # gitlab_workhorse['log_format'] = "json"
 
@@ -1398,7 +1401,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['tcp_nopush'] = 'on'
 # nginx['tcp_nodelay'] = 'on'
 # nginx['hide_server_tokens'] = 'off'
-# nginx['gzip'] = "on"
 # nginx['gzip_http_version'] = "1.0"
 # nginx['gzip_comp_level'] = "2"
 # nginx['gzip_proxied'] = "any"

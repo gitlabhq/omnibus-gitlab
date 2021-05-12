@@ -564,17 +564,6 @@ Docker-branch:
   dependencies: []
   retry: 1
 
-Docker-branch-measure-memory:
-  extends: .measure_memory_script_artifacts
-  stage: metrics
-  # To be made back to automatic once
-  # https://gitlab.com/gitlab-org/gitlab/-/issues/215000 is done.
-  <<: *dev-nightly-only-manual
-  tags:
-  - docker-builder
-  cache: *branch-cache
-  dependencies: []
-
 QA-branch:
   extends: .docker_job
   stage: package-and-image
@@ -799,15 +788,6 @@ Docker:
   cache: *tag-cache
   dependencies: []
   retry: 1
-
-Docker-measure-memory:
-  extends: .measure_memory_script_artifacts
-  stage: metrics
-  <<: *dev-tag-only-except-auto-deploy-manual
-  tags:
-  - docker-builder
-  cache: *tag-cache
-  dependencies: []
 
 ### Staging uploads
 Debian-9-staging:

@@ -25,34 +25,6 @@ RSpec.describe 'docker', type: :rake do
     end
   end
 
-  describe 'docker:measure_memory' do
-    let(:mock_measurer) { Gitlab::DockerImageMemoryMeasurer.new('abc') }
-
-    before do
-      Rake::Task['docker:measure_memory'].reenable
-      allow(ENV).to receive(:[]).and_call_original
-    end
-
-    it 'initialize DockerImageMemoryMeasurer with correct parameters when ENV IMAGE_REFERENCE not set' do
-      allow(Build::Info).to receive(:image_reference).and_return("dev.gitlab.org:5005/gitlab/omnibus-gitlab")
-      allow(ENV).to receive(:[]).with('DEBUG_OUTPUT_DIR').and_return('tmp/debug_folder')
-
-      expect(Gitlab::DockerImageMemoryMeasurer).to receive(:new).with('dev.gitlab.org:5005/gitlab/omnibus-gitlab', 'tmp/debug_folder').and_return(mock_measurer)
-      expect(mock_measurer).to receive(:measure).and_return('mock_return')
-      expect { Rake::Task['docker:measure_memory'].invoke }.to output(/.*mock_return\n.*/).to_stdout
-    end
-
-    it 'initialize DockerImageMemoryMeasurer with correct parameters when ENV IMAGE_REFERENCE set' do
-      allow(Build::Info).to receive(:image_reference).and_return("dev.gitlab.org:5005/gitlab/omnibus-gitlab")
-      allow(ENV).to receive(:[]).with('IMAGE_REFERENCE').and_return('env_value_image_reference')
-      allow(ENV).to receive(:[]).with('DEBUG_OUTPUT_DIR').and_return('tmp/debug_folder')
-
-      expect(Gitlab::DockerImageMemoryMeasurer).to receive(:new).with('env_value_image_reference', 'tmp/debug_folder').and_return(mock_measurer)
-      expect(mock_measurer).to receive(:measure).and_return('mock_return')
-      expect { Rake::Task['docker:measure_memory'].invoke }.to output(/.*mock_return\n.*/).to_stdout
-    end
-  end
-
   describe 'docker:pull:staging' do
     before do
       Rake::Task['docker:pull:staging'].reenable

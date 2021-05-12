@@ -30,12 +30,23 @@ RSpec.describe 'puma_config' do
     end
   end
 
+  context 'create with default puma config' do
+    let(:chef_run) { runner.converge('test_gitlab::puma_config_create') }
+
+    it 'renders puma.rb file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
+        expect(content).to match(%r(rackup '/opt/gitlab/embedded/service/gitlab-rails))
+      }
+    end
+  end
+
   context 'create with custom Puma settings' do
     let(:chef_run) { runner.converge('test_gitlab::puma_config_custom') }
 
     it 'renders puma.rb file' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
         expect(content).to match(%r(Gitlab::Cluster::PumaWorkerKillerInitializer.start\(options, puma_per_worker_max_memory_mb: 1000\)))
+        expect(content).to match(%r(rackup '/opt/custom/gitlab/embedded/service/gitlab-rails))
       }
     end
   end

@@ -906,8 +906,8 @@ To increase the `client_max_body_size`:
    nginx['client_max_body_size'] = '250m'
    ```
 
-1. Reconfigure GitLab, and [hup](https://nginx.org/en/docs/control.html)
-   NGINX to cause it to reload the with the updated configuration gracefully:
+1. Reconfigure GitLab, and [HUP](https://nginx.org/en/docs/control.html)
+   NGINX to cause it to reload with the updated configuration gracefully:
 
    ```shell
    sudo gitlab-ctl reconfigure

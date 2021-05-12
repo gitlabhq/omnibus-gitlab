@@ -501,7 +501,7 @@ RSpec.describe 'nginx' do
     before do
       stub_gitlab_rb(nginx: { gzip_enabled: false })
     end
-    it { is_expected.not_to render_file(gitlab_http_config).with_content(/gzip on;/) }
+    it { is_expected.to render_file(gitlab_http_config).with_content(/gzip off;/) }
   end
 
   it { is_expected.to render_file(gitlab_http_config).with_content(/gzip on;/) }

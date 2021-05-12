@@ -8,7 +8,6 @@ require 'chef_helper'
 
 RSpec.describe 'gitlab-ee::geo-database-migrations' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
-  let(:name) { 'migrate gitlab-geo tracking database' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -16,7 +15,7 @@ RSpec.describe 'gitlab-ee::geo-database-migrations' do
 
   context 'when migration should run' do
     before do
-      allow_any_instance_of(OmnibusHelper).to receive(:not_listening?).and_return(false)
+      stub_default_not_listening?(false)
       stub_gitlab_rb(geo_secondary_role: { enable: true })
 
       # Make sure other calls to `File.symlink?` are allowed.
@@ -45,47 +44,31 @@ RSpec.describe 'gitlab-ee::geo-database-migrations' do
       ).map { |svc| stub_should_notify?(svc, true) }
     end
 
-    let(:bash_block) { chef_run.bash(name) }
-
-    it 'runs the migrations' do
-      expect(chef_run).to run_bash(name)
-    end
-
-    # The reverse can't be tested in a unit test due to
-    # https://github.com/chefspec/chefspec/issues/546
-    context 'when database has not been migrated' do
-      it 'restarts services' do
-        allow_any_instance_of(GitlabGeoHelper).to receive(:migrated?).and_return(false)
-
-        expect(bash_block).to notify('runit_service[puma]').to(:restart)
-        expect(bash_block).to notify('sidekiq_service[sidekiq]').to(:restart)
+    it 'runs the migrations with expected attributes' do
+      expect(chef_run).to run_rails_migration('gitlab-geo tracking') do |resource|
+        expect(resource.dependent_services).to include_array(%w(runit_service[puma] sidekiq_service[sidekiq]))
+        expect(resource.rake_task).to eq('geo:db:migrate')
+        expect(resource.logfile_prefix).to eq('gitlab-geo-db-migrate')
+        expect(resource.helper).to be_a(GitlabGeoHelper)
       end
     end
 
-    context 'places the log file' do
-      it 'in a default location' do
-        path = Regexp.escape('/var/log/gitlab/gitlab-rails/gitlab-geo-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log')
-        expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
-        expect(bash_block.code).to match(/#{path}/)
-      end
+    it 'starts geo-postgresql if its not running' do
+      stub_not_listening?('geo-postgresql', true)
 
-      it 'in a custom location' do
-        path = '/tmp/gitlab-geo-db-migrate-'
-        stub_gitlab_rb(gitlab_rails: { log_directory: '/tmp' })
-        expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
-        expect(bash_block.code).to match(/#{path}/)
-      end
+      expect(chef_run.rails_migration('gitlab-geo tracking')).to notify('execute[start geo-postgresql]').to(:run)
     end
+  end
 
-    context 'with auto_migrate off' do
-      before do
-        stub_gitlab_rb(geo_secondary: { auto_migrate: false })
-      end
+  context 'with auto_migrate off' do
+    it 'skips running the migrations' do
+      stub_gitlab_rb({
+                       geo_secondary_role: { enable: true },
+                       geo_secondary: { auto_migrate: false }
+                     })
 
-      it 'skips running the migrations' do
-        expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
-        expect(chef_run).not_to run_bash(name)
-      end
+      expect(chef_run).to include_recipe('gitlab-ee::geo_database_migrations')
+      expect(chef_run).not_to run_rails_migration('gitlab-geo tracking')
     end
   end
 end

@@ -1,47 +1,14 @@
-class GitlabGeoHelper
-  REVISION_FILE ||= '/opt/gitlab/embedded/service/gitlab-rails/REVISION'.freeze
+# frozen_string_literal: true
 
-  attr_reader :node
-
+class GitlabGeoHelper < RailsMigrationHelper
   def initialize(node)
     @node = node
-  end
-
-  def migrated?
-    check_status_file(db_migrate_status_file)
-  end
-
-  def db_migrate_status_file
-    @db_migrate_status_file ||= begin
-      upgrade_status_dir = ::File.join(node['gitlab']['gitlab-rails']['dir'], 'upgrade-status')
-      ::File.join(upgrade_status_dir, "geo-db-migrate-#{connection_digest}-#{revision}")
-    end
+    @status_file_prefix = 'geo-db-migrate'
+    @attributes_node = node['gitlab']['geo-secondary']
   end
 
   def geo_database_configured?
     database_geo_yml = ::File.join(node['gitlab']['gitlab-rails']['dir'], 'etc', 'database_geo.yml')
     ::File.exist?(database_geo_yml)
-  end
-
-  private
-
-  def check_status_file(file)
-    ::File.exist?(file) && IO.read(file).chomp == '0'
-  end
-
-  def revision
-    @revision ||= IO.read(REVISION_FILE).chomp if ::File.exist?(REVISION_FILE)
-  end
-
-  def connection_digest
-    connection_attributes = %w(
-      db_adapter
-      db_database
-      db_host
-      db_port
-      db_socket
-    ).collect { |attribute| node['gitlab']['geo-secondary'][attribute] }
-
-    Digest::MD5.hexdigest(Marshal.dump(connection_attributes))
   end
 end

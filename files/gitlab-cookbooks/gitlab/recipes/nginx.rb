@@ -122,6 +122,10 @@ nginx_vars['https'] = if nginx_vars['listen_https'].nil?
                         nginx_vars['listen_https']
                       end
 
+# TODO: Remove in 14.0.
+# https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6122
+nginx_vars['gzip'] ||= node['gitlab']['nginx']['gzip_enabled'] ? "on" : "off"
+
 nginx_gitlab_http_vars = nginx_vars.merge(
   fqdn: node['gitlab']['gitlab-rails']['gitlab_host'],
   port: node['gitlab']['gitlab-rails']['gitlab_port'],

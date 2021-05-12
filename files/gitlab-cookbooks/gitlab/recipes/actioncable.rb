@@ -72,7 +72,6 @@ puma_config puma_rb do
   stdout_path File.join(puma_log_dir, "puma_actioncable_stdout.log")
   pid puma_pidfile
   state_path puma_state_path
-  install_dir node['package']['install-dir']
   owner "root"
   group "root"
   mode "0644"

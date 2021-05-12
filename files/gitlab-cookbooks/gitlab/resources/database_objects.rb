@@ -27,11 +27,14 @@ action :create do
     action :create
   end
 
-  execute "create #{database_name} database" do
-    command "/opt/gitlab/embedded/bin/createdb --port #{pg_port} -h #{pg_host} -O #{gitlab_sql_user} #{database_name}"
+  postgresql_database database_name do
+    database_port pg_port
+    database_socket pg_host
+    owner gitlab_sql_user
     user postgresql_username
-    retries 30
-    only_if { rails_enabled && new_resource.pg_helper.is_running? && !new_resource.pg_helper.database_exists?(database_name) }
+    helper new_resource.pg_helper
+
+    only_if { rails_enabled }
   end
 
   postgresql_extension 'pg_trgm' do
