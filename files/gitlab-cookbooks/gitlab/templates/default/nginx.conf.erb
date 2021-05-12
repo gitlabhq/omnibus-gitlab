@@ -26,10 +26,12 @@ http {
   keepalive_timeout <%= @keepalive_timeout %>;
 
   gzip <%= @gzip %>;
+  <% if @gzip_enabled %>
   gzip_http_version <%= @gzip_http_version %>;
   gzip_comp_level <%= @gzip_comp_level %>;
   gzip_proxied <%= @gzip_proxied %>;
   gzip_types <%= @gzip_types.join(' ') %>;
+  <% end %>
 
   include /opt/gitlab/embedded/conf/mime.types;
 

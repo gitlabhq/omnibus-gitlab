@@ -127,6 +127,13 @@ module Gitlab
             removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6033
             note: "Starting with GitLab 14.0, GitLab Pages only supports API-based configuration. Check https://docs.gitlab.com/ee/administration/pages/#deprecated-domain_config_source for details."
           },
+          {
+            config_keys: %w(gitlab nginx gzip),
+            deprecation: '13.12',
+            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6122
+            note: "The config has been deprecated. Value for this directive in NGINX configuration will be controlled by `nginx['gzip_enabled']` setting in `/etc/gitlab/gitlab.rb`."
+          },
+
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")
