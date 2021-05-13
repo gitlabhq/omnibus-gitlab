@@ -1001,6 +1001,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['max_concurrency'] = 50
 # sidekiq['min_concurrency'] = nil
 
+##! GitLab allows route a job to a particular queue determined by an array of ##! routing rules.
+##! Each routing rule is a tuple of queue selector query and corresponding queue. By default,
+##! the routing rules are not configured (empty array)
+
+# sidekiq['routing_rules'] = []
+
 ##! Each entry in the queue_groups array denotes a group of queues that have to be processed by a
 ##! Sidekiq process. Multiple queues can be processed by the same process by
 ##! separating them with a comma within the group entry, a `*` will process all queues

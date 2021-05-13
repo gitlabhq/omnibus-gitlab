@@ -379,6 +379,12 @@ production: &base
   ## Sidekiq
   sidekiq:
     log_format: <%= @sidekiq['log_format'] %>
+    <% unless @sidekiq['routing_rules'].empty? %>
+    routing_rules:
+      <% @sidekiq['routing_rules'].each do |query, queue| %>
+      - [<%= quote(query) %>, <%= queue.nil? ? 'null' : quote(queue) %>]
+      <% end %>
+    <% end %>
 
   ## Auxiliary jobs
   # Periodically executed jobs, to self-heal GitLab, do external synchronizations, etc.
