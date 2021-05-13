@@ -110,7 +110,7 @@ main() {
     BACKUP_ETC_ADDED_VERSION=12.3
     if greater_version $OLD_MINOR_VERSION $BACKUP_ETC_ADDED_VERSION; then
       notify "Automatically backing up /etc/gitlab"
-      if ! ${DEST_DIR}/bin/gitlab-ctl backup-etc ; then
+      if ! ${DEST_DIR}/bin/gitlab-ctl backup-etc --no-delete-old-backups ; then
         notify "Configuration backup failed - check permissions for /etc/gitlab/config_backup/ [is it nfs root_squash?]"
       fi
     fi

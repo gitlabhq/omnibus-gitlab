@@ -24,7 +24,7 @@ archive in `/etc/gitlab/config_backup/`. Directory and backup files will be
 readable only to root.
 
 NOTE:
-Running `sudo gitlab-ctl backup-etc <DIRECTORY>` will place
+Running `sudo gitlab-ctl backup-etc --backup-path <DIRECTORY>` will place
 the backup in the specified directory. The directory will be created if it
 does not exist. Absolute paths are recommended.
 
@@ -61,6 +61,32 @@ backup.
 
 NOTE:
 Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
+
+### Limit backup lifetime for configuration backups (prune old backups)
+
+> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5102) in GitLab 13.12.
+
+GitLab configuration backups can be pruned using the same `backup_keep_time` setting that is
+[used for the GitLab application backups](https://docs.gitlab.com/ee/raketasks/backup_restore.html#limit-backup-lifetime-for-local-files-prune-old-backups)
+
+To make use of this setting, edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   ## Limit backup lifetime to 7 days - 604800 seconds
+   gitlab_rails['backup_keep_time'] = 604800
+   ```
+
+The default `backup_keep_time` setting is `0` - which keeps all GitLab configuration and application backups.
+
+Once a `backup_keep_time` is set - you can run `sudo gitlab-ctl backup-etc --delete-old-backups` to prune all
+backups older than the current time minus the `backup_keep_time`.
+
+You can provide the parameter `--no-delete-old-backups` if you want to keep all existing backups.
+
+WARNING:
+If no parameter is provided the current default is `--no-delete-old-backups`. In GitLab 14.0 the default setting
+will be `--delete-old-backups` - meaning that we will begin removing older configuration backups by default,
+according to your `backup_keep_time` setting.
 
 ### Separate configuration backups from application data
 
