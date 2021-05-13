@@ -65,7 +65,7 @@ variables:
   AUTO_DEPLOY_TAG_REGEX: '^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$'
   # Default environment for auto-deploy
   AUTO_DEPLOY_ENVIRONMENT: 'pre'
-  MAX_PACKAGE_SIZE_MB: "960"
+  MAX_PACKAGE_SIZE_MB: "975"
   OMNIBUS_GITLAB_MIRROR_ID: "14588374"
   DOCS_GITLAB_REPO_SUFFIX: "omnibus"
 
