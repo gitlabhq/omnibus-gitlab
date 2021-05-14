@@ -176,6 +176,8 @@ default['gitlab']['gitlab-rails']['service_desk_email_log_file'] = "/var/log/git
 default['gitlab']['gitlab-rails']['service_desk_email_inbox_method'] = "imap"
 default['gitlab']['gitlab-rails']['service_desk_email_inbox_inbox_options'] = nil
 default['gitlab']['gitlab-rails']['namespaces_in_product_marketing_emails_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['ssh_keys_expired_notification_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['ssh_keys_expiring_soon_notification_worker_cron'] = nil
 
 # Consolidated object storage config
 default['gitlab']['gitlab-rails']['object_store']['enabled'] = false
