@@ -278,7 +278,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             gitlab-retrieval-timeout=3s
             gitlab-retrieval-timeout=500ms
             gitlab-retrieval-retries=5
-            enable-disk
+            enable-disk=true
         EOS
 
         expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(expected_content)

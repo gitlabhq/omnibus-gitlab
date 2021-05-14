@@ -131,6 +131,6 @@ gitlab-retrieval-timeout=<%= @gitlab_retrieval_interval %>
 <%- if @gitlab_retrieval_retries -%>
 gitlab-retrieval-retries=<%= @gitlab_retrieval_retries %>
 <%- end -%>
-<%- if @enable_disk -%>
-enable-disk
+<%- unless @enable_disk.nil? -%>
+enable-disk=<%= @enable_disk %>
 <%- end -%>
