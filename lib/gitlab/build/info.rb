@@ -116,7 +116,17 @@ module Build
       def release_bucket
         # Tag builds are releases and they get pushed to a specific S3 bucket
         # whereas regular branch builds use a separate one
-        Check.on_tag? ? "downloads-packages" : "omnibus-builds"
+        downloads_bucket = Gitlab::Util.get_env('RELEASE_BUCKET') || "downloads-packages"
+        builds_bucket = Gitlab::Util.get_env('BUILDS_BUCKET') || "omnibus-builds"
+        Check.on_tag? ? downloads_bucket : builds_bucket
+      end
+
+      def release_bucket_region
+        Gitlab::Util.get_env('RELEASE_BUCKET_REGION') || "eu-west-1"
+      end
+
+      def release_bucket_s3_endpoint
+        Gitlab::Util.get_env('RELEASE_BUCKET_S3_ENDPOINT') || "s3.amazonaws.com"
       end
 
       def log_level
@@ -130,7 +140,7 @@ module Build
       # Fetch the package from an S3 bucket
       def package_download_url
         package_filename_url_safe = Info.release_version.gsub("+", "%2B")
-        "https://#{Info.release_bucket}.s3.amazonaws.com/ubuntu-focal/#{Info.package}_#{package_filename_url_safe}_amd64.deb"
+        "https://#{Info.release_bucket}.#{Info.release_bucket_s3_endpoint}/ubuntu-focal/#{Info.package}_#{package_filename_url_safe}_amd64.deb"
       end
 
       def get_api(path, token: nil)
