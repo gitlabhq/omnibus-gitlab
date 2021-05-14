@@ -11,6 +11,7 @@ default['gitlab-pages']['internal_gitlab_server'] = nil
 default['gitlab-pages']['http_proxy'] = nil
 default['gitlab-pages']['metrics_address'] = nil
 default['gitlab-pages']['pages_path'] = nil
+default['gitlab-pages']['enable_disk'] = nil
 default['gitlab-pages']['domain'] = nil
 default['gitlab-pages']['cert'] = nil
 default['gitlab-pages']['cert_key'] = nil

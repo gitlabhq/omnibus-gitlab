@@ -1649,6 +1649,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! The maximum amount of time it takes to open a zip archive from the file system or object storage.
 # gitlab_pages['zip_open_timeout'] = "30s"
 
+##! Enable serving content from disk instead of Object Storage
+# gitlab_pages['enable_disk'] = nil
+
 # gitlab_pages['env_directory'] = "/opt/gitlab/etc/gitlab-pages/env"
 # gitlab_pages['env'] = {
 #   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
