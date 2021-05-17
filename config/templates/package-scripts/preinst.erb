@@ -95,6 +95,27 @@ pg_check() {
   fi
 }
 
+unmigrated_data_check() {
+  if ( [ ! -d ${DEST_DIR}/service/puma ] || [ ! -d ${DEST_DIR}/service/sidekiq ] ); then
+    notify
+    notify "This node does not appear to be running puma and/or sidekiq services"
+    notify "Skipping unmigrated data check, if you think this is an error exit now"
+    notify
+    return
+  fi
+
+  found=$(gitlab-rake gitlab:storage:legacy_attachments gitlab:storage:legacy_projects 2>/dev/null);
+
+  if ! (echo $found | grep 'Found 0 attachments' && echo $found | grep 'Found 0 projects') > /dev/null 2>&1; then
+    notify
+    notify "Legacy storage is no longer supported. Please migrate your data to hashed storage."
+    notify "Check https://docs.gitlab.com/ee/administration/raketasks/storage.html#migrate-to-hashed-storage for details."
+    notify ""
+    notify "Upgrade failed. Retry the upgrade after migrating your data to hashed storage."
+    exit 1
+  fi
+}
+
 main() {
   if [ -e "${skip_reconfigure_file}" ] ; then
     # The user wants us to do nothing
@@ -140,6 +161,7 @@ case "$1" in
     upgrade_check
     config_check
     pg_check
+    unmigrated_data_check
     main
     ;;
   upgrade)
@@ -147,6 +169,7 @@ case "$1" in
     upgrade_check
     config_check
     pg_check
+    unmigrated_data_check
     main
     ;;
   *)
