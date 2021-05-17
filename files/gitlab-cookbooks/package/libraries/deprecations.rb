@@ -230,7 +230,7 @@ module Gitlab
         messages
       end
 
-      def deprecate_only_if_value(incoming_version, existing_config, type, config_keys, key, value, deprecated_version, removed_version)
+      def deprecate_only_if_value(incoming_version, existing_config, type, config_keys, key, value, deprecated_version, removed_version, ignore_deprecation: false) # rubocop:disable Metrics/ParameterLists
         setting = existing_config.dig(*config_keys) || {}
 
         return [] unless setting.key?(key)
@@ -247,7 +247,7 @@ module Gitlab
 
         if Gem::Version.new(incoming_version) >= Gem::Version.new(removed_version) && type == :removal
           messages << "* #{config_keys[0]}[#{key}] has been deprecated since #{deprecated_version} and was removed in #{removed_version}."
-        elsif Gem::Version.new(incoming_version) >= Gem::Version.new(deprecated_version) && type == :deprecation
+        elsif Gem::Version.new(incoming_version) >= Gem::Version.new(deprecated_version) && type == :deprecation && !ignore_deprecation
           messages << "* #{config_keys[0]}[#{key}] has been deprecated since #{deprecated_version} and will be removed in #{removed_version}."
         end
 
