@@ -352,6 +352,7 @@ RSpec.describe 'praefect' do
         let(:virtual_storages) { { 'default' => { 'node-1' => {}, 'nodes' => { 'node-1' => {} } } } }
 
         it 'raises an error' do
+          allow(LoggingHelper).to receive(:deprecation)
           expect(LoggingHelper).to receive(:deprecation).with(
             <<~EOS
               Configuring the Gitaly nodes directly in the virtual storage's root configuration object has
