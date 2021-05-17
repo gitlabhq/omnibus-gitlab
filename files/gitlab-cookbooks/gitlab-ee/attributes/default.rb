@@ -55,7 +55,6 @@ default['gitlab']['geo-secondary']['db_sslmode'] = nil
 default['gitlab']['geo-secondary']['db_sslcompression'] = 0
 default['gitlab']['geo-secondary']['db_sslrootcert'] = nil
 default['gitlab']['geo-secondary']['db_sslca'] = nil
-default['gitlab']['geo-secondary']['db_fdw'] = nil
 
 ###
 # Geo: PostgreSQL (Tracking database)
@@ -73,11 +72,6 @@ default['gitlab']['geo-postgresql']['ssl'] = 'off'
 default['gitlab']['geo-postgresql']['sql_user'] = 'gitlab_geo'
 default['gitlab']['geo-postgresql']['sql_mattermost_user'] = nil
 default['gitlab']['geo-postgresql']['port'] = 5431
-# PostgreSQL Foreign Data Wrapper (FDW)
-# The following is needed to make FDW work with pgbouncer. You need
-# a separate login for the FDW connection to prevent schema path issues.
-default['gitlab']['geo-postgresql']['fdw_external_user'] = default['gitlab']['gitlab-rails']['db_username']
-default['gitlab']['geo-postgresql']['fdw_external_password'] = default['gitlab']['gitlab-rails']['db_password']
 
 # Mininum of 1/8 of total memory and Maximum of 1024MB as sane defaults
 default['gitlab']['geo-postgresql']['shared_buffers'] = "#{[(node['memory']['total'].to_i / 8) / 1024, 1024].max}MB"
