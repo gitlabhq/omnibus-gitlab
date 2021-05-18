@@ -17,7 +17,7 @@ module Praefect
         config_path = File.join(praefect_dir, 'config.toml')
 
         begin
-          per_repository_configured = File.foreach(config_path).include?("election_strategy = 'per_repository'")
+          per_repository_configured = !File.foreach(config_path).grep(/election_strategy = 'per_repository'/).empty?
           # The previous behavior was to use 'sql' election strategy unless something else was explicitly configured.
           # Given that, it's fine to fallback to 'sql' if the config does not contain 'per_repository'
           # election strategy. If the config contains 'per_repository' but the value was not explicitly set, then we've
