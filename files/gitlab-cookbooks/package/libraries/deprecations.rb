@@ -227,6 +227,14 @@ module Gitlab
         messages = []
         messages += deprecate_only_if_value(incoming_version, existing_config, type, ['gitlab', 'unicorn'], 'enable', true, '13.10', '14.0')
 
+        praefect_note = <<~EOS
+          From GitLab 14.0 onwards, the `per_repository` will be the only available election strategy.
+          Migrate to repository-specific primary nodes following
+          https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-to-repository-specific-primary-gitaly-nodes.
+        EOS
+        messages += deprecate_only_if_value(incoming_version, existing_config, type, ['praefect'], 'failover_election_strategy', 'sql', '13.12', '14.0', note: praefect_note, ignore_deprecation: true)
+        messages += deprecate_only_if_value(incoming_version, existing_config, type, ['praefect'], 'failover_election_strategy', 'local', '13.12', '14.0', note: praefect_note, ignore_deprecation: true)
+
         messages
       end
 
