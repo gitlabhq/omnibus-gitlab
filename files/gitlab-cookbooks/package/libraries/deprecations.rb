@@ -227,10 +227,18 @@ module Gitlab
         messages = []
         messages += deprecate_only_if_value(incoming_version, existing_config, type, ['gitlab', 'unicorn'], 'enable', true, '13.10', '14.0')
 
+        praefect_note = <<~EOS
+          From GitLab 14.0 onwards, the `per_repository` will be the only available election strategy.
+          Migrate to repository-specific primary nodes following
+          https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-to-repository-specific-primary-gitaly-nodes.
+        EOS
+        messages += deprecate_only_if_value(incoming_version, existing_config, type, ['praefect'], 'failover_election_strategy', 'sql', '13.12', '14.0', note: praefect_note, ignore_deprecation: true)
+        messages += deprecate_only_if_value(incoming_version, existing_config, type, ['praefect'], 'failover_election_strategy', 'local', '13.12', '14.0', note: praefect_note, ignore_deprecation: true)
+
         messages
       end
 
-      def deprecate_only_if_value(incoming_version, existing_config, type, config_keys, key, value, deprecated_version, removed_version)
+      def deprecate_only_if_value(incoming_version, existing_config, type, config_keys, key, value, deprecated_version, removed_version, note: nil, ignore_deprecation: false) # rubocop:disable Metrics/ParameterLists
         setting = existing_config.dig(*config_keys) || {}
 
         return [] unless setting.key?(key)
@@ -246,9 +254,13 @@ module Gitlab
         messages = []
 
         if Gem::Version.new(incoming_version) >= Gem::Version.new(removed_version) && type == :removal
-          messages << "* #{config_keys[0]}[#{key}] has been deprecated since #{deprecated_version} and was removed in #{removed_version}."
-        elsif Gem::Version.new(incoming_version) >= Gem::Version.new(deprecated_version) && type == :deprecation
-          messages << "* #{config_keys[0]}[#{key}] has been deprecated since #{deprecated_version} and will be removed in #{removed_version}."
+          message = "* #{config_keys[0]}[#{key}] has been deprecated since #{deprecated_version} and was removed in #{removed_version}."
+          message += " #{note}" if note
+          messages << message
+        elsif Gem::Version.new(incoming_version) >= Gem::Version.new(deprecated_version) && type == :deprecation && !ignore_deprecation
+          message =  "* #{config_keys[0]}[#{key}] has been deprecated since #{deprecated_version} and will be removed in #{removed_version}."
+          message += " #{note}" if note
+          messages << message
         end
 
         messages
