@@ -13,3 +13,5 @@ default['letsencrypt']['group'] = nil
 default['letsencrypt']['key_size'] = nil
 default['letsencrypt']['owner'] = nil
 default['letsencrypt']['wwwroot'] = '/var/opt/gitlab/nginx/www'
+default['letsencrypt']['acme_staging_endpoint'] = 'https://acme-staging-v02.api.letsencrypt.org/directory'
+default['letsencrypt']['acme_production_endpoint'] = 'https://acme-v02.api.letsencrypt.org/directory'

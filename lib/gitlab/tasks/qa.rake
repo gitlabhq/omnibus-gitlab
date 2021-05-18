@@ -80,6 +80,17 @@ namespace :qa do
     end
   end
 
+  desc "Run QA letsencrypt tests"
+  task :test_letsencrypt do
+    Gitlab::Util.section('qa:test_letsencrypt') do
+      Gitlab::Util.set_env_if_missing('CI_REGISTRY_IMAGE', 'registry.gitlab.com/gitlab-org/build/omnibus-gitlab-mirror')
+      image_address = Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info.docker_tag)
+      Dir.chdir('letsencrypt-test') do
+        system({ 'IMAGE' => image_address }, './test.sh')
+      end
+    end
+  end
+
   namespace :ha do
     desc "Validate HA setup"
     task :validate do
