@@ -24,25 +24,6 @@ Before installing GitLab JiHu Edition, it is of critical importance to review th
 Once you have contracted with JiHu, a JiHu representative will contact you to supply you with a license
 that you can use as part of the installation process.
 
-## Available JiHu Edition (JH) packages
-
-The deb/rpm packages are hosted in Amazon S3:
-
-| OS | URL |
-| Ubuntu 20.04 | <https://omnibus.gitlab.cn/ubuntu/focal/gitlab-jh_13.10.0-jh.0_amd64.deb> |
-| Ubuntu 18.04 | <https://omnibus.gitlab.cn/ubuntu/bionic/gitlab-jh_13.10.0-jh.0_amd64.deb> |
-| Ubuntu 16.04 | <https://omnibus.gitlab.cn/ubuntu/xenial/gitlab-jh_13.10.0-jh.0_amd64.deb> |
-| Debian 10 | <https://omnibus.gitlab.cn/debian/buster/gitlab-jh_13.10.0-jh.0_amd64.deb> |
-| Debian 9 | <https://omnibus.gitlab.cn/debian/stretch/gitlab-jh_13.10.0-jh.0_amd64.deb> |
-| CentOS 8 | <https://omnibus.gitlab.cn/el/8/gitlab-jh-13.10.0-jh.0.el8.x86_64.rpm> |
-| CentOS 7 | <https://omnibus.gitlab.cn/el/7/gitlab-jh-13.10.0-jh.0.el7.x86_64.rpm> |
-
-The Docker image is [hosted on GitLab.com](https://gitlab.com/gitlab-jh/omnibus-gitlab/container_registry/1772325):
-
-```shell
-registry.gitlab.com/gitlab-jh/omnibus-gitlab/gitlab-jh:13.10.0
-```
-
 ## Install or update a JiHu Edition package
 
 NOTE:
@@ -51,34 +32,8 @@ If you are installing for the first time, you have to pass the
 automatically configures and starts GitLab at that URL. Enabling HTTPS requires
 [additional configuration](settings/nginx.md#enable-https) to specify the certificates.
 
-To install or update the JiHu Edition package, use one of the following methods
-based on your distribution. Replace `<url>` with the URL of the
-[package](#available-jihu-edition-jh-packages) you download:
-
-**For Debian/Ubuntu**
-
-```shell
-curl --output gitlab-jh.deb <url>
-sudo dpkg -i gitlab-jh.deb
-```
-
-**For CentOS/RHEL**
-
-```shell
-curl --output gitlab-jh.rpm <url>
-sudo rpm -Uvh gitlab-jh.rpm
-```
-
-**For Docker**
-
-Follow the [Docker installation guide](docker/README.md)
-and replace `gitlab/gitlab-ee:latest` with the following:
-
-```shell
-registry.gitlab.com/gitlab-jh/omnibus-gitlab/gitlab-jh:<version>
-```
-
-You can find the version in the [Container Registry](https://gitlab.com/gitlab-jh/omnibus-gitlab/container_registry/1772325).
+Please refer to the [GitLab Jihu Edition Install](https://about.gitlab.cn/install/) page
+for more details on installing or updating a JiHu Edition package.
 
 ### Set initial password and apply license
 
