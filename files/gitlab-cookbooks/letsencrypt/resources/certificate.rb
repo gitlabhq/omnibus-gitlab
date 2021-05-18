@@ -6,7 +6,8 @@ property :alt_names, Array, default: lazy { node['letsencrypt']['alt_names'] }
 property :key_size, [Integer, nil], default: lazy { node['letsencrypt']['key_size'] }
 property :crt, [String, nil], default: lazy { node['letsencrypt']['crt'] }
 property :group, [String, nil], default: lazy { node['letsencrypt']['group'] }
-
+property :acme_staging_endpoint, [String, nil], default: lazy { node['letsencrypt']['acme_staging_endpoint'] }
+property :acme_production_endpoint, [String, nil], default: lazy { node['letsencrypt']['acme_production_endpoint'] }
 property :chain, [String, nil],
          deprecated: 'chain has been deprecated since crt now returns the full certificate by default',
          default: lazy { node['letsencrypt']['chain'] }
@@ -32,7 +33,7 @@ action :create do
     crt "#{new_resource.crt}-staging"
     cn new_resource.cn
     key "#{new_resource.key}-staging"
-    dir 'https://acme-staging-v02.api.letsencrypt.org/directory'
+    dir new_resource.acme_staging_endpoint
     wwwroot new_resource.wwwroot
     sensitive true
   end
@@ -53,6 +54,7 @@ action :create do
     crt new_resource.crt
     cn new_resource.cn
     key new_resource.key
+    dir new_resource.acme_production_endpoint
     wwwroot new_resource.wwwroot
     notifies :run, 'execute[reload nginx]'
     sensitive true

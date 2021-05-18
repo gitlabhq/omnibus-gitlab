@@ -2,6 +2,7 @@ site = URI(node['gitlab']['external-url']).host
 
 omnibus_helper = OmnibusHelper.new(node)
 
+# ../resources/certificate.rb
 letsencrypt_certificate site do
   crt node['gitlab']['nginx']['ssl_certificate']
   key node['gitlab']['nginx']['ssl_certificate_key']
