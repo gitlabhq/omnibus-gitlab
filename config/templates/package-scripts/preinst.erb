@@ -42,7 +42,7 @@ upgrade_check() {
   MIN_VERSION=13.0
 
   # If this succeeds, then gitlab-ctl upgrade-check exists, and passed
-  if ctl_results=$(MIN_VERSION=${MIN_VERSION} gitlab-ctl upgrade-check "${OLD_VERSION_STRING}" "${NEW_MAJOR_VERSION}.${NEW_MINOR_VERSION}") ; then
+  if ctl_results=$(MIN_VERSION=${MIN_VERSION} gitlab-ctl upgrade-check "${OLD_VERSION_STRING}" "${NEW_MINOR_VERSION}") ; then
     return 0
   fi
 
