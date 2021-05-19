@@ -1,10 +1,10 @@
 ---
 stage: Monitor
-group: APM
+group: Monitor
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Omnibus GitLab Logs
+# Omnibus GitLab logs **(FREE SELF)**
 
 GitLab includes an [advanced log system](https://docs.gitlab.com/ee/administration/logs.html) where every service and component within GitLab will output system logs. Here are the Omnibus configuration settings and tools for managing these logs.
 
@@ -136,7 +136,7 @@ To manually trigger GitLab log rotation with `logrotate`, use the following comm
 /opt/gitlab/embedded/sbin/logrotate -fv -s /var/opt/gitlab/logrotate/logrotate.status /var/opt/gitlab/logrotate/logrotate.conf
 ```
 
-## UDP log forwarding **(STARTER ONLY)**
+## UDP log forwarding **(PREMIUM SELF)**
 
 Omnibus GitLab can utilize the UDP logging feature in svlogd as well as sending non-svlogd logs to a syslog-compatible remote system using UDP.
 To configure Omnibus GitLab to send syslog-protocol messages via UDP, use the following settings:
