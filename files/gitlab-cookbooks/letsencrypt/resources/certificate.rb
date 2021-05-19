@@ -21,21 +21,13 @@ action :create do
   # they provide invalid data
   helper = LetsEncryptHelper.new(node)
   contact_info = helper.contact
+  target_key_size = new_resource.key_size || node['acme']['key_size']
 
   if ::File.file?("#{new_resource.key}-staging")
     staging_key = OpenSSL::PKey::RSA.new ::File.read "#{new_resource.key}-staging"
     staging_key_size = staging_key.n.num_bits
 
-    if new_resource.key_size.nil?
-      unless staging_key_size == node['acme']['key_size']
-        file "#{new_resource.key}-staging" do
-          action :delete
-        end
-        file "#{new_resource.crt}-staging" do
-          action :delete
-        end
-      end
-    elsif staging_key_size != new_resource.key_size
+    if staging_key_size != target_key_size
       file "#{new_resource.key}-staging" do
         action :delete
       end
@@ -70,16 +62,7 @@ action :create do
     production_key = OpenSSL::PKey::RSA.new ::File.read new_resource.key
     production_key_size = production_key.n.num_bits
 
-    if new_resource.key_size.nil?
-      unless production_key_size == node['acme']['key_size']
-        file new_resource.key do
-          action :delete
-        end
-        file new_resource.crt do
-          action :delete
-        end
-      end
-    elsif production_key_size != new_resource.key_size
+    if production_key_size != target_key_size
       file new_resource.key do
         action :delete
       end
