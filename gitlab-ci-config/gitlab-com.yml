@@ -320,7 +320,6 @@ Centos 7 knapsack: *prepare_knapsack
 Centos 8 knapsack: *prepare_knapsack
 Debian 9 knapsack: *prepare_knapsack
 Debian 10 knapsack: *prepare_knapsack
-OpenSUSE 15.1 knapsack: *prepare_knapsack
 OpenSUSE 15.2 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
 Ubuntu 18.04 knapsack: *prepare_knapsack
@@ -368,12 +367,6 @@ Centos 8 specs :
   parallel: 6
   needs:
   - Centos 8 knapsack
-OpenSUSE 15.1 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse15.1"
-  extends: .spec_template
-  parallel: 6
-  needs:
-  - OpenSUSE 15.1 knapsack
 OpenSUSE 15.2 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse15.2"
   extends: .spec_template
