@@ -27,7 +27,7 @@ skip_transitive_dependency_licensing true
 source git: version.remote
 
 dependency 'python3'
-dependency 'postgresql_new'
+dependency 'postgresql'
 
 pg_major_version = '12'
 

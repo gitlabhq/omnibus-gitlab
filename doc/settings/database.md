@@ -481,6 +481,14 @@ To opt out of automatic PostgreSQL upgrade during GitLab package upgrades, run:
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
+#### GitLab 14.0 and later
+
+PostgreSQL versions 11 is no longer supported and the binaries have been
+removed. To proceed, administrators must:
+
+1. Ensure the installation is using [PostgreSQL 12](../settings/database.md#upgrade-packaged-postgresql-server)
+1. If using repmgr, [convert to using patroni](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni)
+
 #### GitLab 13.8 and later
 
 The default PostgreSQL version is set to 12.x, and an upgrade of the database is

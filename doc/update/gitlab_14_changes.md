@@ -55,3 +55,12 @@ Starting with GitLab 14.0, GitLab automatically generates a password for initial
 administrator user (`root`) and stores this value to
 `/etc/gitlab/initial_root_password`. For details, see the
 [documentation on initial login](../installation/index.md#set-up-the-initial-password).
+
+### PostgreSQL 11 and repmgr removal
+
+The binaries for PostgreSQL 11 and repmgr have been removed.
+
+Prior to upgrading, administrators using Omnibus GitLab must:
+
+1. Ensure the installation is using [PostgreSQL 12](../settings/database.md#upgrade-packaged-postgresql-server)
+1. If using repmgr, [convert to using patroni](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni)
