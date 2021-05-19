@@ -79,7 +79,7 @@ detect_unclean_start
 if old_version=$(cat /var/opt/gitlab/gitlab-rails/VERSION)
 then
     new_version=$(awk '/^gitlab-(c|e)e/ {print $NF}' /opt/gitlab/version-manifest.txt)
-    gitlab-ctl upgrade-check "${old_version}" "${new_version}"
+    MIN_VERSION="13.0" gitlab-ctl upgrade-check "${old_version}" "${new_version}"
 fi
 
 # Copy gitlab.rb for the first time
