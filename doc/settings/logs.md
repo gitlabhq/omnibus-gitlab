@@ -122,10 +122,6 @@ are only rotated when they change. With this setting in place, some tidying can 
 - Empty logs which were rotated and compressed by older versions of GitLab. These
   empty logs are usually 20 bytes in size.
 
-NOTE:
-Currently the Gitaly-specific [GitLab Shell log](https://docs.gitlab.com/ee/administration/logs.html#gitlab-shelllog) is not rotated by logrotate.
-See [Issue #4938](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4938) for more details.
-
 ### Run logrotate manually
 
 Logrotate is a scheduled job but it can also be triggered on-demand.
