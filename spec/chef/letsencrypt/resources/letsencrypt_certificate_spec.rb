@@ -44,6 +44,36 @@ RSpec.describe 'gitlab::letsencrypt' do
       )
     end
 
+    context 'specifying a different key_size' do
+      before do
+        allow(File).to receive(:file?).and_call_original
+        allow(File).to receive(:file?).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(true)
+        allow(File).to receive(:read).with(anything).and_call_original
+        allow(File).to receive(:read).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(OpenSSL::PKey::RSA.new(2048))
+
+        stub_gitlab_rb(
+          external_url: 'https://fakehost.example.com',
+          letsencrypt: {
+            enable: true,
+            key_size: 3072
+          }
+        )
+      end
+
+      it 'deletes and recreates the SSL files' do
+        expect(chef_run).to delete_file('/etc/gitlab/ssl/fakehost.example.com.key')
+        expect(chef_run).to delete_file('/etc/gitlab/ssl/fakehost.example.com.crt')
+
+        expect(chef_run).to create_acme_certificate('production').with(
+          crt: '/etc/gitlab/ssl/fakehost.example.com.crt',
+          key: '/etc/gitlab/ssl/fakehost.example.com.key',
+          key_size: 3072,
+          wwwroot: '/var/opt/gitlab/nginx/www',
+          sensitive: true
+        )
+      end
+    end
+
     it 'reloads nginx' do
       prod_cert = chef_run.acme_certificate('production')
       expect(prod_cert).to notify('execute[reload nginx]').to(:run)
@@ -72,6 +102,11 @@ RSpec.describe 'gitlab::letsencrypt' do
   end
 
   context 'when NGINX is not running' do
+    before do
+      allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
+      allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('nginx').and_return(false)
+    end
+
     it 'does not attempt to create a certificate' do
       expect(chef_run).not_to create_acme_certificate('staging')
       expect(chef_run).not_to create_acme_certificate('production')

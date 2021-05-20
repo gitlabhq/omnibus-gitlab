@@ -22,6 +22,21 @@ action :create do
   # they provide invalid data
   helper = LetsEncryptHelper.new(node)
   contact_info = helper.contact
+  target_key_size = new_resource.key_size || node['acme']['key_size']
+
+  if ::File.file?("#{new_resource.key}-staging")
+    staging_key = OpenSSL::PKey::RSA.new ::File.read "#{new_resource.key}-staging"
+    staging_key_size = staging_key.n.num_bits
+
+    if staging_key_size != target_key_size
+      file "#{new_resource.key}-staging" do
+        action :delete
+      end
+      file "#{new_resource.crt}-staging" do
+        action :delete
+      end
+    end
+  end
 
   acme_certificate 'staging' do
     alt_names new_resource.alt_names unless new_resource.alt_names.empty?
@@ -41,6 +56,20 @@ action :create do
   ruby_block 'reset private key' do
     block do
       node.normal['acme']['private_key'] = nil
+    end
+  end
+
+  if ::File.file?(new_resource.key)
+    production_key = OpenSSL::PKey::RSA.new ::File.read new_resource.key
+    production_key_size = production_key.n.num_bits
+
+    if production_key_size != target_key_size
+      file new_resource.key do
+        action :delete
+      end
+      file new_resource.crt do
+        action :delete
+      end
     end
   end
 
