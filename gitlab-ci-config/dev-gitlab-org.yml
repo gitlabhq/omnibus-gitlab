@@ -242,6 +242,10 @@
       when: never
     - <<: *unless-dev
       when: never
+    - <<: *if-auto-deploy-tag
+      when: never
+    - <<: *if-ee-tag
+      when: never
     - <<: *if-ce-tag
 
 .dev-ce-tag-only-manual: &dev-ce-tag-only-manual
