@@ -599,12 +599,11 @@ Raspberry-Pi-2-Buster-branch:
 RAT-Nightly:
   stage: slow_jobs
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  when: manual
   script:
-    - '[[ -n "${NIGHTLY}" ]] || exit 0'
     - bundle exec rake qa:rat:nightly
-  <<: *dev-ee-nightly-only
   cache: *branch-cache
-  dependencies: []
+  needs: []
   allow_failure: true
 
 ############################
@@ -1005,11 +1004,13 @@ license-upload:
 RAT-Tag:
   stage: slow_jobs
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  when: manual
+  variables:
+    CI_COMMIT_TAG: "1.2.3"
   script:
     - bundle exec rake qa:rat:tag
-  <<: *dev-ee-tag-only
   cache: *tag-cache
-  dependencies: []
+  needs: []
   allow_failure: true
 
 Raspberry-Pi-2-Buster:
