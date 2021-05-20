@@ -1,5 +1,6 @@
 ---
 redirect_to: https://docs.gitlab.com/charts/development/release.html
+remove_date: '2021-07-30'
 ---
 
 This document was moved to [another location](https://docs.gitlab.com/charts/development/release.html).
