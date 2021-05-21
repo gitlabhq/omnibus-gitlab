@@ -627,7 +627,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['encrypted_settings_path'] = '/var/opt/gitlab/gitlab-rails/shared/encrypted_settings'
 
 ### Wait for file system to be mounted
-###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#only-start-omnibus-gitlab-services-after-a-given-filesystem-is-mounted
+###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#only-start-omnibus-gitlab-services-after-a-given-file-system-is-mounted
 # high_availability['mountpoint'] = ["/var/opt/gitlab/git-data", "/var/opt/gitlab/gitlab-rails/shared"]
 
 ### GitLab Shell settings for GitLab
