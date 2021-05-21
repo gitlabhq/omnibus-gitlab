@@ -5,7 +5,7 @@ require 'cgi'
 
 module Build
   class RAT
-    class TriggerPipeline
+    class TagPipeline
       extend Trigger
 
       PROJECT_PATH = 'gitlab-org/distribution/reference-architecture-tester'.freeze
@@ -23,9 +23,13 @@ module Build
           'ref' => 'master',
           'token' => Gitlab::Util.get_env('RAT_TRIGGER_TOKEN'),
           'variables[REFERENCE_ARCHITECTURE]' => 'omnibus-gitlab-mrs',
-          'variables[PACKAGE_URL]' => Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.triggered_build_package_url,
-          'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || image || "registry.gitlab.com/#{Build::Info::OMNIBUS_PROJECT_MIRROR_PATH}/gitlab-ee-qa:#{Build::Info.docker_tag}"
+          'variables[PACKAGE_URL]' => Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.package_download_url,
+          'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || image || "dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ee-qa:#{version.partition(/\.\d+$/).first}"
         }
+      end
+
+      def self.version
+        Gitlab::Util.get_env('CI_COMMIT_TAG').tr('+', '-')
       end
 
       def self.get_access_token

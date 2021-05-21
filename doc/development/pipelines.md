@@ -267,13 +267,16 @@ against up using these images
 
 This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
 
-#### `Trigger:ha-validate`
+#### `Trigger:RAT`
 
-This manual job triggers a pipeline in the [GitLab Provisioner](https://gitlab.com/gitlab-org/distribution/gitlab-provisioner) project passing
-the URL to the package built by `Trigger:package` job, which will spin up an HA
-instance in Terraform using that package and run QA against it.
+This manual job triggers a pipeline in the
+[RAT](https://gitlab.com/gitlab-org/distribution/reference-architecture-tester)
+project passing the URL to the package built by `Trigger:package` job, which
+will spin up a PostgreSQL HA instance with that package using
+[GET](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit), and run
+QA against that instance.
 
-This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
+This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered EE pipelines.
 
 #### `<OS_NAME>-branch`
 
@@ -412,13 +415,27 @@ any of them are vulnerable to any known vulnerabilities.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on tag and nightly pipelines.
 
-### `HA-Validate-Tagged`
+### `RAT-Nightly`
 
-This job triggers a pipeline in the [GitLab Provisioner](https://gitlab.com/gitlab-org/distribution/gitlab-provisioner) project passing the URL
-to the Ubuntu 16.04 package built in this pipeline, which will spin up an HA
-instance in Terraform using that package and run QA against it.
+This job triggers a pipeline in the
+[RAT](https://gitlab.com/gitlab-org/distribution/reference-architecture-tester)
+project passing the URL to the nightly Ubuntu 20.04 package built in this pipeline,
+which will spin up a PostgreSQL HA instance with that package using
+[GET](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit), and run
+QA against that instance.
 
-This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
+This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on nightly pipelines.
+
+### `RAT-Tag`
+
+This job triggers a pipeline in the
+[RAT](https://gitlab.com/gitlab-org/distribution/reference-architecture-tester)
+project passing the URL to the Ubuntu 20.04 package built in this pipeline,
+which will spin up a PostgreSQL HA instance with that package using
+[GET](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit), and run
+QA against that instance.
+
+This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on EE tag pipelines.
 
 ### `license-upload`
 

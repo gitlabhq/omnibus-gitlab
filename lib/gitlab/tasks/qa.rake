@@ -6,7 +6,6 @@ require_relative '../build/info'
 require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
 require_relative '../build/qa_trigger'
-require_relative '../build/ha_validate'
 require_relative '../build/rat'
 require_relative "../util.rb"
 
@@ -91,34 +90,25 @@ namespace :qa do
     end
   end
 
-  namespace :ha do
-    desc "Validate HA setup"
-    task :validate do
-      Gitlab::Util.section('qa:ha:validate') do
-        Build::HA::ValidateTrigger.invoke!.wait!(timeout: 3600 * 4)
-      end
-    end
-
-    desc 'Validate nightly build'
-    task :nightly do
-      Gitlab::Util.section('qa:ha:nightly') do
-        Build::HA::ValidateNightly.invoke!.wait!(timeout: 3600 * 4)
-      end
-    end
-
-    desc 'Validate tagged build'
-    task :tag do
-      Gitlab::Util.section('qa:ha:tag') do
-        Build::HA::ValidateTag.invoke!(timeout: 3600 * 4)
-      end
-    end
-  end
-
   namespace :rat do
     desc "Trigger a RAT pipeline"
     task :trigger do
       Gitlab::Util.section('qa:rat:validate') do
-        Build::RAT::PipelineTrigger.invoke!.wait!(timeout: 3600 * 4)
+        Build::RAT::TriggerPipeline.invoke!.wait!(timeout: 3600 * 4)
+      end
+    end
+
+    desc "Trigger a RAT pipeline using nightly package"
+    task :nightly do
+      Gitlab::Util.section('qa:rat:validate') do
+        Build::RAT::NightlyPipeline.invoke!.wait!(timeout: 3600 * 4)
+      end
+    end
+
+    desc "Trigger a RAT pipeline using tag package"
+    task :tag do
+      Gitlab::Util.section('qa:rat:validate') do
+        Build::RAT::TagPipeline.invoke!.wait!(timeout: 3600 * 4)
       end
     end
   end

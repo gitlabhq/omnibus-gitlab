@@ -5,7 +5,7 @@ require 'cgi'
 
 module Build
   class RAT
-    class TriggerPipeline
+    class NightlyPipeline
       extend Trigger
 
       PROJECT_PATH = 'gitlab-org/distribution/reference-architecture-tester'.freeze
@@ -23,8 +23,8 @@ module Build
           'ref' => 'master',
           'token' => Gitlab::Util.get_env('RAT_TRIGGER_TOKEN'),
           'variables[REFERENCE_ARCHITECTURE]' => 'omnibus-gitlab-mrs',
-          'variables[PACKAGE_URL]' => Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.triggered_build_package_url,
-          'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || image || "registry.gitlab.com/#{Build::Info::OMNIBUS_PROJECT_MIRROR_PATH}/gitlab-ee-qa:#{Build::Info.docker_tag}"
+          'variables[PACKAGE_URL]' => Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.package_download_url,
+          'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || image || 'gitlab/gitlab-ee-qa:nightly'
         }
       end
 

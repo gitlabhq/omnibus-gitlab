@@ -48,7 +48,7 @@ These additional variables are available to override or enable different build b
 
 | Environment Variable                            | Description |
 | ---------------------------------------------   | ----------- |
-| HA_VALIDATE_TOKEN                               | Trigger token for the HA Validate pipeline. |
+| RAT_TRIGGER_TOKEN                               | Trigger token for the RAT pipeline. |
 | GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN | Trigger token for building a test package. |
 | CVEIGNORE                                       | See document on [dependencies being reported as vulnerable](broken_master.md). |
 | CI_SLACK_WEBHOOK_URL                            | Webhook URL for Slack failure notifications. |
