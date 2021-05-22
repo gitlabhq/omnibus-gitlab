@@ -340,7 +340,7 @@
   <<: *branch-cache
 
 .branch_template: &branch_build
-  stage: package-and-image
+  stage: package
   script:
     - support/import_gpg_secrets.sh
     - bundle exec rake cache:populate
@@ -374,7 +374,7 @@
   retry: 1
 
 .tag_template: &tag_build
-  stage: package-and-image
+  stage: package
   script:
     # Always compile assets for auto-deploy builds,
     # this is done for auto-deploy builds
@@ -492,17 +492,14 @@
 # We build package for deploying to GitLab.com first
 Ubuntu-16.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  stage: gitlab_com:package
   extends: .branch_template
 
 Ubuntu-18.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
-  stage: gitlab_com:package
   extends: .branch_template
 
 Ubuntu-20.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
-  stage: gitlab_com:package
   extends: .branch_template
 
 Debian-9-branch:
@@ -551,7 +548,7 @@ SLES-12.5-branch:
 
 Docker-branch:
   extends: .docker_job
-  stage: package-and-image
+  stage: image
   script:
   - bundle exec rake docker:build:image
   - bundle exec rake docker:push:staging
@@ -567,7 +564,7 @@ Docker-branch:
 
 QA-branch:
   extends: .docker_job
-  stage: package-and-image
+  stage: image
   variables:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
@@ -614,21 +611,21 @@ RAT-Nightly:
 # We build package for deploying to GitLab.com first
 Ubuntu-16.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  stage: gitlab_com:package
+  stage: package
   extends: .tag_template
   # Also build for auto-deploy tags
   <<: *dev-tag-only
 
 Ubuntu-18.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
-  stage: gitlab_com:package
+  stage: package
   extends: .tag_template
   # Also build for auto-deploy tags
   <<: *dev-tag-only
 
 Ubuntu-20.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
-  stage: gitlab_com:package
+  stage: package
   extends: .tag_template
   # Also build for auto-deploy tags
   <<: *dev-tag-only
@@ -639,7 +636,7 @@ Ubuntu-20.04:
 ## the upload and deploy stage for GitLab.com
 Docker-QA:
   extends: .docker_job
-  stage: gitlab_com:package
+  stage: image
   script:
     - bundle exec rake qa:build qa:push:staging
   <<: *dev-tag-only
@@ -664,7 +661,6 @@ Docker-QA:
 ##                after this package is built
 
 Ubuntu-16.04-upload-deploy:
-  stage: gitlab_com:upload_deploy
   extends: .staging_upload_template
   needs:
     - job: Ubuntu-16.04
@@ -677,7 +673,6 @@ Ubuntu-16.04-upload-deploy:
   <<: *dev-tag-and-nightly
 
 Ubuntu-18.04-staging:
-  stage: gitlab_com:upload_deploy
   extends: .staging_upload_template
   needs:
     - job: Ubuntu-18.04
@@ -687,7 +682,6 @@ Ubuntu-18.04-staging:
   <<: *dev-tag-and-nightly
 
 Ubuntu-20.04-staging:
-  stage: gitlab_com:upload_deploy
   extends: .staging_upload_template
   needs:
     - job: Ubuntu-20.04
@@ -757,7 +751,7 @@ create_omnibus_manifest:
 
 dependency_scanning:
   image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.1.0"
-  stage: package-and-image
+  stage: package
   variables:
     REPORT_PATH: ./
     NVD_DB_UPDATE: "true"
@@ -778,7 +772,7 @@ dependency_scanning:
 
 Docker:
   extends: .docker_job
-  stage: package-and-image
+  stage: image
   script:
   - bundle exec rake docker:build:image
   - bundle exec rake docker:push:staging

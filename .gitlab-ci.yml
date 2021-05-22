@@ -5,9 +5,8 @@ stages:
   - prepare
   - tests
   - post-test
-  - gitlab_com:package
-  - gitlab_com:upload_deploy
-  - package-and-image
+  - package
+  - image
   - scan-dependencies
   - staging_upload
   - package-and-image-release
