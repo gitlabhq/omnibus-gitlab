@@ -67,37 +67,5 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
       end
     end
-
-    describe 'backward compatibility for `analytics_instance_statistics_count_job_trigger_worker_cron` setting' do
-      before do
-        stub_gitlab_rb(gitlab_rails: settings).transform_keys(&:to_sym)
-      end
-
-      subject(:cron_jobs) { gitlab_yml[:production][:cron_jobs] }
-
-      context 'when the setting is not set' do
-        let(:settings)  { { analytics_instance_statistics_count_job_trigger_worker_cron: nil } }
-
-        it 'does not set any cron job' do
-          expect(cron_jobs).to be_nil
-        end
-      end
-
-      context 'when the setting is set' do
-        let(:settings) { { analytics_instance_statistics_count_job_trigger_worker_cron: '1 2 3 4 5' } }
-
-        it 'sets the analytics_usage_trends_count_job_trigger_worker_cron setting' do
-          expect(cron_jobs[:analytics_usage_trends_count_job_trigger_worker]).to eq({ cron: '1 2 3 4 5' })
-        end
-      end
-
-      context 'when the new setting is set' do
-        let(:settings) { { analytics_usage_trends_count_job_trigger_worker_cron: '1 2 3 4 5' } }
-
-        it 'sets the analytics_usage_trends_count_job_trigger_worker_cron setting' do
-          expect(cron_jobs[:analytics_usage_trends_count_job_trigger_worker]).to eq({ cron: '1 2 3 4 5' })
-        end
-      end
-    end
   end
 end
