@@ -714,7 +714,6 @@ default['gitlab']['nginx']['sendfile'] = 'on'
 default['gitlab']['nginx']['tcp_nopush'] = 'on'
 default['gitlab']['nginx']['tcp_nodelay'] = 'on'
 default['gitlab']['nginx']['hide_server_tokens'] = 'off'
-default['gitlab']['nginx']['gzip'] = nil
 default['gitlab']['nginx']['gzip_http_version'] = "1.1"
 default['gitlab']['nginx']['gzip_comp_level'] = "2"
 default['gitlab']['nginx']['gzip_proxied'] = "no-cache no-store private expired auth"
