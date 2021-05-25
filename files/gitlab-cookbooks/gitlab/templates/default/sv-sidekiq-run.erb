@@ -1,18 +1,38 @@
 #!/bin/sh
 
-cd <%= node['gitlab'][@options[:rails_app]]['dir'] %>/working
+cd <%= node['gitlab']['gitlab-rails']['dir'] %>/working
 
 exec 2>&1
-<%= render("make_metrics_rundir.erb") %>
-<%= render("mount_point_check.erb") %>
-exec chpst -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env -P \
+<%= render("make_metrics_rundir.erb", cookbook: 'gitlab') %>
+<%= render("mount_point_check.erb", cookbook: 'gitlab') %>
+exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
   -U <%= @options[:user] %>:<%= @options[:groupname] %> \
   -u <%= @options[:user] %>:<%= @options[:groupname] %> \
   /usr/bin/env \
     prometheus_multiproc_dir="${prometheus_run_dir}" \
-    /opt/gitlab/embedded/bin/bundle exec sidekiq \
-      -C /opt/gitlab/embedded/service/<%= @options[:rails_app] %>/config/sidekiq_queues.yml \
-      -e <%= node['gitlab'][@options[:rails_app]]['environment'] %> \
-      -r /opt/gitlab/embedded/service/<%= @options[:rails_app] %> \
-      -t <%= @options[:shutdown_timeout] %> \
-      -c <%= @options[:concurrency] %>
+    /opt/gitlab/embedded/service/gitlab-rails/bin/sidekiq-cluster \
+      -e <%= node['gitlab']['gitlab-rails']['environment'] %> \
+      -r /opt/gitlab/embedded/service/gitlab-rails \
+      <% if node['gitlab']['sidekiq']['interval'] %>
+      -i <%= node['gitlab']['sidekiq']['interval'] %> \
+      <% end %>
+      <% if node['gitlab']['sidekiq']['max_concurrency'] %>
+      -m <%= node['gitlab']['sidekiq']['max_concurrency'] %> \
+      <% end %>
+      <% if node['gitlab']['sidekiq']['min_concurrency'] %>
+      --min-concurrency <%= node['gitlab']['sidekiq']['min_concurrency'] %> \
+      <% end %>
+      <% if node['gitlab']['sidekiq']['queue_selector'] || node['gitlab']['sidekiq']['experimental_queue_selector'] %>
+      --queue-selector \
+      <% end %>
+      <% if node['gitlab']['sidekiq']['shutdown_timeout'] %>
+      --timeout <%= node['gitlab']['sidekiq']['shutdown_timeout'] %> \
+      <% end %>
+      <% node['gitlab']['sidekiq']['queue_groups'].each do |queue| %>
+        "<%= queue %>" \
+      <% end %>
+      <% if node['gitlab']['sidekiq']['negate'] %>
+      --negate \
+      <% end %>
+
+# Do not remove this line; it prevents trouble with the trailing backslashes above.
