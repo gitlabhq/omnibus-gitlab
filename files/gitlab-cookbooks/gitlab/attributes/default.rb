@@ -607,22 +607,6 @@ default['gitlab']['sidekiq']['min_concurrency'] = nil
 default['gitlab']['sidekiq']['negate'] = false
 default['gitlab']['sidekiq']['queue_groups'] = ['*']
 
-####
-# Sidekiq Cluster
-####
-# This will be removed in 14.0
-# https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/198
-default['gitlab']['sidekiq-cluster']['enable'] = false
-default['gitlab']['sidekiq-cluster']['ha'] = false
-default['gitlab']['sidekiq-cluster']['log_directory'] = "/var/log/gitlab/sidekiq-cluster"
-default['gitlab']['sidekiq-cluster']['interval'] = nil
-default['gitlab']['sidekiq-cluster']['max_concurrency'] = nil
-default['gitlab']['sidekiq-cluster']['min_concurrency'] = nil
-default['gitlab']['sidekiq-cluster']['queue_groups'] = []
-default['gitlab']['sidekiq-cluster']['negate'] = false
-# Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
-default['gitlab']['sidekiq-cluster']['experimental_queue_selector'] = false
-
 ###
 # gitlab-shell
 ###

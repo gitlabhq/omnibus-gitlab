@@ -109,7 +109,6 @@ module Gitlab
     attribute('user')
     attribute('gitlab_ci')
     attribute('sidekiq')
-    attribute('sidekiq_cluster').use { SidekiqCluster }
     attribute('mattermost_nginx')
     attribute('pages_nginx')
     attribute('registry_nginx')

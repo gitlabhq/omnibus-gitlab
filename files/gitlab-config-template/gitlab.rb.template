@@ -1017,7 +1017,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # sidekiq['queue_groups'] = ['*']
 
-##! If negate is enabled then sidekiq-cluster will process all the queues that
+##! If negate is enabled then Sidekiq will process all the queues that
 ##! don't match those in queue_groups.
 
 # sidekiq['negate'] = false

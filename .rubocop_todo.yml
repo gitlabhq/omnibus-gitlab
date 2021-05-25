@@ -154,7 +154,6 @@ Performance/CollectionLiteralInLoop:
     - 'files/gitlab-cookbooks/pgbouncer/libraries/pgbouncer_helper.rb'
     - 'files/gitlab-cookbooks/repmgr/libraries/repmgr_helper.rb'
     - 'lib/gitlab/package_repository.rb'
-    - 'spec/chef/recipes/sidekiq-cluster_spec.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -327,7 +326,6 @@ Style/RedundantRegexpEscape:
     - 'spec/chef/recipes/mailroom_spec.rb'
     - 'spec/chef/recipes/puma_spec.rb'
     - 'spec/chef/recipes/registry_spec.rb'
-    - 'spec/chef/recipes/sidekiq-cluster_spec.rb'
     - 'spec/chef/recipes/sidekiq_spec.rb'
     - 'spec/chef/recipes/unicorn_spec.rb'
     - 'spec/chef_helper.rb'

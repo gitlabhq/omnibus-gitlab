@@ -329,7 +329,7 @@ module Prometheus
 
     def sidekiq_scrape_config
       # Don't parse if sidekiq is explicitly disabled
-      return unless Services.enabled?('sidekiq') || Services.enabled?('sidekiq_cluster') || service_discovery
+      return unless Services.enabled?('sidekiq') || service_discovery
 
       if service_discovery
         scrape_config = {

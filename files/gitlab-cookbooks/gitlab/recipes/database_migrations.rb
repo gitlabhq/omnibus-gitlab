@@ -28,7 +28,6 @@ dependent_services << "unicorn_service[unicorn]" if omnibus_helper.should_notify
 dependent_services << "runit_service[puma]" if omnibus_helper.should_notify?("puma")
 dependent_services << "runit_service[actioncable]" if omnibus_helper.should_notify?("actioncable")
 dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
-dependent_services << "sidekiq_service[sidekiq-cluster]" if omnibus_helper.should_notify?("sidekiq-cluster")
 
 env_variables = {}
 env_variables['GITLAB_ROOT_PASSWORD'] = initial_root_password if initial_root_password

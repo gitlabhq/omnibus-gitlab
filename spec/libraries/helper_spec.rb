@@ -91,7 +91,6 @@ RSpec.describe OmnibusHelper do
       puma
       actioncable
       sidekiq
-      sidekiq-cluster
       gitlab-workhorse
       postgresql
       redis

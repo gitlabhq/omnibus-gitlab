@@ -25,13 +25,6 @@ class OmnibusHelper
   end
 
   def service_enabled?(service_name)
-    # Dealing with sidekiq and sidekiq-cluster separatly, since `sidekiq-cluster`
-    # could be configured through `sidekiq`
-    # This be removed after https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/240
-    # The sidekiq services are still in the old `node['gitlab']`
-    return sidekiq_service_enabled? if service_name == 'sidekiq'
-    return sidekiq_cluster_service_enabled? if service_name == 'sidekiq-cluster'
-
     # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
     # being split to their own dedicated cookbooks, and attributes are being moved from
     # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we
@@ -248,25 +241,10 @@ class OmnibusHelper
     LoggingHelper.warning(format(error_message, variable: 'LANG')) unless utf8_variable?('LANG')
   end
 
-  def sidekiq_cluster_service_name
-    node['gitlab']['sidekiq']['cluster'] ? 'sidekiq' : 'sidekiq-cluster'
-  end
-
   def restart_service_resource(service)
-    return "sidekiq_service[#{service}]" if %w(sidekiq sidekiq-cluster).include?(service)
+    return "sidekiq_service[#{service}]" if %w(sidekiq).include?(service)
     return "unicorn_service[#{service}]" if %w(unicorn).include?(service)
 
     "runit_service[#{service}]"
-  end
-
-  private
-
-  def sidekiq_service_enabled?
-    node['gitlab']['sidekiq']['enable'] ||
-      (node['gitlab']['sidekiq']['cluster'] && node['gitlab']['sidekiq-cluster']['enable'])
-  end
-
-  def sidekiq_cluster_service_enabled?
-    node['gitlab']['sidekiq-cluster']['enable'] && !node['gitlab']['sidekiq']['cluster']
   end
 end
