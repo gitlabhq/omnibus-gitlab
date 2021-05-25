@@ -598,7 +598,6 @@ default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"
 default['gitlab']['sidekiq']['listen_port'] = 8082
 
 # Cluster specific settings
-default['gitlab']['sidekiq']['cluster'] = true
 default['gitlab']['sidekiq']['queue_selector'] = false
 # Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
 default['gitlab']['sidekiq']['experimental_queue_selector'] = false
