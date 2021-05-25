@@ -106,7 +106,7 @@ class RedisHelper
       end
 
       def replica_role?
-        Gitlab['redis_replica_role']['enable'] || Gitlab['redis_slave_role']['enable']
+        Gitlab['redis_replica_role']['enable']
       end
     end
   end

@@ -17,7 +17,7 @@
 module RedisMasterRole
   def self.load_role
     master_role = Gitlab['redis_master_role']['enable']
-    replica_role = Gitlab['redis_replica_role']['enable'] || Gitlab['redis_slave_role']['enable']
+    replica_role = Gitlab['redis_replica_role']['enable']
 
     raise 'Cannot define both redis_master_role and redis_replica_role in the same machine.' if master_role && replica_role
 
