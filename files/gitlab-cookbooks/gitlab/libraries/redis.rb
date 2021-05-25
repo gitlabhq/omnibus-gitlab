@@ -21,7 +21,6 @@ module Redis
   class << self
     def parse_variables
       parse_redis_settings
-      parse_client_output_settings
       parse_rename_commands
     end
 
@@ -48,13 +47,6 @@ module Redis
 
       raise "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
       raise "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']
-    end
-
-    def parse_client_output_settings
-      Gitlab['redis']['client_output_buffer_limit_replica'] ||= Gitlab['redis']['client_output_buffer_limit_slave']
-
-      # If this is nil, don't set it here, as it will override the default
-      Gitlab['redis'].delete('client_output_buffer_limit_replica') if Gitlab['redis']['client_output_buffer_limit_replica'].nil?
     end
 
     def parse_rename_commands
