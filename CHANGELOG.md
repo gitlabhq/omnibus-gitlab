@@ -5,7 +5,56 @@ omnibus-gitlab repository.
 
 ## 13.12.0 (2021-05-21)
 
-No changes.
+### Added (8 changes)
+
+- [Add expired and expiring SSH key notification cron](gitlab-org/omnibus-gitlab@8c2740fb4ab9af542d40926e84d1077937348931) ([merge request](gitlab-org/omnibus-gitlab!5119))
+- [Add support to configure Sidekiq routing rules](gitlab-org/omnibus-gitlab@9b75bd4218196590b70c40184e8504c0c941c9f3) ([merge request](gitlab-org/omnibus-gitlab!5202))
+- [Add enable_disk flag for Pages](gitlab-org/omnibus-gitlab@7308676169f8d14173c38e470f0152d59a445363) ([merge request](gitlab-org/omnibus-gitlab!5242))
+- [Added environment support for ECS/Fargate](gitlab-org/omnibus-gitlab@e94fbc72f6c0a1ae4bf656624a1ee2584bf6befb) ([merge request](gitlab-org/omnibus-gitlab!5164))
+- [Add hide_server_tokens option for NGINX](gitlab-org/omnibus-gitlab@bd5b246d5885ea545865854c09c3aad76872db2b) ([merge request](gitlab-org/omnibus-gitlab!5208))
+- [Add support in Workhorse for X-Request-Id header propagation](gitlab-org/omnibus-gitlab@ae97ab2dc7cf90b53379ba891f501828fea98600) ([merge request](gitlab-org/omnibus-gitlab!5207))
+- [Toogle for workhorse keywatcher](gitlab-org/omnibus-gitlab@aa6dc87f520325037649a19bef38445afb62a4e4) ([merge request](gitlab-org/omnibus-gitlab!5173))
+- [Add support for SMTP connection pooling](gitlab-org/omnibus-gitlab@6bf6e1039d1ac33812235f73d4981b885db287b6) ([merge request](gitlab-org/omnibus-gitlab!5175))
+
+### Fixed (4 changes)
+
+- [Fix an error where reconfigure would swap the praefect election strategy](gitlab-org/omnibus-gitlab@3a2ca5eecaba0282f62cbbcad2dc1999856c86f2) ([merge request](gitlab-org/omnibus-gitlab!5260))
+- [Fix deprecation logic which could auto-enable services](gitlab-org/omnibus-gitlab@5798c379da43df0779e0baafe6540d645dc8c9a3) ([merge request](gitlab-org/omnibus-gitlab!5226))
+- [Fix pg-upgrade failing on mattermost only deploys](gitlab-org/omnibus-gitlab@1df80f6c68587fe9b5f2abe700a70b899976f82a) ([merge request](gitlab-org/omnibus-gitlab!5223))
+- [Fix crash in gitlab-exporter when running on Puma](gitlab-org/omnibus-gitlab@dd86f2bbbe9f9789cd1be6817a0b113df6002e26) ([merge request](gitlab-org/omnibus-gitlab!5181))
+
+### Changed (6 changes)
+
+- [Bump container registry to v3.4.1](gitlab-org/omnibus-gitlab@79f804d851e985b8b99cd3c56eae14115f4e877a) ([merge request](gitlab-org/omnibus-gitlab!5243))
+- [Upgrade mailroom to v0.0.12](gitlab-org/omnibus-gitlab@a49943237377d14078091cc74a5d0ad34b3278dc) ([merge request](gitlab-org/omnibus-gitlab!5250))
+- [Use backup_keep_time to prune configuration backups](gitlab-org/omnibus-gitlab@58cdb7aa419efb040863c9b2bdc9f4365fbaa8c4) ([merge request](gitlab-org/omnibus-gitlab!5102))
+- [Update acme-client from 2.0.7 to 2.0.8](gitlab-org/omnibus-gitlab@55ea32ba4eddcb130e7b83a452f88691c2734eb1) ([merge request](gitlab-org/omnibus-gitlab!5211))
+- [Include gzip directives in main nginx.conf only if enabled](gitlab-org/omnibus-gitlab@2624c960fca970eec4a6e31886596113bfd5f823) ([merge request](gitlab-org/omnibus-gitlab!5225))
+- [Update git vendor to gitlab](gitlab-org/omnibus-gitlab@7a62e8b5141287823a674a153033f580901718fb) ([merge request](gitlab-org/omnibus-gitlab!5184))
+
+### Deprecated (5 changes)
+
+- [Deprecate Praefect's failover_election_strategy config option](gitlab-org/omnibus-gitlab@0c00c13f1be742a82ea887e9f734cfcc719d2161) ([merge request](gitlab-org/omnibus-gitlab!5228))
+- [Deprecate configuring Gitaly nodes in virtual storage's config root](gitlab-org/omnibus-gitlab@4cb5946e9b55ad870412b07ac69aa7f1a229df2b) ([merge request](gitlab-org/omnibus-gitlab!5240))
+- [Deprecate nginx['gzip'] setting in favor of nginx['gzip_enabled']](gitlab-org/omnibus-gitlab@f204a982e850bb781c0fa0562f45cdf82ccdfc8f) ([merge request](gitlab-org/omnibus-gitlab!5225))
+- [Deprecate Unicorn settings](gitlab-org/omnibus-gitlab@da7349da515f895f9be5a2e7c0a9cff30f39410c) ([merge request](gitlab-org/omnibus-gitlab!5214))
+- [Deprecate Unicorn settings](gitlab-org/omnibus-gitlab@ecdf7ff19fc1f91b1274d71245cc7e59b93aff74) ([merge request](gitlab-org/omnibus-gitlab!5180))
+
+### Security (2 changes)
+
+- [Update Python to 3.7.10](gitlab-org/omnibus-gitlab@88e5c6a1e047ceb965299282e47b2b07b0f24dc4)
+- [Upgrade redis to 6.0.12](gitlab-org/omnibus-gitlab@0aac392e6315f0cf363fb0ec35f6fc711aee66bb)
+
+### Performance (1 change)
+
+- [Reuse `postgresql::sysctl` in geo-postgresql](gitlab-org/omnibus-gitlab@9ac7d69394559163356fb23af21bf830ef71bfbc) ([merge request](gitlab-org/omnibus-gitlab!5153))
+
+### Other (4 changes)
+
+- [Make `puma_config` `install_dir` resource attribute optional](gitlab-org/omnibus-gitlab@4908919a3e66429e7507fe5ad68a864a98ec8fb2) ([merge request](gitlab-org/omnibus-gitlab!5201))
+- [Update Mattermost to 5.34.2](gitlab-org/omnibus-gitlab@1e7d5463b598950472870b346cd44e9368596f66) ([merge request](gitlab-org/omnibus-gitlab!5206))
+- [Update libtiff from 4.2.0 to 4.3.0](gitlab-org/omnibus-gitlab@c4ebbb5116ddb6ce76cf61625a51b6ee6c4c2d26) ([merge request](gitlab-org/omnibus-gitlab!5189))
+- [Update grafana from 7.5.1 to 7.5.4](gitlab-org/omnibus-gitlab@a322670d961092b7bde707af2ba94af864b09216) ([merge request](gitlab-org/omnibus-gitlab!5178))
 
 ## 13.11.4 (2021-05-14)
 
