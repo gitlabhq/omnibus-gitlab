@@ -138,12 +138,6 @@ class BasePgHelper < BaseHelper
     psql_query(db_name, sql)
   end
 
-  def fdw_server_exists?(server_name, db_name)
-    psql_cmd(["-d '#{db_name}'",
-              "-c 'select srvname from pg_foreign_server' -tA",
-              "| grep -x #{server_name}"])
-  end
-
   def user_hashed_password(db_user)
     db_user_safe = db_user.scan(/[a-z_][a-z0-9_-]*[$]?/).first
     psql_query('template1', "SELECT passwd FROM pg_shadow WHERE usename='#{db_user_safe}'")

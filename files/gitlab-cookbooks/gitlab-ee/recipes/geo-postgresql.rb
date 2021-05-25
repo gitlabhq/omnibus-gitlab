@@ -26,7 +26,6 @@ postgresql_log_dir = node['gitlab']['geo-postgresql']['log_directory']
 postgresql_username = account_helper.postgresql_user
 
 geo_pg_helper = GeoPgHelper.new(node)
-fdw_helper = FdwHelper.new(node)
 
 directory node['gitlab']['geo-postgresql']['dir'] do
   owner postgresql_username
@@ -145,15 +144,6 @@ if node['gitlab']['geo-postgresql']['enable']
     database geo_database_name
     helper geo_pg_helper
     action :enable
-  end
-
-  postgresql_fdw 'gitlab_secondary' do
-    db_name geo_database_name
-    external_host fdw_helper.fdw_host
-    external_port fdw_helper.fdw_port
-    external_name fdw_helper.fdw_dbname
-    helper geo_pg_helper
-    action :delete
   end
 
   ruby_block 'warn pending geo-postgresql restart' do
