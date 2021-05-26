@@ -44,6 +44,28 @@ function detect_unclean_start() {
     set -e
 }
 
+# Make sure that there is no unmigrated data to hashed storage.
+function unmigrated_data_check() {
+  if ( [ ! -d /opt/gitlab/service/puma ] || [ ! -d /opt/gitlab/service/sidekiq ] ); then
+    echo
+    echo "This node does not appear to be running puma and/or sidekiq services"
+    echo "Skipping unmigrated data check, if you think this is an error exit now"
+    echo
+    return
+  fi
+
+  found=$(gitlab-rake gitlab:storage:legacy_attachments gitlab:storage:legacy_projects 2>/dev/null);
+
+  if ! (echo $found | grep 'Found 0 attachments' && echo $found | grep 'Found 0 projects') > /dev/null 2>&1; then
+    echo
+    echo "Legacy storage is no longer supported. Please migrate your data to hashed storage."
+    echo "Check https://docs.gitlab.com/ee/administration/raketasks/storage.html#migrate-to-hashed-storage for details."
+    echo ""
+    echo "Upgrade failed. Retry the upgrade after migrating your data to hashed storage."
+    exit 1
+  fi
+}
+
 trap "sigterm_handler; exit" TERM
 
 source /RELEASE
@@ -80,6 +102,7 @@ if old_version=$(cat /var/opt/gitlab/gitlab-rails/VERSION)
 then
     new_version=$(awk '/^gitlab-(c|e)e/ {print $NF}' /opt/gitlab/version-manifest.txt)
     MIN_VERSION="13.12" gitlab-ctl upgrade-check "${old_version}" "${new_version}"
+    unmigrated_data_check
 fi
 
 # Copy gitlab.rb for the first time
