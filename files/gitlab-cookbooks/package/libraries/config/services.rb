@@ -57,6 +57,5 @@ module Services
     service 'repmgrd',            groups: %w(postgres postgres_role)
     service 'patroni',            groups: %w(postgres patroni_role)
     service 'consul',             groups: %w(consul_role ha pgbouncer_role postgres_role patroni_role)
-    service 'sidekiq_cluster',    groups: ['sidekiq']
   end
 end

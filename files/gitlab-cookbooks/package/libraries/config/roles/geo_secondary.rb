@@ -37,7 +37,7 @@ module GeoSecondaryRole
 
     # If a service is explicitly set, it will be set in Gitlab[svc]['enable'].
     # If it us auto-enabled, it will be set to true in Gitlab[:node][svc]['enable']
-    %w(unicorn puma sidekiq sidekiq_cluster geo_logcursor).each do |svc|
+    %w(unicorn puma sidekiq geo_logcursor).each do |svc|
       # If the service is explicitly enabled
       return true if Gitlab[svc]['enable']
       # If the service is auto-enabled, and not explicitly disabled

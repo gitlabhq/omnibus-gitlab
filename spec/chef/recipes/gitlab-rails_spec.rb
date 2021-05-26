@@ -874,28 +874,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'sidekiq-cluster' do
-      let(:chef_run) do
-        ChefSpec::SoloRunner.new.converge('gitlab-ee::default')
-      end
-
-      before do
-        stub_gitlab_rb(sidekiq_cluster: { enable: true, queue_groups: 'gitlab_shell' })
-        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
-        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('sidekiq-cluster').and_return(true)
-        stub_should_notify?('sidekiq-cluster', true)
-      end
-
-      describe 'gitlab.yml' do
-        let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab.yml and create a symlink to Rails root') }
-
-        it 'template triggers notifications' do
-          expect(templatesymlink).not_to notify('sidekiq_service[sidekiq]').to(:restart).delayed
-          expect(templatesymlink).to notify('sidekiq_service[sidekiq-cluster]').to(:restart).delayed
-        end
-      end
-    end
-
     context 'Sidekiq exporter settings' do
       it 'exporter enabled but log disabled by default' do
         expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|

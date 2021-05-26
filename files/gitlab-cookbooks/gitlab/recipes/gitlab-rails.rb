@@ -145,7 +145,6 @@ node['gitlab']['gitlab-rails']['dependent_services'].each do |name|
 end
 
 dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify?('sidekiq')
-dependent_services << "sidekiq_service[sidekiq-cluster]" if omnibus_helper.should_notify?('sidekiq-cluster')
 dependent_services << "unicorn_service[unicorn]" if omnibus_helper.should_notify?('unicorn')
 
 secret_file = File.join(gitlab_rails_etc_dir, "secret")

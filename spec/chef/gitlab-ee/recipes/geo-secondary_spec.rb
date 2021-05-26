@@ -51,7 +51,6 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
                      geo_postgresql: { enable: true },
                      puma: { enable: false },
                      sidekiq: { enable: false },
-                     sidekiq_cluster: { enable: false },
                      geo_logcursor: { enable: false },
                      gitlab_rails: { enable: true })
     end
@@ -71,7 +70,6 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
                        geo_postgresql: { enable: false },
                        puma: { enable: false },
                        sidekiq: { enable: false },
-                       sidekiq_cluster: { enable: false },
                        geo_logcursor: { enable: false },
                        gitaly: { enable: true })
       end
@@ -91,7 +89,6 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
                        geo_postgresql: { enable: false },
                        puma: { enable: false },
                        sidekiq: { enable: false },
-                       sidekiq_cluster: { enable: false },
                        geo_logcursor: { enable: false },
                        gitaly: { enable: true },
                        gitlab_rails: { enable: false })
@@ -172,7 +169,6 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
         redis
         redis-exporter
         sidekiq
-        sidekiq-cluster
         puma
         actioncable
         gitaly
@@ -263,7 +259,6 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
                        unicorn: { enable: false },
                        puma: { enable: false },
                        sidekiq: { enable: false },
-                       sidekiq_cluster: { enable: false },
                        gitaly: { enable: false },
                        postgresql: { enable: false },
                        geo_logcursor: { enable: false },
@@ -291,7 +286,6 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
             # Everything but unicorn is disabled
             puma: { enable: false },
             sidekiq: { enable: false },
-            sidekiq_cluster: { enable: false },
             geo_logcursor: { enable: false },
             gitaly: { enable: false }
           )

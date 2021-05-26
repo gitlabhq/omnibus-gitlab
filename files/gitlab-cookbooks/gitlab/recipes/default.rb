@@ -139,7 +139,6 @@ include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['
   unicorn
   puma
   sidekiq
-  sidekiq-cluster
   gitlab-workhorse
   mailroom
   nginx

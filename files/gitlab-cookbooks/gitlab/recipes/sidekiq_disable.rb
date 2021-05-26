@@ -16,10 +16,6 @@
 # limitations under the License.
 #
 
-# Disabling a sidekiq-cluster process from the sidekiq configuration is
-# delegated to the sidekiq-cluster_disable recipe.
-return if node['gitlab']['sidekiq']['cluster']
-
 runit_service "sidekiq" do
   action :disable
 end

@@ -1000,7 +1000,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['log_directory'] = "/var/log/gitlab/sidekiq"
 # sidekiq['log_format'] = "json"
 # sidekiq['shutdown_timeout'] = 4
-# sidekiq['cluster'] = true
 # sidekiq['queue_selector'] = false
 # sidekiq['interval'] = nil
 # sidekiq['max_concurrency'] = 50
@@ -1018,7 +1017,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # sidekiq['queue_groups'] = ['*']
 
-##! If negate is enabled then sidekiq-cluster will process all the queues that
+##! If negate is enabled then Sidekiq will process all the queues that
 ##! don't match those in queue_groups.
 
 # sidekiq['negate'] = false

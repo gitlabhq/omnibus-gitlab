@@ -20,7 +20,7 @@ gitlab_rails_source_dir = '/opt/gitlab/embedded/service/gitlab-rails'
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
-dependent_services = %w(puma unicorn sidekiq sidekiq-cluster)
+dependent_services = %w(puma unicorn sidekiq)
 
 templatesymlink 'Removes database_geo.yml symlink' do
   link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')

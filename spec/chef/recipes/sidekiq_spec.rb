@@ -31,28 +31,6 @@ RSpec.describe 'gitlab::sidekiq' do
     end
 
     it_behaves_like "enabled runit service", "sidekiq", "root", "root"
-    it_behaves_like "disabled runit service", "sidekiq-cluster"
-  end
-
-  context 'with legacy specified values' do
-    before do
-      stub_gitlab_rb(
-        sidekiq: {
-          cluster: false, shutdown_timeout: 8, concurrency: 35
-        },
-        user: {
-          username: 'foo',
-          group: 'bar'
-        }
-      )
-    end
-
-    it 'correctly renders out the sidekiq service file' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/run").with_content(/\-t 8/)
-      expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/run").with_content(/\-c 35/)
-    end
-
-    it_behaves_like "enabled runit service", "sidekiq", "root", "root"
   end
 
   describe 'log_format' do

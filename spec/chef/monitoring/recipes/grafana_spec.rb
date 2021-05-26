@@ -293,7 +293,7 @@ RSpec.describe 'monitoring::grafana' do
         grafana: {
           metrics_enabled: true,
         },
-        sidekiq_cluster: {
+        sidekiq: {
           enable: true,
           queue_groups: queue_groups
         }
@@ -302,7 +302,7 @@ RSpec.describe 'monitoring::grafana' do
       block = chef_run.ruby_block('populate Grafana configuration options')
       block.block.call
 
-      expect(chef_run.node['gitlab']['sidekiq-cluster']['queue_groups']).to eq(queue_groups)
+      expect(chef_run.node['gitlab']['sidekiq']['queue_groups']).to eq(queue_groups)
     end
 
     it 'disables reporting when usage_ping_enabled is disabled' do

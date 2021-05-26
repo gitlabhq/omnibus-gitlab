@@ -107,8 +107,7 @@ module Gitlab
     attribute('manage_storage_directories')
     attribute('user')
     attribute('gitlab_ci')
-    attribute('sidekiq').use { Sidekiq }
-    attribute('sidekiq_cluster').use { SidekiqCluster }
+    attribute('sidekiq')
     attribute('mattermost_nginx')
     attribute('pages_nginx')
     attribute('registry_nginx')
