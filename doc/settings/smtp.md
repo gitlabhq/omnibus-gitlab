@@ -183,6 +183,19 @@ gitlab_rails['smtp_domain'] = "smtp.zoho.com"
 gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
+### Siteage, LLC (Zimbra)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = 'mail.siteage.net'
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = 'gitlab@domain.com'
+gitlab_rails['smtp_password'] = 'password'
+gitlab_rails['smtp_authentication'] = 'login'
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['gitlab_email_from'] = "gitlab@domain.com"
+gitlab_rails['smtp_tls'] = true
+```
 
 ### OVH
 
