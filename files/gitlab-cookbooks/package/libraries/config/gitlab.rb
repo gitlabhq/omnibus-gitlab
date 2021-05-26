@@ -89,7 +89,7 @@ module Gitlab
     attribute('gitlab_rails',     priority: 15).use { GitlabRails } # Parse rails first as others may depend on it
     attribute('gitlab_workhorse', priority: 20).use { GitlabWorkhorse }
     attribute('logging',          priority: 20).use { Logging }
-    attribute('unicorn',          priority: 20).use { Unicorn }
+    attribute('unicorn',          priority: 20)
     attribute('puma',             priority: 20).use { Puma }
     attribute('actioncable',      priority: 20).use { ActionCable }
     attribute('mailroom',         priority: 20).use { IncomingEmail }

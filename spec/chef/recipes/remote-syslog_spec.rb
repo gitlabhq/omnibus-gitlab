@@ -40,7 +40,6 @@ RSpec.describe 'gitlab::remote-syslog' do
       # via node[service] and those via node['gitlab'][service] are populated.
       expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/redis\/\*.log/)
       expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/nginx\/\*.log/)
-      expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/unicorn\/\*.log/)
       expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/gitlab-rails\/\*.log/)
       expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/postgresql\/\*.log/)
       expect(chef_run).to render_file('/var/opt/gitlab/remote-syslog/remote_syslog.yml').with_content(/- \/var\/log\/gitlab\/sidekiq\/\*.log/)

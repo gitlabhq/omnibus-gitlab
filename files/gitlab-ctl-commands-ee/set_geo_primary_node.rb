@@ -16,7 +16,7 @@
 #
 
 add_command_under_category 'set-geo-primary-node', 'gitlab-geo', 'Make this node the Geo primary', 2 do |cmd_name|
-  service_names = %w[unicorn puma]
+  service_names = %w[puma]
   service_enabled = service_names.any? do |service_name|
     service_enabled?(service_name)
   end

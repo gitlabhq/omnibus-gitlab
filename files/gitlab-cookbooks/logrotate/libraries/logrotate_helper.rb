@@ -57,7 +57,6 @@ class LogrotateHelper < AccountHelper
       'repmgr' => { username: postgresql_user, group: postgresql_group },
       'sidekiq' => { username: gitlab_user, group: gitlab_group },
       'storage-check' => { username: gitlab_user, group: gitlab_group },
-      'unicorn' => { username: gitlab_user, group: gitlab_group },
       'sentinel' => { username: redis_user, group: redis_group }
     }
   end

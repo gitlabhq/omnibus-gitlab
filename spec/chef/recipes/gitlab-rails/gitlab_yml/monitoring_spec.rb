@@ -7,7 +7,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
     context 'with default configuration' do
       it 'renders gitlab.yml with default values' do
         expect(gitlab_yml[:production][:monitoring]).to eq(
-          unicorn_sampler_interval: 10,
           ip_whitelist: %w[127.0.0.0/8 ::1/128],
           sidekiq_exporter: {
             enabled: true,
@@ -29,14 +28,12 @@ RSpec.describe 'gitlab::gitlab-rails' do
         stub_gitlab_rb(
           gitlab_rails: {
             monitoring_whitelist: %w[1.0.0.0 2.0.0.0],
-            monitoring_unicorn_sampler_interval: 50
           }
         )
       end
 
       it 'renders gitlab.rb with user specified values' do
         expect(gitlab_yml[:production][:monitoring][:ip_whitelist]).to eq(%w[1.0.0.0 2.0.0.0])
-        expect(gitlab_yml[:production][:monitoring][:unicorn_sampler_interval]).to eq(50)
       end
 
       context 'when sidekiq exports logs' do
@@ -67,29 +64,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
             stub_gitlab_rb(
               puma: {
                 enable: true,
-                exporter_enabled: false,
-                exporter_address: '1.2.3.4',
-                exporter_port: 1234
-              }
-            )
-          end
-
-          it 'renders gitlab.rb with user specified values' do
-            expect(gitlab_yml[:production][:monitoring][:web_exporter]).to eq(
-              enabled: false,
-              port: 1234,
-              address: '1.2.3.4'
-            )
-          end
-        end
-
-        context 'with Unicorn' do
-          before do
-            stub_gitlab_rb(
-              puma: {
-                enable: false
-              },
-              unicorn: {
                 exporter_enabled: false,
                 exporter_address: '1.2.3.4',
                 exporter_port: 1234

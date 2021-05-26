@@ -32,3 +32,12 @@ following settings in `gitlab.rb` is being removed:
 
 1. `sidekiq['concurrency']` setting. The limits should be controlled using the
    two settings `sidekiq['min_concurrency']` and `sidekiq['max_concurrency']`.
+
+### Removing support for using Unicorn as web server
+
+In GitLab 13.0, Puma became the default web server for GitLab, but users were
+still able to continue using Unicorn if needed. Starting with GitLab 14.0,
+Unicorn is no longer supported as a webserver for GitLab and is no longer
+shipped with the `omnibus-gitlab` packages. Users must migrate to Puma following
+[documentation](https://docs.gitlab.com/ee/administration/operations/puma.html)
+to upgrade to GitLab 14.0.

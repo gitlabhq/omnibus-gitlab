@@ -96,7 +96,6 @@ include_recipe "gitlab::add_trusted_certs"
 # Create dummy services to receive notifications, in case
 # the corresponding service recipe is not loaded below.
 %w(
-  unicorn
   puma
   actioncable
   sidekiq
@@ -136,7 +135,6 @@ include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['
 
 # Configure Services
 %w[
-  unicorn
   puma
   sidekiq
   gitlab-workhorse

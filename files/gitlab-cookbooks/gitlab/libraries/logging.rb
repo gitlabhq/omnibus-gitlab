@@ -61,7 +61,6 @@ module Logging
         remote-syslog
         sentinel
         sidekiq
-        unicorn
         puma
         storage-check
       ).each do |runit_sv|

@@ -257,19 +257,8 @@ RSpec.describe 'monitoring::prometheus' do
     end
   end
 
-  context 'with puma' do
+  context 'by default' do
     context 'with user provided settings' do
-      before do
-        stub_gitlab_rb(
-          puma: {
-            enable: true
-          },
-          unicorn: {
-            enable: false
-          }
-        )
-      end
-
       it 'configures puma job' do
         expect(chef_run).to render_file('/var/opt/gitlab/prometheus/prometheus.yml')
           .with_content(%r{- job_name: gitlab-rails\s+metrics_path: "/-/metrics"\s+static_configs:\s+- targets:\s+- 127.0.0.1:8080})

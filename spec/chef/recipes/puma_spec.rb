@@ -11,7 +11,6 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(puma: { enable: true }, unicorn: { enable: false })
     stub_default_should_notify?(true)
     stub_should_notify?('puma', true)
   end
@@ -96,7 +95,6 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
     before do
       stub_gitlab_rb(
         puma: {
-          enable: true,
           worker_timeout: 120,
           worker_processes: 4,
           min_threads: 5,
@@ -106,9 +104,6 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
           socket: '/tmp/puma.socket',
           state_path: '/tmp/puma.state',
           per_worker_max_memory_mb: 1000
-        },
-        unicorn: {
-          enable: false
         }
       )
     end
@@ -133,12 +128,6 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
   context 'with custom user and group' do
     before do
       stub_gitlab_rb(
-        puma: {
-          enable: true
-        },
-        unicorn: {
-          enable: false
-        },
         user: {
           username: 'foo',
           group: 'bar'
@@ -152,13 +141,7 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
   context 'with custom runtime_dir' do
     before do
       stub_gitlab_rb(
-        runtime_dir: '/tmp/test-dir',
-        puma: {
-          enable: true
-        },
-        unicorn: {
-          enable: false
-        }
+        runtime_dir: '/tmp/test-dir'
       )
     end
 
@@ -178,12 +161,6 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
           enable: true,
           in_app: true,
           worker_pool_size: 7
-        },
-        puma: {
-          enable: true
-        },
-        unicorn: {
-          enable: false
         }
       )
     end
@@ -210,7 +187,6 @@ RSpec.describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(puma: { enable: true }, unicorn: { enable: false })
   end
 
   context 'when puma is enabled on a node with no /run or /dev/shm tmpfs' do
@@ -237,14 +213,6 @@ RSpec.describe 'gitlab::puma Ubuntu 16.04 Docker' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(
-      puma: {
-        enable: true
-      },
-      unicorn: {
-        enable: false
-      }
-    )
   end
 
   context 'when puma is enabled on a node with a /dev/shm tmpfs' do
@@ -271,14 +239,6 @@ RSpec.describe 'gitlab::puma with more CPUs' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    stub_gitlab_rb(
-      puma: {
-        enable: true
-      },
-      unicorn: {
-        enable: false
-      }
-    )
   end
 
   context 'when puma is enabled' do

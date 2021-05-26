@@ -18,17 +18,9 @@
 module Puma
   class << self
     def parse_variables
-      only_one_allowed!
-
       return unless Services.enabled?('puma')
 
       parse_listen_address
-    end
-
-    def only_one_allowed!
-      return unless Services.enabled?('unicorn') && Services.enabled?('puma')
-
-      raise 'Only one web server (Puma or Unicorn) can be enabled at the same time!'
     end
 
     def parse_listen_address

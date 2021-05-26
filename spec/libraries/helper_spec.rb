@@ -87,7 +87,6 @@ RSpec.describe OmnibusHelper do
   let(:node) { chef_run.node }
   let(:services) do
     %w(
-      unicorn
       puma
       actioncable
       sidekiq

@@ -14,7 +14,7 @@ production: &base
     port: <%= @gitlab_port %>
     https: <%= @gitlab_https %>
 
-    # The maximum time unicorn/puma can spend on the request. This needs to be smaller than the worker timeout.
+    # The maximum time puma can spend on the request. This needs to be smaller than the worker timeout.
     # Default is 95% of the worker timeout
     max_request_duration_seconds: <%= @max_request_duration_seconds %>
 
@@ -109,7 +109,7 @@ production: &base
     ### GraphQL Settings
     # Tells the rails application how long it has to complete a GraphQL request.
     # We suggest this value to be higher than the database timeout value
-    # and lower than the worker timeout set in unicorn/puma. (default: 30)
+    # and lower than the worker timeout set in puma. (default: 30)
     graphql_timeout: <%= @graphql_timeout %>
 
     ## Repository downloads directory
@@ -936,8 +936,6 @@ production: &base
     bin_path: <%= @git_bin_path %>
 
   monitoring:
-    # Time between sampling of unicorn socket metrics, in seconds
-    unicorn_sampler_interval: <%= @monitoring_unicorn_sampler_interval %>
     # IP whitelist controlling access to monitoring endpoints
     ip_whitelist:
 <% @monitoring_whitelist.each do |entry| %>
@@ -952,9 +950,9 @@ production: &base
 
     # Web exporter is webserver built in to Unicorn/Puma to expose Prometheus metrics
     web_exporter:
-      enabled: <%= @puma['enable'] ? @puma['exporter_enabled'] : @unicorn['exporter_enabled']  %>
-      address: <%= @puma['enable'] ? @puma['exporter_address'] : @unicorn['exporter_address']  %>
-      port: <%= @puma['enable'] ? @puma['exporter_port'] : @unicorn['exporter_port']  %>
+      enabled: <%= @puma['exporter_enabled'] %>
+      address: <%= @puma['exporter_address'] %>
+      port: <%= @puma['exporter_port'] %>
 
   shutdown:
     blackout_seconds: <%= @shutdown_blackout_seconds %>

@@ -923,19 +923,15 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
 
     describe 'maximum request duration' do
-      where(:web_worker, :configured_timeout, :expected_duration) do
-        :unicorn | nil  | 57
-        :unicorn | 30   | 29
-        :unicorn | "30" | 29
-        :puma    | nil  | 57
-        :puma    | 120  | 114
+      where(:configured_timeout, :expected_duration) do
+        nil  | 57
+        120  | 114
       end
 
       with_them do
         before do
           stub_gitlab_rb(
-            unicorn: { enable: web_worker == :unicorn, worker_timeout: configured_timeout },
-            puma: { enable: web_worker == :puma, worker_timeout: configured_timeout }
+            puma: { worker_timeout: configured_timeout }
           )
         end
 
