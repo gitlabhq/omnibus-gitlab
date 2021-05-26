@@ -977,19 +977,6 @@ QA-Tag:
     - Ubuntu-20.04
   retry: 1
 
-upgrade:
-  stage: metrics
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  script:
-    - echo $GCP_SERVICE_ACCOUNT > service_account.json
-    - bundle exec rake metrics:upgrade_package
-  allow_failure: true
-  <<: *dev-tag-only-except-auto-deploy-manual
-  tags:
-  - docker-builder
-  cache: *tag-cache
-  dependencies: []
-
 license-upload:
   stage: metrics
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
