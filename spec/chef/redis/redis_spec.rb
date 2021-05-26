@@ -310,18 +310,4 @@ redis_socket=''
 
     it_behaves_like 'disabled runit service', 'redis', 'root', 'root'
   end
-
-  context 'deprecated setting still has an effect' do
-    before do
-      stub_gitlab_rb(
-        redis: {
-          client_output_buffer_limit_slave: "fakesetting",
-        }
-      )
-    end
-
-    it 'sets the replica setting' do
-      expect(chef_run).to render_file(redis_conf).with_content("client-output-buffer-limit replica fakesetting")
-    end
-  end
 end
