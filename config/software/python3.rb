@@ -1,6 +1,6 @@
 #
 # Copyright:: Copyright (c) 2013-2014 Chef Software, Inc.
-# Copyright:: Copyright (c) 2016-2020 GitLab B.V.
+# Copyright:: Copyright (c) 2016-2021 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +17,13 @@
 #
 
 name 'python3'
-# If bumping from 3.7.x to something higher, be sure to update the following files with the new path:
-# config/software/python-docutils.rb
+# If bumping from 3.9.x to something higher, be sure to update the following files with the new path:
+# files/gitlab-config-template/gitlab.rb.template
 # files/gitlab-cookbooks/gitaly/recipes/enable.rb
 # files/gitlab-cookbooks/gitlab/attributes/default.rb
 # spec/chef/recipes/gitaly_spec.rb
 # spec/chef/recipes/gitlab-rails_spec.rb
-default_version '3.7.10'
+default_version '3.9.5'
 
 dependency 'libedit'
 dependency 'ncurses'
@@ -40,7 +40,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       sha256: 'c9649ad84dc3a434c8637df6963100b2e5608697f9ba56d82e3809e4148e0975'
+       sha256: 'e0fbd5b6e1ee242524430dee3c91baf4cbbaba4a72dd1674b90fda87b713c7ab'
 
 relative_path "Python-#{version}"
 
@@ -67,10 +67,10 @@ build do
   make env: env
   make 'install', env: env
 
-  delete("#{install_dir}/embedded/lib/python3.7/lib-dynload/dbm.*")
-  delete("#{install_dir}/embedded/lib/python3.7/lib-dynload/_sqlite3.*")
-  delete("#{install_dir}/embedded/lib/python3.7/test")
-  command "find #{install_dir}/embedded/lib/python3.7 -name '__pycache__' -type d -print -exec rm -r {} +"
+  delete("#{install_dir}/embedded/lib/python3.9/lib-dynload/dbm.*")
+  delete("#{install_dir}/embedded/lib/python3.9/lib-dynload/_sqlite3.*")
+  delete("#{install_dir}/embedded/lib/python3.9/test")
+  command "find #{install_dir}/embedded/lib/python3.9 -name '__pycache__' -type d -print -exec rm -r {} +"
 end
 
 project.exclude "embedded/bin/python3*-config"

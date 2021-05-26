@@ -14,7 +14,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
       'BUNDLE_GEMFILE' => '/opt/gitlab/embedded/service/gitlab-rails/Gemfile',
       'PATH' => '/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin',
       'ICU_DATA' => '/opt/gitlab/embedded/share/icu/current',
-      'PYTHONPATH' => '/opt/gitlab/embedded/lib/python3.7/site-packages',
+      'PYTHONPATH' => '/opt/gitlab/embedded/lib/python3.9/site-packages',
       'EXECJS_RUNTIME' => 'Disabled',
       'TZ' => ':/etc/localtime',
       'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so',
