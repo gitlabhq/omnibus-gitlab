@@ -320,7 +320,6 @@ Style/RedundantRegexpEscape:
   Exclude:
     - 'files/gitlab-cookbooks/gitlab/libraries/registry.rb'
     - 'files/gitlab-cookbooks/package/libraries/helpers/redhat_helper.rb'
-    - 'spec/chef/recipes/actioncable.rb'
     - 'spec/chef/recipes/add_trusted_certs_spec.rb'
     - 'spec/chef/recipes/gitlab-workhorse_spec.rb'
     - 'spec/chef/recipes/mailroom_spec.rb'

@@ -91,7 +91,6 @@ module Gitlab
     attribute('logging',          priority: 20).use { Logging }
     attribute('unicorn',          priority: 20)
     attribute('puma',             priority: 20).use { Puma }
-    attribute('actioncable',      priority: 20).use { ActionCable }
     attribute('mailroom',         priority: 20).use { IncomingEmail }
     attribute('storage_check',    priority: 30).use { StorageCheck }
     attribute('nginx',            priority: 40).use { Nginx } # Parse nginx last so all external_url are parsed before it
@@ -101,6 +100,7 @@ module Gitlab
     attribute('pages_external_url',      default: nil)
     attribute('runtime_dir',             default: nil)
     attribute('git_data_dir',            default: nil)
+    attribute('actioncable')
     attribute('bootstrap')
     attribute('omnibus_gitconfig')
     attribute('manage_accounts')

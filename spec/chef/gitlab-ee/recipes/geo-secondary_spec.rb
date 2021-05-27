@@ -170,7 +170,6 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
         redis-exporter
         sidekiq
         puma
-        actioncable
         gitaly
         geo-postgresql
         gitlab-pages

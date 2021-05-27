@@ -154,12 +154,11 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
     end
   end
 
-  context 'with ActionCable in-app enabled' do
+  context 'with ActionCable enabled' do
     before do
       stub_gitlab_rb(
         actioncable: {
           enable: true,
-          in_app: true,
           worker_pool_size: 7
         }
       )

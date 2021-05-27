@@ -97,7 +97,6 @@ include_recipe "gitlab::add_trusted_certs"
 # the corresponding service recipe is not loaded below.
 %w(
   puma
-  actioncable
   sidekiq
   mailroom
 ).each do |dummy|
@@ -149,12 +148,6 @@ include_recipe "gitlab::database_migrations" if node['gitlab']['gitlab-rails']['
   else
     include_recipe "gitlab::#{service}_disable"
   end
-end
-
-if node['gitlab']['actioncable']['enable'] && !node['gitlab']['actioncable']['in_app']
-  include_recipe "gitlab::actioncable"
-else
-  include_recipe "gitlab::actioncable_disable"
 end
 
 %w(
