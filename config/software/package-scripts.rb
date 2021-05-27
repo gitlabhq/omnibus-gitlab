@@ -24,9 +24,7 @@ license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
 
 skip_transitive_dependency_licensing true
 
-stable_tag = Build::Info.latest_stable_tag
-
-default_version(stable_tag && !stable_tag.empty? ? stable_tag : Build::Info.semver_version.split('+')[0])
+default_version Gitlab::Util.get_env('CI_COMMIT_TAG') || Build::Info.semver_version.split('+')[0]
 
 build do
   # Create the package-script folder. The gitlab.rb project excludes this folder from the package.
