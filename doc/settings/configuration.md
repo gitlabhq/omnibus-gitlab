@@ -704,6 +704,26 @@ For example:
 GITLAB_ROOT_PASSWORD="<strongpassword>" EXTERNAL_URL="http://gitlab.exmaple.com" apt install gitlab-ee
 ```
 
+## Setting allowed hosts to prevent host header attacks
+
+To prevent GitLab from accepting a host header other than
+what's intended:
+
+1. Edit `/etc/gitlab/gitlab.rb` and configure `allowed_hosts`:
+
+   ```ruby
+   gitlab_rails['allowed_hosts'] = ['gitlab.example.com']
+   ```
+
+1. Reconfigure GitLab for the changes to take effect:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+There are no known security issues in GitLab caused by not configuring `allowed_hosts`,
+but it's recommended for defense in depth against potential [host header attacks](https://portswigger.net/web-security/host-header).
+
 ## Setting up LDAP sign-in
 
 See [LDAP setup documentation](ldap.md).
