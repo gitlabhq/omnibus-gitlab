@@ -98,9 +98,6 @@ node.default['gitlab-pages']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
 }
 
-node.default['gitlab-pages']['env']['http_proxy'] = node['gitlab-pages']['http_proxy'] \
-  unless node['gitlab-pages']['http_proxy'].nil?
-
 env_dir env_directory do
   variables node['gitlab-pages']['env']
   notifies :restart, "runit_service[gitlab-pages]" if omnibus_helper.should_notify?('gitlab-pages')
