@@ -597,10 +597,10 @@ production: &base
       cron: "<%= @elastic_index_bulk_cron %>"
     <% end %>
 
-    # Worker for triggering counter jobs for usage trends and keep backward compatibiltity with analytics_instance_statistics_count_job_trigger_worker_cron until 14.0
-    <% unless @analytics_usage_trends_count_job_trigger_worker_cron.nil? && @analytics_instance_statistics_count_job_trigger_worker_cron.nil? %>
+    # Worker for triggering counter jobs for usage trends
+    <% unless @analytics_usage_trends_count_job_trigger_worker_cron.nil? %>
     analytics_usage_trends_count_job_trigger_worker:
-      cron: "<%= @analytics_usage_trends_count_job_trigger_worker_cron || @analytics_instance_statistics_count_job_trigger_worker_cron %>"
+      cron: "<%= @analytics_usage_trends_count_job_trigger_worker_cron %>"
     <% end %>
 
     # Worker for triggering member invitation reminder emails
