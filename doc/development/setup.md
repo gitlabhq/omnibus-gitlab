@@ -132,6 +132,24 @@ This ensures that your new work is behaving as expected, and not breaking anythi
    GITLAB_USERNAME=$USERNAME GITLAB_PASSWORD=$PASSWORD bundle exec bin/qa Test::Instance $DEV_INSTANCE_URL
    ```
 
+## Use Customers Portal Staging in GitLab
+
+To connect your GitLab instance to Customers Portal Staging, you can set the following
+[custom environment variables](../settings/environment-variables.md#setting-custom-environment-variables)
+in `/etc/gitlab/gitlab.rb` by supplying them in a `gitlab_rails['env']` hash. Set:
+
+- `GITLAB_LICENSE_MODE` to `test`
+- `CUSTOMER_PORTAL_URL` to `https://customers.stg.gitlab.com`
+
+For example:
+
+```ruby
+gitlab_rails['env'] = {
+    "GITLAB_LICENSE_MODE" => "test",
+    "CUSTOMER_PORTAL_URL" => "https://customers.stg.gitlab.com"
+}
+```
+
 ## OpenShift GitLab Development Setup
 
 See Omnibus GitLab [development setup](openshift/README.md) documentation.
