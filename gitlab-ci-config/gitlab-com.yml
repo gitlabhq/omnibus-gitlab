@@ -145,8 +145,8 @@
   variables:
     GIT_STRATEGY: none
     DOCS_REVIEW_APPS_DOMAIN: 178.62.207.141.nip.io
-    # By default, deploy the Review App using the `master` branch of the `gitlab-org/gitlab-docs` project
-    DOCS_BRANCH: master
+    # By default, deploy the Review App using the `main` branch of the `gitlab-org/gitlab-docs` project
+    DOCS_BRANCH: main
   when: manual
   only:
     refs:
