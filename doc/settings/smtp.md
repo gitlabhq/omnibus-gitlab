@@ -183,7 +183,7 @@ gitlab_rails['smtp_domain'] = "smtp.zoho.com"
 gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
-### Siteage, LLC (Zimbra)
+### SiteAge Mail
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
