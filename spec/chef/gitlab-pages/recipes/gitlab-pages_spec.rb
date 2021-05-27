@@ -296,23 +296,6 @@ RSpec.describe 'gitlab::gitlab-pages' do
         expect(chef_run).to render_file("/opt/gitlab/etc/gitlab-pages/env/SSL_CERT_DIR")
           .with_content('/opt/gitlab/embedded/ssl/certs')
       end
-
-      context 'when http_proxy is specified' do
-        before do
-          stub_gitlab_rb(
-            external_url: 'https://gitlab.example.com',
-            pages_external_url: 'https://pages.example.com',
-            gitlab_pages: {
-              http_proxy: 'http://example:8081'
-            }
-          )
-        end
-
-        it 'renders an environment variable file with http_proxy' do
-          expect(chef_run).to render_file("/opt/gitlab/etc/gitlab-pages/env/http_proxy")
-            .with_content('http://example:8081')
-        end
-      end
     end
 
     describe 'logrotate settings' do

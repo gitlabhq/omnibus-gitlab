@@ -8,7 +8,6 @@ default['gitlab-pages']['external_https_proxyv2'] = []
 default['gitlab-pages']['listen_proxy'] = "localhost:8090"
 default['gitlab-pages']['gitlab_server'] = nil
 default['gitlab-pages']['internal_gitlab_server'] = nil
-default['gitlab-pages']['http_proxy'] = nil
 default['gitlab-pages']['metrics_address'] = nil
 default['gitlab-pages']['pages_path'] = nil
 default['gitlab-pages']['enable_disk'] = nil
