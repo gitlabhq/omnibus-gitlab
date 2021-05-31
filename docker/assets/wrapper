@@ -78,7 +78,7 @@ detect_unclean_start
 # If the VERSION file doesn't exist, then this is not an upgrade
 if old_version=$(cat /var/opt/gitlab/gitlab-rails/VERSION)
 then
-    new_version=$(awk '/^gitlab-(c|e)e/ {print $NF}' /opt/gitlab/version-manifest.txt)
+    new_version=$(awk '/^gitlab-(ce|ee|jh)/ {print $NF}' /opt/gitlab/version-manifest.txt)
     MIN_VERSION="13.0" gitlab-ctl upgrade-check "${old_version}" "${new_version}"
 fi
 
