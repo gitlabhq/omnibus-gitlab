@@ -42,6 +42,10 @@ RSpec.describe 'rails_migration' do
         expect(bash_block.code).to include(log_file)
       end
 
+      it 'passes appropriate environment variables through' do
+        expect(bash_block.environment).to match(hash_including('SOME_ENV'))
+      end
+
       it 'triggers provided rake_task' do
         migrate = %(/opt/gitlab/bin/gitlab-rake gitlab:db:configure 2>& 1 | tee ${log_file})
 
