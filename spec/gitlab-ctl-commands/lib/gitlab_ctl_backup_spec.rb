@@ -60,10 +60,9 @@ RSpec.describe GitlabCtl::Backup do
       allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return({})
     end
 
-    it 'should not attempt to delete old backups' do
+    it 'should default to deleting old backups' do
       backup = GitlabCtl::Backup.new
-      expect(backup).to receive(:wants_pruned).and_return(false)
-      backup.prune
+      expect(backup.wants_pruned).to eq(true)
     end
 
     context 'when the backup path is readable by non-root' do
@@ -200,10 +199,6 @@ RSpec.describe GitlabCtl::Backup do
         allow(Dir).to receive(:glob).and_return(all_backup_files)
       end
 
-      it 'should warn the user of the coming breaking change' do
-        expect { @backup.prune }.to output(a_string_matching(warning_message)).to_stderr
-      end
-
       it 'should identify the correct files to remove' do
         removed = past_valid_backup_files.map do |x|
           File.join(backup_dir_path, x)
@@ -253,10 +248,6 @@ RSpec.describe GitlabCtl::Backup do
     context 'when the only valid files are after backup_keep_time' do
       before do
         allow(Dir).to receive(:glob).and_return(future_valid_backup_files)
-      end
-
-      it 'should warn the user of the coming breaking change' do
-        expect { @backup.prune }.to output(a_string_matching(warning_message)).to_stderr
       end
 
       it 'should find no files to remove' do
