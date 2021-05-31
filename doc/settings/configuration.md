@@ -726,7 +726,7 @@ but it's recommended for defense in depth against potential [host header attacks
 
 ## Setting up LDAP sign-in
 
-See [LDAP setup documentation](ldap.md).
+See [LDAP setup documentation](https://docs.gitlab.com/ee/administration/auth/ldap.html).
 
 ## Smartcard authentication
 

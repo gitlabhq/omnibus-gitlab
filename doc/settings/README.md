@@ -14,7 +14,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [Gitaly Cluster](praefect.md)
 - [`gitlab.yml`](gitlab.yml.md)
 - [Grafana](grafana.md)
-- [LDAP](ldap.md)
+- [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap.html)
 - [Logs](logs.md)
 - [NGINX](nginx.md)
 - [Pages](https://docs.gitlab.com/ee/administration/pages/index.html)
