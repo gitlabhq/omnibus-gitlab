@@ -17,7 +17,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'grafana'
-version = Gitlab::Version.new('grafana', '7.5.1')
+version = Gitlab::Version.new('grafana', '7.5.5')
 default_version version.print(false)
 
 license 'APACHE-2.0'
@@ -27,11 +27,11 @@ license_file 'NOTICE.md'
 skip_transitive_dependency_licensing true
 
 arch, sha = if ohai['platform'] == 'raspbian' && /armv/.match?(ohai['kernel']['machine'])
-              %w[armv7 ca3e884fe4d9ebbf17456de125622e7374bc5f53034fa41c53c75df08558dc2f]
+              %w[armv7 13a5fde5651d75b8ec560b52b6c7eccfda997015077f2a9ff3bbdb2709938def]
             elsif /aarch64/.match?(ohai['kernel']['machine'])
-              %w[arm64 4367db18af36d2730552de7925908f35b6572ef48237d530572f5d78dfceae4e]
+              %w[arm64 cd65cd84c38c7a43afeb0b1895e97a7b4f3203340be2da070a6dee75ead3fdfe]
             else
-              %w[amd64 f7b8921d020ae021d9f6837d1ec19d227fada13b41b81b9ade6612f62f554ef6]
+              %w[amd64 ecf09e49301679f50829c756c446802a124e8981dec0d22dcbfaaa4df81c3fb7]
             end
 
 source url: "https://dl.grafana.com/oss/release/grafana-#{default_version}.linux-#{arch}.tar.gz",
