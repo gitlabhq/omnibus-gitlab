@@ -5,7 +5,9 @@ omnibus-gitlab repository.
 
 ## 13.11.5 (2021-06-01)
 
-No changes.
+### Security (1 change)
+
+- [Update grafana from 7.5.1 to 7.5.5](gitlab-org/security/omnibus-gitlab@3ddaa573b95a186a776296816a43d6e36947200d) ([merge request](gitlab-org/security/omnibus-gitlab!115))
 
 ## 13.11.4 (2021-05-14)
 
