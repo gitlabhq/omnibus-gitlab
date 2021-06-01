@@ -243,7 +243,6 @@ class OmnibusHelper
 
   def restart_service_resource(service)
     return "sidekiq_service[#{service}]" if %w(sidekiq).include?(service)
-    return "unicorn_service[#{service}]" if %w(unicorn).include?(service)
 
     "runit_service[#{service}]"
   end

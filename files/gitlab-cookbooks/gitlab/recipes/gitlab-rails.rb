@@ -145,7 +145,6 @@ node['gitlab']['gitlab-rails']['dependent_services'].each do |name|
 end
 
 dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify?('sidekiq')
-dependent_services << "unicorn_service[unicorn]" if omnibus_helper.should_notify?('unicorn')
 
 secret_file = File.join(gitlab_rails_etc_dir, "secret")
 secret_symlink = File.join(gitlab_rails_source_dir, ".secret")
@@ -298,7 +297,6 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       mattermost_host: mattermost_host,
       mattermost_enabled: node['mattermost']['enable'] || !mattermost_host.nil?,
       sidekiq: node['gitlab']['sidekiq'],
-      unicorn: node['gitlab']['unicorn'],
       puma: node['gitlab']['puma'],
       actioncable: node['gitlab']['actioncable'],
       gitlab_shell_authorized_keys_file: node['gitlab']['gitlab-shell']['auth_file'],
@@ -432,7 +430,7 @@ remote_file File.join(gitlab_rails_dir, 'REVISION') do
 end
 
 # If a version of ruby changes restart dependent services. Otherwise, services like
-# unicorn will fail to reload until restarted
+# Puma will fail to reload until restarted
 version_file 'Create version file for Rails' do
   version_file_path File.join(gitlab_rails_dir, 'RUBY_VERSION')
   version_check_cmd '/opt/gitlab/embedded/bin/ruby --version'

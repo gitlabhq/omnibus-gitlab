@@ -486,7 +486,6 @@ default['gitlab']['gitlab-rails']['allowed_hosts'] = []
 
 # List of ips and subnets that are allowed to access Gitlab monitoring endpoints
 default['gitlab']['gitlab-rails']['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128']
-default['gitlab']['gitlab-rails']['monitoring_unicorn_sampler_interval'] = 10
 default['gitlab']['gitlab-rails']['shutdown_blackout_seconds'] = 10
 # Default dependent services to restart in the event that files-of-interest change
 default['gitlab']['gitlab-rails']['dependent_services'] = %w{puma actioncable}
@@ -510,29 +509,6 @@ default['gitlab']['gitlab-rails']['prometheus_address'] = nil
 default['gitlab']['gitlab-rails']['gitlab_kas_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_kas_external_url'] = nil
 default['gitlab']['gitlab-rails']['gitlab_kas_internal_url'] = nil
-
-####
-# Unicorn
-####
-default['gitlab']['unicorn']['enable'] = false
-default['gitlab']['unicorn']['ha'] = false
-default['gitlab']['unicorn']['log_directory'] = "/var/log/gitlab/unicorn"
-default['gitlab']['unicorn']['listen'] = "127.0.0.1"
-default['gitlab']['unicorn']['port'] = 8080
-default['gitlab']['unicorn']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
-# Path to the unicorn server Process ID file
-# defaults to /opt/gitlab/var/unicorn/unicorn.pid. The install-dir path is set at build time
-default['gitlab']['unicorn']['pidfile'] = "#{node['package']['install-dir']}/var/unicorn/unicorn.pid"
-default['gitlab']['unicorn']['tcp_nopush'] = true
-default['gitlab']['unicorn']['backlog_socket'] = 1024
-default['gitlab']['unicorn']['somaxconn'] = 1024
-default['gitlab']['unicorn']['worker_timeout'] = 60
-default['gitlab']['unicorn']['worker_memory_limit_min'] = "1024 * 1 << 20"
-default['gitlab']['unicorn']['worker_memory_limit_max'] = "1280 * 1 << 20"
-default['gitlab']['unicorn']['worker_processes'] = nil
-default['gitlab']['unicorn']['exporter_enabled'] = false
-default['gitlab']['unicorn']['exporter_address'] = "127.0.0.1"
-default['gitlab']['unicorn']['exporter_port'] = 8083
 
 ####
 # Puma
@@ -791,7 +767,7 @@ default['gitlab']['remote-syslog']['dir'] = "/var/opt/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-syslog"
 default['gitlab']['remote-syslog']['destination_host'] = "localhost"
 default['gitlab']['remote-syslog']['destination_port'] = 514
-default['gitlab']['remote-syslog']['services'] = %w(redis nginx puma unicorn gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect gitlab-kas)
+default['gitlab']['remote-syslog']['services'] = %w(redis nginx puma gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect gitlab-kas)
 
 ###
 # High Availability

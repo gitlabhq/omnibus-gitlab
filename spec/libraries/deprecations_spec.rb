@@ -136,31 +136,29 @@ RSpec.describe Gitlab::Deprecations do
     context 'during removals' do
       context 'when deprecated config is not set' do
         it 'does not raise warning' do
-          expect(described_class.deprecate_only_if_value('14.0', chef_run.node.normal, :removal, ['gitlab', 'unicorn'], 'enable', true, '13.10', '14.0')).to eq([])
+          expect(described_class.deprecate_only_if_value('14.0', chef_run.node.normal, :removal, ['gitlab', 'puma'], 'enable', true, '13.10', '14.0')).to eq([])
         end
       end
 
       context 'when deprecated config is set to an acceptable value' do
         before do
           stub_gitlab_rb(
-            puma: { enable: false },
-            unicorn: { enable: false }
+            puma: { enable: false }
           )
         end
         it 'does not raise warning' do
-          expect(described_class.deprecate_only_if_value('14.0', chef_run.node.normal, :removal, ['gitlab', 'unicorn'], 'enable', true, '13.10', '14.0')).to eq([])
+          expect(described_class.deprecate_only_if_value('14.0', chef_run.node.normal, :removal, ['gitlab', 'puma'], 'enable', true, '13.10', '14.0')).to eq([])
         end
       end
 
       context 'when deprecated config is set to an unacceptable value' do
         before do
           stub_gitlab_rb(
-            puma: { enable: false },
-            unicorn: { enable: true }
+            puma: { enable: true }
           )
         end
         it 'raises warning' do
-          expect(described_class.deprecate_only_if_value('14.0', chef_run.node.normal, :removal, ['gitlab', 'unicorn'], 'enable', true, '13.10', '14.0')).to eq(["* unicorn[enable] has been deprecated since 13.10 and was removed in 14.0."])
+          expect(described_class.deprecate_only_if_value('14.0', chef_run.node.normal, :removal, ['gitlab', 'puma'], 'enable', true, '13.10', '14.0')).to eq(["* puma[enable] has been deprecated since 13.10 and was removed in 14.0."])
         end
       end
     end
@@ -168,31 +166,29 @@ RSpec.describe Gitlab::Deprecations do
     context 'during deprecations' do
       context 'when deprecated config is not set' do
         it 'does not raise warning' do
-          expect(described_class.deprecate_only_if_value('13.12', chef_run.node.normal, :deprecation, ['gitlab', 'unicorn'], 'enable', true, '13.10', '14.0')).to eq([])
+          expect(described_class.deprecate_only_if_value('13.12', chef_run.node.normal, :deprecation, ['gitlab', 'puma'], 'enable', true, '13.10', '14.0')).to eq([])
         end
       end
 
       context 'when deprecated config is set to an acceptable value' do
         before do
           stub_gitlab_rb(
-            puma: { enable: false },
-            unicorn: { enable: false }
+            puma: { enable: false }
           )
         end
         it 'raises warning' do
-          expect(described_class.deprecate_only_if_value('13.12', chef_run.node.normal, :deprecation, ['gitlab', 'unicorn'], 'enable', true, '13.10', '14.0')).to eq(["* unicorn[enable] has been deprecated since 13.10 and will be removed in 14.0."])
+          expect(described_class.deprecate_only_if_value('13.12', chef_run.node.normal, :deprecation, ['gitlab', 'puma'], 'enable', true, '13.10', '14.0')).to eq(["* puma[enable] has been deprecated since 13.10 and will be removed in 14.0."])
         end
       end
 
       context 'when deprecated config is set to an unacceptable value' do
         before do
           stub_gitlab_rb(
-            puma: { enable: false },
-            unicorn: { enable: true }
+            puma: { enable: true }
           )
         end
         it 'raises warning' do
-          expect(described_class.deprecate_only_if_value('13.12', chef_run.node.normal, :deprecation, ['gitlab', 'unicorn'], 'enable', true, '13.10', '14.0')).to eq(["* unicorn[enable] has been deprecated since 13.10 and will be removed in 14.0."])
+          expect(described_class.deprecate_only_if_value('13.12', chef_run.node.normal, :deprecation, ['gitlab', 'puma'], 'enable', true, '13.10', '14.0')).to eq(["* puma[enable] has been deprecated since 13.10 and will be removed in 14.0."])
         end
       end
     end

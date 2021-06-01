@@ -772,10 +772,10 @@ def revert_data_dir(version)
 end
 
 def maintenance_mode(command)
-  # In order for the deploy page to work, we need nginx, unicorn, redis, and
+  # In order for the deploy page to work, we need nginx, Puma, redis, and
   # gitlab-workhorse running
   # We'll manage postgresql and patroni during the upgrade process
-  omit_services = %w(postgresql geo-postgresql patroni consul nginx unicorn puma redis gitlab-workhorse)
+  omit_services = %w(postgresql geo-postgresql patroni consul nginx puma redis gitlab-workhorse)
   if command.eql?('enable')
     dp_cmd = 'up'
     sv_cmd = 'stop'

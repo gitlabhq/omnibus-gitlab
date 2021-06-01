@@ -1,16 +1,11 @@
 class WebServerHelper
   class << self
     def enabled?
-      Services.enabled?('puma') || Services.enabled?('unicorn')
+      Services.enabled?('puma')
     end
 
     def service_name
-      # We are defaulting to Puma here if unicorn isn't explicitly enabled
-      if Services.enabled?('unicorn')
-        'unicorn'
-      else
-        'puma'
-      end
+      'puma'
     end
 
     def internal_api_url(node)

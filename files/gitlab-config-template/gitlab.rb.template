@@ -69,7 +69,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Request duration
 ###! Tells the rails application how long it has to complete a request
-###! This value needs to be lower than the worker timeout set in unicorn/puma.
+###! This value needs to be lower than the worker timeout set in puma.
 ###! By default, we'll allow 95% of the the worker timeout
 # gitlab_rails['max_request_duration_seconds'] = 57
 
@@ -187,7 +187,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### GraphQL Settings
 ###! Tells the rails application how long it has to complete a GraphQL request.
 ###! We suggest this value to be higher than the database timeout value
-###! and lower than the worker timeout set in unicorn/puma. (default: 30)
+###! and lower than the worker timeout set in puma. (default: 30)
 # gitlab_rails['graphql_timeout'] = 30
 
 ### Trusted proxies
@@ -233,8 +233,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Monitoring settings
 ###! IP whitelist controlling access to monitoring endpoints
 # gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128']
-###! Time between sampling of unicorn socket metrics, in seconds
-# gitlab_rails['monitoring_unicorn_sampler_interval'] = 10
 
 ### Shutdown settings
 ###! Defines an interval to block healthcheck,
@@ -918,42 +916,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # user['git_user_name'] = "GitLab"
 # user['git_user_email'] = "gitlab@#{node['fqdn']}"
-
-################################################################################
-## GitLab Unicorn
-##! Tweak unicorn settings.
-##! Docs: https://docs.gitlab.com/omnibus/settings/unicorn.html
-################################################################################
-
-# unicorn['enable'] = false
-# unicorn['worker_timeout'] = 60
-###! Minimum worker_processes is 2 at this moment
-###! See https://gitlab.com/gitlab-org/gitlab-foss/issues/18771
-# unicorn['worker_processes'] = 2
-
-### Advanced settings
-# unicorn['listen'] = 'localhost'
-# unicorn['port'] = 8080
-# unicorn['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
-# unicorn['pidfile'] = '/opt/gitlab/var/unicorn/unicorn.pid'
-# unicorn['tcp_nopush'] = true
-# unicorn['backlog_socket'] = 1024
-
-###! **Make sure somaxconn is equal or higher then backlog_socket**
-# unicorn['somaxconn'] = 1024
-
-###! **We do not recommend changing this setting**
-# unicorn['log_directory'] = "/var/log/gitlab/unicorn"
-
-### **Only change these settings if you understand well what they mean**
-###! Docs: https://docs.gitlab.com/ee/administration/operations/unicorn.html#unicorn-worker-killer
-###!       https://github.com/kzk/unicorn-worker-killer
-# unicorn['worker_memory_limit_min'] = "1024 * 1 << 20"
-# unicorn['worker_memory_limit_max'] = "1280 * 1 << 20"
-
-# unicorn['exporter_enabled'] = false
-# unicorn['exporter_address'] = "127.0.0.1"
-# unicorn['exporter_port'] = 8083
 
 ################################################################################
 ## GitLab Puma

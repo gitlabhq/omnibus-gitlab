@@ -43,7 +43,6 @@ module Services
     service 'storage_check'
     service 'crond'
     service 'praefect'
-    service 'unicorn'
     service 'actioncable'
   end
 

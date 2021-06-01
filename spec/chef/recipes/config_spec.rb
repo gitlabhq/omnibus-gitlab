@@ -10,7 +10,7 @@ RSpec.describe 'gitlab::config' do
 
   shared_examples 'regular services are disabled' do
     it 'disables regular services' do
-      expect(node['gitlab']['unicorn']['enable']).to eq false
+      expect(node['gitlab']['puma']['enable']).to eq false
       expect(node['gitlab']['sidekiq']['enable']).to eq false
       expect(node['gitlab']['gitlab-workhorse']['enable']).to eq false
       expect(node['gitaly']['enable']).to eq false
@@ -58,7 +58,7 @@ RSpec.describe 'gitlab::config' do
     end
 
     it 'disables Gitlab components' do
-      expect(node['gitlab']['unicorn']['enable']).to eq false
+      expect(node['gitlab']['puma']['enable']).to eq false
       expect(node['gitlab']['sidekiq']['enable']).to eq false
       expect(node['gitlab']['gitlab-workhorse']['enable']).to eq false
       expect(node['monitoring']['gitlab-exporter']['enable']).to eq false

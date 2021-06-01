@@ -37,7 +37,7 @@ module GeoSecondaryRole
 
     # If a service is explicitly set, it will be set in Gitlab[svc]['enable'].
     # If it us auto-enabled, it will be set to true in Gitlab[:node][svc]['enable']
-    %w(unicorn puma sidekiq geo_logcursor).each do |svc|
+    %w(puma sidekiq geo_logcursor).each do |svc|
       # If the service is explicitly enabled
       return true if Gitlab[svc]['enable']
       # If the service is auto-enabled, and not explicitly disabled
@@ -50,14 +50,10 @@ module GeoSecondaryRole
   end
 
   # running as a secondary requires several additional processes (geo-postgresql, geo-logcursor, etc).
-  # allow more memory for them by reducing the number of Unicorn workers.  Each one is minimum
+  # allow more memory for them by reducing the number of Puma workers. Each one is minimum
   # 400MB, so free up 1.2GB.  But maintain our 2 worker minimum. #2858
   def self.number_of_worker_processes
     memory = Gitlab['node']['memory']['total'].to_i - 1258291
-    if WebServerHelper.service_name == 'unicorn'
-      Unicorn.workers(memory)
-    else
-      Puma.workers(memory)
-    end
+    Puma.workers(memory)
   end
 end

@@ -58,5 +58,5 @@ execute 'restart geo-logcursor' do
   command '/opt/gitlab/bin/gitlab-ctl restart geo-logcursor'
   action :nothing
   dependent_services.map { |svc| subscribes :run, "runit_service[#{svc}]" }
-  notifies :restart, "unicorn_service[unicorn]" if omnibus_helper.should_notify?('unicorn')
+  notifies :restart, "runit_service[puma]" if omnibus_helper.should_notify?('puma')
 end
