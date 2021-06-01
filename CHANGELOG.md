@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.10.5 (2021-06-01)
+
+### Security (1 change)
+
+- [Update grafana from 7.4.2 to 7.5.5](gitlab-org/security/omnibus-gitlab@cb7bdbfd7e27ae9320b45b4d099df0ede38e5148) ([merge request](gitlab-org/security/omnibus-gitlab!114))
+
 ## 13.10.4 (2021-04-27)
 
 ### Security (2 changes)
