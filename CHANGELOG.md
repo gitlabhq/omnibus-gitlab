@@ -139,6 +139,10 @@ No changes.
 - [Update grafana from 7.4.2 to 7.5.1](gitlab-org/omnibus-gitlab@f24acaa0eda025c8a2982770b1a012775a2e1ecc) ([merge request](gitlab-org/omnibus-gitlab!5041))
 - [Update Mattermost to 5.33.3](gitlab-org/omnibus-gitlab@5ea328d92881bfc991582bf83bb3aba2a248aaad) ([merge request](gitlab-org/omnibus-gitlab!5151))
 
+## 13.10.5 (2021-06-01)
+
+No changes.
+
 ## 13.10.4 (2021-04-27)
 
 ### Security (2 changes)
