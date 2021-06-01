@@ -67,22 +67,4 @@ RSpec.describe 'monitoring::pgbouncer-exporter' do
       expect(chef_run).to create_directory('/var/log/gitlab/pgbouncer-exporter')
     end
   end
-
-  describe 'attribute deprecation' do
-    before do
-      Gitlab::Deprecations::NodeAttribute.log_deprecations = true
-    end
-
-    after do
-      Gitlab::Deprecations::NodeAttribute.log_deprecations = false
-    end
-
-    it "logs deprecation for node['gitlab']['pgbouncer-exporter'] and proxies to node['monitoring']['pgbouncer-exporter']" do
-      node = chef_run.node
-
-      expect(LoggingHelper).to receive(:deprecation).with(/Accessing node\['gitlab'\]\['pgbouncer-exporter'\] is deprecated/)
-
-      expect(node['gitlab']['pgbouncer-exporter']['listen_address']).to eq(node['monitoring']['pgbouncer-exporter']['listen_address'])
-    end
-  end
 end
