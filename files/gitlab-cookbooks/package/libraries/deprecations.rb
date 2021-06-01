@@ -133,6 +133,12 @@ module Gitlab
             removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6122
             note: "The config has been deprecated. Value for this directive in NGINX configuration will be controlled by `nginx['gzip_enabled']` setting in `/etc/gitlab/gitlab.rb`."
           },
+          {
+            config_keys: %w(gitlab-pages use_legacy_storage),
+            deprecation: '14.0',
+            removal: '14.3', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6166
+            note: "This parameter was introduced as a temporary solution in case of unforseen problems with new storage format. It will be removed in 14.3. If you use this parameter, please comment on https://gitlab.com/gitlab-org/gitlab/-/issues/331699"
+          },
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")

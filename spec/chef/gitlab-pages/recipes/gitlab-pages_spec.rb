@@ -209,7 +209,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             headers: ['X-XSS-Protection: 1; mode=block', 'X-Content-Type-Options: nosniff', 'Test: Header'],
             gitlab_client_http_timeout: "10s",
             gitlab_client_jwt_expiry: "30s",
-            domain_config_source: "disk",
+            use_legacy_storage: true,
             zip_cache_expiration: "120s",
             zip_cache_cleanup: "1m",
             zip_cache_refresh: "60s",

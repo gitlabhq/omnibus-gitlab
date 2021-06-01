@@ -1609,8 +1609,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! GitLab API JWT Token expiry time
 # gitlab_pages['gitlab_client_jwt_expiry'] = "30s"
 
-##! Domain configuration source, defaults to disk if set to nil
-# gitlab_pages['domain_config_source'] = nil
+##! Fallback to legacy storage
+##! Warning: support for this flag will be removed in %14.3
+##! If you need to use it, please comment on https://gitlab.com/gitlab-org/gitlab/-/issues/331699
+##! and describe why
+# gitlab_pages['use_legacy_storage'] = nil
 
 ##! Advanced settings for API-based configuration for GitLab Pages.
 ##! The recommended default values are set inside GitLab Pages.

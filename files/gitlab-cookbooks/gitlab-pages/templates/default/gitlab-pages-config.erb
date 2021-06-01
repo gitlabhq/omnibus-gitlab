@@ -97,8 +97,8 @@ gitlab-client-http-timeout=<%= @gitlab_client_http_timeout %>
 <%- if @gitlab_client_jwt_expiry -%>
 gitlab-client-jwt-expiry=<%= @gitlab_client_jwt_expiry %>
 <%- end -%>
-<%- if @domain_config_source -%>
-domain-config-source=<%= @domain_config_source %>
+<%- if @use_legacy_storage -%>
+domain-config-source=disk
 <%- end -%>
 <%- unless @pages_external_http.empty? -%>
 listen-http=<%= @pages_external_http.join(',') %>
