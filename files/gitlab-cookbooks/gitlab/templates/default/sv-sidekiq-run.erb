@@ -22,7 +22,7 @@ exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
       <% if node['gitlab']['sidekiq']['min_concurrency'] %>
       --min-concurrency <%= node['gitlab']['sidekiq']['min_concurrency'] %> \
       <% end %>
-      <% if node['gitlab']['sidekiq']['queue_selector'] || node['gitlab']['sidekiq']['experimental_queue_selector'] %>
+      <% if node['gitlab']['sidekiq']['queue_selector'] %>
       --queue-selector \
       <% end %>
       <% if node['gitlab']['sidekiq']['shutdown_timeout'] %>
