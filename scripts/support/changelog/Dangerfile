@@ -3,9 +3,19 @@
 require 'yaml'
 
 def check_changelog_trailer(commit)
-  trailer = commit.message.match(/^Changelog:\s*(?<category>.+)$/)
+  trailer = commit.message.match(/^(?<name>Changelog):\s*(?<category>.+)$/i)
 
   return :missing if trailer.nil? || trailer[:category].nil?
+
+  name = trailer[:name]
+
+  unless name == 'Changelog'
+    self.fail(
+      "The changelog trailer for commit #{commit.sha} must be `Changelog` (starting with a capital C), not `#{name}`"
+    )
+
+    return :invalid
+  end
 
   category = trailer[:category]
 
