@@ -16,7 +16,6 @@ class PgHelper < BasePgHelper
     # Attributes which should be considered ok for other services to know
     attributes = %w(
       dir
-      data_dir
       unix_socket_directory
       port
     )

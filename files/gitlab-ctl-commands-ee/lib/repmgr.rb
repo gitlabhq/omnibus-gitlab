@@ -188,7 +188,7 @@ class RepmgrHandler
       private
 
       def postgresql_data_dir
-        node_attributes.dig('postgresql', 'data_dir')
+        File.join(node_attributes.dig('postgresql', 'dir'), 'data')
       end
     end
   end

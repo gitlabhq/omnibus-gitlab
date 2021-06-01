@@ -209,9 +209,9 @@ class BasePgHelper < BaseHelper
     # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we
     # need to check both.
 
-    return File.exist?(File.join(node['gitlab'][service_name]['data_dir'], 'PG_VERSION')) if node['gitlab'].key?(service_name)
+    return File.exist?(File.join(node['gitlab'][service_name]['dir'], 'data', 'PG_VERSION')) if node['gitlab'].key?(service_name)
 
-    File.exist?(File.join(node[service_name]['data_dir'], 'PG_VERSION'))
+    File.exist?(File.join(node[service_name]['dir'], 'data', 'PG_VERSION'))
   end
 
   def psql_cmd(cmd_list)
@@ -250,7 +250,7 @@ class BasePgHelper < BaseHelper
     # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we
     # need to check both.
 
-    version_file = node['gitlab'].key?(service_name) ? "#{@node['gitlab'][service_name]['data_dir']}/PG_VERSION" : "#{@node[service_name]['data_dir']}/PG_VERSION"
+    version_file = node['gitlab'].key?(service_name) ? "#{@node['gitlab'][service_name]['dir']}/data/PG_VERSION" : "#{@node[service_name]['dir']}/data/PG_VERSION"
     PGVersion.new(File.read(version_file).chomp) if File.exist?(version_file)
   end
 
@@ -289,7 +289,7 @@ class BasePgHelper < BaseHelper
   end
 
   def config_dir
-    node['patroni']['enable'] ? node['patroni']['data_dir'] : node['postgresql']['data_dir']
+    ::File.join(node['patroni']['enable'] ? node['patroni']['dir'] : node['postgresql']['dir'], 'data')
   end
 
   def postgresql_config

@@ -21,10 +21,11 @@ account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 pg_helper = PgHelper.new(node)
 patroni_helper = PatroniHelper.new(node)
+patroni_data_dir = File.join(node['patroni']['dir'], 'data')
 
 [
   node['patroni']['dir'],
-  node['patroni']['data_dir'],
+  patroni_data_dir,
   node['patroni']['log_directory']
 ].each do |dir|
   directory dir do
@@ -100,8 +101,8 @@ execute 'reload postgresql' do
   action :nothing
 end
 
-Dir["#{node['patroni']['data_dir']}/*"].each do |src|
-  file "#{node['postgresql']['data_dir']}/#{File.basename(src)}" do
+Dir["#{patroni_data_dir}/*"].each do |src|
+  file File.join(node['postgresql']['dir'], 'data', File.basename(src)) do
     owner account_helper.postgresql_user
     group account_helper.postgresql_group
     mode lazy { format('%o', File.new(src).stat.mode)[-5..-1] }

@@ -11,12 +11,17 @@ RSpec.describe BasePgHelper do
   end
 
   context 'when handling ssl configuration' do
+    after do
+      chef_run.node.rm_normal('postgresql', 'dir')
+      chef_run.node.rm_normal('postgresql', 'ssl_cert_file')
+    end
+
     describe 'ssl_cert_file' do
       it 'is configured with an absolute path' do
         absolute_path = "/my/absolute/path"
         config_path = "MrBoots"
         chef_run.node.normal['postgresql']['ssl_cert_file'] = absolute_path
-        chef_run.node.normal['postgresql']['data_dir'] = config_path
+        chef_run.node.normal['postgresql']['dir'] = config_path
         expect(subject.ssl_cert_file).to eq(absolute_path)
       end
 
@@ -24,8 +29,8 @@ RSpec.describe BasePgHelper do
         relative_path = "my/relative/path"
         config_path = "/MrBoots"
         chef_run.node.normal['postgresql']['ssl_cert_file'] = relative_path
-        chef_run.node.normal['postgresql']['data_dir'] = config_path
-        expect(subject.ssl_cert_file).to eq(File.join(config_path, relative_path))
+        chef_run.node.normal['postgresql']['dir'] = config_path
+        expect(subject.ssl_cert_file).to eq(File.join(config_path, 'data', relative_path))
       end
     end
 
@@ -34,7 +39,7 @@ RSpec.describe BasePgHelper do
         absolute_path = "/my/absolute/path"
         config_path = "MrBoots"
         chef_run.node.normal['postgresql']['ssl_key_file'] = absolute_path
-        chef_run.node.normal['postgresql']['data_dir'] = config_path
+        chef_run.node.normal['postgresql']['dir'] = config_path
         expect(subject.ssl_key_file).to eq(absolute_path)
       end
 
@@ -42,8 +47,8 @@ RSpec.describe BasePgHelper do
         relative_path = "my/relative/path"
         config_path = "/MrBoots"
         chef_run.node.normal['postgresql']['ssl_key_file'] = relative_path
-        chef_run.node.normal['postgresql']['data_dir'] = config_path
-        expect(subject.ssl_key_file).to eq(File.join(config_path, relative_path))
+        chef_run.node.normal['postgresql']['dir'] = config_path
+        expect(subject.ssl_key_file).to eq(File.join(config_path, 'data', relative_path))
       end
     end
   end
