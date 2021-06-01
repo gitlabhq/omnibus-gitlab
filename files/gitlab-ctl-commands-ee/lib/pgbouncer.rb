@@ -175,39 +175,19 @@ module Pgbouncer
     private
 
     def database_ini
-      # Deprecation: Remove attributes in `gitlab` in 14.0 - https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5939
-      if attributes['gitlab'].key?('pgbouncer')
-        attributes['gitlab']['pgbouncer']['databases_ini']
-      else
-        attributes['pgbouncer']['databases_ini']
-      end
+      attributes['pgbouncer']['databases_ini']
     end
 
     def database_json
-      # Deprecation: Remove attributes in `gitlab` in 14.0 - https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5939
-      if attributes['gitlab'].key?('pgbouncer')
-        attributes['gitlab']['pgbouncer']['databases_json']
-      else
-        attributes['pgbouncer']['databases_json']
-      end
+      attributes['pgbouncer']['databases_json']
     end
 
     def listen_addr
-      # Deprecation: Remove attributes in `gitlab` in 14.0 - https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5939
-      if attributes['gitlab'].key?('pgbouncer')
-        attributes['gitlab']['pgbouncer']['listen_addr']
-      else
-        attributes['pgbouncer']['listen_addr']
-      end
+      attributes['pgbouncer']['listen_addr']
     end
 
     def listen_port
-      # Deprecation: Remove attributes in `gitlab` in 14.0 - https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5939
-      if attributes['gitlab'].key?('pgbouncer')
-        attributes['gitlab']['pgbouncer']['listen_port']
-      else
-        attributes['pgbouncer']['listen_port']
-      end
+      attributes['pgbouncer']['listen_port']
     end
   end
 end

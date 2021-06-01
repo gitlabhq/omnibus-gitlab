@@ -133,7 +133,6 @@ module Gitlab
             removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6122
             note: "The config has been deprecated. Value for this directive in NGINX configuration will be controlled by `nginx['gzip_enabled']` setting in `/etc/gitlab/gitlab.rb`."
           },
-
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")
