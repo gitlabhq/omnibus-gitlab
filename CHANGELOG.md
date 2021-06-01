@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.12.2 (2021-06-01)
+
+No changes.
+
 ## 13.12.1 (2021-05-25)
 
 No changes.
@@ -59,6 +63,10 @@ No changes.
 - [Update Mattermost to 5.34.2](gitlab-org/omnibus-gitlab@1e7d5463b598950472870b346cd44e9368596f66) ([merge request](gitlab-org/omnibus-gitlab!5206))
 - [Update libtiff from 4.2.0 to 4.3.0](gitlab-org/omnibus-gitlab@c4ebbb5116ddb6ce76cf61625a51b6ee6c4c2d26) ([merge request](gitlab-org/omnibus-gitlab!5189))
 - [Update grafana from 7.5.1 to 7.5.4](gitlab-org/omnibus-gitlab@a322670d961092b7bde707af2ba94af864b09216) ([merge request](gitlab-org/omnibus-gitlab!5178))
+
+## 13.11.5 (2021-06-01)
+
+No changes.
 
 ## 13.11.4 (2021-05-14)
 
@@ -130,6 +138,10 @@ No changes.
 
 - [Update grafana from 7.4.2 to 7.5.1](gitlab-org/omnibus-gitlab@f24acaa0eda025c8a2982770b1a012775a2e1ecc) ([merge request](gitlab-org/omnibus-gitlab!5041))
 - [Update Mattermost to 5.33.3](gitlab-org/omnibus-gitlab@5ea328d92881bfc991582bf83bb3aba2a248aaad) ([merge request](gitlab-org/omnibus-gitlab!5151))
+
+## 13.10.5 (2021-06-01)
+
+No changes.
 
 ## 13.10.4 (2021-04-27)
 
