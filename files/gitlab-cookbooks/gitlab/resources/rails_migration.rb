@@ -25,7 +25,7 @@ action :run do
     exit $STATUS
     EOH
 
-    environment new_resource.environment if property_is_set?(:environment)
+    environment new_resource.environment if new_resource.property_is_set?(:environment)
     new_resource.dependent_services.each do |svc|
       notifies :restart, svc, :immediately
     end
