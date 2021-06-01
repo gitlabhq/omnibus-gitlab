@@ -449,6 +449,8 @@ default['gitlab']['gitlab-rails']['redis_queues_instance'] = nil
 default['gitlab']['gitlab-rails']['redis_queues_sentinels'] = []
 default['gitlab']['gitlab-rails']['redis_shared_state_instance'] = nil
 default['gitlab']['gitlab-rails']['redis_shared_state_sentinels'] = []
+default['gitlab']['gitlab-rails']['redis_trace_chunks_instance'] = nil
+default['gitlab']['gitlab-rails']['redis_trace_chunks_sentinels'] = []
 default['gitlab']['gitlab-rails']['redis_actioncable_instance'] = nil
 default['gitlab']['gitlab-rails']['redis_actioncable_sentinels'] = []
 

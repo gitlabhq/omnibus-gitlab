@@ -737,7 +737,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_queues_instance'] = nil
 # gitlab_rails['redis_queues_sentinels'] = nil
 # gitlab_rails['redis_shared_state_instance'] = nil
-# gitlab_rails['redis_shared_sentinels'] = nil
+# gitlab_rails['redis_shared_state_sentinels'] = nil
+# gitlab_rails['redis_trace_chunks_instance'] = nil
+# gitlab_rails['redis_trace_chunks_sentinels'] = nil
 # gitlab_rails['redis_actioncable_instance'] = nil
 # gitlab_rails['redis_actioncable_sentinels'] = nil
 
