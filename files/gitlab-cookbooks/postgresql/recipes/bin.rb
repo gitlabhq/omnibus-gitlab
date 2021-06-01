@@ -58,7 +58,7 @@ ruby_block "Link postgresql bin files to the correct version" do
   end
 
   only_if do
-    !File.exist?(File.join(node['postgresql']['data_dir'], "PG_VERSION")) || \
+    !File.exist?(File.join(node['postgresql']['dir'], 'data', "PG_VERSION")) || \
       pg_helper.version.major !~ /^#{pg_helper.database_version}/ || \
       (Services.enabled?('geo_postgresql') && geo_pg_helper.version.major !~ /^#{geo_pg_helper.database_version}/) || \
       !node['postgresql']['version'].nil?

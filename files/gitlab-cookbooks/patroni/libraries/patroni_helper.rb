@@ -19,7 +19,7 @@ class PatroniHelper < BaseHelper
   end
 
   def bootstrapped?
-    File.exist?(File.join(node['postgresql']['data_dir'], 'patroni.dynamic.json'))
+    File.exist?(File.join(node['postgresql']['dir'], 'data', 'patroni.dynamic.json'))
   end
 
   def scope
@@ -82,7 +82,7 @@ class PatroniHelper < BaseHelper
     {
       'patroni' => {
         'config_dir' => node['patroni']['dir'],
-        'data_dir' => node['patroni']['data_dir'],
+        'data_dir' => File.join(node['patroni']['dir'], 'data'),
         'log_dir' => node['patroni']['log_directory'],
         'api_address' => "#{node['patroni']['listen_address'] || '127.0.0.1'}:#{node['patroni']['port']}"
       }

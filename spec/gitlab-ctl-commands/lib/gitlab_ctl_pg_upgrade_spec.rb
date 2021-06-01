@@ -127,10 +127,10 @@ RSpec.describe GitlabCtl::PgUpgrade do
 
   context 'when an explicit data directory is specified' do
     it 'should use it as data_dir' do
-      stub_postgresql_json_attributes({ 'data_dir' => 'randomdir' })
+      stub_postgresql_json_attributes({ 'dir' => 'randomdir' })
       @dbw = GitlabCtl::PgUpgrade.new('/fakebasedir', '/fake/data', 'fakenewversion', nil, 123)
 
-      expect(@dbw.data_dir).to eq('randomdir')
+      expect(@dbw.data_dir).to eq('randomdir/data')
     end
   end
 

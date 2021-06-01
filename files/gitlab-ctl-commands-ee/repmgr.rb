@@ -14,7 +14,7 @@ add_command_under_category('repmgr', 'database', 'Manage repmgr PostgreSQL clust
   # know the primary node
   repmgr_options = RepmgrHandler.parse_options(ARGV)
 
-  postgresql_directory = node_attributes.dig('postgresql', 'data_dir')
+  postgresql_directory = File.join(node_attributes.dig('postgresql', 'dir'), 'data')
 
   repmgr_args = begin
                   {

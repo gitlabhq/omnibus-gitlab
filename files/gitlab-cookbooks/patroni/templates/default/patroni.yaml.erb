@@ -8,8 +8,8 @@ consul:
 <% end %>
 postgresql:
   bin_dir: <%= "#{node['package']['install-dir']}/embedded/bin" %>
-  data_dir: <%= @postgresql_defaults['data_dir'] %>
-  config_dir: <%= @postgresql_defaults['data_dir'] %>
+  data_dir: <%= File.join(@postgresql_defaults['dir'], 'data') %>
+  config_dir: <%= File.join(@postgresql_defaults['dir'], 'data') %>
   listen: <%= @postgresql_defaults['listen_address'] %>:<%= @postgresql_defaults['port'] %>
   connect_address: <%= @connect_address %>:<%= @postgresql_defaults['connect_port'] %>
   use_unix_socket: true
@@ -31,7 +31,7 @@ bootstrap:
   dcs: <%= patroni_helper.dynamic_settings.to_json %>
   method: gitlab_ctl
   gitlab_ctl:
-    command: /opt/gitlab/bin/gitlab-ctl patroni bootstrap --srcdir=<%= @data_dir %>
+    command: /opt/gitlab/bin/gitlab-ctl patroni bootstrap --srcdir=<%= File.join(@dir, 'data') %>
 restapi:
   listen: <%= @listen_address %>:<%= @port %>
   connect_address: <%= @connect_address %>:<%= @connect_port %>

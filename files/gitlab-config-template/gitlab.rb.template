@@ -1073,8 +1073,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## endpoint to the cluster. By default it is the same as postgresql['port'].
 # postgresql['connect_port'] = 5432
 
-# postgresql['data_dir'] = "/var/opt/gitlab/postgresql/data"
-
 ##! **recommend value is 1/4 of total RAM, up to 14GB.**
 # postgresql['shared_buffers'] = "256MB"
 
@@ -2479,7 +2477,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_postgresql['enable'] = false
 # geo_postgresql['ha'] = false
 # geo_postgresql['dir'] = '/var/opt/gitlab/geo-postgresql'
-# geo_postgresql['data_dir'] = '/var/opt/gitlab/geo-postgresql/data'
 # geo_postgresql['pgbouncer_user'] = nil
 # geo_postgresql['pgbouncer_user_password'] = nil
 ##! `SQL_USER_PASSWORD_HASH` can be generated using the command `gitlab-ctl pg-password-md5 gitlab`
@@ -2662,7 +2659,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # patroni['enable'] = false
 
 # patroni['dir'] = '/var/opt/gitlab/patroni'
-# patroni['data_dir'] = '/var/opt/gitlab/patroni/data'
 # patroni['ctl_command'] = '/opt/gitlab/embedded/bin/patronictl'
 
 ## Patroni dynamic configuration settings

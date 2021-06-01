@@ -3,7 +3,7 @@ require 'chef_helper'
 RSpec.shared_examples 'Postgres helpers' do |service_name, service_cmd, edition|
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
-      node.normal['gitlab'][service_name]['data_dir'] = '/fakedir'
+      node.normal['gitlab'][service_name]['dir'] = '/fakedir'
       node.normal['package']['install-dir'] = '/fake/install/dir'
     end.converge("#{edition}::config")
   end
@@ -32,9 +32,9 @@ RSpec.shared_examples 'Postgres helpers' do |service_name, service_cmd, edition|
   describe '#database_version' do
     it 'returns a valid database_version' do
       allow(File).to receive(:exist?).and_call_original
-      allow(File).to receive(:exist?).with('/fakedir/PG_VERSION') { true }
+      allow(File).to receive(:exist?).with('/fakedir/data/PG_VERSION') { true }
       allow(File).to receive(:read).and_call_original
-      allow(File).to receive(:read).with('/fakedir/PG_VERSION') { '111.222' }
+      allow(File).to receive(:read).with('/fakedir/data/PG_VERSION') { '111.222' }
       allow(Dir).to receive(:glob).with('/fake/install/dir/embedded/postgresql/*') { %w(111.222.18 222.333.11) }
 
       # We mock this in chef_helper.rb. Override the mock to call the original
@@ -74,7 +74,7 @@ RSpec.describe GeoPgHelper do
     allow(Gitlab).to receive(:[]).and_call_original
     stub_gitlab_rb(
       'geo_postgresql' => {
-        'data_dir' => '/fakedir'
+        'dir' => '/fakedir'
       }
     )
   end

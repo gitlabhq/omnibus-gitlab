@@ -4,7 +4,6 @@
 default['postgresql']['enable'] = false
 default['postgresql']['ha'] = false
 default['postgresql']['dir'] = "/var/opt/gitlab/postgresql"
-default['postgresql']['data_dir'] = nil
 default['postgresql']['unix_socket_directory'] = nil
 default['postgresql']['username'] = "gitlab-psql"
 default['postgresql']['group'] = "gitlab-psql"

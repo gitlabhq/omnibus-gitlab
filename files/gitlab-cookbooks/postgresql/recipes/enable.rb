@@ -26,7 +26,7 @@ pg_helper = PgHelper.new(node)
 postgresql_log_dir = node['postgresql']['log_directory']
 postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
-postgresql_data_dir_symlink = File.join(node['postgresql']['dir'], "data")
+postgresql_data_dir = File.join(node['postgresql']['dir'], "data")
 
 directory node['postgresql']['dir'] do
   owner postgresql_username
@@ -35,7 +35,7 @@ directory node['postgresql']['dir'] do
 end
 
 [
-  node['postgresql']['data_dir'],
+  postgresql_data_dir,
   postgresql_log_dir,
   pg_helper.config_dir
 ].each do |dir|
@@ -46,12 +46,7 @@ end
   end
 end
 
-link postgresql_data_dir_symlink do
-  to node['postgresql']['data_dir']
-  not_if { node['postgresql']['data_dir'] == postgresql_data_dir_symlink }
-end
-
-execute "/opt/gitlab/embedded/bin/initdb -D #{node['postgresql']['data_dir']} -E UTF8" do
+execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
   user postgresql_username
   not_if { pg_helper.bootstrapped? || pg_helper.delegated? }
 end
@@ -66,7 +61,7 @@ end
 # configuration of the database.
 
 ##
-# Create SSL cert + key in the defined location. Paths are relative to node['postgresql']['data_dir']
+# Create SSL cert + key in the defined location. Paths are relative to postgresql_data_dir
 ##
 file pg_helper.ssl_cert_file do
   content node['postgresql']['internal_certificate']
