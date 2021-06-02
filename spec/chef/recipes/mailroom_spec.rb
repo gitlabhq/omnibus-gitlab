@@ -38,6 +38,7 @@ RSpec.describe 'gitlab::mailroom' do
       end
 
       it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
+      it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
     end
 
     context 'when both service_desk_email and incoming_email enabled' do
@@ -51,6 +52,7 @@ RSpec.describe 'gitlab::mailroom' do
       end
 
       it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
+      it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
     end
 
     context 'default values' do
@@ -63,6 +65,7 @@ RSpec.describe 'gitlab::mailroom' do
       end
 
       it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
+      it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
 
       it 'uses --log-exit-as plain' do
         expect(chef_run).to render_file("/opt/gitlab/sv/mailroom/run").with_content(/\-\-log\-exit\-as plain/)
@@ -83,6 +86,7 @@ RSpec.describe 'gitlab::mailroom' do
       end
 
       it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
+      it_behaves_like 'configured logrotate service', 'mailroom', 'foo', 'bar'
     end
 
     shared_examples 'renders Microsoft Graph config' do
@@ -143,5 +147,6 @@ RSpec.describe 'gitlab::mailroom' do
     end
 
     it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
+    it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
   end
 end
