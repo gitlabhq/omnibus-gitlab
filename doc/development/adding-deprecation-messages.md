@@ -46,3 +46,5 @@ deprecations = [
 ### `note`
 
 `note` is part of the deprecation message provided to users during `gitlab-ctl reconfigure`. Use this area to inform users of how to change their settings, often by linking to new documentation, or in the case of a settings rename, telling them what the new setting name should be.
+
+Once the version where the setting is removed is out of the [maintenance window](https://docs.gitlab.com/ee/policy/maintenance.html#gitlab-release-and-maintenance-policy), the deprecation message can be removed from the codebase.
