@@ -44,6 +44,26 @@ function detect_unclean_start() {
     set -e
 }
 
+# Make sure that there is no unmigrated data to hashed storage.
+function unmigrated_data_check() {
+    set +e
+
+    echo "Checking for unmigrated data on legacy storage"
+
+    found=$(MAX_DATABASE_CONNECTION_CHECKS=5 gitlab-rake gitlab:storage:legacy_attachments gitlab:storage:legacy_projects 2>/dev/null);
+
+    if ! (echo $found | grep 'Found 0 attachments' && echo $found | grep 'Found 0 projects') > /dev/null 2>&1; then
+        echo
+        echo "Legacy storage is no longer supported. Please migrate your data to hashed storage."
+        echo "Check https://docs.gitlab.com/ee/administration/raketasks/storage.html#migrate-to-hashed-storage for details."
+        echo ""
+        echo "Upgrade failed. Retry the upgrade after migrating your data to hashed storage."
+        exit 1
+    fi
+
+    set -e
+}
+
 trap "sigterm_handler; exit" TERM
 
 source /RELEASE
@@ -78,6 +98,7 @@ detect_unclean_start
 # If the VERSION file doesn't exist, then this is not an upgrade
 if old_version=$(cat /var/opt/gitlab/gitlab-rails/VERSION)
 then
+    GITLAB_UPGRADE='true'
     new_version=$(awk '/^gitlab-(ce|ee|jh)/ {print $NF}' /opt/gitlab/version-manifest.txt)
     MIN_VERSION="13.12" gitlab-ctl upgrade-check "${old_version}" "${new_version}"
 fi
@@ -121,6 +142,21 @@ GITLAB_OMNIBUS_CONFIG= /opt/gitlab/embedded/bin/runsvdir-start &
 
 echo "Configuring GitLab..."
 gitlab-ctl reconfigure
+
+# Skip unmigrated data check if Puma and Sidekiq is not running
+if [ ! -d /opt/gitlab/service/puma ] && [ ! -d /opt/gitlab/service/sidekiq ]; then
+    echo
+    echo "This node does not appear to be running puma and/or sidekiq services"
+    echo "Skipping unmigrated data check, if you think this is an error exit now"
+    echo
+
+    GITLAB_SKIP_UNMIGRATED_DATA_CHECK='true'
+fi
+
+# Check if there are no unmigrated data to hashed storage if it is an upgrade
+if [ "${GITLAB_UPGRADE}" == 'true' -a "${GITLAB_SKIP_UNMIGRATED_DATA_CHECK}" != 'true' ]; then
+  unmigrated_data_check
+fi
 
 # This must be false when the opt-in PostgreSQL version is the default for pg-upgrade,
 # otherwise it must be true.
