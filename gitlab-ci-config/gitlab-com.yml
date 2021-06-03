@@ -133,7 +133,7 @@
   image: "${RUBY_IMAGE}-alpine"
   stage: post-test
   cache: {}
-  dependencies: []
+  needs: []
   before_script:
     - gem install gitlab --no-doc
     # We need to download the script rather than clone the repo since the
@@ -410,6 +410,9 @@ Trigger:package:
       junit: junit_ci_rspec.xml
   tags:
     - triggered-packages
+  needs:
+    - job: fetch-assets
+      optional: true
 
 Trigger:gitlab-docker:
   extends:
@@ -421,6 +424,9 @@ Trigger:gitlab-docker:
     - bundle exec rake docker:build:image
     - bundle exec rake docker:push:triggered
   <<: *com-trigger-only
+  needs:
+    - job: Trigger:package
+      artifacts: false
 
 Trigger:qa-docker:
   extends:
@@ -435,7 +441,7 @@ Trigger:qa-docker:
   except:
     variables:
       - $SKIP_QA_DOCKER == "true"
-  dependencies:
+  needs:
     - Trigger:package
 
 Trigger:qa-test:
@@ -445,7 +451,13 @@ Trigger:qa-test:
     - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     - bundle exec rake qa:test
   <<: *com-trigger-only
-  dependencies: []
+  needs:
+    - job: Trigger:package
+      artifacts: false
+    - job: Trigger:gitlab-docker
+      artifacts: false
+    - job: Trigger:qa-docker
+      artifacts: false
 
 Trigger:letsencrypt-test:
   extends: .docker_job
@@ -457,7 +469,9 @@ Trigger:letsencrypt-test:
     - chmod +x /usr/local/bin/docker-compose
     - bundle exec rake qa:test_letsencrypt
   <<: *com-trigger-only
-  dependencies: []
+  needs:
+    - job: Trigger:gitlab-docker
+      artifacts: false
 
 Trigger:RAT:
   stage: trigger-qa
@@ -466,7 +480,11 @@ Trigger:RAT:
   script:
     - bundle exec rake qa:rat:trigger
   <<: *com-trigger-only
-  dependencies: []
+  needs:
+    - job: Trigger:package
+      artifacts: false
+    - job: Trigger:qa-docker
+      artifacts: false
 
 dependency_update:
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
