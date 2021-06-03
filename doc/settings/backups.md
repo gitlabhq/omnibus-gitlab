@@ -39,7 +39,7 @@ sudo crontab -e -u root
 
 The cron table will appear in an editor.
 
-Enter the command to create a compressed tar file containing the contents of
+Enter the command to create a tar file containing the contents of
 `/etc/gitlab/`. For example, schedule the backup to run every morning after a
 weekday, Tuesday (day 2) through Saturday (day 6):
 
