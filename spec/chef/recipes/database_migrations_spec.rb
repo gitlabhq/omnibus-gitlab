@@ -47,12 +47,74 @@ RSpec.describe 'gitlab::database-migrations' do
       end
     end
 
-    it 'runs with the initial_root_password in the environment' do
-      stub_gitlab_rb(gitlab_rails: { initial_root_password: '123456789' })
+    context 'initial root password' do
+      context 'set via gitlab.rb' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              initial_root_password: 'foobar'
+            }
+          )
+        end
 
-      expect(chef_run).to run_rails_migration('gitlab-rails').with(
-        environment: { 'GITLAB_ROOT_PASSWORD' => '123456789' }
-      )
+        it 'runs DB migration with GITLAB_ROOT_PASSWORD variable set to provided value' do
+          expect(chef_run).to run_rails_migration('gitlab-rails').with(
+            environment: {
+              'GITLAB_ROOT_PASSWORD' => 'foobar',
+            }
+          )
+        end
+      end
+
+      context 'set via env variable' do
+        before do
+          allow(ENV).to receive(:[]).and_call_original
+          allow(ENV).to receive(:[]).with('GITLAB_ROOT_PASSWORD').and_return('asdf1234@')
+        end
+
+        it 'runs DB migration with GITLAB_ROOT_PASSWORD variable set to provided value' do
+          expect(chef_run).to run_rails_migration('gitlab-rails').with(
+            environment: {
+              'GITLAB_ROOT_PASSWORD' => 'asdf1234@',
+            }
+          )
+        end
+      end
+
+      context 'set via both env variable and gitlab.rb' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              initial_root_password: 'foobar'
+            }
+          )
+
+          allow(ENV).to receive(:[]).and_call_original
+          allow(ENV).to receive(:[]).with('GITLAB_ROOT_PASSWORD').and_return('asdf1234@')
+        end
+
+        it 'runs DB migration with GITLAB_ROOT_PASSWORD variable set to value provided via env variable' do
+          expect(chef_run).to run_rails_migration('gitlab-rails').with(
+            environment: {
+              'GITLAB_ROOT_PASSWORD' => 'asdf1234@',
+            }
+          )
+        end
+      end
+
+      context 'not set' do
+        before do
+          allow(SecretsHelper).to receive(:generate_base64).and_return('LFQLd2ayKNpthh+Ehxqy7ROxsmpzACy55EcOYoMfRlk=')
+        end
+
+        it 'generates a random root password and runs DB migration with GITLAB_ROOT_PASSWORD set to it' do
+          expect(chef_run).to run_rails_migration('gitlab-rails').with(
+            environment: {
+              'GITLAB_ROOT_PASSWORD' => 'LFQLd2ayKNpthh+Ehxqy7ROxsmpzACy55EcOYoMfRlk='
+            }
+          )
+        end
+      end
     end
 
     it 'runs with the initial_root_password and initial_shared_runners_registration_token in the environment' do
@@ -69,12 +131,17 @@ RSpec.describe 'gitlab::database-migrations' do
     end
 
     context 'initial license file' do
+      before do
+        allow(SecretsHelper).to receive(:generate_base64).and_return('LFQLd2ayKNpthh+Ehxqy7ROxsmpzACy55EcOYoMfRlk=')
+      end
+
       it 'detects license file from /etc/gitlab' do
         allow(Dir).to receive(:glob).and_call_original
         allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return(%w[/etc/gitlab/company.gitlab-license /etc/gitlab/company2.gitlab-license])
 
         expect(chef_run).to run_rails_migration('gitlab-rails').with(
           environment: {
+            'GITLAB_ROOT_PASSWORD' => 'LFQLd2ayKNpthh+Ehxqy7ROxsmpzACy55EcOYoMfRlk=',
             'GITLAB_LICENSE_FILE' => '/etc/gitlab/company.gitlab-license'
           }
         )
@@ -90,6 +157,7 @@ RSpec.describe 'gitlab::database-migrations' do
 
         expect(chef_run).to run_rails_migration('gitlab-rails').with(
           environment: {
+            'GITLAB_ROOT_PASSWORD' => 'LFQLd2ayKNpthh+Ehxqy7ROxsmpzACy55EcOYoMfRlk=',
             'GITLAB_LICENSE_FILE' => '/mnt/random.gitlab-license'
           }
         )
@@ -100,7 +168,9 @@ RSpec.describe 'gitlab::database-migrations' do
         allow(Dir).to receive(:glob).with('/etc/gitlab/*.gitlab-license').and_return([])
 
         expect(chef_run).to run_rails_migration('gitlab-rails').with(
-          environment: {}
+          environment: {
+            'GITLAB_ROOT_PASSWORD' => 'LFQLd2ayKNpthh+Ehxqy7ROxsmpzACy55EcOYoMfRlk=',
+          }
         )
       end
     end

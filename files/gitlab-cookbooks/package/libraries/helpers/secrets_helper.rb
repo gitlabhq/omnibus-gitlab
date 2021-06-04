@@ -5,6 +5,10 @@ class SecretsHelper
     SecureRandom.hex(chars)
   end
 
+  def self.generate_base64(bytes)
+    SecureRandom.base64(bytes)
+  end
+
   def self.generate_rsa(bits)
     OpenSSL::PKey::RSA.new(bits)
   end
