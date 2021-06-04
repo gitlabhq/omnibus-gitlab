@@ -138,6 +138,8 @@ if node['gitlab']['gitlab-rails']['enable'] && !(node.key?('pgbouncer') && node[
   OmnibusHelper.new(node).print_root_account_details if node['gitlab']['gitlab-rails']['auto_migrate']
 end
 
+OmnibusHelper.cleanup_root_password_file
+
 # Configure Services
 %w[
   puma

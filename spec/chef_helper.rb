@@ -58,6 +58,10 @@ RSpec.configure do |config|
     # ChefSpec::SoloRunner doesn't support Chef.event_handler, so stub it
     allow(Chef).to receive(:event_handler)
 
+    # Stub access to /etc/gitlab/initial_root_password
+    allow(File).to receive(:open).and_call_original
+    allow(File).to receive(:open).with('/etc/gitlab/initial_root_password', 'w', 0600).and_yield(double(:file, write: true)).once
+
     # Prevent chef converge from reloading any of our previously loaded libraries
     allow(Kernel).to receive(:load).and_call_original
     cookbooks.each do |cookbook|
