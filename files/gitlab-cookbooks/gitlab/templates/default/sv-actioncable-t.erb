@@ -1,3 +1,0 @@
-#!/bin/sh
-echo "Received TERM from runit, sending to process group (-PID)"
-kill -- -$(cat /opt/gitlab/service/<%= @options[:service] %>/supervise/pid)

@@ -88,7 +88,6 @@ RSpec.describe OmnibusHelper do
   let(:services) do
     %w(
       puma
-      actioncable
       sidekiq
       gitlab-workhorse
       postgresql

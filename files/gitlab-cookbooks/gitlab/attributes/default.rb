@@ -488,7 +488,7 @@ default['gitlab']['gitlab-rails']['allowed_hosts'] = []
 default['gitlab']['gitlab-rails']['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128']
 default['gitlab']['gitlab-rails']['shutdown_blackout_seconds'] = 10
 # Default dependent services to restart in the event that files-of-interest change
-default['gitlab']['gitlab-rails']['dependent_services'] = %w{puma actioncable}
+default['gitlab']['gitlab-rails']['dependent_services'] = %w{puma}
 
 ###
 # Unleash
@@ -537,21 +537,6 @@ default['gitlab']['puma']['exporter_port'] = 8083
 # ActionCable
 ####
 default['gitlab']['actioncable']['enable'] = false
-default['gitlab']['actioncable']['ha'] = false
-default['gitlab']['actioncable']['log_directory'] = "/var/log/gitlab/actioncable"
-default['gitlab']['actioncable']['listen'] = "127.0.0.1"
-default['gitlab']['actioncable']['port'] = 8280
-default['gitlab']['actioncable']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab_actioncable.socket'
-# Path to the puma server Process ID file
-# defaults to /opt/gitlab/var/actioncable/actioncable.pid. The install-dir path is set at build time
-default['gitlab']['actioncable']['pidfile'] = "#{node['package']['install-dir']}/var/actioncable/actioncable.pid"
-default['gitlab']['actioncable']['state_path'] = "#{node['package']['install-dir']}/var/actioncable/actioncable.state"
-default['gitlab']['actioncable']['worker_timeout'] = 60
-default['gitlab']['actioncable']['per_worker_max_memory_mb'] = nil
-default['gitlab']['actioncable']['worker_processes'] = 2
-default['gitlab']['actioncable']['min_threads'] = 4
-default['gitlab']['actioncable']['max_threads'] = 4
-default['gitlab']['actioncable']['in_app'] = false
 default['gitlab']['actioncable']['worker_pool_size'] = 4
 
 ####
@@ -625,8 +610,6 @@ default['gitlab']['gitlab-workhorse']['sockets_directory'] = nil
 default['gitlab']['gitlab-workhorse']['listen_addr'] = nil
 default['gitlab']['gitlab-workhorse']['auth_backend'] = "http://localhost:8080"
 default['gitlab']['gitlab-workhorse']['auth_socket'] = nil
-default['gitlab']['gitlab-workhorse']['cable_backend'] = "http://localhost:8280"
-default['gitlab']['gitlab-workhorse']['cable_socket'] = "''" # the empty string is the default in gitlab-workhorse option parser
 default['gitlab']['gitlab-workhorse']['pprof_listen_addr'] = "''" # put an empty string on the command line
 default['gitlab']['gitlab-workhorse']['prometheus_listen_addr'] = "localhost:9229"
 default['gitlab']['gitlab-workhorse']['dir'] = "/var/opt/gitlab/gitlab-workhorse"
