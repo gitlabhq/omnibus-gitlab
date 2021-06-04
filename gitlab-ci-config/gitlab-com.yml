@@ -458,6 +458,7 @@ Trigger:qa-test:
       artifacts: false
     - job: Trigger:qa-docker
       artifacts: false
+      optional: true
 
 Trigger:letsencrypt-test:
   extends: .docker_job
@@ -485,6 +486,7 @@ Trigger:RAT:
       artifacts: false
     - job: Trigger:qa-docker
       artifacts: false
+      optional: true
 
 dependency_update:
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
