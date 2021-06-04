@@ -482,6 +482,7 @@ default['gitlab']['gitlab-rails']['graphql_timeout'] = nil
 default['gitlab']['gitlab-rails']['initial_root_password'] = nil
 default['gitlab']['gitlab-rails']['initial_license_file'] = nil
 default['gitlab']['gitlab-rails']['initial_shared_runners_registration_token'] = nil
+default['gitlab']['gitlab-rails']['display_initial_root_password'] = false
 default['gitlab']['gitlab-rails']['trusted_proxies'] = []
 default['gitlab']['gitlab-rails']['content_security_policy'] = nil
 default['gitlab']['gitlab-rails']['allowed_hosts'] = []

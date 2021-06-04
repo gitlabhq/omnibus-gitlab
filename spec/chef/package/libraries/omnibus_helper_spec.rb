@@ -212,51 +212,53 @@ RSpec.describe OmnibusHelper do
     end
 
     context 'when on first reconfigure after installation' do
-      before do
-        chef_run.node.normal['gitlab']['bootstrap']['enable'] = true
-      end
-
-      context 'when initial root password not set' do
-        it 'adds a note about setting password on first visit' do
-          expect(LoggingHelper).to receive(:note).with(
-            <<~EOS
-              It seems you haven't specified an initial root password while configuring the GitLab instance.
-              On your first visit to  your GitLab instance, you will be presented with a screen to set a
-              password for the default admin account with username `root`.
-          EOS
+      context 'when display_initial_root_password is true' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              initial_root_password: 'foobar',
+              display_initial_root_password: true
+            }
           )
+        end
 
-          subject.print_root_account_details
+        it 'displays root password at the end of reconfigure' do
+          msg = <<~EOS
+            Default admin account has been configured with following details:
+            Username: root
+            Password: foobar
+
+            NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to reset the password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
+          EOS
+
+          expect(LoggingHelper).to receive(:note).with(msg)
+
+          described_class.new(converge_config.node).print_root_account_details
         end
       end
 
-      context 'when initial root password set' do
-        context 'via gitlab.rb' do
-          before do
-            stub_gitlab_rb(
-              gitlab_rails: { initial_root_password: 'foobar' }
-            )
-          end
-
-          it 'adds a note about username and specified password' do
-            expect(LoggingHelper).to receive(:note).with('Default admin account has been configured with username `root` and the password you specified in `/etc/gitlab/gitlab.rb` file.')
-
-            # Intentionally not reusing subject/node/chef_run since we need the
-            # node params to be recomputed using values specified in stub_gitlab_rb
-            described_class.new(converge_config.node).print_root_account_details
-          end
+      context 'when display_initial_root_password is false' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              initial_root_password: 'foobar',
+              display_initial_root_password: false
+            }
+          )
         end
 
-        context 'via env variable' do
-          before do
-            allow(ENV).to receive(:[]).with('GITLAB_ROOT_PASSWORD').and_return('foobar')
-          end
+        it 'does not display root credentials at the end of reconfigure' do
+          msg = <<~EOS
+            Default admin account has been configured with following details:
+            Username: root
+            Password: You didn't opt-in to print initial root password to STDOUT.
 
-          it 'adds a note about username and specified password' do
-            expect(LoggingHelper).to receive(:note).with('Default admin account has been configured with username `root` and the password you specified in `/etc/gitlab/gitlab.rb` file.')
+            NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to reset the password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
+          EOS
 
-            subject.print_root_account_details
-          end
+          expect(LoggingHelper).to receive(:note).with(msg)
+
+          described_class.new(converge_config.node).print_root_account_details
         end
       end
     end

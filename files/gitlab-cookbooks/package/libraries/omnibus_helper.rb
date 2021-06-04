@@ -97,18 +97,24 @@ class OmnibusHelper
   def print_root_account_details
     return unless node['gitlab']['bootstrap']['enable']
 
-    initial_password_provided = ENV['GITLAB_ROOT_PASSWORD'] || node['gitlab']['gitlab-rails']['initial_root_password']
+    initial_password = node['gitlab']['gitlab-rails']['initial_root_password']
+    display_password = node['gitlab']['gitlab-rails']['display_initial_root_password']
 
-    msg = if initial_password_provided
-            "Default admin account has been configured with username `root` and the password you specified in `/etc/gitlab/gitlab.rb` file."
-          else
-            <<~EOS
-              It seems you haven't specified an initial root password while configuring the GitLab instance.
-              On your first visit to  your GitLab instance, you will be presented with a screen to set a
-              password for the default admin account with username `root`.
-            EOS
-          end
-    LoggingHelper.note(msg)
+    password_string = if display_password
+                        "Password: #{initial_password}"
+                      else
+                        "Password: You didn't opt-in to print initial root password to STDOUT."
+                      end
+
+    message = <<~EOS
+      Default admin account has been configured with following details:
+      Username: root
+      #{password_string}
+
+      NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to reset the password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
+    EOS
+
+    LoggingHelper.note(message)
   end
 
   def check_invalid_pg_ha
