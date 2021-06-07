@@ -5,7 +5,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 comments: false
 ---
 
-# Omnibus GitLab Docs
+# Omnibus GitLab Docs **(FREE SELF)**
 
 Omnibus GitLab is a way to package different services and tools required to run GitLab, so that most users can install it without laborious configuration.
 
@@ -76,9 +76,6 @@ to work best with the available resources. Check out the [documentation](setting
 - [Upgrade from a non-Omnibus installation to an Omnibus installation using a backup](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-using-a-backup)
 - [Upgrade from non-Omnibus PostgreSQL to an Omnibus installation in-place](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
 - [Upgrade from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](update/convert_to_omnibus.md#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-68)
-- [Update from GitLab 6.6 and higher to 7.10 or newer](update/gitlab_7_changes.md#updating-from-gitlab-66-and-higher-to-710-or-newer)
-- [Update from GitLab 6.6.0.pre1 to 6.6.4](update/gitlab_6_changes.md#updating-from-gitlab-660pre1-to-664)
-- [Update from GitLab CI version prior to 5.4.0 to the latest version](update/README.md#update-gitlab-ci-from-prior-540-to-version-714-via-omnibus-gitlab)
 
 ## Troubleshooting
 
