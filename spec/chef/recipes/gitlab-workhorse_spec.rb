@@ -43,6 +43,12 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
       }
     end
 
+    it 'does not include shutdown timeout' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).not_to match(/shutdown_timeout/)
+      }
+    end
+
     it 'does not include object storage configs' do
       expect(chef_run).to render_file(config_file).with_content { |content|
         expect(content).not_to match(/object_storage/)
@@ -119,6 +125,18 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     it 'includes alternate document root setting' do
       expect(chef_run).to render_file(config_file).with_content { |content|
         expect(content).to match(%r(alt_document_root = "/tmp/test"))
+      }
+    end
+  end
+
+  context 'with shutdown timeout' do
+    before do
+      stub_gitlab_rb(gitlab_workhorse: { shutdown_timeout: '60s' })
+    end
+
+    it 'includes alternate document root setting' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).to match(%r(shutdown_timeout = "60s"))
       }
     end
   end
