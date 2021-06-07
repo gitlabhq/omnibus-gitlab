@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Update GitLab installed with the Omnibus GitLab package
+# Update GitLab installed with the Omnibus GitLab package **(FREE SELF)**
 
 Before following these instructions, note the following:
 
@@ -43,10 +43,6 @@ check the version your are updating to:
 - [GitLab 13](gitlab_13_changes.md)
 - [GitLab 12](gitlab_12_changes.md)
 - [GitLab 11](gitlab_11_changes.md)
-- [GitLab 10](gitlab_10_changes.md)
-- [GitLab 8](gitlab_8_changes.md)
-- [GitLab 7](gitlab_7_changes.md)
-- [GitLab 6](gitlab_6_changes.md)
 
 ## Mandatory upgrade paths for version upgrades
 
@@ -1222,30 +1218,6 @@ Steps:
 
 1. Follow the instructions in the [Restore for Omnibus GitLab installations](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-gitlab-installations)
 page to complete the downgrade.
-
-## Update GitLab CI from prior `5.4.0` to version `7.14` via Omnibus GitLab
-
-WARNING:
-Omnibus GitLab 7.14 was the last version where CI was bundled in the package.
-Starting from GitLab 8.0, CI was merged into GitLab, thus it's no longer a
-separate application included in the Omnibus package.
-
-In GitLab CI 5.4.0 we changed the way GitLab CI authorizes with GitLab.
-
-In order to use GitLab CI 5.4.x, GitLab 7.7.x is required.
-
-Make sure that GitLab 7.7.x is installed and running and then go to Admin section of GitLab.
-Under Applications create a new a application which will generate the `app_id` and `app_secret`.
-
-In `/etc/gitlab/gitlab.rb`:
-
-```ruby
-gitlab_ci['gitlab_server'] = { "url" => 'http://gitlab.example.com', "app_id" => '12345678', "app_secret" => 'QWERTY12345' }
-```
-
-Where `url` is the URL to the GitLab instance.
-
-Make sure to run `sudo gitlab-ctl reconfigure` after saving the configuration.
 
 ## Troubleshooting
 
