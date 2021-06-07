@@ -41,3 +41,10 @@ Unicorn is no longer supported as a webserver for GitLab and is no longer
 shipped with the `omnibus-gitlab` packages. Users must migrate to Puma following
 [documentation](https://docs.gitlab.com/ee/administration/operations/puma.html)
 to upgrade to GitLab 14.0.
+
+### Consul upgrade
+
+The Consul version has been updated from `1.6.10` to `1.9.6` for Geo and multi-node PostgreSQL installs. Its important
+that Consul nodes be upgraded and restarted one at a time.
+
+See our [Consul upgrade instructions](https://docs.gitlab.com/ee/administration/consul.html#upgrade-the-consul-nodes).
