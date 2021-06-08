@@ -84,9 +84,8 @@ backups older than the current time minus the `backup_keep_time`.
 You can provide the parameter `--no-delete-old-backups` if you want to keep all existing backups.
 
 WARNING:
-If no parameter is provided the current default is `--no-delete-old-backups`. In GitLab 14.0 the default setting
-will be `--delete-old-backups` - meaning that we will begin removing older configuration backups by default,
-according to your `backup_keep_time` setting.
+If no parameter is provided the default is `--delete-old-backups`, which will delete any backups
+older than the current time minus the `backup_keep_time`, if `backup_keep_time` is greater than 0.
 
 ### Separate configuration backups from application data
 

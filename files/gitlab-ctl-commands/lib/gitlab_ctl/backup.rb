@@ -30,8 +30,7 @@ module GitlabCtl
     end
 
     def wants_pruned
-      # in 14.0, change default to `true`
-      @delete_old_backups.nil? ? false : @delete_old_backups
+      @delete_old_backups.nil? ? true : @delete_old_backups
     end
 
     def removable_archives
@@ -64,9 +63,6 @@ module GitlabCtl
     end
 
     def prune
-      # warn users that 14.0 will delete old backups by default
-      warn_breaking_change if backup_keep_time.positive?
-
       if wants_pruned && backup_keep_time.positive?
         remove_backups
       else
@@ -100,13 +96,6 @@ module GitlabCtl
       exit!(1) unless status
 
       puts "Configuration backup archive complete: #{archive_path}"
-    end
-
-    def warn_breaking_change
-      warn("WARNING: In GitLab 14.0 we will begin removing all configuration"\
-           " backups older than your"\
-           "gitlab_rails['backup_keep_time'] setting"\
-           " (currently set to: #{backup_keep_time})")
     end
 
     def remove_backups
