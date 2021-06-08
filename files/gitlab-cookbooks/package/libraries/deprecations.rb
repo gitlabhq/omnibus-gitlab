@@ -86,12 +86,6 @@ module Gitlab
             note: "Geo does not require Foreign Data Wrapper (FDW) to be configured to replicate data."
           },
           {
-            config_keys: %w(praefect virtual_storages primary),
-            deprecation: '13.4',
-            removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5658
-            note: "Praefect no longer supports statically designating primary Gitaly nodes."
-          },
-          {
             config_keys: %w(gitlab gitlab-rails extra_piwik_site_id),
             deprecation: '13.7',
             removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6139
