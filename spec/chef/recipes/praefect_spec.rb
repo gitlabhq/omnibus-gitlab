@@ -45,7 +45,9 @@ RSpec.describe 'praefect' do
         'logging' => { 'format' => 'json' },
         'prometheus_listen_addr' => 'localhost:9652',
         'sentry' => {},
-        'database' => {},
+        'database' => {
+          'session_pooled' => {},
+        },
         'reconciliation' => {},
         'failover' => { 'enabled' => true,
                         'election_strategy' => 'per_repository' }
@@ -114,8 +116,8 @@ RSpec.describe 'praefect' do
       let(:database_sslkey) { '/path/to/client-key' }
       let(:database_sslrootcert) { '/path/to/rootcert' }
       let(:database_sslrootcert) { '/path/to/rootcert' }
-      let(:database_host_no_proxy) { 'pg.internal' }
-      let(:database_port_no_proxy) { 1234 }
+      let(:database_direct_host) { 'pg.internal' }
+      let(:database_direct_port) { 1234 }
       let(:reconciliation_scheduling_interval) { '1m' }
       let(:reconciliation_histogram_buckets) { '[1.0, 2.0]' }
 
@@ -148,8 +150,8 @@ RSpec.describe 'praefect' do
                          database_sslcert: database_sslcert,
                          database_sslkey: database_sslkey,
                          database_sslrootcert: database_sslrootcert,
-                         database_host_no_proxy: database_host_no_proxy,
-                         database_port_no_proxy: database_port_no_proxy,
+                         database_direct_host: database_direct_host,
+                         database_direct_port: database_direct_port,
                          reconciliation_scheduling_interval: reconciliation_scheduling_interval,
                          reconciliation_histogram_buckets: reconciliation_histogram_buckets
                        })
@@ -166,15 +168,17 @@ RSpec.describe 'praefect' do
               'database' => {
                 'dbname' => 'praefect_production',
                 'host' => 'pg.external',
-                'host_no_proxy' => 'pg.internal',
                 'password' => 'praefect-pg-pass',
                 'port' => 2234,
-                'port_no_proxy' => 1234,
                 'sslcert' => '/path/to/client-cert',
                 'sslkey' => '/path/to/client-key',
                 'sslmode' => 'require',
                 'sslrootcert' => '/path/to/rootcert',
-                'user' => 'praefect-pg'
+                'user' => 'praefect-pg',
+                'session_pooled' => {
+                  'host' => 'pg.internal',
+                  'port' => 1234,
+                }
               },
               'failover' => {
                 'election_strategy' => 'local',

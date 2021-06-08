@@ -2196,8 +2196,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # praefect['database_sslrootcert'] = '/path/to/rootcert'
 # praefect['reconciliation_scheduling_interval'] = '5m'
 # praefect['reconciliation_histogram_buckets'] = '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0]'
-# praefect['database_host_no_proxy'] = 'postgres.internal'
-# praefect['database_port_no_proxy'] = 5432
+# praefect['database_direct_host'] = 'postgres.internal'
+# praefect['database_direct_port'] = 5432
+# praefect['database_direct_user'] = 'praefect'
+# praefect['database_direct_password'] = 'secret'
+# praefect['database_direct_dbname'] = 'praefect_production_direct'
+# praefect['database_direct_sslmode'] = 'disable'
+# praefect['database_direct_sslcert'] = '/path/to/client-cert'
+# praefect['database_direct_sslkey'] = '/path/to/client-key'
+# praefect['database_direct_sslrootcert'] = '/path/to/rootcert'
 
 ################################################################################
 # Storage check
