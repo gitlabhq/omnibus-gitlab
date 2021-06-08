@@ -836,12 +836,20 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## GitLab Workhorse
-##! Docs: https://gitlab.com/gitlab-org/gitlab-workhorse/blob/master/README.md
+##! Docs: https://gitlab.com/gitlab-org/gitlab/-/blob/master/workhorse/README.md
 ################################################################################
 
 # gitlab_workhorse['enable'] = true
 # gitlab_workhorse['ha'] = false
 # gitlab_workhorse['alt_document_root'] = nil
+
+##! Duration to wait for all requests to finish (e.g. "10s" for 10
+##! seconds). By default this is disabled to preserve the existing
+##! behavior of fast shutdown. This should not be set higher than 30
+##! seconds, since gitlab-ctl will wait up to 30 seconds (as defined by
+##! the SVWAIT variable) and report a timeout error if the process has
+##! not shut down.
+# gitlab_workhorse['shutdown_timeout'] = nil
 # gitlab_workhorse['listen_network'] = "unix"
 # gitlab_workhorse['listen_umask'] = 000
 # gitlab_workhorse['listen_addr'] = "/var/opt/gitlab/gitlab-workhorse/sockets/socket"

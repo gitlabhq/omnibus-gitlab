@@ -79,6 +79,7 @@ version_file 'Create version file for Workhorse' do
 end
 
 alt_document_root = node['gitlab']['gitlab-workhorse']['alt_document_root']
+shutdown_timeout = node['gitlab']['gitlab-workhorse']['shutdown_timeout']
 _redis_host, _redis_port, redis_password = redis_helper.redis_params
 workhorse_keywatcher = node['gitlab']['gitlab-workhorse']['workhorse_keywatcher']
 redis_url = redis_helper.redis_url.to_s
@@ -106,6 +107,7 @@ template config_file_path do
     password: redis_password,
     sentinels: redis_sentinels,
     sentinel_master: redis_sentinel_master,
+    shutdown_timeout: shutdown_timeout,
     master_password: redis_sentinel_master_password,
     image_scaler_max_procs: image_scaler_max_procs,
     image_scaler_max_filesize: image_scaler_max_filesize

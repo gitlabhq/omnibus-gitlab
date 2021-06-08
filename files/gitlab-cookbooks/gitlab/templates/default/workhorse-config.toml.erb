@@ -1,6 +1,9 @@
 <%- if @alt_document_root %>
 alt_document_root = "<%= @alt_document_root %>"
 <%- end %>
+<%- if @shutdown_timeout %>
+shutdown_timeout = "<%= @shutdown_timeout %>"
+<%- end %>
 
 <% if @workhorse_keywatcher %>
 [redis]
