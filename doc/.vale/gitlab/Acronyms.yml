@@ -27,14 +27,13 @@ exceptions:
   - CNA
   - CNAME
   - CORE
-  - CVS
-  - FREE
   - CPU
   - CRIME
   - CSRF
   - CSS
   - CSV
   - CVE
+  - CVS
   - DAG
   - DAST
   - DHCP
@@ -43,11 +42,13 @@ exceptions:
   - DSA
   - DVCS
   - ECDSA
+  - ECS
   - EFS
   - EKS
   - EOL
   - EXIF
   - FAQ
+  - FIPS
   - FOSS
   - FQDN
   - FREE
@@ -62,6 +63,7 @@ exceptions:
   - GPL
   - GUI
   - HAML
+  - HDD
   - HEAD
   - HIPAA
   - HTML
@@ -79,6 +81,7 @@ exceptions:
   - JPEG
   - JPG
   - JSON
+  - JVM
   - JWT
   - LAN
   - LDAP
@@ -94,7 +97,6 @@ exceptions:
   - NFS
   - NGINX
   - NOTE
-  - NPM
   - NTP
   - ONLY
   - OWASP
@@ -119,9 +121,10 @@ exceptions:
   - RSA
   - RSS
   - RVM
-  - SAML
   - SAAS
+  - SAML
   - SAST
+  - SATA
   - SCIM
   - SCP
   - SCSS

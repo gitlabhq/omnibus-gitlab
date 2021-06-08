@@ -13,6 +13,7 @@ anonymization
 anonymized
 Ansible
 Anthos
+Apdex
 approvers
 architected
 architecting
@@ -207,6 +208,7 @@ formatters
 Fugit
 fuzzer
 Gantt
+Gemfile
 Gemnasium
 Gemojione
 Getter
@@ -245,7 +247,6 @@ Helm
 Heroku
 Herokuish
 Hexo
-HipChat
 hostname
 hostnames
 hotfix
@@ -257,6 +258,7 @@ https
 idempotence
 idmapper
 Iglu
+Immer
 inclusivity
 Ingress
 initializer
@@ -281,6 +283,7 @@ jQuery
 jsdom
 Jsonnet
 JupyterHub
+Kaminari
 kanban
 kanbans
 kaniko
@@ -292,7 +295,6 @@ keytab
 keytabs
 Kibana
 Kinesis
-Klar
 Knative
 Kramdown
 Kroki
@@ -546,6 +548,7 @@ serializer
 serializers
 serializing
 serverless
+severities
 sharded
 sharding
 shfmt
@@ -563,6 +566,7 @@ smartcard
 smartcards
 snapshotting
 Sobelow
+Solargraph
 Solarized
 Sourcegraph
 sparkline
