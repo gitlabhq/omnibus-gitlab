@@ -306,6 +306,11 @@ RSpec.describe 'gitlab::gitlab-rails' do
               { host: 'shared_state', port: '1234' },
               { host: 'shared_state', port: '3456' }
             ],
+            redis_trace_chunks_instance: "redis://:fakepass@fake.redis.trace_chunks.com:8888/2",
+            redis_trace_chunks_sentinels: [
+              { host: 'trace_chunks', port: '1234' },
+              { host: 'trace_chunks', port: '3456' }
+            ],
             redis_actioncable_instance: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
             redis_actioncable_sentinels: [
               { host: 'actioncable', port: '1234' },
