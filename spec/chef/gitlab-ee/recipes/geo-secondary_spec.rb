@@ -129,7 +129,8 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
             "db_database" => "gitlabhq_geo_production",
             "db_host" => "1.1.1.1",
             "db_port" => "5431",
-            "db_sslcompression" => 0
+            "db_sslcompression" => 0,
+            "db_prepared_statements" => false
           )
         )
       end
