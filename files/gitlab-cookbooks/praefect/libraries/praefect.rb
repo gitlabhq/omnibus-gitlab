@@ -12,6 +12,8 @@ module Praefect
     # sql elector. In such cases, we'll keep using it. Deprecation message is logged if the election strategy is
     # determined to be anything other than per_repository elector.
     def parse_election_strategy
+      return unless Gitlab['praefect']['enable']
+
       unless Gitlab['praefect']['failover_election_strategy']
         praefect_dir = Gitlab['praefect']['dir'] || Gitlab['node']['praefect']['dir']
         config_path = File.join(praefect_dir, 'config.toml')
