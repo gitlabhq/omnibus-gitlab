@@ -6,7 +6,7 @@ require 'chefspec'
 require 'ohai'
 
 # Load our cookbook libraries so we can stub them in our tests
-cookbooks = %w(package gitlab gitaly mattermost gitlab-ee letsencrypt monitoring patroni gitlab-kas gitlab-pages pgbouncer)
+cookbooks = %w(package gitlab gitaly mattermost gitlab-ee letsencrypt monitoring patroni gitlab-kas gitlab-pages pgbouncer consul)
 cookbooks.each do |cookbook|
   Dir[File.join(__dir__, "../files/gitlab-cookbooks/#{cookbook}/libraries/**/*.rb")].each { |f| require f }
 end
@@ -53,6 +53,8 @@ RSpec.configure do |config|
     allow(VersionHelper).to receive(:version).with(/-[-]?version/).and_return('foobar')
     allow_any_instance_of(RedisHelper).to receive(:installed_version).and_return('3.2.12')
     allow_any_instance_of(RedisHelper).to receive(:running_version).and_return('3.2.12')
+    allow_any_instance_of(ConsulHelper).to receive(:installed_version).and_return('1.9.6')
+    allow_any_instance_of(ConsulHelper).to receive(:running_version).and_return('1.9.6')
     stub_command('/sbin/init --version | grep upstart')
     stub_command('systemctl | grep "\-\.mount"')
     # ChefSpec::SoloRunner doesn't support Chef.event_handler, so stub it

@@ -136,5 +136,29 @@ RSpec.describe 'consul' do
         }
       end
     end
+
+    describe 'pending restart check' do
+      context 'when running version is same as installed version' do
+        before do
+          allow_any_instance_of(ConsulHelper).to receive(:running_version).and_return('1.9.6')
+          allow_any_instance_of(ConsulHelper).to receive(:installed_version).and_return('1.9.6')
+        end
+
+        it 'does not raise a warning' do
+          expect(chef_run).not_to run_ruby_block('warn pending consul restart')
+        end
+      end
+
+      context 'when running version is different than installed version' do
+        before do
+          allow_any_instance_of(ConsulHelper).to receive(:running_version).and_return('1.6.4')
+          allow_any_instance_of(ConsulHelper).to receive(:installed_version).and_return('1.9.6')
+        end
+
+        it 'raises a warning' do
+          expect(chef_run).to run_ruby_block('warn pending consul restart')
+        end
+      end
+    end
   end
 end

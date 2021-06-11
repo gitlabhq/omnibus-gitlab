@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+consul_helper = ConsulHelper.new(node)
 
 runit_service 'consul' do
   options({
@@ -37,4 +38,17 @@ execute 'reload consul' do
   command '/opt/gitlab/bin/gitlab-ctl hup consul'
   user account_helper.consul_user
   action :nothing
+end
+
+ruby_block 'warn pending consul restart' do
+  block do
+    message = <<~MESSAGE
+      The version of the running consul service is different than what is installed.
+      Please restart consul to start the new version:
+
+      https://docs.gitlab.com/ee/administration/consul.html#restart-consul
+    MESSAGE
+    LoggingHelper.warning(message)
+  end
+  only_if { consul_helper.running_version != consul_helper.installed_version }
 end
