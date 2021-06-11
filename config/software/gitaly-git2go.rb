@@ -29,8 +29,8 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-dependency 'rubygems'
 dependency 'libicu'
+dependency 'pkg-config-lite'
 
 source git: version.remote
 
@@ -39,10 +39,8 @@ build do
 
   touch '.ruby-bundle' # Prevent 'make install' from running bundle install
 
-  block 'delete other binaries from source' do
-    # Delete commands that we don't need to compile for git2go
-    command "find #{File.join(build_dir, 'cmd')} ! -name 'gitaly-git2go' -type d -exec rm -rf {} +"
-  end
+  # Delete commands that we don't need to compile for git2go
+  command "find #{File.join(project_dir, 'cmd', '*')} ! -name 'gitaly-git2go' -type d -exec rm -rf {} +"
 
   make "install PREFIX=#{install_dir}/embedded", env: env
 end
