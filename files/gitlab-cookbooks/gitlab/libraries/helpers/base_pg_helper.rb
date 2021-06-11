@@ -172,9 +172,7 @@ class BasePgHelper < BaseHelper
   end
 
   def is_standby?
-    # PostgreSQL <= 11 uses recovery.conf to configure a standby node.
-    # PostgreSQL 12 switched to the .signal files
-    %w(recovery.conf recovery.signal standby.signal).each do |standby_file|
+    %w(recovery.signal standby.signal).each do |standby_file|
       return true if ::File.exist?(::File.join(node_attributes['dir'], 'data', standby_file))
     end
     false

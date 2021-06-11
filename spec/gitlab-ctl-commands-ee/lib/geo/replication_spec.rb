@@ -32,11 +32,14 @@ RSpec.describe Geo::Replication, '#execute' do
     allow(STDOUT).to receive(:puts)
     allow(subject).to receive(:print)
     allow(File).to receive(:open).and_yield(file)
+    allow(File).to receive(:exist?).with('/var/opt/gitlab/postgresql/data/standby.signal').and_return(true)
+    allow(File).to receive(:exist?).with(anything).and_call_original
+    allow(File).to receive(:write).with('/var/opt/gitlab/postgresql/data/standby.signal', "")
 
     allow(GitlabCtl::Util).to receive(:run_command).and_return(command)
     allow(subject).to receive(:postgresql_user).and_return('gitlab-psql')
     allow(subject).to receive(:postgresql_group).and_return('gitlab-psql')
-    allow(subject).to receive(:postgresql_version).and_return(11)
+    allow(subject).to receive(:postgresql_version).and_return(12)
   end
 
   it 'replicates geo database' do
@@ -62,9 +65,13 @@ RSpec.describe Geo::Replication, '#execute' do
     expect(described_class.new(instance, options).postgresql_dir_path).to eq(expected_dir)
   end
 
-  it 'creates a recovery file' do
+  it 'writes recovery settings to postgresql.conf and creates a standby file' do
+    allow(File).to receive(:write)
+    allow(STDIN).to receive(:gets).and_return("pass\n")
     allow(subject).to receive(:ask_pass).and_return('password')
-    expect(subject).to receive(:create_recovery_file!)
+
+    expect(subject).to receive(:write_recovery_settings!)
+    expect(subject).to receive(:create_standby_file!)
 
     subject.execute
   end
@@ -91,7 +98,6 @@ RSpec.describe Geo::Replication, '#execute' do
 
       subject.execute
 
-      expect(file).to have_received(:write).with(/standby_mode = 'on'/)
       expect(file).to have_received(:write).with(/recovery_target_timeline = 'latest'/)
     end
 
@@ -130,21 +136,6 @@ RSpec.describe Geo::Replication, '#execute' do
       expect(GitlabCtl::Util).to receive(:run_command)
         .with("PGPASSFILE=/var/opt/gitlab/postgresql/.pgpass /opt/gitlab/embedded/embedded/bin/pg_basebackup -h localhost -p 9999 -D /var/opt/gitlab/postgresql/data -U my-user -v -P -X stream -S foo",
               anything)
-
-      subject.execute
-    end
-  end
-
-  context 'when node has PostgreSQL 12 installed' do
-    it 'writes recovery settings to postgresql.conf and creates a standby file' do
-      allow(File).to receive(:write)
-      allow(STDIN).to receive(:gets).and_return("pass\n")
-      allow(subject).to receive(:ask_pass).and_return('password')
-      allow(subject).to receive(:postgresql_version).and_return(12)
-
-      expect(subject).to receive(:write_recovery_settings!)
-      expect(subject).to receive(:create_standby_file!)
-      expect(subject).not_to receive(:create_recovery_file!)
 
       subject.execute
     end
