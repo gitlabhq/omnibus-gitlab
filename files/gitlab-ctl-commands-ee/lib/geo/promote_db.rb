@@ -76,29 +76,13 @@ module Geo
     def write_recovery_settings(lsn)
       settings = built_recovery_setting_for_pitr(lsn)
 
-      if postgresql_version >= 12
-        puts "PostgreSQL 12 or newer. Writing settings to postgresql.conf...".color(:green)
-
-        write_geo_config_file(settings)
-      else
-        puts "Writing recovery.conf...".color(:green)
-
-        write_recovery_conf(settings)
-      end
+      write_geo_config_file(settings)
     end
 
     def write_geo_config_file(settings)
       geo_conf_file = "#{postgresql_dir_path}/data/gitlab-geo.conf"
 
       File.open(geo_conf_file, "w", 0640) do |file|
-        file.write(settings)
-      end
-    end
-
-    def write_recovery_conf(settings)
-      recovery_conf = "#{postgresql_dir_path}/data/recovery.conf"
-
-      File.open(recovery_conf, 'a', 0640) do |file|
         file.write(settings)
       end
     end

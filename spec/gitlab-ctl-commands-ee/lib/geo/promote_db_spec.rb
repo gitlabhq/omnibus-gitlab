@@ -40,31 +40,16 @@ RSpec.describe Geo::PromoteDb, '#execute' do
       allow(command).to receive(:lsn_from_pitr_file).and_return(lsn)
     end
 
-    it 'runs PITR recovery' do
+    it 'writes out the recovery settings' do
       expect(command).to receive(:write_recovery_settings).with(lsn)
 
       expect { command.execute }.to output(
         /Recovery to point #{lsn} and promoting.../).to_stdout
     end
 
-    context 'PG version 11' do
-      it 'runs PITR recovery' do
-        allow(command).to receive(:postgresql_version).and_return(11)
-        expect(command).to receive(:write_recovery_conf)
-
-        expect { command.execute }.to output(
-          /Writing recovery.conf/).to_stdout
-      end
-    end
-
-    context 'PG version 12' do
-      it 'runs PITR recovery' do
-        allow(command).to receive(:postgresql_version).and_return(12)
-        expect(command).to receive(:write_geo_config_file)
-
-        expect { command.execute }.to output(
-          /PostgreSQL 12 or newer. Writing settings to postgresql.conf/).to_stdout
-      end
+    it 'writes out the geo configuration file' do
+      expect(command).to receive(:write_geo_config_file)
+      command.execute
     end
   end
 end
