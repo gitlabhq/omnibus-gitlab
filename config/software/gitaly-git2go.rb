@@ -40,7 +40,7 @@ build do
   touch '.ruby-bundle' # Prevent 'make install' from running bundle install
 
   # Delete commands that we don't need to compile for git2go
-  command "find #{File.join(project_dir, 'cmd', '*')} ! -name 'gitaly-git2go' -type d -exec rm -rf {} +"
+  command "find #{File.join(project_dir, 'cmd')} -mindepth 1 -maxdepth 1 ! -name 'gitaly-git2go' -type d -exec rm -rf {} +"
 
   make "install PREFIX=#{install_dir}/embedded", env: env
 end
