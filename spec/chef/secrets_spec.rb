@@ -16,6 +16,7 @@ RSpec.describe 'secrets' do
     allow(File).to receive(:exist?).and_call_original
     allow(File).to receive(:read).and_call_original
     allow(File).to receive(:open).and_call_original
+    allow(File).to receive(:open).with('/etc/gitlab/initial_root_password', 'w', 0600).and_yield(double(:file, write: true)).once
   end
 
   context 'when /etc/gitlab does not exist' do

@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'mixlib/shellout'
 require_relative 'helper'
 require_relative 'deprecations'
@@ -94,21 +95,63 @@ class OmnibusHelper
     LoggingHelper.deprecation(msg)
   end
 
+  def write_root_password
+    return unless node['gitlab']['bootstrap']['enable']
+
+    content = <<~EOS
+      # WARNING: This value is valid only in the following conditions
+      #          1. If provided manually (either via `GITLAB_ROOT_PASSWORD` environment variable or via `gitlab_rails['initial_root_password']` setting in `gitlab.rb`, it was provided before database was seeded for the first time (usually, the first reconfigure run).
+      #          2. Password hasn't been changed manually, either via UI or via command line.
+      #
+      #          If the password shown here doesn't work, you must reset the admin password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
+
+      Password: #{node['gitlab']['gitlab-rails']['initial_root_password']}
+
+      # NOTE: This file will be automatically deleted in the first reconfigure run after 24 hours.
+    EOS
+
+    File.open('/etc/gitlab/initial_root_password', 'w', 0600) do |f|
+      f.write(content)
+    end
+  end
+
+  def self.cleanup_root_password_file
+    return unless File.exist?('/etc/gitlab/initial_root_password')
+
+    # If initial root password file is younger than 24 hours
+    return if File.mtime('/etc/gitlab/initial_root_password') > (Time.now - (60 * 60 * 24))
+
+    LoggingHelper.note("Found old initial root password file at /etc/gitlab/initial_root_password and deleted it.")
+    FileUtils.rm_f('/etc/gitlab/initial_root_password')
+  end
+
   def print_root_account_details
     return unless node['gitlab']['bootstrap']['enable']
 
-    initial_password_provided = ENV['GITLAB_ROOT_PASSWORD'] || node['gitlab']['gitlab-rails']['initial_root_password']
+    initial_password = node['gitlab']['gitlab-rails']['initial_root_password']
+    display_password = node['gitlab']['gitlab-rails']['display_initial_root_password']
+    store_password = node['gitlab']['gitlab-rails']['store_initial_root_password']
 
-    msg = if initial_password_provided
-            "Default admin account has been configured with username `root` and the password you specified in `/etc/gitlab/gitlab.rb` file."
-          else
-            <<~EOS
-              It seems you haven't specified an initial root password while configuring the GitLab instance.
-              On your first visit to  your GitLab instance, you will be presented with a screen to set a
-              password for the default admin account with username `root`.
-            EOS
-          end
-    LoggingHelper.note(msg)
+    password_string = if display_password
+                        "Password: #{initial_password}"
+                      else
+                        "Password: You didn't opt-in to print initial root password to STDOUT."
+                      end
+
+    if store_password
+      write_root_password
+      password_string += "\nPassword stored to /etc/gitlab/initial_root_password. This file will be cleaned up in first reconfigure run after 24 hours."
+    end
+
+    message = <<~EOS
+      Default admin account has been configured with following details:
+      Username: root
+      #{password_string}
+
+      NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to reset the password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
+    EOS
+
+    LoggingHelper.note(message)
   end
 
   def check_invalid_pg_ha

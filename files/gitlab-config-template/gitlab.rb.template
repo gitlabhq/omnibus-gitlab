@@ -663,6 +663,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['initial_root_password'] = "password"
 # gitlab_rails['initial_shared_runners_registration_token'] = "token"
 
+#### Toggle if root password should be printed to STDOUT during initialization
+# gitlab_rails['display_initial_root_password'] = false
+
+#### Toggle if initial root password should be written to /etc/gitlab/initial_root_password
+# gitlab_rails['store_initial_root_password'] = true
+
 #### Set path to an initial license to be used while bootstrapping GitLab.
 ####! **Only applicable on initial setup, future license updations need to be done via UI.
 ####! Updating the file specified in this path won't yield any change after the first reconfigure run.
