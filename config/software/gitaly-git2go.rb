@@ -22,7 +22,7 @@ version = Gitlab::Version.new('gitaly')
 name 'gitaly-git2go'
 
 # Provide the previous released version of the gitaly-git2go binary for zero-downtime upgrades
-default_version '13.12.3'
+default_version 'v13.12.3'
 
 license 'MIT'
 license_file 'LICENSE'
