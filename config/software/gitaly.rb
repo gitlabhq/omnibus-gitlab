@@ -25,6 +25,7 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
+dependency 'gitaly-git2go'
 dependency 'rubygems'
 dependency 'libicu'
 
