@@ -48,7 +48,7 @@ by default:
 | <a name="mattermost"></a>          Mattermost          | No            | Port             | X           | 8065                                   |
 | <a name="mattermost-web"></a>      Mattermost          | No            | Port             | X           | 80 or 443                              |
 | <a name="pgbouncer"></a>           PgBouncer           | No            | Port             | X           | 6432                                   |
-| <a name="consul"></a>              Consul              | No            | Port             | X           | 8300, 8500                             |
+| <a name="consul"></a>              Consul              | No            | Port             | X           | 8300, 8301(UDP), 8500[^Consul-notes]   |
 | <a name="patroni"></a>             Patroni             | No            | Port             | X           | 8008                                   |
 | <a name="gitlab-kas"></a>          GitLab KAS          | No            | Port             | X           | 8150                                   |
 | <a name="gitaly"></a>              Gitaly              | No            | Port             | X           | 8075                                   |
@@ -70,3 +70,5 @@ over a network which will require, based on implementation, ports `111` and
 
 NOTE:
 In some cases, the GitLab Registry will be automatically enabled by default. Please see [our documentation](https://docs.gitlab.com/ee/administration/packages/container_registry.html) for more details
+
+ [^Consul-notes]: If using additional Consul functionality, more ports may need to be opened. See the [official documentation](https://www.consul.io/docs/install/ports#ports-table) for the list.
