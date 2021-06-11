@@ -19,8 +19,7 @@ RSpec.describe 'patroni cookbook' do
       stub_gitlab_rb(roles: %w(postgres_role))
     end
 
-    it 'should be disabled while repmgr is enabled' do
-      expect(chef_run).to include_recipe('repmgr::enable')
+    it 'should be disabled' do
       expect(chef_run).to include_recipe('patroni::disable')
     end
   end
