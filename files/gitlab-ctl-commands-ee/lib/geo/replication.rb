@@ -138,14 +138,8 @@ module Geo
     end
 
     def write_replication_settings!
-      if postgresql_version >= 12
-        puts "* PostgreSQL 12 or newer. Writing settings to postgresql.conf and creating standby.signal".color(:green)
-        write_recovery_settings!
-        create_standby_file!
-      else
-        puts "* Writing recovery.conf file with sslmode=#{@options[:sslmode]} and sslcompression=#{@options[:sslcompression]}".color(:green)
-        create_recovery_file!
-      end
+      write_recovery_settings!
+      create_standby_file!
     end
 
     private
@@ -186,20 +180,6 @@ module Geo
       standby_file = "#{postgresql_dir_path}/data/standby.signal"
       File.write(standby_file, "")
       run_command("chown #{postgresql_user}:#{postgresql_group} #{standby_file}")
-    end
-
-    def create_recovery_file!
-      recovery_file = "#{postgresql_dir_path}/data/recovery.conf"
-      File.open(recovery_file, 'w', 0640) do |file|
-        file.write(<<~EOF
-          standby_mode = 'on'
-          recovery_target_timeline = '#{@options[:recovery_target_timeline]}'
-          primary_conninfo = 'host=#{@options[:host]} port=#{@options[:port]} user=#{@options[:user]} password=#{@options[:password]} sslmode=#{@options[:sslmode]} sslcompression=#{@options[:sslcompression]}'
-        EOF
-                  )
-        file.write("primary_slot_name = '#{@options[:slot_name]}'\n") if @options[:slot_name]
-      end
-      run_command("chown #{postgresql_user}:#{postgresql_group} #{recovery_file}")
     end
 
     def ask_pass
