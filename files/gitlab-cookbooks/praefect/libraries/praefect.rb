@@ -1,7 +1,16 @@
 module Praefect
   class << self
     def parse_variables
+      inform_election_strategy
       parse_virtual_storages
+    end
+
+    def inform_election_strategy
+      return unless Gitlab['praefect']['enable']
+
+      return unless Gitlab['praefect']['failover_election_strategy']
+
+      LoggingHelper.note("From GitLab 14.0 onwards, `per_repository` is the only supported failover election strategy for Praefect. Hence the setting `praefect['failover_election_strategy']` will be ignored and can be safely removed from `/etc/gitlab/gitlab.rb`.")
     end
 
     # parse_virtual_storages converts the virtual storage's config object in to a format that better represents
