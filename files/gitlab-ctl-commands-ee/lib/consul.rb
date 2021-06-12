@@ -27,6 +27,10 @@ class ConsulHandler
         run_consul("kv delete #{key}")
       end
 
+      def get(key)
+        run_consul("kv get #{key}")
+      end
+
       protected
 
       def run_consul(cmd)
@@ -37,7 +41,9 @@ class ConsulHandler
         rescue StandardError => e
           puts e
           puts command.stderr
+          raise ConsulError, "#{e}: #{command.stderr}"
         end
+        command.stdout
       end
     end
   end
@@ -73,4 +79,5 @@ class ConsulHandler
       end
     end
   end
+  ConsulError = Class.new(StandardError)
 end

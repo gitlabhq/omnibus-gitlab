@@ -1,5 +1,6 @@
 require_relative "./replication_process"
 require_relative "./promote_db"
+require_relative "./pitr_file"
 require 'optparse'
 require 'English'
 
@@ -39,16 +40,14 @@ module Geo
     attr_reader :action, :ctl
 
     def process_pitr_file
-      geo_pitr_file_path = "#{ctl.data_path}/postgresql/data/#{Geo::PromoteDb::PITR_FILE_NAME}"
+      geo_pitr_file = Geo::PitrFile.new("#{ctl.data_path}/postgresql/data/#{Geo::PromoteDb::PITR_FILE_NAME}", consul_key: Geo::PromoteDb::CONSUL_PITR_KEY)
 
       if action == 'pause'
         puts "* Create Geo point-in-time recovery file".color(:green)
-
-        File.write(geo_pitr_file_path, current_lsn)
+        geo_pitr_file.create(current_lsn)
       elsif action == 'resume'
         puts "* Remove Geo point-in-time recovery file".color(:green)
-
-        File.delete(geo_pitr_file_path) if File.exist?(geo_pitr_file_path)
+        geo_pitr_file.delete
       end
     end
 
