@@ -50,6 +50,10 @@ RSpec.describe Geo::ReplicationToggleCommand do
   describe 'resume' do
     subject { described_class.new(ctl_instance, 'resume', arguments) }
 
+    before do
+      allow(File).to receive(:delete).with('data_path/postgresql/data/geo-pitr-file').and_return(1)
+    end
+
     it 'calls resume' do
       expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume)
 
