@@ -1,46 +1,16 @@
 module Praefect
   class << self
     def parse_variables
-      parse_election_strategy
+      inform_election_strategy
       parse_virtual_storages
     end
 
-    # parse_election_strategy determines which election strategy to use by default if the election strategy has not
-    # been explicitly configured. If this is the first time Praefect is being configured, the configuration file does
-    # not yet exist. In such cases, we'll enable per_repository elector directly. If the configuration file exists,
-    # and does not contain per_repository elector, then the installation has been using the previous default value of
-    # sql elector. In such cases, we'll keep using it. Deprecation message is logged if the election strategy is
-    # determined to be anything other than per_repository elector.
-    def parse_election_strategy
+    def inform_election_strategy
       return unless Gitlab['praefect']['enable']
 
-      unless Gitlab['praefect']['failover_election_strategy']
-        praefect_dir = Gitlab['praefect']['dir'] || Gitlab['node']['praefect']['dir']
-        config_path = File.join(praefect_dir, 'config.toml')
+      return unless Gitlab['praefect']['failover_election_strategy']
 
-        begin
-          per_repository_configured = !File.foreach(config_path).grep(/election_strategy = 'per_repository'/).empty?
-          # The previous behavior was to use 'sql' election strategy unless something else was explicitly configured.
-          # Given that, it's fine to fallback to 'sql' if the config does not contain 'per_repository'
-          # election strategy. If the config contains 'per_repository' but the value was not explicitly set, then we've
-          # enabled 'per_repository' elector on first reconfigure of Praefect.
-          Gitlab['praefect']['failover_election_strategy'] = per_repository_configured ? 'per_repository' : 'sql'
-        rescue Errno::ENOENT
-          # This is the first reconfigure of Praefect and the configuration file does not exist. If the
-          # election strategy has not been configured explicitly, we should default to using the recommended one.
-          Gitlab['praefect']['failover_election_strategy'] = 'per_repository'
-        end
-      end
-
-      return if Gitlab['praefect']['failover_election_strategy'] == 'per_repository'
-
-      LoggingHelper.deprecation(
-        <<~EOS
-          From GitLab 14.0 onwards, the `per_repository` will be the only available election strategy.
-          Migrate to repository-specific primary nodes following
-          https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-to-repository-specific-primary-gitaly-nodes.
-        EOS
-      )
+      LoggingHelper.note("From GitLab 14.0 onwards, `per_repository` is the only supported failover election strategy for Praefect. Hence the setting `praefect['failover_election_strategy']` will be ignored and can be safely removed from `/etc/gitlab/gitlab.rb`.")
     end
 
     # parse_virtual_storages converts the virtual storage's config object in to a format that better represents

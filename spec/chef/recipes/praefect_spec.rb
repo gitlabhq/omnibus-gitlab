@@ -49,8 +49,7 @@ RSpec.describe 'praefect' do
           'session_pooled' => {},
         },
         'reconciliation' => {},
-        'failover' => { 'enabled' => true,
-                        'election_strategy' => 'per_repository' }
+        'failover' => { 'enabled' => true }
       }
 
       expect(chef_run).to render_file(config_path).with_content { |content|
@@ -105,7 +104,6 @@ RSpec.describe 'praefect' do
         }
       end
       let(:failover_enabled) { true }
-      let(:failover_election_strategy) { 'local' }
       let(:database_host) { 'pg.external' }
       let(:database_port) { 2234 }
       let(:database_user) { 'praefect-pg' }
@@ -139,7 +137,6 @@ RSpec.describe 'praefect' do
                          logging_level: log_level,
                          logging_format: log_format,
                          failover_enabled: failover_enabled,
-                         failover_election_strategy: failover_election_strategy,
                          virtual_storages: virtual_storages,
                          database_host: database_host,
                          database_port: database_port,
@@ -181,7 +178,6 @@ RSpec.describe 'praefect' do
                 }
               },
               'failover' => {
-                'election_strategy' => 'local',
                 'enabled' => true
               },
               'logging' => {
@@ -243,100 +239,6 @@ RSpec.describe 'praefect' do
             }
           )
         }
-      end
-
-      deprecation_message = <<~EOS
-        From GitLab 14.0 onwards, the `per_repository` will be the only available election strategy.
-        Migrate to repository-specific primary nodes following
-        https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-to-repository-specific-primary-gitaly-nodes.
-      EOS
-
-      context 'with election strategy explicitly configured' do
-        context 'to sql' do
-          let(:failover_election_strategy) { 'sql' }
-
-          it 'prints out deprecation message' do
-            allow(LoggingHelper).to receive(:deprecation)
-            expect(LoggingHelper).to receive(:deprecation).with(deprecation_message)
-            expect(chef_run).to render_file(config_path).with_content(/election_strategy = 'sql'/)
-          end
-        end
-
-        context 'to local' do
-          let(:failover_election_strategy) { 'local' }
-
-          it 'prints out deprecation message' do
-            allow(LoggingHelper).to receive(:deprecation)
-            expect(LoggingHelper).to receive(:deprecation).with(deprecation_message)
-            expect(chef_run).to render_file(config_path).with_content(/election_strategy = 'local'/)
-          end
-        end
-
-        context 'to per_repository' do
-          let(:failover_election_strategy) { 'per_repository' }
-
-          it 'does not print out deprecation message' do
-            expect(LoggingHelper).not_to receive(:deprecation).with(deprecation_message)
-            expect(chef_run).to render_file(config_path).with_content(/election_strategy = 'per_repository'/)
-          end
-        end
-      end
-
-      context 'with election strategy left unconfigured' do
-        let(:failover_election_strategy) { nil }
-
-        context 'with no prior configuration file' do
-          it 'uses the per_repository elector' do
-            expect(LoggingHelper).not_to receive(:deprecation).with(deprecation_message)
-            expect(chef_run).to render_file(config_path).with_content(/election_strategy = 'per_repository'/)
-          end
-        end
-
-        context 'with prior configuration file' do
-          context 'with per_repository election strategy in it' do
-            it 'does not print out a deprecation message' do
-              allow(File).to receive(:foreach).with(config_path).and_return(["election_strategy = 'per_repository'"])
-              expect(LoggingHelper).not_to receive(:deprecation).with(deprecation_message)
-              expect(chef_run).to render_file(config_path).with_content(/election_strategy = 'per_repository'/)
-            end
-          end
-
-          context 'without per_repository election strategy in it' do
-            it 'prints out a deprecation message' do
-              allow(File).to receive(:foreach).with(config_path).and_return(["election_strategy = 'sql'"])
-              allow(LoggingHelper).to receive(:deprecation)
-              expect(LoggingHelper).to receive(:deprecation).with(deprecation_message)
-              expect(chef_run).to render_file(config_path).with_content(/election_strategy = 'sql'/)
-            end
-          end
-        end
-
-        context 'with custom dir' do
-          let(:dir) { 'custom-dir' }
-          let(:config_path) { File.join(dir, 'config.toml') }
-
-          context 'with no prior configuration file' do
-            it 'uses the per_repository elector' do
-              expect(LoggingHelper).not_to receive(:deprecation).with(deprecation_message)
-              expect(chef_run).to render_file(config_path).with_content(/election_strategy = 'per_repository'/)
-            end
-          end
-
-          context 'with prior configuration file in custom dir' do
-            it 'does not print out a deprecation message' do
-              allow(File).to receive(:foreach).with(config_path).and_return(["election_strategy = 'per_repository'"])
-              expect(LoggingHelper).not_to receive(:deprecation).with(deprecation_message)
-              expect(chef_run).to render_file(config_path).with_content(/election_strategy = 'per_repository'/)
-            end
-
-            it 'prints out a deprecation message' do
-              allow(File).to receive(:foreach).with(config_path).and_return(["election_strategy = 'sql'"])
-              allow(LoggingHelper).to receive(:deprecation)
-              expect(LoggingHelper).to receive(:deprecation).with(deprecation_message)
-              expect(chef_run).to render_file(config_path).with_content(/election_strategy = 'sql'/)
-            end
-          end
-        end
       end
 
       it 'renders the env dir files correctly' do

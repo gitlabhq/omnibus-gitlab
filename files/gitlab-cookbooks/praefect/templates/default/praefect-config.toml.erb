@@ -35,9 +35,6 @@ key_path = '<%= @key_path %>'
 <% unless @failover_enabled.nil? %>
 enabled = <%= @failover_enabled %>
 <% end %>
-<% if @failover_election_strategy %>
-election_strategy = '<%= @failover_election_strategy %>'
-<% end %>
 
 [sentry]
 <% if @sentry_dsn %>
