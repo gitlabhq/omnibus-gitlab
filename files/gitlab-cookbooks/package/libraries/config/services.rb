@@ -23,7 +23,7 @@ module Services
     service 'logrotate',          groups: [DEFAULT_GROUP, SYSTEM_GROUP]
     service 'node_exporter',      groups: [DEFAULT_GROUP, SYSTEM_GROUP, 'monitoring', 'monitoring_role']
     service 'puma',               groups: [DEFAULT_GROUP, 'rails']
-    service 'sidekiq',            groups: [DEFAULT_GROUP, 'rails', 'sidekiq']
+    service 'sidekiq',            groups: [DEFAULT_GROUP, 'rails', 'sidekiq', 'sidekiq_role']
     service 'gitlab_exporter',    groups: [DEFAULT_GROUP, 'rails', 'monitoring']
     service 'gitlab_workhorse',   groups: [DEFAULT_GROUP, 'rails']
     service 'gitaly',             groups: [DEFAULT_GROUP, 'rails']
