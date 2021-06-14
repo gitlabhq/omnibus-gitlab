@@ -50,7 +50,7 @@ RSpec.describe GitlabCtl::PostgreSQL::EE do
             }
           )
         allow_any_instance_of(Resolv::DNS).to receive(:getresources)
-          .with('master.fake.service', Resolv::DNS::Resource::IN::SRV)
+          .with('master.fake.service.consul', Resolv::DNS::Resource::IN::SRV)
           .and_return([Struct.new(:target, :port).new('fake.address', 6432)])
         allow_any_instance_of(Resolv::DNS).to receive(:getaddress)
           .with('fake.address')
