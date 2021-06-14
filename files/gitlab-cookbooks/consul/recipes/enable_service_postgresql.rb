@@ -14,7 +14,6 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
-pg_helper = PgHelper.new(node)
 consul_helper = ConsulHelper.new(node)
 
 file "#{node['consul']['config_dir']}/postgresql_service.json" do
@@ -22,5 +21,3 @@ file "#{node['consul']['config_dir']}/postgresql_service.json" do
   owner account_helper.consul_user
   notifies :run, 'execute[reload consul]', :delayed
 end
-
-include_recipe 'repmgr::consul_user_permissions' if !pg_helper.delegated? && node['repmgr']['master_on_initialization']

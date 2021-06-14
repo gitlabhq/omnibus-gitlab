@@ -82,7 +82,7 @@ class ConsulHelper
 
     ha_solution = postgresql_ha_solution
 
-    cfg = {
+    {
       'service' => {
         'name' => node['consul']['internal']['postgresql_service_name'],
         'address' => '',
@@ -95,14 +95,9 @@ class ConsulHelper
         }
       }
     }
-
-    cfg['watches'] = node['consul']['internal']['postgresql_watches_repmgr'] if ha_solution == 'repmgr'
-
-    cfg
   end
 
   def postgresql_ha_solution
-    return 'repmgr' unless node['patroni']['enable']
     return 'patroni_standby_cluster' if node['patroni'].key?('standby_cluster') && node['patroni']['standby_cluster']['enable']
 
     'patroni'

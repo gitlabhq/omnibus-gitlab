@@ -148,6 +148,8 @@ module Gitlab
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")
+        deprecations += identify_deprecated_config(existing_config, ['repmgr'], ['enable'], "13.3", "14.0", "Starting with GitLab 14.0, Repmgr is no longer supported and users must switch to Patroni, following https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni.")
+        deprecations += identify_deprecated_config(existing_config, ['repmgrd'], ['enable'], "13.3", "14.0", "Starting with GitLab 14.0, Repmgr is no longer supported and users must switch to Patroni, following https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni.")
 
         deprecations
       end
@@ -237,6 +239,8 @@ module Gitlab
       def additional_deprecations(incoming_version, existing_config, type)
         messages = []
         messages += deprecate_only_if_value(incoming_version, existing_config, type, ['gitlab', 'unicorn'], 'enable', true, '13.10', '14.0')
+        messages += deprecate_only_if_value(incoming_version, existing_config, type, ['repmgr'], 'enable', true, '13.3', '14.0')
+        messages += deprecate_only_if_value(incoming_version, existing_config, type, ['repmgrd'], 'enable', true, '13.3', '14.0')
 
         praefect_note = <<~EOS
           From GitLab 14.0 onwards, the `per_repository` will be the only available election strategy.

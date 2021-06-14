@@ -19,9 +19,6 @@ module License
       'libtool',            # GPL Mere Aggregate Exception - https://www.gnu.org/licenses/gpl-faq.en.html#MereAggregation
       'logrotate',          # GPL Mere Aggregate Exception - https://www.gnu.org/licenses/gpl-faq.en.html#MereAggregation
       'rsync',              # GPL Mere Aggregate Exception - https://www.gnu.org/licenses/gpl-faq.en.html#MereAggregation
-      'repmgr',             # GPL Mere Aggregate Exception - https://www.gnu.org/licenses/gpl-faq.en.html#MereAggregation
-      'repmgr_pg_10',       # GPL Mere Aggregate Exception - https://www.gnu.org/licenses/gpl-faq.en.html#MereAggregation
-      'repmgr_pg_11',       # GPL Mere Aggregate Exception - https://www.gnu.org/licenses/gpl-faq.en.html#MereAggregation
       'blob',               # MIT Licensed - https://github.com/webmodules/blob/blob/master/LICENSE
       'callsite',           # MIT Licensed - https://github.com/tj/callsite/blob/master/LICENSE
       'component-bind',     # MIT Licensed - https://github.com/component/bind/blob/master/LICENSE

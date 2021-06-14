@@ -178,15 +178,6 @@ add_command_under_category 'pg-upgrade', 'database',
 
   deprecation_message if @db_worker.target_version.major.to_f < 12
 
-  if @db_worker.target_version.major.to_f >= 12 && service_enabled?('repmgrd')
-    error_messsage = <<~EOF
-      Detected an HA cluster using Repmgr. To upgrade PostgreSQL to version 12, it is mandatory to use Patroni instead for replication and failover.
-      Refer to https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni for details.
-    EOF
-    $stderr.puts error_messsage
-    Kernel.exit 1
-  end
-
   target_data_dir = "#{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major}"
   if @db_worker.upgrade_artifact_exists?(target_data_dir)
     $stderr.puts "Cannot upgrade, #{target_data_dir} is not empty. Move or delete this directory to proceed with upgrade"
@@ -269,18 +260,6 @@ add_command_under_category 'pg-upgrade', 'database',
     else
       patroni_replica_upgrade
     end
-  elsif service_enabled?('repmgrd')
-    log "Detected an HA cluster."
-    node = RepmgrHandler::Node.new
-    if node.is_master?
-      log "Primary node detected."
-      @instance_type = :pg_primary
-      general_upgrade
-    else
-      log "Secondary node detected."
-      @instance_type = :pg_secondary
-      ha_secondary_upgrade(options)
-    end
   elsif @roles.include?('geo-primary')
     log 'Detected a GEO primary node'
     @instance_type = :geo_primary
@@ -334,20 +313,6 @@ def common_post_upgrade(disable_maintenance = true)
 
   maintenance_mode('disable') if disable_maintenance
   goodbye_message
-end
-
-def ha_secondary_upgrade(options)
-  promote_database
-  restart_database
-  if options[:skip_unregister]
-    log "Not attempting to unregister secondary node due to --skip-unregister flag"
-  else
-    log "Unregistering secondary node from cluster"
-    RepmgrHandler::Standby.unregister({})
-  end
-
-  common_pre_upgrade
-  common_post_upgrade
 end
 
 def general_upgrade

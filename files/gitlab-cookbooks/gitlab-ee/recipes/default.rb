@@ -34,7 +34,6 @@ end
 %w(
   consul
   pgbouncer
-  repmgr
   patroni
 ).each do |service|
   if node[service]['enable']

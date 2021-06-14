@@ -53,7 +53,6 @@ class LogrotateHelper < AccountHelper
       'redis-exporter' => { username: redis_user, group: redis_group },
       'registry' => { username: registry_user, group: registry_group },
       'remote-syslog' => { username: 'root', group: 'root' },
-      'repmgr' => { username: postgresql_user, group: postgresql_group },
       'sidekiq' => { username: gitlab_user, group: gitlab_group },
       'storage-check' => { username: gitlab_user, group: gitlab_group },
       'sentinel' => { username: redis_user, group: redis_group }

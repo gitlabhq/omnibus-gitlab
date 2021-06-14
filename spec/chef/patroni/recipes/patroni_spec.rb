@@ -24,41 +24,23 @@ RSpec.describe 'patroni cookbook' do
     end
   end
 
-  context 'when patroni_role is enabled' do
+  context 'when patroni_role is configured' do
     before do
       stub_gitlab_rb(roles: %w(patroni_role))
     end
 
-    it 'should be enabled while repmgr is disabled' do
-      expect(chef_run).to include_recipe('repmgr::disable')
+    it 'should be enabled' do
       expect(chef_run).to include_recipe('patroni::enable')
     end
   end
 
-  context 'when patroni_role and postgres_role is enabled' do
+  context 'when patroni_role and postgres_role are configured' do
     before do
       stub_gitlab_rb(roles: %w(postgres_role patroni_role))
     end
 
-    it 'should be enabled while repmgr is disabled' do
-      expect(chef_run).to include_recipe('repmgr::disable')
+    it 'should be enabled' do
       expect(chef_run).to include_recipe('patroni::enable')
-    end
-  end
-
-  context 'when repmgr is enabled' do
-    before do
-      stub_gitlab_rb(
-        roles: %w(postgres_role),
-        repmgr: {
-          enable: true
-        }
-      )
-    end
-
-    it 'should be disabled while repmgr is enabled' do
-      expect(chef_run).to include_recipe('repmgr::enable')
-      expect(chef_run).to include_recipe('patroni::disable')
     end
   end
 
@@ -151,13 +133,6 @@ RSpec.describe 'patroni cookbook' do
           connect_address: "#{Patroni.private_ipv4}:8008",
         },
       }
-    end
-
-    it 'should be enabled while repmgr is disabled' do
-      expect(chef_run).to include_recipe('repmgr::disable')
-      expect(chef_run).to include_recipe('patroni::enable')
-      expect(chef_run).to include_recipe('postgresql::enable')
-      expect(chef_run).to include_recipe('consul::enable')
     end
 
     it 'should enable patroni service and disable postgresql runit service' do
@@ -387,25 +362,10 @@ RSpec.describe 'patroni cookbook' do
       end
     end
 
-    context 'switching from repmgr' do
-      before do
-        allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(true)
-        allow_any_instance_of(PatroniHelper).to receive(:node_status).and_return('running')
-        allow_any_instance_of(PatroniHelper).to receive(:repmgr_data_present?).and_return(true)
-      end
-
-      it 'should not signal to node to restart postgresql but must disable its runit service' do
-        expect(chef_run).to enable_runit_service('patroni')
-        expect(chef_run).to disable_runit_service('postgresql')
-        expect(chef_run).not_to run_execute('signal to restart postgresql')
-      end
-    end
-
     context 'converting a standalone instance to a cluster member' do
       before do
         allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(true)
         allow_any_instance_of(PatroniHelper).to receive(:node_status).and_return('running')
-        allow_any_instance_of(PatroniHelper).to receive(:repmgr_data_present?).and_return(false)
       end
 
       it 'should signal to node to restart postgresql and disable its runit service' do

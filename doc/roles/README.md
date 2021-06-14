@@ -109,7 +109,7 @@ Documentation on the usage of the PostgreSQL Roles can be found in [Configuring 
 
 - **postgres_role** (`gitlab-ce`/`gitlab-ee`)
 
-  Enables the PostgreSQL, repmgr, and Consul services on the machine
+  Enables the PostgreSQL and Consul services on the machine
 
   *By default, enables no other services.*
 
