@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.12.4 (2021-06-14)
+
+### Fixed (1 change)
+
+- [Do not show Praefect deprecation if Praefect is disabled](gitlab-org/omnibus-gitlab@a4101169ca38b46bed71f0e4546d87bc38f88fbb) ([merge request](gitlab-org/omnibus-gitlab!5368))
+
+### Security (1 change)
+
+- [Update Mattermost to 5.34.4](gitlab-org/omnibus-gitlab@0a44c28f79b5cade9be27942178f2c2e6b4c9f48) ([merge request](gitlab-org/omnibus-gitlab!5361))
+
 ## 13.12.3 (2021-06-07)
 
 No changes.
