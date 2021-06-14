@@ -29,6 +29,12 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
+# Skip the gitaly dependency if already loaded by the project. This improves build-ordering,
+# due to how omnibus orders the components. Components that are dependencies of other components
+# get moved in front of ones that are only defined in the project. Without this gate, gitaly
+# ends up in front of components that change less frequently.
+# Omnibus Build order: https://github.com/chef/omnibus/blob/c872e61c30d2b3f88ead03bd1254ff96d37059a3/lib/omnibus/library.rb#L64
+dependency 'gitaly' unless project.dependencies.include?('gitaly')
 dependency 'libicu'
 dependency 'pkg-config-lite'
 
