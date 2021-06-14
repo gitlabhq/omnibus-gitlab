@@ -207,16 +207,16 @@ RSpec.describe Gitlab::Deprecations do
       config = { 'monitoring' => { 'test' => 'test-value' } }
       config['prometheus'] = Gitlab::Deprecations::NodeAttribute.new(config['monitoring'], "config['prometheus']", "config['monitoring']")
 
-      expect(LoggingHelper).to receive(:deprecation).with(/Accessing config\['prometheus'\] is deprecated/)
       expect(config['prometheus']['test']).to eq('test-value')
+      expect_logged_deprecation(/Accessing config\['prometheus'\] is deprecated/)
     end
 
     it 'Logs deprecations for passed variables and proxies to new Proc if provided' do
       config = { 'monitoring' => { 'test' => 'test-value' } }
       config['prometheus'] = Gitlab::Deprecations::NodeAttribute.new(proc { config['monitoring'] }, "config['prometheus']", "config['monitoring']")
 
-      expect(LoggingHelper).to receive(:deprecation).with(/Accessing config\['prometheus'\] is deprecated/)
       expect(config['prometheus']['test']).to eq('test-value')
+      expect_logged_deprecation(/Accessing config\['prometheus'\] is deprecated/)
     end
   end
 end

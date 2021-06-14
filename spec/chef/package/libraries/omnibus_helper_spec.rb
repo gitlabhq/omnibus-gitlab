@@ -151,8 +151,9 @@ RSpec.describe OmnibusHelper do
     it 'detects deprecated OS correctly' do
       allow_any_instance_of(Ohai::System).to receive(:data).and_return({ "platform" => "raspbian", "platform_version" => "8.0" })
 
-      expect(LoggingHelper).to receive(:deprecation).with(/Your OS, raspbian-8.0, will be deprecated soon/)
       OmnibusHelper.is_deprecated_os?
+
+      expect_logged_deprecation(/Your OS, raspbian-8.0, will be deprecated soon/)
     end
 
     it 'does not detects valid OS as deprecated' do
@@ -178,10 +179,9 @@ RSpec.describe OmnibusHelper do
       end
 
       it 'detects deprecated config correctly' do
-        expect(LoggingHelper).to receive(:deprecation)
-                                   .with(/Specifying Praefect storage nodes as an array is deprecated/)
-
         subject.is_deprecated_praefect_config?
+
+        expect_logged_deprecation(/Specifying Praefect storage nodes as an array is deprecated/)
       end
     end
 
@@ -260,9 +260,10 @@ RSpec.describe OmnibusHelper do
 
         it 'attempts to remove the file' do
           expect(FileUtils).to receive(:rm_f).with('/etc/gitlab/initial_root_password')
-          expect(LoggingHelper).to receive(:note).with('Found old initial root password file at /etc/gitlab/initial_root_password and deleted it.')
 
           described_class.cleanup_root_password_file
+
+          expect_logged_note('Found old initial root password file at /etc/gitlab/initial_root_password and deleted it.')
         end
       end
 
@@ -273,9 +274,10 @@ RSpec.describe OmnibusHelper do
 
         it 'does not attempt to remove the file' do
           expect(FileUtils).not_to receive(:rm_f).with('/etc/gitlab/initial_root_password')
-          expect(LoggingHelper).not_to receive(:note).with('Found old initial root password file at /etc/gitlab/initial_root_password and deleted it.')
 
           described_class.cleanup_root_password_file
+
+          expect_logged_note('Found old initial root password file at /etc/gitlab/initial_root_password and deleted it.')
         end
       end
     end
@@ -320,9 +322,9 @@ RSpec.describe OmnibusHelper do
             NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to reset the password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
           EOS
 
-          expect(LoggingHelper).to receive(:note).with(msg)
-
           described_class.new(converge_config.node).print_root_account_details
+
+          expect_logged_note(msg)
         end
       end
 
@@ -346,9 +348,9 @@ RSpec.describe OmnibusHelper do
             NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to reset the password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
           EOS
 
-          expect(LoggingHelper).to receive(:note).with(msg)
-
           described_class.new(converge_config.node).print_root_account_details
+
+          expect_logged_note(msg)
         end
       end
 
@@ -366,11 +368,11 @@ RSpec.describe OmnibusHelper do
 
           it 'writes initial root password to /etc/gitlab/initial_root_password' do
             subject = described_class.new(converge_config.node)
-
             expect(subject).to receive(:write_root_password)
-            expect(LoggingHelper).to receive(:note).with(%r{Password stored to /etc/gitlab/initial_root_password})
 
             subject.print_root_account_details
+
+            expect_logged_note(%r{Password stored to /etc/gitlab/initial_root_password})
           end
         end
 
@@ -386,9 +388,10 @@ RSpec.describe OmnibusHelper do
               subject = described_class.new(chef_run.node)
 
               expect(subject).to receive(:write_root_password)
-              expect(LoggingHelper).to receive(:note).with(%r{Password stored to /etc/gitlab/initial_root_password})
 
               subject.print_root_account_details
+
+              expect_logged_note(%r{Password stored to /etc/gitlab/initial_root_password})
             end
           end
 
@@ -451,9 +454,9 @@ RSpec.describe OmnibusHelper do
         allow(ENV).to receive(:[]).and_call_original
         allow(ENV).to receive(:[]).with('LC_ALL').and_return('en_SG ISO-8859-1')
 
-        expect(LoggingHelper).to receive(:warning).with("Environment variable LC_ALL specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
-
         described_class.check_locale
+
+        expect_logged_warning("Environment variable LC_ALL specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
       end
     end
 
@@ -466,9 +469,9 @@ RSpec.describe OmnibusHelper do
       it 'raises warning when LC_CTYPE is non-UTF-8' do
         allow(ENV).to receive(:[]).with('LC_CTYPE').and_return('en_SG ISO-8859-1')
 
-        expect(LoggingHelper).to receive(:warning).with("Environment variable LC_CTYPE specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
-
         described_class.check_locale
+
+        expect_logged_warning("Environment variable LC_CTYPE specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
       end
     end
 
@@ -482,9 +485,9 @@ RSpec.describe OmnibusHelper do
       it 'raises warning when LC_COLLATE is non-UTF-8' do
         allow(ENV).to receive(:[]).with('LC_COLLATE').and_return('en_SG ISO-8859-1')
 
-        expect(LoggingHelper).to receive(:warning).with("Environment variable LC_COLLATE specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
-
         described_class.check_locale
+
+        expect_logged_warning("Environment variable LC_COLLATE specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
       end
     end
 
@@ -503,9 +506,9 @@ RSpec.describe OmnibusHelper do
         it 'raises warning when LANG is non-UTF-8' do
           allow(ENV).to receive(:[]).with('LANG').and_return('en_SG ISO-8859-1')
 
-          expect(LoggingHelper).to receive(:warning).with("Environment variable LANG specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
-
           described_class.check_locale
+
+          expect_logged_warning("Environment variable LANG specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
         end
       end
 
@@ -518,9 +521,9 @@ RSpec.describe OmnibusHelper do
         it 'raises warning when LANG is non-UTF-8' do
           allow(ENV).to receive(:[]).with('LANG').and_return('en_SG ISO-8859-1')
 
-          expect(LoggingHelper).to receive(:warning).with("Environment variable LANG specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
-
           described_class.check_locale
+
+          expect_logged_warning("Environment variable LANG specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
         end
       end
 
@@ -531,9 +534,9 @@ RSpec.describe OmnibusHelper do
         end
 
         it 'does not raise a warning even if LANG is not UTF-8' do
-          expect(LoggingHelper).not_to receive(:warning).with("Environment variable LANG specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
-
           described_class.check_locale
+
+          expect_logged_warning("Environment variable LANG specifies a non-UTF-8 locale. GitLab requires UTF-8 encoding to function properly. Please check your locale settings.")
         end
       end
     end
