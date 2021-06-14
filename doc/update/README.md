@@ -277,7 +277,7 @@ If you meet all the requirements above, follow these instructions in order. Ther
 | [Geo](#geo-deployment)                                          | GitLab EE with Geo enabled                        |
 | [Multi-node / HA with Geo](#multi-node--ha-deployment-with-geo) | GitLab CE/EE on multiple nodes                    |
 
-Each type of deployment will require that you hot reload the `puma` (or `unicorn`) and `sidekiq` processes on all nodes running these
+Each type of deployment will require that you hot reload the `puma` and `sidekiq` processes on all nodes running these
 services after you've upgraded. The reason for this is that those processes each load the GitLab Rails application which reads and loads
 the database schema into memory when starting up. Each of these processes will need to be reloaded (or restarted in the case of `sidekiq`)
 to re-read any database changes that have been made by post-deployment migrations.
@@ -289,9 +289,7 @@ Before following these instructions, note the following **important** informatio
 - You can only upgrade 1 minor release at a time. So from 13.6 to 13.7, not to 13.8.
   If you attempt more than one minor release, the upgrade may fail.
 - On single-node Omnibus deployments, updates with no downtime are not possible when
-  using Puma because Puma always requires a complete restart (Puma replaced Unicorn as
-  the default in GitLab 13.0 unless
-  [specifically disabled](../settings/unicorn.md#enabling-unicorn)). This is because the
+  using Puma because Puma always requires a complete restart. This is because the
   [phased restart](https://github.com/puma/puma/blob/master/README.md#clustered-mode)
   feature of Puma does not work with the way it is configured in GitLab all-in-one
   packages (cluster-mode with app preloading).
@@ -344,7 +342,7 @@ Before following these instructions, note the following **important** informatio
    sudo gitlab-rake db:migrate
    ```
 
-1. Hot reload `puma` (or `unicorn`) and `sidekiq` services
+1. Hot reload `puma` and `sidekiq` services
 
    ```shell
    sudo gitlab-ctl hup puma
@@ -360,7 +358,7 @@ you've completed these steps.
 You can only upgrade 1 minor release at a time. So from 13.6 to 13.7, not to 13.8.
 If you attempt more than one minor release, the upgrade may fail.
 
-#### Use a load balancer in front of web (Puma/Unicorn) nodes
+#### Use a load balancer in front of web (Puma) nodes
 
 With Puma, single node zero-downtime updates are no longer possible. To achieve
 HA with zero-downtime updates, at least two nodes are required to be used with a
@@ -368,21 +366,21 @@ load balancer which distributes the connections properly across both nodes.
 
 The load balancer in front of the application nodes must be configured to check
 proper health check endpoints to check if the service is accepting traffic or
-not. For Puma and Unicorn, the `/-/readiness` endpoint should be used, while
+not. For Puma, the `/-/readiness` endpoint should be used, while
 `/readiness` endpoint can be used for Sidekiq and other services.
 
-Upgrades on web (Puma/Unicorn) nodes must be done in a rolling manner, one after
+Upgrades on web (Puma) nodes must be done in a rolling manner, one after
 another, ensuring at least one node is always up to serve traffic. This is
 required to ensure zero-downtime.
 
-Both Puma and Unicorn will enter a blackout period as part of the upgrade,
-during which they continue to accept connections but will mark their respective
-health check endpoints to be unhealthy. On seeing this, the load balancer should
-disconnect them gracefully.
+Puma will enter a blackout period as part of the upgrade, during which they
+continue to accept connections but will mark their respective health check
+endpoints to be unhealthy. On seeing this, the load balancer should disconnect
+them gracefully.
 
-Both Puma and Unicorn will restart only after completing all the currently
-processing requests. This ensures data and service integrity. Once they have
-restarted, the health check end points will be marked healthy.
+Puma will restart only after completing all the currently processing requests.
+This ensures data and service integrity. Once they have restarted, the health
+check end points will be marked healthy.
 
 The nodes must be updated in the following order to update an HA instance using
 load balancer to latest GitLab version.
@@ -424,7 +422,7 @@ load balancer to latest GitLab version.
        sudo gitlab-ctl restart sidekiq
        ```
 
-1. Complete the following steps on the other Puma/Unicorn/Sidekiq nodes, one
+1. Complete the following steps on the other Puma/Sidekiq nodes, one
    after another. Always ensure at least one of such nodes is up and running,
    and connected to the load balancer before proceeding to the next node.
 
@@ -613,9 +611,9 @@ node throughout the process.
   sudo gitlab-rake db:migrate
   ```
 
-**For nodes that run Puma/Unicorn or Sidekiq**
+**For nodes that run Puma or Sidekiq**
 
-- Hot reload `puma` (or `unicorn`) and `sidekiq` services
+- Hot reload `puma` and `sidekiq` services
 
   ```shell
   sudo gitlab-ctl hup puma
@@ -763,7 +761,7 @@ Log in to your **primary** node, executing the following:
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-1. Hot reload `puma` (or `unicorn`) and `sidekiq` services
+1. Hot reload `puma` and `sidekiq` services
 
    ```shell
    sudo gitlab-ctl hup puma
@@ -796,7 +794,7 @@ On each **secondary** node, executing the following:
    sudo SKIP_POST_DEPLOYMENT_MIGRATIONS=true gitlab-ctl reconfigure
    ```
 
-1. Hot reload `puma` (or `unicorn`), `sidekiq` and restart `geo-logcursor` services
+1. Hot reload `puma`, `sidekiq` and restart `geo-logcursor` services
 
    ```shell
    sudo gitlab-ctl hup puma
@@ -852,10 +850,10 @@ You now need to choose:
 - One instance for use as the **primary** "deploy node" on the Geo **primary** multi-node deployment.
 - One instance for use as the **secondary** "deploy node" on each Geo **secondary** multi-node deployment.
 
-Deploy nodes must be configured to be running Puma/Unicorn or Sidekiq or the `geo-logcursor` daemon. In order
+Deploy nodes must be configured to be running Puma or Sidekiq or the `geo-logcursor` daemon. In order
 to avoid any downtime, they must not be in use during the update:
 
-- If running Puma/Unicorn, remove the deploy node from the load balancer.
+- If running Puma remove the deploy node from the load balancer.
 - If running Sidekiq, ensure the deploy node is not processing jobs:
 
   ```shell
@@ -868,7 +866,7 @@ to avoid any downtime, they must not be in use during the update:
   sudo gitlab-ctl stop geo-logcursor
   ```
 
-For zero-downtime, Puma/Unicorn, Sidekiq, and `geo-logcursor` must be running on other nodes during the update.
+For zero-downtime, Puma, Sidekiq, and `geo-logcursor` must be running on other nodes during the update.
 
 #### Step 2: Update the Geo primary multi-node deployment
 
@@ -976,9 +974,9 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
-**For all primary nodes that run Puma/Unicorn or Sidekiq _including_ the primary "deploy node"**
+**For all primary nodes that run Puma or Sidekiq _including_ the primary "deploy node"**
 
-Hot reload `puma` (or `unicorn`) and `sidekiq` services:
+Hot reload `puma` and `sidekiq` services:
 
 ```shell
 sudo gitlab-ctl hup puma
@@ -1078,9 +1076,9 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    sudo gitlab-ctl reconfigure
    ```
 
-**For all secondary nodes that run Puma/Unicorn, Sidekiq, or the `geo-logcursor` daemon _including_ the secondary "deploy node"**
+**For all secondary nodes that run Puma, Sidekiq, or the `geo-logcursor` daemon _including_ the secondary "deploy node"**
 
-Hot reload `puma` (or `unicorn`), `sidekiq` and ``geo-logcursor`` services:
+Hot reload `puma`, `sidekiq` and ``geo-logcursor`` services:
 
 ```shell
 sudo gitlab-ctl hup puma
@@ -1172,9 +1170,6 @@ Steps:
    ```shell
    # If running Puma
    sudo gitlab-ctl stop puma
-
-    # If running Unicorn
-   sudo gitlab-ctl stop unicorn
 
    # Stop sidekiq
    sudo gitlab-ctl stop sidekiq

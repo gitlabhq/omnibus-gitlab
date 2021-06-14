@@ -24,5 +24,4 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [Redis](redis.md)
 - [SMTP](smtp.md)
 - [SSL](ssl.md)
-- [Unicorn](unicorn.md)
 - [Image scaling](image_scaling.md)

@@ -52,7 +52,6 @@ to work best with the available resources. Check out the [documentation](setting
 - [NGINX](settings/nginx.md)
 - [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap.html)
 - [Puma](settings/puma.md)
-- [Unicorn](settings/unicorn.md)
 - [ActionCable](settings/actioncable.md)
 - [Redis](settings/redis.md)
 - [Logs](settings/logs.md)

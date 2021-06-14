@@ -8,7 +8,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 NOTE:
 Starting with GitLab 13.0, Puma is the default web server and Unicorn has been
-disabled by default.
+disabled by default. In GitLab 14.0, Unicorn was removed from the package and
+only Puma is available.
 
 ## Configuring Puma settings
 

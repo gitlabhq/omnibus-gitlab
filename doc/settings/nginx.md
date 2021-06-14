@@ -841,7 +841,7 @@ sudo usermod -aG gitlab-www www-data
 
 ## Templates
 
-Other than the Passenger configuration in place of Unicorn and the lack of HTTPS
+Other than the Passenger configuration in place of Puma and the lack of HTTPS
 (although this could be enabled) these files are mostly identical to:
 
 - [Bundled GitLab NGINX configuration](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb)

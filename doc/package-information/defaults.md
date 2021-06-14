@@ -30,8 +30,6 @@ by default:
 | <a name="pgbouncer-exporter"></a>  PgBouncer exporter  | No            | Port             | X           | 9188                                   |
 | <a name="gitlab-exporter"></a>     GitLab Exporter     | Yes           | Port             | X           | 9168                                   |
 | <a name="sidekiq-exporter"></a>    Sidekiq exporter    | Yes           | Port             | X           | 8082                                   |
-| <a name="unicorn"></a>             Unicorn             | No            | Socket           | Port (8080) | X                                      |
-| <a name="unicorn-exporter"></a>    Unicorn exporter    | No            | Port             | X           | 8083                                   |
 | <a name="puma-exporter"></a>       Puma exporter       | No            | Port             | X           | 8083                                   |
 | <a name="geo-postgresql"></a>      Geo PostgreSQL      | No            | Socket           | Port (5431) | X                                      |
 | <a name="redis-sentinel"></a>      Redis Sentinel      | No            | Port             | X           | 26379                                  |
