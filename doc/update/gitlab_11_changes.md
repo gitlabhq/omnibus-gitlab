@@ -66,6 +66,15 @@ been removed:
 
 Rack Attack is disabled by default. To continue using Rack Attack, you must [enable it manually](https://docs.gitlab.com/ee/security/rack_attack.html#settings).
 
+### 11.3
+
+1. A [security patch](https://about.gitlab.com/releases/2018/11/28/security-release-gitlab-11-dot-5-dot-1-released/#improper-enforcement-of-token-scope)
+   removed the ability to get files from a repository by passing
+   a `private_token` URL parameter.
+   Instead, a redirect to `/users/sign_in` is now served.
+   Update any CI scripts, custom automations, etc. to use the
+   [repository files API](https://docs.gitlab.com/ee/api/repository_files.html#get-raw-file-from-repository).
+
 ### 11.4
 
 1. Version of bundled Redis has been upgraded to 3.2.12. This is a critical
@@ -107,6 +116,21 @@ Rack Attack is disabled by default. To continue using Rack Attack, you must [ena
    Users still using those versions will be presented with a deprecation warning
    during reconfigure. With GitLab 12.0 Prometheus will be upgraded to 2.x automatically,
    Prometheus 1.0 data will not be migrated.
+1. A [security patch](https://about.gitlab.com/releases/2018/11/28/security-release-gitlab-11-dot-5-dot-1-released/#improper-enforcement-of-token-scope)
+   removed the ability to get files from a repository by passing
+   a `private_token` URL parameter.
+   Instead, a redirect to `/users/sign_in` is now served.
+   Update any CI scripts, custom automations, etc. to use the
+   [repository files API](https://docs.gitlab.com/ee/api/repository_files.html#get-raw-file-from-repository).
+
+### 11.5
+
+1. A [security patch](https://about.gitlab.com/releases/2018/11/28/security-release-gitlab-11-dot-5-dot-1-released/#improper-enforcement-of-token-scope)
+   removed the ability to get files from a repository by passing
+   a `private_token` URL parameter.
+   Instead, a redirect to `/users/sign_in` is now served.
+   Update any CI scripts, custom automations, etc. to use the
+   [repository files API](https://docs.gitlab.com/ee/api/repository_files.html#get-raw-file-from-repository).
 
 ### 11.6
 
