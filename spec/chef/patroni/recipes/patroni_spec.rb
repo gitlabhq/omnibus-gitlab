@@ -570,4 +570,24 @@ RSpec.describe 'patroni cookbook' do
       end
     end
   end
+
+  context 'when patroni is enabled but consul is not' do
+    let(:chef_run) do
+      converge_config('gitlab-ee::default', is_ee: true)
+    end
+
+    before do
+      stub_gitlab_rb(
+        patroni: {
+          enable: true
+        }
+      )
+    end
+
+    it 'expects a warning to be printed' do
+      chef_run
+
+      expect_logged_warning(/Patroni is enabled but Consul seems to be disabled/)
+    end
+  end
 end

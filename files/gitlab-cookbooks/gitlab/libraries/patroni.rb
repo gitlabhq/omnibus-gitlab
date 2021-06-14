@@ -8,6 +8,7 @@ module Patroni
       Gitlab['patroni']['connect_address'] ||= private_ipv4 || Gitlab['node']['ipaddress']
       Gitlab['patroni']['connect_port'] ||= Gitlab['patroni']['port'] || Gitlab['node']['patroni']['port']
 
+      check_consul_is_enabled
       parse_postgresql_overrides
       auto_detect_wal_log_hint
     end
@@ -30,6 +31,12 @@ module Patroni
       wal_keep_size
       checkpoint_timeout
     ).freeze
+
+    def check_consul_is_enabled
+      return if Services.enabled?('consul')
+
+      LoggingHelper.warning('Patroni is enabled but Consul seems to be disabled. Patroni requires Consul to be enabled.')
+    end
 
     def postgresql_setting(key)
       Gitlab['postgresql'][key] || Gitlab['node']['patroni']['postgresql']&.[](key) || Gitlab['node']['postgresql'][key]
