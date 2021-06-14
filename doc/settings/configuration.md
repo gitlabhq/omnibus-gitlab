@@ -101,7 +101,7 @@ recommend 4GB RAM, and 4 or 8 CPU cores.
 Follow the steps below to enable relative URL in GitLab:
 
 1. (Optional) If you run short on resources, you can temporarily free up some
-   memory by shutting down Puma (or Unicorn) and Sidekiq with the following
+   memory by shutting down Puma and Sidekiq with the following
    command:
 
    ```shell
@@ -135,16 +135,7 @@ If you stumble upon any issues, see the [troubleshooting section](#relative-url-
 ### Disable relative URL in GitLab
 
 To disable the relative URL, follow the same steps as above and set up the
-`external_url` to a one that doesn't contain a relative path. If you are using
-Unicorn, you may need to explicitly restart it after the reconfigure task is
-done:
-
-```shell
-sudo gitlab-ctl restart unicorn
-```
-
-Puma already gets a full restart during reconfigure, so an explicit one is not
-needed.
+`external_url` to a one that doesn't contain a relative path.
 
 If you stumble upon any issues, see the [troubleshooting section](#relative-url-troubleshooting).
 
@@ -768,10 +759,6 @@ See [OmniAuth documentation](https://docs.gitlab.com/ee/integration/omniauth.htm
 ## Adjusting Puma settings
 
 See [Puma documentation](puma.md)
-
-## Adjusting Unicorn settings
-
-See [Unicorn documentation](unicorn.md).
 
 ## Setting the NGINX listen address or addresses
 

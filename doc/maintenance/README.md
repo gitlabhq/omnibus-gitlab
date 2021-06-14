@@ -62,36 +62,22 @@ follows:
 sudo gitlab-ctl hup puma
 ```
 
-If you are using Unicorn, it supports zero-downtime reloads. These can be
-triggered as follows:
+Note that you cannot use a Puma reload to update the Ruby runtime.
 
-```shell
-sudo gitlab-ctl hup unicorn
-```
+Puma has the following signals to control application behavior:
 
-Note that you cannot use a Unicorn/Puma reload to update the Ruby runtime.
+| Signal   | Puma                                                                |
+| -------- | ------                                                              |
+| `HUP`    | reopen log files defined, or stop the process to force restart      |
+| `INT`    | gracefully stops requests processing                                |
+| `USR1`   | restart workers in phases, a rolling restart, without config reload |
+| `USR2`   | restart workers and reload config                                   |
+| `QUIT`   | exit the main process                                               |
 
-Puma and Unicorn have different signals to control application behavior:
-
-| Signal | Unicorn | Puma |
-|--------|---------|------|
-| `HUP` | reloads config file and gracefully restart all workers | reopen log files defined, or stop the process to force restart |
-| `INT` | stops request processing immediately | gracefully stops requests processing |
-| `USR1` | reopen all logs owned by the master and all workers | restart workers in phases, a rolling restart, without config reload |
-| `USR2` | reexecute the running binary | restart workers and reload config |
-| `QUIT` | exit the main process | exit the main process |
-
-The behavior of graceful restart (`gitlab-ctl hup unicorn` and `gitlab-ctl hup puma`) is defined as follow:
-
-1. `Unicorn`: a sequence of `SIGUSR2` and `SIGQUIT` signals are sent to Unicorn,
-1. `Puma`: a sequence of `SIGINT` and `SIGTERM` (if process does not restart) signals are sent to Puma.
-
-There are structural differences in handling of graceful restart (`gitlab-ctl hup`) between `Unicorn` and `Puma`:
-
-1. `Unicorn` starts a new process, but continues processing requests
-   on old master, it stops accepting connections once `SIGQUIT` is received,
-1. `Puma` stops accepting new connections as soon as `SIGINT` is received.
-   It finishes all running requests. Then `runit` restarts the service.
+For Puma, `gitlab-ctl hup puma` will send a sequence of `SIGINT` and `SIGTERM`
+(if process does not restart) signals. Puma stops accepting new connections as
+soon as `SIGINT` is received. It finishes all running requests. Then `runit`
+restarts the service.
 
 ## Invoking Rake tasks
 

@@ -68,17 +68,8 @@ NOTE:
 During a hard restart, your GitLab instance will be down until the
 services are back up.
 
-For configurations where Puma is enabled, only a reconfigure is necessary since
-reconfigure will issue a full restart:
+Perform a reconfigure:
 
 ```shell
 sudo gitlab-ctl reconfigure
-```
-
-For configurations where Unicorn is enabled, after editing the `gitlab.rb` file run
-the following commands:
-
-```shell
-sudo gitlab-ctl reconfigure
-sudo gitlab-ctl restart
 ```

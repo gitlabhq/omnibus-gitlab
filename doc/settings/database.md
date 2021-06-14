@@ -1183,7 +1183,7 @@ replication user's password.
    `pg_hba.conf` file. This is needed because `replicate-geo-database`
    replicates the primary's file to the secondary.
 
-1. Restart `puma` (or `unicorn`), `sidekiq`, and `geo-logcursor`.
+1. Restart `puma`, `sidekiq`, and `geo-logcursor`.
 
    ```shell
    sudo gitlab-ctl hup puma

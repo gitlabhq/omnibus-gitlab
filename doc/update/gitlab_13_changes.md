@@ -15,9 +15,9 @@ When upgrading to a new major version, remember to first [check for background m
 
 Starting with GitLab 13.0, Puma will be the default web server used in
 `omnibus-gitlab` based installations. This will be the case for both fresh
-installations as well as upgrades, unless [users have explicitly disabled Puma
-and enabled Unicorn](../settings/unicorn.md#enabling-unicorn). Users who have
-Unicorn configuration are recommended to refer to [the docs on how to convert them to Puma ones](../settings/puma.md#converting-unicorn-settings-to-puma).
+installations as well as upgrades, unless users have explicitly disabled Puma
+and enabled Unicorn. Users who have Unicorn configuration are recommended to
+refer to [the docs on how to convert them to Puma ones](../settings/puma.md#converting-unicorn-settings-to-puma).
 
 ### PostgreSQL 11 becoming minimum required version
 
