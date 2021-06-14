@@ -14,7 +14,7 @@ module GitlabCtl
           raise 'PostgreSQL service name is not defined' if postgresql_service_name.nil? || postgresql_service_name.empty?
 
           Resolv::DNS.open(nameserver_port: [['127.0.0.1', 8600]]) do |dns|
-            dns.getresources("master.#{postgresql_service_name}.service", Resolv::DNS::Resource::IN::SRV).map do |srv|
+            dns.getresources("master.#{postgresql_service_name}.service.consul", Resolv::DNS::Resource::IN::SRV).map do |srv|
               "#{dns.getaddress(srv.target)}:#{srv.port}"
             end
           end
