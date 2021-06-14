@@ -585,7 +585,9 @@ RSpec.describe 'patroni cookbook' do
     end
 
     it 'expects a warning to be printed' do
-      expect { chef_run }.to output(/Patroni is enabled but Consul seems to be disabled/).to_stderr
+      chef_run
+
+      expect_logged_warning(/Patroni is enabled but Consul seems to be disabled/)
     end
   end
 end

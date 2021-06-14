@@ -35,7 +35,7 @@ module Patroni
     def check_consul_is_enabled
       return if Services.enabled?('consul')
 
-      warn('Patroni is enabled but Consul seems to be disabled. Patroni requires Consul to be enabled.')
+      LoggingHelper.warning('Patroni is enabled but Consul seems to be disabled. Patroni requires Consul to be enabled.')
     end
 
     def postgresql_setting(key)
