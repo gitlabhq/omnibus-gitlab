@@ -52,7 +52,6 @@ module Services
     service 'geo_postgresql',     groups: %w(geo postgres)
     service 'pgbouncer',          groups: %w(postgres pgbouncer_role)
     service 'pgbouncer_exporter', groups: %w(pgbouncer_role monitoring)
-    service 'repmgrd',            groups: %w(postgres)
     service 'patroni',            groups: %w(postgres patroni_role)
     service 'consul',             groups: %w(consul_role ha pgbouncer_role postgres_role patroni_role)
   end

@@ -143,7 +143,7 @@ end
 def run_pg_upgrade
   return unless attempt_auto_pg_upgrade?
 
-  if postgresql_upgrade_disabled? || geo_detected? || repmgr_detected? || patroni_detected?
+  if postgresql_upgrade_disabled? || geo_detected? || patroni_detected?
     log ''
     log '==='
     log 'Skipping the check for newer PostgreSQL version and automatic upgrade.'
@@ -342,10 +342,6 @@ def geo_detected?
   (GitlabCtl::Util.roles(base_path) & %w[geo-primary geo-secondary]).any? || service_enabled?('geo-postgresql')
 end
 
-def repmgr_detected?
-  service_enabled?('repmgrd')
-end
-
 def patroni_detected?
   service_enabled?('patroni')
 end
@@ -371,8 +367,6 @@ end
 def pg_upgrade_doc_url
   if geo_detected?
     'https://docs.gitlab.com/omnibus/settings/database.html#upgrading-a-geo-instance'
-  elsif repmgr_detected?
-    'https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni'
   elsif patroni_detected?
     'https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#upgrading-postgresql-major-version-in-a-patroni-cluster'
   else

@@ -175,6 +175,7 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
         geo-postgresql
         gitlab-pages
         geo-logcursor
+        patroni
       ).map { |svc| stub_should_notify?(svc, true) }
     end
 

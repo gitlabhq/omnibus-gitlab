@@ -20,9 +20,6 @@ ATTRIBUTE_FILES = [
   'files/gitlab-cookbooks/package/attributes/default.rb',
   'files/gitlab-cookbooks/package/libraries/',
   'files/gitlab-cookbooks/registry/attributes/default.rb',
-  'files/gitlab-cookbooks/repmgr/attributes/default.rb',
-  'files/gitlab-cookbooks/repmgr/attributes/external.rb',
-  'files/gitlab-cookbooks/repmgr/libraries/',
   'files/gitlab-cookbooks/runit/attributes/external.rb'
 ].freeze
 

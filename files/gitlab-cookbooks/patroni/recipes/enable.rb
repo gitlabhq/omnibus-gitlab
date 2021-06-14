@@ -121,7 +121,6 @@ end
 
 execute 'signal to restart postgresql' do
   command "#{patroni_helper.ctl_command} -c #{patroni_config_file} restart --force #{node['patroni']['scope']} #{node['patroni']['name']}"
-  not_if { patroni_helper.repmgr_data_present? }
   only_if { omnibus_helper.service_dir_enabled?('postgresql') && patroni_helper.node_status == 'running' }
   notifies :run, 'ruby_block[wait for node bootstrap to complete]', :before
 end
