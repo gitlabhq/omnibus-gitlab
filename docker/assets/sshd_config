@@ -23,5 +23,5 @@ UsePAM no
 # Disabling use DNS in ssh since it tends to slow connecting
 UseDNS no
 
-# Enable the use of Git protcol v2
+# Enable the use of Git protocol v2
 AcceptEnv GIT_PROTOCOL
