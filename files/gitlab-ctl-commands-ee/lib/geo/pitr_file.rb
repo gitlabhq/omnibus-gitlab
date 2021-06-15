@@ -37,7 +37,7 @@ module Geo
       elsif File.exist?(filepath)
         File.delete(filepath)
       end
-    rescue Errno::ENOENT, ConsulError
+    rescue Errno::ENOENT, ConsulHandler::ConsulError
       raise PitrFileError, "Unable to delete PITR"
     end
 
@@ -47,7 +47,7 @@ module Geo
       else
         File.read(filepath)
       end
-    rescue Errno::ENOENT, ConsulError
+    rescue Errno::ENOENT, ConsulHandler::ConsulError
       raise PitrFileError, "Unable to fetch PITR"
     end
   end
