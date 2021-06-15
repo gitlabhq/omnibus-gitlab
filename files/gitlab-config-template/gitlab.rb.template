@@ -2154,9 +2154,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  'WRAPPER_JSON_LOGGING' => true
 # }
 # praefect['wrapper_path'] = "/opt/gitlab/embedded/bin/gitaly-wrapper"
-# praefect['virtual_storage_name'] = "praefect"
-# praefect['failover_enabled'] = false
-# praefect['failover_election_strategy'] = 'sql'
+# praefect['failover_enabled'] = true
 # praefect['auth_token'] = ""
 # praefect['auth_transitioning'] = false
 # praefect['listen_addr'] = "localhost:2305"
