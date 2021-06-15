@@ -43,6 +43,40 @@ For a complete list of settings, see the [README](../README.md#configuring) file
   Set up the Prometheus monitoring included in the Omnibus GitLab package.
 - [GitLab High Availability Roles](../roles/README.md).
 
+### Set up the initial password
+
+> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5331) in Omnibus GitLab 14.0.
+
+By default, Omnibus GitLab automatically generates a password for the
+initial administrator user account (`root`) and stores it to
+`/etc/gitlab/initial_root_password` for at least 24 hours. For security reasons,
+after 24 hours, this file is automatically removed by the first `gitlab-ctl reconfigure`.
+
+NOTE:
+If GitLab can't detect a valid hostname for the server during the
+installation, a reconfigure will not run.
+
+To provide a custom initial root password, you have two options:
+
+- Pass the `GITLAB_ROOT_PASSWORD` environment variable to the
+  [installation command](https://about.gitlab.com/install/) provided
+  the hostname for the server is set up correctly.
+  If during the installation GitLab doesn't automatically perform a
+  reconfigure, you have to pass the `GITLAB_ROOT_PASSWORD` variable to the
+  first `gitlab-ctl reconfigure` run.
+- Before the first reconfigure, edit `/etc/gitlab/gitlab.rb` (create it if it
+  doesn't exist) and set:
+
+  ```ruby
+  gitlab_rails['initial_root_password'] = '<my_strong_password>'
+  ```
+
+Both of these methods apply only during the initial database seeding, which happens
+during the first reconfigure. For subsequent reconfigure runs, neither of
+the aforementioned methods will have any effect. In that case, use the random
+password in `/etc/gitlab/initial_root_password` to log in, or
+[reset the root password](https://docs.gitlab.com/ee/security/reset_user_password.html).
+
 ## Using Docker image
 
 You can also use the Docker images provided by GitLab to install and configure a GitLab instance.
