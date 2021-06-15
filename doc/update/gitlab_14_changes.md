@@ -48,3 +48,10 @@ The Consul version has been updated from `1.6.10` to `1.9.6` for Geo and multi-n
 that Consul nodes be upgraded and restarted one at a time.
 
 See our [Consul upgrade instructions](https://docs.gitlab.com/ee/administration/consul.html#upgrade-the-consul-nodes).
+
+### Automatically generating an initial root password
+
+Starting with GitLab 14.0, GitLab automatically generates a password for initial
+administrator user (`root`) and stores this value to
+`/etc/gitlab/initial_root_password`. For details, see the
+[documentation on initial login](../installation/index.md#set-up-the-initial-password).
