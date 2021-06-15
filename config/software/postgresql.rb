@@ -16,7 +16,7 @@
 #
 
 name 'postgresql'
-default_version '11.11'
+default_version '12.6'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -30,11 +30,12 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '11.11' do
-  source sha256: '40607b7fa15b7d63f5075a7277daf7b3412486aa5db3aedffdb7768b9298186c'
+version '12.6' do
+  source sha256: 'df7dd98d5ccaf1f693c7e1d0d084e9fed7017ee248bba5be0167c42ad2d70a09'
 end
 
-major_version = '11'
+major_version = '12'
+libpq = 'libpq.so.5'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
 
@@ -51,14 +52,21 @@ build do
           " --prefix=#{prefix}" \
           ' --with-libedit-preferred' \
           ' --with-openssl' \
-          ' --with-ossp-uuid', env: env
+          ' --with-uuid=ossp', env: env
 
   make "world -j #{workers}", env: env
   make 'install-world', env: env
+
+  link "#{prefix}/lib/#{libpq}", "#{install_dir}/embedded/lib/#{libpq}"
+
+  block 'link bin files' do
+    Dir.glob("#{prefix}/bin/*").each do |bin_file|
+      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
+    end
+  end
 end
 
 # exclude headers and static libraries from package
-project.exclude "embedded/bin/pg_config"
 project.exclude "embedded/postgresql/#{major_version}/include"
 project.exclude "embedded/postgresql/#{major_version}/lib/*.a"
 project.exclude "embedded/postgresql/#{major_version}/lib/pgxs"

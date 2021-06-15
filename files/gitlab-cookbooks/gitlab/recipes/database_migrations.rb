@@ -37,8 +37,8 @@ ruby_block "check remote PG version" do
     remote_db_version = GitlabRailsEnvHelper.db_version
     if remote_db_version && remote_db_version.to_f < 12
       LoggingHelper.warning(%q(
-        Note that PostgreSQL 12 will become the minimum required PostgreSQL version in GitLab 14.0 (May 2021).
-        Support for PostgreSQL 11 will be removed in GitLab 14.0.
+        Note that PostgreSQL 12 is the minimum required PostgreSQL version in GitLab 14.0.
+        Support for PostgreSQL 11 has been removed.
         To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server
       ))
     end

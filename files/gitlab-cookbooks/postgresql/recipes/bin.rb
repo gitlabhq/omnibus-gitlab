@@ -37,7 +37,7 @@ end
 ruby_block 'check_postgresql_version_is_deprecated' do
   block do
     LoggingHelper.warning(%q(
-      Note that PostgreSQL 12 will become the minimum required PostgreSQL version in GitLab 14.0 (May 2021).
+      Note that PostgreSQL 12 is the minimum required PostgreSQL version in GitLab 14.0.
       To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server
     ))
   end
