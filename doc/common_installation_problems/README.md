@@ -289,6 +289,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ```shell
 $ gitlab-ctl reconfigure
+
 /opt/gitlab/embedded/bin/ruby: /lib64/libc.so.6: version `GLIBC_2.14' not found (required by /opt/gitlab/embedded/lib/libruby.so.2.1)
 /opt/gitlab/embedded/bin/ruby: /lib64/libc.so.6: version `GLIBC_2.17' not found (required by /opt/gitlab/embedded/lib/libruby.so.2.1)
 ```
@@ -625,14 +626,15 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ```shell
 $ gitlab-ctl reconfigure
-    ================================================================================
-    Error executing action `run` on resource 'ruby_block[directory resource: /gitlab-data/git-data]'
-    ================================================================================
 
-    Errno::EPERM
-    ------------
-    'root' cannot chown /gitlab-data/git-data. If using NFS mounts you will need to re-export them in 'no_root_squash' mode and try again.
-    Operation not permitted @ chown_internal - /gitlab-data/git-data
+================================================================================
+Error executing action `run` on resource 'ruby_block[directory resource: /gitlab-data/git-data]'
+================================================================================
+
+Errno::EPERM
+------------
+'root' cannot chown /gitlab-data/git-data. If using NFS mounts you will need to re-export them in 'no_root_squash' mode and try again.
+Operation not permitted @ chown_internal - /gitlab-data/git-data
 ```
 
 This can happen if you have directories mounted using NFS and configured in `root_squash`

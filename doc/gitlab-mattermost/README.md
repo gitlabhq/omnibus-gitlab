@@ -202,6 +202,7 @@ If successful, you can now run any Mattermost CLI command with your new shell al
 
 ```shell
 $ mattermost-cli version
+
 [sudo] password for username:
 {"level":"info","ts":1569614421.9058893,"caller":"utils/i18n.go:83","msg":"Loaded system translations for 'en' from '/opt/gitlab/embedded/service/mattermost/i18n/en.json'"}
 {"level":"info","ts":1569614421.9062793,"caller":"app/server_app_adapters.go:58","msg":"Server is initializing..."}

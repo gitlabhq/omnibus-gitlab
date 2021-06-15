@@ -311,6 +311,7 @@ To test if `c_rehash` is not symlinking the certificate due to a missing perl in
 
 ```shell
 $ /opt/gitlab/embedded/bin/c_rehash /etc/gitlab/trusted-certs
+
 bash: /opt/gitlab/embedded/bin/c_rehash: /usr/bin/perl: bad interpreter: No such file or directory
 ```
 
@@ -399,6 +400,7 @@ tool. For example, let's suppose we add `customcacert.pem` to
 
 ```shell
 $ sudo ls -al /opt/gitlab/embedded/ssl/certs
+
 total 272
 drwxr-xr-x 2 root root   4096 Jul 12 04:19 .
 drwxr-xr-x 4 root root   4096 Jul  6 04:00 ..
