@@ -117,7 +117,7 @@ unmigrated_data_check() {
     notify
     notify "Upgrade failed. Could not check for unmigrated data on legacy storage."
     notify
-    notify $output
+    notify "${output}"
     unmigrated_data_check_failed
   fi
 
