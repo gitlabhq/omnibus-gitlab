@@ -867,10 +867,6 @@ SLES-12.5-staging:
   <<: *dev-ee-tag-only-except-auto-deploy
 
 ### Package releases
-Ubuntu-16.04-release:
-  needs:
-    - Ubuntu-16.04
-  <<: *production_release
 Ubuntu-18.04-release:
   needs:
     - Ubuntu-18.04
