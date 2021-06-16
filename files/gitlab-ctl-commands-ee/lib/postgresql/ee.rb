@@ -15,14 +15,16 @@ module GitlabCtl
 
           result = []
           Resolv::DNS.open(nameserver_port: [['127.0.0.1', 8600]]) do |dns|
-            result = dns.getresources("master.#{postgresql_service_name}.service.consul", Resolv::DNS::Resource::IN::SRV).map do |srv|
-              "#{dns.getaddress(srv.target)}:#{srv.port}"
+            ['master', 'standby-leader'].each do |postgresql_primary_service_name|
+              result = dns.getresources("#{postgresql_primary_service_name}.#{postgresql_service_name}.service.consul", Resolv::DNS::Resource::IN::SRV).map do |srv|
+                "#{dns.getaddress(srv.target)}:#{srv.port}"
+              end
+
+              return result unless result.empty?
             end
           end
 
-          raise 'PostgreSQL Primary could not be found via Consul DNS' if result.empty?
-
-          result
+          raise 'PostgreSQL Primary could not be found via Consul DNS'
         end
       end
     end
