@@ -41,10 +41,10 @@ curl "https://gitlab-org.gitlab.io/omnibus-gitlab/gitlab_new_gpg.key" -o /tmp/om
 
 # Import the key
 ## Debian/Ubuntu/Raspbian
-$ sudo apt-key add /tmp/omnibus_gitlab_gpg.key
+sudo apt-key add /tmp/omnibus_gitlab_gpg.key
 
 # CentOS/OpenSUSE/SLES
-$ sudo rpm --import /tmp/omnibus_gitlab_gpg.key
+sudo rpm --import /tmp/omnibus_gitlab_gpg.key
 ```
 
 #### Fetching new keys after 2020-04-06
@@ -61,10 +61,10 @@ curl "https://packages.gitlab.com/gpg.key" -o /tmp/omnibus_gitlab_gpg.key
 
 # Import the key
 ## Debian/Ubuntu/Raspbian
-$ sudo apt-key add /tmp/omnibus_gitlab_gpg.key
+sudo apt-key add /tmp/omnibus_gitlab_gpg.key
 
 # CentOS/OpenSUSE/SLES
-$ sudo rpm --import /tmp/omnibus_gitlab_gpg.key
+sudo rpm --import /tmp/omnibus_gitlab_gpg.key
 ```
 
 ### Previous keys
@@ -205,6 +205,7 @@ The output of the final command should appear as such:
 
 ```shell
 $ ar p gitlab-xxx.deb debian-binary control.tar.gz data.tar.gz | gpg --verify _gpgorigin -
+
 gpg: Signature made Tue Aug 01 22:21:11 2017 UTC
 gpg:                using RSA key DBEF89774DDB9EB37D9FC3A03CFCF9BAF27EAB47
 gpg:                issuer "support@gitlab.com"

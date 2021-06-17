@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 MAINTAINER GitLab Inc. <support@gitlab.com>
 
-SHELL ["/bin/sh", "-c"],
+SHELL ["/bin/sh", "-c"]
 
 # Default to supporting utf-8
 ENV LANG=C.UTF-8
@@ -9,14 +9,22 @@ ENV LANG=C.UTF-8
 # Install required packages
 RUN apt-get update -q \
     && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
+      busybox \
       ca-certificates \
       openssh-server \
-      wget \
-      vim \
       tzdata \
-      nano \
-      less \
+      wget \
     && rm -rf /var/lib/apt/lists/*
+
+# Use BusyBox
+ENV EDITOR /bin/vi
+RUN busybox --install \
+    && { \
+        echo '#!/bin/sh'; \
+        echo '/bin/vi "$@"'; \
+    } > /usr/local/bin/busybox-editor \
+    && chmod +x /usr/local/bin/busybox-editor \
+    && update-alternatives --install /usr/bin/editor editor /usr/local/bin/busybox-editor 1
 
 # Remove MOTD
 RUN rm -rf /etc/update-motd.d /etc/motd /etc/motd.dynamic

@@ -49,8 +49,20 @@ function unmigrated_data_check() {
     set +e
 
     echo "Checking for unmigrated data on legacy storage"
+    found=$(MAX_DATABASE_CONNECTION_CHECKS=5 gitlab-rake gitlab:storage:legacy_attachments gitlab:storage:legacy_projects 2>&1);
 
-    found=$(MAX_DATABASE_CONNECTION_CHECKS=5 gitlab-rake gitlab:storage:legacy_attachments gitlab:storage:legacy_projects 2>/dev/null);
+    if [ $? -ne 0 ]; then
+        echo "Upgrade failed. Could not check for unmigrated data on legacy storage."
+        echo ""
+        echo $output
+        echo ""
+        echo ""
+        echo "If you would like to restart the instance without perfming this check"
+        echo "check, add the following to your docker command:"
+        echo "-e GITLAB_SKIP_UNMIGRATED_DATA_CHECK=true"
+        echo ""
+        exit 1
+    fi
 
     if ! (echo $found | grep 'Found 0 attachments' && echo $found | grep 'Found 0 projects') > /dev/null 2>&1; then
         echo
@@ -78,7 +90,7 @@ echo "Configure GitLab for your system by editing /etc/gitlab/gitlab.rb file"
 echo "And restart this container to reload settings."
 echo "To do it use docker exec:"
 echo
-echo "  docker exec -it gitlab vim /etc/gitlab/gitlab.rb"
+echo "  docker exec -it gitlab editor /etc/gitlab/gitlab.rb"
 echo "  docker restart gitlab"
 echo
 echo "For a comprehensive list of configuration options please see the Omnibus GitLab readme"
