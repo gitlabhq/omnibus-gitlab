@@ -3,6 +3,80 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.0.0 (2021-06-21)
+
+### Added (8 changes)
+
+- [Prevent Docker upgrade to 14.0 if there data on legacy storage](gitlab-org/omnibus-gitlab@2609201ecaa54d4fe871802783e5b4c94d37ae54) ([merge request](gitlab-org/omnibus-gitlab!5320))
+- [Build gitaly-git2go from previous gitaly version](gitlab-org/omnibus-gitlab@f55201824a745751dbcb9ae571aedbdc3cb7089c) ([merge request](gitlab-org/omnibus-gitlab!5359))
+- [Add option to write initial root password to a file](gitlab-org/omnibus-gitlab@4d7757243ad8bfc6f6a449e174c5f5f626333a43) ([merge request](gitlab-org/omnibus-gitlab!5331))
+- [Add option to disable printing of root password during initialization](gitlab-org/omnibus-gitlab@7369fd762861082057e5e6165917c625f9c1d39e) ([merge request](gitlab-org/omnibus-gitlab!5331))
+- [Add Workhorse shutdown_timeout config setting](gitlab-org/omnibus-gitlab@3bf28cb060186b654fc639215c46df49634c745a) ([merge request](gitlab-org/omnibus-gitlab!5343))
+- [Prevent upgrade to 14.0 if there is data on legacy storage](gitlab-org/omnibus-gitlab@35b97442337616b1147159c6f556c8ddc39276db) ([merge request](gitlab-org/omnibus-gitlab!5311))
+- [Allow configuring redis instance for trace chunks](gitlab-org/omnibus-gitlab@8416adf9755ec5e63ac0e31595dfb049366ce4c7) ([merge request](gitlab-org/omnibus-gitlab!5316))
+- [Prevent upgrade to 14.0 if there is data on legacy storage](gitlab-org/omnibus-gitlab@ad4e6d1a3b72f2bd1549d32f7b905e4fca2ede6d) ([merge request](gitlab-org/omnibus-gitlab!5256))
+
+### Fixed (8 changes)
+
+- [Fix get-postgresql-primary command for Geo](gitlab-org/omnibus-gitlab@87e7496565d851d8d37f2c6a78ccf12f9ab8239e) ([merge request](gitlab-org/omnibus-gitlab!5382))
+- [Fix pitr_file to use the right path for ConsulError](gitlab-org/omnibus-gitlab@70216599a13ff7f8d83970d5888bd4503697f8d3) ([merge request](gitlab-org/omnibus-gitlab!5378))
+- [Update consul lookup in get-postgresql-primary](gitlab-org/omnibus-gitlab@13eec4ee7dadf36f1f84c74efd30440acfb946eb) ([merge request](gitlab-org/omnibus-gitlab!5369))
+- [Do not show Praefect deprecation if Praefect is disabled](gitlab-org/omnibus-gitlab@0a3fdc1c6a0df1b26eebbfed6808c1af1fdc218b) ([merge request](gitlab-org/omnibus-gitlab!5350))
+- [Adds default for prepared_statements config in Geo secondary db.yml](gitlab-org/omnibus-gitlab@8637044b1c9bb9ab019441629e6b2c59a6921e7c) ([merge request](gitlab-org/omnibus-gitlab!5347))
+- [Rotate mailroom logs](gitlab-org/omnibus-gitlab@47d3cebe00366181346e87797036f5cb314fbc42) ([merge request](gitlab-org/omnibus-gitlab!5319))
+- [Fix passing environment variables for migrations](gitlab-org/omnibus-gitlab@11ea132e7ca8ce61a8fca8af5837669388b4a179) ([merge request](gitlab-org/omnibus-gitlab!5310))
+- [Recreate SSL key if it does not match the config](gitlab-org/omnibus-gitlab@ee5b35f6278309c0c474b58ae71be70c7fba8b66) ([merge request](gitlab-org/omnibus-gitlab!5204))
+
+### Changed (17 changes)
+
+- [Use Busybox for editor in docker](gitlab-org/omnibus-gitlab@29b4f428f54b0534a556444b3bd26657f6b42b53) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/4142))
+- [Upgrade Omnibus Builder to v1.6.0](gitlab-org/omnibus-gitlab@ade4aa24b943abbeac0cad3e37dcdd057c48a04e) ([merge request](gitlab-org/omnibus-gitlab!5374))
+- [Don't enable consul with `postgres_role`.](gitlab-org/omnibus-gitlab@af8b3b46967b14fe29a6e56d3d3ac5fe99715265) ([merge request](gitlab-org/omnibus-gitlab!5370))
+- [Upgrade postgresql-exporter to 0.9.0](gitlab-org/omnibus-gitlab@8bd053793c38c51c25d43a36696967e86e3822d0) ([merge request](gitlab-org/omnibus-gitlab!5364))
+- [Use consul if available when pausing Geo replication](gitlab-org/omnibus-gitlab@bfeef1355c7187c10313ca6c8ee32afb0a82debb) ([merge request](gitlab-org/omnibus-gitlab!5300))
+- [Upgrade docker-distribution-pruner to v0.2.0](gitlab-org/omnibus-gitlab@c75d2a948874d7f13597e5de08e92d557e96d65b) ([merge request](gitlab-org/omnibus-gitlab!5362))
+- [Bump Container Registry to v3.5.0-gitlab](gitlab-org/omnibus-gitlab@104115b39b085628d0931220a7c697a03fc5c4ab) ([merge request](gitlab-org/omnibus-gitlab!5354))
+- [Automatically generate initial root password if not set](gitlab-org/omnibus-gitlab@0af09d880118149e0d2e4ab6516679c489500489) ([merge request](gitlab-org/omnibus-gitlab!5331))
+- [Update consul to version 1.9.6](gitlab-org/omnibus-gitlab@4fde3786d470f112d9894177afb89c3009df0c77) ([merge request](gitlab-org/omnibus-gitlab!5344))
+- [change the default to `true` for deleting old backups](gitlab-org/omnibus-gitlab@99027bbefbd9fc53e3df2c77806d47fa79fa0c06) ([merge request](gitlab-org/omnibus-gitlab!5322))
+- [Expand configuration of Praefect direct database connection](gitlab-org/omnibus-gitlab@6931fc428aa0746071cbf3d8fc52d1ec623dbc8e) ([merge request](gitlab-org/omnibus-gitlab!5251))
+- [Bump redis to 6.0.14, drop custom patch](gitlab-org/omnibus-gitlab@238b13d1d78de96067e4ddd11fce5fc948fb31b1) ([merge request](gitlab-org/omnibus-gitlab!5327))
+- [Upgrade Patroni to version 2.0.2](gitlab-org/omnibus-gitlab@bf36ff4fc22f3137f4a7d0113e70e551aebe5f1f) ([merge request](gitlab-org/omnibus-gitlab!5314))
+- [Fix package-scripts version string](gitlab-org/omnibus-gitlab@8ee43bd70723f97467ac5da1be6e6fc94724960d) ([merge request](gitlab-org/omnibus-gitlab!5287))
+- [Remove sidekiq_cluster service and settings](gitlab-org/omnibus-gitlab@be7a659861002803e2bf8c0244083c2d0e822ace) ([merge request](gitlab-org/omnibus-gitlab!5291))
+- [Always use sidekiq-cluster binary for Sidekiq service](gitlab-org/omnibus-gitlab@9d754a15c2bc52d1823a5d7e68d075f424ce6504) ([merge request](gitlab-org/omnibus-gitlab!5291))
+- [Set 13.12 as minimum version required to upgrade from](gitlab-org/omnibus-gitlab@2e65138d645cb92c79682c8a83b504b81a29ec3c) ([merge request](gitlab-org/omnibus-gitlab!5259))
+
+### Removed (18 changes)
+
+- [Remove repmgr installation support](gitlab-org/omnibus-gitlab@69c19633b786962d1eb511631e6994ce393153e0) ([merge request](gitlab-org/omnibus-gitlab!5372))
+- [Remove support for Praefect election strategy](gitlab-org/omnibus-gitlab@60d4e3de2bce833b1fdcb46cd29dc332f7870465) ([merge request](gitlab-org/omnibus-gitlab!5351))
+- [Omnibus v14 requires PG12 or higher](gitlab-org/omnibus-gitlab@f8bb478bd2dfe1136820c74e27af1d3fe927b3e0) ([merge request](gitlab-org/omnibus-gitlab!5348))
+- [Remove deprecated `experimental_queue_selector` option for Sidekiq](gitlab-org/omnibus-gitlab@64fc0fcaaca69ec73ad6960bfe60080a9345831c) ([merge request](gitlab-org/omnibus-gitlab!5317))
+- [Remove deprecated `experimental_queue_selector` option for Sidekiq](gitlab-org/omnibus-gitlab@02a2435eb46a0c2a5bd0877c7a3b95f005de967d) ([merge request](gitlab-org/omnibus-gitlab!5306))
+- [Remove support for postgresql['data_dir'] setting](gitlab-org/omnibus-gitlab@2a2669ed9c89e8a7010c551c58668c879c3ac03c) ([merge request](gitlab-org/omnibus-gitlab!5279))
+- [Remove deprecated `pgbouncer` public attributes](gitlab-org/omnibus-gitlab@1f954f5216694b1ce7812ba11d4c85eb4e23020a) ([merge request](gitlab-org/omnibus-gitlab!5299))
+- [Remove node['gitlab']['pgbouncer-exporter'] deprecation](gitlab-org/omnibus-gitlab@14182dc8c0b471f0e60d7c1ab9e6e8aa3aa04377) ([merge request](gitlab-org/omnibus-gitlab!5298))
+- [Remove Unicorn and related code](gitlab-org/omnibus-gitlab@b7566558b82396e262d7a8e8012365ad5fd3e872) ([merge request](gitlab-org/omnibus-gitlab!5295))
+- [Remove Deprecated Piwik settings](gitlab-org/omnibus-gitlab@1723f793e4dc9a62eb198a4a26a2c6f6f27ba3aa) ([merge request](gitlab-org/omnibus-gitlab!5277))
+- [Remove support for gitlab_pages['http_proxy']](gitlab-org/omnibus-gitlab@9f66bf2fe2adaf1a0c3942b60a20606a3dc56460) ([merge request](gitlab-org/omnibus-gitlab!5278))
+- [Remove obsolete sidekiq['cluster'] setting](gitlab-org/omnibus-gitlab@84fcf243d8f165bb3cfd1376243240fa5c5936a2) ([merge request](gitlab-org/omnibus-gitlab!5291))
+- [Remove support for client_output_buffer_limit_slave](gitlab-org/omnibus-gitlab@f1bdc7900d4a5ee1814ffc623ca0e5aece366af6) ([merge request](gitlab-org/omnibus-gitlab!5290))
+- [Remove support for redis_slave_role](gitlab-org/omnibus-gitlab@78177c126c3532cf16bd0effad7773d79e2e1bd9) ([merge request](gitlab-org/omnibus-gitlab!5290))
+- [Remove support for analytics_instance_statistics_count_job_trigger_worker_cron...](gitlab-org/omnibus-gitlab@697710c02dab6d4699662bcc51df55b5fce517e5) ([merge request](gitlab-org/omnibus-gitlab!5285))
+- [Remove support for nginx['gzip'] in favor of nginx['gzip_enabled']](gitlab-org/omnibus-gitlab@4d8bb0429fffe4fde027e170b21fbdf7cdef1c8e) ([merge request](gitlab-org/omnibus-gitlab!5284))
+- [Remove deprecated PostgreSQL FDW settings](gitlab-org/omnibus-gitlab@3f7a5ccd68be8391b565ec6a2a6d745161e3b923) ([merge request](gitlab-org/omnibus-gitlab!5255))
+- [Stop building packages for openSUSE Leap 15.1](gitlab-org/omnibus-gitlab@b8780946690f3dc56c2095aabc6be2ad4869decd) ([merge request](gitlab-org/omnibus-gitlab!5264))
+
+### Security (1 change)
+
+- [Update Mattermost to 5.35.3](gitlab-org/omnibus-gitlab@891ae9c1cfd338d9a0f4612379a916645b475f57) ([merge request](gitlab-org/omnibus-gitlab!5358))
+
+### Other (2 changes)
+
+- [Bump gitlab-exporter to 10.3.0](gitlab-org/omnibus-gitlab@ff48e6e54f1da086711ea85b586713816eb6a42d) ([merge request](gitlab-org/omnibus-gitlab!5315))
+- [Update Mattermost to 5.35.2](gitlab-org/omnibus-gitlab@c0592b2bb4be3ce0f61ae2e287410cf9128f6c19) ([merge request](gitlab-org/omnibus-gitlab!5329))
+
 ## 13.12.4 (2021-06-14)
 
 ### Fixed (1 change)
