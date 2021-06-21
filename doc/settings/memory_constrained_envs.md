@@ -120,7 +120,7 @@ always [upgrade to GitLab EE](../update/README.md#update-community-edition-to-en
 GitLab by default runs with a configuration that is designed to handle many concurrent connections.
 
 For small installations, which do not require high throughput,
-consider [disabling](../settings/puma.md#running-in-memory-constrained-environments)
+consider [disabling](https://docs.gitlab.com/ee/administration/operations/puma.html#memory-constrained-environments)
 Puma [Clustered mode](https://github.com/puma/puma#clustered-mode).
 As the result, only a single Puma process would serve the application.
 
