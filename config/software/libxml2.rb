@@ -41,6 +41,11 @@ build do
   patch source: '50f06b3efb638efb0abd95dc62dca05ae67882c2.patch', env: env
   patch source: 'CVE-2019-20388.patch', env: env
   patch source: 'CVE-2020-7595.patch', env: env
+  patch source: 'bf22713507fe1fc3a2c4b525cf0a88c2dc87a3a2.patch', env: env # CVE-2021-3517
+  patch source: '1358d157d0bd83be1dfe356a69213df9fac0b539.patch', env: env # CVE-2021-3516
+  patch source: '1098c30a040e72a4654968547f415be4e4c40fe7.patch', env: env # CVE-2021-3518
+  patch source: 'babe75030c7f64a37826bb3342317134568bef61.patch', env: env # CVE-2021-3537
+  patch source: '8598060bacada41a0eb09d95c97744ff4e428f8e.patch', env: env # CVE-2021-3541
 
   configure_command = [
     "--with-zlib=#{install_dir}/embedded",
