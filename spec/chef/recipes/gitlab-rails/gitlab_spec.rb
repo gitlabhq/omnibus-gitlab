@@ -17,7 +17,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
             stub_gitlab_rb(
               gitlab_rails: {
                 content_security_policy: {
-                  enabled: true
+                  enabled: false
                 }
               }
             )
