@@ -97,9 +97,42 @@ RSpec.describe 'gitlab::default' do
 
   context 'with prometheus disabled' do
     before { stub_gitlab_rb(prometheus: { enable: false }) }
+
     it 'includes the prometheus_disable recipe' do
       expect(chef_run).to include_recipe('monitoring::prometheus_disable')
       expect(chef_run).not_to include_recipe('monitoring::prometheus')
+    end
+  end
+
+  context 'with database reindexing and LetsEncrypt auto-renew disabled' do
+    it 'disables crond' do
+      expect(chef_run).to include_recipe('crond::disable')
+      expect(chef_run).not_to include_recipe('crond::enable')
+    end
+  end
+
+  context 'with database reindexing enabled' do
+    before do
+      stub_gitlab_rb(gitlab_rails: { database_reindexing: { enable: true } })
+    end
+
+    it 'enables crond' do
+      expect(chef_run).to include_recipe('crond::enable')
+      expect(chef_run).not_to include_recipe('crond::disable')
+    end
+  end
+
+  context 'with LetsEncrypt auto-renew enabled' do
+    before do
+      # Registry will be auto-enabled if LetsEncrypt is enabled
+      stub_gitlab_rb(external_url: 'http://gitlab.example.com',
+                     registry: { enable: false },
+                     letsencrypt: { enable: true, auto_renew: true })
+    end
+
+    it 'enables crond' do
+      expect(chef_run).to include_recipe('crond::enable')
+      expect(chef_run).not_to include_recipe('crond::disable')
     end
   end
 end
