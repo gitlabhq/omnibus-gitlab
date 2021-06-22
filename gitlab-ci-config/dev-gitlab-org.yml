@@ -984,8 +984,6 @@ license-upload:
 RAT-Tag:
   stage: slow_jobs
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  variables:
-    CI_COMMIT_TAG: "1.2.3"
   script:
     - bundle exec rake qa:rat:tag
   cache: *tag-cache
