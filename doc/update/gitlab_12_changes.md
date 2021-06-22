@@ -138,7 +138,7 @@ manually upgrade to 11.7 following the [upgrade docs](../settings/database.md#up
 ### 12.9
 
 [Puma](https://github.com/puma/puma) is now available as an alternative web server to Unicorn.
-If you are migrating from Unicorn, refer to [converting Unicorn settings to Puma](../settings/puma.md#converting-unicorn-settings-to-puma)
+If you are migrating from Unicorn, refer to [converting Unicorn settings to Puma](https://docs.gitlab.com/ee/administration/operations/puma.html#convert-unicorn-settings-to-puma)
 to make sure your web server settings carry over correctly.
 
 ### 12.10
