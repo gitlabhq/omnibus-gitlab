@@ -359,6 +359,7 @@
   needs:
     - job: fetch-assets
       optional: true
+      artifacts: true
   cache: *branch-cache
   retry: 1
 
@@ -566,6 +567,9 @@ Docker-branch:
   needs:
     - job: Ubuntu-20.04-branch
       artifacts: false
+    - job: fetch-assets
+      optional: true
+      artifacts: true
   retry: 1
 
 QA-branch:
@@ -590,6 +594,9 @@ QA-branch:
   needs:
     - job: Ubuntu-20.04-branch
       artifacts: false
+    - job: fetch-assets
+      optional: true
+      artifacts: true
   retry: 1
 
 Raspberry-Pi-2-Buster-branch:
@@ -649,7 +656,10 @@ Docker-QA:
   cache: *tag-cache
   tags:
   - docker-builder
-  needs: []
+  needs:
+    - job: fetch-assets
+      optional: true
+      artifacts: true
   retry: 1
 
 ###########################################################
@@ -751,6 +761,9 @@ Docker:
   needs:
     - job: Ubuntu-20.04
       artifacts: false
+    - job: fetch-assets
+      optional: true
+      artifacts: true
   retry: 1
 
 ### Staging uploads
@@ -899,6 +912,9 @@ Docker-Release:
   cache: *tag-cache
   needs:
     - Docker
+    - job: fetch-assets
+      optional: true
+      artifacts: true
 
 AWS:
   <<: *aws_ami_build
@@ -934,6 +950,9 @@ QA-Tag:
   cache: *tag-cache
   needs:
     - Docker-QA
+    - job: fetch-assets
+      optional: true
+      artifacts: true
   retry: 1
 
 license-upload:

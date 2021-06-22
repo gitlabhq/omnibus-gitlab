@@ -17,6 +17,13 @@ module Build
     }.freeze
 
     class << self
+      def fetch_fact_from_file(fact)
+        return unless File.exist?("build_facts/#{fact}")
+
+        content = File.read("build_facts/#{fact}").strip
+        return content unless content.empty?
+      end
+
       def package
         return "gitlab-ee" if Check.is_ee?
 
@@ -60,10 +67,18 @@ module Build
       # TODO, merge latest_tag with latest_stable_tag
       # TODO, add tests, needs a repo clone
       def latest_tag
+        unless (fact_from_file = fetch_fact_from_file(__method__)).nil?
+          return fact_from_file
+        end
+
         `git -c versionsort.prereleaseSuffix=rc tag -l '#{Info.tag_match_pattern}' --sort=-v:refname | head -1`.chomp
       end
 
       def latest_stable_tag(level: 1)
+        unless (fact_from_file = fetch_fact_from_file(__method__)).nil?
+          return fact_from_file
+        end
+
         # Level decides tag at which position you want. Level one gives you
         # latest stable tag, two gives you the one just before it and so on.
         `git -c versionsort.prereleaseSuffix=rc tag -l '#{Info.tag_match_pattern}' --sort=-v:refname | awk '!/rc/' | head -#{level}`.split("\n").last

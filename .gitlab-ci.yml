@@ -136,13 +136,14 @@ fetch-assets:
   extends: .docker_job
   stage: prepare-assets
   timeout: 1 hour
-  before_script: []
   script:
     - export VERSION=${GITLAB_REF_SLUG-$(ruby -I. -e 'require "lib/gitlab/version"; puts Gitlab::Version.new("gitlab-rails").print')}
     - support/fetch_assets "${VERSION}"
+    - bundle exec rake build:generate_facts
   artifacts:
     paths:
       - ${ASSET_PATH}
+      - build_facts
   rules:
     - if: '$COMPILE_ASSETS == "true"'
       when: never
