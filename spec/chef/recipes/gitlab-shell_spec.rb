@@ -47,7 +47,6 @@ RSpec.describe 'gitlab::gitlab-shell' do
         hash_including(
           log_file: '/var/log/gitlab/gitlab-shell/gitlab-shell.log',
           log_format: "json",
-          custom_hooks_dir: nil,
           migration: { enabled: true, features: [] },
           gitlab_url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket',
           gitlab_relative_path: '',
@@ -135,7 +134,6 @@ RSpec.describe 'gitlab::gitlab-shell' do
     before do
       stub_gitlab_rb(
         gitlab_shell: {
-          custom_hooks_dir: '/fake/dir',
           log_format: 'json',
           migration: {
             enabled: true,
@@ -148,7 +146,6 @@ RSpec.describe 'gitlab::gitlab-shell' do
     it 'creates the config file with custom values' do
       expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
         hash_including(
-          custom_hooks_dir: '/fake/dir',
           log_format: 'json',
           migration: {
             enabled: true,
