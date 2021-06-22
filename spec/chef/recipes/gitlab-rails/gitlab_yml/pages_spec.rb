@@ -154,6 +154,55 @@ RSpec.describe 'gitlab::gitlab-rails' do
           end
         end
       end
+
+      describe 'Pages local store settings' do
+        context 'when neither Pages path nor local store path is specified' do
+          before do
+            stub_gitlab_rb(
+              external_url: 'https://gitlab.example.com',
+              pages_external_url: 'https://pages.example.com'
+            )
+          end
+
+          it 'renders gitlab.yml with Pages local store path set to default Pages path' do
+            expect(gitlab_yml[:production][:pages][:local_store][:path]).to eq('/var/opt/gitlab/gitlab-rails/shared/pages')
+          end
+        end
+
+        context 'when Pages path is specified but not local store path' do
+          before do
+            stub_gitlab_rb(
+              external_url: 'https://gitlab.example.com',
+              pages_external_url: 'https://pages.example.com',
+              gitlab_rails: {
+                pages_local_store_enabled: true,
+                pages_path: '/tmp/test'
+              }
+            )
+          end
+
+          it 'renders gitlab.yml with Pages local store path set to Pages path' do
+            expect(gitlab_yml[:production][:pages][:local_store][:path]).to eq('/tmp/test')
+          end
+        end
+
+        context 'when Pages local store path is different than Pages path' do
+          before do
+            stub_gitlab_rb(
+              external_url: 'https://gitlab.example.com',
+              pages_external_url: 'https://pages.example.com',
+              gitlab_rails: {
+                pages_path: '/tmp/test',
+                pages_local_store_path: '/another/path'
+              }
+            )
+          end
+
+          it 'renders gitlab.yml with specified Pages local store path' do
+            expect(gitlab_yml[:production][:pages][:local_store][:path]).to eq('/another/path')
+          end
+        end
+      end
     end
   end
 end
