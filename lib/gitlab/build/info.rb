@@ -10,6 +10,11 @@ require_relative 'image'
 module Build
   class Info
     OMNIBUS_PROJECT_MIRROR_PATH ||= 'gitlab-org/build/omnibus-gitlab-mirror'.freeze
+    DEPLOYER_OS_MAPPING = {
+      'AUTO_DEPLOY_ENVIRONMENT' => 'ubuntu-xenial',
+      'PATCH_DEPLOY_ENVIRONMENT' => 'ubuntu-bionic',
+      'RELEASE_DEPLOY_ENVIRONMENT' => 'ubuntu-focal',
+    }.freeze
 
     class << self
       def package
@@ -203,14 +208,18 @@ module Build
         "#{Build::GitlabImage.gitlab_registry_image_address}:#{Info.docker_tag}"
       end
 
+      def deploy_env_key
+        if Build::Check.is_auto_deploy_tag?
+          'AUTO_DEPLOY_ENVIRONMENT'
+        elsif Build::Check.is_rc_tag?
+          'PATCH_DEPLOY_ENVIRONMENT'
+        elsif Build::Check.is_latest_stable_tag?
+          'RELEASE_DEPLOY_ENVIRONMENT'
+        end
+      end
+
       def deploy_env
-        key = if Build::Check.is_auto_deploy_tag?
-                'AUTO_DEPLOY_ENVIRONMENT'
-              elsif Build::Check.is_rc_tag?
-                'PATCH_DEPLOY_ENVIRONMENT'
-              elsif Build::Check.is_latest_stable_tag?
-                'RELEASE_DEPLOY_ENVIRONMENT'
-              end
+        key = deploy_env_key
 
         return nil if key.nil?
 

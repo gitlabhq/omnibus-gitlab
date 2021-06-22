@@ -430,6 +430,12 @@
   - promotion
   <<: *dev-public-release-only
 
+.staging_upload_with_deployment_template: &staging_upload_with_deployment
+  extends: .staging_upload_template
+  script:
+    - bundle exec rake repository:upload:staging[$STAGING_REPO]
+    - if [ -n "$DEPLOYER_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:deployer; fi
+
 ### This stage is ran only on tag:
 ### 1. It is a manual action
 ### 2. It will upload the package to public, user facing repositories
@@ -661,19 +667,16 @@ Docker-QA:
 ##                after this package is built
 
 Ubuntu-16.04-upload-deploy:
-  extends: .staging_upload_template
+  extends: .staging_upload_with_deployment_template
   needs:
     - job: Ubuntu-16.04
       optional: true
     - job: Ubuntu-16.04-branch
       optional: true
-  script:
-    - bundle exec rake repository:upload:staging[$STAGING_REPO]
-    - if [ -n "$DEPLOYER_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:deployer; fi
   <<: *dev-tag-and-nightly
 
 Ubuntu-18.04-staging:
-  extends: .staging_upload_template
+  extends: .staging_upload_with_deployment_template
   needs:
     - job: Ubuntu-18.04
       optional: true
@@ -682,7 +685,7 @@ Ubuntu-18.04-staging:
   <<: *dev-tag-and-nightly
 
 Ubuntu-20.04-staging:
-  extends: .staging_upload_template
+  extends: .staging_upload_with_deployment_template
   needs:
     - job: Ubuntu-20.04
       optional: true
