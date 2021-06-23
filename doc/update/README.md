@@ -745,6 +745,18 @@ Log in to your **primary** node, executing the following:
    sudo touch /etc/gitlab/skip-auto-reconfigure
    ```
 
+1. Edit `/etc/gitlab/gitlab.rb` and ensure the following is present:
+
+   ```ruby
+   gitlab_rails['auto_migrate'] = false
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
 1. Update the GitLab package
 
    ```shell
@@ -776,6 +788,18 @@ On each **secondary** node, executing the following:
 
    ```shell
    sudo touch /etc/gitlab/skip-auto-reconfigure
+   ```
+
+1. Edit `/etc/gitlab/gitlab.rb` and ensure the following is present:
+
+   ```ruby
+   gitlab_rails['auto_migrate'] = false
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
    ```
 
 1. Update the GitLab package
