@@ -18,9 +18,10 @@ all the options of the template as of installation listed in
 ## Configuring the external URL for GitLab
 
 NOTE:
-Before you change the external URL, you should check if you have
-previously defined a custom **Home page URL** or **After sign out a path** under
-**Admin Area > Settings > General > Sign-in restrictions**. If URLs have been
+Before you change the external URL, determine if you have previously
+defined a custom **Home page URL** or **After sign out a path** by
+selecting **Menu >** **{admin}** **Admin** in the top bar, and on the left
+sidebar selecting **Settings > General > Sign-in restrictions**. If URLs are
 defined, either update them or remove them completely. Both of these settings
 might cause unintentional redirecting after configuring a new external URL.
 
