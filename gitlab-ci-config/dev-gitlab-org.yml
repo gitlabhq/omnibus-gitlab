@@ -735,41 +735,6 @@ SLES-12.5:
   <<: *tag_build
   <<: *dev-ee-tag-only-except-auto-deploy
 
-create_omnibus_manifest:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
-  stage: prepare-assets
-  variables:
-    TERM: xterm-256color
-  script:
-    - bundle exec omnibus manifest gitlab -l nothing 2> /dev/null > version-manifest.json
-  <<: *dev-nightly-and-tag-except-auto-deploy
-  cache: *tag-cache
-  artifacts:
-    expire_in: 7 days
-    paths:
-      - version-manifest.json
-
-dependency_scanning:
-  image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.1.0"
-  stage: package
-  variables:
-    REPORT_PATH: ./
-    NVD_DB_UPDATE: "true"
-  before_script: []
-  script:
-    - echo ${CVEIGNORE} | sed -r "s/, */\n/g" >> .cveignore
-    - /gitlab-depscan.sh version-manifest.json
-  <<: *dev-nightly-and-tag-except-auto-deploy
-  needs:
-    - create_omnibus_manifest
-  artifacts:
-    expire_in: 7 days
-    when: on_failure
-    paths:
-      - dependency_report.txt
-      - gl-dependency-scanning-report.json
-      - .cveignore
-
 Docker:
   extends: .docker_job
   stage: image
