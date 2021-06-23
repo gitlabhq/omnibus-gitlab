@@ -45,7 +45,8 @@ RSpec.describe 'gitaly' do
 
   let(:gitlab_url) { 'http://localhost:3000' }
   let(:workhorse_addr) { 'localhost:4000' }
-  let(:custom_hooks_dir) { '/path/to/custom/hooks' }
+  let(:gitaly_custom_hooks_dir) { '/path/to/gitaly/custom/hooks' }
+  let(:gitlab_shell_custom_hooks_dir) { '/path/to/gitlab-shell/custom/hooks' }
   let(:user) { 'user123' }
   let(:password) { 'password321' }
   let(:ca_file) { '/path/to/ca_file' }
@@ -214,12 +215,12 @@ RSpec.describe 'gitaly' do
           pack_objects_cache_enabled: pack_objects_cache_enabled,
           pack_objects_cache_dir: pack_objects_cache_dir,
           pack_objects_cache_max_age: pack_objects_cache_max_age,
+          custom_hooks_dir: gitaly_custom_hooks_dir
         },
         gitlab_rails: {
           internal_api_url: gitlab_url
         },
         gitlab_shell: {
-          custom_hooks_dir: custom_hooks_dir,
           http_settings: {
             read_timeout: read_timeout,
             user: user,
@@ -297,7 +298,7 @@ RSpec.describe 'gitaly' do
 
       hooks_section = Regexp.new([
         %r{\[hooks\]},
-        %r{custom_hooks_dir = '#{Regexp.escape(custom_hooks_dir)}'},
+        %r{custom_hooks_dir = '#{Regexp.escape(gitaly_custom_hooks_dir)}'},
       ].map(&:to_s).join('\s+'))
 
       maintenance_section = Regexp.new([
@@ -352,6 +353,23 @@ RSpec.describe 'gitaly' do
         expect(content).to match(cgroups_memory_section)
         expect(content).to match(cgroups_cpu_section)
         expect(content).to match(pack_objects_cache_section)
+      }
+    end
+
+    it 'populates gitaly config.toml with custom deprecated values' do
+      stub_gitlab_rb(
+        gitlab_shell: {
+          custom_hooks_dir: gitlab_shell_custom_hooks_dir
+        }
+      )
+
+      hooks_section = Regexp.new([
+        %r{\[hooks\]},
+        %r{custom_hooks_dir = '#{Regexp.escape(gitlab_shell_custom_hooks_dir)}'},
+      ].map(&:to_s).join('\s+'))
+
+      expect(chef_run).to render_file(config_path).with_content { |content|
+        expect(content).to match(hooks_section)
       }
     end
 
