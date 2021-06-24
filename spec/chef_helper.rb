@@ -76,7 +76,7 @@ RSpec.configure do |config|
       allow_any_instance_of(helper_class).to receive(:freeze)
     end
 
-    allow_any_instance_of(PgHelper).to receive(:database_version).and_return("9.2")
+    allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('9.2'))
 
     stub_expected_owner?
 
