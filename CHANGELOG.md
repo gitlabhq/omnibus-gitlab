@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.0.1 (2021-06-24)
+
+### Fixed (1 change)
+
+- [Exempt unicorn['svlogd_prefix'] from deprecation check](gitlab-org/omnibus-gitlab@8aa7c341a4f7fdc24833daf66a7abcc3333b6128) ([merge request](gitlab-org/omnibus-gitlab!5404))
+
 ## 14.0.0 (2021-06-21)
 
 ### Added (8 changes)
