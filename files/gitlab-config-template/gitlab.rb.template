@@ -279,7 +279,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 #### Inbox options (for Microsoft Graph)
 # gitlab_rails['incoming_email_inbox_method'] = 'microsoft_graph'
-# gitlab_rails['incoming_email_inbox_options'] {
+# gitlab_rails['incoming_email_inbox_options'] = {
 #    'tenant_id': 'YOUR-TENANT-ID',
 #    'client_id': 'YOUR-CLIENT-ID',
 #    'client_secret': 'YOUR-CLIENT-SECRET',
