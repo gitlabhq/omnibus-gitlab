@@ -12,10 +12,6 @@ RSpec.describe 'gitlab::database-reindexing' do
       stub_gitlab_rb(gitlab_rails: { database_reindexing: { enable: true } })
     end
 
-    it 'enables crond' do
-      expect(chef_run).to include_recipe('crond::enable')
-    end
-
     it 'adds a crond_job with default schedule' do
       expect(chef_run).to create_crond_job('database-reindexing').with(
         user: "root",

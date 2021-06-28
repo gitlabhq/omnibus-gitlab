@@ -139,6 +139,15 @@ end
 
 OmnibusHelper.cleanup_root_password_file
 
+# crond is used by database reindexing and LetsEncrypt auto-renew.  If
+# neither are on, we disable crond to prevent stale config files from
+# being used.
+if node['gitlab']['gitlab-rails']['database_reindexing']['enable'] || (node['letsencrypt']['enable'] && node['letsencrypt']['auto_renew'])
+  include_recipe "crond::enable"
+else
+  include_recipe "crond::disable"
+end
+
 # Configure Services
 %w[
   puma

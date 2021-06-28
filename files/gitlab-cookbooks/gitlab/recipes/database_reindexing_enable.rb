@@ -16,8 +16,6 @@
 
 reindexing = node['gitlab']['gitlab-rails']['database_reindexing']
 
-include_recipe "crond::enable"
-
 crond_job 'database-reindexing' do
   user "root"
   hour reindexing['hour']
