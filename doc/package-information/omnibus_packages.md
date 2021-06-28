@@ -99,7 +99,7 @@ might be a better fit when the application has a number of moving parts.
 
 ## Docker image with multiple services
 
-[GitLab Docker image](../docker/README.md#gitlab-docker-images) is based on the omnibus package.
+[GitLab Docker image](https://docs.gitlab.com/ee/install/docker.html#gitlab-docker-images) is based on the omnibus package.
 
 Considering that container spawned from this image contains multiple processes,
 these types of containers are also referred to as 'fat containers'.

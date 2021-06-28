@@ -51,7 +51,7 @@ Run `sudo gitlab-ctl reconfigure` to configure your instance with these settings
 
 ## runit logs
 
-The [runit-managed](../architecture/README.md#runit) services in Omnibus GitLab generate log data using
+The [runit-managed](../architecture/index.md#runit) services in Omnibus GitLab generate log data using
 `svlogd`.
 
 - Logs are written to a file called `current`.
@@ -145,7 +145,7 @@ logging['udp_log_shipping_port'] = 1514 # Optional, defaults to 514 (syslog)
 
 NOTE:
 Setting `udp_log_shipping_host` will [add a `svlogd_prefix`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/logging.rb)
-for the specified hostname and service for each of the [runit-managed](../architecture/README.md#runit) services.
+for the specified hostname and service for each of the [runit-managed](../architecture/index.md#runit) services.
 
 Example log messages:
 

@@ -7,12 +7,12 @@ comments: false
 
 # Omnibus GitLab release process
 
-Moved to [release/README.md.](release/README.md)
+Moved to [release/index.md.](release/index.md)
 
 ## On your development machine
 
-See [release/README.md.](release/README.md#on-your-development-machine)
+See [release/index.md.](release/index.md#on-your-development-machine)
 
 ## Publishing the packages
 
-See [release/README.md.](release/README.md#publishing-the-packages)
+See [release/index.md.](release/index.md#publishing-the-packages)

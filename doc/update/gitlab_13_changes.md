@@ -77,7 +77,7 @@ If you are using your own NGINX rather than the bundled version, and are proxyin
 
 With these operating systems reaching their end-of-life for support, we are no longer providing packages for them. See the [supported operating systems](../package-information/deprecated_os.md) page for details.
 
-This change also impacts [the packages available for Amazon Linux 2](README.md#gitlab-137-and-later-unavailable-on-amazon-linux-2).
+This change also impacts [the packages available for Amazon Linux 2](index.md#gitlab-137-and-later-unavailable-on-amazon-linux-2).
 
 ### PostgreSQL 12.4 support
 
@@ -140,4 +140,4 @@ redis['io_threads_do_reads'] = true
 
 If your instance has Redis HA with Sentinel, follow the upgrade steps documented
 in [Update GitLab installed with the Omnibus GitLab package to avoid
-downtime](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/doc/update/README.md#use-redis-ha-using-sentinel).
+downtime](index.md#use-redis-ha-using-sentinel).

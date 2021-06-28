@@ -119,7 +119,7 @@ To update EE to JH:
 
 - If you installed GitLab using Docker:
 
-   1. Follow the [Docker update guide](docker/README.md#update)
+   1. Follow the [Docker update guide](https://docs.gitlab.com/ee/install/docker.html)
       and replace `gitlab/gitlab-ee:latest` with the following:
 
       ```shell

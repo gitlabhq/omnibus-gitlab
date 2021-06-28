@@ -113,7 +113,7 @@ than [GitLab Community Edition (CE)](https://about.gitlab.com/install/?version=c
 increase compute and memory requirements.
 
 When memory consumption is the primary concern, install GitLab CE. You can
-always [upgrade to GitLab EE](../update/README.md#update-community-edition-to-enterprise-edition) later.
+always [upgrade to GitLab EE](../update/index.md#update-community-edition-to-enterprise-edition) later.
 
 ## Optimize Puma
 
