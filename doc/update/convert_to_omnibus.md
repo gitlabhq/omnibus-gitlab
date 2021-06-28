@@ -10,7 +10,7 @@ Upgrading from non-Omnibus installations has not been tested by GitLab.com.
 
 Please be advised that you lose your settings in files such as `gitlab.yml`,
 `puma.rb` and `smtp_settings.rb`. You will have to
-[configure those settings in `/etc/gitlab/gitlab.rb`](../README.md#configuring).
+[configure those settings in `/etc/gitlab/gitlab.rb`](../index.md#configuring).
 
 Before starting the migration, ensure that you are moving to **exactly the same version** of GitLab.
 To convert your installation to Omnibus:
@@ -173,7 +173,7 @@ If you can log into the GitLab web interface, the next step is to reboot your
 server to make sure none of the old services interferes with Omnibus GitLab.
 
 If you are using special features such as LDAP you will have to put your
-settings in `gitlab.rb`, see the [settings docs](../settings/README.md).
+settings in `gitlab.rb`, see the [settings docs](../settings/index.md).
 
 ## Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)
 

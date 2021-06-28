@@ -92,7 +92,7 @@ up a Build Environment](../build/build_package.md#preparing-a-build-environment)
    /opt/gitlab/embedded/bin/runsvdir-start &
    ```
 
-   After running `reconfigure`, you may have sysctl errors. There is a workaround in the [common installation problems doc](../common_installation_problems/README.md#failed-to-modify-kernel-parameters-with-sysctl).
+   After running `reconfigure`, you may have sysctl errors. There is a workaround in the [common installation problems doc](../common_installation_problems/index.md#failed-to-modify-kernel-parameters-with-sysctl).
 
 Now, you can make necessary changes in the
 `~/omnibus-gitlab/files/gitlab-cookbooks/gitlab` folder and run `sudo gitlab-ctl reconfigure`
@@ -152,4 +152,4 @@ gitlab_rails['env'] = {
 
 ## OpenShift GitLab Development Setup
 
-See Omnibus GitLab [development setup](openshift/README.md) documentation.
+See Omnibus GitLab [development setup](openshift/index.md) documentation.
