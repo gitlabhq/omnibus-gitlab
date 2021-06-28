@@ -5,6 +5,7 @@ require_relative '../build/omnibus_trigger'
 require_relative "../ohai_helper.rb"
 require_relative '../version.rb'
 require_relative "../util.rb"
+require_relative "../package_size"
 require 'net/http'
 require 'json'
 
@@ -18,6 +19,7 @@ namespace :build do
     Rake::Task["license:check"].invoke
     Rake::Task["build:package:move_to_platform_dir"].invoke
     Rake::Task["build:package:generate_checksums"].invoke
+    Rake::Task["build:package:generate_sizefile"].invoke
   end
 
   namespace :docker do
@@ -48,6 +50,19 @@ namespace :build do
         files = Dir.glob('pkg/**/*.{deb,rpm}').select { |f| File.file? f }
         files.each do |file|
           system('sha256sum', file, out: "#{file}.sha256")
+        end
+      end
+    end
+
+    desc "Generate sizefile for each file"
+    task :generate_sizefile do
+      Gitlab::Util.section('build:package:generate_sizefile') do
+        files = Dir.glob('pkg/**/*.{deb,rpm}').select { |f| File.file? f }
+        if files.empty?
+          # We are probably inside Trigger:package_size_check job.
+          PackageSizeCheck.fetch_sizefile
+        else
+          PackageSizeCheck.generate_sizefiles(files)
         end
       end
     end
