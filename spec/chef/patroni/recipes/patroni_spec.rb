@@ -189,6 +189,8 @@ RSpec.describe 'patroni cookbook' do
           use_pg_rewind: true,
           connect_address: '1.2.3.4',
           connect_port: 18008,
+          username: 'gitlab',
+          password: 'restapipassword',
           replication_password: 'fakepassword',
           remove_data_directory_on_diverged_timelines: true,
           remove_data_directory_on_rewind_failure: true,
@@ -229,7 +231,13 @@ RSpec.describe 'patroni cookbook' do
             password: 'fakepassword'
           }
         )
-        expect(cfg[:restapi][:connect_address]).to eq('1.2.3.4:18008')
+        expect(cfg[:restapi]).to include(
+          connect_address: '1.2.3.4:18008',
+          authentication: {
+            username: 'gitlab',
+            password: 'restapipassword'
+          }
+        )
         expect(cfg[:bootstrap][:dcs]).to include(
           loop_wait: 20,
           ttl: 60,

@@ -54,3 +54,5 @@ default['patroni']['listen_address'] = nil
 default['patroni']['connect_address'] = nil
 default['patroni']['port'] = '8008'
 default['patroni']['connect_port'] = nil
+default['patroni']['username'] = nil
+default['patroni']['password'] = nil
