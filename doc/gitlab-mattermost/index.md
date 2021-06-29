@@ -94,6 +94,7 @@ mattermost_external_url 'http://mattermost.example.com'
 # Shut down GitLab services on the Mattermost server
 gitlab_rails['enable'] = false
 redis['enable'] = false
+postgres_exporter['enable'] = false
 ```
 
 Then follow the appropriate steps in the [Authorize GitLab Mattermost section](#authorize-gitlab-mattermost). Last, to enable
