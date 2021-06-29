@@ -241,7 +241,7 @@ The plugin and slash commands can be used together or individually.
 ### Setting up SMTP for GitLab Mattermost
 
 These settings are configured through the Mattermost System Console by the System Administrator.
-On the **Notifications > Email** tab of the **System Console**, you can enter the SMTP credentials given by your SMTP provider or `127.0.0.1` and port `25` to use `sendmail`. More information on the specific settings
+On the **Environment > SMTP** tab of the **System Console**, you can enter the SMTP credentials given by your SMTP provider, or `127.0.0.1` and port `25` to use `sendmail`. More information on the specific settings
 that are needed is available in the [Mattermost documentation](https://docs.mattermost.com/install/smtp-email-setup.html).
 
 These settings can also be configured in `/var/opt/gitlab/mattermost/config.json`.
@@ -250,7 +250,7 @@ These settings can also be configured in `/var/opt/gitlab/mattermost/config.json
 
 Enabling this feature allows users to control how often they receive email notifications.
 
-Email batching can be enabled in the Mattermost **System Console** by going to the **Notifications > Email** tab, and setting the **Enable Email Batching** setting to **True**.
+Email batching can be enabled in the Mattermost **System Console** by going to the **Environment > SMTP** tab, and setting the **Enable Email Batching** setting to **True**.
 
 This setting can also be configured in `/var/opt/gitlab/mattermost/config.json`.
 
