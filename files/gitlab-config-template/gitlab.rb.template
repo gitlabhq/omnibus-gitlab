@@ -2667,6 +2667,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## advertized and by default is the same as patroni['port'].
 # patroni['connect_port'] = '8008'
 
+## The username and password to use for basic auth on write commands to the
+## Patroni API. If not specified then the API does not use basic auth.
+# patroni['username'] = nil
+# patroni['password'] = nil
 
 ################################################################################
 # Consul (EEP only)

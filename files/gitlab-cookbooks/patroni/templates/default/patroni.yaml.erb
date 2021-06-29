@@ -35,3 +35,8 @@ bootstrap:
 restapi:
   listen: <%= @listen_address %>:<%= @port %>
   connect_address: <%= @connect_address %>:<%= @connect_port %>
+  <% if @username %>
+  authentication:
+    username: <%= @username %>
+    password: <%= "#{@password}" %>
+  <% end %>
