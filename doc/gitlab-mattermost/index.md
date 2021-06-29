@@ -182,6 +182,9 @@ sudo -i -u gitlab-psql -- /opt/gitlab/embedded/bin/pg_dump -h /var/opt/gitlab/po
 
 ### Mattermost Command Line Tools (CLI)
 
+NOTE:
+This CLI will be replaced in a future release with the new [`mmctl` Command Line Tool](https://docs.mattermost.com/administration/mmctl-cli-tool.html).
+
 To use the [Mattermost Command Line Tools (CLI)](https://docs.mattermost.com/administration/command-line-tools.html), ensure that you are in the `/opt/gitlab/embedded/service/mattermost` directory when you run the CLI commands and that you specify the location of the configuration file. The executable is `/opt/gitlab/embedded/bin/mattermost`.
 
 ```shell
