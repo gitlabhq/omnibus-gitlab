@@ -359,6 +359,9 @@
   needs:
     - job: fetch-assets
       optional: true
+    - job: generate-facts
+      optional: true
+      artifacts: true
   cache: *branch-cache
   retry: 1
 
@@ -401,6 +404,9 @@
   needs:
     - job: fetch-assets
       optional: true
+    - job: generate-facts
+      optional: true
+      artifacts: true
   cache: *tag-cache
   retry: 1
 
@@ -494,6 +500,7 @@
 ###########################
 
 # fetch-assets job from .gitlab-ci.yml file runs here
+# generate-assets job from .gitlab-ci.yml file runs here
 
 # We build package for deploying to GitLab.com first
 Ubuntu-16.04-branch:
@@ -566,6 +573,9 @@ Docker-branch:
   needs:
     - job: Ubuntu-20.04-branch
       artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
   retry: 1
 
 QA-branch:
@@ -590,6 +600,9 @@ QA-branch:
   needs:
     - job: Ubuntu-20.04-branch
       artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
   retry: 1
 
 Raspberry-Pi-2-Buster-branch:
@@ -649,7 +662,10 @@ Docker-QA:
   cache: *tag-cache
   tags:
   - docker-builder
-  needs: []
+  needs:
+    - job: generate-facts
+      optional: true
+      artifacts: true
   retry: 1
 
 ###########################################################
@@ -751,6 +767,9 @@ Docker:
   needs:
     - job: Ubuntu-20.04
       artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
   retry: 1
 
 ### Staging uploads
@@ -899,6 +918,9 @@ Docker-Release:
   cache: *tag-cache
   needs:
     - Docker
+    - job: generate-facts
+      optional: true
+      artifacts: true
 
 AWS:
   <<: *aws_ami_build
@@ -934,6 +956,9 @@ QA-Tag:
   cache: *tag-cache
   needs:
     - Docker-QA
+    - job: generate-facts
+      optional: true
+      artifacts: true
   retry: 1
 
 license-upload:

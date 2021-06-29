@@ -27,3 +27,5 @@ config/projects/simple.rb
 # These are created during a package build. We do not want to commit them
 .yarn-cache
 assets_cache
+
+build_facts

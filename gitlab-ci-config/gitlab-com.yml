@@ -421,6 +421,9 @@ Trigger:package:
   needs:
     - job: fetch-assets
       optional: true
+    - job: generate-facts
+      optional: true
+      artifacts: true
 
 Trigger:gitlab-docker:
   extends:
@@ -435,6 +438,9 @@ Trigger:gitlab-docker:
   needs:
     - job: Trigger:package
       artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
 
 Trigger:qa-docker:
   extends:
@@ -451,6 +457,9 @@ Trigger:qa-docker:
       - $SKIP_QA_DOCKER == "true"
   needs:
     - Trigger:package
+    - job: generate-facts
+      optional: true
+      artifacts: true
 
 Trigger:qa-test:
   stage: trigger-qa
