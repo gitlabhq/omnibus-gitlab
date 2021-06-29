@@ -359,6 +359,8 @@
   needs:
     - job: fetch-assets
       optional: true
+    - job: generate-facts
+      optional: true
       artifacts: true
   cache: *branch-cache
   retry: 1
@@ -402,6 +404,9 @@
   needs:
     - job: fetch-assets
       optional: true
+    - job: generate-facts
+      optional: true
+      artifacts: true
   cache: *tag-cache
   retry: 1
 
@@ -495,6 +500,7 @@
 ###########################
 
 # fetch-assets job from .gitlab-ci.yml file runs here
+# generate-assets job from .gitlab-ci.yml file runs here
 
 # We build package for deploying to GitLab.com first
 Ubuntu-16.04-branch:
@@ -567,7 +573,7 @@ Docker-branch:
   needs:
     - job: Ubuntu-20.04-branch
       artifacts: false
-    - job: fetch-assets
+    - job: generate-facts
       optional: true
       artifacts: true
   retry: 1
@@ -594,7 +600,7 @@ QA-branch:
   needs:
     - job: Ubuntu-20.04-branch
       artifacts: false
-    - job: fetch-assets
+    - job: generate-facts
       optional: true
       artifacts: true
   retry: 1
@@ -657,7 +663,7 @@ Docker-QA:
   tags:
   - docker-builder
   needs:
-    - job: fetch-assets
+    - job: generate-facts
       optional: true
       artifacts: true
   retry: 1
@@ -761,7 +767,7 @@ Docker:
   needs:
     - job: Ubuntu-20.04
       artifacts: false
-    - job: fetch-assets
+    - job: generate-facts
       optional: true
       artifacts: true
   retry: 1
@@ -912,7 +918,7 @@ Docker-Release:
   cache: *tag-cache
   needs:
     - Docker
-    - job: fetch-assets
+    - job: generate-facts
       optional: true
       artifacts: true
 
@@ -950,7 +956,7 @@ QA-Tag:
   cache: *tag-cache
   needs:
     - Docker-QA
-    - job: fetch-assets
+    - job: generate-facts
       optional: true
       artifacts: true
   retry: 1
