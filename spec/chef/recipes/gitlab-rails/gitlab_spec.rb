@@ -203,27 +203,5 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
       end
     end
-
-    describe 'Seat link' do
-      context 'with default configuration' do
-        it 'renders gitlab.yml with seat link enabled' do
-          expect(gitlab_yml[:production][:gitlab][:seat_link_enabled]).to be true
-        end
-      end
-
-      context 'with seat link explicitly disabled by the user' do
-        before do
-          stub_gitlab_rb(
-            gitlab_rails: {
-              seat_link_enabled: false
-            }
-          )
-        end
-
-        it 'renders gitlab.yml with user specified value for Seat Link' do
-          expect(gitlab_yml[:production][:gitlab][:seat_link_enabled]).to be false
-        end
-      end
-    end
   end
 end
