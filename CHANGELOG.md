@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 13.11.6 (2021-07-01)
+
+### Security (3 changes)
+
+- [Add libxml2 security patches released as of May 2021](gitlab-org/security/omnibus-gitlab@b9df8cc391c18657f697ddba1e451725096bdf79) ([merge request](gitlab-org/security/omnibus-gitlab!125))
+- [Update Redis to 6.0.14](gitlab-org/security/omnibus-gitlab@283f77dd10b91384a86edc7c0c872de0b44e2c0c) ([merge request](gitlab-org/security/omnibus-gitlab!121))
+- [Update Mattermost to 5.33.5](gitlab-org/security/omnibus-gitlab@06a53e3a307d22d851468f63dfc7ffaeb4a9ad10) ([merge request](gitlab-org/security/omnibus-gitlab!118))
+
 ## 13.11.5 (2021-06-01)
 
 ### Security (1 change)
