@@ -53,8 +53,8 @@ These additional variables are available to override or enable different build b
 | CVEIGNORE                                       | See document on [dependencies being reported as vulnerable](broken_master.md). |
 | CI_SLACK_WEBHOOK_URL                            | Webhook URL for Slack failure notifications. |
 | DANGER_GITLAB_API_TOKEN                         | GitLab API token for dangerbot to post comments to MRs. |
-| DEPS_GITLAB_TOKEN                               | Token used by [dependencies.io](https://docs.dependencies.io/gitlab-ci/) to create MRs. |
-| DEPS_TOKEN                                      | Token used by CI to auth to [dependencies.io](https://docs.dependencies.io/gitlab-ci/). |
+| DEPS_GITLAB_TOKEN                               | Token used by [dependencies.io](https://www.dependencies.io/gitlab-ci/) to create MRs. |
+| DEPS_TOKEN                                      | Token used by CI to auth to [dependencies.io](https://www.dependencies.io/gitlab-ci/). |
 | DOCS_API_TOKEN
 
 ## Release variables

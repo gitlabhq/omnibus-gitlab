@@ -50,7 +50,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [Configuring Rack attack](settings/configuration.md#configuring-rack-attack)
 - [SMTP](settings/smtp.md)
 - [NGINX](settings/nginx.md)
-- [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap.html)
+- [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap/index.html)
 - [Puma](settings/puma.md)
 - [ActionCable](settings/actioncable.md)
 - [Redis](settings/redis.md)

@@ -72,7 +72,7 @@ All trademarks, materials, documentation, and other intellectual property remain
 ### Trademark Requirements
 
 Use of GitLab Trademarks must be in compliance with the standards set forth in [our guidelines](https://about.gitlab.com/handbook/marketing/corporate-marketing/brand-activation/brand-guidelines/#trademark) (as updated from time to time).
-CHEF® and all Chef marks are owned by Chef Software, Inc. and must be used in accordance with the [Chef Trademark policy](https://www.chef.io/trademark-policy/) (as updated from time to time) located at.
+CHEF® and all Chef marks are owned by Chef Software, Inc. and must be used in accordance with the [Chef Trademark policy](https://www.chef.io/trademark-policy) (as updated from time to time) located at.
 
 When using a GitLab or 3rd party trademark in documentation, include the (R) symbol in the first instance, for example, "Chef(R) is used for configuring...." You may omit the symbol in subsequent instances.
 
