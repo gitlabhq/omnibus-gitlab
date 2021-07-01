@@ -175,6 +175,14 @@ No changes.
 - [Update libtiff from 4.2.0 to 4.3.0](gitlab-org/omnibus-gitlab@c4ebbb5116ddb6ce76cf61625a51b6ee6c4c2d26) ([merge request](gitlab-org/omnibus-gitlab!5189))
 - [Update grafana from 7.5.1 to 7.5.4](gitlab-org/omnibus-gitlab@a322670d961092b7bde707af2ba94af864b09216) ([merge request](gitlab-org/omnibus-gitlab!5178))
 
+## 13.11.6 (2021-07-01)
+
+### Security (3 changes)
+
+- [Add libxml2 security patches released as of May 2021](gitlab-org/security/omnibus-gitlab@b9df8cc391c18657f697ddba1e451725096bdf79) ([merge request](gitlab-org/security/omnibus-gitlab!125))
+- [Update Redis to 6.0.14](gitlab-org/security/omnibus-gitlab@283f77dd10b91384a86edc7c0c872de0b44e2c0c) ([merge request](gitlab-org/security/omnibus-gitlab!121))
+- [Update Mattermost to 5.33.5](gitlab-org/security/omnibus-gitlab@06a53e3a307d22d851468f63dfc7ffaeb4a9ad10) ([merge request](gitlab-org/security/omnibus-gitlab!118))
+
 ## 13.11.5 (2021-06-01)
 
 No changes.
