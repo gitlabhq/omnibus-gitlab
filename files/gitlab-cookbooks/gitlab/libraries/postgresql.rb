@@ -22,6 +22,7 @@ module Postgresql
       parse_connect_port
       parse_multi_db_host_addresses
       parse_mattermost_postgresql_settings
+      parse_wal_keep_size
     end
 
     def parse_secrets
@@ -80,6 +81,18 @@ module Postgresql
 
       value_from_attributes = "user=#{user} host=#{host} port=#{port} dbname=#{database_name}"
       Gitlab['mattermost']['sql_data_source'] = value_from_gitlab_rb || value_from_attributes
+    end
+
+    def parse_wal_keep_size
+      wal_segment_size = 16
+      wal_keep_segments = Gitlab['postgresql']['wal_keep_segments'] || Gitlab['node']['postgresql']['wal_keep_segments']
+      wal_keep_size = Gitlab['postgresql']['wal_keep_size'] || Gitlab['node']['postgresql']['wal_keep_size']
+
+      Gitlab['postgresql']['wal_keep_size'] = if wal_keep_size.nil?
+                                                wal_keep_segments.to_i * wal_segment_size
+                                              else
+                                                wal_keep_size
+                                              end
     end
 
     def parse_connect_port

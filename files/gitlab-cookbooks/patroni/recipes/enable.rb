@@ -37,7 +37,7 @@ patroni_data_dir = File.join(node['patroni']['dir'], 'data')
 end
 
 file dcs_config_file do
-  content YAML.dump(patroni_helper.dynamic_settings)
+  content lazy { YAML.dump(patroni_helper.dynamic_settings(pg_helper)) }
   owner account_helper.postgresql_user
   group account_helper.postgresql_group
   mode '0600'

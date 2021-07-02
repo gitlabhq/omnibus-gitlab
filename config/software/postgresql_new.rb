@@ -15,8 +15,8 @@
 # limitations under the License.
 #
 
-name 'postgresql'
-default_version '12.6'
+name 'postgresql_new'
+default_version '13.3'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -30,11 +30,12 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '12.6' do
-  source sha256: 'df7dd98d5ccaf1f693c7e1d0d084e9fed7017ee248bba5be0167c42ad2d70a09'
+version '13.3' do
+  source sha256: '3cd9454fa8c7a6255b6743b767700925ead1b9ab0d7a0f9dcb1151010f8eb4a1'
 end
 
-major_version = '12'
+major_version = '13'
+libpq = 'libpq.so.5'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
 
@@ -56,11 +57,7 @@ build do
   make "world -j #{workers}", env: env
   make 'install-world', env: env
 
-  block 'link bin files' do
-    Dir.glob("#{prefix}/bin/*").each do |bin_file|
-      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
-    end
-  end
+  link "#{prefix}/lib/#{libpq}", "#{install_dir}/embedded/lib/#{libpq}"
 end
 
 # exclude headers and static libraries from package
