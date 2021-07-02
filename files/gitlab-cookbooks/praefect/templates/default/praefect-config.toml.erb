@@ -87,9 +87,9 @@ token = '<%= node['token'] %>'
 <% direct_port = @database_direct_port || @database_port_no_proxy %>
 <%= "host = '#{direct_host}'" if direct_host %>
 <%= "port = #{direct_port}" if direct_port %>
-<%= "user = #{@database_direct_user}" if @database_direct_user %>
-<%= "password = #{@database_direct_password}" if @database_direct_password %>
-<%= "dbname = #{@database_direct_dbname}" if @database_direct_dbname %>
+<%= "user = '#{@database_direct_user}'" if @database_direct_user %>
+<%= "password = '#{@database_direct_password}'" if @database_direct_password %>
+<%= "dbname = '#{@database_direct_dbname}'" if @database_direct_dbname %>
 <%= "sslmode = '#{@database_direct_sslmode}'" if @database_direct_sslmode %>
 <%= "sslcert = '#{@database_direct_sslcert}'" if @database_direct_sslcert %>
 <%= "sslkey = '#{@database_direct_sslkey}'" if @database_direct_sslkey %>
