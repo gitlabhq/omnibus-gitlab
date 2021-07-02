@@ -6,6 +6,7 @@ RSpec.describe PatroniHelper do
   end
 
   subject(:helper) { PatroniHelper.new(chef_run.node) }
+  let(:pg_helper) { PgHelper.new(chef_run.node) }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -39,7 +40,7 @@ RSpec.describe PatroniHelper do
     it 'returns a hash with required keys' do
       expected_root_keys = PatroniHelper::DCS_ATTRIBUTES + %w[postgresql slots]
 
-      expect(helper.dynamic_settings.keys).to match_array(expected_root_keys)
+      expect(helper.dynamic_settings(pg_helper).keys).to match_array(expected_root_keys)
     end
 
     context 'with standby cluster enabled' do
@@ -55,7 +56,7 @@ RSpec.describe PatroniHelper do
 
         expected_root_keys = PatroniHelper::DCS_ATTRIBUTES + %w[postgresql slots standby_cluster]
 
-        expect(helper.dynamic_settings.keys).to match_array(expected_root_keys)
+        expect(helper.dynamic_settings(pg_helper).keys).to match_array(expected_root_keys)
       end
     end
   end

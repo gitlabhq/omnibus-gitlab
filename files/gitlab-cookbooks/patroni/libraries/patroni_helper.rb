@@ -33,7 +33,7 @@ class PatroniHelper < BaseHelper
     do_shell_out(cmd).stdout.chomp.strip
   end
 
-  def dynamic_settings
+  def dynamic_settings(pg_helper)
     dcs = {
       'postgresql' => {
         'parameters' => {}
@@ -51,6 +51,13 @@ class PatroniHelper < BaseHelper
 
     node['patroni']['postgresql'].each do |key, value|
       dcs['postgresql']['parameters'][key] = value
+    end
+
+    # work around to support PG12 and PG13 concurrently
+    if (pg_helper.database_version || pg_helper.version).major.to_i >= 13
+      dcs['postgresql']['parameters'].delete('wal_keep_segments')
+    else
+      dcs['postgresql']['parameters'].delete('wal_keep_size')
     end
 
     node['patroni']['replication_slots'].each do |slot_name, options|
