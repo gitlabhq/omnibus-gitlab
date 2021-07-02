@@ -1385,6 +1385,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['gzip_proxied'] = "any"
 # nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
 # nginx['keepalive_timeout'] = 65
+# nginx['keepalive_time'] = '1h'
 # nginx['cache_max_size'] = '5000m'
 # nginx['server_names_hash_bucket_size'] = 64
 ##! These paths have proxy_request_buffering disabled
