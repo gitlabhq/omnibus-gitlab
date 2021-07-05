@@ -138,8 +138,7 @@ end
 template '/opt/gitlab/etc/gitlab-rails-rc' do
   owner 'root'
   group 'root'
-  mode  '0600'
-  sensitive true
+  mode  '0644'
 end
 
 # TODO: Delete in GitLab 15.0
