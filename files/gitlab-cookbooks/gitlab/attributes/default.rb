@@ -661,6 +661,7 @@ default['gitlab']['nginx']['gzip_comp_level'] = "2"
 default['gitlab']['nginx']['gzip_proxied'] = "no-cache no-store private expired auth"
 default['gitlab']['nginx']['gzip_types'] = ["text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json"]
 default['gitlab']['nginx']['keepalive_timeout'] = 65
+default['gitlab']['nginx']['keepalive_time'] = '1h'
 default['gitlab']['nginx']['client_max_body_size'] = 0
 default['gitlab']['nginx']['cache_max_size'] = '5000m'
 default['gitlab']['nginx']['redirect_http_to_https'] = false
