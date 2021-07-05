@@ -363,6 +363,7 @@ default['gitlab']['gitlab-rails']['shared_path'] = "/var/opt/gitlab/gitlab-rails
 default['gitlab']['gitlab-rails']['encrypted_settings_path'] = nil
 
 default['gitlab']['gitlab-rails']['backup_path'] = "/var/opt/gitlab/backups"
+default['gitlab']['gitlab-rails']['backup_gitaly_backup_path'] = "/opt/gitlab/embedded/bin/gitaly-backup"
 default['gitlab']['gitlab-rails']['manage_backup_path'] = true
 default['gitlab']['gitlab-rails']['backup_archive_permissions'] = nil
 default['gitlab']['gitlab-rails']['backup_pg_schema'] = nil
