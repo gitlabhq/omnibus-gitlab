@@ -291,7 +291,7 @@ only on EE branches.
 #### `Docker-branch`
 
 This job builds a GitLab Docker image using the package built during the Ubuntu
-16.04-branch job. The image is pushed to the GitLab container registry.
+20.04-branch job. The image is pushed to the GitLab container registry.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on branch and nightly pipelines.
 
@@ -337,7 +337,7 @@ Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tag
 ### `Docker`
 
 This job builds a GitLab Docker image using the package built during the Ubuntu
-16.04-branch job. The image is pushed to the internal GitLab container registry.
+20.04-branch job. The image is pushed to the internal GitLab container registry.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
@@ -365,21 +365,21 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 
 ### `AWS`
 
-This job builds the unlicensed AWS AMIs using the Ubuntu 16.04 package.
+This job builds the unlicensed AWS AMIs using the Ubuntu 20.04 package.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on tag pipelines.
 
 ### `AWS-Ultimate`
 
 This job builds an AWS AMI with embedded Ultimate licenses using the Ubuntu
-16.04 package.
+20.04 package.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on EE tag pipelines.
 
 ### `AWS-Premium`
 
 This job builds an AWS AMI with embedded Premium licenses using the Ubuntu
-16.04 package.
+20.04 package.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on EE tag pipelines.
 

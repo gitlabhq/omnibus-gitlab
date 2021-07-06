@@ -163,13 +163,7 @@ To troubleshoot this error:
    sudo systemctl restart gitlab-runsvdir
    ```
 
-   Using upstart (Ubuntu <= 14.04):
-
-   ```shell
-   sudo initctl restart gitlab-runsvdir
-   ```
-
-   Using systemd (CentOS, Ubuntu >= 16.04):
+   Using systemd (CentOS, Ubuntu >= 18.04):
 
    ```shell
    systemctl restart gitlab-runsvdir.service
@@ -645,7 +639,7 @@ will need to switch to using `no_root_squash` in your NFS exports on the NFS ser
 
 ## `gitlab-runsvdir` not starting
 
-This applies to operating systems using systemd (e.g. Ubuntu 16.04+, CentOS, etc.).
+This applies to operating systems using systemd (e.g. Ubuntu 18.04+, CentOS, etc.).
 
 Since GitLab 11.2, the `gitlab-runsvdir` starts during the `multi-user.target`
 instead of `basic.target`. If you are having trouble starting this service
