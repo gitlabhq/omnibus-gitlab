@@ -18,9 +18,16 @@ dependencies:
       - 42196
       - 4849
     gitlab_labels:
+      - group::distribution
+      - devops::enablement
+      - feature::maintenance
       - maintenance
       - dependencies.io
     gitlab_remove_source_branch: true
+    commit_message_template: |-
+      {{.SubjectAndBody}}
+
+      Changelog: updated
     remotes:
       # acme-client
       https://github.com/unixcharles/acme-client.git:
