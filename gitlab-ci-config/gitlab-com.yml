@@ -240,7 +240,7 @@ docs-lint markdown:
     # Lint prose
     - vale --minAlertLevel error doc
     # Lint Markdown
-    - markdownlint --config .markdownlint.json 'doc/**/*.md'
+    - markdownlint --config .markdownlint.yml 'doc/**/*.md'
   except:
     refs:
       - /./@gitlab/omnibus-gitlab
