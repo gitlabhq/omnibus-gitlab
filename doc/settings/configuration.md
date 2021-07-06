@@ -419,10 +419,7 @@ To move an existing home directory, GitLab services will need to be stopped and 
    # Using systemctl (Debian => 9 - Stretch):
    sudo systemctl stop gitlab-runsvdir
 
-   # Using upstart (Ubuntu <= 14.04):
-   sudo initctl stop gitlab-runsvdir
-
-   # Using systemd (CentOS, Ubuntu >= 16.04):
+   # Using systemd (CentOS, Ubuntu >= 18.04):
    systemctl stop gitlab-runsvdir.service
    ```
 
@@ -444,10 +441,7 @@ To move an existing home directory, GitLab services will need to be stopped and 
    # Using systemctl (Debian => 9 - Stretch):
    sudo systemctl start gitlab-runsvdir
 
-   # Using upstart (Ubuntu <= 14.04):
-   sudo initctl start gitlab-runsvdir
-
-   # Using systemd (CentOS, Ubuntu >= 16.04):
+   # Using systemd (CentOS, Ubuntu >= 18.04):
    systemctl start gitlab-runsvdir.service
    ```
 
