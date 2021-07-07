@@ -20,14 +20,14 @@ require 'open3'
 
 if !node['package']['detect_init']
   Chef::Log.info "Skipped selecting an init system because it was explicitly disabled"
+elsif File.directory?('/run/systemd/system')
+  Chef::Log.warn "Selected systemd because /run/systemd/system/ exists"
+  include_recipe "package::runit_systemd"
 elsif File.exist?('/.dockerenv')
   Chef::Log.warn "Skipped selecting an init system because it looks like we are running in a container"
 elsif Open3.capture3('/sbin/init --version | grep upstart')[2].success?
   Chef::Log.warn "Selected upstart because /sbin/init --version is showing upstart."
   include_recipe "package::runit_upstart"
-elsif Open3.capture3('systemctl | grep "\-\.mount"')[2].success?
-  Chef::Log.warn "Selected systemd because systemctl shows .mount units"
-  include_recipe "package::runit_systemd"
 else
   Chef::Log.warn "Selected sysvinit because it looks like it is not upstart or systemd."
   include_recipe "package::runit_sysvinit"
