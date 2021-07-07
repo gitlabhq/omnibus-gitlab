@@ -162,6 +162,8 @@
       when: never
     - <<: *unless-dev
       when: never
+    - <<: *if-ee-tag
+      when: never
     - <<: *if-rc-tag
       when: never
     - <<: *if-auto-deploy-tag
@@ -189,6 +191,10 @@
     - <<: *if-skip-job
       when: never
     - <<: *unless-dev
+      when: never
+    - <<: *if-auto-deploy-tag
+      when: never
+    - <<: *if-ee-tag
       when: never
     - <<: *if-rc-tag
       when: never
@@ -254,6 +260,10 @@
     - <<: *if-skip-job
       when: never
     - <<: *unless-dev
+      when: never
+    - <<: *if-auto-deploy-tag
+      when: never
+    - <<: *if-ee-tag
       when: never
     - <<: *if-ce-tag
       when: manual
