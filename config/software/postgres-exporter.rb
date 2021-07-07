@@ -38,6 +38,8 @@ build do
 
   ldflags = [
     "-X main.Version=#{version.print}",
+    "-s",
+    "-w"
   ].join(' ')
 
   command "go build -ldflags '#{ldflags}' ./cmd/postgres_exporter", env: env

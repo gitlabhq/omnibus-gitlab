@@ -8,7 +8,9 @@ module Prometheus
       @ldflags = [
         "-X #{common_version}.Version=#{version.print(false)}",
         "-X #{common_version}.Branch=master",
-        "-X #{common_version}.BuildUser=GitLab-Omnibus"
+        "-X #{common_version}.BuildUser=GitLab-Omnibus",
+        "-s",
+        "-w"
       ]
     end
 
