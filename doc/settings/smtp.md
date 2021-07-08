@@ -117,6 +117,8 @@ gitlab_rails['smtp_domain'] = "mg.gitlab.com"
 
 ### Amazon Simple Email System (AWS SES)
 
+- Using STARTTLS
+
 ```ruby
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "email-smtp.region-1.amazonaws.com"
@@ -129,6 +131,22 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
 Make sure to permit egress through port 587 in your ACL and security group.
+
+- Using TLS Wrapper
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "email-smtp.region-1.amazonaws.com"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "IAMmailerKey"
+gitlab_rails['smtp_password'] = "IAMmailerSecret"
+gitlab_rails['smtp_domain'] = "yourdomain.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_ssl'] = true
+gitlab_rails['smtp_force_ssl'] = true
+```
+
+Make sure to permit egress through port 465 in your ACL and security group.
 
 ### Mandrill
 
