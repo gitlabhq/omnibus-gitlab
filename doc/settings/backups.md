@@ -47,6 +47,9 @@ weekday, Tuesday (day 2) through Saturday (day 6):
 15 04 * * 2-6  gitlab-ctl backup-etc && cd /etc/gitlab/config_backup && cp $(ls -t | head -n1) /secret/gitlab/backups/
 ```
 
+NOTE:
+Make sure that `/secret/gitlab/backups/` exists.
+
 You can extract the .tar file as follows.
 
 ```shell
@@ -130,7 +133,7 @@ docker exec -t <your container name> gitlab-backup
 Backup configuration and secrets:
 
 ```shell
-docker exec -t <your container name> /bin/sh -c 'umask 0077; tar cfz /secret/gitlab/backups/$(date "+etc-gitlab-\%s.tgz") -C / etc/gitlab'
+docker exec -t <your container name> /bin/sh -c 'gitlab-ctl backup-etc && cd /etc/gitlab/config_backup && cp $(ls -t | head -n1) /secret/gitlab/backups/'
 ```
 
 NOTE:
