@@ -1,13 +1,5 @@
 require 'chef_helper'
 
-RSpec::Matchers.define :configure_gitlab_yml_using do |expected_variables|
-  match do |chef_run|
-    expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-      expected_variables
-    )
-  end
-end
-
 RSpec.describe 'gitlab::gitlab-rails' do
   using RSpec::Parameterized::TableSyntax
 
@@ -345,384 +337,36 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
   end
 
-  context 'creating gitlab.yml' do
+  describe 'gitlab.yml' do
     gitlab_yml_path = '/var/opt/gitlab/gitlab-rails/etc/gitlab.yml'
     let(:gitlab_yml) { chef_run.template(gitlab_yml_path) }
-    let(:gitlab_yml_content) { ChefSpec::Renderer.new(chef_run, gitlab_yml).content }
-    let(:generated_yml_content) { YAML.safe_load(gitlab_yml_content, [], [], true) }
     let(:gitlab_yml_templatesymlink) { chef_run.templatesymlink('Create a gitlab.yml and create a symlink to Rails root') }
 
-    let(:aws_connection_hash) do
-      {
-        'provider' => 'AWS',
-        'region' => 'eu-west-1',
-        'aws_access_key_id' => 'AKIAKIAKI',
-        'aws_secret_access_key' => 'secret123'
-      }
-    end
-
-    it_behaves_like 'renders a valid YAML file', gitlab_yml_path
-
-    shared_examples 'sets the connection in YAML' do
-      it do
-        expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/connection:\s{"provider":"AWS"/)
-        expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/"region":"eu-west-1"/)
-        expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/"aws_access_key_id":"AKIAKIAKI"/)
-        expect(chef_run).to render_file(gitlab_yml_path)
-          .with_content(/"aws_secret_access_key":"secret123"/)
-      end
-    end
-
     # NOTE: Test if we pass proper notifications to other resources
-    context 'rails cache management' do
+    describe 'rails cache management' do
       before do
         stub_default_not_listening?(false)
       end
 
-      it 'should notify rails cache clear resource' do
-        expect(gitlab_yml_templatesymlink).to notify('execute[clear the gitlab-rails cache]')
+      context 'with default values' do
+        it 'should notify rails cache clear resource' do
+          expect(gitlab_yml_templatesymlink).to notify('execute[clear the gitlab-rails cache]')
+        end
       end
 
-      it 'should still notify rails cache clear resource if disabled' do
-        stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
-
-        expect(gitlab_yml_templatesymlink).to notify(
-          'execute[clear the gitlab-rails cache]')
-        expect(chef_run).not_to run_execute(
-          'clear the gitlab-rails cache')
-      end
-    end
-
-    context 'matomo_disable_cookies' do
-      context 'when true' do
+      context 'with rake_cache_clear set to false' do
         before do
-          stub_gitlab_rb(
-            gitlab_rails: { extra_matomo_disable_cookies: true }
-          )
+          stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
         end
 
-        it 'should set matomo_disable_cookies to true' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'extra_matomo_disable_cookies' => true
-            )
-          )
-        end
-      end
-
-      context 'when false' do
-        before do
-          stub_gitlab_rb(
-            gitlab_rails: { extra_matomo_disable_cookies: false }
-          )
+        it 'should notify rails cache clear resource' do
+          expect(gitlab_yml_templatesymlink).to notify(
+            'execute[clear the gitlab-rails cache]')
         end
 
-        it 'should set matomo_disable_cookies to false' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'extra_matomo_disable_cookies' => false
-            )
-          )
-        end
-      end
-
-      context 'when absent' do
-        it 'should set matomo_disable_cookies to nil' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'extra_matomo_disable_cookies' => nil
-            )
-          )
-        end
-      end
-    end
-
-    describe 'repositories storages' do
-      it 'sets specified properties' do
-        stub_gitlab_rb(
-          git_data_dirs: {
-            "second_storage" => {
-              "path" => "/tmp/storage"
-            }
-          }
-        )
-
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'repositories_storages' => {
-              'second_storage' => {
-                'path' => '/tmp/storage/repositories',
-                'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket'
-              }
-            }
-          )
-        )
-      end
-
-      it 'sets the defaults' do
-        default_storages = {
-          'default' => {
-            'path' => '/var/opt/gitlab/git-data/repositories',
-            'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket'
-          }
-        }
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'repositories_storages' => default_storages
-          )
-        )
-      end
-
-      it 'sets path if not provided' do
-        stub_gitlab_rb(
-          {
-            git_data_dirs:
-            {
-              'default' => { 'gitaly_address' => 'tcp://gitaly.internal:8075' }
-            }
-          }
-        )
-
-        expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            'repositories_storages' => {
-              'default' => {
-                'path' => '/var/opt/gitlab/git-data/repositories',
-                'gitaly_address' => 'tcp://gitaly.internal:8075'
-              }
-            }
-          )
-        )
-      end
-    end
-
-    context 'omniauth settings' do
-      context 'enabled setting' do
-        it 'defaults to nil (enabled)' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_enabled' => nil
-            )
-          )
-        end
-
-        it 'can be explicitly enabled' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_enabled: true })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_enabled' => true
-            )
-          )
-        end
-
-        it 'can be disabled' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_enabled: false })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_enabled' => false
-            )
-          )
-        end
-      end
-
-      context 'sync email from omniauth provider is configured' do
-        it 'sets the omniauth provider' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_sync_email_from_provider: 'cas3' })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_sync_email_from_provider' => 'cas3'
-            )
-          )
-        end
-      end
-
-      context 'sync email from omniauth provider is not configured' do
-        it 'does not include the sync email from omniauth provider setting' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_sync_email_from_provider' => nil
-            )
-          )
-        end
-      end
-
-      context 'sync profile from omniauth provider is not configured' do
-        it 'sets the sync profile from provider to []' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_sync_profile_from_provider' => nil
-            )
-          )
-        end
-      end
-
-      context 'sync profile from omniauth provider is configured to array' do
-        it 'sets the sync profile from provider to [\'cas3\']' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_from_provider: ['cas3'] })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_sync_profile_from_provider' => ['cas3']
-            )
-          )
-        end
-      end
-
-      context 'sync profile from omniauth provider is configured to true' do
-        it 'sets the sync profile from provider to true' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_from_provider: true })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_sync_profile_from_provider' => true
-            )
-          )
-        end
-      end
-
-      context 'sync profile attributes is configured to [\"email\", \"name\"]' do
-        it 'sets the sync profile attributes to [\"email\", \"name\"]' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_attributes: %w(email name) })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_sync_profile_attributes' => %w[email name]
-            )
-          )
-        end
-      end
-
-      context 'bypass two factor for providers is configured ' do
-        it 'bypass_two_factor configured as true' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_bypass_two_factor: true })
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_bypass_two_factor' => true
-            )
-          )
-        end
-
-        it 'bypass_two_factor configured as false' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_bypass_two_factor: false })
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_bypass_two_factor' => false
-            )
-          )
-        end
-
-        it 'bypass_two_factor configured as [\'foo\']' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_bypass_two_factor: ['foo'] })
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_bypass_two_factor' => ['foo']
-            )
-          )
-        end
-      end
-
-      context 'sync profile attributes is configured to true' do
-        it 'sets the sync profile attributes to true' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_sync_profile_attributes: true })
-
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_sync_profile_attributes' => true
-            )
-          )
-        end
-      end
-
-      context 'auto link user for providers is configured ' do
-        it 'auto_link_user configured as true' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_auto_link_user: true })
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_auto_link_user' => true
-            )
-          )
-        end
-
-        it 'auto_link_user configured as false' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_auto_link_user: false })
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_auto_link_user' => false
-            )
-          )
-        end
-
-        it 'auto_link_user configured as [\'foo\']' do
-          stub_gitlab_rb(gitlab_rails: { omniauth_auto_link_user: ['foo'] })
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_auto_link_user' => ['foo']
-            )
-          )
-        end
-      end
-
-      context 'auto link user for providers is not configured' do
-        it 'sets auto_link_user to []' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              'omniauth_auto_link_user' => nil
-            )
-          )
-        end
-      end
-    end
-
-    context 'Sidekiq exporter settings' do
-      it 'exporter enabled but log disabled by default' do
-        expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-          yaml_data = YAML.safe_load(content, [], [], true)
-          expect(yaml_data['production']['monitoring']['sidekiq_exporter']).to include('enabled' => true, 'log_enabled' => false)
-        }
-      end
-
-      context 'when exporter log enabled' do
-        before do
-          stub_gitlab_rb(
-            sidekiq: { exporter_log_enabled: true }
-          )
-        end
-
-        it 'enables the log' do
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            yaml_data = YAML.safe_load(content, [], [], true)
-            expect(yaml_data['production']['monitoring']['sidekiq_exporter']).to include('enabled' => true, 'log_enabled' => true)
-          }
-        end
-      end
-    end
-
-    context 'Shutdown settings' do
-      context 'Blackout setting' do
-        it 'default setting' do
-          stub_gitlab_rb({})
-
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            yaml_data = YAML.safe_load(content, [], [], true)
-            expect(yaml_data['production']['shutdown']).to include('blackout_seconds' => 10)
-          }
-        end
-
-        it 'custom setting' do
-          stub_gitlab_rb(
-            gitlab_rails: { shutdown_blackout_seconds: 20 }
-          )
-
-          expect(chef_run).to render_file(gitlab_yml_path).with_content { |content|
-            yaml_data = YAML.safe_load(content, [], [], true)
-            expect(yaml_data['production']['shutdown']).to include('blackout_seconds' => 20)
-          }
+        it 'should not run cache clear' do
+          expect(chef_run).not_to run_execute(
+            'clear the gitlab-rails cache')
         end
       end
     end
