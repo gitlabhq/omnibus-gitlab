@@ -100,4 +100,18 @@ namespace :build do
       end
     end
   end
+
+  desc 'Write build related facts to file'
+  task :generate_facts do
+    FileUtils.rm_rf('build_facts')
+    FileUtils.mkdir_p('build_facts')
+
+    [
+      :latest_stable_tag,
+      :latest_tag
+    ].each do |fact|
+      content = Build::Info.send(fact) # rubocop:disable GitlabSecurity/PublicSend
+      File.write("build_facts/#{fact}", content) unless content.nil?
+    end
+  end
 end

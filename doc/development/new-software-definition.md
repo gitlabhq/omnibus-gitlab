@@ -13,7 +13,7 @@ In order to add a new component to GitLab, you should follow these steps:
 
 ## Fetch and compile the software during build
 
-[Software Definitions](../architecture/README.md#software-definitions), which
+[Software Definitions](../architecture/index.md#software-definitions), which
 can be found in `/config/software`, specify where omnibus should fetch the
 software, how to compile it and install it to the required folder. This part of
 the project is run when we build the Omnibus package for GitLab.

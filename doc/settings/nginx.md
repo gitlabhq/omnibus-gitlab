@@ -881,9 +881,9 @@ To fix this, you will need to match the correct private key with your certificat
 To ensure you have the correct key and certificate, you can ensure that the modulus of the private key and certificate match:
 
 ```shell
-/opt/gitlab/embedded/bin/openssl rsa -in /etc/gitlab/ssl/gitlab.example.com.key -noout -modulus | openssl sha1
+/opt/gitlab/embedded/bin/openssl rsa -in /etc/gitlab/ssl/gitlab.example.com.key -noout -modulus | /opt/gitlab/embedded/bin/openssl sha256
 
-/opt/gitlab/embedded/bin/openssl x509 -in /etc/gitlab/ssl/gitlab.example.com.crt -noout -modulus| openssl sha1
+/opt/gitlab/embedded/bin/openssl x509 -in /etc/gitlab/ssl/gitlab.example.com.crt -noout -modulus| /opt/gitlab/embedded/bin/openssl sha256
 ```
 
 Once you verify that they match, you will need to reconfigure and reload NGINX:

@@ -113,14 +113,14 @@ than [GitLab Community Edition (CE)](https://about.gitlab.com/install/?version=c
 increase compute and memory requirements.
 
 When memory consumption is the primary concern, install GitLab CE. You can
-always [upgrade to GitLab EE](../update/README.md#update-community-edition-to-enterprise-edition) later.
+always [upgrade to GitLab EE](../update/index.md#update-community-edition-to-enterprise-edition) later.
 
 ## Optimize Puma
 
 GitLab by default runs with a configuration that is designed to handle many concurrent connections.
 
 For small installations, which do not require high throughput,
-consider [disabling](../settings/puma.md#running-in-memory-constrained-environments)
+consider [disabling](https://docs.gitlab.com/ee/administration/operations/puma.html#memory-constrained-environments)
 Puma [Clustered mode](https://github.com/puma/puma#clustered-mode).
 As the result, only a single Puma process would serve the application.
 
@@ -225,9 +225,11 @@ To disable these features you need to go to Admin Area of GitLab
 and disable the Prometheus Metrics feature:
 
 1. Go to GitLab web interface.
-1. Go to **Admin Area > Settings > Metrics and profiling**.
+1. On the top bar, select **Menu >** **{admin}** **Admin**.
+1. On the left sidebar, select **Settings > Metrics and profiling**.
 1. Expand **Metrics - Prometheus**.
-1. Disable **Enable Prometheus Metrics** and **Save changes**.
+1. Disable **Enable Prometheus Metrics**.
+1. Select **Save changes**.
 
 ## Configuration with all the changes
 

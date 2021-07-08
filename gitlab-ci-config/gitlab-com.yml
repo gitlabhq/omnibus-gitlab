@@ -14,13 +14,30 @@
       - /(^docs[\/-].*|.*-docs$)/
       - /./@gitlab-org/build/omnibus-gitlab-mirror
     variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE
+      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
 .com-trigger-only: &com-trigger-only
   only:
     - triggers@gitlab-org/build/omnibus-gitlab-mirror
     - pipelines@gitlab-org/build/omnibus-gitlab-mirror
+
+.com-trigger-and-nightly-only: &com-trigger-and-nightly-only
+  only:
+    refs:
+      - triggers@gitlab-org/build/omnibus-gitlab-mirror
+      - pipelines@gitlab-org/build/omnibus-gitlab-mirror
+      - schedules@gitlab-org/build/omnibus-gitlab-mirror
+  except:
+    variables:
+      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
+
+.depscan-rules: &depscan-rules
+  only:
+    refs:
+      - schedules@gitlab-org/omnibus-gitlab
+    variables:
+      - $DEPENDENCY_SCANNING
 
 .knapsack-artifacts: &knapsack-artifacts
   expire_in: 31d
@@ -124,7 +141,7 @@
       - /^deps/
       - /(^docs[\/-].*|.*-docs$)/
     variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE
+      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
   needs: []
   timeout: 3h
@@ -154,6 +171,7 @@
   except:
     variables:
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
+      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
 
 #####################
 # Cache update jobs #
@@ -232,7 +250,7 @@ docs-lint markdown:
     # Lint prose
     - vale --minAlertLevel error doc
     # Lint Markdown
-    - markdownlint --config .markdownlint.json 'doc/**/*.md'
+    - markdownlint --config .markdownlint.yml 'doc/**/*.md'
   except:
     refs:
       - /./@gitlab/omnibus-gitlab
@@ -240,7 +258,7 @@ docs-lint markdown:
       - /^deps/
       - /./@gitlab-org/build/omnibus-gitlab-mirror
     variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE
+      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
 # Perform link checks on published HTML files
@@ -267,7 +285,7 @@ docs-lint links:
       - /^deps/
       - /./@gitlab-org/build/omnibus-gitlab-mirror
     variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE
+      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
 # Trigger a docs build in gitlab-docs
@@ -311,7 +329,7 @@ danger-review:
       - /^[\d-]+-stable(-patch-[\d]+)?$/
       - master
     variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE
+      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
   script:
     - danger --fail-on-errors=true
@@ -400,7 +418,7 @@ Trigger:package:
     - mv pkg/ubuntu-focal/*.deb pkg/ubuntu-focal/gitlab.deb
     - bundle exec rspec --color --format RspecJunitFormatter --out junit_ci_rspec.xml --format documentation ci_build_specs
     - bundle exec rake build:component_shas
-  <<: *com-trigger-only
+  <<: *com-trigger-and-nightly-only
   artifacts:
     expire_in: 3 days
     when: always
@@ -413,6 +431,9 @@ Trigger:package:
   needs:
     - job: fetch-assets
       optional: true
+    - job: generate-facts
+      optional: true
+      artifacts: true
 
 Trigger:gitlab-docker:
   extends:
@@ -427,6 +448,9 @@ Trigger:gitlab-docker:
   needs:
     - job: Trigger:package
       artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
 
 Trigger:qa-docker:
   extends:
@@ -443,6 +467,9 @@ Trigger:qa-docker:
       - $SKIP_QA_DOCKER == "true"
   needs:
     - Trigger:package
+    - job: generate-facts
+      optional: true
+      artifacts: true
 
 Trigger:qa-test:
   stage: trigger-qa
@@ -487,6 +514,42 @@ Trigger:RAT:
     - job: Trigger:qa-docker
       artifacts: false
       optional: true
+
+create_omnibus_manifest:
+  extends: .trigger-package-cache
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
+  stage: prepare-assets
+  variables:
+    TERM: xterm-256color
+  script:
+    - bundle exec omnibus manifest gitlab -l nothing 2> /dev/null > version-manifest.json
+  <<: *depscan-rules
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - version-manifest.json
+
+dependency_scanning:
+  image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.1.0"
+  stage: package
+  variables:
+    REPORT_PATH: ./
+    NVD_DB_UPDATE: "true"
+  before_script: []
+  script:
+    - echo ${CVEIGNORE} | sed -r "s/, */\n/g" >> .cveignore
+    - /gitlab-depscan.sh version-manifest.json
+  <<: *depscan-rules
+  needs:
+    - create_omnibus_manifest
+  artifacts:
+    expire_in: 7 days
+    when: on_failure
+    reports:
+      dependency_scanning: gl-dependency-scanning-report.json
+    paths:
+      - dependency_report.txt
+      - .cveignore
 
 dependency_update:
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
@@ -545,4 +608,4 @@ pages:
     - schedules@gitlab-org/omnibus-gitlab
   except:
     variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE
+      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING

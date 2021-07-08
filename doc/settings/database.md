@@ -772,6 +772,13 @@ correct executables by running both the [backup](https://docs.gitlab.com/ee/rake
 
 ### Upgrade a non-packaged PostgreSQL database
 
+You can upgrade the external database as suggested by the provider after stopping all the processes that are connected to the database (Puma, Sidekiq):
+
+```shell
+sudo gitlab-ctl stop puma
+sudo gitlab-ctl stop sidekiq
+```
+
 Before proceeding with the upgrade, note the following:
 
 - Before upgrading, review the [GitLab and PostgreSQL version compatibility table](../package-information/postgresql_versions.md)
@@ -823,7 +830,7 @@ The following example demonstrates upgrading from a database host running Postgr
 1. Shutdown the PostgreSQL 11 database host.
 
 1. Edit `/etc/gitlab/gitlab.rb` and update the `gitlab_rails['db_host']` setting
-   to point to the PostgreSQL database 11 host.
+   to point to the PostgreSQL database 12 host.
 
 1. Reconfigure GitLab:
 

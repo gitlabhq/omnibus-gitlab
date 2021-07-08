@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Building an all-in-one GitLab Docker image locally
 
-The GitLab all-in-one Docker image uses Ubuntu 16.04 package created by
+The GitLab all-in-one Docker image uses Ubuntu 20.04 package created by
 `omnibus-gitlab` under the hood. The files required for building Docker image
 can be found inside the `Docker` directory of `omnibus-gitlab` repository,
 except `RELEASE` file which needs to be compiled manually, as described below.

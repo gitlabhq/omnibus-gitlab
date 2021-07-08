@@ -17,7 +17,7 @@
 #
 
 name 'nginx'
-default_version '1.18.0'
+default_version '1.20.1'
 
 license 'BSD-2-Clause'
 license_file 'LICENSE'
@@ -35,8 +35,8 @@ dependency 'nginx-module-vts'
 
 dependency 'ngx_security_headers'
 
-version '1.18.0' do
-  source sha256: '4c373e7ab5bf91d34a4f11a0c9496561061ba5eee6020db272a17a7228d35f99'
+version '1.20.1' do
+  source sha256: 'e462e11533d5c30baa05df7652160ff5979591d291736cfa5edb9fd2edb48c49'
 end
 
 source url: "http://nginx.org/download/nginx-#{version}.tar.gz"

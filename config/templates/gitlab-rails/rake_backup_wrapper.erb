@@ -113,7 +113,7 @@ backup_restore() {
 }
 
 # Load gitlab-rails-rc
-gitlab_rails_rc='<%= install_dir %>/etc/gitlab-rails/gitlab-rails-rc'
+gitlab_rails_rc='<%= install_dir %>/etc/gitlab-rails-rc'
 if ! [ -f ${gitlab_rails_rc} ] ; then
   >&2 echo "${0} error: could not load ${gitlab_rails_rc}"
   >&2 echo 'Either you are not allowed to read the file, or it does not exist yet.'

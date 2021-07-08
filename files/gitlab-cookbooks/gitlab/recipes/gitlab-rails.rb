@@ -135,7 +135,17 @@ file key_file_path do
   sensitive true
 end
 
-template File.join(gitlab_rails_static_etc_dir, "gitlab-rails-rc")
+template '/opt/gitlab/etc/gitlab-rails-rc' do
+  owner 'root'
+  group 'root'
+  mode  '0644'
+end
+
+# TODO: Delete in GitLab 15.0
+# https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6240
+file File.join(gitlab_rails_static_etc_dir, "gitlab-rails-rc") do
+  action :delete
+end
 
 dependent_services = []
 dependent_services << "runit_service[mailroom]" if node['gitlab']['mailroom']['enable']

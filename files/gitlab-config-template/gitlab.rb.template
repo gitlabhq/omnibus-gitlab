@@ -279,7 +279,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 #### Inbox options (for Microsoft Graph)
 # gitlab_rails['incoming_email_inbox_method'] = 'microsoft_graph'
-# gitlab_rails['incoming_email_inbox_options'] {
+# gitlab_rails['incoming_email_inbox_options'] = {
 #    'tenant_id': 'YOUR-TENANT-ID',
 #    'client_id': 'YOUR-CLIENT-ID',
 #    'client_secret': 'YOUR-CLIENT-SECRET',
@@ -443,10 +443,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Usage Statistics
 # gitlab_rails['usage_ping_enabled'] = true
 
-### Seat Link setting
-###! Docs: https://docs.gitlab.com/ee/subscriptions/index.html#seat-link
-# gitlab_rails['seat_link_enabled'] = true
-
 ### GitLab Mattermost
 ###! These settings are void if Mattermost is installed on the same omnibus
 ###! install
@@ -554,6 +550,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_rails['manage_backup_path'] = true
 # gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
+# gitlab_rails['backup_gitaly_backup_path'] = "/opt/gitlab/embedded/bin/gitaly-backup"
 
 ###! Docs: https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-archive-permissions
 # gitlab_rails['backup_archive_permissions'] = 0644
@@ -1389,6 +1386,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['gzip_proxied'] = "any"
 # nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
 # nginx['keepalive_timeout'] = 65
+# nginx['keepalive_time'] = '1h'
 # nginx['cache_max_size'] = '5000m'
 # nginx['server_names_hash_bucket_size'] = 64
 ##! These paths have proxy_request_buffering disabled
@@ -2158,9 +2156,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  'WRAPPER_JSON_LOGGING' => true
 # }
 # praefect['wrapper_path'] = "/opt/gitlab/embedded/bin/gitaly-wrapper"
-# praefect['virtual_storage_name'] = "praefect"
-# praefect['failover_enabled'] = false
-# praefect['failover_election_strategy'] = 'sql'
+# praefect['failover_enabled'] = true
 # praefect['auth_token'] = ""
 # praefect['auth_transitioning'] = false
 # praefect['listen_addr'] = "localhost:2305"
@@ -2667,6 +2663,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## advertized and by default is the same as patroni['port'].
 # patroni['connect_port'] = '8008'
 
+## The username and password to use for basic auth on write commands to the
+## Patroni API. If not specified then the API does not use basic auth.
+# patroni['username'] = nil
+# patroni['password'] = nil
 
 ################################################################################
 # Consul (EEP only)

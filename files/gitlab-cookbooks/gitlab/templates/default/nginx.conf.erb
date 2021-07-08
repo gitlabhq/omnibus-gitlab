@@ -26,6 +26,7 @@ http {
   tcp_nodelay <%= @tcp_nodelay %>;
 
   keepalive_timeout <%= @keepalive_timeout %>;
+  keepalive_time <%= @keepalive_time %>;
 
   gzip <%= @gzip %>;
   <% if @gzip_enabled %>

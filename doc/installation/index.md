@@ -23,7 +23,7 @@ comments: false
 ## Installation and Configuration
 
 These configuration settings are commonly used when configuring Omnibus GitLab.
-For a complete list of settings, see the [README](../README.md#configuring) file.
+For a complete list of settings, see the [README](../index.md#configuring) file.
 
 - [Installing GitLab](https://about.gitlab.com/install/).
   - [Manually downloading and installing a GitLab package](../manual_install.md).
@@ -38,10 +38,10 @@ For a complete list of settings, see the [README](../README.md#configuring) file
 - [Enabling GitLab Pages](https://docs.gitlab.com/ee/administration/pages/).
   - If you want HTTPS enabled, you must get wildcard certificates.
 - [Enabling Elasticsearch](https://docs.gitlab.com/ee/integration/elasticsearch.html).
-- [GitLab Mattermost](../gitlab-mattermost/README.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
-- [GitLab Prometheus](https://docs.gitlab.com/ee/administration/monitoring/performance/prometheus.html)
+- [GitLab Mattermost](../gitlab-mattermost/index.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
+- [GitLab Prometheus](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html)
   Set up the Prometheus monitoring included in the Omnibus GitLab package.
-- [GitLab High Availability Roles](../roles/README.md).
+- [GitLab High Availability Roles](../roles/index.md).
 
 ### Set up the initial password
 
@@ -80,4 +80,4 @@ password in `/etc/gitlab/initial_root_password` to log in, or
 ## Using Docker image
 
 You can also use the Docker images provided by GitLab to install and configure a GitLab instance.
-Check the [documentation](../docker/README.md) to know more.
+Check the [documentation](https://docs.gitlab.com/ee/install/docker.html) to know more.

@@ -125,10 +125,6 @@ production: &base
 
     usage_ping_enabled: <%= @usage_ping_enabled %>
 
-    # Seat link setting
-    # When disabled the customer instances would not send seat link information via cron service everyday. (default: true)
-    seat_link_enabled: <%= @seat_link_enabled %>
-
     ## Print initial root password to stdout during initialization
     display_initial_root_password: <%= @display_initial_root_password %>
 
@@ -896,6 +892,7 @@ production: &base
   ## Backup settings
   backup:
     path: "<%= @backup_path %>"   # Relative paths are relative to Rails.root (default: tmp/backups/)
+    gitaly_backup_path: <%= quote(@backup_gitaly_backup_path) %> # Path of the gitaly-backup binary (default: searches $PATH)
     archive_permissions: <%= @backup_archive_permissions %> # Permissions for the resulting backup.tar file (default: 0600)
     keep_time: <%= @backup_keep_time %>   # default: 0 (forever) (in seconds)
     pg_schema: <%= @backup_pg_schema %>   # default: nil, it means that all schemas will be backed up

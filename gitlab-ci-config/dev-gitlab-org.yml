@@ -162,6 +162,8 @@
       when: never
     - <<: *unless-dev
       when: never
+    - <<: *if-ee-tag
+      when: never
     - <<: *if-rc-tag
       when: never
     - <<: *if-auto-deploy-tag
@@ -189,6 +191,10 @@
     - <<: *if-skip-job
       when: never
     - <<: *unless-dev
+      when: never
+    - <<: *if-auto-deploy-tag
+      when: never
+    - <<: *if-ee-tag
       when: never
     - <<: *if-rc-tag
       when: never
@@ -254,6 +260,10 @@
     - <<: *if-skip-job
       when: never
     - <<: *unless-dev
+      when: never
+    - <<: *if-auto-deploy-tag
+      when: never
+    - <<: *if-ee-tag
       when: never
     - <<: *if-ce-tag
       when: manual
@@ -359,6 +369,9 @@
   needs:
     - job: fetch-assets
       optional: true
+    - job: generate-facts
+      optional: true
+      artifacts: true
   cache: *branch-cache
   retry: 1
 
@@ -401,6 +414,9 @@
   needs:
     - job: fetch-assets
       optional: true
+    - job: generate-facts
+      optional: true
+      artifacts: true
   cache: *tag-cache
   retry: 1
 
@@ -429,6 +445,12 @@
   tags:
   - promotion
   <<: *dev-public-release-only
+
+.staging_upload_with_deployment_template: &staging_upload_with_deployment
+  extends: .staging_upload_template
+  script:
+    - bundle exec rake repository:upload:staging[$STAGING_REPO]
+    - if [ -n "$DEPLOYER_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:deployer; fi
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -488,6 +510,7 @@
 ###########################
 
 # fetch-assets job from .gitlab-ci.yml file runs here
+# generate-assets job from .gitlab-ci.yml file runs here
 
 # We build package for deploying to GitLab.com first
 Ubuntu-16.04-branch:
@@ -560,6 +583,9 @@ Docker-branch:
   needs:
     - job: Ubuntu-20.04-branch
       artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
   retry: 1
 
 QA-branch:
@@ -584,6 +610,9 @@ QA-branch:
   needs:
     - job: Ubuntu-20.04-branch
       artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
   retry: 1
 
 Raspberry-Pi-2-Buster-branch:
@@ -643,7 +672,10 @@ Docker-QA:
   cache: *tag-cache
   tags:
   - docker-builder
-  needs: []
+  needs:
+    - job: generate-facts
+      optional: true
+      artifacts: true
   retry: 1
 
 ###########################################################
@@ -661,19 +693,16 @@ Docker-QA:
 ##                after this package is built
 
 Ubuntu-16.04-upload-deploy:
-  extends: .staging_upload_template
+  extends: .staging_upload_with_deployment_template
   needs:
     - job: Ubuntu-16.04
       optional: true
     - job: Ubuntu-16.04-branch
       optional: true
-  script:
-    - bundle exec rake repository:upload:staging[$STAGING_REPO]
-    - if [ -n "$DEPLOYER_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:deployer; fi
   <<: *dev-tag-and-nightly
 
 Ubuntu-18.04-staging:
-  extends: .staging_upload_template
+  extends: .staging_upload_with_deployment_template
   needs:
     - job: Ubuntu-18.04
       optional: true
@@ -682,7 +711,7 @@ Ubuntu-18.04-staging:
   <<: *dev-tag-and-nightly
 
 Ubuntu-20.04-staging:
-  extends: .staging_upload_template
+  extends: .staging_upload_with_deployment_template
   needs:
     - job: Ubuntu-20.04
       optional: true
@@ -735,41 +764,6 @@ SLES-12.5:
   <<: *tag_build
   <<: *dev-ee-tag-only-except-auto-deploy
 
-create_omnibus_manifest:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
-  stage: prepare-assets
-  variables:
-    TERM: xterm-256color
-  script:
-    - bundle exec omnibus manifest gitlab -l nothing 2> /dev/null > version-manifest.json
-  <<: *dev-nightly-and-tag-except-auto-deploy
-  cache: *tag-cache
-  artifacts:
-    expire_in: 7 days
-    paths:
-      - version-manifest.json
-
-dependency_scanning:
-  image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.1.0"
-  stage: package
-  variables:
-    REPORT_PATH: ./
-    NVD_DB_UPDATE: "true"
-  before_script: []
-  script:
-    - echo ${CVEIGNORE} | sed -r "s/, */\n/g" >> .cveignore
-    - /gitlab-depscan.sh version-manifest.json
-  <<: *dev-nightly-and-tag-except-auto-deploy
-  needs:
-    - create_omnibus_manifest
-  artifacts:
-    expire_in: 7 days
-    when: on_failure
-    paths:
-      - dependency_report.txt
-      - gl-dependency-scanning-report.json
-      - .cveignore
-
 Docker:
   extends: .docker_job
   stage: image
@@ -783,6 +777,9 @@ Docker:
   needs:
     - job: Ubuntu-20.04
       artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
   retry: 1
 
 ### Staging uploads
@@ -931,6 +928,9 @@ Docker-Release:
   cache: *tag-cache
   needs:
     - Docker
+    - job: generate-facts
+      optional: true
+      artifacts: true
 
 AWS:
   <<: *aws_ami_build
@@ -966,6 +966,9 @@ QA-Tag:
   cache: *tag-cache
   needs:
     - Docker-QA
+    - job: generate-facts
+      optional: true
+      artifacts: true
   retry: 1
 
 license-upload:
@@ -984,8 +987,6 @@ license-upload:
 RAT-Tag:
   stage: slow_jobs
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  variables:
-    CI_COMMIT_TAG: "1.2.3"
   script:
     - bundle exec rake qa:rat:tag
   cache: *tag-cache

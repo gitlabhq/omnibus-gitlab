@@ -40,6 +40,8 @@ build do
     "-X main.BuildVersion=#{version.print(false)}",
     "-X main.BuildDate=''",
     "-X main.BuildCommitSha=''",
+    "-s",
+    "-w"
   ].join(' ')
 
   command "go build -ldflags '#{ldflags}'", env: env

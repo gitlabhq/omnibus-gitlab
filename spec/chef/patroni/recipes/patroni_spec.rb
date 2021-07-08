@@ -58,6 +58,83 @@ RSpec.describe 'patroni cookbook' do
       allow_any_instance_of(PgHelper).to receive(:is_replica?).and_return(false)
     end
 
+    let(:default_patroni_config_pg13) do
+      {
+        name: 'fauxhai.local',
+        scope: 'postgresql-ha',
+        log: {
+          level: 'INFO'
+        },
+        consul: {
+          url: 'http://127.0.0.1:8500',
+          service_check_interval: '10s',
+          register_service: true,
+          checks: [],
+        },
+        postgresql: {
+          bin_dir: '/opt/gitlab/embedded/bin',
+          data_dir: '/var/opt/gitlab/postgresql/data',
+          config_dir: '/var/opt/gitlab/postgresql/data',
+          listen: :'5432',
+          connect_address: "#{Patroni.private_ipv4}:5432",
+          use_unix_socket: true,
+          parameters: {
+            unix_socket_directories: '/var/opt/gitlab/postgresql'
+          },
+          authentication: {
+            superuser: {
+              username: 'gitlab-psql'
+            },
+            replication: {
+              username: 'gitlab_replicator'
+            },
+          },
+          remove_data_directory_on_diverged_timelines: false,
+          remove_data_directory_on_rewind_failure: false,
+          basebackup: [
+            'no-password'
+          ],
+        },
+        bootstrap: {
+          dcs: {
+            loop_wait: 10,
+            ttl: 30,
+            retry_timeout: 10,
+            maximum_lag_on_failover: 1_048_576,
+            max_timelines_history: 0,
+            master_start_timeout: 300,
+            postgresql: {
+              use_pg_rewind: true,
+              use_slots: true,
+              parameters: {
+                wal_level: 'replica',
+                hot_standby: 'on',
+                wal_keep_size: 160,
+                max_replication_slots: 5,
+                max_connections: 200,
+                max_locks_per_transaction: 128,
+                max_worker_processes: 8,
+                max_wal_senders: 5,
+                checkpoint_timeout: 30,
+                max_prepared_transactions: 0,
+                track_commit_timestamp: 'off',
+                wal_log_hints: 'off'
+              },
+            },
+            slots: {},
+          },
+          method: 'gitlab_ctl',
+          gitlab_ctl: {
+            command: '/opt/gitlab/bin/gitlab-ctl patroni bootstrap --srcdir=/var/opt/gitlab/patroni/data'
+          }
+        },
+        restapi: {
+          listen: :'8008',
+          connect_address: "#{Patroni.private_ipv4}:8008",
+        },
+      }
+    end
+
     let(:default_patroni_config) do
       {
         name: 'fauxhai.local',
@@ -156,9 +233,18 @@ RSpec.describe 'patroni cookbook' do
       expect(chef_run).to enable_postgresql_extension('btree_gist')
     end
 
-    it 'should create patroni configuration file' do
+    it 'should create patroni configuration file for PostgreSQL 12' do
       expect(chef_run).to render_file('/var/opt/gitlab/patroni/patroni.yaml').with_content { |content|
         expect(YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)).to eq(default_patroni_config)
+      }
+    end
+
+    it 'should create patroni configuration file for PostgreSQL 13' do
+      allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('13.0'))
+      allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('13.0'))
+
+      expect(chef_run).to render_file('/var/opt/gitlab/patroni/patroni.yaml').with_content { |content|
+        expect(YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)).to eq(default_patroni_config_pg13)
       }
     end
   end
@@ -189,6 +275,8 @@ RSpec.describe 'patroni cookbook' do
           use_pg_rewind: true,
           connect_address: '1.2.3.4',
           connect_port: 18008,
+          username: 'gitlab',
+          password: 'restapipassword',
           replication_password: 'fakepassword',
           remove_data_directory_on_diverged_timelines: true,
           remove_data_directory_on_rewind_failure: true,
@@ -229,7 +317,13 @@ RSpec.describe 'patroni cookbook' do
             password: 'fakepassword'
           }
         )
-        expect(cfg[:restapi][:connect_address]).to eq('1.2.3.4:18008')
+        expect(cfg[:restapi]).to include(
+          connect_address: '1.2.3.4:18008',
+          authentication: {
+            username: 'gitlab',
+            password: 'restapipassword'
+          }
+        )
         expect(cfg[:bootstrap][:dcs]).to include(
           loop_wait: 20,
           ttl: 60,

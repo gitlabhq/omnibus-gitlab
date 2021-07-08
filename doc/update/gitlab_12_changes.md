@@ -117,7 +117,7 @@ The Redis version packaged with Omnibus GitLab has been updated to Redis 5.0.7.
 You will need to restart Redis after the upgrade so that the new version will be
 active. To restart Redis, run `sudo gitlab-ctl restart redis`. If your instance
 has Redis HA with Sentinel, follow the upgrade steps documented in
-[Update GitLab installed with the Omnibus GitLab package](README.md#use-redis-ha-using-sentinel)
+[Update GitLab installed with the Omnibus GitLab package](index.md#use-redis-ha-using-sentinel)
 to avoid downtime.
 
 Unicorn memory limits should also be adjusted to the following values:
@@ -138,7 +138,7 @@ manually upgrade to 11.7 following the [upgrade docs](../settings/database.md#up
 ### 12.9
 
 [Puma](https://github.com/puma/puma) is now available as an alternative web server to Unicorn.
-If you are migrating from Unicorn, refer to [converting Unicorn settings to Puma](../settings/puma.md#converting-unicorn-settings-to-puma)
+If you are migrating from Unicorn, refer to [converting Unicorn settings to Puma](https://docs.gitlab.com/ee/administration/operations/puma.html#convert-unicorn-settings-to-puma)
 to make sure your web server settings carry over correctly.
 
 ### 12.10

@@ -9,13 +9,13 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 Upgrading from non-Omnibus installations has not been tested by GitLab.com.
 
 Please be advised that you lose your settings in files such as `gitlab.yml`,
-`puma.rb` and `smtp_settings.rb`. You will have to
-[configure those settings in `/etc/gitlab/gitlab.rb`](../README.md#configuring).
+`puma.rb` and `smtp_settings.rb`. You need to
+[configure those settings in `/etc/gitlab/gitlab.rb`](../index.md#configuring).
 
 Before starting the migration, ensure that you are moving to **exactly the same version** of GitLab.
 To convert your installation to Omnibus:
 
-1. If your current GitLab installation uses MySQL, you will first need to migrate
+1. If your current GitLab installation uses MySQL, you first need to migrate
    your data to PostgreSQL, because starting with GitLab 12.1, PostgreSQL is the
    only supported database management system. If you already use PostgreSQL, skip this step.
    1. Verify the [PostgreSQL requirements and supported versions](https://docs.gitlab.com/ee/install/requirements.html#postgresql-requirements),
@@ -38,7 +38,7 @@ To convert your installation to Omnibus:
    sudo gitlab-backup restore BACKUP=<FILE_NAME>
    ```
 
-   The restore will take a few minutes depending on the size of you database and Git data.
+   The restore takes a few minutes depending on the size of you database and Git data.
 
 1. Configure the new installation as in Omnibus GitLab all settings are stored in
    `/etc/gitlab/gitlab.rb`. Individual settings need to be manually moved from
@@ -47,7 +47,7 @@ To convert your installation to Omnibus:
    for all available options.
 1. To finalize the configuration process, copy the secrets from the old installation
    to the new one. GitLab uses secrets to multiple purposes, like database encryption,
-   session encryption, etc. In Omnibus GitLab all secrets are placed in a single
+   session encryption, and so on. In Omnibus GitLab all secrets are placed in a single
    file `/etc/gitlab/gitlab-secrets.json`, whereas in source installations, the
    secrets are placed in multiple files:
    1. First, you need to restore secrets related to Rails. Copy the values of
@@ -173,7 +173,7 @@ If you can log into the GitLab web interface, the next step is to reboot your
 server to make sure none of the old services interferes with Omnibus GitLab.
 
 If you are using special features such as LDAP you will have to put your
-settings in `gitlab.rb`, see the [settings docs](../settings/README.md).
+settings in `gitlab.rb`, see the [settings docs](../settings/index.md).
 
 ## Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)
 

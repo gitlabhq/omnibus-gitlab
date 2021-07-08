@@ -35,7 +35,6 @@ version '12.6' do
 end
 
 major_version = '12'
-libpq = 'libpq.so.5'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
 
@@ -56,8 +55,6 @@ build do
 
   make "world -j #{workers}", env: env
   make 'install-world', env: env
-
-  link "#{prefix}/lib/#{libpq}", "#{install_dir}/embedded/lib/#{libpq}"
 
   block 'link bin files' do
     Dir.glob("#{prefix}/bin/*").each do |bin_file|

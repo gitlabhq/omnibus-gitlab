@@ -40,6 +40,7 @@ module Gitlab
   role('patroni').use { PatroniRole }
   role('consul').use { ConsulRole }
   role('pages').use { PagesRole }
+  role('sidekiq').use { SidekiqRole }
 
   ## Attributes directly on the node
   attribute('package').use { Package }

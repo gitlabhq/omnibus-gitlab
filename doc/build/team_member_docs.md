@@ -15,7 +15,7 @@ leverage it to build packages.
 In the CI pipeline corresponding to your MR, play the `package-and-qa` job in
 the `qa` stage. This will trigger a downstream pipeline in `omnibus-gitlab`'s
 [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) which
-will get you an Ubuntu 16.04 package and an all-in-one Docker image for testing.
+will get you an Ubuntu 20.04 package and an all-in-one Docker image for testing.
 It will also run trigger a `gitlab-qa` run using these artifacts too.
 
 ## I have an MR in the `omnibus-gitlab` project and want a package or Docker image to test it
@@ -108,7 +108,7 @@ below for details:
 
 ## Building packages for other OSs
 
-If you specifically want a package for an OS other than Ubuntu 16.04, or want to
+If you specifically want a package for an OS other than Ubuntu 20.04, or want to
 ensure packages can be built with your change on all OSs, you will have to make
 us of `omnibus-gitlab`'s [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab).
 

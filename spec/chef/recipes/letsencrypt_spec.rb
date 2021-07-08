@@ -156,8 +156,9 @@ server {
         end
 
         it 'warns that we do not setup automatic renewal' do
-          expect(LoggingHelper).to receive(:warning).with(/does not setup/)
           chef_run.ruby_block('display_le_message').block.call
+
+          expect_logged_warning(/does not setup/)
         end
       end
     end

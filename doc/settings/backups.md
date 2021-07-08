@@ -139,8 +139,8 @@ docker exec -t <your container name> /bin/sh -c 'gitlab-ctl backup-etc && cd /et
 NOTE:
 To persist these backups outside the container, mount volumes in the following directories:
 
-1. `/secret/gitlab/backups`. (This path ist not available in Docker container, so make sure, that you mount this)
-1. `/var/opt/gitlab` for [all application data](../docker/README.md#set-up-the-volumes-location), which includes backups.
+1. `/secret/gitlab/backups`.
+1. `/var/opt/gitlab` for [all application data](https://docs.gitlab.com/ee/install/docker.html#set-up-the-volumes-location), which includes backups.
 1. `/var/opt/gitlab/backups` (optional). The `gitlab-backup` tool writes to this directory [by default](#creating-an-application-backup).
    While this directory is nested inside `/var/opt/gitlab`, [Docker sorts these mounts](https://github.com/moby/moby/pull/8055), allowing them to work in harmony.
 
