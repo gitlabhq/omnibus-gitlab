@@ -17,7 +17,7 @@
 name 'chef-zero'
 # The version here should be in agreement with /Gemfile.lock so that our rspec
 # testing stays consistent with the package contents.
-default_version '15.0.3'
+default_version '15.0.7'
 
 license 'Apache-2.0'
 license_file 'LICENSE'

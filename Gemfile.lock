@@ -59,22 +59,22 @@ GEM
     binding_ninja (0.2.3)
     builder (3.2.4)
     byebug (9.0.5)
-    chef (15.14.0)
+    chef (15.17.4)
       addressable
       bcrypt_pbkdf (~> 1.0)
       bundler (>= 1.10)
-      chef-config (= 15.14.0)
-      chef-utils (= 15.14.0)
+      chef-config (= 15.17.4)
+      chef-utils (= 15.17.4)
       chef-zero (>= 14.0.11)
-      diff-lcs (~> 1.2, >= 1.2.4)
+      diff-lcs (>= 1.2.4, < 1.4.0)
       ed25519 (~> 1.2)
       erubis (~> 2.7)
       ffi (~> 1.9, >= 1.9.25)
       ffi-libarchive (~> 1.0, >= 1.0.3)
       ffi-yajl (~> 2.2)
-      highline (>= 1.6.9, < 2)
+      highline (>= 1.6.9, < 3)
       iniparse (~> 1.4)
-      license-acceptance (~> 1.0, >= 1.0.5)
+      license-acceptance (>= 1.0.5, < 3)
       mixlib-archive (>= 0.4, < 2.0)
       mixlib-authentication (>= 2.1, < 4)
       mixlib-cli (>= 2.1.1, < 3.0)
@@ -90,7 +90,7 @@ GEM
       train-core (~> 3.2, >= 3.2.28)
       train-winrm (>= 0.2.5)
       tty-screen (~> 0.6)
-      uuidtools (~> 2.1.5)
+      uuidtools (>= 2.1.5, < 3.0)
     chef-cleanroom (1.0.2)
     chef-cli (3.0.1)
       addressable (>= 2.3.5, < 2.8)
@@ -104,15 +104,15 @@ GEM
       mixlib-shellout (>= 2.0, < 4.0)
       paint (>= 1, < 3)
       solve (> 2.0, < 5.0)
-    chef-config (15.14.0)
+    chef-config (15.17.4)
       addressable
-      chef-utils (= 15.14.0)
+      chef-utils (= 15.17.4)
       fuzzyurl
       mixlib-config (>= 2.2.12, < 4.0)
       mixlib-shellout (>= 2.0, < 4.0)
       tomlrb (~> 1.2)
     chef-sugar (5.1.12)
-    chef-utils (15.14.0)
+    chef-utils (15.17.4)
     chef-zero (15.0.3)
       ffi-yajl (~> 2.2)
       hashie (>= 2.0, < 5.0)
@@ -435,7 +435,7 @@ DEPENDENCIES
   aws-sdk-ec2
   aws-sdk-marketplacecatalog
   byebug
-  chef (~> 15.14.0)
+  chef (~> 15.17.4)
   chefspec
   docker-api
   fantaskspec
@@ -458,4 +458,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   2.2.15
+   2.2.22
