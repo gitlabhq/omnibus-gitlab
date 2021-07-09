@@ -89,8 +89,12 @@ format. There are two methods of verification.
 To verify a package on an RPM based distribution, we'll need to ensure
 that the GitLab, Inc. public key is present in the `rpm` tool's keychain.
 
-Run `rpm -q gpg-pubkey-f27eab47-5cc36020 --qf '%{name}-%{version}-%{release} --> %{summary}\n'`. This will produce either the information on
-the public key, or `package gpg-pubkey-f27eab47 is not installed`. If the key is
+```shell
+rpm -q gpg-pubkey-f27eab47-60d4a67e --qf '%{name}-%{version}-%{release} --> %{summary}'
+```
+
+This will produce either the information on
+the public key, or `gpg-pubkey-f27eab47-60d4a67e is not installed`. If the key is
 not present, perform the following steps:
 
 ```shell
