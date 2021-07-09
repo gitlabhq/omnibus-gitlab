@@ -678,7 +678,7 @@ The initial password for the user `root` can be set at the installation time wit
 For example:
 
 ```shell
-GITLAB_ROOT_PASSWORD="<strongpassword>" EXTERNAL_URL="http://gitlab.exmaple.com" apt install gitlab-ee
+GITLAB_ROOT_PASSWORD="<strongpassword>" EXTERNAL_URL="http://gitlab.example.com" apt install gitlab-ee
 ```
 
 ## Setting allowed hosts to prevent host header attacks
