@@ -27,7 +27,7 @@ dependencies:
     commit_message_template: |-
       {{.SubjectAndBody}}
 
-      Changelog: updated
+      Changelog: changed
     remotes:
       # acme-client
       https://github.com/unixcharles/acme-client.git:
