@@ -371,6 +371,10 @@ nginx['listen_port'] = 80
 nginx['listen_https'] = false
 ```
 
+Additionally, the external load balancer may need access to a GitLab endpoint that returns a `200` status 
+code (for installations requiring login, the root page returns a `302` redirect to the login page). It is 
+recommended to leverage a [health check endpoint](https://docs.gitlab.com/ee/user/admin_area/monitoring/health_check.html).
+
 Other bundled components (Registry, Pages, etc) use a similar strategy for
 proxied SSL. Set the particular component's `*_external_url` with `https://` and
 prefix the `nginx[...]` configuration with the component name. For example, the
