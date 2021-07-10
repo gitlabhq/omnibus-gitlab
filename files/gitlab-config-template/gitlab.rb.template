@@ -1112,7 +1112,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! restart postgresql if you change any of these and run reconfigure.
 # postgresql['work_mem'] = "16MB"
 # postgresql['maintenance_work_mem'] = "16MB"
-# postgresql['checkpoint_segments'] = 10
 # postgresql['checkpoint_timeout'] = "5min"
 # postgresql['checkpoint_completion_target'] = 0.9
 # postgresql['effective_io_concurrency'] = 1

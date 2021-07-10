@@ -80,7 +80,6 @@ default['gitlab']['geo-postgresql']['work_mem'] = '16MB'
 default['gitlab']['geo-postgresql']['maintenance_work_mem'] = '16MB'
 default['gitlab']['geo-postgresql']['effective_cache_size'] = "#{[(node['memory']['total'].to_i / 8) / 1024, 2048].max}MB" # double of shared_buffers estimation
 default['gitlab']['geo-postgresql']['log_min_duration_statement'] = -1 # Disable slow query logging by default
-default['gitlab']['geo-postgresql']['checkpoint_segments'] = 10
 default['gitlab']['geo-postgresql']['min_wal_size'] = '80MB'
 default['gitlab']['geo-postgresql']['max_wal_size'] = '1GB'
 default['gitlab']['geo-postgresql']['checkpoint_timeout'] = '5min'
