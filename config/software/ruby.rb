@@ -202,6 +202,7 @@ build do
   elsif windows?
     configure_command << ' debugflags=-g'
   else
+    configure_command << %w(host target build).map { |w| "--#{w}=#{OhaiHelper.gcc_target}" } if OhaiHelper.raspberry_pi?
     configure_command << "--with-opt-dir=#{install_dir}/embedded"
   end
 

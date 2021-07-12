@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
 name 'openssl'
 
@@ -84,6 +85,8 @@ build do
           # With gcc > 4.3 on s390x there is an error building
           # with inline asm enabled
           './Configure linux64-s390x -DOPENSSL_NO_INLINE_ASM'
+        elsif OhaiHelper.raspberry_pi?
+          './Configure linux-generic32'
         else
           './config'
         end
