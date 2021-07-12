@@ -128,7 +128,7 @@ class OhaiHelper
 
     def ohai
       @ohai ||= Ohai::System.new.tap do |oh|
-        oh.all_plugins(['platform'])
+        oh.all_plugins(['platform', 'languages'])
       end.data
     end
 
@@ -158,6 +158,14 @@ class OhaiHelper
     def arm?
       # Any Arm (32-bit or 64-bit)
       (armhf? || arm64?)
+    end
+
+    def raspberry_pi?
+      os_platform == 'raspbian'
+    end
+
+    def gcc_target
+      ohai['languages']['c']['gcc']['target']
     end
   end
 end

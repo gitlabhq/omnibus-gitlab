@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
 name 'libgcrypt'
 default_version '1.8.6'
@@ -31,8 +32,9 @@ relative_path "libgcrypt-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  command './configure ' \
-    "--prefix=#{install_dir}/embedded --disable-doc", env: env
+  configure_options = ["--prefix=#{install_dir}/embedded", "--disable-doc"]
+  configure_options += %w(host build).map { |w| "--#{w}=#{OhaiHelper.gcc_target}" } if OhaiHelper.raspberry_pi?
+  configure(*configure_options, env: env)
 
   make "-j #{workers}", env: env
   make 'install', env: env

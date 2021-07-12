@@ -15,6 +15,7 @@
 #
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
 name 'grafana'
 version = Gitlab::Version.new('grafana', '7.5.9')
@@ -26,7 +27,7 @@ license_file 'NOTICE.md'
 
 skip_transitive_dependency_licensing true
 
-arch, sha = if ohai['platform'] == 'raspbian' && /armv/.match?(ohai['kernel']['machine'])
+arch, sha = if OhaiHelper.raspberry_pi?
               %w[armv7 e40949ac119ab0977208d1fd610412b494de38874742a56f83f593f1dc4574a7]
             elsif /aarch64/.match?(ohai['kernel']['machine'])
               %w[arm64 bea6eab7b28aa36e236f106b577f070e29e679a53a7131ed0d3c80c264156442]
