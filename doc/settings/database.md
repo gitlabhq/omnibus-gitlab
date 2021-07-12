@@ -820,6 +820,10 @@ The following example demonstrates upgrading from a database host running Postgr
    sudo gitlab-ctl stop
    ```
 
+WARNING:
+The backup command requires [additional parameters](https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-and-restore-for-installations-using-pgbouncer) 
+when your installation is using PgBouncer.
+
 1. Run the backup Rake task using the SKIP options to back up only the database.
    Make a note of the backup file name; you'll use it later to restore.
 
@@ -837,6 +841,9 @@ The following example demonstrates upgrading from a database host running Postgr
    ```shell
    sudo gitlab-ctl reconfigure
    ```
+WARNING:
+The backup command requires [additional parameters](https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-and-restore-for-installations-using-pgbouncer) 
+when your installation is using PgBouncer.
 
 1. Restore the database using the database backup file created earlier, and be
    sure to answer **no** when asked "This task will now rebuild the authorized_keys file":
