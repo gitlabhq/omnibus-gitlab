@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
 name 'libffi'
 
@@ -46,6 +47,7 @@ build do
     if version == '3.2.1'
       patch source: 'libffi-3.2.1-disable-multi-os-directory.patch', plevel: 1, env: env
       configure_command << '--disable-multi-os-directory'
+      configure_command << "--build=#{OhaiHelper.gcc_target}" if OhaiHelper.raspberry_pi?
     end
   end
 
