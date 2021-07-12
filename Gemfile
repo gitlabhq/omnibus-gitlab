@@ -33,6 +33,7 @@ gem 'docker-api'
 gem 'http'
 gem 'aws-sdk-ec2'
 gem 'aws-sdk-marketplacecatalog'
+gem 'gitlab'
 
 group :packagecloud, optional: true do
   gem 'package_cloud'

@@ -358,14 +358,15 @@
     - bundle exec rake build:project build:package:sync
     - bundle exec rake cache:bundle
     - bundle exec rake build:component_shas
-    - bundle exec rspec --color --format RspecJunitFormatter --out junit_ci_rspec.xml --format documentation ci_build_specs
+    # Run package size checks on nightlies. The job will create alerts, so we
+    # don't need it to fail and block the pipeline. Hence the `|| true`.
+    - if [ -n "$NIGHTLY" ]; then
+      bundle exec rake check:package_size || true;
+      fi
   tags:
   - docker-builder
   <<: *dev-branches-only
-  artifacts:
-    <<: *package-artifacts
-    reports:
-      junit: junit_ci_rspec.xml
+  artifacts: *package-artifacts
   needs:
     - job: fetch-assets
       optional: true
