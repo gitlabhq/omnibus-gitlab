@@ -11,12 +11,8 @@ synchronous_commit = <%= @synchronous_commit %> # synchronization level; on, off
 synchronous_standby_names = '<%= @synchronous_standby_names %>'
 
 # - Checkpoints -
-<% if pg_helper.database_version == "9.2" %>
-checkpoint_segments = <%= @checkpoint_segments %>		# in logfile segments, min 1, 16MB each, default 3
-<% else %>
 min_wal_size = <%= @min_wal_size %>
 max_wal_size = <%= @max_wal_size %>
-<% end %>
 
 checkpoint_timeout = <%= @checkpoint_timeout %>		# range 30s-1h, default 5min
 checkpoint_completion_target = <%= @checkpoint_completion_target %>	# checkpoint target duration, 0.0 - 1.0, default 0.5
@@ -143,9 +139,7 @@ default_statistics_target = <%= @default_statistics_target %>
 # - Client connection timeouts
 statement_timeout = <%= @statement_timeout %>
 
-<% unless pg_helper.database_version == '9.2' %>
 idle_in_transaction_session_timeout = <%= @idle_in_transaction_session_timeout %>
-<% end %>
 
 # IO settings
 effective_io_concurrency = <%= @effective_io_concurrency %>

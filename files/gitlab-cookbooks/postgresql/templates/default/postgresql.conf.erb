@@ -69,11 +69,7 @@ max_connections = <%= @max_connections %>      # (change requires restart)
 # Note:  Increasing max_connections costs ~400 bytes of shared memory per
 # connection slot, plus lock space (see max_locks_per_transaction).
 #superuser_reserved_connections = 3 # (change requires restart)
-<% if pg_helper.database_version == "9.2" %>
-unix_socket_directory = '<%= @unix_socket_directory %>'   # (change requires restart)
-<% else %>
 unix_socket_directories = '<%= @unix_socket_directory %>'   # (change requires restart)
-<% end %>
 #unix_socket_group = ''     # (change requires restart)
 #unix_socket_permissions = 0777   # begin with 0 to use octal notation
           # (change requires restart)
@@ -189,7 +185,6 @@ wal_buffers = <%= @wal_buffers %> # -1     # min 32kB, -1 sets based on shared_b
 #commit_delay = 0     # range 0-100000, in microseconds
 #commit_siblings = 5      # range 1-1000
 
-<% if pg_helper.database_version != "9.2" %>
 min_wal_size = <%= @min_wal_size %>
 max_wal_size = <%= @max_wal_size %>
 
@@ -200,7 +195,6 @@ max_replication_slots = <%= @max_replication_slots %>
 <%# So only add a value if one is specified %>
 <% if @dynamic_shared_memory_type %>
 dynamic_shared_memory_type = <%= @dynamic_shared_memory_type %>
-<% end %>
 <% end %>
 
 # - Archiving -
