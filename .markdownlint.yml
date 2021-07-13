@@ -1,7 +1,7 @@
 # Base Markdownlint configuration
 # Extended Markdownlint configuration in doc/.markdownlint/
-"default":
-"first-header-h1":
+"default": true
+"first-header-h1": true
 "header-style":
   "style": "atx"
 "ul-style":
