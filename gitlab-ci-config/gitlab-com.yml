@@ -578,6 +578,7 @@ dependencies_io_check:
   image: "${RUBY_IMAGE}"
   stage: trigger-package
   script:
+    - support/wait_for_sha
     - bundle exec rake build:trigger
   only:
     refs:
