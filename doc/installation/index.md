@@ -34,7 +34,7 @@ For a complete list of settings, see the [README](../index.md#configuring) file.
 - [Enabling replying via email](https://docs.gitlab.com/ee/administration/reply_by_email.html#set-it-up).
   - [Installing and configuring postfix](https://docs.gitlab.com/ee/administration/reply_by_email_postfix_setup.html).
 - [Enabling container registry on GitLab](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-domain-configuration).
-  - You will require SSL certificates for the domain used for container registry.
+  - You require SSL certificates for the domain used for container registry.
 - [Enabling GitLab Pages](https://docs.gitlab.com/ee/administration/pages/).
   - If you want HTTPS enabled, you must get wildcard certificates.
 - [Enabling Elasticsearch](https://docs.gitlab.com/ee/integration/elasticsearch.html).
@@ -54,7 +54,7 @@ after 24 hours, this file is automatically removed by the first `gitlab-ctl reco
 
 NOTE:
 If GitLab can't detect a valid hostname for the server during the
-installation, a reconfigure will not run.
+installation, a reconfigure does not run.
 
 To provide a custom initial root password, you have two options:
 
@@ -73,7 +73,7 @@ To provide a custom initial root password, you have two options:
 
 Both of these methods apply only during the initial database seeding, which happens
 during the first reconfigure. For subsequent reconfigure runs, neither of
-the aforementioned methods will have any effect. In that case, use the random
+the aforementioned methods have any effect. In that case, use the random
 password in `/etc/gitlab/initial_root_password` to log in, or
 [reset the root password](https://docs.gitlab.com/ee/security/reset_user_password.html).
 

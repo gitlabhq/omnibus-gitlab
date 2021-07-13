@@ -247,6 +247,7 @@ Helm
 Heroku
 Herokuish
 Hexo
+HipChat
 hostname
 hostnames
 hotfix
@@ -295,6 +296,7 @@ keytab
 keytabs
 Kibana
 Kinesis
+Klar
 Knative
 Kramdown
 Kroki
@@ -441,6 +443,7 @@ Pritaly
 Priyanka
 profiler
 Prometheus
+ProseMirror
 protobuf
 protobufs
 proxied
@@ -642,6 +645,7 @@ timeboxed
 timeboxes
 timeboxing
 timecop
+tiptap
 todos
 tokenizer
 Tokenizers
