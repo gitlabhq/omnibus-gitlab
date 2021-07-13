@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'alertmanager'
-version = Gitlab::Version.new('alertmanager', '0.21.0')
+version = Gitlab::Version.new('alertmanager', '0.22.2')
 default_version version.print
 
 license 'APACHE-2.0'
@@ -44,7 +44,7 @@ build do
 
   prom_version = Prometheus::VersionFlags.new(version)
 
-  command "go build -mod=vendor -ldflags '#{prom_version.print_ldflags}' ./cmd/alertmanager", env: env, cwd: cwd
+  command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/alertmanager", env: env, cwd: cwd
   copy 'alertmanager', "#{install_dir}/embedded/bin/"
 
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
