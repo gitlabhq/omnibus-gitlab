@@ -517,11 +517,6 @@ RSpec.describe 'postgresql' do
       expect(postgresql_config).to notify('execute[reload postgresql]').to(:run).immediately
       expect(postgresql_config).to notify('execute[start postgresql]').to(:run).immediately
     end
-
-    it 'notifies restarts postgresql when the postgresql runit run file changes' do
-      psql_service = chef_run.service('postgresql')
-      expect(psql_service).not_to subscribe_to('template[/opt/gitlab/sv/postgresql/run]').on(:restart).delayed
-    end
   end
 
   context 'when enabling extensions' do
