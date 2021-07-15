@@ -111,6 +111,21 @@ RSpec.describe 'Patroni' do
     end
   end
 
+  describe 'command output on non-Patroni node' do
+    before do
+      allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'patroni' => nil })
+      allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return({ 'patroni' => nil })
+    end
+
+    additional_commands.each do |cmd|
+      it "should raise errors when running command #{cmd}" do
+        expect { Patroni.send(cmd.to_sym, command_options[cmd]) }.to(
+          raise_error(RuntimeError, /no Patroni configuration/)
+        )
+      end
+    end
+  end
+
   describe '.init_db' do
     before do
       allow(GitlabCtl::Util).to receive(:run_command)
