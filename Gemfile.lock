@@ -149,7 +149,7 @@ GEM
       rspec (~> 3.4)
     fauxhai-ng (8.7.0)
       net-ssh
-    ffi (1.13.1)
+    ffi (1.15.3)
     ffi-libarchive (1.0.4)
       ffi (~> 1.0)
     ffi-yajl (2.3.3)
