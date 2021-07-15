@@ -1319,6 +1319,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! **Recommended in: https://nginx.org/en/docs/http/ngx_http_ssl_module.html**
 # nginx['ssl_session_cache'] = "shared:SSL:10m"
 
+##! **Recommended in: https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=intermediate&openssl=1.1.1d&ocsp=false&guideline=5.6**
+# nginx['ssl_session_tickets'] = "off"
+
 ##! **Default according to https://nginx.org/en/docs/http/ngx_http_ssl_module.html**
 # nginx['ssl_session_timeout'] = "1d"
 

@@ -92,6 +92,7 @@ server {
   ssl_protocols  <%= @ssl_protocols %>;
   ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
   ssl_session_cache  <%= @ssl_session_cache %>;
+  ssl_session_tickets <%= @ssl_session_tickets %>;
   ssl_session_timeout  <%= @ssl_session_timeout %>;
 
   <% if @ssl_dhparam %>

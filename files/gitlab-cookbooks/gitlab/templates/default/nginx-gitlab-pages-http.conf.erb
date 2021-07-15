@@ -51,6 +51,7 @@ server {
   ssl_protocols  <%= @ssl_protocols %>;
   ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
   ssl_session_cache  <%= @ssl_session_cache %>;
+  ssl_session_tickets <%= @ssl_session_tickets %>;
   ssl_session_timeout  <%= @ssl_session_timeout %>;
 
   <% if @ssl_dhparam %>
@@ -68,6 +69,13 @@ server {
   <% end %>
   <% @real_ip_trusted_addresses.each do |trusted_address| %>
   set_real_ip_from <%= trusted_address %>;
+  <% end %>
+
+  ## HSTS Config
+  ## https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
+  <% unless @hsts_max_age.nil? || @hsts_max_age <= 0 %>
+  add_header Strict-Transport-Security "max-age=<%= @hsts_max_age -%>
+<% if @hsts_include_subdomains %>; includeSubdomains<% end %>";
   <% end %>
 
   ## Individual nginx logs for this GitLab vhost
