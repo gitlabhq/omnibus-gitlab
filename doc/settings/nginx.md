@@ -418,11 +418,11 @@ GitLab instance even once, it will remember to no longer attempt insecure connec
 even when the user is explicitly entering a `http://` URL. Such a URL will be automatically redirected by the browser to `https://` variant.
 
 ```ruby
-nginx['hsts_max_age'] = 31536000
+nginx['hsts_max_age'] = 63072000
 nginx['hsts_include_subdomains'] = false
 ```
 
-By default `max_age` is set for one year, this is how long browser will remember to only connect through HTTPS.
+By default `max_age` is set for two years, this is how long browser will remember to only connect through HTTPS.
 Setting `max_age` to 0 will disable this feature. For more information see:
 
 - <https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/>
