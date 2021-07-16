@@ -1113,7 +1113,20 @@ send a test email:
 Notify.test_email('destination_email@address.com', 'Message Subject', 'Message Body').deliver_now
 ```
 
-## Troubleshooting SSL/TLS
+## Troubleshooting 
+
+### Outgoing connections to port 25 is blocked on major cloud providers
+
+If you are using a cloud provider to host your GitLab instance and you are using port 25 for your
+SMTP server, it is possible that your cloud provider is blocking outgoing connections to port 25.
+This prevents GitLab from sending any outgoing mail. You can follow the instructions below to work
+around this depending on your cloud provider:
+
+- AWS: [How do I remove the restriction on port 25 from my Amazon EC2 instance or AWS Lambda function?](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-port-25-throttle/)
+- Azure: [Troubleshoot outbound SMTP connectivity problems in Azure](https://docs.microsoft.com/en-us/azure/virtual-network/troubleshoot-outbound-smtp-connectivity)
+- GCP: [Sending email from an instance](https://cloud.google.com/compute/docs/tutorials/sending-mail)
+
+### Wrong version number when using SSL/TLS
 
 Many users run into the following error after configuring SMTP:
 
