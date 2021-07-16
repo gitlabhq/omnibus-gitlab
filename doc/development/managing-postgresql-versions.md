@@ -6,19 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Managing PostgreSQL versions
 
-The PostgreSQL Global Development Group typically releases [one major version of PostgreSQL each year](https://www.postgresql.org/support/versioning/), usually in the third quarter. Our goal is to add support for the newest PostgreSQL release in the next major release of GitLab, and to support two versions of PostgreSQL at any given time. This means that in each major release of GitLab, we will remove the oldest version of PostgreSQL that we support, bump the minimally required PostgreSQL version up by one major version, and add support for the newest PostgreSQL version.
-
-## Example
-
-1. GitLab 14.0 (May 2021) supports PostgreSQL 12 and 13, with the default version for new installs and upgrades being PostgreSQL 12.
-1. PostgreSQL 14 is released in October 2021.
-1. In GitLab 14.x, the default version for new installs and upgrades is bumped to PostgreSQL 13.
-1. In GitLab 15.0 (May 2022) we remove PostgreSQL 12, minimally require PostgreSQL 13, and add support for PostgreSQL 14.
-
-We need to support running GitLab on both supported versions, as well as upgrading from the older versions to the newest.
-
-NOTE:
-GitLab 13.0 to 13.3 will only have support for one version of PostgreSQL (11). This is an exception while the plan above is implemented.
+The PostgreSQL Global Development Group typically releases [one major version of PostgreSQL each year](https://www.postgresql.org/support/versioning/), usually in the third quarter. Our goal is to balance supporting and adopting new PostgreSQL features with the downtime and administrative costs of having our users upgrade. GitLab aims to support two versions of PostgreSQL at any given time. This means that prior to adding a new version of PostgreSQL, we will remove the oldest version of PostgreSQL that we support, and bump the minimally required PostgreSQL version up by one major version. PostgreSQL removals are only done in major GitLab releases.
 
 ## Software definitions
 
