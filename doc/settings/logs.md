@@ -210,3 +210,27 @@ gitlab_pages['log_format'] = 'text'
 
 NOTE:
 There are a few variations in attribute names for the log format depending on the service involved (for example, Container Registry uses `log_formatter`, Gitaly and Praefect both use `logging_format`). See [Issue #4280](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4280) for more details.
+
+## Configuring log level/verbosity
+
+You can configure the minimum log levels (verbosity) for the Container
+Registry, GitLab Shell and Gitaly:
+
+1. Edit `/etc/gitlab/gitlab.rb` and set the log levels:
+
+   ```ruby
+   registry['log_level'] = 'info'
+   gitlab_shell['log_level'] = 'INFO'
+   gitaly['logging_level'] = 'warn'
+   ```
+
+1. Reconfigure GitLab:
+
+   ```
+   sudo gitlab-ctl reconfigure
+   ```
+
+NOTE:
+You [cannot edit](https://gitlab.com/groups/gitlab-org/-/epics/6034)
+the `log_level` for other GitLab logs, for example
+`production_json.log`, `sidekiq.log`, and so on.
