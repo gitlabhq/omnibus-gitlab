@@ -48,3 +48,24 @@ Add a `dependency` statement to the definition of the GitLab project found in
 `/config/projects/gitlab.rb`, unless there is a more specific component it makes
 sense to be a dependency of (eg `config/software/gitlab-rails.rb` for a
 component only needed by `gitlab-rails`)
+
+## Validating changes to a single software dependency
+
+It can be useful to only build one piece of software, rather than rebuild the whole package each time. For instance,
+when adding a new software definition. Using this method, you can quickly rebuild an omnibus package containing only
+the software and its dependencies. Once you've confirmed the software builds on its own, you can add it to the Omnibus GitLab
+build and confirm it there. To use this:
+
+1. [Setup your development environment](setup.md)
+1. Copy the [simple.rb](examples/simple.rb) file into your projects
+
+   ```shell
+   cp doc/development/examples/simple.rb config/projects/
+   ```
+
+1. Change the `dependency` in `config/projects/simple.rb` to match the software you are testing
+1. Build the simple project by running
+
+   ```shell
+   bundle exec omnibus build simple
+   ```
