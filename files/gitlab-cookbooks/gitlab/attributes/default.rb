@@ -674,11 +674,12 @@ default['gitlab']['nginx']['ssl_verify_client'] = nil # do not enable 2-way SSL 
 default['gitlab']['nginx']['ssl_verify_depth'] = "1" # n/a if ssl_verify_client off
 default['gitlab']['nginx']['ssl_certificate'] = "/etc/gitlab/ssl/#{node['fqdn']}.crt"
 default['gitlab']['nginx']['ssl_certificate_key'] = "/etc/gitlab/ssl/#{node['fqdn']}.key"
-default['gitlab']['nginx']['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4"
-default['gitlab']['nginx']['ssl_prefer_server_ciphers'] = "on"
+default['gitlab']['nginx']['ssl_ciphers'] = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384" # settings from by https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=intermediate&openssl=1.1.1d&ocsp=false&guideline=5.6
+default['gitlab']['nginx']['ssl_prefer_server_ciphers'] = "off" # settings from by https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=intermediate&openssl=1.1.1d&ocsp=false&guideline=5.6
 default['gitlab']['nginx']['ssl_protocols'] = "TLSv1.2 TLSv1.3" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
-default['gitlab']['nginx']['ssl_session_cache'] = "builtin:1000  shared:SSL:10m" # recommended in http://nginx.org/en/docs/http/ngx_http_ssl_module.html
-default['gitlab']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
+default['gitlab']['nginx']['ssl_session_cache'] = "shared:SSL:10m"
+default['gitlab']['nginx']['ssl_session_tickets'] = "off"
+default['gitlab']['nginx']['ssl_session_timeout'] = "1d" # settings from by https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=intermediate&openssl=1.1.1d&ocsp=false&guideline=5.6
 default['gitlab']['nginx']['ssl_dhparam'] = nil # Path to dhparam.pem
 default['gitlab']['nginx']['listen_addresses'] = ['*']
 default['gitlab']['nginx']['listen_port'] = nil # override only if you have a reverse proxy
@@ -706,7 +707,7 @@ default['gitlab']['nginx']['real_ip_header'] = nil
 default['gitlab']['nginx']['real_ip_recursive'] = nil
 default['gitlab']['nginx']['server_names_hash_bucket_size'] = 64
 # HSTS
-default['gitlab']['nginx']['hsts_max_age'] = 31536000
+default['gitlab']['nginx']['hsts_max_age'] = 63072000 # settings from by https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=intermediate&openssl=1.1.1d&ocsp=false&guideline=5.6
 default['gitlab']['nginx']['hsts_include_subdomains'] = false
 # Compression
 default['gitlab']['nginx']['gzip_enabled'] = true
