@@ -573,7 +573,7 @@ node throughout the process.
   To find the master node, run the following on a database node:
 
   ```shell
-  sudo gitlab-ctl repmgr cluster show
+  sudo gitlab-ctl patroni members
   ```
 
   Then, in your `gitlab.rb` file on the deploy node, update
@@ -956,7 +956,7 @@ sudo touch /etc/gitlab/skip-auto-reconfigure
    To find the master node, run the following on a database node:
 
    ```shell
-   sudo gitlab-ctl repmgr cluster show
+   sudo gitlab-ctl patroni members
    ```
 
    Then, in your `gitlab.rb` file on the deploy node, update
