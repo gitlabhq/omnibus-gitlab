@@ -226,7 +226,7 @@ Registry, GitLab Shell and Gitaly:
 
 1. Reconfigure GitLab:
 
-   ```
+   ```shell
    sudo gitlab-ctl reconfigure
    ```
 
