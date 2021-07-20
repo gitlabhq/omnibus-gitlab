@@ -13,8 +13,8 @@ Adding a configuration option may happen during any release milestone.
 - Add an entry to `files/gitlab-config-template/gitlab.rb.template` as
   documentation for administrators.
 - Add a default value for the new option:
-    - Values specific to a service should be set in the appropriate `files/gitlab-cookbooks/SERVICE_NAME/attributes/default.rb`
-    - General values may be set in `files/gitlab-cookbooks/gitlab/attributes/default.rb`
+  - Values specific to a service should be set in the appropriate `files/gitlab-cookbooks/SERVICE_NAME/attributes/default.rb`
+  - General values may be set in `files/gitlab-cookbooks/gitlab/attributes/default.rb`
 - If the value requires calculations at runtime, then it should be added to
   the [defined `parse_variables` method in the related cookbook](new-services.md#additional-configuration-parsing-for-the-service).
 - Consider whether the option should be added to [public attributes](public-attributes.md).
