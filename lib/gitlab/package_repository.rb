@@ -3,8 +3,6 @@ require_relative 'build/info.rb'
 require_relative "util.rb"
 
 class PackageRepository
-  PACKAGE_GLOB = "pkg/**/*.{deb,rpm}".freeze
-
   def target
     # Override
     return Gitlab::Util.get_env('PACKAGECLOUD_REPO') if Gitlab::Util.get_env('PACKAGECLOUD_REPO') && !Gitlab::Util.get_env('PACKAGECLOUD_REPO').empty?
@@ -20,7 +18,7 @@ class PackageRepository
   end
 
   def validate(dry_run)
-    Dir.glob(PACKAGE_GLOB).each do |pkg|
+    Build::Info.package_list.each do |pkg|
       checksum_filename = pkg + '.sha256'
 
       raise "Package #{pkg} is missing its checksum file #{checksum_filename}" unless dry_run || File.exist?(checksum_filename)
@@ -68,7 +66,7 @@ class PackageRepository
   def package_list(repository)
     list = []
 
-    Dir.glob(PACKAGE_GLOB).each do |path|
+    Build::Info.package_list.each do |path|
       platform_path = path.split("/") # ['pkg', 'ubuntu-xenial_aarch64', 'gitlab-ce.deb']
 
       if platform_path.size != 3
