@@ -220,31 +220,48 @@ module Patroni
   end
 
   def self.restart(options)
-    attributes = GitlabCtl::Util.get_node_attributes
-    Utils.patronictl("restart --force #{attributes['patroni']['scope']} #{attributes['patroni']['name']}")
+    patroni = patroni_attributes
+    Utils.patronictl("restart --force #{patroni['scope']} #{patroni['name']}")
   end
 
   def self.reload(options)
-    attributes = GitlabCtl::Util.get_node_attributes
-    Utils.patronictl("reload --force #{attributes['patroni']['scope']} #{attributes['patroni']['name']}")
+    patroni = patroni_attributes
+    Utils.patronictl("reload --force #{patroni['scope']} #{patroni['name']}")
   end
 
   def self.reinitialize_replica(options)
-    attributes = GitlabCtl::Util.get_node_attributes
+    patroni = patroni_attributes
     command = %w(reinit)
     command << '--force'
     command << '--wait' if options[:wait]
-    command << attributes['patroni']['scope']
-    command << (options[:member].nil? ? attributes['patroni']['name'] : options[:member])
+    command << patroni['scope']
+    command << (options[:member].nil? ? patroni['name'] : options[:member])
     Utils.patronictl(command, live: true)
+  end
+
+  def self.patroni_attributes
+    patroni = GitlabCtl::Util.get_node_attributes['patroni']
+    Utils.no_config_error! if patroni.nil?
+
+    patroni
   end
 
   class Utils
     def self.patronictl(cmd, user = 'root', live: false)
-      attributes = GitlabCtl::Util.get_public_node_attributes
+      patroni = GitlabCtl::Util.get_public_node_attributes['patroni']
+      no_config_error! if patroni.nil?
+
       GitlabCtl::Util.run_command(
-        "/opt/gitlab/embedded/bin/patronictl -c #{attributes['patroni']['config_dir']}/patroni.yaml #{cmd.respond_to?(:join) ? cmd.join(' ') : cmd.to_s}",
+        "/opt/gitlab/embedded/bin/patronictl -c #{patroni['config_dir']}/patroni.yaml #{cmd.respond_to?(:join) ? cmd.join(' ') : cmd.to_s}",
         user: user, live: live)
+    end
+
+    def self.no_config_error!
+      raise <<~EOS.freeze
+        This node has no Patroni configuration! This could mean:
+          - either your Omnibus is misconfigured,
+          - or you need to run this command on a database node.
+      EOS
     end
 
     def self.warn_and_exit(msg, code = 0)
