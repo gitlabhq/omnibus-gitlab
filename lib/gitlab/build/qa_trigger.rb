@@ -29,7 +29,8 @@ module Build
     end
 
     def self.get_access_token
-      Gitlab::Util.get_env('GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN')
+      # Default to "Multi-pipeline (from 'gitlab-org/build/omnibus-gitlab-mirror' 'Trigger:qa-test' job)" at https://gitlab.com/gitlab-org/gitlab-qa-mirror/-/settings/access_tokens
+      Gitlab::Util.get_env('GITLAB_QA_MIRROR_PROJECT_ACCESS_TOKEN') || Gitlab::Util.get_env('GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN')
     end
   end
 end
