@@ -3,6 +3,62 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.1.0 (2021-07-21)
+
+### Added (6 changes)
+
+- [Nginx: further modernisation and standardisation](gitlab-org/omnibus-gitlab@aa320de20a678cd27c730d7cc123aaaa276b9367) ([merge request](gitlab-org/omnibus-gitlab!5461))
+- [Add PostgreSQL 13 binaries to Omnibus](gitlab-org/omnibus-gitlab@1400ba430e2abc4bd7f37fa08dc8276898564897) ([merge request](gitlab-org/omnibus-gitlab!5390))
+- [Allow nginx keepalive_time to be configured](gitlab-org/omnibus-gitlab@eb756b2708595d2f88075d62bd07c77ff84ef444) ([merge request](gitlab-org/omnibus-gitlab!5427))
+- [Add configuration for gitaly-backup path](gitlab-org/omnibus-gitlab@4e864e1243f689d0dcdb234fb903600331cfc1aa) ([merge request](gitlab-org/omnibus-gitlab!5419))
+- [Add basic auth settings for patroni rest api](gitlab-org/omnibus-gitlab@082964bc706ddc1566d95949982d12fb66df2637) ([merge request](gitlab-org/omnibus-gitlab!5403))
+- [Add role for Sidekiq](gitlab-org/omnibus-gitlab@9064ab1758476c19a9d7d1f7fb7b83ae75fdfc3d) ([merge request](gitlab-org/omnibus-gitlab!5365))
+
+### Fixed (3 changes)
+
+- [Centralize enabling and disabling of crond](gitlab-org/omnibus-gitlab@44375da451be5199a4412b322eeecfc8e0ebcebe) ([merge request](gitlab-org/omnibus-gitlab!5394))
+- [Exempt unicorn['svlogd_prefix'] from deprecation check](gitlab-org/omnibus-gitlab@f1ff80d38a7398047524a13f384b8384bf0c0ea1) ([merge request](gitlab-org/omnibus-gitlab!5395))
+- [Fix preinstall upgrade message](gitlab-org/omnibus-gitlab@1ddf5a8af58068fa82c25d9017cf5890fde8264b) ([merge request](gitlab-org/omnibus-gitlab!5385))
+
+### Changed (11 changes)
+
+- [Ensure systemd under Docker is correctly detected](gitlab-org/omnibus-gitlab@cafe7cc4ba6e45c021c67c05f24ed0d5d69acfaf) ([merge request](gitlab-org/omnibus-gitlab!5446))
+- [Nginx: modernise TLS config](gitlab-org/omnibus-gitlab@ec870943213718e1c221bb17b1ae9db3b7a2e72f) ([merge request](gitlab-org/omnibus-gitlab!5461))
+- [Bump Container Registry to v3.5.2-gitlab](gitlab-org/omnibus-gitlab@2b9508557beafda31823d66a37ca49d65d9620ea) ([merge request](gitlab-org/omnibus-gitlab!5463))
+- [Update libjpeg-turbo 2.1.0](gitlab-org/omnibus-gitlab@75276e02b7d3ac56959862181268fcd0369985d8) ([merge request](gitlab-org/omnibus-gitlab!5451))
+- [Bump ffi to 1.15.3](gitlab-org/omnibus-gitlab@fc84c088c9867bafe26c5f39350c6a8129821dad) ([merge request](gitlab-org/omnibus-gitlab!5468))
+- [Update alertmanager to 0.22.2](gitlab-org/omnibus-gitlab@59542be7ba4155d6078421acfb95791211200798) ([merge request](gitlab-org/omnibus-gitlab!5301))
+- [Update chef-acme to 4.1.3](gitlab-org/omnibus-gitlab@2a87d1f2b112a39e08f649ce271ccaa83754079e) ([merge request](gitlab-org/omnibus-gitlab!5459))
+- [Update gitlab-exporter from 10.3.0 to 10.4.0](gitlab-org/omnibus-gitlab@259e16c2cc3951bfc7f64f278972d2becba8f271) ([merge request](gitlab-org/omnibus-gitlab!5324))
+- [Set 14.0 as minimum version permitted to upgrade from](gitlab-org/omnibus-gitlab@0ee66c3aa5ee3b14c409ba7a8e63a7ec4df295ed) ([merge request](gitlab-org/omnibus-gitlab!5398))
+- [Update grafana/grafana from 7.5.5 to 7.5.9](gitlab-org/omnibus-gitlab@ff6eca926c669d2431d5ae9225e9138ccf59920a) ([merge request](gitlab-org/omnibus-gitlab!5246))
+- [Update go-crond from 20.7.0 to 21.5.0](gitlab-org/omnibus-gitlab@6077e939274d21b6e8af1e1eb5191f74ff9aed1a) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5237))
+
+### Removed (3 changes)
+
+- [Update Praefect defaults in template](gitlab-org/omnibus-gitlab@f5c06c3e080a14660daf7b54fff1a0b0df17648a) ([merge request](gitlab-org/omnibus-gitlab!5375))
+- [Remove seat link setting](gitlab-org/omnibus-gitlab@c05c309c15b57fc3b306eb8ebaea537c95e4e48f) ([merge request](gitlab-org/omnibus-gitlab!5235))
+- [Remove git2go software module](gitlab-org/omnibus-gitlab@c7638374fecadb2e7bc2b06e4d9a06591b9be775) ([merge request](gitlab-org/omnibus-gitlab!5396))
+
+### Security (2 changes)
+
+- [Move gitlab-rails-rc to more secure location](gitlab-org/omnibus-gitlab@21ab274d8951f6a0fd3c5659e07bf364e5e0f50f) ([merge request](gitlab-org/omnibus-gitlab!5421))
+- [Add libxml2 security patches released as of May 2021](gitlab-org/omnibus-gitlab@371d600f0161ceab9e922068f86d9b93059392bb)
+
+### Other (2 changes)
+
+- [Space savings from stripping promethues build](gitlab-org/omnibus-gitlab@b3ba9e00b9b521eb6a56dbf2c672ab0ee86efc6f) ([merge request](gitlab-org/omnibus-gitlab!5443))
+- [Update Mattermost to 5.36.1](gitlab-org/omnibus-gitlab@ee8c540ae04ad493ba4acaa5d4e398057697a83f) ([merge request](gitlab-org/omnibus-gitlab!5439))
+
+### updated (2 changes)
+
+- [Update Patroni to 2.1.0](gitlab-org/omnibus-gitlab@dbb5f1de558cd0e3405a7e48f90cac046d26b992) ([merge request](gitlab-org/omnibus-gitlab!5440))
+- [Upgrade nginx to 1.20.1](gitlab-org/omnibus-gitlab@bceaa58eb380cbf20753454c6e60820a2845d1cf) ([merge request](gitlab-org/omnibus-gitlab!5417))
+
+### fix (1 change)
+
+- [Fix Praefect configuration template for session pooled connection](gitlab-org/omnibus-gitlab@1825c88764508a7efdccbf3eb70cb32e6bbb91d8) ([merge request](gitlab-org/omnibus-gitlab!5424))
+
 ## 14.0.6 (2021-07-20)
 
 No changes.
