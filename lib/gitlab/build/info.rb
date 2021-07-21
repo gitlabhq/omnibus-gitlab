@@ -15,6 +15,7 @@ module Build
       'PATCH_DEPLOY_ENVIRONMENT' => 'ubuntu-bionic',
       'RELEASE_DEPLOY_ENVIRONMENT' => 'ubuntu-focal',
     }.freeze
+    PACKAGE_GLOB = "pkg/**/*.{deb,rpm}".freeze
 
     class << self
       def fetch_fact_from_file(fact)
@@ -245,6 +246,10 @@ module Build
         puts "Ready to send trigger for environment(s): #{env}"
 
         env
+      end
+
+      def package_list
+        Dir.glob(PACKAGE_GLOB)
       end
     end
   end

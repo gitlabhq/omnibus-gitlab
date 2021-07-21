@@ -108,7 +108,7 @@ RSpec.describe PackageRepository do
   describe :validate do
     context 'with artifacts available' do
       before do
-        allow(Dir).to receive(:glob).with(PackageRepository::PACKAGE_GLOB).and_return(['pkg/el-6/gitlab-ce.rpm'])
+        allow(Build::Info).to receive(:package_list).and_return(['pkg/el-6/gitlab-ce.rpm'])
       end
 
       it 'in dry run mode prints the checksum commands' do
@@ -124,7 +124,7 @@ RSpec.describe PackageRepository do
 
     context 'with artifacts unavailable' do
       before do
-        allow(Dir).to receive(:glob).with(PackageRepository::PACKAGE_GLOB).and_return([])
+        allow(Build::Info).to receive(:package_list).and_return([])
       end
 
       it 'prints nothing' do
@@ -148,7 +148,7 @@ RSpec.describe PackageRepository do
 
         context 'with artifacts available' do
           before do
-            allow(Dir).to receive(:glob).with(PackageRepository::PACKAGE_GLOB).and_return(['pkg/el-6/gitlab-ce.rpm'])
+            allow(Build::Info).to receive(:package_list).and_return(['pkg/el-6/gitlab-ce.rpm'])
           end
 
           it 'in dry run mode prints the upload commands' do
