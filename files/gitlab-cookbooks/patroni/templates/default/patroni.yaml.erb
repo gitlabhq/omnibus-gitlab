@@ -40,3 +40,10 @@ restapi:
     username: <%= @username %>
     password: <%= "#{@password}" %>
   <% end %>
+  <% unless @allowlist.nil? || @allowlist.empty? %>
+  allowlist:
+  <% @allowlist.each do |cidr| %>
+    - <%= cidr %>
+  <% end %>
+  <% end %>
+  allowlist_include_members: <%= @allowlist_include_members %>

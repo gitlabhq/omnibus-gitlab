@@ -131,6 +131,7 @@ RSpec.describe 'patroni cookbook' do
         restapi: {
           listen: :'8008',
           connect_address: "#{Patroni.private_ipv4}:8008",
+          allowlist_include_members: false
         },
       }
     end
@@ -208,6 +209,7 @@ RSpec.describe 'patroni cookbook' do
         restapi: {
           listen: :'8008',
           connect_address: "#{Patroni.private_ipv4}:8008",
+          allowlist_include_members: false
         },
       }
     end
@@ -278,6 +280,8 @@ RSpec.describe 'patroni cookbook' do
           username: 'gitlab',
           password: 'restapipassword',
           replication_password: 'fakepassword',
+          allowlist: ['1.2.3.4/32', '127.0.0.1/32'],
+          allowlist_include_members: false,
           remove_data_directory_on_diverged_timelines: true,
           remove_data_directory_on_rewind_failure: true,
           replication_slots: {
@@ -322,7 +326,9 @@ RSpec.describe 'patroni cookbook' do
           authentication: {
             username: 'gitlab',
             password: 'restapipassword'
-          }
+          },
+          allowlist: ['1.2.3.4/32', '127.0.0.1/32'],
+          allowlist_include_members: false
         )
         expect(cfg[:bootstrap][:dcs]).to include(
           loop_wait: 20,
