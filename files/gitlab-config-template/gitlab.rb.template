@@ -2665,6 +2665,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## advertized and by default is the same as patroni['port'].
 # patroni['connect_port'] = '8008'
 
+## Specifies the set of hosts that are allowed to call unsafe REST API endpoints.
+## Each item can be an hostname, IP address, or CIDR address.
+## All hosts are allowed if this is unset.
+# patroni['allowlist'] = []
+# patroni['allowlist_include_members'] = false
+
 ## The username and password to use for basic auth on write commands to the
 ## Patroni API. If not specified then the API does not use basic auth.
 # patroni['username'] = nil

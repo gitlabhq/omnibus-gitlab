@@ -56,3 +56,5 @@ default['patroni']['port'] = '8008'
 default['patroni']['connect_port'] = nil
 default['patroni']['username'] = nil
 default['patroni']['password'] = nil
+default['patroni']['allowlist'] = []
+default['patroni']['allowlist_include_members'] = false
