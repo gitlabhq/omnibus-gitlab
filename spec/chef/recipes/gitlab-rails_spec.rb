@@ -501,10 +501,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
 
         it 'renders expected YAML' do
-          expect(generated_yml_content.dig('production', 'adapter')).to eq('postgresql')
-          expect(generated_yml_content.dig('production', 'host')).to eq('/var/opt/gitlab/postgresql')
-          expect(generated_yml_content.dig('production', 'port')).to eq(5432)
-          expect(generated_yml_content.dig('production', 'application_name')).to eq(nil)
+          expect(generated_yml_content.dig('production', 'main', 'adapter')).to eq('postgresql')
+          expect(generated_yml_content.dig('production', 'main', 'host')).to eq('/var/opt/gitlab/postgresql')
+          expect(generated_yml_content.dig('production', 'main', 'port')).to eq(5432)
+          expect(generated_yml_content.dig('production', 'main', 'application_name')).to eq(nil)
         end
       end
 
@@ -533,8 +533,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
                 )
               )
 
-              expect(generated_yml_content.dig('production').keys).to include(*%w(adapter host port application_name))
-              expect(generated_yml_content.dig('production', 'application_name')).to eq(expected)
+              expect(generated_yml_content.dig('production', 'main').keys).to include(*%w(adapter host port application_name))
+              expect(generated_yml_content.dig('production', 'main', 'application_name')).to eq(expected)
             end
           end
         end
