@@ -70,6 +70,9 @@ logrotate:
 chef-acme:
   remote: "git@dev.gitlab.org:omnibus-mirror/chef-acme.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/chef-acme.git"
+nginx:
+  remote: "git@dev.gitlab.org:omnibus-mirror/nginx.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/nginx.git"
 nginx-module-vts:
   remote: "git@dev.gitlab.org:omnibus-mirror/nginx-module-vts.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/nginx-module-vts.git"

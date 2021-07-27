@@ -17,12 +17,17 @@
 #
 
 name 'nginx'
-default_version '1.20.1'
+
+version = Gitlab::Version.new('nginx', 'release-1.20.1')
+default_version version.print(false)
+display_version version.print(false).delete_prefix('release-')
 
 license 'BSD-2-Clause'
 license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
+
+source git: version.remote
 
 # From https://www.nginx.com/resources/admin-guide/installing-nginx-open-source/
 # Runtime dependencies
@@ -35,16 +40,9 @@ dependency 'nginx-module-vts'
 
 dependency 'ngx_security_headers'
 
-version '1.20.1' do
-  source sha256: 'e462e11533d5c30baa05df7652160ff5979591d291736cfa5edb9fd2edb48c49'
-end
-
-source url: "http://nginx.org/download/nginx-#{version}.tar.gz"
-
-relative_path "nginx-#{version}"
-
 build do
-  command ['./configure',
+  cwd = "#{Omnibus::Config.source_dir}/nginx"
+  command ['./auto/configure',
            "--prefix=#{install_dir}/embedded",
            '--with-http_ssl_module',
            '--with-http_stub_status_module',
@@ -57,7 +55,7 @@ build do
            "--add-module=#{Omnibus::Config.source_dir}/nginx-module-vts",
            "--add-module=#{Omnibus::Config.source_dir}/ngx_security_headers",
            "--with-ld-opt=-L#{install_dir}/embedded/lib",
-           "--with-cc-opt=\"-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include\""].join(' ')
-  command "make -j #{workers}", env: { 'LD_RUN_PATH' => "#{install_dir}/embedded/lib" }
-  command 'make install'
+           "--with-cc-opt=\"-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include\""].join(' '), cwd: cwd
+  command "make -j #{workers}", env: { 'LD_RUN_PATH' => "#{install_dir}/embedded/lib" }, cwd: cwd
+  command 'make install', cwd: cwd
 end
