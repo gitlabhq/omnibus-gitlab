@@ -1,6 +1,5 @@
 require_relative '../deployer_helper.rb'
 require_relative "../util.rb"
-require_relative '../ohai_helper.rb'
 
 namespace :gitlab_com do
   desc 'Tasks related to gitlab.com.'
@@ -13,10 +12,10 @@ namespace :gitlab_com do
     end
 
     deploy_env = Build::Info.deploy_env
-    current_os = OhaiHelper.platform_dir
+    operating_systems = Build::Info.package_list.map { |path| path.split("/")[1] }.uniq
 
-    if current_os != Build::Info::DEPLOYER_OS_MAPPING[Build::Info.deploy_env_key]
-      puts "Deployment to #{deploy_env} not to be triggered from this build (#{current_os})."
+    unless operating_systems.include?(Build::Info::DEPLOYER_OS_MAPPING[Build::Info.deploy_env_key])
+      puts "Deployment to #{deploy_env} not to be triggered from this build (#{operating_systems.join(',')})."
       exit
     end
 

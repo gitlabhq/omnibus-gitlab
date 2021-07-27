@@ -353,7 +353,7 @@ def attempt_auto_pg_upgrade?
 end
 
 def recommend_pg_upgrade?
-  true
+  false
 end
 
 def display_upgrade_survey?
