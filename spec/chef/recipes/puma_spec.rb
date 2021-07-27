@@ -3,7 +3,7 @@ require 'chef_helper'
 RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(runit_service puma_config),
       path: 'spec/fixtures/fauxhai/ubuntu/16.04.json'
     )
     runner.converge('gitlab::default')
@@ -84,6 +84,10 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
         min_threads: 4,
         max_threads: 4
       )
+      expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
+        expect(content).to match(/lowlevel_error_handler/)
+        expect(content).to include('Raven.capture_exception')
+      }
     end
 
     it 'creates sysctl files' do
