@@ -95,7 +95,6 @@ These additional variables are available to override or enable different build b
 | AUTO_DEPLOY_ENVIRONMENT                       | Deployment name used for the [`gitlab.com` deployer](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md) trigger if current ref is an auto-deploy tag. |
 | DEPLOYER_TRIGGER_PROJECT                      | GitLab project ID for the repository used for the [`gitlab.com` deployer](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md). |
 | DEPLOYER_TRIGGER_TOKEN                        | Trigger token for the various [`gitlab.com` deployer](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md) environments. |
-| AUTO_DEPLOY_OMNIBUS_TRIGGERS_DEPLOYER         | Setting to `false` disables auto deploys for the [`gitlab.com` deployer](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md). |
 | RELEASE_BUCKET                                | S3 bucket where release packages are pushed. |
 | BUILDS_BUCKET                                 | S3 bucket where regular branch packages are pushed. |
 | RELEASE_BUCKET_REGION                         | S3 bucket region. |

@@ -670,8 +670,6 @@ Docker-QA:
 ###########################################################
 ## Upload and deploy to staging or preprod for GitLab.com
 ## * Regular tagged releases are deployed to staging
-## * Auto-deploy tagged releases are deployed to
-##   $AUTO_DEPLOY_ENVIRONMENT, set in CI vars
 ## * Regular patch releases, RCs and tags that are
 ##   not auto-deploys are deployed to
 ##   $PATCH_DEPLOY_ENVIRONMENT, set in CI vars

@@ -27,8 +27,8 @@ namespace :gitlab_com do
     trigger_token = Gitlab::Util.get_env('DEPLOYER_TRIGGER_TOKEN')
     trigger_ref = Build::Check.is_auto_deploy? && Build::Check.ci_commit_tag? ? Gitlab::Util.get_env('CI_COMMIT_TAG') : :master
 
-    if Gitlab::Util.get_env('AUTO_DEPLOY_OMNIBUS_TRIGGERS_DEPLOYER') == 'false' && Build::Check.is_auto_deploy?
-      puts "AUTO_DEPLOY_OMNIBUS_TRIGGERS_DEPLOYER is disabled, exiting..."
+    if Build::Check.is_auto_deploy?
+      puts 'Auto-deploys are handled in release-tools, exiting...'
       exit
     end
 
