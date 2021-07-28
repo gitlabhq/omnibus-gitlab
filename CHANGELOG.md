@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.1.1 (2021-07-28)
+
+### Fixed (1 change)
+
+- [Don't ask users to upgrade to PG 13 yet](gitlab-org/omnibus-gitlab@ea97a631cc97fd193f28f50a7a7510d0aa2fc8b1) ([merge request](gitlab-org/omnibus-gitlab!5493))
+
 ## 14.1.0 (2021-07-21)
 
 ### Added (6 changes)
