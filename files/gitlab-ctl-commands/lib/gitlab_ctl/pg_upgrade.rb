@@ -53,11 +53,9 @@ module GitlabCtl
     end
 
     def space_needed(dir)
-      space_used = GitlabCtl::Util.get_command_output(
+      GitlabCtl::Util.get_command_output(
         "du -s --block-size=1m #{dir}", nil, @timeout
       ).split.first.to_i
-
-      space_used * 2
     end
 
     def space_free(dir)
