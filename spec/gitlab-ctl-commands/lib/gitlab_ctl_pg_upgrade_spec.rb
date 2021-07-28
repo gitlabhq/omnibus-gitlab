@@ -66,7 +66,7 @@ RSpec.describe GitlabCtl::PgUpgrade do
 
         allow(GitlabCtl::Util).to receive(:get_command_output).with(
           "df -P --block-size=1m #{@dbw.data_dir} | awk '{print $4}'", nil, 123
-        ).and_return("Available\n300000")
+        ).and_return("Available\n220000")
 
         expect(@dbw.enough_free_space?(@dbw.data_dir)).to eq(false)
       end
@@ -78,7 +78,7 @@ RSpec.describe GitlabCtl::PgUpgrade do
 
         allow(GitlabCtl::Util).to receive(:get_command_output).with(
           "df -P --block-size=1m #{@dbw.data_dir} | awk '{print $4}'", nil, 123
-        ).and_return("Available\n450000")
+        ).and_return("Available\n250000")
 
         expect(@dbw.enough_free_space?(@dbw.data_dir)).to eq(true)
       end
