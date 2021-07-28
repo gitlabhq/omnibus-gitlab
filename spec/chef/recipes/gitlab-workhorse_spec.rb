@@ -311,6 +311,47 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     it 'correctly renders out the workhorse service file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-propagateCorrelationID/)
     end
+
+    context 'with trusted_cidrs_for_propagation defined' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: {
+                         propagate_correlation_id: true,
+                         trusted_cidrs_for_propagation: %w(127.0.0.1/32 192.168.0.1/8)
+                       })
+      end
+
+      it 'correctly renders out the workhorse service file' do
+        expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-propagateCorrelationID/)
+      end
+
+      it 'should generate an array in the config file' do
+        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content { |content|
+          expect(content).to include(%(trusted_cidrs_for_propagation = ["127.0.0.1/32","192.168.0.1/8"]))
+          expect(content).not_to include(%(trusted_cidrs_for_x_forwarded_for))
+        }
+      end
+    end
+
+    context 'with trusted_cidrs_for_propagation and trusted_cidrs_for_x_forwarded_for defined' do
+      before do
+        stub_gitlab_rb(gitlab_workhorse: {
+                         propagate_correlation_id: true,
+                         trusted_cidrs_for_propagation: %w(127.0.0.1/32 192.168.0.1/8),
+                         trusted_cidrs_for_x_forwarded_for: %w(1.2.3.4/16 5.6.7.8/24)
+                       })
+      end
+
+      it 'correctly renders out the workhorse service file' do
+        expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content(/\-propagateCorrelationID/)
+      end
+
+      it 'should generate arrays in the config file' do
+        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content { |content|
+          expect(content).to include(%(trusted_cidrs_for_propagation = ["127.0.0.1/32","192.168.0.1/8"]))
+          expect(content).to include(%(trusted_cidrs_for_x_forwarded_for = ["1.2.3.4/16","5.6.7.8/24"]))
+        }
+      end
+    end
   end
 
   context 'with log format defined as json' do

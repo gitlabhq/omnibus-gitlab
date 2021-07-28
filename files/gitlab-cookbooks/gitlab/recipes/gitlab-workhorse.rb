@@ -92,6 +92,8 @@ provider = object_store.dig('connection', 'provider')
 object_store_provider = provider if %w(AWS AzureRM).include?(provider)
 image_scaler_max_procs = node['gitlab']['gitlab-workhorse']['image_scaler_max_procs']
 image_scaler_max_filesize = node['gitlab']['gitlab-workhorse']['image_scaler_max_filesize']
+trusted_cidrs_for_propagation = node['gitlab']['gitlab-workhorse']['trusted_cidrs_for_propagation']
+trusted_cidrs_for_x_forwarded_for = node['gitlab']['gitlab-workhorse']['trusted_cidrs_for_x_forwarded_for']
 
 template config_file_path do
   source "workhorse-config.toml.erb"
@@ -110,7 +112,9 @@ template config_file_path do
     shutdown_timeout: shutdown_timeout,
     master_password: redis_sentinel_master_password,
     image_scaler_max_procs: image_scaler_max_procs,
-    image_scaler_max_filesize: image_scaler_max_filesize
+    image_scaler_max_filesize: image_scaler_max_filesize,
+    trusted_cidrs_for_propagation: trusted_cidrs_for_propagation,
+    trusted_cidrs_for_x_forwarded_for: trusted_cidrs_for_x_forwarded_for
   )
   notifies :restart, "runit_service[gitlab-workhorse]"
   notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?

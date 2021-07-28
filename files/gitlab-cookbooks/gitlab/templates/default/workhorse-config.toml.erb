@@ -4,6 +4,12 @@ alt_document_root = "<%= @alt_document_root %>"
 <%- if @shutdown_timeout %>
 shutdown_timeout = "<%= @shutdown_timeout %>"
 <%- end %>
+<%- if @trusted_cidrs_for_propagation %>
+trusted_cidrs_for_propagation = <%= @trusted_cidrs_for_propagation.to_json %>
+<%- end %>
+<%- if @trusted_cidrs_for_x_forwarded_for %>
+trusted_cidrs_for_x_forwarded_for = <%= @trusted_cidrs_for_x_forwarded_for.to_json %>
+<%- end %>
 
 <% if @workhorse_keywatcher %>
 [redis]
