@@ -891,6 +891,18 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Propagate X-Request-Id if available. Workhorse will generate a random value otherwise.
 # gitlab_workhorse['propagate_correlation_id'] = false
 
+##! A list of CIDR blocks to allow for propagation of correlation ID.
+##! propagate_correlation_id should also be set to true.
+##! For example: %w(127.0.0.1/32 192.168.0.1/32)
+# gitlab_workhorse['trusted_cidrs_for_propagation'] = nil
+
+##! A list of CIDR blocks that must match remote IP addresses to use
+##! X-Forwarded-For HTTP header for the actual client IP. Used in
+##! conjuction with propagate_correlation_id and
+##! trusted_cidrs_for_propagation.
+##! For example: %w(127.0.0.1/32 192.168.0.1/32)
+# gitlab_workhorse['trusted_cidrs_for_x_forwarded_for'] = nil
+
 ##! Log format: default is json, can also be text or none.
 # gitlab_workhorse['log_format'] = "json"
 
