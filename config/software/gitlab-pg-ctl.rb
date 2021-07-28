@@ -58,7 +58,7 @@ else
 fi
 
 export PGDATA=${psql_host}/data
-exec /opt/gitlab/embedded/bin/chpst ${privilege_drop} /opt/gitlab/embedded/bin/pg_ctl "$@"
+cd /tmp; exec /opt/gitlab/embedded/bin/chpst ${privilege_drop} /opt/gitlab/embedded/bin/pg_ctl "$@"
       EOH
     end
   end
