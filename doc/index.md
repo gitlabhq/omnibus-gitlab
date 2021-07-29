@@ -78,24 +78,7 @@ to work best with the available resources. Check out the [documentation](setting
 
 ## Troubleshooting
 
-- [Hash Sum mismatch when downloading packages](common_installation_problems/index.md#hash-sum-mismatch-when-downloading-packages)
-- [Apt error: `The requested URL returned error: 403`](common_installation_problems/index.md#apt-error-the-requested-url-returned-error-403).
-- [GitLab is unreachable in my browser](common_installation_problems/index.md#gitlab-is-unreachable-in-my-browser).
-- [Emails are not being delivered](common_installation_problems/index.md#emails-are-not-being-delivered).
-- [Reconfigure freezes at ruby_block[supervise_redis_sleep] action run](common_installation_problems/index.md#reconfigure-freezes-at-ruby_blocksupervise_redis_sleep-action-run).
-- [TCP ports for GitLab services are already taken](common_installation_problems/index.md#tcp-ports-for-gitlab-services-are-already-taken).
-- [Git SSH access stops working on SELinux-enabled systems](common_installation_problems/index.md#selinux-enabled-systems).
-- [PostgreSQL error `FATAL:  could not create shared memory segment: Cannot allocate memory`](common_installation_problems/index.md#postgresql-error-fatal--could-not-create-shared-memory-segment-cannot-allocate-memory).
-- [Reconfigure complains about the GLIBC version](common_installation_problems/index.md#reconfigure-complains-about-the-glibc-version).
-- [Reconfigure fails to create the Git user](common_installation_problems/index.md#reconfigure-fails-to-create-the-git-user).
-- [Failed to modify kernel parameters with sysctl](common_installation_problems/index.md#failed-to-modify-kernel-parameters-with-sysctl).
-- [I am unable to install Omnibus GitLab without root access](common_installation_problems/index.md#i-am-unable-to-install-omnibus-gitlab-without-root-access).
-- [`gitlab-rake assets:precompile` fails with `Permission denied`](common_installation_problems/index.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
-- [`Short read or OOM loading DB` error](common_installation_problems/index.md#short-read-or-oom-loading-db-error).
-- [`pg_dump: aborting because of server version mismatch`](settings/database.md#using-a-non-packaged-postgresql-database-management-server)
-- [`Errno::ENOMEM: Cannot allocate memory` during backup or upgrade](common_installation_problems/index.md#errnoenomem-cannot-allocate-memory-during-backup-or-upgrade)
-- [NGINX error: `could not build server_names_hash`](common_installation_problems/index.md#nginx-error-could-not-build-server_names_hash-you-should-increase-server_names_hash_bucket_size)
-- [Reconfigure fails due to `'root' cannot chown` with NFS root_squash](common_installation_problems/index.md#reconfigure-fails-due-to-root-cannot-chown-with-nfs-root_squash)
+For troubleshooting details, see [Troubleshooting Omnibus GitLab installation issues](troubleshooting.md).
 
 ## Omnibus GitLab developer documentation
 
