@@ -82,7 +82,6 @@ if OhaiHelper.arm?
   end
 end
 
-dependency 'git'
 dependency 'jemalloc'
 dependency 'redis'
 dependency 'nginx'
@@ -128,6 +127,7 @@ dependency 'gitlab-selinux'
 dependency 'gitlab-scripts'
 dependency 'gitlab-config-template'
 dependency 'package-scripts'
+dependency 'git'
 
 # gitaly needs grpc to work correctly. These native extensions are built as part
 # of gitlab-rails build. So, gitlab-rails has to be built before gitaly. But
