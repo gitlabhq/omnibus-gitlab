@@ -24,7 +24,7 @@ postgresql_install_dir = File.join(node['package']['install-dir'], 'embedded/pos
 main_db_version = pg_helper.database_version if Services.enabled?('postgresql')
 geo_db_version = geo_pg_helper.database_version if Services.enabled?('geo_postgresql')
 db_version = node['postgresql']['version'] || main_db_version || geo_db_version
-db_path = db_version && Dir.glob("#{postgresql_install_dir}/#{db_version}*").min
+db_path = Dir.glob("#{postgresql_install_dir}/#{db_version}*").min if db_version
 
 ruby_block 'check_postgresql_version' do
   block do
