@@ -10,8 +10,10 @@ other scheduled work as per our [development guidelines](https://about.gitlab.co
 
 1. Check the job log and find out which component is marked `Vulnerable`
 
-1. Open a confidential issue in [`omnibus-gitlab` issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/)
-   giving details about the vulnerability and a link to the failed job.
+1. Visit the [Omnibus Vulnerability Report](https://gitlab.com/gitlab-org/omnibus-gitlab/-/security/vulnerability_report), locate the appropriate
+   vulnerability. If the vulnerability appears to be legitimate, use the `Create Issue` button to open a confidential issue in the
+   [`omnibus-gitlab` issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab/issues/). Additionally, change the vulnerability status to `Confirmed`. In
+   the event that it is a false positive, duplicate, or otherwise not actionable please change the status to `Dismiss`.
 
 1. Label the issue with the `security` and `For Scheduling` labels. The GitLab
    Security team will be made aware of this issue, thanks to the automation in
@@ -41,6 +43,9 @@ other scheduled work as per our [development guidelines](https://about.gitlab.co
    might affect multiple components and only one of them was fixed by an MR. Removing
    an item from the `.cveignore` file can be done through a public MR to the Omnibus
    repository.
+
+1. Visit the [Omnibus Vulnerability Report](https://gitlab.com/gitlab-org/omnibus-gitlab/-/security/vulnerability_report), locate the appropriate
+   vulnerability and set the status to `Resolved`.
 
 ## Raspberry Pi jobs timed out in pending state waiting to be scheduled
 
