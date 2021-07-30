@@ -47,23 +47,6 @@ other scheduled work as per our [development guidelines](https://about.gitlab.co
 1. Visit the [Omnibus Vulnerability Report](https://gitlab.com/gitlab-org/omnibus-gitlab/-/security/vulnerability_report), locate the appropriate
    vulnerability and set the status to `Resolved`.
 
-## Raspberry Pi jobs timed out in pending state waiting to be scheduled
-
-From time to time, we see Scaleway driver for `docker-machine` failing in properly
-provisioning and de-provisioning machines. THis will result in new machines not
-being spun up for builds, and the jobs end up timing out waiting for a machine.
-
-1. Follow [maintenance documentation](https://about.gitlab.com/handbook/engineering/development/enablement/distribution/maintenance/build-machines.html#when-builds-are-pending-on-devgitlaborg)
-   and delete all the machines that are not running.
-
-1. If machines are present in `Off` state (gray icon), you can manually batch
-   delete them.
-
-1. Ensure new machines are being started up.
-
-1. Retry the failed jobs (only Maintainers can do this) and ensure it gets
-   picked up by a machine.
-
 ## Jobs are stuck due to no runners being active
 
 This is a transient error due to connection issues between runner manager
