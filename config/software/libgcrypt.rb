@@ -16,7 +16,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
 name 'libgcrypt'
-default_version '1.8.6'
+default_version '1.9.3'
 
 dependency 'libgpg-error'
 
@@ -26,7 +26,7 @@ license_file 'COPYING.LIB'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-#{version}.tar.bz2",
-       sha256: '0cba2700617b99fc33864a0c16b1fa7fdf9781d9ed3509f5d767178e5fd7b975'
+       sha256: '97ebe4f94e2f7e35b752194ce15a0f3c66324e0ff6af26659bbfb5ff2ec328fd'
 
 relative_path "libgcrypt-#{version}"
 
