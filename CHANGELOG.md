@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.1.2 (2021-08-03)
+
+### Security (1 change)
+
+- [Update libgcrypt to 1.9.3](gitlab-org/security/omnibus-gitlab@05a6f88dea9600243178741169fe243c48a9bcb2) ([merge request](gitlab-org/security/omnibus-gitlab!131))
+
 ## 14.1.1 (2021-07-28)
 
 ### Fixed (1 change)
@@ -64,6 +70,13 @@ omnibus-gitlab repository.
 ### fix (1 change)
 
 - [Fix Praefect configuration template for session pooled connection](gitlab-org/omnibus-gitlab@1825c88764508a7efdccbf3eb70cb32e6bbb91d8) ([merge request](gitlab-org/omnibus-gitlab!5424))
+
+## 14.0.7 (2021-08-03)
+
+### Security (2 changes)
+
+- [Update libgcrypt to 1.9.3](gitlab-org/security/omnibus-gitlab@4923730ca28a0ad461988378c0d416850658277d) ([merge request](gitlab-org/security/omnibus-gitlab!132))
+- [Update Mattermost to 5.35.4 (GitLab 14.0)](gitlab-org/security/omnibus-gitlab@13f1bb4ed61d7f59479cfae473608167ff3042c6) ([merge request](gitlab-org/security/omnibus-gitlab!128))
 
 ## 14.0.6 (2021-07-20)
 
@@ -166,6 +179,13 @@ No changes.
 
 - [Bump gitlab-exporter to 10.3.0](gitlab-org/omnibus-gitlab@ff48e6e54f1da086711ea85b586713816eb6a42d) ([merge request](gitlab-org/omnibus-gitlab!5315))
 - [Update Mattermost to 5.35.2](gitlab-org/omnibus-gitlab@c0592b2bb4be3ce0f61ae2e287410cf9128f6c19) ([merge request](gitlab-org/omnibus-gitlab!5329))
+
+## 13.12.9 (2021-08-03)
+
+### Security (2 changes)
+
+- [Update libgcrypt to 1.9.3](gitlab-org/security/omnibus-gitlab@42eede86a73071d83db9297d1ad15778f95b0a83) ([merge request](gitlab-org/security/omnibus-gitlab!133))
+- [Update Mattermost to 5.34.5 (GitLab 13.12)](gitlab-org/security/omnibus-gitlab@73c3c9eec3c1254f0f135728a013d9a02c2cdd1b) ([merge request](gitlab-org/security/omnibus-gitlab!129))
 
 ## 13.12.8 (2021-07-07)
 
