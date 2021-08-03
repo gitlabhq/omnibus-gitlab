@@ -71,6 +71,13 @@ omnibus-gitlab repository.
 
 - [Fix Praefect configuration template for session pooled connection](gitlab-org/omnibus-gitlab@1825c88764508a7efdccbf3eb70cb32e6bbb91d8) ([merge request](gitlab-org/omnibus-gitlab!5424))
 
+## 14.0.7 (2021-08-03)
+
+### Security (2 changes)
+
+- [Update libgcrypt to 1.9.3](gitlab-org/security/omnibus-gitlab@4923730ca28a0ad461988378c0d416850658277d) ([merge request](gitlab-org/security/omnibus-gitlab!132))
+- [Update Mattermost to 5.35.4 (GitLab 14.0)](gitlab-org/security/omnibus-gitlab@13f1bb4ed61d7f59479cfae473608167ff3042c6) ([merge request](gitlab-org/security/omnibus-gitlab!128))
+
 ## 14.0.6 (2021-07-20)
 
 No changes.
