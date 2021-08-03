@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.1.2 (2021-08-03)
+
+### Security (1 change)
+
+- [Update libgcrypt to 1.9.3](gitlab-org/security/omnibus-gitlab@05a6f88dea9600243178741169fe243c48a9bcb2) ([merge request](gitlab-org/security/omnibus-gitlab!131))
+
 ## 14.1.1 (2021-07-28)
 
 ### Fixed (1 change)
