@@ -32,7 +32,7 @@ dependent_services = %w(puma geo-logcursor sidekiq)
 templatesymlink 'Create a database_geo.yml and create a symlink to Rails root' do
   link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')
   link_to File.join(gitlab_rails_etc_dir, 'database_geo.yml')
-  source 'database.yml.erb'
+  source 'database_geo.yml.erb'
   cookbook 'gitlab'
   owner 'root'
   group account_helper.gitlab_group

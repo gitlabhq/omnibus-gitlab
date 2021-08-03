@@ -1,6 +1,11 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab-ee::geo-secondary' do
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default') }
+  let(:database_geo_yml) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml') }
+  let(:database_geo_yml_content) { ChefSpec::Renderer.new(chef_run, database_geo_yml).content }
+  let(:generated_yml_content) { YAML.safe_load(database_geo_yml_content, [], [], true, symbolize_names: true) }
+
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
@@ -121,17 +126,38 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
     end
 
     describe 'database.yml' do
-      let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
-
-      it 'creates the template' do
-        expect(chef_run).to create_templatesymlink('Create a database_geo.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            "db_database" => "gitlabhq_geo_production",
-            "db_host" => "1.1.1.1",
-            "db_port" => "5431",
-            "db_sslcompression" => 0,
-            "db_prepared_statements" => false
-          )
+      it 'creates the database_geo.yml template not using many database structure' do
+        expect(generated_yml_content).to eq(
+          production: {
+            adapter: 'postgresql',
+            application_name: nil,
+            collation: nil,
+            connect_timeout: nil,
+            database: 'gitlabhq_geo_production',
+            encoding: 'unicode',
+            host: '1.1.1.1',
+            keepalives: nil,
+            keepalives_count: nil,
+            keepalives_idle: nil,
+            keepalives_interval: nil,
+            load_balancing: {
+              hosts: []
+            },
+            password: 'password',
+            port: 5431,
+            prepared_statements: false,
+            socket: nil,
+            sslca: nil,
+            sslcompression: 0,
+            sslmode: nil,
+            sslrootcert: nil,
+            statement_limit: nil,
+            tcp_user_timeout: nil,
+            username: 'gitlab_geo',
+            variables: {
+              statement_timeout: nil,
+            }
+          }
         )
       end
 
@@ -141,11 +167,7 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
         end
 
         it 'uses provided value in database.yml' do
-          expect(chef_run).to create_templatesymlink('Create a database_geo.yml and create a symlink to Rails root').with_variables(
-            hash_including(
-              "db_sslcompression" => 1
-            )
-          )
+          expect(generated_yml_content[:production][:sslcompression]).to eq(1)
         end
       end
     end
@@ -180,16 +202,40 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
     end
 
     describe 'database.yml' do
-      let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
-
       let(:templatesymlink) { chef_run.templatesymlink('Create a database_geo.yml and create a symlink to Rails root') }
 
-      it 'creates the template' do
-        expect(chef_run).to create_templatesymlink('Create a database_geo.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            "db_database" => "gitlabhq_geo_production",
-            "db_host" => "/var/opt/gitlab/geo-postgresql"
-          )
+      it 'creates the database_geo.yml template not using many database structure' do
+        expect(generated_yml_content).to eq(
+          production: {
+            adapter: 'postgresql',
+            application_name: nil,
+            collation: nil,
+            connect_timeout: nil,
+            database: 'gitlabhq_geo_production',
+            encoding: 'unicode',
+            host: '/var/opt/gitlab/geo-postgresql',
+            keepalives: nil,
+            keepalives_count: nil,
+            keepalives_idle: nil,
+            keepalives_interval: nil,
+            load_balancing: {
+              hosts: []
+            },
+            password: nil,
+            port: 5431,
+            prepared_statements: false,
+            socket: nil,
+            sslca: nil,
+            sslcompression: 0,
+            sslmode: nil,
+            sslrootcert: nil,
+            statement_limit: nil,
+            tcp_user_timeout: nil,
+            username: 'gitlab_geo',
+            variables: {
+              statement_timeout: nil,
+            }
+          }
         )
       end
 
