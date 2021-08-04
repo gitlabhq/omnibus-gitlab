@@ -58,6 +58,7 @@ RSpec.describe Build::Info do
         stub_env_var('CACHE_AWS_SECRET_ACCESS_KEY', 'NOT-SECRET-KEY')
         stub_env_var('CACHE_AWS_BUCKET', 'bucket')
         stub_env_var('CACHE_AWS_S3_REGION', 'moon-west1')
+        stub_env_var('CACHE_AWS_S3_ENDPOINT', 'endpoint')
         stub_env_var('CACHE_S3_ACCELERATE', 'sure')
 
         stub_env_var('NIGHTLY', 'true')
