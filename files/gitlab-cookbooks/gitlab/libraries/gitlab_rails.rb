@@ -18,6 +18,8 @@ require_relative 'nginx.rb'
 require_relative '../../gitaly/libraries/gitaly.rb'
 
 module GitlabRails
+  ALLOWED_DATABASES = %w[main ci].freeze
+
   class << self
     def parse_variables
       parse_database_adapter
@@ -201,7 +203,7 @@ module GitlabRails
 
       # Weed out the databases that aren't allowed
       Gitlab['gitlab_rails']['databases'].to_h.each do |database, settings|
-        unless Gitlab['node']['gitlab']['gitlab-rails']['allowed_databases'].include?(database)
+        unless ALLOWED_DATABASES.include?(database)
           Gitlab['gitlab_rails']['databases'].delete(database)
           LoggingHelper.warning("Additional database `#{database}` not supported in Rails application. It will be ignored.")
         end
