@@ -98,7 +98,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
             )
           end
 
-          it 'renders database.yml with both main database and additional databses using default values' do
+          it 'renders database.yml with both main and additional databases using default values' do
             expect(database_yml[:production]).to eq(
               main: {
                 adapter: 'postgresql',
