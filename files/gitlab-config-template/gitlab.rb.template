@@ -2688,6 +2688,18 @@ external_url 'GENERATED_EXTERNAL_URL'
 # patroni['username'] = nil
 # patroni['password'] = nil
 
+## TLS configuration for Patroni API. Both certificate and key files are
+## required to enable TLS. If not specified then the API uses plain HTTP.
+# patroni['tls_certificate_file'] = nil
+# patroni['tls_key_file'] = nil
+# patroni['tls_key_password'] = nil
+# patroni['tls_ca_file'] = nil
+# patroni['tls_ciphers'] = nil
+# patroni['tls_client_mode'] = nil
+# patroni['tls_client_certificate_file'] = nil
+# patroni['tls_client_key_file'] = nil
+# patroni['tls_verify'] = true
+
 ################################################################################
 # Consul (EEP only)
 ################################################################################
