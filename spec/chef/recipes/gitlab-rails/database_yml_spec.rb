@@ -6,6 +6,40 @@ RSpec.describe 'gitlab::gitlab-rails' do
     let(:database_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/database.yml') }
     let(:database_yml_file_content) { ChefSpec::Renderer.new(chef_run, database_yml_template).content }
     let(:database_yml) { YAML.safe_load(database_yml_file_content, [], [], true, symbolize_names: true) }
+    let(:default_content) do
+      {
+        main: {
+          adapter: 'postgresql',
+          application_name: nil,
+          collation: nil,
+          connect_timeout: nil,
+          database: "gitlabhq_production",
+          encoding: "unicode",
+          host: "/var/opt/gitlab/postgresql",
+          keepalives: nil,
+          keepalives_count: nil,
+          keepalives_idle: nil,
+          keepalives_interval: nil,
+          load_balancing: {
+            hosts: []
+          },
+          password: nil,
+          port: 5432,
+          prepared_statements: false,
+          socket: nil,
+          sslca: nil,
+          sslcompression: 0,
+          sslmode: nil,
+          sslrootcert: nil,
+          statement_limit: 1000,
+          tcp_user_timeout: nil,
+          username: "gitlab",
+          variables: {
+            statement_timeout: nil
+          }
+        }
+      }
+    end
 
     before do
       allow(Gitlab).to receive(:[]).and_call_original
@@ -14,38 +48,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
     context 'with default settings' do
       it 'renders database.yml with main database and default values' do
-        expect(database_yml[:production]).to eq(
-          main: {
-            adapter: 'postgresql',
-            application_name: nil,
-            collation: nil,
-            connect_timeout: nil,
-            database: "gitlabhq_production",
-            encoding: "unicode",
-            host: "/var/opt/gitlab/postgresql",
-            keepalives: nil,
-            keepalives_count: nil,
-            keepalives_idle: nil,
-            keepalives_interval: nil,
-            load_balancing: {
-              hosts: []
-            },
-            password: nil,
-            port: 5432,
-            prepared_statements: false,
-            socket: nil,
-            sslca: nil,
-            sslcompression: 0,
-            sslmode: nil,
-            sslrootcert: nil,
-            statement_limit: 1000,
-            tcp_user_timeout: nil,
-            username: "gitlab",
-            variables: {
-              statement_timeout: nil
-            }
-          }
-        )
+        expect(database_yml[:production]).to eq(default_content)
       end
     end
 
@@ -99,69 +102,12 @@ RSpec.describe 'gitlab::gitlab-rails' do
           end
 
           it 'renders database.yml with both main and additional databases using default values' do
-            expect(database_yml[:production]).to eq(
-              main: {
-                adapter: 'postgresql',
-                application_name: nil,
-                collation: nil,
-                connect_timeout: nil,
-                database: "gitlabhq_production",
-                encoding: "unicode",
-                host: "/var/opt/gitlab/postgresql",
-                keepalives: nil,
-                keepalives_count: nil,
-                keepalives_idle: nil,
-                keepalives_interval: nil,
-                load_balancing: {
-                  hosts: []
-                },
-                password: nil,
-                port: 5432,
-                prepared_statements: false,
-                socket: nil,
-                sslca: nil,
-                sslcompression: 0,
-                sslmode: nil,
-                sslrootcert: nil,
-                statement_limit: 1000,
-                tcp_user_timeout: nil,
-                username: "gitlab",
-                variables: {
-                  statement_timeout: nil
-                }
-              },
-              ci: {
-                adapter: 'postgresql',
-                application_name: nil,
-                collation: nil,
-                connect_timeout: nil,
-                database: "gitlabhq_production_ci",
-                encoding: "unicode",
-                host: "/var/opt/gitlab/postgresql",
-                keepalives: nil,
-                keepalives_count: nil,
-                keepalives_idle: nil,
-                keepalives_interval: nil,
-                load_balancing: {
-                  hosts: []
-                },
-                password: nil,
-                port: 5432,
-                prepared_statements: false,
-                socket: nil,
-                sslca: nil,
-                sslcompression: 0,
-                sslmode: nil,
-                sslrootcert: nil,
-                statement_limit: 1000,
-                tcp_user_timeout: nil,
-                username: "gitlab",
-                variables: {
-                  statement_timeout: nil
-                },
-                migrations_paths: 'db/ci_migrate'
-              }
-            )
+            ci_content = default_content[:main].dup
+            ci_content[:database] = 'gitlabhq_production_ci'
+            ci_content[:migrations_paths] = 'db/ci_migrate'
+            expected_output = default_content.merge(ci: ci_content)
+
+            expect(database_yml[:production]).to eq(expected_output)
           end
         end
 
