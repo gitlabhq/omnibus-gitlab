@@ -34,6 +34,7 @@ These additional variables are available to override or enable different build b
 | CACHE_AWS_SECRET_ACCESS_KEY                   | Account secret to read/write from the s3 bucket containing the s3 software fetch cache. |
 | CACHE_AWS_BUCKET                              | S3 bucket name for the software fetch cache. |
 | CACHE_AWS_S3_REGION                           | S3 bucket region to write/read the software fetch cache. |
+| CACHE_AWS_S3_ENDPOINT                         | The HTTP or HTTPS endpoint to send requests to, when using s3 compatible service. |
 | CACHE_S3_ACCELERATE                           | Setting any value enables the s3 software fetch cache to pull using s3 accelerate. |
 | SECRET_AWS_SECRET_ACCESS_KEY                  | Account secret to read the gpg private package signing key from a secure s3 bucket. |
 | SECRET_AWS_ACCESS_KEY_ID                      | Account ID to read the gpg private package signing key from a secure s3 bucket. |
