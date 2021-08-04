@@ -1,0 +1,34 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+production:
+  adapter: <%= @db_adapter %>
+  encoding: <%= @db_encoding %>
+  collation: <%= @db_collation %>
+  database: <%= @db_database %>
+  username: <%= quote(@db_username) %>
+  password: <%= quote(@db_password) %>
+  host: <%= quote(@db_host) %>
+  port: <%= @db_port %>
+  socket: <%= quote(@db_socket) %>
+  sslmode: <%= quote(@db_sslmode) %>
+  sslcompression: <%= @db_sslcompression %>
+  sslrootcert: <%= quote(@db_sslrootcert) || quote(@db_sslca) %>
+  sslca: <%= quote(@db_sslca) || quote(@db_sslrootcert) %>
+  <% if !@db_sslcert.nil? && !@db_sslkey.nil? %>
+  sslcert: <%= quote(@db_sslcert) %>
+  sslkey: <%= quote(@db_sslkey) %>
+  <% end %>
+  load_balancing: <%= @db_load_balancing.to_json %>
+  prepared_statements: <%= @db_prepared_statements %>
+  statement_limit: <%= @db_statements_limit %>
+  connect_timeout: <%= @db_connect_timeout %>
+  keepalives: <%= @db_keepalives %>
+  keepalives_idle: <%= @db_keepalives_idle %>
+  keepalives_interval: <%= @db_keepalives_interval %>
+  keepalives_count: <%= @db_keepalives_count %>
+  tcp_user_timeout: <%= @db_tcp_user_timeout %>
+  application_name: <%= quote(@db_application_name) %>
+  variables:
+    statement_timeout: <%= @db_statement_timeout %>
