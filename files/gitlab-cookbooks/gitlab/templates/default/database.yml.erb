@@ -34,7 +34,7 @@ production:
     application_name: <%= quote(attributes['db_application_name']) %>
     variables:
       statement_timeout: <%= attributes['db_statement_timeout'] %>
-    <% if database != 'main' %>
-    migrations_paths: "db/<%= database %>_migrate"
+    <% if attributes.key?('database_migration_paths') %>
+    migrations_paths: <%= quote(attributes['database_migration_paths']) %>
     <% end %>
   <% end %>

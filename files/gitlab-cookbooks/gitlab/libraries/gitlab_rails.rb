@@ -19,6 +19,9 @@ require_relative '../../gitaly/libraries/gitaly.rb'
 
 module GitlabRails
   ALLOWED_DATABASES = %w[main ci].freeze
+  DATABASE_MIGRATION_PATHS = {
+    ci: 'db/ci_migrate'
+  }.freeze
 
   class << self
     def parse_variables
@@ -217,6 +220,8 @@ module GitlabRails
         database_attributes.each do |attribute|
           Gitlab['gitlab_rails']['databases'][database][attribute] ||= Gitlab['gitlab_rails']['databases']['main'][attribute]
         end
+
+        Gitlab['gitlab_rails']['databases'][database]['database_migration_paths'] = DATABASE_MIGRATION_PATHS[database.to_sym]
       end
     end
 
