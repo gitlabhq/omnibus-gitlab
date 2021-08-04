@@ -33,6 +33,14 @@ class PatroniHelper < BaseHelper
     do_shell_out(cmd).stdout.chomp.strip
   end
 
+  def use_tls?
+    !!(node['patroni']['tls_certificate_file'] && node['patroni']['tls_key_file'])
+  end
+
+  def verify_client?
+    !!(node['patroni']['tls_client_mode'] && node['patroni']['tls_client_mode'] != 'none')
+  end
+
   def dynamic_settings(pg_helper)
     dcs = {
       'postgresql' => {
@@ -80,13 +88,22 @@ class PatroniHelper < BaseHelper
   def public_attributes
     return {} unless node['patroni']['enable']
 
+    attributes = {
+      'config_dir' => node['patroni']['dir'],
+      'data_dir' => File.join(node['patroni']['dir'], 'data'),
+      'log_dir' => node['patroni']['log_directory'],
+      'api_address' => "#{use_tls? ? 'https' : 'http'}://#{node['patroni']['connect_address'] || '127.0.0.1'}:#{node['patroni']['port']}"
+    }
+    attributes.merge!(
+      'tls_verify' => node['patroni']['tls_verify'],
+      'ca_file' => node['patroni']['tls_ca_file'],
+      'verify_client' => verify_client?,
+      'client_cert' => node['patroni']['tls_client_certificate_file'],
+      'client_key' => node['patroni']['tls_client_key_file']
+    ) if use_tls?
+
     {
-      'patroni' => {
-        'config_dir' => node['patroni']['dir'],
-        'data_dir' => File.join(node['patroni']['dir'], 'data'),
-        'log_dir' => node['patroni']['log_directory'],
-        'api_address' => "#{node['patroni']['listen_address'] || '127.0.0.1'}:#{node['patroni']['port']}"
-      }
+      'patroni' => attributes.compact
     }
   end
 

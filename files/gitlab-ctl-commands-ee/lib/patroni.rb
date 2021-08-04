@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'net/http'
+require 'openssl'
 require 'optparse'
 
 module Patroni
@@ -277,7 +278,7 @@ module Patroni
 
     def initialize
       @attributes = GitlabCtl::Util.get_public_node_attributes
-      @uri = URI("http://#{@attributes['patroni']['api_address']}")
+      @uri = URI(attribute('api_address'))
     end
 
     def up?
@@ -314,8 +315,33 @@ module Patroni
 
     private
 
+    def attribute(name)
+      @attributes['patroni'][name]
+    end
+
+    def http_options
+      opts = {}
+
+      return opts unless @uri.scheme == 'https'
+
+      opts[:use_ssl] = true
+      if attribute('tls_verify')
+        opts[:ca_file] = attribute('ca_file')
+      else
+        opts[:verify_mode] = OpenSSL::SSL::VERIFY_NONE
+      end
+
+      opts.merge!(
+        verify_mode: OpenSSL::SSL::VERIFY_PEER,
+        cert: OpenSSL::X509::Certificate.new(File.read(attribute('client_cert'))),
+        key: OpenSSL::PKey.read(File.read(attribute('client_key')))
+      ) if attribute('verify_client')
+
+      opts.compact
+    end
+
     def get(endpoint, header = nil)
-      Net::HTTP.start(@uri.host, @uri.port) do |http|
+      Net::HTTP.start(@uri.host, @uri.port, http_options) do |http|
         http.request_get(endpoint, header) do |response|
           return yield response
         end

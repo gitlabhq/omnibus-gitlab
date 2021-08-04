@@ -47,3 +47,18 @@ restapi:
   <% end %>
   <% end %>
   allowlist_include_members: <%= @allowlist_include_members %>
+<% if patroni_helper.use_tls? %>
+  <%= "certfile: #{@tls_certificate_file}" if @tls_certificate_file %>
+  <%= "keyfile: #{@tls_key_file}" if @tls_key_file %>
+  <%= "keyfile_password: #{@tls_key_password}" if @tls_key_password %>
+  <%= "cafile: #{@tls_ca_file}" if @tls_ca_file %>
+  <%= "ciphers: #{@tls_ciphers}" if @tls_ciphers %>
+  <%= "verify_client: #{@tls_client_mode}" if @tls_client_mode %>
+<% end %>
+<% if patroni_helper.verify_client? %>
+ctl:
+  insecure: false
+  <%= "certfile: #{@tls_client_certificate_file}" if @tls_client_certificate_file %>
+  <%= "keyfile: #{@tls_client_key_file}" if @tls_client_key_file %>
+  <%= "cafile: #{@tls_ca_file}" if @tls_ca_file %>
+<% end %>

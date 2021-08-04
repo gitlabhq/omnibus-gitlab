@@ -105,6 +105,36 @@ RSpec.describe PatroniHelper do
       end
     end
 
+    context 'when patroni is enabled with tls api' do
+      it 'returns a hash with required keys' do
+        stub_gitlab_rb(
+          patroni: {
+            enable: true,
+            tls_certificate_file: '/path/to/crt.pem',
+            tls_key_file: '/path/to/key.pem',
+            tls_key_password: 'fakepassword',
+            tls_ca_file: '/path/to/ca.pem',
+            tls_ciphers: 'CIPHERS LIST',
+            tls_client_mode: 'optional',
+            tls_client_certificate_file: '/path/to/client.pem',
+            tls_client_key_file: '/path/to/client.key'
+          }
+        )
+
+        expected_tls_cfg = {
+          'tls_verify' => true,
+          'ca_file' => '/path/to/ca.pem',
+          'verify_client' => true,
+          'client_cert' => '/path/to/client.pem',
+          'client_key' => '/path/to/client.key'
+        }
+
+        expect(helper.public_attributes.keys).to match_array('patroni')
+        expect(helper.public_attributes['patroni']).to include(expected_tls_cfg)
+        expect(helper.public_attributes['patroni']['api_address']).to start_with('https://')
+      end
+    end
+
     context 'when patroni is disabled' do
       it 'returns an empty hash' do
         expect(helper.public_attributes).to be_empty

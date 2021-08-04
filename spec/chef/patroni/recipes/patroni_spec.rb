@@ -650,4 +650,60 @@ RSpec.describe 'patroni cookbook' do
       expect_logged_warning(/Patroni is enabled but Consul seems to be disabled/)
     end
   end
+
+  context 'when tls is enabled' do
+    it 'should only set the path to the tls certificate and key' do
+      stub_gitlab_rb(
+        roles: %w(postgres_role),
+        patroni: {
+          enable: true,
+          tls_certificate_file: '/path/to/crt.pem',
+          tls_key_file: '/path/to/key.pem'
+        }
+      )
+
+      expect(chef_run).to render_file('/var/opt/gitlab/patroni/patroni.yaml').with_content { |content|
+        cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
+        expect(cfg[:restapi][:certfile]).to eq('/path/to/crt.pem')
+        expect(cfg[:restapi][:keyfile]).to eq('/path/to/key.pem')
+        expect(cfg[:restapi][:keyfile_password]).to be(nil)
+        expect(cfg[:restapi][:cafile]).to be(nil)
+        expect(cfg[:restapi][:ciphers]).to be(nil)
+        expect(cfg[:restapi][:verify_client]).to be(nil)
+        expect(cfg[:ctl]).to be(nil)
+      }
+    end
+
+    it 'should set all available tls configuration including tls certificate and key paths' do
+      stub_gitlab_rb(
+        roles: %w(postgres_role),
+        patroni: {
+          enable: true,
+          tls_certificate_file: '/path/to/crt.pem',
+          tls_key_file: '/path/to/key.pem',
+          tls_key_password: 'fakepassword',
+          tls_ca_file: '/path/to/ca.pem',
+          tls_ciphers: 'CIPHERS LIST',
+          tls_client_mode: 'optional',
+          tls_client_certificate_file: '/path/to/client.pem',
+          tls_client_key_file: '/path/to/client.key'
+        }
+      )
+
+      expect(chef_run).to render_file('/var/opt/gitlab/patroni/patroni.yaml').with_content { |content|
+        cfg = YAML.safe_load(content, permitted_classes: [Symbol], symbolize_names: true)
+
+        expect(cfg[:restapi][:certfile]).to eq('/path/to/crt.pem')
+        expect(cfg[:restapi][:keyfile]).to eq('/path/to/key.pem')
+        expect(cfg[:restapi][:keyfile_password]).to eq('fakepassword')
+        expect(cfg[:restapi][:cafile]).to eq('/path/to/ca.pem')
+        expect(cfg[:restapi][:ciphers]).to eq('CIPHERS LIST')
+        expect(cfg[:restapi][:verify_client]).to eq('optional')
+        expect(cfg[:ctl][:insecure]).to eq(false)
+        expect(cfg[:ctl][:certfile]).to eq('/path/to/client.pem')
+        expect(cfg[:ctl][:keyfile]).to eq('/path/to/client.key')
+      }
+    end
+  end
 end
