@@ -104,7 +104,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
           it 'renders database.yml with both main and additional databases using default values' do
             ci_content = default_content[:main].dup
             ci_content[:database] = 'gitlabhq_production_ci'
-            ci_content[:migrations_paths] = 'db/ci_migrate'
             expected_output = default_content.merge(ci: ci_content)
 
             expect(database_yml[:production]).to eq(expected_output)
