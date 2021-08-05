@@ -47,7 +47,7 @@
 .knapsack-state:
   services: []
   cache:
-    key: "knapsack"
+    key: "knapsack${CACHE_KEY_SUFFIX}"
     paths:
       - knapsack/
   artifacts: *knapsack-artifacts
@@ -69,14 +69,14 @@
 
 .gems-cache:
   cache:
-    key: "gems-cache-${BUILDER_IMAGE_REVISION}"
+    key: "gems-cache-${BUILDER_IMAGE_REVISION}${CACHE_KEY_SUFFIX}"
     paths:
       - gems
     policy: pull
 
 .trigger-package-cache:
   cache:
-    key: "Ubuntu-20.04-branch-${BUILDER_IMAGE_REVISION}-v1"
+    key: "Ubuntu-20.04-branch-${BUILDER_IMAGE_REVISION}${CACHE_KEY_SUFFIX}"
     paths:
       - cache
       - gems
