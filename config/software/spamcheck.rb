@@ -23,6 +23,8 @@ default_version version.print
 
 license 'MIT'
 
+dependency 'libtensorflow_lite'
+
 source git: version.remote
 
 relative_path 'src/gitlab-org/spamcheck'
