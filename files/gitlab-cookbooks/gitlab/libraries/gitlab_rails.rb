@@ -201,8 +201,13 @@ module GitlabRails
       # settings
       generate_main_database
 
-      # Weed out the databases that aren't allowed
+      # Weed out the databases that are either not allowed or not enabled explicitly (except for main)
       Gitlab['gitlab_rails']['databases'].to_h.each do |database, settings|
+        if database != 'main' && settings['enable'] != true
+          Gitlab['gitlab_rails']['databases'].delete(database)
+          next
+        end
+
         unless ALLOWED_DATABASES.include?(database)
           Gitlab['gitlab_rails']['databases'].delete(database)
           LoggingHelper.warning("Additional database `#{database}` not supported in Rails application. It will be ignored.")

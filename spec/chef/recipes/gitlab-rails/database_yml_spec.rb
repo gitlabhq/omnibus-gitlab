@@ -132,6 +132,59 @@ RSpec.describe 'gitlab::gitlab-rails' do
             expect(database_yml[:production][:ci][:connect_timeout]).to eq(50)
           end
         end
+
+        context 'with additional database specified but not enabled' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                databases: {
+                  main: {
+                    db_connect_timeout: 30,
+                  },
+                  ci: {
+                    db_connect_timeout: 50
+                  }
+                }
+              }
+            )
+          end
+
+          it 'renders database.yml without additional database' do
+            expect(database_yml[:production].keys).not_to include('ci')
+          end
+        end
+
+        context 'with invalid additional database specified' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                databases: {
+                  foobar: {
+                    enable: true,
+                    db_database: 'gitlabhq_foobar'
+                  },
+                  johndoe: {
+                    db_database: 'gitlabhq_johndoe'
+                  },
+                  ci: {
+                    enable: true,
+                    db_database: 'gitlabhq_ci'
+                  }
+                }
+              }
+            )
+          end
+
+          it 'raises warning about invalid database' do
+            chef_run
+            expect_logged_warning("Additional database `foobar` not supported in Rails application. It will be ignored.")
+          end
+
+          it 'does not raise warning about invalid database that is not enabled' do
+            chef_run
+            expect(LoggingHelper.messages).not_to include(kind: :warning, message: /Additional database `johndoe` not supported/)
+          end
+        end
       end
     end
   end
