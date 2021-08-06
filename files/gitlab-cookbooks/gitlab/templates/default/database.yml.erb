@@ -3,33 +3,35 @@
 # and run `sudo gitlab-ctl reconfigure`.
 
 production:
-  main:
-    adapter: <%= @db_adapter %>
-    encoding: <%= @db_encoding %>
-    collation: <%= @db_collation %>
-    database: <%= @db_database %>
-    username: <%= quote(@db_username) %>
-    password: <%= quote(@db_password) %>
-    host: <%= quote(@db_host) %>
-    port: <%= @db_port %>
-    socket: <%= quote(@db_socket) %>
-    sslmode: <%= quote(@db_sslmode) %>
-    sslcompression: <%= @db_sslcompression %>
-    sslrootcert: <%= quote(@db_sslrootcert) || quote(@db_sslca) %>
-    sslca: <%= quote(@db_sslca) || quote(@db_sslrootcert) %>
-    <% if !@db_sslcert.nil? && !@db_sslkey.nil? %>
-    sslcert: <%= quote(@db_sslcert) %>
-    sslkey: <%= quote(@db_sslkey) %>
+  <% @databases.each do |database, attributes| %>
+  <%= database %>:
+    adapter: <%= attributes['db_adapter'] %>
+    encoding: <%= attributes['db_encoding'] %>
+    collation: <%= attributes['db_collation'] %>
+    database: <%= attributes['db_database'] %>
+    username: <%= quote(attributes['db_username']) %>
+    password: <%= quote(attributes['db_password']) %>
+    host: <%= quote(attributes['db_host']) %>
+    port: <%= attributes['db_port'] %>
+    socket: <%= quote(attributes['db_socket']) %>
+    sslmode: <%= quote(attributes['db_sslmode']) %>
+    sslcompression: <%= attributes['db_sslcompression'] %>
+    sslrootcert: <%= quote(attributes['db_sslrootcert']) || quote(attributes['db_sslca']) %>
+    sslca: <%= quote(attributes['db_sslca']) || quote(attributes['db_sslrootcert']) %>
+    <% if !attributes['db_sslcert'].nil? && !attributes['db_sslkey'].nil? %>
+    sslcert: <%= quote(attributes['db_sslcert']) %>
+    sslkey: <%= quote(attributes['db_sslkey']) %>
     <% end %>
-    load_balancing: <%= @db_load_balancing.to_json %>
-    prepared_statements: <%= @db_prepared_statements %>
-    statement_limit: <%= @db_statements_limit %>
-    connect_timeout: <%= @db_connect_timeout %>
-    keepalives: <%= @db_keepalives %>
-    keepalives_idle: <%= @db_keepalives_idle %>
-    keepalives_interval: <%= @db_keepalives_interval %>
-    keepalives_count: <%= @db_keepalives_count %>
-    tcp_user_timeout: <%= @db_tcp_user_timeout %>
-    application_name: <%= quote(@db_application_name) %>
+    load_balancing: <%= attributes['db_load_balancing'].to_json %>
+    prepared_statements: <%= attributes['db_prepared_statements'] %>
+    statement_limit: <%= attributes['db_statements_limit'] %>
+    connect_timeout: <%= attributes['db_connect_timeout'] %>
+    keepalives: <%= attributes['db_keepalives'] %>
+    keepalives_idle: <%= attributes['db_keepalives_idle'] %>
+    keepalives_interval: <%= attributes['db_keepalives_interval'] %>
+    keepalives_count: <%= attributes['db_keepalives_count'] %>
+    tcp_user_timeout: <%= attributes['db_tcp_user_timeout'] %>
+    application_name: <%= quote(attributes['db_application_name']) %>
     variables:
-      statement_timeout: <%= @db_statement_timeout %>
+      statement_timeout: <%= attributes['db_statement_timeout'] %>
+  <% end %>

@@ -18,9 +18,13 @@ require_relative 'nginx.rb'
 require_relative '../../gitaly/libraries/gitaly.rb'
 
 module GitlabRails
+  ALLOWED_DATABASES = %w[main ci].freeze
+
   class << self
     def parse_variables
       parse_database_adapter
+      parse_database_settings
+      parse_databases
       parse_external_url
       parse_directories
       parse_gitlab_trusted_proxies
@@ -140,6 +144,85 @@ module GitlabRails
           to migrate to a PostgreSQL based installation.
       MSG
       raise error_message if adapter && adapter != 'postgresql'
+    end
+
+    def parse_database_settings
+      [
+        [%w(gitlab_rails db_username), %w(postgresql sql_user)],
+        [%w(gitlab_rails db_host), %w(postgresql listen_address)],
+        [%w(gitlab_rails db_port), %w(postgresql port)],
+      ].each do |left, right|
+        next unless Gitlab[left.first][left.last].nil?
+
+        better_value_from_gitlab_rb = Gitlab[right.first][right.last]
+        default_from_attributes = Gitlab['node']['gitlab'][left.first.tr('_', '-')][left.last]
+        Gitlab[left.first][left.last] = better_value_from_gitlab_rb || default_from_attributes
+      end
+
+      # Postgres allow multiple listen addresses, comma-separated values
+      # In case of multi listen_address, will use the first address from list
+      db_host = Gitlab['gitlab_rails']['db_host']
+      if db_host&.include?(',')
+        Gitlab['gitlab_rails']['db_host'] = db_host.split(',')[0]
+        warning = [
+          "Received gitlab_rails['db_host'] value was: #{db_host.to_json}.",
+          "First listen_address '#{Gitlab['gitlab_rails']['db_host']}' will be used."
+        ].join("\n  ")
+        warn(warning)
+      end
+
+      # In case no other setting was provided for db_host, we use the socket
+      # directory
+      Gitlab['gitlab_rails']['db_host'] ||= Gitlab['postgresql']['dir'] || Gitlab['node']['postgresql']['dir']
+    end
+
+    def database_attributes
+      Gitlab['node']['gitlab']['gitlab-rails'].keys.select { |k| k.start_with?('db_') }
+    end
+
+    def generate_main_database
+      # If user hasn't specified a main database, for now, we will use the top
+      # level `db_*` keys to populate one. In the future, when we are confident
+      # in decomposition, we can deprecate top level `gitlab_rails['db_*']`
+      # keys and ask users to explicitly set
+      # `gitlab_rails['databases']['main']['db_*']` settings instead.
+      Gitlab['gitlab_rails']['databases'] ||= {}
+      Gitlab['gitlab_rails']['databases']['main'] ||= { 'enable' => true }
+
+      # Set default value for attributes of main database based on top level
+      # `gitlab_rails['db_*']` settings.
+      database_attributes.each do |attribute|
+        Gitlab['gitlab_rails']['databases']['main'][attribute] ||= Gitlab['gitlab_rails'][attribute] || Gitlab['node']['gitlab']['gitlab-rails'][attribute]
+      end
+    end
+
+    def parse_databases
+      # TODO: Remove when we want to deprecate top level `gitlab_rails['db_*']`
+      # settings
+      generate_main_database
+
+      # Weed out the databases that are either not allowed or not enabled explicitly (except for main)
+      Gitlab['gitlab_rails']['databases'].to_h.each do |database, settings|
+        if database != 'main' && settings['enable'] != true
+          Gitlab['gitlab_rails']['databases'].delete(database)
+          next
+        end
+
+        unless ALLOWED_DATABASES.include?(database)
+          Gitlab['gitlab_rails']['databases'].delete(database)
+          LoggingHelper.warning("Additional database `#{database}` not supported in Rails application. It will be ignored.")
+        end
+      end
+
+      # Set default value of settings for other databases based on values used
+      # in `main` database.
+      Gitlab['gitlab_rails']['databases'].each_key do |database|
+        next if database == 'main'
+
+        database_attributes.each do |attribute|
+          Gitlab['gitlab_rails']['databases'][database][attribute] ||= Gitlab['gitlab_rails']['databases']['main'][attribute]
+        end
+      end
     end
 
     def parse_runtime_dir

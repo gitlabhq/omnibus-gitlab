@@ -18,9 +18,7 @@
 module Postgresql
   class << self
     def parse_variables
-      parse_postgresql_settings
       parse_connect_port
-      parse_multi_db_host_addresses
       parse_mattermost_postgresql_settings
       parse_wal_keep_size
     end
@@ -29,44 +27,6 @@ module Postgresql
       gitlab_postgresql_crt, gitlab_postgresql_key = generate_postgresql_keypair
       Gitlab['postgresql']['internal_certificate'] ||= gitlab_postgresql_crt
       Gitlab['postgresql']['internal_key'] ||= gitlab_postgresql_key
-    end
-
-    def parse_postgresql_settings
-      # If the user wants to run the internal Postgres service using an alternative
-      # DB username, host or port, then those settings should also be applied to
-      # gitlab-rails.
-      [
-        # %w{gitlab_rails db_username} corresponds to
-        # Gitlab['gitlab_rails']['db_username'], etc.
-        [%w(gitlab_rails db_username), %w(postgresql sql_user)],
-        [%w(gitlab_rails db_host), %w(postgresql listen_address)],
-        [%w(gitlab_rails db_port), %w(postgresql port)],
-      ].each do |left, right|
-        unless Gitlab[left.first][left.last].nil?
-          # If the user explicitly sets a value for e.g.
-          # gitlab_rails['db_port'] in gitlab.rb then we should never override
-          # that.
-          next
-        end
-
-        better_value_from_gitlab_rb = Gitlab[right.first][right.last]
-        default_from_attributes = Gitlab['node']['gitlab'][left.first.tr('_', '-')][left.last]
-        Gitlab[left.first][left.last] = better_value_from_gitlab_rb || default_from_attributes
-      end
-    end
-
-    def parse_multi_db_host_addresses
-      # Postgres allow multiple listen addresses, comma-separated values
-      # In case of multi listen_address, will use the first address from list
-      db_host = Gitlab['gitlab_rails']['db_host']
-      return unless db_host&.include?(',')
-
-      Gitlab['gitlab_rails']['db_host'] = db_host.split(',')[0]
-      warning = [
-        "Received gitlab_rails['db_host'] value was: #{db_host.to_json}.",
-        "First listen_address '#{Gitlab['gitlab_rails']['db_host']}' will be used."
-      ].join("\n  ")
-      warn(warning)
     end
 
     def parse_mattermost_postgresql_settings
