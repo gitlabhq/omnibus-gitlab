@@ -29,6 +29,14 @@ workflow:
     # No pipeline on auto-deploy branches as a tag will definitely follow
     - if: '$CI_COMMIT_BRANCH =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/'
       when: never
+    # Set CACHE_EDITION variable to STABLE on stable branch pipelines so that they don't pollute regular branch cache
+    - if: '$CI_COMMIT_BRANCH =~ /^.*-stable$/'
+      variables:
+        CACHE_EDITION: "STABLE"
+    # Set CACHE_EDITION variable to EE on EE pipelines
+    - if: '$ee == "true" || $GITLAB_VERSION =~ /^*-ee/ || $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/ || $CI_COMMIT_TAG =~ /^.*ee\.\d.*$/ || $CI_COMMIT_BRANCH =~ /^.*-ee$/'
+      variables:
+        CACHE_EDITION: "EE"
     # For all other branches, create a pipeline. We are explicitly specifying
     # this so that this rule gets matched earlier before MR pipelines gets
     # triggered, thus causing two pipelines for a branch push - a regular one
@@ -36,8 +44,10 @@ workflow:
     # pushes that doesn't cause an MR, we can change the following to
     # $CI_MERGE_REQUEST_IID
     - if: '$CI_COMMIT_BRANCH'
+      when: always
     # For tags, always create a pipeline.
     - if: '$CI_COMMIT_TAG'
+      when: always
 
 default:
   tags:
@@ -67,6 +77,7 @@ variables:
   OMNIBUS_GITLAB_MIRROR_ID: "14588374"
   DOCS_GITLAB_REPO_SUFFIX: "omnibus"
   CACHE_KEY_SUFFIX: '-v1'
+  CACHE_EDITION: "CE"
 
 ### For services that need a docker daemon
 .docker_job: &docker_job

@@ -329,7 +329,7 @@
   expire_in: 7 days
 
 .branch-cache: &branch-cache
-  key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}${CACHE_KEY_SUFFIX}"
+  key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
   paths:
   - cache
   - gems
@@ -337,7 +337,7 @@
   - node_modules
 
 .tag-cache: &tag-cache
-  key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}${CACHE_KEY_SUFFIX}"
+  key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
   <<: *branch-cache
 
 .branch_template: &branch_build
