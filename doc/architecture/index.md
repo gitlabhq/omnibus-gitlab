@@ -153,7 +153,7 @@ service management and supervision. runit recipes do the job of identifying the
 init system used by the OS and perform basic service management tasks like
 creating necessary service files for GitLab, service enabling, and service
 reloading. runit provides `runit_service` definitions that can be used by other
-recipes to interact with services, see [`/files/gitlab-cookbooks/runit`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/tree/master/files/gitlab-cookbooks/runit) 
+recipes to interact with services, see [`/files/gitlab-cookbooks/runit`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/tree/master/files/gitlab-cookbooks/runit)
 for more information.
 
 ### Services

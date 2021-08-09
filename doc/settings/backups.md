@@ -123,7 +123,7 @@ gitlab_rails['backup_path'] = '/mnt/backups'
 ## Creating backups for GitLab instances in Docker containers
 
 WARNING:
-The backup command requires [additional parameters](https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-and-restore-for-installations-using-pgbouncer) 
+The backup command requires [additional parameters](https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-and-restore-for-installations-using-pgbouncer)
 when your installation is using PgBouncer, for either performance reasons or when using it with a Patroni cluster.
 
 Backups can be scheduled on the host by prepending `docker exec -t <your container name>` to the commands.

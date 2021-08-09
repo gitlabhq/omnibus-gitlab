@@ -1113,7 +1113,7 @@ send a test email:
 Notify.test_email('destination_email@address.com', 'Message Subject', 'Message Body').deliver_now
 ```
 
-## Troubleshooting 
+## Troubleshooting
 
 ### Outgoing connections to port 25 is blocked on major cloud providers
 
