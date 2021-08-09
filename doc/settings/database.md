@@ -821,7 +821,7 @@ The following example demonstrates upgrading from a database host running Postgr
    ```
 
 WARNING:
-The backup command requires [additional parameters](https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-and-restore-for-installations-using-pgbouncer) 
+The backup command requires [additional parameters](https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-and-restore-for-installations-using-pgbouncer)
 when your installation is using PgBouncer.
 
 1. Run the backup Rake task using the SKIP options to back up only the database.

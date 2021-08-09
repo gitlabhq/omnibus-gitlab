@@ -37,7 +37,7 @@ GitLab can be integrated with [Let's Encrypt](https://letsencrypt.org).
 NOTE:
 In order for Let's Encrypt verification to work automatically, ports 80 and 443 will
 need to be accessible to the public Let's Encrypt servers that run the validation checks. The validation
-[does not work with non-standard ports](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3580). 
+[does not work with non-standard ports](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3580).
 If the environment is private or air-gapped, certbot provides a [manual method](https://certbot.eff.org/docs/using.html#manual) to generate certificates for [custom installation](ssl.md#install-custom-public-certificates).
 
 WARNING:
