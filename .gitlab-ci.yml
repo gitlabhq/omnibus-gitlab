@@ -29,6 +29,10 @@ workflow:
     # No pipeline on auto-deploy branches as a tag will definitely follow
     - if: '$CI_COMMIT_BRANCH =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/'
       when: never
+    # Set CACHE_EDITION variable to GITLAB for pipelines triggered from gitlab-org/gitlab project so that they don't pollute regular branch cache
+    - if: '$TOP_UPSTREAM_SOURCE_PROJECT == "gitlab-org/gitlab"'
+      variables:
+        CACHE_EDITION: "GITLAB"
     # Set CACHE_EDITION variable to STABLE on stable branch pipelines so that they don't pollute regular branch cache
     - if: '$CI_COMMIT_BRANCH =~ /^.*-stable$/'
       variables:
