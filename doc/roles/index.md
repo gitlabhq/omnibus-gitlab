@@ -76,20 +76,42 @@ Documentation on the use of the Redis Roles can be found in [Configuring Redis f
 
 ### GitLab Geo Roles
 
-The GitLab Geo roles are used when setting up the database replication for GitLab
-Geo. See the [Geo Database Documentation](https://docs.gitlab.com/ee/administration/geo/setup/database.html)
+The GitLab Geo roles are used for configuration of GitLab Geo sites. See the
+[Geo Setup Documentation](https://docs.gitlab.com/ee/administration/geo/setup/index.html)
 for configuration steps.
 
 - **geo_primary_role** (`gitlab-ee`)
 
-  Prepares the database for replication and configures the application as a Geo Primary.
+  Prepares the database for streaming replication to the secondary site.
+  Prevents automatic upgrade of PostgreSQL to avoid unintended downtime.
+
+  This role is only needed on the Geo primary site's nodes running PostgreSQL.
+  Undesired services will need to be explicitly disabled in `/etc/gitlab/gitlab.rb`.
+
+  This role should not be used to set up a PostgreSQL cluster in a Geo primary
+  site. Instead, see [Geo multi-node database replication](https://docs.gitlab.com/ee/administration/geo/setup/database.html#multi-node-database-replication).
 
   *By default, enables all of the GitLab standard single node services. (NGINX, Puma, Redis, Sidekiq, etc)*
 
 - **geo_secondary_role** (`gitlab-ee`)
 
-  Configures the secondary database for incoming replication and flags the
-  application as a Geo Secondary
+  - Configures the secondary read-only replica database for incoming
+    replication.
+  - Configures the Rails connection to the Geo tracking database.
+  - Enables the Geo tracking database `geo-postgresql`.
+  - Enables the Geo Log Cursor `geo-logcursor`.
+  - Disables automatic database migrations on the read-only replica database
+    during reconfigure.
+  - Reduces the number of Puma workers to save memory for other services.
+  - Sets `gitlab_rails['enable'] = true`.
+  
+  This role is intended to be used in a Geo secondary site running on a single
+  node. If using this role in a Geo site with multiple nodes, undesired
+  services will need to be explicitly disabled in `/etc/gitlab/gitlab.rb`. See
+  [Geo for multiple nodes](https://docs.gitlab.com/ee/administration/geo/replication/multiple_servers.html).
+
+  This role should not be used to set up a PostgreSQL cluster in a Geo secondary
+  site. Instead, see [Geo multi-node database replication](https://docs.gitlab.com/ee/administration/geo/setup/database.html#multi-node-database-replication).
 
   *By default, enables all of the GitLab default single node services. (NGINX, Puma, Redis, Sidekiq, etc)*
 
