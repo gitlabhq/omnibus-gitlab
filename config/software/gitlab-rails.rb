@@ -55,7 +55,6 @@ dependency 'exiftool'
 if EE
   dependency 'pgbouncer'
   dependency 'patroni'
-  dependency 'gitlab-elasticsearch-indexer'
 end
 
 # libatomic is a runtime_dependency of the grpc gem for armhf/aarch64 platforms
