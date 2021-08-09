@@ -94,6 +94,7 @@
   - bundle exec rake cache:restore
   - bundle exec rake build:project
   - bundle exec rake cache:bundle
+  - bundle exec rake build:component_shas
 
 .spec_template:
   extends: .gems-cache
@@ -415,7 +416,6 @@ Trigger:package:
     # Renaming so we can easily generate the artifact URL
     - mv pkg/ubuntu-focal/*.deb pkg/ubuntu-focal/gitlab.deb
     - mv pkg/ubuntu-focal/*.deb.size pkg/ubuntu-focal/gitlab.deb.size
-    - bundle exec rake build:component_shas
   <<: *com-trigger-and-nightly-only
   artifacts:
     expire_in: 3 days
