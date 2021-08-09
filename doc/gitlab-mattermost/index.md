@@ -173,12 +173,57 @@ the PostgreSQL superuser:
 sudo gitlab-psql -d mattermost_production
 ```
 
-### Back up the bundled PostgreSQL database
+### Back up GitLab Mattermost
+
+GitLab Mattermost is not included in the regular [Omnibus GitLab backup](https://docs.gitlab.com/ee/raketasks/backup_restore.html#back-up-gitlab) Rake task.
+
+The general Mattermost [backup and disaster recovery](https://docs.mattermost.com/deploy/backup-disaster-recovery.html) documentation can be used as a guide
+on what needs to be backed up.
+
+#### Back up the bundled PostgreSQL database
 
 If you need to back up the bundled PostgreSQL database and are using the default Omnibus GitLab database configuration, you can back up using this command:
 
 ```shell
 sudo -i -u gitlab-psql -- /opt/gitlab/embedded/bin/pg_dump -h /var/opt/gitlab/postgresql mattermost_production | gzip > mattermost_dbdump_$(date --rfc-3339=date).sql.gz
+```
+
+#### Back up the `data` directory and `config.json`
+
+Mattermost has a `data` directory and `config.json` file that will need to be backed up as well:
+
+```shell
+sudo tar -zcvf mattermost_data_$(date --rfc-3339=date).gz -C /var/opt/gitlab/mattermost data config.json
+```
+
+### Restore GitLab Mattermost
+
+If you have previously [created a backup of GitLab Mattermost](#back-up-gitlab-mattermost), you can run the following commands to restore it:
+
+```shell
+# Stop Mattermost so we don't have any open database connections
+sudo gitlab-ctl stop mattermost
+
+# Drop the Mattermost database
+sudo -u gitlab-psql /opt/gitlab/embedded/bin/dropdb -U gitlab-psql -h /var/opt/gitlab/postgresql -p 5432 mattermost_production
+
+# Create the Mattermost database
+sudo -u gitlab-psql /opt/gitlab/embedded/bin/createdb -U gitlab-psql -h /var/opt/gitlab/postgresql -p 5432 mattermost_production
+
+# Perform the database restore
+# Replace /tmp/mattermost_dbdump_2021-08-05.sql.gz with your backup
+sudo -u mattermost sh -c "zcat /tmp/mattermost_dbdump_2021-08-05.sql.gz | /opt/gitlab/embedded/bin/psql -U gitlab_mattermost -h /var/opt/gitlab/postgresql -p 5432 mattermost_production"
+
+# Restore the data directory and config.json
+# Replace /tmp/mattermost_data_2021-08-09.gz with your backup
+sudo tar -xzvf /tmp/mattermost_data_2021-08-09.gz -C /var/opt/gitlab/mattermost
+
+# Fix permissions if required
+sudo chown -R mattermost:mattermost /var/opt/gitlab/mattermost/data
+sudo chown mattermost:mattermost /var/opt/gitlab/mattermost/config.json
+
+# Start Mattermost
+sudo gitlab-ctl start mattermost 
 ```
 
 ### Mattermost Command Line Tools (CLI)
