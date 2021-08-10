@@ -212,6 +212,7 @@ update-trigger-package-cache:
   only:
     refs:
       - schedules@gitlab-org/build/omnibus-gitlab-mirror  # Jobs that take advantage of this cache are exclusively in the mirror project
+      - pipelines@gitlab-org/build/omnibus-gitlab-mirror
     variables:
       - $CACHE_UPDATE
 
