@@ -180,6 +180,10 @@ No changes.
 - [Bump gitlab-exporter to 10.3.0](gitlab-org/omnibus-gitlab@ff48e6e54f1da086711ea85b586713816eb6a42d) ([merge request](gitlab-org/omnibus-gitlab!5315))
 - [Update Mattermost to 5.35.2](gitlab-org/omnibus-gitlab@c0592b2bb4be3ce0f61ae2e287410cf9128f6c19) ([merge request](gitlab-org/omnibus-gitlab!5329))
 
+## 13.12.10 (2021-08-10)
+
+No changes.
+
 ## 13.12.9 (2021-08-03)
 
 ### Security (2 changes)
