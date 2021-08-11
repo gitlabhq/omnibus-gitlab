@@ -34,6 +34,8 @@ module Geo
       run_command('/opt/gitlab/embedded/bin/gitlab-pg-ctl promote', live: true).error!
 
       success_message
+
+      true
     end
 
     private

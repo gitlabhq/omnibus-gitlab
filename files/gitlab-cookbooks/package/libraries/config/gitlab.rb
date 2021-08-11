@@ -81,8 +81,8 @@ module Gitlab
   attribute_block 'gitlab' do
     # EE attributes
     ee_attribute('geo_postgresql', priority: 20).use { GeoPostgresql }
-    ee_attribute('geo_secondary')
-    ee_attribute('geo_logcursor')
+    ee_attribute('geo_secondary').use { GeoSecondary }
+    ee_attribute('geo_logcursor').use { GeoLogcursor }
     ee_attribute('sentinel').use { Sentinel }
 
     # Base GitLab attributes

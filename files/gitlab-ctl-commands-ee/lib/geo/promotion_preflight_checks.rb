@@ -36,7 +36,7 @@ module Geo
       puts 'Please read https://docs.gitlab.com/ee/administration/geo/'\
         'disaster_recovery/planned_failover.html#preflight-checks'
       puts
-      puts 'Did you perform all manual preflight checks (y/n)?'.color(:green)
+      puts 'Did you perform all manual preflight checks (y/N)?'.color(:green)
 
       return if STDIN.gets.chomp.casecmp('y').zero?
 

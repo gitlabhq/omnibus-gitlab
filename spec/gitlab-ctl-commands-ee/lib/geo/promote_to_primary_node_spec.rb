@@ -13,7 +13,6 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
   subject(:command) { described_class.new(instance, options) }
 
   let(:config_path) { Dir.mktmpdir }
-  let(:gitlab_config_path) { File.join(config_path, 'gitlab.rb') }
 
   before do
     allow($stdout).to receive(:puts)
