@@ -27,6 +27,12 @@ postgresql:
     - no-password
   remove_data_directory_on_rewind_failure: <%= @remove_data_directory_on_rewind_failure %>
   remove_data_directory_on_diverged_timelines: <%= @remove_data_directory_on_diverged_timelines %>
+  <% unless @recovery_conf.empty? %>
+  recovery_conf: <%= @recovery_conf.to_json %>
+  <% end %>
+  <% unless @callbacks.empty? %>
+  callbacks: <%= @callbacks.to_json %>
+  <% end %>
 bootstrap:
   dcs: <%= patroni_helper.dynamic_settings(pg_helper).to_json %>
   method: gitlab_ctl
@@ -61,4 +67,7 @@ ctl:
   <%= "certfile: #{@tls_client_certificate_file}" if @tls_client_certificate_file %>
   <%= "keyfile: #{@tls_client_key_file}" if @tls_client_key_file %>
   <%= "cafile: #{@tls_ca_file}" if @tls_ca_file %>
+<% end %>
+<% unless @tags.empty? %>
+tags: <%= @tags.to_json %>
 <% end %>

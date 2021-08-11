@@ -18,6 +18,9 @@ default['patroni']['remove_data_directory_on_diverged_timelines'] = false
 default['patroni']['use_slots'] = true
 default['patroni']['replication_password'] = nil
 default['patroni']['replication_slots'] = {}
+default['patroni']['callbacks'] = {}
+default['patroni']['recovery_conf'] = {}
+default['patroni']['tags'] = {}
 
 # Standby cluster replication settings
 default['patroni']['standby_cluster']['enable'] = false
