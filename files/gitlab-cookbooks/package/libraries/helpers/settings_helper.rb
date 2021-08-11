@@ -155,7 +155,7 @@ module SettingsHelper
     RolesHelper.parse_enabled
 
     # Roles defined in the cluster configuration file overrides roles from /etc/gitlab/gitlab.rb
-    gitlab_cluster_helper.load_roles!
+    gitlab_cluster_settings.load_roles!
 
     # Load our roles
     DefaultRole.load_role
@@ -205,11 +205,11 @@ module SettingsHelper
     results
   end
 
-  private
-
-  def gitlab_cluster_helper
-    @gitlab_cluster_helper ||= GitlabClusterHelper.new
+  def gitlab_cluster_settings
+    @gitlab_cluster_settings ||= GitlabClusterHelper.new
   end
+
+  private
 
   # Sort settings by their sequence value
   def sorted_settings
