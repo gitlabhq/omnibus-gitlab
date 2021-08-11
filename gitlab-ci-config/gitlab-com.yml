@@ -23,14 +23,13 @@
     - pipelines@gitlab-org/build/omnibus-gitlab-mirror
 
 .com-trigger-and-nightly-only: &com-trigger-and-nightly-only
-  only:
-    refs:
-      - triggers@gitlab-org/build/omnibus-gitlab-mirror
-      - pipelines@gitlab-org/build/omnibus-gitlab-mirror
-      - schedules@gitlab-org/build/omnibus-gitlab-mirror
-  except:
-    variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
+  rules:
+    - if: '$DEPS_PIPELINE || $DEPENDENCY_SCANNING'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "trigger" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
+    - if: '$CI_PIPELINE_SOURCE == "pipeline" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $NIGHTLY == "true" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
+    - when: never
 
 .depscan-rules: &depscan-rules
   only:
