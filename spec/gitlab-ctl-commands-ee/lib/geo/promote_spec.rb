@@ -15,8 +15,8 @@ RSpec.describe Geo::Promote, '#execute' do
   subject(:command) { described_class.new(ctl, options) }
 
   before do
-    stub_const('GitlabClusterHelper::CONFIG_PATH', config_path)
-    stub_const('GitlabClusterHelper::JSON_FILE', gitlab_cluster_config_path)
+    stub_const('GitlabCluster::CONFIG_PATH', config_path)
+    stub_const('GitlabCluster::JSON_FILE', gitlab_cluster_config_path)
 
     allow($stdin).to receive(:gets).and_return('y')
     allow($stdout).to receive(:puts)

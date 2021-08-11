@@ -84,7 +84,7 @@ module Geo
         gitlab_cluster_config.set('patroni', 'standby_cluster', 'enable', false)
         gitlab_cluster_config.write_to_file!
       end
-        die("Unable to write to #{GitlabClusterHelper::JSON_FILE}.")
+        die("Unable to write to #{GitlabCluster::JSON_FILE}.")
       end
     end
 
@@ -148,7 +148,7 @@ module Geo
       unless progress_message('Disabling the secondary services and enabling the primary services in the cluster configuration file') do
         gitlab_cluster_config.write_to_file!
       end
-        die("Unable to write to #{GitlabClusterHelper::JSON_FILE}.")
+        die("Unable to write to #{GitlabCluster::JSON_FILE}.")
       end
     end
 
@@ -268,7 +268,7 @@ module Geo
     end
 
     def gitlab_cluster_config
-      @gitlab_cluster_config ||= GitlabClusterHelper.new
+      @gitlab_cluster_config ||= GitlabCluster.new
     end
 
     def run_command(cmd, live: false)

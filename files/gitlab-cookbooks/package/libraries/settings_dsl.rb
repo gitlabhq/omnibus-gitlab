@@ -22,7 +22,7 @@ require 'securerandom'
 require 'uri'
 
 require_relative 'config_mash.rb'
-require_relative 'helpers/gitlab_cluster_helper'
+require_relative 'gitlab_cluster'
 
 module SettingsDSL
   def self.extended(base)

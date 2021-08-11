@@ -1,7 +1,7 @@
 require 'spec_helper'
-require_relative '../../../files/gitlab-cookbooks/package/libraries/helpers/gitlab_cluster_helper'
+require_relative '../../../files/gitlab-cookbooks/package/libraries/gitlab_cluster'
 
-RSpec.describe GitlabClusterHelper do
+RSpec.describe GitlabCluster do
   let(:gitlab_cluster_config_path) { described_class::JSON_FILE }
 
   describe '#config' do
@@ -128,8 +128,8 @@ RSpec.describe GitlabClusterHelper do
     let(:gitlab_cluster_config_path) { File.join(config_path, 'gitlab-cluster.json') }
 
     before do
-      stub_const('GitlabClusterHelper::CONFIG_PATH', config_path)
-      stub_const('GitlabClusterHelper::JSON_FILE', gitlab_cluster_config_path)
+      stub_const('GitlabCluster::CONFIG_PATH', config_path)
+      stub_const('GitlabCluster::JSON_FILE', gitlab_cluster_config_path)
     end
 
     after do

@@ -1,10 +1,10 @@
 require 'chef/json_compat'
 require 'chef/log'
 
-require_relative '../config_mash'
-require_relative 'logging_helper'
+require_relative 'config_mash'
+require_relative 'helpers/logging_helper'
 
-class GitlabClusterHelper
+class GitlabCluster
   CONFIG_PATH = '/etc/gitlab'.freeze
   JSON_FILE   = '/etc/gitlab/gitlab-cluster.json'.freeze
 
@@ -19,7 +19,7 @@ class GitlabClusterHelper
   #
   # Example:
   #
-  #   GitlabClusterHelper.new.set('patroni', 'standby_cluster', 'enable', false)
+  #   GitlabCluster.new.set('patroni', 'standby_cluster', 'enable', false)
   #   => {
   #     patroni: {
   #       standby_cluster: {
@@ -37,7 +37,7 @@ class GitlabClusterHelper
   #
   # Example:
   #
-  #   GitlabClusterHelper.new.get('patroni', 'standby_cluster', 'enable')
+  #   GitlabCluster.new.get('patroni', 'standby_cluster', 'enable')
   #   => true
   #
   def get(*args)
@@ -49,7 +49,7 @@ class GitlabClusterHelper
   #
   # Example:
   #
-  #   GitlabClusterHelper.new.merge!('patroni', 'standby_cluster', 'enable')
+  #   GitlabCluster.new.merge!('patroni', 'standby_cluster', 'enable')
   #   => true
   #
   def merge!(*args)
