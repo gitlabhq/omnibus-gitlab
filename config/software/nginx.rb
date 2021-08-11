@@ -44,6 +44,8 @@ source url: "http://nginx.org/download/nginx-#{version}.tar.gz"
 relative_path "nginx-#{version}"
 
 build do
+  patch source: 'resolver.patch'
+
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
            '--with-http_ssl_module',
