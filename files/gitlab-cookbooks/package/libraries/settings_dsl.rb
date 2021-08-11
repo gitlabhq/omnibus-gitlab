@@ -21,10 +21,10 @@ require 'chef/mixin/deep_merge'
 require 'securerandom'
 require 'uri'
 
-require_relative '../config_mash.rb'
-require_relative 'gitlab_cluster_helper'
+require_relative 'config_mash.rb'
+require_relative 'helpers/gitlab_cluster_helper'
 
-module SettingsHelper
+module SettingsDSL
   def self.extended(base)
     # Setup getter/setters for roles and settings
     class << base
@@ -206,7 +206,7 @@ module SettingsHelper
   end
 
   def gitlab_cluster_settings
-    @gitlab_cluster_settings ||= GitlabClusterHelper.new
+    @gitlab_cluster_settings ||= GitlabCluster.new
   end
 
   private

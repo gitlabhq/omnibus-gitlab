@@ -15,11 +15,11 @@
 # limitations under the License.
 #
 
-require_relative '../helpers/settings_helper.rb'
+require_relative '../settings_dsl.rb'
 
 module Gitlab
   extend(Mixlib::Config)
-  extend(SettingsHelper)
+  extend(SettingsDSL)
 
   ## Attributes that don't get passed to the node
   node nil
