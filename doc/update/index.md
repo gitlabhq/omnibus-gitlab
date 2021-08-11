@@ -131,7 +131,7 @@ number in your package manager's install or upgrade command:
 
    ```shell
    # Ubuntu/Debian
-   sudo apt upgrade gitlab-ee=12.0.12-ee.0
+   sudo apt install gitlab-ee=12.0.12-ee.0
    # RHEL/CentOS 6 and 7
    yum install gitlab-ee-12.0.12-ee.0.el7
    # RHEL/CentOS 8
