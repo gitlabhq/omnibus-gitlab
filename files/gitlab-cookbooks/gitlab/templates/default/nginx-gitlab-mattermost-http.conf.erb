@@ -80,6 +80,49 @@ server {
   access_log  <%= @log_directory %>/gitlab_mattermost_access.log gitlab_mattermost_access;
   error_log   <%= @log_directory %>/gitlab_mattermost_error.log;
 
+  location ~ /api/v[0-9]+/(users/)?websocket$ {
+    client_max_body_size <%= @client_max_body_size %>;
+
+    <% @proxy_set_headers.each do |header| %>
+    <% next if header[1].nil? %>
+    proxy_set_header <%= header[0] %> <%= header[1] %>;
+    <% end %>
+
+    proxy_buffers 256 16k;
+    proxy_buffer_size 16k;
+
+    client_body_timeout 60;
+    send_timeout 300;
+    lingering_timeout 5;
+    proxy_connect_timeout 90;
+    proxy_send_timeout 300;
+    proxy_read_timeout <%= @proxy_read_timeout %>;
+    proxy_http_version 1.1;
+
+    proxy_pass http://gitlab_mattermost;
+  }
+
+  location ~ /plugins/focalboard/ws/* {
+    client_max_body_size <%= @client_max_body_size %>;
+
+    <% @proxy_set_headers.each do |header| %>
+    <% next if header[1].nil? %>
+    proxy_set_header <%= header[0] %> <%= header[1] %>;
+    <% end %>
+
+    proxy_buffers 256 16k;
+    proxy_buffer_size 16k;
+
+    client_body_timeout 60;
+    send_timeout 300;
+    lingering_timeout 5;
+    proxy_connect_timeout 90;
+    proxy_send_timeout 300;
+    proxy_read_timeout <%= @proxy_read_timeout %>;
+
+    proxy_pass http://gitlab_mattermost;
+  }
+
   location / {
     ## If you use HTTPS make sure you disable gzip compression
     ## to be safe against BREACH attack.
