@@ -96,7 +96,6 @@ dependency 'runit'
 dependency 'go-crond'
 dependency 'docker-distribution-pruner'
 
-dependency 'chef-acme'
 dependency 'mail_room'
 dependency 'grafana-dashboards'
 if Build::Check.include_ee?
@@ -120,6 +119,7 @@ if Build::Check.include_ee?
   dependency 'gitlab-pg-ctl'
 end
 dependency 'gitlab-cookbooks'
+dependency 'chef-acme'
 dependency 'gitlab-ctl'
 dependency 'gitlab-psql'
 dependency 'gitlab-redis-cli'
