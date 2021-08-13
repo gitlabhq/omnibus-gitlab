@@ -64,3 +64,19 @@ Prior to upgrading, administrators using Omnibus GitLab must:
 
 1. Ensure the installation is using [PostgreSQL 12](../settings/database.md#upgrade-packaged-postgresql-server)
 1. If using repmgr, [convert to using patroni](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni)
+
+### Redis configuration changes
+
+Two configuration options for Redis were deprecated in GitLab 13 and removed in GitLab 14:
+
+- `redis_slave_role` is replaced with `redis_replica_role`
+- `redis['client_output_buffer_limit_slave']` is replaced with `redis['client_output_buffer_limit_replica']`
+
+Redis Cache nodes being upgraded from GitLab 13.12 to 14.0 that still refer to `redis_slave_role`
+in `gitlab.rb` will encounter an error in the output of `gitlab-ctl reconfigure`:
+
+```plaintext
+There was an error running gitlab-ctl reconfigure:
+
+The following invalid roles have been set in 'roles': redis_slave_role
+```
