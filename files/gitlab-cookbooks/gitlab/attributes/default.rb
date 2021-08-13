@@ -654,6 +654,7 @@ default['gitlab']['nginx']['enable'] = false
 default['gitlab']['nginx']['ha'] = false
 default['gitlab']['nginx']['dir'] = "/var/opt/gitlab/nginx"
 default['gitlab']['nginx']['log_directory'] = "/var/log/gitlab/nginx"
+default['gitlab']['nginx']['error_log_level'] = "error"
 default['gitlab']['nginx']['worker_processes'] = node['cpu']['total'].to_i
 default['gitlab']['nginx']['worker_connections'] = 10240
 default['gitlab']['nginx']['log_format'] = '$remote_addr - $remote_user [$time_local] "$request_method $filtered_request_uri $server_protocol" $status $body_bytes_sent "$filtered_http_referer" "$http_user_agent" $gzip_ratio' #  NGINX 'combined' format without query strings

@@ -62,7 +62,7 @@ server {
   include /var/opt/gitlab/nginx/conf/gitlab-health.conf;
 
   access_log  /var/log/gitlab/nginx/gitlab_access.log gitlab_access;
-  error_log   /var/log/gitlab/nginx/gitlab_error.log;
+  error_log   /var/log/gitlab/nginx/gitlab_error.log error;
 }
     EOF
   end

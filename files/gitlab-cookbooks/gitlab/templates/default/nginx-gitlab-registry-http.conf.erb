@@ -34,7 +34,7 @@ server {
   }
 
   access_log  <%= @log_directory %>/gitlab_registry_access.log gitlab_access;
-  error_log   <%= @log_directory %>/gitlab_registry_error.log;
+  error_log   <%= @log_directory %>/gitlab_registry_error.log <%= @error_log_level%>;
 }
 <% end %>
 
@@ -93,7 +93,7 @@ server {
   <% end %>
 
   access_log  <%= @log_directory %>/gitlab_registry_access.log gitlab_access;
-  error_log   <%= @log_directory %>/gitlab_registry_error.log;
+  error_log   <%= @log_directory %>/gitlab_registry_error.log <%= @error_log_level%>;
 
   location / {
 

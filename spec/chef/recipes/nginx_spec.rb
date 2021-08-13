@@ -522,6 +522,15 @@ RSpec.describe 'nginx' do
     it { is_expected.to render_file(gitlab_http_config).with_content(/"max-age=10[^"]*"/) }
   end
 
+  context 'when error log level is set to debug' do
+    before do
+      stub_gitlab_rb(nginx: { error_log_level: 'debug' })
+    end
+    it { is_expected.to render_file(gitlab_http_config).with_content(/error_log   \/var\/log\/gitlab\/nginx\/gitlab_error.log debug;/) }
+  end
+
+  it { is_expected.to render_file(gitlab_http_config).with_content(/error_log   \/var\/log\/gitlab\/nginx\/gitlab_error.log error;/) }
+
   context 'when NGINX RealIP module is configured' do
     before do
       stub_gitlab_rb(

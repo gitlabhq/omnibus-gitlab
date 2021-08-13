@@ -54,7 +54,7 @@ server {
   include <%= @gitlab_health_conf %>;
 
   access_log  <%= @log_directory %>/gitlab_access.log gitlab_access;
-  error_log   <%= @log_directory %>/gitlab_error.log;
+  error_log   <%= @log_directory %>/gitlab_error.log <%= @error_log_level%>;
 }
 <% end %>
 
@@ -128,7 +128,7 @@ server {
 
   ## Individual nginx logs for this GitLab vhost
   access_log  <%= @log_directory %>/gitlab_access.log gitlab_access;
-  error_log   <%= @log_directory %>/gitlab_error.log;
+  error_log   <%= @log_directory %>/gitlab_error.log <%= @error_log_level%>;
 
   if ($http_host = "") {
     <% default_host = Nginx.generate_host_header(@fqdn, @port, @https) %>
