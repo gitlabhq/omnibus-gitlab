@@ -17,7 +17,7 @@ module GeoPostgresql
 
     # GitLab cluster settings overrides setttings from /etc/gitlab/gitlab.rb
     def parse_gitlab_cluster_overrides
-      Gitlab.gitlab_cluster_settings.merge!('geo_postgresql', 'enable')
+      GitlabCluster.config.merge!('geo_postgresql', 'enable')
     end
   end
 end

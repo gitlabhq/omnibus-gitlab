@@ -8,7 +8,7 @@ module GeoSecondary
 
     # GitLab cluster settings overrides setttings from /etc/gitlab/gitlab.rb
     def parse_gitlab_cluster_overrides
-      Gitlab.gitlab_cluster_settings.merge!('geo_secondary', 'enable')
+      GitlabCluster.config.merge!('geo_secondary', 'enable')
     end
   end
 end

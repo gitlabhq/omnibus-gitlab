@@ -8,7 +8,7 @@ module GeoLogcursor
 
     # GitLab cluster settings overrides setttings from /etc/gitlab/gitlab.rb
     def parse_gitlab_cluster_overrides
-      Gitlab.gitlab_cluster_settings.merge!('geo_logcursor', 'enable')
+      GitlabCluster.config.merge!('geo_logcursor', 'enable')
     end
   end
 end
