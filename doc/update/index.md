@@ -40,6 +40,7 @@ that can process jobs in the `background_migration` queue.
 Updating to major versions might need some manual intervention. For more information,
 check the version your are updating to:
 
+- [GitLab 14](gitlab_14_changes.md)
 - [GitLab 13](gitlab_13_changes.md)
 - [GitLab 12](gitlab_12_changes.md)
 - [GitLab 11](gitlab_11_changes.md)
