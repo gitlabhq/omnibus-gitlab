@@ -19,7 +19,7 @@ server {
   server_tokens off; ## Don't show the nginx version number, a security best practice
   return 301 https://$http_host:<%= @port %>$request_uri;
   access_log  <%= @log_directory %>/gitlab_pages_access.log gitlab_access;
-  error_log   <%= @log_directory %>/gitlab_pages_error.log;
+  error_log   <%= @log_directory %>/gitlab_pages_error.log <%= @error_log_level%>;
 }
 <% end %>
 
@@ -80,7 +80,7 @@ server {
 
   ## Individual nginx logs for this GitLab vhost
   access_log  <%= @log_directory %>/gitlab_pages_access.log gitlab_access;
-  error_log   <%= @log_directory %>/gitlab_pages_error.log;
+  error_log   <%= @log_directory %>/gitlab_pages_error.log <%= @error_log_level%>;
 
   # Pass everything to pages daemon
   location / {
