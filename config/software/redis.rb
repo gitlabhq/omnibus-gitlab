@@ -30,11 +30,11 @@ source git: version.remote
 
 # libatomic is a runtime_dependency of redis for armhf/aarch64 platforms
 if OhaiHelper.arm?
-  allow_file "#{install_dir}/embedded/bin/redis-benchmark"
-  allow_file "#{install_dir}/embedded/bin/redis-check-aof"
-  allow_file "#{install_dir}/embedded/bin/redis-check-rdb"
-  allow_file "#{install_dir}/embedded/bin/redis-cli"
-  allow_file "#{install_dir}/embedded/bin/redis-server"
+  whitelist_file "#{install_dir}/embedded/bin/redis-benchmark"
+  whitelist_file "#{install_dir}/embedded/bin/redis-check-aof"
+  whitelist_file "#{install_dir}/embedded/bin/redis-check-rdb"
+  whitelist_file "#{install_dir}/embedded/bin/redis-cli"
+  whitelist_file "#{install_dir}/embedded/bin/redis-server"
 end
 
 build do

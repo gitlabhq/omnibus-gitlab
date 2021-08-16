@@ -58,7 +58,7 @@ if EE
 end
 
 # libatomic is a runtime_dependency of the grpc gem for armhf/aarch64 platforms
-allow_file /grpc_c\.so/ if OhaiHelper.arm?
+whitelist_file /grpc_c\.so/ if OhaiHelper.arm?
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
