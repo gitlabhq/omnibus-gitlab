@@ -97,14 +97,6 @@ Lint/NonDeterministicRequireOrder:
     - 'spec/chef_helper.rb'
     - 'spec/spec_helper.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowedMethods.
-# AllowedMethods: instance_of?, kind_of?, is_a?, eql?, respond_to?, equal?
-Lint/RedundantSafeNavigation:
-  Exclude:
-    - 'files/gitlab-cookbooks/package/libraries/helpers/settings_helper.rb'
-
 # Offense count: 2
 # Configuration parameters: IgnoredMethods.
 Metrics/CyclomaticComplexity:
@@ -187,7 +179,6 @@ Style/AccessorGrouping:
   Exclude:
     - 'files/gitlab-cookbooks/gitlab/libraries/helpers/base_pg_helper.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/helpers/pg_status_helper.rb'
-    - 'files/gitlab-cookbooks/package/libraries/helpers/settings_helper.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -345,7 +336,6 @@ Style/SafeNavigation:
   Exclude:
     - 'config/software/rubygems.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/redis_helper.rb'
-    - 'files/gitlab-cookbooks/package/libraries/helpers/settings_helper.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.

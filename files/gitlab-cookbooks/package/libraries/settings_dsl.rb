@@ -28,8 +28,7 @@ module SettingsDSL
   def self.extended(base)
     # Setup getter/setters for roles and settings
     class << base
-      attr_accessor :available_roles
-      attr_accessor :settings
+      attr_accessor :available_roles, :settings
     end
 
     base.available_roles = {}
@@ -161,7 +160,7 @@ module SettingsDSL
     DefaultRole.load_role
     @available_roles.each do |key, value|
       handler = value.handler
-      handler.load_role if handler && handler.respond_to?(:load_role)
+      handler.load_role if handler.respond_to?(:load_role)
     end
   end
 
@@ -172,7 +171,7 @@ module SettingsDSL
     # Parse secrets using the handlers
     sorted_settings.each do |_key, value|
       handler = value.handler
-      handler.parse_secrets if handler && handler.respond_to?(:parse_secrets)
+      handler.parse_secrets if handler.respond_to?(:parse_secrets)
     end
 
     SecretsHelper.write_to_gitlab_secrets
@@ -184,7 +183,7 @@ module SettingsDSL
     # Parse all our variables using the handlers
     sorted_settings.each do |_key, value|
       handler = value.handler
-      handler.parse_variables if handler && handler.respond_to?(:parse_variables)
+      handler.parse_variables if handler.respond_to?(:parse_variables)
     end
     # The last step is to convert underscores to hyphens in top-level keys
     strip_nils(hyphenate_config_keys)
@@ -222,7 +221,7 @@ module SettingsDSL
     end
 
     def handler
-      @handler = @handler.call if @handler&.respond_to?(:call)
+      @handler = @handler.call if @handler.respond_to?(:call)
       @handler
     end
   end
