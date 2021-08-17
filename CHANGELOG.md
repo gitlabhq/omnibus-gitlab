@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.1.3 (2021-08-17)
+
+### Fixed (1 change)
+
+- [Add AES256-GCM-SHA384 to allowed list of Nginx SSL ciphers](gitlab-org/omnibus-gitlab@43169882dfb36046dc01ae681eb7cc5df4a2887f) ([merge request](gitlab-org/omnibus-gitlab!5546))
+
 ## 14.1.2 (2021-08-03)
 
 ### Security (1 change)
