@@ -52,12 +52,8 @@ env = {
 }
 
 build do
-  # Patches below are based on patches provided by martin.panter, 2016-06-02 06:31
-  # in https://bugs.python.org/issue13501
-  patch source: 'configure.patch', target: "configure"
-  patch source: 'pyconfig.h.in.patch', target: "pyconfig.h.in"
-  patch source: 'readline.c.patch', target: "Modules/readline.c"
-  patch source: 'setup.py.patch', target: "setup.py"
+  # Patches below are a backport of https://github.com/python/cpython/pull/24189
+  patch source: 'readline-3-9.patch'
 
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
