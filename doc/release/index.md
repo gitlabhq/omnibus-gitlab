@@ -155,4 +155,4 @@ New images should be released within 3 business days of the package release.
 
 Image specific release documentation:
 
-- (**Deprecated**) [OpenShift](openshift.md).
+- (**Deprecated**) [OpenShift](https://docs.gitlab.com/charts/development/release.html).
