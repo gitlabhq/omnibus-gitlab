@@ -5,7 +5,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 comments: false
 ---
 
-# Omnibus GitLab Docs **(FREE SELF)**
+# Omnibus GitLab Documentation **(FREE SELF)**
 
 Omnibus GitLab is a way to package different services and tools required to run GitLab, so that most users can install it without laborious configuration.
 
