@@ -16,6 +16,17 @@ module Build
         is_ee?
       end
 
+      def fips?
+        # TODO: Add code to automatically set to true on FIPS supported OSs
+        false
+      end
+
+      def use_system_ssl?
+        # Once we implement the above TODO, we can get rid of this variable and
+        # gate on `fips?` alone.
+        Gitlab::Util.get_env('USE_SYSTEM_SSL') == 'true' || fips?
+      end
+
       def match_tag?(tag)
         system(*%W[git describe --exact-match --match #{tag}])
       end
