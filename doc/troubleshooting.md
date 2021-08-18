@@ -137,66 +137,6 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-## Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
-
-If you uninstall and reinstall GitLab, it's possible that the process
-supervisor (runit) may not be in the proper state if it continued to run.
-To troubleshoot this error:
-
-1. First check that the runit directory exists:
-
-   ```shell
-   ls -al /opt/gitlab/sv/redis/supervise
-   ```
-
-1. If you see the message, continue to the next step:
-
-   ```plaintext
-   ls: cannot access /opt/gitlab/sv/redis/supervise: No such file or directory
-   ```
-
-1. Restart the runit server.
-   Using systemctl (Debian => 9 - Stretch):
-
-   ```shell
-   sudo systemctl restart gitlab-runsvdir
-   ```
-
-   Using systemd (CentOS, Ubuntu >= 18.04):
-
-   ```shell
-   systemctl restart gitlab-runsvdir.service
-   ```
-
-*Note* This should be resolved starting from 7.13 Omnibus GitLab packages.
-
-During the first `gitlab-ctl reconfigure` run, Omnibus GitLab needs to figure
-out if your Linux server is using SysV Init, Upstart or Systemd so that it can
-install and activate the `gitlab-runsvdir` service. If `gitlab-ctl reconfigure`
-makes the wrong decision, it will later hang at
-`ruby_block[supervise_redis_sleep] action run`.
-
-The choice of init system is currently made in [the embedded runit
-cookbook](https://gitlab.com/gitlab-org/build/omnibus-mirror/runit-cookbook/blob/master/recipes/default.rb) by essentially
-looking at the output of `uname -a`, `/etc/issue` and others. This mechanism
-can make the wrong decision in situations such as:
-
-- your OS release looks like 'Debian 7' but it is really some variant which
-  uses Upstart instead of SysV Init;
-- your OS release is unknown to the runit cookbook (e.g. ClearOS 6.5).
-
-Solving problems like this would require changes to the embedded runit
-cookbook; Merge Requests are welcome. Until this problem is fixed, you can work
-around it by manually performing the appropriate installation steps for your
-particular init system. For instance, to manually set up `gitlab-runsvdir` with
-Upstart, you can do the following:
-
-```shell
-sudo cp /opt/gitlab/embedded/cookbooks/runit/files/default/gitlab-runsvdir.conf /etc/init/
-sudo initctl start gitlab-runsvdir
-sudo gitlab-ctl reconfigure # Resume gitlab-ctl reconfigure
-```
-
 ## TCP ports for GitLab services are already taken
 
 By default, Puma listens at TCP address 127.0.0.1:8080. NGINX
