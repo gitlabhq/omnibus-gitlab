@@ -28,7 +28,7 @@ default_version '3.9.6'
 dependency 'libedit'
 dependency 'ncurses'
 dependency 'zlib'
-dependency 'openssl'
+dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'bzip2'
 dependency 'libffi'
 dependency 'liblzma'

@@ -24,7 +24,7 @@ license_file 'COPYRIGHT'
 skip_transitive_dependency_licensing true
 
 dependency 'zlib'
-dependency 'openssl'
+dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'libedit'
 dependency 'ncurses'
 dependency 'libossp-uuid'

@@ -152,6 +152,12 @@ dependency 'gitaly'
 # version manifest file
 dependency 'version-manifest'
 
+if Build::Check.use_system_ssl?
+  allowed_lib /libcrypto\.so/
+  allowed_lib /libssl\.so/
+  allowed_lib /libz\.so/
+end
+
 exclude "\.git*"
 exclude "bundler\/git"
 

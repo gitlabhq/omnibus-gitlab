@@ -27,7 +27,7 @@ license_file 'NOTICE'
 
 skip_transitive_dependency_licensing true
 
-dependency 'openssl'
+dependency 'openssl' unless Build::Check.use_system_ssl?
 
 source git: version.remote
 
