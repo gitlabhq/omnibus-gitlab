@@ -57,7 +57,7 @@ module Patroni
 
     # GitLab cluster settings overrides setttings from /etc/gitlab/gitlab.rb
     def parse_gitlab_cluster_overrides
-      GitlabCluster.config.merge!('patroni', 'standby_cluster', 'enable')
+      Gitlab.merge_cluster_attribute!('patroni', 'standby_cluster', 'enable', GitlabCluster.config.get('patroni', 'standby_cluster', 'enable'))
     end
 
     # `wal_log_hints` must be `on` for `pg_rewind`

@@ -204,11 +204,61 @@ module SettingsDSL
     results
   end
 
+  # Merge an incoming setting with Gitlab config. Give a warning if setting is already set
+  # from `/etc/gitlab/gitlab.rb` config file
+  #
+  # @example merging a nested attribute
+  #    Gitlab.merge_cluster_attribute!('patroni', 'standby_cluster', 'enable', value: true)
+  #    #=> true
+  #
+  # @param [Array] keys the nested keys sequence with the value as the last argument
+  def merge_cluster_attribute!(*keys, value)
+    return if value.nil?
+
+    log_overriding_message(keys, value) unless deep_fetch(*keys).nil?
+
+    deep_set(*keys, value)
+  end
+
+  # Merge provided role and value set if value is defined
+  #
+  # @param [String] role
+  # @param [String] value
+  def merge_cluster_role!(role, value)
+    return if value.nil?
+
+    log_overriding_message(role, value) unless deep_fetch(role, 'enable').nil?
+
+    deep_set(role, 'enable', value)
+  end
+
   private
+
+  def deep_set(*keys, value)
+    Gitlab::ConfigMash.auto_vivify do
+      if keys.length == 1
+        self[keys.first] = value
+      else
+        *keys, last = *keys
+        keys.inject(self, :[])[last] = value
+      end
+    end
+  end
+
+  def deep_fetch(*keys)
+    dig(*(keys.inject { |key| convert_key(key) }))
+  end
 
   # Sort settings by their sequence value
   def sorted_settings
     @settings.select { |_k, value| !value[:ee] || Gitlab['edition'] == :ee }.sort_by { |_k, value| value[:priority] }
+  end
+
+  def log_overriding_message(keys, value)
+    message = "The '#{Array(keys).join('.')}' is defined in #{GitlabCluster::JSON_FILE} as '#{value}' " \
+              "and overrides the setting in the /etc/gitlab/gitlab.rb"
+
+    LoggingHelper.warning(message)
   end
 
   # Custom Hash object used to add a handler as a block to the attribute

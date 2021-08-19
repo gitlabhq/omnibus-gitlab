@@ -35,7 +35,7 @@ class GitlabCluster
   #
   # @param [Array] args the nested keys sequence with the value as the last argument
   def set(*args)
-    auto_vivify(local_store, *args)
+    deep_set(local_store, *args)
   end
 
   # Get the value of a config option if the key exists in the local store. Otherwise, returns nil.
@@ -50,26 +50,10 @@ class GitlabCluster
     local_store.dig(*args)
   end
 
-  # Merge an incoming setting with Gitlab config options if the key exists in the JSON file.
-  #
-  # @example
-  #    GitlabCluster.config.merge!('patroni', 'standby_cluster', 'enable')
-  #    #=> true
-  #
-  # @param [Array] args the nested keys sequence with the value as the last argument
-  # @return [Boolean] return true if value existed before and was replaced otherwise false
-  def merge!(*args)
-    value = get(*args)
-    return if value.nil?
-
-    log_overriding_message(args, value)
-    auto_vivify(Gitlab, *args, value)
-  end
-
   # Roles defined in the JSON file overrides roles from /etc/gitlab/gitlab.rb
   def load_roles!
-    load_role!('geo_primary_role', 'primary')
-    load_role!('geo_secondary_role', 'secondary')
+    Gitlab.merge_cluster_role!('geo_primary_role', get('primary'))
+    Gitlab.merge_cluster_role!('geo_secondary_role', get('secondary'))
   end
 
   # Write configuration to the local store overwritting current settings
@@ -88,15 +72,22 @@ class GitlabCluster
     true
   end
 
+  def all
+    local_store.dup
+  end
+
+  # Clears local store cache so content is reloaded from disk
+  def reload!
+    @local_store = nil
+  end
+
   private
 
   def local_store
-    return @local_store if defined?(@local_store)
-
-    @local_store = Gitlab::ConfigMash.new(load_from_file)
+    @local_store ||= Gitlab::ConfigMash.new(load_from_file)
   end
 
-  def auto_vivify(hash, *keys, value)
+  def deep_set(hash, *keys, value)
     Gitlab::ConfigMash.auto_vivify do
       if keys.length == 1
         hash[keys.first] = value
@@ -114,20 +105,5 @@ class GitlabCluster
     return {} unless File.exist?(JSON_FILE)
 
     Chef::JSONCompat.from_json(File.read(JSON_FILE))
-  end
-
-  def load_role!(role, key)
-    value = get(key)
-    return if value.nil?
-
-    log_overriding_message(role, value)
-    Gitlab[role]['enable'] = value
-  end
-
-  def log_overriding_message(keys, value)
-    message = "The '#{Array(keys).join('.')}' is defined in #{JSON_FILE} as '#{value}' " \
-              "and overrides the setting in the /etc/gitlab/gitlab.rb"
-
-    LoggingHelper.warning(message)
   end
 end
