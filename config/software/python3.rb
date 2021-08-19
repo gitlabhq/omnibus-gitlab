@@ -1,6 +1,6 @@
 #
 # Copyright:: Copyright (c) 2013-2014 Chef Software, Inc.
-# Copyright:: Copyright (c) 2016-2020 GitLab B.V.
+# Copyright:: Copyright (c) 2016-2021 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +17,13 @@
 #
 
 name 'python3'
-# If bumping from 3.7.x to something higher, be sure to update the following files with the new path:
-# config/software/python-docutils.rb
+# If bumping from 3.9.x to something higher, be sure to update the following files with the new path:
+# files/gitlab-config-template/gitlab.rb.template
 # files/gitlab-cookbooks/gitaly/recipes/enable.rb
 # files/gitlab-cookbooks/gitlab/attributes/default.rb
 # spec/chef/recipes/gitaly_spec.rb
 # spec/chef/recipes/gitlab-rails_spec.rb
-default_version '3.7.10'
+default_version '3.9.6'
 
 dependency 'libedit'
 dependency 'ncurses'
@@ -40,7 +40,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       sha256: 'c9649ad84dc3a434c8637df6963100b2e5608697f9ba56d82e3809e4148e0975'
+       sha256: 'd0a35182e19e416fc8eae25a3dcd4d02d4997333e4ad1f2eee6010aadc3fe866'
 
 relative_path "Python-#{version}"
 
@@ -52,12 +52,8 @@ env = {
 }
 
 build do
-  # Patches below are based on patches provided by martin.panter, 2016-06-02 06:31
-  # in https://bugs.python.org/issue13501
-  patch source: 'configure.patch', target: "configure"
-  patch source: 'pyconfig.h.in.patch', target: "pyconfig.h.in"
-  patch source: 'readline.c.patch', target: "Modules/readline.c"
-  patch source: 'setup.py.patch', target: "setup.py"
+  # Patches below are a backport of https://github.com/python/cpython/pull/24189
+  patch source: 'readline-3-9.patch'
 
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
@@ -67,10 +63,10 @@ build do
   make env: env
   make 'install', env: env
 
-  delete("#{install_dir}/embedded/lib/python3.7/lib-dynload/dbm.*")
-  delete("#{install_dir}/embedded/lib/python3.7/lib-dynload/_sqlite3.*")
-  delete("#{install_dir}/embedded/lib/python3.7/test")
-  command "find #{install_dir}/embedded/lib/python3.7 -name '__pycache__' -type d -print -exec rm -r {} +"
+  delete("#{install_dir}/embedded/lib/python3.9/lib-dynload/dbm.*")
+  delete("#{install_dir}/embedded/lib/python3.9/lib-dynload/_sqlite3.*")
+  delete("#{install_dir}/embedded/lib/python3.9/test")
+  command "find #{install_dir}/embedded/lib/python3.9 -name '__pycache__' -type d -print -exec rm -r {} +"
 end
 
 project.exclude "embedded/bin/python3*-config"
