@@ -47,7 +47,7 @@ File 'repomd.xml' from repository 'gitlab_gitlab-ce' is signed with an unknown k
 ```
 
 This is a known bug with zypper where zypper ignores the `gpgkey` keyword in the
-repo configuration file. With later versions of Packagecloud, there may be
+repository configuration file. With later versions of Packagecloud, there may be
 improvements regarding this, but currently users have to manually agree to
 package installation.
 
