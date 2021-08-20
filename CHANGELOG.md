@@ -3,6 +3,44 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.2.0 (2021-08-20)
+
+### Added (8 changes)
+
+- [Add option to specify log level for nginx logs](gitlab-org/omnibus-gitlab@89b91fc05ae583143e757c1febdbdeb61314f46c) ([merge request](gitlab-org/omnibus-gitlab!5530))
+- [Add a (experimental) single command to promote a Geo secondary node](gitlab-org/omnibus-gitlab@be85c4d2f060caa5301ed72ac99dc969d8c6f13d) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5401))
+- [Add missing Patroni configuration - tags, recovery_conf, callbacks](gitlab-org/omnibus-gitlab@c862f1f98f84b4a84d925e1a9c76524c6f7a8cba) ([merge request](gitlab-org/omnibus-gitlab!5525))
+- [Add support to specify additional databases to Rails application](gitlab-org/omnibus-gitlab@80349389150549e02721795cd46a5e8b48ced65c) ([merge request](gitlab-org/omnibus-gitlab!5480))
+- [Enable TLS support for Patroni API](gitlab-org/omnibus-gitlab@f0f94de248bba9f73e331df544b2c989c9cf8a46) ([merge request](gitlab-org/omnibus-gitlab!5486))
+- [Support Workhorse config options for propagating correlation IDs](gitlab-org/omnibus-gitlab@dd74092e5e7e812c355bf8540dd7bd23a19c59ef) ([merge request](gitlab-org/omnibus-gitlab!5496))
+- [Connect Puma low-level error handler to Sentry](gitlab-org/omnibus-gitlab@b1ebcc1924e5a9093ac79ad7f5150309e9536a55) ([merge request](gitlab-org/omnibus-gitlab!5490))
+- [Add patroni allowlist support](gitlab-org/omnibus-gitlab@9b366bb46878964b7d09b368abc54604dbc69170) ([merge request](gitlab-org/omnibus-gitlab!5476))
+
+### Fixed (3 changes)
+
+- [Add AES256-GCM-SHA384 to allowed list of Nginx SSL ciphers](gitlab-org/omnibus-gitlab@127525c7f57daf7ca5ec38209180f3dcf0e8940e) ([merge request](gitlab-org/omnibus-gitlab!5513))
+- [Fix `could not change directory to "/root": Permission denied`](gitlab-org/omnibus-gitlab@aa91ab2988958af1dd0bcf6cedbf68babec804f8) ([merge request](gitlab-org/omnibus-gitlab!5498))
+- [Don't ask users to upgrade to PG 13 yet](gitlab-org/omnibus-gitlab@74f82ad556f70c1159267c25180cff7a2b8b54d5) ([merge request](gitlab-org/omnibus-gitlab!5488))
+
+### Changed (7 changes)
+
+- [Update Mattermost to 5.37.1 and update websocket support](gitlab-org/omnibus-gitlab@af32991925af80fbf723195b1e84ef9c04d333ba) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5516))
+- [Bump Container Registry to v3.7.0-gitlab](gitlab-org/omnibus-gitlab@ada9e5ac7d67a99fff614b4570ba4236c4fd5175) ([merge request](gitlab-org/omnibus-gitlab!5520))
+- [Transform database.yml to use main syntax](gitlab-org/omnibus-gitlab@7a379098fb5f45849d9be8e8f4a7054245393387) ([merge request](gitlab-org/omnibus-gitlab!5510))
+- [Bump Container Registry to v3.6.2-gitlab](gitlab-org/omnibus-gitlab@6672574804c36591dc5eee51eaaf8f079df30827) ([merge request](gitlab-org/omnibus-gitlab!5506))
+- [Bump Container Registry to v3.6.1-gitlab](gitlab-org/omnibus-gitlab@7649c01c3bb370dad23bf2ce4aa6860e714b6ae2) ([merge request](gitlab-org/omnibus-gitlab!5489))
+- [Transform database.yml to use main syntax](gitlab-org/omnibus-gitlab@4fd5be4dccd006eb9f9321478e67401529641356) ([merge request](gitlab-org/omnibus-gitlab!5491))
+- [Avoid generic NoMethodError on non-Patroni nodes](gitlab-org/omnibus-gitlab@e26450d3f473dc7dc9443c240f6adfce6adc1881) ([merge request](gitlab-org/omnibus-gitlab!5472))
+
+### Security (1 change)
+
+- [Update libgcrypt to 1.9.3](gitlab-org/omnibus-gitlab@1b8e0bb1b3bf39a339b7a8a63d2d232ef132cbe2)
+
+### Other (2 changes)
+
+- [Remove docs redirects cleanup task](gitlab-org/omnibus-gitlab@c03703f3c3f678e383ce92b17bf2e888dbcfa883) ([merge request](gitlab-org/omnibus-gitlab!5539))
+- [Bump gitlab-exporter to 11.2.0](gitlab-org/omnibus-gitlab@9e005c8e8ccf16766327bd872ad284ae612bf6fd) ([merge request](gitlab-org/omnibus-gitlab!5518))
+
 ## 14.1.3 (2021-08-17)
 
 ### Fixed (1 change)
