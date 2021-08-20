@@ -10,7 +10,7 @@ class GitlabRailsEnvHelper
         require "yaml";
         require "active_record";
 
-        ActiveRecord::Base.establish_connection(YAML.load_file("config/database.yml")['production']['main']);
+        ActiveRecord::Base.establish_connection(YAML.load_file("config/database.yml")["production"]["main"]);
         version_row = ActiveRecord::Base.connection.execute("SELECT VERSION()").first;
         puts version_row["version"].match(Regexp.new("\\\A(?:PostgreSQL |)([^\\\s]+).*\\\z"))[1];
       ).join(' ')
