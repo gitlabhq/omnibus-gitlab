@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.2.1 (2021-08-23)
+
+### Fixed (1 change)
+
+- [Fix migration NameError in rails env helper](gitlab-org/omnibus-gitlab@6a1ddc413f4ac1b4d56abac3aa148f4cd81deec3) ([merge request](gitlab-org/omnibus-gitlab!5553))
+
 ## 14.2.0 (2021-08-20)
 
 ### Added (8 changes)
