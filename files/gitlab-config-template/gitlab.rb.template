@@ -532,6 +532,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     "args" => { "access_type" => "offline", "approval_prompt" => "" }
 #   }
 # ]
+# gitlab_rails['omniauth_cas3_session_duration'] = 28800
 
 ### FortiAuthenticator authentication settings
 # gitlab_rails['forti_authenticator_enabled'] = false
