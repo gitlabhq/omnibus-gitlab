@@ -2775,6 +2775,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     handler: 'failover_pgbouncer'
 #   }
 # }
+#
+# consul['custom_service_config_dir'] = '/path/to/service/configs/directory'
 ################################################################################
 # Service desk email settings
 ################################################################################
