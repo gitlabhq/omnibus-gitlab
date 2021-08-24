@@ -20,7 +20,7 @@ runit_service "puma" do
   action :disable
 end
 
-consul_service 'rails' do
+consul_service node['gitlab']['puma']['consul_service_name'] do
   action :delete
   reload_service false unless node['consul']['enable']
 end

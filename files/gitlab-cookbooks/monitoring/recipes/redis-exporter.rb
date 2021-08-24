@@ -53,7 +53,7 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
-consul_service 'redis-exporter' do
+consul_service node['monitoring']['redis-exporter']['consul_service_name'] do
   action Prometheus.service_discovery_action
   socket_address node['monitoring']['redis-exporter']['listen_address']
   reload_service false unless node['consul']['enable']

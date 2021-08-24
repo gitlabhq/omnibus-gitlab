@@ -134,7 +134,7 @@ version_file 'Create Ruby version file for Gitaly' do
   notifies :hup, "runit_service[gitaly]"
 end
 
-consul_service 'gitaly' do
+consul_service node['gitaly']['consul_service_name'] do
   action Prometheus.service_discovery_action
   socket_address node['gitaly']['prometheus_listen_addr']
   reload_service false unless node['consul']['enable']

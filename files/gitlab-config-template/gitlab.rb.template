@@ -923,6 +923,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Maximum file size in bytes for an image to be considered eligible for rescaling
 # gitlab_workhorse['image_scaler_max_filesize'] = 250000
 
+##! Service name used to register GitLab Workhorse as a Consul service
+# gitlab_workhorse['consul_service_name'] = 'workhorse'
+
 ################################################################################
 ## GitLab User Settings
 ##! Modify default git user.
@@ -976,6 +979,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # puma['exporter_address'] = "127.0.0.1"
 # puma['exporter_port'] = 8083
 
+##! Service name used to register Puma as a Consul service
+# puma['consul_service_name'] = 'rails'
+
 ################################################################################
 ## GitLab Sidekiq
 ################################################################################
@@ -1014,6 +1020,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['exporter_log_enabled'] = false
 # sidekiq['listen_address'] = "localhost"
 # sidekiq['listen_port'] = 8082
+
+##! Service name used to register Sidekiq as a Consul service
+# sidekiq['consul_service_name'] = 'sidekiq'
 
 ################################################################################
 ## gitlab-shell
@@ -1422,6 +1431,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #    "deny" => "all" # Deny access to anyone else
 #  }
 # }
+
+##! Service name used to register Nginx as a Consul service
+# nginx['consul_service_name'] = 'nginx'
 
 ################################################################################
 ## GitLab Logging
@@ -1872,6 +1884,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus['listen_address'] = 'localhost:9090'
 #
 
+##! Service name used to register Prometheus as a Consul service
+# prometheus['consul_service_name'] = 'prometheus'
+
 ################################################################################
 ###! **Only needed if Prometheus and Rails are not on the same server.**
 ### For example, in a multi-node architecture, Prometheus will be installed on the monitoring node, while Rails will be on the Rails node.
@@ -1921,6 +1936,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Advanced settings. Should be changed only if absolutely needed.
 # node_exporter['listen_address'] = 'localhost:9100'
 
+##! Service name used to register Node Exporter as a Consul service
+# node_exporter['consul_service_name'] = 'node-exporter'
+
 ################################################################################
 ## Prometheus Redis exporter
 ##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/redis_exporter.html
@@ -1939,6 +1957,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Advanced settings. Should be changed only if absolutely needed.
 # redis_exporter['listen_address'] = 'localhost:9121'
 
+##! Service name used to register Redis Exporter as a Consul service
+# redis_exporter['consul_service_name'] = 'redis-exporter'
+
 ################################################################################
 ## Prometheus Postgres exporter
 ##! Docs: https://docs.gitlab.com/ee/administration/monitoring/prometheus/postgres_exporter.html
@@ -1955,6 +1976,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 # postgres_exporter['sslmode'] = nil
 # postgres_exporter['per_table_stats'] = false
+
+##! Service name used to register Postgres Exporter as a Consul service
+# postgres_exporter['consul_service_name'] = 'postgres-exporter'
 
 ################################################################################
 ## Prometheus PgBouncer exporter (EE only)
@@ -2151,6 +2175,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['pack_objects_cache_dir'] = '/var/opt/gitlab/git-data/repositories/+gitaly/PackObjectsCache'
 # gitaly['pack_objects_cache_max_age'] = '5m'
 
+##! Service name used to register Gitaly as a Consul service
+# gitaly['consul_service_name'] = 'gitaly'
+
 ################################################################################
 ## Praefect
 ##! Docs: https://gitlab.com/gitlab-org/gitaly/blob/master/doc/design_ha.md
@@ -2227,6 +2254,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # praefect['database_direct_sslcert'] = '/path/to/client-cert'
 # praefect['database_direct_sslkey'] = '/path/to/client-key'
 # praefect['database_direct_sslrootcert'] = '/path/to/rootcert'
+
+##! Service name used to register Praefect as a Consul service
+# praefect['consul_service_name'] = 'praefect'
 
 ################################################################################
 # Storage check

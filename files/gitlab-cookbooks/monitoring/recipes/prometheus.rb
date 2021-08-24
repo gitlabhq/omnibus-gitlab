@@ -95,7 +95,7 @@ runit_service 'prometheus' do
   )
 end
 
-consul_service 'prometheus' do
+consul_service node['monitoring']['prometheus']['consul_service_name'] do
   action Prometheus.service_discovery_action
   socket_address node['monitoring']['prometheus']['listen_address']
   reload_service false unless node['consul']['enable']

@@ -40,3 +40,4 @@ default['praefect']['database_direct_sslrootcert'] = nil
 default['praefect']['tls_listen_addr'] = nil
 default['praefect']['certificate_path'] = nil
 default['praefect']['key_path'] = nil
+default['praefect']['consul_service_name'] = 'praefect'
