@@ -424,6 +424,7 @@ GEM
       winrm (~> 2.0)
     wisper (2.0.1)
     wmi-lite (1.0.5)
+    yard (0.9.26)
     zeitwerk (2.4.2)
     zhexdump (0.0.2)
 
@@ -454,6 +455,7 @@ DEPENDENCIES
   rspec-parameterized
   rspec_junit_formatter
   thor (= 0.18.1)
+  yard
 
 BUNDLED WITH
    2.2.15

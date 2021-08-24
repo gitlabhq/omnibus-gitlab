@@ -1,0 +1,1 @@
+yardoc -o yard --no-private --protected lib/**/*.rb files/gitlab-cookbooks/**/*.rb files/gitlab-ctl-commands/**/*.rb files/gitlab-ctl-commands-ee/**/*.rb - README.md CONTRIBUTING.md LICENSE CHANGELOG.md
