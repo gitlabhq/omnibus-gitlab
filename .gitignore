@@ -23,6 +23,8 @@ public/*
 config/projects/simple.rb
 .markdownlintrc
 .DS_Store
+.yardoc
+yard
 
 # These are created during a package build. We do not want to commit them
 .yarn-cache
