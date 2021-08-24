@@ -2751,12 +2751,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # }
 ################################################################################
-# Service desk email settings (EEP only)
+# Service desk email settings
 ################################################################################
 ### Service desk email
 ###! Allow users to create new service desk issues by sending an email to
 ###! service desk address.
-###! Docs: https://docs.gitlab.com/ee/administration/reply_by_email.html
+###! Docs: https://docs.gitlab.com/ee/user/project/service_desk.html
 # gitlab_rails['service_desk_email_enabled'] = false
 
 #### Service Desk Mailbox Settings (via `mail_room`)
@@ -2788,3 +2788,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['service_desk_email_port'] = 993
 # gitlab_rails['service_desk_email_ssl'] = true
 # gitlab_rails['service_desk_email_start_tls'] = false
+
+#### Inbox options (for Microsoft Graph)
+# gitlab_rails['service_desk_email_inbox_method'] = 'microsoft_graph'
+# gitlab_rails['service_desk_email_inbox_options'] = {
+#    'tenant_id': 'YOUR-TENANT-ID',
+#    'client_id': 'YOUR-CLIENT-ID',
+#    'client_secret': 'YOUR-CLIENT-SECRET',
+#    'poll_interval': 60  # Optional
+# }
