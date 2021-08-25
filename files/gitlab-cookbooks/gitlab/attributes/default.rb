@@ -347,6 +347,7 @@ default['gitlab']['gitlab-rails']['omniauth_auto_link_saml_user'] = nil
 default['gitlab']['gitlab-rails']['omniauth_auto_link_user'] = nil
 default['gitlab']['gitlab-rails']['omniauth_external_providers'] = nil
 default['gitlab']['gitlab-rails']['omniauth_providers'] = []
+default['gitlab']['gitlab-rails']['omniauth_cas3_session_duration'] = nil
 default['gitlab']['gitlab-rails']['omniauth_allow_bypass_two_factor'] = nil
 
 default['gitlab']['gitlab-rails']['forti_authenticator_enabled'] = false
