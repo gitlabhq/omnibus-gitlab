@@ -49,6 +49,65 @@ gitlab_rails['smtp_pool'] = true
 
 This allows Sidekiq workers to reuse SMTP connections for multiple jobs. The maximum number of connections in the pool follows the [maximum concurrency configuration for Sidekiq](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#manage-concurrency).
 
+## Using encrypted credentials
+
+> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6276) in GitLab 14.3.
+
+Instead of storing the SMTP credentials in the configuration files as plain text, you can optionally
+use an encrypted file for the SMTP credentials. To use this feature, you first need to enable
+[GitLab encrypted configuration](https://docs.gitlab.com/ee/administration/encrypted_configuration.html).
+
+The encrypted configuration for SMTP exists in an encrypted YAML file. By default the file will be created at
+`/var/opt/gitlab/gitlab-rails/shared/encrypted_configuration/smtp.yaml.enc`. This location is configurable in the GitLab configuration.
+
+The unencrypted contents of the file should be a subset of the settings from your `smtp_*'` settings in the `gitlab_rails`
+configuration block.
+
+The supported configuration items for the encrypted file are:
+
+- `user_name`
+- `password`
+
+The encrypted contents can be configured with the [SMTP secret edit Rake command](https://docs.gitlab.com/ee/administration/raketasks/smtp.html).
+
+**Configuration**
+
+If initially your SMTP configuration looked like:
+
+1. In `/etc/gitlab/gitlab.rb`:
+
+  ```ruby
+  gitlab_rails['smtp_enable'] = true
+  gitlab_rails['smtp_address'] = "smtp.server"
+  gitlab_rails['smtp_port'] = 465
+  gitlab_rails['smtp_user_name'] = "smtp user"
+  gitlab_rails['smtp_password'] = "smtp password"
+  gitlab_rails['smtp_domain'] = "example.com"
+  gitlab_rails['smtp_authentication'] = "login"
+  gitlab_rails['smtp_enable_starttls_auto'] = true
+  gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+  ```
+
+1. Edit the encrypted secret:
+
+   ```shell
+   sudo gitlab-rake gitlab:smtp:secret:edit EDITOR=vim
+   ```
+
+1. The unencrypted contents of the SMTP secret should be entered like:
+
+   ```yaml
+   user_name: 'smtp user'
+   password: 'smtp password'
+   ```
+
+1. Edit `/etc/gitlab/gitlab.rb` and remove the settings for `smtp_user_name` and `smtp_password`.
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
 ## Example configurations
 
 ### SMTP on localhost
