@@ -642,7 +642,7 @@ pages:
     - bundle exec rake license:generate_pages
     - mv ${LICENSE_S3_BUCKET} public
     - cp support/webpages/* public
-    - cp yard/* public
+    - cp -R yard/* public
   artifacts:
     paths:
       - public
