@@ -115,6 +115,8 @@ module Build
           http.request(req)
         end
 
+        raise "Error fetching status: #{res.code} -- #{res.message}" unless res.is_a?(Net::HTTPSuccess)
+
         JSON.parse(res.body)['status'].to_s.to_sym
       rescue JSON::ParserError
         # Ignore GitLab API hiccups. If GitLab is really down, we'll hit the job

@@ -146,6 +146,18 @@
   needs: []
   timeout: 3h
 
+.trigger-pipeline:
+  stage: trigger-qa
+  image: "${RUBY_IMAGE}"
+  when: manual
+  <<: *com-trigger-only
+  needs:
+    - job: Trigger:package
+      artifacts: false
+    - job: Trigger:qa-docker
+      artifacts: false
+      optional: true
+
 .review-docs:
   image: "${RUBY_IMAGE}-alpine"
   stage: post-test
@@ -522,6 +534,11 @@ Trigger:RAT:
     - job: Trigger:qa-docker
       artifacts: false
       optional: true
+
+Trigger:GET:Geo:
+  extends: .trigger-pipeline
+  script:
+    - bundle exec rake qa:get:geo:trigger
 
 create_omnibus_manifest:
   extends: .trigger-package-cache
