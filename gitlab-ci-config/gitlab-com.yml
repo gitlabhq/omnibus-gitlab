@@ -456,7 +456,7 @@ Trigger:package:
       optional: true
       artifacts: true
 
-Trigger:package_size_check:
+package_size_check:
   extends: .trigger-package-cache
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   stage: trigger-qa
@@ -504,7 +504,7 @@ Trigger:qa-docker:
       optional: true
       artifacts: true
 
-Trigger:qa-test:
+qa-test:
   stage: trigger-qa
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   script:
@@ -520,7 +520,7 @@ Trigger:qa-test:
       artifacts: false
       optional: true
 
-Trigger:letsencrypt-test:
+letsencrypt-test:
   extends: .docker_job
   stage: trigger-qa
   script:
@@ -534,7 +534,7 @@ Trigger:letsencrypt-test:
     - job: Trigger:gitlab-docker
       artifacts: false
 
-Trigger:RAT:
+RAT:
   stage: trigger-qa
   image: "${RUBY_IMAGE}"
   when: manual
@@ -548,7 +548,7 @@ Trigger:RAT:
       artifacts: false
       optional: true
 
-Trigger:GET:Geo:
+GET:Geo:
   extends: .trigger-pipeline
   script:
     - bundle exec rake qa:get:geo:trigger

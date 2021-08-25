@@ -267,7 +267,7 @@ against up using these images
 
 This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
 
-#### `Trigger:RAT`
+#### `RAT`
 
 This manual job triggers a pipeline in the
 [RAT](https://gitlab.com/gitlab-org/distribution/reference-architecture-tester)
