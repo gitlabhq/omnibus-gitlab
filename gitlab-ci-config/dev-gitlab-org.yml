@@ -526,6 +526,14 @@ Debian-10-arm-branch:
   <<: *branch_build
   tags:
   - docker-arm-builder
+Debian-11-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+Debian-11-arm-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_11_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+  tags:
+  - docker-arm-builder
 Ubuntu-20.04-arm-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -726,6 +734,14 @@ Debian-10-arm:
   <<: *tag_build
   tags:
   - docker-arm-builder
+Debian-11:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+Debian-11-arm:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_11_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  tags:
+  - docker-arm-builder
 Ubuntu-20.04-arm:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -805,6 +821,20 @@ Debian-10-arm-staging:
     - job: Debian-10-arm
       optional: true
     - job: Debian-10-arm-branch
+      optional: true
+  <<: *staging_upload
+Debian-11-staging:
+  needs:
+    - job: Debian-11
+      optional: true
+    - job: Debian-11-branch
+      optional: true
+  <<: *staging_upload
+Debian-11-arm-staging:
+  needs:
+    - job: Debian-11-arm
+      optional: true
+    - job: Debian-11-arm-branch
       optional: true
   <<: *staging_upload
 Ubuntu-20.04-arm-staging:
@@ -904,6 +934,14 @@ Debian-10-release:
 Debian-10-arm-release:
   needs:
     - Debian-10-arm
+  <<: *production_release
+Debian-11-release:
+  needs:
+    - Debian-11
+  <<: *production_release
+Debian-11-arm-release:
+  needs:
+    - Debian-11-arm
   <<: *production_release
 CentOS-7-release:
   needs:
