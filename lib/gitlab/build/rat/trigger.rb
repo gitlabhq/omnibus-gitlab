@@ -29,7 +29,7 @@ module Build
       end
 
       def self.get_access_token
-        # Default to "Multi-pipeline (from 'gitlab-org/omnibus-gitlab' 'Trigger:RAT' job)" at https://gitlab.com/gitlab-org/distribution/reference-architecture-tester/-/settings/access_tokens
+        # Default to "Multi-pipeline (from 'gitlab-org/omnibus-gitlab' 'RAT' job)" at https://gitlab.com/gitlab-org/distribution/reference-architecture-tester/-/settings/access_tokens
         Gitlab::Util.get_env('RAT_PROJECT_ACCESS_TOKEN') || Gitlab::Util.get_env('GITLAB_BOT_MULTI_PROJECT_PIPELINE_POLLING_TOKEN')
       end
     end
