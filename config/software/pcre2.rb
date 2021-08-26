@@ -15,7 +15,10 @@
 #
 
 name 'pcre2'
-default_version '10.34'
+
+version = Gitlab::Version.new('pcre2', 'pcre2-10.34')
+default_version version.print(false)
+display_version version.print(false).delete_prefix('pcre2-')
 
 license 'BSD-2-Clause'
 license_file 'LICENCE'
@@ -25,19 +28,15 @@ skip_transitive_dependency_licensing true
 dependency 'libedit'
 dependency 'ncurses'
 dependency 'config_guess'
+dependency 'libtool'
 
-version '10.34' do
-  source md5: 'e3e15cca49557a9c07a21dde2da05ea5'
-end
-
-source url: "http://downloads.sourceforge.net/project/pcre/pcre2/#{version}/pcre2-#{version}.tar.gz"
-
-relative_path "pcre2-#{version}"
+source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-
   update_config_guess
+
+  command "./autogen.sh", env: env
 
   command './configure' \
           " --prefix=#{install_dir}/embedded" \
