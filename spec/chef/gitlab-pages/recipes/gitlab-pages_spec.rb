@@ -209,7 +209,6 @@ RSpec.describe 'gitlab::gitlab-pages' do
             headers: ['X-XSS-Protection: 1; mode=block', 'X-Content-Type-Options: nosniff', 'Test: Header'],
             gitlab_client_http_timeout: "10s",
             gitlab_client_jwt_expiry: "30s",
-            use_legacy_storage: true,
             zip_cache_expiration: "120s",
             zip_cache_cleanup: "1m",
             zip_cache_refresh: "60s",
@@ -266,7 +265,6 @@ RSpec.describe 'gitlab::gitlab-pages' do
             tls-max-version=tls1.2
             gitlab-client-http-timeout=10s
             gitlab-client-jwt-expiry=30s
-            domain-config-source=disk
             listen-http=external_pages.example.com,localhost:9000
             listen-https=external_pages.example.com,localhost:9001
             listen-https-proxyv2=external_pages.example.com,localhost:9002
