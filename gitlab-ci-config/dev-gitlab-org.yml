@@ -363,7 +363,7 @@
   variables:
     NO_SOURCEMAPS: "true"
   tags:
-  - docker-rpi-builder
+  - docker-arm-builder
   <<: *dev-ce-branch-only-except-nightly
   artifacts: *package-artifacts
   retry: 1
@@ -404,7 +404,7 @@
   variables:
     NO_SOURCEMAPS: "true"
   tags:
-  - docker-rpi-builder
+  - docker-arm-builder
   <<: *dev-ce-tag-only
 
 ### This stage is used for uploading packages
