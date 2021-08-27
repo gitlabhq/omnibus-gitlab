@@ -16,6 +16,25 @@ class GitlabRailsEnvHelper
       ).join(' ')
     end
 
+    # Get the path to Gemfile from bundle config file which is generated at build time
+    def bundle_gemfile(source_dir)
+      gemfile = "#{source_dir}/Gemfile"
+      pattern = /BUNDLE_GEMFILE: "(.*)"/
+      begin
+        File.open("#{source_dir}/.bundle/config") do |config_file|
+          config_file.each do |line|
+            if line.match(pattern)
+              gemfile = "#{source_dir}/#{line[pattern, 1]}"
+              break
+            end
+          end
+        end
+      rescue Errno::ENOENT
+        gemfile
+      end
+      gemfile
+    end
+
     def execute_rails_ruby(cmd)
       run_shell = Mixlib::ShellOut.new(%W(
         /opt/gitlab/bin/gitlab-ruby

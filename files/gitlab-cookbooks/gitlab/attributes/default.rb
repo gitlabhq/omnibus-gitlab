@@ -65,9 +65,6 @@ default['gitlab']['gitlab-rails']['log_directory'] = "/var/log/gitlab/gitlab-rai
 default['gitlab']['gitlab-rails']['environment'] = 'production'
 default['gitlab']['gitlab-rails']['env'] = {
   'SIDEKIQ_MEMORY_KILLER_MAX_RSS' => '2000000',
-  # Path to the Gemfile
-  # defaults to /opt/gitlab/embedded/service/gitlab-rails/Gemfile. The install-dir path is set at build time
-  'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/service/gitlab-rails/Gemfile",
   # PATH to set on the environment
   # defaults to /opt/gitlab/embedded/bin:/bin:/usr/bin. The install-dir path is set at build time
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",

@@ -22,6 +22,7 @@ EE = Build::Check.include_ee?
 
 software_name = EE ? 'gitlab-rails-ee' : 'gitlab-rails'
 version = Gitlab::Version.new(software_name)
+gitlab_bundle_gemfile = Gitlab::Util.get_env('GITLAB_BUNDLE_GEMFILE') || 'Gemfile'
 
 name 'gitlab-rails'
 
@@ -85,6 +86,7 @@ build do
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
   bundle 'config build.grpc --with-ldflags="-latomic"', env: env if OhaiHelper.os_platform == 'raspbian'
+  bundle "config set --local gemfile #{gitlab_bundle_gemfile}" if gitlab_bundle_gemfile != 'Gemfile'
   bundle "install --without #{bundle_without.join(' ')} --jobs #{workers} --retry 5", env: env
 
   block 'correct omniauth-jwt permissions' do
