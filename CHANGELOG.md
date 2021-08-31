@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.2.2 (2021-08-31)
+
+### Security (1 change)
+
+- [Update cURL to 7.77.0](gitlab-org/security/omnibus-gitlab@416f65f903ee27f107e6378413649e002d85c4b6) ([merge request](gitlab-org/security/omnibus-gitlab!144))
+
 ## 14.2.1 (2021-08-23)
 
 ### Fixed (1 change)
@@ -46,6 +52,12 @@ omnibus-gitlab repository.
 
 - [Remove docs redirects cleanup task](gitlab-org/omnibus-gitlab@c03703f3c3f678e383ce92b17bf2e888dbcfa883) ([merge request](gitlab-org/omnibus-gitlab!5539))
 - [Bump gitlab-exporter to 11.2.0](gitlab-org/omnibus-gitlab@9e005c8e8ccf16766327bd872ad284ae612bf6fd) ([merge request](gitlab-org/omnibus-gitlab!5518))
+
+## 14.1.4 (2021-08-31)
+
+### Security (1 change)
+
+- [Update cURL to 7.77.0](gitlab-org/security/omnibus-gitlab@77b0ac2436a269b52318dd39390efbacfc8c8244) ([merge request](gitlab-org/security/omnibus-gitlab!136))
 
 ## 14.1.3 (2021-08-17)
 
@@ -120,6 +132,13 @@ omnibus-gitlab repository.
 ### fix (1 change)
 
 - [Fix Praefect configuration template for session pooled connection](gitlab-org/omnibus-gitlab@1825c88764508a7efdccbf3eb70cb32e6bbb91d8) ([merge request](gitlab-org/omnibus-gitlab!5424))
+
+## 14.0.9 (2021-08-31)
+
+### Security (2 changes)
+
+- [Patch NGINX against CVE-2021-23017](gitlab-org/security/omnibus-gitlab@b7a035067769fe6167f43d9ba13f316423a3523c) ([merge request](gitlab-org/security/omnibus-gitlab!142))
+- [Update cURL to 7.77.0](gitlab-org/security/omnibus-gitlab@fdc278a442075eb3ed70aeede942bb10eadc75a5) ([merge request](gitlab-org/security/omnibus-gitlab!135))
 
 ## 14.0.8 (2021-08-25)
 
