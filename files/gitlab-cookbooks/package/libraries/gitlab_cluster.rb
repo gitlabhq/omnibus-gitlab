@@ -21,6 +21,13 @@ class GitlabCluster
     instance
   end
 
+  def self.log_overriding_message(keys, value)
+    message = "The '#{Array(keys).join('.')}' is defined in #{GitlabCluster::JSON_FILE} as '#{value}' " \
+              "and overrides the setting in the /etc/gitlab/gitlab.rb"
+
+    LoggingHelper.warning(message)
+  end
+
   # Set the value of a config option in the JSON file. It overrides the key value if it already exists.
   #
   # @example setting a new value for `patroni.standby_cluster.enable` key
@@ -52,8 +59,8 @@ class GitlabCluster
 
   # Roles defined in the JSON file overrides roles from /etc/gitlab/gitlab.rb
   def load_roles!
-    Gitlab.merge_cluster_role!('geo_primary_role', get('primary'))
-    Gitlab.merge_cluster_role!('geo_secondary_role', get('secondary'))
+    Gitlab.override_role!('geo_primary_role', get('primary'))
+    Gitlab.override_role!('geo_secondary_role', get('secondary'))
   end
 
   # Write configuration to the local store overwritting current settings

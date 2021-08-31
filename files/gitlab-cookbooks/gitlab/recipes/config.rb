@@ -22,3 +22,5 @@ Services.add_services('gitlab', Services::BaseServices.list)
 Gitlab.from_file('/etc/gitlab/gitlab.rb') if File.exist?('/etc/gitlab/gitlab.rb')
 
 node.consume_attributes(Gitlab.generate_config(node['fqdn']))
+
+NodeHelper.consume_cluster_attributes(node, GitlabCluster.config.all)
