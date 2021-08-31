@@ -53,6 +53,12 @@ omnibus-gitlab repository.
 - [Remove docs redirects cleanup task](gitlab-org/omnibus-gitlab@c03703f3c3f678e383ce92b17bf2e888dbcfa883) ([merge request](gitlab-org/omnibus-gitlab!5539))
 - [Bump gitlab-exporter to 11.2.0](gitlab-org/omnibus-gitlab@9e005c8e8ccf16766327bd872ad284ae612bf6fd) ([merge request](gitlab-org/omnibus-gitlab!5518))
 
+## 14.1.4 (2021-08-31)
+
+### Security (1 change)
+
+- [Update cURL to 7.77.0](gitlab-org/security/omnibus-gitlab@77b0ac2436a269b52318dd39390efbacfc8c8244) ([merge request](gitlab-org/security/omnibus-gitlab!136))
+
 ## 14.1.3 (2021-08-17)
 
 ### Fixed (1 change)
