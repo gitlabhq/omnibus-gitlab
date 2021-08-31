@@ -644,50 +644,7 @@ RSpec.describe 'gitaly' do
     end
   end
 
-  describe 'consul service discovery' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
-
-    context 'by default' do
-      it 'is not registered as a consul service' do
-        expect(chef_run).not_to create_consul_service('gitaly')
-      end
-    end
-
-    context 'when enabled' do
-      before do
-        stub_gitlab_rb(
-          consul: {
-            enable: true,
-            monitoring_service_discovery: true
-          }
-        )
-      end
-
-      context 'with default service name' do
-        it 'is registered as a consul service' do
-          expect(chef_run).to create_consul_service('gitaly')
-        end
-      end
-
-      context 'with user specified service name' do
-        before do
-          stub_gitlab_rb(
-            consul: {
-              enable: true,
-              monitoring_service_discovery: true
-            },
-            gitaly: {
-              consul_service_name: 'gitaly-foobar'
-            }
-          )
-        end
-
-        it 'is registered as a consul service with specified service name' do
-          expect(chef_run).to create_consul_service('gitaly-foobar')
-        end
-      end
-    end
-  end
+  include_examples "consul service discovery", "gitaly", "gitaly"
 end
 
 RSpec.describe 'gitaly::git_data_dirs' do
