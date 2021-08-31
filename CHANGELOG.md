@@ -133,6 +133,13 @@ omnibus-gitlab repository.
 
 - [Fix Praefect configuration template for session pooled connection](gitlab-org/omnibus-gitlab@1825c88764508a7efdccbf3eb70cb32e6bbb91d8) ([merge request](gitlab-org/omnibus-gitlab!5424))
 
+## 14.0.9 (2021-08-31)
+
+### Security (2 changes)
+
+- [Patch NGINX against CVE-2021-23017](gitlab-org/security/omnibus-gitlab@b7a035067769fe6167f43d9ba13f316423a3523c) ([merge request](gitlab-org/security/omnibus-gitlab!142))
+- [Update cURL to 7.77.0](gitlab-org/security/omnibus-gitlab@fdc278a442075eb3ed70aeede942bb10eadc75a5) ([merge request](gitlab-org/security/omnibus-gitlab!135))
+
 ## 14.0.8 (2021-08-25)
 
 No changes.
