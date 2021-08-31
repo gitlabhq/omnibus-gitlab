@@ -2,7 +2,7 @@ require_relative 'linker_helper'
 
 class OpenSSLHelper
   @deps = %w[libssl libcrypto]
-  @index = 2
+  @cursor = 2
 
   class << self
     def allowed_libs
@@ -17,7 +17,7 @@ class OpenSSLHelper
     end
 
     def append_deps(path)
-      @index += 1
+      @cursor += 1
 
       return if path.start_with?("/opt/gitlab") || !path.start_with?("/")
 
@@ -36,9 +36,9 @@ class OpenSSLHelper
       end
 
       loop do
-        break if @index >= @deps.length
+        break if @cursor >= @deps.length
 
-        append_deps(@deps[@index])
+        append_deps(@deps[@cursor])
       end
     end
   end
