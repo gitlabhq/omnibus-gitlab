@@ -1,12 +1,13 @@
 
-module gitlab-13.5.0-gitlab-shell 1.0;
+module gitlab-13.5.0-gitlab-shell 1.1;
 
 type gitlab_shell_t;
 
 require {
     type sshd_t;
+    type httpd_t;
     attribute file_type;
-    class sock_file write;
+    class sock_file { write read };
     class file { open read getattr };
 }
 
@@ -15,3 +16,5 @@ allow sshd_t gitlab_shell_t:file read;
 allow sshd_t gitlab_shell_t:file open;
 allow sshd_t gitlab_shell_t:file getattr;
 allow sshd_t gitlab_shell_t:sock_file write;
+allow httpd_t gitlab_shell_t:sock_file read;
+allow httpd_t gitlab_shell_t:sock_file write;
