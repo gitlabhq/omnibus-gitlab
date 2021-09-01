@@ -33,7 +33,7 @@ source git: version.remote
 # Runtime dependencies
 dependency 'pcre'
 dependency 'zlib'
-dependency 'openssl'
+dependency 'openssl' unless Build::Check.use_system_ssl?
 
 # Include the nginx-module-vts for metrics.
 dependency 'nginx-module-vts'

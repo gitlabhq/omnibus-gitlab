@@ -35,7 +35,7 @@ fips_enabled = (project.overrides[:fips] && project.overrides[:fips][:enabled]) 
 dependency 'patch' if solaris_10?
 dependency 'ncurses' unless windows? || version.satisfies?('>= 2.1')
 dependency 'zlib'
-dependency 'openssl'
+dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'libffi'
 dependency 'libyaml'
 # Needed for chef_gem installs of (e.g.) nokogiri on upgrades -

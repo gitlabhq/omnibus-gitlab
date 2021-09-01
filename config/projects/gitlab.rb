@@ -21,6 +21,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/build/info"
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/util"
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
+require "#{Omnibus::Config.project_root}/lib/gitlab/openssl_helper"
 
 gitlab_package_name = Build::Info.package
 gitlab_package_file = File.join(Omnibus::Config.project_dir, 'gitlab', "#{gitlab_package_name}.rb")
@@ -151,6 +152,12 @@ dependency 'gitaly'
 
 # version manifest file
 dependency 'version-manifest'
+
+if Build::Check.use_system_ssl?
+  OpenSSLHelper.allowed_libs.each do |lib|
+    allowed_lib /#{lib}\.so/
+  end
+end
 
 exclude "\.git*"
 exclude "bundler\/git"

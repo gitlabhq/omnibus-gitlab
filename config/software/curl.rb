@@ -23,7 +23,7 @@ display_version version.print(false).delete_prefix('curl-').tr('_', '.')
 
 # Runtime dependency
 dependency 'zlib'
-dependency 'openssl'
+dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'libtool'
 
 vendor 'haxx'
@@ -75,12 +75,13 @@ build do
     "--without-fish-functions-dir",
     "--disable-mqtt",
     '--without-libssh2',
-    "--with-ssl=#{install_dir}/embedded",
     "--with-zlib=#{install_dir}/embedded",
     "--without-ca-path",
     "--without-ca-bundle",
     "--with-ca-fallback"
   ]
+
+  configure_command << "--with-ssl=#{install_dir}/embedded" unless Build::Check.use_system_ssl?
 
   command "autoreconf -fi", env: env
   command configure_command.join(' '), env: env

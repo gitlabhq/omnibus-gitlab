@@ -26,7 +26,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 dependency 'zlib'
-dependency 'openssl'
+dependency 'openssl' unless Build::Check.use_system_ssl?
 
 version '1.0.6' do
   source md5: '00b516f4704d4a7cb50a1d97e6e8e15b'

@@ -21,7 +21,7 @@ default_version version.print(false)
 display_version version.print(false).delete_prefix('release-').delete_suffix('-stable')
 
 dependency 'libtool'
-dependency 'openssl'
+dependency 'openssl' unless Build::Check.use_system_ssl?
 
 license 'BSD-3-Clause'
 license_file 'LICENSE'

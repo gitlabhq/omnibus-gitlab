@@ -23,7 +23,7 @@ license_file 'COPYRIGHT'
 skip_transitive_dependency_licensing true
 
 dependency 'libevent'
-dependency 'openssl'
+dependency 'openssl' unless Build::Check.use_system_ssl?
 
 version '1.12.0' do
   source sha256: '1b3c6564376cafa0da98df3520f0e932bb2aebaf9a95ca5b9fa461e9eb7b273e'
@@ -38,10 +38,10 @@ build do
 
   prefix = "#{install_dir}/embedded"
 
-  command './configure ' \
-    "--prefix=#{prefix} " \
-    "--with-openssl=#{prefix} " \
-    "--with-libevent=#{prefix}", env: env
+  configure_command = ["./configure", "--prefix=#{prefix}", "--with-libevent=#{prefix}"]
+  configure_command << "--with-openssl=#{prefix}" unless Build::Check.use_system_ssl?
+
+  command configure_command.join(' '), env: env
 
   make "-j #{workers}", env: env
   make 'install', env: env
