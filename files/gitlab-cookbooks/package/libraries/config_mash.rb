@@ -58,5 +58,16 @@ module Gitlab
         super
       end
     end
+
+    def deep_set(*keys, value)
+      Gitlab::ConfigMash.auto_vivify do
+        if keys.length == 1
+          self[keys.first] = value
+        else
+          *keys, last = *keys
+          keys.inject(self, :[])[last] = value
+        end
+      end
+    end
   end
 end

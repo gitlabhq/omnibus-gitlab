@@ -42,7 +42,7 @@ class GitlabCluster
   #
   # @param [Array] args the nested keys sequence with the value as the last argument
   def set(*args)
-    deep_set(local_store, *args)
+    local_store.deep_set(*args)
   end
 
   # Get the value of a config option if the key exists in the local store. Otherwise, returns nil.
@@ -92,19 +92,6 @@ class GitlabCluster
 
   def local_store
     @local_store ||= Gitlab::ConfigMash.new(load_from_file)
-  end
-
-  def deep_set(hash, *keys, value)
-    Gitlab::ConfigMash.auto_vivify do
-      if keys.length == 1
-        hash[keys.first] = value
-      else
-        *keys, last = *keys
-        keys.inject(hash, :[])[last] = value
-      end
-    end
-
-    hash
   end
 
   # Load configuration from the local JSON file
