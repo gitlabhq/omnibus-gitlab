@@ -19,7 +19,7 @@ namespace :aws do
   namespace :marketplace do
     desc "Release AMI to AWS Marketplace"
     task :release do
-      next unless Build::Check.on_tag?
+      next unless Build::Check.is_latest_stable_tag?
 
       next if Build::Check.is_auto_deploy? || Build::Check.is_rc_tag?
 
