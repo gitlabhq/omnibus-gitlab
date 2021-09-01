@@ -1,13 +1,15 @@
 require_relative 'linker_helper'
 
 class OpenSSLHelper
-  @deps = %w[libssl libcrypto]
+  @base_libs = %w[libssl libcrypto]
+  @deps = []
   @cursor = 2
 
   class << self
     def allowed_libs
-      find_deps("libssl")
-      find_deps("libcrypto")
+      @base_libs.each do |lib|
+        find_deps(lib)
+      end
 
       @deps.map { |dep| File.basename(dep).split(".so").first }.uniq
     end
@@ -29,6 +31,7 @@ class OpenSSLHelper
 
     def find_deps(name)
       puts "Libraries starting with '#{name}' and their dependencies"
+      @deps << name
       libs = find_libs(name)
 
       libs.each do |lib, path|
