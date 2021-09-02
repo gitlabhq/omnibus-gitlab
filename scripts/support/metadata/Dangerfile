@@ -1,11 +1,12 @@
 # rubocop:disable Style/SignalException
 
-METRICS_LABELS = [
+WORKTYPE_LABELS = [
   'Community contribution',
   'security',
   'bug',
   'feature',
   'feature::addition',
+  'feature::enhancement',
   'feature::maintenance',
   'tooling',
   'tooling::pipelines',
@@ -32,8 +33,8 @@ if gitlab.branch_for_base != "master" && !has_pick_into_stable_label
   warn "Most of the time, all merge requests should target `master`. Otherwise, please set the relevant `Pick into X.Y` label."
 end
 
-if (gitlab.mr_labels & METRICS_LABELS).empty?
-  warn "This merge request is missing any [engineering metrics labels](https://about.gitlab.com/handbook/engineering/metrics/#data-classification)."
+if (gitlab.mr_labels & WORKTYPE_LABELS).empty?
+  warn "This merge request is missing any [engineering metrics labels](https://about.gitlab.com/handbook/engineering/metrics/#work-type-classification)."
 end
 # rubocop:enable Style/IfUnlessModifier
 # rubocop:enable Style/SignalException
