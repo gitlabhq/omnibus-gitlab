@@ -2,6 +2,7 @@ resource_name :consul_service
 provides :consul_service
 
 property :service_name, String, name_property: true
+property :id, String, name_property: true
 property :ip_address, [String, nil], default: nil
 property :port, [Integer, nil], default: nil
 property :reload_service, [TrueClass, FalseClass], default: true
@@ -21,6 +22,7 @@ action :create do
   end
 
   service_name = sanitize_service_name(new_resource.service_name)
+  file_name = sanitize_service_name(new_resource.id)
 
   content = {
     'service' => {
@@ -38,16 +40,16 @@ action :create do
     recursive true
   end
 
-  file "#{node['consul']['config_dir']}/#{service_name}-service.json" do
+  file "#{node['consul']['config_dir']}/#{file_name}-service.json" do
     content content.to_json
     notifies :run, 'execute[reload consul]' if new_resource.reload_service
   end
 end
 
 action :delete do
-  service_name = sanitize_service_name(new_resource.service_name)
+  file_name = sanitize_service_name(new_resource.id)
 
-  file "#{node['consul']['config_dir']}/#{service_name}-service.json" do
+  file "#{node['consul']['config_dir']}/#{file_name}-service.json" do
     action :delete
     notifies :run, 'execute[reload consul]' if new_resource.reload_service
   end

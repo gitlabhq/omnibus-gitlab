@@ -19,6 +19,7 @@ runit_service 'prometheus' do
 end
 
 consul_service node['monitoring']['prometheus']['consul_service_name'] do
+  id 'prometheus'
   action :delete
   reload_service false unless node['consul']['enable']
 end

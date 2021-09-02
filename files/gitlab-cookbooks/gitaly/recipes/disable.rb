@@ -20,6 +20,7 @@ runit_service "gitaly" do
 end
 
 consul_service node['gitaly']['consul_service_name'] do
+  id 'gitaly'
   action :delete
   reload_service false unless node['consul']['enable']
 end

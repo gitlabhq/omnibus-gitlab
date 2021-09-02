@@ -88,6 +88,7 @@ version_file 'Create Praefect version file' do
 end
 
 consul_service node['praefect']['consul_service_name'] do
+  id 'praefect'
   action Prometheus.service_discovery_action
   socket_address node['praefect']['prometheus_listen_addr']
   reload_service false unless node['consul']['enable']

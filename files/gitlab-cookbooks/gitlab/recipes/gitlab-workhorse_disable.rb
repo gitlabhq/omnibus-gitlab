@@ -20,6 +20,7 @@ runit_service "gitlab-workhorse" do
 end
 
 consul_service node['gitlab']['gitlab-workhorse']['consul_service_name'] do
+  id 'workhorse'
   action :delete
   reload_service false unless node['consul']['enable']
 end

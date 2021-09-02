@@ -21,6 +21,7 @@ runit_service "puma" do
 end
 
 consul_service node['gitlab']['puma']['consul_service_name'] do
+  id 'rails'
   action :delete
   reload_service false unless node['consul']['enable']
 end

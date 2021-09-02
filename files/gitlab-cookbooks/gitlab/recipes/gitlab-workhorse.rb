@@ -67,6 +67,7 @@ runit_service 'gitlab-workhorse' do
 end
 
 consul_service node['gitlab']['gitlab-workhorse']['consul_service_name'] do
+  id 'workhorse'
   action Prometheus.service_discovery_action
   socket_address node['gitlab']['gitlab-workhorse']['prometheus_listen_addr']
   reload_service false unless node['consul']['enable']

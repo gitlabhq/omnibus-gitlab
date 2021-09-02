@@ -109,6 +109,7 @@ if node['gitlab']['bootstrap']['enable']
 end
 
 consul_service node['gitlab']['puma']['consul_service_name'] do
+  id 'rails'
   action Prometheus.service_discovery_action
   ip_address node['gitlab']['puma']['listen']
   port node['gitlab']['puma']['port']
