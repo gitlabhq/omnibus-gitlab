@@ -962,3 +962,21 @@ header with `hide_server_tokens`:
    sudo gitlab-ctl reconfigure
    sudo gitlab-ctl hup nginx
    ```
+
+## `502: Bad Gateway` when SELinux and external NGINX are used
+
+On Linux servers with SELinux enabled, after setting up an external NGINX, the error `502: Bad Gateway` may be observed when accessing the GitLab UI. You can also see the error in NGINX's logs:
+
+```plaintext
+connect() to unix:/var/opt/gitlab/gitlab-workhorse/sockets/socket failed (13:Permission denied) while connecting to upstream
+```
+
+Select one of the following options to fix:
+
+- Update to GitLab 14.3 or later which contains an [updated SELinux policy](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5569).
+- Fetch and update the policy manually:
+
+  ```shell
+  wget https://gitlab.com/gitlab-org/omnibus-gitlab/-/raw/a9d6b020f81d18d778fb502c21b2c8f2265cabb4/files/gitlab-selinux/rhel/7/gitlab-13.5.0-gitlab-shell.pp
+  semodule -i gitlab-13.5.0-gitlab-shell.pp
+  ```
