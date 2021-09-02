@@ -218,7 +218,7 @@ sudo gitlab-ctl stop
 
 # Note there is _no_ slash behind 'repositories', but there _is_ a
 # slash behind 'git-data'.
-sudo rsync -av /var/opt/gitlab/git-data/repositories /mnt/nas/git-data/
+sudo rsync -av --delete /var/opt/gitlab/git-data/repositories /mnt/nas/git-data/
 
 # Start the necessary processes and run reconfigure to fix permissions
 # if necessary
