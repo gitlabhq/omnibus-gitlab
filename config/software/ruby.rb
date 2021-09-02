@@ -22,13 +22,7 @@ license_file 'LEGAL'
 
 skip_transitive_dependency_licensing true
 
-# - chef-client cannot use 2.2.x yet due to a bug in IRB that affects chef-shell on linux:
-#   https://bugs.ruby-lang.org/issues/11869
-# - the current status of 2.3.x is that it downloads but fails to compile.
-# - verify that all ffi libs are available for your version on all platforms.
-# - when upgrading please check the ABI version and update the exclusion until
-#   https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3414 is addressed
-default_version '2.7.2'
+default_version '2.7.4'
 
 fips_enabled = (project.overrides[:fips] && project.overrides[:fips][:enabled]) || false
 
@@ -44,7 +38,7 @@ dependency 'libyaml'
 # and that's the only one we will ever use.
 dependency 'libiconv'
 
-version('2.7.2') { source sha256: '6e5706d0d4ee4e1e2f883db9d768586b4d06567debea353c796ec45e8321c3d4' }
+version('2.7.4') { source sha256: '3043099089608859fc8cce7f9fdccaa1f53a462457e3838ec3b25a7d609fbc5b' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
