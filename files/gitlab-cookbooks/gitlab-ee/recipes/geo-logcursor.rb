@@ -24,6 +24,7 @@ env_directory = node['gitlab']['geo-logcursor']['env_directory']
 rails_env = {
   'HOME' => node['gitlab']['user']['home'],
   'RAILS_ENV' => node['gitlab']['gitlab-rails']['environment'],
+  'BUNDLE_GEMFILE' => GitlabRailsEnvHelper.bundle_gemfile(working_dir),
 }
 
 env_dir env_directory do
