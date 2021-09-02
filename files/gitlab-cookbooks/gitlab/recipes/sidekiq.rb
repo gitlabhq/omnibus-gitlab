@@ -24,7 +24,8 @@ sidekiq_service 'sidekiq' do
   group account_helper.gitlab_group
 end
 
-consul_service 'sidekiq' do
+consul_service node['gitlab']['sidekiq']['consul_service_name'] do
+  id 'sidekiq'
   action Prometheus.service_discovery_action
   ip_address node['gitlab']['sidekiq']['listen_address']
   port node['gitlab']['sidekiq']['listen_port']

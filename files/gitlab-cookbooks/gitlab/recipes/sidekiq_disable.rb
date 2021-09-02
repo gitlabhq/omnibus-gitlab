@@ -20,7 +20,8 @@ runit_service "sidekiq" do
   action :disable
 end
 
-consul_service 'sidekiq' do
+consul_service node['gitlab']['sidekiq']['consul_service_name'] do
+  id 'sidekiq'
   action :delete
   reload_service false unless node['consul']['enable']
 end

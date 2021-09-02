@@ -19,7 +19,8 @@ runit_service "praefect" do
   action :disable
 end
 
-consul_service 'praefect' do
+consul_service node['praefect']['consul_service_name'] do
+  id 'praefect'
   action :delete
   reload_service false unless node['consul']['enable']
 end

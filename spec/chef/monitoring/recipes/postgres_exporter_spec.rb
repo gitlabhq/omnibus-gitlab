@@ -189,4 +189,6 @@ RSpec.describe 'monitoring::postgres-exporter' do
       )
     end
   end
+
+  include_examples "consul service discovery", "postgres_exporter", "postgres-exporter"
 end

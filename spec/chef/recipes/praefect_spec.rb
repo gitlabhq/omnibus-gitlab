@@ -293,5 +293,7 @@ RSpec.describe 'praefect' do
         end
       end
     end
+
+    include_examples "consul service discovery", "praefect", "praefect"
   end
 end

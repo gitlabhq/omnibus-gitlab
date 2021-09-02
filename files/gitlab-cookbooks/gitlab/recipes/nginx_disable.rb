@@ -19,7 +19,8 @@ runit_service "nginx" do
   action :disable
 end
 
-consul_service 'nginx' do
+consul_service node['gitlab']['nginx']['consul_service_name'] do
+  id 'nginx'
   action :delete
   reload_service false unless node['consul']['enable']
 end

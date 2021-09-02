@@ -597,6 +597,8 @@ RSpec.describe 'nginx' do
     end
   end
 
+  include_examples "consul service discovery", "nginx", "nginx"
+
   describe 'logrotate settings' do
     context 'default values' do
       it_behaves_like 'configured logrotate service', 'nginx', 'root', 'root'

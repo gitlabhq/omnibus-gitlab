@@ -20,7 +20,8 @@ runit_service "postgres-exporter" do
   action :disable
 end
 
-consul_service 'postgres-exporter' do
+consul_service node['monitoring']['postgres-exporter']['consul_service_name'] do
+  id 'postgres-exporter'
   action :delete
   reload_service false unless node['consul']['enable']
 end

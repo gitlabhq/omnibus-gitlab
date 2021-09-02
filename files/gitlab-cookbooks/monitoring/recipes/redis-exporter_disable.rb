@@ -20,7 +20,8 @@ runit_service 'redis-exporter' do
   action :disable
 end
 
-consul_service 'redis-exporter' do
+consul_service node['monitoring']['redis-exporter']['consul_service_name'] do
+  id 'redis-exporer'
   action :delete
   reload_service false unless node['consul']['enable']
 end

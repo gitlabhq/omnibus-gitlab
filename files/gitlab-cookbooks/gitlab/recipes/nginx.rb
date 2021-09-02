@@ -298,7 +298,8 @@ nginx_consul_action = if nginx_status_enabled && Prometheus.service_discovery
                         :delete
                       end
 
-consul_service 'nginx' do
+consul_service node['gitlab']['nginx']['consul_service_name'] do
+  id 'nginx'
   action nginx_consul_action
   ip_address node['gitlab']['nginx']['status']['listen_addresses'].first
   port node['gitlab']['nginx']['status']['port']

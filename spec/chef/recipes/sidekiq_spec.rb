@@ -52,4 +52,6 @@ RSpec.describe 'gitlab::sidekiq' do
       end
     end
   end
+
+  include_examples "consul service discovery", "sidekiq", "sidekiq"
 end

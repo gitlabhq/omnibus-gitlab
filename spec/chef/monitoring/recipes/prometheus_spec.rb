@@ -307,4 +307,6 @@ RSpec.describe 'monitoring::prometheus' do
       end
     end
   end
+
+  include_examples "consul service discovery", "prometheus", "prometheus"
 end

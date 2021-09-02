@@ -124,4 +124,6 @@ RSpec.describe 'monitoring::redis-exporter' do
       )
     end
   end
+
+  include_examples "consul service discovery", "redis_exporter", "redis-exporter"
 end

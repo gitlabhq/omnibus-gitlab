@@ -539,6 +539,7 @@ default['gitlab']['puma']['max_threads'] = 4
 default['gitlab']['puma']['exporter_enabled'] = false
 default['gitlab']['puma']['exporter_address'] = "127.0.0.1"
 default['gitlab']['puma']['exporter_port'] = 8083
+default['gitlab']['puma']['consul_service_name'] = 'rails'
 
 ####
 # ActionCable
@@ -570,6 +571,7 @@ default['gitlab']['sidekiq']['max_concurrency'] = 50
 default['gitlab']['sidekiq']['min_concurrency'] = nil
 default['gitlab']['sidekiq']['negate'] = false
 default['gitlab']['sidekiq']['queue_groups'] = ['*']
+default['gitlab']['sidekiq']['consul_service_name'] = 'sidekiq'
 
 ###
 # gitlab-shell
@@ -639,6 +641,7 @@ default['gitlab']['gitlab-workhorse']['env'] = {
 }
 default['gitlab']['gitlab-workhorse']['image_scaler_max_procs'] = [2, node['cpu']['total'].to_i / 2].max
 default['gitlab']['gitlab-workhorse']['image_scaler_max_filesize'] = 250_000
+default['gitlab']['gitlab-workhorse']['consul_service_name'] = 'workhorse'
 
 ####
 # mailroom
@@ -720,6 +723,9 @@ default['gitlab']['nginx']['hsts_max_age'] = 63072000 # settings from by https:/
 default['gitlab']['nginx']['hsts_include_subdomains'] = false
 # Compression
 default['gitlab']['nginx']['gzip_enabled'] = true
+
+# Consul
+default['gitlab']['nginx']['consul_service_name'] = 'nginx'
 
 ###
 # Nginx status

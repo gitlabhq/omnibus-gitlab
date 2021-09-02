@@ -144,4 +144,6 @@ RSpec.describe 'monitoring::node-exporter' do
       )
     end
   end
+
+  include_examples "consul service discovery", "node_exporter", "node-exporter"
 end

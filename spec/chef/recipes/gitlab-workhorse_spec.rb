@@ -575,4 +575,6 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
       }
     end
   end
+
+  include_examples "consul service discovery", "gitlab_workhorse", "workhorse"
 end

@@ -643,6 +643,8 @@ RSpec.describe 'gitaly' do
       expect(chef_run).to create_directory('/sys/fs/cgroup/memory/gitaly').with(mode: '0700', user: 'git')
     end
   end
+
+  include_examples "consul service discovery", "gitaly", "gitaly"
 end
 
 RSpec.describe 'gitaly::git_data_dirs' do

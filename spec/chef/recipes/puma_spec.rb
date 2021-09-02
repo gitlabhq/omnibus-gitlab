@@ -177,6 +177,8 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
         }
     end
   end
+
+  include_examples "consul service discovery", "puma", "rails"
 end
 
 RSpec.describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
