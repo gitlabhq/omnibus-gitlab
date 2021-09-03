@@ -3,7 +3,8 @@
 # and run `sudo gitlab-ctl reconfigure`.
 
 production:
-  <% @databases.each do |database, attributes| %>
+  <% # database.yml must always have `main` first, sort it to the front %>
+  <% @databases.sort_by { |name, config| name == "main" ? 0 : 1 }.each do |database, attributes| %>
   <%= database %>:
     adapter: <%= attributes['db_adapter'] %>
     encoding: <%= attributes['db_encoding'] %>
