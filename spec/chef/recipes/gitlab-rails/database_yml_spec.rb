@@ -101,6 +101,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
             )
           end
 
+          it 'renders database.yml with main stanza first' do
+            expect(database_yml_file_content).to match("production:\n  main:")
+          end
+
           it 'renders database.yml with both main and additional databases using default values' do
             ci_content = default_content[:main].dup
             ci_content[:database] = 'gitlabhq_production_ci'
