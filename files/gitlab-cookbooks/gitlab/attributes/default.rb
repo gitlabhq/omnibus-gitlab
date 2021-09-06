@@ -368,6 +368,7 @@ default['gitlab']['gitlab-rails']['backup_pg_schema'] = nil
 default['gitlab']['gitlab-rails']['backup_keep_time'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_connection'] = nil
 default['gitlab']['gitlab-rails']['backup_upload_remote_directory'] = nil
+default['gitlab']['gitlab-rails']['backup_upload_storage_options'] = {}
 default['gitlab']['gitlab-rails']['backup_multipart_chunk_size'] = nil
 default['gitlab']['gitlab-rails']['backup_encryption'] = nil
 default['gitlab']['gitlab-rails']['backup_encryption_key'] = nil
