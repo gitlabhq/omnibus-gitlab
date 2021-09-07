@@ -223,7 +223,7 @@ sudo chown -R mattermost:mattermost /var/opt/gitlab/mattermost/data
 sudo chown mattermost:mattermost /var/opt/gitlab/mattermost/config.json
 
 # Start Mattermost
-sudo gitlab-ctl start mattermost 
+sudo gitlab-ctl start mattermost
 ```
 
 ### Mattermost Command Line Tools (CLI)
