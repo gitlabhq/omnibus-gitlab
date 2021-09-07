@@ -104,7 +104,7 @@ for configuration steps.
     during reconfigure.
   - Reduces the number of Puma workers to save memory for other services.
   - Sets `gitlab_rails['enable'] = true`.
-  
+
   This role is intended to be used in a Geo secondary site running on a single
   node. If using this role in a Geo site with multiple nodes, undesired
   services will need to be explicitly disabled in `/etc/gitlab/gitlab.rb`. See
