@@ -4,6 +4,7 @@ default['consul']['username'] = 'gitlab-consul'
 default['consul']['group'] = 'gitlab-consul'
 default['consul']['config_file'] = '/var/opt/gitlab/consul/config.json'
 default['consul']['config_dir'] = '/var/opt/gitlab/consul/config.d'
+default['consul']['custom_config_dir'] = nil
 default['consul']['data_dir'] = '/var/opt/gitlab/consul/data'
 default['consul']['log_directory'] = '/var/log/gitlab/consul'
 default['consul']['node_name'] = nil

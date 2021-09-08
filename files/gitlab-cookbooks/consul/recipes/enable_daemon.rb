@@ -19,6 +19,7 @@ consul_helper = ConsulHelper.new(node)
 runit_service 'consul' do
   options({
             config_dir: node['consul']['config_dir'],
+            custom_config_dir: node['consul']['custom_config_dir'],
             config_file: node['consul']['config_file'],
             data_dir: node['consul']['data_dir'],
             dir: node['consul']['dir'],

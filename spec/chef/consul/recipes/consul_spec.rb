@@ -24,7 +24,8 @@ RSpec.describe 'consul' do
         consul: {
           enable: true,
           config_dir: '/fake/config.d',
-          data_dir: '/fake/data'
+          data_dir: '/fake/data',
+          custom_config_dir: '/custom/dir'
         }
       )
     end
@@ -72,6 +73,12 @@ RSpec.describe 'consul' do
         config_json = chef_run.file('/var/opt/gitlab/consul/config.json')
         expect(config_json).to notify('execute[reload consul]').to(:run)
         expect(config_json).to notify('ruby_block[consul config change]').to(:run)
+      end
+
+      it 'renders run file with specified options' do
+        expect(chef_run).to render_file('/opt/gitlab/sv/consul/run').with_content(%r{-config-dir /fake/config.d})
+        expect(chef_run).to render_file('/opt/gitlab/sv/consul/run').with_content(%r{-config-dir /custom/dir})
+        expect(chef_run).to render_file('/opt/gitlab/sv/consul/run').with_content(%r{-data-dir /fake/data})
       end
     end
 
