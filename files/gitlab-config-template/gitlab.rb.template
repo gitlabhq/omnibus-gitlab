@@ -2776,7 +2776,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # }
 #
-# consul['custom_service_config_dir'] = '/path/to/service/configs/directory'
+# consul['custom_config_dir'] = '/path/to/service/configs/directory'
 ################################################################################
 # Service desk email settings
 ################################################################################

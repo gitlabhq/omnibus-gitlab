@@ -25,7 +25,7 @@ RSpec.describe 'consul' do
           enable: true,
           config_dir: '/fake/config.d',
           data_dir: '/fake/data',
-          custom_service_config_dir: '/custom/dir'
+          custom_config_dir: '/custom/dir'
         }
       )
     end

@@ -11,7 +11,7 @@ exec chpst -P -e <%= @options[:env_dir] %> \
 -u <%= @options[:user] %>:<%= @options[:groupname] %> \
 /opt/gitlab/embedded/bin/consul agent -config-file <%= @options[:config_file] %> \
   -config-dir <%= @options[:config_dir] %> \
-  <% unless @options[:custom_service_config_dir].nil? -%>
-  -config-dir <%= @options[:custom_service_config_dir] %> \
+  <% unless @options[:custom_config_dir].nil? -%>
+  -config-dir <%= @options[:custom_config_dir] %> \
   <% end -%>
   -data-dir <%= @options[:data_dir] %>
