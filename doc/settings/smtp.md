@@ -459,6 +459,24 @@ gitlab_rails['gitlab_email_reply_to'] = 'email@sender_owner_reply_api'
 Note that `smtp_user_name` must literally be set to `"apikey"`.
 The API Key you created must be entered in `smtp_password`.
 
+### Sendinblue
+
+This configuration was tested with Sendinblue's [SMTP relay service](https://www.sendinblue.com/free-smtp-server/). To grab the relevant account credentials via the URLs commented into this example, [log in to your Sendinblue account](https://app.sendinblue.com/account/login). For further details, refer to Sendinblue's [help page](https://help.sendinblue.com/hc/en-us/articles/209462765-What-is-Sendinblue-SMTP-).
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp-relay.sendinblue.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "<username@example.com>" # https://account.sendinblue.com/advanced/api
+gitlab_rails['smtp_password'] = "<password>"              # https://account.sendinblue.com/advanced/api
+gitlab_rails['smtp_domain'] = "<example.com>"             # https://account.sendinblue.com/senders
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['gitlab_email_from'] = '<gitlab@example.com>'
+gitlab_rails['gitlab_email_reply_to'] = '<noreply@example.com>'
+```
+
 ### Yandex
 
 ```ruby
