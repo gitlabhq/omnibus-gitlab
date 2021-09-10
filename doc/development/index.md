@@ -25,3 +25,4 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [Release process](../release/index.md)
 - [Version format of packages, Docker images and other artifacts](package_version_format.md)
 - [Handling broken master pipelines](broken_master.md)
+- [Handling vulnerabilities](vulnerabilities.md)
