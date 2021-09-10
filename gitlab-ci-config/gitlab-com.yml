@@ -577,6 +577,7 @@ dependency_scanning:
   script:
     - /gitlab-depscan.sh version-manifest.json
   <<: *depscan-rules
+  allow_failure: true
   needs:
     - create_omnibus_manifest
   artifacts:
