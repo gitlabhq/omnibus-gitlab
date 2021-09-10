@@ -63,6 +63,15 @@ module LoggingHelper
     log(message, kind: :warning)
   end
 
+  # Records a message as debug, logging as we see it.
+  #
+  # @param message [String] A message to give the user
+  # @return [void]
+  def debug(message)
+    Chef::Log.debug message
+    log(message, kind: :debug)
+  end
+
   # Prints a report for the specified message type
   #
   # @param type [Symbol] The type of message to print a report for

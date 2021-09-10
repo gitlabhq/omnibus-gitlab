@@ -54,13 +54,25 @@ RSpec.describe LoggingHelper do
 
   context '.warning' do
     it 'calls Chef::Log.warn' do
-      subject.deprecation('hello')
+      subject.warning('hello')
       expect(log).to have_received(:warn).with('hello')
     end
 
     it 'adds the kind :warning' do
       subject.warning('basic')
       expect(subject.messages).to contain_exactly(hash_including(kind: :warning))
+    end
+  end
+
+  context '.debug' do
+    it 'calls Chef::Log.debug' do
+      subject.debug('hello')
+      expect(log).to have_received(:debug).with('hello')
+    end
+
+    it 'adds the kind :debug' do
+      subject.debug('basic')
+      expect(subject.messages).to contain_exactly(hash_including(kind: :debug))
     end
   end
 
@@ -132,24 +144,24 @@ RSpec.describe LoggingHelper do
 
       output = <<~EOS
 
-      Removals:
-      one
-      two
+        Removals:
+        one
+        two
 
 
-      Deprecations:
-      three
-      four
+        Deprecations:
+        three
+        four
 
 
-      Warnings:
-      five
-      six
+        Warnings:
+        five
+        six
 
 
-      Notes:
-      seven
-      eight
+        Notes:
+        seven
+        eight
 
       EOS
 

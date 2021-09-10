@@ -18,6 +18,7 @@ module NodeHelper
               "the setting in the /etc/gitlab/gitlab.rb configuration file"
 
       LoggingHelper.warning(message) unless dest.empty?
+      LoggingHelper.debug("The following values will be merged from #{GitlabCluster::JSON_FILE} : #{dest.inspect}")
 
       Chef::Mixin::DeepMerge.merge(source, dest)
     end
