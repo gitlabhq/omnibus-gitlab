@@ -575,7 +575,6 @@ dependency_scanning:
     NVD_DB_UPDATE: "true"
   before_script: []
   script:
-    - echo ${CVEIGNORE} | sed -r "s/, */\n/g" >> .cveignore
     - /gitlab-depscan.sh version-manifest.json
   <<: *depscan-rules
   needs:
