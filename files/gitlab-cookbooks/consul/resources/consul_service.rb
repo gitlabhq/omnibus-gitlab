@@ -4,6 +4,7 @@ provides :consul_service
 property :service_name, String, name_property: true
 property :id, String, name_property: true
 property :ip_address, [String, nil], default: nil
+property :meta, [Hash, nil], default: nil
 property :port, [Integer, nil], default: nil
 property :reload_service, [TrueClass, FalseClass], default: true
 
@@ -34,6 +35,8 @@ action :create do
 
   # Remove address if advertise_addr is set to allow service to use underlying advertise_addr
   content['service'].delete('address') if node['consul']['configuration']['advertise_addr']
+
+  content['service']['meta'] = new_resource.meta if property_is_set?(:meta)
 
   # Ensure the dir exists but leave permissions to `consul::enable`
   directory node['consul']['config_dir'] do

@@ -48,3 +48,4 @@ default['gitaly']['pack_objects_cache_dir'] = nil
 default['gitaly']['pack_objects_cache_max_age'] = nil
 default['gitaly']['consul_service_name'] = 'gitaly'
 default['gitaly']['custom_hooks_dir'] = nil
+default['gitaly']['consul_service_meta'] = nil

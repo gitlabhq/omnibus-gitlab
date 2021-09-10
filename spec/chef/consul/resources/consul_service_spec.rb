@@ -37,6 +37,15 @@ RSpec.describe 'consul_service' do
           .not_to notify 'execute[reload consul]'
       end
     end
+
+    context 'with symantic metadata' do
+      let(:chef_run) { runner.converge('test_consul::consul_service_meta') }
+
+      it 'creates the Consul service file' do
+        expect(chef_run).to render_file('/var/opt/gitlab/consul/config.d/node-exporter-service.json')
+          .with_content('{"service":{"name":"node-exporter","address":"10.1.1.1","port":1234,"meta":{"some_key":"value"}}}')
+      end
+    end
   end
 
   context 'delete' do

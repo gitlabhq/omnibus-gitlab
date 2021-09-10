@@ -931,6 +931,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Service name used to register GitLab Workhorse as a Consul service
 # gitlab_workhorse['consul_service_name'] = 'workhorse'
+##! Semantic metadata used when registering GitLab Workhorse as a Consul service
+# gitlab_workhorse['consul_service_meta'] = {}
 
 ################################################################################
 ## GitLab User Settings
@@ -987,6 +989,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Service name used to register Puma as a Consul service
 # puma['consul_service_name'] = 'rails'
+##! Semantic metadata used when registering Puma as a Consul service
+# puma['consul_service_meta'] = {}
 
 ################################################################################
 ## GitLab Sidekiq
@@ -1029,6 +1033,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Service name used to register Sidekiq as a Consul service
 # sidekiq['consul_service_name'] = 'sidekiq'
+##! Semantic metadata used when registering Sidekiq as a Consul service
+# sidekiq['consul_service_meta'] = {}
 
 ################################################################################
 ## gitlab-shell
@@ -1439,6 +1445,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Service name used to register Nginx as a Consul service
 # nginx['consul_service_name'] = 'nginx'
+##! Semantic metadata used when registering NGINX as a Consul service
+# nginx['consul_service_meta'] = {}
 
 ################################################################################
 ## GitLab Logging
@@ -1891,6 +1899,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Service name used to register Prometheus as a Consul service
 # prometheus['consul_service_name'] = 'prometheus'
+##! Semantic metadata used when registering Prometheus as a Consul service
+# prometheus['consul_service_meta'] = {}
 
 ################################################################################
 ###! **Only needed if Prometheus and Rails are not on the same server.**
@@ -1943,6 +1953,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Service name used to register Node Exporter as a Consul service
 # node_exporter['consul_service_name'] = 'node-exporter'
+##! Semantic metadata used when registering Node Exporter as a Consul service
+# node_exporter['consul_service_meta'] = {}
 
 ################################################################################
 ## Prometheus Redis exporter
@@ -1964,6 +1976,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Service name used to register Redis Exporter as a Consul service
 # redis_exporter['consul_service_name'] = 'redis-exporter'
+##! Semantic metadata used when registering Redis Exporter as a Consul service
+# redis_exporter['consul_service_meta'] = {}
 
 ################################################################################
 ## Prometheus Postgres exporter
@@ -1984,6 +1998,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Service name used to register Postgres Exporter as a Consul service
 # postgres_exporter['consul_service_name'] = 'postgres-exporter'
+##! Semantic metadata used when registering Postgres Exporter as a Consul service
+# postgres_exporter['consul_service_meta'] = {}
 
 ################################################################################
 ## Prometheus PgBouncer exporter (EE only)
@@ -2183,6 +2199,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Service name used to register Gitaly as a Consul service
 # gitaly['consul_service_name'] = 'gitaly'
+##! Semantic metadata used when registering Gitaly as a Consul service
+# gitaly['consul_service_meta'] = {}
 
 ################################################################################
 ## Praefect
@@ -2263,6 +2281,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Service name used to register Praefect as a Consul service
 # praefect['consul_service_name'] = 'praefect'
+##! Semantic metadata used when registering Praefect as a Consul service
+# praefect['consul_service_meta'] = {}
 
 ################################################################################
 # Storage check

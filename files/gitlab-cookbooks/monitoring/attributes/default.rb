@@ -25,6 +25,7 @@ default['monitoring']['prometheus']['external_labels'] = {}
 default['monitoring']['prometheus']['listen_address'] = 'localhost:9090'
 default['monitoring']['prometheus']['alertmanagers'] = nil
 default['monitoring']['prometheus']['consul_service_name'] = 'prometheus'
+default['monitoring']['prometheus']['consul_service_meta'] = nil
 
 ####
 # Prometheus Alertmanager
@@ -57,6 +58,7 @@ default['monitoring']['node-exporter']['env'] = {
 }
 default['monitoring']['node-exporter']['listen_address'] = 'localhost:9100'
 default['monitoring']['node-exporter']['consul_service_name'] = 'node-exporter'
+default['monitoring']['node-exporter']['consul_service_meta'] = nil
 
 ####
 # Redis exporter
@@ -69,6 +71,7 @@ default['monitoring']['redis-exporter']['env'] = {
 }
 default['monitoring']['redis-exporter']['listen_address'] = 'localhost:9121'
 default['monitoring']['redis-exporter']['consul_service_name'] = 'redis-exporter'
+default['monitoring']['redis-exporter']['consul_service_meta'] = nil
 
 ####
 # Postgres exporter
@@ -84,6 +87,7 @@ default['monitoring']['postgres-exporter']['env'] = {
 default['monitoring']['postgres-exporter']['sslmode'] = nil
 default['monitoring']['postgres-exporter']['per_table_stats'] = false
 default['monitoring']['postgres-exporter']['consul_service_name'] = 'postgres-exporter'
+default['monitoring']['postgres-exporter']['consul_service_meta'] = nil
 
 ####
 # PgBouncer exporter
