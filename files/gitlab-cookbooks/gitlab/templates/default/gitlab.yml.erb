@@ -910,6 +910,7 @@ production: &base
       multipart_chunk_size: <%= @backup_multipart_chunk_size %>
       encryption: <%= @backup_encryption %>
       encryption_key: <%= @backup_encryption_key %>
+      storage_options: <%= @backup_upload_storage_options.to_json %>
       storage_class: <%= @backup_storage_class %>
 
   ## Pseudonymizer settings

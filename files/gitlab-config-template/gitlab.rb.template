@@ -580,6 +580,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###!   otherwise S3-managed keys are used.
 # gitlab_rails['backup_encryption_key'] = '<base64-encoded encryption key>'
 
+###! **Turns on AWS Server-Side Encryption with Amazon SSE-KMS (AWS managed but customer-master key)
+# gitlab_rails['backup_upload_storage_options'] = {
+#  'server_side_encryption' => 'aws:kms',
+#  'server_side_encryption_kms_key_id' => 'arn:aws:kms:YOUR-KEY-ID-HERE'
+# }
+
 ###! **Specifies Amazon S3 storage class to use for backups. Valid values
 ###!   include 'STANDARD', 'STANDARD_IA', and 'REDUCED_REDUNDANCY'**
 # gitlab_rails['backup_storage_class'] = 'STANDARD'
