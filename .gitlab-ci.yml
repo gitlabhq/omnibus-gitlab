@@ -221,3 +221,11 @@ notify:slack-fail:scheduled-master:
     variables:
       - $TOP_UPSTREAM_SOURCE_JOB && $TOP_UPSTREAM_SOURCE_REF == 'master'
   when: on_failure
+
+issue-bot:
+  stage: notification_fail
+  image: registry.gitlab.com/gitlab-org/distribution/issue-bot:latest
+  script: /issue-bot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab"'
+      when: on_failure
