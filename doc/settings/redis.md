@@ -123,7 +123,7 @@ redis['maxmemory_samples'] = 5
 ## Using Secure Sockets Layer (SSL)
 
 Redis 5.x does NOT support SSL out of the box. However, you can encrypt a
-Redis connection using [stunnel](https://redislabs.com/blog/stunnel-secure-redis-ssl/).
+Redis connection using [stunnel](https://redis.com/blog/stunnel-secure-redis-ssl/).
 AWS ElasticCache also supports Redis over SSL.
 
 Support for SSL has the following limitations:
