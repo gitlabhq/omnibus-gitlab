@@ -385,19 +385,19 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 
 ### `AWS-CE-Release`
 
-This job updates the [GitLab Community Edition listing in AWS Marketplace](https://aws.amazon.com/marketplace/pp/B071RFCJZK?ref_=srh_res_product_title) with the current version.
+This job updates the [GitLab Community Edition listing in AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-w6ykryurkesjq?ref_=srh_res_product_title) with the current version.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on CE tag pipelines.
 
 ### `AWS-Ultimate-Release`
 
-This job updates the [GitLab Ultimate listing in AWS Marketplace](https://aws.amazon.com/marketplace/pp/B07SJ817DX?ref_=srh_res_product_title) with the current version.
+This job updates the [GitLab Ultimate listing in AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-g6ktjmpuc33zk?ref_=srh_res_product_title) with the current version.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on EE tag pipelines.
 
 ### `AWS-Premium-Release`
 
-This job updates the [GitLab Premium listing in AWS Marketplace](https://aws.amazon.com/marketplace/pp/B085Y7TJ5K?ref_=srh_res_product_title) with the current version.
+This job updates the [GitLab Premium listing in AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-amk6tacbois2k?ref_=srh_res_product_title) with the current version.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on EE tag pipelines.
 
