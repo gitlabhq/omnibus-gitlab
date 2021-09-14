@@ -18,4 +18,4 @@ the Gitaly Cluster [setup instructions](https://docs.gitlab.com/ee/administratio
 ## Update GitLab when Gitaly Cluster is enabled
 
 For information on updating GitLab with Gitaly Cluster enabled, see the
-[specific instructions](../update/index.md#gitaly-cluster).
+[specific instructions](https://docs.gitlab.com/ee/update/zero_downtime.html#gitaly-cluster).
