@@ -77,7 +77,7 @@ If you are using your own NGINX rather than the bundled version, and are proxyin
 
 With these operating systems reaching their end-of-life for support, we are no longer providing packages for them. See the [supported operating systems](../package-information/deprecated_os.md) page for details.
 
-This change also impacts [the packages available for Amazon Linux 2](index.md#gitlab-137-and-later-unavailable-on-amazon-linux-2).
+This change also impacts [the packages available for Amazon Linux 2](https://docs.gitlab.com/ee/update/package/#gitlab-137-and-later-unavailable-on-amazon-linux-2).
 
 ### PostgreSQL 12.4 support
 

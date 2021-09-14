@@ -68,10 +68,10 @@ to work best with the available resources. Check out the [documentation](setting
 
 ## Updating
 
-- [Upgrade guidance](https://docs.gitlab.com/ee/update/index.html), including [supported upgrade paths](https://docs.gitlab.com/ee/update/index.html#upgrade-paths).
-- [Upgrade from Community Edition to Enterprise Edition](update/index.md#update-community-edition-to-enterprise-edition)
-- [Update to the latest version](update/index.md#update-using-the-official-repositories)
-- [Downgrade to an earlier version](update/index.md#downgrade)
+- [Upgrade guidance](https://docs.gitlab.com/ee/update/package/), including [supported upgrade paths](https://docs.gitlab.com/ee/update/index.html#upgrade-paths).
+- [Upgrade from Community Edition to Enterprise Edition](https://docs.gitlab.com/ee/update/package/convert_to_ee.html)
+- [Update to the latest version](https://docs.gitlab.com/ee/update/package/#upgrade-using-the-official-repositories)
+- [Downgrade to an earlier version](https://docs.gitlab.com/ee/update/package/downgrade.html)
 - [Upgrade from a non-Omnibus installation to an Omnibus installation using a backup](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-using-a-backup)
 - [Upgrade from non-Omnibus PostgreSQL to an Omnibus installation in-place](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
 - [Upgrade from non-Omnibus MySQL to an Omnibus installation (version 6.8+)](update/convert_to_omnibus.md#upgrading-from-non-omnibus-mysql-to-an-omnibus-installation-version-68)
