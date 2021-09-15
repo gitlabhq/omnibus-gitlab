@@ -136,6 +136,7 @@ RSpec.describe 'qa', type: :rake do
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID').and_return("543210")
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_MERGE_REQUEST_IID').and_return("12121")
       allow(ENV).to receive(:[]).with('QA_BRANCH').and_return(nil)
+      allow(ENV).to receive(:[]).with('GITLAB_QA_OPTIONS').and_return("--set-feature-flags test_feature_flag=enable")
       allow(DockerOperations).to receive(:build).and_return(true)
       allow(Build::QA).to receive(:get_gitlab_repo).and_return("/tmp/gitlab.1234/qa")
       allow(Build::Info).to receive(:release_version).and_return('13.2.0+ce.0')
@@ -152,6 +153,7 @@ RSpec.describe 'qa', type: :rake do
         "ref" => "master",
         "token" => "1234",
         "variables[RELEASE]" => "registry.gitlab.com/gitlab-ce:latest",
+        "variables[GITLAB_QA_OPTIONS]" => "--set-feature-flags test_feature_flag=enable",
         "variables[TRIGGERED_USER]" => "John Doe",
         "variables[TRIGGER_SOURCE]" => "https://gitlab.com/gitlab-org/omnibus-gitlab/-/jobs/12345",
         "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => "https://gitlab.com/gitlab-org/gitlab-foss",
