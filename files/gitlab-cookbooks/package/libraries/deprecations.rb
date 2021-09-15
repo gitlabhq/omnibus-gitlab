@@ -146,7 +146,7 @@ module Gitlab
             note: "Use `praefect['database_direct_port']` instead."
           },
           {
-            config_keys: %w(gitlab gitlab_shell custom_hooks_dir),
+            config_keys: %w(gitlab gitlab-shell custom_hooks_dir),
             deprecation: '14.3',
             removal: '15.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6393
             note: "Use `gitaly['custom_hooks_dir']` instead."
