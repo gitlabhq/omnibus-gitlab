@@ -45,12 +45,6 @@ build do
 
   delete "#{project_dir}/src/tool_hugehelp.c"
 
-  if aix?
-    # otherwise gawk will die during ./configure with variations on the theme of:
-    # "/opt/omnibus-toolchain/embedded/lib/libiconv.a(shr4.o) could not be loaded"
-    env['LIBPATH'] = '/usr/lib:/lib'
-  end
-
   configure_command = [
     './configure',
     "--prefix=#{install_dir}/embedded",

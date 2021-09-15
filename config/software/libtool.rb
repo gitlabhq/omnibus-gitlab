@@ -37,8 +37,6 @@ build do
   update_config_guess
   update_config_guess(target: 'libltdl/config')
 
-  env['M4'] = '/opt/freeware/bin/m4' if aix?
-
   command './configure' \
           " --prefix=#{install_dir}/embedded", env: env
 

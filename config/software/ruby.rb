@@ -60,17 +60,6 @@ elsif freebsd?
   #   http://mailing.freebsd.ports-bugs.narkive.com/kCgK8sNQ/ports-183106-patch-sysutils-libcdio-does-not-build-on-10-0-and-head
   #
   env['LDFLAGS'] << ' -ltinfow'
-elsif aix?
-  # this magic per IBM
-  env['LDSHARED'] = 'xlc -G'
-  env['CFLAGS'] = "-I#{install_dir}/embedded/include/ncurses -I#{install_dir}/embedded/include"
-  # this magic per IBM
-  env['XCFLAGS'] = '-DRUBY_EXPORT'
-  # need CPPFLAGS set so ruby doesn't try to be too clever
-  env['CPPFLAGS'] = "-I#{install_dir}/embedded/include/ncurses -I#{install_dir}/embedded/include"
-  env['SOLIBS'] = '-lm -lc'
-  # need to use GNU m4, default m4 doesn't work
-  env['M4'] = '/opt/freeware/bin/m4'
 elsif solaris_10?
   if sparc?
     # Known issue with rubby where too much GCC optimization blows up miniruby on sparc
@@ -91,22 +80,18 @@ end
 build do
   env['CFLAGS'] << ' -fno-omit-frame-pointer'
 
-  # AIX needs /opt/freeware/bin only for patch
-  patch_env = env.dup
-  patch_env['PATH'] = "/opt/freeware/bin:#{env['PATH']}" if aix?
-
   if solaris_10? && version.satisfies?('>= 2.1')
-    patch source: 'ruby-no-stack-protector.patch', plevel: 1, env: patch_env
+    patch source: 'ruby-no-stack-protector.patch', plevel: 1, env: env
   elsif solaris_10? && version =~ /^1.9/
-    patch source: 'ruby-sparc-1.9.3-c99.patch', plevel: 1, env: patch_env
+    patch source: 'ruby-sparc-1.9.3-c99.patch', plevel: 1, env: env
   elsif solaris_11? && version =~ /^2.1/
-    patch source: 'ruby-solaris-linux-socket-compat.patch', plevel: 1, env: patch_env
+    patch source: 'ruby-solaris-linux-socket-compat.patch', plevel: 1, env: env
   end
 
   # wrlinux7/ios_xr build boxes from Cisco include libssp and there is no way to
   # disable ruby from linking against it, but Cisco switches will not have the
   # library.  Disabling it as we do for Solaris.
-  patch source: 'ruby-no-stack-protector.patch', plevel: 1, env: patch_env if ios_xr? && version.satisfies?('>= 2.1')
+  patch source: 'ruby-no-stack-protector.patch', plevel: 1, env: env if ios_xr? && version.satisfies?('>= 2.1')
 
   # disable libpath in mkmf across all platforms, it trolls omnibus and
   # breaks the postgresql cookbook.  i'm not sure why ruby authors decided
@@ -116,14 +101,14 @@ build do
   # embedded and non-embedded libs get into a fight (libiconv, openssl, etc)
   # and ruby trying to set LD_LIBRARY_PATH itself gets it wrong.
   if version.satisfies?('>= 2.1')
-    patch source: 'ruby-mkmf.patch', plevel: 1, env: patch_env
+    patch source: 'ruby-mkmf.patch', plevel: 1, env: env
     # should intentionally break and fail to apply on 2.2, patch will need to
     # be fixed.
   end
 
   # Enable custom patch created by ayufan that allows to count memory allocations
   # per-thread. This is asked to be upstreamed as part of https://github.com/ruby/ruby/pull/3978
-  patch source: 'thread-memory-allocations-2.7.patch', plevel: 1, env: patch_env
+  patch source: 'thread-memory-allocations-2.7.patch', plevel: 1, env: env
 
   # Fix reserve stack segmentation fault when building on RHEL5 or below
   # Currently only affects 2.1.7 and 2.2.3. This patch taken from the fix
@@ -133,14 +118,14 @@ build do
       platform_version.satisfies?('< 6') &&
       (version == '2.1.7' || version == '2.2.3')
 
-    patch source: 'ruby-fix-reserve-stack-segfault.patch', plevel: 1, env: patch_env
+    patch source: 'ruby-fix-reserve-stack-segfault.patch', plevel: 1, env: env
   end
 
   # copy_file_range() has been disabled on recent RedHat kernels:
   # 1. https://gitlab.com/gitlab-org/gitlab/-/issues/218999
   # 2. https://bugs.ruby-lang.org/issues/16965
   # 3. https://bugzilla.redhat.com/show_bug.cgi?id=1783554
-  patch source: 'ruby-disable-copy-file-range.patch', plevel: 1, env: patch_env if centos? || rhel?
+  patch source: 'ruby-disable-copy-file-range.patch', plevel: 1, env: env if centos? || rhel?
 
   configure_command = ['--with-out-ext=dbm,readline',
                        '--enable-shared',
@@ -152,49 +137,29 @@ build do
   configure_command << '--with-ext=psych' if version.satisfies?('< 2.3')
   configure_command << '--with-bundled-md5' if fips_enabled
 
-  if aix?
-    # need to patch ruby's configure file so it knows how to find shared libraries
-    patch source: 'ruby-aix-configure.patch', plevel: 1, env: patch_env
-    # have ruby use zlib on AIX correctly
-    patch source: 'ruby_aix_openssl.patch', plevel: 1, env: patch_env
-    # AIX has issues with ssl retries, need to patch to have it retry
-    patch source: 'ruby_aix_2_1_3_ssl_EAGAIN.patch', plevel: 1, env: patch_env
-    # the next two patches are because xlc doesn't deal with long vs int types well
-    patch source: 'ruby-aix-atomic.patch', plevel: 1, env: patch_env
-    patch source: 'ruby-aix-vm-core.patch', plevel: 1, env: patch_env
-
-    # per IBM, just help ruby along on what it's running on
-    configure_command << '--host=powerpc-ibm-aix6.1.0.0 --target=powerpc-ibm-aix6.1.0.0 --build=powerpc-ibm-aix6.1.0.0 --enable-pthread'
-
-  elsif freebsd?
+  if freebsd?
     # Disable optional support C level backtrace support. This requires the
     # optional devel/libexecinfo port to be installed.
     configure_command << 'ac_cv_header_execinfo_h=no'
-    configure_command << "--with-opt-dir=#{install_dir}/embedded"
   elsif smartos?
     # Opscode patch - someara@opscode.com
     # GCC 4.7.0 chokes on mismatched function types between OpenSSL 1.0.1c and Ruby 1.9.3-p286
-    patch source: 'ruby-openssl-1.0.1c.patch', plevel: 1, env: patch_env
+    patch source: 'ruby-openssl-1.0.1c.patch', plevel: 1, env: env
 
     # Patches taken from RVM.
     # http://bugs.ruby-lang.org/issues/5384
     # https://www.illumos.org/issues/1587
     # https://github.com/wayneeseguin/rvm/issues/719
-    patch source: 'rvm-cflags.patch', plevel: 1, env: patch_env
+    patch source: 'rvm-cflags.patch', plevel: 1, env: env
 
     # From RVM forum
     # https://github.com/wayneeseguin/rvm/commit/86766534fcc26f4582f23842a4d3789707ce6b96
     configure_command << 'ac_cv_func_dl_iterate_phdr=no'
-    configure_command << "--with-opt-dir=#{install_dir}/embedded"
-  else
-    configure_command << %w(host target build).map { |w| "--#{w}=#{OhaiHelper.gcc_target}" } if OhaiHelper.raspberry_pi?
-    configure_command << "--with-opt-dir=#{install_dir}/embedded"
+  elsif OhaiHelper.raspberry_pi?
+    configure_command << %w(host target build).map { |w| "--#{w}=#{OhaiHelper.gcc_target}" }
   end
 
-  # FFS: works around a bug that infects AIX when it picks up our pkg-config
-  # AFAIK, ruby does not need or use this pkg-config it just causes the build to fail.
-  # The alternative would be to patch configure to remove all the pkg-config garbage entirely
-  env['PKG_CONFIG'] = '/bin/true' if aix?
+  configure_command << "--with-opt-dir=#{install_dir}/embedded"
 
   configure(*configure_command, env: env)
   make "-j #{workers}", env: env

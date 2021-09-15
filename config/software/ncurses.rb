@@ -23,7 +23,6 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
-dependency 'libtool' if aix?
 dependency 'patch' if solaris2?
 
 version('5.9') { source md5: '8cb9c412e5f2d96bc6f459aa8c6282a1', url: 'http://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz' }
@@ -68,12 +67,9 @@ build do
     patch source: 'ncurses-5.9-solaris-xopen_source_extended-detection.patch', plevel: 0
   end
 
-  # AIX's old version of patch doesn't like the patches here
-  unless aix?
-    if version == '5.9'
-      # Patch to add support for GCC 5, doesn't break previous versions
-      patch source: 'ncurses-5.9-gcc-5.patch', plevel: 1, env: env
-    end
+  if version == '5.9'
+    # Patch to add support for GCC 5, doesn't break previous versions
+    patch source: 'ncurses-5.9-gcc-5.patch', plevel: 1, env: env
   end
 
   if mac_os_x? ||
@@ -107,35 +103,11 @@ build do
     '--without-manpages'
   ]
 
-  if aix?
-    # AIX kinda needs 5.9-20140621 or later
-    # because of a naming snafu in shared library naming.
-    # see http://invisible-island.net/ncurses/NEWS.html#t20140621
-
-    # let libtool deal with library silliness
-    configure_command << "--with-libtool=\"#{install_dir}/embedded/bin/libtool\""
-
-    # stick with just the shared libs on AIX
-    configure_command << '--without-normal'
-
-    # ncurses's ./configure incorrectly
-    # "figures out" ARFLAGS if you try
-    # to set them yourself
-    env.delete('ARFLAGS')
-
-    # use gnu install from the coreutils IBM rpm package
-    env['INSTALL'] = '/opt/freeware/bin/install'
-  end
-
   # only Solaris 10 sh has a problem with
   # parens enclosed case statement conditions the configure script
   configure_command.unshift 'bash' if solaris2?
 
   command configure_command.join(' '), env: env
-
-  # unfortunately, libtool may try to link to libtinfo
-  # before it has been assembled; so we have to build in serial
-  make 'libs', env: env if aix?
 
   make "-j #{workers}", env: env
   make "-j #{workers} install", env: env
@@ -145,7 +117,6 @@ build do
   configure_command << '--enable-widec'
 
   command configure_command.join(' '), env: env
-  make 'libs', env: env if aix?
   make "-j #{workers}", env: env
 
   # Installing the non-wide libraries will also install the non-wide
