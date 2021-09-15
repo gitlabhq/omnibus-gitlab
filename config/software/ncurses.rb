@@ -53,17 +53,6 @@ build do
     patch source: 'ncurses-5.9-gcc-5.patch', plevel: 1, env: env
   end
 
-  if mac_os_x?
-    # References:
-    # https://github.com/Homebrew/homebrew-dupes/issues/43
-    # http://invisible-island.net/ncurses/NEWS.html#t20110409
-    #
-    # Patches ncurses for clang compiler. Changes have been accepted into
-    # upstream, but occurred shortly after the 5.9 release. We should be able
-    # to remove this after upgrading to any release created after June 2012
-    patch source: 'ncurses-clang.patch'
-  end
-
   patch source: 'v5.9.ppc64le-configure.patch', plevel: 1 if version == '5.9' && ppc64le?
 
   update_config_guess

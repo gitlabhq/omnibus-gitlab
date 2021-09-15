@@ -25,10 +25,6 @@ license_file 'README'
 skip_transitive_dependency_licensing true
 
 build do
-  # We omit the omnibus path here because it breaks mac_os_x builds by picking
-  # up the embedded libtool instead of the system libtool which the zlib
-  # configure script cannot handle.
-  # TODO: Do other OSes need this?  Is this strictly a mac thing?
   env = with_standard_compiler_flags
 
   configure env: env

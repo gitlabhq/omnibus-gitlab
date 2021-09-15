@@ -42,23 +42,12 @@ relative_path "ruby-#{version}"
 
 env = with_standard_compiler_flags(with_embedded_path)
 
-if mac_os_x?
-  # -Qunused-arguments suppresses "argument unused during compilation"
-  # warnings. These can be produced if you compile a program that doesn't
-  # link to anything in a path given with -Lextra-libs. Normally these
-  # would be harmless, except that autoconf treats any output to stderr as
-  # a failure when it makes a test program to check your CFLAGS (regardless
-  # of the actual exit code from the compiler).
-  env['CFLAGS'] << " -I#{install_dir}/embedded/include/ncurses -arch x86_64 -m64 -O3 -g -pipe -Qunused-arguments"
-  env['LDFLAGS'] << ' -arch x86_64'
-else # including linux
-  env['CFLAGS'] << if version.satisfies?('>= 2.3.0') &&
-      rhel? && platform_version.satisfies?('< 6.0')
-                     ' -O2 -g -pipe'
-                   else
-                     ' -O3 -g -pipe'
-                   end
-end
+env['CFLAGS'] << if version.satisfies?('>= 2.3.0') &&
+    rhel? && platform_version.satisfies?('< 6.0')
+                   ' -O2 -g -pipe'
+                 else
+                   ' -O3 -g -pipe'
+                 end
 
 build do
   env['CFLAGS'] << ' -fno-omit-frame-pointer'

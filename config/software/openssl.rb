@@ -47,24 +47,18 @@ build do
     'shared',
   ]
 
-  configure_cmd =
-    if mac_os_x?
-      './Configure darwin64-x86_64-cc'
-    else
-      prefix =
-        if linux? && ppc64?
-          './Configure linux-ppc64'
-        elsif linux? && s390x?
-          # With gcc > 4.3 on s390x there is an error building
-          # with inline asm enabled
-          './Configure linux64-s390x -DOPENSSL_NO_INLINE_ASM'
-        elsif OhaiHelper.raspberry_pi?
-          './Configure linux-generic32'
-        else
-          './config'
-        end
-      "#{prefix} disable-gost"
-    end
+  prefix = if linux? && ppc64?
+             './Configure linux-ppc64'
+           elsif linux? && s390x?
+             # With gcc > 4.3 on s390x there is an error building
+             # with inline asm enabled
+             './Configure linux64-s390x -DOPENSSL_NO_INLINE_ASM'
+           elsif OhaiHelper.raspberry_pi?
+             './Configure linux-generic32'
+           else
+             './config'
+           end
+  configure_cmd = "#{prefix} disable-gost"
 
   # Out of abundance of caution, we put the feature flags first and then
   # the crazy platform specific compiler flags at the end.
