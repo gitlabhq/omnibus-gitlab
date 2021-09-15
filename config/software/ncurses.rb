@@ -49,24 +49,6 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
   env.delete('CPPFLAGS')
 
-  if smartos?
-    # SmartOS is Illumos Kernel, plus NetBSD userland with a GNU toolchain.
-    # These patches are taken from NetBSD pkgsrc and provide GCC 4.7.0
-    # compatibility:
-    # http://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/devel/ncurses/patches/
-    patch source: 'patch-aa', plevel: 0
-    patch source: 'patch-ab', plevel: 0
-    patch source: 'patch-ac', plevel: 0
-    patch source: 'patch-ad', plevel: 0
-    patch source: 'patch-cxx_cursesf.h', plevel: 0
-    patch source: 'patch-cxx_cursesm.h', plevel: 0
-
-    # Opscode patches - <someara@opscode.com>
-    # The configure script from the pristine tarball detects xopen_source_extended incorrectly.
-    # Manually working around a false positive.
-    patch source: 'ncurses-5.9-solaris-xopen_source_extended-detection.patch', plevel: 0
-  end
-
   if version == '5.9'
     # Patch to add support for GCC 5, doesn't break previous versions
     patch source: 'ncurses-5.9-gcc-5.patch', plevel: 1, env: env
@@ -123,9 +105,6 @@ build do
   # binaries, which doesn't happen to be a problem since we don't
   # utilize the ncurses binaries in private-chef (or oss chef)
   make "-j #{workers} install", env: env
-
-  # Ensure embedded ncurses wins in the LD search path
-  link "#{install_dir}/embedded/lib/libcurses.so", "#{install_dir}/embedded/lib/libcurses.so.1" if smartos?
 end
 
 project.exclude "embedded/bin/ncurses5-config"

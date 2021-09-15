@@ -141,20 +141,6 @@ build do
     # Disable optional support C level backtrace support. This requires the
     # optional devel/libexecinfo port to be installed.
     configure_command << 'ac_cv_header_execinfo_h=no'
-  elsif smartos?
-    # Opscode patch - someara@opscode.com
-    # GCC 4.7.0 chokes on mismatched function types between OpenSSL 1.0.1c and Ruby 1.9.3-p286
-    patch source: 'ruby-openssl-1.0.1c.patch', plevel: 1, env: env
-
-    # Patches taken from RVM.
-    # http://bugs.ruby-lang.org/issues/5384
-    # https://www.illumos.org/issues/1587
-    # https://github.com/wayneeseguin/rvm/issues/719
-    patch source: 'rvm-cflags.patch', plevel: 1, env: env
-
-    # From RVM forum
-    # https://github.com/wayneeseguin/rvm/commit/86766534fcc26f4582f23842a4d3789707ce6b96
-    configure_command << 'ac_cv_func_dl_iterate_phdr=no'
   elsif OhaiHelper.raspberry_pi?
     configure_command << %w(host target build).map { |w| "--#{w}=#{OhaiHelper.gcc_target}" }
   end

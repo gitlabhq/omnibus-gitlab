@@ -54,8 +54,6 @@ build do
   configure_cmd =
     if mac_os_x?
       './Configure darwin64-x86_64-cc'
-    elsif smartos?
-      '/bin/bash ./Configure solaris64-x86_64-gcc -static-libgcc'
     elsif omnios?
       '/bin/bash ./Configure solaris-x86-gcc'
     elsif solaris_11?
