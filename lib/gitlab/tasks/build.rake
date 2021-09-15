@@ -69,7 +69,7 @@ namespace :build do
 
     desc "Sync packages to aws"
     task :sync do
-      Gitlab::Util.section('build:package:sync') do
+      Gitlab::Util.section('build:package:sync', collapsed: Build::Check.on_tag?) do
         release_bucket = Build::Info.release_bucket
         release_bucket_region = Build::Info.release_bucket_region
         release_bucket_s3_endpoint = Build::Info.release_bucket_s3_endpoint
