@@ -39,15 +39,6 @@ build do
   elsif freebsd?
     # Should this just be in standard_compiler_flags?
     env['LDFLAGS'] += " -Wl,-rpath,#{install_dir}/embedded/lib"
-  elsif windows?
-    # XXX: OpenSSL explicitly sets -march=i486 and expects that to be honored.
-    # It has OPENSSL_IA32_SSE2 controlling whether it emits optimized SSE2 code
-    # and the 32-bit calling convention involving XMM registers is...  vague.
-    # Do not enable SSE2 generally because the hand optimized assembly will
-    # overwrite registers that mingw expects to get preserved.
-    env['CFLAGS'] = "-I#{install_dir}/embedded/include"
-    env['CPPFLAGS'] = env['CFLAGS']
-    env['CXXFLAGS'] = env['CFLAGS']
   end
 
   configure_args = [
@@ -74,9 +65,6 @@ build do
     elsif solaris_11?
       platform = sparc? ? 'solaris64-sparcv9-gcc' : 'solaris64-x86_64-gcc'
       "/bin/bash ./Configure #{platform} -static-libgcc"
-    elsif windows?
-      platform = windows_arch_i386? ? 'mingw' : 'mingw64'
-      "perl.exe ./Configure #{platform}"
     else
       prefix =
         if linux? && ppc64?
@@ -104,11 +92,6 @@ build do
                 env
               end
 
-  if windows?
-    # Patch Makefile.org to update the compiler flags/options table for mingw.
-    patch source: 'openssl-1.0.1q-fix-compiler-flags-table-for-msys.patch', env: env
-  end
-
   # Out of abundance of caution, we put the feature flags first and then
   # the crazy platform specific compiler flags at the end.
   configure_args << env['CFLAGS'] << env['LDFLAGS']
@@ -117,7 +100,6 @@ build do
 
   command configure_command, env: env, in_msys_bash: true
 
-  patch source: 'openssl-1.0.1j-windows-relocate-dll.patch', env: env if windows?
   patch source: "openssl-1.1.1f-do-not-install-docs.patch", env: patch_env
 
   make 'depend', env: env

@@ -25,7 +25,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 # Is libtool actually necessary? Doesn't configure generate one?
-dependency 'libtool' unless windows?
+dependency 'libtool'
 
 version('3.2.1') { source md5: '83b89587607e3eb65c70d361f13bab43' }
 

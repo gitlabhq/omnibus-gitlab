@@ -27,15 +27,12 @@ default_version '2.7.4'
 fips_enabled = (project.overrides[:fips] && project.overrides[:fips][:enabled]) || false
 
 dependency 'patch' if solaris_10?
-dependency 'ncurses' unless windows? || version.satisfies?('>= 2.1')
 dependency 'zlib'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'libffi'
 dependency 'libyaml'
 # Needed for chef_gem installs of (e.g.) nokogiri on upgrades -
 # they expect to see our libiconv instead of a system version.
-# Ignore on windows - TDM GCC comes with libiconv in the runtime
-# and that's the only one we will ever use.
 dependency 'libiconv'
 
 version('2.7.4') { source sha256: '3043099089608859fc8cce7f9fdccaa1f53a462457e3838ec3b25a7d609fbc5b' }
@@ -82,8 +79,6 @@ elsif solaris_10?
   else
     env['CFLAGS'] << ' -std=c99 -O3 -g -pipe'
   end
-elsif windows?
-  env['CPPFLAGS'] << ' -DFD_SETSIZE=2048'
 else # including linux
   env['CFLAGS'] << if version.satisfies?('>= 2.3.0') &&
       rhel? && platform_version.satisfies?('< 6.0')
@@ -120,8 +115,6 @@ build do
   # other platforms.  generally you need to have a condition where the
   # embedded and non-embedded libs get into a fight (libiconv, openssl, etc)
   # and ruby trying to set LD_LIBRARY_PATH itself gets it wrong.
-  #
-  # Also, fix paths emitted in the makefile on windows on both msys and msys2.
   if version.satisfies?('>= 2.1')
     patch source: 'ruby-mkmf.patch', plevel: 1, env: patch_env
     # should intentionally break and fail to apply on 2.2, patch will need to
@@ -193,8 +186,6 @@ build do
     # https://github.com/wayneeseguin/rvm/commit/86766534fcc26f4582f23842a4d3789707ce6b96
     configure_command << 'ac_cv_func_dl_iterate_phdr=no'
     configure_command << "--with-opt-dir=#{install_dir}/embedded"
-  elsif windows?
-    configure_command << ' debugflags=-g'
   else
     configure_command << %w(host target build).map { |w| "--#{w}=#{OhaiHelper.gcc_target}" } if OhaiHelper.raspberry_pi?
     configure_command << "--with-opt-dir=#{install_dir}/embedded"
@@ -208,22 +199,4 @@ build do
   configure(*configure_command, env: env)
   make "-j #{workers}", env: env
   make "-j #{workers} install", env: env
-
-  if windows?
-    # Needed now that we switched to msys2 and have not figured out how to tell
-    # it how to statically link yet
-    dlls = ['libwinpthread-1']
-    dlls << if windows_arch_i386?
-              'libgcc_s_dw2-1'
-            else
-              'libgcc_s_seh-1'
-            end
-    dlls.each do |dll|
-      arch_suffix = windows_arch_i386? ? '32' : '64'
-      windows_path = "C:/msys2/mingw#{arch_suffix}/bin/#{dll}.dll"
-      raise "Cannot find required DLL needed for dynamic linking: #{windows_path}" unless File.exist?(windows_path)
-
-      copy windows_path, "#{install_dir}/embedded/bin/#{dll}.dll"
-    end
-  end
 end

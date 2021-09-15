@@ -44,12 +44,9 @@ build do
 
   copy "#{project_dir}/cacert-#{version.tr('.', '-')}.pem", "#{install_dir}/embedded/ssl/certs/cacert.pem"
 
-  # Windows does not support symlinks
-  unless windows?
-    link "#{install_dir}/embedded/ssl/certs/cacert.pem", "#{install_dir}/embedded/ssl/cert.pem"
+  link "#{install_dir}/embedded/ssl/certs/cacert.pem", "#{install_dir}/embedded/ssl/cert.pem"
 
-    block { File.chmod(0644, "#{install_dir}/embedded/ssl/certs/cacert.pem") }
-  end
+  block { File.chmod(0644, "#{install_dir}/embedded/ssl/certs/cacert.pem") }
 end
 
 VERISIGN_CERTS = <<-EOH.freeze

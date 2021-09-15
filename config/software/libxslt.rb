@@ -55,11 +55,6 @@ build do
 
   configure(*configure_commands, env: env)
 
-  if windows?
-    # Apply a post configure patch to prevent dll base address clash
-    patch source: 'libxslt-windows-relocate.patch', env: env if windows?
-  end
-
   make "-j #{workers}", env: env
   make 'install', env: env
 end
