@@ -145,6 +145,12 @@ module Gitlab
             removal: '14.3', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6150
             note: "Use `praefect['database_direct_port']` instead."
           },
+          {
+            config_keys: %w(gitlab gitlab-shell custom_hooks_dir),
+            deprecation: '14.3',
+            removal: '15.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6393
+            note: "Use `gitaly['custom_hooks_dir']` instead."
+          },
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable', 'svlogd_prefix'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")

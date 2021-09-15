@@ -69,7 +69,6 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
               audit_usernames: node['gitlab']['gitlab-shell']['audit_usernames'],
               http_settings: node['gitlab']['gitlab-shell']['http_settings'],
               git_trace_log_file: node['gitlab']['gitlab-shell']['git_trace_log_file'],
-              custom_hooks_dir: node['gitlab']['gitlab-shell']['custom_hooks_dir'],
               migration: node['gitlab']['gitlab-shell']['migration'],
               ssl_cert_dir: node['gitlab']['gitlab-shell']['ssl_cert_dir']
             })

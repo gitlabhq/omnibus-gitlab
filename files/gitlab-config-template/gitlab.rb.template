@@ -1039,7 +1039,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_shell['log_format'] = 'json'
 # gitlab_shell['http_settings'] = { user: 'username', password: 'password', ca_file: '/etc/ssl/cert.pem', ca_path: '/etc/pki/tls/certs', self_signed_cert: false}
 # gitlab_shell['log_directory'] = "/var/log/gitlab/gitlab-shell/"
-# gitlab_shell['custom_hooks_dir'] = "/opt/gitlab/embedded/service/gitlab-shell/hooks"
 
 # gitlab_shell['auth_file'] = "/var/opt/gitlab/.ssh/authorized_keys"
 
@@ -2180,6 +2179,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['pack_objects_cache_enabled'] = true
 # gitaly['pack_objects_cache_dir'] = '/var/opt/gitlab/git-data/repositories/+gitaly/PackObjectsCache'
 # gitaly['pack_objects_cache_max_age'] = '5m'
+# gitaly['custom_hooks_dir'] = "/var/opt/gitlab/gitaly/custom_hooks"
 
 ##! Service name used to register Gitaly as a Consul service
 # gitaly['consul_service_name'] = 'gitaly'

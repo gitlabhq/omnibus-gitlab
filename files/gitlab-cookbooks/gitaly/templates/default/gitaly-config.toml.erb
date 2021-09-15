@@ -134,10 +134,9 @@ self_signed_cert = <%= http_settings['self_signed_cert'] %>
 <% end %>
 
 [hooks]
-<% if @gitlab_shell['custom_hooks_dir'] %>
-custom_hooks_dir = '<%= @gitlab_shell['custom_hooks_dir'] %>'
+<% if @custom_hooks_dir %>
+custom_hooks_dir = '<%= @custom_hooks_dir %>'
 <% end %>
-
 
 <% if @concurrency %>
   <% @concurrency.each do |endpoint| %>
