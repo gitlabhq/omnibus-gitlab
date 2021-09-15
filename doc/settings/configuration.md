@@ -753,7 +753,7 @@ See [OmniAuth documentation](https://docs.gitlab.com/ee/integration/omniauth.htm
 
 ## Adjusting Puma settings
 
-See [Puma documentation](puma.md)
+See [Puma documentation](https://docs.gitlab.com/ee/administration/operations/puma.html)
 
 ## Setting the NGINX listen address or addresses
 
