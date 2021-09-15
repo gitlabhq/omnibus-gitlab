@@ -26,7 +26,6 @@ default_version '2.7.4'
 
 fips_enabled = (project.overrides[:fips] && project.overrides[:fips][:enabled]) || false
 
-dependency 'patch' if solaris_10?
 dependency 'zlib'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'libffi'
@@ -60,14 +59,6 @@ elsif freebsd?
   #   http://mailing.freebsd.ports-bugs.narkive.com/kCgK8sNQ/ports-183106-patch-sysutils-libcdio-does-not-build-on-10-0-and-head
   #
   env['LDFLAGS'] << ' -ltinfow'
-elsif solaris_10?
-  if sparc?
-    # Known issue with rubby where too much GCC optimization blows up miniruby on sparc
-    env['CFLAGS'] << ' -std=c99 -O0 -g -pipe -mcpu=v9'
-    env['LDFLAGS'] << ' -mcpu=v9'
-  else
-    env['CFLAGS'] << ' -std=c99 -O3 -g -pipe'
-  end
 else # including linux
   env['CFLAGS'] << if version.satisfies?('>= 2.3.0') &&
       rhel? && platform_version.satisfies?('< 6.0')
@@ -79,14 +70,6 @@ end
 
 build do
   env['CFLAGS'] << ' -fno-omit-frame-pointer'
-
-  if solaris_10? && version.satisfies?('>= 2.1')
-    patch source: 'ruby-no-stack-protector.patch', plevel: 1, env: env
-  elsif solaris_10? && version =~ /^1.9/
-    patch source: 'ruby-sparc-1.9.3-c99.patch', plevel: 1, env: env
-  elsif solaris_11? && version =~ /^2.1/
-    patch source: 'ruby-solaris-linux-socket-compat.patch', plevel: 1, env: env
-  end
 
   # wrlinux7/ios_xr build boxes from Cisco include libssp and there is no way to
   # disable ruby from linking against it, but Cisco switches will not have the

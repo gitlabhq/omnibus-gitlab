@@ -54,9 +54,6 @@ build do
   configure_cmd =
     if mac_os_x?
       './Configure darwin64-x86_64-cc'
-    elsif solaris_11?
-      platform = sparc? ? 'solaris64-sparcv9-gcc' : 'solaris64-x86_64-gcc'
-      "/bin/bash ./Configure #{platform} -static-libgcc"
     else
       prefix =
         if linux? && ppc64?

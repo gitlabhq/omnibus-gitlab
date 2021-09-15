@@ -23,7 +23,6 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
-dependency 'patch' if solaris2?
 
 version('5.9') { source md5: '8cb9c412e5f2d96bc6f459aa8c6282a1', url: 'http://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz' }
 
@@ -84,10 +83,6 @@ build do
     '--without-debug',
     '--without-manpages'
   ]
-
-  # only Solaris 10 sh has a problem with
-  # parens enclosed case statement conditions the configure script
-  configure_command.unshift 'bash' if solaris2?
 
   command configure_command.join(' '), env: env
 

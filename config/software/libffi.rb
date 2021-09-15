@@ -48,14 +48,8 @@ build do
 
   configure(*configure_command, env: env)
 
-  if solaris_10?
-    # run old make :(
-    make env: env, bin: '/usr/ccs/bin/make'
-    make 'install', env: env, bin: '/usr/ccs/bin/make'
-  else
-    make "-j #{workers}", env: env
-    make "-j #{workers} install", env: env
-  end
+  make "-j #{workers}", env: env
+  make "-j #{workers} install", env: env
 
   # libffi's default install location of header files is awful...
   copy "#{install_dir}/embedded/lib/libffi-#{version}/include/*", "#{install_dir}/embedded/include"
