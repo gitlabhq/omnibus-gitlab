@@ -1,13 +1,14 @@
 require 'spec_helper'
-require_relative '../../../files/gitlab-cookbooks/package/libraries/helpers/gitlab_cluster_helper'
+require_relative '../../../files/gitlab-cookbooks/package/libraries/gitlab_cluster'
 
-RSpec.describe GitlabClusterHelper do
+RSpec.describe GitlabCluster, :cluster_config do
   let(:gitlab_cluster_config_path) { described_class::JSON_FILE }
+  subject { described_class.config }
 
-  describe '#config' do
+  describe '#all' do
     context 'when the cluster configuration file does not exist' do
       it 'returns an empty hash' do
-        expect(subject.config).to be_empty
+        expect(subject.all).to be_empty
       end
     end
 
@@ -15,7 +16,7 @@ RSpec.describe GitlabClusterHelper do
       it 'parses the file content' do
         stub_file_content(gitlab_cluster_config_path, foo: 'bar')
 
-        expect(subject.config).to eq('foo' => 'bar')
+        expect(subject.all).to eq('foo' => 'bar')
       end
     end
   end
@@ -24,13 +25,13 @@ RSpec.describe GitlabClusterHelper do
     it 'set the value of a single config option' do
       subject.set('primary', true)
 
-      expect(subject.config).to eq('primary' => true)
+      expect(subject.all).to eq('primary' => true)
     end
 
     it 'sets the value of a nested config option' do
       subject.set('patroni', 'standby_cluster', 'enable', true)
 
-      expect(subject.config).to eq('patroni' => { 'standby_cluster' => { 'enable' => true } })
+      expect(subject.all).to eq('patroni' => { 'standby_cluster' => { 'enable' => true } })
     end
 
     it 'overrides the key value if it already set' do
@@ -38,7 +39,7 @@ RSpec.describe GitlabClusterHelper do
 
       subject.set('patroni', 'standby_cluster', 'enable', true)
 
-      expect(subject.config).to eq('patroni' => { 'standby_cluster' => { 'enable' => true } })
+      expect(subject.all).to eq('patroni' => { 'standby_cluster' => { 'enable' => true } })
     end
   end
 
@@ -57,30 +58,6 @@ RSpec.describe GitlabClusterHelper do
 
     it 'returns nil if the key does not exist' do
       expect(subject.get('foo', 'bar')).to be_nil
-    end
-  end
-
-  describe '#merge!' do
-    before do
-      stub_file_content(gitlab_cluster_config_path, primary: false, patroni: { standby_cluster: { enable: true } })
-    end
-
-    it 'merges a single config option with Gitlab config options if the key exists' do
-      subject.merge!('primary')
-
-      expect(Gitlab['primary']).to eq(false)
-    end
-
-    it 'merges a nested config option with Gitlab config options if the key exists' do
-      subject.merge!('patroni', 'standby_cluster', 'enable')
-
-      expect(Gitlab['patroni']['standby_cluster']['enable']).to eq(true)
-    end
-
-    it 'does not merge the config option if the key does not exist' do
-      subject.merge!('foo', 'bar')
-
-      expect(Gitlab['foo']).to be_nil
     end
   end
 
@@ -128,8 +105,8 @@ RSpec.describe GitlabClusterHelper do
     let(:gitlab_cluster_config_path) { File.join(config_path, 'gitlab-cluster.json') }
 
     before do
-      stub_const('GitlabClusterHelper::CONFIG_PATH', config_path)
-      stub_const('GitlabClusterHelper::JSON_FILE', gitlab_cluster_config_path)
+      stub_const('GitlabCluster::CONFIG_PATH', config_path)
+      stub_const('GitlabCluster::JSON_FILE', gitlab_cluster_config_path)
     end
 
     after do
@@ -140,7 +117,7 @@ RSpec.describe GitlabClusterHelper do
       it 'does not create the configuration file' do
         FileUtils.rm_rf(config_path)
 
-        subject.write_to_file!
+        subject.save
 
         expect(File.exist?(gitlab_cluster_config_path)).to eq(false)
       end
@@ -150,7 +127,7 @@ RSpec.describe GitlabClusterHelper do
       it 'creates the configuration file' do
         FileUtils.rm_rf(gitlab_cluster_config_path)
 
-        subject.write_to_file!
+        subject.save
 
         expect(File.exist?(gitlab_cluster_config_path)).to eq(true)
         expect(read_file_content(gitlab_cluster_config_path)).to be_empty
@@ -160,9 +137,9 @@ RSpec.describe GitlabClusterHelper do
     context 'when the cluster configuration file exists' do
       it 'overrides previous settings' do
         write_file_content(gitlab_cluster_config_path, foo: 'bar', zoo: true)
-        subject.config['zoo'] = false
+        subject.set('zoo', false)
 
-        subject.write_to_file!
+        subject.save
 
         expect(read_file_content(gitlab_cluster_config_path)).to eq("foo" => "bar", "zoo" => false)
       end

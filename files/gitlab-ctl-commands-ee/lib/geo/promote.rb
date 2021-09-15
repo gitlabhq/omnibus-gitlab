@@ -81,10 +81,10 @@ module Geo
 
     def disable_patroni_standby_cluster
       unless progress_message('Disabling Patroni Standby server settings in the cluster configuration file') do
-        gitlab_cluster_config.set('patroni', 'standby_cluster', 'enable', false)
-        gitlab_cluster_config.write_to_file!
+        GitlabCluster.config.set('patroni', 'standby_cluster', 'enable', false)
+        GitlabCluster.config.save
       end
-        die("Unable to write to #{GitlabClusterHelper::JSON_FILE}.")
+        die("Unable to write to #{GitlabCluster::JSON_FILE}.")
       end
     end
 
@@ -137,18 +137,18 @@ module Geo
       # The geo_secondary_role must not be used in a mutiple-server setup.
       # It is very convenient only for single-server Geo secondary sites.
       if single_server_site?
-        gitlab_cluster_config.set('primary', true)
-        gitlab_cluster_config.set('secondary', false)
+        GitlabCluster.config.set('primary', true)
+        GitlabCluster.config.set('secondary', false)
       else
-        gitlab_cluster_config.set('geo_secondary', 'enable', false) if puma_enabled? || sidekiq_enabled?
-        gitlab_cluster_config.set('geo_logcursor', 'enable', false) if geo_logcursor_enabled?
-        gitlab_cluster_config.set('geo_postgresql', 'enable', false) if geo_postgresql_enabled?
+        GitlabCluster.config.set('geo_secondary', 'enable', false) if puma_enabled? || sidekiq_enabled?
+        GitlabCluster.config.set('geo_logcursor', 'enable', false) if geo_logcursor_enabled?
+        GitlabCluster.config.set('geo_postgresql', 'enable', false) if geo_postgresql_enabled?
       end
 
       unless progress_message('Disabling the secondary services and enabling the primary services in the cluster configuration file') do
-        gitlab_cluster_config.write_to_file!
+        GitlabCluster.config.save
       end
-        die("Unable to write to #{GitlabClusterHelper::JSON_FILE}.")
+        die("Unable to write to #{GitlabCluster::JSON_FILE}.")
       end
     end
 
@@ -265,10 +265,6 @@ module Geo
 
     def attributes
       @attributes ||= GitlabCtl::Util.get_node_attributes(base_path)
-    end
-
-    def gitlab_cluster_config
-      @gitlab_cluster_config ||= GitlabClusterHelper.new
     end
 
     def run_command(cmd, live: false)

@@ -16,11 +16,17 @@
 #
 require 'chef/mash'
 
-# ConfigMash is a custom Mash based on http://www.rubydoc.info/github/opscode/chef/Chef/Node/VividMash
+# ConfigMash is a custom Mash based on Chef::Node::ViviMash
 # But it does not have the attribute and state tracking capabilities for use in a node
-# And only auto-vivifies when used within a block passed to ConfigMash.auto_vivify
+# and only auto-vivifies when used within a block passed to Gitlab::ConfigMash.auto_vivify
+#
+# @see Chef::Node::VividMash
+# @see http://www.rubydoc.info/github/opscode/chef/Chef/Node/VividMash
 module Gitlab
   class ConfigMash < Mash
+    # Sets context to auto_vivify any ConfigMash access inside the block
+    #
+    # @yield block in which any access to the ConfigMash will be auto vivified
     def self.auto_vivify
       return unless block_given?
 
@@ -32,13 +38,21 @@ module Gitlab
       end
     end
 
+    # Returns whether context is set to auto vivify access to the ConfigMash
+    #
+    # @return [Boolean] whether access will auto vivify
     def self.auto_vivify?
       @auto_vivify || false
     end
 
+    # Access a value stored in the ConfigMash
+    # When auto_vivify? is enable and the key does not exist it creates a new ConfigMash for that key
+    #
+    # @param [String] key
+    # @return [Gitlab::ConfigMash, Object]
     def [](key)
-      # Create a new mash when auto_vivify is enabled and the key does not exist
       value = super
+
       if ConfigMash.auto_vivify? && !key?(key)
         value = self.class.new({})
         self[key] = value
@@ -47,15 +61,33 @@ module Gitlab
       end
     end
 
+    # Cast a Hash that is passed in to ConfigMash
+    # this method is called from Mash.[]=
+    #
+    # @param [Gitlab::ConfigMash, Hash, Object] value
+    # @return [Gitlab::ConfigMash, Array, Object] either a CofigMash when its a Hash or a ConfigMash or original value otherwise
     def convert_value(value)
-      # Cast a Hash that is passed in to ConfigMash
-      # this method is called from Mash.[]=
       if value.class == ConfigMash
         value
       elsif value.class == Hash
         ConfigMash.new(value)
       else
         super
+      end
+    end
+
+    # Sets a value o the ConfigMash based on accessing the keys in order
+    #
+    # @param [Array] keys
+    # @param [Object] value
+    def deep_set(*keys, value)
+      Gitlab::ConfigMash.auto_vivify do
+        if keys.length == 1
+          self[keys.first] = value
+        else
+          *keys, last = *keys
+          keys.inject(self, :[])[last] = value
+        end
       end
     end
   end

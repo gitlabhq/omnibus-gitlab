@@ -21,15 +21,14 @@ require 'chef/mixin/deep_merge'
 require 'securerandom'
 require 'uri'
 
-require_relative '../config_mash.rb'
-require_relative 'gitlab_cluster_helper'
+require_relative 'config_mash.rb'
+require_relative 'gitlab_cluster'
 
-module SettingsHelper
+module SettingsDSL
   def self.extended(base)
     # Setup getter/setters for roles and settings
     class << base
-      attr_accessor :available_roles
-      attr_accessor :settings
+      attr_accessor :available_roles, :settings
     end
 
     base.available_roles = {}
@@ -155,13 +154,13 @@ module SettingsHelper
     RolesHelper.parse_enabled
 
     # Roles defined in the cluster configuration file overrides roles from /etc/gitlab/gitlab.rb
-    gitlab_cluster_settings.load_roles!
+    GitlabCluster.config.load_roles!
 
     # Load our roles
     DefaultRole.load_role
     @available_roles.each do |key, value|
       handler = value.handler
-      handler.load_role if handler && handler.respond_to?(:load_role)
+      handler.load_role if handler.respond_to?(:load_role)
     end
   end
 
@@ -172,7 +171,7 @@ module SettingsHelper
     # Parse secrets using the handlers
     sorted_settings.each do |_key, value|
       handler = value.handler
-      handler.parse_secrets if handler && handler.respond_to?(:parse_secrets)
+      handler.parse_secrets if handler.respond_to?(:parse_secrets)
     end
 
     SecretsHelper.write_to_gitlab_secrets
@@ -184,7 +183,7 @@ module SettingsHelper
     # Parse all our variables using the handlers
     sorted_settings.each do |_key, value|
       handler = value.handler
-      handler.parse_variables if handler && handler.respond_to?(:parse_variables)
+      handler.parse_variables if handler.respond_to?(:parse_variables)
     end
     # The last step is to convert underscores to hyphens in top-level keys
     strip_nils(hyphenate_config_keys)
@@ -205,8 +204,18 @@ module SettingsHelper
     results
   end
 
-  def gitlab_cluster_settings
-    @gitlab_cluster_settings ||= GitlabClusterHelper.new
+  # Merge provided role and value set if value is defined
+  #
+  # @param [String] role
+  # @param [String] value
+  def override_role!(role, value)
+    return if value.nil?
+
+    GitlabCluster.log_overriding_message(role, value) unless dig(role, 'enable').nil?
+
+    Gitlab::ConfigMash.auto_vivify do
+      self[role]['enable'] = value
+    end
   end
 
   private
@@ -226,7 +235,7 @@ module SettingsHelper
     end
 
     def handler
-      @handler = @handler.call if @handler&.respond_to?(:call)
+      @handler = @handler.call if @handler.respond_to?(:call)
       @handler
     end
   end

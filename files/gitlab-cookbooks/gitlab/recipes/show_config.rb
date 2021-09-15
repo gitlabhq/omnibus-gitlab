@@ -16,11 +16,11 @@
 # limitations under the License.
 #
 
-if File.exist?("/etc/gitlab/gitlab.rb")
-  Gitlab[:node] = node
-  Gitlab.from_file("/etc/gitlab/gitlab.rb")
-end
+Gitlab[:node] = node
+Gitlab.from_file("/etc/gitlab/gitlab.rb") if File.exist?("/etc/gitlab/gitlab.rb")
+
 config = Gitlab.generate_config(node['fqdn'])
+config = Chef::Mixin::DeepMerge.merge(config, GitlabCluster.config.all)
 
 puts Chef::JSONCompat.to_json_pretty(config)
 return

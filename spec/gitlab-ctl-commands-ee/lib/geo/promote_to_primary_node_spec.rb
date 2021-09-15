@@ -88,8 +88,8 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
     let(:gitlab_cluster_config_path) { File.join(config_path, 'gitlab-cluster.json') }
 
     before do
-      stub_const('GitlabClusterHelper::CONFIG_PATH', config_path)
-      stub_const('GitlabClusterHelper::JSON_FILE', gitlab_cluster_config_path)
+      stub_const('GitlabCluster::CONFIG_PATH', config_path)
+      stub_const('GitlabCluster::JSON_FILE', gitlab_cluster_config_path)
 
       allow(STDIN).to receive(:gets).and_return('y')
 
@@ -243,8 +243,7 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
 
       allow(command).to receive(:run_preflight_checks).and_return(true)
 
-      allow_any_instance_of(GitlabClusterHelper)
-        .to receive(:write_to_file!).and_return(false)
+      allow(GitlabCluster.config).to receive(:save).and_return(false)
     end
 
     it 'exits with 1' do
@@ -261,8 +260,7 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
       allow(command).to receive(:promote_to_primary).and_return(true)
       allow(command).to receive(:success_message).and_return(true)
 
-      allow_any_instance_of(GitlabClusterHelper)
-        .to receive(:write_to_file!).and_return(true)
+      allow(GitlabCluster.config).to receive(:save).and_return(true)
     end
 
     it 'calls all the subcommands' do

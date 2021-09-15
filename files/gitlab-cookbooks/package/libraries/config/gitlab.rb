@@ -15,11 +15,11 @@
 # limitations under the License.
 #
 
-require_relative '../helpers/settings_helper.rb'
+require_relative '../settings_dsl.rb'
 
 module Gitlab
   extend(Mixlib::Config)
-  extend(SettingsHelper)
+  extend(SettingsDSL)
 
   ## Attributes that don't get passed to the node
   node nil
@@ -81,8 +81,8 @@ module Gitlab
   attribute_block 'gitlab' do
     # EE attributes
     ee_attribute('geo_postgresql', priority: 20).use { GeoPostgresql }
-    ee_attribute('geo_secondary').use { GeoSecondary }
-    ee_attribute('geo_logcursor').use { GeoLogcursor }
+    ee_attribute('geo_secondary')
+    ee_attribute('geo_logcursor')
     ee_attribute('sentinel').use { Sentinel }
 
     # Base GitLab attributes

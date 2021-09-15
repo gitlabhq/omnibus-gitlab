@@ -93,5 +93,8 @@ RSpec.configure do |config|
 
     # Clear services list before each test
     Services.reset_list!
+
+    # Clear GitlabCluster config before each test
+    GitlabCluster.config.reload!
   end
 end

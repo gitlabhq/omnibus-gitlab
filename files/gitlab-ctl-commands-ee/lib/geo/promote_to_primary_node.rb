@@ -64,12 +64,12 @@ module Geo
       puts 'Disabling the secondary role and enabling the primary in the cluster configuration file...'.color(:yellow)
       puts
 
-      cluster_helper = GitlabClusterHelper.new
-      cluster_helper.config['primary'] = true
-      cluster_helper.config['secondary'] = false
-      return if cluster_helper.write_to_file!
+      GitlabCluster.config.set('primary', true)
+      GitlabCluster.config.set('secondary', false)
 
-      puts "ERROR: Could not write to #{GitlabClusterHelper::JSON_FILE}.".color(:red)
+      return if GitlabCluster.config.save
+
+      puts "ERROR: Could not write to #{GitlabCluster::JSON_FILE}.".color(:red)
       exit 1
     end
 

@@ -10,7 +10,6 @@ module Patroni
 
       check_consul_is_enabled
       parse_postgresql_overrides
-      parse_gitlab_cluster_overrides
       auto_detect_wal_log_hint
     end
 
@@ -53,11 +52,6 @@ module Patroni
       POSTGRESQL_DCS_PARAMETERS.each do |key|
         Gitlab['patroni']['postgresql'][key] ||= postgresql_setting(key)
       end
-    end
-
-    # GitLab cluster settings overrides setttings from /etc/gitlab/gitlab.rb
-    def parse_gitlab_cluster_overrides
-      Gitlab.gitlab_cluster_settings.merge!('patroni', 'standby_cluster', 'enable')
     end
 
     # `wal_log_hints` must be `on` for `pg_rewind`

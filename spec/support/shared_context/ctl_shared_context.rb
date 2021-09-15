@@ -8,9 +8,9 @@ RSpec.shared_context 'ctl' do
     allow_any_instance_of(Omnibus::Ctl).to receive(:require).and_call_original
 
     allow_any_instance_of(Omnibus::Ctl).to receive(:require).with(
-      "/opt/testing-ctl/embedded/cookbooks/package/libraries/helpers/gitlab_cluster_helper"
+      "/opt/testing-ctl/embedded/cookbooks/package/libraries/gitlab_cluster"
     ) do
-      require_relative("../../../files/gitlab-cookbooks/package/libraries/helpers/gitlab_cluster_helper")
+      require_relative("../../../files/gitlab-cookbooks/package/libraries/gitlab_cluster")
     end
 
     allow_any_instance_of(Omnibus::Ctl).to receive(:require).with(
