@@ -25,6 +25,7 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
+dependency 'pkg-config-lite'
 dependency 'rubygems'
 dependency 'libicu'
 
