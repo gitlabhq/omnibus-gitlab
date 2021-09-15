@@ -52,11 +52,6 @@ env['CFLAGS'] << if version.satisfies?('>= 2.3.0') &&
 build do
   env['CFLAGS'] << ' -fno-omit-frame-pointer'
 
-  # wrlinux7/ios_xr build boxes from Cisco include libssp and there is no way to
-  # disable ruby from linking against it, but Cisco switches will not have the
-  # library.  Disabling it as we do for Solaris.
-  patch source: 'ruby-no-stack-protector.patch', plevel: 1, env: env if ios_xr? && version.satisfies?('>= 2.1')
-
   # disable libpath in mkmf across all platforms, it trolls omnibus and
   # breaks the postgresql cookbook.  i'm not sure why ruby authors decided
   # this was a good idea, but it breaks our use case hard.  AIX cannot even
