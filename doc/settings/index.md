@@ -19,7 +19,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [NGINX](nginx.md)
 - [Pages](https://docs.gitlab.com/ee/administration/pages/index.html)
 - [Prometheus Monitoring](prometheus.md)
-- [Puma](puma.md)
+- [Puma](https://docs.gitlab.com/ee/administration/operations/puma.html)
 - [Raspberry Pi](rpi.md)
 - [Redis](redis.md)
 - [SMTP](smtp.md)

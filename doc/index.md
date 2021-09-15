@@ -51,7 +51,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [SMTP](settings/smtp.md)
 - [NGINX](settings/nginx.md)
 - [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap/index.html)
-- [Puma](settings/puma.md)
+- [Puma](https://docs.gitlab.com/ee/administration/operations/puma.html)
 - [ActionCable](settings/actioncable.md)
 - [Redis](settings/redis.md)
 - [Logs](settings/logs.md)
