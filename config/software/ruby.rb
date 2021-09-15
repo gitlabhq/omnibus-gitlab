@@ -51,14 +51,6 @@ if mac_os_x?
   # of the actual exit code from the compiler).
   env['CFLAGS'] << " -I#{install_dir}/embedded/include/ncurses -arch x86_64 -m64 -O3 -g -pipe -Qunused-arguments"
   env['LDFLAGS'] << ' -arch x86_64'
-elsif freebsd?
-  # Stops "libtinfo.so.5.9: could not read symbols: Bad value" error when
-  # compiling ext/readline. See the following for more info:
-  #
-  #   https://lists.freebsd.org/pipermail/freebsd-current/2013-October/045425.html
-  #   http://mailing.freebsd.ports-bugs.narkive.com/kCgK8sNQ/ports-183106-patch-sysutils-libcdio-does-not-build-on-10-0-and-head
-  #
-  env['LDFLAGS'] << ' -ltinfow'
 else # including linux
   env['CFLAGS'] << if version.satisfies?('>= 2.3.0') &&
       rhel? && platform_version.satisfies?('< 6.0')
@@ -120,13 +112,7 @@ build do
   configure_command << '--with-ext=psych' if version.satisfies?('< 2.3')
   configure_command << '--with-bundled-md5' if fips_enabled
 
-  if freebsd?
-    # Disable optional support C level backtrace support. This requires the
-    # optional devel/libexecinfo port to be installed.
-    configure_command << 'ac_cv_header_execinfo_h=no'
-  elsif OhaiHelper.raspberry_pi?
-    configure_command << %w(host target build).map { |w| "--#{w}=#{OhaiHelper.gcc_target}" }
-  end
+  configure_command << %w(host target build).map { |w| "--#{w}=#{OhaiHelper.gcc_target}" } if OhaiHelper.raspberry_pi?
 
   configure_command << "--with-opt-dir=#{install_dir}/embedded"
 

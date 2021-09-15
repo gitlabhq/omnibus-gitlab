@@ -53,9 +53,7 @@ build do
     patch source: 'ncurses-5.9-gcc-5.patch', plevel: 1, env: env
   end
 
-  if mac_os_x? ||
-      # Clang became the default compiler in FreeBSD 10+
-      (freebsd? && ohai['os_version'].to_i >= 1_000_024)
+  if mac_os_x?
     # References:
     # https://github.com/Homebrew/homebrew-dupes/issues/43
     # http://invisible-island.net/ncurses/NEWS.html#t20110409
@@ -65,8 +63,6 @@ build do
     # to remove this after upgrading to any release created after June 2012
     patch source: 'ncurses-clang.patch'
   end
-
-  patch source: 'patch-ncurses_tinfo_lib__baudrate.c', plevel: 0 if openbsd?
 
   patch source: 'v5.9.ppc64le-configure.patch', plevel: 1 if version == '5.9' && ppc64le?
 

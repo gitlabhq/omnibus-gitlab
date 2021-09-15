@@ -30,11 +30,6 @@ build do
   # configure script cannot handle.
   # TODO: Do other OSes need this?  Is this strictly a mac thing?
   env = with_standard_compiler_flags
-  if freebsd?
-    # FreeBSD 10+ gets cranky if zlib is not compiled in a
-    # position-independent way.
-    env['CFLAGS'] << ' -fPIC'
-  end
 
   configure env: env
 

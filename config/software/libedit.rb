@@ -38,12 +38,6 @@ end
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  # The patch is from the FreeBSD ports tree and is for GCC compatibility.
-  # http://svnweb.freebsd.org/ports/head/devel/libedit/files/patch-vi.c?annotate=300896
-  patch source: 'freebsd-vi-fix.patch', env: env if version.to_i < 20_150_325 && (freebsd? || openbsd?)
-
-  patch source: 'openbsd-weak-alias-fix.patch', plevel: 1, env: env if openbsd?
-
   update_config_guess
 
   command './configure' \

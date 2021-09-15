@@ -34,10 +34,6 @@ source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  if freebsd?
-    # Should this just be in standard_compiler_flags?
-    env['LDFLAGS'] += " -Wl,-rpath,#{install_dir}/embedded/lib"
-  end
 
   configure_args = [
     "--prefix=#{install_dir}/embedded",
