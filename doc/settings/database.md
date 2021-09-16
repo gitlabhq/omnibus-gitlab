@@ -390,7 +390,7 @@ existing installation
 
 Omnibus GitLab provides the `gitlab-ctl pg-upgrade` command to update the
 packaged PostgreSQL server to a later version (if one is included in the
-package). This updates PostgreSQL to the [default shipped version](../package-information/postgresql_versions.md)
+package). This updates PostgreSQL to the [default shipped version](https://docs.gitlab.com/ee/administration/package-information/postgresql_versions.html)
 during package upgrades, unless specifically [opted out](#opt-out-of-automatic-postgresql-upgrades).
 
 WARNING:
@@ -471,7 +471,7 @@ sudo rm -f /var/opt/gitlab/postgresql-version.old
 ```
 
 You can find details of PostgreSQL versions shipped with various GitLab versions
-in [PostgreSQL versions shipped with Omnibus GitLab](../package-information/postgresql_versions.md).
+in [PostgreSQL versions shipped with Omnibus GitLab](https://docs.gitlab.com/ee/administration/package-information/postgresql_versions.html).
 
 #### Opt out of automatic PostgreSQL upgrades
 
@@ -781,14 +781,14 @@ sudo gitlab-ctl stop sidekiq
 
 Before proceeding with the upgrade, note the following:
 
-- Before upgrading, review the [GitLab and PostgreSQL version compatibility table](../package-information/postgresql_versions.md)
+- Before upgrading, review the [GitLab and PostgreSQL version compatibility table](https://docs.gitlab.com/ee/administration/package-information/postgresql_versions.html)
   to determine your upgrade path. When using GitLab backup or restore, you
   _must_ keep the same version of GitLab; first upgrade PostgreSQL, and then GitLab.
 - The [backup and restore Rake task](https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system)
   can be used to back up and restore the database to a later version of PostgreSQL.
 - If configuring a version number whose binaries are unavailable on the file
   system, GitLab/Rails uses the default database's version binaries (default as
-  per [GitLab and PostgreSQL version compatibility table](../package-information/postgresql_versions.md)).
+  per [GitLab and PostgreSQL version compatibility table](https://docs.gitlab.com/ee/administration/package-information/postgresql_versions.html)).
 - If you're using Amazon RDS and are seeing extremely high (near 100%) CPU
   utilization following a major version upgrade (for example, from `10.x` to
   `11.x`), running an `ANALYZE VERBOSE;` query may be necessary to recreate query
@@ -894,10 +894,10 @@ NOTE:
 GitLab 14.0 only ships with PostgreSQL 12. GitLab 13.3 and onward shipped both Postgres 11 and Postgres 12.
 GitLab 13.0 through 13.2 only shipped with PostgreSQL 11.
 
-Omnibus GitLab will initialize PostgreSQL with the [default version](../package-information/postgresql_versions.md).
+Omnibus GitLab will initialize PostgreSQL with the [default version](https://docs.gitlab.com/ee/administration/package-information/postgresql_versions.html).
 
 To initialize PostgreSQL with a non-default version, you can set `postgresql['version']` to the major version one of
-the [packaged PostgreSQL versions](../package-information/postgresql_versions.md) prior to the initial reconfigure.
+the [packaged PostgreSQL versions](https://docs.gitlab.com/ee/administration/package-information/postgresql_versions.html) prior to the initial reconfigure.
 For example, in GitLab 13.7 you can use `postgresql['version'] = 11` to use PostgreSQL 11 instead of the default of PostgreSQL 12.
 
 WARNING:
