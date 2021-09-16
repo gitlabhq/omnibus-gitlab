@@ -62,7 +62,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [Backups](settings/backups.md)
 - [Pages](https://docs.gitlab.com/ee/administration/pages/index.html)
 - [SSL](settings/ssl.md)
-- [GitLab and Registry](architecture/registry/index.md)
+- [GitLab and Registry](https://docs.gitlab.com/ee/administration/packages/container_registry.html)
 - [Configuring an asset proxy server](https://docs.gitlab.com/ee/security/asset_proxy.html)
 - [Image scaling](settings/image_scaling.md)
 
