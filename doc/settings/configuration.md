@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # Configuration options
 
 GitLab is configured by setting the relevant options in
-`/etc/gitlab/gitlab.rb`. See [package defaults](../package-information/defaults.md)
+`/etc/gitlab/gitlab.rb`. See [package defaults](https://docs.gitlab.com/ee/administration/package-information/defaults.html)
 for a list of default settings and visit the
 [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
 for a complete list of available options.
