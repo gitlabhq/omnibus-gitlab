@@ -51,7 +51,7 @@ been removed:
 
 1. Mattermost related configurations - Support for most of the Mattermost
    related configuration have been removed, except for the essential ones that
-   are needed for GitLab-Mattermost integration. [Check out the official documentation for details](../gitlab-mattermost/index.md#upgrading-gitlab-mattermost-from-versions-prior-to-110)
+   are needed for GitLab-Mattermost integration. [Check out the official documentation for details](https://docs.gitlab.com/ee/integration/mattermost/index.html#upgrading-gitlab-mattermost-from-versions-prior-to-110)
 
 1. Legacy `git_data_dir` configuration, which was used to set location of where
    data was to be stored. It has been now replaced with `git_data_dirs`
