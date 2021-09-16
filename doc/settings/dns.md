@@ -37,7 +37,7 @@ If you want to use the [container registry](https://docs.gitlab.com/ee/user/pack
 
 ### `mattermost_external_url`
 
-This is needed if you want to use the [bundled Mattermost](../gitlab-mattermost/index.md) software. Can be used by the Let's Encrypt integration.
+This is needed if you want to use the [bundled Mattermost](https://docs.gitlab.com/ee/integration/mattermost/) software. Can be used by the Let's Encrypt integration.
 
 ### `pages_external_url`
 

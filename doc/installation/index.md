@@ -38,7 +38,7 @@ For a complete list of settings, see the [README](../index.md#configuring) file.
 - [Enabling GitLab Pages](https://docs.gitlab.com/ee/administration/pages/).
   - If you want HTTPS enabled, you must get wildcard certificates.
 - [Enabling Elasticsearch](https://docs.gitlab.com/ee/integration/elasticsearch.html).
-- [GitLab Mattermost](../gitlab-mattermost/index.md) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
+- [GitLab Mattermost](https://docs.gitlab.com/ee/integration/mattermost/) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
 - [GitLab Prometheus](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html)
   Set up the Prometheus monitoring included in the Omnibus GitLab package.
 - [GitLab High Availability Roles](../roles/index.md).
