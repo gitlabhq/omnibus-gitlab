@@ -125,6 +125,38 @@ RSpec.describe 'gitlab-ee::geo' do
       end
     end
 
+    context 'postgresql 13' do
+      let(:runtime_conf) { '/var/opt/gitlab/geo-postgresql/data/runtime.conf' }
+
+      before do
+        allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('13.0'))
+        allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return(PGVersion.new('13.0'))
+      end
+
+      it 'configures wal_keep_size instead of wal_keep_segments' do
+        expect(chef_run).to render_file(runtime_conf).with_content { |content|
+          expect(content).to include("wal_keep_size")
+          expect(content).not_to include("wal_keep_segments")
+        }
+      end
+    end
+
+    context 'postgresql 12' do
+      let(:runtime_conf) { '/var/opt/gitlab/geo-postgresql/data/runtime.conf' }
+
+      before do
+        allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('12.0'))
+        allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return(PGVersion.new('12.0'))
+      end
+
+      it 'configures wal_keep_segments instead of wal_keep_size' do
+        expect(chef_run).to render_file(runtime_conf).with_content { |content|
+          expect(content).to include("wal_keep_segments")
+          expect(content).to_not include("wal_keep_size")
+        }
+      end
+    end
+
     context 'in gitlab-rails' do
       it 'disables auto_migrate' do
         expect(node['gitlab']['gitlab-rails']['auto_migrate']).to eq(false)
