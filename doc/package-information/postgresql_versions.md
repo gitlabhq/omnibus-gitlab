@@ -1,5 +1,5 @@
 ---
-redirect_to: 'https://docs.gitlab.com/ee/administration/package-information/postgresql_versions.html'
+redirect_to: 'https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html'
 ---
 
 This document was moved to [another location](https://docs.gitlab.com/ee/administration/package_information/postgresql-versions.html).
