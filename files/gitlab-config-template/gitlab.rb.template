@@ -533,6 +533,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # ]
 # gitlab_rails['omniauth_cas3_session_duration'] = 28800
+# gitlab_rails['omniauth_saml_message_max_byte_size'] = 250000
 
 ### FortiAuthenticator authentication settings
 # gitlab_rails['forti_authenticator_enabled'] = false
