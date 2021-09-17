@@ -11,12 +11,12 @@ Omnibus GitLab is a way to package different services and tools required to run 
 
 ## Package information
 
-- [Checking the versions of bundled software](https://docs.gitlab.com/ee/administration/package-information/index.html#checking-the-versions-of-bundled-software)
-- [Package defaults](package-information/defaults.md)
+- [Checking the versions of bundled software](https://docs.gitlab.com/ee/administration/package_information/index.html#checking-the-versions-of-bundled-software)
+- [Package defaults](https://docs.gitlab.com/ee/administration/package_information/defaults.html)
 - [Components included](https://docs.gitlab.com/ee/development/architecture.html#component-list)
-- [Deprecated Operating Systems](https://docs.gitlab.com/ee/administration/package-information/deprecated_os.html)
-- [Signed Packages](https://docs.gitlab.com/ee/administration/package-information/signed_packages.html)
-- [Deprecation Policy](https://docs.gitlab.com/ee/administration/package-information/deprecation_policy.html)
+- [Deprecated Operating Systems](https://docs.gitlab.com/ee/administration/package_information/deprecated_os.html)
+- [Signed Packages](https://docs.gitlab.com/ee/administration/package_information/signed_packages.html)
+- [Deprecation Policy](https://docs.gitlab.com/ee/administration/package_information/deprecation_policy.html)
 - [Licenses of bundled dependencies](https://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html)
 
 ## Installation
