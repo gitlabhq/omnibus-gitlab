@@ -90,6 +90,8 @@ RSpec.configure do |config|
 
     # BUG: https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4780
     Gitlab['geo_postgresql']['dir'] = '/var/opt/gitlab/geo-postgresql'
+    Gitlab['geo_postgresql']['wal_keep_segments'] = 10
+    Gitlab['geo_postgresql']['wal_keep_size'] = 160
 
     # Clear services list before each test
     Services.reset_list!

@@ -115,6 +115,7 @@ default['gitlab']['geo-postgresql']['wal_level'] = 'minimal'
 default['gitlab']['geo-postgresql']['wal_log_hints'] = 'off'
 default['gitlab']['geo-postgresql']['max_wal_senders'] = 0
 default['gitlab']['geo-postgresql']['wal_keep_segments'] = 10
+default['gitlab']['geo-postgresql']['wal_keep_size'] = nil
 default['gitlab']['geo-postgresql']['hot_standby'] = 'off'
 default['gitlab']['geo-postgresql']['max_standby_archive_delay'] = '30s'
 default['gitlab']['geo-postgresql']['max_standby_streaming_delay'] = '30s'
