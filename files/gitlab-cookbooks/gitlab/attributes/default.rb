@@ -538,6 +538,7 @@ default['gitlab']['puma']['exporter_enabled'] = false
 default['gitlab']['puma']['exporter_address'] = "127.0.0.1"
 default['gitlab']['puma']['exporter_port'] = 8083
 default['gitlab']['puma']['consul_service_name'] = 'rails'
+default['gitlab']['puma']['consul_service_meta'] = nil
 
 ####
 # ActionCable
@@ -570,6 +571,7 @@ default['gitlab']['sidekiq']['min_concurrency'] = nil
 default['gitlab']['sidekiq']['negate'] = false
 default['gitlab']['sidekiq']['queue_groups'] = ['*']
 default['gitlab']['sidekiq']['consul_service_name'] = 'sidekiq'
+default['gitlab']['sidekiq']['consul_service_meta'] = nil
 
 ###
 # gitlab-shell
@@ -640,6 +642,7 @@ default['gitlab']['gitlab-workhorse']['env'] = {
 default['gitlab']['gitlab-workhorse']['image_scaler_max_procs'] = [2, node['cpu']['total'].to_i / 2].max
 default['gitlab']['gitlab-workhorse']['image_scaler_max_filesize'] = 250_000
 default['gitlab']['gitlab-workhorse']['consul_service_name'] = 'workhorse'
+default['gitlab']['gitlab-workhorse']['consul_service_meta'] = nil
 
 ####
 # mailroom
@@ -724,6 +727,7 @@ default['gitlab']['nginx']['gzip_enabled'] = true
 
 # Consul
 default['gitlab']['nginx']['consul_service_name'] = 'nginx'
+default['gitlab']['nginx']['consul_service_meta'] = nil
 
 ###
 # Nginx status

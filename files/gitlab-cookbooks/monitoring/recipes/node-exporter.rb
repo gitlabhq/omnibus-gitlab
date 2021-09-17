@@ -68,6 +68,7 @@ end
 
 consul_service node['monitoring']['node-exporter']['consul_service_name'] do
   id 'node-exporter'
+  meta node['monitoring']['node-exporter']['consul_service_meta']
   action Prometheus.service_discovery_action
   socket_address node['monitoring']['node-exporter']['listen_address']
   reload_service false unless node['consul']['enable']
