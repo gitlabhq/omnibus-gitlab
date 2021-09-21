@@ -3,6 +3,51 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.3.0 (2021-09-21)
+
+### Added (6 changes)
+
+- [Adds symantic metadata to consul services](gitlab-org/omnibus-gitlab@08b43e3b498cafa56902ba652141329aa1a99431) ([merge request](gitlab-org/omnibus-gitlab!5594))
+- [Add AWS SSE-KMS support for backups](gitlab-org/omnibus-gitlab@088fa1ed836de22203488beb443f7cec75bcd4f7) ([merge request](gitlab-org/omnibus-gitlab!5584))
+- [Allow specifying additional config directory to consul](gitlab-org/omnibus-gitlab@6cb5b0f45992f9f16352b5570a197e4774da83fc) ([merge request](gitlab-org/omnibus-gitlab!5559))
+- [Allow service names used to register with Consul be customized](gitlab-org/omnibus-gitlab@96526d5a825348f0d98002b6dc011af4db80ad24) ([merge request](gitlab-org/omnibus-gitlab!5560))
+- [Add support for gitlab['omniauth_cas3_session_duration']](gitlab-org/omnibus-gitlab@0bd4ac5958b82501291bc1260e54cfa4cc531612) ([merge request](gitlab-org/omnibus-gitlab!5558))
+- [Add SMTP configuration support for SMTP secret encryption](gitlab-org/omnibus-gitlab@1bb2a4003fe10ba8d24d7eb70e119f1b1598ac14) ([merge request](gitlab-org/omnibus-gitlab!5536))
+
+### Fixed (3 changes)
+
+- [Fixes the use of wal_keep_size with GEO on PG13](gitlab-org/omnibus-gitlab@8bd646ad8f1223a937050b4878f316c88d0c8582) ([merge request](gitlab-org/omnibus-gitlab!5601))
+- [Update gitlab.rb.template for Service Desk](gitlab-org/omnibus-gitlab@2ec10e4090ed4b1ad62ae643991ec51428434916) ([merge request](gitlab-org/omnibus-gitlab!5556))
+- [Fix migration NameError in rails env helper](gitlab-org/omnibus-gitlab@62974d5c13bb072683dcc08a2d83437a48361331) ([merge request](gitlab-org/omnibus-gitlab!5552))
+
+### Changed (8 changes)
+
+- [Bump container registry to v3.11.0](gitlab-org/omnibus-gitlab@8d724a2c96e021e365352be1c9c7234913e6b67a) ([merge request](gitlab-org/omnibus-gitlab!5600))
+- [Update grafana to 8.1.3](gitlab-org/omnibus-gitlab@90c9eb0487af4e852553d2fdee89d1904584cfc0) ([merge request](gitlab-org/omnibus-gitlab!5449))
+- [Bump container registry to v3.10.1](gitlab-org/omnibus-gitlab@a83eae00206ad500141111afd0bcb63e22c197e4) ([merge request](gitlab-org/omnibus-gitlab!5585))
+- [Update Ruby to 2.7.4](gitlab-org/omnibus-gitlab@3a4304d9f9547619e955bf2b5971d73193a9f9f4) ([merge request](gitlab-org/omnibus-gitlab!5545))
+- [Update chef gems to 15.17.4](gitlab-org/omnibus-gitlab@62f95b0ab9f75566f60d4f9623f66566f8b7e0d0) ([merge request](gitlab-org/omnibus-gitlab!5450))
+- [Bump Container Registry to v3.10.0-gitlab](gitlab-org/omnibus-gitlab@2b8c96cf8442928cf80723b154faee5161d374b5) ([merge request](gitlab-org/omnibus-gitlab!5562))
+- [Bump container registry to v3.9.0](gitlab-org/omnibus-gitlab@dda7bdf4cd9c6eea21359e919d6cfc81b21c4989) ([merge request](gitlab-org/omnibus-gitlab!5542))
+- [Use Python 3.9.6](gitlab-org/omnibus-gitlab@82d52ccf3727b4603d39657794f02fa0f4b588de) ([merge request](gitlab-org/omnibus-gitlab!5547))
+
+### Deprecated (1 change)
+
+- [Prefer gitaly custom_hooks_dir setting](gitlab-org/omnibus-gitlab@136d789f675b0a13c848ca68eb0332ffa489fe11) ([merge request](gitlab-org/omnibus-gitlab!4208))
+
+### Removed (1 change)
+
+- [Remove support for gitlab_pages['use_legacy_storage'] setting](gitlab-org/omnibus-gitlab@4c96751a8fa8b4dd814f781133fb558c90343ed8) by @feistel ([merge request](gitlab-org/omnibus-gitlab!5529))
+
+### Security (1 change)
+
+- [Update cURL to 7.77.0](gitlab-org/omnibus-gitlab@dd9bc79002b84a110bc4a1e6ce87fb36b165424e)
+
+### Other (2 changes)
+
+- [Update Mattermost to 5.38.2](gitlab-org/omnibus-gitlab@02d9eb7adfbd2c13048cd0db4550ab994fb9feaa) by @hmhealey ([merge request](gitlab-org/omnibus-gitlab!5587))
+- [Update Python from 3.7.10 to 3.9.5](gitlab-org/omnibus-gitlab@055e29c12442df3ef278a566160e1664e5da331b) ([merge request](gitlab-org/omnibus-gitlab!5547))
+
 ## 14.2.4 (2021-09-17)
 
 No changes.
