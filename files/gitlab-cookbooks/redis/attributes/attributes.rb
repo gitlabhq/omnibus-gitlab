@@ -35,6 +35,7 @@ default['redis']['client_output_buffer_limit_pubsub'] = "32mb 8mb 60"
 default['redis']['save'] = ['900 1', '300 10', '60 10000']
 default['redis']['io_threads'] = 1
 default['redis']['io_threads_do_reads'] = false
+default['redis']['stop_writes_on_bgsave_error'] = true
 
 default['redis']['rename_commands'] = nil
 

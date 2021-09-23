@@ -41,6 +41,7 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
           expect(content).to match(/^lazyfree-lazy-expire no$/)
           expect(content).to match(/^io-threads 1$/)
           expect(content).to match(/^io-threads-do-reads no$/)
+          expect(content).to match(/^stop-writes-on-bgsave-error yes$/)
           expect(content).not_to match(/^replicaof/)
         }
     end
@@ -299,6 +300,23 @@ redis_socket=''
         .with_content { |content|
           expect(content).to match(/^io-threads 4$/)
           expect(content).to match(/^io-threads-do-reads yes$/)
+        }
+    end
+  end
+
+  context 'with stop writes on bgsave error disabled' do
+    before do
+      stub_gitlab_rb(
+        redis: {
+          stop_writes_on_bgsave_error: false
+        }
+      )
+    end
+
+    it 'creates redis config with stop-writes-on-bgsave-error no' do
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content { |content|
+          expect(content).to match(/^stop-writes-on-bgsave-error no$/)
         }
     end
   end
