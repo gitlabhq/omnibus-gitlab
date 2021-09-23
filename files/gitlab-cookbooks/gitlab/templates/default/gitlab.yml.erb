@@ -836,8 +836,13 @@ production: &base
 
     ## cas3-specific settings, specifically session_duration:
 <% if @omniauth_cas3_session_duration %>
-    cas3: 
+    cas3:
       session_duration: <%= @omniauth_cas3_session_duration %>
+<% end %>
+
+    ## max SAML message size setting. Will be useful in case received SAML message is too big.
+<% if @omniauth_saml_message_max_byte_size %>
+    saml_message_max_byte_size: <%= @omniauth_saml_message_max_byte_size %>
 <% end %>
 
   # FortiAuthenticator settings

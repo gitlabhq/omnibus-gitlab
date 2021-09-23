@@ -27,6 +27,20 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
 
     context 'with user specified values' do
+      describe 'saml_message_max_byte_size' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              omniauth_saml_message_max_byte_size: 100000
+            }
+          )
+        end
+
+        it 'renders gitlab.yml with custom value' do
+          expect(gitlab_yml[:production][:omniauth][:saml_message_max_byte_size]).to eq(100000)
+        end
+      end
+
       describe 'settings that take in boolean values' do
         where(:gitlab_yml_setting, :gitlab_rb_setting) do
           'enabled'                  | 'omniauth_enabled'
