@@ -19,7 +19,7 @@ all the options of the template as of installation listed in
 
 NOTE:
 Before you change the external URL, determine if you have previously
-defined a custom **Home page URL** or **After sign out a path** by
+defined a custom **Home page URL** or **After sign-out path** by
 selecting **Menu >** **{admin}** **Admin** in the top bar, and on the left
 sidebar selecting **Settings > General > Sign-in restrictions**. If URLs are
 defined, either update them or remove them completely. Both of these settings
