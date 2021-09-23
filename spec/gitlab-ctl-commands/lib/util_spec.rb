@@ -83,6 +83,20 @@ RSpec.describe GitlabCtl::Util do
       allow(File).to receive(:read).with(fake_node_file).and_return(roled_node.to_json)
       expect(described_class.roles(fake_base_path)).to eq(%w[role_one role_three])
     end
+
+    it 'when no roles are defined' do
+      roled_node = {}
+      allow(File).to receive(:read).with(fake_node_file).and_return(roled_node.to_json)
+
+      expect(described_class.roles(fake_base_path)).to eq([])
+    end
+
+    it 'when roles is not a Hash' do
+      roled_node = { roles: "test" }
+      allow(File).to receive(:read).with(fake_node_file).and_return(roled_node.to_json)
+
+      expect(described_class.roles(fake_base_path)).to eq([])
+    end
   end
 
   describe '#parse_json_file' do
