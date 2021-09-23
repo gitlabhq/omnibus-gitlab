@@ -190,6 +190,10 @@ No changes.
 
 - [Fix Praefect configuration template for session pooled connection](gitlab-org/omnibus-gitlab@1825c88764508a7efdccbf3eb70cb32e6bbb91d8) ([merge request](gitlab-org/omnibus-gitlab!5424))
 
+## 14.0.11 (2021-09-23)
+
+No changes.
+
 ## 14.0.10 (2021-09-02)
 
 No changes.
