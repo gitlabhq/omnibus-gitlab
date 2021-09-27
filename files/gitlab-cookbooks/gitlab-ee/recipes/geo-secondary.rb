@@ -50,8 +50,8 @@ ruby_block 'Restart geo-secondary dependent services' do
   action :nothing
 end
 
-# Make schema.rb writable for when we run `rake geo:db:migrate`
-file '/opt/gitlab/embedded/service/gitlab-rails/ee/db/geo/schema.rb' do
+# Make structure.sql writable for when we run `rake geo:db:migrate`
+file '/opt/gitlab/embedded/service/gitlab-rails/ee/db/geo/structure.sql' do
   owner gitlab_user
 end
 
