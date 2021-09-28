@@ -100,7 +100,11 @@ module GitlabCtl
 
       # Parse enabled roles out of the attributes json file and return an Array of Strings
       def roles(base_path)
-        get_node_attributes(base_path)['roles'].select { |k, v| v.key?('enable') && v['enable'] }.keys
+        roles = get_node_attributes(base_path)['roles']
+
+        return [] unless roles.is_a?(Hash)
+
+        roles.select { |k, v| v.key?('enable') && v['enable'] }.keys
       end
 
       def delay_for(seconds)
