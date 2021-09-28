@@ -103,6 +103,9 @@ To enable HTTPS for the domain `gitlab.example.com`:
 
 When the reconfigure finishes, your GitLab instance should be reachable at `https://gitlab.example.com`.
 
+NOTE:
+If you are updating existing certificates, you will need to follow a [different process](#update-the-ssl-certificates).
+
 If you are using a firewall you may have to open port 443 to allow inbound
 HTTPS traffic.
 
