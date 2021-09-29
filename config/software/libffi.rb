@@ -25,7 +25,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 # Is libtool actually necessary? Doesn't configure generate one?
-dependency 'libtool' unless windows?
+dependency 'libtool'
 
 version('3.2.1') { source md5: '83b89587607e3eb65c70d361f13bab43' }
 
@@ -36,31 +36,20 @@ relative_path "libffi-#{version}"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  env['INSTALL'] = '/opt/freeware/bin/install' if aix?
-
   configure_command = []
 
-  # AIX's old version of patch doesn't like the patch here
-  unless aix?
-    # Patch to disable multi-os-directory via configure flag (don't use /lib64)
-    # Works on all platforms, and is compatible on 32bit platforms as well
-    if version == '3.2.1'
-      patch source: 'libffi-3.2.1-disable-multi-os-directory.patch', plevel: 1, env: env
-      configure_command << '--disable-multi-os-directory'
-      configure_command << "--build=#{OhaiHelper.gcc_target}" if OhaiHelper.raspberry_pi?
-    end
+  # Patch to disable multi-os-directory via configure flag (don't use /lib64)
+  # Works on all platforms, and is compatible on 32bit platforms as well
+  if version == '3.2.1'
+    patch source: 'libffi-3.2.1-disable-multi-os-directory.patch', plevel: 1, env: env
+    configure_command << '--disable-multi-os-directory'
+    configure_command << "--build=#{OhaiHelper.gcc_target}" if OhaiHelper.raspberry_pi?
   end
 
   configure(*configure_command, env: env)
 
-  if solaris_10?
-    # run old make :(
-    make env: env, bin: '/usr/ccs/bin/make'
-    make 'install', env: env, bin: '/usr/ccs/bin/make'
-  else
-    make "-j #{workers}", env: env
-    make "-j #{workers} install", env: env
-  end
+  make "-j #{workers}", env: env
+  make "-j #{workers} install", env: env
 
   # libffi's default install location of header files is awful...
   copy "#{install_dir}/embedded/lib/libffi-#{version}/include/*", "#{install_dir}/embedded/include"

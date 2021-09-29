@@ -34,8 +34,6 @@ build do
 
   update_config_guess
 
-  patch source: 'v1.7.10.1.ppc64le-configure.patch', plevel: 1 if version == '1.7.10.1' && (ppc64? || ppc64le?)
-
   # --disable-nls => Disable localization support.
   command './configure' \
           " --prefix=#{install_dir}/embedded" \

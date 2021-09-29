@@ -29,10 +29,6 @@ relative_path "xz-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  # liblzma properly uses CFLAGS for C compilation and CPPFLAGS for common
-  # flags used across tools such as windres.  Don't put anything in it
-  # that can be misinterpreted by windres.
-  env['CPPFLAGS'] = "-I#{install_dir}/embedded/include" if windows?
 
   config_command = [
     '--disable-debug',
@@ -40,7 +36,6 @@ build do
     '--disable-doc',
     '--disable-scripts'
   ]
-  config_command << '--disable-nls' if windows?
 
   configure(*config_command, env: env)
 

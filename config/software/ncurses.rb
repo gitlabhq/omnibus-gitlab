@@ -23,8 +23,6 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
-dependency 'libtool' if aix?
-dependency 'patch' if solaris2?
 
 version('5.9') { source md5: '8cb9c412e5f2d96bc6f459aa8c6282a1', url: 'http://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz' }
 
@@ -50,48 +48,10 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
   env.delete('CPPFLAGS')
 
-  if smartos?
-    # SmartOS is Illumos Kernel, plus NetBSD userland with a GNU toolchain.
-    # These patches are taken from NetBSD pkgsrc and provide GCC 4.7.0
-    # compatibility:
-    # http://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/devel/ncurses/patches/
-    patch source: 'patch-aa', plevel: 0
-    patch source: 'patch-ab', plevel: 0
-    patch source: 'patch-ac', plevel: 0
-    patch source: 'patch-ad', plevel: 0
-    patch source: 'patch-cxx_cursesf.h', plevel: 0
-    patch source: 'patch-cxx_cursesm.h', plevel: 0
-
-    # Opscode patches - <someara@opscode.com>
-    # The configure script from the pristine tarball detects xopen_source_extended incorrectly.
-    # Manually working around a false positive.
-    patch source: 'ncurses-5.9-solaris-xopen_source_extended-detection.patch', plevel: 0
+  if version == '5.9'
+    # Patch to add support for GCC 5, doesn't break previous versions
+    patch source: 'ncurses-5.9-gcc-5.patch', plevel: 1, env: env
   end
-
-  # AIX's old version of patch doesn't like the patches here
-  unless aix?
-    if version == '5.9'
-      # Patch to add support for GCC 5, doesn't break previous versions
-      patch source: 'ncurses-5.9-gcc-5.patch', plevel: 1, env: env
-    end
-  end
-
-  if mac_os_x? ||
-      # Clang became the default compiler in FreeBSD 10+
-      (freebsd? && ohai['os_version'].to_i >= 1_000_024)
-    # References:
-    # https://github.com/Homebrew/homebrew-dupes/issues/43
-    # http://invisible-island.net/ncurses/NEWS.html#t20110409
-    #
-    # Patches ncurses for clang compiler. Changes have been accepted into
-    # upstream, but occurred shortly after the 5.9 release. We should be able
-    # to remove this after upgrading to any release created after June 2012
-    patch source: 'ncurses-clang.patch'
-  end
-
-  patch source: 'patch-ncurses_tinfo_lib__baudrate.c', plevel: 0 if openbsd?
-
-  patch source: 'v5.9.ppc64le-configure.patch', plevel: 1 if version == '5.9' && ppc64le?
 
   update_config_guess
 
@@ -107,35 +67,7 @@ build do
     '--without-manpages'
   ]
 
-  if aix?
-    # AIX kinda needs 5.9-20140621 or later
-    # because of a naming snafu in shared library naming.
-    # see http://invisible-island.net/ncurses/NEWS.html#t20140621
-
-    # let libtool deal with library silliness
-    configure_command << "--with-libtool=\"#{install_dir}/embedded/bin/libtool\""
-
-    # stick with just the shared libs on AIX
-    configure_command << '--without-normal'
-
-    # ncurses's ./configure incorrectly
-    # "figures out" ARFLAGS if you try
-    # to set them yourself
-    env.delete('ARFLAGS')
-
-    # use gnu install from the coreutils IBM rpm package
-    env['INSTALL'] = '/opt/freeware/bin/install'
-  end
-
-  # only Solaris 10 sh has a problem with
-  # parens enclosed case statement conditions the configure script
-  configure_command.unshift 'bash' if solaris2?
-
   command configure_command.join(' '), env: env
-
-  # unfortunately, libtool may try to link to libtinfo
-  # before it has been assembled; so we have to build in serial
-  make 'libs', env: env if aix?
 
   make "-j #{workers}", env: env
   make "-j #{workers} install", env: env
@@ -145,16 +77,12 @@ build do
   configure_command << '--enable-widec'
 
   command configure_command.join(' '), env: env
-  make 'libs', env: env if aix?
   make "-j #{workers}", env: env
 
   # Installing the non-wide libraries will also install the non-wide
   # binaries, which doesn't happen to be a problem since we don't
   # utilize the ncurses binaries in private-chef (or oss chef)
   make "-j #{workers} install", env: env
-
-  # Ensure embedded ncurses wins in the LD search path
-  link "#{install_dir}/embedded/lib/libcurses.so", "#{install_dir}/embedded/lib/libcurses.so.1" if smartos?
 end
 
 project.exclude "embedded/bin/ncurses5-config"

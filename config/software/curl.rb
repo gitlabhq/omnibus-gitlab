@@ -38,18 +38,7 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
   env['ACLOCAL_PATH'] = "#{install_dir}/embedded/share/aclocal"
 
-  if freebsd?
-    # from freebsd ports - IPv6 Hostcheck patch
-    patch source: 'curl-freebsd-hostcheck.patch', plevel: 1
-  end
-
   delete "#{project_dir}/src/tool_hugehelp.c"
-
-  if aix?
-    # otherwise gawk will die during ./configure with variations on the theme of:
-    # "/opt/omnibus-toolchain/embedded/lib/libiconv.a(shr4.o) could not be loaded"
-    env['LIBPATH'] = '/usr/lib:/lib'
-  end
 
   configure_command = [
     './configure',

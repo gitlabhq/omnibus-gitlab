@@ -25,52 +25,10 @@ license_file 'README'
 skip_transitive_dependency_licensing true
 
 build do
-  if windows?
-    env = with_standard_compiler_flags(with_embedded_path)
+  env = with_standard_compiler_flags
 
-    patch source: 'zlib-windows-relocate.patch', env: env
+  configure env: env
 
-    # We can't use the top-level Makefile. Instead, the developers have made
-    # an organic, artisanal, hand-crafted Makefile.gcc for us which takes a few
-    # variables.
-    env['BINARY_PATH'] = '/bin'
-    env['LIBRARY_PATH'] = '/lib'
-    env['INCLUDE_PATH'] = '/include'
-    env['DESTDIR'] = "#{install_dir}/embedded"
-
-    make_args = [
-      '-fwin32/Makefile.gcc',
-      'SHARED_MODE=1',
-      "CFLAGS=\"#{env['CFLAGS']} -Wall\"",
-      "ASFLAGS=\"#{env['CFLAGS']} -Wall\"",
-      "LDFLAGS=\"#{env['LDFLAGS']}\"",
-      # The win32 makefile for zlib does not handle parallel make correctly.
-      # In particular, see its rule for IMPLIB and SHAREDLIB. The ld step in
-      # SHAREDLIB will generate both the dll and the dll.a files. The step to
-      # strip the dll occurs next but since the dll.a file is already present,
-      # make will attempt to link example_d.exe and minigzip_d.exe in parallel
-      # with the strip step - causing gcc to freak out when a source file is
-      # rewritten part way through the linking stage.
-      # "-j #{workers}",
-    ]
-
-    make(*make_args, env: env)
-    make('install', *make_args, env: env)
-  else
-    # We omit the omnibus path here because it breaks mac_os_x builds by picking
-    # up the embedded libtool instead of the system libtool which the zlib
-    # configure script cannot handle.
-    # TODO: Do other OSes need this?  Is this strictly a mac thing?
-    env = with_standard_compiler_flags
-    if freebsd?
-      # FreeBSD 10+ gets cranky if zlib is not compiled in a
-      # position-independent way.
-      env['CFLAGS'] << ' -fPIC'
-    end
-
-    configure env: env
-
-    make "-j #{workers}", env: env
-    make "-j #{workers} install", env: env
-  end
+  make "-j #{workers}", env: env
+  make "-j #{workers} install", env: env
 end

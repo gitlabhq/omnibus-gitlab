@@ -36,9 +36,6 @@ relative_path "libiconv-#{version}"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  # freebsd 10 needs to be build PIC
-  env['CFLAGS'] << ' -fPIC' if freebsd?
-
   update_config_guess(target: 'build-aux')
   update_config_guess(target: 'libcharset/build-aux')
 
