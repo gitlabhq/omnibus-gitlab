@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Gitaly Cluster
+# Gitaly Cluster **(FREE SELF)**
 
 [Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) provides
 fault-tolerant storage for repositories. It uses Praefect as a router and transaction manager for

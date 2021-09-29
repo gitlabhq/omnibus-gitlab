@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Maintenance commands
+# Maintenance commands **(FREE SELF)**
 
 The following commands can be run after installation.
 

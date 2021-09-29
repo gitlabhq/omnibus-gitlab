@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Action Cable
+# Action Cable **(FREE SELF)**
 
 NOTE:
 Action Cable is **experimental**, and enabling it also enables experimental features.
