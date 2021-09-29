@@ -1,3 +1,5 @@
+require 'timeout'
+
 class ConsulHelper
   attr_reader :node, :default_configuration, :default_server_configuration
 
@@ -146,9 +148,19 @@ class ConsulHelper
 
   def get_api(endpoint, header = nil)
     uri = URI(api_url)
-    Net::HTTP.start(uri.host, uri.port) do |http|
-      http.request_get(endpoint, header) do |response|
-        return yield response
+
+    Timeout.timeout(30, Timeout::Error, "Timed out waiting for Consul to start") do
+      loop do
+        Net::HTTP.start(uri.host, uri.port) do |http|
+          http.request_get(endpoint, header) do |response|
+            return yield response
+          end
+        end
+      rescue Errno::ECONNREFUSED, Errno::EADDRNOTAVAIL
+        sleep 1
+        next
+      else
+        break
       end
     end
   end
