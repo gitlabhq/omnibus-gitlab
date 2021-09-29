@@ -1,18 +1,9 @@
 ---
-stage: Enablement
-group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
-comments: false
+redirect_to: 'release/index.md'
+remove_date: '2021-12-29'
 ---
 
-# Omnibus GitLab release process
+This file was moved to [another location](release/index.md).
 
-Moved to [release/index.md.](release/index.md)
-
-## On your development machine
-
-See [release/index.md.](release/index.md#on-your-development-machine)
-
-## Publishing the packages
-
-See [release/index.md.](release/index.md#publishing-the-packages)
+<!-- This redirect file can be deleted after <2021-12-29>. -->
+<!-- Before deletion, see: https://docs.gitlab.com/ee/development/documentation/#move-or-rename-a-page -->
