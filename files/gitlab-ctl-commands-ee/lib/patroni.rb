@@ -24,7 +24,7 @@ module Patroni
       failover               Failover to a replica
       switchover             Switchover to a replica
       reinitialize-replica   Reinitialize replication when in a Patroni replica
-      restart                Restart Patroni service without triggering failover
+      restart                Restart Postgres service without triggering failover
       reload                 Reload Patroni configuration
   EOS
 
