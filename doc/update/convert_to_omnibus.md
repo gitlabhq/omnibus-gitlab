@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Upgrading from a non-Omnibus installation to an Omnibus installation
+# Upgrading from a non-Omnibus installation to an Omnibus installation **(FREE SELF)**
 
 Upgrading from non-Omnibus installations has not been tested by GitLab.com.
 

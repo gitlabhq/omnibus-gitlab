@@ -4,7 +4,7 @@ group: Memory
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Image scaling
+# Image scaling **(FREE SELF)**
 
 GitLab runs a built-in image scaler to improve site rendering performance. It is enabled by default.
 

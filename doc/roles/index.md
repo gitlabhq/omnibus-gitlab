@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Omnibus GitLab High Availability Roles
+# Omnibus GitLab High Availability Roles **(FREE SELF)**
 
 > Introduced in GitLab EE 10.1.0
 

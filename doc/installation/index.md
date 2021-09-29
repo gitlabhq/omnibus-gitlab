@@ -5,7 +5,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 comments: false
 ---
 
-# Installing GitLab with Omnibus packages
+# Installing GitLab with Omnibus packages **(FREE SELF)**
 
 ## Prerequisites
 

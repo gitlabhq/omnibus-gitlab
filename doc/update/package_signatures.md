@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Cryptographic details related to `omnibus-gitlab` packages
+# Cryptographic details related to `omnibus-gitlab` packages **(FREE SELF)**
 
 GitLab uses a [packagecloud](https://packages.gitlab.com) instance to share the
 different OS packages it offers, and uses various cryptographic methods to

@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Grafana Dashboard Service
+# Grafana Dashboard Service **(FREE SELF)**
 
 > [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3487) in GitLab 11.9.
 
