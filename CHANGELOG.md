@@ -52,6 +52,10 @@ No changes.
 - [Update Mattermost to 5.38.2](gitlab-org/omnibus-gitlab@02d9eb7adfbd2c13048cd0db4550ab994fb9feaa) by @hmhealey ([merge request](gitlab-org/omnibus-gitlab!5587))
 - [Update Python from 3.7.10 to 3.9.5](gitlab-org/omnibus-gitlab@055e29c12442df3ef278a566160e1664e5da331b) ([merge request](gitlab-org/omnibus-gitlab!5547))
 
+## 14.2.5 (2021-09-30)
+
+No changes.
+
 ## 14.2.4 (2021-09-17)
 
 No changes.
