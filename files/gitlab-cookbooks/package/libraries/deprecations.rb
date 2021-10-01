@@ -136,13 +136,13 @@ module Gitlab
           {
             config_keys: %w(praefect database_host_no_proxy),
             deprecation: '14.0',
-            removal: '14.3', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6150
+            removal: '15.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6150
             note: "Use `praefect['database_direct_host']` instead."
           },
           {
             config_keys: %w(praefect database_port_no_proxy),
             deprecation: '14.0',
-            removal: '14.3', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6150
+            removal: '15.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6150
             note: "Use `praefect['database_direct_port']` instead."
           },
           {
