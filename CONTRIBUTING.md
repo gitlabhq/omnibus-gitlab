@@ -60,14 +60,14 @@ please consider we favor
 
 ## Maintainer documentation
 
-Maintainers of this project will try to address issues in a timely manner.
-Maintainers, however, cannot guarantee that they would be able to address
-all incoming issues as soon as they are raised nor can guarantee to provide an
+Maintainers of this project will try to address issues promptly.
+Maintainers, however, cannot guarantee that they would be able to handle
+all the incoming issues as soon as they are raised, nor can they guarantee to provide an
 answer to all raised issues.
 
 If your issue is closed due to inactivity (from either side), please check
-whether the issue persists in the latest version. If that is the case, feel free
-to reopen the issue or create a new one with a link to the old issue.
+whether the problem persists in the latest version. Feel free
+to reopen the issue or create a new one linked to the old issue.
 
 ### Issue description templates
 
