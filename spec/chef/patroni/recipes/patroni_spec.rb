@@ -219,6 +219,13 @@ RSpec.describe 'patroni cookbook' do
       expect(chef_run).to disable_runit_service('postgresql')
     end
 
+    it 'should notify patroni service to hup' do
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('patroni').and_return(true)
+
+      expect(chef_run.template('/var/opt/gitlab/patroni/patroni.yaml')).to notify('runit_service[patroni]').to(:hup)
+    end
+
     it 'should skip standalone postgresql configuration' do
       expect(chef_run).to create_postgresql_config('gitlab')
       expect(chef_run.postgresql_config('gitlab')).not_to notify('execute[start postgresql]').to(:run)

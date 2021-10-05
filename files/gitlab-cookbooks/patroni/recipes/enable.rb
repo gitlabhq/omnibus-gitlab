@@ -58,7 +58,7 @@ template patroni_config_file do
       postgresql_defaults: node['postgresql'].to_hash
     )
   )
-  notifies :reload, 'runit_service[patroni]', :delayed if omnibus_helper.should_notify?(patroni_helper.service_name)
+  notifies :hup, 'runit_service[patroni]', :delayed if omnibus_helper.should_notify?(patroni_helper.service_name)
 end
 
 runit_service 'patroni' do
