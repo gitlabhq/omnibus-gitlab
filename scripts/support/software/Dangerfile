@@ -6,12 +6,18 @@ NO_BUILD_CHANGE_HAPPENED_LABELS = [
 
 SOFTWARE_MESSAGE = <<~MSG.freeze
 You've made some changes to the software definitions.
-Any change in software definition requires package rebuild to verify that
-builds across the supported platforms are successful.
-It is also required to execute a manual verification to confirm
-that the package is installable.
-If the change is a comment or an edit that does not affect exiting
-functionality, add %<labels>s labels.
+
+Any change in software definition requires:
+
+- package rebuild to verify that builds across the supported platforms are successful.
+- manual verification to confirm the package is installable
+- [uses an approved license](https://about.gitlab.com/handbook/engineering/open-source/#acceptable-licenses)
+
+If the change does not affect existing functionality, for example when
+resolving `rubocop` warnings, adding comments, or fixing typos, add one of
+the following labels:
+
+- %<labels>s
 MSG
 
 LIBRARY_FILES = [
@@ -22,7 +28,7 @@ LIBRARY_FILES = [
 ].freeze
 
 def no_build_change_happened_labels
-  NO_BUILD_CHANGE_HAPPENED_LABELS.map { |label| %(~"#{label}") }.join(', ')
+  NO_BUILD_CHANGE_HAPPENED_LABELS.map { |label| %(~"#{label}") }.join("\n- ")
 end
 
 def library_paths_requiring_review(files)
