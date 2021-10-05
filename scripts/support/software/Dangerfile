@@ -1,6 +1,4 @@
-QA_LABELS = [
-  'test',
-  'QA',
+NO_BUILD_CHANGE_HAPPENED_LABELS = [
   'tooling',
   'tooling::pipelines',
   'tooling::workflow',
@@ -23,8 +21,8 @@ LIBRARY_FILES = [
   'config/templates/'
 ].freeze
 
-def qa_labels
-  QA_LABELS.map { |label| %(~"#{label}") }.join(', ')
+def no_build_change_happened_labels
+  NO_BUILD_CHANGE_HAPPENED_LABELS.map { |label| %(~"#{label}") }.join(', ')
 end
 
 def library_paths_requiring_review(files)
@@ -43,6 +41,6 @@ end
 
 all_files = git.added_files + git.modified_files
 has_config_changes = !library_paths_requiring_review(all_files).empty?
-manual_check_needed = (gitlab.mr_labels & QA_LABELS).empty?
+requires_build_review = (gitlab.mr_labels & NO_BUILD_CHANGE_HAPPENED_LABELS).empty?
 
-warn format(SOFTWARE_MESSAGE, labels: qa_labels) if has_config_changes && !manual_check_needed
+warn format(SOFTWARE_MESSAGE, labels: no_build_change_happened_labels) if has_config_changes && requires_build_review
