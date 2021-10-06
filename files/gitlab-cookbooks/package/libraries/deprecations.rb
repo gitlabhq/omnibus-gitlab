@@ -134,6 +134,12 @@ module Gitlab
             note: "This parameter was introduced as a temporary solution in case of unforseen problems with new storage format. It will be removed in 14.3. If you use this parameter, please comment on https://gitlab.com/gitlab-org/gitlab/-/issues/331699"
           },
           {
+            config_keys: %w(gitlab-pages daemon-inplace-chroot),
+            deprecation: '14.4',
+            removal: '15.0',
+            note: "Starting with GitLab 14.3, chroot has been removed along with disk-based configuration source. Because of this, the flag is a no-op and can be removed."
+          },
+          {
             config_keys: %w(praefect database_host_no_proxy),
             deprecation: '14.0',
             removal: '15.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6150

@@ -57,9 +57,6 @@ RSpec.describe 'gitlab::gitlab-pages' do
       default_content = <<~EOS
        pages-domain=pages.example.com
        pages-root=/var/opt/gitlab/gitlab-rails/shared/pages
-       daemon-uid=1000
-       daemon-gid=1000
-       daemon-inplace-chroot=false
        api-secret-key=/var/opt/gitlab/gitlab-pages/.gitlab_pages_secret
        listen-proxy=localhost:8090
        log-format=json
@@ -190,7 +187,6 @@ RSpec.describe 'gitlab::gitlab-pages' do
             artifacts_server_timeout: 60,
             status_uri: '/@status',
             max_connections: 7500,
-            inplace_chroot: true,
             propagate_correlation_id: true,
             log_format: 'text',
             log_verbose: true,
@@ -232,9 +228,6 @@ RSpec.describe 'gitlab::gitlab-pages' do
         expected_content = <<~EOS
             pages-domain=pages.example.com
             pages-root=/var/opt/gitlab/gitlab-rails/shared/pages
-            daemon-uid=1000
-            daemon-gid=1000
-            daemon-inplace-chroot=true
             api-secret-key=/var/opt/gitlab/pages/.gitlab_pages_secret
             auth-client-id=app_id
             auth-redirect-uri=https://projects.pages.example.com/auth
