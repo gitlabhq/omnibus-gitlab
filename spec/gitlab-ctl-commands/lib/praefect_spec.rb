@@ -17,29 +17,53 @@ RSpec.describe Praefect do
       expect { Praefect.parse_options!(%w(praefect unknown-command)) }.to raise_error(OptionParser::ParseError, /Unknown Praefect command: unknown-command/)
     end
 
-    it 'throws an error when unknown option is specified' do
-      expect { Praefect.parse_options!(%w(praefect remove-repository --unknown)) }.to raise_error(OptionParser::InvalidOption, /unknown/)
+    shared_examples 'parses common required options' do
+      it 'throws an error when unknown option is specified' do
+        expect { Praefect.parse_options!(%W(praefect #{command} --unknown)) }.to raise_error(OptionParser::InvalidOption, /unknown/)
+      end
+
+      it 'throws an error when an argument for --virtual-storage-name is not specified' do
+        expect { Praefect.parse_options!(%W(praefect #{command} --virtual-storage-name)) }.to raise_error(OptionParser::MissingArgument, /virtual-storage-name/)
+      end
+
+      it 'throws an error when --virtual-storage-name is not specified' do
+        expect { Praefect.parse_options!(%W(praefect #{command})) }.to raise_error(OptionParser::ParseError, /Option --virtual-storage-name must be specified/)
+      end
+
+      it 'throws an error when an argument for --repository-relative-path is not specified' do
+        expect { Praefect.parse_options!(%W(praefect #{command} --repository-relative-path)) }.to raise_error(OptionParser::MissingArgument, /repository-relative-path/)
+      end
+
+      it 'throws an error when --repository-relative-path is not specified' do
+        expect { Praefect.parse_options!(%W(praefect #{command} --virtual-storage-name name)) }.to raise_error(OptionParser::ParseError, /Option --repository-relative-path must be specified/)
+      end
+
+      it 'successfully parses correct params' do
+        expected_options = { command: command, virtual_storage_name: 'name', repository_relative_path: 'path' }
+
+        expect(Praefect.parse_options!(%W(praefect #{command} --virtual-storage-name name --repository-relative-path path))).to eq(expected_options)
+      end
     end
 
-    it 'throws an error when an argument for --virtual-storage-name is not specified' do
-      expect { Praefect.parse_options!(%w(praefect remove-repository --virtual-storage-name)) }.to raise_error(OptionParser::MissingArgument, /virtual-storage-name/)
+    context 'when command is remove-repository' do
+      let(:command) { 'remove-repository' }
+
+      it_behaves_like 'parses common required options'
     end
 
-    it 'throws an error when --virtual-storage-name is not specified' do
-      expect { Praefect.parse_options!(%w(praefect remove-repository)) }.to raise_error(OptionParser::ParseError, /Option --virtual-storage-name must be specified/)
-    end
+    context 'when command is track-repository' do
+      let(:command) { 'track-repository' }
 
-    it 'throws an error when an argument for --repository-relative-path is not specified' do
-      expect { Praefect.parse_options!(%w(praefect remove-repository --repository-relative-path)) }.to raise_error(OptionParser::MissingArgument, /repository-relative-path/)
-    end
+      it_behaves_like 'parses common required options'
 
-    it 'throws an error when --repository-relative-path is not specified' do
-      expect { Praefect.parse_options!(%w(praefect remove-repository --virtual-storage-name name)) }.to raise_error(OptionParser::ParseError, /Option --repository-relative-path must be specified/)
-    end
+      it 'successfully parses authoritative-storage' do
+        expected_options = { command: command, virtual_storage_name: 'name', repository_relative_path: 'path', authoritative_storage: 'storage-1' }
 
-    it 'successfully parses correct params' do
-      expected_options = { command: 'remove-repository', virtual_storage_name: 'name', repository_relative_path: 'path' }
-      expect(Praefect.parse_options!(%w(praefect remove-repository --virtual-storage-name name --repository-relative-path path))).to eq(expected_options)
+        expect(Praefect.parse_options!(%W(praefect #{command}
+                                          --virtual-storage-name name
+                                          --repository-relative-path path
+                                          --authoritative-storage storage-1))).to eq(expected_options)
+      end
     end
 
     context 'when help option is passed' do
@@ -51,10 +75,10 @@ RSpec.describe Praefect do
         expect { Praefect.parse_options!(%w(praefect -h)) }.to raise_error('Kernel.exit(0)')
       end
 
-      ['remove-repository'].each do |cmd|
+      ['remove-repository', 'track-repository'].each do |cmd|
         it "shows help message and exit for #{cmd} help option" do
           expect(Kernel).to receive(:puts) do |msg|
-            expect(msg.to_s).to match(/gitlab-ctl praefect remove-repository/)
+            expect(msg.to_s).to match(/gitlab-ctl praefect #{cmd}/)
           end
 
           expect { Praefect.parse_options!(%W(praefect #{cmd} -h)) }.to raise_error('Kernel.exit(0)')
@@ -73,23 +97,52 @@ RSpec.describe Praefect do
       end
     end
 
-    it 'executes the command' do
-      allow(File).to receive(:exist?).and_return(true)
-      expect(Kernel).not_to receive(:abort)
+    shared_examples 'executes the command' do
+      it 'successfully executes' do
+        allow(File).to receive(:exist?).and_return(true)
+        expect(Kernel).not_to receive(:abort)
+        args = [
+          Praefect::EXEC_PATH, '-config', 'dir/config.toml', command,
+          '-virtual-storage', 'storage-name', '-repository', 'repository-path'
+        ]
 
-      expect(Kernel).to receive(:system).with(
-        Praefect::EXEC_PATH, '-config', 'dir/config.toml', 'cmd',
-        '-virtual-storage', 'storage-name', '-repository', 'repository-path'
-      ).and_return('result!')
-      expect(Kernel).not_to receive(:exit!)
+        args += command_args
 
-      options = {
-        virtual_storage_name: 'storage-name',
-        repository_relative_path: 'repository-path',
-        command: 'cmd',
-        dir: 'dir'
-      }
-      Praefect.execute(options)
+        expect(Kernel).to receive(:system).with(*args).and_return('result!')
+        expect(Kernel).not_to receive(:exit!)
+
+        common_options = {
+          virtual_storage_name: 'storage-name',
+          repository_relative_path: 'repository-path',
+          command: command,
+          dir: 'dir'
+        }
+
+        Praefect.execute(common_options.merge(command_options))
+      end
+    end
+
+    context 'remove-repository command' do
+      let(:command) { 'remove-repository' }
+      let(:command_args) { [] }
+      let(:command_options) { {} }
+
+      it_behaves_like 'executes the command'
+    end
+
+    context 'track-repository command' do
+      let(:command) { 'track-repository' }
+      let(:command_args) { [] }
+      let(:command_options) { {} }
+
+      it_behaves_like 'executes the command'
+
+      context 'with authoritative-storage' do
+        let(:command_options) { { authoritative_storage: 'storage' } }
+        let(:command_args) { ['-authoritative-storage', 'storage'] }
+
+        it_behaves_like 'executes the command'
+      end
     end
   end
 end
