@@ -751,6 +751,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_trace_chunks_sentinels'] = nil
 # gitlab_rails['redis_actioncable_instance'] = nil
 # gitlab_rails['redis_actioncable_sentinels'] = nil
+# gitlab_rails['redis_rate_limiting_instance'] = nil
+# gitlab_rails['redis_rate_limiting_sentinels'] = nil
 
 ################################################################################
 ## Container Registry settings
