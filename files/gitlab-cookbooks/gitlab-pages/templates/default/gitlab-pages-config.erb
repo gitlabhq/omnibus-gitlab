@@ -1,8 +1,5 @@
 pages-domain=<%= @domain %>
 pages-root=<%= @pages_root %>
-daemon-uid=<%= Etc.getpwnam(node['gitlab']['user']['username']).uid %>
-daemon-gid=<%= Etc.getpwnam(node['gitlab']['user']['username']).gid %>
-daemon-inplace-chroot=<%= @inplace_chroot %>
 api-secret-key=<%= @api_secret_key_path %>
 <%- if @access_control -%>
 <%- if @gitlab_id -%>
