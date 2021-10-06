@@ -455,6 +455,8 @@ default['gitlab']['gitlab-rails']['redis_trace_chunks_instance'] = nil
 default['gitlab']['gitlab-rails']['redis_trace_chunks_sentinels'] = []
 default['gitlab']['gitlab-rails']['redis_actioncable_instance'] = nil
 default['gitlab']['gitlab-rails']['redis_actioncable_sentinels'] = []
+default['gitlab']['gitlab-rails']['redis_rate_limiting_instance'] = nil
+default['gitlab']['gitlab-rails']['redis_rate_limiting_sentinels'] = []
 
 default['gitlab']['gitlab-rails']['smtp_enable'] = false
 default['gitlab']['gitlab-rails']['smtp_address'] = nil

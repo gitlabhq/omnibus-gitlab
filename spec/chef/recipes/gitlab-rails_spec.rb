@@ -4,7 +4,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
   using RSpec::Parameterized::TableSyntax
 
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
-  let(:redis_instances) { %w(cache queues shared_state) }
+  let(:redis_instances) { %w(cache queues shared_state trace_chunks rate_limiting) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
   let(:default_vars) do
     {
@@ -302,6 +302,11 @@ RSpec.describe 'gitlab::gitlab-rails' do
             redis_trace_chunks_sentinels: [
               { host: 'trace_chunks', port: '1234' },
               { host: 'trace_chunks', port: '3456' }
+            ],
+            redis_rate_limiting_instance: "redis://:fakepass@fake.redis.rate_limiting.com:8888/2",
+            redis_rate_limiting_sentinels: [
+              { host: 'rate_limiting', port: '1234' },
+              { host: 'rate_limiting', port: '3456' }
             ],
             redis_actioncable_instance: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
             redis_actioncable_sentinels: [

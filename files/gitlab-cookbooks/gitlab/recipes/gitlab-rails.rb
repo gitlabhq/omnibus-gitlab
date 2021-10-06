@@ -241,7 +241,7 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
   dependent_services.each { |svc| notifies :restart, svc }
 end
 
-%w(cache queues shared_state trace_chunks).each do |instance|
+%w(cache queues shared_state trace_chunks rate_limiting).each do |instance|
   filename = "redis.#{instance}.yml"
   url = node['gitlab']['gitlab-rails']["redis_#{instance}_instance"]
   sentinels = node['gitlab']['gitlab-rails']["redis_#{instance}_sentinels"]
