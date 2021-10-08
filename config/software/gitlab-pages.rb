@@ -35,6 +35,6 @@ build do
   make 'gitlab-pages', env: env
   move 'gitlab-pages', "#{install_dir}/embedded/bin/gitlab-pages"
 
-  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
-  copy "license.csv", "#{install_dir}/licenses/gitlab-pages.csv"
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --save=license.json"
+  copy "license.json", "#{install_dir}/licenses/gitlab-pages.json"
 end

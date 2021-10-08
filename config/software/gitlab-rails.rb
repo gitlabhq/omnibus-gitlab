@@ -154,9 +154,17 @@ build do
   move "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache", "#{Omnibus::Config.project_root}/assets_cache"
   move "#{Omnibus::Config.source_dir}/gitlab-rails/node_modules", Omnibus::Config.project_root.to_s
 
-  bundle "exec license_finder report --decisions-file=config/dependency_decisions.yml --format=csv --save=licenses.csv", env: env
-  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv", cwd: "#{Omnibus::Config.source_dir}/gitlab-rails/workhorse"
-  command "sort -u licenses.csv workhorse/license.csv > #{install_dir}/licenses/gitlab-rails.csv"
+  bundle "exec license_finder report --decisions-file=config/dependency_decisions.yml --format=json --save=rails-license.json", env: env
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --save=workhorse-license.json", cwd: "#{Omnibus::Config.source_dir}/gitlab-rails/workhorse"
+
+  # Merge rails and workhorse license files.
+  block "Merge license files of rails and workhorse" do
+    require 'json'
+    rails_licenses = JSON.parse(File.read("#{Omnibus::Config.source_dir}/gitlab-rails/rails-license.json"))['dependencies']
+    workhorse_licenses = JSON.parse(File.read("#{Omnibus::Config.source_dir}/gitlab-rails/workhorse/workhorse-license.json"))['dependencies']
+    output = { dependencies: rails_licenses.concat(workhorse_licenses).uniq }
+    File.write("#{install_dir}/licenses/gitlab-rails.json", JSON.pretty_generate(output))
+  end
 
   # Tear down now that gitlab:assets:compile is done.
   delete 'config/gitlab.yml'
