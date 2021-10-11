@@ -1,5 +1,6 @@
 ---
 redirect_to: 'https://docs.gitlab.com/ee/install/docker.html'
+remove_date: '2022-06-28'
 ---
 
 This document was moved to [another location](https://docs.gitlab.com/ee/install/docker.html).
