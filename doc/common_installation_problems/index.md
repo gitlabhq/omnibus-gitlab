@@ -1,5 +1,6 @@
 ---
 redirect_to: '../troubleshooting.md'
+remove_date: '2021-10-28'
 ---
 
 This document was moved to [another location](../troubleshooting.md).

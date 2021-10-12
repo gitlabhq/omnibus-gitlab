@@ -1,5 +1,6 @@
 ---
 redirect_to: 'https://docs.gitlab.com/ee/administration/package_information/deprecation_policy.html'
+remove_date: '2022-03-28'
 ---
 
 This document was moved to [another location](https://docs.gitlab.com/ee/administration/package_information/deprecation_policy.html).
