@@ -9,6 +9,15 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 NOTE:
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/index.html#checking-for-background-migrations-before-upgrading).
 
+## 14.4
+
+### Downgrading Grafana from 8.1 to 7.5
+
+In GitLab 14.4 the provided Grafana version is 7.5, this is a downgrade from
+the Grafana 8.1 version introduced in GitLab 14.3. This was reverted to an
+Apache-licensed Grafana release to allow time to consider the implications of
+the newer AGPL-licensed releases.
+
 ## 14.0
 
 ### Removing support for running Sidekiq directly instead of `sidekiq-cluster`
