@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.3.3 (2021-10-12)
+
+### Fixed (2 changes)
+
+- [Update cacerts to 2021-09-30](gitlab-org/omnibus-gitlab@b39f98773f7e3e6ac4817f7fb93efb2bee1ec795) ([merge request](gitlab-org/omnibus-gitlab!5668))
+- [Delay praefect database_*_no_proxy removals](gitlab-org/omnibus-gitlab@b30716ae18cf94b69befb2de607ae5434864a8f1) ([merge request](gitlab-org/omnibus-gitlab!5668))
+
 ## 14.3.2 (2021-10-01)
 
 No changes.
