@@ -119,6 +119,8 @@ default['monitoring']['gitlab-exporter']['env'] = {
   'RUBY_GC_HEAP_FREE_SLOTS_MIN_RATIO' => 0.055,
   'RUBY_GC_HEAP_FREE_SLOTS_MAX_RATIO' => 0.111
 }
+default['monitoring']['gitlab-exporter']['consul_service_name'] = 'gitlab-exporter'
+default['monitoring']['gitlab-exporter']['consul_service_meta'] = nil
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus-monitoring']['enable'] = true

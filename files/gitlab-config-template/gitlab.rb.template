@@ -2035,6 +2035,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Manage gitlab-exporter sidekiq probes. false by default when Sentinels are
 ##! found.
 # gitlab_exporter['probe_sidekiq'] = true
+##! Service name used to register GitLab Exporter as a Consul service
+# gitlab_exporter['consul_service_name'] = 'gitlab-exporter'
+##! Semantic metadata used when registering GitLab Exporter as a Consul service
+# gitlab_exporter['consul_service_meta'] = {}
 
 # To completely disable prometheus, and all of it's exporters, set to false
 # prometheus_monitoring['enable'] = true

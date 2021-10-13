@@ -144,4 +144,6 @@ RSpec.describe 'monitoring::gitlab-exporter' do
         .with_content(/exec svlogd -tt foo/)
     end
   end
+
+  include_examples "consul service discovery", "gitlab_exporter", "gitlab-exporter"
 end
