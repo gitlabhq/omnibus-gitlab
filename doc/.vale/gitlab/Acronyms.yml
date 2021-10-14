@@ -24,6 +24,7 @@ exceptions:
   - BSD
   - CAS
   - CDN
+  - CIDR
   - CLI
   - CNA
   - CNAME

@@ -47,7 +47,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [Only start Omnibus GitLab services after a given file system is mounted](settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-file-system-is-mounted)
 - [Disable user and group account management](settings/configuration.md#disable-user-and-group-account-management)
 - [Disable storage directory management](settings/configuration.md#disable-storage-directories-management)
-- [Configuring Rack attack](settings/configuration.md#configuring-rack-attack)
+- [Failed authentication ban](settings/configuration.md#configure-a-failed-authentication-ban)
 - [SMTP](settings/smtp.md)
 - [NGINX](settings/nginx.md)
 - [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap/index.html)
