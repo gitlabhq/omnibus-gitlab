@@ -145,8 +145,16 @@ After you have these files, enable SSL:
 
 To determine whether SSL is being used by clients, you can run:
 
+In GitLab 14.2 and later:
+
 ```shell
-gitlab-rails dbconsole
+sudo gitlab-rails dbconsole --database main
+```
+
+In GitLab 14.1 and earlier:
+
+```shell
+sudo gitlab-rails dbconsole
 ```
 
 At startup, you should see a banner as the following:
@@ -602,6 +610,14 @@ this.
 If you need to connect to the bundled PostgreSQL database and are using the
 default Omnibus GitLab database configuration, you can connect as the
 application user:
+
+In GitLab 14.2 and later:
+
+```shell
+sudo gitlab-rails dbconsole --database main
+```
+
+In GitLab 14.1 and earlier:
 
 ```shell
 sudo gitlab-rails dbconsole
