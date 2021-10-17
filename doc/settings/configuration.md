@@ -603,7 +603,7 @@ gitlab_rails['rack_attack_git_basic_auth'] = {
 ## Disable impersonation
 
 Disabling impersonation is documented in
-[the API docs](https://docs.gitlab.com/ee/api/README.html#disable-impersonation).
+[the API docs](https://docs.gitlab.com/ee/api/index.html#disable-impersonation).
 
 ## Error Reporting and Logging with Sentry
 
