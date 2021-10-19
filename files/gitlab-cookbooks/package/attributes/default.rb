@@ -26,6 +26,10 @@ default['package']['systemd_tasks_max'] = 4915
 default['package']['systemd_wanted_by'] = 'multi-user.target'
 default['package']['systemd_after'] = 'multi-user.target'
 
+# We only want to generate the public attributes file on specific calls to Chef.
+# Normally, you will not want to change this
+default['package']['public_attributes'] = false
+
 # Setting runit defaults here so that they can be made available automatically
 # to cookbooks of individual services via depends in metadata.rb
 default['runit']['sv_bin'] = '/opt/gitlab/embedded/bin/sv'
