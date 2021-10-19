@@ -34,6 +34,8 @@ module GitLabHandler
   class Attributes < Chef::Handler
     # Generate a JSON file of attributes which non-root users need access to
     def report
+      return unless node['package']['public_attributes']
+
       data = {}
       BaseHelper.descendants.each do |klass|
         k = klass.send(:new, node)
