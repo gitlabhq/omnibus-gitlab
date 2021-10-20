@@ -46,6 +46,16 @@ RSpec.describe 'gitlab::gitlab-rails' do
           end
         end
       end
+
+      describe 'one_trust_id setting' do
+        before do
+          stub_gitlab_rb(gitlab_rails: { extra_one_trust_id: '0000-0000-test' })
+        end
+
+        it 'renders gitlab.yml with the provided value' do
+          expect(gitlab_yml[:production][:extra][:one_trust_id]).to eq('0000-0000-test')
+        end
+      end
     end
   end
 end

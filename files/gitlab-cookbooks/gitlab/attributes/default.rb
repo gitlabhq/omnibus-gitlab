@@ -394,6 +394,7 @@ default['gitlab']['gitlab-rails']['gitlab_shell_git_timeout'] = 10800
 default['gitlab']['gitlab-rails']['git_bin_path'] = "#{node['package']['install-dir']}/embedded/bin/git"
 default['gitlab']['gitlab-rails']['extra_google_analytics_id'] = nil
 default['gitlab']['gitlab-rails']['extra_google_tag_manager_id'] = nil
+default['gitlab']['gitlab-rails']['extra_one_trust_id'] = nil
 default['gitlab']['gitlab-rails']['extra_matomo_url'] = nil
 default['gitlab']['gitlab-rails']['extra_matomo_site_id'] = nil
 default['gitlab']['gitlab-rails']['extra_matomo_disable_cookies'] = nil
