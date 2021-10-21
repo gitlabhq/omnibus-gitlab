@@ -568,7 +568,7 @@ create_omnibus_manifest:
       - version-manifest.json
 
 dependency_scanning:
-  image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.1.0"
+  image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.2.0"
   stage: package
   variables:
     REPORT_PATH: ./
