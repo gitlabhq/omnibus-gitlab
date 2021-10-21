@@ -6,7 +6,16 @@ module Geo
     GEO_NODE_ROLES = %i[primary secondary].freeze
     PATRONI_NODE_ROLES = %i[leader replica standby_leader].freeze
     PATRONI_LEADER_ROLES = %i[leader standby_leader].freeze
-    SERVICE_NAMES = %w[puma sidekiq postgresql patroni geo-logcursor geo-postgresql].freeze
+    SERVICE_NAMES = %w[
+      geo-logcursor
+      geo-postgresql
+      gitaly
+      patroni
+      postgresql
+      praefect
+      puma
+      sidekiq
+    ].freeze
 
     attr_accessor :base_path, :ctl, :options
 
@@ -23,6 +32,7 @@ module Geo
       toggle_geo_services
       promote_to_primary
       run_reconfigure
+      restart_services
       print_success_message
     end
 
@@ -164,6 +174,19 @@ module Geo
       end
     end
 
+    def restart_services
+      restart_gitaly
+      restart_praefect
+    end
+
+    def restart_gitaly
+      sv_progress('restart', 'gitaly') if gitaly_enabled?
+    end
+
+    def restart_praefect
+      sv_progress('restart', 'praefect') if praefect_enabled?
+    end
+
     def secondary_node?
       node_role == :secondary
     end
@@ -230,12 +253,20 @@ module Geo
       @geo_postgresql_enabled ||= service_enabled?('geo-postgresql')
     end
 
+    def gitaly_enabled?
+      @gitaly_enabled ||= service_enabled?('gitaly')
+    end
+
     def patroni_enabled?
       @patroni_enabled ||= service_enabled?('patroni')
     end
 
     def pg_enabled?
       @pg_enabled ||= service_enabled?('postgresql')
+    end
+
+    def praefect_enabled?
+      @praefect_enabled ||= service_enabled?('praefect')
     end
 
     def puma_enabled?
@@ -281,6 +312,12 @@ module Geo
 
     def run_task(task, live: false)
       run_command("#{base_path}/bin/gitlab-rake #{task}", live: live)
+    end
+
+    def sv_progress(action, service)
+      progress_message("Running #{action} on #{service}") do
+        ctl.run_sv_command_for_service(action, service).zero?
+      end
     end
   end
 
