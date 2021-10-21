@@ -12,6 +12,7 @@ module Praefect
       remove-repository           Remove repository from Gitaly cluster
       track-repository            Tells Gitaly cluster to track a repository
       list-untracked-repositories Lists repositories that exist on disk but are untracked by Praefect
+      check                       Runs checks to determine cluster health
   EOS
 
   def self.parse_options!(args)
@@ -48,6 +49,12 @@ module Praefect
 
       'list-untracked-repositories' => OptionParser.new do |opts|
         opts.banner = "Usage: gitlab-ctl praefect untracked-repositories [options]"
+
+        parse_common_options!(options, opts)
+      end,
+
+      'check' => OptionParser.new do |opts|
+        opts.banner = "Usage: gitlab-ctl praefect check"
 
         parse_common_options!(options, opts)
       end
