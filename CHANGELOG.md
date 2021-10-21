@@ -3,6 +3,38 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.4.0 (2021-10-21)
+
+### Added (6 changes)
+
+- [add list-untracked-repositories command](gitlab-org/omnibus-gitlab@e42713ef3a93df8050e78e12a1a95069ebd99c14) ([merge request](gitlab-org/omnibus-gitlab!5662))
+- [Introduce praefect track-repository command](gitlab-org/omnibus-gitlab@c893910cb7c77262a3bf8740af91c9caa34e392e) ([merge request](gitlab-org/omnibus-gitlab!5658))
+- [Allow configuring redis instance for rate-limiting](gitlab-org/omnibus-gitlab@b3d85c90f911018e9fa4e9f1aea5cfee3b312106) ([merge request](gitlab-org/omnibus-gitlab!5624))
+- [Introduce "praefect remove-repository" command](gitlab-org/omnibus-gitlab@c19995c77e8383212fedd7c4520af0d27f1c7cec) ([merge request](gitlab-org/omnibus-gitlab!5614))
+- [Add new max_saml_message_size setting](gitlab-org/omnibus-gitlab@5de647796be4bcbc1353bad94e1090263f95a7db) ([merge request](gitlab-org/omnibus-gitlab!5613))
+- [Make Redis stop-writes-on-bgsave-error setting configurable](gitlab-org/omnibus-gitlab@573dd55e824acf91161b67e585a81a6c92fc669b) ([merge request](gitlab-org/omnibus-gitlab!5616))
+
+### Fixed (4 changes)
+
+- [Don't generate public_attributes.json on non-reconfigure runs](gitlab-org/omnibus-gitlab@890543e38b89031d927ed0539ddbf753959d5320) ([merge request](gitlab-org/omnibus-gitlab!5674))
+- [Update cacerts to 2021-09-30](gitlab-org/omnibus-gitlab@a90a59323c72277275c67c12de4bb2a0aaa6db08) ([merge request](gitlab-org/omnibus-gitlab!5650))
+- [Delay praefect database[_direct_host,_port_no_proxy] removals](gitlab-org/omnibus-gitlab@fb1b94a1e1cd7d93fe54b17b7d87facec781eb4f) ([merge request](gitlab-org/omnibus-gitlab!5647))
+- [Properly reload Patroni on config change](gitlab-org/omnibus-gitlab@e1697c547a421073dad5961219e0106cd4915f9b) ([merge request](gitlab-org/omnibus-gitlab!5644))
+
+### Changed (7 changes)
+
+- [Update gitlab-mail_room to 0.0.14](gitlab-org/omnibus-gitlab@7ea548474c0e9ba8aa15ba09e3410df03a5aeffa) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5687))
+- [Downgrade grafana to the 7.x release branch](gitlab-org/omnibus-gitlab@ea6bb0bf64a22f2ede0aec0bcbb74905345d3647) ([merge request](gitlab-org/omnibus-gitlab!5675))
+- [Add timeout block for Consul get_api](gitlab-org/omnibus-gitlab@b7f63aca40675d1db85a672f4c2082e57c19eea8) ([merge request](gitlab-org/omnibus-gitlab!5638))
+- [Bump omnibus to 8.2.1](gitlab-org/omnibus-gitlab@0b970c9ecea72097f8031a2f2138cd4f5fe2cc4b) ([merge request](gitlab-org/omnibus-gitlab!5602))
+- [Switch to supporting the new ee/db/geo/structure.sql](gitlab-org/omnibus-gitlab@9e2f2a4ef1ab907e318c4a7137ae2b6db1603ea6) ([merge request](gitlab-org/omnibus-gitlab!5637))
+- [Gracefully handle empty roles](gitlab-org/omnibus-gitlab@69ec50023de59a6a05c5fc81e2c5d400b3f84052) ([merge request](gitlab-org/omnibus-gitlab!5634))
+- [Bump Container Registry to v3.11.1-gitlab](gitlab-org/omnibus-gitlab@2499016a479c3747c30eef8945955dd49273f2b2) ([merge request](gitlab-org/omnibus-gitlab!5623))
+
+### Deprecated (1 change)
+
+- [Deprecate Pages `inplace_chroot` flag and stop running Pages as a daemon](gitlab-org/omnibus-gitlab@ae3cdf3bf6846415391a765661090456a06ce32b) by @feistel ([merge request](gitlab-org/omnibus-gitlab!5639))
+
 ## 14.3.3 (2021-10-12)
 
 ### Fixed (2 changes)
