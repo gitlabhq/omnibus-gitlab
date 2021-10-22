@@ -33,6 +33,6 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   make "install PREFIX=#{install_dir}/embedded", env: env
-  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
-  copy "license.csv", "#{install_dir}/licenses/gitlab-elasticsearch-indexer.csv"
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --save=license.json"
+  copy "license.json", "#{install_dir}/licenses/gitlab-elasticsearch-indexer.json"
 end

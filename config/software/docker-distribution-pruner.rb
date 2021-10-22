@@ -33,6 +33,6 @@ build do
   command "go build -ldflags '-s -w' ./cmds/docker-distribution-pruner", env: env
   copy 'docker-distribution-pruner', "#{install_dir}/embedded/bin/"
 
-  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=csv --save=license.csv"
-  copy "license.csv", "#{install_dir}/licenses/docker-distribution-pruner.csv"
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --save=license.json"
+  copy "license.json", "#{install_dir}/licenses/docker-distribution-pruner.json"
 end
