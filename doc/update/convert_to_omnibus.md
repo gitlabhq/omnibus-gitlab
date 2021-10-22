@@ -77,9 +77,15 @@ To convert your installation to Omnibus:
 
 1. Reconfigure Omnibus GitLab to apply the changes:
 
-    ```shell
-    sudo gitlab-ctl reconfigure
-    ```
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+1. If you migrated `/home/git/gitlab-shell/.gitlab_shell_secret`, you also [need to restart Gitaly](https://gitlab.com/gitlab-org/gitaly/-/issues/3837):
+
+   ```shell
+   sudo gitlab-ctl restart gitaly
+   ```
 
 ## Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup
 
