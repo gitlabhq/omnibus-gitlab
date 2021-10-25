@@ -564,10 +564,41 @@ Please note that there is no `=` in the configuration.
 
 Run `sudo gitlab-ctl reconfigure` for the settings to take effect.
 
-## Configuring Rack Attack
+## Configure a failed authentication ban
 
-To prevent abusive clients from doing damage, GitLab uses the Rack Attack gem.
-Learn how to [configure Rack Attack](https://docs.gitlab.com/ee/security/rack_attack.html).
+You can configure a [failed authentication ban](https://docs.gitlab.com/ee/security/rate_limits.html#failed-authentication-ban-for-git-and-container-registry)
+for Git and the container registry.
+
+1. Open `/etc/gitlab/gitlab.rb` with your editor.
+1. Add the following:
+
+   ```ruby
+   gitlab_rails['rack_attack_git_basic_auth'] = {
+     'enabled' => true,
+     'ip_whitelist' => ["127.0.0.1"],
+     'maxretry' => 10, # Limit the number of Git HTTP authentication attempts per IP
+     'findtime' => 60, # Reset the auth attempt counter per IP after 60 seconds
+     'bantime' => 3600 # Ban an IP for one hour (3600s) after too many auth attempts
+   }
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+The following settings can be configured:
+
+- `enabled`: By default this is set to `false`. Set this to `true` to enable Rack Attack.
+- `ip_whitelist`: IPs to not block. They must be formatted as strings within a
+  Ruby array. CIDR notation is supported in GitLab 12.1 and later.
+  For example, `["127.0.0.1", "127.0.0.2", "127.0.0.3", "192.168.0.1/24"]`.
+- `maxretry`: The maximum amount of times a request can be made in the
+  specified time.
+- `findtime`: The maximum amount of time that failed requests can count against an IP
+  before it's added to the denylist (in seconds).
+- `bantime`: The total amount of time that an IP is blocked (in seconds).
 
 ## Disabling automatic cache cleaning during installation
 
@@ -585,20 +616,6 @@ gitlab_rails['rake_cache_clear'] = false
 
 Don't forget to remove the `#` comment characters at the beginning of this
 line.
-
-### Enabling/Disabling Rack Attack and setting up basic auth throttling
-
-Next configuration settings control Rack Attack:
-
-```ruby
-gitlab_rails['rack_attack_git_basic_auth'] = {
-  'enabled' => true, # Enable/Disable Rack Attack
-  'ip_whitelist' => ["127.0.0.1"], # Whitelisted urls
-  'maxretry' => 10, # Limit the number of Git HTTP authentication attempts per IP
-  'findtime' => 60, # Reset the auth attempt counter per IP after 60 seconds
-  'bantime' => 3600 # Ban an IP for one hour (3600s) after too many auth attempts
-}
-```
 
 ## Disable impersonation
 
