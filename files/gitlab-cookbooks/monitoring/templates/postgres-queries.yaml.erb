@@ -133,6 +133,17 @@ pg_blocked:
         usage: "LABEL"
         description: "The table on which a query is blocked"
 
+pg_oldest_blocked:
+  query: |
+    SELECT coalesce(extract('epoch' from max(clock_timestamp() - state_change)), 0) age_seconds
+      FROM pg_stat_activity
+     WHERE wait_event_type = 'Lock'
+       AND state='active'
+  metrics:
+    - age_seconds:
+        usage: "GAUGE"
+        description: "Largest number of seconds any transaction is currently waiting on a lock"
+
 pg_slow:
   query: |
     SELECT COUNT(*) AS queries
@@ -142,6 +153,37 @@ pg_slow:
     - queries:
         usage: "GAUGE"
         description: "Current number of slow queries"
+
+pg_long_running_transactions:
+  query: |
+    SELECT COUNT(*) as transactions,
+    coalesce(MAX(EXTRACT(EPOCH FROM (clock_timestamp() - xact_start))), 0) AS age_in_seconds
+    FROM pg_stat_activity
+    WHERE state is distinct from 'idle' AND (now() - xact_start) > '1 minutes'::interval AND query not like 'autovacuum:%'
+  metrics:
+    - transactions:
+        usage: "GAUGE"
+        description: "Current number of long running transactions"
+    - age_in_seconds:
+        usage: "GAUGE"
+        description: "The current maximum transaction age in seconds"
+
+pg_stuck_idle_in_transaction:
+  query: |
+    SELECT COUNT(*) AS queries
+    FROM pg_stat_activity
+    WHERE state = 'idle in transaction' AND (now() - query_start) > '10 minutes'::interval
+  metrics:
+    - queries:
+        usage: "GAUGE"
+        description: "Current number of queries that are stuck being idle in transactions"
+
+# All xid and lsn metrics here are reported mod 2^52 to ensure they
+# fit within a float for Prometheus :( Really annoying that counters
+# aren't stored in a 64-bit integer. Note that for queries that report
+# floats this only works because postgres_exporter does know to set
+# extra_float_digits (which it sets to 2). So they don't print in
+# exponential notation and precision is maintained up to 2^53-1.
 
 pg_vacuum:
   query: |
@@ -299,3 +341,141 @@ pg_vacuum_queue:
         usage: "GAUGE"
         description: "Elapsed time vacuuming (in seconds)"
 
+#
+# This query extracts marginalia comments from pg_stat_activity and provides a sampled summary of the type of
+# endpoints that are actively making calls
+#
+pg_stat_activity_marginalia_sampler:
+  query: >
+    SELECT
+      usename AS usename,
+      a.matches[1] AS application,
+      a.matches[2] AS endpoint,
+      a.matches[3] AS command,
+      a.wait_event AS wait_event,
+      a.state AS state,
+      a.wait_event_type AS wait_event_type,
+      COUNT(*) active_count,
+     MAX(coalesce(age_in_seconds, 0)) AS max_tx_age_in_seconds
+    FROM (
+      SELECT
+        usename,
+        regexp_matches(query, '^\s*(?:\/\*(?:application:(\w+),?)?(?:correlation_id:\w+,?)?(?:jid:\w+,?)?(?:endpoint_id:([\w/\-\.:\#\s]+),?)?.*?\*\/)?\s*(\w+)') AS matches,
+        state,
+        wait_event,
+        wait_event_type,
+        EXTRACT(EPOCH FROM (clock_timestamp() - xact_start)) AS age_in_seconds
+      FROM
+        pg_stat_activity
+      ) a
+    GROUP BY usename, application, endpoint, command, state, wait_event, wait_event_type
+    ORDER BY active_count DESC
+  metrics:
+    - usename:
+        usage: LABEL
+        description: The user running the command
+    - application:
+        usage: LABEL
+        description: Name of the application as presented in marginalia comment
+    - endpoint:
+        usage: LABEL
+        description: Name of the web endpoint or sidekiq job as presented in marginalia comment
+    - command:
+        usage: LABEL
+        description: The first word for the running command
+    - wait_event:
+        usage: LABEL
+        description: Wait event  of the activity as presented by pg_stat_activity.wait_event
+    - state:
+        usage: LABEL
+        description: State of the activity as presented by pg_stat_activity.state
+    - wait_event_type:
+        usage: LABEL
+        description: Wait event type of the activity as presented by pg_stat_activity.wait_event_type
+    - active_count:
+        usage: GAUGE
+        description: Number of active queries at time of sample
+    - max_tx_age_in_seconds:
+        usage: GAUGE
+        description: Number of active queries at time of sample
+
+# This records long running autovacuum processes. The reason we limit to
+# long-running processes is to avoid cardinality problems in prometheus. Since
+# we're only concerned about long running processes we limit the output only to
+# those that take longer than 5 minutes.
+pg_stat_activity_autovacuum:
+  query: >
+    SELECT
+      SPLIT_PART(query, '.', 2) AS relname,
+      EXTRACT(EPOCH FROM (clock_timestamp() - xact_start)) AS age_in_seconds
+    FROM
+      pg_stat_activity
+    WHERE
+      query like 'autovacuum:%'
+    AND
+      EXTRACT(EPOCH FROM (clock_timestamp() - xact_start)) > 300
+  metrics:
+    - relname:
+        usage: LABEL
+        description: The table being vacuumed
+    - age_in_seconds:
+        usage: GAUGE
+        description: The age of the vacuum process in seconds
+
+# Keep track of the number of the total number of autovacuum workers
+# currently active
+pg_stat_activity_autovacuum_active:
+  query: >
+    SELECT v.phase,
+           CASE
+             when a.query ~ '^autovacuum.*to prevent wraparound' then 'wraparound'
+             when a.query ~* '^vacuum' then 'user'
+             when a.pid is null then null
+             ELSE 'regular'
+           END as mode,
+           count(1) as workers_count
+      FROM pg_stat_progress_vacuum v
+      LEFT JOIN pg_stat_activity a using (pid)
+     GROUP BY 1,2
+  metrics:
+    - phase:
+        usage: LABEL
+        description: Vacuum phase
+    - mode:
+        usage: LABEL
+        description: Vacuum mode
+    - workers_count:
+        usage: GAUGE
+        description: The number of active autovacuum workers in this state
+
+#
+# This query extracts marginalia metadata from pg_stat_activity and provides a sampled summary about the long running transactions.
+#
+pg_long_running_transactions_marginalia:
+  query: >
+    SELECT
+      activity.matches[1] AS application,
+      activity.matches[2] AS endpoint,
+      MAX(age_in_seconds) AS max_age_in_seconds
+    FROM (
+      SELECT
+        regexp_matches(query, '^\s*(?:\/\*(?:application:(\w+),?)?(?:correlation_id:\w+,?)?(?:jid:\w+,?)?(?:endpoint_id:([\w/\-\.:\#\s]+),?)?.*?\*\/)?\s*(\w+)') AS matches,
+        EXTRACT(EPOCH FROM (clock_timestamp() - xact_start)) AS age_in_seconds
+      FROM
+        pg_stat_activity
+      WHERE state <> 'idle'
+        AND (clock_timestamp() - xact_start) > '30 seconds'::interval
+        AND query NOT LIKE 'autovacuum:%'
+      ) activity
+    GROUP BY application, endpoint
+    ORDER BY max_age_in_seconds DESC
+  metrics:
+    - application:
+        usage: LABEL
+        description: Name of the application as presented in marginalia comment
+    - endpoint:
+        usage: LABEL
+        description: Name of the web endpoint or sidekiq job as presented in marginalia comment
+    - max_age_in_seconds:
+        usage: GAUGE
+        description: The current maximum transaction age in seconds
