@@ -21,6 +21,11 @@ add_command_under_category('renew-le-certs', "Let's Encrypt", "Renew the existin
   node_attributes = GitlabCtl::Util.get_node_attributes
   auto_renew_log_directory = node_attributes['letsencrypt']['auto_renew_log_directory']
 
+  unless node_attributes['letsencrypt']['enable']
+    $stderr.puts 'LetsEncrypt is not enabled in your gitlab.rb. Have you run "gitlab-ctl reconfigure" yet?'
+    exit 1
+  end
+
   remove_old_node_state
 
   status = GitlabCtl::Util.chef_run('solo.rb', 'renew-letsencrypt.json', "#{auto_renew_log_directory}/renewal.#{Time.now.to_i}.log")
