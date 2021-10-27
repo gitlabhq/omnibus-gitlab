@@ -159,6 +159,38 @@ RSpec.describe Geo::Promote, '#execute' do
       end
     end
 
+    context 'when gitaly is enabled' do
+      before do
+        stub_service_enabled('gitaly')
+      end
+
+      it 'restarts the gitaly service' do
+        allow(command).to receive(:toggle_geo_services)
+        allow(command).to receive(:promote_to_primary)
+        allow(command).to receive(:run_reconfigure)
+
+        expect(ctl).to receive(:run_sv_command_for_service).with('restart', 'gitaly').once.and_return(double(zero?: true))
+
+        command.execute
+      end
+    end
+
+    context 'when praefect is enabled' do
+      before do
+        stub_service_enabled('praefect')
+      end
+
+      it 'restarts the praefect service' do
+        allow(command).to receive(:toggle_geo_services)
+        allow(command).to receive(:promote_to_primary)
+        allow(command).to receive(:run_reconfigure)
+
+        expect(ctl).to receive(:run_sv_command_for_service).with('restart', 'praefect').once.and_return(double(zero?: true))
+
+        command.execute
+      end
+    end
+
     shared_examples 'single-server secondary site' do
       context 'on a single-server secondary site' do
         before do
@@ -382,6 +414,7 @@ RSpec.describe Geo::Promote, '#execute' do
         allow(command).to receive(:toggle_geo_services)
         allow(command).to receive(:promote_to_primary)
         allow(command).to receive(:run_reconfigure)
+        allow(command).to receive(:restart_services)
       end
 
       it 'prints a success message' do
