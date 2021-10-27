@@ -1,17 +1,14 @@
 # rubocop:disable Style/SignalException
 
 WORKTYPE_LABELS = [
-  'Community contribution',
-  'security',
-  'bug',
-  'feature',
+  'type::bug',
+  'type::feature',
   'feature::addition',
   'feature::enhancement',
-  'feature::maintenance',
-  'tooling',
+  'type::maintenance',
+  'type::tooling',
   'tooling::pipelines',
-  'tooling::workflow',
-  'documentation'
+  'tooling::workflow'
 ].freeze
 
 fail "Please provide a proper merge request description." if gitlab.mr_body.size < 5
