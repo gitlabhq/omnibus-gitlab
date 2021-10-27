@@ -54,6 +54,12 @@ RSpec.describe Praefect do
       it_behaves_like 'unknown option is specified'
     end
 
+    context 'when command is check' do
+      let(:command) { 'check' }
+
+      it_behaves_like 'unknown option is specified'
+    end
+
     context 'when command is track-repository' do
       let(:command) { 'track-repository' }
 
@@ -124,6 +130,14 @@ RSpec.describe Praefect do
 
         Praefect.execute(common_options.merge(command_options))
       end
+    end
+
+    context 'check command' do
+      let(:command) { 'check' }
+      let(:command_args) { [] }
+      let(:command_options) { {} }
+
+      it_behaves_like 'executes the command'
     end
 
     context 'remove-repository command' do
