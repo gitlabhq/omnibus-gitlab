@@ -42,7 +42,7 @@ module Praefect
         parse_common_options!(options, opts)
         parse_repository_options!(options, opts)
 
-        opts.on('--authoritative-storage STORAGE-NAME', 'The storage to use as the primary for this repository (optional)') do |authoritative_storage|
+        opts.on('--authoritative-storage STORAGE-NAME', 'The storage to use as the primary for this repository (mandatory for per_repository elector)') do |authoritative_storage|
           options[:authoritative_storage] = authoritative_storage
         end
       end,
