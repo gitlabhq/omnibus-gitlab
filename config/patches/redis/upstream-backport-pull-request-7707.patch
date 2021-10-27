@@ -1,5 +1,5 @@
 diff --git a/src/Makefile b/src/Makefile
-index 3a09ccd3f..aa35874d6 100644
+index 691d5434e..697a49f2a 100644
 --- a/src/Makefile
 +++ b/src/Makefile
 @@ -20,7 +20,7 @@ DEPENDENCY_TARGETS=hiredis linenoise lua
@@ -209,7 +209,7 @@ index e17bc8ea5..c41fa1c0a 100644
          lruclock = getLRUClock();
      }
 diff --git a/src/lazyfree.c b/src/lazyfree.c
-index 31197df2e..2332a83b1 100644
+index 2557a7504..e493b4c0f 100644
 --- a/src/lazyfree.c
 +++ b/src/lazyfree.c
 @@ -3,8 +3,7 @@
@@ -223,7 +223,7 @@ index 31197df2e..2332a83b1 100644
  /* Return the number of currently pending objects to free. */
  size_t lazyfreeGetPendingObjectsCount(void) {
 diff --git a/src/module.c b/src/module.c
-index afea0063e..8cfa64b6a 100644
+index 93517494f..fac4f5d05 100644
 --- a/src/module.c
 +++ b/src/module.c
 @@ -356,11 +356,6 @@ unsigned long long ModulesInHooks = 0; /* Total number of modules in hooks
@@ -239,10 +239,10 @@ index afea0063e..8cfa64b6a 100644
   * able to create users, set ACLs to such users, and later authenticate
   * clients using such newly created users. */
 diff --git a/src/networking.c b/src/networking.c
-index dd2ca1aae..27dfba8af 100644
+index b02397c96..bf6951f4b 100644
 --- a/src/networking.c
 +++ b/src/networking.c
-@@ -114,7 +114,8 @@ client *createClient(connection *conn) {
+@@ -123,7 +123,8 @@ client *createClient(connection *conn) {
      }
  
      selectDb(c,0);
@@ -252,7 +252,7 @@ index dd2ca1aae..27dfba8af 100644
      c->id = client_id;
      c->resp = 2;
      c->conn = conn;
-@@ -1368,7 +1369,7 @@ client *lookupClientByID(uint64_t id) {
+@@ -1386,7 +1387,7 @@ client *lookupClientByID(uint64_t id) {
   * thread safe. */
  int writeToClient(client *c, int handler_installed) {
      /* Update total number of writes on server */
@@ -261,7 +261,7 @@ index dd2ca1aae..27dfba8af 100644
  
      ssize_t nwritten = 0, totwritten = 0;
      size_t objlen;
-@@ -1430,7 +1431,7 @@ int writeToClient(client *c, int handler_installed) {
+@@ -1448,7 +1449,7 @@ int writeToClient(client *c, int handler_installed) {
               zmalloc_used_memory() < server.maxmemory) &&
              !(c->flags & CLIENT_SLAVE)) break;
      }
@@ -270,7 +270,7 @@ index dd2ca1aae..27dfba8af 100644
      if (nwritten == -1) {
          if (connGetState(c->conn) == CONN_STATE_CONNECTED) {
              nwritten = 0;
-@@ -2001,7 +2002,7 @@ void readQueryFromClient(connection *conn) {
+@@ -2042,7 +2043,7 @@ void readQueryFromClient(connection *conn) {
      if (postponeClientRead(c)) return;
  
      /* Update total number of reads on server */
@@ -279,7 +279,7 @@ index dd2ca1aae..27dfba8af 100644
  
      readlen = PROTO_IOBUF_LEN;
      /* If this is a multi bulk request, and we are processing a bulk reply
-@@ -2047,7 +2048,7 @@ void readQueryFromClient(connection *conn) {
+@@ -2088,7 +2089,7 @@ void readQueryFromClient(connection *conn) {
      sdsIncrLen(c->querybuf,nread);
      c->lastinteraction = server.unixtime;
      if (c->flags & CLIENT_MASTER) c->read_reploff += nread;
@@ -288,7 +288,7 @@ index dd2ca1aae..27dfba8af 100644
      if (sdslen(c->querybuf) > server.client_max_querybuf_len) {
          sds ci = catClientInfoString(sdsempty(),c), bytes = sdsempty();
  
-@@ -3025,7 +3026,7 @@ int tio_debug = 0;
+@@ -3066,7 +3067,7 @@ int tio_debug = 0;
  
  pthread_t io_threads[IO_THREADS_MAX_NUM];
  pthread_mutex_t io_threads_mutex[IO_THREADS_MAX_NUM];
@@ -297,7 +297,7 @@ index dd2ca1aae..27dfba8af 100644
  int io_threads_op;      /* IO_THREADS_OP_WRITE or IO_THREADS_OP_READ. */
  
  /* This is the list of clients each thread will serve when threaded I/O is
-@@ -3033,6 +3034,16 @@ int io_threads_op;      /* IO_THREADS_OP_WRITE or IO_THREADS_OP_READ. */
+@@ -3074,6 +3075,16 @@ int io_threads_op;      /* IO_THREADS_OP_WRITE or IO_THREADS_OP_READ. */
   * itself. */
  list *io_threads_list[IO_THREADS_MAX_NUM];
  
@@ -314,7 +314,7 @@ index dd2ca1aae..27dfba8af 100644
  void *IOThreadMain(void *myid) {
      /* The ID is the thread number (from 0 to server.iothreads_num-1), and is
       * used by the thread to just manipulate a single sub-array of clients. */
-@@ -3047,17 +3058,17 @@ void *IOThreadMain(void *myid) {
+@@ -3088,17 +3099,17 @@ void *IOThreadMain(void *myid) {
      while(1) {
          /* Wait for start */
          for (int j = 0; j < 1000000; j++) {
@@ -335,7 +335,7 @@ index dd2ca1aae..27dfba8af 100644
  
          if (tio_debug) printf("[%ld] %d to handle\n", id, (int)listLength(io_threads_list[id]));
  
-@@ -3077,7 +3088,7 @@ void *IOThreadMain(void *myid) {
+@@ -3118,7 +3129,7 @@ void *IOThreadMain(void *myid) {
              }
          }
          listEmpty(io_threads_list[id]);
@@ -344,7 +344,7 @@ index dd2ca1aae..27dfba8af 100644
  
          if (tio_debug) printf("[%ld] Done\n", id);
      }
-@@ -3106,7 +3117,7 @@ void initThreadedIO(void) {
+@@ -3147,7 +3158,7 @@ void initThreadedIO(void) {
          /* Things we do only for the additional threads. */
          pthread_t tid;
          pthread_mutex_init(&io_threads_mutex[i],NULL);
@@ -353,7 +353,7 @@ index dd2ca1aae..27dfba8af 100644
          pthread_mutex_lock(&io_threads_mutex[i]); /* Thread will be stopped. */
          if (pthread_create(&tid,NULL,IOThreadMain,(void*)(long)i) != 0) {
              serverLog(LL_WARNING,"Fatal: Can't initialize IO thread.");
-@@ -3220,7 +3231,7 @@ int handleClientsWithPendingWritesUsingThreads(void) {
+@@ -3261,7 +3272,7 @@ int handleClientsWithPendingWritesUsingThreads(void) {
      io_threads_op = IO_THREADS_OP_WRITE;
      for (int j = 1; j < server.io_threads_num; j++) {
          int count = listLength(io_threads_list[j]);
@@ -362,7 +362,7 @@ index dd2ca1aae..27dfba8af 100644
      }
  
      /* Also use the main thread to process a slice of clients. */
-@@ -3235,7 +3246,7 @@ int handleClientsWithPendingWritesUsingThreads(void) {
+@@ -3276,7 +3287,7 @@ int handleClientsWithPendingWritesUsingThreads(void) {
      while(1) {
          unsigned long pending = 0;
          for (int j = 1; j < server.io_threads_num; j++)
@@ -371,7 +371,7 @@ index dd2ca1aae..27dfba8af 100644
          if (pending == 0) break;
      }
      if (tio_debug) printf("I/O WRITE All threads finshed\n");
-@@ -3310,7 +3321,7 @@ int handleClientsWithPendingReadsUsingThreads(void) {
+@@ -3352,7 +3363,7 @@ int handleClientsWithPendingReadsUsingThreads(void) {
      io_threads_op = IO_THREADS_OP_READ;
      for (int j = 1; j < server.io_threads_num; j++) {
          int count = listLength(io_threads_list[j]);
@@ -380,7 +380,7 @@ index dd2ca1aae..27dfba8af 100644
      }
  
      /* Also use the main thread to process a slice of clients. */
-@@ -3325,7 +3336,7 @@ int handleClientsWithPendingReadsUsingThreads(void) {
+@@ -3367,7 +3378,7 @@ int handleClientsWithPendingReadsUsingThreads(void) {
      while(1) {
          unsigned long pending = 0;
          for (int j = 1; j < server.io_threads_num; j++)
@@ -390,10 +390,10 @@ index dd2ca1aae..27dfba8af 100644
      }
      if (tio_debug) printf("I/O READ All threads finshed\n");
 diff --git a/src/redis-benchmark.c b/src/redis-benchmark.c
-index 9d9c15e00..ef35fc84e 100644
+index bec92fb33..2b8c94614 100644
 --- a/src/redis-benchmark.c
 +++ b/src/redis-benchmark.c
-@@ -70,10 +70,10 @@ static struct config {
+@@ -71,10 +71,10 @@ static struct config {
      int hostport;
      const char *hostsocket;
      int numclients;
@@ -407,7 +407,7 @@ index 9d9c15e00..ef35fc84e 100644
      int keysize;
      int datasize;
      int randomkeys;
-@@ -102,18 +102,12 @@ static struct config {
+@@ -103,18 +103,12 @@ static struct config {
      int cluster_node_count;
      struct clusterNode **cluster_nodes;
      struct redisConfig *redis_config;
@@ -429,7 +429,7 @@ index 9d9c15e00..ef35fc84e 100644
  } config;
  
  typedef struct _client {
-@@ -1617,13 +1611,8 @@ int main(int argc, const char **argv) {
+@@ -1622,13 +1616,8 @@ int main(int argc, const char **argv) {
      }
  
      if (config.num_threads > 0) {
@@ -444,10 +444,10 @@ index 9d9c15e00..ef35fc84e 100644
  
      if (config.keepalive == 0) {
 diff --git a/src/replication.c b/src/replication.c
-index 5ce9f0208..789c94e42 100644
+index 67cf420fe..5cd30dacb 100644
 --- a/src/replication.c
 +++ b/src/replication.c
-@@ -1025,7 +1025,7 @@ void sendBulkToSlave(connection *conn) {
+@@ -1030,7 +1030,7 @@ void sendBulkToSlave(connection *conn) {
              freeClient(slave);
              return;
          }
@@ -456,7 +456,7 @@ index 5ce9f0208..789c94e42 100644
          sdsrange(slave->replpreamble,nwritten,-1);
          if (sdslen(slave->replpreamble) == 0) {
              sdsfree(slave->replpreamble);
-@@ -1054,7 +1054,7 @@ void sendBulkToSlave(connection *conn) {
+@@ -1059,7 +1059,7 @@ void sendBulkToSlave(connection *conn) {
          return;
      }
      slave->repldboff += nwritten;
@@ -465,16 +465,16 @@ index 5ce9f0208..789c94e42 100644
      if (slave->repldboff == slave->repldbsize) {
          close(slave->repldbfd);
          slave->repldbfd = -1;
-@@ -1095,7 +1095,7 @@ void rdbPipeWriteHandler(struct connection *conn) {
+@@ -1102,7 +1102,7 @@ void rdbPipeWriteHandler(struct connection *conn) {
          return;
      } else {
          slave->repldboff += nwritten;
 -        server.stat_net_output_bytes += nwritten;
 +        atomicIncr(server.stat_net_output_bytes, nwritten);
-         if (slave->repldboff < server.rdb_pipe_bufflen)
+         if (slave->repldboff < server.rdb_pipe_bufflen) {
+             slave->repl_last_partial_write = server.unixtime;
              return; /* more data to write.. */
-     }
-@@ -1185,7 +1185,7 @@ void rdbPipeReadHandler(struct aeEventLoop *eventLoop, int fd, void *clientData,
+@@ -1180,7 +1180,7 @@ void rdbPipeReadHandler(struct aeEventLoop *eventLoop, int fd, void *clientData,
                  slave->repldboff = 0;
              } else {
                  slave->repldboff = nwritten;
@@ -483,7 +483,7 @@ index 5ce9f0208..789c94e42 100644
              }
              /* If we were unable to write all the data to one of the replicas,
               * setup write handler (and disable pipe read handler, below) */
-@@ -1551,7 +1551,7 @@ void readSyncBulkPayload(connection *conn) {
+@@ -1546,7 +1546,7 @@ void readSyncBulkPayload(connection *conn) {
              cancelReplicationHandshake();
              return;
          }
@@ -493,10 +493,10 @@ index 5ce9f0208..789c94e42 100644
          /* When a mark is used, we want to detect EOF asap in order to avoid
           * writing the EOF mark into the file... */
 diff --git a/src/server.c b/src/server.c
-index ece71834e..992bad1ca 100644
+index c8768b182..2da8432e3 100644
 --- a/src/server.c
 +++ b/src/server.c
-@@ -1760,7 +1760,8 @@ void databasesCron(void) {
+@@ -1761,7 +1761,8 @@ void databasesCron(void) {
  void updateCachedTime(int update_daylight_info) {
      server.ustime = ustime();
      server.mstime = server.ustime / 1000;
@@ -506,7 +506,7 @@ index ece71834e..992bad1ca 100644
  
      /* To get information about daylight saving time, we need to call
       * localtime_r and cache the result. However calling localtime_r in this
-@@ -1879,11 +1880,15 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
+@@ -1872,11 +1873,15 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
      }
  
      run_with_period(100) {
@@ -524,7 +524,7 @@ index ece71834e..992bad1ca 100644
      }
  
      /* We have just LRU_BITS bits per object for LRU information.
-@@ -1897,7 +1902,8 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
+@@ -1890,7 +1895,8 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
       *
       * Note that you can change the resolution altering the
       * LRU_CLOCK_RESOLUTION define. */
@@ -534,7 +534,7 @@ index ece71834e..992bad1ca 100644
  
      /* Record the max memory used since the server was started. */
      if (zmalloc_used_memory() > server.stat_peak_memory)
-@@ -2398,7 +2404,8 @@ void initServerConfig(void) {
+@@ -2391,7 +2397,8 @@ void initServerConfig(void) {
      server.next_client_id = 1; /* Client IDs, start from 1 .*/
      server.loading_process_events_interval_bytes = (1024*1024*2);
  
@@ -544,7 +544,7 @@ index ece71834e..992bad1ca 100644
      resetServerSaveParams();
  
      appendServerSaveParams(60*60,1);  /* save after 1 hour and 1 change */
-@@ -2807,9 +2814,9 @@ void resetServerStats(void) {
+@@ -2801,9 +2808,9 @@ void resetServerStats(void) {
      server.stat_sync_partial_ok = 0;
      server.stat_sync_partial_err = 0;
      server.stat_io_reads_processed = 0;
@@ -556,7 +556,7 @@ index ece71834e..992bad1ca 100644
      for (j = 0; j < STATS_METRIC_COUNT; j++) {
          server.inst_metric[j].idx = 0;
          server.inst_metric[j].last_sample_time = mstime();
-@@ -2817,8 +2824,8 @@ void resetServerStats(void) {
+@@ -2811,8 +2818,8 @@ void resetServerStats(void) {
          memset(server.inst_metric[j].samples,0,
              sizeof(server.inst_metric[j].samples));
      }
@@ -567,7 +567,7 @@ index ece71834e..992bad1ca 100644
      server.stat_unexpected_error_replies = 0;
      server.aof_delayed_fsync = 0;
  }
-@@ -4166,6 +4173,8 @@ sds genRedisInfoString(const char *section) {
+@@ -4159,6 +4166,8 @@ sds genRedisInfoString(const char *section) {
              call_uname = 0;
          }
  
@@ -576,7 +576,7 @@ index ece71834e..992bad1ca 100644
          info = sdscatfmt(info,
              "# Server\r\n"
              "redis_version:%s\r\n"
-@@ -4210,7 +4219,7 @@ sds genRedisInfoString(const char *section) {
+@@ -4203,7 +4212,7 @@ sds genRedisInfoString(const char *section) {
              (int64_t)(uptime/(3600*24)),
              server.hz,
              server.config_hz,
@@ -585,7 +585,7 @@ index ece71834e..992bad1ca 100644
              server.executable ? server.executable : "",
              server.configfile ? server.configfile : "",
              server.io_threads_active);
-@@ -4452,6 +4461,13 @@ sds genRedisInfoString(const char *section) {
+@@ -4445,6 +4454,13 @@ sds genRedisInfoString(const char *section) {
  
      /* Stats */
      if (allsections || defsections || !strcasecmp(section,"stats")) {
@@ -599,7 +599,7 @@ index ece71834e..992bad1ca 100644
          if (sections++) info = sdscat(info,"\r\n");
          info = sdscatprintf(info,
              "# Stats\r\n"
-@@ -4493,8 +4509,8 @@ sds genRedisInfoString(const char *section) {
+@@ -4486,8 +4502,8 @@ sds genRedisInfoString(const char *section) {
              server.stat_numconnections,
              server.stat_numcommands,
              getInstantaneousMetric(STATS_METRIC_COMMAND),
@@ -610,7 +610,7 @@ index ece71834e..992bad1ca 100644
              (float)getInstantaneousMetric(STATS_METRIC_NET_INPUT)/1024,
              (float)getInstantaneousMetric(STATS_METRIC_NET_OUTPUT)/1024,
              server.stat_rejected_conn,
-@@ -4521,8 +4537,8 @@ sds genRedisInfoString(const char *section) {
+@@ -4514,8 +4530,8 @@ sds genRedisInfoString(const char *section) {
              (unsigned long long) trackingGetTotalItems(),
              (unsigned long long) trackingGetTotalPrefixes(),
              server.stat_unexpected_error_replies,
@@ -622,7 +622,7 @@ index ece71834e..992bad1ca 100644
              server.stat_io_writes_processed);
      }
 diff --git a/src/server.h b/src/server.h
-index 96963c3b5..324e6b5dc 100644
+index 38774bbc2..0ddb2827e 100644
 --- a/src/server.h
 +++ b/src/server.h
 @@ -34,6 +34,7 @@
@@ -646,7 +646,7 @@ index 96963c3b5..324e6b5dc 100644
  typedef void (*RedisModuleUserChangedFunc) (uint64_t client_id, void *privdata);
  
  
-@@ -1079,7 +1082,7 @@ struct redisServer {
+@@ -1081,7 +1084,7 @@ struct redisServer {
      dict *commands;             /* Command table */
      dict *orig_commands;        /* Command table before command renaming. */
      aeEventLoop *el;
@@ -655,7 +655,7 @@ index 96963c3b5..324e6b5dc 100644
      volatile sig_atomic_t shutdown_asap; /* SHUTDOWN needed ASAP */
      int activerehashing;        /* Incremental rehash in serverCron() */
      int active_defrag_running;  /* Active defragmentation running (holds current scan aggressiveness) */
-@@ -1128,7 +1131,7 @@ struct redisServer {
+@@ -1130,7 +1133,7 @@ struct redisServer {
      mstime_t clients_pause_end_time; /* Time when we undo clients_paused */
      char neterr[ANET_ERR_LEN];   /* Error buffer for anet.c */
      dict *migrate_cached_sockets;/* MIGRATE cached sockets */
@@ -664,7 +664,7 @@ index 96963c3b5..324e6b5dc 100644
      int protected_mode;         /* Don't accept external connections. */
      int gopher_enabled;         /* If true the server will reply to gopher
                                     queries. Will still serve RESP2 queries. */
-@@ -1177,8 +1180,8 @@ struct redisServer {
+@@ -1179,8 +1182,8 @@ struct redisServer {
      long long slowlog_log_slower_than; /* SLOWLOG time limit (to get logged) */
      unsigned long slowlog_max_len;     /* SLOWLOG max number of items logged */
      struct malloc_stats cron_malloc_stats; /* sampled in serverCron(). */
@@ -675,7 +675,7 @@ index 96963c3b5..324e6b5dc 100644
      size_t stat_rdb_cow_bytes;      /* Copy on write bytes during RDB saving. */
      size_t stat_aof_cow_bytes;      /* Copy on write bytes during AOF rewrite. */
      size_t stat_module_cow_bytes;   /* Copy on write bytes during module fork. */
-@@ -1186,8 +1189,8 @@ struct redisServer {
+@@ -1188,8 +1191,8 @@ struct redisServer {
      long long stat_unexpected_error_replies; /* Number of unexpected (aof-loading, replica to master, etc.) error replies */
      long long stat_io_reads_processed; /* Number of read events processed by IO / Main threads */
      long long stat_io_writes_processed; /* Number of write events processed by IO / Main threads */
@@ -686,7 +686,7 @@ index 96963c3b5..324e6b5dc 100644
      /* The following two are used to track instantaneous metrics, like
       * number of operations per second, network traffic. */
      struct {
-@@ -1210,7 +1213,7 @@ struct redisServer {
+@@ -1212,7 +1215,7 @@ struct redisServer {
      int active_defrag_cycle_min;       /* minimal effort for defrag in CPU percentage */
      int active_defrag_cycle_max;       /* maximal effort for defrag in CPU percentage */
      unsigned long active_defrag_max_scan_fields; /* maximum number of fields of set/hash/zset/list to process from within the main dict scan */
@@ -695,7 +695,7 @@ index 96963c3b5..324e6b5dc 100644
      int dbnum;                      /* Total number of configured DBs */
      int supervised;                 /* 1 if supervised, 0 otherwise. */
      int supervised_mode;            /* See SUPERVISED_* */
-@@ -1401,7 +1404,7 @@ struct redisServer {
+@@ -1404,7 +1407,7 @@ struct redisServer {
      int list_max_ziplist_size;
      int list_compress_depth;
      /* time cache */
@@ -705,10 +705,10 @@ index 96963c3b5..324e6b5dc 100644
      int daylight_active;        /* Currently in daylight saving time. */
      mstime_t mstime;            /* 'unixtime' in milliseconds. */
 diff --git a/src/zmalloc.c b/src/zmalloc.c
-index d693aac1c..940920bc2 100644
+index beae8d656..acccaee8e 100644
 --- a/src/zmalloc.c
 +++ b/src/zmalloc.c
-@@ -83,8 +83,7 @@ void zlibc_free(void *ptr) {
+@@ -86,8 +86,7 @@ void zlibc_free(void *ptr) {
      atomicDecr(used_memory,__n); \
  } while(0)
  
