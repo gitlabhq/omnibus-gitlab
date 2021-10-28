@@ -435,7 +435,7 @@ Faraday::SSLError (SSL_connect returned=1 errno=0 state=SSLv3 read server certif
 
 when GitLab tries to connect with the internal services like GitLab Shell.
 
-To fix these errors, see the [Custom SSL settings](settings/ssl.md) section.
+To fix these errors, see the [Install Custom Public Certificates](settings/ssl.md#install-custom-public-certificates) section.
 
 ## error: proxyRoundTripper: XXX failed with: "net/http: timeout awaiting response headers"
 
