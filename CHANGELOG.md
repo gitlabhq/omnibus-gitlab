@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.4.1 (2021-10-28)
+
+### Security (2 changes)
+
+- [Update Curl to version 7.79.1](gitlab-org/security/omnibus-gitlab@882a0b93e38669049aa13d824945010b6895a382) ([merge request](gitlab-org/security/omnibus-gitlab!154))
+- [Update openssl to 1.1.1l](gitlab-org/security/omnibus-gitlab@22584f0661c4dba0103caf083f30bd818ec63537) ([merge request](gitlab-org/security/omnibus-gitlab!152))
+
 ## 14.4.0 (2021-10-21)
 
 ### Added (6 changes)
@@ -34,6 +41,13 @@ omnibus-gitlab repository.
 ### Deprecated (1 change)
 
 - [Deprecate Pages `inplace_chroot` flag and stop running Pages as a daemon](gitlab-org/omnibus-gitlab@ae3cdf3bf6846415391a765661090456a06ce32b) by @feistel ([merge request](gitlab-org/omnibus-gitlab!5639))
+
+## 14.3.4 (2021-10-28)
+
+### Security (2 changes)
+
+- [Update Curl to version 7.79.1](gitlab-org/security/omnibus-gitlab@152ecf0a7e6888f7d301aef27d3db8b68fd7e252) ([merge request](gitlab-org/security/omnibus-gitlab!155))
+- [Update openssl to 1.1.1l](gitlab-org/security/omnibus-gitlab@4a566defdbb9f224f932c8876c666840d6d3e77e) ([merge request](gitlab-org/security/omnibus-gitlab!147))
 
 ## 14.3.3 (2021-10-12)
 
@@ -94,6 +108,13 @@ No changes.
 
 - [Update Mattermost to 5.38.2](gitlab-org/omnibus-gitlab@02d9eb7adfbd2c13048cd0db4550ab994fb9feaa) by @hmhealey ([merge request](gitlab-org/omnibus-gitlab!5587))
 - [Update Python from 3.7.10 to 3.9.5](gitlab-org/omnibus-gitlab@055e29c12442df3ef278a566160e1664e5da331b) ([merge request](gitlab-org/omnibus-gitlab!5547))
+
+## 14.2.6 (2021-10-28)
+
+### Security (2 changes)
+
+- [Update Curl to version 7.79.1](gitlab-org/security/omnibus-gitlab@151269917214a2b791b90949e7794d19a5fc304d) ([merge request](gitlab-org/security/omnibus-gitlab!156))
+- [Update openssl to 1.1.1l](gitlab-org/security/omnibus-gitlab@df6605f7b2cf0042ec156fd8b8bd35a2b5be0d1f) ([merge request](gitlab-org/security/omnibus-gitlab!148))
 
 ## 14.2.5 (2021-09-30)
 
