@@ -1,8 +1,8 @@
 diff --git a/deps/Makefile b/deps/Makefile
-index eb35c1e1f..3ca8252e7 100644
+index 700867f3b..03fd9ecb9 100644
 --- a/deps/Makefile
 +++ b/deps/Makefile
-@@ -77,7 +77,7 @@ JEMALLOC_LDFLAGS= $(LDFLAGS)
+@@ -81,7 +81,7 @@ JEMALLOC_LDFLAGS= $(LDFLAGS)
  
  jemalloc: .make-prerequisites
  	@printf '%b %b\n' $(MAKECOLOR)MAKE$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR)

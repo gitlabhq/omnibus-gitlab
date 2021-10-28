@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.2.6 (2021-10-28)
+
+### Security (2 changes)
+
+- [Update Curl to version 7.79.1](gitlab-org/security/omnibus-gitlab@151269917214a2b791b90949e7794d19a5fc304d) ([merge request](gitlab-org/security/omnibus-gitlab!156))
+- [Update openssl to 1.1.1l](gitlab-org/security/omnibus-gitlab@df6605f7b2cf0042ec156fd8b8bd35a2b5be0d1f) ([merge request](gitlab-org/security/omnibus-gitlab!148))
+
 ## 14.2.5 (2021-09-30)
 
 No changes.
