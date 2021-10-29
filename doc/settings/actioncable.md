@@ -6,16 +6,9 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Action Cable **(FREE SELF)**
 
-NOTE:
-Action Cable is **experimental**, and enabling it also enables experimental features.
-
-This service is disabled by default. To enable:
-
-```ruby
-actioncable['enable'] = true
-```
+Action Cable is a Rails engine that handles websocket connections.
 
 ## Configuring the worker pool size
 
-Action Cable uses a separate thread pool to handle the websocket connections. The number of threads can be configured
+Action Cable uses a separate thread pool per Puma worker. The number of threads can be configured
 using the `actioncable['worker_pool_size']` option.

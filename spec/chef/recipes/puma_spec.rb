@@ -162,7 +162,6 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
     before do
       stub_gitlab_rb(
         actioncable: {
-          enable: true,
           worker_pool_size: 7
         }
       )
@@ -171,7 +170,6 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
     it 'renders the runit configuration with ActionCable environment variables' do
       expect(chef_run).to render_file('/opt/gitlab/sv/puma/run')
         .with_content { |content|
-          expect(content).to match(/ACTION_CABLE_IN_APP=true/)
           expect(content).to match(/ACTION_CABLE_WORKER_POOL_SIZE=7/)
           expect(content).to match(%r(/opt/gitlab/embedded/bin/bundle exec puma -C /var/opt/gitlab/gitlab-rails/etc/puma.rb))
         }

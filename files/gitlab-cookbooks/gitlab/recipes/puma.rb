@@ -38,7 +38,6 @@ puma_rb = File.join(puma_etc_dir, "puma.rb")
 
 node.default['gitlab'][svc]['worker_processes'] = Puma.workers unless node['gitlab'][svc]['worker_processes']
 
-actioncable_in_app_enabled = node['gitlab']['actioncable']['enable']
 actioncable_worker_pool_size = node['gitlab']['actioncable']['worker_pool_size']
 
 [
@@ -94,7 +93,6 @@ runit_service svc do
     rails_app: rails_app,
     puma_rb: puma_rb,
     log_directory: puma_log_dir,
-    actioncable_in_app_enabled: actioncable_in_app_enabled,
     actioncable_worker_pool_size: actioncable_worker_pool_size,
     metrics_dir: metrics_dir,
     clean_metrics_dir: false
