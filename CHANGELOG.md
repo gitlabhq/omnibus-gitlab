@@ -398,6 +398,12 @@ No changes.
 - [Bump gitlab-exporter to 10.3.0](gitlab-org/omnibus-gitlab@ff48e6e54f1da086711ea85b586713816eb6a42d) ([merge request](gitlab-org/omnibus-gitlab!5315))
 - [Update Mattermost to 5.35.2](gitlab-org/omnibus-gitlab@c0592b2bb4be3ce0f61ae2e287410cf9128f6c19) ([merge request](gitlab-org/omnibus-gitlab!5329))
 
+## 13.12.13 (2021-10-29)
+
+### Fixed (1 change)
+
+- [Conditionally generate public_attributes.json](gitlab-org/omnibus-gitlab@466e0c357dae6f66d12a558364a2bc5b62bcf2d6) ([merge request](gitlab-org/omnibus-gitlab!5699))
+
 ## 13.12.12 (2021-09-21)
 
 No changes.
