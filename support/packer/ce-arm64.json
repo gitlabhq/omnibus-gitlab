@@ -1,0 +1,69 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "version": "",
+    "download_url": ""
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "us-east-1",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "ubuntu/images/*ubuntu-focal-20.04-arm64-server-*",
+        "root-device-type": "ebs"
+      },
+      "owners": ["099720109477"],
+      "most_recent": true
+    },
+    "instance_type": "m6g.medium",
+    "ssh_username": "ubuntu",
+    "ami_name": "GitLab CE {{user `version`}} (ARM64)",
+    "ami_users": ["684062674729", "679593333241"],
+    "snapshot_users": ["684062674729", "679593333241"],
+    "ami_description": "Official GitLab CE {{user `version`}} (ARM64) AMI. https://about.gitlab.com/",
+    "ami_groups": ["all"],
+    "tags": {
+      "Type": "GitLab Community Edition (ARM64)",
+      "Version": "{{user `version`}}"
+    },
+    "ami_regions": [
+      "af-south-1",
+      "ap-northeast-1",
+      "ap-northeast-2",
+      "ap-northeast-3",
+      "ap-south-1",
+      "ap-southeast-1",
+      "ap-southeast-2",
+      "ca-central-1",
+      "eu-central-1",
+      "eu-north-1",
+      "eu-south-1",
+      "eu-west-1",
+      "eu-west-2",
+      "eu-west-3",
+      "me-south-1",
+      "sa-east-1",
+      "us-east-2",
+      "us-west-1",
+      "us-west-2"
+    ],
+    "sriov_support": true,
+    "ena_support": true
+  }],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "./ami-startup-script.sh",
+      "destination": "/home/ubuntu/ami-startup-script.sh"
+    },
+    {
+      "type": "shell",
+      "script": "update-script-ce.sh",
+      "environment_vars": ["DOWNLOAD_URL={{user `download_url`}}"]
+    }
+  ]
+}

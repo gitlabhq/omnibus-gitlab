@@ -77,6 +77,28 @@ RSpec.describe 'aws:ami:create', type: :rake do
       Rake::Task['aws:ami:create'].invoke
     end
 
+    it 'should identify ce arm64 correctly' do
+      allow(Gitlab::Util).to receive(:get_env).and_call_original
+      allow(Gitlab::Util).to receive(:get_env).with('AWS_ARCHITECTURE').and_return('arm64')
+      allow(Build::Info).to receive(:edition).and_return(nil)
+      allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
+
+      expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ce-arm64", "http://example.com", ""])
+
+      Rake::Task['aws:ami:create'].invoke
+    end
+
+    it 'should identify ee arm64 correctly' do
+      allow(Gitlab::Util).to receive(:get_env).and_call_original
+      allow(Gitlab::Util).to receive(:get_env).with('AWS_ARCHITECTURE').and_return('arm64')
+      allow(Build::Info).to receive(:edition).and_return('ee')
+      allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
+
+      expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ee-arm64", "http://example.com", ""])
+
+      Rake::Task['aws:ami:create'].invoke
+    end
+
     it 'should identify ee ultimate category correctly' do
       allow(Build::Info).to receive(:edition).and_return('ee')
       allow(Gitlab::Util).to receive(:get_env).and_call_original

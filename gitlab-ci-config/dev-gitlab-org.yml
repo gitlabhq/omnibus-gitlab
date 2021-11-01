@@ -922,6 +922,12 @@ Docker-Release:
 AWS:
   <<: *aws_ami_build
 
+AWS-ARM64:
+  variables:
+    AWS_ARCHITECTURE: 'arm64'
+  <<: *aws_ami_build
+
+
 AWS-Ultimate:
   variables:
     AWS_RELEASE_TYPE: "ultimate"
