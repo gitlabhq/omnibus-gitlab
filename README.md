@@ -140,7 +140,7 @@ If you have problems removing accounts or groups, run `luserdel` or `lgroupdel` 
 to delete them. You might also want to manually remove the leftover user home directories
 from `/home/`.
 
-To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse`.
+To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse && sudo rm -r /opt/gitlab`.
 
 To uninstall omnibus-gitlab, preserving your data (repositories, database, configuration), run the following commands.
 
