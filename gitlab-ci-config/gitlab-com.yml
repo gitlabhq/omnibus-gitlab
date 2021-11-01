@@ -262,7 +262,7 @@ rubocop:
 
 # Perform documentation linting on Markdown files
 docs-lint markdown:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.14-vale-2.10.4-markdownlint-0.28.1
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.14-vale-2.12.0-markdownlint-0.29.0
   stage: check
   cache: {}
   needs: []
@@ -276,7 +276,7 @@ docs-lint markdown:
 
 # Perform link checks on published HTML files
 docs-lint links:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.14-ruby-2.7.4-db71f027
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.14-ruby-2.7.4-0fae0f62
   stage: check
   cache: {}
   needs: []
