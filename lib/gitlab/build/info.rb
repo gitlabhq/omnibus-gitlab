@@ -159,9 +159,12 @@ module Build
       end
 
       # Fetch the package from an S3 bucket
-      def package_download_url
+      def package_download_url(arch: 'amd64')
+        folder = 'ubuntu-focal'
+        folder = "#{folder}-aarch64" if arch == 'arm64'
+
         package_filename_url_safe = Info.release_version.gsub("+", "%2B")
-        "https://#{Info.release_bucket}.#{Info.release_bucket_s3_endpoint}/ubuntu-focal/#{Info.package}_#{package_filename_url_safe}_amd64.deb"
+        "https://#{Info.release_bucket}.#{Info.release_bucket_s3_endpoint}/#{folder}/#{Info.package}_#{package_filename_url_safe}_#{arch}.deb"
       end
 
       def get_api(path, token: nil)

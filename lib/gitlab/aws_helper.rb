@@ -16,13 +16,20 @@ class AWSHelper
 
   def create_ami
     release_type = Gitlab::Util.get_env('AWS_RELEASE_TYPE')
+    architecture = Gitlab::Util.get_env('AWS_ARCHITECTURE')
+    args = {}
 
     if (@type == 'ee') && release_type
       @type = "ee-#{release_type}"
       @license_file = "AWS_#{release_type}_LICENSE_FILE".upcase
     end
 
-    @download_url = Build::Info.package_download_url
+    if architecture
+      args = { arch: architecture }
+      @type = "#{@type}-#{architecture}"
+    end
+
+    @download_url = Build::Info.package_download_url(**args)
 
     system(*%W[support/packer/packer_ami.sh #{@version} #{@type} #{@download_url} #{@license_file}])
   end
