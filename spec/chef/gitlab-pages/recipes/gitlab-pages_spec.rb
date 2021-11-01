@@ -216,6 +216,8 @@ RSpec.describe 'gitlab::gitlab-pages' do
             gitlab_retrieval_timeout: "3s",
             gitlab_retrieval_interval: "500ms",
             gitlab_retrieval_retries: 5,
+            rate_limit_source_ip: 100,
+            rate_limit_source_ip_burst: 50,
             enable_disk: true,
             env: {
               GITLAB_CONTINUOUS_PROFILING: "stackdriver?service=gitlab-pages",
@@ -270,6 +272,8 @@ RSpec.describe 'gitlab::gitlab-pages' do
             gitlab-retrieval-timeout=500ms
             gitlab-retrieval-retries=5
             enable-disk=true
+            rate-limit-source-ip=100
+            rate-limit-source-ip-burst=50
         EOS
 
         expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(expected_content)

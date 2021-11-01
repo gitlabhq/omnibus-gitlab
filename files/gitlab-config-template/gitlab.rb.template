@@ -1670,6 +1670,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Enable serving content from disk instead of Object Storage
 # gitlab_pages['enable_disk'] = nil
 
+##! Rate-limiting options below work in report-only mode:
+##! they only count rejected requests, but don't reject them
+##! enable `FF_ENABLE_RATE_LIMITER=true` environment variable to
+##! reject requests.
+
+##! Rate limit per source IP in number of requests per second, 0 means is disabled
+# gitlab_pages['rate_limit_source_ip'] = 50.0
+##! Rate limit per source IP maximum burst allowed per second
+# gitlab_pages['rate_limit_source_ip_burst'] = 600
+
 # gitlab_pages['env_directory'] = "/opt/gitlab/etc/gitlab-pages/env"
 # gitlab_pages['env'] = {
 #   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
