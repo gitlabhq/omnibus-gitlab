@@ -498,6 +498,12 @@ production: &base
       cron: "<%= @ssh_keys_expiring_soon_notification_worker_cron %>"
     <% end %>
 
+    # Orphaned record cleanup with the loose foreign key feature
+    <% unless @loose_foreign_keys_cleanup_worker_cron.nil? %>
+    loose_foreign_keys_cleanup_worker:
+      cron: "<%= @loose_foreign_keys_cleanup_worker_cron %>"
+    <% end %>
+
     ##
     # GitLab EE only jobs:
 
