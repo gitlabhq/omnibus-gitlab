@@ -27,9 +27,25 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 build do
+  env = {}
   build_dir = "#{Omnibus::Config.source_dir}/libtensorflow_lite/tflite_build"
+
   command "mkdir -p #{install_dir}/embedded/lib #{build_dir}"
-  command "cmake #{Omnibus::Config.source_dir}/libtensorflow_lite/tensorflow/lite/c", cwd: build_dir
-  command "cmake --build . -j #{workers}", cwd: build_dir
+
+  block 'use a custom compiler for OSs with older gcc' do
+    if ohai['platform'] == 'centos' && ohai['platform_version'].start_with?('7.')
+      env['CC'] = "/opt/rh/devtoolset-8/root/usr/bin/gcc"
+      env['CXX'] = "/opt/rh/devtoolset-8/root/usr/bin/g++"
+    elsif ohai['platform'] == 'suse' && ohai['platform_version'].start_with?('12.')
+      env['CC'] = "/usr/bin/gcc-5"
+      env['CXX'] = "/usr/bin/g++-5"
+    elsif ohai['platform'] == 'opensuseleap' && ohai['platform_version'].start_with?('15.')
+      env['CC'] = "/usr/bin/gcc-8"
+      env['CXX'] = "/usr/bin/g++-8"
+    end
+  end
+
+  command "cmake #{Omnibus::Config.source_dir}/libtensorflow_lite/tensorflow/lite/c", cwd: build_dir, env: env
+  command "cmake --build . -j #{workers}", cwd: build_dir, env: env
   move "#{build_dir}/libtensorflowlite_c.*", "#{install_dir}/embedded/lib"
 end
