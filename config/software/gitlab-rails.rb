@@ -72,12 +72,6 @@ build do
   # Set installation type to omnibus
   command "echo 'omnibus-gitlab' > INSTALLATION_TYPE"
 
-  block 'use a custom compiler (gcc 6.3 instead of 4.4.7) in CentOS 6' do
-    next unless ohai['platform'] == 'centos' && ohai['platform_version'].start_with?('6.')
-
-    env['PATH'] = "/opt/rh/devtoolset-7/root/usr/bin:#{env['PATH']}"
-  end
-
   make "install -C workhorse PREFIX=#{install_dir}/embedded"
 
   bundle_without = %w(development test)
