@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.0.12 (2021-11-05)
+
+### Fixed (1 change)
+
+- [Conditionally generate public_attributes.json](gitlab-org/omnibus-gitlab@84109feb04962e6af2c42a50fd2a56d0c7ced334) ([merge request](gitlab-org/omnibus-gitlab!5712))
+
 ## 14.0.11 (2021-09-23)
 
 No changes.
