@@ -337,6 +337,7 @@ production: &base
     enabled: <%= @gitlab_kas_enabled %>
     internal_url: <%= @gitlab_kas_internal_url %>
     external_url: <%= @gitlab_kas_external_url %>
+    external_k8s_proxy_url: <%= @gitlab_kas_external_k8s_proxy_url %>
 
   ## Error Reporting and Logging with Sentry
   sentry:

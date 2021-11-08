@@ -179,10 +179,13 @@ server {
 
   <% end -%>
   <% if node['gitlab-kas']['enable'] -%>
-  location <%= File.join(@path, '-/kubernetes-agent/') %> {
+  location = <%= File.join(@path, '-/kubernetes-agent/') %> {
     proxy_pass http://<%= node['gitlab-kas']['listen_address'] %>/;
   }
 
+  location <%= File.join(@path, '-/kubernetes-agent/k8s-proxy/') %> {
+    proxy_pass http://<%= node['gitlab-kas']['kubernetes_api_listen_address'] %>/;
+  }
   <% end -%>
 
   # health checks configuration

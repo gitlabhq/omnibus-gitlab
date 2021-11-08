@@ -24,6 +24,7 @@ module GitlabKas
       parse_gitlab_kas_enabled
       parse_gitlab_kas_external_url
       parse_gitlab_kas_internal_url
+      parse_gitlab_kas_external_k8s_proxy_url
     end
 
     def parse_address
@@ -83,12 +84,30 @@ module GitlabKas
       Gitlab['gitlab_rails'][key] = "#{scheme}://#{address}"
     end
 
+    def parse_gitlab_kas_external_k8s_proxy_url
+      key = 'gitlab_kas_external_k8s_proxy_url'
+      return unless Gitlab['gitlab_rails'][key].nil?
+
+      return unless gitlab_kas_attr('enable')
+
+      gitlab_external_url = Gitlab['external_url']
+      return unless gitlab_external_url
+
+      # For now, the default external proxy URL is on the subpath /-/kubernetes-agent/proxy
+      # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5784
+      Gitlab['gitlab_rails'][key] = "#{gitlab_external_url}/-/kubernetes-agent/k8s-proxy"
+    end
+
     def parse_secrets
       # KAS and GitLab expects exactly 32 bytes, encoded with base64
-      Gitlab['gitlab_kas']['api_secret_key'] ||= Base64.strict_encode64(SecretsHelper.generate_hex(16))
 
+      Gitlab['gitlab_kas']['api_secret_key'] ||= Base64.strict_encode64(SecretsHelper.generate_hex(16))
       api_secret_key = Base64.strict_decode64(Gitlab['gitlab_kas']['api_secret_key'])
       raise "gitlab_kas['api_secret_key'] should be exactly 32 bytes" if api_secret_key.length != 32
+
+      Gitlab['gitlab_kas']['private_api_secret_key'] ||= Base64.strict_encode64(SecretsHelper.generate_hex(16))
+      private_api_secret_key = Base64.strict_decode64(Gitlab['gitlab_kas']['private_api_secret_key'])
+      raise "gitlab_kas['private_api_secret_key'] should be exactly 32 bytes" if private_api_secret_key.length != 32
     end
 
     private

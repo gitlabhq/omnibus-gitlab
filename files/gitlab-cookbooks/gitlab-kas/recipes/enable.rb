@@ -24,6 +24,7 @@ env_directory = node['gitlab-kas']['env_directory']
 gitlab_kas_static_etc_dir = '/opt/gitlab/etc/gitlab-kas'
 gitlab_kas_config_file = File.join(working_dir, 'gitlab-kas-config.yml')
 gitlab_kas_authentication_secret_file = File.join(working_dir, 'authentication_secret_file')
+gitlab_kas_private_api_authentication_secret_file = File.join(working_dir, 'private_api_authentication_secret_file')
 redis_host, redis_port, redis_password = redis_helper.redis_params
 redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 redis_sentinels_master_name = node['redis']['master_name']
@@ -61,6 +62,14 @@ file gitlab_kas_authentication_secret_file do
   notifies :restart, 'runit_service[gitlab-kas]'
 end
 
+file gitlab_kas_private_api_authentication_secret_file do
+  content node['gitlab-kas']['private_api_secret_key']
+  owner 'root'
+  group account_helper.gitlab_group
+  mode '0640'
+  notifies :restart, 'runit_service[gitlab-kas]'
+end
+
 file gitlab_kas_redis_password_file do
   content redis_password
   owner 'root'
@@ -78,6 +87,7 @@ template gitlab_kas_config_file do
   variables(
     node['gitlab-kas'].to_hash.merge(
       authentication_secret_file: gitlab_kas_authentication_secret_file,
+      private_api_authentication_secret_file: gitlab_kas_private_api_authentication_secret_file,
       redis_network: redis_network,
       redis_address: redis_address,
       redis_password_file: redis_password ? gitlab_kas_redis_password_file : nil,

@@ -1708,6 +1708,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_kas_enabled'] = true
 # gitlab_rails['gitlab_kas_external_url'] = ws://gitlab.example.com/-/kubernetes-agent
 # gitlab_rails['gitlab_kas_internal_url'] = grpc://localhost:8153
+# gitlab_rails['gitlab_kas_external_k8s_proxy_url'] = ws://gitlab.example.com/-/kubernetes-agent
 
 ##! Enable GitLab KAS
 # gitlab_kas['enable'] = true
@@ -1723,15 +1724,28 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Shared secret used for authentication between KAS and GitLab
 # gitlab_kas['api_secret_key'] = nil # Will be generated if not set. Base64 encoded and exactly 32 bytes long.
 
+##! Shared secret used for authentication between different KAS instances in a multi-node setup
+# gitlab_kas['private_api_secret_key'] = nil # Will be generated if not set. Base64 encoded and exactly 32 bytes long.
+
 ##! Listen configuration for GitLab KAS
 # gitlab_kas['listen_address'] = 'localhost:8150'
 # gitlab_kas['listen_network'] = 'tcp'
 # gitlab_kas['listen_websocket'] = true
 # gitlab_kas['internal_api_listen_network'] = 'tcp'
 # gitlab_kas['internal_api_listen_address'] = 'localhost:8153'
+# gitlab_kas['kubernetes_api_listen_address'] = 'localhost:8154'
+# gitlab_kas['private_api_listen_network'] = 'tcp'
+# gitlab_kas['private_api_listen_address'] = 'localhost:8155'
 
 ##! Metrics configuration for GitLab KAS
 # gitlab_kas['metrics_usage_reporting_period'] = 60
+
+##! Environment variables for GitLab KAS
+# gitlab_kas['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/",
+#   # In a multi-node setup, this address MUST be reachable from other KAS instances. In a single-node setup, it can be on localhost for simplicity
+#   'OWN_PRIVATE_API_URL' => 'grpc://localhost:8155'
+# }
 
 ##! Directories for GitLab KAS
 # gitlab_kas['dir'] = '/var/opt/gitlab/gitlab-kas'
