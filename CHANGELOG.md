@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.4.2 (2021-11-08)
+
+### Added (1 change)
+
+- [Build and publish ARM64 AMIs](gitlab-org/omnibus-gitlab@062aef7148073a8b336b5394a5b1b19bc75957c8) ([merge request](gitlab-org/omnibus-gitlab!5715))
+
+### Fixed (1 change)
+
+- [Fix URL for unzip v6.0 download](gitlab-org/omnibus-gitlab@85ca56906a376ff746a62c0054c9704cbac48116) ([merge request](gitlab-org/omnibus-gitlab!5715))
+
 ## 14.4.1 (2021-10-28)
 
 ### Security (2 changes)
