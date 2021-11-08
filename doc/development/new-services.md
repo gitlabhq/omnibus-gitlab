@@ -199,7 +199,7 @@ end
 
 ### Disable recipe
 
-The enable recipe should be created as `files/gitlab-cookbooks/<cookbook-name>/recipes/<service-name>_disable.rb`
+The disable recipe should be created as `files/gitlab-cookbooks/<cookbook-name>/recipes/<service-name>_disable.rb`
 if it being added to an existing cookbook. If the service has its own cookbook,
 the disable recipe can be created as `files/gitlab-cookbooks/<cookbook-name>/recipes/disable.rb`.
 
