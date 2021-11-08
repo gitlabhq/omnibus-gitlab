@@ -9,7 +9,7 @@ class RedhatHelper
 
   def self.platform_family
     case platform
-    when /oracle/, /centos/, /redhat/, /scientific/, /enterpriseenterprise/, /amazon/, /xenserver/, /cloudlinux/, /ibm_powerkvm/, /parallels/
+    when /oracle/, /centos/, /almalinux/, /rocky/, /redhat/, /scientific/, /enterpriseenterprise/, /amazon/, /xenserver/, /cloudlinux/, /ibm_powerkvm/, /parallels/
       'rhel'
     else
       'not redhat'
