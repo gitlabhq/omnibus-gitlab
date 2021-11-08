@@ -2,6 +2,7 @@ require 'chef_helper'
 
 RSpec.describe 'gitlab-kas' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir templatesymlink)).converge('gitlab::default') }
+  let(:gitlab_kas_config_yml) { chef_run_load_yaml_template(chef_run, '/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -35,22 +36,56 @@ RSpec.describe 'gitlab-kas' do
     end
 
     it 'correctly renders the KAS config file' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^    address: localhost:8150})
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^    websocket: true})
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  usage_reporting_period: 60s})
+      expect(gitlab_kas_config_yml).to(
+        include(
+          agent: hash_including(
+            listen: {
+              network: 'tcp',
+              address: 'localhost:8150',
+              websocket: true,
+            },
+            kubernetes_api: {
+              listen: {
+                address: 'localhost:8154',
+              },
+              url_path_prefix: '/'
+            }
+          ),
+          observability: {
+            usage_reporting_period: '60s'
+          },
+          private_api: {
+            listen: {
+              address: "localhost:8155",
+              authentication_secret_file: "/var/opt/gitlab/gitlab-kas/private_api_authentication_secret_file",
+              network: "tcp"
+            },
+          }
+        )
+      )
     end
 
-    it 'correctly renders the KAS authentication secret file' do
+    it 'correctly renders the KAS authentication secret files' do
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/authentication_secret_file").with_content { |content| Base64.strict_decode64(content).size == 32 }
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/private_api_authentication_secret_file").with_content { |content| Base64.strict_decode64(content).size == 32 }
+    end
+
+    it 'sets OWN_PRIVATE_API_URL and SSL_CERT_DIR' do
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-kas/env/OWN_PRIVATE_API_URL').with_content('grpc://localhost:8155')
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-kas/env/SSL_CERT_DIR').with_content('/opt/gitlab/embedded/ssl/certs/')
     end
   end
 
   context 'with user settings' do
+    let(:api_secret_key) { Base64.strict_encode64('1' * 32) }
+    let(:private_api_secret_key) { Base64.strict_encode64('2' * 32) }
+
     before do
       stub_gitlab_rb(
         external_url: 'https://gitlab.example.com',
         gitlab_kas: {
-          api_secret_key: 'QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUE=',
+          api_secret_key: api_secret_key,
+          private_api_secret_key: private_api_secret_key,
           enable: true,
           listen_address: 'localhost:5006',
           listen_websocket: false,
@@ -68,20 +103,30 @@ RSpec.describe 'gitlab-kas' do
     end
 
     it 'correctly renders the KAS config file' do
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^    address: localhost:5006})
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^    websocket: false})
-      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content(%r{^  usage_reporting_period: 120s})
+      expect(gitlab_kas_config_yml).to(
+        include(
+          agent: hash_including(
+            listen: {
+              network: 'tcp',
+              address: 'localhost:5006',
+              websocket: false
+            }
+          ),
+          observability: {
+            usage_reporting_period: '120s'
+          }
+        )
+      )
     end
 
-    it 'correctly renders the KAS authentication secret file' do
-      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/authentication_secret_file").with_content('QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUE=')
+    it 'correctly renders the KAS authentication secret files' do
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/authentication_secret_file").with_content(api_secret_key)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/private_api_authentication_secret_file").with_content(private_api_secret_key)
     end
   end
 
   describe 'gitlab.yml configuration' do
-    let(:gitlab_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml') }
-    let(:gitlab_yml_file_content) { ChefSpec::Renderer.new(chef_run, gitlab_yml_template).content }
-    let(:gitlab_yml) { YAML.safe_load(gitlab_yml_file_content, [], [], true, symbolize_names: true) }
+    let(:gitlab_yml) { chef_run_load_yaml_template(chef_run, '/var/opt/gitlab/gitlab-rails/etc/gitlab.yml') }
 
     context 'with defaults' do
       before do
@@ -97,7 +142,8 @@ RSpec.describe 'gitlab-kas' do
         expect(gitlab_yml[:production][:gitlab_kas]).to include(
           enabled: true,
           external_url: 'wss://gitlab.example.com/-/kubernetes-agent',
-          internal_url: 'grpc://localhost:8153'
+          internal_url: 'grpc://localhost:8153',
+          external_k8s_proxy_url: 'https://gitlab.example.com/-/kubernetes-agent/k8s-proxy'
         )
       end
     end
@@ -131,11 +177,12 @@ RSpec.describe 'gitlab-kas' do
         )
       end
 
-      it 'derives the external URL from the top level external URL, and the internal URL from the listen address' do
+      it 'derives the external URLs from the top level external URL, and the internal URL from the listen address' do
         expect(gitlab_yml[:production][:gitlab_kas]).to include(
           enabled: true,
           external_url: 'wss://gitlab.example.com/-/kubernetes-agent',
-          internal_url: 'grpc://custom-api-address:9999'
+          internal_url: 'grpc://custom-api-address:9999',
+          external_k8s_proxy_url: 'https://gitlab.example.com/-/kubernetes-agent/k8s-proxy'
         )
       end
     end
@@ -146,7 +193,8 @@ RSpec.describe 'gitlab-kas' do
           external_url: 'https://gitlab.example.com',
           gitlab_rails: {
             gitlab_kas_external_url: 'wss://kas.example.com',
-            gitlab_kas_internal_url: 'grpc://kas.internal'
+            gitlab_kas_internal_url: 'grpc://kas.internal',
+            gitlab_kas_external_k8s_proxy_url: 'https://kas.example.com/k8s-proxy'
           },
           gitlab_kas: {
             enable: true
@@ -157,7 +205,8 @@ RSpec.describe 'gitlab-kas' do
       it 'uses the explicitly configured URL' do
         expect(gitlab_yml[:production][:gitlab_kas]).to include(
           external_url: 'wss://kas.example.com',
-          internal_url: 'grpc://kas.internal'
+          internal_url: 'grpc://kas.internal',
+          external_k8s_proxy_url: 'https://kas.example.com/k8s-proxy'
         )
       end
     end
@@ -299,5 +348,11 @@ RSpec.describe 'gitlab-kas' do
         }
       end
     end
+  end
+
+  def chef_run_load_yaml_template(chef_run, path)
+    template = chef_run.template(path)
+    file_content = ChefSpec::Renderer.new(chef_run, template).content
+    YAML.safe_load(file_content, [], [], true, symbolize_names: true)
   end
 end

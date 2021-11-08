@@ -9,6 +9,10 @@ agent:
     poll_period: <%= @agent_gitops_poll_period %>s
     project_info_cache_ttl: <%= @agent_gitops_project_info_cache_ttl %>s
     project_info_cache_error_ttl: <%= @agent_gitops_project_info_cache_error_ttl %>s
+  kubernetes_api:
+    listen:
+      address: <%= @kubernetes_api_listen_address %>
+    url_path_prefix: /
   info_cache_ttl: <%= @agent_info_cache_ttl %>s
   info_cache_error_ttl: <%= @agent_info_cache_error_ttl %>s
 gitlab:
@@ -37,4 +41,8 @@ api:
     network: <%= @internal_api_listen_network %>
     address: <%= @internal_api_listen_address %>
     authentication_secret_file: <%= @authentication_secret_file %>
-
+private_api:
+  listen:
+    network: <%= @private_api_listen_network %>
+    address: <%= @private_api_listen_address %>
+    authentication_secret_file: <%= @private_api_authentication_secret_file %>

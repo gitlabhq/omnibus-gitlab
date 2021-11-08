@@ -464,8 +464,11 @@ RSpec.describe 'nginx' do
 
     it 'applies nginx KAS proxy' do
       expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
-        expect(content).to include('location /-/kubernetes-agent/ {')
+        expect(content).to include('location = /-/kubernetes-agent/ {')
         expect(content).to include('proxy_pass http://localhost:8150/;')
+
+        expect(content).to include('location /-/kubernetes-agent/k8s-proxy/ {')
+        expect(content).to include('proxy_pass http://localhost:8154/;')
       }
     end
   end

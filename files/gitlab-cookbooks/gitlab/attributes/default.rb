@@ -520,6 +520,7 @@ default['gitlab']['gitlab-rails']['prometheus_address'] = nil
 default['gitlab']['gitlab-rails']['gitlab_kas_enabled'] = nil
 default['gitlab']['gitlab-rails']['gitlab_kas_external_url'] = nil
 default['gitlab']['gitlab-rails']['gitlab_kas_internal_url'] = nil
+default['gitlab']['gitlab-rails']['gitlab_kas_external_k8s_proxy_url'] = nil
 
 ####
 # Puma
