@@ -53,6 +53,7 @@ module Gitlab
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul')
+  attribute('spamcheck')
   attribute('patroni').use { Patroni }
   attribute('gitaly').use { Gitaly }
   attribute('praefect').use { Praefect }
