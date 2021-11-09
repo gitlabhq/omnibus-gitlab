@@ -16,12 +16,21 @@ RSpec.describe Geo::PromoteDb, '#execute' do
     allow(command).to receive(:run_command).and_return(double('error!' => nil))
   end
 
+  shared_examples 'deprecated legacy command' do
+    it 'prints the deprecation message' do
+      expect { command.execute }.to output(
+        /WARNING: As of GitLab 14.5, this command is deprecated/).to_stdout
+    end
+  end
+
   context 'when PITR file does not exist' do
     it 'does not run PITR recovery' do
       expect(command).not_to receive(:write_recovery_settings)
 
       command.execute
     end
+
+    it_behaves_like 'deprecated legacy command'
   end
 
   context 'postgres dir is in non-default location' do
@@ -31,6 +40,8 @@ RSpec.describe Geo::PromoteDb, '#execute' do
 
       expect(described_class.new(instance).postgresql_dir_path).to eq(expected_dir)
     end
+
+    it_behaves_like 'deprecated legacy command'
   end
 
   context 'when PITR file exists' do
@@ -38,6 +49,7 @@ RSpec.describe Geo::PromoteDb, '#execute' do
 
     before do
       allow(command).to receive(:lsn_from_pitr_file).and_return(lsn)
+      allow(command).to receive(:write_geo_config_file).and_return(true)
     end
 
     it 'writes out the recovery settings' do
@@ -48,8 +60,11 @@ RSpec.describe Geo::PromoteDb, '#execute' do
     end
 
     it 'writes out the geo configuration file' do
-      expect(command).to receive(:write_geo_config_file)
+      expect(command).to receive(:write_geo_config_file).once
+
       command.execute
     end
+
+    it_behaves_like 'deprecated legacy command'
   end
 end
