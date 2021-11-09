@@ -22,6 +22,7 @@ version = Gitlab::Version.new('spamcheck', '0.3.0')
 default_version version.print
 
 license 'MIT'
+license_file 'LICENSE'
 
 dependency 'libtensorflow_lite'
 
@@ -44,8 +45,6 @@ build do
     tests
     tools
   )
-  copy "tools/preprocess_helper/dist", "#{install_dir}/embedded/service/spamcheck/preprocessor"
-  copy "tools/preprocess_helper/LICENSE.md", "#{install_dir}/embedded/service/spamcheck/preprocessor"
 
   env['CGO_CFLAGS'] = env['CFLAGS'].dup
   env['CGO_CPPFLAGS'] = env['CPPFLAGS'].dup

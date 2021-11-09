@@ -2969,3 +2969,4 @@ external_url 'GENERATED_EXTERNAL_URL'
 # spamcheck['env'] = {
 #   'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/cers'
 # }
+# spamcheck['classifier']['log_directory'] = "/var/log/gitlab/spam-classifier"

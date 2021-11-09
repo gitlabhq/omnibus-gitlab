@@ -24,3 +24,9 @@ monitorMode = "<%= @monitor_mode %>"
 <% @denylist.each do |key, value| %>
 <%= key %> = "<%= value %>"
 <% end %>
+
+[preprocessor]
+socketPath = "<%= @preprocessor_socket_path %>"
+
+[modelAttributes]
+modelPath = "<%= @preprocessor_model_path %>"

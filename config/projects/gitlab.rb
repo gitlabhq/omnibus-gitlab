@@ -104,6 +104,7 @@ if Build::Check.include_ee?
   dependency 'consul'
   dependency 'pgbouncer-exporter'
   dependency 'spamcheck'
+  dependency 'spam-classifier'
 end
 dependency 'alertmanager'
 dependency 'node-exporter'

@@ -101,5 +101,11 @@ module GitlabSpec
     def fixture_path
       File.join(__dir__, '../fixtures')
     end
+
+    def get_rendered_toml(chef_run, path)
+      template = chef_run.template(path)
+      content = ChefSpec::Renderer.new(chef_run, template).content
+      TomlRB.parse(content, symbolize_keys: true)
+    end
   end
 end

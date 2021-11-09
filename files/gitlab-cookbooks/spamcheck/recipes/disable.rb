@@ -18,3 +18,7 @@
 runit_service 'spamcheck' do
   action :disable
 end
+
+runit_service 'spam-classifier' do
+  action :disable
+end
