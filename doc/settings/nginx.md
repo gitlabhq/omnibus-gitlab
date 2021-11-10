@@ -87,9 +87,12 @@ To enable HTTPS for the domain `gitlab.example.com`:
    clients connect. The full certificate chain order should consist of the server certificate first,
    followed by all intermediate certificates, with the root CA last.
 
+   NOTE:
    If the `certificate.key` file is password protected, NGINX will not ask for
    the password when you reconfigure GitLab. In that case, Omnibus GitLab will
-   fail silently with no error messages. To remove the password from the key, run:
+   fail silently with no error messages. 
+   
+   To remove the password from the key, run:
 
    ```shell
    openssl rsa -in certificate_before.key -out certificate_after.key
