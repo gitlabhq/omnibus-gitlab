@@ -12,6 +12,7 @@ module Geo
     end
 
     def execute
+      print_deprecation_message
       run_preflight_checks
       final_confirmation
       toggle_geo_roles
@@ -22,6 +23,14 @@ module Geo
     end
 
     private
+
+    def print_deprecation_message
+      puts
+      puts 'WARNING: As of GitLab 14.5, this command is deprecated in favor of ' \
+        'gitlab-ctl geo promote. This command will be removed in GitLab 15.0. ' \
+        'Please see https://docs.gitlab.com/ee/administration/geo/disaster_recovery/planned_failover.html ' \
+        'for more details.'.color(:red)
+    end
 
     def run_preflight_checks
       return true if @options[:skip_preflight_checks]

@@ -51,11 +51,6 @@ module Geo
       return if options[:force]
 
       puts
-      puts 'WARNING: Note that this command is not production-ready. Please read ' \
-        'https://docs.gitlab.com/ee/administration/geo/disaster_recovery/planned_failover.html ' \
-        'for further instructions.'.color(:red)
-
-      puts
       puts 'WARNING: The current secondary node will now be promoted to a primary node. '\
         'Are you sure you want to proceed? (y/n)'.color(:yellow)
 
