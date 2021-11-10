@@ -85,7 +85,7 @@ RSpec.describe Geo::Promote, '#execute' do
             allow(command).to receive(:toggle_geo_services)
             allow(command).to receive(:run_reconfigure)
 
-            expect(command).not_to receive(:run_command).with(promote_to_primary_cmd, anything)
+            expect(command).not_to receive(:run_task).with('geo:set_secondary_as_primary')
 
             command.execute
           end
@@ -101,7 +101,7 @@ RSpec.describe Geo::Promote, '#execute' do
             allow(command).to receive(:run_reconfigure)
             allow(command).to receive(:restart_services)
 
-            expect(command).to receive(:run_command).with(promote_to_primary_cmd, anything).once.and_return(double(error?: false))
+            expect(command).to receive(:run_task).with('geo:set_secondary_as_primary').once.and_return(double(error?: false))
 
             command.execute
           end
@@ -454,11 +454,9 @@ RSpec.describe Geo::Promote, '#execute' do
       end
     end
 
-    let(:geo_node_cmd) { "#{base_path}/bin/gitlab-rails runner \"puts Gitlab::Geo.secondary?\"" }
     let(:patroni_pause_cmd) { "#{base_path}/bin/gitlab-ctl patroni pause" }
     let(:patroni_resume_cmd) { "#{base_path}/bin/gitlab-ctl patroni resume" }
     let(:pg_is_in_recovery_cmd) { "#{base_path}/bin/gitlab-psql -c \"SELECT pg_is_in_recovery();\" -q -t" }
-    let(:promote_to_primary_cmd) { "#{base_path}/bin/gitlab-rake geo:set_secondary_as_primary" }
     let(:reconfigure_cmd) { "#{base_path}/embedded/cookbooks/dna.json" }
 
     def stub_service_enabled(service)
@@ -466,11 +464,11 @@ RSpec.describe Geo::Promote, '#execute' do
     end
 
     def stub_primary_node
-      allow(command).to receive(:run_command).with(geo_node_cmd, anything).and_return(double(error?: false, stdout: 'false'))
+      allow(command).to receive(:run_task).with('geo:site:role').and_return(double(error?: false, stdout: 'primary'))
     end
 
     def stub_secondary_node
-      allow(command).to receive(:run_command).with(geo_node_cmd, anything).and_return(double(error?: false, stdout: 'true'))
+      allow(command).to receive(:run_task).with('geo:site:role').and_return(double(error?: false, stdout: 'secondary'))
     end
 
     def stub_single_server_secondary_site
