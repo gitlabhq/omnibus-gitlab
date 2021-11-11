@@ -187,6 +187,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             artifacts_server_timeout: 60,
             status_uri: '/@status',
             max_connections: 7500,
+            max_uri_length: 2048,
             propagate_correlation_id: true,
             log_format: 'text',
             log_verbose: true,
@@ -242,6 +243,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             metrics-address=localhost:1234
             pages-status=/@status
             max-conns=7500
+            max-uri-length=2048
             propagate-correlation-id=true
             log-format=text
             log-verbose
