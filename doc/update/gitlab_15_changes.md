@@ -11,6 +11,22 @@ When upgrading to a new major version, remember to first [check for background m
 
 ## 15.0
 
+### PostgreSQL version updates
+
+In GitLab 15.0, PostgreSQL versions have been updated to v12.10 and v13.6
+respectively. Because of underlying structural changes, the running PostgreSQL
+process **_must_** be restarted before running database migrations. If automatic
+restart is skipped, users must make sure the following command is run before
+migrations are run:
+
+```shell
+# If using PostgreSQL
+sudo gitlab-ctl restart postgresql
+
+# If using Patroni for Database replication
+sudo gitlab-ctl restart patroni
+```
+
 ### AES256-GCM-SHA384 SSL cipher no longer allowed by default by NGINX
 
 Starting with GitLab 15.0, the `AES256-GCM-SHA384` SSL cipher will not be allowed by
