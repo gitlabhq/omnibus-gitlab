@@ -178,6 +178,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['namespaces_in_product_marketing_emails_worker_cron'] = "0 9 * * *"
 # gitlab_rails['ssh_keys_expired_notification_worker_cron'] = "0 2 * * *"
 # gitlab_rails['ssh_keys_expiring_soon_notification_worker_cron'] = "0 1 * * *"
+# gitlab_rails['loose_foreign_keys_cleanup_worker_cron'] = "*/5 * * * *"
 
 ### Webhook Settings
 ###! Number of seconds to wait for HTTP response after sending webhook HTTP POST

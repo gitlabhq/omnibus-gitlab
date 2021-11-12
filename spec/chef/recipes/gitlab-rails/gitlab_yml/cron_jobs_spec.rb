@@ -50,6 +50,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'namespaces_in_product_marketing_emails_worker'          | 'namespaces_in_product_marketing_emails_worker_cron'
         'ssh_keys_expired_notification_worker'                   | 'ssh_keys_expired_notification_worker_cron'
         'ssh_keys_expiring_soon_notification_worker'             | 'ssh_keys_expiring_soon_notification_worker_cron'
+        'loose_foreign_keys_cleanup_worker'                      | 'loose_foreign_keys_cleanup_worker_cron'
       end
 
       with_them do
