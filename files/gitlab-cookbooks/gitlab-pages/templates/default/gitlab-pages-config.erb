@@ -128,3 +128,9 @@ gitlab-retrieval-retries=<%= @gitlab_retrieval_retries %>
 <%- unless @enable_disk.nil? -%>
 enable-disk=<%= @enable_disk %>
 <%- end -%>
+<%- if @rate_limit_source_ip -%>
+rate-limit-source-ip=<%= @rate_limit_source_ip %>
+<%-end -%>
+<%- if @rate_limit_source_ip_burst -%>
+rate-limit-source-ip-burst=<%= @rate_limit_source_ip_burst %>
+<%-end -%>
