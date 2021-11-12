@@ -58,7 +58,6 @@ build do
     '--disable-dependency-tracking',
     '--enable-ipv6',
     "--without-libidn2",
-    '--without-gnutls',
     '--without-librtmp',
     "--without-zsh-functions-dir",
     "--without-fish-functions-dir",
