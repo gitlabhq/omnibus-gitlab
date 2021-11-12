@@ -477,6 +477,22 @@ gitlab_rails['gitlab_email_from'] = '<gitlab@example.com>'
 gitlab_rails['gitlab_email_reply_to'] = '<noreply@example.com>'
 ```
 
+### SMTP2GO
+
+This configuration was tested using [SMTP2GO](https://www.smtp2go.com/). To get the relevant account credentials using the URLs commented in this example, [sign in to your SMTP2GO account](https://app.smtp2go.com/login/).
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "mail.smtp2go.com"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "<username>"    # https://app.smtp2go.com/settings/users
+gitlab_rails['smtp_password'] = "<password>"     # https://app.smtp2go.com/settings/users
+gitlab_rails['smtp_domain'] = "<example.com>"    # https://app.smtp2go.com/settings/sender_domains
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+```
+
 ### Yandex
 
 ```ruby
