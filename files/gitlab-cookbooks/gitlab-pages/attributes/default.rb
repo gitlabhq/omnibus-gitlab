@@ -20,6 +20,7 @@ default['gitlab-pages']['dir'] = "/var/opt/gitlab/gitlab-pages"
 default['gitlab-pages']['log_directory'] = "/var/log/gitlab/gitlab-pages"
 default['gitlab-pages']['status_uri'] = nil
 default['gitlab-pages']['max_connections'] = nil
+default['gitlab-pages']['max_uri_length'] = nil
 default['gitlab-pages']['log_format'] = "json"
 default['gitlab-pages']['artifacts_server'] = true
 default['gitlab-pages']['artifacts_server_url'] = nil

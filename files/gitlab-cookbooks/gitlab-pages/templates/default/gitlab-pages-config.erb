@@ -42,6 +42,9 @@ pages-status=<%= @status_uri %>
 <%- if @max_connections -%>
 max-conns=<%= @max_connections %>
 <%- end -%>
+<%- if @max_uri_length -%>
+max-uri-length=<%= @max_uri_length %>
+<%- end -%>
 <%- if @propagate_correlation_id -%>
 propagate-correlation-id=<%= @propagate_correlation_id %>
 <%- end -%>
