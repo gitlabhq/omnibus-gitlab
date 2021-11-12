@@ -9,10 +9,13 @@ module Praefect
       gitlab-ctl praefect command [options]
 
     COMMANDS:
-      remove-repository           Remove repository from Gitaly cluster
-      track-repository            Tells Gitaly cluster to track a repository
-      list-untracked-repositories Lists repositories that exist on disk but are untracked by Praefect
-      check                       Runs checks to determine cluster health
+      Repository/Metadata Health
+        remove-repository           Remove repository from Gitaly cluster
+        track-repository            Tells Gitaly cluster to track a repository
+        list-untracked-repositories Lists repositories that exist on disk but are untracked by Praefect
+
+      Operational Cluster Health
+        check                       Runs checks to determine cluster health
   EOS
 
   def self.parse_options!(args)
@@ -27,28 +30,32 @@ module Praefect
       end
     end
 
+    praefect_docs_url = 'https://docs.gitlab.com/ee/administration/gitaly/praefect.html'
+
     options = {}
     commands = {
       'remove-repository' => OptionParser.new do |opts|
-        opts.banner = "Usage: gitlab-ctl praefect remove-repository [options]"
+        opts.banner = "Usage: gitlab-ctl praefect remove-repository [options]. See documentation at #{praefect_docs_url}#manually-remove-repositories"
 
         parse_common_options!(options, opts)
         parse_repository_options!(options, opts)
       end,
 
       'track-repository' => OptionParser.new do |opts|
-        opts.banner = "Usage: gitlab-ctl praefect track-repository [options]"
+        opts.banner = "Usage: gitlab-ctl praefect track-repository [options]. See documentation at #{praefect_docs_url}#manually-track-repositories"
 
         parse_common_options!(options, opts)
         parse_repository_options!(options, opts)
 
-        opts.on('--authoritative-storage STORAGE-NAME', 'The storage to use as the primary for this repository (mandatory for per_repository elector)') do |authoritative_storage|
+        opts.on('--authoritative-storage STORAGE-NAME', 'The storage to use as the primary for this repository (mandatory for per_repository elector).
+                                                        Repository data on this storage will be used to overwrite corresponding repository data on other
+                                                        nodes. ') do |authoritative_storage|
           options[:authoritative_storage] = authoritative_storage
         end
       end,
 
       'list-untracked-repositories' => OptionParser.new do |opts|
-        opts.banner = "Usage: gitlab-ctl praefect untracked-repositories [options]"
+        opts.banner = "Usage: gitlab-ctl praefect list-untracked-repositories [options]. See documentation at #{praefect_docs_url}#manually-list-untracked-repositories"
 
         parse_common_options!(options, opts)
       end,
@@ -75,11 +82,11 @@ module Praefect
 
     # repository arguments
     if ['remove-repository', 'track-repository'].include?(command)
-      raise OptionParser::ParseError, "Option --virtual-storage-name must be specified" \
-        unless options.key?(:virtual_storage_name)
+      raise OptionParser::ParseError, "Option --virtual-storage-name must be specified." \
+              unless options.key?(:virtual_storage_name)
 
-      raise OptionParser::ParseError, "Option --repository-relative-path must be specified" \
-        unless options.key?(:repository_relative_path)
+      raise OptionParser::ParseError, "Option --repository-relative-path must be specified." \
+       unless options.key?(:repository_relative_path)
     end
 
     options[:command] = command
@@ -98,11 +105,19 @@ module Praefect
   end
 
   def self.parse_repository_options!(options, option_parser)
-    option_parser.on('--virtual-storage-name NAME', 'Name of the virtual storage where the repository resides (mandatory)') do |virtual_storage_name|
+    option_parser.on('--virtual-storage-name NAME', 'Name of the virtual storage where the repository resides (mandatory)
+                      The virtual-storage-name can be found in /etc/gitlab/gitlab.rb under praefect["virtual_storages"].
+                      If praefect["virtual_storages"] = { "default" => {"nodes" => { ... }},
+                      "storage_1" => {"nodes" => { ... }}}, the virtual-storage-name would be either "default", or "storage_1".
+                      This can also be found in the Project Detail page in the Admin Panel under "Gitaly storage name".'
+    ) do |virtual_storage_name|
       options[:virtual_storage_name] = virtual_storage_name
     end
 
-    option_parser.on('--repository-relative-path PATH', 'Relative path to the repository on the disk (mandatory)') do |repository_relative_path|
+    option_parser.on('--repository-relative-path PATH', 'Relative path to the repository on the disk (mandatory).
+                      These start with @hashed/..." and can be found in the Project Detail page in the Admin Panel under
+                      "Gitaly relative path"'
+    ) do |repository_relative_path|
       options[:repository_relative_path] = repository_relative_path
     end
   end
