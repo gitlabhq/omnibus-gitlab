@@ -188,6 +188,13 @@ No changes.
 - [Remove docs redirects cleanup task](gitlab-org/omnibus-gitlab@c03703f3c3f678e383ce92b17bf2e888dbcfa883) ([merge request](gitlab-org/omnibus-gitlab!5539))
 - [Bump gitlab-exporter to 11.2.0](gitlab-org/omnibus-gitlab@9e005c8e8ccf16766327bd872ad284ae612bf6fd) ([merge request](gitlab-org/omnibus-gitlab!5518))
 
+## 14.1.8 (2021-11-15)
+
+### Fixed (2 changes)
+
+- [Conditionally generate public_attributes.json](gitlab-org/omnibus-gitlab@4c2df93ec3abd466b233b99dd1558043347d98f9) ([merge request](gitlab-org/omnibus-gitlab!5717))
+- [Delay praefect database_*_no_proxy removals](gitlab-org/omnibus-gitlab@9679474648e51a2ae699c8aa23dbb523e45fb6e3) ([merge request](gitlab-org/omnibus-gitlab!5717))
+
 ## 14.1.7 (2021-09-30)
 
 No changes.
