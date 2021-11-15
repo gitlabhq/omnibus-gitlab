@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.1.8 (2021-11-15)
+
+### Fixed (2 changes)
+
+- [Conditionally generate public_attributes.json](gitlab-org/omnibus-gitlab@4c2df93ec3abd466b233b99dd1558043347d98f9) ([merge request](gitlab-org/omnibus-gitlab!5717))
+- [Delay praefect database_*_no_proxy removals](gitlab-org/omnibus-gitlab@9679474648e51a2ae699c8aa23dbb523e45fb6e3) ([merge request](gitlab-org/omnibus-gitlab!5717))
+
 ## 14.1.7 (2021-09-30)
 
 No changes.
