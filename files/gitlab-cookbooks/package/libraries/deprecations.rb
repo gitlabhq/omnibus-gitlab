@@ -157,6 +157,12 @@ module Gitlab
             removal: '15.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6393
             note: "Use `gitaly['custom_hooks_dir']` instead."
           },
+          {
+            config_keys: %w(gitlab actioncable enable),
+            deprecation: '14.5',
+            removal: '15.0',
+            note: "Starting with GitLab 14.5, Action Cable is enabled all the time. Because of this, the flag is a no-op and can be removed."
+          },
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable', 'svlogd_prefix'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")

@@ -551,7 +551,6 @@ default['gitlab']['puma']['consul_service_meta'] = nil
 ####
 # ActionCable
 ####
-default['gitlab']['actioncable']['enable'] = false
 default['gitlab']['actioncable']['worker_pool_size'] = 4
 
 ####
