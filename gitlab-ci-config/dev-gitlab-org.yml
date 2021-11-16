@@ -550,6 +550,14 @@ OpenSUSE-15.2-arm64-branch:
   <<: *branch_build
   tags:
   - docker-arm-builder
+OpenSUSE-15.3-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+OpenSUSE-15.3-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+  tags:
+  - docker-arm-builder
 SLES-12.2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -742,6 +750,14 @@ OpenSUSE-15.2-arm64:
   <<: *tag_build
   tags:
   - docker-arm-builder
+OpenSUSE-15.3:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+OpenSUSE-15.3-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  tags:
+  - docker-arm-builder
 SLES-12.2:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -833,6 +849,20 @@ OpenSUSE-15.2-arm64-staging:
     - job: OpenSUSE-15.2-arm64-branch
       optional: true
   <<: *staging_upload
+OpenSUSE-15.3-staging:
+  needs:
+    - job: OpenSUSE-15.3
+      optional: true
+    - job: OpenSUSE-15.3-branch
+      optional: true
+  <<: *staging_upload
+OpenSUSE-15.3-arm64-staging:
+  needs:
+    - job: OpenSUSE-15.3-arm64
+      optional: true
+    - job: OpenSUSE-15.3-arm64-branch
+      optional: true
+  <<: *staging_upload
 SLES-12.2-staging:
   needs:
     - job: SLES-12.2
@@ -894,6 +924,14 @@ OpenSUSE-15.2-release:
 OpenSUSE-15.2-arm64-release:
   needs:
     - OpenSUSE-15.2-arm64
+  <<: *production_release
+OpenSUSE-15.3-release:
+  needs:
+    - OpenSUSE-15.3
+  <<: *production_release
+OpenSUSE-15.3-arm64-release:
+  needs:
+    - OpenSUSE-15.3-arm64
   <<: *production_release
 SLES-12.2-release:
   needs:
