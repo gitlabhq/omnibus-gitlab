@@ -1,6 +1,8 @@
 class LinkerHelper
   class << self
     def ldconfig
+      # Update the linker library cache
+      system("ldconfig")
       ldconfig_raw_output = IO.popen(%w[ldconfig -p], &:read)&.split("\n")&.map { |line| line.strip }
       ldconfig_raw_output.shift
 
