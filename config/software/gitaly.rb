@@ -71,6 +71,6 @@ build do
     end
   end
 
-  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --save=license.json"
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"
   copy "license.json", "#{install_dir}/licenses/gitaly.json"
 end

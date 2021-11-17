@@ -148,8 +148,8 @@ build do
   move "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache", "#{Omnibus::Config.project_root}/assets_cache"
   move "#{Omnibus::Config.source_dir}/gitlab-rails/node_modules", Omnibus::Config.project_root.to_s
 
-  bundle "exec license_finder report --decisions-file=config/dependency_decisions.yml --format=json --save=rails-license.json", env: env
-  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --save=workhorse-license.json", cwd: "#{Omnibus::Config.source_dir}/gitlab-rails/workhorse"
+  bundle "exec license_finder report --decisions-file=config/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=rails-license.json", env: env
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=workhorse-license.json", cwd: "#{Omnibus::Config.source_dir}/gitlab-rails/workhorse"
 
   # Merge rails and workhorse license files.
   block "Merge license files of rails and workhorse" do
