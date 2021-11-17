@@ -23,4 +23,20 @@ RSpec.describe 'gitlab-ctl promote-to-primary-node' do
   it_behaves_like 'geo promotion command accepts option',
                   '--force',
                   { force: true }
+
+  # rubocop:disable Style/MutableConstant, Lint/ConstantDefinitionInBlock
+  it 'prints the deprecation message' do
+    # ARGV contains the commands that were passed to rspec, which are
+    # invalid for the omnibus-ctl commands
+    oldargv = ARGV
+    ARGV = [] # rubocop:disable Style/MutableConstant
+
+    expect_any_instance_of(klass).to receive(:execute)
+
+    expect { ctl.send(command_script) }.to output(
+      /WARNING: As of GitLab 14.5, this command is deprecated/).to_stdout
+
+    ARGV = oldargv
+  end
+  # rubocop:enable Style/MutableConstant, Lint/ConstantDefinitionInBlock
 end

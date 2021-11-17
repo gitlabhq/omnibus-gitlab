@@ -11,4 +11,20 @@ RSpec.describe 'gitlab-ctl promote-db' do
   include_context 'ctl'
 
   it_behaves_like 'gitlab geo promotion commands', 'promote-db'
+
+  # rubocop:disable Style/MutableConstant, Lint/ConstantDefinitionInBlock
+  it 'prints the deprecation message' do
+    # ARGV contains the commands that were passed to rspec, which are
+    # invalid for the omnibus-ctl commands
+    oldargv = ARGV
+    ARGV = []
+
+    expect_any_instance_of(klass).to receive(:execute)
+
+    expect { ctl.send(command_script) }.to output(
+      /WARNING: As of GitLab 14.5, this command is deprecated/).to_stdout
+
+    ARGV = oldargv
+  end
+  # rubocop:enable Style/MutableConstant, Lint/ConstantDefinitionInBlock
 end
