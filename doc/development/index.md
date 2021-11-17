@@ -17,6 +17,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [How to perform common maintenance tasks](contribute-to-omnibus-gitlab.md#common-maintenance-tasks)
 - [Building and testing enhancements](contribute-to-omnibus-gitlab.md#build-and-test-your-enhancement)
 - [Submitting an enhancement merge request for review](contribute-to-omnibus-gitlab.md#submit-your-enhancement-for-review)
+- [Development for s390x architecture](s390x.md)
 
 ## Omnibus GitLab continuous integration
 
