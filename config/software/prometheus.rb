@@ -47,6 +47,6 @@ build do
   command "go build -tags netgo,builtinassets -ldflags '#{prom_version.print_ldflags}' ./cmd/prometheus", env: env, cwd: cwd
   copy 'prometheus', "#{install_dir}/embedded/bin/prometheus"
 
-  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --save=license.json"
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"
   copy "license.json", "#{install_dir}/licenses/prometheus.json"
 end
