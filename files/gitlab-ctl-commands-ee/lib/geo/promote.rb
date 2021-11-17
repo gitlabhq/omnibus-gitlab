@@ -10,6 +10,7 @@ module Geo
       geo-logcursor
       geo-postgresql
       gitaly
+      gitlab-workhorse
       patroni
       postgresql
       praefect
@@ -172,6 +173,8 @@ module Geo
     def restart_services
       restart_gitaly
       restart_praefect
+      restart_puma
+      restart_workhorse
     end
 
     def restart_gitaly
@@ -180,6 +183,14 @@ module Geo
 
     def restart_praefect
       sv_progress('restart', 'praefect') if praefect_enabled?
+    end
+
+    def restart_puma
+      sv_progress('restart', 'puma') if puma_enabled?
+    end
+
+    def restart_workhorse
+      sv_progress('restart', 'gitlab-workhorse') if workhorse_enabled?
     end
 
     def secondary_node?
@@ -270,6 +281,10 @@ module Geo
 
     def sidekiq_enabled?
       @sidekiq_enabled ||= service_enabled?('sidekiq')
+    end
+
+    def workhorse_enabled?
+      @workhorse_enabled ||= service_enabled?('gitlab-workhorse')
     end
 
     def service_enabled?(service)
