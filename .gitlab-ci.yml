@@ -124,7 +124,7 @@ before_script:
   # show up). So, an altered Gemfile.lock file will fail on this
   # check. Hence we do a git commit as part of the pipeline if
   # ALTERNATIVE_SOURCES is used.
-  - if [ -n "$ALTERNATIVE_SOURCES" ]; then
+  - if [ "$ALTERNATIVE_SOURCES" == "true" ]; then
         git config --global user.email "packages@gitlab.com"
         && git config --global user.name "GitLab Inc.";
         git add Gemfile.lock || true ;
