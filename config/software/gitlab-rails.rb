@@ -76,7 +76,12 @@ build do
 
   bundle_without = %w(development test)
   bundle_without << 'mysql'
-  bundle 'config build.rugged --no-use-system-libraries', env: env
+
+  if Build::Check.use_system_ssl?
+    env['CMAKE_FLAGS'] = OpenSSLHelper.cmake_flags
+    env['PKG_CONFIG_PATH'] = OpenSSLHelper.pkg_config_dirs
+  end
+
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
   bundle 'config build.grpc --with-ldflags="-latomic"', env: env if OhaiHelper.os_platform == 'raspbian'

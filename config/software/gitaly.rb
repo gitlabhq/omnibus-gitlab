@@ -28,6 +28,7 @@ skip_transitive_dependency_licensing true
 dependency 'pkg-config-lite'
 dependency 'rubygems'
 dependency 'libicu'
+dependency 'git'
 
 source git: version.remote
 
@@ -36,7 +37,12 @@ build do
 
   ruby_build_dir = "#{Omnibus::Config.source_dir}/gitaly/ruby"
   bundle_without = %w(development test)
-  bundle 'config build.rugged --no-use-system-libraries', env: env, cwd: ruby_build_dir
+
+  if Build::Check.use_system_ssl?
+    env['CMAKE_FLAGS'] = OpenSSLHelper.cmake_flags
+    env['PKG_CONFIG_PATH'] = OpenSSLHelper.pkg_config_dirs
+  end
+
   bundle "install --without #{bundle_without.join(' ')}", env: env, cwd: ruby_build_dir
   touch '.ruby-bundle' # Prevent 'make install' below from running 'bundle install' again
 
