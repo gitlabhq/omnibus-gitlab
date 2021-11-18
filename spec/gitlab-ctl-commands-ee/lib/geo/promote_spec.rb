@@ -39,8 +39,7 @@ RSpec.describe Geo::Promote, '#execute' do
   describe '#execute' do
     context 'when not running in force mode' do
       it 'asks for confirmation' do
-        expect { command.execute }.to output(
-          /WARNING: The current secondary node will now be promoted to a primary node./).to_stdout
+        expect { command.execute }.to output(/Are you sure you want to proceed\?/).to_stdout
       end
     end
 
@@ -48,8 +47,7 @@ RSpec.describe Geo::Promote, '#execute' do
       let(:options) { { force: true } }
 
       it 'does not ask for final confirmation' do
-        expect { command.execute }.not_to output(
-          /WARNING: The current secondary node will now be promoted to a primary node./).to_stdout
+        expect { command.execute }.to_not output(/Are you sure you want to proceed\?/).to_stdout
       end
     end
 
@@ -77,13 +75,11 @@ RSpec.describe Geo::Promote, '#execute' do
 
       shared_examples 'promote secondary site to primary site' do
         context 'on a primary node' do
-          before do
-            stub_primary_node
-          end
-
           it 'does not try to promote the secondary site to primary site' do
-            allow(command).to receive(:toggle_geo_services)
+            stub_primary_node
+
             allow(command).to receive(:run_reconfigure)
+            allow(command).to receive(:restart_services)
 
             expect(command).not_to receive(:run_task).with('geo:set_secondary_as_primary')
 
@@ -94,11 +90,10 @@ RSpec.describe Geo::Promote, '#execute' do
         context 'on a secondary node' do
           before do
             stub_secondary_node
+            allow(command).to receive(:run_reconfigure)
           end
 
           it 'promotes the secondary site to primary site' do
-            allow(command).to receive(:toggle_geo_services)
-            allow(command).to receive(:run_reconfigure)
             allow(command).to receive(:restart_services)
 
             expect(command).to receive(:run_task).with('geo:set_secondary_as_primary').once.and_return(double(error?: false))
@@ -107,13 +102,19 @@ RSpec.describe Geo::Promote, '#execute' do
           end
 
           it 'restarts the puma service' do
-            allow(command).to receive(:toggle_geo_services)
             allow(command).to receive(:promote_to_primary)
-            allow(command).to receive(:run_reconfigure)
 
             expect(ctl).to receive(:run_sv_command_for_service).with('restart', 'puma').once.and_return(double(zero?: true))
 
             command.execute
+          end
+        end
+
+        context 'on a misconfigured node' do
+          it 'aborts promotion with an error message' do
+            stub_misconfigured_node
+
+            expect { command.execute }.to output(/Unable to detect the role of this Geo node/).to_stdout
           end
         end
       end
@@ -469,6 +470,10 @@ RSpec.describe Geo::Promote, '#execute' do
 
     def stub_secondary_node
       allow(command).to receive(:run_task).with('geo:site:role').and_return(double(error?: false, stdout: 'secondary'))
+    end
+
+    def stub_misconfigured_node
+      allow(command).to receive(:run_task).with('geo:site:role').and_return(double(error?: true, stdout: 'misconfigured'))
     end
 
     def stub_single_server_secondary_site

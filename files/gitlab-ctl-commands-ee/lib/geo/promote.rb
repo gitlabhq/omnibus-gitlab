@@ -203,7 +203,7 @@ module Geo
       unless progress_message('Attempting to detect the role of this Geo node') do
         task = run_task('geo:site:role')
 
-        next :unknown if task.error?
+        next false if task.error?
 
         @node_role = task.stdout.strip.to_sym
 
