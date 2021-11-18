@@ -99,8 +99,19 @@ RSpec.describe Geo::Promote, '#execute' do
           it 'promotes the secondary site to primary site' do
             allow(command).to receive(:toggle_geo_services)
             allow(command).to receive(:run_reconfigure)
+            allow(command).to receive(:restart_services)
 
             expect(command).to receive(:run_command).with(promote_to_primary_cmd, anything).once.and_return(double(error?: false))
+
+            command.execute
+          end
+
+          it 'restarts the puma service' do
+            allow(command).to receive(:toggle_geo_services)
+            allow(command).to receive(:promote_to_primary)
+            allow(command).to receive(:run_reconfigure)
+
+            expect(ctl).to receive(:run_sv_command_for_service).with('restart', 'puma').once.and_return(double(zero?: true))
 
             command.execute
           end
@@ -115,6 +126,7 @@ RSpec.describe Geo::Promote, '#execute' do
         it 'toggles the Geo primary/secondary roles' do
           allow(command).to receive(:run_reconfigure)
           allow(command).to receive(:promote_to_primary)
+          allow(command).to receive(:restart_services)
 
           command.execute
 
@@ -124,6 +136,7 @@ RSpec.describe Geo::Promote, '#execute' do
         it 'runs reconfigure' do
           allow(command).to receive(:toggle_geo_services)
           allow(command).to receive(:promote_to_primary)
+          allow(command).to receive(:restart_services)
 
           expect(ctl).to receive(:run_chef).with(reconfigure_cmd).once.and_return(double(success?: true))
 
@@ -143,6 +156,7 @@ RSpec.describe Geo::Promote, '#execute' do
         it 'disables Geo secondary settings' do
           allow(command).to receive(:run_reconfigure)
           allow(command).to receive(:promote_to_primary)
+          allow(command).to receive(:restart_services)
 
           command.execute
 
@@ -151,6 +165,7 @@ RSpec.describe Geo::Promote, '#execute' do
 
         it 'runs reconfigure' do
           allow(command).to receive(:promote_to_primary)
+          allow(command).to receive(:restart_services)
 
           expect(ctl).to receive(:run_chef).with(reconfigure_cmd).once.and_return(double(success?: true))
 
@@ -186,6 +201,22 @@ RSpec.describe Geo::Promote, '#execute' do
         allow(command).to receive(:run_reconfigure)
 
         expect(ctl).to receive(:run_sv_command_for_service).with('restart', 'praefect').once.and_return(double(zero?: true))
+
+        command.execute
+      end
+    end
+
+    context 'when workhorse is enabled' do
+      before do
+        stub_service_enabled('gitlab-workhorse')
+      end
+
+      it 'restarts the workhorse service' do
+        allow(command).to receive(:toggle_geo_services)
+        allow(command).to receive(:promote_to_primary)
+        allow(command).to receive(:run_reconfigure)
+
+        expect(ctl).to receive(:run_sv_command_for_service).with('restart', 'gitlab-workhorse').once.and_return(double(zero?: true))
 
         command.execute
       end
