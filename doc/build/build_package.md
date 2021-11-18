@@ -41,13 +41,12 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
    docker run -v ~/omnibus-gitlab:~/omnibus-gitlab -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_10:${BUILDER_IMAGE_REVISION} bash
    ```
 
-1. By default, `omnibus-gitlab` will choose internal GitLab repositories from
-   `dev.gitlab.org` to fetch sources of various GitLab components. Since this
-   repository is not publicly accessible, set the environment variable
-   `ALTERNATIVE_SOURCES` to `true`.
+1. By default, `omnibus-gitlab` will choose public GitLab repositories to
+   fetch sources of various GitLab components. Set the environment variable
+   `ALTERNATIVE_SOURCES` to `false` to build from `dev.gitlab.org`.
 
    ```shell
-   export ALTERNATIVE_SOURCES=true
+   export ALTERNATIVE_SOURCES=false
    ```
 
    Details of sources of various components is available in the

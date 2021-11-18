@@ -44,7 +44,8 @@ These additional variables are available to override or enable different build b
 | DEV_GITLAB_SSH_KEY                            | SSH private key for an account able to read repositories from `dev.gitlab.org`. Used for SSH Git fetch. |
 | BUILDER_IMAGE_REGISTRY                        | Registry to pull the CI Job images from. |
 | BUILD_LOG_LEVEL                               | Omnibus build log level. |
-| ALTERNATIVE_SOURCES                           | Switch to the custom sources listed in `https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/.custom_sources.yml` |
+| ALTERNATIVE_SOURCES                           | Switch to the custom sources listed in `https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/.custom_sources.yml` Defaults to `true`. |
+| OMNIBUS_GEM_SOURCE                            | Non-default remote URI to clone the omnibus gem from. |
 
 ## Test variables
 

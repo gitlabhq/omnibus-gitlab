@@ -26,7 +26,8 @@ module Gitlab
       "gitlab-pages" => "GITLAB_PAGES_VERSION",
       "gitaly" => "GITALY_SERVER_VERSION",
       "gitlab-elasticsearch-indexer" => "GITLAB_ELASTICSEARCH_INDEXER_VERSION",
-      "gitlab-kas" => "GITLAB_KAS_VERSION"
+      "gitlab-kas" => "GITLAB_KAS_VERSION",
+      "omnibus" => "OMNIBUS_GEM_VERSION"
     }.freeze
 
     # Return which remote sources channel we are using
@@ -48,7 +49,7 @@ module Gitlab
     #
     # @return [String]
     def self.fallback_sources_channel
-      Gitlab::Util.get_env("ALTERNATIVE_SOURCES").to_s == "true" ? ALTERNATIVE_SOURCE : DEFAULT_SOURCE
+      Gitlab::Util.get_env("ALTERNATIVE_SOURCES").to_s == "false" ? DEFAULT_SOURCE : ALTERNATIVE_SOURCE
     end
 
     # Whether security sources channel is selected
@@ -135,21 +136,22 @@ module Gitlab
       end
     end
 
-    def read_remote_from_file
+    def read_remote_from_file(channel = nil)
       filepath = File.expand_path(".custom_sources.yml", @project_root)
       sources = YAML.load_file(filepath)[@software]
+      channel ||= ::Gitlab::Version.sources_channel
 
       return "" unless sources
 
-      if ::Gitlab::Version.security_channel?
-        attach_remote_credential(sources[::Gitlab::Version.sources_channel], Gitlab::Util.get_env("CI_JOB_TOKEN")) || sources[::Gitlab::Version.fallback_sources_channel]
+      if channel == SECURITY_SOURCE || ::Gitlab::Version.security_channel?
+        attach_remote_credential(sources[channel], Gitlab::Util.get_env("CI_JOB_TOKEN")) || sources[::Gitlab::Version.fallback_sources_channel]
       else
-        sources[::Gitlab::Version.sources_channel]
+        sources[channel]
       end
     end
 
-    def remote
-      read_remote_from_env || read_remote_from_file || ""
+    def remote(channel = nil)
+      read_remote_from_env || read_remote_from_file(channel) || ""
     end
 
     private
