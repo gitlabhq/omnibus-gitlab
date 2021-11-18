@@ -10,36 +10,29 @@ RSpec.describe Gitlab::Version do
 
   describe '.sources_channel' do
     subject { described_class }
-
-    context 'with ALTERNATIVE_SOURCES=true' do
-      it 'returns "alternative"' do
-        stub_env_var('ALTERNATIVE_SOURCES', 'true')
-
-        expect(subject.sources_channel).to eq('alternative')
-      end
+    using RSpec::Parameterized::TableSyntax
+    where(:alternative_sources, :security_sources, :source_channel) do
+      nil | nil | "alternative"
+      nil | 'true' | "security"
+      nil | 'false' | "alternative"
+      'true' | nil | "alternative"
+      'true' | 'true' | "security"
+      'true' | 'false' | "alternative"
+      'false' | nil | "remote"
+      'false' | 'true' | "security"
+      'false' | 'false' | "remote"
     end
 
-    context 'with SECURITY_SOURCES=true' do
-      it 'returns "security"' do
-        stub_env_var('SECURITY_SOURCES', 'true')
-
-        expect(subject.sources_channel).to eq('security')
+    with_them do
+      before do
+        stub_env_var('ALTERNATIVE_SOURCES', alternative_sources)
+        stub_env_var('SECURITY_SOURCES', security_sources)
       end
 
-      it 'ignores ALTERNATIVE_SOURCES=true and still return "security"' do
-        stub_env_var('ALTERNATIVE_SOURCES', 'true')
-        stub_env_var('SECURITY_SOURCES', 'true')
-
-        expect(subject.sources_channel).to eq('security')
-      end
-    end
-
-    context 'with neither ALTERNATIVE_SOURCES or SECURITY_SOURCES set true' do
-      it 'returns "remote"' do
-        stub_env_var('ALTERNATIVE_SOURCES', 'false')
-        stub_env_var('SECURITY_SOURCES', 'false')
-
-        expect(subject.sources_channel).to eq('remote')
+      context 'when checking the source channel environment variables' do
+        it 'uses the correct source channel' do
+          expect(subject.sources_channel).to eq(source_channel)
+        end
       end
     end
   end
