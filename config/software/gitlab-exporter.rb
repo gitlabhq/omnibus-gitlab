@@ -26,6 +26,8 @@ dependency 'rubygems'
 dependency 'postgresql'
 
 build do
+  patch source: 'add-license-file.patch'
+
   env = with_standard_compiler_flags(with_embedded_path)
   gem "install gitlab-exporter --no-document --version #{version}", env: env
 end
