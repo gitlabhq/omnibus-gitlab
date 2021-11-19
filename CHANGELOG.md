@@ -3,6 +3,53 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.5.0 (2021-11-19)
+
+### Added (11 changes)
+
+- [Add praefect prometheus_exclude_database_from_default_metrics config value](gitlab-org/omnibus-gitlab@35d37fd96323b1846b43d1c75a722aabd7e8624b) ([merge request](gitlab-org/omnibus-gitlab!5740))
+- [Build packages for openSUSE 15.3](gitlab-org/omnibus-gitlab@afdc5f3b699dbe64de56a290e0b87fb113a0ab1d) ([merge request](gitlab-org/omnibus-gitlab!5720))
+- [Add max_uri_length to GitLab Pages config](gitlab-org/omnibus-gitlab@594675b8e1a25a09a612f4389f9a1bca4706869e) ([merge request](gitlab-org/omnibus-gitlab!5729))
+- [Add source-IP rate-limiting options to GitLab Pages](gitlab-org/omnibus-gitlab@b19a99391f7c95fdcfd408e7ce22a887fc48fca3) ([merge request](gitlab-org/omnibus-gitlab!5704))
+- [Configure the Loose foreign key cleanup job](gitlab-org/omnibus-gitlab@2cc32e21b28f3570946de2f522199bbcf964c519) ([merge request](gitlab-org/omnibus-gitlab!5708))
+- [Add configuration for the KAS CI tunnel feature](gitlab-org/omnibus-gitlab@832b8fffe7a96a75d5ee745b514ac2cf1886e392) ([merge request](gitlab-org/omnibus-gitlab!5686))
+- [Add praefect check command](gitlab-org/omnibus-gitlab@503df6dbed3949f4aadecc693bd395187f9906de) ([merge request](gitlab-org/omnibus-gitlab!5688))
+- [Allow configuring redis instance for sessions](gitlab-org/omnibus-gitlab@182245701d498863b703265bce7dd24a5b5d44a3) ([merge request](gitlab-org/omnibus-gitlab!5690))
+- [Create a Consul service for GitLab Exporter](gitlab-org/omnibus-gitlab@5aebc282f4e7d4b00e21c58a7e4ce7141d2336df) ([merge request](gitlab-org/omnibus-gitlab!5672))
+- [Build and publish ARM64 AMIs](gitlab-org/omnibus-gitlab@997afab74ebb5b8fc03e6841444a8b3bef6e8d30) ([merge request](gitlab-org/omnibus-gitlab!5682))
+- [Add one_trust_id configuration](gitlab-org/omnibus-gitlab@e71fd56e87e0a53a1b24178da12c037ee54785eb) ([merge request](gitlab-org/omnibus-gitlab!5655))
+
+### Fixed (5 changes)
+
+- [Drop --without-gnutls flag from curl](gitlab-org/omnibus-gitlab@98901806aa0b37db3356bc1d2197f5e6a0d3006f) ([merge request](gitlab-org/omnibus-gitlab!5730))
+- [adding helper text for subcommands](gitlab-org/omnibus-gitlab@655b5ee078728978e5d3bec0450068b09ef94d91) ([merge request](gitlab-org/omnibus-gitlab!5706))
+- [Fix URL for unzip v6.0 download](gitlab-org/omnibus-gitlab@08806a5686a469779151d330808397338b53c7bd) ([merge request](gitlab-org/omnibus-gitlab!5705))
+- [Geo - Restart Gitaly/Praefect services during promotion](gitlab-org/omnibus-gitlab@3b4160fb40f2de6e4ac5dc37a6021e64ae23289c) ([merge request](gitlab-org/omnibus-gitlab!5691))
+- [Ensure letsencrypt is enabled when running  gitlab-ctl renew-le-certs](gitlab-org/omnibus-gitlab@0821de816202aac0019a9ab04d453b38c3954561) ([merge request](gitlab-org/omnibus-gitlab!5681))
+
+### Changed (11 changes)
+
+- [Update grafana-dashboards to 1.9.0](gitlab-org/omnibus-gitlab@7c2bef94efe6694c03871ebcf607273dea5ef6b1) ([merge request](gitlab-org/omnibus-gitlab!5736))
+- [Bump container registry to v3.14.3](gitlab-org/omnibus-gitlab@43ee251ea2a68d5194c09b6d74c33c160d62f335) ([merge request](gitlab-org/omnibus-gitlab!5727))
+- [Upgrade gitlab-exporter to v11.7.0](gitlab-org/omnibus-gitlab@7268bf80da3cedcab04f3ad9481e13e17f031136) ([merge request](gitlab-org/omnibus-gitlab!5725))
+- [Make gitlab-ctl geo promote production ready](gitlab-org/omnibus-gitlab@e2b9eb88b5a88ed767ccd61436a03832de315989) ([merge request](gitlab-org/omnibus-gitlab!5719))
+- [Ensure the selinux modules are enabled on rocky and almalinux](gitlab-org/omnibus-gitlab@8896fe22315369add8ec8c40d91b8bd74cb59c36) ([merge request](gitlab-org/omnibus-gitlab!5714))
+- [Bump container registry to v3.14.1](gitlab-org/omnibus-gitlab@bc9f23610f94e298d716371c648dcfe5e6e91c42) ([merge request](gitlab-org/omnibus-gitlab!5709))
+- [Drop custom compiler for CentOS 6](gitlab-org/omnibus-gitlab@bc8099a15b45676f1e9a2cbaddee4707949d08b4) ([merge request](gitlab-org/omnibus-gitlab!5707))
+- [Upgrade Omnibus Builder to v2.5.0](gitlab-org/omnibus-gitlab@187830c0c70711ce04633faecff7d7f7e9143685) ([merge request](gitlab-org/omnibus-gitlab!5701))
+- [Bump omnibus to 8.2.1.1](gitlab-org/omnibus-gitlab@d94c515b9b312147e018de9d89502c087ee691ea) ([merge request](gitlab-org/omnibus-gitlab!5667))
+- [Update gitlab-mail_room to 0.0.14](gitlab-org/omnibus-gitlab@70dbff79af988b760eb9844c8c5899395bbcb1fb) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5687))
+- [Bump Container Registry to v3.13.0-gitlab](gitlab-org/omnibus-gitlab@98e6ec691071322a324fdf821db5ca5d8e379ac5) ([merge request](gitlab-org/omnibus-gitlab!5684))
+
+### Removed (1 change)
+
+- [Remove Action Cable in-app setting](gitlab-org/omnibus-gitlab@e23ce52074df3e69bf9357f8531be3e0efe432a4) ([merge request](gitlab-org/omnibus-gitlab!5700))
+
+### Security (2 changes)
+
+- [Update Curl to version 7.79.1](gitlab-org/omnibus-gitlab@5e1d27acf27eed44f9f69609cd19d21a8147ec74)
+- [Update openssl to 1.1.1l](gitlab-org/omnibus-gitlab@f107290e750c4df586bb475ca537401eb46094e3)
+
 ## 14.4.2 (2021-11-08)
 
 ### Added (1 change)
