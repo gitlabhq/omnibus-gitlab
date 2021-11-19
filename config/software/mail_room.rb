@@ -25,6 +25,8 @@ skip_transitive_dependency_licensing true
 dependency 'ruby'
 
 build do
+  patch source: 'add-license-file.patch'
+
   env = with_standard_compiler_flags(with_embedded_path)
   gem "install gitlab-mail_room --no-document --version #{version}", env: env
 end
