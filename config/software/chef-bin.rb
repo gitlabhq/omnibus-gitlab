@@ -13,6 +13,7 @@ dependency 'rubygems'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  patch source: 'add-license-file.patch'
 
   gem 'install chef-bin' \
       " --version '#{version}'" \
