@@ -18,5 +18,15 @@ require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/promote_db"
 #
 
 add_command_under_category('promote-db', 'gitlab-geo', 'Promote secondary PostgreSQL database', 2) do |cmd_name, *args|
+  print_deprecation_message
+
   Geo::PromoteDb.new(self).execute
+end
+
+def print_deprecation_message
+  puts
+  puts 'WARNING: As of GitLab 14.5, this command is deprecated in favor of ' \
+    'gitlab-ctl geo promote. This command will be removed in GitLab 15.0. ' \
+    'Please see https://docs.gitlab.com/ee/administration/geo/disaster_recovery/planned_failover.html ' \
+    'for more details.'.color(:red)
 end

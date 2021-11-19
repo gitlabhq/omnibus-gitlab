@@ -25,23 +25,6 @@ RSpec.describe Geo::PromoteToPrimaryNode, '#execute' do
     FileUtils.rm_rf(config_path)
   end
 
-  context 'deprecated legacy command' do
-    before do
-      allow(STDIN).to receive(:gets).and_return('y')
-
-      allow(command).to receive(:promote_postgresql_to_primary).and_return(true)
-      allow(command).to receive(:toggle_geo_roles).and_return(true)
-      allow(command).to receive(:reconfigure).and_return(true)
-      allow(command).to receive(:promote_to_primary).and_return(true)
-      allow(command).to receive(:success_message).and_return(true)
-    end
-
-    it 'prints the deprecation message' do
-      expect { command.execute }.to output(
-        /WARNING: As of GitLab 14.5, this command is deprecated/).to_stdout
-    end
-  end
-
   describe '#promote_postgresql_to_primary' do
     before do
       allow(STDIN).to receive(:gets).and_return('y')
