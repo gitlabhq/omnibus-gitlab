@@ -23,7 +23,7 @@ default_version version.print(false)
 display_version version.print(false).delete_prefix('release-')
 
 license 'BSD-2-Clause'
-license_file 'LICENSE'
+license_file 'docs/text/LICENSE'
 
 skip_transitive_dependency_licensing true
 
