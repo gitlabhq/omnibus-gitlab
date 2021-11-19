@@ -26,7 +26,7 @@ name 'git'
 default_version version.print
 
 license 'GPL-2.0'
-license_file 'COPYING'
+license_file '_build/deps/git/source/COPYING'
 
 vendor 'gitlab'
 
