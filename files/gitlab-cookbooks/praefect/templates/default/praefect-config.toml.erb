@@ -19,6 +19,12 @@ socket_path = '<%= @socket_path %>'
 prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
 <% end %>
 
+<% if @separate_database_metrics %>
+# Optional: when set to true, metrics that query the database will no longer be
+# available on the /metrics endpoint but will be available on the /db_metrics endpoint
+prometheus_exclude_database_from_default_metrics = <%= @separate_database_metrics %>
+<% end %>
+
 <% if @tls_listen_addr %>
 # Optional: listen on a secure TCP socket
 tls_listen_addr = '<%= @tls_listen_addr %>'

@@ -118,6 +118,7 @@ RSpec.describe 'praefect' do
       let(:database_direct_port) { 1234 }
       let(:reconciliation_scheduling_interval) { '1m' }
       let(:reconciliation_histogram_buckets) { '[1.0, 2.0]' }
+      let(:separate_database_metrics) { true }
 
       before do
         stub_gitlab_rb(praefect: {
@@ -150,7 +151,8 @@ RSpec.describe 'praefect' do
                          database_direct_host: database_direct_host,
                          database_direct_port: database_direct_port,
                          reconciliation_scheduling_interval: reconciliation_scheduling_interval,
-                         reconciliation_histogram_buckets: reconciliation_histogram_buckets
+                         reconciliation_histogram_buckets: reconciliation_histogram_buckets,
+                         separate_database_metrics: separate_database_metrics
                        })
       end
 
@@ -203,6 +205,7 @@ RSpec.describe 'praefect' do
                 'key_path' => '/path/to/key.pem'
               },
               'tls_listen_addr' => 'localhost:5555',
+              'prometheus_exclude_database_from_default_metrics' => true,
               'virtual_storage' => [
                 {
                   'name' => 'default',
