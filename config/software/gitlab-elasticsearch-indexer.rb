@@ -21,7 +21,7 @@ name 'gitlab-elasticsearch-indexer'
 default_version version.print
 
 license 'MIT'
-license_file 'LICENSE'
+license_file 'LICENSE.md'
 
 skip_transitive_dependency_licensing true
 

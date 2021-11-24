@@ -26,7 +26,7 @@ display_version version.print(false).delete_prefix('release-').tr('-', '.')
 source git: version.remote
 
 license 'MIT'
-license_file 'icu/LICENSE'
+license_file 'icu4c/LICENSE'
 
 skip_transitive_dependency_licensing true
 
