@@ -1,6 +1,9 @@
 production:
   adapter: redis
   url: <%= @redis_url %>
+  <% if !@redis_enable_client %>
+  id:
+  <% end %>
   <% unless @redis_sentinels.empty? %>
   sentinels:
     <% @redis_sentinels.each do |sentinel| %>
