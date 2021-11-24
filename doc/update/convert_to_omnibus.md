@@ -9,7 +9,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 Upgrading from non-Omnibus installations has not been tested by GitLab.com.
 
 Please be advised that you lose your settings in files such as `gitlab.yml`,
-`puma.rb` and `smtp_settings.rb`. You need to
+`puma.rb` and `smtp_settings.rb`. You must
 [configure those settings in `/etc/gitlab/gitlab.rb`](../index.md#configuring).
 
 Before starting the migration, ensure that you are moving to **exactly the same version** of GitLab.
