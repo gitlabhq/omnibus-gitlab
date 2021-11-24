@@ -3,7 +3,7 @@ require 'rainbow/ext/string'
 
 module Geo
   class Promote
-    GEO_NODE_ROLES = %i[primary secondary].freeze
+    GEO_SITE_ROLES = %i[primary secondary].freeze
     PATRONI_NODE_ROLES = %i[leader replica standby_leader].freeze
     PATRONI_LEADER_ROLES = %i[leader standby_leader].freeze
     SERVICE_NAMES = %w[
@@ -201,17 +201,15 @@ module Geo
       return @node_role if defined?(@node_role)
 
       unless progress_message('Attempting to detect the role of this Geo node') do
-        cmd = run_runner("puts Gitlab::Geo.secondary?")
+        task = run_task('geo:site:role')
 
-        @node_role =
-          if cmd.stdout.strip.to_s == 'true'
-            :secondary
-          else
-            :unknown
-          end
+        next false if task.error?
 
-        GEO_NODE_ROLES.include?(@node_role)
+        @node_role = task.stdout.strip.to_sym
+
+        GEO_SITE_ROLES.include?(@node_role)
       end
+
         die('Unable to detect the role of this Geo node.')
       end
 
@@ -219,7 +217,7 @@ module Geo
     end
 
     def run_reconfigure
-      # If the current node is a Patorni leader, we need to enable Patroni
+      # If the current node is a Patroni leader, we need to enable Patroni
       # maintenance mode to prevent an automatic failover during reconfigure.
       pause_patroni_cluster
 

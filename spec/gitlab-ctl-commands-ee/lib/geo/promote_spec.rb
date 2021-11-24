@@ -39,8 +39,7 @@ RSpec.describe Geo::Promote, '#execute' do
   describe '#execute' do
     context 'when not running in force mode' do
       it 'asks for confirmation' do
-        expect { command.execute }.to output(
-          /WARNING: The current secondary node will now be promoted to a primary node./).to_stdout
+        expect { command.execute }.to output(/Are you sure you want to proceed\?/).to_stdout
       end
     end
 
@@ -48,8 +47,7 @@ RSpec.describe Geo::Promote, '#execute' do
       let(:options) { { force: true } }
 
       it 'does not ask for final confirmation' do
-        expect { command.execute }.not_to output(
-          /WARNING: The current secondary node will now be promoted to a primary node./).to_stdout
+        expect { command.execute }.to_not output(/Are you sure you want to proceed\?/).to_stdout
       end
     end
 
@@ -77,15 +75,13 @@ RSpec.describe Geo::Promote, '#execute' do
 
       shared_examples 'promote secondary site to primary site' do
         context 'on a primary node' do
-          before do
-            stub_primary_node
-          end
-
           it 'does not try to promote the secondary site to primary site' do
-            allow(command).to receive(:toggle_geo_services)
-            allow(command).to receive(:run_reconfigure)
+            stub_primary_node
 
-            expect(command).not_to receive(:run_command).with(promote_to_primary_cmd, anything)
+            allow(command).to receive(:run_reconfigure)
+            allow(command).to receive(:restart_services)
+
+            expect(command).not_to receive(:run_task).with('geo:set_secondary_as_primary')
 
             command.execute
           end
@@ -94,26 +90,31 @@ RSpec.describe Geo::Promote, '#execute' do
         context 'on a secondary node' do
           before do
             stub_secondary_node
+            allow(command).to receive(:run_reconfigure)
           end
 
           it 'promotes the secondary site to primary site' do
-            allow(command).to receive(:toggle_geo_services)
-            allow(command).to receive(:run_reconfigure)
             allow(command).to receive(:restart_services)
 
-            expect(command).to receive(:run_command).with(promote_to_primary_cmd, anything).once.and_return(double(error?: false))
+            expect(command).to receive(:run_task).with('geo:set_secondary_as_primary').once.and_return(double(error?: false))
 
             command.execute
           end
 
           it 'restarts the puma service' do
-            allow(command).to receive(:toggle_geo_services)
             allow(command).to receive(:promote_to_primary)
-            allow(command).to receive(:run_reconfigure)
 
             expect(ctl).to receive(:run_sv_command_for_service).with('restart', 'puma').once.and_return(double(zero?: true))
 
             command.execute
+          end
+        end
+
+        context 'on a misconfigured node' do
+          it 'aborts promotion with an error message' do
+            stub_misconfigured_node
+
+            expect { command.execute }.to output(/Unable to detect the role of this Geo node/).to_stdout
           end
         end
       end
@@ -454,11 +455,9 @@ RSpec.describe Geo::Promote, '#execute' do
       end
     end
 
-    let(:geo_node_cmd) { "#{base_path}/bin/gitlab-rails runner \"puts Gitlab::Geo.secondary?\"" }
     let(:patroni_pause_cmd) { "#{base_path}/bin/gitlab-ctl patroni pause" }
     let(:patroni_resume_cmd) { "#{base_path}/bin/gitlab-ctl patroni resume" }
     let(:pg_is_in_recovery_cmd) { "#{base_path}/bin/gitlab-psql -c \"SELECT pg_is_in_recovery();\" -q -t" }
-    let(:promote_to_primary_cmd) { "#{base_path}/bin/gitlab-rake geo:set_secondary_as_primary" }
     let(:reconfigure_cmd) { "#{base_path}/embedded/cookbooks/dna.json" }
 
     def stub_service_enabled(service)
@@ -466,11 +465,15 @@ RSpec.describe Geo::Promote, '#execute' do
     end
 
     def stub_primary_node
-      allow(command).to receive(:run_command).with(geo_node_cmd, anything).and_return(double(error?: false, stdout: 'false'))
+      allow(command).to receive(:run_task).with('geo:site:role').and_return(double(error?: false, stdout: 'primary'))
     end
 
     def stub_secondary_node
-      allow(command).to receive(:run_command).with(geo_node_cmd, anything).and_return(double(error?: false, stdout: 'true'))
+      allow(command).to receive(:run_task).with('geo:site:role').and_return(double(error?: false, stdout: 'secondary'))
+    end
+
+    def stub_misconfigured_node
+      allow(command).to receive(:run_task).with('geo:site:role').and_return(double(error?: true, stdout: 'misconfigured'))
     end
 
     def stub_single_server_secondary_site
