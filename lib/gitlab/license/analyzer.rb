@@ -34,6 +34,7 @@ module License
       'select2',            # MIT Licensed - https://github.com/select2/select2/blob/master/LICENSE.md
       'exiftool',           # License similar to Perl, which is under either GPL v1 or Artistic license - https://www.sno.phy.queensu.ca/~phil/exiftool/#license
       'github.com/cloudflare/tableflip', # BSD-3-Clause Licensed - https://github.com/cloudflare/tableflip/blob/master/LICENSE
+      'gitlab.com/gitlab-org/golang-archive-zip', # BSD-3-Clause Licensed - https://gitlab.com/gitlab-org/golang-archive-zip/-/blob/c8e752e2d582090de40338553ef00ef08b89c905/LICENSE
     ]
     # readline is GPL licensed and its use was not mere aggregation. Hence it is
     # blacklisted.
