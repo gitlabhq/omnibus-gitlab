@@ -562,13 +562,19 @@ default['gitlab']['sidekiq']['log_directory'] = "/var/log/gitlab/sidekiq"
 default['gitlab']['sidekiq']['log_format'] = "json"
 default['gitlab']['sidekiq']['shutdown_timeout'] = 25
 default['gitlab']['sidekiq']['concurrency'] = 25
-default['gitlab']['sidekiq']['metrics_enabled'] = true
-default['gitlab']['sidekiq']['exporter_log_enabled'] = false
 default['gitlab']['sidekiq']['routing_rules'] = []
 
-# Sidekiq http listener
+# Sidekiq metrics server defaults
+default['gitlab']['sidekiq']['metrics_enabled'] = true
+default['gitlab']['sidekiq']['exporter_log_enabled'] = false
 default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"
 default['gitlab']['sidekiq']['listen_port'] = 8082
+
+# Sidekiq health-check server defaults
+default['gitlab']['sidekiq']['health_checks_enabled'] = nil
+default['gitlab']['sidekiq']['health_checks_log_enabled'] = nil
+default['gitlab']['sidekiq']['health_checks_listen_address'] = nil
+default['gitlab']['sidekiq']['health_checks_listen_port'] = nil
 
 # Cluster specific settings
 default['gitlab']['sidekiq']['queue_selector'] = false

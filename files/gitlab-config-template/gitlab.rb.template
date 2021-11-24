@@ -1033,10 +1033,18 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # sidekiq['negate'] = false
 
+##! Specifies where Prometheus metrics endpoints should be made available for Sidekiq processes.
 # sidekiq['metrics_enabled'] = true
 # sidekiq['exporter_log_enabled'] = false
 # sidekiq['listen_address'] = "localhost"
 # sidekiq['listen_port'] = 8082
+
+##! Specifies where health-check endpoints should be made available for Sidekiq processes.
+##! Defaults to the same settings as for Prometheus metrics (see above).
+# sidekiq['health_checks_enabled'] = true
+# sidekiq['health_checks_log_enabled'] = false
+# sidekiq['health_checks_listen_address'] = "localhost"
+# sidekiq['health_checks_listen_port'] = 8082
 
 ##! Service name used to register Sidekiq as a Consul service
 # sidekiq['consul_service_name'] = 'sidekiq'
