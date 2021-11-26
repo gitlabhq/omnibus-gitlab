@@ -45,6 +45,7 @@ build do
 
   bundle "install --without #{bundle_without.join(' ')}", env: env, cwd: ruby_build_dir
   touch '.ruby-bundle' # Prevent 'make install' below from running 'bundle install' again
+  bundle "exec license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=gitaly-ruby-licenses.json", cwd: ruby_build_dir, env: env
 
   block 'delete grpc shared objects' do
     # Delete unused shared objects included in grpc gem
@@ -77,6 +78,14 @@ build do
     end
   end
 
-  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"
-  copy "license.json", "#{install_dir}/licenses/gitaly.json"
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=gitaly-go-licenses.json"
+
+  # Merge license files of ruby and go dependencies.
+  block "Merge license files of ruby and go depenrencies of Gitaly" do
+    require 'json'
+    ruby_licenses = JSON.parse(File.read("#{ruby_build_dir}/gitaly-ruby-licenses.json"))['dependencies']
+    go_licenses = JSON.parse(File.read("#{Omnibus::Config.source_dir}/gitaly/gitaly-go-licenses.json"))['dependencies']
+    output = { dependencies: ruby_licenses.concat(go_licenses).uniq }
+    File.write("#{install_dir}/licenses/gitaly.json", JSON.pretty_generate(output))
+  end
 end

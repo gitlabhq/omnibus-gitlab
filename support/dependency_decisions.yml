@@ -1,4 +1,16 @@
 ---
+- - :ignore_group
+  - development
+  - :who: Balasankar C
+    :why: Development gems are not distributed with any of the components
+    :versions: []
+    :when: 2021-11-20 07:24:20.632539809 Z
+- - :ignore_group
+  - test
+  - :who: Balasankar C
+    :why: Development gems are not distributed with any of the components
+    :versions: []
+    :when: 2021-11-20 07:24:23.869636301 Z
 - - :license
   - github.com/gomodule/redigo
   - Apache2
