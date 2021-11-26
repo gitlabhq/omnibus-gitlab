@@ -56,6 +56,16 @@ RSpec.describe 'gitlab::gitlab-rails' do
           expect(gitlab_yml[:production][:extra][:one_trust_id]).to eq('0000-0000-test')
         end
       end
+
+      describe 'google_tag_manager_nonce_id setting' do
+        before do
+          stub_gitlab_rb(gitlab_rails: { extra_google_tag_manager_nonce_id: '0000-0000' })
+        end
+
+        it 'renders gitlab.yml with the provided value' do
+          expect(gitlab_yml[:production][:extra][:google_tag_manager_nonce_id]).to eq('0000-0000')
+        end
+      end
     end
   end
 end
