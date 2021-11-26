@@ -3,6 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.2.7 (2021-11-26)
+
+### Added (1 change)
+
+- [Add praefect prometheus_exclude_database_from_default_metrics config value](gitlab-org/omnibus-gitlab@a92ad24941e479d2e30ba087107081d36cf888e4) ([merge request](gitlab-org/omnibus-gitlab!5750))
+
+### Fixed (3 changes)
+
+- [Fix URL for unzip v6.0 download](gitlab-org/omnibus-gitlab@23f4f83c0926fc81ebd3b2932b7e5a1bcd31b2e1) ([merge request](gitlab-org/omnibus-gitlab!5750))
+- [Conditionally generate public_attributes.json](gitlab-org/omnibus-gitlab@440ce859b9bca7f2147c835b7f199a4e4b6f8f38) ([merge request](gitlab-org/omnibus-gitlab!5750))
+- [Delay praefect database_*_no_proxy removals](gitlab-org/omnibus-gitlab@dddf6f9d893d5f59a089a7d039360c5918840bea) ([merge request](gitlab-org/omnibus-gitlab!5750))
+
 ## 14.2.6 (2021-10-28)
 
 ### Security (2 changes)
