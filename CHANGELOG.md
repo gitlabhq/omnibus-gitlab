@@ -3,6 +3,21 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.3.5 (2021-11-26)
+
+### Added (1 change)
+
+- [Add praefect prometheus_exclude_database_from_default_metrics config value](gitlab-org/omnibus-gitlab@29473df822968966dfc640a53d95be908998f389) ([merge request](gitlab-org/omnibus-gitlab!5752))
+
+### Fixed (2 changes)
+
+- [Fix URL for unzip v6.0 download](gitlab-org/omnibus-gitlab@21fcea1eb78cdae7ceba302f6abef1b49135b48a) ([merge request](gitlab-org/omnibus-gitlab!5752))
+- [Conditionally generate public_attributes.json](gitlab-org/omnibus-gitlab@7dbfb5e782a269040eebd673ba6279ae2de6d3b1) ([merge request](gitlab-org/omnibus-gitlab!5752))
+
+### Changed (1 change)
+
+- [Downgrade grafana to the 7.x release branch](gitlab-org/omnibus-gitlab@f32b875f748d763cfda4f231a9cfb4210d5793e6) ([merge request](gitlab-org/omnibus-gitlab!5752))
+
 ## 14.3.4 (2021-10-28)
 
 ### Security (2 changes)
