@@ -86,3 +86,17 @@ For more information on available collectors, see the [upstream documentation](h
 Prometheus metrics data. Omnibus GitLab >= 11.9 includes an embedded copy.
 
 See [the embedded Grafana documentation](grafana.md) for more information.
+
+## Alertmanager global options
+
+You can set [global options](https://prometheus.io/docs/alerting/latest/configuration/)
+for the [Alertmanager](https://prometheus.io/docs/alerting/latest/configuration/).
+
+For example, the following `gitlab.rb` configuration overrides the hostname Alertmanager
+uses to identify itself to the SMTP server:
+
+```ruby
+alertmanager['global'] = {
+  'smtp_hello' => 'example.org'
+}
+```
