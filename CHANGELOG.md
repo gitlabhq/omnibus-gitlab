@@ -166,6 +166,18 @@ No changes.
 - [Update Mattermost to 5.38.2](gitlab-org/omnibus-gitlab@02d9eb7adfbd2c13048cd0db4550ab994fb9feaa) by @hmhealey ([merge request](gitlab-org/omnibus-gitlab!5587))
 - [Update Python from 3.7.10 to 3.9.5](gitlab-org/omnibus-gitlab@055e29c12442df3ef278a566160e1664e5da331b) ([merge request](gitlab-org/omnibus-gitlab!5547))
 
+## 14.2.7 (2021-11-26)
+
+### Added (1 change)
+
+- [Add praefect prometheus_exclude_database_from_default_metrics config value](gitlab-org/omnibus-gitlab@a92ad24941e479d2e30ba087107081d36cf888e4) ([merge request](gitlab-org/omnibus-gitlab!5750))
+
+### Fixed (3 changes)
+
+- [Fix URL for unzip v6.0 download](gitlab-org/omnibus-gitlab@23f4f83c0926fc81ebd3b2932b7e5a1bcd31b2e1) ([merge request](gitlab-org/omnibus-gitlab!5750))
+- [Conditionally generate public_attributes.json](gitlab-org/omnibus-gitlab@440ce859b9bca7f2147c835b7f199a4e4b6f8f38) ([merge request](gitlab-org/omnibus-gitlab!5750))
+- [Delay praefect database_*_no_proxy removals](gitlab-org/omnibus-gitlab@dddf6f9d893d5f59a089a7d039360c5918840bea) ([merge request](gitlab-org/omnibus-gitlab!5750))
+
 ## 14.2.6 (2021-10-28)
 
 ### Security (2 changes)
