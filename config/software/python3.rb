@@ -55,6 +55,11 @@ build do
   # Patches below are a backport of https://github.com/python/cpython/pull/24189
   patch source: 'readline-3-9.patch'
 
+  # Patch to avoid building nis module in Debian 11. If nis is built, it gets
+  # linked to system `nsl` and `tirpc` libraries and thus fail omnibus
+  # healthcheck in Debian 11.
+  patch source: 'debian-11-skip-nis-build.patch' if ohai['platform'] =~ /^debian/ && ohai['platform_version'] =~ /^11/
+
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
            '--enable-shared',
