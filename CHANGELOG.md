@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.4.3 (2021-12-01)
+
+### Added (1 change)
+
+- [Add praefect prometheus_exclude_database_from_default_metrics config value](gitlab-org/omnibus-gitlab@4be6a278a6401c70e0676d2f487b8752a30c41d7) ([merge request](gitlab-org/omnibus-gitlab!5762))
+
 ## 14.4.2 (2021-11-08)
 
 ### Added (1 change)
