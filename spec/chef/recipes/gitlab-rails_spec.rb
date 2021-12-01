@@ -227,7 +227,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
         expect(chef_run).to create_templatesymlink('Create a cable.yml and create a symlink to Rails root').with_variables(
           hash_including(
             redis_url: URI('unix:/var/opt/gitlab/redis/redis.socket'),
-            redis_sentinels: []
+            redis_sentinels: [],
+            redis_enable_client: true
           )
         )
 
@@ -277,12 +278,28 @@ RSpec.describe 'gitlab::gitlab-rails' do
           expect(content).to match(/id:$/)
         }
       end
+
+      it 'creates cable.yml with custom host, port, password and database' do
+        expect(chef_run).to create_templatesymlink('Create a cable.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            redis_url: URI('redis://:mypass@redis.example.com:8888/2'),
+            redis_sentinels: [],
+            redis_enable_client: false
+          )
+        )
+
+        expect(chef_run).to render_file(config_file).with_content { |content|
+          expect(content).to match(%r(url: redis://:mypass@redis.example.com:8888/2))
+          expect(content).to match(/id:$/)
+        }
+      end
     end
 
     context 'with multiple instances' do
       before do
         stub_gitlab_rb(
           gitlab_rails: {
+            redis_enable_client: false,
             redis_cache_instance: "redis://:fakepass@fake.redis.cache.com:8888/2",
             redis_cache_sentinels: [
               { host: 'cache', port: '1234' },
@@ -326,7 +343,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
         redis_instances.each do |instance|
           expect(chef_run).to create_templatesymlink("Create a redis.#{instance}.yml and create a symlink to Rails root").with_variables(
             redis_url: "redis://:fakepass@fake.redis.#{instance}.com:8888/2",
-            redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }]
+            redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
+            redis_enable_client: false
           )
           expect(chef_run).not_to delete_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml")
         end
@@ -340,7 +358,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
         expect(chef_run).to create_templatesymlink('Create a cable.yml and create a symlink to Rails root').with_variables(
           hash_including(
             redis_url: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
-            redis_sentinels: [{ 'host' => 'actioncable', 'port' => '1234' }, { 'host' => 'actioncable', 'port' => '3456' }]
+            redis_sentinels: [{ 'host' => 'actioncable', 'port' => '1234' }, { 'host' => 'actioncable', 'port' => '3456' }],
+            redis_enable_client: false
           )
         )
       end
