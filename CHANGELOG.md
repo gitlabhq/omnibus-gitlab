@@ -56,6 +56,12 @@ omnibus-gitlab repository.
 - [Update Curl to version 7.79.1](gitlab-org/omnibus-gitlab@5e1d27acf27eed44f9f69609cd19d21a8147ec74)
 - [Update openssl to 1.1.1l](gitlab-org/omnibus-gitlab@f107290e750c4df586bb475ca537401eb46094e3)
 
+## 14.4.3 (2021-12-01)
+
+### Added (1 change)
+
+- [Add praefect prometheus_exclude_database_from_default_metrics config value](gitlab-org/omnibus-gitlab@4be6a278a6401c70e0676d2f487b8752a30c41d7) ([merge request](gitlab-org/omnibus-gitlab!5762))
+
 ## 14.4.2 (2021-11-08)
 
 ### Added (1 change)
