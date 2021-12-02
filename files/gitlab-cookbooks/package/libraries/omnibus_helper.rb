@@ -170,11 +170,10 @@ class OmnibusHelper
     # This hash follows the format `'ohai-slug' => 'EOL version'
     # example: deprecated_os = { 'raspbian-8' => 'GitLab 11.8' }
     {
-      'raspbian-9' => 'GitLab 13.4',
-      'debian-8' => 'GitLab 13.4',
-      'centos-6' => 'GitLab 13.7',
       'ubuntu-16.04' => 'GitLab 14.0',
-      'opensuseleap-15.1' => 'GitLab 14.0'
+      'opensuseleap-15.1' => 'GitLab 14.0',
+      'opensuseleap-15.2' => 'GitLab 14.5',
+      'suse-12.2' => 'GitLab 14.5'
     }
   end
 
