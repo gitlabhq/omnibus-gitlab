@@ -219,6 +219,31 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
+### SMTP.com
+
+You can use the [SMTP.com](https://smtp.com/) email service. [Retrieve your sender login and password](https://kb.smtp.com/article/1043-my-account-1)
+from your account.
+
+To improve delivery by authorizing `SMTP.com` to send emails on behalf of your domain, you should:
+
+- Specify `from` and `reply_to` addresses using your GitLab domain name.
+- [Set up SPF and DKIM for the domain](https://kb.smtp.com/article/1039-email-authentication-spf-dkim-dmarc).
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = 'send.smtp.com'
+gitlab_rails['smtp_port'] = 25 # If your outgoing port 25 is blocked, try 2525, 2082
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_authentication'] = 'plain'
+gitlab_rails['smtp_user_name'] = 'your_sender_login' 
+gitlab_rails['smtp_password'] = 'your_sender_password'
+gitlab_rails['smtp_domain'] = 'your.gitlab.domain.com'
+gitlab_rails['gitlab_email_from'] = 'user@your.gitlab.domain.com' 
+gitlab_rails['gitlab_email_reply_to'] = 'user@your.gitlab.domain.com' 
+```
+
+Check the [SMTP.com Knowledge Base](https://kb.smtp.com/) for further assistance.
+
 ### SparkPost
 
 ```ruby
