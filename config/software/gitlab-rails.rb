@@ -33,6 +33,10 @@ combined_licenses_file = "#{install_dir}/embedded/lib/ruby/gems/gitlab-gem-licen
 
 license 'MIT'
 license_file 'LICENSE'
+
+# TODO: Compare contents of this file with the output of license_finder and
+# tackle the missing ones and stop using this workaround.
+# https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6517
 license_file combined_licenses_file
 
 dependency 'pkg-config-lite'
@@ -148,11 +152,6 @@ build do
     sync "#{Gitlab::Util.get_env('CI_PROJECT_DIR')}/#{Gitlab::Util.get_env('ASSET_PATH')}", 'public/assets/'
   end
 
-  # Move folders for caching. GitLab CI permits only relative path for Cache
-  # and Artifacts. So we need these folder in the root directory.
-  move "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache", "#{Omnibus::Config.project_root}/assets_cache"
-  move "#{Omnibus::Config.source_dir}/gitlab-rails/node_modules", Omnibus::Config.project_root.to_s
-
   bundle "exec license_finder report --decisions-file=config/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=rails-license.json", env: env
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=workhorse-license.json", cwd: "#{Omnibus::Config.source_dir}/gitlab-rails/workhorse"
 
@@ -164,6 +163,11 @@ build do
     output = { dependencies: rails_licenses.concat(workhorse_licenses).uniq }
     File.write("#{install_dir}/licenses/gitlab-rails.json", JSON.pretty_generate(output))
   end
+
+  # Move folders for caching. GitLab CI permits only relative path for Cache
+  # and Artifacts. So we need these folder in the root directory.
+  move "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache", "#{Omnibus::Config.project_root}/assets_cache"
+  move "#{Omnibus::Config.source_dir}/gitlab-rails/node_modules", Omnibus::Config.project_root.to_s
 
   # Tear down now that gitlab:assets:compile is done.
   delete 'config/gitlab.yml'
