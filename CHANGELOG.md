@@ -123,6 +123,12 @@ omnibus-gitlab repository.
 
 - [Deprecate Pages `inplace_chroot` flag and stop running Pages as a daemon](gitlab-org/omnibus-gitlab@ae3cdf3bf6846415391a765661090456a06ce32b) by @feistel ([merge request](gitlab-org/omnibus-gitlab!5639))
 
+## 14.3.6 (2021-12-03)
+
+### Security (1 change)
+
+- [Bump Mattermost to 5.38.4](gitlab-org/security/omnibus-gitlab@28663f0c7a3fd084d461a836c6dbe53282008074) ([merge request](gitlab-org/security/omnibus-gitlab!162))
+
 ## 14.3.5 (2021-11-26)
 
 ### Added (1 change)
