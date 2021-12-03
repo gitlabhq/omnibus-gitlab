@@ -22,7 +22,7 @@ license_file 'LEGAL'
 
 skip_transitive_dependency_licensing true
 
-default_version '2.7.4'
+default_version '2.7.5'
 
 fips_enabled = (project.overrides[:fips] && project.overrides[:fips][:enabled]) || false
 
@@ -34,7 +34,7 @@ dependency 'libyaml'
 # they expect to see our libiconv instead of a system version.
 dependency 'libiconv'
 
-version('2.7.4') { source sha256: '3043099089608859fc8cce7f9fdccaa1f53a462457e3838ec3b25a7d609fbc5b' }
+version('2.7.5') { source sha256: '2755b900a21235b443bb16dadd9032f784d4a88f143d852bc5d154f22b8781f1' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
