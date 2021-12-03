@@ -62,6 +62,12 @@ omnibus-gitlab repository.
 - [Update Curl to version 7.79.1](gitlab-org/omnibus-gitlab@5e1d27acf27eed44f9f69609cd19d21a8147ec74)
 - [Update openssl to 1.1.1l](gitlab-org/omnibus-gitlab@f107290e750c4df586bb475ca537401eb46094e3)
 
+## 14.4.4 (2021-12-03)
+
+### Security (1 change)
+
+- [Bump Mattermost to 5.39.2](gitlab-org/security/omnibus-gitlab@57bf68e0fe9f165641ea2d39a2ba785824cf49d3) ([merge request](gitlab-org/security/omnibus-gitlab!161))
+
 ## 14.4.3 (2021-12-01)
 
 ### Added (1 change)
