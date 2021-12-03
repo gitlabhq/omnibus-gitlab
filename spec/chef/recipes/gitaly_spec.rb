@@ -83,7 +83,7 @@ RSpec.describe 'gitaly' do
     it 'creates a default VERSION file and restarts service' do
       expect(chef_run).to create_version_file('Create version file for Gitaly').with(
         version_file_path: '/var/opt/gitlab/gitaly/VERSION',
-        version_check_cmd: '/opt/gitlab/embedded/bin/gitaly --version'
+        version_check_cmd: "/opt/gitlab/embedded/bin/ruby -rdigest/sha2 -e 'puts %(sha256:) + Digest::SHA256.file(%(/opt/gitlab/embedded/bin/gitaly)).hexdigest'"
       )
 
       expect(chef_run.version_file('Create version file for Gitaly')).to notify('runit_service[gitaly]').to(:hup)

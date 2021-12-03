@@ -125,7 +125,7 @@ end
 
 version_file 'Create version file for Gitaly' do
   version_file_path File.join(working_dir, 'VERSION')
-  version_check_cmd '/opt/gitlab/embedded/bin/gitaly --version'
+  version_check_cmd "/opt/gitlab/embedded/bin/ruby -rdigest/sha2 -e 'puts %(sha256:) + Digest::SHA256.file(%(/opt/gitlab/embedded/bin/gitaly)).hexdigest'"
   notifies :hup, "runit_service[gitaly]"
 end
 
