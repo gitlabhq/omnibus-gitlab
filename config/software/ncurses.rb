@@ -15,7 +15,7 @@
 #
 
 name 'ncurses'
-default_version '5.9'
+default_version '6.3'
 
 license 'MIT'
 license_file 'LICENSE'
@@ -24,7 +24,7 @@ skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
 
-version('5.9') { source md5: '8cb9c412e5f2d96bc6f459aa8c6282a1', url: 'http://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz' }
+version('6.3') { source md5: 'a2736befde5fee7d2b7eb45eb281cdbe', url: 'https://ftp.gnu.org/gnu/ncurses/ncurses-6.3.tar.gz' }
 
 relative_path "ncurses-#{version}"
 
@@ -47,11 +47,6 @@ build do
   patch source: 'add-license-file.patch'
   env = with_standard_compiler_flags(with_embedded_path)
   env.delete('CPPFLAGS')
-
-  if version == '5.9'
-    # Patch to add support for GCC 5, doesn't break previous versions
-    patch source: 'ncurses-5.9-gcc-5.patch', plevel: 1, env: env
-  end
 
   update_config_guess
 
@@ -85,5 +80,5 @@ build do
   make "-j #{workers} install", env: env
 end
 
-project.exclude "embedded/bin/ncurses5-config"
-project.exclude "embedded/bin/ncursesw5-config"
+project.exclude "embedded/bin/ncurses6-config"
+project.exclude "embedded/bin/ncursesw6-config"
