@@ -19,7 +19,7 @@ It is not recommended to store your configuration backup in the
 same place as your application data backup, see below.
 
 All configuration for Omnibus GitLab is stored in `/etc/gitlab`. To backup your
-configuration, just run `sudo gitlab-ctl backup-etc`. It will create a tar
+configuration, just run `sudo gitlab-ctl backup-etc` (introduced in GitLab 12.3). It will create a tar
 archive in `/etc/gitlab/config_backup/`. Directory and backup files will be
 readable only to root.
 
@@ -27,9 +27,6 @@ NOTE:
 Running `sudo gitlab-ctl backup-etc --backup-path <DIRECTORY>` will place
 the backup in the specified directory. The directory will be created if it
 does not exist. Absolute paths are recommended.
-
-NOTE:
-`backup-etc` introduced in GitLab 12.3.
 
 To create a daily application backup, edit the cron table for user root:
 
@@ -50,7 +47,7 @@ weekday, Tuesday (day 2) through Saturday (day 6):
 NOTE:
 Make sure that `/secret/gitlab/backups/` exists.
 
-You can extract the .tar file as follows.
+You can extract the tar file as follows.
 
 ```shell
 # Rename the existing /etc/gitlab, if any
@@ -108,7 +105,7 @@ lost/leaked/stolen together with the keys needed to decrypt it.
 ## Creating an application backup
 
 To create a backup of your repositories and GitLab metadata, follow the
-[backup create documentation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system).
+[backup create documentation](https://docs.gitlab.com/ee/raketasks/backup_restore.html).
 
 Backup create will store a tar file in `/var/opt/gitlab/backups`.
 
@@ -163,7 +160,7 @@ If you are using non-packaged database see [documentation on using non-packaged 
 
 ## Upload backups to remote (cloud) storage
 
-For details check [backup restore document of GitLab CE](https://docs.gitlab.com/ee/raketasks/backup_restore.html#uploading-backups-to-a-remote-cloud-storage).
+For details check [backup restore document](https://docs.gitlab.com/ee/raketasks/backup_restore.html#uploading-backups-to-a-remote-cloud-storage).
 
 ## Manually manage backup directory
 
@@ -177,5 +174,6 @@ To disable backup directory management, in `/etc/gitlab/gitlab.rb` set:
 gitlab_rails['manage_backup_path'] = false
 ```
 
-*Warning* If you set this configuration option, it is up to you to create the directory specified in `gitlab_rails['backup_path']` and to set permissions
+WARNING:
+If you set this configuration option, it is up to you to create the directory specified in `gitlab_rails['backup_path']` and to set permissions
 which will allow user specified in `user['username']` to have correct access. Failing to do so will prevent GitLab from creating the backup archive.
