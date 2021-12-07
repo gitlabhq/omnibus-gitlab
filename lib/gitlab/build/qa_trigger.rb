@@ -17,6 +17,7 @@ module Build
         "token" => Gitlab::Util.get_env('CI_JOB_TOKEN'),
         "variables[RELEASE]" => image,
         "variables[QA_IMAGE]" => Gitlab::Util.get_env('QA_IMAGE'),
+        "variables[QA_TESTS]" => Gitlab::Util.get_env('QA_TESTS'),
         "variables[GITLAB_QA_OPTIONS]" => Gitlab::Util.get_env('GITLAB_QA_OPTIONS'),
         "variables[TRIGGERED_USER]" => Gitlab::Util.get_env("TRIGGERED_USER") || Gitlab::Util.get_env("GITLAB_USER_NAME"),
         "variables[TRIGGER_SOURCE]" => Gitlab::Util.get_env('CI_JOB_URL'),
