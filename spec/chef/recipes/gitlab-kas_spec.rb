@@ -310,6 +310,39 @@ RSpec.describe 'gitlab-kas' do
       end
     end
 
+    context 'without sentinel but with tls enabled' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas: {
+            enable: true
+          },
+          gitlab_rails: {
+            redis_host: 'the-host',
+            redis_port: 12345,
+            redis_ssl: true,
+          }
+        )
+      end
+
+      it 'renders a configuration with tls enabled in to the kas config' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content { |content|
+          kas_redis_cfg = YAML.safe_load(content)['redis']
+          expect(kas_redis_cfg).to(
+            include(
+              'network' => 'tcp',
+              'tls' => {
+                'enabled' => true
+              },
+              'server' => {
+                'address' => 'the-host:12345'
+              }
+            )
+          )
+        }
+      end
+    end
+
     context 'with sentinel' do
       before do
         stub_gitlab_rb(

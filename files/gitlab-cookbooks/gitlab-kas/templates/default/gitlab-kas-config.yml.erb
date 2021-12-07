@@ -22,6 +22,8 @@ observability:
   usage_reporting_period: <%= @metrics_usage_reporting_period %>s
 redis:
   network: <%= @redis_network %>
+  tls:
+    enabled: <%= @redis_ssl %>
   <%- if @redis_password_file %>
   password_file: <%= @redis_password_file %>
   <%- end %>

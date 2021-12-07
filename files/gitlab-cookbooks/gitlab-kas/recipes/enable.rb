@@ -30,6 +30,7 @@ redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 redis_sentinels_master_name = node['redis']['master_name']
 gitlab_kas_redis_password_file = File.join(working_dir, 'redis_password_file')
 redis_network = redis_helper.redis_url.scheme == 'unix' ? 'unix' : 'tcp'
+redis_ssl = node['gitlab']['gitlab-rails']['redis_ssl']
 redis_address = if redis_network == 'tcp'
                   "#{redis_host}:#{redis_port}"
                 else
@@ -90,6 +91,7 @@ template gitlab_kas_config_file do
       private_api_authentication_secret_file: gitlab_kas_private_api_authentication_secret_file,
       redis_network: redis_network,
       redis_address: redis_address,
+      redis_ssl: redis_ssl,
       redis_password_file: redis_password ? gitlab_kas_redis_password_file : nil,
       redis_sentinels_master_name: redis_sentinels_master_name,
       redis_sentinels: redis_sentinels
