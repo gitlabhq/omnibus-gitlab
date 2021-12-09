@@ -73,9 +73,9 @@ See <https://docs.gitlab.com/ee/administration/redis/replication_and_failover.ht
 ## Using Google Cloud Memorystore
 
 Google Cloud Memorystore [does not support the Redis `CLIENT`
-command](https://cloud.google.com/memorystore/docs/redis/redis-configs).
-By default Sidekiq will attempt to set the `CLIENT` for debugging
-purposes. This can be disabled via this configuration setting:
+command](https://cloud.google.com/memorystore/docs/redis/product-constraints#blocked_redis_commands).
+By default, Sidekiq will attempt to set the `CLIENT` for debugging
+purposes. This can be disabled via the following configuration setting:
 
 ```ruby
 gitlab_rails['redis_enable_client'] = false
