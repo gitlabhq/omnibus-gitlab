@@ -1215,6 +1215,22 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = true
 ```
 
+### Hostpoint
+
+For more information about Hostpoint email visit their [help page](https://support.hostpoint.ch/en/technical/e-mail/frequently-asked-questions/e-mail-settings-at-a-glance#hp-section3)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "asmtp.mail.hostpoint.ch"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "username@example.com"
+gitlab_rails['smtp_password'] = "authentication code"
+gitlab_rails['smtp_domain'] = "asmtp.mail.hostpoint.ch"
+gitlab_rails['smtp_authentication'] = "plain"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['gitlab_email_from'] = 'username@example.com'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
