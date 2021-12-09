@@ -52,6 +52,25 @@ RSpec.describe Praefect do
 
       it_behaves_like 'parses repository options'
       it_behaves_like 'unknown option is specified'
+
+      it 'successfully parses apply' do
+        expect(Praefect.parse_options!(%W(praefect #{command}
+                                          --dir dir
+                                          --virtual-storage-name name
+                                          --repository-relative-path path
+                                          --apply))).to include(apply: true)
+
+        expect(Praefect.parse_options!(%W(praefect #{command}
+                                          --dir dir
+                                          --virtual-storage-name name
+                                          --repository-relative-path path
+                                          --apply something))).to include(apply: true)
+
+        expect(Praefect.parse_options!(%W(praefect #{command}
+                                          --dir dir
+                                          --virtual-storage-name name
+                                          --repository-relative-path path))).not_to include(:apply)
+      end
     end
 
     context 'when command is check' do
