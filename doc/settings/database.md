@@ -424,7 +424,7 @@ To upgrade the PostgreSQL version, be sure that:
     (or update to your database path).
   - Check the space available using `sudo df -h`. If the partition where the
     database resides doesn't have enough space, pass the argument `--tmp-dir $DIR`
-    to the command. GitLab 13.3 includes an available disk space check and aborts
+    to the command. GitLab 13.3 and above includes an available disk space check and aborts
     the upgrade if the requirements aren't met.
 
 After you confirm that the above checklist is satisfied, you can proceed with
