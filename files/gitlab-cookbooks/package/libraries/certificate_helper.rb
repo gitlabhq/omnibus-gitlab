@@ -122,7 +122,11 @@ class CertificateHelper
 
   def link_certificates
     update_permissions
-    c_rehash
+    rehash_status = c_rehash
+    unless rehash_status.zero?
+      LoggingHelper.warning("Rehashing of trusted certificates present in `/etc/gitlab/trusted-certs` failed. If on a FIPS-enabled machine, ensure `c_rehash` binary is available in $PATH.")
+      return
+    end
     link_to_omnibus_ssl_directory
     log_directory_hash
   end
