@@ -177,7 +177,7 @@ gitlab_rails['smtp_password'] = "password"
 gitlab_rails['smtp_domain'] = "mg.gitlab.com"
 ```
 
-### Amazon Simple Email System (AWS SES)
+### Amazon Simple Email Service (AWS SES)
 
 - Using STARTTLS
 
