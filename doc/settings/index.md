@@ -16,6 +16,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [Grafana](grafana.md)
 - [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap/index.html)
 - [Logs](logs.md)
+- [Mattermost](https://docs.gitlab.com/ee/integration/mattermost/)
 - [NGINX](nginx.md)
 - [Pages](https://docs.gitlab.com/ee/administration/pages/index.html)
 - [Prometheus Monitoring](prometheus.md)
