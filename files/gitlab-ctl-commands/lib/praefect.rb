@@ -39,6 +39,10 @@ module Praefect
 
         parse_common_options!(options, opts)
         parse_repository_options!(options, opts)
+
+        opts.on('--apply', 'When --apply is used, the repository will be removed from the database and any gitaly nodes on which they reside.') do |apply|
+          options[:apply] = true
+        end
       end,
 
       'track-repository' => OptionParser.new do |opts|
@@ -142,6 +146,7 @@ module Praefect
 
     # command specific arguments
     command += ["-authoritative-storage", options[:authoritative_storage]] if options[:command] == 'track-repository' && options.key?(:authoritative_storage)
+    command += ["-apply"] if options[:command] == 'remove-repository' && options.key?(:apply)
 
     status = Kernel.system(*command)
     Kernel.exit!(1) unless status
