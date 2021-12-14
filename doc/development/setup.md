@@ -169,14 +169,14 @@ To connect your GitLab instance to Customers Portal Staging, you can set the fol
 in `/etc/gitlab/gitlab.rb` by supplying them in a `gitlab_rails['env']` hash. Set:
 
 - `GITLAB_LICENSE_MODE` to `test`
-- `CUSTOMER_PORTAL_URL` to `https://customers.stg.gitlab.com`
+- `CUSTOMER_PORTAL_URL` to `https://customers.staging.gitlab.com`
 
 For example:
 
 ```ruby
 gitlab_rails['env'] = {
     "GITLAB_LICENSE_MODE" => "test",
-    "CUSTOMER_PORTAL_URL" => "https://customers.stg.gitlab.com"
+    "CUSTOMER_PORTAL_URL" => "https://customers.staging.gitlab.com"
 }
 ```
 
