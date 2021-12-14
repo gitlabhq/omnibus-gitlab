@@ -165,6 +165,12 @@ RSpec.describe Gitlab::Version do
           expect(subject.remote).to eq('git@dev.gitlab.org:omnibus-mirror/prometheus.git')
         end
 
+        it 'returns expected link from custom_sources yml when asked for a specific remote' do
+          mock_fallback_channel
+
+          expect(subject.remote('alternative')).to eq('https://gitlab.com/gitlab-org/build/omnibus-mirror/prometheus.git')
+        end
+
         context 'with alternative fallback' do
           it 'returns "alternative" link from custom_sources yml' do
             mock_fallback_channel('alternative')
