@@ -72,6 +72,8 @@ class OhaiHelper
         'stretch'
       when /^10/
         'buster'
+      when /^11/
+        'bullseye'
       end
     end
 
