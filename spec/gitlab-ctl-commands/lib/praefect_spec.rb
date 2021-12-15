@@ -86,13 +86,19 @@ RSpec.describe Praefect do
       it_behaves_like 'unknown option is specified'
 
       it 'successfully parses authoritative-storage' do
-        expected_options = { command: command, dir: 'dir', virtual_storage_name: 'name', repository_relative_path: 'path', authoritative_storage: 'storage-1' }
+        expected_options = { command: command,
+                             dir: 'dir',
+                             virtual_storage_name: 'name',
+                             repository_relative_path: 'path',
+                             authoritative_storage: 'storage-1',
+                             replicate_immediately: true }
 
         expect(Praefect.parse_options!(%W(praefect #{command}
                                           --dir dir
                                           --virtual-storage-name name
                                           --repository-relative-path path
-                                          --authoritative-storage storage-1))).to eq(expected_options)
+                                          --authoritative-storage storage-1
+                                          --replicate-immediately))).to eq(expected_options)
       end
     end
 
@@ -179,15 +185,19 @@ RSpec.describe Praefect do
 
       context 'track-repository command' do
         let(:command) { 'track-repository' }
-        let(:command_args) { ['-virtual-storage', 'storage-name', '-repository', 'repository-path'] }
-        let(:command_options) { repository_options }
+        let(:command_args) { ['-virtual-storage', 'storage-name', '-repository', 'repository-path', '-authoritative-storage', 'storage-1'] }
+        let(:command_options) { repository_options.merge(authoritative_storage: 'storage-1') }
 
         it_behaves_like 'executes the command'
 
-        context 'with authoritative-storage' do
-          let(:command) { 'track-repository' }
-          let(:command_args) { ['-virtual-storage', 'storage-name', '-repository', 'repository-path', '-authoritative-storage', 'storage-1'] }
-          let(:command_options) { repository_options.merge(authoritative_storage: 'storage-1') }
+        context 'with replicate-immediately' do
+          let(:command_args) do
+            ['-virtual-storage', 'storage-name',
+             '-repository', 'repository-path',
+             '-authoritative-storage', 'storage-1',
+             '-replicate-immediately']
+          end
+          let(:command_options) { repository_options.merge(authoritative_storage: 'storage-1', replicate_immediately: true) }
 
           it_behaves_like 'executes the command'
         end
