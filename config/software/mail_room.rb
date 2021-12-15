@@ -15,7 +15,7 @@
 #
 
 name 'mail_room'
-default_version '0.0.14'
+default_version '0.0.15'
 
 license 'MIT'
 license_file 'LICENSE.txt'
