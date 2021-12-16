@@ -6,62 +6,72 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # DNS settings **(FREE SELF)**
 
-Although you can run a GitLab instance using only IP addresses, using DNS is:
+The Domain Name System (DNS) is the naming system used to match IP addresses
+with domain names.
 
-- Easier for users
-- Required for HTTPS
+Although you can run a GitLab instance using only its IP address, using a
+domain name is:
 
-Depending on the features you want to take advantage of, multiple DNS entries may be necessary. These
-DNS entries should be one of type:
+- Easier to remember and use.
+- Required for HTTPS.
 
-- A
-- AAAA
-- CNAME
+  NOTE:
+  To take advantage of the [Let's Encrypt integration](ssl.md#lets-encrypt-integration) (automatic SSL certificates),
+  your instance's domain name must be resolvable over the public internet.
 
-The type depends on the underlying architecture of your instance.
+## Use a name registrar
 
-If you don't want to take advantage of the [Let's Encrypt integration](ssl.md#lets-encrypt-integration),
-none of these addresses need to be resolvable over the public internet. Only nodes that
-will access the GitLab instance need to be able to resolve the addresses.
+To associate a domain name with your instance's IP address, you must specify
+one or more DNS records.
+Adding a DNS record to your domain's DNS configuration is entirely dependent
+on your chosen provider, and out of scope for this document.
 
-Adding these entries to your domain's DNS configuration is entirely dependent on your chosen provider, and out of scope for this document. Consult the documentation from your domain name registrar, hosting provider, or managed DNS provider for the most accurate guidance. Instructions for common DNS registrars include:
+Generally, the process is similar to:
 
-- [Godaddy](https://www.godaddy.com/help/create-a-subdomain-4080)
-- [Namecheap](https://www.namecheap.com/support/knowledgebase/article.aspx/9776/2237/how-to-create-a-subdomain-for-my-domain/)
-- [Gandi](https://docs.gandi.net/en/domain_names/faq/dns_records.html)
-- [Dreamhost](https://help.dreamhost.com/hc/en-us/articles/214694348-Basic-DNS-records)
+1. Visit the control panel of your DNS registrar and add the DNS record.
+   It should be one of type:
 
-It is also possible to utilize dynamic DNS services, such as [nip.io](https://nip.io), for a quick and easy DNS name for non-production instances. We do not recommend these for any production or long-lived instances, as they are often [rate-limited](https://letsencrypt.org/docs/rate-limits/) by Let's Encrypt and [insecure](https://github.com/publicsuffix/list/issues/335#issuecomment-261825647). Even if you are successful on initial registration, renewals may subsequently fail.
+   - `A`
+   - `AAAA`
+   - `CNAME`
 
-## GitLab Settings
+   The type depends on the underlying architecture of your instance. The most
+   common one is the A record.
 
-Below is a list of attributes for `/etc/gitlab/gitlab.rb` that can take advantage of a corresponding DNS entry.
+1. [Test](#successful-dns-query) that the configuration was applied.
+1. Use SSH to connect to the server where GitLab is installed.
+1. Edit the configuration file `(/etc/gitlab/gitlab.rb)` with your preferred [GitLab settings](#gitlab-settings-that-use-dns).
 
-While it is possible to replace the below DNS entries with a wildcard entry in DNS, you still need to provide your GitLab instance with the individual records, and this will **not** result in the Let's Encrypt integration fetching a wildcard certificate.
+To learn more about the DNS records, see the
+[DNS records overview](https://docs.gitlab.com/ee/user/project/pages/custom_domains_ssl_tls_certification/dns_concepts.html).
 
-### `external_url`
+## Use a dynamic DNS service
 
-This will be the address that will be used to interact with the main GitLab instance. Cloning over SSH/HTTP/HTTPS will use this address. Accessing the web UI will reference this DNS entry. If you are using a GitLab Runner, it will use this address to talk to the instance.
+For non-production use, you can use a dynamic DNS service, such as [nip.io](https://nip.io).
 
-### `registry_external_url`
+We do not recommend these for any production or long-lived instances, as they are often:
 
-If you want to use the [container registry](https://docs.gitlab.com/ee/user/packages/container_registry/index.html), this will be an address that is used to interact with the registry. This can also use the same DNS entry as [external_url](#external_url), on a different port. Can be used by the Let's Encrypt integration.
+- [Insecure](https://github.com/publicsuffix/list/issues/335#issuecomment-261825647)
+- [Rate-limited](https://letsencrypt.org/docs/rate-limits/) by Let's Encrypt
 
-### `mattermost_external_url`
+## GitLab settings that use DNS
 
-This is needed if you want to use the [bundled Mattermost](https://docs.gitlab.com/ee/integration/mattermost/) software. Can be used by the Let's Encrypt integration.
+The following GitLab settings correspond to DNS entries.
 
-### `pages_external_url`
-
-By default, projects that use [GitLab Pages](https://docs.gitlab.com/ee/user/project/pages/index.html) will deploy to a sub-domain of this value.
-
-### Auto DevOps domain
-
-If you are going to be deploying projects via Auto DevOps with GitLab, this domain can be used to deploy software. Can be defined at an instance, or cluster level. See the [specific documentation](https://docs.gitlab.com/ee/topics/autodevops/#auto-devops-base-domain) for more details.
+| GitLab setting | Description | Configuration |
+| -------------- | ----------- | ------------- |
+| `external_url` | This URL interacts with the main GitLab instance. It's used when cloning over SSH/HTTP/HTTPS and when accessing the web UI. GitLab Runner uses this URL to communicate with the instance. | [Configure the `external_url`](configuration.md#configuring-the-external-url-for-gitlab). |
+| `registry_external_url` | This URL is used to interact with the [Container Registry](https://docs.gitlab.com/ee/user/packages/container_registry/). It can be used by the Let's Encrypt integration. This URL can also use the same DNS entry as `external_url` but on a different port. | [Configure the `registry_external_url`](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-domain-configuration). |
+| `mattermost_external_url` | This URL is used for the [bundled Mattermost](https://docs.gitlab.com/ee/integration/mattermost/) software. It can be used by the Let's Encrypt integration. | [Configure the `mattermost_external_url`](https://docs.gitlab.com/ee/integration/mattermost/#getting-started). |
+| `pages_external_url` | By default, projects that use [GitLab Pages](https://docs.gitlab.com/ee/user/project/pages/) deploy to a sub-domain of this value. | [Configure the `pages_external_url`](https://docs.gitlab.com/ee/administration/pages/#configuration).
+| Auto DevOps domain | If you use Auto DevOps to deploy projects, this domain can be used to deploy software. It can be defined at an instance, or cluster level. This is configured using the GitLab UI, and not in `/etc/gitlab/gitlab.rb`. | [Configure the Auto DevOps domain](https://docs.gitlab.com/ee/topics/autodevops/requirements.html#auto-devops-base-domain). |
 
 ## Troubleshooting
 
-If you are having issues accessing a particular component, or if Let's Encrypt integration is failing, you may have a DNS issue. You can use the [dig](https://en.wikipedia.org/wiki/Dig_(command)) tool to check and verify if DNS is causing you a problem.
+If you have issues accessing a particular component, or if the Let's
+Encrypt integration is failing, you might have a DNS issue. You can use the
+[dig](https://en.wikipedia.org/wiki/Dig_(command)) tool to determine if
+DNS is causing a problem.
 
 ### Successful DNS query
 
@@ -88,7 +98,7 @@ registry.gitlab.com.    300     IN      A       35.227.35.254
 ;; MSG SIZE  rcvd: 83
 ```
 
-At the least, you are looking for the status to be `NOERROR`, and the`ANSWER SECTION` for the actual results.
+At the least, the status should be `NOERROR`, and the `ANSWER SECTION` should have the actual results.
 
 ### Failed DNS query
 
@@ -114,4 +124,12 @@ gitlab.com.             900     IN      SOA     ns-705.awsdns-24.net. awsdns-hos
 ;; WHEN: Fri Mar 20 14:51:58 CDT 2020
 ```
 
-Notice here, that the `status` is `NXDOMAIN`, and there is no `ANSWER SECTION`. The `SERVER` field tells you which DNS server was queried for the answer. By default, this is the primary DNS server used by the station the dig command was run from.
+In this example, the `status` is `NXDOMAIN`, and there is no `ANSWER SECTION`. The `SERVER` field tells you which DNS server was queried for the answer. By default, this is the primary DNS server used by the station the `dig` command was run from.
+
+### Use a wildcard DNS entry
+
+It is possible use a wildcard DNS for the [URL attributes](#gitlab-settings-that-use-dns),
+but you must provide the full domain name for each one.
+
+The Let's Encrypt integration does not fetch a wildcard certificate. You must do this
+[on your own](https://certbot.eff.org/faq/#does-let-s-encrypt-issue-wildcard-certificates).
