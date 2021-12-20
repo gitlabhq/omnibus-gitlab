@@ -22,6 +22,8 @@ license_file 'LEGAL'
 
 skip_transitive_dependency_licensing true
 
+# Follow the Ruby upgrade guidelines when changing the ruby version
+# link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
 default_version '2.7.5'
 
 fips_enabled = (project.overrides[:fips] && project.overrides[:fips][:enabled]) || false
