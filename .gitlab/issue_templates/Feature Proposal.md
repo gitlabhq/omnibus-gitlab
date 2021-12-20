@@ -23,4 +23,4 @@ End result of the proposed feature.
 
 <!-- Provide references related to this proposal -->
 
-/label ~feature
+/label ~"type::feature"
