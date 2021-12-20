@@ -88,4 +88,4 @@ configuration such as passwords and secrets.
 </pre>
 </details>
 
-/label ~bug 
+/label ~"type::bug"
