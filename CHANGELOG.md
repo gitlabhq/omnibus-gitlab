@@ -3,6 +3,34 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.6.0 (2021-12-21)
+
+### Added (5 changes)
+
+- [Add --replicate-immediately flag to Praefect track-repository subcommand](gitlab-org/omnibus-gitlab@d35e0cc3c47835532ed54561ee9e18dac43fec81) ([merge request](gitlab-org/omnibus-gitlab!5789))
+- [Provide packages for Debian Bullseye](gitlab-org/omnibus-gitlab@9eeffc1dd5e5180d5015ce1bb557fc4eab0b0097) ([merge request](gitlab-org/omnibus-gitlab!5755))
+- [Add apply flag to praefect remove-repository subcommand](gitlab-org/omnibus-gitlab@0dd3d51a5723a38492152029f1a7a0eb2993a74d) ([merge request](gitlab-org/omnibus-gitlab!5785))
+- [Add google tag manager nonce config](gitlab-org/omnibus-gitlab@28d0da1135961c79e2ef008fcf0ee02ad71dc907) ([merge request](gitlab-org/omnibus-gitlab!5763))
+- [Add health-checks settings keys for Sidekiq](gitlab-org/omnibus-gitlab@6c7393963f6ef7d005b58f36051e08682274f312) ([merge request](gitlab-org/omnibus-gitlab!5743))
+
+### Fixed (4 changes)
+
+- [Return early from trusted certificate handling if hashing/symlinking failed](gitlab-org/omnibus-gitlab@edbd9514bad14b6921b06423745067b4df52bb2d) ([merge request](gitlab-org/omnibus-gitlab!5788))
+- [Fix Google Memorystore support for Action Cable](gitlab-org/omnibus-gitlab@bf959c1b8ead8dc076a7b255962e0028ddeb2013) ([merge request](gitlab-org/omnibus-gitlab!5753))
+- [Move deprecation message to gitlabc-ctl commands](gitlab-org/omnibus-gitlab@6631b5f7f9b8c9d96e54dd643f79d65ce049e6af) ([merge request](gitlab-org/omnibus-gitlab!5739))
+- [gitlab-ctl geo promote requires restart of puma and workhorse services](gitlab-org/omnibus-gitlab@56ce0d27ee550547eba5a49f882eccfc0feb73fc) ([merge request](gitlab-org/omnibus-gitlab!5738))
+
+### Changed (8 changes)
+
+- [Upgrade mailroom to v0.0.15](gitlab-org/omnibus-gitlab@936956c794a42ed6b13970a02be994c2cef4887d) ([merge request](gitlab-org/omnibus-gitlab!5794))
+- [Add patch to prevent Python from building nis module in Debian 11](gitlab-org/omnibus-gitlab@90a2190d5c2d8e873c2d3288812daab239960e32) ([merge request](gitlab-org/omnibus-gitlab!5755))
+- [Update gitlab-exporter to 11.8.0](gitlab-org/omnibus-gitlab@bd8a21e5b953cda735f1cb2f93215190a4f9f84e) ([merge request](gitlab-org/omnibus-gitlab!5759))
+- [Merge branch 'add-redis-ssl-kas' into 'master'](gitlab-org/omnibus-gitlab@acfcd985c6fe2b8cbeb88b71e6bbd8e4afad46d5) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5632))
+- [Update 2 dependencies from git](gitlab-org/omnibus-gitlab@1a408cb1d73f64dc3975bb9a0a2087667036849a) ([merge request](gitlab-org/omnibus-gitlab!5590))
+- [Use `geo:site:role` rake task to retrieve node role for the promote command](gitlab-org/omnibus-gitlab@0cae546fd9c5d04b59dac44b468217b244541782) ([merge request](gitlab-org/omnibus-gitlab!5724))
+- [Use public sources for omnibus-gitlab builds by default](gitlab-org/omnibus-gitlab@981e78d0162c8f202a38093ed5ead9ab059f07c7) ([merge request](gitlab-org/omnibus-gitlab!5659))
+- [Build rugged gem with system SSL on FIPS builds](gitlab-org/omnibus-gitlab@da0a44b28982ea1399e060396e892932b7e430d1) ([merge request](gitlab-org/omnibus-gitlab!5592))
+
 ## 14.5.2 (2021-12-03)
 
 ### Security (1 change)
