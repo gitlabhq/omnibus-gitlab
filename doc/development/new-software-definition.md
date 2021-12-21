@@ -49,6 +49,30 @@ Add a `dependency` statement to the definition of the GitLab project found in
 sense to be a dependency of (eg `config/software/gitlab-rails.rb` for a
 component only needed by `gitlab-rails`)
 
+Omnibus will build dependency components first, and then other ones in the order
+of their presence in `/config/projects/gitlab.rb`. So, when a software component
+A is marked as a dependency of another software B, A will be built towards the
+beginning of the process. In cases where A is a component that changes frequently, cache gets invalidated often causing every subsequent component to be
+rebuilt, increasing overall build time. A workaround is to ensure A gets built
+immediately before B, avoiding cache invalidation.
+
+1. Add the software A to `/config/projects/gitlab.rb` immediately before
+   software B
+
+   Since A and B are now top-level dependencies of the project, omnibus will
+   build them in the order of their presence in `/config/projects/gitlab.rb`.
+
+1. In the software definition of B, add a line similar to the following
+
+   ```ruby
+   dependency '<name of software A>' unless project.dependencies.include?('<name of software A>')
+   ```
+
+   Above ensures that whenever the project is not built from
+   `/config/projects/gitlab.rb`, A is marked as a dependency of B and is built
+   before B. There will be no effect on builds from `/config/projects/gitlab.rb`
+   however.
+
 ## Validating changes to a single software dependency
 
 It can be useful to only build one piece of software, rather than rebuild the whole package each time. For instance,
