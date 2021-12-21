@@ -28,7 +28,17 @@ skip_transitive_dependency_licensing true
 dependency 'pkg-config-lite'
 dependency 'rubygems'
 dependency 'libicu'
-dependency 'git'
+
+# Technically, gitaly depends on git also. But because of how omnibus arranges
+# components to be built, this causes git to be built early in the process. But
+# in our case, git is built from gitaly source code. This results in git
+# invalidating the cache frequently as Gitaly's master branch is a fast moving
+# target. So, we are kinda cheating here and depending on the presence of git
+# in the project's direct dependency list before gitaly as a workaround.
+# The conditional will ensure git gets built before gitaly in scenarios where
+# the entire GitLab project is not built, but only a subset of it is.
+
+dependency 'git' unless project.dependencies.include?('git')
 
 source git: version.remote
 
