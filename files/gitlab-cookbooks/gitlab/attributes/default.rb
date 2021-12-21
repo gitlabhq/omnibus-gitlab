@@ -76,7 +76,8 @@ default['gitlab']['gitlab-rails']['env'] = {
   'EXECJS_RUNTIME' => 'Disabled',
   # Prevent excessive system calls: #3530,
   # Details: https://blog.packagecloud.io/eng/2017/02/21/set-environment-variable-save-thousands-of-system-calls/
-  'TZ' => ':/etc/localtime'
+  'TZ' => ':/etc/localtime',
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
 default['gitlab']['gitlab-rails']['enable_jemalloc'] = true
 

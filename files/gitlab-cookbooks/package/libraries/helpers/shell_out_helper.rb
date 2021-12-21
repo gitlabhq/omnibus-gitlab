@@ -13,6 +13,16 @@ module ShellOutHelper
     o
   end
 
+  def do_shell_out_with_embedded_path(cmd, user = nil, cwd = nil, env: {})
+    env = env.transform_keys(&:to_sym)
+    modified_paths = ["/opt/gitlab/embedded/bin"]
+    modified_paths << env[:PATH] if env.key?(:PATH)
+    modified_paths << ENV['PATH']
+    env[:PATH] = modified_paths.join(':')
+
+    do_shell_out(cmd, user, cwd, env: env)
+  end
+
   def success?(cmd)
     o = do_shell_out(cmd)
     o.exitstatus.zero?

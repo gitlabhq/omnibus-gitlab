@@ -83,6 +83,7 @@ if OhaiHelper.arm?
   end
 end
 
+dependency 'cacerts'
 dependency 'jemalloc'
 dependency 'redis'
 dependency 'nginx'

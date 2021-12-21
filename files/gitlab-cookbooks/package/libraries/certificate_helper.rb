@@ -157,8 +157,8 @@ class CertificateHelper
   end
 
   def c_rehash
-    cmd = "/opt/gitlab/embedded/bin/c_rehash #{@trusted_certs_dir}"
-    result = do_shell_out(cmd)
+    cmd = "c_rehash #{@trusted_certs_dir}"
+    result = do_shell_out_with_embedded_path(cmd)
     result.exitstatus
   end
 
