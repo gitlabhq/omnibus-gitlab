@@ -52,7 +52,7 @@ SEE_DOC = "See [the documentation](https://docs.gitlab.com/ee/development/change
 CHANGELOG_MISSING = <<~MSG.freeze
 **[CHANGELOG missing](https://docs.gitlab.com/ee/development/changelog.html).**
 
-To ceate a changelog, annotate one or more commits with the `Changelog` Git
+To create a changelog, annotate one or more commits with the `Changelog` Git
 trailer. If you want to annotate the latest commit, you can do so using `git
 commit --amend`. If you want to annotate older or multiple commits, you need to
 do so using `git rebase -i`.
