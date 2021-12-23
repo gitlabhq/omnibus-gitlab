@@ -164,7 +164,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 If the content of your SSL certificates has been updated, but no configuration
 changes have been made to `gitlab.rb`, then `gitlab-ctl reconfigure` will not
-affect NGINX. Instead, run `sudo gitlab-ctl hup nginx` to cause NGINX to
+affect NGINX. Instead, run `sudo gitlab-ctl hup nginx registry` to cause NGINX to
 [reload the existing configuration and new certificates](http://nginx.org/en/docs/control.html)
 gracefully.
 
