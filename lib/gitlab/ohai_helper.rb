@@ -94,6 +94,8 @@ class OhaiHelper
 
     def get_suse_version
       case ohai['platform_version']
+      when /^15\.2/
+        '15.2'
       when /^12\.2/
         '12.2'
       when /^12\.5/
