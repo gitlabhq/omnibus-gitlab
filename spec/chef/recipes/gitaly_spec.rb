@@ -378,6 +378,15 @@ RSpec.describe 'gitaly' do
         .with_content(%r{ulimit -n #{open_files_ulimit}})
     end
 
+    it 'renders the runit run script with cgroup root creation' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/run').with_content { |content|
+        expect(content).to match(%r{mkdir -m 0700 -p #{cgroups_mountpoint}/memory/#{cgroups_hierarchy_root}})
+        expect(content).to match(%r{mkdir -m 0700 -p #{cgroups_mountpoint}/cpu/#{cgroups_hierarchy_root}})
+        expect(content).to match(%r{chown foo:bar #{cgroups_mountpoint}/memory/#{cgroups_hierarchy_root}})
+        expect(content).to match(%r{chown foo:bar #{cgroups_mountpoint}/cpu/#{cgroups_hierarchy_root}})
+      }
+    end
+
     it 'populates sv related log files' do
       expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/log/run')
         .with_content(/exec svlogd -tt \/var\/log\/gitlab\/gitaly/)
@@ -654,11 +663,6 @@ RSpec.describe 'gitaly' do
           cgroups_hierarchy_root: 'gitaly'
         }
       )
-    end
-
-    it 'create cgroup directories under cpu and memory resources' do
-      expect(chef_run).to create_directory('/sys/fs/cgroup/cpu/gitaly').with(mode: '0700', user: 'git')
-      expect(chef_run).to create_directory('/sys/fs/cgroup/memory/gitaly').with(mode: '0700', user: 'git')
     end
   end
 
