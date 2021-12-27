@@ -960,13 +960,14 @@ production: &base
 <% @monitoring_whitelist.each do |entry| %>
       - "<%= entry %>"
 <% end %>
-    # Sidekiq exporter is webserver built in to Sidekiq to expose Prometheus metrics
+    # Sidekiq exporter is a webserver built in to Sidekiq to expose Prometheus metrics
     sidekiq_exporter:
       enabled: <%= @sidekiq['metrics_enabled'] %>
       log_enabled: <%= @sidekiq['exporter_log_enabled'] %>
       address: <%= @sidekiq['listen_address'] %>
       port: <%= @sidekiq['listen_port'] %>
 
+    # Sidekiq health checks is a webserver built in to Sidekiq to serve health checks for the workers
     sidekiq_health_checks:
       enabled: <%=  @sidekiq['health_checks_enabled'].nil? ? @sidekiq['metrics_enabled'] : @sidekiq['health_checks_enabled'] %>
       log_enabled: <%= @sidekiq['health_checks_log_enabled'].nil? ? @sidekiq['exporter_log_enabled'] : @sidekiq['health_checks_log_enabled'] %>
