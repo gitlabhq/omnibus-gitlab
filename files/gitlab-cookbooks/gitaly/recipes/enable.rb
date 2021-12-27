@@ -48,15 +48,6 @@ directory internal_socket_directory do
   recursive true
 end
 
-if cgroups_mountpoint && cgroups_hierarchy_root
-  %w(cpu memory).each do |resource|
-    directory File.join(cgroups_mountpoint, resource, cgroups_hierarchy_root) do
-      owner account_helper.gitlab_user
-      mode '0700'
-    end
-  end
-end
-
 # Doing this in attributes/default.rb will need gitlab cookbook to be loaded
 # before gitaly cookbook. This means gitaly cookbook has to depend on gitlab
 # cookbook.  Since gitlab cookbook already depends on gitaly cookbook, this
@@ -112,7 +103,9 @@ runit_service 'gitaly' do
     config_path: config_path,
     log_directory: log_directory,
     json_logging: json_logging,
-    open_files_ulimit: open_files_ulimit
+    open_files_ulimit: open_files_ulimit,
+    cgroups_mountpoint: cgroups_mountpoint,
+    cgroups_hierarchy_root: cgroups_hierarchy_root
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitaly'].to_hash)
 end
