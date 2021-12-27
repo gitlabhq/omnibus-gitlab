@@ -6,6 +6,9 @@ log:
     service: registry
     environment: production
 storage: <%= @storage.to_json %>
+<% if @middleware %>
+middleware: <%= @middleware.to_json %>
+<% end %>
 http:
   addr: <%= @registry_http_addr %>
   secret: "<%= @http_secret %>"
