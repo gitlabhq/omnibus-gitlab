@@ -122,6 +122,26 @@ RSpec.describe 'registry recipe' do
       end
     end
 
+    context 'when registry middleware is enabled' do
+      let(:middleware_config) do
+        { "storage" => [
+          { "name" => "googlecdn",
+            "options" => {
+              "baseurl" => "https://example.org",
+              "privatekey" => "/etc/gitlab/googlecdn.key",
+              "keyname" => "example-key"
+            } }
+        ] }
+      end
+
+      before { stub_gitlab_rb(registry: { middleware: middleware_config }) }
+
+      it 'creates registry config with middleware' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(%r(^middleware: {"storage":))
+      end
+    end
+
     context 'when a log formatter is specified' do
       before { stub_gitlab_rb(registry: { log_formatter: 'json' }) }
 

@@ -31,6 +31,7 @@ default['registry']['rootcertbundle'] = nil
 default['registry']['health_storagedriver_enabled'] = true
 default['registry']['storage_delete_enabled'] = nil
 default['registry']['storage'] = nil
+default['registry']['middleware'] = nil
 default['registry']['debug_addr'] = nil
 default['registry']['validation_enabled'] = false
 default['registry']['autoredirect'] = false

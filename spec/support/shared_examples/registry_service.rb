@@ -68,6 +68,7 @@ shared_examples 'enabled registry service' do
         expect(content).to match(/log:\s*level: info\s*formatter:\s*text/)
         expect(content).to match(/validation:\s*disabled: true$/)
         expect(content).not_to match(/^compatibility:/)
+        expect(content).not_to match(/^middleware:/)
       end
     )
   end
