@@ -18,7 +18,7 @@ comments: false
   Container Registry which can have their own subdomains requires certificates for
   those subdomains also.)
 - If you want to send notification emails, install and configure a mail server (MTA)
-  like sendmail. Alternatively, you can use other [third party SMTP servers](../settings/smtp.md).
+  like Sendmail or Postfix. Alternatively, you can use other [third party SMTP servers](../settings/smtp.md).
 
 ## Installation and Configuration
 
@@ -32,7 +32,7 @@ For a complete list of settings, see the [README](../index.md#configuring) file.
 - [Enabling HTTPS](../settings/nginx.md#enable-https).
 - [Enabling notification emails](../settings/smtp.md#smtp-settings).
 - [Enabling replying via email](https://docs.gitlab.com/ee/administration/reply_by_email.html#set-it-up).
-  - [Installing and configuring postfix](https://docs.gitlab.com/ee/administration/reply_by_email_postfix_setup.html).
+  - [Installing and configuring Postfix](https://docs.gitlab.com/ee/administration/reply_by_email_postfix_setup.html).
 - [Enabling container registry on GitLab](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-domain-configuration).
   - You require SSL certificates for the domain used for container registry.
 - [Enabling GitLab Pages](https://docs.gitlab.com/ee/administration/pages/).

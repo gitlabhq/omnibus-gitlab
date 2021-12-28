@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # SMTP settings **(FREE SELF)**
 
 If you would rather send application email via an SMTP server instead of via
-Sendmail, add the following configuration information to
+Sendmail or Postfix, add the following configuration information to
 `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
 
 WARNING:
