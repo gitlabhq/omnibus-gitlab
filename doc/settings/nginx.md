@@ -20,7 +20,7 @@ service separately. Settings given via `nginx['foo']` WILL NOT be replicated to
 service specific NGINX configuration (as `registry_nginx['foo']` or
 `mattermost_nginx['foo']`, etc.). For example, to configure HTTP to HTTPS
 redirection for GitLab, Mattermost and Registry, the following settings should
-be added to `gitlab.rb`
+be added to `gitlab.rb`:
 
 ```ruby
 nginx['redirect_http_to_https'] = true
@@ -132,7 +132,7 @@ redirect all HTTP traffic to HTTPS you can use the `redirect_http_to_https`
 setting.
 
 NOTE:
-This behavior is enabled by default.
+This behavior is enabled by default when using Let's Encrypt.
 
 ```ruby
 external_url "https://gitlab.example.com"
