@@ -723,6 +723,7 @@ default['gitlab']['nginx']['proxy_set_headers'] = {
   "Upgrade" => "$http_upgrade",
   "Connection" => "$connection_upgrade"
 }
+default['gitlab']['nginx']['proxy_protocol'] = false
 default['gitlab']['nginx']['referrer_policy'] = 'strict-origin-when-cross-origin'
 default['gitlab']['nginx']['http2_enabled'] = true
 # Cache up to 1GB of HTTP responses from GitLab on disk
@@ -841,6 +842,7 @@ default['gitlab']['pages-nginx']['proxy_set_headers'] = {
 default['gitlab']['registry-nginx'] = default['gitlab']['nginx'].dup
 default['gitlab']['registry-nginx']['enable'] = true
 default['gitlab']['registry-nginx']['https'] = false
+default['gitlab']['registry-nginx']['http2_enabled'] = false
 default['gitlab']['registry-nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",

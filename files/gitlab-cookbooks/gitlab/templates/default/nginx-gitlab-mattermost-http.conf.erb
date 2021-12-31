@@ -11,7 +11,7 @@ upstream gitlab_mattermost {
 <% if @https && @redirect_http_to_https %>
 server {
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @redirect_http_to_https_port %>;
+  listen <%= listen_address %>:<%= @redirect_http_to_https_port %><% if @proxy_protocol %> proxy_protocol<% end %>;
 <% end %>
 
   server_name <%= @fqdn %>;
@@ -34,7 +34,7 @@ server {
 
 server {
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @listen_port %><% if @https %> ssl<% if @http2_enabled %> http2<% end %><% end %>;
+  listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% if @http2_enabled %> http2<% end %><% end %>;
 <% end %>
   server_name <%= @fqdn %>;
   server_tokens off;     # don't show the version number, a security best practice

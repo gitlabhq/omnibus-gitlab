@@ -19,6 +19,7 @@ module Nginx
   class << self
     def parse_variables
       parse_nginx_listen_ports
+      parse_nginx_proxy_protocol
     end
 
     def generate_host_header(fqdn, port, is_https)
@@ -58,6 +59,17 @@ module Nginx
       end
     end
 
+    def parse_nginx_proxy_protocol
+      [
+        'nginx',
+        'mattermost_nginx',
+        'pages_nginx',
+        'registry_nginx'
+      ].each do |app|
+        Gitlab[app]['real_ip_header'] ||= 'proxy_protocol' if Gitlab[app]['proxy_protocol']
+      end
+    end
+
     def parse_proxy_headers(app, https)
       values_from_gitlab_rb = Gitlab[app]['proxy_set_headers']
       dashed_app = app.tr('_', '-')
@@ -73,6 +85,12 @@ module Nginx
                                                                   "X-Forwarded-Proto" => "http"
                                                                 })
                                 end
+      if Gitlab[app]['proxy_protocol']
+        default_from_attributes = default_from_attributes.merge({
+                                                                  'X-Real-IP' => '$proxy_protocol_addr',
+                                                                  'X-Forwarded-For' => '$proxy_protocol_addr'
+                                                                })
+      end
 
       if values_from_gitlab_rb
         values_from_gitlab_rb.each do |key, value|
