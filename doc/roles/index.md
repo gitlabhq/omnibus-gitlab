@@ -6,8 +6,6 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Omnibus GitLab High Availability Roles **(FREE SELF)**
 
-> Introduced in GitLab EE 10.1.0
-
 Omnibus GitLab includes various software components/services to support running GitLab in
 a high availability configuration. By default, some of these supporting services
 are disabled, and Omnibus GitLab is configured to run as a single node installation.
@@ -68,7 +66,7 @@ Documentation on the use of the Redis Roles can be found in [Configuring Redis f
 
   *By default, enables no other services.*
 
-- **redis_replica_role** (`gitlab-ee`)
+- **redis_replica_role** (`gitlab-ee`, [introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/4168) in GitLab 13.0)
 
   Enables the Redis service and monitoring
 
@@ -117,6 +115,8 @@ for configuration steps.
 
 ### Monitoring Roles
 
+> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/3404) in GitLab 12.1.
+
 Monitoring roles are used to set up monitoring of installations. For additional information, see the [Monitoring documentation](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html).
 
 - **monitoring_role** (`gitlab-ce`/`gitlab-ee`)
@@ -135,7 +135,7 @@ Documentation on the usage of the PostgreSQL Roles can be found in [Configuring 
 
   *By default, enables no other services.*
 
-- **patroni_role** (`gitlab-ee`)
+- **patroni_role** (`gitlab-ee`, [introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/4851) in GitLab 13.8)
 
   Enables the PostgreSQL, patroni, and Consul services on the machine
 
@@ -155,6 +155,8 @@ Documentation on the usage of the PostgreSQL Roles can be found in [Configuring 
 
 ### GitLab Pages Roles
 
+> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/4740) in GitLab 13.6.
+
 GitLab Pages roles are used to setup and configure GitLab Pages. For additional
 information, see the
 [GitLab Pages Administration documentation](https://docs.gitlab.com/ee/administration/pages/index.html)
@@ -166,6 +168,8 @@ information, see the
   *By default, enables no other services.*
 
 ### Sidekiq Roles
+
+> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5365) in GitLab 14.1.
 
 Sidekiq roles are used to setup and configure Sidekiq. For additional
 information, see the
