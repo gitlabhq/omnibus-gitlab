@@ -866,7 +866,8 @@ when your installation is using PgBouncer.
    sure to answer **no** when asked "This task will now rebuild the authorized_keys file":
 
    ```shell
-   sudo gitlab-backup restore BACKUP=<database-backup-filename>
+   # Use the backup timestamp https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-timestamp
+   sudo gitlab-backup restore BACKUP=<backup-timestamp>
    ```
 
 1. Start GitLab:
