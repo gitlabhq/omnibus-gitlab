@@ -129,7 +129,7 @@ RSpec.describe 'qa', type: :rake do
       allow(ENV).to receive(:[]).with('CI_JOB_TOKEN').and_return("1234")
       allow(ENV).to receive(:[]).with('TRIGGERED_USER').and_return("John Doe")
       allow(ENV).to receive(:[]).with('CI_JOB_URL').and_return("https://gitlab.com/gitlab-org/omnibus-gitlab/-/jobs/12345")
-      allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_PROJECT').and_return("https://gitlab.com/gitlab-org/gitlab-foss")
+      allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_PROJECT').and_return("gitlab-org/gitlab")
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_JOB').and_return("https://gitlab.com/gitlab-org/gitlab-foss/-/jobs/67890")
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_SHA').and_return("abc123")
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_SOURCE_REF').and_return("master")
@@ -160,7 +160,8 @@ RSpec.describe 'qa', type: :rake do
         "variables[GITLAB_QA_OPTIONS]" => "--set-feature-flags test_feature_flag=enable",
         "variables[TRIGGERED_USER]" => "John Doe",
         "variables[TRIGGER_SOURCE]" => "https://gitlab.com/gitlab-org/omnibus-gitlab/-/jobs/12345",
-        "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => "https://gitlab.com/gitlab-org/gitlab-foss",
+        "variables[KNAPSACK_GENERATE_REPORT]" => "true",
+        "variables[TOP_UPSTREAM_SOURCE_PROJECT]" => "gitlab-org/gitlab",
         "variables[TOP_UPSTREAM_SOURCE_JOB]" => "https://gitlab.com/gitlab-org/gitlab-foss/-/jobs/67890",
         "variables[TOP_UPSTREAM_SOURCE_SHA]" => "abc123",
         "variables[TOP_UPSTREAM_SOURCE_REF]" => "master",
