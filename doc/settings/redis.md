@@ -288,17 +288,17 @@ When connecting to Redis for troubleshooting you can use:
 - Redis via Unix domain sockets:
 
   ```shell
-  /opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket
+  sudo /opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket
   ```
 
 - Redis via TCP:
 
   ```shell
-  /opt/gitlab/embedded/bin/redis-cli -h 127.0.0.1 -p 6379
+  sudo /opt/gitlab/embedded/bin/redis-cli -h 127.0.0.1 -p 6379
   ```
 
 - Password to authenticate to Redis if required:
 
   ```shell
-  /opt/gitlab/embedded/bin/redis-cli -h 127.0.0.1 -p 6379 -a <password>
+  sudo /opt/gitlab/embedded/bin/redis-cli -h 127.0.0.1 -p 6379 -a <password>
   ```
