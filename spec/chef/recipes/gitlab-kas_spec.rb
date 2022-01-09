@@ -89,7 +89,9 @@ RSpec.describe 'gitlab-kas' do
           enable: true,
           listen_address: 'localhost:5006',
           listen_websocket: false,
-          metrics_usage_reporting_period: '120'
+          metrics_usage_reporting_period: '120',
+          sentry_dsn: 'https://my_key:my_secret@sentry.io/test_project',
+          sentry_environment: 'production'
         }
       )
     end
@@ -113,7 +115,11 @@ RSpec.describe 'gitlab-kas' do
             }
           ),
           observability: {
-            usage_reporting_period: '120s'
+            usage_reporting_period: '120s',
+            sentry: {
+              dsn: 'https://my_key:my_secret@sentry.io/test_project',
+              environment: 'production'
+            }
           }
         )
       )

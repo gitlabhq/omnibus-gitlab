@@ -1801,6 +1801,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'OWN_PRIVATE_API_URL' => 'grpc://localhost:8155'
 # }
 
+##! Error Reporting and Logging with Sentry
+# gitlab_kas['sentry_dsn'] = 'https://<key>@sentry.io/<project>'
+# gitlab_kas['sentry_environment'] = 'production'
+
 ##! Directories for GitLab KAS
 # gitlab_kas['dir'] = '/var/opt/gitlab/gitlab-kas'
 # gitlab_kas['log_directory'] = '/var/log/gitlab/gitlab-kas'

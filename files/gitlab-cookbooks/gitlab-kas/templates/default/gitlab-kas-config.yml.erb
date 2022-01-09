@@ -20,6 +20,13 @@ gitlab:
   authentication_secret_file: <%= @authentication_secret_file %>
 observability:
   usage_reporting_period: <%= @metrics_usage_reporting_period %>s
+  <%- if @sentry_dsn -%>
+  sentry:
+    dsn: <%= @sentry_dsn %>
+    <%- if @sentry_environment -%>
+    environment: <%= @sentry_environment %>
+    <%- end %>
+  <%- end %>
 redis:
   network: <%= @redis_network %>
   tls:
