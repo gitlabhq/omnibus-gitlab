@@ -280,7 +280,36 @@ RSpec.describe 'gitlab-kas' do
       end
     end
 
-    context 'without sentinel' do
+    context 'without sentinel host only' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas: {
+            enable: true
+          },
+          gitlab_rails: {
+            redis_host: 'the-host'
+          }
+        )
+      end
+
+      it 'renders a single server configuration in to the kas config' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content { |content|
+          kas_redis_cfg = YAML.safe_load(content)['redis']
+          expect(kas_redis_cfg).to(
+            include(
+              'network' => 'tcp',
+              'server' => {
+                'address' => 'the-host:6379'
+              }
+            )
+          )
+          expect(kas_redis_cfg).not_to(include('sentinel'))
+        }
+      end
+    end
+
+    context 'without sentinel host and port' do
       before do
         stub_gitlab_rb(
           external_url: 'https://gitlab.example.com',
@@ -353,7 +382,8 @@ RSpec.describe 'gitlab-kas' do
           gitlab_rails: {
             redis_sentinels: [
               { host: 'a', port: 1 },
-              { host: 'b', port: 2 }
+              { host: 'b', port: 2 },
+              { host: 'c' }
             ]
           },
           redis: {
@@ -372,7 +402,8 @@ RSpec.describe 'gitlab-kas' do
                 'master_name' => 'example-redis',
                 'addresses' => [
                   'a:1',
-                  'b:2'
+                  'b:2',
+                  'c:6379'
                 ]
               }
             )

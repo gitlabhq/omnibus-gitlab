@@ -35,7 +35,7 @@ redis:
     master_name: <%= @redis_sentinels_master_name %>
     addresses:
     <%- @redis_sentinels.each do |sentinel| %>
-      - '<%= sentinel['host'] %>:<%= sentinel['port'] %>'
+      - '<%= sentinel['host'] %>:<%= sentinel['port'] || @redis_default_port %>'
     <%- end %>
   <%- end %>
 api:
