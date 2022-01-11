@@ -39,6 +39,10 @@ No changes.
 - [Use public sources for omnibus-gitlab builds by default](gitlab-org/omnibus-gitlab@981e78d0162c8f202a38093ed5ead9ab059f07c7) ([merge request](gitlab-org/omnibus-gitlab!5659))
 - [Build rugged gem with system SSL on FIPS builds](gitlab-org/omnibus-gitlab@da0a44b28982ea1399e060396e892932b7e430d1) ([merge request](gitlab-org/omnibus-gitlab!5592))
 
+## 14.5.3 (2022-01-11)
+
+No changes.
+
 ## 14.5.2 (2021-12-03)
 
 ### Security (1 change)
