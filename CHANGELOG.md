@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.6.2 (2022-01-11)
+
+No changes.
+
 ## 14.6.1 (2022-01-04)
 
 No changes.
@@ -34,6 +38,10 @@ No changes.
 - [Use `geo:site:role` rake task to retrieve node role for the promote command](gitlab-org/omnibus-gitlab@0cae546fd9c5d04b59dac44b468217b244541782) ([merge request](gitlab-org/omnibus-gitlab!5724))
 - [Use public sources for omnibus-gitlab builds by default](gitlab-org/omnibus-gitlab@981e78d0162c8f202a38093ed5ead9ab059f07c7) ([merge request](gitlab-org/omnibus-gitlab!5659))
 - [Build rugged gem with system SSL on FIPS builds](gitlab-org/omnibus-gitlab@da0a44b28982ea1399e060396e892932b7e430d1) ([merge request](gitlab-org/omnibus-gitlab!5592))
+
+## 14.5.3 (2022-01-11)
+
+No changes.
 
 ## 14.5.2 (2021-12-03)
 
@@ -93,6 +101,10 @@ No changes.
 
 - [Update Curl to version 7.79.1](gitlab-org/omnibus-gitlab@5e1d27acf27eed44f9f69609cd19d21a8147ec74)
 - [Update openssl to 1.1.1l](gitlab-org/omnibus-gitlab@f107290e750c4df586bb475ca537401eb46094e3)
+
+## 14.4.5 (2022-01-11)
+
+No changes.
 
 ## 14.4.4 (2021-12-03)
 
