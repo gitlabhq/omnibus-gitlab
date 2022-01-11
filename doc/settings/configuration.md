@@ -734,7 +734,7 @@ See [NGINX documentation](nginx.md#enable-https).
 
 See [NGINX documentation](nginx.md#redirect-http-requests-to-https).
 
-### Change the default port and the ssl certificate locations
+### Change the default port and the SSL certificate locations
 
 See
 [NGINX documentation](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
