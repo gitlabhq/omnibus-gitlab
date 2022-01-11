@@ -102,6 +102,10 @@ No changes.
 - [Update Curl to version 7.79.1](gitlab-org/omnibus-gitlab@5e1d27acf27eed44f9f69609cd19d21a8147ec74)
 - [Update openssl to 1.1.1l](gitlab-org/omnibus-gitlab@f107290e750c4df586bb475ca537401eb46094e3)
 
+## 14.4.5 (2022-01-11)
+
+No changes.
+
 ## 14.4.4 (2021-12-03)
 
 ### Security (1 change)
