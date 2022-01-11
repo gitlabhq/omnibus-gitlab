@@ -31,3 +31,4 @@ yard
 assets_cache
 
 build_facts
+node_modules
