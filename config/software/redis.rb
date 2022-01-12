@@ -25,7 +25,7 @@ skip_transitive_dependency_licensing true
 dependency 'config_guess'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
-version = Gitlab::Version.new('redis', '6.0.16')
+version = Gitlab::Version.new('redis', '6.2.6')
 default_version version.print(false)
 
 source git: version.remote
@@ -45,6 +45,7 @@ build do
   )
 
   env['CFLAGS'] << ' -fno-omit-frame-pointer'
+  env['LDFLAGS'] << ' -latomic' if OhaiHelper.raspberry_pi?
 
   # jemallocs page size must be >= to the runtime pagesize
   # Use large for arm/newer platforms based on debian rules:
@@ -52,15 +53,6 @@ build do
   env['EXTRA_JEMALLOC_CONFIGURE_FLAGS'] = (OhaiHelper.arm64? ? '--with-lg-page=16' : '--with-lg-page=12')
 
   patch source: 'jemalloc-extra-config-flags.patch'
-
-  # We are backporting this commit from the (unstable) Redis 6.2 branch,
-  # in order to get Redis 6.0 to compile on centos7. This patch adds support
-  # for an older version of GCC.
-  #
-  # - https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/4930#note_490191430
-  # - https://github.com/redis/redis/pull/7707
-  # - https://github.com/redis/redis/commit/445a4b669a3a7232a18bf23340c5f7d580aa92c7.patch
-  patch source: 'upstream-backport-pull-request-7707.patch'
 
   update_config_guess
 
