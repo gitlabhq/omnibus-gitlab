@@ -550,7 +550,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
-### Microsoft Exchange (No authentication)
+### Microsoft Exchange (no authentication)
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
