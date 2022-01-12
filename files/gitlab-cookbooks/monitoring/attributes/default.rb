@@ -118,7 +118,8 @@ default['monitoring']['gitlab-exporter']['env'] = {
   'RUBY_GC_HEAP_INIT_SLOTS' => 80000,
   'RUBY_GC_HEAP_FREE_SLOTS_MIN_RATIO' => 0.055,
   'RUBY_GC_HEAP_FREE_SLOTS_MAX_RATIO' => 0.111,
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'SSL_CERT_FILE' => "#{node['package']['install-dir']}/embedded/ssl/cert.pem"
 }
 default['monitoring']['gitlab-exporter']['consul_service_name'] = 'gitlab-exporter'
 default['monitoring']['gitlab-exporter']['consul_service_meta'] = nil
