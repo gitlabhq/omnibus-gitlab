@@ -165,6 +165,11 @@ A perl interpreter is required for `c_rehash` dependency to properly symlink the
 1. Copy the public certificate file only into the `/etc/gitlab/trusted-certs` directory.
 1. Run `gitlab-ctl reconfigure`.
 
+By default, GitLab expects to find a certificate titled after your GitLab URL. For instance, if your server 
+address is `https://gitlab.example.com`, the certificate should be named `gitlab.example.com.crt`. 
+
+To specify a different path and file name, you can [change the default SSL certificate location](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
+
 WARNING:
 If using a custom certificate chain, the root and/or intermediate certificates must be put into separate files in `/etc/gitlab/trusted-certs` [due to `c_rehash` creating a hash for the first certificate only](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/1425).
 
@@ -290,7 +295,7 @@ means there may be one of four issues:
 
 1. The file in `/etc/gitlab/trusted-certs/` is a symlink
 1. The file is not a valid PEM or DER-encoded certificate
-1. Perl is not installed on the operating system which is needed for c_rehash to properly symlink certificates.
+1. Perl is not installed on the operating system which is needed for c_rehash to properly symlink certificates
 1. The certificate contains the string `TRUSTED`
 
 Test the certificate's validity using the commands below:
