@@ -90,8 +90,8 @@ To enable HTTPS for the domain `gitlab.example.com`:
    NOTE:
    If the `certificate.key` file is password protected, NGINX will not ask for
    the password when you reconfigure GitLab. In that case, Omnibus GitLab will
-   fail silently with no error messages. 
-   
+   fail silently with no error messages.
+
    To remove the password from the key, run:
 
    ```shell
