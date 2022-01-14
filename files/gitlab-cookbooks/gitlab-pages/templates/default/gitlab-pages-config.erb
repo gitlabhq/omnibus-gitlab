@@ -137,3 +137,9 @@ rate-limit-source-ip=<%= @rate_limit_source_ip %>
 <%- if @rate_limit_source_ip_burst -%>
 rate-limit-source-ip-burst=<%= @rate_limit_source_ip_burst %>
 <%-end -%>
+<%- if @rate_limit_domain -%>
+rate-limit-domain=<%= @rate_limit_domain %>
+<%-end -%>
+<%- if @rate_limit_domain_burst -%>
+rate-limit-domain-burst=<%= @rate_limit_domain_burst %>
+<%-end -%>
