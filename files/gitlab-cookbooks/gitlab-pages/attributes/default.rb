@@ -61,3 +61,5 @@ default['gitlab-pages']['gitlab_retrieval_retries'] = nil
 # Rate-limiting
 default['gitlab-pages']['rate_limit_source_ip'] = nil
 default['gitlab-pages']['rate_limit_source_ip_burst'] = nil
+default['gitlab-pages']['rate_limit_domain'] = nil
+default['gitlab-pages']['rate_limit_domain_burst'] = nil

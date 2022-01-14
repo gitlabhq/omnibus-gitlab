@@ -219,6 +219,8 @@ RSpec.describe 'gitlab::gitlab-pages' do
             gitlab_retrieval_retries: 5,
             rate_limit_source_ip: 100,
             rate_limit_source_ip_burst: 50,
+            rate_limit_domain: 1000,
+            rate_limit_domain_burst: 10000,
             enable_disk: true,
             env: {
               GITLAB_CONTINUOUS_PROFILING: "stackdriver?service=gitlab-pages",
@@ -276,6 +278,8 @@ RSpec.describe 'gitlab::gitlab-pages' do
             enable-disk=true
             rate-limit-source-ip=100
             rate-limit-source-ip-burst=50
+            rate-limit-domain=1000
+            rate-limit-domain-burst=10000
         EOS
 
         expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(expected_content)

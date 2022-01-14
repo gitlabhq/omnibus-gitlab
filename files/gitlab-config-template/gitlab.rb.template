@@ -1698,6 +1698,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['rate_limit_source_ip'] = 50.0
 ##! Rate limit per source IP maximum burst allowed per second
 # gitlab_pages['rate_limit_source_ip_burst'] = 600
+##! Rate limit per domain name in number of requests per second, 0 means is disabled
+# gitlab_pages['rate_limit_domain'] = 0
+##! Rate limit per domain name maximum burst allowed per second
+# gitlab_pages['rate_limit_domain_burst'] = 10000
 
 # gitlab_pages['env_directory'] = "/opt/gitlab/etc/gitlab-pages/env"
 # gitlab_pages['env'] = {
