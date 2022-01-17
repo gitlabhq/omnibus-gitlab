@@ -19,7 +19,7 @@ class ConsulHelper
       'node_name' => node['consul']['node_name'] || node['fqdn'],
       'rejoin_after_leave' => true,
       'server' => false
-    }
+    }.merge(encryption_configuration)
     @default_server_configuration = {
       'bootstrap_expect' => 3
     }
@@ -52,6 +52,22 @@ class ConsulHelper
       ).to_json
     end
     config.to_json
+  end
+
+  def use_encryption?
+    encryption_key = node['consul']['encryption_key']
+
+    !encryption_key.nil? && !encryption_key.empty?
+  end
+
+  def encryption_configuration
+    return {} unless use_encryption?
+
+    {
+      'encrypt' => node['consul']['encryption_key'],
+      'encrypt_verify_incoming' => node['consul']['encryption_verify_incoming'],
+      'encrypt_verify_outgoing' => node['consul']['encryption_verify_outgoing']
+    }.compact
   end
 
   def api_url
