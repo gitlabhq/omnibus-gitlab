@@ -531,14 +531,15 @@ To require web clients to authenticate with a trusted certificate, you can enabl
 
 ```ruby
   nginx['ssl_verify_client'] = "on"
+  nginx['ssl_client_certificate'] = "/etc/pki/tls/certs/root-certs.pem"
 ```
 
 and running reconfigure.
 
-These additional options NGINX supports for configuring SSL client authentication can also be configured:
+Optionally, you can configure how deeply in the certificate chain NGINX should verify
+before deciding that the clients don't have a valid certificate (default is `1`):
 
 ```ruby
-  nginx['ssl_client_certificate'] = "/etc/pki/tls/certs/root-certs.pem"
   nginx['ssl_verify_depth'] = "2"
 ```
 
