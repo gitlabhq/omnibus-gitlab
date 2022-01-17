@@ -43,6 +43,7 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
           expect(content).to match(/^io-threads-do-reads no$/)
           expect(content).to match(/^stop-writes-on-bgsave-error yes$/)
           expect(content).not_to match(/^replicaof/)
+          expect(content).not_to match(/^tls-/)
         }
     end
 
@@ -317,6 +318,53 @@ redis_socket=''
       expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
         .with_content { |content|
           expect(content).to match(/^stop-writes-on-bgsave-error no$/)
+        }
+    end
+  end
+
+  context 'with tls settings specified' do
+    before do
+      stub_gitlab_rb(
+        redis: {
+          tls_port: 6380,
+          tls_cert_file: '/etc/gitlab/ssl/redis.crt',
+          tls_key_file: '/etc/gitlab/ssl/redis.key',
+          tls_dh_params_file: '/etc/gitlab/ssl/redis-dhparams',
+          tls_ca_cert_file: '/etc/gitlab/ssl/redis-ca.crt',
+          tls_ca_cert_dir: '/opt/gitlab/embedded/ssl/certs',
+          tls_auth_clients: 'no',
+          tls_replication: 'yes',
+          tls_cluster: 'yes',
+          tls_protocols: 'TLSv1.2 TLSv1.3',
+          tls_ciphers: 'DEFAULT:!MEDIUM',
+          tls_ciphersuites: 'TLS_CHACHA20_POLY1305_SHA256',
+          tls_prefer_server_ciphers: 'yes',
+          tls_session_caching: 'no',
+          tls_session_cache_size: 10000,
+          tls_session_cache_timeout: 120
+        }
+      )
+    end
+
+    it 'renders redis config with tls settings' do
+      expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+        .with_content { |content|
+          expect(content).to match(%r{^tls-port 6380$})
+          expect(content).to match(%r{^tls-cert-file /etc/gitlab/ssl/redis.crt$})
+          expect(content).to match(%r{^tls-key-file /etc/gitlab/ssl/redis.key$})
+          expect(content).to match(%r{^tls-dh-params-file /etc/gitlab/ssl/redis-dhparams$})
+          expect(content).to match(%r{^tls-ca-cert-file /etc/gitlab/ssl/redis-ca.crt$})
+          expect(content).to match(%r{^tls-ca-cert-dir /opt/gitlab/embedded/ssl/certs$})
+          expect(content).to match(%r{^tls-auth-clients no$})
+          expect(content).to match(%r{^tls-replication yes$})
+          expect(content).to match(%r{^tls-cluster yes$})
+          expect(content).to match(%r{^tls-protocols "TLSv1.2 TLSv1.3"$})
+          expect(content).to match(%r{^tls-ciphers DEFAULT:!MEDIUM$})
+          expect(content).to match(%r{^tls-ciphersuites TLS_CHACHA20_POLY1305_SHA256$})
+          expect(content).to match(%r{^tls-prefer-server-ciphers yes$})
+          expect(content).to match(%r{^tls-session-caching no$})
+          expect(content).to match(%r{^tls-session-cache-size 10000$})
+          expect(content).to match(%r{^tls-session-cache-timeout 120$})
         }
     end
   end

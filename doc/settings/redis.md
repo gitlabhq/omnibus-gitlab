@@ -122,20 +122,35 @@ redis['maxmemory_samples'] = 5
 
 ## Using Secure Sockets Layer (SSL)
 
-Redis 5.x does NOT support SSL out of the box. However, you can encrypt a
-Redis connection using [stunnel](https://redis.com/blog/stunnel-secure-redis-ssl/).
-AWS ElasticCache also supports Redis over SSL.
+You can configure Redis to run behind SSL.
 
-Support for SSL has the following limitations:
+### Running Redis server behind SSL
 
-- Omnibus GitLab doesn't include `stunnel` or other tools to provide encryption
-  for the Redis server. However, GitLab does provide client support by using
-  the `rediss://` (as opposed to `redis://`) URL scheme.
-- Omnibus GitLab bundles Redis Sentinel 5.0.x which does NOT support SSL.
-  If you use Redis Sentinel, do not activate client support for SSL.
-  [Redis 6 supports SSL](https://redis.io/topics/encryption), and you can
-  configure it to work with GitLab only as an
-  [external service](https://docs.gitlab.com/ee/administration/redis/replication_and_failover_external.html).
+1. To run Redis server behind SSL, you can use the following settings in
+   `/etc/gitlab/gitlab.rb`. See the TLS/SSL section of
+   [`redis.conf.erb`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/redis/templates/default/redis.conf.erb)
+   to learn about the possible values:
+
+   ```ruby
+   redis['tls_port']
+   redis['tls_cert_file']
+   redis['tls_key_file']
+   ```
+
+1. After specifying the required values, reconfigure GitLab for the changes to take
+   effect:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+NOTE:
+Some `redis-cli` binaries are not built with support for directly connecting to a Redis server over TLS.
+If your `redis-cli` doesn't support the `--tls` flag, you will have to use something like
+[`stunnel`](https://redis.com/blog/stunnel-secure-redis-ssl/) to connect to the
+Redis server using `redis-cli` for any debugging purposes.
+
+### Make GitLab client connect to Redis server over SSL
 
 To activate GitLab client support for SSL:
 

@@ -203,3 +203,141 @@ sentinel auth-pass <%= @redis['master_name'] %> <%= @redis['master_password'] %>
 # Example:
 #
 # sentinel client-reconfig-script mymaster /var/redis/reconfig.sh
+
+################################# TLS/SSL #####################################
+
+# By default, TLS/SSL is disabled. To enable it, the "tls-port" configuration
+# directive can be used to define TLS-listening ports. To enable TLS on the
+# default port, use:
+#
+# port 0
+# tls-port 6379
+# We enable TLS related settings only if tls_port is defined
+<% unless @sentinel['tls_port'].nil? %>
+tls-port <%= @sentinel['tls_port'] %>
+
+# Configure a X.509 certificate and private key to use for authenticating the
+# server to connected clients, masters or cluster peers.  These files should be
+# PEM formatted.
+#
+# tls-cert-file redis.crt
+<% unless @sentinel['tls_cert_file'].nil? %>
+tls-cert-file <%= @sentinel['tls_cert_file'] %>
+<% end %>
+# tls-key-file redis.key
+<% unless @sentinel['tls_key_file'].nil? %>
+tls-key-file <%= @sentinel['tls_key_file'] %>
+<% end %>
+
+# Configure a DH parameters file to enable Diffie-Hellman (DH) key exchange:
+#
+# tls-dh-params-file redis.dh
+<% unless @sentinel['tls_dh_params_file'].nil? %>
+tls-dh-params-file <%= @sentinel['tls_dh_params_file'] %>
+<% end %>
+
+# Configure a CA certificate(s) bundle or directory to authenticate TLS/SSL
+# clients and peers.  Redis requires an explicit configuration of at least one
+# of these, and will not implicitly use the system wide configuration.
+#
+# tls-ca-cert-file ca.crt
+<% unless @sentinel['tls_ca_cert_file'].nil? %>
+tls-ca-cert-file <%= @sentinel['tls_ca_cert_file'] %>
+<% end %>
+# tls-ca-cert-dir /etc/ssl/certs
+<% unless @sentinel['tls_ca_cert_dir'].nil? %>
+tls-ca-cert-dir <%= @sentinel['tls_ca_cert_dir'] %>
+<% end %>
+
+# By default, clients (including replica servers) on a TLS port are required
+# to authenticate using valid client side certificates.
+#
+# If "no" is specified, client certificates are not required and not accepted.
+# If "optional" is specified, client certificates are accepted and must be
+# valid if provided, but are not required.
+#
+# tls-auth-clients no
+# tls-auth-clients optional
+<% unless @sentinel['tls_auth_clients'].nil? %>
+tls-auth-clients <%= @sentinel['tls_auth_clients'] %>
+<% end %>
+
+# By default, a Redis replica does not attempt to establish a TLS connection
+# with its master.
+#
+# Use the following directive to enable TLS on replication links.
+#
+# tls-replication yes
+<% unless @sentinel['tls_replication'].nil? %>
+tls-replication <%= @sentinel['tls_replication'] %>
+<% end %>
+
+# By default, the Redis Cluster bus uses a plain TCP connection. To enable
+# TLS for the bus protocol, use the following directive:
+#
+# tls-cluster yes
+<% unless @sentinel['tls_cluster'].nil? %>
+tls-cluster <%= @sentinel['tls_cluster'] %>
+<% end %>
+
+# Explicitly specify TLS versions to support. Allowed values are case insensitive
+# and include "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3" (OpenSSL >= 1.1.1) or
+# any combination. To enable only TLSv1.2 and TLSv1.3, use:
+#
+# tls-protocols "TLSv1.2 TLSv1.3"
+<% unless @sentinel['tls_protocols'].nil? %>
+tls-protocols "<%= @sentinel['tls_protocols'] %>"
+<% end %>
+
+# Configure allowed ciphers.  See the ciphers(1ssl) manpage for more information
+# about the syntax of this string.
+#
+# Note: this configuration applies only to <= TLSv1.2.
+#
+# tls-ciphers DEFAULT:!MEDIUM
+<% unless @sentinel['tls_ciphers'].nil? %>
+tls-ciphers <%= @sentinel['tls_ciphers'] %>
+<% end %>
+
+# Configure allowed TLSv1.3 ciphersuites.  See the ciphers(1ssl) manpage for more
+# information about the syntax of this string, and specifically for TLSv1.3
+# ciphersuites.
+#
+# tls-ciphersuites TLS_CHACHA20_POLY1305_SHA256
+<% unless @sentinel['tls_ciphersuites'].nil? %>
+tls-ciphersuites <%= @sentinel['tls_ciphersuites'] %>
+<% end %>
+
+# When choosing a cipher, use the server's preference instead of the client
+# preference. By default, the server follows the client's preference.
+#
+# tls-prefer-server-ciphers yes
+<% unless @sentinel['tls_prefer_server_ciphers'].nil? %>
+tls-prefer-server-ciphers <%= @sentinel['tls_prefer_server_ciphers'] %>
+<% end %>
+
+# By default, TLS session caching is enabled to allow faster and less expensive
+# reconnections by clients that support it. Use the following directive to disable
+# caching.
+#
+# tls-session-caching no
+<% unless @sentinel['tls_session_caching'].nil? %>
+tls-session-caching <%= @sentinel['tls_session_caching'] %>
+<% end %>
+
+# Change the default number of TLS sessions cached. A zero value sets the cache
+# to unlimited size. The default size is 20480.
+#
+# tls-session-cache-size 5000
+<% unless @sentinel['tls_session_cache_size'].nil? %>
+tls-session-cache-size <%= @sentinel['tls_session_cache_size'] %>
+<% end %>
+
+# Change the default timeout of cached TLS sessions. The default timeout is 300
+# seconds.
+#
+# tls-session-cache-timeout 60
+<% unless @sentinel['tls_session_cache_timeout'].nil? %>
+tls-session-cache-timeout <%= @sentinel['tls_session_cache_timeout'] %>
+<% end %>
+<% end %>
