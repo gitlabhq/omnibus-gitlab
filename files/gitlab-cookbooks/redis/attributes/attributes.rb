@@ -39,6 +39,24 @@ default['redis']['stop_writes_on_bgsave_error'] = true
 
 default['redis']['rename_commands'] = nil
 
+## TLS settings
+default['redis']['tls_port'] = nil
+default['redis']['tls_cert_file'] = nil
+default['redis']['tls_key_file'] = nil
+default['redis']['tls_dh_params_file'] = nil
+default['redis']['tls_ca_cert_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
+default['redis']['tls_ca_cert_dir'] = "#{node['package']['install-dir']}/embedded/ssl/certs/"
+default['redis']['tls_auth_clients'] = 'optional'
+default['redis']['tls_replication'] = nil
+default['redis']['tls_cluster'] = nil
+default['redis']['tls_protocols'] = nil
+default['redis']['tls_ciphers'] = nil
+default['redis']['tls_ciphersuites'] = nil
+default['redis']['tls_prefer_server_ciphers'] = nil
+default['redis']['tls_session_caching'] = nil
+default['redis']['tls_session_cache_size'] = nil
+default['redis']['tls_session_cache_timeout'] = nil
+
 ####
 # Redis Settings for EE
 # They are no-op in CE

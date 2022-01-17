@@ -45,6 +45,20 @@ RSpec.describe 'gitlab::redis' do
         expect(chef_run).to create_account('user and group for sentinel').with(username: 'gitlab-redis', groupname: 'gitlab-redis')
       end
 
+      it 'renders sentinel config file with default values' do
+        expect(chef_run).to render_file('/var/opt/gitlab/sentinel/sentinel.conf')
+          .with_content { |content|
+            expect(content).to match(%r{bind 0.0.0.0})
+            expect(content).to match(%r{port 26379})
+            expect(content).to match(%r{sentinel announce-ip 10.10.10.10})
+            expect(content).to match(%r{sentinel monitor gitlab-redis 1.1.1.1 6379 1})
+            expect(content).to match(%r{sentinel down-after-milliseconds gitlab-redis 10000})
+            expect(content).to match(%r{sentinel failover-timeout gitlab-redis 60000})
+            expect(content).to match(%r{sentinel auth-pass gitlab-redis blahblahblah})
+            expect(content).not_to match(%r{^tls})
+          }
+      end
+
       it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
     end
 
@@ -68,6 +82,61 @@ RSpec.describe 'gitlab::redis' do
       end
 
       it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
+    end
+
+    context 'with tls settings specified' do
+      before do
+        stub_gitlab_rb(
+          redis: {
+            master_ip: redis_master_ip,
+            announce_ip: redis_announce_ip,
+            master_password: redis_master_password,
+          },
+          redis_sentinel_role: {
+            enable: true
+          },
+          sentinel: {
+            tls_port: 6380,
+            tls_cert_file: '/etc/gitlab/ssl/redis.crt',
+            tls_key_file: '/etc/gitlab/ssl/redis.key',
+            tls_dh_params_file: '/etc/gitlab/ssl/redis-dhparams',
+            tls_ca_cert_file: '/etc/gitlab/ssl/redis-ca.crt',
+            tls_ca_cert_dir: '/opt/gitlab/embedded/ssl/certs',
+            tls_auth_clients: 'no',
+            tls_replication: 'yes',
+            tls_cluster: 'yes',
+            tls_protocols: 'TLSv1.2 TLSv1.3',
+            tls_ciphers: 'DEFAULT:!MEDIUM',
+            tls_ciphersuites: 'TLS_CHACHA20_POLY1305_SHA256',
+            tls_prefer_server_ciphers: 'yes',
+            tls_session_caching: 'no',
+            tls_session_cache_size: 10000,
+            tls_session_cache_timeout: 120
+          }
+        )
+      end
+
+      it 'renders sentinel config file with specified tls values' do
+        expect(chef_run).to render_file('/var/opt/gitlab/sentinel/sentinel.conf')
+          .with_content { |content|
+            expect(content).to match(%r{^tls-port 6380$})
+            expect(content).to match(%r{^tls-cert-file /etc/gitlab/ssl/redis.crt$})
+            expect(content).to match(%r{^tls-key-file /etc/gitlab/ssl/redis.key$})
+            expect(content).to match(%r{^tls-dh-params-file /etc/gitlab/ssl/redis-dhparams$})
+            expect(content).to match(%r{^tls-ca-cert-file /etc/gitlab/ssl/redis-ca.crt$})
+            expect(content).to match(%r{^tls-ca-cert-dir /opt/gitlab/embedded/ssl/certs$})
+            expect(content).to match(%r{^tls-auth-clients no$})
+            expect(content).to match(%r{^tls-replication yes$})
+            expect(content).to match(%r{^tls-cluster yes$})
+            expect(content).to match(%r{^tls-protocols "TLSv1.2 TLSv1.3"$})
+            expect(content).to match(%r{^tls-ciphers DEFAULT:!MEDIUM$})
+            expect(content).to match(%r{^tls-ciphersuites TLS_CHACHA20_POLY1305_SHA256$})
+            expect(content).to match(%r{^tls-prefer-server-ciphers yes$})
+            expect(content).to match(%r{^tls-session-caching no$})
+            expect(content).to match(%r{^tls-session-cache-size 10000$})
+            expect(content).to match(%r{^tls-session-cache-timeout 120$})
+          }
+      end
     end
   end
 end

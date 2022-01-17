@@ -23,6 +23,8 @@ license_file 'COPYING'
 skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
+dependency 'openssl' unless Build::Check.use_system_ssl?
+
 version = Gitlab::Version.new('redis', '6.0.16')
 default_version version.print(false)
 
@@ -62,6 +64,6 @@ build do
 
   update_config_guess
 
-  make "-j #{workers}", env: env
+  make "-j #{workers} BUILD_TLS=yes", env: env
   make 'install', env: env
 end

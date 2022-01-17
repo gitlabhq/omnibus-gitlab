@@ -1254,6 +1254,27 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['uid'] = nil
 # redis['gid'] = nil
 
+### Redis TLS settings
+###! To run Redis over TLS, specify values for the following settings
+# redis['tls_port'] = nil
+# redis['tls_cert_file'] = nil
+# redis['tls_key_file'] = nil
+
+###! Other TLS related optional settings
+# redis['tls_dh_params_file'] = nil
+# redis['tls_ca_cert_dir'] = '/opt/gitlab/embedded/ssl/certs/'
+# redis['tls_ca_cert_file'] = '/opt/gitlab/embedded/ssl/certs/cacert.pem'
+# redis['tls_auth_clients'] = 'optional'
+# redis['tls_replication'] = nil
+# redis['tls_cluster'] = nil
+# redis['tls_protocols'] = nil
+# redis['tls_ciphers'] = nil
+# redis['tls_ciphersuites'] = nil
+# redis['tls_prefer_server_ciphers'] = nil
+# redis['tls_session_caching'] = nil
+# redis['tls_session_cache_size'] = nil
+# redis['tls_session_cache_timeout'] = nil
+
 ### Disable or obfuscate unnecessary redis command names
 ### Uncomment and edit this block to add or remove entries.
 ### See https://docs.gitlab.com/omnibus/settings/redis.html#renamed-commands
@@ -2532,6 +2553,27 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##!   the replicas will be reconfigured by the Sentinels anyway, but not with
 ##!   the exact parallel-syncs progression as specified.
 # sentinel['failover_timeout'] = 60000
+
+### Sentinel TLS settings
+###! To run Sentinel over TLS, specify values for the following settings
+# sentinel['tls_port'] = nil
+# sentinel['tls_cert_file'] = nil
+# sentinel['tls_key_file'] = nil
+
+###! Other TLS related optional settings
+# sentinel['tls_dh_params_file'] = nil
+# sentinel['tls_ca_cert_dir'] = '/opt/gitlab/embedded/ssl/certs/'
+# sentinel['tls_ca_cert_file'] = '/opt/gitlab/embedded/ssl/certs/cacert.pem'
+# sentinel['tls_auth_clients'] = 'optional'
+# sentinel['tls_replication'] = nil
+# sentinel['tls_cluster'] = nil
+# sentinel['tls_protocols'] = nil
+# sentinel['tls_ciphers'] = nil
+# sentinel['tls_ciphersuites'] = nil
+# sentinel['tls_prefer_server_ciphers'] = nil
+# sentinel['tls_session_caching'] = nil
+# sentinel['tls_session_cache_size'] = nil
+# sentinel['tls_session_cache_timeout'] = nil
 
 ################################################################################
 ## Additional Database Settings (EE only)

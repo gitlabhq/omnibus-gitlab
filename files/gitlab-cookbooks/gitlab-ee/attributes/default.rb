@@ -27,6 +27,22 @@ default['gitlab']['sentinel']['announce_port'] = nil
 default['gitlab']['sentinel']['down_after_milliseconds'] = 10000
 default['gitlab']['sentinel']['failover_timeout'] = 60000
 default['gitlab']['sentinel']['myid'] = nil
+default['gitlab']['sentinel']['tls_port'] = nil
+default['gitlab']['sentinel']['tls_cert_file'] = nil
+default['gitlab']['sentinel']['tls_key_file'] = nil
+default['gitlab']['sentinel']['tls_dh_params_file'] = nil
+default['gitlab']['sentinel']['tls_ca_cert_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
+default['gitlab']['sentinel']['tls_ca_cert_dir'] = "#{node['package']['install-dir']}/embedded/ssl/certs/"
+default['gitlab']['sentinel']['tls_auth_clients'] = 'optional'
+default['gitlab']['sentinel']['tls_replication'] = nil
+default['gitlab']['sentinel']['tls_cluster'] = nil
+default['gitlab']['sentinel']['tls_protocols'] = nil
+default['gitlab']['sentinel']['tls_ciphers'] = nil
+default['gitlab']['sentinel']['tls_ciphersuites'] = nil
+default['gitlab']['sentinel']['tls_prefer_server_ciphers'] = nil
+default['gitlab']['sentinel']['tls_session_caching'] = nil
+default['gitlab']['sentinel']['tls_session_cache_size'] = nil
+default['gitlab']['sentinel']['tls_session_cache_timeout'] = nil
 
 ###
 # Geo: Common (primary or secondary) node configuration
