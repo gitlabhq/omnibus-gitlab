@@ -168,4 +168,56 @@ RSpec.describe 'consul' do
       end
     end
   end
+
+  describe 'encryption' do
+    it 'is not enabled by default' do
+      stub_gitlab_rb(
+        consul: {
+          enable: true,
+        }
+      )
+
+      expect(chef_run).to render_file(consul_conf).with_content { |content|
+        expect(content).not_to match(%r{"encrypt":})
+        expect(content).not_to match(%r{"encrypt_verify_incoming":})
+        expect(content).not_to match(%r{"encrypt_verify_outgoing":})
+      }
+    end
+
+    context 'new datacenter' do
+      it 'uses encryption key and falls back to defaults' do
+        stub_gitlab_rb(
+          consul: {
+            enable: true,
+            encryption_key: 'fake_key'
+          }
+        )
+
+        expect(chef_run).to render_file(consul_conf).with_content { |content|
+          expect(content).to match(%r{"encrypt":"fake_key"})
+          expect(content).not_to match(%r{"encrypt_verify_incoming":})
+          expect(content).not_to match(%r{"encrypt_verify_outgoing":})
+        }
+      end
+    end
+
+    context 'existing datacenter' do
+      it 'uses encryption key and specified verification settings' do
+        stub_gitlab_rb(
+          consul: {
+            enable: true,
+            encryption_key: 'fake_key',
+            encryption_verify_incoming: false,
+            encryption_verify_outgoing: true,
+          }
+        )
+
+        expect(chef_run).to render_file(consul_conf).with_content { |content|
+          expect(content).to match(%r{"encrypt":"fake_key"})
+          expect(content).to match(%r{"encrypt_verify_incoming":false})
+          expect(content).to match(%r{"encrypt_verify_outgoing":true})
+        }
+      end
+    end
+  end
 end

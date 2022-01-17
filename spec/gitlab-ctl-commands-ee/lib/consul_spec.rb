@@ -22,38 +22,58 @@ RSpec.describe ConsulHandler do
       instance.execute
     end
   end
-end
 
-RSpec.describe ConsulHandler::Kv do
   let(:consul_cmd) { '/opt/gitlab/embedded/bin/consul' }
 
-  it 'allows nil values' do
-    results = double('results', run_command: [], error!: nil, stdout: '')
-    expect(Mixlib::ShellOut).to receive(:new).with("#{consul_cmd} kv put foo ").and_return(results)
-    described_class.send(:put, 'foo')
-  end
-
-  describe '#get' do
-    context 'existing key' do
-      before do
-        results = double('results', run_command: [], error!: nil, stdout: 'bar')
-        allow(Mixlib::ShellOut).to receive(:new).with("#{consul_cmd} kv get foo").and_return(results)
-      end
-
-      it 'returns the expected key' do
-        expect(described_class.get('foo')).to eq('bar')
-      end
+  describe ConsulHandler::Kv do
+    it 'allows nil values' do
+      results = double('results', run_command: [], error!: nil, stdout: '')
+      expect(Mixlib::ShellOut).to receive(:new).with("#{consul_cmd} kv put foo ").and_return(results)
+      described_class.send(:put, 'foo')
     end
 
-    context 'non-existing key' do
-      before do
-        results = double('results', run_command: [], stdout: '', stderr: 'oops')
-        allow(results).to receive(:error!).and_raise(StandardError)
-        allow(Mixlib::ShellOut).to receive(:new).with("#{consul_cmd} kv get foo").and_return(results)
+    describe '#get' do
+      context 'existing key' do
+        before do
+          results = double('results', run_command: [], error!: nil, stdout: 'bar')
+          allow(Mixlib::ShellOut).to receive(:new).with("#{consul_cmd} kv get foo").and_return(results)
+        end
+
+        it 'returns the expected key' do
+          expect(described_class.get('foo')).to eq('bar')
+        end
+      end
+
+      context 'non-existing key' do
+        before do
+          results = double('results', run_command: [], stdout: '', stderr: 'oops')
+          allow(results).to receive(:error!).and_raise(StandardError)
+          allow(Mixlib::ShellOut).to receive(:new).with("#{consul_cmd} kv get foo").and_return(results)
+        end
+
+        it 'raises an error' do
+          expect { described_class.get('foo') }.to raise_error(ConsulHandler::ConsulError, 'StandardError: oops')
+        end
+      end
+    end
+  end
+
+  describe ConsulHandler::Encrypt do
+    describe '#keygen' do
+      it 'returns the generated key' do
+        generated_key = 'BYX6EPaUiUI0TDdm6gAMmmLnpJSwePJ33Xwh6rjCYbg='
+        results = double('results', run_command: [], error!: nil, stdout: generated_key)
+        allow(Mixlib::ShellOut).to receive(:new).with("#{consul_cmd} keygen").and_return(results)
+
+        expect(described_class.keygen).to eq(generated_key)
       end
 
       it 'raises an error' do
-        expect { described_class.get('foo') }.to raise_error(ConsulHandler::ConsulError, 'StandardError: oops')
+        results = double('results', run_command: [], stdout: '', stderr: 'oops')
+        allow(results).to receive(:error!).and_raise(StandardError)
+        allow(Mixlib::ShellOut).to receive(:new).with("#{consul_cmd} keygen").and_return(results)
+
+        expect { described_class.keygen }.to raise_error(ConsulHandler::ConsulError, 'StandardError: oops')
       end
     end
   end

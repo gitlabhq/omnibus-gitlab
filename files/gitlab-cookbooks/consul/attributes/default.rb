@@ -22,3 +22,7 @@ default['consul']['logging_filters'] = {
   postgresql_warning: "-*agent: Check 'service:postgresql' is now critical"
 }
 default['consul']['monitoring_service_discovery'] = false
+
+default['consul']['encryption_key'] = nil
+default['consul']['encryption_verify_incoming'] = nil
+default['consul']['encryption_verify_outgoing'] = nil
