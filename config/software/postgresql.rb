@@ -42,6 +42,9 @@ relative_path "postgresql-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+
+  env['CFLAGS'] << ' -fno-omit-frame-pointer'
+
   prefix = "#{install_dir}/embedded/postgresql/#{major_version}"
   update_config_guess(target: 'config')
 
