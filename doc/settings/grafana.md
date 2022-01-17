@@ -20,7 +20,7 @@ automatically configured. Grafana will be available on `https://gitlab.example.c
 NOTE:
 The admin account's username is `admin`.
 
-Logging in to Grafana using username/password combo is disabled , and only
+Logging in to Grafana using username/password combo is disabled, and only
 GitLab SSO is available by default. However, to access the admin account, you
 need to enable login using username/password. For that, add the following line
 to `/etc/gitlab/gitlab.rb` file and [reconfigure](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure):
