@@ -130,6 +130,45 @@ NOTE:
 The above commands require root privileges and only generate a renewal if the certificate is close to expiration.
 [Consider the upstream rate limits](https://letsencrypt.org/docs/rate-limits/) if encountering an error during renewal.
 
+### Use an ACME server other than Let's Encrypt
+
+You can use an ACME server other than Let's Encrypt, and configure GitLab to
+use that to fetch a certificate. Some services that provide their own ACME
+server are:
+
+- [ZeroSSL](https://zerossl.com/documentation/acme/)
+- [Buypass](https://www.buypass.com/products/tls-ssl-certificates/go-ssl)
+- [SSL.com](https://www.ssl.com/guide/ssl-tls-certificate-issuance-and-revocation-with-acme/)
+- [`step-ca`](https://smallstep.com/docs/step-ca)
+
+To configure GitLab to use a custom ACME server:
+
+1. Edit `/etc/gitlab/gitlab.rb` and set the ACME endpoints:
+
+   ```ruby
+   external_url 'https://example.com'
+   letsencrypt['acme_staging_endpoint'] = 'https://ca.internal/acme/acme/directory'
+   letsencrypt['acme_production_endpoint'] = 'https://ca.internal/acme/acme/directory'
+   ```
+
+   If the custom ACME server provides it, use a staging endpoint as well.
+   Checking the staging endpoint first ensures that the ACME configuration is correct
+   before submitting the request to ACME production. Do this to avoid ACME
+   rate-limits while working on your configuration.
+
+   The default values are:
+
+   ```plaintext
+   https://acme-staging-v02.api.letsencrypt.org/directory
+   https://acme-v02.api.letsencrypt.org/directory
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
 ## Connecting to External Resources
 
 Some environments connect to external resources for various tasks. Omnibus-GitLab
