@@ -141,9 +141,9 @@ RSpec.describe 'gitlab-kas' do
       it 'renders gitlab_kas enabled with default URLs in config/gitlab.yml' do
         expect(gitlab_yml[:production][:gitlab_kas]).to include(
           enabled: true,
-          external_url: 'wss://gitlab.example.com/-/kubernetes-agent',
+          external_url: 'wss://gitlab.example.com/-/kubernetes-agent/',
           internal_url: 'grpc://localhost:8153',
-          external_k8s_proxy_url: 'https://gitlab.example.com/-/kubernetes-agent/k8s-proxy'
+          external_k8s_proxy_url: 'https://gitlab.example.com/-/kubernetes-agent/k8s-proxy/'
         )
       end
     end
@@ -160,7 +160,7 @@ RSpec.describe 'gitlab-kas' do
 
       it 'has exernal URL with scheme `ws` instead of `wss`' do
         expect(gitlab_yml[:production][:gitlab_kas]).to include(
-          external_url: 'ws://gitlab.example.com/-/kubernetes-agent'
+          external_url: 'ws://gitlab.example.com/-/kubernetes-agent/'
         )
       end
     end
@@ -180,9 +180,9 @@ RSpec.describe 'gitlab-kas' do
       it 'derives the external URLs from the top level external URL, and the internal URL from the listen address' do
         expect(gitlab_yml[:production][:gitlab_kas]).to include(
           enabled: true,
-          external_url: 'wss://gitlab.example.com/-/kubernetes-agent',
+          external_url: 'wss://gitlab.example.com/-/kubernetes-agent/',
           internal_url: 'grpc://custom-api-address:9999',
-          external_k8s_proxy_url: 'https://gitlab.example.com/-/kubernetes-agent/k8s-proxy'
+          external_k8s_proxy_url: 'https://gitlab.example.com/-/kubernetes-agent/k8s-proxy/'
         )
       end
     end

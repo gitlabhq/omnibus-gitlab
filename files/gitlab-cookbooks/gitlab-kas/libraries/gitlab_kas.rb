@@ -48,7 +48,7 @@ module GitlabKas
 
       return unless Gitlab['external_url']
 
-      # For now, the default external URL is on the subpath /-/kubernetes-agent
+      # For now, the default external URL is on the subpath /-/kubernetes-agent/
       # so whether to use TLS is determined from the primary external_url.
       # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5784
       gitlab_uri = URI(Gitlab['external_url'])
@@ -63,7 +63,7 @@ module GitlabKas
         raise "external_url scheme should be 'http' or 'https', got '#{gitlab_uri.scheme}"
       end
 
-      Gitlab['gitlab_rails'][key] = "#{scheme}://#{gitlab_uri.host}#{port}/#{gitlab_uri.path}-/kubernetes-agent"
+      Gitlab['gitlab_rails'][key] = "#{scheme}://#{gitlab_uri.host}#{port}/#{gitlab_uri.path}-/kubernetes-agent/"
     end
 
     def parse_gitlab_kas_internal_url
@@ -93,9 +93,9 @@ module GitlabKas
       gitlab_external_url = Gitlab['external_url']
       return unless gitlab_external_url
 
-      # For now, the default external proxy URL is on the subpath /-/kubernetes-agent/proxy
+      # For now, the default external proxy URL is on the subpath /-/kubernetes-agent/k8s-proxy/
       # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5784
-      Gitlab['gitlab_rails'][key] = "#{gitlab_external_url}/-/kubernetes-agent/k8s-proxy"
+      Gitlab['gitlab_rails'][key] = "#{gitlab_external_url}/-/kubernetes-agent/k8s-proxy/"
     end
 
     def parse_secrets
