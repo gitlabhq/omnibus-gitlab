@@ -159,7 +159,7 @@ For NGINX port changes please see [`settings/nginx.md`](settings/nginx.md).
 
 On SELinux-enabled systems the Git user's `.ssh` directory or its contents can
 get their security context messed up. You can fix this by running `sudo
-gitlab-ctl reconfigure`, which will set the `ssh_home_t` security context on
+gitlab-ctl reconfigure`, which sets the `ssh_home_t` security context on
 `/var/opt/gitlab/.ssh`.
 
 In GitLab 10.0 this behavior was improved by setting the context permanently using
@@ -170,13 +170,13 @@ command is available.
 ### All systems
 
 The Git user is created, by default, with a locked password, shown by `'!'` in
-/etc/shadow. Unless "UsePam yes" is enabled, the OpenSSH daemon will prevent the
+/etc/shadow. Unless "UsePam yes" is enabled, the OpenSSH daemon prevents the
 Git user from authenticating even with SSH keys. An alternative secure solution
 is to unlock the password by replacing `'!'` with `'*'` in `/etc/shadow`. The Git
-user will still be unable to change the password because it runs in a restricted
+user is still unable to change the password because it runs in a restricted
 shell and the `passwd` command for non-superusers requires entering the current
-password prior to a new password. The user cannot enter a password that will
-match `'*'` and therefore the account remains password-less.
+password prior to a new password. The user cannot enter a password that matches
+`'*'`, which means the account continues to not have a password.
 
 Keep in mind that the Git user must have access to the system so please review
 your security settings at `/etc/security/access.conf` and make sure the Git user
@@ -184,9 +184,9 @@ is not blocked.
 
 ## PostgreSQL error `FATAL:  could not create shared memory segment: Cannot allocate memory`
 
-The packaged PostgreSQL instance will try to allocate 25% of total memory as
+The packaged PostgreSQL instance tries to allocate 25% of total memory as
 shared memory. On some Linux (virtual) servers, there is less shared memory
-available, which will prevent PostgreSQL from starting. In
+available, which prevents PostgreSQL from starting. In
 `/var/log/gitlab/postgresql/current`:
 
 ```plaintext
@@ -207,7 +207,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
 ## PostgreSQL error `FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied`
 
-By default, PostgreSQL will try to detect the shared memory type to use. If you don't
+By default, PostgreSQL tries to detect the shared memory type to use. If you don't
 have shared memory enabled, you might see this error in `/var/log/gitlab/postgresql/current`.
 To fix this, you can disable PostgreSQL's shared memory detection. Set the
 following value in `/etc/gitlab/gitlab.rb`:
@@ -262,7 +262,7 @@ or container doesn't have access to kernel parameters.
 
 Try [enabling the module](https://serverfault.com/questions/477718/sysctl-p-etc-sysctl-conf-returns-error) on which sysctl errored out.
 
-There is a reported workaround described in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/361) which requires editing the GitLab' internal recipe by supplying the switch which will ignore failures. Ignoring errors can have unexpected side effects on performance of your GitLab server so it is not recommended to do so.
+There is a reported workaround described in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/361) which requires editing the GitLab' internal recipe by supplying the switch which ignores failures. Ignoring errors can have unexpected side effects on the performance of your GitLab server, so it isn't recommended to do so.
 
 Another variation of this error reports the file system is read-only and shows following stack trace:
 
@@ -288,7 +288,7 @@ Another variation of this error reports the file system is read-only and shows f
 
 This error is also reported to occur in virtual machines only, and the recommended workaround is to set the values in the host. The values needed for GitLab can be found inside the file `/opt/gitlab/embedded/etc/90-omnibus-gitlab.conf` in the virtual machine. After setting these values in `/etc/sysctl.conf` file in the host OS, run `cat /etc/sysctl.conf /etc/sysctl.d/*.conf  | sysctl -e -p -` on the host. Then try running `gitlab-ctl reconfigure` inside the virtual machine. It should detect that the kernel is already running with the necessary settings, and not raise any errors.
 
-Also note you may need to repeat this process for a couple other lines, e.g. reconfigure will fail 3 times and you will eventually have added something like this to `/etc/sysctl.conf`:
+You may have to repeat this process for other lines. For example, reconfigure fails three times, after having added something like this to `/etc/sysctl.conf`:
 
 ```plaintext
 kernel.shmall = 4194304
