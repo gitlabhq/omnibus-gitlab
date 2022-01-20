@@ -15,5 +15,10 @@
 # limitations under the License.
 #
 
+# Add the EE specific services. Useful when `gitlab-ee::config` is called
+# directly, like via `GitlabCtl::Util.chef_run` calls.  For regular reconfigure
+# runs, this is already done in `gitlab-ee::default` recipe.
+Services.add_services('gitlab-ee', Services::EEServices.list)
+
 # Use the gitlab cookbook config
 include_recipe 'gitlab::config'
