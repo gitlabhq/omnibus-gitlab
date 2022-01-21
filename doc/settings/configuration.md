@@ -51,17 +51,17 @@ Please see our [DNS documentation](dns.md) for more details about the use of DNS
 To make it easier to get a GitLab instance up and running with the minimum
 number of commands, `omnibus-gitlab` supports the use of an environment variable
 `EXTERNAL_URL` during the package installation. On detecting the presence of
-this environment variable, its value will be written as `external_url` in the
+this environment variable, its value is written as `external_url` in the
 `gitlab.rb` file as part of package installation (or upgrade).
 
 NOTE:
 `EXTERNAL_URL` environment variable only affects installation/upgrade
 of packages. For regular `sudo gitlab-ctl reconfigure` runs, the value present
-in `/etc/gitlab/gitlab.rb` will be used.
+in `/etc/gitlab/gitlab.rb` is used.
 
 NOTE:
 As part of package updates, if you have `EXTERNAL_URL` variable set
-inadvertently, it will replace the existing value in `/etc/gitlab/gitlab.rb`
+inadvertently, it replaces the existing value in `/etc/gitlab/gitlab.rb`
 without any warning. So, it is recommended not to set the variable globally, but
 pass it specifically to the installation command:
 
