@@ -3,6 +3,41 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.7.0 (2022-01-21)
+
+### Added (6 changes)
+
+- [Add Redis TLS related settings](gitlab-org/omnibus-gitlab@660586e7aefc5f38f8b6ec796b6f32e941388f28) ([merge request](gitlab-org/omnibus-gitlab!5770))
+- [Add gossip encryption configuration to Consul](gitlab-org/omnibus-gitlab@b08ff3cf8139f4f99b6602189802cae07cd7a5e9) ([merge request](gitlab-org/omnibus-gitlab!5842))
+- [Add domain rate-limiting options for GitLab Pages](gitlab-org/omnibus-gitlab@b2dd448cbe8c60960c10f3ac55a9c87a61fd0182) ([merge request](gitlab-org/omnibus-gitlab!5832))
+- [Add packages to skip list in preinst](gitlab-org/omnibus-gitlab@66de9c6c839b2e7eb0bbcfda25db889a707ab8ad) ([merge request](gitlab-org/omnibus-gitlab!5837))
+- [add nginx proxy_protocol option for gitlab-http](gitlab-org/omnibus-gitlab@f87ff7372d414bb97d9feb6f299fd81eb8a11000) by @cruelsmith ([merge request](gitlab-org/omnibus-gitlab!5663))
+- [Add config support for container registry middleware](gitlab-org/omnibus-gitlab@bd43f9134fb4dc593b9d0433be31ebacfc50cc66) ([merge request](gitlab-org/omnibus-gitlab!5807))
+
+### Fixed (4 changes)
+
+- [Include the cert file location by default as well](gitlab-org/omnibus-gitlab@b6bdff0fa3b022a9be514e09315dd1ff78742dcd) ([merge request](gitlab-org/omnibus-gitlab!5839))
+- [Sync trailing slash usage for GitLab KAS routes](gitlab-org/omnibus-gitlab@da816362ef00c62a569a0515d0aecd5ab84c1d04) by @fh1ch ([merge request](gitlab-org/omnibus-gitlab!5824))
+- [Revert chef-acme cookbook update](gitlab-org/omnibus-gitlab@3a595ef7921a2273c387f32005599e6a72bcbd60) ([merge request](gitlab-org/omnibus-gitlab!5819))
+- [Set SSL_CERT_DIR variable for all services](gitlab-org/omnibus-gitlab@ed9beda692797fa8e7b5576b47c30bd4285a1e0a) ([merge request](gitlab-org/omnibus-gitlab!5765))
+
+### Changed (6 changes)
+
+- [Bump omnibus to 8.2.1.5](gitlab-org/omnibus-gitlab@611add7bacd7e1108ad87eeb642055fc40e488fc) ([merge request](gitlab-org/omnibus-gitlab!5855))
+- [Upgrade MailRoom to v0.0.18](gitlab-org/omnibus-gitlab@f37f798b2e09af0bcdf3e34b556784038bdd8d7a) ([merge request](gitlab-org/omnibus-gitlab!5816))
+- [Enable frame pointer in PostgreSQL compile options](gitlab-org/omnibus-gitlab@129be61ae511cd6aeacce30bb73ef6b9b64b51a6) ([merge request](gitlab-org/omnibus-gitlab!5845))
+- [Bump Container Registry to v3.21.0-gitlab](gitlab-org/omnibus-gitlab@1dd3ce09f351acaab237c5b8d6783128ec510363) ([merge request](gitlab-org/omnibus-gitlab!5827))
+- [Create cgroup root directory on gitaly startup](gitlab-org/omnibus-gitlab@d1e09648b557d7a6d2349b354744e59f506d2a14) ([merge request](gitlab-org/omnibus-gitlab!5800))
+- [Skip terraform_state in preinst backup](gitlab-org/omnibus-gitlab@8dc6af4771f9089fa69e11c8199150754ff0b2d8) ([merge request](gitlab-org/omnibus-gitlab!5336))
+
+### Security (1 change)
+
+- [* bump prometheus version to 2.25.2](gitlab-org/omnibus-gitlab@303c2b4d97066357bbffc607d23f0fa94771bb21)
+
+### Other (1 change)
+
+- [Update Mattermost to 6.2.1](gitlab-org/omnibus-gitlab@05a5869b18ab109fffb7d0723ab04cb6da68ecf9) by @hmhealey ([merge request](gitlab-org/omnibus-gitlab!5828))
+
 ## 14.6.3 (2022-01-18)
 
 ### Fixed (1 change)
