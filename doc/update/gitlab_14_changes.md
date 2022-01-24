@@ -9,6 +9,16 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 NOTE:
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/index.html#checking-for-background-migrations-before-upgrading).
 
+## 14.7
+
+### Redis 6.2.6
+
+In 14.8, we are upgrading Redis from 6.0.16 to 6.2.6. This upgrade is expected
+to be fully backwards compatible.
+
+If your instance has Redis HA with Sentinel, follow the upgrade steps documented in
+[Update GitLab installed with the Omnibus GitLab package](https://docs.gitlab.com/ee/update/zero_downtime.html#use-redis-ha-using-sentinel)
+
 ## 14.4
 
 ### Downgrading Grafana from 8.1 to 7.5
