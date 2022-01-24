@@ -90,17 +90,6 @@ execute 'update dynamic configuration settings' do
   notifies :run, 'ruby_block[wait for node bootstrap to complete]', :before
 end
 
-ruby_block 'wait for postgresql to start' do
-  block { pg_helper.is_ready? }
-  only_if { omnibus_helper.should_notify?(patroni_helper.service_name) }
-end
-
-execute 'reload postgresql' do
-  command "#{patroni_helper.ctl_command} -c #{patroni_config_file} reload --force #{node['patroni']['scope']} #{node['patroni']['name']}"
-  only_if { patroni_helper.node_status == 'running' }
-  action :nothing
-end
-
 Dir["#{patroni_data_dir}/*"].each do |src|
   file File.join(node['postgresql']['dir'], 'data', File.basename(src)) do
     owner account_helper.postgresql_user
@@ -111,6 +100,17 @@ Dir["#{patroni_data_dir}/*"].each do |src|
     only_if { patroni_helper.bootstrapped? }
     notifies :run, 'execute[reload postgresql]', :delayed
   end
+end
+
+ruby_block 'wait for postgresql to start' do
+  block { pg_helper.is_ready? }
+  only_if { omnibus_helper.should_notify?(patroni_helper.service_name) }
+end
+
+execute 'reload postgresql' do
+  command "#{patroni_helper.ctl_command} -c #{patroni_config_file} reload --force #{node['patroni']['scope']} #{node['patroni']['name']}"
+  only_if { patroni_helper.node_status == 'running' }
+  action :nothing
 end
 
 database_objects 'patroni' do
