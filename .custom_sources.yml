@@ -145,3 +145,9 @@ psycopg2:
 pcre2:
   remote: "git@dev.gitlab.org:omnibus-mirror/pcre2.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/pcre2.git"
+libtensorflow_lite:
+  remote: "git@dev.gitlab.org:omnibus-mirror/tensorflow.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/tensorflow.git"
+spamcheck:
+  remote: "git@dev.gitlab.org:gitlab/spamcheck.git"
+  alternative: "https://gitlab.com/gitlab-com/gl-security/engineering-and-research/automation-team/spam/spamcheck.git"

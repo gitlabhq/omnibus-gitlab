@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Let runit capture all script error messages
+exec 2>&1
+
+exec chpst -e <%= @options[:env_directory] %> -P \
+  -u <%= @options[:user] %>:<%= @options[:groupname] %> \
+  -U <%= @options[:user] %>:<%= @options[:groupname] %> \
+  /opt/gitlab/embedded/bin/spamcheck -config <%= @options[:config_file] %>
