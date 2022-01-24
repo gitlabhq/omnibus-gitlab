@@ -136,6 +136,7 @@ RSpec.describe 'qa', type: :rake do
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID').and_return("543210")
       allow(ENV).to receive(:[]).with('TOP_UPSTREAM_MERGE_REQUEST_IID').and_return("12121")
       allow(ENV).to receive(:[]).with('QA_BRANCH').and_return(nil)
+      allow(ENV).to receive(:[]).with('QA_IMAGE').and_return(nil)
       allow(ENV).to receive(:[]).with('QA_TESTS').and_return('qa/specs/features/browser_ui/1_manage/login/log_in_spec.rb')
       allow(ENV).to receive(:[]).with('ALLURE_JOB_NAME').and_return('package-and-qa')
       allow(ENV).to receive(:[]).with('GITLAB_QA_OPTIONS').and_return("--set-feature-flags test_feature_flag=enable")
