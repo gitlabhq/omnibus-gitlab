@@ -70,3 +70,10 @@
     :why: https://github.com/spf13/cobra/blob/v1.1.3/LICENSE.txt
     :versions: []
     :when: 2021-07-06 04:39:20.525953779 Z
+- - :license
+  - github.com/beevik/ntp
+  - BSD-2-Clause
+  - :who: Balasankar C
+    :why: https://github.com/beevik/ntp/blob/master/LICENSE
+    :versions: []
+    :when: 2022-01-25 04:29:22.369196427 Z
