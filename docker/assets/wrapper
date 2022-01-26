@@ -185,8 +185,10 @@ if [ -n "${GITLAB_POST_RECONFIGURE_SCRIPT+x}" ]; then
   eval "${GITLAB_POST_RECONFIGURE_SCRIPT}"
 fi
 
-# Tail all logs
-gitlab-ctl tail &
+if [ "${GITLAB_SKIP_TAIL_LOGS}" != 'true' ]; then
+  # Tail all logs
+  gitlab-ctl tail &
+fi
 
 # Wait for SIGTERM
 wait
