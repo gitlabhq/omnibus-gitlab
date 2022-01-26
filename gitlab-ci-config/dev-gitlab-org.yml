@@ -574,6 +574,10 @@ SLES-12.5-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
   <<: *dev-ee-branch-only
+SLES-15.2-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+  <<: *dev-ee-branch-only
 
 Docker-branch:
   extends: .docker_job
@@ -782,6 +786,10 @@ SLES-12.5:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
   <<: *dev-ee-tag-only-except-auto-deploy
+SLES-15.2:
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  <<: *dev-ee-tag-only-except-auto-deploy
 
 Docker:
   extends: .docker_job
@@ -909,6 +917,14 @@ SLES-12.5-staging:
       optional: true
   <<: *staging_upload
   <<: *dev-ee-tag-only-except-auto-deploy
+SLES-15.2-staging:
+  needs:
+    - job: SLES-15.2
+      optional: true
+    - job: SLES-15.2-branch
+      optional: true
+  <<: *staging_upload
+  <<: *dev-ee-tag-only-except-auto-deploy
 
 ### Package releases
 Ubuntu-18.04-release:
@@ -979,6 +995,11 @@ SLES-12.2-release:
 SLES-12.5-release:
   needs:
     - SLES-12.5
+  <<: *production_release
+  <<: *dev-ee-tag-only-except-auto-deploy-manual
+SLES-15.2-release:
+  needs:
+    - SLES-15.2
   <<: *production_release
   <<: *dev-ee-tag-only-except-auto-deploy-manual
 
