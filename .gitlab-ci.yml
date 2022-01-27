@@ -82,6 +82,7 @@ variables:
   DOCS_GITLAB_REPO_SUFFIX: "omnibus"
   CACHE_KEY_SUFFIX: '-v1'
   CACHE_EDITION: "CE"
+  QA_BRANCH: 'master'
 
 ### For services that need a docker daemon
 .docker_job: &docker_job
@@ -181,6 +182,8 @@ generate-facts:
   artifacts:
     paths:
       - build_facts
+    reports:
+      dotenv: build_facts/env_vars
   rules:
     # Run on dev.gitlab.org and multi-project pipelines on omnibus-gitlab-mirror
     - if: '$CI_PROJECT_PATH == "gitlab/omnibus-gitlab"'

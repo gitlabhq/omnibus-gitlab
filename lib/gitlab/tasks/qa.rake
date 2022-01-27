@@ -5,7 +5,6 @@ require_relative '../build/check'
 require_relative '../build/info'
 require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
-require_relative '../build/qa_trigger'
 require_relative '../build/rat'
 require_relative '../build/get'
 require_relative "../util.rb"
@@ -69,14 +68,6 @@ namespace :qa do
       Gitlab::Util.section('qa:push:triggered') do
         Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.docker_tag)
       end
-    end
-  end
-
-  desc "Run QA tests"
-  task :test do
-    Gitlab::Util.section('qa:test') do
-      image_address = Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info.docker_tag)
-      Build::QATrigger.invoke!(image: image_address, post_comment: true).wait!
     end
   end
 
