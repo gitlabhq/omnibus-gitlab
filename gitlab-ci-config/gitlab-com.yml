@@ -520,12 +520,29 @@ Trigger:qa-docker:
 
 qa-test:
   stage: trigger-qa
-  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
-  script:
-    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
-    - bundle exec rake qa:test
+  inherit:
+    variables: false
+  variables:
+    RELEASE: $QA_RELEASE
+    QA_IMAGE: $QA_IMAGE
+    QA_TESTS: $QA_TESTS
+    ALLURE_JOB_NAME: $ALLURE_JOB_NAME
+    GITLAB_QA_OPTIONS: $GITLAB_QA_OPTIONS
+    KNAPSACK_GENERATE_REPORT: $KNAPSACK_GENERATE_REPORT
+    TOP_UPSTREAM_SOURCE_PROJECT: $TOP_UPSTREAM_SOURCE_PROJECT
+    TOP_UPSTREAM_SOURCE_REF: $TOP_UPSTREAM_SOURCE_REF
+    TOP_UPSTREAM_SOURCE_JOB: $TOP_UPSTREAM_SOURCE_JOB
+    TOP_UPSTREAM_SOURCE_SHA: $TOP_UPSTREAM_SOURCE_SHA
+    TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID: $TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID
+    TOP_UPSTREAM_MERGE_REQUEST_IID: $TOP_UPSTREAM_MERGE_REQUEST_IID
+  trigger:
+    project: "gitlab-org/gitlab-qa-mirror"
+    branch: $QA_BRANCH
+    strategy: depend
   <<: *com-trigger-only
   needs:
+    - job: generate-facts
+      artifacts: true
     - job: Trigger:package
       artifacts: false
     - job: Trigger:gitlab-docker
