@@ -135,4 +135,59 @@ RSpec.describe 'gitlab::default' do
       expect(chef_run).not_to include_recipe('crond::disable')
     end
   end
+
+  context 'with sidekiq exporter settings' do
+    context 'when Sidekiq exporter and Sidekiq health checks port are the same' do
+      before do
+        stub_gitlab_rb(
+          sidekiq:
+            {
+              metrics_enabled: true,
+              listen_address: 'localhost',
+              listen_port: 3807,
+              health_checks_enabled: true,
+              health_checks_listen_address: 'localhost',
+              health_checks_listen_port: 3807
+            }
+        )
+      end
+
+      it 'logs a warning' do
+        allow(LoggingHelper).to receive(:deprecation)
+        expect(LoggingHelper).to receive(:deprecation).with("Sidekiq exporter and health checks are set to the same address and port. This is deprecated and will result in an error in version 15.0. See https://docs.gitlab.com/ee/administration/sidekiq.html")
+
+        chef_run
+      end
+    end
+
+    context 'when Sidekiq exporter and Sidekiq health checks port are different' do
+      before do
+        stub_gitlab_rb(
+          sidekiq:
+            {
+              metrics_enabled: true,
+              listen_address: 'localhost',
+              listen_port: 3807,
+              health_checks_enabled: true,
+              health_checks_listen_address: 'localhost',
+              health_checks_listen_port: 3907
+            }
+        )
+      end
+
+      it 'does not log a warning' do
+        expect(LoggingHelper).not_to receive(:deprecation).with("Sidekiq exporter and health checks are set to the same address and port. This is deprecated and will result in an error in version 15.0. See https://docs.gitlab.com/ee/administration/sidekiq.html")
+
+        chef_run
+      end
+    end
+  end
+
+  context 'with sidekiq exporter settings not set (default settings)' do
+    it 'does not log a warning' do
+      expect(LoggingHelper).not_to receive(:deprecation).with("Sidekiq exporter and health checks are set to the same address and port. This is deprecated and will result in an error in version 15.0. See https://docs.gitlab.com/ee/administration/sidekiq.html")
+
+      chef_run
+    end
+  end
 end
