@@ -83,6 +83,15 @@ if OhaiHelper.arm?
   end
 end
 
+# FIPs requires system OpenSSL packages to run
+if Build::Check.use_system_ssl?
+  if rhel?
+    runtime_dependency 'openssl-perl'
+  else
+    runtime_dependency 'openssl'
+  end
+end
+
 dependency 'cacerts'
 dependency 'jemalloc'
 dependency 'redis'
