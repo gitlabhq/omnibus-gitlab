@@ -273,7 +273,7 @@ This manual job triggers a pipeline in the
 [RAT](https://gitlab.com/gitlab-org/distribution/reference-architecture-tester)
 project passing the URL to the package built by `Trigger:package` job, which
 will spin up a PostgreSQL HA instance with that package using
-[GET](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit), and run
+[GET](https://gitlab.com/gitlab-org/gitlab-environment-toolkit), and run
 QA against that instance.
 
 This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered EE pipelines.
@@ -421,7 +421,7 @@ This job triggers a pipeline in the
 [RAT](https://gitlab.com/gitlab-org/distribution/reference-architecture-tester)
 project passing the URL to the nightly Ubuntu 20.04 package built in this pipeline,
 which will spin up a PostgreSQL HA instance with that package using
-[GET](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit), and run
+[GET](https://gitlab.com/gitlab-org/gitlab-environment-toolkit), and run
 QA against that instance.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on nightly pipelines.
@@ -432,7 +432,7 @@ This job triggers a pipeline in the
 [RAT](https://gitlab.com/gitlab-org/distribution/reference-architecture-tester)
 project passing the URL to the Ubuntu 20.04 package built in this pipeline,
 which will spin up a PostgreSQL HA instance with that package using
-[GET](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit), and run
+[GET](https://gitlab.com/gitlab-org/gitlab-environment-toolkit), and run
 QA against that instance.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on EE tag pipelines.
