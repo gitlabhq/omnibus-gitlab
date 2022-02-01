@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'prometheus'
-version = Gitlab::Version.new('prometheus', '2.25.2')
+version = Gitlab::Version.new('prometheus', '2.30.4')
 default_version version.print
 
 license 'APACHE-2.0'
@@ -34,7 +34,6 @@ source git: version.remote
 relative_path 'src/github.com/prometheus/prometheus'
 
 build do
-  patch source: 'CVE-2021-29622.patch'
   prometheus_source_dir = "#{Omnibus::Config.source_dir}/prometheus"
   cwd = "#{prometheus_source_dir}/#{relative_path}"
   env = {
