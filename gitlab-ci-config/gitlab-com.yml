@@ -580,7 +580,7 @@ GET:Geo:
 create_omnibus_manifest:
   extends: .trigger-package-cache
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
-  stage: prepare-assets
+  stage: prepare
   variables:
     TERM: xterm-256color
   script:
