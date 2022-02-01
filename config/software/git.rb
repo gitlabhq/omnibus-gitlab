@@ -62,5 +62,8 @@ build do
     end
   end
 
-  command "make git GIT_PREFIX=#{install_dir}/embedded", env: env
+  # For now we install both a Git distribution as well as bundled Git. This is
+  # only done temporarily to migrate to bundled Git via a feature flagged
+  # rollout. Eventually, we will only install bundled Git.
+  command "make git install-bundled-git PREFIX=#{install_dir}/embedded GIT_PREFIX=#{install_dir}/embedded", env: env
 end
