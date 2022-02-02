@@ -59,10 +59,11 @@ if id -u git; then
 	chown_if_exists -R git:git /var/log/gitlab/gitaly/*.log
 fi
 
-# Fix nginx buffering directory permission
+# Fix nginx buffering & www directory permission
 if id -u gitlab-www; then
 	chown_if_exists -R gitlab-www:gitlab-www /var/opt/gitlab/nginx/*_temp
 	chown_if_exists -R gitlab-www:gitlab-www /var/opt/gitlab/nginx/*_cache
+	chown_if_exists -R root:root /var/opt/gitlab/nginx/www
 fi
 
 # Fix database storage and logs
