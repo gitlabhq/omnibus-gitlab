@@ -36,8 +36,8 @@ module Services
     service 'postgres_exporter',  groups: [DEFAULT_GROUP, 'monitoring', 'postgres', 'postgres_role', 'patroni_role']
     service 'grafana',            groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
     service 'gitlab_pages',       groups: ['pages_role']
+    service 'gitlab_kas',         groups: [DEFAULT_GROUP, 'rails']
     service 'mailroom'
-    service 'gitlab_kas'
     service 'mattermost'
     service 'registry'
     service 'storage_check'

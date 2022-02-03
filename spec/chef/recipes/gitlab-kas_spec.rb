@@ -8,14 +8,19 @@ RSpec.describe 'gitlab-kas' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
+  context 'when application_role is configured' do
+    before do
+      stub_gitlab_rb(roles: %w(application_role))
+    end
+
+    it 'should be enabled' do
+      expect(chef_run).to include_recipe('gitlab-kas::enable')
+    end
+  end
+
   context 'with defaults' do
     before do
-      stub_gitlab_rb(
-        external_url: 'https://gitlab.example.com',
-        gitlab_kas: {
-          enable: true
-        }
-      )
+      stub_gitlab_rb(external_url: 'https://gitlab.example.com')
     end
 
     it 'creates a default VERSION file and restarts service' do
@@ -86,7 +91,6 @@ RSpec.describe 'gitlab-kas' do
         gitlab_kas: {
           api_secret_key: api_secret_key,
           private_api_secret_key: private_api_secret_key,
-          enable: true,
           listen_address: 'localhost:5006',
           listen_websocket: false,
           metrics_usage_reporting_period: '120',
@@ -137,10 +141,7 @@ RSpec.describe 'gitlab-kas' do
     context 'with defaults' do
       before do
         stub_gitlab_rb(
-          external_url: 'https://gitlab.example.com',
-          gitlab_kas: {
-            enable: true
-          }
+          external_url: 'https://gitlab.example.com'
         )
       end
 
@@ -157,10 +158,7 @@ RSpec.describe 'gitlab-kas' do
     context 'when not https' do
       before do
         stub_gitlab_rb(
-          external_url: 'http://gitlab.example.com',
-          gitlab_kas: {
-            enable: true
-          }
+          external_url: 'http://gitlab.example.com'
         )
       end
 
@@ -201,9 +199,6 @@ RSpec.describe 'gitlab-kas' do
             gitlab_kas_external_url: 'wss://kas.example.com',
             gitlab_kas_internal_url: 'grpc://kas.internal',
             gitlab_kas_external_k8s_proxy_url: 'https://kas.example.com/k8s-proxy'
-          },
-          gitlab_kas: {
-            enable: true
           }
         )
       end
@@ -227,9 +222,6 @@ RSpec.describe 'gitlab-kas' do
       before do
         stub_gitlab_rb(
           external_url: 'https://gitlab.example.com',
-          gitlab_kas: {
-            enable: true
-          },
           user: {
             username: 'foo',
             group: 'bar'
@@ -319,9 +311,6 @@ RSpec.describe 'gitlab-kas' do
       before do
         stub_gitlab_rb(
           external_url: 'https://gitlab.example.com',
-          gitlab_kas: {
-            enable: true
-          },
           gitlab_rails: {
             redis_host: 'the-host',
             redis_port: 12345,
@@ -349,9 +338,6 @@ RSpec.describe 'gitlab-kas' do
       before do
         stub_gitlab_rb(
           external_url: 'https://gitlab.example.com',
-          gitlab_kas: {
-            enable: true
-          },
           gitlab_rails: {
             redis_host: 'the-host',
             redis_port: 12345,
@@ -382,9 +368,6 @@ RSpec.describe 'gitlab-kas' do
       before do
         stub_gitlab_rb(
           external_url: 'https://gitlab.example.com',
-          gitlab_kas: {
-            enable: true
-          },
           gitlab_rails: {
             redis_sentinels: [
               { host: 'a', port: 1 },
