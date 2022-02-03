@@ -46,22 +46,15 @@ build do
 
   build_options = [
     "# Added by Omnibus git software definition git.rb",
-    "GIT_BUILD_OPTIONS += CURLDIR=#{install_dir}/embedded",
-    "GIT_BUILD_OPTIONS += ICONVDIR=#{install_dir}/embedded",
-    "GIT_BUILD_OPTIONS += ZLIB_PATH=#{install_dir}/embedded",
-    "GIT_BUILD_OPTIONS += NEEDS_LIBICONV=YesPlease",
-    "GIT_BUILD_OPTIONS += USE_LIBPCRE2=YesPlease",
-    "GIT_BUILD_OPTIONS += NO_PERL=YesPlease",
-    "GIT_BUILD_OPTIONS += NO_EXPAT=YesPlease",
-    "GIT_BUILD_OPTIONS += NO_TCLTK=YesPlease",
-    "GIT_BUILD_OPTIONS += NO_GETTEXT=YesPlease",
-    "GIT_BUILD_OPTIONS += NO_PYTHON=YesPlease",
-    "GIT_BUILD_OPTIONS += NO_INSTALL_HARDLINKS=YesPlease",
-    "GIT_BUILD_OPTIONS += NO_R_TO_GCC_LINKER=YesPlease",
-    "GIT_BUILD_OPTIONS += CFLAGS=-fno-omit-frame-pointer"
+    "GIT_APPEND_BUILD_OPTIONS += CURLDIR=#{install_dir}/embedded",
+    "GIT_APPEND_BUILD_OPTIONS += ICONVDIR=#{install_dir}/embedded",
+    "GIT_APPEND_BUILD_OPTIONS += ZLIB_PATH=#{install_dir}/embedded",
+    "GIT_APPEND_BUILD_OPTIONS += NEEDS_LIBICONV=YesPlease",
+    "GIT_APPEND_BUILD_OPTIONS += NO_R_TO_GCC_LINKER=YesPlease",
+    "GIT_APPEND_BUILD_OPTIONS += CFLAGS=-fno-omit-frame-pointer"
   ]
 
-  build_options << "GIT_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded" unless Build::Check.use_system_ssl?
+  build_options << "GIT_APPEND_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded" unless Build::Check.use_system_ssl?
 
   block do
     File.open(File.join(project_dir, 'config.mak'), 'a') do |file|
@@ -69,5 +62,8 @@ build do
     end
   end
 
-  command "make git GIT_PREFIX=#{install_dir}/embedded", env: env
+  # For now we install both a Git distribution as well as bundled Git. This is
+  # only done temporarily to migrate to bundled Git via a feature flagged
+  # rollout. Eventually, we will only install bundled Git.
+  command "make git install-bundled-git PREFIX=#{install_dir}/embedded GIT_PREFIX=#{install_dir}/embedded", env: env
 end
