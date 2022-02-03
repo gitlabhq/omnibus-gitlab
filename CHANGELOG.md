@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.6.4 (2022-02-03)
+
+### Security (2 changes)
+
+- [Update builder image to use golang 1.16.12](gitlab-org/security/omnibus-gitlab@97046c4ab099e663032b5d62a4c232122f2ed237) ([merge request](gitlab-org/security/omnibus-gitlab!180))
+- [Update Mattermost to 6.1.1 (GitLab 14.6)](gitlab-org/security/omnibus-gitlab@2832fe9da7658bdfae28818517afd9ca4c514a19) ([merge request](gitlab-org/security/omnibus-gitlab!178))
+
 ## 14.6.3 (2022-01-18)
 
 ### Fixed (1 change)
