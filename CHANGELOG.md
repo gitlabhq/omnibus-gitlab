@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.7.1 (2022-02-03)
+
+No changes.
+
 ## 14.7.0 (2022-01-21)
 
 ### Added (6 changes)
@@ -37,6 +41,13 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Update Mattermost to 6.2.1](gitlab-org/omnibus-gitlab@05a5869b18ab109fffb7d0723ab04cb6da68ecf9) by @hmhealey ([merge request](gitlab-org/omnibus-gitlab!5828))
+
+## 14.6.4 (2022-02-03)
+
+### Security (2 changes)
+
+- [Update builder image to use golang 1.16.12](gitlab-org/security/omnibus-gitlab@97046c4ab099e663032b5d62a4c232122f2ed237) ([merge request](gitlab-org/security/omnibus-gitlab!180))
+- [Update Mattermost to 6.1.1 (GitLab 14.6)](gitlab-org/security/omnibus-gitlab@2832fe9da7658bdfae28818517afd9ca4c514a19) ([merge request](gitlab-org/security/omnibus-gitlab!178))
 
 ## 14.6.3 (2022-01-18)
 
@@ -79,6 +90,13 @@ No changes.
 - [Use `geo:site:role` rake task to retrieve node role for the promote command](gitlab-org/omnibus-gitlab@0cae546fd9c5d04b59dac44b468217b244541782) ([merge request](gitlab-org/omnibus-gitlab!5724))
 - [Use public sources for omnibus-gitlab builds by default](gitlab-org/omnibus-gitlab@981e78d0162c8f202a38093ed5ead9ab059f07c7) ([merge request](gitlab-org/omnibus-gitlab!5659))
 - [Build rugged gem with system SSL on FIPS builds](gitlab-org/omnibus-gitlab@da0a44b28982ea1399e060396e892932b7e430d1) ([merge request](gitlab-org/omnibus-gitlab!5592))
+
+## 14.5.4 (2022-02-03)
+
+### Security (2 changes)
+
+- [Update builder image to use golang 1.16.12](gitlab-org/security/omnibus-gitlab@143f67f02155945c7b4b3ab1d32e7ea9d4534e77) ([merge request](gitlab-org/security/omnibus-gitlab!181))
+- [Update Mattermost to 5.38.3](gitlab-org/security/omnibus-gitlab@0a5be862558b2737903df134525a662388cd9073) ([merge request](gitlab-org/security/omnibus-gitlab!179))
 
 ## 14.5.3 (2022-01-11)
 
