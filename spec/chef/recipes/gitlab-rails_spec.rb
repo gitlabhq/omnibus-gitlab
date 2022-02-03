@@ -937,6 +937,16 @@ RSpec.describe 'gitlab::gitlab-rails' do
     describe 'gitlab_kas_secret' do
       let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab_kas_secret and create a symlink to Rails root') }
 
+      shared_examples 'creates the KAS template' do
+        it 'creates the template' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab_kas_secret and create a symlink to Rails root').with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644'
+          )
+        end
+      end
+
       context 'with KAS disabled' do
         cached(:chef_run) do
           RSpec::Mocks.with_temporary_scope do
@@ -948,33 +958,15 @@ RSpec.describe 'gitlab::gitlab-rails' do
           ChefSpec::SoloRunner.new.converge('gitlab::default')
         end
 
-        it 'creates the template' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab_kas_secret and create a symlink to Rails root').with(
-            owner: 'root',
-            group: 'root',
-            mode: '0644'
-          )
-        end
+        it_behaves_like 'creates the KAS template'
       end
 
       context 'with KAS enabled' do
         cached(:chef_run) do
-          RSpec::Mocks.with_temporary_scope do
-            stub_gitlab_rb(
-              gitlab_kas: { enable: true }
-            )
-          end
-
           ChefSpec::SoloRunner.new.converge('gitlab::default')
         end
 
-        it 'creates the template' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab_kas_secret and create a symlink to Rails root').with(
-            owner: 'root',
-            group: 'root',
-            mode: '0644'
-          )
-        end
+        it_behaves_like 'creates the KAS template'
 
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('runit_service[gitlab-kas]').to(:restart).delayed
@@ -989,7 +981,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         cached(:chef_run) do
           RSpec::Mocks.with_temporary_scope do
             stub_gitlab_rb(
-              gitlab_kas: { api_secret_key: api_secret_key, enable: true }
+              gitlab_kas: { api_secret_key: api_secret_key }
             )
           end
 
@@ -1002,13 +994,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
           )
         end
 
-        it 'uses the correct owner and permissions' do
-          expect(chef_run).to create_templatesymlink('Create a gitlab_kas_secret and create a symlink to Rails root').with(
-            owner: 'root',
-            group: 'root',
-            mode: '0644'
-          )
-        end
+        it_behaves_like 'creates the KAS template'
 
         it 'template triggers notifications' do
           expect(templatesymlink).to notify('runit_service[gitlab-kas]').to(:restart).delayed
