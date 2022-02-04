@@ -236,6 +236,9 @@ update-trigger-package-cache:
       - pipelines@gitlab-org/build/omnibus-gitlab-mirror
     variables:
       - $CACHE_UPDATE
+  needs:
+    - job: fetch-assets
+      optional: true
 
 ###########################
 #     Branch pipeline     #

@@ -1,9 +1,9 @@
 stages:
-  - update-cache
   - check
   - prepare
   - tests
   - post-test
+  - update-cache
   - package
   - image
   - scan-dependencies
