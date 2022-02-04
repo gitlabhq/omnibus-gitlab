@@ -44,6 +44,7 @@ RSpec.describe 'praefect' do
         'listen_addr' => 'localhost:2305',
         'logging' => { 'format' => 'json' },
         'prometheus_listen_addr' => 'localhost:9652',
+        'prometheus_exclude_database_from_default_metrics' => true,
         'sentry' => {},
         'database' => {
           'session_pooled' => {},
@@ -86,6 +87,7 @@ RSpec.describe 'praefect' do
       let(:certificate_path) { '/path/to/cert.pem' }
       let(:key_path) { '/path/to/key.pem' }
       let(:prom_addr) { 'localhost:1234' }
+      let(:separate_database_metrics) { false }
       let(:log_level) { 'debug' }
       let(:log_format) { 'text' }
       let(:primaries) { %w[praefect1 praefect2] }
@@ -118,7 +120,6 @@ RSpec.describe 'praefect' do
       let(:database_direct_port) { 1234 }
       let(:reconciliation_scheduling_interval) { '1m' }
       let(:reconciliation_histogram_buckets) { '[1.0, 2.0]' }
-      let(:separate_database_metrics) { true }
 
       before do
         stub_gitlab_rb(praefect: {
@@ -135,6 +136,7 @@ RSpec.describe 'praefect' do
                          key_path: key_path,
                          prometheus_listen_addr: prom_addr,
                          prometheus_grpc_latency_buckets: prometheus_grpc_latency_buckets,
+                         separate_database_metrics: separate_database_metrics,
                          logging_level: log_level,
                          logging_format: log_format,
                          failover_enabled: failover_enabled,
@@ -152,7 +154,6 @@ RSpec.describe 'praefect' do
                          database_direct_port: database_direct_port,
                          reconciliation_scheduling_interval: reconciliation_scheduling_interval,
                          reconciliation_histogram_buckets: reconciliation_histogram_buckets,
-                         separate_database_metrics: separate_database_metrics
                        })
       end
 
@@ -199,13 +200,13 @@ RSpec.describe 'praefect' do
                 'sentry_environment' => 'production'
               },
               'prometheus_listen_addr' => 'localhost:1234',
+              'prometheus_exclude_database_from_default_metrics' => false,
               'socket_path' => '/var/opt/gitlab/praefect/praefect.socket',
               'tls' => {
                 'certificate_path' => '/path/to/cert.pem',
                 'key_path' => '/path/to/key.pem'
               },
               'tls_listen_addr' => 'localhost:5555',
-              'prometheus_exclude_database_from_default_metrics' => true,
               'virtual_storage' => [
                 {
                   'name' => 'default',
