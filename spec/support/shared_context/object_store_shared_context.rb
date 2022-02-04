@@ -10,6 +10,7 @@ RSpec.shared_context 'object storage config' do
       external_diffs: { bucket: 'external_diffs' },
       packages: { bucket: 'packages' },
       terraform_state: { enabled: false, bucket: 'terraform' },
+      ci_secure_files: { bucket: 'ci_secure_files' },
       uploads: { bucket: 'uploads' },
       pages: { bucket: 'pages' }
     }

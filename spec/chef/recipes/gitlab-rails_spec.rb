@@ -96,6 +96,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/terraform_state')
     end
 
+    it 'does not create the ci_secure_files storage directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/ci_secure_files')
+    end
+
     it 'does not create the GitLab pages directory' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/pages')
     end
@@ -164,6 +168,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
     it 'creates the terraform_state directory' do
       expect(chef_run).to create_storage_directory('/tmp/shared/terraform_state').with(owner: 'git', group: 'git', mode: '0700')
+    end
+
+    it 'creates the ci_secure_files directory' do
+      expect(chef_run).to create_storage_directory('/tmp/shared/ci_secure_files').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the encrypted_settings directory' do

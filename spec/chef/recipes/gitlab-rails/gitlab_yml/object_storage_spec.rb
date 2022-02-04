@@ -53,6 +53,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
       include_examples 'renders object storage settings in gitlab.yml', 'packages'
       include_examples 'renders object storage settings in gitlab.yml', 'dependency_proxy'
       include_examples 'renders object storage settings in gitlab.yml', 'terraform_state', { remote_directory: 'terraform' }, false
+      include_examples 'renders object storage settings in gitlab.yml', 'ci_secure_files', { remote_directory: 'ci-secure-files' }, false
       include_examples 'renders object storage settings in gitlab.yml', 'pages', {}, false
     end
   end

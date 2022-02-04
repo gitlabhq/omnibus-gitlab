@@ -134,7 +134,7 @@ main() {
 
   if [ -d ${DEST_DIR}/service/puma ] && [ ! -e "${skip_backup_file}" ] ; then
     notify "Automatically backing up only the GitLab SQL database (excluding everything else!)"
-    if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads,builds,artifacts,lfs,terraform_state,registry,pages,packages ; then
+    if ! ${DEST_DIR}/bin/gitlab-rake gitlab:backup:create SKIP=repositories,uploads,builds,artifacts,lfs,terraform_state,ci_secure_files,registry,pages,packages ; then
       backup_failed "Database"
     fi
 
