@@ -43,6 +43,7 @@ module GitlabRails
       parse_packages_dir
       parse_dependency_proxy_dir
       parse_terraform_state_dir
+      parse_ci_secure_files_dir
       parse_encrypted_settings_path
       parse_pages_dir
       parse_repository_storage
@@ -286,6 +287,11 @@ module GitlabRails
     def parse_terraform_state_dir
       # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['terraform_state_storage_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'terraform_state')
+    end
+
+    def parse_ci_secure_files_dir
+      # This requires the parse_shared_dir to be executed before
+      Gitlab['gitlab_rails']['ci_secure_files_storage_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'ci_secure_files')
     end
 
     def parse_encrypted_settings_path

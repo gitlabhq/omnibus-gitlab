@@ -321,6 +321,16 @@ production: &base
       remote_directory: <%= quote(@terraform_state_object_store_remote_directory) %>
       connection: <%= @terraform_state_object_store_connection.to_json %>
 
+  ## CI Secure Files
+  ci_secure_files:
+    enabled: <%= @ci_secure_files_enabled %>
+    # The location where ci secure files are stored (default: shared/ci_secure_files).
+    storage_path: <%= @ci_secure_files_storage_path %>
+    object_store:
+      enabled: <%= @ci_secure_files_object_store_enabled %>
+      remote_directory: <%= quote(@ci_secure_files_object_store_remote_directory) %>
+      connection: <%= @ci_secure_files_object_store_connection.to_json %>
+
   ## Container Registry
   registry:
     enabled: <%= @registry_enabled %>

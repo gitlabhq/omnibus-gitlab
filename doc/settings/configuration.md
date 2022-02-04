@@ -516,6 +516,7 @@ Enabling this setting will prevent the creation of the following directories:
 | `/var/opt/gitlab/gitlab-rails/shared/packages`         | `0700`        | `git:git`        | Holds package repository |
 | `/var/opt/gitlab/gitlab-rails/shared/dependency_proxy` | `0700`        | `git:git`        | Holds dependency proxy |
 | `/var/opt/gitlab/gitlab-rails/shared/terraform_state`  | `0700`        | `git:git`        | Holds terraform state |
+| `/var/opt/gitlab/gitlab-rails/shared/ci_secure_files`  | `0700`        | `git:git`        | Holds uploaded secure files |
 | `/var/opt/gitlab/gitlab-rails/shared/pages`            | `0750`        | `git:gitlab-www` | Holds user pages |
 | `/var/opt/gitlab/gitlab-rails/uploads`                 | `0700`        | `git:git`        | Holds user attachments |
 | `/var/opt/gitlab/gitlab-ci/builds`                     | `0700`        | `git:git`        | Holds CI build logs |

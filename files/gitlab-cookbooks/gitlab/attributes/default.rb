@@ -198,6 +198,8 @@ default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy']
 default['gitlab']['gitlab-rails']['object_store']['objects']['dependency_proxy']['bucket'] = nil
 default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state'] = {}
 default['gitlab']['gitlab-rails']['object_store']['objects']['terraform_state']['bucket'] = nil
+default['gitlab']['gitlab-rails']['object_store']['objects']['ci_secure_files'] = {}
+default['gitlab']['gitlab-rails']['object_store']['objects']['ci_secure_files']['bucket'] = nil
 default['gitlab']['gitlab-rails']['object_store']['objects']['pages'] = {}
 default['gitlab']['gitlab-rails']['object_store']['objects']['pages']['bucket'] = nil
 
@@ -267,6 +269,11 @@ default['gitlab']['gitlab-rails']['terraform_state_storage_path'] = nil
 default['gitlab']['gitlab-rails']['terraform_state_object_store_enabled'] = false
 default['gitlab']['gitlab-rails']['terraform_state_object_store_remote_directory'] = 'terraform'
 default['gitlab']['gitlab-rails']['terraform_state_object_store_connection'] = {}
+default['gitlab']['gitlab-rails']['ci_secure_files_enabled'] = nil
+default['gitlab']['gitlab-rails']['ci_secure_files_storage_path'] = nil
+default['gitlab']['gitlab-rails']['ci_secure_files_object_store_enabled'] = false
+default['gitlab']['gitlab-rails']['ci_secure_files_object_store_remote_directory'] = 'ci-secure-files'
+default['gitlab']['gitlab-rails']['ci_secure_files_object_store_connection'] = {}
 default['gitlab']['gitlab-rails']['ldap_enabled'] = false
 default['gitlab']['gitlab-rails']['prevent_ldap_sign_in'] = false
 default['gitlab']['gitlab-rails']['ldap_servers'] = []

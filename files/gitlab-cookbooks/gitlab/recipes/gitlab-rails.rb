@@ -70,6 +70,7 @@ include_recipe 'gitlab::rails_pages_shared_path'
   node['gitlab']['gitlab-rails']['packages_storage_path'],
   node['gitlab']['gitlab-rails']['dependency_proxy_storage_path'],
   node['gitlab']['gitlab-rails']['terraform_state_storage_path'],
+  node['gitlab']['gitlab-rails']['ci_secure_files_storage_path'],
   node['gitlab']['gitlab-rails']['encrypted_settings_path'],
   gitlab_rails_public_uploads_dir,
   gitlab_ci_builds_dir,
