@@ -445,7 +445,7 @@ forward certain headers (e.g. `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`,
 you forget this step. For more information, see:
 
 - <https://stackoverflow.com/questions/16042647/whats-the-de-facto-standard-for-a-reverse-proxy-to-tell-the-backend-ssl-is-used>
-- <https://websiteforstudents.com/how-to-setup-apache-reverse-proxy/'>
+- <https://www.digitalocean.com/community/tutorials/how-to-use-apache-http-server-as-reverse-proxy-using-mod_proxy-extension'>
 Some cloud provider services, such as AWS Certificate Manager (ACM), do not allow the download of certificates. This prevents them from being used to terminate on the GitLab instance. If SSL is desired between such a cloud service and the GitLab instance, another certificate must be used on the GitLab instance.
 
 ## Setting HTTP Strict Transport Security
