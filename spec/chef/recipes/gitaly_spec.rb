@@ -507,10 +507,14 @@ RSpec.describe 'gitaly' do
             concurrency: [
               {
                 'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
-                'max_per_repo' => 20
+                'max_per_repo' => 20,
+                'max_queue_size' => 100,
+                'max_queue_wait' => '1m'
               }, {
                 'rpc' => "/gitaly.SSHService/SSHUploadPack",
-                'max_per_repo' => 5
+                'max_per_repo' => 5,
+                'max_queue_size' => 10,
+                'max_queue_wait' => '10s'
               }
             ]
           }
@@ -520,9 +524,9 @@ RSpec.describe 'gitaly' do
 
     it 'populates gitaly config.toml with custom concurrency configurations' do
       expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[\[concurrency\]\]\s+rpc = "/gitaly.SmartHTTPService/PostReceivePack"\s+max_per_repo = 20})
+        .with_content(%r{\[\[concurrency\]\]\s+rpc = "/gitaly.SmartHTTPService/PostReceivePack"\s+max_per_repo = 20\s+max_queue_size = 100\s+max_queue_wait = 1m})
       expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[\[concurrency\]\]\s+rpc = "/gitaly.SSHService/SSHUploadPack"\s+max_per_repo = 5})
+        .with_content(%r{\[\[concurrency\]\]\s+rpc = "/gitaly.SSHService/SSHUploadPack"\s+max_per_repo = 5\s+max_queue_size = 10\s+max_queue_wait = 10s})
     end
   end
 
