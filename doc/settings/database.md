@@ -759,8 +759,16 @@ they are the correct versions. Check the versions of the packaged `pg_dump` and
 /opt/gitlab/embedded/bin/psql --version
 ```
 
-If these versions are different from your non-packaged external PostgreSQL, you
-will need to install tools that match your database version and then follow the
+If these versions are different from your non-packaged external PostgreSQL, you may encounter the following error output when attempting to run a [Rake backup create task](https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system):
+
+```plaintext
+Dumping PostgreSQL database gitlabhq_production ... pg_dump: error: server version: 13.3; pg_dump version: 12.6
+pg_dump: error: aborting because of server version mismatch
+```
+
+In this example, the error occurs on GitLab 14.1 when using PostgreSQL version 13.3, instead of the [default shipped PostgreSQL version](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html) of 12.6.
+
+In this case, you will need to install tools that match your database version and then follow the
 steps below. There are multiple ways to install PostgreSQL client tools. See
 <https://www.postgresql.org/download/> for options.
 
