@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.7.2 (2022-02-08)
+
+### Fixed (1 change)
+
+- [Ensure EE services are added when gitlab-ee::config recipe is included](gitlab-org/omnibus-gitlab@bb7a99e05274969671dd5e0e0d82abeb9b5644a3) ([merge request](gitlab-org/omnibus-gitlab!5886))
+
 ## 14.7.1 (2022-02-03)
 
 No changes.
