@@ -39,12 +39,12 @@ to work best with the available resources. Check out the [documentation](setting
 
 ## Configuring
 
-- [Configuring the external URL](settings/configuration.md#configuring-the-external-url-for-gitlab)
-- [Configuring a relative URL for GitLab (experimental)](settings/configuration.md#configuring-a-relative-url-for-gitlab)
-- [Storing Git data in an alternative directory](settings/configuration.md#storing-git-data-in-an-alternative-directory)
-- [Changing the name of the Git user group](settings/configuration.md#changing-the-name-of-the-git-user--group)
+- [Configuring the external URL](settings/configuration.md#configure-the-external-url-for-gitlab)
+- [Configuring a relative URL for GitLab (experimental)](settings/configuration.md#configure-a-relative-url-for-gitlab)
+- [Storing Git data in an alternative directory](settings/configuration.md#store-git-data-in-an-alternative-directory)
+- [Changing the name of the Git user group](settings/configuration.md#change-the-name-of-the-git-user-or-group)
 - [Specify numeric user and group identifiers](settings/configuration.md#specify-numeric-user-and-group-identifiers)
-- [Only start Omnibus GitLab services after a given file system is mounted](settings/configuration.md#only-start-omnibus-gitlab-services-after-a-given-file-system-is-mounted)
+- [Only start Omnibus GitLab services after a given file system is mounted](settings/configuration.md#start-omnibus-gitlab-services-only-after-a-given-file-system-is-mounted)
 - [Disable user and group account management](settings/configuration.md#disable-user-and-group-account-management)
 - [Disable storage directory management](settings/configuration.md#disable-storage-directories-management)
 - [Failed authentication ban](settings/configuration.md#configure-a-failed-authentication-ban)

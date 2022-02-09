@@ -106,7 +106,7 @@ You can check the latest available configuration by using `sudo gitlab-ctl diff-
 
 ## GitLab is unreachable in my browser
 
-Try [specifying](settings/configuration.md#configuring-the-external-url-for-gitlab) an `external_url` in
+Try [specifying](settings/configuration.md#configure-the-external-url-for-gitlab) an `external_url` in
 `/etc/gitlab/gitlab.rb`. Also check your firewall settings; port 80 (HTTP) or
 443 (HTTPS) might be closed on your GitLab server.
 

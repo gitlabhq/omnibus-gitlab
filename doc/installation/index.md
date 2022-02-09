@@ -27,7 +27,7 @@ For a complete list of settings, see the [README](../index.md#configuring) file.
 
 - [Installing GitLab](https://about.gitlab.com/install/).
   - [Manually downloading and installing a GitLab package](../manual_install.md).
-- [Setting up a domain name/URL](../settings/configuration.md#configuring-the-external-url-for-gitlab)
+- [Setting up a domain name/URL](../settings/configuration.md#configure-the-external-url-for-gitlab)
   for the GitLab Instance so that it can be accessed easily.
 - [Enabling HTTPS](../settings/nginx.md#enable-https).
 - [Enabling notification emails](../settings/smtp.md#smtp-settings).

@@ -55,10 +55,10 @@ been removed:
 
 1. Legacy `git_data_dir` configuration, which was used to set location of where
    data was to be stored. It has been now replaced with `git_data_dirs`
-   configuration. [Check out the official documentation for details](../settings/configuration.md#storing-git-data-in-an-alternative-directory)
+   configuration. [Check out the official documentation for details](../settings/configuration.md#store-git-data-in-an-alternative-directory)
 
 1. Old format of `git_data_dirs` configuration has been replaced with a new
-   format, allowing much more fine grain control. [Check out the official documentation for details](../settings/configuration.md#storing-git-data-in-an-alternative-directory)
+   format, allowing much more fine grain control. [Check out the official documentation for details](../settings/configuration.md#store-git-data-in-an-alternative-directory)
 
 ## Changes introduced in minor versions
 
