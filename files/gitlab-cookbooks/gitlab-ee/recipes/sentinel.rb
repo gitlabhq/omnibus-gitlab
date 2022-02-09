@@ -16,7 +16,12 @@
 #
 
 sentinel_helper = SentinelHelper.new(node)
-sentinel_cfg = node['gitlab']['sentinel'].to_hash.merge({ 'myid' => sentinel_helper.myid })
+sentinel_cfg = node['gitlab']['sentinel'].to_hash.merge(
+  {
+    'myid' => sentinel_helper.myid,
+    'use_hostnames' => sentinel_helper.use_hostnames
+  }
+)
 
 sentinel_service 'redis' do
   config_path File.join(node['gitlab']['sentinel']['dir'], 'sentinel.conf')

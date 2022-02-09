@@ -5,6 +5,7 @@ RSpec.describe 'gitlab::redis' do
   let(:redis_master_ip) { '1.1.1.1' }
   let(:redis_announce_ip) { '10.10.10.10' }
   let(:redis_master_password) { 'blahblahblah' }
+  let(:sentinel_conf) { '/var/opt/gitlab/sentinel/sentinel.conf' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -56,10 +57,29 @@ RSpec.describe 'gitlab::redis' do
             expect(content).to match(%r{sentinel failover-timeout gitlab-redis 60000})
             expect(content).to match(%r{sentinel auth-pass gitlab-redis blahblahblah})
             expect(content).not_to match(%r{^tls})
+            expect(content).to match(%r{SENTINEL resolve-hostnames no})
+            expect(content).to match(%r{SENTINEL announce-hostnames no})
           }
       end
 
       it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
+
+      context 'user overrides sentinel_use_hostnames' do
+        before do
+          stub_gitlab_rb(
+            sentinel: {
+              use_hostnames: true
+            }
+          )
+        end
+
+        it 'uses hostnames' do
+          expect(chef_run).to render_file(sentinel_conf).with_content { |content|
+            expect(content).to match(%r{SENTINEL resolve-hostnames yes})
+            expect(content).to match(%r{SENTINEL announce-hostnames yes})
+          }
+        end
+      end
     end
 
     context 'user specified values' do
@@ -72,7 +92,7 @@ RSpec.describe 'gitlab::redis' do
             username: 'foo',
             group: 'bar',
             master_ip: redis_master_ip,
-            announce_ip: redis_announce_ip,
+            announce_ip: 'fake.hostname.local',
             master_password: redis_master_password
           }
         )
@@ -82,6 +102,30 @@ RSpec.describe 'gitlab::redis' do
       end
 
       it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
+
+      it 'uses hostnames' do
+        expect(chef_run).to render_file(sentinel_conf).with_content { |content|
+          expect(content).to match(%r{SENTINEL resolve-hostnames yes})
+          expect(content).to match(%r{SENTINEL announce-hostnames yes})
+        }
+      end
+
+      context 'user overrides sentinel_use_hostnames' do
+        before do
+          stub_gitlab_rb(
+            sentinel: {
+              use_hostnames: false
+            }
+          )
+        end
+
+        it 'does not use hostnames' do
+          expect(chef_run).to render_file(sentinel_conf).with_content { |content|
+            expect(content).to match(%r{SENTINEL resolve-hostnames no})
+            expect(content).to match(%r{SENTINEL announce-hostnames no})
+          }
+        end
+      end
     end
 
     context 'with tls settings specified' do

@@ -341,3 +341,21 @@ tls-session-cache-size <%= @sentinel['tls_session_cache_size'] %>
 tls-session-cache-timeout <%= @sentinel['tls_session_cache_timeout'] %>
 <% end %>
 <% end %>
+
+# HOSTNAMES SUPPORT
+#
+# Normally Sentinel uses only IP addresses and requires SENTINEL MONITOR
+# to specify an IP address. Also, it requires the Redis replica-announce-ip
+# keyword to specify only IP addresses.
+#
+# You may enable hostnames support by enabling resolve-hostnames. Note
+# that you must make sure your DNS is configured properly and that DNS
+# resolution does not introduce very long delays.
+#
+SENTINEL resolve-hostnames <%= @sentinel['use_hostnames'] %>
+
+# When resolve-hostnames is enabled, Sentinel still uses IP addresses
+# when exposing instances to users, configuration files, etc. If you want
+# to retain the hostnames when announced, enable announce-hostnames below.
+#
+SENTINEL announce-hostnames <%= @sentinel['use_hostnames'] %>
