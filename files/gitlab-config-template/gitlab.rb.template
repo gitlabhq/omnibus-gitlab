@@ -2597,6 +2597,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sentinel['tls_session_cache_size'] = nil
 # sentinel['tls_session_cache_timeout'] = nil
 
+### Sentinel hostname support
+###! When enabled, Redis will leverage hostname support
+###! Generally this does not need to be changed as we determine this based on
+###! the provided input from `redis['announce_ip']`
+###! * This is configured to `true` when a fully qualified hostname is provided
+###! * This is configured to `false` when an IP address is provided
+# sentinel['use_hostnames'] = <calculated>
+
 ################################################################################
 ## Additional Database Settings (EE only)
 ##! Docs: https://docs.gitlab.com/ee/administration/database_load_balancing.html

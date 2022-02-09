@@ -43,6 +43,7 @@ default['gitlab']['sentinel']['tls_prefer_server_ciphers'] = nil
 default['gitlab']['sentinel']['tls_session_caching'] = nil
 default['gitlab']['sentinel']['tls_session_cache_size'] = nil
 default['gitlab']['sentinel']['tls_session_cache_timeout'] = nil
+default['gitlab']['sentinel']['use_hostnames'] = nil
 
 ###
 # Geo: Common (primary or secondary) node configuration
