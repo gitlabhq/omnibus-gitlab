@@ -23,6 +23,12 @@ if [ -e "${DEST_DIR}/version-manifest.json" ] ; then
   OLD_MINOR_VERSION=$(echo $OLD_VERSION_STRING | awk -F "." '{print $1"."$2}')
 fi
 
+# This removal is only to get GitLab.com unbroken, and is not needed for
+# self-managed installations. This will be removed before 14.8.0 release.
+echo "Removing problematic symlink directories"
+rm -rf /opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/ci/parsers/security/validators/schemas/14* || true
+rm -rf /opt/gitlab/embedded/service/gitlab-rails/ee/lib/ee/gitlab/ci/parsers/security/validators/schemas/14* || true
+
 greater_version()
 {
   test "$(printf '%s\n' "$@" | sort -V | tail -n 1)" = "$1";
