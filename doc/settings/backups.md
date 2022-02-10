@@ -19,7 +19,7 @@ It is not recommended to store your configuration backup in the
 same place as your application data backup, see below.
 
 All configuration for Omnibus GitLab is stored in `/etc/gitlab`. To backup your
-configuration, just run `sudo gitlab-ctl backup-etc` (introduced in GitLab 12.3). It will create a tar
+configuration, just run `sudo gitlab-ctl backup-etc` (introduced in GitLab 12.3). It creates a tar
 archive in `/etc/gitlab/config_backup/`. Directory and backup files will be
 readable only to root.
 
