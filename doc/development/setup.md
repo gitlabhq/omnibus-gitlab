@@ -162,6 +162,16 @@ You can also test your changes against the current tests (or to test your newly 
    sudo bundle exec rspec spec/<path_to_spec_file>
    ```
 
+## Use chef-shell with `omnibus-gitlab` cookbooks
+
+You can use [chef-shell](https://docs.chef.io/workstation/chef_shell/) to debug changes to the cookbooks in your instance.
+
+As root in your development server run:
+
+```shell
+/opt/gitlab/embedded/bin/chef-shell -z -c /opt/gitlab/embedded/cookbooks/solo.rb -s -j /opt/gitlab/embedded/cookbooks/dna.json
+```
+
 ## Use Customers Portal Staging in GitLab
 
 To connect your GitLab instance to Customers Portal Staging, you can set the following
