@@ -50,6 +50,17 @@ redis_address = if redis_network == 'tcp'
   end
 end
 
+ruby_block 'websocket TLS termination' do
+  block do
+    message = [
+      "Enabling gitlab-kas API TLS termination and websocket tunnelling at the same time is not supported.",
+      "See <https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/issues/217>"
+    ]
+    LoggingHelper.warning(message.join("\n\n"))
+  end
+  only_if { node['gitlab-kas']['listen_websocket'] && node['gitlab-kas']['certificate_file'] && node['gitlab-kas']['key_file'] }
+end
+
 version_file 'Create version file for Gitlab KAS' do
   version_file_path File.join(working_dir, 'VERSION')
   version_check_cmd '/opt/gitlab/embedded/bin/gitlab-kas --version'

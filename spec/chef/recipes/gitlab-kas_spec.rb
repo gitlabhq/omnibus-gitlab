@@ -403,6 +403,96 @@ RSpec.describe 'gitlab-kas' do
     end
   end
 
+  describe 'TLS listen config' do
+    context 'when all certificates and keys are defined' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas: {
+            enable: true,
+            listen_websocket: false,
+            certificate_file: '/path/to/cert.pem',
+            key_file: '/path/to/key.pem',
+            internal_api_certificate_file: '/path/to/internal-api-cert.pem',
+            internal_api_key_file: '/path/to/internal-api-key.pem',
+            kubernetes_api_certificate_file: '/path/to/kubernetes-api-cert.pem',
+            kubernetes_api_key_file: '/path/to/kubernetes-api-key.pem',
+            private_api_certificate_file: '/path/to/private-api-cert.pem',
+            private_api_key_file: '/path/to/private-api-key.pem'
+          }
+        )
+      end
+
+      it 'correctly renders the KAS config file' do
+        expect(gitlab_kas_config_yml).to(
+          include(
+            agent: hash_including(
+              listen: hash_including(
+                certificate_file: '/path/to/cert.pem',
+                key_file: '/path/to/key.pem'
+              ),
+              kubernetes_api: hash_including(
+                listen: hash_including(
+                  certificate_file: '/path/to/kubernetes-api-cert.pem',
+                  key_file: '/path/to/kubernetes-api-key.pem'
+                )
+              )
+            ),
+            api: {
+              listen: hash_including(
+                certificate_file: '/path/to/internal-api-cert.pem',
+                key_file: '/path/to/internal-api-key.pem'
+              ),
+            },
+            private_api: {
+              listen: hash_including(
+                certificate_file: '/path/to/private-api-cert.pem',
+                key_file: '/path/to/private-api-key.pem'
+              )
+            }
+          )
+        )
+      end
+    end
+
+    context 'when certificate/key bundles are not correctly defined' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas: {
+            enable: true,
+            certificate_file: '/path/to/file.pem',
+            internal_api_certificate_file: '/path/to/file.pem',
+            kubernetes_api_key_file: '/path/to/file.pem',
+            private_api_key_file: '/path/to/file.pem'
+          }
+        )
+      end
+
+      it 'renders no certificate or key configuration' do
+        expect(gitlab_kas_config_yml).not_to(include('/path/to/file.pem'))
+      end
+    end
+
+    context 'when the certificate/key bundle is defined and websocket tunneling is enabled' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas: {
+            enable: true,
+            listen_websocket: true,
+            certificate_file: '/path/to/cert.pem',
+            key_file: '/path/to/key.pem',
+          }
+        )
+      end
+
+      it 'logs a warning' do
+        expect(chef_run).to run_ruby_block('websocket TLS termination')
+      end
+    end
+  end
+
   def chef_run_load_yaml_template(chef_run, path)
     template = chef_run.template(path)
     file_content = ChefSpec::Renderer.new(chef_run, template).content

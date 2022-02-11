@@ -3,6 +3,10 @@ agent:
     address: <%= @listen_address %>
     network: <%= @listen_network %>
     websocket: <%= @listen_websocket %>
+    <%- if @certificate_file and @key_file %>
+    certificate_file: <%= @certificate_file %>
+    key_file: <%= @key_file %>
+    <%- end %>
   configuration:
     poll_period: <%= @agent_configuration_poll_period %>s
   gitops:
@@ -12,6 +16,10 @@ agent:
   kubernetes_api:
     listen:
       address: <%= @kubernetes_api_listen_address %>
+      <%- if @kubernetes_api_certificate_file and @kubernetes_api_key_file %>
+      certificate_file: <%= @kubernetes_api_certificate_file %>
+      key_file: <%= @kubernetes_api_key_file %>
+      <%- end %>
     url_path_prefix: /
   info_cache_ttl: <%= @agent_info_cache_ttl %>s
   info_cache_error_ttl: <%= @agent_info_cache_error_ttl %>s
@@ -50,8 +58,16 @@ api:
     network: <%= @internal_api_listen_network %>
     address: <%= @internal_api_listen_address %>
     authentication_secret_file: <%= @authentication_secret_file %>
+    <%- if @internal_api_certificate_file and @internal_api_key_file %>
+    certificate_file: <%= @internal_api_certificate_file %>
+    key_file: <%= @internal_api_key_file %>
+    <%- end %>
 private_api:
   listen:
     network: <%= @private_api_listen_network %>
     address: <%= @private_api_listen_address %>
     authentication_secret_file: <%= @private_api_authentication_secret_file %>
+    <%- if @private_api_certificate_file and @private_api_key_file %>
+    certificate_file: <%= @private_api_certificate_file %>
+    key_file: <%= @private_api_key_file %>
+    <%- end %>
