@@ -1803,11 +1803,19 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_kas['listen_address'] = 'localhost:8150'
 # gitlab_kas['listen_network'] = 'tcp'
 # gitlab_kas['listen_websocket'] = true
+# gitlab_kas['certificate_file'] = "/path/to/certificate.pem"
+# gitlab_kas['key_file'] = "/path/to/key.pem"
 # gitlab_kas['internal_api_listen_network'] = 'tcp'
 # gitlab_kas['internal_api_listen_address'] = 'localhost:8153'
+# gitlab_kas['internal_api_certificate_file'] = "/path/to/certificate.pem"
+# gitlab_kas['internal_api_key_file'] = "/path/to/key.pem"
 # gitlab_kas['kubernetes_api_listen_address'] = 'localhost:8154'
+# gitlab_kas['kubernetes_api_certificate_file'] = "/path/to/certificate.pem"
+# gitlab_kas['kubernetes_api_key_file'] = "/path/to/key.pem"
 # gitlab_kas['private_api_listen_network'] = 'tcp'
 # gitlab_kas['private_api_listen_address'] = 'localhost:8155'
+# gitlab_kas['private_api_certificate_file'] = "/path/to/certificate.pem"
+# gitlab_kas['private_api_key_file'] = "/path/to/key.pem"
 
 ##! Metrics configuration for GitLab KAS
 # gitlab_kas['metrics_usage_reporting_period'] = 60
