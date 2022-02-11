@@ -219,5 +219,141 @@ RSpec.describe 'consul' do
         }
       end
     end
+
+    describe 'secure configuration' do
+      context 'client mode' do
+        it 'use tls for outgoing' do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+              use_tls: true,
+              tls_ca_file: '/fake/ca.crt.pem',
+            }
+          )
+
+          expect(chef_run).to render_file(consul_conf).with_content { |content|
+            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
+            expect(content).to match(%r{"verify_outgoing":true})
+            expect(content).to match(%r{"verify_incoming":false})
+            expect(content).not_to match(%r{"https":8501})
+            expect(content).not_to match(%r{"cert_file":})
+            expect(content).not_to match(%r{"key_file":})
+          }
+        end
+
+        it 'use tls client authentication' do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+              use_tls: true,
+              tls_ca_file: '/fake/ca.crt.pem',
+              tls_certificate_file: '/fake/client.crt.pem',
+              tls_key_file: '/fake/client.key.pem'
+            }
+          )
+
+          expect(chef_run).to render_file(consul_conf).with_content { |content|
+            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
+            expect(content).to match(%r{"cert_file":"/fake/client.crt.pem"})
+            expect(content).to match(%r{"key_file":"/fake/client.key.pem"})
+            expect(content).to match(%r{"verify_outgoing":true})
+            expect(content).to match(%r{"verify_incoming":false})
+            expect(content).not_to match(%r{"https":8501})
+          }
+        end
+
+        it 'use tls for incoming and outgoing' do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+              use_tls: true,
+              tls_ca_file: '/fake/ca.crt.pem',
+              tls_certificate_file: '/fake/server.crt.pem',
+              tls_key_file: '/fake/server.key.pem',
+              https_port: 8501,
+            }
+          )
+
+          expect(chef_run).to render_file(consul_conf).with_content { |content|
+            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
+            expect(content).to match(%r{"cert_file":"/fake/server.crt.pem"})
+            expect(content).to match(%r{"key_file":"/fake/server.key.pem"})
+            expect(content).to match(%r{"verify_outgoing":true})
+            expect(content).to match(%r{"verify_incoming":false})
+            expect(content).to match(%r{"https":8501})
+          }
+        end
+
+        it 'use tls for incoming and outgoing and verify incoming' do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+              use_tls: true,
+              tls_ca_file: '/fake/ca.crt.pem',
+              tls_certificate_file: '/fake/server.crt.pem',
+              tls_key_file: '/fake/server.key.pem',
+              tls_verify_client: true,
+              https_port: 8501
+            }
+          )
+
+          expect(chef_run).to render_file(consul_conf).with_content { |content|
+            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
+            expect(content).to match(%r{"cert_file":"/fake/server.crt.pem"})
+            expect(content).to match(%r{"key_file":"/fake/server.key.pem"})
+            expect(content).to match(%r{"verify_outgoing":true})
+            expect(content).to match(%r{"verify_incoming":true})
+            expect(content).to match(%r{"https":8501})
+          }
+        end
+      end
+
+      context 'server mode' do
+        it 'use tls for incoming and outgoing and verify incoming by default' do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+              configuration: { server: true },
+              use_tls: true,
+              tls_ca_file: '/fake/ca.crt.pem',
+              tls_certificate_file: '/fake/server.crt.pem',
+              tls_key_file: '/fake/server.key.pem'
+            }
+          )
+
+          expect(chef_run).to render_file(consul_conf).with_content { |content|
+            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
+            expect(content).to match(%r{"cert_file":"/fake/server.crt.pem"})
+            expect(content).to match(%r{"key_file":"/fake/server.key.pem"})
+            expect(content).to match(%r{"verify_outgoing":true})
+            expect(content).to match(%r{"verify_incoming":true})
+            expect(content).to match(%r{"https":8501})
+          }
+        end
+
+        it 'use tls for incoming and outgoing without verifying incoming' do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+              configuration: { server: true },
+              use_tls: true,
+              tls_ca_file: '/fake/ca.crt.pem',
+              tls_certificate_file: '/fake/server.crt.pem',
+              tls_key_file: '/fake/server.key.pem',
+              tls_verify_client: false
+            }
+          )
+
+          expect(chef_run).to render_file(consul_conf).with_content { |content|
+            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
+            expect(content).to match(%r{"cert_file":"/fake/server.crt.pem"})
+            expect(content).to match(%r{"key_file":"/fake/server.key.pem"})
+            expect(content).to match(%r{"verify_outgoing":true})
+            expect(content).to match(%r{"verify_incoming":false})
+            expect(content).to match(%r{"https":8501})
+          }
+        end
+      end
+    end
   end
 end
