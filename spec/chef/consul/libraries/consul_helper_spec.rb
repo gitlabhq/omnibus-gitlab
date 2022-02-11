@@ -66,4 +66,97 @@ RSpec.describe ConsulHelper do
       end
     end
   end
+
+  describe '#api_port' do
+    before do
+      allow(Gitlab).to receive(:[]).and_call_original
+    end
+
+    it 'falls back to default ports' do
+      stub_gitlab_rb(
+        consul: {
+          enable: true
+        }
+      )
+
+      expect(subject.api_port('http')).to eq(8500)
+      expect(subject.api_port('https')).to eq(8501)
+      expect(subject.configuration).not_to match(%r{"http":8500})
+      expect(subject.configuration).not_to match(%r{"https":8501})
+    end
+
+    it 'uses the configured ports' do
+      stub_gitlab_rb(
+        consul: {
+          enable: true,
+          http_port: 18500,
+          https_port: 18501
+        }
+      )
+
+      expect(subject.api_port('http')).to eq(18500)
+      expect(subject.api_port('https')).to eq(18501)
+      expect(subject.configuration).to match(%r{"http":18500})
+      expect(subject.configuration).to match(%r{"https":18501})
+    end
+
+    it 'uses the ports from configuration override' do
+      stub_gitlab_rb(
+        consul: {
+          enable: true,
+          http_port: 18500,
+          https_port: 18501,
+          configuration: {
+            ports: {
+              http: 28500,
+              https: 28501,
+            }
+          }
+        }
+      )
+
+      expect(subject.api_port('http')).to eq(28500)
+      expect(subject.api_port('https')).to eq(28501)
+      expect(subject.configuration).to match(%r{"http":28500})
+      expect(subject.configuration).to match(%r{"https":28501})
+    end
+  end
+
+  describe '#api_url' do
+    before do
+      allow(Gitlab).to receive(:[]).and_call_original
+    end
+
+    it 'uses http by default' do
+      stub_gitlab_rb(
+        consul: {
+          enable: true
+        }
+      )
+
+      expect(subject.api_url).to eq('http://localhost:8500')
+    end
+
+    it 'uses https when tls is enabled' do
+      stub_gitlab_rb(
+        consul: {
+          enable: true,
+          use_tls: true
+        }
+      )
+
+      expect(subject.api_url).to eq('https://localhost:8501')
+    end
+
+    it 'uses https when http port is disabled' do
+      stub_gitlab_rb(
+        consul: {
+          enable: true,
+          http_port: -1
+        }
+      )
+
+      expect(subject.api_url).to eq('https://localhost:8501')
+    end
+  end
 end

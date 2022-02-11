@@ -26,3 +26,12 @@ default['consul']['monitoring_service_discovery'] = false
 default['consul']['encryption_key'] = nil
 default['consul']['encryption_verify_incoming'] = nil
 default['consul']['encryption_verify_outgoing'] = nil
+
+default['consul']['http_port'] = nil
+default['consul']['https_port'] = nil
+
+default['consul']['use_tls'] = false
+default['consul']['tls_ca_file'] = nil
+default['consul']['tls_certificate_file'] = nil
+default['consul']['tls_key_file'] = nil
+default['consul']['tls_verify_client'] = nil

@@ -101,6 +101,23 @@ RSpec.describe 'gitlab::gitlab-rails' do
           end
         end
       end
+
+      context 'when tls is enabled' do
+        before do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+              use_tls: true
+            }
+          )
+        end
+
+        it 'renders gitlab.yml with specified Consul settings' do
+          expect(gitlab_yml[:production][:consul]).to eq(
+            api_url: 'https://localhost:8501'
+          )
+        end
+      end
     end
   end
 end

@@ -18,8 +18,12 @@ class ConsulHelper
       'enable_script_checks' => true,
       'node_name' => node['consul']['node_name'] || node['fqdn'],
       'rejoin_after_leave' => true,
-      'server' => false
-    }.merge(encryption_configuration)
+      'server' => false,
+    }
+    .merge(encryption_configuration)
+    .merge(ports_configuration)
+    .merge(tls_configuration)
+
     @default_server_configuration = {
       'bootstrap_expect' => 3
     }
@@ -41,12 +45,37 @@ class ConsulHelper
     node['consul']['watcher_config'][watcher]['handler']
   end
 
+  def server?
+    !!node['consul']['configuration']['server']
+  end
+
+  def use_tls?
+    node['consul']['use_tls']
+  end
+
+  def tls_configuration
+    return {} unless use_tls?
+
+    verify_incoming = node['consul']['tls_verify_client']
+
+    tls_cfg = {
+      'ca_file' => node['consul']['tls_ca_file'],
+      'cert_file' => node['consul']['tls_certificate_file'],
+      'key_file' => node['consul']['tls_key_file'],
+      'verify_outgoing' => true,
+      'verify_incoming' => verify_incoming.nil? ? server? : verify_incoming
+    }
+    tls_cfg['ports'] = { 'https': api_port('https') } if server?
+
+    tls_cfg.compact
+  end
+
   def configuration
     config = Chef::Mixin::DeepMerge.merge(
       default_configuration,
       node['consul']['configuration']
     ).select { |k, v| !v.nil? }
-    if config['server']
+    if server?
       return Chef::Mixin::DeepMerge.merge(
         default_server_configuration, config
       ).to_json
@@ -70,19 +99,33 @@ class ConsulHelper
     }.compact
   end
 
-  def api_url
-    %w[https http].each do |scheme|
-      port = api_port(scheme)
+  def ports_configuration
+    http_port = node['consul']['http_port']
+    https_port = node['consul']['https_port']
 
-      # Positive value means enabled API port(https://www.consul.io/docs/agent/options#ports)
-      return "#{scheme}://#{api_address(scheme)}:#{port}" if port.positive?
-    end
+    return {} if http_port.nil? && https_port.nil?
+
+    ports = {}
+    ports['http'] = http_port unless http_port.nil?
+    ports['https'] = https_port unless https_port.nil?
+
+    { 'ports' => ports }
+  end
+
+  def api_url
+    scheme = use_tls? || api_port('http').negative? ? 'https' : 'http'
+
+    "#{scheme}://#{api_address(scheme)}:#{api_port(scheme)}"
   end
 
   def api_port(scheme)
-    default_port = { 'http' => 8500, 'https' => -1 }
+    default_port = { 'http' => 8500, 'https' => 8501 }
 
-    node.dig('consul', 'configuration', 'ports', scheme) || default_port[scheme]
+    config = Chef::Mixin::DeepMerge.merge(
+      ports_configuration,
+      node['consul']['configuration'])
+
+    config.dig('ports', scheme) || default_port[scheme]
   end
 
   def api_address(scheme)

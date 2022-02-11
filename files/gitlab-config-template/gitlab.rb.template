@@ -2923,6 +2923,24 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 #
 # consul['custom_config_dir'] = '/path/to/service/configs/directory'
+#
+
+#### HTTP API ports
+# consul['http_port'] = nil
+# consul['https_port'] = nil
+
+#### Gossip encryption
+# consul['encryption_key'] = nil
+# consul['encryption_verify_incoming'] = nil
+# consul['encryption_verify_outgoing'] = nil
+
+#### TLS settings
+# consul['use_tls'] = false
+# consul['tls_ca_file'] = nil
+# consul['tls_certificate_file'] = nil
+# consul['tls_key_file'] = nil
+# consul['tls_verify_client'] = nil
+
 ################################################################################
 # Service desk email settings
 ################################################################################
