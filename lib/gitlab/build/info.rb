@@ -51,6 +51,7 @@ module Build
           latest_version = latest_git_tag && !latest_git_tag.empty? ? latest_git_tag[0, latest_git_tag.match("[+]").begin(0)] : '0.0.1'
           commit_sha = Build::Info.commit_sha
           ver_tag = "#{latest_version}+" + (Build::Check.is_nightly? ? "rnightly" : "rfbranch")
+          ver_tag += ".fips" if Build::Check.use_system_ssl?
           [ver_tag, Gitlab::Util.get_env('CI_PIPELINE_ID'), commit_sha].compact.join('.')
         end
       end

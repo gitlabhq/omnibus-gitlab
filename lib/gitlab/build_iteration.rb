@@ -11,7 +11,12 @@ module Gitlab
     def build_iteration
       if Build::Check.on_tag?
         match = /[^+]*\+([^\-]*)/.match(@git_describe)
-        return match[1] if match && !match[1].empty?
+        if match && !match[1].empty?
+          result = match[1]
+          result = result.gsub('ee.', 'fips.') if Build::Check.use_system_ssl?
+
+          return result
+        end
       end
 
       # For any builds other than a tag release, built_iteration value is not of
