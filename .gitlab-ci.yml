@@ -145,7 +145,7 @@ before_script:
   - bundle install -j $(nproc)
   - echo -e "section_end:`date +%s`:bundle_install\r\e[0K"
   - bundle binstubs --all
-  - if [ -n "$NIGHTLY" ]; then export STAGING_REPO=nightly-builds; fi
+  - if [ -n "$NIGHTLY" ]; then export STAGING_REPO=nightly-builds; export FIPS_STAGING_REPO=nightly-fips-builds; fi
 
 fetch-assets:
   extends: .docker_job

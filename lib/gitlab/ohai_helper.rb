@@ -8,6 +8,8 @@ class OhaiHelper
 
       return "#{os}-#{codename}-#{arch}" if arm64?
 
+      return "#{os}-#{codename}-fips" if Build::Check.use_system_ssl?
+
       "#{os}-#{codename}"
     end
 

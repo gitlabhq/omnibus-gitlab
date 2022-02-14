@@ -367,6 +367,12 @@
   cache: *branch-cache
   retry: 1
 
+.fips_branch_template: &fips_branch_build
+  <<: *branch_build
+  variables:
+    USE_SYSTEM_SSL: "true"
+  <<: *dev-ee-nightly-only
+
 .rpi_branch_template: &rpi_branch_build
   <<: *branch_build
   stage: slow_jobs
@@ -430,12 +436,24 @@
   variables:
     INCLUDE_PACKAGECLOUD: "true"
   script:
+    - if [[ "${USE_SYSTEM_SSL}" == "true" ]]; then export STAGING_REPO=${FIPS_STAGING_REPO}; fi
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
   cache: *tag-cache
   retry: 2
   tags:
   - promotion
   <<: *dev-public-release-only
+
+.fips_staging_upload_template: &fips_staging_upload
+  <<: *staging_upload
+  variables:
+    USE_SYSTEM_SSL: "true"
+    INCLUDE_PACKAGECLOUD: "true"
+  # TODO: Change to *dev-ee-tag-only-except-auto-deploy when add tag build
+  # jobs and make them part of the release pipeline. However, this will
+  # cause them not to be uploaded to the repo as part of the nightly
+  # pipelines. So we should do this only after the testing phase.
+  <<: *dev-ee-nightly-only
 
 .staging_upload_with_deployment_template: &staging_upload_with_deployment
   extends: .staging_upload_template
@@ -569,6 +587,15 @@ SLES-15.2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
   <<: *dev-ee-branch-only
+CentOS-8-fips-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_8:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_branch_template
+Ubuntu-18.04-fips-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_branch_template
+Ubuntu-20.04-fips-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_branch_template
 
 Docker-branch:
   extends: .docker_job
@@ -894,6 +921,24 @@ SLES-15.2-staging:
       optional: true
   <<: *staging_upload
   <<: *dev-ee-tag-only-except-auto-deploy
+CentOS-8-fips-staging:
+  extends: .fips_staging_upload_template
+  needs:
+    # Add tag build jobs here when we add them
+    - job: CentOS-8-fips-branch
+      optional: true
+Ubuntu-18.04-fips-staging:
+  extends: .fips_staging_upload_template
+  needs:
+    # Add tag build jobs here when we add them
+    - job: Ubuntu-18.04-fips-branch
+      optional: true
+Ubuntu-20.04-fips-staging:
+  extends: .fips_staging_upload_template
+  needs:
+    # Add tag build jobs here when we add them
+    - job: Ubuntu-20.04-fips-branch
+      optional: true
 
 ### Package releases
 Ubuntu-18.04-release:
