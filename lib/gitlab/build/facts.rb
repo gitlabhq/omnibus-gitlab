@@ -37,6 +37,7 @@ module Build
 
       def qa_trigger_vars
         %W[
+          QA_BRANCH=#{Gitlab::Util.get_env('QA_BRANCH') || 'master'}
           QA_RELEASE=#{Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info.docker_tag)}
           QA_IMAGE=#{Gitlab::Util.get_env('QA_IMAGE')}
           QA_TESTS=#{Gitlab::Util.get_env('QA_TESTS')}

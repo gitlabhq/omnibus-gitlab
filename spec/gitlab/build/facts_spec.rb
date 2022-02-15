@@ -80,6 +80,7 @@ RSpec.describe Build::Facts do
 
     it 'returns correct variables' do
       result = %w[
+        QA_BRANCH=master
         QA_RELEASE=registry.gitlab.com/gitlab-org/build/omnibus-gitlab-mirror/gitlab-ee:14.6.2-rfbranch.450066356.c97110ad-0
         QA_IMAGE=gitlab/gitlab-ee-qa:nightly
         QA_TESTS=
