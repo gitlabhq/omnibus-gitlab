@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.7.3 (2022-02-15)
+
+### Fixed (1 change)
+
+- [Update Omnibus to v8.2.1.7](gitlab-org/omnibus-gitlab@0847ad87f499ad8312f2aaa7367b957165c0e341) ([merge request](gitlab-org/omnibus-gitlab!5907))
+
 ## 14.7.2 (2022-02-08)
 
 ### Fixed (1 change)
