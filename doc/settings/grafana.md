@@ -204,3 +204,50 @@ lvl=eror msg=login.OAuthLogin(NewTransportWithCode) logger=context userId=0 orgI
 ```
 
 In this case, you must [install the self-signed GitLab certificate as trusted](ssl.md#install-custom-public-certificates).
+
+### The redirect URI included is not valid
+
+An incorrect callback URL commonly causes this error.
+You may get this error when trying to log in to Grafana if the Callback URL is not correct.
+To fix that:
+
+1. On the top bar, select **Menu > Admin**.
+1. On the left sidebar, select **Applications**.
+1. Select **Edit** of the **GitLab Grafana** application.
+1. Change the value of **Callback URL** to look like `https://gitlab.example.com/-/grafana/login/gitlab` where `https://gitlab.example.com` corresponds to your `external_url`.
+
+### Client authentication failed due to unknown client, no client authentication included, or unsupported authentication method
+
+These errors may happen if the GitLab Grafana OAuth application does not exist or
+the settings in `/etc/gitlab/gitlab-secrets.json` are no longer consistent with each other.
+
+WARNING:
+The following steps may lead to data loss if the `/etc/gitlab/gitlab-secrets.json` file is corrupted. 
+Make sure to create a backup before applying any changes.
+
+To fix it:
+
+1. On the top bar, select **Menu > Admin**.
+1. On the left sidebar, select **Applications**.
+1. Remove the application **GitLab Grafana** if it exists by selecting **Destroy**.
+1. Create a backup of `/etc/gitlab/gitlab-secrets.json` on your GitLab server.
+1. Edit `/etc/gitlab/gitlab-secrets.json` and remove the section starting with `grafana`.
+   You can find the relevant section with:
+
+   ```shell
+   $ grep grafana -A6 /etc/gitlab/gitlab-secrets.json
+
+   "grafana": {
+   "secret_key": "...",
+   "gitlab_secret": "...",
+   "gitlab_application_id": "...",
+   "admin_password": "...",
+   "metrics_basic_auth_password": null
+   },
+   ``` 
+
+1. Reconfigure GitLab to re-create the **GitLab Grafana** application and regenerate the values in `/etc/gitlab/gitlab-secrets.json`:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
