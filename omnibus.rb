@@ -5,6 +5,7 @@ s3_bucket ENV['CACHE_AWS_BUCKET']
 s3_region ENV['CACHE_AWS_S3_REGION']
 s3_endpoint ENV['CACHE_AWS_S3_ENDPOINT']
 s3_accelerate !ENV['CACHE_S3_ACCELERATE'].nil? && !ENV['CACHE_S3_ACCELERATE'].casecmp("false").zero?
+fetch_workers ENV['OMNIBUS_FETCH_WORKERS_COUNT'].to_i if ENV['OMNIBUS_FETCH_WORKERS_COUNT']
 
 build_retries 2
 fetcher_retries 5
