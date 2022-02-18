@@ -34,6 +34,7 @@ skip_transitive_dependency_licensing true
 
 build do
   move 'bin/mattermost', "#{install_dir}/embedded/bin/mattermost"
+  move 'bin/mmctl', "#{install_dir}/embedded/bin/mmctl"
 
   command "mkdir -p #{install_dir}/embedded/service/mattermost"
   copy 'templates', "#{install_dir}/embedded/service/mattermost/templates"
