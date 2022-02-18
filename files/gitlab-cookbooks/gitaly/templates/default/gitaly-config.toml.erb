@@ -79,7 +79,9 @@ catfile_cache_size = <%= @git_catfile_cache_size %>
 <% if @git_bin_path %>
 bin_path = '<%= @git_bin_path %>'
 <% end %>
-
+<% if @use_bundled_git %>
+use_bundled_binaries = <%= @use_bundled_git %>
+<% end %>
 
 [gitaly-ruby]
 dir = "/opt/gitlab/embedded/service/gitaly-ruby"
