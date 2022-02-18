@@ -567,6 +567,33 @@ RSpec.describe 'gitaly' do
 
       it_behaves_like 'empty concurrency configuration'
     end
+
+    context 'when max_queue_size and max_queue_wait are empty' do
+      before do
+        stub_gitlab_rb(
+          {
+            gitaly: {
+              concurrency: [
+                {
+                  'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+                  'max_per_repo' => 20,
+                }, {
+                  'rpc' => "/gitaly.SSHService/SSHUploadPack",
+                  'max_per_repo' => 5,
+                }
+              ]
+            }
+          }
+        )
+      end
+
+      it 'populates gitaly config.toml without max_queue_size and max_queue_wait' do
+        expect(chef_run).to render_file(config_path).with_content { |content|
+          expect(content).not_to include("max_queue_size")
+          expect(content).not_to include("max_queue_wait")
+        }
+      end
+    end
   end
 
   context 'populates default env variables' do
