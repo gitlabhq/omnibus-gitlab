@@ -54,6 +54,6 @@ module Services
     service 'pgbouncer_exporter', groups: %w(pgbouncer_role monitoring)
     service 'patroni',            groups: %w(postgres patroni_role)
     service 'consul',             groups: %w(consul_role ha pgbouncer_role patroni_role)
-    service 'spamcheck'
+    service 'spamcheck',          groups: %w(spamcheck_role)
   end
 end
