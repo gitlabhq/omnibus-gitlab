@@ -200,14 +200,19 @@ NOTE:
 A perl interpreter is required for `c_rehash` dependency to properly symlink the certificates.
 [Perl is currently not bundled in Omnibus GitLab](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/2275).
 
-1. Generate the ***PEM*** or ***DER*** encoded public certificate from your private key certificate.
+1. Generate the **PEM** or **DER** encoded public certificate from your private key certificate.
 1. Copy the public certificate file only into the `/etc/gitlab/trusted-certs` directory.
-1. Run `gitlab-ctl reconfigure`.
+   By default, GitLab expects to find a certificate titled after your GitLab URL with a `.crt`
+   extension. For instance, if your server address is `https://gitlab.example.com`, the
+   certificate should be named `gitlab.example.com.crt`.
+   
+   To specify a different path and file name, you can
+   [change the default SSL certificate location](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
+1. Reconfigure GitLab:
 
-By default, GitLab expects to find a certificate titled after your GitLab URL. For instance, if your server 
-address is `https://gitlab.example.com`, the certificate should be named `gitlab.example.com.crt`. 
-
-To specify a different path and file name, you can [change the default SSL certificate location](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
 
 WARNING:
 If using a custom certificate chain, the root and/or intermediate certificates must be put into separate files in `/etc/gitlab/trusted-certs` [due to `c_rehash` creating a hash for the first certificate only](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/1425).
