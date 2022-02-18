@@ -180,3 +180,17 @@ information, see the
   Configures the server with Sidekiq service.
 
   *By default, enables no other services.*
+
+### Spamcheck Roles
+
+> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5893) in GitLab 14.9.
+
+Spamcheck roles are used to setup and configure Spamcheck services. For additional
+information, see the
+[Spamcheck documentation](https://docs.gitlab.com/ee/user/admin_area/reporting/spamcheck.html)
+
+- **spamcheck_role** (`gitlab-ee`)
+
+  Configures the server with spamcheck and spam-classifier services.
+
+  *By default, enables no other services.*
