@@ -983,8 +983,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## GitLab Puma
-##! Tweak puma settings. You should only use Unicorn or Puma, not both.
-##! Docs: https://docs.gitlab.com/omnibus/settings/puma.html
+##! Tweak puma settings.
+##! Docs: https://docs.gitlab.com/ee/administration/operations/puma.html
 ################################################################################
 
 # puma['enable'] = true
@@ -2009,7 +2009,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! **Only needed if Prometheus and Rails are not on the same server.**
 ### For example, in a multi-node architecture, Prometheus will be installed on the monitoring node, while Rails will be on the Rails node.
 ### https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html#using-an-external-prometheus-server
-### This value should be the address at which Prometheus is available to GitLab Rails(Puma/Unicorn, Sidekiq) node.
+### This value should be the address at which Prometheus is available to a GitLab Rails(Puma, Sidekiq) node.
 ################################################################################
 # gitlab_rails['prometheus_address'] = 'your.prom:9090'
 
