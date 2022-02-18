@@ -53,7 +53,7 @@ some running processes:
    ```ruby
    # Reduce the number of running workers to the minimum in order to reduce memory usage
    puma['worker_processes'] = 2
-   sidekiq['concurrency'] = 9
+   sidekiq['max_concurrency'] = 9
    # Turn off monitoring to reduce idle cpu and disk usage
    prometheus_monitoring['enable'] = false
    ```
