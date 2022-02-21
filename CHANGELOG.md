@@ -3,6 +3,53 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.8.0 (2022-02-21)
+
+### Added (10 changes)
+
+- [Add TLS configuration to Consul](gitlab-org/omnibus-gitlab@dd830bcbfca95ec5e17b828a47feeff68d5006fd) ([merge request](gitlab-org/omnibus-gitlab!5822))
+- [Add TLS termination options to GitLab KAS's APIs](gitlab-org/omnibus-gitlab@be8062afe1c2ce2c63f2da9482e8f53ed4c41085) by @fh1ch ([merge request](gitlab-org/omnibus-gitlab!5852))
+- [Add ability for Sentinel to leverage hostnames](gitlab-org/omnibus-gitlab@4875705279cc76daf430c8a0afcc3c266ca81782) ([merge request](gitlab-org/omnibus-gitlab!5853))
+- [Adding Secure Files settings](gitlab-org/omnibus-gitlab@4624ab3e884eed2a3c274c6033b9ef55f2cca66d) ([merge request](gitlab-org/omnibus-gitlab!5857))
+- [Add gitaly concurrency queue limit configs](gitlab-org/omnibus-gitlab@acb7b76c1a420db1cb8ef40da590eebee764f95e) ([merge request](gitlab-org/omnibus-gitlab!5875))
+- [Add openssl FIPS runtime dependencies](gitlab-org/omnibus-gitlab@bf51384b2c781f7ed45b616c446fce539db49bb4) ([merge request](gitlab-org/omnibus-gitlab!5865))
+- [Add sentry configuration options for GitLab KAS](gitlab-org/omnibus-gitlab@e7891deb3332c66ae40633624bf8ef7a48e2977c) by @fh1ch ([merge request](gitlab-org/omnibus-gitlab!5826))
+- [Add GITLAB_SKIP_TAIL_LOGS to docker wrapper](gitlab-org/omnibus-gitlab@7002b2d742f0975e91cdf9eb7666d596c24cf1f9) by @jpflouret ([merge request](gitlab-org/omnibus-gitlab!5799))
+- [Add spamcheck to the package](gitlab-org/omnibus-gitlab@ea23589a7eb867ba672840ddee15e8a56d6766d5) ([merge request](gitlab-org/omnibus-gitlab!5478))
+- [Provide packages for SLES 15.2](gitlab-org/omnibus-gitlab@05a700957052ef254aac0d71366b6eff20df0c62) ([merge request](gitlab-org/omnibus-gitlab!5811))
+
+### Fixed (6 changes)
+
+- [Update MailRoom to v0.0.19](gitlab-org/omnibus-gitlab@3a0d4355d00f2a07092befc6971ae84ace1c2c71) ([merge request](gitlab-org/omnibus-gitlab!5905))
+- [Update Omnibus to v8.2.1.7](gitlab-org/omnibus-gitlab@e051251228d494e784f712cd2dbf275827502ea6) ([merge request](gitlab-org/omnibus-gitlab!5902))
+- [Fix nginx www directory permission](gitlab-org/omnibus-gitlab@13d546ef9e5229532d332e9b2adb5e606aed3444) by @JulianForster01 ([merge request](gitlab-org/omnibus-gitlab!5619))
+- [Correct GitLab KAS default redis port configuration](gitlab-org/omnibus-gitlab@15d2c741574ae10f00beebd8f068a254a2abaace) by @fh1ch ([merge request](gitlab-org/omnibus-gitlab!5825))
+- [Update PG runtime conf before restarting](gitlab-org/omnibus-gitlab@15d0d1f7aa69789e039bb527335b494605bcde8e) ([merge request](gitlab-org/omnibus-gitlab!5848))
+- [Ensure EE services are added when gitlab-ee::config recipe is included](gitlab-org/omnibus-gitlab@57058af7fc324374845b890b95f383ecc7ae829d) ([merge request](gitlab-org/omnibus-gitlab!5861))
+
+### Changed (16 changes)
+
+- [Add QA_BRANCH trigger var](gitlab-org/omnibus-gitlab@c495e01de5bf8bd9c5ccb3fae514a1cc4a4653e2) ([merge request](gitlab-org/omnibus-gitlab!5910))
+- [Update Mattermost to 6.3.3](gitlab-org/omnibus-gitlab@50bf80c439f2c37c6de0b6436ff4f0301bc785ba) ([merge request](gitlab-org/omnibus-gitlab!5884))
+- [Update Mattermost to 6.3.3](gitlab-org/omnibus-gitlab@59859b16cc9f97959212364a2683bda18baca6c4) by @spirosoik ([merge request](gitlab-org/omnibus-gitlab!5884))
+- [Bump Container Registry to v3.24.1-gitlab](gitlab-org/omnibus-gitlab@6a72ffff1458266fa679063bdb5c56d1e863fc87) ([merge request](gitlab-org/omnibus-gitlab!5899))
+- [Update libjpeg-turbo/libjpeg-turbo from 2.1.0 to 2.1.2](gitlab-org/omnibus-gitlab@f48e3a506d123a3d234505d9ed32619ff13207b1) ([merge request](gitlab-org/omnibus-gitlab!5534))
+- [Enable KAS by default](gitlab-org/omnibus-gitlab@518103b793791e87fa94739764f4f2fc5b8b879d) ([merge request](gitlab-org/omnibus-gitlab!4762))
+- [gitaly: Install both external and bundled Git](gitlab-org/omnibus-gitlab@e68e455716a29ef9d104e394ebb27dbb56062f6d) ([merge request](gitlab-org/omnibus-gitlab!5874))
+- [Update Mattermost to 6.2.2](gitlab-org/omnibus-gitlab@280d9a23f8fc00756f89ed6594fe773fb66341c6) by @spirosoik ([merge request](gitlab-org/omnibus-gitlab!5872))
+- [Update config/software/prometheus.rb](gitlab-org/omnibus-gitlab@ae9ea0a5fc7506c30d74ee17afb5fceeb97b0c01) ([merge request](gitlab-org/omnibus-gitlab!5849))
+- [Upgrade Redis from 6.0 to 6.2](gitlab-org/omnibus-gitlab@3b613f875b26bc3b84fd9a1427c71924d26a64ee) ([merge request](gitlab-org/omnibus-gitlab!5867))
+- [Upgrade Redis from 6.0 to 6.2](gitlab-org/omnibus-gitlab@bfa25f3e8b363f18d5a8a3ff6778a50509abb82c) ([merge request](gitlab-org/omnibus-gitlab!5843))
+- [Bump postgres-exporter to 0.10.0](gitlab-org/omnibus-gitlab@f620283eee40fd426eb715dc5021ae81697d88d5) ([merge request](gitlab-org/omnibus-gitlab!5850))
+- [Bump redis-exporter to 1.33.0](gitlab-org/omnibus-gitlab@96861ec6d370720bbd8bd30b8078320e53ae5bea) ([merge request](gitlab-org/omnibus-gitlab!5850))
+- [Bump node-exporter to 1.3.1](gitlab-org/omnibus-gitlab@e30165e8bb60d493b0bf38b0017a526097767b0e) ([merge request](gitlab-org/omnibus-gitlab!5850))
+- [Bump Alertmanager to 0.23.0](gitlab-org/omnibus-gitlab@3aaa25efbefb49b43d146a8d3b92d3386035eaa5) ([merge request](gitlab-org/omnibus-gitlab!5850))
+- [Bump Grafana to 7.5.12](gitlab-org/omnibus-gitlab@4b34583492911dc468caca801f1a67cd5784db20) ([merge request](gitlab-org/omnibus-gitlab!5850))
+
+### Deprecated (1 change)
+
+- [Add a warning if Sidekiq exporter and health checks are on the same port](gitlab-org/omnibus-gitlab@2f142b79d1c9d8a7cd879df736255ae223cffb2a) ([merge request](gitlab-org/omnibus-gitlab!5844))
+
 ## 14.7.3 (2022-02-15)
 
 ### Fixed (1 change)
