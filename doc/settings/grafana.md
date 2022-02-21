@@ -49,6 +49,25 @@ random password for the admin user as a security measure. However, in that case
 you will have to [reset the password manually](#resetting-the-admin-password)
 to access the admin user.
 
+## Enable Grafana alerts
+
+Grafana can provide the ability to [create alerts](https://grafana.com/docs/grafana/latest/alerting/old-alerting/create-alerts/)
+based on rules that you configure in your dashboard. By default, alerts are disabled in the bundled Grafana instance.
+
+To enable Grafana alerts:
+
+1. Edit `/etc/gitlab/gitlab.rb` and add the following line:
+
+   ```ruby
+   grafana['alerting_enabled'] = true
+   ```
+
+1. Save the file and reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
 ## Disabling Grafana
 
 1. Edit `/etc/gitlab/gitlab.rb` and add/edit the following lines:
