@@ -66,6 +66,24 @@ RSpec.describe 'gitlab::gitlab-rails' do
           expect(gitlab_yml[:production][:extra][:google_tag_manager_nonce_id]).to eq('0000-0000')
         end
       end
+
+      context 'bizible' do
+        context 'when true' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: { bizible: true }
+            )
+          end
+
+          it 'should set bizible to true' do
+            expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'bizible' => true
+              )
+            )
+          end
+        end
+      end
     end
   end
 end
