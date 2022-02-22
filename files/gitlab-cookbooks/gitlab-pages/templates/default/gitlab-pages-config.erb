@@ -143,3 +143,15 @@ rate-limit-domain=<%= @rate_limit_domain %>
 <%- if @rate_limit_domain_burst -%>
 rate-limit-domain-burst=<%= @rate_limit_domain_burst %>
 <%-end -%>
+<%- if @rate_limit_tls_source_ip -%>
+rate-limit-tls-source-ip=<%= @rate_limit_tls_source_ip %>
+<%-end -%>
+<%- if @rate_limit_tls_source_ip_burst -%>
+rate-limit-tls-source-ip-burst=<%= @rate_limit_tls_source_ip_burst %>
+<%-end -%>
+<%- if @rate_limit_tls_domain -%>
+rate-limit-tls-domain=<%= @rate_limit_tls_domain %>
+<%-end -%>
+<%- if @rate_limit_tls_domain_burst -%>
+rate-limit-tls-domain-burst=<%= @rate_limit_tls_domain_burst %>
+<%-end -%>
