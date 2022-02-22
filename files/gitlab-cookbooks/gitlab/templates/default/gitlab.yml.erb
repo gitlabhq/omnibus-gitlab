@@ -1032,6 +1032,11 @@ production: &base
     google_tag_manager_nonce_id: <%= quote(@extra_google_tag_manager_nonce_id) %>
     <% end %>
 
+    <% if @extra_bizible %>
+    ## Bizible
+    bizible: <%= @extra_bizible %>
+    <% end %>
+
     <% if @extra_matomo_url %>
     ## matomo analytics.
     matomo_url: <%= quote(@extra_matomo_url) %>
