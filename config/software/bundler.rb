@@ -1,6 +1,6 @@
 #
-# Copyright 2012-2015 Chef Software, Inc.
-# Copyright 2017-2021 GitLab Inc.
+# Copyright 2012-2016 Chef Software, Inc.
+# Copyright 2017-2022 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,32 +15,26 @@
 # limitations under the License.
 #
 
-name 'omnibus-ctl'
-version = Gitlab::Version.new('omnibus-ctl', 'v0.6.0')
-default_version version.print(false)
-display_version version.print(false)
+name 'bundler'
+# Pin the bundler version to avoid breaking changes in later versions
+default_version '2.2.33'
 
-license 'Apache-2.0'
+license 'MIT'
 license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-dependency 'bundler'
 dependency 'rubygems'
 
-source git: version.remote
-
-relative_path 'omnibus-ctl'
-
 build do
+  patch source: "add-license-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
-  patch source: 'skip-license-acceptance.patch'
 
-  # Remove existing built gems in case they exist in the current dir
-  delete 'omnibus-ctl-*.gem'
+  v_opts = "--version '#{version}'" unless version.nil?
 
-  gem 'build omnibus-ctl.gemspec', env: env
-  gem 'install omnibus-ctl-*.gem --no-document', env: env
-
-  touch "#{install_dir}/embedded/service/omnibus-ctl/.gitkeep"
+  gem [
+    'install bundler',
+    v_opts,
+    '--no-document --force'
+  ].compact.join(' '), env: env
 end
