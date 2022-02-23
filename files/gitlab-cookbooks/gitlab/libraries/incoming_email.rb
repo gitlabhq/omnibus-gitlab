@@ -21,6 +21,20 @@ module IncomingEmail
       parse_incoming_email || parse_service_desk_email
     end
 
+    def parse_secrets
+      # mailroom expects exactly 32 bytes, encoded with base64
+
+      # rubocop:disable Style/IfUnlessModifier,Style/GuardClause
+      if Gitlab['gitlab_rails']['incoming_email_enabled'] && Gitlab['gitlab_rails']['incoming_email_delivery_method'] == "webhook"
+        Gitlab['mailroom']['incoming_email_auth_token'] ||= Gitlab['gitlab_rails']['incoming_email_auth_token'] || SecretsHelper.generate_base64(32)
+      end
+
+      if Gitlab['gitlab_rails']['service_desk_email_enabled'] && Gitlab['gitlab_rails']['service_desk_email_delivery_method'] == "webhook"
+        Gitlab['mailroom']['service_desk_email_auth_token'] ||= Gitlab['gitlab_rails']['service_desk_email_auth_token'] || SecretsHelper.generate_base64(32)
+      end
+      # rubocop:enable Style/IfUnlessModifier,Style/GuardClause
+    end
+
     def parse_incoming_email
       return unless Gitlab['gitlab_rails']['incoming_email_enabled']
 

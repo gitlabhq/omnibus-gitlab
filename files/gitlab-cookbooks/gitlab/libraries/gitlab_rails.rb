@@ -108,6 +108,8 @@ module GitlabRails
 
       raise "GitLab external URL must include a schema and FQDN, e.g. http://gitlab.example.com/" unless uri.host
 
+      Gitlab['gitlab_rails']['gitlab_url'] = uri.to_s.chomp("/")
+
       Gitlab['user']['git_user_email'] ||= "gitlab@#{uri.host}"
       Gitlab['gitlab_rails']['gitlab_host'] = uri.host
       Gitlab['gitlab_rails']['gitlab_email_from'] ||= "gitlab@#{uri.host}"

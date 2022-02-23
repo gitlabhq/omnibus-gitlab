@@ -287,6 +287,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 #    'poll_interval': 60  # Optional
 # }
 
+#### How incoming emails are delivered to Rails process. Accept either sidekiq
+#### or webhook. The default config is sidekiq.
+# gitlab_rails['incoming_email_delivery_method'] = "sidekiq"
+
+#### Token to authenticate webhook requests. The token must be exactly 32 bytes,
+#### encoded with base64
+# gitlab_rails['incoming_email_auth_token'] = nil
+
 ####! The format of mail_room crash logs
 # mailroom['exit_log_format'] = "plain"
 
@@ -3021,6 +3029,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 #    'client_secret': 'YOUR-CLIENT-SECRET',
 #    'poll_interval': 60  # Optional
 # }
+
+#### How service desk emails are delivered to Rails process. Accept either
+#### sidekiq or webhook. The default config is sidekiq.
+# gitlab_rails['service_desk_email_delivery_method'] = "sidekiq"
+
+#### Token to authenticate webhook requests. The token must be exactly 32 bytes,
+#### encoded with base64
+# gitlab_rails['service_desk_email_auth_token'] = nil
 
 ################################################################################
 ## Spamcheck (EE only)

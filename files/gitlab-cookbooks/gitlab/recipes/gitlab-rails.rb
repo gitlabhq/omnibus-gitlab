@@ -346,6 +346,32 @@ templatesymlink "Create a gitlab_shell_secret and create a symlink to Rails root
   notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
 end
 
+templatesymlink "Create a gitlab_incoming_email_secret and create a symlink to Rails root" do
+  link_from File.join(gitlab_rails_source_dir, ".gitlab_incoming_email_secret")
+  link_to File.join(gitlab_rails_etc_dir, "gitlab_incoming_email_secret")
+  source "secret_token.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  sensitive true
+  variables(secret_token: node['gitlab']['mailroom']['incoming_email_auth_token'])
+  only_if { node['gitlab']['mailroom']['incoming_email_auth_token'] }
+  dependent_services.each { |svc| notifies :restart, svc }
+end
+
+templatesymlink "Create a gitlab_service_desk_email_secret and create a symlink to Rails root" do
+  link_from File.join(gitlab_rails_source_dir, ".gitlab_service_desk_email_secret")
+  link_to File.join(gitlab_rails_etc_dir, "gitlab_service_desk_email_secret")
+  source "secret_token.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  sensitive true
+  variables(secret_token: node['gitlab']['mailroom']['service_desk_email_auth_token'])
+  only_if { node['gitlab']['mailroom']['service_desk_email_auth_token'] }
+  dependent_services.each { |svc| notifies :restart, svc }
+end
+
 gitlab_pages_services = dependent_services
 gitlab_pages_services += ['runit_service[gitlab-pages]'] if omnibus_helper.should_notify?('gitlab-pages')
 

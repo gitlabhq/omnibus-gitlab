@@ -21,6 +21,7 @@ group = AccountHelper.new(node).gitlab_group
 GITLAB_RAILS_SOURCE_DIR = '/opt/gitlab/embedded/service/gitlab-rails'.freeze
 
 exit_log_format = node['gitlab']['mailroom']['exit_log_format']
+mailroom_working_dir = "#{node['gitlab']['gitlab-rails']['dir']}/working"
 mailroom_log_dir = node['gitlab']['mailroom']['log_directory']
 mail_room_config = File.join(GITLAB_RAILS_SOURCE_DIR, 'config', 'mail_room.yml')
 
@@ -37,9 +38,22 @@ runit_service 'mailroom' do
     groupname: group,
     log_directory: mailroom_log_dir,
     mail_room_config: mail_room_config,
-    exit_log_format: exit_log_format
+    exit_log_format: exit_log_format,
+    working_dir: mailroom_working_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['mailroom'].to_hash)
+end
+
+if node['gitlab']['mailroom']['incoming_email_auth_token']
+  link File.join(mailroom_working_dir, ".gitlab_incoming_email_secret") do
+    to File.join(GITLAB_RAILS_SOURCE_DIR, ".gitlab_incoming_email_secret")
+  end
+end
+
+if node['gitlab']['mailroom']['service_desk_email_auth_token']
+  link File.join(mailroom_working_dir, ".gitlab_service_desk_email_secret") do
+    to File.join(GITLAB_RAILS_SOURCE_DIR, ".gitlab_service_desk_email_secret")
+  end
 end
 
 if node['gitlab']['bootstrap']['enable']
