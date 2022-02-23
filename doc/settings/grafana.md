@@ -241,7 +241,7 @@ These errors may happen if the GitLab Grafana OAuth application does not exist o
 the settings in `/etc/gitlab/gitlab-secrets.json` are no longer consistent with each other.
 
 WARNING:
-The following steps may lead to data loss if the `/etc/gitlab/gitlab-secrets.json` file is corrupted. 
+The following steps may lead to data loss if the `/etc/gitlab/gitlab-secrets.json` file is corrupted.
 Make sure to create a backup before applying any changes.
 
 To fix it:
@@ -263,7 +263,7 @@ To fix it:
    "admin_password": "...",
    "metrics_basic_auth_password": null
    },
-   ``` 
+   ```
 
 1. Reconfigure GitLab to re-create the **GitLab Grafana** application and regenerate the values in `/etc/gitlab/gitlab-secrets.json`:
 
