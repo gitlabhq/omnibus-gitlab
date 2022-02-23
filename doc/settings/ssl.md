@@ -205,7 +205,7 @@ A perl interpreter is required for `c_rehash` dependency to properly symlink the
    By default, GitLab expects to find a certificate titled after your GitLab URL with a `.crt`
    extension. For instance, if your server address is `https://gitlab.example.com`, the
    certificate should be named `gitlab.example.com.crt`.
-   
+
    To specify a different path and file name, you can
    [change the default SSL certificate location](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
 1. Reconfigure GitLab:
