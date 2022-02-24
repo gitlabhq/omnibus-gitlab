@@ -206,10 +206,52 @@ RSpec.describe GitlabCtl::Util do
     end
   end
 
+  describe "#public_attributes_missing?" do
+    context 'when the public attributes file is missing' do
+      before do
+        allow(File).to receive(:exist?).with(%r{/var/opt/gitlab/public_attributes.json}).and_return(false)
+      end
+
+      it 'returns true' do
+        expect(GitlabCtl::Util.public_attributes_missing?).to be true
+      end
+    end
+  end
+
+  describe "#public_attributes_broken?" do
+    context 'when the public attributes file is broken' do
+      before do
+        allow(File).to receive(:exist?).with(%r{/var/opt/gitlab/public_attributes.json}).and_return(true)
+      end
+
+      it 'returns true when the attribute is missing' do
+        allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({})
+        expect(GitlabCtl::Util.public_attributes_broken?).to be true
+      end
+
+      it 'returns false by default when the gitlab attribute is found' do
+        allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ "gitlab" => "hithere" })
+        expect(GitlabCtl::Util.public_attributes_broken?).to be false
+      end
+
+      context 'when using an alternate key to check for broken' do
+        it 'returns true when the key is missing' do
+          allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({})
+          expect(GitlabCtl::Util.public_attributes_broken?('funky')).to be true
+        end
+
+        it 'returns false when the key is present' do
+          allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ "funky" => "llama" })
+          expect(GitlabCtl::Util.public_attributes_broken?('funky')).to be false
+        end
+      end
+    end
+  end
+
   describe '#get_public_node_attributes' do
     context 'when node file is missing' do
       before do
-        allow(File).to receive(:exist?).with(%r{/var/opt/gitlab/public_attributes.json}).and_return(false)
+        allow(GitlabCtl::Util).to receive(:public_attributes_missing?).and_return(true)
       end
 
       it 'returns empty hash' do
