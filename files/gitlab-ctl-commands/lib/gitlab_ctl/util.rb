@@ -2,11 +2,14 @@ require 'mixlib/shellout'
 require 'io/console'
 require 'chef/mash'
 require 'chef/mixins'
+require 'json'
 
 require 'socket'
 
 module GitlabCtl
   module Util
+    PUBLIC_ATTRIBUTES_FILE = '/var/opt/gitlab/public_attributes.json'.freeze
+
     class <<self
       def get_command_output(command, user = nil, timeout = nil)
         begin
@@ -64,11 +67,9 @@ module GitlabCtl
       end
 
       def get_public_node_attributes
-        attribute_file = '/var/opt/gitlab/public_attributes.json'
+        return {} if public_attributes_missing?
 
-        return {} unless File.exist?(attribute_file)
-
-        parse_json_file(attribute_file)
+        parse_json_file(PUBLIC_ATTRIBUTES_FILE)
       end
 
       def get_password(input_text: 'Enter password: ', do_confirm: true)
@@ -160,6 +161,16 @@ module GitlabCtl
         end
 
         millis.to_i
+      end
+
+      def public_attributes_missing?
+        !File.exist?(PUBLIC_ATTRIBUTES_FILE)
+      end
+
+      def public_attributes_broken?(attribute_key = "gitlab")
+        return true if public_attributes_missing?
+
+        !get_public_node_attributes.key?(attribute_key)
       end
     end
   end

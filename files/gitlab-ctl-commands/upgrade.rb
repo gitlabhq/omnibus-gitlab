@@ -42,6 +42,11 @@ add_command 'upgrade', 'Run migrations after a package upgrade', 1 do |cmd_name|
     print_welcome_and_exit
   end
 
+  if GitlabCtl::Util.public_attributes_broken?
+    log 'It looks like there was a problem with public attributes; run gitlab-ctl reconfigure manually to fix.'
+    Kernel.exit 1
+  end
+
   unless GitlabCtl::Util.progress_message('Checking PostgreSQL executables') do
     remove_old_node_state
     status = GitlabCtl::Util.chef_run('solo.rb', 'postgresql-bin.json')
