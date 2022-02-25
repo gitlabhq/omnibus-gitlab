@@ -58,6 +58,13 @@ No changes.
 
 - [Add a warning if Sidekiq exporter and health checks are on the same port](gitlab-org/omnibus-gitlab@2f142b79d1c9d8a7cd879df736255ae223cffb2a) ([merge request](gitlab-org/omnibus-gitlab!5844))
 
+## 14.7.4 (2022-02-25)
+
+### Security (2 changes)
+
+- [Mattermost February security updates](gitlab-org/security/omnibus-gitlab@a33d088a428e9f390352cd971fc63afa2f8eb5c6) ([merge request](gitlab-org/security/omnibus-gitlab!186))
+- [Bump Grafana to 7.5.12](gitlab-org/security/omnibus-gitlab@29c7f7f88385d3b0d822466f866feb43bfa92da5) ([merge request](gitlab-org/security/omnibus-gitlab!183))
+
 ## 14.7.3 (2022-02-15)
 
 ### Fixed (1 change)
