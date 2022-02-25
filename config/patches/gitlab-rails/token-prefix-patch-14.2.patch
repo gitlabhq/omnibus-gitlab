@@ -1,0 +1,198 @@
+diff --git a/app/models/concerns/token_authenticatable_strategies/encrypted.rb b/app/models/concerns/token_authenticatable_strategies/encrypted.rb
+index 50a2613bb10..e957d09fbc6 100644
+--- a/app/models/concerns/token_authenticatable_strategies/encrypted.rb
++++ b/app/models/concerns/token_authenticatable_strategies/encrypted.rb
+@@ -5,16 +5,18 @@ class Encrypted < Base
+     def find_token_authenticatable(token, unscoped = false)
+       return if token.blank?
+ 
+-      if required?
+-        find_by_encrypted_token(token, unscoped)
+-      elsif optional?
+-        find_by_encrypted_token(token, unscoped) ||
+-          find_by_plaintext_token(token, unscoped)
+-      elsif migrating?
+-        find_by_plaintext_token(token, unscoped)
+-      else
+-        raise ArgumentError, _("Unknown encryption strategy: %{encrypted_strategy}!") % { encrypted_strategy: encrypted_strategy }
+-      end
++      instance = if required?
++                   find_by_encrypted_token(token, unscoped)
++                 elsif optional?
++                   find_by_encrypted_token(token, unscoped) ||
++                     find_by_plaintext_token(token, unscoped)
++                 elsif migrating?
++                   find_by_plaintext_token(token, unscoped)
++                 else
++                   raise ArgumentError, _("Unknown encryption strategy: %{encrypted_strategy}!") % { encrypted_strategy: encrypted_strategy }
++                 end
++
++      instance if instance && matches_prefix?(instance, token)
+     end
+ 
+     def ensure_token(instance)
+@@ -41,9 +43,7 @@ def ensure_token(instance)
+     def get_token(instance)
+       return insecure_strategy.get_token(instance) if migrating?
+ 
+-      encrypted_token = instance.read_attribute(encrypted_field)
+-      token = EncryptionHelper.decrypt_token(encrypted_token)
+-      token || (insecure_strategy.get_token(instance) if optional?)
++      get_encrypted_token(instance)
+     end
+ 
+     def set_token(instance, token)
+@@ -69,6 +69,12 @@ def optional?
+ 
+     protected
+ 
++    def get_encrypted_token(instance)
++      encrypted_token = instance.read_attribute(encrypted_field)
++      token = EncryptionHelper.decrypt_token(encrypted_token)
++      token || (insecure_strategy.get_token(instance) if optional?)
++    end
++
+     def encrypted_strategy
+       value = options[:encrypted]
+       value = value.call if value.is_a?(Proc)
+@@ -95,14 +101,22 @@ def insecure_strategy
+         .new(klass, token_field, options)
+     end
+ 
++    def matches_prefix?(instance, token)
++      prefix = options[:prefix]
++      prefix = prefix.call(instance) if prefix.is_a?(Proc)
++      prefix = '' unless prefix.is_a?(String)
++
++      token.start_with?(prefix)
++    end
++
+     def token_set?(instance)
+-      raw_token = instance.read_attribute(encrypted_field)
++      token = get_encrypted_token(instance)
+ 
+       unless required?
+-        raw_token ||= insecure_strategy.get_token(instance)
++        token ||= insecure_strategy.get_token(instance)
+       end
+ 
+-      raw_token.present?
++      token.present? && matches_prefix?(instance, token)
+     end
+ 
+     def encrypted_field
+diff --git a/app/models/group.rb b/app/models/group.rb
+index f6b45a755e4..e1d55514cff 100644
+--- a/app/models/group.rb
++++ b/app/models/group.rb
+@@ -17,6 +17,12 @@ class Group < Namespace
+   include GroupAPICompatibility
+   include EachBatch
+   include BulkMemberAccessLoad
++  extend ::Gitlab::Utils::Override
++
++  # Prefix for runners_token which can be used to invalidate existing tokens.
++  # The value chosen here is GR (for Gitlab Runner) combined with the rotation
++  # date (20220225) decimal to hex encoded.
++  RUNNERS_TOKEN_PREFIX = 'GR1348941'
+ 
+   has_many :all_group_members, -> { where(requested_at: nil) }, dependent: :destroy, as: :source, class_name: 'GroupMember' # rubocop:disable Cop/ActiveRecordDependent
+   has_many :group_members, -> { where(requested_at: nil).where.not(members: { access_level: Gitlab::Access::MINIMAL_ACCESS }) }, dependent: :destroy, as: :source # rubocop:disable Cop/ActiveRecordDependent
+@@ -98,7 +104,9 @@ class Group < Namespace
+                       message: Gitlab::Regex.group_name_regex_message },
+             if: :name_changed?
+ 
+-  add_authentication_token_field :runners_token, encrypted: -> { Feature.enabled?(:groups_tokens_optional_encryption, default_enabled: true) ? :optional : :required }
++  add_authentication_token_field :runners_token,
++                                 encrypted: -> { Feature.enabled?(:groups_tokens_optional_encryption, default_enabled: true) ? :optional : :required },
++                                 prefix: ->(instance) { instance.runners_token_prefix }
+ 
+   after_create :post_create_hook
+   after_destroy :post_destroy_hook
+@@ -630,6 +638,15 @@ def runners_token
+     ensure_runners_token!
+   end
+ 
++  def runners_token_prefix
++    Feature.enabled?(:groups_runners_token_prefix, self, default_enabled: :yaml) ? RUNNERS_TOKEN_PREFIX : ''
++  end
++
++  override :format_runners_token
++  def format_runners_token(token)
++    "#{runners_token_prefix}#{token}"
++  end
++
+   def project_creation_level
+     super || ::Gitlab::CurrentSettings.default_project_creation
+   end
+diff --git a/app/models/project.rb b/app/models/project.rb
+index 67fc53c5ff3..0addf0d8724 100644
+--- a/app/models/project.rb
++++ b/app/models/project.rb
+@@ -73,6 +73,11 @@ class Project < ApplicationRecord
+ 
+   GL_REPOSITORY_TYPES = [Gitlab::GlRepository::PROJECT, Gitlab::GlRepository::WIKI, Gitlab::GlRepository::DESIGN].freeze
+ 
++  # Prefix for runners_token which can be used to invalidate existing tokens.
++  # The value chosen here is GR (for Gitlab Runner) combined with the rotation
++  # date (20220225) decimal to hex encoded.
++  RUNNERS_TOKEN_PREFIX = 'GR1348941'
++
+   cache_markdown_field :description, pipeline: :description
+ 
+   default_value_for :packages_enabled, true
+@@ -93,7 +98,9 @@ class Project < ApplicationRecord
+   default_value_for :autoclose_referenced_issues, true
+   default_value_for(:ci_config_path) { Gitlab::CurrentSettings.default_ci_config_path }
+ 
+-  add_authentication_token_field :runners_token, encrypted: -> { Feature.enabled?(:projects_tokens_optional_encryption, default_enabled: true) ? :optional : :required }
++  add_authentication_token_field :runners_token,
++                                 encrypted: -> { Feature.enabled?(:projects_tokens_optional_encryption, default_enabled: true) ? :optional : :required },
++                                 prefix: ->(instance) { instance.runners_token_prefix }
+ 
+   before_validation :mark_remote_mirrors_for_removal, if: -> { RemoteMirror.table_exists? }
+ 
+@@ -1796,6 +1803,15 @@ def runners_token
+     ensure_runners_token!
+   end
+ 
++  def runners_token_prefix
++    Feature.enabled?(:projects_runners_token_prefix, self, default_enabled: :yaml) ? RUNNERS_TOKEN_PREFIX : ''
++  end
++
++  override :format_runners_token
++  def format_runners_token(token)
++    "#{runners_token_prefix}#{token}"
++  end
++
+   def pages_deployed?
+     pages_metadatum&.deployed?
+   end
+diff --git a/config/feature_flags/development/groups_runners_token_prefix.yml b/config/feature_flags/development/groups_runners_token_prefix.yml
+new file mode 100644
+index 00000000000..87b87266673
+--- /dev/null
++++ b/config/feature_flags/development/groups_runners_token_prefix.yml
+@@ -0,0 +1,8 @@
++---
++name: groups_runners_token_prefix
++introduced_by_url:
++rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/353805
++milestone: '14.9'
++type: development
++group: group::database
++default_enabled: true
+diff --git a/config/feature_flags/development/projects_runners_token_prefix.yml b/config/feature_flags/development/projects_runners_token_prefix.yml
+new file mode 100644
+index 00000000000..5dd21d115f6
+--- /dev/null
++++ b/config/feature_flags/development/projects_runners_token_prefix.yml
+@@ -0,0 +1,8 @@
++---
++name: projects_runners_token_prefix
++introduced_by_url:
++rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/353805
++milestone: '14.9'
++type: development
++group: group::database
++default_enabled: true
