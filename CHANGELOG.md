@@ -109,6 +109,13 @@ No changes.
 
 - [Update Mattermost to 6.2.1](gitlab-org/omnibus-gitlab@05a5869b18ab109fffb7d0723ab04cb6da68ecf9) by @hmhealey ([merge request](gitlab-org/omnibus-gitlab!5828))
 
+## 14.6.5 (2022-02-25)
+
+### Security (2 changes)
+
+- [Mattermost February security updates](gitlab-org/security/omnibus-gitlab@96536555ac828a91719b680a9b2ada22b5cd33da) ([merge request](gitlab-org/security/omnibus-gitlab!187))
+- [Bump Grafana to 7.5.12](gitlab-org/security/omnibus-gitlab@ca5139ba89ff852bbbd2ffdca4e0985ad7e98e20) ([merge request](gitlab-org/security/omnibus-gitlab!184))
+
 ## 14.6.4 (2022-02-03)
 
 ### Security (2 changes)
