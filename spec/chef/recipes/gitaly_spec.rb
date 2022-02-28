@@ -594,6 +594,54 @@ RSpec.describe 'gitaly' do
         }
       end
     end
+
+    context 'when max_per_repo is empty' do
+      before do
+        stub_gitlab_rb(
+          {
+            gitaly: {
+              concurrency: [
+                {
+                  'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+                  'max_queue_size' => '10s'
+                }, {
+                  'rpc' => "/gitaly.SSHService/SSHUploadPack",
+                  'max_queue_size' => '10s'
+                }
+              ]
+            }
+          }
+        )
+      end
+
+      it 'populates gitaly config.toml without max_per_repo' do
+        expect(chef_run).to render_file(config_path).with_content { |content|
+          expect(content).not_to include("max_per_repo")
+        }
+      end
+    end
+
+    context 'when max_queue_wait is set' do
+      before do
+        stub_gitlab_rb(
+          {
+            gitaly: {
+              concurrency: [
+                {
+                  'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+                  'max_queue_wait' => "10s",
+                }
+              ]
+            }
+          }
+        )
+      end
+
+      it 'populates gitaly config.toml with quoted max_queue_wait' do
+        expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[\[concurrency\]\]\s+rpc = "/gitaly.SmartHTTPService/PostReceivePack"\s+max_queue_wait = "10s"})
+      end
+    end
   end
 
   context 'populates default env variables' do
