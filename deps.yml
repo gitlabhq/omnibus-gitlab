@@ -20,7 +20,7 @@ dependencies:
     gitlab_labels:
       - group::distribution
       - devops::enablement
-      - feature::maintenance
+      - type::maintenance
       - maintenance
       - dependencies.io
     gitlab_remove_source_branch: true
