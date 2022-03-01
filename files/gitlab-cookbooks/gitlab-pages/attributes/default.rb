@@ -63,3 +63,7 @@ default['gitlab-pages']['rate_limit_source_ip'] = nil
 default['gitlab-pages']['rate_limit_source_ip_burst'] = nil
 default['gitlab-pages']['rate_limit_domain'] = nil
 default['gitlab-pages']['rate_limit_domain_burst'] = nil
+default['gitlab-pages']['rate_limit_tls_source_ip'] = nil
+default['gitlab-pages']['rate_limit_tls_source_ip_burst'] = nil
+default['gitlab-pages']['rate_limit_tls_domain'] = nil
+default['gitlab-pages']['rate_limit_tls_domain_burst'] = nil
