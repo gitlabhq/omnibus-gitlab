@@ -159,13 +159,43 @@ For NGINX port changes please see [`settings/nginx.md`](settings/nginx.md).
 
 On SELinux-enabled systems the Git user's `.ssh` directory or its contents can
 get their security context messed up. You can fix this by running `sudo
-gitlab-ctl reconfigure`, which sets the `ssh_home_t` security context on
+gitlab-ctl reconfigure`, which sets the `gitlab_shell_t` security context on
 `/var/opt/gitlab/.ssh`.
 
 In GitLab 10.0 this behavior was improved by setting the context permanently using
 `semanage`. The runtime dependency `policycoreutils-python` has been added to the
 RPM package for RHEL based operating systems in order to ensure the `semanage`
 command is available.
+
+#### Diagnose and resolve SELinux issues
+
+Omnibus GitLab detects default path changes in `/etc/gitlab/gitlab.rb` and should apply
+the correct file contexts. For installations using custom data path configuration,
+the administrator may need to manually resolve SELinux issues.
+
+Data paths may be altered via `gitlab.rb`, however, a common scenario forces the
+use of `symlink` paths. Administrators should be cautious, because `symlink` paths are
+not supported for all scenarios, such as [Gitaly data paths](settings/configuration.md#store-git-data-in-an-alternative-directory).
+
+For example, if `/data/gitlab` replaced `/var/opt/gitlab` as the base data directory, the following fixes the security context:
+
+```shell
+sudo semanage fcontext -a -t gitlab_shell_t /data/gitlab/.ssh/
+sudo semanage fcontext -a -t gitlab_shell_t /data/gitlab/.ssh/authorized_keys
+sudo restorecon -Rv /data/gitlab/
+sudo semanage fcontext -a -t gitlab_shell_t /data/gitlab/gitlab-shell/config.yml
+sudo restorecon -Rv /data/gitlab/gitlab-shell/
+sudo semanage fcontext -a -t gitlab_shell_t /data/gitlab/gitlab-rails/etc/gitlab_shell_secret
+sudo restorecon -Rv /data/gitlab/gitlab-rails/
+sudo semanage fcontext --list | grep /data/gitlab/
+```
+
+After the policies are applied, you can verify the SSH access is working
+by getting the welcome message:
+
+```shell
+ssh -T git@gitlab-hostname
+```
 
 ### All systems
 
