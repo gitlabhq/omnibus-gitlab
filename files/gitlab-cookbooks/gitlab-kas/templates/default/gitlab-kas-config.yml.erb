@@ -35,6 +35,8 @@ observability:
     environment: <%= @sentry_environment %>
     <%- end %>
   <%- end %>
+  logging:
+    level: <%= @log_level %>
 redis:
   network: <%= @redis_network %>
   tls:

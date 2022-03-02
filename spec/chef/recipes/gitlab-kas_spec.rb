@@ -57,6 +57,9 @@ RSpec.describe 'gitlab-kas' do
             }
           ),
           observability: {
+            logging: {
+              level: 'info',
+            },
             usage_reporting_period: '60s'
           },
           private_api: {
@@ -95,7 +98,8 @@ RSpec.describe 'gitlab-kas' do
           listen_websocket: false,
           metrics_usage_reporting_period: '120',
           sentry_dsn: 'https://my_key:my_secret@sentry.io/test_project',
-          sentry_environment: 'production'
+          sentry_environment: 'production',
+          log_level: 'debug',
         }
       )
     end
@@ -119,6 +123,9 @@ RSpec.describe 'gitlab-kas' do
             }
           ),
           observability: {
+            logging: {
+              level: 'debug'
+            },
             usage_reporting_period: '120s',
             sentry: {
               dsn: 'https://my_key:my_secret@sentry.io/test_project',

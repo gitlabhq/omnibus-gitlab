@@ -1832,6 +1832,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Metrics configuration for GitLab KAS
 # gitlab_kas['metrics_usage_reporting_period'] = 60
 
+##! Log configuration for GitLab KAS
+# gitlab_kas['log_level'] = 'info'
+
 ##! Environment variables for GitLab KAS
 # gitlab_kas['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/",
