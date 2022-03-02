@@ -30,6 +30,7 @@ default['gitlab-kas']['private_api_key_file'] = nil
 default['gitlab-kas']['metrics_usage_reporting_period'] = 60
 default['gitlab-kas']['sentry_dsn'] = nil
 default['gitlab-kas']['sentry_environment'] = nil
+default['gitlab-kas']['log_level'] = 'info'
 default['gitlab-kas']['dir'] = '/var/opt/gitlab/gitlab-kas'
 default['gitlab-kas']['log_directory'] = '/var/log/gitlab/gitlab-kas'
 default['gitlab-kas']['env_directory'] = '/opt/gitlab/etc/gitlab-kas/env'
