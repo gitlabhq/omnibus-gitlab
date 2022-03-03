@@ -27,3 +27,4 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] Tests added
 - [ ] Integration tests added to [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa)
 - [ ] Equivalent MR/issue for the [GitLab Chart](https://gitlab.com/gitlab-org/charts/gitlab) opened
+- [ ] Validate potential values for new configuration settings. Formats such as integer `10`, duration `10s`, URI `scheme://user:passwd@host:port` may require quotation or other special handling when rendered in a template and written to a configuration file.
