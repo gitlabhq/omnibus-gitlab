@@ -145,9 +145,9 @@ RSpec.describe 'gitaly' do
         .with_content('[pack_objects_cache]')
     end
 
-    it 'does not set git binary path explicitly in gitaly config.toml unless configured' do
-      expect(chef_run).not_to render_file(config_path)
-        .with_content('bin_path = /opt/gitlab/embedded/bin/git')
+    it 'populates gitaly config.toml with default git binary path' do
+      expect(chef_run).to render_file(config_path)
+        .with_content("bin_path = '/opt/gitlab/embedded/bin/git'")
     end
 
     it 'populates gitaly config.toml with default storages' do
