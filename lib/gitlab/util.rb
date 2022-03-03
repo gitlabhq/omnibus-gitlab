@@ -2,7 +2,9 @@ module Gitlab
   class Util
     class << self
       def get_env(key)
-        ENV[key]&.strip
+        value = ENV[key]&.strip
+
+        value unless value&.empty?
       end
 
       def set_env(key, value)

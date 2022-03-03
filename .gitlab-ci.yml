@@ -184,10 +184,12 @@ generate-facts:
     reports:
       dotenv: build_facts/env_vars
   rules:
-    # Run on dev.gitlab.org and multi-project pipelines on omnibus-gitlab-mirror
-    - if: '$CI_PROJECT_PATH == "gitlab/omnibus-gitlab"'
-    - if: '$CI_PIPELINE_SOURCE == "pipeline" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
-    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
+    - if: '$DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING'
+      when: never
+    - if: '$CI_BRANCH_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/ || $CI_BRANCH_NAME =~ /^deps/'
+      when: never
+    - when: always
+  needs: []
 
 include:
   - '/gitlab-ci-config/gitlab-com.yml'

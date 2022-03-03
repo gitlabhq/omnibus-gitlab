@@ -20,16 +20,17 @@ module Build
         env_vars = []
         env_vars += common_vars
         env_vars += qa_trigger_vars
+        env_vars += omnibus_trigger_vars
 
         File.write("build_facts/env_vars", env_vars.join("\n"))
       end
 
       def common_vars
         %W[
-          TOP_UPSTREAM_SOURCE_PROJECT=#{Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_PROJECT')}
-          TOP_UPSTREAM_SOURCE_REF=#{Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_REF')}
-          TOP_UPSTREAM_SOURCE_JOB=#{Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_JOB')}
-          TOP_UPSTREAM_SOURCE_SHA=#{Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA')}
+          TOP_UPSTREAM_SOURCE_PROJECT=#{Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_PROJECT') || Gitlab::Util.get_env('CI_PROJECT_PATH')}
+          TOP_UPSTREAM_SOURCE_REF=#{Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_REF') || Gitlab::Util.get_env('CI_COMMIT_REF_NAME')}
+          TOP_UPSTREAM_SOURCE_JOB=#{Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_JOB') || Gitlab::Util.get_env('CI_JOB_URL')}
+          TOP_UPSTREAM_SOURCE_SHA=#{Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA') || Gitlab::Util.get_env('CI_COMMIT_SHA')}
           TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID=#{Gitlab::Util.get_env('TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID')}
           TOP_UPSTREAM_MERGE_REQUEST_IID=#{Gitlab::Util.get_env('TOP_UPSTREAM_MERGE_REQUEST_IID')}
         ]
@@ -45,6 +46,16 @@ module Build
           GITLAB_QA_OPTIONS=#{Gitlab::Util.get_env('GITLAB_QA_OPTIONS')}
           KNAPSACK_GENERATE_REPORT=#{generate_knapsack_report?}
         ]
+      end
+
+      def omnibus_trigger_vars
+        version_vars
+      end
+
+      def version_vars
+        Gitlab::Version::COMPONENTS_ENV_VARS.values.uniq.map do |version|
+          "#{version}=#{Gitlab::Util.get_env(version)}"
+        end
       end
 
       private

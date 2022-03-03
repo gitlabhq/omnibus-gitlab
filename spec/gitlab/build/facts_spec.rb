@@ -34,10 +34,11 @@ RSpec.describe Build::Facts do
     before do
       allow(described_class).to receive(:common_vars).and_return(%w[TOP_UPSTREAM_SOURCE_PROJECT=gitlab-org/gitlab])
       allow(described_class).to receive(:qa_trigger_vars).and_return(%w[QA_RELEASE=foobar])
+      allow(described_class).to receive(:version_vars).and_return(%w[GITLAB_VERSION=randombranch])
     end
 
     it 'writes environment variables to file' do
-      expect(File).to receive(:write).with('build_facts/env_vars', "TOP_UPSTREAM_SOURCE_PROJECT=gitlab-org/gitlab\nQA_RELEASE=foobar")
+      expect(File).to receive(:write).with('build_facts/env_vars', "TOP_UPSTREAM_SOURCE_PROJECT=gitlab-org/gitlab\nQA_RELEASE=foobar\nGITLAB_VERSION=randombranch")
 
       described_class.generate_env_file
     end

@@ -27,6 +27,12 @@
       - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
+.com-branches-except-trigger: &com-branches-except-trigger
+  only:
+    - branches@gitlab-org/omnibus-gitlab
+    - branches@gitlab-org/security/omnibus-gitlab
+  <<: *com-except-triggers
+
 .com-trigger-only: &com-trigger-only
   only:
     - triggers@gitlab-org/build/omnibus-gitlab-mirror
@@ -135,31 +141,43 @@
   retry: 1
 
 .trigger-job:
-  extends: .gems-cache
-  image: "${RUBY_IMAGE}"
   stage: trigger-package
+  inherit:
+    variables: false
+  variables:
+    ALTERNATIVE_SOURCES: 'true'
+    BUILDER_IMAGE_REVISION: ${BUILDER_IMAGE_REVISION}
+    BUILDER_IMAGE_REGISTRY: ${BUILDER_IMAGE_REGISTRY}
+    PUBLIC_BUILDER_IMAGE_REGISTRY: ${PUBLIC_BUILDER_IMAGE_REGISTRY}
+    COMPILE_ASSETS: ${COMPILE_ASSETS}
+    GITLAB_VERSION: ${GITLAB_VERSION}
+    GITLAB_SHELL_VERSION: ${GITLAB_SHELL_VERSION}
+    GITLAB_PAGES_VERSION: ${GITLAB_PAGES_VERSION}
+    GITALY_VERSION: ${GITALY_SERVER_VERSION}
+    GITLAB_ELASTICSEARCH_INDEXER_VERSION: ${GITLAB_ELASTICSEARCH_INDEXER_VERSION}
+    GITLAB_KAS_VERSION: ${GITLAB_KAS_VERSION}
+    TOP_UPSTREAM_SOURCE_PROJECT: ${TOP_UPSTREAM_SOURCE_PROJECT}
+    TOP_UPSTREAM_SOURCE_JOB: ${TOP_UPSTREAM_SOURCE_JOB}
+    TOP_UPSTREAM_SOURCE_SHA: ${TOP_UPSTREAM_SOURCE_SHA}
+    TOP_UPSTREAM_SOURCE_REF: ${TOP_UPSTREAM_SOURCE_REF}
+    QA_BRANCH: ${QA_BRANCH}
   when: manual
-  script:
-    - support/wait_for_sha
-    - bundle exec rake build:trigger
-  only:
-    - branches@gitlab-org/omnibus-gitlab
-    - branches@gitlab-org/security/omnibus-gitlab
-  except:
-    refs:
-      - triggers
-      - /^deps/
-      - /(^docs[\/-].*|.*-docs$)/
-    variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
-      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
-  needs: []
-  timeout: 3h
+  trigger:
+    project: 'gitlab-org/build/omnibus-gitlab-mirror'
+    branch: $CI_COMMIT_REF_NAME
+    strategy: depend
+  <<: *com-branches-except-trigger
+  needs:
+    - job: generate-facts
+      artifacts: true
+    - job: check-for-sha-in-mirror
+      artifacts: false
 
 .trigger-pipeline:
   stage: trigger-qa
   image: "${RUBY_IMAGE}"
   when: manual
+  allow_failure: true
   <<: *com-trigger-only
   needs:
     - job: Trigger:package
@@ -243,6 +261,16 @@ update-trigger-package-cache:
 ###########################
 #     Branch pipeline     #
 ###########################
+
+check-for-sha-in-mirror:
+  extends: .gems-cache
+  stage: check
+  image: "${RUBY_IMAGE}"
+  script:
+    - support/wait_for_sha
+  <<: *com-branches-except-trigger
+  timeout: 3h
+  needs: []
 
 Trigger:ce-package:
   extends: .trigger-job
@@ -446,7 +474,6 @@ Trigger:package:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   stage: trigger-package
   script:
-    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     - *build-package
     # Renaming so we can easily generate the artifact URL
     - mv pkg/ubuntu-focal/*.deb pkg/ubuntu-focal/gitlab.deb
@@ -484,7 +511,6 @@ Trigger:gitlab-docker:
     - .gems-cache
   stage: trigger-docker
   script:
-    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     - bundle exec rake docker:build:image
     - bundle exec rake docker:push:triggered
   <<: *com-trigger-only
@@ -501,7 +527,6 @@ Trigger:qa-docker:
     - .gems-cache
   stage: trigger-docker
   script:
-    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     - bundle exec rake qa:build
     - bundle exec rake qa:push:triggered
   <<: *com-trigger-only
@@ -551,7 +576,6 @@ letsencrypt-test:
   extends: .docker_job
   stage: trigger-qa
   script:
-    - if [ -n "$TRIGGERED_USER" ] && [ -n "$TRIGGER_SOURCE" ]; then echo "Pipeline triggered by $TRIGGERED_USER at $TRIGGER_SOURCE"; fi
     - echo "${CI_REGISTRY_PASSWORD}" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     - chmod +x /usr/local/bin/docker-compose
@@ -565,6 +589,7 @@ RAT:
   stage: trigger-qa
   image: "${RUBY_IMAGE}"
   when: manual
+  allow_failure: true
   script:
     - bundle exec rake qa:rat:trigger
   <<: *com-trigger-only
