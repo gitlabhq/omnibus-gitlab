@@ -24,7 +24,7 @@ script specified in the installation instructions.
 | Name          | `GitLab B.V.`                                        |
 | EMail         | `packages@gitlab.com`                                |
 | Comment       | `package repository signing key`                     |
-| Fingerprint   | `F640 3F65 44A3 8863 DAA0  B6E0 3F01 618A 5131 2F3F` |
+| Fingerprint   | `F640 3F65 44A3 8863 DAA0 B6E0 3F01 618A 5131 2F3F` |
 | Expiry        | `2024-03-01`                                         |
 
 This key is active from **2020-04-06**. Existing users who already have
@@ -35,8 +35,67 @@ below.
 
 This key's expiration was extended from **2022-03-02** to **2024-03-01**.
 If you encounter a complaint of expiration on `2022-03-02`, perform the steps
-in [Fetching new keys after 2020-04-06](#fetching-new-keys-after-2020-04-06)
-in order to pull down the updated public key content.
+in [Update keys after expiry extension](#update-keys-after-expiry-extension)
+to incorporate the updated public key content.
+
+#### Update keys after expiry extension
+
+For Debian based distributions:
+
+PackageCloud generally made use of `apt-key`, which will be deprecated in the future. Manually installed
+or configured repositories from some distributions, such as [TurnKey Linux](https://turnkeylinux.org), are
+already using the `signed-by` support within Debian package source lists.
+
+1. Determine if you're using `apt-key` or `signed-by` functionality:
+    
+    ```shell
+    grep 'deb \[signed-by=' /etc/apt/sources.list.d/gitlab_gitlab-?e.list
+    ```
+    
+    - If this `grep` returns any lines, you're using `signed-by` functionality. This takes
+      precedence over any `apt-key` usage.
+    - If this `grep` returns no lines, you're using `apt-key` functionality.
+
+1. For `signed-by`, the following script (run as root) updates the public keys for GitLab repositories:
+    
+    ```shell
+    awk '/deb \[signed-by=/{
+          pubkey = $2;
+          sub(/\[signed-by=/, "", pubkey);
+          sub(/\]$/, "", pubkey);
+          print pubkey
+        }' /etc/apt/sources.list.d/gitlab_gitlab-?e.list | \
+      while read line; do
+        curl -s "https://packages.gitlab.com/gpg.key" | gpg --dearmor > $line
+      done
+    ```
+    
+1. For `apt-key`, the following script (run as root) updates the public keys for GitLab repositories:
+    
+    ```shell
+    apt-key del 3F01618A51312F3F
+    curl -s "https://packages.gitlab.com/gpg.key" | apt-key add -
+    apt-key list 3F01618A51312F3F
+    ```
+
+For RPM based distributions:
+
+There are mild differences between Yum and Dnf, but the underlying configuration is identical.
+
+1. Remove any existing key from the repository keyrings:
+    
+    ```shell
+    for pubring in /var/cache/dnf/gitlab_gitlab-?e-*/pubring
+    do
+      gpg --homedir $pubring --delete-key F6403F6544A38863DAA0B6E03F01618A51312F3F
+    done
+    ```
+
+1. Update the repository data/cache, which asks you to confirm keys:
+    
+    ```shell
+    dnf check-update
+    ```
 
 #### Fetching new keys before 2020-04-06
 
