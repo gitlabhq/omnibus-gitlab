@@ -17,6 +17,7 @@
 #
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
+require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 version = Gitlab::Version.new('gitaly')
 
 name 'git'
@@ -44,6 +45,17 @@ source git: version.remote
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  git_cflags = '-fno-omit-frame-pointer'
+
+  # CentOS 7 uses gcc v4.8.5, which uses C90 (`-std=gnu90`) by default.
+  # C11 is a newer standard than C90, and gcc v5.1.0 switched the default
+  # from `std=gnu90` to `std=gnu11`.
+  # Git v2.35 added a balloon test that will fail the build if
+  # C99 is not supported. On other platforms, C11 may be required
+  # (https://gitlab.com/gitlab-org/gitlab-git/-/commit/7bc341e21b5).
+  # Similar is the case for SLES OSs also.
+  git_cflags += ' -std=gnu99' if OhaiHelper.get_centos_version.to_i == 7 || OhaiHelper.os_platform == 'sles'
+
   build_options = [
     "# Added by Omnibus git software definition git.rb",
     "GIT_APPEND_BUILD_OPTIONS += CURLDIR=#{install_dir}/embedded",
@@ -51,7 +63,7 @@ build do
     "GIT_APPEND_BUILD_OPTIONS += ZLIB_PATH=#{install_dir}/embedded",
     "GIT_APPEND_BUILD_OPTIONS += NEEDS_LIBICONV=YesPlease",
     "GIT_APPEND_BUILD_OPTIONS += NO_R_TO_GCC_LINKER=YesPlease",
-    "GIT_APPEND_BUILD_OPTIONS += CFLAGS=-fno-omit-frame-pointer"
+    "GIT_APPEND_BUILD_OPTIONS += CFLAGS=\"#{git_cflags}\""
   ]
 
   build_options << "GIT_APPEND_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded" unless Build::Check.use_system_ssl?
