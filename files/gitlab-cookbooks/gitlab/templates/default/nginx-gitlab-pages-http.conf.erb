@@ -102,6 +102,11 @@ server {
     # See https://gitlab.com/gitlab-org/gitlab-pages/issues/73
     proxy_cache off;
 
+    <% if @proxy_custom_buffer_size -%>
+      proxy_buffers 8 <%= @proxy_custom_buffer_size %>;
+      proxy_buffer_size <%= @proxy_custom_buffer_size %>;
+    <% end -%>
+
     proxy_pass          http://<%= @pages_listen_proxy %>;
   }
 

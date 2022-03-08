@@ -131,6 +131,10 @@ server {
     proxy_read_timeout      <%= @proxy_read_timeout %>;
     proxy_connect_timeout   <%= @proxy_connect_timeout %>;
     proxy_redirect          off;
+    <% if @proxy_custom_buffer_size -%>
+      proxy_buffers 8 <%= @proxy_custom_buffer_size %>;
+      proxy_buffer_size <%= @proxy_custom_buffer_size %>;
+    <% end -%>
 
     <% @proxy_set_headers.each do |header| %>
     <% next if header[1].nil? %>

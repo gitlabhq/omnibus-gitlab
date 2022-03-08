@@ -194,6 +194,10 @@ server {
   location <%= @path %> {
     proxy_cache off;
     proxy_pass  http://gitlab-workhorse;
+    <% if @proxy_custom_buffer_size -%>
+    proxy_buffers 8 <%= @proxy_custom_buffer_size %>;
+    proxy_buffer_size <%= @proxy_custom_buffer_size %>;
+    <% end -%>
   }
 
   location <%= File.join(@path, 'assets') %> {
