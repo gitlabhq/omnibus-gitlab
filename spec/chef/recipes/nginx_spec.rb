@@ -633,6 +633,44 @@ RSpec.describe 'nginx' do
     end
   end
 
+  context 'for proxy_custom_buffer_size' do
+    before do
+      stub_gitlab_rb(
+        external_url: 'https://localhost',
+        mattermost_external_url: 'https://mattermost.localhost',
+        pages_external_url: 'https://pages.localhost'
+      )
+    end
+
+    context 'when proxy_custom_buffer_size is set' do
+      before do
+        stub_gitlab_rb(
+          nginx: { proxy_custom_buffer_size: '42k' },
+          mattermost_nginx: { proxy_custom_buffer_size: '42k' },
+          pages_nginx: { proxy_custom_buffer_size: '42k' }
+        )
+      end
+
+      it 'applies nginx proxy_custom_buffer_size settings' do
+        ['gitlab', 'mattermost', 'pages'].each do |conf|
+          expect(chef_run).to render_file(http_conf[conf]).with_content { |content|
+            expect(content).to include('proxy_buffers 8 42k;')
+            expect(content).to include('proxy_buffer_size 42k;')
+          }
+        end
+      end
+    end
+
+    it 'does not set proxy_custom_buffer_size by default' do
+      ['gitlab', 'mattermost', 'pages'].each do |conf|
+        expect(chef_run).to render_file(http_conf[conf]).with_content { |content|
+          expect(content).not_to include('proxy_buffers 8 42k;')
+          expect(content).not_to include('proxy_buffer_size 42k;')
+        }
+      end
+    end
+  end
+
   include_examples "consul service discovery", "nginx", "nginx"
 
   describe 'logrotate settings' do
