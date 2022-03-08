@@ -140,18 +140,18 @@ module Geo
 
       log('Detected an application or a Sidekiq or a Geo log cursor or a Geo PostgreSQL node.')
 
-      # The geo_secondary_role must not be used in a mutiple-server setup.
-      # It is very convenient only for single-server Geo secondary sites.
-      if single_server_site?
-        GitlabCluster.config.set('primary', true)
-        GitlabCluster.config.set('secondary', false)
-      else
-        GitlabCluster.config.set('geo_secondary', 'enable', false) if puma_enabled? || sidekiq_enabled?
-        GitlabCluster.config.set('geo_logcursor', 'enable', false) if geo_logcursor_enabled?
-        GitlabCluster.config.set('geo_postgresql', 'enable', false) if geo_postgresql_enabled?
-      end
-
       unless progress_message('Disabling the secondary services and enabling the primary services in the cluster configuration file') do
+        # The geo_secondary_role must not be used in a mutiple-server setup.
+        # It is very convenient only for single-server Geo secondary sites.
+        if single_server_site?
+          GitlabCluster.config.set('primary', true)
+          GitlabCluster.config.set('secondary', false)
+        else
+          GitlabCluster.config.set('geo_secondary', 'enable', false) if puma_enabled? || sidekiq_enabled?
+          GitlabCluster.config.set('geo_logcursor', 'enable', false) if geo_logcursor_enabled?
+          GitlabCluster.config.set('geo_postgresql', 'enable', false) if geo_postgresql_enabled?
+        end
+
         GitlabCluster.config.save
       end
         die("Unable to write to #{GitlabCluster::JSON_FILE}.")
@@ -202,7 +202,6 @@ module Geo
 
       unless progress_message('Attempting to detect the role of this Geo node') do
         task = run_task('geo:site:role')
-
         next false if task.error?
 
         @node_role = task.stdout.strip.to_sym
@@ -306,7 +305,7 @@ module Geo
       @attributes ||= GitlabCtl::Util.get_node_attributes(base_path)
     end
 
-    def run_command(cmd, live: false)
+    def run_command(cmd, live: true)
       GitlabCtl::Util.run_command(cmd, live: live)
     end
 
@@ -314,11 +313,7 @@ module Geo
       run_command("#{base_path}/bin/gitlab-psql -c \"#{query}\" -q -t", live: live)
     end
 
-    def run_runner(cmd, live: false)
-      run_command("#{base_path}/bin/gitlab-rails runner \"#{cmd}\"", live: live)
-    end
-
-    def run_task(task, live: false)
+    def run_task(task, live: true)
       run_command("#{base_path}/bin/gitlab-rake #{task}", live: live)
     end
 
