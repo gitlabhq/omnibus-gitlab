@@ -235,7 +235,7 @@ module Geo
 
     def print_success_message
       puts
-      puts 'You successfully promoted the current node!'.color(:green)
+      puts 'You successfully promoted the current node! It might take some time to reload the services, and for the changes to take effect.'.color(:green)
     end
 
     def pg_is_in_recovery?
