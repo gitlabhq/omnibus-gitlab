@@ -15,7 +15,18 @@
       - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
-.com-except-triggers: &com-except-triggers
+.com-except-triggers-and-docs: &com-except-triggers-and-docs
+  except:
+    refs:
+      - /./@gitlab/omnibus-gitlab
+      - triggers
+      - /(^docs[\/-].*|.*-docs$)/
+      - /./@gitlab-org/build/omnibus-gitlab-mirror
+    variables:
+      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
+      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
+
+.com-except-triggers-docs-and-deps: &com-except-triggers-docs-and-deps
   except:
     refs:
       - /./@gitlab/omnibus-gitlab
@@ -27,11 +38,17 @@
       - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
 
-.com-branches-except-trigger: &com-branches-except-trigger
+.com-branches-except-triggers-docs-and-deps: &com-branches-except-triggers-docs-and-deps
   only:
     - branches@gitlab-org/omnibus-gitlab
     - branches@gitlab-org/security/omnibus-gitlab
-  <<: *com-except-triggers
+  <<: *com-except-triggers-docs-and-deps
+
+.com-branches-except-triggers-and-docs: &com-branches-except-triggers-and-docs
+  only:
+    - branches@gitlab-org/omnibus-gitlab
+    - branches@gitlab-org/security/omnibus-gitlab
+  <<: *com-except-triggers-and-docs
 
 .com-trigger-only: &com-trigger-only
   only:
@@ -77,7 +94,7 @@
     - export DISTRO_VERSION=${JOB_NAME[1]}
     - mkdir -p knapsack/
     - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json'
-  <<: *com-except-triggers
+  <<: *com-except-triggers-docs-and-deps
   retry: 1
   needs:
     - rubocop
@@ -133,7 +150,7 @@
     - rm -f knapsack/*.json
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
     - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml --format documentation]"
-  <<: *com-except-triggers
+  <<: *com-except-triggers-docs-and-deps
   artifacts:
     <<: *knapsack-artifacts
     reports:
@@ -166,7 +183,7 @@
     project: 'gitlab-org/build/omnibus-gitlab-mirror'
     branch: $CI_COMMIT_REF_NAME
     strategy: depend
-  <<: *com-branches-except-trigger
+  <<: *com-branches-except-triggers-docs-and-deps
   needs:
     - job: generate-facts
       artifacts: true
@@ -209,6 +226,7 @@
   except:
     variables:
       - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
+      - $CI_COMMIT_REF_NAME =~ /^deps/
       - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
 
 #####################
@@ -268,7 +286,7 @@ check-for-sha-in-mirror:
   image: "${RUBY_IMAGE}"
   script:
     - support/wait_for_sha
-  <<: *com-branches-except-trigger
+  <<: *com-branches-except-triggers-and-docs
   timeout: 3h
   needs: []
 
@@ -288,7 +306,7 @@ rubocop:
     - *install-gems
   script:
     - bundle exec rubocop --parallel
-  <<: *com-except-triggers
+  <<: *com-except-triggers-docs-and-deps
   needs: []
 
 # Perform documentation linting on Markdown files
@@ -462,7 +480,7 @@ update-knapsack:
   script:
     - support/merge-reports knapsack
     - rm -f knapsack/*node*
-  <<: *com-except-triggers
+  <<: *com-except-triggers-docs-and-deps
   retry: 1
 
 ############################
@@ -653,13 +671,10 @@ dependency_update:
       - $DEPS_PIPELINE
 
 dependencies_io_check:
+  extends: .trigger-job
+  when: always
   variables:
     ee: "true"
-  image: "${RUBY_IMAGE}"
-  stage: trigger-package
-  script:
-    - support/wait_for_sha
-    - bundle exec rake build:trigger
   only:
     refs:
       - /^deps.*/@gitlab-org/omnibus-gitlab
@@ -667,7 +682,6 @@ dependencies_io_check:
     refs:
       - triggers
       - branches@gitlab/omnibus-gitlab
-  needs: []
 
 validate_packer_changes:
   before_script: []
@@ -679,7 +693,7 @@ validate_packer_changes:
   only:
     changes:
       - support/packer/*
-  <<: *com-except-triggers
+  <<: *com-except-triggers-docs-and-deps
 
 ##############################
 #     Scheduled pipeline     #
