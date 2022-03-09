@@ -58,6 +58,10 @@ No changes.
 
 - [Add a warning if Sidekiq exporter and health checks are on the same port](gitlab-org/omnibus-gitlab@2f142b79d1c9d8a7cd879df736255ae223cffb2a) ([merge request](gitlab-org/omnibus-gitlab!5844))
 
+## 14.7.5 (2022-03-09)
+
+No changes.
+
 ## 14.7.4 (2022-02-25)
 
 ### Security (2 changes)
