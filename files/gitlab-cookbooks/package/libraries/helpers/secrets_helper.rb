@@ -110,6 +110,10 @@ class SecretsHelper
         'internal_certificate' => Gitlab['postgresql']['internal_certificate'],
         'internal_key' => Gitlab['postgresql']['internal_key']
       },
+      'mailroom' => {
+        'incoming_email_auth_token' => Gitlab['mailroom']['incoming_email_auth_token'],
+        'service_desk_email_auth_token' => Gitlab['mailroom']['service_desk_email_auth_token'],
+      },
     }
 
     if Gitlab['mattermost']['gitlab_enable']

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd <%= node['gitlab']['gitlab-rails']['dir'] %>/working
+cd <%= @options[:working_dir] %>
 
 exec 2>&1
 

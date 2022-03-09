@@ -170,6 +170,27 @@ production: &base
     # Whether to expunge (permanently remove) messages from the mailbox when they are deleted after delivery
     expunge_deleted: <%= @incoming_email_expunge_deleted %>
 
+    # How mailroom delivers email content to Rails. There are two methods at the moment:
+    # - sidekiq: mailroom pushes the email content to Sidekiq's Sidekiq
+    # directly. This job is then picked up by Sidekiq.
+    # - webhook: mailroom triggers a HTTP POST request to Rails web server. The
+    # content is embedded into the request body.
+    # Default is sidekiq.
+    delivery_method: <%= @incoming_email_delivery_method %>
+
+    <% if @incoming_email_delivery_method == "webhook" %>
+    # When the delivery method is webhook, those configs tell the url that
+    # mailroom can contact to. Note that the combined url must not end with "/".
+    # At the moment, the webhook delivery method doesn't support HTTP/HTTPs via
+    # UNIX socket.
+    gitlab_url: <%= @gitlab_url %>
+
+    # When the delivery method is webhook, this config is the file that
+    # contains the shared secret key for verifying access for mailroom's
+    # incoming_email.
+    secret_file: .gitlab_incoming_email_secret
+    <% end %>
+
   <%- if @object_store['enabled'] -%>
   ## Consolidated object store config
   # This uses a single credential for object storage with multiple buckets.
@@ -224,6 +245,27 @@ production: &base
     idle_timeout: <%= @service_desk_email_idle_timeout %>
     # file path of internal `mail_room` JSON logs
     log_path: <%= @service_desk_email_log_file %>
+
+    # How mailroom delivers email content to Rails. There are two methods at the moment:
+    # - sidekiq: mailroom pushes the email content to Sidekiq's Sidekiq
+    # directly. This job is then picked up by Sidekiq.
+    # - webhook: mailroom triggers a HTTP POST request to Rails web server. The
+    # content is embedded into the request body.
+    # Default is sidekiq.
+    delivery_method: <%= @service_desk_email_delivery_method %>
+
+    <% if @service_desk_email_delivery_method == "webhook" %>
+    # When the delivery method is webhook, those configs tell the url that
+    # mailroom can contact to. Note that the combined url must not end with "/".
+    # At the moment, the webhook delivery method doesn't support HTTP/HTTPs via
+    # UNIX socket.
+    gitlab_url: <%= @gitlab_url %>
+
+    # When the delivery method is webhook, this config is the file that
+    # contains the shared secret key for verifying access for mailroom's
+    # service_desk_email.
+    secret_file: .gitlab_service_desk_email_secret
+    <% end %>
 
   ## Build Artifacts
   artifacts:

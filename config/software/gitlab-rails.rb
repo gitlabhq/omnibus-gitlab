@@ -181,6 +181,8 @@ build do
   delete '.gitlab_workhorse_secret'
   delete '.gitlab_pages_secret'
   delete '.gitlab_kas_secret'
+  delete '.gitlab_incoming_email_secret'
+  delete '.gitlab_service_desk_email_secret'
 
   # Remove directories that will be created by `gitlab-ctl reconfigure`
   delete 'log'
