@@ -1293,6 +1293,13 @@ following settings are set:
 
 For more details, read [about the confusion over SMTP ports, TLS, and STARTTLS](https://www.fastmail.help/hc/en-us/articles/360058753834).
 
+### Emails not sending when using external Sidekiq
+
+If your instance has [an external Sidekiq](https://docs.gitlab.com/ee/administration/sidekiq.html)
+configured, the SMTP configuration must be present in `/etc/gitlab/gitlab.rb` on the external Sidekiq server. If
+the SMTP configuration is missing, you may notice that emails do not get sent through SMTP as many
+GitLab emails are sent via Sidekiq.
+
 ## Disable all outgoing email
 
 NOTE:
