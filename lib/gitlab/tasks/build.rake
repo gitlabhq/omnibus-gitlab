@@ -1,7 +1,6 @@
 require 'fileutils'
 require_relative "../build.rb"
 require_relative "../build/info.rb"
-require_relative '../build/omnibus_trigger'
 require_relative '../build/facts'
 require_relative "../ohai_helper.rb"
 require_relative '../version.rb'
@@ -80,20 +79,6 @@ namespace :build do
           puts file.gsub('pkg', "https://#{release_bucket}.#{release_bucket_s3_endpoint}").gsub('+', '%2B')
         end
       end
-    end
-  end
-
-  desc "Trigger package and QA builds"
-  task :trigger do
-    # We need to set the following variables to be able to post a comment with
-    # the "downstream" pipeline on the commit under test
-    Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_PROJECT', Gitlab::Util.get_env('CI_PROJECT_PATH'))
-    Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_JOB', Gitlab::Util.get_env('CI_JOB_URL'))
-    Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_SHA', Gitlab::Util.get_env('CI_COMMIT_SHA'))
-    Gitlab::Util.set_env_if_missing('TOP_UPSTREAM_SOURCE_REF', Gitlab::Util.get_env('CI_COMMIT_REF_NAME'))
-
-    Gitlab::Util.section('build:trigger') do
-      Build::OmnibusTrigger.invoke!(post_comment: true).wait!
     end
   end
 
