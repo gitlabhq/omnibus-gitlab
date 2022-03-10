@@ -451,7 +451,7 @@ RSpec.describe Geo::Promote, '#execute' do
 
       it 'prints a success message' do
         expect { command.execute }.to output(
-          /You successfully promoted the current node!/).to_stdout
+          /You successfully promoted the current node! It might take some time to reload the services, and for the changes to take effect./).to_stdout
       end
     end
 
