@@ -2,37 +2,230 @@ require 'chef_helper'
 
 RSpec.describe 'gitlab-ee::geo-secondary' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default') }
-  let(:database_geo_yml) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml') }
-  let(:database_geo_yml_content) { ChefSpec::Renderer.new(chef_run, database_geo_yml).content }
-  let(:generated_yml_content) { YAML.safe_load(database_geo_yml_content, [], [], true, symbolize_names: true) }
+  let(:database_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/database.yml') }
+  let(:database_yml_file_content) { ChefSpec::Renderer.new(chef_run, database_yml_template).content }
+  let(:database_yml) { YAML.safe_load(database_yml_file_content, [], [], true, symbolize_names: true) }
+
+  let(:default_content) do
+    {
+      main: {
+        adapter: 'postgresql',
+        application_name: nil,
+        collation: nil,
+        connect_timeout: nil,
+        database: "gitlabhq_production",
+        database_tasks: true,
+        encoding: "unicode",
+        host: "/var/opt/gitlab/postgresql",
+        keepalives: nil,
+        keepalives_count: nil,
+        keepalives_idle: nil,
+        keepalives_interval: nil,
+        load_balancing: {
+          hosts: []
+        },
+        password: nil,
+        port: 5432,
+        prepared_statements: false,
+        socket: nil,
+        sslca: nil,
+        sslcompression: 0,
+        sslmode: nil,
+        sslrootcert: nil,
+        statement_limit: 1000,
+        tcp_user_timeout: nil,
+        username: "gitlab",
+        variables: {
+          statement_timeout: nil
+        }
+      }
+    }
+  end
+
+  let(:default_geo_content) do
+    {
+      geo: {
+        adapter: 'postgresql',
+        application_name: nil,
+        collation: nil,
+        connect_timeout: nil,
+        database: "gitlabhq_geo_production",
+        database_tasks: true,
+        migrations_paths: "ee/db/geo/migrate",
+        schema_migrations_path: "ee/db/geo/schema_migrations",
+        encoding: "unicode",
+        host: "/var/opt/gitlab/geo-postgresql",
+        keepalives: nil,
+        keepalives_count: nil,
+        keepalives_idle: nil,
+        keepalives_interval: nil,
+        load_balancing: {
+          hosts: []
+        },
+        password: nil,
+        port: 5431,
+        prepared_statements: false,
+        socket: nil,
+        sslca: nil,
+        sslcompression: 0,
+        sslmode: nil,
+        sslrootcert: nil,
+        statement_limit: nil,
+        tcp_user_timeout: nil,
+        username: "gitlab_geo",
+        variables: {
+          statement_timeout: nil
+        }
+      }
+    }
+  end
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
-  describe 'when geo_secondary_role is disabled' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+  shared_examples 'renders database.yml without geo database' do
+    context 'database_geo.yml' do
+      it 'removes the database_geo.yml symlink' do
+        expect(chef_run).to delete_templatesymlink('Remove the deprecated database_geo.yml symlink')
+                              .with(link_to: '/var/opt/gitlab/gitlab-rails/etc/database_geo.yml',
+                                    link_from: '/opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml')
+      end
+    end
 
-    before { stub_gitlab_rb(geo_secondary_role: { enable: false }) }
+    context 'database.yml' do
+      it 'renders database.yml without geo database' do
+        expect(database_yml[:production].keys).not_to include(:geo)
+      end
 
-    it 'does not render the geo-secondary files' do
-      expect(chef_run).not_to render_file('/opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml')
-      expect(chef_run).not_to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml')
+      context 'with geo database specified' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              databases: {
+                geo: {
+                  enable: true,
+                  db_connect_timeout: 50
+                }
+              }
+            }
+          )
+        end
+
+        it 'renders database.yml without geo database' do
+          expect(database_yml[:production].keys).not_to include(:geo)
+        end
+      end
     end
   end
 
-  describe 'when geo_secondary_role is disabled but geo-postgresql enabled' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+  shared_examples 'renders database.yml with both main and geo databases' do
+    context 'database_geo.yml' do
+      it 'removes the database_geo.yml symlink' do
+        expect(chef_run).to delete_templatesymlink('Remove the deprecated database_geo.yml symlink')
+                              .with(link_to: '/var/opt/gitlab/gitlab-rails/etc/database_geo.yml',
+                                    link_from: '/opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml')
+      end
+    end
 
+    context 'database.yml' do
+      context 'with default settings' do
+        it 'renders database.yml with main stanza first' do
+          expect(database_yml_file_content).to match("production:\n  main:")
+        end
+
+        it 'renders database.yml with both main and geo databases using default values' do
+          expected_output = default_content.merge(default_geo_content)
+
+          expect(database_yml[:production]).to eq(expected_output)
+        end
+      end
+
+      context 'with user provided settings' do
+        context "via top level geo_secondary['db_*'] keys" do
+          before do
+            stub_gitlab_rb(
+              geo_secondary: {
+                db_database: 'foo',
+                db_sslcompression: 1
+              }
+            )
+          end
+
+          it 'renders database.yml with user specified values for geo database' do
+            expect(database_yml[:production][:geo][:database]).to eq('foo')
+            expect(database_yml[:production][:geo][:sslcompression]).to eq(1)
+          end
+        end
+
+        context "via gitlab_rails['databases']['geo'] settings" do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                databases: {
+                  geo: {
+                    enable: true,
+                    db_database: 'bar',
+                    db_sslcompression: 1
+                  }
+                }
+              }
+            )
+          end
+
+          it 'renders database.yml with user specified values for geo database' do
+            expect(database_yml[:production][:geo][:database]).to eq('bar')
+            expect(database_yml[:production][:geo][:sslcompression]).to eq(1)
+          end
+        end
+      end
+
+      context 'with geo database specified but not enabled' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              databases: {
+                main: {
+                  db_connect_timeout: 30
+                },
+                geo: {
+                  db_connect_timeout: 50
+                }
+              }
+            }
+          )
+        end
+
+        it 'renders database.yml without geo database' do
+          expect(database_yml[:production].keys).not_to include(:geo)
+        end
+      end
+
+      context 'dependent services' do
+        let(:templatesymlink) { chef_run.templatesymlink('Add the geo database settings to database.yml and create a symlink to Rails root') }
+
+        it 'triggers dependent services notifications' do
+          expect(templatesymlink).to notify('ruby_block[Restart geo-secondary dependent services]').to(:run).delayed
+        end
+      end
+    end
+  end
+
+  describe 'when geo_secondary_role is disabled' do
+    before do
+      stub_gitlab_rb(geo_secondary_role: { enable: false })
+    end
+
+    it_behaves_like 'renders database.yml without geo database'
+  end
+
+  describe 'when geo_secondary_role is disabled but geo-postgresql enabled' do
     before do
       stub_gitlab_rb(geo_secondary_role: { enable: false },
                      geo_postgresql: { enable: true })
     end
 
-    it 'does not render the geo-secondary files' do
-      expect(chef_run).not_to render_file('/opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml')
-      expect(chef_run).not_to render_file('/var/opt/gitlab/gitlab-rails/etc/database_geo.yml')
-    end
+    it_behaves_like 'renders database.yml without geo database'
   end
 
   describe 'when gitlab_rails is disabled, but geo_secondary_role is enabled' do
@@ -44,7 +237,7 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
     end
 
     it 'does not render the geo-secondary files' do
-      expect(chef_run).not_to create_templatesymlink('Create a database_geo.yml and create a symlink to Rails root')
+      expect(chef_run).not_to create_templatesymlink('Add the geo database settings to database.yml and create a symlink to Rails root')
     end
   end
 
@@ -109,15 +302,10 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
   context 'when geo_secondary_role is enabled but geo-postgresql is disabled' do
     before do
       stub_gitlab_rb(geo_secondary_role: { enable: true },
-                     geo_postgresql: { enable: false },
-                     geo_secondary: {
-                       db_host: '1.1.1.1',
-                       db_password: 'password',
-                       db_port: '5431'
-                     })
+                     geo_postgresql: { enable: false })
     end
 
-    describe 'migrations' do
+    context 'migrations' do
       let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
       it 'includes the database migration recipe' do
@@ -125,52 +313,7 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
       end
     end
 
-    describe 'database.yml' do
-      it 'creates the database_geo.yml template not using many database structure' do
-        expect(generated_yml_content).to eq(
-          production: {
-            adapter: 'postgresql',
-            application_name: nil,
-            collation: nil,
-            connect_timeout: nil,
-            database: 'gitlabhq_geo_production',
-            encoding: 'unicode',
-            host: '1.1.1.1',
-            keepalives: nil,
-            keepalives_count: nil,
-            keepalives_idle: nil,
-            keepalives_interval: nil,
-            load_balancing: {
-              hosts: []
-            },
-            password: 'password',
-            port: 5431,
-            prepared_statements: false,
-            socket: nil,
-            sslca: nil,
-            sslcompression: 0,
-            sslmode: nil,
-            sslrootcert: nil,
-            statement_limit: nil,
-            tcp_user_timeout: nil,
-            username: 'gitlab_geo',
-            variables: {
-              statement_timeout: nil,
-            }
-          }
-        )
-      end
-
-      context 'when SSL compression is enabled' do
-        before do
-          stub_gitlab_rb(geo_secondary: { db_sslcompression: 1 })
-        end
-
-        it 'uses provided value in database.yml' do
-          expect(generated_yml_content[:production][:sslcompression]).to eq(1)
-        end
-      end
-    end
+    it_behaves_like 'renders database.yml with both main and geo databases'
   end
 
   context 'when geo_secondary_role is enabled' do
@@ -201,48 +344,7 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
       ).map { |svc| stub_should_notify?(svc, true) }
     end
 
-    describe 'database.yml' do
-      let(:templatesymlink) { chef_run.templatesymlink('Create a database_geo.yml and create a symlink to Rails root') }
-
-      it 'creates the database_geo.yml template not using many database structure' do
-        expect(generated_yml_content).to eq(
-          production: {
-            adapter: 'postgresql',
-            application_name: nil,
-            collation: nil,
-            connect_timeout: nil,
-            database: 'gitlabhq_geo_production',
-            encoding: 'unicode',
-            host: '/var/opt/gitlab/geo-postgresql',
-            keepalives: nil,
-            keepalives_count: nil,
-            keepalives_idle: nil,
-            keepalives_interval: nil,
-            load_balancing: {
-              hosts: []
-            },
-            password: nil,
-            port: 5431,
-            prepared_statements: false,
-            socket: nil,
-            sslca: nil,
-            sslcompression: 0,
-            sslmode: nil,
-            sslrootcert: nil,
-            statement_limit: nil,
-            tcp_user_timeout: nil,
-            username: 'gitlab_geo',
-            variables: {
-              statement_timeout: nil,
-            }
-          }
-        )
-      end
-
-      it 'template triggers dependent services notifications' do
-        expect(templatesymlink).to notify('ruby_block[Restart geo-secondary dependent services]').to(:run).delayed
-      end
-    end
+    it_behaves_like 'renders database.yml with both main and geo databases'
 
     describe 'PostgreSQL gitlab-geo.conf' do
       let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
@@ -264,9 +366,8 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
       end
     end
 
-    describe 'Restart geo-secondary dependent services' do
+    describe 'restart geo-secondary dependent services' do
       let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
-
       let(:ruby_block) { chef_run.ruby_block('Restart geo-secondary dependent services') }
 
       it 'does not run' do

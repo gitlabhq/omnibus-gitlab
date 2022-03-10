@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
 gitlab_rails_source_dir = '/opt/gitlab/embedded/service/gitlab-rails'
@@ -22,12 +23,24 @@ gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
 dependent_services = %w(puma sidekiq)
 
-templatesymlink 'Removes database_geo.yml symlink' do
+# TODO: To be removed in 15.0. See https://gitlab.com/gitlab-org/gitlab/-/issues/351946
+templatesymlink 'Remove the deprecated database_geo.yml symlink' do
   link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')
   link_to File.join(gitlab_rails_etc_dir, 'database_geo.yml')
+
+  action :delete
+end
+
+templatesymlink 'Removes the geo database settings from database.yml and create a symlink to Rails root' do
+  link_from File.join(gitlab_rails_source_dir, 'config/database.yml')
+  link_to File.join(gitlab_rails_etc_dir, 'database.yml')
+  source 'database.yml.erb'
+  cookbook 'gitlab'
+  owner 'root'
+  group account_helper.gitlab_group
+  mode '0640'
+  variables node['gitlab']['gitlab-rails'].to_hash
   dependent_services.each do |svc|
     notifies :restart, omnibus_helper.restart_service_resource(svc) if omnibus_helper.should_notify?(svc)
   end
-
-  action :delete
 end

@@ -25,19 +25,27 @@ postgresql_group = account_helper.postgresql_group
 
 gitlab_rails_source_dir = '/opt/gitlab/embedded/service/gitlab-rails'
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
-gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
+gitlab_rails_etc_dir = File.join(gitlab_rails_dir, 'etc')
 
 dependent_services = %w(puma geo-logcursor sidekiq)
 
-templatesymlink 'Create a database_geo.yml and create a symlink to Rails root' do
+# TODO: To be removed in 15.0. See https://gitlab.com/gitlab-org/gitlab/-/issues/351946
+templatesymlink 'Remove the deprecated database_geo.yml symlink' do
   link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')
   link_to File.join(gitlab_rails_etc_dir, 'database_geo.yml')
-  source 'database_geo.yml.erb'
+
+  action :delete
+end
+
+templatesymlink 'Add the geo database settings to database.yml and create a symlink to Rails root' do
+  link_from File.join(gitlab_rails_source_dir, 'config/database.yml')
+  link_to File.join(gitlab_rails_etc_dir, 'database.yml')
+  source 'database.yml.erb'
   cookbook 'gitlab'
   owner 'root'
   group account_helper.gitlab_group
   mode '0640'
-  variables node['gitlab']['geo-secondary'].to_hash
+  variables node['gitlab']['gitlab-rails'].to_hash
   notifies :run, 'ruby_block[Restart geo-secondary dependent services]'
 end
 
@@ -50,7 +58,7 @@ ruby_block 'Restart geo-secondary dependent services' do
   action :nothing
 end
 
-# Make structure.sql writable for when we run `rake geo:db:migrate`
+# Make structure.sql writable for when we run `rake db:migrate:geo`
 file '/opt/gitlab/embedded/service/gitlab-rails/ee/db/geo/structure.sql' do
   owner gitlab_user
 end
