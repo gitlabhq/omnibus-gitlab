@@ -51,7 +51,7 @@ RSpec.describe 'gitlab-ctl replicate-geo-database' do
                                       skip_backup: false,
                                       skip_replication_slot: false,
                                       backup_timeout: 1800,
-                                      sslmode: 'verify-ca',
+                                      sslmode: 'verify-full',
                                       sslcompression: 0,
                                       recovery_target_timeline: 'latest',
                                       db_name: 'gitlabhq_production'))
