@@ -29,7 +29,7 @@ class AWSHelper
       @type = "#{@type}-#{architecture}"
     end
 
-    @download_url = Build::Info.package_download_url(**args)
+    @download_url = Build::Info.deb_package_download_url(**args)
 
     system(*%W[support/packer/packer_ami.sh #{@version} #{@type} #{@download_url} #{@license_file}])
   end
