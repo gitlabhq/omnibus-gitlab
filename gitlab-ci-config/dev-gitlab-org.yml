@@ -658,6 +658,21 @@ RAT-Nightly:
   allow_failure: true
   <<: *dev-ee-nightly-only
 
+# This job runs only on nightly EE builds
+RAT-Nightly-FIPS:
+  stage: slow_jobs
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  variables:
+    USE_SYSTEM_SSL: "true"
+    RAT_REFERENCE_ARCHITECTURE: "omnibus-gitlab-mrs-fips"
+  script:
+    - bundle exec rake qa:rat:nightly
+  cache: *branch-cache
+  needs:
+    - CentOS-8-fips-branch
+  allow_failure: true
+  <<: *dev-ee-nightly-only
+
 ############################
 #     Release pipeline     #
 ############################

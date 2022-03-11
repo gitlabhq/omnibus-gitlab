@@ -19,11 +19,16 @@ module Build
       end
 
       def self.get_params(image: nil)
+        package_url = if Build::Check.use_system_ssl?
+                        Build::Info.rpm_package_download_url
+                      else
+                        Build::Info.deb_package_download_url
+                      end
         {
           'ref' => 'master',
           'token' => Gitlab::Util.get_env('RAT_TRIGGER_TOKEN'),
-          'variables[REFERENCE_ARCHITECTURE]' => 'omnibus-gitlab-mrs',
-          'variables[PACKAGE_URL]' => Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.package_download_url,
+          'variables[REFERENCE_ARCHITECTURE]' => Gitlab::Util.get_env('RAT_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs',
+          'variables[PACKAGE_URL]' => Gitlab::Util.get_env('PACKAGE_URL') || package_url,
           'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || image || 'gitlab/gitlab-ee-qa:nightly'
         }
       end

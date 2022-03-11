@@ -160,12 +160,21 @@ module Build
       end
 
       # Fetch the package from an S3 bucket
-      def package_download_url(arch: 'amd64')
+      def deb_package_download_url(arch: 'amd64')
         folder = 'ubuntu-focal'
         folder = "#{folder}-aarch64" if arch == 'arm64'
 
         package_filename_url_safe = Info.release_version.gsub("+", "%2B")
         "https://#{Info.release_bucket}.#{Info.release_bucket_s3_endpoint}/#{folder}/#{Info.package}_#{package_filename_url_safe}_#{arch}.deb"
+      end
+
+      def rpm_package_download_url(arch: 'x86_64')
+        folder = 'el-8'
+        folder = "#{folder}-aarch64" if arch == 'arm64'
+        folder = "#{folder}-fips" if Build::Check.use_system_ssl?
+
+        package_filename_url_safe = Info.release_version.gsub("+", "%2B")
+        "https://#{Info.release_bucket}.#{Info.release_bucket_s3_endpoint}/#{folder}/#{Info.package}-#{package_filename_url_safe}.el8.#{arch}.rpm"
       end
 
       def get_api(path, token: nil)
@@ -209,7 +218,7 @@ module Build
         download_url = if token && !token.empty?
                          Info.triggered_build_package_url
                        else
-                         Info.package_download_url
+                         Info.deb_package_download_url
                        end
         contents = []
         contents << "PACKAGECLOUD_REPO=#{repo.chomp}\n" if repo && !repo.empty?
