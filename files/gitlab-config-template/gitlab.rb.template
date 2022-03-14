@@ -1569,7 +1569,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#disable-user-and-group-account-management
 ################################################################################
 
-# manage_accounts['enable'] = false
+# manage_accounts['enable'] = true
 
 ################################################################################
 ## Storage directories
