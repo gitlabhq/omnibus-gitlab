@@ -173,7 +173,8 @@ class OmnibusHelper
       'ubuntu-16.04' => 'GitLab 14.0',
       'opensuseleap-15.1' => 'GitLab 14.0',
       'opensuseleap-15.2' => 'GitLab 14.5',
-      'suse-12.2' => 'GitLab 14.5'
+      'suse-12.2' => 'GitLab 14.5',
+      'debian-9' => 'GitLab 15.2'
     }
   end
 
