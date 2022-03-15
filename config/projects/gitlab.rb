@@ -242,6 +242,11 @@ exclude 'embedded/lib/ruby/gems/*/gems/*/script'
 exclude 'embedded/lib/ruby/gems/*/gems/*/t'
 
 # Exclude additional files from specific gems
+exclude 'embedded/lib/ruby/gems/*/gems/gitlab-grpc-*/include'
+exclude 'embedded/lib/ruby/gems/*/gems/gitlab-grpc-*/src/core'
+exclude 'embedded/lib/ruby/gems/*/gems/gitlab-grpc-*/src/ruby/ext'
+exclude 'embedded/lib/ruby/gems/*/gems/gitlab-grpc-*/src/ruby/spec'
+exclude 'embedded/lib/ruby/gems/*/gems/gitlab-grpc-*/third_party'
 exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/include'
 exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/src/core'
 exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/src/ruby/ext'
