@@ -3,12 +3,7 @@
 WORKTYPE_LABELS = [
   'type::bug',
   'type::feature',
-  'feature::addition',
-  'feature::enhancement',
-  'type::maintenance',
-  'type::tooling',
-  'tooling::pipelines',
-  'tooling::workflow'
+  'type::maintenance'
 ].freeze
 
 fail "Please provide a proper merge request description." if gitlab.mr_body.size < 5
