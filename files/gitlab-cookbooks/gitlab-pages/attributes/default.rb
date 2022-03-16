@@ -42,6 +42,7 @@ default['gitlab-pages']['sentry_environment'] = nil
 default['gitlab-pages']['headers'] = nil
 default['gitlab-pages']['api_secret_key'] = nil
 default['gitlab-pages']['gitlab_client_http_timeout'] = nil
+default['gitlab-pages']['server_shutdown_timeout'] = nil
 default['gitlab-pages']['gitlab_client_jwt_expiry'] = nil
 default['gitlab-pages']['env_directory'] = '/opt/gitlab/etc/gitlab-pages/env'
 # Serving from zip archives fine grained configuration.

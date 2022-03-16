@@ -91,6 +91,9 @@ tls-min-version=<%= @tls_min_version %>
 <%- if @tls_max_version-%>
 tls-max-version=<%= @tls_max_version %>
 <%- end -%>
+<%- if @server_shutdown_timeout -%>
+server-shutdown-timeout=<%= @server_shutdown_timeout %>
+<%- end -%>
 <%- if @gitlab_client_http_timeout -%>
 gitlab-client-http-timeout=<%= @gitlab_client_http_timeout %>
 <%- end -%>
