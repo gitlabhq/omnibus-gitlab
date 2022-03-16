@@ -1693,6 +1693,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['auth_secret'] = nil # Generated if not present
 # gitlab_pages['auth_scope'] = nil # Defaults to api, can be changed to read_api to increase security
 
+##! GitLab Pages Server Shutdown Timeout
+##! Duration ("30s" for 30 seconds)
+# gitlab_pages['server_shutdown_timeout'] = "30s"
+
 ##! GitLab API HTTP client connection timeout
 # gitlab_pages['gitlab_client_http_timeout'] = "10s"
 
