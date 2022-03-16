@@ -1,7 +1,6 @@
 NO_BUILD_CHANGE_HAPPENED_LABELS = [
-  'type::tooling',
-  'tooling::pipelines',
-  'tooling::workflow',
+  'maintenance::pipelines',
+  'maintenance::workflow'
 ].freeze
 
 SOFTWARE_MESSAGE = <<~MSG.freeze
