@@ -435,6 +435,7 @@ default['gitlab']['gitlab-rails']['db_sslcert'] = nil
 default['gitlab']['gitlab-rails']['db_sslkey'] = nil
 default['gitlab']['gitlab-rails']['db_sslca'] = nil
 default['gitlab']['gitlab-rails']['db_prepared_statements'] = false
+default['gitlab']['gitlab-rails']['db_database_tasks'] = true
 default['gitlab']['gitlab-rails']['db_statements_limit'] = 1000
 default['gitlab']['gitlab-rails']['db_statement_timeout'] = nil
 default['gitlab']['gitlab-rails']['db_connect_timeout'] = nil

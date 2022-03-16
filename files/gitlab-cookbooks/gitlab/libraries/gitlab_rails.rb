@@ -19,6 +19,7 @@ require_relative '../../gitaly/libraries/gitaly.rb'
 
 module GitlabRails
   ALLOWED_DATABASES = %w[main ci].freeze
+  SHARED_DATABASE_ATTRIBUTES = %w[db_host db_port db_database].freeze
 
   class << self
     def parse_variables
@@ -195,7 +196,10 @@ module GitlabRails
       # Set default value for attributes of main database based on top level
       # `gitlab_rails['db_*']` settings.
       database_attributes.each do |attribute|
-        Gitlab['gitlab_rails']['databases']['main'][attribute] ||= Gitlab['gitlab_rails'][attribute] || Gitlab['node']['gitlab']['gitlab-rails'][attribute]
+        next unless Gitlab['gitlab_rails']['databases']['main'][attribute].nil?
+
+        Gitlab['gitlab_rails']['databases']['main'][attribute] =
+          [Gitlab['gitlab_rails'][attribute], Gitlab['node']['gitlab']['gitlab-rails'][attribute]].compact.first
       end
     end
 
@@ -223,8 +227,15 @@ module GitlabRails
         next if database == 'main'
 
         database_attributes.each do |attribute|
-          Gitlab['gitlab_rails']['databases'][database][attribute] ||= Gitlab['gitlab_rails']['databases']['main'][attribute]
+          next unless Gitlab['gitlab_rails']['databases'][database][attribute].nil?
+
+          Gitlab['gitlab_rails']['databases'][database][attribute] = Gitlab['gitlab_rails']['databases']['main'][attribute]
         end
+
+        # If additional database shares attributes with main
+        # it should be skipped from database_tasks (running migrations)
+        database_same_as_main = SHARED_DATABASE_ATTRIBUTES.all? { |attribute| Gitlab['gitlab_rails']['databases'][database][attribute] == Gitlab['gitlab_rails']['databases']['main'][attribute] }
+        Gitlab['gitlab_rails']['databases'][database]['db_database_tasks'] = false if database_same_as_main
       end
     end
 
