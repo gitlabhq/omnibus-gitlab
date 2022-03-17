@@ -108,7 +108,7 @@ After you have these files, enable SSL:
 1. Add the following to `/etc/gitlab/gitlab.rb`:
 
     ```ruby
-    postgresql['db_sslmode'] = 'require'
+    gitlab_rails['db_sslmode'] = 'require'
     ```
 
 1. [Reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure) to apply the configuration changes.
@@ -701,7 +701,7 @@ socket:
 1. Add the following to `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   postgresql['db_sslmode'] = 'require'
+   gitlab_rails['db_sslmode'] = 'require'
    ```
 
 1. [Reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure) to apply the configuration changes.
