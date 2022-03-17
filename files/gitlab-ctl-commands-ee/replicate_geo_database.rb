@@ -22,7 +22,7 @@ class GeoReplicationCommand
       slot_name: nil,
       skip_replication_slot: false,
       backup_timeout: 1800,
-      sslmode: 'verify-ca',
+      sslmode: 'verify-full',
       sslcompression: 0,
       recovery_target_timeline: 'latest',
       db_name: 'gitlabhq_production'
