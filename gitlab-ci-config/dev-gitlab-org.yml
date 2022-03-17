@@ -575,6 +575,14 @@ OpenSUSE-15.3-arm64-branch:
   <<: *branch_build
   tags:
   - docker-arm-builder
+AmazonLinux-2-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+AmazonLinux-2-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *branch_build
+  tags:
+  - docker-arm-builder
 SLES-12.2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -803,6 +811,14 @@ OpenSUSE-15.3-arm64:
   <<: *tag_build
   tags:
   - docker-arm-builder
+AmazonLinux-2:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+AmazonLinux-2-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
+  <<: *tag_build
+  tags:
+  - docker-arm-builder
 SLES-12.2:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp2:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -912,6 +928,20 @@ OpenSUSE-15.3-arm64-staging:
     - job: OpenSUSE-15.3-arm64-branch
       optional: true
   <<: *staging_upload
+AmazonLinux-2-staging:
+  needs:
+    - job: AmazonLinux-2
+      optional: true
+    - job: AmazonLinux-2-branch
+      optional: true
+  <<: *staging_upload
+AmazonLinux-2-arm64-staging:
+  needs:
+    - job: AmazonLinux-2-arm64
+      optional: true
+    - job: AmazonLinux-2-arm64-branch
+      optional: true
+  <<: *staging_upload
 SLES-12.2-staging:
   needs:
     - job: SLES-12.2
@@ -1007,6 +1037,14 @@ OpenSUSE-15.3-release:
 OpenSUSE-15.3-arm64-release:
   needs:
     - OpenSUSE-15.3-arm64
+  <<: *production_release
+AmazonLinux-2-release:
+  needs:
+    - AmazonLinux-2
+  <<: *production_release
+AmazonLinux-2-arm64-release:
+  needs:
+    - AmazonLinux-2-arm64
   <<: *production_release
 SLES-12.2-release:
   needs:
