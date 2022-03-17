@@ -1,14 +1,11 @@
 #!/opt/gitlab/embedded/bin/ruby
 
-require 'resolv'
-require 'json'
-require 'logger'
+require '/opt/gitlab/embedded/cookbooks/consul/libraries/failover_helper'
 require 'open3'
+require 'logger'
 
 @log = Logger.new('<%= @log_directory %>/failover_pgbouncer.log')
 @log.level = Logger::INFO
-
-
 
 def run_command(command)
   exit_status = 0
@@ -29,64 +26,29 @@ def run_command(command)
   exit_status.to_i
 end
 
-def find_passing_service(data, service)
-  data.select do |x|
-    x['Checks'].find do |y|
-      y['CheckID'].eql?(service) && y['Status'].eql?('passing')
-    end
-  end
-end
-
-# When multiple masters are found, running `gitlab-ctl repmgr-check-master` in
-# PG nodes will print `Multiple masters found` and exit returning code 3.
-# Because any value other than 0 or 1 is `critical` for consul, we need a way
-# to differentiate between a multiple-master situation and any legit error that
-# happened while running gitlab-ctl repmgr-check-master. So, we check the
-# output string of the command.
-def find_masters(data, service)
-  data.select do |x|
-    x['Checks'].find do |y|
-      (y['CheckID'].eql?(service) && y['Status'].eql?('passing')) || (y['CheckID'].eql?(service) && y['Output'].include?('MasterNode: Multiple masters found'))
-    end
-  end
-end
+service_data = FailoverHelper::ServiceData.new
+service_data.service_name = "service:postgresql"
+service_data.check_field = "Status"
+service_data.leader_value = "passing"
 
 begin
-  data = JSON.parse($stdin.gets)
-rescue JSON::ParserError
-  @log.error('Invalid input detected')
-  Kernel.exit 1
-end
+  failover = FailoverHelper::LeaderFinder.new($stdin.gets, service_data)
+  new_primary = failover.primary_node_address
+  @log.info("Found primary: #{new_primary}")
 
-begin
-  healthy_agents = find_passing_service(data, 'serfHealth')
-  masters = find_masters(healthy_agents, 'service:postgresql')
-rescue Exception => e
-  @log.error("Error parsing data: #{e.inspect}")
+  Kernel.exit run_command("gitlab-ctl pgb-notify --newhost #{new_primary} --user pgbouncer --hostuser gitlab-consul")
+rescue JSON::ParserError => jparser_error
+  @log.error(jparser_error.message)
   Kernel.exit 2
-end
-
-if masters.length > 1
-  @log.error('More than one master found, stopping pgbouncer to prevent issues.')
-  masters.each do |master|
-    @log.error("    Node: #{master['Node']['Node']}")
+rescue FailoverHelper::SplitBrain => splitbrain_error
+  @log.error(splitbrain_error.message)
+  splitbrain_error.primary_nodes.each do |primary|
+    @log.error("    Node: #{primary.name}")
   end
-  @log.error('Once the error is cleared, consul will reload pgbouncer')
+  @log.error('Stopping pgbouncer to prevent issues. Once the error is cleared, consul will reload pgbouncer')
   results = run_command('gitlab-ctl pgb-kill --pg-database gitlabhq_production --user pgbouncer --hostuser gitlab-consul')
   Kernel.exit 3 + results
-elsif masters.empty?
-  @log.error('No master found')
+rescue FailoverHelper::PrimaryMissing => no_primary_error
+  @log.error(no_primary_error.message)
   Kernel.exit 4
 end
-
-newhost = masters.first['Node']['Node']
-begin
-  Resolv::DNS.new.getaddress(newhost)
-rescue Resolv::ResolvError
-  @log.info("#{newhost} does not resolve in DNS, using IP address of node instead")
-  newhost = masters.first['Node']['Address']
-end
-
-@log.info("Found master: #{newhost}")
-
-Kernel.exit run_command("gitlab-ctl pgb-notify --newhost #{newhost} --user pgbouncer --hostuser gitlab-consul")
