@@ -76,7 +76,7 @@ end
 
 # Arm targets need libatomic
 if OhaiHelper.arm?
-  if rhel?
+  if rhel? || amazon?
     runtime_dependency 'libatomic'
   else
     runtime_dependency 'libatomic1'

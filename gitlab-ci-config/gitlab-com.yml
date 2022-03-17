@@ -416,6 +416,7 @@ OpenSUSE 15.3 knapsack: *prepare_knapsack
 Ubuntu 16.04 knapsack: *prepare_knapsack
 Ubuntu 18.04 knapsack: *prepare_knapsack
 Ubuntu 20.04 knapsack: *prepare_knapsack
+AmazonLinux 2 knapsack: *prepare_knapsack
 
 Ubuntu 16.04 specs:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
@@ -471,6 +472,12 @@ OpenSUSE 15.3 specs :
   parallel: 6
   needs:
   - OpenSUSE 15.3 knapsack
+AmazonLinux 2 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-amazonlinux2"
+  extends: .spec_template
+  parallel: 6
+  needs:
+  - AmazonLinux 2 knapsack
 
 update-knapsack:
   extends: .knapsack-state
