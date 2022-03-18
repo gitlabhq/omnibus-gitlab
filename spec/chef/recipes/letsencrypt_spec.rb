@@ -42,30 +42,9 @@ RSpec.describe 'letsencrypt::enable' do
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
   let(:node) { chef_run.node }
 
-  let(:redirect_block) do
-    <<-EOF
-server {
-  listen *:80;
-
-  server_name fakehost.example.com;
-  server_tokens off; ## Don't show the nginx version number, a security best practice
-
-  location /.well-known {
-    root /var/opt/gitlab/nginx/www/;
-  }
-
-  location / {
-    return 301 https://fakehost.example.com:443$request_uri;
-  }
-
-  # health checks configuration
-  include /var/opt/gitlab/nginx/conf/gitlab-health.conf;
-
-  access_log  /var/log/gitlab/nginx/gitlab_access.log gitlab_access;
-  error_log   /var/log/gitlab/nginx/gitlab_error.log error;
-}
-    EOF
-  end
+  let(:https_redirect_block) { %r!server { ## HTTPS redirect server(.*)} ## end HTTPS redirect server!m }
+  let(:https_block) { %r!server { ## HTTPS server(.*)} ## end HTTPS server!m }
+  let(:acme_challenge_block) { %r!\s*location /.well-known/acme-challenge/ {! }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -84,6 +63,8 @@ server {
     before do
       stub_gitlab_rb(
         external_url: 'https://fakehost.example.com',
+        mattermost_external_url: 'https://fakemost.example.com',
+        registry_external_url: 'https://fakereg.example.com',
         letsencrypt: {
           enable: true
         }
@@ -94,10 +75,33 @@ server {
       expect(chef_run).to include_recipe('letsencrypt::enable')
     end
 
-    it 'Updates nginx configuration' do
-      expect(node['gitlab']['nginx']['redirect_http_to_https']).to be_truthy
-      expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-http.conf')
-        .with_content(redirect_block)
+    context 'when updating nginx configurations' do
+      using RSpec::Parameterized::TableSyntax
+
+      where(:redirect_config_key, :nginx_config_file) do
+        'nginx' | '/var/opt/gitlab/nginx/conf/gitlab-http.conf'
+        'mattermost-nginx' | '/var/opt/gitlab/nginx/conf/gitlab-mattermost-http.conf'
+        'registry-nginx' | '/var/opt/gitlab/nginx/conf/gitlab-registry.conf'
+      end
+
+      with_them do
+        it 'redirects http to https' do
+          expect(node['gitlab'][redirect_config_key]['redirect_http_to_https']).to be_truthy
+        end
+
+        it 'includes the well known acme challenge location block' do
+          expect(chef_run).to render_file(nginx_config_file).with_content { |content|
+            https_redirect_server = content.match(https_redirect_block)
+            https_server = content.match(https_block)
+
+            expect(https_redirect_server).not_to be_nil
+            expect(https_server).not_to be_nil
+
+            expect(https_redirect_server.to_s).to match(acme_challenge_block)
+            expect(https_server.to_s).to match(acme_challenge_block)
+          }
+        end
+      end
     end
 
     it 'uses http authorization by default' do

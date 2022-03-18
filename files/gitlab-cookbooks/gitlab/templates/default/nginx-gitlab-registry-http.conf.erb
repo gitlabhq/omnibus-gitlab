@@ -11,7 +11,7 @@
 
 <% if @https && @redirect_http_to_https %>
 ## Redirects all HTTP traffic to the HTTPS host
-server {
+server { ## HTTPS redirect server
 <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @redirect_http_to_https_port %><% if @proxy_protocol %> proxy_protocol<% end %>;
 <% end %>
@@ -20,7 +20,7 @@ server {
   server_tokens off; ## Don't show the nginx version number, a security best practice
 
   <% if @letsencrypt_enable %>
-  location /.well-known {
+  location /.well-known/acme-challenge/ {
     root <%= @dir %>/www/;
   }
   <% end %>
@@ -35,10 +35,10 @@ server {
 
   access_log  <%= @log_directory %>/gitlab_registry_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_registry_error.log <%= @error_log_level%>;
-}
+} ## end HTTPS redirect server
 <% end %>
 
-server {
+server { ## HTTPS server
 <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% if @http2_enabled %> http2<% end %><% end %>;
 <% end %>
@@ -95,6 +95,12 @@ server {
   access_log  <%= @log_directory %>/gitlab_registry_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_registry_error.log <%= @error_log_level%>;
 
+  <% if @letsencrypt_enable %>
+  location /.well-known/acme-challenge/ {
+    root <%= @dir %>/www/;
+  }
+  <% end %>
+
   location / {
 
     <% @proxy_set_headers.each do |header| %>
@@ -112,4 +118,4 @@ server {
   }
 
   <%= @custom_gitlab_server_config %>
-}
+} ## end HTTPS server
