@@ -34,3 +34,5 @@ build_facts
 node_modules
 
 spec/examples.txt
+
+.projections.json
