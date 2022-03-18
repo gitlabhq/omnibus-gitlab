@@ -68,8 +68,8 @@ Lint/ConstantDefinitionInBlock:
     - 'files/gitlab-ctl-commands/upgrade.rb'
     - 'spec/chef/secrets_spec.rb'
     - 'spec/gitlab-ctl-commands/gitlab_ctl_spec.rb'
-    - 'spec/gitlab/build/image_spec.rb'
-    - 'spec/gitlab/tasks/qa_spec.rb'
+    - 'spec/lib/gitlab/build/image_spec.rb'
+    - 'spec/lib/gitlab/tasks/qa_spec.rb'
     - 'spec/support/shared_examples/geo_promotion_command_accepts_option_shared_examples.rb'
     - 'spec/support/shared_examples/gitlab_geo_promotion_commands_shared_examples.rb'
 

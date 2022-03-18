@@ -1,5 +1,5 @@
 require 'spec_helper'
-require_relative '../../../lib/gitlab/docker_operations.rb'
+require 'gitlab/docker_operations'
 
 RSpec.describe 'docker', type: :rake do
   before :all do
