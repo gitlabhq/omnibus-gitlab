@@ -51,6 +51,7 @@ default['gitlab-pages']['zip_cache_expiration'] = nil
 default['gitlab-pages']['zip_cache_cleanup'] = nil
 default['gitlab-pages']['zip_cache_refresh'] = nil
 default['gitlab-pages']['zip_open_timeout'] = nil
+default['gitlab-pages']['zip_http_client_timeout'] = nil
 # API-based fine grained configuration.
 # The recommended default values are set inside GitLab Pages.
 default['gitlab-pages']['gitlab_cache_expiry'] = nil

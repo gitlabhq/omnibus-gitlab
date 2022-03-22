@@ -1739,6 +1739,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['zip_cache_refresh'] = "30s"
 ##! The maximum amount of time it takes to open a zip archive from the file system or object storage.
 # gitlab_pages['zip_open_timeout'] = "30s"
+##! Zip HTTP Client timeout
+# gitlab_pages['zip_http_client_timeout'] = "30m"
 
 ##! Enable serving content from disk instead of Object Storage
 # gitlab_pages['enable_disk'] = nil
