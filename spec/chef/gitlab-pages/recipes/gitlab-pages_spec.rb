@@ -210,6 +210,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             zip_cache_cleanup: "1m",
             zip_cache_refresh: "60s",
             zip_open_timeout: "45s",
+            zip_http_client_timeout: "30m",
             internal_gitlab_server: "https://int.gitlab.example.com",
             gitlab_cache_expiry: "1m",
             gitlab_cache_refresh: "500ms",
@@ -247,6 +248,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             zip-cache-cleanup=1m
             zip-cache-refresh=60s
             zip-open-timeout=45s
+            zip-http-client-timeout=30m
             listen-proxy=localhost:8090
             metrics-address=localhost:1234
             pages-status=/@status
