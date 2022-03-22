@@ -9,26 +9,6 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 NOTE:
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/index.html#checking-for-background-migrations-before-upgrading).
 
-## 14.9
-
-### Amazon Linux 2 packages
-
-Starting with GitLab 14.9, GitLab provides packages for Amazon Linux 2.
-
-- Users with existing installations who installed with the
-  [official bash script](https://about.gitlab.com/install)
-  will continue to use CentOS 7 packages without manual intervention.
-- New installations with the [official bash script](https://about.gitlab.com/install)
-  will now use Amazon Linux 2 native packages.
-
-To switch an existing installation to use Amazon Linux 2 native packages, use
-one of the following methods to update the local repo configuration:
-
-- Fetch the repository configuration again using the `curl` command from the
-  [official install page](https://about.gitlab.com/install).
-- Manually edit the repo file at `/etc/yum.repos.d/gitlab_gitlab-ee.repo` and
-  replace the string `el/7` with `amazon/2`.
-
 ## 14.7
 
 ### Redis 6.2.6
