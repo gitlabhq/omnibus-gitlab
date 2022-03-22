@@ -25,6 +25,7 @@ production:
     <% end %>
     load_balancing: <%= attributes['db_load_balancing'].to_json %>
     prepared_statements: <%= attributes['db_prepared_statements'] %>
+    database_tasks: <%= attributes['db_database_tasks'] %>
     statement_limit: <%= attributes['db_statements_limit'] %>
     connect_timeout: <%= attributes['db_connect_timeout'] %>
     keepalives: <%= attributes['db_keepalives'] %>

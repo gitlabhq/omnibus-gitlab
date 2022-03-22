@@ -14,6 +14,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
           collation: nil,
           connect_timeout: nil,
           database: "gitlabhq_production",
+          database_tasks: true,
           encoding: "unicode",
           host: "/var/opt/gitlab/postgresql",
           keepalives: nil,
@@ -64,6 +65,29 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
         it 'renders database.yml with user specified values for main database' do
           expect(database_yml[:production][:main][:database]).to eq('foobar')
+          expect(database_yml[:production][:main][:database_tasks]).to eq(true)
+        end
+      end
+
+      context 'via top level db_* keys and overwritten main:' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              db_database: 'foobar',
+              db_database_tasks: true,
+              databases: {
+                main: {
+                  enable: true,
+                  db_database_tasks: false
+                }
+              }
+            }
+          )
+        end
+
+        it 'renders database.yml with user specified values for main database' do
+          expect(database_yml[:production][:main][:database]).to eq('foobar')
+          expect(database_yml[:production][:main][:database_tasks]).to eq(false)
         end
       end
 
@@ -87,7 +111,33 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
 
       context 'with additional databases specified' do
-        context 'with default values for other settings' do
+        context 'when using the same database as main:' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                databases: {
+                  ci: {
+                    enable: true
+                  }
+                }
+              }
+            )
+          end
+
+          it 'renders database.yml with main stanza first' do
+            expect(database_yml_file_content).to match("production:\n  main:")
+          end
+
+          it 'renders database.yml with both main and additional databases using default values, but disabled database_tasks' do
+            ci_content = default_content[:main].dup
+            ci_content[:database_tasks] = false
+            expected_output = default_content.merge(ci: ci_content)
+
+            expect(database_yml[:production]).to eq(expected_output)
+          end
+        end
+
+        context 'when using a different database to main:' do
           before do
             stub_gitlab_rb(
               gitlab_rails: {
@@ -105,12 +155,41 @@ RSpec.describe 'gitlab::gitlab-rails' do
             expect(database_yml_file_content).to match("production:\n  main:")
           end
 
-          it 'renders database.yml with both main and additional databases using default values' do
+          it 'renders database.yml with both main and additional databases using default values, and enabled database_tasks' do
             ci_content = default_content[:main].dup
             ci_content[:database] = 'gitlabhq_production_ci'
+            ci_content[:database_tasks] = true
             expected_output = default_content.merge(ci: ci_content)
 
             expect(database_yml[:production]).to eq(expected_output)
+          end
+        end
+
+        context 'when db_database_tasks is explicitly enabled in main, but disabled in CI' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                databases: {
+                  main: {
+                    db_connect_timeout: 30,
+                    db_database_tasks: true
+                  },
+                  ci: {
+                    enable: true,
+                    db_host: 'patroni-ci',
+                    db_connect_timeout: 50,
+                    db_database_tasks: false
+                  }
+                }
+              }
+            )
+          end
+
+          it 'renders database.yml with user specified DB settings' do
+            expect(database_yml[:production][:main][:connect_timeout]).to eq(30)
+            expect(database_yml[:production][:main][:database_tasks]).to eq(true)
+            expect(database_yml[:production][:ci][:connect_timeout]).to eq(50)
+            expect(database_yml[:production][:ci][:database_tasks]).to eq(false)
           end
         end
 
@@ -124,7 +203,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
                   },
                   ci: {
                     enable: true,
-                    db_connect_timeout: 50
+                    db_connect_timeout: 50,
+                    db_database_tasks: false
                   }
                 }
               }
@@ -133,7 +213,9 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
           it 'renders database.yml with user specified DB settings' do
             expect(database_yml[:production][:main][:connect_timeout]).to eq(30)
+            expect(database_yml[:production][:main][:database_tasks]).to eq(true)
             expect(database_yml[:production][:ci][:connect_timeout]).to eq(50)
+            expect(database_yml[:production][:ci][:database_tasks]).to eq(false)
           end
         end
 
