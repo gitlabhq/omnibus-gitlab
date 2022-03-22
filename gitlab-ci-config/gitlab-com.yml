@@ -387,26 +387,25 @@ review-docs-cleanup:
   script:
     - ./trigger-build.rb docs cleanup
 
+include:
+  - project: 'gitlab-org/quality/pipeline-common'
+    file:
+      - '/ci/danger-review.yml'
+
 danger-review:
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
   stage: check
-  cache: {}
-  needs: []
-  only:
-    refs:
-      - branches@gitlab-org/omnibus-gitlab
-  except:
-    refs:
-      - schedules@gitlab-org/omnibus-gitlab
-      - /^[\d-]+-stable(-patch-[\d]+)?$/
-      - master
-    variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
-      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
-  before_script:
-    - gem install gitlab-dangerfiles --no-document --version 3.0.0
-  script:
-    - danger --fail-on-errors=true
+  rules:
+    - if: '$CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME =~ /^[\d-]+-stable(-patch-[\d]+)?$/'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH'
+      when: never
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/'
+      when: never
+    - if: '$DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING'
+      when: never
+    - if: '$CI_COMMIT_BRANCH'
 
 Centos 7 knapsack: *prepare_knapsack
 Centos 8 knapsack: *prepare_knapsack
