@@ -406,6 +406,8 @@ danger-review:
     - if: '$DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING'
       when: never
     - if: '$CI_COMMIT_BRANCH'
+  variables:
+    BUNDLE_WITH: "danger"
 
 Centos 7 knapsack: *prepare_knapsack
 Centos 8 knapsack: *prepare_knapsack
