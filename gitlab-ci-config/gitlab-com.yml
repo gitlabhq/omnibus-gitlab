@@ -218,7 +218,7 @@
     - chmod 755 trigger-build.rb
   variables:
     GIT_STRATEGY: none
-    DOCS_REVIEW_APPS_DOMAIN: 178.62.207.141.nip.io
+    DOCS_REVIEW_APPS_DOMAIN: 35.193.151.162.nip.io
   when: manual
   only:
     refs:
