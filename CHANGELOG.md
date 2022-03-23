@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.9.1 (2022-03-23)
+
+No changes.
+
 ## 14.9.0 (2022-03-21)
 
 ### Added (9 changes)
