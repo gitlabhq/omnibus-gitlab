@@ -139,7 +139,6 @@ dependency 'gitlab-redis-cli'
 dependency 'gitlab-healthcheck'
 dependency 'gitlab-selinux'
 dependency 'gitlab-scripts'
-dependency 'package-scripts'
 dependency 'gitlab-config-template'
 
 # Build GitLab components at the end because except for tag pipelines, we build
@@ -162,6 +161,8 @@ dependency 'git'
 dependency 'gitlab-rails'
 dependency 'gitaly'
 
+# Package scripts
+dependency 'package-scripts'
 # version manifest file
 dependency 'version-manifest'
 
