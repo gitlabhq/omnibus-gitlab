@@ -51,9 +51,9 @@ Layout/RescueEnsureAlignment:
 # Cop supports --auto-correct.
 Layout/SpaceAroundMethodCallOperator:
   Exclude:
-    - 'spec/chef/recipes/postgresql_spec.rb'
-    - 'spec/gitlab-ctl-commands-ee/lib/postgresql/ee_spec.rb'
-    - 'spec/libraries/logging_helper_spec.rb'
+    - 'spec/chef/cookbooks/postgresql/recipes/postgresql_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands-ee/lib/postgresql/ee_spec.rb'
+    - 'spec/chef/cookbooks/package/libraries/helpers/logging_helper_spec.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -66,12 +66,12 @@ Layout/SpaceBeforeFirstArg:
 Lint/ConstantDefinitionInBlock:
   Exclude:
     - 'files/gitlab-ctl-commands/upgrade.rb'
-    - 'spec/chef/secrets_spec.rb'
-    - 'spec/gitlab-ctl-commands/gitlab_ctl_spec.rb'
+    - 'spec/chef/cookbooks/package/libraries/secrets_helper_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands/gitlab_ctl_spec.rb'
     - 'spec/lib/gitlab/build/image_spec.rb'
     - 'spec/lib/gitlab/tasks/qa_spec.rb'
-    - 'spec/support/shared_examples/geo_promotion_command_accepts_option_shared_examples.rb'
-    - 'spec/support/shared_examples/gitlab_geo_promotion_commands_shared_examples.rb'
+    - 'spec/chef/support/shared_examples/geo_promotion_command_accepts_option_shared_examples.rb'
+    - 'spec/chef/support/shared_examples/gitlab_geo_promotion_commands_shared_examples.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -226,11 +226,11 @@ Style/GlobalStdStream:
     - 'files/gitlab-ctl-commands-ee/lib/geo/replication.rb'
     - 'files/gitlab-ctl-commands/lib/gitlab_ctl/util.rb'
     - 'lib/gitlab/build/trigger.rb'
-    - 'spec/gitlab-ctl-commands-ee/lib/geo/promote_to_primary_node_spec.rb'
-    - 'spec/gitlab-ctl-commands-ee/lib/geo/promotion_preflight_checks_spec.rb'
-    - 'spec/gitlab-ctl-commands-ee/lib/geo/replication_spec.rb'
-    - 'spec/gitlab-ctl-commands/lib/gitlab_ctl_backup_spec.rb'
-    - 'spec/gitlab-ctl-commands/lib/util_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands-ee/lib/geo/promote_to_primary_node_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands-ee/lib/geo/promotion_preflight_checks_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands-ee/lib/geo/replication_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands/lib/gitlab_ctl_backup_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands/lib/util_spec.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -311,15 +311,15 @@ Style/RedundantRegexpEscape:
   Exclude:
     - 'files/gitlab-cookbooks/gitlab/libraries/registry.rb'
     - 'files/gitlab-cookbooks/package/libraries/helpers/redhat_helper.rb'
-    - 'spec/chef/recipes/add_trusted_certs_spec.rb'
-    - 'spec/chef/recipes/gitlab-workhorse_spec.rb'
-    - 'spec/chef/recipes/mailroom_spec.rb'
-    - 'spec/chef/recipes/puma_spec.rb'
-    - 'spec/chef/recipes/registry_spec.rb'
-    - 'spec/chef/recipes/sidekiq_spec.rb'
-    - 'spec/chef/recipes/unicorn_spec.rb'
+    - 'spec/chef/cookbooks/gitlab/recipes/add_trusted_certs_spec.rb'
+    - 'spec/chef/cookbooks/gitlab/recipes/gitlab-workhorse_spec.rb'
+    - 'spec/chef/cookbooks/gitlab/recipes/mailroom_spec.rb'
+    - 'spec/chef/cookbooks/gitlab/recipes/puma_spec.rb'
+    - 'spec/chef/cookbooks/registry/recipes/registry_spec.rb'
+    - 'spec/chef/cookbooks/gitlab/recipes/sidekiq_spec.rb'
+    - 'spec/chef/cookbooks/gitlab/recipes/unicorn_spec.rb'
     - 'spec/chef_helper.rb'
-    - 'spec/gitlab-ctl-commands-ee/lib/geo/promote_to_primary_node_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands-ee/lib/geo/promote_to_primary_node_spec.rb'
 
 # Offense count: 249
 # Cop supports --auto-correct.

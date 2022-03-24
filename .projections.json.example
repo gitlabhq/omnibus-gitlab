@@ -7,5 +7,29 @@
     "alternate": "lib/{}.rb",
     "type": "test",
     "dispatch": "bundle exec rspec {file}"
+  },
+  "files/gitlab-cookbooks/*.rb" : {
+    "alternate": "spec/chef/cookbooks/{}_spec.rb",
+    "type": "source"
+  },
+  "spec/chef/cookbooks/*_spec.rb": {
+    "alternate": "files/gitlab-cookbooks/{}.rb",
+    "type": "test"
+  },
+  "files/gitlab-ctl-commands/*.rb" : {
+    "alternate": "spec/chef/gitlab-ctl-commands/{}_spec.rb",
+    "type": "source"
+  },
+  "spec/chef/gitlab-ctl-commands/*_spec.rb": {
+    "alternate": "files/gitlab-ctl-commands/{}.rb",
+    "type": "test"
+  },
+  "files/gitlab-ctl-commands-ee/*.rb" : {
+    "alternate": "spec/chef/gitlab-ctl-commands-ee/{}_spec.rb",
+    "type": "source"
+  },
+  "spec/chef/gitlab-ctl-commands-ee/*_spec.rb": {
+    "alternate": "files/gitlab-ctl-commands-ee/{}.rb",
+    "type": "test"
   }
 }
