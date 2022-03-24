@@ -99,7 +99,7 @@ module GitlabSpec
     # Return the full path for the spec fixtures folder
     # @return [String] full path
     def fixture_path
-      File.join(__dir__, '../fixtures')
+      File.join(__dir__, '../chef/fixtures')
     end
 
     def get_rendered_toml(chef_run, path)
