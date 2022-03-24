@@ -14,7 +14,7 @@ to make contributing as easy as possible.
 
 ## Documentation
 
-The documentation overview is in the [readme in the doc directory](doc/README.md).
+The documentation overview is in the [doc directory](doc/index.md).
 
 ## Omnibus fork
 
@@ -22,7 +22,7 @@ Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omni
 
 ## Deprecated links
 
-*We left the links below in the readme to preserve old links, but please use the [readme in the doc directory](doc/README.md) to browse the complete documentation.*
+*We left the links below in the readme to preserve old links, but please use the [index in the doc directory](doc/index.md) to browse the complete documentation.*
 
 ## Contributing
 
