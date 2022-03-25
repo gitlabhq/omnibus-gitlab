@@ -53,7 +53,3 @@ group :test do
   gem 'pry'
   gem 'rspec-parameterized', require: false
 end
-
-group :danger, optional: true do
-  gem 'gitlab-dangerfiles', '~> 3.0', require: false
-end
