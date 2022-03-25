@@ -27,7 +27,8 @@ AllCops:
     - 'node_modules/**/*'
     - 'vendor/bundle/**/*'
     - 'files/gitlab-cookbooks/runit/**/*'
-    - 'danger/changelog/Dangerfile'
+    - 'scripts/changelog'
+    - 'scripts/support/changelog/Dangerfile'
     - 'scripts/security-harness'
 
 # No rails in omnibus
