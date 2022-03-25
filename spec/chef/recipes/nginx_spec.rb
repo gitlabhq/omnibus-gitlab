@@ -63,7 +63,7 @@ RSpec.describe 'gitlab::nginx' do
   it 'uses the default proxy_intercept_errors option when custom_error_pages is not defined' do
     chef_runner.node.normal['gitlab']['nginx'].delete('custom_error_pages')
     expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
-      expect(content).not_to include("proxy_intercept_errors")
+      expect(content).not_to include("proxy_intercept_errors on")
     }
   end
 end

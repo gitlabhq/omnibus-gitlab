@@ -181,10 +181,12 @@ server { ## HTTPS server
   <% if node['gitlab-kas']['enable'] -%>
   location = <%= File.join(@path, '-/kubernetes-agent/') %> {
     proxy_pass http://<%= node['gitlab-kas']['listen_address'] %>/;
+    proxy_intercept_errors off;
   }
 
   location <%= File.join(@path, '-/kubernetes-agent/k8s-proxy/') %> {
     proxy_pass http://<%= node['gitlab-kas']['kubernetes_api_listen_address'] %>/;
+    proxy_intercept_errors off;
   }
   <% end -%>
 
