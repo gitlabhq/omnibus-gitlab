@@ -1,0 +1,14 @@
+# frozen_string_literal: true
+
+return if helper.has_scoped_label_with_scope?("workflow")
+
+REVIEWERS_MESSAGE = <<~MSG
+Please add the ~"workflow::ready for review" label once you think the MR is ready to for an initial review.
+
+Merge requests are handled according to the workflow documented in our [handbook](https://about.gitlab.com/handbook/engineering/development/enablement/distribution/merge_requests.html) and should receive a response within the limit documented in our [First-response SLO](https://about.gitlab.com/handbook/engineering/workflow/code-review/#first-response-slo).
+
+If you don't receive a response, please mention `@gitlab-org\/distribution`, or one of our [Project Maintainers](https://about.gitlab.com/handbook/engineering/projects/#omnibus-gitlab)
+MSG
+
+# Print maintainers message
+message(REVIEWERS_MESSAGE)

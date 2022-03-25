@@ -4,7 +4,8 @@ That's OK as long as you're refactoring existing code,
 but please consider adding the ~"type::maintenance" label in that case.
 MSG
 
-has_app_changes = !git.modified_files.grep(%r{\A(files|lib)/}).empty?
-has_spec_changes = !git.modified_files.grep(/spec/).empty?
+all_changed_files = helper.all_changed_files
+has_app_changes = all_changed_files.grep(%r{\A(files|lib)/}).any?
+has_spec_changes = all_changed_files.grep(/spec/).any?
 
 warn NO_NEW_SPEC_MESSAGE, sticky: false if has_app_changes && !has_spec_changes
