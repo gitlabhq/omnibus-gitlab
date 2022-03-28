@@ -414,7 +414,7 @@ description at the [Omnibus GitLab issue tracker](https://gitlab.com/gitlab-org/
 
 To upgrade the PostgreSQL version, be sure that:
 
-- You're running the latest version of GitLab, and it's working.
+- You're running the latest version of GitLab that supports your current version of PostgreSQL.
 - If you recently upgraded, you ran `sudo gitlab-ctl reconfigure` successfully
   before you proceed.
 - You have sufficient disk space for two copies of your database. _Do not attempt
