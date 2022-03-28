@@ -204,8 +204,12 @@ generate-facts:
   needs: []
 
 include:
-  - '/gitlab-ci-config/gitlab-com.yml'
-  - '/gitlab-ci-config/dev-gitlab-org.yml'
+  - local: '/gitlab-ci-config/gitlab-com.yml'
+    rules:
+      - if: '$CI_SERVER_HOST == "gitlab.com"'
+  - local: '/gitlab-ci-config/dev-gitlab-org.yml'
+    rules:
+      - if: '$CI_SERVER_HOST == "dev.gitlab.org"'
 
 .notify:
   before_script:
