@@ -128,7 +128,7 @@
   - bundle exec rake cache:bundle
   - bundle exec rake build:component_shas
 
-.spec_template:
+.spec_template: &spec_template
   extends: .gems-cache
   stage: tests
   before_script:
@@ -136,6 +136,18 @@
     # so tests run fine on forks
     - export ALTERNATIVE_SOURCES="true";
     - *install-gems
+  <<: *com-except-triggers-docs-and-deps
+  retry: 1
+  script:
+    - bundle exec rspec --color --format RspecJunitFormatter --out junit_rspec.xml --format documentation spec/lib
+  artifacts:
+    reports:
+      junit: junit_rspec.xml
+
+.chef_spec_template:
+  extends: .spec_template
+  variables:
+    KNAPSACK_TEST_FILE_PATTERN: "spec/chef/**{,/*/**}/*_spec.rb"
   script:
     - JOB_NAME=( $CI_JOB_NAME )
     - export DISTRO_NAME=${JOB_NAME[0]}
@@ -150,12 +162,10 @@
     - rm -f knapsack/*.json
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
     - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml --format documentation]"
-  <<: *com-except-triggers-docs-and-deps
   artifacts:
     <<: *knapsack-artifacts
     reports:
       junit: junit_rspec.xml
-  retry: 1
 
 .trigger-job:
   stage: trigger-package
@@ -418,63 +428,69 @@ Ubuntu 18.04 knapsack: *prepare_knapsack
 Ubuntu 20.04 knapsack: *prepare_knapsack
 AmazonLinux 2 knapsack: *prepare_knapsack
 
+build library specs:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-focal"
+  extends: .spec_template
+  needs:
+    - rubocop
+
 Ubuntu 16.04 specs:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
-  extends: .spec_template
+  extends: .chef_spec_template
   parallel: 6
   needs:
   - Ubuntu 16.04 knapsack
 Ubuntu 18.04 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
-  extends: .spec_template
+  extends: .chef_spec_template
   parallel: 6
   needs:
   - Ubuntu 18.04 knapsack
 Ubuntu 20.04 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-focal"
-  extends: .spec_template
+  extends: .chef_spec_template
   parallel: 6
   needs:
   - Ubuntu 20.04 knapsack
 Debian 9 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  extends: .spec_template
+  extends: .chef_spec_template
   parallel: 6
   needs:
   - Debian 9 knapsack
 Debian 10 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-buster"
-  extends: .spec_template
+  extends: .chef_spec_template
   parallel: 6
   needs:
   - Debian 10 knapsack
 Debian 11 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bullseye"
-  extends: .spec_template
+  extends: .chef_spec_template
   parallel: 6
   needs:
   - Debian 11 knapsack
 Centos 7 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
-  extends: .spec_template
+  extends: .chef_spec_template
   parallel: 6
   needs:
   - Centos 7 knapsack
 Centos 8 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos8"
-  extends: .spec_template
+  extends: .chef_spec_template
   parallel: 6
   needs:
   - Centos 8 knapsack
 OpenSUSE 15.3 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse15.3"
-  extends: .spec_template
+  extends: .chef_spec_template
   parallel: 6
   needs:
   - OpenSUSE 15.3 knapsack
 AmazonLinux 2 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-amazonlinux2"
-  extends: .spec_template
+  extends: .chef_spec_template
   parallel: 6
   needs:
   - AmazonLinux 2 knapsack

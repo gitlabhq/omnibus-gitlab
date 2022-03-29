@@ -14,6 +14,9 @@ $LOAD_PATH << './files/gitlab-ctl-commands-ee/lib'
 $LOAD_PATH << './files/gitlab-ctl-commands/lib'
 
 Knapsack::Adapters::RSpecAdapter.bind if Gitlab::Util.get_env('USE_KNAPSACK')
+Knapsack.report.config({
+                         test_file_pattern: 'spec/chef/**/*_spec.rb'
+                       })
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = './spec/examples.txt' unless Gitlab::Util.get_env('CI')
