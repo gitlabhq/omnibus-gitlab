@@ -36,3 +36,5 @@ node_modules
 spec/examples.txt
 
 .projections.json
+
+coverage/

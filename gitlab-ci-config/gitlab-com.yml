@@ -141,7 +141,7 @@
   script:
     - bundle exec rspec --color --format RspecJunitFormatter --out junit_rspec.xml --format documentation spec/lib
   artifacts:
-    reports:
+    reports: &spec_reports
       junit: junit_rspec.xml
 
 .chef_spec_template:
@@ -433,6 +433,11 @@ build library specs:
   extends: .spec_template
   needs:
     - rubocop
+  coverage: '/\(\d+.\d+\%\) covered/'
+  artifacts:
+    reports:
+      <<: *spec_reports
+      cobertura: coverage/coverage.xml
 
 Ubuntu 16.04 specs:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"

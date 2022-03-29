@@ -52,4 +52,5 @@ group :test do
   gem 'rspec_junit_formatter'
   gem 'pry'
   gem 'rspec-parameterized', require: false
+  gem 'simplecov-cobertura'
 end
