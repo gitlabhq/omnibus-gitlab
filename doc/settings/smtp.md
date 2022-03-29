@@ -852,13 +852,14 @@ gitlab_rails['gitlab_email_reply_to'] = 'noreply@domain.com'
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
-gitlab_rails['smtp_address'] = "in.mailjet.com"
-gitlab_rails['smtp_port'] = 2525
-gitlab_rails['smtp_user_name'] = "your.username"
-gitlab_rails['smtp_password'] = "your.password"
-gitlab_rails['smtp_domain'] = "in.mailjet.com"
-gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_address'] = "in-v3.mailjet.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "mailjet-api-key"
+gitlab_rails['smtp_password'] = "mailjet-secret-key"
+gitlab_rails['smtp_domain'] = "in-v3.mailjet.com"
+gitlab_rails['smtp_authentication'] = "plain"
 gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
 gitlab_rails['gitlab_email_from'] = 'gitlab@domain.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@domain.com'
 ```
