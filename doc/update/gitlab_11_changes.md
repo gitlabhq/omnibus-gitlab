@@ -64,7 +64,7 @@ been removed:
 
 ### 11.2
 
-Rack Attack is disabled by default. To continue using Rack Attack, you must [enable it manually](https://docs.gitlab.com/ee/security/rack_attack.html#settings).
+Rack Attack is disabled by default. To continue using Rack Attack, you must [enable it manually](https://docs.gitlab.com/ee/user/admin_area/settings/protected_paths.html).
 
 ### 11.3
 

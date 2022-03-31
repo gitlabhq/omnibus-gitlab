@@ -17,7 +17,7 @@ it to relevant stakeholders, both internal and external to the company.
 Slack reminders are configured to remind Distribution team's Slack channel on
 the first day of every quarter to check EOL dates of various supported
 operating systems. Known EOL dates and links to find out the unknown ones are
-linked from [the deprecated OSs page](https://docs.gitlab.com/ee/administration/package_information/package_information/deprecated_os.html).
+linked from [the deprecated OSs page](https://docs.gitlab.com/ee/administration/package_information/supported_os.html).
 
 ## Informing users of the deprecation and upcoming removal of support
 

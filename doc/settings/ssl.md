@@ -38,7 +38,7 @@ NOTE:
 In order for Let's Encrypt verification to work automatically, ports 80 and 443 will
 need to be accessible to the public Let's Encrypt servers that run the validation checks. The validation
 [does not work with non-standard ports](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3580).
-If the environment is private or air-gapped, certbot provides a [manual method](https://certbot.eff.org/docs/using.html#manual) to generate certificates for [custom installation](ssl.md#install-custom-public-certificates).
+If the environment is private or air-gapped, certbot provides a [manual method](https://eff-certbot.readthedocs.io/en/stable/using.html#manual) to generate certificates for [custom installation](ssl.md#install-custom-public-certificates).
 
 WARNING:
 Administrators installing or upgrading to GitLab 10.7 or later and do not plan on using
@@ -443,7 +443,7 @@ compiled to look for certificates in `/opt/gitlab/embedded/ssl/certs`.
 
 GitLab-Omnibus manages custom certificates by symlinking any certificate that
 gets added to `/etc/gitlab/trusted-certs/` to `/opt/gitlab/embedded/ssl/certs`
-using the [c_rehash](https://www.openssl.org/docs/man1.1.0/man1/c_rehash.html)
+using the [c_rehash](https://www.openssl.org/docs/manmaster/man1/c_rehash.html)
 tool. For example, let's suppose we add `customcacert.pem` to
 `/etc/gitlab/trusted-certs/`:
 

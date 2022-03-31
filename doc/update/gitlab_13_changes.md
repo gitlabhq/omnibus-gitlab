@@ -75,7 +75,7 @@ If you are using your own NGINX rather than the bundled version, and are proxyin
 
 ### CentOS/RHEL 6 packages no longer provided
 
-With these operating systems reaching their end-of-life for support, we are no longer providing packages for them. See the [supported operating systems](https://docs.gitlab.com/ee/administration/package_information/deprecated_os.html) page for details.
+With these operating systems reaching their end-of-life for support, we are no longer providing packages for them. See the [supported operating systems](https://docs.gitlab.com/ee/administration/package_information/supported_os.html) page for details.
 
 This change also impacts [the packages available for Amazon Linux 2](https://docs.gitlab.com/ee/update/package/#gitlab-137-and-later-unavailable-on-amazon-linux-2).
 
@@ -139,4 +139,4 @@ redis['io_threads_do_reads'] = true
 ```
 
 If your instance has Redis HA with Sentinel, follow the upgrade steps documented in
-[Update GitLab installed with the Omnibus GitLab package](https://docs.gitlab.com/ee/update/zero_downtime.md#use-redis-ha-using-sentinel)
+[Update GitLab installed with the Omnibus GitLab package](https://docs.gitlab.com/ee/update/zero_downtime.html#use-redis-ha-using-sentinel)
