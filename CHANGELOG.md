@@ -204,6 +204,12 @@ No changes.
 
 - [Update Mattermost to 6.2.1](gitlab-org/omnibus-gitlab@05a5869b18ab109fffb7d0723ab04cb6da68ecf9) by @hmhealey ([merge request](gitlab-org/omnibus-gitlab!5828))
 
+## 14.6.7 (2022-03-31)
+
+### Security (1 change)
+
+- [Update OpenSSL to v1.1.1n](gitlab-org/omnibus-gitlab@8a4fdc5fa226e5f17c235dc49317d64cf4731d43) ([merge request](gitlab-org/omnibus-gitlab!6001))
+
 ## 14.6.6 (2022-03-01)
 
 ### Fixed (1 change)
