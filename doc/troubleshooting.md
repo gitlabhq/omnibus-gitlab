@@ -435,7 +435,7 @@ sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
 
 ## 'Short read or OOM loading DB' error
 
-Try [cleaning the old Redis session](https://docs.gitlab.com/ee/administration/operations/cleaning_up_redis_sessions.html).
+Try [cleaning the old Redis session](https://docs.gitlab.com/ee/administration/operations/index.html).
 
 ## Apt error 'The requested URL returned error: 403'
 
