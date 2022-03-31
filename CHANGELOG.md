@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.9.2 (2022-03-31)
+
+### Security (2 changes)
+
+- [Update Mattermost version](gitlab-org/security/omnibus-gitlab@8f0ca9426e8c2226c715ee7adff9a93c147f1f00) ([merge request](gitlab-org/security/omnibus-gitlab!193))
+- [Update grafana version to 7.5.15](gitlab-org/security/omnibus-gitlab@838321a59c0824d3d66d1e52f45b1ba2cd660c33) ([merge request](gitlab-org/security/omnibus-gitlab!196))
+
 ## 14.9.1 (2022-03-23)
 
 No changes.
@@ -49,6 +56,13 @@ No changes.
 - [Improve success message after promoting secondary nodes](gitlab-org/omnibus-gitlab@d19ed935875778233151fe9b19a07134d757f133) ([merge request](gitlab-org/omnibus-gitlab!5959))
 - [Enable live stdout/stderr](gitlab-org/omnibus-gitlab@ae79d717a0f7735442463ec65121b1b19b67ec8a) ([merge request](gitlab-org/omnibus-gitlab!5958))
 - [Update Mattermost to 6.4.0](gitlab-org/omnibus-gitlab@2db39bba83bede1ec856b519289eb6f44b003882) by @angelos.kyratzakos ([merge request](gitlab-org/omnibus-gitlab!5919))
+
+## 14.8.5 (2022-03-31)
+
+### Security (2 changes)
+
+- [Update Mattermost version](gitlab-org/security/omnibus-gitlab@3ceef837a8d28b68eced040158bbc70d2a7ec66b) ([merge request](gitlab-org/security/omnibus-gitlab!194))
+- [Update grafana version to 7.5.15](gitlab-org/security/omnibus-gitlab@dd99aa32346b2074167e2b0168d4fad23fc76678) ([merge request](gitlab-org/security/omnibus-gitlab!192))
 
 ## 14.8.4 (2022-03-16)
 
@@ -114,6 +128,13 @@ No changes.
 ### Deprecated (1 change)
 
 - [Add a warning if Sidekiq exporter and health checks are on the same port](gitlab-org/omnibus-gitlab@2f142b79d1c9d8a7cd879df736255ae223cffb2a) ([merge request](gitlab-org/omnibus-gitlab!5844))
+
+## 14.7.7 (2022-03-31)
+
+### Security (2 changes)
+
+- [Update Mattermost version](gitlab-org/security/omnibus-gitlab@c79f7657299a014485d73154726e380ee838c3be) ([merge request](gitlab-org/security/omnibus-gitlab!195))
+- [Update grafana version to 7.5.15](gitlab-org/security/omnibus-gitlab@bbf79c23818c10906577d4168be2c44949e8a26a) ([merge request](gitlab-org/security/omnibus-gitlab!191))
 
 ## 14.7.6 (2022-03-24)
 
