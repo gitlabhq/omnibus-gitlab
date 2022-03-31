@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.9.2 (2022-03-31)
+
+### Security (2 changes)
+
+- [Update Mattermost version](gitlab-org/security/omnibus-gitlab@8f0ca9426e8c2226c715ee7adff9a93c147f1f00) ([merge request](gitlab-org/security/omnibus-gitlab!193))
+- [Update grafana version to 7.5.15](gitlab-org/security/omnibus-gitlab@838321a59c0824d3d66d1e52f45b1ba2cd660c33) ([merge request](gitlab-org/security/omnibus-gitlab!196))
+
 ## 14.9.1 (2022-03-23)
 
 No changes.
