@@ -44,7 +44,7 @@ RSpec.describe 'gitlab-ee::geo-database-migrations' do
     it 'runs the migrations with expected attributes' do
       expect(chef_run).to run_rails_migration('gitlab-geo tracking') do |resource|
         expect(resource.dependent_services).to include_array(%w(runit_service[puma] sidekiq_service[sidekiq]))
-        expect(resource.rake_task).to eq('geo:db:migrate')
+        expect(resource.rake_task).to eq('db:migrate:geo')
         expect(resource.logfile_prefix).to eq('gitlab-geo-db-migrate')
         expect(resource.helper).to be_a(GitlabGeoHelper)
       end

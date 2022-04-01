@@ -23,7 +23,7 @@ dependent_services << "runit_service[puma]" if omnibus_helper.should_notify?("pu
 dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
 
 rails_migration "gitlab-geo tracking" do
-  rake_task 'geo:db:migrate'
+  rake_task 'db:migrate:geo'
   logfile_prefix 'gitlab-geo-db-migrate'
   helper migration_helper
 

@@ -18,7 +18,8 @@ require_relative 'nginx.rb'
 require_relative '../../gitaly/libraries/gitaly.rb'
 
 module GitlabRails
-  ALLOWED_DATABASES = %w[main ci].freeze
+  ALLOWED_DATABASES = %w[main ci geo].freeze
+  MAIN_DATABASES = %w[main geo].freeze
   SHARED_DATABASE_ATTRIBUTES = %w[db_host db_port db_database].freeze
 
   class << self
@@ -208,9 +209,9 @@ module GitlabRails
       # settings
       generate_main_database
 
-      # Weed out the databases that are either not allowed or not enabled explicitly (except for main)
+      # Weed out the databases that are either not allowed or not enabled explicitly (except for main and geo)
       Gitlab['gitlab_rails']['databases'].to_h.each do |database, settings|
-        if database != 'main' && settings['enable'] != true
+        if !MAIN_DATABASES.include?(database) && settings['enable'] != true
           Gitlab['gitlab_rails']['databases'].delete(database)
           next
         end
@@ -221,10 +222,9 @@ module GitlabRails
         end
       end
 
-      # Set default value of settings for other databases based on values used
-      # in `main` database.
+      # Set default value of settings for other databases based on values used in `main` database.
       Gitlab['gitlab_rails']['databases'].each_key do |database|
-        next if database == 'main'
+        next if MAIN_DATABASES.include?(database)
 
         database_attributes.each do |attribute|
           next unless Gitlab['gitlab_rails']['databases'][database][attribute].nil?

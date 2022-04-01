@@ -2684,6 +2684,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_secondary['db_sslrootcert'] = nil
 # geo_secondary['db_sslca'] = nil
 # geo_secondary['db_prepared_statements'] = false
+# geo_secondary['db_database_tasks'] = true
 
 ################################################################################
 ## GitLab Geo Secondary Tracking Database (EE only)

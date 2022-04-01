@@ -10,6 +10,12 @@ production:
     encoding: <%= attributes['db_encoding'] %>
     collation: <%= attributes['db_collation'] %>
     database: <%= attributes['db_database'] %>
+    <% if attributes.key?('db_migrations_paths') %>
+    migrations_paths: <%= quote(attributes['db_migrations_paths']) %>
+    <% end %>
+    <% if attributes.key?('db_schema_migrations_path') %>
+    schema_migrations_path: <%= quote(attributes['db_schema_migrations_path']) %>
+    <% end %>
     username: <%= quote(attributes['db_username']) %>
     password: <%= quote(attributes['db_password']) %>
     host: <%= quote(attributes['db_host']) %>
