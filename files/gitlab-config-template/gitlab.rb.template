@@ -2280,10 +2280,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  'WRAPPER_JSON_LOGGING' => true
 # }
 
-##! internal_socket_dir is the directory that will contain internal gitaly sockets,
-##! separate from socket_path which is the socket that external clients listen on
-
-# gitaly['internal_socket_dir'] = "/var/opt/gitlab/gitaly"
+# gitaly['runtime_dir'] = "/var/opt/gitlab/gitaly/run"
 # gitaly['socket_path'] = "/var/opt/gitlab/gitaly/gitaly.socket"
 # gitaly['listen_addr'] = "localhost:8075"
 # gitaly['tls_listen_addr'] = "localhost:9075"
