@@ -9,6 +9,22 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 NOTE:
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/index.html#checking-for-background-migrations-before-upgrading).
 
+## 14.10
+
+### Gitaly runtime directory
+
+In 14.10, Gitaly has introduced a new runtime directory. This directory is
+intended to hold all files and directories Gitaly needs to create at runtime in
+order to operate correctly. This includes for example internal sockets, the Git
+execution environment or the temporary hooks directory.
+
+This new configuration can be set via `gitaly['runtime_dir']`. It replaces the
+the old `gitaly['internal_socket_dir']` configuration: if the internal socket
+directory is not explicitly configured, sockets will be created in the runtime
+directory.
+
+Support for `gitaly['internal_socket_dir']` will be removed in 15.0.
+
 ## 14.7
 
 ### Redis 6.2.6

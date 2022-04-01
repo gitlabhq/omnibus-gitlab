@@ -26,11 +26,18 @@ wrapper_path = "#{gitaly_path}-wrapper"
 pid_file = File.join(working_dir, "gitaly.pid")
 json_logging = node['gitaly']['logging_format'].eql?('json')
 open_files_ulimit = node['gitaly']['open_files_ulimit']
+runtime_dir = node['gitaly']['runtime_dir']
 internal_socket_directory = node['gitaly']['internal_socket_dir']
 cgroups_mountpoint = node['gitaly']['cgroups_mountpoint']
 cgroups_hierarchy_root = node['gitaly']['cgroups_hierarchy_root']
 
 directory working_dir do
+  owner account_helper.gitlab_user
+  mode '0700'
+  recursive true
+end
+
+directory runtime_dir do
   owner account_helper.gitlab_user
   mode '0700'
   recursive true
@@ -42,10 +49,21 @@ directory log_directory do
   recursive true
 end
 
-directory internal_socket_directory do
-  owner account_helper.gitlab_user
-  mode '0700'
-  recursive true
+if internal_socket_directory
+  directory internal_socket_directory do
+    owner account_helper.gitlab_user
+    mode '0700'
+    recursive true
+  end
+else
+  # When the internal socket directory is unset, then we try to delete the
+  # default internal socket directory that has been set previous to v14.10. The
+  # internal socket directory is deprecated and will be removed in v15.0, so we
+  # can delete this snippet with v15.0, too.
+  directory File.join(node['gitaly']['dir'], 'internal_sockets') do
+    action :delete
+    recursive true
+  end
 end
 
 # Doing this in attributes/default.rb will need gitlab cookbook to be loaded
