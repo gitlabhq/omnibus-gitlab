@@ -469,9 +469,6 @@ To fix these errors, see the [Install Custom Public Certificates](settings/ssl.m
 
 ## error: proxyRoundTripper: XXX failed with: "net/http: timeout awaiting response headers"
 
-Starting with version 8.3, GitLab Workorse is the default router for any requests
-going to GitLab.
-
 If GitLab Workhorse doesn't receive an answer from
 GitLab within 1 minute (default), it will serve a 502 page.
 
