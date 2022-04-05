@@ -82,6 +82,7 @@ variables:
   CACHE_KEY_SUFFIX: '-v1'
   CACHE_EDITION: "CE"
   QA_BRANCH: 'master'
+  ISSUE_BOT_LABELS_EXTRA: "group::distribution"
 
 ### For services that need a docker daemon
 .docker_job: &docker_job
