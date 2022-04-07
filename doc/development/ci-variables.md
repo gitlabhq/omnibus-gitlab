@@ -102,7 +102,6 @@ These additional variables are available to override or enable different build b
 | RELEASE_BUCKET_REGION                         | S3 bucket region. |
 | RELEASE_BUCKET_S3_ENDPOINT                    | Specify S3 endpoint. Especially useful when S3 compatible storage service is adopted. |
 | GITLAB_BUNDLE_GEMFILE                         | Set Gemfile path required by `gitlab-rails` bundle. Default is `Gemfile`. |
-| JH_DEV                                        | Indicate that the pipeline is in Jihu dev environment. If it is `true`, all jobs in `gitlab-ci-config/dev-gitlab-org.yml` will be skipped. |
 
 ## Unknown/outdated variables
 

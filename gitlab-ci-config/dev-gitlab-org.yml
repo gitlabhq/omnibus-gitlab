@@ -6,7 +6,7 @@
 #############
 
 .unless-dev: &unless-dev
-  if: '$CI_PROJECT_PATH != "gitlab/omnibus-gitlab" || $JH_DEV == "true"'
+  if: '$CI_PROJECT_PATH != "gitlab/omnibus-gitlab"'
 
 .if-branch: &if-branch
   if: '$CI_COMMIT_BRANCH'
