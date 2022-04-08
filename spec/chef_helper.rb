@@ -15,7 +15,7 @@ cookbooks = %w[package gitlab gitlab-ee].map { |cookbook| File.join(__dir__, "..
 cookbooks = cookbooks.concat(Dir[File.join(__dir__, "../files/gitlab-cookbooks/*")].select { |d| File.directory?(d) }).uniq
 
 cookbooks.each do |cookbook|
-  Dir["#{cookbook}/libraries/**/*.rb"].each { |library| require library }
+  Dir["#{cookbook}/libraries/**/*.rb"].sort.each { |library| require library }
 end
 
 def deep_clone(obj)
