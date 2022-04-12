@@ -44,6 +44,12 @@ relative_path "ruby-#{version}"
 
 env = with_standard_compiler_flags(with_embedded_path)
 
+# Ruby will compile out the OpenSSL dyanmic checks for FIPS when
+# OPENSSL_FIPS is not defined. RedHat always defines this macro in
+# /usr/include/openssl/opensslconf-x86_64.h, but Ubuntu does not do
+# this.
+env['CFLAGS'] << " -DOPENSSL_FIPS" if Build::Check.use_system_ssl?
+
 env['CFLAGS'] << if version.satisfies?('>= 2.3.0') &&
     rhel? && platform_version.satisfies?('< 6.0')
                    ' -O2 -g -pipe'
