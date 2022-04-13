@@ -76,9 +76,17 @@ RSpec.describe 'consul' do
       end
 
       it 'renders run file with specified options' do
-        expect(chef_run).to render_file('/opt/gitlab/sv/consul/run').with_content(%r{-config-dir /fake/config.d})
-        expect(chef_run).to render_file('/opt/gitlab/sv/consul/run').with_content(%r{-config-dir /custom/dir})
-        expect(chef_run).to render_file('/opt/gitlab/sv/consul/run').with_content(%r{-data-dir /fake/data})
+        expect(chef_run).to render_file('/opt/gitlab/sv/consul/run').with_content { |content|
+          expect(content).to match(%r{-config-dir /fake/config.d})
+          expect(content).to match(%r{-config-dir /custom/dir})
+          expect(content).to match(%r{-data-dir /fake/data})
+        }
+      end
+
+      it 'renders log run file with timestamp option' do
+        expect(chef_run).to render_file('/opt/gitlab/sv/consul/log/run').with_content { |content|
+          expect(content).to match(%r{exec svlogd -tt /var/log/gitlab/consul})
+        }
       end
     end
 
@@ -108,6 +116,9 @@ RSpec.describe 'consul' do
             node_name: 'fakenodename',
             username: 'foo',
             group: 'bar',
+            configuration: {
+              log_json: true
+            }
           }
         )
       end
@@ -118,6 +129,12 @@ RSpec.describe 'consul' do
 
       it 'creates the consul system user and group' do
         expect(chef_run).to create_account('Consul user and group').with(username: 'foo', groupname: 'bar')
+      end
+
+      it 'renders log run file without timestamp option' do
+        expect(chef_run).to render_file('/opt/gitlab/sv/consul/log/run').with_content { |content|
+          expect(content).to match(%r{exec svlogd /var/log/gitlab/consul})
+        }
       end
 
       it_behaves_like 'enabled runit service', 'consul', 'foo', 'bar', 'foo', 'bar'
