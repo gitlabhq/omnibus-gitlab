@@ -113,7 +113,6 @@ No changes.
 ### Changed (16 changes)
 
 - [Add QA_BRANCH trigger var](gitlab-org/omnibus-gitlab@c495e01de5bf8bd9c5ccb3fae514a1cc4a4653e2) ([merge request](gitlab-org/omnibus-gitlab!5910))
-- [Update Mattermost to 6.3.3](gitlab-org/omnibus-gitlab@50bf80c439f2c37c6de0b6436ff4f0301bc785ba) ([merge request](gitlab-org/omnibus-gitlab!5884))
 - [Update Mattermost to 6.3.3](gitlab-org/omnibus-gitlab@59859b16cc9f97959212364a2683bda18baca6c4) by @spirosoik ([merge request](gitlab-org/omnibus-gitlab!5884))
 - [Bump Container Registry to v3.24.1-gitlab](gitlab-org/omnibus-gitlab@6a72ffff1458266fa679063bdb5c56d1e863fc87) ([merge request](gitlab-org/omnibus-gitlab!5899))
 - [Update libjpeg-turbo/libjpeg-turbo from 2.1.0 to 2.1.2](gitlab-org/omnibus-gitlab@f48e3a506d123a3d234505d9ed32619ff13207b1) ([merge request](gitlab-org/omnibus-gitlab!5534))
