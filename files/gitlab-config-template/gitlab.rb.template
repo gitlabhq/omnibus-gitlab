@@ -1741,6 +1741,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Zip HTTP Client timeout
 # gitlab_pages['zip_http_client_timeout'] = "30m"
 
+##! ReadTimeout is the maximum duration for reading the entire request, including the body. A zero or negative value means there will be no timeout.
+# gitlab_pages['server_read_timeout'] = "5s"
+##! ReadHeaderTimeout is the amount of time allowed to read request headers. A zero or negative value means there will be no timeout.
+# gitlab_pages['server_read_header_timeout'] = "1s"
+##! WriteTimeout is the maximum duration before timing out writes of the response. A zero or negative value means there will be no timeout.
+# gitlab_pages['server_write_timeout'] = "5m"
+##! KeepAlive specifies the keep-alive period for network connections accepted by this listener. If zero, keep-alives are enabled if supported by the protocol and operating system. If negative, keep-alives are disabled.
+# gitlab_pages['server_keep_alive'] = "15s"
+
 ##! Enable serving content from disk instead of Object Storage
 # gitlab_pages['enable_disk'] = nil
 

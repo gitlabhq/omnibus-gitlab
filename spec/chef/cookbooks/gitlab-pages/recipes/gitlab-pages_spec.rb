@@ -227,6 +227,10 @@ RSpec.describe 'gitlab::gitlab-pages' do
             rate_limit_tls_source_ip_burst: 51,
             rate_limit_tls_domain: 1001,
             rate_limit_tls_domain_burst: 10001,
+            server_read_timeout: "1m",
+            server_read_header_timeout: "2m",
+            server_write_timeout: "3m",
+            server_keep_alive: "4m",
             enable_disk: true,
             env: {
               GITLAB_CONTINUOUS_PROFILING: "stackdriver?service=gitlab-pages",
@@ -292,6 +296,10 @@ RSpec.describe 'gitlab::gitlab-pages' do
             rate-limit-tls-source-ip-burst=51
             rate-limit-tls-domain=1001
             rate-limit-tls-domain-burst=10001
+            server-read-timeout=1m
+            server-read-header-timeout=2m
+            server-write-timeout=3m
+            server-keep-alive=4m
         EOS
 
         expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(expected_content)
