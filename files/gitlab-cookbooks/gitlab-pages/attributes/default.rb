@@ -69,3 +69,8 @@ default['gitlab-pages']['rate_limit_tls_source_ip'] = nil
 default['gitlab-pages']['rate_limit_tls_source_ip_burst'] = nil
 default['gitlab-pages']['rate_limit_tls_domain'] = nil
 default['gitlab-pages']['rate_limit_tls_domain_burst'] = nil
+# HTTP Server timeouts
+default['gitlab-pages']['server_read_timeout'] = nil
+default['gitlab-pages']['server_read_header_timeout'] = nil
+default['gitlab-pages']['server_write_timeout'] = nil
+default['gitlab-pages']['server_keep_alive'] = nil

@@ -161,3 +161,15 @@ rate-limit-tls-domain=<%= @rate_limit_tls_domain %>
 <%- if @rate_limit_tls_domain_burst -%>
 rate-limit-tls-domain-burst=<%= @rate_limit_tls_domain_burst %>
 <%-end -%>
+<%- if @server_read_timeout -%>
+server-read-timeout=<%= @server_read_timeout %>
+<%-end -%>
+<%- if @server_read_header_timeout -%>
+server-read-header-timeout=<%= @server_read_header_timeout %>
+<%-end -%>
+<%- if @server_write_timeout -%>
+server-write-timeout=<%= @server_write_timeout %>
+<%-end -%>
+<%- if @server_keep_alive -%>
+server-keep-alive=<%= @server_keep_alive %>
+<%-end -%>
