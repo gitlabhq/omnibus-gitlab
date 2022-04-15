@@ -119,4 +119,5 @@ template config_file_path do
   )
   notifies :restart, "runit_service[gitlab-workhorse]"
   notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
+  sensitive true
 end

@@ -90,6 +90,7 @@ file gitlab_kas_redis_password_file do
   mode '0640'
   notifies :restart, 'runit_service[gitlab-kas]'
   only_if { redis_password && !redis_password.empty? }
+  sensitive true
 end
 
 template gitlab_kas_config_file do
@@ -127,4 +128,5 @@ runit_service 'gitlab-kas' do
     config_file: gitlab_kas_config_file,
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab-kas'].to_hash)
+  sensitive true
 end

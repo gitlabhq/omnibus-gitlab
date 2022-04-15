@@ -44,6 +44,7 @@ action :create do
     mode "0644"
     variables(node['redis'].to_hash.merge({ is_replica: is_replica }))
     notifies :restart, 'runit_service[redis]', :immediately if new_resource.omnibus_helper.should_notify?('redis')
+    sensitive true
   end
 
   runit_service 'redis' do

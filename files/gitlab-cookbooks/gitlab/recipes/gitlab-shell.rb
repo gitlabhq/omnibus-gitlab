@@ -73,6 +73,7 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
               ssl_cert_dir: node['gitlab']['gitlab-shell']['ssl_cert_dir']
             })
   notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
+  sensitive true
 end
 
 link File.join(gitlab_shell_dir, ".gitlab_shell_secret") do
