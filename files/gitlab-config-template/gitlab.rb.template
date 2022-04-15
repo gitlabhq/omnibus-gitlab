@@ -2323,6 +2323,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     'max_per_repo' => 5
 #   }
 # ]
+# gitaly['rate_limiting'] = [
+#   {
+#     'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+#     'interval' => '1m',
+#     'burst' => 10
+#   }, {
+#     'rpc' => "/gitaly.SSHService/SSHUploadPack",
+#     'interval' => '1m',
+#     'burst' => 5
+#   }
+# ]
 #
 # gitaly['daily_maintenance_start_hour'] = 22
 # gitaly['daily_maintenance_start_minute'] = 30
