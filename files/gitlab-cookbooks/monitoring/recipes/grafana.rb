@@ -141,6 +141,7 @@ template grafana_config do
   mode '0644'
   notifies :restart, 'runit_service[grafana]'
   only_if { node['monitoring']['grafana']['enable'] }
+  sensitive true
 end
 
 dashboards = {

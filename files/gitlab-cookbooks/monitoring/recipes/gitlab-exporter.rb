@@ -60,6 +60,7 @@ template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
     connection_string: connection_string,
     redis_enable_client: node['gitlab']['gitlab-rails']['redis_enable_client']
   )
+  sensitive true
 end
 
 version_file 'Create version file for GitLab-Exporter' do

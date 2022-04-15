@@ -187,6 +187,7 @@ templatesymlink "Create a database.yml and create a symlink to Rails root" do
   mode "0640"
   variables node['gitlab']['gitlab-rails'].to_hash
   dependent_services.each { |svc| notifies :restart, svc }
+  sensitive true
 end
 
 redis_url = RedisHelper.new(node).redis_url
@@ -221,6 +222,7 @@ templatesymlink "Create a resque.yml and create a symlink to Rails root" do
   mode "0644"
   variables(redis_url: redis_url, redis_sentinels: redis_sentinels, redis_enable_client: redis_enable_client)
   dependent_services.each { |svc| notifies :restart, svc }
+  sensitive true
 end
 
 templatesymlink "Create a cable.yml and create a symlink to Rails root" do
@@ -240,6 +242,7 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
   mode "0644"
   variables(redis_url: url, redis_sentinels: sentinels, redis_enable_client: redis_enable_client)
   dependent_services.each { |svc| notifies :restart, svc }
+  sensitive true
 end
 
 %w(cache queues shared_state trace_chunks rate_limiting sessions).each do |instance|
@@ -259,6 +262,7 @@ end
     variables(redis_url: url, redis_sentinels: sentinels, redis_enable_client: redis_enable_client)
     dependent_services.each { |svc| notifies :restart, svc }
     not_if { url.nil? }
+    sensitive true
   end
 
   [from_filename, to_filename].each do |filename|
@@ -316,6 +320,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   )
   dependent_services.each { |svc| notifies :restart, svc }
   notifies :run, 'execute[clear the gitlab-rails cache]'
+  sensitive true
 end
 
 gitlab_workhorse_services = dependent_services

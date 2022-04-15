@@ -4,8 +4,8 @@ provides :rails_migration
 property :name, name_property: true
 property :logfile_prefix, String, required: true
 property :rake_task, String, required: true
-property :helper, required: true
-property :environment
+property :helper, required: true, sensitive: true
+property :environment, sensitive: true
 property :dependent_services, Array, default: []
 
 default_action :run
@@ -31,5 +31,6 @@ action :run do
     end
 
     not_if { new_resource.helper.migrated? }
+    sensitive true
   end
 end

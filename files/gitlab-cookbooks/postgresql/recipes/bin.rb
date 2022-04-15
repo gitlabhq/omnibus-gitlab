@@ -73,4 +73,5 @@ end
 template "/opt/gitlab/etc/gitlab-psql-rc" do
   owner 'root'
   group 'root'
+  sensitive true
 end
