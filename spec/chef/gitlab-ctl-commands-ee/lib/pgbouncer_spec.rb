@@ -66,7 +66,8 @@ RSpec.describe Pgbouncer::Databases do
         'databases_ini' => '/another/databases.ini',
         'databases_json' => '/another/databases.json',
         'port' => 8888,
-        'user' => 'fakeuser'
+        'user' => 'fakeuser',
+        'database' => 'fakedb'
       }
       allow(File).to receive(:exist?).with('/another/databases.json').and_return(true)
       allow(File).to receive(:read).with('/another/databases.json').and_return(fake_databases_json)
@@ -91,7 +92,7 @@ RSpec.describe Pgbouncer::Databases do
       @obj = Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
     end
 
-    it 'should generate an databases.ini with sane defaults' do
+    it 'should generate an databases.ini with the default rails database' do
       expect(@obj.render).to eq(
         "[databases]\n\nfake_database = \n\n"
       )
