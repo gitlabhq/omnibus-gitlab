@@ -63,6 +63,7 @@ build do
     "--without-fish-functions-dir",
     "--disable-mqtt",
     '--without-libssh2',
+    '--without-nghttp2',
     "--with-zlib=#{install_dir}/embedded",
     "--without-ca-path",
     "--without-ca-bundle",
