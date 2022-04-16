@@ -59,7 +59,7 @@ add_command_under_category('write-pgpass', 'database', 'Write a pgpass file for 
   pgpass = GitlabCtl::PostgreSQL::Pgpass.new(
     hostname: options['host'],
     port: options['port'],
-    database: options['database'],
+    database: options['database'] || Pgbouncer::Databases.rails_database,
     username: options['user'],
     password: password,
     host_user: options['host_user'],
@@ -70,7 +70,7 @@ end
 
 def get_pg_options
   options = {
-    'database' => 'gitlabhq_production',
+    'database' => nil,
     'databases_ini' => nil,
     'databases_json' => nil,
     'host' => nil,

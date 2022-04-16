@@ -9,9 +9,21 @@ rescue LoadError
 end
 
 module Pgbouncer
+  DEFAULT_RAILS_DATABASE = 'gitlabhq_production'.freeze
+
   class Databases
     attr_accessor :install_path, :databases, :options, :ini_file, :json_file, :template_file, :attributes, :userinfo, :groupinfo, :database
     attr_reader :data_path
+
+    def self.rails_database(attributes: nil)
+      attributes = GitlabCtl::Util.get_public_node_attributes if attributes.nil?
+
+      if attributes.key?('gitlab')
+        attributes['gitlab']['gitlab-rails']['db_database']
+      else
+        DEFAULT_RAILS_DATABASE
+      end
+    end
 
     def initialize(options, install_path, base_data_path)
       self.data_path = base_data_path
@@ -21,36 +33,42 @@ module Pgbouncer
       @ini_file = options['databases_ini'] || database_ini
       @json_file = options['databases_json'] || database_json
       @template_file = "#{@install_path}/embedded/cookbooks/gitlab-ee/templates/default/databases.ini.erb"
-      @database = if attributes.key?('gitlab')
-                    attributes['gitlab']['gitlab-rails']['db_database']
-                  else
-                    'gitlabhq_production'
-                  end
+      @database = options['database'] || Databases.rails_database(attributes: @attributes)
       @databases = update_databases(JSON.parse(File.read(@json_file))) if File.exist?(@json_file)
       @userinfo = GitlabCtl::Util.userinfo(options['host_user']) if options['host_user']
       @groupinfo = GitlabCtl::Util.groupinfo(options['host_group']) if options['host_group']
     end
 
-    def update_databases(original)
+    def update_databases(original = {})
+      updated = {}
+
       if original.empty?
         original = {
           database => {}
         }
       end
-      updated = Chef::Mixin::DeepMerge.merge(updated, original)
+
       original.each do |db, settings|
         settings.delete('password')
+
         updated[db] = ''
-        settings['host'] = options['newhost'] if options['newhost']
-        settings['port'] = options['port'] if options['port']
+
         settings['auth_user'] = settings.delete('user') if settings.key?('user')
-        settings['auth_user'] = options['user'] if options['user']
-        settings['dbname'] = options['pg_database'] if options['pg_database']
+
+        if db == @database
+          settings['host'] = options['newhost'] if options['newhost']
+          settings['port'] = options['port'] if options['port']
+          settings['auth_user'] = options['user'] if options['user']
+          settings['dbname'] = options['pg_database'] if options['pg_database']
+        end
+
         settings.each do |setting, value|
           updated[db] << " #{setting}=#{value}"
         end
+
         updated[db].strip!
       end
+
       updated
     end
 
