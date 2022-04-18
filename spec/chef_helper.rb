@@ -45,7 +45,11 @@ RSpec.configure do |config|
   config.cookbook_path = ['files/gitlab-cookbooks/', 'spec/chef/fixtures/cookbooks']
   config.log_level = :error
 
-  config.before do
+  config.define_derived_metadata(file_path: Regexp.new('/spec/chef/')) do |metadata|
+    metadata[:type] = :chef
+  end
+
+  config.before(:each, type: :chef) do
     stub_command('id -Z').and_return(false)
     stub_command("grep 'CS:123456:respawn:/opt/gitlab/embedded/bin/runsvdir-start' /etc/inittab").and_return('')
     stub_command(%r{\(test -f /var/opt/gitlab/gitlab-rails/upgrade-status/db-migrate-\h+-\) && \(cat /var/opt/gitlab/gitlab-rails/upgrade-status/db-migrate-\h+- | grep -Fx 0\)}).and_return(false)
