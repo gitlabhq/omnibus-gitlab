@@ -44,7 +44,7 @@ of that setting in the running PostgreSQL instance.
 Omnibus automatically enables SSL on the PostgreSQL server, but it will accept
 both encrypted and unencrypted connections by default. Enforcing SSL requires
 using the `hostssl` configuration in `pg_hba.conf`. For more details, see the
-[`pg_hba.conf` documentation](https://www.postgresql.org/docs/12/auth-pg-hba-conf.html).
+[`pg_hba.conf` documentation](https://www.postgresql.org/docs/13/auth-pg-hba-conf.html).
 
 SSL support depends on the following files:
 
@@ -489,6 +489,22 @@ To opt out of automatic PostgreSQL upgrade during GitLab package upgrades, run:
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
+#### GitLab 15.0 and later
+
+As of GitLab 15.0, new installations will default to PostgreSQL 13.
+
+Existing single database node instances can update manually via:
+
+```shell
+sudo gitlab-ctl pg-upgrade -V 13
+```
+
+Until PostgreSQL 12 is removed, administrators may
+[pin the PostgreSQL version](#pin-the-packaged-postgresql-version-fresh-installs-only)
+if needed for compatibility or test environment reasons.
+
+[Fault tolerant and Geo installations require additional steps and planning](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#upgrading-postgresql-major-version-in-a-patroni-cluster).
+
 #### GitLab 14.0 and later
 
 PostgreSQL versions 11 is no longer supported and the binaries have been
@@ -916,6 +932,7 @@ gitlab_rails['initial_shared_runners_registration_token'] = 'token'
 ### Pin the packaged PostgreSQL version (fresh installs only)
 
 NOTE:
+GitLab 14.1 and onward shipped with both Postgres 12 and Postgres 13.
 GitLab 14.0 only ships with PostgreSQL 12. GitLab 13.3 and onward shipped both Postgres 11 and Postgres 12.
 GitLab 13.0 through 13.2 only shipped with PostgreSQL 11.
 
@@ -923,7 +940,7 @@ Omnibus GitLab will initialize PostgreSQL with the [default version](https://doc
 
 To initialize PostgreSQL with a non-default version, you can set `postgresql['version']` to the major version one of
 the [packaged PostgreSQL versions](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html) prior to the initial reconfigure.
-For example, in GitLab 13.7 you can use `postgresql['version'] = 11` to use PostgreSQL 11 instead of the default of PostgreSQL 12.
+For example, in GitLab 15.0 you can use `postgresql['version'] = 12` to use PostgreSQL 12 instead of the default of PostgreSQL 13.
 
 WARNING:
 Setting `postgresql['version']` while using the Omnibus packaged PostgreSQL after the initial reconfigure will

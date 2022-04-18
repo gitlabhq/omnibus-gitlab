@@ -31,3 +31,9 @@ you can add the cipher back to the allow list by following the steps below:
 In 14.10, [Gitaly introduced a new directory](gitlab_14_changes.md#gitaly-runtime-directory) that holds all runtime data Gitaly requires to operate correctly. This new directory replaces the old internal socket directory, and consequentially the usage of `gitaly['internal_socket_dir']` was deprecated in favor of `gitaly['runtime_dir']`.
 
 The old `gitaly['internal_socket_dir']` configuration was removed in this release.
+
+### PostgreSQL 13.3 support
+
+PostgreSQL 13.3 is being shipped as the default version for fresh installs.
+
+Users can manually upgrade to 13.3 following the [upgrade docs](../settings/database.md#gitlab-150-and-later).
