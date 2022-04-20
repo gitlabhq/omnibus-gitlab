@@ -47,7 +47,6 @@ RSpec.describe 'gitaly' do
   let(:gitlab_url) { 'http://localhost:3000' }
   let(:workhorse_addr) { 'localhost:4000' }
   let(:gitaly_custom_hooks_dir) { '/path/to/gitaly/custom/hooks' }
-  let(:gitlab_shell_custom_hooks_dir) { '/path/to/gitlab-shell/custom/hooks' }
   let(:user) { 'user123' }
   let(:password) { 'password321' }
   let(:ca_file) { '/path/to/ca_file' }
@@ -364,23 +363,6 @@ RSpec.describe 'gitaly' do
         expect(content).to match(cgroups_memory_section)
         expect(content).to match(cgroups_cpu_section)
         expect(content).to match(pack_objects_cache_section)
-      }
-    end
-
-    it 'populates gitaly config.toml with custom deprecated values' do
-      stub_gitlab_rb(
-        gitlab_shell: {
-          custom_hooks_dir: gitlab_shell_custom_hooks_dir
-        }
-      )
-
-      hooks_section = Regexp.new([
-        %r{\[hooks\]},
-        %r{custom_hooks_dir = '#{Regexp.escape(gitlab_shell_custom_hooks_dir)}'},
-      ].map(&:to_s).join('\s+'))
-
-      expect(chef_run).to render_file(config_path).with_content { |content|
-        expect(content).to match(hooks_section)
       }
     end
 
