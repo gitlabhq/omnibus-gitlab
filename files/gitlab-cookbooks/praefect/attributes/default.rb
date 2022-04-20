@@ -43,3 +43,4 @@ default['praefect']['certificate_path'] = nil
 default['praefect']['key_path'] = nil
 default['praefect']['consul_service_name'] = 'praefect'
 default['praefect']['consul_service_meta'] = nil
+default['praefect']['background_verification_verification_interval'] = nil

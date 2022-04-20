@@ -50,6 +50,7 @@ RSpec.describe 'praefect' do
           'session_pooled' => {},
         },
         'reconciliation' => {},
+        'background_verification' => {},
         'failover' => { 'enabled' => true }
       }
 
@@ -154,6 +155,7 @@ RSpec.describe 'praefect' do
                          database_direct_port: database_direct_port,
                          reconciliation_scheduling_interval: reconciliation_scheduling_interval,
                          reconciliation_histogram_buckets: reconciliation_histogram_buckets,
+                         background_verification_verification_interval: '168h',
                        })
       end
 
@@ -194,6 +196,9 @@ RSpec.describe 'praefect' do
               'reconciliation' => {
                 'histogram_buckets' => [1.0, 2.0],
                 'scheduling_interval' => '1m'
+              },
+              'background_verification' => {
+                'verification_interval' => '168h'
               },
               'sentry' => {
                 'sentry_dsn' => 'https://my_key:my_secret@sentry.io/test_project',
