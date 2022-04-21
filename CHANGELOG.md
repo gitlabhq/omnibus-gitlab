@@ -3,6 +3,34 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.10.0 (2022-04-21)
+
+### Added (3 changes)
+
+- [Gitaly: Add rate_limiting section to config toml](gitlab-org/omnibus-gitlab@89d8f26a49063b1ec55b613d139e6de4f081e3ab) ([merge request](gitlab-org/omnibus-gitlab!6023))
+- [Add pages http server timeout options](gitlab-org/omnibus-gitlab@50ba3875f12a5c7e754e1c9d13162cfe3d3e588d) ([merge request](gitlab-org/omnibus-gitlab!6029))
+- [Expose `db_database_tasks` attribute](gitlab-org/omnibus-gitlab@c17057d17fbefeccef1f93768b4d90414e10e8ed) ([merge request](gitlab-org/omnibus-gitlab!5982))
+
+### Fixed (3 changes)
+
+- [consul: Disable logging of timestamps if JSON log enabled](gitlab-org/omnibus-gitlab@d376b30f25472a4c09e317135495b8a41af4c040) ([merge request](gitlab-org/omnibus-gitlab!6034))
+- [ruby: Enable OPENSSL_FIPS macro for system SSL builds](gitlab-org/omnibus-gitlab@cb0137add87ad37aa266a05f30313a1cd32ffb63) ([merge request](gitlab-org/omnibus-gitlab!6030))
+- [Always disable proxy_intercept_errors for kas](gitlab-org/omnibus-gitlab@2c76574dc69483a8c41bdadda3a0a83e810422f8) ([merge request](gitlab-org/omnibus-gitlab!5995))
+
+### Changed (5 changes)
+
+- [Update Mattermost to 6.5.0](gitlab-org/omnibus-gitlab@090603d39ddf8ebfe64ece70e6019e2d9779a084) by @stavros.foteinopoulos ([merge request](gitlab-org/omnibus-gitlab!5996))
+- [gitaly: Set up newly introduced runtime directory](gitlab-org/omnibus-gitlab@00534f346f11d02a5fe550257f5424b6e998bee1) ([merge request](gitlab-org/omnibus-gitlab!5999))
+- [Migrate Geo Tracking database configuration into database.yml](gitlab-org/omnibus-gitlab@4b88e899ecb99a0c0eef9dec8ef7b9df2903f2d0) ([merge request](gitlab-org/omnibus-gitlab!5962))
+- [add pages zip http client timeout option](gitlab-org/omnibus-gitlab@d6d0a17bc97505ff12205b05b943cf2ec355f02c) ([merge request](gitlab-org/omnibus-gitlab!5975))
+- [Update Mattermost to 6.4.2](gitlab-org/omnibus-gitlab@0e2ebff67f9ccf71c8d5f93d1f2c5893683d1809) by @stylianosrigas ([merge request](gitlab-org/omnibus-gitlab!5966))
+
+### Security (3 changes)
+
+- [mark credentials as sensitive](gitlab-org/omnibus-gitlab@9354ccc5d43df012eaacf46029e67ff4ecc2d482) ([merge request](gitlab-org/omnibus-gitlab!5971))
+- [Upgrade zlib version](gitlab-org/omnibus-gitlab@056875b6497087a33fa837e5549baa1ecea33674) by @srslypascal ([merge request](gitlab-org/omnibus-gitlab!6015))
+- [Update grafana version to 7.5.15](gitlab-org/omnibus-gitlab@5e98cbfb95cc3176fbaf5f38de99775d9cae512e)
+
 ## 14.9.3 (2022-04-12)
 
 No changes.
