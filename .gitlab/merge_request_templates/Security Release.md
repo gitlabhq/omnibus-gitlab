@@ -18,6 +18,7 @@ See [the general developer security release guidelines](https://gitlab.com/gitla
 - [ ] A [CHANGELOG entry] has been included, with `Changelog` trailer set to `security`.
 - [ ] Assign to a reviewer and maintainer, per our [Code Review process].
 - [ ] For the MR targeting `master`, ensure it's approved according to our [Approval Guidelines]
+  - [ ] Approved by an AppSec engineer.
 - [ ] Merge request _must not_ close the corresponding security issue, _unless_ it targets `master`.
 
 ## Reviewer checklist
