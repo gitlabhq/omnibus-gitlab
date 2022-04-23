@@ -592,13 +592,13 @@ SLES-15.2-branch:
   <<: *branch_build
   <<: *dev-ee-branch-only
 CentOS-8-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_8:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
 Ubuntu-18.04-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
 Ubuntu-20.04-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
 
 Docker-branch:

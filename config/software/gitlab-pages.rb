@@ -33,6 +33,10 @@ build do
   # since it requires the package to be in $GOPATH/src/package
   env = { 'GOPATH' => "#{Omnibus::Config.source_dir}/gitlab-pages" }
 
+  # Pages compiles with CGO_ENABLED=0 by default, so we need to activate
+  # FIPS mode explicitly.
+  env['FIPS_MODE'] = '1' if Build::Check.use_system_ssl?
+
   make 'gitlab-pages', env: env
   move 'gitlab-pages', "#{install_dir}/embedded/bin/gitlab-pages"
 
