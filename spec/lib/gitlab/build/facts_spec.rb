@@ -74,6 +74,7 @@ RSpec.describe Build::Facts do
       allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('registry.gitlab.com/gitlab-org/build/omnibus-gitlab-mirror/gitlab-ee:14.6.2-rfbranch.450066356.c97110ad-0')
 
       stub_env_var('QA_IMAGE', 'gitlab/gitlab-ee-qa:nightly')
+      stub_env_var('QA_BRANCH', 'testapalooza')
       stub_env_var('QA_TESTS', '')
       stub_env_var('ALLURE_JOB_NAME', '')
       stub_env_var('GITLAB_QA_OPTIONS', '')
@@ -81,7 +82,7 @@ RSpec.describe Build::Facts do
 
     it 'returns correct variables' do
       result = %w[
-        QA_BRANCH=master
+        QA_BRANCH=testapalooza
         QA_RELEASE=registry.gitlab.com/gitlab-org/build/omnibus-gitlab-mirror/gitlab-ee:14.6.2-rfbranch.450066356.c97110ad-0
         QA_IMAGE=gitlab/gitlab-ee-qa:nightly
         QA_TESTS=
