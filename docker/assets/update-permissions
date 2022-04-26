@@ -78,6 +78,8 @@ if id -u gitlab-prometheus; then
 	chown_if_exists gitlab-prometheus /var/log/gitlab/prometheus
 	chown_if_exists -R gitlab-prometheus:gitlab-prometheus /var/opt/gitlab/alertmanager
 	chown_if_exists gitlab-prometheus /var/log/gitlab/alertmanager
+	chown_if_exists -R gitlab-prometheus:gitlab-prometheus /var/opt/gitlab/grafana
+	chown_if_exists gitlab-prometheus /var/log/gitlab/grafana
 fi
 
 # Fix redis storage and logs
