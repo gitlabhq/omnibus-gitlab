@@ -552,7 +552,7 @@ To configure [`robots.txt`](https://www.robotstxt.org/robotstxt.html) for your i
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['custom_gitlab_server_config'] = "rewrite ^/robots.txt /var/opt/gitlab/robots.txt last;"
+   nginx['custom_gitlab_server_config'] = "\nlocation =/robots.txt { alias /path/to/custom/robots.txt; }\n"
    ```
 
 1. Reconfigure GitLab:
