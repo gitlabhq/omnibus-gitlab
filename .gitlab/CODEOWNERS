@@ -3,6 +3,6 @@
 # As described in https://docs.gitlab.com/ee/user/project/code_owners.html
 
 [Documentation]
-.markdownlint.yml @marcel.amirault @eread @aqualls @cnorris
-/doc/.vale/ @marcel.amirault @eread @aqualls @cnorris
+.markdownlint.yml @marcel.amirault @eread @aqualls
+/doc/.vale/ @marcel.amirault @eread @aqualls
 /doc/ @axil
