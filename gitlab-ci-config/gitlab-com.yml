@@ -664,7 +664,6 @@ dependency_scanning:
       dependency_scanning: gl-dependency-scanning-report.json
     paths:
       - dependency_report.txt
-      - .cveignore
 
 dependency_update:
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
