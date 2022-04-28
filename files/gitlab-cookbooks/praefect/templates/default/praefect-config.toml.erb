@@ -89,8 +89,8 @@ token = '<%= node['token'] %>'
 <%= "sslrootcert = '#{@database_sslrootcert}'" if @database_sslrootcert %>
 
 [database.session_pooled]
-<% direct_host = @database_direct_host || @database_host_no_proxy %>
-<% direct_port = @database_direct_port || @database_port_no_proxy %>
+<% direct_host = @database_direct_host %>
+<% direct_port = @database_direct_port %>
 <%= "host = '#{direct_host}'" if direct_host %>
 <%= "port = #{direct_port}" if direct_port %>
 <%= "user = '#{@database_direct_user}'" if @database_direct_user %>
