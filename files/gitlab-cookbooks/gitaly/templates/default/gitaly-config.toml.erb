@@ -8,9 +8,6 @@ socket_path = '<%= @socket_path %>'
 
 runtime_dir = '<%= @runtime_dir %>'
 bin_dir = '/opt/gitlab/embedded/bin'
-<% if @internal_socket_dir %>
-internal_socket_dir = '<%= @internal_socket_dir %>'
-<% end %>
 <% if @graceful_restart_timeout %>
 graceful_restart_timeout = '<%= @graceful_restart_timeout %>'
 <% end %>
