@@ -35,6 +35,12 @@ No changes.
 - [Upgrade zlib version](gitlab-org/omnibus-gitlab@056875b6497087a33fa837e5549baa1ecea33674) by @srslypascal ([merge request](gitlab-org/omnibus-gitlab!6015))
 - [Update grafana version to 7.5.15](gitlab-org/omnibus-gitlab@5e98cbfb95cc3176fbaf5f38de99775d9cae512e)
 
+## 14.9.4 (2022-04-29)
+
+### Security (1 change)
+
+- [Upgrade zlib version](gitlab-org/security/omnibus-gitlab@22de3296bc229d7812d1adb0de8b846390ca494b) ([merge request](gitlab-org/security/omnibus-gitlab!200))
+
 ## 14.9.3 (2022-04-12)
 
 No changes.
