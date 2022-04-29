@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.9.4 (2022-04-29)
+
+### Security (1 change)
+
+- [Upgrade zlib version](gitlab-org/security/omnibus-gitlab@22de3296bc229d7812d1adb0de8b846390ca494b) ([merge request](gitlab-org/security/omnibus-gitlab!200))
+
 ## 14.9.3 (2022-04-12)
 
 No changes.
