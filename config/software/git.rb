@@ -63,6 +63,7 @@ build do
     "GIT_APPEND_BUILD_OPTIONS += ZLIB_PATH=#{install_dir}/embedded",
     "GIT_APPEND_BUILD_OPTIONS += NEEDS_LIBICONV=YesPlease",
     "GIT_APPEND_BUILD_OPTIONS += NO_R_TO_GCC_LINKER=YesPlease",
+    "GIT_APPEND_BUILD_OPTIONS += INSTALL_SYMLINKS=YesPlease",
     "GIT_APPEND_BUILD_OPTIONS += CFLAGS=\"#{git_cflags}\""
   ]
 
