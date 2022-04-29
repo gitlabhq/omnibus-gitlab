@@ -99,6 +99,12 @@ No changes.
 - [Enable live stdout/stderr](gitlab-org/omnibus-gitlab@ae79d717a0f7735442463ec65121b1b19b67ec8a) ([merge request](gitlab-org/omnibus-gitlab!5958))
 - [Update Mattermost to 6.4.0](gitlab-org/omnibus-gitlab@2db39bba83bede1ec856b519289eb6f44b003882) by @angelos.kyratzakos ([merge request](gitlab-org/omnibus-gitlab!5919))
 
+## 14.8.6 (2022-04-29)
+
+### Security (1 change)
+
+- [Upgrade zlib version](gitlab-org/security/omnibus-gitlab@a197f94fd54297077c02704cff9309ae8f2ad3ed) ([merge request](gitlab-org/security/omnibus-gitlab!199))
+
 ## 14.8.5 (2022-03-31)
 
 ### Security (2 changes)
