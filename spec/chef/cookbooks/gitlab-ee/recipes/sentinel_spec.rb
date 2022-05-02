@@ -1,11 +1,12 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::redis' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(sentinel_service runit_service)).converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(redis_service sentinel_service runit_service)).converge('gitlab-ee::default') }
   let(:redis_master_ip) { '1.1.1.1' }
   let(:redis_announce_ip) { '10.10.10.10' }
   let(:redis_master_password) { 'blahblahblah' }
   let(:sentinel_conf) { '/var/opt/gitlab/sentinel/sentinel.conf' }
+  let(:redis_sv_run) { '/opt/gitlab/sv/redis/run' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -33,6 +34,7 @@ RSpec.describe 'gitlab::redis' do
       before do
         stub_gitlab_rb(
           redis: {
+            enable: true,
             master_ip: redis_master_ip,
             announce_ip: redis_announce_ip,
             master_password: redis_master_password
@@ -62,6 +64,12 @@ RSpec.describe 'gitlab::redis' do
           }
       end
 
+      it 'renders redis service definition without --replica-announce-ip' do
+        expect(chef_run).to render_file(redis_sv_run).with_content { |content|
+          expect(content).not_to match(%r{--replica-announce-ip "\$\(hostname -f\)"})
+        }
+      end
+
       it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
 
       context 'user overrides sentinel_use_hostnames' do
@@ -77,6 +85,29 @@ RSpec.describe 'gitlab::redis' do
           expect(chef_run).to render_file(sentinel_conf).with_content { |content|
             expect(content).to match(%r{SENTINEL resolve-hostnames yes})
             expect(content).to match(%r{SENTINEL announce-hostnames yes})
+          }
+        end
+      end
+
+      context 'user enables announce_ip_from_hostname' do
+        before do
+          stub_gitlab_rb(
+            redis: {
+              enable: true,
+              master_ip: redis_master_ip,
+              announce_ip_from_hostname: true,
+              master_password: redis_master_password
+            })
+        end
+
+        it 'uses hostnames' do
+          expect(chef_run).to render_file(sentinel_conf).with_content { |content|
+            expect(content).to match(%r{SENTINEL resolve-hostnames yes})
+            expect(content).to match(%r{SENTINEL announce-hostnames yes})
+          }
+
+          expect(chef_run).to render_file(redis_sv_run).with_content { |content|
+            expect(content).to match(%r{--replica-announce-ip "\$\(hostname -f\)"})
           }
         end
       end

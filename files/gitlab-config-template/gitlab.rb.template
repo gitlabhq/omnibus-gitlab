@@ -1334,6 +1334,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ####! Docs: https://redis.io/topics/replication#configuring-replication-in-docker-and-nat
 # redis['announce_ip'] = nil
 # redis['announce_port'] = nil
+# redis['announce_ip_from_hostname'] = false
 
 ####! **Master password should have the same value defined in
 ####!   redis['password'] to enable the instance to transition to/from
