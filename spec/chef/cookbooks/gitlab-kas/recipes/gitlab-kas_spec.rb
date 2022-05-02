@@ -57,6 +57,10 @@ RSpec.describe 'gitlab-kas' do
             }
           ),
           observability: {
+            listen: {
+              address: 'localhost:8151',
+              network: 'tcp'
+            },
             logging: {
               level: 'info',
             },
@@ -96,6 +100,7 @@ RSpec.describe 'gitlab-kas' do
           private_api_secret_key: private_api_secret_key,
           listen_address: 'localhost:5006',
           listen_websocket: false,
+          observability_listen_address: '0.0.0.0:8151',
           metrics_usage_reporting_period: '120',
           sentry_dsn: 'https://my_key:my_secret@sentry.io/test_project',
           sentry_environment: 'production',
@@ -123,6 +128,10 @@ RSpec.describe 'gitlab-kas' do
             }
           ),
           observability: {
+            listen: {
+              address: '0.0.0.0:8151',
+              network: 'tcp'
+            },
             logging: {
               level: 'debug'
             },

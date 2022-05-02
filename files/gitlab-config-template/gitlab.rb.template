@@ -1841,6 +1841,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_kas['listen_websocket'] = true
 # gitlab_kas['certificate_file'] = "/path/to/certificate.pem"
 # gitlab_kas['key_file'] = "/path/to/key.pem"
+# gitlab_kas['observability_listen_network'] = 'tcp'
+# gitlab_kas['observability_listen_address'] = 'localhost:8151'
 # gitlab_kas['internal_api_listen_network'] = 'tcp'
 # gitlab_kas['internal_api_listen_address'] = 'localhost:8153'
 # gitlab_kas['internal_api_certificate_file'] = "/path/to/certificate.pem"
