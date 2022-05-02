@@ -40,7 +40,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'personal_access_tokens_expired_notification_worker'     | 'personal_access_tokens_expired_notification_worker_cron'
         'personal_access_tokens_expiring_worker'                 | 'personal_access_tokens_expiring_worker_cron'
         'pipeline_schedule_worker'                               | 'pipeline_schedule_worker_cron'
-        'pseudonymizer_worker'                                   | 'pseudonymizer_worker_cron'
         'remove_unaccepted_member_invites_worker'                | 'remove_unaccepted_member_invites_cron_worker'
         'repository_archive_cache_worker'                        | 'repository_archive_cache_worker_cron'
         'repository_check_worker'                                | 'repository_check_worker_cron'

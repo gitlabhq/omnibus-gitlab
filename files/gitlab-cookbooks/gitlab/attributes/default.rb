@@ -143,7 +143,6 @@ default['gitlab']['gitlab-rails']['geo_repository_verification_secondary_schedul
 default['gitlab']['gitlab-rails']['analytics_usage_trends_count_job_trigger_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['member_invitation_reminder_emails_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['user_status_cleanup_batch_worker_cron'] = nil
-default['gitlab']['gitlab-rails']['pseudonymizer_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['loose_foreign_keys_cleanup_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['elastic_index_bulk_cron'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_enabled'] = false
@@ -389,10 +388,6 @@ default['gitlab']['gitlab-rails']['backup_multipart_chunk_size'] = nil
 default['gitlab']['gitlab-rails']['backup_encryption'] = nil
 default['gitlab']['gitlab-rails']['backup_encryption_key'] = nil
 default['gitlab']['gitlab-rails']['backup_storage_class'] = nil
-
-default['gitlab']['gitlab-rails']['pseudonymizer_manifest'] = nil
-default['gitlab']['gitlab-rails']['pseudonymizer_upload_remote_directory'] = nil
-default['gitlab']['gitlab-rails']['pseudonymizer_upload_connection'] = {}
 
 # Path to the GitLab Shell installation
 # defaults to /opt/gitlab/embedded/service/gitlab-shell/. The install-dir path is set at build time

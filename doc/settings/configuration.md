@@ -684,7 +684,6 @@ but it's recommended for defense in depth against potential [host header attacks
 - [Send application email via SMTP](smtp.md)
 - [Set up OmniAuth (Google, Twitter, GitHub login)](https://docs.gitlab.com/ee/integration/omniauth.html)
 - [Adjust Puma settings](https://docs.gitlab.com/ee/administration/operations/puma.html)
-- [Pseudonymizer settings](https://docs.gitlab.com/ee/administration/pseudonymizer.html)
 
 ## Troubleshooting
 
