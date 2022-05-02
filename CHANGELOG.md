@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.10.1 (2022-04-29)
+
+No changes.
+
 ## 14.10.0 (2022-04-21)
 
 ### Added (3 changes)
@@ -30,6 +34,12 @@ omnibus-gitlab repository.
 - [mark credentials as sensitive](gitlab-org/omnibus-gitlab@9354ccc5d43df012eaacf46029e67ff4ecc2d482) ([merge request](gitlab-org/omnibus-gitlab!5971))
 - [Upgrade zlib version](gitlab-org/omnibus-gitlab@056875b6497087a33fa837e5549baa1ecea33674) by @srslypascal ([merge request](gitlab-org/omnibus-gitlab!6015))
 - [Update grafana version to 7.5.15](gitlab-org/omnibus-gitlab@5e98cbfb95cc3176fbaf5f38de99775d9cae512e)
+
+## 14.9.4 (2022-04-29)
+
+### Security (1 change)
+
+- [Upgrade zlib version](gitlab-org/security/omnibus-gitlab@22de3296bc229d7812d1adb0de8b846390ca494b) ([merge request](gitlab-org/security/omnibus-gitlab!200))
 
 ## 14.9.3 (2022-04-12)
 
@@ -88,6 +98,12 @@ No changes.
 - [Improve success message after promoting secondary nodes](gitlab-org/omnibus-gitlab@d19ed935875778233151fe9b19a07134d757f133) ([merge request](gitlab-org/omnibus-gitlab!5959))
 - [Enable live stdout/stderr](gitlab-org/omnibus-gitlab@ae79d717a0f7735442463ec65121b1b19b67ec8a) ([merge request](gitlab-org/omnibus-gitlab!5958))
 - [Update Mattermost to 6.4.0](gitlab-org/omnibus-gitlab@2db39bba83bede1ec856b519289eb6f44b003882) by @angelos.kyratzakos ([merge request](gitlab-org/omnibus-gitlab!5919))
+
+## 14.8.6 (2022-04-29)
+
+### Security (1 change)
+
+- [Upgrade zlib version](gitlab-org/security/omnibus-gitlab@a197f94fd54297077c02704cff9309ae8f2ad3ed) ([merge request](gitlab-org/security/omnibus-gitlab!199))
 
 ## 14.8.5 (2022-03-31)
 
