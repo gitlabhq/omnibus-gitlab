@@ -16,13 +16,14 @@ class SentinelHelper
 
   def use_hostnames
     # Detect if user is overriding what we want to calculate here
-    if sentinel['use_hostnames'].nil?
-      # Match on IP addresses, if an IP address is detected, we will NOT use hostnames
-      !!(sentinel['announce_ip'].nil? || sentinel['announce_ip'] =~ Regexp.union([Resolv::IPv4::Regex, Resolv::IPv6::Regex])) ? 'no' : 'yes'
-    else
-      # Leverage user override
-      sentinel['use_hostnames'] ? 'yes' : 'no'
-    end
+    return sentinel['use_hostnames'] ? 'yes' : 'no' unless sentinel['use_hostnames'].nil?
+
+    return 'yes' if redis['announce_ip_from_hostname']
+
+    # Enable hostnames if a non-IP address value is provided in announce_ip
+    return 'yes' if sentinel['announce_ip'] && !Regexp.union([Resolv::IPv4::Regex, Resolv::IPv6::Regex]).match(sentinel['announce_ip'])
+
+    'no'
   end
 
   def running_version
@@ -77,6 +78,10 @@ class SentinelHelper
 
   def sentinel
     @node['gitlab']['sentinel']
+  end
+
+  def redis
+    @node['redis']
   end
 
   # Load from local JSON file

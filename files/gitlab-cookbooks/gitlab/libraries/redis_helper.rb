@@ -10,6 +10,8 @@ class RedisHelper
     gitlab_rails_config = @node['gitlab']['gitlab-rails']
     redis_config = @node['redis']
 
+    raise 'Redis announce_ip and announce_ip_from_hostname are mutually exclusive, please unset one of them' if redis_config['announce_ip'] && redis_config['announce_ip_from_hostname']
+
     params = if RedisHelper::Checks.has_sentinels? && support_sentinel_groupname
                [redis_config['master_name'], redis_config['master_port'], redis_config['master_password']]
              else
