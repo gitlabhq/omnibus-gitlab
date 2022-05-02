@@ -644,12 +644,6 @@ production: &base
       cron: "<%= @geo_migrated_local_files_clean_up_worker_cron %>"
     <% end %>
 
-    # Export pseudonymized data in CSV format for analysis
-    <% unless @pseudonymizer_worker_cron.nil? %>
-    pseudonymizer_worker:
-      cron: "<%= @pseudonymizer_worker_cron %>"
-    <% end %>
-
     <% unless @elastic_index_bulk_cron.nil? %>
     elastic_index_bulk_cron_worker:
       cron: "<%= @elastic_index_bulk_cron %>"
@@ -976,13 +970,6 @@ production: &base
       encryption_key: <%= @backup_encryption_key %>
       storage_options: <%= @backup_upload_storage_options.to_json %>
       storage_class: <%= @backup_storage_class %>
-
-  ## Pseudonymizer settings
-  pseudonymizer:
-    manifest: <%= quote(@pseudonymizer_manifest) %>
-    upload:
-      remote_directory: <%= quote(@pseudonymizer_upload_remote_directory) %>
-      connection: <%= @pseudonymizer_upload_connection.to_json %>
 
   ## GitLab Shell settings
   gitlab_shell:
