@@ -27,6 +27,9 @@ gitlab:
   address: <%= @gitlab_address %>
   authentication_secret_file: <%= @authentication_secret_file %>
 observability:
+  listen:
+    address: <%= @observability_listen_address %>
+    network: <%=  @observability_listen_network %>
   usage_reporting_period: <%= @metrics_usage_reporting_period %>s
   <%- if @sentry_dsn -%>
   sentry:
