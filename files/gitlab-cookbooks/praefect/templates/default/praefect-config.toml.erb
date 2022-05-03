@@ -63,6 +63,11 @@ level = '<%= @logging_level %>'
 format = '<%= @logging_format %>'
 <% end %>
 
+[background_verification]
+<% if @background_verification_verification_interval %>
+verification_interval = '<%= @background_verification_verification_interval %>'
+<% end %>
+
 <% @virtual_storages.each do |name, config| %>
 [[virtual_storage]]
 name = '<%= name %>'
