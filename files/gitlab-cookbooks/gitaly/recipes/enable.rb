@@ -81,7 +81,7 @@ env_dir env_directory do
 end
 
 gitlab_url, gitlab_relative_path = WebServerHelper.internal_api_url(node)
-custom_hooks_dir = node.dig('gitlab', 'gitlab-shell', 'custom_hooks_dir') || node.dig('gitaly', 'custom_hooks_dir')
+custom_hooks_dir = node.dig('gitaly', 'custom_hooks_dir')
 
 template "Create Gitaly config.toml" do
   path config_path
