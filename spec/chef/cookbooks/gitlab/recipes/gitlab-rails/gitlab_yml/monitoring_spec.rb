@@ -16,8 +16,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
           },
           sidekiq_health_checks: {
             enabled: true,
-            log_enabled: false,
-            port: 8082,
+            port: 8092,
             address: '127.0.0.1'
           },
           web_exporter: {
@@ -83,12 +82,11 @@ RSpec.describe 'gitlab::gitlab-rails' do
         context 'when health-checks are not configured manually' do
           let(:health_checks_settings) { {} }
 
-          it 'defaults health-checks to exporter settings' do
+          it 'uses the default settings' do
             expect(gitlab_yml[:production][:monitoring][:sidekiq_health_checks]).to eq(
-              enabled: false,
-              log_enabled: true,
-              port: 2222,
-              address: '1.2.2.2'
+              enabled: true,
+              port: 8092,
+              address: '127.0.0.1'
             )
           end
         end
@@ -98,7 +96,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
             {
               sidekiq: {
                 health_checks_enabled: true,
-                health_checks_log_enabled: true,
                 health_checks_listen_address: '1.2.3.5',
                 health_checks_listen_port: 1235
               }
@@ -108,7 +105,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
           it 'uses custom health-checks settings' do
             expect(gitlab_yml[:production][:monitoring][:sidekiq_health_checks]).to eq(
               enabled: true,
-              log_enabled: true,
               port: 1235,
               address: '1.2.3.5'
             )

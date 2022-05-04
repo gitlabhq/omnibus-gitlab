@@ -1008,10 +1008,9 @@ production: &base
 
     # Sidekiq health checks is a webserver built in to Sidekiq to serve health checks for the workers
     sidekiq_health_checks:
-      enabled: <%=  @sidekiq['health_checks_enabled'].nil? ? @sidekiq['metrics_enabled'] : @sidekiq['health_checks_enabled'] %>
-      log_enabled: <%= @sidekiq['health_checks_log_enabled'].nil? ? @sidekiq['exporter_log_enabled'] : @sidekiq['health_checks_log_enabled'] %>
-      address: <%= @sidekiq['health_checks_listen_address'].nil? ? @sidekiq['listen_address'] : @sidekiq['health_checks_listen_address'] %>
-      port: <%= @sidekiq['health_checks_listen_port'].nil? ? @sidekiq['listen_port'] : @sidekiq['health_checks_listen_port'] %>
+      enabled: <%=  @sidekiq['health_checks_enabled'] %>
+      address: <%= @sidekiq['health_checks_listen_address'] %>
+      port: <%= @sidekiq['health_checks_listen_port'] %>
 
     # Web exporter is webserver built in to Unicorn/Puma to expose Prometheus metrics
     web_exporter:
