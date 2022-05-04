@@ -1,3 +1,6 @@
+require 'resolv'
+require 'ipaddr'
+
 module Sidekiq
   class << self
     def parse_variables
@@ -5,9 +8,6 @@ module Sidekiq
     end
 
     def check_listen_address
-      # TODO: In %15.0 we want to change this deprecation log to raise an error instead
-      # See: https://gitlab.com/gitlab-org/gitlab/-/issues/350148
-
       default_config = Gitlab['node']['gitlab']['sidekiq']
       user_config = Gitlab['sidekiq']
 
@@ -18,7 +18,16 @@ module Sidekiq
 
       return if listen_address.nil? || health_checks_address.nil?
 
-      LoggingHelper.deprecation("Sidekiq exporter and health checks are set to the same address and port. This is deprecated and will result in an error in version 15.0. See https://docs.gitlab.com/ee/administration/sidekiq.html") if listen_address == health_checks_address && listen_port == health_checks_port
+      raise "The Sidekiq metrics and health checks servers are binding the same address and port. This is unsupported in GitLab 15.0 and newer. See https://docs.gitlab.com/ee/administration/sidekiq.html for up-to-date instructions." if same_address?(listen_address, health_checks_address) && listen_port == health_checks_port
+    end
+
+    private
+
+    def same_address?(address1, address2)
+      addr1 = IPAddr.new(Resolv.getaddress(address1))
+      addr2 = IPAddr.new(Resolv.getaddress(address2))
+
+      addr1.loopback? == addr2.loopback? || addr1 == addr2
     end
   end
 end

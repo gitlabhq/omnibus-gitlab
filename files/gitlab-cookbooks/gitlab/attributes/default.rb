@@ -583,10 +583,9 @@ default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"
 default['gitlab']['sidekiq']['listen_port'] = 8082
 
 # Sidekiq health-check server defaults
-default['gitlab']['sidekiq']['health_checks_enabled'] = nil
-default['gitlab']['sidekiq']['health_checks_log_enabled'] = nil
-default['gitlab']['sidekiq']['health_checks_listen_address'] = nil
-default['gitlab']['sidekiq']['health_checks_listen_port'] = nil
+default['gitlab']['sidekiq']['health_checks_enabled'] = true
+default['gitlab']['sidekiq']['health_checks_listen_address'] = "127.0.0.1"
+default['gitlab']['sidekiq']['health_checks_listen_port'] = 8092
 
 # Cluster specific settings
 default['gitlab']['sidekiq']['queue_selector'] = false
