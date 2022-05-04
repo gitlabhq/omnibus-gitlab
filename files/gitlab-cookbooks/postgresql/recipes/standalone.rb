@@ -1,5 +1,6 @@
 account_helper = AccountHelper.new(node)
 pg_helper = PgHelper.new(node)
+omnibus_helper = OmnibusHelper.new(node)
 
 postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
@@ -31,6 +32,12 @@ database_objects 'postgresql' do
   not_if { pg_helper.replica? }
 end
 
+version_file 'Create version file for PostgreSQL' do
+  version_file_path File.join(node['postgresql']['dir'], 'VERSION')
+  version_check_cmd "/opt/gitlab/embedded/bin/postgres --version"
+  notifies :restart, 'runit_service[postgresql]', :immediately if node['postgresql']['auto_restart_on_version_change'] && pg_helper.is_running? && omnibus_helper.should_notify?("postgresql") && pg_helper.bootstrapped?
+end
+
 ruby_block 'warn pending postgresql restart' do
   block do
     message = <<~MESSAGE
@@ -42,6 +49,7 @@ ruby_block 'warn pending postgresql restart' do
     LoggingHelper.warning(message)
   end
   only_if { pg_helper.is_running? && pg_helper.running_version != pg_helper.version }
+  not_if { node['postgresql']['auto_restart_on_version_change'] }
 end
 
 execute 'reload postgresql' do

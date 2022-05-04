@@ -117,3 +117,6 @@ default['postgresql']['version'] = nil
 # Listen Check settings
 default['postgresql']['max_service_checks'] = 20
 default['postgresql']['service_check_interval'] = 5
+
+# Automatically restart on version changes
+default['postgresql']['auto_restart_on_version_change'] = true

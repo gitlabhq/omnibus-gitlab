@@ -1254,6 +1254,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # Set this if you have disabled the bundled PostgreSQL but still want to use the backup rake tasks
 # postgresql['version'] = 10
 
+
+##! Automatically restart PostgreSQL service when version changes.
+# postgresql['auto_restart_on_version_change'] = true
+
 ################################################################################
 ## GitLab Redis
 ##! **Can be disabled if you are using your own Redis instance.**
