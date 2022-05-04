@@ -4,7 +4,6 @@ $LOAD_PATH << './files/gitlab-ctl-commands-ee/lib'
 $LOAD_PATH << './files/gitlab-ctl-commands/lib'
 
 require 'geo/replication_toggle_command'
-require 'geo/promote_to_primary_node'
 require 'gitlab_ctl/util'
 
 RSpec.describe Geo::ReplicationToggleCommand do

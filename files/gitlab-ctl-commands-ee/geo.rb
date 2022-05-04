@@ -1,5 +1,6 @@
 require 'optparse'
 
+require "#{base_path}/embedded/cookbooks/package/libraries/gitlab_cluster"
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
 require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo"
 require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/promote"
