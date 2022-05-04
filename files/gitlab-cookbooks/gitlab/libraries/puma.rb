@@ -24,8 +24,19 @@ module Puma
     end
 
     def parse_listen_address
-      puma_socket = Gitlab['puma']['socket'] || Gitlab['node']['gitlab']['puma']['socket']
-      Gitlab['gitlab_workhorse']['auth_socket'] = puma_socket if Gitlab['gitlab_workhorse']['auth_backend'].nil?
+      return unless Gitlab['gitlab_workhorse']['auth_backend'].nil?
+
+      https_url = puma_https_url
+
+      # As described in https://gitlab.com/gitlab-org/gitlab/-/blob/master/workhorse/doc/operations/configuration.md#interaction-of-authbackend-and-authsocket,
+      # Workhorse will give precedence to a UNIX socket. In order to ensure
+      # traffic is sent over an encrypted channel, set auth_backend if SSL
+      # has been enabled on Puma.
+      if https_url
+        Gitlab['gitlab_workhorse']['auth_backend'] = https_url
+      else
+        Gitlab['gitlab_workhorse']['auth_socket'] = puma_socket
+      end
     end
 
     def workers(total_memory = Gitlab['node']['memory']['total'].to_i)
@@ -43,6 +54,24 @@ module Puma
     # Currently, Puma workers can use 1GB per process.
     def worker_memory(total_memory, reserved_memory = 1572864, per_worker_ram = 1048576)
       (total_memory - reserved_memory) / per_worker_ram
+    end
+
+    private
+
+    def puma_socket
+      attributes['socket'] || Gitlab['node']['gitlab']['puma']['socket']
+    end
+
+    def puma_https_url
+      url(host: attributes['ssl_listen'], port: attributes['ssl_port'], scheme: 'https') if attributes['ssl_listen'] && attributes['ssl_port']
+    end
+
+    def attributes
+      Gitlab['puma']
+    end
+
+    def url(host:, port:, scheme:)
+      Addressable::URI.new(host: host, port: port, scheme: scheme).to_s
     end
   end
 end

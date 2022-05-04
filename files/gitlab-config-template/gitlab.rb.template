@@ -998,6 +998,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # puma['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
 # puma['somaxconn'] = 1024
 
+### SSL settings
+# puma['ssl_listen'] = nil
+# puma['ssl_port'] = nil
+# puma['ssl_certificate'] = nil
+# puma['ssl_certificate_key'] = nil
+# puma['ssl_client_certificate'] = nil
+# puma['ssl_cipher_filter'] = nil
+# puma['ssl_verify_mode'] = 'none'
+
 # puma['pidfile'] = '/opt/gitlab/var/puma/puma.pid'
 # puma['state_path'] = '/opt/gitlab/var/puma/puma.state'
 

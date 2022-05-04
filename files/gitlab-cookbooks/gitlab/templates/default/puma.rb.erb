@@ -34,12 +34,32 @@ queue_requests false
 
 # Bind the server to "url". "tcp://", "unix://" and "ssl://" are the only
 # accepted protocols.
-<%- if @listen_socket %>
+<%- if @listen_socket && !@listen_socket.empty? %>
 bind 'unix://<%= @listen_socket %>'
 <%- end %>
 
 <%- if @listen_tcp %>
 bind 'tcp://<%= @listen_tcp %>'
+<%- end %>
+
+<%- if @ssl_listen_host && @ssl_port %>
+ssl_bind '<%= @ssl_listen_host %>', <%= @ssl_port %>, {
+  <%- if @ssl_certificate %>
+  cert: '<%= @ssl_certificate %>',
+  <%- end %>
+  <%- if @ssl_certificate_key %>
+  key: '<%= @ssl_certificate_key %>',
+  <%- end %>
+  <%- if @ssl_client_certificate %>
+  ca: '<%= @ssl_client_certificate %>',
+  <%- end %>
+  <%- if @ssl_cipher_filter %>
+  ssl_cipher_filter: '<%= @ssl_cipher_filter %>',
+  <%- end %>
+  <%- if @ssl_verify_mode %>
+  verify_mode: '<%= @ssl_verify_mode %>'
+  <%- end %>
+}
 <%- end %>
 
 <%- if @working_directory %>

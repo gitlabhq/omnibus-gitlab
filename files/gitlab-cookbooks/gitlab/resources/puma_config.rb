@@ -8,6 +8,13 @@ property :environment, String, default: 'production'
 property :install_dir, [String, nil], default: lazy { node['package']['install-dir'] }
 property :listen_socket, [String, nil], default: nil
 property :listen_tcp, [String, nil], default: nil
+property :ssl_listen_host, [String, nil], default: nil
+property :ssl_port, [Integer, nil], default: nil
+property :ssl_certificate, [String, nil], default: nil
+property :ssl_certificate_key, [String, nil], default: nil
+property :ssl_client_certificate, [String, nil], default: nil
+property :ssl_cipher_filter, [String, nil], default: nil
+property :ssl_verify_mode, String, default: 'none'
 property :working_directory, [String, nil], default: nil
 property :worker_timeout, Integer, default: 60
 property :per_worker_max_memory_mb, [Integer, nil], default: nil
