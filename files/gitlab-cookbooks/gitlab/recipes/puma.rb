@@ -28,8 +28,19 @@ puma_listen_socket = node['gitlab'][svc]['socket']
 puma_pidfile = node['gitlab'][svc]['pidfile']
 puma_state_path = node['gitlab'][svc]['state_path']
 puma_log_dir = node['gitlab'][svc]['log_directory']
-puma_socket_dir = File.dirname(puma_listen_socket)
-puma_listen_tcp = [node['gitlab'][svc]['listen'], node['gitlab'][svc]['port']].join(':')
+puma_socket_dir = File.dirname(puma_listen_socket) if puma_listen_socket && !puma_listen_socket.empty?
+puma_listen_host = node['gitlab'][svc]['listen']
+
+# This works around not being able to disable `listen` with `nil` to defaults.
+puma_listen_tcp = [puma_listen_host, node['gitlab'][svc]['port']].join(':') if puma_listen_host && !puma_listen_host.empty?
+
+puma_listen_ssl_host = node['gitlab'][svc]['ssl_listen']
+puma_ssl_port = node['gitlab'][svc]['ssl_port']
+puma_ssl_cert = node['gitlab'][svc]['ssl_certificate']
+puma_ssl_key = node['gitlab'][svc]['ssl_certificate_key']
+puma_ssl_client_cert = node['gitlab'][svc]['ssl_client_certificate']
+puma_ssl_cipher_filter = node['gitlab'][svc]['ssl_cipher_filter']
+puma_ssl_verify_mode = node['gitlab'][svc]['ssl_verify_mode']
 
 puma_etc_dir = File.join(rails_home, "etc")
 puma_working_dir = File.join(rails_home, "working")
@@ -51,17 +62,26 @@ actioncable_worker_pool_size = node['gitlab']['actioncable']['worker_pool_size']
   end
 end
 
-directory puma_socket_dir do
-  owner user
-  group AccountHelper.new(node).web_server_group
-  mode '0750'
-  recursive true
+if puma_socket_dir
+  directory puma_socket_dir do
+    owner user
+    group AccountHelper.new(node).web_server_group
+    mode '0750'
+    recursive true
+  end
 end
 
 puma_config puma_rb do
   environment node['gitlab'][rails_app]['environment']
   listen_socket puma_listen_socket
   listen_tcp puma_listen_tcp
+  ssl_listen_host puma_listen_ssl_host
+  ssl_port puma_ssl_port
+  ssl_certificate puma_ssl_cert
+  ssl_certificate_key puma_ssl_key
+  ssl_cipher_filter puma_ssl_cipher_filter
+  ssl_client_certificate puma_ssl_client_cert
+  ssl_verify_mode puma_ssl_verify_mode
   worker_timeout node['gitlab'][svc]['worker_timeout']
   per_worker_max_memory_mb node['gitlab'][svc]['per_worker_max_memory_mb']
   working_directory puma_working_dir

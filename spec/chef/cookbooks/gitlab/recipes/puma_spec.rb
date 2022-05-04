@@ -84,7 +84,7 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
         min_threads: 4,
         max_threads: 4
       )
-      expect(chef_run).to create_template('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
         expect(content).to match(/lowlevel_error_handler/)
         expect(content).to include('Raven.capture_exception')
       }
@@ -126,6 +126,124 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
         expect(content).to match(%r(-authSocket /tmp/puma.socket))
       }
       expect(Gitlab['gitlab_workhorse']['auth_socket']).to eq('/tmp/puma.socket')
+    end
+  end
+
+  context 'with SSL enabled' do
+    let(:base_params) do
+      {
+        puma: {
+          worker_timeout: 120,
+          worker_processes: 4,
+          min_threads: 5,
+          max_threads: 10,
+          socket: '/tmp/puma.socket',
+          listen: '10.0.0.1',
+          port: 9000,
+          ssl_listen: '192.168.0.1',
+          ssl_port: 9999,
+          ssl_certificate: '/tmp/test.crt',
+          ssl_certificate_key: '/tmp/test.key'
+        }
+      }
+    end
+    let(:params) { base_params }
+
+    before do
+      stub_gitlab_rb(params)
+    end
+
+    it 'renders the puma.rb file' do
+      expect(chef_run).to create_puma_config('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with(
+        ssl_listen_host: '192.168.0.1',
+        ssl_port: 9999,
+        listen_socket: '/tmp/puma.socket',
+        listen_tcp: '10.0.0.1:9000',
+        worker_processes: 4,
+        min_threads: 5,
+        max_threads: 10
+      )
+
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
+        expect(content).to match(/ssl_bind '192.168.0.1', 9999, {\n  cert: '\/tmp\/test.crt',\n  key: '\/tmp\/test.key',\n  verify_mode: 'none'\n}/m)
+      }
+    end
+
+    it 'uses HTTPS instead of a UNIX socket for the Workhorse auth backend' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content { |content|
+        expect(content).to match(%r(-authBackend https://192.168.0.1:9999))
+        expect(content).not_to match(%r(-authSocket /tmp/puma.socket))
+      }
+      expect(Gitlab['gitlab_workhorse']['auth_socket']).to be_nil
+      expect(Gitlab['gitlab_workhorse']['auth_backend']).to eq('https://192.168.0.1:9999')
+    end
+
+    context 'with UNIX socket and HTTP disabled' do
+      let(:params) do
+        {
+          puma: {
+            worker_timeout: 120,
+            worker_processes: 4,
+            min_threads: 5,
+            max_threads: 10,
+            socket: '',
+            listen: '',
+            port: 9000,
+            ssl_listen: '192.168.0.1',
+            ssl_port: 9999,
+            ssl_certificate: '/tmp/test.crt',
+            ssl_certificate_key: '/tmp/test.key'
+          }
+        }
+      end
+
+      it 'omits the UNIX socket and TCP binds from the Puma config' do
+        expect(chef_run).to create_puma_config('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with(
+          ssl_listen_host: '192.168.0.1',
+          ssl_port: 9999,
+          listen_socket: '',
+          listen_tcp: nil,
+          worker_processes: 4,
+          min_threads: 5,
+          max_threads: 10
+        )
+
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
+          expect(content).not_to match(%r(bind 'unix://))
+          expect(content).not_to match(%r(bind 'tcp://))
+          expect(content).to match(/ssl_bind '192.168.0.1', 9999, {\n  cert: '\/tmp\/test.crt',\n  key: '\/tmp\/test.key',\n  verify_mode: 'none'\n}/m)
+        }
+      end
+    end
+
+    context 'with other SSL options configured' do
+      let(:filter) { '!aNULL:AES+SHA' }
+      let(:client_cert) { '/tmp/client.crt' }
+
+      let(:params) do
+        base_params.tap do |config|
+          config[:puma][:ssl_client_certificate] = client_cert
+          config[:puma][:ssl_cipher_filter] = filter
+          config[:puma][:ssl_verify_mode] = 'peer'
+        end
+      end
+
+      it 'renders the puma.rb file' do
+        expect(chef_run).to create_puma_config('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with(
+          ssl_listen_host: '192.168.0.1',
+          ssl_port: 9999,
+          listen_socket: '/tmp/puma.socket',
+          listen_tcp: '10.0.0.1:9000',
+          ssl_cipher_filter: filter,
+          worker_processes: 4,
+          min_threads: 5,
+          max_threads: 10
+        )
+
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
+          expect(content).to match(/ssl_bind '192.168.0.1', 9999, {\n  cert: '\/tmp\/test.crt',\n  key: '\/tmp\/test.key',\n  ca: '#{client_cert}',\n  ssl_cipher_filter: '#{Regexp.escape(filter)}',\n  verify_mode: 'peer'\n}/m)
+        }
+      end
     end
   end
 

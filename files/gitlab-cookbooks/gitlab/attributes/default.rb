@@ -549,6 +549,14 @@ default['gitlab']['puma']['log_directory'] = "/var/log/gitlab/puma"
 default['gitlab']['puma']['listen'] = "127.0.0.1"
 default['gitlab']['puma']['port'] = 8080
 default['gitlab']['puma']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
+default['gitlab']['puma']['ssl_listen'] = nil
+default['gitlab']['puma']['ssl_port'] = nil
+default['gitlab']['puma']['ssl_certificate'] = nil
+default['gitlab']['puma']['ssl_certificate_key'] = nil
+default['gitlab']['puma']['ssl_client_certificate'] = nil
+default['gitlab']['puma']['ssl_cipher_filter'] = nil
+default['gitlab']['puma']['ssl_verify_mode'] = 'none'
+
 default['gitlab']['puma']['somaxconn'] = 1024
 # Path to the puma server Process ID file
 # defaults to /opt/gitlab/var/puma/puma.pid. The install-dir path is set at build time
