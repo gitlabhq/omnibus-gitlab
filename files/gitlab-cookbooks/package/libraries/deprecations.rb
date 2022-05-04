@@ -169,6 +169,42 @@ module Gitlab
             removal: '15.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6758
             note: "Use `gitaly['runtime_dir']` instead."
           },
+          {
+            config_keys: %w(gitlab gitlab-rails object_store connection openstack_username),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Update object storage configuration to use S3 API instead of SWIFT."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails object_store connection rackspace_username),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Migrate object storage to another provider other than Rackspace."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails pseudonymizer_manifest),
+            deprecation: '14.7',
+            removal: '15.0',
+            note: "Starting with GitLab 14.7, Pseudonymizer has been deprecated and will be removed."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails pseudonymizer_upload_remote_directory),
+            deprecation: '14.7',
+            removal: '15.0',
+            note: "Starting with GitLab 14.7, Pseudonymizer has been deprecated and will be removed."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails pseudonymizer_upload_connection),
+            deprecation: '14.7',
+            removal: '15.0',
+            note: "Starting with GitLab 14.7, Pseudonymizer has been deprecated and will be removed."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails pseudonymizer_worker_cron),
+            deprecation: '14.7',
+            removal: '15.0',
+            note: "Starting with GitLab 14.7, Pseudonymizer has been deprecated and will be removed."
+          },
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable', 'svlogd_prefix'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")
