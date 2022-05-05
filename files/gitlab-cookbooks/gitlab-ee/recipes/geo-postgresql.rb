@@ -147,6 +147,12 @@ if node['gitlab']['geo-postgresql']['enable']
     action :enable
   end
 
+  version_file 'Create version file for PostgreSQL' do
+    version_file_path File.join(node['gitlab']['geo-postgresql']['dir'], 'VERSION')
+    version_check_cmd "/opt/gitlab/embedded/bin/postgres --version"
+    notifies :restart, 'runit_service[geo-postgresql]', :immediately if node['gitlab']['geo-postgresql']['auto_restart_on_version_change'] && geo_pg_helper.is_running? && should_notify
+  end
+
   ruby_block 'warn pending geo-postgresql restart' do
     block do
       message = <<~MESSAGE
@@ -158,6 +164,7 @@ if node['gitlab']['geo-postgresql']['enable']
       LoggingHelper.warning(message)
     end
     only_if { geo_pg_helper.is_running? && geo_pg_helper.running_version != geo_pg_helper.version }
+    not_if { node['gitlab']['geo-postgresql']['auto_restart_on_version_change'] }
   end
 end
 

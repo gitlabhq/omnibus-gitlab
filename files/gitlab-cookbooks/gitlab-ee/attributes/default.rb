@@ -151,6 +151,9 @@ default['gitlab']['geo-postgresql']['archive_timeout'] = '0'
 default['gitlab']['geo-postgresql']['pgbouncer_user'] = 'pgbouncer'
 default['gitlab']['geo-postgresql']['pgbouncer_user_password'] = nil
 
+# Automatically restart on version changes
+default['gitlab']['geo-postgresql']['auto_restart_on_version_change'] = true
+
 ###
 # Geo: LogCursor (replication)
 ###

@@ -2731,6 +2731,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # geo_postgresql['sql_user_password'] = 'SQL_USER_PASSWORD_HASH'
 # geo_postgresql['log_directory'] = '/var/log/gitlab/geo-postgresql'
 
+##! Automatically restart PostgreSQL service when version changes.
+# geo_postgresql['auto_restart_on_version_change'] = true
+
 ################################################################################
 ## GitLab Geo Log Cursor Daemon (EE only)
 ################################################################################
