@@ -96,7 +96,7 @@ module GitlabCtl
       def chef_run(config, attribs, alternate_log = nil)
         cookbook_path = "/opt/gitlab/embedded/cookbooks"
         alternate_log = " -L #{alternate_log}" if alternate_log
-        run_command("/opt/gitlab/embedded/bin/chef-client#{alternate_log} -z -c #{cookbook_path}/#{config} -j #{cookbook_path}/#{attribs}")
+        run_command("/opt/gitlab/embedded/bin/cinc-client#{alternate_log} -z -c #{cookbook_path}/#{config} -j #{cookbook_path}/#{attribs}")
       end
 
       # Parse enabled roles out of the attributes json file and return an Array of Strings

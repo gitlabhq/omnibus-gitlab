@@ -21,7 +21,10 @@ omnibus_gem_version = Gitlab::Version.new('omnibus')
 #    definitions in `config/software`.  You can find them quickly with:
 #      grep "gem 'install " config/software/*
 gem 'omnibus', git: omnibus_gem_version.remote(Gitlab::Version::ALTERNATIVE_SOURCE), tag: omnibus_gem_version.print(false)
-gem 'chef', '~> 15.17.4'
+source 'https://packagecloud.io/cinc-project/stable' do
+  gem 'chef', '~> 15.17.4'
+  gem 'chef-cli', '~> 3.0.1'
+end
 gem 'ohai', '~> 15.12.0'
 gem 'rainbow', '~> 2.2' # This is used by gitlab-ctl and the chef formatter
 gem 'thor', '0.18.1' # This specific version is required by package_cloud
