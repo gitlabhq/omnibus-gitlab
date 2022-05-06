@@ -32,6 +32,9 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   gem 'install chef-zero' \
+      " --clear-sources" \
+      " -s https://packagecloud.io/cinc-project/stable" \
+      " -s https://rubygems.org" \
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
       ' --no-document', env: env

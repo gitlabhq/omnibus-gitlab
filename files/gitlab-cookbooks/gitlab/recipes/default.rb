@@ -195,9 +195,9 @@ OmnibusHelper.is_deprecated_os?
 
 # Report on any deprecations we encountered at the end of the run
 # There are three possible exits for a reconfigure run
-# 1. Normal chef-client run completion
-# 2. chef-client failed due to an exception
-# 3. chef-client failed for some other reason
+# 1. Normal cinc-client run completion
+# 2. cinc-client failed due to an exception
+# 3. cinc-client failed for some other reason
 # 1 and 3 are handled below. 2 is handled in our custom exception handler
 # defined at files/gitlab-cookbooks/package/libraries/handlers/gitlab.rb
 Chef.event_handler do

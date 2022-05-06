@@ -16,7 +16,7 @@
 #
 
 name 'omnibus-ctl'
-version = Gitlab::Version.new('omnibus-ctl', 'v0.6.0')
+version = Gitlab::Version.new('omnibus-ctl', '0.6.0.1')
 default_version version.print(false)
 display_version version.print(false)
 

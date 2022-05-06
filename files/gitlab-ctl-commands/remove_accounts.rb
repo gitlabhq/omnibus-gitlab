@@ -16,7 +16,7 @@
 #
 
 add_command "remove-accounts", "Delete *all* users and groups used by this package", 1 do
-  command = %W( chef-client
+  command = %W( cinc-client
                 -z
                 -c #{base_path}/embedded/cookbooks/solo.rb
                 -o recipe[gitlab::remove_accounts])
