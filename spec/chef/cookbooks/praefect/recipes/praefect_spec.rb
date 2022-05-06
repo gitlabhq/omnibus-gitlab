@@ -101,8 +101,7 @@ RSpec.describe 'praefect' do
               'praefect2' => { address: 'tcp://node2.internal', token: "praefect2-token" },
               'praefect3' => { address: 'tcp://node3.internal', token: "praefect3-token" },
               'praefect4' => { address: 'tcp://node4.internal', token: "praefect4-token" }
-            },
-            'praefect5' => { address: 'tcp://node5.internal', token: "praefect5-token" }
+            }
           }
         }
       end
@@ -236,11 +235,6 @@ RSpec.describe 'praefect' do
                       'address' => 'tcp://node4.internal',
                       'storage' => 'praefect4',
                       'token' => 'praefect4-token'
-                    },
-                    {
-                      'address' => 'tcp://node5.internal',
-                      'storage' => 'praefect5',
-                      'token' => 'praefect5-token'
                     }
                   ]
                 }
@@ -263,28 +257,31 @@ RSpec.describe 'praefect' do
         end
       end
 
-      context 'with duplicate virtual storage node configured via fallback' do
-        let(:virtual_storages) { { 'default' => { 'node-1' => {}, 'nodes' => { 'node-1' => {} } } } }
-
-        it 'raises an error' do
-          allow(LoggingHelper).to receive(:deprecation)
-          expect(LoggingHelper).to receive(:deprecation).with(
-            <<~EOS
-              Configuring the Gitaly nodes directly in the virtual storage's root configuration object has
-              been deprecated in GitLab 13.12 and will no longer be supported in GitLab 15.0. Move the Gitaly
-              nodes under the 'nodes' key as described in step 6 of https://docs.gitlab.com/ee/administration/gitaly/praefect.html#praefect.
-            EOS
-          )
-
-          expect { chef_run }.to raise_error("Virtual storage 'default' contains duplicate configuration for node 'node-1'")
+      context 'with nodes of virtual storage as an array' do
+        let(:virtual_storages) do
+          {
+            'default' => {
+              'nodes' => {
+                'node-1' => {
+                  'address' => 'tcp://node1.internal',
+                  'token' => 'praefect1-token'
+                }
+              }
+            },
+            'external' => {
+              'nodes' => [
+                {
+                  'storage' => 'node-2',
+                  'address' => 'tcp://node2.external',
+                  'token' => 'praefect2-token'
+                }
+              ]
+            }
+          }
         end
-      end
-
-      context 'with nodes within virtual_storages as an array' do
-        let(:virtual_storages) { { 'default' => [{ storage: 'praefect1', address: 'tcp://node1.internal', token: "praefect1-token" }] } }
 
         it 'raises an error' do
-          expect { chef_run }.to raise_error("nodes of a Praefect virtual_storage must be a hash")
+          expect { chef_run }.to raise_error('Nodes of Praefect virtual storage `external` must be a hash')
         end
       end
     end
