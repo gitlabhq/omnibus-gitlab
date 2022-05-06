@@ -15,7 +15,6 @@
 #
 
 require_relative 'gitlab_ctl/pg_upgrade'
-require_relative 'gitlab_ctl/prometheus_upgrade'
 require_relative 'gitlab_ctl/backup'
 require_relative 'gitlab_ctl/util'
 
