@@ -43,4 +43,5 @@ templatesymlink 'Removes the geo database settings from database.yml and create 
   dependent_services.each do |svc|
     notifies :restart, omnibus_helper.restart_service_resource(svc) if omnibus_helper.should_notify?(svc)
   end
+  only_if { node['gitlab']['gitlab-rails']['enable'] }
 end
