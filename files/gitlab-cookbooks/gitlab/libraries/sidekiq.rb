@@ -11,6 +11,10 @@ module Sidekiq
       default_config = Gitlab['node']['gitlab']['sidekiq']
       user_config = Gitlab['sidekiq']
 
+      metrics_enabled = user_config['metrics_enabled'].nil? ? default_config['metrics_enabled'] : user_config['metrics_enabled']
+      health_checks_enabled = user_config['health_checks_enabled'].nil? ? default_config['health_checks_enabled'] : user_config['health_checks_enabled']
+      return unless metrics_enabled && health_checks_enabled
+
       listen_address = user_config['listen_address'] || default_config['listen_address']
       health_checks_address = user_config['health_checks_listen_address'] || default_config['health_checks_listen_address']
       listen_port = user_config['listen_port'] || default_config['listen_port']
