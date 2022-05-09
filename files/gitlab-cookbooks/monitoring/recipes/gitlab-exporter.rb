@@ -56,6 +56,9 @@ template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
   notifies :restart, "runit_service[gitlab-exporter]"
   variables(
     probe_sidekiq: node['monitoring']['gitlab-exporter']['probe_sidekiq'],
+    probe_elasticsearch: node['monitoring']['gitlab-exporter']['probe_elasticsearch'],
+    elasticsearch_url: node['monitoring']['gitlab-exporter']['elasticsearch_url'],
+    elasticsearch_authorization: node['monitoring']['gitlab-exporter']['elasticsearch_authorization'],
     redis_url: redis_url,
     connection_string: connection_string,
     redis_enable_client: node['gitlab']['gitlab-rails']['redis_enable_client']
