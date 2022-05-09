@@ -115,6 +115,45 @@ RSpec.describe 'monitoring::gitlab-exporter' do
     end
   end
 
+  context 'when gitlab-exporter is enabled with elasticsearch probe configured' do
+    before do
+      stub_gitlab_rb(
+        gitlab_exporter: { enable: true, probe_elasticsearch: true, elasticsearch_url: "http://localhost:9200" }
+      )
+    end
+
+    it 'adds elasticsearch config' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
+        .with_content { |content|
+          expect(content).to match(/- url: "http:\/\/localhost:9200"/)
+        }
+    end
+  end
+
+  context 'when gitlab-exporter is enabled with elasticsearch probe that uses basic auth' do
+    let(:authorization) { 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==' }
+
+    before do
+      stub_gitlab_rb(
+        gitlab_exporter: {
+          enable: true,
+          probe_elasticsearch: true,
+          elasticsearch_url: "http://localhost:9200",
+          elasticsearch_authorization: authorization
+        }
+      )
+    end
+
+    it 'adds tranport options to elasticsearch config' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
+        .with_content { |content|
+          transport_options = YAML.load(content) # rubocop:disable Security/YAMLLoad
+            .dig('probes', 'elasticsearch', 'opts').first['options']
+          expect(transport_options).to eq({ 'headers' => { 'Authorization' => authorization } })
+        }
+    end
+  end
+
   context 'with custom Redis settings' do
     before do
       stub_gitlab_rb(

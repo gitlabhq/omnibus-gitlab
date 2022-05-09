@@ -49,6 +49,19 @@ probes:
       redis_enable_client: <%= @redis_enable_client %>
 <% end %>
 
+<% if @probe_elasticsearch && @elasticsearch_url %>
+  elasticsearch: &elasticsearch
+    methods:
+      - probe_migrations
+    opts:
+      - url: "<%= @elasticsearch_url %>"
+    <% if @elasticsearch_authorization %>
+        options:
+          headers:
+            Authorization: <%= @elasticsearch_authorization %>
+    <% end %>
+<% end %>
+
   metrics:
     multiple: true
     ruby:
@@ -57,6 +70,12 @@ probes:
     sidekiq:
       <<: *sidekiq
 <% end %>
+
+<% if @probe_elasticsearch && @elasticsearch_url %>
+    elasticsearch:
+      <<: *elasticsearch
+<% end %>
+
 <% if node['gitlab']['gitlab-rails']['db_adapter'] == 'postgresql' -%>
     ci_builds:
       class_name: Database::CiBuildsProber

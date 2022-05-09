@@ -111,6 +111,9 @@ default['monitoring']['gitlab-exporter']['server_name'] = 'webrick'
 default['monitoring']['gitlab-exporter']['listen_address'] = 'localhost'
 default['monitoring']['gitlab-exporter']['listen_port'] = '9168'
 default['monitoring']['gitlab-exporter']['probe_sidekiq'] = true
+default['monitoring']['gitlab-exporter']['probe_elasticsearch'] = false
+default['monitoring']['gitlab-exporter']['elasticsearch_url'] = nil
+default['monitoring']['gitlab-exporter']['elasticsearch_authorization'] = nil
 default['monitoring']['gitlab-exporter']['env'] = {
   # See https://gitlab.com/gitlab-org/gitlab/-/issues/297241
   'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so',
