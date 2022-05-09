@@ -2419,6 +2419,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # }
 # praefect['background_verification_verification_interval'] = "72h"
+# praefect['background_verification_delete_invalid_records'] = false
 # praefect['sentry_dsn'] = "https://<key>:<secret>@sentry.io/<project>"
 # praefect['sentry_environment'] = "production"
 # praefect['auto_migrate'] = true

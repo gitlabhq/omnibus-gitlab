@@ -67,6 +67,9 @@ format = '<%= @logging_format %>'
 <% if @background_verification_verification_interval %>
 verification_interval = '<%= @background_verification_verification_interval %>'
 <% end %>
+<% if @background_verification_delete_invalid_records %>
+delete_invalid_records = <%= @background_verification_delete_invalid_records %>
+<% end %>
 
 <% @virtual_storages.each do |name, config| %>
 [[virtual_storage]]

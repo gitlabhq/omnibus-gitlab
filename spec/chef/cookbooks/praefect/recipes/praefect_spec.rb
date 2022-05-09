@@ -155,6 +155,7 @@ RSpec.describe 'praefect' do
                          reconciliation_scheduling_interval: reconciliation_scheduling_interval,
                          reconciliation_histogram_buckets: reconciliation_histogram_buckets,
                          background_verification_verification_interval: '168h',
+                         background_verification_delete_invalid_records: true,
                        })
       end
 
@@ -197,7 +198,8 @@ RSpec.describe 'praefect' do
                 'scheduling_interval' => '1m'
               },
               'background_verification' => {
-                'verification_interval' => '168h'
+                'verification_interval' => '168h',
+                'delete_invalid_records' => true
               },
               'sentry' => {
                 'sentry_dsn' => 'https://my_key:my_secret@sentry.io/test_project',
