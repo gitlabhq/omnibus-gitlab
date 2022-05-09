@@ -9,7 +9,7 @@ module Build
 
         class <<self
           def get_project_path
-            'gitlab-org/quality/gitlab-environment-toolkit-configs/Geo'
+            'gitlab-org/geo-team/geo-ci'
           end
 
           def get_access_token
@@ -18,7 +18,7 @@ module Build
 
           def get_params(image: nil)
             {
-              'ref' => 'main',
+              'ref' => Gitlab::Util.get_env('GET_GEO_REF') || 'main',
               'token' => Gitlab::Util.get_env('GET_GEO_QA_TRIGGER_TOKEN'),
               'variables[ENVIRONMENT_ACTION]' => 'tmp-env',
               'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || 'master',
