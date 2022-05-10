@@ -668,7 +668,7 @@ create_omnibus_manifest:
       - version-manifest.json
 
 dependency_scanning:
-  image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.3.0"
+  image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.3.2"
   stage: package
   variables:
     REPORT_PATH: ./
@@ -682,7 +682,7 @@ dependency_scanning:
     - create_omnibus_manifest
   artifacts:
     expire_in: 7 days
-    when: on_failure
+    when: always
     reports:
       dependency_scanning: gl-dependency-scanning-report.json
     paths:
