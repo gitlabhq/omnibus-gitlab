@@ -23,14 +23,6 @@ gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
 dependent_services = %w(puma sidekiq)
 
-# TODO: To be removed in 15.0. See https://gitlab.com/gitlab-org/gitlab/-/issues/351946
-templatesymlink 'Remove the deprecated database_geo.yml symlink' do
-  link_from File.join(gitlab_rails_source_dir, 'config/database_geo.yml')
-  link_to File.join(gitlab_rails_etc_dir, 'database_geo.yml')
-
-  action :delete
-end
-
 templatesymlink 'Removes the geo database settings from database.yml and create a symlink to Rails root' do
   link_from File.join(gitlab_rails_source_dir, 'config/database.yml')
   link_to File.join(gitlab_rails_etc_dir, 'database.yml')

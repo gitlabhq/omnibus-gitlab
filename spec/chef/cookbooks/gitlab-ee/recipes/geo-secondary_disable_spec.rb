@@ -15,14 +15,6 @@ RSpec.describe 'gitlab-ee::geo-secondary_disable' do
       stub_gitlab_rb(geo_secondary_role: { enable: false })
     end
 
-    context 'database_geo.yml' do
-      it 'removes the database_geo.yml symlink' do
-        expect(chef_run).to delete_templatesymlink('Remove the deprecated database_geo.yml symlink')
-                              .with(link_to: '/var/opt/gitlab/gitlab-rails/etc/database_geo.yml',
-                                    link_from: '/opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml')
-      end
-    end
-
     context 'database.yml' do
       shared_examples 'removes Geo database settings' do
         it 'renders database.yml without geo database' do

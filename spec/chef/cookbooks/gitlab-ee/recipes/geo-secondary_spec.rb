@@ -85,14 +85,6 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
   end
 
   shared_examples 'renders database.yml without geo database' do
-    context 'database_geo.yml' do
-      it 'removes the database_geo.yml symlink' do
-        expect(chef_run).to delete_templatesymlink('Remove the deprecated database_geo.yml symlink')
-                              .with(link_to: '/var/opt/gitlab/gitlab-rails/etc/database_geo.yml',
-                                    link_from: '/opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml')
-      end
-    end
-
     context 'database.yml' do
       it 'renders database.yml without geo database' do
         expect(database_yml[:production].keys).not_to include(:geo)
@@ -120,14 +112,6 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
   end
 
   shared_examples 'renders database.yml with both main and geo databases' do
-    context 'database_geo.yml' do
-      it 'removes the database_geo.yml symlink' do
-        expect(chef_run).to delete_templatesymlink('Remove the deprecated database_geo.yml symlink')
-                              .with(link_to: '/var/opt/gitlab/gitlab-rails/etc/database_geo.yml',
-                                    link_from: '/opt/gitlab/embedded/service/gitlab-rails/config/database_geo.yml')
-      end
-    end
-
     context 'database.yml' do
       context 'with default settings' do
         it 'renders database.yml with main stanza first' do
