@@ -125,4 +125,10 @@ execute 'signal to restart postgresql' do
   notifies :run, 'ruby_block[wait for node bootstrap to complete]', :before
 end
 
+execute 'signal to restart postgresql if running version is less than installed one' do
+  command "#{patroni_helper.ctl_command} -c #{patroni_config_file} restart --pg-version #{pg_helper.version} --force #{node['patroni']['scope']} #{node['patroni']['name']}"
+  only_if { node['postgresql']['auto_restart_on_version_change'] && patroni_helper.node_status == 'running' }
+  notifies :run, 'ruby_block[wait for node bootstrap to complete]', :before
+end
+
 include_recipe 'postgresql::disable'

@@ -675,17 +675,34 @@ RSpec.describe 'postgres when version mismatches occur' do
 
   context 'when running version and installed version differ' do
     before do
+      allow(Gitlab).to receive(:[]).and_call_original
       allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('expectation'))
       allow_any_instance_of(PgHelper).to receive(:running_version).and_return(PGVersion.new('reality'))
     end
 
-    it 'warns the user that a restart is needed' do
-      allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
-      expect(chef_run).to run_ruby_block('warn pending postgresql restart')
+    context 'by defaul' do
+      it 'does not warns the user that a restart is needed' do
+        expect(chef_run).not_to run_ruby_block('warn pending postgresql restart')
+      end
     end
 
-    it 'does not warns the user that a restart is needed when postgres is stopped' do
-      expect(chef_run).not_to run_ruby_block('warn pending postgresql restart')
+    context 'when auto_restart_on_version_change is set to false' do
+      before do
+        stub_gitlab_rb(
+          postgresql: {
+            auto_restart_on_version_change: false
+          }
+        )
+      end
+
+      it 'warns the user that a restart is needed' do
+        allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+        expect(chef_run).to run_ruby_block('warn pending postgresql restart')
+      end
+
+      it 'does not warns the user that a restart is needed when postgres is stopped' do
+        expect(chef_run).not_to run_ruby_block('warn pending postgresql restart')
+      end
     end
   end
 

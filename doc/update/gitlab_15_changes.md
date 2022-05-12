@@ -11,6 +11,61 @@ When upgrading to a new major version, remember to first [check for background m
 
 ## 15.0
 
+### PostgreSQL version updates
+
+In GitLab 15.0, PostgreSQL versions have been updated to v12.10 and v13.6
+respectively. Because of underlying structural changes, the running PostgreSQL
+process **_must_** be restarted before running database migrations. If automatic
+restart is skipped, you must run the following command before
+migrations are run:
+
+```shell
+# If using PostgreSQL
+sudo gitlab-ctl restart postgresql
+
+# If using Patroni for Database replication
+sudo gitlab-ctl restart patroni
+```
+
+If PostgreSQL is not restarted, you might face
+[errors related to loading libraries](../settings/database.md#could-not-load-library-plpgsqlso).
+
+### Automatic restart of PostgreSQL service on version change
+
+Starting with GitLab 15.0, `postgresql` and `geo-postgresql` services are
+automatically restarted when the PostgreSQL version changes. Restarting
+PostgreSQL services causes downtime due to the temporary unavailability of the
+database for operations. While this restart is mandatory for proper functioning
+of the Database services, you might want more control over when the PostgreSQL
+is restarted. For that purpose, you can choose to skip the automatic restarts as
+part of `gitlab-ctl reconfigure` and manually restart the services.
+
+To skip automatic restarts as part of GitLab 15.0 upgrade, perform the following
+steps before the upgrade:
+
+1. Edit `/etc/gitlab/gitlab.rb` and add the following line:
+
+   ```ruby
+   # For PostgreSQL/Patroni
+   postgresql['auto_restart_on_version_change'] = false
+
+   # For Geo PostgreSQL
+   geo_postgresql['auto_restart_on_version_change'] = false
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+NOTE:
+It is mandatory to restart PostgreSQL when underlying version changes, to avoid
+errors like the [one related to loading necessary libraries](../settings/database.md#could-not-load-library-plpgsqlso)
+that can cause downtime. So, if you skip the automatic restarts using the above
+method, ensure that you restart the services manually before upgrading to GitLab
+15.0.
+
 ### AES256-GCM-SHA384 SSL cipher no longer allowed by default by NGINX
 
 Starting with GitLab 15.0, the `AES256-GCM-SHA384` SSL cipher will not be allowed by

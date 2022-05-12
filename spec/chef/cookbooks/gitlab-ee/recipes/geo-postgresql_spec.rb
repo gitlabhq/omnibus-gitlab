@@ -363,13 +363,30 @@ RSpec.describe 'geo postgresql when version mismatches occur' do
       allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return(PGVersion.new('reality'))
     end
 
-    it 'warns the user that a restart is needed' do
-      allow_any_instance_of(GeoPgHelper).to receive(:is_running?).and_return(true)
-      expect(chef_run).to run_ruby_block('warn pending geo-postgresql restart')
+    context 'by default' do
+      it 'does not warns the user that a restart is needed' do
+        expect(chef_run).not_to run_ruby_block('warn pending geo-postgresql restart')
+      end
     end
 
-    it 'does not warns the user that a restart is needed when geo-postgres is stopped' do
-      expect(chef_run).not_to run_ruby_block('warn pending geo-postgresql restart')
+    context 'when auto_restart_on_version_change is set to false' do
+      before do
+        stub_gitlab_rb(
+          geo_postgresql: {
+            enable: true,
+            auto_restart_on_version_change: false
+          }
+        )
+      end
+
+      it 'warns the user that a restart is needed' do
+        allow_any_instance_of(GeoPgHelper).to receive(:is_running?).and_return(true)
+        expect(chef_run).to run_ruby_block('warn pending geo-postgresql restart')
+      end
+
+      it 'does not warns the user that a restart is needed when geo-postgres is stopped' do
+        expect(chef_run).not_to run_ruby_block('warn pending geo-postgresql restart')
+      end
     end
   end
 

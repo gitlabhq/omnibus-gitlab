@@ -39,6 +39,35 @@ SELECT name,setting FROM pg_settings WHERE context = 'postmaster' AND name = '<s
 If changing the setting will require a restart, the query will return the name of the setting and the current value
 of that setting in the running PostgreSQL instance.
 
+#### Automatic restart when the PostgreSQL version changes
+
+By default, Omnibus automatically restarts PostgreSQL when the underlying
+version changes, as suggested by the [upstream documentation](https://www.postgresql.org/docs/13/upgrading.html).
+This behavior can be controlled using the `auto_restart_on_version_change` setting
+available for `postgresql` and `geo-postgresql`.
+
+To disable automatic restarts when the PostgreSQL version changes:
+
+1. Edit `/etc/gitlab/gitlab.rb` and add the following line:
+
+   ```ruby
+   # For PostgreSQL/Patroni
+   postgresql['auto_restart_on_version_change'] = false
+
+   # For Geo PostgreSQL
+   geo_postgresql['auto_restart_on_version_change'] = false
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+NOTE:
+It is highly recommended to restart PostgreSQL when underlying version changes,
+to avoid errors like the [one related to loading necessary libraries](#could-not-load-library-plpgsqlso).
+
 ### Configuring SSL
 
 Omnibus automatically enables SSL on the PostgreSQL server, but it will accept
@@ -966,6 +995,37 @@ This `default_transaction_isolation` configuration is set in your
 `postgresql.conf` file. You will need to restart/reload the database once you
 changed the configuration. This configuration comes by default in the packaged
 PostgreSQL server included with Omnibus GitLab.
+
+### Could not load library `plpgsql.so`
+
+You might see errors similar to the following while running Database migrations
+or in the PostgreSQL/Patroni logs:
+
+```plaintext
+ERROR:  could not load library "/opt/gitlab/embedded/postgresql/12/lib/plpgsql.so": /opt/gitlab/embedded/postgresql/12/lib/plpgsql.so: undefined symbol: EnsurePortalSnapshotExists
+```
+
+This error is caused due to not restarting PostgreSQL after the underlying
+version changed. To fix this error:
+
+1. Run one of the following commands:
+
+   ```shell
+   # For PostgreSQL
+   sudo gitlab-ctl restart postgresql
+
+   # For Patroni
+   sudo gitlab-ctl restart patroni
+
+   # For Geo PostgreSQL
+   sudo gitlab-ctl restart geo-postgresql
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
 
 ## Application Settings for the Database
 
