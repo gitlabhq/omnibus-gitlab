@@ -661,6 +661,12 @@ production: &base
       cron: "<%= @namespaces_in_product_marketing_emails_worker_cron %>"
     <% end %>
 
+    # Worker for pruning stale group runners on opted-in namespaces
+    <% unless @ci_runners_stale_group_runners_prune_worker_cron.nil? %>
+    ci_runners_stale_group_runners_prune_worker_cron:
+      cron: "<%= @ci_runners_stale_group_runners_prune_worker_cron %>"
+    <% end %>
+
   ## Geo
   # NOTE: These settings will only take effect if Geo is enabled
   geo:

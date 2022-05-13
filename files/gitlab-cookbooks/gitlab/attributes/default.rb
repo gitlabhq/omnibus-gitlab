@@ -182,6 +182,8 @@ default['gitlab']['gitlab-rails']['namespaces_in_product_marketing_emails_worker
 default['gitlab']['gitlab-rails']['ssh_keys_expired_notification_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ssh_keys_expiring_soon_notification_worker_cron'] = nil
 
+default['gitlab']['gitlab-rails']['ci_runners_stale_group_runners_prune_worker_cron'] = nil
+
 # Consolidated object storage config
 default['gitlab']['gitlab-rails']['object_store']['enabled'] = false
 default['gitlab']['gitlab-rails']['object_store']['connection'] = {}

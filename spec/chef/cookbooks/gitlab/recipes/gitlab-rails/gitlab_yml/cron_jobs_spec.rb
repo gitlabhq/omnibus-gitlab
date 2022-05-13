@@ -50,6 +50,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'ssh_keys_expired_notification_worker'                   | 'ssh_keys_expired_notification_worker_cron'
         'ssh_keys_expiring_soon_notification_worker'             | 'ssh_keys_expiring_soon_notification_worker_cron'
         'loose_foreign_keys_cleanup_worker'                      | 'loose_foreign_keys_cleanup_worker_cron'
+        'ci_runners_stale_group_runners_prune_worker_cron'       | 'ci_runners_stale_group_runners_prune_worker_cron'
       end
 
       with_them do
