@@ -330,8 +330,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ####! Job artifacts Object Store
 ####! Docs: https://docs.gitlab.com/ee/administration/job_artifacts.html#using-object-storage
 # gitlab_rails['artifacts_object_store_enabled'] = false
-# gitlab_rails['artifacts_object_store_direct_upload'] = false
-# gitlab_rails['artifacts_object_store_background_upload'] = true
 # gitlab_rails['artifacts_object_store_proxy_download'] = false
 # gitlab_rails['artifacts_object_store_remote_directory'] = "artifacts"
 # gitlab_rails['artifacts_object_store_connection'] = {
@@ -351,8 +349,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['external_diffs_when'] = nil
 # gitlab_rails['external_diffs_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/external-diffs"
 # gitlab_rails['external_diffs_object_store_enabled'] = false
-# gitlab_rails['external_diffs_object_store_direct_upload'] = false
-# gitlab_rails['external_diffs_object_store_background_upload'] = false
 # gitlab_rails['external_diffs_object_store_proxy_download'] = false
 # gitlab_rails['external_diffs_object_store_remote_directory'] = "external-diffs"
 # gitlab_rails['external_diffs_object_store_connection'] = {
@@ -371,8 +367,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['lfs_enabled'] = true
 # gitlab_rails['lfs_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/lfs-objects"
 # gitlab_rails['lfs_object_store_enabled'] = false
-# gitlab_rails['lfs_object_store_direct_upload'] = false
-# gitlab_rails['lfs_object_store_background_upload'] = true
 # gitlab_rails['lfs_object_store_proxy_download'] = false
 # gitlab_rails['lfs_object_store_remote_directory'] = "lfs-objects"
 # gitlab_rails['lfs_object_store_connection'] = {
@@ -393,8 +387,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['uploads_storage_path'] = "/opt/gitlab/embedded/service/gitlab-rails/public"
 # gitlab_rails['uploads_base_dir'] = "uploads/-/system"
 # gitlab_rails['uploads_object_store_enabled'] = false
-# gitlab_rails['uploads_object_store_direct_upload'] = false
-# gitlab_rails['uploads_object_store_background_upload'] = true
 # gitlab_rails['uploads_object_store_proxy_download'] = false
 # gitlab_rails['uploads_object_store_remote_directory'] = "uploads"
 # gitlab_rails['uploads_object_store_connection'] = {
@@ -2538,8 +2530,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['packages_enabled'] = true
 # gitlab_rails['packages_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/packages"
 # gitlab_rails['packages_object_store_enabled'] = false
-# gitlab_rails['packages_object_store_direct_upload'] = false
-# gitlab_rails['packages_object_store_background_upload'] = true
 # gitlab_rails['packages_object_store_proxy_download'] = false
 # gitlab_rails['packages_object_store_remote_directory'] = "packages"
 # gitlab_rails['packages_object_store_connection'] = {
@@ -2562,8 +2552,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['dependency_proxy_enabled'] = true
 # gitlab_rails['dependency_proxy_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/dependency_proxy"
 # gitlab_rails['dependency_proxy_object_store_enabled'] = false
-# gitlab_rails['dependency_proxy_object_store_direct_upload'] = false
-# gitlab_rails['dependency_proxy_object_store_background_upload'] = true
 # gitlab_rails['dependency_proxy_object_store_proxy_download'] = false
 # gitlab_rails['dependency_proxy_object_store_remote_directory'] = "dependency_proxy"
 # gitlab_rails['dependency_proxy_object_store_connection'] = {

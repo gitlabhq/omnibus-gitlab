@@ -11,13 +11,7 @@ RSpec.shared_examples 'renders object storage settings in gitlab.yml' do |compon
           connection: {}
         }
 
-        if workhorse_accelerated
-          default_values.merge!(
-            direct_upload: false,
-            background_upload: true,
-            proxy_download: false
-          )
-        end
+        default_values[:proxy_download] = false if workhorse_accelerated
 
         default_values.merge!(component_default)
 
@@ -34,13 +28,7 @@ RSpec.shared_examples 'renders object storage settings in gitlab.yml' do |compon
           "#{component}_object_store_connection" => aws_connection_hash
         }
 
-        if workhorse_accelerated
-          gitlab_rails_config.merge!(
-            "#{component}_object_store_direct_upload" => true,
-            "#{component}_object_store_background_upload" => false,
-            "#{component}_object_store_proxy_download" => true
-          )
-        end
+        gitlab_rails_config["#{component}_object_store_proxy_download"] = true if workhorse_accelerated
 
         stub_gitlab_rb(
           gitlab_rails: gitlab_rails_config.transform_keys(&:to_sym)
@@ -54,13 +42,7 @@ RSpec.shared_examples 'renders object storage settings in gitlab.yml' do |compon
           remote_directory: 'foobar'
         }
 
-        if workhorse_accelerated
-          expected_output.merge!(
-            direct_upload: true,
-            background_upload: false,
-            proxy_download: true
-          )
-        end
+        expected_output[:proxy_download] = true if workhorse_accelerated
 
         expect(gitlab_yml[:production][component.to_sym][:object_store]).to eq(expected_output)
       end
