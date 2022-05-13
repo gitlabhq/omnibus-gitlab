@@ -37,3 +37,22 @@ The old `gitaly['internal_socket_dir']` configuration was removed in this releas
 PostgreSQL 13.3 is being shipped as the default version for fresh installs.
 
 Users can manually upgrade to 13.3 following the [upgrade docs](../settings/database.md#gitlab-150-and-later).
+
+### Removed background uploads settings for object storage
+
+Object storage now preferentially uses direct uploads.
+
+The following keys are no longer supported in `gitlab.rb`:
+
+- `gitlab_rails['artifacts_object_store_direct_upload']`
+- `gitlab_rails['artifacts_object_store_background_upload']`
+- `gitlab_rails['external_diffs_object_store_direct_upload']`
+- `gitlab_rails['external_diffs_object_store_background_upload']`
+- `gitlab_rails['lfs_object_store_direct_upload']`
+- `gitlab_rails['lfs_object_store_background_upload']`
+- `gitlab_rails['uploads_object_store_direct_upload']`
+- `gitlab_rails['uploads_object_store_background_upload']`
+- `gitlab_rails['packages_object_store_direct_upload']`
+- `gitlab_rails['packages_object_store_background_upload']`
+- `gitlab_rails['dependency_proxy_object_store_direct_upload']`
+- `gitlab_rails['dependency_proxy_object_store_background_upload']`
