@@ -205,6 +205,78 @@ module Gitlab
             removal: '15.0',
             note: "Starting with GitLab 14.7, Pseudonymizer has been deprecated and will be removed."
           },
+          {
+            config_keys: %w(gitlab gitlab-rails artifacts_object_store_direct_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails artifacts_object_store_background_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails external_diffs_object_store_direct_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails external_diffs_object_store_background_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails lfs_object_store_direct_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails lfs_object_store_background_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails uploads_object_store_direct_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails uploads_object_store_background_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails packages_object_store_direct_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails packages_object_store_background_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails dependency_proxy_object_store_direct_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails dependency_proxy_object_store_background_upload),
+            deprecation: '14.9',
+            removal: '15.0',
+            note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
+          }
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable', 'svlogd_prefix'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")
