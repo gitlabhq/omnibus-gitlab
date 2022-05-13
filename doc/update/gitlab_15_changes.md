@@ -87,11 +87,11 @@ In 14.10, [Gitaly introduced a new directory](gitlab_14_changes.md#gitaly-runtim
 
 The old `gitaly['internal_socket_dir']` configuration was removed in this release.
 
-### PostgreSQL 13.3 support
+### PostgreSQL 13.6 support
 
-PostgreSQL 13.3 is being shipped as the default version for fresh installs.
+PostgreSQL 13.6 is being shipped as the default version for fresh installs.
 
-Users can manually upgrade to 13.3 following the [upgrade docs](../settings/database.md#gitlab-150-and-later).
+Users can manually upgrade to 13.6 following the [upgrade docs](../settings/database.md#gitlab-150-and-later).
 
 ### Removed background uploads settings for object storage
 
