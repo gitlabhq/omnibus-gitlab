@@ -301,6 +301,12 @@ module Gitlab
             removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
             note: "Use `gitaly['cgroups_cpu_shares'] or gitaly['cgroups_repositories_cpu_shares'] instead."
           },
+          {
+            config_keys: %w(gitaly ruby_rugged_git_config_search_path),
+            deprecation: '15.1',
+            removal: '15.1',
+            note: "Starting with GitLab 15.1, Rugged does not read the Git configuration anymore. Instead, Gitaly knows to configure Rugged as required."
+          }
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable', 'svlogd_prefix'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")
