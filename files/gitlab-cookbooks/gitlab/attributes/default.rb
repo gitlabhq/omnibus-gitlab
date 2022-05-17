@@ -133,7 +133,6 @@ default['gitlab']['gitlab-rails']['historical_data_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['analytics_devops_adoption_create_all_snapshots_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['ldap_group_sync_worker_cron'] = nil
-default['gitlab']['gitlab-rails']['geo_file_download_dispatch_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_repository_sync_worker_cron'] = nil
 default['gitlab']['gitlab-rails']['geo_secondary_registry_consistency_worker'] = nil
 default['gitlab']['gitlab-rails']['geo_secondary_usage_data_cron_worker'] = nil
