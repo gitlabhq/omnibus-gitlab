@@ -614,19 +614,29 @@ To add a CSP:
    ```ruby
    gitlab_rails['content_security_policy'] = {
        enabled: true,
+       report_only: false
+   }
+   ```
+
+   GitLab automatically provides secure default values for the CSP.
+   
+   To add a custom CSP:
+
+   ```ruby
+   gitlab_rails['content_security_policy'] = {
+       enabled: true,
        report_only: false,
        directives: {
-         default_src: "'self'",
-         script_src: "'self' 'unsafe-inline' 'unsafe-eval' https://www.recaptcha.net https://apis.google.com",
-         frame_ancestors: "'self'",
-         frame_src: "'self' https://www.recaptcha.net/ https://content.googleapis.com https://content-compute.googleapis.com https://content-cloudbilling.googleapis.com https://content-cloudresourcemanager.googleapis.com",
-         img_src: "* data: blob:",
-         style_src: "'self' 'unsafe-inline'"
+         default_src: "'none'",
+         script_src: "https://example.com"
        }
    }
    ```
 
-   The previous example is a configuration that works for most GitLab installations.
+   [In GitLab 14.9 and later](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/80303), secure default values
+   are used for the directives that aren't explicitly configured.
+
+   To unset a CSP directive, set a value of `false`.
 
 1. Reconfigure GitLab:
 
