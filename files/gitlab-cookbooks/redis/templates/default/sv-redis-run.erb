@@ -6,5 +6,5 @@ exec chpst -P \
   -U <%= node['redis']['username'] %>:<%= node['redis']['group'] %> \
   -u <%= node['redis']['username'] %>:<%= node['redis']['group'] %> \
   /opt/gitlab/embedded/bin/redis-server \
-  <%= File.join(node[@options[:service]]['dir'], "redis.conf") %> \
-  <% if node['redis']['announce_ip_from_hostname'] %>--replica-announce-ip "$(hostname -f)"<% end %>
+  <%= File.join(node[@options[:service]]['dir'], "redis.conf") %><% if node['redis']['announce_ip_from_hostname'] %> \
+  --replica-announce-ip "$(hostname -f)"<% end %>
