@@ -66,11 +66,11 @@ to work best with the available resources. Check out the [documentation](setting
 - [Configuring an asset proxy server](https://docs.gitlab.com/ee/security/asset_proxy.html)
 - [Image scaling](settings/image_scaling.md)
 
-## Updating
+## Upgrading
 
 - [Upgrade guidance](https://docs.gitlab.com/ee/update/package/), including [supported upgrade paths](https://docs.gitlab.com/ee/update/index.html#upgrade-paths).
 - [Upgrade from Community Edition to Enterprise Edition](https://docs.gitlab.com/ee/update/package/convert_to_ee.html)
-- [Update to the latest version](https://docs.gitlab.com/ee/update/package/#upgrade-using-the-official-repositories)
+- [Upgrade to the latest version](https://docs.gitlab.com/ee/update/package/#upgrade-using-the-official-repositories)
 - [Downgrade to an earlier version](https://docs.gitlab.com/ee/update/package/downgrade.html)
 - [Upgrade from a non-Omnibus installation to an Omnibus installation using a backup](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-using-a-backup)
 - [Upgrade from non-Omnibus PostgreSQL to an Omnibus installation in-place](update/convert_to_omnibus.md#upgrading-from-non-omnibus-postgresql-to-an-omnibus-installation-in-place)
