@@ -43,7 +43,7 @@ to incorporate the updated public key content.
 For Debian based distributions:
 
 PackageCloud generally made use of `apt-key`, which will be deprecated in the future. Manually installed
-or configured repositories from some distributions, such as [TurnKey Linux](https://turnkeylinux.org), are
+or configured repositories from some distributions, such as [TurnKey Linux](https://www.turnkeylinux.org/), are
 already using the `signed-by` support within Debian package source lists.
 
 1. Determine if you're using `apt-key` or `signed-by` functionality:

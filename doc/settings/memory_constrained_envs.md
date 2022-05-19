@@ -59,7 +59,7 @@ of your system is good enough to run GitLab on a constrained environment.
 These systems provide adequate performance to run a small installations of GitLab:
 
 - [Raspberry PI 4 2GB](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/).
-- [DigitalOcean Basic 2GB with SSD](https://www.digitalocean.com/pricing/).
+- [DigitalOcean Basic 2GB with SSD](https://www.digitalocean.com/pricing).
 - [Scaleway DEV1-S 2GB/20GB](https://www.scaleway.com/en/pricing/).
 - [GCS e2-small](https://cloud.google.com/compute/docs/machine-types).
 

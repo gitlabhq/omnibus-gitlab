@@ -33,7 +33,7 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 
-# If your SMTP server is using a self signed certificate or a certificate which 
+# If your SMTP server is using a self signed certificate or a certificate which
 # is signed by a CA which is not trusted by default, you can specify a custom ca file.
 # Please note that the certificates from /etc/gitlab/trusted-certs/ are
 # not used for the verification of the SMTP server certificate.
@@ -224,7 +224,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 
 ### SMTP.com
 
-You can use the [SMTP.com](https://smtp.com/) email service. [Retrieve your sender login and password](https://kb.smtp.com/article/1043-my-account-1)
+You can use the [SMTP.com](https://www.smtp.com/) email service. [Retrieve your sender login and password](https://kb.smtp.com/article/1043-my-account-1)
 from your account.
 
 To improve delivery by authorizing `SMTP.com` to send emails on behalf of your domain, you should:
@@ -238,11 +238,11 @@ gitlab_rails['smtp_address'] = 'send.smtp.com'
 gitlab_rails['smtp_port'] = 25 # If your outgoing port 25 is blocked, try 2525, 2082
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_authentication'] = 'plain'
-gitlab_rails['smtp_user_name'] = 'your_sender_login' 
+gitlab_rails['smtp_user_name'] = 'your_sender_login'
 gitlab_rails['smtp_password'] = 'your_sender_password'
 gitlab_rails['smtp_domain'] = 'your.gitlab.domain.com'
-gitlab_rails['gitlab_email_from'] = 'user@your.gitlab.domain.com' 
-gitlab_rails['gitlab_email_reply_to'] = 'user@your.gitlab.domain.com' 
+gitlab_rails['gitlab_email_from'] = 'user@your.gitlab.domain.com'
+gitlab_rails['gitlab_email_reply_to'] = 'user@your.gitlab.domain.com'
 ```
 
 Check the [SMTP.com Knowledge Base](https://kb.smtp.com/) for further assistance.
@@ -489,7 +489,7 @@ The API Key you created must be entered in `smtp_password`.
 
 ### Sendinblue
 
-This configuration was tested with Sendinblue's [SMTP relay service](https://www.sendinblue.com/free-smtp-server/). To grab the relevant account credentials via the URLs commented into this example, [log in to your Sendinblue account](https://app.sendinblue.com/account/login). For further details, refer to Sendinblue's [help page](https://help.sendinblue.com/hc/en-us/articles/209462765-What-is-Sendinblue-SMTP-).
+This configuration was tested with Sendinblue's [SMTP relay service](https://www.sendinblue.com/free-smtp-server/). To grab the relevant account credentials via the URLs commented into this example, [log in to your Sendinblue account](https://app.sendinblue.com/account/login). For further details, refer to Sendinblue's [help page](https://help.sendinblue.com/hc/en-us/articles/209462765-What-is-Sendinblue-SMTP).
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1103,7 +1103,7 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@yourdomain'
 
 ### Uberspace 6
 
-From the [Uberspace Wiki](https://wiki.uberspace.de/mail#tldr):
+From the [Uberspace Wiki](https://manual.uberspace.de/):
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
