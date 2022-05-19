@@ -24,26 +24,64 @@ RSpec.describe 'gitlab-ee::geo-secondary_disable' do
     end
 
     context 'database.yml' do
-      it 'renders database.yml without geo database' do
-        expect(database_yml[:production].keys).not_to include(:geo)
+      shared_examples 'removes Geo database settings' do
+        it 'renders database.yml without geo database' do
+          expect(database_yml[:production].keys).not_to include(:geo)
+        end
+
+        context 'with geo database specified' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                databases: {
+                  geo: {
+                    enable: true,
+                    db_connect_timeout: 50
+                  }
+                }
+              }
+            )
+          end
+
+          it 'renders database.yml without geo database' do
+            expect(database_yml[:production].keys).not_to include(:geo)
+          end
+        end
       end
 
-      context 'with geo database specified' do
+      context 'when gitlab_rails is enabled' do
         before do
           stub_gitlab_rb(
             gitlab_rails: {
-              databases: {
-                geo: {
-                  enable: true,
-                  db_connect_timeout: 50
-                }
-              }
+              enable: true
             }
           )
         end
 
-        it 'renders database.yml without geo database' do
-          expect(database_yml[:production].keys).not_to include(:geo)
+        include_examples "removes Geo database settings"
+      end
+
+      context 'when geo-logcursor is enabled' do
+        before do
+          stub_gitlab_rb(
+            geo_logcursor: {
+              enable: true
+            }
+          )
+        end
+
+        include_examples "removes Geo database settings"
+      end
+
+      context 'when gitlab_rails and geo-logcursor are disabled' do
+        before do
+          stub_gitlab_rb(geo_postgresql: { enable: true },
+                         gitlab_rails: { enable: false },
+                         geo_logcursor: { enable: false })
+        end
+
+        it 'does not render the database.yml file' do
+          expect(chef_run).not_to create_templatesymlink('Removes the geo database settings from database.yml and create a symlink to Rails root')
         end
       end
     end
