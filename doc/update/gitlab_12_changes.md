@@ -127,7 +127,7 @@ unicorn['worker_memory_limit_min'] = "1024 * 1 << 20"
 unicorn['worker_memory_limit_max'] = "1280 * 1 << 20"
 ```
 
-See our documentation on [unicorn-worker-killer](https://docs.gitlab.com/ee/administration/operations/unicorn.html#unicorn-worker-killer) for more information.
+See our documentation on [unicorn-worker-killer](https://docs.gitlab.com/ee/administration/operations/puma.html) for more information.
 
 ### 12.8
 
