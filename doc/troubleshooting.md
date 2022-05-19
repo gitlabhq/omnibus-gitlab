@@ -171,7 +171,7 @@ command is available.
 
 Omnibus GitLab detects default path changes in `/etc/gitlab/gitlab.rb` and should apply
 the correct file contexts. For installations using custom data path configuration,
-the administrator may need to manually resolve SELinux issues.
+the administrator may have to manually resolve SELinux issues.
 
 Data paths may be altered via `gitlab.rb`, however, a common scenario forces the
 use of `symlink` paths. Administrators should be cautious, because `symlink` paths are
