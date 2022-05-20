@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 14.10.3 (2022-05-20)
+
+### Fixed (1 change)
+
+- [Remove Geo database settings only if some services are enabled](gitlab-org/omnibus-gitlab@13366f11d2430307f13ad874305540c0f01c8782) ([merge request](gitlab-org/omnibus-gitlab!6103))
+
 ## 14.10.2 (2022-05-04)
 
 ### Other (1 change)
