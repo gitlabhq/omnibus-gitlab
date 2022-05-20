@@ -3,6 +3,45 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.0.0 (2022-05-20)
+
+### Added (7 changes)
+
+- [Add ci_runners_stale_group_runners_prune_worker_cron setting](gitlab-org/omnibus-gitlab@4fe5c08204b54052fc0b9953873291ce82ff8e4b) ([merge request](gitlab-org/omnibus-gitlab!6094))
+- [Add Praefect verifier deletion logic config option](gitlab-org/omnibus-gitlab@daa5197b5ea4a21b0bb38c877a3132eb81ef9d26) ([merge request](gitlab-org/omnibus-gitlab!6081))
+- [Add option to configure Elasticsearch probe for gitlab-exporter](gitlab-org/omnibus-gitlab@9d6c7f4ad45e76f4c71bfad63212a6350ae38df8) ([merge request](gitlab-org/omnibus-gitlab!5960))
+- [Add Puma config support for SSL](gitlab-org/omnibus-gitlab@4b4e52105948b2f2c22baae61872227702f91840) ([merge request](gitlab-org/omnibus-gitlab!6004))
+- [Introduce redis.announce_ip_from_hostname option, to enable setting the hostname at runtime](gitlab-org/omnibus-gitlab@2c2aca3e2ecc2aa9ed3742ce7ee0f095cda55113) ([merge request](gitlab-org/omnibus-gitlab!6027))
+- [Add observability listener configuration for KAS](gitlab-org/omnibus-gitlab@747fde2e41398f85a5ad36cdff6788dcd0c4fffe) ([merge request](gitlab-org/omnibus-gitlab!6066))
+- [Expose Praefect's background verification config via gitlab.rb](gitlab-org/omnibus-gitlab@580a9007ac865785abd43ab54c0fea124c50c52f) ([merge request](gitlab-org/omnibus-gitlab!6044))
+
+### Fixed (4 changes)
+
+- [Only check listen address and port if both exporter and health checks are enabled](gitlab-org/omnibus-gitlab@b8c45ee89a40158cb3ad8d65975f06bc40c13448) ([merge request](gitlab-org/omnibus-gitlab!6086))
+- [Remove Geo database settings only if some services are enabled](gitlab-org/omnibus-gitlab@10681dd601b9ab05ffd19ce1296918ac20063eb2) ([merge request](gitlab-org/omnibus-gitlab!6072))
+- [Nginx: implement HSTS support in the mattermost configuration template](gitlab-org/omnibus-gitlab@217fa57d2822a434e8cbc57be7acf340552a8e0b) by @hcartiaux ([merge request](gitlab-org/omnibus-gitlab!6033))
+- [Fix permissions on Grafana folder in Docker container](gitlab-org/omnibus-gitlab@0bdef8a586a56c78a2a2ef1301c21f9e1c807d81) by @cHiv0rz ([merge request](gitlab-org/omnibus-gitlab!6055))
+
+### Changed (7 changes)
+
+- [Update to PostgreSQL to v12.10 and v13.6](gitlab-org/omnibus-gitlab@b99198ae364b33c0a55543c226693b609bb0f0c6) ([merge request](gitlab-org/omnibus-gitlab!5728))
+- [Update to OpenSSL 1.1.1o](gitlab-org/omnibus-gitlab@4b2b99524b5df302a4b125a56440ffafcbcd9b7c) ([merge request](gitlab-org/omnibus-gitlab!6080))
+- [Change the sidekiq warning on using same address for healthcheck to raise an error instead](gitlab-org/omnibus-gitlab@d0b622e2c9e208a1bcb1dec76f350c49ba1d445d) ([merge request](gitlab-org/omnibus-gitlab!6065))
+- [Delete code for deprecated geo commands](gitlab-org/omnibus-gitlab@4d61a7be8e9ede7082a0336a083cf450479c9b93) ([merge request](gitlab-org/omnibus-gitlab!6059))
+- [Bump Container Registry to v3.39.2-gitlab](gitlab-org/omnibus-gitlab@1350edfdbc5af0851a9c88b3ca376af45b2f4619) ([merge request](gitlab-org/omnibus-gitlab!6064))
+- [Bump BUILDER_IMAGE_REVISION to v3.3.1](gitlab-org/omnibus-gitlab@6b73a7ad96d88dd741abf8a631b952fa871f9598) ([merge request](gitlab-org/omnibus-gitlab!6056))
+- [Remove AES256-GCM-SHA384 from default list of allowed NGINX SSL ciphers](gitlab-org/omnibus-gitlab@77238e0e6478308e6be709d557a63f404dd92efe) by @m.baur ([merge request](gitlab-org/omnibus-gitlab!5913))
+
+### Removed (3 changes)
+
+- [Remove background_upload and direct_upload configs](gitlab-org/omnibus-gitlab@6d841dc2d6d38c089fbe7fee025309c960f4ac94) ([merge request](gitlab-org/omnibus-gitlab!6091))
+- [Remove cveignore file and references](gitlab-org/omnibus-gitlab@99e659f5c66b3356ba6fcdbaca5a874e2187a335) ([merge request](gitlab-org/omnibus-gitlab!6061))
+- [gitaly: Remove support for configuring the internal socket directory](gitlab-org/omnibus-gitlab@0d5aaf031c3f03640cbdd8774ac9ce7b8b8650b4) ([merge request](gitlab-org/omnibus-gitlab!6068))
+
+### Other (1 change)
+
+- [Update deprecated settings list](gitlab-org/omnibus-gitlab@842cb755e72429663439b592c431b5d8cb7ffbc8) ([merge request](gitlab-org/omnibus-gitlab!6040))
+
 ## 14.10.2 (2022-05-04)
 
 ### Other (1 change)
