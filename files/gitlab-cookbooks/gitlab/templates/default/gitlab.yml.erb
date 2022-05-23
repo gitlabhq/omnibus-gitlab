@@ -603,13 +603,6 @@ production: &base
       cron: "<%= @geo_secondary_usage_data_cron_worker %>"
     <% end %>
 
-    # GitLab Geo file download dispatch worker
-    # NOTE: This will only take effect if Geo is enabled
-    <% unless @geo_file_download_dispatch_worker_cron.nil? %>
-    geo_file_download_dispatch_worker:
-      cron: "<%= @geo_file_download_dispatch_worker_cron %>"
-    <% end %>
-
     # GitLab Geo repository verification primary batch worker
     # NOTE: This will only take effect if Geo is enabled
     <% unless @geo_repository_verification_primary_batch_worker_cron.nil? %>

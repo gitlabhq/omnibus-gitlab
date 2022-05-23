@@ -22,7 +22,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'elastic_index_bulk_cron_worker'                         | 'elastic_index_bulk_cron'
         'environments_auto_stop_cron_worker'                     | 'environments_auto_stop_cron_worker_cron'
         'expire_build_artifacts_worker'                          | 'expire_build_artifacts_worker_cron'
-        'geo_file_download_dispatch_worker'                      | 'geo_file_download_dispatch_worker_cron'
         'geo_migrated_local_files_clean_up_worker'               | 'geo_migrated_local_files_clean_up_worker_cron'
         'geo_prune_event_log_worker'                             | 'geo_prune_event_log_worker_cron'
         'geo_repository_sync_worker'                             | 'geo_repository_sync_worker_cron'
