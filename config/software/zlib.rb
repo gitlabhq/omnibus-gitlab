@@ -27,6 +27,13 @@ skip_transitive_dependency_licensing true
 build do
   env = with_standard_compiler_flags
 
+  # Default from `configure` in upstream zlib
+  env['CFLAGS'] << ' -O3'
+
+  # Enable frame-pointers to support profiling processes that
+  # call this library's functions.
+  env['CFLAGS'] << ' -fno-omit-frame-pointer'
+
   configure env: env
 
   make "-j #{workers}", env: env
