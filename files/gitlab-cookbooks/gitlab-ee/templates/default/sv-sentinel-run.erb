@@ -5,4 +5,9 @@ umask 077
 
 <% user = @options[:user] %>
 <% group = @options[:groupname] %>
-exec chpst -P -U <%= user %>:<%= group %> -u <%= user %>:<%= group %> /opt/gitlab/embedded/bin/redis-sentinel <%= @options[:config_path] %>
+exec chpst -P \
+  -U <%= user %>:<%= group %> \
+  -u <%= user %>:<%= group %> \
+  /opt/gitlab/embedded/bin/redis-sentinel \
+  <%= @options[:config_path] %><% if node['redis']['announce_ip_from_hostname'] %> \
+  '--sentinel announce-ip' "$(hostname -f)"<% end %>
