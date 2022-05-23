@@ -7,6 +7,7 @@ RSpec.describe 'gitlab::redis' do
   let(:redis_master_password) { 'blahblahblah' }
   let(:sentinel_conf) { '/var/opt/gitlab/sentinel/sentinel.conf' }
   let(:redis_sv_run) { '/opt/gitlab/sv/redis/run' }
+  let(:sentinel_sv_run) { '/opt/gitlab/sv/sentinel/run' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -68,6 +69,9 @@ RSpec.describe 'gitlab::redis' do
         expect(chef_run).to render_file(redis_sv_run).with_content { |content|
           expect(content).not_to match(%r{--replica-announce-ip "\$\(hostname -f\)"})
         }
+        expect(chef_run).to render_file(sentinel_sv_run).with_content { |content|
+          expect(content).not_to match(%r{'--sentinel announce-ip' "\$\(hostname -f\)"})
+        }
       end
 
       it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
@@ -108,6 +112,9 @@ RSpec.describe 'gitlab::redis' do
 
           expect(chef_run).to render_file(redis_sv_run).with_content { |content|
             expect(content).to match(%r{--replica-announce-ip "\$\(hostname -f\)"})
+          }
+          expect(chef_run).to render_file(sentinel_sv_run).with_content { |content|
+            expect(content).to match(%r{'--sentinel announce-ip' "\$\(hostname -f\)"})
           }
         end
       end
