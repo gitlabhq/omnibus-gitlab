@@ -276,7 +276,31 @@ module Gitlab
             deprecation: '14.9',
             removal: '15.0',
             note: "Starting with GitLab 15.0, only direct uploads will be permitted deprecating this configuration key."
-          }
+          },
+          {
+            config_keys: %w(gitaly cgroups_count),
+            deprecation: '15.1',
+            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
+            note: "Use `gitaly['cgroups_repositories_count']` instead."
+          },
+          {
+            config_keys: %w(gitaly cgroups_memory_enabled),
+            deprecation: '15.1',
+            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
+            note: "Use `gitaly['cgroups_memory_bytes'] or gitaly['cgroups_repositories_memory_bytes'] instead."
+          },
+          {
+            config_keys: %w(gitaly cgroups_memory_limit),
+            deprecation: '15.1',
+            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
+            note: "Use `gitaly['cgroups_memory_bytes'] or gitaly['cgroups_repositories_memory_bytes'] instead."
+          },
+          {
+            config_keys: %w(gitaly cgroups_cpu_enabled),
+            deprecation: '15.1',
+            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
+            note: "Use `gitaly['cgroups_cpu_shares'] or gitaly['cgroups_repositories_cpu_shares'] instead."
+          },
         ]
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable', 'svlogd_prefix'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")

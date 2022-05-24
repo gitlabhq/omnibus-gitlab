@@ -180,23 +180,25 @@ disabled = <%= @daily_maintenance_disabled %>
 <%= "storages = #{@daily_maintenance_storages}" if @daily_maintenance_storages %>
 <% end %>
 
-<% if @cgroups_count %>
+<% if @cgroups_repositories_count %>
 [cgroups]
-count = <%= @cgroups_count %>
 mountpoint = '<%= @cgroups_mountpoint %>'
 hierarchy_root = '<%= @cgroups_hierarchy_root %>'
-<% end %>
+  <% if @cgroups_memory_bytes %>
+memory_bytes = <%= @cgroups_memory_bytes %>
+  <% end %>
+  <% if @cgroups_cpu_shares %>
+cpu_shares = <%= @cgroups_cpu_shares %>
+  <% end %>
 
-<% if @cgroups_memory_enabled %>
-[cgroups.memory]
-enabled = <%= @cgroups_memory_enabled %>
-limit = <%= @cgroups_memory_limit %>
-<% end %>
-
-<% if @cgroups_cpu_enabled %>
-[cgroups.cpu]
-enabled = <%= @cgroups_cpu_enabled %>
-shares = <%= @cgroups_cpu_shares %>
+[cgroups.repositories]
+count = <%= @cgroups_repositories_count %>
+  <% if @cgroups_repositories_memory_bytes %>
+memory_bytes = <%= @cgroups_repositories_memory_bytes %>
+  <% end %>
+  <% if @cgroups_repositories_cpu_shares %>
+cpu_shares = <%= @cgroups_repositories_cpu_shares %>
+  <% end %>
 <% end %>
 
 <% if @pack_objects_cache_enabled %>
