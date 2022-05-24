@@ -2343,13 +2343,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['daily_maintenance_duration'] = '30m'
 # gitaly['daily_maintenance_storages'] = ["default"]
 # gitaly['daily_maintenance_disabled'] = false
-# gitaly['cgroups_count'] = 10
 # gitaly['cgroups_mountpoint'] = '/sys/fs/cgroup'
 # gitaly['cgroups_hierarchy_root'] = 'gitaly'
-# gitaly['cgroups_memory_enabled'] = true
-# gitaly['cgroups_memory_limit'] = 1048576
-# gitaly['cgroups_cpu_enabled'] = true
+# gitaly['cgroups_memory_bytes'] = 1048576
 # gitaly['cgroups_cpu_shares'] = 512
+# gitaly['cgroups_repositories_count'] = 1000
+# gitaly['cgroups_repositories_memory_bytes'] = 12884901888
+# gitaly['cgroups_repositories_cpu_shares'] = 128
 # gitaly['pack_objects_cache_enabled'] = true
 # gitaly['pack_objects_cache_dir'] = '/var/opt/gitlab/git-data/repositories/+gitaly/PackObjectsCache'
 # gitaly['pack_objects_cache_max_age'] = '5m'
