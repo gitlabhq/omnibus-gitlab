@@ -117,7 +117,9 @@
     policy: pull
 
 .install-gems: &install-gems
+  - gem install bundler:${BUNDLER_VERSION}
   - bundle config set --local path 'gems'
+  - bundle config set --local frozen 'true'
   - bundle install -j $(nproc)
   - bundle binstubs --all
 

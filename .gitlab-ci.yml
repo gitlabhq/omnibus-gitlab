@@ -83,6 +83,7 @@ variables:
   CACHE_EDITION: "CE"
   QA_BRANCH: 'master'
   ISSUE_BOT_LABELS_EXTRA: "group::distribution"
+  BUNDLER_VERSION: "2.2.33"
 
 ### For services that need a docker daemon
 .docker_job: &docker_job
@@ -124,6 +125,7 @@ before_script:
       cp support/known_hosts ~/.ssh/known_hosts;
       chmod -R 0600 ~/.ssh/;
     fi
+  - gem install bundler:${BUNDLER_VERSION}
   - bundle config set --local path 'gems'
   - bundle config set --local without 'rubocop'
   - if [ "$INCLUDE_PACKAGECLOUD" = "true" ]; then
@@ -142,6 +144,7 @@ before_script:
       bundle config --local local.omnibus .bundle/local-omnibus;
       bundle config --local disable_local_branch_check true;
     fi
+  - bundle config set frozen 'true'
   - echo -e "section_start:`date +%s`:bundle_install[collapsed=true]\r\e[0Kbundle install -j $(nproc)"
   - bundle install -j $(nproc)
   - echo -e "section_end:`date +%s`:bundle_install\r\e[0K"
