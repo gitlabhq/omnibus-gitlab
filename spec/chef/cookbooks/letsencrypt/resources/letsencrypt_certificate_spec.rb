@@ -44,6 +44,10 @@ RSpec.describe 'gitlab::letsencrypt' do
       )
     end
 
+    it "deletes the private_key_file" do
+      expect(chef_run).to delete_file('/etc/gitlab/ssl/letsencrypt_account_private_key.pem')
+    end
+
     context 'specifying a different key_size' do
       before do
         allow(File).to receive(:file?).and_call_original
