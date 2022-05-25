@@ -26,7 +26,6 @@ RSpec.describe 'gitaly' do
   let(:ruby_graceful_restart_timeout) { '30m' }
   let(:ruby_restart_delay) { '10m' }
   let(:ruby_num_workers) { 5 }
-  let(:ruby_rugged_git_config_search_path) { '/path/to/opt/gitlab/embedded/etc' }
   let(:git_catfile_cache_size) { 50 }
   let(:git_bin_path) { '/path/to/usr/bin/git' }
   let(:use_bundled_git) { true }
@@ -103,7 +102,6 @@ RSpec.describe 'gitaly' do
         expect(content).to include("socket_path = '/var/opt/gitlab/gitaly/gitaly.socket'")
         expect(content).to include("runtime_dir = '/var/opt/gitlab/gitaly/run'")
         expect(content).to include("bin_dir = '/opt/gitlab/embedded/bin'")
-        expect(content).to include(%(rugged_git_config_search_path = "/opt/gitlab/embedded/etc"))
       }
 
       expect(chef_run).not_to render_file(config_path)
@@ -142,6 +140,8 @@ RSpec.describe 'gitaly' do
         .with_content(%r{catfile_cache_size})
       expect(chef_run).not_to render_file(config_path)
         .with_content('[pack_objects_cache]')
+      expect(chef_run).not_to render_file(config_path)
+        .with_content('rugged_git_config_search_path')
     end
 
     it 'populates gitaly config.toml with default git binary path' do
@@ -243,7 +243,6 @@ RSpec.describe 'gitaly' do
           git_bin_path: git_bin_path,
           use_bundled_git: true,
           open_files_ulimit: open_files_ulimit,
-          ruby_rugged_git_config_search_path: ruby_rugged_git_config_search_path,
           daily_maintenance_start_hour: daily_maintenance_start_hour,
           daily_maintenance_start_minute: daily_maintenance_start_minute,
           daily_maintenance_duration: daily_maintenance_duration,
@@ -377,7 +376,6 @@ RSpec.describe 'gitaly' do
         expect(content).to include("tls_listen_addr = 'localhost:8888'")
         expect(content).to include("certificate_path = '/path/to/cert.pem'")
         expect(content).to include("key_path = '/path/to/key.pem'")
-        expect(content).to include(%(rugged_git_config_search_path = "#{ruby_rugged_git_config_search_path}"))
         expect(content).to include("prometheus_listen_addr = 'localhost:9000'")
         expect(content).to match(gitaly_logging_section)
         expect(content).to match(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
