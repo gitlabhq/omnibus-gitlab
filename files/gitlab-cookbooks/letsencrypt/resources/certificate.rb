@@ -59,6 +59,11 @@ action :create do
     end
   end
 
+  # Delete the private key_file
+  file node['acme']['private_key_file'] do
+    action :delete
+  end
+
   if ::File.file?(new_resource.key)
     production_key = OpenSSL::PKey::RSA.new ::File.read new_resource.key
     production_key_size = production_key.n.num_bits
@@ -87,5 +92,10 @@ action :create do
     wwwroot new_resource.wwwroot
     notifies :run, 'execute[reload nginx]'
     sensitive true
+  end
+
+  # Delete the private key_file
+  file node['acme']['private_key_file'] do
+    action :delete
   end
 end
