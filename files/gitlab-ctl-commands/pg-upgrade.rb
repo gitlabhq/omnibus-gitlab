@@ -535,7 +535,9 @@ end
 
 def run_reconfigure
   unless GitlabCtl::Util.progress_message('Running reconfigure') do
-    run_chef("#{base_path}/embedded/cookbooks/dna.json").success?
+    # Disable automatic restart as part of reconfigure to avoid other PGs than
+    # the one being currently upgraded getting restarted unnecessarily.
+    run_chef("#{base_path}/embedded/cookbooks/pg-upgrade-config.json").success?
   end
     die 'Something went wrong during final reconfiguration, please check the output'
   end
