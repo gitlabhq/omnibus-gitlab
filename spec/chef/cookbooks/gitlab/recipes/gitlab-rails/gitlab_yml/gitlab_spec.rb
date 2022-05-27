@@ -4,6 +4,28 @@ RSpec.describe 'gitlab::gitlab-rails' do
   include_context 'gitlab-rails'
 
   describe 'GitLab Application Settings' do
+    describe 'CDN Host' do
+      context 'with default configuration' do
+        it 'does not render cdn_host in gitlab.yml' do
+          expect(gitlab_yml[:production][:gitlab][:cdn_host]).to be nil
+        end
+      end
+
+      context 'with user specified configuration' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              cdn_host: 'https://cdn.example.com'
+            }
+          )
+        end
+
+        it 'renders specified cdn_host in gitlab.yml' do
+          expect(gitlab_yml[:production][:gitlab][:cdn_host]).to eq('https://cdn.example.com')
+        end
+      end
+    end
+
     describe 'Content Security Policy settings' do
       context 'with default configuration' do
         it 'renders gitlab.yml without content security policy settings' do

@@ -92,6 +92,7 @@ default['gitlab']['gitlab-rails']['gitlab_https'] = false
 default['gitlab']['gitlab-rails']['gitlab_ssh_user'] = nil
 default['gitlab']['gitlab-rails']['gitlab_ssh_host'] = nil
 default['gitlab']['gitlab-rails']['time_zone'] = nil
+default['gitlab']['gitlab-rails']['cdn_host'] = nil
 default['gitlab']['gitlab-rails']['gitlab_email_from'] = nil
 default['gitlab']['gitlab-rails']['gitlab_email_display_name'] = nil
 default['gitlab']['gitlab-rails']['gitlab_email_subject_suffix'] = nil

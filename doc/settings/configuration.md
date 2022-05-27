@@ -590,6 +590,28 @@ To configure Sentry:
    sudo gitlab-ctl reconfigure
    ```
 
+## Set a Content Delivery Network URL
+
+Service static assets with a Content Delivery Network (CDN) or asset host
+using `gitlab_rails['cdn_host']`. This configures a [Rails asset host](https://guides.rubyonrails.org/configuring.html#config-asset-host).
+
+To set a CDN/asset host:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['cdn_host'] = 'https://mycdnsubdomain.fictional-cdn.com'
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+Additional documentation for configuring common services to act as an asset host
+is tracked in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5708).
+
 ## Set a Content Security Policy
 
 Setting a Content Security Policy (CSP) can help thwart JavaScript
