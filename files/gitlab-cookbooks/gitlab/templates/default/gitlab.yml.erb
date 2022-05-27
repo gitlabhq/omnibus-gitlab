@@ -14,6 +14,11 @@ production: &base
     port: <%= @gitlab_port %>
     https: <%= @gitlab_https %>
 
+    <%- unless @cdn_host.nil? %>
+    ## Rails asset/CDN host
+    cdn_host: <%= @cdn_host %>
+    <% end %>
+
     # The maximum time puma can spend on the request. This needs to be smaller than the worker timeout.
     # Default is 95% of the worker timeout
     max_request_duration_seconds: <%= @max_request_duration_seconds %>

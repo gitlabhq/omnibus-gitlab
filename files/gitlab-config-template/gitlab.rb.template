@@ -67,6 +67,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_ssh_user'] = ''
 # gitlab_rails['time_zone'] = 'UTC'
 
+### Rails asset / CDN host
+###! Defines a url for a host/cdn to use for the Rails assets
+###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#set-a-content-delivery-network-url
+# gitlab_rails['cdn_host'] = 'https://mycdnsubdomain.fictional-cdn.com'
+
 ### Request duration
 ###! Tells the rails application how long it has to complete a request
 ###! This value needs to be lower than the worker timeout set in puma.
