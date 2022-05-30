@@ -26,6 +26,7 @@ module Build
       end
 
       def package
+        return "gitlab-fips" if Check.use_system_ssl?
         return "gitlab-ee" if Check.is_ee?
 
         "gitlab-ce"
