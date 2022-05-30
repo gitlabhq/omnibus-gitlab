@@ -163,7 +163,7 @@ module Build
       # Fetch the package from an S3 bucket
       def deb_package_download_url(arch: 'amd64')
         folder = 'ubuntu-focal'
-        folder = "#{folder}-aarch64" if arch == 'arm64'
+        folder = "#{folder}_aarch64" if arch == 'arm64'
 
         package_filename_url_safe = Info.release_version.gsub("+", "%2B")
         "https://#{Info.release_bucket}.#{Info.release_bucket_s3_endpoint}/#{folder}/#{Info.package}_#{package_filename_url_safe}_#{arch}.deb"
@@ -171,8 +171,8 @@ module Build
 
       def rpm_package_download_url(arch: 'x86_64')
         folder = 'el-8'
-        folder = "#{folder}-aarch64" if arch == 'arm64'
-        folder = "#{folder}-fips" if Build::Check.use_system_ssl?
+        folder = "#{folder}_aarch64" if arch == 'arm64'
+        folder = "#{folder}_fips" if Build::Check.use_system_ssl?
 
         package_filename_url_safe = Info.release_version.gsub("+", "%2B")
         "https://#{Info.release_bucket}.#{Info.release_bucket_s3_endpoint}/#{folder}/#{Info.package}-#{package_filename_url_safe}.el8.#{arch}.rpm"

@@ -6,9 +6,9 @@ class OhaiHelper
     def platform_dir
       os, codename, arch = fetch_os_with_codename
 
-      return "#{os}-#{codename}-#{arch}" if arm64?
+      return "#{os}-#{codename}_#{arch}" if arm64?
 
-      return "#{os}-#{codename}-fips" if Build::Check.use_system_ssl?
+      return "#{os}-#{codename}_fips" if Build::Check.use_system_ssl?
 
       "#{os}-#{codename}"
     end

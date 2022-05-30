@@ -89,10 +89,10 @@ build do
   end
 
   gem_source_compile_os = %w[
-    el-8-aarch64
-    amazon-2-aarch64
-    debian-buster-aarch64
-    raspbian-buster-aarch64
+    el-8_aarch64
+    amazon-2_aarch64
+    debian-buster_aarch64
+    raspbian-buster_aarch64
   ]
 
   # Currently rake-compiler-dock uses a Ubuntu 20.04 image to create the
