@@ -194,6 +194,28 @@ RSpec.describe PackageRepository do
               expect { repo.upload(nil, true) }.to output(%r{Uploading...\n}).to_stdout
               expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/gitlab-ee/ubuntu/focal pkg/ubuntu-focal/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
             end
+
+            context 'for arm64 packages' do
+              before do
+                allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(['pkg/ubuntu-focal_aarch64/gitlab.deb'])
+              end
+
+              it 'drops the architecture suffix from repo path' do
+                expect { repo.upload(nil, true) }.to output(%r{Uploading...\n}).to_stdout
+                expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/gitlab-ee/ubuntu/focal pkg/ubuntu-focal_aarch64/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+              end
+            end
+
+            context 'for fips packages' do
+              before do
+                allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(['pkg/ubuntu-focal_fips/gitlab.deb'])
+              end
+
+              it 'drops the fips suffix from repo path' do
+                expect { repo.upload(nil, true) }.to output(%r{Uploading...\n}).to_stdout
+                expect { repo.upload(nil, true) }.to output(%r{bin/package_cloud push gitlab/gitlab-ee/ubuntu/focal pkg/ubuntu-focal_fips/gitlab.deb --url=https://packages.gitlab.com\n}).to_stdout
+              end
+            end
           end
 
           context 'of CE' do
