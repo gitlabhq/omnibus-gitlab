@@ -164,6 +164,19 @@ _If you encounter authentication errors, ensure you have [allowed less secure ap
  or try [turning on 2-step validation](https://support.google.com/accounts/answer/185839)
  and using [an application password](https://support.google.com/mail/answer/185833)._
 
+### Google SMTP relay
+
+You can route outgoing non-Gmail messages through Google [using Google's SMTP relay service](https://support.google.com/a/answer/2956491?hl=en).
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp-relay.gmail.com"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_domain'] = "yourdomain.com"
+gitlab_rails['gitlab_email_from'] = 'username@yourdomain.com'
+gitlab_rails['gitlab_email_reply_to'] = 'username@yourdomain.com'
+```
+
 ### Mailgun
 
 ```ruby
