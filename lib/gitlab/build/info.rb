@@ -189,8 +189,11 @@ module Build
       end
 
       def fetch_artifact_url(project_id, pipeline_id)
+        job_name = 'Trigger:package'
+        job_name = "#{job_name}:fips" if Build::Check.use_system_ssl?
+
         output = get_api("projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
-        output.map { |job| job['id'] if job['name'] == 'Trigger:package' }.compact.max
+        output.map { |job| job['id'] if job['name'] == job_name }.compact.max
       end
 
       def fetch_pipeline_jobs(project_id, pipeline_id, token)
@@ -203,7 +206,11 @@ module Build
         return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
 
         id = fetch_artifact_url(project_id, pipeline_id)
-        "https://gitlab.com/api/v4/projects/#{Gitlab::Util.get_env('CI_PROJECT_ID')}/jobs/#{id}/artifacts/pkg/ubuntu-focal/gitlab.deb"
+
+        folder = 'ubuntu-focal'
+        folder = "#{folder}_fips" if Build::Check.use_system_ssl?
+
+        "https://gitlab.com/api/v4/projects/#{Gitlab::Util.get_env('CI_PROJECT_ID')}/jobs/#{id}/artifacts/pkg/#{folder}/gitlab.deb"
       end
 
       def tag_match_pattern

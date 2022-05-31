@@ -116,6 +116,16 @@
       - node_modules
     policy: pull
 
+.trigger-fips-package-cache:
+  cache:
+    key: "Ubuntu-20.04-fips-branch-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
+    paths:
+      - cache
+      - gems
+      - assets_cache
+      - node_modules
+    policy: pull
+
 .install-gems: &install-gems
   - gem install bundler:${BUNDLER_VERSION}
   - bundle config set --local path 'gems'
@@ -129,6 +139,30 @@
   - bundle exec rake build:project
   - bundle exec rake cache:bundle
   - bundle exec rake build:component_shas
+
+.trigger-package-common:
+  extends: .trigger-package-cache
+  variables:
+  image: "${BUILDER_IMAGE_REGISTRY}/${BASE_OS}:${BUILDER_IMAGE_REVISION}"
+  stage: trigger-package
+  script:
+    - *build-package
+    # Renaming so we can easily generate the artifact URL
+    - mv $PACKAGE_DIRECTORY/*.deb $PACKAGE_DIRECTORY/gitlab.deb
+    - mv $PACKAGE_DIRECTORY/*.deb.size $PACKAGE_DIRECTORY/gitlab.deb.size
+  artifacts:
+    expire_in: 3 days
+    when: always
+    paths:
+      - pkg/
+  tags:
+    - triggered-packages
+  needs:
+    - job: fetch-assets
+      optional: true
+    - job: generate-facts
+      optional: true
+      artifacts: true
 
 .spec_template: &spec_template
   extends: .gems-cache
@@ -520,28 +554,22 @@ update-knapsack:
 ############################
 
 Trigger:package:
-  extends: .trigger-package-cache
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
-  stage: trigger-package
-  script:
-    - *build-package
-    # Renaming so we can easily generate the artifact URL
-    - mv pkg/ubuntu-focal/*.deb pkg/ubuntu-focal/gitlab.deb
-    - mv pkg/ubuntu-focal/*.deb.size pkg/ubuntu-focal/gitlab.deb.size
+  extends: .trigger-package-common
+  variables:
+    BASE_OS: "ubuntu_20.04"
+    PACKAGE_DIRECTORY: "pkg/ubuntu-focal"
   <<: *com-trigger-and-nightly-only
-  artifacts:
-    expire_in: 3 days
-    when: always
-    paths:
-      - pkg/
-  tags:
-    - triggered-packages
-  needs:
-    - job: fetch-assets
-      optional: true
-    - job: generate-facts
-      optional: true
-      artifacts: true
+
+Trigger:package:fips:
+  extends:
+    - .trigger-package-common
+    - .trigger-fips-package-cache
+  variables:
+    USE_SYSTEM_SSL: "true"
+    BASE_OS: "ubuntu_20.04_fips"
+    PACKAGE_DIRECTORY: "pkg/ubuntu-focal_fips"
+  <<: *com-trigger-only
+  when: manual
 
 package_size_check:
   extends: .trigger-package-cache
@@ -645,6 +673,18 @@ RAT:
   <<: *com-trigger-only
   needs:
     - job: Trigger:package
+      artifacts: false
+    - job: Trigger:qa-docker
+      artifacts: false
+      optional: true
+
+RAT:FIPS:
+  extends: RAT
+  variables:
+    USE_SYSTEM_SSL: "true"
+    RAT_REFERENCE_ARCHITECTURE: "omnibus-gitlab-mrs-fips-ubuntu"
+  needs:
+    - job: Trigger:package:fips
       artifacts: false
     - job: Trigger:qa-docker
       artifacts: false
