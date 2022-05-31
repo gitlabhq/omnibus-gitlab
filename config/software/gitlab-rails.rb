@@ -175,7 +175,7 @@ build do
     sync "#{Gitlab::Util.get_env('CI_PROJECT_DIR')}/#{Gitlab::Util.get_env('ASSET_PATH')}", 'public/assets/'
   end
 
-  bundle "exec license_finder report --decisions-file=config/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=rails-license.json", env: env
+  bundle "exec license_finder report --project_path=#{File.dirname(gitlab_bundle_gemfile)} --decisions-file=config/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=rails-license.json", env: env
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=workhorse-license.json", cwd: "#{Omnibus::Config.source_dir}/gitlab-rails/workhorse"
 
   # Merge rails and workhorse license files.
