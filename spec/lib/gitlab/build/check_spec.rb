@@ -168,4 +168,36 @@ RSpec.describe Build::Check do
       expect(described_class.ci_commit_tag?).to be_truthy
     end
   end
+
+  describe 'on_stable_branch?' do
+    context 'when on a stable branch' do
+      before do
+        stub_env_var('CI_COMMIT_BRANCH', '14-10-stable')
+      end
+
+      it 'returns true' do
+        expect(described_class.on_stable_branch?).to be_truthy
+      end
+    end
+
+    context 'when on a regular branch' do
+      before do
+        stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
+      end
+
+      it 'returns false' do
+        expect(described_class.on_stable_branch?).to be_falsey
+      end
+    end
+
+    context 'when using a a tag' do
+      before do
+        stub_env_var('CI_COMMIT_BRANCH', '')
+      end
+
+      it 'returns false' do
+        expect(described_class.on_stable_branch?).to be_falsey
+      end
+    end
+  end
 end

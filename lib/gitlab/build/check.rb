@@ -75,6 +75,10 @@ module Build
       def on_tag?
         system('git describe --exact-match > /dev/null 2>&1')
       end
+
+      def on_stable_branch?
+        Build::Info.branch_name&.match?(/^\d+-\d+-stable$/)
+      end
     end
   end
 end

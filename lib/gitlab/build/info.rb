@@ -57,6 +57,10 @@ module Build
         end
       end
 
+      def branch_name
+        Gitlab::Util.get_env('CI_COMMIT_BRANCH')
+      end
+
       def commit_sha
         commit_sha_raw = Gitlab::Util.get_env('CI_COMMIT_SHA') || `git rev-parse HEAD`.strip
         commit_sha_raw[0, 8]
@@ -74,7 +78,9 @@ module Build
           return fact_from_file
         end
 
-        `git -c versionsort.prereleaseSuffix=rc tag -l '#{Info.tag_match_pattern}' --sort=-v:refname | head -1`.chomp
+        version = branch_name.delete_suffix('-stable').tr('-', '.') if Build::Check.on_stable_branch?
+
+        `git -c versionsort.prereleaseSuffix=rc tag -l '#{version}#{Info.tag_match_pattern}' --sort=-v:refname | head -1`.chomp
       end
 
       def latest_stable_tag(level: 1)
@@ -82,9 +88,11 @@ module Build
           return fact_from_file
         end
 
+        version = branch_name.delete_suffix('-stable').tr('-', '.') if Build::Check.on_stable_branch?
+
         # Level decides tag at which position you want. Level one gives you
         # latest stable tag, two gives you the one just before it and so on.
-        `git -c versionsort.prereleaseSuffix=rc tag -l '#{Info.tag_match_pattern}' --sort=-v:refname | awk '!/rc/' | head -#{level}`.split("\n").last
+        `git -c versionsort.prereleaseSuffix=rc tag -l '#{version}#{Info.tag_match_pattern}' --sort=-v:refname | awk '!/rc/' | head -#{level}`.split("\n").last
       end
 
       def docker_tag
