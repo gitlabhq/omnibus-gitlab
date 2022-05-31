@@ -22,9 +22,9 @@ module Build
         {
           'ref' => 'master',
           'token' => Gitlab::Util.get_env('RAT_TRIGGER_TOKEN'),
-          'variables[REFERENCE_ARCHITECTURE]' => 'omnibus-gitlab-mrs',
+          'variables[REFERENCE_ARCHITECTURE]' => Gitlab::Util.get_env('RAT_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs',
           'variables[PACKAGE_URL]' => Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.triggered_build_package_url,
-          'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || image || "registry.gitlab.com/#{Build::Info::OMNIBUS_PROJECT_MIRROR_PATH}/gitlab-ee-qa:#{Build::Info.docker_tag}"
+          'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || image || "registry.gitlab.com/#{Build::Info::OMNIBUS_PROJECT_MIRROR_PATH}/gitlab-ee-qa:#{Build::Info.docker_tag.gsub('.fips', '')}"
         }
       end
 
