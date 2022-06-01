@@ -33,7 +33,7 @@ build do
   command "mkdir -p #{install_dir}/embedded/cookbooks"
   sync './', "#{install_dir}/embedded/cookbooks/"
 
-  solo_recipes = %w(dna postgresql-bin postgresql-config)
+  solo_recipes = %w(dna postgresql-bin postgresql-config pg-upgrade-config)
 
   # If EE package, use a different master cookbook
   if EE
