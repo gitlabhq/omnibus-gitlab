@@ -1,0 +1,14 @@
+{
+  "run_list": [ "recipe[<%= master_cookbook %>]" ],
+  "package": {
+    "public_attributes": true
+  },
+  "postgresql": {
+    "auto_restart_on_version_change": false
+  },
+  "gitlab": {
+    "geo-postgresql": {
+      "auto_restart_on_version_change": false
+    }
+  }
+}
