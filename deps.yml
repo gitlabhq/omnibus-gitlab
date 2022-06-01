@@ -155,7 +155,14 @@ dependencies:
           pattern: "Gitlab::Version.new\\('grafana', '(\\S+)'\\)"
           tag_prefix: 'v'
           range: '< 8.0.0'
-
+      # gitlab-registry
+      https://gitlab.com/gitlab-org/container-registry.git:
+        replace_in_files:
+        - filename: config/software/registry.rb
+          pattern: "Gitlab::Version.new\\('registry', '(\\S+)'\\)"
+          tag_filter:
+            matching: 'v(\S+)-gitlab'
+            sort_as: '$1'
       # deps that need updated filtering to work https://github.com/dropseed/deps-git/issues/2
       # krb5
       # https://github.com/krb5/krb5.git:
