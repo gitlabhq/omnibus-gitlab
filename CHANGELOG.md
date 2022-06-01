@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.0.1 (2022-06-01)
+
+No changes.
+
 ## 15.0.0 (2022-05-20)
 
 ### Added (7 changes)
@@ -41,6 +45,12 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Update deprecated settings list](gitlab-org/omnibus-gitlab@842cb755e72429663439b592c431b5d8cb7ffbc8) ([merge request](gitlab-org/omnibus-gitlab!6040))
+
+## 14.10.4 (2022-06-01)
+
+### Security (1 change)
+
+- [Mattermost Security Updates May 2022](gitlab-org/security/omnibus-gitlab@0c61238d916a545b89f8d2d52a8996ce36b58bc5) ([merge request](gitlab-org/security/omnibus-gitlab!202))
 
 ## 14.10.3 (2022-05-20)
 
@@ -85,6 +95,12 @@ No changes.
 - [mark credentials as sensitive](gitlab-org/omnibus-gitlab@9354ccc5d43df012eaacf46029e67ff4ecc2d482) ([merge request](gitlab-org/omnibus-gitlab!5971))
 - [Upgrade zlib version](gitlab-org/omnibus-gitlab@056875b6497087a33fa837e5549baa1ecea33674) by @srslypascal ([merge request](gitlab-org/omnibus-gitlab!6015))
 - [Update grafana version to 7.5.15](gitlab-org/omnibus-gitlab@5e98cbfb95cc3176fbaf5f38de99775d9cae512e)
+
+## 14.9.5 (2022-06-01)
+
+### Security (1 change)
+
+- [Mattermost Security Updates May 2022](gitlab-org/security/omnibus-gitlab@04aba5468f2a0a7b1f52f7ec755d08ecf5859b22) ([merge request](gitlab-org/security/omnibus-gitlab!203))
 
 ## 14.9.4 (2022-04-29)
 
