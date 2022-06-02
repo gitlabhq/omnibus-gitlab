@@ -774,7 +774,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Container Registry settings
-##! Docs: https://docs.gitlab.com/ee/administration/container_registry.html
+##! Docs: https://docs.gitlab.com/ee/administration/packages/container_registry.html
 ################################################################################
 
 # registry_external_url 'https://registry.example.com'
