@@ -52,6 +52,7 @@ build do
   if Build::Check.use_system_ssl?
     env['CMAKE_FLAGS'] = OpenSSLHelper.cmake_flags
     env['PKG_CONFIG_PATH'] = OpenSSLHelper.pkg_config_dirs
+    env['FIPS_MODE'] = '1'
   end
 
   bundle "config set --local frozen 'true'"

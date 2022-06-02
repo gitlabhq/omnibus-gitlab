@@ -67,7 +67,11 @@ build do
     "GIT_APPEND_BUILD_OPTIONS += CFLAGS=\"#{git_cflags}\""
   ]
 
-  build_options << "GIT_APPEND_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded" unless Build::Check.use_system_ssl?
+  if Build::Check.use_system_ssl?
+    env['FIPS_MODE'] = '1'
+  else
+    build_options << "GIT_APPEND_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded"
+  end
 
   block do
     File.open(File.join(project_dir, 'config.mak'), 'a') do |file|
