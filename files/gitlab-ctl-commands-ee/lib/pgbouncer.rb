@@ -149,11 +149,9 @@ module Pgbouncer
       # command. Assumes the current user is in the list of admin-users
       pgbouncer_command('RELOAD')
     rescue GitlabCtl::Errors::ExecutionError
-      # We don't allow passwordless access to the pgbouncer console by default
-      # so pgbouncer_command might fail. PG HA does allow it for consul user,
-      # so it should be tried first.
-      $stderr.puts "There was an issue reloading pgbouncer through admin console, sending HUP"
-      GitlabCtl::Util.get_command_output("gitlab-ctl hup pgbouncer")
+      $stderr.puts "There was an issue reloading pgbouncer through admin console"
+      $stderr.puts "Check that gitlab-ctl write-pgpass has been run to populate ~/.pgpass for the Consul account."
+      $stderr.puts "See https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#configure-pgbouncer-nodes"
     end
 
     def restart
