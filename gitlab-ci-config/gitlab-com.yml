@@ -175,7 +175,7 @@
   <<: *com-except-triggers-docs-and-deps
   retry: 1
   script:
-    - bundle exec rspec --color --format RspecJunitFormatter --out junit_rspec.xml --format documentation spec/lib
+    - bundle exec rspec spec/lib
   artifacts:
     reports: &spec_reports
       junit: junit_rspec.xml
@@ -197,7 +197,7 @@
     - cp knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ${KNAPSACK_REPORT_PATH}.bak
     - rm -f knapsack/*.json
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
-    - bundle exec rake "knapsack:rspec[--color --format RspecJunitFormatter --out junit_rspec.xml --format documentation]"
+    - bundle exec rake knapsack:rspec
   artifacts:
     <<: *knapsack-artifacts
     reports:
