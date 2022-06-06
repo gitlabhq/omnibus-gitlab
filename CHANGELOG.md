@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.0.2 (2022-06-06)
+
+### Fixed (1 change)
+
+- [Skip auto-restart of PG during reconfigure as part of pg-upgrade](gitlab-org/omnibus-gitlab@d4eb21d6a9406be4812c0ab5539f522cf7eeaefb) ([merge request](gitlab-org/omnibus-gitlab!6135))
+
 ## 15.0.1 (2022-06-01)
 
 No changes.
