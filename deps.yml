@@ -20,7 +20,7 @@ dependencies:
       - 2602134
     gitlab_labels:
       - group::distribution
-      - devops::enablement
+      - devops::systems
       - type::maintenance
       - maintenance
       - dependencies.io
