@@ -545,6 +545,24 @@ before deciding that the clients don't have a valid certificate (default is `1`)
 
 After making the changes run `sudo gitlab-ctl reconfigure`.
 
+## Disabling proxy request buffering
+
+Request buffering can be disabled selectively on specific locations by changing `request_buffering_off_path_regex`.
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   nginx['request_buffering_off_path_regex'] = "/api/v\\d/jobs/\\d+/artifacts$|/import/gitlab_project$|\\.git/git-receive-pack$|\\.git/gitlab-lfs/objects|\\.git/info/lfs/objects/batch$"
+   ```
+
+1. Reconfigure GitLab, and [HUP](https://nginx.org/en/docs/control.html)
+   NGINX to cause it to reload with the updated configuration gracefully:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   sudo gitlab-ctl hup nginx
+   ```
+
 ## Configure `robots.txt`
 
 To configure [`robots.txt`](https://www.robotstxt.org/robotstxt.html) for your instance, specify a custom `robots.txt` file by adding a [custom NGINX configuration](#inserting-custom-nginx-settings-into-the-gitlab-server-block):
