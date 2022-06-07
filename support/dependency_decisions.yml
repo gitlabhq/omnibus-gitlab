@@ -77,3 +77,10 @@
     :why: https://github.com/beevik/ntp/blob/master/LICENSE
     :versions: []
     :when: 2022-01-25 04:29:22.369196427 Z
+- - :license
+  - github.com/hashicorp/go-uuid
+  - MPL
+  - :who: DJ Mountney
+    :why: https://github.com/hashicorp/go-uuid/blob/master/LICENSE
+    :versions: []
+    :when: 2022-06-07 16:16:10.060878355 Z
