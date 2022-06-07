@@ -689,7 +689,7 @@ default['gitlab']['nginx']['cache_max_size'] = '5000m'
 default['gitlab']['nginx']['redirect_http_to_https'] = false
 default['gitlab']['nginx']['redirect_http_to_https_port'] = 80
 # The following matched paths will set proxy_request_buffering to off
-default['gitlab']['nginx']['request_buffering_off_path_regex'] = "/api/v\\d/jobs/\\d+/artifacts$|\\.git/git-receive-pack$|\\.git/gitlab-lfs/objects|\\.git/info/lfs/objects/batch$"
+default['gitlab']['nginx']['request_buffering_off_path_regex'] = "/api/v\\d/jobs/\\d+/artifacts$|/import/gitlab_project$|\\.git/git-receive-pack$|\\.git/gitlab-lfs/objects|\\.git/info/lfs/objects/batch$"
 default['gitlab']['nginx']['ssl_client_certificate'] = nil # Most root CA's will be included by default
 default['gitlab']['nginx']['ssl_verify_client'] = nil # do not enable 2-way SSL client authentication
 default['gitlab']['nginx']['ssl_verify_depth'] = "1" # n/a if ssl_verify_client off
