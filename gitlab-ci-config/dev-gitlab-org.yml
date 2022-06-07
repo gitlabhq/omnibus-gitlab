@@ -41,6 +41,9 @@
 .unless-nightly: &unless-nightly
   if: '$CI_PIPELINE_SOURCE != "schedule" || $NIGHTLY != "true"'
 
+.if-ee-nightly: &if-ee-nightly
+  if: '$CI_PIPELINE_SOURCE == "schedule" && $NIGHTLY == "true" && $ee == "true"'
+
 .if-skip-job: &if-skip-job
   if: '$SKIP_JOB_REGEX && $CI_JOB_NAME =~ $SKIP_JOB_REGEX'
 
@@ -318,6 +321,17 @@
       when: never
     - <<: *if-ee-var
 
+.dev-ee-nightly-and-tag-except-auto-deploy: &dev-ee-nightly-and-tag-except-auto-deploy
+  rules:
+    - <<: *if-skip-job
+      when: never
+    - <<: *unless-dev
+      when: never
+    - <<: *if-auto-deploy-tag
+      when: never
+    - <<: *if-ee-nightly
+    - <<: *if-ee-tag
+
 .package-artifacts: &package-artifacts
   when: always
   expire_in: 1 day
@@ -418,6 +432,12 @@
   cache: *tag-cache
   retry: 1
 
+.fips_tag_template: &fips_tag_build
+  <<: *tag_build
+  variables:
+    USE_SYSTEM_SSL: "true"
+  <<: *dev-ee-tag-only-except-auto-deploy
+
 .rpi_tag_template: &rpi_tag_build
   <<: *tag_build
   stage: slow_jobs
@@ -449,11 +469,7 @@
   variables:
     USE_SYSTEM_SSL: "true"
     INCLUDE_PACKAGECLOUD: "true"
-  # TODO: Change to *dev-ee-tag-only-except-auto-deploy when add tag build
-  # jobs and make them part of the release pipeline. However, this will
-  # cause them not to be uploaded to the repo as part of the nightly
-  # pipelines. So we should do this only after the testing phase.
-  <<: *dev-ee-nightly-only
+  <<: *dev-ee-nightly-and-tag-except-auto-deploy
 
 .staging_upload_with_deployment_template: &staging_upload_with_deployment
   extends: .staging_upload_template
@@ -823,6 +839,15 @@ SLES-15.2:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
   <<: *dev-ee-tag-only-except-auto-deploy
+CentOS-8-fips:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_tag_template
+Ubuntu-18.04-fips:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04_fips:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_tag_template
+Ubuntu-20.04-fips:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_tag_template
 
 Docker:
   extends: .docker_job
@@ -953,19 +978,22 @@ SLES-15.2-staging:
 CentOS-8-fips-staging:
   extends: .fips_staging_upload_template
   needs:
-    # Add tag build jobs here when we add them
+    - job: CentOS-8-fips
+      optional: true
     - job: CentOS-8-fips-branch
       optional: true
 Ubuntu-18.04-fips-staging:
   extends: .fips_staging_upload_template
   needs:
-    # Add tag build jobs here when we add them
+    - job: Ubuntu-18.04-fips
+      optional: true
     - job: Ubuntu-18.04-fips-branch
       optional: true
 Ubuntu-20.04-fips-staging:
   extends: .fips_staging_upload_template
   needs:
-    # Add tag build jobs here when we add them
+    - job: Ubuntu-20.04-fips
+      optional: true
     - job: Ubuntu-20.04-fips-branch
       optional: true
 
@@ -1040,6 +1068,18 @@ SLES-15.2-release:
     - SLES-15.2
   <<: *production_release
   <<: *dev-ee-tag-only-except-auto-deploy-manual
+CentOS-8-fips-release:
+  needs:
+    - CentOS-8-fips
+  <<: *production_release
+Ubuntu-18.04-fips-release:
+  needs:
+    - Ubuntu-18.04-fips
+  <<: *production_release
+Ubuntu-20.04-fips-release:
+  needs:
+    - Ubuntu-20.04-fips
+  <<: *production_release
 
 Docker-Release:
   extends: .docker_job
