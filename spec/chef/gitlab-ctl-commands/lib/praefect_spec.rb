@@ -102,6 +102,22 @@ RSpec.describe Praefect do
       end
     end
 
+    context 'when command is list-storages' do
+      let(:command) { 'list-storages' }
+
+      it_behaves_like 'unknown option is specified'
+
+      it 'successfully parses virtual-storage-name' do
+        expected_options = { command: command,
+                             dir: 'dir',
+                             virtual_storage_name: 'name' }
+
+        expect(Praefect.parse_options!(%W(praefect #{command}
+                                          --dir dir
+                                          --virtual-storage-name name))).to eq(expected_options)
+      end
+    end
+
     context 'when help option is passed' do
       it 'shows help message and exit for global help option' do
         expect(Kernel).to receive(:puts) do |msg|
@@ -167,6 +183,14 @@ RSpec.describe Praefect do
 
     context 'remove-repository command' do
       let(:command) { 'list-untracked-repositories' }
+      let(:command_args) { [] }
+      let(:command_options) { {} }
+
+      it_behaves_like 'executes the command'
+    end
+
+    context 'list-storages command' do
+      let(:command) { 'list-storages' }
       let(:command_args) { [] }
       let(:command_options) { {} }
 

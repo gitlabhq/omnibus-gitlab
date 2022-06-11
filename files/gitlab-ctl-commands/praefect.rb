@@ -13,6 +13,5 @@ add_command_under_category('praefect', 'gitaly', 'Interact with Gitaly cluster',
 
   puts "Running #{options[:command]}"
   Praefect.execute(options)
-  puts "Done."
   exit 0
 end
