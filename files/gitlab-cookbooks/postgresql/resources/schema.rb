@@ -1,3 +1,5 @@
+unified_mode true
+
 property :schema, String, name_property: true
 property :database, String
 property :owner, String, default: 'CURRENT_USER'

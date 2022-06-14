@@ -16,4 +16,6 @@
 
 crond_job 'database-reindexing' do
   action :delete
+  user "root"
+  command "/opt/gitlab/bin/gitlab-rake gitlab:db:reindex"
 end

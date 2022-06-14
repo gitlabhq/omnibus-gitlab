@@ -1,3 +1,5 @@
+unified_mode true
+
 property :cn, String, name_property: true
 property :key, String, required: true
 property :owner, [String, nil], default: lazy { node['letsencrypt']['owner'] }

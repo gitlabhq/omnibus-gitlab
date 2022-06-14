@@ -1,6 +1,8 @@
 resource_name :consul_service
 provides :consul_service
 
+unified_mode true
+
 property :service_name, String, name_property: true
 property :id, String, name_property: true
 property :ip_address, [String, nil], default: nil

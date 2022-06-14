@@ -20,6 +20,8 @@ provides :storage_directory
 actions :create
 default_action :create
 
+unified_mode true
+
 property :path, [String, nil], default: nil
 property :owner, [String, nil], default: 'root'
 property :group, [String, nil], default: nil

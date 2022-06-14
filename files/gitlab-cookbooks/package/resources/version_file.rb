@@ -22,6 +22,8 @@ provides :version_file
 actions :create
 default_action :create
 
+unified_mode true
+
 property :version_file_path, [String, nil], default: nil
 property :version_check_cmd, [String, nil], default: nil
 

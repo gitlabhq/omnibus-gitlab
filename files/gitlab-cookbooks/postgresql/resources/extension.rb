@@ -1,3 +1,5 @@
+unified_mode true
+
 property :extension, String, name_property: true
 property :database, String
 property :helper, default: lazy { PgHelper.new(node) }

@@ -20,6 +20,8 @@ provides :gitlab_sysctl
 actions :create
 default_action :create
 
+unified_mode true
+
 property :value, [Integer, Float, String, nil], default: nil
 
 action :create do

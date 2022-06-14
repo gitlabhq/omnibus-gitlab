@@ -20,6 +20,8 @@ provides :env_dir
 actions :create
 default_action :create
 
+unified_mode true
+
 property :variables, Hash, default: {}
 
 action :create do
