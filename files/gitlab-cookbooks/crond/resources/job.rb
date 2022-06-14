@@ -1,3 +1,5 @@
+unified_mode true
+
 property :title, String, name_property: true
 property :user, String, required: true
 property :minute, [String, Integer], default: "*"

@@ -1,6 +1,8 @@
 resource_name :rails_migration
 provides :rails_migration
 
+unified_mode true
+
 property :name, name_property: true
 property :logfile_prefix, String, required: true
 property :rake_task, String, required: true

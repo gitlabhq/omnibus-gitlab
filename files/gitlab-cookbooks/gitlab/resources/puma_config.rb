@@ -1,6 +1,8 @@
 resource_name :puma_config
 provides :puma_config
 
+unified_mode true
+
 property :filename, String, name_property: true
 property :tag, String, default: 'gitlab-puma-worker'
 property :rackup, String, default: 'config.ru'

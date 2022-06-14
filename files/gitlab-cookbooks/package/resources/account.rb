@@ -20,6 +20,8 @@ provides :account
 actions :create, :remove
 default_action :create
 
+unified_mode true
+
 property :username, [String, nil], default: nil
 property :uid, [String, Integer, nil], default: nil
 property :ugid, [String, Integer, nil], default: nil

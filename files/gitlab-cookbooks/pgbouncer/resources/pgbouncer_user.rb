@@ -1,6 +1,8 @@
 resource_name :pgbouncer_user
 provides :pgbouncer_user
 
+unified_mode true
+
 property :type, String, name_property: true
 property :account_helper, default: AccountHelper.new(node)
 property :add_auth_function, [true, false], required: true

@@ -1,6 +1,8 @@
 resource_name :postgresql_query
 provides :postgresql_query
 
+unified_mode true
+
 property :description, String, name_property: true
 property :query, String
 property :db_name, String, default: 'template1'

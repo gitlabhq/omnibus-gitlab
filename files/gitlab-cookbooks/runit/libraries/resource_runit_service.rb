@@ -26,6 +26,8 @@ class Chef
     # Missing top-level class documentation comment
     class RunitService < Chef::Resource::Service
       resource_name :runit_service
+      provides :runit_service
+      allowed_actions :nothing, :start, :stop, :enable, :disable, :restart, :reload, :status, :once, :hup, :cont, :term, :kill, :up, :down, :usr1, :usr2, :create, :reload_log
 
       default_action :enable
 

@@ -1,6 +1,8 @@
 resource_name :sentinel_service
 provides :sentinel_service
 
+unified_mode true
+
 property :config_path, String
 property :redis_configuration, Hash
 property :sentinel_configuration, Hash

@@ -1,3 +1,5 @@
+unified_mode true
+
 property :socket_group, String
 property :dir, String, default: lazy { node['redis']['dir'] }
 property :log_dir, String, default: lazy { node['redis']['log_directory'] }

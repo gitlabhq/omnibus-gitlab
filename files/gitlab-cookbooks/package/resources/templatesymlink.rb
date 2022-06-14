@@ -20,6 +20,8 @@ provides :templatesymlink
 actions :create, :delete
 default_action :create
 
+unified_mode true
+
 property :link_from, String
 property :link_to, String
 property :source, String

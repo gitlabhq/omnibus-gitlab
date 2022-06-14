@@ -1,3 +1,5 @@
+unified_mode true
+
 property :database, String, name_property: true
 property :owner, String, default: lazy { node['postgresql']['sql_user'] }
 property :helper, default: lazy { PgHelper.new(node) }
