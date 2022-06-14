@@ -136,8 +136,84 @@ RSpec.describe 'gitlab::default' do
     end
   end
 
-  context 'with sidekiq exporter settings' do
-    context 'when Sidekiq exporter is not enabled' do
+  shared_examples 'consistent exporter TLS settings' do |target|
+    context 'when TLS is enabled' do
+      context 'when certificate path is blank' do
+        let(:exporter_settings) do
+          {
+            exporter_tls_enabled: true,
+            exporter_tls_key_path: '/valid/path'
+          }
+        end
+
+        it 'raises an error' do
+          expect { chef_run }.to raise_error(/#{target} exporter_tls_enabled is true, but exporter_tls_cert_path is not set/)
+        end
+      end
+
+      context 'when key path is blank' do
+        let(:exporter_settings) do
+          {
+            exporter_tls_enabled: true,
+            exporter_tls_cert_path: '/valid/path'
+          }
+        end
+
+        it 'raises an error' do
+          expect { chef_run }.to raise_error(/#{target} exporter_tls_enabled is true, but exporter_tls_key_path is not set/)
+        end
+      end
+    end
+
+    context 'when TLS is disabled' do
+      let(:exporter_settings) do
+        {
+          exporter_tls_enabled: false
+        }
+      end
+
+      it 'does not raise an error' do
+        expect { chef_run }.not_to raise_error
+      end
+    end
+  end
+
+  context 'with dedicated Puma exporter settings' do
+    context 'when exporter is enabled' do
+      let(:puma_settings) do
+        {
+          exporter_enabled: true
+        }
+      end
+
+      let(:exporter_settings) { {} }
+
+      before do
+        stub_gitlab_rb(puma: puma_settings.merge(exporter_settings))
+      end
+
+      it_behaves_like 'consistent exporter TLS settings', 'Puma'
+    end
+  end
+
+  context 'with dedicated Sidekiq exporter settings' do
+    context 'when exporter is enabled' do
+      let(:sidekiq_settings) do
+        {
+          metrics_enabled: true
+        }
+      end
+
+      let(:exporter_settings) { {} }
+
+      before do
+        stub_gitlab_rb(sidekiq: sidekiq_settings.merge(exporter_settings))
+      end
+
+      it_behaves_like 'consistent exporter TLS settings', 'Sidekiq'
+    end
+
+    context 'when exporter is not enabled' do
       before do
         stub_gitlab_rb(
           sidekiq:

@@ -543,6 +543,9 @@ default['gitlab']['puma']['max_threads'] = 4
 default['gitlab']['puma']['exporter_enabled'] = false
 default['gitlab']['puma']['exporter_address'] = "127.0.0.1"
 default['gitlab']['puma']['exporter_port'] = 8083
+default['gitlab']['puma']['exporter_tls_enabled'] = false
+default['gitlab']['puma']['exporter_tls_cert_path'] = nil
+default['gitlab']['puma']['exporter_tls_key_path'] = nil
 default['gitlab']['puma']['consul_service_name'] = 'rails'
 default['gitlab']['puma']['consul_service_meta'] = nil
 
@@ -565,6 +568,9 @@ default['gitlab']['sidekiq']['routing_rules'] = []
 # Sidekiq metrics server defaults
 default['gitlab']['sidekiq']['metrics_enabled'] = true
 default['gitlab']['sidekiq']['exporter_log_enabled'] = false
+default['gitlab']['sidekiq']['exporter_tls_enabled'] = false
+default['gitlab']['sidekiq']['exporter_tls_cert_path'] = nil
+default['gitlab']['sidekiq']['exporter_tls_key_path'] = nil
 default['gitlab']['sidekiq']['listen_address'] = "127.0.0.1"
 default['gitlab']['sidekiq']['listen_port'] = 8082
 
