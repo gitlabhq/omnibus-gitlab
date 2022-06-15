@@ -130,6 +130,7 @@ Naming/PredicateName:
     - 'spec/**/*'
     - 'features/**/*'
     - 'files/gitlab-cookbooks/gitlab/libraries/helpers/base_pg_helper.rb'
+    - 'files/gitlab-cookbooks/gitlab/libraries/helpers/pg_helper.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/redis_helper.rb'
     - 'files/gitlab-cookbooks/monitoring/libraries/prometheus_helper.rb'
     - 'files/gitlab-cookbooks/package/libraries/certificate_helper.rb'

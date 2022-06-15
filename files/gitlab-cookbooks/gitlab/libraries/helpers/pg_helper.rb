@@ -27,6 +27,13 @@ class PgHelper < BasePgHelper
     }
   end
 
+  # Overridden the definition in BasePgHelper to handle scenarios where
+  # PostgreSQL is delegated to Patroni.
+  def is_running?
+    omnibus_helper = OmnibusHelper.new(node)
+    omnibus_helper.service_up?(service_name) || (delegated? && omnibus_helper.service_up?(delegate_service_name) && is_ready?)
+  end
+
   private
 
   def connection_info

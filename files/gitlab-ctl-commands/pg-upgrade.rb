@@ -102,8 +102,10 @@ add_command_under_category 'revert-pg-upgrade', 'database',
     log '== Reverting =='
     if @instance_type == :patroni_leader
       patroni_leader_downgrade(revert_version)
-    else
+    elsif @instance_type == :patroni_replica
       patroni_replica_downgrade(revert_version)
+    elsif @instance_type == :patroni_standby_leader
+      patroni_standby_leader_downgrade(revert_version)
     end
     log '== Reverted =='
   elsif pg_enabled
@@ -139,6 +141,8 @@ add_command_under_category 'pg-upgrade', 'database',
     options[:timeout]
   )
   @instance_type = :single_node
+  @geo_pg_enabled = service_enabled?('geo-postgresql') || false
+
   @roles = GitlabCtl::Util.roles(base_path)
   @attributes = GitlabCtl::Util.get_node_attributes(base_path)
 
@@ -254,20 +258,35 @@ add_command_under_category 'pg-upgrade', 'database',
     end
   end
 
+  # The possible deployment types we need to handle are:
+  # 1. Standalone regular postgresql node
+  # 2. Standalone Geo primary node
+  # 3. Standalone Geo secondary node
+  # 4. Leader in Regular/Geo-Primary patroni cluster
+  # 5. Replica in Regular/Geo-Primary patroni cluster
+  # 6. Leader in Geo-Secondary patroni cluster (i.e, standby leader)
+  # 7. Replica in Geo-Secondary patroni cluster
+
   if patroni_enabled
     if @instance_type == :patroni_leader
       patroni_leader_upgrade
-    else
+    elsif @instance_type == :patroni_replica
       patroni_replica_upgrade
+    elsif @instance_type == :patroni_standby_leader
+      patroni_standby_leader_upgrade
     end
   elsif @roles.include?('geo-primary')
     log 'Detected a GEO primary node'
     @instance_type = :geo_primary
     general_upgrade
-  elsif @roles.include?('geo-secondary') || service_enabled?('geo-postgresql')
-    log 'Detected a GEO secondary node'
+  elsif @roles.include?('geo-secondary')
+    log 'Detected a Geo secondary node'
     @instance_type = :geo_secondary
     geo_secondary_upgrade(options[:tmp_dir], options[:timeout])
+  elsif service_enabled?('geo-postgresql')
+    log 'Detected a Geo PostgreSQL node'
+    @instance_type = :geo_postgresql
+    geo_pg_upgrade
   else
     general_upgrade
   end
@@ -306,7 +325,7 @@ def common_post_upgrade(disable_maintenance = true)
     GitlabCtl::PostgreSQL.wait_for_postgresql(120)
   end
 
-  unless [:pg_secondary, :geo_secondary, :patroni_replica].include?(@instance_type)
+  unless [:pg_secondary, :geo_secondary, :geo_postgresql, :patroni_replica, :patroni_standby_leader].include?(@instance_type)
     log 'Database upgrade is complete, running vacuumdb analyze'
     analyze_cluster
   end
@@ -340,6 +359,15 @@ def patroni_replica_upgrade
   stop_database
   create_links(@db_worker.target_version)
   common_post_upgrade(false)
+  geo_pg_upgrade
+end
+
+def patroni_standby_leader_upgrade
+  stop_database
+  create_links(@db_worker.target_version)
+  remove_patroni_cluster_state
+  common_post_upgrade(false)
+  geo_pg_upgrade
 end
 
 def patroni_leader_downgrade(revert_version)
@@ -356,6 +384,16 @@ def patroni_replica_downgrade(revert_version)
   stop_database
   create_links(revert_version)
   revert_data_dir(revert_version)
+  start_database
+  configure_postgresql
+  restart_patroni_node
+end
+
+def patroni_standby_leader_downgrade(revert_version)
+  stop_database
+  create_links(revert_version)
+  revert_data_dir(revert_version)
+  remove_patroni_cluster_state
   start_database
   configure_postgresql
   restart_patroni_node
@@ -402,7 +440,6 @@ end
 
 def geo_secondary_upgrade(tmp_dir, timeout)
   pg_enabled = service_enabled?('postgresql')
-  geo_pg_enabled = service_enabled?('geo-postgresql')
 
   # Run the first time to link the primary postgresql instance
   if pg_enabled
@@ -420,10 +457,16 @@ def geo_secondary_upgrade(tmp_dir, timeout)
     common_pre_upgrade
 
     # Only disable maintenance_mode if geo-pg is not enabled
-    common_post_upgrade(!geo_pg_enabled)
+    common_post_upgrade(!@geo_pg_enabled)
   end
 
-  return unless geo_pg_enabled
+  geo_pg_upgrade
+end
+
+def geo_pg_upgrade
+  return unless @geo_pg_enabled
+
+  @instance_type = :geo_postgresql
 
   # Update the location to handle the geo-postgresql instance
   log('Upgrading the geo-postgresql database')
@@ -510,7 +553,7 @@ def cleanup_data_dir
     die 'Error moving data for older version, '
   end
 
-  if @instance_type == :patroni_replica
+  if @instance_type == :patroni_replica || @instance_type == :patroni_standby_leader
     unless GitlabCtl::Util.progress_message('Recreating an empty data directory') do
       run_command("mkdir -p #{@db_worker.data_dir}")
     end
@@ -567,15 +610,24 @@ end
 def patroni_preflight_check(options)
   log 'Detected a Patroni cluster.'
 
-  @instance_type = (:patroni_leader if options[:leader]) || (:patroni_replica if options[:replica])
+  @instance_type = if options[:leader]
+                     :patroni_leader
+                   elsif options[:replica]
+                     :patroni_replica
+                   elsif options[:standby_leader]
+                     :patroni_standby_leader
+                   end
   guess_patroni_node_role unless @instance_type
 
   check_patroni_cluster_status
 
   if @instance_type == :patroni_leader
     log "Using #{Rainbow('leader').yellow} node upgrade procedure."
-  else
+  elsif @instance_type == :patroni_replica
     log "Using #{Rainbow('replica').yellow} node upgrade procedure."
+    log Rainbow('This procedure REMOVES DATA directory.').yellow
+  elsif @instance_type == :patroni_standby_leader
+    log "Using #{Rainbow('standby-leader').yellow} node upgrade procedure."
     log Rainbow('This procedure REMOVES DATA directory.').yellow
   end
 end
@@ -591,8 +643,9 @@ def guess_patroni_node_role
       if node.up?
         @instance_type = :patroni_leader if node.leader?
         @instance_type = :patroni_replica if node.replica?
+        @instance_type = :patroni_standby_leader if node.standby_leader?
         failure_cause = :patroni_running_on_replica if @instance_type == :patroni_replica
-        @instance_type == :patroni_leader
+        @instance_type == :patroni_leader || @instance_type == :patroni_standby_leader
       else
         leader_name = GitlabCtl::Util.get_command_output("#{base_path}/embedded/bin/consul kv get /service/#{scope}/leader").strip
         @instance_type = node_name == leader_name ? :patroni_leader : :patroni_replica unless leader_name.nil? || leader_name.empty?
@@ -619,7 +672,7 @@ def guess_patroni_node_role
       die 'Patroni service is not running on the leader node.'
     else
       log 'Unable to detect the role of this Patroni node.'
-      log 'Try to use --leader or --replica switches to specify the role manually.'
+      log 'Try to use --leader, --replica or --standby-leader switches to specify the role manually.'
       log 'See: https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#upgrading-postgresql-major-version-in-a-patroni-cluster'
 
       die 'Unable to detect the role of this Patroni node.'
@@ -632,7 +685,7 @@ def check_patroni_cluster_status
   # required node attributes are stored correctly.
   node = Patroni::Client.new
 
-  return unless @instance_type == :patroni_leader
+  return if [:patroni_leader, :patroni_standby_leader].none? { |type| @instance_type == type }
 
   die 'Patroni service is not running on the leader node.' unless node.up?
 

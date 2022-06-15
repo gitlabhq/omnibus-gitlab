@@ -177,7 +177,8 @@ module GitlabCtl
           target_version: nil,
           skip_disk_check: false,
           leader: nil,
-          replica: nil
+          replica: nil,
+          standby_leader: nil
         }
 
         OptionParser.new do |opts|
@@ -214,6 +215,12 @@ module GitlabCtl
           opts.on('--replica', 'Patroni only. Force replica upgrade procedure.') do
             options[:replica] = true
             options[:leader] = false
+          end
+
+          opts.on('--standby-leader', 'Patroni only. Force standby-leader upgrade procedure.') do
+            options[:leader] = false
+            options[:replica] = false
+            options[:standby_leader] = true
           end
         end.parse!(args)
 
