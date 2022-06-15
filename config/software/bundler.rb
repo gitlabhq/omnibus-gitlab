@@ -17,7 +17,7 @@
 
 name 'bundler'
 # Pin the bundler version to avoid breaking changes in later versions
-default_version '2.2.33'
+default_version '2.3.15'
 
 license 'MIT'
 license_file 'LICENSE'
