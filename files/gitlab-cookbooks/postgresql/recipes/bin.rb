@@ -21,9 +21,13 @@ geo_pg_helper = GeoPgHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 postgresql_install_dir = File.join(node['package']['install-dir'], 'embedded/postgresql')
 
-main_db_version = pg_helper.database_version if Services.enabled?('postgresql')
-geo_db_version = geo_pg_helper.database_version if Services.enabled?('geo_postgresql')
-db_version = node['postgresql']['version'] || main_db_version || geo_db_version
+if Services.enabled?('postgresql')
+  running_db_version = pg_helper.database_version
+elsif Services.enabled?('geo_postgresql')
+  running_db_version = geo_pg_helper.database_version
+end
+
+db_version = node['postgresql']['version'] || running_db_version
 db_path = Dir.glob("#{postgresql_install_dir}/#{db_version}*").min if db_version
 
 ruby_block 'check_postgresql_version' do
