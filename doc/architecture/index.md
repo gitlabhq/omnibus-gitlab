@@ -24,7 +24,7 @@ An in-depth video walkthrough of these components is available
 ### GitLab project definition file
 
 A primary component of the omnibus architecture is a project definition file
-that lists the project details and dependency relations to external softwares
+that lists the project details and dependency relations to external software
 and libraries.
 
 The main components of this [project definition file](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/config/projects/gitlab.rb)
@@ -32,7 +32,7 @@ are:
 
 - Project metadata: Includes attributes such as the project's name and description.
 - License details of the project.
-- Dependency list: List of external tools and softwares which are required to
+- Dependency list: List of external tools and software which are required to
   build or run GitLab, and sometimes their metadata.
 - Global configuration variables used for installation of GitLab: Includes the
   installation directory, system user, and system group.
@@ -188,25 +188,25 @@ So, of the components described above, some (such as software definitions, proje
 
 The type of packages being built depends on the OS the build process is run. If build is done on a Debian environment, a `.deb` package will be created. What happens during package building can be summarized to the following steps
 
-1. Fetching sources of dependency softwares:
+1. Fetching sources of dependency software:
    1. Parsing software definitions to find out corresponding versions.
    1. Getting source code from remotes or cache.
 1. Building individual software components:
    1. Setting up necessary environment variables and flags.
    1. Applying patches, if applicable.
    1. Performing the build and installation of the component, which involves installing it to appropriate location (inside `/opt/gitlab`).
-1. Generating license information of all bundled components - including external softwares, Ruby gems, and JS modules. This involves analysing definitions of each dependencies as well as any additional licensing document provided by the components (like `licenses.csv` file provided by GitLab Rails)
+1. Generating license information of all bundled components - including external software, Ruby gems, and JS modules. This involves analysing definitions of each dependencies as well as any additional licensing document provided by the components (like `licenses.csv` file provided by GitLab Rails)
 1. Checking license of the components to make sure we are not shipping a component with a non-compatible license
 1. Running a health check on the package to make sure the binaries are linked against available libraries. For bundled libraries, the binaries should link against them and not the one available globally.
 1. Building the package with contents of `/opt/gitlab`. This makes use of the metadata given inside [`gitlab.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/config/projects/gitlab.rb) file. This includes package name, version, maintainer, homepage, and information regarding conflicts with other packages.
 
 #### Caching
 
-Omnibus uses two types of cache to optimize the build process: one to store the software artifacts (sources of dependent softwares), and one to store the project tree after each software component is built
+Omnibus uses two types of cache to optimize the build process: one to store the software artifacts (sources of dependent software), and one to store the project tree after each software component is built
 
 ##### Software artifact cache (for GitLab Inc builds)
 
-Software artifact cache uses an Amazon S3 bucket to store the sources of the dependent softwares. In our build process, this cache is populated using the command `bin/omnibus cache populate`. This will pull in all the necessary software sources from the Amazon bucket and store it in the necessary locations. When there is a change in the version requirement of a software, omnibus pulls it from the original upstream and add it to the artifact cache. This process is internal to omnibus and we configure the Amazon bucket to use in [omnibus.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/omnibus.rb) file available in the root of the repository. This cache ensures availability of the dependent softwares even if their original upstream remotes go down.
+Software artifact cache uses an Amazon S3 bucket to store the sources of the dependent software. In our build process, this cache is populated using the command `bin/omnibus cache populate`. This will pull in all the necessary software sources from the Amazon bucket and store it in the necessary locations. When there is a change in the version requirement of a software, omnibus pulls it from the original upstream and add it to the artifact cache. This process is internal to omnibus and we configure the Amazon bucket to use in [omnibus.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/omnibus.rb) file available in the root of the repository. This cache ensures availability of the dependent software even if their original upstream remotes go down.
 
 ##### Build cache
 
