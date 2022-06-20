@@ -437,6 +437,7 @@
   variables:
     USE_SYSTEM_SSL: "true"
   <<: *dev-ee-tag-only-except-auto-deploy
+  allow_failure: true
 
 .rpi_tag_template: &rpi_tag_build
   <<: *tag_build
@@ -470,6 +471,7 @@
     USE_SYSTEM_SSL: "true"
     INCLUDE_PACKAGECLOUD: "true"
   <<: *dev-ee-nightly-and-tag-except-auto-deploy
+  allow_failure: true
 
 .staging_upload_with_deployment_template: &staging_upload_with_deployment
   extends: .staging_upload_template
@@ -493,6 +495,14 @@
   cache: *tag-cache
   tags:
   - promotion
+
+.fips_release_template: &fips_release
+  <<: *production_release
+  variables:
+    USE_SYSTEM_SSL: "true"
+    INCLUDE_PACKAGECLOUD: "true"
+  allow_failure: true
+  <<: *dev-ee-tag-only-except-auto-deploy-manual
 
 .raspbian_release_template: &raspbian_release
   <<: *production_release
@@ -1071,15 +1081,15 @@ SLES-15.2-release:
 CentOS-8-fips-release:
   needs:
     - CentOS-8-fips
-  <<: *production_release
+  <<: *fips_release
 Ubuntu-18.04-fips-release:
   needs:
     - Ubuntu-18.04-fips
-  <<: *production_release
+  <<: *fips_release
 Ubuntu-20.04-fips-release:
   needs:
     - Ubuntu-20.04-fips
-  <<: *production_release
+  <<: *fips_release
 
 Docker-Release:
   extends: .docker_job
