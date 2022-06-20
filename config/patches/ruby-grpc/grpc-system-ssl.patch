@@ -1,0 +1,26 @@
+diff --git a/src/ruby/ext/grpc/extconf.rb b/src/ruby/ext/grpc/extconf.rb
+index 09748235ec..0089734718 100644
+--- a/src/ruby/ext/grpc/extconf.rb
++++ b/src/ruby/ext/grpc/extconf.rb
+@@ -45,7 +45,12 @@ if darwin && !cross_compiling
+   ENV['ARFLAGS'] = '-o'
+ end
+ 
+-ENV['EMBED_OPENSSL'] = 'true'
++# By default, use the system OpenSSL instead of BoringSSL. This is
++# needed on systems that need to use a FIPS-approved OpenSSL or cannot
++# compile the embedded BoringSSL module (e.g. s390x).
++embed_ssl = ENV['EMBED_OPENSSL'] == 'true'
++ENV['EMBED_OPENSSL'] = embed_ssl ? 'true' : 'false'
++
+ ENV['EMBED_ZLIB'] = 'true'
+ ENV['EMBED_CARES'] = 'true'
+ 
+@@ -94,6 +99,7 @@ end
+ $LDFLAGS << ' -Wl,-wrap,memcpy' if linux
+ $LDFLAGS << ' -static-libgcc -static-libstdc++' if linux
+ $LDFLAGS << ' -static' if windows
++$LDFLAGS << ' -lssl' unless embed_ssl
+ 
+ $CFLAGS << ' -std=c99 '
+ $CFLAGS << ' -Wall '
