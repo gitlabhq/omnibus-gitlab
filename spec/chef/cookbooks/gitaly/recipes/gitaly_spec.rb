@@ -142,8 +142,6 @@ RSpec.describe 'gitaly' do
         .with_content('[pack_objects_cache]')
       expect(chef_run).not_to render_file(config_path)
         .with_content('rugged_git_config_search_path')
-      expect(chef_run).not_to render_file(config_path)
-        .with_content('[[git.config]]')
     end
 
     it 'populates gitaly config.toml with default git binary path' do
@@ -214,115 +212,6 @@ RSpec.describe 'gitaly' do
       expect(chef_run).to render_file(config_path).with_content { |content|
         expect(content).to match(cgroups_section)
       }
-    end
-  end
-
-  context 'with Omnibus gitconfig' do
-    let(:omnibus_gitconfig) { nil }
-    let(:gitaly_gitconfig) { nil }
-
-    before do
-      stub_gitlab_rb(
-        omnibus_gitconfig: {
-          system: omnibus_gitconfig,
-        },
-        gitaly: {
-          gitconfig: gitaly_gitconfig,
-        }
-      )
-    end
-
-    context 'with default Omnibus gitconfig' do
-      it 'does not write a git.config section' do
-        expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(content).not_to include("git.config")
-        }
-      end
-    end
-
-    context 'with changed default value' do
-      let(:omnibus_gitconfig) do
-        {
-          receive: ["fsckObjects = false", "advertisePushOptions = true"],
-        }
-      end
-
-      it 'writes only non-default git.config section' do
-        gitconfig_section = Regexp.new([
-          %r{\[\[git.config\]\]},
-          %r{key = "receive.fsckObjects"},
-          %r{value = "false"},
-        ].map(&:to_s).join('\s+'))
-
-        expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(content).to match(gitconfig_section)
-          expect(content).not_to include("advertisePushOptions")
-        }
-      end
-    end
-
-    context 'with mixed default and non-default values' do
-      let(:omnibus_gitconfig) do
-        {
-          receive: ["fsckObjects = true"],
-          nondefault: ["bar = baz"],
-        }
-      end
-
-      it 'writes only non-default git.config section' do
-        gitconfig_section = Regexp.new([
-          %r{\[\[git.config\]\]},
-          %r{key = "nondefault.bar"},
-          %r{value = "baz"},
-        ].map(&:to_s).join('\s+'))
-
-        expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(content).to match(gitconfig_section)
-          expect(content).not_to include("fsckObjects")
-        }
-      end
-    end
-
-    context 'with Gitaly gitconfig' do
-      let(:gitaly_gitconfig) do
-        [
-          { key: "core.fsckObjects", value: "true" },
-        ]
-      end
-
-      let(:omnibus_gitconfig) do
-        {
-          this: ["is = overridden"],
-        }
-      end
-
-      it 'writes only non-default git.config section' do
-        gitconfig_section = Regexp.new([
-          %r{\[\[git.config\]\]},
-          %r{key = "core.fsckObjects"},
-          %r{value = "true"},
-        ].map(&:to_s).join('\s+'))
-
-        expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(content).to match(gitconfig_section)
-          expect(content).not_to include("overridden")
-        }
-      end
-    end
-
-    context 'with empty Gitaly gitconfig' do
-      let(:gitaly_gitconfig) { [] }
-      let(:omnibus_gitconfig) do
-        {
-          this: ["is = overridden"],
-        }
-      end
-
-      it 'does not write a git.config section' do
-        expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(content).not_to include("git.config")
-        }
-      end
     end
   end
 
