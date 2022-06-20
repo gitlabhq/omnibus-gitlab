@@ -61,12 +61,8 @@ the `https_proxy` value, you should usually specify a value as
 
 ## Applying the changes
 
-Any change made to the environment variables **requires a hard restart** after
-reconfigure for it to take effect.
-
-NOTE:
-During a hard restart, your GitLab instance will be down until the
-services are back up.
+Any change made to the environment variables requires a reconfigure for it
+to take effect.
 
 Perform a reconfigure:
 
