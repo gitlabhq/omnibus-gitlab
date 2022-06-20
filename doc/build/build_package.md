@@ -38,7 +38,7 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
    directory in it:
 
    ```shell
-   docker run -v ~/omnibus-gitlab:~/omnibus-gitlab -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_10:${BUILDER_IMAGE_REVISION} bash
+   docker run -v ~/omnibus-gitlab:/omnibus-gitlab -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_10:${BUILDER_IMAGE_REVISION} bash
    ```
 
 1. By default, `omnibus-gitlab` will choose public GitLab repositories to
@@ -67,7 +67,7 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
 1. Install the libraries and other dependencies:
 
    ```shell
-   cd ~/omnibus-gitlab
+   cd /omnibus-gitlab
    bundle install
    bundle binstubs --all
    ```
@@ -103,7 +103,7 @@ again, and thus save time:
    it:
 
    ```shell
-   docker run -v ~/omnibus-gitlab:~/omnibus-gitlab -v ~/gitlab-assets:/gitlab-assets -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_10:${BUILDER_IMAGE_REVISION} bash
+   docker run -v ~/omnibus-gitlab:/omnibus-gitlab -v ~/gitlab-assets:/gitlab-assets -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_10:${BUILDER_IMAGE_REVISION} bash
    ```
 
 1. Instead of setting `COMPILE_ASSETS` to true, set the path where assets can be
@@ -147,7 +147,7 @@ You can clean up all temporary files generated during the build process with
 `omnibus`'s `clean` command:
 
 ```shell
-bin/omnibus clean
+bin/omnibus clean gitlab
 ```
 
 Adding the `--purge` purge option removes __ALL__ files generated during the
@@ -155,7 +155,7 @@ build including the project install directory (`/opt/gitlab`) and
 the package cache directory (`/var/cache/omnibus/pkg`):
 
 ```shell
-bin/omnibus clean --purge
+bin/omnibus clean --purge gitlab
 ```
 
 ### Getting further help on Omnibus
