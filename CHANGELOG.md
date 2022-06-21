@@ -3,6 +3,49 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.1.0 (2022-06-21)
+
+### Added (1 change)
+
+- [Add gitlab_rails['cdn_host'] setting](gitlab-org/omnibus-gitlab@456dda0db813e0d3baae01642497a33c61cf714c) ([merge request](gitlab-org/omnibus-gitlab!6096))
+
+### Fixed (4 changes)
+
+- [Handle standby leader nodes properly in pg-upgrade](gitlab-org/omnibus-gitlab@41383d3c89a82b067891114ac44996348ed7779c) ([merge request](gitlab-org/omnibus-gitlab!6036))
+- [pgbouncer reload failure should provide insight](gitlab-org/omnibus-gitlab@0a09f57484a0053765cd729bea834c06a7096ded) ([merge request](gitlab-org/omnibus-gitlab!6127))
+- [Skip auto-restart of PG during reconfigure as part of pg-upgrade](gitlab-org/omnibus-gitlab@817c0fea370a1aceeffd9f5ef539bfed96cb00e1) ([merge request](gitlab-org/omnibus-gitlab!6122))
+- [redis: Add announce_ip_from_hostname support to sentinel](gitlab-org/omnibus-gitlab@eca430a9af3daf04379ca43d4b851c3a72f57caf) ([merge request](gitlab-org/omnibus-gitlab!6101))
+
+### Changed (6 changes)
+
+- [Update GitLab Omnibus Builder to v3.5.0](gitlab-org/omnibus-gitlab@9b0c9d8d7f189f69dcd9de9c312bdc170692ba35) ([merge request](gitlab-org/omnibus-gitlab!6142))
+- [nginx: Disable request buffering by default for gitlab project imports](gitlab-org/omnibus-gitlab@4b0e528ea58766d6a4faaeeada4523b765e3edb0) by @mirsal ([merge request](gitlab-org/omnibus-gitlab!6117))
+- [Turn off proxy_buffering for KAS](gitlab-org/omnibus-gitlab@8ebacd1fa1fd09c9e351959e296ec379572ce45e) ([merge request](gitlab-org/omnibus-gitlab!6136))
+- [Update libtiff/libtiff from 4.3.0 to 4.4.0](gitlab-org/omnibus-gitlab@df4acda97c4dd8407d31f40ebbef26b06cd61508) ([merge request](gitlab-org/omnibus-gitlab!6125))
+- [Update chef-acme to 4.1.5](gitlab-org/omnibus-gitlab@fa354561697820b58c2fa146995a43d628e05fb7) ([merge request](gitlab-org/omnibus-gitlab!6095))
+- [Add frame-pointer support to zlib](gitlab-org/omnibus-gitlab@48a3d020e3053cdff44d0c16b19ff5d722796cb4) ([merge request](gitlab-org/omnibus-gitlab!6104))
+
+### Deprecated (1 change)
+
+- [Gitaly: update cgroups configuration](gitlab-org/omnibus-gitlab@05fc776f1173b0d35d677a5017c69daffc6d4d75) ([merge request](gitlab-org/omnibus-gitlab!6076))
+
+### Removed (2 changes)
+
+- [gitaly: Remove configuration for Rugged's gitconfig search path](gitlab-org/omnibus-gitlab@279eb2fe4866817f2621611d9b42af83ea7c8484) ([merge request](gitlab-org/omnibus-gitlab!6105))
+- [Remove geo_file_download_dispatch_worker_cron settings](gitlab-org/omnibus-gitlab@e90dbef21f156021bed3d18f2c7a139e6948df46) ([merge request](gitlab-org/omnibus-gitlab!6106))
+
+### Security (1 change)
+
+- [Update to Redis v6.2.7](gitlab-org/omnibus-gitlab@0409a6a11d8a1585fe38895125bb22edf9170105) ([merge request](gitlab-org/omnibus-gitlab!6069))
+
+### Performance (1 change)
+
+- [Upgrade to bundler v2.3.15](gitlab-org/omnibus-gitlab@28c48c44d5c14511086aab54da3cf751d03810e4) ([merge request](gitlab-org/omnibus-gitlab!6139))
+
+### Other (1 change)
+
+- [Disallow bundle to any changes to Gemfile.lock](gitlab-org/omnibus-gitlab@cd4f464c27058bebc0033ed2e013c56e86ff38f1) ([merge request](gitlab-org/omnibus-gitlab!6090))
+
 ## 15.0.2 (2022-06-06)
 
 ### Fixed (1 change)
