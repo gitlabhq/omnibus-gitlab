@@ -160,6 +160,7 @@ dependency 'git'
 # https://github.com/chef/omnibus/blob/master/docs/Build%20Cache.md
 dependency 'gitlab-rails'
 dependency 'gitaly'
+dependency 'ruby-grpc' if Build::Check.use_system_ssl?
 
 # Package scripts
 dependency 'package-scripts'
@@ -243,11 +244,6 @@ exclude 'embedded/lib/ruby/gems/*/gems/*/script'
 exclude 'embedded/lib/ruby/gems/*/gems/*/t'
 
 # Exclude additional files from specific gems
-exclude 'embedded/lib/ruby/gems/*/gems/gitlab-grpc-*/include'
-exclude 'embedded/lib/ruby/gems/*/gems/gitlab-grpc-*/src/core'
-exclude 'embedded/lib/ruby/gems/*/gems/gitlab-grpc-*/src/ruby/ext'
-exclude 'embedded/lib/ruby/gems/*/gems/gitlab-grpc-*/src/ruby/spec'
-exclude 'embedded/lib/ruby/gems/*/gems/gitlab-grpc-*/third_party'
 exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/include'
 exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/src/core'
 exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/src/ruby/ext'
