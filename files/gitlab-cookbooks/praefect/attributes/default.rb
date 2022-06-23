@@ -1,5 +1,6 @@
 default['praefect']['enable'] = false
 default['praefect']['failover_enabled'] = true
+default['praefect']['failover_timeout'] = nil
 default['praefect']['failover_election_strategy'] = nil
 default['praefect']['auth_token'] = nil
 default['praefect']['auth_transitioning'] = false

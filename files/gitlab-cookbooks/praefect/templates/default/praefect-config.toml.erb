@@ -40,6 +40,9 @@ key_path = '<%= @key_path %>'
 [failover]
 <% unless @failover_enabled.nil? %>
 enabled = <%= @failover_enabled %>
+<% unless @failover_timeout.nil? %>
+timeout = '<%= @failover_timeout %>'
+<% end %>
 <% end %>
 
 [sentry]
