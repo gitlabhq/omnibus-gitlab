@@ -208,6 +208,7 @@ A perl interpreter is required for `c_rehash` dependency to properly symlink the
 
    To specify a different path and file name, you can
    [change the default SSL certificate location](nginx.md#change-the-default-port-and-the-ssl-certificate-locations).
+1. [Enable and manually configure HTTPS on NGINX](nginx.md#enable-https) to set up GitLab to use your own certificates.
 1. Reconfigure GitLab:
 
    ```shell
