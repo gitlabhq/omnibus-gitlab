@@ -80,10 +80,18 @@ class PackageRepository
       platform = platform_name.gsub(/_.*/, '').tr("-", "/") # "ubuntu/xenial"
       target_repository = repository || target # staging override or the rest, eg. "unstable"
 
-      # If we detect Enterprise Linux 6/7, upload the same package
-      # to Scientific and Oracle Linux repositories
-      if platform.match?(/^el\/[6,7]/)
-        %w(scientific ol).each do |distro|
+      # We can copy EL packages to Oracle and Scientific Linux repos also as
+      # they are binary compatible.
+      enterprise_linux_additional_uploads = {
+        '6' => %w(scientific ol),
+        '7' => %w(scientific ol),
+        '8' => %w(ol), # There is no Scientific Linux 8
+      }
+
+      source_os, target_os = enterprise_linux_additional_uploads.find { |os| platform.match?(/^el\/#{os}/) }
+
+      if source_os && target_os
+        target_os.each do |distro|
           platform_path = platform.gsub('el', distro)
 
           list << "#{target_repository}/#{platform_path} #{package_path}"
