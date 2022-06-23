@@ -641,7 +641,7 @@ To add a CSP:
    ```
 
    GitLab automatically provides secure default values for the CSP.
-   
+
    To add a custom CSP:
 
    ```ruby
