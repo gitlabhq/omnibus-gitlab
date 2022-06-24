@@ -62,7 +62,7 @@ RSpec.shared_examples 'enabled registry service' do
       render_file('/var/opt/gitlab/registry/config.yml').with_content do |content|
         expect(content).to match(/version: 0.1/)
         expect(content).to match(/realm: .*\/jwt\/auth/)
-        expect(content).to match(/addr: localhost:5000/)
+        expect(content).to match(/addr: 127.0.0.1:5000/)
         expect(content).to match(%r(storage: {"filesystem":{"rootdirectory":"/var/opt/gitlab/gitlab-rails/shared/registry"}))
         expect(content).to match(/health:\s*storagedriver:\s*enabled:\s*true/)
         expect(content).to match(/log:\s*level: info\s*formatter:\s*text/)
@@ -88,7 +88,7 @@ RSpec.shared_examples 'enabled registry service' do
   end
 
   it 'creates gitlab-rails config with default values' do
-    expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(hash_including('registry_api_url' => 'http://localhost:5000'))
+    expect(chef_run).to create_templatesymlink('Create a gitlab.yml and create a symlink to Rails root').with_variables(hash_including('registry_api_url' => 'http://127.0.0.1:5000'))
   end
 
   it 'sets default storage options' do

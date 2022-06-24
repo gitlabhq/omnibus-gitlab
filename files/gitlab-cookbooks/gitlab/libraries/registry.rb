@@ -82,7 +82,7 @@ module Registry
       Gitlab['gitlab_rails']['registry_enabled'] = true if Gitlab['registry']['enable']
       Gitlab['gitlab_rails']['registry_host'] = uri.host
       Gitlab['registry_nginx']['listen_port'] ||= uri.port
-      Gitlab['registry']['registry_http_addr'] ||= "localhost:5000"
+      Gitlab['registry']['registry_http_addr'] ||= "127.0.0.1:5000"
       Gitlab['registry']['registry_http_addr'].gsub(/^https?\:\/\/(www.)?/, '')
       Gitlab['registry']['token_realm'] ||= Gitlab['external_url']
       Gitlab['gitlab_rails']['registry_api_url'] ||= "http://#{Gitlab['registry']['registry_http_addr']}"
