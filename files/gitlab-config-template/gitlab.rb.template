@@ -792,7 +792,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ###! **Do not change the following 3 settings unless you know what you are
 ###!   doing**
-# gitlab_rails['registry_api_url'] = "http://localhost:5000"
+# gitlab_rails['registry_api_url'] = "http://127.0.0.1:5000"
 # gitlab_rails['registry_key_path'] = "/var/opt/gitlab/gitlab-rails/certificate.key"
 # gitlab_rails['registry_issuer'] = "omnibus-gitlab-issuer"
 
@@ -803,7 +803,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['uid'] = nil
 # registry['gid'] = nil
 # registry['dir'] = "/var/opt/gitlab/registry"
-# registry['registry_http_addr'] = "localhost:5000"
+# registry['registry_http_addr'] = "127.0.0.1:5000"
 # registry['debug_addr'] = "localhost:5001"
 # registry['log_directory'] = "/var/log/gitlab/registry"
 # registry['env_directory'] = "/opt/gitlab/etc/registry/env"
