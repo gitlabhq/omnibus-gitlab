@@ -87,7 +87,7 @@ Prometheus metrics data. Omnibus GitLab >= 11.9 includes an embedded copy.
 
 See [the embedded Grafana documentation](grafana.md) for more information.
 
-## Alertmanager global options
+## Alertmanager options
 
 You can set [global options](https://prometheus.io/docs/alerting/latest/configuration/)
 for the [Alertmanager](https://prometheus.io/docs/alerting/latest/configuration/).
@@ -100,3 +100,49 @@ alertmanager['global'] = {
   'smtp_hello' => 'example.org'
 }
 ```
+
+### Additional receivers and routes
+
+In this example, we implement a new receiver for VictorOps.
+
+1. Edit `/etc/gitlab/gitlab.rb` to add a new receiver and define a [route](https://prometheus.io/docs/alerting/latest/configuration/#route):
+
+   ```ruby
+   alertmanager['receivers'] = [
+     {
+       'name' => 'victorOps-receiver',
+       'victorops_configs' => [
+         {
+           'routing_key'         => 'Sample_route',
+           'api_key'             => '558e7ebc-XXXX-XXXX-XXXX-XXXXXXXXXXXX',
+           'entity_display_name' => '{{ .CommonAnnotations.summary }}',
+           'message_type'        => '{{ .CommonLabels.severity }}',
+           'state_message'       => 'Alert: {{ .CommonLabels.alertname }}. Summary:{{ .CommonAnnotations.summary }}. RawData: {{ .CommonLabels }}',
+           'http_config'         => {
+             proxy_url: 'http://internet.proxy.com:3128'
+           }
+         } #, { Next receiver }
+       ]
+     }
+   ]
+ 
+   alertmanager['routes'] = [
+     {
+       'receiver'        => 'victorOps-receiver',
+       'group_wait'      => '30s',
+       'group_interval'  => '5m',
+       'repeat_interval' => '3h',
+       'matchers'        => [ 'severity = high' ]
+     } #, { Next route }
+   ]
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+Alertmanager will now route `severity = high` alerts to `victorops-receiver`.
+
+Read more about VictorOps options for Alertmanager at the [VictorOps documentation](https://help.victorops.com/knowledge-base/victorops-prometheus-integration/).
