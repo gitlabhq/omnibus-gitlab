@@ -38,7 +38,7 @@ build do
 
     raise "Missing gRPC patch: #{source}" unless patch_path
 
-    shellout!("#{gem_bin} install gem-patch -v 0.1.6")
+    shellout!("#{gem_bin} install --no-document gem-patch -v 0.1.6")
     shellout!("#{gem_bin} uninstall --force --all grpc")
 
     grpc_versions.each do |version|
@@ -46,7 +46,7 @@ build do
       shellout!("rm -f #{gemfile}")
       shellout!("#{gem_bin} fetch grpc -v #{version} --platform ruby")
       shellout!("#{gem_bin} patch -p1 #{gemfile} #{patch_path}")
-      shellout!("#{gem_bin} install #{gemfile} --platform ruby")
+      shellout!("#{gem_bin} install --platform ruby --no-document #{gemfile}")
     end
 
     shellout!("#{gem_bin} uninstall gem-patch")
