@@ -1017,6 +1017,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # puma['exporter_enabled'] = false
 # puma['exporter_address'] = "127.0.0.1"
 # puma['exporter_port'] = 8083
+# puma['exporter_tls_enabled'] = false
+# puma['exporter_tls_cert_path'] = ""
+# puma['exporter_tls_key_path'] = ""
 
 ##! Service name used to register Puma as a Consul service
 # puma['consul_service_name'] = 'rails'
@@ -1060,6 +1063,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Specifies where Prometheus metrics endpoints should be made available for Sidekiq processes.
 # sidekiq['metrics_enabled'] = true
 # sidekiq['exporter_log_enabled'] = false
+# sidekiq['exporter_tls_enabled'] = false
+# sidekiq['exporter_tls_cert_path'] = ""
+# sidekiq['exporter_tls_key_path'] = ""
 # sidekiq['listen_address'] = "localhost"
 # sidekiq['listen_port'] = 8082
 

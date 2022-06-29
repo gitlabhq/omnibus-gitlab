@@ -995,6 +995,9 @@ production: &base
     sidekiq_exporter:
       enabled: <%= @sidekiq['metrics_enabled'] %>
       log_enabled: <%= @sidekiq['exporter_log_enabled'] %>
+      tls_enabled: <%= @sidekiq['exporter_tls_enabled'] %>
+      tls_cert_path: <%= @sidekiq['exporter_tls_cert_path'] %>
+      tls_key_path: <%= @sidekiq['exporter_tls_key_path'] %>
       address: <%= @sidekiq['listen_address'] %>
       port: <%= @sidekiq['listen_port'] %>
 
@@ -1009,6 +1012,9 @@ production: &base
       enabled: <%= @puma['exporter_enabled'] %>
       address: <%= @puma['exporter_address'] %>
       port: <%= @puma['exporter_port'] %>
+      tls_enabled: <%= @puma['exporter_tls_enabled'] %>
+      tls_cert_path: <%= @puma['exporter_tls_cert_path'] %>
+      tls_key_path: <%= @puma['exporter_tls_key_path'] %>
 
   shutdown:
     blackout_seconds: <%= @shutdown_blackout_seconds %>

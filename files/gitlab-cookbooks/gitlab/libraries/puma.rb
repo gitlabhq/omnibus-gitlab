@@ -17,10 +17,14 @@
 
 module Puma
   class << self
+    include MetricsExporterHelper
+
     def parse_variables
       return unless Services.enabled?('puma')
 
       parse_listen_address
+
+      check_consistent_exporter_tls_settings('puma')
     end
 
     def parse_listen_address
@@ -59,15 +63,23 @@ module Puma
     private
 
     def puma_socket
-      attributes['socket'] || Gitlab['node']['gitlab']['puma']['socket']
+      user_config_or_default('socket')
     end
 
     def puma_https_url
-      url(host: attributes['ssl_listen'], port: attributes['ssl_port'], scheme: 'https') if attributes['ssl_listen'] && attributes['ssl_port']
+      url(host: user_config['ssl_listen'], port: user_config['ssl_port'], scheme: 'https') if user_config['ssl_listen'] && user_config['ssl_port']
     end
 
-    def attributes
+    def default_config
+      Gitlab['node']['gitlab']['puma']
+    end
+
+    def user_config
       Gitlab['puma']
+    end
+
+    def metrics_enabled?
+      user_config_or_default('exporter_enabled')
     end
 
     def url(host:, port:, scheme:)
