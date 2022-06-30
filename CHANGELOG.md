@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.1.1 (2022-06-30)
+
+No changes.
+
 ## 15.1.0 (2022-06-21)
 
 ### Added (1 change)
@@ -45,6 +49,10 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Disallow bundle to any changes to Gemfile.lock](gitlab-org/omnibus-gitlab@cd4f464c27058bebc0033ed2e013c56e86ff38f1) ([merge request](gitlab-org/omnibus-gitlab!6090))
+
+## 15.0.4 (2022-06-30)
+
+No changes.
 
 ## 15.0.3 (2022-06-16)
 
@@ -100,6 +108,10 @@ No changes.
 ### Other (1 change)
 
 - [Update deprecated settings list](gitlab-org/omnibus-gitlab@842cb755e72429663439b592c431b5d8cb7ffbc8) ([merge request](gitlab-org/omnibus-gitlab!6040))
+
+## 14.10.5 (2022-06-30)
+
+No changes.
 
 ## 14.10.4 (2022-06-01)
 
