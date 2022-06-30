@@ -173,3 +173,12 @@ server-write-timeout=<%= @server_write_timeout %>
 <%- if @server_keep_alive -%>
 server-keep-alive=<%= @server_keep_alive %>
 <%-end -%>
+<%- if @redirects_max_config_size -%>
+redirects-max-config-size=<%= @redirects_max_config_size %>
+<%-end -%>
+<%- if @redirects_max_path_segments -%>
+redirects-max-path-segments=<%= @redirects_max_path_segments %>
+<%-end -%>
+<%- if @redirects_max_rule_count -%>
+redirects-max-rule-count=<%= @redirects_max_rule_count %>
+<%-end -%>

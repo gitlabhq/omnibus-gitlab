@@ -74,3 +74,8 @@ default['gitlab-pages']['server_read_timeout'] = nil
 default['gitlab-pages']['server_read_header_timeout'] = nil
 default['gitlab-pages']['server_write_timeout'] = nil
 default['gitlab-pages']['server_keep_alive'] = nil
+# _redirects file fine grained configuration.
+# The recommended default values are set inside GitLab Pages.
+default['gitlab-pages']['redirects_max_config_size'] = nil
+default['gitlab-pages']['redirects_max_path_segments'] = nil
+default['gitlab-pages']['redirects_max_rule_count'] = nil

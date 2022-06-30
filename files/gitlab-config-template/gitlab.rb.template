@@ -1777,6 +1777,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Rate limit new TLS connections to a single domain, maximum burst allowed per second
 # gitlab_pages['rate_limit_tls_domain_burst'] = 10000
 
+##! The maximum size of the _redirects file, in bytes
+# gitlab_pages['redirects_max_config_size'] = 65536
+##! The maximum number of path segments allowed in _redirects rules URLs
+# gitlab_pages['redirects_max_path_segments'] = 25
+##! The maximum number of rules allowed in _redirects
+# gitlab_pages['redirects_max_rule_count'] = 1000
+
 # gitlab_pages['env_directory'] = "/opt/gitlab/etc/gitlab-pages/env"
 # gitlab_pages['env'] = {
 #   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
