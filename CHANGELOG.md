@@ -50,6 +50,10 @@ No changes.
 
 - [Disallow bundle to any changes to Gemfile.lock](gitlab-org/omnibus-gitlab@cd4f464c27058bebc0033ed2e013c56e86ff38f1) ([merge request](gitlab-org/omnibus-gitlab!6090))
 
+## 15.0.4 (2022-06-30)
+
+No changes.
+
 ## 15.0.3 (2022-06-16)
 
 ### Performance (1 change)
