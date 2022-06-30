@@ -109,6 +109,10 @@ No changes.
 
 - [Update deprecated settings list](gitlab-org/omnibus-gitlab@842cb755e72429663439b592c431b5d8cb7ffbc8) ([merge request](gitlab-org/omnibus-gitlab!6040))
 
+## 14.10.5 (2022-06-30)
+
+No changes.
+
 ## 14.10.4 (2022-06-01)
 
 ### Security (1 change)
