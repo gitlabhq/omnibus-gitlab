@@ -201,46 +201,94 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
   end
 
   context 'consolidated object store settings' do
+    using RSpec::Parameterized::TableSyntax
+
     include_context 'object storage config'
 
-    context 'with S3 config' do
-      before do
-        stub_gitlab_rb(
-          gitlab_rails: {
-            object_store: {
-              enabled: true,
-              connection: aws_connection_hash,
-              objects: object_config
-            }
+    before do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          object_store: {
+            enabled: true,
+            connection: connection_hash,
+            objects: object_config
           }
-        )
+        }
+      )
+    end
+
+    context 'with S3 config' do
+      where(:access_key, :secret) do
+        ""                  | ""
+        nil                 | nil
+        "AKIAKIAKI"         | 'secret123'
+        '3_FTW\s3.test1234' | 'T_PW\s3.test1234'
       end
 
-      it 'includes S3 credentials' do
-        expect(chef_run).to render_file(config_file).with_content { |content|
-          expect(content).to match(/\[object_storage\]\n  provider = "AWS"\n/m)
-          expect(content).to match(/\[object_storage.s3\]\n  aws_access_key_id = "AKIAKIAKI"\n  aws_secret_access_key = "secret123"\n/m)
-        }
+      with_them do
+        let(:connection_hash) do
+          {
+            'provider' => 'AWS',
+            'region' => 'eu-west-1',
+            'aws_access_key_id' => access_key,
+            'aws_secret_access_key' => secret
+          }
+        end
+        let(:expected_access_key) { (access_key || '').to_json }
+        let(:expected_secret) { (secret || '').to_json }
+
+        it 'includes S3 credentials' do
+          expect(chef_run).to render_file(config_file).with_content { |content|
+            expect(content).to include(%([object_storage]\n  provider = "AWS"\n))
+            expect(content).to include(%([object_storage.s3]\n  aws_access_key_id = #{expected_access_key}\n  aws_secret_access_key = #{expected_secret}\n))
+          }
+        end
       end
     end
 
     context 'with Azure config' do
-      before do
-        stub_gitlab_rb(
-          gitlab_rails: {
-            object_store: {
-              enabled: true,
-              connection: azure_connection_hash,
-              objects: object_config
-            }
-          }
-        )
+      where(:account_name, :access_key) do
+        # Azure doesn't yet support Managed Identities (https://gitlab.com/gitlab-org/gitlab/-/issues/242245), but
+        # handle nil values gracefully.
+        ""                  | ""
+        nil                 | nil
+        "testaccount"       | "1234abcd"
+        '3_FTW\s3.test1234' | 'T_PW\s3.test1234'
       end
 
-      it 'includes Azure credentials' do
+      with_them do
+        let(:connection_hash) do
+          {
+            'provider' => 'AzureRM',
+            'azure_storage_account_name' => account_name,
+            'azure_storage_access_key' => access_key
+          }
+        end
+        let(:expected_account_name) { (account_name || '').to_json }
+        let(:expected_access_key) { (access_key || '').to_json }
+
+        it 'includes Azure credentials' do
+          expect(chef_run).to render_file(config_file).with_content { |content|
+            expect(content).to include(%([object_storage]\n  provider = "AzureRM"\n))
+            expect(content).to include(%([object_storage.azurerm]\n  azure_storage_account_name = #{expected_account_name}\n  azure_storage_access_key = #{expected_access_key}\n))
+          }
+        end
+      end
+    end
+
+    # Workhorse doesn't directly use a Google Cloud client and relies on
+    # pre-signed URLs, but include a test for completeness.
+    context 'with Google Cloud config' do
+      let(:connection_hash) do
+        {
+          'provider' => 'Google',
+          'google_application_default' => true
+        }
+      end
+
+      it 'does not include object storage config' do
         expect(chef_run).to render_file(config_file).with_content { |content|
-          expect(content).to match(/\[object_storage\]\n  provider = "AzureRM"\n/m)
-          expect(content).to match(/\[object_storage.azurerm\]\n  azure_storage_account_name = "testaccount"\n  azure_storage_access_key = "1234abcd"\n/m)
+          expect(content).not_to include(%([object_storage]))
         }
       end
     end
