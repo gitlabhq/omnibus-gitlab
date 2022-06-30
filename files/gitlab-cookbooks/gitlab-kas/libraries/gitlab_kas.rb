@@ -63,7 +63,7 @@ module GitlabKas
         raise "external_url scheme should be 'http' or 'https', got '#{gitlab_uri.scheme}"
       end
 
-      Gitlab['gitlab_rails'][key] = "#{scheme}://#{gitlab_uri.host}#{port}/#{gitlab_uri.path}-/kubernetes-agent/"
+      Gitlab['gitlab_rails'][key] = "#{scheme}://#{gitlab_uri.host}#{port}#{gitlab_uri.path}/-/kubernetes-agent/"
     end
 
     def parse_gitlab_kas_internal_url
