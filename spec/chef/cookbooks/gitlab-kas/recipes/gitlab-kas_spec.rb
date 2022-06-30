@@ -227,6 +227,23 @@ RSpec.describe 'gitlab-kas' do
         )
       end
     end
+
+    context 'with GitLab on a relative URL' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://example.com/gitlab'
+        )
+      end
+
+      it 'renders gitlab_kas enabled with relative URLs in config/gitlab.yml' do
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          enabled: true,
+          external_url: 'wss://example.com/gitlab/-/kubernetes-agent/',
+          internal_url: 'grpc://localhost:8153',
+          external_k8s_proxy_url: 'https://example.com/gitlab/-/kubernetes-agent/k8s-proxy/'
+        )
+      end
+    end
   end
 
   describe 'logrotate settings' do
