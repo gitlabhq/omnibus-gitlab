@@ -114,3 +114,34 @@ token = '<%= node['token'] %>'
 [prometheus]
 grpc_latency_buckets = <%= @prometheus_grpc_latency_buckets %>
 <% end %>
+
+[gitlab]
+<% if @gitlab_url %>
+url = '<%= @gitlab_url %>'
+<% end %>
+<% if @gitlab_relative_path %>
+relative_url_root = '<%= @gitlab_relative_path %>'
+<% end %>
+
+<% if @gitlab_shell['http_settings'] %>
+<% http_settings = @gitlab_shell['http_settings'] %>
+[gitlab.http-settings]
+<% if http_settings['read_timeout'] %>
+read_timeout = <%= http_settings['read_timeout'] %>
+<% end %>
+<% if http_settings['user'] %>
+user = '<%= http_settings['user'] %>'
+<% end %>
+<% if http_settings['password'] %>
+password = '<%= http_settings['password'] %>'
+<% end %>
+<% if http_settings['ca_file'] %>
+ca_file = '<%= http_settings['ca_file'] %>'
+<% end %>
+<% if http_settings['ca_path'] %>
+ca_path = '<%= http_settings['ca_path'] %>'
+<% end %>
+<% if http_settings['self_signed_cert'] %>
+self_signed_cert = <%= http_settings['self_signed_cert'] %>
+<% end %>
+<% end %>

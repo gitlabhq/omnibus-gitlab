@@ -50,13 +50,19 @@ env_dir env_directory do
   notifies :restart, "runit_service[praefect]" if omnibus_helper.should_notify?('praefect')
 end
 
+gitlab_url, gitlab_relative_path = WebServerHelper.internal_api_url(node)
+
 template "Create praefect config.toml" do
   path config_path
   source "praefect-config.toml.erb"
   owner "root"
   group account_helper.gitlab_group
   mode "0640"
-  variables node['praefect'].to_hash
+  variables node['praefect'].to_hash.merge(
+    { gitlab_shell: node['gitlab']['gitlab-shell'].to_hash,
+      gitlab_url: gitlab_url,
+      gitlab_relative_path: gitlab_relative_path }
+  )
   notifies :hup, "runit_service[praefect]"
 end
 
