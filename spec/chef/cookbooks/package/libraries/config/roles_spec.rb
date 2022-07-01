@@ -81,6 +81,14 @@ RSpec.describe 'GitLabRoles' do
 
       expect(Services).to have_received(:enable_group).with(Services::DEFAULT_GROUP, hash_including(except: ['rails'])).once
     end
+
+    it 'leaves skip_on_fips services disabled when on FIPS environment' do
+      allow(OpenSSL).to receive(:fips_mode).and_return(true)
+
+      Gitlab.load_roles
+
+      expect(Services).to have_received(:enable_group).with(Services::DEFAULT_GROUP, hash_including(except: ['skip_on_fips'])).once
+    end
   end
 
   describe 'ApplicationRole' do
@@ -95,7 +103,17 @@ RSpec.describe 'GitLabRoles' do
 
       expect(ApplicationRole).to have_received(:load_role)
       expect(Gitlab['gitlab_rails']['enable']).to eq true
-      expect(Services).to have_received(:enable_group).with('rails').once
+      expect(Services).to have_received(:enable_group).with('rails', except: []).once
+    end
+
+    it 'leaves skip_on_fips services disabled when on FIPS environment' do
+      allow(OpenSSL).to receive(:fips_mode).and_return(true)
+
+      stub_gitlab_rb(application_role: { enable: true })
+
+      Gitlab.load_roles
+
+      expect(Services).to have_received(:enable_group).with('rails', except: ['skip_on_fips']).once
     end
   end
 

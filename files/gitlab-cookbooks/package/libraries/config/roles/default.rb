@@ -23,6 +23,12 @@ module DefaultRole
       service_exclusions = []
       service_exclusions << 'rails' if Gitlab['gitlab_rails']['enable'] == false
 
+      # Certain services, like KAS doesn't work on FIPS environments. So we
+      # disable it by default on FIPS environments.
+      # Check https://gitlab.com/groups/gitlab-org/-/epics/7933 for details
+      # about KAS.
+      service_exclusions << 'skip_on_fips' if OpenSSL.fips_mode
+
       Services.enable_group(Services::DEFAULT_GROUP, except: service_exclusions)
     end
 
