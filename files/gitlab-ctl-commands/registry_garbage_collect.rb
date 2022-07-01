@@ -93,6 +93,10 @@ class RegistryGarbageCollect
       opts.on('-m', '--delete-manifests', '--delete-untagged', 'Delete manifests that are not currently referenced via tag') do
         @command << "-m"
       end
+
+      opts.on('-d', '--dry-run', 'Do everything except remove the blobs') do
+        @command << "-d"
+      end
     end.parse!(@args)
   end
 end
