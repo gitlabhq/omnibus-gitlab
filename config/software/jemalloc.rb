@@ -16,7 +16,7 @@
 #
 
 name 'jemalloc'
-version = Gitlab::Version.new('jemalloc', '5.2.1')
+version = Gitlab::Version.new('jemalloc', '5.3.0')
 default_version version.print(false)
 
 license 'jemalloc'
