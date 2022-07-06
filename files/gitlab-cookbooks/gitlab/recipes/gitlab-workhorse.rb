@@ -88,9 +88,6 @@ redis_sentinels = node['gitlab']['gitlab-rails']['redis_sentinels']
 redis_sentinel_master = node['redis']['master_name']
 redis_sentinel_master_password = node['redis']['master_password']
 config_file_path = File.join(working_dir, "config.toml")
-object_store = node['gitlab']['gitlab-rails']['object_store']
-provider = object_store.dig('connection', 'provider')
-object_store_provider = provider if %w(AWS AzureRM).include?(provider)
 image_scaler_max_procs = node['gitlab']['gitlab-workhorse']['image_scaler_max_procs']
 image_scaler_max_filesize = node['gitlab']['gitlab-workhorse']['image_scaler_max_filesize']
 trusted_cidrs_for_propagation = node['gitlab']['gitlab-workhorse']['trusted_cidrs_for_propagation']
@@ -103,8 +100,6 @@ template config_file_path do
   mode "0640"
   variables(
     alt_document_root: alt_document_root,
-    object_store: object_store,
-    object_store_provider: object_store_provider,
     workhorse_keywatcher: workhorse_keywatcher,
     redis_url: redis_url,
     password: redis_password,
@@ -115,7 +110,8 @@ template config_file_path do
     image_scaler_max_procs: image_scaler_max_procs,
     image_scaler_max_filesize: image_scaler_max_filesize,
     trusted_cidrs_for_propagation: trusted_cidrs_for_propagation,
-    trusted_cidrs_for_x_forwarded_for: trusted_cidrs_for_x_forwarded_for
+    trusted_cidrs_for_x_forwarded_for: trusted_cidrs_for_x_forwarded_for,
+    object_store_toml: workhorse_helper.object_store_toml
   )
   notifies :restart, "runit_service[gitlab-workhorse]"
   notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
