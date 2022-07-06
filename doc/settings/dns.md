@@ -75,56 +75,61 @@ DNS is causing a problem.
 
 ### Successful DNS query
 
-```shell
-$ dig registry.gitlab.com
+This example uses the [Public Cloudflare DNS resolver](https://www.cloudflare.com/learning/dns/what-is-1.1.1.1/) to ensure that the query is globally resolvable. However, other public resolvers like the [Google Public DNS resolver](https://developers.google.com/speed/public-dns) are also available.
 
-; <<>> DiG 9.10.6 <<>> registry.gitlab.com
+```shell
+$ dig registry.gitlab.com @1.1.1.1
+
+; <<>> DiG 9.16.1-Ubuntu <<>> registry.gitlab.com @1.1.1.1
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 12967
-;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4128
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
 
 ;; OPT PSEUDOSECTION:
-; EDNS: version: 0, flags:; udp: 1452
+; EDNS: version: 0, flags:; udp: 1232
 ;; QUESTION SECTION:
-;registry.gitlab.com.           IN      A
+;registry.gitlab.com.   IN  A
 
 ;; ANSWER SECTION:
-registry.gitlab.com.    300     IN      A       35.227.35.254
+registry.gitlab.com.  37  IN  A  104.18.27.123
+registry.gitlab.com.  37  IN  A  104.18.26.123
 
-;; Query time: 56 msec
-;; SERVER: 172.16.0.1#53(172.16.0.1)
-;; WHEN: Fri Mar 20 14:31:24 CDT 2020
-;; MSG SIZE  rcvd: 83
+;; Query time: 4 msec
+;; SERVER: 1.1.1.1#53(1.1.1.1)
+;; WHEN: Wed Jul 06 10:03:59 CEST 2022
+;; MSG SIZE  rcvd: 80
+
 ```
 
-At the least, the status should be `NOERROR`, and the `ANSWER SECTION` should have the actual results.
+Make sure that the status is `NOERROR`, and that the `ANSWER SECTION` has the actual results.
 
 ### Failed DNS query
 
 ```shell
-$ dig fake.gitlab.com
+$ dig fake.gitlab.com @1.1.1.1
 
-; <<>> DiG 9.10.6 <<>> fake.gitlab.com
+; <<>> DiG 9.16.1-Ubuntu <<>> fake.gitlab.com @1.1.1.1
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 50688
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 1502
 ;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
 
 ;; OPT PSEUDOSECTION:
-; EDNS: version: 0, flags:; udp: 1452
+; EDNS: version: 0, flags:; udp: 1232
 ;; QUESTION SECTION:
-;fake.gitlab.com.               IN      A
+;fake.gitlab.com.    IN A
 
 ;; AUTHORITY SECTION:
-gitlab.com.             900     IN      SOA     ns-705.awsdns-24.net. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400
+gitlab.com.   3600 IN SOA diva.ns.cloudflare.com. dns.cloudflare.com. 2282080190 10000 2400 604800 3600
 
-;; Query time: 101 msec
-;; SERVER: 172.16.0.1#53(172.16.0.1)
-;; WHEN: Fri Mar 20 14:51:58 CDT 2020
+;; Query time: 8 msec
+;; SERVER: 1.1.1.1#53(1.1.1.1)
+;; WHEN: Wed Jul 06 10:06:53 CEST 2022
+;; MSG SIZE  rcvd: 103
 ```
 
-In this example, the `status` is `NXDOMAIN`, and there is no `ANSWER SECTION`. The `SERVER` field tells you which DNS server was queried for the answer. By default, this is the primary DNS server used by the station the `dig` command was run from.
+In this example, the `status` is `NXDOMAIN`, and there is no `ANSWER SECTION`. The `SERVER` field tells you which DNS server was queried for the answer, in this case the [Public Cloudflare DNS resolver](https://www.cloudflare.com/learning/dns/what-is-1.1.1.1/).
 
 ### Use a wildcard DNS entry
 
