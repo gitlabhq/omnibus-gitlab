@@ -639,6 +639,9 @@ qa-test:
     branch: $QA_BRANCH
     strategy: depend
   <<: *com-trigger-only
+  except:
+    variables:
+      - $SKIP_QA_TEST == "true"
   needs:
     - job: generate-facts
       artifacts: true
