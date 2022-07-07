@@ -84,3 +84,10 @@
     :why: https://github.com/hashicorp/go-uuid/blob/master/LICENSE
     :versions: []
     :when: 2022-06-07 16:16:10.060878355 Z
+- - :license
+  - github.com/aws/smithy-go
+  - Apache2
+  - :who: Balasankar C
+    :why: https://github.com/aws/smithy-go/blob/main/LICENSE
+    :versions: []
+    :when: 2022-07-07 11:37:14.372184788 Z
