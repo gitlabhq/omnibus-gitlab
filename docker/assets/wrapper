@@ -57,7 +57,7 @@ function unmigrated_data_check() {
         echo $output
         echo ""
         echo ""
-        echo "If you would like to restart the instance without perfming this check"
+        echo "If you would like to restart the instance without performing this"
         echo "check, add the following to your docker command:"
         echo "-e GITLAB_SKIP_UNMIGRATED_DATA_CHECK=true"
         echo ""
