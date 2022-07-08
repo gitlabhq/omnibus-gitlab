@@ -21,6 +21,7 @@ module GitlabExporter
   class << self
     def parse_variables
       parse_gitlab_exporter_settings
+      validate_tls_config
     end
 
     def parse_gitlab_exporter_settings
@@ -30,6 +31,16 @@ module GitlabExporter
       return if Gitlab['gitlab_exporter'].key?('probe_sidekiq') && !Gitlab['gitlab_exporter']['probe_sidekiq'].nil?
 
       Gitlab['gitlab_exporter']['probe_sidekiq'] = !RedisHelper::Checks.has_sentinels?
+    end
+
+    def validate_tls_config
+      return unless Gitlab['gitlab_exporter']['tls_enabled']
+
+      %i[tls_cert_path tls_key_path].each do |key|
+        raise "TLS enabled for GitLab Exporter, but #{key} not specified in config" unless Gitlab['gitlab_exporter'].key?(key)
+
+        raise "File specified via gitlab_exporter['#{key}'] not found: #{Gitlab['gitlab_exporter'][key]}" unless File.exist?(Gitlab['gitlab_exporter'][key])
+      end
     end
   end
 end

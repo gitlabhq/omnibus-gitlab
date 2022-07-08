@@ -126,6 +126,9 @@ default['monitoring']['gitlab-exporter']['env'] = {
 }
 default['monitoring']['gitlab-exporter']['consul_service_name'] = 'gitlab-exporter'
 default['monitoring']['gitlab-exporter']['consul_service_meta'] = nil
+default['monitoring']['gitlab-exporter']['tls_enabled'] = false
+default['monitoring']['gitlab-exporter']['tls_cert_path'] = nil
+default['monitoring']['gitlab-exporter']['tls_key_path'] = nil
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus-monitoring']['enable'] = true
