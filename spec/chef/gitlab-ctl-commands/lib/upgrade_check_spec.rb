@@ -5,7 +5,8 @@ $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
 require 'gitlab_ctl/upgrade_check'
 
 RSpec.describe GitlabCtl::UpgradeCheck do
-  let(:latest) { '13.1.3' }
+  let(:latest) { '13.2.3' }
+  let(:min_latest) { '13.1.4' }
   let(:previous_major) { '12.5.10' }
   let(:previous_major_latest) { '12.10.13' }
   let(:current_major) { '13.0.8' }
@@ -19,6 +20,7 @@ RSpec.describe GitlabCtl::UpgradeCheck do
 
   context 'valid upgrade paths' do
     it 'returns true for an upgrade from the current major version' do
+      stub_const("#{described_class}::MIN_VERSION", '13.0')
       expect(described_class.valid?(current_major, latest)).to be true
     end
   end
@@ -34,6 +36,11 @@ RSpec.describe GitlabCtl::UpgradeCheck do
 
     it 'returns false upgrading from previous_major_latest to the latest' do
       expect(described_class.valid?(previous_major_latest, latest)).to be false
+    end
+
+    it 'returns false upgrading from a minor version less than our min version' do
+      stub_const("#{described_class}::MIN_VERSION", min_latest)
+      expect(described_class.valid?(current_major, latest)).to be false
     end
   end
 end
