@@ -6,9 +6,18 @@ db_common: &db_common
 
 # Web server config
 server:
-  name: <%= node['monitoring']['gitlab-exporter']['server_name'] %>
   listen_address: <%= node['monitoring']['gitlab-exporter']['listen_address'] %>
   listen_port: <%= node['monitoring']['gitlab-exporter']['listen_port'] %>
+  name: <%= node['monitoring']['gitlab-exporter']['server_name'] %>
+  <% if node['monitoring']['gitlab-exporter']['tls_enabled'] == true %>
+  tls_enabled: true
+    <% if node['monitoring']['gitlab-exporter']['tls_cert_path'] %>
+  tls_cert_path: <%= node['monitoring']['gitlab-exporter']['tls_cert_path'] %>
+    <% end %>
+    <% if node['monitoring']['gitlab-exporter']['tls_key_path'] %>
+  tls_key_path: <%= node['monitoring']['gitlab-exporter']['tls_key_path'] %>
+    <% end %>
+  <% end %>
 
 # Probes config
 probes:

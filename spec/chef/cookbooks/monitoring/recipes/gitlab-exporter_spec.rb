@@ -60,6 +60,7 @@ RSpec.describe 'monitoring::gitlab-exporter' do
           expect(settings.dig('probes', 'database')).not_to be_nil
           expect(settings.dig('probes', 'ruby')).not_to be_nil
           expect(settings.dig('probes', 'metrics', 'rows_count')).not_to be_nil
+          expect(settings['server']).not_to include('tls_enabled')
 
           expect(content).to match(/host=\/var\/opt\/gitlab\/postgresql/)
           expect(content).to match(/redis_enable_client: true/)
@@ -92,6 +93,38 @@ RSpec.describe 'monitoring::gitlab-exporter' do
     end
 
     it_behaves_like 'enabled runit service', 'gitlab-exporter', 'root', 'root'
+  end
+
+  context 'with TLS settings' do
+    before do
+      allow(::File).to receive(:exist?).and_call_original
+      allow(::File).to receive(:exist?).with(%r{/tmp/server.(crt|key)}).and_return(true)
+
+      stub_gitlab_rb(
+        gitlab_exporter: {
+          enable: true,
+          tls_enabled: true,
+          listen_address: '0.0.0.0',
+          listen_port: '8443',
+          tls_cert_path: '/tmp/server.crt',
+          tls_key_path: '/tmp/server.key',
+        }
+      )
+    end
+
+    it 'populates TLS related settings in config file' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
+        .with_content { |content|
+          # Not disabling this Cop fails the test with:
+          # Psych::BadAlias: Unknown alias: db_common
+          settings = YAML.load(content) # rubocop:disable Security/YAMLLoad
+          expect(settings.dig('server', 'tls_enabled')).to be_truthy
+          expect(settings.dig('server', 'listen_address')).to eq('0.0.0.0')
+          expect(settings.dig('server', 'listen_port')).to eq(8443)
+          expect(settings.dig('server', 'tls_cert_path')).to eq('/tmp/server.crt')
+          expect(settings.dig('server', 'tls_key_path')).to eq('/tmp/server.key')
+        }
+    end
   end
 
   context 'when gitlab-exporter is enabled and postgres is disabled' do
