@@ -13,6 +13,7 @@ module Praefect
         remove-repository           Remove repository from Gitaly cluster
         track-repository            Tells Gitaly cluster to track a repository
         list-untracked-repositories Lists repositories that exist on disk but are untracked by Praefect
+        list-storages               List virtual storages and their nodes
 
       Operational Cluster Health
         check                       Runs checks to determine cluster health
@@ -74,7 +75,14 @@ module Praefect
         opts.banner = "Usage: gitlab-ctl praefect check"
 
         parse_common_options!(options, opts)
-      end
+      end,
+
+      'list-storages' => OptionParser.new do |opts|
+        opts.banner = "Usage: gitlab-ctl praefect list-storages [options]. See documentation at #{praefect_docs_url}#list-storages"
+
+        parse_common_options!(options, opts)
+        parse_virtual_storage_option!(options, opts)
+      end,
     }
 
     global.order!(args)
@@ -114,15 +122,18 @@ module Praefect
     end
   end
 
-  def self.parse_repository_options!(options, option_parser)
-    option_parser.on('--virtual-storage-name NAME', 'Name of the virtual storage where the repository resides (mandatory)
-                      The virtual-storage-name can be found in /etc/gitlab/gitlab.rb under praefect["virtual_storages"].
+  def self.parse_virtual_storage_option!(options, option_parser)
+    option_parser.on('--virtual-storage-name NAME', 'Name of the virtual storage where the repository resides (mandatory) The virtual-storage-name can be found in /etc/gitlab/gitlab.rb under praefect["virtual_storages"].
                       If praefect["virtual_storages"] = { "default" => {"nodes" => { ... }},
                       "storage_1" => {"nodes" => { ... }}}, the virtual-storage-name would be either "default", or "storage_1".
                       This can also be found in the Project Detail page in the Admin Panel under "Gitaly storage name".'
     ) do |virtual_storage_name|
       options[:virtual_storage_name] = virtual_storage_name
     end
+  end
+
+  def self.parse_repository_options!(options, option_parser)
+    parse_virtual_storage_option!(options, option_parser)
 
     option_parser.on('--repository-relative-path PATH', 'Relative path to the repository on the disk (mandatory).
                       These start with @hashed/..." and can be found in the Project Detail page in the Admin Panel under
@@ -144,11 +155,14 @@ module Praefect
     # common arguments
     command = [EXEC_PATH, "-config", config_file_path, options[:command]]
 
-    # repository arguments
-    if ['remove-repository', 'track-repository'].include?(options[:command])
+    # virtual storage argument
+    if ['remove-repository', 'track-repository', 'list-storages'].include?(options[:command]) &&
+        options.key?(:virtual_storage_name)
       command += ["-virtual-storage", options[:virtual_storage_name]]
-      command += ["-repository", options[:repository_relative_path]]
     end
+
+    # repository arguments
+    command += ["-repository", options[:repository_relative_path]] if ['remove-repository', 'track-repository'].include?(options[:command])
 
     # command specific arguments
     if options[:command] == 'track-repository'
