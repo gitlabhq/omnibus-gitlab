@@ -1314,6 +1314,39 @@ configured, the SMTP configuration must be present in `/etc/gitlab/gitlab.rb` on
 the SMTP configuration is missing, you may notice that emails do not get sent through SMTP as many
 GitLab emails are sent via Sidekiq.
 
+### Email not sent
+
+If you have correctly configured an email server, but email is not sent:
+
+1. Run a [Rails console](https://docs.gitlab.com/ee/administration/operations/rails_console.html#starting-a-rails-console-session).
+1. Check the `ActionMailer` `delivery_method`. It must match the type of server you're using, either `:smtp` for an SMTP server or `:sendmail`
+   for Sendmail:
+   intended. If you configured SMTP, it should say `:smtp`. If you're using
+   Sendmail, it should say `:sendmail`:
+
+   ```ruby
+   irb(main):001:0> ActionMailer::Base.delivery_method
+   => :smtp
+   ```
+
+1. If you're using SMTP, check the mail settings:
+
+   ```ruby
+   irb(main):002:0> ActionMailer::Base.smtp_settings
+   => {:address=>"localhost", :port=>25, :domain=>"localhost.localdomain", :user_name=>nil, :password=>nil, :authentication=>nil, :enable_starttls_auto=>true}
+   ```
+
+   In the example above, the SMTP server is configured for the local machine. If this is intended, check your local mail
+   logs (for example, `/var/log/mail.log`) for more details.
+
+1. Send a test message using the console:
+
+   ```ruby
+   irb(main):003:0> Notify.test_email('youremail@email.com', 'Hello World', 'This is a test message').deliver_now
+   ```
+
+   If you do not receive an email or see an error message, check your mail server settings.
+
 ## Disable all outgoing email
 
 NOTE:
