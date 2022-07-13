@@ -25,6 +25,7 @@ module Gitaly
     def parse_variables
       parse_git_data_dirs
       parse_gitaly_storages
+      parse_gitconfig
     end
 
     def gitaly_address
@@ -71,6 +72,60 @@ module Gitaly
         }
       end
       Gitlab['gitaly']['storage'] = storages
+    end
+
+    # Compute the default gitconfig from the old Omnibus gitconfig setting.
+    # This depends on the Gitlab cookbook having been parsed already.
+    def parse_gitconfig
+      # For the time being we require explicit opt-in to ignore the gitconfig
+      # and instead use the new mechanism. This is to ensure that we can test
+      # in staging first before we roll out this change to production.
+      #
+      # Note: this flag is only intended for use in `gitlab.com` to transition
+      # to the new default.
+      return unless Gitlab['gitaly']['ignore_gitconfig']
+
+      # If the administrator has set `gitaly['gitconfig']` then we do not add a
+      # fallback gitconfig.
+      return unless Gitlab['gitaly']['gitconfig'].nil?
+
+      # Furthermore, if the administrator has not overridden the
+      # `omnibus_gitconfig` we do not have to migrate anything either. Most
+      # importantly, we are _not_ interested in migrating defaults.
+      return if Gitlab['omnibus_gitconfig']['system'].nil?
+
+      # We use the old system-level Omnibus gitconfig as the default value...
+      omnibus_gitconfig = Gitlab['omnibus_gitconfig']['system'].flat_map do |section, entries|
+        entries.map do |entry|
+          key, value = entry.split('=', 2)
+          "#{section}.#{key.rstrip}=#{value.lstrip}"
+        end
+      end
+
+      # ... but remove any of its values that are part of the default
+      # configuration. We do not want to inject our old default values into
+      # Gitaly anymore given that it is setting its own defaults nowadays.
+      # Furthermore, we must not inject the `core.fsyncObjectFiles` config
+      # entry, which has been deprecated in Git.
+      omnibus_gitconfig -= Gitlab['node']['gitlab']['omnibus-gitconfig']['system'].flat_map do |section, entries|
+        entries.map do |entry|
+          key, value = entry.split('=', 2)
+          "#{section}.#{key.rstrip}=#{value.lstrip}"
+        end
+      end
+
+      # The configuration format has changed. Previously, we had a map of
+      # top-level config entry keys to their sublevel entry keys which also
+      # included a value. The new format is an array of hashes with key and
+      # value entries.
+      gitaly_gitconfig = omnibus_gitconfig.map do |config|
+        key, value = config.split('=', 2)
+        { 'key' => key, 'value' => value }
+      end
+
+      return unless gitaly_gitconfig.any?
+
+      Gitlab['gitaly']['gitconfig'] = gitaly_gitconfig
     end
 
     private
