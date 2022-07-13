@@ -82,18 +82,18 @@ You ran `sudo gitlab-ctl reconfigure` or package upgrade triggered the
 reconfigure which produced error similar to:
 
 ```plaintext
-================================================================================
-Recipe Compile Error in /opt/gitlab/embedded/cookbooks/cache/cookbooks/gitlab/recipes/default.rb
-================================================================================
+ ================================================================================
+ Recipe Compile Error in /opt/gitlab/embedded/cookbooks/cache/cookbooks/gitlab/recipes/default.rb
+ ================================================================================
 
 NoMethodError
 -------------
-undefined method `[]=' for nil:NilClass
+undefined method '[]=' for nil:NilClass
 
 Cookbook Trace:
 ---------------
-  /opt/gitlab/embedded/cookbooks/cache/cookbooks/gitlab/recipes/config.rb:21:in `from_file'
-  /opt/gitlab/embedded/cookbooks/cache/cookbooks/gitlab/recipes/default.rb:26:in `from_file'
+  /opt/gitlab/embedded/cookbooks/cache/cookbooks/gitlab/recipes/config.rb:21:in 'from_file'
+  /opt/gitlab/embedded/cookbooks/cache/cookbooks/gitlab/recipes/default.rb:26:in 'from_file'
 
 Relevant File Content:
 ```
@@ -781,3 +781,18 @@ lib/gitlab/i18n.rb:79:in `with_user_locale'
 ```
 
 As a workaround, avoid using underscores in `external_url`. There is an open issue about it: [Setting `external_url` with underscore results in a broken GitLab CI/CD functionality](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6077).
+
+## Upgrade fails with `timeout: run: /opt/gitlab/service/gitaly` error
+
+If the package upgrade fails when running reconfigure with the following error, 
+check that all Gitaly processes are stopped and then rerun `sudo gitlab-ctl reconfigure`.
+
+```plaintext
+---- Begin output of /opt/gitlab/embedded/bin/sv restart /opt/gitlab/service/gitaly ----
+STDOUT: timeout: run: /opt/gitlab/service/gitaly: (pid 4886) 15030s, got TERM
+STDERR:
+---- End output of /opt/gitlab/embedded/bin/sv restart /opt/gitlab/service/gitaly ----
+Ran /opt/gitlab/embedded/bin/sv restart /opt/gitlab/service/gitaly returned 1
+```
+
+Refer to [issue 341573](https://gitlab.com/gitlab-org/gitlab/-/issues/341573) for more details.
