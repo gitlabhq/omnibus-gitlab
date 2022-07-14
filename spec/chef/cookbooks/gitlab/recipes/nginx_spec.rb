@@ -696,3 +696,21 @@ RSpec.describe 'nginx' do
     basic_nginx_headers.merge(additional_headers)
   end
 end
+
+RSpec.describe 'gitlab::nginx with no total CPUs' do
+  let(:chef_runner) do
+    ChefSpec::SoloRunner.new(
+      step_into: %w(runit_service),
+      path: 'spec/chef/fixtures/fauxhai/ubuntu/16.04-no-total-cpus.json')
+  end
+
+  let(:chef_run) do
+    chef_runner.converge('gitlab::config', 'gitlab::nginx')
+  end
+
+  it 'sets worker_processes to 16' do
+    expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/nginx.conf').with_content { |content|
+      expect(content).to include("worker_processes 16;")
+    }
+  end
+end

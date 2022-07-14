@@ -51,7 +51,7 @@ module Puma
 
     def cpu_threads
       # lscpu may return 0 for total number of CPUs: https://github.com/chef/ohai/issues/1755
-      [Gitlab['node']['cpu']['total'].to_i,  Gitlab['node']['cpu']['cores'].to_i].max
+      [Gitlab['node']['cpu']['total'].to_i,  Gitlab['node']['cpu']['real'].to_i].max
     end
 
     # See how many worker processes fit in the system.
