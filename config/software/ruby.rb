@@ -111,4 +111,6 @@ build do
   configure(*configure_command, env: env)
   make "-j #{workers}", env: env
   make "-j #{workers} install", env: env
+
+  bundle 'config --global force_ruby_platform true', env: env if OhaiHelper.ruby_native_gems_unsupported?
 end
