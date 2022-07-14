@@ -173,5 +173,18 @@ class OhaiHelper
     def gcc_target
       ohai['languages']['c']['gcc']['target']
     end
+
+    # Currently rake-compiler-dock uses a Ubuntu 20.04 image to create the
+    # native gem for the aarch64-linux platform. As a result, anything
+    # using a glibc older than v2.29 will not work. We need to compile
+    # gems for these platforms.
+    def ruby_native_gems_unsupported?
+      %w[
+        el-8_aarch64
+        amazon-2_aarch64
+        debian-buster_aarch64
+        raspbian-buster_aarch64
+      ].include?(platform_dir)
+    end
   end
 end
