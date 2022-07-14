@@ -211,6 +211,24 @@ gitlab_pages['log_format'] = 'text'
 NOTE:
 There are a few variations in attribute names for the log format depending on the service involved (for example, Container Registry uses `log_formatter`, Gitaly and Praefect both use `logging_format`). See [Issue #4280](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4280) for more details.
 
+## rbtrace
+
+GitLab ships with [`rbtrace`](https://github.com/tmm1/rbtrace), which
+allows you to trace Ruby code, view all running threads, take memory dumps,
+and more. However, this is not enabled by default. To enable it, define the
+`ENABLE_RBTRACE` variable to the environment. In Omnibus:
+
+```ruby
+gitlab_rails['env'] = {"ENABLE_RBTRACE" => "1"}
+```
+
+Then reconfigure the system and restart Puma and Sidekiq. To run this
+in Omnibus, run as root:
+
+```ruby
+/opt/gitlab/embedded/bin/ruby /opt/gitlab/embedded/bin/rbtrace
+```
+
 ## Configuring log level/verbosity
 
 You can configure the minimum log levels (verbosity) for the Container
