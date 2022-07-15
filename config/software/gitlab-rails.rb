@@ -88,6 +88,7 @@ build do
     env['PKG_CONFIG_PATH'] = OpenSSLHelper.pkg_config_dirs
   end
 
+  bundle 'config force_ruby_platform true', env: env if OhaiHelper.ruby_native_gems_unsupported?
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
   bundle 'config build.grpc --with-ldflags="-latomic"', env: env if OhaiHelper.os_platform == 'raspbian'
