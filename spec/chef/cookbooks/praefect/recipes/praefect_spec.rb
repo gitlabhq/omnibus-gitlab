@@ -126,7 +126,6 @@ RSpec.describe 'praefect' do
       let(:password) { 'password321' }
       let(:ca_file) { '/path/to/ca_file' }
       let(:ca_path) { '/path/to/ca_path' }
-      let(:self_signed_cert) { true }
       let(:read_timeout) { 123 }
 
       before do
@@ -175,8 +174,7 @@ RSpec.describe 'praefect' do
                            user: user,
                            password: password,
                            ca_file: ca_file,
-                           ca_path: ca_path,
-                           self_signed_cert: self_signed_cert
+                           ca_path: ca_path
                          }
                        }
                       )
@@ -273,8 +271,7 @@ RSpec.describe 'praefect' do
                   'user' => 'user123',
                   'password' => 'password321',
                   'ca_file' => '/path/to/ca_file',
-                  'ca_path' => '/path/to/ca_path',
-                  'self_signed_cert' => true
+                  'ca_path' => '/path/to/ca_path'
                 }
               }
             }

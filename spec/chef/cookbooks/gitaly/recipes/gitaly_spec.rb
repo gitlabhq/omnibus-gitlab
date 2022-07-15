@@ -50,7 +50,6 @@ RSpec.describe 'gitaly' do
   let(:password) { 'password321' }
   let(:ca_file) { '/path/to/ca_file' }
   let(:ca_path) { '/path/to/ca_path' }
-  let(:self_signed_cert) { true }
   let(:read_timeout) { 123 }
   let(:daily_maintenance_start_hour) { 21 }
   let(:daily_maintenance_start_minute) { 9 }
@@ -444,8 +443,7 @@ RSpec.describe 'gitaly' do
             user: user,
             password: password,
             ca_file: ca_file,
-            ca_path: ca_path,
-            self_signed_cert: self_signed_cert
+            ca_path: ca_path
           }
         },
         gitlab_workhorse: {
@@ -513,7 +511,6 @@ RSpec.describe 'gitaly' do
         %r{password = '#{Regexp.escape(password)}'},
         %r{ca_file = '#{Regexp.escape(ca_file)}'},
         %r{ca_path = '#{Regexp.escape(ca_path)}'},
-        %r{self_signed_cert = #{self_signed_cert}},
       ].map(&:to_s).join('\s+'))
 
       hooks_section = Regexp.new([
