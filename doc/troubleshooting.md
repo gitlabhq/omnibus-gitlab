@@ -151,7 +151,7 @@ postgresql['port'] = 2345
 puma['port'] = 3456
 ```
 
-For NGINX port changes please see [`settings/nginx.md`](settings/nginx.md).
+For NGINX port changes please see [Setting the NGINX listen port](settings/nginx.md#setting-the-nginx-listen-port).
 
 ## Git user does not have SSH access
 
@@ -489,7 +489,7 @@ Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
 for your environment.
 
-See [Change the default proxy headers section of NGINX doc](settings/nginx.md) for details on
+See [Change the default proxy headers section of NGINX doc](settings/nginx.md#change-the-default-proxy-headers) for details on
 how to override the default headers.
 
 ## Can't verify CSRF token authenticity Completed 422 Unprocessable
@@ -498,7 +498,7 @@ Most likely you have GitLab setup in an environment that has proxy in front
 of GitLab and the proxy headers set in package by default are incorrect
 for your environment.
 
-See [Change the default proxy headers section of NGINX doc](settings/nginx.md) for details on
+See [Change the default proxy headers section of NGINX doc](settings/nginx.md#change-the-default-proxy-headers) for details on
 how to override the default headers.
 
 ## Extension missing pg_trgm
