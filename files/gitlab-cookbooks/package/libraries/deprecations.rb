@@ -206,6 +206,12 @@ module Gitlab
             note: "Starting with GitLab 14.7, Pseudonymizer has been deprecated and will be removed."
           },
           {
+            config_keys: %w(gitlab gitlab-shell http_settings self_signed_cert),
+            deprecation: '14.8',
+            removal: '15.0', # https://gitlab.com/gitlab-org/gitlab-shell/-/issues/120
+            note: "Starting with GitLab 14.8, SelfSignedCert has been deprecated and will be removed. Install self-signed certificates into `/etc/gitlab/trusted-certs` instead."
+          },
+          {
             config_keys: %w(gitlab gitlab-rails artifacts_object_store_direct_upload),
             deprecation: '14.9',
             removal: '15.0',

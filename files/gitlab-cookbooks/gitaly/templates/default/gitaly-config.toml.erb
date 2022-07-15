@@ -141,9 +141,6 @@ ca_file = '<%= http_settings['ca_file'] %>'
 <% if http_settings['ca_path'] %>
 ca_path = '<%= http_settings['ca_path'] %>'
 <% end %>
-<% if http_settings['self_signed_cert'] %>
-self_signed_cert = <%= http_settings['self_signed_cert'] %>
-<% end %>
 <% end %>
 
 [hooks]
