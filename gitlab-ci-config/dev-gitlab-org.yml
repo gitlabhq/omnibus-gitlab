@@ -385,6 +385,7 @@
   <<: *branch_build
   variables:
     USE_SYSTEM_SSL: "true"
+    ee: "true"
   <<: *dev-ee-nightly-only
 
 .rpi_branch_template: &rpi_branch_build
@@ -436,6 +437,7 @@
   <<: *tag_build
   variables:
     USE_SYSTEM_SSL: "true"
+    ee: "true"
   <<: *dev-ee-tag-only-except-auto-deploy
   allow_failure: true
 
@@ -470,6 +472,7 @@
   variables:
     USE_SYSTEM_SSL: "true"
     INCLUDE_PACKAGECLOUD: "true"
+    ee: "true"
   <<: *dev-ee-nightly-and-tag-except-auto-deploy
   allow_failure: true
 
@@ -501,6 +504,7 @@
   variables:
     USE_SYSTEM_SSL: "true"
     INCLUDE_PACKAGECLOUD: "true"
+    ee: "true"
   allow_failure: true
   <<: *dev-ee-tag-only-except-auto-deploy-manual
 
@@ -695,6 +699,7 @@ RAT-Nightly-FIPS:
   variables:
     USE_SYSTEM_SSL: "true"
     RAT_REFERENCE_ARCHITECTURE: "omnibus-gitlab-mrs-fips"
+    ee: "true"
   script:
     - bundle exec rake qa:rat:nightly
   cache: *branch-cache
