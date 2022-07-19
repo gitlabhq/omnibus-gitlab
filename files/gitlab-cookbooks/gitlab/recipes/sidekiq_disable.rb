@@ -23,5 +23,5 @@ end
 consul_service node['gitlab']['sidekiq']['consul_service_name'] do
   id 'sidekiq'
   action :delete
-  reload_service false unless node['consul']['enable']
+  reload_service false unless Services.enabled?('consul')
 end

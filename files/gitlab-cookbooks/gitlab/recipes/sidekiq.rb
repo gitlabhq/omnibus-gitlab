@@ -29,5 +29,5 @@ consul_service node['gitlab']['sidekiq']['consul_service_name'] do
   action Prometheus.service_discovery_action
   ip_address node['gitlab']['sidekiq']['listen_address']
   port node['gitlab']['sidekiq']['listen_port']
-  reload_service false unless node['consul']['enable']
+  reload_service false unless Services.enabled?('consul')
 end

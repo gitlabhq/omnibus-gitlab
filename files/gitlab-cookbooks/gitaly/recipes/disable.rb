@@ -22,5 +22,5 @@ end
 consul_service node['gitaly']['consul_service_name'] do
   id 'gitaly'
   action :delete
-  reload_service false unless node['consul']['enable']
+  reload_service false unless Services.enabled?('consul')
 end

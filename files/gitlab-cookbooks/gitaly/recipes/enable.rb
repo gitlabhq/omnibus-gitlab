@@ -150,5 +150,5 @@ consul_service node['gitaly']['consul_service_name'] do
   meta node['gitaly']['consul_service_meta']
   action Prometheus.service_discovery_action
   socket_address node['gitaly']['prometheus_listen_addr']
-  reload_service false unless node['consul']['enable']
+  reload_service false unless Services.enabled?('consul')
 end

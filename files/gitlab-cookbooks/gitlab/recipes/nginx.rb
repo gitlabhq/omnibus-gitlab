@@ -303,7 +303,7 @@ consul_service node['gitlab']['nginx']['consul_service_name'] do
   action nginx_consul_action
   ip_address node['gitlab']['nginx']['status']['listen_addresses'].first
   port node['gitlab']['nginx']['status']['port']
-  reload_service false unless node['consul']['enable']
+  reload_service false unless Services.enabled?('consul')
 end
 
 nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']
