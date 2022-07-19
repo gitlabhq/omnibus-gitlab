@@ -3,6 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.1.3 (2022-07-19)
+
+### Fixed (3 changes)
+
+- [Adjust worker processes to use real CPUs instead of cores](gitlab-org/omnibus-gitlab@056ba003d899862c5d251b83e050a33d59e6b1eb) ([merge request](gitlab-org/omnibus-gitlab!6216))
+- [Ensure Ruby platform is set globally for arm64 based operating systems](gitlab-org/omnibus-gitlab@b65a681a3c123969e18b6c311c38e9c8cb64c791) ([merge request](gitlab-org/omnibus-gitlab!6216))
+- [Fix worker processes not starting up due to 0 processes](gitlab-org/omnibus-gitlab@143e340f82bc34439b88a835c2597d28537cac25) ([merge request](gitlab-org/omnibus-gitlab!6216))
+
+### Changed (1 change)
+
+- [Set force_ruby_platform to true locally for Gitaly and GitLab Rails](gitlab-org/omnibus-gitlab@4bc3f6259284c298ecac94f9d27516dc7bec7681) ([merge request](gitlab-org/omnibus-gitlab!6216))
+
 ## 15.1.2 (2022-07-05)
 
 No changes.
