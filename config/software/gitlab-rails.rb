@@ -88,18 +88,7 @@ build do
     env['PKG_CONFIG_PATH'] = OpenSSLHelper.pkg_config_dirs
   end
 
-  gem_source_compile_os = %w[
-    el-8_aarch64
-    amazon-2_aarch64
-    debian-buster_aarch64
-    raspbian-buster_aarch64
-  ]
-
-  # Currently rake-compiler-dock uses a Ubuntu 20.04 image to create the
-  # native gem for the aarch64-linux platform. As a result, anything
-  # using a glibc older than v2.29 will not work. We need to compile
-  # gems for these platforms.
-  bundle 'config force_ruby_platform true', env: env if gem_source_compile_os.include?(OhaiHelper.platform_dir)
+  bundle 'config force_ruby_platform true', env: env if OhaiHelper.ruby_native_gems_unsupported?
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
   bundle 'config build.grpc --with-ldflags="-latomic"', env: env if OhaiHelper.os_platform == 'raspbian'
@@ -121,7 +110,7 @@ build do
   block 'reinstall google-protobuf gem' do
     require 'fileutils'
 
-    unless gem_source_compile_os.include?(OhaiHelper.platform_dir)
+    unless OhaiHelper.ruby_native_gems_unsupported?
       current_gem = shellout!("#{embedded_bin('bundle')} show | grep google-protobuf", env: env).stdout
       protobuf_version = current_gem[/google-protobuf \((.*)\)/, 1]
       shellout!("#{embedded_bin('gem')} uninstall --force google-protobuf", env: env)

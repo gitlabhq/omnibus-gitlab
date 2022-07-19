@@ -43,10 +43,15 @@ module Puma
       [
         2, # Two is the minimum or web editor will no longer work.
         [
-          Gitlab['node']['cpu']['total'].to_i,
+          cpu_threads,
           worker_memory(total_memory).to_i,
         ].min # min because we want to exceed neither CPU nor RAM
       ].max # max because we need at least 2 workers
+    end
+
+    def cpu_threads
+      # lscpu may return 0 for total number of CPUs: https://github.com/chef/ohai/issues/1755
+      [Gitlab['node']['cpu']['total'].to_i,  Gitlab['node']['cpu']['real'].to_i].max
     end
 
     # See how many worker processes fit in the system.
