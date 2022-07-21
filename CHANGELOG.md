@@ -3,6 +3,48 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.2.0 (2022-07-21)
+
+### Added (6 changes)
+
+- [gitaly: Reintroduce migration to `[[git.config]]` stanzas](gitlab-org/omnibus-gitlab@4bf3bf85045cd94373184761e6f9a3b7fb6cd7cd) ([merge request](gitlab-org/omnibus-gitlab!6186))
+- [Add praefect list-storages subcommand](gitlab-org/omnibus-gitlab@e0e0b0ebf8db5893cb543a2bfa9c57ffa564c560) ([merge request](gitlab-org/omnibus-gitlab!6147))
+- [Add [gitlab] section to praefect config toml](gitlab-org/omnibus-gitlab@e9b444b63e690b1dc4d573ae37a40c7408b76a85) ([merge request](gitlab-org/omnibus-gitlab!6146))
+- [Make gitlab-pages redirects limits configurable](gitlab-org/omnibus-gitlab@e5cfe22be99037081aedb4d45b1f63c718329050) by @nejc ([merge request](gitlab-org/omnibus-gitlab!6144))
+- [Add TLS support for dedicated metrics servers](gitlab-org/omnibus-gitlab@d8558c80fe9c234b0fa7e1769a8403922e1706c4) ([merge request](gitlab-org/omnibus-gitlab!6155))
+- [Add failover timeout to Praefect config](gitlab-org/omnibus-gitlab@ebddd96305ab24b46a630f16d85ac269c4e43087) ([merge request](gitlab-org/omnibus-gitlab!6150))
+
+### Fixed (8 changes)
+
+- [Ensure FIPS builds are EE](gitlab-org/omnibus-gitlab@0efee70f93086181fdc652be3f6d5b72686ff9c0) ([merge request](gitlab-org/omnibus-gitlab!6217))
+- [Adjust worker processes to use real CPUs instead of cores](gitlab-org/omnibus-gitlab@182bc46016c73f5a9a2d39d676e7ed8eff811322) ([merge request](gitlab-org/omnibus-gitlab!6210))
+- [Ensure Ruby platform is set globally on ARM64 OSes](gitlab-org/omnibus-gitlab@ad98bf31735ba0242d8c3376eaca335c143b3c09) ([merge request](gitlab-org/omnibus-gitlab!6208))
+- [Fix worker processes not starting up due to 0 processes](gitlab-org/omnibus-gitlab@fb8549a22789347424ef6ba0454573c532ea2aa9) ([merge request](gitlab-org/omnibus-gitlab!6192))
+- [Properly escape S3 credentials in Workhorse config TOML](gitlab-org/omnibus-gitlab@cafff1b049296de9c2822f45be02f86c473dac48) ([merge request](gitlab-org/omnibus-gitlab!6187))
+- [Fix KAS address when running GitLab on a relative URL](gitlab-org/omnibus-gitlab@059115935b3cd6a2ab309452401f000af9811081) by @paddy-hack ([merge request](gitlab-org/omnibus-gitlab!6185))
+- [Force nginx proxy to use IPv4](gitlab-org/omnibus-gitlab@11e43467114a1aabe42e21d3936328909a6e0140) ([merge request](gitlab-org/omnibus-gitlab!6143))
+- [Fix DISABLE_PUMA_WORKER_KILLER env var check](gitlab-org/omnibus-gitlab@05c1e99593b8f3b2e3b44298d4fe34ae84ad5947) ([merge request](gitlab-org/omnibus-gitlab!6173))
+
+### Changed (13 changes)
+
+- [Configure local Gemfile before force_ruby_platform](gitlab-org/omnibus-gitlab@8415a921304f68f4a75e28e8130e7f52199c78e1) by @vincent_stchu ([merge request](gitlab-org/omnibus-gitlab!6207))
+- [Update to openssl 1.1.1q](gitlab-org/omnibus-gitlab@52727ac1bbf405da7d5a1ca3a49e4bfe8aa638eb) ([merge request](gitlab-org/omnibus-gitlab!6215))
+- [Update gitlab-org/container-registry from v3.51.0-gitlab to v3.51.1-gitlab](gitlab-org/omnibus-gitlab@093e518deffad656af8b8c9832dd83f6f4282586) ([merge request](gitlab-org/omnibus-gitlab!6214))
+- [Update acme-client to 2.0.11](gitlab-org/omnibus-gitlab@e3b88da7fa0899ac29274140b24c0288741047a5) ([merge request](gitlab-org/omnibus-gitlab!6131))
+- [Update to openssl 1.1.1p](gitlab-org/omnibus-gitlab@54bedc1dac06571c5fbb1d9417fd2afdd7e1da6a) ([merge request](gitlab-org/omnibus-gitlab!6176))
+- [Update container registry to 3.51.0](gitlab-org/omnibus-gitlab@a362b10c0cb9c1d78d752654147daa4bd956ab6e) ([merge request](gitlab-org/omnibus-gitlab!6194))
+- [Set force_ruby_platform to true locally for Gitaly and GitLab Rails](gitlab-org/omnibus-gitlab@628f5581dd6802296ae75b564a999a56977656fa) ([merge request](gitlab-org/omnibus-gitlab!6212))
+- [Update jemalloc from 5.2.1 to 5.3.0](gitlab-org/omnibus-gitlab@7a82726701f97f68218523ebc2f2d12835a8195e) ([merge request](gitlab-org/omnibus-gitlab!6085))
+- [Bump Container Registry to v3.49.0-gitlab](gitlab-org/omnibus-gitlab@519dfca3677913699d1914c65ef08cfea4517083) ([merge request](gitlab-org/omnibus-gitlab!6181))
+- [Disable KAS by default in FIPS environments](gitlab-org/omnibus-gitlab@96406491400f7d975cf6772050c09b3c6c07b817) ([merge request](gitlab-org/omnibus-gitlab!6184))
+- [Disable doc generation in grpc gem compilation for FIPS builds](gitlab-org/omnibus-gitlab@640ef48f3be8dfbf38667e8d0a728b0ba27bd92d) ([merge request](gitlab-org/omnibus-gitlab!6177))
+- [gitaly: Migrate to inject Git configuration via `config.toml`](gitlab-org/omnibus-gitlab@2727686d248cffa6c3883f9daa8e0d02c479b11b) ([merge request](gitlab-org/omnibus-gitlab!6128))
+- [Add dry run option to registry-garbage-collect command.](gitlab-org/omnibus-gitlab@44bf128b02deff84e89611bdc90e0f66748c6537) ([merge request](gitlab-org/omnibus-gitlab!6145))
+
+### Deprecated (1 change)
+
+- [global: Remove deprecated `self_signed_cert` setting](gitlab-org/omnibus-gitlab@0021a2c1e28ded37c428b4f3ee4d10abf6099840) ([merge request](gitlab-org/omnibus-gitlab!6196))
+
 ## 15.1.3 (2022-07-19)
 
 ### Fixed (3 changes)
