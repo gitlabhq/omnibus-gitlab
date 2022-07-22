@@ -13,18 +13,22 @@ gitlab-rails-ee:
 gitlab-shell:
   remote: "git@dev.gitlab.org:gitlab/gitlab-shell.git"
   alternative: "https://gitlab.com/gitlab-org/gitlab-shell.git"
+  security: "https://gitlab.com/gitlab-org/security/gitlab-shell.git"
 gitlab-workhorse:
   remote: "git@dev.gitlab.org:gitlab/gitlab-workhorse.git"
   alternative: "https://gitlab.com/gitlab-org/gitlab-workhorse.git"
+  security: "https://gitlab.com/gitlab-org/security/gitlab-workhorse.git"
 gitlab-pages:
   remote: "git@dev.gitlab.org:gitlab/gitlab-pages.git"
   alternative: "https://gitlab.com/gitlab-org/gitlab-pages.git"
+  security: "https://gitlab.com/gitlab-org/security/gitlab-pages.git"
 gitlab-exporter:
   remote: "git@dev.gitlab.org:gitlab-org/gitlab-exporter.git"
   alternative: "https://gitlab.com/gitlab-org/gitlab-exporter.git"
 gitlab-kas:
   remote: "git@dev.gitlab.org:gitlab/gitlab-agent.git"
   alternative: "https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git"
+  security: "https://gitlab.com/gitlab-org/security/cluster-integration/gitlab-agent.git"
 docker-distribution-pruner:
   remote: "git@dev.gitlab.org:gitlab/docker-distribution-pruner.git"
   alternative: "https://gitlab.com/gitlab-org/docker-distribution-pruner.git"
@@ -37,6 +41,7 @@ omnibus:
 registry:
   remote: "git@dev.gitlab.org:gitlab/container-registry.git"
   alternative: "https://gitlab.com/gitlab-org/container-registry.git"
+  security: "https://gitlab.com/gitlab-org/security/container-registry.git"
 rb-readline:
   remote: "git@dev.gitlab.org:omnibus-mirror/rb-readline.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/rb-readline.git"
@@ -61,9 +66,11 @@ pgbouncer-exporter:
 gitaly:
   remote: 'git@dev.gitlab.org:gitlab/gitaly'
   alternative: 'https://gitlab.com/gitlab-org/gitaly'
+  security: "https://gitlab.com/gitlab-org/security/gitaly.git"
 gitlab-elasticsearch-indexer:
   remote: 'git@dev.gitlab.org:gitlab/gitlab-elasticsearch-indexer.git'
   alternative: 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git'
+  security: "https://gitlab.com/gitlab-org/security/gitlab-elasticsearch-indexer.git"
 logrotate:
   remote: "git@dev.gitlab.org:omnibus-mirror/logrotate.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/logrotate.git"
