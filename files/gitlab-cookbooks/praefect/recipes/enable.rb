@@ -98,7 +98,7 @@ consul_service node['praefect']['consul_service_name'] do
   meta node['praefect']['consul_service_meta']
   action Prometheus.service_discovery_action
   socket_address node['praefect']['prometheus_listen_addr']
-  reload_service false unless node['consul']['enable']
+  reload_service false unless Services.enabled?('consul')
 end
 
 include_recipe "praefect::database_migrations" if node['praefect']['auto_migrate']

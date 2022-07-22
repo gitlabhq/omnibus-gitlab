@@ -100,7 +100,7 @@ consul_service node['monitoring']['prometheus']['consul_service_name'] do
   meta node['monitoring']['prometheus']['consul_service_meta']
   action Prometheus.service_discovery_action
   socket_address node['monitoring']['prometheus']['listen_address']
-  reload_service false unless node['consul']['enable']
+  reload_service false unless Services.enabled?('consul')
 end
 
 if node['gitlab']['bootstrap']['enable']

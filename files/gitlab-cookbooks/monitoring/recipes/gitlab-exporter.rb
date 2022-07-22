@@ -91,5 +91,5 @@ consul_service node['monitoring']['gitlab-exporter']['consul_service_name'] do
   action Prometheus.service_discovery_action
   ip_address node['monitoring']['gitlab-exporter']['listen_address']
   port node['monitoring']['gitlab-exporter']['listen_port'].to_i
-  reload_service false unless node['consul']['enable']
+  reload_service false unless Services.enabled?('consul')
 end

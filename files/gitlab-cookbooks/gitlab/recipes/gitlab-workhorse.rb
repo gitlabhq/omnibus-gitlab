@@ -70,7 +70,7 @@ consul_service node['gitlab']['gitlab-workhorse']['consul_service_name'] do
   id 'workhorse'
   action Prometheus.service_discovery_action
   socket_address node['gitlab']['gitlab-workhorse']['prometheus_listen_addr']
-  reload_service false unless node['consul']['enable']
+  reload_service false unless Services.enabled?('consul')
 end
 
 version_file 'Create version file for Workhorse' do
