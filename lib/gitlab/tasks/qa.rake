@@ -8,16 +8,19 @@ require_relative '../build/qa_image'
 require_relative '../build/rat'
 require_relative '../build/get'
 require_relative "../util.rb"
+require 'json'
 
 namespace :qa do
   desc "Build QA Docker image"
   task :build do
+    qa_build_target = Gitlab::Util.get_env('QA_BUILD_TARGET') || 'qa'
     Gitlab::Util.section('qa:build') do
       DockerOperations.build(
         Build::QA.get_gitlab_repo,
         Build::QAImage.gitlab_registry_image_address,
         'latest',
-        dockerfile: 'qa/Dockerfile'
+        dockerfile: 'qa/Dockerfile',
+        buildargs: JSON.generate({ QA_BUILD_TARGET: qa_build_target })
       )
     end
   end

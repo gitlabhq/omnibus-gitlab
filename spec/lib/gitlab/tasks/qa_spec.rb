@@ -23,7 +23,13 @@ RSpec.describe 'qa', type: :rake do
     end
 
     it 'calls build method with correct parameters' do
-      expect(DockerOperations).to receive(:build).with(repo_path, 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce-qa', 'latest', dockerfile: "qa/Dockerfile")
+      expect(DockerOperations).to receive(:build).with(
+        repo_path,
+        'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce-qa',
+        'latest',
+        buildargs: "{\"QA_BUILD_TARGET\":\"qa\"}",
+        dockerfile: "qa/Dockerfile"
+      )
 
       Rake::Task['qa:build'].invoke
     end

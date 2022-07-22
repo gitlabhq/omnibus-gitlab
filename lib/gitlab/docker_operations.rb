@@ -8,10 +8,14 @@ class DockerOperations
     Docker.options = { read_timeout: timeout, write_timeout: timeout }
   end
 
-  def self.build(location, image, tag, dockerfile: nil)
+  def self.build(location, image, tag, dockerfile: nil, buildargs: nil)
     set_timeout
-    opts = { t: "#{image}:#{tag}", pull: true }
+    opts = {
+      t: "#{image}:#{tag}",
+      pull: true,
+    }
     opts[:dockerfile] = dockerfile if dockerfile
+    opts[:buildargs] = buildargs if buildargs
 
     Docker::Image.build_from_dir(location.to_s, opts) do |chunk|
       if (log = JSON.parse(chunk)) && log.key?("stream")
