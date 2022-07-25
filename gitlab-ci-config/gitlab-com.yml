@@ -568,7 +568,6 @@ Trigger:package:fips:
     USE_SYSTEM_SSL: "true"
     BASE_OS: "ubuntu_20.04_fips"
     PACKAGE_DIRECTORY: "pkg/ubuntu-focal_fips"
-    ee: "true"
   <<: *com-trigger-only
   when: manual
 
@@ -687,7 +686,6 @@ RAT:FIPS:
   variables:
     USE_SYSTEM_SSL: "true"
     RAT_REFERENCE_ARCHITECTURE: "omnibus-gitlab-mrs-fips-ubuntu"
-    ee: "true"
   needs:
     - job: Trigger:package:fips
       artifacts: false
