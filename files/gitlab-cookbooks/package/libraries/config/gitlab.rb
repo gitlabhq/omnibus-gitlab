@@ -69,7 +69,9 @@ module Gitlab
 
   # Attributes under node['monitoring']
   attribute_block 'monitoring' do
-    attribute('prometheus',         priority: 20).use { Prometheus }
+    # Prometheus needs to be loaded after puma for proper parsing of listen
+    # address for rails metrics
+    attribute('prometheus',         priority: 21).use { Prometheus }
     attribute('grafana',            priority: 30).use { Grafana }
     attribute('alertmanager',       priority: 30)
     attribute('node_exporter',      priority: 30)

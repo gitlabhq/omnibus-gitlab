@@ -28,8 +28,6 @@ module Puma
     end
 
     def parse_listen_address
-      return unless Gitlab['gitlab_workhorse']['auth_backend'].nil?
-
       https_url = puma_https_url
 
       # As described in https://gitlab.com/gitlab-org/gitlab/-/blob/master/workhorse/doc/operations/configuration.md#interaction-of-authbackend-and-authsocket,
@@ -37,9 +35,11 @@ module Puma
       # traffic is sent over an encrypted channel, set auth_backend if SSL
       # has been enabled on Puma.
       if https_url
-        Gitlab['gitlab_workhorse']['auth_backend'] = https_url
+        Gitlab['gitlab_workhorse']['auth_backend'] = https_url if Gitlab['gitlab_workhorse']['auth_backend'].nil?
+        Gitlab['puma']['prometheus_scrape_scheme'] ||= 'https'
       else
-        Gitlab['gitlab_workhorse']['auth_socket'] = puma_socket
+        Gitlab['puma']['listen'] ||= '127.0.0.1'
+        Gitlab['gitlab_workhorse']['auth_socket'] = puma_socket if Gitlab['gitlab_workhorse']['auth_backend'].nil?
       end
     end
 
