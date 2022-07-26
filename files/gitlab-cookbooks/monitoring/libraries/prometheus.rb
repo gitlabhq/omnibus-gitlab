@@ -270,12 +270,17 @@ module Prometheus
       # Don't parse if gitlab_exporter is explicitly disabled
       return unless Services.enabled?('gitlab_exporter')
 
+      # Prometheus library gets evaluated before GitLab Exporter. So, we need to compute this here.
+      Gitlab['gitlab_exporter']['prometheus_scrape_scheme'] ||= 'https' if Gitlab['gitlab_exporter']['tls_enabled']
+
       default_config = Gitlab['node']['monitoring']['gitlab-exporter'].to_hash
       user_config = Gitlab['gitlab_exporter']
 
       listen_address = user_config['listen_address'] || default_config['listen_address']
       listen_port = user_config['listen_port'] || default_config['listen_port']
       prometheus_target = [listen_address, listen_port].join(':')
+
+      extra_config = tls_config(default_config, user_config, listen_key: 'listen_address')
 
       # Include gitlab-exporter defaults scrape config.
       database = {
@@ -284,21 +289,21 @@ module Prometheus
         'static_configs' => [
           'targets' => [prometheus_target],
         ]
-      }
+      }.merge(extra_config)
       sidekiq = {
         'job_name' => 'gitlab_exporter_sidekiq',
         'metrics_path' => '/sidekiq',
         'static_configs' => [
           'targets' => [prometheus_target],
         ]
-      }
+      }.merge(extra_config)
       ruby = {
         'job_name' => 'gitlab_exporter_ruby',
         'metrics_path' => '/ruby',
         'static_configs' => [
           'targets' => [prometheus_target],
         ]
-      }
+      }.merge(extra_config)
 
       default_scrape_configs = [] << database << sidekiq << ruby << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -374,6 +379,7 @@ module Prometheus
       return unless WebServerHelper.enabled? || service_discovery
 
       webserver_service = WebServerHelper.service_name
+
       default_config = Gitlab['node']['gitlab'][webserver_service].to_hash
       user_config = Gitlab[webserver_service]
 
@@ -384,8 +390,14 @@ module Prometheus
           'consul_sd_configs' => [{ 'services' => ['rails'] }]
         }
       else
-        listen_address = user_config['listen'] || default_config['listen']
-        listen_port = user_config['port'] || default_config['port']
+        if user_config['ssl_listen'] && user_config['ssl_port']
+          listen_address = user_config['ssl_listen'] || default_config['ssl_listen']
+          listen_port = user_config['ssl_port'] || default_config['ssl_port']
+        else
+          listen_address = user_config['listen'] || default_config['listen']
+          listen_port = user_config['port'] || default_config['port']
+        end
+
         prometheus_target = [listen_address, listen_port].join(':')
 
         scrape_config = {
@@ -404,6 +416,13 @@ module Prometheus
           ]
         }
       end
+
+      # Perform the 127.0.0.1 => localhost replacement we do in scrape configs
+      prometheus_scrape_server_name = user_config['prometheus_scrape_tls_server_name'] || default_config['prometheus_scrape_tls_server_name'] || listen_address
+      prometheus_scrape_server_name = "localhost" if prometheus_scrape_server_name == "127.0.0.1"
+
+      extra_config = tls_config(default_config, user_config, server_name: prometheus_scrape_server_name)
+      scrape_config.merge!(extra_config)
 
       default_scrape_configs = [] << scrape_config << Gitlab['prometheus']['scrape_configs']
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
@@ -682,6 +701,24 @@ module Prometheus
 
     def service_discovery_action
       service_discovery ? :create : :delete
+    end
+
+    def tls_config(default_config, user_config, listen_key: 'listen', server_name: nil)
+      prometheus_scrape_server_name = server_name || user_config['prometheus_scrape_tls_server_name'] || default_config['prometheus_scrape_tls_server_name'] || user_config[listen_key] || default_config[listen_key]
+      prometheus_scrape_scheme = user_config['prometheus_scrape_scheme'] || default_config['prometheus_scrape_scheme']
+      prometheus_scrape_skip_tls_verification = user_config['prometheus_scrape_tls_skip_verification'] || default_config['prometheus_scrape_tls_skip_verification']
+
+      if prometheus_scrape_scheme == 'https'
+        {
+          'scheme' => 'https',
+          'tls_config' => {
+            'server_name' => prometheus_scrape_server_name,
+            'insecure_skip_verify' => prometheus_scrape_skip_tls_verification
+          }
+        }
+      else
+        {}
+      end
     end
   end
 end

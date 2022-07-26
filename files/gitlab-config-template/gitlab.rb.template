@@ -1021,6 +1021,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # puma['exporter_tls_cert_path'] = ""
 # puma['exporter_tls_key_path'] = ""
 
+# puma['prometheus_scrape_scheme'] = 'http'
+# puma['prometheus_scrape_tls_server_name'] = 'localhost'
+# puma['prometheus_scrape_tls_skip_verification'] = false
+
 ##! Service name used to register Puma as a Consul service
 # puma['consul_service_name'] = 'rails'
 ##! Semantic metadata used when registering Puma as a Consul service
@@ -2189,6 +2193,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_exporter['tls_enabled'] = false
 # gitlab_exporter['tls_cert_path'] = '/etc/gitlab/ssl/gitlab-exporter.crt'
 # gitlab_exporter['tls_key_path'] = '/etc/gitlab/ssl/gitlab-exporter.key'
+
+##! Prometheus scrape related configs
+# gitlab_exporter['prometheus_scrape_scheme'] = 'http'
+# gitlab_exporter['prometheus_scrape_tls_server_name'] = 'localhost'
+# gitlab_exporter['prometheus_scrape_tls_skip_verification'] = false
 
 ##! Manage gitlab-exporter sidekiq probes. false by default when Sentinels are
 ##! found.

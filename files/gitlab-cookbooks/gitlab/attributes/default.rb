@@ -519,7 +519,7 @@ default['gitlab']['gitlab-rails']['gitlab_kas_external_k8s_proxy_url'] = nil
 default['gitlab']['puma']['enable'] = false
 default['gitlab']['puma']['ha'] = false
 default['gitlab']['puma']['log_directory'] = "/var/log/gitlab/puma"
-default['gitlab']['puma']['listen'] = "127.0.0.1"
+default['gitlab']['puma']['listen'] = nil
 default['gitlab']['puma']['port'] = 8080
 default['gitlab']['puma']['socket'] = '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
 default['gitlab']['puma']['ssl_listen'] = nil
@@ -529,6 +529,9 @@ default['gitlab']['puma']['ssl_certificate_key'] = nil
 default['gitlab']['puma']['ssl_client_certificate'] = nil
 default['gitlab']['puma']['ssl_cipher_filter'] = nil
 default['gitlab']['puma']['ssl_verify_mode'] = 'none'
+default['gitlab']['puma']['prometheus_scrape_scheme'] = 'http'
+default['gitlab']['puma']['prometheus_scrape_tls_server_name'] = nil
+default['gitlab']['puma']['prometheus_scrape_tls_skip_verification'] = false
 
 default['gitlab']['puma']['somaxconn'] = 1024
 # Path to the puma server Process ID file
