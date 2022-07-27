@@ -1,6 +1,8 @@
+diff --git a/lib/Image/ExifTool.pm b/lib/Image/ExifTool.pm
+index a96cbf36..2d81ce98 100644
 --- a/lib/Image/ExifTool.pm
 +++ b/lib/Image/ExifTool.pm
-@@ -180,17 +180,10 @@ $defaultLang = 'en';    # default language
+@@ -185,17 +185,10 @@ $defaultLang = 'en';    # default language
  # 2) Put types with weak file signatures at end of list to avoid false matches
  # 3) PLIST must be in this list for the binary PLIST format, although it may
  #    cause a file to be checked twice for XML
@@ -8,22 +10,23 @@
 -                PSD XMP BMP BPG PPM RIFF AIFF ASF MOV MPEG Real SWF PSP FLV OGG
 -                FLAC APE MPC MKV MXF DV PMP IND PGF ICC ITC FLIR FLIF FPF LFP
 -                HTML VRD RTF FITS XCF DSS QTIF FPX PICT ZIP GZIP PLIST RAR BZ2
--                TAR RWZ EXE EXR HDR CHM LNK WMF AVC DEX DPX RAW Font RSRC M2TS
--                PHP PCX DCX DWF DWG WTV Torrent VCard LRI R3D AA PDB MOI ISO
--                ALIAS JSON MP3 DICOM PCD);
+-                CZI TAR  EXE EXR HDR CHM LNK WMF AVC DEX DPX RAW Font RSRC M2TS
+-                MacOS PHP PCX DCX DWF DWG DXF WTV Torrent VCard LRI R3D AA PDB
+-                PFM2 MRC LIF JXL MOI ISO ALIAS JSON MP3 DICOM PCD TXT);
 +@fileTypes = qw(JPEG TIFF);
-
+ 
  # file types that we can write (edit)
 -my @writeTypes = qw(JPEG TIFF GIF CRW MRW ORF RAF RAW PNG MIE PSD XMP PPM EPS
--                    X3F PS PDF ICC VRD DR4 JP2 EXIF AI AIT IND MOV EXV FLIF);
+-                    X3F PS PDF ICC VRD DR4 JP2 JXL EXIF AI AIT IND MOV EXV FLIF);
 +my @writeTypes = qw(JPEG TIFF);
  my %writeTypes; # lookup for writable file types (hash filled if required)
-
+ 
  # file extensions that we can't write for various base types
-@@ -209,319 +202,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
+@@ -214,339 +207,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
  # (if extension may be more than one type, the type is a list where
  #  the writable type should come first if it exists)
  %fileTypeLookup = (
+-   '360' => ['MOV',  'GoPro 360 video'],
 -   '3FR' => ['TIFF', 'Hasselblad RAW format'],
 -   '3G2' => ['MOV',  '3rd Gen. Partnership Project 2 audio/video'],
 -   '3GP' => ['MOV',  '3rd Gen. Partnership Project audio/video'],
@@ -50,6 +53,7 @@
 -    ASF  => ['ASF',  'Microsoft Advanced Systems Format'],
 -    AVC  => ['AVC',  'Advanced Video Connection'], # (extensions are actually _AU,_AD,_IM,_ID)
 -    AVI  => ['RIFF', 'Audio Video Interleaved'],
+-    AVIF => ['MOV',  'AV1 Image File Format'],
 -    AZW  =>  'MOBI', # (see http://wiki.mobileread.com/wiki/AZW)
 -    AZW3 =>  'MOBI',
 -    BMP  => ['BMP',  'Windows Bitmap'],
@@ -64,6 +68,8 @@
 -    CRM  => ['MOV',  'Canon RAW Movie'],
 -    CRW  => ['CRW',  'Canon RAW format'],
 -    CS1  => ['PSD',  'Sinar CaptureShop 1-Shot RAW'],
+-    CSV  => ['TXT',  'Comma-Separated Values'],
+-    CZI  => ['CZI',  'Zeiss Integrated Software RAW'],
 -    DC3  =>  'DICM',
 -    DCM  =>  'DICM',
 -    DCP  => ['TIFF', 'DNG Camera Profile'],
@@ -74,6 +80,7 @@
 -    DIB  => ['BMP',  'Device Independent Bitmap'],
 -    DIC  =>  'DICM',
 -    DICM => ['DICOM','Digital Imaging and Communications in Medicine'],
+-    DIR  => ['DIR',  'Directory'],
 -    DIVX => ['ASF',  'DivX media format'],
 -    DJV  =>  'DJVU',
 -    DJVU => ['AIFF', 'DjVu image'],
@@ -98,6 +105,7 @@
 -    DWF  => ['DWF',  'Autodesk drawing (Design Web Format)'],
 -    DWG  => ['DWG',  'AutoCAD Drawing'],
 -    DYLIB=> ['EXE',  'Mach-O Dynamic Link Library'],
+-    DXF  => ['DXF',  'AutoCAD Drawing Exchange Format'],
 -    EIP  => ['ZIP',  'Capture One Enhanced Image Package'],
 -    EPS  => ['EPS',  'Encapsulated PostScript Format'],
 -    EPS2 =>  'EPS',
@@ -124,13 +132,14 @@
 -    FPF  => ['FPF',  'FLIR Public image Format'],
 -    FPX  => ['FPX',  'FlashPix'],
 -    GIF  => ['GIF',  'Compuserve Graphics Interchange Format'],
--    GPR  => ['TIFF', 'GoPro RAW'],
+-    GPR  => ['TIFF', 'General Purpose RAW'], # https://gopro.github.io/gpr/
 -    GZ   =>  'GZIP',
 -    GZIP => ['GZIP', 'GNU ZIP compressed archive'],
 -    HDP  => ['TIFF', 'Windows HD Photo'],
 -    HDR  => ['HDR',  'Radiance RGBE High Dynamic Range'],
 -    HEIC => ['MOV',  'High Efficiency Image Format still image'],
 -    HEIF => ['MOV',  'High Efficiency Image Format'],
+-    HIF  =>  'HEIF',
 -    HTM  =>  'HTML',
 -    HTML => ['HTML', 'HyperText Markup Language'],
 -    ICAL =>  'ICS',
@@ -143,6 +152,7 @@
 -    INDD => ['IND',  'Adobe InDesign Document'],
 -    INDT => ['IND',  'Adobe InDesign Template'],
 -    INSV => ['MOV',  'Insta360 Video'],
+-    INSP => ['JPEG', 'Insta360 Picture'],
 -    INX  => ['XMP',  'Adobe InDesign Interchange'],
 -    ISO  => ['ISO',  'ISO 9660 disk image'],
 -    ITC  => ['ITC',  'iTunes Cover Flow'],
@@ -157,8 +167,10 @@
 -    JPF  =>  'JP2',
      JPG =>   'JPEG',
 -    JPM  => ['JP2',  'JPEG 2000 compound image'],
+-    JPS  => ['JPEG', 'JPEG Stereo image'],
 -    JPX  => ['JP2',  'JPEG 2000 with extensions'],
 -    JSON => ['JSON', 'JavaScript Object Notation'],
+-    JXL  => ['JXL',  'JPEG XL'],
 -    JXR  => ['TIFF', 'JPEG XR'],
 -    K25  => ['TIFF', 'Kodak DC25 RAW'],
 -    KDC  => ['TIFF', 'Kodak Digital Camera RAW'],
@@ -167,6 +179,7 @@
 -    LA   => ['RIFF', 'Lossless Audio'],
 -    LFP  => ['LFP',  'Lytro Light Field Picture'],
 -    LFR  =>  'LFP', # (Light Field RAW)
+-    LIF  => ['LIF',  'Leica Image File'],
 -    LNK  => ['LNK',  'Windows shortcut'],
 -    LRI  => ['LRI',  'Light RAW'],
 -    LRV  => ['MOV',  'Low-Resolution Video'],
@@ -198,12 +211,15 @@
 -    MPG  =>  'MPEG',
 -    MPO  => ['JPEG', 'Extended Multi-Picture format'],
 -    MQV  => ['MOV',  'Sony Mobile Quicktime Video'],
+-    MRC  => ['MRC',  'Medical Research Council image'],
 -    MRW  => ['MRW',  'Minolta RAW format'],
 -    MTS  =>  'M2TS',
 -    MXF  => ['MXF',  'Material Exchange Format'],
 -  # NDPI => ['TIFF', 'Hamamatsu NanoZoomer Digital Pathology Image'],
 -    NEF  => ['TIFF', 'Nikon (RAW) Electronic Format'],
 -    NEWER => 'COS',
+-    NKSC => ['XMP',  'Nikon Sidecar'],
+-
 -    NMBTEMPLATE => ['ZIP','Apple Numbers Template'],
 -    NRW  => ['TIFF', 'Nikon RAW (2)'],
 -    NUMBERS => ['ZIP','Apple Numbers spreadsheet'],
@@ -219,8 +235,10 @@
 -    OFR  => ['RIFF', 'OptimFROG audio'],
 -    OGG  => ['OGG',  'Ogg Vorbis audio file'],
 -    OGV  => ['OGG',  'Ogg Video file'],
+-    ONP  => ['JSON', 'ON1 Presets'],
 -    OPUS => ['OGG',  'Ogg Opus audio file'],
 -    ORF  => ['ORF',  'Olympus RAW format'],
+-    ORI  =>  'ORF',
 -    OTF  => ['Font', 'Open Type Font'],
 -    PAC  => ['RIFF', 'Lossless Predictive Audio Compression'],
 -    PAGES => ['ZIP', 'Apple Pages document'],
@@ -233,7 +251,7 @@
 -    PEF  => ['TIFF', 'Pentax (RAW) Electronic Format'],
 -    PFA  => ['Font', 'PostScript Font ASCII'],
 -    PFB  => ['Font', 'PostScript Font Binary'],
--    PFM  => ['Font', 'Printer Font Metrics'],
+-    PFM  => [['Font','PFM2'], 'Printer Font Metrics'], # (description is overridden for Portable FloatMap images)
 -    PGF  => ['PGF',  'Progressive Graphics File'],
 -    PGM  => ['PPM',  'Portable Gray Map'],
 -    PHP  => ['PHP',  'PHP Hypertext Preprocessor'],
@@ -309,6 +327,7 @@
 -    TTC  => ['Font', 'True Type Font Collection'],
 -    TTF  => ['Font', 'True Type Font'],
 -    TUB  => 'PSP',
+-    TXT  => ['TXT',  'Text file'],
 -    VCARD=> ['VCard','Virtual Card'],
 -    VCF  => 'VCARD',
 -    VOB  => ['MPEG', 'Video Object'],
@@ -323,6 +342,7 @@
 -    WMV  => ['ASF',  'Windows Media Video'],
 -    WV   => ['RIFF', 'WavePack lossless audio'],
 -    X3F  => ['X3F',  'Sigma RAW format'],
+-    MACOS=> ['MacOS','MacOS ._ sidecar file'],
 -    XCF  => ['XCF',  'GIMP native image format'],
 -    XHTML=> ['HTML', 'Extensible HyperText Markup Language'],
 -    XLA  => ['FPX',  'Microsoft Excel Add-in'],
@@ -335,11 +355,16 @@
 -    XLTM => [['ZIP','FPX'], 'Office Open XML Spreadsheet Template Macro-enabled'],
 -    XLTX => [['ZIP','FPX'], 'Office Open XML Spreadsheet Template'],
 -    XMP  => ['XMP',  'Extensible Metadata Platform'],
+-    WOFF => ['Font', 'Web Open Font Format'],
+-    WOFF2=> ['Font', 'Web Open Font Format2'],
 -    WTV  => ['WTV',  'Windows recorded TV show'],
 -    ZIP  => ['ZIP',  'ZIP archive'],
  );
-
+ 
  # typical extension for each file type (if different than FileType)
+diff --git a/lib/Image/ExifTool/AIFF.pm b/lib/Image/ExifTool/AIFF.pm
+deleted file mode 100644
+index 3fe6c4a6..00000000
 --- a/lib/Image/ExifTool/AIFF.pm
 +++ /dev/null
 @@ -1,312 +0,0 @@
@@ -363,7 +388,7 @@
 -use Image::ExifTool qw(:DataAccess :Utils);
 -use Image::ExifTool::ID3;
 -
--$VERSION = '1.10';
+-$VERSION = '1.11';
 -
 -# information for time/date-based tags (time zero is Jan 1, 1904)
 -my %timeInfo = (
@@ -418,12 +443,12 @@
 -            ProcessProc => \&Image::ExifTool::ID3::ProcessID3,
 -        },
 -    },
+-    APPL => 'ApplicationData', # (first 4 bytes are the application signature)
 -#    SSND => 'SoundData',
 -#    MARK => 'Marker',
 -#    INST => 'Instrument',
 -#    MIDI => 'MidiData',
 -#    AESD => 'AudioRecording',
--#    APPL => 'ApplicationSpecific',
 -);
 -
 -%Image::ExifTool::AIFF::Common = (
@@ -547,7 +572,7 @@
 -        $et->SetFileType('DJVU');
 -        return 1 if $fast3;
 -        $tagTablePtr = GetTagTable('Image::ExifTool::DjVu::Main');
--        # modifiy FileType to indicate a multi-page document
+-        # modify FileType to indicate a multi-page document
 -        $$et{VALUE}{FileType} .= " (multi-page)" if $buf2 eq 'DJVM';
 -        $type = 'DjVu';
 -    } else {
@@ -632,7 +657,7 @@
 -
 -=head1 AUTHOR
 -
--Copyright 2003-2019, Phil Harvey (phil at owl.phy.queensu.ca)
+-Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
 -
 -This library is free software; you can redistribute it and/or modify it
 -under the same terms as Perl itself.
