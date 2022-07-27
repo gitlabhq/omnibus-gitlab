@@ -18,6 +18,7 @@
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 consul_helper = ConsulHelper.new(node)
+mailroom_helper = MailroomHelper.new(node)
 
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
 gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
@@ -309,7 +310,8 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       gitlab_shell_authorized_keys_file: node['gitlab']['gitlab-shell']['auth_file'],
       prometheus_available: node['monitoring']['prometheus']['enable'] || !node['gitlab']['gitlab-rails']['prometheus_address'].nil?,
       prometheus_server_address: node['gitlab']['gitlab-rails']['prometheus_address'] || node['monitoring']['prometheus']['listen_address'],
-      consul_api_url: node['consul']['enable'] ? consul_helper.api_url : nil
+      consul_api_url: node['consul']['enable'] ? consul_helper.api_url : nil,
+      mailroom_internal_api_url: mailroom_helper.internal_api_url
     )
   )
   dependent_services.each { |svc| notifies :restart, svc }
