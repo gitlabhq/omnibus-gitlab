@@ -1,9 +1,11 @@
+diff --git a/exiftool b/exiftool
+index bdf9d4f5..aa30cbda 100755
 --- a/exiftool
 +++ b/exiftool
-@@ -28,6 +28,7 @@
-     }
+@@ -31,6 +31,7 @@ BEGIN {
+     $Image::ExifTool::exeDir = $exeDir; # use our exeDir for loading config file
      # add lib directory at start of include path
-     unshift @INC, "$exeDir/lib";
+     unshift @INC, $incDir;
 +    push ( @INC, "/opt/gitlab/embedded/lib/exiftool-perl");
      # load or disable config file if specified
      if (@ARGV and lc($ARGV[0]) eq '-config') {
