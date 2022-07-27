@@ -1201,3 +1201,9 @@ AWS-EE-Premium-Release:
   extends: .aws_marketplace_release
   needs:
     - AWS-Premium
+
+check-packages:
+  stage: verify
+  trigger:
+    include: '/gitlab-ci-config/check-packages.yml'
+  <<: *dev-tag-only-except-auto-deploy
