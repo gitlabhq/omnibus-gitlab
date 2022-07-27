@@ -1,0 +1,166 @@
+stages:
+  - package
+
+.if-ee-tag: &if-ee-tag
+  if: '$CI_COMMIT_TAG =~ /^.*ee\.\d.*$/'
+
+.if-ce-tag: &if-ce-tag
+  if: '$CI_COMMIT_TAG =~ /^.*ce\.\d.*$/'
+
+.ee-tag-only: &ee-tag-only
+  rules:
+    - <<: *if-ee-tag
+
+.ce-tag-only: &ce-tag-only
+  rules:
+    - <<: *if-ce-tag
+
+before_script:
+  - bash scripts/ci/prepare_bundle.sh
+
+.common_install_scripts: &common_install_scripts
+  script:
+    - export package_name_version_dist=$(bundle exec rake build:package:name_version 2>&1 | tail -n1)
+    - export package_name=$(bundle exec rake build:package:name)
+    - if [ -z "${package_repository}" ]; then
+        export package_repository=${package_name};
+      fi
+    - if [ -z "${package_name}" ]; then
+      echo "Unable to detect GitLab edition. Exiting.";
+      exit 1;
+      fi
+    - if [ -z "${package_type}" ]; then
+      echo "Package manager (apt/yum/zypper) not specified. Exiting.";
+      exit 1;
+      fi
+    - echo "Installing ${package_name} using https://packages.gitlab.com/install/repositories/gitlab/${package_repository}/script.${package_type}.sh"
+    - curl https://packages.gitlab.com/install/repositories/gitlab/${package_repository}/script.${package_type}.sh | bash
+
+.apt-install: &apt-install
+  stage: package
+  variables:
+    package_type: deb
+  script:
+    - !reference [.common_install_scripts, script]
+    - apt install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
+
+.yum-install: &yum-install
+  stage: package
+  variables:
+    package_type: rpm
+  script:
+    - !reference [.common_install_scripts, script]
+    - yum install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
+
+.zypper-install: &zypper-install
+  stage: package
+  variables:
+    package_type: rpm
+  script:
+    - !reference [.common_install_scripts, script]
+    - zypper install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
+
+# apt based
+Ubuntu-18.04-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+Ubuntu-20.04-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+Ubuntu-20.04-arm-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+  tags:
+  - docker-arm-builder
+Debian-9-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+Debian-10-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+Debian-10-arm-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+  tags:
+  - docker-arm-builder
+Debian-11-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+Debian-11-arm-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_11_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+  tags:
+  - docker-arm-builder
+Raspberry-Pi-2-Buster-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
+  extends:
+    - .apt-install
+    - .ce-tag-only
+  variables:
+    package_repository: 'raspberry-pi2'
+  tags:
+  - docker-arm-builder
+Ubuntu-18.04-fips-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04_fips:${BUILDER_IMAGE_REVISION}"
+  extends:
+    - .apt-install
+    - .ee-tag-only
+  variables:
+    USE_SYSTEM_SSL: "true"
+Ubuntu-20.04-fips-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
+  extends:
+    - .apt-install
+    - .ee-tag-only
+  variables:
+    USE_SYSTEM_SSL: "true"
+
+# yum based
+CentOS-7-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
+  extends: .yum-install
+CentOS-8-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_8:${BUILDER_IMAGE_REVISION}"
+  extends: .yum-install
+CentOS-8-arm64-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .yum-install
+  tags:
+  - docker-arm-builder
+# Amazon Linux checks will be added once AL2 repo is made the default one
+# instead of el7
+# AmazonLinux-2-check:
+#   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
+#   extends: .yum-install
+# AmazonLinux-2-arm64-check:
+#   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
+#   extends: .yum-install
+#   tags:
+#   - docker-arm-builder
+CentOS-8-fips-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
+  extends:
+    - .yum-install
+    - .ee-tag-only
+  variables:
+    USE_SYSTEM_SSL: "true"
+
+# zypper based
+OpenSUSE-15.3-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3:${BUILDER_IMAGE_REVISION}"
+  extends: .zypper-install
+OpenSUSE-15.3-arm64-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .zypper-install
+  tags:
+  - docker-arm-builder
+SLES-12.5-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
+  extends:
+    - .zypper-install
+    - .ee-tag-only
+SLES-15.2-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
+  extends:
+    - .zypper-install
+    - .ee-tag-only
