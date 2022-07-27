@@ -404,3 +404,31 @@ RSpec.describe 'gitlab::puma with no total CPUs' do
     end
   end
 end
+
+RSpec.describe 'gitlab::puma with Raspberry Pi 4' do
+  let(:chef_run) do
+    runner = ChefSpec::SoloRunner.new(
+      step_into: %w(runit_service),
+      path: 'spec/chef/fixtures/fauxhai/ubuntu/22.04-rpi4.json'
+    )
+    runner.converge('gitlab::default')
+  end
+
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
+  end
+
+  context 'when puma is enabled' do
+    it 'renders the puma.rb file' do
+      expect(chef_run).to create_puma_config('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with(
+        environment: 'production',
+        pid: '/opt/gitlab/var/puma/puma.pid',
+        state_path: '/opt/gitlab/var/puma/puma.state',
+        listen_socket: '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket',
+        listen_tcp: '127.0.0.1:8080',
+        working_directory: '/var/opt/gitlab/gitlab-rails/working',
+        worker_processes: 2
+      )
+    end
+  end
+end
