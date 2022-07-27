@@ -180,7 +180,7 @@ production: &base
     # directly. This job is then picked up by Sidekiq.
     # - webhook: mailroom triggers a HTTP POST request to Rails web server. The
     # content is embedded into the request body.
-    # Default is sidekiq.
+    # Default is webhook.
     delivery_method: <%= @incoming_email_delivery_method %>
 
     <% if @incoming_email_delivery_method == "webhook" %>
@@ -188,7 +188,7 @@ production: &base
     # mailroom can contact to. Note that the combined url must not end with "/".
     # At the moment, the webhook delivery method doesn't support HTTP/HTTPs via
     # UNIX socket.
-    gitlab_url: <%= @gitlab_url %>
+    gitlab_url: <%= @mailroom_internal_api_url %>
 
     # When the delivery method is webhook, this config is the file that
     # contains the shared secret key for verifying access for mailroom's
@@ -256,7 +256,7 @@ production: &base
     # directly. This job is then picked up by Sidekiq.
     # - webhook: mailroom triggers a HTTP POST request to Rails web server. The
     # content is embedded into the request body.
-    # Default is sidekiq.
+    # Default is webhook.
     delivery_method: <%= @service_desk_email_delivery_method %>
 
     <% if @service_desk_email_delivery_method == "webhook" %>
@@ -264,7 +264,7 @@ production: &base
     # mailroom can contact to. Note that the combined url must not end with "/".
     # At the moment, the webhook delivery method doesn't support HTTP/HTTPs via
     # UNIX socket.
-    gitlab_url: <%= @gitlab_url %>
+    gitlab_url: <%= @mailroom_internal_api_url %>
 
     # When the delivery method is webhook, this config is the file that
     # contains the shared secret key for verifying access for mailroom's

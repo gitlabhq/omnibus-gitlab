@@ -84,14 +84,18 @@ RSpec.describe 'gitlab::mailroom' do
     let(:gitlab_yml) { YAML.safe_load(gitlab_yml_file_content, [], [], true, symbolize_names: true) }
 
     before do
+      configured_mailroom = config_sections.each_with_object({}) do |config_section, memo|
+        memo.merge!(
+          "#{config_section}_enabled".to_sym => true,
+          "#{config_section}_delivery_method".to_sym => 'webhook'
+        )
+      end
+
       stub_gitlab_rb(
-        external_url: 'http://localhost/gitlab/', # Mind the last "/" character
-        gitlab_rails: config_sections.each_with_object({}) do |config_section, memo|
-          memo.merge!(
-            "#{config_section}_enabled".to_sym => true,
-            "#{config_section}_delivery_method".to_sym => 'webhook'
-          )
-        end
+        external_url: 'http://localhost/gitlab/',
+        gitlab_rails: configured_mailroom.merge(
+          internal_api_url: "http://internal-mailroom-endpoint/" # Mind the last "/" character
+        )
       )
     end
 
@@ -99,7 +103,7 @@ RSpec.describe 'gitlab::mailroom' do
       config_sections.each do |config_section|
         expect(gitlab_yml[:production][config_section][:delivery_method]).to eq('webhook')
         expect(gitlab_yml[:production][config_section][:secret_file]).to eq(".gitlab_#{config_section}_secret")
-        expect(gitlab_yml[:production][config_section][:gitlab_url]).to eq("http://localhost/gitlab")
+        expect(gitlab_yml[:production][config_section][:gitlab_url]).to eq("http://internal-mailroom-endpoint/")
       end
     end
 
@@ -135,7 +139,6 @@ RSpec.describe 'gitlab::mailroom' do
 
       before do
         stub_gitlab_rb(
-          external_url: 'http://localhost/gitlab/',
           gitlab_rails: config_sections.each_with_object({}) do |config_section, memo|
             memo.merge!(
               "#{config_section}_enabled".to_sym => true,
@@ -157,6 +160,52 @@ RSpec.describe 'gitlab::mailroom' do
               secret_token: "#{auth_token}-#{config_section}"
             )
           )
+        end
+      end
+    end
+
+    context 'when internal_api_url is not set' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'http://localhost/gitlab/',
+          gitlab_rails: config_sections.each_with_object({}) do |config_section, memo|
+            memo.merge!(
+              "#{config_section}_enabled".to_sym => true,
+              "#{config_section}_delivery_method".to_sym => 'webhook'
+            )
+          end,
+          gitlab_workhorse: { listen_network: 'tcp', listen_addr: 'localhost:9191', relative_url: '/relative' }
+        )
+      end
+
+      it 'sets gitlab_url to workhorse listen address' do
+        config_sections.each do |config_section|
+          expect(gitlab_yml[:production][config_section][:delivery_method]).to eq('webhook')
+          expect(gitlab_yml[:production][config_section][:secret_file]).to eq(".gitlab_#{config_section}_secret")
+          expect(gitlab_yml[:production][config_section][:gitlab_url]).to eq("http://localhost:9191/relative")
+        end
+      end
+    end
+
+    context 'when internal_api_url is not set and workhorse is using a unix socket' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'http://localhost/gitlab/',
+          gitlab_rails: config_sections.each_with_object({}) do |config_section, memo|
+            memo.merge!(
+              "#{config_section}_enabled".to_sym => true,
+              "#{config_section}_delivery_method".to_sym => 'webhook'
+            )
+          end,
+          gitlab_workhorse: { listen_network: 'unix', listen_addr: '/path/to/socket/something.sock' }
+        )
+      end
+
+      it 'falls back to external url' do
+        config_sections.each do |config_section|
+          expect(gitlab_yml[:production][config_section][:delivery_method]).to eq('webhook')
+          expect(gitlab_yml[:production][config_section][:secret_file]).to eq(".gitlab_#{config_section}_secret")
+          expect(gitlab_yml[:production][config_section][:gitlab_url]).to eq("http://localhost/gitlab")
         end
       end
     end
@@ -242,6 +291,25 @@ RSpec.describe 'gitlab::mailroom' do
       let(:config_sections) { %i[incoming_email] }
 
       it_behaves_like 'renders Microsoft Graph config'
+    end
+
+    context 'when using the default delivery method' do
+      let(:config_sections) { %i[incoming_email service_desk_email] }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: config_sections.each_with_object({}) do |config_section, memo|
+            memo["#{config_section}_enabled".to_sym] = true
+          end
+        )
+      end
+
+      it 'sets the default mailroom delivery method to webhook' do
+        node = chef_run.node
+
+        expect(node['gitlab']['gitlab-rails']['incoming_email_delivery_method']).to eql('webhook')
+        expect(node['gitlab']['gitlab-rails']['service_desk_email_delivery_method']).to eql('webhook')
+      end
     end
 
     context 'Service Desk email with Microsoft Graph' do
