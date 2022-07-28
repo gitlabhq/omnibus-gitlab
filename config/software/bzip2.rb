@@ -18,7 +18,7 @@
 # and should be picked up automatically when building Python.
 
 name 'bzip2'
-default_version '1.0.6'
+default_version '1.0.8'
 
 license 'BSD-2-Clause'
 license_file 'LICENSE'
@@ -28,8 +28,8 @@ skip_transitive_dependency_licensing true
 dependency 'zlib'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
-version '1.0.6' do
-  source md5: '00b516f4704d4a7cb50a1d97e6e8e15b'
+version '1.0.8' do
+  source sha512: '083f5e675d73f3233c7930ebe20425a533feedeaaa9d8cc86831312a6581cefbe6ed0d08d2fa89be81082f2a5abdabca8b3c080bf97218a1bd59dc118a30b9f3'
 end
 source url: "https://sourceware.org/pub/bzip2/#{name}-#{version}.tar.gz"
 
@@ -45,7 +45,6 @@ build do
   args = "PREFIX='#{install_dir}/embedded' VERSION='#{version}'"
 
   patch source: 'makefile_take_env_vars.patch', env: env
-  patch source: 'CVE-2016-3189.patch', env: env
 
   make args.to_s, env: env
   make "#{args} -f Makefile-libbz2_so", env: env
