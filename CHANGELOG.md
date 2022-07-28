@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.0.5 (2022-07-28)
+
+### Security (2 changes)
+
+- [Bump exiftool version to 12.42](gitlab-org/security/omnibus-gitlab@0564b3878692dc21c8eea0785ce3d95cccb05e0f) ([merge request](gitlab-org/security/omnibus-gitlab!207))
+- [Upgrade bzip2 to use version 1.0.8](gitlab-org/security/omnibus-gitlab@5b9c29a2db9b49df87e1bdcf861cc4005e56cd78) ([merge request](gitlab-org/security/omnibus-gitlab!208))
+
 ## 15.0.4 (2022-06-30)
 
 No changes.
