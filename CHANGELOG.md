@@ -52,6 +52,13 @@ omnibus-gitlab repository.
 
 - [global: Remove deprecated `self_signed_cert` setting](gitlab-org/omnibus-gitlab@0021a2c1e28ded37c428b4f3ee4d10abf6099840) ([merge request](gitlab-org/omnibus-gitlab!6196))
 
+## 15.1.4 (2022-07-28)
+
+### Security (2 changes)
+
+- [Bump exiftool version to 12.42](gitlab-org/security/omnibus-gitlab@85a6446d5aea2c353231abed1c2ff411c7d5e66d) ([merge request](gitlab-org/security/omnibus-gitlab!206))
+- [Upgrade bzip2 to use version 1.0.8](gitlab-org/security/omnibus-gitlab@1e84e9ed015def9f34e5c107f91a275ac9042917) ([merge request](gitlab-org/security/omnibus-gitlab!209))
+
 ## 15.1.3 (2022-07-19)
 
 ### Fixed (3 changes)
