@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.2.1 (2022-07-28)
+
+### Security (2 changes)
+
+- [Bump exiftool version to 12.42](gitlab-org/security/omnibus-gitlab@53294ab72ff4ce07edbb1028e5311ff49196c378) ([merge request](gitlab-org/security/omnibus-gitlab!211))
+- [Upgrade bzip2 to use version 1.0.8](gitlab-org/security/omnibus-gitlab@ff77949fc27633df0b9a8c5ad478133c650e5a94) ([merge request](gitlab-org/security/omnibus-gitlab!210))
+
 ## 15.2.0 (2022-07-21)
 
 ### Added (6 changes)
@@ -44,6 +51,13 @@ omnibus-gitlab repository.
 ### Deprecated (1 change)
 
 - [global: Remove deprecated `self_signed_cert` setting](gitlab-org/omnibus-gitlab@0021a2c1e28ded37c428b4f3ee4d10abf6099840) ([merge request](gitlab-org/omnibus-gitlab!6196))
+
+## 15.1.4 (2022-07-28)
+
+### Security (2 changes)
+
+- [Bump exiftool version to 12.42](gitlab-org/security/omnibus-gitlab@85a6446d5aea2c353231abed1c2ff411c7d5e66d) ([merge request](gitlab-org/security/omnibus-gitlab!206))
+- [Upgrade bzip2 to use version 1.0.8](gitlab-org/security/omnibus-gitlab@1e84e9ed015def9f34e5c107f91a275ac9042917) ([merge request](gitlab-org/security/omnibus-gitlab!209))
 
 ## 15.1.3 (2022-07-19)
 
@@ -107,6 +121,13 @@ No changes.
 ### Other (1 change)
 
 - [Disallow bundle to any changes to Gemfile.lock](gitlab-org/omnibus-gitlab@cd4f464c27058bebc0033ed2e013c56e86ff38f1) ([merge request](gitlab-org/omnibus-gitlab!6090))
+
+## 15.0.5 (2022-07-28)
+
+### Security (2 changes)
+
+- [Bump exiftool version to 12.42](gitlab-org/security/omnibus-gitlab@0564b3878692dc21c8eea0785ce3d95cccb05e0f) ([merge request](gitlab-org/security/omnibus-gitlab!207))
+- [Upgrade bzip2 to use version 1.0.8](gitlab-org/security/omnibus-gitlab@5b9c29a2db9b49df87e1bdcf861cc4005e56cd78) ([merge request](gitlab-org/security/omnibus-gitlab!208))
 
 ## 15.0.4 (2022-06-30)
 
