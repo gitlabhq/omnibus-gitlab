@@ -183,6 +183,7 @@ default['gitlab']['gitlab-rails']['ssh_keys_expired_notification_worker_cron'] =
 default['gitlab']['gitlab-rails']['ssh_keys_expiring_soon_notification_worker_cron'] = nil
 
 default['gitlab']['gitlab-rails']['ci_runners_stale_group_runners_prune_worker_cron'] = nil
+default['gitlab']['gitlab-rails']['ci_runner_versions_reconciliation_worker_cron'] = nil
 
 # Consolidated object storage config
 default['gitlab']['gitlab-rails']['object_store']['enabled'] = false
