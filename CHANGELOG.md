@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.2.2 (2022-08-01)
+
+### Fixed (1 change)
+
+- [Gracefully handle blank CPU information](gitlab-org/omnibus-gitlab@d95763e7c02ad78300ba41a8f2526dee86b8e5cd) ([merge request](gitlab-org/omnibus-gitlab!6234))
+
 ## 15.2.1 (2022-07-28)
 
 ### Security (2 changes)
