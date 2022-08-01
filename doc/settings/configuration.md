@@ -714,7 +714,7 @@ but it's recommended for defense in depth against potential [host header attacks
 - [Use a non-packaged PostgreSQL database management server](database.md)
 - [Use a non-packaged Redis instance](redis.md)
 - [Add `ENV` vars to the GitLab runtime environment](environment-variables.md)
-- [Change GitLab.yml settings](gitlab.yml.md)
+- [Changing `gitlab.yml` and `application.yml` settings](gitlab.yml.md)
 - [Send application email via SMTP](smtp.md)
 - [Set up OmniAuth (Google, Twitter, GitHub login)](https://docs.gitlab.com/ee/integration/omniauth.html)
 - [Adjust Puma settings](https://docs.gitlab.com/ee/administration/operations/puma.html)
