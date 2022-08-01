@@ -45,9 +45,9 @@ grafana['admin_password'] = 'foobar'
 ```
 
 If no admin password is provided, Omnibus GitLab will automatically generate a
-random password for the admin user as a security measure. However, in that case
+random password for the `admin` user as a security measure. However, in that case
 you will have to [reset the password manually](#resetting-the-admin-password)
-to access the admin user.
+to access the `admin` user.
 
 ## Enable Grafana alerts
 
