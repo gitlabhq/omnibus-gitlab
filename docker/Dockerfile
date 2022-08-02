@@ -14,6 +14,7 @@ RUN apt-get update -q \
       openssh-server \
       tzdata \
       wget \
+      libperl5.30 \
     && rm -rf /var/lib/apt/lists/*
 
 # Use BusyBox
