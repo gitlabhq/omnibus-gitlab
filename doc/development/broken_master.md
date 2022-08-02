@@ -11,7 +11,7 @@ other scheduled work as per our [development guidelines](https://about.gitlab.co
 This is a transient error due to connection issues between runner manager
 machine and `dev.gitlab.org`.
 
-1. Sign in to [runner manager machine](https://about.gitlab.com/handbook/engineering/development/enablement/distribution/maintenance/build-machines.html#build-runnersgitlaborg).
+1. Sign in to [runner manager machine](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/maintenance/build-machines.html#build-runners-gitlab-org).
 
 1. Run the following command to force a connection between runner and GitLab
 

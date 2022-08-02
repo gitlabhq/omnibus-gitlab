@@ -24,7 +24,7 @@ sudo apt-get update
 sudo apt-get clean
 ```
 
-See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/628#note_1824330) and [his blog article](https://blog.packagecloud.io/eng/2016/03/21/apt-hash-sum-mismatch/) for more context.
+See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/628#note_1824330) and [his blog article](https://blog.packagecloud.io/apt-hash-sum-mismatch/) for more context.
 
 Another workaround is to download the package manually by selecting the correct package from the [CE packages](https://packages.gitlab.com/gitlab/gitlab-ce) or [EE packages](https://packages.gitlab.com/gitlab/gitlab-ee) repository:
 
@@ -453,7 +453,7 @@ Add the following line to apt-cacher-ng config(eg. in  `/etc/apt-cacher-ng/acng.
 PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com|*\.cloudfront\.net)
 ```
 
-Read more about `apt-cacher-ng` and the reasons why this change is needed [on the packagecloud blog](https://blog.packagecloud.io/eng/2015/05/05/using-apt-cacher-ng-with-ssl-tls/).
+Read more about `apt-cacher-ng` and the reasons why this change is needed [on the packagecloud blog](https://blog.packagecloud.io/using-apt-cacher-ng-with-ssl-tls/).
 
 ## Using self signed certificate or custom certificate authorities
 
