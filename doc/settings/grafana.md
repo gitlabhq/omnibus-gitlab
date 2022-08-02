@@ -51,7 +51,7 @@ to access the `admin` user.
 
 ## Enable Grafana alerts
 
-Grafana can provide the ability to [create alerts](https://grafana.com/docs/grafana/latest/alerting/old-alerting/create-alerts/)
+Grafana can provide the ability to [create alerts](https://grafana.com/docs/grafana/next/alerting/alerting-rules/)
 based on rules that you configure in your dashboard. By default, alerts are disabled in the bundled Grafana instance.
 
 To enable Grafana alerts:
@@ -140,7 +140,7 @@ To update it, you can use the following command:
 gitlab-ctl set-grafana-password
 ```
 
-See the [Grafana CLI documentation](https://grafana.com/docs/grafana/latest/administration/cli/#reset-admin-password)
+See the [Grafana CLI documentation](https://grafana.com/docs/grafana/next/cli/#reset-admin-password)
 for more information.
 
 ## Dashboards
@@ -153,7 +153,7 @@ that are tailored for Omnibus installations.
 
 ## Grafana metrics
 
-Grafana can provide [metrics to be scraped by Prometheus](https://grafana.com/docs/grafana/latest/administration/view-server/internal-metrics/).
+Grafana can provide [metrics to be scraped by Prometheus](https://grafana.com/docs/grafana/next/setup-grafana/set-up-grafana-monitoring/).
 
 By default, the metrics API is disabled in the bundled Grafana instance.
 
@@ -202,7 +202,7 @@ grafana['smtp'] = {
 }
 ```
 
-For more information on Grafana's SMTP configuration see Grafana's [documentation](https://grafana.com/docs/grafana/latest/administration/configuration/#smtp).
+For more information on Grafana's SMTP configuration see Grafana's [documentation](https://grafana.com/docs/grafana/next/setup-grafana/configure-grafana/#smtp).
 
 ## Troubleshooting
 
