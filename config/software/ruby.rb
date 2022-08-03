@@ -50,12 +50,7 @@ env = with_standard_compiler_flags(with_embedded_path)
 # this.
 env['CFLAGS'] << " -DOPENSSL_FIPS" if Build::Check.use_system_ssl?
 
-env['CFLAGS'] << if version.satisfies?('>= 2.3.0') &&
-    rhel? && platform_version.satisfies?('< 6.0')
-                   ' -O2 -g -pipe'
-                 else
-                   ' -O3 -g -pipe'
-                 end
+env['CFLAGS'] << ' -O3 -g -pipe'
 
 build do
   env['CFLAGS'] << ' -fno-omit-frame-pointer'
