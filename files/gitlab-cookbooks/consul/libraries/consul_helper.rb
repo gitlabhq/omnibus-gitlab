@@ -29,22 +29,6 @@ class ConsulHelper
     }
   end
 
-  def watcher_config(watcher)
-    {
-      watches: [
-        {
-          type: 'service',
-          service: watcher,
-          args: ["#{node['consul']['script_directory']}/#{watcher_handler(watcher)}"]
-        }
-      ]
-    }
-  end
-
-  def watcher_handler(watcher)
-    node['consul']['watcher_config'][watcher]['handler']
-  end
-
   def server?
     !!node['consul']['configuration']['server']
   end
