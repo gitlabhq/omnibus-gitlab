@@ -15,7 +15,7 @@ omnibus_gem_version = Gitlab::Version.new('omnibus')
 
 # When updating gem versions:
 # 1. Edit this file to specify pinning if needed
-# 2. `bundle upgrade GEM`
+# 2. `bundle update GEM`
 # 3. Inspect and check-in Gemfile.lock
 # 4. Check that the changes to Gemfile.lock are propogated to the software
 #    definitions in `config/software`.  You can find them quickly with:
