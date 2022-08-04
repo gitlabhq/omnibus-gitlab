@@ -72,17 +72,6 @@ build do
   # per-thread. This is asked to be upstreamed as part of https://github.com/ruby/ruby/pull/3978
   patch source: 'thread-memory-allocations-2.7.patch', plevel: 1, env: env
 
-  # Fix reserve stack segmentation fault when building on RHEL5 or below
-  # Currently only affects 2.1.7 and 2.2.3. This patch taken from the fix
-  # in Ruby trunk and expected to be included in future point releases.
-  # https://redmine.ruby-lang.org/issues/11602
-  if rhel? &&
-      platform_version.satisfies?('< 6') &&
-      (version == '2.1.7' || version == '2.2.3')
-
-    patch source: 'ruby-fix-reserve-stack-segfault.patch', plevel: 1, env: env
-  end
-
   # copy_file_range() has been disabled on recent RedHat kernels:
   # 1. https://gitlab.com/gitlab-org/gitlab/-/issues/218999
   # 2. https://bugs.ruby-lang.org/issues/16965
