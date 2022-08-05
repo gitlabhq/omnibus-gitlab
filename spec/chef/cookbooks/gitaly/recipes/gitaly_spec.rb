@@ -219,7 +219,6 @@ RSpec.describe 'gitaly' do
   context 'with Omnibus gitconfig' do
     let(:omnibus_gitconfig) { nil }
     let(:gitaly_gitconfig) { nil }
-    let(:ignore_gitconfig) { true }
 
     before do
       stub_gitlab_rb(
@@ -228,7 +227,6 @@ RSpec.describe 'gitaly' do
         },
         gitaly: {
           gitconfig: gitaly_gitconfig,
-          ignore_gitconfig: ignore_gitconfig,
         }
       )
     end
@@ -361,28 +359,6 @@ RSpec.describe 'gitaly' do
 
       it 'does not write a git.config section' do
         expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(content).not_to include("git.config")
-        }
-      end
-    end
-
-    context 'with ignore_gitconfig disabled' do
-      let(:ignore_gitconfig) { false }
-      let(:gitaly_gitconfig) do
-        [
-          { key: "some.value", value: "overridden" },
-        ]
-      end
-
-      let(:omnibus_gitconfig) do
-        {
-          some: ["value = overridden"],
-        }
-      end
-
-      it 'does not write [[git.config]] sections' do
-        expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(content).not_to include("ignore_gitconfig")
           expect(content).not_to include("git.config")
         }
       end
