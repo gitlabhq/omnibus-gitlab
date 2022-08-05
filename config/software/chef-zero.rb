@@ -1,5 +1,5 @@
 #
-# Copyright 2016 GitLab Inc.
+# Copyright 2016-2022 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 dependency 'ruby'
-dependency 'rubygems'
 
 build do
   patch source: "license/add-license-file.patch"

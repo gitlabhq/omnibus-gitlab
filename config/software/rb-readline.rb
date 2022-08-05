@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2016 Chef Software, Inc.
+# Copyright 2012-2022 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 dependency 'ruby'
-dependency 'rubygems'
 
 source git: version.remote
 
