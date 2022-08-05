@@ -15,12 +15,8 @@ default['consul']['env'] = {
   'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
 }
 
-# Critical state of service:postgresql indicates a node is not a master
-# It does not need to be logged. Health status should be checked from
-# the consul cluster.
-default['consul']['logging_filters'] = {
-  postgresql_warning: "-*agent: Check 'service:postgresql' is now critical"
-}
+default['consul']['logging_filters'] = {}
+
 default['consul']['monitoring_service_discovery'] = false
 
 default['consul']['encryption_key'] = nil

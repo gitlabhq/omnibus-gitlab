@@ -118,6 +118,9 @@ RSpec.describe 'consul' do
             group: 'bar',
             configuration: {
               log_json: true
+            },
+            logging_filters: {
+              label: 'filter'
             }
           }
         )
@@ -134,6 +137,12 @@ RSpec.describe 'consul' do
       it 'renders log run file without timestamp option' do
         expect(chef_run).to render_file('/opt/gitlab/sv/consul/log/run').with_content { |content|
           expect(content).to match(%r{exec svlogd /var/log/gitlab/consul})
+        }
+      end
+
+      it 'renders log config with logging_filters keys/values as comments/values' do
+        expect(chef_run).to render_file('/opt/gitlab/sv/consul/log/config').with_content { |content|
+          expect(content).to match(%r{# label\nfilter})
         }
       end
 
