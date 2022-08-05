@@ -15,22 +15,20 @@
 #
 
 name 'libxslt'
-default_version '1.1.32'
+default_version '1.1.35'
 
 license 'MIT'
 license_file 'COPYING'
-
 skip_transitive_dependency_licensing true
 
 dependency 'libxml2'
 dependency 'liblzma'
 dependency 'config_guess'
 
-version '1.1.32' do
-  source md5: '1fc72f98e98bf4443f1651165f3aa146'
-end
+# versions_list: url=https://download.gnome.org/sources/libxslt/1.1/ filter=*.tar.xz
+version('1.1.35') { source sha256: '8247f33e9a872c6ac859aa45018bc4c4d00b97e2feac9eebc10c93ce1f34dd79' }
 
-source url: "ftp://xmlsoft.org/libxml2/libxslt-#{version}.tar.gz"
+source url: "https://download.gnome.org/sources/libxslt/1.1/libxslt-#{version}.tar.xz"
 
 relative_path "libxslt-#{version}"
 
