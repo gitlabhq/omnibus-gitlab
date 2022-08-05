@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2017-2021 GitLab Inc.
+# Copyright:: Copyright (c) 2017-2022 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 dependency 'pkg-config-lite'
+dependency 'ruby'
 dependency 'bundler'
-dependency 'rubygems'
 dependency 'libicu'
 
 # Technically, gitaly depends on git also. But because of how omnibus arranges

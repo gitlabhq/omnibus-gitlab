@@ -335,7 +335,6 @@ Style/RegexpLiteral:
 # AllowedMethods: present?, blank?, presence, try, try!
 Style/SafeNavigation:
   Exclude:
-    - 'config/software/rubygems.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/redis_helper.rb'
 
 # Offense count: 1

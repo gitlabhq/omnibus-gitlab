@@ -1,5 +1,6 @@
 #
 # Copyright 2012-2014 Chef Software, Inc.
+# Copyright 2017-2022 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +27,6 @@ license_file 'NOTICE'
 skip_transitive_dependency_licensing true
 
 dependency 'ruby'
-dependency 'rubygems'
 dependency 'libffi'
 dependency 'rb-readline'
 
