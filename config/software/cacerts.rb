@@ -26,7 +26,8 @@ default_version '2022.07.19'
 display_version version.tr('.', '')
 
 version '2022.07.19' do
-  source md5: 'cba7b319792b372675225b57279be08e'
+  # sha256sum only for the latest PEM is available at https://curl.se/ca/cacert.pem.sha256
+  source sha256: '6ed95025fba2aef0ce7b647607225745624497f876d74ef6ec22b26e73e9de77'
 end
 
 # Source URL looks like https://curl.haxx.se/ca/cacert-2018-01-17.pem. The
