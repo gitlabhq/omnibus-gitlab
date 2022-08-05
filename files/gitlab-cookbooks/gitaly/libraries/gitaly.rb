@@ -77,14 +77,6 @@ module Gitaly
     # Compute the default gitconfig from the old Omnibus gitconfig setting.
     # This depends on the Gitlab cookbook having been parsed already.
     def parse_gitconfig
-      # For the time being we require explicit opt-in to ignore the gitconfig
-      # and instead use the new mechanism. This is to ensure that we can test
-      # in staging first before we roll out this change to production.
-      #
-      # Note: this flag is only intended for use in `gitlab.com` to transition
-      # to the new default.
-      return unless Gitlab['gitaly']['ignore_gitconfig']
-
       # If the administrator has set `gitaly['gitconfig']` then we do not add a
       # fallback gitconfig.
       return unless Gitlab['gitaly']['gitconfig'].nil?

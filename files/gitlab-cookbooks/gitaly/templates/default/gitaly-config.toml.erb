@@ -82,19 +82,17 @@ bin_path = '<%= @git_bin_path %>'
 <% if @use_bundled_git %>
 use_bundled_binaries = <%= @use_bundled_git %>
 <% end %>
-<% if @ignore_gitconfig %>
 # Ignore gitconfig files so that the only source of truth for how Git commands
 # are configured are Gitaly's own defaults and the Git configuration injected
 # in this file.
 ignore_gitconfig = true
 
-  <% if @gitconfig %>
-    <% @gitconfig.each do |gitconfig| %>
+<% if @gitconfig %>
+  <% @gitconfig.each do |gitconfig| %>
 [[git.config]]
 key = "<%= gitconfig['key'] %>"
 value = "<%= gitconfig['value'] %>"
 
-    <% end %>
   <% end %>
 <% end %>
 [gitaly-ruby]

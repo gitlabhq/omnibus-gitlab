@@ -24,7 +24,6 @@ default['gitaly']['auth_token'] = nil
 default['gitaly']['auth_transitioning'] = false
 default['gitaly']['git_catfile_cache_size'] = nil
 default['gitaly']['git_bin_path'] = "#{node['package']['install-dir']}/embedded/bin/git"
-default['gitaly']['ignore_gitconfig'] = false
 default['gitaly']['use_bundled_git'] = true
 default['gitaly']['open_files_ulimit'] = 15000
 default['gitaly']['ruby_max_rss'] = nil
