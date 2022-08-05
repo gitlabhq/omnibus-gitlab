@@ -1,0 +1,115 @@
+workflow:
+  rules:
+    # Avoid duplicate pipeline when an MR is open
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"'
+      when: never
+    # Detect pipeline type
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $PAGES_UPDATE == "true" && $CI_PIPELINE_SOURCE == "schedule"'
+      variables:
+        PIPELINE_TYPE: LICENSE_PAGE_UPDATE_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $DEPENDENCY_SCANNING == "true" && $CI_PIPELINE_SOURCE == "schedule"'
+      variables:
+        PIPELINE_TYPE: DEPENDENCY_SCANNING_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $DEPS_PIPELINE == "true" && $CI_PIPELINE_SOURCE == "schedule"'
+      variables:
+        PIPELINE_TYPE: DEPS_IO_VERSION_CHECK_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CACHE_UPDATE == "true" && $CI_PIPELINE_SOURCE == "schedule"'
+      variables:
+        PIPELINE_TYPE: CACHE_UPDATE_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && $CACHE_UPDATE == "true"'
+      variables:
+        PIPELINE_TYPE: TRIGGER_CACHE_UPDATE_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && $DURATION_PLOTTER == "true" && $CI_PIPELINE_SOURCE == "schedule"'
+      variables:
+        PIPELINE_TYPE: DURATION_PLOTTER_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $CI_PROJECT_BRANCH =~ /^deps/'
+      variables:
+        PIPELINE_TYPE: DEPS_IO_VERSION_BUMP_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && ($CI_PROJECT_BRANCH =~ /^docs/ || $CI_PROJECT_BRANCH =~ /-docs$/)'
+      variables:
+        PIPELINE_TYPE: DOCS_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $CI_PIPELINE_SOURCE == "merge_request_event"'
+      variables:
+        PIPELINE_TYPE: GITLAB_MR_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $CI_COMMIT_REF_PROTECTED == "true"'
+      variables:
+        PIPELINE_TYPE: PROTECTED_TEST_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $CI_COMMIT_BRANCH'
+      variables:
+        PIPELINE_TYPE: GITLAB_BRANCH_TEST_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $NIGHTLY && $CI_COMMIT_BRANCH && ($ee == "true" || $GITLAB_VERSION =~ /-ee$/)'
+      variables:
+        PIPELINE_TYPE: EE_NIGHTLY_BUILD_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $CI_COMMIT_BRANCH && ($ee == "true" || $GITLAB_VERSION =~ /-ee$/)'
+      variables:
+        PIPELINE_TYPE: EE_BRANCH_BUILD_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $NIGHTLY && $CI_COMMIT_BRANCH'
+      variables:
+        PIPELINE_TYPE: CE_NIGHTLY_BUILD_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $CI_COMMIT_BRANCH'
+      variables:
+        PIPELINE_TYPE: CE_BRANCH_BUILD_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]7,\.[^ ]7,$/'
+      variables:
+        PIPELINE_TYPE: AUTO_DEPLOY_BUILD_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $CI_COMMIT_TAG =~ /^.*\+rc.*\.ce\..*/'
+      variables:
+        PIPELINE_TYPE: CE_RC_BUILD_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $CI_COMMIT_TAG =~ /^.*\+rc.*\.ee\..*/'
+      variables:
+        PIPELINE_TYPE: EE_RC_BUILD_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $CI_COMMIT_TAG =~ /^.*ce\.\d.*$/'
+      variables:
+        PIPELINE_TYPE: CE_TAG_BUILD_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $CI_COMMIT_TAG =~ /^.*ee\.\d.*$/'
+      variables:
+        PIPELINE_TYPE: EE_TAG_BUILD_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab" && $CI_PIPELINE_SOURCE == "merge_request_event"'
+      variables:
+        PIPELINE_TYPE: GITLAB_MR_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab" && $CI_COMMIT_REF_PROTECTED == "true"'
+      variables:
+        PIPELINE_TYPE: PROTECTED_TEST_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab" && $CI_COMMIT_BRANCH'
+      variables:
+        PIPELINE_TYPE: GITLAB_BRANCH_TEST_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && ($CI_PIPELINE_SOURCE == "pipeline" || $CI_PIPELINE_SOURCE == "trigger") && $ee == "true"'
+      variables:
+        PIPELINE_TYPE: TRIGGERED_EE_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && ($CI_PIPELINE_SOURCE == "pipeline" || $CI_PIPELINE_SOURCE == "trigger")'
+      variables:
+        PIPELINE_TYPE: TRIGGERED_CE_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_PROJECT_PATH != "gitlab-org/omnibus-gitlab" && $CI_PROJECT_PATH != "gitlab-org/security/omnibus-gitlab" && $CI_PROJECT_PATH != "gitlab-org/build/omnibus-gitlab-mirror" && $CI_PROJECT_PATH != "gitlab/omnibus-gitlab"'
+      variables:
+        PIPELINE_TYPE: FORK_MR_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH != "gitlab-org/omnibus-gitlab" && $CI_PROJECT_PATH != "gitlab-org/security/omnibus-gitlab" && $CI_PROJECT_PATH != "gitlab-org/build/omnibus-gitlab-mirror" && $CI_PROJECT_PATH != "gitlab/omnibus-gitlab"'
+      variables:
+        PIPELINE_TYPE: FORK_BRANCH_TEST_PIPELINE
+    # If pipeline type could not be detected, do not create a pipeline
+    - if: '$PIPELINE_TYPE == null'
+      when: never
+    # Skip pipelines if configured to do so. For example,
+    # $SKIP_PIPELINE_SOURCE is set to "push" in QA mirror
+    - if: '$SKIP_PIPELINE_SOURCE == $CI_PIPELINE_SOURCE'
+      when: never
+    # No pipeline on auto-deploy branches as a tag will definitely follow
+    - if: '$CI_COMMIT_BRANCH =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/'
+      when: never
+    # Set CACHE_EDITION variable to GITLAB for pipelines triggered from gitlab-org/gitlab project so that they don't pollute regular branch cache
+    - if: '$TOP_UPSTREAM_SOURCE_PROJECT == "gitlab-org/gitlab"'
+      variables:
+        CACHE_EDITION: "GITLAB"
+    # Set CACHE_EDITION variable to STABLE on stable branch pipelines so that they don't pollute regular branch cache
+    - if: '$CI_COMMIT_BRANCH =~ /^.*-stable$/'
+      variables:
+        CACHE_EDITION: "STABLE"
+    # Set CACHE_EDITION variable to EE on EE pipelines
+    - if: '$ee == "true" || $GITLAB_VERSION =~ /^*-ee/ || $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/ || $CI_COMMIT_TAG =~ /^.*ee\.\d.*$/ || $CI_COMMIT_BRANCH =~ /^.*-ee$/'
+      variables:
+        CACHE_EDITION: "EE"
+    # Support Merge Request pipelines
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    # Run regular pipelines on pushes to branches that does not have an MR open
+    - if: '$CI_COMMIT_BRANCH'
+    # For tags, always create a pipeline.
+    - if: '$CI_COMMIT_TAG'

@@ -21,37 +21,14 @@ stages:
   - trigger-qa
   - verify
 
-workflow:
-  rules:
-    # Do not create a pipeline on branch push to QA mirror
-    - if: '$CI_PROJECT_NAME == "omnibus-gitlab-mirror" && $CI_PIPELINE_SOURCE == "push"'
-      when: never
-    # No pipeline on auto-deploy branches as a tag will definitely follow
-    - if: '$CI_COMMIT_BRANCH =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/'
-      when: never
-    # Set CACHE_EDITION variable to GITLAB for pipelines triggered from gitlab-org/gitlab project so that they don't pollute regular branch cache
-    - if: '$TOP_UPSTREAM_SOURCE_PROJECT == "gitlab-org/gitlab"'
-      variables:
-        CACHE_EDITION: "GITLAB"
-    # Set CACHE_EDITION variable to STABLE on stable branch pipelines so that they don't pollute regular branch cache
-    - if: '$CI_COMMIT_BRANCH =~ /^.*-stable$/'
-      variables:
-        CACHE_EDITION: "STABLE"
-    # Set CACHE_EDITION variable to EE on EE pipelines
-    - if: '$ee == "true" || $GITLAB_VERSION =~ /^*-ee/ || $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/ || $CI_COMMIT_TAG =~ /^.*ee\.\d.*$/ || $CI_COMMIT_BRANCH =~ /^.*-ee$/'
-      variables:
-        CACHE_EDITION: "EE"
-    # For all other branches, create a pipeline. We are explicitly specifying
-    # this so that this rule gets matched earlier before MR pipelines gets
-    # triggered, thus causing two pipelines for a branch push - a regular one
-    # and a detached one. If we ever decide not to run pipelines on branch
-    # pushes that doesn't cause an MR, we can change the following to
-    # $CI_MERGE_REQUEST_IID
-    - if: '$CI_COMMIT_BRANCH'
-      when: always
-    # For tags, always create a pipeline.
-    - if: '$CI_COMMIT_TAG'
-      when: always
+include:
+  - local: '/gitlab-ci-config/workflow-rules.yml'
+  - local: '/gitlab-ci-config/dev-gitlab-org.yml'
+    rules:
+      - if: '$CI_SERVER_HOST == "dev.gitlab.org"'
+  - local: '/gitlab-ci-config/gitlab-com.yml'
+    rules:
+      - if: '$CI_SERVER_HOST != "dev.gitlab.org"'
 
 default:
   tags:
@@ -99,6 +76,7 @@ variables:
     - gitlab-org-docker
 
 before_script:
+  - echo "PIPELINE_TYPE detected as ${PIPELINE_TYPE}"
   - export CE_ONLY=(Raspberry)
   - export EE_ONLY=(SLES RAT)
   - for job in "${CE_ONLY[@]}"; do
@@ -166,32 +144,14 @@ generate-facts:
     reports:
       dotenv: build_facts/env_vars
   rules:
-    - if: '$DEPS_PIPELINE || $DEPENDENCY_SCANNING'
-      when: never
-    # The CACHE_UPDATE variable has two use cases:
-    # 1. Scheduled nightly builds in omnibus-gitlab-mirror that update the
-    #    cache to improve speed for package-and-qa builds from
-    #    omnibus-gitlab merge requests.
-    # 1. The gitlab-org/gitlab project schedules a pipeline with
-    #    CACHE_UPDATE every two hours. The resulting package-and-qa
-    #    pipeline refreshes the cache and reduces build times for
-    #    other GitLab merge requests that trigger package-and-qa.
-    # The first one doesn't have a qa-test job, and hence doesn't need
-    # the generate-facts job.
-    - if: '$CACHE_UPDATE && $CI_PIPELINE_SOURCE == "schedule"'
-      when: never
-    - if: '$CI_BRANCH_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/'
-      when: never
-    - when: always
+    # Temporary, until we use PIPELINE_TYPE in dev.gitlab.org pipelines also
+    - if: '$CI_PROJECT_PATH == "gitlab/omnibus-gitlab"'
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "GITLAB_BRANCH_TEST_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+    - when: never
   needs: []
-
-include:
-  - local: '/gitlab-ci-config/gitlab-com.yml'
-    rules:
-      - if: '$CI_SERVER_HOST == "gitlab.com"'
-  - local: '/gitlab-ci-config/dev-gitlab-org.yml'
-    rules:
-      - if: '$CI_SERVER_HOST == "dev.gitlab.org"'
 
 .notify:
   before_script:

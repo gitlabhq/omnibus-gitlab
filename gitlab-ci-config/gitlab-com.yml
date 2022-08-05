@@ -4,73 +4,6 @@
 #############
 # Templates #
 #############
-.com-docs-except-triggers: &com-docs-except-triggers
-  except:
-    refs:
-      - /./@gitlab/omnibus-gitlab
-      - triggers
-      - /^deps/
-      - /./@gitlab-org/build/omnibus-gitlab-mirror
-    variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
-      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
-
-.com-except-triggers-and-docs: &com-except-triggers-and-docs
-  except:
-    refs:
-      - /./@gitlab/omnibus-gitlab
-      - triggers
-      - /(^docs[\/-].*|.*-docs$)/
-      - /./@gitlab-org/build/omnibus-gitlab-mirror
-    variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
-      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
-
-.com-except-triggers-docs-and-deps: &com-except-triggers-docs-and-deps
-  except:
-    refs:
-      - /./@gitlab/omnibus-gitlab
-      - triggers
-      - /^deps/
-      - /(^docs[\/-].*|.*-docs$)/
-      - /./@gitlab-org/build/omnibus-gitlab-mirror
-    variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
-      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
-
-.com-branches-except-triggers-docs-and-deps: &com-branches-except-triggers-docs-and-deps
-  only:
-    - branches@gitlab-org/omnibus-gitlab
-    - branches@gitlab-org/security/omnibus-gitlab
-  <<: *com-except-triggers-docs-and-deps
-
-.com-branches-except-triggers-and-docs: &com-branches-except-triggers-and-docs
-  only:
-    - branches@gitlab-org/omnibus-gitlab
-    - branches@gitlab-org/security/omnibus-gitlab
-  <<: *com-except-triggers-and-docs
-
-.com-trigger-only: &com-trigger-only
-  only:
-    - triggers@gitlab-org/build/omnibus-gitlab-mirror
-    - pipelines@gitlab-org/build/omnibus-gitlab-mirror
-
-.com-trigger-and-nightly-only: &com-trigger-and-nightly-only
-  rules:
-    - if: '$DEPS_PIPELINE || $DEPENDENCY_SCANNING'
-      when: never
-    - if: '$CI_PIPELINE_SOURCE == "trigger" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
-    - if: '$CI_PIPELINE_SOURCE == "pipeline" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
-    - if: '$CI_PIPELINE_SOURCE == "schedule" && $NIGHTLY == "true" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
-    - when: never
-
-.depscan-rules: &depscan-rules
-  only:
-    refs:
-      - schedules@gitlab-org/omnibus-gitlab
-    variables:
-      - $DEPENDENCY_SCANNING
-
 .knapsack-artifacts: &knapsack-artifacts
   expire_in: 31d
   paths:
@@ -94,7 +27,9 @@
     - export DISTRO_VERSION=${JOB_NAME[1]}
     - mkdir -p knapsack/
     - '[[ -f knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json ]] || echo "{}" > knapsack/${DISTRO_NAME}_${DISTRO_VERSION}_main_rspec_report.json'
-  <<: *com-except-triggers-docs-and-deps
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
   retry: 1
   needs:
     - rubocop
@@ -163,6 +98,9 @@
     - job: generate-facts
       optional: true
       artifacts: true
+  rules:
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+    - if: '$PIPELINE_TYPE == "DURATION_PLOTTER_PIPELINE"'
 
 .spec_template: &spec_template
   extends: .gems-cache
@@ -172,13 +110,15 @@
     # so tests run fine on forks
     - export ALTERNATIVE_SOURCES="true";
     - *install-gems
-  <<: *com-except-triggers-docs-and-deps
   retry: 1
   script:
     - bundle exec rspec spec/lib
   artifacts:
     reports: &spec_reports
       junit: junit_rspec.xml
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
 
 .chef_spec_template:
   extends: .spec_template
@@ -224,24 +164,35 @@
     TOP_UPSTREAM_SOURCE_SHA: ${TOP_UPSTREAM_SOURCE_SHA}
     TOP_UPSTREAM_SOURCE_REF: ${TOP_UPSTREAM_SOURCE_REF}
     QA_BRANCH: ${QA_BRANCH}
-  when: manual
   trigger:
     project: 'gitlab-org/build/omnibus-gitlab-mirror'
     branch: $CI_COMMIT_REF_NAME
     strategy: depend
-  <<: *com-branches-except-triggers-docs-and-deps
   needs:
     - job: generate-facts
       artifacts: true
     - job: check-for-sha-in-mirror
       artifacts: false
+  allow_failure: true
+  rules:
+    # Because of inherit:variables being false, `PIPELINE_TYPE` isn't available here. :(
+    # https://gitlab.com/gitlab-org/gitlab/-/issues/368759
+    - if: '$CI_PIPELINE_SOURCE=="schedule" || $CI_PIPELINE_SOURCE=="pipeline"'
+      when: never
+    - if: '$CI_COMMIT_REF_PROTECTED == "true"'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && ($CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" || $CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab")'
+      when: manual
+    - if: '$CI_COMMIT_BRANCH && ($CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" || $CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab")'
+      when: manual
 
 .trigger-pipeline:
   stage: trigger-qa
   image: "${RUBY_IMAGE}"
-  when: manual
   allow_failure: true
-  <<: *com-trigger-only
+  rules:
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+      when: manual
   needs:
     - job: Trigger:package
       artifacts: false
@@ -265,15 +216,14 @@
   variables:
     GIT_STRATEGY: none
     DOCS_REVIEW_APPS_DOMAIN: 35.193.151.162.nip.io
-  when: manual
-  only:
-    refs:
-      - branches@gitlab-org/omnibus-gitlab
-  except:
-    variables:
-      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
-      - $CI_COMMIT_REF_NAME =~ /^deps/
-      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
+  allow_failure: true
+  rules:
+    - if: '$PIPELINE_TYPE == "GITLAB_BRANCH_TEST_PIPELINE"'
+      when: manual
+    - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
+      when: manual
+    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
+      when: manual
 
 #####################
 # Cache update jobs #
@@ -288,11 +238,8 @@ update-gems-cache:
     - echo "Cache is up to date!"
   cache:
     policy: push  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
-  only:
-    refs:
-      - schedules  # Jobs that take advantage of this cache are in the canonical project and the mirror one
-    variables:
-      - $CACHE_UPDATE
+  rules:
+    - if: '$PIPELINE_TYPE == "CACHE_UPDATE_PIPELINE"'
 
 # We need to populate the cache for jobs with the `gitlab-org-docker` tag. Ideally, we wouldn't need this if
 # we'd use Kaniko to build the Docker images, allowing to use the `gitlab-org` tag instead of the `gitlab-org-docker` tag.
@@ -312,12 +259,8 @@ update-trigger-package-cache:
     policy: push  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
   tags:
     - triggered-packages
-  only:
-    refs:
-      - schedules@gitlab-org/build/omnibus-gitlab-mirror  # Jobs that take advantage of this cache are exclusively in the mirror project
-      - pipelines@gitlab-org/build/omnibus-gitlab-mirror
-    variables:
-      - $CACHE_UPDATE
+  rules:
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
   needs:
     - job: fetch-assets
       optional: true
@@ -332,7 +275,9 @@ check-for-sha-in-mirror:
   image: "${RUBY_IMAGE}"
   script:
     - support/wait_for_sha
-  <<: *com-branches-except-triggers-and-docs
+  rules:
+    - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "GITLAB_BRANCH_TEST_PIPELINE"'
   timeout: 3h
   needs: []
 
@@ -352,7 +297,9 @@ rubocop:
     - *install-gems
   script:
     - bundle exec rubocop --parallel
-  <<: *com-except-triggers-docs-and-deps
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
   needs: []
 
 # Perform documentation linting on Markdown files
@@ -367,7 +314,10 @@ docs-lint markdown:
     - vale --minAlertLevel error doc
     # Lint Markdown
     - markdownlint --config .markdownlint.yml 'doc/**/*.md'
-  <<: *com-docs-except-triggers
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
 
 # Perform link checks on published HTML files
 docs-lint links:
@@ -386,7 +336,10 @@ docs-lint links:
     - bundle exec nanoc check internal_links
     # Check the internal anchor links
     - bundle exec nanoc check internal_anchors
-  <<: *com-docs-except-triggers
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
 
 yard:
   extends: .gems-cache
@@ -400,12 +353,14 @@ yard:
     - *install-gems
   script:
     - bundle exec yardoc
-  <<: *com-docs-except-triggers
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "LICENSE_PAGE_UPDATE_PIPELINE"'
   artifacts:
     expire_in: 1 week
     paths:
       - yard/*
-
 
 # Trigger a docs build in gitlab-docs
 # Useful to preview the docs changes live
@@ -439,17 +394,8 @@ danger-review:
   cache: {}
   needs: []
   before_script: []
-  only:
-    refs:
-      - branches@gitlab-org/omnibus-gitlab
-  except:
-    refs:
-      - schedules@gitlab-org/omnibus-gitlab
-      - /^[\d-]+-stable(-patch-[\d]+)?$/
-      - master
-    variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
-      - $CI_COMMIT_REF_NAME =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
   script:
     - danger --fail-on-errors=true
 
@@ -546,7 +492,9 @@ update-knapsack:
   script:
     - support/merge-reports knapsack
     - rm -f knapsack/*node*
-  <<: *com-except-triggers-docs-and-deps
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
   retry: 1
 
 ############################
@@ -558,7 +506,6 @@ Trigger:package:
   variables:
     BASE_OS: "ubuntu_20.04"
     PACKAGE_DIRECTORY: "pkg/ubuntu-focal"
-  <<: *com-trigger-and-nightly-only
 
 Trigger:package:fips:
   extends:
@@ -568,8 +515,10 @@ Trigger:package:fips:
     USE_SYSTEM_SSL: "true"
     BASE_OS: "ubuntu_20.04_fips"
     PACKAGE_DIRECTORY: "pkg/ubuntu-focal_fips"
-  <<: *com-trigger-only
-  when: manual
+  allow_failure: true
+  rules:
+    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
+      when: manual
 
 package_size_check:
   extends: .trigger-package-cache
@@ -578,10 +527,11 @@ package_size_check:
   script:
     - bundle exec rake build:package:generate_sizefile
     - bundle exec rake check:package_size
-  <<: *com-trigger-only
   needs:
     - job: Trigger:package
       artifacts: false
+  rules:
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
 
 Trigger:gitlab-docker:
   extends:
@@ -591,7 +541,8 @@ Trigger:gitlab-docker:
   script:
     - bundle exec rake docker:build:image
     - bundle exec rake docker:push:triggered
-  <<: *com-trigger-only
+  rules:
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
   needs:
     - job: Trigger:package
       artifacts: false
@@ -607,10 +558,10 @@ Trigger:qa-docker:
   script:
     - bundle exec rake qa:build
     - bundle exec rake qa:push:triggered
-  <<: *com-trigger-only
-  except:
-    variables:
-      - $SKIP_QA_DOCKER == "true"
+  rules:
+    - if: '$SKIP_QA_DOCKER == "true"'
+      when: never
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
   needs:
     - Trigger:package
     - job: generate-facts
@@ -638,10 +589,12 @@ qa-test:
     project: "gitlab-org/gitlab-qa-mirror"
     branch: $QA_BRANCH
     strategy: depend
-  <<: *com-trigger-only
-  except:
-    variables:
-      - $SKIP_QA_TEST == "true"
+  rules:
+    - if: '$SKIP_QA_TEST == "true"'
+      when: never
+    # Because of inherit:variables being false, `PIPELINE_TYPE` isn't available here. :(
+    # https://gitlab.com/gitlab-org/gitlab/-/issues/368759
+    - if: '$CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && $CI_PIPELINE_SOURCE=="pipeline"'
   needs:
     - job: generate-facts
       artifacts: true
@@ -661,7 +614,8 @@ letsencrypt-test:
     - curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     - chmod +x /usr/local/bin/docker-compose
     - bundle exec rake qa:test_letsencrypt
-  <<: *com-trigger-only
+  rules:
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
   needs:
     - job: Trigger:gitlab-docker
       artifacts: false
@@ -669,11 +623,12 @@ letsencrypt-test:
 RAT:
   stage: trigger-qa
   image: "${RUBY_IMAGE}"
-  when: manual
   allow_failure: true
   script:
     - bundle exec rake qa:rat:trigger
-  <<: *com-trigger-only
+  rules:
+    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
+      when: manual
   needs:
     - job: Trigger:package
       artifacts: false
@@ -695,6 +650,8 @@ RAT:FIPS:
 
 GET:Geo:
   extends: .trigger-pipeline
+  rules:
+    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
   script:
     - bundle exec rake qa:get:geo:trigger
 
@@ -706,7 +663,8 @@ create_omnibus_manifest:
     TERM: xterm-256color
   script:
     - bundle exec omnibus manifest gitlab -l nothing 2> /dev/null > version-manifest.json
-  <<: *depscan-rules
+  rules:
+    - if: '$PIPELINE_TYPE == "DEPENDENCY_SCANNING_PIPELINE"'
   artifacts:
     expire_in: 7 days
     paths:
@@ -721,7 +679,8 @@ dependency_scanning:
   before_script: []
   script:
     - /gitlab-depscan.sh version-manifest.json
-  <<: *depscan-rules
+  rules:
+    - if: '$PIPELINE_TYPE == "DEPENDENCY_SCANNING_PIPELINE"'
   allow_failure: true
   needs:
     - create_omnibus_manifest
@@ -740,22 +699,16 @@ dependency_update:
   script:
     - curl https://deps.app/install.sh | bash -s -- -b $HOME/bin
     - $HOME/bin/deps ci
-  only:
-    variables:
-      - $DEPS_PIPELINE
+  rules:
+    - if: '$PIPELINE_TYPE == "DEPS_IO_VERSION_CHECK_PIPELINE"'
 
 dependencies_io_check:
   extends: .trigger-job
   when: always
   variables:
     ee: "true"
-  only:
-    refs:
-      - /^deps.*/@gitlab-org/omnibus-gitlab
-  except:
-    refs:
-      - triggers
-      - branches@gitlab/omnibus-gitlab
+  rules:
+    - if: '$PIPELINE_TYPE == "DEPS_IO_VERSION_BUMP_PIPELINE"'
 
 validate_packer_changes:
   before_script: []
@@ -764,10 +717,13 @@ validate_packer_changes:
   script:
     - cd "${CI_PROJECT_DIR}/support/packer" && packer validate ce.json
     - cd "${CI_PROJECT_DIR}/support/packer" && packer validate ee.json
-  only:
-    changes:
-      - support/packer/*
-  <<: *com-except-triggers-docs-and-deps
+  rules:
+    - if: '$PIPELINE_TYPE == "_TEST_PIPELINE"'
+      changes:
+        - support/packer/*
+    - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
+      changes:
+        - support/packer/*
 
 ##############################
 #     Scheduled pipeline     #
@@ -786,8 +742,5 @@ pages:
   artifacts:
     paths:
       - public
-  only:
-    - schedules@gitlab-org/omnibus-gitlab
-  except:
-    variables:
-      - $DEPS_PIPELINE || $CACHE_UPDATE || $DEPENDENCY_SCANNING
+  rules:
+    - if: '$PIPELINE_TYPE == "LICENSE_PAGE_UPDATE_PIPELINE"'
