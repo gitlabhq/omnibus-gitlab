@@ -29,7 +29,6 @@ source 'https://packagecloud.io/cinc-project/stable' do
 end
 gem 'ohai', '~> 17.0'
 gem 'rainbow', '~> 2.2' # This is used by gitlab-ctl and the chef formatter
-gem 'thor', '0.20.3' # This specific version is required by package_cloud
 gem 'json'
 gem 'rspec'
 gem 'rake'
@@ -43,6 +42,7 @@ gem 'yard'
 
 group :packagecloud, optional: true do
   gem 'package_cloud'
+  gem 'thor', '~> 1.2'
 end
 
 group :rubocop do
