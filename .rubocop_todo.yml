@@ -74,12 +74,6 @@ Lint/ConstantDefinitionInBlock:
     - 'spec/chef/support/shared_examples/gitlab_geo_promotion_commands_shared_examples.rb'
 
 # Offense count: 1
-# Cop supports --auto-correct.
-Lint/DeprecatedOpenSSLConstant:
-  Exclude:
-    - 'files/gitlab-cookbooks/package/libraries/helpers/secrets_helper.rb'
-
-# Offense count: 1
 Lint/DuplicateMethods:
   Exclude:
     - 'files/gitlab-ctl-commands/lib/postgresql/pgpass.rb'
