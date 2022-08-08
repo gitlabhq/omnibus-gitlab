@@ -101,6 +101,7 @@
   rules:
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
     - if: '$PIPELINE_TYPE == "DURATION_PLOTTER_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
 .spec_template: &spec_template
   extends: .gems-cache
@@ -543,6 +544,7 @@ Trigger:gitlab-docker:
     - bundle exec rake docker:push:triggered
   rules:
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
   needs:
     - job: Trigger:package
       artifacts: false
@@ -562,6 +564,7 @@ Trigger:qa-docker:
     - if: '$SKIP_QA_DOCKER == "true"'
       when: never
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
   needs:
     - Trigger:package
     - job: generate-facts
