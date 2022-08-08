@@ -72,8 +72,7 @@ See <https://docs.gitlab.com/ee/administration/redis/replication_and_failover.ht
 
 ## Using Google Cloud Memorystore
 
-Google Cloud Memorystore [does not support the Redis `CLIENT`
-command](https://cloud.google.com/memorystore/docs/redis/product-constraints#blocked_redis_commands).
+Google Cloud Memorystore [does not support the Redis `CLIENT` command](https://cloud.google.com/memorystore/docs/redis/product-constraints#blocked_redis_commands).
 By default, Sidekiq will attempt to set the `CLIENT` for debugging
 purposes. This can be disabled via the following configuration setting:
 
@@ -116,8 +115,8 @@ redis['announce_ip_from_hostname'] = true
 
 ## Setting the Redis Cache instance as an LRU
 
-Using multiple Redis instances allows you to configure Redis as a [Least
-Recently Used cache](https://redis.io/docs/manual/eviction/). Note you should only
+Using multiple Redis instances allows you to configure Redis as a
+[Least Recently Used cache](https://redis.io/docs/manual/eviction/). Note you should only
 do this for the Redis cache and rate-limiting instances; the Redis queues, shared
 state instances, and tracechunks instances should never be configured as an LRU,
 since they contain data (e.g. Sidekiq jobs) that is expected to be persistent.
@@ -249,8 +248,7 @@ check whether this is an issue:
    of the Redis server. The second line indicates the certificate is
    not properly trusted on this server. See the [previous section](#ssl-certificates).
 
-1. Verify that the SSL certificate is working via [these troubleshooting
-   steps](ssl.md#custom-certificates-missing-or-skipped).
+1. Verify that the SSL certificate is working via [these troubleshooting steps](ssl.md#custom-certificates-missing-or-skipped).
 
 ### NOAUTH Authentication required
 

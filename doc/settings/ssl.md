@@ -489,8 +489,7 @@ Note that the OpenSSL library supports the definition of `SSL_CERT_FILE` and
 certificate bundle to load, while the latter defines a directory in which to
 search for more certificates. These variables should not be necessary if you
 have added certificates to the `trusted-certs` directory. However, if for some
-reason you need to set them, they can be [defined as environment
-variables](environment-variables.md). For example:
+reason you need to set them, they can be [defined as environment variables](environment-variables.md). For example:
 
 ```ruby
 gitlab_rails['env'] = {"SSL_CERT_FILE" => "/usr/lib/ssl/private/customcacert.pem"}

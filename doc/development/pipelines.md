@@ -130,8 +130,8 @@ and [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab).
 ### Tag pipelines
 
 Tag pushes to [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) starts a pipeline with the
-[release jobs](#release-jobs). Tag pushes to [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and [Security
-mirror](https://gitlab.com/gitlab-org/security/omnibus-gitlab) behaves as regular branch pushes (except that they don't have an option
+[release jobs](#release-jobs). Tag pushes to [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and
+[Security mirror](https://gitlab.com/gitlab-org/security/omnibus-gitlab) behaves as regular branch pushes (except that they don't have an option
 to start a package-and-qa pipeline) and run basic stylistic checks and unit
 tests.
 
@@ -164,8 +164,8 @@ environments - will be part of this pipeline.
 
 ### Triggered pipelines
 
-We use triggered pipelines to run a "package-and-qa" pipeline in the [QA
-mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror). These can be triggered either from a pipeline in the
+We use triggered pipelines to run a "package-and-qa" pipeline in the
+[QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror). These can be triggered either from a pipeline in the
 [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) or [GitLab project](https://gitlab.com/gitlab-org/gitlab).
 
 This pipeline is intended to give the developers a package and an image to test
@@ -286,8 +286,8 @@ This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-
 
 #### `Trigger:qa-docker`
 
-This job builds a GitLab QA Docker image from the [qa directory in the Rails
-codebase](https://gitlab.com/gitlab-org/gitlab/blob/master/qa/Dockerfile). This
+This job builds a GitLab QA Docker image from the
+[qa directory in the Rails codebase](https://gitlab.com/gitlab-org/gitlab/blob/master/qa/Dockerfile). This
 QA image is used for QA runs.
 
 This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
@@ -331,8 +331,8 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 
 #### `QA-branch`
 
-This job builds a GitLab QA Docker image from the [qa directory in the Rails
-codebase](https://gitlab.com/gitlab-org/gitlab/blob/master/qa/Dockerfile).
+This job builds a GitLab QA Docker image from the
+[qa directory in the Rails codebase](https://gitlab.com/gitlab-org/gitlab/blob/master/qa/Dockerfile).
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on branch and nightly pipelines.
 
@@ -384,8 +384,8 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 
 ### `Docker-QA`
 
-This job builds a GitLab QA Docker image from the [qa directory in the Rails
-codebase](https://gitlab.com/gitlab-org/gitlab/blob/master/qa/Dockerfile) and
+This job builds a GitLab QA Docker image from the
+[qa directory in the Rails codebase](https://gitlab.com/gitlab-org/gitlab/blob/master/qa/Dockerfile) and
 pushes it to the internal GitLab container registry.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on tag pipelines.
