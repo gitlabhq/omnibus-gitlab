@@ -49,7 +49,7 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $CI_COMMIT_BRANCH'
       variables:
         PIPELINE_TYPE: CE_BRANCH_BUILD_PIPELINE
-    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]7,\.[^ ]7,$/'
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/'
       variables:
         PIPELINE_TYPE: AUTO_DEPLOY_BUILD_PIPELINE
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab/omnibus-gitlab" && $CI_COMMIT_TAG =~ /^.*\+rc.*\.ce\..*/'
