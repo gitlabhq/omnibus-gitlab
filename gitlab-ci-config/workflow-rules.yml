@@ -3,6 +3,13 @@ workflow:
     # Avoid duplicate pipeline when an MR is open
     - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"'
       when: never
+    # Skip pipelines if configured to do so. For example,
+    # $SKIP_PIPELINE_SOURCE is set to "push" in QA mirror
+    - if: '$SKIP_PIPELINE_SOURCE == $CI_PIPELINE_SOURCE'
+      when: never
+    # No pipeline on auto-deploy branches as a tag will definitely follow
+    - if: '$CI_COMMIT_BRANCH =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/'
+      when: never
     # Detect pipeline type
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $PAGES_UPDATE == "true" && $CI_PIPELINE_SOURCE == "schedule"'
       variables:
@@ -87,13 +94,6 @@ workflow:
         PIPELINE_TYPE: FORK_BRANCH_TEST_PIPELINE
     # If pipeline type could not be detected, do not create a pipeline
     - if: '$PIPELINE_TYPE == null'
-      when: never
-    # Skip pipelines if configured to do so. For example,
-    # $SKIP_PIPELINE_SOURCE is set to "push" in QA mirror
-    - if: '$SKIP_PIPELINE_SOURCE == $CI_PIPELINE_SOURCE'
-      when: never
-    # No pipeline on auto-deploy branches as a tag will definitely follow
-    - if: '$CI_COMMIT_BRANCH =~ /^[0-9]+-[0-9]+-auto-deploy-[0-9]+$/'
       when: never
     # Set CACHE_EDITION variable to GITLAB for pipelines triggered from gitlab-org/gitlab project so that they don't pollute regular branch cache
     - if: '$TOP_UPSTREAM_SOURCE_PROJECT == "gitlab-org/gitlab"'
