@@ -65,6 +65,10 @@ else
   runtime_dependency 'openssh-server'
 end
 
+# perl is required for exiftool and openssh certificate hashing
+
+runtime_dependency 'perl'
+
 if rhel?
   case OhaiHelper.get_centos_version
   when '6', '7'
