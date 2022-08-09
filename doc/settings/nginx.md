@@ -991,8 +991,8 @@ To increase the `client_max_body_size`:
 Some security scanners detect issues when they see the `Server: nginx` http header. Most scanners with this alert will
 notify as `Low` or `Info` severity. [See Nessus as an example](https://www.tenable.com/plugins/nessus/106375).
 
-We recommend ignoring this warning, as the benefit of removing the header is low, and its presence [helps support the
-NGINX project in usage statistics](https://trac.nginx.org/nginx/ticket/1644). We do provide a way to turn off the
+We recommend ignoring this warning, as the benefit of removing the header is low, and its presence
+[helps support the NGINX project in usage statistics](https://trac.nginx.org/nginx/ticket/1644). We do provide a way to turn off the
 header with `hide_server_tokens`:
 
 1. Edit `/etc/gitlab/gitlab.rb` and set the value:
