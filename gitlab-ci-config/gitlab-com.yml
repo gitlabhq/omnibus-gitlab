@@ -655,6 +655,7 @@ GET:Geo:
   extends: .trigger-pipeline
   rules:
     - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
+      when: manual
   script:
     - bundle exec rake qa:get:geo:trigger
 
