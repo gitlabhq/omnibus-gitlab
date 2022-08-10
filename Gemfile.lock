@@ -178,7 +178,7 @@ GEM
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
     equalizer (0.0.11)
-    erubi (1.10.0)
+    erubi (1.11.0)
     erubis (2.7.0)
     excon (0.76.0)
     fantaskspec (1.2.0)
