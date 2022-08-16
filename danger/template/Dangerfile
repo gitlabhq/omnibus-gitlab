@@ -37,9 +37,7 @@ def user_configuration_paths_requiring_review(files)
   to_review
 end
 
-all_files = git.added_files + git.modified_files
-
-configuration_paths_to_review = user_configuration_paths_requiring_review(all_files)
+configuration_paths_to_review = user_configuration_paths_requiring_review(helper.all_changed_files)
 
 NO_TEMPLATE_CHANGE_MESSAGE = <<~MSG
 You've made some changes at the locations which contain user facing configuration.
@@ -49,4 +47,4 @@ to gitlab.rb.template located in files/gitlab-config-template/gitlab.rb.template
 Otherwise, please consider adding the ~"type::maintenance" label in that case.
 MSG
 
-warn NO_TEMPLATE_CHANGE_MESSAGE, sticky: false if !git.modified_files.include?('files/gitlab-config-template/gitlab.rb.template') && !configuration_paths_to_review.empty?
+warn NO_TEMPLATE_CHANGE_MESSAGE, sticky: false if !helper.changes.modified.files.include?('files/gitlab-config-template/gitlab.rb.template') && !configuration_paths_to_review.empty?

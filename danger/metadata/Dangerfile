@@ -1,0 +1,1 @@
+warn "You may want to add ~group::distribution label to this MR for gitlab-insights" unless helper.has_scoped_label_with_scope?("group")

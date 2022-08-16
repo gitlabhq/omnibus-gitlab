@@ -45,6 +45,10 @@ group :packagecloud, optional: true do
   gem 'thor', '~> 1.2'
 end
 
+group :danger, optional: true do
+  gem 'gitlab-dangerfiles', '~> 3.0', require: false
+end
+
 group :rubocop do
   gem 'gitlab-styles', '~> 6.1', require: false
 end

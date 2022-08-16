@@ -389,16 +389,17 @@ review-docs-cleanup:
   script:
     - ./trigger-build.rb docs cleanup
 
+include:
+  - project: 'gitlab-org/quality/pipeline-common'
+    file:
+      - '/ci/danger-review.yml'
+
 danger-review:
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
   stage: check
-  cache: {}
-  needs: []
-  before_script: []
+  variables:
+    BUNDLE_WITH: "danger"
   rules:
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
-  script:
-    - danger --fail-on-errors=true
 
 Centos 7 knapsack: *prepare_knapsack
 Centos 8 knapsack: *prepare_knapsack

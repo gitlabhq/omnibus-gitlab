@@ -24,11 +24,9 @@ stages:
 include:
   - local: '/gitlab-ci-config/workflow-rules.yml'
   - local: '/gitlab-ci-config/dev-gitlab-org.yml'
-    rules:
-      - if: '$CI_SERVER_HOST == "dev.gitlab.org"'
   - local: '/gitlab-ci-config/gitlab-com.yml'
     rules:
-      - if: '$CI_SERVER_HOST != "dev.gitlab.org"'
+      - if: '$CI_SERVER_HOST == "gitlab.com"'
 
 default:
   tags:
