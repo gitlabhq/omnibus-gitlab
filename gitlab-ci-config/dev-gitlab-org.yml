@@ -559,9 +559,6 @@ Ubuntu-20.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
 
-Debian-9-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
 Debian-10-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
@@ -791,9 +788,6 @@ Ubuntu-20.04-staging:
   <<: *dev-tag-and-nightly
 
 ### Package builds
-Debian-9:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
 Debian-10:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
@@ -879,13 +873,6 @@ Docker:
   retry: 1
 
 ### Staging uploads
-Debian-9-staging:
-  needs:
-    - job: Debian-9
-      optional: true
-    - job: Debian-9-branch
-      optional: true
-  <<: *staging_upload
 Debian-10-staging:
   needs:
     - job: Debian-10
@@ -1020,10 +1007,6 @@ Ubuntu-20.04-release:
 Ubuntu-20.04-arm-release:
   needs:
     - Ubuntu-20.04-arm
-  <<: *production_release
-Debian-9-release:
-  needs:
-    - Debian-9
   <<: *production_release
 Debian-10-release:
   needs:

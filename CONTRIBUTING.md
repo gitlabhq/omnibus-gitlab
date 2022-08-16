@@ -166,11 +166,10 @@ See the [developer documentation](doc/development/README.md#merge-request-guidel
 
 ## Unofficial packaging point of contact
 
-The omnibus-gitlab project is a project used for building official GitLab packages.
-There are multiple community driven projects for packaging, such as [GitLab CE unofficial Debian 9](https://packages.debian.org/stretch/gitlab) package.
-
-If you are a maintainer or point of contact for a such project, and you require
-assistance or just want to talk about GitLab, please raise [an issue in the omnibus-gitlab project](https://gitlab.com/gitlab-org/omnibus-gitlab/issues).
+The omnibus-gitlab project is a project used for building official GitLab
+packages. If you are a maintainer or point of contact for a such project, and
+you require assistance or just want to talk about GitLab, please raise
+[an issue in the omnibus-gitlab project](https://gitlab.com/gitlab-org/omnibus-gitlab/issues).
 
 ## Code of conduct
 

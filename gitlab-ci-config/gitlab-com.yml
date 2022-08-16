@@ -403,7 +403,6 @@ danger-review:
 
 Centos 7 knapsack: *prepare_knapsack
 Centos 8 knapsack: *prepare_knapsack
-Debian 9 knapsack: *prepare_knapsack
 Debian 10 knapsack: *prepare_knapsack
 Debian 11 knapsack: *prepare_knapsack
 OpenSUSE 15.3 knapsack: *prepare_knapsack
@@ -443,12 +442,6 @@ Ubuntu 20.04 specs :
   parallel: 6
   needs:
   - Ubuntu 20.04 knapsack
-Debian 9 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-stretch"
-  extends: .chef_spec_template
-  parallel: 6
-  needs:
-  - Debian 9 knapsack
 Debian 10 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-buster"
   extends: .chef_spec_template

@@ -72,9 +72,6 @@ Ubuntu-20.04-arm-check:
   extends: .apt-install
   tags:
   - docker-arm-builder
-Debian-9-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_9:${BUILDER_IMAGE_REVISION}"
-  extends: .apt-install
 Debian-10-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
