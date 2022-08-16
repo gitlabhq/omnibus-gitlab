@@ -44,8 +44,7 @@ def library_paths_requiring_review(files)
   to_review
 end
 
-all_files = git.added_files + git.modified_files
-has_config_changes = !library_paths_requiring_review(all_files).empty?
-requires_build_review = (gitlab.mr_labels & NO_BUILD_CHANGE_HAPPENED_LABELS).empty?
+has_config_changes = !library_paths_requiring_review(helper.all_changed_files).empty?
+requires_build_review = (helper.mr_labels & NO_BUILD_CHANGE_HAPPENED_LABELS).empty?
 
 warn format(SOFTWARE_MESSAGE, labels: no_build_change_happened_labels) if has_config_changes && requires_build_review

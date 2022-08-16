@@ -5,6 +5,6 @@ Please make sure this merge request follows all standards established
 within the [Ruby upgrade guidelines](https://docs.gitlab.com/ee/development/ruby_upgrade.html).
 MSG
 
-diff = git.diff_for_file("config/software/ruby.rb")
+lines = helper.changed_lines("config/software/ruby.rb")
 
-warn format(RUBY_UPGRADE_MESSAGE) if diff && diff.patch =~ /[+-]+.*default_version/
+warn format(RUBY_UPGRADE_MESSAGE) if lines.any? { |line| line =~ /[+-]+.*default_version/ }
