@@ -38,6 +38,34 @@ RSpec.describe 'monitoring::grafana' do
     allow_any_instance_of(PgHelper).to receive(:database_exists?).and_return(true)
   end
 
+  context 'default values' do
+    before do
+      stub_gitlab_rb(external_url: 'http://gitlab.example.com')
+    end
+
+    it 'is not enabled by default for new installs' do
+      allow(File).to receive(:exist?).and_wrap_original do |m, *args|
+        if !args.empty? && args.first == '/var/opt/gitlab/grafana/data/grafana.db'
+          false
+        else
+          m.call(*args)
+        end
+      end
+      expect(chef_run).not_to include_recipe('monitoring::grafana')
+    end
+
+    it 'is enabled by default for upgrades' do
+      allow(File).to receive(:exist?).and_wrap_original do |m, *args|
+        if !args.empty? && args.first == '/var/opt/gitlab/grafana/data/grafana.db'
+          true
+        else
+          m.call(*args)
+        end
+      end
+      expect(chef_run).to include_recipe('monitoring::grafana')
+    end
+  end
+
   context 'when grafana is enabled' do
     let(:config_template) { chef_run.template('/opt/gitlab/sv/grafana/log/config') }
 
@@ -129,7 +157,12 @@ RSpec.describe 'monitoring::grafana' do
   end
 
   it 'authorizes Grafana with gitlab' do
-    stub_gitlab_rb(external_url: 'http://gitlab.example.com')
+    stub_gitlab_rb(
+      external_url: 'http://gitlab.example.com',
+      grafana: {
+        enable: true
+      }
+    )
 
     allow(GrafanaHelper).to receive(:authorize_with_gitlab)
 
@@ -231,6 +264,7 @@ RSpec.describe 'monitoring::grafana' do
     it 'generates grafana metrics basic auth password when enabled' do
       stub_gitlab_rb(
         grafana: {
+          enable: true,
           metrics_enabled: true
         }
       )
@@ -246,6 +280,7 @@ RSpec.describe 'monitoring::grafana' do
     it 'adds metrics basic_auth_username when set' do
       stub_gitlab_rb(
         grafana: {
+          enable: true,
           metrics_enabled: true,
           metrics_basic_auth_username: 'user'
         }
@@ -262,6 +297,7 @@ RSpec.describe 'monitoring::grafana' do
     it 'can use special chars in metrics basic auth username and password' do
       stub_gitlab_rb(
         grafana: {
+          enable: true,
           metrics_enabled: true,
           metrics_basic_auth_username: '#user;@',
           metrics_basic_auth_password: 'password_#;@'
@@ -291,6 +327,7 @@ RSpec.describe 'monitoring::grafana' do
 
       stub_gitlab_rb(
         grafana: {
+          enable: true,
           metrics_enabled: true,
         },
         sidekiq: {
@@ -307,6 +344,9 @@ RSpec.describe 'monitoring::grafana' do
 
     it 'disables reporting when usage_ping_enabled is disabled' do
       stub_gitlab_rb(
+        grafana: {
+          enable: true,
+        },
         gitlab_rails: {
           usage_ping_enabled: false
         }
@@ -324,6 +364,7 @@ RSpec.describe 'monitoring::grafana' do
           usage_ping_enabled: true
         },
         grafana: {
+          enable: true,
           reporting_enabled: false
         }
       )

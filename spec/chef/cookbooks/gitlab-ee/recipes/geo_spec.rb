@@ -16,7 +16,7 @@ RSpec.describe 'gitlab-ee::geo' do
 
       expect(default_services.count).to be > 0
       default_services.each do |service|
-        expect(omnibus_helper.service_enabled?(service.tr('_', '-'))).to be(true), "#{service} was not enabled"
+        expect(omnibus_helper.service_enabled?(service.tr('_', '-'))).to be(true), "#{service} was not enabled" if Services.enabled?(service)
       end
     end
   end
