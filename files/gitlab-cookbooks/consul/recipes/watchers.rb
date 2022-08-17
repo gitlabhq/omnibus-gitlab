@@ -14,10 +14,10 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
-consul_helper = ConsulHelper.new(node)
+watch_helper = WatchHelper.new(node)
 
 node['consul']['watchers'].each do |watcher|
-  config = consul_helper.watcher_config(watcher)
+  config = watch_helper.watcher_config(watcher)
 
   file "#{node['consul']['config_dir']}/watcher_#{watcher}.json" do
     content config.to_json
@@ -25,7 +25,7 @@ node['consul']['watchers'].each do |watcher|
   end
 
   config[:watches].each do |watch|
-    template "#{node['consul']['script_directory']}/#{consul_helper.watcher_handler(watch[:service])}" do
+    template "#{node['consul']['script_directory']}/#{watch_helper.watcher_handler(watch[:service])}" do
       source "watcher_scripts/#{node['consul']['watcher_config'][watch[:service]][:handler]}.erb"
       variables node['consul'].to_hash
       mode 0555
