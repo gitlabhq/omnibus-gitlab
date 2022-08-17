@@ -12,8 +12,20 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 you can use to visualize performance metrics from the [embedded Prometheus](prometheus.md)
 monitoring system.
 
-Starting with GitLab 12.0, Grafana is enabled by default and SSO with GitLab is
-automatically configured. Grafana will be available on `https://gitlab.example.com/-/grafana`.
+## Enabling Grafana
+
+Starting with GitLab 15.3, Grafana is not enabled by default. To enable it:
+
+1. Edit `/etc/gitlab/gitlab.rb` and add/edit the following lines:
+
+   ```ruby
+   ## Set to true/false to enable/disable respectively
+   grafana['enable'] = true
+   ```
+
+1. Save the file and [reconfigure] GitLab for the changes to take effect.
+1. Once enabled, Grafana will be available on `https://gitlab.example.com/-/grafana`
+   and SSO with GitLab is automatically configured.
 
 ## Enable login using username and password
 

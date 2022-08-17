@@ -25,7 +25,14 @@ module Grafana
     end
 
     def parse_variables
+      enable_for_existing_installation
       parse_grafana_datasources
+    end
+
+    def enable_for_existing_installation
+      return unless File.exist?("#{Gitlab.node['monitoring']['grafana']['home']}/data/grafana.db")
+
+      Services.set_status('grafana', true) if Gitlab['grafana']['enable'].nil?
     end
 
     def parse_grafana_datasources
