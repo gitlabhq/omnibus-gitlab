@@ -39,6 +39,7 @@ gem 'aws-sdk-ec2'
 gem 'aws-sdk-marketplacecatalog'
 gem 'gitlab'
 gem 'yard'
+gem 'toml-rb'
 
 group :packagecloud, optional: true do
   gem 'package_cloud'
