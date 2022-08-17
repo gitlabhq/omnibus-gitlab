@@ -5,332 +5,15 @@
 # Templates #
 #############
 
-.unless-dev: &unless-dev
-  if: '$CI_PROJECT_PATH != "gitlab/omnibus-gitlab"'
-
-.if-branch: &if-branch
-  if: '$CI_COMMIT_BRANCH'
-
-.if-tag: &if-tag
-  if: '$CI_COMMIT_TAG'
-
-.if-auto-deploy-tag: &if-auto-deploy-tag
-  if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/'
-
-.if-rc-tag: &if-rc-tag
-  if: '$CI_COMMIT_TAG =~ /^.*\+rc.*/'
-
-.if-ee-tag: &if-ee-tag
-  if: '$CI_COMMIT_TAG =~ /^.*ee\.\d.*$/'
-
-.if-skip-release: &if-skip-release
-  if: '$SKIP_RELEASE == "true"'
-
-.if-ee-branch: &if-ee-branch
-  if: '$CI_COMMIT_BRANCH =~ /^.*-ee$/'
-
-.if-ce-tag: &if-ce-tag
-  if: '$CI_COMMIT_TAG =~ /^.*ce\.\d.*$/'
-
-.if-ee-var: &if-ee-var
-  if: '$ee == "true"'
-
-.if-nightly: &if-nightly
-  if: '$CI_PIPELINE_SOURCE == "schedule" && $NIGHTLY == "true"'
-
-.unless-nightly: &unless-nightly
-  if: '$CI_PIPELINE_SOURCE != "schedule" || $NIGHTLY != "true"'
-
-.if-ee-nightly: &if-ee-nightly
-  if: '$CI_PIPELINE_SOURCE == "schedule" && $NIGHTLY == "true" && $ee == "true"'
-
-.if-skip-job: &if-skip-job
-  if: '$SKIP_JOB_REGEX && $CI_JOB_NAME =~ $SKIP_JOB_REGEX'
-
-.dev-branches-only: &dev-branches-only
+.default_rules:
   rules:
-    - <<: *if-skip-job
+    - if: '$SKIP_JOB_REGEX && $CI_JOB_NAME =~ $SKIP_JOB_REGEX'
       when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-branch
 
-.dev-tag-only: &dev-tag-only
+.skip_release_jobs:
   rules:
-    - <<: *if-skip-job
+    - if: '$SKIP_RELEASE == "true"'
       when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-tag
-
-.dev-tag-only-manual: &dev-tag-only-manual
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-tag
-      when: manual
-
-.dev-tag-only-except-auto-deploy: &dev-tag-only-except-auto-deploy
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-tag
-
-.dev-public-release-only: &dev-public-release-only
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-skip-release
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-tag
-
-.dev-tag-only-except-auto-deploy-manual: &dev-tag-only-except-auto-deploy-manual
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-skip-release
-      when: never
-    - <<: *if-tag
-      when: manual
-
-.dev-ee-tag-only-except-auto-deploy: &dev-ee-tag-only-except-auto-deploy
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-ee-tag
-
-.dev-ee-tag-only-except-auto-deploy-manual: &dev-ee-tag-only-except-auto-deploy-manual
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-skip-release
-      when: never
-    - <<: *if-ee-tag
-      when: manual
-
-.dev-tag-only-except-auto-deploy-or-rc: &dev-tag-only-except-auto-deploy-or-rc
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-rc-tag
-      when: never
-    - <<: *if-skip-release
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-tag
-
-.dev-ee-tag-only-except-auto-deploy-or-rc: &dev-ee-tag-only-except-auto-deploy-or-rc
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-rc-tag
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-ee-tag
-
-.dev-ce-tag-only-except-auto-deploy-or-rc: &dev-ce-tag-only-except-auto-deploy-or-rc
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-ee-tag
-      when: never
-    - <<: *if-rc-tag
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-ce-tag
-
-.dev-tag-only-except-auto-deploy-or-rc-manual: &dev-tag-only-except-auto-deploy-or-rc-manual
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-rc-tag
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-skip-release
-      when: never
-    - <<: *if-tag
-      when: manual
-
-.dev-ce-tag-only-except-rc-manual: &dev-ce-tag-only-except-rc-manual
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-ee-tag
-      when: never
-    - <<: *if-rc-tag
-      when: never
-    - <<: *if-ce-tag
-      when: manual
-
-.dev-ee-tag-only-except-auto-deploy-or-rc-manual: &dev-ee-tag-only-except-auto-deploy-or-rc-manual
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-rc-tag
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-ee-tag
-      when: manual
-
-.dev-ce-branch-only-except-nightly: &dev-ce-branch-only-except-nightly
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-ee-var
-      when: never
-    - <<: *if-ee-branch
-      when: never
-    # https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/3199
-    # removed RPi jobs from nightly.
-    - <<: *if-nightly
-      when: never
-    - <<: *if-branch
-
-.dev-ee-branch-only: &dev-ee-branch-only
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - if: '$CI_COMMIT_BRANCH == ""'
-      when: never
-    - <<: *if-ee-var
-    - <<: *if-ee-branch
-
-.dev-ce-tag-only: &dev-ce-tag-only
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-ee-tag
-      when: never
-    - <<: *if-ce-tag
-
-.dev-ce-tag-only-manual: &dev-ce-tag-only-manual
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-ee-tag
-      when: never
-    - <<: *if-ce-tag
-      when: manual
-
-.dev-ee-tag-only: &dev-ee-tag-only
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-ee-tag
-
-.dev-ee-tag-only-manual: &dev-ee-tag-only-manual
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-ee-tag
-      when: manual
-
-.dev-tag-and-nightly: &dev-tag-and-nightly
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-tag
-    - <<: *if-nightly
-
-.dev-nightly-and-tag-except-auto-deploy: &dev-nightly-and-tag-except-auto-deploy
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-tag
-    - <<: *if-nightly
-
-.dev-nightly-only-manual: &dev-nightly-only-manual
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-nightly
-      when: manual
-
-.dev-ee-nightly-only: &dev-ee-nightly-only
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *unless-nightly
-      when: never
-    - <<: *if-ee-var
-
-.dev-ee-nightly-and-tag-except-auto-deploy: &dev-ee-nightly-and-tag-except-auto-deploy
-  rules:
-    - <<: *if-skip-job
-      when: never
-    - <<: *unless-dev
-      when: never
-    - <<: *if-auto-deploy-tag
-      when: never
-    - <<: *if-ee-nightly
-    - <<: *if-ee-tag
 
 .package-artifacts: &package-artifacts
   when: always
@@ -370,7 +53,6 @@
       fi
   tags:
   - docker-builder
-  <<: *dev-branches-only
   artifacts: *package-artifacts
   needs:
     - job: fetch-assets
@@ -380,12 +62,17 @@
       artifacts: true
   cache: *branch-cache
   retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
 
 .fips_branch_template: &fips_branch_build
   <<: *branch_build
   variables:
     USE_SYSTEM_SSL: "true"
-  <<: *dev-ee-nightly-only
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
 
 .rpi_branch_template: &rpi_branch_build
   <<: *branch_build
@@ -394,9 +81,11 @@
     NO_SOURCEMAPS: "true"
   tags:
   - docker-arm-builder
-  <<: *dev-ce-branch-only-except-nightly
   artifacts: *package-artifacts
   retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE == "CE_BRANCH_BUILD_PIPELINE"'
 
 .tag_template: &tag_build
   stage: package
@@ -421,7 +110,6 @@
     - bundle exec rake build:component_shas
   tags:
   - docker-builder
-  <<: *dev-tag-only-except-auto-deploy
   artifacts: *package-artifacts-release
   needs:
     - job: fetch-assets
@@ -431,13 +119,18 @@
       artifacts: true
   cache: *tag-cache
   retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
 
 .fips_tag_template: &fips_tag_build
   <<: *tag_build
   variables:
     USE_SYSTEM_SSL: "true"
-  <<: *dev-ee-tag-only-except-auto-deploy
   allow_failure: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 
 .rpi_tag_template: &rpi_tag_build
   <<: *tag_build
@@ -446,7 +139,9 @@
     NO_SOURCEMAPS: "true"
   tags:
   - docker-arm-builder
-  <<: *dev-ce-tag-only
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^CE_(RC|TAG)_BUILD_PIPELINE$/'
 
 ### This stage is used for uploading packages
 ### 1. To a staging package repository
@@ -463,15 +158,20 @@
   retry: 2
   tags:
   - promotion
-  <<: *dev-public-release-only
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
 
 .fips_staging_upload_template: &fips_staging_upload
   <<: *staging_upload
   variables:
     USE_SYSTEM_SSL: "true"
     INCLUDE_PACKAGECLOUD: "true"
-  <<: *dev-ee-nightly-and-tag-except-auto-deploy
   allow_failure: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 
 .staging_upload_with_deployment_template: &staging_upload_with_deployment
   extends: .staging_upload_template
@@ -492,10 +192,14 @@
   script:
     - bundle exec rake repository:upload:production
   retry: 2
-  <<: *dev-tag-only-except-auto-deploy-manual
   cache: *tag-cache
   tags:
   - promotion
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
+      when: manual
 
 .fips_release_template: &fips_release
   <<: *production_release
@@ -503,7 +207,11 @@
     USE_SYSTEM_SSL: "true"
     INCLUDE_PACKAGECLOUD: "true"
   allow_failure: true
-  <<: *dev-ee-tag-only-except-auto-deploy-manual
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+      when: manual
 
 .raspbian_release_template: &raspbian_release
   <<: *production_release
@@ -512,7 +220,11 @@
     INCLUDE_PACKAGECLOUD: "true"
   stage: raspbian-release
   retry: 2
-  <<: *dev-ce-tag-only-manual
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /^CE_(RC|TAG)_BUILD_PIPELINE$/'
+      when: manual
 
 .aws_ami_build: &aws_ami_build
   stage: package-and-image-release
@@ -524,11 +236,15 @@
   - bundle exec rake aws:ami:create
   tags:
   - docker-builder
-  <<: *dev-tag-only-except-auto-deploy-or-rc-manual
   cache: *tag-cache
   needs:
     - Ubuntu-20.04
   retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /_TAG_BUILD_PIPELINE$/'
+      when: manual
 
 .aws_marketplace_release: &aws_marketplace_release
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
@@ -537,7 +253,11 @@
     - export AWS_ACCESS_KEY_ID=$AWS_AMI_ACCESS_KEY_ID
     - export AWS_SECRET_ACCESS_KEY=$AWS_AMI_SECRET_ACCESS_KEY
     - bundle exec rake aws:marketplace:release
-  <<: *dev-ee-tag-only-except-auto-deploy-or-rc
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE == "EE_TAG_BUILD_PIPELINE"'
+      when: manual
 
 ###########################
 #     Branch pipeline     #
@@ -613,11 +333,15 @@ AmazonLinux-2-arm64-branch:
 SLES-12.5-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
-  <<: *dev-ee-branch-only
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
 SLES-15.2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
   <<: *branch_build
-  <<: *dev-ee-branch-only
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
 CentOS-8-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
@@ -635,7 +359,6 @@ Docker-branch:
   - bundle exec rake docker:build:image
   - bundle exec rake docker:push:staging
   - bundle exec rake docker:push:nightly
-  <<: *dev-branches-only
   tags:
   - docker-builder
   cache: *branch-cache
@@ -646,6 +369,9 @@ Docker-branch:
       optional: true
       artifacts: true
   retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
 
 QA-branch:
   extends: .docker_job
@@ -661,7 +387,6 @@ QA-branch:
     expire_in: 7d
     paths:
     - screenshots/
-  <<: *dev-branches-only
   tags:
   - docker-builder
   cache: *branch-cache
@@ -672,6 +397,9 @@ QA-branch:
       optional: true
       artifacts: true
   retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
 
 Raspberry-Pi-2-Buster-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
@@ -687,7 +415,9 @@ RAT-Nightly:
   needs:
     - Ubuntu-20.04-branch
   allow_failure: true
-  <<: *dev-ee-nightly-only
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
 
 # This job runs only on nightly EE builds
 RAT-Nightly-FIPS:
@@ -702,7 +432,9 @@ RAT-Nightly-FIPS:
   needs:
     - CentOS-8-fips-branch
   allow_failure: true
-  <<: *dev-ee-nightly-only
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
 
 ############################
 #     Release pipeline     #
@@ -715,22 +447,28 @@ Ubuntu-16.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   stage: package
   extends: .tag_template
+  rules:
+    - !reference [.default_rules, rules]
   # Also build for auto-deploy tags
-  <<: *dev-tag-only
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
 Ubuntu-18.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
   stage: package
   extends: .tag_template
+  rules:
+    - !reference [.default_rules, rules]
   # Also build for auto-deploy tags
-  <<: *dev-tag-only
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
 Ubuntu-20.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   stage: package
   extends: .tag_template
+  rules:
+    - !reference [.default_rules, rules]
   # Also build for auto-deploy tags
-  <<: *dev-tag-only
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
 ## Build the docker image for QA
 ## This is necessary for the deployment
@@ -741,7 +479,6 @@ Docker-QA:
   stage: image
   script:
     - bundle exec rake qa:build qa:push:staging
-  <<: *dev-tag-only
   cache: *tag-cache
   tags:
   - docker-builder
@@ -750,6 +487,9 @@ Docker-QA:
       optional: true
       artifacts: true
   retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
 ###########################################################
 ## Upload and deploy to staging or preprod for GitLab.com
@@ -770,7 +510,9 @@ Ubuntu-16.04-upload-deploy:
       optional: true
     - job: Ubuntu-16.04-branch
       optional: true
-  <<: *dev-tag-and-nightly
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY)_BUILD_PIPELINE$/'
 
 Ubuntu-18.04-staging:
   extends: .staging_upload_with_deployment_template
@@ -779,7 +521,9 @@ Ubuntu-18.04-staging:
       optional: true
     - job: Ubuntu-18.04-branch
       optional: true
-  <<: *dev-tag-and-nightly
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY)_BUILD_PIPELINE$/'
 
 Ubuntu-20.04-staging:
   extends: .staging_upload_with_deployment_template
@@ -788,7 +532,9 @@ Ubuntu-20.04-staging:
       optional: true
     - job: Ubuntu-20.04-branch
       optional: true
-  <<: *dev-tag-and-nightly
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY)_BUILD_PIPELINE$/'
 
 ### Package builds
 Debian-9:
@@ -845,11 +591,15 @@ AmazonLinux-2-arm64:
 SLES-12.5:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
-  <<: *dev-ee-tag-only-except-auto-deploy
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 SLES-15.2:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
   <<: *tag_build
-  <<: *dev-ee-tag-only-except-auto-deploy
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 CentOS-8-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
@@ -866,7 +616,6 @@ Docker:
   script:
   - bundle exec rake docker:build:image
   - bundle exec rake docker:push:staging
-  <<: *dev-tag-only
   tags:
   - docker-builder
   cache: *tag-cache
@@ -877,6 +626,9 @@ Docker:
       optional: true
       artifacts: true
   retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
 ### Staging uploads
 Debian-9-staging:
@@ -977,7 +729,9 @@ SLES-12.5-staging:
     - job: SLES-12.5-branch
       optional: true
   <<: *staging_upload
-  <<: *dev-ee-tag-only-except-auto-deploy
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 SLES-15.2-staging:
   needs:
     - job: SLES-15.2
@@ -985,7 +739,11 @@ SLES-15.2-staging:
     - job: SLES-15.2-branch
       optional: true
   <<: *staging_upload
-  <<: *dev-ee-tag-only-except-auto-deploy
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+  rules:
+    - !reference [.default_rules, rules]
 CentOS-8-fips-staging:
   extends: .fips_staging_upload_template
   needs:
@@ -1073,12 +831,20 @@ SLES-12.5-release:
   needs:
     - SLES-12.5
   <<: *production_release
-  <<: *dev-ee-tag-only-except-auto-deploy-manual
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+      when: manual
 SLES-15.2-release:
   needs:
     - SLES-15.2
   <<: *production_release
-  <<: *dev-ee-tag-only-except-auto-deploy-manual
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+      when: manual
 CentOS-8-fips-release:
   needs:
     - CentOS-8-fips
@@ -1097,13 +863,17 @@ Docker-Release:
   stage: package-and-image-release
   script:
     - bundle exec rake release:docker
-  <<: *dev-tag-only-except-auto-deploy-manual
   cache: *tag-cache
   needs:
     - Docker
     - job: generate-facts
       optional: true
       artifacts: true
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
+      when: manual
 
 AWS:
   <<: *aws_ami_build
@@ -1113,18 +883,25 @@ AWS-ARM64:
     AWS_ARCHITECTURE: 'arm64'
   <<: *aws_ami_build
 
-
 AWS-Ultimate:
   variables:
     AWS_RELEASE_TYPE: "ultimate"
   <<: *aws_ami_build
-  <<: *dev-ee-tag-only-except-auto-deploy-or-rc-manual
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE == "EE_TAG_BUILD_PIPELINE"'
+      when: manual
 
 AWS-Premium:
   variables:
     AWS_RELEASE_TYPE: "premium"
   <<: *aws_ami_build
-  <<: *dev-ee-tag-only-except-auto-deploy-or-rc-manual
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE == "EE_TAG_BUILD_PIPELINE"'
+      when: manual
 
 QA-Tag:
   extends: .docker_job
@@ -1138,7 +915,6 @@ QA-Tag:
     expire_in: 7d
     paths:
     - screenshots/
-  <<: *dev-tag-only-except-auto-deploy-manual
   tags:
   - docker-builder
   cache: *tag-cache
@@ -1148,18 +924,27 @@ QA-Tag:
       optional: true
       artifacts: true
   retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
+      when: manual
 
 license-upload:
   stage: metrics
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
   script:
     - bundle exec rake license:upload
-  <<: *dev-tag-only-except-auto-deploy-manual
   tags:
   - docker-builder
   cache: *tag-cache
   needs:
     - Ubuntu-18.04
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
+      when: manual
 
 RAT-Tag:
   stage: slow_jobs
@@ -1170,7 +955,9 @@ RAT-Tag:
   needs:
     - Ubuntu-20.04
   allow_failure: true
-  <<: *dev-ee-tag-only
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 
 Raspberry-Pi-2-Buster:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
@@ -1187,7 +974,9 @@ AWS-CE-Release:
   extends: .aws_marketplace_release
   needs:
     - AWS
-  <<: *dev-ce-tag-only-except-auto-deploy-or-rc
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE == "CE_TAG_BUILD_PIPELINE"'
 
 AWS-EE-Ultimate-Release:
   variables:
@@ -1207,4 +996,6 @@ check-packages:
   stage: verify
   trigger:
     include: '/gitlab-ci-config/check-packages.yml'
-  <<: *dev-tag-only-except-auto-deploy
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /_TAG_BUILD_PIPELINE$/'
