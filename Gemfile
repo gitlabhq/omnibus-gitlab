@@ -51,7 +51,7 @@ group :danger, optional: true do
 end
 
 group :rubocop do
-  gem 'gitlab-styles', '~> 6.1', require: false
+  gem 'gitlab-styles', '~> 7.1', require: false
 end
 
 group :test do
