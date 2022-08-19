@@ -729,8 +729,6 @@ SLES-15.2-staging:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
-  rules:
-    - !reference [.default_rules, rules]
 CentOS-8-fips-staging:
   extends: .fips_staging_upload_template
   needs:
