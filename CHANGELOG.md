@@ -3,6 +3,45 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.3.0 (2022-08-19)
+
+### Added (2 changes)
+
+- [Add perl as runtime dependency](gitlab-org/omnibus-gitlab@89e6dc81c0745a30450cdf45fd849dbced1f2fc4) ([merge request](gitlab-org/omnibus-gitlab!6237))
+- [Add ci_runner_versions_reconciliation_worker setting](gitlab-org/omnibus-gitlab@22d70d6862e415e6d746bd4a97feccccee2851e3) ([merge request](gitlab-org/omnibus-gitlab!6198))
+
+### Fixed (3 changes)
+
+- [Ensure Omnibus Docker image has exiftool deps](gitlab-org/omnibus-gitlab@30de86b06e7cf55d9a07963720b20c854e293d39) ([merge request](gitlab-org/omnibus-gitlab!6236))
+- [Gracefully handle blank CPU information](gitlab-org/omnibus-gitlab@fa684b35d8fbb5bec34cf3aa80bb0b182ad3f6ad) ([merge request](gitlab-org/omnibus-gitlab!6230))
+- [Reload Consul only if the service is enabled](gitlab-org/omnibus-gitlab@6ae828d4176e5be37653ef2d4d185a56819240a2) ([merge request](gitlab-org/omnibus-gitlab!6218))
+
+### Changed (4 changes)
+
+- [gitaly: Unconditionally ignore the gitconfig](gitlab-org/omnibus-gitlab@8508277a72b2d5e81c28e9956b5d541e2ebf55a1) ([merge request](gitlab-org/omnibus-gitlab!6245))
+- [Remove svlogd filter from consul configuration](gitlab-org/omnibus-gitlab@b6ae0f59fb18037e92ecf5efc4973431ccb80706) ([merge request](gitlab-org/omnibus-gitlab!6154))
+- [Update cacerts to 2022.07.19](gitlab-org/omnibus-gitlab@7d0650d92758e83d8f4b06164152d3b6bf7c29ae) ([merge request](gitlab-org/omnibus-gitlab!6232))
+- [Set webhook as MailRoomm's default delivery strategy](gitlab-org/omnibus-gitlab@785f20c486c36ec4ba7205337a6145f94af08cd6) ([merge request](gitlab-org/omnibus-gitlab!6149))
+
+### Removed (1 change)
+
+- [Stop enabling Grafana for new installs](gitlab-org/omnibus-gitlab@0ae2fb20e78c769e59e78229b2b09ebc1f0f9cbf) ([merge request](gitlab-org/omnibus-gitlab!6271))
+
+### Security (3 changes)
+
+- [Update libxslt from 1.1.32 to 1.1.35](gitlab-org/omnibus-gitlab@13db4d38c377c5e7be6bdee249cab5a1989b5028) ([merge request](gitlab-org/omnibus-gitlab!6249))
+- [Upgrade bzip2 to use version 1.0.8](gitlab-org/omnibus-gitlab@013b8b94479a9c8baa33fec5835fec2fca4a71a5)
+- [Bump exiftool version to 12.42](gitlab-org/omnibus-gitlab@9fb6f2f8297f975fa2413ccf1ecd48b1b5990b06)
+
+### Other (6 changes)
+
+- [Update erubi from 1.10.0 to 1.11.0](gitlab-org/omnibus-gitlab@e1f2b452c877ff5a8d7693f27e12206514ee5e7a) ([merge request](gitlab-org/omnibus-gitlab!6256))
+- [Update rack from 2.2.3 to 2.2.4](gitlab-org/omnibus-gitlab@081dcfbc1d78d992e21a07c7c51b993574b1dbd9) ([merge request](gitlab-org/omnibus-gitlab!6255))
+- [Use updated syntax in OpenSSL::Digest](gitlab-org/omnibus-gitlab@434514b2192b9511d3d9d2deb1f22abf500eb3a7) ([merge request](gitlab-org/omnibus-gitlab!6254))
+- [Use rubygems bundled with ruby language](gitlab-org/omnibus-gitlab@c16b20b5c433a8605075bacb2903a07fd5bf5f2d) ([merge request](gitlab-org/omnibus-gitlab!6242))
+- [Use official sha256 as checksum for cacerts](gitlab-org/omnibus-gitlab@576a8c296da6b2b89ac684d014c1192c4b13c50b) ([merge request](gitlab-org/omnibus-gitlab!6251))
+- [Add GITLAB_METRICS_EXPORTER_VERSION for releases](gitlab-org/omnibus-gitlab@25b3c469015ae487fa390cf5cae567f06f1df288) ([merge request](gitlab-org/omnibus-gitlab!6222))
+
 ## 15.2.2 (2022-08-01)
 
 ### Fixed (1 change)
