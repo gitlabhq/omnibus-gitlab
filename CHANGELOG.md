@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.3.1 (2022-08-22)
+
+No changes.
+
 ## 15.3.0 (2022-08-19)
 
 ### Added (2 changes)
@@ -41,6 +45,10 @@ omnibus-gitlab repository.
 - [Use rubygems bundled with ruby language](gitlab-org/omnibus-gitlab@c16b20b5c433a8605075bacb2903a07fd5bf5f2d) ([merge request](gitlab-org/omnibus-gitlab!6242))
 - [Use official sha256 as checksum for cacerts](gitlab-org/omnibus-gitlab@576a8c296da6b2b89ac684d014c1192c4b13c50b) ([merge request](gitlab-org/omnibus-gitlab!6251))
 - [Add GITLAB_METRICS_EXPORTER_VERSION for releases](gitlab-org/omnibus-gitlab@25b3c469015ae487fa390cf5cae567f06f1df288) ([merge request](gitlab-org/omnibus-gitlab!6222))
+
+## 15.2.3 (2022-08-22)
+
+No changes.
 
 ## 15.2.2 (2022-08-01)
 
@@ -96,6 +104,10 @@ omnibus-gitlab repository.
 ### Deprecated (1 change)
 
 - [global: Remove deprecated `self_signed_cert` setting](gitlab-org/omnibus-gitlab@0021a2c1e28ded37c428b4f3ee4d10abf6099840) ([merge request](gitlab-org/omnibus-gitlab!6196))
+
+## 15.1.5 (2022-08-22)
+
+No changes.
 
 ## 15.1.4 (2022-07-28)
 
