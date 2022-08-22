@@ -119,17 +119,16 @@ fetch-assets:
   rules:
     - if: '$COMPILE_ASSETS == "true"'
       when: never
-    - if: '$DEPS_PIPELINE'
-      when: never
     # NOTE (rspeicher): Checking `$AUTO_DEPLOY_COMPILE_ASSETS` as a feature flag
     # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5805
-    - if: '$AUTO_DEPLOY_COMPILE_ASSETS && $CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/'
+    - if: '$AUTO_DEPLOY_COMPILE_ASSETS && $PIPELINE_TYPE =~ /AUTO_DEPLOY_BUILD_PIPELINE$/'
       when: never
-    # Run on dev.gitlab.org (except auto-deploy tag covered above) and
-    # multi-project pipelines on omnibus-gitlab-mirror
-    - if: '$CI_PROJECT_PATH == "gitlab/omnibus-gitlab"'
-    - if: '$CI_PIPELINE_SOURCE == "pipeline" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
-    - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror"'
+    # Run on all pipelines including a package build (except auto-deploy tag
+    # covered above)
+    - if: '$PIPELINE_TYPE =~ /_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "DURATION_PLOTTER_PIPELINE"'
 
 generate-facts:
   stage: prepare
