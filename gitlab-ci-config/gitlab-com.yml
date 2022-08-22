@@ -742,3 +742,29 @@ pages:
       - public
   rules:
     - if: '$PIPELINE_TYPE == "LICENSE_PAGE_UPDATE_PIPELINE"'
+
+build-package-on-all-os:
+  stage: trigger-package
+  needs:
+    - job: generate-facts
+      artifacts: true
+  inherit:
+    variables: false
+  variables:
+    SKIP_JOB_REGEX: '/SLES|Ubuntu-20.04|Docker|QA/'
+    PIPELINE_TYPE: "${EDITION}_BRANCH_BUILD_PIPELINE"
+    ee: "${ee}"
+    ALTERNATIVE_SOURCES: 'true'
+    GITLAB_VERSION: ${GITLAB_VERSION}
+    GITLAB_SHELL_VERSION: ${GITLAB_SHELL_VERSION}
+    GITLAB_PAGES_VERSION: ${GITLAB_PAGES_VERSION}
+    GITALY_VERSION: ${GITALY_SERVER_VERSION}
+    GITLAB_ELASTICSEARCH_INDEXER_VERSION: ${GITLAB_ELASTICSEARCH_INDEXER_VERSION}
+    GITLAB_KAS_VERSION: ${GITLAB_KAS_VERSION}
+  trigger:
+    include: '.gitlab-ci.yml'
+    strategy: depend
+  rules:
+    - if: '$CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && ($CI_PIPELINE_SOURCE == "pipeline" || $CI_PIPELINE_SOURCE == "trigger")'
+      when: manual
+      allow_failure: true
