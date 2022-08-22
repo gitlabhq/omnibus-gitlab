@@ -105,6 +105,10 @@ No changes.
 
 - [global: Remove deprecated `self_signed_cert` setting](gitlab-org/omnibus-gitlab@0021a2c1e28ded37c428b4f3ee4d10abf6099840) ([merge request](gitlab-org/omnibus-gitlab!6196))
 
+## 15.1.5 (2022-08-22)
+
+No changes.
+
 ## 15.1.4 (2022-07-28)
 
 ### Security (2 changes)
