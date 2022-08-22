@@ -46,6 +46,10 @@ No changes.
 - [Use official sha256 as checksum for cacerts](gitlab-org/omnibus-gitlab@576a8c296da6b2b89ac684d014c1192c4b13c50b) ([merge request](gitlab-org/omnibus-gitlab!6251))
 - [Add GITLAB_METRICS_EXPORTER_VERSION for releases](gitlab-org/omnibus-gitlab@25b3c469015ae487fa390cf5cae567f06f1df288) ([merge request](gitlab-org/omnibus-gitlab!6222))
 
+## 15.2.3 (2022-08-22)
+
+No changes.
+
 ## 15.2.2 (2022-08-01)
 
 ### Fixed (1 change)
