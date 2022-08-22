@@ -62,6 +62,8 @@ RSpec.describe Build::Facts do
         TOP_UPSTREAM_SOURCE_SHA=aq2456fs
         TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID=55555
         TOP_UPSTREAM_MERGE_REQUEST_IID=7689
+        EDITION=ce
+        ee=false
       ]
 
       expect(described_class.common_vars).to eq(result)
