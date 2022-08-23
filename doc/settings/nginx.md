@@ -1009,7 +1009,7 @@ header with `hide_server_tokens`:
    sudo gitlab-ctl hup nginx
    ```
 
-## `502: Bad Gateway` when SELinux and external NGINX are used
+### `502: Bad Gateway` when SELinux and external NGINX are used
 
 On Linux servers with SELinux enabled, after setting up an external NGINX, the error `502: Bad Gateway` may be observed when accessing the GitLab UI. You can also see the error in NGINX's logs:
 
