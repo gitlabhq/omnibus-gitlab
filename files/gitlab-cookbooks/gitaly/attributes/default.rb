@@ -12,6 +12,7 @@ default['gitaly']['listen_addr'] = nil
 default['gitaly']['tls_listen_addr'] = nil
 default['gitaly']['certificate_path'] = nil
 default['gitaly']['key_path'] = nil
+default['gitaly']['gpg_signing_key_path'] = nil
 default['gitaly']['prometheus_listen_addr'] = "localhost:9236"
 default['gitaly']['logging_level'] = nil
 default['gitaly']['logging_format'] = "json"
