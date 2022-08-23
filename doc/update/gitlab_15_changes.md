@@ -13,9 +13,9 @@ When upgrading to a new major version, remember to first [check for background m
 
 ### PostgreSQL version updates
 
-In GitLab 15.0, PostgreSQL versions have been updated to v12.10 and v13.6
-respectively. Because of underlying structural changes, the running PostgreSQL
-process **_must_** be restarted before running database migrations. If automatic
+In GitLab 15.0, [Omnibus GitLab ships with PostgreSQL versions](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html) 12.10 for upgrades and 13.6 for fresh installs.
+Because of underlying structural changes, the running PostgreSQL
+process **_must_** be restarted when it is upgraded before running database migrations. If automatic
 restart is skipped, you must run the following command before
 migrations are run:
 
