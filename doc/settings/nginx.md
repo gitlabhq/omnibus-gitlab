@@ -35,138 +35,14 @@ or incompatible configuration may yield to unavailability of service.
 ## Enable HTTPS
 
 By default, Omnibus GitLab does not use HTTPS. If you want to enable HTTPS for
-`gitlab.example.com`, there are two options:
+`gitlab.example.com`, you can:
 
-1. [Free and automated HTTPS with Let's Encrypt](ssl.md#lets-encrypt-integration)
-1. [Manually configuring HTTPS with your own certificates](#manually-configuring-https)
+- [Use Let's Encrypt for free, automated HTTPS](ssl.md#enable-the-lets-encrypt-integration).
+- [Manually configure HTTPS with your own certificates](ssl.md#configure-https-manually).
 
 NOTE:
 If you use a proxy, load balancer or some other external device to terminate SSL for the GitLab host name,
-see [External, proxy, and load balancer SSL termination](#external-proxy-and-load-balancer-ssl-termination).
-
-### Warning
-
-The NGINX configuration will tell browsers and clients to only communicate with your
-GitLab instance over a secure connection for the next 365 days using [HSTS](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security). See [Setting HTTP Strict Transport Security](#setting-http-strict-transport-security) for more configuration options. By enabling
-HTTPS you'll need to provide a secure connection to your instance for at least
-the next 24 months.
-
-## Manually configuring HTTPS
-
-By default, Omnibus GitLab does not use HTTPS.
-
-To enable HTTPS for the domain `gitlab.example.com`:
-
-1. Edit the `external_url` in `/etc/gitlab/gitlab.rb`:
-
-   ```ruby
-   # note the 'https' below
-   external_url "https://gitlab.example.com"
-   ```
-
-1. Disable Let's Encrypt in `/etc/gitlab/gitlab.rb`:
-
-   ```ruby
-   letsencrypt['enable'] = false
-   ```
-
-1. Create the `/etc/gitlab/ssl` directory and copy your key and certificate there:
-
-   ```shell
-   sudo mkdir -p /etc/gitlab/ssl
-   sudo chmod 755 /etc/gitlab/ssl
-   sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
-   ```
-
-   Because the hostname in our example is `gitlab.example.com`, Omnibus GitLab
-   will look for private key and public certificate files called
-   `/etc/gitlab/ssl/gitlab.example.com.key` and `/etc/gitlab/ssl/gitlab.example.com.crt`,
-   respectively.
-
-   Make sure you use the full certificate chain in order to prevent SSL errors when
-   clients connect. The full certificate chain order should consist of the server certificate first,
-   followed by all intermediate certificates, with the root CA last.
-
-   NOTE:
-   If the `certificate.key` file is password protected, NGINX will not ask for
-   the password when you reconfigure GitLab. In that case, Omnibus GitLab will
-   fail silently with no error messages.
-
-   To remove the password from the key, run:
-
-   ```shell
-   openssl rsa -in certificate_before.key -out certificate_after.key
-   ```
-
-1. Now, reconfigure GitLab:
-
-   ```shell
-   sudo gitlab-ctl reconfigure
-   ```
-
-When the reconfigure finishes, your GitLab instance should be reachable at `https://gitlab.example.com`.
-
-NOTE:
-If you are updating existing certificates, you will need to follow a [different process](#update-the-ssl-certificates).
-
-If you are using a firewall you may have to open port 443 to allow inbound
-HTTPS traffic.
-
-```shell
-# UFW example (Debian, Ubuntu)
-sudo ufw allow https
-
-# lokkit example (RedHat, CentOS 6)
-sudo lokkit -s https
-
-# firewall-cmd (RedHat, Centos 7)
-sudo firewall-cmd --permanent --add-service=https
-sudo systemctl reload firewalld
-```
-
-## Redirect `HTTP` requests to `HTTPS`
-
-By default, when you specify an `external_url` starting with 'https', NGINX will
-no longer listen for unencrypted HTTP traffic on port 80. If you want to
-redirect all HTTP traffic to HTTPS you can use the `redirect_http_to_https`
-setting.
-
-NOTE:
-This behavior is enabled by default when using Let's Encrypt.
-
-```ruby
-external_url "https://gitlab.example.com"
-nginx['redirect_http_to_https'] = true
-```
-
-## Change the default port and the SSL certificate locations
-
-If you need to use an HTTPS port other than the default (443), just specify it
-as part of the `external_url`.
-
-```ruby
-external_url "https://gitlab.example.com:2443"
-```
-
-To set the location of ssl certificates create `/etc/gitlab/ssl` directory,
-place the `.crt` and `.key` files in the directory and specify the following
-configuration:
-
-```ruby
-# For GitLab
-nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.example.com.crt"
-nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.example.com.key"
-```
-
-Run `sudo gitlab-ctl reconfigure` for the change to take effect.
-
-## Update the SSL Certificates
-
-If the content of your SSL certificates has been updated, but no configuration
-changes have been made to `gitlab.rb`, then `gitlab-ctl reconfigure` will not
-affect NGINX. Instead, run `sudo gitlab-ctl hup nginx registry` to cause NGINX to
-[reload the existing configuration and new certificates](http://nginx.org/en/docs/control.html)
-gracefully.
+see [External, proxy, and load balancer SSL termination](ssl.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination).
 
 ## Change the default proxy headers
 
@@ -251,38 +127,6 @@ you need to enable this setting. Do not forget to set the `real_ip_trusted_addre
 
 Once enabled, NGINX only accepts PROXY protocol traffic on these listeners.
 Ensure to also adjust any other environments you might have, like monitoring checks.
-
-## Configuring HTTP2 protocol
-
-By default, when you specify that your GitLab instance should be reachable
-through HTTPS by specifying `external_url "https://gitlab.example.com"`,
-[http2 protocol](https://tools.ietf.org/html/rfc7540) is also enabled.
-
-The Omnibus GitLab package sets required ssl_ciphers that are compatible with
-http2 protocol.
-
-If you are specifying custom ssl_ciphers in your configuration and a cipher is
-in [http2 cipher blacklist](https://tools.ietf.org/html/rfc7540#appendix-A), once you try to reach your GitLab instance you will
-be presented with `INADEQUATE_SECURITY` error in your browser.
-
-Consider removing the offending ciphers from the cipher list. Changing ciphers
-is only necessary if you have a very specific custom setup.
-
-For more information on why you would want to have http2 protocol enabled, check out
-the [http2 whitepaper](https://assets.wp.nginx.com/wp-content/uploads/2015/09/NGINX_HTTP2_White_Paper_v4.pdf?_ga=1.127086286.212780517.1454411744).
-
-If changing the ciphers is not an option you can disable http2 support by
-specifying in `/etc/gitlab/gitlab.rb`:
-
-```ruby
-nginx['http2_enabled'] = false
-```
-
-Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
-for the changes to take effect.
-
-NOTE:
-The `http2` setting only works for the main GitLab application and not for the other services.
 
 ## Using a non-bundled web-server
 
@@ -396,78 +240,6 @@ nginx['error_log_level'] = "debug"
 
 Valid values can be found from the [NGINX documentation](https://nginx.org/en/docs/ngx_core_module.html#error_log).
 
-## External, proxy, and load balancer SSL termination
-
-By default, Omnibus GitLab auto-detects whether to use SSL if `external_url`
-contains `https://` and configures NGINX for SSL termination.
-However, if configuring GitLab to run behind a reverse proxy or an external load balancer,
-some environments may want to terminate SSL outside the GitLab application. To do this,
-edit `/etc/gitlab/gitlab.rb` to prevent the bundled NGINX from handling SSL termination:
-
-```ruby
-nginx['listen_port'] = 80
-nginx['listen_https'] = false
-```
-
-Additionally, the external load balancer may need access to a GitLab endpoint that returns a `200` status
-code (for installations requiring login, the root page returns a `302` redirect to the login page). It is
-recommended to leverage a [health check endpoint](https://docs.gitlab.com/ee/user/admin_area/monitoring/health_check.html).
-
-Other bundled components (Registry, Pages, etc) use a similar strategy for
-proxied SSL. Set the particular component's `*_external_url` with `https://` and
-prefix the `nginx[...]` configuration with the component name. For example, the
-GitLab Container Registry configuration is prefixed with `registry_`:
-
-- [GitLab Container Registry listening under its own subdomain](https://docs.gitlab.com/ee/administration/packages/container_registry.html#configure-container-registry-under-its-own-domain):
-
-  ```ruby
-  registry_external_url 'https://registry.example.com'
-
-  registry_nginx['listen_port'] = 80
-  registry_nginx['listen_https'] = false
-  ```
-
-- [GitLab Container Registry listening on a port under main GitLab domain](https://docs.gitlab.com/ee/administration/packages/container_registry.html#configure-container-registry-under-an-existing-gitlab-domain):
-
-  ```ruby
-  registry_external_url 'https://example.com:5050'
-
-  registry_nginx['listen_port'] = 5050
-  registry_nginx['listen_https'] = false
-  ```
-
-The same format can be used for Pages (`pages_` prefix) and Mattermost (`mattermost_` prefix).
-
-Note that you may need to configure your reverse proxy or load balancer to
-forward certain headers (e.g. `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`,
-`X-Forwarded-Port`) to GitLab (and Mattermost if you use one). You may see improper redirections or errors
-(e.g. "422 Unprocessable Entity", "Can't verify CSRF token authenticity") if
-you forget this step. For more information, see:
-
-- <https://stackoverflow.com/questions/16042647/whats-the-de-facto-standard-for-a-reverse-proxy-to-tell-the-backend-ssl-is-used>
-- <https://www.digitalocean.com/community/tutorials/how-to-use-apache-http-server-as-reverse-proxy-using-mod_proxy-extension>
-Some cloud provider services, such as AWS Certificate Manager (ACM), do not allow the download of certificates. This prevents them from being used to terminate on the GitLab instance. If SSL is desired between such a cloud service and the GitLab instance, another certificate must be used on the GitLab instance.
-
-## Setting HTTP Strict Transport Security
-
-By default GitLab enables Strict Transport Security which informs browsers that
-they should only contact the website using HTTPS. When a browser visits a
-GitLab instance even once, it will remember to no longer attempt insecure connections,
-even when the user is explicitly entering a `http://` URL. Such a URL will be automatically redirected by the browser to `https://` variant.
-
-```ruby
-nginx['hsts_max_age'] = 63072000
-nginx['hsts_include_subdomains'] = false
-```
-
-By default `max_age` is set for two years, this is how long browser will remember to only connect through HTTPS.
-Setting `max_age` to 0 will disable this feature. For more information see:
-
-- <https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/>
-
-NOTE:
-The HSTS settings only work for the main GitLab application and not for the other services.
-
 ## Setting the Referrer-Policy header
 
 By default, GitLab sets the `Referrer-Policy` header to `strict-origin-when-cross-origin` on all responses.
@@ -502,48 +274,6 @@ nginx['gzip_enabled'] = false
 
 NOTE:
 The `gzip` setting only works for the main GitLab application and not for the other services.
-
-## Using custom SSL ciphers
-
-By default GitLab is using SSL ciphers that are combination of testing on <https://gitlab.com> and various best practices contributed by the GitLab community.
-
-However, you can change the ssl ciphers by adding to `gitlab.rb`:
-
-```ruby
-  nginx['ssl_ciphers'] = "CIPHER:CIPHER1"
-```
-
-and running reconfigure.
-
-You can also enable `ssl_dhparam` directive.
-
-First, generate `dhparams.pem` with `openssl dhparam -out dhparams.pem 2048`. Then, in `gitlab.rb` add a path to the generated file, for example:
-
-```ruby
-  nginx['ssl_dhparam'] = "/etc/gitlab/ssl/dhparams.pem"
-```
-
-After the change run `sudo gitlab-ctl reconfigure`.
-
-## Enable 2-way SSL Client Authentication
-
-To require web clients to authenticate with a trusted certificate, you can enable 2-way SSL by adding to `gitlab.rb`:
-
-```ruby
-  nginx['ssl_verify_client'] = "on"
-  nginx['ssl_client_certificate'] = "/etc/pki/tls/certs/root-certs.pem"
-```
-
-and running reconfigure.
-
-Optionally, you can configure how deeply in the certificate chain NGINX should verify
-before deciding that the clients don't have a valid certificate (default is `1`):
-
-```ruby
-  nginx['ssl_verify_depth'] = "2"
-```
-
-After making the changes run `sudo gitlab-ctl reconfigure`.
 
 ## Disabling proxy request buffering
 
@@ -916,7 +646,7 @@ systems `sudo service nginx restart`).
 
 Make sure you don't have the `proxy_set_header` configuration in
 `nginx['custom_gitlab_server_config']` settings and instead use the
-['proxy_set_headers'](#external-proxy-and-load-balancer-ssl-termination) configuration in your `gitlab.rb` file.
+['proxy_set_headers'](ssl.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination) configuration in your `gitlab.rb` file.
 
 ### `javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure`
 
