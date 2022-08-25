@@ -55,12 +55,11 @@ group :rubocop do
 end
 
 group :test do
-  gem 'byebug'
+  gem 'debug'
   gem 'chefspec'
   gem 'omnibus-ctl', '0.3.6'
   gem 'fantaskspec'
   gem 'rspec_junit_formatter'
-  gem 'pry'
   gem 'rspec-parameterized', require: false
   gem 'simplecov-cobertura'
 end
