@@ -349,6 +349,18 @@ RSpec.describe 'gitaly' do
       end
     end
 
+    context 'with invalid value' do
+      let(:omnibus_gitconfig) do
+        {
+          receive: ["fsckObjects"]
+        }
+      end
+
+      it 'raises an error' do
+        expect { chef_run }.to raise_error(/Invalid entry detected in omnibus_gitconfig/)
+      end
+    end
+
     context 'with empty Gitaly gitconfig' do
       let(:gitaly_gitconfig) { [] }
       let(:omnibus_gitconfig) do
