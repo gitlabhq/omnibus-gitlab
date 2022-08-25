@@ -29,10 +29,10 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && $DURATION_PLOTTER == "true" && $CI_PIPELINE_SOURCE == "schedule"'
       variables:
         PIPELINE_TYPE: DURATION_PLOTTER_PIPELINE
-    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $CI_PROJECT_BRANCH =~ /^deps/'
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^deps/'
       variables:
         PIPELINE_TYPE: DEPS_IO_VERSION_BUMP_PIPELINE
-    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && ($CI_PROJECT_BRANCH =~ /^docs/ || $CI_PROJECT_BRANCH =~ /-docs$/)'
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && ($CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^docs-/ || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /-docs$/)'
       variables:
         PIPELINE_TYPE: DOCS_PIPELINE
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $CI_PIPELINE_SOURCE == "merge_request_event"'
