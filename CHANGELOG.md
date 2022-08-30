@@ -55,6 +55,15 @@ No changes.
 - [Use official sha256 as checksum for cacerts](gitlab-org/omnibus-gitlab@576a8c296da6b2b89ac684d014c1192c4b13c50b) ([merge request](gitlab-org/omnibus-gitlab!6251))
 - [Add GITLAB_METRICS_EXPORTER_VERSION for releases](gitlab-org/omnibus-gitlab@25b3c469015ae487fa390cf5cae567f06f1df288) ([merge request](gitlab-org/omnibus-gitlab!6222))
 
+## 15.2.4 (2022-08-30)
+
+### Security (4 changes)
+
+- [Update libxslt and libxml](gitlab-org/security/omnibus-gitlab@47ff9e8beb445fa7f14f9f7854c810c3fcabb217) ([merge request](gitlab-org/security/omnibus-gitlab!221))
+- [Bump gitlab-exporter version to 11.18.2 to mitigate VULNDB-255039](gitlab-org/security/omnibus-gitlab@d77281ac01120901f40743427c8a18fc3cea7e4c) ([merge request](gitlab-org/security/omnibus-gitlab!231))
+- [Update unzip to 6.0.27](gitlab-org/security/omnibus-gitlab@146bcbebe071444cdc46f3ab9566cc86c24454f0) ([merge request](gitlab-org/security/omnibus-gitlab!227))
+- [Bump nginx version to 1.20.2](gitlab-org/security/omnibus-gitlab@6327df5fba9e4e26b2bbf48f025169e0cc367b87) ([merge request](gitlab-org/security/omnibus-gitlab!223))
+
 ## 15.2.3 (2022-08-22)
 
 No changes.
