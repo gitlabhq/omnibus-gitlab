@@ -40,6 +40,7 @@ gem 'aws-sdk-marketplacecatalog'
 gem 'gitlab'
 gem 'yard'
 gem 'toml-rb'
+gem 'retriable'
 
 group :packagecloud, optional: true do
   gem 'package_cloud'

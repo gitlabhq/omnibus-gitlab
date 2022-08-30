@@ -133,7 +133,7 @@ RSpec.describe PackageRepository do
     end
   end
 
-  describe :upload do
+  describe '#upload' do
     describe 'with staging repository' do
       context 'when upload user is not specified' do
         it 'prints a message and aborts' do
@@ -156,6 +156,16 @@ RSpec.describe PackageRepository do
             expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/scientific/6 pkg/el-6/gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
             expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/ol/6 pkg/el-6/gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
             expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/el/6 pkg/el-6/gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
+          end
+
+          it 'retries upload if it fails' do
+            allow(repo).to receive(:`).and_return('504 Gateway Timeout')
+            allow(repo).to receive(:child_process_status).and_return(1)
+            allow(repo).to receive(:validate).and_return(nil)
+
+            expect(repo).to receive(:`).exactly(10).times
+
+            expect { repo.upload('my-staging-repository', false) }.to raise_error(described_class::PackageUploadError)
           end
         end
 
