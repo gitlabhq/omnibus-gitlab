@@ -3,6 +3,15 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.2.4 (2022-08-30)
+
+### Security (4 changes)
+
+- [Update libxslt and libxml](gitlab-org/security/omnibus-gitlab@47ff9e8beb445fa7f14f9f7854c810c3fcabb217) ([merge request](gitlab-org/security/omnibus-gitlab!221))
+- [Bump gitlab-exporter version to 11.18.2 to mitigate VULNDB-255039](gitlab-org/security/omnibus-gitlab@d77281ac01120901f40743427c8a18fc3cea7e4c) ([merge request](gitlab-org/security/omnibus-gitlab!231))
+- [Update unzip to 6.0.27](gitlab-org/security/omnibus-gitlab@146bcbebe071444cdc46f3ab9566cc86c24454f0) ([merge request](gitlab-org/security/omnibus-gitlab!227))
+- [Bump nginx version to 1.20.2](gitlab-org/security/omnibus-gitlab@6327df5fba9e4e26b2bbf48f025169e0cc367b87) ([merge request](gitlab-org/security/omnibus-gitlab!223))
+
 ## 15.2.3 (2022-08-22)
 
 No changes.
