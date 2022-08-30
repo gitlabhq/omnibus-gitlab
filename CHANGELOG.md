@@ -123,6 +123,16 @@ No changes.
 
 - [global: Remove deprecated `self_signed_cert` setting](gitlab-org/omnibus-gitlab@0021a2c1e28ded37c428b4f3ee4d10abf6099840) ([merge request](gitlab-org/omnibus-gitlab!6196))
 
+## 15.1.6 (2022-08-30)
+
+### Security (5 changes)
+
+- [Update libxslt and libxml](gitlab-org/security/omnibus-gitlab@829e0c7c007d0fe9120c06609e6569f42433405a) ([merge request](gitlab-org/security/omnibus-gitlab!220))
+- [Upgrade mattermost to use version 6.7.1](gitlab-org/security/omnibus-gitlab@6dad6fd8d5123dca58290b63f4eaf3f68a992fb8) ([merge request](gitlab-org/security/omnibus-gitlab!213))
+- [Bump gitlab-exporter version to 11.18.2 to mitigate VULNDB-255039](gitlab-org/security/omnibus-gitlab@4374bc384c8626e1a635435efc8804ebfce284cb) ([merge request](gitlab-org/security/omnibus-gitlab!230))
+- [Update unzip to 6.0.27](gitlab-org/security/omnibus-gitlab@7b0997e0350cee1b8cefc8106c566e1be9c25721) ([merge request](gitlab-org/security/omnibus-gitlab!226))
+- [Bump nginx version to 1.20.2](gitlab-org/security/omnibus-gitlab@20647e2748f1f7b5f4b029a0d122ac8ce4ed4428) ([merge request](gitlab-org/security/omnibus-gitlab!224))
+
 ## 15.1.5 (2022-08-22)
 
 No changes.
