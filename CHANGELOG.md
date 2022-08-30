@@ -3,6 +3,15 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.3.2 (2022-08-30)
+
+### Security (4 changes)
+
+- [Update libxml2 from 2.9.10 to 2.9.14](gitlab-org/security/omnibus-gitlab@96138c7c299ef038554e809462f98229bf902451) ([merge request](gitlab-org/security/omnibus-gitlab!218))
+- [Bump gitlab-exporter version to 11.18.2 to mitigate VULNDB-255039](gitlab-org/security/omnibus-gitlab@ccd42069e018253b751228e66ffffc35dc6c5b79) ([merge request](gitlab-org/security/omnibus-gitlab!232))
+- [Update unzip to 6.0.27](gitlab-org/security/omnibus-gitlab@c82fcd26e4fda6a734b32036381a4cb2915569f5) ([merge request](gitlab-org/security/omnibus-gitlab!228))
+- [Bump nginx version to 1.20.2](gitlab-org/security/omnibus-gitlab@8917dbf9f158bc010918e9e757bff29fe339acce) ([merge request](gitlab-org/security/omnibus-gitlab!222))
+
 ## 15.3.1 (2022-08-22)
 
 No changes.
@@ -45,6 +54,15 @@ No changes.
 - [Use rubygems bundled with ruby language](gitlab-org/omnibus-gitlab@c16b20b5c433a8605075bacb2903a07fd5bf5f2d) ([merge request](gitlab-org/omnibus-gitlab!6242))
 - [Use official sha256 as checksum for cacerts](gitlab-org/omnibus-gitlab@576a8c296da6b2b89ac684d014c1192c4b13c50b) ([merge request](gitlab-org/omnibus-gitlab!6251))
 - [Add GITLAB_METRICS_EXPORTER_VERSION for releases](gitlab-org/omnibus-gitlab@25b3c469015ae487fa390cf5cae567f06f1df288) ([merge request](gitlab-org/omnibus-gitlab!6222))
+
+## 15.2.4 (2022-08-30)
+
+### Security (4 changes)
+
+- [Update libxslt and libxml](gitlab-org/security/omnibus-gitlab@47ff9e8beb445fa7f14f9f7854c810c3fcabb217) ([merge request](gitlab-org/security/omnibus-gitlab!221))
+- [Bump gitlab-exporter version to 11.18.2 to mitigate VULNDB-255039](gitlab-org/security/omnibus-gitlab@d77281ac01120901f40743427c8a18fc3cea7e4c) ([merge request](gitlab-org/security/omnibus-gitlab!231))
+- [Update unzip to 6.0.27](gitlab-org/security/omnibus-gitlab@146bcbebe071444cdc46f3ab9566cc86c24454f0) ([merge request](gitlab-org/security/omnibus-gitlab!227))
+- [Bump nginx version to 1.20.2](gitlab-org/security/omnibus-gitlab@6327df5fba9e4e26b2bbf48f025169e0cc367b87) ([merge request](gitlab-org/security/omnibus-gitlab!223))
 
 ## 15.2.3 (2022-08-22)
 
@@ -104,6 +122,16 @@ No changes.
 ### Deprecated (1 change)
 
 - [global: Remove deprecated `self_signed_cert` setting](gitlab-org/omnibus-gitlab@0021a2c1e28ded37c428b4f3ee4d10abf6099840) ([merge request](gitlab-org/omnibus-gitlab!6196))
+
+## 15.1.6 (2022-08-30)
+
+### Security (5 changes)
+
+- [Update libxslt and libxml](gitlab-org/security/omnibus-gitlab@829e0c7c007d0fe9120c06609e6569f42433405a) ([merge request](gitlab-org/security/omnibus-gitlab!220))
+- [Upgrade mattermost to use version 6.7.1](gitlab-org/security/omnibus-gitlab@6dad6fd8d5123dca58290b63f4eaf3f68a992fb8) ([merge request](gitlab-org/security/omnibus-gitlab!213))
+- [Bump gitlab-exporter version to 11.18.2 to mitigate VULNDB-255039](gitlab-org/security/omnibus-gitlab@4374bc384c8626e1a635435efc8804ebfce284cb) ([merge request](gitlab-org/security/omnibus-gitlab!230))
+- [Update unzip to 6.0.27](gitlab-org/security/omnibus-gitlab@7b0997e0350cee1b8cefc8106c566e1be9c25721) ([merge request](gitlab-org/security/omnibus-gitlab!226))
+- [Bump nginx version to 1.20.2](gitlab-org/security/omnibus-gitlab@20647e2748f1f7b5f4b029a0d122ac8ce4ed4428) ([merge request](gitlab-org/security/omnibus-gitlab!224))
 
 ## 15.1.5 (2022-08-22)
 
