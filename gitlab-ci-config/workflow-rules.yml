@@ -23,6 +23,10 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CACHE_UPDATE == "true" && $CI_PIPELINE_SOURCE == "schedule"'
       variables:
         PIPELINE_TYPE: CACHE_UPDATE_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && ($CI_PIPELINE_SOURCE == "pipeline" || $CI_PIPELINE_SOURCE == "trigger") && $ee == "true" && $TOP_UPSTREAM_SOURCE_PROJECT == "gitlab-org/gitlab"'
+      variables:
+        PIPELINE_TYPE: TRIGGER_CACHE_UPDATE_PIPELINE
+        CACHE_EDITION: "GITLAB"
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && $CACHE_UPDATE == "true"'
       variables:
         PIPELINE_TYPE: TRIGGER_CACHE_UPDATE_PIPELINE
