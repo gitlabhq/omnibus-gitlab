@@ -86,6 +86,9 @@ use_bundled_binaries = <%= @use_bundled_git %>
 # are configured are Gitaly's own defaults and the Git configuration injected
 # in this file.
 ignore_gitconfig = true
+<% if @gpg_signing_key_path %>
+signing_key = '<%= @gpg_signing_key_path %>'
+<% end %>
 
 <% if @gitconfig %>
   <% @gitconfig.each do |gitconfig| %>

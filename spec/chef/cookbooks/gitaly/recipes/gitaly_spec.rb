@@ -10,6 +10,7 @@ RSpec.describe 'gitaly' do
   let(:tls_listen_addr) { 'localhost:8888' }
   let(:certificate_path) { '/path/to/cert.pem' }
   let(:key_path) { '/path/to/key.pem' }
+  let(:gpg_signing_key_path) { '/path/to/signing_key.gpg' }
   let(:prometheus_listen_addr) { 'localhost:9000' }
   let(:logging_level) { 'warn' }
   let(:logging_format) { 'default' }
@@ -111,6 +112,8 @@ RSpec.describe 'gitaly' do
        .with_content("certificate_path  =")
       expect(chef_run).not_to render_file(config_path)
        .with_content("key_path  =")
+      expect(chef_run).not_to render_file(config_path)
+       .with_content("signing_key =")
       expect(chef_run).not_to render_file(config_path)
         .with_content("prometheus_listen_addr = '#{prometheus_listen_addr}'")
       expect(chef_run).not_to render_file(config_path)
@@ -387,6 +390,7 @@ RSpec.describe 'gitaly' do
           tls_listen_addr: tls_listen_addr,
           certificate_path: certificate_path,
           key_path: key_path,
+          gpg_signing_key_path: gpg_signing_key_path,
           prometheus_listen_addr: prometheus_listen_addr,
           logging_level: logging_level,
           logging_format: logging_format,
@@ -536,6 +540,7 @@ RSpec.describe 'gitaly' do
         expect(content).to include("tls_listen_addr = 'localhost:8888'")
         expect(content).to include("certificate_path = '/path/to/cert.pem'")
         expect(content).to include("key_path = '/path/to/key.pem'")
+        expect(content).to include("signing_key = '/path/to/signing_key.gpg'")
         expect(content).to include("prometheus_listen_addr = 'localhost:9000'")
         expect(content).to match(gitaly_logging_section)
         expect(content).to match(%r{\[prometheus\]\s+grpc_latency_buckets = #{Regexp.escape(prometheus_grpc_latency_buckets)}})
