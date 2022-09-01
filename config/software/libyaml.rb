@@ -1,5 +1,5 @@
 #
-# Copyright 2012-2015 Chef Software, Inc.
+# Copyright:: Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 #
 
 name 'libyaml'
-default_version '0.1.7'
+default_version '0.2.5'
 
 license 'MIT'
 license_file 'LICENSE'
@@ -24,9 +24,10 @@ skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
 
-version("0.1.7") { source sha256: "8088e457264a98ba451a90b8661fcb4f9d6f478f7265d48322a196cec2480729" }
+# versions_list: https://pyyaml.org/download/libyaml/ filter=*.tar.gz
+version('0.2.5') { source sha256: 'c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4' }
 
-source url: "http://pyyaml.org/download/libyaml/yaml-#{version}.tar.gz"
+source url: "https://pyyaml.org/download/libyaml/yaml-#{version}.tar.gz"
 
 relative_path "yaml-#{version}"
 
