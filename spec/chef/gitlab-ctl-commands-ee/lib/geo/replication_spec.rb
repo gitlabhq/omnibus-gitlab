@@ -42,10 +42,10 @@ RSpec.describe Geo::Replication, '#execute' do
     allow(subject).to receive(:postgresql_version).and_return(12)
   end
 
-  it 'replicates geo database' do
+  it 'replicates geo database with default timeout' do
     expect(subject).to receive(:ask_pass).and_return('password')
     expect(GitlabCtl::Util).to receive(:run_command)
-      .with(%r{/embedded/bin/pg_basebackup}, anything)
+      .with(%r{/embedded/bin/pg_basebackup}, hash_including(timeout: described_class::DEFAULT_REPLICATION_TIMEOUT_S))
 
     subject.execute
   end
@@ -74,6 +74,20 @@ RSpec.describe Geo::Replication, '#execute' do
     expect(subject).to receive(:create_standby_file!)
 
     subject.execute
+  end
+
+  context 'with a backup timeout specified' do
+    before do
+      options[:backup_timeout] = 100
+    end
+
+    it 'replicates geo database with specified timeout' do
+      expect(subject).to receive(:ask_pass).and_return('password')
+      expect(GitlabCtl::Util).to receive(:run_command)
+        .with(%r{/embedded/bin/pg_basebackup}, hash_including(timeout: 100))
+
+      subject.execute
+    end
   end
 
   context 'when there is TTY available' do
