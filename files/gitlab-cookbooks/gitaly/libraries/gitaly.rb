@@ -90,6 +90,9 @@ module Gitaly
       omnibus_gitconfig = Gitlab['omnibus_gitconfig']['system'].flat_map do |section, entries|
         entries.map do |entry|
           key, value = entry.split('=', 2)
+
+          raise "Invalid entry detected in omnibus_gitconfig['system']: '#{entry}' should be in the form key=value" if key.nil? || value.nil?
+
           "#{section}.#{key.rstrip}=#{value.lstrip}"
         end
       end
