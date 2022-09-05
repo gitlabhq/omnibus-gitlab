@@ -23,7 +23,7 @@ Starting with GitLab 15.3, Grafana is not enabled by default. To enable it:
    grafana['enable'] = true
    ```
 
-1. Save the file and [reconfigure] GitLab for the changes to take effect.
+1. Save the file and [reconfigure](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure) GitLab for the changes to take effect.
 1. Once enabled, Grafana will be available on `https://gitlab.example.com/-/grafana`
    and SSO with GitLab is automatically configured.
 
