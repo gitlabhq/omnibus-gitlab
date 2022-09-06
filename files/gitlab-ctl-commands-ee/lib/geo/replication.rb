@@ -14,6 +14,8 @@ module Geo
     attr_writer :data_dir, :tmp_data_dir
     attr_reader :options
 
+    DEFAULT_REPLICATION_TIMEOUT_S = 12 * 60 * 60 # 12 hours
+
     def initialize(instance, options)
       @base_path = instance.base_path
       @data_path = instance.data_path
@@ -113,7 +115,7 @@ module Geo
       puts "* Starting base backup as the replicator user (#{@options[:user]})".color(:green)
 
       run_command(pg_basebackup_command,
-                  live: true, timeout: @options[:backup_timeout])
+                  live: true, timeout: backup_timeout)
 
       puts '* Restoring postgresql.conf'.color(:green)
       run_command("mv #{postgresql_dir_path}/postgresql.conf #{postgresql_dir_path}/data/")
@@ -143,6 +145,10 @@ module Geo
     end
 
     private
+
+    def backup_timeout
+      @options[:backup_timeout] || DEFAULT_REPLICATION_TIMEOUT_S
+    end
 
     def create_gitlab_backup!
       return if @options[:skip_backup]
