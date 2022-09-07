@@ -147,7 +147,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     binding_ninja (0.2.3)
     builder (3.2.4)
-    chef-cleanroom (1.0.4)
+    chef-cleanroom (1.0.5)
     chef-telemetry (1.1.1)
       chef-config
       concurrent-ruby (~> 1.0)
