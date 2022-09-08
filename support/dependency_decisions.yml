@@ -91,3 +91,68 @@
     :why: https://github.com/aws/smithy-go/blob/main/LICENSE
     :versions: []
     :when: 2022-07-07 11:37:14.372184788 Z
+#   github.com/hashicorp/consul/api
+- - :license
+  - ./api
+  - MPL2
+  - :who: Andrew Patterson
+    :why: https://github.com/hashicorp/consul/blob/main/LICENSE
+    :versions: []
+    :when: 2022-09-08 20:30:35.688702200 Z
+#   github.com/hashicorp/consul/sdk
+- - :license
+  - ./sdk
+  - MPL2
+  - :who: Andrew Patterson
+    :why: https://github.com/hashicorp/consul/blob/main/LICENSE
+    :versions: []
+    :when: 2022-09-08 20:30:35.688702200 Z
+- - :license
+  - github.com/circonus-labs/circonus-gometrics
+  - NewBSD
+  - :who: Andrew Patterson
+    :why: https://github.com/circonus-labs/circonus-gometrics/blob/master/LICENSE
+    :versions: []
+    :when: 2022-09-08 20:30:35.688702200 Z
+- - :license
+  - github.com/circonus-labs/circonusllhist
+  - Apache2
+  - :who: Andrew Patterson
+    :why: https://github.com/circonus-labs/circonus-gometrics/blob/master/LICENSE
+    :versions: []
+    :when: 2022-09-08 20:30:35.688702200 Z
+- - :license
+  - github.com/gorhill/cronexpr
+  - Apache2
+  - :who: Andrew Patterson
+    :why: https://github.com/gorhill/cronexpr/blob/master/APLv2
+    :versions: []
+    :when: 2022-09-08 20:30:35.688702200 Z
+- - :license
+  - github.com/rcrowley/go-metrics
+  - SimpleBSD
+  - :who: Andrew Patterson
+    :why: https://github.com/rcrowley/go-metrics/blob/master/LICENSE
+    :versions: []
+    :when: 2022-09-08 20:30:35.688702200 Z
+- - :license
+  - github.com/tj/go-redirects
+  - MIT
+  - :who: Andrew Patterson
+    :why: https://github.com/tj/go-redirects/blob/master/LICENSE
+    :versions: []
+    :when: 2022-09-08 20:30:35.688702200 Z
+- - :license
+  - github.com/alicebob/gopher-json
+  - UnLicense
+  - :who: Andrew Patterson
+    :why: https://github.com/alicebob/gopher-json/blob/master/LICENSE
+    :versions: []
+    :when: 2022-09-08 20:30:35.688702200 Z
+- - :license
+  - github.com/pavelmemory/go-license-detector/v4
+  - Apache2
+  - :who: Andrew Patterson
+    :why: https://github.com/pavelmemory/go-license-detector/blob/master/LICENSE.md
+    :versions: []
+    :when: 2022-09-08 20:30:35.688702200 Z
