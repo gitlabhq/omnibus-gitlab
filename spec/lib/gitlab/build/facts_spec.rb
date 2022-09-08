@@ -52,6 +52,9 @@ RSpec.describe Build::Facts do
       stub_env_var('TOP_UPSTREAM_SOURCE_SHA', 'aq2456fs')
       stub_env_var('TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID', '55555')
       stub_env_var('TOP_UPSTREAM_MERGE_REQUEST_IID', '7689')
+      stub_env_var('BUILDER_IMAGE_REVISION', '1.2.3')
+      stub_env_var('BUILDER_IMAGE_REGISTRY', 'registry.example.com')
+      stub_env_var('PUBLIC_BUILDER_IMAGE_REGISTRY', 'registry.example.com')
     end
 
     it 'returns correct variables' do
@@ -62,7 +65,11 @@ RSpec.describe Build::Facts do
         TOP_UPSTREAM_SOURCE_SHA=aq2456fs
         TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID=55555
         TOP_UPSTREAM_MERGE_REQUEST_IID=7689
-        EDITION=ce
+        BUILDER_IMAGE_REVISION=1.2.3
+        BUILDER_IMAGE_REGISTRY=registry.example.com
+        PUBLIC_BUILDER_IMAGE_REGISTRY=registry.example.com
+        COMPILE_ASSETS=false
+        EDITION=CE
         ee=false
       ]
 
