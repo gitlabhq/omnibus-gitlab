@@ -15,7 +15,7 @@
     key: "knapsack${CACHE_KEY_SUFFIX}"
     paths:
       - knapsack/
-  artifacts: *knapsack-artifacts
+  artifacts: !reference [.knapsack-artifacts]
 
 .knapsack: &prepare_knapsack
   extends: .knapsack-state
@@ -81,7 +81,7 @@
   image: "${BUILDER_IMAGE_REGISTRY}/${BASE_OS}:${BUILDER_IMAGE_REVISION}"
   stage: trigger-package
   script:
-    - *build-package
+    - !reference [.build-package]
     # Renaming so we can easily generate the artifact URL
     - mv $PACKAGE_DIRECTORY/*.deb $PACKAGE_DIRECTORY/gitlab.deb
     - mv $PACKAGE_DIRECTORY/*.deb.size $PACKAGE_DIRECTORY/gitlab.deb.size
@@ -110,7 +110,7 @@
     # These jobs will not be run on dev, so we set ALTERNATIVE_SOURCES to true
     # so tests run fine on forks
     - export ALTERNATIVE_SOURCES="true";
-    - *install-gems
+    - !reference [.install-gems]
   retry: 1
   script:
     - bundle exec rspec spec/lib
@@ -140,6 +140,8 @@
     - mv ${KNAPSACK_REPORT_PATH}.bak ${KNAPSACK_REPORT_PATH}
     - bundle exec rake knapsack:rspec
   artifacts:
+    # Since this is not an array, we can't use `!reference` tags. Hence using
+    # yaml anchors.
     <<: *knapsack-artifacts
     reports:
       junit: junit_rspec.xml
@@ -244,8 +246,7 @@ update-gems-cache:
   extends: .gems-cache
   stage: update-cache
   image: "${RUBY_IMAGE}"
-  before_script:
-    - *install-gems
+  before_script: !reference [.install-gems]
   script:
     - echo "Cache is up to date!"
   cache:
@@ -265,7 +266,7 @@ update-trigger-package-cache:
   stage: update-cache
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   script:
-    - *build-package
+    - !reference [.build-package]
     - echo "Cache is up to date!"
   cache:
     policy: push  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
@@ -295,8 +296,7 @@ rubocop:
   extends: .gems-cache
   stage: check
   image: "${RUBY_IMAGE}"
-  before_script:
-    - *install-gems
+  before_script: !reference [.install-gems]
   script:
     - bundle exec rubocop --parallel
   rules:
@@ -352,7 +352,7 @@ yard:
     # These jobs will not be run on dev, so we set ALTERNATIVE_SOURCES to true
     # so tests run fine on forks
     - export ALTERNATIVE_SOURCES="true";
-    - *install-gems
+    - !reference [.install-gems]
   script:
     - bundle exec yardoc
   rules:
@@ -402,15 +402,15 @@ danger-review:
   rules:
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
 
-Centos 7 knapsack: *prepare_knapsack
-Centos 8 knapsack: *prepare_knapsack
-Debian 10 knapsack: *prepare_knapsack
-Debian 11 knapsack: *prepare_knapsack
-OpenSUSE 15.3 knapsack: *prepare_knapsack
-Ubuntu 16.04 knapsack: *prepare_knapsack
-Ubuntu 18.04 knapsack: *prepare_knapsack
-Ubuntu 20.04 knapsack: *prepare_knapsack
-AmazonLinux 2 knapsack: *prepare_knapsack
+Centos 7 knapsack: !reference [.knapsack]
+Centos 8 knapsack: !reference [.knapsack]
+Debian 10 knapsack: !reference [.knapsack]
+Debian 11 knapsack: !reference [.knapsack]
+OpenSUSE 15.3 knapsack: !reference [.knapsack]
+Ubuntu 16.04 knapsack: !reference [.knapsack]
+Ubuntu 18.04 knapsack: !reference [.knapsack]
+Ubuntu 20.04 knapsack: !reference [.knapsack]
+AmazonLinux 2 knapsack: !reference [.knapsack]
 
 build library specs:
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-focal"
@@ -420,6 +420,8 @@ build library specs:
   coverage: '/\(\d+.\d+\%\) covered/'
   artifacts:
     reports:
+      # Since this is not an array, we can't use `!reference` tags. Hence using
+      # yaml anchors.
       <<: *spec_reports
       coverage_report:
         coverage_format: cobertura

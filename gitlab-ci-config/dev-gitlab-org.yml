@@ -25,17 +25,20 @@
   <<: *package-artifacts
   expire_in: 7 days
 
-.branch-cache: &branch-cache
-  key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
-  paths:
+.cache-paths:
   - cache
   - gems
   - assets_cache
   - node_modules
 
+.branch-cache: &branch-cache
+  key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
+  paths: !reference [.cache-paths]
+
 .tag-cache: &tag-cache
-  <<: *branch-cache
+  # Use the same cache key as branch builds, by manually appending `-branch` substring.
   key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
+  paths: !reference [.cache-paths]
 
 .branch_template: &branch_build
   stage: package
@@ -53,21 +56,21 @@
       fi
   tags:
   - docker-builder
-  artifacts: *package-artifacts
+  artifacts: !reference [.package-artifacts]
   needs:
     - job: fetch-assets
       optional: true
     - job: generate-facts
       optional: true
       artifacts: true
-  cache: *branch-cache
+  cache: !reference [.branch-cache]
   retry: 1
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
 
 .fips_branch_template: &fips_branch_build
-  <<: *branch_build
+  extends: .branch_template
   variables:
     USE_SYSTEM_SSL: "true"
   rules:
@@ -75,13 +78,12 @@
     - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
 
 .rpi_branch_template: &rpi_branch_build
-  <<: *branch_build
+  extends: .branch_template
   stage: slow_jobs
   variables:
     NO_SOURCEMAPS: "true"
   tags:
   - docker-arm-builder
-  artifacts: *package-artifacts
   retry: 1
   rules:
     - !reference [.default_rules, rules]
@@ -110,21 +112,21 @@
     - bundle exec rake build:component_shas
   tags:
   - docker-builder
-  artifacts: *package-artifacts-release
+  artifacts: !reference [.package-artifacts-release]
   needs:
     - job: fetch-assets
       optional: true
     - job: generate-facts
       optional: true
       artifacts: true
-  cache: *tag-cache
+  cache: !reference [.tag-cache]
   retry: 1
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
 
 .fips_tag_template: &fips_tag_build
-  <<: *tag_build
+  extends: .tag_template
   variables:
     USE_SYSTEM_SSL: "true"
   allow_failure: true
@@ -133,7 +135,7 @@
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 
 .rpi_tag_template: &rpi_tag_build
-  <<: *tag_build
+  extends: .tag_template
   stage: slow_jobs
   variables:
     NO_SOURCEMAPS: "true"
@@ -154,7 +156,7 @@
   script:
     - if [[ "${USE_SYSTEM_SSL}" == "true" ]]; then export STAGING_REPO=${FIPS_STAGING_REPO}; fi
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
-  cache: *tag-cache
+  cache: !reference [.tag-cache]
   retry: 2
   tags:
   - promotion
@@ -164,7 +166,7 @@
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
 
 .fips_staging_upload_template: &fips_staging_upload
-  <<: *staging_upload
+  extends: .staging_upload_template
   variables:
     USE_SYSTEM_SSL: "true"
     INCLUDE_PACKAGECLOUD: "true"
@@ -192,7 +194,7 @@
   script:
     - bundle exec rake repository:upload:production
   retry: 2
-  cache: *tag-cache
+  cache: !reference [.tag-cache]
   tags:
   - promotion
   rules:
@@ -202,7 +204,7 @@
       when: manual
 
 .fips_release_template: &fips_release
-  <<: *production_release
+  extends: .production_release_template
   variables:
     USE_SYSTEM_SSL: "true"
     INCLUDE_PACKAGECLOUD: "true"
@@ -214,7 +216,7 @@
       when: manual
 
 .raspbian_release_template: &raspbian_release
-  <<: *production_release
+  extends: .production_release_template
   variables:
     RASPBERRY_REPO: "raspberry-pi2"
     INCLUDE_PACKAGECLOUD: "true"
@@ -236,7 +238,7 @@
   - bundle exec rake aws:ami:create
   tags:
   - docker-builder
-  cache: *tag-cache
+  cache: !reference [.tag-cache]
   needs:
     - Ubuntu-20.04
   retry: 1
@@ -280,61 +282,61 @@ Ubuntu-20.04-branch:
 
 Debian-10-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
 Debian-10-arm-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
   tags:
   - docker-arm-builder
 Debian-11-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
 Debian-11-arm-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
   tags:
   - docker-arm-builder
 Ubuntu-20.04-arm-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
   tags:
   - docker-arm-builder
 CentOS-7-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
 CentOS-8-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_8:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
 CentOS-8-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_8_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
   tags:
   - docker-arm-builder
 OpenSUSE-15.3-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
 OpenSUSE-15.3-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
   tags:
   - docker-arm-builder
 AmazonLinux-2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
 AmazonLinux-2-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
   tags:
   - docker-arm-builder
 SLES-12.5-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
 SLES-15.2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
-  <<: *branch_build
+  extends: .branch_template
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
@@ -357,7 +359,7 @@ Docker-branch:
   - bundle exec rake docker:push:nightly
   tags:
   - docker-builder
-  cache: *branch-cache
+  cache: !reference [.branch-cache]
   needs:
     - job: Ubuntu-20.04-branch
       artifacts: false
@@ -385,7 +387,7 @@ QA-branch:
     - screenshots/
   tags:
   - docker-builder
-  cache: *branch-cache
+  cache: !reference [.branch-cache]
   needs:
     - job: Ubuntu-20.04-branch
       artifacts: false
@@ -399,7 +401,7 @@ QA-branch:
 
 Raspberry-Pi-2-Buster-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
-  <<: *rpi_branch_build
+  extends: .rpi_branch_template
 
 # This job runs only on nightly EE builds
 RAT-Nightly:
@@ -407,7 +409,7 @@ RAT-Nightly:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   script:
     - bundle exec rake qa:rat:nightly
-  cache: *branch-cache
+  cache: !reference [.branch-cache]
   needs:
     - Ubuntu-20.04-branch
   allow_failure: true
@@ -424,7 +426,7 @@ RAT-Nightly-FIPS:
     RAT_REFERENCE_ARCHITECTURE: "omnibus-gitlab-mrs-fips"
   script:
     - bundle exec rake qa:rat:nightly
-  cache: *branch-cache
+  cache: !reference [.branch-cache]
   needs:
     - CentOS-8-fips-branch
   allow_failure: true
@@ -475,7 +477,7 @@ Docker-QA:
   stage: image
   script:
     - bundle exec rake qa:build qa:push:staging
-  cache: *tag-cache
+  cache: !reference [.tag-cache]
   tags:
   - docker-builder
   needs:
@@ -535,61 +537,61 @@ Ubuntu-20.04-staging:
 ### Package builds
 Debian-10:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
 Debian-10-arm:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
   tags:
   - docker-arm-builder
 Debian-11:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
 Debian-11-arm:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
   tags:
   - docker-arm-builder
 Ubuntu-20.04-arm:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
   tags:
   - docker-arm-builder
 CentOS-7:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
 CentOS-8:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_8:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
 CentOS-8-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_8_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
   tags:
   - docker-arm-builder
 OpenSUSE-15.3:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
 OpenSUSE-15.3-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
   tags:
   - docker-arm-builder
 AmazonLinux-2:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
 AmazonLinux-2-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
   tags:
   - docker-arm-builder
 SLES-12.5:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 SLES-15.2:
   image: "${BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
-  <<: *tag_build
+  extends: .tag_template
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
@@ -611,7 +613,7 @@ Docker:
   - bundle exec rake docker:push:staging
   tags:
   - docker-builder
-  cache: *tag-cache
+  cache: !reference [.tag-cache]
   needs:
     - job: Ubuntu-20.04
       artifacts: false
@@ -625,106 +627,106 @@ Docker:
 
 ### Staging uploads
 Debian-10-staging:
+  extends: .staging_upload_template
   needs:
     - job: Debian-10
       optional: true
     - job: Debian-10-branch
       optional: true
-  <<: *staging_upload
 Debian-10-arm-staging:
+  extends: .staging_upload_template
   needs:
     - job: Debian-10-arm
       optional: true
     - job: Debian-10-arm-branch
       optional: true
-  <<: *staging_upload
 Debian-11-staging:
+  extends: .staging_upload_template
   needs:
     - job: Debian-11
       optional: true
     - job: Debian-11-branch
       optional: true
-  <<: *staging_upload
 Debian-11-arm-staging:
+  extends: .staging_upload_template
   needs:
     - job: Debian-11-arm
       optional: true
     - job: Debian-11-arm-branch
       optional: true
-  <<: *staging_upload
 Ubuntu-20.04-arm-staging:
+  extends: .staging_upload_template
   needs:
     - job: Ubuntu-20.04-arm
       optional: true
     - job: Ubuntu-20.04-arm-branch
       optional: true
-  <<: *staging_upload
 CentOS-7-staging:
+  extends: .staging_upload_template
   needs:
     - job: CentOS-7
       optional: true
     - job: CentOS-7-branch
       optional: true
-  <<: *staging_upload
 CentOS-8-staging:
+  extends: .staging_upload_template
   needs:
     - job: CentOS-8
       optional: true
     - job: CentOS-8-branch
       optional: true
-  <<: *staging_upload
 CentOS-8-arm64-staging:
+  extends: .staging_upload_template
   needs:
     - job: CentOS-8-arm64
       optional: true
     - job: CentOS-8-arm64-branch
       optional: true
-  <<: *staging_upload
 OpenSUSE-15.3-staging:
+  extends: .staging_upload_template
   needs:
     - job: OpenSUSE-15.3
       optional: true
     - job: OpenSUSE-15.3-branch
       optional: true
-  <<: *staging_upload
 OpenSUSE-15.3-arm64-staging:
+  extends: .staging_upload_template
   needs:
     - job: OpenSUSE-15.3-arm64
       optional: true
     - job: OpenSUSE-15.3-arm64-branch
       optional: true
-  <<: *staging_upload
 AmazonLinux-2-staging:
+  extends: .staging_upload_template
   needs:
     - job: AmazonLinux-2
       optional: true
     - job: AmazonLinux-2-branch
       optional: true
-  <<: *staging_upload
 AmazonLinux-2-arm64-staging:
+  extends: .staging_upload_template
   needs:
     - job: AmazonLinux-2-arm64
       optional: true
     - job: AmazonLinux-2-arm64-branch
       optional: true
-  <<: *staging_upload
 SLES-12.5-staging:
+  extends: .staging_upload_template
   needs:
     - job: SLES-12.5
       optional: true
     - job: SLES-12.5-branch
       optional: true
-  <<: *staging_upload
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 SLES-15.2-staging:
+  extends: .staging_upload_template
   needs:
     - job: SLES-15.2
       optional: true
     - job: SLES-15.2-branch
       optional: true
-  <<: *staging_upload
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
@@ -752,98 +754,98 @@ Ubuntu-20.04-fips-staging:
 
 ### Package releases
 Ubuntu-18.04-release:
+  extends: .production_release_template
   needs:
     - Ubuntu-18.04
-  <<: *production_release
 Ubuntu-20.04-release:
+  extends: .production_release_template
   needs:
     - Ubuntu-20.04
-  <<: *production_release
 Ubuntu-20.04-arm-release:
+  extends: .production_release_template
   needs:
     - Ubuntu-20.04-arm
-  <<: *production_release
 Debian-10-release:
+  extends: .production_release_template
   needs:
     - Debian-10
-  <<: *production_release
 Debian-10-arm-release:
+  extends: .production_release_template
   needs:
     - Debian-10-arm
-  <<: *production_release
 Debian-11-release:
+  extends: .production_release_template
   needs:
     - Debian-11
-  <<: *production_release
 Debian-11-arm-release:
+  extends: .production_release_template
   needs:
     - Debian-11-arm
-  <<: *production_release
 CentOS-7-release:
+  extends: .production_release_template
   needs:
     - CentOS-7
-  <<: *production_release
 CentOS-8-release:
+  extends: .production_release_template
   needs:
     - CentOS-8
-  <<: *production_release
 CentOS-8-arm64-release:
+  extends: .production_release_template
   needs:
     - CentOS-8-arm64
-  <<: *production_release
 OpenSUSE-15.3-release:
+  extends: .production_release_template
   needs:
     - OpenSUSE-15.3
-  <<: *production_release
 OpenSUSE-15.3-arm64-release:
+  extends: .production_release_template
   needs:
     - OpenSUSE-15.3-arm64
-  <<: *production_release
 AmazonLinux-2-release:
+  extends: .production_release_template
   needs:
     - AmazonLinux-2
-  <<: *production_release
 AmazonLinux-2-arm64-release:
+  extends: .production_release_template
   needs:
     - AmazonLinux-2-arm64
-  <<: *production_release
 SLES-12.5-release:
+  extends: .production_release_template
   needs:
     - SLES-12.5
-  <<: *production_release
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
 SLES-15.2-release:
+  extends: .production_release_template
   needs:
     - SLES-15.2
-  <<: *production_release
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
 CentOS-8-fips-release:
+  extends: .fips_release_template
   needs:
     - CentOS-8-fips
-  <<: *fips_release
 Ubuntu-18.04-fips-release:
+  extends: .fips_release_template
   needs:
     - Ubuntu-18.04-fips
-  <<: *fips_release
 Ubuntu-20.04-fips-release:
+  extends: .fips_release_template
   needs:
     - Ubuntu-20.04-fips
-  <<: *fips_release
 
 Docker-Release:
   extends: .docker_job
   stage: package-and-image-release
   script:
     - bundle exec rake release:docker
-  cache: *tag-cache
+  cache: !reference [.tag-cache]
   needs:
     - Docker
     - job: generate-facts
@@ -856,17 +858,17 @@ Docker-Release:
       when: manual
 
 AWS:
-  <<: *aws_ami_build
+  extends: .aws_ami_build
 
 AWS-ARM64:
+  extends: .aws_ami_build
   variables:
     AWS_ARCHITECTURE: 'arm64'
-  <<: *aws_ami_build
 
 AWS-Ultimate:
+  extends: .aws_ami_build
   variables:
     AWS_RELEASE_TYPE: "ultimate"
-  <<: *aws_ami_build
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
@@ -874,9 +876,9 @@ AWS-Ultimate:
       when: manual
 
 AWS-Premium:
+  extends: .aws_ami_build
   variables:
     AWS_RELEASE_TYPE: "premium"
-  <<: *aws_ami_build
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
@@ -897,7 +899,7 @@ QA-Tag:
     - screenshots/
   tags:
   - docker-builder
-  cache: *tag-cache
+  cache: !reference [.tag-cache]
   needs:
     - Docker-QA
     - job: generate-facts
@@ -917,7 +919,7 @@ license-upload:
     - bundle exec rake license:upload
   tags:
   - docker-builder
-  cache: *tag-cache
+  cache: !reference [.tag-cache]
   needs:
     - Ubuntu-18.04
   rules:
@@ -931,7 +933,7 @@ RAT-Tag:
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   script:
     - bundle exec rake qa:rat:tag
-  cache: *tag-cache
+  cache: !reference [.tag-cache]
   needs:
     - Ubuntu-20.04
   allow_failure: true
@@ -940,13 +942,13 @@ RAT-Tag:
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 
 Raspberry-Pi-2-Buster:
+  extends: .rpi_tag_template
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
-  <<: *rpi_tag_build
 
 Raspberry-Pi-2-Buster-release:
+  extends: .raspbian_release_template
   needs:
     - Raspberry-Pi-2-Buster
-  <<: *raspbian_release
 
 AWS-CE-Release:
   variables:
