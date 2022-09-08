@@ -122,7 +122,9 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH != "gitlab-org/omnibus-gitlab" && $CI_PROJECT_PATH != "gitlab-org/security/omnibus-gitlab" && $CI_PROJECT_PATH != "gitlab-org/build/omnibus-gitlab-mirror" && $CI_PROJECT_PATH != "gitlab/omnibus-gitlab"'
       variables:
         PIPELINE_TYPE: FORK_BRANCH_TEST_PIPELINE
-    # If pipeline type could not be detected, do not create a pipeline
+    # If a pipeline type is specified, use it and create a pipeline
+    - if: '$PIPELINE_TYPE'
+    # If pipeline type is neither specified nor could be detected, do not create a pipeline
     - if: '$PIPELINE_TYPE == null'
       when: never
     # Support Merge Request pipelines

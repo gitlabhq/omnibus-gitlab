@@ -149,6 +149,8 @@
   inherit:
     variables: false
   variables:
+    PIPELINE_TYPE: "TRIGGERED_CE_PIPELINE"
+    CACHE_EDITION: "CE"
     ALTERNATIVE_SOURCES: 'true'
     BUILDER_IMAGE_REVISION: ${BUILDER_IMAGE_REVISION}
     BUILDER_IMAGE_REGISTRY: ${BUILDER_IMAGE_REGISTRY}
@@ -166,27 +168,34 @@
     TOP_UPSTREAM_SOURCE_REF: ${TOP_UPSTREAM_SOURCE_REF}
     QA_BRANCH: ${QA_BRANCH}
   trigger:
-    project: 'gitlab-org/build/omnibus-gitlab-mirror'
-    branch: $CI_COMMIT_REF_NAME
+    include: '.gitlab-ci.yml'
     strategy: depend
   needs:
     - job: generate-facts
       artifacts: true
-    - job: check-for-sha-in-mirror
-      artifacts: false
   allow_failure: true
   rules:
     # Because of inherit:variables being false, `PIPELINE_TYPE` isn't available here. :(
     # https://gitlab.com/gitlab-org/gitlab/-/issues/368759
-    - if: '$CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && ($CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^docs-/ || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /-docs$/)'
+    # Do not include in dependency update related pipelines
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^deps/ || $CI_COMMIT_BRANCH =~ /^deps/ || $DEPS_PIPELINE == "true"'
       when: never
-    - if: '$CI_PIPELINE_SOURCE=="schedule" || $CI_PIPELINE_SOURCE=="pipeline"'
+    # Do not include in docs pipelines
+    - if: '$CI_COMMIT_BRANCH =~ /^docs/ || $CI_COMMIT_BRANCH =~ /-docs$/ || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^docs/ || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /-docs$/'
       when: never
+    # Do not include in other housekeeping pipelines
+    - if: '$PAGES_UPDATE == "true" || $DEPENDENCY_SCANNING == "true" || $CACHE_UPDATE == "true" || $DURATION_PLOTTER == "true"'
+      when: never
+    # Do not include in pipelines of protected branches and tags. This job
+    # makes sense only during feature development
     - if: '$CI_COMMIT_REF_PROTECTED == "true"'
+      when: never
+    # Do not include in triggered and scheduled pipelines
+    - if: '$CI_PIPELINE_SOURCE=="schedule" || $CI_PIPELINE_SOURCE=="pipeline"'
       when: never
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && ($CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" || $CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab")'
       when: manual
-    - if: '$CI_COMMIT_BRANCH && ($CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" || $CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab")'
+    - if: '$CI_COMMIT_BRANCH && ($CI_PIPELINE_SOURCE =~ /(web|push|webide|api)/) && ($CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" || $CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab")'
       when: manual
 
 .trigger-pipeline:
@@ -272,24 +281,14 @@ update-trigger-package-cache:
 #     Branch pipeline     #
 ###########################
 
-check-for-sha-in-mirror:
-  extends: .gems-cache
-  stage: check
-  image: "${RUBY_IMAGE}"
-  script:
-    - support/wait_for_sha
-  rules:
-    - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
-    - if: '$PIPELINE_TYPE == "GITLAB_BRANCH_TEST_PIPELINE"'
-  timeout: 3h
-  needs: []
-
 Trigger:ce-package:
   extends: .trigger-job
 
 Trigger:ee-package:
   extends: .trigger-job
   variables:
+    PIPELINE_TYPE: "TRIGGERED_EE_PIPELINE"
+    CACHE_EDITION: "EE"
     ee: "true"
 
 rubocop:
@@ -768,5 +767,8 @@ build-package-on-all-os:
     strategy: depend
   rules:
     - if: '$CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && ($CI_PIPELINE_SOURCE == "pipeline" || $CI_PIPELINE_SOURCE == "trigger")'
+      when: manual
+      allow_failure: true
+    - if: '$CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $CI_PIPELINE_SOURCE == "parent_pipeline"'
       when: manual
       allow_failure: true

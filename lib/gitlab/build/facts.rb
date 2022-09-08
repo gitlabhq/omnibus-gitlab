@@ -33,7 +33,11 @@ module Build
           TOP_UPSTREAM_SOURCE_SHA=#{Gitlab::Util.get_env('TOP_UPSTREAM_SOURCE_SHA') || Gitlab::Util.get_env('CI_COMMIT_SHA')}
           TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID=#{Gitlab::Util.get_env('TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID')}
           TOP_UPSTREAM_MERGE_REQUEST_IID=#{Gitlab::Util.get_env('TOP_UPSTREAM_MERGE_REQUEST_IID')}
-          EDITION=#{Build::Info.edition}
+          BUILDER_IMAGE_REVISION=#{Gitlab::Util.get_env('BUILDER_IMAGE_REVISION')}
+          BUILDER_IMAGE_REGISTRY=#{Gitlab::Util.get_env('BUILDER_IMAGE_REGISTRY')}
+          PUBLIC_BUILDER_IMAGE_REGISTRY=#{Gitlab::Util.get_env('PUBLIC_BUILDER_IMAGE_REGISTRY')}
+          COMPILE_ASSETS=#{Gitlab::Util.get_env('COMPILE_ASSETS') || 'false'}
+          EDITION=#{Build::Info.edition.upcase}
           ee=#{Build::Check.is_ee? || 'false'}
         ]
       end
