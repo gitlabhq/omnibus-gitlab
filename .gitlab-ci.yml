@@ -141,8 +141,7 @@ generate-facts:
     reports:
       dotenv: build_facts/env_vars
   rules:
-    # Temporary, until we use PIPELINE_TYPE in dev.gitlab.org pipelines also
-    - if: '$CI_PROJECT_PATH == "gitlab/omnibus-gitlab"'
+    - if: '$PIPELINE_TYPE =~ /_BUILD_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
     - if: '$PIPELINE_TYPE == "GITLAB_BRANCH_TEST_PIPELINE"'
     - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
