@@ -73,6 +73,13 @@ variables:
   tags:
     - gitlab-org-docker
 
+.gems-cache:
+  cache:
+    key: "gems-cache-${BUILDER_IMAGE_REVISION}${CACHE_KEY_SUFFIX}"
+    paths:
+      - gems
+    policy: pull
+
 before_script:
   - echo "PIPELINE_TYPE detected as ${PIPELINE_TYPE}"
   - export CE_ONLY=(Raspberry)
@@ -131,6 +138,7 @@ fetch-assets:
     - if: '$PIPELINE_TYPE == "DURATION_PLOTTER_PIPELINE"'
 
 generate-facts:
+  extends: .gems-cache
   stage: prepare
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   script:
