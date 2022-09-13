@@ -27,7 +27,7 @@ def run_command(command)
 end
 
 service_data = FailoverHelper::ServiceData.new
-service_data.service_name = "service:postgresql"
+service_data.service_name = "<%= @watcher_service_name %>"
 service_data.check_field = "Status"
 service_data.leader_value = "passing"
 
@@ -36,7 +36,7 @@ begin
   new_primary = failover.primary_node_address
   @log.info("Found primary: #{new_primary}")
 
-  Kernel.exit run_command("gitlab-ctl pgb-notify --newhost #{new_primary} --user pgbouncer --hostuser gitlab-consul")
+  Kernel.exit run_command("gitlab-ctl pgb-notify --pg-database <%= @database_name %> --newhost #{new_primary} --user pgbouncer --hostuser gitlab-consul")
 rescue JSON::ParserError => jparser_error
   @log.error(jparser_error.message)
   Kernel.exit 2
@@ -46,7 +46,7 @@ rescue FailoverHelper::SplitBrain => splitbrain_error
     @log.error("    Node: #{primary.name}")
   end
   @log.error('Stopping pgbouncer to prevent issues. Once the error is cleared, consul will reload pgbouncer')
-  results = run_command('gitlab-ctl pgb-kill --pg-database gitlabhq_production --user pgbouncer --hostuser gitlab-consul')
+  results = run_command('gitlab-ctl pgb-kill --pg-database <%= @database_name %> --user pgbouncer --hostuser gitlab-consul')
   Kernel.exit 3 + results
 rescue FailoverHelper::PrimaryMissing => no_primary_error
   @log.error(no_primary_error.message)
