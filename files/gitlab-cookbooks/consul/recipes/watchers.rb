@@ -14,22 +14,18 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
-watch_helper = WatchHelper.new(node)
+watch_helper = WatchHelper::WatcherConfig.new(node)
 
-node['consul']['watchers'].each do |watcher|
-  config = watch_helper.watcher_config(watcher)
-
-  file "#{node['consul']['config_dir']}/watcher_#{watcher}.json" do
-    content config.to_json
+watch_helper.watchers.each do |watcher|
+  file watcher.consul_config_file do
+    content watcher.consul_config
     owner account_helper.postgresql_user
   end
 
-  config[:watches].each do |watch|
-    template "#{node['consul']['script_directory']}/#{watch_helper.watcher_handler(watch[:service])}" do
-      source "watcher_scripts/#{node['consul']['watcher_config'][watch[:service]][:handler]}.erb"
-      variables node['consul'].to_hash
-      mode 0555
-    end
+  template watcher.handler_script do
+    source "watcher_scripts/#{watcher.handler_template}"
+    variables watcher.template_variables
+    mode 0555
   end
 end
 
