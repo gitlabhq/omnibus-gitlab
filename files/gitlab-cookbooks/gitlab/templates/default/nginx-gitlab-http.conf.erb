@@ -172,6 +172,11 @@ server { ## HTTPS server
     proxy_request_buffering off;
   }
 
+  location ~ ^/api/v\d {
+    proxy_pass http://gitlab-workhorse;
+    proxy_intercept_errors off;
+  }
+
   <% if node['monitoring']['grafana']['enable'] -%>
   location <%= File.join(@path, '-/grafana/') %> {
     proxy_pass http://<%= node['monitoring']['grafana']['http_addr'] %>:<%= node['monitoring']['grafana']['http_port'] %>/;
