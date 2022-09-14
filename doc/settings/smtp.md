@@ -718,6 +718,37 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_ssl'] = true
 ```
 
+### Alibaba Cloud Direct Mail (No TLS)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtpdm-ap-southeast-1.aliyun.com"    # Set to the Direct Mail service region in use, refer to: https://www.alibabacloud.com/help/en/directmail/latest/smtp-service-address
+gitlab_rails['smtp_port'] = 80
+gitlab_rails['smtp_user_name'] = "<username@example.com>"            # Direct Mail sender address
+gitlab_rails['smtp_password'] = "<password>"                         # Set Direct Mail password
+gitlab_rails['smtp_domain'] = "<example.com>"                        # Email domain configured in Direct Mail
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = false
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+gitlab_rails['gitlab_email_from'] = "<username@example.com>"         # Email domain configured in Direct Mail
+```
+
+### Alibaba Cloud Direct Mail (TLS)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtpdm-ap-southeast-1.aliyun.com"    # Set to the Direct Mail service region in use, refer to: https://www.alibabacloud.com/help/en/directmail/latest/smtp-service-address
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "<username@example.com>"            # Direct Mail sender address
+gitlab_rails['smtp_password'] = "<password>"                         # Set Direct Mail password
+gitlab_rails['smtp_domain'] = "<example.com>"                        # Email domain configured in Direct Mail
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = false
+gitlab_rails['smtp_tls'] = true
+gitlab_rails['gitlab_email_from'] = "<username@example.com>"         # Email domain configured in Direct Mail
+```
+
 ### Aliyun Direct Mail
 
 Aliyun Direct Mail (阿里云邮件推送)
