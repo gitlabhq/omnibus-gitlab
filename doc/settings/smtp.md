@@ -123,7 +123,7 @@ gitlab_rails['smtp_enable'] = true
 
 ### SMTP without SSL
 
-By default SSL is enabled for SMTP. If your SMTP server do not support communication over SSL use following settings:
+By default SSL is enabled for SMTP. If your SMTP server does not support communication over SSL use following settings:
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
