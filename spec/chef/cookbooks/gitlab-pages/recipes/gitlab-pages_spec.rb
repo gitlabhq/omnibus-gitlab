@@ -137,8 +137,8 @@ RSpec.describe 'gitlab::gitlab-pages' do
           )
         end
 
-        it 'does not attempt to authorize with GitLab' do
-          expect(chef_run).not_to run_ruby_block('authorize pages with gitlab')
+        it 'attempt to authorize with GitLab even when oauth credentials are given' do
+          expect(chef_run).to run_ruby_block('authorize pages with gitlab')
         end
 
         it 'renders pages config file' do

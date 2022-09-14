@@ -8,16 +8,15 @@ class MattermostHelper
   def self.authorize_with_gitlab(gitlab_external_url)
     redirect_uri = "#{Gitlab['mattermost_external_url']}/signup/gitlab/complete\r\n#{Gitlab['mattermost_external_url']}/login/gitlab/complete"
     app_name = 'GitLab Mattermost'
+    oauth_uid = Gitlab['mattermost']['gitlab_id']
+    oauth_secret = Gitlab['mattermost']['gitlab_secret']
 
-    o = query_gitlab_rails(redirect_uri, app_name)
+    o = query_gitlab_rails(redirect_uri, app_name, oauth_uid, oauth_secret)
 
     if o.exitstatus.zero?
-      app_id, app_secret = o.stdout.lines.last.chomp.split(" ")
-
       Gitlab['mattermost']['gitlab_enable'] = true
-      Gitlab['mattermost']['gitlab_secret'] = app_secret
-      Gitlab['mattermost']['gitlab_id'] = app_id
       Gitlab['mattermost']['gitlab_scope'] = ""
+      Gitlab['mattermost']['register_as_oauth_app'] = false
 
       SecretsHelper.write_to_gitlab_secrets
       info('Updated the gitlab-secrets.json file.')

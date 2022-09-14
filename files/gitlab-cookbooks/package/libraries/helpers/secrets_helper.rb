@@ -9,6 +9,10 @@ class SecretsHelper
     SecureRandom.base64(bytes)
   end
 
+  def self.generate_urlsafe_base64(bytes = 32)
+    SecureRandom.urlsafe_base64(bytes)
+  end
+
   def self.generate_rsa(bits)
     OpenSSL::PKey::RSA.new(bits)
   end
@@ -80,7 +84,8 @@ class SecretsHelper
         'gitlab_secret' => Gitlab['gitlab_pages']['gitlab_secret'],
         'gitlab_id' => Gitlab['gitlab_pages']['gitlab_id'],
         'auth_secret' => Gitlab['gitlab_pages']['auth_secret'],
-        'api_secret_key' => Gitlab['gitlab_pages']['api_secret_key']
+        'api_secret_key' => Gitlab['gitlab_pages']['api_secret_key'],
+        'register_as_oauth_app' => Gitlab['gitlab_pages']['register_as_oauth_app']
       },
       'gitlab_kas' => {
         'api_secret_key' => Gitlab['gitlab_kas']['api_secret_key'],
@@ -91,7 +96,8 @@ class SecretsHelper
         'gitlab_secret' => Gitlab['grafana']['gitlab_secret'],
         'gitlab_application_id' => Gitlab['grafana']['gitlab_application_id'],
         'admin_password' => Gitlab['grafana']['admin_password'],
-        'metrics_basic_auth_password' => Gitlab['grafana']['metrics_basic_auth_password']
+        'metrics_basic_auth_password' => Gitlab['grafana']['metrics_basic_auth_password'],
+        'register_as_oauth_app' => Gitlab['grafana']['register_as_oauth_app']
       },
       'registry' => {
         'http_secret' => Gitlab['registry']['http_secret'],
@@ -104,7 +110,8 @@ class SecretsHelper
       'mattermost' => {
         'email_invite_salt' => Gitlab['mattermost']['email_invite_salt'],
         'file_public_link_salt' => Gitlab['mattermost']['file_public_link_salt'],
-        'sql_at_rest_encrypt_key' => Gitlab['mattermost']['sql_at_rest_encrypt_key']
+        'sql_at_rest_encrypt_key' => Gitlab['mattermost']['sql_at_rest_encrypt_key'],
+        'register_as_oauth_app' => Gitlab['mattermost']['register_as_oauth_app']
       },
       'postgresql' => {
         'internal_certificate' => Gitlab['postgresql']['internal_certificate'],

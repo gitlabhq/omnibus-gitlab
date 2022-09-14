@@ -91,13 +91,12 @@ module GitlabPages
     def authorize_with_gitlab
       redirect_uri = Gitlab['gitlab_pages']['auth_redirect_uri']
       app_name = 'GitLab Pages'
+      oauth_uid = Gitlab['gitlab_pages']['gitlab_id']
+      oauth_secret = Gitlab['gitlab_pages']['gitlab_secret']
 
-      o = query_gitlab_rails(redirect_uri, app_name)
+      o = query_gitlab_rails(redirect_uri, app_name, oauth_uid, oauth_secret)
       if o.exitstatus.zero?
-        app_id, app_secret = o.stdout.lines.last.chomp.split(" ")
-
-        Gitlab['gitlab_pages']['gitlab_secret'] = app_secret
-        Gitlab['gitlab_pages']['gitlab_id'] = app_id
+        Gitlab['gitlab_pages']['register_as_oauth_app'] = false
 
         SecretsHelper.write_to_gitlab_secrets
         info('Updated the gitlab-secrets.json file.')
@@ -108,6 +107,8 @@ module GitlabPages
 
     def parse_secrets
       Gitlab['gitlab_pages']['auth_secret'] ||= SecretsHelper.generate_hex(64) if Gitlab['gitlab_pages']['access_control']
+      Gitlab['gitlab_pages']['gitlab_id'] ||= SecretsHelper.generate_urlsafe_base64
+      Gitlab['gitlab_pages']['gitlab_secret'] ||= SecretsHelper.generate_urlsafe_base64
 
       # Pages and GitLab expects exactly 32 bytes, encoded with base64
       if Gitlab['gitlab_pages']['api_secret_key']
