@@ -42,8 +42,7 @@ ruby_block "authorize pages with gitlab" do
     GitlabPages.authorize_with_gitlab
   end
 
-  not_if { node['gitlab-pages']['gitlab_id'] && node['gitlab-pages']['gitlab_secret'] }
-  only_if { node['gitlab-pages']['access_control'] }
+  only_if { node['gitlab-pages']['access_control'] && node['gitlab-pages']['register_as_oauth_app'] }
 end
 
 # Options may have changed in the previous step

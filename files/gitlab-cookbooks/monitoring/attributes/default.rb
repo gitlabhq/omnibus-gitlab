@@ -188,3 +188,4 @@ default['monitoring']['grafana']['smtp'] = {
   'ehlo_identity' => 'dashboard.example.com',
   'startTLS_policy' => nil
 }
+default['monitoring']['grafana']['register_as_oauth_app'] = true

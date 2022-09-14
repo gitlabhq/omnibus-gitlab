@@ -79,3 +79,4 @@ default['gitlab-pages']['server_keep_alive'] = nil
 default['gitlab-pages']['redirects_max_config_size'] = nil
 default['gitlab-pages']['redirects_max_path_segments'] = nil
 default['gitlab-pages']['redirects_max_rule_count'] = nil
+default['gitlab-pages']['register_as_oauth_app'] = true

@@ -1,15 +1,18 @@
 module AuthorizeHelper
-  def query_gitlab_rails(uri, name)
+  def query_gitlab_rails(uri, name, oauth_uid, oauth_secret)
     warn("Connecting to GitLab to generate new app_id and app_secret for #{name}.")
-    runner_cmd = create_or_find_authorization(uri, name)
+    runner_cmd = create_or_find_authorization(uri, name, oauth_uid, oauth_secret)
     cmd = execute_rails_runner(runner_cmd)
     do_shell_out(cmd)
   end
 
-  def create_or_find_authorization(uri, name)
+  def create_or_find_authorization(uri, name, oauth_uid, oauth_secret)
     args = %(redirect_uri: "#{uri}", name: "#{name}")
 
-    app = %(app = Doorkeeper::Application.where(#{args}).first_or_create;)
+    app = %(
+      app = Doorkeeper::Application.where(#{args}).by_uid_and_secret("#{oauth_uid}", "#{oauth_secret}");
+      app ||= Doorkeeper::Application.where({ redirect_uri: "#{uri}", name: "#{name}", uid: "#{oauth_uid}", secret: "#{oauth_secret}" }).create!
+    )
 
     output = %(puts app.uid.concat(" ").concat(app.secret);)
 

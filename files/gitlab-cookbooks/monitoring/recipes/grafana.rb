@@ -97,14 +97,12 @@ directory grafana_static_etc_dir do
   recursive true
 end
 
-if !node['monitoring']['grafana']['gitlab_secret'] && !node['monitoring']['grafana']['gitlab_application_id']
-  ruby_block "authorize Grafana with GitLab" do
-    block do
-      GrafanaHelper.authorize_with_gitlab(external_url)
-    end
-    # Try connecting to GitLab only if it is enabled and on this node
-    only_if { node['gitlab']['gitlab-rails']['enable'] }
+ruby_block "authorize Grafana with GitLab" do
+  block do
+    GrafanaHelper.authorize_with_gitlab(external_url)
   end
+  # Try connecting to GitLab only if it is enabled and on this node
+  only_if { node['gitlab']['gitlab-rails']['enable'] && node['monitoring']['grafana']['register_as_oauth_app'] }
 end
 
 ruby_block "populate Grafana configuration options" do

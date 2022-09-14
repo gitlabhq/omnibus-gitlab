@@ -7,9 +7,9 @@ RSpec.describe 'gitlab::mattermost' do
       'MM_FILESETTINGS_DIRECTORY' => '/var/opt/gitlab/mattermost/data',
       'MM_GITLABSETTINGS_AUTHENDPOINT' => 'http://gitlab.example.com/oauth/authorize',
       'MM_GITLABSETTINGS_ENABLE' => 'false',
-      'MM_GITLABSETTINGS_ID' => '',
+      'MM_GITLABSETTINGS_ID' => 'gitlab_secret',
       'MM_GITLABSETTINGS_SCOPE' => '',
-      'MM_GITLABSETTINGS_SECRET' => '',
+      'MM_GITLABSETTINGS_SECRET' => 'gitlab_secret',
       'MM_GITLABSETTINGS_TOKENENDPOINT' => 'http://gitlab.example.com/oauth/token',
       'MM_GITLABSETTINGS_USERAPIENDPOINT' => 'http://gitlab.example.com/api/v4/user',
       'MM_INSTALL_TYPE' => 'gitlab_omnibus',
@@ -35,6 +35,7 @@ RSpec.describe 'gitlab::mattermost' do
     allow_any_instance_of(PgHelper).to receive(:database_exists?).and_return(true)
     allow(SecretsHelper).to receive(:generate_hex).with(64).and_return('aaaabbbbccccddddeeeeffff1111222233334444555566667777888899990000')
     allow(SecretsHelper).to receive(:generate_hex).with(16).and_return('aabbccddeeff11223344556677889900')
+    allow(SecretsHelper).to receive(:generate_urlsafe_base64).and_return('gitlab_secret')
   end
 
   context 'by default' do
@@ -200,12 +201,6 @@ RSpec.describe 'gitlab::mattermost' do
     it 'does not authorize mattermost with gitlab' do
       expect(chef_run).not_to run_ruby_block('authorize mattermost with gitlab')
     end
-  end
-
-  context 'when gitlab authentication parameters are specified explicitly' do
-    before { stub_gitlab_rb(mattermost: { enable: true, gitlab_enable: true }) }
-
-    it_behaves_like 'no gitlab authorization performed'
   end
 
   context 'when gitlab-rails is disabled' do

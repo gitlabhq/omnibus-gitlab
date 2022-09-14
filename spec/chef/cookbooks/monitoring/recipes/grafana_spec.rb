@@ -110,7 +110,6 @@ RSpec.describe 'monitoring::grafana' do
           expect(content).to match(/http_addr = localhost/)
           expect(content).to match(/http_port = 3000/)
           expect(content).to match(/root_url = http:\/\/localhost\/-\/grafana/)
-          expect(content).not_to match(/\[auth\.gitlab\]/)
           expect(content).to match(/reporting_enabled = true/)
         }
     end

@@ -30,6 +30,8 @@ module GitlabMattermost
       Gitlab['mattermost']['email_invite_salt'] ||= SecretsHelper.generate_hex(16)
       Gitlab['mattermost']['file_public_link_salt'] ||= SecretsHelper.generate_hex(16)
       Gitlab['mattermost']['sql_at_rest_encrypt_key'] ||= SecretsHelper.generate_hex(16)
+      Gitlab['mattermost']['gitlab_id'] ||= SecretsHelper.generate_urlsafe_base64
+      Gitlab['mattermost']['gitlab_secret'] ||= SecretsHelper.generate_urlsafe_base64
     end
 
     def parse_mattermost_external_url
