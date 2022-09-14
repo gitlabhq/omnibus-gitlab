@@ -304,11 +304,13 @@ RSpec.describe 'gitlab::mailroom' do
         )
       end
 
-      it 'sets the default mailroom delivery method to webhook' do
+      it 'sets the default mailroom delivery method to webhook and renders the secret file' do
         node = chef_run.node
 
         expect(node['gitlab']['gitlab-rails']['incoming_email_delivery_method']).to eql('webhook')
         expect(node['gitlab']['gitlab-rails']['service_desk_email_delivery_method']).to eql('webhook')
+        expect(chef_run).to create_templatesymlink('Create a gitlab_incoming_email_secret and create a symlink to Rails root')
+        expect(chef_run).to create_templatesymlink('Create a gitlab_service_desk_email_secret and create a symlink to Rails root')
       end
     end
 

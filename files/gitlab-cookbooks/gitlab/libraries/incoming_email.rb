@@ -25,11 +25,11 @@ module IncomingEmail
       # mailroom expects exactly 32 bytes, encoded with base64
 
       # rubocop:disable Style/IfUnlessModifier,Style/GuardClause
-      if Gitlab['gitlab_rails']['incoming_email_enabled'] && Gitlab['gitlab_rails']['incoming_email_delivery_method'] == "webhook"
+      if rails_user_config_or_default('incoming_email_enabled') && rails_user_config_or_default('incoming_email_delivery_method') == "webhook"
         Gitlab['mailroom']['incoming_email_auth_token'] ||= Gitlab['gitlab_rails']['incoming_email_auth_token'] || SecretsHelper.generate_base64(32)
       end
 
-      if Gitlab['gitlab_rails']['service_desk_email_enabled'] && Gitlab['gitlab_rails']['service_desk_email_delivery_method'] == "webhook"
+      if rails_user_config_or_default('service_desk_email_enabled') && rails_user_config_or_default('service_desk_email_delivery_method') == "webhook"
         Gitlab['mailroom']['service_desk_email_auth_token'] ||= Gitlab['gitlab_rails']['service_desk_email_auth_token'] || SecretsHelper.generate_base64(32)
       end
       # rubocop:enable Style/IfUnlessModifier,Style/GuardClause
@@ -45,6 +45,22 @@ module IncomingEmail
       return unless Gitlab['gitlab_rails']['service_desk_email_enabled']
 
       Gitlab['mailroom']['enable'] = true if Gitlab['mailroom']['enable'].nil?
+    end
+
+    private
+
+    def default_rails_config
+      Gitlab['node']['gitlab']['gitlab-rails']
+    end
+
+    def user_rails_config
+      Gitlab['gitlab_rails']
+    end
+
+    def rails_user_config_or_default(key)
+      # Note that we must not use an `a || b`` truthiness check here since that would mean a `false`
+      # user setting would fail over to the default, which is not what we want.
+      user_rails_config[key].nil? ? default_rails_config[key] : user_rails_config[key]
     end
   end
 end
