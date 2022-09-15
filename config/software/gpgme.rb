@@ -16,7 +16,7 @@
 
 name 'gpgme'
 
-default_version '1.14.0'
+default_version '1.17.0'
 
 dependency 'libassuan'
 dependency 'gnupg'
@@ -28,7 +28,7 @@ license_file 'COPYING.LESSER'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-#{version}.tar.bz2",
-       sha256: 'cef1f710a6b0d28f5b44242713ad373702d1466dcbe512eb4e754d7f35cd4307'
+       sha256: '4ed3f50ceb7be2fce2c291414256b20c9ebf4c03fddb922c88cda99c119a69f5'
 
 relative_path "gpgme-#{version}"
 
