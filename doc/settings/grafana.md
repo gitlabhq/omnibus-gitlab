@@ -242,7 +242,7 @@ An incorrect callback URL commonly causes this error.
 You may get this error when trying to log in to Grafana if the Callback URL is not correct.
 To fix that:
 
-1. On the top bar, select **Menu > Admin**.
+1. On the top bar, select **Main menu > Admin**.
 1. On the left sidebar, select **Applications**.
 1. Select **Edit** of the **GitLab Grafana** application.
 1. Change the value of **Callback URL** to look like `https://gitlab.example.com/-/grafana/login/gitlab` where `https://gitlab.example.com` corresponds to your `external_url`.
@@ -258,7 +258,7 @@ Make sure to create a backup before applying any changes.
 
 To fix it:
 
-1. On the top bar, select **Menu > Admin**.
+1. On the top bar, select **Main menu > Admin**.
 1. On the left sidebar, select **Applications**.
 1. Remove the application **GitLab Grafana** if it exists by selecting **Destroy**.
 1. Create a backup of `/etc/gitlab/gitlab-secrets.json` on your GitLab server.

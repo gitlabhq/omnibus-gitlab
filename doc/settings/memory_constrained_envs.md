@@ -231,7 +231,7 @@ To disable these features you need to go to Admin Area of GitLab
 and disable the Prometheus Metrics feature:
 
 1. Go to GitLab web interface.
-1. On the top bar, select **Menu >** **{admin}** **Admin**.
+1. On the top bar, select **Main menu > Admin**.
 1. On the left sidebar, select **Settings > Metrics and profiling**.
 1. Expand **Metrics - Prometheus**.
 1. Disable **Enable Prometheus Metrics**.
