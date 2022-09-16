@@ -24,7 +24,7 @@ skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
 
-version('6.3') { source md5: 'a2736befde5fee7d2b7eb45eb281cdbe', url: 'https://ftp.gnu.org/gnu/ncurses/ncurses-6.3.tar.gz' }
+version('6.3') { source sha256: '97fc51ac2b085d4cde31ef4d2c3122c21abc217e9090a43a30fc5ec21684e059', url: 'https://ftp.gnu.org/gnu/ncurses/ncurses-6.3.tar.gz' }
 
 relative_path "ncurses-#{version}"
 

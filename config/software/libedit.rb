@@ -24,7 +24,7 @@ skip_transitive_dependency_licensing true
 dependency 'ncurses'
 dependency 'config_guess'
 
-version('20120601-3.0') { source md5: 'e50f6a7afb4de00c81650f7b1a0f5aea' }
+version('20120601-3.0') { source sha256: '51f0f4b4a97b7ebab26e7b5c2564c47628cdb3042fd8ba8d0605c719d2541918' }
 
 source url: "http://www.thrysoee.dk/editline/libedit-#{version}.tar.gz"
 
