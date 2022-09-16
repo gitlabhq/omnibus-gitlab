@@ -23,7 +23,7 @@ license_file '../package/COPYING'
 skip_transitive_dependency_licensing true
 
 version '2.1.2' do
-  source md5: '6c985fbfe3a34608eb3c53dc719172c4'
+  source sha256: '6fd0160cb0cf1207de4e66754b6d39750cff14bb0aa66ab49490992c0c47ba18'
 end
 
 source url: "http://smarden.org/runit/runit-#{version}.tar.gz"

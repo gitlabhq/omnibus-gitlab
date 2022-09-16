@@ -32,7 +32,7 @@ skip_transitive_dependency_licensing true
 dependency 'popt'
 
 version '3.1.3' do
-  source md5: '1581a588fde9d89f6bc6201e8129afaf'
+  source sha256: '55cc554efec5fdaad70de921cd5a5eeb6c29a95524c715f3bbf849235b0800c0'
 end
 
 source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz"

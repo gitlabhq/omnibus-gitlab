@@ -25,7 +25,7 @@ skip_transitive_dependency_licensing true
 dependency 'config_guess'
 
 version '1.6.2' do
-  source md5: '5db0d43a9022a6ebbbc25337ae28942f'
+  source sha256: '11a615225baa5f8bb686824423f50e4427acd3f70d394765bdff32801f0fd5b0'
 end
 
 # ftp on ftp.ossp.org is unavaiable so we must use another mirror site.
