@@ -704,6 +704,10 @@ for more examples of troubleshooting SSL problems with OpenSSL.
 
     This error indicates that the client does not trust the certificate or CA. To fix this error, the client connecting to server will need to [trust the certificate or CA](#install-custom-public-certificates).
 
+1. `x509: certificate relies on legacy Common Name field, use SANs instead`
+
+    This error indicates that [SANs](http://wiki.cacert.org/FAQ/subjectAltName) (subjectAltName) must be configured in the certificate. For more information, see [this issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/28841).
+      
 ### Git-LFS and other embedded services written in ***golang*** report custom certificate signed by unknown authority
 
 NOTE:
