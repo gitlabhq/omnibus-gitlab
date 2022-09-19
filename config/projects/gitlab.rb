@@ -97,7 +97,6 @@ if Build::Check.use_system_ssl?
 end
 
 dependency 'cacerts'
-dependency 'jemalloc'
 dependency 'redis'
 dependency 'nginx'
 dependency 'mixlib-log'

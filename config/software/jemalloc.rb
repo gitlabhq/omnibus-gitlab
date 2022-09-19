@@ -53,9 +53,7 @@ build do
   autogen_command << (OhaiHelper.arm64? ? '--with-lg-page=16' : '--with-lg-page=12')
 
   command autogen_command.join(' '), env: env
-  make "-j #{workers} build_lib", env: env
-  make 'install_lib', env: env
-  make 'install_bin', env: env
+  make "-j #{workers} install", env: env
 end
 
 project.exclude "embedded/bin/jemalloc-config"

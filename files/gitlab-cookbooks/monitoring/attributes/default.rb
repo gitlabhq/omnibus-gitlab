@@ -115,8 +115,6 @@ default['monitoring']['gitlab-exporter']['probe_elasticsearch'] = false
 default['monitoring']['gitlab-exporter']['elasticsearch_url'] = nil
 default['monitoring']['gitlab-exporter']['elasticsearch_authorization'] = nil
 default['monitoring']['gitlab-exporter']['env'] = {
-  # See https://gitlab.com/gitlab-org/gitlab/-/issues/297241
-  'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so',
   'MALLOC_CONF' => 'dirty_decay_ms:0,muzzy_decay_ms:0',
   'RUBY_GC_HEAP_INIT_SLOTS' => 80000,
   'RUBY_GC_HEAP_FREE_SLOTS_MIN_RATIO' => 0.055,
