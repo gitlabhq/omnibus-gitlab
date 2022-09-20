@@ -43,6 +43,6 @@ build do
   make "binaries", env: env, cwd: cwd
   move "#{cwd}/bin/*", "#{install_dir}/embedded/bin", force: true
 
-  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"
+  command "license_finder report --enabled-package-managers godep gomodules dep --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"
   copy "license.json", "#{install_dir}/licenses/registry.json"
 end
