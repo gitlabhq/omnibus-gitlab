@@ -46,6 +46,7 @@ RSpec.describe Build::Facts do
 
   describe '.common_vars' do
     before do
+      stub_is_ee(false)
       stub_env_var('TOP_UPSTREAM_SOURCE_PROJECT', 'gitlab-org/gitlab')
       stub_env_var('TOP_UPSTREAM_SOURCE_REF', 'master')
       stub_env_var('TOP_UPSTREAM_SOURCE_JOB', '123456')
