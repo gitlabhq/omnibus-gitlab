@@ -18,6 +18,19 @@ AllCops:
   # behavior by overriding DisplayStyleGuide, or by giving the
   # -S/--display-style-guide option.
   DisplayStyleGuide: false
+  # New cops introduced between major versions are set to a special pending status
+  # and are not enabled by default with warning message.
+  # Change this behavior by overriding either `NewCops: enable` or `NewCops: disable`.
+  # When `NewCops` is `enable`, pending cops are enabled in bulk. Can be overridden by
+  # the `--enable-pending-cops` command-line option.
+  # When `NewCops` is `disable`, pending cops are disabled in bulk. Can be overridden by
+  # the `--disable-pending-cops` command-line option.
+  NewCops: disable
+  # Determines if a notification for extension libraries should be shown when
+  # rubocop is run. Keys are the name of the extension, and values are an array
+  # of gems in the Gemfile that the extension is suggested for, if not already
+  # included.
+  SuggestExtensions: false
   # Exclude some GitLab files
   Exclude:
     - 'bin/*'
