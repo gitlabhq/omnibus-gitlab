@@ -30,8 +30,19 @@ namespace :qa do
     desc "Push unstable or auto-deploy version of gitlab-{ce,ee}-qa to the GitLab registry"
     task :staging do
       Gitlab::Util.section('qa:push:staging') do
-        tag = Build::Check.is_auto_deploy? ? Build::Info.major_minor_version_and_rails_ref : Build::Info.gitlab_version
-        Build::QAImage.tag_and_push_to_gitlab_registry(tag)
+        if Build::Check.is_auto_deploy?
+          # Tag using both major.minor-railsref tag and just railsref tag.
+          # Temporary until gitlab-qa is changed to detect QA image tag from just railsref.
+          # https://gitlab.com/gitlab-org/gitlab-qa/-/issues/687
+          major_minor_version_and_rails_ref = Build::Info.major_minor_version_and_rails_ref
+          rails_ref = major_minor_version_and_rails_ref.match(/^(?<major>\d+)\.(?<minor>\d+)-(?<railsref>\w+)$/)['railsref']
+
+          Build::QAImage.tag_and_push_to_gitlab_registry(major_minor_version_and_rails_ref)
+          Build::QAImage.tag_and_push_to_gitlab_registry(rails_ref)
+        else
+          Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.gitlab_version)
+        end
+
         Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.commit_sha)
       end
     end
