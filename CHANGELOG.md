@@ -3,6 +3,42 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.4.0 (2022-09-21)
+
+### Added (1 change)
+
+- [Add support for Gitaly GPG signing](gitlab-org/omnibus-gitlab@6f401b63547891efec40799ae8178cdf7342fb88) ([merge request](gitlab-org/omnibus-gitlab!6294))
+
+### Fixed (2 changes)
+
+- [Fix an issue were the incoming email secret file was not being created](gitlab-org/omnibus-gitlab@4ce9a961eec600bfb8812562e9ff05cf92381200) ([merge request](gitlab-org/omnibus-gitlab!6324))
+- [API should return JSON on errors even if custom error pages are used](gitlab-org/omnibus-gitlab@e2e2176d07cb2a14c9a49ca548c3467edd81f009) by @ercan.ucan ([merge request](gitlab-org/omnibus-gitlab!6276))
+
+### Changed (7 changes)
+
+- [Bump packer version to 1.8.2](gitlab-org/omnibus-gitlab@9095dd5198ffc3020001deaf25c96c68d92600d9) ([merge request](gitlab-org/omnibus-gitlab!6322))
+- [Use sha256 instead of md5 when downloading component source](gitlab-org/omnibus-gitlab@20602725482d70f75a41a6649cf0aa6989753754) ([merge request](gitlab-org/omnibus-gitlab!6330))
+- [Update gpgme to version 1.17.0](gitlab-org/omnibus-gitlab@e59a65c7ec6e3b729f2b03a370ac126e9c4fa128) ([merge request](gitlab-org/omnibus-gitlab!6332))
+- [Compatibility for hashed oauth secrets](gitlab-org/omnibus-gitlab@643a089acd17d4d5d14298db0e6f7eaff4844fe8) ([merge request](gitlab-org/omnibus-gitlab!6310))
+- [Raise default Geo base backup timeout to 12 hours](gitlab-org/omnibus-gitlab@596373120354bf9aa819732aeb8a9ad6f8c0b1d4) ([merge request](gitlab-org/omnibus-gitlab!6308))
+- [Improve error message when omnibus_gitconfig is not set properly](gitlab-org/omnibus-gitlab@0bf606a23d39570189c5a53650e9f35b351759c5) ([merge request](gitlab-org/omnibus-gitlab!6298))
+- [Update container registry to v3.53.0-gitlab](gitlab-org/omnibus-gitlab@f9b56f675ad12c55d781392c9ad318ee6e1c6dde) ([merge request](gitlab-org/omnibus-gitlab!6227))
+
+### Security (4 changes)
+
+- [Bump gitlab-exporter version to 11.18.2 to mitigate VULNDB-255039](gitlab-org/omnibus-gitlab@f14d07f73f54e407edd3ed6ecf76e17ddda0664b)
+- [Update unzip to 6.0.27](gitlab-org/omnibus-gitlab@76bc3e9c3dbfe8a57aedbb9b73631f5f3cd3dcf0)
+- [Bump nginx version to 1.20.2](gitlab-org/omnibus-gitlab@7ee8bc82dd644a38e5516c9cadd07e77a4dd84c3)
+- [Update libxml2 from 2.9.10 to 2.9.14](gitlab-org/omnibus-gitlab@b4ce083cfb478ce04daeaa375fd6ae5d98f26a32) ([merge request](gitlab-org/omnibus-gitlab!6248))
+
+### Other (5 changes)
+
+- [Update chef-classroom to 1.0.5](gitlab-org/omnibus-gitlab@dca6529508cd299f6557acceb379f2d5f73fac5d) ([merge request](gitlab-org/omnibus-gitlab!6274))
+- [Update libyaml to 0.2.5](gitlab-org/omnibus-gitlab@69b88f4fc29ae255820ec19a38098e3a9f23d418) ([merge request](gitlab-org/omnibus-gitlab!6253))
+- [Update aws-sdk-ec2 and aws-sdk-marketplacecatalog](gitlab-org/omnibus-gitlab@cb7b423577f890de04502214272a6c5cba1f4aec) ([merge request](gitlab-org/omnibus-gitlab!6257))
+- [Replace byebug and pry](gitlab-org/omnibus-gitlab@6764d7ab3c4925a157fe09ff1ba1d92d4f23c742) ([merge request](gitlab-org/omnibus-gitlab!6240))
+- [Use HTTPS instead of HTTP for pkg-config-lite](gitlab-org/omnibus-gitlab@525cd1994d06d7f6304715338553a870085a15ca) ([merge request](gitlab-org/omnibus-gitlab!6252))
+
 ## 15.3.3 (2022-09-01)
 
 ### Changed (1 change)
