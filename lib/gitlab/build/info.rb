@@ -9,7 +9,6 @@ require_relative 'image'
 
 module Build
   class Info
-    OMNIBUS_PROJECT_MIRROR_PATH ||= 'gitlab-org/build/omnibus-gitlab-mirror'.freeze
     DEPLOYER_OS_MAPPING = {
       'AUTO_DEPLOY_ENVIRONMENT' => 'ubuntu-xenial',
       'PATCH_DEPLOY_ENVIRONMENT' => 'ubuntu-bionic',
