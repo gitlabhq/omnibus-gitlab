@@ -14,10 +14,6 @@ module Build
         PROJECT_PATH
       end
 
-      def self.omnibus_gitlab_path
-        CGI.escape(Build::Info::OMNIBUS_PROJECT_MIRROR_PATH)
-      end
-
       def self.get_params(image: nil)
         {
           'ref' => 'master',
