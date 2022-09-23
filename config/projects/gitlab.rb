@@ -260,6 +260,8 @@ exclude 'embedded/lib/ruby/gems/*/gems/*pg_query-*/ext'
 
 # Exclude exe files from Python libraries
 exclude 'embedded/lib/python*/**/*.exe'
+# Exclude whl files from Python libraries.
+exclude 'embedded/lib/python*/**/*.whl'
 
 # Enable signing packages
 package :rpm do
