@@ -35,6 +35,7 @@ dependency 'libyaml'
 # Needed for chef_gem installs of (e.g.) nokogiri on upgrades -
 # they expect to see our libiconv instead of a system version.
 dependency 'libiconv'
+dependency 'jemalloc'
 
 version('2.7.5') { source sha256: '2755b900a21235b443bb16dadd9032f784d4a88f143d852bc5d154f22b8781f1' }
 
@@ -54,6 +55,8 @@ env['CFLAGS'] << ' -O3 -g -pipe'
 
 build do
   env['CFLAGS'] << ' -fno-omit-frame-pointer'
+  # Fix for https://bugs.ruby-lang.org/issues/18409. This can be removed with Ruby 3.0+.
+  env['LDFLAGS'] << ' -Wl,--no-as-needed'
 
   # disable libpath in mkmf across all platforms, it trolls omnibus and
   # breaks the postgresql cookbook.  i'm not sure why ruby authors decided
@@ -80,6 +83,7 @@ build do
 
   configure_command = ['--with-out-ext=dbm,readline',
                        '--enable-shared',
+                       '--with-jemalloc',
                        '--disable-install-doc',
                        '--without-gmp',
                        '--without-gdbm',

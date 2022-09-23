@@ -318,6 +318,12 @@ module Gitlab
             deprecation: '15.5',
             removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7072
             note: "Starting with GitLab 16.0, Praefect DB metrics will no longer be available on `/metrics` and must be scraped from `/db_metrics`."
+          },
+          {
+            config_keys: %w(gitlab gitlab-rails enable_jemalloc),
+            deprecation: '15.5',
+            removal: '15.5',
+            note: "Starting with GitLab 15.5, jemalloc is compiled in with the Ruby interpreter and can no longer be disabled."
           }
         ]
 

@@ -215,7 +215,6 @@ gitlab_rails['env'] = {
 }
 
 gitaly['env'] = {
-  'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so',
   'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000'
 }
 ```
@@ -271,7 +270,6 @@ and disable the Prometheus Metrics feature:
      }
    ]
    gitaly['env'] = {
-     'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so',
      'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000',
      'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'
    }

@@ -80,7 +80,6 @@ default['gitlab']['gitlab-rails']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
   'SSL_CERT_FILE' => "#{node['package']['install-dir']}/embedded/ssl/cert.pem"
 }
-default['gitlab']['gitlab-rails']['enable_jemalloc'] = true
 
 default['gitlab']['gitlab-rails']['internal_api_url'] = nil
 default['gitlab']['gitlab-rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
