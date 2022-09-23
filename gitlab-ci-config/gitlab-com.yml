@@ -609,6 +609,8 @@ letsencrypt-test:
     - chmod +x /usr/local/bin/docker-compose
     - bundle exec rake qa:test_letsencrypt
   rules:
+    - if: '$TOP_UPSTREAM_SOURCE_PROJECT == "gitlab-org/gitlab"'
+      when: never
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
   needs:
     - job: Trigger:gitlab-docker
