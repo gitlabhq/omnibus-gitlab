@@ -41,6 +41,6 @@ build do
   command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/postgres_exporter", env: env
   copy 'postgres_exporter', "#{install_dir}/embedded/bin/"
 
-  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"
+  command "license_finder report --enabled-package-managers godep gomodules --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"
   copy "license.json", "#{install_dir}/licenses/postgres-exporter.json"
 end
