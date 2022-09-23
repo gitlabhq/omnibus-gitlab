@@ -2418,7 +2418,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # praefect['key_path'] = "/var/opt/gitlab/prafect/key.pem"
 # praefect['prometheus_listen_addr'] = "localhost:9652"
 # praefect['prometheus_grpc_latency_buckets'] = "[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]"
-# praefect['separate_database_metrics'] = true
 # praefect['logging_level'] = "warn"
 # praefect['logging_format'] = "json"
 # praefect['virtual_storages'] = {
