@@ -26,7 +26,7 @@ skip_transitive_dependency_licensing true
 # link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
 default_version '2.7.5'
 
-fips_enabled = (project.overrides[:fips] && project.overrides[:fips][:enabled]) || false
+fips_enabled = Build::Check.use_system_ssl?
 
 dependency 'zlib'
 dependency 'openssl' unless Build::Check.use_system_ssl?
