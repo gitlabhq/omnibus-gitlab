@@ -67,13 +67,6 @@ GitlabSecurity/PublicSend:
     - 'files/gitlab-ctl-commands-ee/**/*'
     - 'spec/**/*'
 
-# Do not introduce global variables.
-Style/GlobalVars:
-  Enabled: true
-  Exclude:
-    - 'lib/backup/**/*'
-    - 'lib/tasks/**/*'
-
 # This is only useful for our build scripts, used in CI
 # Exlude most other locations
 Cop/AvoidUsingEnv:
