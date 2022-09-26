@@ -133,6 +133,7 @@ add_command_under_category 'pg-upgrade', 'database',
   geo_enabled = service_enabled?('geo-postgresql')
 
   @db_service_name = patroni_enabled ? 'patroni' : 'postgresql'
+  @timeout = options[:timeout]
   @db_worker = GitlabCtl::PgUpgrade.new(
     base_path,
     data_path,
@@ -401,7 +402,7 @@ end
 
 def configure_postgresql
   log 'Configuring PostgreSQL'
-  status = GitlabCtl::Util.chef_run('solo.rb', "#{@db_service_name}-config.json")
+  status = GitlabCtl::Util.chef_run('solo.rb', "#{@db_service_name}-config.json", timeout: @timeout)
   $stdout.puts status.stdout
   if status.error?
     $stderr.puts '===STDERR==='
