@@ -341,6 +341,9 @@ SLES-15.2-branch:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
+AmazonLinux-2-fips-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_branch_template
 CentOS-8-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
@@ -596,6 +599,9 @@ SLES-15.2:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+AmazonLinux-2-fips:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_tag_template
 CentOS-8-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
@@ -731,6 +737,13 @@ SLES-15.2-staging:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+AmazonLinux-2-fips-staging:
+  extends: .fips_staging_upload_template
+  needs:
+    - job: AmazonLinux-2-fips
+      optional: true
+    - job: AmazonLinux-2-fips-branch
+      optional: true
 CentOS-8-fips-staging:
   extends: .fips_staging_upload_template
   needs:
@@ -828,6 +841,10 @@ SLES-15.2-release:
     - !reference [.skip_release_jobs, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
+AmazonLinux-2-fips-release:
+  extends: .fips_release_template
+  needs:
+    - AmazonLinux-2-fips
 CentOS-8-fips-release:
   extends: .fips_release_template
   needs:
