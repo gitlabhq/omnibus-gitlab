@@ -174,7 +174,7 @@ gitaly['cgroups_count'] = 2
 gitaly['cgroups_mountpoint'] = '/sys/fs/cgroup'
 gitaly['cgroups_hierarchy_root'] = 'gitaly'
 gitaly['cgroups_memory_enabled'] = true
-gitaly['cgroups_memory_limit'] = 500000
+gitaly['cgroups_memory_bytes'] = 500000
 gitaly['cgroups_cpu_enabled'] = true
 gitaly['cgroups_cpu_shares'] = 512
 
@@ -256,7 +256,7 @@ and disable the Prometheus Metrics feature:
    gitaly['cgroups_mountpoint'] = '/sys/fs/cgroup'
    gitaly['cgroups_hierarchy_root'] = 'gitaly'
    gitaly['cgroups_memory_enabled'] = true
-   gitaly['cgroups_memory_limit'] = 500000
+   gitaly['cgroups_memory_bytes'] = 500000
    gitaly['cgroups_cpu_enabled'] = true
    gitaly['cgroups_cpu_shares'] = 512
 
