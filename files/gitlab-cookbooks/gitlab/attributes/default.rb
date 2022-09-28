@@ -711,6 +711,7 @@ default['gitlab']['nginx']['ssl_session_cache'] = "shared:SSL:10m"
 default['gitlab']['nginx']['ssl_session_tickets'] = "off"
 default['gitlab']['nginx']['ssl_session_timeout'] = "1d" # settings from by https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=intermediate&openssl=1.1.1d&ocsp=false&guideline=5.6
 default['gitlab']['nginx']['ssl_dhparam'] = nil # Path to dhparam.pem
+default['gitlab']['nginx']['ssl_password_file'] = nil
 default['gitlab']['nginx']['listen_addresses'] = ['*']
 default['gitlab']['nginx']['listen_port'] = nil # override only if you have a reverse proxy
 default['gitlab']['nginx']['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP

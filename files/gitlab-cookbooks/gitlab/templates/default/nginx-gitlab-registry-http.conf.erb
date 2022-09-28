@@ -71,6 +71,10 @@ server { ## HTTPS server
   <% if @ssl_dhparam %>
   ssl_dhparam <%= @ssl_dhparam %>;
   <% end %>
+
+  <% if @ssl_password_file %>
+  ssl_password_file '<%= @ssl_password_file %>';
+  <% end %>
   <% end %>
 
   ## Real IP Module Config

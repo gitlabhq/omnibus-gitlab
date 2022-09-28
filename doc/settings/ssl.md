@@ -221,10 +221,12 @@ To enable HTTPS:
    the password when you reconfigure GitLab. In that case, Omnibus GitLab
    fails silently with no error messages.
 
-   To remove the password from the key:
+   To specify the password for the key file, store the password in a text file
+   (for example, `/etc/gitlab/ssl/key_file_password.txt`) and add the following
+   to `/etc/gitlab/gitlab.rb`:
 
-   ```shell
-   openssl rsa -in certificate_before.key -out certificate_after.key
+   ```ruby
+   nginx['ssl_password_file'] = '/etc/gitlab/ssl/key_file_password.txt'
    ```
 
 1. Reconfigure GitLab:

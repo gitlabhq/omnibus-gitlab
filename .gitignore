@@ -38,3 +38,5 @@ spec/examples.txt
 .projections.json
 
 coverage/
+
+junit_rspec.xml
