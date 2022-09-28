@@ -285,5 +285,8 @@ exclude 'embedded/lib/python*/**/*.dist-info'
 exclude 'embedded/lib/python*/**/*.egg-info'
 exclude 'embedded/lib/python*/**/__pycache__'
 
+# exclude Spamcheck application source and libraries
+exclude 'embedded/service/spamcheck/app'
+
 package_user 'root'
 package_group 'root'
