@@ -1,0 +1,25 @@
+From 6fb2eb12f99f902d90bd9fa508186acbcf1ea33b Mon Sep 17 00:00:00 2001
+From: "YoungJoo.Kim" <vozltx@gmail.com>
+Date: Thu, 8 Sep 2022 00:42:18 +0900
+Subject: [PATCH] Compatibility: fixed an issues/232 with compile errors in gcc
+ 11.3
+
+---
+ src/ngx_http_vhost_traffic_status_dump.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/ngx_http_vhost_traffic_status_dump.c b/src/ngx_http_vhost_traffic_status_dump.c
+index 76d4c75..fafe60c 100644
+--- a/src/ngx_http_vhost_traffic_status_dump.c
++++ b/src/ngx_http_vhost_traffic_status_dump.c
+@@ -108,7 +108,7 @@ ngx_http_vhost_traffic_status_dump_node_write(ngx_event_t *ev, ngx_file_t *file,
+     ngx_rbtree_node_t *node)
+ {
+     ngx_http_vhost_traffic_status_ctx_t   *ctx;
+-    ngx_http_vhost_traffic_status_node_t  *vtsn;
++    ngx_http_vhost_traffic_status_node_t  *volatile vtsn;
+
+     ctx = ev->data;
+
+--
+2.37.3

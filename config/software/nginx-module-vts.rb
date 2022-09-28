@@ -29,4 +29,8 @@ skip_transitive_dependency_licensing true
 
 source git: version.remote
 
+build do
+  patch source: 'fix-compile-errors-in-gcc-11.patch'
+end
+
 # This is a source-only package for nginx.
