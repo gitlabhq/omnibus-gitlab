@@ -4,12 +4,12 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Building an `omnibus-gitlab` package locally
+# Build an `omnibus-gitlab` package locally
 
-## Preparing a build environment
+## Prepare a build environment
 
-Docker images with necessary build tools for building `omnibus-gitlab` packages
-can be found at the [`GitLab Omnibus Builder`](https://gitlab.com/gitlab-org/gitlab-omnibus-builder)
+Docker images with the necessary build tools for building `omnibus-gitlab` packages
+are in the [`GitLab Omnibus Builder`](https://gitlab.com/gitlab-org/gitlab-omnibus-builder)
 project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-builder/container_registry).
 
 1. [Install Docker](https://docs.Docker.com/engine/installation/).
@@ -18,10 +18,10 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
     > for your container runtime. Docker for Mac and Docker for Windows are known to set
     > this value to 2GB for default installations.
 
-1. Pull the Docker image for the OS you need to build a package for. The current
-   version of the image used officially by `omnibus-gitlab` is referred to the
-   `BUILDER_IMAGE_REVISION` environment variable in the
+1. Pull the Docker image for the OS you want to build a package for. The current
+   version of the image used officially by `omnibus-gitlab` is referred to in the
    [CI configuration](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/.gitlab-ci.yml)
+   `BUILDER_IMAGE_REVISION` environment variable.
 
    ```shell
    docker pull registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_10:${BUILDER_IMAGE_REVISION}
@@ -35,13 +35,13 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
    ```
 
 1. Start the container and enter its shell, while mounting the `omnibus-gitlab`
-   directory in it:
+   directory in the container:
 
    ```shell
    docker run -v ~/omnibus-gitlab:/omnibus-gitlab -it registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_10:${BUILDER_IMAGE_REVISION} bash
    ```
 
-1. By default, `omnibus-gitlab` will choose public GitLab repositories to
+1. By default, `omnibus-gitlab` chooses public GitLab repositories to
    fetch sources of various GitLab components. Set the environment variable
    `ALTERNATIVE_SOURCES` to `false` to build from `dev.gitlab.org`.
 
@@ -49,7 +49,7 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
    export ALTERNATIVE_SOURCES=false
    ```
 
-   Details of sources of various components is available in the
+   Component source information is in the
    [`.custom_sources.yml`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/.custom_sources.yml)
    file.
 
@@ -74,12 +74,12 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
 
 ### Fetch upstream assets
 
-Pipelines on GitLab and GitLab-FOSS projects will create a Docker image with
-pre-compiled assets and publish it to the container registry. While building
-packages, it's possible to reuse these images instead of compiling the assets
-again, and thus save time:
+Pipelines on GitLab and GitLab-FOSS projects create a Docker image with
+pre-compiled assets and publish the image to the container registry. While building
+packages, to save time you can reuse these images instead of compiling the assets
+again:
 
-1. Fetch the assets Docker image corresponding to the ref of GitLab or
+1. Fetch the assets Docker image that corresponds to the ref of GitLab or
    GitLab-FOSS you are building. For example, to pull the asset image
    corresponding to latest master ref, run the following:
 
@@ -87,13 +87,13 @@ again, and thus save time:
    docker pull registry.gitlab.com/gitlab-org/gitlab/gitlab-assets-ee:master
    ```
 
-1. Create a container using that image
+1. Create a container using that image:
 
    ```shell
    docker create --name gitlab_asset_cache registry.gitlab.com/gitlab-org/gitlab/gitlab-assets-ee:master
    ```
 
-1. Copy the asset directory from the container to the host
+1. Copy the asset directory from the container to the host:
 
    ```shell
    docker cp gitlab_asset_cache:/assets ~/gitlab-assets
@@ -113,10 +113,10 @@ again, and thus save time:
    export ASSET_PATH=/gitlab-assets
    ```
 
-## Building the package
+## Build the package
 
-Once you have prepared the build environment and have made necessary changes, if
-any, you can build packages using the provided Rake tasks:
+After you have prepared the build environment and have made necessary changes,
+you can build packages using the provided Rake tasks:
 
 1. For builds to work, Git working directory should be clean. So, commit your
    changes to a new branch.
@@ -127,30 +127,28 @@ any, you can build packages using the provided Rake tasks:
     bundle exec rake build:project
     ```
 
-The packages will be built and available in the `~/omnibus-gitlab/pkg`
+The packages are built and made available in the `~/omnibus-gitlab/pkg`
 directory.
 
-### Building an EE package
+### Build an EE package
 
-By default, `omnibus-gitlab` will build a CE package. If you want to build an EE
+By default, `omnibus-gitlab` builds a CE package. If you want to build an EE
 package, set the `ee` environment variable before running the Rake task:
 
 ```shell
 export ee=true
 ```
 
-## Miscellaneous
+### Clean files created during build
 
-### Cleaning files created during build
-
-You can clean up all temporary files generated during the build process with
+You can clean up all temporary files generated during the build process using
 `omnibus`'s `clean` command:
 
 ```shell
 bin/omnibus clean gitlab
 ```
 
-Adding the `--purge` purge option removes __ALL__ files generated during the
+Adding the `--purge` purge option removes **all** files generated during the
 build including the project install directory (`/opt/gitlab`) and
 the package cache directory (`/var/cache/omnibus/pkg`):
 
@@ -158,9 +156,9 @@ the package cache directory (`/var/cache/omnibus/pkg`):
 bin/omnibus clean --purge gitlab
 ```
 
-### Getting further help on Omnibus
+## Get help on Omnibus
 
-Full help for the Omnibus command line interface can be accessed with the
+For help with the Omnibus command-line interface, run the
 `help` command:
 
 ```shell

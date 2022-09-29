@@ -9,7 +9,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 Development of Omnibus GitLab can be done using an existing package available
 from the [Downloads page](https://about.gitlab.com/install/). To know how to setup
 a build environment to build these packages and use them, please read
-[Setting up a Build Environment](../build/build_package.md#preparing-a-build-environment)
+[Setting up a Build Environment](../build/build_package.md#prepare-a-build-environment)
 
 Choose one of the GitLab installation methods below. To provide isolation and
 to prevent rebuilding of the package for each and every change, it is preferred
