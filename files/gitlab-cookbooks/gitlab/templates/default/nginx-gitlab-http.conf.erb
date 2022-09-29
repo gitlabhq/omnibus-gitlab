@@ -50,6 +50,13 @@ server { ## HTTPS redirect server
     return 301 https://<%= @fqdn %>:<%= @port %>$request_uri;
   }
 
+  # Pass headers because we are serving monitoring endpoints directly without
+  # redirection
+  <% @proxy_set_headers.each do |header| %>
+  <% next if header[1].nil? || header[1].empty? %>
+  proxy_set_header <%= header[0] %> <%= header[1] %>;
+  <% end %>
+
   # health checks configuration
   include <%= @gitlab_health_conf %>;
 
