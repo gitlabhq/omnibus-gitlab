@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.3.4 (2022-09-29)
+
+### Security (3 changes)
+
+- [Mattermost security release for 2022-08](gitlab-org/security/omnibus-gitlab@e8f1ac2a668c5dd6141ef30be03c65a608e6af57) ([merge request](gitlab-org/security/omnibus-gitlab!241))
+- [Apply Grafana CVE-2022-3110 patch](gitlab-org/security/omnibus-gitlab@1722a2cbaf66b019ac8cd9ccf2b1bef868f7e353) ([merge request](gitlab-org/security/omnibus-gitlab!237))
+- [Pass necessary headers on accessing healthcheck endpoints](gitlab-org/security/omnibus-gitlab@5601e4db7f660dd17f5c11bc31dad44baba5f293) ([merge request](gitlab-org/security/omnibus-gitlab!235))
+
 ## 15.3.3 (2022-09-01)
 
 ### Changed (1 change)
