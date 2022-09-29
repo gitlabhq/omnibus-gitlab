@@ -14,11 +14,8 @@
 # limitations under the License.
 #
 
-require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
-
 name 'grafana'
-version = Gitlab::Version.new('grafana', '7.5.16')
+version = Gitlab::Version.new('grafana', 'v7.5.16')
 default_version version.print(false)
 
 license 'APACHE-2.0'
@@ -27,27 +24,74 @@ license_file 'NOTICE.md'
 
 skip_transitive_dependency_licensing true
 
-arch, sha = if OhaiHelper.raspberry_pi?
-              %w[armv7 95039bd8c239b93819a381b37bcdf6c3d5515b189b748ea84bee49b692be38c7]
-            elsif /aarch64/.match?(ohai['kernel']['machine'])
-              %w[arm64 e5971fa967f5bf672e48127e9638ab4f2170bb6d0b23b7f6e64c70af65c3742b]
-            else
-              %w[amd64 78491e7c07a3f2d810a55256df526d66b7f3d6ee3628ae5ab3862b81838d7852]
-            end
+arch = if OhaiHelper.raspberry_pi?
+         'armv7'
+       elsif /aarch64/.match?(ohai['kernel']['machine'])
+         'arm64'
+       else
+         'amd64'
+       end
 
-source url: "https://dl.grafana.com/oss/release/grafana-#{default_version}.linux-#{arch}.tar.gz",
-       sha256: sha
-
-relative_path "grafana-#{default_version}"
+source git: version.remote
 
 build do
-  # Binaries.
-  copy 'bin/grafana-server', "#{install_dir}/embedded/bin/grafana-server"
-  copy 'bin/grafana-cli', "#{install_dir}/embedded/bin/grafana-cli"
-  # Static assets.
-  command "mkdir -p '#{install_dir}/embedded/service/grafana/public'"
+  env = with_standard_compiler_flags(with_embedded_path)
+
+  # cypress e2e tests not needed for production build, and doesn't work on armv7
+  # see https://github.com/cypress-io/cypress/issues/6110
+  env['CYPRESS_INSTALL_BINARY'] = '0'
+
+  patch source: '1-cve-2022-31107-oauth-vulnerability.patch'
+
+  # Build backend
+  make 'build-go', env: env
+
+  # Build frontend
+  if OhaiHelper.raspberry_pi?
+    # CAUTION:
+    #
+    # This is a temporary workaround to reduce the build time for 32-bit
+    # environment.
+    #
+    # We do does not build the frontend from source, instead we download it
+    # from the official release of Grafana.
+    #
+    # The caveat is that, for RPi, we can not patch the frontend and security
+    # fixes are limited to backend.
+
+    # drop `v` from the version
+    release_version = default_version[1..]
+    release_archive = "grafana-#{release_version}.linux-#{arch}.tar.gz"
+    release_url = "https://dl.grafana.com/oss/release/#{release_archive}"
+
+    # download and extract the release archive from the official source
+    command("curl -fL --retry 3 -o #{release_archive} #{release_url}")
+    command("tar -xvf #{release_archive}")
+
+    # replace public directory from the official release
+    delete("public/")
+    move("grafana-#{release_version}/public/", "public/")
+  else
+    # build frontend from source
+    make 'node_modules', env: env
+
+    assets_compile_env = {
+      'NODE_ENV' => 'production'
+    }
+
+    make 'build-js', env: assets_compile_env
+  end
+
+  # Copy binaries
+  command "mkdir -p #{install_dir}/embedded/bin"
+  copy 'bin/linux-*/grafana-server', "#{install_dir}/embedded/bin/grafana-server"
+  copy 'bin/linux-*/grafana-cli', "#{install_dir}/embedded/bin/grafana-cli"
+
+  # Copy static assets
+  command "mkdir -p #{install_dir}/embedded/service/grafana/public"
   sync 'public/', "#{install_dir}/embedded/service/grafana/public/"
-  # Default configuration.
-  command "mkdir -p '#{install_dir}/embedded/service/grafana/conf'"
+
+  # Copy default configuration
+  command "mkdir -p #{install_dir}/embedded/service/grafana/conf"
   copy 'conf/defaults.ini', "#{install_dir}/embedded/service/grafana/conf/defaults.ini"
 end
