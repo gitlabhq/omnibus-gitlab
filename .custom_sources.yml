@@ -158,3 +158,6 @@ libtensorflow_lite:
 spamcheck:
   remote: "git@dev.gitlab.org:gitlab/spamcheck.git"
   alternative: "https://gitlab.com/gitlab-com/gl-security/engineering-and-research/automation-team/spam/spamcheck.git"
+grafana:
+  remote: "git@dev.gitlab.org:omnibus-mirror/grafana.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/grafana.git"

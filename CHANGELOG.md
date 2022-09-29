@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.4.1 (2022-09-29)
+
+### Security (2 changes)
+
+- [Apply Grafana CVE-2022-3110 patch](gitlab-org/security/omnibus-gitlab@3febf0771ca0924f8db3392c99b03ab852ca4950) ([merge request](gitlab-org/security/omnibus-gitlab!239))
+- [Pass necessary headers on accessing healthcheck endpoints](gitlab-org/security/omnibus-gitlab@48b29f3972d2137be4153ad9e7d5c2bd45a397aa) ([merge request](gitlab-org/security/omnibus-gitlab!240))
+
 ## 15.4.0 (2022-09-21)
 
 ### Added (1 change)
@@ -38,6 +45,14 @@ omnibus-gitlab repository.
 - [Update aws-sdk-ec2 and aws-sdk-marketplacecatalog](gitlab-org/omnibus-gitlab@cb7b423577f890de04502214272a6c5cba1f4aec) ([merge request](gitlab-org/omnibus-gitlab!6257))
 - [Replace byebug and pry](gitlab-org/omnibus-gitlab@6764d7ab3c4925a157fe09ff1ba1d92d4f23c742) ([merge request](gitlab-org/omnibus-gitlab!6240))
 - [Use HTTPS instead of HTTP for pkg-config-lite](gitlab-org/omnibus-gitlab@525cd1994d06d7f6304715338553a870085a15ca) ([merge request](gitlab-org/omnibus-gitlab!6252))
+
+## 15.3.4 (2022-09-29)
+
+### Security (3 changes)
+
+- [Mattermost security release for 2022-08](gitlab-org/security/omnibus-gitlab@e8f1ac2a668c5dd6141ef30be03c65a608e6af57) ([merge request](gitlab-org/security/omnibus-gitlab!241))
+- [Apply Grafana CVE-2022-3110 patch](gitlab-org/security/omnibus-gitlab@1722a2cbaf66b019ac8cd9ccf2b1bef868f7e353) ([merge request](gitlab-org/security/omnibus-gitlab!237))
+- [Pass necessary headers on accessing healthcheck endpoints](gitlab-org/security/omnibus-gitlab@5601e4db7f660dd17f5c11bc31dad44baba5f293) ([merge request](gitlab-org/security/omnibus-gitlab!235))
 
 ## 15.3.3 (2022-09-01)
 
@@ -96,6 +111,14 @@ No changes.
 - [Use rubygems bundled with ruby language](gitlab-org/omnibus-gitlab@c16b20b5c433a8605075bacb2903a07fd5bf5f2d) ([merge request](gitlab-org/omnibus-gitlab!6242))
 - [Use official sha256 as checksum for cacerts](gitlab-org/omnibus-gitlab@576a8c296da6b2b89ac684d014c1192c4b13c50b) ([merge request](gitlab-org/omnibus-gitlab!6251))
 - [Add GITLAB_METRICS_EXPORTER_VERSION for releases](gitlab-org/omnibus-gitlab@25b3c469015ae487fa390cf5cae567f06f1df288) ([merge request](gitlab-org/omnibus-gitlab!6222))
+
+## 15.2.5 (2022-09-29)
+
+### Security (3 changes)
+
+- [Mattermost security release for 2022-08](gitlab-org/security/omnibus-gitlab@3d5112f1e3f9bbcf3a495cf0cd81245ef4edf6de) ([merge request](gitlab-org/security/omnibus-gitlab!242))
+- [Apply Grafana CVE-2022-3110 patch](gitlab-org/security/omnibus-gitlab@63099fde11ae26ff9d74d6f28f8ff7e83596a414) ([merge request](gitlab-org/security/omnibus-gitlab!238))
+- [Pass necessary headers on accessing healthcheck endpoints](gitlab-org/security/omnibus-gitlab@0b1f054956091d6fe9ea6fc4f613db863ac5e4a2) ([merge request](gitlab-org/security/omnibus-gitlab!236))
 
 ## 15.2.4 (2022-08-30)
 

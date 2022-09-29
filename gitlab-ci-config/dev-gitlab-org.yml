@@ -406,7 +406,6 @@ QA-branch:
 Raspberry-Pi-2-Buster-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
   extends: .rpi_branch_template
-
 # This job runs only on nightly EE builds
 RAT-Nightly:
   stage: slow_jobs
