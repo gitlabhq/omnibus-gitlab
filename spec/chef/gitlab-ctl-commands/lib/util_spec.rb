@@ -3,7 +3,6 @@ require 'spec_helper'
 $LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
 
 require 'gitlab_ctl'
-require 'pry'
 
 RSpec.describe GitlabCtl::Util do
   context 'when there is no TTY available' do
