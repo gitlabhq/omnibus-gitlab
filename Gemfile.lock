@@ -343,6 +343,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    retriable (3.1.2)
     rexml (3.2.4)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
@@ -520,6 +521,7 @@ DEPENDENCIES
   pry
   rainbow (~> 2.2)
   rake
+  retriable
   rspec
   rspec-parameterized
   rspec_junit_formatter
