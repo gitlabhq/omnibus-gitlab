@@ -1,8 +1,11 @@
 require 'English'
+require_relative 'retriable.rb'
 require_relative 'build/info.rb'
 require_relative "util.rb"
 
 class PackageRepository
+  PackageUploadError = Class.new(StandardError)
+
   def target
     # Override
     return Gitlab::Util.get_env('PACKAGECLOUD_REPO') if Gitlab::Util.get_env('PACKAGECLOUD_REPO') && !Gitlab::Util.get_env('PACKAGECLOUD_REPO').empty?
@@ -50,18 +53,27 @@ class PackageRepository
       if dry_run
         puts cmd
       else
-        result = `#{cmd}`
+        Retriable.with_context(:package_publish, on: PackageUploadError) do
+          result = `#{cmd}`
 
-        if $CHILD_STATUS.exitstatus == 1
-          raise "Upload to package server failed!." unless /filename: has already been taken/.match?(result)
+          if child_process_status == 1
+            unless /filename: has already been taken/.match?(result)
+              puts 'Upload to package server failed!.'
+              raise PackageUploadError, "Upload to package server failed!."
+            end
 
-          puts "Package #{pkg} has already been uploaded, skipping.\n"
+            puts "Package #{pkg} has already been uploaded, skipping.\n"
+          end
         end
       end
     end
   end
 
   private
+
+  def child_process_status
+    $CHILD_STATUS.exitstatus
+  end
 
   def package_list(repository)
     list = []
