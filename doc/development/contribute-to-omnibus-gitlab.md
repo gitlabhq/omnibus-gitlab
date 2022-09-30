@@ -25,7 +25,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 ## Build and test your enhancement
 
 - [Building your own package](../build/index.md)
-- [Building a package from a custom branch](../build/team_member_docs.md#i-have-an-mr-in-the-omnibus-gitlab-project-and-want-a-package-or-docker-image-to-test-it)
+- [Building a package from a custom branch](../build/team_member_docs.md#test-an-omnibus-gitlab-project-mr)
 
 ## Submit your enhancement for review
 
