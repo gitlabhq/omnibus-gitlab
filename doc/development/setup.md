@@ -192,4 +192,4 @@ gitlab_rails['env'] = {
 
 ## OpenShift GitLab Development Setup
 
-See Omnibus GitLab [development setup](openshift/index.md) documentation.
+See Omnibus GitLab [development setup](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/blob/master/doc/developer/guide.md) documentation.
