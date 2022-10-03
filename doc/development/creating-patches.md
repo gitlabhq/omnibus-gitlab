@@ -4,69 +4,73 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Creating Patches
+# Create Patches
 
-It can happen that you may need to manually modify an external dependency for it
-to work correctly in the context of a Omnibus embedded packaging, or even to
-fix an issue that the upstream maintainer have not either accepted or still
-taking longer to review and ship.
+You can manually modify an external dependency to:
 
-## Bootstrapping
+- Make sure that dependency works with Omnibus embedded packaging.
+- Fix an issue that an upstream maintainer has not fixed.
+
+## Bootstrap patch files
 
 Omnibus has a specific [DSL](https://github.com/chef/omnibus#software) and
-conventions to ship and apply patches automatically as part of the building
+conventions to ship and apply patches automatically as part of the build
 process.
 
-You will store `.patch` files that contain the changes in a specific
-directory structure and with the help of the `patch` DSL method, will apply
-the file(s) to reflect the desired changes:
+To apply patch files, store `.patch` files that contain the changes in a
+specific directory structure using the `patch` DSL method:
 
 ```plaintext
 config/patches/<software-name>
 ```
 
-As example, for a patch that will be applied during the execution of
-`gitlab-rails`, you will store `.patch` files in:
+For example, for a patch applied during the execution of
+`gitlab-rails`, store the `.patch` files in:
 
 ```plaintext
 config/patches/gitlab-rails
 ```
 
-## Creating a patch
+## Create a patch
 
-There are two easy ways to create a patch file. You can use the `diff` command
-and compare a original with a modified file (i.e. `target.rb` with
-`target.rb.original`) or you can use Git to output a patch based one or more
-commits.
+To create a patch file, you can use:
 
-### Diff command
+- The `diff` command to compare an original file with a modified file.
+- Git to output a patch based one or more commits.
 
-To create a patch file using the diff and the previous example, duplicate the
-file you are changing with a new name, and make the change to the old one.
+### Use `diff` to create a patch
 
-```shell
-diff -Naur target.rb.original target.rb > my_awesome_change.patch
-```
+To create a patch file using the `diff` command:
 
-### Git command
-
-To create a patch file based on Git commits, you must get the hash from both
-(or just the earliest one if you are comparing with base HEAD).
+1. Duplicate the file you are changing and give the new file a new name.
+1. Change the original file.
 
 ```shell
-# to generate a patch between two commits
-git diff commitid1 commitid2 > my_awesome_change.patch
-
-# to generate a patch between the HEAD and a specific commits
-git diff commitid1 > my_awesome_change.patch
+diff -Naur <original_file> <new_file> > <patch_filename>.patch
 ```
 
-## Using the patch
+### Use Git to create a patch
 
-To patch one or more files, you must first execute any operation in your
-software definition that provides the original files like downloading,
-bundle installing etc, and then add something similar to:
+Use the `git diff` command to create a patch file between two Git commits.
+You must know both commit IDs.
 
 ```shell
-patch source: 'my_awesome_change.patch', target: "#{install_dir}/embedded/target_file.txt"
+git diff <commitid1> <commitid2 > <patch_filename>.patch
 ```
+
+You can also create a patch file based on one Git commit and the base HEAD.
+
+```shell
+git diff <commitid1> > <patch_filename>.patch
+```
+
+## Use the patch
+
+To patch one or more files:
+
+1. Get the original files by downloading, bundle installing, or using a similar method.
+1. Add the following line to each original file:
+
+   ```shell
+   patch source: '<patch_filename>.patch', target: "#{<install_directory>}/embedded/<target_file>.txt"
+   ```
