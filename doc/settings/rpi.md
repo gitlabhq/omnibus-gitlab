@@ -40,7 +40,7 @@ Raspberry Pi OS, and follow the instructions to install GitLab.
 ### Manually download GitLab
 
 If your distribution of choice is other than Raspbian, but Debian-based, you
-can [manually download](../manual_install.md)
+can [manually download](https://docs.gitlab.com/ee/update/package/#upgrade-using-a-manually-downloaded-package)
 GitLab and install it.
 
 ## Reduce running processes
