@@ -76,6 +76,9 @@
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "EE_BRANCH_BUILD_PIPELINE"'
+      when: manual
+      allow_failure: true
 
 .rpi_branch_template: &rpi_branch_build
   extends: .branch_template
