@@ -3,9 +3,8 @@
 The original README can be found at the [upstream repo](https://github.com/chef-cookbooks/runit/blob/master/README.md)
 and contains details about the cookbook.
 
-Changes made to upstream version (v5.1.3) can be found at [the custom branch in
-our runit-cookbook
-mirror](https://gitlab.com/gitlab-org/build/omnibus-mirror/runit-cookbook/compare/v5.1.3...5.1.3-gitlab).
+Changes made to upstream version (v5.1.7) can be found at
+[the custom branch in our runit-cookbook mirror](https://gitlab.com/gitlab-org/build/omnibus-mirror/runit-cookbook/compare/v5.1.7...5-1-3-stable).
 In addition to those, while pulling to omnibus-gitlab repo, the following
 changes are made:
 
