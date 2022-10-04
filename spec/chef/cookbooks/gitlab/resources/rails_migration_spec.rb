@@ -10,7 +10,7 @@ RSpec.describe 'rails_migration' do
 
   context 'run' do
     let(:chef_run) { runner.converge('test_gitlab::rails_migration_run') }
-    let(:bash_block) { chef_run.bash('migrate gitlab-test database') }
+    let(:bash_block) { chef_run.bash_hide_env('migrate gitlab-test database') }
     let(:migration_block) { chef_run.rails_migration('gitlab-test') }
 
     context 'when database has not been migrated' do
@@ -19,7 +19,7 @@ RSpec.describe 'rails_migration' do
       end
 
       it 'executes the bash script migration' do
-        expect(chef_run).to run_bash('migrate gitlab-test database')
+        expect(chef_run).to run_bash_hide_env('migrate gitlab-test database')
       end
 
       it 'restarts dependent_services' do
@@ -31,7 +31,7 @@ RSpec.describe 'rails_migration' do
       it 'doesnt execute the bash script' do
         expect_any_instance_of(RailsMigrationHelper).to receive(:migrated?) { true }
 
-        expect(chef_run).not_to run_bash('migrate gitlab-test database')
+        expect(chef_run).not_to run_bash_hide_env('migrate gitlab-test database')
       end
     end
 
