@@ -121,7 +121,7 @@ module RunitCookbook
     def safe_sv_shellout(command, options = {})
       begin
         Chef::Log.debug("Attempting to run runit command: #{new_resource.sv_bin} #{command}")
-        cmd = shell_out("#{new_resource.sv_bin} #{command}", options)
+        cmd = shell_out("#{new_resource.sv_bin} #{command}", **options)
       rescue Errno::ENOENT
         if binary_exists?
           raise # Some other cause

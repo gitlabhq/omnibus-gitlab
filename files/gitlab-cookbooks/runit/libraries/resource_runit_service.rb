@@ -27,8 +27,8 @@ class Chef
     class RunitService < Chef::Resource::Service
       resource_name :runit_service
       provides :runit_service
-      allowed_actions :nothing, :start, :stop, :enable, :disable, :restart, :reload, :status, :once, :hup, :cont, :term, :kill, :up, :down, :usr1, :usr2, :create, :reload_log
 
+      allowed_actions :nothing, :start, :stop, :enable, :disable, :restart, :reload, :status, :once, :hup, :cont, :term, :kill, :up, :down, :usr1, :usr2, :create, :reload_log
       default_action :enable
 
       # For legacy reasons we allow setting these via attribute
