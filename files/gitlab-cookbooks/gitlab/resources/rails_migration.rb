@@ -15,7 +15,7 @@ default_action :run
 action :run do
   account_helper = AccountHelper.new(node)
 
-  bash "migrate #{new_resource.name} database" do
+  bash_hide_env "migrate #{new_resource.name} database" do
     code <<-EOH
     set -e
     log_file="#{node['gitlab']['gitlab-rails']['log_directory']}/#{new_resource.logfile_prefix}-$(date +%Y-%m-%d-%H-%M-%S).log"
@@ -33,6 +33,6 @@ action :run do
     end
 
     not_if { new_resource.helper.migrated? }
-    sensitive true
+    sensitive false
   end
 end
