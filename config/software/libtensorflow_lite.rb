@@ -17,7 +17,7 @@
 #
 
 name 'libtensorflow_lite'
-version = Gitlab::Version.new('libtensorflow_lite', '2.5.0')
+version = Gitlab::Version.new('libtensorflow_lite', '2.6.0')
 
 default_version version.print
 source git: version.remote
