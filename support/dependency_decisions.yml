@@ -156,3 +156,10 @@
     :why: https://github.com/pavelmemory/go-license-detector/blob/master/LICENSE.md
     :versions: []
     :when: 2022-09-08 20:30:35.688702200 Z
+- - :license
+  - github.com/dennwc/ioctl
+  - MIT
+  - :who: Stan Hu
+    :why: https://github.com/dennwc/ioctl/blob/master/LICENSE
+    :versions: []
+    :when: 2022-10-03 20:30:35.688702200 Z
