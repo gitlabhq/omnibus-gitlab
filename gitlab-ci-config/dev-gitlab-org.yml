@@ -284,6 +284,10 @@ Ubuntu-20.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
 
+Ubuntu-22.04-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
+  extends: .branch_template
+
 Debian-10-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -302,6 +306,11 @@ Debian-11-arm-branch:
   - docker-arm-builder
 Ubuntu-20.04-arm-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .branch_template
+  tags:
+  - docker-arm-builder
+Ubuntu-22.04-arm-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
   tags:
   - docker-arm-builder
@@ -474,6 +483,11 @@ Ubuntu-20.04:
   # Also build for auto-deploy tags
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
+Ubuntu-22.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
+  stage: package
+  extends: .tag_template
+
 ## Build the docker image for QA
 ## This is necessary for the deployment
 ## pipeline so it must happen before
@@ -540,6 +554,14 @@ Ubuntu-20.04-staging:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY)_BUILD_PIPELINE$/'
 
+Ubuntu-22.04-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: Ubuntu-22.04
+      optional: true
+    - job: Ubuntu-22.04-branch
+      optional: true
+
 ### Package builds
 Debian-10:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
@@ -559,6 +581,11 @@ Debian-11-arm:
   - docker-arm-builder
 Ubuntu-20.04-arm:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .tag_template
+  tags:
+  - docker-arm-builder
+Ubuntu-22.04-arm:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
   tags:
   - docker-arm-builder
@@ -670,6 +697,13 @@ Ubuntu-20.04-arm-staging:
       optional: true
     - job: Ubuntu-20.04-arm-branch
       optional: true
+Ubuntu-22.04-arm-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: Ubuntu-22.04-arm
+      optional: true
+    - job: Ubuntu-22.04-arm-branch
+      optional: true
 CentOS-7-staging:
   extends: .staging_upload_template
   needs:
@@ -777,10 +811,18 @@ Ubuntu-20.04-release:
   extends: .production_release_template
   needs:
     - Ubuntu-20.04
+Ubuntu-22.04-release:
+  extends: .production_release_template
+  needs:
+    - Ubuntu-22.04
 Ubuntu-20.04-arm-release:
   extends: .production_release_template
   needs:
     - Ubuntu-20.04-arm
+Ubuntu-22.04-arm-release:
+  extends: .production_release_template
+  needs:
+    - Ubuntu-22.04-arm
 Debian-10-release:
   extends: .production_release_template
   needs:

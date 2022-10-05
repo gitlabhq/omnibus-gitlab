@@ -403,6 +403,7 @@ OpenSUSE 15.3 knapsack: !reference [.knapsack]
 Ubuntu 16.04 knapsack: !reference [.knapsack]
 Ubuntu 18.04 knapsack: !reference [.knapsack]
 Ubuntu 20.04 knapsack: !reference [.knapsack]
+Ubuntu 22.04 knapsack: !reference [.knapsack]
 AmazonLinux 2 knapsack: !reference [.knapsack]
 
 build library specs:
@@ -438,6 +439,12 @@ Ubuntu 20.04 specs :
   parallel: 6
   needs:
   - Ubuntu 20.04 knapsack
+Ubuntu 22.04 specs:
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jammy"
+  extends: .chef_spec_template
+  parallel: 6
+  needs:
+  - Ubuntu 22.04 knapsack
 Debian 10 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-buster"
   extends: .chef_spec_template

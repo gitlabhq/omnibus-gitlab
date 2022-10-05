@@ -72,6 +72,14 @@ Ubuntu-20.04-arm-check:
   extends: .apt-install
   tags:
   - docker-arm-builder
+Ubuntu-22.04-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+Ubuntu-22.04-arm-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+  tags:
+  - docker-arm-builder
 Debian-10-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
