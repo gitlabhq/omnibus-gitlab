@@ -61,6 +61,8 @@ class OhaiHelper
         'bionic'
       when /^20\.04/
         'focal'
+      when /^22\.04/
+        'jammy'
       end
     end
 
