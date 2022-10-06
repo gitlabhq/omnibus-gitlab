@@ -211,7 +211,7 @@ To enable HTTPS:
    looks for private key and public certificate files called
    `/etc/gitlab/ssl/gitlab.example.com.key` and `/etc/gitlab/ssl/gitlab.example.com.crt`,
    respectively. If you want, you can
-   [use a differente location and certificates names](#change-the-default-ssl-certificate-location).
+   [use a different location and certificates names](#change-the-default-ssl-certificate-location).
 
    You must use the full certificate chain, in the correct order, to prevent
    SSL errors when clients connect: first the server certificate,
