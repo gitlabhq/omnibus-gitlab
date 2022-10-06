@@ -76,15 +76,6 @@ RSpec.describe 'qa', type: :rake do
       Rake::Task['qa:push:rc'].invoke
     end
 
-    it 'pushes triggered images correctly' do
-      allow(ENV).to receive(:[]).with('CI').and_return('true')
-      expect(ENV).to receive(:[]).with('IMAGE_TAG').and_return(image_tag)
-
-      expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(image_tag)
-
-      Rake::Task['qa:push:triggered'].invoke
-    end
-
     describe ':staging' do
       before do
         Rake::Task['qa:push:staging'].reenable

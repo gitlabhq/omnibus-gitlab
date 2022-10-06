@@ -46,7 +46,7 @@ module Build
         %W[
           QA_BRANCH=#{Gitlab::Util.get_env('QA_BRANCH') || 'master'}
           QA_RELEASE=#{Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info.docker_tag)}
-          QA_IMAGE=#{Gitlab::Util.get_env('QA_IMAGE') || Build::QAImage.gitlab_registry_image_address(tag: Build::Info.docker_tag)}
+          QA_IMAGE=#{Build::Info.qa_image}
           QA_TESTS=#{Gitlab::Util.get_env('QA_TESTS')}
           ALLURE_JOB_NAME=#{Gitlab::Util.get_env('ALLURE_JOB_NAME')}
           GITLAB_QA_OPTIONS=#{Gitlab::Util.get_env('GITLAB_QA_OPTIONS')}

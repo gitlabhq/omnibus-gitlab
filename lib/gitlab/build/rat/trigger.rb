@@ -20,7 +20,7 @@ module Build
           'token' => Gitlab::Util.get_env('RAT_TRIGGER_TOKEN'),
           'variables[REFERENCE_ARCHITECTURE]' => Gitlab::Util.get_env('RAT_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs',
           'variables[PACKAGE_URL]' => Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.triggered_build_package_url,
-          'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || image || "registry.gitlab.com/#{Gitlab::Util.get_env('CI_PROJECT_PATH')}/gitlab-ee-qa:#{Build::Info.docker_tag.gsub('.fips', '')}"
+          'variables[QA_IMAGE]' => Build::Info.qa_image
         }
       end
 
