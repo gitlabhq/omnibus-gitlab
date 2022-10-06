@@ -284,19 +284,11 @@ This job builds a GitLab Docker image using the package that was built by
 
 This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
 
-#### `Trigger:qa-docker`
-
-This job builds a GitLab QA Docker image from the
-[qa directory in the Rails codebase](https://gitlab.com/gitlab-org/gitlab/blob/master/qa/Dockerfile). This
-QA image is used for QA runs.
-
-This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
-
 #### `Trigger:qa-test`
 
 This job triggers a pipeline in the [GitLab QA Mirror](https://gitlab.com/gitlab-org/gitlab-qa-mirror), passing the GitLab
 Docker image created by `Trigger:gitlab-docker` job and the GitLab QA Docker
-image built by the `Trigger:qa-docker` job, so that a full QA run will be run
+image built by the GitLab Rails pipeline, so that a full QA run will be run
 against up using these images
 
 This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.

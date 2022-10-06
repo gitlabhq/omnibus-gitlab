@@ -76,13 +76,6 @@ namespace :qa do
         Build::QAImage.tag_and_push_to_dockerhub('latest', initial_tag: 'latest') if Build::Check.is_latest_stable_tag?
       end
     end
-
-    desc "Push triggered version of gitlab-{ce,ee}-qa to the GitLab registry"
-    task :triggered do
-      Gitlab::Util.section('qa:push:triggered') do
-        Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.docker_tag)
-      end
-    end
   end
 
   desc "Run QA letsencrypt tests"

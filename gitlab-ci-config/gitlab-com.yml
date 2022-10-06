@@ -203,9 +203,6 @@
   needs:
     - job: Trigger:package
       artifacts: false
-    - job: Trigger:qa-docker
-      artifacts: false
-      optional: true
 
 .review-docs:
   image: "${RUBY_IMAGE}-alpine"
@@ -549,25 +546,6 @@ Trigger:gitlab-docker:
       optional: true
       artifacts: true
 
-Trigger:qa-docker:
-  extends:
-    - .docker_job
-    - .gems-cache
-  stage: trigger-docker
-  script:
-    - bundle exec rake qa:build
-    - bundle exec rake qa:push:triggered
-  rules:
-    - if: '$SKIP_QA_DOCKER == "true"'
-      when: never
-    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
-    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
-  needs:
-    - Trigger:package
-    - job: generate-facts
-      optional: true
-      artifacts: true
-
 qa-test:
   stage: trigger-qa
   inherit:
@@ -603,9 +581,6 @@ qa-test:
       artifacts: false
     - job: Trigger:gitlab-docker
       artifacts: false
-    - job: Trigger:qa-docker
-      artifacts: false
-      optional: true
 
 letsencrypt-test:
   extends: .docker_job
@@ -635,9 +610,6 @@ RAT:
   needs:
     - job: Trigger:package
       artifacts: false
-    - job: Trigger:qa-docker
-      artifacts: false
-      optional: true
 
 RAT:FIPS:
   extends: RAT
@@ -647,9 +619,6 @@ RAT:FIPS:
   needs:
     - job: Trigger:package:fips
       artifacts: false
-    - job: Trigger:qa-docker
-      artifacts: false
-      optional: true
 
 GET:Geo:
   extends: .trigger-pipeline

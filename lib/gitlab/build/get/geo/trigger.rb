@@ -21,7 +21,7 @@ module Build
               'ref' => Gitlab::Util.get_env('GET_GEO_REF') || 'main',
               'token' => Gitlab::Util.get_env('GET_GEO_QA_TRIGGER_TOKEN'),
               'variables[ENVIRONMENT_ACTION]' => 'tmp-env',
-              'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || 'master',
+              'variables[QA_IMAGE]' => Build::Info.qa_image,
               'variables[GITLAB_DEB_DOWNLOAD_URL]' => Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.triggered_build_package_url
             }
           end

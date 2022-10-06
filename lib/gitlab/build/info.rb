@@ -110,6 +110,12 @@ module Build
         end
       end
 
+      def gitlab_version_slug
+        gitlab_version.downcase
+          .gsub(/[^a-z0-9]/, '-')[0..62]
+          .gsub(/(\A-+|-+\z)/, '')
+      end
+
       def major_minor_version_and_rails_ref
         version_reg = /^(?<major>\d+)\.(?<minor>\d+)\.\d+\+(?<railsref>\w+)\.\w+$/
         match = Gitlab::Util.get_env('CI_COMMIT_TAG').match(version_reg)
@@ -128,6 +134,14 @@ module Build
         previous_tag.tr("+", "-")
       end
 
+      def gitlab_rails_project_path
+        if Gitlab::Util.get_env('CI_SERVER_HOST') == 'dev.gitlab.org'
+          package == "gitlab-ee" ? 'gitlab/gitlab-ee' : 'gitlab/gitlabhq'
+        else
+          package == "gitlab-ee" ? 'gitlab-org/gitlab' : 'gitlab-org/gitlab-foss'
+        end
+      end
+
       def gitlab_rails_repo
         gitlab_rails =
           if package == "gitlab-ce"
@@ -137,6 +151,10 @@ module Build
           end
 
         Gitlab::Version.new(gitlab_rails).remote
+      end
+
+      def qa_image
+        Gitlab::Util.get_env('QA_IMAGE') || "#{Gitlab::Util.get_env('CI_REGISTRY')}/#{gitlab_rails_project_path}/#{Build::Info.package}-qa:#{gitlab_version_slug}"
       end
 
       def edition
