@@ -71,6 +71,19 @@ RSpec.describe Praefect do
                                           --virtual-storage-name name
                                           --repository-relative-path path))).not_to include(:apply)
       end
+
+      it 'successfully parses db-only' do
+        expect(Praefect.parse_options!(%W(praefect #{command}
+                                          --dir dir
+                                          --virtual-storage-name name
+                                          --repository-relative-path path
+                                          --db-only))).to include(db_only: true)
+
+        expect(Praefect.parse_options!(%W(praefect #{command}
+                                          --dir dir
+                                          --virtual-storage-name name
+                                          --repository-relative-path path))).not_to include(:db_only)
+      end
     end
 
     context 'when command is check' do
@@ -222,6 +235,23 @@ RSpec.describe Praefect do
              '-replicate-immediately']
           end
           let(:command_options) { repository_options.merge(authoritative_storage: 'storage-1', replicate_immediately: true) }
+
+          it_behaves_like 'executes the command'
+        end
+      end
+
+      context 'track-repositories command' do
+        let(:command) { 'track-repositories' }
+        let(:command_args) { ['-input-path', '/input/file'] }
+        let(:command_options) { repository_options.merge(input_path: '/input/file') }
+
+        it_behaves_like 'executes the command'
+
+        context 'with replicate-immediately' do
+          let(:command_args) do
+            ['-input-path', '/input/file', '-replicate-immediately']
+          end
+          let(:command_options) { repository_options.merge(input_path: '/input/file', replicate_immediately: true) }
 
           it_behaves_like 'executes the command'
         end
