@@ -22,9 +22,13 @@ license_file 'LEGAL'
 
 skip_transitive_dependency_licensing true
 
-# Follow the Ruby upgrade guidelines when changing the ruby version
-# link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
-default_version '2.7.5'
+if Gitlab::Util.get_env('RUBY3_BUILD') == 'true'
+  default_version '3.0.4'
+else
+  # Follow the Ruby upgrade guidelines when changing the ruby version
+  # link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
+  default_version '2.7.5'
+end
 
 fips_enabled = Build::Check.use_system_ssl?
 
@@ -38,6 +42,7 @@ dependency 'libiconv'
 dependency 'jemalloc'
 
 version('2.7.5') { source sha256: '2755b900a21235b443bb16dadd9032f784d4a88f143d852bc5d154f22b8781f1' }
+version('3.0.4') { source sha256: '70b47c207af04bce9acea262308fb42893d3e244f39a4abc586920a1c723722b' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
@@ -73,13 +78,17 @@ build do
 
   # Enable custom patch created by ayufan that allows to count memory allocations
   # per-thread. This is asked to be upstreamed as part of https://github.com/ruby/ruby/pull/3978
-  patch source: 'thread-memory-allocations-2.7.patch', plevel: 1, env: env
+  if version.start_with?('2.7')
+    patch source: 'thread-memory-allocations-2.7.patch', plevel: 1, env: env
+  elsif version.start_with?('3.0')
+    patch source: 'thread-memory-allocations-3.0.patch', plevel: 1, env: env
+  end
 
   # copy_file_range() has been disabled on recent RedHat kernels:
   # 1. https://gitlab.com/gitlab-org/gitlab/-/issues/218999
   # 2. https://bugs.ruby-lang.org/issues/16965
   # 3. https://bugzilla.redhat.com/show_bug.cgi?id=1783554
-  patch source: 'ruby-disable-copy-file-range.patch', plevel: 1, env: env if centos? || rhel?
+  patch source: 'ruby-disable-copy-file-range.patch', plevel: 1, env: env if version.start_with?('2.7') && (centos? || rhel?)
 
   configure_command = ['--with-out-ext=dbm,readline',
                        '--enable-shared',
