@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'prometheus'
-version = Gitlab::Version.new('prometheus', '2.30.4')
+version = Gitlab::Version.new('prometheus', '2.38.0')
 default_version version.print
 
 license 'APACHE-2.0'
@@ -43,7 +43,12 @@ build do
 
   prom_version = Prometheus::VersionFlags.new(version)
 
-  make 'assets', env: env, cwd: cwd
+  # CentOS 7 and Amazon Linux 2 ships gzip 1.5 which does not have `-k` flag to
+  # keep the files. Apply https://github.com/prometheus/prometheus/pull/11256 to
+  # work around the problem.
+  patch source: "gzip-k-flag.patch"
+
+  make 'build', env: env, cwd: cwd
   command "go build -tags netgo,builtinassets -ldflags '#{prom_version.print_ldflags}' ./cmd/prometheus", env: env, cwd: cwd
   copy 'prometheus', "#{install_dir}/embedded/bin/prometheus"
 
