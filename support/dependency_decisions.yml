@@ -163,3 +163,10 @@
     :why: https://github.com/dennwc/ioctl/blob/master/LICENSE
     :versions: []
     :when: 2022-10-03 20:30:35.688702200 Z
+- - :license
+  - github.com/hashicorp/cronexpr
+  - Apache2
+  - :who: Balasankar C
+    :why: https://github.com/hashicorp/cronexpr/blob/master/APLv2
+    :versions: []
+    :when: 2022-10-11 04:19:36.141935786 Z
