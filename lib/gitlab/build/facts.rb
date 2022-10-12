@@ -51,6 +51,10 @@ module Build
           ALLURE_JOB_NAME=#{Gitlab::Util.get_env('ALLURE_JOB_NAME')}
           GITLAB_QA_OPTIONS=#{Gitlab::Util.get_env('GITLAB_QA_OPTIONS')}
           KNAPSACK_GENERATE_REPORT=#{generate_knapsack_report?}
+          RAT_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs'}
+          RAT_FIPS_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_FIPS_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs-fips-ubuntu'}
+          RAT_PACKAGE_URL=#{Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.triggered_build_package_url(fips: false)}
+          RAT_FIPS_PACKAGE_URL=#{Gitlab::Util.get_env('FIPS_PACKAGE_URL') || Build::Info.triggered_build_package_url(fips: true)}
         ]
       end
 
