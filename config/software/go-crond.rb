@@ -15,7 +15,7 @@
 #
 
 name 'go-crond'
-version = Gitlab::Version.new('go-crond', '21.5.0')
+version = Gitlab::Version.new('go-crond', '22.9.1')
 default_version version.print(false)
 
 license 'BSD-2-Clause'
@@ -30,6 +30,6 @@ build do
     'GOPATH' => "#{Omnibus::Config.source_dir}/go-crond",
   }
 
-  make 'build-local', env: env
+  make 'build', env: env
   copy 'go-crond', "#{install_dir}/embedded/bin/"
 end
