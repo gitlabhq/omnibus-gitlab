@@ -131,6 +131,30 @@ dependencies:
         replace_in_files:
         - filename: config/software/gitlab-exporter.rb
           pattern: "default_version '(\\S+)'"
+      # node-exporter
+      https://gitlab.com/gitlab-org/build/omnibus-mirror/node_exporter.git:
+        replace_in_files:
+        - filename: config/software/node-exporter.rb
+          pattern: "Gitlab::Version.new\\('node-exporter', '(\\S+)'\\)"
+          tag_prefix: 'v'
+      # postgres-exporter
+      https://gitlab.com/gitlab-org/build/omnibus-mirror/postgres_exporter.git:
+        replace_in_files:
+        - filename: config/software/postgres-exporter.rb
+          pattern: "Gitlab::Version.new\\('postgres-exporter', '(\\S+)'\\)"
+          tag_prefix: 'v'
+      # pgbouncer-exporter
+      https://gitlab.com/gitlab-org/build/omnibus-mirror/pgbouncer_exporter.git:
+        replace_in_files:
+        - filename: config/software/pgbouncer-exporter.rb
+          pattern: "Gitlab::Version.new\\('pgbouncer-exporter', '(\\S+)'\\)"
+          tag_prefix: 'v'
+      # redis-exporter
+      https://gitlab.com/gitlab-org/build/omnibus-mirror/redis_exporter.git:
+        replace_in_files:
+        - filename: config/software/redis-exporter.rb
+          pattern: "Gitlab::Version.new\\('redis-exporter', '(\\S+)'\\)"
+          tag_prefix: 'v'
       #libjpeg-turbo
       https://github.com/libjpeg-turbo/libjpeg-turbo.git:
         replace_in_files:
