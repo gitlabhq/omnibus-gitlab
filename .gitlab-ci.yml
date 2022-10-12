@@ -154,6 +154,7 @@ generate-facts:
     - if: '$PIPELINE_TYPE == "GITLAB_BRANCH_TEST_PIPELINE"'
     - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+    - if: '$PIPELINE_TYPE == "DEPS_IO_VERSION_BUMP_PIPELINE"'
     - when: never
   needs: []
 

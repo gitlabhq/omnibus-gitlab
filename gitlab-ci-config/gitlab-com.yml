@@ -681,7 +681,9 @@ dependencies_io_check:
   variables:
     ee: "true"
   rules:
-    - if: '$PIPELINE_TYPE == "DEPS_IO_VERSION_BUMP_PIPELINE"'
+    # Because of inherit:variables being false, `PIPELINE_TYPE` isn't available here. :(
+    # https://gitlab.com/gitlab-org/gitlab/-/issues/368759
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^deps/ || $CI_COMMIT_BRANCH =~ /^deps/'
 
 validate_packer_changes:
   before_script: []
