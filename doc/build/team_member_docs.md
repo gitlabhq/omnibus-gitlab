@@ -15,7 +15,7 @@ can use that access to build packages.
 If you have a merge request (MR) in the `gitlab-org/gitlab` project, you can
 test that MR using a package or a Docker image.
 
-In the CI pipeline corresponding to your MR, run the `package-and-qa` job in
+In the CI pipeline corresponding to your MR, run the `e2e:package-and-test` job in
 the `qa` stage to trigger:
 
 - A downstream pipeline in the `omnibus-gitlab`
@@ -50,7 +50,7 @@ Check the following table for more information:
 | GITLAB_ELASTICSEARCH_INDEXER_VERSION | GITLAB_ELASTICSEARCH_INDEXER_VERSION | Git reference of the [GitLab Elasticsearch Indexer](https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer) repository. Used only in EE builds.|
 | GITLAB_KAS_VERSION                   | GITLAB_KAS_VERSION                   | Git reference of the [GitLab Kubernetes Agent Server](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent) repository.|
 
-If you are running the `package-and-qa` job from a GitLab MR, the `GITLAB_VERSION`
+If you are running the `e2e:package-and-test` job from a GitLab MR, the `GITLAB_VERSION`
 environment variable is set to the commit SHA corresponding to the pipeline.
 Other environment variables, if not specified, are populated from
 their corresponding files and passed on to the triggered pipeline.
