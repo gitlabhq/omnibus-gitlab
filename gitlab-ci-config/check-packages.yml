@@ -105,6 +105,15 @@ Raspberry-Pi-2-Buster-check:
     package_repository: 'raspberry-pi2'
   tags:
   - docker-arm-builder
+Raspberry-Pi-2-Bullseye-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:${BUILDER_IMAGE_REVISION}"
+  extends:
+    - .apt-install
+    - .ce-tag-only
+  variables:
+    package_repository: 'raspberry-pi2'
+  tags:
+  - docker-arm-builder
 Ubuntu-18.04-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04_fips:${BUILDER_IMAGE_REVISION}"
   extends:
