@@ -28,7 +28,7 @@ default_version Gitlab::Util.get_env('CI_COMMIT_TAG') || Build::Info.semver_vers
 
 build do
   # Create the package-script folder. The gitlab.rb project excludes this folder from the package.
-  command "mkdir -p #{install_dir}/.package_util/package-scripts"
+  mkdir "#{install_dir}/.package_util/package-scripts"
   external_url_script = File.read(File.join(Omnibus::Config.project_root, 'config/templates/package-scripts/external_url.sh'))
 
   # Render the package script erb files

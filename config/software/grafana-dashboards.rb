@@ -31,6 +31,6 @@ relative_path 'grafana-dashboards'
 
 build do
   # Copy dashboards.
-  command "mkdir -p '#{install_dir}/embedded/service/grafana-dashboards'"
+  mkdir "#{install_dir}/embedded/service/grafana-dashboards"
   sync 'omnibus/', "#{install_dir}/embedded/service/grafana-dashboards/"
 end

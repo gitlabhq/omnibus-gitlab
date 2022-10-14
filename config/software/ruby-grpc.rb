@@ -22,6 +22,8 @@ license :project_license
 
 skip_transitive_dependency_licensing true
 
+dependency 'ruby'
+
 build do
   block 're-install grpc gem with system OpenSSL' do
     gem_bin = embedded_bin('gem')

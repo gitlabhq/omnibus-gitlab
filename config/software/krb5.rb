@@ -40,9 +40,9 @@ build do
   #
   # TEMPORARY: 1.17 uses configure.in, but because autoconf is moving to
   # having this file named configure.ac, the upstream patches that now
-  command "mv configure.in configure.ac", env: env, cwd: cwd
+  move "#{cwd}/configure.in", "#{cwd}/configure.ac"
   patch source: 'Add-option-to-build-without-libkeyutils.patch'
-  command "mv configure.ac configure.in", env: env, cwd: cwd
+  move "#{cwd}/configure.ac", "#{cwd}/configure.in"
 
   command "autoreconf", env: env, cwd: cwd
   command './configure' \

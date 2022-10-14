@@ -71,7 +71,7 @@ build do
   end
 
   ruby_install_dir = "#{install_dir}/embedded/service/gitaly-ruby"
-  command "mkdir -p #{ruby_install_dir}"
+  mkdir ruby_install_dir.to_s
   sync './ruby/', "#{ruby_install_dir}/", exclude: ['.git', '.gitignore', 'spec', 'features']
   %w(
     LICENSE

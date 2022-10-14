@@ -62,6 +62,10 @@ build do
 
   link "#{prefix}/lib/#{libpq}", "#{install_dir}/embedded/lib/#{libpq}"
 
+  # NOTE: There are several dependencies which require these files in these
+  # locations and have dependency on `postgresql_new`. So when this block is
+  # changed to be in the `postgresql` software definition for default PG
+  # version changes, change those dependencies to `postgresql`.
   block 'link bin files' do
     Dir.glob("#{prefix}/bin/*").each do |bin_file|
       link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"

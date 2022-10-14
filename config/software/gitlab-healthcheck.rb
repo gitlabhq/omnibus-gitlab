@@ -27,6 +27,8 @@ skip_transitive_dependency_licensing true
 default_version Digest::MD5.file(__FILE__).hexdigest
 
 build do
+  mkdir "#{install_dir}/bin/"
+
   block do
     File.open("#{install_dir}/bin/gitlab-healthcheck", 'w') do |file|
       file.print <<-EOH

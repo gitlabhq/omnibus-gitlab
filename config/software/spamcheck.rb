@@ -35,7 +35,8 @@ build do
   env['GOPATH'] = "#{Omnibus::Config.source_dir}/spamcheck"
   env['PATH'] = "#{env['PATH']}:#{env['GOPATH']}/bin"
 
-  command "mkdir -p #{install_dir}/embedded/service #{install_dir}/embedded/bin"
+  mkdir "#{install_dir}/embedded/service"
+  mkdir "#{install_dir}/embedded/bin"
   sync './', "#{install_dir}/embedded/service/spamcheck/", exclude: %w(
     _support
     build

@@ -30,7 +30,7 @@ source path: File.expand_path('files/gitlab-cookbooks', Omnibus::Config.project_
 build do
   cookbook_name = 'gitlab'
 
-  command "mkdir -p #{install_dir}/embedded/cookbooks"
+  mkdir "#{install_dir}/embedded/cookbooks"
   sync './', "#{install_dir}/embedded/cookbooks/"
 
   solo_recipes = %w(dna postgresql-bin postgresql-config pg-upgrade-config)

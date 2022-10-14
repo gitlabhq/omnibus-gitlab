@@ -32,6 +32,8 @@ build do
   env = { 'GOPATH' => "#{Omnibus::Config.source_dir}/docker-distribution-pruner" }
 
   command "go build -ldflags '-s -w' ./cmds/docker-distribution-pruner", env: env
+
+  mkdir "#{install_dir}/embedded/bin/"
   copy 'docker-distribution-pruner', "#{install_dir}/embedded/bin/"
 
   command "license_finder report --enabled-package-managers godep gomodules --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"

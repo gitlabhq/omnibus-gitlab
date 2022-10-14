@@ -31,5 +31,7 @@ build do
   }
 
   make 'build', env: env
+
+  mkdir "#{install_dir}/embedded/bin/"
   copy 'go-crond', "#{install_dir}/embedded/bin/"
 end

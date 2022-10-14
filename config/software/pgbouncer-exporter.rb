@@ -41,6 +41,8 @@ build do
   prom_version = Prometheus::VersionFlags.new(version)
 
   command "go build -ldflags '#{prom_version.print_ldflags}'", env: env
+
+  mkdir "#{install_dir}/embedded/bin"
   copy 'pgbouncer_exporter', "#{install_dir}/embedded/bin/"
 
   command "license_finder report --enabled-package-managers godep gomodules --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"

@@ -215,7 +215,7 @@ build do
   copy 'db/structure.sql', 'db/structure.sql.bundled'
   copy 'ee/db/geo/structure.sql', 'ee/db/geo/structure.sql.bundled' if EE
 
-  command "mkdir -p #{install_dir}/embedded/service/gitlab-rails"
+  mkdir "#{install_dir}/embedded/service/gitlab-rails"
   sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: %w(
     .git
     .gitignore
@@ -230,6 +230,8 @@ build do
     workhorse
   )
 
+  mkdir "#{install_dir}/bin/"
+  mkdir "#{install_dir}/embedded/bin/"
   # Create a wrapper for the rake tasks of the Rails app
   erb dest: "#{install_dir}/bin/gitlab-rake",
       source: 'bundle_exec_wrapper.erb',
