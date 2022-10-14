@@ -56,6 +56,8 @@ build do
 
   update_config_guess
 
-  make "-j #{workers} BUILD_TLS=yes", env: env
+  make_args = ['BUILD_TLS=yes']
+  make_args << 'uname_M=armv6l' if OhaiHelper.raspberry_pi?
+  make "-j #{workers} #{make_args.join(' ')}", env: env
   make 'install', env: env
 end
