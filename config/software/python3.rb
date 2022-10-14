@@ -17,13 +17,13 @@
 #
 
 name 'python3'
-# If bumping from 3.9.x to something higher, be sure to update the following files with the new path:
+# If bumping from 3.10.x to something higher, be sure to update the following files with the new path:
 # files/gitlab-config-template/gitlab.rb.template
 # files/gitlab-cookbooks/gitaly/recipes/enable.rb
 # files/gitlab-cookbooks/gitlab/attributes/default.rb
 # spec/chef/recipes/gitaly_spec.rb
 # spec/chef/recipes/gitlab-rails_spec.rb
-default_version '3.9.6'
+default_version '3.10.7'
 
 dependency 'libedit'
 dependency 'ncurses'
@@ -40,7 +40,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       sha256: 'd0a35182e19e416fc8eae25a3dcd4d02d4997333e4ad1f2eee6010aadc3fe866'
+       sha256: '1b2e4e2df697c52d36731666979e648beeda5941d0f95740aafbf4163e5cc126'
 
 relative_path "Python-#{version}"
 
@@ -52,9 +52,6 @@ env = {
 }
 
 build do
-  # Patches below are a backport of https://github.com/python/cpython/pull/24189
-  patch source: 'readline-3-9.patch'
-
   # Patch to avoid building nis module in Debian 11. If nis is built, it gets
   # linked to system `nsl` and `tirpc` libraries and thus fail omnibus
   # healthcheck in Debian 11 and Ubuntu 22.04.
@@ -70,10 +67,10 @@ build do
   make env: env
   make 'install', env: env
 
-  delete("#{install_dir}/embedded/lib/python3.9/lib-dynload/dbm.*")
-  delete("#{install_dir}/embedded/lib/python3.9/lib-dynload/_sqlite3.*")
-  delete("#{install_dir}/embedded/lib/python3.9/test")
-  command "find #{install_dir}/embedded/lib/python3.9 -name '__pycache__' -type d -print -exec rm -r {} +"
+  delete("#{install_dir}/embedded/lib/python3.10/lib-dynload/dbm.*")
+  delete("#{install_dir}/embedded/lib/python3.10/lib-dynload/_sqlite3.*")
+  delete("#{install_dir}/embedded/lib/python3.10/test")
+  command "find #{install_dir}/embedded/lib/python3.10 -name '__pycache__' -type d -print -exec rm -r {} +"
 end
 
 project.exclude "embedded/bin/python3*-config"
