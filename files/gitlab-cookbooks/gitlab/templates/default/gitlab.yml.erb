@@ -133,6 +133,22 @@ production: &base
     ## Print initial root password to stdout during initialization
     display_initial_root_password: <%= @display_initial_root_password %>
 
+  # Allows delivery of emails using Microsoft Graph API with OAuth 2.0 client credentials flow.
+  microsoft_graph_mailer:
+    enabled: <%= @microsoft_graph_mailer_enabled %>
+    # The unique identifier for the user. To use Microsoft Graph on behalf of the user.
+    user_id: <%= @microsoft_graph_mailer_user_id %>
+    # The directory tenant the application plans to operate against, in GUID or domain-name format.
+    tenant: <%= @microsoft_graph_mailer_tenant %>
+    # The application ID that's assigned to your app. You can find this information in the portal where you registered your app.
+    client_id: <%= @microsoft_graph_mailer_client_id %>
+    # The client secret that you generated for your app in the app registration portal.
+    client_secret: <%= @microsoft_graph_mailer_client_secret %>
+    # Defaults to "https://login.microsoftonline.com".
+    azure_ad_endpoint: <%= @microsoft_graph_mailer_azure_ad_endpoint %>
+    # Defaults to "https://graph.microsoft.com".
+    graph_endpoint: <%= @microsoft_graph_mailer_graph_endpoint %>
+
   ## Reply by email
   # Allow users to comment on issues and merge requests by replying to notification emails.
   # For documentation on how to set this up, see https://docs.gitlab.com/ee/administration/reply_by_email.html
