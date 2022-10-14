@@ -1333,6 +1333,9 @@ GitLab emails are sent via Sidekiq.
 
 ### Email not sent
 
+WARNING:
+Any command that changes data directly could be damaging if not run correctly, or under the right conditions. We highly recommend running them in a test environment with a backup of the instance ready to be restored, just in case.
+
 If you have correctly configured an email server, but email is not sent:
 
 1. Run a [Rails console](https://docs.gitlab.com/ee/administration/operations/rails_console.html#starting-a-rails-console-session).
