@@ -118,7 +118,7 @@ fetch-assets:
   timeout: 1 hour
   before_script: []
   script:
-    - export VERSION=${GITLAB_REF_SLUG-$(ruby -I. -e 'require "lib/gitlab/version"; puts Gitlab::Version.new("gitlab-rails").print')}
+    - export VERSION=${GITLAB_ASSETS_TAG-${GITLAB_REF_SLUG-$(ruby -I. -e 'require "lib/gitlab/version"; puts Gitlab::Version.new("gitlab-rails").print')}}
     - support/fetch_assets "${VERSION}"
   artifacts:
     paths:
