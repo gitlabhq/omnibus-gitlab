@@ -246,6 +246,18 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! but continue accepting application requests.
 # gitlab_rails['shutdown_blackout_seconds'] = 10
 
+### Microsoft Graph Mailer
+###! Allows delivery of emails using Microsoft Graph API with OAuth 2.0 client
+###! credentials flow.
+###! Docs: https://docs.gitlab.com/omnibus/settings/microsoft_graph_mailer.html
+# gitlab_rails['microsoft_graph_mailer_enabled'] = false
+# gitlab_rails['microsoft_graph_mailer_user_id'] = "YOUR-USER-ID"
+# gitlab_rails['microsoft_graph_mailer_tenant'] = "YOUR-TENANT-ID"
+# gitlab_rails['microsoft_graph_mailer_client_id'] = "YOUR-CLIENT-ID"
+# gitlab_rails['microsoft_graph_mailer_client_secret'] = "YOUR-CLIENT-SECRET-ID"
+# gitlab_rails['microsoft_graph_mailer_azure_ad_endpoint'] = "https://login.microsoftonline.com"
+# gitlab_rails['microsoft_graph_mailer_graph_endpoint'] = "https://graph.microsoft.com"
+
 ### Reply by email
 ###! Allow users to comment on issues and merge requests by replying to
 ###! notification emails.

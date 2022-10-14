@@ -51,5 +51,5 @@ Don't forget to update the following 5 files when adding a new setting:
   file to actually use the setting's value from `gitlab.rb`.
 - the [`gitlab.yml.erb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb)
   file
-- the [`gitlab-rails_spec.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/spec/chef/recipes/gitlab-rails_spec.rb)
+- the [`gitlab-rails_spec.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/spec/chef/cookbooks/gitlab/recipes/gitlab-rails_spec.rb)
   file

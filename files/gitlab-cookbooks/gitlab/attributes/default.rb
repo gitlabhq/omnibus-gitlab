@@ -316,6 +316,14 @@ default['gitlab']['gitlab-rails']['smartcard_client_certificate_required_port'] 
 default['gitlab']['gitlab-rails']['smartcard_required_for_git_access'] = false
 default['gitlab']['gitlab-rails']['smartcard_san_extensions'] = false
 
+default['gitlab']['gitlab-rails']['microsoft_graph_mailer_enabled'] = false
+default['gitlab']['gitlab-rails']['microsoft_graph_mailer_user_id'] = nil
+default['gitlab']['gitlab-rails']['microsoft_graph_mailer_tenant'] = nil
+default['gitlab']['gitlab-rails']['microsoft_graph_mailer_client_id'] = nil
+default['gitlab']['gitlab-rails']['microsoft_graph_mailer_client_secret'] = nil
+default['gitlab']['gitlab-rails']['microsoft_graph_mailer_azure_ad_endpoint'] = nil
+default['gitlab']['gitlab-rails']['microsoft_graph_mailer_graph_endpoint'] = nil
+
 default['gitlab']['gitlab-rails']['kerberos_enabled'] = nil
 default['gitlab']['gitlab-rails']['kerberos_keytab'] = nil
 default['gitlab']['gitlab-rails']['kerberos_service_principal_name'] = nil
