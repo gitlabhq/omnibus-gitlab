@@ -33,10 +33,11 @@ license_file license_path
 skip_transitive_dependency_licensing true
 
 build do
+  mkdir "#{install_dir}/embedded/bin"
   move 'bin/mattermost', "#{install_dir}/embedded/bin/mattermost"
   move 'bin/mmctl', "#{install_dir}/embedded/bin/mmctl"
 
-  command "mkdir -p #{install_dir}/embedded/service/mattermost"
+  mkdir "#{install_dir}/embedded/service/mattermost"
   copy 'templates', "#{install_dir}/embedded/service/mattermost/templates"
   copy 'i18n', "#{install_dir}/embedded/service/mattermost/i18n"
   copy 'fonts', "#{install_dir}/embedded/service/mattermost/fonts"

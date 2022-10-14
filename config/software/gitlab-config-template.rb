@@ -25,6 +25,6 @@ skip_transitive_dependency_licensing true
 source path: File.expand_path('files/gitlab-config-template', Omnibus::Config.project_root)
 
 build do
-  command "mkdir -p #{install_dir}/etc"
+  mkdir "#{install_dir}/etc"
   sync './', "#{install_dir}/etc/"
 end

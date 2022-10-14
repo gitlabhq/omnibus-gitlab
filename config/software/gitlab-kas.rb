@@ -31,6 +31,8 @@ build do
   env = { 'TARGET_DIRECTORY' => "#{Omnibus::Config.source_dir}/gitlab-kas/build" }
 
   make 'kas', env: env
+
+  mkdir "#{install_dir}/embedded/bin/"
   move 'build/kas', "#{install_dir}/embedded/bin/gitlab-kas"
 
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"

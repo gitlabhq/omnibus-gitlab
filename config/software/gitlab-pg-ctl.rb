@@ -29,6 +29,8 @@ skip_transitive_dependency_licensing true
 default_version Digest::MD5.file(__FILE__).hexdigest
 
 build do
+  mkdir "#{install_dir}/embedded/bin/"
+
   block do
     File.open("#{install_dir}/embedded/bin/gitlab-pg-ctl", 'w') do |file|
       file.print <<-EOH

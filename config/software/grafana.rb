@@ -83,15 +83,15 @@ build do
   end
 
   # Copy binaries
-  command "mkdir -p #{install_dir}/embedded/bin"
+  mkdir "#{install_dir}/embedded/bin"
   copy 'bin/linux-*/grafana-server', "#{install_dir}/embedded/bin/grafana-server"
   copy 'bin/linux-*/grafana-cli', "#{install_dir}/embedded/bin/grafana-cli"
 
   # Copy static assets
-  command "mkdir -p #{install_dir}/embedded/service/grafana/public"
+  mkdir "#{install_dir}/embedded/service/grafana/public"
   sync 'public/', "#{install_dir}/embedded/service/grafana/public/"
 
   # Copy default configuration
-  command "mkdir -p #{install_dir}/embedded/service/grafana/conf"
+  mkdir "#{install_dir}/embedded/service/grafana/conf"
   copy 'conf/defaults.ini', "#{install_dir}/embedded/service/grafana/conf/defaults.ini"
 end

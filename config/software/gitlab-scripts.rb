@@ -25,5 +25,6 @@ skip_transitive_dependency_licensing true
 source path: File.expand_path('files/gitlab-scripts', Omnibus::Config.project_root)
 
 build do
+  mkdir "#{install_dir}/embedded/bin/"
   copy '*', "#{install_dir}/embedded/bin/"
 end

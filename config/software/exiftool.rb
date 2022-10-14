@@ -38,7 +38,7 @@ build do
   patch source: 'allowlist-types.patch'
 
   # Ensuring a bin directory exists
-  command "mkdir -p #{install_dir}/embedded/bin"
+  mkdir "#{install_dir}/embedded/bin"
 
   # Copying necessary files from source
   sync "lib", "#{install_dir}/embedded/lib/exiftool-perl"

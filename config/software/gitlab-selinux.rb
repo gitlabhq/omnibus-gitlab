@@ -25,6 +25,6 @@ skip_transitive_dependency_licensing true
 source path: File.expand_path('files/gitlab-selinux', Omnibus::Config.project_root)
 
 build do
-  command "mkdir -p #{install_dir}/embedded/selinux"
+  mkdir "#{install_dir}/embedded/selinux"
   sync './', "#{install_dir}/embedded/selinux/"
 end

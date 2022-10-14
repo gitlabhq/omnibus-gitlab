@@ -26,7 +26,7 @@ license 'proprietary'
 license_file 'LICENSE.md'
 
 build do
-  command "mkdir -p #{install_dir}/embedded/service/spam-classifier"
+  mkdir "#{install_dir}/embedded/service/spam-classifier"
   sync './', "#{install_dir}/embedded/service/spam-classifier/", exclude: %w(dist tokenizer.pickle)
   copy "dist", "#{install_dir}/embedded/service/spam-classifier/preprocessor"
   copy "tokenizer.pickle", "#{install_dir}/embedded/service/spam-classifier/preprocessor/"
