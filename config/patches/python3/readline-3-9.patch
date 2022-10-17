@@ -1,0 +1,780 @@
+From 0b989c687ce05dcadbbf672d9c400223cf0eb162 Mon Sep 17 00:00:00 2001
+From: Roland Hieber <rhi@pengutronix.de>
+Date: Sun, 10 Jan 2021 20:35:33 +0100
+Subject: [PATCH] bpo-13501: allow choosing between readline and libedit
+
+In contrast to macOS, libedit is available as its own include file and
+library on Linux systems to prevent file name clashes. So if both
+libraries are available on the system, readline is currently chosen by
+default; and if only libedit is available, it is not found at all. This
+patch adds a way to link against libedit by adding the following
+arguments to configure:
+
+  --with-readline           link against libreadline (the default)
+  --with-readline=editline  link against libeditline
+  --with-readline=no        disable building the readline module
+  --without-readline        (same)
+
+The runtime detection of libedit vs. readline was already done in commit
+7105319ada2e66365902 (2019-12-04, serge-sans-paille: "bpo-38634: Allow
+non-apple build to cope with libedit (GH-16986)").
+
+Fixes: GH-12076 ("bpo-13501 Build or disable readline with Editline")
+Fixes: bpo-13501 ("Make libedit support more generic; port readline / libedit to FreeBSD")
+Co-authored-by: Enji Cooper (ngie-eign)
+Co-authored-by: Martin Panter (vadmium)
+Co-authored-by: Robert Marshall (kellinm)
+---
+ .../2021-01-10-22-25-23.bpo-13501.g4L-6R.rst  |   2 +
+ Modules/readline.c                            |  10 +-
+ configure                                     | 267 ++++++++++--------
+ configure.ac                                  | 186 +++++++-----
+ pyconfig.h.in                                 |   5 +-
+ setup.py                                      |  13 +-
+ 6 files changed, 276 insertions(+), 207 deletions(-)
+ create mode 100644 Misc/NEWS.d/next/Build/2021-01-10-22-25-23.bpo-13501.g4L-6R.rst
+
+diff --git a/Misc/NEWS.d/next/Build/2021-01-10-22-25-23.bpo-13501.g4L-6R.rst b/Misc/NEWS.d/next/Build/2021-01-10-22-25-23.bpo-13501.g4L-6R.rst
+new file mode 100644
+index 00000000000000..8dc9442725e678
+--- /dev/null
++++ b/Misc/NEWS.d/next/Build/2021-01-10-22-25-23.bpo-13501.g4L-6R.rst
+@@ -0,0 +1,2 @@
++The configure script can now use *libedit* instead of *readline* with the
++command line option ``--with-readline=editline``.
+diff --git a/Modules/readline.c b/Modules/readline.c
+index 1e74f997b07112..ca51320a2f7eb4 100644
+--- a/Modules/readline.c
++++ b/Modules/readline.c
+@@ -26,10 +26,14 @@
+ #  define RESTORE_LOCALE(sl)
+ #endif
+ 
++#ifdef WITH_EDITLINE
++#  include <editline/readline.h>
++#else
+ /* GNU readline definitions */
+-#undef HAVE_CONFIG_H /* Else readline/chardefs.h includes strings.h */
+-#include <readline/readline.h>
+-#include <readline/history.h>
++#  undef HAVE_CONFIG_H /* Else readline/chardefs.h includes strings.h */
++#  include <readline/readline.h>
++#  include <readline/history.h>
++#endif
+ 
+ #ifdef HAVE_RL_COMPLETION_MATCHES
+ #define completion_matches(x, y) \
+diff --git a/configure b/configure
+index c7a7291feab9a8..836aa1644baec6 100755
+--- a/configure
++++ b/configure
+@@ -846,6 +846,8 @@ with_libm
+ with_libc
+ enable_big_digits
+ with_platlibdir
++with_wheel_pkg_dir
++with_readline
+ with_computed_gotos
+ with_ensurepip
+ with_openssl
+@@ -1572,6 +1574,8 @@ Optional Packages:
+                           system-dependent)
+   --with-platlibdir=DIRNAME
+                           Python library directory name (default is "lib")
++  --with(out)-readline[=editline]
++                          use Editline for backend or disable readline module
+   --with-computed-gotos   enable computed gotos in evaluation loop (enabled by
+                           default on supported compilers)
+   --with-ensurepip[=install|upgrade|no]
+@@ -15524,24 +15528,49 @@ $as_echo "#define HAVE_GETC_UNLOCKED 1" >>confdefs.h
+ 
+ fi
+ 
++
++# Check whether --with-readline was given.
++if test "${with_readline+set}" = set; then :
++  withval=$with_readline;
++else
++  with_readline=yes
++fi
++
++
+ # check where readline lives
++py_cv_lib_readline=no
+ # save the value of LIBS so we don't actually link Python with readline
+ LIBS_no_readline=$LIBS
+ 
+-# On some systems we need to link readline to a termcap compatible
+-# library.  NOTE: Keep the precedence of listed libraries synchronised
+-# with setup.py.
+-py_cv_lib_readline=no
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking how to link readline libs" >&5
++if test "$with_readline" != no; then
++  case "$with_readline" in
++  editline|edit)
++    LIBREADLINE=edit
++
++$as_echo "#define WITH_EDITLINE 1" >>confdefs.h
++
++    ;;
++  yes|readline)
++    LIBREADLINE=readline
++    ;;
++  *)
++    as_fn_error $? "proper usage is --with(out)-readline[=editline]" "$LINENO" 5
++    ;;
++  esac
++
++  # On some systems we need to link readline to a termcap compatible
++  # library.  NOTE: Keep the precedence of listed libraries synchronised
++  # with setup.py.
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking how to link readline libs" >&5
+ $as_echo_n "checking how to link readline libs... " >&6; }
+-for py_libtermcap in "" tinfo ncursesw ncurses curses termcap; do
+-  if test -z "$py_libtermcap"; then
+-    READLINE_LIBS="-lreadline"
+-  else
+-    READLINE_LIBS="-lreadline -l$py_libtermcap"
+-  fi
+-  LIBS="$READLINE_LIBS $LIBS_no_readline"
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++  for py_libtermcap in "" tinfo ncursesw ncurses curses termcap; do
++    if test -z "$py_libtermcap"; then
++      READLINE_LIBS="-l$LIBREADLINE"
++    else
++      READLINE_LIBS="-l$LIBREADLINE -l$py_libtermcap"
++    fi
++    LIBS="$READLINE_LIBS $LIBS_no_readline"
++    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+ /* Override any GCC internal prototype to avoid an error.
+@@ -15564,73 +15593,67 @@ if ac_fn_c_try_link "$LINENO"; then :
+ fi
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
+-  if test $py_cv_lib_readline = yes; then
+-    break
+-  fi
+-done
+-# Uncomment this line if you want to use READINE_LIBS in Makefile or scripts
+-#AC_SUBST([READLINE_LIBS])
+-if test $py_cv_lib_readline = no; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: none" >&5
++    if test $py_cv_lib_readline = yes; then
++      break
++    fi
++  done
++
++  # Uncomment this line if you want to use READLINE_LIBS in Makefile or scripts
++  #AC_SUBST([READLINE_LIBS])
++  if test $py_cv_lib_readline = no; then
++    { $as_echo "$as_me:${as_lineno-$LINENO}: result: none" >&5
+ $as_echo "none" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $READLINE_LIBS" >&5
++  else
++    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $READLINE_LIBS" >&5
+ $as_echo "$READLINE_LIBS" >&6; }
+ 
+ $as_echo "#define HAVE_LIBREADLINE 1" >>confdefs.h
+ 
++  fi
+ fi
+ 
+-# check for readline 2.2
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#include <readline/readline.h>
+-_ACEOF
+-if ac_fn_c_try_cpp "$LINENO"; then :
+-  have_readline=yes
+-else
+-  have_readline=no
+-
+-fi
+-rm -f conftest.err conftest.i conftest.$ac_ext
+-if test $have_readline = yes
+-then
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#include <readline/readline.h>
++if test "$py_cv_lib_readline" = yes; then
++  # check for readline 2.2
++  ac_fn_c_check_decl "$LINENO" "rl_completion_append_character" "ac_cv_have_decl_rl_completion_append_character" "
++#include <stdio.h> /* Must be first for Gnu Readline */
++#ifdef WITH_EDITLINE
++# include <editline/readline.h>
++#else
++# include <readline/readline.h>
++#endif
+ 
+-_ACEOF
+-if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "extern int rl_completion_append_character;" >/dev/null 2>&1; then :
++"
++if test "x$ac_cv_have_decl_rl_completion_append_character" = xyes; then :
+ 
+ $as_echo "#define HAVE_RL_COMPLETION_APPEND_CHARACTER 1" >>confdefs.h
+ 
+ fi
+-rm -f conftest*
+ 
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#include <readline/readline.h>
++  ac_fn_c_check_decl "$LINENO" "rl_completion_suppress_append" "ac_cv_have_decl_rl_completion_suppress_append" "
++#include <stdio.h> /* Must be first for Gnu Readline */
++#ifdef WITH_EDITLINE
++# include <editline/readline.h>
++#else
++# include <readline/readline.h>
++#endif
+ 
+-_ACEOF
+-if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "extern int rl_completion_suppress_append;" >/dev/null 2>&1; then :
++"
++if test "x$ac_cv_have_decl_rl_completion_suppress_append" = xyes; then :
+ 
+ $as_echo "#define HAVE_RL_COMPLETION_SUPPRESS_APPEND 1" >>confdefs.h
+ 
+ fi
+-rm -f conftest*
+ 
+-fi
+ 
+-# check for readline 4.0
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rl_pre_input_hook in -lreadline" >&5
+-$as_echo_n "checking for rl_pre_input_hook in -lreadline... " >&6; }
+-if ${ac_cv_lib_readline_rl_pre_input_hook+:} false; then :
++  # check for readline 4.0
++  as_ac_Lib=`$as_echo "ac_cv_lib_$LIBREADLINE''_rl_pre_input_hook" | $as_tr_sh`
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rl_pre_input_hook in -l$LIBREADLINE" >&5
++$as_echo_n "checking for rl_pre_input_hook in -l$LIBREADLINE... " >&6; }
++if eval \${$as_ac_Lib+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lreadline $READLINE_LIBS $LIBS"
++LIBS="-l$LIBREADLINE $READLINE_LIBS $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -15650,31 +15673,33 @@ return rl_pre_input_hook ();
+ }
+ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_readline_rl_pre_input_hook=yes
++  eval "$as_ac_Lib=yes"
+ else
+-  ac_cv_lib_readline_rl_pre_input_hook=no
++  eval "$as_ac_Lib=no"
+ fi
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
+ LIBS=$ac_check_lib_save_LIBS
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_readline_rl_pre_input_hook" >&5
+-$as_echo "$ac_cv_lib_readline_rl_pre_input_hook" >&6; }
+-if test "x$ac_cv_lib_readline_rl_pre_input_hook" = xyes; then :
++eval ac_res=\$$as_ac_Lib
++	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
++$as_echo "$ac_res" >&6; }
++if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+ 
+ $as_echo "#define HAVE_RL_PRE_INPUT_HOOK 1" >>confdefs.h
+ 
+ fi
+ 
+ 
+-# also in 4.0
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rl_completion_display_matches_hook in -lreadline" >&5
+-$as_echo_n "checking for rl_completion_display_matches_hook in -lreadline... " >&6; }
+-if ${ac_cv_lib_readline_rl_completion_display_matches_hook+:} false; then :
++  # also in 4.0
++  as_ac_Lib=`$as_echo "ac_cv_lib_$LIBREADLINE''_rl_completion_display_matches_hook" | $as_tr_sh`
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rl_completion_display_matches_hook in -l$LIBREADLINE" >&5
++$as_echo_n "checking for rl_completion_display_matches_hook in -l$LIBREADLINE... " >&6; }
++if eval \${$as_ac_Lib+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lreadline $READLINE_LIBS $LIBS"
++LIBS="-l$LIBREADLINE $READLINE_LIBS $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -15694,31 +15719,33 @@ return rl_completion_display_matches_hook ();
+ }
+ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_readline_rl_completion_display_matches_hook=yes
++  eval "$as_ac_Lib=yes"
+ else
+-  ac_cv_lib_readline_rl_completion_display_matches_hook=no
++  eval "$as_ac_Lib=no"
+ fi
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
+ LIBS=$ac_check_lib_save_LIBS
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_readline_rl_completion_display_matches_hook" >&5
+-$as_echo "$ac_cv_lib_readline_rl_completion_display_matches_hook" >&6; }
+-if test "x$ac_cv_lib_readline_rl_completion_display_matches_hook" = xyes; then :
++eval ac_res=\$$as_ac_Lib
++	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
++$as_echo "$ac_res" >&6; }
++if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+ 
+ $as_echo "#define HAVE_RL_COMPLETION_DISPLAY_MATCHES_HOOK 1" >>confdefs.h
+ 
+ fi
+ 
+ 
+-# also in 4.0, but not in editline
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rl_resize_terminal in -lreadline" >&5
+-$as_echo_n "checking for rl_resize_terminal in -lreadline... " >&6; }
+-if ${ac_cv_lib_readline_rl_resize_terminal+:} false; then :
++  # also in 4.0, but not in editline
++  as_ac_Lib=`$as_echo "ac_cv_lib_$LIBREADLINE''_rl_resize_terminal" | $as_tr_sh`
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rl_resize_terminal in -l$LIBREADLINE" >&5
++$as_echo_n "checking for rl_resize_terminal in -l$LIBREADLINE... " >&6; }
++if eval \${$as_ac_Lib+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lreadline $READLINE_LIBS $LIBS"
++LIBS="-l$LIBREADLINE $READLINE_LIBS $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -15738,31 +15765,33 @@ return rl_resize_terminal ();
+ }
+ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_readline_rl_resize_terminal=yes
++  eval "$as_ac_Lib=yes"
+ else
+-  ac_cv_lib_readline_rl_resize_terminal=no
++  eval "$as_ac_Lib=no"
+ fi
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
+ LIBS=$ac_check_lib_save_LIBS
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_readline_rl_resize_terminal" >&5
+-$as_echo "$ac_cv_lib_readline_rl_resize_terminal" >&6; }
+-if test "x$ac_cv_lib_readline_rl_resize_terminal" = xyes; then :
++eval ac_res=\$$as_ac_Lib
++	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
++$as_echo "$ac_res" >&6; }
++if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+ 
+ $as_echo "#define HAVE_RL_RESIZE_TERMINAL 1" >>confdefs.h
+ 
+ fi
+ 
+ 
+-# check for readline 4.2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rl_completion_matches in -lreadline" >&5
+-$as_echo_n "checking for rl_completion_matches in -lreadline... " >&6; }
+-if ${ac_cv_lib_readline_rl_completion_matches+:} false; then :
++  # check for readline 4.2
++  as_ac_Lib=`$as_echo "ac_cv_lib_$LIBREADLINE''_rl_completion_matches" | $as_tr_sh`
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rl_completion_matches in -l$LIBREADLINE" >&5
++$as_echo_n "checking for rl_completion_matches in -l$LIBREADLINE... " >&6; }
++if eval \${$as_ac_Lib+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lreadline $READLINE_LIBS $LIBS"
++LIBS="-l$LIBREADLINE $READLINE_LIBS $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -15782,59 +15811,49 @@ return rl_completion_matches ();
+ }
+ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_readline_rl_completion_matches=yes
++  eval "$as_ac_Lib=yes"
+ else
+-  ac_cv_lib_readline_rl_completion_matches=no
++  eval "$as_ac_Lib=no"
+ fi
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
+ LIBS=$ac_check_lib_save_LIBS
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_readline_rl_completion_matches" >&5
+-$as_echo "$ac_cv_lib_readline_rl_completion_matches" >&6; }
+-if test "x$ac_cv_lib_readline_rl_completion_matches" = xyes; then :
++eval ac_res=\$$as_ac_Lib
++	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
++$as_echo "$ac_res" >&6; }
++if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+ 
+ $as_echo "#define HAVE_RL_COMPLETION_MATCHES 1" >>confdefs.h
+ 
+ fi
+ 
+ 
+-# also in readline 4.2
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#include <readline/readline.h>
+-_ACEOF
+-if ac_fn_c_try_cpp "$LINENO"; then :
+-  have_readline=yes
+-else
+-  have_readline=no
+-
+-fi
+-rm -f conftest.err conftest.i conftest.$ac_ext
+-if test $have_readline = yes
+-then
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#include <readline/readline.h>
++  # also in readline 4.2
++  ac_fn_c_check_decl "$LINENO" "rl_catch_signals" "ac_cv_have_decl_rl_catch_signals" "
++#include <stdio.h> /* Must be first for Gnu Readline */
++#ifdef WITH_EDITLINE
++# include <editline/readline.h>
++#else
++# include <readline/readline.h>
++#endif
+ 
+-_ACEOF
+-if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "extern int rl_catch_signals;" >/dev/null 2>&1; then :
++"
++if test "x$ac_cv_have_decl_rl_catch_signals" = xyes; then :
+ 
+ $as_echo "#define HAVE_RL_CATCH_SIGNAL 1" >>confdefs.h
+ 
+ fi
+-rm -f conftest*
+ 
+-fi
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for append_history in -lreadline" >&5
+-$as_echo_n "checking for append_history in -lreadline... " >&6; }
+-if ${ac_cv_lib_readline_append_history+:} false; then :
++  as_ac_Lib=`$as_echo "ac_cv_lib_$LIBREADLINE''_append_history" | $as_tr_sh`
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for append_history in -l$LIBREADLINE" >&5
++$as_echo_n "checking for append_history in -l$LIBREADLINE... " >&6; }
++if eval \${$as_ac_Lib+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lreadline $READLINE_LIBS $LIBS"
++LIBS="-l$LIBREADLINE $READLINE_LIBS $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -15854,22 +15873,24 @@ return append_history ();
+ }
+ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_readline_append_history=yes
++  eval "$as_ac_Lib=yes"
+ else
+-  ac_cv_lib_readline_append_history=no
++  eval "$as_ac_Lib=no"
+ fi
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
+ LIBS=$ac_check_lib_save_LIBS
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_readline_append_history" >&5
+-$as_echo "$ac_cv_lib_readline_append_history" >&6; }
+-if test "x$ac_cv_lib_readline_append_history" = xyes; then :
++eval ac_res=\$$as_ac_Lib
++	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
++$as_echo "$ac_res" >&6; }
++if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+ 
+ $as_echo "#define HAVE_RL_APPEND_HISTORY 1" >>confdefs.h
+ 
+ fi
+ 
++fi
+ 
+ # End of readline checks: restore LIBS
+ LIBS=$LIBS_no_readline
+diff --git a/configure.ac b/configure.ac
+index 45e0af4493f05e..dbf9d453a02ddd 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -4879,92 +4879,124 @@ then
+   [Define this if you have flockfile(), getc_unlocked(), and funlockfile()])
+ fi
+ 
++AC_ARG_WITH([readline],
++  [AS_HELP_STRING([--with(out)-readline@<:@=editline@:>@],
++    [use Editline for backend or disable readline module])],
++    [],
++    [with_readline=yes])
++
+ # check where readline lives
++py_cv_lib_readline=no
+ # save the value of LIBS so we don't actually link Python with readline
+ LIBS_no_readline=$LIBS
+ 
+-# On some systems we need to link readline to a termcap compatible
+-# library.  NOTE: Keep the precedence of listed libraries synchronised
+-# with setup.py.
+-py_cv_lib_readline=no
+-AC_MSG_CHECKING([how to link readline libs])
+-for py_libtermcap in "" tinfo ncursesw ncurses curses termcap; do
+-  if test -z "$py_libtermcap"; then
+-    READLINE_LIBS="-lreadline"
++if test "$with_readline" != no; then
++  case "$with_readline" in
++  editline|edit)
++    LIBREADLINE=edit
++    AC_DEFINE(WITH_EDITLINE, 1,
++      [Define to build the readline module against Editline.])
++    ;;
++  yes|readline)
++    LIBREADLINE=readline
++    ;;
++  *)
++    AC_MSG_ERROR([proper usage is --with(out)-readline@<:@=editline@:>@])
++    ;;
++  esac
++
++  # On some systems we need to link readline to a termcap compatible
++  # library.  NOTE: Keep the precedence of listed libraries synchronised
++  # with setup.py.
++  AC_MSG_CHECKING([how to link readline libs])
++  for py_libtermcap in "" tinfo ncursesw ncurses curses termcap; do
++    if test -z "$py_libtermcap"; then
++      READLINE_LIBS="-l$LIBREADLINE"
++    else
++      READLINE_LIBS="-l$LIBREADLINE -l$py_libtermcap"
++    fi
++    LIBS="$READLINE_LIBS $LIBS_no_readline"
++    AC_LINK_IFELSE(
++      [AC_LANG_CALL([],[readline])],
++      [py_cv_lib_readline=yes])
++    if test $py_cv_lib_readline = yes; then
++      break
++    fi
++  done
++
++  # Uncomment this line if you want to use READLINE_LIBS in Makefile or scripts
++  #AC_SUBST([READLINE_LIBS])
++  if test $py_cv_lib_readline = no; then
++    AC_MSG_RESULT([none])
+   else
+-    READLINE_LIBS="-lreadline -l$py_libtermcap"
++    AC_MSG_RESULT([$READLINE_LIBS])
++    AC_DEFINE(HAVE_LIBREADLINE, 1,
++      [Define to build the readline module.])
+   fi
+-  LIBS="$READLINE_LIBS $LIBS_no_readline"
+-  AC_LINK_IFELSE(
+-    [AC_LANG_CALL([],[readline])],
+-    [py_cv_lib_readline=yes])
+-  if test $py_cv_lib_readline = yes; then
+-    break
+-  fi
+-done
+-# Uncomment this line if you want to use READINE_LIBS in Makefile or scripts
+-#AC_SUBST([READLINE_LIBS])
+-if test $py_cv_lib_readline = no; then
+-  AC_MSG_RESULT([none])
+-else
+-  AC_MSG_RESULT([$READLINE_LIBS])
+-  AC_DEFINE(HAVE_LIBREADLINE, 1,
+-    [Define if you have the readline library (-lreadline).])
+ fi
+ 
+-# check for readline 2.2
+-AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <readline/readline.h>]])],
+-  [have_readline=yes],
+-  [have_readline=no]
+-)
+-if test $have_readline = yes
+-then
+-  AC_EGREP_HEADER([extern int rl_completion_append_character;],
+-  [readline/readline.h],
+-  AC_DEFINE(HAVE_RL_COMPLETION_APPEND_CHARACTER, 1,
+-  [Define if you have readline 2.2]), )
+-  AC_EGREP_HEADER([extern int rl_completion_suppress_append;],
+-  [readline/readline.h],
+-  AC_DEFINE(HAVE_RL_COMPLETION_SUPPRESS_APPEND, 1,
+-  [Define if you have rl_completion_suppress_append]), )
+-fi
+-
+-# check for readline 4.0
+-AC_CHECK_LIB(readline, rl_pre_input_hook,
+-	AC_DEFINE(HAVE_RL_PRE_INPUT_HOOK, 1,
+-        [Define if you have readline 4.0]), ,$READLINE_LIBS)
+-
+-# also in 4.0
+-AC_CHECK_LIB(readline, rl_completion_display_matches_hook,
+-	AC_DEFINE(HAVE_RL_COMPLETION_DISPLAY_MATCHES_HOOK, 1,
+-        [Define if you have readline 4.0]), ,$READLINE_LIBS)
+-
+-# also in 4.0, but not in editline
+-AC_CHECK_LIB(readline, rl_resize_terminal,
+-	AC_DEFINE(HAVE_RL_RESIZE_TERMINAL, 1,
+-        [Define if you have readline 4.0]), ,$READLINE_LIBS)
+-
+-# check for readline 4.2
+-AC_CHECK_LIB(readline, rl_completion_matches,
+-	AC_DEFINE(HAVE_RL_COMPLETION_MATCHES, 1,
+-        [Define if you have readline 4.2]), ,$READLINE_LIBS)
+-
+-# also in readline 4.2
+-AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <readline/readline.h>]])],
+-  [have_readline=yes],
+-  [have_readline=no]
+-)
+-if test $have_readline = yes
+-then
+-  AC_EGREP_HEADER([extern int rl_catch_signals;],
+-  [readline/readline.h],
+-  AC_DEFINE(HAVE_RL_CATCH_SIGNAL, 1,
+-  [Define if you can turn off readline's signal handling.]), )
+-fi
++if test "$py_cv_lib_readline" = yes; then
++  # check for readline 2.2
++  AC_CHECK_DECL(rl_completion_append_character,
++    AC_DEFINE(HAVE_RL_COMPLETION_APPEND_CHARACTER, 1,
++      [Define if you have readline 2.2]),,
++    [
++#include <stdio.h> /* Must be first for Gnu Readline */
++#ifdef WITH_EDITLINE
++# include <editline/readline.h>
++#else
++# include <readline/readline.h>
++#endif
++    ])
++  AC_CHECK_DECL(rl_completion_suppress_append,
++    AC_DEFINE(HAVE_RL_COMPLETION_SUPPRESS_APPEND, 1,
++      [Define if you have rl_completion_suppress_append]),,
++    [
++#include <stdio.h> /* Must be first for Gnu Readline */
++#ifdef WITH_EDITLINE
++# include <editline/readline.h>
++#else
++# include <readline/readline.h>
++#endif
++    ])
+ 
+-AC_CHECK_LIB(readline, append_history,
+-	AC_DEFINE(HAVE_RL_APPEND_HISTORY, 1,
+-        [Define if readline supports append_history]), ,$READLINE_LIBS)
++  # check for readline 4.0
++  AC_CHECK_LIB($LIBREADLINE, rl_pre_input_hook,
++    AC_DEFINE(HAVE_RL_PRE_INPUT_HOOK, 1,
++      [Define if you have readline 4.0]),,$READLINE_LIBS)
++
++  # also in 4.0
++  AC_CHECK_LIB($LIBREADLINE, rl_completion_display_matches_hook,
++    AC_DEFINE(HAVE_RL_COMPLETION_DISPLAY_MATCHES_HOOK, 1,
++      [Define if you have readline 4.0]),,$READLINE_LIBS)
++
++  # also in 4.0, but not in editline
++  AC_CHECK_LIB($LIBREADLINE, rl_resize_terminal,
++    AC_DEFINE(HAVE_RL_RESIZE_TERMINAL, 1,
++      [Define if you have readline 4.0]),,$READLINE_LIBS)
++
++  # check for readline 4.2
++  AC_CHECK_LIB($LIBREADLINE, rl_completion_matches,
++    AC_DEFINE(HAVE_RL_COMPLETION_MATCHES, 1,
++      [Define if you have readline 4.2]),,$READLINE_LIBS)
++
++  # also in readline 4.2
++  AC_CHECK_DECL(rl_catch_signals,
++    AC_DEFINE(HAVE_RL_CATCH_SIGNAL, 1,
++      [Define if you can turn off readline's signal handling.]),,
++    [
++#include <stdio.h> /* Must be first for Gnu Readline */
++#ifdef WITH_EDITLINE
++# include <editline/readline.h>
++#else
++# include <readline/readline.h>
++#endif
++    ])
++
++  AC_CHECK_LIB($LIBREADLINE, append_history,
++    AC_DEFINE(HAVE_RL_APPEND_HISTORY, 1,
++      [Define if readline supports append_history]),,$READLINE_LIBS)
++fi
+ 
+ # End of readline checks: restore LIBS
+ LIBS=$LIBS_no_readline
+diff --git a/pyconfig.h.in b/pyconfig.h.in
+index 8510c8778b5690..e1ee500f80279c 100644
+--- a/pyconfig.h.in
++++ b/pyconfig.h.in
+@@ -601,7 +601,7 @@
+ /* Define to 1 if you have the <libintl.h> header file. */
+ #undef HAVE_LIBINTL_H
+ 
+-/* Define if you have the readline library (-lreadline). */
++/* Define to build the readline module. */
+ #undef HAVE_LIBREADLINE
+ 
+ /* Define to 1 if you have the `resolv' library (-lresolv). */
+@@ -1539,6 +1539,9 @@
+    Dyld is necessary to support frameworks. */
+ #undef WITH_DYLD
+ 
++/* Define to build the readline module against Editline. */
++#undef WITH_EDITLINE
++
+ /* Define to 1 if libintl is needed for locale functions. */
+ #undef WITH_LIBINTL
+ 
+diff --git a/setup.py b/setup.py
+index d8941790b35d00..b26d6c92e09a45 100644
+--- a/setup.py
++++ b/setup.py
+@@ -963,7 +963,6 @@ def detect_test_extensions(self):
+ 
+     def detect_readline_curses(self):
+         # readline
+-        do_readline = self.compiler.find_library_file(self.lib_dirs, 'readline')
+         readline_termcap_library = ""
+         curses_library = ""
+         # Cannot use os.popen here in py3k.
+@@ -971,7 +970,13 @@ def detect_readline_curses(self):
+         if not os.path.exists(self.build_temp):
+             os.makedirs(self.build_temp)
+         # Determine if readline is already linked against curses or tinfo.
+-        if do_readline:
++        if sysconfig.get_config_var('HAVE_LIBREADLINE'):
++            if sysconfig.get_config_var('WITH_EDITLINE'):
++                readline_lib = 'edit'
++            else:
++                readline_lib = 'readline'
++            do_readline = self.compiler.find_library_file(self.lib_dirs,
++                readline_lib)
+             if CROSS_COMPILING:
+                 ret = run_command("%s -d %s | grep '(NEEDED)' > %s"
+                                 % (sysconfig.get_config_var('READELF'),
+@@ -994,6 +999,8 @@ def detect_readline_curses(self):
+                             break
+             if os.path.exists(tmpfile):
+                 os.unlink(tmpfile)
++        else:
++            do_readline = False
+         # Issue 7384: If readline is already linked against curses,
+         # use the same library for the readline and curses modules.
+         if 'curses' in readline_termcap_library:
+@@ -1033,7 +1040,7 @@ def detect_readline_curses(self):
+             else:
+                 readline_extra_link_args = ()
+ 
+-            readline_libs = ['readline']
++            readline_libs = [readline_lib]
+             if readline_termcap_library:
+                 pass # Issue 7384: Already linked against curses or tinfo.
+             elif curses_library:

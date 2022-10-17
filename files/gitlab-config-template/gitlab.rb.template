@@ -2332,7 +2332,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  'PATH' => "/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin",
 #  'HOME' => '/var/opt/gitlab',
 #  'TZ' => ':/etc/localtime',
-#  'PYTHONPATH' => "/opt/gitlab/embedded/lib/python3.10/site-packages",
+#  'PYTHONPATH' => "/opt/gitlab/embedded/lib/python3.9/site-packages",
 #  'ICU_DATA' => "/opt/gitlab/embedded/share/icu/current",
 #  'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/",
 #  'WRAPPER_JSON_LOGGING' => true
