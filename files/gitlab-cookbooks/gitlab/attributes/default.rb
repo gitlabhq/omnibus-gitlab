@@ -71,7 +71,7 @@ default['gitlab']['gitlab-rails']['env'] = {
   # Charlock Holmes and libicu will report U_FILE_ACCESS_ERROR if this is not set to the right path
   # See https://gitlab.com/gitlab-org/gitlab-foss/issues/17415#note_13868167
   'ICU_DATA' => "#{node['package']['install-dir']}/embedded/share/icu/current",
-  'PYTHONPATH' => "#{node['package']['install-dir']}/embedded/lib/python3.10/site-packages",
+  'PYTHONPATH' => "#{node['package']['install-dir']}/embedded/lib/python3.9/site-packages",
   # Prevent ExecJS from complaining that Node is not installed in production
   'EXECJS_RUNTIME' => 'Disabled',
   # Prevent excessive system calls: #3530,

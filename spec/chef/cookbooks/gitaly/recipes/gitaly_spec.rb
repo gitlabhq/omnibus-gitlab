@@ -38,7 +38,7 @@ RSpec.describe 'gitaly' do
       'HOME' => '/var/opt/gitlab',
       'PATH' => '/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin',
       'ICU_DATA' => '/opt/gitlab/embedded/share/icu/current',
-      'PYTHONPATH' => '/opt/gitlab/embedded/lib/python3.10/site-packages',
+      'PYTHONPATH' => '/opt/gitlab/embedded/lib/python3.9/site-packages',
       'WRAPPER_JSON_LOGGING' => 'true',
       "GITALY_PID_FILE" => '/var/opt/gitlab/gitaly/gitaly.pid',
     }
