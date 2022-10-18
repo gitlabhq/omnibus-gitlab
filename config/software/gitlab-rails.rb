@@ -81,7 +81,6 @@ build do
   make "install -C workhorse PREFIX=#{install_dir}/embedded"
 
   bundle_without = %w(development test)
-  bundle_without << 'mysql'
 
   if Build::Check.use_system_ssl?
     env['CMAKE_FLAGS'] = OpenSSLHelper.cmake_flags
