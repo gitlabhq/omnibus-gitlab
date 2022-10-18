@@ -1,1 +1,1 @@
-The latest docker guide can be found here: [GitLab Docker images](/doc/docker/README.md).
+The latest Docker guide can be found here: [GitLab Docker images](https://docs.gitlab.com/ee/install/docker.html).
