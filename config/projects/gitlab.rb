@@ -78,6 +78,8 @@ if rhel?
   end
 end
 
+runtime_dependency 'policycoreutils-python' if amazon? && OhaiHelper.get_amazon_version == '2'
+
 # Arm targets need libatomic
 if OhaiHelper.arm?
   if rhel? || amazon?
