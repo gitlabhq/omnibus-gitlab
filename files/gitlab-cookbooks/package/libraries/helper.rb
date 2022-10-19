@@ -17,7 +17,7 @@
 
 require 'uri'
 require 'digest'
-require_relative 'helpers/redhat_helper'
+require_relative 'helpers/selinux_distro_helper'
 require_relative 'helpers/selinux_helper'
 require_relative 'helpers/secrets_helper'
 require_relative 'helpers/version_helper'
