@@ -296,7 +296,7 @@ rubocop:
 
 # Perform documentation linting on Markdown files
 docs-lint markdown:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.16-vale-2.20.1-markdownlint-0.32.2
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.16-vale-2.20.2-markdownlint-0.32.2-markdownlint2-0.5.1
   stage: check
   cache: {}
   needs: []
@@ -305,7 +305,7 @@ docs-lint markdown:
     # Lint prose
     - vale --minAlertLevel error doc
     # Lint Markdown
-    - markdownlint --config .markdownlint.yml 'doc/**/*.md'
+    - markdownlint-cli2-config .markdownlint.yml 'doc/**/*.md'
   rules:
     - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
@@ -313,7 +313,7 @@ docs-lint markdown:
 
 # Perform link checks on published HTML files
 docs-lint links:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.16-ruby-2.7.6-0bc327a4
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.16-ruby-2.7.6-0088e238
   stage: check
   cache: {}
   needs: []
