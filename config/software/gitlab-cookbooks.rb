@@ -50,4 +50,13 @@ build do
         mode: 0644,
         vars: { master_cookbook: cookbook_name }
   end
+
+  block do
+    if Build::Check.use_system_ssl?
+      solo_file = "#{install_dir}/embedded/cookbooks/solo.rb"
+      data = File.read(solo_file)
+      data.sub!(/^fips false/, 'fips true')
+      File.write(solo_file, data)
+    end
+  end
 end
