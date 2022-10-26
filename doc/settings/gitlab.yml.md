@@ -11,7 +11,7 @@ Some GitLab features can be customized through
 with Omnibus GitLab, you need to do so via `/etc/gitlab/gitlab.rb`. The
 translation works as follows. For a complete list of available options, visit the
 [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
-New installations starting from GitLab 7.6, will have
+New installations starting from GitLab 7.6 have
 all the options of the template listed in `/etc/gitlab/gitlab.rb` by default.
 
 In `gitlab.yml`, you will find structure like this:
