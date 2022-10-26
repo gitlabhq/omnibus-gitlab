@@ -191,7 +191,6 @@
 ### 3. Only ran on dev.gitlab.org
 .production_release_template: &production_release
   stage: package-and-image-release
-  resource_group: publish_package_$CI_COMMIT_SHA
   image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
   variables:
     INCLUDE_PACKAGECLOUD: "true"
