@@ -234,7 +234,7 @@ The error reported in the Grafana logs at `/var/log/gitlab/grafana/current` can 
 lvl=eror msg=login.OAuthLogin(NewTransportWithCode) logger=context userId=0 orgId=0 uname= error="Post \"https://gitlab.example.com/oauth/token\": x509: certificate signed by unknown authority"
 ```
 
-In this case, you must [install the self-signed GitLab certificate as trusted](ssl.md#install-custom-public-certificates).
+In this case, you must [install the self-signed GitLab certificate as trusted](ssl/index.md#install-custom-public-certificates).
 
 ### The redirect URI included is not valid
 

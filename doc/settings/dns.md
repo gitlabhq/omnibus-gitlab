@@ -16,7 +16,7 @@ domain name is:
 - Required for HTTPS.
 
   NOTE:
-  To take advantage of the [Let's Encrypt integration](ssl.md#enable-the-lets-encrypt-integration) (automatic SSL certificates),
+  To take advantage of the [Let's Encrypt integration](ssl/index.md#enable-the-lets-encrypt-integration) (automatic SSL certificates),
   your instance's domain name must be resolvable over the public internet.
 
 ## Use a name registrar
