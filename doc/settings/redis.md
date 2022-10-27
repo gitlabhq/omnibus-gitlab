@@ -178,7 +178,7 @@ To activate GitLab client support for SSL:
 ## SSL certificates
 
 If you're using custom SSL certificates for Redis, be sure to add them
-to the [trusted certificates](../settings/ssl.md#install-custom-public-certificates).
+to the [trusted certificates](../settings/ssl/index.md#install-custom-public-certificates).
 
 ## Renamed commands
 
@@ -248,7 +248,7 @@ check whether this is an issue:
    of the Redis server. The second line indicates the certificate is
    not properly trusted on this server. See the [previous section](#ssl-certificates).
 
-1. Verify that the SSL certificate is working via [these troubleshooting steps](ssl.md#custom-certificates-missing-or-skipped).
+1. Verify that the SSL certificate is working via [these troubleshooting steps](ssl/index.md#custom-certificates-missing-or-skipped).
 
 ### NOAUTH Authentication required
 

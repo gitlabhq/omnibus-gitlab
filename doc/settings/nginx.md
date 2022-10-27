@@ -37,12 +37,12 @@ or incompatible configuration may yield to unavailability of service.
 By default, Omnibus GitLab does not use HTTPS. If you want to enable HTTPS for
 `gitlab.example.com`, you can:
 
-- [Use Let's Encrypt for free, automated HTTPS](ssl.md#enable-the-lets-encrypt-integration).
-- [Manually configure HTTPS with your own certificates](ssl.md#configure-https-manually).
+- [Use Let's Encrypt for free, automated HTTPS](ssl/index.md#enable-the-lets-encrypt-integration).
+- [Manually configure HTTPS with your own certificates](ssl/index.md#configure-https-manually).
 
 NOTE:
 If you use a proxy, load balancer or some other external device to terminate SSL for the GitLab host name,
-see [External, proxy, and load balancer SSL termination](ssl.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination).
+see [External, proxy, and load balancer SSL termination](ssl/index.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination).
 
 ## Change the default proxy headers
 
@@ -646,7 +646,7 @@ systems `sudo service nginx restart`).
 
 Make sure you don't have the `proxy_set_header` configuration in
 `nginx['custom_gitlab_server_config']` settings and instead use the
-['proxy_set_headers'](ssl.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination) configuration in your `gitlab.rb` file.
+['proxy_set_headers'](ssl/index.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination) configuration in your `gitlab.rb` file.
 
 ### `javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure`
 
