@@ -19,6 +19,9 @@ class ConsulHelper
       'node_name' => node['consul']['node_name'] || node['fqdn'],
       'rejoin_after_leave' => true,
       'server' => false,
+      'telemetry' => {
+        'disable_compat_1.9' => false
+      }
     }
     .merge(encryption_configuration)
     .merge(ports_configuration)
@@ -43,15 +46,19 @@ class ConsulHelper
     verify_incoming = node['consul']['tls_verify_client']
 
     tls_cfg = {
-      'ca_file' => node['consul']['tls_ca_file'],
-      'cert_file' => node['consul']['tls_certificate_file'],
-      'key_file' => node['consul']['tls_key_file'],
-      'verify_outgoing' => true,
-      'verify_incoming' => verify_incoming.nil? ? server? : verify_incoming
+      'tls' => {
+        'defaults' => {
+          'ca_file' => node['consul']['tls_ca_file'],
+          'cert_file' => node['consul']['tls_certificate_file'],
+          'key_file' => node['consul']['tls_key_file'],
+          'verify_outgoing' => true,
+          'verify_incoming' => verify_incoming.nil? ? server? : verify_incoming
+        }.compact
+      }
     }
     tls_cfg['ports'] = { 'https': api_port('https') } if server?
 
-    tls_cfg.compact
+    tls_cfg
   end
 
   def configuration
@@ -191,10 +198,11 @@ class ConsulHelper
 
   def get_api(endpoint, header = nil)
     uri = URI(api_url)
+    use_ssl = uri.scheme == "https"
 
     Timeout.timeout(30, Timeout::Error, "Timed out waiting for Consul to start") do
       loop do
-        Net::HTTP.start(uri.host, uri.port) do |http|
+        Net::HTTP.start(uri.host, uri.port, use_ssl: use_ssl) do |http|
           http.request_get(endpoint, header) do |response|
             return yield response
           end
