@@ -24,5 +24,5 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - [Raspberry Pi](rpi.md)
 - [Redis](redis.md)
 - [SMTP](smtp.md)
-- [SSL](ssl.md)
+- [SSL](ssl/index.md)
 - [Image scaling](image_scaling.md)
