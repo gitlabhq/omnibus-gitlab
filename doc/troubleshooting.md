@@ -795,3 +795,170 @@ Ran /opt/gitlab/embedded/bin/sv restart /opt/gitlab/service/gitaly returned 1
 ```
 
 Refer to [issue 341573](https://gitlab.com/gitlab-org/gitlab/-/issues/341573) for more details.
+
+## Mirroring the GitLab `yum` repository with Pulp or Red Hat Satellite fails
+
+Direct mirroring of the Omnibus GitLab `yum` repositories located at <https://packages.gitlab.com/gitlab/> with [Pulp](https://pulpproject.org/) or
+[Red HatSatellite](https://www.redhat.com/technologies/management/satellite) fails
+when syncing. Different errors are caused by different software:
+
+- Pulp 2 or Satellite < 6.10 fails with `"Malformed repository: metadata is specified for different set of packages in filelists.xml and in other.xml"` error.
+- Satellite 6.10 fails with `"pkgid"` error.
+- Pulp 3 or Satellite > 6.10 seems to succeed, but only the repository metadata is synced.
+
+These sync failures are caused by issues with the metadata in the GitLab `yum`
+mirror repository. This metadata includes a `filelists.xml.gz` file that
+normally includes a list of files for every RPM in the repository. The GitLab
+`yum` repository leaves this file mostly empty to work around a size issue that
+would be caused if the file was fully populated.
+
+Each GitLab RPM contains an enormous number of files, which when multiplied by
+the large number of RPMs in the repository, would result in a huge
+`filelists.xml.gz` file if it was fully populated. Because of storage and build
+constraints, we create the file but do not populate it. The empty file causes
+Pulp and RedHat Satellite (which uses Pulp) repository mirroring of the file to
+fail.
+
+Refer to [issue 2766](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/2766) for details.
+
+### Work around the issue
+
+To work around the issue:
+
+1. Use an alternative RPM repository mirroring tool like `reposync` or
+`createrepo` to make a local copy of the official GitLab `yum` repository. These
+tools recreate the repository metadata in the local data, which includes
+creating a fully-populated `filelists.xml.gz` file.
+1. Point Pulp or Satellite at the local mirror.
+
+### Local mirror example
+
+The following is an example of how to do local mirroring. The example uses:
+
+- [Apache](https://httpd.apache.org/) as the web server for the repository.
+- [`reposync`](https://dnf-plugins-core.readthedocs.io/en/latest/reposync.html)
+  and [`createrepo`](http://createrepo.baseurl.org/) to sync the GitLab
+  repository to the local mirror. This local mirror can then be used as a source
+  for Pulp or RedHat Satellite. You can use other tools like
+  [Cobbler](https://cobbler.github.io/) as well.
+
+In this example:
+
+- The local mirror is running on a `RHEL 8`, `Rocky 8`, or `AlmaLinux 8` system.
+- The host name used for the web-server is `mirror.example.com`.
+- Pulp 3 syncs from the local mirror.
+- Mirroring is of the [GitLab Enterprise Edition repository](https://packages.gitlab.com/gitlab/gitlab-ee).
+
+#### Create and configure an Apache server
+
+The following example shows how to install and configure a basic Apache 2
+server to host one or more Yum repository mirrors.
+Consult the [Apache](https://httpd.apache.org/) documentation for details on
+configuring and securing your web server.
+
+1. Install `httpd`:
+
+   ```shell
+   sudo dnf install httpd
+   ```
+
+1. Add a `Directory` stanza to `/etc/httpd/conf/httpd.conf`:
+
+   ```apache
+   <Directory “/var/www/html/repos“>
+   Options All Indexes FollowSymLinks
+   Require all granted
+   </Directory>
+   ```
+
+1. Complete the `httpd` configuration:
+
+   ```shell
+   sudo rm -f /etc/httpd/conf.d/welcome.conf
+   sudo mkdir /var/www/html/repos
+   sudo systemctl enable httpd --now
+   ```
+
+#### Get the mirrored Yum repository URL
+
+1. Install the GitLab repository `yum` configuration file:
+
+   ```shell
+   curl "https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh" | sudo bash
+   sudo dnf config-manager --disable gitlab_gitlab-ee gitlab_gitlab-ee-source
+   ```
+
+1. Get the repository URL:
+
+   ```shell
+   sudo dnf config-manager --dump gitlab_gitlab-ee | grep baseurl
+   baseurl = https://packages.gitlab.com/gitlab/gitlab-ee/el/8/x86_64
+   ```
+
+   You use the contents of `baseurl` as the source of the local mirror. For example,
+   `https://packages.gitlab.com/gitlab/gitlab-ee/el/8/x86_64`.
+
+#### Create the local mirror
+
+1. Install the `createrepo` package:
+
+   ```shell
+   sudo dnf install createrepo
+   ```
+
+1. Run `reposync` to copy RPMs to the local mirror:
+
+   ```shell
+   sudo dnf reposync --arch x86_64 --repoid=gitlab_gitlab-ee --download-path=/var/www/html/repos --newest-only
+   ```
+
+   The `--newest-only` option only downloads the latest RPM. If you omit this
+   option, all RPMs in the repo (approximately 1 GB each) are downloaded.
+
+1. Run `createrepo` to recreate the repository metadata:
+
+   ```shell
+   sudo createrepo -o /var/www/html/repos/gitlab_gitlab-ee /var/www/html/repos/gitlab_gitlab-ee
+   ```
+
+The local mirror repository should now be available at
+<http://mirror.example.com/repos/gitlab_gitlab-ee/>.
+
+#### Update the local mirror
+
+Your local mirror should be updated periodically to get new RPMs as new GitLab
+versions are released. One way of doing this is using `cron`.
+
+Create `/etc/cron.daily/sync-gitlab-mirror` with the following contents:
+
+```shell
+#!/bin/sh
+
+dnf reposync --arch x86_64 --repoid=gitlab_gitlab-ee --download-path=/var/www/html/repos --newest-only --delete
+createrepo -o /var/www/html/repos/gitlab_gitlab-ee /var/www/html/repos/gitlab_gitlab-ee
+```
+
+The `--delete` option used in the `dnf reposync` command deletes RPMs in the
+local mirror that are no longer present in the corresponding GitLab repository.
+
+#### Using the local mirror
+
+1. Create the Pulp `repository` and `remote`:
+
+   ```shell
+   pulp rpm repository create --retain-package-versions=1 --name "gitlab-ee"
+   pulp rpm remote create --name gitlab-ee --url http://mirror.example.com/repos/gitlab_gitlab-ee/ --policy immediate
+   pulp rpm repository update --name gitlab-ee --remote gitlab-ee
+   ```
+
+1. Sync the repository:
+
+   ```shell
+   pulp rpm repository sync --name gitlab-ee
+   ```
+
+   This command must be run periodically to update the local mirror with changes
+   to the GitLab repository.
+
+After the repository is synced, you can create a publication and distribution to
+make it available. See <https://docs.pulpproject.org/pulp_rpm> for details.
