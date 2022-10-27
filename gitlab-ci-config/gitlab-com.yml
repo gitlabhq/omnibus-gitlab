@@ -603,25 +603,37 @@ letsencrypt-test:
 
 RAT:
   stage: trigger-qa
-  image: "${RUBY_IMAGE}"
-  allow_failure: true
-  script:
-    - bundle exec rake qa:rat:trigger
+  variables:
+    PACKAGE_URL: ${RAT_PACKAGE_URL}
+    REFERENCE_ARCHITECTURE: ${RAT_REFERENCE_ARCHITECTURE}
+    QA_IMAGE: ${QA_IMAGE}
+  trigger:
+    project: 'gitlab-org/distribution/reference-architecture-tester'
+    branch: 'master'
+    strategy: depend
+    forward:
+      pipeline_variables: false
+      yaml_variables: true
   rules:
     - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
       when: manual
+      allow_failure: true
   needs:
     - job: Trigger:package
       artifacts: false
+    - job: generate-facts
+      artifacts: true
 
 RAT:FIPS:
   extends: RAT
   variables:
-    USE_SYSTEM_SSL: "true"
-    RAT_REFERENCE_ARCHITECTURE: "omnibus-gitlab-mrs-fips-ubuntu"
+    PACKAGE_URL: ${RAT_FIPS_PACKAGE_URL}
+    REFERENCE_ARCHITECTURE: ${RAT_FIPS_REFERENCE_ARCHITECTURE}
   needs:
     - job: Trigger:package:fips
       artifacts: false
+    - job: generate-facts
+      artifacts: true
 
 GET:Geo:
   extends: .trigger-pipeline
