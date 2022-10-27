@@ -3,6 +3,9 @@ require 'chef_helper'
 RSpec.describe 'consul' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
   let(:consul_conf) { '/var/opt/gitlab/consul/config.json' }
+  let(:consul_conf_chef_file) { chef_run.file(consul_conf) }
+  let(:consul_conf_file_content) { ChefSpec::Renderer.new(chef_run, consul_conf_chef_file).content }
+  let(:consul_conf_json) { JSON.parse(consul_conf_file_content) }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -245,72 +248,34 @@ RSpec.describe 'consul' do
         }
       end
     end
+  end
 
-    describe 'secure configuration' do
-      context 'client mode' do
-        it 'use tls for outgoing' do
+  describe 'TLS configuration' do
+    context 'in client mode' do
+      context 'by default' do
+        before do
           stub_gitlab_rb(
             consul: {
               enable: true,
-              use_tls: true,
-              tls_ca_file: '/fake/ca.crt.pem',
+              use_tls: true
             }
           )
-
-          expect(chef_run).to render_file(consul_conf).with_content { |content|
-            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
-            expect(content).to match(%r{"verify_outgoing":true})
-            expect(content).to match(%r{"verify_incoming":false})
-            expect(content).not_to match(%r{"https":8501})
-            expect(content).not_to match(%r{"cert_file":})
-            expect(content).not_to match(%r{"key_file":})
-          }
         end
 
-        it 'use tls client authentication' do
-          stub_gitlab_rb(
-            consul: {
-              enable: true,
-              use_tls: true,
-              tls_ca_file: '/fake/ca.crt.pem',
-              tls_certificate_file: '/fake/client.crt.pem',
-              tls_key_file: '/fake/client.key.pem'
+        it 'verifies outgoing connections only' do
+          expected_output = {
+            'defaults' => {
+              'verify_incoming' => false,
+              'verify_outgoing' => true
             }
-          )
-
-          expect(chef_run).to render_file(consul_conf).with_content { |content|
-            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
-            expect(content).to match(%r{"cert_file":"/fake/client.crt.pem"})
-            expect(content).to match(%r{"key_file":"/fake/client.key.pem"})
-            expect(content).to match(%r{"verify_outgoing":true})
-            expect(content).to match(%r{"verify_incoming":false})
-            expect(content).not_to match(%r{"https":8501})
           }
+
+          expect(consul_conf_json['tls']).to eq(expected_output)
         end
+      end
 
-        it 'use tls for incoming and outgoing' do
-          stub_gitlab_rb(
-            consul: {
-              enable: true,
-              use_tls: true,
-              tls_ca_file: '/fake/ca.crt.pem',
-              tls_certificate_file: '/fake/server.crt.pem',
-              tls_key_file: '/fake/server.key.pem',
-              https_port: 8501,
-            }
-          )
-
-          expect(chef_run).to render_file(consul_conf).with_content { |content|
-            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
-            expect(content).to match(%r{"cert_file":"/fake/server.crt.pem"})
-            expect(content).to match(%r{"key_file":"/fake/server.key.pem"})
-            expect(content).to match(%r{"verify_outgoing":true})
-            expect(content).to match(%r{"verify_incoming":false})
-            expect(content).to match(%r{"https":8501})
-          }
-        end
-
-        it 'use tls for incoming and outgoing and verify incoming' do
+      context 'with user specified values' do
+        before do
           stub_gitlab_rb(
             consul: {
               enable: true,
@@ -322,64 +287,194 @@ RSpec.describe 'consul' do
               https_port: 8501
             }
           )
+        end
 
-          expect(chef_run).to render_file(consul_conf).with_content { |content|
-            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
-            expect(content).to match(%r{"cert_file":"/fake/server.crt.pem"})
-            expect(content).to match(%r{"key_file":"/fake/server.key.pem"})
-            expect(content).to match(%r{"verify_outgoing":true})
-            expect(content).to match(%r{"verify_incoming":true})
-            expect(content).to match(%r{"https":8501})
+        it 'verifies incoming and outgoing connections' do
+          expected_output = {
+            'defaults' => {
+              'verify_incoming' => true,
+              'verify_outgoing' => true,
+              'ca_file' => '/fake/ca.crt.pem',
+              'cert_file' => '/fake/server.crt.pem',
+              'key_file' => '/fake/server.key.pem',
+            }
           }
+
+          expect(consul_conf_json['ports']).to eq({ 'https' => 8501 })
+          expect(consul_conf_json['tls']).to eq(expected_output)
+        end
+      end
+    end
+
+    context 'in server mode' do
+      context 'by default' do
+        before do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+              use_tls: true,
+              configuration: {
+                server: true
+              }
+            }
+          )
+        end
+
+        it 'verifies outgoing and incoming connections' do
+          expected_output = {
+            'defaults' => {
+              'verify_incoming' => true,
+              'verify_outgoing' => true
+            }
+          }
+
+          expect(consul_conf_json['tls']).to eq(expected_output)
         end
       end
 
-      context 'server mode' do
-        it 'use tls for incoming and outgoing and verify incoming by default' do
+      context 'with user specified values' do
+        before do
           stub_gitlab_rb(
             consul: {
               enable: true,
-              configuration: { server: true },
-              use_tls: true,
-              tls_ca_file: '/fake/ca.crt.pem',
-              tls_certificate_file: '/fake/server.crt.pem',
-              tls_key_file: '/fake/server.key.pem'
-            }
-          )
-
-          expect(chef_run).to render_file(consul_conf).with_content { |content|
-            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
-            expect(content).to match(%r{"cert_file":"/fake/server.crt.pem"})
-            expect(content).to match(%r{"key_file":"/fake/server.key.pem"})
-            expect(content).to match(%r{"verify_outgoing":true})
-            expect(content).to match(%r{"verify_incoming":true})
-            expect(content).to match(%r{"https":8501})
-          }
-        end
-
-        it 'use tls for incoming and outgoing without verifying incoming' do
-          stub_gitlab_rb(
-            consul: {
-              enable: true,
-              configuration: { server: true },
               use_tls: true,
               tls_ca_file: '/fake/ca.crt.pem',
               tls_certificate_file: '/fake/server.crt.pem',
               tls_key_file: '/fake/server.key.pem',
-              tls_verify_client: false
+              tls_verify_client: false,
+              https_port: 8501
             }
           )
+        end
 
-          expect(chef_run).to render_file(consul_conf).with_content { |content|
-            expect(content).to match(%r{"ca_file":"/fake/ca.crt.pem"})
-            expect(content).to match(%r{"cert_file":"/fake/server.crt.pem"})
-            expect(content).to match(%r{"key_file":"/fake/server.key.pem"})
-            expect(content).to match(%r{"verify_outgoing":true})
-            expect(content).to match(%r{"verify_incoming":false})
-            expect(content).to match(%r{"https":8501})
+        it 'verifies outgoing connection only' do
+          expected_output = {
+            'defaults' => {
+              'verify_incoming' => false,
+              'verify_outgoing' => true,
+              'ca_file' => '/fake/ca.crt.pem',
+              'cert_file' => '/fake/server.crt.pem',
+              'key_file' => '/fake/server.key.pem',
+            }
           }
+
+          expect(consul_conf_json['ports']).to eq({ 'https' => 8501 })
+          expect(consul_conf_json['tls']).to eq(expected_output)
         end
       end
+    end
+
+    context 'using both dedicated consul TLS configuration settings and general configuration hash' do
+      before do
+        stub_gitlab_rb(
+          consul: {
+            enable: true,
+            use_tls: true,
+            tls_ca_file: '/fake/ca.crt.pem',
+            tls_certificate_file: '/fake/server.crt.pem',
+            tls_key_file: '/fake/server.key.pem',
+            tls_verify_client: false,
+            https_port: 8501,
+            configuration: {
+              tls: {
+                defaults: {
+                  cert_file: '/foo/server.crt',
+                  key_file: '/foo/server.key',
+                  ca_file: '/foo/ca.crt'
+                }
+              }
+            }
+          }
+        )
+      end
+
+      it 'uses the settings given in general configuration hash' do
+        expected_output = {
+          'defaults' => {
+            'verify_incoming' => false,
+            'verify_outgoing' => true,
+            'ca_file' => '/foo/ca.crt',
+            'cert_file' => '/foo/server.crt',
+            'key_file' => '/foo/server.key',
+          }
+        }
+
+        expect(consul_conf_json['tls']).to eq(expected_output)
+      end
+
+      context 'using deprecated settings' do
+        before do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+              use_tls: true,
+              configuration: {
+                cert_file: '/foo/server.crt',
+                key_file: '/foo/server.key',
+                ca_file: '/foo/ca.crt'
+              }
+            }
+          )
+        end
+
+        it 'generates the configuration file properly' do
+          expected_output = {
+            'defaults' => {
+              'verify_incoming' => false,
+              'verify_outgoing' => true,
+              'ca_file' => '/foo/ca.crt',
+              'cert_file' => '/foo/server.crt',
+              'key_file' => '/foo/server.key',
+            }
+          }
+
+          expect(consul_conf_json['tls']).to eq(expected_output)
+        end
+
+        it 'generates deprecation notices' do
+          chef_run
+
+          expect_logged_deprecation(%r{`consul\['configuration'\]\['ca_file'\]` has been deprecated.*`consul\['configuration'\]\['tls'\]\['defaults'\]\['ca_file'\]`})
+          expect_logged_deprecation(%r{`consul\['configuration'\]\['cert_file'\]` has been deprecated.*`consul\['configuration'\]\['tls'\]\['defaults'\]\['cert_file'\]`})
+          expect_logged_deprecation(%r{`consul\['configuration'\]\['key_file'\]` has been deprecated.*`consul\['configuration'\]\['tls'\]\['defaults'\]\['key_file'\]`})
+        end
+      end
+    end
+  end
+
+  describe 'using deprecated ACL token settings' do
+    before do
+      stub_gitlab_rb(
+        consul: {
+          enable: true,
+          configuration: {
+            acl: {
+              tokens: {
+                master: 'foo',
+                agent_master: 'bar'
+              }
+            }
+          }
+        }
+      )
+    end
+
+    it 'generates the configuration file properly' do
+      expected_output = {
+        'tokens' => {
+          'initial_management' => 'foo',
+          'agent_recovery' => 'bar'
+        }
+      }
+
+      expect(consul_conf_json['acl']).to eq(expected_output)
+    end
+
+    it 'generates deprecation notices' do
+      chef_run
+
+      expect_logged_deprecation(%r{`consul\['configuration'\]\['acl'\]\['tokens'\]\['master'\]` has been deprecated.*`consul\['configuration'\]\['acl'\]\['tokens'\]\['initial_management'\]`})
+      expect_logged_deprecation(%r{`consul\['configuration'\]\['acl'\]\['tokens'\]\['agent_master'\]` has been deprecated.*`consul\['configuration'\]\['acl'\]\['tokens'\]\['agent_recovery'\]`})
     end
   end
 end
