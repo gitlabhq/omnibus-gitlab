@@ -15,7 +15,10 @@
 #
 
 name 'consul'
-version = Gitlab::Version.new('consul', 'v1.9.6')
+
+# NOTE: If updating this version to 1.13 or higher, remove `disable_compat_1.9`
+# flag from Consul configuration in ConsulHelper
+version = Gitlab::Version.new('consul', 'v1.12.5')
 default_version version.print(false)
 
 license 'MPL-2.0'

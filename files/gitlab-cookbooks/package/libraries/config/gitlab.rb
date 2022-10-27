@@ -53,7 +53,7 @@ module Gitlab
   attribute('pgbouncer')
   attribute('repmgr')
   attribute('repmgrd')
-  attribute('consul')
+  attribute('consul').use { Consul }
   attribute('spamcheck')
   attribute('patroni').use { Patroni }
   attribute('gitaly').use { Gitaly }
