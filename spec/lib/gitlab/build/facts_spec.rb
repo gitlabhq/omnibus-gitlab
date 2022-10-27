@@ -88,6 +88,8 @@ RSpec.describe Build::Facts do
       stub_env_var('QA_TESTS', '')
       stub_env_var('ALLURE_JOB_NAME', '')
       stub_env_var('GITLAB_QA_OPTIONS', '')
+      stub_env_var('PACKAGE_URL', 'https://example.com/gitlab.deb')
+      stub_env_var('FIPS_PACKAGE_URL', 'https://example.com/gitlab-fips.deb')
     end
 
     it 'returns correct variables' do
@@ -99,6 +101,10 @@ RSpec.describe Build::Facts do
         ALLURE_JOB_NAME=
         GITLAB_QA_OPTIONS=
         KNAPSACK_GENERATE_REPORT=true
+        RAT_REFERENCE_ARCHITECTURE=omnibus-gitlab-mrs
+        RAT_FIPS_REFERENCE_ARCHITECTURE=omnibus-gitlab-mrs-fips-ubuntu
+        RAT_PACKAGE_URL=https://example.com/gitlab.deb
+        RAT_FIPS_PACKAGE_URL=https://example.com/gitlab-fips.deb
       ]
 
       expect(described_class.qa_trigger_vars).to eq(result)
