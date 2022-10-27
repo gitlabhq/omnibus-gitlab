@@ -210,14 +210,14 @@ module Build
         http = Net::HTTP.new(uri.hostname, uri.port)
         http.use_ssl = true
         res = http.request(req)
-        JSON.parse(res.body)
+        JSON.parse(res.body) if res.code == '200'
       end
 
-      def fetch_artifact_url(project_id, pipeline_id)
+      def fetch_artifact_url(project_id, pipeline_id, fips: Build::Check.use_system_ssl?)
         job_name = 'Trigger:package'
-        job_name = "#{job_name}:fips" if Build::Check.use_system_ssl?
+        job_name = "#{job_name}:fips" if fips
 
-        output = get_api("projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
+        output = get_api("projects/#{project_id}/pipelines/#{pipeline_id}/jobs") || {}
         output.map { |job| job['id'] if job['name'] == job_name }.compact.max
       end
 
@@ -225,15 +225,17 @@ module Build
         get_api("projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
       end
 
-      def triggered_build_package_url
+      def triggered_build_package_url(fips: Build::Check.use_system_ssl?)
         project_id = Gitlab::Util.get_env('CI_PROJECT_ID')
         pipeline_id = Gitlab::Util.get_env('CI_PIPELINE_ID')
         return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
 
         id = fetch_artifact_url(project_id, pipeline_id)
 
+        return unless id
+
         folder = 'ubuntu-focal'
-        folder = "#{folder}_fips" if Build::Check.use_system_ssl?
+        folder = "#{folder}_fips" if fips
 
         "https://gitlab.com/api/v4/projects/#{Gitlab::Util.get_env('CI_PROJECT_ID')}/jobs/#{id}/artifacts/pkg/#{folder}/gitlab.deb"
       end
