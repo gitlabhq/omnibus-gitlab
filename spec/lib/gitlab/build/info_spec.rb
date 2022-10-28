@@ -237,20 +237,6 @@ RSpec.describe Build::Info do
     end
   end
 
-  describe '.major_minor_version_and_rails_ref' do
-    it 'return minor and major version components plus the rails ref' do
-      allow(ENV).to receive(:[]).with('CI_COMMIT_TAG').and_return('12.0.12345+5159f2949cb.59c9fa631')
-
-      expect(described_class.major_minor_version_and_rails_ref).to eq('12.0-5159f2949cb')
-    end
-
-    it 'raises an error if the commit tag is invalid' do
-      allow(ENV).to receive(:[]).with('CI_COMMIT_TAG').and_return('xyz')
-
-      expect { described_class.major_minor_version_and_rails_ref }.to raise_error(RuntimeError, /Invalid auto-deploy version 'xyz'/)
-    end
-  end
-
   describe '.deploy_env' do
     before do
       allow(ENV).to receive(:[]).with('AUTO_DEPLOY_ENVIRONMENT').and_return('ad')

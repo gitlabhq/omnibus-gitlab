@@ -116,18 +116,6 @@ module Build
           .gsub(/(\A-+|-+\z)/, '')
       end
 
-      def major_minor_version_and_rails_ref
-        version_reg = /^(?<major>\d+)\.(?<minor>\d+)\.\d+\+(?<railsref>\w+)\.\w+$/
-        match = Gitlab::Util.get_env('CI_COMMIT_TAG').match(version_reg)
-        raise "Invalid auto-deploy version '#{Gitlab::Util.get_env('CI_COMMIT_TAG')}'" unless match
-
-        major = match['major']
-        minor = match['minor']
-        rails_ref = match['railsref']
-
-        "#{major}.#{minor}-#{rails_ref}"
-      end
-
       def previous_version
         # Get the second latest git tag
         previous_tag = Info.latest_stable_tag(level: 2)
