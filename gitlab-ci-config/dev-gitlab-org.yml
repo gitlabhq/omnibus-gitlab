@@ -511,7 +511,7 @@ Docker-QA:
   retry: 1
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG)_BUILD_PIPELINE$/'
 
 ###########################################################
 ## Upload and deploy to staging or preprod for GitLab.com
