@@ -91,18 +91,6 @@ RSpec.describe 'qa', type: :rake do
 
         Rake::Task['qa:push:staging'].invoke
       end
-
-      it 'pushes staging auto-deploy images correctly' do
-        allow(ENV).to receive(:[]).with('CI').and_return('true')
-        allow(ENV).to receive(:[]).with('CI_COMMIT_TAG').and_return('12.0.12345+5159f2949cb.59c9fa631')
-        allow(Build::Info).to receive(:current_git_tag).and_return('12.0.12345+5159f2949cb.59c9fa631')
-
-        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with('12.0-5159f2949cb')
-        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with('5159f2949cb')
-        expect(Build::QAImage).to receive(:tag_and_push_to_gitlab_registry).with(commit_sha)
-
-        Rake::Task['qa:push:staging'].invoke
-      end
     end
   end
 end
