@@ -60,6 +60,7 @@ variables:
   QA_BRANCH: 'master'
   ISSUE_BOT_LABELS_EXTRA: "group::distribution"
   BUNDLER_VERSION: "2.3.22"
+  GET_GEO_TAG: "0.4.0"
 
 ### For services that need a docker daemon
 .docker_job: &docker_job

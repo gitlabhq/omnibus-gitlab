@@ -80,7 +80,6 @@ Layout/SpaceAroundOperators:
   Exclude:
     - 'files/gitlab-ctl-commands/lib/gitlab_ctl/upgrade_check.rb'
     - 'files/gitlab-ctl-commands/lib/gitlab_ctl/util.rb'
-    - 'lib/gitlab/build/get/geo/trigger.rb'
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
