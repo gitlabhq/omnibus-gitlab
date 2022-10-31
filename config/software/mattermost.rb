@@ -17,11 +17,10 @@
 #
 
 name 'mattermost'
-# TODO: Remove special handling of `bundlestats.json` when version below is upgraded
-default_version '7.3.0'
+default_version '7.4.0'
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
-       sha256: '47602e67b457a4871fd459f32a67f44e3353e4152989157eced2ad3bff5f634b'
+       sha256: '530118ced6f0f2bf9f3ae98cfec43bf1f2a0a35a52913ba60c0203fadacd9b10'
 relative_path 'mattermost'
 
 license_name = 'GITLAB-MATTERMOST-COMPILED-LICENSE.txt'
@@ -41,9 +40,7 @@ build do
   copy 'templates', "#{install_dir}/embedded/service/mattermost/templates"
   copy 'i18n', "#{install_dir}/embedded/service/mattermost/i18n"
   copy 'fonts', "#{install_dir}/embedded/service/mattermost/fonts"
-  # Copy everything in client directory except `bundlestats.json` file
-  # TODO: Remove when version is upgraded to 7.3.1
-  sync 'client', "#{install_dir}/embedded/service/mattermost/client", exclude: %w(bundlestats.json)
+  copy 'client', "#{install_dir}/embedded/service/mattermost/client"
   copy 'config/config.json', "#{install_dir}/embedded/service/mattermost/config.json.template"
   copy 'prepackaged_plugins', "#{install_dir}/embedded/service/mattermost/prepackaged_plugins"
 
