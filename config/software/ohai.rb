@@ -32,6 +32,10 @@ build do
   patch source: "license/add-notice-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
+  # Install a known good version of chef-config to workaround
+  # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7267
+  gem "install chef-config --version '17.10.19' --no-document", env: env
+
   gem 'install ohai' \
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
