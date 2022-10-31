@@ -12,7 +12,7 @@ Docker images with the necessary build tools for building `omnibus-gitlab` packa
 are in the [`GitLab Omnibus Builder`](https://gitlab.com/gitlab-org/gitlab-omnibus-builder)
 project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-builder/container_registry).
 
-1. [Install Docker](https://docs.Docker.com/engine/installation/).
+1. [Install Docker](https://docs.docker.com/engine/install/).
 
     > Containers need access to 4GB of memory to complete builds. Consult the documentation
     > for your container runtime. Docker for Mac and Docker for Windows are known to set

@@ -1291,7 +1291,7 @@ This prevents GitLab from sending any outgoing mail. You can follow the instruct
 around this depending on your cloud provider:
 
 - AWS: [How do I remove the restriction on port 25 from my Amazon EC2 instance or AWS Lambda function?](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-port-25-throttle/)
-- Azure: [Troubleshoot outbound SMTP connectivity problems in Azure](https://docs.microsoft.com/en-us/azure/virtual-network/troubleshoot-outbound-smtp-connectivity)
+- Azure: [Troubleshoot outbound SMTP connectivity problems in Azure](https://learn.microsoft.com/en-us/azure/virtual-network/troubleshoot-outbound-smtp-connectivity)
 - GCP: [Sending email from an instance](https://cloud.google.com/compute/docs/tutorials/sending-mail)
 
 ### Wrong version number when using SSL/TLS

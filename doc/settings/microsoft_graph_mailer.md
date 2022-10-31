@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 > [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/8259) in GitLab 15.5.
 
-If you would rather send application emails using [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/api/user-sendmail)
+If you would rather send application emails using [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0&tabs=http)
 with [OAuth 2.0 client credentials flow](https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow),
 add the following configuration information to `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
 
