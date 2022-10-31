@@ -37,7 +37,7 @@ For a complete list of settings, see the [README](../index.md#configuring) file.
   - You require SSL certificates for the domain used for container registry.
 - [Enabling GitLab Pages](https://docs.gitlab.com/ee/administration/pages/).
   - If you want HTTPS enabled, you must get wildcard certificates.
-- [Enabling Elasticsearch](https://docs.gitlab.com/ee/integration/elasticsearch.html).
+- [Enabling Elasticsearch](https://docs.gitlab.com/ee/integration/advanced_search/elasticsearch.html).
 - [GitLab Mattermost](https://docs.gitlab.com/ee/integration/mattermost/) Set up the Mattermost messaging app that ships with Omnibus GitLab package.
 - [GitLab Prometheus](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html)
   Set up the Prometheus monitoring included in the Omnibus GitLab package.
