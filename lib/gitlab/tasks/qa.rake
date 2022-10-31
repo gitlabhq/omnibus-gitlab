@@ -6,7 +6,6 @@ require_relative '../build/info'
 require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
 require_relative '../build/rat'
-require_relative '../build/get'
 require_relative "../util.rb"
 require 'json'
 
@@ -96,17 +95,6 @@ namespace :qa do
     task :tag do
       Gitlab::Util.section('qa:rat:validate') do
         Build::RAT::TagPipeline.invoke!.wait!(timeout: 3600 * 4)
-      end
-    end
-  end
-
-  namespace :get do
-    namespace :geo do
-      desc 'Trigger a GET Geo validation'
-      task :trigger do
-        Gitlab::Util.section('qa:get:geo:validate') do
-          Build::Get::Geo::TriggerPipeline.invoke!.wait!(timeout: 3600 * 4)
-        end
       end
     end
   end

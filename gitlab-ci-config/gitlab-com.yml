@@ -636,12 +636,27 @@ RAT:FIPS:
       artifacts: true
 
 GET:Geo:
-  extends: .trigger-pipeline
+  stage: trigger-qa
+  variables:
+    ENVIRONMENT_ACTION: 'tmp-env'
+    QA_IMAGE: ${QA_IMAGE}
+    GITLAB_DEB_DOWNLOAD_URL: ${RAT_PACKAGE_URL}
+  trigger:
+    project: 'gitlab-org/geo-team/geo-ci'
+    branch: $GET_GEO_TAG
+    strategy: depend
+    forward:
+      pipeline_variables: false
+      yaml_variables: true
   rules:
     - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
       when: manual
-  script:
-    - bundle exec rake qa:get:geo:trigger
+      allow_failure: true
+  needs:
+    - job: Trigger:package
+      artifacts: false
+    - job: generate-facts
+      artifacts: true
 
 create_omnibus_manifest:
   extends: .trigger-package-cache
