@@ -16,7 +16,7 @@
 
 name 'pcre2'
 
-version = Gitlab::Version.new('pcre2', 'pcre2-10.37')
+version = Gitlab::Version.new('pcre2', 'pcre2-10.40')
 default_version version.print(false)
 display_version version.print(false).delete_prefix('pcre2-')
 
@@ -34,6 +34,8 @@ source git: version.remote
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  env['CFLAGS'] << ' -std=c99'
+
   update_config_guess
 
   command "./autogen.sh", env: env
@@ -41,10 +43,8 @@ build do
   command './configure' \
           " --prefix=#{install_dir}/embedded" \
           ' --disable-cpp' \
-          ' --enable-utf' \
-          ' --enable-unicode-properties' \
           ' --enable-jit' \
-          ' --enable-pcretest-libedit', env: env
+          ' --enable-pcre2test-libedit', env: env
 
   make "-j #{workers}", env: env
   make 'install', env: env
