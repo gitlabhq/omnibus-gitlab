@@ -134,6 +134,6 @@ To build packages for other operating systems:
    to `true` to use a commit from the GitLab repository instead of GitLab-FOSS.
 
 1. Push your branch to the release mirror and check the
-   [pipelines](https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines).
+   [pipelines](https://dev.gitlab.org/gitlab/omnibus-gitlab/-/pipelines).
 
 1. The pipeline builds packages for all supported operating systems and a Docker image.
