@@ -69,6 +69,13 @@ No changes.
 - [Enable Style/GlobalVars cop through all files in RuboCop](gitlab-org/omnibus-gitlab@db7ad34d52fe0844be1cf7e02e7fc04a465c7271) ([merge request](gitlab-org/omnibus-gitlab!6371))
 - [Remove license patch for removed awesome_print gem](gitlab-org/omnibus-gitlab@3e3fcf4a50c89f7f008dce7c16fafd1b922cfd1a) ([merge request](gitlab-org/omnibus-gitlab!6370))
 
+## 15.4.4 (2022-11-02)
+
+### Security (2 changes)
+
+- [Upgrade pcre2 to 10.40](gitlab-org/security/omnibus-gitlab@c751b4b9569350a109876544400b29fc6c8ce7e4) ([merge request](gitlab-org/security/omnibus-gitlab!249))
+- [Upgrade curl to 7.85.0](gitlab-org/security/omnibus-gitlab@8cfcfb3747d46c43f7e5c2fb1fec107609a32515) ([merge request](gitlab-org/security/omnibus-gitlab!246))
+
 ## 15.4.3 (2022-10-19)
 
 No changes.
