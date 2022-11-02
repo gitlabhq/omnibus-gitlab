@@ -127,6 +127,13 @@ No changes.
 - [Replace byebug and pry](gitlab-org/omnibus-gitlab@6764d7ab3c4925a157fe09ff1ba1d92d4f23c742) ([merge request](gitlab-org/omnibus-gitlab!6240))
 - [Use HTTPS instead of HTTP for pkg-config-lite](gitlab-org/omnibus-gitlab@525cd1994d06d7f6304715338553a870085a15ca) ([merge request](gitlab-org/omnibus-gitlab!6252))
 
+## 15.3.5 (2022-11-02)
+
+### Security (2 changes)
+
+- [Upgrade pcre2 to 10.40](gitlab-org/security/omnibus-gitlab@9ad83001cbc8927c6a8f6af941f8985714482951) ([merge request](gitlab-org/security/omnibus-gitlab!248))
+- [Upgrade curl to 7.85.0](gitlab-org/security/omnibus-gitlab@c3af4488a448b32ac4abbbb273437af4476348c9) ([merge request](gitlab-org/security/omnibus-gitlab!245))
+
 ## 15.3.4 (2022-09-29)
 
 ### Security (3 changes)
