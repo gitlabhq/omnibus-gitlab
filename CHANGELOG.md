@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.5.2 (2022-11-02)
+
+### Security (2 changes)
+
+- [Upgrade pcre2 to 10.40](gitlab-org/security/omnibus-gitlab@849947f198888e89a4a9fe2498e16b0544272bfd) ([merge request](gitlab-org/security/omnibus-gitlab!250))
+- [Upgrade curl to 7.85.0](gitlab-org/security/omnibus-gitlab@f2d8212264ef716dc2de606807a5cc15320578f1) ([merge request](gitlab-org/security/omnibus-gitlab!247))
+
 ## 15.5.1 (2022-10-24)
 
 No changes.
@@ -62,6 +69,13 @@ No changes.
 - [Enable Style/GlobalVars cop through all files in RuboCop](gitlab-org/omnibus-gitlab@db7ad34d52fe0844be1cf7e02e7fc04a465c7271) ([merge request](gitlab-org/omnibus-gitlab!6371))
 - [Remove license patch for removed awesome_print gem](gitlab-org/omnibus-gitlab@3e3fcf4a50c89f7f008dce7c16fafd1b922cfd1a) ([merge request](gitlab-org/omnibus-gitlab!6370))
 
+## 15.4.4 (2022-11-02)
+
+### Security (2 changes)
+
+- [Upgrade pcre2 to 10.40](gitlab-org/security/omnibus-gitlab@c751b4b9569350a109876544400b29fc6c8ce7e4) ([merge request](gitlab-org/security/omnibus-gitlab!249))
+- [Upgrade curl to 7.85.0](gitlab-org/security/omnibus-gitlab@8cfcfb3747d46c43f7e5c2fb1fec107609a32515) ([merge request](gitlab-org/security/omnibus-gitlab!246))
+
 ## 15.4.3 (2022-10-19)
 
 No changes.
@@ -112,6 +126,13 @@ No changes.
 - [Update aws-sdk-ec2 and aws-sdk-marketplacecatalog](gitlab-org/omnibus-gitlab@cb7b423577f890de04502214272a6c5cba1f4aec) ([merge request](gitlab-org/omnibus-gitlab!6257))
 - [Replace byebug and pry](gitlab-org/omnibus-gitlab@6764d7ab3c4925a157fe09ff1ba1d92d4f23c742) ([merge request](gitlab-org/omnibus-gitlab!6240))
 - [Use HTTPS instead of HTTP for pkg-config-lite](gitlab-org/omnibus-gitlab@525cd1994d06d7f6304715338553a870085a15ca) ([merge request](gitlab-org/omnibus-gitlab!6252))
+
+## 15.3.5 (2022-11-02)
+
+### Security (2 changes)
+
+- [Upgrade pcre2 to 10.40](gitlab-org/security/omnibus-gitlab@9ad83001cbc8927c6a8f6af941f8985714482951) ([merge request](gitlab-org/security/omnibus-gitlab!248))
+- [Upgrade curl to 7.85.0](gitlab-org/security/omnibus-gitlab@c3af4488a448b32ac4abbbb273437af4476348c9) ([merge request](gitlab-org/security/omnibus-gitlab!245))
 
 ## 15.3.4 (2022-09-29)
 
