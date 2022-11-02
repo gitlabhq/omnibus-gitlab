@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.5.2 (2022-11-02)
+
+### Security (2 changes)
+
+- [Upgrade pcre2 to 10.40](gitlab-org/security/omnibus-gitlab@849947f198888e89a4a9fe2498e16b0544272bfd) ([merge request](gitlab-org/security/omnibus-gitlab!250))
+- [Upgrade curl to 7.85.0](gitlab-org/security/omnibus-gitlab@f2d8212264ef716dc2de606807a5cc15320578f1) ([merge request](gitlab-org/security/omnibus-gitlab!247))
+
 ## 15.5.1 (2022-10-24)
 
 No changes.
