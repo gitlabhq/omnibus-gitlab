@@ -132,7 +132,6 @@
   extends: .tag_template
   variables:
     USE_SYSTEM_SSL: "true"
-  allow_failure: true
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
@@ -173,7 +172,6 @@
   variables:
     USE_SYSTEM_SSL: "true"
     INCLUDE_PACKAGECLOUD: "true"
-  allow_failure: true
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
@@ -211,7 +209,6 @@
   variables:
     USE_SYSTEM_SSL: "true"
     INCLUDE_PACKAGECLOUD: "true"
-  allow_failure: true
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
