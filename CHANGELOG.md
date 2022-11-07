@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.5.3 (2022-11-07)
+
+### Changed (1 change)
+
+- [Bump Container Registry to v3.60.1-gitlab](gitlab-org/omnibus-gitlab@ecf2ce33ac249ac251b7cbea44a1dd54c5ae6ed3) ([merge request](gitlab-org/omnibus-gitlab!6490))
+
 ## 15.5.2 (2022-11-02)
 
 ### Security (2 changes)
