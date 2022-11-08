@@ -756,3 +756,19 @@ Select one of the following options to fix:
   wget https://gitlab.com/gitlab-org/omnibus-gitlab/-/raw/a9d6b020f81d18d778fb502c21b2c8f2265cabb4/files/gitlab-selinux/rhel/7/gitlab-13.5.0-gitlab-shell.pp
   semodule -i gitlab-13.5.0-gitlab-shell.pp
   ```
+
+### `Branch 'branch_name' was not found in this project's repository` when Web IDE and external NGINX are used
+
+If you get this error, check your NGINX configuration file if you have a trailing slash in `proxy_pass` and remove it:
+
+1. Edit your NGINX configuration file:
+
+   ```plaintext
+   proxy_pass https://1.2.3.4;
+   ```
+
+1. Restart NGINX:
+
+   ```shell
+   sudo systemctl restart nginx
+   ```
