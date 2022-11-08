@@ -20,7 +20,7 @@ module Geo
       puts task.stdout.strip.color(:red) if task.error?
 
       query = run_query('SELECT pg_wal_replay_pause();')
-      raise PsqlError, "Unable to pause postgres replication #{query.stdout.strip}" if query.error?
+      raise PsqlError, "Unable to pause postgres replication #{query.stderr.strip}" if query.error?
 
       puts '* Replication paused'.color(:green)
     end
@@ -29,7 +29,7 @@ module Geo
       puts '* Resume replication'.color(:green)
 
       query = run_query('SELECT pg_wal_replay_resume();')
-      raise PsqlError, "Unable to resume postgres replication #{query.stdout.strip}" if query.error?
+      raise PsqlError, "Unable to resume postgres replication #{query.stderr.strip}" if query.error?
 
       task = run_task('geo:replication:resume')
       raise RakeError, "Unable to resume replication from primary #{task.stdout.strip}" if task.error?
