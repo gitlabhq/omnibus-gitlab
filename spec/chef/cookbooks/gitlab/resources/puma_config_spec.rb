@@ -23,7 +23,8 @@ RSpec.describe 'puma_config' do
         expect(content).to match(%r(^directory '/var/opt/gitlab/gitlab-rails/working'))
         expect(content).to match(%r(^require_relative "/opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/cluster/lifecycle_events"$))
         expect(content).to match(/^options = { workers: 2 }$/)
-        expect(content).to match(%r(Gitlab::Cluster::PumaWorkerKillerInitializer.start\(options\)))
+        expect(content).to match(%r(puma_per_worker_max_memory_mb))
+        expect(content).to match(%r(Gitlab::Cluster::PumaWorkerKillerInitializer.start\(options, \*\*args\)))
         expect(content).to match(/^preload_app!$/)
         expect(content).to match(%r(^require_relative "/opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/puma_logging/json_formatter"$))
       }
@@ -45,7 +46,6 @@ RSpec.describe 'puma_config' do
 
     it 'renders puma.rb file' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
-        expect(content).to match(%r(Gitlab::Cluster::PumaWorkerKillerInitializer.start\(options, puma_per_worker_max_memory_mb: 1000\)))
         expect(content).to match(%r(rackup '/opt/custom/gitlab/embedded/service/gitlab-rails))
       }
     end

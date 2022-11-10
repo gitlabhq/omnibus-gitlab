@@ -18,7 +18,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
       'EXECJS_RUNTIME' => 'Disabled',
       'TZ' => ':/etc/localtime',
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
-      'SSL_CERT_FILE' => '/opt/gitlab/embedded/ssl/cert.pem'
+      'SSL_CERT_FILE' => '/opt/gitlab/embedded/ssl/cert.pem',
+      'PUMA_WORKER_MAX_MEMORY' => nil
     }
   end
 
@@ -430,6 +431,22 @@ RSpec.describe 'gitlab::gitlab-rails' do
             )
           )
         end
+      end
+    end
+
+    context 'when puma per_worker_max_memory_mb is configured' do
+      before do
+        stub_gitlab_rb(puma: { per_worker_max_memory_mb: 1200 })
+      end
+
+      it 'creates necessary env variable files' do
+        expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitlab-rails/env').with_variables(
+          default_vars.merge(
+            {
+              'PUMA_WORKER_MAX_MEMORY' => 1200
+            }
+          )
+        )
       end
     end
 
