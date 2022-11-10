@@ -80,7 +80,12 @@ options = { workers: <%= @worker_processes %> }
 
 before_fork do
   enable_puma_worker_killer = !Gitlab::Utils.to_boolean(ENV['DISABLE_PUMA_WORKER_KILLER'])
-  Gitlab::Cluster::PumaWorkerKillerInitializer.start(options<% unless @per_worker_max_memory_mb.nil? %>, puma_per_worker_max_memory_mb: <%= @per_worker_max_memory_mb %><% end %>) if enable_puma_worker_killer
+
+  if enable_puma_worker_killer
+    args = {}
+    args[:puma_per_worker_max_memory_mb] = ENV['PUMA_WORKER_MAX_MEMORY'].to_i if ENV['PUMA_WORKER_MAX_MEMORY']
+    Gitlab::Cluster::PumaWorkerKillerInitializer.start(options, **args)
+  end
 
   # Signal application hooks that we're about to fork
   Gitlab::Cluster::LifecycleEvents.do_before_fork
