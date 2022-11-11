@@ -79,8 +79,12 @@ module Gitlab
     end
 
     def read_version_from_file
+      path_to_build_facts_file = "build_facts/#{@software}_version"
       path_to_version_file = COMPONENTS_FILES[@software]
-      if path_to_version_file
+
+      if File.exist?(path_to_build_facts_file)
+        File.read(path_to_build_facts_file).chomp
+      elsif path_to_version_file
         filepath = File.expand_path(path_to_version_file, @project_root)
         File.read(filepath).chomp
       else

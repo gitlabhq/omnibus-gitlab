@@ -182,6 +182,55 @@ RSpec.describe Gitlab::Version do
     end
   end
 
+  describe :read_version_from_file do
+    context 'when build facts exist' do
+      before do
+        allow(::File).to receive(:exist?).with(/build_facts.*_version/).and_return(true)
+        allow(::File).to receive(:read).with(/build_facts.*_version/).and_return('version-from-build-facts')
+        allow(::File).to receive(:read).with(/.*VERSION/).and_return('version-from-version-file')
+      end
+
+      it 'uses the version from build_facts' do
+        components = %w[
+          gitlab-rails
+          gitlab-rails-ee
+          gitlab-shell
+          gitlab-pages
+          gitaly
+          gitlab-elasticsearch-indexer
+          gitlab-kas
+        ]
+
+        components.each do |software|
+          expect(Gitlab::Version.new(software).read_version_from_file).to eq('version-from-build-facts')
+        end
+      end
+    end
+
+    context 'when build facts do not exist' do
+      before do
+        allow(::File).to receive(:exist?).with(/build_facts.*_version/).and_return(false)
+        allow(::File).to receive(:read).with(/.*VERSION/).and_return('version-from-version-file')
+      end
+
+      it 'uses the version from version files' do
+        components = %w[
+          gitlab-rails
+          gitlab-rails-ee
+          gitlab-shell
+          gitlab-pages
+          gitaly
+          gitlab-elasticsearch-indexer
+          gitlab-kas
+        ]
+
+        components.each do |software|
+          expect(Gitlab::Version.new(software).read_version_from_file).to eq('version-from-version-file')
+        end
+      end
+    end
+  end
+
   describe :print do
     subject { Gitlab::Version.new(software, version) }
 

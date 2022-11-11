@@ -3,6 +3,80 @@ require 'gitlab/build/facts'
 require 'gitlab/build/gitlab_image'
 
 RSpec.describe Build::Facts do
+  let(:version_manifest_contents) do
+    <<-EOS
+    {
+      "manifest_format": 2,
+      "software": {
+        "gitlab-rails": {
+          "locked_version": "6f286d7717f419489a08a9918621f438256e397b",
+          "locked_source": {
+            "git": "https://gitlab.com/gitlab-org/gitlab-foss.git"
+          },
+          "source_type": "git",
+          "described_version": "master",
+          "display_version": "master",
+          "vendor": null,
+          "license": "MIT"
+        },
+        "gitaly": {
+          "locked_version": "b55578ec476e8bc8ecd9775ee7e9960b52e0f6e0",
+          "locked_source": {
+            "git": "https://gitlab.com/gitlab-org/gitaly"
+          },
+          "source_type": "git",
+          "described_version": "master",
+          "display_version": "master",
+          "vendor": null,
+          "license": "MIT"
+        },
+        "gitlab-shell": {
+          "locked_version": "264d63e81cbf08e3ae75e84433b8d09af15f351f",
+          "locked_source": {
+            "git": "https://gitlab.com/gitlab-org/gitlab-shell.git"
+          },
+          "source_type": "git",
+          "described_version": "main",
+          "display_version": "main",
+          "vendor": null,
+          "license": "MIT"
+        },
+        "gitlab-pages": {
+          "locked_version": "b0cb1f0c0783db2f5176301e6528fe41e1b42abf",
+          "locked_source": {
+            "git": "https://gitlab.com/gitlab-org/gitlab-pages.git"
+          },
+          "source_type": "git",
+          "described_version": "master",
+          "display_version": "master",
+          "vendor": null,
+          "license": "MIT"
+        },
+        "gitlab-kas": {
+          "locked_version": "bab63c42d061bd8610fc681d7852df3c51eac515",
+          "locked_source": {
+            "git": "https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git"
+          },
+          "source_type": "git",
+          "described_version": "master",
+          "display_version": "master",
+          "vendor": null,
+          "license": "MIT"
+        }
+      }
+    }
+    EOS
+  end
+  let(:component_shas) do
+    {
+      'gitlab-rails' => '6f286d7717f419489a08a9918621f438256e397b',
+      'gitaly' => 'b55578ec476e8bc8ecd9775ee7e9960b52e0f6e0',
+      'gitlab-shell' => '264d63e81cbf08e3ae75e84433b8d09af15f351f',
+      'gitlab-pages' => 'b0cb1f0c0783db2f5176301e6528fe41e1b42abf',
+      'gitlab-kas' => 'bab63c42d061bd8610fc681d7852df3c51eac515'
+    }
+  end
+
   before do
     allow(ENV).to receive(:[]).and_call_original
   end
@@ -10,6 +84,7 @@ RSpec.describe Build::Facts do
   describe '.generate' do
     it 'calls necessary methods' do
       expect(described_class).to receive(:generate_tag_files)
+      expect(described_class).to receive(:generate_version_files)
       expect(described_class).to receive(:generate_env_file)
 
       described_class.generate
@@ -27,6 +102,72 @@ RSpec.describe Build::Facts do
       expect(File).to receive(:write).with('build_facts/latest_tag', '14.7.0+rc42.ce.0')
 
       described_class.generate_tag_files
+    end
+  end
+
+  describe '.get_component_shas' do
+    context 'when version-manifest.json file does not exist' do
+      before do
+        allow(::File).to receive(:exist?).with('version-manifest.json').and_return(false)
+      end
+
+      it 'returns empty hash' do
+        expect(described_class.get_component_shas).to eq({})
+      end
+    end
+
+    context 'when version-manifest.json file exists' do
+      before do
+        allow(::File).to receive(:exist?).with('version-manifest.json').and_return(true)
+        allow(::File).to receive(:read).with('version-manifest.json').and_return(version_manifest_contents)
+      end
+
+      it 'returns proper component shas hash' do
+        expect(described_class.get_component_shas).to eq(component_shas)
+      end
+    end
+  end
+
+  describe '.generate_version_files' do
+    context 'on tags' do
+      before do
+        allow(Build::Check).to receive(:on_tag?).and_return(true)
+      end
+
+      it 'does not generate version files as build facts' do
+        expect(described_class).not_to receive(:get_component_shas)
+
+        described_class.generate_version_files
+      end
+    end
+
+    context 'on stable branches' do
+      before do
+        allow(Build::Check).to receive(:on_tag?).and_return(false)
+        allow(Build::Check).to receive(:on_stable_branch?).and_return(true)
+      end
+
+      it 'does not generate version files as build facts' do
+        expect(described_class).not_to receive(:get_component_shas)
+
+        described_class.generate_version_files
+      end
+    end
+
+    context 'on feature branches' do
+      before do
+        allow(Build::Check).to receive(:on_tag?).and_return(false)
+        allow(Build::Check).to receive(:on_stable_branch?).and_return(false)
+        allow(described_class).to receive(:get_component_shas).and_return(component_shas)
+      end
+
+      it 'writes version files as build facts' do
+        component_shas.each do |component, version|
+          expect(::File).to receive(:write).with("build_facts/#{component}_version", version)
+        end
+
+        described_class.generate_version_files
+      end
     end
   end
 

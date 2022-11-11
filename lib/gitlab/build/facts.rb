@@ -3,6 +3,7 @@ module Build
     class << self
       def generate
         generate_tag_files
+        generate_version_files
         generate_env_file
       end
 
@@ -13,6 +14,31 @@ module Build
         ].each do |fact|
           content = Build::Info.send(fact) # rubocop:disable GitlabSecurity/PublicSend
           File.write("build_facts/#{fact}", content) unless content.nil?
+        end
+      end
+
+      def get_component_shas(version_manifest_file = 'version-manifest.json')
+        return {} unless File.exist?(version_manifest_file)
+
+        version_manifest = JSON.parse(File.read(version_manifest_file))
+        softwares = version_manifest['software']
+        results = {}
+        Gitlab::Version::COMPONENTS_ENV_VARS.keys.map do |component|
+          next unless softwares.key?(component)
+
+          results[component] = softwares[component]['locked_version']
+        end
+
+        results
+      end
+
+      def generate_version_files
+        # Do not build version facts for tags and stable branches because
+        # those jobs MUST use the VERSION files
+        return if Build::Check.on_tag? || Build::Check.on_stable_branch?
+
+        get_component_shas('build_facts/version-manifest.json').each do |component, sha|
+          File.write("build_facts/#{component}_version", sha) unless sha.nil?
         end
       end
 
