@@ -105,7 +105,7 @@ RSpec.describe Build::Image do
         stub_env_var('CI_PROJECT_ID', '1')
         stub_env_var('CI_PIPELINE_ID', '2')
         allow(Build::Info).to receive(:release_version).and_return('12.121.12-ce.1')
-        allow(Build::Info).to receive(:fetch_artifact_url).with('1', '2').and_return('1')
+        allow(Build::Info).to receive(:fetch_artifact_url).with('1', '2', fips: false).and_return('1')
       end
 
       describe 'for CE' do

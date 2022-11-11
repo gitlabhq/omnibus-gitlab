@@ -218,7 +218,7 @@ module Build
         pipeline_id = Gitlab::Util.get_env('CI_PIPELINE_ID')
         return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
 
-        id = fetch_artifact_url(project_id, pipeline_id)
+        id = fetch_artifact_url(project_id, pipeline_id, fips: fips)
 
         return unless id
 
