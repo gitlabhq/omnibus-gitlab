@@ -143,6 +143,8 @@ generate-facts:
   stage: prepare
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   script:
+    - mkdir -p build_facts
+    - bundle exec omnibus manifest gitlab -l nothing 2> /dev/null > build_facts/version-manifest.json
     - bundle exec rake build:generate_facts
   artifacts:
     paths:
@@ -156,6 +158,7 @@ generate-facts:
     - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
     - if: '$PIPELINE_TYPE == "DEPS_IO_VERSION_BUMP_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "DEPENDENCY_SCANNING_PIPELINE"'
     - when: never
   needs: []
 

@@ -658,21 +658,6 @@ GET:Geo:
     - job: generate-facts
       artifacts: true
 
-create_omnibus_manifest:
-  extends: .trigger-package-cache
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
-  stage: prepare
-  variables:
-    TERM: xterm-256color
-  script:
-    - bundle exec omnibus manifest gitlab -l nothing 2> /dev/null > version-manifest.json
-  rules:
-    - if: '$PIPELINE_TYPE == "DEPENDENCY_SCANNING_PIPELINE"'
-  artifacts:
-    expire_in: 7 days
-    paths:
-      - version-manifest.json
-
 dependency_scanning:
   image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.3.2"
   stage: package
@@ -681,12 +666,12 @@ dependency_scanning:
     NVD_DB_UPDATE: "true"
   before_script: []
   script:
-    - /gitlab-depscan.sh version-manifest.json
+    - /gitlab-depscan.sh build_facts/version-manifest.json
   rules:
     - if: '$PIPELINE_TYPE == "DEPENDENCY_SCANNING_PIPELINE"'
   allow_failure: true
   needs:
-    - create_omnibus_manifest
+    - generate-facts
   artifacts:
     expire_in: 7 days
     when: always

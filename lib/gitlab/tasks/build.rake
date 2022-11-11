@@ -116,16 +116,14 @@ namespace :build do
 
     Gitlab::Util.section('build:component_shas') do
       puts "#### SHAs of GitLab Components"
-      json_content = JSON.parse(File.read(version_manifest_file))
-      %w[gitlab-rails gitaly gitlab-pages gitlab-shell].each do |component|
-        puts "#{component} : #{json_content['software'][component]['locked_version']}"
+      Build::Facts.get_component_shas(version_manifest_file).each do |component, sha|
+        puts "#{component} : #{sha}"
       end
     end
   end
 
   desc 'Write build related facts to file'
   task :generate_facts do
-    FileUtils.rm_rf('build_facts')
     FileUtils.mkdir_p('build_facts')
 
     Build::Facts.generate
