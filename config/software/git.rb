@@ -73,6 +73,12 @@ build do
     build_options << "GIT_APPEND_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded"
   end
 
+  if Build::Check.is_auto_deploy_tag?
+    env['GIT_REPO_URL'] = Gitlab::Util.get_env('GITALY_GIT_REPO_URL') if Gitlab::Util.get_env('GITALY_GIT_REPO_URL')
+    env['GIT_VERSION_2_37_1'] = Gitlab::Util.get_env('GITALY_GIT_VERSION_2_37_1') if Gitlab::Util.get_env('GITALY_GIT_VERSION_2_37_1')
+    env['GIT_VERSION_2_38'] = Gitlab::Util.get_env('GITALY_GIT_VERSION_2_38') if Gitlab::Util.get_env('GITALY_GIT_VERSION_2_38')
+  end
+
   block do
     File.open(File.join(project_dir, 'config.mak'), 'a') do |file|
       file.print build_options.join("\n")
