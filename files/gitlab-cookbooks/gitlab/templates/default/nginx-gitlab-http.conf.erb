@@ -186,6 +186,10 @@ server { ## HTTPS server
   location ~ ^/api/v\d {
     proxy_pass http://gitlab-workhorse;
     proxy_intercept_errors off;
+    <% if @proxy_custom_buffer_size -%>
+    proxy_buffers 8 <%= @proxy_custom_buffer_size %>;
+    proxy_buffer_size <%= @proxy_custom_buffer_size %>;
+    <% end -%>
   }
 
   <% if node['monitoring']['grafana']['enable'] -%>
