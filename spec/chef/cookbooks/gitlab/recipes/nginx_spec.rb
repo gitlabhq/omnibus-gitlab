@@ -694,8 +694,16 @@ RSpec.describe 'nginx' do
         )
       end
 
-      it 'applies nginx proxy_custom_buffer_size settings' do
-        ['gitlab', 'mattermost', 'pages'].each do |conf|
+      it 'applies nginx proxy_custom_buffer_size settings for gitlab' do
+        # the proxy_buffers and proxy_buffer_size are written in two places for gitlab
+        expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
+          expect(content).to include('proxy_buffers 8 42k;').twice
+          expect(content).to include('proxy_buffer_size 42k;').twice
+        }
+      end
+
+      it 'applies nginx proxy_custom_buffer_size settings for mattermost and pages' do
+        ['mattermost', 'pages'].each do |conf|
           expect(chef_run).to render_file(http_conf[conf]).with_content { |content|
             expect(content).to include('proxy_buffers 8 42k;')
             expect(content).to include('proxy_buffer_size 42k;')
