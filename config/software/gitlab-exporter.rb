@@ -15,7 +15,7 @@
 #
 
 name 'gitlab-exporter'
-default_version '11.19.0'
+default_version '12.0.1'
 license 'MIT'
 license_file 'LICENSE'
 
