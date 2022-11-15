@@ -9,6 +9,16 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 NOTE:
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/index.html#checking-for-background-migrations-before-upgrading).
 
+## 15.6
+
+### PostgreSQL version updates
+
+In GitLab 15.6, the [PostgreSQL versions shipped with `omnibus-gitlab` packages](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html)
+have been upgraded to 12.12 and 13.8. Unless
+[explicitly opted out](../settings/database.md#automatic-restart-when-the-postgresql-version-changes),
+this can cause an automatic restart of the PostgreSQL service, and can
+potentially cause downtime.
+
 ## 15.0
 
 ### PostgreSQL version updates
