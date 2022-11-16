@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Omnibus GitLab logs **(FREE SELF)**
 
-GitLab includes an [advanced log system](https://docs.gitlab.com/ee/administration/logs.html) where every service and component within GitLab will output system logs. Here are the Omnibus configuration settings and tools for managing these logs.
+GitLab includes an [advanced log system](https://docs.gitlab.com/ee/administration/logs/index.html) where every service and component within GitLab will output system logs. Here are the Omnibus configuration settings and tools for managing these logs.
 
 ## Tail logs in a console on the server
 

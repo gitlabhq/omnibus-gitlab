@@ -761,7 +761,7 @@ If you have set `external_url` with underscores (for example `https://my_company
 - It will not be possible to open project's **Settings > CI/CD** page.
 - Runners will not pick up jobs and will fail with an error 500.
 
-If that's the case, [`production.log`](https://docs.gitlab.com/ee/administration/logs.html#productionlog) will contain the following error:
+If that's the case, [`production.log`](https://docs.gitlab.com/ee/administration/logs/index.html#productionlog) will contain the following error:
 
 ```plaintext
 Completed 500 Internal Server Error in 50ms (ActiveRecord: 4.9ms | Elasticsearch: 0.0ms | Allocations: 17672)
@@ -799,7 +799,7 @@ Refer to [issue 341573](https://gitlab.com/gitlab-org/gitlab/-/issues/341573) fo
 ## Mirroring the GitLab `yum` repository with Pulp or Red Hat Satellite fails
 
 Direct mirroring of the Omnibus GitLab `yum` repositories located at <https://packages.gitlab.com/gitlab/> with [Pulp](https://pulpproject.org/) or
-[Red HatSatellite](https://www.redhat.com/technologies/management/satellite) fails
+[Red Hat Satellite](https://www.redhat.com/en/technologies/management/satellite) fails
 when syncing. Different errors are caused by different software:
 
 - Pulp 2 or Satellite < 6.10 fails with `"Malformed repository: metadata is specified for different set of packages in filelists.xml and in other.xml"` error.
@@ -961,4 +961,4 @@ local mirror that are no longer present in the corresponding GitLab repository.
    to the GitLab repository.
 
 After the repository is synced, you can create a publication and distribution to
-make it available. See <https://docs.pulpproject.org/pulp_rpm> for details.
+make it available. See <https://docs.pulpproject.org/pulp_rpm/> for details.

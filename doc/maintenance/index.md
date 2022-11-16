@@ -106,8 +106,8 @@ the user or the `RAILS_ENV` environment variable; this is taken care of by the
 
 ## Starting a Rails console session
 
-This content has been moved to the
-[GitLab debugging tips documentation](https://docs.gitlab.com/ee/administration/troubleshooting/debug.html#starting-a-rails-console-session).
+For more information, see
+[Rails console](https://docs.gitlab.com/ee/administration/operations/rails_console.html#starting-a-rails-console-session).
 
 ## Starting a PostgreSQL superuser `psql` session
 
