@@ -75,7 +75,7 @@ DNS is causing a problem.
 
 ### Successful DNS query
 
-This example uses the [Public Cloudflare DNS resolver](https://www.cloudflare.com/learning/dns/what-is-1.1.1.1/) to ensure that the query is globally resolvable. However, other public resolvers like the [Google Public DNS resolver](https://developers.google.com/speed/public-dns) are also available.
+This example uses the [Public Cloudflare DNS resolver](https://www.cloudflare.com/en-gb/learning/dns/what-is-1.1.1.1/) to ensure that the query is globally resolvable. However, other public resolvers like the [Google Public DNS resolver](https://developers.google.com/speed/public-dns) are also available.
 
 ```shell
 $ dig registry.gitlab.com @1.1.1.1
@@ -129,7 +129,7 @@ gitlab.com.   3600 IN SOA diva.ns.cloudflare.com. dns.cloudflare.com. 2282080190
 ;; MSG SIZE  rcvd: 103
 ```
 
-In this example, the `status` is `NXDOMAIN`, and there is no `ANSWER SECTION`. The `SERVER` field tells you which DNS server was queried for the answer, in this case the [Public Cloudflare DNS resolver](https://www.cloudflare.com/learning/dns/what-is-1.1.1.1/).
+In this example, the `status` is `NXDOMAIN`, and there is no `ANSWER SECTION`. The `SERVER` field tells you which DNS server was queried for the answer, in this case the [Public Cloudflare DNS resolver](https://www.cloudflare.com/en-gb/learning/dns/what-is-1.1.1.1/).
 
 ### Use a wildcard DNS entry
 

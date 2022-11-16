@@ -215,15 +215,15 @@ end
 
 ## Determine and document how log rotation will be handled
 
-In Omnibus, [log rotation](https://docs.gitlab.com/ee/administration/logs.html#log-rotation) for
+In Omnibus, [log rotation](https://docs.gitlab.com/ee/administration/logs/index.html#log-rotation) for
 a given service can be handled by `logrotate`, `svlogd`, both or neither. The new service should
-be included in the [log rotation](https://docs.gitlab.com/ee/administration/logs.html#log-rotation)
+be included in the [log rotation](https://docs.gitlab.com/ee/administration/logs/index.html#log-rotation)
 table with an indication about what is responsible for managing and rotating the logs for that
 service. When adding a service to Omnibus GitLab, you should:
 
 - Ensure that log rotation is in place for the new service.
 - Open a merge request to have the new service added to
-  [the log rotation table](https://docs.gitlab.com/ee/administration/logs.html#log-rotation).
+  [the log rotation table](https://docs.gitlab.com/ee/administration/logs/index.html#log-rotation).
 
 If a new log is added that is not using `runit` (`svlogd`), the log must be manually
 added to the logrotate configuration. The
