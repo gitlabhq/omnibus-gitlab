@@ -660,7 +660,7 @@ GET:Geo:
 
 dependency_scanning:
   image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.3.2"
-  stage: package
+  stage: validate
   variables:
     REPORT_PATH: ./
     NVD_DB_UPDATE: "true"
@@ -669,6 +669,7 @@ dependency_scanning:
     - /gitlab-depscan.sh build_facts/version-manifest.json
   rules:
     - if: '$PIPELINE_TYPE == "DEPENDENCY_SCANNING_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
   allow_failure: true
   needs:
     - generate-facts
