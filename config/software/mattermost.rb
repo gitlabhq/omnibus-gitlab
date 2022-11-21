@@ -17,10 +17,10 @@
 #
 
 name 'mattermost'
-default_version '7.4.0'
+default_version '7.5.1'
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
-       sha256: '530118ced6f0f2bf9f3ae98cfec43bf1f2a0a35a52913ba60c0203fadacd9b10'
+       sha256: 'd934b4c9efc4008c47ddd966039e92c95e01cb5404888a16a947be112c5750d3'
 relative_path 'mattermost'
 
 license_name = 'GITLAB-MATTERMOST-COMPILED-LICENSE.txt'
