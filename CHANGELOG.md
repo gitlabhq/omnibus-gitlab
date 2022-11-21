@@ -3,6 +3,31 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.6.0 (2022-11-21)
+
+### Fixed (3 changes)
+
+- [Apply proxy_custom_buffer_size option to API location as well](gitlab-org/omnibus-gitlab@70756a8328537f203fe8223d6b02be13e95ce140) ([merge request](gitlab-org/omnibus-gitlab!6481))
+- [Fixed error logging for geo-replication-(pause|resume)](gitlab-org/omnibus-gitlab@6b49363b7ed43de19c26153cc9a9fb39d8fbdd3d) by @m.baur ([merge request](gitlab-org/omnibus-gitlab!6478))
+- [Conditionally enable FIPS auto-detection](gitlab-org/omnibus-gitlab@0136f38ff4237b4bf04855fc054b4e781f5c3d05) ([merge request](gitlab-org/omnibus-gitlab!6473))
+
+### Changed (4 changes)
+
+- [Update gitlab-exporter from 11.19.0 to 12.0.0](gitlab-org/omnibus-gitlab@1a9d1c5dbb7af52c181896ec75c8c99a6f7012c7) ([merge request](gitlab-org/omnibus-gitlab!6500))
+- [Update gitlab-org/container-registry from v3.60.1-gitlab to v3.60.2-gitlab](gitlab-org/omnibus-gitlab@2246b68c18d58e110fc7e63cc3f40ecc36b5a16d) ([merge request](gitlab-org/omnibus-gitlab!6506))
+- [Bump Container Registry to v3.60.1-gitlab](gitlab-org/omnibus-gitlab@b48b492d2effeccd03fea52a752a59a64e5261ae) ([merge request](gitlab-org/omnibus-gitlab!6489))
+- [Bump rspec and friends to 3.11 in omnibus](gitlab-org/omnibus-gitlab@6785e0a132e40e126a9c9028784a9dd11bfe9da5) ([merge request](gitlab-org/omnibus-gitlab!6498))
+
+### Security (2 changes)
+
+- [Upgrade curl to 7.85.0](gitlab-org/omnibus-gitlab@1f15b3922d6770061b40b5436a7990af7506e0bf)
+- [Upgrade pcre2 to 10.40](gitlab-org/omnibus-gitlab@88a5fda9018a184e407fb18e5ef3d0e29d8f3019)
+
+### Other (2 changes)
+
+- [Add Puma on_worker_shutdown hook](gitlab-org/omnibus-gitlab@856617e16df2003fdb82768c17165998adbd8ddb) ([merge request](gitlab-org/omnibus-gitlab!6508))
+- [Update Mattermost to 7.4.0](gitlab-org/omnibus-gitlab@a76ed1ffac36f6ab677c2c800460284a7dc9dc97) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6462))
+
 ## 15.5.4 (2022-11-11)
 
 No changes.
