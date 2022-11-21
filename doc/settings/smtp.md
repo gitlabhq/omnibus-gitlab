@@ -1265,6 +1265,21 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['gitlab_email_from'] = 'username@example.com'
 ```
 
+### Fastweb (fastweb.it)
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.fastwebnet.it"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "your_fastweb_fastmail_username@fastwebnet.it"
+gitlab_rails['smtp_password'] = "your_fastweb_fastmail_password"
+gitlab_rails['smtp_domain'] = "smtp.fastwebnet.it"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
