@@ -67,6 +67,16 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
       end
 
+      describe 'maximum_text_highlight_size_kilobytes setting' do
+        before do
+          stub_gitlab_rb(gitlab_rails: { extra_maximum_text_highlight_size_kilobytes: 128 })
+        end
+
+        it 'renders gitlab.yml with the provided value' do
+          expect(gitlab_yml[:production][:extra][:maximum_text_highlight_size_kilobytes]).to eq(128)
+        end
+      end
+
       context 'bizible' do
         context 'when true' do
           before do
