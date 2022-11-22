@@ -125,6 +125,9 @@ production: &base
     ## Impersonation settings
     impersonation_enabled: <%= @impersonation_enabled %>
 
+    ## Disable jQuery and CSS animations
+    disable_animations: <%= @disable_animations %>
+
     ## Application settings cache expiry in seconds. (default: 60)
     application_settings_cache_seconds: <%= @application_settings_cache_seconds %>
 
@@ -1090,6 +1093,12 @@ production: &base
     matomo_url: <%= quote(@extra_matomo_url) %>
     matomo_site_id: <%= quote(@extra_matomo_site_id) %>
     matomo_disable_cookies: <%= @extra_matomo_disable_cookies %>
+    <% end %>
+
+    <% if @extra_maximum_text_highlight_size_kilobytes %>
+    ## Maximum file size for syntax highlighting
+    ## https://docs.gitlab.com/ee/user/project/highlighting.html
+    maximum_text_highlight_size_kilobytes: <%= @extra_maximum_text_highlight_size_kilobytes %>
     <% end %>
 
   rack_attack:

@@ -225,5 +225,27 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    describe 'Disable Animations' do
+      context 'with default configuration' do
+        it 'render gitlab.yml with default value for disable_animations' do
+          expect(gitlab_yml[:production][:gitlab][:disable_animations]).to be false
+        end
+      end
+
+      context 'with user specified configuration' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              disable_animations: true
+            }
+          )
+        end
+
+        it 'render gitlab.yml with user specified value for disable_animations' do
+          expect(gitlab_yml[:production][:gitlab][:disable_animations]).to be true
+        end
+      end
+    end
   end
 end

@@ -474,6 +474,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Impersonation settings
 # gitlab_rails['impersonation_enabled'] = true
 
+### Disable jQuery and CSS animations
+# gitlab_rails['disable_animations'] = false
+
 ### Application settings cache expiry in seconds. (default: 60)
 # gitlab_rails['application_settings_cache_seconds'] = 60
 
@@ -672,6 +675,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['extra_matomo_url'] = '_your_matomo_url'
 # gitlab_rails['extra_matomo_site_id'] = '_your_matomo_site_id'
 # gitlab_rails['extra_matomo_disable_cookies'] = false
+# gitlab_rails['extra_maximum_text_highlight_size_kilobytes'] = 512
 
 ##! Docs: https://docs.gitlab.com/omnibus/settings/environment-variables.html
 # gitlab_rails['env'] = {
