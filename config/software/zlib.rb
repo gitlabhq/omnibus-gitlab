@@ -15,7 +15,7 @@
 #
 
 name 'zlib'
-version = Gitlab::Version.new('zlib', 'v1.2.12')
+version = Gitlab::Version.new('zlib', 'v1.2.13')
 default_version version.print(false)
 
 source git: version.remote
