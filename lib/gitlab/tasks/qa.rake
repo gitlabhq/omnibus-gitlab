@@ -12,7 +12,8 @@ require 'json'
 namespace :qa do
   desc "Build QA Docker image"
   task :build do
-    qa_build_target = Gitlab::Util.get_env('QA_BUILD_TARGET') || 'qa'
+    edition_build_target = Build::Check.is_ee? ? 'ee' : 'foss'
+    qa_build_target = Gitlab::Util.get_env('QA_BUILD_TARGET') || edition_build_target
     Gitlab::Util.section('qa:build') do
       DockerOperations.build(
         Build::QA.get_gitlab_repo,
