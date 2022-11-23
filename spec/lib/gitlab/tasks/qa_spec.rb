@@ -27,7 +27,7 @@ RSpec.describe 'qa', type: :rake do
         repo_path,
         'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce-qa',
         'latest',
-        buildargs: "{\"QA_BUILD_TARGET\":\"qa\"}",
+        buildargs: "{\"QA_BUILD_TARGET\":\"foss\"}",
         dockerfile: "qa/Dockerfile"
       )
 
