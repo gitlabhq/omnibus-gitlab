@@ -173,6 +173,14 @@ OpenSUSE-15.3-arm64-check:
   extends: .zypper-install
   tags:
   - docker-arm-builder
+OpenSUSE-15.4-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4:${BUILDER_IMAGE_REVISION}"
+  extends: .zypper-install
+OpenSUSE-15.4-arm64-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .zypper-install
+  tags:
+  - docker-arm-builder
 SLES-12.5-check:
   image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   extends:
