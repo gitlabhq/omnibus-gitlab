@@ -329,6 +329,14 @@ OpenSUSE-15.3-arm64-branch:
   extends: .branch_template
   tags:
   - docker-arm-builder
+OpenSUSE-15.4-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4:${BUILDER_IMAGE_REVISION}"
+  extends: .branch_template
+OpenSUSE-15.4-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .branch_template
+  tags:
+  - docker-arm-builder
 AmazonLinux-2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -609,6 +617,14 @@ OpenSUSE-15.3-arm64:
   extends: .tag_template
   tags:
   - docker-arm-builder
+OpenSUSE-15.4:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4:${BUILDER_IMAGE_REVISION}"
+  extends: .tag_template
+OpenSUSE-15.4-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .tag_template
+  tags:
+  - docker-arm-builder
 AmazonLinux-2:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
@@ -740,6 +756,20 @@ OpenSUSE-15.3-arm64-staging:
       optional: true
     - job: OpenSUSE-15.3-arm64-branch
       optional: true
+OpenSUSE-15.4-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: OpenSUSE-15.4
+      optional: true
+    - job: OpenSUSE-15.4-branch
+      optional: true
+OpenSUSE-15.4-arm64-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: OpenSUSE-15.4-arm64
+      optional: true
+    - job: OpenSUSE-15.4-arm64-branch
+      optional: true
 AmazonLinux-2-staging:
   extends: .staging_upload_template
   needs:
@@ -860,6 +890,14 @@ OpenSUSE-15.3-arm64-release:
   extends: .production_release_template
   needs:
     - OpenSUSE-15.3-arm64
+OpenSUSE-15.4-release:
+  extends: .production_release_template
+  needs:
+    - OpenSUSE-15.4
+OpenSUSE-15.4-arm64-release:
+  extends: .production_release_template
+  needs:
+    - OpenSUSE-15.4-arm64
 AmazonLinux-2-release:
   extends: .production_release_template
   needs:

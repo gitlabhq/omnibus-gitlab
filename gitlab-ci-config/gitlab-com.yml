@@ -399,6 +399,7 @@ Centos 8 knapsack: !reference [.knapsack]
 Debian 10 knapsack: !reference [.knapsack]
 Debian 11 knapsack: !reference [.knapsack]
 OpenSUSE 15.3 knapsack: !reference [.knapsack]
+OpenSUSE 15.4 knapsack: !reference [.knapsack]
 Ubuntu 16.04 knapsack: !reference [.knapsack]
 Ubuntu 18.04 knapsack: !reference [.knapsack]
 Ubuntu 20.04 knapsack: !reference [.knapsack]
@@ -474,6 +475,12 @@ OpenSUSE 15.3 specs :
   parallel: 6
   needs:
   - OpenSUSE 15.3 knapsack
+OpenSUSE 15.4 specs :
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse15.4"
+  extends: .chef_spec_template
+  parallel: 6
+  needs:
+  - OpenSUSE 15.4 knapsack
 AmazonLinux 2 specs :
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-amazonlinux2"
   extends: .chef_spec_template
