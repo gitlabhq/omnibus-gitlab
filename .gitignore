@@ -40,3 +40,5 @@ spec/examples.txt
 coverage/
 
 junit_rspec.xml
+
+support/packer/manifests

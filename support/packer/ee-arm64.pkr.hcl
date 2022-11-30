@@ -122,4 +122,10 @@ build {
     script           = "update-script-ee.sh"
   }
 
+  post-processor "manifest" {
+    output = "manifests/ee-arm64-manifest.json"
+    custom_data = {
+      name: "${var.ami_prefix}GitLab EE ${var.version} (ARM64)"
+    }
+  }
 }

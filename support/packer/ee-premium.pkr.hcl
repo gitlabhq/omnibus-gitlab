@@ -121,4 +121,10 @@ build {
     script           = "update-script-ee-premium.sh"
   }
 
+  post-processor "manifest" {
+    output = "manifests/ee-premium-manifest.json"
+    custom_data = {
+      name: "${var.ami_prefix}GitLab EE ${var.version} Premium"
+    }
+  }
 }
