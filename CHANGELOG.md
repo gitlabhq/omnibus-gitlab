@@ -3,6 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.5.5 (2022-11-30)
+
+### Security (7 changes)
+
+- [Bump PostgreSQL versions to 12.12 and 13.8](gitlab-org/security/omnibus-gitlab@9c8b3f88ebbbea3a3a9920141e7fa0f588cb5cf5) ([merge request](gitlab-org/security/omnibus-gitlab!278))
+- [Bump rsync to 3.2.7](gitlab-org/security/omnibus-gitlab@ba1291196ba1925e797a58e382ab2bb6781f0b4d) ([merge request](gitlab-org/security/omnibus-gitlab!255))
+- [Update zlib to 1.2.13](gitlab-org/security/omnibus-gitlab@a8dc7bb99475bf1a8ad3cf21e9b6c6ade367f00b) ([merge request](gitlab-org/security/omnibus-gitlab!270))
+- [Bump ncurses to 6.3-20220416 to patch against CVE-2022-2945](gitlab-org/security/omnibus-gitlab@bc212f47fa64361452b5ddf1465c20d051584068) ([merge request](gitlab-org/security/omnibus-gitlab!273))
+- [Bump Ruby version to 2.7.6](gitlab-org/security/omnibus-gitlab@e2a0966fb350efb0c790564fb0e83a9a8073e630) ([merge request](gitlab-org/security/omnibus-gitlab!276))
+- [Upgrade haxx/curl to 7.86.0](gitlab-org/security/omnibus-gitlab@2c0d26d49ff33ef458dbbccd208a806633e1be8a) ([merge request](gitlab-org/security/omnibus-gitlab!260))
+- [Update xmlsoft/libxml2 to version 2.10.3](gitlab-org/security/omnibus-gitlab@1381b7e8bd5b7015952ca87a97f76f5e7a190473) ([merge request](gitlab-org/security/omnibus-gitlab!263))
+
 ## 15.5.4 (2022-11-11)
 
 No changes.
