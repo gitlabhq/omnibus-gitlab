@@ -27,7 +27,7 @@ if Gitlab::Util.get_env('RUBY3_BUILD') == 'true'
 else
   # Follow the Ruby upgrade guidelines when changing the ruby version
   # link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
-  default_version '2.7.5'
+  default_version '2.7.6'
 end
 
 fips_enabled = Build::Check.use_system_ssl?
@@ -41,7 +41,7 @@ dependency 'libyaml'
 dependency 'libiconv'
 dependency 'jemalloc'
 
-version('2.7.5') { source sha256: '2755b900a21235b443bb16dadd9032f784d4a88f143d852bc5d154f22b8781f1' }
+version('2.7.6') { source sha256: 'e7203b0cc09442ed2c08936d483f8ac140ec1c72e37bb5c401646b7866cb5d10' }
 version('3.0.4') { source sha256: '70b47c207af04bce9acea262308fb42893d3e244f39a4abc586920a1c723722b' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
