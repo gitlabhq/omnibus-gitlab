@@ -126,6 +126,18 @@ No changes.
 - [Enable Style/GlobalVars cop through all files in RuboCop](gitlab-org/omnibus-gitlab@db7ad34d52fe0844be1cf7e02e7fc04a465c7271) ([merge request](gitlab-org/omnibus-gitlab!6371))
 - [Remove license patch for removed awesome_print gem](gitlab-org/omnibus-gitlab@3e3fcf4a50c89f7f008dce7c16fafd1b922cfd1a) ([merge request](gitlab-org/omnibus-gitlab!6370))
 
+## 15.4.6 (2022-11-30)
+
+### Security (7 changes)
+
+- [Bump PostgreSQL versions to 12.12 and 13.8](gitlab-org/security/omnibus-gitlab@ccdf562dfc14dcb9b81a68bb3adfbd9f7dedf0e8) ([merge request](gitlab-org/security/omnibus-gitlab!279))
+- [Bump rsync to 3.2.7](gitlab-org/security/omnibus-gitlab@d848e1890b81341dce7efb71afb8b57dd7fe3ab3) ([merge request](gitlab-org/security/omnibus-gitlab!254))
+- [Update zlib to 1.2.13](gitlab-org/security/omnibus-gitlab@897aebdd97adcf589a33cc8c7da64dcda6619385) ([merge request](gitlab-org/security/omnibus-gitlab!269))
+- [Bump ncurses to 6.3-20220416 to patch against CVE-2022-2945](gitlab-org/security/omnibus-gitlab@e971a0449829f49b0aea2a37c8c5bdb2e91e2eb7) ([merge request](gitlab-org/security/omnibus-gitlab!274))
+- [Bump Ruby version to 2.7.6](gitlab-org/security/omnibus-gitlab@c29547b207afb58375080a1b9457f010cb4f6b9a) ([merge request](gitlab-org/security/omnibus-gitlab!277))
+- [Upgrade haxx/curl to 7.86.0](gitlab-org/security/omnibus-gitlab@dab4c292e4e54d21c40ccdd329adb15b986364d0) ([merge request](gitlab-org/security/omnibus-gitlab!259))
+- [Update xmlsoft/libxml2 to version 2.10.3](gitlab-org/security/omnibus-gitlab@68c2da6d17f0b3ab7e36ce0b1474dfd7ce5a8cf3) ([merge request](gitlab-org/security/omnibus-gitlab!264))
+
 ## 15.4.5 (2022-11-15)
 
 No changes.
