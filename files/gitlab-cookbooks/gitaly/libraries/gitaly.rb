@@ -114,8 +114,24 @@ module Gitaly
       # included a value. The new format is an array of hashes with key and
       # value entries.
       gitaly_gitconfig = omnibus_gitconfig.map do |config|
-        key, value = config.split('=', 2)
-        { 'key' => key, 'value' => value }
+        # Split up the `foo.bar=value` to obtain the left-hand and right-hand sides of the assignment
+        section_subsection_and_key, value = config.split('=', 2)
+
+        # We need to split up the left-hand side. This can either be of the
+        # form `core.gc`, or of the form `http "http://example.com".insteadOf`.
+        # We thus split from the right side at the first dot we see.
+        key, section_and_subsection = section_subsection_and_key.reverse.split('.', 2)
+        key.reverse!
+
+        # And then we need to potentially split the section/subsection if we
+        # have `http "http://example.com"` now.
+        section, subsection = section_and_subsection.reverse!.split(' ', 2)
+        subsection&.gsub!(/\A"|"\Z/, '')
+
+        # So that we have finally split up the section, subsection, key and
+        # value. It is fine for the `subsection` to be `nil` here in case there
+        # is none.
+        { 'section' => section, 'subsection' => subsection, 'key' => key, 'value' => value }
       end
 
       return unless gitaly_gitconfig.any?
