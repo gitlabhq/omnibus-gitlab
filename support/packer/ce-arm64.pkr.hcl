@@ -125,4 +125,10 @@ build {
     script           = "update-script-ce.sh"
   }
 
+  post-processor "manifest" {
+    output = "manifests/ce-arm64-manifest.json"
+    custom_data = {
+      name: "${var.ami_prefix}GitLab CE ${var.version} (ARM64)"
+    }
+  }
 }
