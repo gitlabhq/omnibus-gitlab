@@ -161,3 +161,6 @@ spamcheck:
 grafana:
   remote: "git@dev.gitlab.org:omnibus-mirror/grafana.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/grafana.git"
+ncurses:
+  remote: "git@dev.gitlab.org:omnibus-mirror/ncurses.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/ncurses.git"
