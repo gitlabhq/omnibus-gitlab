@@ -15,18 +15,21 @@
 #
 
 name 'ncurses'
-default_version '6.3'
+
+# Commit with fix to CVE-2022-2945
+version = Gitlab::Version.new('ncurses', '4c9f63c460cb7134f142aa65f6866c175ed77605')
+
+default_version version.print(false)
+display_version '6.3-20220416'
+
+source git: version.remote
 
 license 'MIT'
-license_file 'LICENSE'
+license_file 'COPYING'
 
 skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
-
-version('6.3') { source sha256: '97fc51ac2b085d4cde31ef4d2c3122c21abc217e9090a43a30fc5ec21684e059', url: 'https://ftp.gnu.org/gnu/ncurses/ncurses-6.3.tar.gz' }
-
-relative_path "ncurses-#{version}"
 
 ########################################################################
 #
@@ -44,7 +47,6 @@ relative_path "ncurses-#{version}"
 ########################################################################
 
 build do
-  patch source: 'add-license-file.patch'
   env = with_standard_compiler_flags(with_embedded_path)
   env.delete('CPPFLAGS')
 
