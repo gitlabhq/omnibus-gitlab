@@ -239,6 +239,9 @@
   tags:
   - docker-builder
   cache: !reference [.tag-cache]
+  artifacts:
+    paths:
+      - support/packer/manifests
   needs:
     - Ubuntu-20.04
   retry: 1
