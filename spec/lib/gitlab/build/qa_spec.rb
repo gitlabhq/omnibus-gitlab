@@ -38,8 +38,10 @@ RSpec.describe Build::QA do
   describe '.checkout_gitlab_rails' do
     it 'calls the git command' do
       allow(Build::Info).to receive(:package).and_return("gitlab-ee")
-      allow(Build::Info).to receive(:gitlab_version).and_return("9.0.0")
       allow(Build::Check).to receive(:on_tag?).and_return(true)
+
+      allow(::File).to receive(:read).and_call_original
+      allow(::File).to receive(:read).with(%r{/VERSION$}).and_return("9.0.0")
       stub_is_auto_deploy(false)
 
       expect(described_class).to receive(:system).with(*%w[git --git-dir=/tmp/gitlab/.git --work-tree=/tmp/gitlab checkout --quiet v9.0.0])
@@ -50,16 +52,20 @@ RSpec.describe Build::QA do
 
   describe '.get_gitlab_rails_sha' do
     it 'returns the correct stable tag' do
-      allow(Build::Info).to receive(:gitlab_version).and_return("9.0.0")
       allow(Build::Check).to receive(:on_tag?).and_return(true)
+
+      allow(::File).to receive(:read).and_call_original
+      allow(::File).to receive(:read).with(%r{/VERSION$}).and_return("9.0.0")
       stub_is_auto_deploy(false)
 
       expect(Build::QA.get_gitlab_rails_sha).to eq("v9.0.0")
     end
 
     it 'returns the correct auto-deploy commit sha' do
-      allow(Build::Info).to receive(:gitlab_version).and_return("bebc7c1e290074863e0d2621b3a4c4c7bdb072ae")
       allow(Build::Check).to receive(:on_tag?).and_return(true)
+
+      allow(::File).to receive(:read).and_call_original
+      allow(::File).to receive(:read).with(%r{/VERSION$}).and_return("bebc7c1e290074863e0d2621b3a4c4c7bdb072ae")
       stub_is_auto_deploy(true)
 
       expect(Build::QA.get_gitlab_rails_sha).to eq("bebc7c1e290074863e0d2621b3a4c4c7bdb072ae")
