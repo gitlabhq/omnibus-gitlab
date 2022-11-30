@@ -325,6 +325,26 @@ RSpec.describe 'gitaly' do
       end
     end
 
+    context 'with Omnibus gitconfig containing subsections' do
+      let(:omnibus_gitconfig) do
+        {
+          'http "http://example.com"' => ['proxy = http://proxy.example.com'],
+        }
+      end
+
+      it 'writes the correct key' do
+        gitconfig_section = Regexp.new([
+          %r{\[\[git.config\]\]},
+          %r{key = "http.http://example.com.proxy"},
+          %r{value = "http://proxy.example.com"},
+        ].map(&:to_s).join('\s+'))
+
+        expect(chef_run).to render_file(config_path).with_content { |content|
+          expect(content).to match(gitconfig_section)
+        }
+      end
+    end
+
     context 'with Gitaly gitconfig' do
       let(:gitaly_gitconfig) do
         [
@@ -375,6 +395,63 @@ RSpec.describe 'gitaly' do
       it 'does not write a git.config section' do
         expect(chef_run).to render_file(config_path).with_content { |content|
           expect(content).not_to include("git.config")
+        }
+      end
+    end
+
+    context 'with sections' do
+      let(:gitaly_gitconfig) do
+        [
+          { section: 'core', key: 'fsckObjects', value: 'true' },
+          { section: 'core', key: 'somethingElse', value: 'true' },
+          { section: 'another', key: 'section', value: 'true' },
+        ]
+      end
+
+      it 'writes the correct keys' do
+        gitconfig_section = Regexp.new([
+          %r{\[\[git.config\]\]},
+          %r{key = "core.fsckObjects"},
+          %r{value = "true"},
+          %r{},
+          %r{\[\[git.config\]\]},
+          %r{key = "core.somethingElse"},
+          %r{value = "true"},
+          %r{},
+          %r{\[\[git.config\]\]},
+          %r{key = "another.section"},
+          %r{value = "true"},
+        ].map(&:to_s).join('\s+'))
+
+        expect(chef_run).to render_file(config_path).with_content { |content|
+          expect(content).to match(gitconfig_section)
+          expect(content).not_to include("overridden")
+        }
+      end
+    end
+
+    context 'with subsections' do
+      let(:gitaly_gitconfig) do
+        [
+          { section: 'http', subsection: 'http://example.com', key: 'insteadOf', value: 'http://rewritten.example.com' },
+          { key: 'http.http://another.example.com.insteadOf', value: 'http://rewritten.example.com' },
+        ]
+      end
+
+      it 'writes the correct keys' do
+        gitconfig_section = Regexp.new([
+          %r{\[\[git.config\]\]},
+          %r{key = "http.http://example.com.insteadOf"},
+          %r{value = "http://rewritten.example.com"},
+          %r{},
+          %r{\[\[git.config\]\]},
+          %r{key = "http.http://another.example.com.insteadOf"},
+          %r{value = "http://rewritten.example.com"},
+        ].map(&:to_s).join('\s+'))
+
+        expect(chef_run).to render_file(config_path).with_content { |content|
+          expect(content).to match(gitconfig_section)
+          expect(content).not_to include("overridden")
         }
       end
     end

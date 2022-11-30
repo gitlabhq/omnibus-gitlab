@@ -93,7 +93,7 @@ signing_key = '<%= @gpg_signing_key_path %>'
 <% if @gitconfig %>
   <% @gitconfig.each do |gitconfig| %>
 [[git.config]]
-key = "<%= gitconfig['key'] %>"
+key = "<%= [ gitconfig['section'], gitconfig['subsection'], gitconfig['key'] ].compact.join('.') %>"
 value = "<%= gitconfig['value'] %>"
 
   <% end %>
