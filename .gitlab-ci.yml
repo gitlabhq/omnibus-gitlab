@@ -168,23 +168,35 @@ generate-facts:
   image: "alpine"
   stage: notification_fail
 
+notify:slack-fail:
+  extends:
+    - .notify
+  script:
+    - ./support/notify_slack.sh "#g_distribution" "Build on \`$CI_COMMIT_REF_NAME\` failed! See <https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines/"$CI_PIPELINE_ID">"
+  when: on_failure
+  only:
+    - master@gitlab-org/omnibus-gitlab
+    - /.*-stable(-ee)?$/@gitlab-org/omnibus-gitlab
+  except:
+    - triggers@gitlab-org/omnibus-gitlab
+  dependencies: []
+
 notify:slack-fail:scheduled-master:
   extends:
     - .notify
   script:
     - ./support/notify_slack.sh "#qa-master" "☠️ Scheduled omnibus-build against master failed! ☠️ See $CI_PIPELINE_URL (triggered from $TOP_UPSTREAM_SOURCE_JOB)"
-  rules:
-    - if: '$TOP_UPSTREAM_SOURCE_JOB == null || $TOP_UPSTREAM_SOURCE_REF != "master"'
-      when: never
-    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
-      when: on_failure
+  only:
+    refs:
+      - pipelines@gitlab-org/build/omnibus-gitlab-mirror
+    variables:
+      - $TOP_UPSTREAM_SOURCE_JOB && $TOP_UPSTREAM_SOURCE_REF == 'master'
+  when: on_failure
 
 issue-bot:
   stage: notification_fail
   image: registry.gitlab.com/gitlab-org/distribution/issue-bot:latest
   script: /issue-bot
   rules:
-    - if: '$CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH'
-      when: never
-    - if: '$PIPELINE_TYPE == "PROTECTED_TEST_PIPELINE"'
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH && $CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab"'
       when: on_failure
