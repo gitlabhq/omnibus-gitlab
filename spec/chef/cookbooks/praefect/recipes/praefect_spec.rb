@@ -127,6 +127,7 @@ RSpec.describe 'praefect' do
       let(:ca_file) { '/path/to/ca_file' }
       let(:ca_path) { '/path/to/ca_path' }
       let(:read_timeout) { 123 }
+      let(:graceful_stop_timeout) { '3m' }
 
       before do
         stub_gitlab_rb(praefect: {
@@ -164,6 +165,7 @@ RSpec.describe 'praefect' do
                          reconciliation_histogram_buckets: reconciliation_histogram_buckets,
                          background_verification_verification_interval: '168h',
                          background_verification_delete_invalid_records: true,
+                         graceful_stop_timeout: graceful_stop_timeout,
                        },
                        gitlab_rails: {
                          internal_api_url: gitlab_url
@@ -273,7 +275,8 @@ RSpec.describe 'praefect' do
                   'ca_file' => '/path/to/ca_file',
                   'ca_path' => '/path/to/ca_path'
                 }
-              }
+              },
+              'graceful_stop_timeout' => graceful_stop_timeout
             }
           )
         }

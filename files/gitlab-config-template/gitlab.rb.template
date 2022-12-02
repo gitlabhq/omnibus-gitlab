@@ -2501,6 +2501,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # praefect['database_direct_sslcert'] = '/path/to/client-cert'
 # praefect['database_direct_sslkey'] = '/path/to/client-key'
 # praefect['database_direct_sslrootcert'] = '/path/to/rootcert'
+# praefect['graceful_stop_timeout'] = '1m'
 
 ##! Service name used to register Praefect as a Consul service
 # praefect['consul_service_name'] = 'praefect'
