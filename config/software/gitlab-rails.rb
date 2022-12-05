@@ -84,7 +84,11 @@ build do
 
   if Build::Check.use_system_ssl?
     env['CMAKE_FLAGS'] = OpenSSLHelper.cmake_flags
-    env['PKG_CONFIG_PATH'] = OpenSSLHelper.pkg_config_dirs
+    # We need to add /opt/gitlab/embedded/lib/pkgconfig for the gpgme gem since we manually install its
+    # dependencies. We can drop this once when any of the two issues are resolved:
+    # 1. https://github.com/ueno/ruby-gpgme/issues/167
+    # 2. https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7344
+    env['PKG_CONFIG_PATH'] = "#{OpenSSLHelper.pkg_config_dirs}:/opt/gitlab/embedded/lib/pkgconfig"
   end
 
   bundle "config set --local gemfile #{gitlab_bundle_gemfile}" if gitlab_bundle_gemfile != 'Gemfile'
