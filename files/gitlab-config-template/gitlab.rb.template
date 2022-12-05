@@ -2385,6 +2385,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # ]
 #
+## Gitaly knows to set up the required default configuration for spawned Git
+## commands automatically. It should thus not be required to configure anything
+## here, except in very special situations where you must e.g. tweak specific
+## performance-related settings or enable debugging facilities. It is not safe in
+## general to set Git configuration that may change Git output in ways that are
+## unexpected by Gitaly.
+# gitaly['gitconfig'] = [
+#   { 'section': 'pack', 'key': 'threads', 'value': '4' }
+#   { 'section': 'http', 'subsection': 'http://example.com', 'key': 'proxy', 'value': 'http://example.proxy.com' }
+# ]
+#
 # gitaly['daily_maintenance_start_hour'] = 22
 # gitaly['daily_maintenance_start_minute'] = 30
 # gitaly['daily_maintenance_duration'] = '30m'
