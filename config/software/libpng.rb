@@ -15,7 +15,7 @@
 #
 
 name 'libpng'
-version = Gitlab::Version.new('libpng', 'v1.6.37')
+version = Gitlab::Version.new('libpng', 'v1.6.38')
 
 default_version version.print(false)
 
