@@ -20,21 +20,47 @@ with [OAuth 2.0 client credentials flow](https://learn.microsoft.com/en-us/azure
 add the following configuration information to `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
 
 ```ruby
+# The originating email address for outgoing mail
+gitlab_rails['gitlab_email_from'] = '<YOUR_ACCOUNT_EMAIL>'
+
+# The reply-to email address
+gitlab_rails['gitlab_email_reply_to'] = '<YOUR_ACCOUNT_EMAIL>'
+
 gitlab_rails['microsoft_graph_mailer_enabled'] = true
 
 # The unique identifier for the user. To use Microsoft Graph on behalf of the user.
-gitlab_rails['microsoft_graph_mailer_user_id'] = "YOUR_USER_ID"
+gitlab_rails['microsoft_graph_mailer_user_id'] = "<YOUR_USER_ID>"
 
 # The directory tenant the application plans to operate against, in GUID or domain-name format.
-gitlab_rails['microsoft_graph_mailer_tenant'] = "YOUR_TENANT_ID"
+gitlab_rails['microsoft_graph_mailer_tenant'] = "<YOUR_TENANT_ID>"
 
 # The application ID that's assigned to your app. You can find this information in the portal where you registered your app.
-gitlab_rails['microsoft_graph_mailer_client_id'] = "YOUR_CLIENT_ID"
+gitlab_rails['microsoft_graph_mailer_client_id'] = "<YOUR_CLIENT_ID>"
 
 # The client secret that you generated for your app in the app registration portal.
-gitlab_rails['microsoft_graph_mailer_client_secret'] = "YOUR_CLIENT_SECRET_ID"
+gitlab_rails['microsoft_graph_mailer_client_secret'] = "<YOUR_CLIENT_SECRET_ID>"
 
 gitlab_rails['microsoft_graph_mailer_azure_ad_endpoint'] = "https://login.microsoftonline.com"
 
 gitlab_rails['microsoft_graph_mailer_graph_endpoint'] = "https://graph.microsoft.com"
 ```
+
+## Troubleshooting
+
+### `ErrorSendAsDenied`
+
+The full error message is:
+
+```plaintext
+"ErrorSendAsDenied","message":"The user account which was used to submit this request does not have the right to send mail on behalf of the specified sending account., Cannot submit message."
+```
+
+To resolve this error:
+
+1. Verify your API permissions are correct by reviewing the [application permission](https://learn.microsoft.com/en-us/graph/permissions-reference).
+
+1. Set the following fields to the email address for the account you're using:
+   - `gitlab_rails['gitlab_email_from']`. 
+   - `gitlab_rails['gitlab_email_reply_to']`.
+
+Other than permissions, this error is sometimes caused because the server does not allow the default `gitlab_email_from` value to be used. You should set the value to the email address for the account you're authenticating with.
