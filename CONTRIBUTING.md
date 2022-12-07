@@ -29,8 +29,7 @@ As this project is a wrapper around GitLab CE/EE, some additions to the definiti
 
 1. Integration tests using [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa).
 1. Green pipelines in both [gitlab.com pipelines](https://gitlab.com/gitlab-org/omnibus-gitlab/pipelines) (Specs) and
-[dev.gitlab.org pipelines](https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines) (Package builds). This rule is at minimum applicable to the reviewers.
-
+   [dev.gitlab.org pipelines](https://dev.gitlab.org/gitlab/omnibus-gitlab/pipelines) (Package builds). This rule is at minimum applicable to the reviewers.
 
 ## General issue guidelines
 
@@ -38,9 +37,14 @@ If you are experiencing problems during GitLab package installation or have issu
 
 - Include the omnibus-gitlab version when discussing behavior: `dpkg-query -W "gitlab*"` or `rpm -q gitlab`.
 - Include the omnibus-gitlab configuration: `sudo gitlab-ctl show-config`
-- Copy few lines before, full error output and few lines after from the `gitlab-ctl reconfigure` run log and paste it inside a [GitLab snippet](https://gitlab.com/snippets) or inside the issue description under triple backticks "``` TEXT ```".
+- Copy few lines before, full error output and few lines after from the `gitlab-ctl reconfigure` run log and paste it inside a [GitLab snippet](https://gitlab.com/snippets) or inside the issue description under triple backticks:
+  ````
+  ```
+  log output
+  ```
+  ````
 
-*Warning* Be careful when pasting log outputs of `gitlab-ctl reconfigure` or `gitlab-ctl show-config`; They will contain secrets like passwords and keys so *make sure to edit out all secrets before pasting the log output*.
+**Warning:** Be careful when pasting log outputs of `gitlab-ctl reconfigure` or `gitlab-ctl show-config`, as they contain secrets like passwords and keys so _make sure to edit out all secrets before pasting the log output_.
 
 #### For problems not related to package installation and configuration check ways to get help [at GitLab website.](https://about.gitlab.com/getting-help/)
 
@@ -49,7 +53,7 @@ This can be the case when installation and `gitlab-ctl reconfigure` run went wit
 ## I want to contribute!
 
 If you want to contribute to GitLab Omnibus, issues with both the ~Accepting merge requests and ~For Scheduling labels
-are issues that have been triaged as areas where where we are looking for contributors to help us out.
+are issues that have been triaged as areas where we are looking for contributors to help us out.
 
 See the [contributor issue issues list](https://gitlab.com/gitlab-org/omnibus-gitlab/issues?state=opened&label_name[]=Accepting%20merge%20requests&label_name[]=For%20Scheduling).
 
@@ -115,7 +119,7 @@ that everything still works.
 
 Some of the interactions of the components are not fully covered by the
 unit/acceptance tests, so testing here can reveal issues such as invalid service
-configuration being generated.  Issues found should be fed back into the test
+configuration being generated. Issues found should be fed back into the test
 suites where possible as part of the review process.
 
 ### Reviewing Merge Requests
@@ -125,7 +129,7 @@ If the change is not time-sensitive, then the MR can first be reviewed by any ot
 [Distribution Team Member](https://about.gitlab.com/handbook/engineering/development/enablement/distribution/#team-members),
 then finally reviewed by a Maintainer.
 
-Reviews generally only need the *approval* of one Maintainer to be merged, but
+Reviews generally only need the _approval_ of one Maintainer to be merged, but
 additional Maintainers may be involved with reviewing parts of the change. We will
 try to avoid having more than one Maintainer do a full review.
 
@@ -146,23 +150,23 @@ be reviewed again before merge.
 
 ### Developer Documentation
 
-See the [developer documentation](doc/development/README.md) for additional information.
+See the [developer documentation](doc/development/index.md) for additional information.
 
 #### Setting up development environment
 
-See the [developer documentation](doc/development/README.md#setting-up-development-environment)
+See the [developer documentation](doc/development/setup.md)
 
 #### Understanding the architecture
 
-See the [developer documentation](doc/development/README.md#understanding-the-architecture)
+See the [architecture documentation](doc/architecture/index.md)
 
 ### Writing tests
 
-See the [developer documentation](doc/development/README.md#writing tests)
+See the [developer documentation](doc/development/contribute-to-omnibus-gitlab.md#write-tests)
 
 ### Merge Request Guidelines
 
-See the [developer documentation](doc/development/README.md#merge-request-guidelines)
+See the [developer documentation](doc/development/contribute-to-omnibus-gitlab.md#merge-request-guidelines)
 
 ## Unofficial packaging point of contact
 
