@@ -44,6 +44,12 @@ omnibus-gitlab repository.
 - [Add Puma on_worker_shutdown hook](gitlab-org/omnibus-gitlab@856617e16df2003fdb82768c17165998adbd8ddb) ([merge request](gitlab-org/omnibus-gitlab!6508))
 - [Update Mattermost to 7.4.0](gitlab-org/omnibus-gitlab@a76ed1ffac36f6ab677c2c800460284a7dc9dc97) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6462))
 
+## 15.5.6 (2022-12-07)
+
+### Fixed (1 change)
+
+- [gitaly: Fix migration of gitconfig with subsections](gitlab-org/omnibus-gitlab@c9683e3d91f863993ec0abbda96a5f984ec5821c) ([merge request](gitlab-org/omnibus-gitlab!6561))
+
 ## 15.5.5 (2022-11-30)
 
 ### Security (7 changes)
