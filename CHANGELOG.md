@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.5.6 (2022-12-07)
+
+### Fixed (1 change)
+
+- [gitaly: Fix migration of gitconfig with subsections](gitlab-org/omnibus-gitlab@c9683e3d91f863993ec0abbda96a5f984ec5821c) ([merge request](gitlab-org/omnibus-gitlab!6561))
+
 ## 15.5.5 (2022-11-30)
 
 ### Security (7 changes)
