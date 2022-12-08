@@ -1096,3 +1096,23 @@ check-packages:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_TAG_BUILD_PIPELINE$/'
+
+print-release-contents:
+  stage: package-and-image-release
+  needs:
+    - job: AWS
+      artifacts: true
+    - job: AWS-ARM64
+      artifacts: true
+    - job: AWS-Premium
+      artifacts: true
+      optional: true
+    - job: AWS-Ultimate
+      artifacts: true
+      optional: true
+  script:
+    - bundle exec release:print_details
+  allow_failure: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(CE|EE)_TAG_BUILD_PIPELINE$/'

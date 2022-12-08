@@ -1,3 +1,5 @@
+require_relative '../gitlab_release_helper'
+
 namespace :release do
   desc "Release omnibus package"
   task package: ["check:on_tag", "build:project", "build:package:sync"]
@@ -7,4 +9,9 @@ namespace :release do
 
   desc "Release QA image"
   task qa: ["qa:build", "qa:push:stable", "qa:push:rc", "qa:push:latest"]
+
+  desc "Create GitLab release"
+  task :print_details do
+    puts GitlabReleaseHelper.release_details
+  end
 end
