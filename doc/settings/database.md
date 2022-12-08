@@ -313,20 +313,29 @@ The following settings are affected in the `postgresql` block:
   authentication. Replace `securesqlpassword` in the following example with an
   acceptable password.
 
-```ruby
-postgresql['listen_address'] = '0.0.0.0'
-postgresql['port'] = 5432
-postgresql['md5_auth_cidr_addresses'] = %w()
-postgresql['trust_auth_cidr_addresses'] = %w(127.0.0.1/24)
-postgresql['sql_user'] = "gitlab"
+1. Edit `/etc/gitlab/gitlab.rb`:
 
-##! SQL_USER_PASSWORD_HASH can be generated using the command `gitlab-ctl pg-password-md5 gitlab`,
-##! where `gitlab` is the name of the SQL user that connects to GitLab.
-postgresql['sql_user_password'] = "SQL_USER_PASSWORD_HASH"
+   ```ruby
+   postgresql['listen_address'] = '0.0.0.0'
+   postgresql['port'] = 5432
+   postgresql['md5_auth_cidr_addresses'] = %w()
+   postgresql['trust_auth_cidr_addresses'] = %w(127.0.0.1/24)
+   postgresql['sql_user'] = "gitlab"
 
-# force ssl on all connections defined in trust_auth_cidr_addresses and md5_auth_cidr_addresses
-postgresql['hostssl'] = true
-```
+   ##! SQL_USER_PASSWORD_HASH can be generated using the command `gitlab-ctl pg-password-md5 gitlab`,
+   ##! where `gitlab` is the name of the SQL user that connects to GitLab.
+   postgresql['sql_user_password'] = "SQL_USER_PASSWORD_HASH"
+
+   # force ssl on all connections defined in trust_auth_cidr_addresses and md5_auth_cidr_addresses
+   postgresql['hostssl'] = true
+   ```
+
+1. Reconfigure GitLab and restart PostrgreSQL:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   sudo gitlab-ctl restart postgresql
+   ```
 
 Any client or GitLab service which will connect over the network will need to
 provide the values of `sql_user` for the username, and password provided to the
@@ -350,12 +359,21 @@ over the network, several settings must be configured:
   above. This is not required if you are connecting to `127.0.0.1` and have configured
   `postgresql['trust_auth_cidr_addresses']` to include it.
 
-```ruby
-gitlab_rails['db_host'] = '127.0.0.1'
-gitlab_rails['db_port'] = 5432
-gitlab_rails['db_username'] = "gitlab"
-gitlab_rails['db_password'] = "securesqlpassword"
-```
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['db_host'] = '127.0.0.1'
+   gitlab_rails['db_port'] = 5432
+   gitlab_rails['db_username'] = "gitlab"
+   gitlab_rails['db_password'] = "securesqlpassword"
+   ```
+
+1. Reconfigure GitLab and restart PostrgreSQL:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   sudo gitlab-ctl restart postgresql
+   ```
 
 #### Apply and restart services
 
