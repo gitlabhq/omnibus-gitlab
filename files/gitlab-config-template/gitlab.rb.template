@@ -1061,7 +1061,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['shutdown_timeout'] = 4
 # sidekiq['queue_selector'] = false
 # sidekiq['interval'] = nil
-# sidekiq['max_concurrency'] = 50
+# sidekiq['max_concurrency'] = 20
 # sidekiq['min_concurrency'] = nil
 
 ##! GitLab allows route a job to a particular queue determined by an array of ##! routing rules.
