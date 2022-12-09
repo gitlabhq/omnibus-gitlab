@@ -68,7 +68,7 @@ sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee
 ## Configure a relative URL for GitLab
 
 NOTE:
-For installations from source, there is a
+For self-compiled (source) installations, there is a
 [separate document](https://docs.gitlab.com/ee/install/relative_url.html).
 
 While we recommended installing GitLab in its own (sub)domain, sometimes
@@ -102,7 +102,7 @@ If you have any issues, see the [troubleshooting section](#relative-url-troubles
 Omnibus GitLab package loads all configuration from `/etc/gitlab/gitlab.rb` file.
 This file has strict file permissions and is owned by the `root` user. The reason for strict permissions
 and ownership is that `/etc/gitlab/gitlab.rb` is being executed as Ruby code by the `root` user during `gitlab-ctl reconfigure`. This means
-that users who have to write access to `/etc/gitlab/gitlab.rb` can add configuration that is executed as code by `root`.
+that users who have to write access to `/etc/gitlab/gitlab.rb` can add a configuration that is executed as code by `root`.
 
 In certain organizations, it is allowed to have access to the configuration files but not as the root user.
 You can include an external configuration file inside `/etc/gitlab/gitlab.rb` by specifying the path to the file:
@@ -128,7 +128,7 @@ To change the location of the `git-data` parent directory:
    git_data_dirs({ "default" => { "path" => "/mnt/nas/git-data" } })
    ```
 
-   You can also add more than one Git data directories:
+   You can also add more than one Git data directory:
 
    ```ruby
    git_data_dirs({
@@ -180,7 +180,7 @@ To change the location of the `git-data` parent directory:
       sudo gitlab-ctl start
       ```
 
-If you're running Gitaly on its own server remember to also include the
+If you're running Gitaly on a separate server, remember to also include the
 `gitaly_address` for each Git data directory. See
 [the documentation on configuring Gitaly](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configure-gitaly-clients).
 
@@ -192,7 +192,7 @@ endpoint and specify the `repository_storage` attribute.
 ## Change the name of the Git user or group
 
 NOTE:
-We do not recommend changing the user or group of an existing installation because it can cause unpredictable side-effects.
+We do not recommend changing the user or group of an existing installation because it can cause unpredictable side effects.
 
 By default, Omnibus GitLab uses the user name `git` for Git GitLab Shell login,
 ownership of the Git data itself, and SSH URL generation on the web interface.
@@ -247,7 +247,7 @@ specify the numeric identifiers for these users:
    sudo gitlab-ctl reconfigure
    ```
 
-1. Optional. If you're changing `user['uid']` and `user['gid']`, make sure to update the uid/guid of any files not managed by Omnibus directly, for example the logs:
+1. Optional. If you're changing `user['uid']` and `user['gid']`, make sure to update the uid/guid of any files not managed by Omnibus directly, for example, the logs:
 
 ```shell
 find /var/log/gitlab -uid <old_uid> | xargs -I:: chown git ::
@@ -262,10 +262,10 @@ By default, Omnibus GitLab creates system user and group accounts,
 as well as keeping the information updated.
 These system accounts run various components of the package.
 Most users don't need to change this behavior.
-However, if your system accounts are managed by other software, for example LDAP, you
+However, if your system accounts are managed by other software, for example, LDAP, you
 might need to disable account management done by the GitLab package.
 
-By default, the Omnibus GitLab package expects that following users and groups to exist:
+By default, the Omnibus GitLab package expects the following users and groups to exist:
 
 | Linux user and group | Required                                | Description                                                          |
 | -------------------- | --------------------------------------- | -------------------------------------------------------------------- |
@@ -325,7 +325,7 @@ To disable user and group accounts management:
 ## Move the home directory for a user
 
 For the GitLab user, we recommended that the home directory
-is set in local disk and not on a shared storage like NFS, for better performance. When setting it in
+is set on a local disk and not on shared storage like NFS, for better performance. When setting it in
 NFS, Git requests must make another network request to read the Git
 configuration and this increases latency in Git operations.
 
@@ -374,11 +374,11 @@ To move an existing home directory, GitLab services need to be stopped and some 
 The Omnibus GitLab package takes care of creating all the necessary directories
 with the correct ownership and permissions, as well as keeping this updated.
 
-Some of the directories hold large amounts of data, so in certain setups,
+Some of the directories hold large amounts of data so in certain setups,
 those directories are most likely mounted on an NFS (or some other) share.
 
-Some types of mounts don't allow automatic creation of directories by the root user
-(default user for initial setup), for example NFS with `root_squash` enabled on the
+Some types of mounts don't allow the automatic creation of directories by the root user
+(default user for initial setup), for example, NFS with `root_squash` enabled on the
 share. To work around this, the Omnibus GitLab package attempts to create
 those directories using the directory's owner user.
 
@@ -464,13 +464,13 @@ from starting before a given file system is mounted:
 When Prometheus monitoring is enabled, the GitLab Exporter conducts measurements
 of each Puma process (Rails metrics). Every Puma process needs to write
 a metrics file to a temporary location for each controller request.
-Prometheus then collects all these files and process their values.
+Prometheus then collects all these files and processes their values.
 
 To avoid creating disk I/O, the Omnibus GitLab package uses a
 runtime directory.
 
 During `reconfigure`, the package check if `/run` is a `tmpfs` mount.
-If it is not, the following warning is shown and Rails metrics is disabled:
+If it is not, the following warning is shown and Rails metrics are disabled:
 
 ```plaintext
 Runtime directory '/run' is not a tmpfs mount.
@@ -516,7 +516,7 @@ for Git and the container registry:
 
 The following settings can be configured:
 
-- `enabled`: By default this is set to `false`. Set this to `true` to enable Rack Attack.
+- `enabled`: By default, this is set to `false`. Set this to `true` to enable Rack Attack.
 - `ip_whitelist`: IPs to not block. They must be formatted as strings in a
   Ruby array. CIDR notation is supported in GitLab 12.1 and later.
   For example, `["127.0.0.1", "127.0.0.2", "127.0.0.3", "192.168.0.1/24"]`.
@@ -528,9 +528,9 @@ The following settings can be configured:
 
 ## Disable automatic cache cleaning during installation
 
-If you have large GitLab installation, you might not want to run a `rake cache:clear` task
+If you have a large GitLab installation, you might not want to run a `rake cache:clear` task
 as it can take a long time to finish. By default, the cache clear task runs automatically
-during reconfigure.
+during reconfiguring.
 
 To disable automatic cache cleaning during installation:
 
@@ -551,7 +551,7 @@ To disable automatic cache cleaning during installation:
 ## Error Reporting and Logging with Sentry
 
 [Sentry](https://sentry.io) is an error reporting and logging tool which can be
-used as SaaS or on premise. It's Open Source, and you can
+used as SaaS or on-premise. It's Open Source, and you can
 [browse its source code repositories](https://github.com/getsentry).
 
 To configure Sentry:
@@ -567,11 +567,11 @@ To configure Sentry:
 
    The [Sentry environment](https://docs.sentry.io/product/sentry-basics/environments/)
    can be used to track errors and issues across several deployed GitLab
-   environments, for example lab, development, staging, production.
+   environments, for example, lab, development, staging, and production.
 
 1. Optional. To set custom [Sentry tags](https://docs.sentry.io/product/sentry-basics/guides/enrich-data/)
    on every event sent from a particular server, the `GITLAB_SENTRY_EXTRA_TAGS`
-   environment variable can be set. This variable is a JSON-encoded hash representing any
+   an environment variable can be set. This variable is a JSON-encoded hash representing any
    tags that should be passed to Sentry for all exceptions from that server.
 
    For instance, setting:
@@ -621,7 +621,7 @@ details.
 
 GitLab 12.2 added support for
 [CSP and nonce-source with inline JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
-It is [not configured on by default yet](https://gitlab.com/gitlab-org/gitlab/-/issues/30720).
+It is [not configured by default yet](https://gitlab.com/gitlab-org/gitlab/-/issues/30720).
 
 NOTE:
 Improperly configuring the CSP rules could prevent GitLab from working
@@ -657,7 +657,7 @@ To add a CSP:
    ```
 
    [In GitLab 14.9 and later](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/80303), secure default values
-   are used for the directives that aren't explicitly configured.
+   are used for directives that aren't explicitly configured.
 
    To unset a CSP directive, set a value of `false`.
 
@@ -711,7 +711,7 @@ gitlab_rails['allowed_hosts'] = ['gitlab.example.com', '127.0.0.1']
   - Set up HTTPS
   - Redirect `HTTP` requests to `HTTPS`
   - Change the default port and the SSL certificate locations
-  - Set the NGINX listen address or addresses
+  - Set the NGINX listen-address or addresses
   - Insert custom NGINX settings into the GitLab server block
   - Insert custom settings into the NGINX configuration
   - Enable `nginx_status`
