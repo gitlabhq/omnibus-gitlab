@@ -60,7 +60,7 @@ To resolve this error:
 1. Verify your API permissions are correct by reviewing the [application permission](https://learn.microsoft.com/en-us/graph/permissions-reference).
 
 1. Set the following fields to the email address for the account you're using:
-   - `gitlab_rails['gitlab_email_from']`. 
+   - `gitlab_rails['gitlab_email_from']`.
    - `gitlab_rails['gitlab_email_reply_to']`.
 
 Other than permissions, this error is sometimes caused because the server does not allow the default `gitlab_email_from` value to be used. You should set the value to the email address for the account you're authenticating with.
