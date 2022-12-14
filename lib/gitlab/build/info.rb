@@ -165,6 +165,14 @@ module Build
         Gitlab::Util.get_env('RELEASE_BUCKET_S3_ENDPOINT') || "s3.amazonaws.com"
       end
 
+      def gcp_release_bucket
+        Gitlab::Util.get_env('GITLAB_COM_PKGS_BUCKET') || "gitlab-com-pkgs"
+      end
+
+      def gcp_release_bucket_sa_file
+        Gitlab::Util.get_env('GITLAB_COM_PKGS_SA_FILE')
+      end
+
       def log_level
         if Gitlab::Util.get_env('BUILD_LOG_LEVEL') && !Gitlab::Util.get_env('BUILD_LOG_LEVEL').empty?
           Gitlab::Util.get_env('BUILD_LOG_LEVEL')

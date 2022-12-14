@@ -107,6 +107,8 @@ These additional variables are available to override or enable different build b
 | RELEASE_BUCKET_REGION                         | S3 bucket region. |
 | RELEASE_BUCKET_S3_ENDPOINT                    | Specify S3 endpoint. Especially useful when S3 compatible storage service is adopted. |
 | GITLAB_BUNDLE_GEMFILE                         | Set Gemfile path required by `gitlab-rails` bundle. Default is `Gemfile`. |
+| GITLAB_COM_PKGS_BUCKET                        | GCS bucket where release packages are pushed for SaaS deployments. |
+| GITLAB_COM_PKGS_SA_FILE                       | Service account key used for pushing release packages for SaaS deployments, it must have write access to the pkgs bucket. |
 
 ## Unknown/outdated variables
 
