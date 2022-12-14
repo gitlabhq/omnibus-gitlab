@@ -1,5 +1,6 @@
 require 'fileutils'
 require_relative "../build.rb"
+require_relative "../build/check.rb"
 require_relative "../build/info.rb"
 require_relative '../build/facts'
 require_relative "../ohai_helper.rb"
@@ -67,12 +68,21 @@ namespace :build do
       end
     end
 
-    desc "Sync packages to aws"
+    desc "Sync packages to aws and gcp"
     task :sync do
       Gitlab::Util.section('build:package:sync', collapsed: Build::Check.on_tag?) do
+        pkgs_sa_file = Build::Info.gcp_release_bucket_sa_file
+        if pkgs_sa_file && Build::Check.is_auto_deploy_tag?
+          pkgs_bucket = Build::Info.gcp_release_bucket
+          puts 'GCS Sync: Activating service account'
+          system(*%W[gcloud auth activate-service-account --key-file #{pkgs_sa_file}])
+          puts "GCS Sync: Copying pkg/ contents to #{pkgs_bucket}"
+          system(*%W[gsutil -qm rsync -r pkg/ gs://#{pkgs_bucket}])
+        end
         release_bucket = Build::Info.release_bucket
         release_bucket_region = Build::Info.release_bucket_region
         release_bucket_s3_endpoint = Build::Info.release_bucket_s3_endpoint
+        puts "AWS S3 Sync: Copying pkg/ contents to #{release_bucket_s3_endpoint}"
         system(*%W[aws s3 --endpoint-url https://#{release_bucket_s3_endpoint} sync pkg/ s3://#{release_bucket} --no-progress --acl public-read --region #{release_bucket_region}])
         files = Dir.glob('pkg/**/*').select { |f| File.file? f }
         files.each do |file|
