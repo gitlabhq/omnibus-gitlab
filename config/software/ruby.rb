@@ -23,11 +23,11 @@ license_file 'LEGAL'
 skip_transitive_dependency_licensing true
 
 if Gitlab::Util.get_env('RUBY3_BUILD') == 'true'
-  default_version '3.0.4'
+  default_version '3.0.5'
 else
   # Follow the Ruby upgrade guidelines when changing the ruby version
   # link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
-  default_version '2.7.6'
+  default_version '2.7.7'
 end
 
 fips_enabled = Build::Check.use_system_ssl?
@@ -41,8 +41,8 @@ dependency 'libyaml'
 dependency 'libiconv'
 dependency 'jemalloc'
 
-version('2.7.6') { source sha256: 'e7203b0cc09442ed2c08936d483f8ac140ec1c72e37bb5c401646b7866cb5d10' }
-version('3.0.4') { source sha256: '70b47c207af04bce9acea262308fb42893d3e244f39a4abc586920a1c723722b' }
+version('2.7.7') { source sha256: 'e10127db691d7ff36402cfe88f418c8d025a3f1eea92044b162dd72f0b8c7b90' }
+version('3.0.5') { source sha256: '9afc6380a027a4fe1ae1a3e2eccb6b497b9c5ac0631c12ca56f9b7beb4848776' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
@@ -57,6 +57,9 @@ env = with_standard_compiler_flags(with_embedded_path)
 env['CFLAGS'] << " -DOPENSSL_FIPS" if Build::Check.use_system_ssl?
 
 env['CFLAGS'] << ' -O3 -g -pipe'
+
+# Workaround for https://bugs.ruby-lang.org/issues/19161
+env['CFLAGS'] << ' -std=gnu99' if OhaiHelper.get_centos_version.to_i == 7 || OhaiHelper.os_platform == 'sles'
 
 build do
   env['CFLAGS'] << ' -fno-omit-frame-pointer'
