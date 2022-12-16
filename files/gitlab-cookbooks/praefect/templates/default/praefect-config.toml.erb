@@ -25,6 +25,11 @@ prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
 prometheus_exclude_database_from_default_metrics = <%= @separate_database_metrics %>
 <% end %>
 
+<% if @graceful_stop_timeout %>
+# Optional: The amount of time a graceful shutdown has before forcible interruption. For example "3m", "1m30s".
+graceful_stop_timeout = '<%= @graceful_stop_timeout %>'
+<% end %>
+
 <% if @tls_listen_addr %>
 # Optional: listen on a secure TCP socket
 tls_listen_addr = '<%= @tls_listen_addr %>'

@@ -44,3 +44,4 @@ default['praefect']['consul_service_name'] = 'praefect'
 default['praefect']['consul_service_meta'] = nil
 default['praefect']['background_verification_verification_interval'] = nil
 default['praefect']['background_verification_delete_invalid_records'] = nil
+default['praefect']['graceful_stop_timeout'] = nil
