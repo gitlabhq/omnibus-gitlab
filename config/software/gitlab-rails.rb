@@ -78,7 +78,8 @@ build do
   # Set installation type to omnibus
   command "echo 'omnibus-gitlab' > INSTALLATION_TYPE"
 
-  make "install -C workhorse PREFIX=#{install_dir}/embedded"
+  workhorse_flags = " FIPS_MODE=1" if Build::Check.use_system_ssl?
+  make "install -C workhorse PREFIX=#{install_dir}/embedded#{workhorse_flags}"
 
   bundle_without = %w(development test)
 
