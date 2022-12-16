@@ -1,4 +1,5 @@
 workflow:
+  name: '$PIPELINE_TYPE'
   rules:
     # Avoid duplicate pipeline when an MR is open
     - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"'
