@@ -4,7 +4,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
   using RSpec::Parameterized::TableSyntax
 
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
-  let(:redis_instances) { %w(cache queues shared_state trace_chunks rate_limiting sessions) }
+  let(:redis_instances) { %w(cache queues shared_state trace_chunks rate_limiting sessions repository_cache) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
   let(:default_vars) do
     {
@@ -344,7 +344,12 @@ RSpec.describe 'gitlab::gitlab-rails' do
             redis_actioncable_sentinels: [
               { host: 'actioncable', port: '1234' },
               { host: 'actioncable', port: '3456' }
-            ]
+            ],
+            redis_repository_cache_instance: "redis://:fakepass@fake.redis.repository_cache.com:8888/2",
+            redis_repository_cache_sentinels: [
+              { host: 'repository_cache', port: '1234' },
+              { host: 'repository_cache', port: '3456' }
+            ],
           }
         )
       end

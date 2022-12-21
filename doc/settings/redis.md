@@ -117,7 +117,7 @@ redis['announce_ip_from_hostname'] = true
 
 Using multiple Redis instances allows you to configure Redis as a
 [Least Recently Used cache](https://redis.io/docs/manual/eviction/). Note you should only
-do this for the Redis cache and rate-limiting instances; the Redis queues, shared
+do this for the Redis cache, rate-limiting, and repository cache instances; the Redis queues, shared
 state instances, and tracechunks instances should never be configured as an LRU,
 since they contain data (e.g. Sidekiq jobs) that is expected to be persistent.
 
