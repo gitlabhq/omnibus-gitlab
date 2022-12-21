@@ -14,6 +14,7 @@ Prerequisites:
   [create an application](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app)
   in the Azure Active Directory, and add the `Mail.Send`
   [application permission](https://learn.microsoft.com/en-us/graph/permissions-reference).
+- Set the application permissions to **App-only access**. Make sure the permissions are not set to **Delegated**.
 
 If you would rather send application emails using [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0&tabs=http)
 with [OAuth 2.0 client credentials flow](https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow),
@@ -64,3 +65,20 @@ To resolve this error:
    - `gitlab_rails['gitlab_email_reply_to']`.
 
 Other than permissions, this error is sometimes caused because the server does not allow the default `gitlab_email_from` value to be used. You should set the value to the email address for the account you're authenticating with.
+ 
+### `Tail logs`
+
+For troubleshooting, use the `tail logs` command to view live GitLab log updates:
+
+```ruby
+# Tail all logs for the application
+sudo gitlab-ctl tail
+
+# Tail logs for an application sub-directory
+sudo gitlab-ctl tail gitlab-rails
+
+# Tail logs for an individual file in the application
+sudo gitlab-ctl tail nginx/gitlab_error.log
+```
+
+To stop any of these commands, press <kbd>Control</kbd>+<kbd>C</kbd>.
