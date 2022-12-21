@@ -3,6 +3,39 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.7.0 (2022-12-21)
+
+### Added (3 changes)
+
+- [praefect: Add configuration for graceful_stop_timeout](gitlab-org/omnibus-gitlab@637f27795d09d35f34ec797fc5e95f3e3ded4015) ([merge request](gitlab-org/omnibus-gitlab!6549))
+- [Provide packages for openSUSE Leap 15.4](gitlab-org/omnibus-gitlab@29305a26825423fe5fcad15b42d74a01feb9b0d8) ([merge request](gitlab-org/omnibus-gitlab!6499))
+- [Expose missing gitlab.yml settings in gitlab.rb](gitlab-org/omnibus-gitlab@36459542f60633a047362be26cebc7b766c77958) by @pm9551 ([merge request](gitlab-org/omnibus-gitlab!6529))
+
+### Fixed (2 changes)
+
+- [Ensure Workhorse is built in FIPS mode](gitlab-org/omnibus-gitlab@a1415708f485968f0e41e0ba9fd48285de259b2c) ([merge request](gitlab-org/omnibus-gitlab!6575))
+- [gitaly: Allow passing gitconfig as separate section, subsection and key](gitlab-org/omnibus-gitlab@d5d04066f6e41b6a3d5ee624617e6ed93441cc0d) ([merge request](gitlab-org/omnibus-gitlab!6512))
+
+### Changed (5 changes)
+
+- [Update Ruby to 2.7.7 and 3.0.5](gitlab-org/omnibus-gitlab@19bea74af288b046e15643c8de73c066a8fac70b) ([merge request](gitlab-org/omnibus-gitlab!6554))
+- [Set Sidekiq default max concurrency to 20](gitlab-org/omnibus-gitlab@b6ac13b198e31f3f60cc2f51cb1fbd223960780e) ([merge request](gitlab-org/omnibus-gitlab!6536))
+- [Update to libpng 1.6.38](gitlab-org/omnibus-gitlab@e623427be34d79efec59c5da47a59645b509f740) ([merge request](gitlab-org/omnibus-gitlab!6353))
+- [Update container-registry from to v3.61.0-gitlab](gitlab-org/omnibus-gitlab@27607ff397f95f07429dc87dd6e98f9b66b134a4) ([merge request](gitlab-org/omnibus-gitlab!6522))
+- [Update openssl from 1q to 1s](gitlab-org/omnibus-gitlab@a89c5c715b3f3d43d7cba5968eb41c1a2e65f273) ([merge request](gitlab-org/omnibus-gitlab!6520))
+
+### Security (5 changes)
+
+- [Update zlib to 1.2.13](gitlab-org/omnibus-gitlab@a1d1231d20de5d50934a5bded68c561e304af140)
+- [Bump Ruby version to 2.7.6](gitlab-org/omnibus-gitlab@76cf0c240a09459b6862a9d8f907730741b966fe)
+- [Bump ncurses to 6.3-20220416 to patch against CVE-2022-2945](gitlab-org/omnibus-gitlab@d1f697ebdc676a3482e607f303515221533e4dc1)
+- [Update xmlsoft/libxml2 to version 2.10.3](gitlab-org/omnibus-gitlab@ab5244050e92f0c88b794447af9a372f9abb4d79)
+- [Upgrade haxx/curl to 7.86.0](gitlab-org/omnibus-gitlab@c6714986da0fa50d7fa24b66bba3fa1c71f85075)
+
+### Other (1 change)
+
+- [Update Mattermost to 7.5.1](gitlab-org/omnibus-gitlab@477c3f4be4fd4933f35accf422ce5528aae20fec) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6526))
+
 ## 15.6.2 (2022-12-05)
 
 ### Fixed (1 change)
