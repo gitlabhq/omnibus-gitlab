@@ -36,6 +36,10 @@ omnibus-gitlab repository.
 
 - [Update Mattermost to 7.5.1](gitlab-org/omnibus-gitlab@477c3f4be4fd4933f35accf422ce5528aae20fec) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6526))
 
+## 15.6.3 (2022-12-21)
+
+No changes.
+
 ## 15.6.2 (2022-12-05)
 
 ### Fixed (1 change)
