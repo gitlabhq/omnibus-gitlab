@@ -1913,6 +1913,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_kas['env_directory'] = '/opt/gitlab/etc/gitlab-kas/env'
 
 ################################################################################
+## GitLab Suggested Reviewers (EE Only)
+##! Docs: https://docs.gitlab.com/ee/user/project/merge_requests/reviews/#suggested-reviewers
+################################################################################
+
+##! Shared secret used for authentication between Suggested Reviewers and GitLab
+# suggested_reviewers['api_secret_key'] = nil # Will be generated if not set. Base64 encoded and exactly 32 bytes long.
+
+################################################################################
 ## GitLab Mattermost
 ##! Docs: https://docs.gitlab.com/omnibus/gitlab-mattermost
 ################################################################################

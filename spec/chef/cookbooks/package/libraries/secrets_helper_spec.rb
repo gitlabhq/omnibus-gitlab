@@ -77,6 +77,11 @@ RSpec.describe 'secrets' do
         kas_shared_secret = new_secrets['gitlab_kas']['api_secret_key']
         expect(Base64.strict_decode64(kas_shared_secret).length).to eq(32)
       end
+
+      it 'generates an appropriate shared secret for suggested-reviewers' do
+        suggested_reviewers_shared_secret = new_secrets['suggested_reviewers']['api_secret_key']
+        expect(Base64.strict_decode64(suggested_reviewers_shared_secret).length).to eq(32)
+      end
     end
 
     context 'gitlab.rb provided gitlab_pages.api_secret_key' do
