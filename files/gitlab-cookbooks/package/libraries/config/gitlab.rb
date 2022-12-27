@@ -88,6 +88,7 @@ module Gitlab
     ee_attribute('geo_secondary', priority: 20).use { GeoSecondary }
     ee_attribute('geo_logcursor')
     ee_attribute('sentinel').use { Sentinel }
+    ee_attribute('suggested_reviewers').use { SuggestedReviewers }
 
     # Base GitLab attributes
     attribute('gitlab_shell',     priority: 10).use { GitlabShell } # Parse shell before rails for data dir settings

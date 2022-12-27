@@ -1015,6 +1015,44 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    describe 'gitlab_suggested_reviewers_secret' do
+      let(:templatesymlink) do
+        chef_run.templatesymlink('Create a gitlab_suggested_reviewers_secret and create a symlink to Rails root')
+      end
+
+      shared_examples 'Create suggested reviewer secrets and notifies services' do
+        it 'creates gitlab_suggested_reviewers_secret template' do
+          expect(templatesymlink.action).to include(:create)
+          expect(templatesymlink.variables[:secret_token]).to eq(api_secret_key)
+        end
+
+        it 'gitlab_suggested_reviewers_secret template triggers notifications' do
+          expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
+        end
+      end
+
+      context 'by default' do
+        let(:api_secret_key) { Gitlab['suggested_reviewers']['api_secret_key'] }
+
+        it_behaves_like 'Create suggested reviewer secrets and notifies services'
+      end
+
+      context 'with specific gitlab_suggested_reviewers_secret' do
+        let(:api_secret_key) { SecureRandom.base64(32) }
+
+        before do
+          stub_gitlab_rb(
+            suggested_reviewers: {
+              api_secret_key: api_secret_key
+            }
+          )
+        end
+
+        it_behaves_like 'Create suggested reviewer secrets and notifies services'
+      end
+    end
   end
 
   describe 'GitLab Registry files' do

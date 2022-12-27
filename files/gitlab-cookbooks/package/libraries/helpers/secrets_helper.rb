@@ -91,6 +91,9 @@ class SecretsHelper
         'api_secret_key' => Gitlab['gitlab_kas']['api_secret_key'],
         'private_api_secret_key' => Gitlab['gitlab_kas']['private_api_secret_key']
       },
+      'suggested_reviewers' => {
+        'api_secret_key' => Gitlab['suggested_reviewers']['api_secret_key']
+      },
       'grafana' => {
         'secret_key' => Gitlab['grafana']['secret_key'],
         'gitlab_secret' => Gitlab['grafana']['gitlab_secret'],
