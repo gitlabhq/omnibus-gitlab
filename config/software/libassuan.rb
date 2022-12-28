@@ -15,7 +15,7 @@
 #
 
 name 'libassuan'
-default_version '2.5.3'
+default_version '2.5.5'
 
 license 'LGPL-2.1'
 license_file 'COPYING.LIB'
@@ -23,7 +23,7 @@ license_file 'COPYING.LIB'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-#{version}.tar.bz2",
-       sha256: '91bcb0403866b4e7c4bc1cc52ed4c364a9b5414b3994f718c70303f7f765e702'
+       sha256: '8e8c2fcc982f9ca67dcbb1d95e2dc746b1739a4668bc20b3a3c5be632edb34e4'
 
 dependency 'libgpg-error'
 
@@ -31,8 +31,9 @@ relative_path "libassuan-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  prefix = "#{install_dir}/embedded"
   command './configure ' \
-    "--prefix=#{install_dir}/embedded --disable-doc", env: env
+    "--prefix=#{prefix} --with-libgpg-error-prefix=#{prefix} --disable-doc", env: env
 
   make "-j #{workers}", env: env
   make 'install', env: env
