@@ -407,7 +407,7 @@ Ubuntu 22.04 knapsack: !reference [.knapsack]
 AmazonLinux 2 knapsack: !reference [.knapsack]
 
 build library specs:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-focal"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ubuntu_20.04-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .spec_template
   needs:
     - rubocop
@@ -422,67 +422,67 @@ build library specs:
         path: coverage/coverage.xml
 
 Ubuntu 16.04 specs:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-xenial"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ubuntu_16.04-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
   parallel: 6
   needs:
   - Ubuntu 16.04 knapsack
 Ubuntu 18.04 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bionic"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ubuntu_18.04-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
   parallel: 6
   needs:
   - Ubuntu 18.04 knapsack
 Ubuntu 20.04 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-focal"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ubuntu_20.04-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
   parallel: 6
   needs:
   - Ubuntu 20.04 knapsack
 Ubuntu 22.04 specs:
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-jammy"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ubuntu_22.04-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
   parallel: 6
   needs:
   - Ubuntu 22.04 knapsack
 Debian 10 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-buster"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/debian_10-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
   parallel: 6
   needs:
   - Debian 10 knapsack
 Debian 11 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-bullseye"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/debian_11-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
   parallel: 6
   needs:
   - Debian 11 knapsack
 Centos 7 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos7"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/centos_7-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
   parallel: 6
   needs:
   - Centos 7 knapsack
 Centos 8 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-centos8"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/centos_8-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
   parallel: 6
   needs:
   - Centos 8 knapsack
 OpenSUSE 15.3 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse15.3"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/opensuse_15.3-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
   parallel: 6
   needs:
   - OpenSUSE 15.3 knapsack
 OpenSUSE 15.4 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-opensuse15.4"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/opensuse_15.4-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
   parallel: 6
   needs:
   - OpenSUSE 15.4 knapsack
 AmazonLinux 2 specs :
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:omnibus-gitlab-amazonlinux2"
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/amazonlinux_2-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
   parallel: 6
   needs:

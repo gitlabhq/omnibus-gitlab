@@ -153,7 +153,7 @@
 ### 2. Always ran on dev.gitlab.org
 .staging_upload_template: &staging_upload
   stage: staging_upload
-  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   variables:
     INCLUDE_PACKAGECLOUD: "true"
   script:
@@ -190,7 +190,7 @@
 ### 3. Only ran on dev.gitlab.org
 .production_release_template: &production_release
   stage: package-and-image-release
-  image: "dev.gitlab.org:5005/gitlab/gitlab-build-images:omnibus-gitlab-xenial"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
   variables:
     INCLUDE_PACKAGECLOUD: "true"
   script:
