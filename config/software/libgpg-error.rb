@@ -15,7 +15,7 @@
 #
 
 name 'libgpg-error'
-default_version '1.39'
+default_version '1.46'
 
 license 'LGPL-2.1'
 license_file 'COPYING.LIB'
@@ -23,14 +23,20 @@ license_file 'COPYING.LIB'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-#{version}.tar.bz2",
-       sha256: '4a836edcae592094ef1c5a4834908f44986ab2b82e0824a0344b49df8cdb298f'
+       sha256: 'b7e11a64246bbe5ef37748de43b245abd72cfcd53c9ae5e7fc5ca59f1c81268d'
 
 relative_path "libgpg-error-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+
+  # gpg-error-config has been deprecated in favor of gpgrt-config
+  # (https://dev.gnupg.org/T5683), but libassuan and gnupg currently
+  # still use gpg-error-config if it is present. Older systems, such as
+  # Amazon Linux 2, have a version that is too old, so we need to ensure
+  # a recent version of gpg-error-config is installed.
   command './configure ' \
-    "--prefix=#{install_dir}/embedded --disable-doc", env: env
+    "--prefix=#{install_dir}/embedded --enable-install-gpg-error-config --disable-doc", env: env
 
   make "-j #{workers}", env: env
   make 'install', env: env

@@ -15,7 +15,7 @@
 #
 
 name 'gnupg'
-default_version '2.2.23'
+default_version '2.2.40'
 
 dependency 'libassuan'
 dependency 'npth'
@@ -30,7 +30,7 @@ license_file 'COPYING.LGPL3'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-#{version}.tar.bz2",
-       sha256: '10b55e49d78b3e49f1edb58d7541ecbdad92ddaeeb885b6f486ed23d1cd1da5c'
+       sha256: '1164b29a75e8ab93ea15033300149e1872a7ef6bdda3d7c78229a735f8204c28'
 
 relative_path "gnupg-#{version}"
 
@@ -44,8 +44,9 @@ build do
   # IN_EXCL_UNLINK undeclared. Hence disabling it explicitly.
   config_flags = "ac_cv_func_inotify_init=no" if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^6/
 
+  prefix = "#{install_dir}/embedded"
   command './configure ' \
-    "--prefix=#{install_dir}/embedded --disable-doc --without-readline --disable-sqlite --disable-gnutls --disable-dirmngr #{config_flags}", env: env
+    "--prefix=#{prefix} --with-libgpg-error-prefix=#{prefix} --disable-doc --without-readline --disable-sqlite --disable-gnutls --disable-dirmngr #{config_flags}", env: env
 
   make "-j #{workers}", env: env
   make 'install', env: env
