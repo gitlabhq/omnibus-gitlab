@@ -37,6 +37,41 @@ RSpec.describe 'qa', type: :rake do
     end
   end
 
+  describe 'qa:copy' do
+    before do
+      allow(Build::Info).to receive(:gitlab_version).and_return(gitlab_version)
+      allow(Build::Info).to receive(:commit_sha).and_return(commit_sha)
+    end
+
+    describe ':nightly' do
+      before do
+        Rake::Task['qa:copy:nightly'].reenable
+        allow(Build::Check).to receive(:is_nightly?).and_return(true)
+      end
+
+      it 'copies nightly images correctly' do
+        expect(Build::QAImage).to receive(:copy_image_to_dockerhub).with('nightly')
+
+        Rake::Task['qa:copy:nightly'].invoke
+      end
+    end
+
+    describe ':staging' do
+      before do
+        Rake::Task['qa:copy:staging'].reenable
+      end
+
+      it 'copies staging images correctly' do
+        stub_is_auto_deploy(false)
+
+        expect(Build::QAImage).to receive(:copy_image_to_omnibus_registry).with(gitlab_version)
+        expect(Build::QAImage).to receive(:copy_image_to_omnibus_registry).with(commit_sha)
+
+        Rake::Task['qa:copy:staging'].invoke
+      end
+    end
+  end
+
   describe 'qa:push' do
     before do
       Rake::Task['qa:push:stable'].reenable
