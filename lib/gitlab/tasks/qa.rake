@@ -25,6 +25,23 @@ namespace :qa do
     end
   end
 
+  namespace :copy do
+    desc "Copy current QA image from GitLab rails registry to omnibus-gitlab registry"
+    task :staging do
+      Gitlab::Util.section('qa:copy:staging') do
+        Build::QAImage.copy_image_to_omnibus_registry(Build::Info.gitlab_version)
+        Build::QAImage.copy_image_to_omnibus_registry(Build::Info.commit_sha)
+      end
+    end
+
+    desc "Copy nightly version of gitlab-{ce,ee}-qa to Docker Hub"
+    task :nightly do
+      Gitlab::Util.section('qa:copy:nightly') do
+        Build::QAImage.copy_image_to_dockerhub('nightly') if Build::Check.is_nightly?
+      end
+    end
+  end
+
   namespace :push do
     # Only runs on dev.gitlab.org
     desc "Push unstable version of gitlab-{ce,ee}-qa to the GitLab registry"

@@ -401,9 +401,15 @@ QA-branch:
   variables:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
-    - bundle exec rake qa:build
-    - bundle exec rake qa:push:nightly
-    - bundle exec rake qa:push:staging
+    # For downstream users like JiHu to retain original behavior
+    - if [ "BUILD_GITLAB_QA_IMAGE" == "true" ]; then
+        bundle exec rake qa:build;
+        bundle exec rake qa:push:nightly;
+        bundle exec rake qa:push:staging;
+      else
+        bundle exec rake qa:copy:nightly;
+        bundle exec rake qa:copy:staging;
+      fi
   artifacts:
     when: on_failure
     expire_in: 7d
