@@ -131,35 +131,9 @@ See [doc/settings/configuration.md](doc/settings/configuration.md#only-start-omn
 Instructions for updating your Omnibus installation and upgrading from a manual
 installation are in the [update doc](doc/update/README.md).
 
-### Uninstalling omnibus-gitlab
+### Uninstalling Omnibus GitLab
 
-To remove [all users and groups created by Omnibus GitLab](doc/settings/configuration.md#disable-user-and-group-account-management),
-run `sudo gitlab-ctl stop && sudo gitlab-ctl remove-accounts` before removing the gitlab package (with `dpkg` or `yum`).
-
-If you have problems removing accounts or groups, run `luserdel` or `lgroupdel` manually
-to delete them. You might also want to manually remove the leftover user home directories
-from `/home/`.
-
-To remove all omnibus-gitlab data use `sudo gitlab-ctl cleanse && sudo rm -r /opt/gitlab`.
-
-To uninstall omnibus-gitlab, preserving your data (repositories, database, configuration), run the following commands.
-
-```
-# Stop gitlab and remove its supervision process
-sudo systemctl stop    gitlab-runsvdir
-sudo systemctl disable gitlab-runsvdir
-sudo rm /usr/lib/systemd/system/gitlab-runsvdir.service
-sudo systemctl daemon-reload
-sudo gitlab-ctl uninstall
-
-# (Replace with gitlab-ce if you have GitLab FOSS installed)
-
-# Debian/Ubuntu
-sudo apt remove gitlab-ee
-
-# Redhat/Centos
-sudo yum remove gitlab-ee
-```
+See [doc/installation/index.md](doc/installation/index.md#uninstall-the-linux-package-omnibus).
 
 ### Common installation problems
 

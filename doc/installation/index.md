@@ -81,3 +81,50 @@ password in `/etc/gitlab/initial_root_password` to log in, or
 
 You can also use the Docker images provided by GitLab to install and configure a GitLab instance.
 Check the [documentation](https://docs.gitlab.com/ee/install/docker.html) to know more.
+
+## Uninstall the Linux package (Omnibus)
+
+To uninstall the Linux package, you can opt to either keep your data (repositories,
+database, configuration) or remove all of them:
+
+1. Optional. To remove
+   [all users and groups created by Omnibus GitLab](../settings/configuration.md#disable-user-and-group-account-management)
+   before removing the GitLab package (with `apt` or `yum`):
+
+   ```shell
+   sudo gitlab-ctl stop && sudo gitlab-ctl remove-accounts
+   ```
+
+   NOTE:
+   If you have problems removing accounts or groups, run `userdel` or `groupdel` manually
+   to delete them. You might also want to manually remove the leftover user home directories
+   from `/home/`.
+
+1. Choose whether to keep your data or remove all of them:
+
+   - To preserve your data (repositories, database, configuration), stop GitLab and
+     remove its supervision process:
+
+     ```shell
+     sudo systemctl stop gitlab-runsvdir
+     sudo systemctl disable gitlab-runsvdir
+     sudo rm /usr/lib/systemd/system/gitlab-runsvdir.service
+     sudo systemctl daemon-reload
+     sudo gitlab-ctl uninstall
+     ```
+
+   - To remove all data:
+
+     ```shell
+     sudo gitlab-ctl cleanse && sudo rm -r /opt/gitlab
+     ```
+
+1. Uninstall the package (replace with `gitlab-ce` if you have GitLab FOSS installed):
+
+   ```shell
+   # Debian/Ubuntu
+   sudo apt remove gitlab-ee
+
+   # RedHat/CentOS
+   sudo yum remove gitlab-ee
+   ```
