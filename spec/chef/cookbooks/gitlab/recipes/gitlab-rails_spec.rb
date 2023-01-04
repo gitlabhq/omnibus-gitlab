@@ -255,7 +255,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
       it 'deletes the separate instance config files' do
         redis_instances.each do |instance|
-          expect(chef_run).to delete_file("/opt/gitlab/embedded/service/gitlab-rails/config/redis.#{instance}.yml")
+          expect(chef_run).to delete_link("/opt/gitlab/embedded/service/gitlab-rails/config/redis.#{instance}.yml")
           expect(chef_run).to delete_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml")
         end
       end

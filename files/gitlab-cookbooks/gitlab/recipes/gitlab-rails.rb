@@ -256,15 +256,8 @@ end
     mode '0644'
     variables(redis_url: url, redis_sentinels: sentinels, redis_enable_client: redis_enable_client)
     dependent_services.each { |svc| notifies :restart, svc }
-    not_if { url.nil? }
     sensitive true
-  end
-
-  [from_filename, to_filename].each do |filename|
-    file filename do
-      action :delete
-      only_if { url.nil? }
-    end
+    action :delete if url.nil?
   end
 end
 
