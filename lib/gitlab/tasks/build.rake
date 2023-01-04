@@ -75,9 +75,12 @@ namespace :build do
         if pkgs_sa_file && Build::Check.is_auto_deploy_tag?
           pkgs_bucket = Build::Info.gcp_release_bucket
           puts 'GCS Sync: Activating service account'
-          system(*%W[gcloud auth activate-service-account --key-file #{pkgs_sa_file}])
-          puts "GCS Sync: Copying pkg/ contents to #{pkgs_bucket}"
-          system(*%W[gsutil -qm rsync -r pkg/ gs://#{pkgs_bucket}])
+          activate_ret = system(*%W[gcloud auth activate-service-account --key-file #{pkgs_sa_file}])
+          if activate_ret
+            puts "GCS Sync: Copying pkg/ contents to #{pkgs_bucket}"
+            gsutil_ret = system(*%W[gsutil -m rsync -r pkg/ gs://#{pkgs_bucket}])
+            puts "GCS Sync: Rsync success: #{gsutil_ret}"
+          end
         end
         release_bucket = Build::Info.release_bucket
         release_bucket_region = Build::Info.release_bucket_region
