@@ -56,12 +56,12 @@ class ConsulHelper
         }.compact
       }
     }
-    tls_cfg['ports'] = { 'https': api_port('https') } if server?
+    tls_cfg['ports'] = { 'https': api_port('https') }
 
     tls_cfg
   end
 
-  def configuration
+  def final_config
     config = Chef::Mixin::DeepMerge.merge(
       default_configuration,
       node['consul']['configuration']
@@ -69,9 +69,14 @@ class ConsulHelper
     if server?
       return Chef::Mixin::DeepMerge.merge(
         default_server_configuration, config
-      ).to_json
+      )
     end
-    config.to_json
+
+    config
+  end
+
+  def configuration
+    final_config.to_json
   end
 
   def use_encryption?
@@ -94,17 +99,16 @@ class ConsulHelper
     http_port = node['consul']['http_port']
     https_port = node['consul']['https_port']
 
-    return {} if http_port.nil? && https_port.nil?
-
     ports = {}
+
     ports['http'] = http_port unless http_port.nil?
     ports['https'] = https_port unless https_port.nil?
 
     { 'ports' => ports }
   end
 
-  def api_url
-    scheme = use_tls? || api_port('http').negative? ? 'https' : 'http'
+  def api_url(scheme: nil)
+    scheme ||= use_tls? || api_port('http').negative? ? 'https' : 'http'
 
     "#{scheme}://#{api_address(scheme)}:#{api_port(scheme)}"
   end
@@ -187,24 +191,77 @@ class ConsulHelper
   def running_version
     return unless OmnibusHelper.new(@node).service_up?('consul')
 
-    info = get_api('/v1/agent/self') do |response|
-      response.code == '200' ? JSON.parse(response.body, symbolize_names: true) : {}
-    end
+    response_code, response_body = get_api('/v1/agent/self')
+    info = response_code == '200' ? JSON.parse(response_body, symbolize_names: true) : {}
 
     info[:Config][:Version] unless info.empty?
   end
 
   private
 
-  def get_api(endpoint, header = nil)
-    uri = URI(api_url)
-    use_ssl = uri.scheme == "https"
+  def verify_incoming?
+    final_config['tls']['defaults']['verify_incoming']
+  end
 
+  def can_access_api_over_https?
+    # If daemon isn't listening over HTTPS, no point in proceeding. Just use
+    # HTTP.
+    return false unless use_tls?
+
+    # If incoming requests aren't verified, we can access API over HTTPS
+    # without client certificates.
+    return true unless verify_incoming?
+
+    # If incoming connections are verified, we need a certificate/key to use as
+    # "client" certificate/key while accessing API. Let's use the ones
+    # specified as server certificate/key for this purpose.
+    File.exist?(final_config['tls']['defaults']['cert_file'].to_s) && File.exist?(final_config['tls']['defaults']['key_file'].to_s)
+  end
+
+  def get_tls_args
+    args = { use_ssl: true }
+
+    return args unless verify_incoming?
+
+    args[:cert] = OpenSSL::X509::Certificate.new(File.read(final_config['tls']['defaults']['cert_file']))
+    args[:key] = OpenSSL::PKey.read(File.read(final_config['tls']['defaults']['key_file']))
+
+    args
+  end
+
+  def get_api(endpoint, header = nil)
+    if can_access_api_over_https?
+      uri = URI(api_url(scheme: 'https'))
+      args = get_tls_args
+    else
+      uri = URI(api_url(scheme: 'http'))
+      args = {}
+    end
+
+    begin
+      fetch_response(uri, endpoint, args, header)
+    rescue Timeout::Error => e
+      # If we were already using HTTP, there is nothing more we can do.
+      # Fail hard.
+      raise Timeout::Error, e.message if uri.scheme == "http"
+
+      # We were trying HTTPS but, it wasn't available. Maybe HTTPS was enabled
+      # in this reconfigure run, and won't be active till user restarts Consul,
+      # and thus Consul is still running over HTTP only. Try accessing API over
+      # HTTP.
+      uri = URI(api_url(scheme: 'http'))
+      args = {}
+
+      fetch_response(uri, endpoint, args, header)
+    end
+  end
+
+  def fetch_response(uri, endpoint, args, header = nil)
     Timeout.timeout(30, Timeout::Error, "Timed out waiting for Consul to start") do
       loop do
-        Net::HTTP.start(uri.host, uri.port, use_ssl: use_ssl) do |http|
+        Net::HTTP.start(uri.host, uri.port, **args) do |http|
           http.request_get(endpoint, header) do |response|
-            return yield response
+            return response.code, response.body
           end
         end
       rescue Errno::ECONNREFUSED, Errno::EADDRNOTAVAIL
