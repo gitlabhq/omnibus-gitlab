@@ -5,13 +5,13 @@ RSpec.describe ConsulHelper do
   subject { described_class.new(chef_run.node) }
 
   describe '#running_version' do
-    let(:consul_api_output) { instance_double('response', code: '200', body: '{"Config": { "Version": "1.8.10" }}') }
+    let(:consul_api_output) { ['200', '{"Config": { "Version": "1.8.10" }}'] }
 
     before do
       # Un-doing the stub added in chef_helper
       allow_any_instance_of(described_class).to receive(:running_version).and_call_original
       allow(Gitlab).to receive(:[]).and_call_original
-      allow(subject).to receive(:get_api).and_yield(consul_api_output)
+      allow(subject).to receive(:get_api).and_return(consul_api_output)
     end
 
     context 'when consul is not running' do
