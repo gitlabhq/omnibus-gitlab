@@ -184,3 +184,10 @@
     :why: https://gitlab.com/gitlab-org/frontend/fonts/-/blob/main/LICENSE
     :versions: []
     :when: 2022-12-03 05:42:00.501910000 Z
+- - :license
+  - github.com/spf13/afero
+  - Apache2
+  - :who: Robert Marshall
+    :why: https://github.com/spf13/afero/blob/master/LICENSE.txt
+    :versions: []
+    :when: 2023-01-04 17:54:42.260459000 Z
