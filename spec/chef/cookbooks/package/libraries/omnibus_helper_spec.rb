@@ -207,7 +207,7 @@ RSpec.describe OmnibusHelper do
     before do
       stub_gitlab_rb(
         gitlab_rails: {
-          initial_root_password: 'foobar',
+          initial_root_password: 'foobar123',
           store_initial_root_password: true
         }
       )
@@ -221,7 +221,7 @@ RSpec.describe OmnibusHelper do
         #
         #          If the password shown here doesn't work, you must reset the admin password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
 
-        Password: foobar
+        Password: foobar123
 
         # NOTE: This file will be automatically deleted in the first reconfigure run after 24 hours.
       EOS
@@ -306,7 +306,7 @@ RSpec.describe OmnibusHelper do
         before do
           stub_gitlab_rb(
             gitlab_rails: {
-              initial_root_password: 'foobar',
+              initial_root_password: 'foobar123',
               display_initial_root_password: true,
               store_initial_root_password: false
             }
@@ -317,7 +317,7 @@ RSpec.describe OmnibusHelper do
           msg = <<~EOS
             Default admin account has been configured with following details:
             Username: root
-            Password: foobar
+            Password: foobar123
 
             NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to reset the password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
           EOS
@@ -332,7 +332,7 @@ RSpec.describe OmnibusHelper do
         before do
           stub_gitlab_rb(
             gitlab_rails: {
-              initial_root_password: 'foobar',
+              initial_root_password: 'foobar123',
               display_initial_root_password: false,
               store_initial_root_password: false
             }
@@ -359,7 +359,7 @@ RSpec.describe OmnibusHelper do
           before do
             stub_gitlab_rb(
               gitlab_rails: {
-                initial_root_password: 'foobar',
+                initial_root_password: 'foobar123',
                 display_initial_root_password: false,
                 store_initial_root_password: true
               }
@@ -400,7 +400,7 @@ RSpec.describe OmnibusHelper do
               before do
                 stub_gitlab_rb(
                   gitlab_rails: {
-                    initial_root_password: 'foobar',
+                    initial_root_password: 'foobar123',
                   }
                 )
               end
@@ -414,10 +414,24 @@ RSpec.describe OmnibusHelper do
               end
             end
 
+            context 'via gitlab.rb, short password' do
+              before do
+                stub_gitlab_rb(
+                  gitlab_rails: {
+                    initial_root_password: 'foobar',  # 6 chars, minimum is 8 chars
+                  }
+                )
+              end
+
+              it 'raises an exception when password is too short' do
+                expect { described_class.new(converge_config.node) }.to raise_error(RuntimeError, /initial_root_password: Length is too short, minimum is 8 characters/)
+              end
+            end
+
             context 'via env variable' do
               before do
                 allow(ENV).to receive(:[]).and_call_original
-                allow(ENV).to receive(:[]).with('GITLAB_ROOT_PASSWORD').and_return('foobar')
+                allow(ENV).to receive(:[]).with('GITLAB_ROOT_PASSWORD').and_return('foobar123')
               end
 
               it 'does not write initial root password to /etc/gitlab/initial_root_password' do

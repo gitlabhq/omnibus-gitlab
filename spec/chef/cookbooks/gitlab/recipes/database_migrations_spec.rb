@@ -53,7 +53,7 @@ RSpec.describe 'gitlab::database-migrations' do
         before do
           stub_gitlab_rb(
             gitlab_rails: {
-              initial_root_password: 'foobar'
+              initial_root_password: 'foobar123'
             }
           )
         end
@@ -61,7 +61,7 @@ RSpec.describe 'gitlab::database-migrations' do
         it 'runs DB migration with GITLAB_ROOT_PASSWORD variable set to provided value' do
           expect(chef_run).to run_rails_migration('gitlab-rails').with(
             environment: {
-              'GITLAB_ROOT_PASSWORD' => 'foobar',
+              'GITLAB_ROOT_PASSWORD' => 'foobar123',
             }
           )
         end
@@ -86,7 +86,7 @@ RSpec.describe 'gitlab::database-migrations' do
         before do
           stub_gitlab_rb(
             gitlab_rails: {
-              initial_root_password: 'foobar'
+              initial_root_password: 'foobar123'
             }
           )
 
