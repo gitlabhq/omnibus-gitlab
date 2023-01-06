@@ -86,6 +86,8 @@ module GitlabRails
       if Gitlab['gitlab_rails']['initial_root_password'].nil?
         Gitlab['gitlab_rails']['initial_root_password'] = SecretsHelper.generate_base64(32)
         Gitlab['gitlab_rails']['store_initial_root_password'] = true if Gitlab['gitlab_rails']['store_initial_root_password'].nil?
+      elsif Gitlab['gitlab_rails']['initial_root_password'].length < 8
+        raise 'initial_root_password: Length is too short, minimum is 8 characters'
       end
 
       if Gitlab['gitlab_rails']['ci_jwt_signing_key']
