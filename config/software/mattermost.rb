@@ -18,10 +18,10 @@
 
 name 'mattermost'
 # TODO: Remove special handling of `bundlestats.json` when version below is upgraded
-default_version '7.3.0'
+default_version '7.3.1'
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",
-       sha256: '47602e67b457a4871fd459f32a67f44e3353e4152989157eced2ad3bff5f634b'
+       sha256: '26af2a6235261d5cb8b3d29b55a5c50b38c92f0b5e70e3ffac74729112d82c87'
 relative_path 'mattermost'
 
 license_name = 'GITLAB-MATTERMOST-COMPILED-LICENSE.txt'
