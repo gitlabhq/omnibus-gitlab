@@ -54,7 +54,7 @@ See [doc/settings/configuration.md](doc/settings/configuration.md#storing-git-da
 
 #### Changing the name of the Git user / group
 
-See [doc/settings/configuration.md](doc/settings/configuration.md#changing-the-name-of-the-git-user-group).
+See [doc/settings/configuration.md](doc/settings/configuration.md#change-the-name-of-the-git-user-or-group).
 
 #### Setting up LDAP sign-in
 
