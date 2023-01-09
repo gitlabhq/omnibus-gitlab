@@ -47,6 +47,14 @@ No changes.
 
 - [Update Mattermost to 7.5.1](gitlab-org/omnibus-gitlab@477c3f4be4fd4933f35accf422ce5528aae20fec) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6526))
 
+## 15.6.4 (2023-01-09)
+
+### Security (3 changes)
+
+- [Bump Redis version to 6.2.8](gitlab-org/security/omnibus-gitlab@458f9cc16a707d7503b400150685bd366aa4ba23) ([merge request](gitlab-org/security/omnibus-gitlab!289))
+- [Update logrotate to 3.20.1](gitlab-org/security/omnibus-gitlab@0010b7e1957fe373ca4b0c0d5726cd2459928ae6) ([merge request](gitlab-org/security/omnibus-gitlab!285))
+- [Update curl to 7.87.0](gitlab-org/security/omnibus-gitlab@1538649d714ba3e85fdf3e21c7f13277100e8201) ([merge request](gitlab-org/security/omnibus-gitlab!293))
+
 ## 15.6.3 (2022-12-21)
 
 No changes.
