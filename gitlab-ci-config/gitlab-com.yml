@@ -139,29 +139,37 @@
     reports:
       junit: junit_rspec.xml
 
-.trigger-job:
+.base-trigger-job-variables:
+  ALTERNATIVE_SOURCES: 'true'
+  BUILDER_IMAGE_REVISION: ${BUILDER_IMAGE_REVISION}
+  BUILDER_IMAGE_REGISTRY: ${BUILDER_IMAGE_REGISTRY}
+  PUBLIC_BUILDER_IMAGE_REGISTRY: ${PUBLIC_BUILDER_IMAGE_REGISTRY}
+  COMPILE_ASSETS: ${COMPILE_ASSETS}
+  GITLAB_VERSION: ${GITLAB_VERSION}
+  GITLAB_SHELL_VERSION: ${GITLAB_SHELL_VERSION}
+  GITLAB_PAGES_VERSION: ${GITLAB_PAGES_VERSION}
+  GITALY_VERSION: ${GITALY_SERVER_VERSION}
+  GITLAB_ELASTICSEARCH_INDEXER_VERSION: ${GITLAB_ELASTICSEARCH_INDEXER_VERSION}
+  GITLAB_KAS_VERSION: ${GITLAB_KAS_VERSION}
+  TOP_UPSTREAM_SOURCE_PROJECT: ${TOP_UPSTREAM_SOURCE_PROJECT}
+  TOP_UPSTREAM_SOURCE_JOB: ${TOP_UPSTREAM_SOURCE_JOB}
+  TOP_UPSTREAM_SOURCE_SHA: ${TOP_UPSTREAM_SOURCE_SHA}
+  TOP_UPSTREAM_SOURCE_REF: ${TOP_UPSTREAM_SOURCE_REF}
+  QA_BRANCH: ${QA_BRANCH}
+
+.ce-trigger-job-variables:
+  extends: .base-trigger-job-variables
+  PIPELINE_TYPE: "TRIGGERED_CE_PIPELINE"
+  CACHE_EDITION: "CE"
+
+.ee-trigger-job-variables:
+  extends: .base-trigger-job-variables
+  PIPELINE_TYPE: "TRIGGERED_EE_PIPELINE"
+  CACHE_EDITION: "EE"
+  ee: "true"
+
+.ce-trigger-job:
   stage: trigger-package
-  inherit:
-    variables: false
-  variables:
-    PIPELINE_TYPE: "TRIGGERED_CE_PIPELINE"
-    CACHE_EDITION: "CE"
-    ALTERNATIVE_SOURCES: 'true'
-    BUILDER_IMAGE_REVISION: ${BUILDER_IMAGE_REVISION}
-    BUILDER_IMAGE_REGISTRY: ${BUILDER_IMAGE_REGISTRY}
-    PUBLIC_BUILDER_IMAGE_REGISTRY: ${PUBLIC_BUILDER_IMAGE_REGISTRY}
-    COMPILE_ASSETS: ${COMPILE_ASSETS}
-    GITLAB_VERSION: ${GITLAB_VERSION}
-    GITLAB_SHELL_VERSION: ${GITLAB_SHELL_VERSION}
-    GITLAB_PAGES_VERSION: ${GITLAB_PAGES_VERSION}
-    GITALY_VERSION: ${GITALY_SERVER_VERSION}
-    GITLAB_ELASTICSEARCH_INDEXER_VERSION: ${GITLAB_ELASTICSEARCH_INDEXER_VERSION}
-    GITLAB_KAS_VERSION: ${GITLAB_KAS_VERSION}
-    TOP_UPSTREAM_SOURCE_PROJECT: ${TOP_UPSTREAM_SOURCE_PROJECT}
-    TOP_UPSTREAM_SOURCE_JOB: ${TOP_UPSTREAM_SOURCE_JOB}
-    TOP_UPSTREAM_SOURCE_SHA: ${TOP_UPSTREAM_SOURCE_SHA}
-    TOP_UPSTREAM_SOURCE_REF: ${TOP_UPSTREAM_SOURCE_REF}
-    QA_BRANCH: ${QA_BRANCH}
   trigger:
     include: '.gitlab-ci.yml'
     strategy: depend
@@ -170,28 +178,12 @@
       artifacts: true
   allow_failure: true
   rules:
-    # Because of inherit:variables being false, `PIPELINE_TYPE` isn't available here. :(
-    # https://gitlab.com/gitlab-org/gitlab/-/issues/368759
-    # Do not include in dependency update related pipelines
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^deps/ || $CI_COMMIT_BRANCH =~ /^deps/ || $DEPS_PIPELINE == "true"'
-      when: never
-    # Do not include in docs pipelines
-    - if: '$CI_COMMIT_BRANCH =~ /^docs/ || $CI_COMMIT_BRANCH =~ /-docs$/ || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^docs/ || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /-docs$/'
-      when: never
-    # Do not include in other housekeeping pipelines
-    - if: '$PAGES_UPDATE == "true" || $DEPENDENCY_SCANNING == "true" || $CACHE_UPDATE == "true" || $DURATION_PLOTTER == "true"'
-      when: never
-    # Do not include in pipelines of protected branches and tags. This job
-    # makes sense only during feature development
-    - if: '$CI_COMMIT_REF_PROTECTED == "true"'
-      when: never
-    # Do not include in triggered and scheduled pipelines
-    - if: '$CI_PIPELINE_SOURCE=="schedule" || $CI_PIPELINE_SOURCE=="pipeline"'
-      when: never
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && ($CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" || $CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab")'
+    - if: '$PIPELINE_TYPE =~ /_BRANCH_TEST_PIPELINE$/'
       when: manual
-    - if: '$CI_COMMIT_BRANCH && ($CI_PIPELINE_SOURCE =~ /(web|push|webide|api)/) && ($CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" || $CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab")'
+      variables: !reference [.ce-trigger-job-variables]
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
       when: manual
+      variables: !reference [.ce-trigger-job-variables]
 
 .trigger-pipeline:
   stage: trigger-qa
@@ -275,14 +267,19 @@ update-trigger-package-cache:
 ###########################
 
 Trigger:ce-package:
-  extends: .trigger-job
+  extends: .ce-trigger-job
 
 Trigger:ee-package:
-  extends: .trigger-job
-  variables:
-    PIPELINE_TYPE: "TRIGGERED_EE_PIPELINE"
-    CACHE_EDITION: "EE"
-    ee: "true"
+  extends: .ce-trigger-job
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_BRANCH_TEST_PIPELINE$/'
+      when: manual
+      variables: !reference [.ee-trigger-job-variables]
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
+      when: manual
+      variables: !reference [.ee-trigger-job-variables]
+    - if: '$PIPELINE_TYPE == "DEPS_IO_VERSION_BUMP_PIPELINE"'
+      variables: !reference [.ee-trigger-job-variables]
 
 rubocop:
   extends: .gems-cache
@@ -557,8 +554,6 @@ Trigger:gitlab-docker:
 
 qa-test:
   stage: trigger-qa
-  inherit:
-    variables: false
   variables:
     RELEASE: $QA_RELEASE
     QA_IMAGE: $QA_IMAGE
@@ -576,14 +571,13 @@ qa-test:
     project: "gitlab-org/gitlab-qa-mirror"
     branch: $QA_BRANCH
     strategy: depend
+    forward:
+      pipeline_variables: false
+      yaml_variables: true
   rules:
     - if: '$SKIP_QA_TEST == "true"'
       when: never
-    # Because of inherit:variables being false, `PIPELINE_TYPE` isn't available here. :(
-    # https://gitlab.com/gitlab-org/gitlab/-/issues/368759
-    - if: '$CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && $CI_PIPELINE_SOURCE=="pipeline"'
-    - if: '$CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $CI_PIPELINE_SOURCE == "parent_pipeline" && $UPSTREAM_CI_PIPELINE_SOURCE != "parent_pipeline"'
-    - if: '$CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab" && $CI_PIPELINE_SOURCE == "parent_pipeline" && $UPSTREAM_CI_PIPELINE_SOURCE != "parent_pipeline"'
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
   needs:
     - job: generate-facts
       artifacts: true
@@ -698,16 +692,6 @@ dependency_update:
   rules:
     - if: '$PIPELINE_TYPE == "DEPS_IO_VERSION_CHECK_PIPELINE"'
 
-dependencies_io_check:
-  extends: .trigger-job
-  when: always
-  variables:
-    ee: "true"
-  rules:
-    # Because of inherit:variables being false, `PIPELINE_TYPE` isn't available here. :(
-    # https://gitlab.com/gitlab-org/gitlab/-/issues/368759
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^deps/ || $CI_COMMIT_BRANCH =~ /^deps/'
-
 validate_packer_changes:
   before_script: []
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/debian_packer:${BUILDER_IMAGE_REVISION}"
@@ -752,28 +736,22 @@ build-package-on-all-os:
   needs:
     - job: generate-facts
       artifacts: true
-  inherit:
-    variables: false
   variables:
-    SKIP_JOB_REGEX: '/SLES|Ubuntu-20.04|Docker|QA/'
-    PIPELINE_TYPE: "${EDITION}_BRANCH_BUILD_PIPELINE"
-    ee: "${ee}"
-    ALTERNATIVE_SOURCES: 'true'
-    GITLAB_VERSION: ${GITLAB_VERSION}
-    GITLAB_SHELL_VERSION: ${GITLAB_SHELL_VERSION}
-    GITLAB_PAGES_VERSION: ${GITLAB_PAGES_VERSION}
-    GITALY_VERSION: ${GITALY_SERVER_VERSION}
-    GITLAB_ELASTICSEARCH_INDEXER_VERSION: ${GITLAB_ELASTICSEARCH_INDEXER_VERSION}
-    GITLAB_KAS_VERSION: ${GITLAB_KAS_VERSION}
   trigger:
     include: '.gitlab-ci.yml'
     strategy: depend
   rules:
-    - if: '$CI_PROJECT_PATH == "gitlab-org/build/omnibus-gitlab-mirror" && ($CI_PIPELINE_SOURCE == "pipeline" || $CI_PIPELINE_SOURCE == "trigger")'
-      when: manual
-      allow_failure: true
-    - if: '$CI_PROJECT_PATH == "gitlab-org/omnibus-gitlab" && $CI_PIPELINE_SOURCE == "parent_pipeline" && $UPSTREAM_CI_PIPELINE_SOURCE != "parent_pipeline"'
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
       when: manual
       allow_failure: true
       variables:
-        UPSTREAM_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
+        SKIP_JOB_REGEX: '/SLES|Ubuntu-20.04|Docker|QA/'
+        PIPELINE_TYPE: "${EDITION}_BRANCH_BUILD_PIPELINE"
+        ee: "${ee}"
+        ALTERNATIVE_SOURCES: 'true'
+        GITLAB_VERSION: ${GITLAB_VERSION}
+        GITLAB_SHELL_VERSION: ${GITLAB_SHELL_VERSION}
+        GITLAB_PAGES_VERSION: ${GITLAB_PAGES_VERSION}
+        GITALY_VERSION: ${GITALY_SERVER_VERSION}
+        GITLAB_ELASTICSEARCH_INDEXER_VERSION: ${GITLAB_ELASTICSEARCH_INDEXER_VERSION}
+        GITLAB_KAS_VERSION: ${GITLAB_KAS_VERSION}
