@@ -144,6 +144,7 @@ default['gitlab']['gitlab-rails']['incoming_email_password'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_mailbox_name'] = "inbox"
 default['gitlab']['gitlab-rails']['incoming_email_idle_timeout'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_log_file'] = "/var/log/gitlab/mailroom/mail_room_json.log" # file path of internal `mail_room` JSON logs
+default['gitlab']['gitlab-rails']['incoming_email_delete_after_delivery'] = true
 default['gitlab']['gitlab-rails']['incoming_email_expunge_deleted'] = nil
 default['gitlab']['gitlab-rails']['incoming_email_inbox_method'] = "imap"
 default['gitlab']['gitlab-rails']['incoming_email_inbox_options'] = nil
