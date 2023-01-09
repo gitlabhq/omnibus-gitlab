@@ -976,7 +976,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 ## GitLab User Settings
 ##! Modify default git user.
-##! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#changing-the-name-of-the-git-user-group
+##! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#change-the-name-of-the-git-user-or-group
 ################################################################################
 
 # user['username'] = "git"
