@@ -515,7 +515,13 @@ Docker-QA:
   extends: .docker_job
   stage: image
   script:
-    - bundle exec rake qa:build qa:push:staging
+    # For downstream users like JiHu to retain original behavior
+    - if [ "BUILD_GITLAB_QA_IMAGE" == "true" ]; then
+        bundle exec rake qa:build;
+        bundle exec rake qa:push:staging;
+      else
+        bundle exec rake qa:copy:staging;
+      fi
   cache: !reference [.tag-cache]
   tags:
   - docker-builder
