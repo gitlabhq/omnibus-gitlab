@@ -8,7 +8,13 @@ namespace :release do
   task docker: ["docker:pull:staging", "docker:push:stable", "docker:push:rc", "docker:push:latest"]
 
   desc "Release QA image"
-  task qa: ["qa:build", "qa:push:stable", "qa:push:rc", "qa:push:latest"]
+  # For downstream users like JiHu to retain original behavior
+  qa_release_tasks = if Gitlab::Util.get_env("BUILD_GITLAB_QA_IMAGE") == "true"
+                       ["qa:build", "qa:push:stable", "qa:push:rc", "qa:push:latest"]
+                     else
+                       ["qa:copy:stable", "qa:copy:rc", "qa:copy:latest"]
+                     end
+  task qa: qa_release_tasks
 
   desc "Create GitLab release"
   task :print_details do
