@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.7.2 (2023-01-09)
+
+### Security (2 changes)
+
+- [Bump Redis version to 6.2.8](gitlab-org/security/omnibus-gitlab@e648c5ae4d486990b14f07bdbff01cae45e4f144) ([merge request](gitlab-org/security/omnibus-gitlab!288))
+- [Update logrotate to 3.20.1](gitlab-org/security/omnibus-gitlab@2679b92ae2c935635d1980f7b1c263f76a875a1b) ([merge request](gitlab-org/security/omnibus-gitlab!286))
+
 ## 15.7.1 (2023-01-05)
 
 No changes.
@@ -39,6 +46,14 @@ No changes.
 ### Other (1 change)
 
 - [Update Mattermost to 7.5.1](gitlab-org/omnibus-gitlab@477c3f4be4fd4933f35accf422ce5528aae20fec) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6526))
+
+## 15.6.4 (2023-01-09)
+
+### Security (3 changes)
+
+- [Bump Redis version to 6.2.8](gitlab-org/security/omnibus-gitlab@458f9cc16a707d7503b400150685bd366aa4ba23) ([merge request](gitlab-org/security/omnibus-gitlab!289))
+- [Update logrotate to 3.20.1](gitlab-org/security/omnibus-gitlab@0010b7e1957fe373ca4b0c0d5726cd2459928ae6) ([merge request](gitlab-org/security/omnibus-gitlab!285))
+- [Update curl to 7.87.0](gitlab-org/security/omnibus-gitlab@1538649d714ba3e85fdf3e21c7f13277100e8201) ([merge request](gitlab-org/security/omnibus-gitlab!293))
 
 ## 15.6.3 (2022-12-21)
 
@@ -84,6 +99,15 @@ No changes.
 
 - [Add Puma on_worker_shutdown hook](gitlab-org/omnibus-gitlab@856617e16df2003fdb82768c17165998adbd8ddb) ([merge request](gitlab-org/omnibus-gitlab!6508))
 - [Update Mattermost to 7.4.0](gitlab-org/omnibus-gitlab@a76ed1ffac36f6ab677c2c800460284a7dc9dc97) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6462))
+
+## 15.5.7 (2023-01-09)
+
+### Security (4 changes)
+
+- [Mattermost October 2022 Security Updates](gitlab-org/security/omnibus-gitlab@b1cbcc4bc3e969c769761194bb499fd05a196917) ([merge request](gitlab-org/security/omnibus-gitlab!267))
+- [Bump Redis version to 6.2.8](gitlab-org/security/omnibus-gitlab@f0a27f685cec3aa7e46440024571cf24f22e3f5d) ([merge request](gitlab-org/security/omnibus-gitlab!290))
+- [Update logrotate to 3.20.1](gitlab-org/security/omnibus-gitlab@fee4773dda91151e5ae7203c18a1aecd53d208f0) ([merge request](gitlab-org/security/omnibus-gitlab!284))
+- [Update curl to 7.87.0](gitlab-org/security/omnibus-gitlab@440f9e88bed7dce1728fe85f6406219f69db465b) ([merge request](gitlab-org/security/omnibus-gitlab!292))
 
 ## 15.5.6 (2022-12-07)
 
