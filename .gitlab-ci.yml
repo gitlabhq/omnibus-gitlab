@@ -159,6 +159,7 @@ generate-facts:
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
     - if: '$PIPELINE_TYPE == "DEPS_IO_VERSION_BUMP_PIPELINE"'
     - if: '$PIPELINE_TYPE == "DEPENDENCY_SCANNING_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "FORK_MR_PIPELINE"'
     - when: never
   needs: []
 
