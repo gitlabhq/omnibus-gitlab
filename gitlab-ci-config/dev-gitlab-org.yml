@@ -402,7 +402,7 @@ QA-branch:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
     # For downstream users like JiHu to retain original behavior
-    - if [ "BUILD_GITLAB_QA_IMAGE" == "true" ]; then
+    - if [ "$BUILD_GITLAB_QA_IMAGE" == "true" ]; then
         bundle exec rake qa:build;
         bundle exec rake qa:push:nightly;
         bundle exec rake qa:push:staging;
@@ -516,7 +516,7 @@ Docker-QA:
   stage: image
   script:
     # For downstream users like JiHu to retain original behavior
-    - if [ "BUILD_GITLAB_QA_IMAGE" == "true" ]; then
+    - if [ "$BUILD_GITLAB_QA_IMAGE" == "true" ]; then
         bundle exec rake qa:build;
         bundle exec rake qa:push:staging;
       else
