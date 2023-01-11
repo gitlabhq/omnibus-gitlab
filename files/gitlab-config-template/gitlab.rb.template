@@ -1169,7 +1169,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['home'] = "/var/opt/gitlab/postgresql"
 # postgresql['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
 # postgresql['sql_user'] = "gitlab"
-# postgresql['max_connections'] = 200
+# postgresql['max_connections'] = 400
 # postgresql['md5_auth_cidr_addresses'] = []
 # postgresql['trust_auth_cidr_addresses'] = []
 # postgresql['wal_buffers'] = "-1"
@@ -2970,7 +2970,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # patroni['postgresql']['wal_log_hints'] = 'on'
 # patroni['postgresql']['max_worker_processes'] = 8
 # patroni['postgresql']['max_locks_per_transaction'] = 64
-# patroni['postgresql']['max_connections'] = 200
+# patroni['postgresql']['max_connections'] = 400
 # patroni['postgresql']['checkpoint_timeout'] = 30
 
 ## The following can hold different values on all nodes.

@@ -111,7 +111,7 @@ RSpec.describe 'patroni cookbook' do
                 hot_standby: 'on',
                 wal_keep_size: 160,
                 max_replication_slots: 5,
-                max_connections: 200,
+                max_connections: 400,
                 max_locks_per_transaction: 128,
                 max_worker_processes: 8,
                 max_wal_senders: 5,
@@ -189,7 +189,7 @@ RSpec.describe 'patroni cookbook' do
                 hot_standby: 'on',
                 wal_keep_segments: 10,
                 max_replication_slots: 5,
-                max_connections: 200,
+                max_connections: 400,
                 max_locks_per_transaction: 128,
                 max_worker_processes: 8,
                 max_wal_senders: 5,
@@ -537,7 +537,7 @@ RSpec.describe 'patroni cookbook' do
 
           expect(cfg[:postgresql][:use_pg_rewind]).to be(true)
           expect(cfg[:postgresql][:parameters]).to include(
-            max_connections: 200,
+            max_connections: 400,
             max_locks_per_transaction: 128,
             max_worker_processes: 8,
             max_prepared_transactions: 0,
@@ -646,7 +646,7 @@ RSpec.describe 'patroni cookbook' do
 
           expect(cfg[:postgresql][:use_pg_rewind]).to be(true)
           expect(cfg[:postgresql][:parameters]).to include(
-            max_connections: 200,
+            max_connections: 400,
             max_locks_per_transaction: 128,
             max_worker_processes: 8,
             wal_log_hints: 'on'

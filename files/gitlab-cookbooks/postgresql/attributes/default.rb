@@ -22,7 +22,7 @@ default['postgresql']['connect_port'] = nil
 # Postgres allow multi listen_address, comma-separated values.
 # If used, first address from the list will be use for connection
 default['postgresql']['listen_address'] = nil
-default['postgresql']['max_connections'] = 200
+default['postgresql']['max_connections'] = 400
 default['postgresql']['md5_auth_cidr_addresses'] = []
 default['postgresql']['trust_auth_cidr_addresses'] = []
 
