@@ -22,56 +22,50 @@ RSpec.describe 'gitlab::default' do
       group: 'root',
       mode: '0755'
     )
+
+    gitconfig_hash = {
+      "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
+      "pack" => ["threads = 1"],
+      "repack" => ["writeBitmaps = true"],
+      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
+      "core" => [
+        'alternateRefsCommand="exit 0 #"',
+        "fsyncObjectFiles = true"
+      ],
+      "fetch" => ["writeCommitGraph = true"]
+    }
+
+    expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
+      variables: { gitconfig: gitconfig_hash }
+    )
   end
 
-  context 'with gitconfig' do
-    shared_examples 'a rendered system-level gitconfig' do
-      before do
-        stub_gitlab_rb(gitlab_config)
-      end
+  it 'creates the system gitconfig directory and file' do
+    stub_gitlab_rb(omnibus_gitconfig: { system: { receive: ["fsckObjects = true", "advertisePushOptions = true"], pack: ["threads = 2"] } })
 
-      it 'creates the system gitconfig directory' do
-        expect(chef_run).to create_directory('/opt/gitlab/embedded/etc').with(
-          user: 'root',
-          group: 'root',
-          mode: '0755'
-        )
-      end
+    expect(chef_run).to create_directory('/opt/gitlab/embedded/etc').with(
+      user: 'root',
+      group: 'root',
+      mode: '0755'
+    )
 
-      it 'renders the gitconfig' do
-        expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
-          source: 'gitconfig-system.erb',
-          variables: {
-            gitconfig: expected_gitconfig
-          },
-          mode: 0755
-        )
-      end
-    end
+    gitconfig_hash = {
+      "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
+      "pack" => ["threads = 2"],
+      "repack" => ["writeBitmaps = true"],
+      "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
+      "core" => [
+        'alternateRefsCommand="exit 0 #"',
+        "fsyncObjectFiles = true"
+      ],
+      "fetch" => ["writeCommitGraph = true"]
+    }
 
-    context 'without default gitconfig' do
-      let(:gitlab_config) { {} }
-      let(:expected_gitconfig) { nil }
-
-      it_behaves_like 'a rendered system-level gitconfig'
-    end
-
-    context 'with omnibus_gitconfig' do
-      let(:gitlab_config) do
-        {
-          omnibus_gitconfig: { system: { receive: ["fsckObjects = true", "advertisePushOptions = true"], pack: ["threads = 2"] } }
-        }
-      end
-
-      let(:expected_gitconfig) do
-        {
-          "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
-          "pack" => ["threads = 2"]
-        }
-      end
-
-      it_behaves_like 'a rendered system-level gitconfig'
-    end
+    expect(chef_run).to create_template('/opt/gitlab/embedded/etc/gitconfig').with(
+      source: 'gitconfig-system.erb',
+      variables: { gitconfig: gitconfig_hash },
+      mode: 0755
+    )
   end
 
   context 'with logrotate' do
