@@ -1621,21 +1621,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! internal git
 ################################################################################
 
+##! The format of the Omnibus gitconfig is:
+##! { "section" => ["subsection = value"] }
+##! For example:
+##! { "pack" => ["threads = 1"] }
 ##! For multiple options under one header use array of comma separated values,
 ##! eg.:
 ##! { "receive" => ["fsckObjects = true"], "alias" => ["st = status", "co = checkout"] }
-
-# omnibus_gitconfig['system'] = {
-#  "pack" => ["threads = 1"],
-#  "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
-#  "repack" => ["writeBitmaps = true"],
-#  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
-#  "core" => [
-#    'alternateRefsCommand="exit 0 #"',
-#    "fsyncObjectFiles = true"
-#  ],
-#  "fetch" => ["writeCommitGraph = true"]
-# }
+# omnibus_gitconfig['system'] = {}
 
 ################################################################################
 ## GitLab Pages
