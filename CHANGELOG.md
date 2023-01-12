@@ -122,6 +122,12 @@ No changes.
 - [Add Puma on_worker_shutdown hook](gitlab-org/omnibus-gitlab@856617e16df2003fdb82768c17165998adbd8ddb) ([merge request](gitlab-org/omnibus-gitlab!6508))
 - [Update Mattermost to 7.4.0](gitlab-org/omnibus-gitlab@a76ed1ffac36f6ab677c2c800460284a7dc9dc97) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6462))
 
+## 15.5.9 (2023-01-12)
+
+### Security (1 change)
+
+- [Allow GIT_REPO_URL to be overridden for self managed releases [15.5]](gitlab-org/security/omnibus-gitlab@04fe0d5863f2e40709c1940fe8b714150ffa1510) ([merge request](gitlab-org/security/omnibus-gitlab!295))
+
 ## 15.5.8 (2023-01-12)
 
 No changes.
