@@ -575,6 +575,12 @@ production: &base
       cron: "<%= @ci_runner_versions_reconciliation_worker_cron %>"
     <% end %>
 
+    # Periodically clean up stale ci_runner_machines records
+    <% unless @ci_runners_stale_machines_cleanup_worker_cron.nil? %>
+    ci_runners_stale_machines_cleanup_worker:
+      cron: "<%= @ci_runners_stale_machines_cleanup_worker_cron %>"
+    <% end %>
+
     ##
     # GitLab EE only jobs:
 

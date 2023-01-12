@@ -51,6 +51,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'loose_foreign_keys_cleanup_worker'                      | 'loose_foreign_keys_cleanup_worker_cron'
         'ci_runners_stale_group_runners_prune_worker_cron'       | 'ci_runners_stale_group_runners_prune_worker_cron'
         'ci_runner_versions_reconciliation_worker'               | 'ci_runner_versions_reconciliation_worker_cron'
+        'ci_runners_stale_machines_cleanup_worker'               | 'ci_runners_stale_machines_cleanup_worker_cron'
       end
 
       with_them do
