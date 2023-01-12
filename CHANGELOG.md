@@ -55,6 +55,10 @@ No changes.
 
 - [Update Mattermost to 7.5.1](gitlab-org/omnibus-gitlab@477c3f4be4fd4933f35accf422ce5528aae20fec) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6526))
 
+## 15.6.5 (2023-01-12)
+
+No changes.
+
 ## 15.6.4 (2023-01-09)
 
 ### Security (3 changes)
