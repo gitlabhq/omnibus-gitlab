@@ -59,6 +59,12 @@ No changes.
 
 - [Update Mattermost to 7.5.1](gitlab-org/omnibus-gitlab@477c3f4be4fd4933f35accf422ce5528aae20fec) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6526))
 
+## 15.6.6 (2023-01-12)
+
+### Security (1 change)
+
+- [Allow GIT_REPO_URL to be overridden for self managed releases [15.6]](gitlab-org/security/omnibus-gitlab@5c76abf360fa5aec6985a0e7c040fa9c3e4a30fd) ([merge request](gitlab-org/security/omnibus-gitlab!296))
+
 ## 15.6.5 (2023-01-12)
 
 No changes.
