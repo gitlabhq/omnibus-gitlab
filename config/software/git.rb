@@ -73,6 +73,14 @@ build do
     build_options << "GIT_APPEND_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded"
   end
 
+  sm_version_override_git_repo_url = Gitlab::Util.get_env('SELF_MANAGED_VERSION_REGEX_OVERRIDE_GIT_REPO_URL')
+
+  if sm_version_override_git_repo_url && Regexp.new(sm_version_override_git_repo_url).match?(Build::Info.gitlab_version)
+    git_repo_url = Gitlab::Util.get_env('GITALY_GIT_REPO_URL')
+
+    env['GIT_REPO_URL'] = git_repo_url if git_repo_url
+  end
+
   block do
     File.open(File.join(project_dir, 'config.mak'), 'a') do |file|
       file.print build_options.join("\n")
