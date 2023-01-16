@@ -97,17 +97,23 @@ module Gitaly
         end
       end
 
-      # ... but remove any of its values that are part of the default
-      # configuration. We do not want to inject our old default values into
-      # Gitaly anymore given that it is setting its own defaults nowadays.
-      # Furthermore, we must not inject the `core.fsyncObjectFiles` config
-      # entry, which has been deprecated in Git.
-      omnibus_gitconfig -= Gitlab['node']['gitlab']['omnibus-gitconfig']['system'].flat_map do |section, entries|
-        entries.map do |entry|
-          key, value = entry.split('=', 2)
-          "#{section}.#{key.rstrip}=#{value.lstrip}"
-        end
-      end
+      # ... but remove any of its values that had been part of the default
+      # configuration when introducing the Gitaly gitconfig. We do not want to
+      # inject our old default values into Gitaly anymore given that it is
+      # setting its own defaults nowadays. Furthermore, we must not inject the
+      # `core.fsyncObjectFiles` config entry, which has been deprecated in Git.
+      omnibus_gitconfig -= [
+        'pack.threads=1',
+        'receive.advertisePushOptions=true',
+        'receive.fsckObjects=true',
+        'repack.writeBitmaps=true',
+        'transfer.hideRefs=^refs/tmp/',
+        'transfer.hideRefs=^refs/keep-around/',
+        'transfer.hideRefs=^refs/remotes/',
+        'core.alternateRefsCommand="exit 0 #"',
+        'core.fsyncObjectFiles=true',
+        'fetch.writeCommitGraph=true'
+      ]
 
       # The configuration format has changed. Previously, we had a map of
       # top-level config entry keys to their sublevel entry keys which also
