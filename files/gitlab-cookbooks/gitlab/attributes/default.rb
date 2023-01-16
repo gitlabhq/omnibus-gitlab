@@ -20,17 +20,6 @@
 # omnibus options
 ####
 default['gitlab']['bootstrap']['enable'] = true
-default['gitlab']['omnibus-gitconfig']['system'] = {
-  "pack" => ["threads = 1"],
-  "receive" => ["fsckObjects = true", "advertisePushOptions = true"],
-  "repack" => ["writeBitmaps = true"],
-  "transfer" => ["hideRefs=^refs/tmp/", "hideRefs=^refs/keep-around/", "hideRefs=^refs/remotes/"],
-  "core" => [
-    'alternateRefsCommand="exit 0 #"',
-    "fsyncObjectFiles = true"
-  ],
-  "fetch" => ["writeCommitGraph = true"]
-}
 # Create users and groups needed for the package
 default['gitlab']['manage-accounts']['enable'] = true
 
