@@ -73,10 +73,18 @@ build do
     build_options << "GIT_APPEND_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded"
   end
 
+  sm_version_override_git_repo_url = Gitlab::Util.get_env('SELF_MANAGED_VERSION_REGEX_OVERRIDE_GIT_REPO_URL')
+  git_repo_url = Gitlab::Util.get_env('GITALY_GIT_REPO_URL')
   if Build::Check.is_auto_deploy_tag?
-    env['GIT_REPO_URL'] = Gitlab::Util.get_env('GITALY_GIT_REPO_URL') if Gitlab::Util.get_env('GITALY_GIT_REPO_URL')
-    env['GIT_VERSION_2_37_1'] = Gitlab::Util.get_env('GITALY_GIT_VERSION_2_37_1') if Gitlab::Util.get_env('GITALY_GIT_VERSION_2_37_1')
-    env['GIT_VERSION_2_38'] = Gitlab::Util.get_env('GITALY_GIT_VERSION_2_38') if Gitlab::Util.get_env('GITALY_GIT_VERSION_2_38')
+    git_version_2_37_1 = Gitlab::Util.get_env('GITALY_GIT_VERSION_2_37_1')
+    git_version_2_38 = Gitlab::Util.get_env('GITALY_GIT_VERSION_2_38')
+
+    env['GIT_REPO_URL'] = git_repo_url if git_repo_url
+    env['GIT_VERSION_2_37_1'] = git_version_2_37_1 if git_version_2_37_1
+    env['GIT_VERSION_2_38'] = git_version_2_38 if git_version_2_38
+
+  elsif sm_version_override_git_repo_url && Regexp.new(sm_version_override_git_repo_url).match?(Build::Info.gitlab_version)
+    env['GIT_REPO_URL'] = git_repo_url if git_repo_url
   end
 
   block do

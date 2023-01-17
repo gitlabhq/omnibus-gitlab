@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.6.6 (2023-01-12)
+
+### Security (1 change)
+
+- [Allow GIT_REPO_URL to be overridden for self managed releases [15.6]](gitlab-org/security/omnibus-gitlab@5c76abf360fa5aec6985a0e7c040fa9c3e4a30fd) ([merge request](gitlab-org/security/omnibus-gitlab!296))
+
+## 15.6.5 (2023-01-12)
+
+No changes.
+
 ## 15.6.4 (2023-01-09)
 
 ### Security (3 changes)
