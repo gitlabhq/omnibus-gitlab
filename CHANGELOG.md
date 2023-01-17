@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.7.5 (2023-01-12)
+
+No changes.
+
+## 15.7.4 (2023-01-12)
+
+No changes.
+
 ## 15.7.3 (2023-01-11)
 
 No changes.
@@ -50,6 +58,16 @@ No changes.
 ### Other (1 change)
 
 - [Update Mattermost to 7.5.1](gitlab-org/omnibus-gitlab@477c3f4be4fd4933f35accf422ce5528aae20fec) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6526))
+
+## 15.6.6 (2023-01-12)
+
+### Security (1 change)
+
+- [Allow GIT_REPO_URL to be overridden for self managed releases [15.6]](gitlab-org/security/omnibus-gitlab@5c76abf360fa5aec6985a0e7c040fa9c3e4a30fd) ([merge request](gitlab-org/security/omnibus-gitlab!296))
+
+## 15.6.5 (2023-01-12)
+
+No changes.
 
 ## 15.6.4 (2023-01-09)
 
@@ -103,6 +121,16 @@ No changes.
 
 - [Add Puma on_worker_shutdown hook](gitlab-org/omnibus-gitlab@856617e16df2003fdb82768c17165998adbd8ddb) ([merge request](gitlab-org/omnibus-gitlab!6508))
 - [Update Mattermost to 7.4.0](gitlab-org/omnibus-gitlab@a76ed1ffac36f6ab677c2c800460284a7dc9dc97) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6462))
+
+## 15.5.9 (2023-01-12)
+
+### Security (1 change)
+
+- [Allow GIT_REPO_URL to be overridden for self managed releases [15.5]](gitlab-org/security/omnibus-gitlab@04fe0d5863f2e40709c1940fe8b714150ffa1510) ([merge request](gitlab-org/security/omnibus-gitlab!295))
+
+## 15.5.8 (2023-01-12)
+
+No changes.
 
 ## 15.5.7 (2023-01-09)
 
