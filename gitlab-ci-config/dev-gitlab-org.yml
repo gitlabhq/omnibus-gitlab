@@ -1111,6 +1111,7 @@ check-packages:
 
 print-release-contents:
   stage: package-and-image-release
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04-ruby:${BUILDER_IMAGE_REVISION}"
   needs:
     - job: AWS
       artifacts: true
