@@ -65,7 +65,7 @@ To resolve this error:
    - `gitlab_rails['gitlab_email_reply_to']`.
 
 Other than permissions, this error is sometimes caused because the server does not allow the default `gitlab_email_from` value to be used. You should set the value to the email address for the account you're authenticating with.
- 
+
 ### `Tail logs`
 
 For troubleshooting, use the `tail logs` command to view live GitLab log updates:
