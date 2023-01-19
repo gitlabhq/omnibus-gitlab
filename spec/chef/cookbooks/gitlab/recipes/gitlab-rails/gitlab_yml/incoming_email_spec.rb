@@ -4,6 +4,28 @@ RSpec.describe 'gitlab::gitlab-rails' do
   include_context 'gitlab-rails'
 
   describe 'incoming email settings' do
+    describe 'delete_after_delivery values' do
+      context 'with default values' do
+        it 'renders gitlab.yml with delete_after_delivery set to true' do
+          expect(gitlab_yml[:production][:incoming_email][:delete_after_delivery]).to be true
+        end
+      end
+
+      context 'with incoming_email_delete_after_delivery set to false' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              incoming_email_delete_after_delivery: false
+            }
+          )
+        end
+
+        it 'renders gitlab.yml with delete_after_delivery set to false' do
+          expect(gitlab_yml[:production][:incoming_email][:delete_after_delivery]).to be false
+        end
+      end
+    end
+
     describe 'log file location' do
       context 'with default values' do
         it 'renders gitlab.yml with default value for mailroom log file path' do
