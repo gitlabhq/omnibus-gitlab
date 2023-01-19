@@ -93,7 +93,7 @@ module Gitaly
 
           raise "Invalid entry detected in omnibus_gitconfig['system']: '#{entry}' should be in the form key=value" if key.nil? || value.nil?
 
-          "#{section}.#{key.rstrip}=#{value.lstrip}"
+          "#{section}.#{key.strip}=#{value.strip}"
         end
       end
 

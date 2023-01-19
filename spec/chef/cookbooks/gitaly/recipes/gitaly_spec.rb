@@ -245,9 +245,9 @@ RSpec.describe 'gitaly' do
     context 'with default values and weird spacing' do
       let(:omnibus_gitconfig) do
         {
-          pack: ["threads =1"],
-          receive: ["fsckObjects=true", "advertisePushOptions   =    true"],
-          repack: ["writeBitmaps= true"],
+          pack: ["threads =1 "],
+          receive: ["  fsckObjects=true", "advertisePushOptions   =    true  "],
+          repack: [" writeBitmaps= true "],
         }
       end
 
