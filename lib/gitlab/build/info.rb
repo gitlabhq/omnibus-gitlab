@@ -116,11 +116,14 @@ module Build
           .gsub(/(\A-+|-+\z)/, '')
       end
 
-      def gitlab_rails_commit
-        # In generate-facts, we are identifying the latest commit and storing
-        # it as a build fact. This gets used by Version class and is presented
-        # as version of `gitlab-rails` software component.
-        Gitlab::Version.new('gitlab-rails').print
+      def gitlab_rails_commit(prepend_version = true)
+        # In generate-facts of feature branch pipelines, we are identifying the
+        # latest commit and storing it as a build fact. This gets used by
+        # `Gitlab::Version` class and is presented as version of `gitlab-rails`
+        # software component. In tags and stable branch pipelines, we don't
+        # store version information as a build fact, and hence the contents of
+        # VERSION file will be used by `Gitlab::Version` class.
+        Gitlab::Version.new('gitlab-rails').print(prepend_version)
       end
 
       def previous_version
@@ -149,7 +152,7 @@ module Build
       end
 
       def qa_image
-        Gitlab::Util.get_env('QA_IMAGE') || "#{Gitlab::Util.get_env('CI_REGISTRY')}/#{gitlab_rails_project_path}/#{Build::Info.package}-qa:#{gitlab_rails_commit}"
+        Gitlab::Util.get_env('QA_IMAGE') || "#{Gitlab::Util.get_env('CI_REGISTRY')}/#{gitlab_rails_project_path}/#{Build::Info.package}-qa:#{gitlab_rails_commit(false)}"
       end
 
       def edition
