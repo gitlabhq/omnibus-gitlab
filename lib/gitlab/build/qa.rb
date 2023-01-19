@@ -27,7 +27,7 @@ module Build
     def self.checkout_gitlab_rails
       # Checking out the cloned repo to the specific commit (well, without doing
       # a to-and-fro `cd`).
-      version = Build::Info.gitlab_rails_commit
+      version = Build::Info.gitlab_rails_ref
 
       puts "Building from #{Build::Info.package} commit #{version}"
 

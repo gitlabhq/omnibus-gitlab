@@ -286,7 +286,7 @@ RSpec.describe Build::Info do
     end
   end
 
-  describe '.gitlab_rails_commit' do
+  describe '.gitlab_rails_ref' do
     context 'with prepend_version true' do
       context 'on tags and stable branches' do
         # On stable branches and tags, generate-facts will not populate version facts
@@ -294,7 +294,7 @@ RSpec.describe Build::Info do
         it 'returns tag with v prefix' do
           allow(File).to receive(:exist?).with(/gitlab-rails_version/).and_return(false)
           allow(File).to receive(:read).with(/VERSION/).and_return('15.7.0')
-          expect(described_class.gitlab_rails_commit).to eq('v15.7.0')
+          expect(described_class.gitlab_rails_ref).to eq('v15.7.0')
         end
       end
 
@@ -302,7 +302,7 @@ RSpec.describe Build::Info do
         it 'returns commit SHA without any prefix' do
           allow(File).to receive(:exist?).with(/gitlab-rails_version/).and_return(true)
           allow(File).to receive(:read).with(/gitlab-rails_version/).and_return('arandomcommit')
-          expect(described_class.gitlab_rails_commit).to eq('arandomcommit')
+          expect(described_class.gitlab_rails_ref).to eq('arandomcommit')
         end
       end
     end
@@ -314,7 +314,7 @@ RSpec.describe Build::Info do
         it 'returns tag without v prefix' do
           allow(File).to receive(:exist?).with(/gitlab-rails_version/).and_return(false)
           allow(File).to receive(:read).with(/VERSION/).and_return('15.7.0')
-          expect(described_class.gitlab_rails_commit(false)).to eq('15.7.0')
+          expect(described_class.gitlab_rails_ref(prepend_version: false)).to eq('15.7.0')
         end
       end
 
@@ -322,7 +322,7 @@ RSpec.describe Build::Info do
         it 'returns commit SHA without any prefix' do
           allow(File).to receive(:exist?).with(/gitlab-rails_version/).and_return(true)
           allow(File).to receive(:read).with(/gitlab-rails_version/).and_return('arandomcommit')
-          expect(described_class.gitlab_rails_commit(false)).to eq('arandomcommit')
+          expect(described_class.gitlab_rails_ref(prepend_version: false)).to eq('arandomcommit')
         end
       end
     end
