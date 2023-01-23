@@ -185,3 +185,6 @@ redirects-max-path-segments=<%= @redirects_max_path_segments %>
 <%- if @redirects_max_rule_count -%>
 redirects-max-rule-count=<%= @redirects_max_rule_count %>
 <%-end -%>
+<%- if @headers -%>
+header=<%= @headers.join(';;') %>
+<%-end -%>

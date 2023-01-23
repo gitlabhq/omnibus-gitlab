@@ -12,6 +12,3 @@ cd <%= node['gitlab-pages']['dir'] %>
 exec chpst -e <%= @options[:env_dir] %> \
     /opt/gitlab/embedded/bin/gitlab-pages \
     -config="<%= node['gitlab-pages']['dir'] %>/gitlab-pages-config" \
-    <% headers.each do |spec| %>
-    -header="<%= spec %>" \
-    <% end %>
