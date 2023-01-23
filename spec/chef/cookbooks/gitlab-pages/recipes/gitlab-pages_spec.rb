@@ -308,15 +308,10 @@ RSpec.describe 'gitlab::gitlab-pages' do
             redirects-max-config-size=128000
             redirects-max-path-segments=50
             redirects-max-rule-count=2000
+            header=X-XSS-Protection: 1; mode=block;;X-Content-Type-Options: nosniff;;Test: Header
         EOS
 
         expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(expected_content)
-      end
-
-      it 'specifies headers as arguments in the run file' do
-        expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="X-XSS-Protection: 1; mode=block"})
-        expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="X-Content-Type-Options: nosniff"})
-        expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-pages/run").with_content(%r{-header="Test: Header"})
       end
 
       it 'renders the env dir files' do
