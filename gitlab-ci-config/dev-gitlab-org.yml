@@ -1124,7 +1124,7 @@ print-release-contents:
       artifacts: true
       optional: true
   script:
-    - bundle exec release:print_details
+    - bundle exec rake release:print_details
   allow_failure: true
   rules:
     - !reference [.default_rules, rules]
