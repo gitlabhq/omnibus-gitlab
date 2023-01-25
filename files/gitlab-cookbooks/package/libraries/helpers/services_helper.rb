@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+require_relative '../settings_dsl.rb'
+
 module Services
   ALL_SERVICES = 'all'.freeze
   ALL_GROUPS = 'all-groups'.freeze
@@ -231,7 +233,7 @@ module Services
     # @param [String] service_name
     # @return [Array]
     def service_attribute_path(service_name)
-      service = service_name.tr('_', '-')
+      service = SettingsDSL::Utils.sanitized_key(service_name)
 
       return ['monitoring', service] if Gitlab[:node]['monitoring']&.attribute?(service)
       return [service] if Gitlab[:node].attribute?(service)

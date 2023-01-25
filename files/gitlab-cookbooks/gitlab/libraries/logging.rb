@@ -64,7 +64,7 @@ module Logging
         puma
         storage-check
       ).each do |runit_sv|
-        Gitlab[runit_sv.tr('-', '_')]['svlogd_prefix'] ||= "#{Gitlab['node']['hostname']} #{runit_sv}: "
+        Gitlab[SettingsDSL::Utils.underscored_form(runit_sv)]['svlogd_prefix'] ||= "#{Gitlab['node']['hostname']} #{runit_sv}: "
       end
     end
   end

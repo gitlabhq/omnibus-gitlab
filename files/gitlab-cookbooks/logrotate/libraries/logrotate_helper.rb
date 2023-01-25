@@ -85,17 +85,18 @@ class LogrotateHelper < AccountHelper
 
     logged_services.each do |svc|
       # In `Gitlab.settings`, settings aren't hyphenated, but use underscores.
-      setting_name = svc.tr('-', '_')
+      setting_name = SettingsDSL::Utils.underscored_form(svc)
+      node_attribute_key = SettingsDSL::Utils.sanitized_key(svc)
 
       raise "Service #{svc} was specified in logrotate['services'], but is not a valid service." unless available_settings.include?(setting_name)
 
       parent = available_settings[setting_name][:parent]
       if parent
-        log_dir = node[parent][svc]['log_directory']
-        options = node['gitlab']['logging'].to_hash.merge(node[parent][svc].to_hash)
+        log_dir = node[parent][node_attribute_key]['log_directory']
+        options = node['gitlab']['logging'].to_hash.merge(node[parent][node_attribute_key].to_hash)
       else
-        log_dir = node[svc]['log_directory']
-        options = node['gitlab']['logging'].to_hash.merge(node[svc].to_hash)
+        log_dir = node[node_attribute_key]['log_directory']
+        options = node['gitlab']['logging'].to_hash.merge(node[node_attribute_key].to_hash)
       end
 
       services[svc] = {

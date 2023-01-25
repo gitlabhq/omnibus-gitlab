@@ -18,6 +18,7 @@
 require_relative 'prometheus_helper.rb'
 require_relative '../../gitlab/libraries/postgresql.rb'
 require_relative '../../gitlab/libraries/redis.rb'
+require_relative '../../package/libraries/settings_dsl.rb'
 
 require 'yaml'
 require 'json'
@@ -25,7 +26,7 @@ require 'json'
 module Prometheus
   class << self
     def services
-      Services.find_by_group('monitoring').map { |name| name.tr('_', '-') }
+      Services.find_by_group('monitoring').map { |name| SettingsDSL::Utils.sanitized_key(name) }
     end
 
     def parse_variables

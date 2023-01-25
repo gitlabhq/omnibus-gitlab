@@ -1,5 +1,6 @@
 require_relative 'object_proxy'
 require_relative 'helpers/logging_helper'
+require_relative 'settings_dsl.rb'
 
 module Gitlab
   class Deprecations
@@ -401,11 +402,11 @@ module Gitlab
           config_keys = deprecation[:config_keys].dup
           config_keys.shift if ATTRIBUTE_BLOCKS.include?(config_keys[0])
           key = if config_keys.length == 1
-                  config_keys[0].tr("-", "_")
+                  SettingsDSL::Utils.underscored_form(config_keys[0])
                 elsif config_keys.first.eql?('roles')
-                  "#{config_keys[1].tr('-', '_')}_role"
+                  "#{SettingsDSL::Utils.underscored_form(config_keys[1])}_role"
                 else
-                  "#{config_keys[0].tr('-', '_')}['#{config_keys.drop(1).join("']['")}']"
+                  "#{SettingsDSL::Utils.underscored_form(config_keys[0])}['#{config_keys.drop(1).join("']['")}']"
                 end
 
           if type == :deprecation

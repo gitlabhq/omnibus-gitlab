@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+require_relative '../../package/libraries/settings_dsl.rb'
+
 module Nginx
   class << self
     def parse_variables
@@ -46,7 +48,7 @@ module Nginx
         # This conditional is required until all services are extracted to
         # their own cookbook. Mattermost exists directly on node while
         # others exists on node['gitlab']
-        service_name_key = right.first.tr('_', '-')
+        service_name_key = SettingsDSL::Utils.sanitized_key(right.first)
         service_attribute_key = right.last
         default_set_gitlab_port = if Gitlab['node']['gitlab'].key?(service_name_key)
                                     Gitlab['node']['gitlab'][service_name_key][service_attribute_key]
@@ -72,7 +74,7 @@ module Nginx
 
     def parse_proxy_headers(app, https)
       values_from_gitlab_rb = Gitlab[app]['proxy_set_headers']
-      dashed_app = app.tr('_', '-')
+      dashed_app = SettingsDSL::Utils.sanitized_key(app)
       default_from_attributes = Gitlab['node']['gitlab'][dashed_app]['proxy_set_headers'].to_hash
 
       default_from_attributes = if https

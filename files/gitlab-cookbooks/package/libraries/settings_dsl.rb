@@ -135,14 +135,12 @@ module SettingsDSL
 
       target = value[:parent] ? results[value[:parent]] : results
 
-      rkey = key.tr('_', '-')
-      target[rkey] = Gitlab[key]
+      target[Utils.sanitized_key(key)] = Gitlab[key]
     end
 
     # Add the roles the the results
     @available_roles.each do |key, value|
-      rkey = key.tr('_', '-')
-      results['roles'][rkey] = Gitlab["#{key}_role"]
+      results['roles'][Utils.sanitized_key(key)] = Gitlab["#{key}_role"]
     end
 
     results
@@ -237,6 +235,28 @@ module SettingsDSL
     def handler
       @handler = @handler.call if @handler.respond_to?(:call)
       @handler
+    end
+  end
+
+  class Utils
+    class << self
+      def hyphenated_form(key)
+        key.tr('_', '-')
+      end
+
+      def underscored_form(key)
+        key.tr('-', '_')
+      end
+
+      def sanitized_key(key)
+        # Services that have been migrated to use underscored form in Chef code
+        # and no longer needs to be hyphenated.
+        skip_hyphenation = %w[]
+
+        return underscored_form(key) if skip_hyphenation.include?(underscored_form(key))
+
+        hyphenated_form(key)
+      end
     end
   end
 end
