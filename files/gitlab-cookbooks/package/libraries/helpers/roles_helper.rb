@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+require_relative '../settings_dsl.rb'
+
 module RolesHelper
   class << self
     def parse_enabled
@@ -22,7 +24,7 @@ module RolesHelper
 
       # convert hyphens to underscores to avoid user errors
       # split or space or comma (allow both to avoid user errors)
-      active        = [Gitlab['roles']].flatten.map { |role| role.tr('-', '_') }
+      active        = [Gitlab['roles']].flatten.map { |role| SettingsDSL::Utils.underscored_form(role) }
       valid_roles   = Gitlab.available_roles.keys.map { |key| "#{key}_role" }
       invalid_roles = active - valid_roles
 

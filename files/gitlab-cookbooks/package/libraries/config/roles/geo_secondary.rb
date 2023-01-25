@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+require_relative '../../settings_dsl.rb'
+
 module GeoSecondaryRole
   def self.load_role
     return unless Gitlab['geo_secondary_role']['enable']
@@ -41,7 +43,7 @@ module GeoSecondaryRole
       # If the service is explicitly enabled
       return true if Gitlab[svc]['enable']
       # If the service is auto-enabled, and not explicitly disabled
-      return true if Gitlab[:node]['gitlab'][svc.tr('_', '-')]['enable'] && Gitlab[svc]['enable'].nil?
+      return true if Gitlab[:node]['gitlab'][SettingsDSL::Utils.sanitized_key(svc)]['enable'] && Gitlab[svc]['enable'].nil?
     end
 
     return true if Gitlab['gitaly']['enable'] || (Gitlab[:node]['gitaly']['enable'] && Gitlab['gitaly']['enable'].nil?)
