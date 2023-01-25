@@ -1,4 +1,5 @@
 require 'openssl'
+require 'toml-rb'
 
 module GitlabSpec
   module Macros
