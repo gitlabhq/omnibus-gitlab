@@ -794,6 +794,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_rate_limiting_sentinels'] = nil
 # gitlab_rails['redis_sessions_instance'] = nil
 # gitlab_rails['redis_sessions_sentinels'] = nil
+# gitlab_rails['redis_repository_cache_instance'] = nil
+# gitlab_rails['redis_repository_cache_sentinels'] = nil
 
 ################################################################################
 ## Container Registry settings
