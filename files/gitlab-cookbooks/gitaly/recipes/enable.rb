@@ -29,11 +29,6 @@ open_files_ulimit = node['gitaly']['open_files_ulimit']
 runtime_dir = node['gitaly']['runtime_dir']
 cgroups_mountpoint = node['gitaly']['cgroups_mountpoint']
 cgroups_hierarchy_root = node['gitaly']['cgroups_hierarchy_root']
-# maintain backwards compatibility with pre 15.0 Gitaly cgroups config
-cgroups_repositories_memory_bytes = node['gitaly']['cgroups_repositories_memory_bytes'] || (node['gitaly']['cgroups_memory_limit'] if node['gitaly']['cgroups_memory_enabled'])
-cgroups_repositories_cpu_shares = node['gitaly']['cgroups_repositories_cpu_shares'] || (node['gitaly']['cgroups_cpu_shares'] if node['gitaly']['cgroups_cpu_enabled'])
-cgroups_repositories_count = node['gitaly']['cgroups_repositories_count'] || node['gitaly']['cgroups_count']
-cgroups_cpu_shares = node['gitaly']['cgroups_cpu_shares'] if node['gitaly']['cgroups_repositories_count'] && cgroups_repositories_count&.positive?
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -98,11 +93,7 @@ template "Create Gitaly config.toml" do
     { gitlab_shell: node['gitlab']['gitlab-shell'].to_hash,
       gitlab_url: gitlab_url,
       gitlab_relative_path: gitlab_relative_path,
-      custom_hooks_dir: custom_hooks_dir,
-      cgroups_cpu_shares: cgroups_cpu_shares,
-      cgroups_repositories_count: cgroups_repositories_count,
-      cgroups_repositories_memory_bytes: cgroups_repositories_memory_bytes,
-      cgroups_repositories_cpu_shares: cgroups_repositories_cpu_shares }
+      custom_hooks_dir: custom_hooks_dir }
   )
   notifies :hup, "runit_service[gitaly]" if omnibus_helper.should_notify?('gitaly')
 end

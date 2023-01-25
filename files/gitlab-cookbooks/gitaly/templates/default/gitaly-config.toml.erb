@@ -168,14 +168,10 @@ max_queue_wait = "<%= endpoint['max_queue_wait'] %>"
 
 <% if @rate_limiting %>
   <% @rate_limiting.each do |endpoint| %>
-    <% if (endpoint['interval'] && endpoint['burst']) && endpoint['burst'] > 0 %>
-
 [[rate_limiting]]
 rpc = "<%= endpoint['rpc'] %>"
 interval = "<%= endpoint['interval'] %>"
 burst = <%= endpoint['burst'] %>
-
-    <% end %>
   <% end %>
 <% end %>
 
