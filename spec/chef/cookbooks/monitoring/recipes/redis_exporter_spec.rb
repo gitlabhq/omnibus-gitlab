@@ -96,7 +96,8 @@ RSpec.describe 'monitoring::redis-exporter' do
       stub_gitlab_rb(
         redis_exporter: {
           flags: {
-            'redis.addr' => '/tmp/socket'
+            'redis.addr' => '/tmp/socket',
+            'redis.password' => 'password<(',
           },
           listen_address: 'localhost:9900',
           enable: true,
@@ -112,6 +113,8 @@ RSpec.describe 'monitoring::redis-exporter' do
         .with_content(/web.listen-address=localhost:9900/)
       expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/run')
         .with_content(%r{redis.addr=/tmp/socket})
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/run')
+        .with_content(/redis.password=password\\<\\/)
     end
 
     it 'creates necessary env variable files' do
