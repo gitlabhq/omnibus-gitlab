@@ -454,6 +454,7 @@ default['gitlab']['gitlab-rails']['redis_sessions_instance'] = nil
 default['gitlab']['gitlab-rails']['redis_sessions_sentinels'] = []
 default['gitlab']['gitlab-rails']['redis_repository_cache_instance'] = nil
 default['gitlab']['gitlab-rails']['redis_repository_cache_sentinels'] = []
+default['gitlab']['gitlab-rails']['redis_yml_override'] = nil
 
 default['gitlab']['gitlab-rails']['smtp_enable'] = false
 default['gitlab']['gitlab-rails']['smtp_address'] = nil

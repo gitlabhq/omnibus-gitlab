@@ -379,6 +379,42 @@ RSpec.describe 'gitlab::gitlab-rails' do
         )
       end
     end
+
+    context 'redis.yml override' do
+      let(:redis_yml_file_path) { '/var/opt/gitlab/gitlab-rails/etc/redis.yml' }
+      let(:redis_yml_link_path) { '/opt/gitlab/embedded/service/gitlab-rails/config/redis.yml' }
+
+      it 'renders empty redis.yml' do
+        expect(chef_run).to create_link(redis_yml_link_path).with(to: redis_yml_file_path)
+        expect(chef_run).to render_file(redis_yml_file_path).with_content { |content|
+          expect(content.strip).to eq('')
+        }
+      end
+
+      context 'when configured' do
+        let(:redis_yml_hash) do
+          {
+            'foo' => 'bar',
+            'baz' => [1, 2, 3],
+            'deeply' => { 'nested' => 'value' }
+          }
+        end
+
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: { redis_yml_override: redis_yml_hash }
+          )
+        end
+
+        it 'renders redis.yml' do
+          expect(chef_run).to create_link(redis_yml_link_path).with(to: redis_yml_file_path)
+          expect(chef_run).to render_file(redis_yml_file_path).with_content { |content|
+            actual = YAML.safe_load(content)
+            expect(actual).to eq({ 'production' => redis_yml_hash })
+          }
+        end
+      end
+    end
   end
 
   describe 'gitlab.yml' do

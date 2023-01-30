@@ -220,6 +220,18 @@ templatesymlink "Create a resque.yml and create a symlink to Rails root" do
   sensitive true
 end
 
+templatesymlink "Create an override redis.yml and create a symlink to Rails root" do
+  link_from File.join(gitlab_rails_source_dir, "config/redis.yml")
+  link_to File.join(gitlab_rails_etc_dir, "redis.yml")
+  source "redis.yml.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(redis_yml: node['gitlab']['gitlab-rails']['redis_yml_override'])
+  dependent_services.each { |svc| notifies :restart, svc }
+  sensitive true
+end
+
 templatesymlink "Create a cable.yml and create a symlink to Rails root" do
   url = node['gitlab']['gitlab-rails']['redis_actioncable_instance']
   sentinels = node['gitlab']['gitlab-rails']['redis_actioncable_sentinels']
