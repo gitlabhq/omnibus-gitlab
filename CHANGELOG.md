@@ -106,6 +106,16 @@ No changes.
 
 - [Update Mattermost to 7.5.1](gitlab-org/omnibus-gitlab@477c3f4be4fd4933f35accf422ce5528aae20fec) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6526))
 
+## 15.6.7 (2023-01-30)
+
+### Fixed (1 change)
+
+- [Ensure Workhorse is built in FIPS mode](gitlab-org/security/omnibus-gitlab@22eabafc5c4650ab5f64174ed233abf9fc33f1f0)
+
+### Security (1 change)
+
+- [Update Mattermost to December 2022 release](gitlab-org/security/omnibus-gitlab@3eeb9089cedfb6e9609749a803e45cf5050e6ea0) ([merge request](gitlab-org/security/omnibus-gitlab!300))
+
 ## 15.6.6 (2023-01-12)
 
 ### Security (1 change)
