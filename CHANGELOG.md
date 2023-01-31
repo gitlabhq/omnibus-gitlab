@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.8.1 (2023-01-30)
+
+No changes.
+
 ## 15.8.0 (2023-01-20)
 
 ### Added (1 change)
@@ -39,6 +43,12 @@ omnibus-gitlab repository.
 
 - [Update gpgme dependencies to match ruby-gpgme dependencies](gitlab-org/omnibus-gitlab@31e0eaf442e41608b04e022425b844d594b80ff9) ([merge request](gitlab-org/omnibus-gitlab!6557))
 - [Update Mattermost to 7.5.2](gitlab-org/omnibus-gitlab@7362352ebc6e6d274fcce076385e13395346a53f) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6583))
+
+## 15.7.6 (2023-01-30)
+
+### Security (1 change)
+
+- [Update Mattermost to December 2022 release](gitlab-org/security/omnibus-gitlab@0847cefdce1883a7e7ef0c4796778e0307466852) ([merge request](gitlab-org/security/omnibus-gitlab!301))
 
 ## 15.7.5 (2023-01-12)
 
@@ -95,6 +105,16 @@ No changes.
 ### Other (1 change)
 
 - [Update Mattermost to 7.5.1](gitlab-org/omnibus-gitlab@477c3f4be4fd4933f35accf422ce5528aae20fec) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6526))
+
+## 15.6.7 (2023-01-30)
+
+### Fixed (1 change)
+
+- [Ensure Workhorse is built in FIPS mode](gitlab-org/security/omnibus-gitlab@22eabafc5c4650ab5f64174ed233abf9fc33f1f0)
+
+### Security (1 change)
+
+- [Update Mattermost to December 2022 release](gitlab-org/security/omnibus-gitlab@3eeb9089cedfb6e9609749a803e45cf5050e6ea0) ([merge request](gitlab-org/security/omnibus-gitlab!300))
 
 ## 15.6.6 (2023-01-12)
 
