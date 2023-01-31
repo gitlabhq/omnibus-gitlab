@@ -37,7 +37,7 @@ See [settings/logs.md.](../settings/logs.md)
 
 ## Starting and stopping
 
-After Omnibus GitLab is installed and configured, your server will have a runit
+After Omnibus GitLab is installed and configured, your server has a runit
 service directory (`runsvdir`) process running that gets started at boot via
 `/etc/inittab` or the `/etc/init/gitlab-runsvdir.conf` Upstart resource. You
 should not have to deal with the `runsvdir` process directly; you can use the
