@@ -17,7 +17,7 @@ after installation.
 ![Omnibus-GitLab Components](components.png)
 
 An in-depth video walkthrough of these components is available
-[on YouTube](https://www.youtube.com/watch?v=m89NHLhTMj4).
+[on YouTube](https://youtu.be/m89NHLhTMj4?t=807).
 
 ## Software definitions
 
