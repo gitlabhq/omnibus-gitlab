@@ -2448,7 +2448,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 # praefect['wrapper_path'] = "/opt/gitlab/embedded/bin/gitaly-wrapper"
 # praefect['failover_enabled'] = true
-# praefect['failover_timeout'] = "10s"
 # praefect['auth_token'] = ""
 # praefect['auth_transitioning'] = false
 # praefect['listen_addr'] = "localhost:2305"
