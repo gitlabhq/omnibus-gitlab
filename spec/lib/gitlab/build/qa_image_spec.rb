@@ -28,27 +28,6 @@ RSpec.describe Build::QAImage do
     end
   end
 
-  describe '.copy_image_to_omnibus_registry' do
-    before do
-      allow(Build::Info).to receive(:qa_image).and_return('registry.gitlab.com/gitlab-org/gitlab/gitlab-ce-qa:1234567890')
-
-      allow(SkopeoHelper).to receive(:login).and_return(true)
-      allow(SkopeoHelper).to receive(:copy_image).and_return(true)
-    end
-
-    it 'logs in to the gitlab registry' do
-      expect(SkopeoHelper).to receive(:login).with('gitlab-ci-token', 'dummy-token', 'registry.gitlab.com')
-
-      described_class.copy_image_to_omnibus_registry('foobar')
-    end
-
-    it 'copies the image from gitlab rails registry to omnibus gitlab registry' do
-      expect(SkopeoHelper).to receive(:copy_image).with('registry.gitlab.com/gitlab-org/gitlab/gitlab-ce-qa:1234567890', 'registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce-qa:foobar')
-
-      described_class.copy_image_to_omnibus_registry('foobar')
-    end
-  end
-
   describe '.copy_image_to_dockerhub' do
     before do
       allow(Build::Info).to receive(:qa_image).and_return('registry.gitlab.com/gitlab-org/gitlab/gitlab-ce-qa:1234567890')
