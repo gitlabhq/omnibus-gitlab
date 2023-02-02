@@ -169,7 +169,7 @@ You can use [chef-shell](https://docs.chef.io/workstation/chef_shell/) to debug 
 As root in your development server run:
 
 ```shell
-/opt/gitlab/embedded/bin/chef-shell -z -c /opt/gitlab/embedded/cookbooks/solo.rb -s -j /opt/gitlab/embedded/cookbooks/dna.json
+/opt/gitlab/embedded/bin/cinc-shell -z -c /opt/gitlab/embedded/cookbooks/solo.rb -s -j /opt/gitlab/embedded/cookbooks/dna.json
 ```
 
 ## Use Customers Portal Staging in GitLab
