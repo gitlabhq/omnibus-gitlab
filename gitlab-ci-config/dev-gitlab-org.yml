@@ -408,7 +408,6 @@ QA-branch:
         bundle exec rake qa:push:staging;
       else
         bundle exec rake qa:copy:nightly;
-        bundle exec rake qa:copy:staging;
       fi
   artifacts:
     when: on_failure
@@ -515,13 +514,8 @@ Docker-QA:
   extends: .docker_job
   stage: image
   script:
-    # For downstream users like JiHu to retain original behavior
-    - if [ "$BUILD_GITLAB_QA_IMAGE" == "true" ]; then
-        bundle exec rake qa:build;
-        bundle exec rake qa:push:staging;
-      else
-        bundle exec rake qa:copy:staging;
-      fi
+    - bundle exec rake qa:build
+    - bundle exec rake qa:push:staging
   cache: !reference [.tag-cache]
   tags:
   - docker-builder
@@ -532,6 +526,9 @@ Docker-QA:
   retry: 1
   rules:
     - !reference [.default_rules, rules]
+    # For downstream users like JiHu to retain original behavior
+    - if: '$BUILD_GITLAB_QA_IMAGE != "true"'
+      when: never
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG)_BUILD_PIPELINE$/'
 
 ###########################################################
@@ -1018,7 +1015,6 @@ QA-Tag:
   - docker-builder
   cache: !reference [.tag-cache]
   needs:
-    - Docker-QA
     - job: generate-facts
       optional: true
       artifacts: true

@@ -26,14 +26,6 @@ namespace :qa do
   end
 
   namespace :copy do
-    desc "Copy current QA image from GitLab rails registry to omnibus-gitlab registry"
-    task :staging do
-      Gitlab::Util.section('qa:copy:staging') do
-        Build::QAImage.copy_image_to_omnibus_registry(Build::Info.gitlab_version)
-        Build::QAImage.copy_image_to_omnibus_registry(Build::Info.commit_sha)
-      end
-    end
-
     desc "Copy nightly version of gitlab-{ce,ee}-qa to Docker Hub"
     task :nightly do
       Gitlab::Util.section('qa:copy:nightly') do
@@ -47,7 +39,6 @@ namespace :qa do
         # Using `Build::Info.gitlab_version` allows to have
         # gitlab/gitlab-{ce,ee}-qa:X.Y.Z-{ce,ee} without the build number, as
         # opposed to using something like `Build::Info.release_version`.
-        Build::QAImage.copy_image_to_omnibus_registry(Build::Info.gitlab_version)
         Build::QAImage.copy_image_to_dockerhub(Build::Info.gitlab_version)
       end
     end

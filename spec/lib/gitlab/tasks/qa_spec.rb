@@ -56,28 +56,12 @@ RSpec.describe 'qa', type: :rake do
       end
     end
 
-    describe ':staging' do
-      before do
-        Rake::Task['qa:copy:staging'].reenable
-      end
-
-      it 'copies staging images correctly' do
-        stub_is_auto_deploy(false)
-
-        expect(Build::QAImage).to receive(:copy_image_to_omnibus_registry).with(gitlab_version)
-        expect(Build::QAImage).to receive(:copy_image_to_omnibus_registry).with(commit_sha)
-
-        Rake::Task['qa:copy:staging'].invoke
-      end
-    end
-
     describe ':stable' do
       before do
         Rake::Task['qa:copy:stable'].reenable
       end
 
       it 'copies stable images correctly' do
-        expect(Build::QAImage).to receive(:copy_image_to_omnibus_registry).with(gitlab_version)
         expect(Build::QAImage).to receive(:copy_image_to_dockerhub).with(gitlab_version)
 
         Rake::Task['qa:copy:stable'].invoke
