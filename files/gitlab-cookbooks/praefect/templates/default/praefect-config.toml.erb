@@ -4,4 +4,149 @@
 # and run:
 # sudo gitlab-ctl reconfigure
 
-<%= Tomlib.dump(@configuration) %>
+<% if @listen_addr %>
+# TCP address to listen on
+listen_addr = '<%= @listen_addr %>'
+<% end %>
+
+<% if @socket_path %>
+# # Praefect can listen on a socket when placed on the same machine as all clients
+socket_path = '<%= @socket_path %>'
+<% end %>
+
+<% if @prometheus_listen_addr %>
+# Optional: export metrics via Prometheus
+prometheus_listen_addr = '<%= @prometheus_listen_addr %>'
+<% end %>
+
+<% unless @separate_database_metrics.nil? %>
+# Optional: when set to true, metrics that query the database will no longer be
+# available on the /metrics endpoint but will be available on the /db_metrics endpoint
+prometheus_exclude_database_from_default_metrics = <%= @separate_database_metrics %>
+<% end %>
+
+<% if @graceful_stop_timeout %>
+# Optional: The amount of time a graceful shutdown has before forcible interruption. For example "3m", "1m30s".
+graceful_stop_timeout = '<%= @graceful_stop_timeout %>'
+<% end %>
+
+<% if @tls_listen_addr %>
+# Optional: listen on a secure TCP socket
+tls_listen_addr = '<%= @tls_listen_addr %>'
+[tls]
+certificate_path = '<%= @certificate_path %>'
+key_path = '<%= @key_path %>'
+<% end %>
+
+[reconciliation]
+<%= "scheduling_interval = '#{@reconciliation_scheduling_interval}'" if @reconciliation_scheduling_interval %>
+<%= "histogram_buckets = #{@reconciliation_histogram_buckets}" if @reconciliation_histogram_buckets %>
+
+[failover]
+<% unless @failover_enabled.nil? %>
+enabled = <%= @failover_enabled %>
+<% unless @failover_timeout.nil? %>
+timeout = '<%= @failover_timeout %>'
+<% end %>
+<% end %>
+
+[sentry]
+<% if @sentry_dsn %>
+# Optional: emit errors to Sentry
+sentry_dsn = '<%= @sentry_dsn %>'
+<% end %>
+<% if @sentry_environment %>
+sentry_environment = '<%= @sentry_environment %>'
+<% end %>
+
+[auth]
+token = '<%= @auth_token %>'
+transitioning = <%= @auth_transitioning %>
+
+[logging]
+<% if @logging_level %>
+level = '<%= @logging_level %>'
+<% end %>
+<% if @logging_format %>
+format = '<%= @logging_format %>'
+<% end %>
+
+[background_verification]
+<% if @background_verification_verification_interval %>
+verification_interval = '<%= @background_verification_verification_interval %>'
+<% end %>
+<% if @background_verification_delete_invalid_records %>
+delete_invalid_records = <%= @background_verification_delete_invalid_records %>
+<% end %>
+
+<% @virtual_storages.each do |name, config| %>
+[[virtual_storage]]
+name = '<%= name %>'
+<% if config['default_replication_factor'] %>
+default_replication_factor = <%= config['default_replication_factor'] %>
+<% end %>
+<% config['nodes'].each do |storage, node|  %>
+[[virtual_storage.node]]
+storage = '<%= storage %>'
+address = '<%= node['address'] %>'
+token = '<%= node['token'] %>'
+<% end %>
+<% end %>
+
+[database]
+<%= "host = '#{@database_host}'" if @database_host %>
+<%= "port = #{@database_port}" if @database_port %>
+<%= "user = '#{@database_user}'" if @database_user %>
+<%= "password = '#{@database_password}'" if @database_password %>
+<%= "dbname = '#{@database_dbname}'" if @database_dbname %>
+<%= "sslmode = '#{@database_sslmode}'" if @database_sslmode %>
+<%= "sslcert = '#{@database_sslcert}'" if @database_sslcert %>
+<%= "sslkey = '#{@database_sslkey}'" if @database_sslkey %>
+<%= "sslrootcert = '#{@database_sslrootcert}'" if @database_sslrootcert %>
+
+[database.session_pooled]
+<% direct_host = @database_direct_host %>
+<% direct_port = @database_direct_port %>
+<%= "host = '#{direct_host}'" if direct_host %>
+<%= "port = #{direct_port}" if direct_port %>
+<%= "user = '#{@database_direct_user}'" if @database_direct_user %>
+<%= "password = '#{@database_direct_password}'" if @database_direct_password %>
+<%= "dbname = '#{@database_direct_dbname}'" if @database_direct_dbname %>
+<%= "sslmode = '#{@database_direct_sslmode}'" if @database_direct_sslmode %>
+<%= "sslcert = '#{@database_direct_sslcert}'" if @database_direct_sslcert %>
+<%= "sslkey = '#{@database_direct_sslkey}'" if @database_direct_sslkey %>
+<%= "sslrootcert = '#{@database_direct_sslrootcert}'" if @database_direct_sslrootcert %>
+
+<% if @prometheus_grpc_latency_buckets %>
+# # You can optionally configure Gitaly to record histogram latencies on GRPC method calls
+[prometheus]
+grpc_latency_buckets = <%= @prometheus_grpc_latency_buckets %>
+<% end %>
+
+[gitlab]
+<% if @gitlab_url %>
+url = '<%= @gitlab_url %>'
+<% end %>
+<% if @gitlab_relative_path %>
+relative_url_root = '<%= @gitlab_relative_path %>'
+<% end %>
+
+<% if @gitlab_shell['http_settings'] %>
+<% http_settings = @gitlab_shell['http_settings'] %>
+[gitlab.http-settings]
+<% if http_settings['read_timeout'] %>
+read_timeout = <%= http_settings['read_timeout'] %>
+<% end %>
+<% if http_settings['user'] %>
+user = '<%= http_settings['user'] %>'
+<% end %>
+<% if http_settings['password'] %>
+password = '<%= http_settings['password'] %>'
+<% end %>
+<% if http_settings['ca_file'] %>
+ca_file = '<%= http_settings['ca_file'] %>'
+<% end %>
+<% if http_settings['ca_path'] %>
+ca_path = '<%= http_settings['ca_path'] %>'
+<% end %>
+<% end %>

@@ -21,7 +21,7 @@ working_dir = node['praefect']['dir']
 log_directory = node['praefect']['log_directory']
 env_directory = node['praefect']['env_directory']
 wrapper_path = node['praefect']['wrapper_path']
-json_logging = node['praefect']['configuration']['logging']['format'].eql?('json')
+json_logging = node['praefect']['logging_format'].eql?('json')
 config_path = File.join(working_dir, "config.toml")
 
 directory working_dir do
@@ -50,13 +50,19 @@ env_dir env_directory do
   notifies :restart, "runit_service[praefect]" if omnibus_helper.should_notify?('praefect')
 end
 
+gitlab_url, gitlab_relative_path = WebServerHelper.internal_api_url(node)
+
 template "Create praefect config.toml" do
   path config_path
   source "praefect-config.toml.erb"
   owner "root"
   group account_helper.gitlab_group
   mode "0640"
-  variables node['praefect']
+  variables node['praefect'].to_hash.merge(
+    { gitlab_shell: node['gitlab']['gitlab-shell'].to_hash,
+      gitlab_url: gitlab_url,
+      gitlab_relative_path: gitlab_relative_path }
+  )
   notifies :hup, "runit_service[praefect]"
 end
 
@@ -91,7 +97,7 @@ consul_service node['praefect']['consul_service_name'] do
   id 'praefect'
   meta node['praefect']['consul_service_meta']
   action Prometheus.service_discovery_action
-  socket_address node['praefect']['configuration']['prometheus_listen_addr']
+  socket_address node['praefect']['prometheus_listen_addr']
   reload_service false unless Services.enabled?('consul')
 end
 
