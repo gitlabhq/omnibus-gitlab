@@ -1,6 +1,7 @@
 files:
 <% @services.each do |service| %>
-  <% log_dir = node['gitlab'].has_key?(service) ? node['gitlab'][service]['log_directory'] : node[service]['log_directory'] %>
+  <% node_attribute_key = SettingsDSL::Utils.sanitized_key(service) %>
+  <% log_dir = node['gitlab'].has_key?(node_attribute_key) ? node['gitlab'][node_attribute_key]['log_directory'] : node[node_attribute_key]['log_directory'] %>
   - <%= File.join(log_dir, "*.log") %>
 <% end %>
 exclude_files:

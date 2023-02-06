@@ -57,7 +57,7 @@ module Gitlab
             note: 'Use client_output_buffer_limit_replica instead'
           },
           {
-            config_keys: %w(gitlab gitlab-pages http_proxy),
+            config_keys: %w(gitlab gitlab_pages http_proxy),
             deprecation: '13.1',
             removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6137
             note: "Set gitlab_pages['env']['http_proxy'] instead. See https://docs.gitlab.com/omnibus/settings/environment-variables.html"
@@ -117,7 +117,7 @@ module Gitlab
             note: 'The config have been renamed, use analytics_usage_trends_count_job_trigger_worker_cron option.'
           },
           {
-            config_keys: %w(gitlab-pages domain_config_source),
+            config_keys: %w(gitlab_pages domain_config_source),
             deprecation: '13.9',
             removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6033
             note: "Starting with GitLab 14.0, GitLab Pages only supports API-based configuration. Check https://docs.gitlab.com/ee/administration/pages/#deprecated-domain_config_source for details."
@@ -129,13 +129,13 @@ module Gitlab
             note: "The config has been deprecated. Value for this directive in NGINX configuration will be controlled by `nginx['gzip_enabled']` setting in `/etc/gitlab/gitlab.rb`."
           },
           {
-            config_keys: %w(gitlab-pages use_legacy_storage),
+            config_keys: %w(gitlab_pages use_legacy_storage),
             deprecation: '14.0',
             removal: '14.3', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6166
             note: "This parameter was introduced as a temporary solution in case of unforseen problems with new storage format. It will be removed in 14.3. If you use this parameter, please comment on https://gitlab.com/gitlab-org/gitlab/-/issues/331699"
           },
           {
-            config_keys: %w(gitlab-pages daemon-inplace-chroot),
+            config_keys: %w(gitlab_pages daemon-inplace-chroot),
             deprecation: '14.4',
             removal: '15.0',
             note: "Starting with GitLab 14.3, chroot has been removed along with disk-based configuration source. Because of this, the flag is a no-op and can be removed."

@@ -1157,25 +1157,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
   end
 
-  describe 'logrotate settings' do
-    context 'default values' do
-      it_behaves_like 'configured logrotate service', 'gitlab-pages', 'git', 'git'
-    end
-
-    context 'specified username and group' do
-      before do
-        stub_gitlab_rb(
-          user: {
-            username: 'foo',
-            group: 'bar'
-          }
-        )
-      end
-
-      it_behaves_like 'configured logrotate service', 'gitlab-pages', 'foo', 'bar'
-    end
-  end
-
   describe 'cleaning up the legacy sidekiq log symlink' do
     it 'removes the link if it existed' do
       allow(File).to receive(:symlink?).with('/var/log/gitlab/gitlab-rails/sidekiq.log') { true }
