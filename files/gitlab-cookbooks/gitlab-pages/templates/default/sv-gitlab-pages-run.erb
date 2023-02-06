@@ -5,10 +5,10 @@ set -e # fail on errors
 exec 2>&1
 <%= render("mount_point_check.erb") %>
 
-cd <%= node['gitlab-pages']['dir'] %>
+cd <%= node['gitlab_pages']['dir'] %>
 
-<% headers = [ node['gitlab-pages']['headers'] ].flatten.compact  %>
+<% headers = [ node['gitlab_pages']['headers'] ].flatten.compact  %>
 
 exec chpst -e <%= @options[:env_dir] %> \
     /opt/gitlab/embedded/bin/gitlab-pages \
-    -config="<%= node['gitlab-pages']['dir'] %>/gitlab-pages-config" \
+    -config="<%= node['gitlab_pages']['dir'] %>/gitlab-pages-config" \

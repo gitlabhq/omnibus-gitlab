@@ -17,9 +17,9 @@
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
-working_dir = node['gitlab-pages']['dir']
-log_directory = node['gitlab-pages']['log_directory']
-env_directory = node['gitlab-pages']['env_directory']
+working_dir = node['gitlab_pages']['dir']
+log_directory = node['gitlab_pages']['log_directory']
+env_directory = node['gitlab_pages']['env_directory']
 gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
 pages_secret_path = File.join(working_dir, ".gitlab_pages_secret")
 
@@ -42,14 +42,14 @@ ruby_block "authorize pages with gitlab" do
     GitlabPages.authorize_with_gitlab
   end
 
-  only_if { node['gitlab-pages']['access_control'] && node['gitlab-pages']['register_as_oauth_app'] }
+  only_if { node['gitlab_pages']['access_control'] && node['gitlab_pages']['register_as_oauth_app'] }
 end
 
 # Options may have changed in the previous step
 ruby_block "re-populate GitLab Pages configuration options" do
   block do
     node.consume_attributes(
-      { 'gitlab-pages' => Gitlab.hyphenate_config_keys['gitlab-pages'] }
+      { 'gitlab_pages' => Gitlab.hyphenate_config_keys['gitlab_pages'] }
     )
   end
 end
@@ -70,7 +70,7 @@ template pages_secret_path do
   owner 'root'
   group account_helper.gitlab_group
   mode "0640"
-  variables(secret_token: node['gitlab-pages']['api_secret_key'])
+  variables(secret_token: node['gitlab_pages']['api_secret_key'])
   notifies :restart, "runit_service[gitlab-pages]"
 end
 
@@ -82,23 +82,23 @@ template File.join(working_dir, "gitlab-pages-config") do
   variables(
     lazy do
       {
-        pages_external_http: [node['gitlab-pages']['external_http']].flatten.compact,
-        pages_external_https: [node['gitlab-pages']['external_https']].flatten.compact,
-        pages_external_https_proxyv2: [node['gitlab-pages']['external_https_proxyv2']].flatten.compact,
-        pages_headers: [node['gitlab-pages']['headers']].flatten.compact,
+        pages_external_http: [node['gitlab_pages']['external_http']].flatten.compact,
+        pages_external_https: [node['gitlab_pages']['external_https']].flatten.compact,
+        pages_external_https_proxyv2: [node['gitlab_pages']['external_https_proxyv2']].flatten.compact,
+        pages_headers: [node['gitlab_pages']['headers']].flatten.compact,
         api_secret_key_path: pages_secret_path
-      }.merge(node['gitlab-pages'].to_hash)
+      }.merge(node['gitlab_pages'].to_hash)
     end
   )
   notifies :restart, "runit_service[gitlab-pages]"
 end
 
-node.default['gitlab-pages']['env'] = {
+node.default['gitlab_pages']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
 }
 
 env_dir env_directory do
-  variables node['gitlab-pages']['env']
+  variables node['gitlab_pages']['env']
   notifies :restart, "runit_service[gitlab-pages]" if omnibus_helper.should_notify?('gitlab-pages')
 end
 
@@ -107,5 +107,5 @@ runit_service 'gitlab-pages' do
     log_directory: log_directory,
     env_dir: env_directory,
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab-pages'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab_pages'].to_hash)
 end

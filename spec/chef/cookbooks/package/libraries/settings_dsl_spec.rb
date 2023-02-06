@@ -22,4 +22,23 @@ RSpec.describe SettingsDSL::Utils do
       expect(subject.underscored_form('foo-bar')).to eq('foo_bar')
     end
   end
+
+  describe '.sanitized_key' do
+    it 'returns underscored form for services specified to skip hyphenation' do
+      [
+        %w[gitlab-pages gitlab_pages]
+      ].each do |input, output|
+        expect(subject.sanitized_key(input)).to eq(output)
+      end
+    end
+
+    it 'returns hyphenated form for services not specified to skip hyphenation' do
+      [
+        %w[foo-bar foo-bar],
+        %w[foo_bar foo-bar],
+      ].each do |input, output|
+        expect(subject.sanitized_key(input)).to eq(output)
+      end
+    end
+  end
 end

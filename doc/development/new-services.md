@@ -38,21 +38,37 @@ you want to define the [Default Attributes](../architecture/index.md#default-att
 for your service. For a service you should define an `enable` option by default.
 
 ```ruby
-default['gitlab']['best-service']['enable'] = false
-default['gitlab']['best-service']['dir'] = '/var/opt/gitlab/best-service'
-default['gitlab']['best-service']['log_directory'] = '/var/log/gitlab/best-service'
+default['gitlab']['best_service']['enable'] = false
+default['gitlab']['best_service']['dir'] = '/var/opt/gitlab/best-service'
+default['gitlab']['best_service']['log_directory'] = '/var/log/gitlab/best-service'
 ```
 
 - `default` is how you define basic cookbook attributes.
 - `['gitlab']` contains the cookbook name.
-- `['best-service']` is the name of your service, at this level we use hyphens to separate words.
-- `enable`, `dir`, and `log_directory` are our configuration settings, and we use underscores to separate words at this and deeper levels.
+- `['best_service']` is the name of your service.
+- `enable`, `dir`, and `log_directory` are our configuration settings.
 - `/var/opt/gitlab` is where the working directory and configuration files for the services are placed.
 - `/var/log/gitlab` is where logs are written to for the GitLab package.
 
 Define all your settings that you want configurable in the package here. Default
 them to `nil` if you need to calculate their defaults based on other settings for
 now.
+
+#### Naming convention
+
+A service is referred to mainly in two scenarios - when accessing the Chef
+attributes corresponding to the service, and when referring to items such as
+the users, groups, and paths corresponding to the service. In the attribute names, we use
+underscores to differentiate words in the service name, while in other cases we
+use hyphens to differentiate them. For example, if we take GitLab Pages, the
+attributes are available as `Gitlab['gitlab_pages']` and `node['gitlab_pages']`
+while the default directories and paths might look like
+`/var/log/gitlab/gitlab-pages` and `/var/opt/gitlab/gitlab-pages`.
+
+NOTE:
+The migration of existing services to use the underscored form while
+accessing Chef attributes is underway. For current status, check the
+corresponding [issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6873).
 
 ### Create a configuration Mash for your service
 
@@ -63,11 +79,8 @@ In `files/gitlab-cookbooks/package/libraries/config/gitlab.rb` you will find the
 `attribute` methods.
 
 If your service exists within the attributes for the GitLab cookbook, you should
-add it within the `attribute_block('gitlab')` block. Otherwise, if your service
-has its own cookbook, add it above.
-
-Add your service as an attribute, using an underscore to separate words, **even if you
-used a hyphen in the default attributes.**
+add it as an attribute within the `attribute_block('gitlab')` block. Otherwise,
+if your service has its own cookbook, add it above.
 
 ```ruby
 attribute('best_service')
@@ -96,10 +109,10 @@ to this file. `files/gitlab-config-template/gitlab.rb.template`
 # best_service['log_directory'] = '/var/log/gitlab/best-service'
 ```
 
-Use the underscore syntax here for word separation. The values provided are not
-meant to reflect the defaults, but are to make it easier to uncomment to use the
-service. If that isn't possible you can use values clearly meant to be replaced
-like `YOURSECRET` etc. Or use the default when it makes the most sense.
+The values provided are not meant to reflect the defaults, but are to make it
+easier to uncomment to use the service. If that isn't possible you can use
+values clearly meant to be replaced like `YOURSECRET` etc. Or use the default
+when it makes the most sense.
 
 ## Include the service in the services list
 
@@ -115,9 +128,8 @@ service is only for GitLab EE.
 service 'best_service', groups: ['bestest']
 ```
 
-We use the underscore word separation because these services act on the Mash
-objects we created earlier. Specifying groups makes it easier to disable/enable
-multiple related services as once.
+Specifying groups makes it easier to disable/enable multiple related services as
+once.
 
 If none of the existing groups match with what your service does, and you don't
 currently need to enable/disable the service using a group. Don't bother adding
