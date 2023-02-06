@@ -507,13 +507,13 @@ This configuration was tested with Sendinblue's [SMTP relay service](https://www
 ```ruby
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "smtp-relay.sendinblue.com"
-gitlab_rails['smtp_port'] = 587
-gitlab_rails['smtp_user_name'] = "<username@example.com>" # https://account.sendinblue.com/advanced/api
-gitlab_rails['smtp_password'] = "<password>"              # https://account.sendinblue.com/advanced/api
-gitlab_rails['smtp_domain'] = "<example.com>"             # https://account.sendinblue.com/senders
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "<username@example.com>" # https://app.sendinblue.com/settings/keys/smtp
+gitlab_rails['smtp_password'] = "<password>"              # https://app.sendinblue.com/settings/keys/smtp
+gitlab_rails['smtp_domain'] = "<example.com>"
 gitlab_rails['smtp_authentication'] = "login"
-gitlab_rails['smtp_enable_starttls_auto'] = true
-gitlab_rails['smtp_tls'] = false
+gitlab_rails['smtp_enable_starttls_auto'] = false
+gitlab_rails['smtp_tls'] = true
 gitlab_rails['gitlab_email_from'] = '<gitlab@example.com>'
 gitlab_rails['gitlab_email_reply_to'] = '<noreply@example.com>'
 ```
