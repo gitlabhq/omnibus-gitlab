@@ -91,6 +91,7 @@ module Gitlab
     ee_attribute('suggested_reviewers').use { SuggestedReviewers }
 
     # Base GitLab attributes
+    attribute('gitlab_sshd',      priority: 5)
     attribute('gitlab_shell',     priority: 10).use { GitlabShell } # Parse shell before rails for data dir settings
     attribute('gitlab_rails',     priority: 15).use { GitlabRails } # Parse rails first as others may depend on it
     attribute('gitlab_workhorse', priority: 20).use { GitlabWorkhorse }

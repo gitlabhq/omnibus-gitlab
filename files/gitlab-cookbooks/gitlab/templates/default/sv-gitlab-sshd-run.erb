@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e # fail on errors
+
+# Redirect stderr -> stdout
+exec 2>&1
+
+cd <%= @options[:working_dir] %>
+
+exec chpst -P -e <%= @options[:env_dir] %> \
+-U <%= @options[:user] %>:<%= @options[:groupname] %> \
+-u <%= @options[:user] %>:<%= @options[:groupname] %> \
+<%= @options[:bin_path] %> \
+  -config-dir <%= @options[:config_dir] %> \

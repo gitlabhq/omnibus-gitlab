@@ -12,6 +12,10 @@ gitlab_url: "<%= @gitlab_url %>"
 gitlab_relative_url_root: <%= @gitlab_relative_path %>
 <% end %>
 
+# File that contains the secret key for verifying access to GitLab.
+# Default is .gitlab_shell_secret in the gitlab-shell directory.
+secret_file: "<%= @secret_file %>"
+
 http_settings:
   <%= @http_settings.to_json if @http_settings %>
 #  user: someone
@@ -54,4 +58,8 @@ migration:
 # An absolute path starting with / – the trace output will be appended to that file.
 # It needs to exist so we can check permissions and avoid to throwing warnings to the users.
 git_trace_log_file: "<%= @git_trace_log_file %>"
+<% end %>
+
+<% if @gitlab_sshd %>
+sshd: <%= @gitlab_sshd.to_json %>
 <% end %>
