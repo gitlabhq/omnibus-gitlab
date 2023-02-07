@@ -1161,9 +1161,9 @@ check-packages:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_TAG_BUILD_PIPELINE$/'
 
-print-release-contents:
+create-gitlab-release:
   stage: package-and-image-release
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04-ruby:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   needs:
     - job: AWS
       artifacts: true
@@ -1176,7 +1176,11 @@ print-release-contents:
       artifacts: true
       optional: true
   script:
-    - bundle exec rake release:print_details
+    - bundle exec rake release:print_details | tee release_info.txt
+  release:
+    name: "GitLab ${GITLAB_EDITION} ${CI_COMMIT_TAG}"
+    tag_name: $CI_COMMIT_TAG
+    description: './release_info.txt'
   allow_failure: true
   rules:
     - !reference [.default_rules, rules]
