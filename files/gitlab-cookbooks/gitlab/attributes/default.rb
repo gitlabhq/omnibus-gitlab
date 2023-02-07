@@ -614,6 +614,33 @@ default['gitlab']['gitlab-shell']['git_data_directories'] = {
   "default" => { "path" => "/var/opt/gitlab/git-data" }
 }
 
+###
+# gitlab-sshd
+###
+default['gitlab']['gitlab_sshd']['enable'] = false
+default['gitlab']['gitlab_sshd']['generate_host_keys'] = true
+default['gitlab']['gitlab_sshd']['dir'] = "/var/opt/gitlab/gitlab-sshd"
+# gitlab-sshd outputs most logs to /var/log/gitlab/gitlab-shell/gitlab-shell.log.
+# This directory only stores any stdout/stderr output from the daemon.
+default['gitlab']['gitlab_sshd']['log_directory'] = "/var/log/gitlab/gitlab-sshd/"
+default['gitlab']['gitlab_sshd']['env_directory'] = '/opt/gitlab/etc/gitlab-sshd/env'
+default['gitlab']['gitlab_sshd']['listen_address'] = 'localhost:2222'
+default['gitlab']['gitlab_sshd']['metrics_address'] = 'localhost:9122'
+default['gitlab']['gitlab_sshd']['concurrent_sessions_limit'] = 100
+default['gitlab']['gitlab_sshd']['proxy_protocol'] = false
+default['gitlab']['gitlab_sshd']['proxy_policy'] = 'use'
+default['gitlab']['gitlab_sshd']['proxy_header_timeout'] = '500ms'
+default['gitlab']['gitlab_sshd']['grace_period'] = 55
+default['gitlab']['gitlab_sshd']['client_alive_interval'] = nil
+default['gitlab']['gitlab_sshd']['ciphers'] = nil
+default['gitlab']['gitlab_sshd']['kex_algorithms'] = nil
+default['gitlab']['gitlab_sshd']['macs'] = nil
+default['gitlab']['gitlab_sshd']['login_grace_time'] = 60
+default['gitlab']['gitlab_sshd']['host_keys_dir'] = '/var/opt/gitlab/gitlab-sshd'
+default['gitlab']['gitlab_sshd']['host_keys_glob'] = 'ssh_host_*_key'
+default['gitlab']['gitlab_sshd']['host_certs_dir'] = '/var/opt/gitlab/gitlab-sshd'
+default['gitlab']['gitlab_sshd']['host_certs_glob'] = 'ssh_host_*-cert.pub'
+
 ####
 # Web server
 ####

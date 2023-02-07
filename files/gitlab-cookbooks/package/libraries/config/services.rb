@@ -43,6 +43,7 @@ module Services
     service 'storage_check'
     service 'crond'
     service 'praefect'
+    service 'gitlab_sshd'
   end
 
   # Define the services included in the EE edition of GitLab
