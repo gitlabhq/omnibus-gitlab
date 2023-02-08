@@ -170,12 +170,10 @@ gitaly['concurrency'] = [
   }
 ]
 
-gitaly['cgroups_count'] = 2
+gitaly['cgroups_repositories_count'] = 2
 gitaly['cgroups_mountpoint'] = '/sys/fs/cgroup'
 gitaly['cgroups_hierarchy_root'] = 'gitaly'
-gitaly['cgroups_memory_enabled'] = true
 gitaly['cgroups_memory_bytes'] = 500000
-gitaly['cgroups_cpu_enabled'] = true
 gitaly['cgroups_cpu_shares'] = 512
 
 gitaly['env'] = {
@@ -252,12 +250,10 @@ and disable the Prometheus Metrics feature:
      'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000'
    }
 
-   gitaly['cgroups_count'] = 2
+   gitaly['cgroups_repositories_count'] = 2
    gitaly['cgroups_mountpoint'] = '/sys/fs/cgroup'
    gitaly['cgroups_hierarchy_root'] = 'gitaly'
-   gitaly['cgroups_memory_enabled'] = true
    gitaly['cgroups_memory_bytes'] = 500000
-   gitaly['cgroups_cpu_enabled'] = true
    gitaly['cgroups_cpu_shares'] = 512
 
    gitaly['concurrency'] = [
