@@ -64,6 +64,7 @@ template "Create praefect config.toml" do
       gitlab_relative_path: gitlab_relative_path }
   )
   notifies :hup, "runit_service[praefect]"
+  sensitive true
 end
 
 runit_service 'praefect' do
