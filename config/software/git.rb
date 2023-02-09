@@ -84,7 +84,7 @@ build do
     #
     # As the bundled Git versions change over time we have this generic loop to
     # just accept any such override into the environment used by make.
-    ENV.select { |k, v| k.start_with('GITALY_GIT_VERSION_') }.each do |k, v|
+    ENV.select { |k, v| k.start_with?('GITALY_GIT_VERSION_') }.each do |k, v|
       env[k.delete_prefix('GITALY_')] = v unless v&.empty?
     end
 
