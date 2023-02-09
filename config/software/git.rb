@@ -76,13 +76,19 @@ build do
   sm_version_override_git_repo_url = Gitlab::Util.get_env('SELF_MANAGED_VERSION_REGEX_OVERRIDE_GIT_REPO_URL')
   git_repo_url = Gitlab::Util.get_env('GITALY_GIT_REPO_URL')
   if Build::Check.is_auto_deploy_tag?
-    git_version_2_37_1 = Gitlab::Util.get_env('GITALY_GIT_VERSION_2_37_1')
-    git_version_2_38 = Gitlab::Util.get_env('GITALY_GIT_VERSION_2_38')
+    # Gitaly potentially bundles multiple different Git distributions with it.
+    # It is possible to override the specific version that Gitaly compiles each
+    # of these distributions with by setting:
+    #
+    #     `GIT_VERSION_2_38=v2.38.1`
+    #
+    # As the bundled Git versions change over time we have this generic loop to
+    # just accept any such override into the environment used by make.
+    ENV.select { |k, v| k.start_with('GITALY_GIT_VERSION_') }.each do |k, v|
+      env[k.delete_prefix('GITALY_')] = v unless v&.empty?
+    end
 
     env['GIT_REPO_URL'] = git_repo_url if git_repo_url
-    env['GIT_VERSION_2_37_1'] = git_version_2_37_1 if git_version_2_37_1
-    env['GIT_VERSION_2_38'] = git_version_2_38 if git_version_2_38
-
   elsif sm_version_override_git_repo_url && Regexp.new(sm_version_override_git_repo_url).match?(Build::Info.gitlab_version)
     env['GIT_REPO_URL'] = git_repo_url if git_repo_url
   end
