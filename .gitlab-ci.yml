@@ -9,6 +9,7 @@ stages:
   - scan-dependencies
   - staging_upload
   - package-and-image-release
+  - qa-release
   - validate
   - metrics
   - slow_jobs
