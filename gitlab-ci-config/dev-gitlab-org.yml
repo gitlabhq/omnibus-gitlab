@@ -1001,7 +1001,7 @@ AWS-Premium:
 
 QA-Tag:
   extends: .docker_job
-  stage: package-and-image-release
+  stage: qa-release
   variables:
     QA_SCREENSHOTS_DIR: $CI_PROJECT_DIR/screenshots
   script:
@@ -1024,6 +1024,7 @@ QA-Tag:
     - !reference [.skip_release_jobs, rules]
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
+      allow_failure: true
 
 license-upload:
   stage: metrics
