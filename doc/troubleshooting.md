@@ -248,6 +248,30 @@ postgresql['dynamic_shared_memory_type'] = 'none'
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+## PostgreSQL error `FATAL:  remaining connection slots are reserved for non-replication superuser connections`
+
+PostgreSQL has a setting for the maximum number of the concurrent connections
+to the database server. If you see this error, it means that your GitLab instance is trying to exceed
+this limit on the number of concurrent connections.
+
+To fix this problem, you have two options:
+
+- Either increase the max connections value:
+
+  1. Edit `/etc/gitlab/gitlab.rb`:
+
+     ```ruby
+     postgresql['max_connections'] = 600
+     ```
+
+  1. Reconfigure GitLab:
+
+     ```shell
+     sudo gitlab-ctl reconfigure
+     ```
+
+- Or, you can consider [using PgBouncer](https://docs.gitlab.com/ee/administration/postgresql/pgbouncer.html) which is a connection pooler for PostgreSQL.
+
 ## Reconfigure complains about the GLIBC version
 
 ```shell
