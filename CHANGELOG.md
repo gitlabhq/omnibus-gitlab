@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.8.2 (2023-02-10)
+
+### Security (1 change)
+
+- [Update Python3 version to 3.9.16](gitlab-org/security/omnibus-gitlab@cfe38a683798149d401602c8466f83d2774eac64) ([merge request](gitlab-org/security/omnibus-gitlab!299))
+
 ## 15.8.1 (2023-01-30)
 
 No changes.
@@ -43,6 +49,12 @@ No changes.
 
 - [Update gpgme dependencies to match ruby-gpgme dependencies](gitlab-org/omnibus-gitlab@31e0eaf442e41608b04e022425b844d594b80ff9) ([merge request](gitlab-org/omnibus-gitlab!6557))
 - [Update Mattermost to 7.5.2](gitlab-org/omnibus-gitlab@7362352ebc6e6d274fcce076385e13395346a53f) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6583))
+
+## 15.7.7 (2023-02-10)
+
+### Security (1 change)
+
+- [Update Python3 version to 3.9.16](gitlab-org/security/omnibus-gitlab@5ffb6f66629c1fe7f0b0325eca21e65544468b01) ([merge request](gitlab-org/security/omnibus-gitlab!298))
 
 ## 15.7.6 (2023-01-30)
 
@@ -105,6 +117,12 @@ No changes.
 ### Other (1 change)
 
 - [Update Mattermost to 7.5.1](gitlab-org/omnibus-gitlab@477c3f4be4fd4933f35accf422ce5528aae20fec) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6526))
+
+## 15.6.8 (2023-02-10)
+
+### Security (1 change)
+
+- [Update Python3 version to 3.9.16](gitlab-org/security/omnibus-gitlab@0e34e07ef8bcad35e6efaeb82deed22dbb07a6df) ([merge request](gitlab-org/security/omnibus-gitlab!297))
 
 ## 15.6.7 (2023-01-30)
 
