@@ -251,7 +251,11 @@ module SettingsDSL
       def sanitized_key(key)
         # Services that have been migrated to use underscored form in Chef code
         # and no longer needs to be hyphenated.
-        skip_hyphenation = %w[gitlab_pages gitlab_sshd]
+        skip_hyphenation = %w[
+          gitlab_pages
+          gitlab_sshd
+          node_exporter
+        ]
 
         return underscored_form(key) if skip_hyphenation.include?(underscored_form(key))
 

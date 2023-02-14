@@ -26,7 +26,9 @@ RSpec.describe SettingsDSL::Utils do
   describe '.sanitized_key' do
     it 'returns underscored form for services specified to skip hyphenation' do
       [
-        %w[gitlab-pages gitlab_pages]
+        %w[gitlab-pages gitlab_pages],
+        %w[gitlab-sshd gitlab_sshd],
+        %w[node-exporter node_exporter]
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end

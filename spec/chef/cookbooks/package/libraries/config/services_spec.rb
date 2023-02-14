@@ -115,12 +115,12 @@ RSpec.describe Services do
 
       it 'ignores disable on system services' do
         Services.disable('node_exporter')
-        expect(node['monitoring']['node-exporter']['enable']).to be true
+        expect(node['monitoring']['node_exporter']['enable']).to be true
       end
 
       it 'allows forced disable on system services' do
         Services.disable('node_exporter', include_system: true)
-        expect(node['monitoring']['node-exporter']['enable']).to be false
+        expect(node['monitoring']['node_exporter']['enable']).to be false
       end
     end
 
@@ -251,7 +251,7 @@ RSpec.describe Services do
         Services.disable_group('redis', Services::SYSTEM_GROUP, include_system: true)
         Services.enable_group('rails', 'monitoring', except: ['redis', Services::SYSTEM_GROUP])
         expect(node['monitoring']['redis-exporter']['enable']).to be false
-        expect(node['monitoring']['node-exporter']['enable']).to be false
+        expect(node['monitoring']['node_exporter']['enable']).to be false
         expect(node['gitlab']['puma']['enable']).to be true
 
         Services.enable_group('sidekiq', 'monitoring')
@@ -300,7 +300,7 @@ RSpec.describe Services do
         Services.disable_group('redis', 'rails')
         Services.enable_group(Services::ALL_GROUPS, except: %w(redis rails))
         expect(node['gitlab']['puma']['enable']).to be false
-        expect(node['monitoring']['node-exporter']['enable']).to be true
+        expect(node['monitoring']['node_exporter']['enable']).to be true
         expect(node['monitoring']['redis-exporter']['enable']).to be false
       end
 
