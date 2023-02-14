@@ -49,16 +49,16 @@ default['monitoring']['alertmanager']['global'] = {}
 ####
 # Prometheus Node Exporter
 ####
-default['monitoring']['node-exporter']['enable'] = false
-default['monitoring']['node-exporter']['home'] = '/var/opt/gitlab/node-exporter'
-default['monitoring']['node-exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
-default['monitoring']['node-exporter']['env_directory'] = '/opt/gitlab/etc/node-exporter/env'
-default['monitoring']['node-exporter']['env'] = {
+default['monitoring']['node_exporter']['enable'] = false
+default['monitoring']['node_exporter']['home'] = '/var/opt/gitlab/node-exporter'
+default['monitoring']['node_exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
+default['monitoring']['node_exporter']['env_directory'] = '/opt/gitlab/etc/node-exporter/env'
+default['monitoring']['node_exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
-default['monitoring']['node-exporter']['listen_address'] = 'localhost:9100'
-default['monitoring']['node-exporter']['consul_service_name'] = 'node-exporter'
-default['monitoring']['node-exporter']['consul_service_meta'] = nil
+default['monitoring']['node_exporter']['listen_address'] = 'localhost:9100'
+default['monitoring']['node_exporter']['consul_service_name'] = 'node-exporter'
+default['monitoring']['node_exporter']['consul_service_meta'] = nil
 
 ####
 # Redis exporter
@@ -187,3 +187,8 @@ default['monitoring']['grafana']['smtp'] = {
   'startTLS_policy' => nil
 }
 default['monitoring']['grafana']['register_as_oauth_app'] = true
+
+# Temporarily retain support for `node['monitoring']['node-exporter'][*]` usage in
+# `/etc/gitlab/gitlab.rb`
+# TODO: Remove support in 16.0
+default['monitoring']['node-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['node_exporter'].to_h }, "node['monitoring']['node-exporter']", "node['monitoring']['node_exporter']")

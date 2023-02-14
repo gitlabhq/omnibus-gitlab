@@ -20,7 +20,7 @@ runit_service "node-exporter" do
   action :disable
 end
 
-consul_service node['monitoring']['node-exporter']['consul_service_name'] do
+consul_service node['monitoring']['node_exporter']['consul_service_name'] do
   id 'node-exporter'
   action :delete
   reload_service false unless Services.enabled?('consul')

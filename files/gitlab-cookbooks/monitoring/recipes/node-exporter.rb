@@ -17,9 +17,9 @@
 #
 account_helper = AccountHelper.new(node)
 prometheus_user = account_helper.prometheus_user
-node_exporter_log_dir = node['monitoring']['node-exporter']['log_directory']
-textfile_dir = File.join(node['monitoring']['node-exporter']['home'], 'textfile_collector')
-node_exporter_static_etc_dir = node['monitoring']['node-exporter']['env_directory']
+node_exporter_log_dir = node['monitoring']['node_exporter']['log_directory']
+textfile_dir = File.join(node['monitoring']['node_exporter']['home'], 'textfile_collector')
+node_exporter_static_etc_dir = node['monitoring']['node_exporter']['env_directory']
 
 # node-exporter runs under the prometheus user account. If prometheus is
 # disabled, it's up to this recipe to create the account
@@ -38,7 +38,7 @@ directory node_exporter_static_etc_dir do
 end
 
 env_dir node_exporter_static_etc_dir do
-  variables node['monitoring']['node-exporter']['env']
+  variables node['monitoring']['node_exporter']['env']
   notifies :restart, "runit_service[node-exporter]"
 end
 
@@ -48,7 +48,7 @@ directory textfile_dir do
   recursive true
 end
 
-runtime_flags = PrometheusHelper.new(node).kingpin_flags('node-exporter')
+runtime_flags = PrometheusHelper.new(node).kingpin_flags('node_exporter')
 runit_service 'node-exporter' do
   options({
     log_directory: node_exporter_log_dir,
@@ -56,7 +56,7 @@ runit_service 'node-exporter' do
     env_dir: node_exporter_static_etc_dir
   }.merge(params))
   log_options node['gitlab']['logging'].to_hash.merge(
-    node['monitoring']['node-exporter'].to_hash
+    node['monitoring']['node_exporter'].to_hash
   )
 end
 
@@ -66,10 +66,10 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
-consul_service node['monitoring']['node-exporter']['consul_service_name'] do
+consul_service node['monitoring']['node_exporter']['consul_service_name'] do
   id 'node-exporter'
-  meta node['monitoring']['node-exporter']['consul_service_meta']
+  meta node['monitoring']['node_exporter']['consul_service_meta']
   action Prometheus.service_discovery_action
-  socket_address node['monitoring']['node-exporter']['listen_address']
+  socket_address node['monitoring']['node_exporter']['listen_address']
   reload_service false unless Services.enabled?('consul')
 end
