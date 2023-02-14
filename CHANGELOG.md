@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.7.7 (2023-02-10)
+
+### Security (1 change)
+
+- [Update Python3 version to 3.9.16](gitlab-org/security/omnibus-gitlab@5ffb6f66629c1fe7f0b0325eca21e65544468b01) ([merge request](gitlab-org/security/omnibus-gitlab!298))
+
 ## 15.7.6 (2023-01-30)
 
 ### Security (1 change)
