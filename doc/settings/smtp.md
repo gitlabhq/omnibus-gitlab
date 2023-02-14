@@ -1346,6 +1346,12 @@ configured, the SMTP configuration must be present in `/etc/gitlab/gitlab.rb` on
 the SMTP configuration is missing, you may notice that emails do not get sent through SMTP as many
 GitLab emails are sent via Sidekiq.
 
+### Emails not sending when using Sidekiq routing rules
+
+If you are using Sidekiq [routing rules](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#routing-rules), your configuration might be missing the `mailers` queue which is required for outgoing mail. 
+
+For more details, review the [example configuration](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#detailed-example).
+
 ### Email not sent
 
 WARNING:
