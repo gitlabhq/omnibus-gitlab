@@ -331,6 +331,18 @@ module Gitlab
             deprecation: '15.5',
             removal: '16.0',
             note: "Starting with GitLab 15.5, this setting cannot be controlled via the configuration file anymore. Follow the steps at https://docs.gitlab.com/ee/user/admin_area/settings/account_and_limit_settings.html#prevent-users-from-creating-top-level-groups, to configure this setting via the Admin UI or the API"
+          },
+          {
+            config_keys: %w(gitlab sidekiq queue_selector),
+            deprecation: '15.9',
+            removal: '17.0',
+            note: "Starting with GitLab 17.0, running Sidekiq with queue selector (`sidekiq['queue_selector'] = true`) will be removed. We recommend to follow the steps at https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes, to run Sidekiq with multiple processes while listening to all queues."
+          },
+          {
+            config_keys: %w(gitlab sidekiq negate),
+            deprecation: '15.9',
+            removal: '17.0',
+            note: "Starting with GitLab 17.0, running Sidekiq with negate (`sidekiq['negate'] = true`) will be removed. We recommend to follow the steps at https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes, to run Sidekiq with multiple processes while listening to all queues."
           }
         ]
 

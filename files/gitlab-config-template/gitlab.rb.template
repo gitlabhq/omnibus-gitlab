@@ -1069,7 +1069,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['log_directory'] = "/var/log/gitlab/sidekiq"
 # sidekiq['log_format'] = "json"
 # sidekiq['shutdown_timeout'] = 4
-# sidekiq['queue_selector'] = false
 # sidekiq['interval'] = nil
 # sidekiq['max_concurrency'] = 20
 # sidekiq['min_concurrency'] = nil
@@ -1085,11 +1084,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! separating them with a comma within the group entry, a `*` will process all queues
 
 # sidekiq['queue_groups'] = ['*']
-
-##! If negate is enabled then Sidekiq will process all the queues that
-##! don't match those in queue_groups.
-
-# sidekiq['negate'] = false
 
 ##! Specifies where Prometheus metrics endpoints should be made available for Sidekiq processes.
 # sidekiq['metrics_enabled'] = true
