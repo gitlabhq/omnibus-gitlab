@@ -96,6 +96,7 @@ template "Create Gitaly config.toml" do
       custom_hooks_dir: custom_hooks_dir }
   )
   notifies :hup, "runit_service[gitaly]" if omnibus_helper.should_notify?('gitaly')
+  sensitive true
 end
 
 runit_service 'gitaly' do
