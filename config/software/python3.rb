@@ -62,10 +62,17 @@ build do
     (ohai['platform_family'] =~ /^debian/ && ohai['platform_version'] =~ /^11/) ||
       (ohai['platform'] =~ /^ubuntu/ && ohai['platform_version'] =~ /^22/)
 
+  with_openssl = ''
+  if (ohai['platform'] =~ /^amzn/ || ohai['platform'] =~ /^amazon/) && (ohai['platform_version'] == "2022")
+    patch source: 'custom-openssl.patch'
+    with_openssl = "--with-opensssl=/usr/local/openssl"
+  end
+
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
            '--enable-shared',
            '--with-readline=editline',
+           with_openssl,
            '--with-dbmliborder='].join(' '), env: env
   make env: env
   make 'install', env: env

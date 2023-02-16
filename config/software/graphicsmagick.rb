@@ -60,7 +60,8 @@ build do
     '--with-jpeg=yes',
     '--with-zlib=yes',
     '--with-png=yes',
-    "--with-sysroot=#{install_dir}/embedded"
+    "--with-sysroot=#{install_dir}/embedded",
+    "--without-zstd"
   ]
 
   command configure_command.join(' '), env: env

@@ -67,7 +67,8 @@ build do
     "--with-zlib=#{install_dir}/embedded",
     "--without-ca-path",
     "--without-ca-bundle",
-    "--with-ca-fallback"
+    "--with-ca-fallback",
+    "--without-zstd"
   ]
 
   openssl_library_path = "=#{install_dir}/embedded" unless Build::Check.use_system_ssl?
