@@ -43,7 +43,7 @@ build do
     elsif ohai['platform'] == 'opensuseleap' && ohai['platform_version'].start_with?('15.')
       env['CC'] = "/usr/bin/gcc-8"
       env['CXX'] = "/usr/bin/g++-8"
-    elsif ohai['platform'] == 'amazon' && ohai['platform_version'].start_with?('2')
+    elsif ohai['platform'] == 'amazon' && ohai['platform_version'] == '2'
       env['CC'] = "/usr/bin/gcc10-gcc"
       env['CXX'] = "/usr/bin/gcc10-g++"
     end

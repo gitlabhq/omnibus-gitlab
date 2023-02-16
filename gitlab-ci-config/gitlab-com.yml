@@ -402,6 +402,7 @@ Ubuntu 18.04 knapsack: !reference [.knapsack]
 Ubuntu 20.04 knapsack: !reference [.knapsack]
 Ubuntu 22.04 knapsack: !reference [.knapsack]
 AmazonLinux 2 knapsack: !reference [.knapsack]
+AmazonLinux 2022 knapsack: !reference [.knapsack]
 
 build library specs:
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ubuntu_20.04-ruby:${BUILDER_IMAGE_REVISION}"
@@ -484,6 +485,13 @@ AmazonLinux 2 specs :
   parallel: 6
   needs:
   - AmazonLinux 2 knapsack
+AmazonLinux 2022 specs :
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/amazonlinux_2022-ruby:${BUILDER_IMAGE_REVISION}"
+  extends: .chef_spec_template
+  parallel: 6
+  needs:
+  - AmazonLinux 2022 knapsack
+
 
 update-knapsack:
   extends: .knapsack-state

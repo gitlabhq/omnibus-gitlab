@@ -146,6 +146,11 @@ AmazonLinux-2-check:
   extends: .yum-install
 AmazonLinux-2-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
+AmazonLinux-2022-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2022:${BUILDER_IMAGE_REVISION}"
+  extends: .yum-install
+AmazonLinux-2022-arm64-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2022_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   tags:
   - docker-arm-builder
