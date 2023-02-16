@@ -83,10 +83,7 @@ include_recipe "gitlab::web-server"
 # `account` custom resource will not create them.
 include_recipe "gitlab::users"
 
-if node['gitlab']['gitlab-rails']['enable']
-  include_recipe "gitlab::gitlab-shell"
-  include_recipe "gitlab::gitlab-rails"
-end
+include_recipe "gitlab::gitlab-rails" if node['gitlab']['gitlab-rails']['enable']
 
 include_recipe "gitlab::selinux"
 
@@ -108,6 +105,9 @@ end
 
 # Install our runit instance
 include_recipe "package::runit"
+
+# Install shell after runit so `gitlab-sshd` comes up
+include_recipe "gitlab::gitlab-shell" if node['gitlab']['gitlab-rails']['enable']
 
 # Make global sysctl commands available
 include_recipe "package::sysctl"
