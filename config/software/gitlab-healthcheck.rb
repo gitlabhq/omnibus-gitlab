@@ -32,7 +32,7 @@ build do
   block do
     File.open("#{install_dir}/bin/gitlab-healthcheck", 'w') do |file|
       file.print <<-EOH
-#!/bin/sh
+#!/bin/bash
 
 error_echo()
 {
@@ -48,7 +48,7 @@ fi
 
 . ${gitlab_healthcheck_rc}
 
-exec /opt/gitlab/embedded/bin/curl $@ ${flags} ${url}
+exec /opt/gitlab/embedded/bin/curl "$@" "${flags[@]}" "${url}"
       EOH
     end
   end

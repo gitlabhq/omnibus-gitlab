@@ -1,6 +1,2 @@
 url='<%= @url %>'
-<% if @use_socket %>
-flags='--unix-socket <%= @socket_path %>'
-<% else %>
-flags='--insecure'
-<% end %>
+flags=(<%= @flags %>)
