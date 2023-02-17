@@ -40,19 +40,12 @@ RSpec.describe 'praefect' do
 
     it 'renders the config.toml' do
       rendered = {
-        'auth' => { 'token' => '', 'transitioning' => false },
+        'auth' => { 'transitioning' => false },
         'listen_addr' => 'localhost:2305',
         'logging' => { 'format' => 'json' },
         'prometheus_listen_addr' => 'localhost:9652',
         'prometheus_exclude_database_from_default_metrics' => true,
-        'sentry' => {},
-        'database' => {
-          'session_pooled' => {},
-        },
-        'reconciliation' => {},
-        'background_verification' => {},
         'failover' => { 'enabled' => true },
-        'gitlab' => { 'relative_url_root' => '', 'url' => 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket' }
       }
 
       expect(chef_run).to render_file(config_path).with_content { |content|
@@ -75,6 +68,253 @@ RSpec.describe 'praefect' do
       expect(chef_run).to render_file('/opt/gitlab/sv/praefect/run')
         .with_content('/opt/gitlab/embedded/bin/gitaly-wrapper /opt/gitlab/embedded/bin/praefect')
         .with_content('exec chpst -e /opt/gitlab/etc/praefect/env')
+    end
+
+    context 'with defaults overridden with custom configuration' do
+      before do
+        stub_gitlab_rb(
+          {
+            praefect: {
+              enable: true,
+              configuration: {
+                listen_addr: 'custom_listen_addr:5432',
+                prometheus_listen_addr: 'custom_prometheus_listen_addr:5432',
+                logging: {
+                  format: 'custom_format',
+                  has_no_default: 'should get output'
+                },
+                prometheus_exclude_database_from_default_metrics: false,
+                auth: {
+                  transitioning: true
+                },
+                failover: {
+                  enabled: false
+                },
+                virtual_storage: [
+                  {
+                    name: 'default',
+                    node: [
+                      {
+                        storage: 'praefect1',
+                        address: 'tcp://node2.internal',
+                        token: 'praefect2-token'
+                      },
+                      {
+                        storage: 'praefect2',
+                        address: 'tcp://node2.internal',
+                        token: 'praefect2-token'
+                      }
+                    ]
+                  },
+                  {
+                    name: 'virtual-storage-2',
+                    node: [
+                      {
+                        storage: 'praefect3',
+                        address: 'tcp://node3.internal',
+                        token: 'praefect3-token'
+                      },
+                      {
+                        storage: 'praefect4',
+                        address: 'tcp://node4.internal',
+                        token: 'praefect4-token'
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        )
+      end
+
+      it 'renders config.toml' do
+        expect(chef_run).to render_file(config_path).with_content { |content|
+          expect(Tomlrb.parse(content)).to eq(
+            {
+              'auth' => {
+                'transitioning' => true
+              },
+              'failover' => {
+                'enabled' => false
+              },
+              'listen_addr' => 'custom_listen_addr:5432',
+              'logging' => {
+                'format' => 'custom_format',
+                'has_no_default' => 'should get output'
+              },
+              'prometheus_exclude_database_from_default_metrics' => false,
+              'prometheus_listen_addr' => 'custom_prometheus_listen_addr:5432',
+              'virtual_storage' => [
+                {
+                  'name' => 'default',
+                  'node' => [
+                    {
+                      'storage' => 'praefect1',
+                      'address' => 'tcp://node2.internal',
+                      'token' => 'praefect2-token'
+                    },
+                    {
+                      'storage' => 'praefect2',
+                      'address' => 'tcp://node2.internal',
+                      'token' => 'praefect2-token'
+                    }
+                  ]
+                },
+                {
+                  'name' => 'virtual-storage-2',
+                  'node' => [
+                    {
+                      'storage' => 'praefect3',
+                      'address' => 'tcp://node3.internal',
+                      'token' => 'praefect3-token'
+                    },
+                    {
+                      'storage' => 'praefect4',
+                      'address' => 'tcp://node4.internal',
+                      'token' => 'praefect4-token'
+                    }
+                  ]
+                }
+              ]
+            }
+          )
+        }
+      end
+    end
+
+    context 'with old key and its new key set' do
+      it 'raises an error in the generic case' do
+        stub_gitlab_rb(
+          {
+            praefect: {
+              enable: true,
+              database_direct_host: 'database_direct_host_legacy',
+              configuration: {
+                database: {
+                  session_pooled: {
+                    host: 'database_direct_host_new'
+                  }
+                }
+              }
+            }
+          }
+        )
+
+        expect { chef_run }.to raise_error("Legacy configuration key 'database_direct_host' can't be set when its new key 'configuration.database.session_pooled.host' is set.")
+      end
+
+      it 'raises an error with prometheus_grpc_latency_buckets' do
+        stub_gitlab_rb(
+          {
+            praefect: {
+              enable: true,
+              prometheus_grpc_latency_buckets: '[0, 1, 2]',
+              configuration: {
+                prometheus: {
+                  grpc_latency_buckets: [0, 1, 2]
+                }
+              }
+            }
+          }
+        )
+
+        expect { chef_run }.to raise_error("Legacy configuration key 'prometheus_grpc_latency_buckets' can't be set when its new key 'configuration.prometheus.grpc_latency_buckets' is set.")
+      end
+
+      it 'raises an error with reconciliation_histogram_buckets' do
+        stub_gitlab_rb(
+          {
+            praefect: {
+              enable: true,
+              reconciliation_histogram_buckets: '[0, 1, 2]',
+              configuration: {
+                reconciliation: {
+                  histogram_buckets: [0, 1, 2]
+                }
+              }
+            }
+          }
+        )
+
+        expect { chef_run }.to raise_error("Legacy configuration key 'reconciliation_histogram_buckets' can't be set when its new key 'configuration.reconciliation.histogram_buckets' is set.")
+      end
+    end
+
+    context 'with old virtual_storages and new virtual_storage set' do
+      before do
+        stub_gitlab_rb(
+          {
+            praefect: {
+              enable: true,
+              virtual_storages: {
+                default: {
+                  nodes: {
+                    praefect1: {
+                      address: 'tcp://node1.internal',
+                      token: "praefect1-token"
+                    }
+                  }
+                }
+              },
+              configuration: {
+                virtual_storage: [
+                  {
+                    name: 'default',
+                    node: [
+                      {
+                        storage: 'praefect2',
+                        address: 'tcp://node2.internal',
+                        token: 'praefect2-token'
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        )
+      end
+
+      it 'raises an error' do
+        expect { chef_run }.to raise_error("Legacy configuration key 'virtual_storages' can't be set when its new key 'configuration.virtual_storage' is set.")
+      end
+    end
+
+    context 'with array configured as string' do
+      it 'raises an error with reconciliation histogram buckets' do
+        stub_gitlab_rb(
+          {
+            praefect: {
+              enable: true,
+              configuration: {
+                reconciliation: {
+                  histogram_buckets: '[0, 1, 2]'
+                }
+              }
+            }
+          }
+        )
+
+        expect { chef_run }.to raise_error("praefect['configuration'][:reconciliation][:histogram_buckets] must be an array, not a string")
+      end
+
+      it 'raises an error with prometheus grpc latency buckets' do
+        stub_gitlab_rb(
+          {
+            praefect: {
+              enable: true,
+              configuration: {
+                prometheus: {
+                  grpc_latency_buckets: '[0, 1, 2]'
+                }
+              }
+            }
+          }
+        )
+
+        expect { chef_run }.to raise_error("praefect['configuration'][:prometheus][:grpc_latency_buckets] must be an array, not a string")
+      end
     end
 
     context 'with custom settings' do
@@ -107,7 +347,6 @@ RSpec.describe 'praefect' do
         }
       end
       let(:failover_enabled) { true }
-      let(:failover_timeout) { "30s" }
       let(:database_host) { 'pg.external' }
       let(:database_port) { 2234 }
       let(:database_user) { 'praefect-pg' }
@@ -121,7 +360,6 @@ RSpec.describe 'praefect' do
       let(:database_direct_port) { 1234 }
       let(:reconciliation_scheduling_interval) { '1m' }
       let(:reconciliation_histogram_buckets) { '[1.0, 2.0]' }
-      let(:gitlab_url) { 'http://localhost:3000' }
       let(:user) { 'user123' }
       let(:password) { 'password321' }
       let(:ca_file) { '/path/to/ca_file' }
@@ -148,7 +386,6 @@ RSpec.describe 'praefect' do
                          logging_level: log_level,
                          logging_format: log_format,
                          failover_enabled: failover_enabled,
-                         failover_timeout: failover_timeout,
                          virtual_storages: virtual_storages,
                          database_host: database_host,
                          database_port: database_port,
@@ -166,17 +403,12 @@ RSpec.describe 'praefect' do
                          background_verification_verification_interval: '168h',
                          background_verification_delete_invalid_records: true,
                          graceful_stop_timeout: graceful_stop_timeout,
-                       },
-                       gitlab_rails: {
-                         internal_api_url: gitlab_url
-                       },
-                       gitlab_shell: {
-                         http_settings: {
-                           read_timeout: read_timeout,
-                           user: user,
-                           password: password,
-                           ca_file: ca_file,
-                           ca_path: ca_path
+                         # Sanity check that the configuration values get templated out as TOML.
+                         configuration: {
+                           string_value: 'value',
+                           subsection: {
+                             array_value: [1, 2]
+                           },
                          }
                        }
                       )
@@ -207,7 +439,6 @@ RSpec.describe 'praefect' do
               },
               'failover' => {
                 'enabled' => true,
-                'timeout' => "30s"
               },
               'logging' => {
                 'format' => 'text',
@@ -232,6 +463,10 @@ RSpec.describe 'praefect' do
               'prometheus_listen_addr' => 'localhost:1234',
               'prometheus_exclude_database_from_default_metrics' => false,
               'socket_path' => '/var/opt/gitlab/praefect/praefect.socket',
+              'string_value' => 'value',
+              'subsection' => {
+                'array_value' => [1, 2]
+              },
               'tls' => {
                 'certificate_path' => '/path/to/cert.pem',
                 'key_path' => '/path/to/key.pem'
@@ -265,17 +500,6 @@ RSpec.describe 'praefect' do
                   ]
                 }
               ],
-              'gitlab' => {
-                'url' => 'http://localhost:3000',
-                'relative_url_root' => '',
-                'http-settings' => {
-                  'read_timeout' => 123,
-                  'user' => 'user123',
-                  'password' => 'password321',
-                  'ca_file' => '/path/to/ca_file',
-                  'ca_path' => '/path/to/ca_path'
-                }
-              },
               'graceful_stop_timeout' => graceful_stop_timeout
             }
           )
