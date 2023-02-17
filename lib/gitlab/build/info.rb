@@ -309,6 +309,21 @@ module Build
       def package_list
         Dir.glob(PACKAGE_GLOB)
       end
+
+      def name_version
+        Omnibus.load_configuration('omnibus.rb')
+        project = Omnibus::Project.load('gitlab')
+        packager = project.packagers_for_system[0]
+
+        case packager
+        when Omnibus::Packager::DEB
+          "#{Build::Info.package}=#{packager.safe_version}-#{packager.safe_build_iteration}"
+        when Omnibus::Packager::RPM
+          "#{Build::Info.package}-#{packager.safe_version}-#{packager.safe_build_iteration}#{packager.dist_tag}"
+        else
+          raise "Unable to detect version"
+        end
+      end
     end
   end
 end
