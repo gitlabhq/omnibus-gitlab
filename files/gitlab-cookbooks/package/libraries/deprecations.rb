@@ -346,11 +346,66 @@ module Gitlab
           }
         ]
 
+        deprecations += praefect_legacy_configuration_deprecations
+
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable', 'svlogd_prefix'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")
         deprecations += identify_deprecated_config(existing_config, ['repmgr'], ['enable'], "13.3", "14.0", "Starting with GitLab 14.0, Repmgr is no longer supported and users must switch to Patroni, following https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni.")
         deprecations += identify_deprecated_config(existing_config, ['repmgrd'], ['enable'], "13.3", "14.0", "Starting with GitLab 14.0, Repmgr is no longer supported and users must switch to Patroni, following https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni.")
 
         deprecations
+      end
+
+      # praefect_legacy_configuration_deprecations returns deprecations of the old keys of Praefect prior to
+      # updating its configuration structure in Omnibus to match Praefect's own configuration.
+      def praefect_legacy_configuration_deprecations
+        [
+          'listen_addr',
+          'socket_path',
+          'prometheus_listen_addr',
+          'tls_listen_addr',
+          'separate_database_metrics',
+          'auth_token',
+          'auth_transitioning',
+          'logging_format',
+          'logging_level',
+          'failover_enabled',
+          'background_verification_delete_invalid_records',
+          'background_verification_verification_interval',
+          'reconciliation_scheduling_interval',
+          'reconciliation_histogram_buckets',
+          'certificate_path',
+          'key_path',
+          'database_host',
+          'database_port',
+          'database_user',
+          'database_password',
+          'database_dbname',
+          'database_sslmode',
+          'database_sslcert',
+          'database_sslkey',
+          'database_sslrootcert',
+          'database_direct_host',
+          'database_direct_port',
+          'database_direct_user',
+          'database_direct_password',
+          'database_direct_dbname',
+          'database_direct_sslmode',
+          'database_direct_sslcert',
+          'database_direct_sslkey',
+          'database_direct_sslrootcert',
+          'sentry_dsn',
+          'sentry_environment',
+          'prometheus_grpc_latency_buckets',
+          'graceful_stop_timeout',
+          'virtual_storages',
+        ].map do |key|
+          {
+            config_keys: ['praefect', key],
+            deprecation: '15.9',
+            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7438
+            note: "In GitLab 15.9, Praefect's configuration in Omnibus GitLab was changed to structurally match Praefect's own configuration. Please see the migration instructions at https://docs.gitlab.com/ee/update/#1590"
+          }
+        end
       end
 
       def identify_deprecated_config(existing_config, config_keys, allowed_keys, deprecation, removal, note = nil)
