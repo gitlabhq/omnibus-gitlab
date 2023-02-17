@@ -101,18 +101,7 @@ namespace :build do
 
     desc 'Print the package name-version string to install the specific version of package'
     task :name_version do
-      Omnibus.load_configuration('omnibus.rb')
-      project = Omnibus::Project.load('gitlab')
-      packager = project.packagers_for_system[0]
-
-      case packager
-      when Omnibus::Packager::DEB
-        puts "#{Build::Info.package}=#{packager.safe_version}-#{packager.safe_build_iteration}"
-      when Omnibus::Packager::RPM
-        puts "#{Build::Info.package}-#{packager.safe_version}-#{packager.safe_build_iteration}#{packager.dist_tag}"
-      else
-        raise "Unable to detect version"
-      end
+      puts Build::Info.name_version
     end
   end
 

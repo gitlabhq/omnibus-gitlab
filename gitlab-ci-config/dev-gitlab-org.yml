@@ -453,7 +453,7 @@ RAT-Nightly:
 # This job runs only on nightly EE builds
 RAT-Nightly-FIPS:
   stage: slow_jobs
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
   variables:
     USE_SYSTEM_SSL: "true"
     RAT_REFERENCE_ARCHITECTURE: "omnibus-gitlab-mrs-fips"

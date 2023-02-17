@@ -19,8 +19,9 @@ module Build
           'ref' => 'master',
           'token' => Gitlab::Util.get_env('RAT_TRIGGER_TOKEN'),
           'variables[REFERENCE_ARCHITECTURE]' => 'omnibus-gitlab-mrs',
-          'variables[PACKAGE_URL]' => Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.deb_package_download_url,
-          'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || image || "dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ee-qa:#{version.partition(/\.\d+$/).first}"
+          'variables[PRE_RELEASE]' => "true",
+          'variables[PACKAGE_VERSION]' => Build::Info.name_version,
+          'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || image || "dev.gitlab.org:5005/gitlab/gitlab-ee/gitlab-ee-qa:#{version.partition(/\.\d+$/).first}"
         }
       end
 
