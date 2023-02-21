@@ -1348,7 +1348,7 @@ GitLab emails are sent via Sidekiq.
 
 ### Emails not sending when using Sidekiq routing rules
 
-If you are using Sidekiq [routing rules](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#routing-rules), your configuration might be missing the `mailers` queue which is required for outgoing mail. 
+If you are using Sidekiq [routing rules](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#routing-rules), your configuration might be missing the `mailers` queue which is required for outgoing mail.
 
 For more details, review the [example configuration](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#detailed-example).
 
