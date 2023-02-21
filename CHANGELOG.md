@@ -3,6 +3,54 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.9.0 (2023-02-21)
+
+### Added (5 changes)
+
+- [Provide packages for Amazon Linux 2022](gitlab-org/omnibus-gitlab@243ab3b3d9b122a4c996e7850e1c4942980278d9) ([merge request](gitlab-org/omnibus-gitlab!6477))
+- [Add gitlab-sshd configuration support](gitlab-org/omnibus-gitlab@833c4489ace2a24ccdf21e53026f862877b60709) ([merge request](gitlab-org/omnibus-gitlab!6446))
+- [Add redis_yml_override setting](gitlab-org/omnibus-gitlab@7f3d67ce21c00dd6427a885adc10f751d3e53585) ([merge request](gitlab-org/omnibus-gitlab!6609))
+- [Add ci_runners_stale_machines_cleanup_worker setting](gitlab-org/omnibus-gitlab@fdd9fac5b46524182bdc1dd434fb930faa3bb0b7) ([merge request](gitlab-org/omnibus-gitlab!6623))
+- [Allow configuring repository cache redis instance](gitlab-org/omnibus-gitlab@8f4717e1ac2662aed5d738267541db915b99c75c) ([merge request](gitlab-org/omnibus-gitlab!6582))
+
+### Changed (20 changes)
+
+- [Match Praefect's configuration format in Omnibus](gitlab-org/omnibus-gitlab@4dff04a602afde189c8521c22703b3cb83e5a0b0) ([merge request](gitlab-org/omnibus-gitlab!6658))
+- [Use first entry in allowed_hosts, if set, for healthcheck](gitlab-org/omnibus-gitlab@293e8314aeb4ac4950d6ad6a30255b1567a88bac) ([merge request](gitlab-org/omnibus-gitlab!6666))
+- [Mark praefect configuration as sensitive](gitlab-org/omnibus-gitlab@aa8048d8aa248d0b486d462264ff537bb8f63489) ([merge request](gitlab-org/omnibus-gitlab!6679))
+- [Mark gitaly configuration as sensitive](gitlab-org/omnibus-gitlab@289a980977bd89c0db4495eb45f4d9752f79aafe) ([merge request](gitlab-org/omnibus-gitlab!6678))
+- [Update acme-client to 2.0.13](gitlab-org/omnibus-gitlab@ac2a0a1188c162dfdc9777b3cee45788308391fc) ([merge request](gitlab-org/omnibus-gitlab!6655))
+- [Update redis_exporter to version 1.45.0](gitlab-org/omnibus-gitlab@6b1c64403e03e442a5fa0566a5a5868bae8ad31c) ([merge request](gitlab-org/omnibus-gitlab!6483))
+- [Update Mattermost to 7.7.1](gitlab-org/omnibus-gitlab@2ec912a331ab3213b24a1f356e92c583f28dcb4e) by @antonis.stamatiou ([merge request](gitlab-org/omnibus-gitlab!6643))
+- [Bump Omnibus builder image to 4.5.0](gitlab-org/omnibus-gitlab@ffb142f5b501be44485a15353b3c3f9239894dc0) ([merge request](gitlab-org/omnibus-gitlab!6665))
+- [Update gitlab-org/gitlab-exporter from 12.1.0 to 12.1.1](gitlab-org/omnibus-gitlab@1db2e56924194dd1dc112e83449a704a9963ba8f) ([merge request](gitlab-org/omnibus-gitlab!6664))
+- [Update alertmanager to version 0.25.0](gitlab-org/omnibus-gitlab@c38166553e68923b0135650b60edb6c51b31b544) ([merge request](gitlab-org/omnibus-gitlab!6584))
+- [Update gitlab-exporter to version 12.1.0](gitlab-org/omnibus-gitlab@9831e53a36315d203740be71d9369cc2f3be712e) ([merge request](gitlab-org/omnibus-gitlab!6602))
+- [Update logrotate to version 3.21.0](gitlab-org/omnibus-gitlab@7d43d4746039072f8925773f2cd1f6705ff28b39) ([merge request](gitlab-org/omnibus-gitlab!6613))
+- [Update gitlab-org/container-registry to v3.66.0-gitlab](gitlab-org/omnibus-gitlab@4503ed5de15b884bc28e81198f98465efe443ff0) ([merge request](gitlab-org/omnibus-gitlab!6651))
+- [Update libpng version to 1.6.39](gitlab-org/omnibus-gitlab@27d88f95bc3efd1410d1c32d4ce2937aa4464626) ([merge request](gitlab-org/omnibus-gitlab!6571))
+- [Update libtiff to 4.5.0](gitlab-org/omnibus-gitlab@7fe15f368e3edc25aeffa4540e68dd84bd4d37d3) ([merge request](gitlab-org/omnibus-gitlab!6579))
+- [Match Praefect's configuration format in Omnibus](gitlab-org/omnibus-gitlab@a82c788d46c6fd0a234999a2fe8d9556bf95cdd5) ([merge request](gitlab-org/omnibus-gitlab!6373))
+- [Use shellwords to escape special characters](gitlab-org/omnibus-gitlab@7c76d30036b62eed3ea7b98c87c575c6bd3d5dda) ([merge request](gitlab-org/omnibus-gitlab!6572))
+- [Use config file for Pages Headers parameter instead of command line](gitlab-org/omnibus-gitlab@cc022abb999fb9c967e369e70440bd2bd0556ad1) ([merge request](gitlab-org/omnibus-gitlab!6624))
+- [Update gitlab-org/container-registry from v3.63.0 to v3.65.0](gitlab-org/omnibus-gitlab@c8380837bdb5e8c3a8011297728d99adf6b13426) ([merge request](gitlab-org/omnibus-gitlab!6618))
+- [Change ci_runner_versions_reconciliation_worker job to run daily](gitlab-org/omnibus-gitlab@a962f5a15722e86c16fd599d7fa2bfb5d3a3c2ee) ([merge request](gitlab-org/omnibus-gitlab!6622))
+
+### Deprecated (2 changes)
+
+- [Deprecate legacy Praefect configuration options](gitlab-org/omnibus-gitlab@96c147cf28cc774c410816cd42fa51c8ce3143d4) ([merge request](gitlab-org/omnibus-gitlab!6669))
+- [Deprecate queue_selector and negate options](gitlab-org/omnibus-gitlab@16c80e4fb09ed0f1a785e2718318df1e7006c567) ([merge request](gitlab-org/omnibus-gitlab!6676))
+
+### Security (1 change)
+
+- [Update Python3 version to 3.9.16](gitlab-org/omnibus-gitlab@39c2dc9969b798dc1c9a44b25aaba99b7b66fc9a)
+
+### Other (3 changes)
+
+- [Add docs for troubleshooting connection problems due to two connections](gitlab-org/omnibus-gitlab@3e3d216c7680edc37a2cacd2d170f565b243dfc7) ([merge request](gitlab-org/omnibus-gitlab!6663))
+- [Corrects the example for KAS K8S proxy URL](gitlab-org/omnibus-gitlab@c064071105007d8219e674c07d2f67812d330875) by @zeeZ ([merge request](gitlab-org/omnibus-gitlab!6648))
+- [Use templatesymlink :delete to cleanup redis config](gitlab-org/omnibus-gitlab@5dfefc907e683771cb543ecd49c549da651f0c8b) ([merge request](gitlab-org/omnibus-gitlab!6594))
+
 ## 15.8.3 (2023-02-15)
 
 No changes.
