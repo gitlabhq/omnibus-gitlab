@@ -241,8 +241,8 @@ module Prometheus
       # Don't parse if gitaly is explicitly disabled
       return unless Services.enabled?('gitaly') || service_discovery
 
-      default_config = Gitlab['node']['gitaly'].to_hash
-      user_config = Gitlab['gitaly']
+      default_config = Gitlab['node']['gitaly']['configuration'].to_hash
+      user_config = Gitlab['gitaly']['configuration']
 
       # Don't enable a scrape config if the listen address is empty.
       return if user_config['prometheus_listen_addr'] && user_config['prometheus_listen_addr'].empty?
