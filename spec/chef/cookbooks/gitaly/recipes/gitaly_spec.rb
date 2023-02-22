@@ -100,14 +100,13 @@ RSpec.describe 'gitaly' do
     it 'populates gitaly config.toml with defaults' do
       expect(get_rendered_toml(chef_run, '/var/opt/gitlab/gitaly/config.toml')).to eq(
         {
-          auth: {},
           bin_dir: '/opt/gitlab/embedded/bin',
-          daily_maintenance: {},
           git: {
             bin_path: '/opt/gitlab/embedded/bin/git',
             ignore_gitconfig: true,
             use_bundled_binaries: true
           },
+          cgroups: { repositories: {} },
           'gitaly-ruby': {
             dir: '/opt/gitlab/embedded/service/gitaly-ruby'
           },
@@ -118,7 +117,6 @@ RSpec.describe 'gitaly' do
           'gitlab-shell': {
             dir: '/opt/gitlab/embedded/service/gitlab-shell'
           },
-          hooks: {},
           logging: {
             dir: '/var/log/gitlab/gitaly',
             format: 'json'
@@ -173,8 +171,8 @@ RSpec.describe 'gitaly' do
     it 'populates gitaly cgroups with correct values' do
       cgroups_section = Regexp.new([
         %r{\[cgroups\]},
-        %r{mountpoint = '#{cgroups_mountpoint}'},
-        %r{hierarchy_root = '#{cgroups_hierarchy_root}'},
+        %r{mountpoint = "#{cgroups_mountpoint}"},
+        %r{hierarchy_root = "#{cgroups_hierarchy_root}"},
         %r{\[cgroups.repositories\]},
         %r{count = 100},
         %r{memory_bytes = #{cgroups_memory_bytes}},
@@ -184,6 +182,44 @@ RSpec.describe 'gitaly' do
       expect(chef_run).to render_file(config_path).with_content { |content|
         expect(content).to match(cgroups_section)
       }
+    end
+  end
+
+  context 'with new gitconfig' do
+    it 'raises an error with legacy gitconfig set' do
+      stub_gitlab_rb(
+        {
+          gitaly: {
+            gitconfig: [{ key: 'legacy_key', value: 'legacy_value' }],
+            configuration: {
+              git: {
+                config: [{ key: 'new_key', value: 'new_value' }]
+              }
+            }
+          }
+        }
+      )
+
+      expect { chef_run }.to raise_error "Legacy configuration keys 'gitconfig' and 'omnibus_gitconfig' can't be set when its new key 'configuration.git.config' is set."
+    end
+
+    it 'raises an error if omnibus_gitconfig is set' do
+      stub_gitlab_rb(
+        {
+          omnibus_gitconfig: {
+            system: { nondefault: ['bar = baz'] }
+          },
+          gitaly: {
+            configuration: {
+              git: {
+                config: [{ key: 'new_key', value: 'new_value' }]
+              }
+            }
+          }
+        }
+      )
+
+      expect { chef_run }.to raise_error "Legacy configuration keys 'gitconfig' and 'omnibus_gitconfig' can't be set when its new key 'configuration.git.config' is set."
     end
   end
 
@@ -425,6 +461,134 @@ RSpec.describe 'gitaly' do
     end
   end
 
+  context 'with array configured as string' do
+    it 'raises an error with prometheus grpc latency buckets' do
+      stub_gitlab_rb(
+        {
+          gitaly: {
+            enable: true,
+            configuration: {
+              prometheus: {
+                grpc_latency_buckets: '[0, 1, 2]'
+              }
+            }
+          }
+        }
+      )
+
+      expect { chef_run }.to raise_error("gitaly['configuration'][:prometheus][:grpc_latency_buckets] must be an array, not a string")
+    end
+  end
+
+  context 'with some defaults overridden with custom configuration' do
+    before do
+      stub_gitlab_rb(
+        gitaly: {
+          enable: true,
+          configuration: {
+            socket_path: 'overridden_socket_path',
+            logging: {
+              dir: 'overridden_logging_path'
+            },
+            git: {
+              bin_path: 'overridden_git_bin_path'
+            },
+            custom_section: {
+              custom_key: 'custom_value'
+            },
+            storage: [
+              {
+                name: 'custom_storage',
+                path: 'custom_path'
+              },
+            ],
+            cgroups: {
+              cpu_shares: 100,
+            },
+          }
+        }
+      )
+    end
+
+    it 'renders config.toml with' do
+      expect(get_rendered_toml(chef_run, '/var/opt/gitlab/gitaly/config.toml')).to eq(
+        {
+          'gitaly-ruby': {
+            dir: '/opt/gitlab/embedded/service/gitaly-ruby'
+          },
+          'gitlab-shell': {
+            dir: '/opt/gitlab/embedded/service/gitlab-shell'
+          },
+          bin_dir: '/opt/gitlab/embedded/bin',
+          custom_section: { custom_key: 'custom_value' },
+          git: {
+            bin_path: 'overridden_git_bin_path',
+            ignore_gitconfig: true,
+            use_bundled_binaries: true,
+          },
+          gitlab: {
+            url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket',
+            relative_url_root: '',
+          },
+          logging: {
+            dir: 'overridden_logging_path',
+            format: 'json',
+          },
+          prometheus_listen_addr: 'localhost:9236',
+          runtime_dir: '/var/opt/gitlab/gitaly/run',
+          socket_path: 'overridden_socket_path',
+          storage: [
+            {
+              name: 'custom_storage',
+              path: 'custom_path',
+            }
+          ],
+          cgroups: {
+            cpu_shares: 100,
+          }
+        }
+      )
+    end
+  end
+
+  context 'with old key and its new key set' do
+    it 'raises an error in generic case' do
+      stub_gitlab_rb(
+        {
+          gitaly: {
+            enable: true,
+            certificate_path: 'legacy_certificate_path_key',
+            configuration: {
+              tls: {
+                certificate_path: 'new_certificate_path_key',
+              }
+            }
+          }
+        }
+      )
+
+      expect { chef_run }.to raise_error "Legacy configuration key 'certificate_path' can't be set when its new key 'configuration.tls.certificate_path' is set."
+    end
+
+    it 'raises an error in generic case' do
+      stub_gitlab_rb(
+        {
+          gitaly: {
+            enable: true,
+            prometheus_grpc_latency_buckets: '[0, 1, 2]',
+            configuration: {
+              prometheus: {
+                grpc_latency_buckets: '[0, 1, 3]',
+              }
+            }
+          }
+        }
+      )
+
+      expect { chef_run }.to raise_error "Legacy configuration key 'prometheus_grpc_latency_buckets' can't be set when its new key 'configuration.prometheus.grpc_latency_buckets' is set."
+    end
+  end
+
   context 'with user settings' do
     before do
       stub_gitlab_rb(
@@ -477,7 +641,7 @@ RSpec.describe 'gitaly' do
           ruby_num_workers: ruby_num_workers,
           git_catfile_cache_size: git_catfile_cache_size,
           git_bin_path: git_bin_path,
-          use_bundled_git: true,
+          use_bundled_git: false,
           open_files_ulimit: open_files_ulimit,
           daily_maintenance_start_hour: daily_maintenance_start_hour,
           daily_maintenance_start_minute: daily_maintenance_start_minute,
@@ -494,7 +658,14 @@ RSpec.describe 'gitaly' do
           pack_objects_cache_enabled: pack_objects_cache_enabled,
           pack_objects_cache_dir: pack_objects_cache_dir,
           pack_objects_cache_max_age: pack_objects_cache_max_age,
-          custom_hooks_dir: gitaly_custom_hooks_dir
+          custom_hooks_dir: gitaly_custom_hooks_dir,
+          # Sanity check that configuration values get printed out.
+          configuration: {
+            string_value: 'some value',
+            subsection: {
+              array_value: [1, 2, 3]
+            }
+          }
         },
         gitlab_rails: {
           internal_api_url: gitlab_url
@@ -555,6 +726,7 @@ RSpec.describe 'gitaly' do
             }
           ],
           daily_maintenance: {
+            disabled: false,
             duration: '45m',
             start_hour: 21,
             start_minute: 9,
@@ -565,7 +737,7 @@ RSpec.describe 'gitaly' do
             catfile_cache_size: 50,
             ignore_gitconfig: true,
             signing_key: '/path/to/signing_key.gpg',
-            use_bundled_binaries: true
+            use_bundled_binaries: false
           },
           'gitaly-ruby': {
             dir: '/opt/gitlab/embedded/service/gitaly-ruby',
@@ -633,6 +805,8 @@ RSpec.describe 'gitaly' do
               path: '/mnt/nfs1'
             }
           ],
+          string_value: 'some value',
+          subsection: { array_value: [1, 2, 3] },
           tls: {
             certificate_path: '/path/to/cert.pem',
             key_path: '/path/to/key.pem'
@@ -666,7 +840,7 @@ RSpec.describe 'gitaly' do
 
       it 'renders daily_maintenance with disabled set to true' do
         expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(content).to include("[daily_maintenance]\ndisabled = true\n\n")
+          expect(content).to include("[daily_maintenance]\ndisabled = true\n")
         }
       end
     end
@@ -688,9 +862,9 @@ RSpec.describe 'gitaly' do
 
         it 'populates gitaly config.toml with custom storages' do
           expect(chef_run).to render_file(config_path)
-            .with_content(%r{\[\[storage\]\]\s+name = 'default'\s+path = '/tmp/default/git-data/repositories'})
+            .with_content(%r{\[\[storage\]\]\s+name = "default"\s+path = "/tmp/default/git-data/repositories"})
           expect(chef_run).to render_file(config_path)
-            .with_content(%r{\[\[storage\]\]\s+name = 'nfs1'\s+path = '/mnt/nfs1/repositories'})
+            .with_content(%r{\[\[storage\]\]\s+name = "nfs1"\s+path = "/mnt/nfs1/repositories"})
           expect(chef_run).not_to render_file(config_path)
             .with_content('gitaly_address: "/var/opt/gitlab/gitaly/gitaly.socket"')
         end
@@ -711,7 +885,7 @@ RSpec.describe 'gitaly' do
 
         it 'populates gitaly config.toml with custom storages' do
           expect(chef_run).to render_file(config_path)
-            .with_content(%r{\[\[storage\]\]\s+name = 'default'\s+path = '/var/opt/gitlab/git-data/repositories'})
+            .with_content(%r{\[\[storage\]\]\s+name = "default"\s+path = "/var/opt/gitlab/git-data/repositories"})
           expect(chef_run).not_to render_file(config_path)
             .with_content('gitaly_address: "tcp://gitaly.internal:8075"')
         end
@@ -903,7 +1077,7 @@ RSpec.describe 'gitaly' do
 
       it 'create config file with provided values' do
         expect(chef_run).to render_file(config_path)
-          .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsocket'\s+relative_url_root = ''})
+          .with_content(%r{\[gitlab\]\s+url = "http\+unix://%2Ffake%2Fworkhorse%2Fsocket"\s+relative_url_root = ""})
       end
     end
 
@@ -914,7 +1088,7 @@ RSpec.describe 'gitaly' do
 
       it 'create config file with provided values' do
         expect(chef_run).to render_file(config_path)
-          .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Ffake%2Fworkhorse%2Fsockets%2Fsocket'\s+relative_url_root = ''})
+          .with_content(%r{\[gitlab\]\s+url = "http\+unix://%2Ffake%2Fworkhorse%2Fsockets%2Fsocket"\s+relative_url_root = ""})
       end
     end
 
@@ -925,7 +1099,7 @@ RSpec.describe 'gitaly' do
 
       it 'create config file with provided values' do
         expect(chef_run).to render_file(config_path)
-          .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fsockets%2Fin%2Fthe%2Fwind'\s+relative_url_root = ''})
+          .with_content(%r{\[gitlab\]\s+url = "http\+unix://%2Fsockets%2Fin%2Fthe%2Fwind"\s+relative_url_root = ""})
       end
     end
   end
@@ -943,7 +1117,7 @@ RSpec.describe 'gitaly' do
 
     it 'create config file with only the URL set' do
       expect(chef_run).to render_file(config_path).with_content { |content|
-        expect(content).to match(%r{\[gitlab\]\s+url = 'http://localhost:1234/gitlab'})
+        expect(content).to match(%r{\[gitlab\]\s+url = "http://localhost:1234/gitlab"})
         expect(content).not_to match(/relative_url_root/)
       }
     end
@@ -956,7 +1130,7 @@ RSpec.describe 'gitaly' do
 
     it 'create config file with the relative_url_root set' do
       expect(chef_run).to render_file(config_path)
-        .with_content(%r{\[gitlab\]\s+url = 'http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket'\s+relative_url_root = '/gitlab'})
+        .with_content(%r{\[gitlab\]\s+url = "http\+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket"\s+relative_url_root = "/gitlab"})
     end
   end
 

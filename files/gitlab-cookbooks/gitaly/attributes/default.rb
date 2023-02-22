@@ -1,53 +1,24 @@
 default['gitaly']['enable'] = false
 default['gitaly']['ha'] = false
 default['gitaly']['dir'] = "/var/opt/gitlab/gitaly"
-default['gitaly']['runtime_dir'] = "#{node['gitaly']['dir']}/run"
-default['gitaly']['log_directory'] = "/var/log/gitlab/gitaly"
 default['gitaly']['env_directory'] = "/opt/gitlab/etc/gitaly/env"
-default['gitaly']['graceful_restart_timeout'] = nil
 # default['gitaly']['env'] is set in ../recipes/enable.rb
 default['gitaly']['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
-default['gitaly']['socket_path'] = "#{node['gitaly']['dir']}/gitaly.socket"
-default['gitaly']['listen_addr'] = nil
-default['gitaly']['tls_listen_addr'] = nil
-default['gitaly']['certificate_path'] = nil
-default['gitaly']['key_path'] = nil
-default['gitaly']['gpg_signing_key_path'] = nil
-default['gitaly']['prometheus_listen_addr'] = "localhost:9236"
-default['gitaly']['logging_level'] = nil
-default['gitaly']['logging_format'] = "json"
-default['gitaly']['logging_sentry_dsn'] = nil
-default['gitaly']['logging_ruby_sentry_dsn'] = nil
-default['gitaly']['logging_sentry_environment'] = nil
-default['gitaly']['prometheus_grpc_latency_buckets'] = nil
 default['gitaly']['storage'] = []
-default['gitaly']['auth_token'] = nil
-default['gitaly']['auth_transitioning'] = false
-default['gitaly']['git_catfile_cache_size'] = nil
-default['gitaly']['git_bin_path'] = "#{node['package']['install-dir']}/embedded/bin/git"
-default['gitaly']['use_bundled_git'] = true
 default['gitaly']['open_files_ulimit'] = 15000
-default['gitaly']['ruby_max_rss'] = nil
-default['gitaly']['ruby_graceful_restart_timeout'] = nil
-default['gitaly']['ruby_restart_delay'] = nil
-default['gitaly']['ruby_num_workers'] = nil
-default['gitaly']['concurrency'] = nil
-default['gitaly']['rate_limiting'] = nil
-default['gitaly']['daily_maintenance_start_hour'] = nil
-default['gitaly']['daily_maintenance_start_minute'] = nil
-default['gitaly']['daily_maintenance_duration'] = nil
-default['gitaly']['daily_maintenance_storages'] = nil
-default['gitaly']['daily_maintenance_disabled'] = false
-default['gitaly']['cgroups_mountpoint'] = nil
-default['gitaly']['cgroups_hierarchy_root'] = nil
-default['gitaly']['cgroups_memory_bytes'] = nil
-default['gitaly']['cgroups_cpu_shares'] = nil
-default['gitaly']['cgroups_repositories_count'] = nil
-default['gitaly']['cgroups_repositories_memory_bytes'] = nil
-default['gitaly']['cgroups_repositories_cpu_shares'] = nil
-default['gitaly']['pack_objects_cache_enabled'] = false
-default['gitaly']['pack_objects_cache_dir'] = nil
-default['gitaly']['pack_objects_cache_max_age'] = nil
 default['gitaly']['consul_service_name'] = 'gitaly'
-default['gitaly']['custom_hooks_dir'] = nil
 default['gitaly']['consul_service_meta'] = nil
+
+default['gitaly']['configuration'] = {
+  runtime_dir: "#{node['gitaly']['dir']}/run",
+  socket_path: "#{node['gitaly']['dir']}/gitaly.socket",
+  prometheus_listen_addr: 'localhost:9236',
+  logging: {
+    dir: '/var/log/gitlab/gitaly',
+    format: 'json'
+  },
+  git: {
+    use_bundled_binaries: true,
+    bin_path: "#{node['package']['install-dir']}/embedded/bin/git"
+  }
+}
