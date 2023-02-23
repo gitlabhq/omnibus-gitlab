@@ -9,6 +9,8 @@ module Gitlab
     ALTERNATIVE_SOURCE = 'alternative'.freeze
     SECURITY_SOURCE = 'security'.freeze
 
+    CUSTOM_SOURCES_FILENAME = '.custom_sources.yml'.freeze
+
     COMPONENTS_ENV_VARS = {
       'gitlab-rails' => 'GITLAB_VERSION',
       'gitlab-rails-ee' => 'GITLAB_VERSION',
@@ -141,7 +143,7 @@ module Gitlab
     end
 
     def read_remote_from_file(channel = nil)
-      filepath = File.expand_path(".custom_sources.yml", @project_root)
+      filepath = File.expand_path(CUSTOM_SOURCES_FILENAME, @project_root)
       sources = YAML.load_file(filepath)[@software]
       channel ||= ::Gitlab::Version.sources_channel
 

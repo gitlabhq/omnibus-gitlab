@@ -1045,6 +1045,23 @@ license-upload:
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
 
+manifest-upload:
+  stage: metrics
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - bundle exec rake manifest:upload
+  tags:
+  - docker-builder
+  cache: !reference [.tag-cache]
+  needs:
+    - Ubuntu-18.04
+  allow_failure: true
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
+      when: manual
+
 RAT-Tag:
   stage: slow_jobs
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"

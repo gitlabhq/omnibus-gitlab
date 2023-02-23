@@ -722,6 +722,8 @@ pages:
     - yard
   script:
     - bundle exec rake license:generate_pages
+    # Remove "|| true" after we confirm this works.
+    - bundle exec rake manifest:generate_pages || true
     - mv ${LICENSE_S3_BUCKET} public
     - cp support/webpages/* public
     - cp -R yard/* public
