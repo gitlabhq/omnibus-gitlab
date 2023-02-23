@@ -21,13 +21,13 @@ RSpec.describe 'monitoring::redis-exporter' do
     end
 
     it 'defaults the redis-exporter to being disabled' do
-      expect(node['monitoring']['redis-exporter']['enable']).to eq false
+      expect(node['monitoring']['redis_exporter']['enable']).to eq false
     end
 
     it 'allows redis-exporter to be explicitly enabled' do
       stub_gitlab_rb(redis_exporter: { enable: true })
 
-      expect(node['monitoring']['redis-exporter']['enable']).to eq true
+      expect(node['monitoring']['redis_exporter']['enable']).to eq true
     end
   end
 

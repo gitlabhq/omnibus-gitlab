@@ -255,6 +255,7 @@ module SettingsDSL
           gitlab_pages
           gitlab_sshd
           node_exporter
+          redis_exporter
         ]
 
         return underscored_form(key) if skip_hyphenation.include?(underscored_form(key))

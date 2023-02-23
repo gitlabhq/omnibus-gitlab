@@ -28,7 +28,8 @@ RSpec.describe SettingsDSL::Utils do
       [
         %w[gitlab-pages gitlab_pages],
         %w[gitlab-sshd gitlab_sshd],
-        %w[node-exporter node_exporter]
+        %w[node-exporter node_exporter],
+        %w[redis-exporter redis_exporter]
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end
