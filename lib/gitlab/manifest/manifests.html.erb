@@ -1,0 +1,39 @@
+<!doctype html>
+<head>
+  <link rel="stylesheet" media="all" href="style.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+  <title>Version manifests | omnibus-gitlab </title>
+</head>
+<body>
+  <% editions = {"gitlab-ce" => "GitLab Community Edition", "gitlab-ee" => "GitLab Enterprise Edition"} %>
+  <h1>Version manifests for the omnibus-gitlab package</h1>
+  <div style="margin-left:10%;margin-right:10%;width:80%;">
+    <div class="row">
+      <% editions.each do |slug, edition| %>
+        <div class="col-md-6">
+          <h2><%= edition %></h2>
+          <table class="table table-bordered">
+            <% Dir.glob(File.join(@manifests_local_path, slug, "*")).sort_by { |version_path| Gem::Version.new(File.basename(version_path)) }.reverse.each do |minor_version| %>
+              <tr class="header clickable">
+                <td class="deps"><h3><%= File.basename(minor_version) %></h3></td>
+              </tr>
+              <% Dir.glob(File.join(minor_version, "*.version-manifest.json")).sort_by { |version_path| Gem::Version.new(File.basename(version_path).gsub(/-(ce|ee).*$/, "")) }.reverse.each do |manifest_file| %>
+                <% url = "#{slug}/#{File.basename(minor_version)}/#{File.basename(manifest_file).gsub('+', '%2B')}" %>
+                <% title = File.basename(manifest_file).gsub(".json", "") %>
+                <tr>
+                  <td>
+                    <a href='<%= url %>'><%= title %></a>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+          </table>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</body>
+</html>
