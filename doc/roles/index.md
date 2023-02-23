@@ -48,7 +48,7 @@ a `gitlab-ee` Omnibus package. It will be mentioned next to each role.
 
 - **application_role** (`gitlab-ce`/`gitlab-ee`)
 
-  The GitLab App role is used to easily configure an instance where only GitLab is running. Redis, PostgreSQL, and Consul services are disabled by default.
+  The GitLab App role is used to configure an instance where only GitLab is running. Redis, PostgreSQL, and Consul services are disabled by default.
 
 ### Redis Server Roles
 
