@@ -63,15 +63,15 @@ default['monitoring']['node_exporter']['consul_service_meta'] = nil
 ####
 # Redis exporter
 ###
-default['monitoring']['redis-exporter']['enable'] = false
-default['monitoring']['redis-exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
-default['monitoring']['redis-exporter']['env_directory'] = '/opt/gitlab/etc/redis-exporter/env'
-default['monitoring']['redis-exporter']['env'] = {
+default['monitoring']['redis_exporter']['enable'] = false
+default['monitoring']['redis_exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
+default['monitoring']['redis_exporter']['env_directory'] = '/opt/gitlab/etc/redis-exporter/env'
+default['monitoring']['redis_exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
-default['monitoring']['redis-exporter']['listen_address'] = 'localhost:9121'
-default['monitoring']['redis-exporter']['consul_service_name'] = 'redis-exporter'
-default['monitoring']['redis-exporter']['consul_service_meta'] = nil
+default['monitoring']['redis_exporter']['listen_address'] = 'localhost:9121'
+default['monitoring']['redis_exporter']['consul_service_name'] = 'redis-exporter'
+default['monitoring']['redis_exporter']['consul_service_meta'] = nil
 
 ####
 # Postgres exporter
@@ -188,7 +188,8 @@ default['monitoring']['grafana']['smtp'] = {
 }
 default['monitoring']['grafana']['register_as_oauth_app'] = true
 
-# Temporarily retain support for `node['monitoring']['node-exporter'][*]` usage in
+# Temporarily retain support for `node['monitoring']['*-exporter'][*]` usage in
 # `/etc/gitlab/gitlab.rb`
 # TODO: Remove support in 16.0
 default['monitoring']['node-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['node_exporter'].to_h }, "node['monitoring']['node-exporter']", "node['monitoring']['node_exporter']")
+default['monitoring']['redis-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['redis_exporter'].to_h }, "node['monitoring']['redis-exporter']", "node['monitoring']['redis_exporter']")

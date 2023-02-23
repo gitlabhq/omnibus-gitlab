@@ -114,7 +114,7 @@ module Prometheus
     end
 
     def parse_redis_exporter_flags
-      default_config = Gitlab['node']['monitoring']['redis-exporter'].to_hash
+      default_config = Gitlab['node']['monitoring']['redis_exporter'].to_hash
       user_config = Gitlab['redis_exporter']
 
       listen_address = user_config['listen_address'] || default_config['listen_address']

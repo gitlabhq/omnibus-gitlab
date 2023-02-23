@@ -17,8 +17,8 @@
 #
 account_helper = AccountHelper.new(node)
 redis_user = account_helper.redis_user
-redis_exporter_log_dir = node['monitoring']['redis-exporter']['log_directory']
-redis_exporter_static_etc_dir = node['monitoring']['redis-exporter']['env_directory']
+redis_exporter_log_dir = node['monitoring']['redis_exporter']['log_directory']
+redis_exporter_static_etc_dir = node['monitoring']['redis_exporter']['env_directory']
 
 directory redis_exporter_log_dir do
   owner redis_user
@@ -33,11 +33,11 @@ directory redis_exporter_static_etc_dir do
 end
 
 env_dir redis_exporter_static_etc_dir do
-  variables node['monitoring']['redis-exporter']['env']
+  variables node['monitoring']['redis_exporter']['env']
   notifies :restart, "runit_service[redis-exporter]"
 end
 
-runtime_flags = PrometheusHelper.new(node).flags('redis-exporter')
+runtime_flags = PrometheusHelper.new(node).flags('redis_exporter')
 runit_service 'redis-exporter' do
   options({
     log_directory: redis_exporter_log_dir,
@@ -53,10 +53,10 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
-consul_service node['monitoring']['redis-exporter']['consul_service_name'] do
+consul_service node['monitoring']['redis_exporter']['consul_service_name'] do
   id 'redis-exporter'
-  meta node['monitoring']['redis-exporter']['consul_service_meta']
+  meta node['monitoring']['redis_exporter']['consul_service_meta']
   action Prometheus.service_discovery_action
-  socket_address node['monitoring']['redis-exporter']['listen_address']
+  socket_address node['monitoring']['redis_exporter']['listen_address']
   reload_service false unless Services.enabled?('consul')
 end

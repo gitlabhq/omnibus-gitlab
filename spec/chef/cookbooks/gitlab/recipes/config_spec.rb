@@ -71,7 +71,7 @@ RSpec.describe 'gitlab::config' do
       expect(node['monitoring']['prometheus']['enable']).to eq true
       expect(node['monitoring']['alertmanager']['enable']).to eq true
       expect(node['monitoring']['node_exporter']['enable']).to eq true
-      expect(node['monitoring']['redis-exporter']['enable']).to eq true
+      expect(node['monitoring']['redis_exporter']['enable']).to eq true
       expect(node['logrotate']['enable']).to eq true
       expect(node['monitoring']['postgres-exporter']['enable']).to eq true
     end
@@ -97,7 +97,7 @@ RSpec.describe 'gitlab::config' do
       it 'only sentinel is enabled' do
         expect(node['gitlab']['sentinel']['enable']).to eq true
         expect(node['redis']['enable']).to eq false
-        expect(node['monitoring']['redis-exporter']['enable']).to eq false
+        expect(node['monitoring']['redis_exporter']['enable']).to eq false
         expect(node['monitoring']['node_exporter']['enable']).to eq true
         expect(node['logrotate']['enable']).to eq true
       end
@@ -120,7 +120,7 @@ RSpec.describe 'gitlab::config' do
         it 'redis and sentinel are enabled' do
           expect(node['gitlab']['sentinel']['enable']).to eq true
           expect(node['redis']['enable']).to eq true
-          expect(node['monitoring']['redis-exporter']['enable']).to eq true
+          expect(node['monitoring']['redis_exporter']['enable']).to eq true
           expect(node['monitoring']['node_exporter']['enable']).to eq true
           expect(node['logrotate']['enable']).to eq true
         end
@@ -149,7 +149,7 @@ RSpec.describe 'gitlab::config' do
         it 'only redis is enabled' do
           expect(node['gitlab']['sentinel']['enable']).to eq true
           expect(node['redis']['enable']).to eq true
-          expect(node['monitoring']['redis-exporter']['enable']).to eq true
+          expect(node['monitoring']['redis_exporter']['enable']).to eq true
           expect(node['monitoring']['node_exporter']['enable']).to eq true
           expect(node['logrotate']['enable']).to eq true
         end
@@ -171,7 +171,7 @@ RSpec.describe 'gitlab::config' do
       it 'only redis is enabled' do
         expect(node['redis']['enable']).to eq true
         expect(node['gitlab']['sentinel']['enable']).to eq false
-        expect(node['monitoring']['redis-exporter']['enable']).to eq true
+        expect(node['monitoring']['redis_exporter']['enable']).to eq true
         expect(node['monitoring']['node_exporter']['enable']).to eq true
         expect(node['logrotate']['enable']).to eq true
       end

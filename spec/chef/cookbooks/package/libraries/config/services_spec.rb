@@ -200,7 +200,7 @@ RSpec.describe Services do
       it 'sets the correct values' do
         Services.disable_group('redis')
         expect(node['redis']['enable']).to be false
-        expect(node['monitoring']['redis-exporter']['enable']).to be false
+        expect(node['monitoring']['redis_exporter']['enable']).to be false
 
         Services.enable_group('rails')
         expect(node['gitlab']['puma']['enable']).to be true
@@ -216,7 +216,7 @@ RSpec.describe Services do
         Services.enable_group('monitoring')
         Services.disable_group('redis', except: 'monitoring')
         expect(node['redis']['enable']).to be false
-        expect(node['monitoring']['redis-exporter']['enable']).to be true
+        expect(node['monitoring']['redis_exporter']['enable']).to be true
       end
     end
 
@@ -228,7 +228,7 @@ RSpec.describe Services do
         expect(node['postgresql']['enable']).to be false
 
         Services.enable_group('rails', 'monitoring')
-        expect(node['monitoring']['redis-exporter']['enable']).to be true
+        expect(node['monitoring']['redis_exporter']['enable']).to be true
         expect(node['gitlab']['puma']['enable']).to be true
       end
 
@@ -238,7 +238,7 @@ RSpec.describe Services do
         expect(node['redis']['enable']).to be true
         expect(node['gitlab']['puma']['enable']).to be true
         expect(node['monitoring']['gitlab-exporter']['enable']).to be false
-        expect(node['monitoring']['redis-exporter']['enable']).to be false
+        expect(node['monitoring']['redis_exporter']['enable']).to be false
 
         Services.enable_group('postgres')
         Services.disable_group('redis', 'monitoring', except: 'postgres')
@@ -250,7 +250,7 @@ RSpec.describe Services do
       it 'supports multiple exceptions' do
         Services.disable_group('redis', Services::SYSTEM_GROUP, include_system: true)
         Services.enable_group('rails', 'monitoring', except: ['redis', Services::SYSTEM_GROUP])
-        expect(node['monitoring']['redis-exporter']['enable']).to be false
+        expect(node['monitoring']['redis_exporter']['enable']).to be false
         expect(node['monitoring']['node_exporter']['enable']).to be false
         expect(node['gitlab']['puma']['enable']).to be true
 
@@ -301,7 +301,7 @@ RSpec.describe Services do
         Services.enable_group(Services::ALL_GROUPS, except: %w(redis rails))
         expect(node['gitlab']['puma']['enable']).to be false
         expect(node['monitoring']['node_exporter']['enable']).to be true
-        expect(node['monitoring']['redis-exporter']['enable']).to be false
+        expect(node['monitoring']['redis_exporter']['enable']).to be false
       end
 
       it 'disables all others' do
