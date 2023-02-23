@@ -2,6 +2,8 @@
 
 <!-- Briefly describe what this MR is about. -->
 
+%{first_multiline_commit}
+
 ## Related issues
 
 <!-- Link related issues below. -->
@@ -13,10 +15,7 @@
   - [Documentation process](https://docs.gitlab.com/ee/development/documentation/workflow.html).
   - [Documentation guidelines](https://docs.gitlab.com/ee/development/documentation/).
   - [Style Guide](https://docs.gitlab.com/ee/development/documentation/styleguide/).
-- [ ] Ensure that the [product tier badge](https://docs.gitlab.com/ee/development/documentation/styleguide/index.html#product-tier-badges) is added to topic's `h1`.
-- [ ] [Request a review](https://docs.gitlab.com/ee/development/code_review.html#dogfooding-the-reviewers-feature) based on:
-  - The documentation page's [metadata](https://docs.gitlab.com/ee/development/documentation/#metadata).
-  - The [associated Technical Writer](https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments).
+- [ ] When ready for review, MR is labeled "~workflow::ready for review" per the [Distribution MR workflow](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/merge_requests.html)
 
 If you are only adding documentation, do not add any of the following labels:
 
