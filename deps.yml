@@ -12,9 +12,8 @@ dependencies:
     - name: .* # everything else
       enabled: true
   settings:
-    # Assign to ibaum, twk3 (dmountney), balasankarc, and rmarshall by default
+    # Assign to twk3 (dmountney), balasankarc, and rmarshall by default
     gitlab_assignee_ids:
-      - 787914
       - 42196
       - 4849
       - 2602134
