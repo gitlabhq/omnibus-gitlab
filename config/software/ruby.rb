@@ -22,12 +22,12 @@ license_file 'LEGAL'
 
 skip_transitive_dependency_licensing true
 
-if Gitlab::Util.get_env('RUBY3_BUILD') == 'true'
-  default_version '3.0.5'
-else
+if Gitlab::Util.get_env('RUBY2_BUILD') == 'true' || Build::Check.on_tag? || Build::Check.on_stable_branch?
   # Follow the Ruby upgrade guidelines when changing the ruby version
   # link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
   default_version '2.7.7'
+else
+  default_version Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.0.5'
 end
 
 fips_enabled = Build::Check.use_system_ssl?
