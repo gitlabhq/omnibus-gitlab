@@ -61,6 +61,7 @@ variables:
   QA_BRANCH: 'master'
   ISSUE_BOT_LABELS_EXTRA: "group::distribution"
   BUNDLER_VERSION: "2.3.22"
+  NEXT_RUBY_VERSION: "3.0.5"
   GET_GEO_TAG: "0.4.0"
   CANONICAL_PROJECT_PATH: 'gitlab-org/omnibus-gitlab'
   SECURITY_PROJECT_PATH: 'gitlab-org/security/omnibus-gitlab'
