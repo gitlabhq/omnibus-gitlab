@@ -1,8 +1,18 @@
 production:
-  url: <%= @redis_url %>
   <% if !@redis_enable_client %>
   id:
   <% end %>
+  <% if defined?(@cluster_nodes) && !@cluster_nodes.empty? %>
+  <%- if @cluster_username %>username: <%= @cluster_username %><% end %>
+  <%- if @cluster_password %>password: <%= @cluster_password %><% end %>
+  cluster:
+    <% @cluster_nodes.each do |node| %>
+    -
+      host: <%= node['host'] %>
+      port: <%= node['port'] %>
+    <% end %>
+  <% else %>
+  url: <%= @redis_url %>
   <% unless @redis_sentinels.empty? %>
   sentinels:
     <% @redis_sentinels.each do |sentinel| %>
@@ -10,4 +20,5 @@ production:
       host: <%= sentinel['host'] %>
       port: <%= sentinel['port'] %>
     <% end %>
+  <% end %>
   <% end %>

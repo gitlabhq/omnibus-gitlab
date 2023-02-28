@@ -5,6 +5,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
   let(:redis_instances) { %w(cache queues shared_state trace_chunks rate_limiting sessions repository_cache) }
+  let(:redis_cluster_instances) { %w(cluster_rate_limiting) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
   let(:default_vars) do
     {
@@ -305,78 +306,148 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
-    context 'with multiple instances' do
-      before do
-        stub_gitlab_rb(
-          gitlab_rails: {
-            redis_enable_client: false,
-            redis_cache_instance: "redis://:fakepass@fake.redis.cache.com:8888/2",
-            redis_cache_sentinels: [
-              { host: 'cache', port: '1234' },
-              { host: 'cache', port: '3456' }
-            ],
-            redis_queues_instance: "redis://:fakepass@fake.redis.queues.com:8888/2",
-            redis_queues_sentinels: [
-              { host: 'queues', port: '1234' },
-              { host: 'queues', port: '3456' }
-            ],
-            redis_shared_state_instance: "redis://:fakepass@fake.redis.shared_state.com:8888/2",
-            redis_shared_state_sentinels: [
-              { host: 'shared_state', port: '1234' },
-              { host: 'shared_state', port: '3456' }
-            ],
-            redis_trace_chunks_instance: "redis://:fakepass@fake.redis.trace_chunks.com:8888/2",
-            redis_trace_chunks_sentinels: [
-              { host: 'trace_chunks', port: '1234' },
-              { host: 'trace_chunks', port: '3456' }
-            ],
-            redis_rate_limiting_instance: "redis://:fakepass@fake.redis.rate_limiting.com:8888/2",
-            redis_rate_limiting_sentinels: [
-              { host: 'rate_limiting', port: '1234' },
-              { host: 'rate_limiting', port: '3456' }
-            ],
-            redis_sessions_instance: "redis://:fakepass@fake.redis.sessions.com:8888/2",
-            redis_sessions_sentinels: [
-              { host: 'sessions', port: '1234' },
-              { host: 'sessions', port: '3456' }
-            ],
-            redis_actioncable_instance: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
-            redis_actioncable_sentinels: [
-              { host: 'actioncable', port: '1234' },
-              { host: 'actioncable', port: '3456' }
-            ],
-            redis_repository_cache_instance: "redis://:fakepass@fake.redis.repository_cache.com:8888/2",
-            redis_repository_cache_sentinels: [
-              { host: 'repository_cache', port: '1234' },
-              { host: 'repository_cache', port: '3456' }
-            ],
-          }
-        )
+    shared_examples 'instances does not support redis cluster' do |instance|
+      context "with disallowed instance: #{instance}" do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              "redis_#{instance}_cluster_nodes" => [
+                { 'host' => 'cluster1.example.com', 'port' => '12345' }
+              ]
+            }
+          )
+        end
+
+        it 'defining cluster_nodes raises error' do
+          expect { chef_run }.to raise_error(RuntimeError)
+        end
+      end
+    end
+
+    context 'with multiple redis cluster instance' do
+      %w(queues shared_state trace_chunks sessions cache).each do |instance|
+        it_should_behave_like 'instances does not support redis cluster', instance
       end
 
-      it 'render separate config files' do
-        redis_instances.each do |instance|
-          expect(chef_run).to create_templatesymlink("Create a redis.#{instance}.yml and create a symlink to Rails root").with_variables(
-            redis_url: "redis://:fakepass@fake.redis.#{instance}.com:8888/2",
-            redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
-            redis_enable_client: false
+      context 'with allowed instances' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: RedisHelper::ALLOWED_REDIS_CLUSTER_INSTANCE.to_h do |inst|
+              ["redis_#{inst}_cluster_nodes", { 'host' => 'cluster1.example.com', 'port' => '12345' }]
+            end
           )
-          expect(chef_run).not_to delete_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml")
+        end
+
+        it 'does not raise error' do
+          expect { chef_run }.not_to raise_error(RuntimeError)
+        end
+      end
+    end
+
+    context 'with multiple instances' do
+      context 'with action cable' do
+        before do
+          stub_gitlab_rb(gitlab_rails: {
+                           redis_enable_client: false,
+                           redis_actioncable_instance: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
+                           redis_actioncable_sentinels: [{ host: 'actioncable', port: '1234' }, { host: 'actioncable', port: '3456' }]
+                         })
+        end
+
+        it 'still renders the default configuration file' do
+          expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root')
+        end
+
+        it 'creates cable.yml with custom settings' do
+          expect(chef_run).to create_templatesymlink('Create a cable.yml and create a symlink to Rails root').with_variables(
+            hash_including(
+              redis_url: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
+              redis_sentinels: [{ 'host' => 'actioncable', 'port' => '1234' }, { 'host' => 'actioncable', 'port' => '3456' }],
+              redis_enable_client: false
+            )
+          )
         end
       end
 
-      it 'still renders the default configuration file' do
-        expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root')
+      context 'with cluster configs' do
+        before do
+          stub_hash = { redis_enable_client: false }
+          redis_cluster_instances.each do |instance|
+            stub_hash["redis_#{instance}_username"] = instance
+            stub_hash["redis_#{instance}_password"] = "#{instance}_password"
+            stub_hash["redis_#{instance}_cluster_nodes"] = [{ host: instance, port: '1234' }, { host: instance, port: '3456' }]
+          end
+
+          stub_gitlab_rb(gitlab_rails: stub_hash)
+        end
+
+        it 'still renders the default configuration file' do
+          expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root')
+        end
+
+        it 'render separate cluster config files' do
+          redis_cluster_instances.each do |instance|
+            expect(chef_run).to create_templatesymlink("Create a redis.#{instance}.yml and create a symlink to Rails root").with_variables(
+              redis_url: nil,
+              redis_sentinels: [],
+              redis_enable_client: false,
+              cluster_nodes: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
+              cluster_username: instance,
+              cluster_password: "#{instance}_password"
+            )
+
+            expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
+              generated_yml = YAML.safe_load(content)
+              expect(generated_yml.dig('production', 'url')).to eq(nil)
+              expect(generated_yml.dig('production', 'sentinels')).to eq(nil)
+              expect(generated_yml.dig('production', 'cluster')).to eq([{ "host" => instance, "port" => 1234 }, { "host" => instance, "port" => 3456 }])
+              expect(generated_yml.dig('production', 'username')).to eq(instance)
+              expect(generated_yml.dig('production', 'password')).to eq("#{instance}_password")
+            }
+
+            expect(chef_run).not_to delete_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml")
+          end
+        end
       end
 
-      it 'creates cable.yml with custom settings' do
-        expect(chef_run).to create_templatesymlink('Create a cable.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            redis_url: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
-            redis_sentinels: [{ 'host' => 'actioncable', 'port' => '1234' }, { 'host' => 'actioncable', 'port' => '3456' }],
-            redis_enable_client: false
-          )
-        )
+      context 'with sentinel configs' do
+        before do
+          stub_hash = { redis_enable_client: false }
+          redis_instances.each do |instance|
+            stub_hash["redis_#{instance}_instance"] = "redis://:fakepass@fake.redis.#{instance}.com:8888/2"
+            stub_hash["redis_#{instance}_sentinels"] = [{ host: instance, port: '1234' }, { host: instance, port: '3456' }]
+          end
+
+          stub_gitlab_rb(gitlab_rails: stub_hash)
+        end
+
+        it 'render separate config files' do
+          redis_instances.each do |instance|
+            expect(chef_run).to create_templatesymlink("Create a redis.#{instance}.yml and create a symlink to Rails root").with_variables(
+              redis_url: "redis://:fakepass@fake.redis.#{instance}.com:8888/2",
+              redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
+              redis_enable_client: false,
+              cluster_nodes: [],
+              cluster_username: nil,
+              cluster_password: nil
+            )
+
+            expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
+              generated_yml = YAML.safe_load(content)
+              expect(generated_yml.dig('production', 'url')).to eq("redis://:fakepass@fake.redis.#{instance}.com:8888/2")
+              expect(generated_yml.dig('production', 'sentinels')).to eq([{ "host" => instance, "port" => 1234 }, { "host" => instance, "port" => 3456 }])
+              expect(generated_yml.dig('production', 'cluster')).to eq(nil)
+              expect(generated_yml.dig('production', 'username')).to eq(nil)
+              expect(generated_yml.dig('production', 'password')).to eq(nil)
+            }
+
+            expect(chef_run).not_to delete_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml")
+          end
+        end
+
+        it 'still renders the default configuration file' do
+          expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root')
+        end
       end
     end
 
