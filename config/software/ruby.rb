@@ -22,9 +22,15 @@ license_file 'LEGAL'
 
 skip_transitive_dependency_licensing true
 
-if Gitlab::Util.get_env('RUBY2_BUILD') == 'true' || Build::Check.on_tag? || Build::Check.on_stable_branch?
-  # Follow the Ruby upgrade guidelines when changing the ruby version
-  # link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
+# Follow the Ruby upgrade guidewhen changing the ruby version
+# link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
+# Bundle Ruby 2 if either (or multiple) of the following conditions are met:
+# 1. `RUBY2_BUILD` variable is set to true
+# 2. Running on stable branch
+# 3. Running on regular (non-auto-deploy) tag
+# 4. Running on auto-deploy tag, but variable `USE_NEXT_RUBY_VERSION_IN_AUTODEPLOY` is not set to true
+# In all other scenarios, bundle Ruby 3
+if Gitlab::Util.get_env('RUBY2_BUILD') == 'true' || Build::Check.on_stable_branch? || Build::Check.on_regular_tag? || (Build::Check.is_auto_deploy_tag? && Gitlab::Util.get_env('USE_NEXT_RUBY_VERSION_IN_AUTODEPLOY') != "true")
   default_version '2.7.7'
 else
   default_version Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.0.5'
