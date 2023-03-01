@@ -91,17 +91,15 @@
     :why: https://github.com/aws/smithy-go/blob/main/LICENSE
     :versions: []
     :when: 2022-07-07 11:37:14.372184788 Z
-#   github.com/hashicorp/consul/api
 - - :license
-  - ./api
+  - "./api"
   - MPL2
   - :who: Andrew Patterson
     :why: https://github.com/hashicorp/consul/blob/main/LICENSE
     :versions: []
     :when: 2022-09-08 20:30:35.688702200 Z
-#   github.com/hashicorp/consul/sdk
 - - :license
-  - ./sdk
+  - "./sdk"
   - MPL2
   - :who: Andrew Patterson
     :why: https://github.com/hashicorp/consul/blob/main/LICENSE
@@ -191,3 +189,10 @@
     :why: https://github.com/spf13/afero/blob/master/LICENSE.txt
     :versions: []
     :when: 2023-01-04 17:54:42.260459000 Z
+- - :license
+  - github.com/gl-gitaly/go-license-detector/v4
+  - Apache2
+  - :who: DJ Mountney
+    :why: https://github.com/gl-gitaly/go-license-detector/blob/master/LICENSE.md
+    :versions: []
+    :when: 2023-03-01 19:37:02.484036831 Z

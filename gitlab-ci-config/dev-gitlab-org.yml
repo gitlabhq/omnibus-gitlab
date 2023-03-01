@@ -1060,6 +1060,9 @@ QA-Tag:
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
+    # For downstream users like JiHu to retain original behavior
+    - if: '$BUILD_GITLAB_QA_IMAGE != "true"'
+      when: never
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
       allow_failure: true
