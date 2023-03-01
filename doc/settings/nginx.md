@@ -359,6 +359,8 @@ NGINX.
 This inserts the defined string into the end of the `http` block of
 `/var/opt/gitlab/nginx/conf/nginx.conf`.
 
+Consider including your custom NGINX configuration file in `/etc/gitlab/` so the custom configuration is backed up.
+
 ## Custom error pages
 
 You can use `custom_error_pages` to modify text on the default GitLab error page.
