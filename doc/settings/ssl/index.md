@@ -335,7 +335,8 @@ doesn't affect NGINX. Instead, you must cause NGINX to
 gracefully:
 
 ```shell
-sudo gitlab-ctl hup nginx registry
+sudo gitlab-ctl hup nginx 
+sudo gitlab-ctl hup registry
 ```
 
 ## Configure a reverse proxy or load balancer SSL termination
