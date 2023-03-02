@@ -15,7 +15,7 @@
 #
 
 name 'gnupg'
-default_version '2.2.23'
+default_version '2.2.41'
 
 dependency 'libassuan'
 dependency 'npth'
@@ -30,7 +30,7 @@ license_file 'COPYING.LGPL3'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-#{version}.tar.bz2",
-       sha256: '10b55e49d78b3e49f1edb58d7541ecbdad92ddaeeb885b6f486ed23d1cd1da5c'
+       sha256: '13f3291007a5e8546fcb7bc0c6610ce44aaa9b3995059d4f8145ba09fd5be3e1'
 
 relative_path "gnupg-#{version}"
 
