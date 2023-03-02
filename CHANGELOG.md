@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.8.4 (2023-03-02)
+
+### Security (1 change)
+
+- [Update libksba/gnupg to 1.6.3/2.2.41](gitlab-org/security/omnibus-gitlab@bb6cdcef966ba288fe2ab257ddff67f7a6c9b459) ([merge request](gitlab-org/security/omnibus-gitlab!304))
+
 ## 15.8.3 (2023-02-15)
 
 No changes.
