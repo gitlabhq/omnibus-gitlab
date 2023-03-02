@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.9.2 (2023-03-02)
+
+### Security (1 change)
+
+- [Update libksba/gnupg to 1.6.3/2.2.41](gitlab-org/security/omnibus-gitlab@269c9e5c87b41c68909ee0ea2fe4f25cd07cbe5e) ([merge request](gitlab-org/security/omnibus-gitlab!305))
+
 ## 15.9.1 (2023-02-23)
 
 No changes.
@@ -55,6 +61,12 @@ No changes.
 - [Corrects the example for KAS K8S proxy URL](gitlab-org/omnibus-gitlab@c064071105007d8219e674c07d2f67812d330875) by @zeeZ ([merge request](gitlab-org/omnibus-gitlab!6648))
 - [Use templatesymlink :delete to cleanup redis config](gitlab-org/omnibus-gitlab@5dfefc907e683771cb543ecd49c549da651f0c8b) ([merge request](gitlab-org/omnibus-gitlab!6594))
 
+## 15.8.4 (2023-03-02)
+
+### Security (1 change)
+
+- [Update libksba/gnupg to 1.6.3/2.2.41](gitlab-org/security/omnibus-gitlab@bb6cdcef966ba288fe2ab257ddff67f7a6c9b459) ([merge request](gitlab-org/security/omnibus-gitlab!304))
+
 ## 15.8.3 (2023-02-15)
 
 No changes.
@@ -105,6 +117,12 @@ No changes.
 
 - [Update gpgme dependencies to match ruby-gpgme dependencies](gitlab-org/omnibus-gitlab@31e0eaf442e41608b04e022425b844d594b80ff9) ([merge request](gitlab-org/omnibus-gitlab!6557))
 - [Update Mattermost to 7.5.2](gitlab-org/omnibus-gitlab@7362352ebc6e6d274fcce076385e13395346a53f) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6583))
+
+## 15.7.8 (2023-03-02)
+
+### Security (1 change)
+
+- [Update libksba/gnupg to 1.6.3/2.2.41](gitlab-org/security/omnibus-gitlab@722a7cf94894e2583e59efce4fb2e757a1078f66) ([merge request](gitlab-org/security/omnibus-gitlab!303))
 
 ## 15.7.7 (2023-02-10)
 
