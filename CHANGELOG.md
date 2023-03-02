@@ -61,6 +61,12 @@ No changes.
 - [Corrects the example for KAS K8S proxy URL](gitlab-org/omnibus-gitlab@c064071105007d8219e674c07d2f67812d330875) by @zeeZ ([merge request](gitlab-org/omnibus-gitlab!6648))
 - [Use templatesymlink :delete to cleanup redis config](gitlab-org/omnibus-gitlab@5dfefc907e683771cb543ecd49c549da651f0c8b) ([merge request](gitlab-org/omnibus-gitlab!6594))
 
+## 15.8.4 (2023-03-02)
+
+### Security (1 change)
+
+- [Update libksba/gnupg to 1.6.3/2.2.41](gitlab-org/security/omnibus-gitlab@bb6cdcef966ba288fe2ab257ddff67f7a6c9b459) ([merge request](gitlab-org/security/omnibus-gitlab!304))
+
 ## 15.8.3 (2023-02-15)
 
 No changes.
