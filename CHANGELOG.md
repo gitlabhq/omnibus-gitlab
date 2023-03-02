@@ -118,6 +118,12 @@ No changes.
 - [Update gpgme dependencies to match ruby-gpgme dependencies](gitlab-org/omnibus-gitlab@31e0eaf442e41608b04e022425b844d594b80ff9) ([merge request](gitlab-org/omnibus-gitlab!6557))
 - [Update Mattermost to 7.5.2](gitlab-org/omnibus-gitlab@7362352ebc6e6d274fcce076385e13395346a53f) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6583))
 
+## 15.7.8 (2023-03-02)
+
+### Security (1 change)
+
+- [Update libksba/gnupg to 1.6.3/2.2.41](gitlab-org/security/omnibus-gitlab@722a7cf94894e2583e59efce4fb2e757a1078f66) ([merge request](gitlab-org/security/omnibus-gitlab!303))
+
 ## 15.7.7 (2023-02-10)
 
 ### Security (1 change)
