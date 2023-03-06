@@ -674,6 +674,17 @@ On other GitLab versions that ship only one PostgreSQL version, you can't
 downgrade your PostgreSQL version. You must downgrade GitLab to an older version for
 this.
 
+### Configuring multiple database connections
+
+In GitLab 16.0, GitLab will default to using two database connections, that point to the same
+PostgreSQL database.
+
+If you want to opt-in for this feature, you can update this setting in `/etc/gitlab/gitlab.rb`:
+
+```ruby
+gitlab_rails['databases']['ci']['enable'] = true
+```
+
 ### Connecting to the bundled PostgreSQL database
 
 If you need to connect to the bundled PostgreSQL database and are using the

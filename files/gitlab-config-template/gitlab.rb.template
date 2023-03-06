@@ -753,6 +753,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['db_application_name'] = nil
 # gitlab_rails['db_database_tasks'] = true
 
+### Gitlab decomposed database settings
+###! Docs: https://docs.gitlab.com/omnibus/settings/database.html
+# gitlab_rails['databases']['ci']['enable'] = false
+# gitlab_rails['databases']['ci']['db_database'] = 'gitlabhq_production'
+# gitlab_rails['databases']['ci']['database_tasks'] = false
 
 ### GitLab Redis settings
 ###! Connect to your own Redis instance
