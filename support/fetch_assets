@@ -38,6 +38,12 @@ gitlab_version=$(echo "${1}" | awk '
   }
 ')
 
+if [ -z "$gitlab_version" ]
+then
+  echo "error generating gitlab_version from ${1} "
+  exit 1
+fi
+
 docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
 
 assets_image_name="${ASSET_REGISTRY}/${assets_image}:${gitlab_version}"
