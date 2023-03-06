@@ -35,7 +35,7 @@ module Build
     end
 
     def self.cleanup_directories
-      system(*%W[rm -rf #{repo_path}/changelogs/unreleased #{repo_path}/ee/changelogs/unreleased])
+      system(*%W[rm -rf #{repo_path}/changelogs/unreleased #{repo_path}/ee/changelogs/unreleased #{repo_path}/ee/config/metrics])
     end
   end
 end
