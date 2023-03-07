@@ -44,6 +44,7 @@ runit_service 'geo-logcursor' do
   start_down node['gitlab']['geo-logcursor']['ha']
   options({
     user: account_helper.gitlab_user,
+    groupname: account_helper.gitlab_group,
     working_dir: working_dir,
     env_dir: env_directory,
     log_directory: log_directory

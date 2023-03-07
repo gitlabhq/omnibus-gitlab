@@ -6,7 +6,7 @@ def get_env_string(username, groupname)
   env_string
 end
 
-RSpec.shared_examples 'enabled runit service' do |svc_name, owner, group, username = nil, groupname = nil|
+RSpec.shared_examples 'enabled runit service' do |svc_name, owner, group, username = nil, groupname = nil, has_supervisor = nil|
   it 'creates directories' do
     expect(chef_run).to create_directory("/opt/gitlab/sv/#{svc_name}").with(
       owner: owner,
@@ -78,6 +78,8 @@ RSpec.shared_examples 'enabled runit service' do |svc_name, owner, group, userna
   context 'gitlab customization' do
     # These are specs related to changes we have made to the upstream runit cookbook
     before do
+      skip "Service does not have a supervisor" unless has_supervisor
+
       %w(ok status control).each do |target|
         file_name = ::File.join('/opt/gitlab/service', svc_name, 'log', 'supervise', target)
         allow_any_instance_of(OmnibusHelper).to receive(:expected_owner?).with(file_name, username, groupname).and_return(false)
@@ -86,15 +88,13 @@ RSpec.shared_examples 'enabled runit service' do |svc_name, owner, group, userna
 
     it 'sets the supervise log files with correct permissions' do
       # For some services, we set the ownership on the sv log files to allow supervisor_owner to run commands
-      unless username.nil?
-        expect(chef_run).to create_directory("/opt/gitlab/service/#{svc_name}/log/supervise").with(mode: '0755')
-        %w(ok status control).each do |target|
-          file_name = ::File.join('/opt/gitlab/service', svc_name, 'log', 'supervise', target)
-          expect(chef_run).to touch_file(file_name).with(
-            owner: username,
-            group: groupname
-          )
-        end
+      expect(chef_run).to create_directory("/opt/gitlab/service/#{svc_name}/log/supervise").with(mode: '0755')
+      %w(ok status control).each do |target|
+        file_name = ::File.join('/opt/gitlab/service', svc_name, 'log', 'supervise', target)
+        expect(chef_run).to touch_file(file_name).with(
+          owner: username,
+          group: groupname
+        )
       end
     end
   end
