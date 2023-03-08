@@ -2493,10 +2493,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     hierarchy_root: 'gitaly',
 #     memory_bytes: 1048576,
 #     cpu_shares: 512,
+#     cpu_quota_us: 400000
 #     repositories: {
 #       count: 1000,
 #       memory_bytes: 12884901888,
 #       cpu_shares: 128,
+#       cpu_quota_us: 200000
 #     },
 #   },
 #   concurrency: [
