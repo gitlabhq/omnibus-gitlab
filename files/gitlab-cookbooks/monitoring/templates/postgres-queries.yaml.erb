@@ -15,7 +15,7 @@ pg_postmaster:
         usage: "GAUGE"
         description: "Time at which postmaster started"
 
-<% if node['monitoring']['postgres-exporter']['per_table_stats'] -%>
+<% if node['monitoring']['postgres_exporter']['per_table_stats'] -%>
 pg_stat_user_tables:
   query: |
     SELECT

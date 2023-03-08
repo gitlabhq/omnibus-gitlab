@@ -22,13 +22,13 @@ RSpec.describe 'monitoring::postgres-exporter' do
     end
 
     it 'defaults the postgres-exporter to being disabled' do
-      expect(node['monitoring']['postgres-exporter']['enable']).to eq false
+      expect(node['monitoring']['postgres_exporter']['enable']).to eq false
     end
 
     it 'allows postgres-exporter to be explicitly enabled' do
       stub_gitlab_rb(postgres_exporter: { enable: true })
 
-      expect(node['monitoring']['postgres-exporter']['enable']).to eq true
+      expect(node['monitoring']['postgres_exporter']['enable']).to eq true
     end
 
     it 'uses gitlab-rails db_host for the database host if postgres-exporter is explicitly enabled' do
@@ -43,7 +43,7 @@ RSpec.describe 'monitoring::postgres-exporter' do
         }
       )
 
-      expect(node['monitoring']['postgres-exporter']['env']['DATA_SOURCE_NAME'])
+      expect(node['monitoring']['postgres_exporter']['env']['DATA_SOURCE_NAME'])
         .to eq "host=10.0.0.1 port=4242 user=foo password=bar database=baz"
     end
   end
@@ -62,7 +62,7 @@ RSpec.describe 'monitoring::postgres-exporter' do
         postgresql: { dir: '/dir/to/postgresql' }
       )
 
-      expect(node['monitoring']['postgres-exporter']['env']['DATA_SOURCE_NAME'])
+      expect(node['monitoring']['postgres_exporter']['env']['DATA_SOURCE_NAME'])
         .to eq "host=/dir/to/postgresql user=gitlab-psql database=gitlabhq_production"
     end
   end

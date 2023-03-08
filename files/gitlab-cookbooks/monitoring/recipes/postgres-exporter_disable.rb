@@ -20,7 +20,7 @@ runit_service "postgres-exporter" do
   action :disable
 end
 
-consul_service node['monitoring']['postgres-exporter']['consul_service_name'] do
+consul_service node['monitoring']['postgres_exporter']['consul_service_name'] do
   id 'postgres-exporter'
   action :delete
   reload_service false unless Services.enabled?('consul')

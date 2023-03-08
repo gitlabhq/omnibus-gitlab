@@ -76,18 +76,18 @@ default['monitoring']['redis_exporter']['consul_service_meta'] = nil
 ####
 # Postgres exporter
 ###
-default['monitoring']['postgres-exporter']['enable'] = false
-default['monitoring']['postgres-exporter']['home'] = '/var/opt/gitlab/postgres-exporter'
-default['monitoring']['postgres-exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
-default['monitoring']['postgres-exporter']['listen_address'] = 'localhost:9187'
-default['monitoring']['postgres-exporter']['env_directory'] = '/opt/gitlab/etc/postgres-exporter/env'
-default['monitoring']['postgres-exporter']['env'] = {
+default['monitoring']['postgres_exporter']['enable'] = false
+default['monitoring']['postgres_exporter']['home'] = '/var/opt/gitlab/postgres-exporter'
+default['monitoring']['postgres_exporter']['log_directory'] = "/var/log/gitlab/postgres-exporter"
+default['monitoring']['postgres_exporter']['listen_address'] = 'localhost:9187'
+default['monitoring']['postgres_exporter']['env_directory'] = '/opt/gitlab/etc/postgres-exporter/env'
+default['monitoring']['postgres_exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
-default['monitoring']['postgres-exporter']['sslmode'] = nil
-default['monitoring']['postgres-exporter']['per_table_stats'] = false
-default['monitoring']['postgres-exporter']['consul_service_name'] = 'postgres-exporter'
-default['monitoring']['postgres-exporter']['consul_service_meta'] = nil
+default['monitoring']['postgres_exporter']['sslmode'] = nil
+default['monitoring']['postgres_exporter']['per_table_stats'] = false
+default['monitoring']['postgres_exporter']['consul_service_name'] = 'postgres-exporter'
+default['monitoring']['postgres_exporter']['consul_service_meta'] = nil
 
 ####
 # PgBouncer exporter
@@ -193,3 +193,4 @@ default['monitoring']['grafana']['register_as_oauth_app'] = true
 # TODO: Remove support in 16.0
 default['monitoring']['node-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['node_exporter'].to_h }, "node['monitoring']['node-exporter']", "node['monitoring']['node_exporter']")
 default['monitoring']['redis-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['redis_exporter'].to_h }, "node['monitoring']['redis-exporter']", "node['monitoring']['redis_exporter']")
+default['monitoring']['postgres-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['postgres_exporter'].to_h }, "node['monitoring']['postgres-exporter']", "node['monitoring']['postgres_exporter']")

@@ -129,7 +129,7 @@ module Prometheus
     end
 
     def parse_postgres_exporter_flags
-      default_config = Gitlab['node']['monitoring']['postgres-exporter'].to_hash
+      default_config = Gitlab['node']['monitoring']['postgres_exporter'].to_hash
       user_config = Gitlab['postgres_exporter']
 
       home_directory = user_config['home'] || default_config['home']

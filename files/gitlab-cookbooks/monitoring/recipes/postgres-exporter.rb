@@ -17,11 +17,11 @@
 #
 account_helper = AccountHelper.new(node)
 postgresql_user = account_helper.postgresql_user
-postgres_exporter_log_dir = node['monitoring']['postgres-exporter']['log_directory']
-postgres_exporter_env_dir = node['monitoring']['postgres-exporter']['env_directory']
-postgres_exporter_dir = node['monitoring']['postgres-exporter']['home']
-postgres_exporter_sslmode = " sslmode=#{node['monitoring']['postgres-exporter']['sslmode']}" \
-  unless node['monitoring']['postgres-exporter']['sslmode'].nil?
+postgres_exporter_log_dir = node['monitoring']['postgres_exporter']['log_directory']
+postgres_exporter_env_dir = node['monitoring']['postgres_exporter']['env_directory']
+postgres_exporter_dir = node['monitoring']['postgres_exporter']['home']
+postgres_exporter_sslmode = " sslmode=#{node['monitoring']['postgres_exporter']['sslmode']}" \
+  unless node['monitoring']['postgres_exporter']['sslmode'].nil?
 postgres_exporter_connection_string = if node['postgresql']['enable']
                                         "host=#{node['postgresql']['dir']} user=#{node['postgresql']['username']}"
                                       else
@@ -32,7 +32,7 @@ postgres_exporter_connection_string = if node['postgresql']['enable']
                                       end
 postgres_exporter_database = "#{node['gitlab']['gitlab-rails']['db_database']}#{postgres_exporter_sslmode}"
 
-node.default['monitoring']['postgres-exporter']['env']['DATA_SOURCE_NAME'] = "#{postgres_exporter_connection_string} " \
+node.default['monitoring']['postgres_exporter']['env']['DATA_SOURCE_NAME'] = "#{postgres_exporter_connection_string} " \
                                                                              "database=#{postgres_exporter_database}"
 
 include_recipe 'postgresql::user'
@@ -50,11 +50,11 @@ directory postgres_exporter_dir do
 end
 
 env_dir postgres_exporter_env_dir do
-  variables node['monitoring']['postgres-exporter']['env']
+  variables node['monitoring']['postgres_exporter']['env']
   notifies :restart, "runit_service[postgres-exporter]"
 end
 
-runtime_flags = PrometheusHelper.new(node).kingpin_flags('postgres-exporter')
+runtime_flags = PrometheusHelper.new(node).kingpin_flags('postgres_exporter')
 runit_service 'postgres-exporter' do
   options({
     log_directory: postgres_exporter_log_dir,
@@ -77,10 +77,10 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
-consul_service node['monitoring']['postgres-exporter']['consul_service_name'] do
+consul_service node['monitoring']['postgres_exporter']['consul_service_name'] do
   id 'postgres-exporter'
-  meta node['monitoring']['postgres-exporter']['consul_service_meta']
+  meta node['monitoring']['postgres_exporter']['consul_service_meta']
   action Prometheus.service_discovery_action
-  socket_address node['monitoring']['postgres-exporter']['listen_address']
+  socket_address node['monitoring']['postgres_exporter']['listen_address']
   reload_service false unless Services.enabled?('consul')
 end

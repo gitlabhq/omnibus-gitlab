@@ -18,7 +18,7 @@ RSpec.describe 'gitlab::config' do
       expect(node['postgresql']['enable']).to eq false
       expect(node['gitlab']['mailroom']['enable']).to eq false
       expect(node['monitoring']['gitlab-exporter']['enable']).to eq false
-      expect(node['monitoring']['postgres-exporter']['enable']).to eq false
+      expect(node['monitoring']['postgres_exporter']['enable']).to eq false
       expect(node['monitoring']['prometheus']['enable']).to eq false
     end
   end
@@ -73,7 +73,7 @@ RSpec.describe 'gitlab::config' do
       expect(node['monitoring']['node_exporter']['enable']).to eq true
       expect(node['monitoring']['redis_exporter']['enable']).to eq true
       expect(node['logrotate']['enable']).to eq true
-      expect(node['monitoring']['postgres-exporter']['enable']).to eq true
+      expect(node['monitoring']['postgres_exporter']['enable']).to eq true
     end
   end
 

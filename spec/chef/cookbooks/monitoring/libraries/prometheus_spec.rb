@@ -10,7 +10,7 @@ RSpec.describe Prometheus do
                                                  grafana
                                                  node_exporter
                                                  redis_exporter
-                                                 postgres-exporter
+                                                 postgres_exporter
                                                  gitlab-exporter
                                                ))
   end
