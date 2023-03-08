@@ -243,7 +243,7 @@ RSpec.describe Services do
         Services.enable_group('postgres')
         Services.disable_group('redis', 'monitoring', except: 'postgres')
         expect(node['redis']['enable']).to be false
-        expect(node['monitoring']['postgres-exporter']['enable']).to be true
+        expect(node['monitoring']['postgres_exporter']['enable']).to be true
         expect(node['monitoring']['prometheus']['enable']).to be false
       end
 
@@ -259,7 +259,7 @@ RSpec.describe Services do
         expect(node['gitlab']['gitlab-workhorse']['enable']).to be false
         expect(node['gitlab']['sidekiq']['enable']).to be true
         expect(node['postgresql']['enable']).to be false
-        expect(node['monitoring']['postgres-exporter']['enable']).to be true
+        expect(node['monitoring']['postgres_exporter']['enable']).to be true
       end
 
       it 'ignores disable on system services' do
@@ -288,7 +288,7 @@ RSpec.describe Services do
       it 'disables all others' do
         Services.enable_group('monitoring')
         Services.disable_group(Services::ALL_GROUPS, except: 'monitoring')
-        expect(node['monitoring']['postgres-exporter']['enable']).to be true
+        expect(node['monitoring']['postgres_exporter']['enable']).to be true
         expect(node['postgresql']['enable']).to be false
       end
     end
