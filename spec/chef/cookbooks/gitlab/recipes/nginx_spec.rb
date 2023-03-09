@@ -266,6 +266,12 @@ RSpec.describe 'nginx' do
       }
     end
 
+    it 'disables proxy for api urls' do
+      expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
+        expect(content).to include("location ~ ^/api/v\\d {\n    proxy_cache off;")
+      }
+    end
+
     it 'applies mattermost_nginx verify client settings to gitlab-mattermost-http' do
       stub_gitlab_rb("mattermost_nginx" => {
                        "ssl_client_certificate" => "/etc/gitlab/ssl/gitlab-mattermost-http-ca.crt",

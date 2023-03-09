@@ -184,6 +184,7 @@ server { ## HTTPS server
   }
 
   location ~ ^/api/v\d {
+    proxy_cache off;
     proxy_pass http://gitlab-workhorse;
     proxy_intercept_errors off;
     <% if @proxy_custom_buffer_size -%>
