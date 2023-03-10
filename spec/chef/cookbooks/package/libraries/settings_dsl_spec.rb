@@ -30,7 +30,8 @@ RSpec.describe SettingsDSL::Utils do
         %w[gitlab-sshd gitlab_sshd],
         %w[node-exporter node_exporter],
         %w[redis-exporter redis_exporter],
-        %w[postgres-exporter postgres_exporter]
+        %w[postgres-exporter postgres_exporter],
+        %w[pgbouncer-exporter pgbouncer_exporter]
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end
