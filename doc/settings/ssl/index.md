@@ -556,9 +556,12 @@ To install custom public certificates:
 
 1. Generate the **PEM** or **DER** encoded public certificate from your private key certificate.
 1. Copy only the public certificate file in the `/etc/gitlab/trusted-certs` directory.
-   By default, GitLab expects to find a certificate titled after your GitLab domain name with a `.crt`
-   extension. For instance, if your server address is `https://gitlab.example.com`, the
-   certificate should be named `gitlab.example.com.crt`.
+   - When configuring GitLab to use a custom public certificate, by default, GitLab expects to find a certificate named
+     after your GitLab domain name with a `.crt` extension. For example, if your server address is
+     `https://gitlab.example.com`, the certificate should be named `gitlab.example.com.crt`. 
+   - If GitLab needs to connect to an external resource that uses a custom public certificate, store the certificate in
+     the `/etc/gitlab/trusted-certs` directory with a `.crt` extension. You don't have to name the file based on the
+     domain name of the related external resource, though it helps to use a consistent naming scheme.
 
    To specify a different path and file name, you can
    [change the default SSL certificate location](#change-the-default-ssl-certificate-location).
@@ -570,10 +573,26 @@ To install custom public certificates:
    sudo gitlab-ctl reconfigure
    ```
 
-WARNING:
-If using a custom certificate chain, the root and intermediate certificates must
-be put into separate files in `/etc/gitlab/trusted-certs`
-[due to `c_rehash` creating a hash for the first certificate only](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/1425).
+### Using a custom certificate chain
+
+Because of a [known issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/1425), if using a custom certificate
+chain, the root and intermediate certificates **must** be put into separate files in the `/etc/gitlab/trusted-certs`
+directory.
+
+This applies in both cases where GitLab itself, or external resources GitLab must connect to, are using a custom
+certificate chain.
+
+For example, for GitLab itself you can use: 
+
+- `/etc/gitlab/trusted-certs/example.gitlab.com.crt`
+- `/etc/gitlab/trusted-certs/example.gitlab.com_intermediate.crt`
+- `/etc/gitlab/trusted-certs/example.gitlab.com_root.crt`
+
+For external resources GitLab must to, you can use:
+
+- `/etc/gitlab/trusted-certs/external-service.gitlab.com.crt`
+- `/etc/gitlab/trusted-certs/external-service.gitlab.com_intermediate.crt`
+- `/etc/gitlab/trusted-certs/external-service.gitlab.com_root.crt`
 
 ## Details on how GitLab and SSL work
 
