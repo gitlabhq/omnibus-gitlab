@@ -257,6 +257,7 @@ module SettingsDSL
           node_exporter
           redis_exporter
           postgres_exporter
+          pgbouncer_exporter
         ]
 
         return underscored_form(key) if skip_hyphenation.include?(underscored_form(key))

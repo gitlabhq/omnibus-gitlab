@@ -92,11 +92,11 @@ default['monitoring']['postgres_exporter']['consul_service_meta'] = nil
 ####
 # PgBouncer exporter
 ###
-default['monitoring']['pgbouncer-exporter']['enable'] = false
-default['monitoring']['pgbouncer-exporter']['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
-default['monitoring']['pgbouncer-exporter']['listen_address'] = 'localhost:9188'
-default['monitoring']['pgbouncer-exporter']['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter/env'
-default['monitoring']['pgbouncer-exporter']['env'] = {
+default['monitoring']['pgbouncer_exporter']['enable'] = false
+default['monitoring']['pgbouncer_exporter']['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
+default['monitoring']['pgbouncer_exporter']['listen_address'] = 'localhost:9188'
+default['monitoring']['pgbouncer_exporter']['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter/env'
+default['monitoring']['pgbouncer_exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
 
@@ -194,3 +194,4 @@ default['monitoring']['grafana']['register_as_oauth_app'] = true
 default['monitoring']['node-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['node_exporter'].to_h }, "node['monitoring']['node-exporter']", "node['monitoring']['node_exporter']")
 default['monitoring']['redis-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['redis_exporter'].to_h }, "node['monitoring']['redis-exporter']", "node['monitoring']['redis_exporter']")
 default['monitoring']['postgres-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['postgres_exporter'].to_h }, "node['monitoring']['postgres-exporter']", "node['monitoring']['postgres_exporter']")
+default['monitoring']['pgbouncer-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['pgbouncer_exporter'].to_h }, "node['monitoring']['pgbouncer-exporter']", "node['monitoring']['pgbouncer_exporter']")
