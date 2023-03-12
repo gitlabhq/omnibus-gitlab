@@ -588,7 +588,7 @@ For example, for GitLab itself you can use:
 - `/etc/gitlab/trusted-certs/example.gitlab.com_intermediate.crt`
 - `/etc/gitlab/trusted-certs/example.gitlab.com_root.crt`
 
-For external resources GitLab must to, you can use:
+For external resources GitLab must connect to, you can use:
 
 - `/etc/gitlab/trusted-certs/external-service.gitlab.com.crt`
 - `/etc/gitlab/trusted-certs/external-service.gitlab.com_intermediate.crt`
