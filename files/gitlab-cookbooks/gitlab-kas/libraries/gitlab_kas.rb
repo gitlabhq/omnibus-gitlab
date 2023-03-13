@@ -47,10 +47,12 @@ module GitlabKas
 
       network = gitlab_kas_attr('internal_api_listen_network')
       case network
-      when 'tcp'
+      when 'unix'
+        scheme = 'unix'
+      when 'tcp', 'tcp4', 'tcp6'
         scheme = 'grpc'
       else
-        raise "gitlab_kas['internal_api_listen_network'] should be 'tcp' got '#{network}'"
+        raise "gitlab_kas['internal_api_listen_network'] should be 'tcp', 'tcp4', 'tcp6' or 'unix' got '#{network}'"
       end
 
       address = gitlab_kas_attr('internal_api_listen_address')
