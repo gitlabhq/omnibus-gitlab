@@ -1,0 +1,189 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+## Lines starting with two hashes (##) are comments with information.
+## Lines starting with one hash (#) are configuration parameters that can be uncommented.
+##
+###################################
+##         configuration         ##
+###################################
+
+<% if @https && @redirect_http_to_https %>
+## Redirects all HTTP traffic to the HTTPS host
+server {
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @redirect_http_to_https_port %><% if @proxy_protocol %> proxy_protocol<% end %>;
+<% end %>
+  server_name <%= @fqdn %>;
+  server_tokens off; ## Don't show the nginx version number, a security best practice
+  <% if @letsencrypt_enable %>
+  location /.well-known/acme-challenge/ {
+    root <%= @dir %>/www/;
+  }
+  <% end %>
+
+  location / {
+    return 301 https://$http_host:<%= @port %>$request_uri;
+  }
+  access_log  <%= @log_directory %>/gitlab_kas_access.log gitlab_access;
+  error_log   <%= @log_directory %>/gitlab_kas_error.log <%= @error_log_level%>;
+}
+<% end %>
+
+server {
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% if @http2_enabled %> http2<% end %><% end %>;
+<% end %>
+  server_name <%= @fqdn %>;
+  server_tokens off; ## Don't show the nginx version number, a security best practice
+
+  ## Disable symlink traversal
+  disable_symlinks on;
+
+  <% if @https %>
+  ## Strong SSL Security
+  ## https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
+  ssl_certificate <%= @ssl_certificate %>;
+  ssl_certificate_key <%= @ssl_certificate_key %>;
+  <% if @ssl_client_certificate %>
+  ssl_client_certificate <%= @ssl_client_certificate%>;
+  <% end %>
+  <% if @ssl_verify_client %>
+  ssl_verify_client <%= @ssl_verify_client%>;
+  ssl_verify_depth <%= @ssl_verify_depth%>;
+  <% end %>
+
+  # GitLab needs backwards compatible ciphers to retain compatibility with Java IDEs
+  ssl_ciphers '<%= @ssl_ciphers %>';
+  ssl_protocols  <%= @ssl_protocols %>;
+  ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
+  ssl_session_cache  <%= @ssl_session_cache %>;
+  ssl_session_tickets <%= @ssl_session_tickets %>;
+  ssl_session_timeout  <%= @ssl_session_timeout %>;
+
+  <% if @ssl_dhparam %>
+  ssl_dhparam <%= @ssl_dhparam %>;
+  <% end %>
+
+  <% if @ssl_password_file %>
+  ssl_password_file '<%= @ssl_password_file %>';
+  <% end %>
+  <% end %>
+
+  ## Real IP Module Config
+  ## http://nginx.org/en/docs/http/ngx_http_realip_module.html
+  <% if @real_ip_header %>
+  real_ip_header <%= @real_ip_header %>;
+  <% end %>
+  <% if @real_ip_recursive %>
+  real_ip_recursive <%= @real_ip_recursive %>;
+  <% end %>
+  <% @real_ip_trusted_addresses.each do |trusted_address| %>
+  set_real_ip_from <%= trusted_address %>;
+  <% end %>
+
+  ## HSTS Config
+  ## https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
+  <% unless @hsts_max_age.nil? || @hsts_max_age <= 0 %>
+  add_header Strict-Transport-Security "max-age=<%= @hsts_max_age -%>
+<% if @hsts_include_subdomains %>; includeSubdomains<% end %>";
+  <% end %>
+
+  ## Individual nginx logs for this GitLab vhost
+  access_log  <%= @log_directory %>/gitlab_kas_access.log gitlab_access;
+  error_log   <%= @log_directory %>/gitlab_kas_error.log <%= @error_log_level%>;
+
+  <% if @letsencrypt_enable %>
+  location /.well-known/acme-challenge/ {
+    root <%= @dir %>/www/;
+  }
+  <% end %>
+  # Pass everything to gitlab_kas daemon
+  location / {
+    proxy_http_version 1.1;
+    proxy_pass http://<%= @gitlab_kas_listen_address %>/;
+
+    <% @proxy_set_headers.each do |header| %>
+    <% next if header[1].nil? %>
+    proxy_set_header <%= header[0] %> <%= header[1] %>;
+    <% end %>
+
+    proxy_buffering off;
+    proxy_request_buffering on;
+    <% if @proxy_custom_buffer_size -%>
+      proxy_buffers 8 <%= @proxy_custom_buffer_size %>;
+      proxy_buffer_size <%= @proxy_custom_buffer_size %>;
+    <% end -%>
+
+    proxy_connect_timeout 5s;
+    proxy_send_timeout 60s;
+    proxy_read_timeout 60s;
+
+    proxy_max_temp_file_size 1024m;
+
+    proxy_redirect off;
+
+    proxy_intercept_errors off;
+  }
+
+  location /k8s-proxy/ {
+    proxy_http_version 1.1;
+    proxy_pass http://<%= @gitlab_kas_k8s_proxy_listen_address %>/;
+
+    <% @proxy_set_headers.each do |header| %>
+    <% next if header[1].nil? %>
+    proxy_set_header <%= header[0] %> <%= header[1] %>;
+    <% end %>
+
+    proxy_buffering off;
+    proxy_request_buffering on;
+    <% if @proxy_custom_buffer_size -%>
+      proxy_buffers 8 <%= @proxy_custom_buffer_size %>;
+      proxy_buffer_size <%= @proxy_custom_buffer_size %>;
+    <% end -%>
+
+    proxy_connect_timeout 5s;
+    proxy_send_timeout 60s;
+    proxy_read_timeout 60s;
+
+    proxy_max_temp_file_size 1024m;
+
+    proxy_redirect off;
+
+    proxy_intercept_errors off;
+  }
+
+  location = /k8s-proxy/ {
+    proxy_http_version 1.1;
+    proxy_pass http://<%= @gitlab_kas_k8s_proxy_listen_address %>/;
+
+    <% @proxy_set_headers.each do |header| %>
+    <% next if header[1].nil? %>
+    proxy_set_header <%= header[0] %> <%= header[1] %>;
+    <% end %>
+
+    proxy_buffering off;
+    proxy_request_buffering on;
+    <% if @proxy_custom_buffer_size -%>
+      proxy_buffers 8 <%= @proxy_custom_buffer_size %>;
+      proxy_buffer_size <%= @proxy_custom_buffer_size %>;
+    <% end -%>
+
+    proxy_connect_timeout 5s;
+    proxy_send_timeout 60s;
+    proxy_read_timeout 60s;
+
+    proxy_max_temp_file_size 1024m;
+
+    proxy_redirect off;
+
+    proxy_intercept_errors off;
+  }
+
+  # Define custom error pages
+  error_page 403 /403.html;
+  error_page 404 /404.html;
+
+  <%= @custom_gitlab_server_config %>
+}

@@ -916,6 +916,26 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
 }
 
 ####
+# GitLab KAS NGINX
+####
+default['gitlab']['gitlab-kas-nginx'] = default['gitlab']['nginx'].dup
+default['gitlab']['gitlab-kas-nginx']['enable'] = false
+default['gitlab']['gitlab-kas-nginx']['https'] = false
+default['gitlab']['gitlab-kas-nginx']['port'] = 80
+default['gitlab']['gitlab-kas-nginx']['host'] = "kas.gitlab.example.com"
+default['gitlab']['gitlab-kas-nginx']['proxy_set_headers'] = {
+  "Host" => "$http_host",
+  "Upgrade" => "$http_upgrade",
+  "Connection" => "$connection_upgrade",
+  "X-Real-IP" => "$remote_addr",
+  "X-Forwarded-For" => "$remote_addr",
+  "X-Forwarded-Proto" => "$scheme",
+  "X-Forwarded-Scheme" => "$scheme",
+  "X-Scheme" => "$scheme",
+  "X-Original-Forwarded-For" => "$http_x_forwarded_for"
+}
+
+####
 # Storage check
 ####
 default['gitlab']['storage-check']['enable'] = false
