@@ -245,6 +245,8 @@ redis_socket=''
         .with_content(/^replicaof/)
     end
 
+    it_behaves_like 'started down runit service', 'redis'
+
     it 'creates gitlab-redis-cli-rc' do
       expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-redis-cli-rc')
         .with_content(gitlab_redis_cli_rc)

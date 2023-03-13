@@ -36,21 +36,28 @@ action :create do
   end
 
   redis_config = ::File.join(new_resource.dir, 'redis.conf')
-  is_replica = node['redis']['master_ip'] &&
-    node['redis']['master_port'] &&
-    !node['redis']['master']
+
+  if node['redis'].key?('ha')
+    if node['redis']['ha']
+      node.default['redis']['start_down'] = true
+      node.default['redis']['set_replicaof'] = false
+    else
+      node.default['redis']['start_down'] = false
+      node.default['redis']['set_replicaof'] = true unless node['redis']['master']
+    end
+  end
 
   template redis_config do
     source "redis.conf.erb"
     owner new_resource.account_helper.redis_user
     mode "0644"
-    variables(node['redis'].to_hash.merge({ is_replica: is_replica }))
+    variables(node['redis'].to_hash)
     notifies :restart, 'runit_service[redis]', :immediately if new_resource.omnibus_helper.should_notify?('redis')
     sensitive true
   end
 
   runit_service 'redis' do
-    start_down node['redis']['ha']
+    start_down node['redis']['start_down']
     template_name 'redis'
     options({
       service: 'redis',
