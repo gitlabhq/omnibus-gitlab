@@ -80,16 +80,14 @@ for configuration steps.
 
 - **geo_primary_role** (`gitlab-ee`)
 
-  Prepares the database for streaming replication to the secondary site.
-  Prevents automatic upgrade of PostgreSQL to avoid unintended downtime.
+  This role:
 
-  This role is only needed on the Geo primary site's nodes running PostgreSQL.
-  Undesired services will need to be explicitly disabled in `/etc/gitlab/gitlab.rb`.
+  - Configures a single-node PostgreSQL database as a leader for streaming replication.
+  - Prevents automatic upgrade of PostgreSQL since it requires downtime of streaming replication to Geo secondary sites.
+  - Enables all single-node GitLab services including NGINX, Puma, Redis, and Sidekiq. If you are segregating services, then you must explicitly disable unwanted services in `/etc/gitlab/gitlab.rb`. Therefore, this role is only useful on a single-node PostgreSQL in a Geo primary site.
+  - Cannot be used to set up a PostgreSQL cluster in a Geo primary site. Instead, see [Geo multi-node database replication](https://docs.gitlab.com/ee/administration/geo/setup/database.html#multi-node-database-replication).
 
-  This role should not be used to set up a PostgreSQL cluster in a Geo primary
-  site. Instead, see [Geo multi-node database replication](https://docs.gitlab.com/ee/administration/geo/setup/database.html#multi-node-database-replication).
-
-  *By default, enables all of the GitLab standard single node services. (NGINX, Puma, Redis, Sidekiq, etc)*
+  *By default, enables standard single-node GitLab services including NGINX, Puma, Redis, and Sidekiq.*
 
 - **geo_secondary_role** (`gitlab-ee`)
 
