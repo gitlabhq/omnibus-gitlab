@@ -244,6 +244,61 @@ RSpec.describe 'gitlab-kas' do
         )
       end
     end
+
+    context 'with kas url using own sub-domain' do
+      it "allows ws/wss scheme if gitlab_kas['listen_websocket']=true" do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas_external_url: 'wss://kas.gitlab.example.com/',
+          gitlab_kas: { listen_websocket: true }
+        )
+
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          enabled: true,
+          external_url: 'wss://kas.gitlab.example.com/',
+          external_k8s_proxy_url: 'https://kas.gitlab.example.com/k8s-proxy/'
+        )
+      end
+
+      it "raises an error if gitlab_kas['listen_websocket']=false" do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas_external_url: 'wss://kas.gitlab.example.com',
+          gitlab_kas: { listen_websocket: false }
+        )
+
+        expect { gitlab_yml }.to raise_error(
+          RuntimeError,
+          "gitlab_kas['listen_websocket'] must be set to `true`"
+        )
+      end
+
+      it "does not allow grpc/grpcs" do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas_external_url: 'grpcs://kas.gitlab.example.com/',
+          gitlab_kas: { listen_websocket: false }
+        )
+
+        expect { gitlab_yml }.to raise_error(
+          RuntimeError,
+          "gitlab_kas_external_url scheme must be 'ws' or 'wss'"
+        )
+      end
+
+      it "does not allow http/https" do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas_external_url: 'https://kas.gitlab.example.com/',
+          gitlab_kas: { listen_websocket: false }
+        )
+
+        expect { gitlab_yml }.to raise_error(
+          RuntimeError,
+          "gitlab_kas_external_url scheme must be 'ws' or 'wss'"
+        )
+      end
+    end
   end
 
   describe 'logrotate settings' do

@@ -105,6 +105,10 @@ http {
   include <%= @gitlab_registry_http_config %>;
   <% end %>
 
+  <% if @gitlab_kas_http_config %>
+  include <%= @gitlab_kas_http_config %>;
+  <% end %>
+
   <% if @nginx_status_config %>
   include <%= @nginx_status_config %>;
   <% end %>

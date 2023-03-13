@@ -65,6 +65,7 @@ to work best with the available resources. Check out the [documentation](setting
 - [GitLab and Registry](https://docs.gitlab.com/ee/administration/packages/container_registry.html)
 - [Configuring an asset proxy server](https://docs.gitlab.com/ee/security/asset_proxy.html)
 - [Image scaling](settings/image_scaling.md)
+- [GitLab Agent](https://docs.gitlab.com/ee/administration/clusters/kas.html)
 
 ## Upgrading
 

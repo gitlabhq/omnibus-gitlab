@@ -24,7 +24,6 @@ module GitlabKas
       parse_gitlab_kas_enabled
       parse_gitlab_kas_external_url
       parse_gitlab_kas_internal_url
-      parse_gitlab_kas_external_k8s_proxy_url
     end
 
     def parse_address
@@ -38,32 +37,6 @@ module GitlabKas
 
       # implicitly enable if installed and gitlab integration not explicitly disabled
       Gitlab['gitlab_rails'][key] = gitlab_kas_attr('enable')
-    end
-
-    def parse_gitlab_kas_external_url
-      key = 'gitlab_kas_external_url'
-      return unless Gitlab['gitlab_rails'][key].nil?
-
-      return unless gitlab_kas_attr('enable')
-
-      return unless Gitlab['external_url']
-
-      # For now, the default external URL is on the subpath /-/kubernetes-agent/
-      # so whether to use TLS is determined from the primary external_url.
-      # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5784
-      gitlab_uri = URI(Gitlab['external_url'])
-      case gitlab_uri.scheme
-      when 'https'
-        scheme = gitlab_kas_attr('listen_websocket') ? 'wss' : 'grpcs'
-        port = gitlab_uri.port == 443 ? '' : ":#{port}"
-      when 'http'
-        scheme = gitlab_kas_attr('listen_websocket') ? 'ws' : 'grpc'
-        port = gitlab_uri.port == 80 ? '' : ":#{port}"
-      else
-        raise "external_url scheme should be 'http' or 'https', got '#{gitlab_uri.scheme}"
-      end
-
-      Gitlab['gitlab_rails'][key] = "#{scheme}://#{gitlab_uri.host}#{port}#{gitlab_uri.path}/-/kubernetes-agent/"
     end
 
     def parse_gitlab_kas_internal_url
@@ -84,18 +57,23 @@ module GitlabKas
       Gitlab['gitlab_rails'][key] = "#{scheme}://#{address}"
     end
 
-    def parse_gitlab_kas_external_k8s_proxy_url
-      key = 'gitlab_kas_external_k8s_proxy_url'
-      return unless Gitlab['gitlab_rails'][key].nil?
-
+    def parse_gitlab_kas_external_url
       return unless gitlab_kas_attr('enable')
 
-      gitlab_external_url = Gitlab['external_url']
-      return unless gitlab_external_url
+      # we need to return if `external_url` is not set because this is needed
+      # - to set the kas_url if `gitlab_kas_external_url` is not set
+      # - to check the domain of `gitlab_kas_external_url` against the GitLab url
+      return unless Gitlab['external_url']
 
-      # For now, the default external proxy URL is on the subpath /-/kubernetes-agent/k8s-proxy/
-      # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5784
-      Gitlab['gitlab_rails'][key] = "#{gitlab_external_url}/-/kubernetes-agent/k8s-proxy/"
+      Gitlab['gitlab_kas_external_url'] ||= build_default_gitlab_kas_external_url
+
+      if kas_domain_matches_gitlab_domain?
+        parse_gitlab_kas_external_url_with_gitlab_domain
+        parse_gitlab_kas_external_k8s_proxy_url_with_gitlab_domain
+      else
+        parse_gitlab_kas_external_url_using_own_subdomain
+        parse_gitlab_kas_external_k8s_proxy_url_using_own_subdomain
+      end
     end
 
     def parse_secrets
@@ -112,11 +90,109 @@ module GitlabKas
 
     private
 
+    def parse_gitlab_kas_external_url_with_gitlab_domain
+      key = 'gitlab_kas_external_url'
+      return unless Gitlab['gitlab_rails'][key].nil?
+
+      Gitlab['gitlab_rails'][key] = Gitlab[key]
+    end
+
+    def parse_gitlab_kas_external_k8s_proxy_url_with_gitlab_domain
+      key = 'gitlab_kas_external_k8s_proxy_url'
+      return unless Gitlab['gitlab_rails'][key].nil?
+
+      gitlab_external_url = Gitlab['external_url']
+      return unless gitlab_external_url
+
+      # For now, the default external proxy URL is on the subpath /-/kubernetes-agent/k8s-proxy/
+      # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5784
+      Gitlab['gitlab_rails'][key] = "#{gitlab_external_url}/-/kubernetes-agent/k8s-proxy/"
+    end
+
+    def parse_gitlab_kas_external_url_using_own_subdomain
+      key = 'gitlab_kas_external_url'
+      return unless Gitlab['gitlab_rails'][key].nil?
+
+      kas_uri = URI(Gitlab[key].to_s)
+
+      raise "gitlab_kas_external_url must include a scheme and FQDN, e.g. wss://kas.gitlab.example.com/" unless kas_uri.host
+
+      # We are temporarily not supporting grpc/grpcs as this requires a bigger change in the NGINX configuration
+      raise "gitlab_kas_external_url scheme must be 'ws' or 'wss'" unless ws_scheme?(kas_uri.scheme)
+      raise "gitlab_kas['listen_websocket'] must be set to `true`" unless gitlab_kas_attr('listen_websocket')
+
+      use_ssl = kas_uri.scheme == 'wss'
+
+      Gitlab['gitlab_kas_nginx']['host'] ||= kas_uri.host
+      Gitlab['gitlab_kas_nginx']['port'] ||= use_ssl ? '443' : '80'
+
+      # set gitlab_kas_nginx configs
+      parse_gitlab_kas_nginx(kas_uri, use_ssl)
+
+      Gitlab['gitlab_rails'][key] = kas_uri.to_s
+    end
+
+    def parse_gitlab_kas_nginx(kas_uri, use_ssl)
+      Gitlab['gitlab_kas_nginx']['enable'] = true
+
+      Gitlab['gitlab_kas_nginx']['https'] ||= use_ssl
+
+      if use_ssl
+        Gitlab['gitlab_kas_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{kas_uri.host}.crt"
+        Gitlab['gitlab_kas_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{kas_uri.host}.key"
+
+        LetsEncryptHelper.add_service_alt_name('gitlab_kas')
+      end
+
+      Nginx.parse_proxy_headers('gitlab_kas_nginx', use_ssl, true)
+    end
+
+    def parse_gitlab_kas_external_k8s_proxy_url_using_own_subdomain
+      key = 'gitlab_kas_external_k8s_proxy_url'
+      return unless Gitlab['gitlab_rails'][key].nil?
+
+      kas_uri = URI(Gitlab['gitlab_kas_external_url'].to_s)
+      scheme = kas_uri.scheme == 'wss' ? 'https' : 'http'
+
+      Gitlab['gitlab_rails'][key] = "#{scheme}://#{kas_uri.host}/k8s-proxy/"
+    end
+
+    def build_default_gitlab_kas_external_url
+      # For now, the default external URL is on the subpath /-/kubernetes-agent/
+      # so whether to use TLS is determined from the primary external_url.
+      # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5784
+      gitlab_uri = URI(Gitlab['external_url'])
+
+      case gitlab_uri.scheme
+      when 'https'
+        scheme = gitlab_kas_attr('listen_websocket') ? 'wss' : 'grpcs'
+        port = gitlab_uri.port == 443 ? '' : ":#{port}"
+      when 'http'
+        scheme = gitlab_kas_attr('listen_websocket') ? 'ws' : 'grpc'
+        port = gitlab_uri.port == 80 ? '' : ":#{port}"
+      else
+        raise "external_url scheme should be 'http' or 'https', got '#{gitlab_uri.scheme}"
+      end
+
+      "#{scheme}://#{gitlab_uri.host}#{port}#{gitlab_uri.path}/-/kubernetes-agent/"
+    end
+
+    def kas_domain_matches_gitlab_domain?
+      gitlab_uri = URI(Gitlab['external_url'])
+      gitlab_kas_uri = URI(Gitlab['gitlab_kas_external_url'])
+
+      gitlab_uri.host == gitlab_kas_uri.host
+    end
+
     def gitlab_kas_attr(key)
       configured = Gitlab['gitlab_kas'][key]
       return configured unless configured.nil?
 
       Gitlab['node']['gitlab-kas'][key]
+    end
+
+    def ws_scheme?(scheme)
+      %w[ws wss].include?(scheme)
     end
   end
 end

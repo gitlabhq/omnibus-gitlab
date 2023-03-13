@@ -66,27 +66,25 @@ module Nginx
         'nginx',
         'mattermost_nginx',
         'pages_nginx',
-        'registry_nginx'
+        'registry_nginx',
+        'gitlab_kas_nginx'
       ].each do |app|
         Gitlab[app]['real_ip_header'] ||= 'proxy_protocol' if Gitlab[app]['proxy_protocol']
       end
     end
 
-    def parse_proxy_headers(app, https)
+    def parse_proxy_headers(app, ssl, allow_other_schemes = false)
       values_from_gitlab_rb = Gitlab[app]['proxy_set_headers']
       dashed_app = SettingsDSL::Utils.sanitized_key(app)
       default_from_attributes = Gitlab['node']['gitlab'][dashed_app]['proxy_set_headers'].to_hash
 
-      default_from_attributes = if https
-                                  default_from_attributes.merge({
-                                                                  'X-Forwarded-Proto' => "https",
-                                                                  'X-Forwarded-Ssl' => "on"
-                                                                })
-                                else
-                                  default_from_attributes.merge({
-                                                                  "X-Forwarded-Proto" => "http"
-                                                                })
-                                end
+      default_from_attributes['X-Forwarded-Ssl'] = 'on' if ssl
+
+      unless allow_other_schemes
+        scheme = ssl ? 'https' : 'http'
+        default_from_attributes['X-Forwarded-Proto'] = scheme
+      end
+
       if Gitlab[app]['proxy_protocol']
         default_from_attributes = default_from_attributes.merge({
                                                                   'X-Real-IP' => '$proxy_protocol_addr',
