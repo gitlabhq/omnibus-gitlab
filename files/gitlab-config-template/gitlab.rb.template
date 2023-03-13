@@ -1372,6 +1372,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # redis['enable'] = true
 # redis['ha'] = false
+# redis['start_down'] = false
+# redis['set_replicaof'] = false
 # redis['hz'] = 10
 # redis['dir'] = "/var/opt/gitlab/redis"
 # redis['log_directory'] = "/var/log/gitlab/redis"

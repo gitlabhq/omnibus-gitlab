@@ -3,6 +3,8 @@
 ####
 default['redis']['enable'] = false
 default['redis']['ha'] = false
+default['redis']['start_down'] = false
+default['redis']['set_replicaof'] = false
 default['redis']['hz'] = 10
 default['redis']['dir'] = "/var/opt/gitlab/redis"
 default['redis']['log_directory'] = "/var/log/gitlab/redis"

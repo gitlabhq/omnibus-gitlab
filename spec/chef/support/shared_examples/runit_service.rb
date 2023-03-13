@@ -118,3 +118,9 @@ RSpec.shared_examples 'disabled runit service' do |svc_name|
     expect(chef_run).to run_ruby_block("disable #{svc_name}")
   end
 end
+
+RSpec.shared_examples 'started down runit service' do |svc_name|
+  it 'creates a service down file' do
+    expect(chef_run).to render_file("/opt/gitlab/sv/#{svc_name}/down")
+  end
+end
