@@ -92,6 +92,8 @@ build do
     env['PKG_CONFIG_PATH'] = "#{OpenSSLHelper.pkg_config_dirs}:/opt/gitlab/embedded/lib/pkgconfig"
   end
 
+  env['CFLAGS'] = '-std=gnu99' if OhaiHelper.get_centos_version.to_i == 7 || OhaiHelper.os_platform == 'sles'
+
   bundle "config set --local gemfile #{gitlab_bundle_gemfile}" if gitlab_bundle_gemfile != 'Gemfile'
   bundle 'config force_ruby_platform true', env: env if OhaiHelper.ruby_native_gems_unsupported?
   bundle 'config build.gpgme --use-system-libraries', env: env
