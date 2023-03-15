@@ -38,7 +38,7 @@ RSpec.describe 'consul' do
     end
 
     describe 'consul::enable' do
-      it_behaves_like 'enabled runit service', 'consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul'
+      it_behaves_like 'enabled runit service', 'consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul', true
 
       it 'creates the consul system user and group' do
         expect(chef_run).to create_account('Consul user and group').with(username: 'gitlab-consul', groupname: 'gitlab-consul')
@@ -149,7 +149,7 @@ RSpec.describe 'consul' do
         }
       end
 
-      it_behaves_like 'enabled runit service', 'consul', 'foo', 'bar', 'foo', 'bar'
+      it_behaves_like 'enabled runit service', 'consul', 'foo', 'bar', 'foo', 'bar', true
     end
 
     context 'server enabled' do
