@@ -357,7 +357,6 @@ flamegraph
 flamegraphs
 Flawfinder
 Flickr
-Flowdock
 Fluentd
 Flutterwave
 Flycheck
@@ -498,6 +497,7 @@ Kibana
 Kinesis
 Klar
 Knative
+KPIs
 Kramdown
 Kroki
 kubeconfig
@@ -618,6 +618,7 @@ Nurtch
 NVMe
 nyc
 OAuth
+OCP
 Octokit
 offboarded
 offboarding
@@ -626,6 +627,7 @@ OIDs
 OKRs
 OKRs
 Okta
+OLM
 OmniAuth
 onboarding
 OpenID
@@ -669,6 +671,7 @@ Pipfile
 Pipfiles
 Piwik
 plaintext
+podman
 Poedit
 polyfill
 polyfills
@@ -836,8 +839,8 @@ sanitization
 SBOMs
 sbt
 SBT
-scalers
 scalar's
+scalers
 scatterplot
 scatterplots
 schedulable
@@ -1185,7 +1188,7 @@ ZAProxy
 Zeitwerk
 Zendesk
 ZenTao
+Zoekt
 zsh
 Zstandard
 Zuora
-Zoekt

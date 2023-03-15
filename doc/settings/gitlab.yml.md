@@ -14,7 +14,7 @@ translation works as follows. For a complete list of available options, visit th
 New installations starting from GitLab 7.6 have
 all the options of the template listed in `/etc/gitlab/gitlab.rb` by default.
 
-In `gitlab.yml`, you will find structure like this:
+In `gitlab.yml`, you find structure like this:
 
 ```yaml
 production: &base
@@ -37,7 +37,7 @@ If you think an attribute is missing please create a merge request on the Omnibu
 Run `sudo gitlab-ctl reconfigure` for changes in `gitlab.rb` to take effect.
 
 Do not edit the generated file in `/var/opt/gitlab/gitlab-rails/etc/gitlab.yml`
-since it will be overwritten on the next `gitlab-ctl reconfigure` run.
+because it is overwritten on the next `gitlab-ctl reconfigure` run.
 
 ## Adding a new setting to `gitlab.yml`
 
