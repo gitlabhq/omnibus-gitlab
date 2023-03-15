@@ -61,9 +61,11 @@ RSpec.describe 'gitaly' do
   let(:cgroups_hierarchy_root) { 'gitaly' }
   let(:cgroups_memory_bytes) { 2097152 }
   let(:cgroups_cpu_shares) { 512 }
+  let(:cgroups_cpu_quota_us) { 400000 }
   let(:cgroups_repositories_count) { 10 }
   let(:cgroups_repositories_memory_bytes) { 1048576 }
   let(:cgroups_repositories_cpu_shares) { 128 }
+  let(:cgroups_repositories_cpu_quota_us) { 200000 }
   let(:pack_objects_cache_enabled) { true }
   let(:pack_objects_cache_dir) { '/pack-objects-cache' }
   let(:pack_objects_cache_max_age) { '10m' }
@@ -177,6 +179,50 @@ RSpec.describe 'gitaly' do
         %r{count = 100},
         %r{memory_bytes = #{cgroups_memory_bytes}},
         %r{cpu_shares = #{cgroups_cpu_shares}},
+      ].map(&:to_s).join('\s+'))
+
+      expect(chef_run).to render_file(config_path).with_content { |content|
+        expect(content).to match(cgroups_section)
+      }
+    end
+  end
+
+  context 'sets cgroups settings' do
+    before do
+      stub_gitlab_rb(
+        gitaly: {
+          configuration: {
+            cgroups: {
+              mountpoint: cgroups_mountpoint,
+              hierarchy_root: cgroups_hierarchy_root,
+              memory_bytes: cgroups_memory_bytes,
+              cpu_shares: cgroups_cpu_shares,
+              cpu_quota_us: cgroups_cpu_quota_us,
+              repositories: {
+                count: cgroups_repositories_count,
+                memory_bytes: cgroups_repositories_memory_bytes,
+                cpu_shares: cgroups_repositories_cpu_shares,
+                cpu_quota_us: cgroups_repositories_cpu_quota_us,
+              }
+            },
+          },
+        }
+      )
+    end
+
+    it 'populate gitaly cgroups' do
+      cgroups_section = Regexp.new([
+        %r{\[cgroups\]},
+        %r{mountpoint = "#{cgroups_mountpoint}"},
+        %r{hierarchy_root = "#{cgroups_hierarchy_root}"},
+        %r{memory_bytes = #{cgroups_memory_bytes}},
+        %r{cpu_shares = #{cgroups_cpu_shares}},
+        %r{cpu_quota_us = #{cgroups_cpu_quota_us}},
+        %r{\[cgroups.repositories\]},
+        %r{count = #{cgroups_repositories_count}},
+        %r{memory_bytes = #{cgroups_repositories_memory_bytes}},
+        %r{cpu_shares = #{cgroups_repositories_cpu_shares}},
+        %r{cpu_quota_us = #{cgroups_repositories_cpu_quota_us}},
       ].map(&:to_s).join('\s+'))
 
       expect(chef_run).to render_file(config_path).with_content { |content|
