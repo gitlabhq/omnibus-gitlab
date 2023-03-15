@@ -924,6 +924,18 @@ production: &base
     client_secret: <%= quote(@forti_token_cloud_client_secret) %>
     <% end %>
 
+  # DuoAuth settings
+  duo_auth:
+    # Allow using DuoAuth as OTP provider
+    enabled: <%= @duo_auth_enabled %>
+
+    <% if @duo_auth_enabled %>
+    # Hostname integration_key and secret key of duo_auth instance
+    hostname: <%= @duo_auth_hostname %>
+    integration_key: <%= quote(@duo_auth_integration_key) %>
+    secret_key: <%= quote(@duo_auth_secret_key) %>
+    <% end %>
+
   # Shared file storage settings
   shared:
     path: <%= @shared_path %>
