@@ -347,6 +347,7 @@ module Gitlab
         ]
 
         deprecations += praefect_legacy_configuration_deprecations
+        deprecations += gitaly_legacy_configuration_deprecations
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable', 'svlogd_prefix'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")
         deprecations += identify_deprecated_config(existing_config, ['repmgr'], ['enable'], "13.3", "14.0", "Starting with GitLab 14.0, Repmgr is no longer supported and users must switch to Patroni, following https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni.")
@@ -404,6 +405,65 @@ module Gitlab
             deprecation: '15.9',
             removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7438
             note: "In GitLab 15.9, Praefect's configuration in Omnibus GitLab was changed to structurally match Praefect's own configuration. Please see the migration instructions at https://docs.gitlab.com/ee/update/#1590"
+          }
+        end
+      end
+
+      # gitaly_legacy_configuration_deprecations returns deprecations of the old keys of Gitaly prior to
+      # updating its configuration structure in Omnibus to match Gitalys's own configuration.
+      def gitaly_legacy_configuration_deprecations
+        [
+          'socket_path',
+          'runtime_dir',
+          'listen_addr',
+          'prometheus_listen_addr',
+          'tls_listen_addr',
+          'certificate_path',
+          'key_path',
+          'graceful_restart_timeout',
+          'logging_level',
+          'logging_format',
+          'logging_sentry_dsn',
+          'logging_ruby_sentry_dsn',
+          'logging_sentry_environment',
+          'log_directory',
+          'prometheus_grpc_latency_buckets',
+          'auth_token',
+          'auth_transitioning',
+          'git_catfile_cache_size',
+          'git_bin_path',
+          'use_bundled_git',
+          'gpg_signing_key_path',
+          'gitconfig',
+          'ruby_max_rss',
+          'ruby_graceful_restart_timeout',
+          'ruby_restart_delay',
+          'ruby_num_workers',
+          'storage',
+          'custom_hooks_dir',
+          'daily_maintenance_disabled',
+          'daily_maintenance_start_hour',
+          'daily_maintenance_start_minute',
+          'daily_maintenance_duration',
+          'daily_maintenance_storages',
+          'cgroups_mountpoint',
+          'cgroups_hierarchy_root',
+          'cgroups_memory_bytes',
+          'cgroups_cpu_shares',
+          'cgroups_repositories_count',
+          'cgroups_repositories_memory_bytes',
+          'cgroups_repositories_cpu_shares',
+          'concurrency',
+          'rate_limiting',
+          'pack_objects_cache_enabled',
+          'pack_objects_cache_dir',
+          'pack_objects_cache_max_age',
+        ].map do |key|
+          {
+            config_keys: ['gitaly', key],
+            deprecation: '15.10',
+            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7439
+            note: "In GitLab 15.10, Gitaly's configuration in Omnibus GitLab was changed to structurally match Gitaly's own configuration. Please see the migration instructions at https://docs.gitlab.com/ee/update/#1510"
           }
         end
       end
