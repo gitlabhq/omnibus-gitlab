@@ -99,6 +99,9 @@ build do
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
   bundle 'config build.grpc --with-ldflags=-Wl,--no-as-needed --with-dldflags=-latomic', env: env if OhaiHelper.os_platform == 'raspbian'
+  # Disable zstd decompression support to avoid linking against libzstd,
+  # which may not be a safe system dependency to use.
+  bundle 'config build.ruby-magic --with-magic-flags=--disable-zstdlib', env: env
   bundle "config set --local frozen 'true'"
   bundle "install --without #{bundle_without.join(' ')} --jobs #{workers} --retry 5", env: env
 
