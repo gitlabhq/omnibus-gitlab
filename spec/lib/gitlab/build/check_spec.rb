@@ -261,4 +261,65 @@ RSpec.describe Build::Check do
       end
     end
   end
+
+  describe 'on_regular_branch?' do
+    context 'when on a regular branch' do
+      before do
+        stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
+        allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(false)
+      end
+
+      it 'returns false' do
+        expect(described_class.on_regular_branch?).to be_truthy
+      end
+    end
+
+    context 'when on a stable branch' do
+      before do
+        stub_env_var('CI_COMMIT_BRANCH', '15-6-stable')
+        allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(false)
+      end
+
+      it 'returns false' do
+        expect(described_class.on_regular_branch?).to be_falsey
+      end
+    end
+
+    context 'when on RC tag' do
+      before do
+        stub_env_var('CI_COMMIT_BRANCH', '')
+        stub_env_var('CI_COMMIT_TAG', '15.8.0+rc42.ce.0')
+        allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(true)
+      end
+
+      it 'returns true' do
+        expect(described_class.on_regular_branch?).to be_falsey
+      end
+    end
+
+    context 'when on stable tag' do
+      before do
+        stub_env_var('CI_COMMIT_BRANCH', '')
+        stub_env_var('CI_COMMIT_TAG', '15.8.0+ce.0')
+        allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(true)
+      end
+
+      it 'returns true' do
+        expect(described_class.on_regular_branch?).to be_falsey
+      end
+    end
+
+    context 'when on auto-deploy tag' do
+      before do
+        stub_env_var('CI_COMMIT_BRANCH', '')
+        stub_env_var('CI_COMMIT_TAG', '15.8.202301050320+b251a9da107.0e5d6807f3a')
+        allow(Build::Info).to receive(:current_git_tag).and_return('15.8.202301050320+b251a9da107.0e5d6807f3a')
+        allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(true)
+      end
+
+      it 'returns false' do
+        expect(described_class.on_regular_branch?).to be_falsey
+      end
+    end
+  end
 end

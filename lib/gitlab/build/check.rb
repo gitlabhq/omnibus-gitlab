@@ -83,6 +83,10 @@ module Build
       def on_stable_branch?
         Build::Info.branch_name&.match?(/^\d+-\d+-stable$/)
       end
+
+      def on_regular_branch?
+        Build::Info.branch_name && !on_stable_branch?
+      end
     end
   end
 end
