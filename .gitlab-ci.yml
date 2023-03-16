@@ -61,6 +61,8 @@ variables:
   QA_BRANCH: 'master'
   ISSUE_BOT_LABELS_EXTRA: "group::distribution"
   BUNDLER_VERSION: "2.3.22"
+  # NOTE: When `NEXT_RUBY_VERSION` is updated, flip
+  # `USE_NEXT_RUBY_VERSION_IN_*` variables to false to avoid surprises.
   NEXT_RUBY_VERSION: "3.0.5"
   GET_GEO_TAG: "0.4.0"
   CANONICAL_PROJECT_PATH: 'gitlab-org/omnibus-gitlab'
