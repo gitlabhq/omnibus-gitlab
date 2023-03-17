@@ -103,18 +103,18 @@ default['monitoring']['pgbouncer_exporter']['env'] = {
 ####
 # Gitlab exporter
 ###
-default['monitoring']['gitlab-exporter']['enable'] = false
-default['monitoring']['gitlab-exporter']['log_directory'] = '/var/log/gitlab/gitlab-exporter'
-default['monitoring']['gitlab-exporter']['env_directory'] = '/opt/gitlab/etc/gitlab-exporter/env'
-default['monitoring']['gitlab-exporter']['home'] = "/var/opt/gitlab/gitlab-exporter"
-default['monitoring']['gitlab-exporter']['server_name'] = 'webrick'
-default['monitoring']['gitlab-exporter']['listen_address'] = 'localhost'
-default['monitoring']['gitlab-exporter']['listen_port'] = '9168'
-default['monitoring']['gitlab-exporter']['probe_sidekiq'] = true
-default['monitoring']['gitlab-exporter']['probe_elasticsearch'] = false
-default['monitoring']['gitlab-exporter']['elasticsearch_url'] = nil
-default['monitoring']['gitlab-exporter']['elasticsearch_authorization'] = nil
-default['monitoring']['gitlab-exporter']['env'] = {
+default['monitoring']['gitlab_exporter']['enable'] = false
+default['monitoring']['gitlab_exporter']['log_directory'] = '/var/log/gitlab/gitlab-exporter'
+default['monitoring']['gitlab_exporter']['env_directory'] = '/opt/gitlab/etc/gitlab-exporter/env'
+default['monitoring']['gitlab_exporter']['home'] = "/var/opt/gitlab/gitlab-exporter"
+default['monitoring']['gitlab_exporter']['server_name'] = 'webrick'
+default['monitoring']['gitlab_exporter']['listen_address'] = 'localhost'
+default['monitoring']['gitlab_exporter']['listen_port'] = '9168'
+default['monitoring']['gitlab_exporter']['probe_sidekiq'] = true
+default['monitoring']['gitlab_exporter']['probe_elasticsearch'] = false
+default['monitoring']['gitlab_exporter']['elasticsearch_url'] = nil
+default['monitoring']['gitlab_exporter']['elasticsearch_authorization'] = nil
+default['monitoring']['gitlab_exporter']['env'] = {
   'MALLOC_CONF' => 'dirty_decay_ms:0,muzzy_decay_ms:0',
   'RUBY_GC_HEAP_INIT_SLOTS' => 80000,
   'RUBY_GC_HEAP_FREE_SLOTS_MIN_RATIO' => 0.055,
@@ -122,14 +122,14 @@ default['monitoring']['gitlab-exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
   'SSL_CERT_FILE' => "#{node['package']['install-dir']}/embedded/ssl/cert.pem"
 }
-default['monitoring']['gitlab-exporter']['consul_service_name'] = 'gitlab-exporter'
-default['monitoring']['gitlab-exporter']['consul_service_meta'] = nil
-default['monitoring']['gitlab-exporter']['tls_enabled'] = false
-default['monitoring']['gitlab-exporter']['tls_cert_path'] = nil
-default['monitoring']['gitlab-exporter']['tls_key_path'] = nil
-default['monitoring']['gitlab-exporter']['prometheus_scrape_scheme'] = 'http'
-default['monitoring']['gitlab-exporter']['prometheus_scrape_tls_server_name'] = nil
-default['monitoring']['gitlab-exporter']['prometheus_scrape_tls_skip_verification'] = false
+default['monitoring']['gitlab_exporter']['consul_service_name'] = 'gitlab-exporter'
+default['monitoring']['gitlab_exporter']['consul_service_meta'] = nil
+default['monitoring']['gitlab_exporter']['tls_enabled'] = false
+default['monitoring']['gitlab_exporter']['tls_cert_path'] = nil
+default['monitoring']['gitlab_exporter']['tls_key_path'] = nil
+default['monitoring']['gitlab_exporter']['prometheus_scrape_scheme'] = 'http'
+default['monitoring']['gitlab_exporter']['prometheus_scrape_tls_server_name'] = nil
+default['monitoring']['gitlab_exporter']['prometheus_scrape_tls_skip_verification'] = false
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus-monitoring']['enable'] = true
@@ -195,3 +195,4 @@ default['monitoring']['node-exporter'] = Gitlab::Deprecations::NodeAttribute.new
 default['monitoring']['redis-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['redis_exporter'].to_h }, "node['monitoring']['redis-exporter']", "node['monitoring']['redis_exporter']")
 default['monitoring']['postgres-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['postgres_exporter'].to_h }, "node['monitoring']['postgres-exporter']", "node['monitoring']['postgres_exporter']")
 default['monitoring']['pgbouncer-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['pgbouncer_exporter'].to_h }, "node['monitoring']['pgbouncer-exporter']", "node['monitoring']['pgbouncer_exporter']")
+default['monitoring']['gitlab-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['gitlab_exporter'].to_h }, "node['monitoring']['gitlab-exporter']", "node['monitoring']['gitlab_exporter']")

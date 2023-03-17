@@ -34,6 +34,7 @@ RSpec.describe SettingsDSL::Utils do
         %w[pgbouncer-exporter pgbouncer_exporter],
         %w[gitlab-shell gitlab_shell],
         %w[suggested-reviewers suggested_reviewers],
+        %w[gitlab-exporter gitlab_exporter],
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end

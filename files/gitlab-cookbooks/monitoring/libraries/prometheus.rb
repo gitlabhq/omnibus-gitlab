@@ -274,7 +274,7 @@ module Prometheus
       # Prometheus library gets evaluated before GitLab Exporter. So, we need to compute this here.
       Gitlab['gitlab_exporter']['prometheus_scrape_scheme'] ||= 'https' if Gitlab['gitlab_exporter']['tls_enabled']
 
-      default_config = Gitlab['node']['monitoring']['gitlab-exporter'].to_hash
+      default_config = Gitlab['node']['monitoring']['gitlab_exporter'].to_hash
       user_config = Gitlab['gitlab_exporter']
 
       listen_address = user_config['listen_address'] || default_config['listen_address']
