@@ -36,7 +36,7 @@ templatesymlink 'Create a gitlab_suggested_reviewers_secret and create a symlink
   group 'root'
   mode '0644'
   sensitive true
-  variables(secret_token: node['gitlab']['suggested-reviewers']['api_secret_key'])
+  variables(secret_token: node['gitlab']['suggested_reviewers']['api_secret_key'])
   dependent_services.each { |svc| notifies :restart, svc }
-  only_if { node['gitlab']['suggested-reviewers']['api_secret_key'] }
+  only_if { node['gitlab']['suggested_reviewers']['api_secret_key'] }
 end

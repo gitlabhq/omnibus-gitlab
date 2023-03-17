@@ -161,3 +161,5 @@ default['gitlab']['geo-postgresql']['auto_restart_on_version_change'] = true
 default['gitlab']['geo-logcursor']['ha'] = false
 default['gitlab']['geo-logcursor']['log_directory'] = '/var/log/gitlab/geo-logcursor'
 default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcursor/env'
+
+default['gitlab']['suggested-reviewers'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['suggested_reviewers'].to_h }, "node['gitlab']['suggested-reviewers']", "node['gitlab']['suggested_reviewers']")

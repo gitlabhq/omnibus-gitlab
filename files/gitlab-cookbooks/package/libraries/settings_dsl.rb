@@ -259,6 +259,7 @@ module SettingsDSL
           postgres_exporter
           pgbouncer_exporter
           gitlab_shell
+          suggested_reviewers
         ]
 
         return underscored_form(key) if skip_hyphenation.include?(underscored_form(key))
