@@ -261,6 +261,7 @@ module SettingsDSL
           gitlab_shell
           suggested_reviewers
           gitlab_exporter
+          remote_syslog
         ]
 
         return underscored_form(key) if skip_hyphenation.include?(underscored_form(key))

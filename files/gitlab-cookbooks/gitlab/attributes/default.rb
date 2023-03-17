@@ -849,13 +849,13 @@ default['gitlab']['logging']['logrotate_dateformat'] = nil # use date extensions
 ###
 # Remote syslog
 ###
-default['gitlab']['remote-syslog']['enable'] = false
-default['gitlab']['remote-syslog']['ha'] = false
-default['gitlab']['remote-syslog']['dir'] = "/var/opt/gitlab/remote-syslog"
-default['gitlab']['remote-syslog']['log_directory'] = "/var/log/gitlab/remote-syslog"
-default['gitlab']['remote-syslog']['destination_host'] = "localhost"
-default['gitlab']['remote-syslog']['destination_port'] = 514
-default['gitlab']['remote-syslog']['services'] = %w(redis nginx puma gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect gitlab-kas)
+default['gitlab']['remote_syslog']['enable'] = false
+default['gitlab']['remote_syslog']['ha'] = false
+default['gitlab']['remote_syslog']['dir'] = "/var/opt/gitlab/remote-syslog"
+default['gitlab']['remote_syslog']['log_directory'] = "/var/log/gitlab/remote-syslog"
+default['gitlab']['remote_syslog']['destination_host'] = "localhost"
+default['gitlab']['remote_syslog']['destination_port'] = 514
+default['gitlab']['remote_syslog']['services'] = %w(redis nginx puma gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect gitlab-kas)
 
 ###
 # High Availability
@@ -943,3 +943,4 @@ default['gitlab']['storage-check']['target'] = nil
 default['gitlab']['storage-check']['log_directory'] = '/var/log/gitlab/storage-check'
 
 default['gitlab']['gitlab-shell'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_shell'].to_h }, "node['gitlab']['gitlab-shell']", "node['gitlab']['gitlab_shell']")
+default['gitlab']['remote-syslog'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['remote_syslog'].to_h }, "node['gitlab']['remote-syslog']", "node['gitlab']['remote_syslog']")
