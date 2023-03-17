@@ -28,12 +28,12 @@ RSpec.describe 'gitlab::gitlab-shell' do
 
   it 'defaults the auth_file to be within the user\'s home directory' do
     stub_gitlab_rb(user: { home: '/tmp/user' })
-    expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/user/.ssh/authorized_keys')
+    expect(chef_run.node['gitlab']['gitlab_shell']['auth_file']).to eq('/tmp/user/.ssh/authorized_keys')
   end
 
   it 'uses custom auth_files set in gitlab.rb' do
     stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/authorized_keys' })
-    expect(chef_run.node['gitlab']['gitlab-shell']['auth_file']).to eq('/tmp/authorized_keys')
+    expect(chef_run.node['gitlab']['gitlab_shell']['auth_file']).to eq('/tmp/authorized_keys')
   end
 
   it 'creates authorized_keys file if missing' do

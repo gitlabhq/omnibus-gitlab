@@ -258,6 +258,7 @@ module SettingsDSL
           redis_exporter
           postgres_exporter
           pgbouncer_exporter
+          gitlab_shell
         ]
 
         return underscored_form(key) if skip_hyphenation.include?(underscored_form(key))

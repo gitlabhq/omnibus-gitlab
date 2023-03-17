@@ -6,8 +6,8 @@ class SELinuxHelper
 
     def commands(node)
       ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
-      authorized_keys = node['gitlab']['gitlab-shell']['auth_file']
-      gitlab_shell_var_dir = node['gitlab']['gitlab-shell']['dir']
+      authorized_keys = node['gitlab']['gitlab_shell']['auth_file']
+      gitlab_shell_var_dir = node['gitlab']['gitlab_shell']['dir']
       gitlab_shell_config_file = File.join(gitlab_shell_var_dir, "config.yml")
       gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
       gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")

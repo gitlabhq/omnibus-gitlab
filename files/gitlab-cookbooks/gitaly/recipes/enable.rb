@@ -97,7 +97,7 @@ template "Create Gitaly config.toml" do
           gitlab: {
             url: gitlab_url,
             relative_url_root: gitlab_relative_path,
-            'http-settings': node.dig('gitlab', 'gitlab-shell', 'http_settings')
+            'http-settings': node.dig('gitlab', 'gitlab_shell', 'http_settings')
           }.compact,
 
           # These options below were historically hard coded values in the template. They

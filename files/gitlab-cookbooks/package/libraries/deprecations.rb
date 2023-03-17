@@ -153,7 +153,7 @@ module Gitlab
             note: "Use `praefect['database_direct_port']` instead."
           },
           {
-            config_keys: %w(gitlab gitlab-shell custom_hooks_dir),
+            config_keys: %w(gitlab gitlab_shell custom_hooks_dir),
             deprecation: '14.3',
             removal: '15.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6393
             note: "Use `gitaly['custom_hooks_dir']` instead."
@@ -207,7 +207,7 @@ module Gitlab
             note: "Starting with GitLab 14.7, Pseudonymizer has been deprecated and will be removed."
           },
           {
-            config_keys: %w(gitlab gitlab-shell http_settings self_signed_cert),
+            config_keys: %w(gitlab gitlab_shell http_settings self_signed_cert),
             deprecation: '14.8',
             removal: '15.0', # https://gitlab.com/gitlab-org/gitlab-shell/-/issues/120
             note: "Starting with GitLab 14.8, SelfSignedCert has been deprecated and will be removed. Install self-signed certificates into `/etc/gitlab/trusted-certs` instead."

@@ -325,7 +325,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       mattermost_enabled: node['mattermost']['enable'] || !mattermost_host.nil?,
       sidekiq: node['gitlab']['sidekiq'],
       puma: node['gitlab']['puma'],
-      gitlab_shell_authorized_keys_file: node['gitlab']['gitlab-shell']['auth_file'],
+      gitlab_shell_authorized_keys_file: node['gitlab']['gitlab_shell']['auth_file'],
       prometheus_available: node['monitoring']['prometheus']['enable'] || !node['gitlab']['gitlab-rails']['prometheus_address'].nil?,
       prometheus_server_address: node['gitlab']['gitlab-rails']['prometheus_address'] || node['monitoring']['prometheus']['listen_address'],
       consul_api_url: node['consul']['enable'] ? consul_helper.api_url : nil,
@@ -360,7 +360,7 @@ templatesymlink "Create a gitlab_shell_secret and create a symlink to Rails root
   group "root"
   mode "0644"
   sensitive true
-  variables(secret_token: node['gitlab']['gitlab-shell']['secret_token'])
+  variables(secret_token: node['gitlab']['gitlab_shell']['secret_token'])
   dependent_services.each { |svc| notifies :restart, svc }
   notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
 end
