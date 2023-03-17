@@ -346,6 +346,11 @@ default['gitlab']['gitlab-rails']['forti_authenticator_port'] = 443
 default['gitlab']['gitlab-rails']['forti_authenticator_username'] = nil
 default['gitlab']['gitlab-rails']['forti_authenticator_access_token'] = nil
 
+default['gitlab']['gitlab-rails']['duo_auth_enabled'] = false
+default['gitlab']['gitlab-rails']['duo_auth_integration_key'] = nil
+default['gitlab']['gitlab-rails']['duo_auth_secret_key'] = nil
+default['gitlab']['gitlab-rails']['duo_auth_hostname'] = nil
+
 default['gitlab']['gitlab-rails']['forti_token_cloud_enabled'] = false
 default['gitlab']['gitlab-rails']['forti_token_cloud_client_id'] = nil
 default['gitlab']['gitlab-rails']['forti_token_cloud_client_secret'] = nil
