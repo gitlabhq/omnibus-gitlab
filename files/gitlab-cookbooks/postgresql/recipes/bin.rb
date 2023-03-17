@@ -41,12 +41,12 @@ end
 ruby_block 'check_postgresql_version_is_deprecated' do
   block do
     LoggingHelper.warning(%q(
-      Note that PostgreSQL 12 is the minimum required PostgreSQL version in GitLab 14.0.
+      Note that PostgreSQL 13 will become the minimum required PostgreSQL version in GitLab 16.0.
       To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server
     ))
   end
 
-  not_if { node['postgresql']['version'].nil? || node['postgresql']['version'].to_f >= 12 }
+  not_if { node['postgresql']['version'].nil? || node['postgresql']['version'].to_f >= 13 }
 end
 
 ruby_block "Link postgresql bin files to the correct version" do

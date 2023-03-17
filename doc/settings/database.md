@@ -452,8 +452,7 @@ WARNING:
 Before upgrading, it's important that you fully read this section before running any commands. For
 single-node installations, this upgrade needs downtime, as the database must be
 down while the upgrade is being performed. The length of time depends on the
-size of your database. To avoid downtime, it's possible to upgrade to a new
-database [using Slony](https://docs.gitlab.com/ee/update/upgrading_postgresql_using_slony.html).
+size of your database.
 
 NOTE:
 If you encounter any problems during the upgrade, raise an issue with a full
