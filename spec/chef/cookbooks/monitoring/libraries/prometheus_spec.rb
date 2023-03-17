@@ -11,7 +11,7 @@ RSpec.describe Prometheus do
                                                  node_exporter
                                                  redis_exporter
                                                  postgres_exporter
-                                                 gitlab-exporter
+                                                 gitlab_exporter
                                                ))
   end
 end

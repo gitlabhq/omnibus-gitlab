@@ -260,6 +260,7 @@ module SettingsDSL
           pgbouncer_exporter
           gitlab_shell
           suggested_reviewers
+          gitlab_exporter
         ]
 
         return underscored_form(key) if skip_hyphenation.include?(underscored_form(key))

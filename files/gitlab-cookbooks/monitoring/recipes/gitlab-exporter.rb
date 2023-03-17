@@ -18,9 +18,9 @@
 account_helper = AccountHelper.new(node)
 redis_helper = RedisHelper.new(node)
 gitlab_user = account_helper.gitlab_user
-gitlab_exporter_dir = node['monitoring']['gitlab-exporter']['home']
-gitlab_exporter_log_dir = node['monitoring']['gitlab-exporter']['log_directory']
-env_directory = node['monitoring']['gitlab-exporter']['env_directory']
+gitlab_exporter_dir = node['monitoring']['gitlab_exporter']['home']
+gitlab_exporter_log_dir = node['monitoring']['gitlab_exporter']['log_directory']
+env_directory = node['monitoring']['gitlab_exporter']['env_directory']
 
 directory gitlab_exporter_dir do
   owner gitlab_user
@@ -35,7 +35,7 @@ directory gitlab_exporter_log_dir do
 end
 
 env_dir env_directory do
-  variables node['monitoring']['gitlab-exporter']['env']
+  variables node['monitoring']['gitlab_exporter']['env']
   notifies :restart, "runit_service[gitlab-exporter]"
 end
 
@@ -55,10 +55,10 @@ template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
   mode "0600"
   notifies :restart, "runit_service[gitlab-exporter]"
   variables(
-    probe_sidekiq: node['monitoring']['gitlab-exporter']['probe_sidekiq'],
-    probe_elasticsearch: node['monitoring']['gitlab-exporter']['probe_elasticsearch'],
-    elasticsearch_url: node['monitoring']['gitlab-exporter']['elasticsearch_url'],
-    elasticsearch_authorization: node['monitoring']['gitlab-exporter']['elasticsearch_authorization'],
+    probe_sidekiq: node['monitoring']['gitlab_exporter']['probe_sidekiq'],
+    probe_elasticsearch: node['monitoring']['gitlab_exporter']['probe_elasticsearch'],
+    elasticsearch_url: node['monitoring']['gitlab_exporter']['elasticsearch_url'],
+    elasticsearch_authorization: node['monitoring']['gitlab_exporter']['elasticsearch_authorization'],
     redis_url: redis_url,
     connection_string: connection_string,
     redis_enable_client: node['gitlab']['gitlab-rails']['redis_enable_client']
@@ -76,7 +76,7 @@ runit_service "gitlab-exporter" do
   options({
     log_directory: gitlab_exporter_log_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['monitoring']['gitlab-exporter'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['monitoring']['gitlab_exporter'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']
@@ -85,11 +85,11 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 
-consul_service node['monitoring']['gitlab-exporter']['consul_service_name'] do
+consul_service node['monitoring']['gitlab_exporter']['consul_service_name'] do
   id 'gitlab-exporter'
-  meta node['monitoring']['gitlab-exporter']['consul_service_meta']
+  meta node['monitoring']['gitlab_exporter']['consul_service_meta']
   action Prometheus.service_discovery_action
-  ip_address node['monitoring']['gitlab-exporter']['listen_address']
-  port node['monitoring']['gitlab-exporter']['listen_port'].to_i
+  ip_address node['monitoring']['gitlab_exporter']['listen_address']
+  port node['monitoring']['gitlab_exporter']['listen_port'].to_i
   reload_service false unless Services.enabled?('consul')
 end
