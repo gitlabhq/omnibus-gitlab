@@ -160,7 +160,8 @@ end
   bootstrap
   storage-check
 ].each do |service|
-  if node["gitlab"][service]["enable"]
+  chef_attribute_name = SettingsDSL::Utils.sanitized_key(service)
+  if node["gitlab"][chef_attribute_name]["enable"]
     include_recipe "gitlab::#{service}"
   else
     include_recipe "gitlab::#{service}_disable"

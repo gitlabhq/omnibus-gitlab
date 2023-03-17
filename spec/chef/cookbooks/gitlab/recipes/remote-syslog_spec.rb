@@ -30,7 +30,7 @@ RSpec.describe 'gitlab::remote-syslog' do
     end
 
     it 'creates the remote_syslog config' do
-      expect(chef_run.node['gitlab']['remote-syslog']['enable']).to eq true
+      expect(chef_run.node['gitlab']['remote_syslog']['enable']).to eq true
     end
 
     it 'creates remote-syslog config file with correct log directories' do

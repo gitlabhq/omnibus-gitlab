@@ -35,6 +35,7 @@ RSpec.describe SettingsDSL::Utils do
         %w[gitlab-shell gitlab_shell],
         %w[suggested-reviewers suggested_reviewers],
         %w[gitlab-exporter gitlab_exporter],
+        %w[remote-syslog remote_syslog],
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end

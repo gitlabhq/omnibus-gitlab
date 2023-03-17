@@ -17,8 +17,8 @@
 
 omnibus_helper = OmnibusHelper.new(node)
 
-remote_syslog_dir = node['gitlab']['remote-syslog']['dir']
-remote_syslog_log_dir = node['gitlab']['remote-syslog']['log_directory']
+remote_syslog_dir = node['gitlab']['remote_syslog']['dir']
+remote_syslog_log_dir = node['gitlab']['remote_syslog']['log_directory']
 logging_hostname = node['gitlab']['logging']['udp_log_shipping_hostname']
 
 [
@@ -33,18 +33,18 @@ end
 
 template File.join(remote_syslog_dir, "remote_syslog.yml") do
   mode "0644"
-  variables(node['gitlab']['remote-syslog'].to_hash)
+  variables(node['gitlab']['remote_syslog'].to_hash)
   notifies :restart, 'runit_service[remote-syslog]' if omnibus_helper.should_notify?("remote-syslog")
 end
 
 runit_service "remote-syslog" do
-  start_down node['gitlab']['remote-syslog']['ha']
+  start_down node['gitlab']['remote_syslog']['ha']
   options({
     log_directory: remote_syslog_log_dir,
     dir: remote_syslog_dir,
     logging_hostname: logging_hostname,
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['remote-syslog'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['remote_syslog'].to_hash)
 end
 
 if node['gitlab']['bootstrap']['enable']
