@@ -44,7 +44,7 @@ RSpec.describe Gitlab::Deprecations do
 
   let(:conf3) do
     {
-      config_keys: %w(gitlab gitlab-shell git_data_directories),
+      config_keys: %w(gitlab gitlab_shell git_data_directories),
       deprecation: '8.10',
       removal: '11.0',
       note: "Use git_data_dirs instead."

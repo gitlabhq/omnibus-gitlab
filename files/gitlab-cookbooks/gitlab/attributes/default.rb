@@ -629,18 +629,18 @@ default['gitlab']['sidekiq']['consul_service_meta'] = nil
 ###
 # gitlab-shell
 ###
-default['gitlab']['gitlab-shell']['dir'] = "/var/opt/gitlab/gitlab-shell"
-default['gitlab']['gitlab-shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
-default['gitlab']['gitlab-shell']['log_level'] = nil
-default['gitlab']['gitlab-shell']['log_format'] = "json"
-default['gitlab']['gitlab-shell']['audit_usernames'] = nil
-default['gitlab']['gitlab-shell']['http_settings'] = nil
-default['gitlab']['gitlab-shell']['auth_file'] = nil
-default['gitlab']['gitlab-shell']['git_trace_log_file'] = nil
-default['gitlab']['gitlab-shell']['migration'] = { enabled: true, features: [] }
-default['gitlab']['gitlab-shell']['ssl_cert_dir'] = "#{node['package']['install-dir']}/embedded/ssl/certs/"
+default['gitlab']['gitlab_shell']['dir'] = "/var/opt/gitlab/gitlab-shell"
+default['gitlab']['gitlab_shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
+default['gitlab']['gitlab_shell']['log_level'] = nil
+default['gitlab']['gitlab_shell']['log_format'] = "json"
+default['gitlab']['gitlab_shell']['audit_usernames'] = nil
+default['gitlab']['gitlab_shell']['http_settings'] = nil
+default['gitlab']['gitlab_shell']['auth_file'] = nil
+default['gitlab']['gitlab_shell']['git_trace_log_file'] = nil
+default['gitlab']['gitlab_shell']['migration'] = { enabled: true, features: [] }
+default['gitlab']['gitlab_shell']['ssl_cert_dir'] = "#{node['package']['install-dir']}/embedded/ssl/certs/"
 # DEPRECATED! Not used by gitlab-shell
-default['gitlab']['gitlab-shell']['git_data_directories'] = {
+default['gitlab']['gitlab_shell']['git_data_directories'] = {
   "default" => { "path" => "/var/opt/gitlab/git-data" }
 }
 
@@ -921,3 +921,5 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
 default['gitlab']['storage-check']['enable'] = false
 default['gitlab']['storage-check']['target'] = nil
 default['gitlab']['storage-check']['log_directory'] = '/var/log/gitlab/storage-check'
+
+default['gitlab']['gitlab-shell'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_shell'].to_h }, "node['gitlab']['gitlab-shell']", "node['gitlab']['gitlab_shell']")

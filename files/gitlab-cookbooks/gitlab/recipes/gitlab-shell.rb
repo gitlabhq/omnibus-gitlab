@@ -22,10 +22,10 @@ sshd_helper = GitlabSshdHelper.new(node)
 git_user = account_helper.gitlab_user
 git_group = account_helper.gitlab_group
 gitlab_shell_dir = "/opt/gitlab/embedded/service/gitlab-shell"
-gitlab_shell_var_dir = node['gitlab']['gitlab-shell']['dir']
+gitlab_shell_var_dir = node['gitlab']['gitlab_shell']['dir']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
-authorized_keys = node['gitlab']['gitlab-shell']['auth_file']
-log_directory = node['gitlab']['gitlab-shell']['log_directory']
+authorized_keys = node['gitlab']['gitlab_shell']['auth_file']
+log_directory = node['gitlab']['gitlab_shell']['log_directory']
 gitlab_shell_config_file = File.join(gitlab_shell_var_dir, "config.yml")
 
 gitlab_sshd_enabled = Services.enabled?('gitlab_sshd')
@@ -100,13 +100,13 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
         authorized_keys: authorized_keys,
         secret_file: gitlab_shell_secret_file,
         log_file: File.join(log_directory, "gitlab-shell.log"),
-        log_level: node['gitlab']['gitlab-shell']['log_level'],
-        log_format: node['gitlab']['gitlab-shell']['log_format'],
-        audit_usernames: node['gitlab']['gitlab-shell']['audit_usernames'],
-        http_settings: node['gitlab']['gitlab-shell']['http_settings'],
-        git_trace_log_file: node['gitlab']['gitlab-shell']['git_trace_log_file'],
-        migration: node['gitlab']['gitlab-shell']['migration'],
-        ssl_cert_dir: node['gitlab']['gitlab-shell']['ssl_cert_dir'],
+        log_level: node['gitlab']['gitlab_shell']['log_level'],
+        log_format: node['gitlab']['gitlab_shell']['log_format'],
+        audit_usernames: node['gitlab']['gitlab_shell']['audit_usernames'],
+        http_settings: node['gitlab']['gitlab_shell']['http_settings'],
+        git_trace_log_file: node['gitlab']['gitlab_shell']['git_trace_log_file'],
+        migration: node['gitlab']['gitlab_shell']['migration'],
+        ssl_cert_dir: node['gitlab']['gitlab_shell']['ssl_cert_dir'],
         gitlab_sshd: gitlab_sshd_enabled ? sshd_helper.json_config : nil
       }
     end
