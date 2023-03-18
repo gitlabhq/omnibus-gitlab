@@ -65,7 +65,6 @@ end
 
 gitlab_url, gitlab_relative_path = WebServerHelper.internal_api_url(node)
 ssh_key_path = File.join(gitlab_sshd_host_key_dir, '/etc/ssh')
-ssh_key_glob = File.join(ssh_key_path, 'ssh_host_*_key')
 
 bash 'generate gitlab-sshd host keys' do
   action
@@ -73,10 +72,27 @@ bash 'generate gitlab-sshd host keys' do
   code <<~EOS
     set -e
     mkdir -p #{ssh_key_path}
-    ssh-keygen -A -f #{gitlab_sshd_host_key_dir}
-    chmod 0600 #{ssh_key_glob}
-    chown #{git_user}:#{git_group} #{ssh_key_glob}
-    mv #{ssh_key_glob} #{gitlab_sshd_host_key_dir}
+    success=0
+    for crypto in rsa ecdsa ed25519
+    do
+        filename="#{gitlab_sshd_host_key_dir}/ssh_host_${crypto}_key"
+        echo "Generating ${filename}..."
+        # Some keys may not be supported on FIPS-enabled systems, so skip over them.
+        ssh-keygen -q -N "" -t ${crypto} -f "${filename}" < /dev/null || true
+
+        if [[ -f "${filename}" ]]; then
+          success=1
+          chmod 0600 "${filename}"
+          chown #{git_user}:#{git_group} "${filename}"
+        else
+          echo "${filename} was not generated"
+        fi
+    done
+
+    if [[ ${success} -ne 1 ]]; then
+        echo "Failed to generate any keys, aborting."
+        exit 1
+    fi
   EOS
 end
 
