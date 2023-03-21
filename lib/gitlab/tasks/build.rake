@@ -3,6 +3,7 @@ require_relative "../build.rb"
 require_relative "../build/check.rb"
 require_relative "../build/info.rb"
 require_relative '../build/facts'
+require_relative "../gcloud_helper.rb"
 require_relative "../ohai_helper.rb"
 require_relative '../version.rb'
 require_relative "../util.rb"
@@ -71,17 +72,12 @@ namespace :build do
     desc "Sync packages to aws and gcp"
     task :sync do
       Gitlab::Util.section('build:package:sync', collapsed: Build::Check.on_tag?) do
-        pkgs_sa_file = Build::Info.gcp_release_bucket_sa_file
-        if pkgs_sa_file && Build::Check.is_auto_deploy_tag?
-          pkgs_bucket = Build::Info.gcp_release_bucket
-          puts 'GCS Sync: Activating service account'
-          activate_ret = system(*%W[/usr/local/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file #{pkgs_sa_file}])
-          if activate_ret
-            puts "GCS Sync: Copying pkg/ contents to #{pkgs_bucket}"
-            gsutil_ret = system(*%W[/usr/local/google-cloud-sdk/bin/gsutil -m rsync -r pkg/ gs://#{pkgs_bucket}])
-            puts "GCS Sync: Rsync success: #{gsutil_ret}"
-          end
-        end
+        puts '---- Syncing packages to GCP'
+        puts GCloudHelper.gcs_sync!('pkg/')
+        paths = Dir.glob('pkg/**/*').select { |f| File.file?(f) }.map { |p| p.gsub(%r[^pkg/], '') }
+        puts GCloudHelper.signed_urls(paths)
+
+        puts '---- Syncing packages to AWS'
         release_bucket = Build::Info.release_bucket
         release_bucket_region = Build::Info.release_bucket_region
         release_bucket_s3_endpoint = Build::Info.release_bucket_s3_endpoint

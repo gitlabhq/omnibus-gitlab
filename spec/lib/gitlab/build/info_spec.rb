@@ -327,4 +327,16 @@ RSpec.describe Build::Info do
       end
     end
   end
+
+  describe '.gcp_release_bucket' do
+    it 'returns the release bucket when on a tag' do
+      allow(Build::Check).to receive(:on_tag?).and_return(true)
+      expect(described_class.gcp_release_bucket).to eq('gitlab-com-pkgs-release')
+    end
+
+    it 'returns the build bucket when not on a tag' do
+      allow(Build::Check).to receive(:on_tag?).and_return(false)
+      expect(described_class.gcp_release_bucket).to eq('gitlab-com-pkgs-builds')
+    end
+  end
 end
