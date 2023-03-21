@@ -70,13 +70,11 @@ module Build
 
       def qa_trigger_vars
         %W[
-          QA_BRANCH=#{Gitlab::Util.get_env('QA_BRANCH') || 'master'}
           QA_RELEASE=#{Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info.docker_tag)}
           QA_IMAGE=#{Build::Info.qa_image}
           QA_TESTS=#{Gitlab::Util.get_env('QA_TESTS')}
-          ALLURE_JOB_NAME=#{Gitlab::Util.get_env('ALLURE_JOB_NAME')}
-          GITLAB_QA_OPTIONS=#{Gitlab::Util.get_env('GITLAB_QA_OPTIONS')}
-          KNAPSACK_GENERATE_REPORT=#{generate_knapsack_report?}
+          ALLURE_JOB_NAME=#{allure_job_name}-#{Build::Info.edition}
+          GITLAB_SEMVER_VERSION=#{Build::Info.latest_stable_tag.tr('+', '-')}
           RAT_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs'}
           RAT_FIPS_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_FIPS_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs-fips-ubuntu'}
           RAT_PACKAGE_URL=#{Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.triggered_build_package_url(fips: false)}
@@ -96,8 +94,8 @@ module Build
 
       private
 
-      def generate_knapsack_report?
-        (upstream_project == "gitlab-org/gitlab" && upstream_ref == "master").to_s
+      def allure_job_name
+        (upstream_project || Gitlab::Util.get_env('CI_PROJECT_NAME')).split('/').last
       end
 
       def upstream_project

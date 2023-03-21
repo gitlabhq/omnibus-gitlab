@@ -223,25 +223,23 @@ RSpec.describe Build::Facts do
     before do
       allow(described_class).to receive(:generate_knapsack_report?).and_return('true')
       allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('registry.gitlab.com/gitlab-org/build/omnibus-gitlab-mirror/gitlab-ee:14.6.2-rfbranch.450066356.c97110ad-0')
+      allow(Build::Info).to receive(:latest_stable_tag).and_return("14.6.2+rfbranch.450066356")
 
       stub_env_var('QA_IMAGE', 'gitlab/gitlab-ee-qa:nightly')
-      stub_env_var('QA_BRANCH', 'testapalooza')
       stub_env_var('QA_TESTS', '')
-      stub_env_var('ALLURE_JOB_NAME', '')
-      stub_env_var('GITLAB_QA_OPTIONS', '')
+      stub_env_var('TOP_UPSTREAM_SOURCE_PROJECT', 'gitlab-org/gitaly')
       stub_env_var('PACKAGE_URL', 'https://example.com/gitlab.deb')
       stub_env_var('FIPS_PACKAGE_URL', 'https://example.com/gitlab-fips.deb')
+      stub_env_var('ee', 'true')
     end
 
     it 'returns correct variables' do
       result = %w[
-        QA_BRANCH=testapalooza
         QA_RELEASE=registry.gitlab.com/gitlab-org/build/omnibus-gitlab-mirror/gitlab-ee:14.6.2-rfbranch.450066356.c97110ad-0
         QA_IMAGE=gitlab/gitlab-ee-qa:nightly
         QA_TESTS=
-        ALLURE_JOB_NAME=
-        GITLAB_QA_OPTIONS=
-        KNAPSACK_GENERATE_REPORT=true
+        ALLURE_JOB_NAME=gitaly-ee
+        GITLAB_SEMVER_VERSION=14.6.2-rfbranch.450066356
         RAT_REFERENCE_ARCHITECTURE=omnibus-gitlab-mrs
         RAT_FIPS_REFERENCE_ARCHITECTURE=omnibus-gitlab-mrs-fips-ubuntu
         RAT_PACKAGE_URL=https://example.com/gitlab.deb
