@@ -33,7 +33,7 @@ account "GitLab user and group" do
   gid node['gitlab']['user']['gid']
   shell node['gitlab']['user']['shell']
   home gitlab_home
-  manage node['gitlab']['manage-accounts']['enable']
+  manage node['gitlab']['manage_accounts']['enable']
 end
 
 # Configure Git settings for the GitLab user

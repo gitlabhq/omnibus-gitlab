@@ -37,7 +37,7 @@ account "Docker registry user and group" do
   gid registry_gid
   shell '/bin/sh'
   home working_dir
-  manage node['gitlab']['manage-accounts']['enable']
+  manage node['gitlab']['manage_accounts']['enable']
 end
 
 directory "create #{working_dir} and set the owner" do

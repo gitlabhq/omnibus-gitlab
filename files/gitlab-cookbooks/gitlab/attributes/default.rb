@@ -21,7 +21,7 @@
 ####
 default['gitlab']['bootstrap']['enable'] = true
 # Create users and groups needed for the package
-default['gitlab']['manage-accounts']['enable'] = true
+default['gitlab']['manage_accounts']['enable'] = true
 
 # Create directories with correct permissions and ownership required by the pkg
 default['gitlab']['manage-storage-directories']['enable'] = true

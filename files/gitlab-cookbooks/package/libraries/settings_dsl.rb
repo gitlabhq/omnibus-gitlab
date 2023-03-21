@@ -53,6 +53,7 @@ module SettingsDSL
     registry_external_url
     gitlab_ci
     high_availability
+    manage_accounts
   ].freeze
 
   def self.extended(base)
