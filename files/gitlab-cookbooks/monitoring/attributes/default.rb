@@ -132,7 +132,7 @@ default['monitoring']['gitlab_exporter']['prometheus_scrape_tls_server_name'] = 
 default['monitoring']['gitlab_exporter']['prometheus_scrape_tls_skip_verification'] = false
 
 # To completely disable prometheus, and all of it's exporters, set to false
-default['gitlab']['prometheus-monitoring']['enable'] = true
+default['gitlab']['prometheus_monitoring']['enable'] = true
 
 ####
 # Grafana

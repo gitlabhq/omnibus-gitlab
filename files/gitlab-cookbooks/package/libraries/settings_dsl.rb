@@ -56,6 +56,7 @@ module SettingsDSL
     manage_accounts
     manage_storage_directories
     omnibus_gitconfig
+    prometheus_monitoring
   ].freeze
 
   def self.extended(base)
