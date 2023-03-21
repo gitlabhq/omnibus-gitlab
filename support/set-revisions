@@ -3,7 +3,6 @@
 main() {
   gitlab_rails_ref=$1
   gitlab_shell_ref=$2
-  gitlab_workhorse_ref=$3
   gitaly_ref=$4
   indexer_ref=$5
 
@@ -13,7 +12,6 @@ main() {
     gitlab_rails_repo=git@dev.gitlab.org:gitlab/gitlabhq.git
   fi
   gitlab_shell_repo=git@dev.gitlab.org:gitlab/gitlab-shell.git
-  gitlab_workhorse_repo=git@dev.gitlab.org:gitlab/gitlab-workhorse.git
   gitaly_repo=git@dev.gitlab.org:gitlab/gitaly.git
   indexer_repo=git@dev.gitlab.org:gitlab/gitlab-elasticsearch-indexer.git
 
@@ -21,8 +19,6 @@ main() {
   assert_non_empty gitlab_rails_ref_id
   gitlab_shell_ref_id=$(check_remote_ref gitlab_shell)
   assert_non_empty gitlab_shell_ref_id
-  gitlab_workhorse_ref_id=$(check_remote_ref gitlab_workhorse)
-  assert_non_empty gitlab_workhorse_ref_id
   gitaly_ref_id=$(check_remote_ref gitaly)
   assert_non_empty gitaly_ref_id
 
