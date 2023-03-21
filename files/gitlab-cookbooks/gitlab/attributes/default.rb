@@ -679,14 +679,14 @@ default['gitlab']['gitlab_sshd']['host_certs_glob'] = 'ssh_host_*-cert.pub'
 # Web server
 ####
 # Username for the webserver user
-default['gitlab']['web-server']['username'] = 'gitlab-www'
-default['gitlab']['web-server']['group'] = 'gitlab-www'
-default['gitlab']['web-server']['uid'] = nil
-default['gitlab']['web-server']['gid'] = nil
-default['gitlab']['web-server']['shell'] = '/bin/false'
-default['gitlab']['web-server']['home'] = '/var/opt/gitlab/nginx'
+default['gitlab']['web_server']['username'] = 'gitlab-www'
+default['gitlab']['web_server']['group'] = 'gitlab-www'
+default['gitlab']['web_server']['uid'] = nil
+default['gitlab']['web_server']['gid'] = nil
+default['gitlab']['web_server']['shell'] = '/bin/false'
+default['gitlab']['web_server']['home'] = '/var/opt/gitlab/nginx'
 # When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group
-default['gitlab']['web-server']['external_users'] = []
+default['gitlab']['web_server']['external_users'] = []
 
 ####
 # gitlab-workhorse

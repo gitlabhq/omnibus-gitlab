@@ -59,6 +59,7 @@ module SettingsDSL
     prometheus_monitoring
     runtime_dir
     storage_check
+    web_server
   ].freeze
 
   def self.extended(base)

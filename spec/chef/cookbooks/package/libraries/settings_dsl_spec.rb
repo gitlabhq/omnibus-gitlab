@@ -55,6 +55,7 @@ RSpec.describe SettingsDSL::Utils do
         %w[prometheus-monitoring prometheus_monitoring],
         %w[runtime-dir runtime_dir],
         %w[storage-check storage_check],
+        %w[web-server web_server],
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end
