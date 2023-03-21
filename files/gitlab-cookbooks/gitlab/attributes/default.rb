@@ -961,3 +961,4 @@ default['gitlab']['mattermost-external-url'] = Gitlab::Deprecations::NodeAttribu
 default['gitlab']['pages-external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['pages_external_url'] }, "node['gitlab']['pages-external-url']", "node['gitlab']['pages_external_url']")
 default['gitlab']['registry-external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['registry_external_url'] }, "node['gitlab']['registry-external-url']", "node['gitlab']['registry_external_url']")
 default['gitlab']['gitlab-ci'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_ci'].to_h }, "node['gitlab']['gitlab-ci']", "node['gitlab']['gitlab_ci']")
+default['gitlab']['high-availability'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['high_availability'].to_h }, "node['gitlab']['high-availability']", "node['gitlab']['high_availability']")
