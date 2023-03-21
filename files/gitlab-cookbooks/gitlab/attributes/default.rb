@@ -963,3 +963,4 @@ default['gitlab']['registry-external-url'] = Gitlab::Deprecations::NodeAttribute
 default['gitlab']['gitlab-ci'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_ci'].to_h }, "node['gitlab']['gitlab-ci']", "node['gitlab']['gitlab_ci']")
 default['gitlab']['high-availability'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['high_availability'].to_h }, "node['gitlab']['high-availability']", "node['gitlab']['high_availability']")
 default['gitlab']['manage-accounts'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['manage_accounts'].to_h }, "node['gitlab']['manage-accounts']", "node['gitlab']['manage_accounts']")
+default['gitlab']['manage-storage-directories'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['manage_storage_directories'].to_h }, "node['gitlab']['manage-storage-directories']", "node['gitlab']['manage_storage_directories']")
