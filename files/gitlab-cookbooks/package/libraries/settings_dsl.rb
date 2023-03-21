@@ -54,6 +54,7 @@ module SettingsDSL
     gitlab_ci
     high_availability
     manage_accounts
+    manage_storage_directories
   ].freeze
 
   def self.extended(base)

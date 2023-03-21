@@ -67,7 +67,7 @@ directory node['gitlab']['gitlab_rails']['registry_path'] do
   group account_helper.gitlab_group
   mode '0770'
   recursive true
-  only_if { node['gitlab']['manage-storage-directories']['enable'] }
+  only_if { node['gitlab']['manage_storage_directories']['enable'] }
 end
 
 cert_file_path = File.join(working_dir, "gitlab-registry.crt")

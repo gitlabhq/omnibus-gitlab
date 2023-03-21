@@ -37,7 +37,7 @@ directory "/etc/gitlab" do
   owner "root"
   group "root"
   mode "0775"
-  only_if { node['gitlab']['manage-storage-directories']['manage_etc'] }
+  only_if { node['gitlab']['manage_storage_directories']['manage_etc'] }
 end.run_action(:create)
 
 node.default['gitlab']['bootstrap']['enable'] = false if File.exist?("/var/opt/gitlab/bootstrapped")

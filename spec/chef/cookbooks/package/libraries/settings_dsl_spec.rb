@@ -50,6 +50,7 @@ RSpec.describe SettingsDSL::Utils do
         %w[gitlab-ci gitlab_ci],
         %w[high-availability high_availability],
         %w[manage-accounts manage_accounts],
+        %w[manage-storage-directories manage_storage_directories],
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end
