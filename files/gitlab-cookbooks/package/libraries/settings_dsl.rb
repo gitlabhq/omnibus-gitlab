@@ -46,6 +46,11 @@ module SettingsDSL
     geo_logcursor
     geo_postgresql
     gitlab_rails
+    external_url
+    gitlab_kas_external_url
+    mattermost_external_url
+    pages_external_url
+    registry_external_url
   ].freeze
 
   def self.extended(base)

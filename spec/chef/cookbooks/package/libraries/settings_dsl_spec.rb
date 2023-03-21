@@ -42,6 +42,11 @@ RSpec.describe SettingsDSL::Utils do
         %w[geo-logcursor geo_logcursor],
         %w[geo-postgresql geo_postgresql],
         %w[gitlab-rails gitlab_rails],
+        %w[external-url external_url],
+        %w[gitlab-kas-external-url gitlab_kas_external_url],
+        %w[mattermost-external-url mattermost_external_url],
+        %w[pages-external-url pages_external_url],
+        %w[registry-external-url registry_external_url],
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end
