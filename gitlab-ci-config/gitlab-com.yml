@@ -155,7 +155,6 @@
   TOP_UPSTREAM_SOURCE_JOB: ${TOP_UPSTREAM_SOURCE_JOB}
   TOP_UPSTREAM_SOURCE_SHA: ${TOP_UPSTREAM_SOURCE_SHA}
   TOP_UPSTREAM_SOURCE_REF: ${TOP_UPSTREAM_SOURCE_REF}
-  QA_BRANCH: ${QA_BRANCH}
 
 .ce-trigger-job-variables:
   extends: .base-trigger-job-variables
@@ -565,27 +564,27 @@ qa-test:
   variables:
     RELEASE: $QA_RELEASE
     QA_IMAGE: $QA_IMAGE
-    QA_TESTS: $QA_TESTS
     ALLURE_JOB_NAME: $ALLURE_JOB_NAME
-    GITLAB_QA_OPTIONS: $GITLAB_QA_OPTIONS
-    KNAPSACK_GENERATE_REPORT: $KNAPSACK_GENERATE_REPORT
-    TOP_UPSTREAM_SOURCE_PROJECT: $TOP_UPSTREAM_SOURCE_PROJECT
-    TOP_UPSTREAM_SOURCE_REF: $TOP_UPSTREAM_SOURCE_REF
-    TOP_UPSTREAM_SOURCE_JOB: $TOP_UPSTREAM_SOURCE_JOB
-    TOP_UPSTREAM_SOURCE_SHA: $TOP_UPSTREAM_SOURCE_SHA
-    TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID: $TOP_UPSTREAM_MERGE_REQUEST_PROJECT_ID
-    TOP_UPSTREAM_MERGE_REQUEST_IID: $TOP_UPSTREAM_MERGE_REQUEST_IID
+    GITLAB_SEMVER_VERSION: $GITLAB_SEMVER_VERSION # latest semver gitlab version used for testing upgrade paths
+    SKIP_OMNIBUS_TRIGGER: "true"
+  inherit:
+   variables: false
   trigger:
-    project: "gitlab-org/gitlab-qa-mirror"
-    branch: $QA_BRANCH
     strategy: depend
     forward:
-      pipeline_variables: false
       yaml_variables: true
+      pipeline_variables: true
+    include:
+      - project: gitlab-org/gitlab
+        ref: master
+        file: .gitlab/ci/package-and-test/main.gitlab-ci.yml
   rules:
     - if: '$SKIP_QA_TEST == "true"'
       when: never
-    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_CE_PIPELINE/'
+      variables:
+        FOSS_ONLY: "true"
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_EE_PIPELINE/'
   needs:
     - job: generate-facts
       artifacts: true
