@@ -65,4 +65,28 @@ RSpec.describe 'gitlab-ee::suggested_reviwers' do
       it_behaves_like 'Create suggested reviewer secrets and notifies services'
     end
   end
+
+  context 'rails configuration' do
+    before do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          enable: rails_enabled,
+        }
+      )
+    end
+
+    context 'is enabled' do
+      let(:rails_enabled) { true }
+      it 'does incudes suggested reviewers' do
+        expect(chef_run).to include_recipe('gitlab-ee::suggested_reviewers')
+      end
+    end
+
+    context 'is disabled' do
+      let(:rails_enabled) { false }
+      it 'does not incudes suggested reviewers' do
+        expect(chef_run).to_not include_recipe('gitlab-ee::suggested_reviewers')
+      end
+    end
+  end
 end

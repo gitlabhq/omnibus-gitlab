@@ -44,9 +44,11 @@ end
   end
 end
 
+rails_enable = node['gitlab']['gitlab-rails']['enable']
+
 # Geo secondary
 if node['gitlab']['geo-secondary']['enable']
-  if node['gitlab']['gitlab-rails']['enable']
+  if rails_enable
     include_recipe 'gitlab-ee::geo-secondary'
     include_recipe 'gitlab-ee::geo_database_migrations'
   end
@@ -55,7 +57,7 @@ else
 end
 
 # Suggested Reviewers
-include_recipe 'gitlab-ee::suggested_reviewers'
+include_recipe 'gitlab-ee::suggested_reviewers' if rails_enable
 
 # Create the pgbouncer users
 include_recipe 'pgbouncer::user'
