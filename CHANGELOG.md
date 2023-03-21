@@ -3,6 +3,46 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.10.0 (2023-03-21)
+
+### Added (4 changes)
+
+- [Added duo auth config](gitlab-org/omnibus-gitlab@7d63a392fc70dde0bf696f6ca70b9e3b441371e3) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/6752))
+- [Add cpu_quota_us Gitaly config](gitlab-org/omnibus-gitlab@bfa009db1693c93f27b3baf921cb6f88376ba20b) ([merge request](gitlab-org/omnibus-gitlab!6730))
+- [Make geo-logcursor group configurable](gitlab-org/omnibus-gitlab@d700c0d930b01ec0807e534cfa456b26c73906ca) ([merge request](gitlab-org/omnibus-gitlab!6728))
+- [Introduce support for Redis Cluster and specifying acl user](gitlab-org/omnibus-gitlab@f3a91b1cae3c66159bc59c285650323794da1138) ([merge request](gitlab-org/omnibus-gitlab!6548))
+
+### Fixed (2 changes)
+
+- [Fix SSH host key generation on CentOS 7](gitlab-org/omnibus-gitlab@0308afc14e96500e944b4dd69340a2a5544e6500) ([merge request](gitlab-org/omnibus-gitlab!6756))
+- [Disable proxy cache for api urls](gitlab-org/omnibus-gitlab@004d0c27c6e650797402429018c6aad764df1df2) ([merge request](gitlab-org/omnibus-gitlab!6724))
+
+### Changed (15 changes)
+
+- [Turn on the pg upgrade recommendation notice](gitlab-org/omnibus-gitlab@1187d2cbc117047c367436a064ec46b0af113187) ([merge request](gitlab-org/omnibus-gitlab!6611))
+- [Bump Container Registry to v3.69.0-gitlab](gitlab-org/omnibus-gitlab@aaf8b03d24fbeb5ff70be6607352c421a2fed23c) ([merge request](gitlab-org/omnibus-gitlab!6759))
+- [Disable zstd decompression with libmagic](gitlab-org/omnibus-gitlab@1ee6893bfc74b2054d9c41863134a03ec4d923bf) ([merge request](gitlab-org/omnibus-gitlab!6749))
+- [Omit redis replicaof config by default when HA is enabled.](gitlab-org/omnibus-gitlab@3ef1f67f5048863daa6de223b06570a070d503e7) ([merge request](gitlab-org/omnibus-gitlab!6646))
+- [Update docutils from 0.16 to 0.19](gitlab-org/omnibus-gitlab@e0125cb246569b5ecaa03c1b4636089fc18f861a) ([merge request](gitlab-org/omnibus-gitlab!6649))
+- [Support dedicated sub-domain for kas](gitlab-org/omnibus-gitlab@deaa5c65a16de9faab620c66e831ae21d0330bcb) ([merge request](gitlab-org/omnibus-gitlab!6593))
+- [Bump OpenSSL to version 1.1.1t](gitlab-org/omnibus-gitlab@6ce39a64106e72e7c34c17d52b01ec812290e8a7) ([merge request](gitlab-org/omnibus-gitlab!6677))
+- [Bump go-crond to version 23.2.0](gitlab-org/omnibus-gitlab@ee573ec65a8d6d601590a15e5f5bddb83532f2cd) ([merge request](gitlab-org/omnibus-gitlab!6715))
+- [Bump container-registry to 3.68.0](gitlab-org/omnibus-gitlab@31afe3542b0521de2007060ef5c59d94a1c6eca9) ([merge request](gitlab-org/omnibus-gitlab!6695))
+- [Bump node_exporter to version 1.5.0](gitlab-org/omnibus-gitlab@8fc267fec38ca46615206594c220d8c032416c83) ([merge request](gitlab-org/omnibus-gitlab!6547))
+- [Bump chef-acme to 4.1.6](gitlab-org/omnibus-gitlab@5c2e5e6955d94d47bcde60ec732691e57d52f4e2) ([merge request](gitlab-org/omnibus-gitlab!6723))
+- [Update Mattermost to 7.8.1](gitlab-org/omnibus-gitlab@5cf447af3a653da2f9d26294375f9875bf0b574d) by @antonis.stamatiou ([merge request](gitlab-org/omnibus-gitlab!6696))
+- [Expand allowed gitlab_kas['internal_api_listen_network']](gitlab-org/omnibus-gitlab@8c68590076f98c16fae209de9c126908d744ea51) ([merge request](gitlab-org/omnibus-gitlab!6726))
+- [Update Gitaly and Praefect in configuration template](gitlab-org/omnibus-gitlab@97f2bc2d58a03bcb79a6596cd66b47556f0cc138) ([merge request](gitlab-org/omnibus-gitlab!6714))
+- [Match Gitaly configuration format in Omnibus](gitlab-org/omnibus-gitlab@b76c190e65e31067c79f3fed70b9b34f22532599) ([merge request](gitlab-org/omnibus-gitlab!6621))
+
+### Deprecated (1 change)
+
+- [Deprecate legacy Gitaly configuration options](gitlab-org/omnibus-gitlab@4fed1becd2e604d2b27112041e3357bd960b9172) ([merge request](gitlab-org/omnibus-gitlab!6670))
+
+### Security (1 change)
+
+- [Update libksba/gnupg to 1.6.3/2.2.41](gitlab-org/omnibus-gitlab@2f72ecc671ddf654254f463b434abe553c1ebe7f)
+
 ## 15.9.3 (2023-03-09)
 
 No changes.
