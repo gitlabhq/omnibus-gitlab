@@ -967,3 +967,4 @@ default['gitlab']['manage-storage-directories'] = Gitlab::Deprecations::NodeAttr
 default['gitlab']['omnibus-gitconfig'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['omnibus_gitconfig'].to_h }, "node['gitlab']['omnibus-gitconfig']", "node['gitlab']['omnibus_gitconfig']")
 default['gitlab']['runtime-dir'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['runtime_dir'] }, "node['gitlab']['runtime-dir']", "node['gitlab']['runtime_dir']")
 default['gitlab']['storage-check'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['storage_check'].to_h }, "node['gitlab']['storage-check']", "node['gitlab']['storage_check']")
+default['gitlab']['web-server'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['web_server'].to_h }, "node['gitlab']['web-server']", "node['gitlab']['web_server']")
