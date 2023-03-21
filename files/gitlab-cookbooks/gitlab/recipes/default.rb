@@ -71,7 +71,7 @@ end
 template "#{install_dir}/embedded/etc/gitconfig" do
   source "gitconfig-system.erb"
   mode 0755
-  variables gitconfig: node.dig('gitlab', 'omnibus-gitconfig', 'system') || {}
+  variables gitconfig: node.dig('gitlab', 'omnibus_gitconfig', 'system') || {}
 end
 
 # This recipe needs to run before gitlab-rails

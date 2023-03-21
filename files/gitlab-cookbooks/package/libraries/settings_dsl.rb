@@ -55,6 +55,7 @@ module SettingsDSL
     high_availability
     manage_accounts
     manage_storage_directories
+    omnibus_gitconfig
   ].freeze
 
   def self.extended(base)

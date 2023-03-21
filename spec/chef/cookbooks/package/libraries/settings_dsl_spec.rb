@@ -51,6 +51,7 @@ RSpec.describe SettingsDSL::Utils do
         %w[high-availability high_availability],
         %w[manage-accounts manage_accounts],
         %w[manage-storage-directories manage_storage_directories],
+        %w[omnibus-gitconfig omnibus_gitconfig],
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end
