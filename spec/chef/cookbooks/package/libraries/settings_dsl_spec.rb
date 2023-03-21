@@ -53,6 +53,7 @@ RSpec.describe SettingsDSL::Utils do
         %w[manage-storage-directories manage_storage_directories],
         %w[omnibus-gitconfig omnibus_gitconfig],
         %w[prometheus-monitoring prometheus_monitoring],
+        %w[runtime-dir runtime_dir],
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end

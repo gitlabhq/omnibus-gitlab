@@ -57,6 +57,7 @@ module SettingsDSL
     manage_storage_directories
     omnibus_gitconfig
     prometheus_monitoring
+    runtime_dir
   ].freeze
 
   def self.extended(base)

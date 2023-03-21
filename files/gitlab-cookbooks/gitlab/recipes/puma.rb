@@ -20,7 +20,7 @@ omnibus_helper = OmnibusHelper.new(node)
 logfiles_helper = LogfilesHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('puma')
 
-metrics_dir = File.join(node['gitlab']['runtime-dir'].to_s, 'gitlab/puma') unless node['gitlab']['runtime-dir'].nil?
+metrics_dir = File.join(node['gitlab']['runtime_dir'].to_s, 'gitlab/puma') unless node['gitlab']['runtime_dir'].nil?
 
 svc = 'puma'
 user = account_helper.gitlab_user
