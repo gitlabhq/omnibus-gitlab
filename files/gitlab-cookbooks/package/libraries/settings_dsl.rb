@@ -52,6 +52,7 @@ module SettingsDSL
     pages_external_url
     registry_external_url
     gitlab_ci
+    high_availability
   ].freeze
 
   def self.extended(base)

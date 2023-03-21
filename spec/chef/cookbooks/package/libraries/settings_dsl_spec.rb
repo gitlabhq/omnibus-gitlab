@@ -48,6 +48,7 @@ RSpec.describe SettingsDSL::Utils do
         %w[pages-external-url pages_external_url],
         %w[registry-external-url registry_external_url],
         %w[gitlab-ci gitlab_ci],
+        %w[high-availability high_availability],
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end

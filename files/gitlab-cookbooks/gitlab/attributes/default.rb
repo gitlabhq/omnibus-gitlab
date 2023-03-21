@@ -865,7 +865,7 @@ default['gitlab']['remote_syslog']['services'] = %w(redis nginx puma gitlab-rail
 ###
 # High Availability
 ###
-default['gitlab']['high-availability']['mountpoint'] = nil
+default['gitlab']['high_availability']['mountpoint'] = nil
 
 ####
 # GitLab CI Rails app
