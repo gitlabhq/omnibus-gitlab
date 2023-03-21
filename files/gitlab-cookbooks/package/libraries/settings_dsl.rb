@@ -58,6 +58,7 @@ module SettingsDSL
     omnibus_gitconfig
     prometheus_monitoring
     runtime_dir
+    storage_check
   ].freeze
 
   def self.extended(base)

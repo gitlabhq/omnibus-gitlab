@@ -943,9 +943,9 @@ default['gitlab']['gitlab_kas_nginx']['proxy_set_headers'] = {
 ####
 # Storage check
 ####
-default['gitlab']['storage-check']['enable'] = false
-default['gitlab']['storage-check']['target'] = nil
-default['gitlab']['storage-check']['log_directory'] = '/var/log/gitlab/storage-check'
+default['gitlab']['storage_check']['enable'] = false
+default['gitlab']['storage_check']['target'] = nil
+default['gitlab']['storage_check']['log_directory'] = '/var/log/gitlab/storage-check'
 
 default['gitlab']['gitlab-shell'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_shell'].to_h }, "node['gitlab']['gitlab-shell']", "node['gitlab']['gitlab_shell']")
 default['gitlab']['remote-syslog'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['remote_syslog'].to_h }, "node['gitlab']['remote-syslog']", "node['gitlab']['remote_syslog']")
