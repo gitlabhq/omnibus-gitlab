@@ -870,13 +870,13 @@ default['gitlab']['high-availability']['mountpoint'] = nil
 ####
 # GitLab CI Rails app
 ####
-default['gitlab']['gitlab-ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
-default['gitlab']['gitlab-ci']['builds_directory'] = "/var/opt/gitlab/gitlab-ci/builds"
+default['gitlab']['gitlab_ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
+default['gitlab']['gitlab_ci']['builds_directory'] = "/var/opt/gitlab/gitlab-ci/builds"
 
-default['gitlab']['gitlab-ci']['schedule_builds_minute'] = "0"
+default['gitlab']['gitlab_ci']['schedule_builds_minute'] = "0"
 
-default['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'] = nil
-default['gitlab']['gitlab-ci']['gitlab_ci_add_pusher'] = nil
+default['gitlab']['gitlab_ci']['gitlab_ci_all_broken_builds'] = nil
+default['gitlab']['gitlab_ci']['gitlab_ci_add_pusher'] = nil
 
 ####
 # Mattermost NGINX

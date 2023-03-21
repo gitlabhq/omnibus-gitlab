@@ -51,6 +51,7 @@ module SettingsDSL
     mattermost_external_url
     pages_external_url
     registry_external_url
+    gitlab_ci
   ].freeze
 
   def self.extended(base)
