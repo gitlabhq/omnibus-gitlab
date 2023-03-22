@@ -16,12 +16,23 @@
 account_helper = AccountHelper.new(node)
 watch_helper = WatchHelper::WatcherConfig.new(node)
 
+# Remove excess watcher configurations and handlers
+to_cleanup = watch_helper.excess_handler_scripts
+to_cleanup += watch_helper.excess_configs
+
+to_cleanup.each do |f|
+  file f do
+    action :delete
+  end
+end
+
 watch_helper.watchers.each do |watcher|
   file watcher.consul_config_file do
     content watcher.consul_config
     owner account_helper.postgresql_user
   end
 
+  # Create/update handler scripts
   template watcher.handler_script do
     source "watcher_scripts/#{watcher.handler_template}"
     variables watcher.template_variables
@@ -30,7 +41,8 @@ watch_helper.watchers.each do |watcher|
 end
 
 # Watcher specific settings
-if node['consul']['watchers'].include?('postgresql')
+pg_service = node['consul']['internal']['postgresql_service_name']
+if node['consul']['watchers'].include?(pg_service)
   node.default['pgbouncer']['databases_ini'] = '/var/opt/gitlab/consul/databases.ini'
   node.default['pgbouncer']['databases_json'] = '/var/opt/gitlab/consul/databases.json'
   node.default['pgbouncer']['databases_ini_user'] = 'gitlab-consul'

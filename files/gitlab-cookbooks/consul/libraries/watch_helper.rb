@@ -72,5 +72,17 @@ module WatchHelper
     def watchers
       @all_watchers.select { |watcher| @enabled_watchers.include? watcher.name }
     end
+
+    def excess_configs
+      enabled_configs = watchers.map { |w| File.basename w.consul_config_file }
+      Dir.glob("#{@consul_config_directory}/*")
+        .reject { |c| enabled_configs.include? c }
+    end
+
+    def excess_handler_scripts
+      enabled_handlers = watchers.map { |w| File.basename w.handler_script }
+      Dir.glob("#{@handler_directory}/*")
+        .reject { |h| enabled_handlers.include? h }
+    end
   end
 end
