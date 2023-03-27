@@ -82,6 +82,6 @@ action :create do
       MESSAGE
       LoggingHelper.warning(message)
     end
-    only_if { new_resource.redis_helper.running_version != new_resource.redis_helper.installed_version }
+    only_if { node['redis']['startup_delay'].zero? && new_resource.redis_helper.running_version != new_resource.redis_helper.installed_version }
   end
 end
