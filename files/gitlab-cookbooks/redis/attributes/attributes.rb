@@ -36,6 +36,7 @@ default['redis']['save'] = ['900 1', '300 10', '60 10000']
 default['redis']['io_threads'] = 1
 default['redis']['io_threads_do_reads'] = false
 default['redis']['stop_writes_on_bgsave_error'] = true
+default['redis']['startup_delay'] = 0
 
 default['redis']['rename_commands'] = nil
 

@@ -53,6 +53,13 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
 
     it_behaves_like 'enabled runit service', 'redis', 'root', 'root'
 
+    it 'uses a 0 second startup delay' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis/run')
+    .with_content { |content|
+      expect(content).to match(/^sleep 0$/)
+    }
+    end
+
     it 'creates gitlab-redis-cli-rc' do
       expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-redis-cli-rc')
         .with_content(gitlab_redis_cli_rc)
@@ -101,7 +108,8 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
           rename_commands: {
             "FAKE_COMMAND" => "RENAMED_FAKE_COMMAND",
             "DISABLED_FAKE_COMMAND" => ""
-          }
+          },
+          'startup_delay': 10
         }
       )
     end
@@ -141,6 +149,13 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
     end
 
     it_behaves_like 'enabled runit service', 'redis', 'root', 'root'
+
+    it 'uses a 10 second startup delay' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis/run')
+    .with_content { |content|
+      expect(content).to match(/^sleep 10$/)
+    }
+    end
   end
 
   context 'with snapshotting disabled' do

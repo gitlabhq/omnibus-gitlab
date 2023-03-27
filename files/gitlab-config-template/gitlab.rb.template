@@ -1382,6 +1382,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['tcp_keepalive'] = "300"
 # redis['uid'] = nil
 # redis['gid'] = nil
+# redis['startup_delay'] = 0
 
 ### Redis TLS settings
 ###! To run Redis over TLS, specify values for the following settings
