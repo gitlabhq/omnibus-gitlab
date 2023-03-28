@@ -326,14 +326,6 @@ CentOS-8-arm64-branch:
   extends: .branch_template
   tags:
   - docker-arm-builder
-OpenSUSE-15.3-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3:${BUILDER_IMAGE_REVISION}"
-  extends: .branch_template
-OpenSUSE-15.3-arm64-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .branch_template
-  tags:
-  - docker-arm-builder
 OpenSUSE-15.4-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -631,14 +623,6 @@ CentOS-8-arm64:
   extends: .tag_template
   tags:
   - docker-arm-builder
-OpenSUSE-15.3:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3:${BUILDER_IMAGE_REVISION}"
-  extends: .tag_template
-OpenSUSE-15.3-arm64:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.3_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .tag_template
-  tags:
-  - docker-arm-builder
 OpenSUSE-15.4:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
@@ -771,20 +755,6 @@ CentOS-8-arm64-staging:
     - job: CentOS-8-arm64
       optional: true
     - job: CentOS-8-arm64-branch
-      optional: true
-OpenSUSE-15.3-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: OpenSUSE-15.3
-      optional: true
-    - job: OpenSUSE-15.3-branch
-      optional: true
-OpenSUSE-15.3-arm64-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: OpenSUSE-15.3-arm64
-      optional: true
-    - job: OpenSUSE-15.3-arm64-branch
       optional: true
 OpenSUSE-15.4-staging:
   extends: .staging_upload_template
@@ -926,14 +896,6 @@ CentOS-8-arm64-release:
   extends: .production_release_template
   needs:
     - CentOS-8-arm64
-OpenSUSE-15.3-release:
-  extends: .production_release_template
-  needs:
-    - OpenSUSE-15.3
-OpenSUSE-15.3-arm64-release:
-  extends: .production_release_template
-  needs:
-    - OpenSUSE-15.3-arm64
 OpenSUSE-15.4-release:
   extends: .production_release_template
   needs:
