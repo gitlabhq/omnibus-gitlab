@@ -82,7 +82,7 @@ http {
   <% end -%>
 
   upstream gitlab-workhorse {
-    server <%= "unix:" if node['gitlab']['gitlab-workhorse']['listen_network'] == "unix" %><%= node['gitlab']['gitlab-workhorse']['listen_addr'] %>;
+    server <%= "unix:" if node['gitlab']['gitlab_workhorse']['listen_network'] == "unix" %><%= node['gitlab']['gitlab_workhorse']['listen_addr'] %>;
   }
 
   <% if @gitlab_http_config %>
