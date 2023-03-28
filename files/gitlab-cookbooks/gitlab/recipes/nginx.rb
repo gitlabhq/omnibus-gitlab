@@ -65,24 +65,24 @@ gitlab_rails_smartcard_enabled = if node['gitlab']['gitlab-rails']['enable']
                                  end
 
 gitlab_mattermost_enabled = if node['mattermost']['enable']
-                              node['gitlab']['mattermost-nginx']['enable']
+                              node['gitlab']['mattermost_nginx']['enable']
                             else
                               false
                             end
 
 gitlab_pages_enabled = if node['gitlab']['gitlab-rails']['pages_enabled']
-                         node['gitlab']['pages-nginx']['enable']
+                         node['gitlab']['pages_nginx']['enable']
                        else
                          false
                        end
 
 gitlab_registry_enabled = if node['registry']['enable']
-                            node['gitlab']['registry-nginx']['enable']
+                            node['gitlab']['registry_nginx']['enable']
                           else
                             false
                           end
 
-gitlab_kas_enabled = node['gitlab-kas']['enable'] ? node['gitlab']['gitlab-kas-nginx']['enable'] : false
+gitlab_kas_enabled = node['gitlab-kas']['enable'] ? node['gitlab']['gitlab_kas_nginx']['enable'] : false
 
 nginx_status_enabled = node['gitlab']['nginx']['status']['enable']
 
@@ -210,7 +210,7 @@ template gitlab_rails_health_conf do
   action(gitlab_rails_enabled || gitlab_rails_smartcard_enabled ? :create : :delete)
 end
 
-pages_nginx_vars = node['gitlab']['pages-nginx'].to_hash
+pages_nginx_vars = node['gitlab']['pages_nginx'].to_hash
 
 pages_nginx_vars['https'] = if pages_nginx_vars['listen_https'].nil?
                               node['gitlab']['gitlab-rails']['pages_https']
@@ -233,7 +233,7 @@ template gitlab_pages_http_conf do
   action gitlab_pages_enabled ? :create : :delete
 end
 
-registry_nginx_vars = node['gitlab']['registry-nginx'].to_hash
+registry_nginx_vars = node['gitlab']['registry_nginx'].to_hash
 
 registry_nginx_vars['https'] = registry_nginx_vars['listen_https'] unless registry_nginx_vars['listen_https'].nil?
 
@@ -249,14 +249,14 @@ template gitlab_registry_http_conf do
                 port: node['gitlab']['gitlab-rails']['registry_port'],
                 registry_http_addr: node['registry']['registry_http_addr'],
                 letsencrypt_enable: node['letsencrypt']['enable'],
-                redirect_http_to_https: node['gitlab']['registry-nginx']['redirect_http_to_https']
+                redirect_http_to_https: node['gitlab']['registry_nginx']['redirect_http_to_https']
               }
             ))
   notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_registry_enabled ? :create : :delete
 end
 
-mattermost_nginx_vars = node['gitlab']['mattermost-nginx'].to_hash
+mattermost_nginx_vars = node['gitlab']['mattermost_nginx'].to_hash
 
 mattermost_nginx_vars['https'] = if mattermost_nginx_vars['listen_https'].nil?
                                    node['mattermost']['service_use_ssl']
@@ -276,14 +276,14 @@ template gitlab_mattermost_http_conf do
                 service_port: node['mattermost']['service_port'],
                 service_address: node['mattermost']['service_address'],
                 letsencrypt_enable: node['letsencrypt']['enable'],
-                redirect_http_to_https: node['gitlab']['mattermost-nginx']['redirect_http_to_https']
+                redirect_http_to_https: node['gitlab']['mattermost_nginx']['redirect_http_to_https']
               }
             ))
   notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")
   action gitlab_mattermost_enabled ? :create : :delete
 end
 
-gitlab_kas_nginx_vars = node['gitlab']['gitlab-kas-nginx'].to_hash
+gitlab_kas_nginx_vars = node['gitlab']['gitlab_kas_nginx'].to_hash
 gitlab_kas_nginx_vars['https'] = gitlab_kas_nginx_vars['listen_https'] unless gitlab_kas_nginx_vars['listen_https'].nil?
 
 template gitlab_kas_http_conf do
@@ -293,8 +293,8 @@ template gitlab_kas_http_conf do
   mode '0644'
   variables(gitlab_kas_nginx_vars.merge(
               {
-                fqdn: node['gitlab']['gitlab-kas-nginx']['host'],
-                listen_port: node['gitlab']['gitlab-kas-nginx']['port'],
+                fqdn: node['gitlab']['gitlab_kas_nginx']['host'],
+                listen_port: node['gitlab']['gitlab_kas_nginx']['port'],
                 gitlab_kas_listen_address: node['gitlab-kas']['listen_address'],
                 gitlab_kas_k8s_proxy_listen_address: node['gitlab-kas']['kubernetes_api_listen_address'],
                 gitlab_kas_listen_https: gitlab_kas_nginx_vars['listen_https'],
@@ -336,7 +336,7 @@ consul_service node['gitlab']['nginx']['consul_service_name'] do
 end
 
 nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']
-nginx_vars['gitlab_mattermost_access_log_format'] = node['gitlab']['mattermost-nginx']['log_format']
+nginx_vars['gitlab_mattermost_access_log_format'] = node['gitlab']['mattermost_nginx']['log_format']
 
 template nginx_config do
   source "nginx.conf.erb"

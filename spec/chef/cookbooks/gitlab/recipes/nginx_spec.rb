@@ -116,13 +116,13 @@ RSpec.describe 'nginx' do
                                                                                            "Upgrade" => "$http_upgrade",
                                                                                            "Connection" => "$connection_upgrade"
                                                                                          }))
-      expect(chef_run.node['gitlab']['registry-nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
-      expect(chef_run.node['gitlab']['mattermost-nginx']['proxy_set_headers']).to eql(nginx_headers({
+      expect(chef_run.node['gitlab']['registry_nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
+      expect(chef_run.node['gitlab']['mattermost_nginx']['proxy_set_headers']).to eql(nginx_headers({
                                                                                                       "X-Frame-Options" => "SAMEORIGIN",
                                                                                                       "Upgrade" => "$http_upgrade",
                                                                                                       "Connection" => "$connection_upgrade"
                                                                                                     }))
-      expect(chef_run.node['gitlab']['pages-nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
+      expect(chef_run.node['gitlab']['pages_nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
     end
 
     it 'properly sets the default nginx proxy headers for gitlab_kas' do
@@ -136,7 +136,7 @@ RSpec.describe 'nginx' do
                                                            "X-Forwarded-Scheme" => "$scheme",
                                                            "X-Scheme" => "$scheme"
                                                          })
-      expect(chef_run.node['gitlab']['gitlab-kas-nginx']['proxy_set_headers']).to eql(expected_nginx_headers)
+      expect(chef_run.node['gitlab']['gitlab_kas_nginx']['proxy_set_headers']).to eql(expected_nginx_headers)
     end
 
     it 'supports overriding default nginx headers' do
@@ -150,11 +150,11 @@ RSpec.describe 'nginx' do
 
       expect_headers = nginx_headers(set_headers)
       expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers)
-      expect(chef_run.node['gitlab']['mattermost-nginx']['proxy_set_headers']).to include(expect_headers)
-      expect(chef_run.node['gitlab']['registry-nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['mattermost_nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['registry_nginx']['proxy_set_headers']).to include(expect_headers)
 
       # only test the headers that were overridden
-      expect(chef_run.node['gitlab']['gitlab-kas-nginx']['proxy_set_headers'].to_h).to include(set_headers)
+      expect(chef_run.node['gitlab']['gitlab_kas_nginx']['proxy_set_headers'].to_h).to include(set_headers)
     end
   end
 
@@ -179,12 +179,12 @@ RSpec.describe 'nginx' do
                                                                                            "Connection" => "$connection_upgrade"
                                                                                          }))
 
-      expect(chef_run.node['gitlab']['registry-nginx']['proxy_set_headers']).to eql(nginx_headers({
+      expect(chef_run.node['gitlab']['registry_nginx']['proxy_set_headers']).to eql(nginx_headers({
                                                                                                     "X-Forwarded-Proto" => "https",
                                                                                                     "X-Forwarded-Ssl" => "on"
                                                                                                   }))
 
-      expect(chef_run.node['gitlab']['mattermost-nginx']['proxy_set_headers']).to eql(nginx_headers({
+      expect(chef_run.node['gitlab']['mattermost_nginx']['proxy_set_headers']).to eql(nginx_headers({
                                                                                                       "X-Forwarded-Proto" => "https",
                                                                                                       "X-Forwarded-Ssl" => "on",
                                                                                                       "X-Frame-Options" => "SAMEORIGIN",
@@ -192,11 +192,11 @@ RSpec.describe 'nginx' do
                                                                                                       "Connection" => "$connection_upgrade"
                                                                                                     }))
 
-      expect(chef_run.node['gitlab']['pages-nginx']['proxy_set_headers']).to eql(nginx_headers({
+      expect(chef_run.node['gitlab']['pages_nginx']['proxy_set_headers']).to eql(nginx_headers({
                                                                                                  "X-Forwarded-Proto" => "https",
                                                                                                  "X-Forwarded-Ssl" => "on"
                                                                                                }))
-      expect(chef_run.node['gitlab']['gitlab-kas-nginx']['proxy_set_headers']).to eql(nginx_headers({
+      expect(chef_run.node['gitlab']['gitlab_kas_nginx']['proxy_set_headers']).to eql(nginx_headers({
                                                                                                       "Host" => "$http_host",
                                                                                                       "Upgrade" => "$http_upgrade",
                                                                                                       "Connection" => "$connection_upgrade",
@@ -221,12 +221,12 @@ RSpec.describe 'nginx' do
       )
 
       expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers)
-      expect(chef_run.node['gitlab']['mattermost-nginx']['proxy_set_headers']).to include(expect_headers)
-      expect(chef_run.node['gitlab']['registry-nginx']['proxy_set_headers']).to include(expect_headers)
-      expect(chef_run.node['gitlab']['pages-nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['mattermost_nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['registry_nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['pages_nginx']['proxy_set_headers']).to include(expect_headers)
 
       # only testing against the headers that were set
-      expect(chef_run.node['gitlab']['gitlab-kas-nginx']['proxy_set_headers'].to_h).to include(set_headers)
+      expect(chef_run.node['gitlab']['gitlab_kas_nginx']['proxy_set_headers'].to_h).to include(set_headers)
     end
 
     it 'disables Connection header' do
@@ -241,9 +241,9 @@ RSpec.describe 'nginx' do
       )
 
       expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers)
-      expect(chef_run.node['gitlab']['mattermost-nginx']['proxy_set_headers']).to include(expect_headers)
-      expect(chef_run.node['gitlab']['registry-nginx']['proxy_set_headers']).to include(expect_headers)
-      expect(chef_run.node['gitlab']['pages-nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['mattermost_nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['registry_nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['pages_nginx']['proxy_set_headers']).to include(expect_headers)
     end
 
     it 'does not set ssl_client_certificate by default' do
