@@ -190,7 +190,7 @@ module GitlabKas
       configured = Gitlab['gitlab_kas'][key]
       return configured unless configured.nil?
 
-      Gitlab['node']['gitlab-kas'][key]
+      Gitlab['node']['gitlab_kas'][key]
     end
 
     def ws_scheme?(scheme)

@@ -41,6 +41,7 @@ module SettingsDSL
     pages_nginx
     registry_nginx
     gitlab_kas_nginx
+    gitlab_kas
   ].freeze
 
   def self.extended(base)

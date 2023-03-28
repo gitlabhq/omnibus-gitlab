@@ -18,9 +18,9 @@ account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 redis_helper = RedisHelper.new(node)
 
-working_dir = node['gitlab-kas']['dir']
-log_directory = node['gitlab-kas']['log_directory']
-env_directory = node['gitlab-kas']['env_directory']
+working_dir = node['gitlab_kas']['dir']
+log_directory = node['gitlab_kas']['log_directory']
+env_directory = node['gitlab_kas']['env_directory']
 gitlab_kas_static_etc_dir = '/opt/gitlab/etc/gitlab-kas'
 gitlab_kas_config_file = File.join(working_dir, 'gitlab-kas-config.yml')
 gitlab_kas_authentication_secret_file = File.join(working_dir, 'authentication_secret_file')
@@ -58,7 +58,7 @@ ruby_block 'websocket TLS termination' do
     ]
     LoggingHelper.warning(message.join("\n\n"))
   end
-  only_if { node['gitlab-kas']['listen_websocket'] && node['gitlab-kas']['certificate_file'] && node['gitlab-kas']['key_file'] }
+  only_if { node['gitlab_kas']['listen_websocket'] && node['gitlab_kas']['certificate_file'] && node['gitlab_kas']['key_file'] }
 end
 
 version_file 'Create version file for Gitlab KAS' do
@@ -68,7 +68,7 @@ version_file 'Create version file for Gitlab KAS' do
 end
 
 file gitlab_kas_authentication_secret_file do
-  content node['gitlab-kas']['api_secret_key']
+  content node['gitlab_kas']['api_secret_key']
   owner 'root'
   group account_helper.gitlab_group
   mode '0640'
@@ -76,7 +76,7 @@ file gitlab_kas_authentication_secret_file do
 end
 
 file gitlab_kas_private_api_authentication_secret_file do
-  content node['gitlab-kas']['private_api_secret_key']
+  content node['gitlab_kas']['private_api_secret_key']
   owner 'root'
   group account_helper.gitlab_group
   mode '0640'
@@ -99,7 +99,7 @@ template gitlab_kas_config_file do
   group account_helper.gitlab_group
   mode '0640'
   variables(
-    node['gitlab-kas'].to_hash.merge(
+    node['gitlab_kas'].to_hash.merge(
       authentication_secret_file: gitlab_kas_authentication_secret_file,
       private_api_authentication_secret_file: gitlab_kas_private_api_authentication_secret_file,
       redis_network: redis_network,
@@ -115,7 +115,7 @@ template gitlab_kas_config_file do
 end
 
 env_dir env_directory do
-  variables node['gitlab-kas']['env']
+  variables node['gitlab_kas']['env']
   notifies :restart, 'runit_service[gitlab-kas]' if omnibus_helper.should_notify?('gitlab-kas')
 end
 
@@ -127,6 +127,6 @@ runit_service 'gitlab-kas' do
     groupname: account_helper.gitlab_group,
     config_file: gitlab_kas_config_file,
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab-kas'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab_kas'].to_hash)
   sensitive true
 end
