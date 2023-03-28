@@ -463,7 +463,7 @@ module Gitlab
             config_keys: ['gitaly', key],
             deprecation: '15.10',
             removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7439
-            note: "In GitLab 15.10, Gitaly's configuration in Omnibus GitLab was changed to structurally match Gitaly's own configuration. Please see the migration instructions at https://docs.gitlab.com/ee/update/#1510"
+            note: "In GitLab 15.10, Gitaly's configuration in Omnibus GitLab was changed to structurally match Gitaly's own configuration. Please see the migration instructions at https://docs.gitlab.com/ee/update/#15100"
           }
         end
       end
