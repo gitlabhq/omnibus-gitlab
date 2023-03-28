@@ -82,7 +82,7 @@ gitlab_registry_enabled = if node['registry']['enable']
                             false
                           end
 
-gitlab_kas_enabled = node['gitlab-kas']['enable'] ? node['gitlab']['gitlab_kas_nginx']['enable'] : false
+gitlab_kas_enabled = node['gitlab_kas']['enable'] ? node['gitlab']['gitlab_kas_nginx']['enable'] : false
 
 nginx_status_enabled = node['gitlab']['nginx']['status']['enable']
 
@@ -295,8 +295,8 @@ template gitlab_kas_http_conf do
               {
                 fqdn: node['gitlab']['gitlab_kas_nginx']['host'],
                 listen_port: node['gitlab']['gitlab_kas_nginx']['port'],
-                gitlab_kas_listen_address: node['gitlab-kas']['listen_address'],
-                gitlab_kas_k8s_proxy_listen_address: node['gitlab-kas']['kubernetes_api_listen_address'],
+                gitlab_kas_listen_address: node['gitlab_kas']['listen_address'],
+                gitlab_kas_k8s_proxy_listen_address: node['gitlab_kas']['kubernetes_api_listen_address'],
                 gitlab_kas_listen_https: gitlab_kas_nginx_vars['listen_https'],
                 letsencrypt_enable: node['letsencrypt']['enable']
               }

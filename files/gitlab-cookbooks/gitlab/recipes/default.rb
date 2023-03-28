@@ -123,7 +123,8 @@ include_recipe "package::sysctl"
   praefect
   gitlab-kas
 ).each do |service|
-  if node[service]['enable']
+  node_attribute_key = SettingsDSL::Utils.sanitized_key(service)
+  if node[node_attribute_key]['enable']
     include_recipe "#{service}::enable"
   else
     include_recipe "#{service}::disable"
