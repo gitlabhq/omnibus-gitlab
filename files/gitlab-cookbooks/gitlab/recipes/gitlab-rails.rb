@@ -418,9 +418,9 @@ templatesymlink 'Create a gitlab_kas_secret and create a symlink to Rails root' 
   group 'root'
   mode '0644'
   sensitive true
-  variables(secret_token: node['gitlab-kas']['api_secret_key'])
+  variables(secret_token: node['gitlab_kas']['api_secret_key'])
   gitlab_kas_services.each { |svc| notifies :restart, svc }
-  only_if { node['gitlab-kas']['api_secret_key'] }
+  only_if { node['gitlab_kas']['api_secret_key'] }
 end
 
 rails_env = {
