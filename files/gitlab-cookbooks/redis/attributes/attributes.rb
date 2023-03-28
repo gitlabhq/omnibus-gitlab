@@ -66,3 +66,6 @@ default['redis']['tls_session_cache_timeout'] = nil
 default['redis']['announce_ip'] = nil
 default['redis']['announce_port'] = nil
 default['redis']['announce_ip_from_hostname'] = false
+
+## Runit settings
+default['redis']['runit_sv_timeout'] = nil

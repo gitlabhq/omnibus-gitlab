@@ -6,6 +6,7 @@ property :log_dir, String, default: lazy { node['redis']['log_directory'] }
 property :account_helper, default: lazy { AccountHelper.new(node) }
 property :omnibus_helper, default: lazy { OmnibusHelper.new(node) }
 property :redis_helper, default: lazy { RedisHelper.new(node) }
+property :runit_sv_timeout, [Integer, nil], default: lazy { node['redis']['runit_sv_timeout'] }
 
 action :create do
   account 'user and group for redis' do
@@ -64,6 +65,7 @@ action :create do
       log_directory: new_resource.log_dir
     }.merge(new_resource))
     log_options node['gitlab']['logging'].to_hash.merge(node['redis'].to_hash)
+    sv_timeout new_resource.runit_sv_timeout
   end
 
   if node['gitlab']['bootstrap']['enable']
