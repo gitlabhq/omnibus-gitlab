@@ -1428,6 +1428,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #}
 #
 
+###! Configure timeout (in seconds) for runit's sv commands used for managing
+###! the Redis service
+# redis['runit_sv_timeout'] = nil
+
 ###! **To enable only Redis service in this machine, uncomment
 ###!   one of the lines below (choose master or replica instance types).**
 ###! Docs: https://docs.gitlab.com/omnibus/settings/redis.html
