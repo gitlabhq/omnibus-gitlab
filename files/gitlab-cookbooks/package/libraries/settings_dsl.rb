@@ -25,6 +25,20 @@ require_relative 'config_mash.rb'
 require_relative 'gitlab_cluster'
 
 module SettingsDSL
+  SERVICES_SKIP_HYPHENATION = %w[
+    gitlab_pages
+    gitlab_sshd
+    node_exporter
+    redis_exporter
+    postgres_exporter
+    pgbouncer_exporter
+    gitlab_shell
+    suggested_reviewers
+    gitlab_exporter
+    remote_syslog
+    gitlab_workhorse
+  ].freeze
+
   def self.extended(base)
     # Setup getter/setters for roles and settings
     class << base
@@ -249,22 +263,7 @@ module SettingsDSL
       end
 
       def sanitized_key(key)
-        # Services that have been migrated to use underscored form in Chef code
-        # and no longer needs to be hyphenated.
-        skip_hyphenation = %w[
-          gitlab_pages
-          gitlab_sshd
-          node_exporter
-          redis_exporter
-          postgres_exporter
-          pgbouncer_exporter
-          gitlab_shell
-          suggested_reviewers
-          gitlab_exporter
-          remote_syslog
-        ]
-
-        return underscored_form(key) if skip_hyphenation.include?(underscored_form(key))
+        return underscored_form(key) if SERVICES_SKIP_HYPHENATION.include?(underscored_form(key))
 
         hyphenated_form(key)
       end

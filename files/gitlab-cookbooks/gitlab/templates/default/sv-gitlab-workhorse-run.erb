@@ -6,45 +6,45 @@ exec 2>&1
 
 <%= render("mount_point_check.erb") %>
 
-cd <%= node['gitlab']['gitlab-workhorse']['dir'] %>
+cd <%= node['gitlab']['gitlab_workhorse']['dir'] %>
 
 exec chpst -e /opt/gitlab/etc/gitlab-workhorse/env -P \
   -U <%= node['gitlab']['user']['username'] %>:<%= node['gitlab']['user']['group'] %> \
   -u <%= node['gitlab']['user']['username'] %>:<%= node['gitlab']['user']['group'] %> \
   /opt/gitlab/embedded/bin/gitlab-workhorse \
-    -listenNetwork <%= node['gitlab']['gitlab-workhorse']['listen_network'] %> \
-    -listenUmask <%= node['gitlab']['gitlab-workhorse']['listen_umask'] %> \
-    -listenAddr <%= node['gitlab']['gitlab-workhorse']['listen_addr'] %> \
-    -authBackend <%= node['gitlab']['gitlab-workhorse']['auth_backend'] %><%= node['gitlab']['gitlab-workhorse']['relative_url'] %> \
-    <% if node['gitlab']['gitlab-workhorse']['auth_socket'] %>
-    -authSocket <%= node['gitlab']['gitlab-workhorse']['auth_socket'] %> \
+    -listenNetwork <%= node['gitlab']['gitlab_workhorse']['listen_network'] %> \
+    -listenUmask <%= node['gitlab']['gitlab_workhorse']['listen_umask'] %> \
+    -listenAddr <%= node['gitlab']['gitlab_workhorse']['listen_addr'] %> \
+    -authBackend <%= node['gitlab']['gitlab_workhorse']['auth_backend'] %><%= node['gitlab']['gitlab_workhorse']['relative_url'] %> \
+    <% if node['gitlab']['gitlab_workhorse']['auth_socket'] %>
+    -authSocket <%= node['gitlab']['gitlab_workhorse']['auth_socket'] %> \
     <% end %>
     -documentRoot /opt/gitlab/embedded/service/gitlab-rails/public \
-    -pprofListenAddr <%= node['gitlab']['gitlab-workhorse']['pprof_listen_addr'] %>\
-    <% if node['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] %>
-    -proxyHeadersTimeout <%= node['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] %> \
+    -pprofListenAddr <%= node['gitlab']['gitlab_workhorse']['pprof_listen_addr'] %>\
+    <% if node['gitlab']['gitlab_workhorse']['proxy_headers_timeout'] %>
+    -proxyHeadersTimeout <%= node['gitlab']['gitlab_workhorse']['proxy_headers_timeout'] %> \
     <% end %>
-    <% if node['gitlab']['gitlab-workhorse']['api_limit'] %>
-    -apiLimit <%= node['gitlab']['gitlab-workhorse']['api_limit'] %> \
+    <% if node['gitlab']['gitlab_workhorse']['api_limit'] %>
+    -apiLimit <%= node['gitlab']['gitlab_workhorse']['api_limit'] %> \
     <% end %>
-    <% if node['gitlab']['gitlab-workhorse']['api_queue_duration'] %>
-    -apiQueueDuration <%= node['gitlab']['gitlab-workhorse']['api_queue_duration'] %> \
+    <% if node['gitlab']['gitlab_workhorse']['api_queue_duration'] %>
+    -apiQueueDuration <%= node['gitlab']['gitlab_workhorse']['api_queue_duration'] %> \
     <% end %>
-    <% if node['gitlab']['gitlab-workhorse']['api_queue_limit'] %>
-    -apiQueueLimit <%= node['gitlab']['gitlab-workhorse']['api_queue_limit'] %> \
+    <% if node['gitlab']['gitlab_workhorse']['api_queue_limit'] %>
+    -apiQueueLimit <%= node['gitlab']['gitlab_workhorse']['api_queue_limit'] %> \
     <% end %>
-    <% unless node['gitlab']['gitlab-workhorse']['prometheus_listen_addr'].empty? %>
-    -prometheusListenAddr <%= node['gitlab']['gitlab-workhorse']['prometheus_listen_addr'] %> \
+    <% unless node['gitlab']['gitlab_workhorse']['prometheus_listen_addr'].empty? %>
+    -prometheusListenAddr <%= node['gitlab']['gitlab_workhorse']['prometheus_listen_addr'] %> \
     <% end %>
     -secretPath /opt/gitlab/embedded/service/gitlab-rails/.gitlab_workhorse_secret \
-    <% if node['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] %>
-    -apiCiLongPollingDuration <%= node['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] %> \
+    <% if node['gitlab']['gitlab_workhorse']['api_ci_long_polling_duration'] %>
+    -apiCiLongPollingDuration <%= node['gitlab']['gitlab_workhorse']['api_ci_long_polling_duration'] %> \
     <% end %>
-    <% if node['gitlab']['gitlab-workhorse']['propagate_correlation_id'] %>
+    <% if node['gitlab']['gitlab_workhorse']['propagate_correlation_id'] %>
     -propagateCorrelationID \
     <% end %>
-    <% if node['gitlab']['gitlab-workhorse']['log_format'] %>
-    -logFormat <%= node['gitlab']['gitlab-workhorse']['log_format'] %> \
+    <% if node['gitlab']['gitlab_workhorse']['log_format'] %>
+    -logFormat <%= node['gitlab']['gitlab_workhorse']['log_format'] %> \
     <% end %>
     -config config.toml \
 

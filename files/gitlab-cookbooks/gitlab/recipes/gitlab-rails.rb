@@ -348,7 +348,7 @@ templatesymlink "Create a gitlab_workhorse_secret and create a symlink to Rails 
   group "root"
   mode "0644"
   sensitive true
-  variables(secret_token: node['gitlab']['gitlab-workhorse']['secret_token'])
+  variables(secret_token: node['gitlab']['gitlab_workhorse']['secret_token'])
   gitlab_workhorse_services.each { |svc| notifies :restart, svc }
 end
 
