@@ -28,11 +28,11 @@ RSpec.describe 'GitlabWorkhorse' do
       end
 
       it 'uses the user configured TCP listen address' do
-        expect(node['gitlab']['gitlab-workhorse']['listen_addr']).to eq(tcp_listen_address)
+        expect(node['gitlab']['gitlab_workhorse']['listen_addr']).to eq(tcp_listen_address)
       end
 
       it 'keeps the sockets_directory as nil' do
-        expect(node['gitlab']['gitlab-workhorse']['sockets_directory']).to eq(nil)
+        expect(node['gitlab']['gitlab_workhorse']['sockets_directory']).to eq(nil)
       end
     end
 
@@ -49,11 +49,11 @@ RSpec.describe 'GitlabWorkhorse' do
         end
 
         it 'uses the default sockets directory' do
-          expect(node['gitlab']['gitlab-workhorse']['sockets_directory']).to eq(default_sockets_directory)
+          expect(node['gitlab']['gitlab_workhorse']['sockets_directory']).to eq(default_sockets_directory)
         end
 
         it 'uses the default socket file path' do
-          expect(node['gitlab']['gitlab-workhorse']['listen_addr']).to eq(default_socket)
+          expect(node['gitlab']['gitlab_workhorse']['listen_addr']).to eq(default_socket)
         end
       end
 
@@ -70,11 +70,11 @@ RSpec.describe 'GitlabWorkhorse' do
         end
 
         it 'uses the user configured listen address' do
-          expect(node['gitlab']['gitlab-workhorse']['listen_addr']).to eq(user_socket)
+          expect(node['gitlab']['gitlab_workhorse']['listen_addr']).to eq(user_socket)
         end
 
         it 'keeps the sockets_directory as nil' do
-          expect(node['gitlab']['gitlab-workhorse']['sockets_directory']).to eq(nil)
+          expect(node['gitlab']['gitlab_workhorse']['sockets_directory']).to eq(nil)
         end
       end
 
@@ -91,11 +91,11 @@ RSpec.describe 'GitlabWorkhorse' do
         end
 
         it 'uses the user configured sockets directory' do
-          expect(node['gitlab']['gitlab-workhorse']['sockets_directory']).to eq(user_sockets_directory)
+          expect(node['gitlab']['gitlab_workhorse']['sockets_directory']).to eq(user_sockets_directory)
         end
 
         it 'creates a socket named socket in the user configured sockets directory' do
-          expect(node['gitlab']['gitlab-workhorse']['listen_addr']).to eq("#{user_sockets_directory}/socket")
+          expect(node['gitlab']['gitlab_workhorse']['listen_addr']).to eq("#{user_sockets_directory}/socket")
         end
       end
 
@@ -113,11 +113,11 @@ RSpec.describe 'GitlabWorkhorse' do
         end
 
         it 'uses the user configured sockets directory' do
-          expect(node['gitlab']['gitlab-workhorse']['sockets_directory']).to eq(user_sockets_directory)
+          expect(node['gitlab']['gitlab_workhorse']['sockets_directory']).to eq(user_sockets_directory)
         end
 
         it 'creates a socket matching the configured listen_addr' do
-          expect(node['gitlab']['gitlab-workhorse']['listen_addr']).to eq(user_socket)
+          expect(node['gitlab']['gitlab_workhorse']['listen_addr']).to eq(user_socket)
         end
       end
     end

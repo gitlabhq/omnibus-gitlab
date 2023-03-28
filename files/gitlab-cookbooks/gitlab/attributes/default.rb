@@ -693,40 +693,40 @@ default['gitlab']['web-server']['external_users'] = []
 # gitlab-workhorse
 ####
 
-default['gitlab']['gitlab-workhorse']['enable'] = false
-default['gitlab']['gitlab-workhorse']['ha'] = false
-default['gitlab']['gitlab-workhorse']['alt_document_root'] = nil
-default['gitlab']['gitlab-workhorse']['shutdown_timeout'] = nil
-default['gitlab']['gitlab-workhorse']['workhorse_keywatcher'] = true
-default['gitlab']['gitlab-workhorse']['listen_network'] = "unix"
-default['gitlab']['gitlab-workhorse']['listen_umask'] = 000
-default['gitlab']['gitlab-workhorse']['sockets_directory'] = nil
-default['gitlab']['gitlab-workhorse']['listen_addr'] = nil
-default['gitlab']['gitlab-workhorse']['auth_backend'] = "http://localhost:8080"
-default['gitlab']['gitlab-workhorse']['auth_socket'] = nil
-default['gitlab']['gitlab-workhorse']['pprof_listen_addr'] = "''" # put an empty string on the command line
-default['gitlab']['gitlab-workhorse']['prometheus_listen_addr'] = "localhost:9229"
-default['gitlab']['gitlab-workhorse']['dir'] = "/var/opt/gitlab/gitlab-workhorse"
-default['gitlab']['gitlab-workhorse']['log_directory'] = "/var/log/gitlab/gitlab-workhorse"
-default['gitlab']['gitlab-workhorse']['proxy_headers_timeout'] = nil
-default['gitlab']['gitlab-workhorse']['api_limit'] = nil
-default['gitlab']['gitlab-workhorse']['api_queue_duration'] = nil
-default['gitlab']['gitlab-workhorse']['api_queue_limit'] = nil
-default['gitlab']['gitlab-workhorse']['api_ci_long_polling_duration'] = nil
-default['gitlab']['gitlab-workhorse']['propagate_correlation_id'] = false
-default['gitlab']['gitlab-workhorse']['trusted_cidrs_for_x_forwarded_for'] = nil
-default['gitlab']['gitlab-workhorse']['trusted_cidrs_for_propagation'] = nil
-default['gitlab']['gitlab-workhorse']['log_format'] = "json"
-default['gitlab']['gitlab-workhorse']['env_directory'] = '/opt/gitlab/etc/gitlab-workhorse/env'
-default['gitlab']['gitlab-workhorse']['env'] = {
+default['gitlab']['gitlab_workhorse']['enable'] = false
+default['gitlab']['gitlab_workhorse']['ha'] = false
+default['gitlab']['gitlab_workhorse']['alt_document_root'] = nil
+default['gitlab']['gitlab_workhorse']['shutdown_timeout'] = nil
+default['gitlab']['gitlab_workhorse']['workhorse_keywatcher'] = true
+default['gitlab']['gitlab_workhorse']['listen_network'] = "unix"
+default['gitlab']['gitlab_workhorse']['listen_umask'] = 000
+default['gitlab']['gitlab_workhorse']['sockets_directory'] = nil
+default['gitlab']['gitlab_workhorse']['listen_addr'] = nil
+default['gitlab']['gitlab_workhorse']['auth_backend'] = "http://localhost:8080"
+default['gitlab']['gitlab_workhorse']['auth_socket'] = nil
+default['gitlab']['gitlab_workhorse']['pprof_listen_addr'] = "''" # put an empty string on the command line
+default['gitlab']['gitlab_workhorse']['prometheus_listen_addr'] = "localhost:9229"
+default['gitlab']['gitlab_workhorse']['dir'] = "/var/opt/gitlab/gitlab-workhorse"
+default['gitlab']['gitlab_workhorse']['log_directory'] = "/var/log/gitlab/gitlab-workhorse"
+default['gitlab']['gitlab_workhorse']['proxy_headers_timeout'] = nil
+default['gitlab']['gitlab_workhorse']['api_limit'] = nil
+default['gitlab']['gitlab_workhorse']['api_queue_duration'] = nil
+default['gitlab']['gitlab_workhorse']['api_queue_limit'] = nil
+default['gitlab']['gitlab_workhorse']['api_ci_long_polling_duration'] = nil
+default['gitlab']['gitlab_workhorse']['propagate_correlation_id'] = false
+default['gitlab']['gitlab_workhorse']['trusted_cidrs_for_x_forwarded_for'] = nil
+default['gitlab']['gitlab_workhorse']['trusted_cidrs_for_propagation'] = nil
+default['gitlab']['gitlab_workhorse']['log_format'] = "json"
+default['gitlab']['gitlab_workhorse']['env_directory'] = '/opt/gitlab/etc/gitlab-workhorse/env'
+default['gitlab']['gitlab_workhorse']['env'] = {
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
   'HOME' => node['gitlab']['user']['home'],
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
-default['gitlab']['gitlab-workhorse']['image_scaler_max_procs'] = [2, node.dig('cpu', 'total').to_i / 2, node.dig('cpu', 'real').to_i / 2].max
-default['gitlab']['gitlab-workhorse']['image_scaler_max_filesize'] = 250_000
-default['gitlab']['gitlab-workhorse']['consul_service_name'] = 'workhorse'
-default['gitlab']['gitlab-workhorse']['consul_service_meta'] = nil
+default['gitlab']['gitlab_workhorse']['image_scaler_max_procs'] = [2, node.dig('cpu', 'total').to_i / 2, node.dig('cpu', 'real').to_i / 2].max
+default['gitlab']['gitlab_workhorse']['image_scaler_max_filesize'] = 250_000
+default['gitlab']['gitlab_workhorse']['consul_service_name'] = 'workhorse'
+default['gitlab']['gitlab_workhorse']['consul_service_meta'] = nil
 
 ####
 # mailroom
@@ -949,3 +949,4 @@ default['gitlab']['storage-check']['log_directory'] = '/var/log/gitlab/storage-c
 
 default['gitlab']['gitlab-shell'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_shell'].to_h }, "node['gitlab']['gitlab-shell']", "node['gitlab']['gitlab_shell']")
 default['gitlab']['remote-syslog'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['remote_syslog'].to_h }, "node['gitlab']['remote-syslog']", "node['gitlab']['remote_syslog']")
+default['gitlab']['gitlab-workhorse'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_workhorse'].to_h }, "node['gitlab']['gitlab-workhorse']", "node['gitlab']['gitlab_workhorse']")

@@ -4,7 +4,7 @@ class GitlabWorkhorseHelper < BaseHelper
   attr_reader :node
 
   def unix_socket?
-    node['gitlab']['gitlab-workhorse']['listen_network'] == "unix"
+    node['gitlab']['gitlab_workhorse']['listen_network'] == "unix"
   end
 
   def object_store_toml

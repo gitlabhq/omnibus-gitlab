@@ -33,14 +33,14 @@ else
   # Always use http for workhorse
   schema = 'http'
   use_socket = workhorse_helper.unix_socket?
-  socket_path = use_socket ? node['gitlab']['gitlab-workhorse']['listen_addr'] : ''
+  socket_path = use_socket ? node['gitlab']['gitlab_workhorse']['listen_addr'] : ''
   if use_socket
     flags << '--unix-socket'
     flags << socket_path
   else
     flags << '--insecure'
   end
-  host = use_socket ? 'localhost' : node['gitlab']['gitlab-workhorse']['listen_addr']
+  host = use_socket ? 'localhost' : node['gitlab']['gitlab_workhorse']['listen_addr']
 end
 
 template "/opt/gitlab/etc/gitlab-healthcheck-rc" do

@@ -439,7 +439,7 @@ module Prometheus
           'consul_sd_configs' => [{ 'services' => ['workhorse'] }]
         }
       else
-        default_config = Gitlab['node']['gitlab']['gitlab-workhorse'].to_hash
+        default_config = Gitlab['node']['gitlab']['gitlab_workhorse'].to_hash
         user_config = Gitlab['gitlab_workhorse']
 
         # Don't enable a scrape config if the listen address is empty.
