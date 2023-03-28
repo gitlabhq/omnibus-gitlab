@@ -25,7 +25,7 @@ module GitlabWorkhorse
 
       sockets_dir = Gitlab['gitlab_workhorse']['sockets_directory']
 
-      default_network = Gitlab['node']['gitlab']['gitlab-workhorse']['listen_network']
+      default_network = Gitlab['node']['gitlab']['gitlab_workhorse']['listen_network']
       user_network = Gitlab['gitlab_workhorse']['listen_network']
       network = user_network || default_network
 

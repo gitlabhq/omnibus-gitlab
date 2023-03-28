@@ -256,7 +256,7 @@ RSpec.describe Services do
 
         Services.enable_group('sidekiq', 'monitoring')
         Services.disable_group('rails', 'postgres', except: %w(sidekiq monitoring))
-        expect(node['gitlab']['gitlab-workhorse']['enable']).to be false
+        expect(node['gitlab']['gitlab_workhorse']['enable']).to be false
         expect(node['gitlab']['sidekiq']['enable']).to be true
         expect(node['postgresql']['enable']).to be false
         expect(node['monitoring']['postgres_exporter']['enable']).to be true

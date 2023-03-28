@@ -160,8 +160,8 @@ end
   bootstrap
   storage-check
 ].each do |service|
-  chef_attribute_name = SettingsDSL::Utils.sanitized_key(service)
-  if node["gitlab"][chef_attribute_name]["enable"]
+  node_attribute_key = SettingsDSL::Utils.sanitized_key(service)
+  if node["gitlab"][node_attribute_key]["enable"]
     include_recipe "gitlab::#{service}"
   else
     include_recipe "gitlab::#{service}_disable"
@@ -187,7 +187,7 @@ end
   end
 end
 # Configure healthcheck if we have nginx or workhorse enabled
-include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable'] || node["gitlab"]["gitlab-workhorse"]["enable"]
+include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable'] || node["gitlab"]["gitlab_workhorse"]["enable"]
 
 # Recipe which handles all prometheus related services
 include_recipe "monitoring"
