@@ -881,9 +881,9 @@ default['gitlab']['gitlab-ci']['gitlab_ci_add_pusher'] = nil
 ####
 # Mattermost NGINX
 ####
-default['gitlab']['mattermost-nginx'] = default['gitlab']['nginx'].dup
-default['gitlab']['mattermost-nginx']['enable'] = false
-default['gitlab']['mattermost-nginx']['proxy_set_headers'] = {
+default['gitlab']['mattermost_nginx'] = default['gitlab']['nginx'].dup
+default['gitlab']['mattermost_nginx']['enable'] = false
+default['gitlab']['mattermost_nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
@@ -892,14 +892,14 @@ default['gitlab']['mattermost-nginx']['proxy_set_headers'] = {
   "Upgrade" => "$http_upgrade",
   "Connection" => "$connection_upgrade"
 }
-default['gitlab']['mattermost-nginx']['referrer_policy'] = 'strict-origin-when-cross-origin'
+default['gitlab']['mattermost_nginx']['referrer_policy'] = 'strict-origin-when-cross-origin'
 
 ####
 # GitLab Pages NGINX
 ####
-default['gitlab']['pages-nginx'] = default['gitlab']['nginx'].dup
-default['gitlab']['pages-nginx']['enable'] = true
-default['gitlab']['pages-nginx']['proxy_set_headers'] = {
+default['gitlab']['pages_nginx'] = default['gitlab']['nginx'].dup
+default['gitlab']['pages_nginx']['enable'] = true
+default['gitlab']['pages_nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
@@ -909,11 +909,11 @@ default['gitlab']['pages-nginx']['proxy_set_headers'] = {
 ####
 # GitLab Registry NGINX
 ####
-default['gitlab']['registry-nginx'] = default['gitlab']['nginx'].dup
-default['gitlab']['registry-nginx']['enable'] = true
-default['gitlab']['registry-nginx']['https'] = false
-default['gitlab']['registry-nginx']['http2_enabled'] = false
-default['gitlab']['registry-nginx']['proxy_set_headers'] = {
+default['gitlab']['registry_nginx'] = default['gitlab']['nginx'].dup
+default['gitlab']['registry_nginx']['enable'] = true
+default['gitlab']['registry_nginx']['https'] = false
+default['gitlab']['registry_nginx']['http2_enabled'] = false
+default['gitlab']['registry_nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "X-Real-IP" => "$remote_addr",
   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
@@ -923,12 +923,12 @@ default['gitlab']['registry-nginx']['proxy_set_headers'] = {
 ####
 # GitLab KAS NGINX
 ####
-default['gitlab']['gitlab-kas-nginx'] = default['gitlab']['nginx'].dup
-default['gitlab']['gitlab-kas-nginx']['enable'] = false
-default['gitlab']['gitlab-kas-nginx']['https'] = false
-default['gitlab']['gitlab-kas-nginx']['port'] = 80
-default['gitlab']['gitlab-kas-nginx']['host'] = "kas.gitlab.example.com"
-default['gitlab']['gitlab-kas-nginx']['proxy_set_headers'] = {
+default['gitlab']['gitlab_kas_nginx'] = default['gitlab']['nginx'].dup
+default['gitlab']['gitlab_kas_nginx']['enable'] = false
+default['gitlab']['gitlab_kas_nginx']['https'] = false
+default['gitlab']['gitlab_kas_nginx']['port'] = 80
+default['gitlab']['gitlab_kas_nginx']['host'] = "kas.gitlab.example.com"
+default['gitlab']['gitlab_kas_nginx']['proxy_set_headers'] = {
   "Host" => "$http_host",
   "Upgrade" => "$http_upgrade",
   "Connection" => "$connection_upgrade",
@@ -950,3 +950,7 @@ default['gitlab']['storage-check']['log_directory'] = '/var/log/gitlab/storage-c
 default['gitlab']['gitlab-shell'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_shell'].to_h }, "node['gitlab']['gitlab-shell']", "node['gitlab']['gitlab_shell']")
 default['gitlab']['remote-syslog'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['remote_syslog'].to_h }, "node['gitlab']['remote-syslog']", "node['gitlab']['remote_syslog']")
 default['gitlab']['gitlab-workhorse'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_workhorse'].to_h }, "node['gitlab']['gitlab-workhorse']", "node['gitlab']['gitlab_workhorse']")
+default['gitlab']['mattermost-nginx'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['mattermost_nginx'].to_h }, "node['gitlab']['mattermost-nginx']", "node['gitlab']['mattermost_nginx']")
+default['gitlab']['pages-nginx'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['pages_nginx'].to_h }, "node['gitlab']['pages-nginx']", "node['gitlab']['pages_nginx']")
+default['gitlab']['registry-nginx'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['registry_nginx'].to_h }, "node['gitlab']['registry-nginx']", "node['gitlab']['registry_nginx']")
+default['gitlab']['gitlab-kas-nginx'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_kas_nginx'].to_h }, "node['gitlab']['gitlab-kas-nginx']", "node['gitlab']['gitlab_kas_nginx']")

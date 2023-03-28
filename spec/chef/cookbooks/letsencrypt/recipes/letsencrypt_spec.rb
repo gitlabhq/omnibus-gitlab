@@ -80,8 +80,8 @@ RSpec.describe 'letsencrypt::enable' do
 
       where(:redirect_config_key, :nginx_config_file) do
         'nginx' | '/var/opt/gitlab/nginx/conf/gitlab-http.conf'
-        'mattermost-nginx' | '/var/opt/gitlab/nginx/conf/gitlab-mattermost-http.conf'
-        'registry-nginx' | '/var/opt/gitlab/nginx/conf/gitlab-registry.conf'
+        'mattermost_nginx' | '/var/opt/gitlab/nginx/conf/gitlab-mattermost-http.conf'
+        'registry_nginx' | '/var/opt/gitlab/nginx/conf/gitlab-registry.conf'
       end
 
       with_them do

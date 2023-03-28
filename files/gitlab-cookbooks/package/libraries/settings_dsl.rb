@@ -37,6 +37,10 @@ module SettingsDSL
     gitlab_exporter
     remote_syslog
     gitlab_workhorse
+    mattermost_nginx
+    pages_nginx
+    registry_nginx
+    gitlab_kas_nginx
   ].freeze
 
   def self.extended(base)
