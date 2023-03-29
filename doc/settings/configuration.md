@@ -30,11 +30,20 @@ To change the external URL:
    Both of these settings might cause unintentional redirecting after configuring
    a new external URL. If you have defined any URLs, remove them completely.
 
-1. Edit `/etc/gitlab/gitlab.rb`:
+1. Edit `/etc/gitlab/gitlab.rb` and change `external_url` to your preferred URL:
 
    ```ruby
    external_url "http://gitlab.example.com"
    ```
+
+   Alternatively, you can use the IP address of your server:
+
+   ```ruby
+   external_url "http://10.0.0.1"
+   ```
+
+   In the previous examples we use plain HTTP. If you want to use HTTPS, see
+   how to [configure SSL](ssl/index.md).
 
 1. Reconfigure GitLab:
 
@@ -42,7 +51,8 @@ To change the external URL:
    sudo gitlab-ctl reconfigure
    ```
 
-1. After you change the external URL, we recommended you also
+1. Optional. If you had been using GitLab for a while, after you change the
+   external URL, you should also
    [invalidate the Markdown cache](https://docs.gitlab.com/ee/administration/invalidate_markdown_cache.html).
 
 ### Specify the external URL at the time of installation
