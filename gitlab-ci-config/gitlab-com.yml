@@ -740,6 +740,17 @@ pages:
   rules:
     - if: '$PIPELINE_TYPE == "LICENSE_PAGE_UPDATE_PIPELINE"'
 
+.build-package-on-all-os-vars:
+  SKIP_JOB_REGEX: '/SLES|Ubuntu-20.04|Docker|QA/'
+  PIPELINE_TYPE: "${EDITION}_BRANCH_BUILD_PIPELINE"
+  ALTERNATIVE_SOURCES: 'true'
+  GITLAB_VERSION: ${GITLAB_VERSION}
+  GITLAB_SHELL_VERSION: ${GITLAB_SHELL_VERSION}
+  GITLAB_PAGES_VERSION: ${GITLAB_PAGES_VERSION}
+  GITALY_VERSION: ${GITALY_SERVER_VERSION}
+  GITLAB_ELASTICSEARCH_INDEXER_VERSION: ${GITLAB_ELASTICSEARCH_INDEXER_VERSION}
+  GITLAB_KAS_VERSION: ${GITLAB_KAS_VERSION}
+
 build-package-on-all-os:
   stage: trigger-package
   needs:
@@ -750,17 +761,25 @@ build-package-on-all-os:
     include: '.gitlab-ci.yml'
     strategy: depend
   rules:
+    # Triggers from GitLab Rails/Gitaly/GitLab Pages pipeline which forced building on all OS automatically
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/ && $BUILD_ON_ALL_OS == "true"'
+      when: always
+      allow_failure: true
+      variables: !reference [.build-package-on-all-os-vars]
+    # MR pipelines from omnibus-gitlab that change files which require building on all OS automatically
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/ && $CI_PIPELINE_SOURCE != "pipeline"'
+      changes:
+       - Gemfile
+       - Gemfile.lock
+       - config/software/**
+       - config/patches/**
+      when: always
+      allow_failure: true
+      variables: !reference [.build-package-on-all-os-vars]
+    # Covering the remaining scenarios - provide the job to be manually run by developers, if required
+    # (i) MR pipelines from omnibus-gitlab that doesn't change files which require building on all OS
+    # (ii) Triggers from GitLab Rails/Gitaly/GitLab Pages pipeline which didn't force building on all OS
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
       when: manual
       allow_failure: true
-      variables:
-        SKIP_JOB_REGEX: '/SLES|Ubuntu-20.04|Docker|QA/'
-        PIPELINE_TYPE: "${EDITION}_BRANCH_BUILD_PIPELINE"
-        ee: "${ee}"
-        ALTERNATIVE_SOURCES: 'true'
-        GITLAB_VERSION: ${GITLAB_VERSION}
-        GITLAB_SHELL_VERSION: ${GITLAB_SHELL_VERSION}
-        GITLAB_PAGES_VERSION: ${GITLAB_PAGES_VERSION}
-        GITALY_VERSION: ${GITALY_SERVER_VERSION}
-        GITLAB_ELASTICSEARCH_INDEXER_VERSION: ${GITLAB_ELASTICSEARCH_INDEXER_VERSION}
-        GITLAB_KAS_VERSION: ${GITLAB_KAS_VERSION}
+      variables: !reference [.build-package-on-all-os-vars]
