@@ -15,7 +15,7 @@
 #
 
 name 'pgbouncer'
-default_version '1.12.0'
+default_version '1.18.0'
 
 license 'ISC'
 license_file 'COPYRIGHT'
@@ -25,8 +25,8 @@ skip_transitive_dependency_licensing true
 dependency 'libevent'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
-version '1.12.0' do
-  source sha256: '1b3c6564376cafa0da98df3520f0e932bb2aebaf9a95ca5b9fa461e9eb7b273e'
+version '1.18.0' do
+  source sha256: '9349c9e59f6f88156354f4f6af27cdb014a235b00ae184cbaa37688bd0df544c'
 end
 
 source url: "https://www.pgbouncer.org/downloads/files/#{version}/pgbouncer-#{version}.tar.gz"
