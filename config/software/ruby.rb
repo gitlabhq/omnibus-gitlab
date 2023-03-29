@@ -110,6 +110,10 @@ build do
     patch source: 'thread-memory-allocations-2.7.patch', plevel: 1, env: env
   elsif version.start_with?('3.0')
     patch source: 'thread-memory-allocations-3.0.patch', plevel: 1, env: env
+  elsif version.start_with?('3.1')
+    patch source: 'thread-memory-allocations-3.1.patch', plevel: 1, env: env
+  elsif version.start_with?('3.2')
+    patch source: 'thread-memory-allocations-3.2.patch', plevel: 1, env: env
   end
 
   # copy_file_range() has been disabled on recent RedHat kernels:
