@@ -48,6 +48,7 @@ These additional variables are available to override or enable different build b
 | OMNIBUS_GEM_SOURCE                            | Non-default remote URI to clone the omnibus gem from. |
 | QA_BUILD_TARGET                               | Build specified QA image. See this [MR](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/91250) for details. Defaults to `qa`. |
 | GITLAB_ASSETS_TAG                             | Tag of the assets image built by the `build-assets-image` job in the `gitlab-org/gitlab` pipelines. Defaults to `$GITLAB_REF_SLUG` or the `gitlab-rails` version. |
+| BUILD_ON_ALL_OS                               | Build all OS images without using manual trigger if set to `true`. |
 
 ## Test variables
 
