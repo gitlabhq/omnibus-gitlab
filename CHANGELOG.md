@@ -122,6 +122,14 @@ No changes.
 - [Corrects the example for KAS K8S proxy URL](gitlab-org/omnibus-gitlab@c064071105007d8219e674c07d2f67812d330875) by @zeeZ ([merge request](gitlab-org/omnibus-gitlab!6648))
 - [Use templatesymlink :delete to cleanup redis config](gitlab-org/omnibus-gitlab@5dfefc907e683771cb543ecd49c549da651f0c8b) ([merge request](gitlab-org/omnibus-gitlab!6594))
 
+## 15.8.5 (2023-03-30)
+
+### Security (3 changes)
+
+- [Update openssl/openssl from 1s to 1t](gitlab-org/security/omnibus-gitlab@0316bbda601853ee83fe9de2539bc9ec66a8340d) ([merge request](gitlab-org/security/omnibus-gitlab!308))
+- [Update redis to 6.2.11](gitlab-org/security/omnibus-gitlab@8af583656f2ffa8f36bf76a8fe5d3b819dfc73bc) ([merge request](gitlab-org/security/omnibus-gitlab!312))
+- [Update curl to 8.0.1 to resolve February CVEs](gitlab-org/security/omnibus-gitlab@a09286aa54af1082fa780b09279439576a9466bc) ([merge request](gitlab-org/security/omnibus-gitlab!319))
+
 ## 15.8.4 (2023-03-02)
 
 ### Security (1 change)
