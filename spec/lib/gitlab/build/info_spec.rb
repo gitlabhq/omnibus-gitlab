@@ -237,6 +237,86 @@ RSpec.describe Build::Info do
     end
   end
 
+  describe '.gitlab_rails_project_path' do
+    context 'on CE' do
+      before do
+        stub_is_ee(false)
+      end
+
+      context 'on build mirror' do
+        before do
+          stub_env_var('CI_SERVER_HOST', 'dev.gitlab.org')
+          stub_env_var('SECURITY_SOURCES', '')
+        end
+
+        it 'returns correct path for GitLab rails project' do
+          expect(described_class.gitlab_rails_project_path).to eq("gitlab/gitlabhq")
+        end
+      end
+
+      context 'on canonical and QA mirror' do
+        before do
+          stub_env_var('CI_SERVER_HOST', 'gitlab.com')
+          stub_env_var('SECURITY_SOURCES', '')
+        end
+
+        it 'returns correct path for GitLab rails project' do
+          expect(described_class.gitlab_rails_project_path).to eq("gitlab-org/gitlab-foss")
+        end
+      end
+
+      context 'on security mirror' do
+        before do
+          stub_env_var('CI_SERVER_HOST', 'gitlab.com')
+          stub_env_var('SECURITY_SOURCES', 'true')
+        end
+
+        it 'returns correct path for GitLab rails project' do
+          expect(described_class.gitlab_rails_project_path).to eq("gitlab-org/security/gitlab-foss")
+        end
+      end
+    end
+
+    context 'on EE' do
+      before do
+        stub_is_ee(true)
+      end
+
+      context 'on build mirror' do
+        before do
+          stub_env_var('CI_SERVER_HOST', 'dev.gitlab.org')
+          stub_env_var('SECURITY_SOURCES', '')
+        end
+
+        it 'returns correct path for GitLab rails project' do
+          expect(described_class.gitlab_rails_project_path).to eq("gitlab/gitlab-ee")
+        end
+      end
+
+      context 'on canonical and QA mirror' do
+        before do
+          stub_env_var('CI_SERVER_HOST', 'gitlab.com')
+          stub_env_var('SECURITY_SOURCES', '')
+        end
+
+        it 'returns correct path for GitLab rails project' do
+          expect(described_class.gitlab_rails_project_path).to eq("gitlab-org/gitlab")
+        end
+      end
+
+      context 'on security mirror' do
+        before do
+          stub_env_var('CI_SERVER_HOST', 'gitlab.com')
+          stub_env_var('SECURITY_SOURCES', 'true')
+        end
+
+        it 'returns correct path for GitLab rails project' do
+          expect(described_class.gitlab_rails_project_path).to eq("gitlab-org/security/gitlab")
+        end
+      end
+    end
+  end
+
   describe '.deploy_env' do
     before do
       allow(ENV).to receive(:[]).with('AUTO_DEPLOY_ENVIRONMENT').and_return('ad')
