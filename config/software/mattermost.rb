@@ -17,6 +17,7 @@
 #
 
 name 'mattermost'
+
 default_version '7.9.1'
 
 source url: "https://releases.mattermost.com/#{version}/mattermost-team-#{version}-linux-amd64.tar.gz",

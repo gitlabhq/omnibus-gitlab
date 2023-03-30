@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.10.1 (2023-03-30)
+
+### Security (3 changes)
+
+- [Mattermost March 2023 security updates](gitlab-org/security/omnibus-gitlab@4f4f5b3fddbc1223c58b7fe8781b132aa89d327c) ([merge request](gitlab-org/security/omnibus-gitlab!315))
+- [Update redis to 6.2.11](gitlab-org/security/omnibus-gitlab@0764196fef0778dc64fc5ca5f05437c81fd9fd40) ([merge request](gitlab-org/security/omnibus-gitlab!314))
+- [Update curl to 8.0.1 to resolve February CVEs](gitlab-org/security/omnibus-gitlab@d58c934f28aacfc63388584b7e03fe63177957f5) ([merge request](gitlab-org/security/omnibus-gitlab!321))
+
 ## 15.10.0 (2023-03-21)
 
 ### Added (4 changes)
@@ -42,6 +50,15 @@ omnibus-gitlab repository.
 ### Security (1 change)
 
 - [Update libksba/gnupg to 1.6.3/2.2.41](gitlab-org/omnibus-gitlab@2f72ecc671ddf654254f463b434abe553c1ebe7f)
+
+## 15.9.4 (2023-03-30)
+
+### Security (4 changes)
+
+- [Update openssl/openssl from 1s to 1t](gitlab-org/security/omnibus-gitlab@3ce5c0890a76b3c643ec1627553edfcd455a8e97) ([merge request](gitlab-org/security/omnibus-gitlab!309))
+- [Mattermost March 2023 security updates](gitlab-org/security/omnibus-gitlab@bf3f3377afe386dc0a1a8bec938826e3ee09df15) ([merge request](gitlab-org/security/omnibus-gitlab!310))
+- [Update redis to 6.2.11](gitlab-org/security/omnibus-gitlab@efe261861f4aad23f61ab31fd637b3d073faf658) ([merge request](gitlab-org/security/omnibus-gitlab!313))
+- [Update curl to 8.0.1 to resolve February CVEs](gitlab-org/security/omnibus-gitlab@f51881d8f9dc9c4331a581f710449ac34193708b) ([merge request](gitlab-org/security/omnibus-gitlab!320))
 
 ## 15.9.3 (2023-03-09)
 
@@ -104,6 +121,14 @@ No changes.
 - [Add docs for troubleshooting connection problems due to two connections](gitlab-org/omnibus-gitlab@3e3d216c7680edc37a2cacd2d170f565b243dfc7) ([merge request](gitlab-org/omnibus-gitlab!6663))
 - [Corrects the example for KAS K8S proxy URL](gitlab-org/omnibus-gitlab@c064071105007d8219e674c07d2f67812d330875) by @zeeZ ([merge request](gitlab-org/omnibus-gitlab!6648))
 - [Use templatesymlink :delete to cleanup redis config](gitlab-org/omnibus-gitlab@5dfefc907e683771cb543ecd49c549da651f0c8b) ([merge request](gitlab-org/omnibus-gitlab!6594))
+
+## 15.8.5 (2023-03-30)
+
+### Security (3 changes)
+
+- [Update openssl/openssl from 1s to 1t](gitlab-org/security/omnibus-gitlab@0316bbda601853ee83fe9de2539bc9ec66a8340d) ([merge request](gitlab-org/security/omnibus-gitlab!308))
+- [Update redis to 6.2.11](gitlab-org/security/omnibus-gitlab@8af583656f2ffa8f36bf76a8fe5d3b819dfc73bc) ([merge request](gitlab-org/security/omnibus-gitlab!312))
+- [Update curl to 8.0.1 to resolve February CVEs](gitlab-org/security/omnibus-gitlab@a09286aa54af1082fa780b09279439576a9466bc) ([merge request](gitlab-org/security/omnibus-gitlab!319))
 
 ## 15.8.4 (2023-03-02)
 
