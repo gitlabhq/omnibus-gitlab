@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.8.5 (2023-03-30)
+
+### Security (3 changes)
+
+- [Update openssl/openssl from 1s to 1t](gitlab-org/security/omnibus-gitlab@0316bbda601853ee83fe9de2539bc9ec66a8340d) ([merge request](gitlab-org/security/omnibus-gitlab!308))
+- [Update redis to 6.2.11](gitlab-org/security/omnibus-gitlab@8af583656f2ffa8f36bf76a8fe5d3b819dfc73bc) ([merge request](gitlab-org/security/omnibus-gitlab!312))
+- [Update curl to 8.0.1 to resolve February CVEs](gitlab-org/security/omnibus-gitlab@a09286aa54af1082fa780b09279439576a9466bc) ([merge request](gitlab-org/security/omnibus-gitlab!319))
+
 ## 15.8.4 (2023-03-02)
 
 ### Security (1 change)
