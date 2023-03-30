@@ -667,7 +667,7 @@ GET:Geo:
       artifacts: true
 
 dependency_scanning:
-  image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.3.2"
+  image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.3"
   stage: validate
   variables:
     REPORT_PATH: ./
