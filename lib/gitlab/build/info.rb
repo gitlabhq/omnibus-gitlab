@@ -140,7 +140,10 @@ module Build
         if Gitlab::Util.get_env('CI_SERVER_HOST') == 'dev.gitlab.org'
           package == "gitlab-ee" ? 'gitlab/gitlab-ee' : 'gitlab/gitlabhq'
         else
-          package == "gitlab-ee" ? 'gitlab-org/gitlab' : 'gitlab-org/gitlab-foss'
+          namespace = Gitlab::Version.security_channel? ? "gitlab-org/security" : "gitlab-org"
+          project = package == "gitlab-ee" ? 'gitlab' : 'gitlab-foss'
+
+          "#{namespace}/#{project}"
         end
       end
 
