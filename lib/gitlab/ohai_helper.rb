@@ -38,6 +38,8 @@ class OhaiHelper
         verify_platform
       when 'centos'
         'el'
+      when 'almalinux'
+        'el'
       when 'opensuse', 'opensuseleap'
         'opensuse'
       when 'suse'
@@ -122,6 +124,8 @@ class OhaiHelper
       when 'debian', 'raspbian'
         version = get_debian_version
       when 'centos'
+        version = get_centos_version
+      when 'almalinux'
         version = get_centos_version
       when 'opensuse', 'opensuseleap'
         version = get_opensuse_version

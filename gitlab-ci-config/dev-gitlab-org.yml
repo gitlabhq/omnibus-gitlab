@@ -318,11 +318,11 @@ Ubuntu-22.04-arm-branch:
 CentOS-7-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
-CentOS-8-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_8:${BUILDER_IMAGE_REVISION}"
+AlmaLinux-8-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
-CentOS-8-arm64-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_arm64:${BUILDER_IMAGE_REVISION}"
+AlmaLinux-8-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
   tags:
   - docker-arm-builder
@@ -369,8 +369,8 @@ SLES-15.2-branch:
 AmazonLinux-2-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
-CentOS-8-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
+AlmaLinux-8-fips-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
 Ubuntu-18.04-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04_fips:${BUILDER_IMAGE_REVISION}"
@@ -458,7 +458,7 @@ RAT-Nightly:
 # This job runs only on nightly EE builds
 RAT-Nightly-FIPS:
   stage: slow_jobs
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   variables:
     USE_SYSTEM_SSL: "true"
     RAT_REFERENCE_ARCHITECTURE: "omnibus-gitlab-mrs-fips"
@@ -466,7 +466,7 @@ RAT-Nightly-FIPS:
     - bundle exec rake qa:rat:nightly
   cache: !reference [.branch-cache]
   needs:
-    - CentOS-8-fips-branch
+    - AlmaLinux-8-fips-branch
   allow_failure: true
   rules:
     - !reference [.default_rules, rules]
@@ -619,11 +619,11 @@ Ubuntu-22.04-arm:
 CentOS-7:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
-CentOS-8:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_8:${BUILDER_IMAGE_REVISION}"
+AlmaLinux-8:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
-CentOS-8-arm64:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_arm64:${BUILDER_IMAGE_REVISION}"
+AlmaLinux-8-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
   tags:
   - docker-arm-builder
@@ -666,8 +666,8 @@ SLES-15.2:
 AmazonLinux-2-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
-CentOS-8-fips:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
+AlmaLinux-8-fips:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
 Ubuntu-18.04-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04_fips:${BUILDER_IMAGE_REVISION}"
@@ -746,19 +746,19 @@ CentOS-7-staging:
       optional: true
     - job: CentOS-7-branch
       optional: true
-CentOS-8-staging:
+AlmaLinux-8-staging:
   extends: .staging_upload_template
   needs:
-    - job: CentOS-8
+    - job: AlmaLinux-8
       optional: true
-    - job: CentOS-8-branch
+    - job: AlmaLinux-8-branch
       optional: true
-CentOS-8-arm64-staging:
+AlmaLinux-8-arm64-staging:
   extends: .staging_upload_template
   needs:
-    - job: CentOS-8-arm64
+    - job: AlmaLinux-8-arm64
       optional: true
-    - job: CentOS-8-arm64-branch
+    - job: AlmaLinux-8-arm64-branch
       optional: true
 OpenSUSE-15.4-staging:
   extends: .staging_upload_template
@@ -829,12 +829,12 @@ AmazonLinux-2-fips-staging:
       optional: true
     - job: AmazonLinux-2-fips-branch
       optional: true
-CentOS-8-fips-staging:
+AlmaLinux-8-fips-staging:
   extends: .fips_staging_upload_template
   needs:
-    - job: CentOS-8-fips
+    - job: AlmaLinux-8-fips
       optional: true
-    - job: CentOS-8-fips-branch
+    - job: AlmaLinux-8-fips-branch
       optional: true
 Ubuntu-18.04-fips-staging:
   extends: .fips_staging_upload_template
@@ -892,14 +892,14 @@ CentOS-7-release:
   extends: .production_release_template
   needs:
     - CentOS-7
-CentOS-8-release:
+AlmaLinux-8-release:
   extends: .production_release_template
   needs:
-    - CentOS-8
-CentOS-8-arm64-release:
+    - AlmaLinux-8
+AlmaLinux-8-arm64-release:
   extends: .production_release_template
   needs:
-    - CentOS-8-arm64
+    - AlmaLinux-8-arm64
 OpenSUSE-15.4-release:
   extends: .production_release_template
   needs:
@@ -946,10 +946,10 @@ AmazonLinux-2-fips-release:
   extends: .fips_release_template
   needs:
     - AmazonLinux-2-fips
-CentOS-8-fips-release:
+AlmaLinux-8-fips-release:
   extends: .fips_release_template
   needs:
-    - CentOS-8-fips
+    - AlmaLinux-8-fips
 Ubuntu-18.04-fips-release:
   extends: .fips_release_template
   needs:
