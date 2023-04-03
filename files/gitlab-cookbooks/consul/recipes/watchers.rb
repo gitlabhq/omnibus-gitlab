@@ -18,7 +18,7 @@ watch_helper = WatchHelper::WatcherConfig.new(node)
 
 # Remove excess watcher configurations and handlers
 to_cleanup = watch_helper.excess_handler_scripts
-to_cleanup += watch_helper.excess_configs
+to_cleanup += watch_helper.excess_watcher_configs
 
 to_cleanup.each do |f|
   file f do
