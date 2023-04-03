@@ -14,20 +14,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('logrotate')
 
 logrotate_dir = node['logrotate']['dir']
-logrotate_log_dir = node['logrotate']['log_directory']
 logrotate_d_dir = File.join(logrotate_dir, 'logrotate.d')
-logrotate_helper = LogrotateHelper.new(node)
 
 [
   logrotate_dir,
-  logrotate_d_dir,
-  logrotate_log_dir
+  logrotate_d_dir
 ].each do |dir|
   directory dir do
     mode "0700"
   end
+end
+
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
+  recursive true
 end
 
 template File.join(logrotate_dir, "logrotate.conf") do
@@ -35,14 +44,14 @@ template File.join(logrotate_dir, "logrotate.conf") do
   variables(node['logrotate'].to_hash)
 end
 
-logrotate_helper.services_list.each do |svc, details|
+logfiles_helper.logrotate_services_list.each do |svc, logging_settings|
   template File.join(logrotate_d_dir, svc) do
     source 'logrotate-service.erb'
     variables(
-      username: details[:owner],
-      groupname: details[:group],
-      log_directory: details[:log_directory],
-      options: details[:options]
+      username: logging_settings[:log_directory_owner],
+      groupname: logging_settings[:logrotate_group],
+      log_directory: logging_settings[:log_directory],
+      options: logging_settings[:options]
     )
   end
 end
