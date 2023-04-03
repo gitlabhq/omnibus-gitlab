@@ -228,7 +228,7 @@
 update-gems-cache:
   extends: .gems-cache
   stage: update-cache
-  image: "${RUBY_IMAGE}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   before_script: !reference [.install-gems]
   script:
     - echo "Cache is up to date!"
