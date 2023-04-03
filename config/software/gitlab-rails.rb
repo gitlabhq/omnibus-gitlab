@@ -92,13 +92,25 @@ build do
     env['PKG_CONFIG_PATH'] = "#{OpenSSLHelper.pkg_config_dirs}:/opt/gitlab/embedded/lib/pkgconfig"
   end
 
-  env['CFLAGS'] = '-std=gnu99' if OhaiHelper.get_centos_version.to_i == 7 || OhaiHelper.os_platform == 'sles'
+  env['CFLAGS'] = '-std=gnu99' if OhaiHelper.centos7? || OhaiHelper.os_platform == 'sles'
+
+  # Special configuration for Rust extensions, which require clang 3.9+.
+  if OhaiHelper.centos7?
+    env['PATH'] = "/opt/rh/llvm-toolset-7/root/bin:#{env['PATH']}"
+    env['LIBCLANG_PATH'] = '/opt/rh/llvm-toolset-7/root/usr/lib64'
+  elsif OhaiHelper.sles12?
+    env['BINDGEN_EXTRA_CLANG_ARGS'] = "-I/usr/lib64/clang/7.0.1/include"
+  elsif OhaiHelper.raspberry_pi?
+    # This is needed to workaround a bug in QEMU: https://gitlab.com/gitlab-org/gitlab-omnibus-builder/-/issues/60
+    # This has to be a tmpfs or some other filesystem other than ext4.
+    env['CARGO_HOME'] = '/run'
+  end
 
   bundle "config set --local gemfile #{gitlab_bundle_gemfile}" if gitlab_bundle_gemfile != 'Gemfile'
   bundle 'config force_ruby_platform true', env: env if OhaiHelper.ruby_native_gems_unsupported?
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
-  bundle 'config build.grpc --with-ldflags=-Wl,--no-as-needed --with-dldflags=-latomic', env: env if OhaiHelper.os_platform == 'raspbian'
+  bundle 'config build.grpc --with-ldflags=-Wl,--no-as-needed --with-dldflags=-latomic', env: env if OhaiHelper.raspberry_pi?
   # Disable zstd decompression support to avoid linking against libzstd,
   # which may not be a safe system dependency to use.
   bundle 'config build.ruby-magic --with-magic-flags=--disable-zstdlib', env: env
