@@ -1280,6 +1280,20 @@ gitlab_rails['smtp_tls'] = false
 gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 ```
 
+### Scaleway Transactional Email
+
+Read more about [Scaleway's Transactional Email](https://www.scaleway.com/en/docs/managed-services/transactional-email/how-to/generate-api-keys-for-api-and-smtp-sending/#generate-an-api-key-to-send-emails-via-smtp).
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.tem.scw.cloud"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "transactional_email_user_name"
+gitlab_rails['smtp_password'] = "secret_key_of_api_key"
+gitlab_rails['smtp_authentication'] = "plain"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
