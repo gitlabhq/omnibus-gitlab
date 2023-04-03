@@ -11,15 +11,8 @@ RSpec.describe 'gitlab::logrotate_folder_and_configs_spec' do
     it 'creates default set of directories' do
       expect(chef_run.node['logrotate']['dir'])
         .to eql('/var/opt/gitlab/logrotate')
-      expect(chef_run.node['logrotate']['log_directory'])
-        .to eql('/var/log/gitlab/logrotate')
 
       expect(chef_run).to create_directory('/var/opt/gitlab/logrotate').with(
-        owner: nil,
-        group: nil,
-        mode: '0700'
-      )
-      expect(chef_run).to create_directory('/var/log/gitlab/logrotate').with(
         owner: nil,
         group: nil,
         mode: '0700'
@@ -32,14 +25,9 @@ RSpec.describe 'gitlab::logrotate_folder_and_configs_spec' do
     end
 
     it 'creates logrotate directories in alternative locations' do
-      stub_gitlab_rb(logrotate: { dir: "/tmp/logrotate", log_directory: "/tmp/logs/logrotate" })
+      stub_gitlab_rb(logrotate: { dir: "/tmp/logrotate" })
 
       expect(chef_run).to create_directory('/tmp/logrotate').with(
-        owner: nil,
-        group: nil,
-        mode: '0700'
-      )
-      expect(chef_run).to create_directory('/tmp/logs/logrotate').with(
         owner: nil,
         group: nil,
         mode: '0700'

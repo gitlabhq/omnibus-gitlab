@@ -850,6 +850,7 @@ default['gitlab']['logging']['logrotate_compress'] = "compress" # see 'man logro
 default['gitlab']['logging']['logrotate_method'] = "copytruncate" # see 'man logrotate'
 default['gitlab']['logging']['logrotate_postrotate'] = nil # no postrotate command by default
 default['gitlab']['logging']['logrotate_dateformat'] = nil # use date extensions for rotated files rather than numbers e.g. a value of "-%Y-%m-%d" would give rotated files like production.log-2016-03-09.gz
+default['gitlab']['logging']['log_group'] = nil # log group for logs (svlogd only at this time)
 
 ###
 # Remote syslog

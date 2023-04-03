@@ -23,7 +23,7 @@ RSpec.describe 'logrotate' do
         .with_content(/\/opt\/gitlab\/embedded\/bin\/gitlab-logrotate-wrapper/)
 
       expect(chef_run).to render_file('/opt/gitlab/sv/logrotate/log/run')
-        .with_content(/exec svlogd -tt \/var\/log\/gitlab\/logrotate/)
+        .with_content(/svlogd -tt \/var\/log\/gitlab\/logrotate/)
 
       expect(chef_run).to render_file('/opt/gitlab/sv/logrotate/log/config')
         .with_content(/s209715200/)

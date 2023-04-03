@@ -16,9 +16,10 @@
 #
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('gitaly')
 
 working_dir = node['gitaly']['dir']
-log_directory = node.dig('gitaly', 'configuration', 'logging', 'dir')
 env_directory = node['gitaly']['env_directory']
 config_path = File.join(working_dir, "config.toml")
 gitaly_path = node['gitaly']['bin_path']
@@ -42,9 +43,12 @@ directory runtime_dir do
   recursive true
 end
 
-directory log_directory do
-  owner account_helper.gitlab_user
-  mode '0700'
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
   recursive true
 end
 
@@ -139,13 +143,15 @@ runit_service 'gitaly' do
     bin_path: gitaly_path,
     wrapper_path: wrapper_path,
     config_path: config_path,
-    log_directory: log_directory,
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     json_logging: json_logging,
     open_files_ulimit: open_files_ulimit,
     cgroups_mountpoint: cgroups_mountpoint,
     cgroups_hierarchy_root: cgroups_hierarchy_root,
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitaly'].to_hash)
+  log_options logging_settings[:options]
 end
 
 if node['gitlab']['bootstrap']['enable']

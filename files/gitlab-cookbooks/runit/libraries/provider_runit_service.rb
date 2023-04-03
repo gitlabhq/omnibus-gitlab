@@ -340,6 +340,16 @@ class Chef
             end
           end
         end
+
+        # Change group on log_directory/current
+        file ::File.join(new_resource.options[:log_directory], 'current') do
+          log_owner = new_resource.options[:log_user] || 'root'
+          log_group = new_resource.options[:log_group] || 'root'
+          owner log_owner
+          group log_group
+          action :touch
+          only_if { ::File.exist?(name) && !omnibus_helper.expected_owner?(name, log_owner, log_group) }
+        end
       end
 
       # signals
