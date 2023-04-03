@@ -176,6 +176,14 @@ class OhaiHelper
       ohai['languages']['c']['gcc']['target']
     end
 
+    def centos7?
+      ohai['platform'] == 'centos' && get_centos_version.to_i == 7
+    end
+
+    def sles12?
+      os_platform == 'sles' && get_suse_version.to_i == 12
+    end
+
     # Currently rake-compiler-dock uses a Ubuntu 20.04 image to create the
     # native gem for the aarch64-linux platform. As a result, anything
     # using a glibc older than v2.29 will not work. We need to compile
