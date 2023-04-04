@@ -395,7 +395,6 @@ Centos 7 knapsack: !reference [.knapsack]
 Centos 8 knapsack: !reference [.knapsack]
 Debian 10 knapsack: !reference [.knapsack]
 Debian 11 knapsack: !reference [.knapsack]
-OpenSUSE 15.3 knapsack: !reference [.knapsack]
 OpenSUSE 15.4 knapsack: !reference [.knapsack]
 Ubuntu 16.04 knapsack: !reference [.knapsack]
 Ubuntu 18.04 knapsack: !reference [.knapsack]
@@ -467,12 +466,6 @@ Centos 8 specs :
   parallel: 6
   needs:
   - Centos 8 knapsack
-OpenSUSE 15.3 specs :
-  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/opensuse_15.3-ruby:${BUILDER_IMAGE_REVISION}"
-  extends: .chef_spec_template
-  parallel: 6
-  needs:
-  - OpenSUSE 15.3 knapsack
 OpenSUSE 15.4 specs :
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/opensuse_15.4-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
