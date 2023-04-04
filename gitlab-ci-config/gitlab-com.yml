@@ -98,7 +98,7 @@
     - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
 .spec_template: &spec_template
-  extends: .gems-cache
+  extends: .gems-cache-os-dependent
   stage: tests
   before_script:
     # These jobs will not be run on dev, so we set ALTERNATIVE_SOURCES to true
