@@ -322,4 +322,26 @@ RSpec.describe Build::Check do
       end
     end
   end
+
+  describe 'boringcrypto_supported?' do
+    context 'when using a golang with boringcrypto support' do
+      before do
+        allow(described_class).to receive(:system).with(hash_including('GOEXPERIMENT'), 'go', 'version').and_return(true)
+      end
+
+      it 'returns true' do
+        expect(described_class.boringcrypto_supported?).to be_truthy
+      end
+    end
+
+    context 'when using a golang withou boringcrypto support' do
+      before do
+        allow(described_class).to receive(:system).with(hash_including('GOEXPERIMENT'), 'go', 'version').and_return(false)
+      end
+
+      it 'returns true' do
+        expect(described_class.boringcrypto_supported?).to be_falsey
+      end
+    end
+  end
 end
