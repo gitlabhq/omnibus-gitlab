@@ -21,6 +21,7 @@ module GitlabKas
   class << self
     def parse_variables
       parse_address
+      parse_gitlab_external_url
       parse_gitlab_kas_enabled
       parse_gitlab_kas_external_url
       parse_gitlab_kas_internal_url
@@ -76,6 +77,14 @@ module GitlabKas
         parse_gitlab_kas_external_url_using_own_subdomain
         parse_gitlab_kas_external_k8s_proxy_url_using_own_subdomain
       end
+    end
+
+    def parse_gitlab_external_url
+      return if Gitlab['external_url'].nil?
+
+      gitlab_uri = URI(Gitlab['external_url'])
+
+      Gitlab['gitlab_kas']['gitlab_external_url'] ||= "#{gitlab_uri.scheme}://#{gitlab_uri.host}"
     end
 
     def parse_secrets
