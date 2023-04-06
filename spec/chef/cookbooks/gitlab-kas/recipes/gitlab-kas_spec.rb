@@ -72,7 +72,10 @@ RSpec.describe 'gitlab-kas' do
               authentication_secret_file: "/var/opt/gitlab/gitlab-kas/private_api_authentication_secret_file",
               network: "tcp"
             },
-          }
+          },
+          gitlab: hash_including(
+            external_url: 'https://gitlab.example.com'
+          )
         )
       )
     end
@@ -243,6 +246,16 @@ RSpec.describe 'gitlab-kas' do
           external_k8s_proxy_url: 'https://example.com/gitlab/-/kubernetes-agent/k8s-proxy/'
         )
       end
+
+      it 'renders KAS config gitlab external URL correctly' do
+        expect(gitlab_kas_config_yml).to(
+          include(
+            gitlab: hash_including(
+              external_url: 'https://example.com'
+            )
+          )
+        )
+      end
     end
 
     context 'with kas url using own sub-domain' do
@@ -296,6 +309,22 @@ RSpec.describe 'gitlab-kas' do
         expect { gitlab_yml }.to raise_error(
           RuntimeError,
           "gitlab_kas_external_url scheme must be 'ws' or 'wss'"
+        )
+      end
+
+      it 'renders KAS config gitlab external URL correctly' do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas_external_url: 'wss://kas.gitlab.example.com/',
+          gitlab_kas: { listen_websocket: true }
+        )
+
+        expect(gitlab_kas_config_yml).to(
+          include(
+            gitlab: hash_including(
+              external_url: 'https://gitlab.example.com'
+            )
+          )
         )
       end
     end

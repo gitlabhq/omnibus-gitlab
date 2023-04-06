@@ -9,6 +9,7 @@ default['gitlab_kas']['agent_gitops_project_info_cache_error_ttl'] = 60
 default['gitlab_kas']['agent_info_cache_ttl'] = 300
 default['gitlab_kas']['agent_info_cache_error_ttl'] = 60
 default['gitlab_kas']['gitlab_address'] = ''
+default['gitlab_kas']['gitlab_external_url'] = nil
 default['gitlab_kas']['api_secret_key'] = nil
 default['gitlab_kas']['listen_address'] = 'localhost:8150'
 default['gitlab_kas']['listen_network'] = 'tcp'
