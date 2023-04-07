@@ -47,7 +47,7 @@ end
 rails_enable = node['gitlab']['gitlab-rails']['enable']
 
 # Geo secondary
-if node['gitlab']['geo-secondary']['enable']
+if node['gitlab']['geo_secondary']['enable']
   if rails_enable
     include_recipe 'gitlab-ee::geo-secondary'
     include_recipe 'gitlab-ee::geo_database_migrations'
