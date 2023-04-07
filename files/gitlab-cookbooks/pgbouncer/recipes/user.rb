@@ -26,7 +26,7 @@ if pgb_helper.create_pgbouncer_user?('geo-postgresql')
     helper lazy { GeoPgHelper.new(node) }
     user node['gitlab']['geo-postgresql']['pgbouncer_user']
     password node['gitlab']['geo-postgresql']['pgbouncer_user_password']
-    database node['gitlab']['geo-secondary']['db_database']
+    database node['gitlab']['geo_secondary']['db_database']
     add_auth_function default_auth_query.eql?(auth_query)
     action :create
   end

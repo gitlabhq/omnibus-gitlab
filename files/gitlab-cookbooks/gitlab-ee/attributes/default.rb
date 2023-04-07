@@ -55,25 +55,25 @@ default['gitlab']['gitlab-rails']['geo_registry_replication_primary_api_url'] = 
 ###
 # Geo: Secondary node configuration
 ###
-default['gitlab']['geo-secondary']['enable'] = false
-default['gitlab']['geo-secondary']['auto_migrate'] = true
-default['gitlab']['geo-secondary']['db_adapter'] = "postgresql"
-default['gitlab']['geo-secondary']['db_encoding'] = "unicode"
-default['gitlab']['geo-secondary']['db_collation'] = nil
-default['gitlab']['geo-secondary']['db_database'] = "gitlabhq_geo_production"
-default['gitlab']['geo-secondary']['db_username'] = "gitlab_geo"
-default['gitlab']['geo-secondary']['db_password'] = nil
-default['gitlab']['geo-secondary']['db_load_balancing'] = { 'hosts' => [] }
+default['gitlab']['geo_secondary']['enable'] = false
+default['gitlab']['geo_secondary']['auto_migrate'] = true
+default['gitlab']['geo_secondary']['db_adapter'] = "postgresql"
+default['gitlab']['geo_secondary']['db_encoding'] = "unicode"
+default['gitlab']['geo_secondary']['db_collation'] = nil
+default['gitlab']['geo_secondary']['db_database'] = "gitlabhq_geo_production"
+default['gitlab']['geo_secondary']['db_username'] = "gitlab_geo"
+default['gitlab']['geo_secondary']['db_password'] = nil
+default['gitlab']['geo_secondary']['db_load_balancing'] = { 'hosts' => [] }
 # Path to postgresql socket directory
-default['gitlab']['geo-secondary']['db_host'] = "/var/opt/gitlab/geo-postgresql"
-default['gitlab']['geo-secondary']['db_port'] = 5431
-default['gitlab']['geo-secondary']['db_socket'] = nil
-default['gitlab']['geo-secondary']['db_sslmode'] = nil
-default['gitlab']['geo-secondary']['db_sslcompression'] = 0
-default['gitlab']['geo-secondary']['db_sslrootcert'] = nil
-default['gitlab']['geo-secondary']['db_sslca'] = nil
-default['gitlab']['geo-secondary']['db_prepared_statements'] = false
-default['gitlab']['geo-secondary']['db_database_tasks'] = true
+default['gitlab']['geo_secondary']['db_host'] = "/var/opt/gitlab/geo-postgresql"
+default['gitlab']['geo_secondary']['db_port'] = 5431
+default['gitlab']['geo_secondary']['db_socket'] = nil
+default['gitlab']['geo_secondary']['db_sslmode'] = nil
+default['gitlab']['geo_secondary']['db_sslcompression'] = 0
+default['gitlab']['geo_secondary']['db_sslrootcert'] = nil
+default['gitlab']['geo_secondary']['db_sslca'] = nil
+default['gitlab']['geo_secondary']['db_prepared_statements'] = false
+default['gitlab']['geo_secondary']['db_database_tasks'] = true
 
 ###
 # Geo: PostgreSQL (Tracking database)
@@ -163,3 +163,4 @@ default['gitlab']['geo-logcursor']['log_directory'] = '/var/log/gitlab/geo-logcu
 default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcursor/env'
 
 default['gitlab']['suggested-reviewers'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['suggested_reviewers'].to_h }, "node['gitlab']['suggested-reviewers']", "node['gitlab']['suggested_reviewers']")
+default['gitlab']['geo-secondary'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['geo_secondary'].to_h }, "node['gitlab']['geo-secondary']", "node['gitlab']['geo_secondary']")

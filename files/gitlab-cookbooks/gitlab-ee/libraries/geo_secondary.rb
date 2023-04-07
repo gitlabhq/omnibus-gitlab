@@ -25,7 +25,7 @@ module GeoSecondary
         # Set default value for attributes of geo database based on
         # geo_secondary[`db_*`] settings.
         geo_database_attributes.each do |attribute|
-          Gitlab['gitlab_rails']['databases']['geo'][attribute] ||= Gitlab['geo_secondary'][attribute] || node['gitlab']['geo-secondary'][attribute]
+          Gitlab['gitlab_rails']['databases']['geo'][attribute] ||= Gitlab['geo_secondary'][attribute] || node['gitlab']['geo_secondary'][attribute]
         end
 
         # Set db_migrations_path since Geo migration lives in a non-default place
@@ -42,7 +42,7 @@ module GeoSecondary
     end
 
     def geo_database_attributes
-      node['gitlab']['geo-secondary'].to_h.keys.select { |k| k.start_with?('db_') }
+      node['gitlab']['geo_secondary'].to_h.keys.select { |k| k.start_with?('db_') }
     end
 
     def geo_database_enabled?

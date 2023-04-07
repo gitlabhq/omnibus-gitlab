@@ -42,6 +42,7 @@ module SettingsDSL
     registry_nginx
     gitlab_kas_nginx
     gitlab_kas
+    geo_secondary
   ].freeze
 
   def self.extended(base)

@@ -124,7 +124,7 @@ end
 geo_pg_port = node['gitlab']['geo-postgresql']['port']
 geo_pg_user = node['gitlab']['geo-postgresql']['sql_user']
 geo_pg_user_password = node['gitlab']['geo-postgresql']['sql_user_password']
-geo_database_name = node['gitlab']['geo-secondary']['db_database']
+geo_database_name = node['gitlab']['geo_secondary']['db_database']
 
 if node['gitlab']['geo-postgresql']['enable']
   postgresql_user geo_pg_user do

@@ -8,7 +8,7 @@ action :create do
   postgresql_helper = new_resource.helper
 
   template postgresql_helper.postgresql_config do
-    geo_config = { geo_secondary_enabled: node.dig('gitlab', 'geo-secondary', 'enable') }
+    geo_config = { geo_secondary_enabled: node.dig('gitlab', 'geo_secondary', 'enable') }
     source 'postgresql.conf.erb'
     owner new_resource.username
     mode '0644'
