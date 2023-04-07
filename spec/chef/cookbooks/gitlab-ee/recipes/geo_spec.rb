@@ -33,7 +33,7 @@ RSpec.describe 'gitlab-ee::geo' do
 
     context 'in geo_logcursor settings' do
       it 'is not enabled' do
-        expect(node['gitlab']['geo-logcursor']['enable']).to eq(nil)
+        expect(node['gitlab']['geo_logcursor']['enable']).to eq(nil)
       end
     end
 
@@ -88,7 +88,7 @@ RSpec.describe 'gitlab-ee::geo' do
 
     context 'in geo_logcursor settings' do
       it 'is enabled' do
-        expect(node['gitlab']['geo-logcursor']['enable']).to eq(true)
+        expect(node['gitlab']['geo_logcursor']['enable']).to eq(true)
       end
     end
 
