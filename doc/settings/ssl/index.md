@@ -539,10 +539,14 @@ For more information on HSTS and NGINX, see <https://www.nginx.com/blog/http-str
 
 ## Install custom public certificates
 
-Some environments connect to external resources for various tasks. Omnibus GitLab
+Some environments connect to external resources for various tasks and GitLab
 allows these connections to use HTTPS, and supports connections with self-signed certificates.
+GitLab has its own ca-cert bundle that you can add certs to by placing the
+individual custom certs in the `/etc/gitlab/trusted-certs` directory. They then
+get added to the bundle. They are added using openssl's `c_rehash` method, which
+only works on a [single certificate](#using-a-custom-certificate-chain).
 
-Omnibus GitLab ships with the official [CAcert.org](http://www.cacert.org/)
+GitLab ships with the official [CAcert.org](http://www.cacert.org/)
 collection of trusted root certification authorities which are used to verify
 certificate authenticity.
 
@@ -555,10 +559,11 @@ at the bottom of this page.
 To install custom public certificates:
 
 1. Generate the **PEM** or **DER** encoded public certificate from your private key certificate.
-1. Copy only the public certificate file in the `/etc/gitlab/trusted-certs` directory.
+1. Copy only the public certificate file into the `/etc/gitlab/trusted-certs` directory.
+   If you have a multi-node installation, make sure to copy the certificate in all nodes.
    - When configuring GitLab to use a custom public certificate, by default, GitLab expects to find a certificate named
      after your GitLab domain name with a `.crt` extension. For example, if your server address is
-     `https://gitlab.example.com`, the certificate should be named `gitlab.example.com.crt`. 
+     `https://gitlab.example.com`, the certificate should be named `gitlab.example.com.crt`.
    - If GitLab needs to connect to an external resource that uses a custom public certificate, store the certificate in
      the `/etc/gitlab/trusted-certs` directory with a `.crt` extension. You don't have to name the file based on the
      domain name of the related external resource, though it helps to use a consistent naming scheme.
@@ -566,7 +571,6 @@ To install custom public certificates:
    To specify a different path and file name, you can
    [change the default SSL certificate location](#change-the-default-ssl-certificate-location).
 
-1. [Enable and manually configure HTTPS on NGINX](#configure-https-manually) to set up GitLab to use your own certificates.
 1. Reconfigure GitLab:
 
    ```shell
