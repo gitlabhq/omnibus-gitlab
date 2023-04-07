@@ -9,6 +9,19 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 NOTE:
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/index.html#checking-for-background-migrations-before-upgrading).
 
+## 15.11 
+
+### PostgreSQL 13 upgrade
+
+In GitLab 15.11, PostgreSQL will automatically be upgraded to 13.x except for the following cases:
+
+- You are running the database in high availability using Patroni.
+- Your database nodes are part of GitLab Geo configuration.
+- You have specifically [opted out](../settings/database.md#opt-out-of-automatic-postgresql-upgrades).
+- You have `postgresql['version'] = 12` in your `gitlab.rb`
+
+Fault-tolerant and Geo installations support manual upgrades to PostgreSQL 13, see [Packaged PostgreSQL deployed in an HA/Geo Cluster](../settings/database.md#packaged-postgresql-deployed-in-an-hageo-cluster).
+
 ## 15.6
 
 ### PostgreSQL version updates

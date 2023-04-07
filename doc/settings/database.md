@@ -535,6 +535,19 @@ To opt out of automatic PostgreSQL upgrades during GitLab package upgrades, run:
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
+#### GitLab 15.11 and later
+
+In GitLab 15.11, PostgreSQL will automatically be upgraded to 13.x except for the following cases:
+
+The upgrade is skipped in any of the following cases:
+
+- You are running the database in high availability using Patroni.
+- Your database nodes are part of GitLab Geo configuration.
+- You have specifically [opted out](#opt-out-of-automatic-postgresql-upgrades).
+- You have `postgresql['version'] = 12` in your `gitlab.rb`
+
+Fault-tolerant and Geo installations support manual upgrades to PostgreSQL 13, see [Packaged PostgreSQL deployed in an HA/Geo Cluster](#packaged-postgresql-deployed-in-an-hageo-cluster).
+
 #### GitLab 15.0 and later
 
 As of GitLab 15.0, new installations will default to PostgreSQL 13.
@@ -909,16 +922,16 @@ Before proceeding with the upgrade, note the following:
   [Amazon recommends this](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.PostgreSQL.html)
   as part of a major version upgrade.
 
-The following example demonstrates upgrading from a database host running PostgreSQL 11 to another database host running PostgreSQL 12 and incurs downtime:
+The following example demonstrates upgrading from a database host running PostgreSQL 12 to another database host running PostgreSQL 13 and incurs downtime:
 
-1. Spin up a new PostgreSQL 12 database server that's set up according to the [database requirements](https://docs.gitlab.com/ee/install/requirements.html#database).
+1. Spin up a new PostgreSQL 13 database server that's set up according to the [database requirements](https://docs.gitlab.com/ee/install/requirements.html#database).
 
 1. Ensure that the compatible versions of `pg_dump` and `pg_restore` are being
    used on the GitLab Rails instance. To amend GitLab configuration, edit
    `/etc/gitlab/gitlab.rb` and specify the value of `postgresql['version']`:
 
     ```ruby
-    postgresql['version'] = 12
+    postgresql['version'] = 13
     ```
 
 1. Reconfigure GitLab:
@@ -944,10 +957,10 @@ when your installation is using PgBouncer.
    sudo gitlab-backup create SKIP=repositories,uploads,builds,artifacts,lfs,pages,registry
    ```
 
-1. Shutdown the PostgreSQL 11 database host.
+1. Shutdown the PostgreSQL 12 database host.
 
 1. Edit `/etc/gitlab/gitlab.rb` and update the `gitlab_rails['db_host']` setting
-   to point to the PostgreSQL database 12 host.
+   to point to the PostgreSQL database 13 host.
 
 1. Reconfigure GitLab:
 
