@@ -158,9 +158,10 @@ default['gitlab']['geo-postgresql']['auto_restart_on_version_change'] = true
 # Geo: LogCursor (replication)
 ###
 
-default['gitlab']['geo-logcursor']['ha'] = false
-default['gitlab']['geo-logcursor']['log_directory'] = '/var/log/gitlab/geo-logcursor'
-default['gitlab']['geo-logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcursor/env'
+default['gitlab']['geo_logcursor']['ha'] = false
+default['gitlab']['geo_logcursor']['log_directory'] = '/var/log/gitlab/geo-logcursor'
+default['gitlab']['geo_logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcursor/env'
 
 default['gitlab']['suggested-reviewers'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['suggested_reviewers'].to_h }, "node['gitlab']['suggested-reviewers']", "node['gitlab']['suggested_reviewers']")
 default['gitlab']['geo-secondary'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['geo_secondary'].to_h }, "node['gitlab']['geo-secondary']", "node['gitlab']['geo_secondary']")
+default['gitlab']['geo-logcursor'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['geo_logcursor'].to_h }, "node['gitlab']['geo-logcursor']", "node['gitlab']['geo_logcursor']")

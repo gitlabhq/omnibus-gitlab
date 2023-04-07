@@ -18,8 +18,8 @@ account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
 working_dir = "#{node['package']['install-dir']}/embedded/service/gitlab-rails"
-log_directory = node['gitlab']['geo-logcursor']['log_directory']
-env_directory = node['gitlab']['geo-logcursor']['env_directory']
+log_directory = node['gitlab']['geo_logcursor']['log_directory']
+env_directory = node['gitlab']['geo_logcursor']['env_directory']
 
 rails_env = {
   'HOME' => node['gitlab']['user']['home'],
@@ -41,7 +41,7 @@ directory log_directory do
 end
 
 runit_service 'geo-logcursor' do
-  start_down node['gitlab']['geo-logcursor']['ha']
+  start_down node['gitlab']['geo_logcursor']['ha']
   options({
     user: account_helper.gitlab_user,
     groupname: account_helper.gitlab_group,
@@ -49,7 +49,7 @@ runit_service 'geo-logcursor' do
     env_dir: env_directory,
     log_directory: log_directory
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo-logcursor'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo_logcursor'].to_hash)
 end
 
 dependent_services = node['gitlab']['gitlab-rails']['dependent_services']
