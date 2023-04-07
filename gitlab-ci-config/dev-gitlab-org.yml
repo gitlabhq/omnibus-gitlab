@@ -351,14 +351,18 @@ AmazonLinux-2022-arm64-branch:
   tags:
   - docker-arm-builder
 SLES-12.5-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
+  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
+  variables:
+    DOCKER_AUTH_CONFIG: $DEV_BUILDER_DOCKER_AUTH_CONFIG
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
 SLES-15.2-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
+  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
+  variables:
+    DOCKER_AUTH_CONFIG: $DEV_BUILDER_DOCKER_AUTH_CONFIG
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
