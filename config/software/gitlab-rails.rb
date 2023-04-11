@@ -70,6 +70,12 @@ whitelist_file /grpc_c\.so/ if OhaiHelper.arm?
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  # Remove ee code when building in CE mode from canonical source
+  if !EE && File.directory?('ee')
+    delete 'ee'
+    delete 'CHANGELOG-EE.md'
+  end
+
   # Exclude rails directory from cache
   cache_dir = File.join('/var/cache/omnibus/cache/git_cache', install_dir, 'info/exclude')
   command "echo '/embedded/service/gitlab-rails' >> #{cache_dir}"
