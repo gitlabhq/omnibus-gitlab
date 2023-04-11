@@ -577,7 +577,7 @@ qa-test:
       when: never
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_CE_PIPELINE/'
       variables:
-        FOSS_ONLY: "true"
+        FOSS_ONLY: "1"
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_EE_PIPELINE/'
   needs:
     - job: generate-facts
