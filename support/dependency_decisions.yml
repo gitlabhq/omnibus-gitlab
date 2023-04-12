@@ -196,3 +196,17 @@
     :why: https://github.com/gl-gitaly/go-license-detector/blob/master/LICENSE.md
     :versions: []
     :when: 2023-03-01 19:37:02.484036831 Z
+- - :license
+  - github.com/ovh/go-ovh
+  - BSD-3-Clause
+  - :who: Clemens Beck 
+    :why: https://github.com/ovh/go-ovh/blob/master/LICENSE
+    :versions: []
+    :when: 2023-04-03 12:35:41.232698958 Z
+- - :license
+  - github.com/hashicorp/nomad/api
+  - MPL2
+  - :who: Clemens Beck
+    :why: https://github.com/hashicorp/nomad/blob/main/LICENSE
+    :versions: []
+    :when: 2023-04-03 12:41:28.825087612 Z
