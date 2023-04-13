@@ -133,11 +133,11 @@ Ubuntu-20.04-fips-check:
 CentOS-7-check:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
-CentOS-8-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_8:${BUILDER_IMAGE_REVISION}"
+AlmaLinux-8-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
-CentOS-8-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_arm64:${BUILDER_IMAGE_REVISION}"
+AlmaLinux-8-arm64-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   tags:
   - docker-arm-builder
@@ -157,8 +157,8 @@ AmazonLinux-2022-arm64-check:
   extends: .yum-install
   tags:
   - docker-arm-builder
-CentOS-8-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_8_fips:${BUILDER_IMAGE_REVISION}"
+AlmaLinux-8-fips-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends:
     - .yum-install
     - .ee-tag-only
