@@ -45,20 +45,21 @@ class PgbouncerHelper < BaseHelper
   end
 
   def create_pgbouncer_user?(db)
+    node_attribute_key = SettingsDSL::Utils.sanitized_key(db)
     # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
     # being split to their own dedicated cookbooks, and attributes are being moved from
     # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we
     # need to check both.
 
-    if node['gitlab'].key?(db)
-      node['gitlab'][db]['enable'] &&
-        !node['gitlab'][db]['pgbouncer_user'].nil? &&
-        !node['gitlab'][db]['pgbouncer_user_password'].nil?
+    if node['gitlab'].key?(node_attribute_key)
+      node['gitlab'][node_attribute_key]['enable'] &&
+        !node['gitlab'][node_attribute_key]['pgbouncer_user'].nil? &&
+        !node['gitlab'][node_attribute_key]['pgbouncer_user_password'].nil?
     else
       # User info for Patroni are stored under `postgresql` key
-      info_key = db == 'patroni' ? 'postgresql' : db
+      info_key = node_attribute_key == 'patroni' ? 'postgresql' : node_attribute_key
 
-      node[db]['enable'] &&
+      node[node_attribute_key]['enable'] &&
         !node[info_key]['pgbouncer_user'].nil? &&
         !node[info_key]['pgbouncer_user_password'].nil?
     end

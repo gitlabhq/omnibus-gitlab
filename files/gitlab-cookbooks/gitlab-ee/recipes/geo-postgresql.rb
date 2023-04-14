@@ -22,13 +22,13 @@ include_recipe 'postgresql::sysctl'
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
-postgresql_log_dir = node['gitlab']['geo-postgresql']['log_directory']
+postgresql_log_dir = node['gitlab']['geo_postgresql']['log_directory']
 postgresql_username = account_helper.postgresql_user
-postgresql_data_dir = File.join(node['gitlab']['geo-postgresql']['dir'], 'data')
+postgresql_data_dir = File.join(node['gitlab']['geo_postgresql']['dir'], 'data')
 
 geo_pg_helper = GeoPgHelper.new(node)
 
-directory node['gitlab']['geo-postgresql']['dir'] do
+directory node['gitlab']['geo_postgresql']['dir'] do
   owner postgresql_username
   mode '0755'
   recursive true
@@ -60,7 +60,7 @@ template postgresql_config do
   owner postgresql_username
   mode '0644'
   helper(:pg_helper) { geo_pg_helper }
-  variables(node['gitlab']['geo-postgresql'].to_hash)
+  variables(node['gitlab']['geo_postgresql'].to_hash)
   cookbook 'postgresql'
   notifies :restart, 'runit_service[geo-postgresql]', :immediately if should_notify
 end
@@ -70,7 +70,7 @@ template postgresql_runtime_config do
   owner postgresql_username
   mode '0644'
   helper(:pg_helper) { geo_pg_helper }
-  variables(node['gitlab']['geo-postgresql'].to_hash)
+  variables(node['gitlab']['geo_postgresql'].to_hash)
   cookbook 'postgresql'
   notifies :run, 'execute[reload geo-postgresql]', :immediately if should_notify
 end
@@ -81,7 +81,7 @@ template pg_hba_config do
   source 'pg_hba.conf.erb'
   owner postgresql_username
   mode '0644'
-  variables(lazy { node['gitlab']['geo-postgresql'].to_hash })
+  variables(lazy { node['gitlab']['geo_postgresql'].to_hash })
   cookbook 'postgresql'
   notifies :restart, 'runit_service[geo-postgresql]', :immediately if should_notify
 end
@@ -89,19 +89,19 @@ end
 template File.join(postgresql_data_dir, 'pg_ident.conf') do
   owner postgresql_username
   mode '0644'
-  variables(node['gitlab']['geo-postgresql'].to_hash)
+  variables(node['gitlab']['geo_postgresql'].to_hash)
   cookbook 'postgresql'
   notifies :restart, 'runit_service[geo-postgresql]', :immediately if should_notify
 end
 
 runit_service 'geo-postgresql' do
-  start_down node['gitlab']['geo-postgresql']['ha']
+  start_down node['gitlab']['geo_postgresql']['ha']
   restart_on_update false
   control(['t'])
   options({
     log_directory: postgresql_log_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo-postgresql'].to_hash)
+  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo_postgresql'].to_hash)
 end
 
 execute 'start geo-postgresql' do
@@ -121,12 +121,12 @@ template '/opt/gitlab/etc/gitlab-geo-psql-rc' do
   group 'root'
 end
 
-geo_pg_port = node['gitlab']['geo-postgresql']['port']
-geo_pg_user = node['gitlab']['geo-postgresql']['sql_user']
-geo_pg_user_password = node['gitlab']['geo-postgresql']['sql_user_password']
+geo_pg_port = node['gitlab']['geo_postgresql']['port']
+geo_pg_user = node['gitlab']['geo_postgresql']['sql_user']
+geo_pg_user_password = node['gitlab']['geo_postgresql']['sql_user_password']
 geo_database_name = node['gitlab']['geo_secondary']['db_database']
 
-if node['gitlab']['geo-postgresql']['enable']
+if node['gitlab']['geo_postgresql']['enable']
   postgresql_user geo_pg_user do
     password "md5#{geo_pg_user_password}" unless geo_pg_user_password.nil?
     helper geo_pg_helper
@@ -136,7 +136,7 @@ if node['gitlab']['geo-postgresql']['enable']
   postgresql_database geo_database_name do
     owner geo_pg_user
     database_port geo_pg_port
-    database_socket node['gitlab']['geo-postgresql']['unix_socket_directory']
+    database_socket node['gitlab']['geo_postgresql']['unix_socket_directory']
     helper geo_pg_helper
     action :create
   end
@@ -148,9 +148,9 @@ if node['gitlab']['geo-postgresql']['enable']
   end
 
   version_file 'Create version file for PostgreSQL' do
-    version_file_path File.join(node['gitlab']['geo-postgresql']['dir'], 'VERSION')
+    version_file_path File.join(node['gitlab']['geo_postgresql']['dir'], 'VERSION')
     version_check_cmd "/opt/gitlab/embedded/bin/postgres --version"
-    notifies :restart, 'runit_service[geo-postgresql]', :immediately if node['gitlab']['geo-postgresql']['auto_restart_on_version_change'] && geo_pg_helper.is_running? && should_notify
+    notifies :restart, 'runit_service[geo-postgresql]', :immediately if node['gitlab']['geo_postgresql']['auto_restart_on_version_change'] && geo_pg_helper.is_running? && should_notify
   end
 
   ruby_block 'warn pending geo-postgresql restart' do
@@ -164,7 +164,7 @@ if node['gitlab']['geo-postgresql']['enable']
       LoggingHelper.warning(message)
     end
     only_if { geo_pg_helper.is_running? && geo_pg_helper.running_version != geo_pg_helper.version }
-    not_if { node['gitlab']['geo-postgresql']['auto_restart_on_version_change'] }
+    not_if { node['gitlab']['geo_postgresql']['auto_restart_on_version_change'] }
   end
 end
 

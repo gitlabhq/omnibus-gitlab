@@ -75,13 +75,13 @@ module Gitlab
             note: "Geo does not require Foreign Data Wrapper (FDW) to be configured to replicate data."
           },
           {
-            config_keys: %w(gitlab geo-postgresql fdw_external_user),
+            config_keys: %w(gitlab geo_postgresql fdw_external_user),
             deprecation: '13.3',
             removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6138
             note: "Geo does not require Foreign Data Wrapper (FDW) to be configured to replicate data."
           },
           {
-            config_keys: %w(gitlab geo-postgresql fdw_external_password),
+            config_keys: %w(gitlab geo_postgresql fdw_external_password),
             deprecation: '13.3',
             removal: '14.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6138
             note: "Geo does not require Foreign Data Wrapper (FDW) to be configured to replicate data."
