@@ -17,9 +17,9 @@ class GeoPgHelper < BasePgHelper
   def connection_info
     build_connection_info(
       node['gitlab']['geo_secondary']['db_database'],
-      node['gitlab']['geo-postgresql']['unix_socket_directory'],
-      node['gitlab']['geo-postgresql']['port'],
-      node['gitlab']['geo-postgresql']['sql_user']
+      node['gitlab']['geo_postgresql']['unix_socket_directory'],
+      node['gitlab']['geo_postgresql']['port'],
+      node['gitlab']['geo_postgresql']['sql_user']
     )
   end
 end

@@ -79,80 +79,80 @@ default['gitlab']['geo_secondary']['db_database_tasks'] = true
 # Geo: PostgreSQL (Tracking database)
 ###
 
-default['gitlab']['geo-postgresql'] = default['postgresql'].dup
+default['gitlab']['geo_postgresql'] = default['postgresql'].dup
 # We are inheriting default attributes from postgresql and changing below what should be different
-default['gitlab']['geo-postgresql']['enable'] = false
-default['gitlab']['geo-postgresql']['dir'] = '/var/opt/gitlab/geo-postgresql'
-default['gitlab']['geo-postgresql']['log_directory'] = '/var/log/gitlab/geo-postgresql'
-default['gitlab']['geo-postgresql']['unix_socket_directory'] = nil
-default['gitlab']['geo-postgresql']['ssl'] = 'off'
+default['gitlab']['geo_postgresql']['enable'] = false
+default['gitlab']['geo_postgresql']['dir'] = '/var/opt/gitlab/geo-postgresql'
+default['gitlab']['geo_postgresql']['log_directory'] = '/var/log/gitlab/geo-postgresql'
+default['gitlab']['geo_postgresql']['unix_socket_directory'] = nil
+default['gitlab']['geo_postgresql']['ssl'] = 'off'
 # Postgres User's Environment Path
-default['gitlab']['geo-postgresql']['sql_user'] = 'gitlab_geo'
-default['gitlab']['geo-postgresql']['sql_mattermost_user'] = nil
-default['gitlab']['geo-postgresql']['port'] = 5431
+default['gitlab']['geo_postgresql']['sql_user'] = 'gitlab_geo'
+default['gitlab']['geo_postgresql']['sql_mattermost_user'] = nil
+default['gitlab']['geo_postgresql']['port'] = 5431
 
 # Mininum of 1/8 of total memory and Maximum of 1024MB as sane defaults
-default['gitlab']['geo-postgresql']['shared_buffers'] = "#{[(node['memory']['total'].to_i / 8) / 1024, 1024].max}MB"
+default['gitlab']['geo_postgresql']['shared_buffers'] = "#{[(node['memory']['total'].to_i / 8) / 1024, 1024].max}MB"
 
-default['gitlab']['geo-postgresql']['work_mem'] = '16MB'
-default['gitlab']['geo-postgresql']['maintenance_work_mem'] = '16MB'
-default['gitlab']['geo-postgresql']['effective_cache_size'] = "#{[(node['memory']['total'].to_i / 8) / 1024, 2048].max}MB" # double of shared_buffers estimation
-default['gitlab']['geo-postgresql']['log_min_duration_statement'] = -1 # Disable slow query logging by default
-default['gitlab']['geo-postgresql']['min_wal_size'] = '80MB'
-default['gitlab']['geo-postgresql']['max_wal_size'] = '1GB'
-default['gitlab']['geo-postgresql']['checkpoint_timeout'] = '5min'
-default['gitlab']['geo-postgresql']['checkpoint_completion_target'] = 0.9
-default['gitlab']['geo-postgresql']['checkpoint_warning'] = '30s'
-default['gitlab']['geo-postgresql']['wal_buffers'] = '-1'
-default['gitlab']['geo-postgresql']['autovacuum'] = 'on'
-default['gitlab']['geo-postgresql']['log_autovacuum_min_duration'] = '-1'
-default['gitlab']['geo-postgresql']['autovacuum_max_workers'] = '3'
-default['gitlab']['geo-postgresql']['autovacuum_naptime'] = '1min'
-default['gitlab']['geo-postgresql']['autovacuum_vacuum_threshold'] = '50'
-default['gitlab']['geo-postgresql']['autovacuum_analyze_threshold'] = '50'
-default['gitlab']['geo-postgresql']['autovacuum_vacuum_scale_factor'] = '0.02' # 10x lower than PG defaults
-default['gitlab']['geo-postgresql']['autovacuum_analyze_scale_factor'] = '0.01' # 10x lower than PG defaults
-default['gitlab']['geo-postgresql']['autovacuum_freeze_max_age'] = '200000000'
-default['gitlab']['geo-postgresql']['autovacuum_vacuum_cost_delay'] = '20ms'
-default['gitlab']['geo-postgresql']['autovacuum_vacuum_cost_limit'] = '-1'
-default['gitlab']['geo-postgresql']['statement_timeout'] = '60000'
-default['gitlab']['geo-postgresql']['idle_in_transaction_session_timeout'] = '60000'
-default['gitlab']['geo-postgresql']['log_line_prefix'] = nil
-default['gitlab']['geo-postgresql']['track_activity_query_size'] = '1024'
-default['gitlab']['geo-postgresql']['effective_io_concurrency'] = 1
-default['gitlab']['geo-postgresql']['max_worker_processes'] = 8
-default['gitlab']['geo-postgresql']['max_parallel_workers_per_gather'] = 0
-default['gitlab']['geo-postgresql']['log_lock_waits'] = 1
-default['gitlab']['geo-postgresql']['deadlock_timeout'] = '5s'
-default['gitlab']['geo-postgresql']['track_io_timing'] = 'off'
-default['gitlab']['geo-postgresql']['custom_pg_hba_entries'] = {}
-default['gitlab']['geo-postgresql']['default_statistics_target'] = 1000
+default['gitlab']['geo_postgresql']['work_mem'] = '16MB'
+default['gitlab']['geo_postgresql']['maintenance_work_mem'] = '16MB'
+default['gitlab']['geo_postgresql']['effective_cache_size'] = "#{[(node['memory']['total'].to_i / 8) / 1024, 2048].max}MB" # double of shared_buffers estimation
+default['gitlab']['geo_postgresql']['log_min_duration_statement'] = -1 # Disable slow query logging by default
+default['gitlab']['geo_postgresql']['min_wal_size'] = '80MB'
+default['gitlab']['geo_postgresql']['max_wal_size'] = '1GB'
+default['gitlab']['geo_postgresql']['checkpoint_timeout'] = '5min'
+default['gitlab']['geo_postgresql']['checkpoint_completion_target'] = 0.9
+default['gitlab']['geo_postgresql']['checkpoint_warning'] = '30s'
+default['gitlab']['geo_postgresql']['wal_buffers'] = '-1'
+default['gitlab']['geo_postgresql']['autovacuum'] = 'on'
+default['gitlab']['geo_postgresql']['log_autovacuum_min_duration'] = '-1'
+default['gitlab']['geo_postgresql']['autovacuum_max_workers'] = '3'
+default['gitlab']['geo_postgresql']['autovacuum_naptime'] = '1min'
+default['gitlab']['geo_postgresql']['autovacuum_vacuum_threshold'] = '50'
+default['gitlab']['geo_postgresql']['autovacuum_analyze_threshold'] = '50'
+default['gitlab']['geo_postgresql']['autovacuum_vacuum_scale_factor'] = '0.02' # 10x lower than PG defaults
+default['gitlab']['geo_postgresql']['autovacuum_analyze_scale_factor'] = '0.01' # 10x lower than PG defaults
+default['gitlab']['geo_postgresql']['autovacuum_freeze_max_age'] = '200000000'
+default['gitlab']['geo_postgresql']['autovacuum_vacuum_cost_delay'] = '20ms'
+default['gitlab']['geo_postgresql']['autovacuum_vacuum_cost_limit'] = '-1'
+default['gitlab']['geo_postgresql']['statement_timeout'] = '60000'
+default['gitlab']['geo_postgresql']['idle_in_transaction_session_timeout'] = '60000'
+default['gitlab']['geo_postgresql']['log_line_prefix'] = nil
+default['gitlab']['geo_postgresql']['track_activity_query_size'] = '1024'
+default['gitlab']['geo_postgresql']['effective_io_concurrency'] = 1
+default['gitlab']['geo_postgresql']['max_worker_processes'] = 8
+default['gitlab']['geo_postgresql']['max_parallel_workers_per_gather'] = 0
+default['gitlab']['geo_postgresql']['log_lock_waits'] = 1
+default['gitlab']['geo_postgresql']['deadlock_timeout'] = '5s'
+default['gitlab']['geo_postgresql']['track_io_timing'] = 'off'
+default['gitlab']['geo_postgresql']['custom_pg_hba_entries'] = {}
+default['gitlab']['geo_postgresql']['default_statistics_target'] = 1000
 
 # Replication settings
-default['gitlab']['geo-postgresql']['wal_level'] = 'minimal'
-default['gitlab']['geo-postgresql']['wal_log_hints'] = 'off'
-default['gitlab']['geo-postgresql']['max_wal_senders'] = 0
-default['gitlab']['geo-postgresql']['wal_keep_segments'] = 10
-default['gitlab']['geo-postgresql']['wal_keep_size'] = nil
-default['gitlab']['geo-postgresql']['hot_standby'] = 'off'
-default['gitlab']['geo-postgresql']['max_standby_archive_delay'] = '30s'
-default['gitlab']['geo-postgresql']['max_standby_streaming_delay'] = '30s'
-default['gitlab']['geo-postgresql']['max_replication_slots'] = 0
-default['gitlab']['geo-postgresql']['synchronous_commit'] = 'on'
-default['gitlab']['geo-postgresql']['synchronous_standby_names'] = ''
-default['gitlab']['geo-postgresql']['hot_standby_feedback'] = 'off'
+default['gitlab']['geo_postgresql']['wal_level'] = 'minimal'
+default['gitlab']['geo_postgresql']['wal_log_hints'] = 'off'
+default['gitlab']['geo_postgresql']['max_wal_senders'] = 0
+default['gitlab']['geo_postgresql']['wal_keep_segments'] = 10
+default['gitlab']['geo_postgresql']['wal_keep_size'] = nil
+default['gitlab']['geo_postgresql']['hot_standby'] = 'off'
+default['gitlab']['geo_postgresql']['max_standby_archive_delay'] = '30s'
+default['gitlab']['geo_postgresql']['max_standby_streaming_delay'] = '30s'
+default['gitlab']['geo_postgresql']['max_replication_slots'] = 0
+default['gitlab']['geo_postgresql']['synchronous_commit'] = 'on'
+default['gitlab']['geo_postgresql']['synchronous_standby_names'] = ''
+default['gitlab']['geo_postgresql']['hot_standby_feedback'] = 'off'
 
 # Backup/Archive settings
-default['gitlab']['geo-postgresql']['archive_mode'] = 'off'
-default['gitlab']['geo-postgresql']['archive_command'] = nil
-default['gitlab']['geo-postgresql']['archive_timeout'] = '0'
+default['gitlab']['geo_postgresql']['archive_mode'] = 'off'
+default['gitlab']['geo_postgresql']['archive_command'] = nil
+default['gitlab']['geo_postgresql']['archive_timeout'] = '0'
 
 # pgbouncer settings
-default['gitlab']['geo-postgresql']['pgbouncer_user'] = 'pgbouncer'
-default['gitlab']['geo-postgresql']['pgbouncer_user_password'] = nil
+default['gitlab']['geo_postgresql']['pgbouncer_user'] = 'pgbouncer'
+default['gitlab']['geo_postgresql']['pgbouncer_user_password'] = nil
 
 # Automatically restart on version changes
-default['gitlab']['geo-postgresql']['auto_restart_on_version_change'] = true
+default['gitlab']['geo_postgresql']['auto_restart_on_version_change'] = true
 
 ###
 # Geo: LogCursor (replication)
@@ -165,3 +165,4 @@ default['gitlab']['geo_logcursor']['env_directory'] = '/opt/gitlab/etc/geo-logcu
 default['gitlab']['suggested-reviewers'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['suggested_reviewers'].to_h }, "node['gitlab']['suggested-reviewers']", "node['gitlab']['suggested_reviewers']")
 default['gitlab']['geo-secondary'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['geo_secondary'].to_h }, "node['gitlab']['geo-secondary']", "node['gitlab']['geo_secondary']")
 default['gitlab']['geo-logcursor'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['geo_logcursor'].to_h }, "node['gitlab']['geo-logcursor']", "node['gitlab']['geo_logcursor']")
+default['gitlab']['geo-postgresql'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['geo_postgresql'].to_h }, "node['gitlab']['geo-postgresql']", "node['gitlab']['geo_postgresql']")

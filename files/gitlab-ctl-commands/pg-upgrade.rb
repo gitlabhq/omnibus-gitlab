@@ -57,7 +57,7 @@ add_command_under_category 'revert-pg-upgrade', 'database',
       options[:tmp_dir],
       options[:timeout]
     )
-    geo_db_worker.data_dir = File.join(@attributes['gitlab']['geo-postgresql']['dir'], 'data')
+    geo_db_worker.data_dir = File.join(@attributes['gitlab']['geo_postgresql']['dir'], 'data')
     geo_db_worker.tmp_data_dir = "#{geo_db_worker.tmp_dir}/geo-data" unless geo_db_worker.tmp_dir.nil?
     geo_db_worker.psql_command = 'gitlab-geo-psql'
   end
@@ -192,7 +192,7 @@ add_command_under_category 'pg-upgrade', 'database',
   unless options[:skip_disk_check]
     check_dirs = [@db_worker.tmp_dir]
     check_dirs << @db_worker.data_dir if pg_enabled || patroni_enabled
-    check_dirs << File.join(@attributes['gitlab']['geo-postgresql']['dir'], 'data') if geo_enabled
+    check_dirs << File.join(@attributes['gitlab']['geo_postgresql']['dir'], 'data') if geo_enabled
 
     check_dirs.compact.uniq.each do |dir|
       unless GitlabCtl::Util.progress_message(
@@ -473,7 +473,7 @@ def geo_pg_upgrade
   log('Upgrading the geo-postgresql database')
   # Secondary nodes have a replica db under /var/opt/gitlab/postgresql that needs
   # the bin files updated and the geo tracking db under /var/opt/gitlab/geo-postgresl that needs data updated
-  data_dir = File.join(@attributes['gitlab']['geo-postgresql']['dir'], 'data')
+  data_dir = File.join(@attributes['gitlab']['geo_postgresql']['dir'], 'data')
 
   @db_service_name = 'geo-postgresql'
   @db_worker.data_dir = data_dir

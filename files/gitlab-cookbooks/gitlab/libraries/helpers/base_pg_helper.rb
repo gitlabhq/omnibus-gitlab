@@ -166,9 +166,10 @@ class BasePgHelper < BaseHelper
   end
 
   def node_attributes
-    return node['gitlab'][service_name] if node['gitlab'].key?(service_name)
+    node_attribute_key = SettingsDSL::Utils.sanitized_key(service_name)
+    return node['gitlab'][node_attribute_key] if node['gitlab'].key?(node_attribute_key)
 
-    node[service_name]
+    node[node_attribute_key]
   end
 
   def is_standby?
@@ -202,14 +203,16 @@ class BasePgHelper < BaseHelper
   end
 
   def bootstrapped?
+    node_attribute_key = SettingsDSL::Utils.sanitized_key(service_name)
+
     # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
     # being split to their own dedicated cookbooks, and attributes are being moved from
     # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we
     # need to check both.
 
-    return File.exist?(File.join(node['gitlab'][service_name]['dir'], 'data', 'PG_VERSION')) if node['gitlab'].key?(service_name)
+    return File.exist?(File.join(node['gitlab'][node_attribute_key]['dir'], 'data', 'PG_VERSION')) if node['gitlab'].key?(node_attribute_key)
 
-    File.exist?(File.join(node[service_name]['dir'], 'data', 'PG_VERSION'))
+    File.exist?(File.join(node[node_attribute_key]['dir'], 'data', 'PG_VERSION'))
   end
 
   def psql_cmd(cmd_list)
@@ -243,12 +246,14 @@ class BasePgHelper < BaseHelper
   end
 
   def database_version
+    node_attribute_key = SettingsDSL::Utils.sanitized_key(service_name)
+
     # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
     # being split to their own dedicated cookbooks, and attributes are being moved from
     # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we
     # need to check both.
 
-    version_file = node['gitlab'].key?(service_name) ? "#{@node['gitlab'][service_name]['dir']}/data/PG_VERSION" : "#{@node[service_name]['dir']}/data/PG_VERSION"
+    version_file = node['gitlab'].key?(node_attribute_key) ? "#{@node['gitlab'][node_attribute_key]['dir']}/data/PG_VERSION" : "#{@node[node_attribute_key]['dir']}/data/PG_VERSION"
     PGVersion.new(File.read(version_file).chomp) if File.exist?(version_file)
   end
 

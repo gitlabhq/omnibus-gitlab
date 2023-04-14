@@ -44,6 +44,7 @@ module SettingsDSL
     gitlab_kas
     geo_secondary
     geo_logcursor
+    geo_postgresql
   ].freeze
 
   def self.extended(base)

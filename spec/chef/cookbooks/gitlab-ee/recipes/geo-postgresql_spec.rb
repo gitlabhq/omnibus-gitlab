@@ -69,7 +69,7 @@ RSpec.describe 'geo postgresql' do
 
       context 'when rendering postgresql.conf' do
         it 'correctly sets the shared_preload_libraries default setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['shared_preload_libraries']).to be_nil
+          expect(chef_run.node['gitlab']['geo_postgresql']['shared_preload_libraries']).to be_nil
 
           expect(chef_run).to render_file(postgresql_conf)
             .with_content(/shared_preload_libraries = ''/)
@@ -82,7 +82,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets the max_replication_slots setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['max_replication_slots']).to eq(0)
+          expect(chef_run.node['gitlab']['geo_postgresql']['max_replication_slots']).to eq(0)
 
           expect(chef_run).to render_file(
             postgresql_conf
@@ -90,7 +90,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets the synchronous_commit setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['synchronous_standby_names']).to eq('')
+          expect(chef_run.node['gitlab']['geo_postgresql']['synchronous_standby_names']).to eq('')
 
           expect(chef_run).to render_file(
             postgresql_conf
@@ -104,7 +104,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets the max_locks_per_transaction setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['max_locks_per_transaction'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['max_locks_per_transaction'])
             .to eq(128)
 
           expect(chef_run).to render_file(
@@ -114,7 +114,7 @@ RSpec.describe 'geo postgresql' do
       end
       context 'when rendering runtime.conf' do
         it 'correctly sets the log_line_prefix default setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['log_line_prefix']).to be_nil
+          expect(chef_run.node['gitlab']['geo_postgresql']['log_line_prefix']).to be_nil
 
           expect(chef_run).to render_file(runtime_conf)
             .with_content(/log_line_prefix = ''/)
@@ -139,7 +139,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets the synchronous_commit setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['synchronous_commit']).to eq('on')
+          expect(chef_run.node['gitlab']['geo_postgresql']['synchronous_commit']).to eq('on')
 
           expect(chef_run).to render_file(
             runtime_conf
@@ -147,7 +147,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets the hot_standby_feedback setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['hot_standby_feedback'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['hot_standby_feedback'])
             .to eq('off')
 
           expect(chef_run).to render_file(
@@ -156,7 +156,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets the random_page_cost setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['random_page_cost'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['random_page_cost'])
             .to eq(2.0)
 
           expect(chef_run).to render_file(
@@ -165,7 +165,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets the log_temp_files setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['log_temp_files'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['log_temp_files'])
             .to eq(-1)
 
           expect(chef_run).to render_file(
@@ -174,7 +174,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets the log_checkpoints setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['log_checkpoints'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['log_checkpoints'])
             .to eq('off')
 
           expect(chef_run).to render_file(
@@ -183,7 +183,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets idle_in_transaction_session_timeout' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['idle_in_transaction_session_timeout'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['idle_in_transaction_session_timeout'])
             .to eq('60000')
 
           expect(chef_run).to render_file(runtime_conf)
@@ -191,7 +191,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets effective_io_concurrency' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['effective_io_concurrency'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['effective_io_concurrency'])
             .to eq(1)
 
           expect(chef_run).to render_file(runtime_conf)
@@ -199,7 +199,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets max_worker_processes' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['max_worker_processes'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['max_worker_processes'])
             .to eq(8)
 
           expect(chef_run).to render_file(runtime_conf)
@@ -207,7 +207,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets max_parallel_workers_per_gather' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['max_parallel_workers_per_gather'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['max_parallel_workers_per_gather'])
             .to eq(0)
 
           expect(chef_run).to render_file(runtime_conf)
@@ -215,7 +215,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets log_lock_waits' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['log_lock_waits'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['log_lock_waits'])
             .to eq(1)
 
           expect(chef_run).to render_file(runtime_conf)
@@ -223,7 +223,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets deadlock_timeout' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['deadlock_timeout'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['deadlock_timeout'])
             .to eq('5s')
 
           expect(chef_run).to render_file(runtime_conf)
@@ -231,7 +231,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'sets track_io_timing' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['track_io_timing'])
+          expect(chef_run.node['gitlab']['geo_postgresql']['track_io_timing'])
             .to eq('off')
 
           expect(chef_run).to render_file(runtime_conf)
@@ -287,7 +287,7 @@ RSpec.describe 'geo postgresql' do
         end
 
         it 'correctly sets the shared_preload_libraries setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['shared_preload_libraries']).to eql('pg_stat_statements')
+          expect(chef_run.node['gitlab']['geo_postgresql']['shared_preload_libraries']).to eql('pg_stat_statements')
 
           expect(chef_run).to render_file(postgresql_conf)
             .with_content(/shared_preload_libraries = 'pg_stat_statements'/)
@@ -308,7 +308,7 @@ RSpec.describe 'geo postgresql' do
 
       context 'when rendering runtime.conf' do
         it 'correctly sets the log_line_prefix setting' do
-          expect(chef_run.node['gitlab']['geo-postgresql']['log_line_prefix']).to eql('%a')
+          expect(chef_run.node['gitlab']['geo_postgresql']['log_line_prefix']).to eql('%a')
 
           expect(chef_run).to render_file(runtime_conf)
             .with_content(/log_line_prefix = '%a'/)

@@ -1,5 +1,5 @@
 psql_user='<%= node['postgresql']['username'] %>'
 psql_group='<%= node['postgresql']['group'] %>'
-psql_host='<%= node['gitlab']['geo-postgresql']['unix_socket_directory'] %>'
-psql_port='<%= node['gitlab']['geo-postgresql']['port'] %>'
+psql_host='<%= node['gitlab']['geo_postgresql']['unix_socket_directory'] %>'
+psql_port='<%= node['gitlab']['geo_postgresql']['port'] %>'
 psql_dbname='<%= node['gitlab']['geo_secondary']['db_database'] %>'

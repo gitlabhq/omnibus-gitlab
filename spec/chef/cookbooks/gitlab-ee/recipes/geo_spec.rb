@@ -82,7 +82,7 @@ RSpec.describe 'gitlab-ee::geo' do
 
     context 'in geo_postgres settings' do
       it 'is enabled' do
-        expect(node['gitlab']['geo-postgresql']['enable']).to eq(true)
+        expect(node['gitlab']['geo_postgresql']['enable']).to eq(true)
       end
     end
 
