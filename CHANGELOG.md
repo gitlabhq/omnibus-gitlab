@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.8.6 (2023-04-18)
+
+### Fixed (1 change)
+
+- [Fix suggested_reviewers run when rails is disabled](gitlab-org/omnibus-gitlab@583174dffdcf16980c00fe87c010dc577732429d) ([merge request](gitlab-org/omnibus-gitlab!6796))
+
 ## 15.8.5 (2023-03-30)
 
 ### Security (3 changes)
