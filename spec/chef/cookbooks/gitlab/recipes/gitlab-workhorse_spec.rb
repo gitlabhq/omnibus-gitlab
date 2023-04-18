@@ -276,20 +276,48 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
       end
     end
 
-    # Workhorse doesn't directly use a Google Cloud client and relies on
-    # pre-signed URLs, but include a test for completeness.
     context 'with Google Cloud config' do
-      let(:connection_hash) do
-        {
-          'provider' => 'Google',
-          'google_application_default' => true
-        }
+      where(:parameter_name, :parameter_value) do
+        'google_application_default' | true
+        'google_application_default' | ''
+        'google_application_default' | nil
+        'google_json_key_string'     | 'test'
+        'google_json_key_string'     | ''
+        'google_json_key_string'     | nil
+        'google_json_key_location'   | 'test'
+        'google_json_key_location'   | ''
+        'google_json_key_location'   | nil
       end
 
-      it 'does not include object storage config' do
-        expect(chef_run).to render_file(config_file).with_content { |content|
-          expect(content).not_to include(%([object_storage]))
-        }
+      with_them do
+        let(:connection_hash) do
+          {
+            'provider' => 'Google',
+            parameter_name => parameter_value
+          }
+        end
+        let(:expected_parameter_value) do
+          if parameter_name == 'google_json_key_string'
+            "'''#{parameter_value}'''"
+          else
+            parameter_value.to_json
+          end
+        end
+
+        if params[:parameter_value].nil?
+          it 'does not include object storage config' do
+            expect(chef_run).to render_file(config_file).with_content { |content|
+              expect(content).not_to include(%([object_storage]))
+            }
+          end
+        else
+          it 'includes the proper google configuration' do
+            expect(chef_run).to render_file(config_file).with_content { |content|
+              expect(content).to include(%([object_storage]\n  provider = "Google"\n))
+              expect(content).to include(%([object_storage.google]\n  #{parameter_name} = #{expected_parameter_value}))
+            }
+          end
+        end
       end
     end
   end
