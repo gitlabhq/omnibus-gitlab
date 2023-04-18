@@ -132,6 +132,12 @@ No changes.
 - [Corrects the example for KAS K8S proxy URL](gitlab-org/omnibus-gitlab@c064071105007d8219e674c07d2f67812d330875) by @zeeZ ([merge request](gitlab-org/omnibus-gitlab!6648))
 - [Use templatesymlink :delete to cleanup redis config](gitlab-org/omnibus-gitlab@5dfefc907e683771cb543ecd49c549da651f0c8b) ([merge request](gitlab-org/omnibus-gitlab!6594))
 
+## 15.8.6 (2023-04-18)
+
+### Fixed (1 change)
+
+- [Fix suggested_reviewers run when rails is disabled](gitlab-org/omnibus-gitlab@583174dffdcf16980c00fe87c010dc577732429d) ([merge request](gitlab-org/omnibus-gitlab!6796))
+
 ## 15.8.5 (2023-03-30)
 
 ### Security (3 changes)
