@@ -912,13 +912,15 @@ RSpec.describe 'gitaly' do
       context 'using local gitaly' do
         before do
           stub_gitlab_rb(
-            {
-              gitaly: { storage: nil },
-              git_data_dirs:
-              {
-                'default' => { 'path' => '/tmp/default/git-data' },
-                'nfs1' => { 'path' => '/mnt/nfs1' }
+            gitaly: {
+              configuration: {
+                storage: nil
               }
+            },
+            git_data_dirs:
+            {
+              'default' => { 'path' => '/tmp/default/git-data' },
+              'nfs1' => { 'path' => '/mnt/nfs1' }
             }
           )
         end
@@ -936,12 +938,14 @@ RSpec.describe 'gitaly' do
       context 'using external gitaly' do
         before do
           stub_gitlab_rb(
-            {
-              gitaly: { storage: nil },
-              git_data_dirs:
-              {
-                'default' => { 'gitaly_address' => 'tcp://gitaly.internal:8075' },
+            gitaly: {
+              configuration: {
+                storage: nil
               }
+            },
+            git_data_dirs:
+            {
+              'default' => { 'gitaly_address' => 'tcp://gitaly.internal:8075' },
             }
           )
         end
@@ -951,6 +955,68 @@ RSpec.describe 'gitaly' do
             .with_content(%r{\[\[storage\]\]\s+name = "default"\s+path = "/var/opt/gitlab/git-data/repositories"})
           expect(chef_run).not_to render_file(config_path)
             .with_content('gitaly_address: "tcp://gitaly.internal:8075"')
+        end
+      end
+
+      context "when gitaly storage is explicitly set" do
+        context "using gitaly['configuration']['storage'] key" do
+          before do
+            stub_gitlab_rb(
+              gitaly: {
+                configuration: {
+                  storage: [
+                    {
+                      'name' => 'nfs1',
+                      'path' => '/mnt/nfs1/repositories'
+                    },
+                    {
+                      'name' => 'default',
+                      'path' => '/tmp/default/git-data/repositories'
+                    }
+                  ]
+                }
+              },
+              git_data_dirs: {
+                'default' => { 'path' => '/tmp/gitaly-git-data' },
+              }
+            )
+          end
+
+          it 'populates gitaly config.toml with custom storages from gitaly configuration' do
+            expect(chef_run).to render_file(config_path)
+              .with_content(%r{\[\[storage\]\]\s+name = "default"\s+path = "/tmp/default/git-data/repositories"})
+            expect(chef_run).to render_file(config_path)
+              .with_content(%r{\[\[storage\]\]\s+name = "nfs1"\s+path = "/mnt/nfs1/repositories"})
+          end
+        end
+
+        context "using legacy gitaly['storage'] key" do
+          before do
+            stub_gitlab_rb(
+              gitaly: {
+                storage: [
+                  {
+                    'name' => 'nfs1',
+                    'path' => '/mnt/nfs1/repositories'
+                  },
+                  {
+                    'name' => 'default',
+                    'path' => '/tmp/default/git-data/repositories'
+                  }
+                ]
+              },
+              git_data_dirs: {
+                'default' => { 'path' => '/tmp/gitaly-git-data' },
+              }
+            )
+          end
+
+          it 'populates gitaly config.toml with custom storages from gitaly configuration' do
+            expect(chef_run).to render_file(config_path)
+              .with_content(%r{\[\[storage\]\]\s+name = "default"\s+path = "/tmp/default/git-data/repositories"})
+            expect(chef_run).to render_file(config_path)
+              .with_content(%r{\[\[storage\]\]\s+name = "nfs1"\s+path = "/mnt/nfs1/repositories"})
+          end
         end
       end
     end

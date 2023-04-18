@@ -93,7 +93,8 @@ module Gitaly
           'path' => value['path']
         }
       end
-      Gitlab['gitaly']['storage'] = storages
+      Gitlab['gitaly']['configuration'] ||= {}
+      Gitlab['gitaly']['configuration']['storage'] = storages
     end
 
     # Compute the default gitconfig from the old Omnibus gitconfig setting.
