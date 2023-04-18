@@ -105,10 +105,57 @@ RSpec.describe GitlabWorkhorseHelper do
     end
 
     context 'with Google' do
-      let(:connection_hash) { { 'provider' => 'Google' } }
+      context 'with application default' do
+        let(:connection_hash) { google_connection_hash_with_application_default }
 
-      it 'returns nil' do
-        expect(subject.object_store_toml).to be nil
+        it 'returns a valid TOML' do
+          data = Tomlrb.parse(subject.object_store_toml)
+
+          expect(data.dig('object_storage', 'provider')).to eq('Google')
+
+          google_data = data.dig('object_storage', 'google')
+          expect(google_data).to be_a(Hash)
+          expect(google_data.keys.count).to eq(1)
+          expect(google_data['google_application_default']).to eq(true)
+        end
+      end
+
+      context 'with json_key_string' do
+        let(:connection_hash) { google_connection_hash_with_json_key_string }
+
+        it 'returns a valid TOML' do
+          data = Tomlrb.parse(subject.object_store_toml)
+
+          expect(data.dig('object_storage', 'provider')).to eq('Google')
+
+          google_data = data.dig('object_storage', 'google')
+          expect(google_data).to be_a(Hash)
+          expect(google_data.keys.count).to eq(1)
+          expect(google_data['google_json_key_string']).to eq(connection_hash['google_json_key_string'])
+        end
+      end
+
+      context 'with json_key_location' do
+        let(:connection_hash) { google_connection_hash_with_json_key_location }
+
+        it 'returns a valid TOML' do
+          data = Tomlrb.parse(subject.object_store_toml)
+
+          expect(data.dig('object_storage', 'provider')).to eq('Google')
+
+          google_data = data.dig('object_storage', 'google')
+          expect(google_data).to be_a(Hash)
+          expect(google_data.keys.count).to eq(1)
+          expect(google_data['google_connection_hash_with_json_key_location']).to eq(connection_hash['google_connection_hash_with_json_key_location'])
+        end
+      end
+
+      context 'with invalid connection_hash' do
+        let(:connection_hash) { incomplete_google_connection_hash }
+
+        it 'returns a nil TOML' do
+          expect(subject.object_store_toml).to be_nil
+        end
       end
     end
   end
