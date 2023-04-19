@@ -35,7 +35,10 @@ build do
 
   # Pages compiles with CGO_ENABLED=0 by default, so we need to activate
   # FIPS mode explicitly.
-  env['FIPS_MODE'] = '1' if Build::Check.use_system_ssl?
+  if Build::Check.use_system_ssl?
+    env['FIPS_MODE'] = '1'
+    env['GOEXPERIMENT'] = 'boringcrypto' if Build::Check.boringcrypto_supported?
+  end
 
   make 'gitlab-pages', env: env
 

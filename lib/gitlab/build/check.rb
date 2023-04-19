@@ -21,6 +21,10 @@ module Build
         false
       end
 
+      def boringcrypto_supported?
+        system({ 'GOEXPERIMENT' => 'boringcrypto' }, *%w(go version))
+      end
+
       def use_system_ssl?
         # Once we implement the above TODO, we can get rid of this variable and
         # gate on `fips?` alone.
