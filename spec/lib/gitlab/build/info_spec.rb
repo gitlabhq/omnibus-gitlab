@@ -162,6 +162,42 @@ RSpec.describe Build::Info do
         expect(described_class.latest_stable_tag).to eq('12.121.12+ee.0')
       end
     end
+
+    describe 'on stable branches' do
+      before do
+        stub_env_var('CI_COMMIT_BRANCH', '15-11-stable')
+        stub_is_ee(false)
+      end
+
+      context 'when no tags exist in the stable branch' do
+        before do
+          allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '15.11*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return(nil)
+        end
+
+        it 'returns the latest available stable tag' do
+          # Twice because we are calling the method two times - once to check
+          # the return value and another time to check if the message is
+          # printed
+          expect(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '15.11*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").twice
+          expect(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").twice.and_return('15.10.3+ce.0')
+
+          expect(described_class.latest_stable_tag).to eq('15.10.3+ce.0')
+          expect { described_class.latest_stable_tag }.to output(/No tags found in 15.11.x series/).to_stdout
+        end
+      end
+
+      context 'when tags exist in the stable branch' do
+        before do
+          allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '15.11*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return('15.11.0+ce.0')
+        end
+
+        it 'returns the latest available stable tag' do
+          expect(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '15.11*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1")
+          expect(described_class).not_to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1")
+          expect(described_class.latest_stable_tag).to eq('15.11.0+ce.0')
+        end
+      end
+    end
   end
 
   describe '.gitlab_version' do
