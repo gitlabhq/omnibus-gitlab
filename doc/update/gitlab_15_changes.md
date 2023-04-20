@@ -9,7 +9,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 NOTE:
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/index.html#checking-for-background-migrations-before-upgrading).
 
-## 15.11 
+## 15.11
 
 ### PostgreSQL 13 upgrade
 
