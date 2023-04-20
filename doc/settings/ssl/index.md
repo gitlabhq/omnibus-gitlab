@@ -586,7 +586,7 @@ directory.
 This applies in both cases where GitLab itself, or external resources GitLab must connect to, are using a custom
 certificate chain.
 
-For example, for GitLab itself you can use: 
+For example, for GitLab itself you can use:
 
 - `/etc/gitlab/trusted-certs/example.gitlab.com.crt`
 - `/etc/gitlab/trusted-certs/example.gitlab.com_intermediate.crt`
