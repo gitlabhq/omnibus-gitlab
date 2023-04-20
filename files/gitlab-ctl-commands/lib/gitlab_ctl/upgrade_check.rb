@@ -1,6 +1,6 @@
 module GitlabCtl
   class UpgradeCheck
-    MIN_VERSION = ENV['MIN_VERSION'] || '15.0'.freeze
+    MIN_VERSION = ENV['MIN_VERSION'] || '15.11'.freeze
 
     class <<self
       def valid?(ov, nv)
