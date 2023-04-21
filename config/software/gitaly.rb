@@ -48,61 +48,14 @@ source git: version.remote
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  ruby_build_dir = "#{Omnibus::Config.source_dir}/gitaly/ruby"
-  bundle_without = %w(development test)
-
   if Build::Check.use_system_ssl?
     env['CMAKE_FLAGS'] = OpenSSLHelper.cmake_flags
     env['PKG_CONFIG_PATH'] = OpenSSLHelper.pkg_config_dirs
     env['FIPS_MODE'] = '1'
   end
 
-  bundle 'config force_ruby_platform true', env: env if OhaiHelper.ruby_native_gems_unsupported?
-  bundle "config set --local frozen 'true'"
-  bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
-  bundle "install --without #{bundle_without.join(' ')}", env: env, cwd: ruby_build_dir
-  touch '.ruby-bundle' # Prevent 'make install' below from running 'bundle install' again
-  bundle "exec license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=gitaly-ruby-licenses.json", cwd: ruby_build_dir, env: env
-
-  block 'delete grpc shared objects' do
-    # Delete unused shared objects included in grpc gem
-    grpc_path = shellout!("#{embedded_bin('bundle')} show grpc", env: env, cwd: ruby_build_dir).stdout.strip
-    ruby_ver = shellout!("#{embedded_bin('ruby')} -e 'puts RUBY_VERSION.match(/\\d+\\.\\d+/)[0]'", env: env).stdout.chomp
-    command "find #{File.join(grpc_path, 'src/ruby/lib/grpc')} ! -path '*/#{ruby_ver}/*' -name 'grpc_c.so' -type f -print -delete"
-  end
-
-  ruby_install_dir = "#{install_dir}/embedded/service/gitaly-ruby"
-  mkdir ruby_install_dir.to_s
-  sync './ruby/', "#{ruby_install_dir}/", exclude: ['.git', '.gitignore', 'spec', 'features']
-  %w(
-    LICENSE
-    NOTICE
-    VERSION
-  ).each { |f| copy(f, ruby_install_dir) }
-
   make "install PREFIX=#{install_dir}/embedded", env: env
 
-  block 'disable RubyGems in gitlab-shell hooks' do
-    hooks_source_dir = File.join(ruby_build_dir, "gitlab-shell", "hooks")
-    hooks_dest_dir = File.join(ruby_install_dir, "gitlab-shell", "hooks")
-    env_shebang = '#!/usr/bin/env ruby'
-    `grep -r -l '^#{env_shebang}' #{hooks_source_dir}`.split("\n").each do |ruby_script|
-      script = File.read(ruby_script)
-      erb dest: ruby_script.sub(hooks_source_dir, hooks_dest_dir),
-          source: 'gitlab_shell_hooks_wrapper.erb',
-          mode: 0755,
-          vars: { script: script, install_dir: install_dir }
-    end
-  end
-
-  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=gitaly-go-licenses.json"
-
-  # Merge license files of ruby and go dependencies.
-  block "Merge license files of ruby and go depenrencies of Gitaly" do
-    require 'json'
-    ruby_licenses = JSON.parse(File.read("#{ruby_build_dir}/gitaly-ruby-licenses.json"))['dependencies']
-    go_licenses = JSON.parse(File.read("#{Omnibus::Config.source_dir}/gitaly/gitaly-go-licenses.json"))['dependencies']
-    output = { dependencies: ruby_licenses.concat(go_licenses).uniq }
-    File.write("#{install_dir}/licenses/gitaly.json", JSON.pretty_generate(output))
-  end
+  command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=licenses.json"
+  copy "licenses.json", "#{install_dir}/licenses/gitaly.json"
 end
