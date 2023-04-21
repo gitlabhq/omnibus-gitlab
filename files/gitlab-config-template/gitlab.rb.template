@@ -116,7 +116,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_email_smime_ca_certs_file'] = '/etc/gitlab/ssl/gitlab_smime_cas.crt'
 
 ### GitLab user privileges
-# gitlab_rails['gitlab_default_can_create_group'] = true
 # gitlab_rails['gitlab_username_changing_enabled'] = true
 
 ### Default Theme
