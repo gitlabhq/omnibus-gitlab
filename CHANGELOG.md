@@ -98,6 +98,12 @@ No changes.
 
 - [Update libksba/gnupg to 1.6.3/2.2.41](gitlab-org/omnibus-gitlab@2f72ecc671ddf654254f463b434abe553c1ebe7f)
 
+## 15.9.5 (2023-04-21)
+
+### Fixed (1 change)
+
+- [Fix suggested_reviewers run when rails is disabled](gitlab-org/omnibus-gitlab@b1aff71954786f883a1cc76b515c6b805037bcbd) ([merge request](gitlab-org/omnibus-gitlab!6795))
+
 ## 15.9.4 (2023-03-30)
 
 ### Security (4 changes)
