@@ -3,6 +3,39 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.11.0 (2023-04-21)
+
+### Added (2 changes)
+
+- [Enable autoupgrade to PostgreSQL 13](gitlab-org/omnibus-gitlab@79fa08813d12d1dcd6e352096e2c0350a776afc2) ([merge request](gitlab-org/omnibus-gitlab!6764))
+- [Add configurable startup delay to Redis](gitlab-org/omnibus-gitlab@2593093931abb6732b5bc3ffb94cce30a01352f2) ([merge request](gitlab-org/omnibus-gitlab!6717))
+
+### Fixed (2 changes)
+
+- [Add cleanup of disabled consul watcher files](gitlab-org/omnibus-gitlab@6309ef101308def4895afe8dd759ee57eada0813) ([merge request](gitlab-org/omnibus-gitlab!6747))
+- [Fix suggested_reviewers run when rails is disabled](gitlab-org/omnibus-gitlab@d82edbb5d989382967ddac37b81fff2a454a706e) ([merge request](gitlab-org/omnibus-gitlab!6767))
+
+### Changed (12 changes)
+
+- [Add support for the workhorse google client](gitlab-org/omnibus-gitlab@c3550679175b2829b7ef43d25c34b6c43628375d) ([merge request](gitlab-org/omnibus-gitlab!6530))
+- [Bump Container Registry to v3.71.0-gitlab](gitlab-org/omnibus-gitlab@a451ee45be583eb9a26fbd337fa274b189d9e1af) ([merge request](gitlab-org/omnibus-gitlab!6816))
+- [Update prometheus from 2.38.0 to 2.43.0+stringlabels](gitlab-org/omnibus-gitlab@11995d1ffe4ae9829da65d589358aaa4f5acc349) ([merge request](gitlab-org/omnibus-gitlab!6797))
+- [Allow external GitLab URL configuration for KAS](gitlab-org/omnibus-gitlab@42a2bda23b014deef9d28953d7b5f853275cf82d) ([merge request](gitlab-org/omnibus-gitlab!6760))
+- [Drop mail_room as a separate dependency](gitlab-org/omnibus-gitlab@549d28b7f36e7e7dd8a7e424168dc2b53b7058ca) ([merge request](gitlab-org/omnibus-gitlab!6804))
+- [Bump Ruby to 3.0.6](gitlab-org/omnibus-gitlab@e82ee6e51ecc9715d2a92886a7c8ba7ad6a8173a) ([merge request](gitlab-org/omnibus-gitlab!6792))
+- [Bump container-registry to v3.70.0-gitlab](gitlab-org/omnibus-gitlab@b69810bc02918010e2ea639f526f584d7faf2e06) ([merge request](gitlab-org/omnibus-gitlab!6793))
+- [Add a logfiles_helper to handle svlogd and log directories](gitlab-org/omnibus-gitlab@b13c49d26f9efa20bdd63d5cdc18e5b42e1ca49a) ([merge request](gitlab-org/omnibus-gitlab!6701))
+- [Update PgBouncer to v1.18.0](gitlab-org/omnibus-gitlab@8bf36a3dec723fe388f6aea21fcad6ff4255fa0e) ([merge request](gitlab-org/omnibus-gitlab!6742))
+- [Add patches to support Ruby 3.1 and 3.2](gitlab-org/omnibus-gitlab@3405e65478d7057a92488db31dcc9cff47942520) ([merge request](gitlab-org/omnibus-gitlab!6769))
+- [Update Mattermost to 7.9.1](gitlab-org/omnibus-gitlab@c059b16210e484cfb1db5c347ed90e95f64c4398) by @antonis.stamatiou ([merge request](gitlab-org/omnibus-gitlab!6765))
+- [Update gitlab-mail_room to v0.0.23](gitlab-org/omnibus-gitlab@10b6b2068e23afc15118ceaef4f43313194f9561) ([merge request](gitlab-org/omnibus-gitlab!6758))
+
+### Security (3 changes)
+
+- [Update curl to 8.0.1 to resolve February CVEs](gitlab-org/omnibus-gitlab@5cf5c05bd915672c5c034847eff544c32284ad66)
+- [Update redis to 6.2.11](gitlab-org/omnibus-gitlab@c16ed96251f1093f7401ac7961b5dfbe1ec6db2e)
+- [Mattermost March 2023 security updates](gitlab-org/omnibus-gitlab@a4bab17e8cb59465aaf34b13307b3441a8526146)
+
 ## 15.10.3 (2023-04-14)
 
 ### Fixed (1 change)
