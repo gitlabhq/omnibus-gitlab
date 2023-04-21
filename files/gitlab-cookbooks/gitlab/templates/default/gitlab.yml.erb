@@ -80,7 +80,6 @@ production: &base
     # Email server smtp settings are in [a separate file](initializers/smtp_settings.rb.sample).
 
     ## User settings
-    default_can_create_group: <%= @gitlab_default_can_create_group %>  # default: true
     username_changing_enabled: <%= @gitlab_username_changing_enabled %> # default: true - User can change her username/namespace
     ## Default theme
     ##   1 - Graphite
