@@ -148,6 +148,11 @@ mkdir -p /var/run/sshd
 mkdir -p /var/log/gitlab/sshd
 mkdir -p /var/log/gitlab/reconfigure
 
+if [ -n "${GITLAB_PRE_RECONFIGURE_SCRIPT+x}" ]; then
+  echo "Running Pre Reconfigure Script..."
+  eval "${GITLAB_PRE_RECONFIGURE_SCRIPT}"
+fi
+
 # Start service manager
 echo "Starting services..."
 GITLAB_OMNIBUS_CONFIG= /opt/gitlab/embedded/bin/runsvdir-start &
