@@ -22,6 +22,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 dependency 'ruby'
+dependency 'rubygems'
 dependency 'postgresql_new'
 
 build do
