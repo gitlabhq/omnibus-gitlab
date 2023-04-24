@@ -898,7 +898,7 @@ correct executables by running both the [backup](https://docs.gitlab.com/ee/rake
 
 ### Upgrade a non-packaged PostgreSQL database
 
-You can upgrade the external database as suggested by the provider after stopping all the processes that are connected to the database (Puma, Sidekiq):
+You can upgrade the external database after stopping all the processes that are connected to the database (Puma, Sidekiq):
 
 ```shell
 sudo gitlab-ctl stop puma
@@ -907,20 +907,20 @@ sudo gitlab-ctl stop sidekiq
 
 Before proceeding with the upgrade, note the following:
 
-- Before upgrading, review the [GitLab and PostgreSQL version compatibility table](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html)
-  to determine your upgrade path. When using GitLab backup or restore, you
-  _must_ keep the same version of GitLab; first, upgrade PostgreSQL, and then GitLab.
+- Check compatibility between GitLab releases and PostgreSQL versions:
+  - Read about which GitLab versions introduced a requirement for a
+    [minimum PostgreSQL version](https://docs.gitlab.com/ee/install/requirements.html#postgresql-requirements).
+  - Read about significant changes to the PostgreSQL versions which
+    [shipped with Omnibus](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html):
+    Omnibus GitLab is tested for compatibility with the major releases of PostgreSQL that it ships with.
+- When using GitLab backup or restore, you _must_ keep the same version of GitLab.
+  If you plan to upgrade to a later GitLab version as well, upgrade PostgreSQL first.
 - The [backup and restore Rake task](https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system)
   can be used to back up and restore the database to a later version of PostgreSQL.
-- If configuring a version number whose binaries are unavailable on the file
-  system, GitLab/Rails uses the default database's version binaries (default as
-  per [GitLab and PostgreSQL version compatibility table](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html)).
-- If you're using Amazon RDS and are seeing extremely high (near 100%) CPU
-  utilization following a major version upgrade (for example, from `10.x` to
-  `11.x`), running an `ANALYZE VERBOSE;` query may be necessary to recreate query
-  plans and reduce CPU utilization on the database server(s).
-  [Amazon recommends this](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.PostgreSQL.html)
-  as part of a major version upgrade.
+- If a PostgreSQL version is specified with `postgresql['version']` that doesn't ship
+  with that Omnibus GitLab release, the
+  [default version in the compatibility table](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html)
+  determines which client binaries (such as the PostgreSQL backup/restore binaries) are active.
 
 The following example demonstrates upgrading from a database host running PostgreSQL 12 to another database host running PostgreSQL 13 and incurs downtime:
 
@@ -984,6 +984,20 @@ when your installation is using PgBouncer.
 
    ```shell
    sudo gitlab-ctl start
+   ```
+
+1. After a upgrading PostgreSQL to a new major release:
+
+   - With Amazon RDS ([as recommended by AWS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.PostgreSQL.html)), or
+   - If the database server is running very high (near 100%) CPU utilization.
+
+   Recreating the table statistics will ensure efficient query plans are picked
+   and reduce database server CPU load.
+
+   Run the following query on the PostgreSQL database console:
+
+   ```SQL
+   SET statement_timeout = 0; ANALYZE VERBOSE;
    ```
 
 ### Seed the database (fresh installs only)
