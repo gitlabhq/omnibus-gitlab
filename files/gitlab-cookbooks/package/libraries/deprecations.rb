@@ -287,25 +287,25 @@ module Gitlab
           {
             config_keys: %w(gitaly cgroups_count),
             deprecation: '15.1',
-            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
+            removal: '16.1', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
             note: "Use `gitaly['cgroups_repositories_count']` instead."
           },
           {
             config_keys: %w(gitaly cgroups_memory_enabled),
             deprecation: '15.1',
-            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
+            removal: '16.1', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
             note: "Use `gitaly['cgroups_memory_bytes'] or gitaly['cgroups_repositories_memory_bytes'] instead."
           },
           {
             config_keys: %w(gitaly cgroups_memory_limit),
             deprecation: '15.1',
-            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
+            removal: '16.1', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
             note: "Use `gitaly['cgroups_memory_bytes'] or gitaly['cgroups_repositories_memory_bytes'] instead."
           },
           {
             config_keys: %w(gitaly cgroups_cpu_enabled),
             deprecation: '15.1',
-            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
+            removal: '16.1', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
             note: "Use `gitaly['cgroups_cpu_shares'] or gitaly['cgroups_repositories_cpu_shares'] instead."
           },
           {
@@ -317,7 +317,7 @@ module Gitlab
           {
             config_keys: %w(praefect separate_database_metrics),
             deprecation: '15.5',
-            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7072
+            removal: '16.1', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7072
             note: "Starting with GitLab 16.0, Praefect DB metrics will no longer be available on `/metrics` and must be scraped from `/db_metrics`."
           },
           {
@@ -403,7 +403,7 @@ module Gitlab
           {
             config_keys: ['praefect', key],
             deprecation: '15.9',
-            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7438
+            removal: '16.1', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7438
             note: "In GitLab 15.9, Praefect's configuration in Omnibus GitLab was changed to structurally match Praefect's own configuration. Please see the migration instructions at https://docs.gitlab.com/ee/update/#1590"
           }
         end
@@ -462,7 +462,7 @@ module Gitlab
           {
             config_keys: ['gitaly', key],
             deprecation: '15.10',
-            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7439
+            removal: '16.1', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7439
             note: "In GitLab 15.10, Gitaly's configuration in Omnibus GitLab was changed to structurally match Gitaly's own configuration. Please see the migration instructions at https://docs.gitlab.com/ee/update/#15100"
           }
         end
