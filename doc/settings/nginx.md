@@ -774,3 +774,21 @@ If you get this error, check your NGINX configuration file if you have a trailin
    ```shell
    sudo systemctl restart nginx
    ```
+
+### GitLab is presenting 502 errors and `worker_connections are not enough` in logs
+
+If you get a `worker_connections are not enough` error in the logs, configure the NGINX worker connections to a higher value:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab['nginx']['worker_connections'] = 10240
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+The default value is [10240 connections](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/86f98401113eb843658b63d45d58be8b706216f3/files/gitlab-cookbooks/gitlab/attributes/default.rb#L750).
