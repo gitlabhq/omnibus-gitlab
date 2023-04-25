@@ -65,7 +65,8 @@ These additional variables are available to override or enable different build b
 | DANGER_GITLAB_API_TOKEN                                      | GitLab API token for dangerbot to post comments to MRs.                             |
 | DEPS_GITLAB_TOKEN                                            | Token used by [dependencies.io](https://www.dependencies.io/gitlab/) to create MRs. |
 | DEPS_TOKEN                                                   | Token used by CI to auth to [dependencies.io](https://www.dependencies.io/gitlab/). |
-| DOCS_API_TOKEN
+| DOCS_API_TOKEN                                               | Token used by CI to trigger a review-app build of the docs site.                    |
+| MANUAL_QA_TEST                                               | Variable used to decide if the `qa-test` job should be played automatically or not. |
 
 ## Release variables
 
