@@ -828,7 +828,7 @@ both the root and intermediate certificates.
 
    ```ruby
    gitlab_rails['db_sslmode'] = "verify-full"
-   gitlab_rails['db_sslrootcert'] = "your-full-ca-bundle.pem"
+   gitlab_rails['db_sslrootcert'] = "<full_path_to_your_ca-bundle.pem>"
    ```
 
    If you are using Amazon RDS for your PostgreSQL server, ensure you
