@@ -59,7 +59,7 @@ These additional variables are available to override or enable different build b
 | RAT_PACKAGE_URL                                              | URL to fetch regular package - for RAT pipeline triggered by RAT job.               |
 | RAT_FIPS_PACKAGE_URL                                         | URL to fetch FIPS package - for RAT pipeline triggered by RAT job.                  |
 | RAT_TRIGGER_TOKEN                                            | Trigger token for the RAT pipeline.                                                 |
-| RAT_PROJECT_ACCESS_TOKEN                                     | Project access token for trigerring a RAT pipeline.                                 |
+| RAT_PROJECT_ACCESS_TOKEN                                     | Project access token for triggering a RAT pipeline.                                 |
 | OMNIBUS_GITLAB_MIRROR_PROJECT_ACCESS_TOKEN                   | Project access token for building a test package.                                   |
 | CI_SLACK_WEBHOOK_URL                                         | Webhook URL for Slack failure notifications.                                        |
 | DANGER_GITLAB_API_TOKEN                                      | GitLab API token for dangerbot to post comments to MRs.                             |
