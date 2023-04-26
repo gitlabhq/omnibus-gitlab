@@ -65,7 +65,7 @@ variables:
   # NOTE: When `NEXT_RUBY_VERSION` is updated, flip
   # `USE_NEXT_RUBY_VERSION_IN_*` variables to false to avoid surprises.
   NEXT_RUBY_VERSION: "3.0.6"
-  GET_GEO_TAG: "0.5.0"
+  GET_GEO_TAG: "0.6.0"
   CANONICAL_PROJECT_PATH: 'gitlab-org/omnibus-gitlab'
   SECURITY_PROJECT_PATH: 'gitlab-org/security/omnibus-gitlab'
   DEV_PROJECT_PATH: 'gitlab/omnibus-gitlab'
