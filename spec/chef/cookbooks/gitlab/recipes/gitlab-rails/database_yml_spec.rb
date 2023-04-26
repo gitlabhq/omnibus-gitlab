@@ -199,12 +199,19 @@ RSpec.describe 'gitlab::gitlab-rails' do
               gitlab_rails: {
                 databases: {
                   main: {
-                    db_connect_timeout: 30,
+                    db_connect_timeout: 30
                   },
                   ci: {
+                    db_host: 'the-ci-host',
                     enable: true,
                     db_connect_timeout: 50,
                     db_database_tasks: false
+                  },
+                  embedding: {
+                    db_host: 'the-embedding-host',
+                    enable: true,
+                    db_load_balancing: {},
+                    db_database_tasks: true
                   }
                 }
               }
@@ -214,8 +221,14 @@ RSpec.describe 'gitlab::gitlab-rails' do
           it 'renders database.yml with user specified DB settings' do
             expect(database_yml[:production][:main][:connect_timeout]).to eq(30)
             expect(database_yml[:production][:main][:database_tasks]).to eq(true)
+            expect(database_yml[:production][:main]).to have_key(:load_balancing)
+            expect(database_yml[:production][:ci][:host]).to eq('the-ci-host')
             expect(database_yml[:production][:ci][:connect_timeout]).to eq(50)
             expect(database_yml[:production][:ci][:database_tasks]).to eq(false)
+            expect(database_yml[:production][:embedding][:host]).to eq('the-embedding-host')
+            expect(database_yml[:production][:embedding][:connect_timeout]).to eq(30)
+            expect(database_yml[:production][:embedding][:load_balancing]).to eq({})
+            expect(database_yml[:production][:embedding][:database_tasks]).to eq(true)
           end
         end
 
