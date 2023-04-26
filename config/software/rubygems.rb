@@ -1,6 +1,5 @@
 #
-# Copyright 2012-2014 Chef Software, Inc.
-# Copyright 2017-2022 GitLab Inc.
+# Copyright 2016-2023 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,32 +14,19 @@
 # limitations under the License.
 #
 
-name 'chef-gem'
-# The version here should be in agreement with /Gemfile.lock so that our rspec
-# testing stays consistent with the package contents.
-default_version '17.10.0'
+name 'rubygems'
+default_version '3.4.12'
 
-license 'Apache-2.0'
-license_file 'LICENSE'
-license_file 'NOTICE'
+license 'MIT'
+license_file 'LICENSE.txt'
 
 skip_transitive_dependency_licensing true
 
 dependency 'ruby'
-dependency 'rubygems'
-dependency 'libffi'
-dependency 'rb-readline'
 
 build do
   patch source: "license/add-license-file.patch"
-  patch source: "license/add-notice-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
-  gem 'install chef' \
-      " --clear-sources" \
-      " -s https://packagecloud.io/cinc-project/stable" \
-      " -s https://rubygems.org" \
-      " --version '#{version}'" \
-      " --bindir '#{install_dir}/embedded/bin'" \
-      ' --no-document', env: env
+  gem "update --no-document --system #{version}", env: env
 end

@@ -31,6 +31,7 @@ dependency 'ruby'
 # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7741. Hence, we need to
 # bundle libarchive in the package.
 dependency 'libarchive'
+dependency 'rubygems'
 
 build do
   patch source: "license/add-license-file.patch"
