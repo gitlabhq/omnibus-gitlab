@@ -128,16 +128,28 @@ if [[ ! -f /etc/gitlab/ssh_host_rsa_key ]]; then
 	ssh-keygen -f /etc/gitlab/ssh_host_rsa_key -N '' -t rsa
 	chmod 0600 /etc/gitlab/ssh_host_rsa_key
 fi
+# sshd loads the keys from /etc/gitlab, but the GitLab backend looks for keys
+# from within /etc/ssh
+ln -fs /etc/gitlab/ssh_host_rsa_key.pub /etc/ssh/ssh_host_rsa_key.pub
+
 if [[ ! -f /etc/gitlab/ssh_host_ecdsa_key ]]; then
 	echo "Generating ssh_host_ecdsa_key..."
 	ssh-keygen -f /etc/gitlab/ssh_host_ecdsa_key -N '' -t ecdsa
 	chmod 0600 /etc/gitlab/ssh_host_ecdsa_key
 fi
+# sshd loads the keys from /etc/gitlab, but the GitLab backend looks for keys
+# from within /etc/ssh
+ln -fs /etc/gitlab/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub
+
 if [[ ! -f /etc/gitlab/ssh_host_ed25519_key ]]; then
 	echo "Generating ssh_host_ed25519_key..."
 	ssh-keygen -f /etc/gitlab/ssh_host_ed25519_key -N '' -t ed25519
 	chmod 0600 /etc/gitlab/ssh_host_ed25519_key
 fi
+# sshd loads the keys from /etc/gitlab, but the GitLab backend looks for keys
+# from within /etc/ssh
+ln -fs /etc/gitlab/ssh_host_ed25519_key.pub /etc/ssh/ssh_host_ed25519_key.pub
+
 
 # Remove all services, the reconfigure will create them
 echo "Preparing services..."
