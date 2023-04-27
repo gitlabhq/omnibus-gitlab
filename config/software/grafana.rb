@@ -42,6 +42,8 @@ build do
   env['CYPRESS_INSTALL_BINARY'] = '0'
 
   patch source: '1-cve-2022-31107-oauth-vulnerability.patch'
+  patch source: 'session-cookie.patch'
+  patch source: 'cve-2023-1410.patch'
 
   # Build backend
   make 'build-go', env: env
