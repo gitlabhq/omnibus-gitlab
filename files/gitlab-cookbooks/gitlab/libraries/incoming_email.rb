@@ -50,7 +50,7 @@ module IncomingEmail
     private
 
     def default_rails_config
-      Gitlab['node']['gitlab']['gitlab-rails']
+      Gitlab['node']['gitlab']['gitlab_rails']
     end
 
     def user_rails_config

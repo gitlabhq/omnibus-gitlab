@@ -102,7 +102,7 @@ ruby_block "authorize Grafana with GitLab" do
     GrafanaHelper.authorize_with_gitlab(external_url)
   end
   # Try connecting to GitLab only if it is enabled and on this node
-  only_if { node['gitlab']['gitlab-rails']['enable'] && node['monitoring']['grafana']['register_as_oauth_app'] }
+  only_if { node['gitlab']['gitlab_rails']['enable'] && node['monitoring']['grafana']['register_as_oauth_app'] }
 end
 
 ruby_block "populate Grafana configuration options" do

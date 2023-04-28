@@ -41,6 +41,7 @@ RSpec.describe SettingsDSL::Utils do
         %w[geo-secondary geo_secondary],
         %w[geo-logcursor geo_logcursor],
         %w[geo-postgresql geo_postgresql],
+        %w[gitlab-rails gitlab_rails],
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end

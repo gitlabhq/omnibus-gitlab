@@ -45,7 +45,7 @@ end
   end
 end
 
-rails_enable = node['gitlab']['gitlab-rails']['enable']
+rails_enable = node['gitlab']['gitlab_rails']['enable']
 
 # Geo secondary
 if node['gitlab']['geo_secondary']['enable']

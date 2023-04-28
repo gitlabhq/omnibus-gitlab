@@ -9,7 +9,7 @@ exec 2>&1
 exec chpst -P \
   -u <%= @options[:user] %>:<%= @options[:groupname] %> \
   -U <%= @options[:user] %>:<%= @options[:groupname] %> \
-  -e /opt/gitlab/etc/<%= @options[:rails_app] %>/env \
+  -e /opt/gitlab/etc/gitlab-rails/env \
   /usr/bin/env \
     prometheus_multiproc_dir="${prometheus_run_dir}" \
     ACTION_CABLE_WORKER_POOL_SIZE=<%= @options[:actioncable_worker_pool_size] %> \

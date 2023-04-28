@@ -25,12 +25,12 @@ postgres_exporter_sslmode = " sslmode=#{node['monitoring']['postgres_exporter'][
 postgres_exporter_connection_string = if node['postgresql']['enable']
                                         "host=#{node['postgresql']['dir']} user=#{node['postgresql']['username']}"
                                       else
-                                        "host=#{node['gitlab']['gitlab-rails']['db_host']} " \
-                                        "port=#{node['gitlab']['gitlab-rails']['db_port']} " \
-                                        "user=#{node['gitlab']['gitlab-rails']['db_username']} "\
-                                        "password=#{node['gitlab']['gitlab-rails']['db_password']}"
+                                        "host=#{node['gitlab']['gitlab_rails']['db_host']} " \
+                                        "port=#{node['gitlab']['gitlab_rails']['db_port']} " \
+                                        "user=#{node['gitlab']['gitlab_rails']['db_username']} "\
+                                        "password=#{node['gitlab']['gitlab_rails']['db_password']}"
                                       end
-postgres_exporter_database = "#{node['gitlab']['gitlab-rails']['db_database']}#{postgres_exporter_sslmode}"
+postgres_exporter_database = "#{node['gitlab']['gitlab_rails']['db_database']}#{postgres_exporter_sslmode}"
 
 node.default['monitoring']['postgres_exporter']['env']['DATA_SOURCE_NAME'] = "#{postgres_exporter_connection_string} " \
                                                                              "database=#{postgres_exporter_database}"

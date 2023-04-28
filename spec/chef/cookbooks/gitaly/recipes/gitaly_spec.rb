@@ -1286,7 +1286,7 @@ RSpec.describe 'gitaly::git_data_dirs' do
 
   context 'when user has not specified git_data_dir' do
     it 'defaults to correct path' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
+      expect(chef_run.node['gitlab']['gitlab_rails']['repositories_storages'])
         .to eql('default' => { 'path' => '/var/opt/gitlab/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' })
     end
   end
@@ -1304,7 +1304,7 @@ RSpec.describe 'gitaly::git_data_dirs' do
     end
 
     it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
+      expect(chef_run.node['gitlab']['gitlab_rails']['repositories_storages'])
         .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'tcp://localhost:8123' })
     end
   end
@@ -1321,7 +1321,7 @@ RSpec.describe 'gitaly::git_data_dirs' do
     end
 
     it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
+      expect(chef_run.node['gitlab']['gitlab_rails']['repositories_storages'])
         .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'tls://localhost:8123' })
     end
   end
@@ -1338,7 +1338,7 @@ RSpec.describe 'gitaly::git_data_dirs' do
     end
 
     it 'TlS should take precedence' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages'])
+      expect(chef_run.node['gitlab']['gitlab_rails']['repositories_storages'])
         .to eql('default' => { 'path' => '/tmp/user/git-data/repositories', 'gitaly_address' => 'tls://localhost:8123' })
     end
   end
@@ -1354,7 +1354,7 @@ RSpec.describe 'gitaly::git_data_dirs' do
     end
 
     it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
+      expect(chef_run.node['gitlab']['gitlab_rails']['repositories_storages']).to eql({
                                                                                         'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
                                                                                         'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
                                                                                       })
@@ -1372,7 +1372,7 @@ RSpec.describe 'gitaly::git_data_dirs' do
     end
 
     it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
+      expect(chef_run.node['gitlab']['gitlab_rails']['repositories_storages']).to eql({
                                                                                         'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
                                                                                         'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
                                                                                       })
@@ -1392,7 +1392,7 @@ RSpec.describe 'gitaly::git_data_dirs' do
     end
 
     it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({ 'default' => { 'path' => '/var/opt/gitlab/git-data/repositories', 'gitaly_address' => 'tcp://gitaly.internal:8075' } })
+      expect(chef_run.node['gitlab']['gitlab_rails']['repositories_storages']).to eql({ 'default' => { 'path' => '/var/opt/gitlab/git-data/repositories', 'gitaly_address' => 'tcp://gitaly.internal:8075' } })
     end
   end
 
@@ -1407,7 +1407,7 @@ RSpec.describe 'gitaly::git_data_dirs' do
     end
 
     it 'correctly sets the repository storage directories' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['repositories_storages']).to eql({
+      expect(chef_run.node['gitlab']['gitlab_rails']['repositories_storages']).to eql({
                                                                                         'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
                                                                                         'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' }
                                                                                       })

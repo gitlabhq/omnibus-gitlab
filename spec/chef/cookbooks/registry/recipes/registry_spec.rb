@@ -280,7 +280,7 @@ RSpec.describe 'registry' do
       it 'assigns registry_notification_secret variable automatically' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"Authorization":\["mysecret"\]/)
-        expect(chef_run.node['gitlab']['gitlab-rails']['registry_notification_secret'])
+        expect(chef_run.node['gitlab']['gitlab_rails']['registry_notification_secret'])
           .to eql('mysecret')
       end
     end

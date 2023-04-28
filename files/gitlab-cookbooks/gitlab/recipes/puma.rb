@@ -20,10 +20,9 @@ omnibus_helper = OmnibusHelper.new(node)
 
 metrics_dir = File.join(node['gitlab']['runtime-dir'].to_s, 'gitlab/puma') unless node['gitlab']['runtime-dir'].nil?
 
-rails_app = 'gitlab-rails'
 svc = 'puma'
 user = account_helper.gitlab_user
-rails_home = node['gitlab']['gitlab-rails']['dir']
+rails_home = node['gitlab']['gitlab_rails']['dir']
 puma_listen_socket = node['gitlab'][svc]['socket']
 puma_pidfile = node['gitlab'][svc]['pidfile']
 puma_state_path = node['gitlab'][svc]['state_path']
@@ -72,7 +71,7 @@ if puma_socket_dir
 end
 
 puma_config puma_rb do
-  environment node['gitlab'][rails_app]['environment']
+  environment node['gitlab']['gitlab_rails']['environment']
   listen_socket puma_listen_socket
   listen_tcp puma_listen_tcp
   ssl_listen_host puma_listen_ssl_host
@@ -110,7 +109,6 @@ runit_service svc do
     service: svc,
     user: account_helper.gitlab_user,
     groupname: account_helper.gitlab_group,
-    rails_app: rails_app,
     puma_rb: puma_rb,
     log_directory: puma_log_dir,
     actioncable_worker_pool_size: actioncable_worker_pool_size,

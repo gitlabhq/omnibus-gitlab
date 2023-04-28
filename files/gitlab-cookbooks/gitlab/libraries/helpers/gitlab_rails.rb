@@ -6,7 +6,7 @@ class GitlabRailsHelper < BaseHelper
   def public_attributes
     {
       'gitlab' => {
-        'gitlab-rails' => node['gitlab']['gitlab-rails'].select do |key, value|
+        'gitlab_rails' => node['gitlab']['gitlab_rails'].select do |key, value|
           %w(db_database).include?(key)
         end
       }

@@ -52,14 +52,14 @@ gitlab_kas_http_conf = File.join(nginx_conf_dir, "gitlab-kas.conf")
 nginx_status_conf = File.join(nginx_conf_dir, "nginx-status.conf")
 
 # If the service is enabled, check if we are using internal nginx
-gitlab_rails_enabled = if node['gitlab']['gitlab-rails']['enable']
+gitlab_rails_enabled = if node['gitlab']['gitlab_rails']['enable']
                          node['gitlab']['nginx']['enable']
                        else
                          false
                        end
 
-gitlab_rails_smartcard_enabled = if node['gitlab']['gitlab-rails']['enable']
-                                   node['gitlab']['nginx']['enable'] && node['gitlab']['gitlab-rails']['smartcard_enabled']
+gitlab_rails_smartcard_enabled = if node['gitlab']['gitlab_rails']['enable']
+                                   node['gitlab']['nginx']['enable'] && node['gitlab']['gitlab_rails']['smartcard_enabled']
                                  else
                                    false
                                  end
@@ -70,7 +70,7 @@ gitlab_mattermost_enabled = if node['mattermost']['enable']
                               false
                             end
 
-gitlab_pages_enabled = if node['gitlab']['gitlab-rails']['pages_enabled']
+gitlab_pages_enabled = if node['gitlab']['gitlab_rails']['pages_enabled']
                          node['gitlab']['pages_nginx']['enable']
                        else
                          false
@@ -124,7 +124,7 @@ nginx_vars = nginx_vars.to_hash.merge!({
                                        })
 
 nginx_vars['https'] = if nginx_vars['listen_https'].nil?
-                        node['gitlab']['gitlab-rails']['gitlab_https']
+                        node['gitlab']['gitlab_rails']['gitlab_https']
                       else
                         nginx_vars['listen_https']
                       end
@@ -132,10 +132,10 @@ nginx_vars['https'] = if nginx_vars['listen_https'].nil?
 nginx_vars['gzip'] = node['gitlab']['nginx']['gzip_enabled'] ? "on" : "off"
 
 nginx_gitlab_http_vars = nginx_vars.merge(
-  fqdn: node['gitlab']['gitlab-rails']['gitlab_host'],
-  port: node['gitlab']['gitlab-rails']['gitlab_port'],
-  path: node['gitlab']['gitlab-rails']['gitlab_relative_url'] || '/',
-  registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
+  fqdn: node['gitlab']['gitlab_rails']['gitlab_host'],
+  port: node['gitlab']['gitlab_rails']['gitlab_port'],
+  path: node['gitlab']['gitlab_rails']['gitlab_relative_url'] || '/',
+  registry_api_url: node['gitlab']['gitlab_rails']['registry_api_url'],
   letsencrypt_enable: node['letsencrypt']['enable'],
   # These addresses will be allowed through plain http, even if `redirect_http_to_https` is enabled
   monitoring_addresses: [
@@ -155,10 +155,10 @@ template gitlab_rails_http_conf do
     lazy do
       nginx_gitlab_http_vars.merge(
         {
-          kerberos_enabled: node['gitlab']['gitlab-rails']['kerberos_enabled'],
-          kerberos_use_dedicated_port: node['gitlab']['gitlab-rails']['kerberos_use_dedicated_port'],
-          kerberos_port: node['gitlab']['gitlab-rails']['kerberos_port'],
-          kerberos_https: node['gitlab']['gitlab-rails']['kerberos_https'],
+          kerberos_enabled: node['gitlab']['gitlab_rails']['kerberos_enabled'],
+          kerberos_use_dedicated_port: node['gitlab']['gitlab_rails']['kerberos_use_dedicated_port'],
+          kerberos_port: node['gitlab']['gitlab_rails']['kerberos_port'],
+          kerberos_https: node['gitlab']['gitlab_rails']['kerberos_https'],
           redirect_http_to_https: node['gitlab']['nginx']['redirect_http_to_https']
         }
       )
@@ -169,8 +169,8 @@ template gitlab_rails_http_conf do
 end
 
 gitlab_rails_smartcard_nginx_vars = {
-  listen_port: node['gitlab']['gitlab-rails']['smartcard_client_certificate_required_port'],
-  ssl_client_certificate: node['gitlab']['gitlab-rails']['smartcard_ca_file'],
+  listen_port: node['gitlab']['gitlab_rails']['smartcard_client_certificate_required_port'],
+  ssl_client_certificate: node['gitlab']['gitlab_rails']['smartcard_ca_file'],
   ssl_verify_client: 'on',
   ssl_verify_depth: 2,
   proxy_set_headers: nginx_vars['proxy_set_headers'].merge(
@@ -181,7 +181,7 @@ gitlab_rails_smartcard_nginx_vars = {
   redirect_http_to_https: node['gitlab']['nginx']['redirect_http_to_https']
 }
 
-gitlab_rails_smartcard_nginx_vars['fqdn'] = node['gitlab']['gitlab-rails']['smartcard_client_certificate_required_host'] unless node['gitlab']['gitlab-rails']['smartcard_client_certificate_required_host'].nil?
+gitlab_rails_smartcard_nginx_vars['fqdn'] = node['gitlab']['gitlab_rails']['smartcard_client_certificate_required_host'] unless node['gitlab']['gitlab_rails']['smartcard_client_certificate_required_host'].nil?
 
 template gitlab_rails_smartcard_http_conf do
   source "nginx-gitlab-http.conf.erb"
@@ -213,7 +213,7 @@ end
 pages_nginx_vars = node['gitlab']['pages_nginx'].to_hash
 
 pages_nginx_vars['https'] = if pages_nginx_vars['listen_https'].nil?
-                              node['gitlab']['gitlab-rails']['pages_https']
+                              node['gitlab']['gitlab_rails']['pages_https']
                             else
                               pages_nginx_vars['listen_https']
                             end
@@ -225,7 +225,7 @@ template gitlab_pages_http_conf do
   mode "0644"
   variables(pages_nginx_vars.merge(
               {
-                pages_path: node['gitlab']['gitlab-rails']['pages_path'],
+                pages_path: node['gitlab']['gitlab_rails']['pages_path'],
                 pages_listen_proxy: node['gitlab_pages']['listen_proxy']
               }
             ))
@@ -244,9 +244,9 @@ template gitlab_registry_http_conf do
   mode "0644"
   variables(registry_nginx_vars.merge(
               {
-                registry_api_url: node['gitlab']['gitlab-rails']['registry_api_url'],
-                fqdn: node['gitlab']['gitlab-rails']['registry_host'],
-                port: node['gitlab']['gitlab-rails']['registry_port'],
+                registry_api_url: node['gitlab']['gitlab_rails']['registry_api_url'],
+                fqdn: node['gitlab']['gitlab_rails']['registry_host'],
+                port: node['gitlab']['gitlab_rails']['registry_port'],
                 registry_http_addr: node['registry']['registry_http_addr'],
                 letsencrypt_enable: node['letsencrypt']['enable'],
                 redirect_http_to_https: node['gitlab']['registry_nginx']['redirect_http_to_https']

@@ -3,7 +3,6 @@ provides :sidekiq_service
 
 unified_mode true
 
-property :rails_app, String, default: 'gitlab-rails'
 property :user, default: lazy { node['gitlab']['user']['username'] }
 property :group, default: lazy { node['gitlab']['user']['group'] }
 property :log_directory, [String, nil], default: nil
@@ -31,7 +30,6 @@ action :enable do
     log_directory: sidekiq_log_dir,
     metrics_dir: metrics_dir,
     clean_metrics_dir: true,
-    rails_app: new_resource.rails_app
   }
 
   runit_service svc do

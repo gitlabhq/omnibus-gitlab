@@ -40,6 +40,6 @@ end
 bash "Set proper security context on ssh files for selinux" do
   code lazy { SELinuxHelper.commands(node) }
   only_if "id -Z"
-  not_if { !node['gitlab']['gitlab-rails']['enable'] }
+  not_if { !node['gitlab']['gitlab_rails']['enable'] }
   action :nothing
 end

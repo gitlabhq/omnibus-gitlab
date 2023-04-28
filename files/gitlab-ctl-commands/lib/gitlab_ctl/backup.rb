@@ -6,7 +6,9 @@ module GitlabCtl
       backup_path = options[:backup_path].nil? ? '/etc/gitlab/config_backup' : options[:backup_path]
       @etc_backup_path = File.expand_path(backup_path)
       @etc_path = '/etc/gitlab'
-      @backup_keep_time = node_attributes.dig('gitlab', 'gitlab-rails', 'backup_keep_time').to_i
+      # Earlier, the attribute was named `gitlab-rails`, but it in 15.11, was
+      # changed to `gitlab_rails`. Hence we try both.
+      @backup_keep_time = (node_attributes.dig('gitlab', 'gitlab_rails', 'backup_keep_time') || node_attributes.dig('gitlab', 'gitlab-rails', 'backup_keep_time')).to_i
       @remove_timestamp = Time.now - @backup_keep_time
       @delete_old_backups = options[:delete_old_backups]
       @removable_archives = []

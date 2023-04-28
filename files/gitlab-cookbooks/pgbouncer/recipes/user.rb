@@ -37,7 +37,7 @@ if pgb_helper.create_pgbouncer_user?('postgresql') || pgb_helper.create_pgbounce
     helper lazy { PgHelper.new(node) }
     user node['postgresql']['pgbouncer_user']
     password node['postgresql']['pgbouncer_user_password']
-    database node['gitlab']['gitlab-rails']['db_database']
+    database node['gitlab']['gitlab_rails']['db_database']
     add_auth_function default_auth_query.eql?(auth_query)
     action :create
   end

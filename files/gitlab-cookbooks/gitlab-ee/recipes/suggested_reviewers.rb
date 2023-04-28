@@ -18,11 +18,11 @@
 omnibus_helper = OmnibusHelper.new(node)
 
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
-gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
+gitlab_rails_dir = node['gitlab']['gitlab_rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
 dependent_services = []
-node['gitlab']['gitlab-rails']['dependent_services'].each do |name|
+node['gitlab']['gitlab_rails']['dependent_services'].each do |name|
   dependent_services << "runit_service[#{name}]" if omnibus_helper.should_notify?(name)
 end
 dependent_services << "sidekiq_service[sidekiq]" if omnibus_helper.should_notify?('sidekiq')

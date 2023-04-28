@@ -20,19 +20,19 @@ RSpec.describe 'gitlab::rails-cache-clear' do
     end
 
     it 'check rake_cache_clear default attribute value set to true' do
-      expect(chef_run.node['gitlab']['gitlab-rails']['rake_cache_clear'])
+      expect(chef_run.node['gitlab']['gitlab_rails']['rake_cache_clear'])
         .to be(true)
     end
 
     it 'check rake_cache_clear attribute value set to true' do
       stub_gitlab_rb(gitlab_rails: { rake_cache_clear: true })
-      expect(chef_run.node['gitlab']['gitlab-rails']['rake_cache_clear'])
+      expect(chef_run.node['gitlab']['gitlab_rails']['rake_cache_clear'])
         .to be(true)
     end
 
     it 'check rake_cache_clear attribute value set to false' do
       stub_gitlab_rb(gitlab_rails: { rake_cache_clear: false })
-      expect(chef_run.node['gitlab']['gitlab-rails']['rake_cache_clear'])
+      expect(chef_run.node['gitlab']['gitlab_rails']['rake_cache_clear'])
         .to be(false)
     end
 

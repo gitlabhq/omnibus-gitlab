@@ -120,7 +120,7 @@ module Prometheus
       listen_address = user_config['listen_address'] || default_config['listen_address']
       default_config['flags'] = {
         'web.listen-address' => listen_address,
-        'redis.addr' => "unix://#{Gitlab['node']['gitlab']['gitlab-rails']['redis_socket']}"
+        'redis.addr' => "unix://#{Gitlab['node']['gitlab']['gitlab_rails']['redis_socket']}"
       }
 
       default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')

@@ -7,12 +7,12 @@ property :pg_helper, [GeoPgHelper, PgHelper], required: true
 property :account_helper, [AccountHelper], required: true
 
 action :create do
-  rails_enabled = node['gitlab']['gitlab-rails']['enable']
+  rails_enabled = node['gitlab']['gitlab_rails']['enable']
 
   postgresql_username = new_resource.account_helper.postgresql_user
   pg_host = node['postgresql']['unix_socket_directory']
   pg_port = node['postgresql']['port']
-  database_name = node['gitlab']['gitlab-rails']['db_database']
+  database_name = node['gitlab']['gitlab_rails']['db_database']
   gitlab_sql_user = node['postgresql']['sql_user']
   gitlab_sql_user_password = node['postgresql']['sql_user_password']
   sql_replication_user = node['postgresql']['sql_replication_user']

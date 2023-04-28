@@ -21,7 +21,7 @@ RSpec.describe 'Redis' do
   context '.parse_redis_settings' do
     context 'when no customization is made' do
       it 'keeps unixsocket' do
-        expect(node['gitlab']['gitlab-rails']['unixsocket']).not_to eq false
+        expect(node['gitlab']['gitlab_rails']['unixsocket']).not_to eq false
 
         subject.parse_redis_settings
       end
@@ -48,13 +48,13 @@ RSpec.describe 'Redis' do
         end
 
         it 'expects redis_host to match bind value from redis' do
-          expect(node['gitlab']['gitlab-rails']['redis_host']).to eq redis_host
+          expect(node['gitlab']['gitlab_rails']['redis_host']).to eq redis_host
 
           subject.parse_redis_settings
         end
 
         it 'expects redis_port to match port value from redis' do
-          expect(node['gitlab']['gitlab-rails']['redis_port']).to eq redis_port
+          expect(node['gitlab']['gitlab_rails']['redis_port']).to eq redis_port
 
           subject.parse_redis_settings
         end

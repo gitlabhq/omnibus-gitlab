@@ -39,12 +39,12 @@ env_dir env_directory do
   notifies :restart, "runit_service[gitlab-exporter]"
 end
 
-connection_string = "dbname=#{node['gitlab']['gitlab-rails']['db_database']} user=#{node['gitlab']['gitlab-rails']['db_username']}"
+connection_string = "dbname=#{node['gitlab']['gitlab_rails']['db_database']} user=#{node['gitlab']['gitlab_rails']['db_username']}"
 
 connection_string += if node['postgresql']['enabled']
                        " host=#{node['postgresql']['dir']}"
                      else
-                       " host=#{node['gitlab']['gitlab-rails']['db_host']} port=#{node['gitlab']['gitlab-rails']['db_port']} password=#{node['gitlab']['gitlab-rails']['db_password']}"
+                       " host=#{node['gitlab']['gitlab_rails']['db_host']} port=#{node['gitlab']['gitlab_rails']['db_port']} password=#{node['gitlab']['gitlab_rails']['db_password']}"
                      end
 
 redis_url = redis_helper.redis_url(support_sentinel_groupname: false)
@@ -61,7 +61,7 @@ template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
     elasticsearch_authorization: node['monitoring']['gitlab_exporter']['elasticsearch_authorization'],
     redis_url: redis_url,
     connection_string: connection_string,
-    redis_enable_client: node['gitlab']['gitlab-rails']['redis_enable_client']
+    redis_enable_client: node['gitlab']['gitlab_rails']['redis_enable_client']
   )
   sensitive true
 end
