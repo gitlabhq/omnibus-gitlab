@@ -83,7 +83,7 @@ include_recipe "gitlab::web-server"
 # `account` custom resource will not create them.
 include_recipe "gitlab::users"
 
-include_recipe "gitlab::gitlab-rails" if node['gitlab']['gitlab-rails']['enable']
+include_recipe "gitlab::gitlab-rails" if node['gitlab']['gitlab_rails']['enable']
 
 include_recipe "gitlab::selinux"
 
@@ -107,7 +107,7 @@ end
 include_recipe "package::runit"
 
 # Install shell after runit so `gitlab-sshd` comes up
-include_recipe "gitlab::gitlab-shell" if node['gitlab']['gitlab-rails']['enable']
+include_recipe "gitlab::gitlab-shell" if node['gitlab']['gitlab_rails']['enable']
 
 # Make global sysctl commands available
 include_recipe "package::sysctl"
@@ -131,12 +131,12 @@ include_recipe "package::sysctl"
   end
 end
 
-if node['gitlab']['gitlab-rails']['enable'] && !(node.key?('pgbouncer') && node['pgbouncer']['enable'])
+if node['gitlab']['gitlab_rails']['enable'] && !(node.key?('pgbouncer') && node['pgbouncer']['enable'])
   include_recipe "gitlab::database_migrations"
 
   # We need to deal with initial root password only if the DB migrations were
   # applied.
-  OmnibusHelper.new(node).print_root_account_details if node['gitlab']['gitlab-rails']['auto_migrate']
+  OmnibusHelper.new(node).print_root_account_details if node['gitlab']['gitlab_rails']['auto_migrate']
 end
 
 OmnibusHelper.cleanup_root_password_file
@@ -144,7 +144,7 @@ OmnibusHelper.cleanup_root_password_file
 # crond is used by database reindexing and LetsEncrypt auto-renew.  If
 # neither are on, we disable crond to prevent stale config files from
 # being used.
-if node['gitlab']['gitlab-rails']['database_reindexing']['enable'] || (node['letsencrypt']['enable'] && node['letsencrypt']['auto_renew'])
+if node['gitlab']['gitlab_rails']['database_reindexing']['enable'] || (node['letsencrypt']['enable'] && node['letsencrypt']['auto_renew'])
   include_recipe "crond::enable"
 else
   include_recipe "crond::disable"
@@ -193,7 +193,7 @@ include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable']
 # Recipe which handles all prometheus related services
 include_recipe "monitoring"
 
-if node['gitlab']['gitlab-rails']['database_reindexing']['enable']
+if node['gitlab']['gitlab_rails']['database_reindexing']['enable']
   include_recipe 'gitlab::database_reindexing_enable'
 else
   include_recipe 'gitlab::database_reindexing_disable'

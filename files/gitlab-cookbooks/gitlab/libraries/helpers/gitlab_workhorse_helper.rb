@@ -8,7 +8,7 @@ class GitlabWorkhorseHelper < BaseHelper
   end
 
   def object_store_toml
-    object_store = node['gitlab']['gitlab-rails']['object_store']
+    object_store = node['gitlab']['gitlab_rails']['object_store']
 
     return unless object_store['enabled']
 

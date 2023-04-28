@@ -18,7 +18,7 @@ account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
 gitlab_rails_source_dir = '/opt/gitlab/embedded/service/gitlab-rails'
-gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
+gitlab_rails_dir = node['gitlab']['gitlab_rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 
 dependent_services = %w(puma sidekiq)
@@ -31,9 +31,9 @@ templatesymlink 'Removes the geo database settings from database.yml and create 
   owner 'root'
   group account_helper.gitlab_group
   mode '0640'
-  variables node['gitlab']['gitlab-rails'].to_hash
+  variables node['gitlab']['gitlab_rails'].to_hash
   dependent_services.each do |svc|
     notifies :restart, omnibus_helper.restart_service_resource(svc) if omnibus_helper.should_notify?(svc)
   end
-  only_if { node['gitlab']['gitlab-rails']['enable'] }
+  only_if { node['gitlab']['gitlab_rails']['enable'] }
 end

@@ -4,7 +4,7 @@
 #
 omnibus_helper = OmnibusHelper.new(node)
 install_dir = node['package']['install-dir']
-trusted_certs_dir = node['gitlab']['gitlab-rails']['trusted_certs_dir']
+trusted_certs_dir = node['gitlab']['gitlab_rails']['trusted_certs_dir']
 ssl_certs_dir = File.join(install_dir, "embedded/ssl/certs")
 user_dir = node['gitlab']['user']['home']
 readme_file = File.join(ssl_certs_dir, "README")

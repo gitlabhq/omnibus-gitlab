@@ -19,7 +19,9 @@ require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/util"
 
 add_command 'get-redis-master', 'Get connection details to Redis master', 2 do |cmd_name|
   node_attributes = GitlabCtl::Util.get_node_attributes
-  redis_sentinels = node_attributes['gitlab']['gitlab-rails']['redis_sentinels']
+  # Earlier, the attribute was named `gitlab-rails`, but it in 16.0, was
+  # changed to `gitlab_rails`. Hence we try both.
+  redis_sentinels = node_attributes.dig('gitlab', 'gitlab_rails', 'redis_sentinels') || node_attributes.dig('gitlab', 'gitlab-rails', 'redis_sentinels')
   redis_master_name = node_attributes['redis']['master_name']
 
   master_host = nil

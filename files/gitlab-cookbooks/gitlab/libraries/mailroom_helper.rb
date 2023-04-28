@@ -15,7 +15,7 @@ class MailroomHelper
     # endpoint to workhorse to avoid round-trip through LB. Unfortunately, if
     # workhorse uses Unix socket, we have no choice except to point it at
     # the external URL.
-    api_url = @node['gitlab']['gitlab-rails']['gitlab_url'] if api_url.start_with?("http+unix")
+    api_url = @node['gitlab']['gitlab_rails']['gitlab_url'] if api_url.start_with?("http+unix")
     api_url
   end
 end

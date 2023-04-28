@@ -47,7 +47,7 @@ module WatchHelper
                     handler_template = 'failover_pgbouncer.erb',
                     type = 'service',
                     consul_config = @consul_config_directory,
-                    template_variables = node['consul'].to_hash.merge({ 'database_name' => node['gitlab']['gitlab-rails']['db_database'] })
+                    template_variables = node['consul'].to_hash.merge({ 'database_name' => node['gitlab']['gitlab_rails']['db_database'] })
                    )
       ]
 

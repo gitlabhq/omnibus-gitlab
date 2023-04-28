@@ -21,7 +21,7 @@ server:
 
 # Probes config
 probes:
-<% if node['gitlab']['gitlab-rails']['db_adapter'] == 'postgresql' -%>
+<% if node['gitlab']['gitlab_rails']['db_adapter'] == 'postgresql' -%>
   # We can group multiple probes under a single endpoint by setting the `multiple` key to `true`, followed
   # by probe definitions as usual.
   database:
@@ -85,7 +85,7 @@ probes:
       <<: *elasticsearch
 <% end %>
 
-<% if node['gitlab']['gitlab-rails']['db_adapter'] == 'postgresql' -%>
+<% if node['gitlab']['gitlab_rails']['db_adapter'] == 'postgresql' -%>
     ci_builds:
       class_name: Database::CiBuildsProber
       <<: *db_common

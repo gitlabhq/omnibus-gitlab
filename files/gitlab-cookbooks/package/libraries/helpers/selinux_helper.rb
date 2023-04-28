@@ -9,7 +9,7 @@ class SELinuxHelper
       authorized_keys = node['gitlab']['gitlab_shell']['auth_file']
       gitlab_shell_var_dir = node['gitlab']['gitlab_shell']['dir']
       gitlab_shell_config_file = File.join(gitlab_shell_var_dir, "config.yml")
-      gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
+      gitlab_rails_dir = node['gitlab']['gitlab_rails']['dir']
       gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
       gitlab_shell_secret_file = File.join(gitlab_rails_etc_dir, 'gitlab_shell_secret')
       gitlab_workhorse_sockets_directory = node['gitlab']['gitlab_workhorse']['sockets_directory']

@@ -100,7 +100,7 @@ ruby_block "authorize mattermost with gitlab" do
     MattermostHelper.authorize_with_gitlab(Gitlab['external_url'])
   end
   # Try connecting to GitLab only if it is enabled
-  only_if { node['gitlab']['gitlab-rails']['enable'] && node['mattermost']['register_as_oauth_app'] && pg_helper.is_running? && pg_helper.database_exists?(node['gitlab']['gitlab-rails']['db_database']) }
+  only_if { node['gitlab']['gitlab_rails']['enable'] && node['mattermost']['register_as_oauth_app'] && pg_helper.is_running? && pg_helper.database_exists?(node['gitlab']['gitlab_rails']['db_database']) }
 end
 
 ruby_block "populate mattermost configuration options" do
