@@ -28,7 +28,6 @@ skip_transitive_dependency_licensing true
 
 dependency 'pkg-config-lite'
 dependency 'ruby'
-dependency 'bundler'
 dependency 'libicu'
 dependency 'tomlib'
 

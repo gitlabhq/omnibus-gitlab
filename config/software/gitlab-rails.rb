@@ -42,7 +42,6 @@ license_file combined_licenses_file
 
 dependency 'pkg-config-lite'
 dependency 'ruby'
-dependency 'bundler'
 dependency 'rubygems'
 dependency 'libxml2'
 dependency 'libxslt'
