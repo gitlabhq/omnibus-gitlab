@@ -42,7 +42,6 @@ license_file combined_licenses_file
 
 dependency 'pkg-config-lite'
 dependency 'ruby'
-dependency 'bundler'
 dependency 'rubygems'
 dependency 'libxml2'
 dependency 'libxslt'
@@ -121,8 +120,9 @@ build do
   # Disable zstd decompression support to avoid linking against libzstd,
   # which may not be a safe system dependency to use.
   bundle 'config build.ruby-magic --with-magic-flags=--disable-zstdlib', env: env
-  bundle "config set --local frozen 'true'"
-  bundle "install --without #{bundle_without.join(' ')} --jobs #{workers} --retry 5", env: env
+  bundle "config set --local frozen 'true'", env: env
+  bundle "config set --local without #{bundle_without.join(' ')}", env: env
+  bundle "install --jobs #{workers} --retry 5", env: env
 
   block 'correct omniauth-jwt permissions' do
     # omniauth-jwt has some of its files 0600, make them 0644
