@@ -19,7 +19,7 @@ module Pgbouncer
       attributes = GitlabCtl::Util.get_public_node_attributes if attributes.nil?
 
       if attributes.key?('gitlab')
-        attributes['gitlab']['gitlab-rails']['db_database']
+        attributes.dig('gitlab', 'gitlab_rails', 'db_database') || attributes.dig('gitlab', 'gitlab-rails', 'db_database')
       else
         DEFAULT_RAILS_DATABASE
       end

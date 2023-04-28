@@ -9,7 +9,7 @@ class RedisHelper
   end
 
   def redis_params(support_sentinel_groupname: true)
-    gitlab_rails_config = @node['gitlab']['gitlab-rails']
+    gitlab_rails_config = @node['gitlab']['gitlab_rails']
     redis_config = @node['redis']
 
     raise 'Redis announce_ip and announce_ip_from_hostname are mutually exclusive, please unset one of them' if redis_config['announce_ip'] && redis_config['announce_ip_from_hostname']
@@ -27,7 +27,7 @@ class RedisHelper
   end
 
   def redis_url(support_sentinel_groupname: true)
-    gitlab_rails = @node['gitlab']['gitlab-rails']
+    gitlab_rails = @node['gitlab']['gitlab_rails']
 
     redis_socket = gitlab_rails['redis_socket']
     redis_socket = false if RedisHelper::Checks.is_gitlab_rails_redis_tcp?
@@ -49,7 +49,7 @@ class RedisHelper
   end
 
   def validate_instance_shard_config(instance)
-    gitlab_rails = @node['gitlab']['gitlab-rails']
+    gitlab_rails = @node['gitlab']['gitlab_rails']
 
     sentinels = gitlab_rails["redis_#{instance}_sentinels"]
     clusters = gitlab_rails["redis_#{instance}_cluster_nodes"]

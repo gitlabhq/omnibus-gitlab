@@ -21,7 +21,7 @@ group = AccountHelper.new(node).gitlab_group
 GITLAB_RAILS_SOURCE_DIR = '/opt/gitlab/embedded/service/gitlab-rails'.freeze
 
 exit_log_format = node['gitlab']['mailroom']['exit_log_format']
-mailroom_working_dir = "#{node['gitlab']['gitlab-rails']['dir']}/working"
+mailroom_working_dir = "#{node['gitlab']['gitlab_rails']['dir']}/working"
 mailroom_log_dir = node['gitlab']['mailroom']['log_directory']
 mail_room_config = File.join(GITLAB_RAILS_SOURCE_DIR, 'config', 'mail_room.yml')
 

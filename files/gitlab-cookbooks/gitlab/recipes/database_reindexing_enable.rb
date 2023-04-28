@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-reindexing = node['gitlab']['gitlab-rails']['database_reindexing']
+reindexing = node['gitlab']['gitlab_rails']['database_reindexing']
 
 crond_job 'database-reindexing' do
   user "root"

@@ -11,7 +11,7 @@ class WebServerHelper
     def internal_api_url(node)
       workhorse_helper = GitlabWorkhorseHelper.new(node)
 
-      gitlab_url = node['gitlab']['gitlab-rails']['internal_api_url']
+      gitlab_url = node['gitlab']['gitlab_rails']['internal_api_url']
 
       # If no internal_api_url is specified, default to Workhorse settings
       workhorse_url = node['gitlab']['gitlab_workhorse']['listen_addr']

@@ -159,7 +159,7 @@ RSpec.describe 'gitlab-ee::geo' do
 
     context 'in gitlab-rails' do
       it 'disables auto_migrate' do
-        expect(node['gitlab']['gitlab-rails']['auto_migrate']).to eq(false)
+        expect(node['gitlab']['gitlab_rails']['auto_migrate']).to eq(false)
       end
     end
   end

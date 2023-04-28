@@ -24,7 +24,7 @@ postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
 
 gitlab_rails_source_dir = '/opt/gitlab/embedded/service/gitlab-rails'
-gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
+gitlab_rails_dir = node['gitlab']['gitlab_rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, 'etc')
 
 dependent_services = %w(puma geo-logcursor sidekiq)
@@ -37,7 +37,7 @@ templatesymlink 'Add the geo database settings to database.yml and create a syml
   owner 'root'
   group account_helper.gitlab_group
   mode '0640'
-  variables node['gitlab']['gitlab-rails'].to_hash
+  variables node['gitlab']['gitlab_rails'].to_hash
   notifies :run, 'ruby_block[Restart geo-secondary dependent services]'
 end
 

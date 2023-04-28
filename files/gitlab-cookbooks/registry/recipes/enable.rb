@@ -56,7 +56,7 @@ env_dir env_directory do
   notifies :restart, "runit_service[registry]"
 end
 
-directory node['gitlab']['gitlab-rails']['registry_path'] do
+directory node['gitlab']['gitlab_rails']['registry_path'] do
   owner account_helper.registry_user
   group account_helper.gitlab_group
   mode '0770'
@@ -76,7 +76,7 @@ end
 template "#{working_dir}/config.yml" do
   source "registry-config.yml.erb"
   owner account_helper.registry_user
-  variables node['registry'].to_hash.merge(node['gitlab']['gitlab-rails'].to_hash)
+  variables node['registry'].to_hash.merge(node['gitlab']['gitlab_rails'].to_hash)
   mode "0644"
   notifies :restart, "runit_service[registry]"
 end

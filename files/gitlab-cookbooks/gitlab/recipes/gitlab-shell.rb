@@ -96,7 +96,7 @@ bash 'generate gitlab-sshd host keys' do
   EOS
 end
 
-gitlab_rails_dir = node['gitlab']['gitlab-rails']['dir']
+gitlab_rails_dir = node['gitlab']['gitlab_rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
 gitlab_shell_secret_file = File.join(gitlab_rails_etc_dir, 'gitlab_shell_secret')
 

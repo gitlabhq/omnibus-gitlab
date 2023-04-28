@@ -185,7 +185,7 @@ module GitlabRails
     end
 
     def database_attributes
-      Gitlab['node']['gitlab']['gitlab-rails'].keys.select { |k| k.start_with?('db_') }
+      Gitlab['node']['gitlab']['gitlab_rails'].keys.select { |k| k.start_with?('db_') }
     end
 
     def generate_main_database
@@ -203,7 +203,7 @@ module GitlabRails
         next unless Gitlab['gitlab_rails']['databases']['main'][attribute].nil?
 
         Gitlab['gitlab_rails']['databases']['main'][attribute] =
-          [Gitlab['gitlab_rails'][attribute], Gitlab['node']['gitlab']['gitlab-rails'][attribute]].compact.first
+          [Gitlab['gitlab_rails'][attribute], Gitlab['node']['gitlab']['gitlab_rails'][attribute]].compact.first
       end
     end
 
@@ -268,7 +268,7 @@ module GitlabRails
     end
 
     def parse_shared_dir
-      Gitlab['gitlab_rails']['shared_path'] ||= Gitlab['node']['gitlab']['gitlab-rails']['shared_path']
+      Gitlab['gitlab_rails']['shared_path'] ||= Gitlab['node']['gitlab']['gitlab_rails']['shared_path']
     end
 
     def parse_artifacts_dir

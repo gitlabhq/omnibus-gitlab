@@ -19,9 +19,9 @@ require 'digest'
 omnibus_helper = OmnibusHelper.new(node)
 migration_helper = RailsMigrationHelper.new(node)
 
-initial_root_password = node['gitlab']['gitlab-rails']['initial_root_password']
-initial_license_file = node['gitlab']['gitlab-rails']['initial_license_file'] || Dir.glob('/etc/gitlab/*.gitlab-license').first
-initial_runner_token = node['gitlab']['gitlab-rails']['initial_shared_runners_registration_token']
+initial_root_password = node['gitlab']['gitlab_rails']['initial_root_password']
+initial_license_file = node['gitlab']['gitlab_rails']['initial_license_file'] || Dir.glob('/etc/gitlab/*.gitlab-license').first
+initial_runner_token = node['gitlab']['gitlab_rails']['initial_shared_runners_registration_token']
 
 dependent_services = []
 dependent_services << "runit_service[puma]" if omnibus_helper.should_notify?("puma")

@@ -8,10 +8,10 @@ if Rails.env.production?
     <% unless @smtp_authentication.nil? %>
     authentication: <%= @smtp_authentication.to_s.to_sym.inspect %>,
     <% end %>
-    user_name: <%= node['gitlab']['gitlab-rails']["smtp_user_name"]&.inspect || "secrets.username" %>,
-    password: <%= node['gitlab']['gitlab-rails']["smtp_password"]&.inspect || "secrets.password"  %>,
+    user_name: <%= node['gitlab']['gitlab_rails']["smtp_user_name"]&.inspect || "secrets.username" %>,
+    password: <%= node['gitlab']['gitlab_rails']["smtp_password"]&.inspect || "secrets.password"  %>,
 <% %w{ address port domain enable_starttls_auto tls ssl openssl_verify_mode ca_path ca_file }.each do |key| %>
-  <% value = node['gitlab']['gitlab-rails']["smtp_#{key}"] %>
+  <% value = node['gitlab']['gitlab_rails']["smtp_#{key}"] %>
     <%= "#{key}: #{value.inspect}," unless value.nil? %>
 <% end %>
   }

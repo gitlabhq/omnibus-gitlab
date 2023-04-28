@@ -48,9 +48,9 @@ default['gitlab']['sentinel']['use_hostnames'] = nil
 ###
 # Geo: Common (primary or secondary) node configuration
 ###
-default['gitlab']['gitlab-rails']['geo_node_name'] = nil
-default['gitlab']['gitlab-rails']['geo_registry_replication_enabled'] = false
-default['gitlab']['gitlab-rails']['geo_registry_replication_primary_api_url'] = nil
+default['gitlab']['gitlab_rails']['geo_node_name'] = nil
+default['gitlab']['gitlab_rails']['geo_registry_replication_enabled'] = false
+default['gitlab']['gitlab_rails']['geo_registry_replication_primary_api_url'] = nil
 
 ###
 # Geo: Secondary node configuration

@@ -106,7 +106,7 @@ class OmnibusHelper
       #
       #          If the password shown here doesn't work, you must reset the admin password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
 
-      Password: #{node['gitlab']['gitlab-rails']['initial_root_password']}
+      Password: #{node['gitlab']['gitlab_rails']['initial_root_password']}
 
       # NOTE: This file will be automatically deleted in the first reconfigure run after 24 hours.
     EOS
@@ -129,9 +129,9 @@ class OmnibusHelper
   def print_root_account_details
     return unless node['gitlab']['bootstrap']['enable']
 
-    initial_password = node['gitlab']['gitlab-rails']['initial_root_password']
-    display_password = node['gitlab']['gitlab-rails']['display_initial_root_password']
-    store_password = node['gitlab']['gitlab-rails']['store_initial_root_password']
+    initial_password = node['gitlab']['gitlab_rails']['initial_root_password']
+    display_password = node['gitlab']['gitlab_rails']['display_initial_root_password']
+    store_password = node['gitlab']['gitlab_rails']['store_initial_root_password']
 
     password_string = if display_password
                         "Password: #{initial_password}"

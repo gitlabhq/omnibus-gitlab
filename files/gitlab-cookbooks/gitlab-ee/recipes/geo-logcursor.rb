@@ -23,13 +23,13 @@ env_directory = node['gitlab']['geo_logcursor']['env_directory']
 
 rails_env = {
   'HOME' => node['gitlab']['user']['home'],
-  'RAILS_ENV' => node['gitlab']['gitlab-rails']['environment'],
+  'RAILS_ENV' => node['gitlab']['gitlab_rails']['environment'],
   'BUNDLE_GEMFILE' => GitlabRailsEnvHelper.bundle_gemfile(working_dir),
 }
 
 env_dir env_directory do
   variables(
-    rails_env.merge(node['gitlab']['gitlab-rails']['env'])
+    rails_env.merge(node['gitlab']['gitlab_rails']['env'])
   )
   notifies :restart, 'runit_service[geo-logcursor]'
 end
@@ -52,7 +52,7 @@ runit_service 'geo-logcursor' do
   log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo_logcursor'].to_hash)
 end
 
-dependent_services = node['gitlab']['gitlab-rails']['dependent_services']
+dependent_services = node['gitlab']['gitlab_rails']['dependent_services']
 
 # This approach was taken to avoid the need to alter the runit service provider
 #

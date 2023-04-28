@@ -4,7 +4,7 @@ RSpec.shared_examples 'enabled registry service' do
       .to eql('/var/opt/gitlab/registry')
     expect(chef_run.node['registry']['log_directory'])
       .to eql('/var/log/gitlab/registry')
-    expect(chef_run.node['gitlab']['gitlab-rails']['registry_path'])
+    expect(chef_run.node['gitlab']['gitlab_rails']['registry_path'])
       .to eql('/var/opt/gitlab/gitlab-rails/shared/registry')
 
     expect(chef_run).to create_directory('/var/opt/gitlab/registry')

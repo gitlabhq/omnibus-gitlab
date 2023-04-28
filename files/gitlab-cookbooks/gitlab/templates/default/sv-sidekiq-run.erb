@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd <%= node['gitlab']['gitlab-rails']['dir'] %>/working
+cd <%= node['gitlab']['gitlab_rails']['dir'] %>/working
 
 exec 2>&1
 <%= render("make_metrics_rundir.erb", cookbook: 'gitlab') %>
@@ -11,7 +11,7 @@ exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
   /usr/bin/env \
     prometheus_multiproc_dir="${prometheus_run_dir}" \
     /opt/gitlab/embedded/service/gitlab-rails/bin/sidekiq-cluster \
-      -e <%= node['gitlab']['gitlab-rails']['environment'] %> \
+      -e <%= node['gitlab']['gitlab_rails']['environment'] %> \
       -r /opt/gitlab/embedded/service/gitlab-rails \
       <% if node['gitlab']['sidekiq']['interval'] %>
       -i <%= node['gitlab']['sidekiq']['interval'] %> \
