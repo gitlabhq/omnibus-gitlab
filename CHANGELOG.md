@@ -44,6 +44,14 @@ omnibus-gitlab repository.
 - [Update redis to 6.2.11](gitlab-org/omnibus-gitlab@c16ed96251f1093f7401ac7961b5dfbe1ec6db2e)
 - [Mattermost March 2023 security updates](gitlab-org/omnibus-gitlab@a4bab17e8cb59465aaf34b13307b3441a8526146)
 
+## 15.10.5 (2023-05-01)
+
+### Security (3 changes)
+
+- [Mattermost Security Updates April 2023](gitlab-org/security/omnibus-gitlab@cded3eb54adad5c521fa571aff235ce062e64514) ([merge request](gitlab-org/security/omnibus-gitlab!335))
+- [Patch Openssl for CVE-2023-0464](gitlab-org/security/omnibus-gitlab@5bd5e3ad84e64e37c18482f19a818a21cb0c16c4) ([merge request](gitlab-org/security/omnibus-gitlab!332))
+- [Patch Grafana against session cookie vulnerability and CVE-2023-1410](gitlab-org/security/omnibus-gitlab@febd112507472947b583f560183e0277b1364a9a) ([merge request](gitlab-org/security/omnibus-gitlab!327))
+
 ## 15.10.4 (2023-04-21)
 
 No changes.
