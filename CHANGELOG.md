@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.9.6 (2023-05-01)
+
+### Security (3 changes)
+
+- [Mattermost Security Updates April 2023](gitlab-org/security/omnibus-gitlab@3f09c8954f2ad3713c5402cbb9d7896b73531ddc) ([merge request](gitlab-org/security/omnibus-gitlab!336))
+- [Patch Openssl for CVE-2023-0464](gitlab-org/security/omnibus-gitlab@00788e0d530c5f8cf77ee9e4d9a7b04a1652d24b) ([merge request](gitlab-org/security/omnibus-gitlab!333))
+- [Patch Grafana against session cookie vulnerability and CVE-2023-1410](gitlab-org/security/omnibus-gitlab@f6a987b1f4e81193b7d356467bb8d1f456553d18) ([merge request](gitlab-org/security/omnibus-gitlab!328))
+
 ## 15.9.5 (2023-04-21)
 
 ### Fixed (1 change)
