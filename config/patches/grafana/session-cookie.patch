@@ -1,0 +1,144 @@
+diff --git a/conf/defaults.ini b/conf/defaults.ini
+index b716c9e35a..2d3fcef800 100644
+--- a/conf/defaults.ini
++++ b/conf/defaults.ini
+@@ -342,6 +342,9 @@ hidden_users =
+ # Login cookie name
+ login_cookie_name = grafana_session
+ 
++# GitLab Session Cookie name
++gitlab_auth_cookie_name = _gitlab_session
++
+ # The maximum lifetime (duration) an authenticated user can be inactive before being required to login at next visit. Default is 7 days (7d). This setting should be expressed as a duration, e.g. 5m (minutes), 6h (hours), 10d (days), 2w (weeks), 1M (month). The lifetime resets at each successful token rotation (token_rotation_interval_minutes).
+ login_maximum_inactive_lifetime_duration =
+ 
+diff --git a/pkg/api/pluginproxy/ds_proxy.go b/pkg/api/pluginproxy/ds_proxy.go
+index b5537ba6eb..93f6b398b7 100644
+--- a/pkg/api/pluginproxy/ds_proxy.go
++++ b/pkg/api/pluginproxy/ds_proxy.go
+@@ -222,7 +222,7 @@ func (proxy *DataSourceProxy) director(req *http.Request) {
+ 		}
+ 	}
+ 
+-	proxyutil.ClearCookieHeader(req, keepCookieNames)
++	proxyutil.ClearCookieHeader(req, keepCookieNames, []string{proxy.cfg.LoginCookieName, proxy.cfg.GitLabAuthCookieName})
+ 	proxyutil.PrepareProxyRequest(req)
+ 
+ 	req.Header.Set("User-Agent", fmt.Sprintf("Grafana/%s", setting.BuildVersion))
+diff --git a/pkg/plugins/backendplugin/manager.go b/pkg/plugins/backendplugin/manager.go
+index cc0c902fb6..a6f74b404c 100644
+--- a/pkg/plugins/backendplugin/manager.go
++++ b/pkg/plugins/backendplugin/manager.go
+@@ -275,7 +275,7 @@ func (m *manager) callResourceInternal(w http.ResponseWriter, req *http.Request,
+ 		}
+ 	}
+ 
+-	proxyutil.ClearCookieHeader(req, keepCookieModel.KeepCookies)
++	proxyutil.ClearCookieHeader(req, keepCookieModel.KeepCookies, []string{m.Cfg.LoginCookieName, m.Cfg.GitLabAuthCookieName})
+ 	proxyutil.PrepareProxyRequest(req)
+ 
+ 	body, err := ioutil.ReadAll(req.Body)
+diff --git a/pkg/setting/setting.go b/pkg/setting/setting.go
+index 2eb0d6b225..8b41859585 100644
+--- a/pkg/setting/setting.go
++++ b/pkg/setting/setting.go
+@@ -284,6 +284,7 @@ type Cfg struct {
+ 	BasicAuthEnabled             bool
+ 	AdminUser                    string
+ 	AdminPassword                string
++	GitLabAuthCookieName         string
+ 
+ 	// AWS Plugin Auth
+ 	AWSAllowedAuthProviders []string
+@@ -1158,6 +1159,7 @@ func readAuthSettings(iniFile *ini.File, cfg *Cfg) (err error) {
+ 	auth := iniFile.Section("auth")
+ 
+ 	cfg.LoginCookieName = valueAsString(auth, "login_cookie_name", "grafana_session")
++	cfg.GitLabAuthCookieName = valueAsString(auth, "gitlab_auth_cookie_name", "_gitlab_session")
+ 	maxInactiveDaysVal := auth.Key("login_maximum_inactive_lifetime_days").MustString("")
+ 	if maxInactiveDaysVal != "" {
+ 		maxInactiveDaysVal = fmt.Sprintf("%sd", maxInactiveDaysVal)
+diff --git a/pkg/util/proxyutil/proxyutil.go b/pkg/util/proxyutil/proxyutil.go
+index 3db22a1426..ee56120cc6 100644
+--- a/pkg/util/proxyutil/proxyutil.go
++++ b/pkg/util/proxyutil/proxyutil.go
+@@ -3,6 +3,7 @@ package proxyutil
+ import (
+ 	"net"
+ 	"net/http"
++	"sort"
+ )
+ 
+ // PrepareProxyRequest prepares a request for being proxied.
+@@ -26,19 +27,31 @@ func PrepareProxyRequest(req *http.Request) {
+ 	}
+ }
+ 
+-// ClearCookieHeader clear cookie header, except for cookies specified to be kept.
+-func ClearCookieHeader(req *http.Request, keepCookiesNames []string) {
+-	var keepCookies []*http.Cookie
++// ClearCookieHeader clear cookie header, except for cookies specified to be kept (keepCookiesNames) if not in skipCookiesNames.
++func ClearCookieHeader(req *http.Request, keepCookiesNames []string, skipCookiesNames []string) {
++	keepCookies := map[string]*http.Cookie{}
+ 	for _, c := range req.Cookies() {
+ 		for _, v := range keepCookiesNames {
+ 			if c.Name == v {
+-				keepCookies = append(keepCookies, c)
++				keepCookies[c.Name] = c
+ 			}
+ 		}
+ 	}
+ 
++	for _, v := range skipCookiesNames {
++		delete(keepCookies, v)
++	}
++
+ 	req.Header.Del("Cookie")
+-	for _, c := range keepCookies {
++
++	sortedCookies := []string{}
++	for name := range keepCookies {
++		sortedCookies = append(sortedCookies, name)
++	}
++	sort.Strings(sortedCookies)
++
++	for _, name := range sortedCookies {
++		c := keepCookies[name]
+ 		req.AddCookie(c)
+ 	}
+ }
+diff --git a/pkg/util/proxyutil/proxyutil_test.go b/pkg/util/proxyutil/proxyutil_test.go
+index 5ff61ec1d2..03d816bbcd 100644
+--- a/pkg/util/proxyutil/proxyutil_test.go
++++ b/pkg/util/proxyutil/proxyutil_test.go
+@@ -49,7 +49,7 @@ func TestClearCookieHeader(t *testing.T) {
+ 		require.NoError(t, err)
+ 		req.AddCookie(&http.Cookie{Name: "cookie"})
+ 
+-		ClearCookieHeader(req, nil)
++		ClearCookieHeader(req, nil, nil)
+ 		require.NotContains(t, req.Header, "Cookie")
+ 	})
+ 
+@@ -60,8 +60,20 @@ func TestClearCookieHeader(t *testing.T) {
+ 		req.AddCookie(&http.Cookie{Name: "cookie2"})
+ 		req.AddCookie(&http.Cookie{Name: "cookie3"})
+ 
+-		ClearCookieHeader(req, []string{"cookie1", "cookie3"})
++		ClearCookieHeader(req, []string{"cookie1", "cookie3"}, nil)
+ 		require.Contains(t, req.Header, "Cookie")
+ 		require.Equal(t, "cookie1=; cookie3=", req.Header.Get("Cookie"))
+ 	})
++
++	t.Run("Clear cookie header with cookies to keep and skip should clear Cookie header and keep cookies", func(t *testing.T) {
++		req, err := http.NewRequest(http.MethodGet, "/", nil)
++		require.NoError(t, err)
++		req.AddCookie(&http.Cookie{Name: "cookie1"})
++		req.AddCookie(&http.Cookie{Name: "cookie2"})
++		req.AddCookie(&http.Cookie{Name: "cookie3"})
++
++		ClearCookieHeader(req, []string{"cookie1", "cookie3"}, []string{"cookie3"})
++		require.Contains(t, req.Header, "Cookie")
++		require.Equal(t, "cookie1=", req.Header.Get("Cookie"))
++	})
+ }
