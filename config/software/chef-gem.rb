@@ -43,4 +43,7 @@ build do
       " --version '#{version}'" \
       " --bindir '#{install_dir}/embedded/bin'" \
       ' --no-document', env: env
+
+  patch source: "Version-17-EOL-detection.patch",
+        target: "#{install_dir}/embedded/lib/ruby/gems/3.0.0/gems/chef-#{version}/lib/chef/client.rb"
 end
