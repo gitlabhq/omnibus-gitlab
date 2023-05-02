@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.11.1 (2023-05-01)
+
+### Security (3 changes)
+
+- [Mattermost Security Updates April 2023](gitlab-org/security/omnibus-gitlab@766e732f63d8222692af4a631b15c192ea162b30) ([merge request](gitlab-org/security/omnibus-gitlab!334))
+- [Patch Openssl for CVE-2023-0464](gitlab-org/security/omnibus-gitlab@19e32f203f9cf50c2a42e37b77d90056c0a63e66) ([merge request](gitlab-org/security/omnibus-gitlab!331))
+- [Patch Grafana against session cookie vulnerability and CVE-2023-1410](gitlab-org/security/omnibus-gitlab@f3f37eca710295a7f4a4e2b8e6007eed28302b7f) ([merge request](gitlab-org/security/omnibus-gitlab!326))
+
 ## 15.11.0 (2023-04-21)
 
 ### Added (2 changes)
@@ -35,6 +43,14 @@ omnibus-gitlab repository.
 - [Update curl to 8.0.1 to resolve February CVEs](gitlab-org/omnibus-gitlab@5cf5c05bd915672c5c034847eff544c32284ad66)
 - [Update redis to 6.2.11](gitlab-org/omnibus-gitlab@c16ed96251f1093f7401ac7961b5dfbe1ec6db2e)
 - [Mattermost March 2023 security updates](gitlab-org/omnibus-gitlab@a4bab17e8cb59465aaf34b13307b3441a8526146)
+
+## 15.10.5 (2023-05-01)
+
+### Security (3 changes)
+
+- [Mattermost Security Updates April 2023](gitlab-org/security/omnibus-gitlab@cded3eb54adad5c521fa571aff235ce062e64514) ([merge request](gitlab-org/security/omnibus-gitlab!335))
+- [Patch Openssl for CVE-2023-0464](gitlab-org/security/omnibus-gitlab@5bd5e3ad84e64e37c18482f19a818a21cb0c16c4) ([merge request](gitlab-org/security/omnibus-gitlab!332))
+- [Patch Grafana against session cookie vulnerability and CVE-2023-1410](gitlab-org/security/omnibus-gitlab@febd112507472947b583f560183e0277b1364a9a) ([merge request](gitlab-org/security/omnibus-gitlab!327))
 
 ## 15.10.4 (2023-04-21)
 
@@ -97,6 +113,14 @@ No changes.
 ### Security (1 change)
 
 - [Update libksba/gnupg to 1.6.3/2.2.41](gitlab-org/omnibus-gitlab@2f72ecc671ddf654254f463b434abe553c1ebe7f)
+
+## 15.9.6 (2023-05-01)
+
+### Security (3 changes)
+
+- [Mattermost Security Updates April 2023](gitlab-org/security/omnibus-gitlab@3f09c8954f2ad3713c5402cbb9d7896b73531ddc) ([merge request](gitlab-org/security/omnibus-gitlab!336))
+- [Patch Openssl for CVE-2023-0464](gitlab-org/security/omnibus-gitlab@00788e0d530c5f8cf77ee9e4d9a7b04a1652d24b) ([merge request](gitlab-org/security/omnibus-gitlab!333))
+- [Patch Grafana against session cookie vulnerability and CVE-2023-1410](gitlab-org/security/omnibus-gitlab@f6a987b1f4e81193b7d356467bb8d1f456553d18) ([merge request](gitlab-org/security/omnibus-gitlab!328))
 
 ## 15.9.5 (2023-04-21)
 
