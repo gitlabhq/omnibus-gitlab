@@ -16,6 +16,8 @@
 
 account_helper = AccountHelper.new(node)
 consul_helper = ConsulHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('consul')
 
 gitlab_consul_static_etc_dir = node['consul']['env_directory']
 
@@ -46,12 +48,20 @@ end
 %w(
   config_dir
   data_dir
-  log_directory
   script_directory
 ).each do |dir|
   directory node['consul'][dir] do
     owner account_helper.consul_user
   end
+end
+
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
+  recursive true
 end
 
 file "#{node['consul']['dir']}/config.json" do

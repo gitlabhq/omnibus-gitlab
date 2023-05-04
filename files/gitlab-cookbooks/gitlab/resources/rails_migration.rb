@@ -14,11 +14,13 @@ default_action :run
 
 action :run do
   account_helper = AccountHelper.new(node)
+  logfiles_helper = LogfilesHelper.new(node)
+  logging_settings = logfiles_helper.logging_settings('gitlab-rails')
 
   bash_hide_env "migrate #{new_resource.name} database" do
     code <<-EOH
     set -e
-    log_file="#{node['gitlab']['gitlab_rails']['log_directory']}/#{new_resource.logfile_prefix}-$(date +%Y-%m-%d-%H-%M-%S).log"
+    log_file="#{logging_settings[:log_directory]}/#{new_resource.logfile_prefix}-$(date +%Y-%m-%d-%H-%M-%S).log"
     umask 077
     /opt/gitlab/bin/gitlab-rake #{new_resource.rake_task} 2>& 1 | tee ${log_file}
     STATUS=${PIPESTATUS[0]}

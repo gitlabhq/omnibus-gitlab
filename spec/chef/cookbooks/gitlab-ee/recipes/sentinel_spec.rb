@@ -221,4 +221,43 @@ RSpec.describe 'gitlab::redis' do
       end
     end
   end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(
+          redis: {
+            enable: true,
+            master_ip: redis_master_ip,
+            announce_ip: redis_announce_ip,
+            master_password: redis_master_password
+          },
+          redis_sentinel_role: {
+            enable: true,
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'sentinel', true, { log_directory_owner: 'gitlab-redis' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          redis: {
+            enable: true,
+            master_ip: redis_master_ip,
+            announce_ip: redis_announce_ip,
+            master_password: redis_master_password
+          },
+          redis_sentinel_role: {
+            enable: true,
+          },
+          sentinel: {
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'sentinel', true, { log_directory_owner: 'gitlab-redis', log_group: 'fugee' }
+    end
+  end
 end

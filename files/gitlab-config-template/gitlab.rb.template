@@ -705,6 +705,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_rails['dir'] = "/var/opt/gitlab/gitlab-rails"
 # gitlab_rails['log_directory'] = "/var/log/gitlab/gitlab-rails"
+# gitlab_rails['log_group'] = nil
 
 #### Change the initial default admin password and shared runner registration tokens.
 ####! **Only applicable on initial setup, changing these settings after database
@@ -1166,7 +1167,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_shell['log_level'] = 'INFO'
 # gitlab_shell['log_format'] = 'json'
 # gitlab_shell['http_settings'] = { user: 'username', password: 'password', ca_file: '/etc/ssl/cert.pem', ca_path: '/etc/pki/tls/certs'}
-# gitlab_shell['log_directory'] = "/var/log/gitlab/gitlab-shell/"
+# gitlab_shell['log_directory'] = "/var/log/gitlab/gitlab-shell"
 
 # gitlab_shell['auth_file'] = "/var/opt/gitlab/.ssh/authorized_keys"
 
@@ -1382,6 +1383,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['hz'] = 10
 # redis['dir'] = "/var/opt/gitlab/redis"
 # redis['log_directory'] = "/var/log/gitlab/redis"
+# redis['log_group'] = nil
 # redis['username'] = "gitlab-redis"
 # redis['group'] = "gitlab-redis"
 # redis['maxclients'] = "10000"
@@ -1603,6 +1605,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Advanced settings
 # nginx['dir'] = "/var/opt/gitlab/nginx"
 # nginx['log_directory'] = "/var/log/gitlab/nginx"
+# nginx['log_group'] = nil
 # nginx['error_log_level'] = "error"
 # nginx['worker_processes'] = 4
 # nginx['worker_connections'] = 10240
@@ -1676,6 +1679,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! remote port to ship log messages to via UDP
 # logging['udp_log_shipping_port'] = 514
 
+
 ################################################################################
 ## Logrotate
 ##! Docs: https://docs.gitlab.com/omnibus/settings/logs.html#logrotate
@@ -1683,6 +1687,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 # logrotate['enable'] = true
 # logrotate['log_directory'] = "/var/log/gitlab/logrotate"
+# logrotate['log_group'] = nil
 
 ################################################################################
 ## Users and groups accounts
@@ -1784,6 +1789,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_pages['use_http2'] = true
 # gitlab_pages['dir'] = "/var/opt/gitlab/gitlab-pages"
 # gitlab_pages['log_directory'] = "/var/log/gitlab/gitlab-pages"
+# gitlab_pages['log_group'] = nil
 
 # gitlab_pages['artifacts_server'] = true
 # gitlab_pages['artifacts_server_url'] = nil # Defaults to external_url + '/api/v4'
@@ -1999,6 +2005,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Directories for GitLab KAS
 # gitlab_kas['dir'] = '/var/opt/gitlab/gitlab-kas'
 # gitlab_kas['log_directory'] = '/var/log/gitlab/gitlab-kas'
+# gitlab_kas['log_group'] = nil
 # gitlab_kas['env_directory'] = '/opt/gitlab/etc/gitlab-kas/env'
 
 ################################################################################
@@ -2116,6 +2123,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # prometheus['shell'] = '/bin/sh'
 # prometheus['home'] = '/var/opt/gitlab/prometheus'
 # prometheus['log_directory'] = '/var/log/gitlab/prometheus'
+# prometheus['log_group'] = nil
 # prometheus['rules_files'] = ['/var/opt/gitlab/prometheus/rules/*.rules']
 # prometheus['scrape_interval'] = 15
 # prometheus['scrape_timeout'] = 15
@@ -2193,6 +2201,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # alertmanager['enable'] = true
 # alertmanager['home'] = '/var/opt/gitlab/alertmanager'
 # alertmanager['log_directory'] = '/var/log/gitlab/alertmanager'
+# alertmanager['log_group'] = nil
 # alertmanager['admin_email'] = 'admin@example.com'
 # alertmanager['flags'] = {
 #   'web.listen-address' => "localhost:9093",
@@ -2216,6 +2225,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # node_exporter['enable'] = true
 # node_exporter['home'] = '/var/opt/gitlab/node-exporter'
 # node_exporter['log_directory'] = '/var/log/gitlab/node-exporter'
+# node_exporter['log_group'] = nil
 # node_exporter['flags'] = {
 #   'collector.textfile.directory' => "/var/opt/gitlab/node-exporter/textfile_collector"
 # }
@@ -2239,6 +2249,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # redis_exporter['enable'] = true
 # redis_exporter['log_directory'] = '/var/log/gitlab/redis-exporter'
+# redis_exporter['log_group'] = nil
 # redis_exporter['flags'] = {
 #   'redis.addr' => "unix:///var/opt/gitlab/redis/redis.socket",
 # }
@@ -2263,6 +2274,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgres_exporter['enable'] = true
 # postgres_exporter['home'] = '/var/opt/gitlab/postgres-exporter'
 # postgres_exporter['log_directory'] = '/var/log/gitlab/postgres-exporter'
+# postgres_exporter['log_group'] = nil
 # postgres_exporter['flags'] = {}
 # postgres_exporter['listen_address'] = 'localhost:9187'
 # postgres_exporter['env_directory'] = '/opt/gitlab/etc/postgres-exporter/env'
@@ -2284,6 +2296,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # pgbouncer_exporter['enable'] = false
 # pgbouncer_exporter['log_directory'] = "/var/log/gitlab/pgbouncer-exporter"
+# pgbouncer_exporter['log_group'] = nil
 # pgbouncer_exporter['listen_address'] = 'localhost:9188'
 # pgbouncer_exporter['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter/env'
 # pgbouncer_exporter['env'] = {
@@ -2298,6 +2311,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_exporter['enable'] = true
 # gitlab_exporter['log_directory'] = "/var/log/gitlab/gitlab-exporter"
+# gitlab_exporter['log_group'] = nil
 # gitlab_exporter['home'] = "/var/opt/gitlab/gitlab-exporter"
 
 ##! Advanced settings. Should be changed only if absolutely needed.
@@ -2340,6 +2354,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # grafana['enable'] = false
 # grafana['log_directory'] = '/var/log/gitlab/grafana'
+# grafana['log_group'] = nil
 # grafana['home'] = '/var/opt/gitlab/grafana'
 # grafana['admin_password'] = 'admin'
 # grafana['allow_user_sign_up'] = false
@@ -2553,6 +2568,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # praefect['enable'] = false
 # praefect['dir'] = "/var/opt/gitlab/praefect"
 # praefect['log_directory'] = "/var/log/gitlab/praefect"
+# praefect['log_group'] = nil
 # praefect['env_directory'] = "/opt/gitlab/etc/praefect/env"
 # praefect['env'] = {
 #  'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/",
@@ -2663,6 +2679,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # storage_check['enable'] = false
 # storage_check['target'] = 'unix:///var/opt/gitlab/gitlab-rails/sockets/gitlab.socket'
 # storage_check['log_directory'] = '/var/log/gitlab/storage-check'
+# storage_check['log_group'] = nil
 
 ################################################################################
 # Let's Encrypt integration
@@ -2874,6 +2891,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! * This is configured to `false` when an IP address is provided
 # sentinel['use_hostnames'] = <calculated>
 
+### Sentinel log settings
+# sentinel['log_directory'] = '/var/log/gitlab/sentinel'
+
 ################################################################################
 ## Additional Database Settings (EE only)
 ##! Docs: https://docs.gitlab.com/ee/administration/database_load_balancing.html
@@ -2939,6 +2959,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # geo_logcursor['log_directory'] = '/var/log/gitlab/geo-logcursor'
+# geo_logcursor['log_group'] = nil
 
 ################################################################################
 ## Unleash
@@ -2958,6 +2979,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 # pgbouncer['enable'] = false
 # pgbouncer['log_directory'] = '/var/log/gitlab/pgbouncer'
+# pgbouncer['log_group'] = nil
 # pgbouncer['data_directory'] = '/var/opt/gitlab/pgbouncer'
 # pgbouncer['env_directory'] = '/opt/gitlab/etc/pgbouncer/env'
 # pgbouncer['env'] = {
@@ -3094,6 +3116,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ## Log settings
 # patroni['log_directory'] = '/var/log/gitlab/patroni'
+# patroni['log_group'] = nil
 # patroni['log_level'] = 'INFO'
 
 ## Consul specific settings
@@ -3173,6 +3196,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # consul['config_dir'] = '/var/opt/gitlab/consul/config.d'
 # consul['data_dir'] = '/var/opt/gitlab/consul/data'
 # consul['log_directory'] = '/var/log/gitlab/consul'
+# consul['log_group'] = nil
 # consul['env_directory'] = '/opt/gitlab/etc/consul/env'
 # consul['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
@@ -3295,6 +3319,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # spamcheck['allowlist'] = {}
 # spamcheck['denylist'] = {}
 # spamcheck['log_directory'] = "/var/log/gitlab/spamcheck"
+# spamcheck['log_group'] = nil
 # spamcheck['env_directory'] = "/opt/gitlab/etc/spamcheck/env"
 # spamcheck['env'] = {
 #   'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/cers'

@@ -62,9 +62,26 @@ RSpec.describe 'monitoring::pgbouncer-exporter' do
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/pgbouncer-exporter/env').with_variables(default_vars)
     end
+  end
 
-    it 'creates the appropriate directories' do
-      expect(chef_run).to create_directory('/var/log/gitlab/pgbouncer-exporter')
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(pgbouncer_exporter: { enable: true })
+      end
+      it_behaves_like 'enabled logged service', 'pgbouncer-exporter', true, { log_directory_owner: 'gitlab-psql' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          pgbouncer_exporter: {
+            enable: true,
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'pgbouncer-exporter', true, { log_directory_owner: 'gitlab-psql', log_group: 'fugee' }
     end
   end
 end

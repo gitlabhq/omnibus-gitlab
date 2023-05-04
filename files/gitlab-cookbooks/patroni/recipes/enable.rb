@@ -19,14 +19,15 @@ dcs_config_file = "#{node['patroni']['dir']}/dcs.yaml"
 
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('patroni')
 pg_helper = PgHelper.new(node)
 patroni_helper = PatroniHelper.new(node)
 patroni_data_dir = File.join(node['patroni']['dir'], 'data')
 
 [
   node['patroni']['dir'],
-  patroni_data_dir,
-  node['patroni']['log_directory']
+  patroni_data_dir
 ].each do |dir|
   directory dir do
     recursive true
@@ -34,6 +35,16 @@ patroni_data_dir = File.join(node['patroni']['dir'], 'data')
     group account_helper.postgresql_group
     mode '0700'
   end
+end
+
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
+  recursive true
 end
 
 file dcs_config_file do
@@ -68,10 +79,12 @@ runit_service 'patroni' do
   options({
     user: account_helper.postgresql_user,
     groupname: account_helper.postgresql_group,
-    log_directory: node['patroni']['log_directory'],
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     patroni_config_file: patroni_config_file
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['patroni'].to_hash)
+  log_options logging_settings[:options]
 end
 
 ruby_block 'wait for node bootstrap to complete' do

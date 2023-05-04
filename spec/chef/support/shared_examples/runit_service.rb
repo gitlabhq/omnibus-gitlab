@@ -51,7 +51,6 @@ RSpec.shared_examples 'enabled runit service' do |svc_name, owner, group, userna
       expect(chef_run).to render_file("/opt/gitlab/sv/#{svc_name}/run").with_content(/-U #{env_string}/)
     end
 
-    expect(chef_run).to render_file("/opt/gitlab/sv/#{svc_name}/log/run").with_content(%r{.*})
     expect(chef_run).to render_file("/opt/gitlab/sv/#{svc_name}/log/config")
   end
 

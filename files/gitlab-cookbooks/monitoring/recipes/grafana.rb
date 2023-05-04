@@ -16,8 +16,10 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('grafana')
+
 prometheus_user = account_helper.prometheus_user
-grafana_log_dir = node['monitoring']['grafana']['log_directory']
 grafana_dir = node['monitoring']['grafana']['home']
 grafana_assets_dir = '/opt/gitlab/embedded/service/grafana'
 grafana_config = File.join(grafana_dir, 'grafana.ini')
@@ -43,9 +45,13 @@ grafana_reporting_enabled = if Gitlab['gitlab_rails']['usage_ping_enabled'].nil?
 # disabled, it's up to this recipe to create the account
 include_recipe 'monitoring::user'
 
-directory grafana_log_dir do
-  owner prometheus_user
-  mode '0700'
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
   recursive true
 end
 
@@ -168,14 +174,14 @@ end
 
 runit_service 'grafana' do
   options({
-    log_directory: grafana_log_dir,
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     config: grafana_config,
     env_dir: grafana_static_etc_dir,
     working_dir: grafana_dir,
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(
-    node['monitoring']['grafana'].to_hash
-  )
+  log_options logging_settings[:options]
 end
 
 if node['gitlab']['bootstrap']['enable']

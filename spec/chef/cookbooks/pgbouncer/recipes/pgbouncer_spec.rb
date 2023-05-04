@@ -62,7 +62,6 @@ RSpec.describe 'pgbouncer' do
     end
 
     it 'creates the appropriate directories' do
-      expect(chef_run).to create_directory('/var/log/gitlab/pgbouncer')
       expect(chef_run).to create_directory('/var/opt/gitlab/pgbouncer')
     end
 
@@ -364,6 +363,27 @@ RSpec.describe 'pgbouncer' do
       it 'includes the pgbouncer_disable recipe' do
         expect(chef_run).to include_recipe('pgbouncer::disable')
       end
+    end
+  end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(pgbouncer: { enable: true })
+      end
+      it_behaves_like 'enabled logged service', 'pgbouncer', true, { log_directory_owner: 'gitlab-psql' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          pgbouncer: {
+            enable: true,
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'pgbouncer', true, { log_directory_owner: 'gitlab-psql', log_group: 'fugee' }
     end
   end
 end

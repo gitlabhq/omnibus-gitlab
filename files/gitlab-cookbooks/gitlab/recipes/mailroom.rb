@@ -15,19 +15,25 @@
 # limitations under the License.
 #
 
-user = AccountHelper.new(node).gitlab_user
-group = AccountHelper.new(node).gitlab_group
+account_helper = AccountHelper.new(node)
+user = account_helper.gitlab_user
+group = account_helper.gitlab_group
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('mailroom')
 
 GITLAB_RAILS_SOURCE_DIR = '/opt/gitlab/embedded/service/gitlab-rails'.freeze
 
 exit_log_format = node['gitlab']['mailroom']['exit_log_format']
 mailroom_working_dir = "#{node['gitlab']['gitlab_rails']['dir']}/working"
-mailroom_log_dir = node['gitlab']['mailroom']['log_directory']
 mail_room_config = File.join(GITLAB_RAILS_SOURCE_DIR, 'config', 'mail_room.yml')
 
-directory mailroom_log_dir do
-  owner user
-  mode '0700'
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
   recursive true
 end
 
@@ -36,12 +42,14 @@ runit_service 'mailroom' do
   options({
     user: user,
     groupname: group,
-    log_directory: mailroom_log_dir,
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     mail_room_config: mail_room_config,
     exit_log_format: exit_log_format,
     working_dir: mailroom_working_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['mailroom'].to_hash)
+  log_options logging_settings[:options]
 end
 
 if node['gitlab']['mailroom']['incoming_email_auth_token']

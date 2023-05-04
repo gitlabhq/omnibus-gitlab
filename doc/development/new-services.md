@@ -177,7 +177,10 @@ A service typically needs a `run`, `log-run`, and `log-config`.
 
 ```ruby
 #!/bin/sh
-exec svlogd -tt <%= @options[:log_directory] %>
+exec chpst -P \
+  -U root:<%= @options[:log_group] || 'root' %> \
+  -u root:<%= @options[:log_group] || 'root' %> \
+  svlogd -tt <%= @options[:log_directory] %>
 ```
 
 `sv-best-service-run.erb`:
@@ -198,9 +201,13 @@ Within your recipe, the runit service should be called and started:
 ```ruby
 runit_service "best-service" do
   options({
-    configItem: 'value'
+    configItem: 'value',
+    [...]
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['best-service'].to_hash)
+  log_options logging_settings[:options]
 end
 
 if node['gitlab']['bootstrap']['enable']
@@ -209,6 +216,29 @@ if node['gitlab']['bootstrap']['enable']
   end
 end
 ```
+
+#### Log Directory
+
+The example settings referenced above that include `logging_settings` make use of
+the [`LogfilesHelper`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/tree/master/files/gitlab-cookbooks/gitlab/libraries/logfiles_helper.rb)
+class in order to provide a consistent reference to the configuration settings
+for the service log directory, the log group assigned to the log directory, and
+the group used for svlogd execution.
+
+To make use of these settings, please include the `LogfilesHelper` class in your
+`enable.rb` for your service, for example:
+
+```ruby
+[...]
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('best-service')
+[...]
+```
+
+Please add `best-service` to the list of services in the `default_logdir_ownership`
+class method with the default user/group that should be used for the log directory
+user/group. If you don't have a specific user/group need - default to
+`{ username: gitlab_user, group: gitlab_group }`
 
 ### Disable recipe
 

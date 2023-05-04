@@ -20,6 +20,8 @@ omnibus_helper = OmnibusHelper.new(node)
 consul_helper = ConsulHelper.new(node)
 mailroom_helper = MailroomHelper.new(node)
 redis_helper = RedisHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('gitlab-rails')
 
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
 gitlab_rails_dir = node['gitlab']['gitlab_rails']['dir']
@@ -28,7 +30,6 @@ gitlab_rails_static_etc_dir = "/opt/gitlab/etc/gitlab-rails"
 gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab_rails']['uploads_directory']
-gitlab_rails_log_dir = node['gitlab']['gitlab_rails']['log_directory']
 gitlab_rails_uploads_storage_path = node['gitlab']['gitlab_rails']['uploads_storage_path']
 gitlab_ci_dir = node['gitlab']['gitlab-ci']['dir']
 gitlab_ci_builds_dir = node['gitlab']['gitlab-ci']['builds_directory']
@@ -99,8 +100,7 @@ end
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
   node['gitlab']['gitlab_rails']['gitlab_repository_downloads_path'],
-  upgrade_status_dir,
-  gitlab_rails_log_dir
+  upgrade_status_dir
 ].compact.each do |dir_name|
   directory "create #{dir_name}" do
     path dir_name
@@ -108,6 +108,16 @@ end
     mode '0700'
     recursive true
   end
+end
+
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
+  recursive true
 end
 
 storage_directory node['gitlab']['gitlab_rails']['backup_path'] do
@@ -456,14 +466,14 @@ end
 {
   "/opt/gitlab/embedded/service/gitlab-rails/tmp" => gitlab_rails_tmp_dir,
   "/opt/gitlab/embedded/service/gitlab-rails/public/uploads" => gitlab_rails_public_uploads_dir,
-  "/opt/gitlab/embedded/service/gitlab-rails/log" => gitlab_rails_log_dir
+  "/opt/gitlab/embedded/service/gitlab-rails/log" => logging_settings[:log_directory]
 }.each do |link_dir, target_dir|
   link link_dir do
     to target_dir
   end
 end
 
-legacy_sidekiq_log_file = File.join(gitlab_rails_log_dir, 'sidekiq.log')
+legacy_sidekiq_log_file = File.join(logging_settings[:log_directory], 'sidekiq.log')
 link legacy_sidekiq_log_file do
   action :delete
   only_if { File.symlink?(legacy_sidekiq_log_file) }

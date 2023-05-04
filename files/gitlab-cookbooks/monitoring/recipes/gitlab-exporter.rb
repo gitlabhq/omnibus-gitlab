@@ -17,9 +17,10 @@
 #
 account_helper = AccountHelper.new(node)
 redis_helper = RedisHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('gitlab-exporter')
 gitlab_user = account_helper.gitlab_user
 gitlab_exporter_dir = node['monitoring']['gitlab_exporter']['home']
-gitlab_exporter_log_dir = node['monitoring']['gitlab_exporter']['log_directory']
 env_directory = node['monitoring']['gitlab_exporter']['env_directory']
 
 directory gitlab_exporter_dir do
@@ -28,9 +29,13 @@ directory gitlab_exporter_dir do
   recursive true
 end
 
-directory gitlab_exporter_log_dir do
-  owner gitlab_user
-  mode "0700"
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
   recursive true
 end
 
@@ -74,9 +79,11 @@ end
 
 runit_service "gitlab-exporter" do
   options({
-    log_directory: gitlab_exporter_log_dir
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['monitoring']['gitlab_exporter'].to_hash)
+  log_options logging_settings[:options]
 end
 
 if node['gitlab']['bootstrap']['enable']

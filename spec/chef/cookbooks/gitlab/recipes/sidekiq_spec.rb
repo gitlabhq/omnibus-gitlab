@@ -53,5 +53,22 @@ RSpec.describe 'gitlab::sidekiq' do
     end
   end
 
+  context 'log directory and runit group' do
+    context 'default values' do
+      it_behaves_like 'enabled logged service', 'sidekiq', true, { log_directory_owner: 'git' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          sidekiq: {
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'sidekiq', true, { log_directory_owner: 'git', log_group: 'fugee' }
+    end
+  end
+
   include_examples "consul service discovery", "sidekiq", "sidekiq"
 end

@@ -1247,4 +1247,22 @@ RSpec.describe 'gitlab::gitlab-rails' do
       expect(chef_run).not_to delete_link('/var/log/gitlab/gitlab-rails/sidekiq.log')
     end
   end
+
+  describe 'log directory and runit group' do
+    context 'default values' do
+      it_behaves_like 'enabled logged service', 'gitlab-rails', false, { log_directory_owner: 'git' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'configured logrotate service', 'gitlab-rails', 'git', 'fugee'
+      it_behaves_like 'enabled logged service', 'gitlab-rails', false, { log_directory_owner: 'git', log_group: 'fugee' }
+    end
+  end
 end

@@ -22,8 +22,8 @@ include_recipe 'postgresql::sysctl'
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 pg_helper = PgHelper.new(node)
-
-postgresql_log_dir = node['postgresql']['log_directory']
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('postgresql')
 postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
 postgresql_data_dir = File.join(node['postgresql']['dir'], "data")
@@ -36,7 +36,6 @@ end
 
 [
   postgresql_data_dir,
-  postgresql_log_dir,
   pg_helper.config_dir
 ].each do |dir|
   directory dir do
@@ -44,6 +43,16 @@ end
     mode "0700"
     recursive true
   end
+end
+
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
+  recursive true
 end
 
 execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do

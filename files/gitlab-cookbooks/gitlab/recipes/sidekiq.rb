@@ -17,10 +17,18 @@
 #
 
 account_helper = AccountHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('sidekiq')
 
 sidekiq_service 'sidekiq' do
   user account_helper.gitlab_user
   group account_helper.gitlab_group
+  log_directory logging_settings[:log_directory]
+  log_directory_mode logging_settings[:log_directory_mode]
+  log_directory_owner logging_settings[:log_directory_owner]
+  log_directory_group logging_settings[:log_directory_group]
+  log_user logging_settings[:runit_owner]
+  log_group logging_settings[:runit_group]
 end
 
 consul_service node['gitlab']['sidekiq']['consul_service_name'] do

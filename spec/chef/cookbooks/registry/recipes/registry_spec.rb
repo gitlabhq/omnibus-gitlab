@@ -152,7 +152,7 @@ RSpec.describe 'registry recipe' do
 
       it 'does not append timestamp in logs if logging format is json' do
         expect(chef_run).to render_file('/opt/gitlab/sv/registry/log/run')
-          .with_content(/exec svlogd \/var\/log\/gitlab\/registry/)
+          .with_content(/svlogd \/var\/log\/gitlab\/registry/)
       end
     end
 
@@ -463,6 +463,28 @@ RSpec.describe 'registry' do
           )
         )
       end
+    end
+  end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb({ registry_external_url: 'https://registry.example.com' })
+      end
+      it_behaves_like 'enabled logged service', 'registry', true, { log_directory_owner: 'registry' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          registry_external_url: 'https://registry.example.com',
+          registry: {
+            enabled: true,
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'registry', true, { log_directory_owner: 'registry', log_group: 'fugee' }
     end
   end
 end

@@ -16,6 +16,10 @@
 ##
 #
 account_helper = AccountHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('gitlab-shell')
+logging_settings_sshd = logfiles_helper.logging_settings('gitlab-sshd')
+
 omnibus_helper = OmnibusHelper.new(node)
 sshd_helper = GitlabSshdHelper.new(node)
 
@@ -25,14 +29,12 @@ gitlab_shell_dir = "/opt/gitlab/embedded/service/gitlab-shell"
 gitlab_shell_var_dir = node['gitlab']['gitlab_shell']['dir']
 ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
 authorized_keys = node['gitlab']['gitlab_shell']['auth_file']
-log_directory = node['gitlab']['gitlab_shell']['log_directory']
 gitlab_shell_config_file = File.join(gitlab_shell_var_dir, "config.yml")
 
 gitlab_sshd_enabled = Services.enabled?('gitlab_sshd')
 gitlab_sshd_generate_host_keys = node['gitlab']['gitlab_sshd']['generate_host_keys']
 gitlab_sshd_bin_path = File.join(gitlab_shell_dir, 'bin', 'gitlab-sshd')
 gitlab_sshd_working_dir = node['gitlab']['gitlab_sshd']['dir']
-gitlab_sshd_log_dir = node['gitlab']['gitlab_sshd']['log_directory']
 gitlab_sshd_env_dir = node['gitlab']['gitlab_sshd']['env_directory']
 gitlab_sshd_host_key_dir = node['gitlab']['gitlab_sshd']['host_keys_dir']
 
@@ -49,16 +51,36 @@ gitlab_sshd_host_key_dir = node['gitlab']['gitlab_sshd']['host_keys_dir']
 end
 
 directories = [
-  log_directory,
   gitlab_shell_var_dir,
 ]
 
-directories += [gitlab_sshd_working_dir, gitlab_sshd_log_dir] if gitlab_sshd_enabled
+directories += [gitlab_sshd_working_dir] if gitlab_sshd_enabled
 
 directories.each do |dir|
   directory dir do
     owner git_user
     mode "0700"
+    recursive true
+  end
+end
+
+# Create log_director(ies)
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
+  recursive true
+end
+
+if gitlab_sshd_enabled
+  directory logging_settings_sshd[:log_directory] do
+    owner logging_settings_sshd[:log_directory_owner]
+    mode logging_settings_sshd[:log_directory_mode]
+    if log_group = logging_settings_sshd[:log_directory_group]
+      group log_group
+    end
     recursive true
   end
 end
@@ -115,7 +137,7 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
         gitlab_relative_path: gitlab_relative_path,
         authorized_keys: authorized_keys,
         secret_file: gitlab_shell_secret_file,
-        log_file: File.join(log_directory, "gitlab-shell.log"),
+        log_file: File.join(logging_settings[:log_directory], "gitlab-shell.log"),
         log_level: node['gitlab']['gitlab_shell']['log_level'],
         log_format: node['gitlab']['gitlab_shell']['log_format'],
         audit_usernames: node['gitlab']['gitlab_shell']['audit_usernames'],
@@ -159,6 +181,8 @@ runit_service 'gitlab-sshd' do
     env_dir: gitlab_sshd_env_dir,
     bin_path: gitlab_sshd_bin_path,
     config_dir: gitlab_shell_var_dir,
-    log_directory: gitlab_sshd_log_dir,
+    log_directory: logging_settings_sshd[:log_directory],
+    log_user: logging_settings_sshd[:runit_owner],
+    log_group: logging_settings_sshd[:runit_group],
   }.merge(params))
 end

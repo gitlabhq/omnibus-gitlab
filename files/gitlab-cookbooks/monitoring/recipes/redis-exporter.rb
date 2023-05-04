@@ -17,12 +17,17 @@
 #
 account_helper = AccountHelper.new(node)
 redis_user = account_helper.redis_user
-redis_exporter_log_dir = node['monitoring']['redis_exporter']['log_directory']
 redis_exporter_static_etc_dir = node['monitoring']['redis_exporter']['env_directory']
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('redis-exporter')
 
-directory redis_exporter_log_dir do
-  owner redis_user
-  mode '0700'
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
   recursive true
 end
 
@@ -40,11 +45,13 @@ end
 runtime_flags = PrometheusHelper.new(node).flags('redis_exporter')
 runit_service 'redis-exporter' do
   options({
-    log_directory: redis_exporter_log_dir,
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     flags: runtime_flags,
     env_dir: redis_exporter_static_etc_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
+  log_options logging_settings[:options]
 end
 
 if node['gitlab']['bootstrap']['enable']

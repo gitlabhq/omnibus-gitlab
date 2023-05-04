@@ -1,2 +1,5 @@
 #!/bin/sh
-exec svlogd <% unless node['gitlab']['sidekiq']['log_format'].eql?('json') %>-tt <% end %><%= @options[:log_directory] %>
+exec chpst -P \
+  -U root:<%= @options[:log_group] || 'root' %> \
+  -u root:<%= @options[:log_group] || 'root' %> \
+  svlogd <% unless node['gitlab']['sidekiq']['log_format'].eql?('json') %>-tt <% end %><%= @options[:log_directory] %>

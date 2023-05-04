@@ -16,6 +16,8 @@
 
 account_helper = AccountHelper.new(node)
 pgb_helper = PgbouncerHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('pgbouncer')
 pgbouncer_static_etc_dir = node['pgbouncer']['env_directory']
 
 node.default['pgbouncer']['unix_socket_dir'] ||= node['pgbouncer']['data_directory']
@@ -23,7 +25,6 @@ node.default['pgbouncer']['unix_socket_dir'] ||= node['pgbouncer']['data_directo
 include_recipe 'postgresql::user'
 
 [
-  node['pgbouncer']['log_directory'],
   node['pgbouncer']['data_directory'],
   pgbouncer_static_etc_dir
 ].each do |dir|
@@ -32,6 +33,16 @@ include_recipe 'postgresql::user'
     mode '0700'
     recursive true
   end
+end
+
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
+  recursive true
 end
 
 env_dir pgbouncer_static_etc_dir do
@@ -50,7 +61,9 @@ runit_service 'pgbouncer' do
     username: node['postgresql']['username'],
     groupname: node['postgresql']['group'],
     data_directory: node['pgbouncer']['data_directory'],
-    log_directory: node['pgbouncer']['log_directory'],
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     env_dir: pgbouncer_static_etc_dir
   )
 end

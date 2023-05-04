@@ -93,15 +93,7 @@ RSpec.describe 'monitoring::grafana' do
         }
 
       expect(chef_run).to render_file('/opt/gitlab/sv/grafana/log/run')
-        .with_content(/exec svlogd -tt \/var\/log\/gitlab\/grafana/)
-    end
-
-    it 'creates default set of directories' do
-      expect(chef_run).to create_directory('/var/log/gitlab/grafana').with(
-        owner: 'gitlab-prometheus',
-        group: nil,
-        mode: '0700'
-      )
+        .with_content(/svlogd -tt \/var\/log\/gitlab\/grafana/)
     end
 
     it 'creates the configuration file' do
@@ -151,7 +143,7 @@ RSpec.describe 'monitoring::grafana' do
     end
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/grafana/log/run')
-        .with_content(/exec svlogd -tt foo/)
+        .with_content(/svlogd -tt foo/)
     end
   end
 
@@ -391,6 +383,27 @@ RSpec.describe 'monitoring::grafana' do
       it 'sets auth scope to read_user' do
         expect(chef_run).to render_file('/var/opt/gitlab/grafana/grafana.ini').with_content(/scopes = read_user/)
       end
+    end
+  end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(grafana: { enable: true })
+      end
+      it_behaves_like 'enabled logged service', 'grafana', true, { log_directory_owner: 'gitlab-prometheus' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          grafana: {
+            enable: true,
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'grafana', true, { log_directory_owner: 'gitlab-prometheus', log_group: 'fugee' }
     end
   end
 end
