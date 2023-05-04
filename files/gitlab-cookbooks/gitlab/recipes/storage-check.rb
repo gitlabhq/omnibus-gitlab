@@ -15,13 +15,18 @@
 # limitations under the License.
 
 account_helper = AccountHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('storage-check')
 
 working_dir = "/opt/gitlab/embedded/service/gitlab-rails"
-log_directory = node['gitlab']['storage-check']['log_directory']
 
-directory log_directory do
-  owner account_helper.gitlab_user
-  mode '0700'
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
   recursive true
 end
 
@@ -30,9 +35,11 @@ runit_service 'storage-check' do
     user: account_helper.gitlab_user,
     groupname: account_helper.gitlab_group,
     working_dir: working_dir,
-    log_directory: log_directory,
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     storage_check_target: node['gitlab']['storage-check']['target']
   }.merge(params))
 
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['storage-check'].to_hash)
+  log_options logging_settings[:options]
 end

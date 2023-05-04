@@ -16,10 +16,10 @@
 
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
 
 data_dir = node['spamcheck']['dir']
 sockets_dir = File.join(data_dir, 'sockets')
-log_dir = node['spamcheck']['log_directory']
 env_dir = node['spamcheck']['env_directory']
 config_file = File.join(data_dir, 'config.toml')
 
@@ -27,17 +27,27 @@ classifier_dir = "#{node['package']['install-dir']}/embedded/service/spam-classi
 preprocessor_dir = File.join(classifier_dir, 'preprocessor')
 preprocessor_model_path = File.join(classifier_dir, 'model/issues/tflite/model.tflite')
 preprocessor_socket_path = File.join(sockets_dir, 'preprocessor.sock')
-preprocessor_log_dir = node['spamcheck']['classifier']['log_directory']
 
 [
   data_dir,
-  log_dir,
-  sockets_dir,
-  preprocessor_log_dir
+  sockets_dir
 ].each do |dir|
   directory dir do
     owner account_helper.gitlab_user
     mode '0700'
+    recursive true
+  end
+end
+
+# log directory
+%w(spamcheck spam-classifier).each do |svc|
+  logging_settings = logfiles_helper.logging_settings(svc)
+  directory logging_settings[:log_directory] do
+    owner logging_settings[:log_directory_owner]
+    mode logging_settings[:log_directory_mode]
+    if log_group = logging_settings[:log_directory_group]
+      group log_group
+    end
     recursive true
   end
 end
@@ -59,25 +69,31 @@ env_dir env_dir do
   notifies :restart, 'runit_service[spamcheck]' if omnibus_helper.should_notify?('spamcheck')
 end
 
+spamcheck_logging_settings = logfiles_helper.logging_settings('spamcheck')
 runit_service 'spamcheck' do
   options({
-    log_directory: log_dir,
+    log_directory: spamcheck_logging_settings[:log_directory],
+    log_user: spamcheck_logging_settings[:runit_owner],
+    log_group: spamcheck_logging_settings[:runit_group],
     env_directory: env_dir,
     user: account_helper.gitlab_user,
     groupname: account_helper.gitlab_group,
     config_file: config_file
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['spamcheck'].to_hash)
+  log_options spamcheck_logging_settings[:options]
 end
 
+classifier_logging_settings = logfiles_helper.logging_settings('spam-classifier')
 runit_service 'spam-classifier' do
   options({
-    log_directory: preprocessor_log_dir,
+    log_directory: classifier_logging_settings[:log_directory],
+    log_user: classifier_logging_settings[:runit_owner],
+    log_group: classifier_logging_settings[:runit_group],
     env_directory: env_dir,
     user: account_helper.gitlab_user,
     groupname: account_helper.gitlab_group,
     preprocessor_dir: preprocessor_dir,
     sockets_dir: sockets_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['spamcheck'].to_hash)
+  log_options classifier_logging_settings[:options]
 end

@@ -18,17 +18,23 @@
 omnibus_helper = OmnibusHelper.new(node)
 
 remote_syslog_dir = node['gitlab']['remote_syslog']['dir']
-remote_syslog_log_dir = node['gitlab']['remote_syslog']['log_directory']
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('remote-syslog')
 logging_hostname = node['gitlab']['logging']['udp_log_shipping_hostname']
 
-[
-  remote_syslog_dir,
-  remote_syslog_log_dir
-].each do |dir|
-  directory dir do
-    mode "0700"
-    recursive true
+directory remote_syslog_dir do
+  mode "0700"
+  recursive true
+end
+
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
   end
+  recursive true
 end
 
 template File.join(remote_syslog_dir, "remote_syslog.yml") do
@@ -40,11 +46,13 @@ end
 runit_service "remote-syslog" do
   start_down node['gitlab']['remote_syslog']['ha']
   options({
-    log_directory: remote_syslog_log_dir,
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     dir: remote_syslog_dir,
     logging_hostname: logging_hostname,
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['remote_syslog'].to_hash)
+  log_options logging_settings[:options]
 end
 
 if node['gitlab']['bootstrap']['enable']

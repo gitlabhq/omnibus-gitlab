@@ -38,21 +38,6 @@ RSpec.describe 'spamcheck' do
         )
       end
 
-      it 'creates necessary directories at default locations' do
-        %w[
-          /var/opt/gitlab/spamcheck
-          /var/opt/gitlab/spamcheck/sockets
-          /var/log/gitlab/spamcheck
-          /var/log/gitlab/spam-classifier
-        ].each do |dir|
-          expect(chef_run).to create_directory(dir).with(
-            owner: 'git',
-            mode: '0700',
-            recursive: true
-          )
-        end
-      end
-
       it 'creates config.toml with default values' do
         actual_content = get_rendered_toml(chef_run, '/var/opt/gitlab/spamcheck/config.toml')
         expected_content = {
@@ -132,6 +117,35 @@ RSpec.describe 'spamcheck' do
       end
     end
 
+    context 'log directory and runit group' do
+      context 'default values' do
+        before do
+          stub_gitlab_rb(spamcheck: { enable: true })
+        end
+
+        it_behaves_like 'enabled logged service', 'spamcheck', true, { log_directory_owner: 'git' }
+        it_behaves_like 'enabled logged service', 'spam-classifier', true, { log_directory_owner: 'git' }
+      end
+
+      context 'custom values' do
+        before do
+          stub_gitlab_rb(
+            spamcheck: {
+              enable: true,
+              log_group: 'fugee',
+              log_directory: '/log/spamcheck',
+              classifier: {
+                log_group: 'fugee',
+                log_directory: '/log/spam-classifier',
+              }
+            }
+          )
+        end
+        it_behaves_like 'enabled logged service', 'spamcheck', true, { log_directory_owner: 'git', log_group: 'fugee', log_directory: '/log/spamcheck' }
+        it_behaves_like 'enabled logged service', 'spam-classifier', true, { log_directory_owner: 'git', log_group: 'fugee', log_directory: '/log/spam-classifier' }
+      end
+    end
+
     context 'with user specified values' do
       before do
         stub_gitlab_rb(
@@ -156,13 +170,9 @@ RSpec.describe 'spamcheck' do
               '15' => 'foobar/random'
             },
             env_directory: '/env/spamcheck',
-            log_directory: '/log/spamcheck',
             env: {
               'FOO' => 'BAR'
             },
-            classifier: {
-              log_directory: '/log/spam-classifier'
-            }
           }
         )
       end
@@ -171,8 +181,6 @@ RSpec.describe 'spamcheck' do
         %w[
           /data/spamcheck
           /data/spamcheck/sockets
-          /log/spamcheck
-          /log/spam-classifier
         ].each do |dir|
           expect(chef_run).to create_directory(dir).with(
             owner: 'randomuser',
@@ -258,7 +266,7 @@ RSpec.describe 'spamcheck' do
             -U randomuser:randomgroup \\
             /opt/gitlab/embedded/bin/python3 /opt/gitlab/embedded/service/spam-classifier/preprocessor/preprocess.py \\
               --tokenizer-pickle-path /opt/gitlab/embedded/service/spam-classifier/preprocessor/tokenizer.pickle \\
-              --log-dir /log/spam-classifier \\
+              --log-dir /var/log/gitlab/spam-classifier \\
               --socket-dir /data/spamcheck/sockets
         EOS
 

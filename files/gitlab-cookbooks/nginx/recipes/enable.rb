@@ -13,14 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-nginx_log_dir = node['gitlab']['nginx']['log_directory']
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('nginx')
 
 runit_service "nginx" do
   start_down node['gitlab']['nginx']['ha']
   options({
-    log_directory: nginx_log_dir
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['nginx'].to_hash)
+  log_options logging_settings[:options]
 end
 
 execute 'reload nginx' do

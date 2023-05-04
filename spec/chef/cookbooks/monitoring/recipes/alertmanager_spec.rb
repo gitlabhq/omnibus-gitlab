@@ -67,15 +67,10 @@ RSpec.describe 'monitoring::alertmanager' do
         .with_content(alertmanager_yml_output.gsub(/^ {2}/, ''))
 
       expect(chef_run).to render_file('/opt/gitlab/sv/alertmanager/log/run')
-        .with_content(/exec svlogd -tt \/var\/log\/gitlab\/alertmanager/)
+        .with_content(/svlogd -tt \/var\/log\/gitlab\/alertmanager/)
     end
 
     it 'creates default set of directories' do
-      expect(chef_run).to create_directory('/var/log/gitlab/alertmanager').with(
-        owner: 'gitlab-prometheus',
-        group: nil,
-        mode: '0700'
-      )
       expect(chef_run).to create_directory('/var/opt/gitlab/alertmanager').with(
         owner: 'gitlab-prometheus',
         group: nil,
@@ -144,6 +139,23 @@ RSpec.describe 'monitoring::alertmanager' do
           }
         )
       )
+    end
+  end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      it_behaves_like 'enabled logged service', 'alertmanager', true, { log_directory_owner: 'gitlab-prometheus' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          alertmanager: {
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'alertmanager', true, { log_directory_owner: 'gitlab-prometheus', log_group: 'fugee' }
     end
   end
 end

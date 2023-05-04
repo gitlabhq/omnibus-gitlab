@@ -2,13 +2,14 @@ unified_mode true
 
 property :socket_group, String
 property :dir, String, default: lazy { node['redis']['dir'] }
-property :log_dir, String, default: lazy { node['redis']['log_directory'] }
 property :account_helper, default: lazy { AccountHelper.new(node) }
 property :omnibus_helper, default: lazy { OmnibusHelper.new(node) }
 property :redis_helper, default: lazy { RedisHelper.new(node) }
 property :runit_sv_timeout, [Integer, nil], default: lazy { node['redis']['runit_sv_timeout'] }
+property :logfiles_helper, default: lazy { LogfilesHelper.new(node) }
 
 action :create do
+  logging_settings = new_resource.logfiles_helper.logging_settings('redis')
   account 'user and group for redis' do
     username new_resource.account_helper.redis_user
     uid node['redis']['uid']
@@ -31,9 +32,14 @@ action :create do
     mode "0750"
   end
 
-  directory new_resource.log_dir do
-    owner new_resource.account_helper.redis_user
-    mode "0700"
+  # Create log_directory
+  directory logging_settings[:log_directory] do
+    owner logging_settings[:log_directory_owner]
+    mode logging_settings[:log_directory_mode]
+    if log_group = logging_settings[:log_directory_group]
+      group log_group
+    end
+    recursive true
   end
 
   redis_config = ::File.join(new_resource.dir, 'redis.conf')
@@ -62,10 +68,12 @@ action :create do
     template_name 'redis'
     options({
       service: 'redis',
-      log_directory: new_resource.log_dir
+      log_directory: logging_settings[:log_directory],
+      log_user: logging_settings[:runit_owner],
+      log_group: logging_settings[:runit_group],
     }.merge(new_resource))
-    log_options node['gitlab']['logging'].to_hash.merge(node['redis'].to_hash)
     sv_timeout new_resource.runit_sv_timeout
+    log_options logging_settings[:options]
   end
 
   if node['gitlab']['bootstrap']['enable']

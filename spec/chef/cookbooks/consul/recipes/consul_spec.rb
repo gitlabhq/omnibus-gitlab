@@ -88,7 +88,7 @@ RSpec.describe 'consul' do
 
       it 'renders log run file with timestamp option' do
         expect(chef_run).to render_file('/opt/gitlab/sv/consul/log/run').with_content { |content|
-          expect(content).to match(%r{exec svlogd -tt /var/log/gitlab/consul})
+          expect(content).to match(%r{svlogd -tt /var/log/gitlab/consul})
         }
       end
     end
@@ -139,7 +139,7 @@ RSpec.describe 'consul' do
 
       it 'renders log run file without timestamp option' do
         expect(chef_run).to render_file('/opt/gitlab/sv/consul/log/run').with_content { |content|
-          expect(content).to match(%r{exec svlogd /var/log/gitlab/consul})
+          expect(content).to match(%r{svlogd /var/log/gitlab/consul})
         }
       end
 
@@ -475,6 +475,31 @@ RSpec.describe 'consul' do
 
       expect_logged_deprecation(%r{`consul\['configuration'\]\['acl'\]\['tokens'\]\['master'\]` has been deprecated.*`consul\['configuration'\]\['acl'\]\['tokens'\]\['initial_management'\]`})
       expect_logged_deprecation(%r{`consul\['configuration'\]\['acl'\]\['tokens'\]\['agent_master'\]` has been deprecated.*`consul\['configuration'\]\['acl'\]\['tokens'\]\['agent_recovery'\]`})
+    end
+  end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(
+          consul: {
+            enable: true,
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'consul', true, { log_directory_owner: 'gitlab-consul', log_directory_mode: '0755' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          consul: {
+            enable: true,
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'consul', true, { log_directory_owner: 'gitlab-consul', log_group: 'fugee' }
     end
   end
 end

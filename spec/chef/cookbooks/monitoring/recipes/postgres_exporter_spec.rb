@@ -92,7 +92,7 @@ RSpec.describe 'monitoring::postgres-exporter' do
         }
 
       expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/log/run')
-        .with_content(/exec svlogd -tt \/var\/log\/gitlab\/postgres-exporter/)
+        .with_content(/svlogd -tt \/var\/log\/gitlab\/postgres-exporter/)
     end
 
     it 'creates the queries.yaml file' do
@@ -101,14 +101,6 @@ RSpec.describe 'monitoring::postgres-exporter' do
           expect(content).to match(/pg_replication:/)
           expect(content).not_to match(/pg_stat_user_table:/)
         }
-    end
-
-    it 'creates default set of directories' do
-      expect(chef_run).to create_directory('/var/log/gitlab/postgres-exporter').with(
-        owner: 'gitlab-psql',
-        group: nil,
-        mode: '0700'
-      )
     end
 
     it 'sets default flags' do
@@ -143,7 +135,7 @@ RSpec.describe 'monitoring::postgres-exporter' do
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/log/run')
-        .with_content(/exec svlogd -tt foo/)
+        .with_content(/svlogd -tt foo/)
     end
   end
 
@@ -187,6 +179,27 @@ RSpec.describe 'monitoring::postgres-exporter' do
           }
         )
       )
+    end
+  end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(postgres_exporter: { enable: true })
+      end
+      it_behaves_like 'enabled logged service', 'postgres-exporter', true, { log_directory_owner: 'gitlab-psql' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          postgres_exporter: {
+            enable: true,
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'postgres-exporter', true, { log_directory_owner: 'gitlab-psql', log_group: 'fugee' }
     end
   end
 

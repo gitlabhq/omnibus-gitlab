@@ -81,4 +81,25 @@ RSpec.describe 'gitlab::remote-syslog' do
       expect(chef_run).to render_file('/opt/gitlab/sv/remote-syslog/run').with_content(contents.chomp)
     end
   end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(remote_syslog: { enable: true })
+      end
+      it_behaves_like 'enabled logged service', 'remote-syslog', true, { log_directory_owner: 'root' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          remote_syslog: {
+            enable: true,
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'remote-syslog', true, { log_directory_owner: 'root', log_group: 'fugee' }
+    end
+  end
 end

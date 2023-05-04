@@ -16,10 +16,19 @@
 #
 
 sentinel_helper = SentinelHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('sentinel')
+
 sentinel_cfg = node['gitlab']['sentinel'].to_hash.merge(
   {
     'myid' => sentinel_helper.myid,
-    'use_hostnames' => sentinel_helper.use_hostnames
+    'use_hostnames' => sentinel_helper.use_hostnames,
+    'log_directory' => logging_settings[:log_directory],
+    'log_directory_mode' => logging_settings[:log_directory_mode],
+    'log_directory_owner' => logging_settings[:log_directory_owner],
+    'log_directory_group' => logging_settings[:log_directory_group],
+    'log_user' => logging_settings[:runit_owner],
+    'log_group' => logging_settings[:runit_group],
   }
 )
 

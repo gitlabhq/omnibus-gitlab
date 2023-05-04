@@ -15,11 +15,12 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('registry')
 registry_uid = node['registry']['uid']
 registry_gid = node['registry']['gid']
 
 working_dir = node['registry']['dir']
-log_directory = node['registry']['log_directory']
 log_format = node['registry']['log_formatter']
 env_directory = node['registry']['env_directory']
 
@@ -39,16 +40,21 @@ account "Docker registry user and group" do
   manage node['gitlab']['manage-accounts']['enable']
 end
 
-[
-  working_dir,
-  log_directory,
-].each do |dir|
-  directory "create #{dir} and set the owner" do
-    path dir
-    owner account_helper.registry_user
-    mode '0700'
-    recursive true
+directory "create #{working_dir} and set the owner" do
+  path working_dir
+  owner account_helper.registry_user
+  mode '0700'
+  recursive true
+end
+
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
   end
+  recursive true
 end
 
 env_dir env_directory do
@@ -83,10 +89,12 @@ end
 
 runit_service 'registry' do
   options({
-    log_directory: log_directory,
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     log_format: log_format
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['registry'].to_hash)
+  log_options logging_settings[:options]
 end
 
 version_file 'Create version file for Registry' do

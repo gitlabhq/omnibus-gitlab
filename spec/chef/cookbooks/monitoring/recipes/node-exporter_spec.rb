@@ -41,15 +41,10 @@ RSpec.describe 'monitoring::node-exporter' do
         }
 
       expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/log/run')
-        .with_content(/exec svlogd -tt \/var\/log\/gitlab\/node-exporter/)
+        .with_content(/svlogd -tt \/var\/log\/gitlab\/node-exporter/)
     end
 
     it 'creates default set of directories' do
-      expect(chef_run).to create_directory('/var/log/gitlab/node-exporter').with(
-        owner: 'gitlab-prometheus',
-        group: nil,
-        mode: '0700'
-      )
       expect(chef_run).to create_directory('/var/opt/gitlab/node-exporter/textfile_collector').with(
         owner: 'gitlab-prometheus',
         group: nil,
@@ -90,21 +85,6 @@ RSpec.describe 'monitoring::node-exporter' do
     end
   end
 
-  context 'when log dir is changed' do
-    before do
-      stub_gitlab_rb(
-        node_exporter: {
-          log_directory: 'foo',
-          enable: true
-        }
-      )
-    end
-    it 'populates the files with expected configuration' do
-      expect(chef_run).to render_file('/opt/gitlab/sv/node-exporter/log/run')
-        .with_content(/exec svlogd -tt foo/)
-    end
-  end
-
   context 'with user provided settings' do
     before do
       stub_gitlab_rb(
@@ -142,6 +122,27 @@ RSpec.describe 'monitoring::node-exporter' do
           }
         )
       )
+    end
+  end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(node_exporter: { enable: true })
+      end
+      it_behaves_like 'enabled logged service', 'node-exporter', true, { log_directory_owner: 'gitlab-prometheus' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          node_exporter: {
+            enable: true,
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'node-exporter', true, { log_directory_owner: 'gitlab-prometheus', log_group: 'fugee' }
     end
   end
 

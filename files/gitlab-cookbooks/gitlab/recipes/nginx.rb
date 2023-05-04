@@ -17,16 +17,16 @@
 #
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('nginx')
 
 nginx_dir = node['gitlab']['nginx']['dir']
 nginx_conf_dir = File.join(nginx_dir, "conf")
-nginx_log_dir = node['gitlab']['nginx']['log_directory']
 
 # These directories do not need to be writable for gitlab-www
 [
   nginx_dir,
-  nginx_conf_dir,
-  nginx_log_dir,
+  nginx_conf_dir
 ].each do |dir_name|
   directory dir_name do
     owner 'root'
@@ -36,8 +36,18 @@ nginx_log_dir = node['gitlab']['nginx']['log_directory']
   end
 end
 
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
+  recursive true
+end
+
 link File.join(nginx_dir, "logs") do
-  to nginx_log_dir
+  to logging_settings[:log_directory]
 end
 
 nginx_config = File.join(nginx_conf_dir, "nginx.conf")

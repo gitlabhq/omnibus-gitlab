@@ -54,4 +54,25 @@ RSpec.describe 'gitlab::storage-check' do
       it_behaves_like 'enabled runit service', 'storage-check', 'root', 'root'
     end
   end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(storage_check: { enable: true })
+      end
+      it_behaves_like 'enabled logged service', 'storage-check', true, { log_directory_owner: 'git' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          storage_check: {
+            enable: true,
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'storage-check', true, { log_directory_owner: 'git', log_group: 'fugee' }
+    end
+  end
 end

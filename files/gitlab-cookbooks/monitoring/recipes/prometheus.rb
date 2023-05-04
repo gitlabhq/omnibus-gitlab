@@ -17,7 +17,8 @@
 account_helper = AccountHelper.new(node)
 prometheus_helper = PrometheusHelper.new(node)
 prometheus_user = account_helper.prometheus_user
-prometheus_log_dir = node['monitoring']['prometheus']['log_directory']
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('prometheus')
 prometheus_dir = node['monitoring']['prometheus']['home']
 prometheus_rules_dir = node['monitoring']['prometheus']['rules_directory']
 prometheus_static_etc_dir = node['monitoring']['prometheus']['env_directory']
@@ -36,9 +37,13 @@ directory prometheus_rules_dir do
   recursive true
 end
 
-directory prometheus_log_dir do
-  owner prometheus_user
-  mode '0700'
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
   recursive true
 end
 
@@ -86,13 +91,13 @@ end
 runtime_flags = prometheus_helper.flags('prometheus')
 runit_service 'prometheus' do
   options({
-    log_directory: prometheus_log_dir,
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     flags: runtime_flags,
     env_dir: prometheus_static_etc_dir
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(
-    { log_directory: prometheus_log_dir }
-  )
+  log_options logging_settings[:options]
 end
 
 consul_service node['monitoring']['prometheus']['consul_service_name'] do

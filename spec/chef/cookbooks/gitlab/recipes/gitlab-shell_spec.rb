@@ -7,25 +7,6 @@ RSpec.describe 'gitlab::gitlab-shell' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
-  describe 'logrotate settings' do
-    context 'default values' do
-      it_behaves_like 'configured logrotate service', 'gitlab-shell', 'git', 'git'
-    end
-
-    context 'specified username and group' do
-      before do
-        stub_gitlab_rb(
-          user: {
-            username: 'foo',
-            group: 'bar'
-          }
-        )
-      end
-
-      it_behaves_like 'configured logrotate service', 'gitlab-shell', 'foo', 'bar'
-    end
-  end
-
   it 'defaults the auth_file to be within the user\'s home directory' do
     stub_gitlab_rb(user: { home: '/tmp/user' })
     expect(chef_run.node['gitlab']['gitlab_shell']['auth_file']).to eq('/tmp/user/.ssh/authorized_keys')
@@ -82,24 +63,6 @@ RSpec.describe 'gitlab::gitlab-shell' do
 
     it 'create config file in specified location with default values' do
       expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_link_to('/export/gitlab/gitlab-shell/config.yml')
-    end
-  end
-
-  context 'with a non-default log directory' do
-    before do
-      stub_gitlab_rb(gitlab_shell: {
-                       log_directory: '/tmp/log',
-                       git_trace_log_file: '/tmp/log/gitlab-shell-git-trace.log'
-                     })
-    end
-
-    it 'create config file with provided values' do
-      expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
-        hash_including(
-          log_file: '/tmp/log/gitlab-shell.log',
-          git_trace_log_file: '/tmp/log/gitlab-shell-git-trace.log'
-        )
-      )
     end
   end
 
@@ -282,6 +245,24 @@ RSpec.describe 'gitlab::gitlab-shell' do
     end
   end
 
+  context 'log directory and runit group' do
+    context 'default values' do
+      it_behaves_like 'enabled logged service', 'gitlab-shell', false, { log_directory_owner: 'git' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          gitlab_shell: {
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'configured logrotate service', 'gitlab-shell', 'git', 'fugee'
+      it_behaves_like 'enabled logged service', 'gitlab-shell', false, { log_directory_owner: 'git', log_group: 'fugee' }
+    end
+  end
+
   context 'with gitlab-sshd enabled' do
     let(:templatesymlink) { chef_run.templatesymlink('Create a config.yml and create a symlink to Rails root') }
     let(:expected_sshd_keys) do
@@ -293,7 +274,6 @@ RSpec.describe 'gitlab::gitlab-shell' do
       stub_gitlab_rb(
         gitlab_sshd: {
           enable: true,
-          log_directory: '/tmp/log'
         }
       )
     end
@@ -369,6 +349,25 @@ RSpec.describe 'gitlab::gitlab-shell' do
           expect(data['sshd']['host_key_files']).to eq(host_keys)
           expect(data['sshd']['host_key_certs']).to eq(host_certs)
         }
+      end
+    end
+
+    context 'log directory and runit group' do
+      context 'default values' do
+        it_behaves_like 'enabled logged service', 'gitlab-sshd', false, { log_directory_owner: 'git' }
+      end
+
+      context 'custom values' do
+        before do
+          stub_gitlab_rb(
+            gitlab_sshd: {
+              enable: true,
+              log_group: 'fugee'
+            }
+          )
+        end
+        # it_behaves_like 'configured logrotate service', 'gitlab-sshd', 'git', 'fugee'
+        it_behaves_like 'enabled logged service', 'gitlab-sshd', false, { log_directory_owner: 'git', log_group: 'fugee' }
       end
     end
   end

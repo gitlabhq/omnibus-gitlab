@@ -17,9 +17,10 @@
 account_helper = AccountHelper.new(node)
 redis_helper = RedisHelper.new(node)
 workhorse_helper = GitlabWorkhorseHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('gitlab-workhorse')
 
 working_dir = node['gitlab']['gitlab_workhorse']['dir']
-log_directory = node['gitlab']['gitlab_workhorse']['log_directory']
 gitlab_workhorse_static_etc_dir = "/opt/gitlab/etc/gitlab-workhorse"
 workhorse_env_dir = node['gitlab']['gitlab_workhorse']['env_directory']
 gitlab_workhorse_socket_dir = node['gitlab']['gitlab_workhorse']['sockets_directory']
@@ -41,9 +42,13 @@ if workhorse_helper.unix_socket? && !gitlab_workhorse_socket_dir.nil?
   end
 end
 
-directory log_directory do
-  owner account_helper.gitlab_user
-  mode '0700'
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
   recursive true
 end
 
@@ -61,9 +66,11 @@ end
 runit_service 'gitlab-workhorse' do
   start_down node['gitlab']['gitlab_workhorse']['ha']
   options({
-    log_directory: log_directory
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['gitlab_workhorse'].to_hash)
+  log_options logging_settings[:options]
 end
 
 consul_service node['gitlab']['gitlab_workhorse']['consul_service_name'] do

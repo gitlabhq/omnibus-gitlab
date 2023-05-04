@@ -1,14 +1,14 @@
 files:
 <% @services.each do |service| %>
   <% node_attribute_key = SettingsDSL::Utils.sanitized_key(service) %>
-  <% log_dir = node['gitlab'].has_key?(node_attribute_key) ? node['gitlab'][node_attribute_key]['log_directory'] : node[node_attribute_key]['log_directory'] %>
+  <% log_dir = LogfilesHelper.new(node).logdir(service) %>
   - <%= File.join(log_dir, "*.log") %>
 <% end %>
 exclude_files:
   # /var/log/gitlab-rails/sidekiq.log is a symlink to /var/log/sidekiq/current,
   # which should already be being shipped off-site by svlogd. Exclude it from
   # remote_syslog to avoid duplicate log entries on the syslog server.
-  - <%= File.join(node['gitlab']['gitlab_rails']['log_directory'], "sidekiq.log") %>
+  - <%= File.join(LogfilesHelper.new(node).logdir('gitlab-rails'), "sidekiq.log") %>
 destination:
   host: <%= @destination_host %>
   port: <%= @destination_port %>

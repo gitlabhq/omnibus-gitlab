@@ -229,6 +229,7 @@ RSpec.describe 'gitlab::mailroom' do
 
       it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
       it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
+      it_behaves_like 'enabled logged service', 'mailroom', true, { log_directory_owner: 'git' }
       it_behaves_like 'configured sidekiq delivery method'
     end
 
@@ -246,6 +247,7 @@ RSpec.describe 'gitlab::mailroom' do
 
       it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
       it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
+      it_behaves_like 'enabled logged service', 'mailroom', true, { log_directory_owner: 'git' }
       it_behaves_like 'configured sidekiq delivery method'
     end
 
@@ -261,7 +263,7 @@ RSpec.describe 'gitlab::mailroom' do
       end
 
       it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
-      it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
+      it_behaves_like 'enabled logged service', 'mailroom', true, { log_directory_owner: 'git' }
 
       it 'uses --log-exit-as plain' do
         expect(chef_run).to render_file("/opt/gitlab/sv/mailroom/run").with_content(/\-\-log\-exit\-as plain/)
@@ -284,7 +286,6 @@ RSpec.describe 'gitlab::mailroom' do
       end
 
       it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
-      it_behaves_like 'configured logrotate service', 'mailroom', 'foo', 'bar'
     end
 
     context 'incoming email with Microsoft Graph' do
@@ -356,6 +357,29 @@ RSpec.describe 'gitlab::mailroom' do
     end
 
     it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
-    it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
+  end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(gitlab_rails: { incoming_email_enabled: true })
+      end
+      it_behaves_like 'enabled logged service', 'mailroom', true, { log_directory_owner: 'git' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            incoming_email_enabled: true
+          },
+          mailroom: {
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'fugee'
+      it_behaves_like 'enabled logged service', 'mailroom', true, { log_directory_owner: 'git', log_group: 'fugee' }
+    end
   end
 end
