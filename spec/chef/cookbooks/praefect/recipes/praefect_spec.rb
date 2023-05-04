@@ -332,6 +332,7 @@ RSpec.describe 'praefect' do
       let(:separate_database_metrics) { false }
       let(:log_level) { 'debug' }
       let(:log_format) { 'text' }
+      let(:log_group) { 'fugee' }
       let(:primaries) { %w[praefect1 praefect2] }
       let(:virtual_storages) do
         {
@@ -385,6 +386,7 @@ RSpec.describe 'praefect' do
                          separate_database_metrics: separate_database_metrics,
                          logging_level: log_level,
                          logging_format: log_format,
+                         log_group: log_group,
                          failover_enabled: failover_enabled,
                          virtual_storages: virtual_storages,
                          database_host: database_host,
@@ -559,6 +561,27 @@ RSpec.describe 'praefect' do
         it 'skips running the migrations' do
           expect(chef_run).not_to run_bash('migrate praefect database')
         end
+      end
+    end
+
+    context 'log directory and runit group' do
+      context 'default values' do
+        before do
+          stub_gitlab_rb(praefect: { enable: true })
+        end
+        it_behaves_like 'enabled logged service', 'praefect', true, { log_directory_owner: 'git' }
+      end
+
+      context 'custom values' do
+        before do
+          stub_gitlab_rb(
+            praefect: {
+              enable: true,
+              log_group: 'fugee'
+            }
+          )
+        end
+        it_behaves_like 'enabled logged service', 'praefect', true, { log_directory_owner: 'git', log_group: 'fugee' }
       end
     end
 

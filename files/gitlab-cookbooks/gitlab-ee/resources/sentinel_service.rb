@@ -11,6 +11,11 @@ property :sentinel_service_name, String, default: 'sentinel'
 
 action :enable do
   sentinel_log_dir = new_resource.sentinel_configuration['log_directory']
+  sentinel_log_user = new_resource.sentinel_configuration['log_user']
+  sentinel_log_group = new_resource.sentinel_configuration['log_group']
+  sentinel_log_dir_mode = new_resource.sentinel_configuration['log_directory_mode']
+  sentinel_log_dir_group = new_resource.sentinel_configuration['log_directory_group']
+  sentinel_log_dir_owner = new_resource.sentinel_configuration['log_directory_owner']
 
   redis_user = AccountHelper.new(node).redis_user
   redis_group = AccountHelper.new(node).redis_group
@@ -35,9 +40,12 @@ action :enable do
     mode '0750'
   end
 
+  # Create log_directory
   directory sentinel_log_dir do
-    owner new_resource.redis_configuration['username']
-    mode '0700'
+    owner sentinel_log_dir_owner
+    mode sentinel_log_dir_mode
+    group sentinel_log_dir_group if sentinel_log_dir_group
+    recursive true
   end
 
   runit_service new_resource.sentinel_service_name do
@@ -48,7 +56,9 @@ action :enable do
         user: new_resource.redis_configuration['username'],
         groupname: new_resource.redis_configuration['group'],
         config_path: new_resource.config_path,
-        log_directory: sentinel_log_dir
+        log_directory: sentinel_log_dir,
+        log_user: sentinel_log_user,
+        log_group: sentinel_log_group
       }.merge(new_resource)
     )
     log_options new_resource.redis_configuration.to_hash.merge(new_resource.logging_configuration.to_hash)

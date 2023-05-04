@@ -18,14 +18,14 @@ account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 
 working_dir = node['gitlab_pages']['dir']
-log_directory = node['gitlab_pages']['log_directory']
 env_directory = node['gitlab_pages']['env_directory']
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('gitlab-pages')
 gitlab_pages_static_etc_dir = "/opt/gitlab/etc/gitlab-pages"
 pages_secret_path = File.join(working_dir, ".gitlab_pages_secret")
 
 [
   working_dir,
-  log_directory,
   gitlab_pages_static_etc_dir
 ].each do |dir|
   directory dir do
@@ -33,6 +33,16 @@ pages_secret_path = File.join(working_dir, ".gitlab_pages_secret")
     mode '0700'
     recursive true
   end
+end
+
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
+  recursive true
 end
 
 include_recipe 'gitlab::rails_pages_shared_path'
@@ -104,8 +114,10 @@ end
 
 runit_service 'gitlab-pages' do
   options({
-    log_directory: log_directory,
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     env_dir: env_directory,
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab_pages'].to_hash)
+  log_options logging_settings[:options]
 end

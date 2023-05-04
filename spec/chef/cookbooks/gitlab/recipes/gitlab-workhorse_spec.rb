@@ -65,7 +65,7 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
   context 'user and group' do
     context 'default values' do
       it_behaves_like "enabled runit service", "gitlab-workhorse", "root", "root"
-      it_behaves_like 'configured logrotate service', 'gitlab-workhorse', 'git', 'git'
+      it_behaves_like 'enabled logged service', 'gitlab-workhorse', true, { log_directory_owner: 'git' }
     end
 
     context 'custom values' do
@@ -79,7 +79,24 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
       end
 
       it_behaves_like "enabled runit service", "gitlab-workhorse", "root", "root"
-      it_behaves_like 'configured logrotate service', 'gitlab-workhorse', 'foo', 'bar'
+    end
+  end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      it_behaves_like 'enabled logged service', 'gitlab-workhorse', true, { log_directory_owner: 'git' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          gitlab_workhorse: {
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'configured logrotate service', 'gitlab-workhorse', 'git', 'fugee'
+      it_behaves_like 'enabled logged service', 'gitlab-workhorse', true, { log_directory_owner: 'git', log_group: 'fugee' }
     end
   end
 

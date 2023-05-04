@@ -634,7 +634,7 @@ default['gitlab']['sidekiq']['consul_service_meta'] = nil
 # gitlab-shell
 ###
 default['gitlab']['gitlab_shell']['dir'] = "/var/opt/gitlab/gitlab-shell"
-default['gitlab']['gitlab_shell']['log_directory'] = "/var/log/gitlab/gitlab-shell/"
+default['gitlab']['gitlab_shell']['log_directory'] = "/var/log/gitlab/gitlab-shell"
 default['gitlab']['gitlab_shell']['log_level'] = nil
 default['gitlab']['gitlab_shell']['log_format'] = "json"
 default['gitlab']['gitlab_shell']['audit_usernames'] = nil
@@ -656,7 +656,7 @@ default['gitlab']['gitlab_sshd']['generate_host_keys'] = true
 default['gitlab']['gitlab_sshd']['dir'] = "/var/opt/gitlab/gitlab-sshd"
 # gitlab-sshd outputs most logs to /var/log/gitlab/gitlab-shell/gitlab-shell.log.
 # This directory only stores any stdout/stderr output from the daemon.
-default['gitlab']['gitlab_sshd']['log_directory'] = "/var/log/gitlab/gitlab-sshd/"
+default['gitlab']['gitlab_sshd']['log_directory'] = "/var/log/gitlab/gitlab-sshd"
 default['gitlab']['gitlab_sshd']['env_directory'] = '/opt/gitlab/etc/gitlab-sshd/env'
 default['gitlab']['gitlab_sshd']['listen_address'] = 'localhost:2222'
 default['gitlab']['gitlab_sshd']['metrics_address'] = 'localhost:9122'

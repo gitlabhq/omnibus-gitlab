@@ -274,3 +274,29 @@ NOTE:
 You [cannot edit](https://gitlab.com/groups/gitlab-org/-/epics/6034)
 the `log_level` for other GitLab logs, for example
 `production_json.log`, `sidekiq.log`, and so on.
+
+## Setting a custom log group
+
+GitLab supports assigning a custom group to the configured [log directories](#configure-default-log-directories)
+
+A global `logging['log_group']` setting in your `/etc/gitlab/gitlab.rb` file can
+be configured as well as per-service `log_group` settings such as `gitaly['log_group']`.
+You will need to run `sudo gitlab-ctl reconfigure` to configure your instance
+when adding `log_group` settings.
+
+Setting a global or per-service `log_group` will:
+
+- Change the permissions on the per-service log directories (or all log directories
+if using the global setting) to `0750` to allow the configured group members to
+read the contents of the log directory.
+
+- Configure [runit](#runit-logs) to write and rotate logs using the specified
+`log_group` : either per-service or for all runit-managed services.
+
+### Custom log group limitations
+
+Logs for services not managed by runit (e.g. the `gitlab-rails` logs in
+`/var/log/gitlab/gitlab-rails`) will not inherit the configured `log_group` setting.
+
+The group must already exist on the host - Omnibus will not create the group
+when running `sudo gitlab-ctl reconfigure`.

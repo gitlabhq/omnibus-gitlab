@@ -386,6 +386,23 @@ redis_socket=''
     end
   end
 
+  context 'log directory and runit group' do
+    context 'default values' do
+      it_behaves_like 'enabled logged service', 'redis', true, { log_directory_owner: 'gitlab-redis' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          redis: {
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'redis', true, { log_directory_owner: 'gitlab-redis', log_group: 'fugee' }
+    end
+  end
+
   context 'with redis disabled' do
     before do
       stub_gitlab_rb(redis: { enable: false })

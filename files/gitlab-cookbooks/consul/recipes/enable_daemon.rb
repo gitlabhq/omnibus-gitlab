@@ -15,6 +15,8 @@
 #
 account_helper = AccountHelper.new(node)
 consul_helper = ConsulHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('consul')
 
 runit_service 'consul' do
   options({
@@ -23,7 +25,9 @@ runit_service 'consul' do
             config_file: node['consul']['config_file'],
             data_dir: node['consul']['data_dir'],
             dir: node['consul']['dir'],
-            log_directory: node['consul']['log_directory'],
+            log_directory: logging_settings[:log_directory],
+            log_user: logging_settings[:runit_user],
+            log_group: logging_settings[:runit_group],
             user: node['consul']['username'],
             groupname: node['consul']['group'],
             env_dir: node['consul']['env_directory']
@@ -32,7 +36,7 @@ runit_service 'consul' do
   supervisor_group account_helper.consul_group
   owner account_helper.consul_user
   group account_helper.consul_group
-  log_options node['gitlab']['logging'].to_hash.merge(node['consul'].to_hash)
+  log_options logging_settings[:options]
 end
 
 execute 'reload consul' do

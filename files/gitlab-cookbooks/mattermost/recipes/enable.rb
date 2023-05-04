@@ -15,12 +15,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('mattermost')
 mattermost_user = node['mattermost']['username']
 mattermost_group = node['mattermost']['group']
 mattermost_uid = node['mattermost']['uid']
 mattermost_gid = node['mattermost']['gid']
 mattermost_home = node['mattermost']['home']
-mattermost_log_dir = node['mattermost']['log_file_directory']
 mattermost_storage_directory = node['mattermost']['file_directory']
 mattermost_plugin_directory_server = node['mattermost']['plugin_directory']
 mattermost_plugin_directory_web = node['mattermost']['plugin_client_directory']
@@ -29,7 +30,7 @@ mattermost_env_dir = node['mattermost']['env_directory']
 pg_port = node['postgresql']['port']
 pg_user = node['postgresql']['username']
 config_file_path = File.join(mattermost_home, "config.json")
-mattermost_log_file = File.join(mattermost_log_dir, 'mattermost.log')
+mattermost_log_file = File.join(logging_settings[:log_directory], 'mattermost.log')
 
 ###
 # Create group and user that will be running mattermost
@@ -51,7 +52,6 @@ end
 
 [
   mattermost_home,
-  mattermost_log_dir,
   mattermost_storage_directory,
   mattermost_plugin_directory_server,
   mattermost_plugin_directory_web
@@ -60,6 +60,16 @@ end
     owner mattermost_user
     recursive true
   end
+end
+
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
+  recursive true
 end
 
 # Fix an issue where GitLab 8.9 would create the log file as root on error
@@ -129,9 +139,11 @@ end
 
 runit_service "mattermost" do
   options({
-    log_directory: mattermost_log_dir
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['mattermost'].to_hash)
+  log_options logging_settings[:options]
 end
 
 version_file 'Create version file for Mattermost' do

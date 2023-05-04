@@ -38,6 +38,23 @@ RSpec.describe 'logrotate' do
     it 'executes start command' do
       expect(chef_run).to run_execute('/opt/gitlab/bin/gitlab-ctl start logrotate').with(retries: 20)
     end
+
+    context 'log directory and runit group' do
+      context 'default values' do
+        it_behaves_like 'enabled logged service', 'logrotate', true, { log_directory_owner: 'root' }
+      end
+
+      context 'custom values' do
+        before do
+          stub_gitlab_rb(
+            logrotate: {
+              log_group: 'fugee'
+            }
+          )
+        end
+        it_behaves_like 'enabled logged service', 'logrotate', true, { log_directory_owner: 'root', log_group: 'fugee' }
+      end
+    end
   end
 
   context 'when logrotate is disabled' do

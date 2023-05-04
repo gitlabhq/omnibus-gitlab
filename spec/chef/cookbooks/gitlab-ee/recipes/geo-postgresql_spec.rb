@@ -402,4 +402,25 @@ RSpec.describe 'geo postgresql when version mismatches occur' do
       expect(chef_run).not_to run_ruby_block('warn pending geo-postgresql restart')
     end
   end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(geo_postgresql: { enable: true })
+      end
+      it_behaves_like 'enabled logged service', 'geo-postgresql', true, { log_directory_owner: 'gitlab-psql' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          geo_postgresql: {
+            enable: true,
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'geo-postgresql', true, { log_directory_owner: 'gitlab-psql', log_group: 'fugee' }
+    end
+  end
 end

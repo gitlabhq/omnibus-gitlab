@@ -36,10 +36,6 @@ RSpec.describe 'gitlab-kas' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-kas/run").with_content(%r{--configuration-file /var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml})
     end
 
-    it 'correctly renders the KAS log run file' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-kas/log/run").with_content(%r{exec svlogd -tt /var/log/gitlab/gitlab-kas})
-    end
-
     it 'correctly renders the KAS config file' do
       expect(gitlab_kas_config_yml).to(
         include(
@@ -114,10 +110,6 @@ RSpec.describe 'gitlab-kas' do
 
     it 'correctly renders the KAS service run file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-kas/run").with_content(%r{--configuration-file /var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml})
-    end
-
-    it 'correctly renders the KAS log run file' do
-      expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-kas/log/run").with_content(%r{exec svlogd -tt /var/log/gitlab/gitlab-kas})
     end
 
     it 'correctly renders the KAS config file' do
@@ -327,26 +319,6 @@ RSpec.describe 'gitlab-kas' do
           )
         )
       end
-    end
-  end
-
-  describe 'logrotate settings' do
-    context 'default values' do
-      it_behaves_like 'configured logrotate service', 'gitlab-kas', 'git', 'git'
-    end
-
-    context 'specified username and group' do
-      before do
-        stub_gitlab_rb(
-          external_url: 'https://gitlab.example.com',
-          user: {
-            username: 'foo',
-            group: 'bar'
-          }
-        )
-      end
-
-      it_behaves_like 'configured logrotate service', 'gitlab-kas', 'foo', 'bar'
     end
   end
 
@@ -606,6 +578,24 @@ RSpec.describe 'gitlab-kas' do
 
       it 'logs a warning' do
         expect(chef_run).to run_ruby_block('websocket TLS termination')
+      end
+    end
+
+    context 'log directory and runit group' do
+      context 'default values' do
+        it_behaves_like 'enabled logged service', 'gitlab-kas', true, { log_directory_owner: 'git' }
+      end
+
+      context 'custom values' do
+        before do
+          stub_gitlab_rb(
+            gitlab_kas: {
+              log_group: 'fugee'
+            }
+          )
+        end
+        it_behaves_like 'configured logrotate service', 'gitlab-kas', 'git', 'fugee'
+        it_behaves_like 'enabled logged service', 'gitlab-kas', true, { log_directory_owner: 'git', log_group: 'fugee' }
       end
     end
   end

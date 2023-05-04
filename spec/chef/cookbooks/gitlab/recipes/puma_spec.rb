@@ -18,31 +18,7 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
   context 'when puma is enabled' do
     it_behaves_like 'enabled runit service', 'puma', 'root', 'root'
 
-    describe 'logrotate settings' do
-      context 'default values' do
-        it_behaves_like 'configured logrotate service', 'puma', 'git', 'git'
-      end
-
-      context 'specified username and group' do
-        before do
-          stub_gitlab_rb(
-            user: {
-              username: 'foo',
-              group: 'bar'
-            }
-          )
-        end
-
-        it_behaves_like 'configured logrotate service', 'puma', 'foo', 'bar'
-      end
-    end
-
     it 'creates runtime directories' do
-      expect(chef_run).to create_directory('/var/log/gitlab/puma').with(
-        owner: 'git',
-        group: nil,
-        mode: '0700'
-      )
       expect(chef_run).to create_directory('/opt/gitlab/var/puma').with(
         owner: 'git',
         group: nil,
@@ -53,6 +29,24 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
         group: 'gitlab-www',
         mode: '0750'
       )
+    end
+
+    context 'log directory and runit group' do
+      context 'default values' do
+        it_behaves_like 'enabled logged service', 'puma', true, { log_directory_owner: 'git' }
+      end
+
+      context 'custom values' do
+        before do
+          stub_gitlab_rb(
+            puma: {
+              log_group: 'fugee'
+            }
+          )
+        end
+        it_behaves_like 'configured logrotate service', 'puma', 'git', 'fugee'
+        it_behaves_like 'enabled logged service', 'puma', true, { log_directory_owner: 'git', log_group: 'fugee' }
+      end
     end
 
     it 'renders the runit configuration with expected configuration' do

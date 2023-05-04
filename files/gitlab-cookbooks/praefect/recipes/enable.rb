@@ -16,9 +16,10 @@
 #
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('praefect')
 
 working_dir = node['praefect']['dir']
-log_directory = node['praefect']['log_directory']
 env_directory = node['praefect']['env_directory']
 wrapper_path = node['praefect']['wrapper_path']
 json_logging = node['praefect']['configuration']['logging']['format'].eql?('json')
@@ -30,9 +31,13 @@ directory working_dir do
   recursive true
 end
 
-directory log_directory do
-  owner account_helper.gitlab_user
-  mode '0700'
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
+  end
   recursive true
 end
 
@@ -69,11 +74,13 @@ runit_service 'praefect' do
     env_dir: env_directory,
     wrapper_path: wrapper_path,
     config_path: config_path,
-    log_directory: log_directory,
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
     json_logging: json_logging
   }.merge(params))
 
-  log_options node['gitlab']['logging'].to_hash.merge(node['praefect'].to_hash)
+  log_options logging_settings[:options]
 end
 
 if node['gitlab']['bootstrap']['enable']

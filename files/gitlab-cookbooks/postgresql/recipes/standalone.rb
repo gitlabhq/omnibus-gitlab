@@ -1,7 +1,8 @@
 account_helper = AccountHelper.new(node)
 pg_helper = PgHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
-
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('postgresql')
 postgresql_username = account_helper.postgresql_user
 postgresql_group = account_helper.postgresql_group
 
@@ -12,9 +13,11 @@ runit_service "postgresql" do
   restart_on_update false
   control(['t'])
   options({
-    log_directory: node['postgresql']['log_directory']
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group],
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['postgresql'].to_hash)
+  log_options logging_settings[:options]
 end
 
 if node['gitlab']['bootstrap']['enable']

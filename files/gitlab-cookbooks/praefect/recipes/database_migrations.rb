@@ -16,11 +16,13 @@
 #
 
 account_helper = AccountHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('praefect')
 
 bash 'migrate praefect database' do
   code <<-EOH
     set -e
-    log_file="#{node['praefect']['log_directory']}/praefect-sql-migrate-$(date +%Y-%m-%d-%H-%M-%S).log"
+    log_file="#{logging_settings[:log_directory]}/praefect-sql-migrate-$(date +%Y-%m-%d-%H-%M-%S).log"
 
    /opt/gitlab/embedded/bin/praefect -config #{File.join(node['praefect']['dir'], 'config.toml')} sql-migrate 2>& 1 | tee ${log_file}
 

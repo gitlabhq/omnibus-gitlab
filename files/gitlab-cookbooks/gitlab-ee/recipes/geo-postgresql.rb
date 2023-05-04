@@ -21,8 +21,9 @@ include_recipe 'postgresql::sysctl'
 
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
+logfiles_helper = LogfilesHelper.new(node)
+logging_settings = logfiles_helper.logging_settings('geo-postgresql')
 
-postgresql_log_dir = node['gitlab']['geo_postgresql']['log_directory']
 postgresql_username = account_helper.postgresql_user
 postgresql_data_dir = File.join(node['gitlab']['geo_postgresql']['dir'], 'data')
 
@@ -34,15 +35,20 @@ directory node['gitlab']['geo_postgresql']['dir'] do
   recursive true
 end
 
-[
-  postgresql_data_dir,
-  postgresql_log_dir
-].each do |dir|
-  directory dir do
-    owner postgresql_username
-    mode '0700'
-    recursive true
+directory postgresql_data_dir do
+  owner postgresql_username
+  mode '0700'
+  recursive true
+end
+
+# Create log_directory
+directory logging_settings[:log_directory] do
+  owner logging_settings[:log_directory_owner]
+  mode logging_settings[:log_directory_mode]
+  if log_group = logging_settings[:log_directory_group]
+    group log_group
   end
+  recursive true
 end
 
 execute "/opt/gitlab/embedded/bin/initdb -D #{postgresql_data_dir} -E UTF8" do
@@ -99,9 +105,11 @@ runit_service 'geo-postgresql' do
   restart_on_update false
   control(['t'])
   options({
-    log_directory: postgresql_log_dir
+    log_directory: logging_settings[:log_directory],
+    log_user: logging_settings[:runit_owner],
+    log_group: logging_settings[:runit_group]
   }.merge(params))
-  log_options node['gitlab']['logging'].to_hash.merge(node['gitlab']['geo_postgresql'].to_hash)
+  log_options logging_settings[:options]
 end
 
 execute 'start geo-postgresql' do

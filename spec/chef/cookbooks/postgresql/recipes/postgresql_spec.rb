@@ -593,6 +593,23 @@ RSpec.describe 'postgresql' do
       end
     end
   end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      it_behaves_like 'enabled logged service', 'postgresql', true, { log_directory_owner: 'gitlab-psql' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          postgresql: {
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'postgresql', true, { log_directory_owner: 'gitlab-psql', log_group: 'fugee' }
+    end
+  end
 end
 
 RSpec.describe 'postgresql 13' do

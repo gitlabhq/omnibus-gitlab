@@ -66,15 +66,7 @@ RSpec.describe 'monitoring::gitlab-exporter' do
         }
 
       expect(chef_run).to render_file('/opt/gitlab/sv/gitlab-exporter/log/run')
-        .with_content(/exec svlogd -tt \/var\/log\/gitlab\/gitlab-exporter/)
-    end
-
-    it 'creates default set of directories' do
-      expect(chef_run).to create_directory('/var/log/gitlab/gitlab-exporter').with(
-        owner: 'git',
-        group: nil,
-        mode: '0700'
-      )
+        .with_content(/svlogd -tt \/var\/log\/gitlab\/gitlab-exporter/)
     end
   end
 
@@ -214,7 +206,28 @@ RSpec.describe 'monitoring::gitlab-exporter' do
 
     it 'populates the files with expected configuration' do
       expect(chef_run).to render_file('/opt/gitlab/sv/gitlab-exporter/log/run')
-        .with_content(/exec svlogd -tt foo/)
+        .with_content(/svlogd -tt foo/)
+    end
+  end
+
+  context 'log directory and runit group' do
+    context 'default values' do
+      before do
+        stub_gitlab_rb(gitlab_exporter: { enable: true })
+      end
+      it_behaves_like 'enabled logged service', 'gitlab-exporter', true, { log_directory_owner: 'git' }
+    end
+
+    context 'custom values' do
+      before do
+        stub_gitlab_rb(
+          gitlab_exporter: {
+            enable: true,
+            log_group: 'fugee'
+          }
+        )
+      end
+      it_behaves_like 'enabled logged service', 'gitlab-exporter', true, { log_directory_owner: 'git', log_group: 'fugee' }
     end
   end
 
