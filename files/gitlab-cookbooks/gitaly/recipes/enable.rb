@@ -120,11 +120,6 @@ template "Create Gitaly config.toml" do
               dir: '/opt/gitlab/embedded/service/gitlab-shell'
             }
           ),
-          'gitaly-ruby': (node.dig('gitaly', 'configuration', 'gitaly-ruby') || {}).merge(
-            {
-              dir: '/opt/gitlab/embedded/service/gitaly-ruby'
-            }
-          )
         }
       )
     }
@@ -163,13 +158,6 @@ end
 version_file 'Create version file for Gitaly' do
   version_file_path File.join(working_dir, 'VERSION')
   version_check_cmd "/opt/gitlab/embedded/bin/ruby -rdigest/sha2 -e 'puts %(sha256:) + Digest::SHA256.file(%(/opt/gitlab/embedded/bin/gitaly)).hexdigest'"
-  notifies :hup, "runit_service[gitaly]"
-end
-
-# If a version of ruby changes restart gitaly-ruby
-version_file 'Create Ruby version file for Gitaly' do
-  version_file_path File.join(working_dir, 'RUBY_VERSION')
-  version_check_cmd '/opt/gitlab/embedded/bin/ruby --version'
   notifies :hup, "runit_service[gitaly]"
 end
 

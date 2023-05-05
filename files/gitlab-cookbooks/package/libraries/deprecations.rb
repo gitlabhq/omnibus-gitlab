@@ -348,6 +348,7 @@ module Gitlab
 
         deprecations += praefect_legacy_configuration_deprecations
         deprecations += gitaly_legacy_configuration_deprecations
+        deprecations += gitaly_ruby_deprecations
 
         deprecations += identify_deprecated_config(existing_config, ['gitlab', 'unicorn'], ['enable', 'svlogd_prefix'], "13.10", "14.0", "Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma, following https://docs.gitlab.com/ee/administration/operations/puma.html.")
         deprecations += identify_deprecated_config(existing_config, ['repmgr'], ['enable'], "13.3", "14.0", "Starting with GitLab 14.0, Repmgr is no longer supported and users must switch to Patroni, following https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni.")
@@ -424,7 +425,6 @@ module Gitlab
           'logging_level',
           'logging_format',
           'logging_sentry_dsn',
-          'logging_ruby_sentry_dsn',
           'logging_sentry_environment',
           'log_directory',
           'prometheus_grpc_latency_buckets',
@@ -435,10 +435,6 @@ module Gitlab
           'use_bundled_git',
           'gpg_signing_key_path',
           'gitconfig',
-          'ruby_max_rss',
-          'ruby_graceful_restart_timeout',
-          'ruby_restart_delay',
-          'ruby_num_workers',
           'storage',
           'custom_hooks_dir',
           'daily_maintenance_disabled',
@@ -464,6 +460,23 @@ module Gitlab
             deprecation: '15.10',
             removal: '16.1', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7439
             note: "In GitLab 15.10, Gitaly's configuration in Omnibus GitLab was changed to structurally match Gitaly's own configuration. Please see the migration instructions at https://docs.gitlab.com/ee/update/#15100"
+          }
+        end
+      end
+
+      def gitaly_ruby_deprecations
+        [
+          'logging_ruby_sentry_dsn',
+          'ruby_max_rss',
+          'ruby_graceful_restart_timeout',
+          'ruby_restart_delay',
+          'ruby_num_workers',
+        ].map do |key|
+          {
+            config_keys: ['gitaly', key],
+            deprecation: '16.0',
+            removal: '17.0',
+            note: "Gitaly-ruby is removed in GitLab 16.0, and thus this setting is now unused."
           }
         end
       end
