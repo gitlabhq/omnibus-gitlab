@@ -15,18 +15,13 @@ RSpec.describe 'gitaly' do
   let(:logging_level) { 'warn' }
   let(:logging_format) { 'default' }
   let(:logging_sentry_dsn) { 'https://my_key:my_secret@sentry.io/test_project' }
-  let(:logging_ruby_sentry_dsn) { 'https://my_key:my_secret@sentry.io/test_project-ruby' }
   let(:logging_sentry_environment) { 'production' }
   let(:prometheus_grpc_latency_buckets) do
     '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]'
   end
   let(:auth_token) { '123secret456' }
   let(:auth_transitioning) { true }
-  let(:ruby_max_rss) { 1000000 }
   let(:graceful_restart_timeout) { '20m' }
-  let(:ruby_graceful_restart_timeout) { '30m' }
-  let(:ruby_restart_delay) { '10m' }
-  let(:ruby_num_workers) { 5 }
   let(:git_catfile_cache_size) { 50 }
   let(:git_bin_path) { '/path/to/usr/bin/git' }
   let(:use_bundled_git) { true }
@@ -89,15 +84,6 @@ RSpec.describe 'gitaly' do
       expect(chef_run.version_file('Create version file for Gitaly')).to notify('runit_service[gitaly]').to(:hup)
     end
 
-    it 'creates a default RUBY_VERSION file and restarts service' do
-      expect(chef_run).to create_version_file('Create Ruby version file for Gitaly').with(
-        version_file_path: '/var/opt/gitlab/gitaly/RUBY_VERSION',
-        version_check_cmd: '/opt/gitlab/embedded/bin/ruby --version'
-      )
-
-      expect(chef_run.version_file('Create Ruby version file for Gitaly')).to notify('runit_service[gitaly]').to(:hup)
-    end
-
     it 'populates gitaly config.toml with defaults' do
       expect(get_rendered_toml(chef_run, '/var/opt/gitlab/gitaly/config.toml')).to eq(
         {
@@ -108,9 +94,6 @@ RSpec.describe 'gitaly' do
             use_bundled_binaries: true
           },
           cgroups: { repositories: {} },
-          'gitaly-ruby': {
-            dir: '/opt/gitlab/embedded/service/gitaly-ruby'
-          },
           gitlab: {
             relative_url_root: '',
             url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket'
@@ -576,9 +559,6 @@ RSpec.describe 'gitaly' do
     it 'renders config.toml with' do
       expect(get_rendered_toml(chef_run, '/var/opt/gitlab/gitaly/config.toml')).to eq(
         {
-          'gitaly-ruby': {
-            dir: '/opt/gitlab/embedded/service/gitaly-ruby'
-          },
           'gitlab-shell': {
             dir: '/opt/gitlab/embedded/service/gitlab-shell'
           },
@@ -692,16 +672,11 @@ RSpec.describe 'gitaly' do
           logging_level: logging_level,
           logging_format: logging_format,
           logging_sentry_dsn: logging_sentry_dsn,
-          logging_ruby_sentry_dsn: logging_ruby_sentry_dsn,
           logging_sentry_environment: logging_sentry_environment,
           prometheus_grpc_latency_buckets: prometheus_grpc_latency_buckets,
           auth_token: auth_token,
           auth_transitioning: auth_transitioning,
           graceful_restart_timeout: graceful_restart_timeout,
-          ruby_max_rss: ruby_max_rss,
-          ruby_graceful_restart_timeout: ruby_graceful_restart_timeout,
-          ruby_restart_delay: ruby_restart_delay,
-          ruby_num_workers: ruby_num_workers,
           git_catfile_cache_size: git_catfile_cache_size,
           git_bin_path: git_bin_path,
           use_bundled_git: false,
@@ -802,13 +777,6 @@ RSpec.describe 'gitaly' do
             signing_key: '/path/to/signing_key.gpg',
             use_bundled_binaries: false
           },
-          'gitaly-ruby': {
-            dir: '/opt/gitlab/embedded/service/gitaly-ruby',
-            graceful_restart_timeout: '30m',
-            max_rss: 1000000,
-            num_workers: 5,
-            restart_delay: '10m'
-          },
           gitlab: {
             'http-settings': {
               ca_file: '/path/to/ca_file',
@@ -831,7 +799,6 @@ RSpec.describe 'gitaly' do
             dir: '/var/log/gitlab/gitaly',
             format: 'default',
             level: 'warn',
-            ruby_sentry_dsn: 'https://my_key:my_secret@sentry.io/test_project-ruby',
             sentry_dsn: 'https://my_key:my_secret@sentry.io/test_project',
             sentry_environment: 'production'
           },

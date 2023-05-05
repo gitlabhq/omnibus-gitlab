@@ -2476,7 +2476,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     level: 'warn',
 #     format: 'json',
 #     sentry_dsn: 'https://<key>:<secret>@sentry.io/<project>',
-#     ruby_sentry_dsn: 'https://<key>:<secret>@sentry.io/<project>',
 #     sentry_environment: 'production',
 #   },
 #   prometheus: {
@@ -2501,12 +2500,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 #       { key: 'pack.threads', value: '4' },
 #       { key: 'http.http://example.com.proxy', value: 'http://example.proxy.com' },
 #     ],
-#   },
-#   'gitaly-ruby': {
-#     max_rss: 300000000, # RSS threshold in bytes for triggering a gitaly-ruby restart
-#     graceful_restart_timeout: '10m', # Grace time for a gitaly-ruby process to finish ongoing requests
-#     restart_delay: '5m', # Period of sustained high RSS that needs to be observed before restarting gitaly-ruby
-#     num_workers: 3, # Number of gitaly-ruby worker processes. Minimum 2, default 2.
 #   },
 #   hooks: {
 #     custom_hooks_dir: '/var/opt/gitlab/gitaly/custom_hooks',

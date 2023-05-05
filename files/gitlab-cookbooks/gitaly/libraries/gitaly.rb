@@ -204,7 +204,6 @@ module Gitaly
             level: 'logging_level',
             format: 'logging_format',
             sentry_dsn: 'logging_sentry_dsn',
-            ruby_sentry_dsn: 'logging_ruby_sentry_dsn',
             sentry_environment: 'logging_sentry_environment',
             dir: 'log_directory'
           },
@@ -239,12 +238,6 @@ module Gitaly
                 }
               end
             }
-          },
-          'gitaly-ruby': {
-            max_rss: 'ruby_max_rss',
-            graceful_restart_timeout: 'ruby_graceful_restart_timeout',
-            restart_delay: 'ruby_restart_delay',
-            num_workers: 'ruby_num_workers'
           },
           storage: 'storage',
           hooks: {
