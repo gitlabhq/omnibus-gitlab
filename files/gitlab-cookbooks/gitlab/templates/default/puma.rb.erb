@@ -118,8 +118,12 @@ worker_timeout <%= @worker_timeout %>
 # https://github.com/puma/puma/blob/master/5.0-Upgrade.md#lower-latency-better-throughput
 wait_for_less_busy_worker ENV.fetch('PUMA_WAIT_FOR_LESS_BUSY_WORKER', 0.001).to_f
 
+# nakayoshi_fork was removed in Puma 6.0: https://github.com/puma/puma/issues/2258
 # https://github.com/puma/puma/blob/master/5.0-Upgrade.md#nakayoshi_fork
-nakayoshi_fork unless ENV['DISABLE_PUMA_NAKAYOSHI_FORK'] == 'true'
+if Gem::Version.new(Puma::Const::PUMA_VERSION).canonical_segments.first == 5 &&
+     ENV['DISABLE_PUMA_NAKAYOSHI_FORK'] != 'true'
+  nakayoshi_fork
+end
 
 # Use customised JSON formatter for Puma log
 require_relative "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/puma_logging/json_formatter"
