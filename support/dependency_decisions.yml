@@ -210,3 +210,10 @@
     :why: https://github.com/hashicorp/nomad/blob/main/LICENSE
     :versions: []
     :when: 2023-04-03 12:41:28.825087612 Z
+- - :license
+  - github.com/kieler/elkjs
+  - EPL-2.0
+  - :who: Paul Gascou-Vaillancourt
+    :why: https://github.com/kieler/elkjs/blob/master/LICENSE.md
+    :versions: []
+    :when: 2023-04-28 22:41:37.142646 Z
