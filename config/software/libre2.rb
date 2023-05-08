@@ -18,7 +18,7 @@
 
 name 'libre2'
 
-version = Gitlab::Version.new('libre2', '2016-02-01')
+version = Gitlab::Version.new('libre2', '2023-03-01')
 default_version version.print(false)
 display_version version.print(false).tr('-', '')
 
@@ -32,6 +32,17 @@ source git: version.remote
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  make "-j #{workers}", env: env
-  make "install prefix=#{install_dir}/embedded", env: env
+  block 'compile re2 with a custom compiler if necessary' do
+    if ohai['platform'] == 'centos' && ohai['platform_version'].start_with?('7.')
+      env['CC'] = "/opt/rh/devtoolset-8/root/usr/bin/gcc"
+      env['CXX'] = "/opt/rh/devtoolset-8/root/usr/bin/g++"
+    end
+
+    # This is not enabled by default for the g++ on Ubuntu 16.04.
+    # https://github.com/google/re2/wiki/Install says C++11 is required.
+    env['CPPFLAGS'] << ' -std=c++11'
+
+    make "-j #{workers}", env: env
+    make "install prefix=#{install_dir}/embedded", env: env
+  end
 end
