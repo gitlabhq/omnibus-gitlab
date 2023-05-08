@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 MAINTAINER GitLab Inc. <support@gitlab.com>
 
 SHELL ["/bin/sh", "-c"]
@@ -15,7 +15,7 @@ RUN apt-get update -q \
       tzdata \
       wget \
       perl \
-      libperl5.30 \
+      libperl5.34 \
     && rm -rf /var/lib/apt/lists/*
 
 # Use BusyBox

@@ -30,7 +30,7 @@ all-in-one monolithic one, check out the
 [CNG](https://gitlab.com/gitlab-org/build/CNG) repository.
 
 The GitLab all-in-one Docker image uses the `omnibus-gitlab` package built for
-Ubuntu 20.04 under the hood. The Dockerfile is optimized to be used in a CI
+Ubuntu 22.04 under the hood. The Dockerfile is optimized to be used in a CI
 environment, with the expectation of packages being available over the Internet.
 
 We're looking at improving this situation

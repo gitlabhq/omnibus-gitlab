@@ -36,7 +36,7 @@
 
 .trigger-package-cache:
   cache:
-    key: "Ubuntu-20.04-branch-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
+    key: "Ubuntu-22.04-branch-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
     paths:
       - cache
       - gems
@@ -46,7 +46,7 @@
 
 .trigger-fips-package-cache:
   cache:
-    key: "Ubuntu-20.04-fips-branch-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
+    key: "Ubuntu-22.04-fips-branch-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
     paths:
       - cache
       - gems
@@ -248,7 +248,7 @@ update-gems-cache-for-docker-jobs:
 update-trigger-package-cache:
   extends: .trigger-package-cache
   stage: update-cache
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   script:
     - !reference [.build-package]
     - echo "Cache is up to date!"
@@ -506,8 +506,8 @@ update-knapsack:
 Trigger:package:
   extends: .trigger-package-common
   variables:
-    BASE_OS: "ubuntu_20.04"
-    PACKAGE_DIRECTORY: "pkg/ubuntu-focal"
+    BASE_OS: "ubuntu_22.04"
+    PACKAGE_DIRECTORY: "pkg/ubuntu-jammy"
 
 Trigger:package:fips:
   extends:
@@ -515,8 +515,8 @@ Trigger:package:fips:
     - .trigger-fips-package-cache
   variables:
     USE_SYSTEM_SSL: "true"
-    BASE_OS: "ubuntu_20.04_fips"
-    PACKAGE_DIRECTORY: "pkg/ubuntu-focal_fips"
+    BASE_OS: "ubuntu_22.04_fips"
+    PACKAGE_DIRECTORY: "pkg/ubuntu-jammy_fips"
   allow_failure: true
   rules:
     - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
@@ -524,7 +524,7 @@ Trigger:package:fips:
 
 package_size_check:
   extends: .trigger-package-cache
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   stage: trigger-qa
   script:
     - bundle exec rake build:package:generate_sizefile
@@ -743,7 +743,7 @@ pages:
     - if: '$PIPELINE_TYPE == "LICENSE_PAGE_UPDATE_PIPELINE"'
 
 .build-package-on-all-os-vars:
-  SKIP_JOB_REGEX: '/Ubuntu-20.04|Docker|QA/'
+  SKIP_JOB_REGEX: '/Ubuntu-22.04|Docker|QA/'
   PIPELINE_TYPE: "${EDITION}_BRANCH_BUILD_PIPELINE"
   ALTERNATIVE_SOURCES: 'true'
   GITLAB_VERSION: ${GITLAB_VERSION}

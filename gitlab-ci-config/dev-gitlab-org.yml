@@ -390,7 +390,7 @@ Docker-branch:
   - docker-builder
   cache: !reference [.branch-cache]
   needs:
-    - job: Ubuntu-20.04-branch
+    - job: Ubuntu-22.04-branch
       artifacts: false
     - job: generate-facts
       optional: true
@@ -423,7 +423,7 @@ QA-branch:
   - docker-builder
   cache: !reference [.branch-cache]
   needs:
-    - job: Ubuntu-20.04-branch
+    - job: Ubuntu-22.04-branch
       artifacts: false
     - job: generate-facts
       optional: true
@@ -449,7 +449,7 @@ RAT-Nightly:
     - bundle exec rake qa:rat:nightly
   cache: !reference [.branch-cache]
   needs:
-    - Ubuntu-20.04-branch
+    - Ubuntu-22.04-branch
   allow_failure: true
   rules:
     - !reference [.default_rules, rules]
@@ -510,6 +510,10 @@ Ubuntu-22.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   stage: package
   extends: .tag_template
+  rules:
+    - !reference [.default_rules, rules]
+  # Also build for auto-deploy tags
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
 ## Build the docker image for QA
 ## This is necessary for the deployment
@@ -686,7 +690,7 @@ Docker:
   - docker-builder
   cache: !reference [.tag-cache]
   needs:
-    - job: Ubuntu-20.04
+    - job: Ubuntu-22.04
       artifacts: false
     - job: generate-facts
       optional: true
@@ -1074,7 +1078,7 @@ RAT-Tag:
     - bundle exec rake qa:rat:tag
   cache: !reference [.tag-cache]
   needs:
-    - Ubuntu-20.04
+    - Ubuntu-22.04
   allow_failure: true
   rules:
     - !reference [.default_rules, rules]

@@ -216,6 +216,15 @@ module Build
 
       # Fetch the package from an S3 bucket
       def deb_package_download_url(arch: 'amd64')
+        folder = 'ubuntu-jammy'
+        folder = "#{folder}_aarch64" if arch == 'arm64'
+
+        package_filename_url_safe = Info.release_version.gsub("+", "%2B")
+        "https://#{Info.release_bucket}.#{Info.release_bucket_s3_endpoint}/#{folder}/#{Info.package}_#{package_filename_url_safe}_#{arch}.deb"
+      end
+
+      # Fetch the package used in AWS AMIs from an S3 bucket
+      def ami_deb_package_download_url(arch: 'amd64')
         folder = 'ubuntu-focal'
         folder = "#{folder}_aarch64" if arch == 'arm64'
 
@@ -263,7 +272,7 @@ module Build
 
         return unless id
 
-        folder = 'ubuntu-focal'
+        folder = 'ubuntu-jammy'
         folder = "#{folder}_fips" if fips
 
         "https://gitlab.com/api/v4/projects/#{Gitlab::Util.get_env('CI_PROJECT_ID')}/jobs/#{id}/artifacts/pkg/#{folder}/gitlab.deb"
