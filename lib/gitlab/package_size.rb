@@ -24,7 +24,7 @@ class PackageSizeCheck
       # We have to use net/http here because `gitlab` gem's `download_job_artifact_file`
       # method doesn't support plain text files. It has to be either binary or valid JSON.
       # https://github.com/NARKOZ/gitlab/issues/621
-      sizefile_url = URI("#{api_url}/projects/#{project_id}/jobs/#{trigger_package_job.id}/artifacts/pkg/ubuntu-focal/gitlab.deb.size")
+      sizefile_url = URI("#{api_url}/projects/#{project_id}/jobs/#{trigger_package_job.id}/artifacts/pkg/ubuntu-jammy/gitlab.deb.size")
       req = Net::HTTP::Get.new(sizefile_url)
       req['PRIVATE-TOKEN'] = token
       res = Net::HTTP.start(sizefile_url.hostname, sizefile_url.port, use_ssl: true) do |http|
@@ -33,8 +33,8 @@ class PackageSizeCheck
 
       size = res.body
 
-      FileUtils.mkdir_p('pkg/ubuntu-focal')
-      File.write('pkg/ubuntu-focal/gitlab.deb.size', size)
+      FileUtils.mkdir_p('pkg/ubuntu-jammy')
+      File.write('pkg/ubuntu-jammy/gitlab.deb.size', size)
     end
 
     def generate_sizefiles(files)
@@ -43,7 +43,7 @@ class PackageSizeCheck
       end
     end
 
-    def check_and_alert(package_sizefile = 'pkg/ubuntu-focal/gitlab.deb.size')
+    def check_and_alert(package_sizefile = 'pkg/ubuntu-jammy/gitlab.deb.size')
       permitted_size = if Build::Check.is_ee?
                          EE_MAX_SIZE_MB
                        else

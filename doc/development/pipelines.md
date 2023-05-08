@@ -317,7 +317,7 @@ only on EE branches.
 #### `Docker-branch`
 
 This job builds a GitLab Docker image using the package built during the Ubuntu
-20.04-branch job. The image is pushed to the GitLab container registry.
+22.04-branch job. The image is pushed to the GitLab container registry.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on branch and nightly pipelines.
 
@@ -363,7 +363,7 @@ Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tag
 ### `Docker`
 
 This job builds a GitLab Docker image using the package built during the Ubuntu
-20.04-branch job. The image is pushed to the internal GitLab container registry.
+22.04-branch job. The image is pushed to the internal GitLab container registry.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
@@ -445,7 +445,7 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 
 This job triggers a pipeline in the
 [RAT](https://gitlab.com/gitlab-org/distribution/reference-architecture-tester)
-project passing the URL to the nightly Ubuntu 20.04 package built in this pipeline,
+project passing the URL to the nightly Ubuntu 22.04 package built in this pipeline,
 which will spin up a PostgreSQL HA instance with that package using
 [GET](https://gitlab.com/gitlab-org/gitlab-environment-toolkit), and run
 QA against that instance.
@@ -456,7 +456,7 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 
 This job triggers a pipeline in the
 [RAT](https://gitlab.com/gitlab-org/distribution/reference-architecture-tester)
-project passing the URL to the Ubuntu 20.04 package built in this pipeline,
+project passing the URL to the Ubuntu 22.04 package built in this pipeline,
 which will spin up a PostgreSQL HA instance with that package using
 [GET](https://gitlab.com/gitlab-org/gitlab-environment-toolkit), and run
 QA against that instance.
