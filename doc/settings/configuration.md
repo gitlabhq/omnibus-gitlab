@@ -706,10 +706,10 @@ what's intended:
 There are no known security issues in GitLab caused by not configuring `allowed_hosts`,
 but it's recommended for defense in depth against potential [HTTP Host header attacks](https://portswigger.net/web-security/host-header).
 
-If using a custom external proxy such as apache, it may be necessary to add the localhost. Administrators should add filters to the external proxy to mitigate potential HTTP Host header attacks passed through the proxy to workhorse.
+If using a custom external proxy such as Apache, it may be necessary to add the localhost address or name (`localhost` or `127.0.0.1`). You should add filters to the external proxy to mitigate potential HTTP Host header attacks passed through the proxy to workhorse.
 
 ```ruby
-gitlab_rails['allowed_hosts'] = ['gitlab.example.com', '127.0.0.1']
+gitlab_rails['allowed_hosts'] = ['gitlab.example.com', '127.0.0.1', 'localhost']
 ```
 
 ## Related topics
