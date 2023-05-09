@@ -207,11 +207,18 @@ module GitlabRails
       end
     end
 
+    def default_ci_connection_to_main
+      # If there's an explicit configuration to disable the ci connection or
+      # have a different config for ci we should respect that.
+      Gitlab['gitlab_rails']['databases']['ci'] ||= { 'enable' => true }
+    end
+
     def parse_databases
       # TODO: Remove when we want to deprecate top level `gitlab_rails['db_*']`
       # settings
       generate_main_database
 
+      default_ci_connection_to_main
       # Weed out the databases that are either not allowed or not enabled explicitly (except for main and geo)
       Gitlab['gitlab_rails']['databases'].to_h.each do |database, settings|
         if !MAIN_DATABASES.include?(database) && settings['enable'] != true

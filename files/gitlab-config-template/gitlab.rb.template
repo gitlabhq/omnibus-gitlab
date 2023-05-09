@@ -761,7 +761,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Gitlab decomposed database settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/database.html
-# gitlab_rails['databases']['ci']['enable'] = false
+# gitlab_rails['databases']['ci']['enable'] = true
 # gitlab_rails['databases']['ci']['db_database'] = 'gitlabhq_production'
 # gitlab_rails['databases']['ci']['database_tasks'] = false
 
