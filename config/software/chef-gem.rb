@@ -46,4 +46,7 @@ build do
 
   patch source: "Version-17-EOL-detection.patch",
         target: "#{install_dir}/embedded/lib/ruby/gems/3.0.0/gems/chef-#{version}/lib/chef/client.rb"
+
+  patch source: "utf8-locale-support.patch",
+        target: "#{install_dir}/embedded/lib/ruby/gems/3.0.0/gems/chef-config-#{version}/lib/chef-config/config.rb"
 end

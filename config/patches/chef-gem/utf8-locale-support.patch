@@ -1,0 +1,13 @@
+diff --git a/chef-config/lib/chef-config/config.rb b/chef-config/lib/chef-config/config.rb
+index 970ee840a9..c66d8ea3fb 100644
+--- a/chef-config/lib/chef-config/config.rb
++++ b/chef-config/lib/chef-config/config.rb
+@@ -1215,7 +1215,7 @@ module ChefConfig
+       cmd.error!
+       locales = cmd.stdout.split
+       case
+-      when locales.include?("C.UTF-8")
++      when locales.include?("C.UTF-8"), locales.include?("C.utf8")
+         "C.UTF-8"
+       when locales.include?("en_US.UTF-8"), locales.include?("en_US.utf8")
+         "en_US.UTF-8"
