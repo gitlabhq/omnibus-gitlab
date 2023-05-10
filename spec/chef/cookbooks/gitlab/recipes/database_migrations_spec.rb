@@ -44,7 +44,7 @@ RSpec.describe 'gitlab::database-migrations' do
 
         chef_run.ruby_block('check remote PG version').block.call
 
-        expect_logged_warning(/Support for PostgreSQL 12 will be removed/)
+        expect_logged_warning(/Support for PostgreSQL 12 has been removed/)
       end
     end
 
