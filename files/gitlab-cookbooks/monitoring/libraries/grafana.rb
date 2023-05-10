@@ -28,14 +28,19 @@ module Grafana
     end
 
     def parse_variables
-      enable_for_existing_installation
+      disable_unless_forced
       parse_grafana_datasources
     end
 
-    def enable_for_existing_installation
-      return unless File.exist?("#{Gitlab.node['monitoring']['grafana']['home']}/data/grafana.db")
+    def disable_unless_forced
+      Gitlab['grafana']['internal'] = {
+        'enable' => Gitlab['grafana']['enable']
+      }
 
-      Services.set_status('grafana', true) if Gitlab['grafana']['enable'].nil?
+      return if Gitlab['grafana']['enable'] && Gitlab['grafana']['enable_deprecated_service']
+
+      Gitlab['grafana']['enable'] = false
+      Services.disable('grafana')
     end
 
     def parse_grafana_datasources

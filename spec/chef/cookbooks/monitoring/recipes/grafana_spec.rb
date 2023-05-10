@@ -43,18 +43,7 @@ RSpec.describe 'monitoring::grafana' do
       stub_gitlab_rb(external_url: 'http://gitlab.example.com')
     end
 
-    it 'is not enabled by default for new installs' do
-      allow(File).to receive(:exist?).and_wrap_original do |m, *args|
-        if !args.empty? && args.first == '/var/opt/gitlab/grafana/data/grafana.db'
-          false
-        else
-          m.call(*args)
-        end
-      end
-      expect(chef_run).not_to include_recipe('monitoring::grafana')
-    end
-
-    it 'is enabled by default for upgrades' do
+    it 'is not enabled by default' do
       allow(File).to receive(:exist?).and_wrap_original do |m, *args|
         if !args.empty? && args.first == '/var/opt/gitlab/grafana/data/grafana.db'
           true
@@ -62,16 +51,32 @@ RSpec.describe 'monitoring::grafana' do
           m.call(*args)
         end
       end
-      expect(chef_run).to include_recipe('monitoring::grafana')
+      expect(chef_run).not_to include_recipe('monitoring::grafana')
     end
   end
 
-  context 'when grafana is enabled' do
+  context 'when grafana is enabled but not forced' do
+    before do
+      stub_gitlab_rb(
+        grafana: { enable: true },
+        prometheus: { enable: true }
+      )
+    end
+
+    it 'is not enabled' do
+      expect(chef_run).not_to include_recipe('monitoring::grafana')
+    end
+  end
+
+  context 'when grafana is enabled (forced)' do
     let(:config_template) { chef_run.template('/opt/gitlab/sv/grafana/log/config') }
 
     before do
       stub_gitlab_rb(
-        grafana: { enable: true },
+        grafana: {
+          enable: true,
+          enable_deprecated_service: true
+        },
         prometheus: { enable: true }
       )
     end
@@ -117,12 +122,15 @@ RSpec.describe 'monitoring::grafana' do
     end
   end
 
-  context 'when grafana is enabled and prometheus is disabled' do
+  context 'when grafana is enabled (forced) and prometheus is disabled' do
     before do
       stub_gitlab_rb(
         external_url: 'http://gitlab.example.com',
         prometheus: { enable: false },
-        grafana: { enable: true }
+        grafana: {
+          enable: true,
+          enable_deprecated_service: true
+        }
       )
     end
 
@@ -137,7 +145,8 @@ RSpec.describe 'monitoring::grafana' do
         external_url: 'http://gitlab.example.com',
         grafana: {
           log_directory: 'foo',
-          enable: true
+          enable: true,
+          enable_deprecated_service: true
         }
       )
     end
@@ -151,7 +160,8 @@ RSpec.describe 'monitoring::grafana' do
     stub_gitlab_rb(
       external_url: 'http://gitlab.example.com',
       grafana: {
-        enable: true
+        enable: true,
+        enable_deprecated_service: true
       }
     )
 
@@ -173,6 +183,7 @@ RSpec.describe 'monitoring::grafana' do
           http_addr: '0.0.0.0',
           http_port: 3333,
           enable: true,
+          enable_deprecated_service: true,
           gitlab_application_id: 'appid',
           gitlab_secret: 'secret',
           gitlab_auth_sign_up: false,
@@ -256,6 +267,7 @@ RSpec.describe 'monitoring::grafana' do
       stub_gitlab_rb(
         grafana: {
           enable: true,
+          enable_deprecated_service: true,
           metrics_enabled: true
         }
       )
@@ -272,6 +284,7 @@ RSpec.describe 'monitoring::grafana' do
       stub_gitlab_rb(
         grafana: {
           enable: true,
+          enable_deprecated_service: true,
           metrics_enabled: true,
           metrics_basic_auth_username: 'user'
         }
@@ -289,6 +302,7 @@ RSpec.describe 'monitoring::grafana' do
       stub_gitlab_rb(
         grafana: {
           enable: true,
+          enable_deprecated_service: true,
           metrics_enabled: true,
           metrics_basic_auth_username: '#user;@',
           metrics_basic_auth_password: 'password_#;@'
@@ -319,6 +333,7 @@ RSpec.describe 'monitoring::grafana' do
       stub_gitlab_rb(
         grafana: {
           enable: true,
+          enable_deprecated_service: true,
           metrics_enabled: true,
         },
         sidekiq: {
@@ -337,6 +352,7 @@ RSpec.describe 'monitoring::grafana' do
       stub_gitlab_rb(
         grafana: {
           enable: true,
+          enable_deprecated_service: true
         },
         gitlab_rails: {
           usage_ping_enabled: false
@@ -356,6 +372,7 @@ RSpec.describe 'monitoring::grafana' do
         },
         grafana: {
           enable: true,
+          enable_deprecated_service: true,
           reporting_enabled: false
         }
       )
@@ -374,6 +391,7 @@ RSpec.describe 'monitoring::grafana' do
             http_addr: '0.0.0.0',
             http_port: 3333,
             enable: true,
+            enable_deprecated_service: true,
             gitlab_application_id: 'appid',
             gitlab_secret: 'secret'
           }
@@ -389,7 +407,12 @@ RSpec.describe 'monitoring::grafana' do
   context 'log directory and runit group' do
     context 'default values' do
       before do
-        stub_gitlab_rb(grafana: { enable: true })
+        stub_gitlab_rb(
+          grafana: {
+            enable: true,
+            enable_deprecated_service: true
+          }
+        )
       end
       it_behaves_like 'enabled logged service', 'grafana', true, { log_directory_owner: 'gitlab-prometheus' }
     end
@@ -399,6 +422,7 @@ RSpec.describe 'monitoring::grafana' do
         stub_gitlab_rb(
           grafana: {
             enable: true,
+            enable_deprecated_service: true,
             log_group: 'fugee'
           }
         )

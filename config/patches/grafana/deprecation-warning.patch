@@ -1,0 +1,49 @@
+diff --git a/public/app/routes/ReactContainer.tsx b/public/app/routes/ReactContainer.tsx
+index 0a156f0c84..c4b98c0931 100644
+--- a/public/app/routes/ReactContainer.tsx
++++ b/public/app/routes/ReactContainer.tsx
+@@ -1,5 +1,5 @@
+ // Libraries
+-import React from 'react';
++import React, { useEffect, useState } from 'react';
+ import ReactDOM from 'react-dom';
+ import { Provider } from 'react-redux';
+ 
+@@ -8,14 +8,36 @@ import coreModule from 'app/core/core_module';
+ import { store } from 'app/store/store';
+ import { ContextSrv } from 'app/core/services/context_srv';
+ import { provideTheme } from 'app/core/utils/ConfigProvider';
+-import { ErrorBoundaryAlert, ModalRoot, ModalsProvider } from '@grafana/ui';
++import { Alert, ErrorBoundaryAlert, ModalRoot, ModalsProvider } from '@grafana/ui';
+ import { GrafanaRootScope } from './GrafanaCtrl';
+ 
++const DeprecationWarningStorageKey = 'deprecation-warning-dismissed';
++export function DeprecationWarning() {
++  const [dismissed, setDismissed] = useState(sessionStorage.getItem(DeprecationWarningStorageKey) === 'true');
++
++  useEffect(() => {
++    sessionStorage.setItem(DeprecationWarningStorageKey, dismissed ? 'true' : 'false');
++  }, [dismissed]);
++
++  const dismiss = () => setDismissed(true);
++
++  if (dismissed) {
++    return null;
++  }
++  return (
++    <Alert title="Attention!!" severity="warning" onRemove={() => dismiss()}>
++      The Grafana currently packaged with GitLab Omnibus is being deprecated and will be removed in GitLab 16.3. Please
++      migrate existing Grafana dashboards to another deployment method before upgrading GitLab to 16.3.
++    </Alert>
++  );
++}
++
+ export function WrapInProvider(store: any, Component: any, props: any) {
+   return (
+     <Provider store={store}>
+       <ErrorBoundaryAlert style="page">
+         <Component {...props} />
++        <DeprecationWarning />
+       </ErrorBoundaryAlert>
+     </Provider>
+   );
