@@ -138,6 +138,7 @@ default['gitlab']['prometheus-monitoring']['enable'] = true
 # Grafana
 ###
 default['monitoring']['grafana']['enable'] = false
+default['monitoring']['grafana']['enable_deprecated_service'] = false
 default['monitoring']['grafana']['log_directory'] = '/var/log/gitlab/grafana'
 default['monitoring']['grafana']['home'] = '/var/opt/gitlab/grafana'
 default['monitoring']['grafana']['http_addr'] = 'localhost'

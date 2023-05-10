@@ -554,7 +554,10 @@ RSpec.describe 'nginx' do
   context 'when grafana is enabled' do
     before do
       stub_gitlab_rb(
-        grafana: { enable: true }
+        grafana: {
+          enable: true,
+          enable_deprecated_service: true
+        }
       )
     end
 

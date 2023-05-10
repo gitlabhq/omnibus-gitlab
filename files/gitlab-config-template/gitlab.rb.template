@@ -2353,6 +2353,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # grafana['enable'] = false
+# grafana['enable_deprecated_service'] = false
 # grafana['log_directory'] = '/var/log/gitlab/grafana'
 # grafana['log_group'] = nil
 # grafana['home'] = '/var/opt/gitlab/grafana'
