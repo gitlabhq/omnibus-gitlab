@@ -42,6 +42,20 @@ RSpec.describe SettingsDSL::Utils do
         %w[geo-logcursor geo_logcursor],
         %w[geo-postgresql geo_postgresql],
         %w[gitlab-rails gitlab_rails],
+        %w[external-url external_url],
+        %w[gitlab-kas-external-url gitlab_kas_external_url],
+        %w[mattermost-external-url mattermost_external_url],
+        %w[pages-external-url pages_external_url],
+        %w[registry-external-url registry_external_url],
+        %w[gitlab-ci gitlab_ci],
+        %w[high-availability high_availability],
+        %w[manage-accounts manage_accounts],
+        %w[manage-storage-directories manage_storage_directories],
+        %w[omnibus-gitconfig omnibus_gitconfig],
+        %w[prometheus-monitoring prometheus_monitoring],
+        %w[runtime-dir runtime_dir],
+        %w[storage-check storage_check],
+        %w[web-server web_server],
       ].each do |input, output|
         expect(subject.sanitized_key(input)).to eq(output)
       end

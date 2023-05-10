@@ -18,7 +18,7 @@
 account_helper = AccountHelper.new(node)
 webserver_username = account_helper.web_server_user
 webserver_group = account_helper.web_server_group
-external_webserver_users = node['gitlab']['web-server']['external_users'].to_a
+external_webserver_users = node['gitlab']['web_server']['external_users'].to_a
 
 # Create the group for the GitLab user
 # If external webserver is used, add the external webserver user to
@@ -26,14 +26,14 @@ external_webserver_users = node['gitlab']['web-server']['external_users'].to_a
 
 account "Webserver user and group" do
   username webserver_username
-  uid node['gitlab']['web-server']['uid']
+  uid node['gitlab']['web_server']['uid']
   ugid webserver_group
   groupname webserver_group
-  gid node['gitlab']['web-server']['gid']
-  shell node['gitlab']['web-server']['shell']
-  home node['gitlab']['web-server']['home']
+  gid node['gitlab']['web_server']['gid']
+  shell node['gitlab']['web_server']['shell']
+  home node['gitlab']['web_server']['home']
   append_to_group external_webserver_users.any?
   group_members external_webserver_users
   manage_home false
-  manage node['gitlab']['manage-accounts']['enable']
+  manage node['gitlab']['manage_accounts']['enable']
 end

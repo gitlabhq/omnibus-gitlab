@@ -27,5 +27,5 @@ account "Prometheus user and group" do
   home prometheus_dir
   gid node['monitoring']['prometheus']['gid']
   shell node['monitoring']['prometheus']['shell']
-  manage node['gitlab']['manage-accounts']['enable']
+  manage node['gitlab']['manage_accounts']['enable']
 end

@@ -3,7 +3,7 @@ require 'chef_helper'
 RSpec.describe 'storage_directory' do
   let(:runner) do
     ChefSpec::SoloRunner.new(step_into: %w(storage_directory)) do |node|
-      node.normal['gitlab']['manage-storage-directories']['enable'] = true
+      node.normal['gitlab']['manage_storage_directories']['enable'] = true
     end
   end
   let(:chef_run) { runner.converge("test_package::storage_directory_create") }

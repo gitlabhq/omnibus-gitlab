@@ -1,4 +1,4 @@
-site = URI(node['gitlab']['external-url'])
+site = URI(node['gitlab']['external_url'])
 
 ruby_block 'http external-url' do
   block do

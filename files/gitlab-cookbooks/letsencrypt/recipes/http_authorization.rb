@@ -1,4 +1,4 @@
-site = URI(node['gitlab']['external-url']).host
+site = URI(node['gitlab']['external_url']).host
 
 omnibus_helper = OmnibusHelper.new(node)
 

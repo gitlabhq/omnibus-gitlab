@@ -28,7 +28,7 @@ property :group, [String, nil], default: nil
 property :mode, [String, nil], default: nil
 
 action :create do
-  next unless node['gitlab']['manage-storage-directories']['enable']
+  next unless node['gitlab']['manage_storage_directories']['enable']
 
   new_resource.path ||= new_resource.name
   storage_helper = StorageDirectoryHelper.new(new_resource.owner, new_resource.group, new_resource.mode)

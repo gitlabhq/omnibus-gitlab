@@ -31,8 +31,8 @@ gitlab_rails_working_dir = File.join(gitlab_rails_dir, "working")
 gitlab_rails_tmp_dir = File.join(gitlab_rails_dir, "tmp")
 gitlab_rails_public_uploads_dir = node['gitlab']['gitlab_rails']['uploads_directory']
 gitlab_rails_uploads_storage_path = node['gitlab']['gitlab_rails']['uploads_storage_path']
-gitlab_ci_dir = node['gitlab']['gitlab-ci']['dir']
-gitlab_ci_builds_dir = node['gitlab']['gitlab-ci']['builds_directory']
+gitlab_ci_dir = node['gitlab']['gitlab_ci']['dir']
+gitlab_ci_builds_dir = node['gitlab']['gitlab_ci']['builds_directory']
 gitlab_rails_shared_tmp_dir = File.join(node['gitlab']['gitlab_rails']['shared_path'], 'tmp')
 gitlab_rails_shared_cache_dir = File.join(node['gitlab']['gitlab_rails']['shared_path'], 'cache')
 upgrade_status_dir = File.join(gitlab_rails_dir, "upgrade-status")
@@ -320,8 +320,8 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
 
   variables(
     node['gitlab']['gitlab_rails'].to_hash.merge(
-      gitlab_ci_all_broken_builds: node['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'],
-      gitlab_ci_add_pusher: node['gitlab']['gitlab-ci']['gitlab_ci_add_pusher'],
+      gitlab_ci_all_broken_builds: node['gitlab']['gitlab_ci']['gitlab_ci_all_broken_builds'],
+      gitlab_ci_add_pusher: node['gitlab']['gitlab_ci']['gitlab_ci_add_pusher'],
       builds_directory: gitlab_ci_builds_dir,
       pages_external_http: node['gitlab_pages']['external_http'],
       pages_external_https: node['gitlab_pages']['external_https'],

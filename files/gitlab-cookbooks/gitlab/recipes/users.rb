@@ -33,7 +33,7 @@ account "GitLab user and group" do
   gid node['gitlab']['user']['gid']
   shell node['gitlab']['user']['shell']
   home gitlab_home
-  manage node['gitlab']['manage-accounts']['enable']
+  manage node['gitlab']['manage_accounts']['enable']
 end
 
 # Configure Git settings for the GitLab user
@@ -43,7 +43,7 @@ template File.join(gitlab_home, ".gitconfig") do
   group gitlab_group
   mode "0644"
   variables(user_options: node['gitlab']['user'],
-            system_core_options: node.dig('gitlab', 'omnibus-gitconfig', 'system', 'core') || [])
+            system_core_options: node.dig('gitlab', 'omnibus_gitconfig', 'system', 'core') || [])
 end
 
 # The directory will remain empty in Omnibus GitLab use-case.
