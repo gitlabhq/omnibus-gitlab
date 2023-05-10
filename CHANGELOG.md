@@ -122,6 +122,10 @@ No changes.
 
 - [Update libksba/gnupg to 1.6.3/2.2.41](gitlab-org/omnibus-gitlab@2f72ecc671ddf654254f463b434abe553c1ebe7f)
 
+## 15.9.8 (2023-05-10)
+
+No changes.
+
 ## 15.9.7 (2023-05-03)
 
 No changes.
