@@ -1270,7 +1270,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['hot_standby'] = "off"
 
 ### SSL settings
-# See https://www.postgresql.org/docs/12/static/runtime-config-connection.html#GUC-SSL-CERT-FILE for more details
+# See https://www.postgresql.org/docs/13/static/runtime-config-connection.html#GUC-SSL-CERT-FILE for more details
 # postgresql['ssl'] = 'on'
 # postgresql['hostssl'] = false
 # postgresql['ssl_ciphers'] = 'HIGH:MEDIUM:+3DES:!aNULL:!SSLv3:!TLSv1'
@@ -1359,7 +1359,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     }
 #   ]
 # }
-# See https://www.postgresql.org/docs/12/static/auth-pg-hba-conf.html for an explanation
+# See https://www.postgresql.org/docs/13/static/auth-pg-hba-conf.html for an explanation
 # of the values
 
 ### Version settings

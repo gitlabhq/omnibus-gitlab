@@ -869,9 +869,9 @@ end
 
 def deprecation_message
   log '=== WARNING ==='
-  log "Note that PostgreSQL #{default_version.major} will become the minimum required PostgreSQL version in GitLab 16.0"
+  log "Note that PostgreSQL #{default_version.major} is the minimum required PostgreSQL version in GitLab 16.0"
   log 'See docs for more information: https://about.gitlab.com/handbook/engineering/development/enablement/data_stores/database/postgresql-upgrade-cadence.html'
-  log "PostgreSQL #{old_version.major} will be removed in GitLab 16.0."
+  log "PostgreSQL #{old_version.major} has been removed in GitLab 16.0."
   log 'Please consider upgrading your PostgreSQL version soon.'
   log 'To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
   log '=== WARNING ==='
