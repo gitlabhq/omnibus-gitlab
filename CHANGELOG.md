@@ -52,6 +52,10 @@ No changes.
 - [Update redis to 6.2.11](gitlab-org/omnibus-gitlab@c16ed96251f1093f7401ac7961b5dfbe1ec6db2e)
 - [Mattermost March 2023 security updates](gitlab-org/omnibus-gitlab@a4bab17e8cb59465aaf34b13307b3441a8526146)
 
+## 15.10.7 (2023-05-10)
+
+No changes.
+
 ## 15.10.6 (2023-05-03)
 
 No changes.
