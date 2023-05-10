@@ -1232,6 +1232,58 @@ RSpec.describe 'gitlab::gitlab-rails' do
         }
       end
     end
+
+    context 'when STARTTLS is enabled' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            smtp_enable: true,
+            smtp_enable_starttls_auto: true
+          }
+        )
+      end
+
+      it 'enables STARTTLS in the settings' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/smtp_settings.rb').with_content { |content|
+          expect(content).not_to include('tls =')
+          expect(content).to include('enable_starttls_auto: true')
+        }
+      end
+    end
+
+    context 'when SMTP TLS is enabled' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            smtp_enable: true,
+            smtp_tls: true
+          }
+        )
+      end
+
+      it 'enables SMTP TLS in the settings' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/smtp_settings.rb').with_content { |content|
+          expect(content).to include('tls: true')
+          expect(content).not_to include('enable_starttls_auto')
+        }
+      end
+    end
+
+    context 'when TLS and STARTTLS are enabled' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            smtp_enable: true,
+            smtp_tls: true,
+            smtp_enable_starttls_auto: true
+          }
+        )
+      end
+
+      it 'raises an exception' do
+        expect { chef_run }.to raise_error(RuntimeError)
+      end
+    end
   end
 
   describe 'cleaning up the legacy sidekiq log symlink' do
