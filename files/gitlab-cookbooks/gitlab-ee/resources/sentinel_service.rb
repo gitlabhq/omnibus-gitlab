@@ -31,7 +31,7 @@ action :enable do
     gid node['redis']['gid']
     shell node['redis']['shell']
     home node['redis']['home']
-    manage node['gitlab']['manage-accounts']['enable']
+    manage node['gitlab']['manage_accounts']['enable']
   end
 
   directory new_resource.sentinel_configuration['dir'] do

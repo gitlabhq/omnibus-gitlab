@@ -38,7 +38,7 @@ runit_service 'storage-check' do
     log_directory: logging_settings[:log_directory],
     log_user: logging_settings[:runit_owner],
     log_group: logging_settings[:runit_group],
-    storage_check_target: node['gitlab']['storage-check']['target']
+    storage_check_target: node['gitlab']['storage_check']['target']
   }.merge(params))
 
   log_options logging_settings[:options]

@@ -28,7 +28,7 @@ account "Consul user and group" do
   groupname account_helper.consul_group
   gid node['consul']['gid']
   home node['consul']['dir']
-  manage node['gitlab']['manage-accounts']['enable']
+  manage node['gitlab']['manage_accounts']['enable']
 end
 
 directory node['consul']['dir'] do

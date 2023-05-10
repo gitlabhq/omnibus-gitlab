@@ -21,14 +21,14 @@
 ####
 default['gitlab']['bootstrap']['enable'] = true
 # Create users and groups needed for the package
-default['gitlab']['manage-accounts']['enable'] = true
+default['gitlab']['manage_accounts']['enable'] = true
 
 # Create directories with correct permissions and ownership required by the pkg
-default['gitlab']['manage-storage-directories']['enable'] = true
-default['gitlab']['manage-storage-directories']['manage_etc'] = true
+default['gitlab']['manage_storage_directories']['enable'] = true
+default['gitlab']['manage_storage_directories']['manage_etc'] = true
 
 # A tmpfs mount point directory for runtime files, actual default is located in libraries/gitlab_rails.rb.
-default['gitlab']['runtime-dir'] = nil
+default['gitlab']['runtime_dir'] = nil
 
 ####
 # The Git User that services run as
@@ -679,14 +679,14 @@ default['gitlab']['gitlab_sshd']['host_certs_glob'] = 'ssh_host_*-cert.pub'
 # Web server
 ####
 # Username for the webserver user
-default['gitlab']['web-server']['username'] = 'gitlab-www'
-default['gitlab']['web-server']['group'] = 'gitlab-www'
-default['gitlab']['web-server']['uid'] = nil
-default['gitlab']['web-server']['gid'] = nil
-default['gitlab']['web-server']['shell'] = '/bin/false'
-default['gitlab']['web-server']['home'] = '/var/opt/gitlab/nginx'
+default['gitlab']['web_server']['username'] = 'gitlab-www'
+default['gitlab']['web_server']['group'] = 'gitlab-www'
+default['gitlab']['web_server']['uid'] = nil
+default['gitlab']['web_server']['gid'] = nil
+default['gitlab']['web_server']['shell'] = '/bin/false'
+default['gitlab']['web_server']['home'] = '/var/opt/gitlab/nginx'
 # When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group
-default['gitlab']['web-server']['external_users'] = []
+default['gitlab']['web_server']['external_users'] = []
 
 ####
 # gitlab-workhorse
@@ -865,18 +865,18 @@ default['gitlab']['remote_syslog']['services'] = %w(redis nginx puma gitlab-rail
 ###
 # High Availability
 ###
-default['gitlab']['high-availability']['mountpoint'] = nil
+default['gitlab']['high_availability']['mountpoint'] = nil
 
 ####
 # GitLab CI Rails app
 ####
-default['gitlab']['gitlab-ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
-default['gitlab']['gitlab-ci']['builds_directory'] = "/var/opt/gitlab/gitlab-ci/builds"
+default['gitlab']['gitlab_ci']['dir'] = "/var/opt/gitlab/gitlab-ci"
+default['gitlab']['gitlab_ci']['builds_directory'] = "/var/opt/gitlab/gitlab-ci/builds"
 
-default['gitlab']['gitlab-ci']['schedule_builds_minute'] = "0"
+default['gitlab']['gitlab_ci']['schedule_builds_minute'] = "0"
 
-default['gitlab']['gitlab-ci']['gitlab_ci_all_broken_builds'] = nil
-default['gitlab']['gitlab-ci']['gitlab_ci_add_pusher'] = nil
+default['gitlab']['gitlab_ci']['gitlab_ci_all_broken_builds'] = nil
+default['gitlab']['gitlab_ci']['gitlab_ci_add_pusher'] = nil
 
 ####
 # Mattermost NGINX
@@ -943,9 +943,9 @@ default['gitlab']['gitlab_kas_nginx']['proxy_set_headers'] = {
 ####
 # Storage check
 ####
-default['gitlab']['storage-check']['enable'] = false
-default['gitlab']['storage-check']['target'] = nil
-default['gitlab']['storage-check']['log_directory'] = '/var/log/gitlab/storage-check'
+default['gitlab']['storage_check']['enable'] = false
+default['gitlab']['storage_check']['target'] = nil
+default['gitlab']['storage_check']['log_directory'] = '/var/log/gitlab/storage-check'
 
 default['gitlab']['gitlab-shell'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_shell'].to_h }, "node['gitlab']['gitlab-shell']", "node['gitlab']['gitlab_shell']")
 default['gitlab']['remote-syslog'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['remote_syslog'].to_h }, "node['gitlab']['remote-syslog']", "node['gitlab']['remote_syslog']")
@@ -955,3 +955,16 @@ default['gitlab']['pages-nginx'] = Gitlab::Deprecations::NodeAttribute.new(proc 
 default['gitlab']['registry-nginx'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['registry_nginx'].to_h }, "node['gitlab']['registry-nginx']", "node['gitlab']['registry_nginx']")
 default['gitlab']['gitlab-kas-nginx'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_kas_nginx'].to_h }, "node['gitlab']['gitlab-kas-nginx']", "node['gitlab']['gitlab_kas_nginx']")
 default['gitlab']['gitlab-rails'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_rails'].to_h }, "node['gitlab']['gitlab-rails']", "node['gitlab']['gitlab_rails']")
+default['gitlab']['external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['external_url'] }, "node['gitlab']['external-url']", "node['gitlab']['external_url']")
+default['gitlab']['gitlab-kas-external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_kas_external_url'] }, "node['gitlab']['gitlab-kas-external-url']", "node['gitlab']['gitlab_kas_external_url']")
+default['gitlab']['mattermost-external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['mattermost_external_url'] }, "node['gitlab']['mattermost-external-url']", "node['gitlab']['mattermost_external_url']")
+default['gitlab']['pages-external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['pages_external_url'] }, "node['gitlab']['pages-external-url']", "node['gitlab']['pages_external_url']")
+default['gitlab']['registry-external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['registry_external_url'] }, "node['gitlab']['registry-external-url']", "node['gitlab']['registry_external_url']")
+default['gitlab']['gitlab-ci'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_ci'].to_h }, "node['gitlab']['gitlab-ci']", "node['gitlab']['gitlab_ci']")
+default['gitlab']['high-availability'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['high_availability'].to_h }, "node['gitlab']['high-availability']", "node['gitlab']['high_availability']")
+default['gitlab']['manage-accounts'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['manage_accounts'].to_h }, "node['gitlab']['manage-accounts']", "node['gitlab']['manage_accounts']")
+default['gitlab']['manage-storage-directories'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['manage_storage_directories'].to_h }, "node['gitlab']['manage-storage-directories']", "node['gitlab']['manage_storage_directories']")
+default['gitlab']['omnibus-gitconfig'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['omnibus_gitconfig'].to_h }, "node['gitlab']['omnibus-gitconfig']", "node['gitlab']['omnibus_gitconfig']")
+default['gitlab']['runtime-dir'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['runtime_dir'] }, "node['gitlab']['runtime-dir']", "node['gitlab']['runtime_dir']")
+default['gitlab']['storage-check'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['storage_check'].to_h }, "node['gitlab']['storage-check']", "node['gitlab']['storage_check']")
+default['gitlab']['web-server'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['web_server'].to_h }, "node['gitlab']['web-server']", "node['gitlab']['web_server']")

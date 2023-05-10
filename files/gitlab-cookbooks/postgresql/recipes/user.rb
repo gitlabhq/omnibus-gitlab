@@ -27,7 +27,7 @@ account "Postgresql user and group" do
   gid node['postgresql']['gid']
   shell node['postgresql']['shell']
   home node['postgresql']['home']
-  manage node['gitlab']['manage-accounts']['enable']
+  manage node['gitlab']['manage_accounts']['enable']
 end
 
 directory node['postgresql']['home'] do

@@ -46,6 +46,20 @@ module SettingsDSL
     geo_logcursor
     geo_postgresql
     gitlab_rails
+    external_url
+    gitlab_kas_external_url
+    mattermost_external_url
+    pages_external_url
+    registry_external_url
+    gitlab_ci
+    high_availability
+    manage_accounts
+    manage_storage_directories
+    omnibus_gitconfig
+    prometheus_monitoring
+    runtime_dir
+    storage_check
+    web_server
   ].freeze
 
   def self.extended(base)

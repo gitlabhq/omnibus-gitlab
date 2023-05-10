@@ -27,7 +27,7 @@ usernames.each do |username|
   account username do
     username username
     action :remove
-    manage node['gitlab']['manage-accounts']['enable']
+    manage node['gitlab']['manage_accounts']['enable']
   end
 end
 
@@ -35,6 +35,6 @@ groups.each do |group|
   account group do
     groupname group
     action :remove
-    manage node['gitlab']['manage-accounts']['enable']
+    manage node['gitlab']['manage_accounts']['enable']
   end
 end

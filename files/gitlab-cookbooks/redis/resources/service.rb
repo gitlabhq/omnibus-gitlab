@@ -18,7 +18,7 @@ action :create do
     gid node['redis']['gid']
     shell node['redis']['shell']
     home node['redis']['home']
-    manage node['gitlab']['manage-accounts']['enable']
+    manage node['gitlab']['manage_accounts']['enable']
   end
 
   group 'Socket group' do

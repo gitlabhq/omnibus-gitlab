@@ -31,11 +31,11 @@ class AccountHelper
   end
 
   def web_server_user
-    node['gitlab']['web-server']['username']
+    node['gitlab']['web_server']['username']
   end
 
   def web_server_group
-    node['gitlab']['web-server']['group']
+    node['gitlab']['web_server']['group']
   end
 
   def redis_user

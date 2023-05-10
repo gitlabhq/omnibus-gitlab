@@ -19,7 +19,7 @@ action :enable do
   user = new_resource.user
   group = new_resource.group
 
-  metrics_dir = ::File.join(node['gitlab']['runtime-dir'].to_s, "gitlab/#{svc}") unless node['gitlab']['runtime-dir'].nil?
+  metrics_dir = ::File.join(node['gitlab']['runtime_dir'].to_s, "gitlab/#{svc}") unless node['gitlab']['runtime_dir'].nil?
 
   sidekiq_log_dir = new_resource.log_directory
   sidekiq_log_user = new_resource.log_user
