@@ -144,11 +144,23 @@ build do
       shellout!("#{embedded_bin('gem')} uninstall --force google-protobuf", env: env)
       shellout!("#{embedded_bin('gem')} install google-protobuf --version #{protobuf_version} --platform=ruby", env: env)
     end
+  end
 
-    # Delete unused shared objects included in grpc gem
-    grpc_path = shellout!("#{embedded_bin('bundle')} show grpc", env: env).stdout.strip
+  block 'delete unneeded precompiled shared libraries' do
+    next if OhaiHelper.ruby_native_gems_unsupported?
+
     ruby_ver = shellout!("#{embedded_bin('ruby')} -e 'puts RUBY_VERSION.match(/\\d+\\.\\d+/)[0]'", env: env).stdout.chomp
-    command "find #{File.join(grpc_path, 'src/ruby/lib/grpc')} ! -path '*/#{ruby_ver}/*' -name 'grpc_c.so' -type f -print -delete"
+    gem_paths = {
+      'grpc' => 'src/ruby/lib/grpc',
+      'prometheus-client-mmap' => 'lib',
+      'nokogiri' => 'lib'
+    }
+
+    # Delete unused shared libraries included in the gems
+    gem_paths.each do |name, base_path|
+      gem_path = shellout!("#{embedded_bin('bundle')} show #{name}", env: env).stdout.strip
+      command "find #{File.join(gem_path, base_path)} ! -path '*/#{ruby_ver}/*' -name '*.so' -type f -print -delete"
+    end
   end
 
   # In order to compile the assets, we need to get to a state where rake can
