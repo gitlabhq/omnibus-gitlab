@@ -15,8 +15,8 @@
 # limitations under the License.
 #
 
-name 'postgresql_new'
-default_version '13.8'
+name 'postgresql_old'
+default_version '12.12'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -30,12 +30,11 @@ dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '13.8' do
-  source sha256: '73876fdd3a517087340458dca4ce15b8d2a4dbceb334c0441424551ae6c4cded'
+version '12.12' do
+  source sha256: '34b3f1c69408e22068c0c71b1827691f1c89153b0ad576c1a44f8920a858039c'
 end
 
-major_version = '13'
-libpq = 'libpq.so.5'
+major_version = '12'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
 
@@ -59,18 +58,6 @@ build do
 
   make "world -j #{workers}", env: env
   make 'install-world', env: env
-
-  link "#{prefix}/lib/#{libpq}", "#{install_dir}/embedded/lib/#{libpq}"
-
-  # NOTE: There are several dependencies which require these files in these
-  # locations and have dependency on `postgresql_new`. So when this block is
-  # changed to be in the `postgresql` software definition for default PG
-  # version changes, change those dependencies to `postgresql`.
-  block 'link bin files' do
-    Dir.glob("#{prefix}/bin/*").each do |bin_file|
-      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
-    end
-  end
 end
 
 # exclude headers and static libraries from package
