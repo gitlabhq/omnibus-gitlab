@@ -19,9 +19,6 @@ class ConsulHelper
       'node_name' => node['consul']['node_name'] || node['fqdn'],
       'rejoin_after_leave' => true,
       'server' => false,
-      'telemetry' => {
-        'disable_compat_1.9' => false
-      }
     }
     .merge(encryption_configuration)
     .merge(ports_configuration)
