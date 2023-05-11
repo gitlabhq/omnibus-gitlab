@@ -18,3 +18,9 @@ The binaries for PostgreSQL 12 have been removed.
 Prior to upgrading, administrators using Omnibus GitLab must:
 
 1. Ensure the installation is using [PostgreSQL 13](../settings/database.md#upgrade-packaged-postgresql-server)
+
+### Deprecating bundled Grafana
+
+Bundled Grafana is deprecated and is no longer supported. It will be removed in GitLab 16.3.
+
+For more information, see [deprecation notes](https://docs.gitlab.com/ee/administration/monitoring/performance/grafana_configuration.html#deprecation-of-bundled-grafana).
