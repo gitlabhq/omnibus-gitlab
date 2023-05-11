@@ -11,6 +11,7 @@ RSpec.describe SELinuxDistroHelper do
       'redhat' | '7.0' | true
       'redhat' | '8.0' | true
       'almalinux' | '8.0' | true
+      'almalinux' | '9.0' | true
       'centos' | '8.0' | true
       'centos' | '7.0' | true
       'amzn' | '2' | true

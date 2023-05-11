@@ -73,7 +73,7 @@ if rhel?
   case OhaiHelper.get_centos_version
   when '6', '7'
     runtime_dependency 'policycoreutils-python'
-  when '8'
+  when '8', '9'
     runtime_dependency 'policycoreutils-python-utils'
   end
 end
