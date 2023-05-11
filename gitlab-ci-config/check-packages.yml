@@ -141,6 +141,14 @@ AlmaLinux-8-arm64-check:
   extends: .yum-install
   tags:
   - docker-arm-builder
+AlmaLinux-9-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9:${BUILDER_IMAGE_REVISION}"
+  extends: .yum-install
+AlmaLinux-9-arm64-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .yum-install
+  tags:
+  - docker-arm-builder
 AmazonLinux-2-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
