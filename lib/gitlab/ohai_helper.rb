@@ -91,6 +91,8 @@ class OhaiHelper
         '7'
       when /^8\./
         '8'
+      when /^9\./
+        '9'
       end
     end
 
