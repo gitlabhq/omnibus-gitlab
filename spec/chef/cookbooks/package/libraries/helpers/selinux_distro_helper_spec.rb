@@ -13,10 +13,14 @@ RSpec.describe SELinuxDistroHelper do
       'almalinux' | '8.0' | true
       'almalinux' | '9.0' | true
       'centos' | '8.0' | true
+      'centos' | '8' | true
+      'centos' | '9' | true
       'centos' | '7.0' | true
       'amzn' | '2' | true
       'notadistro' | '42' | false
       nil | '7' | false
+      nil | '8' | false
+      nil | '9' | false
       'redhat' | nil | false
     end
 

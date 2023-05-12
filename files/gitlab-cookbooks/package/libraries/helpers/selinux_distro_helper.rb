@@ -11,11 +11,11 @@ class SELinuxDistroHelper
   end
 
   def self.system_is_rhel8?
-    platform_family == 'rhel' && platform_version&.start_with?('8.')
+    platform_family == 'rhel' && (platform_version&.start_with?('8.') || platform_version.eql?('8'))
   end
 
   def self.system_is_rhel9?
-    platform_family == 'rhel' && platform_version&.start_with?('9.')
+    platform_family == 'rhel' && (platform_version&.start_with?('9.') || platform_version.eql?('9'))
   end
 
   def self.system_is_amazon_linux2?
