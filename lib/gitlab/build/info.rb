@@ -272,8 +272,9 @@ module Build
 
         return unless id
 
-        folder = 'ubuntu-jammy'
-        folder = "#{folder}_fips" if fips
+        # Ubuntu 22.04 is still not FIPS compliant, so we use 20.04 packages
+        # there.
+        folder = fips ? 'ubuntu-focal_fips' : 'ubuntu-jammy'
 
         "https://gitlab.com/api/v4/projects/#{Gitlab::Util.get_env('CI_PROJECT_ID')}/jobs/#{id}/artifacts/pkg/#{folder}/gitlab.deb"
       end

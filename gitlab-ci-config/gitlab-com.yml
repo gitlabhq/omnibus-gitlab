@@ -522,8 +522,8 @@ Trigger:package:fips:
     - .trigger-fips-package-cache
   variables:
     USE_SYSTEM_SSL: "true"
-    BASE_OS: "ubuntu_22.04_fips"
-    PACKAGE_DIRECTORY: "pkg/ubuntu-jammy_fips"
+    BASE_OS: "ubuntu_20.04_fips"
+    PACKAGE_DIRECTORY: "pkg/ubuntu-focal_fips"
   allow_failure: true
   rules:
     - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
