@@ -600,6 +600,9 @@ Ubuntu-22.04-staging:
       optional: true
     - job: Ubuntu-22.04-branch
       optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY)_BUILD_PIPELINE$/'
 
 ### Package builds
 Debian-10:
