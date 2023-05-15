@@ -10,7 +10,7 @@ if Rails.env.production?
     <% end %>
     user_name: <%= node['gitlab']['gitlab_rails']["smtp_user_name"]&.inspect || "secrets.username" %>,
     password: <%= node['gitlab']['gitlab_rails']["smtp_password"]&.inspect || "secrets.password"  %>,
-<% %w{ address port domain enable_starttls_auto tls ssl openssl_verify_mode ca_path ca_file }.each do |key| %>
+<% %w{ address port domain enable_starttls_auto tls ssl openssl_verify_mode ca_path ca_file open_timeout read_timeout }.each do |key| %>
   <% value = node['gitlab']['gitlab_rails']["smtp_#{key}"] %>
     <%= "#{key}: #{value.inspect}," unless value.nil? %>
 <% end %>

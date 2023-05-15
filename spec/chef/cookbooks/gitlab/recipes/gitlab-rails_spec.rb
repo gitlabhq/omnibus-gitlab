@@ -1196,6 +1196,56 @@ RSpec.describe 'gitlab::gitlab-rails' do
   end
 
   context 'SMTP settings' do
+    context 'defaults' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            smtp_enable: true
+          }
+        )
+      end
+
+      it 'renders the default timeout values' do
+        expect(chef_run).to create_templatesymlink('Create a smtp_settings.rb and create a symlink to Rails root').with_variables(
+          hash_including(
+            'smtp_open_timeout' => 30,
+            'smtp_read_timeout' => 60
+          )
+        )
+
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/smtp_settings.rb').with_content { |content|
+          expect(content).to include('open_timeout: 30')
+          expect(content).to include('read_timeout: 60')
+        }
+      end
+    end
+
+    context 'when timeouts are set' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            smtp_enable: true,
+            smtp_open_timeout: 10,
+            smtp_read_timeout: 20
+          }
+        )
+      end
+
+      it 'renders the timeout values' do
+        expect(chef_run).to create_templatesymlink('Create a smtp_settings.rb and create a symlink to Rails root').with_variables(
+          hash_including(
+            'smtp_open_timeout' => 10,
+            'smtp_read_timeout' => 20
+          )
+        )
+
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/smtp_settings.rb').with_content { |content|
+          expect(content).to include('open_timeout: 10')
+          expect(content).to include('read_timeout: 20')
+        }
+      end
+    end
+
     context 'when connection pooling is not configured' do
       it 'creates smtp_settings.rb with pooling disabled' do
         stub_gitlab_rb(
