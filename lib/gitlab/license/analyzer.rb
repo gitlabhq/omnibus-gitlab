@@ -8,7 +8,7 @@ module License
                                         /CC-BY-[0-9]*/, /^project_license$/, /OpenSSL/i,
                                         /ZLib/i, /jemalloc/i, /Python/i, /PostgreSQL/i,
                                         /Info-Zip/i, /Libpng/i, /Mozilla Public/i, /libtiff/i, /WTFPL/, /CC0/,
-                                        /OFL-1.1/, /EPL-2\.0/])
+                                        /OFL-1.1/])
     # TODO: Re-confirm that licenses Python, Info-Zip, OpenSSL and CC-BY are
     # OK to be shipped. https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2448
 
@@ -36,6 +36,7 @@ module License
       'github.com/cloudflare/tableflip', # BSD-3-Clause Licensed - https://github.com/cloudflare/tableflip/blob/master/LICENSE
       'gitlab.com/gitlab-org/golang-archive-zip', # BSD-3-Clause Licensed - https://gitlab.com/gitlab-org/golang-archive-zip/-/blob/c8e752e2d582090de40338553ef00ef08b89c905/LICENSE
       'spam-classifier', # GitLab project and we can distribute the obfuscated binaries
+      'elkjs',           # EPL 2.0 - https://github.com/kieler/elkjs/blob/master/LICENSE.md
     ]
     # readline is GPL licensed and its use was not mere aggregation. Hence it is
     # blacklisted.
