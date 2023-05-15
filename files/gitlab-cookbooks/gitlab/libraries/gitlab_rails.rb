@@ -34,6 +34,7 @@ module GitlabRails
       parse_incoming_email_logfile
       parse_service_desk_email_logfile
       parse_maximum_request_duration
+      validate_smtp_settings!
     end
 
     def parse_directories
@@ -359,6 +360,10 @@ module GitlabRails
       return if Gitlab['gitlab_rails']['max_request_duration_seconds'] < worker_timeout
 
       raise "The maximum request duration needs to be smaller than the worker timeout (#{worker_timeout}s)"
+    end
+
+    def validate_smtp_settings!
+      SmtpHelper.validate_smtp_settings!(Gitlab['gitlab_rails'])
     end
 
     def public_path
