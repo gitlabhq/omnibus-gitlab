@@ -69,7 +69,6 @@ directory '<%= @working_directory %>'
 workers <%= @worker_processes %>
 
 require_relative "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/cluster/lifecycle_events"
-require_relative "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/cluster/puma_worker_killer_initializer"
 
 on_restart do
   # Signal application hooks that we're about to restart
