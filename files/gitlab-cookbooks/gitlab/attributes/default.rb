@@ -506,6 +506,8 @@ default['gitlab']['gitlab-rails']['smtp_pool'] = false
 # Path to the public Certificate Authority file
 # defaults to /opt/gitlab/embedded/ssl/certs/cacert.pem. The install-dir path is set at build time
 default['gitlab']['gitlab-rails']['smtp_ca_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
+default['gitlab']['gitlab-rails']['smtp_open_timeout'] = 30
+default['gitlab']['gitlab-rails']['smtp_read_timeout'] = 60
 
 # Path to directory that contains (ca) certificates that should also be trusted (e.g. on
 # outgoing Webhooks connections). For these certificates symlinks will be created in
