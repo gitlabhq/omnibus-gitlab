@@ -26,7 +26,12 @@ module URI
     # Include this class as the handler for 'redis' and 'rediss' schemes
     # This allows URI('redis://') or URI('rediss://') to delegate to this class
     %w(REDIS REDISS).each do |scheme|
-      @@schemes[scheme] = Redis
+      # https://github.com/ruby/uri/pull/26 modified how schemes are registered.
+      if Gem::Version.new(URI::VERSION) >= Gem::Version.new('0.11.0')
+        ::URI.register_scheme scheme, Redis
+      else
+        @@schemes[scheme] = Redis
+      end
     end
 
     def self.build(args)
