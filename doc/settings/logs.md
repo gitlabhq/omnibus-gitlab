@@ -226,7 +226,7 @@ gitaly['logging_format'] = ''
 gitlab_shell['log_format'] = 'text'
 gitlab_workhorse['log_format'] = 'text'
 registry['log_formatter'] = 'text'
-sidekiq['log_format'] = 'default'
+sidekiq['log_format'] = 'text'
 gitlab_pages['log_format'] = 'text'
 ```
 
