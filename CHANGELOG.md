@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 15.11.4 (2023-05-16)
+
+### Added (1 change)
+
+- [Add SMTP timeout configuration options](gitlab-org/omnibus-gitlab@42c08ac804b58e31b67f81193589a3d1d2523d07) ([merge request](gitlab-org/omnibus-gitlab!6888))
+
+### Changed (1 change)
+
+- [Validate that SMTP settings do not enable both TLS and STARTTLS](gitlab-org/omnibus-gitlab@0bc5f6a53fad0873563f3456b368a84da6128a50) ([merge request](gitlab-org/omnibus-gitlab!6876))
+
 ## 15.11.3 (2023-05-10)
 
 No changes.
