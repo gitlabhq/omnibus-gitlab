@@ -30,9 +30,9 @@ module Praefect
 
   VIRTUAL_STORAGE_DESC = <<~EOS.freeze
     Name of the virtual storage where the repository resides (mandatory).
-    %%The virtual-storage-name can be found in /etc/gitlab/gitlab.rb under praefect["virtual_storages"].
-    %%If praefect["virtual_storages"] = { "default" => {"nodes" => { ... }},
-    %%"storage_1" => {"nodes" => { ... }}}, the virtual-storage-name would be either "default", or "storage_1".
+    %%The virtual-storage-name can be found in /etc/gitlab/gitlab.rb under praefect["configuration"]["virtual_storage"].
+    %%If praefect["configuration"]["virtual_storage"] = [{ "name" => "default" , "nodes" => [{ ... }]},
+    %%{ "name" => "storage_1", "nodes" => [{ ... }]}], the virtual-storage-name would be either "default", or "storage_1".
     %%This can also be found in the Project Detail page in the Admin Panel under "Gitaly storage name".'
   EOS
 

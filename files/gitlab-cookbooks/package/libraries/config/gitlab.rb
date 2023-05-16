@@ -57,7 +57,7 @@ module Gitlab
   attribute('spamcheck')
   attribute('patroni').use { Patroni }
   attribute('gitaly').use { Gitaly }
-  attribute('praefect').use { Praefect }
+  attribute('praefect')
   attribute('mattermost',   priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
   attribute('letsencrypt',  priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry and Mattermost
   attribute('crond')

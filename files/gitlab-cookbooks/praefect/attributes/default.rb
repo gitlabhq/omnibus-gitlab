@@ -13,7 +13,6 @@ default['praefect']['configuration'] = {
   logging: {
     format: 'json',
   },
-  prometheus_exclude_database_from_default_metrics: true,
   auth: {
     transitioning: false
   },
