@@ -287,7 +287,7 @@ module Gitlab
           {
             config_keys: %w(gitaly cgroups_count),
             deprecation: '15.1',
-            removal: '16.1', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
+            removal: '16.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6828
             note: "Use `gitaly['cgroups_repositories_count']` instead."
           },
           {
