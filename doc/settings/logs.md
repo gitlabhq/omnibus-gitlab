@@ -47,6 +47,13 @@ registry['log_directory'] = "/var/log/gitlab/registry"
 ...
 ```
 
+Gitaly and Mattermost have different log directory configs:
+
+```ruby
+gitaly['configuration']['logging']['dir'] = "/var/log/gitlab/registry"
+mattermost['log_file_directory'] = "/var/log/gitlab/registry"
+```
+
 Run `sudo gitlab-ctl reconfigure` to configure your instance with these settings.
 
 ## runit logs

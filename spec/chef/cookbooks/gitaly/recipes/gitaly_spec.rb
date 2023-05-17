@@ -17,7 +17,7 @@ RSpec.describe 'gitaly' do
   let(:logging_sentry_dsn) { 'https://my_key:my_secret@sentry.io/test_project' }
   let(:logging_sentry_environment) { 'production' }
   let(:prometheus_grpc_latency_buckets) do
-    '[0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]'
+    [0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]
   end
   let(:auth_token) { '123secret456' }
   let(:auth_transitioning) { true }
@@ -93,7 +93,6 @@ RSpec.describe 'gitaly' do
             ignore_gitconfig: true,
             use_bundled_binaries: true
           },
-          cgroups: { repositories: {} },
           gitlab: {
             relative_url_root: '',
             url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket'
@@ -151,42 +150,6 @@ RSpec.describe 'gitaly' do
     end
   end
 
-  context 'with pre 15.0 cgroups settings' do
-    before do
-      stub_gitlab_rb(
-        gitaly: {
-          cgroups_mountpoint: cgroups_mountpoint,
-          cgroups_count: 100,
-          cgroups_hierarchy_root: cgroups_hierarchy_root,
-          cgroups_memory_limit: cgroups_memory_bytes,
-          cgroups_memory_enabled: true,
-          cgroups_cpu_shares: cgroups_cpu_shares,
-          cgroups_cpu_enabled: true,
-          pack_objects_cache_enabled: pack_objects_cache_enabled,
-          pack_objects_cache_dir: pack_objects_cache_dir,
-          pack_objects_cache_max_age: pack_objects_cache_max_age,
-          custom_hooks_dir: gitaly_custom_hooks_dir
-        }
-      )
-    end
-
-    it 'populates gitaly cgroups with correct values' do
-      cgroups_section = Regexp.new([
-        %r{\[cgroups\]},
-        %r{mountpoint = "#{cgroups_mountpoint}"},
-        %r{hierarchy_root = "#{cgroups_hierarchy_root}"},
-        %r{\[cgroups.repositories\]},
-        %r{count = 100},
-        %r{memory_bytes = #{cgroups_memory_bytes}},
-        %r{cpu_shares = #{cgroups_cpu_shares}},
-      ].map(&:to_s).join('\s+'))
-
-      expect(chef_run).to render_file(config_path).with_content { |content|
-        expect(content).to match(cgroups_section)
-      }
-    end
-  end
-
   context 'sets cgroups settings' do
     before do
       stub_gitlab_rb(
@@ -231,44 +194,6 @@ RSpec.describe 'gitaly' do
     end
   end
 
-  context 'with new gitconfig' do
-    it 'raises an error with legacy gitconfig set' do
-      stub_gitlab_rb(
-        {
-          gitaly: {
-            gitconfig: [{ key: 'legacy_key', value: 'legacy_value' }],
-            configuration: {
-              git: {
-                config: [{ key: 'new_key', value: 'new_value' }]
-              }
-            }
-          }
-        }
-      )
-
-      expect { chef_run }.to raise_error "Legacy configuration keys 'gitconfig' and 'omnibus_gitconfig' can't be set when its new key 'configuration.git.config' is set."
-    end
-
-    it 'raises an error if omnibus_gitconfig is set' do
-      stub_gitlab_rb(
-        {
-          omnibus_gitconfig: {
-            system: { nondefault: ['bar = baz'] }
-          },
-          gitaly: {
-            configuration: {
-              git: {
-                config: [{ key: 'new_key', value: 'new_value' }]
-              }
-            }
-          }
-        }
-      )
-
-      expect { chef_run }.to raise_error "Legacy configuration keys 'gitconfig' and 'omnibus_gitconfig' can't be set when its new key 'configuration.git.config' is set."
-    end
-  end
-
   context 'with Omnibus gitconfig' do
     let(:omnibus_gitconfig) { nil }
     let(:gitaly_gitconfig) { nil }
@@ -279,7 +204,11 @@ RSpec.describe 'gitaly' do
           system: omnibus_gitconfig,
         },
         gitaly: {
-          gitconfig: gitaly_gitconfig,
+          configuration: {
+            git: {
+              config: gitaly_gitconfig,
+            }
+          }
         }
       )
     end
@@ -395,7 +324,7 @@ RSpec.describe 'gitaly' do
       end
     end
 
-    context 'with Gitaly gitconfig' do
+    context 'with Gitaly configuration git config' do
       let(:gitaly_gitconfig) do
         [
           { key: "core.fsckObjects", value: "true" },
@@ -447,82 +376,6 @@ RSpec.describe 'gitaly' do
           expect(content).not_to include("git.config")
         }
       end
-    end
-
-    context 'with sections' do
-      let(:gitaly_gitconfig) do
-        [
-          { section: 'core', key: 'fsckObjects', value: 'true' },
-          { section: 'core', key: 'somethingElse', value: 'true' },
-          { section: 'another', key: 'section', value: 'true' },
-        ]
-      end
-
-      it 'writes the correct keys' do
-        gitconfig_section = Regexp.new([
-          %r{\[\[git.config\]\]},
-          %r{key = "core.fsckObjects"},
-          %r{value = "true"},
-          %r{},
-          %r{\[\[git.config\]\]},
-          %r{key = "core.somethingElse"},
-          %r{value = "true"},
-          %r{},
-          %r{\[\[git.config\]\]},
-          %r{key = "another.section"},
-          %r{value = "true"},
-        ].map(&:to_s).join('\s+'))
-
-        expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(content).to match(gitconfig_section)
-          expect(content).not_to include("overridden")
-        }
-      end
-    end
-
-    context 'with subsections' do
-      let(:gitaly_gitconfig) do
-        [
-          { section: 'http', subsection: 'http://example.com', key: 'insteadOf', value: 'http://rewritten.example.com' },
-          { key: 'http.http://another.example.com.insteadOf', value: 'http://rewritten.example.com' },
-        ]
-      end
-
-      it 'writes the correct keys' do
-        gitconfig_section = Regexp.new([
-          %r{\[\[git.config\]\]},
-          %r{key = "http.http://example.com.insteadOf"},
-          %r{value = "http://rewritten.example.com"},
-          %r{},
-          %r{\[\[git.config\]\]},
-          %r{key = "http.http://another.example.com.insteadOf"},
-          %r{value = "http://rewritten.example.com"},
-        ].map(&:to_s).join('\s+'))
-
-        expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(content).to match(gitconfig_section)
-          expect(content).not_to include("overridden")
-        }
-      end
-    end
-  end
-
-  context 'with array configured as string' do
-    it 'raises an error with prometheus grpc latency buckets' do
-      stub_gitlab_rb(
-        {
-          gitaly: {
-            enable: true,
-            configuration: {
-              prometheus: {
-                grpc_latency_buckets: '[0, 1, 2]'
-              }
-            }
-          }
-        }
-      )
-
-      expect { chef_run }.to raise_error("gitaly['configuration'][:prometheus][:grpc_latency_buckets] must be an array, not a string")
     end
   end
 
@@ -587,48 +440,10 @@ RSpec.describe 'gitaly' do
             }
           ],
           cgroups: {
-            cpu_shares: 100,
+            cpu_shares: 100
           }
         }
       )
-    end
-  end
-
-  context 'with old key and its new key set' do
-    it 'raises an error in generic case' do
-      stub_gitlab_rb(
-        {
-          gitaly: {
-            enable: true,
-            certificate_path: 'legacy_certificate_path_key',
-            configuration: {
-              tls: {
-                certificate_path: 'new_certificate_path_key',
-              }
-            }
-          }
-        }
-      )
-
-      expect { chef_run }.to raise_error "Legacy configuration key 'certificate_path' can't be set when its new key 'configuration.tls.certificate_path' is set."
-    end
-
-    it 'raises an error in generic case' do
-      stub_gitlab_rb(
-        {
-          gitaly: {
-            enable: true,
-            prometheus_grpc_latency_buckets: '[0, 1, 2]',
-            configuration: {
-              prometheus: {
-                grpc_latency_buckets: '[0, 1, 3]',
-              }
-            }
-          }
-        }
-      )
-
-      expect { chef_run }.to raise_error "Legacy configuration key 'prometheus_grpc_latency_buckets' can't be set when its new key 'configuration.prometheus.grpc_latency_buckets' is set."
     end
   end
 
@@ -636,70 +451,88 @@ RSpec.describe 'gitaly' do
     before do
       stub_gitlab_rb(
         gitaly: {
-          concurrency: [
-            {
-              rpc: '/gitaly.SmartHTTPService/PostReceivePack',
-              max_per_repo: 20
-            },
-            {
-              rpc: '/gitaly.SSHService/SSHUploadPack',
-              max_per_repo: 5
-            }
-          ],
-          storage: [
-            { name: 'default', path: '/tmp/path-1' },
-            { name: 'nfs1', path: '/mnt/nfs1' }
-          ],
-          rate_limiting: [
-            {
-              rpc: '/gitaly.SmartHTTPService/PostReceivePack',
-              interval: '1s',
-              burst: 100
-            }, {
-              rpc: '/gitaly.SSHService/SSHUploadPack',
-              interval: '1s',
-              burst: 200,
-            }
-          ],
-          socket_path: socket_path,
-          runtime_dir: runtime_dir,
-          listen_addr: listen_addr,
-          tls_listen_addr: tls_listen_addr,
-          certificate_path: certificate_path,
-          key_path: key_path,
-          gpg_signing_key_path: gpg_signing_key_path,
-          prometheus_listen_addr: prometheus_listen_addr,
-          logging_level: logging_level,
-          logging_format: logging_format,
-          logging_sentry_dsn: logging_sentry_dsn,
-          logging_sentry_environment: logging_sentry_environment,
-          prometheus_grpc_latency_buckets: prometheus_grpc_latency_buckets,
-          auth_token: auth_token,
-          auth_transitioning: auth_transitioning,
-          graceful_restart_timeout: graceful_restart_timeout,
-          git_catfile_cache_size: git_catfile_cache_size,
-          git_bin_path: git_bin_path,
-          use_bundled_git: false,
           open_files_ulimit: open_files_ulimit,
-          daily_maintenance_start_hour: daily_maintenance_start_hour,
-          daily_maintenance_start_minute: daily_maintenance_start_minute,
-          daily_maintenance_duration: daily_maintenance_duration,
-          daily_maintenance_storages: %w(storage0 storage1),
-          daily_maintenance_disabled: daily_maintenance_disabled,
-          cgroups_mountpoint: cgroups_mountpoint,
-          cgroups_hierarchy_root: cgroups_hierarchy_root,
-          cgroups_memory_bytes: cgroups_memory_bytes,
-          cgroups_cpu_shares: cgroups_cpu_shares,
-          cgroups_repositories_count: cgroups_repositories_count,
-          cgroups_repositories_memory_bytes: cgroups_repositories_memory_bytes,
-          cgroups_repositories_cpu_shares: cgroups_repositories_cpu_shares,
-          pack_objects_cache_enabled: pack_objects_cache_enabled,
-          pack_objects_cache_dir: pack_objects_cache_dir,
-          pack_objects_cache_max_age: pack_objects_cache_max_age,
-          custom_hooks_dir: gitaly_custom_hooks_dir,
           # Sanity check that configuration values get printed out.
           configuration: {
+            socket_path: socket_path,
+            listen_addr: listen_addr,
+            tls_listen_addr: tls_listen_addr,
             string_value: 'some value',
+            runtime_dir: runtime_dir,
+            git: {
+              signing_key: gpg_signing_key_path,
+              bin_path: git_bin_path,
+              catfile_cache_size: git_catfile_cache_size,
+              use_bundled_binaries: false,
+            },
+            prometheus: {
+              grpc_latency_buckets: prometheus_grpc_latency_buckets
+            },
+            prometheus_listen_addr: prometheus_listen_addr,
+            graceful_restart_timeout: graceful_restart_timeout,
+            auth: {
+              token: auth_token,
+              transitioning: auth_transitioning,
+            },
+            tls: {
+              certificate_path: certificate_path,
+              key_path: key_path,
+            },
+            storage: [
+              { name: 'default', path: '/tmp/path-1' },
+              { name: 'nfs1', path: '/mnt/nfs1' }
+            ],
+            logging: {
+              level: logging_level,
+              format: logging_format,
+              sentry_dsn: logging_sentry_dsn,
+              sentry_environment: logging_sentry_environment,
+            },
+            hooks: { custom_hooks_dir: gitaly_custom_hooks_dir },
+            pack_objects_cache: {
+              enabled: pack_objects_cache_enabled,
+              dir: pack_objects_cache_dir,
+              max_age: pack_objects_cache_max_age,
+            },
+            cgroups: {
+              mountpoint: cgroups_mountpoint,
+              hierarchy_root: cgroups_hierarchy_root,
+              memory_bytes: cgroups_memory_bytes,
+              cpu_shares: cgroups_cpu_shares,
+              repositories: {
+                count: cgroups_repositories_count,
+                memory_bytes: cgroups_repositories_memory_bytes,
+                cpu_shares: cgroups_repositories_cpu_shares,
+              },
+            },
+            daily_maintenance: {
+              disabled: daily_maintenance_disabled,
+              start_hour: daily_maintenance_start_hour,
+              start_minute: daily_maintenance_start_minute,
+              duration: daily_maintenance_duration,
+              storages: %w(storage0 storage1),
+            },
+            concurrency: [
+              {
+                rpc: '/gitaly.SmartHTTPService/PostReceivePack',
+                max_per_repo: 20
+              },
+              {
+                rpc: '/gitaly.SSHService/SSHUploadPack',
+                max_per_repo: 5
+              }
+            ],
+            rate_limiting: [
+              {
+                rpc: '/gitaly.SmartHTTPService/PostReceivePack',
+                interval: '1s',
+                burst: 100
+              }, {
+                rpc: '/gitaly.SSHService/SSHUploadPack',
+                interval: '1s',
+                burst: 200,
+              }
+            ],
             subsection: {
               array_value: [1, 2, 3]
             }
@@ -865,16 +698,6 @@ RSpec.describe 'gitaly' do
         .with_content(/svlogd -tt \/var\/log\/gitlab\/gitaly/)
     end
 
-    context 'when maintenance is disabled' do
-      let(:daily_maintenance_disabled) { true }
-
-      it 'renders daily_maintenance with disabled set to true' do
-        expect(chef_run).to render_file(config_path).with_content { |content|
-          expect(content).to include("[daily_maintenance]\ndisabled = true\n")
-        }
-      end
-    end
-
     context 'when using git_data_dirs storage configuration' do
       context 'using local gitaly' do
         before do
@@ -956,35 +779,6 @@ RSpec.describe 'gitaly' do
               .with_content(%r{\[\[storage\]\]\s+name = "nfs1"\s+path = "/mnt/nfs1/repositories"})
           end
         end
-
-        context "using legacy gitaly['storage'] key" do
-          before do
-            stub_gitlab_rb(
-              gitaly: {
-                storage: [
-                  {
-                    'name' => 'nfs1',
-                    'path' => '/mnt/nfs1/repositories'
-                  },
-                  {
-                    'name' => 'default',
-                    'path' => '/tmp/default/git-data/repositories'
-                  }
-                ]
-              },
-              git_data_dirs: {
-                'default' => { 'path' => '/tmp/gitaly-git-data' },
-              }
-            )
-          end
-
-          it 'populates gitaly config.toml with custom storages from gitaly configuration' do
-            expect(chef_run).to render_file(config_path)
-              .with_content(%r{\[\[storage\]\]\s+name = "default"\s+path = "/tmp/default/git-data/repositories"})
-            expect(chef_run).to render_file(config_path)
-              .with_content(%r{\[\[storage\]\]\s+name = "nfs1"\s+path = "/mnt/nfs1/repositories"})
-          end
-        end
       end
     end
   end
@@ -1004,63 +798,7 @@ RSpec.describe 'gitaly' do
     end
   end
 
-  shared_examples 'empty concurrency configuration' do
-    it 'does not generate a gitaly concurrency configuration' do
-      expect(chef_run).not_to render_file(config_path)
-        .with_content(%r{\[\[concurrency\]\]})
-    end
-  end
-
-  shared_examples 'empty rate limiting configuration' do
-    it 'does not generate a gitaly concurrency configuration' do
-      expect(chef_run).not_to render_file(config_path)
-        .with_content(%r{\[\[rate_limiting\]\]})
-    end
-  end
-
   context 'when not using concurrency configuration' do
-    context 'when concurrency configuration is not set' do
-      before do
-        stub_gitlab_rb(
-          {
-            gitaly: {
-            }
-          }
-        )
-      end
-
-      it_behaves_like 'empty concurrency configuration'
-      it_behaves_like 'empty rate limiting configuration'
-    end
-
-    context 'when concurrency configuration is empty' do
-      before do
-        stub_gitlab_rb(
-          {
-            gitaly: {
-              concurrency: []
-            }
-          }
-        )
-      end
-
-      it_behaves_like 'empty concurrency configuration'
-    end
-
-    context 'when rate limiting configuration is empty' do
-      before do
-        stub_gitlab_rb(
-          {
-            gitaly: {
-              rate_limiting: []
-            }
-          }
-        )
-      end
-
-      it_behaves_like 'empty rate limiting configuration'
-    end
-
     context 'when max_queue_size and max_queue_wait are empty' do
       before do
         stub_gitlab_rb(
@@ -1119,12 +857,14 @@ RSpec.describe 'gitaly' do
         stub_gitlab_rb(
           {
             gitaly: {
-              concurrency: [
-                {
-                  'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
-                  'max_queue_wait' => "10s",
-                }
-              ]
+              configuration: {
+                concurrency: [
+                  {
+                    'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+                    'max_queue_wait' => "10s",
+                  }
+                ]
+              }
             }
           }
         )
@@ -1265,8 +1005,10 @@ RSpec.describe 'gitaly::git_data_dirs' do
                          'path' => '/tmp/user/git-data'
                        }
                      }, gitaly: {
-                       socket_path: '',
-                       listen_addr: 'localhost:8123'
+                       configuration: {
+                         socket_path: '',
+                         listen_addr: 'localhost:8123'
+                       }
                      })
     end
 
@@ -1283,7 +1025,10 @@ RSpec.describe 'gitaly::git_data_dirs' do
                          'path' => '/tmp/user/git-data'
                        }
                      }, gitaly: {
-                       socket_path: '', tls_listen_addr: 'localhost:8123'
+                       configuration: {
+                         socket_path: '',
+                         tls_listen_addr: 'localhost:8123'
+                       }
                      })
     end
 
@@ -1300,7 +1045,10 @@ RSpec.describe 'gitaly::git_data_dirs' do
                          'path' => '/tmp/user/git-data'
                        }
                      }, gitaly: {
-                       socket_path: '/some/socket/path.socket', tls_listen_addr: 'localhost:8123'
+                       configuration: {
+                         socket_path: '/some/socket/path.socket',
+                         tls_listen_addr: 'localhost:8123'
+                       }
                      })
     end
 
