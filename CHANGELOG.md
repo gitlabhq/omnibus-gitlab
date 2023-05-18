@@ -3,6 +3,73 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.0.0 (2023-05-18)
+
+### Added (6 changes)
+
+- [Add AlmaLinux 9 packages](gitlab-org/omnibus-gitlab@61f050298f5293367e8aa8e6acb4c25a25192512) ([merge request](gitlab-org/omnibus-gitlab!6817))
+- [Add SMTP timeout configuration options](gitlab-org/omnibus-gitlab@50e7a5b96bbe8fedd3a555a73fd36799e8ac6925) ([merge request](gitlab-org/omnibus-gitlab!6874))
+- [Add EPL 2.0 as acceptable license](gitlab-org/omnibus-gitlab@06466fcdc5427c27395de0396a32ba513dbb1dc0) ([merge request](gitlab-org/omnibus-gitlab!6853))
+- [Add ability to set log directory group for runit managed services](gitlab-org/omnibus-gitlab@ecfca36c98ddb95fc7157b3484c94670f0db1386) ([merge request](gitlab-org/omnibus-gitlab!6809))
+- [Allow configuring an embedding database](gitlab-org/omnibus-gitlab@586eea00c656a02a3541f3beb0da8a2940581094) ([merge request](gitlab-org/omnibus-gitlab!6823))
+- [Add `GITLAB_PRE_RECONFIGURE_SCRIPT` variable support to Docker image](gitlab-org/omnibus-gitlab@69c83d60cc6ef1796a4b22be0aac988b9d31e4c0) by @ergoz ([merge request](gitlab-org/omnibus-gitlab!6744))
+
+### Fixed (4 changes)
+
+- [Update Redis URL implementation to work with Ruby 3.1+](gitlab-org/omnibus-gitlab@5df3c4d34cb30efb184eb9586f77e682fe140ab1) ([merge request](gitlab-org/omnibus-gitlab!6864))
+- [EL Stream releases have different VERSION strings](gitlab-org/omnibus-gitlab@93845747f901d00c9a383b0681a8bc63a451d10d) ([merge request](gitlab-org/omnibus-gitlab!6884))
+- [Make it possible to run Puma v6](gitlab-org/omnibus-gitlab@d378406baf91c9d7074c7de6539ed9a30ff37184) ([merge request](gitlab-org/omnibus-gitlab!6854))
+- [Symlink the public ssh key to /ets/ssh folder](gitlab-org/omnibus-gitlab@33e1af97797af90161ab8d6d946d3c74dbe0ae08) ([merge request](gitlab-org/omnibus-gitlab!6732))
+
+### Changed (10 changes)
+
+- [Bump rubygems to 3.4.13](gitlab-org/omnibus-gitlab@56c0d2ee28e4bf9e9e3307d8fe1435e072676d38) ([merge request](gitlab-org/omnibus-gitlab!6880))
+- [Validate that SMTP settings do not enable both TLS and STARTTLS](gitlab-org/omnibus-gitlab@30be4382b7a765c983e6f50eb3c9f45dbb87f0b4) ([merge request](gitlab-org/omnibus-gitlab!6863))
+- [Default to two database connections i.e. main and ci](gitlab-org/omnibus-gitlab@cd3fcb86b03041f11aaed66d3830aea4de866b6d) ([merge request](gitlab-org/omnibus-gitlab!6850))
+- [Prune extraneous precompiled shared libraries in gems](gitlab-org/omnibus-gitlab@4aa93d9bb8668c2d23f2e1a381504ea439f57071) ([merge request](gitlab-org/omnibus-gitlab!6869))
+- [Update libre2 to 2023-03-01](gitlab-org/omnibus-gitlab@bf75e78ce0d8a4ab56b35402b5b4ec75cd5d718c) ([merge request](gitlab-org/omnibus-gitlab!6733))
+- [Bump container-registry version to 3.72.0](gitlab-org/omnibus-gitlab@f135f9bd322f0e54147d42e28610f0941e84005c) ([merge request](gitlab-org/omnibus-gitlab!6859))
+- [Build use golang 1.19.8](gitlab-org/omnibus-gitlab@fc4b211526c6770165a36bdddf8d9b340fbcd1d4) ([merge request](gitlab-org/omnibus-gitlab!6851))
+- [Update RubyGems to v3.4.12](gitlab-org/omnibus-gitlab@8366c46608f87ef35e539dc8b47058f94ab31925) ([merge request](gitlab-org/omnibus-gitlab!6843))
+- [Make 15.11 minimum required version to upgrade to 16.0](gitlab-org/omnibus-gitlab@5a2cc648af2dac967de78846742b86d0278d1ad1) ([merge request](gitlab-org/omnibus-gitlab!6833))
+- [Remove gitaly-ruby build](gitlab-org/omnibus-gitlab@08138799d93064f7c760c7d708b4483495eb920f) ([merge request](gitlab-org/omnibus-gitlab!6837))
+
+### Deprecated (12 changes)
+
+- [Document Grafana deprecation](gitlab-org/omnibus-gitlab@069a9ab67dac6f7fd6ae8be8d34b303b7eb390c7) ([merge request](gitlab-org/omnibus-gitlab!6878))
+- [Turn off Grafana unless forced](gitlab-org/omnibus-gitlab@5d11d3defe583eea0aaf4a741af2676b55c17208) ([merge request](gitlab-org/omnibus-gitlab!6847))
+- [Deprecate usage of node['gitlab']['web-server'] in gitlab.rb](gitlab-org/omnibus-gitlab@5b590ecefeeb5b84855262f65bc2c6d5a2a720b9) ([merge request](gitlab-org/omnibus-gitlab!6766))
+- [Deprecate usage of node['gitlab']['storage-check'] in gitlab.rb](gitlab-org/omnibus-gitlab@4845016b0b2de70c45361ccd7efdcb4b3c0883e7) ([merge request](gitlab-org/omnibus-gitlab!6766))
+- [Deprecate usage of node['gitlab']['prometheus-monitoring'] in gitlab.rb](gitlab-org/omnibus-gitlab@aad1b69270a0a4265079a8e2845b19813eccc274) ([merge request](gitlab-org/omnibus-gitlab!6766))
+- [Deprecate usage of node['gitlab']['omnibus-gitconfig'] in gitlab.rb](gitlab-org/omnibus-gitlab@c4cc17e9d74f00774d17d858736eb3776c2dbea6) ([merge request](gitlab-org/omnibus-gitlab!6766))
+- [Deprecate usage of node['gitlab']['manage-storage-directories']](gitlab-org/omnibus-gitlab@7d6b0aed8b99bac356da1ce447278d8e09199c63) ([merge request](gitlab-org/omnibus-gitlab!6766))
+- [Deprecate usage of node['gitlab']['manage-accounts'] in gitlab.rb](gitlab-org/omnibus-gitlab@8ad1c813565f487f8cd2a2f47920467827980e70) ([merge request](gitlab-org/omnibus-gitlab!6766))
+- [Deprecate usage of node['gitlab']['high-availability'] in gitlab.rb](gitlab-org/omnibus-gitlab@6288b920d5753524b6e27806077531ad5d6fa95c) ([merge request](gitlab-org/omnibus-gitlab!6766))
+- [Deprecate usage of node['gitlab']['gitlab-ci'] in gitlab.rb](gitlab-org/omnibus-gitlab@b0551cbc86507f4f62d233d32cba4aa44153d2c5) ([merge request](gitlab-org/omnibus-gitlab!6766))
+- [Deprecate usage of node['gitlab']['*-external-url'] in gitlab.rb](gitlab-org/omnibus-gitlab@f8d7a6639fcd9278a1e95099f8d934a098e4a888) ([merge request](gitlab-org/omnibus-gitlab!6766))
+- [gitaly: Remove gitaly-ruby configuration](gitlab-org/omnibus-gitlab@5a69dd55c230ce74add138aa0c0e255e1c98de0a) ([merge request](gitlab-org/omnibus-gitlab!6826))
+
+### Removed (5 changes)
+
+- [Remove old Praefect configuration remapping](gitlab-org/omnibus-gitlab@deccf323279ab1b82c05e632d8f1203b13508b2c) ([merge request](gitlab-org/omnibus-gitlab!6867))
+- [Disable Consul telemetry compatibility](gitlab-org/omnibus-gitlab@5c404cdf79c692cb90af60b381f0883ea0f4ac6c) ([merge request](gitlab-org/omnibus-gitlab!6872))
+- [Remove select2 from software list](gitlab-org/omnibus-gitlab@61e4a2907a83eb6b83bd46cf4d88f281764c6f0e) ([merge request](gitlab-org/omnibus-gitlab!6871))
+- [Remove puma_worker_killer](gitlab-org/omnibus-gitlab@88dd1dc6dfc51b37f41b302b46af1d1ed1b0cef6) ([merge request](gitlab-org/omnibus-gitlab!6845))
+- [Remove rails 'default_can_create_group' setting](gitlab-org/omnibus-gitlab@205c0c96092796d6ecbff23fb5692defcba10749) ([merge request](gitlab-org/omnibus-gitlab!6819))
+
+### Security (2 changes)
+
+- [Patch Openssl for CVE-2023-0464](gitlab-org/omnibus-gitlab@190e03ea2669535a98d3be8a43f723e1b2c0ebbb)
+- [Patch Grafana against session cookie vulnerability and CVE-2023-1410](gitlab-org/omnibus-gitlab@5366ca75405e2fe30f01bd2be5066409c179cba4)
+
+### Other (5 changes)
+
+- [Fix broken link in GitLab 15 docs](gitlab-org/omnibus-gitlab@7002b28aed05822c6e8f248d369b144cf1372d63) by @felix.divo ([merge request](gitlab-org/omnibus-gitlab!6882))
+- [Use Ubuntu 22.04 as base for the GitLab Docker image.](gitlab-org/omnibus-gitlab@0728bc4104b5e1c883e38a2ace42acdcac252349) ([merge request](gitlab-org/omnibus-gitlab!6830))
+- [Postpone cinc EOL message](gitlab-org/omnibus-gitlab@d549962217889f3104f972e0ebb93ad8e3bda08a) ([merge request](gitlab-org/omnibus-gitlab!6857))
+- [Drop bundler software definition](gitlab-org/omnibus-gitlab@3f08274227a17adf5f7d42403804af198895a726) ([merge request](gitlab-org/omnibus-gitlab!6849))
+- [Update Mattermost to 7.10.0](gitlab-org/omnibus-gitlab@ec498e8b899bfaf00d07d161a5a03ae9aed66612) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6827))
+
 ## 15.11.4 (2023-05-16)
 
 ### Added (1 change)
