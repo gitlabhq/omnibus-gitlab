@@ -132,24 +132,12 @@ build do
     end
   end
 
-  # One of our gems, google-protobuf is known to have issues with older gcc versions
-  # when using the pre-built extensions. We will remove it and rebuild it here.
-  block 'reinstall google-protobuf gem' do
-    require 'fileutils'
-
-    unless OhaiHelper.ruby_native_gems_unsupported?
-      current_gem = shellout!("#{embedded_bin('bundle')} show | grep google-protobuf", env: env).stdout
-      protobuf_version = current_gem[/google-protobuf \((.*)\)/, 1]
-      shellout!("#{embedded_bin('gem')} uninstall --force google-protobuf", env: env)
-      shellout!("#{embedded_bin('gem')} install google-protobuf --version #{protobuf_version} --platform=ruby", env: env)
-    end
-  end
-
   block 'delete unneeded precompiled shared libraries' do
     next if OhaiHelper.ruby_native_gems_unsupported?
 
     ruby_ver = shellout!("#{embedded_bin('ruby')} -e 'puts RUBY_VERSION.match(/\\d+\\.\\d+/)[0]'", env: env).stdout.chomp
     gem_paths = {
+      'google-protobuf' => 'lib/google',
       'grpc' => 'src/ruby/lib/grpc',
       'prometheus-client-mmap' => 'lib',
       'nokogiri' => 'lib'
