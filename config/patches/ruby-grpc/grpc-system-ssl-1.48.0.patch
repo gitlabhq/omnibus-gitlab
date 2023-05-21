@@ -1,0 +1,26 @@
+diff --git a/src/ruby/ext/grpc/extconf.rb b/src/ruby/ext/grpc/extconf.rb
+index e0974c4420..ec51a18bf7 100644
+--- a/src/ruby/ext/grpc/extconf.rb
++++ b/src/ruby/ext/grpc/extconf.rb
+@@ -68,8 +68,12 @@ if apple_toolchain && !cross_compiling
+   ENV['ARFLAGS'] = '-o'
+ end
+ 
++# By default, use the system OpenSSL instead of BoringSSL. This is
++# needed on systems that need to use a FIPS-approved OpenSSL or cannot
++# compile the embedded BoringSSL module (e.g. s390x).
++embed_ssl = ENV['EMBED_OPENSSL'] == 'true'
+ # Don't embed on TruffleRuby (constant-time crypto is unsafe with Sulong, slow build times)
+-ENV['EMBED_OPENSSL'] = (RUBY_ENGINE != 'truffleruby').to_s
++ENV['EMBED_OPENSSL'] = embed_ssl ? 'true' : 'false'
+ # Don't embed on TruffleRuby (the system zlib is already linked for the zlib C extension, slow build times)
+ ENV['EMBED_ZLIB'] = (RUBY_ENGINE != 'truffleruby').to_s
+ 
+@@ -160,6 +164,7 @@ if linux && RUBY_ENGINE != 'truffleruby'
+   $LDFLAGS << ' -static-libgcc -static-libstdc++'
+ end
+ $LDFLAGS << ' -static' if windows
++$LDFLAGS << ' -lssl' unless embed_ssl
+ 
+ $CFLAGS << ' -std=c11 '
+ $CFLAGS << ' -Wall '
