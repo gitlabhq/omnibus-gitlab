@@ -73,7 +73,7 @@ follows:
 sudo gitlab-ctl hup puma
 ```
 
-Note that you cannot use a Puma reload to update the Ruby runtime.
+Note that you must wait for the `hup` command to finish. This could take some time. Leave the node out of the pool and do not restart services on the node where this is invoked until this completes. You also cannot use a Puma reload to update the Ruby runtime.
 
 Puma has the following signals to control application behavior:
 
