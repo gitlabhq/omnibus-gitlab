@@ -574,7 +574,7 @@ to do so simply uncomment:
 
 Then run `sudo service nginx reload`.
 
-## Enabling/Disabling nginx_status
+## Enabling/Disabling `nginx_status`
 
 By default you will have an NGINX health-check endpoint configured at `127.0.0.1:8060/nginx_status` to monitor your NGINX server status.
 
