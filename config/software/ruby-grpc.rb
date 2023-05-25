@@ -26,6 +26,7 @@ dependency 'ruby'
 
 build do
   block 're-install grpc gem with system OpenSSL' do
+    env = with_standard_compiler_flags(with_embedded_path)
     gem_bin = embedded_bin('gem')
     command = %(#{embedded_bin('ruby')} -e "puts Gem::Specification.select { |x| x.name == 'grpc' }.map(&:version).uniq.map(&:to_s)")
     grpc_versions = shellout!(command).stdout || ""
@@ -35,20 +36,37 @@ build do
 
     warn "Multiple versions of gRPC found: #{grpc_versions.join(', ')}" if grpc_versions.length > 1
 
-    source = 'grpc-system-ssl.patch'
-    _locations, patch_path = find_file('config/patches', source)
+    patches = {}
 
-    raise "Missing gRPC patch: #{source}" unless patch_path
+    grpc_versions.each do |version|
+      source =
+        # https://github.com/grpc/grpc/pull/27660 significantly changed the extconf.rb for TruffleRuby
+        if Gem::Version.new(version) < Gem::Version.new('1.48.0')
+          'grpc-system-ssl-1.42.0.patch'
+        else
+          'grpc-system-ssl-1.48.0.patch'
+        end
+
+      _locations, patch_path = find_file('config/patches', source)
+      patches[version] = patch_path
+    end
 
     shellout!("#{gem_bin} install --no-document gem-patch -v 0.1.6")
     shellout!("#{gem_bin} uninstall --force --all grpc")
 
+    # This works around an issue with the grpc gem attempting to include
+    # /opt/gitlab/include headers instead of the vendored re2 headers:
+    # https://github.com/grpc/grpc/pull/32580. This can be removed
+    # after grpc is updated with that pull request.
+    env['CPPFLAGS'] = "-Ithird_party/re2 #{env['CPPFLAGS']}"
+
     grpc_versions.each do |version|
+      patch_path = patches[version]
       gemfile = "grpc-#{version}.gem"
       shellout!("rm -f #{gemfile}")
       shellout!("#{gem_bin} fetch grpc -v #{version} --platform ruby")
       shellout!("#{gem_bin} patch -p1 #{gemfile} #{patch_path}")
-      shellout!("#{gem_bin} install --platform ruby --no-document #{gemfile}")
+      shellout!("#{gem_bin} install --platform ruby --no-document #{gemfile}", env: env)
     end
 
     shellout!("#{gem_bin} uninstall gem-patch")
