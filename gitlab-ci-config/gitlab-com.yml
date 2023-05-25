@@ -397,7 +397,6 @@ AlmaLinux 9 knapsack: !reference [.knapsack]
 Debian 10 knapsack: !reference [.knapsack]
 Debian 11 knapsack: !reference [.knapsack]
 OpenSUSE 15.4 knapsack: !reference [.knapsack]
-Ubuntu 16.04 knapsack: !reference [.knapsack]
 Ubuntu 18.04 knapsack: !reference [.knapsack]
 Ubuntu 20.04 knapsack: !reference [.knapsack]
 Ubuntu 22.04 knapsack: !reference [.knapsack]
@@ -419,12 +418,6 @@ build library specs:
         coverage_format: cobertura
         path: coverage/coverage.xml
 
-Ubuntu 16.04 specs:
-  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ubuntu_16.04-ruby:${BUILDER_IMAGE_REVISION}"
-  extends: .chef_spec_template
-  parallel: 6
-  needs:
-  - Ubuntu 16.04 knapsack
 Ubuntu 18.04 specs :
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ubuntu_18.04-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
