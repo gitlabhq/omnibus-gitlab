@@ -775,7 +775,6 @@ build-package-on-all-os:
     # Triggers from GitLab Rails/Gitaly/GitLab Pages pipeline which forced building on all OS automatically
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/ && $BUILD_ON_ALL_OS == "true"'
       when: always
-      allow_failure: true
       variables: !reference [.build-package-on-all-os-vars]
     # MR pipelines from omnibus-gitlab that change files which require building on all OS automatically
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/ && $CI_PIPELINE_SOURCE != "pipeline"'
@@ -785,7 +784,6 @@ build-package-on-all-os:
        - config/software/**
        - config/patches/**
       when: always
-      allow_failure: true
       variables: !reference [.build-package-on-all-os-vars]
     # Covering the remaining scenarios - provide the job to be manually run by developers, if required
     # (i) MR pipelines from omnibus-gitlab that doesn't change files which require building on all OS
