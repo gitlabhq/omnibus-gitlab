@@ -154,7 +154,7 @@
 ### 2. Always ran on dev.gitlab.org
 .staging_upload_template: &staging_upload
   stage: staging_upload
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   variables:
     INCLUDE_PACKAGECLOUD: "true"
   script:
@@ -191,7 +191,7 @@
 ### 3. Only ran on dev.gitlab.org
 .production_release_template: &production_release
   stage: package-and-image-release
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   variables:
     INCLUDE_PACKAGECLOUD: "true"
   script:
@@ -271,11 +271,6 @@
 
 # fetch-assets job from .gitlab-ci.yml file runs here
 # generate-assets job from .gitlab-ci.yml file runs here
-
-# We build package for deploying to GitLab.com first
-Ubuntu-16.04-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  extends: .branch_template
 
 Ubuntu-18.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
@@ -452,7 +447,7 @@ Raspberry-Pi-2-Bullseye-branch:
 # This job runs only on nightly EE builds
 RAT-Nightly:
   stage: slow_jobs
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   script:
     - bundle exec rake qa:rat:nightly
   cache: !reference [.branch-cache]
@@ -485,16 +480,6 @@ RAT-Nightly-FIPS:
 ############################
 
 # fetch-assets job from .gitlab-ci.yml file runs here
-
-# We build package for deploying to GitLab.com first
-Ubuntu-16.04:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
-  stage: package
-  extends: .tag_template
-  rules:
-    - !reference [.default_rules, rules]
-  # Also build for auto-deploy tags
-    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
 Ubuntu-18.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
@@ -555,21 +540,10 @@ Docker-QA:
 ##   not auto-deploys are deployed to
 ##   $PATCH_DEPLOY_ENVIRONMENT, set in CI vars
 ##
-##  Ubuntu 16.04: used for all omnibus installation
+##  Ubuntu 22.04: used for all omnibus installation
 ##  Ubuntu 18.04: used on some non-omnibus infrastructure, we
 ##                will eventually need to trigger deployments
 ##                after this package is built
-
-Ubuntu-16.04-upload-deploy:
-  extends: .staging_upload_with_deployment_template
-  needs:
-    - job: Ubuntu-16.04
-      optional: true
-    - job: Ubuntu-16.04-branch
-      optional: true
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY)_BUILD_PIPELINE$/'
 
 Ubuntu-18.04-staging:
   extends: .staging_upload_with_deployment_template
@@ -1114,7 +1088,7 @@ manifest-upload:
 
 RAT-Tag:
   stage: slow_jobs
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_16.04:${BUILDER_IMAGE_REVISION}"
+  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   script:
     - bundle exec rake qa:rat:tag
   cache: !reference [.tag-cache]
