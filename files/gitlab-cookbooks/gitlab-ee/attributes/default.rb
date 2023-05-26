@@ -21,6 +21,7 @@ default['gitlab']['sentinel']['dir'] = '/var/opt/gitlab/sentinel'
 default['gitlab']['sentinel']['log_directory'] = '/var/log/gitlab/sentinel'
 default['gitlab']['sentinel']['ha'] = false
 default['gitlab']['sentinel']['port'] = 26379
+default['gitlab']['sentinel']['password'] = nil
 default['gitlab']['sentinel']['quorum'] = 1
 default['gitlab']['sentinel']['announce_ip'] = nil
 default['gitlab']['sentinel']['announce_port'] = nil

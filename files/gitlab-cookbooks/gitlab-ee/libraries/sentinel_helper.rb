@@ -30,8 +30,15 @@ class SentinelHelper
     return unless OmnibusHelper.new(@node).service_up?('sentinel')
 
     command = "/opt/gitlab/embedded/bin/redis-cli -h #{sentinel['bind']} -p #{sentinel['port']} INFO"
+    env =
+      if sentinel['password']
+        { 'REDISCLI_AUTH' => sentinel['password'] }
+      else
+        {}
+      end
 
-    command_output = VersionHelper.version(command)
+    command_output = VersionHelper.version(command, env: env)
+
     raise "Execution of the command `#{command}` failed" unless command_output
 
     version_match = command_output.match(/redis_version:(?<redis_version>\d*\.\d*\.\d*)/)

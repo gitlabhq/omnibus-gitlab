@@ -161,6 +161,33 @@ RSpec.describe 'Redis' do
           expect(node['redis']['master_password']).to eq redis_password
         end
 
+        it 'instance Sentinel passwords are nil' do
+          RedisHelper::REDIS_INSTANCES.each do |instance|
+            expect(node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels_password"]).to be_nil
+          end
+        end
+
+        context 'when sentinel password is defined' do
+          before do
+            stub_gitlab_rb(
+              sentinel: {
+                enable: true,
+                password: 'sentinel pass!'
+              },
+              redis: {
+                password: redis_password,
+                master_ip: '10.0.0.0'
+              }
+            )
+          end
+
+          it 'instance Sentinel passwords are autofilled based on Sentinel password' do
+            RedisHelper::REDIS_INSTANCES.each do |instance|
+              expect(node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels_password"]).to eq('sentinel pass!')
+            end
+          end
+        end
+
         context 'announce_ip is defined' do
           let(:redis_port) { 6379 }
           let(:redis_announce_ip) { '10.10.10.10' }

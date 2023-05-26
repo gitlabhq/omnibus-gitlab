@@ -21,6 +21,7 @@ module Redis
   class << self
     def parse_variables
       parse_redis_settings
+      parse_redis_sentinel_settings
       parse_rename_commands
     end
 
@@ -47,6 +48,16 @@ module Redis
 
       raise "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
       raise "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']
+    end
+
+    def parse_redis_sentinel_settings
+      return unless RedisHelper::Checks.sentinel_daemon_enabled?
+
+      Gitlab['gitlab_rails']['redis_sentinels_password'] ||= Gitlab['sentinel']['password']
+
+      RedisHelper::REDIS_INSTANCES.each do |instance|
+        Gitlab['gitlab_rails']["redis_#{instance}_sentinels_password"] ||= Gitlab['sentinel']['password']
+      end
     end
 
     def parse_rename_commands

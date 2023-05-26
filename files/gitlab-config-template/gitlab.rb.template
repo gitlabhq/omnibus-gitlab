@@ -2810,6 +2810,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Uncomment to change default port
 # sentinel['port'] = 26379
 
+##! Uncomment to require a Sentinel password. This may be different from the Redis master password.
+# sentinel['password'] = 'sentinel-password-goes-here'
+
 #### Support to run sentinels in a Docker or NAT environment
 #####! Docs: https://redis.io/topics/sentinel#sentinel-docker-nat-and-possible-issues
 # In an standard case, Sentinel will run in the same network service as Redis, so the same IP will be announce for Redis and Sentinel
