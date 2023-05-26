@@ -107,7 +107,11 @@ RSpec.describe 'gitlab::logrotate_folder_and_configs_spec' do
             services: ['gitlab-rails', 'gitaly']
           },
           gitaly: {
-            log_directory: '/my/log/directory'
+            configuration: {
+              logging: {
+                dir: '/my/log/directory'
+              }
+            }
           }
         )
         expect(chef_run).to create_template('/var/opt/gitlab/logrotate/logrotate.d/gitlab-rails')
