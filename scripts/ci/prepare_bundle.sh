@@ -3,6 +3,11 @@
 gem install bundler:${BUNDLER_VERSION}
 bundle config set --local path 'gems'
 bundle config set --local without 'rubocop'
+
+# Make `ffi` gem statically build its own libffi to avoid surprises of
+# different OSs including different versions of libffi
+bundle config build.ffi --disable-system-libffi
+
 if [ "$INCLUDE_PACKAGECLOUD" = "true" ]; then
     bundle config set --local with 'packagecloud';
 fi
