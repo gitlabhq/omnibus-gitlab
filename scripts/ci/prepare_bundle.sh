@@ -2,7 +2,10 @@
 
 gem install bundler:${BUNDLER_VERSION}
 bundle config set --local path 'gems'
-bundle config set --local without 'rubocop'
+
+if [ "$CI_JOB_NAME" != "rubocop" ]; then
+  bundle config set --local without 'rubocop'
+fi
 
 # Make `ffi` gem statically build its own libffi to avoid surprises of
 # different OSs including different versions of libffi
