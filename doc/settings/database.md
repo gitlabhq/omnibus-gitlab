@@ -709,7 +709,7 @@ sudo gitlab-rake gitlab:db:decomposition:connection_status
 
 If the task indicates that `max_connections` is high enough, then you can proceed with the upgrade.
 
-If, for any reason, you wish to remain on single connection, and you are upgrading 
+If, for any reason, you wish to remain on single connection, and you are upgrading
 from GitLab 15.11 or earlier to GitLab 16.0, or switch back to single database connection
 update this setting in `/etc/gitlab/gitlab.rb`:
 
