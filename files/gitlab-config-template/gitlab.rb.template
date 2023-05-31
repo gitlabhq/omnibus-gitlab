@@ -1083,6 +1083,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # puma['ssl_certificate_key'] = nil
 # puma['ssl_client_certificate'] = nil
 # puma['ssl_cipher_filter'] = nil
+# puma['ssl_key_password_command'] = nil
 # puma['ssl_verify_mode'] = 'none'
 
 # puma['pidfile'] = '/opt/gitlab/var/puma/puma.pid'

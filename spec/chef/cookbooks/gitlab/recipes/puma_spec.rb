@@ -137,7 +137,8 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
           ssl_listen: '192.168.0.1',
           ssl_port: 9999,
           ssl_certificate: '/tmp/test.crt',
-          ssl_certificate_key: '/tmp/test.key'
+          ssl_certificate_key: '/tmp/test.key',
+          ssl_key_password_command: 'echo mypassword'
         }
       }
     end
@@ -149,6 +150,9 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
 
     it 'renders the puma.rb file' do
       expect(chef_run).to create_puma_config('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with(
+        ssl_certificate: '/tmp/test.crt',
+        ssl_certificate_key: '/tmp/test.key',
+        ssl_key_password_command: 'echo mypassword',
         ssl_listen_host: '192.168.0.1',
         ssl_port: 9999,
         listen_socket: '/tmp/puma.socket',
@@ -159,7 +163,7 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
       )
 
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
-        expect(content).to match(/ssl_bind '192.168.0.1', 9999, {\n  cert: '\/tmp\/test.crt',\n  key: '\/tmp\/test.key',\n  verify_mode: 'none'\n}/m)
+        expect(content).to match(/ssl_bind '192.168.0.1', 9999, {\n  cert: '\/tmp\/test.crt',\n  key: '\/tmp\/test.key',\n  key_password_command: 'echo mypassword',\n  verify_mode: 'none'\n}/m)
       }
     end
 
@@ -186,13 +190,17 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
             ssl_listen: '192.168.0.1',
             ssl_port: 9999,
             ssl_certificate: '/tmp/test.crt',
-            ssl_certificate_key: '/tmp/test.key'
+            ssl_certificate_key: '/tmp/test.key',
+            ssl_key_password_command: nil
           }
         }
       end
 
       it 'omits the UNIX socket and TCP binds from the Puma config' do
         expect(chef_run).to create_puma_config('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with(
+          ssl_certificate: '/tmp/test.crt',
+          ssl_certificate_key: '/tmp/test.key',
+          ssl_key_password_command: nil,
           ssl_listen_host: '192.168.0.1',
           ssl_port: 9999,
           listen_socket: '',
@@ -218,6 +226,7 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
         base_params.tap do |config|
           config[:puma][:ssl_client_certificate] = client_cert
           config[:puma][:ssl_cipher_filter] = filter
+          config[:puma][:ssl_key_password_command] = nil
           config[:puma][:ssl_verify_mode] = 'peer'
         end
       end
@@ -228,6 +237,7 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
           ssl_port: 9999,
           listen_socket: '/tmp/puma.socket',
           listen_tcp: '10.0.0.1:9000',
+          ssl_client_certificate: client_cert,
           ssl_cipher_filter: filter,
           worker_processes: 4,
           min_threads: 5,

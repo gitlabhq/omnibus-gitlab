@@ -50,6 +50,9 @@ ssl_bind '<%= @ssl_listen_host %>', <%= @ssl_port %>, {
   <%- if @ssl_certificate_key %>
   key: '<%= @ssl_certificate_key %>',
   <%- end %>
+  <%- if @ssl_key_password_command %>
+  key_password_command: '<%= @ssl_key_password_command %>',
+  <%- end %>
   <%- if @ssl_client_certificate %>
   ca: '<%= @ssl_client_certificate %>',
   <%- end %>

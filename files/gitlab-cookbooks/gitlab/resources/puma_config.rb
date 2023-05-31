@@ -16,6 +16,7 @@ property :ssl_certificate, [String, nil], default: nil
 property :ssl_certificate_key, [String, nil], default: nil
 property :ssl_client_certificate, [String, nil], default: nil
 property :ssl_cipher_filter, [String, nil], default: nil
+property :ssl_key_password_command, [String, nil], default: nil
 property :ssl_verify_mode, String, default: 'none'
 property :working_directory, [String, nil], default: nil
 property :worker_timeout, Integer, default: 60

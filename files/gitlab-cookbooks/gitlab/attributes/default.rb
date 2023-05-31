@@ -569,6 +569,7 @@ default['gitlab']['puma']['ssl_certificate'] = nil
 default['gitlab']['puma']['ssl_certificate_key'] = nil
 default['gitlab']['puma']['ssl_client_certificate'] = nil
 default['gitlab']['puma']['ssl_cipher_filter'] = nil
+default['gitlab']['puma']['ssl_key_password_command'] = nil
 default['gitlab']['puma']['ssl_verify_mode'] = 'none'
 default['gitlab']['puma']['prometheus_scrape_scheme'] = 'http'
 default['gitlab']['puma']['prometheus_scrape_tls_server_name'] = nil
