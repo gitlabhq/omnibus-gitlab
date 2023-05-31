@@ -199,6 +199,14 @@ dependencies:
           tag_filter:
             matching: 'v(\S+)-gitlab'
             sort_as: '$1'
+      # pgbouncer
+      https://github.com/pgbouncer/pgbouncer.git:
+        replace_in_files:
+        - filename: config/software/pgbouncer.rb
+          pattern: "Gitlab::Version.new\\('pgbouncer', '(\\S+)'\\)"
+          tag_filter:
+            matching: 'pgbouncer_(\d+)_(\d+)_(\d+)'
+            sort_as: '$1.$2.$3'
       # deps that need updated filtering to work https://github.com/dropseed/deps-git/issues/2
       # krb5
       # https://github.com/krb5/krb5.git:
