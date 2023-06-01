@@ -54,7 +54,7 @@ function unmigrated_data_check() {
     if [ $? -ne 0 ]; then
         echo "Upgrade failed. Could not check for unmigrated data on legacy storage."
         echo ""
-        echo $output
+        echo $found
         echo ""
         echo ""
         echo "If you would like to restart the instance without performing this"
