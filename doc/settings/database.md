@@ -100,6 +100,12 @@ of your database is `database.example.com`, and your external GitLab hostname
 is `gitlab.example.com`. You will either need a wildcard certificate for
 `*.example.com` or two different SSL certificates.
 
+The `ssl_cert_file`, `ssl_key_file`, and `ssl_ca_file` files direct PostgreSQL to where 
+on the filesystem to find the certificate, key, and bundle. These changes are applied to 
+`postgresql.conf`. The directives `internal_certificate` and `internal_key` are used to 
+populate the contents of these files. The contents can be added directly or 
+loaded from file as shown in the following example.
+
 After you have these files, enable SSL:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
@@ -108,14 +114,8 @@ After you have these files, enable SSL:
    postgresql['ssl_cert_file'] = '/custom/path/to/server.crt'
    postgresql['ssl_key_file'] = '/custom/path/to/server.key'
    postgresql['ssl_ca_file'] = '/custom/path/to/bundle.pem'
-   postgresql['internal_certificate'] = "-----BEGIN CERTIFICATE-----
-   ...base64-encoded certificate...
-   -----END CERTIFICATE-----
-   "
-   postgresql['internal_key'] = "-----BEGIN RSA PRIVATE KEY-----
-   ...base64-encoded private key...
-   -----END RSA PRIVATE KEY-----
-   "
+   postgresql['internal_certificate'] = File.read('/custom/path/to/server.crt')
+   postgresql['internal_key'] = File.read('/custom/path/to/server.key')
    ```
 
    Relative paths will be rooted in the PostgreSQL data directory
