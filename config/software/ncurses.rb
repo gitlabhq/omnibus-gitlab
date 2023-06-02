@@ -16,11 +16,10 @@
 
 name 'ncurses'
 
-# Commit with fix to CVE-2022-2945
-version = Gitlab::Version.new('ncurses', '4c9f63c460cb7134f142aa65f6866c175ed77605')
+version = Gitlab::Version.new('ncurses', '6315e1a380ecdb706d4f6518d2e8c7eb0db8fbe2')
 
 default_version version.print(false)
-display_version '6.3-20220416'
+display_version '6.4-20230225'
 
 source git: version.remote
 
