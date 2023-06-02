@@ -40,7 +40,7 @@ are:
 ### Individual software definitions
 
 Omnibus GitLab follows a batteries-included style of distribution. All of the
-software, libraries, and binaries necessary for the proper functioning of 
+software, libraries, and binaries necessary for the proper functioning of
 a GitLab instance is provided as part of the package, in an embedded format.
 
 So another one of the major components of the omnibus architecture is the
@@ -148,7 +148,7 @@ parsed correctly.
 
 ### runit
 
-GitLab uses [runit](http://smarden.org/runit/) recipes for 
+GitLab uses [runit](http://smarden.org/runit/) recipes for
 service management and supervision. runit recipes do the job of identifying the
 init system used by the OS and performing basic service management tasks like
 creating necessary service files for GitLab, service enabling, and service
