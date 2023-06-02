@@ -124,6 +124,17 @@ from_file "/home/admin/external_gitlab.rb"
 Code you include into `/etc/gitlab/gitlab.rb` using `from_file` runs with `root` privileges when you run `sudo gitlab-ctl reconfigure`.
 Any configuration that is set in `/etc/gitlab/gitlab.rb` after `from_file` is included, takes precedence over the configuration from the included file.
 
+## Read certificate from file
+
+Certificates can be stored as separate files and loaded into memory when running `sudo gitlab-ctl reconfigure`. Files containing
+certificates must be plaintext.
+
+In this example, the PostgreSQL server certificate is read directly from a file rather than copy and pasting into the `gitlab.rb` directly.
+
+```ruby
+postgresql['internal_certificate'] = File.read('/path/to/server.crt')
+```
+
 ## Store Git data in an alternative directory
 
 By default, Omnibus GitLab stores the Git repository data under
