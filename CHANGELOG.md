@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.0.2 (2023-06-05)
+
+### Security (2 changes)
+
+- [Bump PostgreSQL version to 12.14 and 13.11](gitlab-org/security/omnibus-gitlab@1acc48a8cc4312a79a4d2b31a8f09f495f3ff834) ([merge request](gitlab-org/security/omnibus-gitlab!344))
+- [Bump ncurses version to 6.4-20230225](gitlab-org/security/omnibus-gitlab@824740df419d8e579d3ef2ba66a97353ccecd302) ([merge request](gitlab-org/security/omnibus-gitlab!340))
+
 ## 16.0.1 (2023-05-22)
 
 No changes.
@@ -74,6 +81,14 @@ No changes.
 - [Drop bundler software definition](gitlab-org/omnibus-gitlab@3f08274227a17adf5f7d42403804af198895a726) ([merge request](gitlab-org/omnibus-gitlab!6849))
 - [Update Mattermost to 7.10.0](gitlab-org/omnibus-gitlab@ec498e8b899bfaf00d07d161a5a03ae9aed66612) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6827))
 
+## 15.11.7 (2023-06-05)
+
+### Security (3 changes)
+
+- [Mattermost Security Updates April 27, 2023](gitlab-org/security/omnibus-gitlab@7c92f330c071dc9d6d1483d4635d91e755f980b2) ([merge request](gitlab-org/security/omnibus-gitlab!337))
+- [Bump PostgreSQL version to 12.14 and 13.11](gitlab-org/security/omnibus-gitlab@0347775bedb634e9c687af7dbdbdb3d2a5a7f2f5) ([merge request](gitlab-org/security/omnibus-gitlab!345))
+- [Bump ncurses version to 6.4-20230225](gitlab-org/security/omnibus-gitlab@e1bce65571983d2197288716347809bee256a16b) ([merge request](gitlab-org/security/omnibus-gitlab!341))
+
 ## 15.11.6 (2023-05-24)
 
 No changes.
@@ -140,6 +155,22 @@ No changes.
 - [Update curl to 8.0.1 to resolve February CVEs](gitlab-org/omnibus-gitlab@5cf5c05bd915672c5c034847eff544c32284ad66)
 - [Update redis to 6.2.11](gitlab-org/omnibus-gitlab@c16ed96251f1093f7401ac7961b5dfbe1ec6db2e)
 - [Mattermost March 2023 security updates](gitlab-org/omnibus-gitlab@a4bab17e8cb59465aaf34b13307b3441a8526146)
+
+## 15.10.8 (2023-06-05)
+
+### Added (1 change)
+
+- [Add SMTP timeout configuration options](gitlab-org/security/omnibus-gitlab@77d8eb0bdb9a19516c4423b190e8857ea3390b9b)
+
+### Changed (1 change)
+
+- [Validate that SMTP settings do not enable both TLS and STARTTLS](gitlab-org/security/omnibus-gitlab@018c6de1c1c5512747b786ca7cdd4c01477df06c)
+
+### Security (3 changes)
+
+- [Mattermost Security Updates April 27, 2023](gitlab-org/security/omnibus-gitlab@3b95b80d1b82d1bb4aa97e2b87e7ba4c000e1922) ([merge request](gitlab-org/security/omnibus-gitlab!338))
+- [Bump PostgreSQL version to 12.14 and 13.11](gitlab-org/security/omnibus-gitlab@f85013cc68a38d55a81b9be502eef4216305d94a) ([merge request](gitlab-org/security/omnibus-gitlab!346))
+- [Bump ncurses version to 6.4-20230225](gitlab-org/security/omnibus-gitlab@080801ce26351c651ee43ea26c963570e90d3684) ([merge request](gitlab-org/security/omnibus-gitlab!342))
 
 ## 15.10.7 (2023-05-10)
 
