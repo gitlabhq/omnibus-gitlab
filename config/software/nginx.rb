@@ -18,7 +18,7 @@
 
 name 'nginx'
 
-version = Gitlab::Version.new('nginx', 'release-1.20.2')
+version = Gitlab::Version.new('nginx', 'release-1.24.0')
 default_version version.print(false)
 display_version version.print(false).delete_prefix('release-')
 
@@ -42,9 +42,6 @@ dependency 'ngx_security_headers'
 
 build do
   cwd = "#{Omnibus::Config.source_dir}/nginx"
-
-  # Patch against CVE-2021-3618
-  patch source: 'CVE-2021-3618.patch'
 
   command ['./auto/configure',
            "--prefix=#{install_dir}/embedded",

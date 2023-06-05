@@ -107,6 +107,12 @@ dependencies:
         replace_in_files:
         - filename: config/software/nginx-module-vts.rb
           pattern: "Gitlab::Version.new\\('nginx-module-vts', '(\\S+)'\\)"
+      # nginx
+      https://github.com/nginx/nginx.git:
+        replace_in_files:
+        - filename: config/software/nginx.rb
+          pattern: "Gitlab::Version.new\\('nginx', 'release-(\\S+)'\\)"
+          tag_prefix: 'release-'
       # openssl
       https://github.com/openssl/openssl.git:
         replace_in_files:
