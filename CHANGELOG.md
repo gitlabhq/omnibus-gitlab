@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.0.2 (2023-06-05)
+
+### Security (2 changes)
+
+- [Bump PostgreSQL version to 12.14 and 13.11](gitlab-org/security/omnibus-gitlab@1acc48a8cc4312a79a4d2b31a8f09f495f3ff834) ([merge request](gitlab-org/security/omnibus-gitlab!344))
+- [Bump ncurses version to 6.4-20230225](gitlab-org/security/omnibus-gitlab@824740df419d8e579d3ef2ba66a97353ccecd302) ([merge request](gitlab-org/security/omnibus-gitlab!340))
+
 ## 16.0.1 (2023-05-22)
 
 No changes.
