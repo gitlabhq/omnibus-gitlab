@@ -561,6 +561,8 @@ qa-test:
     ALLURE_JOB_NAME: $ALLURE_JOB_NAME
     GITLAB_SEMVER_VERSION: $GITLAB_SEMVER_VERSION # latest semver gitlab version used for testing upgrade paths
     SKIP_OMNIBUS_TRIGGER: "true"
+    GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
+    ALLURE_MERGE_REQUEST_IID: $CI_MERGE_REQUEST_IID
   inherit:
    variables: false
   trigger:
