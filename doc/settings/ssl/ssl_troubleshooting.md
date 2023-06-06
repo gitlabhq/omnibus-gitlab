@@ -87,27 +87,6 @@ this OpenSSL version.
 
    This error indicates that [SANs](http://wiki.cacert.org/FAQ/subjectAltName) (subjectAltName) must be configured in the certificate. For more information, see [this issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/28841).
 
-## Git-LFS and other embedded services written in ***golang*** report custom certificate signed by unknown authority
-
-NOTE:
-In GitLab 11.5, the following workaround is no longer necessary, embedded golang apps now [use the standard GitLab certificate directory automatically](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3701).
-
-The `gitlab-workhorse` and other services written in ***golang*** use the **crypto/tls** library from ***golang***
-instead of **OpenSSL**.
-
-Add the following entry in `/etc/gitlab/gitlab.rb` to work around the
-[issue as reported](https://gitlab.com/gitlab-org/gitlab-workhorse/-/issues/177#note_90203818):
-
-```ruby
-gitlab_workhorse['env'] = {
-  'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
-}
-```
-
-NOTE:
-If you have installed GitLab to a path other than `/opt/gitlab/` then modify the entry above
-with the correct path in your operating environment.
-
 ## Reconfigure Fails Due to Certificates
 
 ```shell
