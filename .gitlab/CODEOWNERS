@@ -5,4 +5,4 @@
 [Documentation]
 .markdownlint.yml @marcel.amirault @eread @aqualls
 /doc/.vale/ @marcel.amirault @eread @aqualls
-/doc/ @axil
+/doc/ @axil @eread
