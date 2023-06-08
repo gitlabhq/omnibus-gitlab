@@ -4,7 +4,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
   using RSpec::Parameterized::TableSyntax
 
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
-  let(:redis_instances) { %w(cache queues shared_state trace_chunks rate_limiting sessions repository_cache) }
+  let(:redis_instances) { RedisHelper::REDIS_INSTANCES }
   let(:redis_cluster_instances) { %w(cluster_rate_limiting) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
   let(:default_vars) do

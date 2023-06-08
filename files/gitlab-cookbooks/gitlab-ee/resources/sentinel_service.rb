@@ -76,6 +76,7 @@ action :enable do
     )
     notifies :restart, 'runit_service[sentinel]', :immediately if omnibus_helper.should_notify?('redis')
     only_if { new_resource.config_path }
+    sensitive true
   end
 
   ruby_block 'warn pending sentinel restart' do

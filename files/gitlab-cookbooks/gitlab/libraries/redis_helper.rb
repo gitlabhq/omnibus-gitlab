@@ -2,6 +2,7 @@ require_relative 'redis_uri.rb'
 require 'cgi'
 
 class RedisHelper
+  REDIS_INSTANCES = %w[cache queues shared_state trace_chunks rate_limiting sessions repository_cache cluster_rate_limiting].freeze
   ALLOWED_REDIS_CLUSTER_INSTANCE = %w[rate_limiting cluster_rate_limiting].freeze
 
   def initialize(node)

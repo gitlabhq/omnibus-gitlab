@@ -263,7 +263,7 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
   sensitive true
 end
 
-%w(cache queues shared_state trace_chunks rate_limiting sessions repository_cache cluster_rate_limiting).each do |instance|
+RedisHelper::REDIS_INSTANCES.each do |instance|
   filename = "redis.#{instance}.yml"
   url = node['gitlab']['gitlab_rails']["redis_#{instance}_instance"]
   sentinels = node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels"]

@@ -60,6 +60,7 @@ RSpec.describe 'gitlab::redis' do
             expect(content).to match(%r{sentinel failover-timeout gitlab-redis 60000})
             expect(content).to match(%r{sentinel auth-pass gitlab-redis blahblahblah})
             expect(content).not_to match(%r{^tls})
+            expect(content).not_to match(%r{^requirepass})
             expect(content).to match(%r{SENTINEL resolve-hostnames no})
             expect(content).to match(%r{SENTINEL announce-hostnames no})
           }
@@ -161,6 +162,22 @@ RSpec.describe 'gitlab::redis' do
           expect(chef_run).to render_file(sentinel_conf).with_content { |content|
             expect(content).to match(%r{SENTINEL resolve-hostnames no})
             expect(content).to match(%r{SENTINEL announce-hostnames no})
+          }
+        end
+      end
+
+      context 'user sets sentinel password' do
+        before do
+          stub_gitlab_rb(
+            sentinel: {
+              password: 'some pass'
+            }
+          )
+        end
+
+        it 'enables requirepass' do
+          expect(chef_run).to render_file(sentinel_conf).with_content { |content|
+            expect(content).to match(%r{requirepass "some pass"})
           }
         end
       end
