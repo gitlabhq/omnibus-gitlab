@@ -38,6 +38,7 @@ puma_listen_ssl_host = node['gitlab'][svc]['ssl_listen']
 puma_ssl_port = node['gitlab'][svc]['ssl_port']
 puma_ssl_cert = node['gitlab'][svc]['ssl_certificate']
 puma_ssl_key = node['gitlab'][svc]['ssl_certificate_key']
+puma_ssl_key_password_command = node['gitlab'][svc]['ssl_key_password_command']
 puma_ssl_client_cert = node['gitlab'][svc]['ssl_client_certificate']
 puma_ssl_cipher_filter = node['gitlab'][svc]['ssl_cipher_filter']
 puma_ssl_verify_mode = node['gitlab'][svc]['ssl_verify_mode']
@@ -85,6 +86,7 @@ puma_config puma_rb do
   ssl_certificate_key puma_ssl_key
   ssl_cipher_filter puma_ssl_cipher_filter
   ssl_client_certificate puma_ssl_client_cert
+  ssl_key_password_command puma_ssl_key_password_command
   ssl_verify_mode puma_ssl_verify_mode
   worker_timeout node['gitlab'][svc]['worker_timeout']
   per_worker_max_memory_mb node['gitlab'][svc]['per_worker_max_memory_mb']
