@@ -199,7 +199,7 @@
 - - :license
   - github.com/ovh/go-ovh
   - BSD-3-Clause
-  - :who: Clemens Beck 
+  - :who: Clemens Beck
     :why: https://github.com/ovh/go-ovh/blob/master/LICENSE
     :versions: []
     :when: 2023-04-03 12:35:41.232698958 Z
@@ -216,4 +216,19 @@
   - :who: Paul Gascou-Vaillancourt
     :why: https://github.com/kieler/elkjs/blob/master/LICENSE.md
     :versions: []
-    :when: 2023-04-28 22:41:37.142646 Z
+    :when: 2023-04-28 22:41:37.142646000 Z
+- - :license
+  - github.com/hashicorp/hcp-sdk-go
+  - MPL2
+  - :who: Clemens Beck
+    :why: https://github.com/hashicorp/hcp-sdk-go/blob/main/LICENSE
+    :versions: []
+    :when: 2023-05-25 06:56:28.063465516 Z
+- - :license
+  # github.com/hashicorp/consul/proto-public
+  - "./proto-public"
+  - MPL2
+  - :who: Clemens Beck 
+    :why: https://github.com/hashicorp/consul/blob/main/LICENSE
+    :versions: []
+    :when: 2023-05-25 06:59:56.730385964 Z
