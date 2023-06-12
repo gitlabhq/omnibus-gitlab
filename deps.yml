@@ -177,6 +177,7 @@ dependencies:
         replace_in_files:
         - filename: config/software/libjpeg-turbo.rb
           pattern: "Gitlab::Version.new\\('libjpeg-turbo', '(\\S+)'\\)"
+          range: '< 2.1.90'
       #libtiff
       https://gitlab.com/libtiff/libtiff.git:
         replace_in_files:
