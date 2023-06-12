@@ -106,11 +106,11 @@ stop necessary services, and notify these services when files correspond to
 their change. A master recipe, named `default`, acts as the entry point and it
 invokes all other necessary recipes for various components and services.
 
-### Definitions
+### Custom Resources
 
-[Definitions](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/definitions)
+[Custom Resources](https://gitlab.com/gitlab-org/omnibus-gitlab/-/tree/master/files/gitlab-cookbooks/gitlab/resources)
 can be considered as global-level macros that are available across recipes. Some
-common uses for definitions are defining the ports used for common services, and
+common uses for Custom Resources are defining the ports used for common services, and
 listing important directories that may be used by different recipes. They define
 resources that may be reused by different recipes.
 
