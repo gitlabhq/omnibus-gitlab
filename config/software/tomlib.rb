@@ -18,7 +18,7 @@ name 'tomlib'
 
 # The version here should be in agreement with /Gemfile.lock so that our rspec
 # testing stays consistent with the package contents.
-default_version '0.5.0'
+default_version '0.6.0'
 
 license 'MIT'
 license_file 'LICENSE.txt'

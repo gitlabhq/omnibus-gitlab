@@ -19,7 +19,7 @@ RSpec.describe 'gitaly' do
   let(:prometheus_grpc_latency_buckets) do
     [0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]
   end
-  let(:auth_token) { '123secret456' }
+  let(:auth_token) { '123#$secret456' }
   let(:auth_transitioning) { true }
   let(:graceful_restart_timeout) { '20m' }
   let(:git_catfile_cache_size) { 50 }
@@ -571,7 +571,7 @@ RSpec.describe 'gitaly' do
       expect(get_rendered_toml(chef_run, '/var/opt/gitlab/gitaly/config.toml')).to eq(
         {
           auth: {
-            token: '123secret456',
+            token: '123#$secret456',
             transitioning: true
           },
           bin_dir: '/opt/gitlab/embedded/bin',
@@ -1081,7 +1081,7 @@ RSpec.describe 'gitaly::git_data_dirs' do
       stub_gitlab_rb({
                        git_data_dirs: {
                          'default' => { 'path' => '/tmp/default/git-data' },
-                         'overflow' => { 'path' => '/tmp/other/git-overflow-data', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
+                         'overflow' => { 'path' => '/tmp/other/git-overflow-data', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123#$secret456gitaly' }
                        }
                      })
     end
@@ -1089,7 +1089,7 @@ RSpec.describe 'gitaly::git_data_dirs' do
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab_rails']['repositories_storages']).to eql({
                                                                                         'default' => { 'path' => '/tmp/default/git-data/repositories', 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' },
-                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123secret456gitaly' }
+                                                                                        'overflow' => { 'path' => '/tmp/other/git-overflow-data/repositories', 'gitaly_address' => 'tcp://localhost:8123', 'gitaly_token' => '123#$secret456gitaly' }
                                                                                       })
     end
   end
