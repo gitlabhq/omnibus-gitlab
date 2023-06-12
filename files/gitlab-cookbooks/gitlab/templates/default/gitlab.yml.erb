@@ -1127,6 +1127,13 @@ production: &base
     git_basic_auth: <%= @rack_attack_git_basic_auth.to_json if @rack_attack_git_basic_auth %>
 
 
+<% if @has_jh_cookbook %>
+  #
+  # 6. JH only settings
+  # ==========================
+<%= render 'gitlab.yml.jh-partial.erb', :cookbook => 'gitlab-jh' %>
+<% end %>
+
 development:
   <<: *base
 

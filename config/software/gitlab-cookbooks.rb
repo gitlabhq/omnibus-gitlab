@@ -24,6 +24,7 @@ license_file File.expand_path('LICENSE', Omnibus::Config.project_root)
 skip_transitive_dependency_licensing true
 
 EE = Build::Check.include_ee?
+JH = Build::Check.is_jh?
 
 source path: File.expand_path('files/gitlab-cookbooks', Omnibus::Config.project_root)
 
@@ -37,7 +38,7 @@ build do
 
   # If EE package, use a different master cookbook
   if EE
-    cookbook_name = 'gitlab-ee'
+    cookbook_name = JH ? 'gitlab-jh' : 'gitlab-ee'
     solo_recipes << 'geo-postgresql-config'
     solo_recipes << 'patroni-config'
   else

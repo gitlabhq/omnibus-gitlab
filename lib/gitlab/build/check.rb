@@ -12,8 +12,14 @@ module Build
           is_auto_deploy?
       end
 
+      def is_jh?
+        Gitlab::Util.get_env('jh') == 'true' || \
+          Gitlab::Util.get_env('GITLAB_VERSION')&.end_with?('-jh') || \
+          File.read('VERSION').strip.end_with?('-jh')
+      end
+
       def include_ee?
-        is_ee?
+        is_ee? || is_jh?
       end
 
       def fips?
