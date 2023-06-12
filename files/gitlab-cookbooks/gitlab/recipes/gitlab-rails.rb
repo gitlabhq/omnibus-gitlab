@@ -317,6 +317,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   mode "0640"
 
   mattermost_host = Gitlab['mattermost_external_url'] || node['gitlab']['gitlab_rails']['mattermost_host']
+  has_jh_cookbook = File.exist?('/opt/gitlab/embedded/cookbooks/gitlab-jh')
 
   variables(
     node['gitlab']['gitlab_rails'].to_hash.merge(
@@ -339,7 +340,8 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       prometheus_available: node['monitoring']['prometheus']['enable'] || !node['gitlab']['gitlab_rails']['prometheus_address'].nil?,
       prometheus_server_address: node['gitlab']['gitlab_rails']['prometheus_address'] || node['monitoring']['prometheus']['listen_address'],
       consul_api_url: node['consul']['enable'] ? consul_helper.api_url : nil,
-      mailroom_internal_api_url: mailroom_helper.internal_api_url
+      mailroom_internal_api_url: mailroom_helper.internal_api_url,
+      has_jh_cookbook: has_jh_cookbook
     )
   )
   dependent_services.each { |svc| notifies :restart, svc }
