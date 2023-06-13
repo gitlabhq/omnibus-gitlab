@@ -288,6 +288,7 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
   context 'when geo_secondary_role is enabled but geo-postgresql is disabled' do
     before do
       stub_gitlab_rb(geo_secondary_role: { enable: true },
+                     geo_secondary: { db_host: '/var/opt/gitlab/geo-postgresql' },
                      geo_postgresql: { enable: false })
     end
 
@@ -300,6 +301,40 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
     end
 
     it_behaves_like 'renders database.yml with both main and geo databases'
+  end
+
+  context 'when geo_secondary_role is enabled' do
+    before do
+      stub_gitlab_rb(geo_secondary_role: { enable: true },
+                     geo_postgresql: { enable: true, dir: '/tmp/geo-postgresql' })
+    end
+
+    it 'sets geo-secondary db_host to the value of geo_postgresql socket directory ' do
+      expect(database_yml[:production][:geo][:host]).to eq('/tmp/geo-postgresql')
+    end
+  end
+
+  context 'when geo_secondary_role is enabled and geo_secondary db_host is set' do
+    before do
+      stub_gitlab_rb(geo_secondary_role: { enable: true },
+                     geo_secondary: { db_host: '/some_test_directory/geo-postgresql' },
+                     geo_postgresql: { enable: true, dir: '/tmp/geo-postgresql' })
+    end
+
+    it 'sets geo-secondary db_host to the specified db_host' do
+      expect(database_yml[:production][:geo][:host]).to eq('/some_test_directory/geo-postgresql')
+    end
+  end
+
+  context 'when geo_secondary_role is enabled, and geo-postgresql is enabled, but geo-postgresql dir is not set' do
+    before do
+      stub_gitlab_rb(geo_secondary_role: { enable: true },
+                     geo_postgresql: { enable: true })
+    end
+
+    it 'sets geo-secondary db_host to the default' do
+      expect(database_yml[:production][:geo][:host]).to eq('/var/opt/gitlab/geo-postgresql')
+    end
   end
 
   context 'when geo_secondary_role is enabled' do
