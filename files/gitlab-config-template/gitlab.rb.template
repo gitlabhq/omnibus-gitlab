@@ -495,7 +495,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['mattermost_host'] = "https://mattermost.example.com"
 
 ### LDAP Settings
-###! Docs: https://docs.gitlab.com/omnibus/settings/ldap.html
+###! Docs: https://docs.gitlab.com/ee/administration/auth/ldap/index.html
 ###! **Be careful not to break the indentation in the ldap_servers block. It is
 ###!   in yaml format and the spaces must be retained. Using tabs will not work.**
 
