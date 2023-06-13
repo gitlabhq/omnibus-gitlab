@@ -5,6 +5,7 @@ module GeoSecondary
   class << self
     def parse_variables
       parse_database
+      parse_geo_secondary_db_host
     end
 
     def node
@@ -45,8 +46,26 @@ module GeoSecondary
       node['gitlab']['geo_secondary'].to_h.keys.select { |k| k.start_with?('db_') }
     end
 
+    def parse_geo_secondary_db_host
+      return unless geo_secondary_enabled? && geo_database_enabled?
+
+      db_host = Gitlab['gitlab_rails']['databases']['geo']['db_host']
+      if db_host&.include?(',')
+        Gitlab['gitlab_rails']['databases']['geo']['db_host'] = db_host.split(',')[0]
+        warning = [
+          "Received multiple geo_secondary['db_host'] values: #{db_host.to_json}.",
+          "First listen_address '#{Gitlab['gitlab_rails']['databases']['geo']['db_host']}' will be used."
+        ].join("\n  ")
+        warn(warning)
+      end
+
+      # In case no other setting was provided for db_host,
+      # we use the socket directory
+      Gitlab['gitlab_rails']['databases']['geo']['db_host'] ||= Gitlab['geo_postgresql']['unix_socket_directory']
+    end
+
     def geo_database_enabled?
-      Gitlab['gitlab_rails']['databases']['geo']['enable'] == true
+      Gitlab['gitlab_rails'].dig('databases', 'geo', 'enable') == true
     end
   end
 end
