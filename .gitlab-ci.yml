@@ -64,7 +64,7 @@ variables:
   BUNDLER_VERSION: "2.4.13"
   # NOTE: When `NEXT_RUBY_VERSION` is updated, flip
   # `USE_NEXT_RUBY_VERSION_IN_*` variables to false to avoid surprises.
-  NEXT_RUBY_VERSION: "3.1.4"
+  NEXT_RUBY_VERSION: "3.0.6"
   GET_GEO_TAG: "0.7.1"
   CANONICAL_PROJECT_PATH: 'gitlab-org/omnibus-gitlab'
   SECURITY_PROJECT_PATH: 'gitlab-org/security/omnibus-gitlab'
