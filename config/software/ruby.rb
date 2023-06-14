@@ -28,7 +28,7 @@ current_ruby_version = '3.0.6'
 
 # NOTE: When this value is updated, flip `USE_NEXT_RUBY_VERSION_IN_*` variable
 # to false to avoid surprises.
-next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.0.6'
+next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.1.4'
 
 # MRs targeting stable branches should use current Ruby version and ignore next
 # Ruby version. Also, we provide `USE_OLD_RUBY_VERSION` variable to force usage
@@ -45,7 +45,7 @@ elsif (Build::Check.on_regular_branch? && !Build::Check.is_nightly?) || (Build::
   default_version next_ruby_version
 # Once feature branches and nightlies have switched to newer Ruby version and
 # we are ready to switch auto-deploy releases to GitLab.com to the new
-# version, flipe the `USE_NEXT_RUBY_VERSION_IN_AUTODEPLOY` to `true`
+# version, flip the `USE_NEXT_RUBY_VERSION_IN_AUTODEPLOY` to `true`
 elsif Build::Check.is_auto_deploy_tag? && Gitlab::Util.get_env('USE_NEXT_RUBY_VERSION_IN_AUTODEPLOY') == "true"
   default_version next_ruby_version
 # Once we see new Ruby version running fine in GitLab.com, set new Ruby version
@@ -68,6 +68,7 @@ dependency 'jemalloc'
 
 version('2.7.8') { source sha256: 'c2dab63cbc8f2a05526108ad419efa63a67ed4074dbbcf9fc2b1ca664cb45ba0' }
 version('3.0.6') { source sha256: '6e6cbd490030d7910c0ff20edefab4294dfcd1046f0f8f47f78b597987ac683e' }
+version('3.1.4') { source sha256: 'a3d55879a0dfab1d7141fdf10d22a07dbf8e5cdc4415da1bde06127d5cc3c7b6' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
