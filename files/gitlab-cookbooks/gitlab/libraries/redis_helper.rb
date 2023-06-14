@@ -37,13 +37,15 @@ class RedisHelper
       uri = URI('unix:/')
       uri.path = redis_socket
     else
-      scheme = gitlab_rails['redis_ssl'] ? 'rediss:/' : 'redis:/'
-      uri = URI(scheme)
       params = redis_params(support_sentinel_groupname: support_sentinel_groupname)
-      # In case the password has non-alphanumeric passwords, be sure to encode it
-      params[2] = CGI.escape(params[2]) if params[2]
-      uri.host, uri.port, uri.password = params
-      uri.path = "/#{gitlab_rails['redis_database']}"
+
+      uri = build_redis_url(
+        ssl: gitlab_rails['redis_ssl'],
+        host: params[0],
+        port: params[1],
+        password: params[2],
+        path: "/#{gitlab_rails['redis_database']}"
+      )
     end
 
     uri
@@ -59,6 +61,37 @@ class RedisHelper
 
     raise "Both sentinel and cluster configurations are defined for #{instance}" unless sentinels.empty?
     raise "Cluster mode is not allowed for #{instance}" unless ALLOWED_REDIS_CLUSTER_INSTANCE.include?(instance)
+  end
+
+  def build_redis_url(ssl:, host:, port:, path:, password:)
+    scheme = ssl ? 'rediss:/' : 'redis:/'
+    uri = URI(scheme)
+    uri.host = host
+    uri.port = port
+    uri.path = path
+    # In case the password has non-alphanumeric passwords, be sure to encode it
+    uri.password = CGI.escape(password) if password
+
+    uri
+  end
+
+  def redis_sentinel_urls(sentinels_key)
+    gitlab_rails = @node['gitlab']['gitlab_rails']
+
+    sentinels = gitlab_rails[sentinels_key]
+
+    return [] unless sentinels
+
+    sentinels_password = gitlab_rails["#{sentinels_key}_password"]
+
+    sentinels.map do |sentinel|
+      build_redis_url(
+        ssl: sentinel['ssl'],
+        host: sentinel['host'],
+        port: sentinel['port'],
+        path: '',
+        password: sentinels_password)
+    end
   end
 
   def running_version

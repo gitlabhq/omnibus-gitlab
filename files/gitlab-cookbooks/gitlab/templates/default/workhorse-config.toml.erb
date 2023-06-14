@@ -17,7 +17,7 @@ trusted_cidrs_for_x_forwarded_for = <%= @trusted_cidrs_for_x_forwarded_for.to_js
 URL = "<%= @redis_url %>"
 Password = "<%= @password %>"
 <% else %>
-Sentinel = <%= @sentinels.map{ |sentinel| "tcp://#{sentinel['host']}:#{sentinel['port']}" }.to_s %>
+Sentinel = <%= @sentinels.to_json %>
 SentinelMaster = "<%= @sentinel_master %>"
 Password = "<%= @master_password %>"
 <% end %>

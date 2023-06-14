@@ -91,7 +91,7 @@ shutdown_timeout = node['gitlab']['gitlab_workhorse']['shutdown_timeout']
 _redis_host, _redis_port, redis_password = redis_helper.redis_params
 workhorse_keywatcher = node['gitlab']['gitlab_workhorse']['workhorse_keywatcher']
 redis_url = redis_helper.redis_url.to_s
-redis_sentinels = node['gitlab']['gitlab_rails']['redis_sentinels']
+redis_sentinel_urls = redis_helper.redis_sentinel_urls('redis_sentinels')
 redis_sentinel_master = node['redis']['master_name']
 redis_sentinel_master_password = node['redis']['master_password']
 config_file_path = File.join(working_dir, "config.toml")
@@ -110,7 +110,7 @@ template config_file_path do
     workhorse_keywatcher: workhorse_keywatcher,
     redis_url: redis_url,
     password: redis_password,
-    sentinels: redis_sentinels,
+    sentinels: redis_sentinel_urls,
     sentinel_master: redis_sentinel_master,
     shutdown_timeout: shutdown_timeout,
     master_password: redis_sentinel_master_password,
