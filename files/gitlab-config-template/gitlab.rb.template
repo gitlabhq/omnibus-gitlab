@@ -2474,7 +2474,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   },
 #   graceful_restart_timeout: '1m', # Grace time for a gitaly process to finish ongoing requests
 #   logging: {
-#     dir: "/var/log/gitlab/gitaly"
+#     dir: "/var/log/gitlab/gitaly",
 #     level: 'warn',
 #     format: 'json',
 #     sentry_dsn: 'https://<key>:<secret>@sentry.io/<project>',
