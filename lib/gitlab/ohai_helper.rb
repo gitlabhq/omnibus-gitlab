@@ -80,6 +80,8 @@ class OhaiHelper
         'buster'
       when /^11/
         'bullseye'
+      when /^12/
+        'bookworm'
       end
     end
 
