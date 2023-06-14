@@ -160,3 +160,6 @@ grafana:
 ncurses:
   remote: "git@dev.gitlab.org:omnibus-mirror/ncurses.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/ncurses.git"
+pgbouncer:
+  remote: "git@dev.gitlab.org:omnibus-mirror/pgbouncer.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/pgbouncer.git"
