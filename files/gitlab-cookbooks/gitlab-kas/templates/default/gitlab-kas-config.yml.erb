@@ -58,6 +58,9 @@ redis:
     <%- @redis_sentinels.each do |sentinel| %>
       - '<%= sentinel['host'] %>:<%= sentinel['port'] || @redis_default_port %>'
     <%- end %>
+    <%- if @redis_sentinels_password_file %>
+    sentinel_password_file: <%= @redis_sentinels_password_file %>
+    <%- end %>
   <%- end %>
 api:
   listen:

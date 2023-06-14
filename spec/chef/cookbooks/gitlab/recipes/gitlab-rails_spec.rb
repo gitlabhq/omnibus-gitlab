@@ -350,7 +350,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
           stub_gitlab_rb(gitlab_rails: {
                            redis_enable_client: false,
                            redis_actioncable_instance: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
-                           redis_actioncable_sentinels: [{ host: 'actioncable', port: '1234' }, { host: 'actioncable', port: '3456' }]
+                           redis_actioncable_sentinels: [{ host: 'actioncable', port: '1234' }, { host: 'actioncable', port: '3456' }],
+                           redis_actioncable_sentinels_password: 'some pass'
                          })
         end
 
@@ -363,9 +364,17 @@ RSpec.describe 'gitlab::gitlab-rails' do
             hash_including(
               redis_url: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
               redis_sentinels: [{ 'host' => 'actioncable', 'port' => '1234' }, { 'host' => 'actioncable', 'port' => '3456' }],
+              redis_sentinels_password: 'some pass',
               redis_enable_client: false
             )
           )
+
+          expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/cable.yml").with_content { |content|
+            generated_yml = YAML.safe_load(content)
+            expect(generated_yml.dig('production', 'url')).to eq("redis://:fakepass@fake.redis.actioncable.com:8888/2")
+            expect(generated_yml.dig('production', 'cluster')).to eq(nil)
+            expect(generated_yml.dig('production', 'sentinels')).to eq([{ "host" => 'actioncable', 'port' => 1234, 'password' => 'some pass' }, { 'host' => 'actioncable', 'port' => 3456, 'password' => 'some pass' }])
+          }
         end
       end
 
@@ -390,6 +399,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
             expect(chef_run).to create_templatesymlink("Create a redis.#{instance}.yml and create a symlink to Rails root").with_variables(
               redis_url: nil,
               redis_sentinels: [],
+              redis_sentinels_password: nil,
               redis_enable_client: false,
               cluster_nodes: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
               cluster_username: instance,
@@ -426,6 +436,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
             expect(chef_run).to create_templatesymlink("Create a redis.#{instance}.yml and create a symlink to Rails root").with_variables(
               redis_url: "redis://:fakepass@fake.redis.#{instance}.com:8888/2",
               redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
+              redis_sentinels_password: nil,
               redis_enable_client: false,
               cluster_nodes: [],
               cluster_username: nil,
@@ -442,6 +453,44 @@ RSpec.describe 'gitlab::gitlab-rails' do
             }
 
             expect(chef_run).not_to delete_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml")
+          end
+        end
+
+        context 'with Sentinel passwords' do
+          before do
+            stub_hash = { redis_enable_client: false }
+            redis_instances.each do |instance|
+              stub_hash["redis_#{instance}_instance"] = "redis://:fakepass@fake.redis.#{instance}.com:8888/2"
+              stub_hash["redis_#{instance}_sentinels"] = [{ host: instance, port: '1234' }, { host: instance, port: '3456' }]
+              stub_hash["redis_#{instance}_sentinels_password"] = 'sentinelpass'
+            end
+
+            stub_gitlab_rb(gitlab_rails: stub_hash)
+          end
+
+          it 'render separate config files' do
+            redis_instances.each do |instance|
+              expect(chef_run).to create_templatesymlink("Create a redis.#{instance}.yml and create a symlink to Rails root").with_variables(
+                redis_url: "redis://:fakepass@fake.redis.#{instance}.com:8888/2",
+                redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
+                redis_sentinels_password: 'sentinelpass',
+                redis_enable_client: false,
+                cluster_nodes: [],
+                cluster_username: nil,
+                cluster_password: nil
+              )
+
+              expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
+                generated_yml = YAML.safe_load(content)
+                expect(generated_yml.dig('production', 'url')).to eq("redis://:fakepass@fake.redis.#{instance}.com:8888/2")
+                expect(generated_yml.dig('production', 'sentinels')).to eq([{ "host" => instance, "port" => 1234, "password" => 'sentinelpass' }, { "host" => instance, "port" => 3456, "password" => 'sentinelpass' }])
+                expect(generated_yml.dig('production', 'cluster')).to eq(nil)
+                expect(generated_yml.dig('production', 'username')).to eq(nil)
+                expect(generated_yml.dig('production', 'password')).to eq(nil)
+              }
+
+              expect(chef_run).not_to delete_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml")
+            end
           end
         end
 

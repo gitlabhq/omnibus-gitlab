@@ -27,9 +27,14 @@ gitlab_kas_config_file = File.join(working_dir, 'gitlab-kas-config.yml')
 gitlab_kas_authentication_secret_file = File.join(working_dir, 'authentication_secret_file')
 gitlab_kas_private_api_authentication_secret_file = File.join(working_dir, 'private_api_authentication_secret_file')
 redis_host, redis_port, redis_password = redis_helper.redis_params
+redis_password_present = redis_password && !redis_password.empty?
 redis_sentinels = node['gitlab']['gitlab_rails']['redis_sentinels']
 redis_sentinels_master_name = node['redis']['master_name']
+redis_sentinels_password = node['gitlab']['gitlab_rails']['redis_sentinels_password']
+redis_sentinels_password_present = redis_sentinels_password && !redis_sentinels_password.empty?
+
 gitlab_kas_redis_password_file = File.join(working_dir, 'redis_password_file')
+gitlab_kas_redis_sentinels_password_file = File.join(working_dir, 'redis_sentinels_password_file')
 redis_default_port = URI::Redis::DEFAULT_PORT
 redis_network = redis_helper.redis_url.scheme == 'unix' ? 'unix' : 'tcp'
 redis_ssl = node['gitlab']['gitlab_rails']['redis_ssl']
@@ -99,7 +104,17 @@ file gitlab_kas_redis_password_file do
   group account_helper.gitlab_group
   mode '0640'
   notifies :restart, 'runit_service[gitlab-kas]'
-  only_if { redis_password && !redis_password.empty? }
+  only_if { redis_password_present }
+  sensitive true
+end
+
+file gitlab_kas_redis_sentinels_password_file do
+  content redis_sentinels_password
+  owner 'root'
+  group account_helper.gitlab_group
+  mode '0640'
+  notifies :restart, 'runit_service[gitlab-kas]'
+  only_if { redis_sentinels_password_present }
   sensitive true
 end
 
@@ -116,9 +131,10 @@ template gitlab_kas_config_file do
       redis_address: redis_address,
       redis_ssl: redis_ssl,
       redis_default_port: redis_default_port,
-      redis_password_file: redis_password ? gitlab_kas_redis_password_file : nil,
+      redis_password_file: redis_password_present ? gitlab_kas_redis_password_file : nil,
       redis_sentinels_master_name: redis_sentinels_master_name,
-      redis_sentinels: redis_sentinels
+      redis_sentinels: redis_sentinels,
+      redis_sentinels_password_file: redis_sentinels_password_present ? gitlab_kas_redis_sentinels_password_file : nil
     )
   )
   notifies :restart, 'runit_service[gitlab-kas]'

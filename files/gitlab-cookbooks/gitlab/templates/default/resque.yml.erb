@@ -19,6 +19,7 @@ production:
     -
       host: <%= sentinel['host'] %>
       port: <%= sentinel['port'] %>
+      <%- if @redis_sentinels_password %>password: "<%= @redis_sentinels_password %>"<% end %>
     <% end %>
   <% end %>
   <% end %>

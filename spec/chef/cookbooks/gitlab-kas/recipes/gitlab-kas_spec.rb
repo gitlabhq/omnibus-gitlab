@@ -454,8 +454,8 @@ RSpec.describe 'gitlab-kas' do
     end
 
     context 'with sentinel' do
-      before do
-        stub_gitlab_rb(
+      let(:sentinel_params) do
+        {
           external_url: 'https://gitlab.example.com',
           gitlab_rails: {
             redis_sentinels: [
@@ -467,7 +467,11 @@ RSpec.describe 'gitlab-kas' do
           redis: {
             master_name: 'example-redis'
           }
-        )
+        }
+      end
+
+      before do
+        stub_gitlab_rb(sentinel_params)
       end
 
       it 'renders a single server configuration in to the kas config' do
@@ -488,6 +492,38 @@ RSpec.describe 'gitlab-kas' do
           )
           expect(kas_redis_cfg).not_to(include('server'))
         }
+      end
+
+      context 'when there is a Sentinel password' do
+        before do
+          sentinel_params[:gitlab_rails]['redis_sentinels_password'] = 'some pass'
+
+          stub_gitlab_rb(sentinel_params)
+        end
+
+        it 'writes sentinel_password_file into the kas config' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content { |content|
+            kas_redis_cfg = YAML.safe_load(content)['redis']
+
+            expect(kas_redis_cfg).to(
+              include(
+                'sentinel' => {
+                  'master_name' => 'example-redis',
+                  'addresses' => [
+                    'a:1',
+                    'b:2',
+                    'c:6379'
+                  ],
+                  'sentinel_password_file' => '/var/opt/gitlab/gitlab-kas/redis_sentinels_password_file'
+                }
+              )
+            )
+          }
+        end
+
+        it 'renders the password file' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/redis_sentinels_password_file').with_content('some pass')
+        end
       end
     end
   end

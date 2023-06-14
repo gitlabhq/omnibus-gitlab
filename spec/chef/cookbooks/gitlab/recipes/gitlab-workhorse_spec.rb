@@ -553,7 +553,7 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     end
 
     it 'should generate config file with the specified values' do
-      content = 'Sentinel = ["tcp://127.0.0.1:2637", "tcp://127.0.8.1:1234"]'
+      content = 'Sentinel = ["redis://127.0.0.1:2637","redis://127.0.8.1:1234"]'
       content_url = 'URL ='
       content_sentinel_master = 'SentinelMaster = "gitlab-redis"'
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content)
@@ -579,7 +579,36 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     end
 
     it 'should generate config file with the specified values' do
-      content = 'Sentinel = ["tcp://127.0.0.1:26379", "tcp://127.0.8.1:12345"]'
+      content = 'Sentinel = ["redis://127.0.0.1:26379","redis://127.0.8.1:12345"]'
+      content_sentinel_master = 'SentinelMaster = "examplemaster"'
+      content_sentinel_password = 'Password = "examplepassword"'
+      content_url = 'URL ='
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_master)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_password)
+      expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
+    end
+  end
+
+  context 'with Sentinels password specified' do
+    before do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          redis_sentinels: [
+            { 'host' => '127.0.0.1', 'port' => 26379 },
+            { 'host' => '127.0.8.1', 'port' => 12345 }
+          ],
+          redis_sentinels_password: 'some pass'
+        },
+        redis: {
+          master_name: 'examplemaster',
+          master_password: 'examplepassword'
+        }
+      )
+    end
+
+    it 'should generate config file with the specified values' do
+      content = 'Sentinel = ["redis://:some+pass@127.0.0.1:26379","redis://:some+pass@127.0.8.1:12345"]'
       content_sentinel_master = 'SentinelMaster = "examplemaster"'
       content_sentinel_password = 'Password = "examplepassword"'
       content_url = 'URL ='
