@@ -8,11 +8,11 @@ sudo debconf-set-selections <<< 'postfix postfix/main_mailer_type string "Intern
 sudo apt-get install -y curl openssh-server ca-certificates postfix libatomic1
 curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
 
-# Downloading package from S3 bucket
-curl -o gitlab.deb "$DOWNLOAD_URL"
+# Downloading package from CI artifact
+wget --quiet --header "JOB-TOKEN: ${CI_JOB_TOKEN}" ${DOWNLOAD_URL} -O /tmp/gitlab.deb
 # Explicitly passing EXTERNAL_URL to prevent automatic EC2 IP detection.
-sudo EXTERNAL_URL="http://gitlab.example.com" dpkg -i gitlab.deb
-sudo rm gitlab.deb
+sudo EXTERNAL_URL="http://gitlab.example.com" dpkg -i /tmp/gitlab.deb
+sudo rm /tmp/gitlab.deb
 
 # Set install type to aws
 echo "gitlab-aws-ami" | sudo tee /opt/gitlab/embedded/service/gitlab-rails/INSTALLATION_TYPE > /dev/null

@@ -14,6 +14,11 @@ variable "download_url" {
   type = string
 }
 
+# ci_job_token is the token used to download the package from CI artifacts
+variable "ci_job_token" {
+  type = string
+}
+
 # license_file, somewhat of a misnomer, is the contents of the license to
 # install on the image. Due to the size of the license contents, it is usually
 # better to use a shell variable to hold the contents and then use the variable
@@ -117,7 +122,7 @@ build {
   }
 
   provisioner "shell" {
-    environment_vars = ["DOWNLOAD_URL=${var.download_url}", "GITLAB_LICENSE_FILE=${var.license_file}"]
+    environment_vars = ["DOWNLOAD_URL=${var.download_url}", "GITLAB_LICENSE_FILE=${var.license_file}", "CI_JOB_TOKEN=${var.ci_job_token}"]
     script           = "update-script-ee-premium.sh"
   }
 
