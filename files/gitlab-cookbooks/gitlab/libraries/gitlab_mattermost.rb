@@ -17,6 +17,7 @@
 
 require_relative 'nginx.rb'
 require_relative '../../package/libraries/deprecations'
+require_relative '../../package/libraries/helpers/logging_helper'
 require_relative '../../letsencrypt/libraries/helper'
 
 module GitlabMattermost
@@ -24,6 +25,7 @@ module GitlabMattermost
     def parse_variables
       parse_mattermost_external_url
       parse_gitlab_mattermost
+      parse_automatic_oauth_registration
     end
 
     def parse_secrets
@@ -91,6 +93,19 @@ module GitlabMattermost
       return unless Gitlab['mattermost']['enable']
 
       Gitlab['mattermost_nginx']['enable'] = true if Gitlab['mattermost_nginx']['enable'].nil?
+    end
+
+    def parse_automatic_oauth_registration
+      # If Mattermost isn't enabled, do nothing.
+      return unless Gitlab['mattermost']['enable']
+
+      # If writing to gitlab-secrets.json file is not explicitly disabled, do
+      # nothing.
+      return if Gitlab['package']['generate_secrets_json_file'] != false
+
+      Gitlab['mattermost']['register_as_oauth_app'] = false
+
+      LoggingHelper.warning("Writing secrets to `gitlab-secrets.json` file is disabled. Hence, not automatically registering Mattermost as an Oauth App. So, GitLab SSO will not be available as a login option.")
     end
   end
 end

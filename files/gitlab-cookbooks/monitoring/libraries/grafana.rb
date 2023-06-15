@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+require_relative '../../package/libraries/helpers/logging_helper'
+
 module Grafana
   class << self
     def parse_secrets
@@ -30,6 +32,7 @@ module Grafana
     def parse_variables
       disable_unless_forced
       parse_grafana_datasources
+      parse_automatic_oauth_registration
     end
 
     def disable_unless_forced
@@ -62,6 +65,19 @@ module Grafana
       datasources = user_config['datasources'] || default_datasources
 
       Gitlab['grafana']['datasources'] = datasources
+    end
+
+    def parse_automatic_oauth_registration
+      # If Grafana isn't enabled, do nothing.
+      return unless Gitlab['grafana']['enable'] && Gitlab['grafana']['enable_deprecated_service']
+
+      # If writing to gitlab-secrets.json file is not explicitly disabled, do
+      # nothing.
+      return if Gitlab['package']['generate_secrets_json_file'] != false
+
+      Gitlab['grafana']['register_as_oauth_app'] = false
+
+      LoggingHelper.warning("Writing secrets to `gitlab-secrets.json` file is disabled. Hence, not automatically registering Grafana as an Oauth App. So, GitLab SSO will not be available as a login option.")
     end
   end
 end

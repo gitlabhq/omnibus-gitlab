@@ -53,10 +53,37 @@ module GitlabRails
       parse_repository_storage
     end
 
-    # rubocop:disable Metrics/AbcSize
-    # rubocop:disable Metrics/CyclomaticComplexity
-    # rubocop:disable Metrics/PerceivedComplexity
+    def transform_secrets
+      # Transform legacy key names to new key names
+      Gitlab['gitlab_rails']['db_key_base'] ||= Gitlab['gitlab_ci']['db_key_base'] # Changed in 8.11
+      Gitlab['gitlab_rails']['secret_key_base'] ||= Gitlab['gitlab_ci']['db_key_base'] # Changed in 8.11
+      Gitlab['gitlab_rails']['otp_key_base'] ||= Gitlab['gitlab_rails']['secret_token']
+      Gitlab['gitlab_rails']['openid_connect_signing_key'] ||= Gitlab['gitlab_rails']['jws_private_key'] # Changed in 10.1
+
+      # Environment variable gets priority over gitlab.rb setting
+      Gitlab['gitlab_rails']['initial_root_password'] = ENV['GITLAB_ROOT_PASSWORD'] || Gitlab['gitlab_rails']['initial_root_password']
+    end
+
     def parse_secrets
+      transform_secrets
+
+      # Note: If you add another secret to generate here make sure it gets written to disk in SecretsHelper.write_to_gitlab_secrets
+      Gitlab['gitlab_rails']['db_key_base'] ||= SecretsHelper.generate_hex(64)
+      Gitlab['gitlab_rails']['secret_key_base'] ||= SecretsHelper.generate_hex(64)
+      Gitlab['gitlab_rails']['otp_key_base'] ||= SecretsHelper.generate_hex(64)
+      Gitlab['gitlab_rails']['encrypted_settings_key_base'] ||= SecretsHelper.generate_hex(64)
+      Gitlab['gitlab_rails']['openid_connect_signing_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
+      Gitlab['gitlab_rails']['ci_jwt_signing_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
+
+      return unless Gitlab['gitlab_rails']['initial_root_password'].nil?
+
+      Gitlab['gitlab_rails']['initial_root_password'] = SecretsHelper.generate_base64(32)
+      Gitlab['gitlab_rails']['store_initial_root_password'] = true if Gitlab['gitlab_rails']['store_initial_root_password'].nil?
+    end
+
+    def validate_secrets
+      transform_secrets
+
       # Blow up when the existing configuration is ambiguous, so we don't accidentally throw away important secrets
       ci_db_key_base = Gitlab['gitlab_ci']['db_key_base']
       rails_db_key_base = Gitlab['gitlab_rails']['db_key_base']
@@ -71,41 +98,17 @@ module GitlabRails
         raise message.join("\n\n")
       end
 
-      # Transform legacy key names to new key names
-      Gitlab['gitlab_rails']['db_key_base'] ||= Gitlab['gitlab_ci']['db_key_base'] # Changed in 8.11
-      Gitlab['gitlab_rails']['secret_key_base'] ||= Gitlab['gitlab_ci']['db_key_base'] # Changed in 8.11
-      Gitlab['gitlab_rails']['otp_key_base'] ||= Gitlab['gitlab_rails']['secret_token']
-      Gitlab['gitlab_rails']['openid_connect_signing_key'] ||= Gitlab['gitlab_rails']['jws_private_key'] # Changed in 10.1
+      raise 'initial_root_password: Length is too short, minimum is 8 characters' if Gitlab['gitlab_rails']['initial_root_password'] && Gitlab['gitlab_rails']['initial_root_password'].length < 8
 
-      # Note: If you add another secret to generate here make sure it gets written to disk in SecretsHelper.write_to_gitlab_secrets
-      Gitlab['gitlab_rails']['db_key_base'] ||= SecretsHelper.generate_hex(64)
-      Gitlab['gitlab_rails']['secret_key_base'] ||= SecretsHelper.generate_hex(64)
-      Gitlab['gitlab_rails']['otp_key_base'] ||= SecretsHelper.generate_hex(64)
-      Gitlab['gitlab_rails']['encrypted_settings_key_base'] ||= SecretsHelper.generate_hex(64)
-      Gitlab['gitlab_rails']['openid_connect_signing_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
+      return unless Gitlab['gitlab_rails']['ci_jwt_signing_key']
 
-      Gitlab['gitlab_rails']['initial_root_password'] = ENV['GITLAB_ROOT_PASSWORD'] || Gitlab['gitlab_rails']['initial_root_password']
-      if Gitlab['gitlab_rails']['initial_root_password'].nil?
-        Gitlab['gitlab_rails']['initial_root_password'] = SecretsHelper.generate_base64(32)
-        Gitlab['gitlab_rails']['store_initial_root_password'] = true if Gitlab['gitlab_rails']['store_initial_root_password'].nil?
-      elsif Gitlab['gitlab_rails']['initial_root_password'].length < 8
-        raise 'initial_root_password: Length is too short, minimum is 8 characters'
-      end
-
-      if Gitlab['gitlab_rails']['ci_jwt_signing_key']
-        begin
-          key = OpenSSL::PKey::RSA.new(Gitlab['gitlab_rails']['ci_jwt_signing_key'])
-          raise 'ci_jwt_signing_key: The provided key is not private RSA key' unless key.private?
-        rescue OpenSSL::PKey::RSAError
-          raise 'ci_jwt_signing_key: The provided key is not valid RSA key'
-        end
-      else
-        Gitlab['gitlab_rails']['ci_jwt_signing_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
+      begin
+        key = OpenSSL::PKey::RSA.new(Gitlab['gitlab_rails']['ci_jwt_signing_key'])
+        raise 'ci_jwt_signing_key: The provided key is not private RSA key' unless key.private?
+      rescue OpenSSL::PKey::RSAError
+        raise 'ci_jwt_signing_key: The provided key is not valid RSA key'
       end
     end
-    # rubocop:enable Metrics/AbcSize
-    # rubocop:enable Metrics/CyclomaticComplexity
-    # rubocop:enable Metrics/PerceivedComplexity
 
     def parse_external_url
       return unless Gitlab['external_url']

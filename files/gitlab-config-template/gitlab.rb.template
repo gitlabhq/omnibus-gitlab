@@ -2708,6 +2708,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Note: We do not recommend changing these values unless absolutely necessary
 # package['systemd_after'] = 'multi-user.target'
 # package['systemd_wanted_by'] = 'multi-user.target'
+
+##! Settings to control secret generation and storage
+##! Note: We do not recommend changing these values unless absolutely necessary
+##! Set to false to only parse secrets from `gitlab-secrets.json` file but not generate them.
+# package['generate_default_secrets'] = true
+##! Set to false to prevent creating `gitlab-secrets.json` file
+# package['generate_secrets_json_file'] = true
 ################################################################################
 ################################################################################
 ##                  Configuration Settings for GitLab EE only                 ##

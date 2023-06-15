@@ -17,6 +17,7 @@
 
 require_relative '../../gitlab/libraries/helpers/authorizer_helper'
 require_relative '../../package/libraries/helpers/shell_out_helper'
+require_relative '../../package/libraries/helpers/logging_helper'
 
 module GitlabPages
   class << self
@@ -27,6 +28,7 @@ module GitlabPages
       parse_pages_external_url
       parse_gitlab_pages_daemon
       parse_secrets
+      parse_automatic_oauth_registration
     end
 
     def parse_pages_external_url
@@ -109,15 +111,28 @@ module GitlabPages
       Gitlab['gitlab_pages']['auth_secret'] ||= SecretsHelper.generate_hex(64) if Gitlab['gitlab_pages']['access_control']
       Gitlab['gitlab_pages']['gitlab_id'] ||= SecretsHelper.generate_urlsafe_base64
       Gitlab['gitlab_pages']['gitlab_secret'] ||= SecretsHelper.generate_urlsafe_base64
+      Gitlab['gitlab_pages']['api_secret_key'] ||= Base64.strict_encode64(SecureRandom.random_bytes(32))
+    end
+
+    def validate_secrets
+      return unless Gitlab['gitlab_pages']['api_secret_key']
 
       # Pages and GitLab expects exactly 32 bytes, encoded with base64
-      if Gitlab['gitlab_pages']['api_secret_key']
-        bytes = Base64.strict_decode64(Gitlab['gitlab_pages']['api_secret_key'])
-        raise "gitlab_pages['api_secret_key'] should be exactly 32 bytes" if bytes.length != 32
-      else
-        bytes = SecureRandom.random_bytes(32)
-        Gitlab['gitlab_pages']['api_secret_key'] = Base64.strict_encode64(bytes)
-      end
+      bytes = Base64.strict_decode64(Gitlab['gitlab_pages']['api_secret_key'])
+      raise "gitlab_pages['api_secret_key'] should be exactly 32 bytes" if bytes.length != 32
+    end
+
+    def parse_automatic_oauth_registration
+      # If GitLab Pages isn't enabled, do nothing.
+      return unless Gitlab['gitlab_pages']['enable']
+
+      # If writing to gitlab-secrets.json file is not explicitly disabled, do
+      # nothing.
+      return if Gitlab['package']['generate_secrets_json_file'] != false
+
+      Gitlab['gitlab_pages']['register_as_oauth_app'] = false
+
+      LoggingHelper.warning("Writing secrets to `gitlab-secrets.json` file is disabled. Hence, not automatically registering GitLab Pages as an Oauth App. So, GitLab SSO will not be available as a login option.")
     end
   end
 end

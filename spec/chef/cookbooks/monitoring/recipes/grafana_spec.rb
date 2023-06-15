@@ -120,6 +120,49 @@ RSpec.describe 'monitoring::grafana' do
       expect(chef_run).to render_file('/var/opt/gitlab/grafana/provisioning/datasources/gitlab_datasources.yml')
         .with_content(default_datasources_yml_output)
     end
+
+    describe 'registering as an OAuth app with GitLab' do
+      context 'by default Grafana is enabled' do
+        before do
+          stub_gitlab_rb(
+            grafana: {
+              enable: true,
+              enable_deprecated_service: true
+            }
+          )
+        end
+
+        it 'registers as an oauth app with GitLab' do
+          expect(chef_run).to run_ruby_block('authorize Grafana with GitLab')
+        end
+      end
+
+      context 'when generating gitlab-secrets.json file is disabled' do
+        before do
+          stub_gitlab_rb(
+            grafana: {
+              enable: true,
+              enable_deprecated_service: true
+            },
+            package: {
+              generate_secrets_json_file: false
+            }
+          )
+
+          allow(LoggingHelper).to receive(:warning).and_call_original
+        end
+
+        it 'does not register as an oauth app with GitLab' do
+          expect(chef_run).not_to run_ruby_block('authorize Grafana with gitlab')
+        end
+
+        it 'displays a warning about disabling automatic oauth registration' do
+          expect(LoggingHelper).to receive(:warning).with(/not automatically registering Grafana as an Oauth App/)
+
+          chef_run
+        end
+      end
+    end
   end
 
   context 'when grafana is enabled (forced) and prometheus is disabled' do
@@ -154,25 +197,6 @@ RSpec.describe 'monitoring::grafana' do
       expect(chef_run).to render_file('/opt/gitlab/sv/grafana/log/run')
         .with_content(/svlogd -tt foo/)
     end
-  end
-
-  it 'authorizes Grafana with gitlab' do
-    stub_gitlab_rb(
-      external_url: 'http://gitlab.example.com',
-      grafana: {
-        enable: true,
-        enable_deprecated_service: true
-      }
-    )
-
-    allow(GrafanaHelper).to receive(:authorize_with_gitlab)
-
-    expect(chef_run).to run_ruby_block('authorize Grafana with GitLab')
-      .at_converge_time
-    expect(GrafanaHelper).to receive(:authorize_with_gitlab)
-      .with 'http://gitlab.example.com'
-
-    chef_run.ruby_block('authorize Grafana with GitLab').block.call
   end
 
   context 'with user provided settings' do

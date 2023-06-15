@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+require_relative '../../package/libraries/helpers/logging_helper'
+
 class LetsEncrypt
   class << self
     def parse_variables
@@ -27,6 +29,11 @@ class LetsEncrypt
       # default for letsencrypt.enable is nil.  If a user has specified anything
       # else leave it alone.
       return unless Gitlab['letsencrypt']['enable'].nil?
+
+      if should_auto_enable? && Gitlab['package']['generate_secrets_json_file'] == false
+        LoggingHelper.warning("Writing secrets to `gitlab-secrets.json` file is disabled. Hence, not automatically enabling Let's Encrypt integration.")
+        return
+      end
 
       # We get to make a 'guess' as to if we should enable based on other parsed
       # values
