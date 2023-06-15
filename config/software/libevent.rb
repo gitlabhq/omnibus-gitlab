@@ -15,7 +15,7 @@
 #
 
 name 'libevent'
-version = Gitlab::Version.new('libevent', 'release-2.1.8-stable')
+version = Gitlab::Version.new('libevent', 'release-2.1.12-stable')
 
 default_version version.print(false)
 display_version version.print(false).delete_prefix('release-').delete_suffix('-stable')
