@@ -147,6 +147,28 @@ RSpec.describe 'gitlab::gitlab-pages' do
           }
         end
       end
+
+      context 'when generating gitlab-secrets.json file is disabled' do
+        before do
+          stub_gitlab_rb(
+            package: {
+              generate_secrets_json_file: false
+            }
+          )
+
+          allow(LoggingHelper).to receive(:warning).and_call_original
+        end
+
+        it 'does not register as an oauth app with GitLab' do
+          expect(chef_run).not_to run_ruby_block('authorize pages with gitlab')
+        end
+
+        it 'displays a warning about disabling automatic oauth registration' do
+          expect(LoggingHelper).to receive(:warning).with(/not automatically registering GitLab Pages as an Oauth App/)
+
+          chef_run
+        end
+      end
     end
 
     context 'with custom port' do

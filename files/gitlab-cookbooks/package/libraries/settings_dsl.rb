@@ -202,14 +202,29 @@ module SettingsDSL
   def generate_secrets(node_name)
     # guards against creating secrets on non-bootstrap node
     SecretsHelper.read_gitlab_secrets
+    generate_default_secrets = Gitlab['package']['generate_default_secrets'] != false
 
+    Chef::Log.info("Generating default secrets") if generate_default_secrets
     # Parse secrets using the handlers
     sorted_settings.each do |_key, value|
       handler = value.handler
-      handler.parse_secrets if handler.respond_to?(:parse_secrets)
+      handler.parse_secrets if handler.respond_to?(:parse_secrets) && generate_default_secrets
+      handler.validate_secrets if handler.respond_to?(:validate_secrets)
     end
 
-    SecretsHelper.write_to_gitlab_secrets
+    if Gitlab['package']['generate_secrets_json_file'] == false
+      return unless generate_default_secrets
+
+      warning_message = <<~EOS
+        You've enabled generating default secrets but have disabled writing them to gitlab-secrets.json file.
+        This results in secrets not persisting across `gitlab-ctl reconfigure` runs and can cause issues with functionality.
+      EOS
+
+      LoggingHelper.warning(warning_message)
+    else
+      Chef::Log.info("Generating gitlab-secrets.json file")
+      SecretsHelper.write_to_gitlab_secrets
+    end
   end
 
   def generate_config(node_name)

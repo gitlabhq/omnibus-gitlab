@@ -26,6 +26,9 @@ default['package']['systemd_tasks_max'] = 4915
 default['package']['systemd_wanted_by'] = 'multi-user.target'
 default['package']['systemd_after'] = 'multi-user.target'
 
+default['package']['generate_default_secrets'] = true
+default['package']['generate_secrets_json_file'] = true
+
 # We only want to generate the public attributes file on specific calls to Chef.
 # Normally, you will not want to change this
 default['package']['public_attributes'] = false
