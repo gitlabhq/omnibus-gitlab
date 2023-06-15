@@ -1,5 +1,7 @@
 # Test Report Generation in Omnibus-GitLab
 
+[[_TOC_]]
+
 The following three pipelines are created while generating the allure-report
 
 - Omnibus pipeline
@@ -87,3 +89,8 @@ subgraph QA flow in omnibus pipeline
         end
 end
 ```
+
+## Demo for Allure report & QA pipelines
+
+An in-depth video walkthrough of the pipeline and how to use Allure report
+is available [on YouTube](https://youtu.be/_0dM6KLdCpw).
