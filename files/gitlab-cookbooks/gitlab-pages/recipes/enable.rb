@@ -59,7 +59,7 @@ end
 ruby_block "re-populate GitLab Pages configuration options" do
   block do
     node.consume_attributes(
-      { 'gitlab_pages' => Gitlab.hyphenate_config_keys['gitlab_pages'] }
+      { 'gitlab_pages' => Gitlab.sanitized_config['gitlab_pages'] }
     )
   end
 end

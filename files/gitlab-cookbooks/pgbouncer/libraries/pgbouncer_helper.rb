@@ -45,7 +45,7 @@ class PgbouncerHelper < BaseHelper
   end
 
   def create_pgbouncer_user?(db)
-    node_attribute_key = SettingsDSL::Utils.sanitized_key(db)
+    node_attribute_key = SettingsDSL::Utils.node_attribute_key(db)
     # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
     # being split to their own dedicated cookbooks, and attributes are being moved from
     # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we

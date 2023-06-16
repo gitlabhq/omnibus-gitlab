@@ -114,7 +114,7 @@ end
 ruby_block "populate Grafana configuration options" do
   block do
     node.consume_attributes(
-      { 'monitoring' => { 'grafana' => Gitlab.hyphenate_config_keys['monitoring']['grafana'] } }
+      { 'monitoring' => { 'grafana' => Gitlab.sanitized_config['monitoring']['grafana'] } }
     )
   end
 end

@@ -123,7 +123,7 @@ include_recipe "package::sysctl"
   praefect
   gitlab-kas
 ).each do |service|
-  node_attribute_key = SettingsDSL::Utils.sanitized_key(service)
+  node_attribute_key = SettingsDSL::Utils.node_attribute_key(service)
   if node[node_attribute_key]['enable']
     include_recipe "#{service}::enable"
   else
@@ -161,7 +161,7 @@ end
   bootstrap
   storage-check
 ].each do |service|
-  node_attribute_key = SettingsDSL::Utils.sanitized_key(service)
+  node_attribute_key = SettingsDSL::Utils.node_attribute_key(service)
   if node["gitlab"][node_attribute_key]["enable"]
     include_recipe "gitlab::#{service}"
   else
@@ -176,12 +176,8 @@ end
   gitlab-kas
   letsencrypt
 ).each do |cookbook|
-  # `service_name` variable represents the key used to access the node
-  # attributes corresponding to the service. Will be in underscored or
-  # hyphenated form depending on whether it has been migrated to use the
-  # underscored form yet or not.
-  service_name = SettingsDSL::Utils.sanitized_key(cookbook)
-  if node[service_name]["enable"]
+  node_attribute_key = SettingsDSL::Utils.node_attribute_key(cookbook)
+  if node[node_attribute_key]["enable"]
     include_recipe "#{cookbook}::enable"
   else
     include_recipe "#{cookbook}::disable"

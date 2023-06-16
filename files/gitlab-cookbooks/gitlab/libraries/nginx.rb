@@ -48,12 +48,12 @@ module Nginx
         # This conditional is required until all services are extracted to
         # their own cookbook. Mattermost exists directly on node while
         # others exists on node['gitlab']
-        service_name_key = SettingsDSL::Utils.sanitized_key(right.first)
+        node_attribute_key = SettingsDSL::Utils.node_attribute_key(right.first)
         service_attribute_key = right.last
-        default_set_gitlab_port = if Gitlab['node']['gitlab'].key?(service_name_key)
-                                    Gitlab['node']['gitlab'][service_name_key][service_attribute_key]
+        default_set_gitlab_port = if Gitlab['node']['gitlab'].key?(node_attribute_key)
+                                    Gitlab['node']['gitlab'][node_attribute_key][service_attribute_key]
                                   else
-                                    Gitlab['node'][service_name_key][service_attribute_key]
+                                    Gitlab['node'][node_attribute_key][service_attribute_key]
                                   end
         user_set_gitlab_port = Gitlab[right.first][right.last]
 
@@ -75,7 +75,7 @@ module Nginx
 
     def parse_proxy_headers(app, ssl, allow_other_schemes = false)
       values_from_gitlab_rb = Gitlab[app]['proxy_set_headers']
-      dashed_app = SettingsDSL::Utils.sanitized_key(app)
+      dashed_app = SettingsDSL::Utils.node_attribute_key(app)
       default_from_attributes = Gitlab['node']['gitlab'][dashed_app]['proxy_set_headers'].to_hash
 
       default_from_attributes['X-Forwarded-Ssl'] = 'on' if ssl

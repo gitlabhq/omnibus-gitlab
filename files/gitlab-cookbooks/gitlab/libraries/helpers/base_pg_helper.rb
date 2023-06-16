@@ -166,7 +166,7 @@ class BasePgHelper < BaseHelper
   end
 
   def node_attributes
-    node_attribute_key = SettingsDSL::Utils.sanitized_key(service_name)
+    node_attribute_key = SettingsDSL::Utils.node_attribute_key(service_name)
     return node['gitlab'][node_attribute_key] if node['gitlab'].key?(node_attribute_key)
 
     node[node_attribute_key]
@@ -203,7 +203,7 @@ class BasePgHelper < BaseHelper
   end
 
   def bootstrapped?
-    node_attribute_key = SettingsDSL::Utils.sanitized_key(service_name)
+    node_attribute_key = SettingsDSL::Utils.node_attribute_key(service_name)
 
     # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
     # being split to their own dedicated cookbooks, and attributes are being moved from
@@ -246,7 +246,7 @@ class BasePgHelper < BaseHelper
   end
 
   def database_version
-    node_attribute_key = SettingsDSL::Utils.sanitized_key(service_name)
+    node_attribute_key = SettingsDSL::Utils.node_attribute_key(service_name)
 
     # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
     # being split to their own dedicated cookbooks, and attributes are being moved from

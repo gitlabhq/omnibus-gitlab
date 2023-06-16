@@ -65,7 +65,7 @@ class LogfilesHelper < AccountHelper
 
   def service_parent(service)
     available_settings = Gitlab.settings
-    setting_name = SettingsDSL::Utils.underscored_form(service)
+    setting_name = SettingsDSL::Utils.node_attribute_key(service)
 
     raise "Service #{service} is not a valid service." unless available_settings.include?(setting_name)
 
@@ -82,7 +82,7 @@ class LogfilesHelper < AccountHelper
         node['spamcheck']['classifier']
       end
     else
-      node_attribute_key = SettingsDSL::Utils.sanitized_key(service)
+      node_attribute_key = SettingsDSL::Utils.node_attribute_key(service)
       if parent = service_parent(service)
         node[parent][node_attribute_key]
       else
@@ -165,7 +165,9 @@ class LogfilesHelper < AccountHelper
   end
 
   def logging_settings(service)
-    service = SettingsDSL::Utils.hyphenated_form(service)
+    # Ensure we are using the hyphenated form of the service name as that is
+    # expected by various methods being called here
+    service = SettingsDSL::Utils.service_name(service)
     {
       log_directory: logdir(service),
       log_directory_owner: logdir_owner(service),

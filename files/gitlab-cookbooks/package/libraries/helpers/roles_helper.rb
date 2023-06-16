@@ -24,7 +24,7 @@ module RolesHelper
 
       # convert hyphens to underscores to avoid user errors
       # split or space or comma (allow both to avoid user errors)
-      active        = [Gitlab['roles']].flatten.map { |role| SettingsDSL::Utils.underscored_form(role) }
+      active        = [Gitlab['roles']].flatten.map { |role| SettingsDSL::Utils.node_attribute_key(role) }
       valid_roles   = Gitlab.available_roles.keys.map { |key| "#{key}_role" }
       invalid_roles = active - valid_roles
 

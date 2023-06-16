@@ -24,7 +24,7 @@ include_recipe 'gitlab::default'
   geo-postgresql
   geo-logcursor
 ].each do |service|
-  node_attribute_key = SettingsDSL::Utils.sanitized_key(service)
+  node_attribute_key = SettingsDSL::Utils.node_attribute_key(service)
   if node['gitlab'][node_attribute_key]['enable']
     include_recipe "gitlab-ee::#{service}"
   else

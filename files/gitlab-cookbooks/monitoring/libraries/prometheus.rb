@@ -26,7 +26,7 @@ require 'json'
 module Prometheus
   class << self
     def services
-      Services.find_by_group('monitoring').map { |name| SettingsDSL::Utils.sanitized_key(name) }
+      Services.find_by_group('monitoring').map { |name| SettingsDSL::Utils.node_attribute_key(name) }
     end
 
     def parse_variables
@@ -469,7 +469,7 @@ module Prometheus
           'consul_sd_configs' => [{ 'services' => ["#{exporter}-exporter"] }]
         }
       else
-        node_attribute_key = SettingsDSL::Utils.sanitized_key("#{exporter}-exporter")
+        node_attribute_key = SettingsDSL::Utils.node_attribute_key("#{exporter}-exporter")
         default_config = Gitlab['node']['monitoring'][node_attribute_key].to_hash
         user_config = Gitlab["#{exporter}_exporter"]
 
