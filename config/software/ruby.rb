@@ -105,16 +105,16 @@ build do
     # be fixed.
   end
 
-  # Enable custom patch created by ayufan that allows to count memory allocations
-  # per-thread. This is asked to be upstreamed as part of https://github.com/ruby/ruby/pull/3978
-  if version.start_with?('2.7')
-    patch source: 'thread-memory-allocations-2.7.patch', plevel: 1, env: env
-  elsif version.start_with?('3.0')
-    patch source: 'thread-memory-allocations-3.0.patch', plevel: 1, env: env
-  elsif version.start_with?('3.1')
-    patch source: 'thread-memory-allocations-3.1.patch', plevel: 1, env: env
-  elsif version.start_with?('3.2')
-    patch source: 'thread-memory-allocations-3.2.patch', plevel: 1, env: env
+  # Two patches:
+  # 1. Enable custom patch created by ayufan that allows to count memory allocations
+  #    per-thread. This is asked to be upstreamed as part of https://github.com/ruby/ruby/pull/3978
+  # 2. Backport Ruby upstream patch to fix seg faults in libxml2/Nokogiri: https://bugs.ruby-lang.org/issues/19580
+  #    This has been merged for Ruby 3.3 but not yet backported: https://github.com/ruby/ruby/pull/7663
+  patches = %w[thread-memory-allocations fix-ruby-xfree-for-libxml2]
+  ruby_version = Gem::Version.new(version).canonical_segments[0..1].join('.')
+
+  patches.each do |patch_name|
+    patch source: "#{patch_name}-#{ruby_version}.patch", plevel: 1, env: env
   end
 
   # copy_file_range() has been disabled on recent RedHat kernels:
