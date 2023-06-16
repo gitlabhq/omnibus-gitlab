@@ -165,7 +165,7 @@ generate-facts:
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
   script:
     - mkdir -p build_facts
-    - bundle exec omnibus manifest gitlab -l nothing 2> /dev/null > build_facts/version-manifest.json
+    - bundle exec omnibus manifest gitlab -l nothing > build_facts/version-manifest.json
     - bundle exec rake build:generate_facts
   artifacts:
     paths:
