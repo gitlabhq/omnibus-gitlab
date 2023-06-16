@@ -96,6 +96,14 @@ Debian-11-arm-check:
   extends: .apt-install
   tags:
   - docker-arm-builder
+Debian-12-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_12:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+Debian-12-arm-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+  tags:
+  - docker-arm-builder
 Raspberry-Pi-2-Buster-check:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
   extends:

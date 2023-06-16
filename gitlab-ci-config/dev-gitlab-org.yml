@@ -300,6 +300,14 @@ Debian-11-arm-branch:
   extends: .branch_template
   tags:
   - docker-arm-builder
+Debian-12-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_12:${BUILDER_IMAGE_REVISION}"
+  extends: .branch_template
+Debian-12-arm-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .branch_template
+  tags:
+  - docker-arm-builder
 Ubuntu-20.04-arm-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -595,6 +603,14 @@ Debian-11-arm:
   extends: .tag_template
   tags:
   - docker-arm-builder
+Debian-12:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_12:${BUILDER_IMAGE_REVISION}"
+  extends: .tag_template
+Debian-12-arm:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .tag_template
+  tags:
+  - docker-arm-builder
 Ubuntu-20.04-arm:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
@@ -721,6 +737,20 @@ Debian-11-arm-staging:
     - job: Debian-11-arm
       optional: true
     - job: Debian-11-arm-branch
+      optional: true
+Debian-12-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: Debian-12
+      optional: true
+    - job: Debian-12-branch
+      optional: true
+Debian-12-arm-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: Debian-12-arm
+      optional: true
+    - job: Debian-12-arm-branch
       optional: true
 Ubuntu-20.04-arm-staging:
   extends: .staging_upload_template
@@ -899,6 +929,14 @@ Debian-11-arm-release:
   extends: .production_release_template
   needs:
     - Debian-11-arm
+Debian-12-release:
+  extends: .production_release_template
+  needs:
+    - Debian-12
+Debian-12-arm-release:
+  extends: .production_release_template
+  needs:
+    - Debian-12-arm
 CentOS-7-release:
   extends: .production_release_template
   needs:
