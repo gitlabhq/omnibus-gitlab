@@ -17,7 +17,7 @@
 
 # Configure Prometheus Services
 Prometheus.services.each do |service|
-  cookbook_name = SettingsDSL::Utils.hyphenated_form(service)
+  cookbook_name = SettingsDSL::Utils.service_name(service)
   if node['monitoring'][service]['enable']
     include_recipe "monitoring::#{cookbook_name}"
   else

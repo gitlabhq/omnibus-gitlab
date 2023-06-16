@@ -56,19 +56,28 @@ now.
 
 #### Naming convention
 
-A service is referred to mainly in two scenarios - when accessing the Chef
-attributes corresponding to the service, and when referring to items such as
-the users, groups, and paths corresponding to the service. In the attribute names, we use
-underscores to differentiate words in the service name, while in other cases we
-use hyphens to differentiate them. For example, if we take GitLab Pages, the
-attributes are available as `Gitlab['gitlab_pages']` and `node['gitlab_pages']`
-while the default directories and paths might look like
-`/var/log/gitlab/gitlab-pages` and `/var/opt/gitlab/gitlab-pages`.
+A service is referred to mainly in three scenarios:
 
-NOTE:
-The migration of existing services to use the underscored form while
-accessing Chef attributes is underway. For current status, check the
-corresponding [issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6873).
+1. Accessing the Chef attributes corresponding to the service
+1. Referencing items such as users, groups, and paths corresponding to the
+   service
+1. Passing the service name to methods which look up on service properties
+   similar to the following examples:
+   - "Is the service enabled?"
+   - "Get the log ownership details corresponding to this service"
+   - "Generate runit configuration for this service"
+
+For the first case mentioned above, we use underscores to differentiate words in
+the service name. For the other two cases, we use hyphens to differentiate words
+in the service name. Since the configuration is mainly used as a Ruby object,
+using underscores instead of hyphens is more flexible (for example, underscores
+make it cleaner to use symbols in configuration hashes).
+
+For example, if we take GitLab Pages, the attributes are available as
+`Gitlab['gitlab_pages']` and `node['gitlab_pages']` while the default
+directories and paths might look like `/var/log/gitlab/gitlab-pages` and
+`/var/opt/gitlab/gitlab-pages`. Similarly, method calls will look like
+`service_enabled?("gitlab-pages")`.
 
 ### Create a configuration Mash for your service
 

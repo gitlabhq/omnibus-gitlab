@@ -3,13 +3,6 @@
 require 'chef_helper'
 require 'time'
 
-module SettingsDSL
-  original_skip_hyphenation_services = SettingsDSL::SERVICES_SKIP_HYPHENATION.dup
-  SettingsDSL.send(:remove_const, :SERVICES_SKIP_HYPHENATION)
-
-  SERVICES_SKIP_HYPHENATION = original_skip_hyphenation_services + %w[old_service new_service another_service]
-end
-
 RSpec.describe OmnibusHelper do
   cached(:chef_run) { converge_config }
   let(:node) { chef_run.node }

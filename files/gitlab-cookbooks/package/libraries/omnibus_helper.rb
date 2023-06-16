@@ -26,7 +26,7 @@ class OmnibusHelper
   end
 
   def service_enabled?(service_name)
-    node_attribute_key = SettingsDSL::Utils.sanitized_key(service_name)
+    node_attribute_key = SettingsDSL::Utils.node_attribute_key(service_name)
     # As part of https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2078 services are
     # being split to their own dedicated cookbooks, and attributes are being moved from
     # node['gitlab'][service_name] to node[service_name]. Until they've been moved, we

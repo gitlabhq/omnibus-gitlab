@@ -233,7 +233,7 @@ module Services
     # @param [String] service_name
     # @return [Array]
     def service_attribute_path(service_name)
-      service = SettingsDSL::Utils.sanitized_key(service_name)
+      service = SettingsDSL::Utils.node_attribute_key(service_name)
 
       return ['monitoring', service] if Gitlab[:node]['monitoring']&.attribute?(service)
       return [service] if Gitlab[:node].attribute?(service)

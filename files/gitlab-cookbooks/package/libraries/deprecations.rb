@@ -542,11 +542,11 @@ module Gitlab
           config_keys = deprecation[:config_keys].dup
           config_keys.shift if ATTRIBUTE_BLOCKS.include?(config_keys[0])
           key = if config_keys.length == 1
-                  SettingsDSL::Utils.underscored_form(config_keys[0])
+                  SettingsDSL::Utils.node_attribute_key(config_keys[0])
                 elsif config_keys.first.eql?('roles')
-                  "#{SettingsDSL::Utils.underscored_form(config_keys[1])}_role"
+                  "#{SettingsDSL::Utils.node_attribute_key(config_keys[1])}_role"
                 else
-                  "#{SettingsDSL::Utils.underscored_form(config_keys[0])}['#{config_keys.drop(1).join("']['")}']"
+                  "#{SettingsDSL::Utils.node_attribute_key(config_keys[0])}['#{config_keys.drop(1).join("']['")}']"
                 end
 
           if type == :deprecation

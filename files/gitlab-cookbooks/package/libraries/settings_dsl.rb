@@ -25,43 +25,6 @@ require_relative 'config_mash.rb'
 require_relative 'gitlab_cluster'
 
 module SettingsDSL
-  SERVICES_SKIP_HYPHENATION = %w[
-    gitlab_pages
-    gitlab_sshd
-    node_exporter
-    redis_exporter
-    postgres_exporter
-    pgbouncer_exporter
-    gitlab_shell
-    suggested_reviewers
-    gitlab_exporter
-    remote_syslog
-    gitlab_workhorse
-    mattermost_nginx
-    pages_nginx
-    registry_nginx
-    gitlab_kas_nginx
-    gitlab_kas
-    geo_secondary
-    geo_logcursor
-    geo_postgresql
-    gitlab_rails
-    external_url
-    gitlab_kas_external_url
-    mattermost_external_url
-    pages_external_url
-    registry_external_url
-    gitlab_ci
-    high_availability
-    manage_accounts
-    manage_storage_directories
-    omnibus_gitconfig
-    prometheus_monitoring
-    runtime_dir
-    storage_check
-    web_server
-  ].freeze
-
   def self.extended(base)
     # Setup getter/setters for roles and settings
     class << base
@@ -163,7 +126,7 @@ module SettingsDSL
     end
   end
 
-  def hyphenate_config_keys
+  def sanitized_config
     results = { "gitlab" => {}, "roles" => {}, "monitoring" => {} }
 
     # Add the settings to the results
@@ -172,12 +135,12 @@ module SettingsDSL
 
       target = value[:parent] ? results[value[:parent]] : results
 
-      target[Utils.sanitized_key(key)] = Gitlab[key]
+      target[Utils.node_attribute_key(key)] = Gitlab[key]
     end
 
     # Add the roles the the results
     @available_roles.each do |key, value|
-      results['roles'][Utils.sanitized_key(key)] = Gitlab["#{key}_role"]
+      results['roles'][Utils.node_attribute_key(key)] = Gitlab["#{key}_role"]
     end
 
     results
@@ -235,8 +198,8 @@ module SettingsDSL
       handler = value.handler
       handler.parse_variables if handler.respond_to?(:parse_variables)
     end
-    # The last step is to convert underscores to hyphens in top-level keys
-    strip_nils(hyphenate_config_keys)
+
+    strip_nils(sanitized_config)
   end
 
   def strip_nils(attributes)
@@ -292,18 +255,15 @@ module SettingsDSL
 
   class Utils
     class << self
-      def hyphenated_form(key)
-        key.tr('_', '-')
+      # In service names, words are seperated with a hyphen
+      def service_name(service)
+        service.tr('_', '-')
       end
 
-      def underscored_form(key)
-        key.tr('-', '_')
-      end
-
-      def sanitized_key(key)
-        return underscored_form(key) if SERVICES_SKIP_HYPHENATION.include?(underscored_form(key))
-
-        hyphenated_form(key)
+      # Node attributes corresponding to a service are formatted by replacing
+      # hyphens in the service names with underscores
+      def node_attribute_key(service)
+        service.tr('-', '_')
       end
     end
   end

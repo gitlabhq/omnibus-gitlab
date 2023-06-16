@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'chef_helper'
 
 RSpec.describe Gitlab do
   context 'when using an attribute_block' do
@@ -7,20 +7,20 @@ RSpec.describe Gitlab do
         expect(Gitlab.attribute('test_attribute')[:parent]).to eq 'gitlab'
       end
       expect(Gitlab['test_attribute']).not_to be_nil
-      expect(Gitlab.hyphenate_config_keys['gitlab']).to include('test-attribute')
+      expect(Gitlab.sanitized_config['gitlab']).to include('test_attribute')
     end
   end
 
   it 'sets top level attributes when no parent is provided' do
     Gitlab.attribute('test_attribute')
     expect(Gitlab['test_attribute']).not_to be_nil
-    expect(Gitlab.hyphenate_config_keys).to include('test-attribute')
+    expect(Gitlab.sanitized_config).to include('test_attribute')
   end
 
   it 'properly defines roles' do
     role = Gitlab.role('test_node')
     expect(Gitlab['test_node_role']).not_to be_nil
-    expect(Gitlab.hyphenate_config_keys['roles']).to include('test-node')
+    expect(Gitlab.sanitized_config['roles']).to include('test_node')
     expect(role).to include(manage_services: true)
   end
 
@@ -41,7 +41,7 @@ RSpec.describe Gitlab do
     allow(Gitlab).to receive(:[]).with('edition').and_return(:ce)
     expect(Gitlab.ee_attribute('test_attribute')[:ee]).to eq true
     expect(Gitlab['test_attribute']).not_to be_nil
-    expect(Gitlab.hyphenate_config_keys).not_to include('test-attribute')
+    expect(Gitlab.sanitized_config).not_to include('test_attribute')
   end
 
   it 'enables ee attributes when EE is enabled' do
@@ -49,7 +49,7 @@ RSpec.describe Gitlab do
     allow(Gitlab).to receive(:[]).with('edition').and_return(:ee)
     expect(Gitlab.ee_attribute('test_attribute')[:ee]).to eq true
     expect(Gitlab['test_attribute']).not_to be_nil
-    expect(Gitlab.hyphenate_config_keys).to include('test-attribute')
+    expect(Gitlab.sanitized_config).to include('test_attribute')
   end
 
   it 'sorts attributes by sequence' do

@@ -167,7 +167,7 @@ module GitlabRails
         next unless Gitlab[left.first][left.last].nil?
 
         better_value_from_gitlab_rb = Gitlab[right.first][right.last]
-        default_from_attributes = Gitlab['node']['gitlab'][SettingsDSL::Utils.sanitized_key(left.first)][left.last]
+        default_from_attributes = Gitlab['node']['gitlab'][SettingsDSL::Utils.node_attribute_key(left.first)][left.last]
         Gitlab[left.first][left.last] = better_value_from_gitlab_rb || default_from_attributes
       end
 
