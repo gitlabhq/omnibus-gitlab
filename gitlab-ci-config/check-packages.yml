@@ -67,7 +67,7 @@ Ubuntu-18.04-check:
 Ubuntu-20.04-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
-Ubuntu-20.04-arm-check:
+Ubuntu-20.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   tags:
@@ -75,7 +75,7 @@ Ubuntu-20.04-arm-check:
 Ubuntu-22.04-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
-Ubuntu-22.04-arm-check:
+Ubuntu-22.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   tags:
@@ -83,7 +83,7 @@ Ubuntu-22.04-arm-check:
 Debian-10-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
-Debian-10-arm-check:
+Debian-10-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   tags:
@@ -91,7 +91,7 @@ Debian-10-arm-check:
 Debian-11-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
-Debian-11-arm-check:
+Debian-11-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   tags:
@@ -99,7 +99,7 @@ Debian-11-arm-check:
 Debian-12-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_12:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
-Debian-12-arm-check:
+Debian-12-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   tags:
