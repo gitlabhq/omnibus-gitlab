@@ -1,7 +1,5 @@
 # Test Report Generation in Omnibus-GitLab
 
-[[_TOC_]]
-
 The following three pipelines are created while generating the allure-report
 
 - Omnibus pipeline
