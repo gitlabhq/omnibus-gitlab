@@ -28,6 +28,7 @@ For anything in this list which will not be completed, please provide a reason i
 If you don't have access to this, the reviewer should trigger these jobs for you during the review process.
 
 - [ ] The manual `Trigger:ee-package` jobs have a green pipeline running against latest commit.
+  - To debug QA failures, refer to the [Investigate QA failures](https://about.gitlab.com/handbook/engineering/quality/quality-engineering/enablement-saas-platforms-qe-team/distribution/#investigate-qa-failures) section.
 - [ ] If `config/software` or `config/patches` directories are changed, make sure the `build-package-on-all-os` job within the `Trigger:ee-package` downstream pipeline succeeded.
 - [ ] If you are changing anything SSL related, then the `Trigger:package:fips` manual job within the `Trigger:ee-package` downstream pipeline must succeed.
 - [ ] If CI configuration is changed, the branch must be pushed to [`dev.gitlab.org`](https://dev.gitlab.org/gitlab/omnibus-gitlab) to confirm regular branch builds aren't broken.
