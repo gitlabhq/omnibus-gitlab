@@ -49,8 +49,8 @@ RSpec.describe Build::Info do
     it 'defaults to an initial build version when there are no matching tags' do
       allow(Build::Check).to receive(:on_tag?).and_return(false)
       allow(Build::Check).to receive(:is_nightly?).and_return(false)
-      allow(Build::Info).to receive(:latest_tag).and_return('')
-      allow(Build::Info).to receive(:commit_sha).and_return('ffffffff')
+      allow(Build::Info::Git).to receive(:latest_tag).and_return('')
+      allow(Build::Info::Git).to receive(:commit_sha).and_return('ffffffff')
       stub_env_var('CI_PIPELINE_ID', '5555')
 
       expect(described_class.release_version).to eq('0.0.1+rfbranch.5555.ffffffff-ce.1')
@@ -91,226 +91,6 @@ RSpec.describe Build::Info do
     end
   end
 
-  describe '.latest_tag' do
-    context 'on CE edition' do
-      before do
-        stub_is_ee(false)
-      end
-
-      context 'on stable branch' do
-        context 'when tags already exist in the stable version series' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '15-10-stable')
-          end
-
-          it 'returns the latest tag in the stable version series' do
-            expect(described_class.latest_tag).to eq('15.10.0+ce.0')
-          end
-        end
-
-        context 'when tags does not exist in the stable version series' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '16-5-stable')
-          end
-
-          it 'returns the latest available tag' do
-            expect(described_class.latest_tag).to eq('16.1.1+ce.0')
-          end
-        end
-
-        context 'when latest tag in the series is an RC tag' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '16-0-stable')
-          end
-
-          it 'returns the RC tag' do
-            expect(described_class.latest_tag).to eq('16.0.0+rc42.ce.0')
-          end
-        end
-      end
-
-      context 'on feature branch' do
-        before do
-          stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
-        end
-
-        it 'returns the latest available tag' do
-          expect(described_class.latest_tag).to eq('16.1.1+ce.0')
-        end
-      end
-    end
-
-    context 'on EE edition' do
-      before do
-        stub_is_ee(true)
-      end
-
-      context 'on stable branch' do
-        context 'when tags already exist in the stable version series' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '15-10-stable')
-          end
-
-          it 'returns the latest tag in the stable version series' do
-            expect(described_class.latest_tag).to eq('15.10.0+ee.0')
-          end
-        end
-
-        context 'when tags does not exist in the stable version series' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '16-5-stable')
-          end
-
-          it 'returns the latest available tag' do
-            expect(described_class.latest_tag).to eq('16.1.1+ee.0')
-          end
-        end
-
-        context 'when latest tag in the series is an RC tag' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '16-0-stable')
-          end
-
-          it 'returns the RC tag' do
-            expect(described_class.latest_tag).to eq('16.0.0+rc42.ee.0')
-          end
-        end
-      end
-
-      context 'on feature branch' do
-        before do
-          stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
-        end
-
-        it 'returns the latest available tag' do
-          expect(described_class.latest_tag).to eq('16.1.1+ee.0')
-        end
-      end
-    end
-  end
-
-  describe '.latest_stable_tag' do
-    context 'on CE edition' do
-      before do
-        stub_is_ee(false)
-      end
-
-      context 'on stable branch' do
-        context 'when tags already exist in the stable version series' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '15-10-stable')
-          end
-
-          it 'returns the latest tag in the stable version series' do
-            expect(described_class.latest_stable_tag).to eq('15.10.0+ce.0')
-          end
-        end
-
-        context 'when tags does not exist in the stable version series' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '16-5-stable')
-          end
-
-          it 'returns the latest available tag' do
-            expect(described_class.latest_stable_tag).to eq('16.1.1+ce.0')
-          end
-        end
-
-        context 'when latest tag in the series is an RC tag' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '16-0-stable')
-          end
-
-          it 'skips the RC tag and returns the latest available tag' do
-            expect(described_class.latest_stable_tag).to eq('16.1.1+ce.0')
-          end
-        end
-      end
-
-      context 'on feature branch' do
-        before do
-          stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
-        end
-
-        it 'returns the latest available tag' do
-          expect(described_class.latest_stable_tag).to eq('16.1.1+ce.0')
-        end
-      end
-    end
-
-    context 'on EE edition' do
-      before do
-        stub_is_ee(true)
-      end
-
-      context 'on stable branch' do
-        context 'when tags already exist in the stable version series' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '15-10-stable')
-          end
-
-          it 'returns the latest tag in the stable version series' do
-            expect(described_class.latest_stable_tag).to eq('15.10.0+ee.0')
-          end
-        end
-
-        context 'when tags does not exist in the stable version series' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '16-5-stable')
-          end
-
-          it 'returns the latest available tag' do
-            expect(described_class.latest_stable_tag).to eq('16.1.1+ee.0')
-          end
-        end
-
-        context 'when latest tag in the series is an RC tag' do
-          before do
-            stub_env_var('CI_COMMIT_BRANCH', '16-0-stable')
-          end
-
-          it 'skips the RC tag and returns the latest available tag' do
-            expect(described_class.latest_stable_tag).to eq('16.1.1+ee.0')
-          end
-        end
-      end
-
-      context 'on feature branch' do
-        before do
-          stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
-        end
-
-        it 'returns the latest available tag' do
-          expect(described_class.latest_stable_tag).to eq('16.1.1+ee.0')
-        end
-      end
-    end
-
-    context 'when a level is specified' do
-      context 'when level is less than total number of tags' do
-        before do
-          stub_is_ee(true)
-          stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
-        end
-
-        it 'returns recent tag at specified position' do
-          expect(described_class.latest_stable_tag(level: 2)).to eq('15.11.1+ee.0')
-        end
-      end
-
-      context 'when level is more than total number of tags' do
-        before do
-          stub_is_ee(true)
-          stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
-        end
-
-        it 'returns last tag' do
-          expect(described_class.latest_stable_tag(level: 6)).to eq('15.10.0+ee.0')
-        end
-      end
-    end
-  end
-
   describe '.gitlab_version' do
     describe 'GITLAB_VERSION variable specified' do
       it 'returns passed value' do
@@ -329,8 +109,9 @@ RSpec.describe Build::Info do
 
   describe '.previous_version' do
     it 'detects previous version correctly' do
-      allow(described_class).to receive(:`).with("git describe --exact-match 2>/dev/null").and_return('10.4.0+ee.0')
-      allow(Build::Info).to receive(:`).with(/git -c versionsort/).and_return("10.4.0+ee.0\n10.3.5+ee.0")
+      allow(Build::Info::Git).to receive(:`).and_call_original
+      allow(Build::Info::Git).to receive(:`).with("git describe --exact-match 2>/dev/null").and_return('10.4.0+ee.0')
+      allow(Build::Info::Git).to receive(:`).with(/git -c versionsort/).and_return("10.4.0+ee.0\n10.3.5+ee.0")
 
       expect(described_class.previous_version).to eq("10.3.5-ee.0")
     end
