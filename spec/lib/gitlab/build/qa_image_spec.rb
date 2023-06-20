@@ -30,7 +30,7 @@ RSpec.describe Build::QAImage do
 
   describe '.copy_image_to_dockerhub' do
     before do
-      allow(Build::Info).to receive(:qa_image).and_return('registry.gitlab.com/gitlab-org/gitlab/gitlab-ce-qa:1234567890')
+      allow(Build::Info::QA).to receive(:image).and_return('registry.gitlab.com/gitlab-org/gitlab/gitlab-ce-qa:1234567890')
 
       allow(SkopeoHelper).to receive(:login).and_return(true)
       allow(SkopeoHelper).to receive(:copy_image).and_return(true)
