@@ -580,7 +580,7 @@ To install custom public certificates:
 ### Using a custom certificate chain
 
 Because of a [known issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/1425), if using a custom certificate
-chain, the root and intermediate certificates **must** be put into separate files in the `/etc/gitlab/trusted-certs`
+chain, the server, intermediate, and root certificates **must** be put into separate files in the `/etc/gitlab/trusted-certs`
 directory.
 
 This applies in both cases where GitLab itself, or external resources GitLab must connect to, are using a custom
