@@ -3,7 +3,7 @@ unified_mode true
 property :username, String, name_property: true
 property :password, String
 property :options, Array
-property :helper, default: lazy { PgHelper.new(node) }
+property :helper, default: lazy { PgHelper.new(node) }, sensitive: true
 
 action :create do
   account_helper = AccountHelper.new(node)

@@ -2,7 +2,7 @@ unified_mode true
 
 property :name, String, name_property: true
 property :username, default: lazy { node['postgresql']['username'] }
-property :helper, default: lazy { PgHelper.new(node) }
+property :helper, default: lazy { PgHelper.new(node) }, sensitive: true
 
 action :create do
   postgresql_helper = new_resource.helper

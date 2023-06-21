@@ -11,7 +11,7 @@ property :log_directory_owner, [String, nil], default: nil
 property :log_directory_group, [String, nil], default: nil
 property :log_user, [String, nil], default: nil
 property :log_group, [String, nil], default: nil
-property :logfiles_helper, default: lazy { LogfilesHelper.new(node) }
+property :logfiles_helper, default: lazy { LogfilesHelper.new(node) }, sensitive: true
 property :template_name, String, default: 'sidekiq'
 
 action :enable do

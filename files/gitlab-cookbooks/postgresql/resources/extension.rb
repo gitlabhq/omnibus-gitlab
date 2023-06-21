@@ -2,7 +2,7 @@ unified_mode true
 
 property :extension, String, name_property: true
 property :database, String
-property :helper, default: lazy { PgHelper.new(node) }
+property :helper, default: lazy { PgHelper.new(node) }, sensitive: true
 
 action :enable do
   postgresql_query "enable #{new_resource.extension} extension" do
