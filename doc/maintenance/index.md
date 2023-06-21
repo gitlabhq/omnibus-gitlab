@@ -27,7 +27,7 @@ As a demonstration, the first line of the previous example can be interpreted as
 - `Nginx` is the process name.
 - `972` is the process identifier.
 - NGINX has been running for 7 seconds (`7s`).
-- `log` indicates a [svlogd logging process](https://manpages.ubuntu.com/manpages/bionic/man8/svlogd.8.html) attached to the preceding process.
+- `log` indicates a [svlogd logging process](https://manpages.ubuntu.com/manpages/lunar/en/man8/svlogd.8.html) attached to the preceding process.
 - `971` is the process identifier for the logging process.
 - The logging process has been running for 7 seconds (`7s`).
 
