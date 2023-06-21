@@ -68,7 +68,7 @@ RSpec.describe GitlabCtl::PgUpgrade do
           "df -P --block-size=1m #{@dbw.data_dir} | awk '{print $4}'", nil, 123
         ).and_return("Available\n220000")
 
-        expect(@dbw.enough_free_space?(@dbw.data_dir)).to eq(false)
+        expect(@dbw.enough_free_space?(@dbw.data_dir, 440000)).to eq(false)
       end
 
       it 'detects when there is enough available disk space for upgrade' do
@@ -80,7 +80,7 @@ RSpec.describe GitlabCtl::PgUpgrade do
           "df -P --block-size=1m #{@dbw.data_dir} | awk '{print $4}'", nil, 123
         ).and_return("Available\n250000")
 
-        expect(@dbw.enough_free_space?(@dbw.data_dir)).to eq(true)
+        expect(@dbw.enough_free_space?(@dbw.data_dir, 100000)).to eq(true)
       end
     end
 

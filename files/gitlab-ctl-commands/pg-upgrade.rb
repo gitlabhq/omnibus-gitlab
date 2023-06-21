@@ -189,18 +189,25 @@ add_command_under_category 'pg-upgrade', 'database',
     Kernel.exit 0
   end
 
+  total_space_needed = 0 # in MiB
   unless options[:skip_disk_check]
-    check_dirs = [@db_worker.tmp_dir]
-    check_dirs << @db_worker.data_dir if pg_enabled || patroni_enabled
-    check_dirs << File.join(@attributes['gitlab']['geo_postgresql']['dir'], 'data') if geo_enabled
+    check_dirs = {}
+    check_dirs[@db_worker.data_dir] = 0 if pg_enabled || patroni_enabled
+    check_dirs[File.join(@attributes['gitlab']['geo_postgresql']['dir'], 'data')] = 0 if geo_enabled
+    check_dirs.each_key do |dir|
+      check_dirs[dir] = @db_worker.space_needed(dir)
+      total_space_needed += check_dirs[dir]
+    end
+    # We need space for all databases if using --tmp-dir.
+    check_dirs = { @db_worker.tmp_dir => total_space_needed } if @db_worker.tmp_dir
 
-    check_dirs.compact.uniq.each do |dir|
+    check_dirs.each do |dir, space_needed|
       unless GitlabCtl::Util.progress_message(
         "Checking if disk for directory #{dir} has enough free space for PostgreSQL upgrade"
       ) do
-        @db_worker.enough_free_space?(dir)
+        @db_worker.enough_free_space?(dir, space_needed)
       end
-        log "Upgrade requires #{@db_worker.space_needed(dir)}MB, but only #{@db_worker.space_free(dir)}MB is free."
+        log "Upgrade requires #{space_needed}MB, but only #{@db_worker.space_free(dir)}MB is free."
         Kernel.exit 1
       end
       next
