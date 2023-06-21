@@ -22,7 +22,7 @@ Even with a newer Pi, the first setting you will want to change is to ensure
 the device has enough memory available by expanding the swap space to 4GB.
 
 On Raspbian, swap can be configured in `/etc/dphys-swapfile`.
-See [the manpage](https://manpages.ubuntu.com/manpages/bionic/man8/dphys-swapfile.8.html#config) for available settings.
+See [the manpage](https://manpages.ubuntu.com/manpages/lunar/en/man8/dphys-swapfile.8.html) for available settings.
 
 ## Install GitLab
 
