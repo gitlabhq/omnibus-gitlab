@@ -55,7 +55,7 @@ Use the `git diff` command to create a patch file between two Git commits.
 You must know both commit IDs.
 
 ```shell
-git diff <commitid1> <commitid2 > <patch_filename>.patch
+git diff <commitid1> <commitid2> > <patch_filename>.patch
 ```
 
 You can also create a patch file based on one Git commit and the base HEAD.
