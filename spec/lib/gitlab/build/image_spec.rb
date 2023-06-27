@@ -16,12 +16,14 @@ RSpec.describe Build::Image do
 
   before do
     allow(ENV).to receive(:[]).and_call_original
+    allow(ENV).to receive(:[]).with('CI_PROJECT_ID').and_return('20699')
     allow(ENV).to receive(:[]).with('CI_JOB_TOKEN').and_return('1234')
     allow(ENV).to receive(:[]).with('CI_REGISTRY').and_return('registry.com')
     allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('registry.com/group/repo')
     allow(ENV).to receive(:[]).with('DOCKERHUB_USERNAME').and_return('john')
     allow(ENV).to receive(:[]).with('DOCKERHUB_PASSWORD').and_return('secret')
     allow(Build::Info).to receive(:docker_tag).and_return('9.0.0')
+    allow(Gitlab::APIClient).to receive(:new).and_return(double(get_job_id: '999999'))
   end
 
   describe '.pull' do
@@ -89,72 +91,106 @@ RSpec.describe Build::Image do
   end
 
   describe '.write_release_file' do
-    describe 'with triggered build' do
-      let(:release_file) do
-        [
-          "PACKAGECLOUD_REPO=download-package",
-          "RELEASE_VERSION=12.121.12-ce.1",
-          "DOWNLOAD_URL=https://gitlab.com/api/v4/projects/1/jobs/1/artifacts/pkg/ubuntu-jammy/gitlab.deb",
-          "TRIGGER_PRIVATE_TOKEN=NOT-PRIVATE-TOKEN\n"
-        ]
-      end
+    before do
+      stub_env_var('CI_JOB_TOKEN', 'NOT-CI-JOB-TOKEN')
+      stub_env_var('PACKAGECLOUD_REPO', 'download-package')
+    end
 
+    describe 'for builds in dev.gitlab.org' do
       before do
-        stub_env_var('PACKAGECLOUD_REPO', 'download-package')
-        stub_env_var('TRIGGER_PRIVATE_TOKEN', 'NOT-PRIVATE-TOKEN')
-        stub_env_var('CI_PROJECT_ID', '1')
-        stub_env_var('CI_PIPELINE_ID', '2')
-        allow(Build::Info).to receive(:release_version).and_return('12.121.12-ce.1')
-        allow(Build::Info).to receive(:fetch_artifact_url).with('1', '2', fips: false).and_return('1')
+        stub_env_var('CI_API_V4_URL', 'https://dev.gitlab.org/api/v4')
+        stub_env_var('CI_PROJECT_ID', '283')
+        stub_env_var('CI_PIPELINE_ID', '12345')
       end
 
       describe 'for CE' do
+        let(:release_file_content) do
+          [
+            "PACKAGECLOUD_REPO=download-package",
+            "RELEASE_PACKAGE=gitlab-ce",
+            "RELEASE_VERSION=12.121.12-ce.0",
+            "DOWNLOAD_URL=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab-ce_12.121.12-ce.0_amd64.deb",
+            "CI_JOB_TOKEN=NOT-CI-JOB-TOKEN\n"
+          ].join("\n")
+        end
+
         before do
           allow(Build::Info).to receive(:package).and_return('gitlab-ce')
+          allow(Build::Info).to receive(:release_version).and_return('12.121.12-ce.0')
         end
 
         it 'returns build version and iteration with env variable' do
-          release_file_content = release_file.insert(1, 'RELEASE_PACKAGE=gitlab-ce').join("\n")
-
           expect(ComponentImage.write_release_file).to eq(release_file_content)
         end
       end
 
       describe 'for EE' do
+        let(:release_file_content) do
+          [
+            "PACKAGECLOUD_REPO=download-package",
+            "RELEASE_PACKAGE=gitlab-ee",
+            "RELEASE_VERSION=12.121.12-ee.0",
+            "DOWNLOAD_URL=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab-ee_12.121.12-ee.0_amd64.deb",
+            "CI_JOB_TOKEN=NOT-CI-JOB-TOKEN\n"
+          ].join("\n")
+        end
+
         before do
-          allow(Build::Info).to receive(:package).and_return('gitlab-ee')
+          allow(Build::Info).to receive(:release_version).and_return('12.121.12-ee.0')
+          stub_env_var('ee', 'true')
         end
 
         it 'returns build version and iteration with env variable' do
-          release_file_content = release_file.insert(1, 'RELEASE_PACKAGE=gitlab-ee').join("\n")
+          expect(ComponentImage.write_release_file).to eq(release_file_content)
+        end
+      end
+    end
 
+    describe 'for builds in gitlab.com' do
+      before do
+        stub_env_var('CI_API_V4_URL', 'https://gitlab.com/api/v4')
+        stub_env_var('CI_PROJECT_ID', '20699')
+        stub_env_var('CI_PIPELINE_ID', '12345')
+      end
+
+      describe 'for CE' do
+        let(:release_file_content) do
+          [
+            "PACKAGECLOUD_REPO=download-package",
+            "RELEASE_PACKAGE=gitlab-ce",
+            "RELEASE_VERSION=12.121.12-ce.0",
+            "DOWNLOAD_URL=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab.deb",
+            "CI_JOB_TOKEN=NOT-CI-JOB-TOKEN\n"
+          ].join("\n")
+        end
+
+        before do
+          allow(Build::Info).to receive(:package).and_return('gitlab-ce')
+          allow(Build::Info).to receive(:release_version).and_return('12.121.12-ce.0')
+        end
+
+        it 'returns build version and iteration with env variable' do
           expect(ComponentImage.write_release_file).to eq(release_file_content)
         end
       end
 
-      describe 'with regular build' do
-        let(:s3_download_link) { 'https://downloads-packages.s3.amazonaws.com/ubuntu-jammy/gitlab-ee_12.121.12-ce.1_amd64.deb' }
-
-        let(:release_file) do
+      describe 'for EE' do
+        let(:release_file_content) do
           [
-            "RELEASE_VERSION=12.121.12-ce.1",
-            "DOWNLOAD_URL=#{s3_download_link}\n",
-          ]
+            "PACKAGECLOUD_REPO=download-package",
+            "RELEASE_PACKAGE=gitlab-ee",
+            "RELEASE_VERSION=12.121.12-ee.0",
+            "DOWNLOAD_URL=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab.deb",
+            "CI_JOB_TOKEN=NOT-CI-JOB-TOKEN\n"
+          ].join("\n")
         end
 
         before do
-          stub_env_var('PACKAGECLOUD_REPO', '')
-          stub_env_var('TRIGGER_PRIVATE_TOKEN', '')
-          stub_env_var('CI_PROJECT_ID', '')
-          stub_env_var('CI_PIPELINE_ID', '')
-          allow(Build::Check).to receive(:on_tag?).and_return(true)
-          allow(Build::Info).to receive(:package).and_return('gitlab-ee')
-          allow(ComponentImage).to receive(:release_version).and_return('12.121.12-ce.1')
+          allow(Build::Info).to receive(:release_version).and_return('12.121.12-ee.0')
+          stub_env_var('ee', 'true')
         end
 
         it 'returns build version and iteration with env variable' do
-          release_file_content = release_file.insert(0, 'RELEASE_PACKAGE=gitlab-ee').join("\n")
-
           expect(ComponentImage.write_release_file).to eq(release_file_content)
         end
       end
