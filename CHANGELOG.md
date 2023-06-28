@@ -147,6 +147,12 @@ No changes.
 - [Drop bundler software definition](gitlab-org/omnibus-gitlab@3f08274227a17adf5f7d42403804af198895a726) ([merge request](gitlab-org/omnibus-gitlab!6849))
 - [Update Mattermost to 7.10.0](gitlab-org/omnibus-gitlab@ec498e8b899bfaf00d07d161a5a03ae9aed66612) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6827))
 
+## 15.11.10 (2023-06-28)
+
+### Security (1 change)
+
+- [Mattermost security updates May 17, 2023](gitlab-org/security/omnibus-gitlab@46cea4e736b1a17e3851998b7db24eb711bdcb31) ([merge request](gitlab-org/security/omnibus-gitlab!347))
+
 ## 15.11.9 (2023-06-15)
 
 No changes.
