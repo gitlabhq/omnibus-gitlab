@@ -125,12 +125,26 @@ Test the certificate's validity using the commands below:
 /opt/gitlab/embedded/bin/openssl x509 -inform DER -in /etc/gitlab/trusted-certs/example.der -text -noout
 ```
 
-Invalid certificate files produce the following output:
+Invalid certificate files produce the following outputs:
+
+- ```shell
+  unable to load certificate
+  140663131141784:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:701:Expecting: TRUSTED CERTIFICATE
+  ```
+
+- ```shell
+  cannot load certificate
+  PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)
+  ```
+
+In either of those cases, and if your certificates begin and end with anything other than the following:
 
 ```shell
-unable to load certificate
-140663131141784:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:701:Expecting: TRUSTED CERTIFICATE
+-----BEGIN CERTIFICATE-----
+-----END CERTIFICATE-----
 ```
+
+Then they are not compatible with GitLab. You should separate them into the certificate components (server, intermediate, root), and convert them to the compatible PEM format.
 
 To test if `c_rehash` is not symlinking the certificate due to a missing perl interpreter:
 
