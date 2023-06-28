@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'postgres-exporter'
-version = Gitlab::Version.new('postgres-exporter', '0.11.1')
+version = Gitlab::Version.new('postgres-exporter', '0.13.0')
 default_version version.print
 
 license 'Apache-2.0'
