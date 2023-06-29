@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.1.1 (2023-06-28)
+
+No changes.
+
 ## 16.1.0 (2023-06-21)
 
 ### Added (4 changes)
@@ -46,6 +50,12 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Update Mattermost to 7.10.2](gitlab-org/omnibus-gitlab@fd50c589d70fb6b32ea5ad9f169ea7209e550e2d) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6905))
+
+## 16.0.6 (2023-06-28)
+
+### Security (1 change)
+
+- [Mattermost security updates May 17, 2023](gitlab-org/security/omnibus-gitlab@9e2778ed45057fa9bd85f9121ea39a0b68d08565) ([merge request](gitlab-org/security/omnibus-gitlab!348))
 
 ## 16.0.5 (2023-06-16)
 
@@ -136,6 +146,12 @@ No changes.
 - [Postpone cinc EOL message](gitlab-org/omnibus-gitlab@d549962217889f3104f972e0ebb93ad8e3bda08a) ([merge request](gitlab-org/omnibus-gitlab!6857))
 - [Drop bundler software definition](gitlab-org/omnibus-gitlab@3f08274227a17adf5f7d42403804af198895a726) ([merge request](gitlab-org/omnibus-gitlab!6849))
 - [Update Mattermost to 7.10.0](gitlab-org/omnibus-gitlab@ec498e8b899bfaf00d07d161a5a03ae9aed66612) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6827))
+
+## 15.11.10 (2023-06-28)
+
+### Security (1 change)
+
+- [Mattermost security updates May 17, 2023](gitlab-org/security/omnibus-gitlab@46cea4e736b1a17e3851998b7db24eb711bdcb31) ([merge request](gitlab-org/security/omnibus-gitlab!347))
 
 ## 15.11.9 (2023-06-15)
 
