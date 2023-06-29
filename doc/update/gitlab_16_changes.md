@@ -24,3 +24,12 @@ Prior to upgrading, administrators using Omnibus GitLab must:
 Bundled Grafana is deprecated and is no longer supported. It will be removed in GitLab 16.3.
 
 For more information, see [deprecation notes](https://docs.gitlab.com/ee/administration/monitoring/performance/grafana_configuration.html#deprecation-of-bundled-grafana).
+
+### Upgrade GitLab Docker image to use Ubuntu 22.04 as base
+
+This upgrades `openssh-server` to `1:8.9p1-3`.
+
+Using `ssh-keyscan -t rsa` with older OpenSSH clients to obtain public key information will no longer
+be viable due to deprecations listed in [OpenSSH 8.7 Release Notes](https://www.openssh.com/txt/release-8.7).  
+
+Workaround is to make use of a different key type, or upgrade the client OpenSSH to a version >= 8.7
