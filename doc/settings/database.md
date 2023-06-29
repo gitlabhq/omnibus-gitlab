@@ -717,30 +717,6 @@ update this setting in `/etc/gitlab/gitlab.rb`:
 gitlab_rails['databases']['ci']['enable'] = false
 ```
 
-### Connecting to the bundled PostgreSQL database
-
-If you need to connect to the bundled PostgreSQL database and are using the
-default Omnibus GitLab database configuration, you can connect as the
-application user:
-
-In [GitLab 14.2 and later](https://gitlab.com/gitlab-org/gitlab/-/issues/341210):
-
-```shell
-sudo gitlab-rails dbconsole --database main
-```
-
-In GitLab 14.1 and earlier:
-
-```shell
-sudo gitlab-rails dbconsole
-```
-
-or as a PostgreSQL superuser:
-
-```shell
-sudo gitlab-psql -d gitlabhq_production
-```
-
 ## Using a non-packaged PostgreSQL database management server
 
 By default, GitLab is configured to use the PostgreSQL server that's included
@@ -1393,3 +1369,26 @@ replication user's password.
    ```
 
 1. Navigate to `https://your_primary_server/admin/geo/nodes` and ensure that all nodes are healthy.
+
+## Connecting to the PostgreSQL database
+
+If you need to connect to the PostgreSQL database, you can connect as the
+application user:
+
+In [GitLab 14.2 and later](https://gitlab.com/gitlab-org/gitlab/-/issues/341210):
+
+```shell
+sudo gitlab-rails dbconsole --database main
+```
+
+In GitLab 14.1 and earlier:
+
+```shell
+sudo gitlab-rails dbconsole
+```
+
+or as a PostgreSQL superuser:
+
+```shell
+sudo gitlab-psql -d gitlabhq_production
+```
