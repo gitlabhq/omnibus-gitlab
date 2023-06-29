@@ -3,8 +3,8 @@ provides :database_objects
 
 unified_mode true
 
-property :pg_helper, [GeoPgHelper, PgHelper], required: true
-property :account_helper, [AccountHelper], required: true
+property :pg_helper, [GeoPgHelper, PgHelper], required: true, sensitive: true
+property :account_helper, [AccountHelper], required: true, sensitive: true
 
 action :create do
   rails_enabled = node['gitlab']['gitlab_rails']['enable']

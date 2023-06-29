@@ -4,11 +4,11 @@ provides :pgbouncer_user
 unified_mode true
 
 property :type, String, name_property: true
-property :account_helper, default: AccountHelper.new(node)
+property :account_helper, default: AccountHelper.new(node), sensitive: true
 property :add_auth_function, [true, false], required: true
 property :database, String, required: true
 property :password, String, required: true
-property :helper, [GeoPgHelper, PgHelper], required: true
+property :helper, [GeoPgHelper, PgHelper], required: true, sensitive: true
 property :user, String, required: true
 
 action :create do
