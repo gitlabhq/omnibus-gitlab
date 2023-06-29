@@ -1397,6 +1397,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['username'] = "gitlab-redis"
 # redis['group'] = "gitlab-redis"
 # redis['maxclients'] = "10000"
+# redis['open_files_ulimit'] = nil # Maximum number of open files allowed for the redis process (defaults to ope
 # redis['maxmemory'] = "0"
 # redis['maxmemory_policy'] = "noeviction"
 # redis['maxmemory_samples'] = "5"

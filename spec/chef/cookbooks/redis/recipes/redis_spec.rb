@@ -109,7 +109,8 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
             "FAKE_COMMAND" => "RENAMED_FAKE_COMMAND",
             "DISABLED_FAKE_COMMAND" => ""
           },
-          'startup_delay': 10
+          'startup_delay': 10,
+          open_files_ulimit: 60000
         }
       )
     end
@@ -154,6 +155,13 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
       expect(chef_run).to render_file('/opt/gitlab/sv/redis/run')
     .with_content { |content|
       expect(content).to match(/^sleep 10$/)
+    }
+    end
+
+    it 'sets a filehandle limit' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis/run')
+    .with_content { |content|
+      expect(content).to match(/^ulimit -n 60000$/)
     }
     end
   end
