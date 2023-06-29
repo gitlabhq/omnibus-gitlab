@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.0.6 (2023-06-28)
+
+### Security (1 change)
+
+- [Mattermost security updates May 17, 2023](gitlab-org/security/omnibus-gitlab@9e2778ed45057fa9bd85f9121ea39a0b68d08565) ([merge request](gitlab-org/security/omnibus-gitlab!348))
+
 ## 16.0.5 (2023-06-16)
 
 No changes.
