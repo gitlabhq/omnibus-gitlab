@@ -3,7 +3,7 @@ unified_mode true
 property :schema, String, name_property: true
 property :database, String
 property :owner, String, default: 'CURRENT_USER'
-property :helper, default: lazy { PgHelper.new(node) }
+property :helper, default: lazy { PgHelper.new(node) }, sensitive: true
 
 action :create do
   postgresql_query "create #{new_resource.schema} schema on #{new_resource.database}" do

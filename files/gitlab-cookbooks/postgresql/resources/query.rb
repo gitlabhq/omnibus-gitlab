@@ -6,7 +6,7 @@ unified_mode true
 property :description, String, name_property: true
 property :query, String
 property :db_name, String, default: 'template1'
-property :helper, default: lazy { PgHelper.new(node) }
+property :helper, default: lazy { PgHelper.new(node) }, sensitive: true
 
 action :run do
   account_helper = AccountHelper.new(node)

@@ -2,7 +2,7 @@ unified_mode true
 
 property :database, String, name_property: true
 property :owner, String, default: lazy { node['postgresql']['sql_user'] }
-property :helper, default: lazy { PgHelper.new(node) }
+property :helper, default: lazy { PgHelper.new(node) }, sensitive: true
 property :database_port, Integer, default: lazy { node['postgresql']['port'] }
 property :database_socket, String, default: lazy { node['postgresql']['unix_socket_directory'] }
 property :user, String, default: lazy { AccountHelper.new(node).postgresql_user }
