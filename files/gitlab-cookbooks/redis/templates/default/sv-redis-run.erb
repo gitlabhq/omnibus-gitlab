@@ -2,6 +2,9 @@
 exec 2>&1
 <%= render('mount_point_check.erb', cookbook: 'gitlab') %>
 sleep <%= node['redis']['startup_delay'] %>
+<% if @options[:open_files_ulimit] %>
+ulimit -n <%= @options[:open_files_ulimit] %>
+<% end %>
 umask 077
 exec chpst -P \
   -U <%= node['redis']['username'] %>:<%= node['redis']['group'] %> \

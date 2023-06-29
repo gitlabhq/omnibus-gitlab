@@ -17,6 +17,7 @@ default['redis']['home'] = "/var/opt/gitlab/redis"
 default['redis']['bind'] = '127.0.0.1'
 default['redis']['port'] = 0
 default['redis']['maxclients'] = "10000"
+default['redis']['open_files_ulimit'] = nil # Maximum number of open files allowed for the redis process. Use the runit default (50000) if nil.
 default['redis']['maxmemory'] = "0"
 default['redis']['maxmemory_policy'] = "noeviction"
 default['redis']['maxmemory_samples'] = 5

@@ -63,6 +63,8 @@ action :create do
     sensitive true
   end
 
+  open_files_ulimit = node['redis']['open_files_ulimit']
+
   runit_service 'redis' do
     start_down node['redis']['start_down']
     template_name 'redis'
@@ -71,6 +73,7 @@ action :create do
       log_directory: logging_settings[:log_directory],
       log_user: logging_settings[:runit_owner],
       log_group: logging_settings[:runit_group],
+      open_files_ulimit: open_files_ulimit
     }.merge(new_resource))
     sv_timeout new_resource.runit_sv_timeout
     log_options logging_settings[:options]
