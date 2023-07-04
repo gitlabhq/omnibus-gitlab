@@ -98,6 +98,7 @@ class PackageRepository
         '6' => %w(scientific ol),
         '7' => %w(scientific ol),
         '8' => %w(ol), # There is no Scientific Linux 8
+        '9' => %w(ol), # There is no Scientific Linux 9
       }
 
       source_os, target_os = enterprise_linux_additional_uploads.find { |os| platform.match?(/^el\/#{os}/) }
