@@ -14,7 +14,7 @@ class AWSHelper
     @type = type || 'ce'
   end
 
-  def create_ami
+  def create_ami_old
     release_type = Gitlab::Util.get_env('AWS_RELEASE_TYPE')
     architecture = Gitlab::Util.get_env('AWS_ARCHITECTURE')
     args = {}
@@ -31,7 +31,27 @@ class AWSHelper
 
     @download_url = Build::Info.ami_deb_package_download_url(**args)
 
-    system(*%W[support/packer/packer_ami.sh #{@version} #{@type} #{@download_url} #{@license_file}])
+    system(*%W[support/packer_old/packer_ami.sh #{@version} #{@type} #{@download_url} #{@license_file}])
+  end
+
+  def create_ami
+    release_type = Gitlab::Util.get_env('AWS_RELEASE_TYPE')
+    architecture = Gitlab::Util.get_env('AWS_ARCHITECTURE')
+
+    if (@type == 'ee') && release_type
+      @type = "ee-#{release_type}"
+      @license_file = "AWS_#{release_type}_LICENSE_FILE".upcase
+    end
+
+    if architecture
+      @type = "#{@type}-#{architecture}"
+    else
+      architecture = 'amd64'
+    end
+
+    @download_url = Build::Info::CI.package_download_url(job_name: "Ubuntu-20.04", arch: architecture)
+
+    system(*%W[support/packer/packer_ami.sh #{@version} #{@type} #{@download_url} #{Build::Info::CI.job_token} #{@license_file}])
   end
 
   def set_marketplace_details

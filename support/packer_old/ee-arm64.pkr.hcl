@@ -14,21 +14,13 @@ variable "download_url" {
   type = string
 }
 
-# ci_job_token is the token used to download the package from CI artifacts
-variable "ci_job_token" {
-  type = string
-}
-
 # license_file, somewhat of a misnomer, is the contents of the license to
 # install on the image. Due to the size of the license contents, it is usually
 # better to use a shell variable to hold the contents and then use the variable
 # reference on the command line, e.g.,
 #
-# GITLAB_LICENSE="eyJkYXRhIjoicEoy..." packer build ... -var
-# "license_file=$GITLAB_LICENSE" ...
-#
-# Note: Licenses are not needed for the Community Edition. Leave this variable
-# set to the default.
+# GITLAB_LICENSE="eyJkYXRhIjoicEoy..."
+# packer build ... -var "license_file=$GITLAB_LICENSE" ...
 variable "license_file" {
   type    = string
   default = ""
@@ -86,7 +78,7 @@ variable "ami_prefix" {
 data "amazon-ami" "base_ami" {
   access_key = "${var.aws_access_key}"
   filters = {
-    name                = "ubuntu/images/*ubuntu-focal-20.04-amd64-server-*"
+    name                = "ubuntu/images/*ubuntu-focal-20.04-arm64-server-*"
     root-device-type    = "ebs"
     virtualization-type = "hvm"
   }
@@ -98,12 +90,12 @@ data "amazon-ami" "base_ami" {
 
 source "amazon-ebs" "base_ami" {
   access_key      = "${var.aws_access_key}"
-  ami_description = "${var.ami_prefix}GitLab CE ${var.version} AMI. https://about.gitlab.com/"
-  ami_name        = "${var.ami_prefix}GitLab CE ${var.version}"
+  ami_description = "${var.ami_prefix}GitLab EE ${var.version} (ARM64) AMI. https://about.gitlab.com/"
+  ami_name        = "${var.ami_prefix}GitLab EE ${var.version} (ARM64)"
   ami_groups      = ["all"]
   ami_users       = ["684062674729", "679593333241"]
   ena_support     = true
-  instance_type   = "m3.medium"
+  instance_type   = "m6g.medium"
   region          = "us-east-1"
   secret_key      = "${var.aws_secret_key}"
   snapshot_users  = ["684062674729", "679593333241"]
@@ -111,7 +103,7 @@ source "amazon-ebs" "base_ami" {
   sriov_support   = true
   ssh_username    = "ubuntu"
   tags = {
-    Type    = "GitLab Community Edition"
+    Type    = "GitLab Enterprise Edition (ARM64)"
     Version = "${var.version}"
   }
   ami_regions = "${var.ami_regions}"
@@ -126,14 +118,14 @@ build {
   }
 
   provisioner "shell" {
-    environment_vars = ["DOWNLOAD_URL=${var.download_url}", "CI_JOB_TOKEN=${var.ci_job_token}"]
-    script           = "update-script-ce.sh"
+    environment_vars = ["DOWNLOAD_URL=${var.download_url}"]
+    script           = "update-script-ee.sh"
   }
 
   post-processor "manifest" {
-    output = "manifests/ce-manifest.json"
+    output = "manifests/ee-arm64-manifest.json"
     custom_data = {
-      name: "${var.ami_prefix}GitLab CE ${var.version}"
+      name: "${var.ami_prefix}GitLab EE ${var.version} (ARM64)"
     }
   }
 }

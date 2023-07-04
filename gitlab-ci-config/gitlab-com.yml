@@ -713,12 +713,12 @@ validate_packer_changes:
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/debian_packer:${BUILDER_IMAGE_REVISION}"
   stage: check
   script:
-    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ce-arm64.pkr.hcl
-    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ce.pkr.hcl
-    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ee-arm64.pkr.hcl
-    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ee-premium.pkr.hcl
-    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ee-ultimate.pkr.hcl
-    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ee.pkr.hcl
+    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var ci_job_token=XXX -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ce-arm64.pkr.hcl
+    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var ci_job_token=XXX -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ce.pkr.hcl
+    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var ci_job_token=XXX -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ee-arm64.pkr.hcl
+    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var ci_job_token=XXX -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ee-premium.pkr.hcl
+    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var ci_job_token=XXX -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ee-ultimate.pkr.hcl
+    - cd "${CI_PROJECT_DIR}/support/packer" && packer validate -var ci_job_token=XXX -var aws_access_key=XXX -var aws_secret_key=XXX -var download_url=XXX ee.pkr.hcl
   rules:
     - if: '$PIPELINE_TYPE == "_TEST_PIPELINE"'
       changes:
