@@ -276,11 +276,11 @@ add_command_under_category 'pg-upgrade', 'database',
     elsif @instance_type == :patroni_standby_leader
       patroni_standby_leader_upgrade
     end
-  elsif @roles.include?('geo-primary')
+  elsif @roles.include?('geo_primary')
     log 'Detected a GEO primary node'
     @instance_type = :geo_primary
     general_upgrade
-  elsif @roles.include?('geo-secondary')
+  elsif @roles.include?('geo_secondary')
     log 'Detected a Geo secondary node'
     @instance_type = :geo_secondary
     geo_secondary_upgrade(options[:tmp_dir], options[:timeout])
@@ -447,8 +447,10 @@ def geo_secondary_upgrade(tmp_dir, timeout)
     log('Upgrading the postgresql database')
     begin
       promote_database
-    rescue GitlabCtl::Errors::ExecutionError
-      die "There was an error promoting the database. Please check the logs"
+    rescue GitlabCtl::Errors::ExecutionError => e
+      log "STDOUT: #{e.stdout}"
+      log "STDERR: #{e.stderr}"
+      die "There was an error promoting the database from standby, please check the logs and output."
     end
 
     # Restart the database after promotion, and wait for it to be ready
@@ -456,12 +458,11 @@ def geo_secondary_upgrade(tmp_dir, timeout)
     GitlabCtl::PostgreSQL.wait_for_postgresql(600)
 
     common_pre_upgrade
-
-    # Only disable maintenance_mode if geo-pg is not enabled
-    common_post_upgrade(!@geo_pg_enabled)
+    cleanup_data_dir
   end
 
   geo_pg_upgrade
+  common_post_upgrade
 end
 
 def geo_pg_upgrade
@@ -485,7 +486,6 @@ def geo_pg_upgrade
   rescue GitlabCtl::Errors::ExecutionError
     die "Error running pg_upgrade on secondary, please check logs"
   end
-  common_post_upgrade
 end
 
 def get_locale_encoding
