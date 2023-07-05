@@ -90,12 +90,6 @@ module Build
         Gitlab::Version.new('gitlab-rails').print(prepend_version)
       end
 
-      def previous_version
-        # Get the second latest git tag
-        previous_tag = Info::Git.latest_stable_tag(level: 2)
-        previous_tag.tr("+", "-")
-      end
-
       def gitlab_rails_project_path
         if Gitlab::Util.get_env('CI_SERVER_HOST') == 'dev.gitlab.org'
           package == "gitlab-ee" ? 'gitlab/gitlab-ee' : 'gitlab/gitlabhq'

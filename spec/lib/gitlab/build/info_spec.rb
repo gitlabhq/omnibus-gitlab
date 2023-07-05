@@ -107,16 +107,6 @@ RSpec.describe Build::Info do
     end
   end
 
-  describe '.previous_version' do
-    it 'detects previous version correctly' do
-      allow(Build::Info::Git).to receive(:`).and_call_original
-      allow(Build::Info::Git).to receive(:`).with("git describe --exact-match 2>/dev/null").and_return('10.4.0+ee.0')
-      allow(Build::Info::Git).to receive(:`).with(/git -c versionsort/).and_return("10.4.0+ee.0\n10.3.5+ee.0")
-
-      expect(described_class.previous_version).to eq("10.3.5-ee.0")
-    end
-  end
-
   describe '.gitlab_rails repo' do
     describe 'with alternative sources channel selected' do
       before do
