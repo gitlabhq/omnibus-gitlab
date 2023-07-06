@@ -18,7 +18,7 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && $DEPENDENCY_SCANNING == "true" && $CI_PIPELINE_SOURCE == "schedule"'
       variables:
         PIPELINE_TYPE: DEPENDENCY_SCANNING_PIPELINE
-    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && $DEPS_PIPELINE == "true" && $CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && $DEPS_PIPELINE == "true"'
       variables:
         PIPELINE_TYPE: DEPS_IO_VERSION_CHECK_PIPELINE
     - if: '$PIPELINE_TYPE == null && $CACHE_UPDATE == "true" && $CI_PIPELINE_SOURCE == "schedule"'
