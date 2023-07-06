@@ -48,8 +48,8 @@ module GitlabCtl
       @tmp_data_dir = @tmp_dir ? "#{@tmp_dir}/data" : data_dir
     end
 
-    def enough_free_space?(dir)
-      space_needed(dir) <= space_free(dir)
+    def enough_free_space?(dir, needed)
+      needed <= space_free(dir)
     end
 
     def space_needed(dir)
