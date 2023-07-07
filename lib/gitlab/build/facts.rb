@@ -77,8 +77,8 @@ module Build
           GITLAB_SEMVER_VERSION=#{Build::Info.latest_stable_tag.tr('+', '-')}
           RAT_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs'}
           RAT_FIPS_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_FIPS_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs-fips-ubuntu'}
-          RAT_PACKAGE_URL=#{Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.triggered_build_package_url(fips: false)}
-          RAT_FIPS_PACKAGE_URL=#{Gitlab::Util.get_env('FIPS_PACKAGE_URL') || Build::Info.triggered_build_package_url(fips: true)}
+          RAT_PACKAGE_URL=#{Gitlab::Util.get_env('PACKAGE_URL') || Build::Info::CI.triggered_package_download_url(fips: false)}
+          RAT_FIPS_PACKAGE_URL=#{Gitlab::Util.get_env('FIPS_PACKAGE_URL') || Build::Info::CI.triggered_package_download_url(fips: true)}
         ]
       end
 

@@ -1,6 +1,7 @@
 require_relative "util"
 require_relative "ohai_helper"
 require_relative "build/check"
+require_relative "build/info/secrets"
 
 require 'gitlab'
 
@@ -12,21 +13,13 @@ class PackageSizeCheck
 
   class << self
     def fetch_sizefile
-      api_url = Gitlab::Util.get_env('CI_API_V4_URL')
-      project_id = Gitlab::Util.get_env('CI_PROJECT_ID')
-      pipeline_id = Gitlab::Util.get_env('CI_PIPELINE_ID')
-      token = Gitlab::Util.get_env('PACKAGE_SIZE_CHECK_OMNIBUS_GITLAB_MIRROR_TOKEN')
-
-      gitlab_client = ::Gitlab.client(endpoint: api_url, private_token: token)
-      pipeline_jobs = gitlab_client.pipeline_jobs(project_id, pipeline_id)
-      trigger_package_job = pipeline_jobs.find { |j| j.name == 'Trigger:package' }
+      sizefile_url = Build::Info::CI.artifact_url("Trigger:package", "pkg/ubuntu-jammy/gitlab.deb.size")
 
       # We have to use net/http here because `gitlab` gem's `download_job_artifact_file`
       # method doesn't support plain text files. It has to be either binary or valid JSON.
       # https://github.com/NARKOZ/gitlab/issues/621
-      sizefile_url = URI("#{api_url}/projects/#{project_id}/jobs/#{trigger_package_job.id}/artifacts/pkg/ubuntu-jammy/gitlab.deb.size")
       req = Net::HTTP::Get.new(sizefile_url)
-      req['PRIVATE-TOKEN'] = token
+      req['PRIVATE-TOKEN'] = Build::Info::Secrets.api_token
       res = Net::HTTP.start(sizefile_url.hostname, sizefile_url.port, use_ssl: true) do |http|
         http.request(req)
       end

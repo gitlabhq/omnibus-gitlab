@@ -1,6 +1,4 @@
 require 'omnibus'
-require 'net/http'
-require 'json'
 
 require_relative '../build_iteration'
 require_relative "../util.rb"
@@ -236,15 +234,6 @@ module Build
         end
       end
 
-      # Fetch the package from an S3 bucket
-      def deb_package_download_url(arch: 'amd64')
-        folder = 'ubuntu-jammy'
-        folder = "#{folder}_aarch64" if arch == 'arm64'
-
-        package_filename_url_safe = Info.release_version.gsub("+", "%2B")
-        "https://#{Info.release_bucket}.#{Info.release_bucket_s3_endpoint}/#{folder}/#{Info.package}_#{package_filename_url_safe}_#{arch}.deb"
-      end
-
       # Fetch the package used in AWS AMIs from an S3 bucket
       def ami_deb_package_download_url(arch: 'amd64')
         folder = 'ubuntu-focal'
@@ -252,53 +241,6 @@ module Build
 
         package_filename_url_safe = Info.release_version.gsub("+", "%2B")
         "https://#{Info.release_bucket}.#{Info.release_bucket_s3_endpoint}/#{folder}/#{Info.package}_#{package_filename_url_safe}_#{arch}.deb"
-      end
-
-      def rpm_package_download_url(arch: 'x86_64')
-        folder = 'el-8'
-        folder = "#{folder}_aarch64" if arch == 'arm64'
-        folder = "#{folder}_fips" if Build::Check.use_system_ssl?
-
-        package_filename_url_safe = Info.release_version.gsub("+", "%2B")
-        "https://#{Info.release_bucket}.#{Info.release_bucket_s3_endpoint}/#{folder}/#{Info.package}-#{package_filename_url_safe}.el8.#{arch}.rpm"
-      end
-
-      def get_api(path, token: nil)
-        uri = URI("https://gitlab.com/api/v4/#{path}")
-        req = Net::HTTP::Get.new(uri)
-        req['PRIVATE-TOKEN'] = token || Gitlab::Util.get_env('TRIGGER_PRIVATE_TOKEN')
-        http = Net::HTTP.new(uri.hostname, uri.port)
-        http.use_ssl = true
-        res = http.request(req)
-        JSON.parse(res.body) if res.code == '200'
-      end
-
-      def fetch_artifact_url(project_id, pipeline_id, fips: Build::Check.use_system_ssl?)
-        job_name = 'Trigger:package'
-        job_name = "#{job_name}:fips" if fips
-
-        output = get_api("projects/#{project_id}/pipelines/#{pipeline_id}/jobs") || {}
-        output.map { |job| job['id'] if job['name'] == job_name }.compact.max
-      end
-
-      def fetch_pipeline_jobs(project_id, pipeline_id, token)
-        get_api("projects/#{project_id}/pipelines/#{pipeline_id}/jobs")
-      end
-
-      def triggered_build_package_url(fips: Build::Check.use_system_ssl?)
-        project_id = Gitlab::Util.get_env('CI_PROJECT_ID')
-        pipeline_id = Gitlab::Util.get_env('CI_PIPELINE_ID')
-        return unless project_id && !project_id.empty? && pipeline_id && !pipeline_id.empty?
-
-        id = fetch_artifact_url(project_id, pipeline_id, fips: fips)
-
-        return unless id
-
-        # Ubuntu 22.04 is still not FIPS compliant, so we use 20.04 packages
-        # there.
-        folder = fips ? 'ubuntu-focal_fips' : 'ubuntu-jammy'
-
-        "https://gitlab.com/api/v4/projects/#{Gitlab::Util.get_env('CI_PROJECT_ID')}/jobs/#{id}/artifacts/pkg/#{folder}/gitlab.deb"
       end
 
       def tag_match_pattern
