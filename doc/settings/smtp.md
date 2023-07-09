@@ -1282,7 +1282,7 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 
 ### Scaleway Transactional Email
 
-Read more about [Scaleway's Transactional Email](https://www.scaleway.com/en/docs/managed-services/transactional-email/how-to/generate-api-keys-for-api-and-smtp-sending/#generate-an-api-key-to-send-emails-via-smtp).
+Read more about [Scaleway's Transactional Email](https://www.scaleway.com/en/docs/managed-services/transactional-email/how-to/generate-api-keys-for-tem-with-iam/).
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
