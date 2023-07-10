@@ -418,6 +418,16 @@ RSpec.describe 'nginx' do
         end
       end
     end
+
+    # Required to allow chunked encoding responses as of nginx 1.23
+    # https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/7006
+    it 'sets proxy_http_version 1.1 when proxy_pass is used' do
+      http_conf.each_value do |conf|
+        expect(chef_run).to render_file(conf).with_content { |content|
+          expect(content).to include('proxy_http_version 1.1;') if content.include?('proxy_pass')
+        }
+      end
+    end
   end
 
   context 'when is enabled' do
@@ -565,6 +575,7 @@ RSpec.describe 'nginx' do
       expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
         expect(content).to include('location /-/grafana/ {')
         expect(content).to include('proxy_pass http://localhost:3000/;')
+        expect(content).to include('proxy_http_version 1.1;')
       }
     end
   end
@@ -580,6 +591,7 @@ RSpec.describe 'nginx' do
       expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
         expect(content).to include('location = /-/kubernetes-agent/ {')
         expect(content).to include('proxy_pass http://localhost:8150/;')
+        expect(content).to include('proxy_http_version 1.1;')
 
         expect(content).to include('location /-/kubernetes-agent/k8s-proxy/ {')
         expect(content).to include('proxy_pass http://localhost:8154/;')
@@ -601,6 +613,7 @@ RSpec.describe 'nginx' do
         expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
           expect(content).to include('location = /-/kubernetes-agent/ {')
           expect(content).to include('proxy_pass http://localhost:8150/;')
+          expect(content).to include('proxy_http_version 1.1;')
 
           expect(content).to include('location /-/kubernetes-agent/k8s-proxy/ {')
           expect(content).to include('proxy_pass http://localhost:8154/;')
@@ -614,6 +627,7 @@ RSpec.describe 'nginx' do
 
           expect(content).to include('proxy_http_version 1.1;')
           expect(content).to include('proxy_pass http://localhost:8150/;')
+          expect(content).to include('proxy_http_version 1.1;')
 
           expect(content).to include('location /k8s-proxy/ {')
           expect(content).to include('location = /k8s-proxy/ {')

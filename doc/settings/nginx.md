@@ -334,6 +334,7 @@ This inserts the defined string into the end of the `server` block of
 
   ```conf
   proxy_cache off;
+  proxy_http_version 1.1;
   proxy_pass http://gitlab-workhorse;
   ```
 
@@ -533,6 +534,7 @@ server {
     proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
     proxy_set_header    X-Forwarded-Proto   $scheme;
 
+    proxy_http_version 1.1;
     proxy_pass http://gitlab-workhorse;
 
     ## The following settings only work with NGINX 1.7.11 or newer
@@ -556,6 +558,7 @@ server {
 
   ## To access Grafana
   location /-/grafana/ {
+    proxy_http_version 1.1;
     proxy_pass http://localhost:3000/;
   }
 

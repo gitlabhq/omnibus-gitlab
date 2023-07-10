@@ -15,6 +15,7 @@ location /error.json  {
 <% @monitoring_addresses.each do |address| %>
 location = <%= File.join(@path, address[:url]) %> {
   proxy_cache off;
+  proxy_http_version 1.1;
   proxy_pass  http://gitlab-workhorse;
   error_page 404 500 502 /error.<%= address[:format] %>;
 }
