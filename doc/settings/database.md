@@ -535,6 +535,19 @@ To opt out of automatic PostgreSQL upgrades during GitLab package upgrades, run:
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
+#### GitLab 16.2 and later
+
+As of GitLab 16.2, PostgreSQL 13.11 and 14.8 are both shipped with Omnibus.
+During a package upgrade, the database isn't upgraded to PostgreSQL 14. If you
+want to upgrade to PostgreSQL 14, you must do it manually:
+
+```shell
+sudo gitlab-ctl pg-upgrade -V 14
+```
+
+PostgreSQL 14 isn't supported on Geo deployments and is [planned](https://gitlab.com/groups/gitlab-org/-/epics/9065)
+for future releases.
+
 #### GitLab 16.0 and later
 
 PostgreSQL version 12 is no longer supported and the binaries have been
