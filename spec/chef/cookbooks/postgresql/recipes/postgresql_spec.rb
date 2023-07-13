@@ -612,6 +612,24 @@ RSpec.describe 'postgresql' do
   end
 end
 
+RSpec.describe 'postgresql 14' do
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config)).converge('gitlab::default') }
+  let(:postgresql_conf) { File.join(postgresql_data_dir, 'postgresql.conf') }
+  let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
+
+  before do
+    allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('14.0'))
+    allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('14.0'))
+  end
+
+  it 'configures wal_keep_size instead of wal_keep_segments' do
+    expect(chef_run).to render_file(runtime_conf).with_content { |content|
+      expect(content).to include("wal_keep_size")
+      expect(content).not_to include("wal_keep_segments")
+    }
+  end
+end
+
 RSpec.describe 'postgresql 13' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config)).converge('gitlab::default') }
   let(:postgresql_conf) { File.join(postgresql_data_dir, 'postgresql.conf') }
