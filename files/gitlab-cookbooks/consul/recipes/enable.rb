@@ -33,6 +33,7 @@ end
 
 directory node['consul']['dir'] do
   owner account_helper.consul_user
+  mode '0755'
 end
 
 directory gitlab_consul_static_etc_dir do
