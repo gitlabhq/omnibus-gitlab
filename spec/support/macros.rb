@@ -53,18 +53,18 @@ module GitlabSpec
 
     def stub_branch(branch)
       stub_env_var('CI_COMMIT_BRANCH', branch)
-      allow(Build::Info::Git).to receive(:`).with('git rev-parse --abbrev-ref HEAD').and_return(branch)
+      allow(Gitlab::Util).to receive(:shellout_stdout).with('git rev-parse --abbrev-ref HEAD').and_return(branch)
 
       stub_env_var('CI_COMMIT_TAG', '')
-      allow(Build::Info::Git).to receive(:`).with('git describe --tags --exact-match').and_raise(Gitlab::Util::ShellOutExecutionError.new("git describe --tags --exact-match", 128, "", "fatal: no tag exactly matches 'foobar'"))
+      allow(Gitlab::Util).to receive(:shellout_stdout).with('git describe --tags --exact-match').and_raise(Gitlab::Util::ShellOutExecutionError.new("git describe --tags --exact-match", 128, "", "fatal: no tag exactly matches 'foobar'"))
     end
 
     def stub_tag(tag)
       stub_env_var('CI_COMMIT_TAG', tag)
-      allow(Build::Info::Git).to receive(:`).with('git describe --tags --exact-match').and_return(tag)
+      allow(Gitlab::Util).to receive(:shellout_stdout).with('git describe --tags --exact-match').and_return(tag)
 
       stub_env_var('CI_COMMIT_BRANCH', '')
-      allow(Build::Info::Git).to receive(:`).with('git rev-parse --abbrev-ref HEAD').and_return('HEAD')
+      allow(Gitlab::Util).to receive(:shellout_stdout).with('git rev-parse --abbrev-ref HEAD').and_return('HEAD')
     end
 
     def stub_is_package_version(package, value = nil)

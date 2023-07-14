@@ -7,8 +7,8 @@ RSpec.describe Build::Info::Git do
 
     ce_tags = "16.1.1+ce.0\n16.0.0+rc42.ce.0\n15.11.1+ce.0\n15.11.0+ce.0\n15.10.0+ce.0\n15.10.0+rc42.ce.0"
     ee_tags = "16.1.1+ee.0\n16.0.0+rc42.ee.0\n15.11.1+ee.0\n15.11.0+ee.0\n15.10.0+ee.0\n15.10.0+rc42.ee.0"
-    allow(described_class).to receive(:`).with(/git -c versionsort.*ce/).and_return(ce_tags)
-    allow(described_class).to receive(:`).with(/git -c versionsort.*ee/).and_return(ee_tags)
+    allow(Gitlab::Util).to receive(:shellout_stdout).with(/git -c versionsort.*ce/).and_return(ce_tags)
+    allow(Gitlab::Util).to receive(:shellout_stdout).with(/git -c versionsort.*ee/).and_return(ee_tags)
   end
 
   describe '.branch_name' do
@@ -26,7 +26,7 @@ RSpec.describe Build::Info::Git do
       context 'not in CI' do
         before do
           stub_env_var('CI_COMMIT_BRANCH', '')
-          allow(described_class).to receive(:`).with('git rev-parse --abbrev-ref HEAD').and_return('HEAD')
+          allow(Gitlab::Util).to receive(:shellout_stdout).with('git rev-parse --abbrev-ref HEAD').and_return('HEAD')
         end
 
         it 'returns nil' do
@@ -50,7 +50,7 @@ RSpec.describe Build::Info::Git do
         before do
           stub_env_var('CI_COMMIT_BRANCH', '')
           stub_env_var('CI_COMMIT_TAG', '')
-          allow(described_class).to receive(:`).with('git rev-parse --abbrev-ref HEAD').and_return('my-feature-branch')
+          allow(Gitlab::Util).to receive(:shellout_stdout).with('git rev-parse --abbrev-ref HEAD').and_return('my-feature-branch')
         end
 
         it 'computes branch name from git' do
@@ -76,7 +76,7 @@ RSpec.describe Build::Info::Git do
           before do
             stub_env_var('CI_COMMIT_BRANCH', '')
             stub_env_var('CI_COMMIT_TAG', '')
-            allow(described_class).to receive(:`).with('git describe --tags --exact-match').and_return('16.1.1+ee.0')
+            allow(Gitlab::Util).to receive(:shellout_stdout).with('git describe --tags --exact-match').and_return('16.1.1+ee.0')
           end
 
           it 'computes tag name from git' do
@@ -100,7 +100,7 @@ RSpec.describe Build::Info::Git do
       before do
         stub_env_var('CI_COMMIT_BRANCH', '')
         stub_env_var('CI_COMMIT_TAG', '')
-        allow(described_class).to receive(:`).with('git describe --tags --exact-match').and_raise(Gitlab::Util::ShellOutExecutionError.new("", 100, "", "Some Other Error"))
+        allow(Gitlab::Util).to receive(:shellout_stdout).with('git describe --tags --exact-match').and_raise(Gitlab::Util::ShellOutExecutionError.new("", 100, "", "Some Other Error"))
       end
 
       it 'raises the error' do
@@ -113,7 +113,7 @@ RSpec.describe Build::Info::Git do
     context 'from CI' do
       before do
         stub_env_var('CI_COMMIT_SHA', '3cd8e712ccd3c3f356108ec1a5cbeecbf3d3be88')
-        allow(described_class).to receive(:`).with('git rev-parse HEAD').and_return('some-other-sha')
+        allow(Gitlab::Util).to receive(:shellout_stdout).with('git rev-parse HEAD').and_return('some-other-sha')
       end
 
       it 'returns truncated commit sha from CI variable' do
@@ -124,7 +124,7 @@ RSpec.describe Build::Info::Git do
     context 'not from CI' do
       before do
         stub_env_var('CI_COMMIT_SHA', '')
-        allow(described_class).to receive(:`).with('git rev-parse HEAD').and_return('3cd8e712ccd3c3f356108ec1a5cbeecbf3d3be88')
+        allow(Gitlab::Util).to receive(:shellout_stdout).with('git rev-parse HEAD').and_return('3cd8e712ccd3c3f356108ec1a5cbeecbf3d3be88')
       end
 
       it 'returns truncated commit sha from CI variable' do

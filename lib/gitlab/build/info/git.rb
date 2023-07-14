@@ -13,7 +13,7 @@ module Build
           return result if result
 
           # If not on CI, attempt to detect branch name
-          head_reference = `git rev-parse --abbrev-ref HEAD`.strip
+          head_reference = Gitlab::Util.shellout_stdout('git rev-parse --abbrev-ref HEAD')
 
           # On tags, the shell command will return `HEAD`. If that is not the
           # case, we are on a branch and can return the output we received.
@@ -21,7 +21,7 @@ module Build
         end
 
         def tag_name
-          Build::Info::CI.tag_name || `git describe --tags --exact-match`.strip
+          Build::Info::CI.tag_name || Gitlab::Util.shellout_stdout('git describe --tags --exact-match')
         rescue Gitlab::Util::ShellOutExecutionError => e
           return nil if /fatal: no tag exactly matches/.match?(e.stderr)
 
@@ -29,7 +29,7 @@ module Build
         end
 
         def commit_sha
-          commit_sha_raw = Gitlab::Util.get_env('CI_COMMIT_SHA') || `git rev-parse HEAD`.strip
+          commit_sha_raw = Gitlab::Util.get_env('CI_COMMIT_SHA') || Gitlab::Util.shellout_stdout('git rev-parse HEAD')
 
           commit_sha_raw[0, 8]
         end
@@ -90,7 +90,7 @@ module Build
         private
 
         def sorted_tags_for_edition
-          `git -c versionsort.prereleaseSuffix=rc tag -l '#{tag_match_pattern}' --sort=-v:refname`.split("\n")
+          Gitlab::Util.shellout_stdout("git -c versionsort.prereleaseSuffix=rc tag -l '#{tag_match_pattern}' --sort=-v:refname")&.split("\n")
         end
 
         def tag_match_pattern
