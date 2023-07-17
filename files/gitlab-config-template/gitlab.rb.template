@@ -1130,6 +1130,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! can be used to ensure certain queues are able to handle additional workload.
 ##! https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html
 
+# sidekiq['enable'] = true
 # sidekiq['log_directory'] = "/var/log/gitlab/sidekiq"
 # sidekiq['log_format'] = "json"
 # sidekiq['shutdown_timeout'] = 4
