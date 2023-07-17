@@ -15,7 +15,7 @@
 #
 
 name 'grafana'
-version = Gitlab::Version.new('grafana', 'v7.5.16')
+version = Gitlab::Version.new('grafana', 'v7.5.17')
 default_version version.print(false)
 
 license 'APACHE-2.0'
@@ -41,7 +41,6 @@ build do
   # see https://github.com/cypress-io/cypress/issues/6110
   env['CYPRESS_INSTALL_BINARY'] = '0'
 
-  patch source: '1-cve-2022-31107-oauth-vulnerability.patch'
   patch source: 'session-cookie.patch'
   patch source: 'cve-2023-1410.patch'
   patch source: 'deprecation-warning.patch'
