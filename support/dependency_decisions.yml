@@ -232,3 +232,10 @@
     :why: https://github.com/hashicorp/consul/blob/main/LICENSE
     :versions: []
     :when: 2023-05-25 06:59:56.730385964 Z
+- - :license
+  - github.com/hashicorp/go-retryablehttp
+  - MPL2
+  - :who: Mikhail Mazurskiy
+    :why: https://github.com/hashicorp/go-retryablehttp/blob/main/LICENSE
+    :versions: []
+    :when: 2023-07-17 06:00:00.000000000 Z
