@@ -9,6 +9,22 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 NOTE:
 When upgrading to a new major version, remember to first [check for background migrations](https://docs.gitlab.com/ee/update/index.html#checking-for-background-migrations-before-upgrading).
 
+## 16.2
+
+### Redis 7.0.12
+
+In 16.2, we are upgrading Redis from 6.2.11 to 7.0.12. This upgrade is expected
+to be fully backwards compatible.
+
+Redis will not be automatically restarted as part of `gitlab-ctl reconfigure`.
+Hence, users are manually required to run `sudo gitlab-ctl restart redis` after
+the reconfigure run so that the new Redis version gets used. A warning
+mentioning that the installed Redis version is different than the one running is
+displayed at the end of reconfigure run until the restart is performed.
+
+If your instance has Redis HA with Sentinel, follow the upgrade steps mentioned in
+[Zero Downtime documentation](https://docs.gitlab.com/ee/update/zero_downtime.html#redis-ha-using-sentinel).
+
 ## 16.0
 
 ### PostgreSQL 12 removal
