@@ -79,7 +79,7 @@ module Build
             folder = "#{folder}_aarch64"
           end
 
-          job_name = "#{job_name}-branch" unless Build::Check.on_tag?
+          job_name = "#{job_name}-branch" unless Build::Info::CI.tag_name
 
           package_path = "pkg/#{folder}/#{package_file_name}"
           Build::Info::CI.artifact_url(job_name, package_path)
