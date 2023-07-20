@@ -365,7 +365,7 @@ The external load balancer may need access to a GitLab endpoint
 that returns a `200` status code (for installations requiring login, the root
 page returns a `302` redirect to the login page). In that case, it's
 recommended to leverage a
-[health check endpoint](https://docs.gitlab.com/ee/user/admin_area/monitoring/health_check.html).
+[health check endpoint](https://docs.gitlab.com/ee/administration/monitoring/health_check.html).
 
 Other bundled components, like the Container Registry, GitLab Pages, or Mattermost,
 use a similar strategy for proxied SSL. Set the particular component's `*_external_url` with `https://` and

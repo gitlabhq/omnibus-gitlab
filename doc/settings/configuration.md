@@ -26,7 +26,7 @@ for more details about the use of DNS in a self-managed GitLab instance.
 To change the external URL:
 
 1. Optional. Before you change the external URL, determine if you have previously
-   defined a [custom **Home page URL** or **After sign-out path**](https://docs.gitlab.com/ee/user/admin_area/settings/sign_in_restrictions.html#sign-in-information).
+   defined a [custom **Home page URL** or **After sign-out path**](https://docs.gitlab.com/ee/administration/settings/sign_in_restrictions.html#sign-in-information).
    Both of these settings might cause unintentional redirecting after configuring
    a new external URL. If you have defined any URLs, remove them completely.
 

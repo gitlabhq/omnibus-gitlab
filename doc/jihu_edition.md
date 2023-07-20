@@ -44,7 +44,7 @@ back to the login screen. Use the default account's username `root` to log in.
 For detailed instructions, see [installation and configuration](installation/index.md#installation-and-configuration).
 
 Additionally, you can navigate to the GitLab administration panel of your server and
-[upload your JiHu Edition license file](https://docs.gitlab.com/ee/user/admin_area/license.html#uploading-your-license).
+[upload your JiHu Edition license file](https://docs.gitlab.com/ee/administration/license.html#uploading-your-license).
 
 ## Update GitLab Enterprise Edition to JiHu Edition
 
