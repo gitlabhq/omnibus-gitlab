@@ -1,3 +1,5 @@
+require_relative 'info/git'
+
 module Build
   class Facts
     class << self
@@ -12,7 +14,7 @@ module Build
           :latest_stable_tag,
           :latest_tag
         ].each do |fact|
-          content = Build::Info.send(fact) # rubocop:disable GitlabSecurity/PublicSend
+          content = Build::Info::Git.send(fact) # rubocop:disable GitlabSecurity/PublicSend
           File.write("build_facts/#{fact}", content) unless content.nil?
         end
       end
@@ -74,7 +76,7 @@ module Build
           QA_IMAGE=#{Build::Info.qa_image}
           QA_TESTS=#{Gitlab::Util.get_env('QA_TESTS')}
           ALLURE_JOB_NAME=#{allure_job_name}-#{Build::Info.edition}
-          GITLAB_SEMVER_VERSION=#{Build::Info.latest_stable_tag.tr('+', '-')}
+          GITLAB_SEMVER_VERSION=#{Build::Info::Git.latest_stable_tag.tr('+', '-')}
           RAT_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs'}
           RAT_FIPS_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_FIPS_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs-fips-ubuntu'}
           RAT_PACKAGE_URL=#{Gitlab::Util.get_env('PACKAGE_URL') || Build::Info.triggered_build_package_url(fips: false)}
