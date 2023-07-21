@@ -185,7 +185,7 @@ information, see the
 
 Spamcheck roles are used to setup and configure Spamcheck services. For additional
 information, see the
-[Spamcheck documentation](https://docs.gitlab.com/ee/user/admin_area/reporting/spamcheck.html)
+[Spamcheck documentation](https://docs.gitlab.com/ee/administration/reporting/spamcheck.html)
 
 - **spamcheck_role** (`gitlab-ee`)
 
