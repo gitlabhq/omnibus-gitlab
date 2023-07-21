@@ -3,6 +3,42 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.2.0 (2023-07-21)
+
+### Added (3 changes)
+
+- [Add PostgreSQL 14 to the package](gitlab-org/omnibus-gitlab@5cae17973352e49978eb32d0b11de7b4ddafc8fd) ([merge request](gitlab-org/omnibus-gitlab!6811))
+- [Add Oracle Linux 9 package](gitlab-org/omnibus-gitlab@3d9ba4d8d841e9e9600d9ca33f4dc9cac044d5f5) ([merge request](gitlab-org/omnibus-gitlab!6998))
+- [Add option to limit maximum number of open files by Redis](gitlab-org/omnibus-gitlab@7d39d66142b7192968bd80103933dc7ce7e8e01a) ([merge request](gitlab-org/omnibus-gitlab!6953))
+
+### Fixed (2 changes)
+
+- [Set proxy_http_version 1.1 in nginx configuration](gitlab-org/omnibus-gitlab@621e2c5fee2de0ff4d86cfdc496acb8b22519ae6) by @drmoose ([merge request](gitlab-org/omnibus-gitlab!7006))
+- [Fix errors on GEO secondary pg-upgrade](gitlab-org/omnibus-gitlab@9f4ff923a0bbd69f045e879b628ccd0c04bb9d6f) ([merge request](gitlab-org/omnibus-gitlab!6984))
+
+### Changed (16 changes)
+
+- [Bump Redis version to 7.0.12](gitlab-org/omnibus-gitlab@26c8c952c472232a167c2cd74983b9c881d7f7eb) ([merge request](gitlab-org/omnibus-gitlab!7015))
+- [Bump Python to 3.9.17](gitlab-org/omnibus-gitlab@aca65f0fafaa43d0bfc0e15f75a16d02cfaf31df) ([merge request](gitlab-org/omnibus-gitlab!7017))
+- [Bump Go build version to 1.20.5](gitlab-org/omnibus-gitlab@64cb677e1a9dada4d21e2cfeb2a7012ed3ec811c) ([merge request](gitlab-org/omnibus-gitlab!7021))
+- [Update Mattermost to 7.10.3](gitlab-org/omnibus-gitlab@fed575a320622978641bafde6a0f6d833163482f) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6993))
+- [Update postgres_exporter from 0.13.0 to 0.13.1](gitlab-org/omnibus-gitlab@3ff95222342f61892f9a1d476994e93c7f8b4a75) ([merge request](gitlab-org/omnibus-gitlab!6999))
+- [Bump pgbouncer_exporter to version 0.7.0](gitlab-org/omnibus-gitlab@4314727081bc2f66eb110a66a5052b78742e35da) ([merge request](gitlab-org/omnibus-gitlab!6656))
+- [Bump redis_exporter to version 1.51.0](gitlab-org/omnibus-gitlab@36389a18bd2ffc4e92c284acc007ab5e856c5195) ([merge request](gitlab-org/omnibus-gitlab!6716))
+- [Bump postgres_exporter to version 0.13.0](gitlab-org/omnibus-gitlab@a7dcf8b54a252da0aba9449ce7bbbdb5913469c9) ([merge request](gitlab-org/omnibus-gitlab!6775))
+- [Bump node_exporter to version 1.6.0](gitlab-org/omnibus-gitlab@09b7172f33369fdc45b6e610f5f935916b065379) ([merge request](gitlab-org/omnibus-gitlab!6925))
+- [Bump prometheus to version 2.45.0](gitlab-org/omnibus-gitlab@3d41277923145bdb10eeb12924ab9418f7c9c3b9) ([merge request](gitlab-org/omnibus-gitlab!6868))
+- [Bump rubygems to version 3.4.14](gitlab-org/omnibus-gitlab@c524c2fbb5d8a113c0d4ea3ecececc633ecf31fc) ([merge request](gitlab-org/omnibus-gitlab!6969))
+- [Bump OpenSSL to version 1.1.1u](gitlab-org/omnibus-gitlab@4ee36529b98ad0789c5f0c5db35616c2cd458bb5) ([merge request](gitlab-org/omnibus-gitlab!6934))
+- [Bump acme-client to version 2.0.14](gitlab-org/omnibus-gitlab@8cf81e582630f4b58db9c5671a6feea82336183e) ([merge request](gitlab-org/omnibus-gitlab!6980))
+- [Bump gitlab-exporter to version 13.1.0](gitlab-org/omnibus-gitlab@8116a31a38543302843d6aea3b1114fec6e4a53a) ([merge request](gitlab-org/omnibus-gitlab!6991))
+- [Bump libpng to version 1.6.40](gitlab-org/omnibus-gitlab@ef1b99a3a2b6c4dc72c37b027d23ac776ab0f51d) ([merge request](gitlab-org/omnibus-gitlab!6992))
+- [Bump goland to 1.19.9](gitlab-org/omnibus-gitlab@95497ee5eb918edab639fdcf8312c52a67476df0) ([merge request](gitlab-org/omnibus-gitlab!6960))
+
+### Other (1 change)
+
+- [Remove GITLAB_METRICS_EXPORTER_VERSION file](gitlab-org/omnibus-gitlab@5afc28844d0abb8b18e3a4b0fea2dec283b757e2) ([merge request](gitlab-org/omnibus-gitlab!7030))
+
 ## 16.1.2 (2023-07-04)
 
 No changes.
