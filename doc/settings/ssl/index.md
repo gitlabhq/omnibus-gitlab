@@ -169,6 +169,35 @@ To configure GitLab to use a custom ACME server:
    sudo gitlab-ctl reconfigure
    ```
 
+### Add alternative domains to the certificate
+
+You can add alternative domains (or subject alternative names) to the Let's Encrypt certificate.
+This can be helpful if you would like to use the [bundled NGINX](../nginx.md) as a
+[reverse proxy for other backend applications](../nginx.md#inserting-custom-settings-into-the-nginx-configuration).
+
+The DNS records for the alternative domains must point to the GitLab instance.
+
+To add alternative domains to your Let's Encrypt certificate:
+
+1. Edit `/etc/gitlab/gitlab.rb` and add the alternative domains:
+
+    ```ruby
+    # Separate multiple domains with commas
+    letsencrypt['alt_names'] = ['another-application.example.com']
+    ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```  
+
+The resulting Let's Encrypt certificates generated for the main GitLab application will
+include the alternative domains specified. The generated files are located at:
+
+- `/etc/gitlab/ssl/gitlab.example.com.key` for the key.
+- `/etc/gitlab/ssl/gitlab.example.com.crt` for the certificate.
+
 ## Configure HTTPS manually
 
 WARNING:

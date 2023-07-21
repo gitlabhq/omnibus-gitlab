@@ -351,16 +351,30 @@ existing server blocks, you can use the following setting.
 
 ```ruby
 # Example: include a directory to scan for additional config files
-nginx['custom_nginx_config'] = "include /etc/nginx/conf.d/*.conf;"
+nginx['custom_nginx_config'] = "include /etc/gitlab/nginx/sites-enabled/*.conf;"
 ```
 
+You should create custom server blocks in the `/etc/gitlab/nginx/sites-available` directory. To enable them, symlink them into the
+`/etc/gitlab/nginx/sites-enabled` directory:
+
+1. Create the `/etc/gitlab/nginx/sites-enabled` directory.
+1. Run the following command:
+
+   ```shell
+   sudo ln -s /etc/gitlab/nginx/sites-available/example.conf /etc/gitlab/nginx/sites-enabled/example.conf 
+   ```
+
+You can add domains for server blocks [as an alternative name](ssl/index.md#add-alternative-domains-to-the-certificate)
+to the generated Let's Encrypt SSL certificate.
+
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
-NGINX.
+NGINX. You must reload NGINX (`gitlab-ctl hup nginx`) or restart NGINX (`gitlab-ctl restart nginx`) whenever you make changes to the custom server blocks.
 
 This inserts the defined string into the end of the `http` block of
 `/var/opt/gitlab/nginx/conf/nginx.conf`.
 
-Consider including your custom NGINX configuration file in `/etc/gitlab/` so the custom configuration is backed up.
+Custom NGINX settings inside the `/etc/gitlab/` directory are backed up to `/etc/gitlab/config_backup/`
+during an upgrade and when `sudo gitlab-ctl backup-etc` is manually executed.
 
 ## Custom error pages
 
