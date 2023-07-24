@@ -12,6 +12,9 @@ To configure GitLab, set the relevant options in the `/etc/gitlab/gitlab.rb` fil
 contains a complete list of available options. New installations have all the
 options of the template listed in `/etc/gitlab/gitlab.rb` by default.
 
+NOTE:
+The examples provided when you edit `/etc/gitlab/gitlab.rb` might not always reflect the default settings for an instance.
+
 For a list of default settings, see the
 [package defaults](https://docs.gitlab.com/ee/administration/package_information/defaults.html).
 
