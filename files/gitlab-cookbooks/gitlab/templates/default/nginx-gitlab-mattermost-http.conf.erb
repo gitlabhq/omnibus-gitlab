@@ -130,6 +130,7 @@ server { ## HTTPS server
     proxy_connect_timeout 90;
     proxy_send_timeout 300;
     proxy_read_timeout <%= @proxy_read_timeout %>;
+    proxy_http_version 1.1;
 
     proxy_pass http://gitlab_mattermost;
   }
@@ -157,6 +158,7 @@ server { ## HTTPS server
     <% next if header[1].nil? %>
     proxy_set_header <%= header[0] %> <%= header[1] %>;
     <% end %>
+    proxy_http_version 1.1;
 
     proxy_pass http://gitlab_mattermost;
   }
