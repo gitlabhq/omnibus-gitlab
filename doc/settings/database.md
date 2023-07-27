@@ -712,8 +712,10 @@ this.
 
 In GitLab 16.0, GitLab defaults to using two database connections that point to the same PostgreSQL database.
 
-Prior to upgrading to GitLab 16.0, you can check that PostgreSQL `max_connections` is high enough
-(using more than 50% of the available max connections).
+Before upgrading to GitLab 16.0, check that the PostgreSQL `max_connections` setting is high enough so that more than 50% of available connections show as being unused.
+For example, if `max_connections` is set to 100 and you see 75 connections in use, you must increase `max_connections` to at least 150 before upgrading because after
+upgrading, the in-use connections will double to 150.
+
 You can verify this by running the following Rake task:
 
 ```shell
