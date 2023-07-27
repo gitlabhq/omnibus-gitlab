@@ -195,6 +195,10 @@ No changes.
 - [Drop bundler software definition](gitlab-org/omnibus-gitlab@3f08274227a17adf5f7d42403804af198895a726) ([merge request](gitlab-org/omnibus-gitlab!6849))
 - [Update Mattermost to 7.10.0](gitlab-org/omnibus-gitlab@ec498e8b899bfaf00d07d161a5a03ae9aed66612) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6827))
 
+## 15.11.13 (2023-07-27)
+
+No changes.
+
 ## 15.11.12 (2023-07-14)
 
 No changes.
