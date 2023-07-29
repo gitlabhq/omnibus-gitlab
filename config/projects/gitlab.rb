@@ -76,9 +76,14 @@ if rhel?
   when '8', '9'
     runtime_dependency 'policycoreutils-python-utils'
   end
+elsif amazon?
+  case OhaiHelper.get_amazon_version
+  when '2'
+    runtime_dependency 'policycoreutils-python'
+  when '2023'
+    runtime_dependency 'policycoreutils-python-utils'
+  end
 end
-
-runtime_dependency 'policycoreutils-python' if amazon? && OhaiHelper.get_amazon_version == '2'
 
 # Arm targets need libatomic
 if OhaiHelper.arm?
