@@ -63,7 +63,7 @@ build do
       (ohai['platform'] =~ /^ubuntu/ && ohai['platform_version'] =~ /^22/)
 
   with_openssl = ''
-  if (ohai['platform'] =~ /^amzn/ || ohai['platform'] =~ /^amazon/) && (ohai['platform_version'] == "2022")
+  if (ohai['platform'] =~ /^amzn/ || ohai['platform'] =~ /^amazon/) && (ohai['platform_version'] == "2023")
     patch source: 'custom-openssl.patch'
     with_openssl = "--with-opensssl=/usr/local/openssl"
   end
