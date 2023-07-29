@@ -3,7 +3,7 @@ class SELinuxDistroHelper
   OS_RELEASE_FILE = '/etc/os-release'.freeze
 
   def self.selinux_supported?
-    system_is_rhel7? || system_is_rhel8? || system_is_rhel9? || system_is_amazon_linux2? || system_is_amazon_linux2022?
+    system_is_rhel7? || system_is_rhel8? || system_is_rhel9? || system_is_amazon_linux2? || system_is_amazon_linux2023?
   end
 
   def self.system_is_rhel7?
@@ -23,9 +23,9 @@ class SELinuxDistroHelper
     platform_family == 'rhel' && %w[amazon amzn].include?(platform&.downcase) && platform_version == '2'
   end
 
-  def self.system_is_amazon_linux2022?
+  def self.system_is_amazon_linux2023?
     # Extra platform check to ensure we don't enable RHEL 2
-    platform_family == 'rhel' && %w[amazon amzn].include?(platform&.downcase) && platform_version == '2022'
+    platform_family == 'rhel' && %w[amazon amzn].include?(platform&.downcase) && platform_version == '2023'
   end
 
   def self.platform_family

@@ -353,11 +353,11 @@ AmazonLinux-2-arm64-branch:
   extends: .branch_template
   tags:
   - docker-arm-builder
-AmazonLinux-2022-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2022:${BUILDER_IMAGE_REVISION}"
+AmazonLinux-2023-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
-AmazonLinux-2022-arm64-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2022_arm64:${BUILDER_IMAGE_REVISION}"
+AmazonLinux-2023-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
   tags:
   - docker-arm-builder
@@ -656,11 +656,11 @@ AmazonLinux-2-arm64:
   extends: .tag_template
   tags:
   - docker-arm-builder
-AmazonLinux-2022:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2022:${BUILDER_IMAGE_REVISION}"
+AmazonLinux-2023:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
-AmazonLinux-2022-arm64:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2022_arm64:${BUILDER_IMAGE_REVISION}"
+AmazonLinux-2023-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
   tags:
   - docker-arm-builder
@@ -829,19 +829,19 @@ AmazonLinux-2-arm64-staging:
       optional: true
     - job: AmazonLinux-2-arm64-branch
       optional: true
-AmazonLinux-2022-staging:
+AmazonLinux-2023-staging:
   extends: .staging_upload_template
   needs:
-    - job: AmazonLinux-2022
+    - job: AmazonLinux-2023
       optional: true
-    - job: AmazonLinux-2022-branch
+    - job: AmazonLinux-2023-branch
       optional: true
-AmazonLinux-2022-arm64-staging:
+AmazonLinux-2023-arm64-staging:
   extends: .staging_upload_template
   needs:
-    - job: AmazonLinux-2022-arm64
+    - job: AmazonLinux-2023-arm64
       optional: true
-    - job: AmazonLinux-2022-arm64-branch
+    - job: AmazonLinux-2023-arm64-branch
       optional: true
 SLES-12.5-staging:
   extends: .staging_upload_template
@@ -973,14 +973,14 @@ AmazonLinux-2-arm64-release:
   extends: .production_release_template
   needs:
     - AmazonLinux-2-arm64
-AmazonLinux-2022-release:
+AmazonLinux-2023-release:
   extends: .production_release_template
   needs:
-    - AmazonLinux-2022
-AmazonLinux-2022-arm64-release:
+    - AmazonLinux-2023
+AmazonLinux-2023-arm64-release:
   extends: .production_release_template
   needs:
-    - AmazonLinux-2022-arm64
+    - AmazonLinux-2023-arm64
 SLES-12.5-release:
   extends: .production_release_template
   needs:
