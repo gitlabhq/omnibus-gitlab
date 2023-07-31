@@ -59,10 +59,16 @@ To provide a custom initial root password, you have two options:
 
 - Pass the `GITLAB_ROOT_PASSWORD` environment variable to the
   [installation command](https://about.gitlab.com/install/) provided
-  the hostname for the server is set up correctly.
+  the hostname for the server is set up correctly:
+
+  ```shell
+  sudo GITLAB_ROOT_PASSWORD="<strongpassword>" EXTERNAL_URL="http://gitlab.example.com" apt install gitlab-ee
+  ```
+
   If during the installation GitLab doesn't automatically perform a
   reconfigure, you have to pass the `GITLAB_ROOT_PASSWORD` variable to the
   first `gitlab-ctl reconfigure` run.
+
 - Before the first reconfigure, edit `/etc/gitlab/gitlab.rb` (create it if it
   doesn't exist) and set:
 
