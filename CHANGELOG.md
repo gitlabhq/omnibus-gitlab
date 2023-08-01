@@ -43,6 +43,18 @@ No changes.
 
 - [Remove GITLAB_METRICS_EXPORTER_VERSION file](gitlab-org/omnibus-gitlab@5afc28844d0abb8b18e3a4b0fea2dec283b757e2) ([merge request](gitlab-org/omnibus-gitlab!7030))
 
+## 16.1.3 (2023-08-01)
+
+### Fixed (1 change)
+
+- [Set proxy_http_version 1.1 in nginx configuration](gitlab-org/security/omnibus-gitlab@2ca25e86e7b5508324f3ef6851b03e702d3543e3)
+
+### Security (3 changes)
+
+- [Mattermost July 2023 security updates](gitlab-org/security/omnibus-gitlab@45213e38854ad89acb995bc1044b8b1dbfb29f97) ([merge request](gitlab-org/security/omnibus-gitlab!359))
+- [Update redis to 6.2.13](gitlab-org/security/omnibus-gitlab@eec7767b65bb82a468715e6b41851e87a89c7660) ([merge request](gitlab-org/security/omnibus-gitlab!355))
+- [Update libxml2 to 2.10.4](gitlab-org/security/omnibus-gitlab@96cfa98f3f3a84dde79bd86670dc29a4985c21d4) ([merge request](gitlab-org/security/omnibus-gitlab!350))
+
 ## 16.1.2 (2023-07-04)
 
 No changes.
