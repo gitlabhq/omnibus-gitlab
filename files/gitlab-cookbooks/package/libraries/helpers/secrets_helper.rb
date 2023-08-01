@@ -94,14 +94,6 @@ class SecretsHelper
       'suggested_reviewers' => {
         'api_secret_key' => Gitlab['suggested_reviewers']['api_secret_key']
       },
-      'grafana' => {
-        'secret_key' => Gitlab['grafana']['secret_key'],
-        'gitlab_secret' => Gitlab['grafana']['gitlab_secret'],
-        'gitlab_application_id' => Gitlab['grafana']['gitlab_application_id'],
-        'admin_password' => Gitlab['grafana']['admin_password'],
-        'metrics_basic_auth_password' => Gitlab['grafana']['metrics_basic_auth_password'],
-        'register_as_oauth_app' => Gitlab['grafana']['register_as_oauth_app']
-      },
       'registry' => {
         'http_secret' => Gitlab['registry']['http_secret'],
         'internal_certificate' => Gitlab['registry']['internal_certificate'],

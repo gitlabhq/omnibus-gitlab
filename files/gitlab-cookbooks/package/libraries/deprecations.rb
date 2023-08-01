@@ -581,7 +581,7 @@ module Gitlab
           The bundled Grafana is deprecated and no longer available. We recommond following
           https://docs.gitlab.com/ee/administration/monitoring/performance/grafana_configuration.html#deprecation.
         EOS
-        messages += deprecate_only_if_value(incoming_version, existing_config, type, ['monitoring', 'grafana', 'internal'], 'enable', true, '16.0', '16.3', note: grafana_note)
+        messages += deprecate_only_if_value(incoming_version, existing_config, type, ['monitoring', 'grafana'], 'enable', true, '16.0', '16.3', note: grafana_note)
 
         messages
       end

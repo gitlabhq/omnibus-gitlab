@@ -37,7 +37,7 @@ Prior to upgrading, administrators using Omnibus GitLab must:
 
 ### Deprecating bundled Grafana
 
-Bundled Grafana is deprecated and is no longer supported. It will be removed in GitLab 16.3.
+Bundled Grafana is deprecated and is no longer supported. It is removed in GitLab 16.3.
 
 For more information, see [deprecation notes](https://docs.gitlab.com/ee/administration/monitoring/performance/grafana_configuration.html#deprecation-of-bundled-grafana).
 

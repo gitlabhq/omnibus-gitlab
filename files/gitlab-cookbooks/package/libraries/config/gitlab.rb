@@ -72,13 +72,13 @@ module Gitlab
     # Prometheus needs to be loaded after puma for proper parsing of listen
     # address for rails metrics
     attribute('prometheus',         priority: 21).use { Prometheus }
-    attribute('grafana',            priority: 30).use { Grafana }
     attribute('alertmanager',       priority: 30)
     attribute('node_exporter',      priority: 30)
     attribute('redis_exporter',     priority: 30)
     attribute('postgres_exporter',  priority: 30)
     attribute('pgbouncer_exporter', priority: 30)
     attribute('gitlab_exporter',    priority: 30).use { GitlabExporter }
+    attribute('grafana')
   end
 
   ## Attributes under node['gitlab']

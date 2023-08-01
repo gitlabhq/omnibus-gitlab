@@ -34,7 +34,6 @@ module Services
     service 'prometheus',         groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
     service 'alertmanager',       groups: [DEFAULT_GROUP, 'monitoring', 'monitoring_role']
     service 'postgres_exporter',  groups: [DEFAULT_GROUP, 'monitoring', 'postgres', 'postgres_role', 'patroni_role']
-    service 'grafana',            groups: ['monitoring', 'monitoring_role']
     service 'gitlab_pages',       groups: ['pages_role']
     service 'gitlab_kas',         groups: [DEFAULT_GROUP, 'rails', 'skip_on_fips']
     service 'mailroom'

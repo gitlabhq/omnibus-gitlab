@@ -37,7 +37,6 @@ class LogfilesHelper < AccountHelper
       'gitlab-shell' => { username: gitlab_user, group: gitlab_group },
       'gitlab-sshd' => { username: gitlab_user, group: gitlab_group },
       'gitlab-workhorse' => { username: gitlab_user, group: gitlab_group },
-      'grafana' => { username: prometheus_user, group: prometheus_group },
       'logrotate' => { username: 'root', group: 'root' },
       'mailroom' => { username: gitlab_user, group: gitlab_group },
       'mattermost' => { username: mattermost_user, group: mattermost_group, mode: '0755' },

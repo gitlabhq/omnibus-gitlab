@@ -82,9 +82,6 @@ nginx-module-vts:
 ngx_security_headers:
   remote: "git@dev.gitlab.org:omnibus-mirror/ngx_security_headers.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/ngx_security_headers.git"
-grafana-dashboards:
-  remote: "git@dev.gitlab.org:omnibus-mirror/grafana-dashboards.git"
-  alternative: "https://gitlab.com/gitlab-org/grafana-dashboards.git"
 zlib:
   remote: "git@dev.gitlab.org:omnibus-mirror/zlib.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/zlib.git"
@@ -154,9 +151,6 @@ libtensorflow_lite:
 spamcheck:
   remote: "git@dev.gitlab.org:gitlab/spamcheck.git"
   alternative: "https://gitlab.com/gitlab-com/gl-security/engineering-and-research/automation-team/spam/spamcheck.git"
-grafana:
-  remote: "git@dev.gitlab.org:omnibus-mirror/grafana.git"
-  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/grafana.git"
 ncurses:
   remote: "git@dev.gitlab.org:omnibus-mirror/ncurses.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/ncurses.git"
