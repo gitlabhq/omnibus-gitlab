@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.2.2 (2023-08-01)
+
+### Changed (1 change)
+
+- [Toggle recommend_pg_upgrade to false for now](gitlab-org/security/omnibus-gitlab@71c787efc52d4317af192fded7574af39e50b6d8)
+
+### Security (2 changes)
+
+- [Mattermost July 2023 security updates](gitlab-org/security/omnibus-gitlab@f0c8a99320bf06c5a781c9f62abd75ecb1455c91) ([merge request](gitlab-org/security/omnibus-gitlab!358))
+- [Update libxml2 to 2.10.4](gitlab-org/security/omnibus-gitlab@f8e7a0687bb7266e3d69790d0772e35820a44b96) ([merge request](gitlab-org/security/omnibus-gitlab!357))
+
 ## 16.2.1 (2023-07-25)
 
 No changes.
@@ -42,6 +53,18 @@ No changes.
 ### Other (1 change)
 
 - [Remove GITLAB_METRICS_EXPORTER_VERSION file](gitlab-org/omnibus-gitlab@5afc28844d0abb8b18e3a4b0fea2dec283b757e2) ([merge request](gitlab-org/omnibus-gitlab!7030))
+
+## 16.1.3 (2023-08-01)
+
+### Fixed (1 change)
+
+- [Set proxy_http_version 1.1 in nginx configuration](gitlab-org/security/omnibus-gitlab@2ca25e86e7b5508324f3ef6851b03e702d3543e3)
+
+### Security (3 changes)
+
+- [Mattermost July 2023 security updates](gitlab-org/security/omnibus-gitlab@45213e38854ad89acb995bc1044b8b1dbfb29f97) ([merge request](gitlab-org/security/omnibus-gitlab!359))
+- [Update redis to 6.2.13](gitlab-org/security/omnibus-gitlab@eec7767b65bb82a468715e6b41851e87a89c7660) ([merge request](gitlab-org/security/omnibus-gitlab!355))
+- [Update libxml2 to 2.10.4](gitlab-org/security/omnibus-gitlab@96cfa98f3f3a84dde79bd86670dc29a4985c21d4) ([merge request](gitlab-org/security/omnibus-gitlab!350))
 
 ## 16.1.2 (2023-07-04)
 
@@ -94,6 +117,14 @@ No changes.
 ### Other (1 change)
 
 - [Update Mattermost to 7.10.2](gitlab-org/omnibus-gitlab@fd50c589d70fb6b32ea5ad9f169ea7209e550e2d) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6905))
+
+## 16.0.8 (2023-08-01)
+
+### Security (3 changes)
+
+- [Mattermost July 2023 security updates](gitlab-org/security/omnibus-gitlab@1bba8b1f3270c65e5a21435c22e64a1cc913a623) ([merge request](gitlab-org/security/omnibus-gitlab!360))
+- [Update redis to 6.2.13](gitlab-org/security/omnibus-gitlab@99a34366a1b6ce8bb3381f9fa8b5befdd220d587) ([merge request](gitlab-org/security/omnibus-gitlab!356))
+- [Update libxml2 to 2.10.4](gitlab-org/security/omnibus-gitlab@d2f8ab764e2ee5af00907294e3ece032910d86bf) ([merge request](gitlab-org/security/omnibus-gitlab!351))
 
 ## 16.0.7 (2023-07-04)
 
