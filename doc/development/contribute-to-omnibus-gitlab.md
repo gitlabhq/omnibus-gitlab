@@ -16,6 +16,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 ## Common maintenance tasks
 
+- [Upgrading software components](upgrading-software-components.md)
 - [Patching upstream software](creating-patches.md)
 - [Managing PostgreSQL versions](managing-postgresql-versions.md)
 - [Upgrading the bundled Chef version](upgrading-chef.md)
