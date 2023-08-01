@@ -88,12 +88,8 @@ end
 
 alt_document_root = node['gitlab']['gitlab_workhorse']['alt_document_root']
 shutdown_timeout = node['gitlab']['gitlab_workhorse']['shutdown_timeout']
-_redis_host, _redis_port, redis_password = redis_helper.redis_params
 workhorse_keywatcher = node['gitlab']['gitlab_workhorse']['workhorse_keywatcher']
-redis_url = redis_helper.redis_url.to_s
-redis_sentinel_urls = redis_helper.redis_sentinel_urls('redis_sentinels')
-redis_sentinel_master = node['redis']['master_name']
-redis_sentinel_master_password = node['redis']['master_password']
+redis_params = redis_helper.workhorse_params
 config_file_path = File.join(working_dir, "config.toml")
 image_scaler_max_procs = node['gitlab']['gitlab_workhorse']['image_scaler_max_procs']
 image_scaler_max_filesize = node['gitlab']['gitlab_workhorse']['image_scaler_max_filesize']
@@ -108,12 +104,12 @@ template config_file_path do
   variables(
     alt_document_root: alt_document_root,
     workhorse_keywatcher: workhorse_keywatcher,
-    redis_url: redis_url,
-    password: redis_password,
-    sentinels: redis_sentinel_urls,
-    sentinel_master: redis_sentinel_master,
+    redis_url: redis_params[:url],
+    password: redis_params[:password],
+    sentinels: redis_params[:sentinels],
+    sentinel_master: redis_params[:sentinelMaster],
+    master_password: redis_params[:sentinelPassword],
     shutdown_timeout: shutdown_timeout,
-    master_password: redis_sentinel_master_password,
     image_scaler_max_procs: image_scaler_max_procs,
     image_scaler_max_filesize: image_scaler_max_filesize,
     trusted_cidrs_for_propagation: trusted_cidrs_for_propagation,

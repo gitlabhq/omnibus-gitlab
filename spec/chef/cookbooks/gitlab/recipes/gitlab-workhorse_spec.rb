@@ -619,6 +619,71 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     end
   end
 
+  context 'with separate workhorse redis details specified' do
+    context 'with standalone redis defined' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_sentinels: [
+              { 'host' => '127.0.0.1', 'port' => 26379 },
+              { 'host' => '127.0.8.1', 'port' => 12345 }
+            ],
+            redis_workhorse_instance: "unix:/home/random/path.socket",
+            redis_workhorse_password: 'some pass'
+          },
+          redis: {
+            master_name: 'examplemaster',
+            master_password: 'examplepassword'
+          }
+        )
+      end
+
+      it 'should generate config file with the specified values' do
+        content_url = 'URL = "unix:/home/random/path.socket"'
+        content_password = 'Password = "some pass"'
+        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
+        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_password)
+        expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(/Sentinel/)
+        expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(/SentinelMaster/)
+      end
+    end
+
+    context 'with sentinels defined' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_sentinels: [
+              { 'host' => '127.0.0.1', 'port' => 26379 },
+              { 'host' => '127.0.8.1', 'port' => 12345 }
+            ],
+            redis_sentinels_password: 'some pass',
+            redis_workhorse_sentinels: [
+              { 'host' => '127.0.0.2', 'port' => 26379 },
+              { 'host' => '127.0.8.2', 'port' => 12345 }
+            ],
+            redis_workhorse_sentinels_password: 'some workhorse pass',
+            redis_workhorse_sentinel_master: 'worhorse.master'
+          },
+          redis: {
+            master_name: 'examplemaster',
+            master_password: 'examplepassword'
+          }
+        )
+      end
+
+      it 'should generate config file with the specified values' do
+        content = 'Sentinel = ["redis://:some+workhorse+pass@127.0.0.2:26379","redis://:some+workhorse+pass@127.0.8.2:12345"]'
+        content_sentinel_master = 'SentinelMaster = "worhorse.master"'
+        content_sentinel_password = 'Password = "some workhorse pass"'
+        content_url = 'URL ='
+        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content)
+        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_master)
+        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_password)
+        expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
+      end
+    end
+  end
+
   context 'image scaler' do
     context 'with default values' do
       it 'sets the default maximum file size' do

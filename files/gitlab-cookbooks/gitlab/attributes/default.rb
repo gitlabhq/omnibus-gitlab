@@ -497,6 +497,15 @@ default['gitlab']['gitlab_rails']['redis_cluster_rate_limiting_sentinels_passwor
 default['gitlab']['gitlab_rails']['redis_cluster_rate_limiting_username'] = nil
 default['gitlab']['gitlab_rails']['redis_cluster_rate_limiting_password'] = nil
 default['gitlab']['gitlab_rails']['redis_cluster_rate_limiting_cluster_nodes'] = []
+default['gitlab']['gitlab_rails']['redis_workhorse_instance'] = nil
+default['gitlab']['gitlab_rails']['redis_workhorse_sentinels'] = []
+default['gitlab']['gitlab_rails']['redis_workhorse_sentinels_password'] = nil
+default['gitlab']['gitlab_rails']['redis_workhorse_username'] = nil
+default['gitlab']['gitlab_rails']['redis_workhorse_password'] = nil
+default['gitlab']['gitlab_rails']['redis_workhorse_cluster_nodes'] = []
+
+# used by workhorse to connect to a separate external redis instead of the omnibus-gitlab redis
+default['gitlab']['gitlab_rails']['redis_workhorse_sentinel_master'] = nil
 
 default['gitlab']['gitlab_rails']['redis_yml_override'] = nil
 
