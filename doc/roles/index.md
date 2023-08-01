@@ -121,7 +121,7 @@ Monitoring roles are used to set up monitoring of installations. For additional 
 
   Configures a central monitoring server to collect metrics and provide dashboards.
 
-  Enables Prometheus, Alertmanager, and Grafana.
+  Enables Prometheus and Alertmanager.
 
 ### PostgreSQL Roles
 

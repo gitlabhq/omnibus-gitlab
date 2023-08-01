@@ -134,61 +134,6 @@ default['monitoring']['gitlab_exporter']['prometheus_scrape_tls_skip_verificatio
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus_monitoring']['enable'] = true
 
-####
-# Grafana
-###
-default['monitoring']['grafana']['enable'] = false
-default['monitoring']['grafana']['enable_deprecated_service'] = false
-default['monitoring']['grafana']['log_directory'] = '/var/log/gitlab/grafana'
-default['monitoring']['grafana']['home'] = '/var/opt/gitlab/grafana'
-default['monitoring']['grafana']['http_addr'] = 'localhost'
-default['monitoring']['grafana']['http_port'] = 3000
-default['monitoring']['grafana']['admin_password'] = nil
-default['monitoring']['grafana']['basic_auth_enabled'] = false
-default['monitoring']['grafana']['disable_login_form'] = true
-default['monitoring']['grafana']['allow_user_sign_up'] = false
-default['monitoring']['grafana']['gitlab_application_id'] = nil
-default['monitoring']['grafana']['gitlab_secret'] = nil
-default['monitoring']['grafana']['allowed_groups'] = []
-default['monitoring']['grafana']['gitlab_auth_sign_up'] = true
-default['monitoring']['grafana']['dashboards'] = [
-  {
-    'name' => 'GitLab Omnibus',
-    'orgId' => 1,
-    'folder' => 'GitLab Omnibus',
-    'type' => 'file',
-    'disableDeletion' => true,
-    'updateIntervalSeconds' => 600,
-    'options' => {
-      'path' => '/opt/gitlab/embedded/service/grafana-dashboards',
-    },
-  }
-]
-default['monitoring']['grafana']['datasources'] = nil
-default['monitoring']['grafana']['env_directory'] = '/opt/gitlab/etc/grafana/env'
-default['monitoring']['grafana']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
-}
-default['monitoring']['grafana']['metrics_enabled'] = false
-default['monitoring']['grafana']['metrics_basic_auth_username'] = nil
-default['monitoring']['grafana']['metrics_basic_auth_password'] = nil
-default['monitoring']['grafana']['alerting_enabled'] = false
-default['monitoring']['grafana']['reporting_enabled'] = true
-default['monitoring']['grafana']['smtp'] = {
-  'enabled' => false,
-  'host' => 'localhost:25',
-  'user' => nil,
-  'password' => nil,
-  'cert_file' => nil,
-  'key_file' => nil,
-  'skip_verify' => false,
-  'from_address' => 'admin@grafana.localhost',
-  'from_name' => 'Grafana',
-  'ehlo_identity' => 'dashboard.example.com',
-  'startTLS_policy' => nil
-}
-default['monitoring']['grafana']['register_as_oauth_app'] = true
-
 # Temporarily retain support for `node['monitoring']['*-exporter'][*]` usage in
 # `/etc/gitlab/gitlab.rb`
 # TODO: Remove support in 16.0

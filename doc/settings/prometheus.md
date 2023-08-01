@@ -80,13 +80,6 @@ node_exporter['flags'] = {
 
 For more information on available collectors, see the [upstream documentation](https://github.com/prometheus/node_exporter#collectors).
 
-## Grafana dashboards
-
-[Grafana](https://grafana.com) is a powerful dashboard software for presenting
-Prometheus metrics data. Omnibus GitLab >= 11.9 includes an embedded copy.
-
-See [the embedded Grafana documentation](grafana.md) for more information.
-
 ## Alertmanager options
 
 You can set [global options](https://prometheus.io/docs/alerting/latest/configuration/)

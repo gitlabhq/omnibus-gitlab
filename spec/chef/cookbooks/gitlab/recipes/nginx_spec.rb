@@ -561,25 +561,6 @@ RSpec.describe 'nginx' do
     end
   end
 
-  context 'when grafana is enabled' do
-    before do
-      stub_gitlab_rb(
-        grafana: {
-          enable: true,
-          enable_deprecated_service: true
-        }
-      )
-    end
-
-    it 'applies nginx grafana proxy' do
-      expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
-        expect(content).to include('location /-/grafana/ {')
-        expect(content).to include('proxy_pass http://localhost:3000/;')
-        expect(content).to include('proxy_http_version 1.1;')
-      }
-    end
-  end
-
   context 'when KAS is enabled' do
     before do
       stub_gitlab_rb(

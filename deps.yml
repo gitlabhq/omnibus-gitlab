@@ -184,13 +184,6 @@ dependencies:
         - filename: config/software/libtiff.rb
           pattern: "Gitlab::Version.new\\('libtiff', 'v(\\S+)'\\)"
           tag_prefix: 'v'
-      # grafana
-      https://github.com/grafana/grafana.git:
-        replace_in_files:
-        - filename: config/software/grafana.rb
-          pattern: "Gitlab::Version.new\\('grafana', '(\\S+)'\\)"
-          tag_prefix: 'v'
-          range: '< 8.0.0'
       # gitlab-registry
       https://gitlab.com/gitlab-org/container-registry.git:
         replace_in_files:

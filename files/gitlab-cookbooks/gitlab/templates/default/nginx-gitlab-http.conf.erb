@@ -193,12 +193,6 @@ server { ## HTTPS server
     <% end -%>
   }
 
-  <% if node['monitoring']['grafana']['enable'] -%>
-  location <%= File.join(@path, '-/grafana/') %> {
-    proxy_pass http://<%= node['monitoring']['grafana']['http_addr'] %>:<%= node['monitoring']['grafana']['http_port'] %>/;
-  }
-  <% end -%>
-
   <% if node['gitlab_kas']['enable'] -%>
   location = <%= File.join(@path, '-/kubernetes-agent/') %> {
     proxy_pass http://<%= node['gitlab_kas']['listen_address'] %>/;

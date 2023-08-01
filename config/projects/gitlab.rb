@@ -117,7 +117,6 @@ dependency 'runit'
 dependency 'go-crond'
 dependency 'docker-distribution-pruner'
 
-dependency 'grafana-dashboards'
 if Build::Check.include_ee?
   dependency 'consul'
   dependency 'pgbouncer-exporter'
@@ -131,7 +130,6 @@ dependency 'node-exporter'
 dependency 'redis-exporter'
 dependency 'postgres-exporter'
 dependency 'prometheus'
-dependency 'grafana'
 dependency 'gitlab-exporter'
 dependency 'mattermost'
 

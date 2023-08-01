@@ -408,7 +408,7 @@ the omnibus packages.
 
 NOTE:
 When disabling NGINX, you won't be able to access
-other services included by Omnibus, like Grafana, Mattermost, etc. unless
+other services included by Omnibus, like Mattermost, etc. unless
 you manually add them in `nginx.conf`.
 
 ### Configuration
@@ -568,12 +568,6 @@ server {
     gzip_static on; # to serve pre-gzipped version
     expires max;
     add_header Cache-Control public;
-  }
-
-  ## To access Grafana
-  location /-/grafana/ {
-    proxy_http_version 1.1;
-    proxy_pass http://localhost:3000/;
   }
 
   error_page 502 /502.html;
