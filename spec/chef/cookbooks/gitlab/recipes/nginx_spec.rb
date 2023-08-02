@@ -94,6 +94,13 @@ RSpec.describe 'nginx' do
     }
   end
 
+  let(:metrics_http_conf) do
+    {
+      "gitlab-health" => "/var/opt/gitlab/nginx/conf/gitlab-health.conf",
+      "nginx-status" => "/var/opt/gitlab/nginx/conf/nginx-status.conf"
+    }
+  end
+
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
@@ -425,6 +432,14 @@ RSpec.describe 'nginx' do
       http_conf.each_value do |conf|
         expect(chef_run).to render_file(conf).with_content { |content|
           expect(content).to include('proxy_http_version 1.1;') if content.include?('proxy_pass')
+        }
+      end
+    end
+
+    it 'sets proxy_http_version 1.0 when proxy_pass is used' do
+      metrics_http_conf.each_value do |conf|
+        expect(chef_run).to render_file(conf).with_content { |content|
+          expect(content).to include('proxy_http_version 1.0;') if content.include?('proxy_pass')
         }
       end
     end
