@@ -4,16 +4,16 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Upgrading from a non-Omnibus installation to an Omnibus installation **(FREE SELF)**
+# Upgrading from a non-Linux package installation to a Linux package installation **(FREE SELF)**
 
-Upgrading from non-Omnibus installations has not been tested by GitLab.com.
+Upgrading from non-Linux package installations has not been tested by GitLab.
 
 Please be advised that you lose your settings in files such as `gitlab.yml`,
 `puma.rb` and `smtp_settings.rb`. You must
 [configure those settings in `/etc/gitlab/gitlab.rb`](../index.md#configuring).
 
 Before starting the migration, ensure that you are moving to **exactly the same version** of GitLab.
-To convert your installation to Omnibus:
+To convert your installation to using the Linux package:
 
 1. If your current GitLab installation uses MySQL, you first need to migrate
    your data to PostgreSQL, because starting with GitLab 12.1, PostgreSQL is the
@@ -40,23 +40,23 @@ To convert your installation to Omnibus:
 
    The restore takes a few minutes depending on the size of you database and Git data.
 
-1. Configure the new installation as in Omnibus GitLab all settings are stored in
+1. Configure the new installation because in Linux package installations, all settings are stored in
    `/etc/gitlab/gitlab.rb`. Individual settings need to be manually moved from
    files such as `gitlab.yml`, `puma.rb` and `smtp_settings.rb`. See the
    [`gitlab.rb` template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
    for all available options.
 1. To finalize the configuration process, copy the secrets from the old installation
    to the new one. GitLab uses secrets to multiple purposes, like database encryption,
-   session encryption, and so on. In Omnibus GitLab all secrets are placed in a single
+   session encryption, and so on. In Linux package installations, all secrets are placed in a single
    file `/etc/gitlab/gitlab-secrets.json`, whereas in source installations, the
    secrets are placed in multiple files:
    1. First, you need to restore secrets related to Rails. Copy the values of
       `db_key_base`, `secret_key_base` and `otp_key_base` from
-      `/home/git/gitlab/config/secrets.yml` (GitLab source) to the equivalent
-      ones in `/etc/gitlab/gitlab-secrets.json` (Omnibus GitLab).
+      `/home/git/gitlab/config/secrets.yml` (self-compiled installation) to the equivalent
+      ones in `/etc/gitlab/gitlab-secrets.json` (Linux package installation).
    1. Then, copy the contents of `/home/git/gitlab-shell/.gitlab_shell_secret`
       (GitLab source) to GitLab Shell's `secret_token` in
-      `/etc/gitlab/gitlab-secrets.json` (Omnibus GitLab). It will look something like:
+      `/etc/gitlab/gitlab-secrets.json` (Linux package installation). It will look something like:
 
        ```json
        {
@@ -75,7 +75,7 @@ To convert your installation to Omnibus:
        }
        ```
 
-1. Reconfigure Omnibus GitLab to apply the changes:
+1. Reconfigure GitLab to apply the changes:
 
    ```shell
    sudo gitlab-ctl reconfigure
@@ -87,12 +87,12 @@ To convert your installation to Omnibus:
    sudo gitlab-ctl restart gitaly
    ```
 
-## Upgrading from non-Omnibus PostgreSQL to an Omnibus installation using a backup
+## Upgrading from a non-Linux package PostgreSQL to a Linux package installation using a backup
 
-Upgrade by [creating a backup from the non-Omnibus install](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
-and [restoring this in the Omnibus installation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-installations).
+Upgrade by [creating a backup from the non-Linux package installation](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html)
+and [restoring this in the Linux package installation](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html#restore-for-linux-package-installations).
 Ensure you are using **exactly equal versions** of GitLab (for example 6.7.3)
-when you do this. You might have to upgrade your non-Omnibus installation before
+when you do this. You might have to upgrade your non-Linux package installation before
 creating the backup to achieve this.
 
 After upgrading make sure that you run the check task:
@@ -110,11 +110,11 @@ find . -lname /home/git/gitlab-shell/hooks -exec sh -c 'ln -snf /opt/gitlab/embe
 
 This assumes that `gitlab-shell` is located in `/home/git`.
 
-## Upgrading from non-Omnibus PostgreSQL to an Omnibus installation in-place
+## Upgrading from a non-Linux package PostgreSQL to a Linux package installation in-place
 
-It is also possible to upgrade a source GitLab installation to Omnibus GitLab
+It is also possible to upgrade a self-compiled installation to a Linux package installation
 in-place. Below we assume you are using PostgreSQL on Ubuntu, and that you
-have an Omnibus GitLab package matching your current GitLab version. We also
+have an Linux package matching your current GitLab version. We also
 assume that your source installation of GitLab uses all the default paths and
 users.
 
@@ -158,7 +158,7 @@ gitlab_rails['db_username'] = 'git'
 EOF
 ```
 
-Now install the Omnibus GitLab package and reconfigure it:
+Now install the Linux package and reconfigure the installation:
 
 ```shell
 sudo gitlab-ctl reconfigure
@@ -176,20 +176,7 @@ You should now have HTTP and SSH access to your GitLab server with the
 repositories and users that were there before.
 
 If you can log into the GitLab web interface, the next step is to reboot your
-server to make sure none of the old services interferes with Omnibus GitLab.
+server to make sure none of the old services interfere with the Linux package installation.
 
 If you are using special features such as LDAP you will have to put your
-settings in `gitlab.rb`, see the [settings docs](../settings/index.md).
-
-## Upgrading from non-Omnibus MySQL to an Omnibus installation (version 6.8+)
-
-Starting with GitLab 12.1, PostgreSQL is the only support database management
-system. So, if your non-Omnibus installation is running a GitLab version before
-12.1 and is using MySQL, you will have to migrate to PostgreSQL before upgrading
-to 12.1.
-
-To convert to PostgreSQL and use the built-in server, follow the steps:
-
-- [Create a backup of the non-Omnibus MySQL installation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
-- [Export and convert the existing MySQL database in the GitLab backup file](https://docs.gitlab.com/ee/update/mysql_to_postgresql.html)
-- [Restore this in the Omnibus installation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-installations)
+settings in `gitlab.rb`, see the [settings documentation](../settings/index.md).

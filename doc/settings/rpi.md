@@ -6,8 +6,6 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Running on a Raspberry Pi **(FREE SELF)**
 
-> Debian Buster support was added in Omnibus GitLab 13.1.
-
 In order to run GitLab Community Edition on a Raspberry Pi, you need the newest
 Pi 4 with at least 4GB of RAM for best results. You might be able to run GitLab
 on lower resources, like a Pi 2 or newer, but it is not recommended. We do not

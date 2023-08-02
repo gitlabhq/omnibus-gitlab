@@ -31,7 +31,7 @@ If your instance has Redis HA with Sentinel, follow the upgrade steps mentioned 
 
 The binaries for PostgreSQL 12 have been removed.
 
-Prior to upgrading, administrators using Omnibus GitLab must:
+Prior to upgrading, administrators of Linux package installations must:
 
 1. Ensure the installation is using [PostgreSQL 13](../settings/database.md#upgrade-packaged-postgresql-server)
 

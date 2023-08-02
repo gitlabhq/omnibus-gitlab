@@ -34,7 +34,7 @@ For more documentation on the options available, see the [remote write](https://
 
 Prometheus allows for [recording](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/) and [alerting](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) rules.
 
-Omnibus includes some [default rules files](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/monitoring/templates/rules)
+Linux package installations include some [default rules files](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/monitoring/templates/rules)
 that are stored in `/var/opt/gitlab/prometheus/rules/`.
 
 To override the default rules, you can change the default list in `gitlab.rb.`.

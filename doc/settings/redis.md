@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 ## Using an alternate local Redis instance
 
-Omnibus GitLab includes Redis by default. To direct the GitLab
+Linux package installations include Redis by default. To direct the GitLab
 application to your own *locally* running Redis instance:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
@@ -37,7 +37,7 @@ application to your own *locally* running Redis instance:
 ## Making the bundled Redis reachable via TCP
 
 Use the following settings if you want to make the Redis instance
-managed by Omnibus GitLab reachable via TCP:
+managed by the Linux package reachable via TCP:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
@@ -52,11 +52,11 @@ managed by Omnibus GitLab reachable via TCP:
    sudo gitlab-ctl reconfigure
    ```
 
-## Setting up a Redis-only server using Omnibus GitLab
+## Setting up a Redis-only server using the Linux package
 
 If you'd like to set up Redis in a separate server than the GitLab application,
 you can use the
-[bundled Redis in Omnibus GitLab](https://docs.gitlab.com/ee/administration/redis/standalone.html).
+[bundled Redis from a Linux package installation](https://docs.gitlab.com/ee/administration/redis/standalone.html).
 
 ## Running with multiple Redis instances
 
@@ -272,7 +272,7 @@ troubleshoot this error:
    gitlab_rails['redis_password'] = 'your-password-here'
    ```
 
-1. If you are using the Omnibus-provided Redis server, check that the server has the same password:
+1. If you are using the Linux package-provided Redis server, check that the server has the same password:
 
    ```ruby
    redis['password'] = 'your-password-here'

@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Backup **(FREE SELF)**
 
-## Backup and restore Omnibus GitLab configuration
+## Backup and restore configuration on a Linux package installation
 
 It is recommended to keep a copy of `/etc/gitlab`, or at least of
 `/etc/gitlab/gitlab-secrets.json`, in a safe place. If you ever
@@ -18,7 +18,7 @@ and 'secure variables' stored in GitLab CI will be lost.
 It is not recommended to store your configuration backup in the
 same place as your application data backup, see below.
 
-All configuration for Omnibus GitLab is stored in `/etc/gitlab`. To backup your
+All configuration for Linux package installations is stored in `/etc/gitlab`. To backup your
 configuration, just run `sudo gitlab-ctl backup-etc` (introduced in GitLab 12.3). It creates a tar
 archive in `/etc/gitlab/config_backup/`. Directory and backup files will be
 readable only to root.
@@ -164,7 +164,7 @@ For details check [backup restore document](https://docs.gitlab.com/ee/raketasks
 
 ## Manually manage backup directory
 
-Omnibus GitLab creates the backup directory set with `gitlab_rails['backup_path']`. The directory is owned by the user that is running GitLab and it has strict permissions set to be accessible to only that user.
+Linux package installations create the backup directory set with `gitlab_rails['backup_path']`. The directory is owned by the user that is running GitLab and it has strict permissions set to be accessible to only that user.
 That directory will hold backup archives and they contain sensitive information.
 In some organizations permissions need to be different because of, for example, shipping the backup archives offsite.
 
