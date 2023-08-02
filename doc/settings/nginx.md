@@ -34,7 +34,7 @@ or incompatible configuration may yield to unavailability of service.
 
 ## Enable HTTPS
 
-By default, Omnibus GitLab does not use HTTPS. If you want to enable HTTPS for
+By default, Linux package installations do not use HTTPS. If you want to enable HTTPS for
 `gitlab.example.com`, you can:
 
 - [Use Let's Encrypt for free, automated HTTPS](ssl/index.md#enable-the-lets-encrypt-integration).
@@ -46,10 +46,10 @@ see [External, proxy, and load balancer SSL termination](ssl/index.md#configure-
 
 ## Change the default proxy headers
 
-By default, when you specify `external_url` Omnibus GitLab will set a few
+By default, when you specify `external_url`, a Linux package installation sets a few
 NGINX proxy headers that are assumed to be sane in most environments.
 
-For example, Omnibus GitLab will set:
+For example, a Linux package installation sets:
 
 ```plaintext
   "X-Forwarded-Proto" => "https",
@@ -100,7 +100,7 @@ Description of the options:
 
 - <http://nginx.org/en/docs/http/ngx_http_realip_module.html>
 
-By default, Omnibus GitLab will use the IP addresses in `real_ip_trusted_addresses`
+By default, Linux package installations use the IP addresses in `real_ip_trusted_addresses`
 as GitLab trusted proxies, which will keep users from being listed as signed
 in from those IPs.
 
@@ -130,8 +130,8 @@ Ensure to also adjust any other environments you might have, like monitoring che
 
 ## Using a non-bundled web-server
 
-By default, Omnibus GitLab installs GitLab with bundled NGINX.
-Omnibus GitLab allows webserver access through the `gitlab-www` user, which resides
+By default, the Linux package installs GitLab with bundled NGINX.
+Linux package installations allow webserver access through the `gitlab-www` user, which resides
 in the group with the same name. To allow an external webserver access to
 GitLab, the external webserver user needs to be added to the `gitlab-www` group.
 
@@ -148,12 +148,13 @@ will have to perform the following steps:
 
 1. **Set the username of the non-bundled web-server user**
 
-   By default, Omnibus GitLab has no default setting for the external webserver
+   By default, Linux package installations have no default setting for the external webserver
    user, you have to specify it in the configuration. For Debian/Ubuntu the
    default user is `www-data` for both Apache/NGINX whereas for RHEL/CentOS
    the NGINX user is `nginx`.
 
-   Make sure you have first installed Apache/NGINX so the webserver user is created, otherwise omnibus will fail while reconfiguring.
+   Make sure you have first installed Apache/NGINX so the webserver user is created, otherwise a Linux package installation
+   fails while reconfiguring.
 
    Let's say for example that the webserver user is `www-data`.
    In `/etc/gitlab/gitlab.rb` set:
@@ -172,7 +173,7 @@ will have to perform the following steps:
 
 1. **Add the non-bundled web-server to the list of trusted proxies**
 
-   Normally, Omnibus GitLab defaults the list of trusted proxies to what was
+   Normally, Linux package installations default the list of trusted proxies to what was
    configured in the `real_ip` module for the bundled NGINX.
 
    For non-bundled web-servers the list needs to be configured directly, and should
@@ -196,10 +197,10 @@ will have to perform the following steps:
 
    Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-1. **Download the right web server configs**
+1. **Download the correct web server configuration**
 
-   Go to [GitLab recipes repository](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server) and look for the omnibus
-   configs in the webserver directory of your choice. Make sure you pick the
+   Go to [GitLab recipes repository](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server) and look for
+   the Linux package configuration in the webserver directory of your choice. Make sure you pick the
    right configuration file depending whether you choose to serve GitLab with
    SSL or not. The only thing you need to change is `YOUR_SERVER_FQDN` with
    your own FQDN and if you use SSL, the location where your SSL keys currently
@@ -404,12 +405,11 @@ NGINX.
 
 In some cases you may want to host GitLab using an existing Passenger/NGINX
 installation but still have the convenience of updating and installing using
-the omnibus packages.
+the Linux packages.
 
 NOTE:
-When disabling NGINX, you won't be able to access
-other services included by Omnibus, like Mattermost, etc. unless
-you manually add them in `nginx.conf`.
+When disabling NGINX, you won't be able to access other services included in a Linux package installation such as
+Mattermost unless you manually add them in `nginx.conf`.
 
 ### Configuration
 
@@ -663,7 +663,7 @@ Make sure you don't have the `proxy_set_header` configuration in
 
 ### `javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure`
 
-Starting with GitLab 10, the Omnibus GitLab package no longer supports TLSv1 protocol by default.
+Linux package installations don't support TLSv1 protocol by default.
 This can cause connection issues with some older Java based IDE clients when interacting with
 your GitLab instance.
 We strongly urge you to upgrade ciphers on your server, similar to what was mentioned

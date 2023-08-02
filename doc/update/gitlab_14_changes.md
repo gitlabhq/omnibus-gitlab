@@ -33,7 +33,7 @@ In 14.8, we are upgrading Redis from 6.0.16 to 6.2.6. This upgrade is expected
 to be fully backwards compatible.
 
 If your instance has Redis HA with Sentinel, follow the upgrade steps documented in
-[Update GitLab installed with the Omnibus GitLab package](https://docs.gitlab.com/ee/update/zero_downtime.html#use-redis-ha-using-sentinel)
+[Update GitLab installed with the Linux package](https://docs.gitlab.com/ee/update/zero_downtime.html#redis-ha-using-sentinel)
 
 ## 14.4
 
@@ -101,7 +101,7 @@ administrator user (`root`) and stores this value to
 
 The binaries for PostgreSQL 11 and repmgr have been removed.
 
-Prior to upgrading, administrators using Omnibus GitLab must:
+Prior to upgrading, administrators of Linux package installations must:
 
 1. Ensure the installation is using [PostgreSQL 12](../settings/database.md#upgrade-packaged-postgresql-server)
 1. If using repmgr, [convert to using patroni](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni)

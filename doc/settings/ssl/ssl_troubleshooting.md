@@ -11,7 +11,7 @@ This page contains a list of common SSL-related errors and scenarios that you
 may encounter while working with GitLab. It should serve as an addition to the
 main SSL documentation:
 
-- [Omnibus SSL Configuration](index.md).
+- [Configure SSL for a Linux package installation](index.md).
 - [Self-signed certificates or custom Certification Authorities for GitLab Runner](https://docs.gitlab.com/runner/configuration/tls-self-signed.html).
 - [Configure HTTPS manually](index.md#configure-https-manually).
 
@@ -174,7 +174,7 @@ If after running `gitlab-ctl reconfigure`:
 1. you have placed custom certificates in `/etc/gitlab/trusted-certs/`; and
 1. you do not see any skipped or symlinked custom certificate messages
 
-You may be encountering an issue where Omnibus GitLab thinks that the custom
+You may be encountering an issue where a Linux package installation thinks that the custom
 certificates have already been added.
 
 To resolve, delete the trusted certificates directory hash:
