@@ -24,3 +24,8 @@ Prometheus.services.each do |service|
     include_recipe "monitoring::#{cookbook_name}_disable"
   end
 end
+
+# Disable Grafana service.
+runit_service 'grafana' do
+  action :disable
+end
