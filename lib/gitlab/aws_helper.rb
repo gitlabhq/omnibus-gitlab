@@ -14,26 +14,6 @@ class AWSHelper
     @type = type || 'ce'
   end
 
-  def create_ami_old
-    release_type = Gitlab::Util.get_env('AWS_RELEASE_TYPE')
-    architecture = Gitlab::Util.get_env('AWS_ARCHITECTURE')
-    args = {}
-
-    if (@type == 'ee') && release_type
-      @type = "ee-#{release_type}"
-      @license_file = "AWS_#{release_type}_LICENSE_FILE".upcase
-    end
-
-    if architecture
-      args = { arch: architecture }
-      @type = "#{@type}-#{architecture}"
-    end
-
-    @download_url = Build::Info.ami_deb_package_download_url(**args)
-
-    system(*%W[support/packer_old/packer_ami.sh #{@version} #{@type} #{@download_url} #{@license_file}])
-  end
-
   def create_ami
     release_type = Gitlab::Util.get_env('AWS_RELEASE_TYPE')
     architecture = Gitlab::Util.get_env('AWS_ARCHITECTURE')

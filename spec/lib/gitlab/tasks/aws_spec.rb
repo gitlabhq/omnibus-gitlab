@@ -44,25 +44,6 @@ RSpec.describe 'aws:ami:create', type: :rake do
     stub_env_var('CI_JOB_TOKEN', 'CI-NO-JOB-TOKEN')
   end
 
-  context 'when using `AMI_USE_OLD_BUILD_PROCESS` environment variable' do
-    before do
-      stub_env_var('AMI_USE_OLD_BUILD_PROCESS', 'true')
-      allow(Build::Check).to receive(:on_tag?).and_return(true)
-      allow(Build::Check).to receive(:is_auto_deploy?).and_return(false)
-      allow(Build::Check).to receive(:is_rc_tag?).and_return(false)
-      allow(Build::Info).to receive(:ami_deb_package_download_url).and_return('http://example.com')
-    end
-
-    it 'should call the old script' do
-      allow(Build::Info).to receive(:edition).and_return('ce')
-      allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
-
-      expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer_old/packer_ami.sh", "9.3.0", "ce", "http://example.com", ""])
-
-      Rake::Task['aws:ami:create'].invoke
-    end
-  end
-
   describe 'on a regular tag' do
     before do
       allow(Build::Check).to receive(:on_tag?).and_return(true)

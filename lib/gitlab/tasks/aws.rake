@@ -12,11 +12,7 @@ namespace :aws do
       next if Build::Check.is_auto_deploy? || Build::Check.is_rc_tag?
 
       Omnibus.load_configuration('omnibus.rb')
-      if Gitlab::Util.get_env('AMI_USE_OLD_BUILD_PROCESS') == "true"
-        AWSHelper.new(Omnibus::BuildVersion.semver, Build::Info.edition).create_ami_old
-      else
-        AWSHelper.new(Omnibus::BuildVersion.semver, Build::Info.edition).create_ami
-      end
+      AWSHelper.new(Omnibus::BuildVersion.semver, Build::Info.edition).create_ami
     end
   end
 
