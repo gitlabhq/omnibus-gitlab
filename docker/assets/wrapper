@@ -106,6 +106,13 @@ sleep 3s
 # Run unclean start detection & cleanup
 detect_unclean_start
 
+# Legacy block to be removed on 17.0. See: https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/7035
+# It re-adds support for rsa key types which was removed on 16.0 without going
+# through the proper deprecation process.
+if [ "${GITLAB_ALLOW_SHA1_RSA}" == 'true' ]; then
+  printf '\n# Enabled/Disabled via GITLAB_ALLOW_SHA1_RSA=[true/false]\nHostKeyAlgorithms +ssh-rsa\nPubkeyAcceptedKeyTypes +ssh-rsa' >> /assets/sshd_config
+fi
+
 # Check if this is a valid upgrade path
 # If the VERSION file doesn't exist, then this is not an upgrade
 if old_version=$(cat /var/opt/gitlab/gitlab-rails/VERSION)

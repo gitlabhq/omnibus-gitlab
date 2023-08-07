@@ -32,6 +32,9 @@ RUN busybox --install \
 RUN rm -rf /etc/update-motd.d /etc/motd /etc/motd.dynamic
 RUN ln -fs /dev/null /run/motd.dynamic
 
+# Legacy code to be removed on 17.0.  See: https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/7035
+ENV GITLAB_ALLOW_SHA1_RSA=false
+
 # Copy assets
 COPY RELEASE /
 COPY assets/ /assets/
