@@ -39,15 +39,15 @@ module License
       'elkjs',           # EPL 2.0 - https://github.com/kieler/elkjs/blob/master/LICENSE.md
     ]
     # readline is GPL licensed and its use was not mere aggregation. Hence it is
-    # blacklisted.
+    # denylisted.
     # Details: https://gitlab.com/gitlab-org/omnibus-gitlab/issues/1945#note_29286329
     @software_unacceptable = ['readline']
 
     def self.software_check(dependency)
       if @software_unacceptable.include?(dependency)
-        ['unacceptable', 'Blacklisted software']
+        ['unacceptable', 'Denylisted software']
       elsif @software_acceptable.include?(dependency)
-        ['acceptable', 'Whitelisted software']
+        ['acceptable', 'Allowlisted software']
       end
     end
 
@@ -82,7 +82,7 @@ module License
       when 'acceptable'
         if reason == 'Acceptable license'
           string = "\t" * level + "✓ #{dependency} - #{version} uses #{license} - #{reason}\n"
-        elsif reason == 'Whitelisted software'
+        elsif reason == 'Allowlisted software'
           string = "\t" * level + "# #{dependency} - #{version} uses #{license} - #{reason}\n"
         end
       when 'unacceptable'
