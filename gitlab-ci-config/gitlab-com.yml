@@ -84,8 +84,7 @@
     when: always
     paths:
       - pkg/
-  tags:
-    - triggered-packages
+  tags: !reference [.distribution-amd64-tags]
   needs:
     - job: fetch-assets
       optional: true
@@ -255,8 +254,7 @@ update-trigger-package-cache:
     - echo "Cache is up to date!"
   cache:
     policy: push  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
-  tags:
-    - triggered-packages
+  tags: !reference [.distribution-amd64-tags]
   rules:
     - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
   needs:

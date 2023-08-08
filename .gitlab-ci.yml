@@ -71,6 +71,18 @@ variables:
   DEV_PROJECT_PATH: 'gitlab/omnibus-gitlab'
   QA_PROJECT_PATH: 'gitlab-org/build/omnibus-gitlab-mirror'
 
+.distribution-amd64-tags:
+  - distribution-runner
+  - amd64
+
+.distribution-arm64-tags:
+  - distribution-runner
+  - arm64
+
+.distribution-armhf-tags:
+  - distribution-runner
+  - armhf
+
 ### For services that need a docker daemon
 .docker_job: &docker_job
   image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"

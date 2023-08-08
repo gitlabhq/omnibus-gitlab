@@ -15,6 +15,18 @@ variables:
   rules:
     - if: '$CI_COMMIT_TAG =~ /^.*ce\.\d.*$/'
 
+.distribution-amd64-tags:
+  - distribution-runner
+  - amd64
+
+.distribution-arm64-tags:
+  - distribution-runner
+  - arm64
+
+.distribution-armhf-tags:
+  - distribution-runner
+  - armhf
+
 before_script:
   - bash scripts/ci/prepare_bundle.sh
 
@@ -43,6 +55,7 @@ before_script:
   script:
     - !reference [.common_install_scripts, script]
     - apt install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
+  tags: !reference [.distribution-amd64-tags]
 
 .yum-install: &yum-install
   stage: package
@@ -51,6 +64,7 @@ before_script:
   script:
     - !reference [.common_install_scripts, script]
     - yum install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
+  tags: !reference [.distribution-amd64-tags]
 
 .zypper-install: &zypper-install
   stage: package
@@ -59,6 +73,19 @@ before_script:
   script:
     - !reference [.common_install_scripts, script]
     - zypper install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
+  tags: !reference [.distribution-amd64-tags]
+
+.apt-arm-install: &apt-arm-install
+  extends: .apt-install
+  tags: !reference [.distribution-arm64-tags]
+
+.yum-arm-install: &yum-arm-install
+  extends: .yum-install
+  tags: !reference [.distribution-arm64-tags]
+
+.zypper-arm-install: &zypper-arm-install
+  extends: .zypper-install
+  tags: !reference [.distribution-arm64-tags]
 
 # apt based
 Ubuntu-18.04-check:
@@ -69,41 +96,31 @@ Ubuntu-20.04-check:
   extends: .apt-install
 Ubuntu-20.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .apt-install
-  tags:
-  - docker-arm-builder
+  extends: .apt-arm-install
 Ubuntu-22.04-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
 Ubuntu-22.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .apt-install
-  tags:
-  - docker-arm-builder
+  extends: .apt-arm-install
 Debian-10-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
 Debian-10-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .apt-install
-  tags:
-  - docker-arm-builder
+  extends: .apt-arm-install
 Debian-11-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
 Debian-11-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .apt-install
-  tags:
-  - docker-arm-builder
+  extends: .apt-arm-install
 Debian-12-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_12:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
 Debian-12-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .apt-install
-  tags:
-  - docker-arm-builder
+  extends: .apt-arm-install
 Raspberry-Pi-2-Buster-check:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
   extends:
@@ -111,8 +128,7 @@ Raspberry-Pi-2-Buster-check:
     - .ce-tag-only
   variables:
     package_repository: 'raspberry-pi2'
-  tags:
-  - docker-arm-builder
+  tags: !reference [.distribution-armhf-tags]
 Raspberry-Pi-2-Bullseye-check:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:${BUILDER_IMAGE_REVISION}"
   extends:
@@ -120,8 +136,7 @@ Raspberry-Pi-2-Bullseye-check:
     - .ce-tag-only
   variables:
     package_repository: 'raspberry-pi2'
-  tags:
-  - docker-arm-builder
+  tags: !reference [.distribution-armhf-tags]
 Ubuntu-18.04-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04_fips:${BUILDER_IMAGE_REVISION}"
   extends:
@@ -146,33 +161,25 @@ AlmaLinux-8-check:
   extends: .yum-install
 AlmaLinux-8-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .yum-install
-  tags:
-  - docker-arm-builder
+  extends: .yum-arm-install
 AlmaLinux-9-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
 AlmaLinux-9-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .yum-install
-  tags:
-  - docker-arm-builder
+  extends: .yum-arm-install
 AmazonLinux-2-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
 AmazonLinux-2-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .yum-install
-  tags:
-    - docker-arm-builder
+  extends: .yum-arm-install
 AmazonLinux-2023-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
 AmazonLinux-2023-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .yum-install
-  tags:
-  - docker-arm-builder
+  extends: .yum-arm-install
 AlmaLinux-8-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends:
@@ -194,9 +201,7 @@ OpenSUSE-15.4-check:
   extends: .zypper-install
 OpenSUSE-15.4-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .zypper-install
-  tags:
-  - docker-arm-builder
+  extends: .zypper-arm-install
 SLES-12.5-check:
   image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   extends:
