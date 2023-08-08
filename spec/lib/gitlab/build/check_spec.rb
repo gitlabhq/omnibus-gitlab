@@ -123,12 +123,12 @@ RSpec.describe Build::Check do
 
   describe '.is_patch_release?' do
     it 'returns true for patch release' do
-      allow(Build::Info).to receive(:semver_version).and_return("10.0.3")
+      allow(Build::Info::Package).to receive(:semver_version).and_return("10.0.3")
       expect(described_class.is_patch_release?).to be_truthy
     end
 
     it 'returns false for major/minor release' do
-      allow(Build::Info).to receive(:semver_version).and_return("10.0.0")
+      allow(Build::Info::Package).to receive(:semver_version).and_return("10.0.0")
       expect(described_class.is_patch_release?).to be_falsey
     end
   end

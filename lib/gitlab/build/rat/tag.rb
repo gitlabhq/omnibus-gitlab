@@ -20,7 +20,7 @@ module Build
           'token' => Gitlab::Util.get_env('RAT_TRIGGER_TOKEN'),
           'variables[REFERENCE_ARCHITECTURE]' => 'omnibus-gitlab-mrs',
           'variables[PRE_RELEASE]' => "true",
-          'variables[PACKAGE_VERSION]' => Build::Info.name_version,
+          'variables[PACKAGE_VERSION]' => Build::Info::Package.name_version,
           'variables[QA_IMAGE]' => Gitlab::Util.get_env('QA_IMAGE') || image || "dev.gitlab.org:5005/gitlab/gitlab-ee/gitlab-ee-qa:#{version.partition(/\.\d+$/).first}"
         }
       end

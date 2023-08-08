@@ -140,7 +140,7 @@ module License
         end
       end
 
-      File.open("pkg/#{Build::Info.package}_#{Build::Info.release_version}.license-status.json", "w") do |f|
+      File.open("pkg/#{Build::Info::Package.name}_#{Build::Info::Package.release_version}.license-status.json", "w") do |f|
         f.write(JSON.pretty_generate(output_json))
       end
 

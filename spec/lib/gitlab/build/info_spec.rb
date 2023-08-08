@@ -7,71 +7,6 @@ RSpec.describe Build::Info do
     stub_default_package_version
     stub_env_var('GITLAB_ALTERNATIVE_REPO', nil)
     stub_env_var('ALTERNATIVE_PRIVATE_TOKEN', nil)
-
-    ce_tags = "16.1.1+ce.0\n16.0.0+rc42.ce.0\n15.11.1+ce.0\n15.11.0+ce.0\n15.10.0+ce.0\n15.10.0+rc42.ce.0"
-    ee_tags = "16.1.1+ee.0\n16.0.0+rc42.ee.0\n15.11.1+ee.0\n15.11.0+ee.0\n15.10.0+ee.0\n15.10.0+rc42.ee.0"
-    allow(described_class).to receive(:`).with(/git -c versionsort.*ce/).and_return(ce_tags)
-    allow(described_class).to receive(:`).with(/git -c versionsort.*ee/).and_return(ee_tags)
-  end
-
-  describe '.package' do
-    describe 'shows EE' do
-      it 'when ee=true' do
-        stub_is_ee_env(true)
-        expect(described_class.package).to eq('gitlab-ee')
-      end
-
-      it 'when env var is not present, checks VERSION file' do
-        stub_is_ee_version(true)
-        expect(described_class.package).to eq('gitlab-ee')
-      end
-    end
-
-    describe 'shows CE' do
-      it 'by default' do
-        stub_is_ee(false)
-        expect(described_class.package).to eq('gitlab-ce')
-      end
-    end
-  end
-
-  describe '.release_version' do
-    before do
-      allow(Build::Check).to receive(:on_tag?).and_return(true)
-      allow_any_instance_of(Omnibus::BuildVersion).to receive(:semver).and_return('12.121.12')
-      allow_any_instance_of(Gitlab::BuildIteration).to receive(:build_iteration).and_return('ce.1')
-    end
-
-    it 'returns build version and iteration' do
-      expect(described_class.release_version).to eq('12.121.12-ce.1')
-    end
-
-    it 'defaults to an initial build version when there are no matching tags' do
-      allow(Build::Check).to receive(:on_tag?).and_return(false)
-      allow(Build::Check).to receive(:is_nightly?).and_return(false)
-      allow(Build::Info::Git).to receive(:latest_tag).and_return('')
-      allow(Build::Info::Git).to receive(:commit_sha).and_return('ffffffff')
-      stub_env_var('CI_PIPELINE_ID', '5555')
-
-      expect(described_class.release_version).to eq('0.0.1+rfbranch.5555.ffffffff-ce.1')
-    end
-
-    describe 'with env variables' do
-      it 'returns build version and iteration with env variable' do
-        stub_env_var('USE_S3_CACHE', 'false')
-        stub_env_var('CACHE_AWS_ACCESS_KEY_ID', 'NOT-KEY')
-        stub_env_var('CACHE_AWS_SECRET_ACCESS_KEY', 'NOT-SECRET-KEY')
-        stub_env_var('CACHE_AWS_BUCKET', 'bucket')
-        stub_env_var('CACHE_AWS_S3_REGION', 'moon-west1')
-        stub_env_var('CACHE_AWS_S3_ENDPOINT', 'endpoint')
-        stub_env_var('CACHE_S3_ACCELERATE', 'sure')
-
-        stub_env_var('NIGHTLY', 'true')
-        stub_env_var('CI_PIPELINE_ID', '5555')
-
-        expect(described_class.release_version).to eq('12.121.12-ce.1')
-      end
-    end
   end
 
   describe '.docker_tag' do
@@ -114,11 +49,12 @@ RSpec.describe Build::Info do
       end
 
       it 'returns public mirror for GitLab CE' do
-        allow(Build::Info).to receive(:package).and_return("gitlab-ce")
+        allow(Build::Info::Package).to receive(:name).and_return("gitlab-ce")
         expect(described_class.gitlab_rails_repo).to eq("https://gitlab.com/gitlab-org/gitlab-foss.git")
       end
+
       it 'returns public mirror for GitLab EE' do
-        allow(Build::Info).to receive(:package).and_return("gitlab-ee")
+        allow(Build::Info::Package).to receive(:name).and_return("gitlab-ee")
         expect(described_class.gitlab_rails_repo).to eq("https://gitlab.com/gitlab-org/gitlab.git")
       end
     end
@@ -129,11 +65,12 @@ RSpec.describe Build::Info do
       end
 
       it 'returns dev repo for GitLab CE' do
-        allow(Build::Info).to receive(:package).and_return("gitlab-ce")
+        allow(Build::Info::Package).to receive(:name).and_return("gitlab-ce")
         expect(described_class.gitlab_rails_repo).to eq("git@dev.gitlab.org:gitlab/gitlabhq.git")
       end
+
       it 'returns dev repo for GitLab EE' do
-        allow(Build::Info).to receive(:package).and_return("gitlab-ee")
+        allow(Build::Info::Package).to receive(:name).and_return("gitlab-ee")
         expect(described_class.gitlab_rails_repo).to eq("git@dev.gitlab.org:gitlab/gitlab-ee.git")
       end
     end
@@ -145,11 +82,11 @@ RSpec.describe Build::Info do
       end
 
       it 'returns security mirror for GitLab CE with attached credential' do
-        allow(Build::Info).to receive(:package).and_return("gitlab-ce")
+        allow(Build::Info::Package).to receive(:name).and_return("gitlab-ce")
         expect(described_class.gitlab_rails_repo).to eq("https://gitlab-ci-token:CJT@gitlab.com/gitlab-org/security/gitlab-foss.git")
       end
       it 'returns security mirror for GitLab EE with attached credential' do
-        allow(Build::Info).to receive(:package).and_return("gitlab-ee")
+        allow(Build::Info::Package).to receive(:name).and_return("gitlab-ee")
         expect(described_class.gitlab_rails_repo).to eq("https://gitlab-ci-token:CJT@gitlab.com/gitlab-org/security/gitlab.git")
       end
     end

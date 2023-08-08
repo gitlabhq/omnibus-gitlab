@@ -56,7 +56,7 @@ module Build
 
       def is_patch_release?
         # Major and minor releases have patch component as zero
-        Info.semver_version.split(".")[-1] != "0"
+        Info::Package.semver_version.split(".")[-1] != "0"
       end
 
       def is_rc_tag?

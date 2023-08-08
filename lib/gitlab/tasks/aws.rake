@@ -12,7 +12,7 @@ namespace :aws do
       next if Build::Check.is_auto_deploy? || Build::Check.is_rc_tag?
 
       Omnibus.load_configuration('omnibus.rb')
-      AWSHelper.new(Omnibus::BuildVersion.semver, Build::Info.edition).create_ami
+      AWSHelper.new(Omnibus::BuildVersion.semver, Build::Info::Package.edition).create_ami
     end
   end
 
@@ -24,7 +24,7 @@ namespace :aws do
       next if Build::Check.is_auto_deploy? || Build::Check.is_rc_tag?
 
       Omnibus.load_configuration('omnibus.rb')
-      AWSHelper.new(Omnibus::BuildVersion.semver, Build::Info.edition).marketplace_release
+      AWSHelper.new(Omnibus::BuildVersion.semver, Build::Info::Package.edition).marketplace_release
     end
   end
 end

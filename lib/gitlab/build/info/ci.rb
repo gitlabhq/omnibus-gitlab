@@ -57,13 +57,13 @@ module Build
             # In EL world, amd64 is called x86_64
             arch = 'x86_64' if arch == 'amd64'
             folder = 'el-8'
-            package_file_name = "#{Info.package}-#{Info.release_version.gsub('+', '%2B')}.el8.#{arch}.rpm"
+            package_file_name = "#{Info::Package.name}-#{Info::Package.release_version.gsub('+', '%2B')}.el8.#{arch}.rpm"
           when /Ubuntu-20.04/
             folder = 'ubuntu-focal'
-            package_file_name = "#{Info.package}_#{Info.release_version.gsub('+', '%2B')}_#{arch}.deb"
+            package_file_name = "#{Info::Package.name}_#{Info::Package.release_version.gsub('+', '%2B')}_#{arch}.deb"
           when /Ubuntu-22.04/
             folder = 'ubuntu-jammy'
-            package_file_name = "#{Info.package}_#{Info.release_version.gsub('+', '%2B')}_#{arch}.deb"
+            package_file_name = "#{Info::Package.name}_#{Info::Package.release_version.gsub('+', '%2B')}_#{arch}.deb"
           end
 
           if arch == 'arm64'

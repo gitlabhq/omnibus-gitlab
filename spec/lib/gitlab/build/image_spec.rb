@@ -115,8 +115,8 @@ RSpec.describe Build::Image do
         end
 
         before do
-          allow(Build::Info).to receive(:package).and_return('gitlab-ce')
-          allow(Build::Info).to receive(:release_version).and_return('12.121.12-ce.0')
+          allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
+          allow(Build::Info::Package).to receive(:release_version).and_return('12.121.12-ce.0')
         end
 
         it 'returns build version and iteration with env variable' do
@@ -136,7 +136,7 @@ RSpec.describe Build::Image do
         end
 
         before do
-          allow(Build::Info).to receive(:release_version).and_return('12.121.12-ee.0')
+          allow(Build::Info::Package).to receive(:release_version).and_return('12.121.12-ee.0')
           stub_env_var('ee', 'true')
         end
 
@@ -165,8 +165,8 @@ RSpec.describe Build::Image do
         end
 
         before do
-          allow(Build::Info).to receive(:package).and_return('gitlab-ce')
-          allow(Build::Info).to receive(:release_version).and_return('12.121.12-ce.0')
+          allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
+          allow(Build::Info::Package).to receive(:release_version).and_return('12.121.12-ce.0')
         end
 
         it 'returns build version and iteration with env variable' do
@@ -186,7 +186,7 @@ RSpec.describe Build::Image do
         end
 
         before do
-          allow(Build::Info).to receive(:release_version).and_return('12.121.12-ee.0')
+          allow(Build::Info::Package).to receive(:release_version).and_return('12.121.12-ee.0')
           stub_env_var('ee', 'true')
         end
 

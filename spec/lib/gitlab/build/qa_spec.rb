@@ -25,7 +25,7 @@ RSpec.describe Build::QA do
 
   describe '.clone_gitlab_rails' do
     it 'calls the git command' do
-      allow(Build::Info).to receive(:package).and_return("gitlab-ee")
+      allow(Build::Info::Package).to receive(:name).and_return("gitlab-ee")
       allow(::Gitlab::Version).to receive(:sources_channel).and_return('remote')
 
       expect(described_class).to receive(:system).with(*%w[rm -rf /tmp/gitlab])
@@ -37,7 +37,7 @@ RSpec.describe Build::QA do
 
   describe '.checkout_gitlab_rails' do
     it 'calls the git command' do
-      allow(Build::Info).to receive(:package).and_return("gitlab-ee")
+      allow(Build::Info::Package).to receive(:name).and_return("gitlab-ee")
       allow(Gitlab::Version).to receive(:new).with('gitlab-rails').and_return(double(print: 'v9.0.0'))
       allow(Build::Check).to receive(:on_tag?).and_return(true)
       stub_is_auto_deploy(false)
