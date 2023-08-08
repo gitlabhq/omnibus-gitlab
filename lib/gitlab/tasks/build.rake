@@ -3,6 +3,7 @@ require_relative "../build.rb"
 require_relative "../build/check.rb"
 require_relative "../build/info.rb"
 require_relative "../build/info/git"
+require_relative "../build/info/package"
 require_relative '../build/facts'
 require_relative "../gcloud_helper.rb"
 require_relative "../ohai_helper.rb"
@@ -40,7 +41,7 @@ namespace :build do
   namespace :package do
     desc "Move packages to OS specific directory"
     task :move_to_platform_dir do
-      FileUtils.mv("pkg/version-manifest.json", "pkg/#{Build::Info.package}_#{Build::Info.release_version}.version-manifest.json")
+      FileUtils.mv("pkg/version-manifest.json", "pkg/#{Build::Info::Package.name}_#{Build::Info::Package.release_version}.version-manifest.json")
       platform_dir = OhaiHelper.platform_dir
       FileUtils.mv("pkg", platform_dir)
       FileUtils.mkdir("pkg")
@@ -93,12 +94,12 @@ namespace :build do
 
     desc "Package name"
     task :name do
-      puts Build::Info.package
+      puts Build::Info::Package.name
     end
 
     desc 'Print the package name-version string to install the specific version of package'
     task :name_version do
-      puts Build::Info.name_version
+      puts Build::Info::Package.name_version
     end
   end
 

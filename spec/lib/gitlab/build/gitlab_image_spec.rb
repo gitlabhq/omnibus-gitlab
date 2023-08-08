@@ -3,7 +3,7 @@ require 'gitlab/build/gitlab_image'
 
 RSpec.describe Build::GitlabImage do
   before do
-    allow(Build::Info).to receive(:package).and_return('gitlab-ce')
+    allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
   end
 
   describe '.dockerhub_image_name' do

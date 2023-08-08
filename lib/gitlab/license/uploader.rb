@@ -7,10 +7,10 @@ require_relative 'base.rb'
 module License
   class Uploader < Base
     def initialize
-      @edition = Build::Info.package
+      @edition = Build::Info::Package.name
       @license_bucket = Gitlab::Util.get_env('LICENSE_S3_BUCKET')
       @licenses_path = File.absolute_path(@license_bucket)
-      @current_version = Build::Info.release_version
+      @current_version = Build::Info::Package.release_version
       @current_minor_version = @current_version.split(".")[0, 2].join(".")
       @license_bucket_region = "eu-west-1"
       @json_data = nil

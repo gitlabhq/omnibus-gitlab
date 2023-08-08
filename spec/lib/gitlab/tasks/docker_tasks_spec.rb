@@ -14,7 +14,7 @@ RSpec.describe 'docker', type: :rake do
 
     it 'calls build command with correct parameters' do
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('dev.gitlab.org:5005/gitlab/omnibus-gitlab')
-      allow(Build::Info).to receive(:package).and_return('gitlab-ce')
+      allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
       allow(Build::GitlabImage).to receive(:write_release_file).and_return(true)
       allow(File).to receive(:expand_path).and_return('/tmp/omnibus-gitlab/lib/gitlab/tasks/docker_tasks.rake')
       allow(DockerOperations).to receive(:build).and_call_original
@@ -33,7 +33,7 @@ RSpec.describe 'docker', type: :rake do
 
     it 'pulls in correct image' do
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('dev.gitlab.org:5005/gitlab/omnibus-gitlab')
-      allow(Build::Info).to receive(:package).and_return('gitlab-ce')
+      allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
       allow(Build::Info).to receive(:docker_tag).and_return('9.0.0')
       allow(DockerOperations).to receive(:authenticate).and_return(true)
 
@@ -55,7 +55,7 @@ RSpec.describe 'docker', type: :rake do
 
       allow(ENV).to receive(:[]).and_call_original
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('dev.gitlab.org:5005/gitlab/omnibus-gitlab')
-      allow(Build::Info).to receive(:package).and_return('gitlab-ce')
+      allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
       allow(Build::Info).to receive(:docker_tag).and_return('9.0.0')
       allow(DockerOperations).to receive(:authenticate).and_return(true)
       allow(Docker::Image).to receive(:get).and_return(dummy_image)

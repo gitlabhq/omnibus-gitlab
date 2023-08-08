@@ -88,11 +88,11 @@ class PackageSizeCheck
       # Also, we are setting a custom static value for fingerprint so that
       # alerts will be grouped together.
       {
-        title: "#{Build::Info.edition.upcase} package size exceeded threshold of #{permitted_size} MB",
+        title: "#{Build::Info::Package.edition.upcase} package size exceeded threshold of #{permitted_size} MB",
         description: "Package size: #{package_size.round(2)} MB.",
         pipeline: Gitlab::Util.get_env('CI_PIPELINE_URL'),
         os: OhaiHelper.platform_dir,
-        fingerprint: "omnibus-gitlab-package-size-#{Build::Info.edition}" # For automatic grouping of alerts
+        fingerprint: "omnibus-gitlab-package-size-#{Build::Info::Package.edition}" # For automatic grouping of alerts
       }
     end
   end

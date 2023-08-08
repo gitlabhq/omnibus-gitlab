@@ -14,7 +14,7 @@ RSpec.describe 'license:check', type: :rake do
     allow(File).to receive(:open).with(/pkg.*license-status.json/, "w").and_return(f)
     allow(f).to receive(:write).and_return(true)
     allow(f).to receive(:close).and_return(true)
-    allow(Build::Info).to receive(:release_version).and_return("11.5.1+ce.0")
+    allow(Build::Info::Package).to receive(:release_version).and_return("11.5.1+ce.0")
   end
 
   it 'detects good licenses correctly' do

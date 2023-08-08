@@ -53,7 +53,7 @@ RSpec.describe 'aws:ami:create', type: :rake do
     end
 
     it 'should identify ce category correctly, if specified' do
-      allow(Build::Info).to receive(:edition).and_return('ce')
+      allow(Build::Info::Package).to receive(:edition).and_return('ce')
       allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
 
       expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ce", "http://example.com", "CI-NO-JOB-TOKEN", ""])
@@ -62,7 +62,7 @@ RSpec.describe 'aws:ami:create', type: :rake do
     end
 
     it 'should identify ce category correctly if nothing is specified' do
-      allow(Build::Info).to receive(:edition).and_return(nil)
+      allow(Build::Info::Package).to receive(:edition).and_return(nil)
       allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
 
       expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ce", "http://example.com", "CI-NO-JOB-TOKEN", ""])
@@ -71,7 +71,7 @@ RSpec.describe 'aws:ami:create', type: :rake do
     end
 
     it 'should identify ee category correctly' do
-      allow(Build::Info).to receive(:edition).and_return('ee')
+      allow(Build::Info::Package).to receive(:edition).and_return('ee')
       allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
 
       expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ee", "http://example.com", "CI-NO-JOB-TOKEN", ""])
@@ -82,7 +82,7 @@ RSpec.describe 'aws:ami:create', type: :rake do
     it 'should identify ce arm64 correctly' do
       allow(Gitlab::Util).to receive(:get_env).and_call_original
       allow(Gitlab::Util).to receive(:get_env).with('AWS_ARCHITECTURE').and_return('arm64')
-      allow(Build::Info).to receive(:edition).and_return(nil)
+      allow(Build::Info::Package).to receive(:edition).and_return(nil)
       allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
 
       expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ce-arm64", "http://example.com", "CI-NO-JOB-TOKEN", ""])
@@ -93,7 +93,7 @@ RSpec.describe 'aws:ami:create', type: :rake do
     it 'should identify ee arm64 correctly' do
       allow(Gitlab::Util).to receive(:get_env).and_call_original
       allow(Gitlab::Util).to receive(:get_env).with('AWS_ARCHITECTURE').and_return('arm64')
-      allow(Build::Info).to receive(:edition).and_return('ee')
+      allow(Build::Info::Package).to receive(:edition).and_return('ee')
       allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
 
       expect_any_instance_of(Kernel).to receive(:system).with(*["support/packer/packer_ami.sh", "9.3.0", "ee-arm64", "http://example.com", "CI-NO-JOB-TOKEN", ""])
@@ -102,7 +102,7 @@ RSpec.describe 'aws:ami:create', type: :rake do
     end
 
     it 'should identify ee ultimate category correctly' do
-      allow(Build::Info).to receive(:edition).and_return('ee')
+      allow(Build::Info::Package).to receive(:edition).and_return('ee')
       allow(Gitlab::Util).to receive(:get_env).and_call_original
       allow(Gitlab::Util).to receive(:get_env).with("AWS_RELEASE_TYPE").and_return('ultimate')
       allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')
@@ -113,7 +113,7 @@ RSpec.describe 'aws:ami:create', type: :rake do
     end
 
     it 'should identify ee premium category correctly' do
-      allow(Build::Info).to receive(:edition).and_return('ee')
+      allow(Build::Info::Package).to receive(:edition).and_return('ee')
       allow(Gitlab::Util).to receive(:get_env).and_call_original
       allow(Gitlab::Util).to receive(:get_env).with("AWS_RELEASE_TYPE").and_return('premium')
       allow(Omnibus::BuildVersion).to receive(:semver).and_return('9.3.0')

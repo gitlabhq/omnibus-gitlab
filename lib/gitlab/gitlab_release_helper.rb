@@ -7,7 +7,7 @@ class GitlabReleaseHelper
 
       return if content.empty?
 
-      content.unshift("# GitLab #{Build::Info.edition.upcase} #{Build::Info.semver_version}").join("\n")
+      content.unshift("# GitLab #{Build::Info::Package.edition.upcase} #{Build::Info::Package.semver_version}").join("\n")
     end
 
     def release_contents

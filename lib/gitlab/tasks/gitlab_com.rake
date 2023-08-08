@@ -6,13 +6,13 @@ namespace :gitlab_com do
   task :deployer do
     abort "This task requires DEPLOYER_TRIGGER_TOKEN to be set" unless Gitlab::Util.get_env('DEPLOYER_TRIGGER_TOKEN')
 
-    unless Build::Info.package == "gitlab-ee"
-      puts "#{Build::Info.package} is not an ee package, not doing anything."
+    unless Build::Info::Package.name == "gitlab-ee"
+      puts "#{Build::Info::Package.name} is not an ee package, not doing anything."
       exit
     end
 
     deploy_env = Build::Info.deploy_env
-    operating_systems = Build::Info.package_list.map { |path| path.split("/")[1] }.uniq
+    operating_systems = Build::Info::Package.file_list.map { |path| path.split("/")[1] }.uniq
 
     unless operating_systems.include?(Build::Info::DEPLOYER_OS_MAPPING[Build::Info.deploy_env_key])
       puts "Deployment to #{deploy_env} not to be triggered from this build (#{operating_systems.join(',')})."

@@ -39,7 +39,7 @@ namespace :qa do
       Gitlab::Util.section('qa:copy:stable') do
         # Using `Build::Info.gitlab_version` allows to have
         # gitlab/gitlab-{ce,ee}-qa:X.Y.Z-{ce,ee} without the build number, as
-        # opposed to using something like `Build::Info.release_version`.
+        # opposed to using something like `Build::Info::Package.release_version`.
         Build::QAImage.copy_image_to_dockerhub(Build::Info.gitlab_version)
       end
     end

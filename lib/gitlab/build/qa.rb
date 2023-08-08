@@ -29,7 +29,7 @@ module Build
       # a to-and-fro `cd`).
       version = Build::Info.gitlab_rails_ref
 
-      puts "Building from #{Build::Info.package} commit #{version}"
+      puts "Building from #{Build::Info::Package.name} commit #{version}"
 
       system(*%W[git --git-dir=#{repo_path}/.git --work-tree=#{repo_path} checkout --quiet #{version}])
     end

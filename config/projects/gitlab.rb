@@ -23,7 +23,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/util"
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 require "#{Omnibus::Config.project_root}/lib/gitlab/openssl_helper"
 
-gitlab_package_name = Build::Info.package
+gitlab_package_name = Build::Info::Package.name
 gitlab_package_file = File.join(Omnibus::Config.project_dir, 'gitlab', "#{gitlab_package_name}.rb")
 
 # Include package specific details like package name and descrption (for gitlab-ee/gitlab-ce/etc)
@@ -54,7 +54,7 @@ install_dir     '/opt/gitlab'
 # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/1007
 #
 # Also check lib/gitlab/build.rb for Docker version forming
-build_version Build::Info.semver_version
+build_version Build::Info::Package.semver_version
 build_iteration Gitlab::BuildIteration.new.build_iteration
 
 # Openssh needs to be installed

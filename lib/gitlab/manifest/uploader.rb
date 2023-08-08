@@ -37,12 +37,12 @@ module Manifest
     # implies, this bucket is shared with the licenses.
     def initialize
       @generator = Generator.new
-      @edition = Build::Info.edition
-      @package = Build::Info.package
+      @edition = Build::Info::Package.edition
+      @package = Build::Info::Package.name
       @manifests_bucket = Gitlab::Util.get_env('LICENSE_S3_BUCKET')
       @manifests_bucket_path = File.join(@manifests_bucket, 'gitlab-manifests')
       @manifests_local_path = File.join(File.absolute_path(@manifests_bucket), 'gitlab-manifests')
-      @current_version = Build::Info.release_version.split("+")[0]
+      @current_version = Build::Info::Package.release_version.split("+")[0]
       @current_minor_version = @current_version.split(".")[0, 2].join(".")
       @manifests_bucket_region = "eu-west-1"
       @json_data = nil

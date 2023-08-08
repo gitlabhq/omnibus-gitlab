@@ -6,11 +6,11 @@ module Build
     extend Image
 
     def self.dockerhub_image_name
-      "gitlab/#{Build::Info.package}"
+      "gitlab/#{Build::Info::Package.name}"
     end
 
     def self.gitlab_registry_image_name
-      Build::Info.package
+      Build::Info::Package.name
     end
   end
 end
