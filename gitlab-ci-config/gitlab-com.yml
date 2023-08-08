@@ -562,7 +562,8 @@ qa-test:
   variables:
     RELEASE: $QA_RELEASE
     QA_IMAGE: $QA_IMAGE
-    ALLURE_JOB_NAME: $ALLURE_JOB_NAME
+    QA_RUN_ALL_TESTS: "false"
+    QA_SUITES: "QA::Scenario::Test::Integration::GitalyCluster,QA::Scenario::Test::Integration::InstanceSAML,QA::Scenario::Test::Integration::LDAPNoServer,QA::Scenario::Test::Integration::LDAPNoTLS,QA::Scenario::Test::Integration::LDAPTLS,QA::Scenario::Test::Integration::Mattermost,QA::Scenario::Test::Integration::Mtls,QA::Scenario::Test::Integration::ObjectStorageGcs,QA::Scenario::Test::Integration::RegistryTLS,QA::Scenario::Test::Integration::RegistryWithCDN,QA::Scenario::Test::Integration::SMTP,QA::Scenario::Test::Integration::Registry,QA::Scenario::Test::Instance::ObjectStorage,QA::Scenario::Test::Instance::RepositoryStorage,QA::Scenario::Test::Instance::GitlabPages,QA::Scenario::Test::Instance::Metrics,QA::EE::Scenario::Test::Integration::GroupSAML,QA::Scenario::Test::Instance::All,QA::Scenario::Test::Instance::Smoke"
     GITLAB_SEMVER_VERSION: $GITLAB_SEMVER_VERSION # latest semver gitlab version used for testing upgrade paths
     SKIP_OMNIBUS_TRIGGER: "true"
     GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
