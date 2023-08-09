@@ -327,12 +327,6 @@ module Gitlab
             note: "Starting with GitLab 15.5, jemalloc is compiled in with the Ruby interpreter and can no longer be disabled."
           },
           {
-            config_keys: %w(gitlab gitlab_rails gitlab_default_can_create_group),
-            deprecation: '15.5',
-            removal: '16.0',
-            note: "Starting with GitLab 15.5, this setting cannot be controlled via the configuration file anymore. Follow the steps at https://docs.gitlab.com/ee/administration/settings/account_and_limit_settings.html#prevent-new-users-from-creating-top-level-groups, to configure this setting via the Admin UI or the API"
-          },
-          {
             config_keys: %w(gitlab sidekiq queue_selector),
             deprecation: '15.9',
             removal: '17.0',
