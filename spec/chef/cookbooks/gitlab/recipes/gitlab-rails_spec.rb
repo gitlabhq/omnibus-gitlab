@@ -5,7 +5,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
   let(:redis_instances) { RedisHelper::REDIS_INSTANCES }
-  let(:redis_cluster_instances) { %w(cluster_rate_limiting) }
+  let(:redis_cluster_instances) { %w(cache rate_limiting cluster_rate_limiting) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
   let(:default_vars) do
     {
@@ -325,7 +325,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
 
     context 'with multiple redis cluster instance' do
-      %w(queues shared_state trace_chunks sessions cache).each do |instance|
+      %w(queues shared_state trace_chunks sessions).each do |instance|
         it_should_behave_like 'instances does not support redis cluster', instance
       end
 
