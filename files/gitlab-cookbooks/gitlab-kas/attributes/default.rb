@@ -2,8 +2,8 @@
 # GitLab Kubernetes Agent Server
 ####
 default['gitlab_kas']['enable'] = false
-default['gitlab_kas']['agent_configuration_poll_period'] = 20
-default['gitlab_kas']['agent_gitops_poll_period'] = 20
+default['gitlab_kas']['agent_configuration_poll_period'] = 300
+default['gitlab_kas']['agent_gitops_poll_period'] = 300
 default['gitlab_kas']['agent_gitops_project_info_cache_ttl'] = 300
 default['gitlab_kas']['agent_gitops_project_info_cache_error_ttl'] = 60
 default['gitlab_kas']['agent_info_cache_ttl'] = 300
