@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.2.4 (2023-08-11)
+
+### Fixed (1 change)
+
+- [Set proxy_http_version v1.0 for health monitoring endpoints](gitlab-org/omnibus-gitlab@7318761272dc022c5273c96cffce4c991abb4bca) ([merge request](gitlab-org/omnibus-gitlab!7075))
+
 ## 16.2.3 (2023-08-03)
 
 No changes.
