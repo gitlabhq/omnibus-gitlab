@@ -12,17 +12,14 @@ dependencies:
     - name: .* # everything else
       enabled: true
   settings:
-    # Assign to twk3 (dmountney), balasankarc, and rmarshall by default
-    gitlab_assignee_ids:
-      - 42196
-      - 4849
-      - 2602134
     gitlab_labels:
       - group::distribution
+      - section::enablement
       - devops::systems
       - type::maintenance
-      - maintenance
+      - maintenance::dependency
       - dependencies.io
+      - workflow::ready for review
     gitlab_remove_source_branch: true
     commit_message_template: |-
       {{.SubjectAndBody}}
