@@ -91,7 +91,7 @@ messages to only be removed in the next planned required stop following the remo
 - The deprecation messages should be removed in 16.3, as this is the next planned required stop.
 
 To track the removal of deprecation messages:
- 
+
 1. Create a follow-up issue using the `Remove Deprecation Message` issue template.
 1. Add a comment next to your deprecation message with a link to the follow-up issue to remove the message. For example:
 
