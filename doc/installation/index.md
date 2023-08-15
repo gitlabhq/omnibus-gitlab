@@ -115,6 +115,7 @@ database, configuration) or remove all of them:
      sudo systemctl disable gitlab-runsvdir
      sudo rm /usr/lib/systemd/system/gitlab-runsvdir.service
      sudo systemctl daemon-reload
+     sudo systemctl reset-failed
      sudo gitlab-ctl uninstall
      ```
 
