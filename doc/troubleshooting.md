@@ -820,6 +820,17 @@ Ran /opt/gitlab/embedded/bin/sv restart /opt/gitlab/service/gitaly returned 1
 
 Refer to [issue 341573](https://gitlab.com/gitlab-org/gitlab/-/issues/341573) for more details.
 
+## Reconfigure is stuck when re-installing GitLab
+
+Because of a [known issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7776), you can see the reconfigure process stuck at
+`ruby_block[wait for logrotate service socket] action run` after uninstalling GitLab and trying to install it again. This problem occurs when one of the `systemctl` commands are
+not executed when [uninstalling GitLab](installation/index.md#uninstall-the-linux-package-omnibus).
+
+To resolve this issue:
+
+- Make sure you followed all the steps when uninstalling GitLab and perform them if necessary.
+- Follow the workaround in [issue 7776](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7776).
+
 ## Mirroring the GitLab `yum` repository with Pulp or Red Hat Satellite fails
 
 Direct mirroring of the Omnibus GitLab `yum` repositories located at <https://packages.gitlab.com/gitlab/> with [Pulp](https://pulpproject.org/) or
