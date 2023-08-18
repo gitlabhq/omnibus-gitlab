@@ -982,7 +982,7 @@ local mirror that are no longer present in the corresponding GitLab repository.
 
    ```shell
    pulp rpm repository create --retain-package-versions=1 --name "gitlab-ee"
-   pulp rpm remote create --name gitlab-ee --url http://mirror.example.com/repos/gitlab_gitlab-ee/ --policy immediate
+   pulp rpm remote create --name gitlab-ee --url "http://mirror.example.com/repos/gitlab_gitlab-ee/" --policy immediate
    pulp rpm repository update --name gitlab-ee --remote gitlab-ee
    ```
 

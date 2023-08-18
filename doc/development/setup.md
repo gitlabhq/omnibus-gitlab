@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Set up your development environment
 
-Development of Omnibus GitLab can be done using an existing package available
+Development of the Linux package can be done using an existing package available
 from the [Downloads page](https://about.gitlab.com/install/). To know how to setup
 a build environment to build these packages and use them, please read
 [Setting up a Build Environment](../build/build_package.md#prepare-a-build-environment)
