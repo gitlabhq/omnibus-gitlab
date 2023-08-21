@@ -3,6 +3,47 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.3.0 (2023-08-21)
+
+### Added (1 change)
+
+- [Add contributed protonmail settings](gitlab-org/omnibus-gitlab@b020a8fa0d53087b88e8f2ac80b19acec46cfe51) ([merge request](gitlab-org/omnibus-gitlab!7042))
+
+### Fixed (4 changes)
+
+- [Restore support for SHA-1 RSA cryptography](gitlab-org/omnibus-gitlab@b1b6071171ace7b7754b466929b406c0ab203943) by @V0V4N ([merge request](gitlab-org/omnibus-gitlab!7035))
+- [Disable Grafana service after dropping it](gitlab-org/omnibus-gitlab@9615acfdcc661e978b14e68468d6a3312b97949d) ([merge request](gitlab-org/omnibus-gitlab!7078))
+- [Set proxy_http_version v1.0 for health monitoring endpoints](gitlab-org/omnibus-gitlab@0f2eb424c3f3a9453b5962354ae2afe98d5fbf05) ([merge request](gitlab-org/omnibus-gitlab!7068))
+- [Ensure the consul home directory has execute flags set](gitlab-org/omnibus-gitlab@ff72c197abc919900b9f6f3e1ebf4add2d7943e0) ([merge request](gitlab-org/omnibus-gitlab!7039))
+
+### Changed (13 changes)
+
+- [Update gitlab-exporter from 13.1.0 to 13.2.0](gitlab-org/omnibus-gitlab@ea2956919a8264a07c4460c43ed92cd4705191da) ([merge request](gitlab-org/omnibus-gitlab!7087))
+- [KAS: increase poll period](gitlab-org/omnibus-gitlab@91ec8c839aa6f48a74b170c3f0e3889f8fbcc167) ([merge request](gitlab-org/omnibus-gitlab!7080))
+- [Update Prometheus from 2.45.0 to 2.46.0](gitlab-org/omnibus-gitlab@85c13343dbcd882b92a32bfa66035fd1a4f255e5) ([merge request](gitlab-org/omnibus-gitlab!7063))
+- [Update nginx-module-vts from 0.1.18 to 0.2.0](gitlab-org/omnibus-gitlab@c95a809fb4c832f42ad50ff260ee54142139d726) ([merge request](gitlab-org/omnibus-gitlab!6320))
+- [Bump rubygems to 3.4.18](gitlab-org/omnibus-gitlab@47d003c6e25ed4608efe07dd84967886108306e5) ([merge request](gitlab-org/omnibus-gitlab!7005))
+- [Bump node_exporter to version 1.6.1](gitlab-org/omnibus-gitlab@7dc6b574f34ca712c2ac154566d8494bc4998a02) ([merge request](gitlab-org/omnibus-gitlab!7047))
+- [Bump openssl to version 1.1.1v](gitlab-org/omnibus-gitlab@a9bbc5b705edace399dfe3004a0ccc44d399a682) ([merge request](gitlab-org/omnibus-gitlab!7072))
+- [Bump container-registry to v3.79.0](gitlab-org/omnibus-gitlab@be098226d525f2b2f6848b571a07f23c7ced4491) ([merge request](gitlab-org/omnibus-gitlab!7073))
+- [Update mattermost from 7.10.4 to 8.0.1](gitlab-org/omnibus-gitlab@9e0bc661e337c6c7e686e050df85b59c31a1aec5) by @antonis.stamatiou ([merge request](gitlab-org/omnibus-gitlab!7065))
+- [Update gitlab-org/build/omnibus-mirror/redis_exporter from 1.51.0 to 1.52.0](gitlab-org/omnibus-gitlab@b89244f3ea19a90c0dd6b59ff21c408a8583f1db) ([merge request](gitlab-org/omnibus-gitlab!7062))
+- [Toggle recommend_pg_upgrade to false for now](gitlab-org/omnibus-gitlab@fe3ff7ba000943d736d9f8535e534d8e9d049f2d) ([merge request](gitlab-org/omnibus-gitlab!7059))
+- [Update gitlab-org/build/omnibus-mirror/postgres_exporter from 0.13.1 to 0.13.2](gitlab-org/omnibus-gitlab@6ff8d6b033b6232cf0479778b8c4e49cdf92985a) ([merge request](gitlab-org/omnibus-gitlab!7058))
+- [Add Redis to deps.yml](gitlab-org/omnibus-gitlab@4da0f1bdf8cc6098dbb73126a50c09ed4470d8ab) ([merge request](gitlab-org/omnibus-gitlab!7031))
+
+### Removed (1 change)
+
+- [Drop Grafana and related code from the package](gitlab-org/omnibus-gitlab@153fedec5210deabf718a8aeec3087d6cab48934) ([merge request](gitlab-org/omnibus-gitlab!7069))
+
+### Security (1 change)
+
+- [Update libxml2 to 2.10.4](gitlab-org/omnibus-gitlab@728678fc7f2962fcb10c09801fa23d573bb7c15d)
+
+### Other (1 change)
+
+- [Enable cache to configure for Redis Cluster](gitlab-org/omnibus-gitlab@8c0aa6b59ad8be8b62e1a720cb370aadb29add05) ([merge request](gitlab-org/omnibus-gitlab!7079))
+
 ## 16.2.4 (2023-08-11)
 
 ### Fixed (1 change)
