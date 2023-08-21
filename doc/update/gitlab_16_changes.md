@@ -2,7 +2,7 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
-remove_date: '2023-11-08'
+remove_date: '2024-08-21'
 redirect_to: 'https://docs.gitlab.com/ee/update/versions/gitlab_16_changes.html'
 ---
 
