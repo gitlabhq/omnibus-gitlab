@@ -15,13 +15,6 @@ Please be advised that you lose your settings in files such as `gitlab.yml`,
 Before starting the migration, ensure that you are moving to **exactly the same version** of GitLab.
 To convert your installation to using the Linux package:
 
-1. If your current GitLab installation uses MySQL, you first need to migrate
-   your data to PostgreSQL, because starting with GitLab 12.1, PostgreSQL is the
-   only supported database management system. If you already use PostgreSQL, skip this step.
-   1. Verify the [PostgreSQL requirements and supported versions](https://docs.gitlab.com/ee/install/requirements.html#postgresql-requirements),
-   then [install PostgreSQL and create a database](https://docs.gitlab.com/ee/install/installation.html#6-database).
-   1. After the database is created, [migrate the MySQL data to PostgreSQL](https://docs.gitlab.com/ee/update/mysql_to_postgresql.html#source-installation).
-
 1. Create a backup from your current installation:
 
    ```shell

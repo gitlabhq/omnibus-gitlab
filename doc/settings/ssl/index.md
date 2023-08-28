@@ -138,7 +138,7 @@ server are:
 - [ZeroSSL](https://zerossl.com/documentation/acme/)
 - [Buypass](https://www.buypass.com/products/tls-ssl-certificates/go-ssl)
 - [SSL.com](https://www.ssl.com/guide/ssl-tls-certificate-issuance-and-revocation-with-acme/)
-- [`step-ca`](https://smallstep.com/docs/step-ca)
+- [`step-ca`](https://smallstep.com/docs/step-ca/index.html)
 
 To configure GitLab to use a custom ACME server:
 
