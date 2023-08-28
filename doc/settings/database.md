@@ -299,8 +299,7 @@ the `postgresql` and `gitlab_rails` sections of `gitlab.rb`.
 The following settings are affected in the `postgresql` block:
 
 - `listen_address`: Controls the address on which PostgreSQL will listen.
-- `port`: Controls the port on which PostgreSQL will listen, and _must be set_
-  if `listen_address` is.
+- `port`: Controls the port on which PostgreSQL listens to. The default is `5432`.
 - `md5_auth_cidr_addresses`: A list of CIDR address blocks that are allowed to
   connect to the server, after authentication with a password.
 - `trust_auth_cidr_addresses`: A list of CIDR address blocks that are allowed
