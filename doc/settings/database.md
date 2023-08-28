@@ -961,6 +961,9 @@ Setting `postgresql['version']` while using the PostgreSQL packaged with the Lin
 throw errors about the data directory being initialized on a different version of PostgreSQL. If this is encountered,
 see [Revert packaged PostgreSQL server to the previous version](#revert-packaged-postgresql-server-to-the-previous-version).
 
+If you are doing a fresh install on an environment that previously had GitLab installed on it and you are using a pinned PostgreSQL version, first make
+sure that any folders that relate to PostgreSQL are deleted and that there are no PostgreSQL processes running on the instance. 
+
 ### Troubleshooting
 
 #### Set `default_transaction_isolation` into `read committed`
