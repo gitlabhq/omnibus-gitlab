@@ -3,8 +3,8 @@
 <!-- Copy and paste the following into your MR description. -->
 ## Test plan
 
-- [ ] QA tests passed for FIPS and non FIPS builds
-- [ ] Confirmed build was done with go 1.19 `strings /opt/gitlab/embedded/bin/gitaly  | grep 'go1\.' | tail -1`
+- [ ] QA tests passed for FIPS and non FIPS builds, including triggering the `build-package-on-all-os` job
+- [ ] Confirmed build was done with desired version of go `strings /opt/gitlab/embedded/bin/gitaly  | grep 'go1\.' | tail -1`
 - [ ] Confirmed Omnibus-built services that are owned by distribution are working
   - [ ] prometheus - (is scraping metrics)
 
