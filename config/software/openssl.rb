@@ -24,7 +24,7 @@ skip_transitive_dependency_licensing true
 
 dependency 'cacerts'
 
-version = Gitlab::Version.new('openssl', 'OpenSSL_1_1_1t')
+version = Gitlab::Version.new('openssl', 'OpenSSL_1_1_1u')
 
 default_version version.print(false)
 display_version version.print(false).delete_prefix('OpenSSL_').tr('_', '.')
@@ -67,7 +67,6 @@ build do
   command configure_command, env: env, in_msys_bash: true
 
   patch source: "openssl-1.1.1f-do-not-install-docs.patch", env: env
-  patch source: "openssl-1.1.1t-excessive-resource-use-verifying-policy-constraints.patch", env: env
 
   make 'depend', env: env
   # make -j N on openssl is not reliable
