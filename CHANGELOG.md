@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.1.5 (2023-08-31)
+
+### Security (2 changes)
+
+- [Update Mattermost to 7.10.5](gitlab-org/security/omnibus-gitlab@215c571f31c69a7b2d71f2a2c52631109b0f13e7) ([merge request](gitlab-org/security/omnibus-gitlab!362))
+- [Update openssl/openssl from 1t to 1u](gitlab-org/security/omnibus-gitlab@878ef45acd7ed02959b59bc9a2a1a9381c1d10e7) ([merge request](gitlab-org/security/omnibus-gitlab!325))
+
 ## 16.1.4 (2023-08-03)
 
 No changes.
