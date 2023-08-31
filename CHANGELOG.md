@@ -48,6 +48,12 @@ No changes.
 
 - [Enable cache to configure for Redis Cluster](gitlab-org/omnibus-gitlab@8c0aa6b59ad8be8b62e1a720cb370aadb29add05) ([merge request](gitlab-org/omnibus-gitlab!7079))
 
+## 16.2.5 (2023-08-31)
+
+### Security (1 change)
+
+- [Update Mattermost to 7.10.5](gitlab-org/security/omnibus-gitlab@f5d25b61529a413636f004e7dc5413c62bfd1af4) ([merge request](gitlab-org/security/omnibus-gitlab!361))
+
 ## 16.2.4 (2023-08-11)
 
 ### Fixed (1 change)
