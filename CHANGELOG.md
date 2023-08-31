@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.3.1 (2023-08-31)
+
+No changes.
+
 ## 16.3.0 (2023-08-21)
 
 ### Added (1 change)
@@ -43,6 +47,12 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Enable cache to configure for Redis Cluster](gitlab-org/omnibus-gitlab@8c0aa6b59ad8be8b62e1a720cb370aadb29add05) ([merge request](gitlab-org/omnibus-gitlab!7079))
+
+## 16.2.5 (2023-08-31)
+
+### Security (1 change)
+
+- [Update Mattermost to 7.10.5](gitlab-org/security/omnibus-gitlab@f5d25b61529a413636f004e7dc5413c62bfd1af4) ([merge request](gitlab-org/security/omnibus-gitlab!361))
 
 ## 16.2.4 (2023-08-11)
 
@@ -104,6 +114,13 @@ No changes.
 ### Other (1 change)
 
 - [Remove GITLAB_METRICS_EXPORTER_VERSION file](gitlab-org/omnibus-gitlab@5afc28844d0abb8b18e3a4b0fea2dec283b757e2) ([merge request](gitlab-org/omnibus-gitlab!7030))
+
+## 16.1.5 (2023-08-31)
+
+### Security (2 changes)
+
+- [Update Mattermost to 7.10.5](gitlab-org/security/omnibus-gitlab@215c571f31c69a7b2d71f2a2c52631109b0f13e7) ([merge request](gitlab-org/security/omnibus-gitlab!362))
+- [Update openssl/openssl from 1t to 1u](gitlab-org/security/omnibus-gitlab@878ef45acd7ed02959b59bc9a2a1a9381c1d10e7) ([merge request](gitlab-org/security/omnibus-gitlab!325))
 
 ## 16.1.4 (2023-08-03)
 
