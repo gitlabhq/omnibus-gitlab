@@ -909,6 +909,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['validation_enabled'] = false
 # registry['autoredirect'] = false
 # registry['compatibility_schema1_enabled'] = false
+# registry['database'] = nil
 
 ### Registry backend storage
 ###! Docs: https://docs.gitlab.com/ee/administration/packages/container_registry.html#configure-storage-for-the-container-registry
@@ -923,6 +924,29 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'redirect' => {
 #     'disable' => false
 #   }
+# }
+
+### Registry database
+###! Docs: https://docs.gitlab.com/ee/administration/packages/container_registry.html?tab=Linux+package+%28Omnibus%29#configure-a-metadata-database-for-the-container-registry
+# registry['database'] = { 
+#   'enabled' => true,
+#   'host' => 'localhost',
+#   'port' => 5432,
+#   'user' => 'postgres',
+#   'password' => 'postgres',
+#   'dbname' => 'registry',
+#   'sslmode' => 'verify-full',
+#   'sslcert' => '/path/to/client.crt',
+#   'sslkey' => '/path/to/client.key',
+#   'sslrootcert' => '/path/to/root.crt',
+#   'connecttimeout' => '5s',
+#   'draintimeout' => '2m',
+#   'preparedstatements' => false,
+#   'pool' => {
+#       'maxidle' => 25,
+#       'maxopen' => 25,
+#       'maxlifetime' => '5m'
+#   } 
 # }
 
 ### Registry notifications endpoints
