@@ -62,6 +62,7 @@ RSpec.shared_examples 'enabled registry service' do
         expect(content).to match(/validation:\s*disabled: true$/)
         expect(content).not_to match(/^compatibility:/)
         expect(content).not_to match(/^middleware:/)
+        expect(content).not_to match(/^database:/)
       end
     )
   end

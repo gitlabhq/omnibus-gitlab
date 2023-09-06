@@ -142,6 +142,36 @@ RSpec.describe 'registry recipe' do
       end
     end
 
+    context 'when the registry metadata database is enabled' do
+      let(:database_config) do
+        { "enabled" => true,
+          "host" => "localhost",
+          "port" => 5432,
+          "user" => "postgres",
+          "password" => "postgres",
+          "dbname" => "registry",
+          "sslmode" => "verify-full",
+          "sslcert" => "/path/to/client.crt",
+          "sslkey" => "/path/to/client.key",
+          "sslrootcert" => "/path/to/root.crt",
+          "connecttimeout" => "5s",
+          "draintimeout" => "2m",
+          "preparedstatements" => false,
+          "pool" => {
+            "maxidle" => 25,
+            "maxopen" => 25,
+            "maxlifetime" => "5m"
+          } }
+      end
+
+      before { stub_gitlab_rb(registry: { database: database_config }) }
+
+      it 'creates registry config with database' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(%r(^database: {"enabled":true))
+      end
+    end
+
     context 'when a log formatter is specified' do
       before { stub_gitlab_rb(registry: { log_formatter: 'json' }) }
 
