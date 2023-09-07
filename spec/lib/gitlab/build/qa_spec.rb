@@ -38,7 +38,7 @@ RSpec.describe Build::QA do
   describe '.checkout_gitlab_rails' do
     it 'calls the git command' do
       allow(Build::Info::Package).to receive(:name).and_return("gitlab-ee")
-      allow(Gitlab::Version).to receive(:new).with('gitlab-rails').and_return(double(print: 'v9.0.0'))
+      allow(Gitlab::Version).to receive(:new).with('gitlab-rails-ee').and_return(double(print: 'v9.0.0'))
       allow(Build::Check).to receive(:on_tag?).and_return(true)
       stub_is_auto_deploy(false)
 
