@@ -89,7 +89,7 @@ build do
     end
 
     env['GIT_REPO_URL'] = git_repo_url if git_repo_url
-  elsif sm_version_override_git_repo_url && Regexp.new(sm_version_override_git_repo_url).match?(Build::Info.gitlab_version)
+  elsif sm_version_override_git_repo_url && Regexp.new(sm_version_override_git_repo_url).match?(Build::Info::Components::GitLabRails.version)
     env['GIT_REPO_URL'] = git_repo_url if git_repo_url
   end
 

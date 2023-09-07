@@ -39,7 +39,7 @@ RSpec.describe 'qa', type: :rake do
 
   describe 'qa:copy' do
     before do
-      allow(Build::Info).to receive(:gitlab_version).and_return(gitlab_version)
+      allow(Build::Info::Components::GitLabRails).to receive(:version).and_return(gitlab_version)
       allow(Build::Info::Git).to receive(:commit_sha).and_return(commit_sha)
     end
 
@@ -100,7 +100,7 @@ RSpec.describe 'qa', type: :rake do
       Rake::Task['qa:push:rc'].reenable
       Rake::Task['qa:push:latest'].reenable
 
-      allow(Build::Info).to receive(:gitlab_version).and_return(gitlab_version)
+      allow(Build::Info::Components::GitLabRails).to receive(:version).and_return(gitlab_version)
     end
 
     it 'pushes stable images correctly' do
@@ -138,7 +138,7 @@ RSpec.describe 'qa', type: :rake do
       before do
         Rake::Task['qa:push:staging'].reenable
 
-        allow(Build::Info).to receive(:gitlab_version).and_return(gitlab_version)
+        allow(Build::Info::Components::GitLabRails).to receive(:version).and_return(gitlab_version)
         allow(Build::Info::Git).to receive(:commit_sha).and_return(commit_sha)
       end
 

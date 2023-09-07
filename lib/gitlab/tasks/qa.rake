@@ -4,6 +4,7 @@ require_relative '../build/qa'
 require_relative '../build/check'
 require_relative '../build/info'
 require_relative "../build/info/git"
+require_relative "../build/info/components"
 require_relative '../build/gitlab_image'
 require_relative '../build/qa_image'
 require_relative '../build/rat'
@@ -37,10 +38,10 @@ namespace :qa do
     desc "Copy stable version of gitlab-{ce,ee}-qa to the Omnibus registry and Docker Hub"
     task :stable do
       Gitlab::Util.section('qa:copy:stable') do
-        # Using `Build::Info.gitlab_version` allows to have
+        # Using `Build::Info::Components::GitLabRails.version` allows to have
         # gitlab/gitlab-{ce,ee}-qa:X.Y.Z-{ce,ee} without the build number, as
         # opposed to using something like `Build::Info::Package.release_version`.
-        Build::QAImage.copy_image_to_dockerhub(Build::Info.gitlab_version)
+        Build::QAImage.copy_image_to_dockerhub(Build::Info::Components::GitLabRails.version)
       end
     end
 
@@ -64,7 +65,7 @@ namespace :qa do
     desc "Push unstable version of gitlab-{ce,ee}-qa to the GitLab registry"
     task :staging do
       Gitlab::Util.section('qa:push:staging') do
-        Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.gitlab_version)
+        Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info::Components::GitLabRails.version)
         Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info::Git.commit_sha)
       end
     end
@@ -73,8 +74,8 @@ namespace :qa do
     task :stable do
       Gitlab::Util.section('qa:push:stable') do
         # Allows to have gitlab/gitlab-{ce,ee}-qa:10.2.0-ee without the build number
-        Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info.gitlab_version)
-        Build::QAImage.tag_and_push_to_dockerhub(Build::Info.gitlab_version, initial_tag: 'latest')
+        Build::QAImage.tag_and_push_to_gitlab_registry(Build::Info::Components::GitLabRails.version)
+        Build::QAImage.tag_and_push_to_dockerhub(Build::Info::Components::GitLabRails.version, initial_tag: 'latest')
       end
     end
 
