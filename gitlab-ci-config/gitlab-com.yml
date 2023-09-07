@@ -62,13 +62,6 @@
   - bundle install -j $(nproc)
   - bundle binstubs --all
 
-.build-package: &build-package
-  - bundle exec rake cache:populate
-  - bundle exec rake cache:restore
-  - bundle exec rake build:project
-  - bundle exec rake cache:bundle
-  - bundle exec rake build:component_shas
-
 .trigger-package-common:
   extends: .trigger-package-cache
   variables:

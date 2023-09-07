@@ -71,24 +71,13 @@ namespace :build do
       end
     end
 
-    desc "Sync packages to aws and gcp"
+    desc "Sync packages to gcp"
     task :sync do
       Gitlab::Util.section('build:package:sync', collapsed: Build::Check.on_tag?) do
         puts '---- Syncing packages to GCP'
         puts GCloudHelper.gcs_sync!('pkg/')
         paths = Dir.glob('pkg/**/*').select { |f| File.file?(f) }.map { |p| p.gsub(%r[^pkg/], '') }
         puts GCloudHelper.signed_urls(paths)
-
-        puts '---- Syncing packages to AWS'
-        release_bucket = Build::Info.release_bucket
-        release_bucket_region = Build::Info.release_bucket_region
-        release_bucket_s3_endpoint = Build::Info.release_bucket_s3_endpoint
-        puts "AWS S3 Sync: Copying pkg/ contents to #{release_bucket_s3_endpoint}"
-        system(*%W[aws s3 --endpoint-url https://#{release_bucket_s3_endpoint} sync pkg/ s3://#{release_bucket} --no-progress --acl public-read --region #{release_bucket_region}])
-        files = Dir.glob('pkg/**/*').select { |f| File.file? f }
-        files.each do |file|
-          puts file.gsub('pkg', "https://#{release_bucket}.#{release_bucket_s3_endpoint}").gsub('+', '%2B')
-        end
       end
     end
 

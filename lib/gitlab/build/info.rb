@@ -23,22 +23,6 @@ module Build
         Gitlab::Util.get_env('QA_IMAGE') || "#{Gitlab::Util.get_env('CI_REGISTRY')}/#{Build::Info::Components::GitLabRails.project_path}/#{Build::Info::Package.name}-qa:#{Build::Info::Components::GitLabRails.ref(prepend_version: false)}"
       end
 
-      def release_bucket
-        # Tag builds are releases and they get pushed to a specific S3 bucket
-        # whereas regular branch builds use a separate one
-        downloads_bucket = Gitlab::Util.get_env('RELEASE_BUCKET') || "downloads-packages"
-        builds_bucket = Gitlab::Util.get_env('BUILDS_BUCKET') || "omnibus-builds"
-        Check.on_tag? ? downloads_bucket : builds_bucket
-      end
-
-      def release_bucket_region
-        Gitlab::Util.get_env('RELEASE_BUCKET_REGION') || "eu-west-1"
-      end
-
-      def release_bucket_s3_endpoint
-        Gitlab::Util.get_env('RELEASE_BUCKET_S3_ENDPOINT') || "s3.amazonaws.com"
-      end
-
       def gcp_release_bucket
         # All tagged builds are pushed to the release bucket
         # whereas regular branch builds use a separate one

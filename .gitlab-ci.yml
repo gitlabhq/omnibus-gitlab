@@ -108,6 +108,14 @@ variables:
     paths:
       - gems
 
+.build-package: &build-package
+  - bundle exec rake cache:populate
+  - bundle exec rake cache:restore
+  - bundle exec rake build:project
+  - bundle exec rake build:package:sync
+  - bundle exec rake cache:bundle
+  - bundle exec rake build:component_shas
+
 before_script:
   - echo "PIPELINE_TYPE detected as ${PIPELINE_TYPE}"
   # Exit early if building on an OS for which we don't provide the specified
