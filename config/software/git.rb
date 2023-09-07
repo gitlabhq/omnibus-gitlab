@@ -18,6 +18,7 @@
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
+require "#{Omnibus::Config.project_root}/lib/gitlab/build/info/components"
 version = Gitlab::Version.new('gitaly')
 
 name 'git'
