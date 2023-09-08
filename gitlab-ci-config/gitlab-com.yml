@@ -223,6 +223,27 @@
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
       when: manual
 
+.qa-template:
+  variables:
+    QA_RUN_ALL_TESTS: "false"
+    RELEASE: $QA_RELEASE
+    QA_IMAGE: $QA_IMAGE
+    GITLAB_SEMVER_VERSION: $GITLAB_SEMVER_VERSION # latest semver gitlab version used for testing upgrade paths
+    SKIP_OMNIBUS_TRIGGER: "true"
+    GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
+    ALLURE_MERGE_REQUEST_IID: $CI_MERGE_REQUEST_IID
+  inherit:
+   variables: false
+  trigger:
+    strategy: depend
+    forward:
+      yaml_variables: true
+      pipeline_variables: true
+    include:
+      - project: gitlab-org/gitlab
+        ref: master
+        file: .gitlab/ci/package-and-test/main.gitlab-ci.yml
+
 #####################
 # Cache update jobs #
 #####################
@@ -557,28 +578,14 @@ Trigger:gitlab-docker:
       optional: true
       artifacts: true
 
-qa-test:
+qa-subset-test:
+  extends:
+    - .qa-template
   stage: trigger-qa
   variables:
-    RELEASE: $QA_RELEASE
-    QA_IMAGE: $QA_IMAGE
-    QA_RUN_ALL_TESTS: "false"
-    QA_SUITES: "QA::Scenario::Test::Integration::GitalyCluster,QA::Scenario::Test::Integration::InstanceSAML,QA::Scenario::Test::Integration::LDAPNoServer,QA::Scenario::Test::Integration::LDAPNoTLS,QA::Scenario::Test::Integration::LDAPTLS,QA::Scenario::Test::Integration::Mattermost,QA::Scenario::Test::Integration::Mtls,QA::Scenario::Test::Integration::ObjectStorageGcs,QA::Scenario::Test::Integration::RegistryTLS,QA::Scenario::Test::Integration::RegistryWithCDN,QA::Scenario::Test::Integration::SMTP,QA::Scenario::Test::Integration::Registry,QA::Scenario::Test::Instance::ObjectStorage,QA::Scenario::Test::Instance::RepositoryStorage,QA::Scenario::Test::Instance::GitlabPages,QA::Scenario::Test::Instance::Metrics,QA::EE::Scenario::Test::Integration::GroupSAML,QA::Scenario::Test::Instance::All,QA::Scenario::Test::Instance::Smoke"
-    GITLAB_SEMVER_VERSION: $GITLAB_SEMVER_VERSION # latest semver gitlab version used for testing upgrade paths
-    SKIP_OMNIBUS_TRIGGER: "true"
-    GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
-    ALLURE_MERGE_REQUEST_IID: $CI_MERGE_REQUEST_IID
-  inherit:
-   variables: false
-  trigger:
-    strategy: depend
-    forward:
-      yaml_variables: true
-      pipeline_variables: true
-    include:
-      - project: gitlab-org/gitlab
-        ref: master
-        file: .gitlab/ci/package-and-test/main.gitlab-ci.yml
+    QA_OMNIBUS_MR_TESTS: "only-smoke-reliable"
+    QA_RUN_TYPE: ${CI_JOB_NAME}
+    QA_SUITES: "QA::Scenario::Test::Integration::GitalyCluster,QA::Scenario::Test::Integration::InstanceSAML,QA::Scenario::Test::Integration::LDAPNoServer,QA::Scenario::Test::Integration::LDAPNoTLS,QA::Scenario::Test::Integration::LDAPTLS,QA::Scenario::Test::Integration::Mattermost,QA::Scenario::Test::Integration::Mtls,QA::Scenario::Test::Integration::ObjectStorageGcs,QA::Scenario::Test::Integration::RegistryTLS,QA::Scenario::Test::Integration::RegistryWithCDN,QA::Scenario::Test::Integration::SMTP,QA::Scenario::Test::Integration::Registry,QA::Scenario::Test::Instance::ObjectStorage,QA::Scenario::Test::Instance::RepositoryStorage,QA::Scenario::Test::Instance::GitlabPages,QA::Scenario::Test::Instance::Metrics,QA::EE::Scenario::Test::Integration::GroupSAML,QA::Scenario::Test::Instance::Smoke"
   rules:
     - if: '$SKIP_QA_TEST == "true"'
       when: never
@@ -594,6 +601,33 @@ qa-test:
       when: manual
       allow_failure: true
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_EE_PIPELINE/'
+  needs:
+    - job: generate-facts
+      artifacts: true
+    - job: Trigger:package
+      artifacts: false
+    - job: Trigger:gitlab-docker
+      artifacts: false
+
+qa-remaining-test-manual:
+  extends:
+    - .qa-template
+  stage: trigger-qa
+  variables:
+    QA_RUN_TYPE: ${CI_JOB_NAME}
+    QA_OMNIBUS_MR_TESTS: "except-smoke-reliable"
+    QA_SUITES: "QA::EE::Scenario::Test::Integration::Elasticsearch,QA::Scenario::Test::Integration::Import,QA::Scenario::Test::Integration::Integrations,QA::Scenario::Test::Integration::OAuth,QA::Scenario::Test::Integration::Jira,QA::Scenario::Test::Integration::ServicePingDisabled,QA::Scenario::Test::Instance::LargeSetup,QA::Scenario::Test::Instance::CloudActivation"
+  rules:
+    - if: '$SKIP_QA_TEST == "true"'
+      when: never
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_CE_PIPELINE/'
+      when: manual
+      allow_failure: true
+      variables:
+        FOSS_ONLY: "1"
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_EE_PIPELINE/'
+      when: manual
+      allow_failure: true
   needs:
     - job: generate-facts
       artifacts: true

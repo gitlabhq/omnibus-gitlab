@@ -115,7 +115,7 @@ At a minimum, the following tests should be performed when updating a software
 component.
 
 - Perform a successful GitLab Enterprise Edition (EE) build on all supported platforms.
-- Run `qa-test` CI/CD test job for both GitLab Enterprise Edition and GitLab Community Edition.
+- Run `qa-subset-test` as well as manual `qa-remaining-test-manual` CI/CD test job for both GitLab Enterprise Edition and GitLab Community Edition.
 - Install and verify that component version has been upgraded.
 - Verify basic functionality of the software component.
 

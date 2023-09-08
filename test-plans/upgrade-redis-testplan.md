@@ -1,10 +1,10 @@
-# redis component upgrade test plan
+# Redis component upgrade test plan
 
 <!-- Copy and paste the following into your MR description. -->
 ## Test plan
 
 - [ ] Performed a successful GitLab Enterprise Edition (EE) build on all supported platforms (include `build-package-on-all-os` job).
-- [ ] Ran `qa-test` CI/CD test job for both GitLab Enterprise Edition and GitLab Community Edition.
+- [ ] Ran `qa-subset-test` as well as manual `qa-remaining-test-manual` CI/CD test job for both GitLab Enterprise Edition and GitLab Community Edition.
 - [ ] Redis indicator test cases were not failing.
   - [realtime components via assignee test](https://gitlab.com/gitlab-org/gitlab/-/quality/test_cases/347941)
   - [project template import](https://gitlab.com/gitlab-org/gitlab/-/quality/test_cases/347932)
