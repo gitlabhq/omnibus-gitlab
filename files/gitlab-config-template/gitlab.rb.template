@@ -858,7 +858,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_repository_cache_username'] = nil
 # gitlab_rails['redis_repository_cache_password'] = nil
 # gitlab_rails['redis_repository_cache_cluster_nodes'] = nil
+# gitlab_rails['redis_workhorse_instance'] = nil
+# gitlab_rails['redis_workhorse_sentinels'] = nil
+# gitlab_rails['redis_workhorse_sentinels_password'] = nil
+# gitlab_rails['redis_workhorse_username'] = nil
+# gitlab_rails['redis_workhorse_password'] = nil
+# gitlab_rails['redis_workhorse_cluster_nodes'] = nil
 
+# gitlab_rails['redis_workhorse_sentinel_master'] = nil
 
 # gitlab_rails['redis_yml_override'] = nil
 

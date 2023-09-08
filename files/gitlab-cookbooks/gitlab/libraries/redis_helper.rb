@@ -2,7 +2,7 @@ require_relative 'redis_uri.rb'
 require 'cgi'
 
 class RedisHelper
-  REDIS_INSTANCES = %w[cache queues shared_state trace_chunks rate_limiting sessions repository_cache cluster_rate_limiting].freeze
+  REDIS_INSTANCES = %w[cache queues shared_state trace_chunks rate_limiting sessions repository_cache cluster_rate_limiting workhorse].freeze
   ALLOWED_REDIS_CLUSTER_INSTANCE = %w[cache rate_limiting cluster_rate_limiting].freeze
 
   def initialize(node)
@@ -49,6 +49,27 @@ class RedisHelper
     end
 
     uri
+  end
+
+  def workhorse_params
+    gitlab_rails = @node['gitlab']['gitlab_rails']
+    if gitlab_rails['redis_workhorse_instance'] || !gitlab_rails['redis_workhorse_sentinels'].empty?
+      {
+        url: gitlab_rails['redis_workhorse_instance'],
+        password: gitlab_rails['redis_workhorse_password'],
+        sentinels: redis_sentinel_urls('redis_workhorse_sentinels'),
+        sentinelMaster: gitlab_rails['redis_workhorse_sentinel_master'],
+        sentinelPassword: gitlab_rails['redis_workhorse_sentinels_password']
+      }
+    else
+      {
+        url: redis_url,
+        password: redis_params.last,
+        sentinels: redis_sentinel_urls('redis_sentinels'),
+        sentinelMaster: @node['redis']['master_name'],
+        sentinelPassword: @node['redis']['master_password']
+      }
+    end
   end
 
   def validate_instance_shard_config(instance)
