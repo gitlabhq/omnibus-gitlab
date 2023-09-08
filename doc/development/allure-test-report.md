@@ -4,7 +4,7 @@ The following three pipelines are created while generating the allure-report
 
 - Omnibus pipeline
 - TRIGGERED_CE/EE_PIPELINE child pipeline (Manually Triggered)
-- QA-TEST child pipeline
+- QA-SUBSET-TEST child pipeline
 
 ## Omnibus MR Pipeline
 
@@ -26,27 +26,33 @@ The child pipeline, called `TRIGGERED_CE/EE_PIPELINE` is generated in the Omnibu
 
 ## TRIGGERED_CE/EE_PIPELINE child pipeline
 
-This child pipeline consists of a job called `qa-test` which uses the `package-and-test/main.gitlab-ci.yml` file of the main GitLab project.
+This child pipeline consists of a job called `qa-subset-test` which uses the `package-and-test/main.gitlab-ci.yml` file of the main GitLab project.
 
-### qa-test job
+### qa-subset-test job
 
-The `qa-test` job triggers another child pipeline in the Omnibus-GitLab repository
-To get an allure report snapshot as a comment in the MR, following environment variables need to be passed to `qa-job`
+The `qa-subset-test` job triggers another child pipeline in the Omnibus-GitLab repository
+To get an allure report snapshot as a comment in the MR, following environment variables need to be passed to `qa-subset-test`
 
 | Environment Variable              | Description |
 | ----------------------------------|-------------|
 |   `GITLAB_AUTH_TOKEN`             | This is used to give access to the Danger bot to post comment in `omnibus-gitlab` repository. We are using  `$DANGER_GITLAB_API_TOKEN` which is also being used for other Danger bot related access in `omnibugs-gitlab` as mentioned [ci-variable](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/doc/development/ci-variables.md)        |
 |  `ALLURE_MERGE_REQUEST_IID`       | This denotes the MR ID which will be used by [e2e-test-report-job](#e2e-test-report-job) which inturn used `allure-report-publisher` to post message to MR with provided ID e.g. !6190 |
 
-## QA-TEST child pipeline
+### qa-remaining-test-manual
 
-This pipeline runs all the orchestrated tests using GitLab QA project which in turn uses allure gem to generate report source files for each test that is executed and stores the files in a common folder.
+The `qa-remaining-test-manual` job is a manual trigger pipeline. It triggers the same pipeline as `qa-subset-test` but runs the tests which aren't run as a part of `qa-subset-test` job. 
+
+The environment variables used in `qa-subset-test` are the same that are used in this job to generate the allure report. 
+
+## QA-SUBSET-TEST child pipeline
+
+This pipeline runs a subset of all the orchestrated tests using GitLab QA project which in turn uses allure gem to generate report source files for each test that is executed and stores the files in a common folder. Certain orchestrated jobs like `instance`, `decomposition-single-db`, `decomposition-multiple-db` and `praefect` run only smoke and reliable tests which intially used to run the entire suite. 
 
 ### e2e-test-report job
 
 The `e2e-test-report` job includes [.generate-allure-report-base](https://gitlab.com/gitlab-org/quality/pipeline-common/-/blob/master/ci/allure-report.yml) job which uses the `allure-report-publisher` gem to collate all the report in the mentioned folder into a single report and uploads it to the s3 bucket.
 
-It also posts the allure report as a comment on the MR having the ID passed in `ALLURE_MERGE_REQUEST_IID` variable in the [qa-test-job](#qa-test-job).
+It also posts the allure report as a comment on the MR having the ID passed in `ALLURE_MERGE_REQUEST_IID` variable in the [qa-subset-test](#qa-subset-test-job).
 
 [allure-report-publisher](https://github.com/andrcuns/allure-report-publisher) is a gem which uses allure in the backend. It has been catered for GitLab to upload the report and post the comment to MR.
 
@@ -73,11 +79,11 @@ subgraph QA flow in omnibus pipeline
         end
 
     subgraph Trigger:CE/EE-job Child Pipeline
-        A1["`**_trigger-qa_** stage <br> **_qa-test_** job`"]
+        A1["`**_trigger-qa_** stage <br> **_qa-subset-test_** job`"]
         A3(["`_package-and-test/main.gitlab-ci.yml_ <br> from _gitlab-org/gitlab_`"])
     end
 
-    subgraph qa-test Child Pipeline
+    subgraph qa-subset-test Child Pipeline
         A2["`from <br> **_package-and-test/main.gitlab-ci.yml_** in **_gitlab-org/gitlab_**`"]
         B1["`**_report_** stage <br> **_e2e-test-report_** job`"]
         B2(["`_.generate-allure-report-base_ job from<br> _quality/pipeline-common_`"])

@@ -287,14 +287,24 @@ This job builds a GitLab Docker image using the package that was built by
 
 This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
 
-#### `qa-test`
+#### `qa-subset-test`
+
+This job runs subset of test suite and is automatically triggered when either
+ `Trigger:CE-package` or `Trigger:EE-package` manual jobs are triggered manually.
+
+This job triggers a pipeline in the [GitLab QA Mirror](https://gitlab.com/gitlab-org/gitlab-qa-mirror), passing the GitLab Docker image created by `Trigger:gitlab-docker` job and the GitLab QA Docker image built by the GitLab Rails pipeline, so that a subset of test as mentioned in [this issue](https://gitlab.com/gitlab-org/distribution/team-tasks/-/issues/1303#we-should-keep) will run using these images
+
+This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
+
+### `qa-remaining-test-manual` 
+
+This is a manual trigger job which runs the remaining tests that donot run in the `qa-subset-test` job.
+
+To run this QA jobs in MR pipeline, you need to either trigger `Trigger:CE-package` or `Trigger:EE-package` manual jobs.
 
 This job triggers a pipeline in the [GitLab QA Mirror](https://gitlab.com/gitlab-org/gitlab-qa-mirror), passing the GitLab
 Docker image created by `Trigger:gitlab-docker` job and the GitLab QA Docker
-image built by the GitLab Rails pipeline, so that a full QA run will be run
-against up using these images
-
-This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
+image built by the GitLab Rails pipeline, so that the entire suite is run using these images. 
 
 #### `RAT`
 

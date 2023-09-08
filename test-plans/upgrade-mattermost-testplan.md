@@ -6,7 +6,7 @@
 ### Build tests
 
 - [ ] Built on all supported platforms
-- [ ] Ran `Trigger:ee-package` and then `qa-test` CI jobs on `gitlab.com`.
+- [ ] Ran `Trigger:ee-package` and then `qa-subset-test` as well as manual `qa-remaining-test-manual` CI jobs on `gitlab.com`.
 
 ### Fresh installation tests
 
