@@ -261,6 +261,7 @@ exclude 'embedded/lib/ruby/gems/*/gems/grpc-*/third_party'
 exclude 'embedded/lib/ruby/gems/*/gems/nokogumbo-*/ext'
 exclude 'embedded/lib/ruby/gems/*/gems/rbtrace-*/ext/src'
 exclude 'embedded/lib/ruby/gems/*/gems/rbtrace-*/ext/dst'
+exclude 'embedded/lib/ruby/gems/*/gems/re2-*/ports'
 exclude 'embedded/lib/ruby/gems/*/gems/*pg_query-*/ext'
 
 # Exclude exe files from Python libraries

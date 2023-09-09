@@ -138,7 +138,8 @@ build do
       'google-protobuf' => 'lib/google',
       'grpc' => 'src/ruby/lib/grpc',
       'prometheus-client-mmap' => 'lib',
-      'nokogiri' => 'lib'
+      'nokogiri' => 'lib',
+      're2' => 'lib'
     }
 
     # Delete unused shared libraries included in the gems
