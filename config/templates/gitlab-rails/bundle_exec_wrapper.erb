@@ -40,4 +40,7 @@ else
   privilege_drop="-u ${gitlab_user}:${gitlab_group}"
 fi
 
-exec <%= install_dir %>/embedded/bin/chpst -e <%= install_dir %>/etc/gitlab-rails/env ${privilege_drop} -U ${gitlab_user}:${gitlab_group} <%= install_dir %>/embedded/bin/bundle exec <%= command %>
+# Suppress one-line pattern matching warnings: https://gitlab.com/gitlab-org/gitlab/-/issues/420811
+rubyopt="RUBYOPT=-W:no-experimental"
+
+exec <%= install_dir %>/embedded/bin/chpst -e <%= install_dir %>/etc/gitlab-rails/env ${privilege_drop} -U ${gitlab_user}:${gitlab_group} /usr/bin/env ${rubyopt} <%= install_dir %>/embedded/bin/bundle exec <%= command %>
