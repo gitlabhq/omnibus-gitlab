@@ -199,12 +199,13 @@ will have to perform the following steps:
 
 1. **Download the correct web server configuration**
 
-   Go to [GitLab recipes repository](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server) and look for
-   the Linux package configuration in the webserver directory of your choice. Make sure you pick the
-   right configuration file depending whether you choose to serve GitLab with
-   SSL or not. The only thing you need to change is `YOUR_SERVER_FQDN` with
-   your own FQDN and if you use SSL, the location where your SSL keys currently
-   reside. You also might need to change the location of your log files.
+   Go to [GitLab repository](https://gitlab.com/gitlab-org/gitlab/-/tree/master/lib/support/nginx) and download
+   the required configuration. Select the correct configuration file depending whether you are serving GitLab with
+   SSL or not. You might need to make some changes, such as:
+
+   - The value of `YOUR_SERVER_FQDN` set to your FQDN.
+   - If you use SSL, the location of your SSL keys.
+   - The location of your log files.
 
 ## Setting the NGINX listen address or addresses
 
