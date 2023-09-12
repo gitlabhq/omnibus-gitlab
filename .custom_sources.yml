@@ -103,9 +103,6 @@ libicu:
 krb5:
   remote: "git@dev.gitlab.org:omnibus-mirror/krb5.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/krb5.git"
-libre2:
-  remote: "git@dev.gitlab.org:omnibus-mirror/libre2.git"
-  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/libre2.git"
 libpng:
   remote: "git@dev.gitlab.org:omnibus-mirror/libpng.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/libpng.git"

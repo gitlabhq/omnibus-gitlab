@@ -53,7 +53,6 @@ dependency 'python-docutils'
 dependency 'krb5'
 dependency 'registry'
 dependency 'unzip'
-dependency 'libre2'
 dependency 'gpgme'
 dependency 'graphicsmagick'
 dependency 'exiftool'
@@ -113,12 +112,6 @@ build do
 
   bundle "config set --local gemfile #{gitlab_bundle_gemfile}" if gitlab_bundle_gemfile != 'Gemfile'
   bundle 'config force_ruby_platform true', env: env if OhaiHelper.ruby_native_gems_unsupported?
-
-  # This works around an issue with the grpc gem attempting to include
-  # /opt/gitlab/include headers instead of the vendored re2 headers:
-  # https://github.com/grpc/grpc/pull/32580. This can be removed
-  # after grpc is updated with that pull request.
-  env['CPPFLAGS'] = "-Ithird_party/re2 #{env['CPPFLAGS']}" if OhaiHelper.arm?
 
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env

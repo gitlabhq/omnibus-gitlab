@@ -54,12 +54,6 @@ build do
     shellout!("#{gem_bin} install --no-document gem-patch -v 0.1.6")
     shellout!("#{gem_bin} uninstall --force --all grpc")
 
-    # This works around an issue with the grpc gem attempting to include
-    # /opt/gitlab/include headers instead of the vendored re2 headers:
-    # https://github.com/grpc/grpc/pull/32580. This can be removed
-    # after grpc is updated with that pull request.
-    env['CPPFLAGS'] = "-Ithird_party/re2 #{env['CPPFLAGS']}"
-
     grpc_versions.each do |version|
       patch_path = patches[version]
       gemfile = "grpc-#{version}.gem"
