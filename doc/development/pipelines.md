@@ -296,7 +296,7 @@ This job triggers a pipeline in the [GitLab QA Mirror](https://gitlab.com/gitlab
 
 This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
 
-### `qa-remaining-test-manual` 
+### `qa-remaining-test-manual`
 
 This is a manual trigger job which runs the remaining tests that donot run in the `qa-subset-test` job.
 
@@ -304,7 +304,7 @@ To run this QA jobs in MR pipeline, you need to either trigger `Trigger:CE-packa
 
 This job triggers a pipeline in the [GitLab QA Mirror](https://gitlab.com/gitlab-org/gitlab-qa-mirror), passing the GitLab
 Docker image created by `Trigger:gitlab-docker` job and the GitLab QA Docker
-image built by the GitLab Rails pipeline, so that the entire suite is run using these images. 
+image built by the GitLab Rails pipeline, so that the entire suite is run using these images.
 
 #### `RAT`
 
