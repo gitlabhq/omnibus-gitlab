@@ -961,7 +961,7 @@ throw errors about the data directory being initialized on a different version o
 see [Revert packaged PostgreSQL server to the previous version](#revert-packaged-postgresql-server-to-the-previous-version).
 
 If you are doing a fresh install on an environment that previously had GitLab installed on it and you are using a pinned PostgreSQL version, first make
-sure that any folders that relate to PostgreSQL are deleted and that there are no PostgreSQL processes running on the instance. 
+sure that any folders that relate to PostgreSQL are deleted and that there are no PostgreSQL processes running on the instance.
 
 ### Troubleshooting
 

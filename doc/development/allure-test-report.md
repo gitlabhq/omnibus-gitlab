@@ -40,13 +40,13 @@ To get an allure report snapshot as a comment in the MR, following environment v
 
 ### qa-remaining-test-manual
 
-The `qa-remaining-test-manual` job is a manual trigger pipeline. It triggers the same pipeline as `qa-subset-test` but runs the tests which aren't run as a part of `qa-subset-test` job. 
+The `qa-remaining-test-manual` job is a manual trigger pipeline. It triggers the same pipeline as `qa-subset-test` but runs the tests which aren't run as a part of `qa-subset-test` job.
 
-The environment variables used in `qa-subset-test` are the same that are used in this job to generate the allure report. 
+The environment variables used in `qa-subset-test` are the same that are used in this job to generate the allure report.
 
 ## QA-SUBSET-TEST child pipeline
 
-This pipeline runs a subset of all the orchestrated tests using GitLab QA project which in turn uses allure gem to generate report source files for each test that is executed and stores the files in a common folder. Certain orchestrated jobs like `instance`, `decomposition-single-db`, `decomposition-multiple-db` and `praefect` run only smoke and reliable tests which intially used to run the entire suite. 
+This pipeline runs a subset of all the orchestrated tests using GitLab QA project which in turn uses allure gem to generate report source files for each test that is executed and stores the files in a common folder. Certain orchestrated jobs like `instance`, `decomposition-single-db`, `decomposition-multiple-db` and `praefect` run only smoke and reliable tests which intially used to run the entire suite.
 
 ### e2e-test-report job
 
