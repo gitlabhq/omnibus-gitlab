@@ -171,7 +171,7 @@ information, see the
 
 Sidekiq roles are used to setup and configure Sidekiq. For additional
 information, see the
-[Sidekiq Administration documentation](https://docs.gitlab.com/ee/administration/sidekiq.html)
+[Sidekiq Administration documentation](https://docs.gitlab.com/ee/administration/sidekiq/index.html)
 
 - **sidekiq_role** (`gitlab-ce`/`gitlab-ee`)
 
