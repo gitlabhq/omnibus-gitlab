@@ -395,6 +395,7 @@ Debian 10 knapsack: !reference [.knapsack]
 Debian 11 knapsack: !reference [.knapsack]
 Debian 12 knapsack: !reference [.knapsack]
 OpenSUSE 15.4 knapsack: !reference [.knapsack]
+OpenSUSE 15.5 knapsack: !reference [.knapsack]
 Ubuntu 18.04 knapsack: !reference [.knapsack]
 Ubuntu 20.04 knapsack: !reference [.knapsack]
 Ubuntu 22.04 knapsack: !reference [.knapsack]
@@ -476,6 +477,12 @@ OpenSUSE 15.4 specs :
   parallel: 6
   needs:
   - OpenSUSE 15.4 knapsack
+OpenSUSE 15.5 specs :
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/opensuse_15.5-ruby:${BUILDER_IMAGE_REVISION}"
+  extends: .chef_spec_template
+  parallel: 6
+  needs:
+    - OpenSUSE 15.5 knapsack
 AmazonLinux 2 specs :
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/amazonlinux_2-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
