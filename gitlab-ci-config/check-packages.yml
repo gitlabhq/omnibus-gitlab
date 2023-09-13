@@ -202,6 +202,12 @@ OpenSUSE-15.4-check:
 OpenSUSE-15.4-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .zypper-arm-install
+OpenSUSE-15.5-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5:${BUILDER_IMAGE_REVISION}"
+  extends: .zypper-install
+OpenSUSE-15.5-arm64-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .zypper-arm-install
 SLES-12.5-check:
   image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   extends:
