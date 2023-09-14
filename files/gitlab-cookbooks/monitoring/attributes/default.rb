@@ -84,8 +84,12 @@ default['monitoring']['postgres_exporter']['env_directory'] = '/opt/gitlab/etc/p
 default['monitoring']['postgres_exporter']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 }
+default['monitoring']['postgres_exporter']['flags'] = {
+  'collector.stat_user_tables' => false,
+  'collector.postmaster' => true
+}
 default['monitoring']['postgres_exporter']['sslmode'] = nil
-default['monitoring']['postgres_exporter']['per_table_stats'] = false
+default['monitoring']['postgres_exporter']['per_table_stats'] = nil
 default['monitoring']['postgres_exporter']['consul_service_name'] = 'postgres-exporter'
 default['monitoring']['postgres_exporter']['consul_service_meta'] = nil
 

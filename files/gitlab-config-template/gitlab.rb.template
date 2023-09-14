@@ -2318,14 +2318,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgres_exporter['home'] = '/var/opt/gitlab/postgres-exporter'
 # postgres_exporter['log_directory'] = '/var/log/gitlab/postgres-exporter'
 # postgres_exporter['log_group'] = nil
-# postgres_exporter['flags'] = {}
+# postgres_exporter['flags'] = {
+#  'collector.stat_user_tables' => false,
+#  'collector.postmaster' => true
+# }
 # postgres_exporter['listen_address'] = 'localhost:9187'
 # postgres_exporter['env_directory'] = '/opt/gitlab/etc/postgres-exporter/env'
 # postgres_exporter['env'] = {
 #   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
 # }
 # postgres_exporter['sslmode'] = nil
-# postgres_exporter['per_table_stats'] = false
 
 ##! Service name used to register Postgres Exporter as a Consul service
 # postgres_exporter['consul_service_name'] = 'postgres-exporter'

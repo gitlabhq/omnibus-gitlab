@@ -35,7 +35,8 @@ postgres_exporter_database = "#{node['gitlab']['gitlab_rails']['db_database']}#{
 
 node.default['monitoring']['postgres_exporter']['env']['DATA_SOURCE_NAME'] = "#{postgres_exporter_connection_string} " \
                                                                              "database=#{postgres_exporter_database}"
-
+deprecated_per_table_stats = node['monitoring']['postgres_exporter']['per_table_stats']
+node.override['monitoring']['postgres_exporter']['flags']['collector.stat_user_tables'] = deprecated_per_table_stats unless deprecated_per_table_stats.nil?
 include_recipe 'postgresql::user'
 
 # Create log_directory
