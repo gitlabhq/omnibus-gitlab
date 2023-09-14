@@ -337,7 +337,13 @@ module Gitlab
             deprecation: '15.9',
             removal: '17.0',
             note: "Starting with GitLab 17.0, running Sidekiq with negate (`sidekiq['negate'] = true`) will be removed. We recommend to follow the steps at https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes, to run Sidekiq with multiple processes while listening to all queues."
-          }
+          },
+          {
+            config_keys: %w(postgres_exporter per_table_stats),
+            deprecation: '16.4', # Remove message issue: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8170
+            removal: '17.0', # Removal issue: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8169
+            note: "Starting with GitLab 17.0, this directive will be controlled by `postgres_exporter['flags'] = { 'collector.stat_user_tables' => bool }`."
+          },
         ]
 
         deprecations += praefect_legacy_configuration_deprecations

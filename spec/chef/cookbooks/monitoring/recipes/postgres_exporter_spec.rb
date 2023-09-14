@@ -98,8 +98,8 @@ RSpec.describe 'monitoring::postgres-exporter' do
     it 'creates the queries.yaml file' do
       expect(chef_run).to render_file('/var/opt/gitlab/postgres-exporter/queries.yaml')
         .with_content { |content|
-          expect(content).to match(/pg_replication:/)
-          expect(content).not_to match(/pg_stat_user_table:/)
+          expect(content).to match(/pg_total_relation_size:/)
+          expect(content).to match(/pg_blocked:/)
         }
     end
 
@@ -108,6 +108,13 @@ RSpec.describe 'monitoring::postgres-exporter' do
         .with_content { |content|
           expect(content).to match(/web.listen-address=localhost:9187/)
           expect(content).to match(/extend.query-path=\/var\/opt\/gitlab\/postgres-exporter\/queries.yaml/)
+        }
+    end
+
+    it 'does disable user stats' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/run')
+        .with_content { |content|
+          expect(content).to match(/no-collector.stat_user_tables/)
         }
     end
   end
@@ -164,11 +171,6 @@ RSpec.describe 'monitoring::postgres-exporter' do
         .with_content(/some.flag=foo/)
     end
 
-    it 'creates the queries.yaml file' do
-      expect(chef_run).to render_file('/var/opt/gitlab/postgres-exporter/queries.yaml')
-        .with_content(/pg_stat_user_tables:/)
-    end
-
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/postgres-exporter/env').with_variables(
         default_vars.merge(
@@ -179,6 +181,13 @@ RSpec.describe 'monitoring::postgres-exporter' do
           }
         )
       )
+    end
+
+    it 'does not disable user stats' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/postgres-exporter/run')
+        .with_content { |content|
+          expect(content).not_to match(/no-collector.stat_user_tables/)
+        }
     end
   end
 
