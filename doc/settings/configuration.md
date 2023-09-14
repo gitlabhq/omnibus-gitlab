@@ -594,7 +594,7 @@ To configure Sentry:
    can be used to track errors and issues across several deployed GitLab
    environments, for example, lab, development, staging, and production.
 
-1. Optional. To set custom [Sentry tags](https://docs.sentry.io/product/sentry-basics/guides/enrich-data/)
+1. Optional. To set custom [Sentry tags](https://docs.sentry.io/product/sentry-basics/enrich-data/)
    on every event sent from a particular server, the `GITLAB_SENTRY_EXTRA_TAGS`
    an environment variable can be set. This variable is a JSON-encoded hash representing any
    tags that should be passed to Sentry for all exceptions from that server.
