@@ -15,7 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require 'yaml'
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
@@ -151,14 +150,8 @@ build do
   # In order to compile the assets, we need to get to a state where rake can
   # load the Rails environment.
   copy 'config/gitlab.yml.example', 'config/gitlab.yml'
+  copy 'config/database.yml.postgresql', 'config/database.yml'
   copy 'config/secrets.yml.example', 'config/secrets.yml'
-
-  block 'render database.yml' do
-    database_yml = YAML.safe_load(File.read("#{Omnibus::Config.source_dir}/gitlab-rails/config/database.yml.postgresql"))
-    database_yml.each { |_, databases| databases.delete('geo') unless EE }
-
-    File.write("#{Omnibus::Config.source_dir}/gitlab-rails/config/database.yml", YAML.dump(database_yml))
-  end
 
   # Copy asset cache and node modules from cache location to source directory
   move "#{Omnibus::Config.project_root}/assets_cache", "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache"
@@ -168,8 +161,8 @@ build do
     'NODE_ENV' => 'production',
     'RAILS_ENV' => 'production',
     'PATH' => "#{install_dir}/embedded/bin:#{Gitlab::Util.get_env('PATH')}",
-    'USE_DB' => 'false',
     'SKIP_STORAGE_VALIDATION' => 'true',
+    'SKIP_DATABASE_CONFIG_VALIDATION' => 'true',
     'NODE_OPTIONS' => '--max_old_space_size=3584'
   }
   assets_compile_env['NO_SOURCEMAPS'] = 'true' if Gitlab::Util.get_env('NO_SOURCEMAPS')
