@@ -119,7 +119,7 @@ if old_version=$(cat /var/opt/gitlab/gitlab-rails/VERSION)
 then
     GITLAB_UPGRADE='true'
     new_version=$(awk '/^gitlab-(ce|ee|jh)/ {print $NF}' /opt/gitlab/version-manifest.txt)
-    MIN_VERSION="15.11" gitlab-ctl upgrade-check "${old_version}" "${new_version}"
+    gitlab-ctl upgrade-check "${old_version}" "${new_version}"
 fi
 
 # Copy gitlab.rb for the first time
