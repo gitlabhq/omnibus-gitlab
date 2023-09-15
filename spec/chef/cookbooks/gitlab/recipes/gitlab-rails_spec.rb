@@ -306,6 +306,38 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    context 'with TLS settings' do
+      let(:resque_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/resque.yml') }
+      let(:resque_yml_file_content) { ChefSpec::Renderer.new(chef_run, resque_yml_template).content }
+      let(:resque_yml) { YAML.safe_load(resque_yml_file_content, [], [], true, symbolize_names: true) }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_host: 'redis.example.com',
+            redis_port: 8888,
+            redis_password: 'mypass',
+            redis_ssl: true,
+            redis_tls_ca_cert_dir: '/tmp/certs',
+            redis_tls_ca_cert_file: '/tmp/ca.crt',
+            redis_tls_client_cert_file: '/tmp/self_signed.crt',
+            redis_tls_client_key_file: '/tmp/self_signed.key',
+          }
+        )
+      end
+
+      it 'renders configuration with tls settings' do
+        expected_output = {
+          ca_file: "/tmp/ca.crt",
+          ca_path: "/tmp/certs",
+          cert_file: "/tmp/self_signed.crt",
+          key_file: "/tmp/self_signed.key"
+        }
+
+        expect(resque_yml[:production][:ssl_params]).to eq(expected_output)
+      end
+    end
+
     shared_examples 'instances does not support redis cluster' do |instance|
       context "with disallowed instance: #{instance}" do
         before do
@@ -403,7 +435,12 @@ RSpec.describe 'gitlab::gitlab-rails' do
               redis_enable_client: false,
               cluster_nodes: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
               cluster_username: instance,
-              cluster_password: "#{instance}_password"
+              cluster_password: "#{instance}_password",
+              redis_ssl: false,
+              redis_tls_ca_cert_dir: "/opt/gitlab/embedded/ssl/certs/",
+              redis_tls_ca_cert_file: "/opt/gitlab/embedded/ssl/certs/cacert.pem",
+              redis_tls_client_cert_file: nil,
+              redis_tls_client_key_file: nil
             )
 
             expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
@@ -440,7 +477,12 @@ RSpec.describe 'gitlab::gitlab-rails' do
               redis_enable_client: false,
               cluster_nodes: [],
               cluster_username: nil,
-              cluster_password: nil
+              cluster_password: nil,
+              redis_ssl: false,
+              redis_tls_ca_cert_dir: "/opt/gitlab/embedded/ssl/certs/",
+              redis_tls_ca_cert_file: "/opt/gitlab/embedded/ssl/certs/cacert.pem",
+              redis_tls_client_cert_file: nil,
+              redis_tls_client_key_file: nil
             )
 
             expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
@@ -477,7 +519,12 @@ RSpec.describe 'gitlab::gitlab-rails' do
                 redis_enable_client: false,
                 cluster_nodes: [],
                 cluster_username: nil,
-                cluster_password: nil
+                cluster_password: nil,
+                redis_ssl: false,
+                redis_tls_ca_cert_dir: "/opt/gitlab/embedded/ssl/certs/",
+                redis_tls_ca_cert_file: "/opt/gitlab/embedded/ssl/certs/cacert.pem",
+                redis_tls_client_cert_file: nil,
+                redis_tls_client_key_file: nil
               )
 
               expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|

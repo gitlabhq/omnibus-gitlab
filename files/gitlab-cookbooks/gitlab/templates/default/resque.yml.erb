@@ -13,6 +13,13 @@ production:
     <% end %>
   <% else %>
   url: <%= @redis_url %>
+  <%- if @redis_ssl %>
+  ssl_params:
+    <%- if @redis_tls_ca_cert_dir %>ca_path: "<%= @redis_tls_ca_cert_dir %>"<% end %>
+    <%- if @redis_tls_ca_cert_file %>ca_file: "<%= @redis_tls_ca_cert_file %>"<% end %>
+    <%- if @redis_tls_client_cert_file %>cert_file: "<%= @redis_tls_client_cert_file %>"<% end %>
+    <%- if @redis_tls_client_key_file %>key_file: "<%= @redis_tls_client_key_file %>"<% end %>
+  <% end %>
   <% unless @redis_sentinels.empty? %>
   sentinels:
     <% @redis_sentinels.each do |sentinel| %>

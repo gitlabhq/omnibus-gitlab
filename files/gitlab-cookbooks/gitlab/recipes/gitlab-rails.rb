@@ -200,6 +200,11 @@ redis_url = redis_helper.redis_url
 redis_sentinels = node['gitlab']['gitlab_rails']['redis_sentinels']
 redis_sentinels_password = node['gitlab']['gitlab_rails']['redis_sentinels_password']
 redis_enable_client = node['gitlab']['gitlab_rails']['redis_enable_client']
+redis_ssl = node['gitlab']['gitlab_rails']['redis_ssl']
+redis_tls_ca_cert_dir = node['gitlab']['gitlab_rails']['redis_tls_ca_cert_dir']
+redis_tls_ca_cert_file = node['gitlab']['gitlab_rails']['redis_tls_ca_cert_file']
+redis_tls_client_cert_file = node['gitlab']['gitlab_rails']['redis_tls_client_cert_file']
+redis_tls_client_key_file = node['gitlab']['gitlab_rails']['redis_tls_client_key_file']
 
 templatesymlink "Create a secrets.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, "config/secrets.yml")
@@ -227,7 +232,17 @@ templatesymlink "Create a resque.yml and create a symlink to Rails root" do
   owner "root"
   group "root"
   mode "0644"
-  variables(redis_url: redis_url, redis_sentinels: redis_sentinels, redis_sentinels_password: redis_sentinels_password, redis_enable_client: redis_enable_client)
+  variables(
+    redis_url: redis_url,
+    redis_sentinels: redis_sentinels,
+    redis_sentinels_password: redis_sentinels_password,
+    redis_enable_client: redis_enable_client,
+    redis_ssl: redis_ssl,
+    redis_tls_ca_cert_dir: redis_tls_ca_cert_dir,
+    redis_tls_ca_cert_file: redis_tls_ca_cert_file,
+    redis_tls_client_cert_file: redis_tls_client_cert_file,
+    redis_tls_client_key_file: redis_tls_client_key_file
+  )
   dependent_services.each { |svc| notifies :restart, svc }
   sensitive true
 end
@@ -273,6 +288,11 @@ RedisHelper::REDIS_INSTANCES.each do |instance|
   clusters = node['gitlab']['gitlab_rails']["redis_#{instance}_cluster_nodes"]
   username = node['gitlab']['gitlab_rails']["redis_#{instance}_username"]
   password = node['gitlab']['gitlab_rails']["redis_#{instance}_password"]
+  redis_ssl = node['gitlab']['gitlab_rails']["redis_#{instance}_ssl"]
+  ca_cert_dir = node['gitlab']['gitlab_rails']["redis_#{instance}_tls_ca_cert_dir"]
+  ca_cert_file = node['gitlab']['gitlab_rails']["redis_#{instance}_tls_ca_cert_file"]
+  certificate_file = node['gitlab']['gitlab_rails']["redis_#{instance}_tls_client_cert_file"]
+  key_file = node['gitlab']['gitlab_rails']["redis_#{instance}_tls_client_key_file"]
   from_filename = File.join(gitlab_rails_source_dir, "config/#{filename}")
   to_filename = File.join(gitlab_rails_etc_dir, filename)
 
@@ -292,7 +312,12 @@ RedisHelper::REDIS_INSTANCES.each do |instance|
       redis_enable_client: redis_enable_client,
       cluster_nodes: clusters,
       cluster_username: username,
-      cluster_password: password
+      cluster_password: password,
+      redis_ssl: redis_ssl,
+      redis_tls_ca_cert_dir: ca_cert_dir,
+      redis_tls_ca_cert_file: ca_cert_file,
+      redis_tls_client_cert_file: certificate_file,
+      redis_tls_client_key_file: key_file
     )
     dependent_services.each { |svc| notifies :restart, svc }
     action :delete if url.nil? && clusters.empty?
