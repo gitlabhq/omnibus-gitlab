@@ -9,14 +9,17 @@ class RedisHelper
     @node = node
   end
 
+  def redis
+    @node['redis']
+  end
+
   def redis_params(support_sentinel_groupname: true)
     gitlab_rails_config = @node['gitlab']['gitlab_rails']
-    redis_config = @node['redis']
 
-    raise 'Redis announce_ip and announce_ip_from_hostname are mutually exclusive, please unset one of them' if redis_config['announce_ip'] && redis_config['announce_ip_from_hostname']
+    raise 'Redis announce_ip and announce_ip_from_hostname are mutually exclusive, please unset one of them' if redis['announce_ip'] && redis['announce_ip_from_hostname']
 
     params = if RedisHelper::Checks.has_sentinels? && support_sentinel_groupname
-               [redis_config['master_name'], redis_config['master_port'], redis_config['master_password']]
+               [redis['master_name'], redis['master_port'], redis['master_password']]
              else
                host = gitlab_rails_config['redis_host'] || Gitlab['redis']['master_ip']
                port = gitlab_rails_config['redis_port'] || Gitlab['redis']['master_port']
@@ -66,8 +69,8 @@ class RedisHelper
         url: redis_url,
         password: redis_params.last,
         sentinels: redis_sentinel_urls('redis_sentinels'),
-        sentinelMaster: @node['redis']['master_name'],
-        sentinelPassword: @node['redis']['master_password']
+        sentinelMaster: redis['master_name'],
+        sentinelPassword: redis['master_password']
       }
     end
   end
@@ -119,15 +122,7 @@ class RedisHelper
     return unless OmnibusHelper.new(@node).service_up?('redis')
 
     commands = ['/opt/gitlab/embedded/bin/redis-cli']
-
-    commands << if RedisHelper::Checks.is_redis_tcp?
-                  "-h #{@node['redis']['bind']} -p #{@node['redis']['port']}"
-                else
-                  "-s #{@node['redis']['unixsocket']}"
-                end
-
-    commands << "-a '#{Gitlab['redis']['password']}'" if Gitlab['redis']['password']
-
+    commands << redis_cli_connect_options
     commands << "INFO"
     command = commands.join(" ")
 
@@ -154,10 +149,63 @@ class RedisHelper
     version_match['redis_version']
   end
 
+  def redis_cli_connect_options
+    args = []
+    if RedisHelper::Checks.is_redis_tcp?
+      args = redis_cli_tcp_connect_options(args)
+    else
+      args << "-s #{redis['unixsocket']}"
+    end
+
+    args << "-a '#{Gitlab['redis']['password']}'" if Gitlab['redis']['password']
+
+    args
+  end
+
+  def redis_cli_tcp_connect_options(args)
+    args << ["-h #{redis['bind']}"]
+    port = redis['port'].to_i
+
+    if port.zero?
+      args = redis_cli_tls_options(args)
+    else
+      args << "-p #{port}"
+    end
+
+    args
+  end
+
+  def redis_cli_tls_options(args)
+    tls_port = redis['tls_port'].to_i
+
+    args << "--tls"
+    args << "-p #{tls_port}"
+    args << "--cacert '#{redis['tls_ca_cert_file']}'" if redis['tls_ca_cert_file']
+    args << "--cacertdir '#{redis['tls_ca_cert_dir']}'" if redis['tls_ca_cert_dir']
+
+    return args unless client_certs_required?
+
+    raise "Redis TLS client authentication requires redis['tls_cert_file'] and redis['tls_key_file'] options" unless client_cert_and_key_available?
+
+    args << "--cert '#{redis['tls_cert_file']}'"
+    args << "--key '#{redis['tls_key_file']}'"
+
+    args
+  end
+
+  def client_certs_required?
+    redis['tls_auth_clients'] == 'yes'
+  end
+
+  def client_cert_and_key_available?
+    redis['tls_cert_file'] && !redis['tls_cert_file'].empty? &&
+      redis['tls_key_file'] && !redis['tls_key_file'].empty?
+  end
+
   class Checks
     class << self
       def is_redis_tcp?
-        Gitlab['redis']['port'] && Gitlab['redis']['port'].positive?
+        (Gitlab['redis']['port'] && Gitlab['redis']['port'].positive?) || (Gitlab['redis']['tls_port'] && Gitlab['redis']['tls_port'].positive?)
       end
 
       def is_redis_replica?

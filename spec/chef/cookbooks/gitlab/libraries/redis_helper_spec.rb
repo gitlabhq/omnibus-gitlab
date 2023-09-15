@@ -274,37 +274,60 @@ RSpec.describe RedisHelper do
       end
 
       context 'over TCP' do
-        before do
-          stub_gitlab_rb(
-            redis: {
-              bind: '0.0.0.0',
-              port: 6379
-            }
-          )
-        end
-
-        it 'calls VersionHelper.version with correct arguments' do
-          expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -h 0.0.0.0 -p 6379 INFO')
-
-          subject.running_version
-        end
-
-        context 'with a Redis password specified' do
+        context 'on non-TLS port' do
           before do
             stub_gitlab_rb(
               redis: {
                 bind: '0.0.0.0',
-                port: 6379,
-                password: 'toomanysecrets'
+                port: 6379
               }
             )
           end
 
-          it 'it passes password to the command' do
-            expect(VersionHelper).to receive(:version).with("/opt/gitlab/embedded/bin/redis-cli -h 0.0.0.0 -p 6379 -a 'toomanysecrets' INFO")
+          it 'calls VersionHelper.version with correct arguments' do
+            expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/redis-cli -h 0.0.0.0 -p 6379 INFO')
 
             subject.running_version
           end
+        end
+
+        context 'on TLS port' do
+          before do
+            stub_gitlab_rb(
+              redis: {
+                bind: '0.0.0.0',
+                tls_port: 6380,
+                tls_cert_file: '/tmp/self_signed.crt',
+                tls_key_file: '/tmp/self_signed.key',
+                tls_auth_clients: 'yes'
+              }
+            )
+          end
+
+          it 'calls VersionHelper.version with correct arguments' do
+            expected_args = "-h 0.0.0.0 --tls -p 6380 --cacert '/opt/gitlab/embedded/ssl/certs/cacert.pem' --cacertdir '/opt/gitlab/embedded/ssl/certs/' --cert '/tmp/self_signed.crt' --key '/tmp/self_signed.key'"
+            expect(VersionHelper).to receive(:version).with("/opt/gitlab/embedded/bin/redis-cli #{expected_args} INFO")
+
+            subject.running_version
+          end
+        end
+      end
+
+      context 'with a Redis password specified' do
+        before do
+          stub_gitlab_rb(
+            redis: {
+              bind: '0.0.0.0',
+              port: 6379,
+              password: 'toomanysecrets'
+            }
+          )
+        end
+
+        it 'it passes password to the command' do
+          expect(VersionHelper).to receive(:version).with("/opt/gitlab/embedded/bin/redis-cli -h 0.0.0.0 -p 6379 -a 'toomanysecrets' INFO")
+
+          subject.running_version
         end
       end
 
