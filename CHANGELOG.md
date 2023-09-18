@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.3.4 (2023-09-18)
+
+No changes.
+
 ## 16.3.3 (2023-09-12)
 
 No changes.
@@ -55,6 +59,10 @@ No changes.
 ### Other (1 change)
 
 - [Enable cache to configure for Redis Cluster](gitlab-org/omnibus-gitlab@8c0aa6b59ad8be8b62e1a720cb370aadb29add05) ([merge request](gitlab-org/omnibus-gitlab!7079))
+
+## 16.2.7 (2023-09-18)
+
+No changes.
 
 ## 16.2.6 (2023-09-12)
 
