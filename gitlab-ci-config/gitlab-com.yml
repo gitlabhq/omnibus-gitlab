@@ -243,7 +243,7 @@
 update-gems-cache:
   extends: .gems-cache
   stage: update-cache
-  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools:${BUILDER_IMAGE_REVISION}"
   before_script: !reference [.install-gems]
   script:
     - echo "Cache is up to date!"
@@ -733,7 +733,7 @@ dependency_scanning:
       - dependency_report.txt
 
 dependency_update:
-  image: "${BUILDER_IMAGE_REGISTRY}/ruby_docker:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools:${BUILDER_IMAGE_REVISION}"
   stage: prepare
   before_script: []
   script:
