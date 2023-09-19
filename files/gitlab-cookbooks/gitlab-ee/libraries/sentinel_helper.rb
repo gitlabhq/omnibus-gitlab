@@ -29,7 +29,7 @@ class SentinelHelper
   def running_version
     return unless OmnibusHelper.new(@node).service_up?('sentinel')
 
-    command = "/opt/gitlab/embedded/bin/redis-cli -h #{sentinel['bind']} -p #{sentinel['port']} INFO"
+    command = "/opt/gitlab/embedded/bin/redis-cli #{redis_cli_connect_options} INFO"
     env =
       if sentinel['password']
         { 'REDISCLI_AUTH' => sentinel['password'] }
@@ -108,5 +108,45 @@ class SentinelHelper
 
   def generate_myid
     SecureRandom.hex(20) # size will be n*2 -> 40 characters
+  end
+
+  def redis_cli_connect_options
+    args = ["-h #{sentinel['bind']}"]
+    port = sentinel['port'].to_i
+
+    if port.zero?
+      redis_cli_tls_options(args)
+    else
+      args << "-p #{port}"
+    end
+
+    args.join(' ')
+  end
+
+  def redis_cli_tls_options(args)
+    tls_port = sentinel['tls_port'].to_i
+
+    raise "No Sentinel port available: sentinel['port'] or sentinel['tls_port'] must be non-zero" if tls_port.zero?
+
+    args << "--tls"
+    args << "-p #{tls_port}"
+    args << "--cacert '#{sentinel['tls_ca_cert_file']}'" if sentinel['tls_ca_cert_file']
+    args << "--cacertdir '#{sentinel['tls_ca_cert_dir']}'" if sentinel['tls_ca_cert_dir']
+
+    return unless client_certs_required?
+
+    raise "Sentinel TLS client authentication requires sentinel['tls_cert_file'] and sentinel['tls_key_file'] options" unless client_cert_and_key_available?
+
+    args << "--cert '#{sentinel['tls_cert_file']}'"
+    args << "--key '#{sentinel['tls_key_file']}'"
+  end
+
+  def client_certs_required?
+    sentinel['tls_auth_clients'] == 'yes'
+  end
+
+  def client_cert_and_key_available?
+    sentinel['tls_cert_file'] && !sentinel['tls_cert_file'].empty? &&
+      sentinel['tls_key_file'] && !sentinel['tls_key_file'].empty?
   end
 end
