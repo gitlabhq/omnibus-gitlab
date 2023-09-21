@@ -3,6 +3,49 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.4.0 (2023-09-21)
+
+### Added (3 changes)
+
+- [Provide packages for OpenSUSE Leap 15.5](gitlab-org/omnibus-gitlab@cd663be2ed65790569971def06ae539fc090ed70) ([merge request](gitlab-org/omnibus-gitlab!7099))
+- [Add config support for container registry database](gitlab-org/omnibus-gitlab@565f7a73f721fa40efc936dfd735b849986ce0ac) ([merge request](gitlab-org/omnibus-gitlab!7100))
+- [Provide option to configure a separate workhorse redis](gitlab-org/omnibus-gitlab@8a0d77b493c855160ddfb3d0c24ed6ae3a613da1) ([merge request](gitlab-org/omnibus-gitlab!7071))
+
+### Fixed (5 changes)
+
+- [Ensure postgresql_new is included in GitLab CE](gitlab-org/omnibus-gitlab@6df8f0cce3d6ad30ebd914a7662825c8604536e8) ([merge request](gitlab-org/omnibus-gitlab!7122))
+- [Remove redundant postgres exporter custom queries](gitlab-org/omnibus-gitlab@bec8913cae1584050269f87d189508c5f287ae4a) ([merge request](gitlab-org/omnibus-gitlab!7092))
+- [Suppress Ruby experimental features warning messages](gitlab-org/omnibus-gitlab@18cb56c9bc2c9f2764f04962b8dcd5308fdd2bbf) ([merge request](gitlab-org/omnibus-gitlab!7137))
+- [Skip database validation during asset compile](gitlab-org/omnibus-gitlab@64432226f5eaec377ffbef5f7f83281b11b894ba) ([merge request](gitlab-org/omnibus-gitlab!7118))
+- [Fix reconfigure failing when Sentinel TLS is only enabled](gitlab-org/omnibus-gitlab@6cebe94cb777afa4fbbc5297bbd312224cf9ce87) ([merge request](gitlab-org/omnibus-gitlab!7086))
+
+### Changed (15 changes)
+
+- [Bump libtiff to version 4.6.0](gitlab-org/omnibus-gitlab@2f304df710f36d231308e92e2b1ce6ab9a60a9c9) ([merge request](gitlab-org/omnibus-gitlab!7146))
+- [Bump container-registry to version 3.83.0](gitlab-org/omnibus-gitlab@cd333ae5853234e64bb119820da3397f6801c46c) ([merge request](gitlab-org/omnibus-gitlab!7093))
+- [Bump redis to version 7.0.13](gitlab-org/omnibus-gitlab@f760bde3be066bed8d4dbc77059c525f7095c531) ([merge request](gitlab-org/omnibus-gitlab!7126))
+- [Require upgrade stop at 16.3](gitlab-org/omnibus-gitlab@07da7ddacc992db52e61dd90149bd9c97186a9a4) ([merge request](gitlab-org/omnibus-gitlab!7110))
+- [Update FIPS Go to 1.20.7](gitlab-org/omnibus-gitlab@6a2cbf272af8df14bebe439e71d2d0dc896abeb5) ([merge request](gitlab-org/omnibus-gitlab!7129))
+- [Update redis_exporter from 1.53.0 to 1.54.0](gitlab-org/omnibus-gitlab@535caf9859329ebfa12a18d248773ab953558b35) ([merge request](gitlab-org/omnibus-gitlab!7125))
+- [Update Prometheus from 2.46.0 to 2.47.0](gitlab-org/omnibus-gitlab@148c2e78439f8d776ac8f5a23f0a46222da68590) ([merge request](gitlab-org/omnibus-gitlab!7124))
+- [Remove libre2 from build](gitlab-org/omnibus-gitlab@607ec5f99f02cff7bdf333691632646792bec18c) ([merge request](gitlab-org/omnibus-gitlab!7139))
+- [Add clean up steps in preparation for re2 v2.0 gem](gitlab-org/omnibus-gitlab@86c52850e63d7e094a1f0742adb42512bad06621) ([merge request](gitlab-org/omnibus-gitlab!7133))
+- [Drop DISABLE_PUMA_NAKAYOSHI_FORK from Puma config](gitlab-org/omnibus-gitlab@d239d8ffec0e19177b61cf927ee332387fd4102e) ([merge request](gitlab-org/omnibus-gitlab!7123))
+- [Update redis_exporter from 1.52.0 to 1.53.0](gitlab-org/omnibus-gitlab@67c08103a4885719e0db40be0b871a48cf57fc59) ([merge request](gitlab-org/omnibus-gitlab!7109))
+- [Update Mattermost to 8.1](gitlab-org/omnibus-gitlab@b0d2e2a123805a65c4357d02d94bad5d2f01d605) by @mvitale1989 ([merge request](gitlab-org/omnibus-gitlab!7112))
+- [Update builder to use nodejs 18.17.2](gitlab-org/omnibus-gitlab@b0b8128abb07b6d409c1d15da79201f5d0bc07cb) ([merge request](gitlab-org/omnibus-gitlab!7117))
+- [Update builder Go version](gitlab-org/omnibus-gitlab@5bf8e0597b6989728f02829f0f64cf42b8ecb4c7) ([merge request](gitlab-org/omnibus-gitlab!7090))
+- [Update rubygems/rubygems from 3.4.18 to 3.4.19](gitlab-org/omnibus-gitlab@dc25e51effe977d4a5fcf1261f2a774bc992c6b9) ([merge request](gitlab-org/omnibus-gitlab!7098))
+
+### Removed (2 changes)
+
+- [Remove reference to Grafana service in cookbook](gitlab-org/omnibus-gitlab@98de98ce18e4dcdc7443421abb6e2e06c0ba8668) ([merge request](gitlab-org/omnibus-gitlab!7115))
+- [Remove Nginx from monitoring_role](gitlab-org/omnibus-gitlab@99a274c69975df1b3f463fda328ac0f8c5808235) ([merge request](gitlab-org/omnibus-gitlab!7121))
+
+### Other (1 change)
+
+- [Enable dual namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/omnibus-gitlab@6ddfb82c93158bdc25e3546625688e99cb400584) ([merge request](gitlab-org/omnibus-gitlab!7141))
+
 ## 16.3.4 (2023-09-18)
 
 No changes.
