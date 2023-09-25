@@ -15,11 +15,11 @@
 #
 
 name 'exiftool'
-version = Gitlab::Version.new('exiftool', '12.42')
+version = Gitlab::Version.new('exiftool', '12.65')
 default_version version.print(false)
 
 license 'GPL-1.0 or Artistic'
-license_file 'LICENSE.txt'
+license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
@@ -30,9 +30,9 @@ build do
   # patch it to add the bundled one
   patch source: 'lib-location.patch'
 
-  # exiftool doesn't provide a license file, so we create one based on info
-  # from the website
-  patch source: 'add-license-file.patch'
+  # exiftool is published under the same license as perl
+  # patch the license file to reflect this
+  patch source: 'license.patch'
 
   # Only support JPEG and TIFF files
   patch source: 'allowlist-types.patch'
