@@ -2,7 +2,47 @@
 # project here: https://gitlab.com/gitlab-org/omnibus-gitlab/-/project_members
 # As described in https://docs.gitlab.com/ee/user/project/code_owners.html
 
-[Documentation]
-.markdownlint.yml @marcel.amirault @eread @aqualls
-/doc/.vale/ @marcel.amirault @eread @aqualls
-/doc/ @axil @eread
+* @gitlab-org/maintainers/distribution-build @gitlab-org/maintainers/distribution-package-configuration @gitlab-org/delivery @gitlab-org/tw-leadership
+
+# TODO: Remove @gitlab-org/maintainers/distribution-build from being a codeowner
+# of the CODEOWNERS file once we have confirmed the rest of the process is working
+.gitlab/CODEOWNERS @gitlab-org/development-leaders @gitlab-org/tw-leadership @gitlab-org/maintainers/distribution-build
+
+## Files that are excluded from required approval
+## These rules override the * rule above, so that changes to docs and templates
+## can be merged by any user who has maintainer rights, but is not included in
+## the * rule (usually technical writers).
+/.gitlab/issue_templates/*.md
+/.gitlab/merge_request_templates/*.md
+/doc/*.md
+/doc/**/*.md
+/doc/**/*.jpg
+/doc/**/*.png
+
+## Technical writing files that do not need `*` rule approval,
+## but still require an approval from a TW team DRI for each file.
+/doc/.vale/ @marcel.amirault @eread @aqualls @gitlab-org/tw-leadership
+.markdownlint.yml @marcel.amirault @eread @aqualls @gitlab-org/tw-leadership
+/doc/.markdownlint/ @marcel.amirault @eread @aqualls @gitlab-org/tw-leadership
+
+[Distribution Build] @gitlab-org/maintainers/distribution-build
+/config/
+/docker/
+/lib/
+/scripts/
+/support/
+
+## Dependency Maintainers
+/config/software/registry.rb @gitlab-org/maintainers/distribution-build @gitlab-org/maintainers/container-registry
+
+[Distribution Cookbooks] @gitlab-org/maintainers/distribution-package-configuration
+/files/
+
+^[Container Registry] @gitlab-org/maintainers/container-registry
+/files/gitlab-cookbooks/registry/
+
+^[Legal] @gitlab-org/legal-reviewers
+/support/dependency_decisions.yml
+
+^[Documentation Directories] @axil @eread
+/doc/
