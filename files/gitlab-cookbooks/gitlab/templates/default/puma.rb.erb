@@ -120,11 +120,15 @@ log_formatter do |str|
     json_formatter.call(str)
 end
 
-lowlevel_error_handler do |ex, env|
+lowlevel_error_handler do |ex, env, status_code|
+  # Puma v6.4.0 added the status_code argument in
+  # https://github.com/puma/puma/pull/3094
+  status_code ||= 500
+
   if Raven.configuration.capture_allowed?
-    Raven.capture_exception(ex, tags: { 'handler': 'puma_low_level' }, extra: { puma_env: env })
+    Raven.capture_exception(ex, tags: { 'handler': 'puma_low_level' }, extra: { puma_env: env, status_code: status_code })
   end
 
   # note the below is just a Rack response
-  [500, {}, ["An error has occurred and reported in the system's low-level error handler."]]
+  [status_code, {}, ["An error has occurred and reported in the system's low-level error handler."]]
 end
