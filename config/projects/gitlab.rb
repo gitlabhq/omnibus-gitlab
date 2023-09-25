@@ -273,11 +273,25 @@ exclude 'embedded/lib/python*/**/*.whl'
 package :rpm do
   vendor 'GitLab, Inc. <support@gitlab.com>'
   signing_passphrase Gitlab::Util.get_env('GPG_PASSPHRASE')
+
+  # Enable XZ compression if selected
+  compress_xz = Gitlab::Util.get_env('COMPRESS_XZ') || 'false'
+  if compress_xz == 'true'
+    compression_type :xz
+    compression_level 6
+  end
 end
 
 package :deb do
   vendor 'GitLab, Inc. <support@gitlab.com>'
   signing_passphrase Gitlab::Util.get_env('GPG_PASSPHRASE')
+
+  # Enable XZ compression if selected
+  compress_xz = Gitlab::Util.get_env('COMPRESS_XZ') || 'true'
+  if compress_xz == 'true'
+    compression_type :xz
+    compression_level 6
+  end
 end
 
 resources_path "#{Omnibus::Config.project_root}/resources"
