@@ -444,7 +444,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 
 ### CI Secure Files
-# gitlab_rails['ci_secure_files_enabled'] = false
+# gitlab_rails['ci_secure_files_enabled'] = true
 # gitlab_rails['ci_secure_files_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/ci_secure_files"
 # gitlab_rails['ci_secure_files_object_store_enabled'] = false
 # gitlab_rails['ci_secure_files_object_store_remote_directory'] = "ci-secure-files"
