@@ -37,7 +37,7 @@ add_command_under_category('pgb-resume', 'pgbouncer', 'Send the "resume" command
   pgb.resume
 end
 
-add_command_under_category('pgb-kill', 'pgbouncer', 'Send the "resume" command to pgbouncer', 2) do
+add_command_under_category('pgb-kill', 'pgbouncer', 'Send the "kill" command to pgbouncer', 2) do
   pgb = get_client
   if pgb.options['pg_database'].nil?
     $stderr.puts "Must provide database name to kill"
