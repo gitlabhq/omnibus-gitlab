@@ -72,6 +72,10 @@ To enable Let's Encrypt:
    sudo gitlab-ctl reconfigure
    ```
 
+If Let's Encrypt fails to issue a certificate, see the
+[troubleshooting section](ssl_troubleshooting.md#lets-encrypt-fails-on-reconfigure)
+for potential solutions.
+
 ### Renew the certificates automatically
 
 Default installations schedule renewals after midnight on every 4th day of the month.
