@@ -201,25 +201,40 @@ Where HOSTNAME is the hostname of the certificate.
 
 ## Let's Encrypt fails on reconfigure
 
+NOTE:
+You can test your domain using the [Let's Debug](https://letsdebug.net/)
+diagnostic tool. It can help you figure out why you can't issue a Let's Encrypt
+certificate.
+
 When you reconfigure, there are common scenarios under which Let's Encrypt may fail:
 
-1. Let's Encrypt may fail if your server isn't able to reach the Let's Encrypt verification servers or vice versa:
+- Let's Encrypt may fail if your server isn't able to reach the Let's Encrypt verification servers or vice versa:
 
-   ```shell
-   letsencrypt_certificate[gitlab.domain.com] (letsencrypt::http_authorization line 3) had an error: RuntimeError: acme_certificate[staging]  (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 20) had an error: RuntimeError: [gitlab.domain.com] Validation failed for domain gitlab.domain.com
-   ```
+  ```shell
+  letsencrypt_certificate[gitlab.domain.com] (letsencrypt::http_authorization line 3) had an error: RuntimeError: acme_certificate[staging]  (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 20) had an error: RuntimeError: [gitlab.domain.com] Validation failed for domain gitlab.domain.com
+  ```
 
-    If you run into issues reconfiguring GitLab due to Let's Encrypt [make sure you have ports 80 and 443 open and accessible](index.md#enable-the-lets-encrypt-integration).
+  If you run into issues reconfiguring GitLab due to Let's Encrypt [make sure you have ports 80 and 443 open and accessible](index.md#enable-the-lets-encrypt-integration).
 
-1. Your domain's Certification Authority Authorization (CAA) record does not allow Let's Encrypt to issue a certificate for your domain. Look for the following error in the reconfigure output:
+- Your domain's Certification Authority Authorization (CAA) record does not allow Let's Encrypt to issue a certificate for your domain. Look for the following error in the reconfigure output:
 
-   ```shell
-   letsencrypt_certificate[gitlab.domain.net] (letsencrypt::http_authorization line 5) had an error: RuntimeError: acme_certificate[staging]   (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 25) had an error: RuntimeError: ruby_block[create certificate for gitlab.domain.net] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/acme/resources/certificate.rb line 108) had an error: RuntimeError: [gitlab.domain.com] Validation failed, unable to request certificate
-   ```
+  ```shell
+  letsencrypt_certificate[gitlab.domain.net] (letsencrypt::http_authorization line 5) had an error: RuntimeError: acme_certificate[staging]   (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 25) had an error: RuntimeError: ruby_block[create certificate for gitlab.domain.net] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/acme/resources/certificate.rb line 108) had an error: RuntimeError: [gitlab.domain.com] Validation failed, unable to request certificate
+  ```
 
-1. If you're using a test domain such as `gitlab.example.com`, without a certificate, you'll see the `unable to request certificate` error shown above. In that case, disable Let's Encrypt by setting `letsencrypt['enable'] = false` in `/etc/gitlab/gitlab.rb`.
+- If you're using a test domain such as `gitlab.example.com`, without a certificate, you'll see the `unable to request certificate` error shown above. In that case, disable Let's Encrypt by setting `letsencrypt['enable'] = false` in `/etc/gitlab/gitlab.rb`.
 
-You can test your domain using the [Let's Debug](https://letsdebug.net/) diagnostic tool. It can help you figure out why you can't issue a Let's Encrypt certificate.
+- [Let's Encrypt enforces rate limits](https://letsencrypt.org/docs/rate-limits/),
+  which is at the top-level domain. In case you're using your cloud provider's
+  hostname as the `external_url`, for example `*.cloudapp.azure.com`, Let's
+  Encrypt would enforce limits to `azure.com`, which could make the certificate
+  creation incomplete.
+
+  In that case, you can try renewing the Let's Encrypt certificates manually:
+
+  ```shell
+  sudo gitlab-ctl renew-le-certs
+  ```
 
 ## Using an internal CA certificate with GitLab
 
