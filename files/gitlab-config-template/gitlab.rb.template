@@ -3223,7 +3223,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # consul['configuration'] = {
 #   'client_addr' => nil,
 #   'datacenter' => 'gitlab_consul',
-#   'enable_script_checks' => true,
+#   'enable_script_checks' => false,
+#   'enable_local_script_checks' => true,
 #   'server' => false
 # }
 # consul['services'] = []

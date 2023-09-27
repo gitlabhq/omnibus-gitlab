@@ -103,7 +103,8 @@ RSpec.describe 'consul' do
         expect(chef_run).to render_file(consul_conf).with_content { |content|
           expect(content).to match(%r{"datacenter":"gitlab_consul"})
           expect(content).to match(%r{"disable_update_check":true})
-          expect(content).to match(%r{"enable_script_checks":true})
+          expect(content).to match(%r{"enable_script_checks":false})
+          expect(content).to match(%r{"enable_local_script_checks":true})
           expect(content).to match(%r{"node_name":"fauxhai.local"})
           expect(content).to match(%r{"rejoin_after_leave":true})
           expect(content).to match(%r{"server":false})
