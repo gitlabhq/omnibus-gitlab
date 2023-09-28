@@ -54,6 +54,14 @@ omnibus-gitlab repository.
 
 - [Enable dual namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/omnibus-gitlab@6ddfb82c93158bdc25e3546625688e99cb400584) ([merge request](gitlab-org/omnibus-gitlab!7141))
 
+## 16.3.5 (2023-09-28)
+
+### Security (3 changes)
+
+- [Mattermost Security Updates September 8, 2023](gitlab-org/security/omnibus-gitlab@76f9a5dc6ea193803ba96d49498f1a6893c82802) ([merge request](gitlab-org/security/omnibus-gitlab!373))
+- [Consul RCE vulnerability `enable-script-checks`](gitlab-org/security/omnibus-gitlab@5655cd2f60eb0218409e47b32690a4647620dade) ([merge request](gitlab-org/security/omnibus-gitlab!369))
+- [ExifTool - Infinite loop when parsing BigTIFF files](gitlab-org/security/omnibus-gitlab@cbc8f7493f8954af7c4a4072d9d400629a39e2d0) ([merge request](gitlab-org/security/omnibus-gitlab!365))
+
 ## 16.3.4 (2023-09-18)
 
 No changes.
