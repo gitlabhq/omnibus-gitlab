@@ -1,28 +1,29 @@
 diff --git a/lib/Image/ExifTool.pm b/lib/Image/ExifTool.pm
-index a96cbf36..2d81ce98 100644
+index e22e73c5..855c20db 100644
 --- a/lib/Image/ExifTool.pm
 +++ b/lib/Image/ExifTool.pm
-@@ -185,17 +185,10 @@ $defaultLang = 'en';    # default language
+@@ -190,18 +190,10 @@ $defaultLang = 'en';    # default language
  # 2) Put types with weak file signatures at end of list to avoid false matches
  # 3) PLIST must be in this list for the binary PLIST format, although it may
  #    cause a file to be checked twice for XML
 -@fileTypes = qw(JPEG EXV CRW DR4 TIFF GIF MRW RAF X3F JP2 PNG MIE MIFF PS PDF
--                PSD XMP BMP BPG PPM RIFF AIFF ASF MOV MPEG Real SWF PSP FLV OGG
--                FLAC APE MPC MKV MXF DV PMP IND PGF ICC ITC FLIR FLIF FPF LFP
--                HTML VRD RTF FITS XCF DSS QTIF FPX PICT ZIP GZIP PLIST RAR BZ2
--                CZI TAR  EXE EXR HDR CHM LNK WMF AVC DEX DPX RAW Font RSRC M2TS
--                MacOS PHP PCX DCX DWF DWG DXF WTV Torrent VCard LRI R3D AA PDB
--                PFM2 MRC LIF JXL MOI ISO ALIAS JSON MP3 DICOM PCD TXT);
+-                PSD XMP BMP WPG BPG PPM RIFF AIFF ASF MOV MPEG Real SWF PSP FLV
+-                OGG FLAC APE MPC MKV MXF DV PMP IND PGF ICC ITC FLIR FLIF FPF
+-                LFP HTML VRD RTF FITS XCF DSS QTIF FPX PICT ZIP GZIP PLIST RAR
+-                7Z BZ2 CZI TAR EXE EXR HDR CHM LNK WMF AVC DEX DPX RAW Font RSRC
+-                M2TS MacOS PHP PCX DCX DWF DWG DXF WTV Torrent VCard LRI R3D AA
+-                PDB PFM2 MRC LIF JXL MOI ISO ALIAS JSON MP3 DICOM PCD ICO TXT);
 +@fileTypes = qw(JPEG TIFF);
  
  # file types that we can write (edit)
 -my @writeTypes = qw(JPEG TIFF GIF CRW MRW ORF RAF RAW PNG MIE PSD XMP PPM EPS
--                    X3F PS PDF ICC VRD DR4 JP2 JXL EXIF AI AIT IND MOV EXV FLIF);
+-                    X3F PS PDF ICC VRD DR4 JP2 JXL EXIF AI AIT IND MOV EXV FLIF
+-                    RIFF);
 +my @writeTypes = qw(JPEG TIFF);
  my %writeTypes; # lookup for writable file types (hash filled if required)
  
  # file extensions that we can't write for various base types
-@@ -214,339 +207,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
+@@ -222,344 +214,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
  # (if extension may be more than one type, the type is a list where
  #  the writable type should come first if it exists)
  %fileTypeLookup = (
@@ -32,6 +33,7 @@ index a96cbf36..2d81ce98 100644
 -   '3GP' => ['MOV',  '3rd Gen. Partnership Project audio/video'],
 -   '3GP2'=>  '3G2',
 -   '3GPP'=>  '3GP',
+-   '7Z'  => ['7Z', '7z archive'],
 -    A    => ['EXE',  'Static library'],
 -    AA   => ['AA',   'Audible Audiobook'],
 -    AAE  => ['PLIST','Apple edit information'],
@@ -69,6 +71,7 @@ index a96cbf36..2d81ce98 100644
 -    CRW  => ['CRW',  'Canon RAW format'],
 -    CS1  => ['PSD',  'Sinar CaptureShop 1-Shot RAW'],
 -    CSV  => ['TXT',  'Comma-Separated Values'],
+-    CUR  => ['ICO',  'Windows Cursor'],
 -    CZI  => ['CZI',  'Zeiss Integrated Software RAW'],
 -    DC3  =>  'DICM',
 -    DCM  =>  'DICM',
@@ -132,6 +135,7 @@ index a96cbf36..2d81ce98 100644
 -    FPF  => ['FPF',  'FLIR Public image Format'],
 -    FPX  => ['FPX',  'FlashPix'],
 -    GIF  => ['GIF',  'Compuserve Graphics Interchange Format'],
+-    GLV  => ['MOV',  'Garmin Low-resolution Video'],
 -    GPR  => ['TIFF', 'General Purpose RAW'], # https://gopro.github.io/gpr/
 -    GZ   =>  'GZIP',
 -    GZIP => ['GZIP', 'GNU ZIP compressed archive'],
@@ -145,6 +149,7 @@ index a96cbf36..2d81ce98 100644
 -    ICAL =>  'ICS',
 -    ICC  => ['ICC',  'International Color Consortium'],
 -    ICM  =>  'ICC',
+-    ICO  => ['ICO',  'Windows Icon'],
 -    ICS  => ['VCard','iCalendar Schedule'],
 -    IDML => ['ZIP',  'Adobe InDesign Markup Language'],
 -    IIQ  => ['TIFF', 'Phase One Intelligent Image Quality RAW'],
@@ -190,6 +195,7 @@ index a96cbf36..2d81ce98 100644
 -    M4B  => ['MOV',  'MPEG-4 audio Book'],
 -    M4P  => ['MOV',  'MPEG-4 Protected'],
 -    M4V  => ['MOV',  'MPEG-4 Video'],
+-    MACOS=> ['MacOS','MacOS ._ sidecar file'],
 -    MAX  => ['FPX',  '3D Studio MAX'],
 -    MEF  => ['TIFF', 'Mamiya (RAW) Electronic Format'],
 -    MIE  => ['MIE',  'Meta Information Encapsulation format'],
@@ -219,7 +225,6 @@ index a96cbf36..2d81ce98 100644
 -    NEF  => ['TIFF', 'Nikon (RAW) Electronic Format'],
 -    NEWER => 'COS',
 -    NKSC => ['XMP',  'Nikon Sidecar'],
--
 -    NMBTEMPLATE => ['ZIP','Apple Numbers Template'],
 -    NRW  => ['TIFF', 'Nikon RAW (2)'],
 -    NUMBERS => ['ZIP','Apple Numbers spreadsheet'],
@@ -331,6 +336,7 @@ index a96cbf36..2d81ce98 100644
 -    VCARD=> ['VCard','Virtual Card'],
 -    VCF  => 'VCARD',
 -    VOB  => ['MPEG', 'Video Object'],
+-    VNT  => [['FPX','VCard'], 'Scene7 Vignette or V-Note text file'],
 -    VRD  => ['VRD',  'Canon VRD Recipe Data'],
 -    VSD  => ['FPX',  'Microsoft Visio Drawing'],
 -    WAV  => ['RIFF', 'WAVeform (Windows digital audio)'],
@@ -342,7 +348,6 @@ index a96cbf36..2d81ce98 100644
 -    WMV  => ['ASF',  'Windows Media Video'],
 -    WV   => ['RIFF', 'WavePack lossless audio'],
 -    X3F  => ['X3F',  'Sigma RAW format'],
--    MACOS=> ['MacOS','MacOS ._ sidecar file'],
 -    XCF  => ['XCF',  'GIMP native image format'],
 -    XHTML=> ['HTML', 'Extensible HyperText Markup Language'],
 -    XLA  => ['FPX',  'Microsoft Excel Add-in'],
@@ -357,6 +362,7 @@ index a96cbf36..2d81ce98 100644
 -    XMP  => ['XMP',  'Extensible Metadata Platform'],
 -    WOFF => ['Font', 'Web Open Font Format'],
 -    WOFF2=> ['Font', 'Web Open Font Format2'],
+-    WPG  => ['WPG',  'WordPerfect Graphics'],
 -    WTV  => ['WTV',  'Windows recorded TV show'],
 -    ZIP  => ['ZIP',  'ZIP archive'],
  );
@@ -364,7 +370,7 @@ index a96cbf36..2d81ce98 100644
  # typical extension for each file type (if different than FileType)
 diff --git a/lib/Image/ExifTool/AIFF.pm b/lib/Image/ExifTool/AIFF.pm
 deleted file mode 100644
-index 3fe6c4a6..00000000
+index a862a0de..00000000
 --- a/lib/Image/ExifTool/AIFF.pm
 +++ /dev/null
 @@ -1,312 +0,0 @@
@@ -388,7 +394,7 @@ index 3fe6c4a6..00000000
 -use Image::ExifTool qw(:DataAccess :Utils);
 -use Image::ExifTool::ID3;
 -
--$VERSION = '1.11';
+-$VERSION = '1.12';
 -
 -# information for time/date-based tags (time zero is Jan 1, 1904)
 -my %timeInfo = (
@@ -573,7 +579,7 @@ index 3fe6c4a6..00000000
 -        return 1 if $fast3;
 -        $tagTablePtr = GetTagTable('Image::ExifTool::DjVu::Main');
 -        # modify FileType to indicate a multi-page document
--        $$et{VALUE}{FileType} .= " (multi-page)" if $buf2 eq 'DJVM';
+-        $$et{VALUE}{FileType} .= " (multi-page)" if $buf2 eq 'DJVM' and $$et{VALUE}{FileType};
 -        $type = 'DjVu';
 -    } else {
 -        return 0 unless $buff =~ /^FORM....(AIF(F|C))/s;
@@ -657,7 +663,7 @@ index 3fe6c4a6..00000000
 -
 -=head1 AUTHOR
 -
--Copyright 2003-2022, Phil Harvey (philharvey66 at gmail.com)
+-Copyright 2003-2023, Phil Harvey (philharvey66 at gmail.com)
 -
 -This library is free software; you can redistribute it and/or modify it
 -under the same terms as Perl itself.
