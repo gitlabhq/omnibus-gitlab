@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.4.1 (2023-09-28)
+
+### Security (3 changes)
+
+- [Mattermost Security Updates September 8, 2023](gitlab-org/security/omnibus-gitlab@1bb8795c5f91d57a4c6ca152f8725fc4750111d2) ([merge request](gitlab-org/security/omnibus-gitlab!376))
+- [Consul RCE vulnerability `enable-script-checks`](gitlab-org/security/omnibus-gitlab@af5bbe62cbd6a186df4216da2a8435b4bb7c3d9e) ([merge request](gitlab-org/security/omnibus-gitlab!375))
+- [ExifTool - Infinite loop when parsing BigTIFF files](gitlab-org/security/omnibus-gitlab@c92d41cca0a21870ccf0b0a431ef7ec97538fb22) ([merge request](gitlab-org/security/omnibus-gitlab!374))
+
 ## 16.4.0 (2023-09-21)
 
 ### Added (3 changes)
