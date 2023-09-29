@@ -24,12 +24,25 @@ RSpec.describe 'gitlab-kas' do
     end
 
     it 'creates a default VERSION file and restarts service' do
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('gitlab-kas').and_return(true)
       expect(chef_run).to create_version_file('Create version file for Gitlab KAS').with(
         version_file_path: '/var/opt/gitlab/gitlab-kas/VERSION',
         version_check_cmd: '/opt/gitlab/embedded/bin/gitlab-kas --version'
       )
 
       expect(chef_run.version_file('Create version file for Gitlab KAS')).to notify('runit_service[gitlab-kas]').to(:restart)
+    end
+
+    it 'creates a default VERSION file and does not restart the service if stopped' do
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('gitlab-kas').and_return(false)
+      expect(chef_run).to create_version_file('Create version file for Gitlab KAS').with(
+        version_file_path: '/var/opt/gitlab/gitlab-kas/VERSION',
+        version_check_cmd: '/opt/gitlab/embedded/bin/gitlab-kas --version'
+      )
+
+      expect(chef_run.version_file('Create version file for Gitlab KAS')).to_not notify('runit_service[gitlab-kas]').to(:restart)
     end
 
     it 'correctly renders the KAS service run file' do
@@ -632,6 +645,45 @@ RSpec.describe 'gitlab-kas' do
         end
         it_behaves_like 'configured logrotate service', 'gitlab-kas', 'git', 'fugee'
         it_behaves_like 'enabled logged service', 'gitlab-kas', true, { log_directory_owner: 'git', log_group: 'fugee' }
+      end
+    end
+  end
+
+  describe 'chef_run.file calls' do
+    def files
+      @files ||= %w(
+        /var/opt/gitlab/gitlab-kas/authentication_secret_file
+        /var/opt/gitlab/gitlab-kas/private_api_authentication_secret_file
+        /var/opt/gitlab/gitlab-kas/redis_password_file
+        /var/opt/gitlab/gitlab-kas/redis_sentinels_password_file
+      )
+    end
+
+    before do
+      allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).and_call_original
+    end
+
+    context "when omnibus_helper.should_notify?('gitlab-kas') returns true" do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('gitlab-kas').and_return(true)
+      end
+
+      it 'chef_run.file calls notify gitlab-kas to restart' do
+        files.each do |file|
+          expect(chef_run.file(file)).to notify('runit_service[gitlab-kas]').to(:restart)
+        end
+      end
+    end
+
+    context "when omnibus_helper.should_notify?('gitlab-kas') returns false" do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:should_notify?).with('gitlab-kas').and_return(false)
+      end
+
+      it 'chef_run.file calls do not notify gitlab-kas to restart' do
+        files.each do |file|
+          expect(chef_run.file(file)).to_not notify('runit_service[gitlab-kas]').to(:restart)
+        end
       end
     end
   end

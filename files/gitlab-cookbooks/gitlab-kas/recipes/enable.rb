@@ -79,7 +79,7 @@ end
 version_file 'Create version file for Gitlab KAS' do
   version_file_path File.join(working_dir, 'VERSION')
   version_check_cmd '/opt/gitlab/embedded/bin/gitlab-kas --version'
-  notifies :restart, 'runit_service[gitlab-kas]'
+  notifies :restart, 'runit_service[gitlab-kas]' if omnibus_helper.should_notify?('gitlab-kas')
 end
 
 file gitlab_kas_authentication_secret_file do
@@ -87,7 +87,7 @@ file gitlab_kas_authentication_secret_file do
   owner 'root'
   group account_helper.gitlab_group
   mode '0640'
-  notifies :restart, 'runit_service[gitlab-kas]'
+  notifies :restart, 'runit_service[gitlab-kas]' if omnibus_helper.should_notify?('gitlab-kas')
 end
 
 file gitlab_kas_private_api_authentication_secret_file do
@@ -95,7 +95,7 @@ file gitlab_kas_private_api_authentication_secret_file do
   owner 'root'
   group account_helper.gitlab_group
   mode '0640'
-  notifies :restart, 'runit_service[gitlab-kas]'
+  notifies :restart, 'runit_service[gitlab-kas]' if omnibus_helper.should_notify?('gitlab-kas')
 end
 
 file gitlab_kas_redis_password_file do
@@ -103,7 +103,7 @@ file gitlab_kas_redis_password_file do
   owner 'root'
   group account_helper.gitlab_group
   mode '0640'
-  notifies :restart, 'runit_service[gitlab-kas]'
+  notifies :restart, 'runit_service[gitlab-kas]' if omnibus_helper.should_notify?('gitlab-kas')
   only_if { redis_password_present }
   sensitive true
 end
@@ -113,7 +113,7 @@ file gitlab_kas_redis_sentinels_password_file do
   owner 'root'
   group account_helper.gitlab_group
   mode '0640'
-  notifies :restart, 'runit_service[gitlab-kas]'
+  notifies :restart, 'runit_service[gitlab-kas]' if omnibus_helper.should_notify?('gitlab-kas')
   only_if { redis_sentinels_password_present }
   sensitive true
 end
@@ -137,7 +137,7 @@ template gitlab_kas_config_file do
       redis_sentinels_password_file: redis_sentinels_password_present ? gitlab_kas_redis_sentinels_password_file : nil
     )
   )
-  notifies :restart, 'runit_service[gitlab-kas]'
+  notifies :restart, 'runit_service[gitlab-kas]' if omnibus_helper.should_notify?('gitlab-kas')
 end
 
 env_dir env_directory do
