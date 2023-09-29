@@ -41,7 +41,8 @@ gem 'gitlab'
 gem 'yard'
 gem 'toml-rb'
 gem 'retriable'
-gem "tomlib", "~> 0.6.0"
+gem 'tomlib', '~> 0.6.0'
+gem 'google-cloud-storage'
 
 group :packagecloud, optional: true do
   gem 'package_cloud'

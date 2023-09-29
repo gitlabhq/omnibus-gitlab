@@ -74,10 +74,7 @@ namespace :build do
     desc "Sync packages to gcp"
     task :sync do
       Gitlab::Util.section('build:package:sync', collapsed: Build::Check.on_tag?) do
-        puts '---- Syncing packages to GCP'
-        puts GCloudHelper.gcs_sync!('pkg/')
-        paths = Dir.glob('pkg/**/*').select { |f| File.file?(f) }.map { |p| p.gsub(%r[^pkg/], '') }
-        puts GCloudHelper.signed_urls(paths)
+        GCloudHelper.upload_packages_and_print_urls('pkg/')
       end
     end
 
