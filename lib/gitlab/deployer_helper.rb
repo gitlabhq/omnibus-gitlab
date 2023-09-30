@@ -50,7 +50,7 @@ class DeployerHelper
   end
 
   def release
-    @release ||= Build::Info.docker_tag
+    @release ||= Build::Info::Docker.tag
   end
 
   def form_data_for_trigger
