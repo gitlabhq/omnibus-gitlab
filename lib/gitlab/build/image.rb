@@ -6,9 +6,9 @@ module Build
   module Image
     def pull
       Docker::Image.create(
-        'fromImage' => "#{gitlab_registry_image_address}:#{Build::Info.docker_tag}"
+        'fromImage' => "#{gitlab_registry_image_address}:#{Build::Info::Docker.tag}"
       )
-      puts "Pulled tag: #{Build::Info.docker_tag}"
+      puts "Pulled tag: #{Build::Info::Docker.tag}"
     end
 
     def gitlab_registry_image_address(tag: nil)
@@ -29,7 +29,7 @@ module Build
       puts "Pushed #{gitlab_registry_image_address}:#{final_tag}"
     end
 
-    def tag_and_push_to_dockerhub(final_tag, initial_tag: Build::Info.docker_tag)
+    def tag_and_push_to_dockerhub(final_tag, initial_tag: Build::Info::Docker.tag)
       DockerOperations.authenticate(Gitlab::Util.get_env('DOCKERHUB_USERNAME'), Gitlab::Util.get_env('DOCKERHUB_PASSWORD'))
       DockerOperations.tag_and_push(
         gitlab_registry_image_address,
@@ -41,7 +41,7 @@ module Build
     end
 
     def write_release_file
-      contents = Build::Info.release_file_contents
+      contents = Build::Info::Docker.release_file_contents
       File.write('docker/RELEASE', contents)
       contents
     end

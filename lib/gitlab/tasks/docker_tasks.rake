@@ -26,13 +26,13 @@ namespace :docker do
     # Only runs on dev.gitlab.org
     task :staging do
       Gitlab::Util.section('docker:push:staging') do
-        Build::GitlabImage.tag_and_push_to_gitlab_registry(Build::Info.docker_tag)
+        Build::GitlabImage.tag_and_push_to_gitlab_registry(Build::Info::Docker.tag)
       end
     end
 
     task :stable do
       Gitlab::Util.section('docker:push:stable') do
-        Build::GitlabImage.tag_and_push_to_dockerhub(Build::Info.docker_tag)
+        Build::GitlabImage.tag_and_push_to_dockerhub(Build::Info::Docker.tag)
       end
     end
 
@@ -60,7 +60,7 @@ namespace :docker do
     desc "Push triggered Docker Image to GitLab Registry"
     task :triggered do
       Gitlab::Util.section('docker:push:triggered') do
-        Build::GitlabImage.tag_and_push_to_gitlab_registry(Build::Info.docker_tag)
+        Build::GitlabImage.tag_and_push_to_gitlab_registry(Build::Info::Docker.tag)
       end
     end
   end

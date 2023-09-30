@@ -22,7 +22,7 @@ RSpec.describe Build::Image do
     allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('registry.com/group/repo')
     allow(ENV).to receive(:[]).with('DOCKERHUB_USERNAME').and_return('john')
     allow(ENV).to receive(:[]).with('DOCKERHUB_PASSWORD').and_return('secret')
-    allow(Build::Info).to receive(:docker_tag).and_return('9.0.0')
+    allow(Build::Info::Docker).to receive(:tag).and_return('9.0.0')
     allow(Gitlab::APIClient).to receive(:new).and_return(double(get_job_id: '999999'))
   end
 

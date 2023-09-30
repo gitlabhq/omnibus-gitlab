@@ -34,7 +34,7 @@ RSpec.describe 'docker', type: :rake do
     it 'pulls in correct image' do
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('dev.gitlab.org:5005/gitlab/omnibus-gitlab')
       allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
-      allow(Build::Info).to receive(:docker_tag).and_return('9.0.0')
+      allow(Build::Info::Docker).to receive(:tag).and_return('9.0.0')
       allow(DockerOperations).to receive(:authenticate).and_return(true)
 
       expect(Docker::Image).to receive(:create).with('fromImage' => 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0')
@@ -56,7 +56,7 @@ RSpec.describe 'docker', type: :rake do
       allow(ENV).to receive(:[]).and_call_original
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('dev.gitlab.org:5005/gitlab/omnibus-gitlab')
       allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
-      allow(Build::Info).to receive(:docker_tag).and_return('9.0.0')
+      allow(Build::Info::Docker).to receive(:tag).and_return('9.0.0')
       allow(DockerOperations).to receive(:authenticate).and_return(true)
       allow(Docker::Image).to receive(:get).and_return(dummy_image)
       allow(Docker).to receive(:creds).and_return(dummy_creds)
@@ -92,7 +92,7 @@ RSpec.describe 'docker', type: :rake do
     it 'pushes triggered images correctly' do
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('registry.gitlab.com/gitlab-org/omnibus-gitlab')
       allow(ENV).to receive(:[]).with("IMAGE_TAG").and_return("omnibus-12345")
-      allow(Build::Info).to receive(:docker_tag).and_call_original
+      allow(Build::Info::Docker).to receive(:tag).and_call_original
 
       expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce:omnibus-12345')
       Rake::Task['docker:push:triggered'].invoke
