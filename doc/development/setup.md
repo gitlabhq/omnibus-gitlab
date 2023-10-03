@@ -131,6 +131,10 @@ This ensures that your new work is behaving as expected, and not breaking anythi
    GITLAB_USERNAME=$USERNAME GITLAB_PASSWORD=$PASSWORD bundle exec bin/qa Test::Instance $DEV_INSTANCE_URL
    ```
 
+### Trigger QA pipeline against deployed instance
+
+If there is sustained network access to the deployed instance, you can trigger GitLab QA tests against the deployed instance using the [GitLab QA Executor](https://gitlab.com/gitlab-org/quality/gitlab-qa-executor) project. It contains CI configuration to run GitLab QA against self-managed GitLab environments with parallelization.
+
 ## Run specific chefspec tests
 
 You can also test your changes against the current tests (or to test your newly added tests).
