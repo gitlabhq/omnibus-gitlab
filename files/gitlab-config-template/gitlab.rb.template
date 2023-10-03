@@ -2102,6 +2102,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_kas['log_group'] = nil
 # gitlab_kas['env_directory'] = '/opt/gitlab/etc/gitlab-kas/env'
 
+##! Redis settings for GitLab KAS
+# gitlab_kas['redis_socket'] = ''
+# gitlab_kas['redis_host'] = '127.0.0.1'
+# gitlab_kas['redis_port'] = '6379'
+# gitlab_kas['redis_password'] = nil
+
+# gitlab_kas['redis_sentinels'] = {}
+# gitlab_kas['redis_sentinels_master_name'] = nil
+# gitlab_kas['redis_sentinels_password'] = ''
+
 ################################################################################
 ## GitLab Suggested Reviewers (EE Only)
 ##! Docs: https://docs.gitlab.com/ee/user/project/merge_requests/reviews/#suggested-reviewers

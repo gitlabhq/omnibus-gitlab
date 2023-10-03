@@ -13,17 +13,15 @@ class RedisHelper
     @node['redis']
   end
 
-  def redis_params(support_sentinel_groupname: true)
-    gitlab_rails_config = @node['gitlab']['gitlab_rails']
-
+  def redis_params(service_config: @node['gitlab']['gitlab_rails'], support_sentinel_groupname: true)
     raise 'Redis announce_ip and announce_ip_from_hostname are mutually exclusive, please unset one of them' if redis['announce_ip'] && redis['announce_ip_from_hostname']
 
     params = if RedisHelper::Checks.has_sentinels? && support_sentinel_groupname
                [redis['master_name'], redis['master_port'], redis['master_password']]
              else
-               host = gitlab_rails_config['redis_host'] || Gitlab['redis']['master_ip']
-               port = gitlab_rails_config['redis_port'] || Gitlab['redis']['master_port']
-               password = gitlab_rails_config['redis_password'] || Gitlab['redis']['master_password']
+               host = service_config['redis_host'] || Gitlab['redis']['master_ip']
+               port = service_config['redis_port'] || Gitlab['redis']['master_port']
+               password = service_config['redis_password'] || Gitlab['redis']['master_password']
 
                [host, port, password]
              end
@@ -73,6 +71,10 @@ class RedisHelper
         sentinelPassword: gitlab_rails['redis_sentinels_password']
       }
     end
+  end
+
+  def kas_params
+    redis_params(service_config: @node['gitlab_kas'])
   end
 
   def validate_instance_shard_config(instance)
