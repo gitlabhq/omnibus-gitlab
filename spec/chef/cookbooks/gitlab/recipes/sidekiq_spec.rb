@@ -23,6 +23,8 @@ RSpec.describe 'gitlab::sidekiq' do
           expect(content).to match(/chmod 0700 \/run\/gitlab\/sidekiq/)
           expect(content).to match(/chown git \/run\/gitlab\/sidekiq/)
           expect(content).to match(/export prometheus_run_dir=\'\/run\/gitlab\/sidekiq\'/)
+          expect(content).to match(/rubyopt=\"-W:no-experimental\"/)
+          expect(content).to include(%(RUBYOPT="${rubyopt}"))
           expect(content).to match(%r{bin/sidekiq-cluster})
           expect(content).to match(/-m 20/) # max_concurrency
           expect(content).to match(/--timeout 25/) # shutdown timeout
