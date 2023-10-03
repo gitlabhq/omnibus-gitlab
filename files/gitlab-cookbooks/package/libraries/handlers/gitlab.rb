@@ -16,6 +16,7 @@
 
 require 'chef/handler'
 require 'rainbow'
+require_relative '../omnibus_helper'
 
 module GitLabHandler
   class Exception < Chef::Handler
