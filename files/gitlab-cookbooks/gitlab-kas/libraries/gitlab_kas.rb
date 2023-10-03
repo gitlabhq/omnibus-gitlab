@@ -114,6 +114,10 @@ module GitlabKas
         redis_password
         redis_sentinels
         redis_sentinels_password
+        redis_ssl
+        redis_tls_ca_cert_file
+        redis_tls_client_cert_file
+        redis_tls_client_key_file
       ]
       settings_copied_from_gitlab_rails.each do |setting|
         Gitlab['gitlab_kas'][setting] = Gitlab['gitlab_rails'][setting] || Gitlab['node']['gitlab']['gitlab_rails'][setting] unless Gitlab['gitlab_kas'].key?(setting)

@@ -45,6 +45,17 @@ redis:
   network: <%= @redis_network %>
   tls:
     enabled: <%= @redis_ssl %>
+    <%- if @redis_ssl %>
+    <%- if @redis_tls_ca_cert_file %>
+    ca_certificate_file: "<%= @redis_tls_ca_cert_file %>"
+    <% end %>
+    <%- if @redis_tls_client_cert_file %>
+    certificate_file: "<%= @redis_tls_client_cert_file %>"
+    <% end %>
+    <%- if @redis_tls_client_key_file %>
+    key_file: "<%= @redis_tls_client_key_file %>"
+    <% end %>
+    <% end %>
   <%- if @redis_password_file %>
   password_file: <%= @redis_password_file %>
   <%- end %>

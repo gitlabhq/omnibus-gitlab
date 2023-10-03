@@ -2112,6 +2112,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_kas['redis_sentinels_master_name'] = nil
 # gitlab_kas['redis_sentinels_password'] = ''
 
+# gitlab_kas['redis_ssl'] = false
+# gitlab_kas['redis_tls_ca_cert_file'] = '/opt/gitlab/embedded/ssl/certs/cacert.pem'
+# gitlab_kas['redis_tls_client_cert_file'] = nil
+# gitlab_kas['redis_tls_client_key_file'] = nil
+
 ################################################################################
 ## GitLab Suggested Reviewers (EE Only)
 ##! Docs: https://docs.gitlab.com/ee/user/project/merge_requests/reviews/#suggested-reviewers

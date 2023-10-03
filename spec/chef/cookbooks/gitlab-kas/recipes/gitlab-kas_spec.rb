@@ -445,6 +445,8 @@ RSpec.describe 'gitlab-kas' do
               redis_host: 'the-host',
               redis_port: 12345,
               redis_ssl: true,
+              redis_tls_client_cert_file: '/etc/gitlab/self_signed.crt',
+              redis_tls_client_key_file: '/etc/gitlab/self_signed.key'
             }
           )
         end
@@ -457,6 +459,9 @@ RSpec.describe 'gitlab-kas' do
                 'network' => 'tcp',
                 'tls' => {
                   'enabled' => true,
+                  'ca_certificate_file' => '/opt/gitlab/embedded/ssl/certs/cacert.pem',
+                  'certificate_file' => '/etc/gitlab/self_signed.crt',
+                  'key_file' => '/etc/gitlab/self_signed.key',
                 },
                 'server' => {
                   'address' => 'the-host:12345'

@@ -54,3 +54,7 @@ default['gitlab_kas']['redis_password'] = nil
 default['gitlab_kas']['redis_sentinels'] = nil
 default['gitlab_kas']['redis_sentinels_master_name'] = nil
 default['gitlab_kas']['redis_sentinels_password'] = nil
+default['gitlab_kas']['redis_ssl'] = nil
+default['gitlab_kas']['redis_tls_ca_cert_file'] = nil
+default['gitlab_kas']['redis_tls_client_cert_file'] = nil
+default['gitlab_kas']['redis_tls_client_key_file'] = nil
