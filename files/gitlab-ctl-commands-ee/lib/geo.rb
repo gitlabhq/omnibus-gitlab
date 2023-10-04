@@ -45,6 +45,10 @@ module Geo
           Utils.warn_and_exit opts
         end
 
+        opts.on('--enable-silent-mode', 'Enable GitLab Silent Mode') do |e|
+          options[:enable_silent_mode] = e
+        end
+
         opts.on('-f', '--force', 'Proceed with no confirmation') do |f|
           options[:force] = f
         end

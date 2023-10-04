@@ -11,11 +11,11 @@ RSpec.describe 'gitlab-ctl geo' do
   commands = %w(promote)
 
   command_lines = {
-    'promote' => []
+    'promote' => ['--enable-silent-mode']
   }
 
   command_options = {
-    'promote' => {}
+    'promote' => { enable_silent_mode: true }
   }
 
   describe '.parse_options' do
