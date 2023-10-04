@@ -23,9 +23,9 @@ module GitlabCtl
         shell_out.stdout
       end
 
-      def run_command(command, live: false, user: nil, timeout: nil)
+      def run_command(command, live: false, user: nil, timeout: nil, env: {})
         timeout = Mixlib::ShellOut::DEFAULT_READ_TIMEOUT if timeout.nil?
-        shell_out = Mixlib::ShellOut.new(command, timeout: timeout)
+        shell_out = Mixlib::ShellOut.new(command, timeout: timeout, environment: env)
         shell_out.user = user unless user.nil?
         shell_out.live_stdout = $stdout if live
         shell_out.live_stderr = $stderr if live

@@ -164,7 +164,7 @@ module Geo
       log('Detected an application node.')
 
       unless progress_message('Promoting secondary site to primary site') do
-        !run_task('geo:set_secondary_as_primary').error?
+        !run_task('geo:set_secondary_as_primary', env: { ENABLE_SILENT_MODE: options[:enable_silent_mode].to_s }).error?
       end
         die("Unable to promote secondary site to primary site.")
       end
@@ -305,16 +305,16 @@ module Geo
       @attributes ||= GitlabCtl::Util.get_node_attributes(base_path)
     end
 
-    def run_command(cmd, live: true)
-      GitlabCtl::Util.run_command(cmd, live: live)
+    def run_command(cmd, live: true, env: {})
+      GitlabCtl::Util.run_command(cmd, live: live, env: env)
     end
 
-    def run_query(query, live: false)
-      run_command("#{base_path}/bin/gitlab-psql -c \"#{query}\" -q -t", live: live)
+    def run_query(query, live: false, env: {})
+      run_command("#{base_path}/bin/gitlab-psql -c \"#{query}\" -q -t", live: live, env: env)
     end
 
-    def run_task(task, live: true)
-      run_command("#{base_path}/bin/gitlab-rake #{task}", live: live)
+    def run_task(task, live: true, env: {})
+      run_command("#{base_path}/bin/gitlab-rake #{task}", live: live, env: env)
     end
 
     def sv_progress(action, service)

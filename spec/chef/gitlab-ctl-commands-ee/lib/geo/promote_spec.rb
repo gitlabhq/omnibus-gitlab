@@ -81,7 +81,9 @@ RSpec.describe Geo::Promote, '#execute' do
             allow(command).to receive(:run_reconfigure)
             allow(command).to receive(:restart_services)
 
-            expect(command).not_to receive(:run_command).with("#{base_path}/bin/gitlab-rake geo:set_secondary_as_primary", live: true)
+            expect(command)
+              .not_to receive(:run_command)
+              .with("#{base_path}/bin/gitlab-rake geo:set_secondary_as_primary", live: true, env: {})
 
             command.execute
           end
@@ -96,15 +98,39 @@ RSpec.describe Geo::Promote, '#execute' do
           it 'promotes the secondary site to primary site' do
             allow(command).to receive(:restart_services)
 
-            expect(command).to receive(:run_command).with("#{base_path}/bin/gitlab-rake geo:set_secondary_as_primary", live: true).once.and_return(double(error?: false))
+            expect(command)
+              .to receive(:run_command)
+              .with("#{base_path}/bin/gitlab-rake geo:set_secondary_as_primary", { live: true, env: an_instance_of(Hash) })
+              .once
+              .and_return(double(error?: false))
 
             command.execute
+          end
+
+          context 'with enable_silent_mode option set' do
+            let(:options) { { enable_silent_mode: 'true', force: false } }
+
+            it 'calls the underlying rake task with ENABLE_SILENT_MODE env var set' do
+              allow(command).to receive(:restart_services)
+
+              expect(command)
+                .to receive(:run_command)
+                .with("#{base_path}/bin/gitlab-rake geo:set_secondary_as_primary", { live: true, env: a_hash_including(ENABLE_SILENT_MODE: 'true') })
+                .once
+                .and_return(double(error?: false))
+
+              command.execute
+            end
           end
 
           it 'restarts the puma service' do
             allow(command).to receive(:promote_to_primary)
 
-            expect(ctl).to receive(:run_sv_command_for_service).with('restart', 'puma').once.and_return(double(zero?: true))
+            expect(ctl)
+              .to receive(:run_sv_command_for_service)
+              .with('restart', 'puma')
+              .once
+              .and_return(double(zero?: true))
 
             command.execute
           end
@@ -465,15 +491,24 @@ RSpec.describe Geo::Promote, '#execute' do
     end
 
     def stub_primary_node
-      allow(command).to receive(:run_command).with("#{base_path}/bin/gitlab-rake geo:site:role", live: true).and_return(double(error?: false, stdout: 'primary'))
+      allow(command)
+        .to receive(:run_command)
+        .with("#{base_path}/bin/gitlab-rake geo:site:role", live: true, env: {})
+        .and_return(double(error?: false, stdout: 'primary'))
     end
 
     def stub_secondary_node
-      allow(command).to receive(:run_command).with("#{base_path}/bin/gitlab-rake geo:site:role", live: true).and_return(double(error?: false, stdout: 'secondary'))
+      allow(command)
+        .to receive(:run_command)
+        .with("#{base_path}/bin/gitlab-rake geo:site:role", live: true, env: {})
+        .and_return(double(error?: false, stdout: 'secondary'))
     end
 
     def stub_misconfigured_node
-      allow(command).to receive(:run_command).with("#{base_path}/bin/gitlab-rake geo:site:role", live: true).and_return(double(error?: true, stdout: 'misconfigured'))
+      allow(command)
+        .to receive(:run_command)
+        .with("#{base_path}/bin/gitlab-rake geo:site:role", live: true, env: {})
+        .and_return(double(error?: true, stdout: 'misconfigured'))
     end
 
     def stub_single_server_secondary_site
