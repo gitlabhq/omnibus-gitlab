@@ -52,6 +52,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'ci_runners_stale_group_runners_prune_worker_cron'       | 'ci_runners_stale_group_runners_prune_worker_cron'
         'ci_runner_versions_reconciliation_worker'               | 'ci_runner_versions_reconciliation_worker_cron'
         'ci_runners_stale_machines_cleanup_worker'               | 'ci_runners_stale_machines_cleanup_worker_cron'
+        'click_house_ci_finished_builds_sync_worker'             | 'click_house_ci_finished_builds_sync_worker_cron'
       end
 
       with_them do

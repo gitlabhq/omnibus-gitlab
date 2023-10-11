@@ -149,6 +149,8 @@ default['gitlab']['gitlab_rails']['incoming_email_inbox_method'] = "imap"
 default['gitlab']['gitlab_rails']['incoming_email_inbox_options'] = nil
 default['gitlab']['gitlab_rails']['incoming_email_delivery_method'] = "webhook"
 default['gitlab']['gitlab_rails']['incoming_email_auth_token'] = nil
+default['gitlab']['gitlab_rails']['click_house_ci_finished_builds_sync_worker_cron'] = nil
+default['gitlab']['gitlab_rails']['click_house_ci_finished_builds_sync_worker_args'] = nil
 
 default['gitlab']['gitlab_rails']['service_desk_email_enabled'] = false
 default['gitlab']['gitlab_rails']['service_desk_email_address'] = nil

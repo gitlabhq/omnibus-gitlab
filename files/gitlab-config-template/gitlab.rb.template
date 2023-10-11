@@ -935,7 +935,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Registry database
 ###! Docs: https://docs.gitlab.com/ee/administration/packages/container_registry.html?tab=Linux+package+%28Omnibus%29#configure-a-metadata-database-for-the-container-registry
-# registry['database'] = { 
+# registry['database'] = {
 #   'enabled' => true,
 #   'host' => 'localhost',
 #   'port' => 5432,
@@ -953,7 +953,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #       'maxidle' => 25,
 #       'maxopen' => 25,
 #       'maxlifetime' => '5m'
-#   } 
+#   }
 # }
 
 ### Registry notifications endpoints
@@ -2704,6 +2704,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['elastic_index_bulk_cron'] = "*/1 * * * *"
 # gitlab_rails['analytics_devops_adoption_create_all_snapshots_worker_cron'] = "0 4 * * 0"
 # gitlab_rails['ci_runners_stale_group_runners_prune_worker_cron'] = "30 * * * *"
+# gitlab_rails['click_house_ci_finished_builds_sync_worker_cron'] = "*/3 * * * *"
+# gitlab_rails['click_house_ci_finished_builds_sync_worker_args'] = [1]
 
 ################################################################################
 ## Kerberos (EE Only)

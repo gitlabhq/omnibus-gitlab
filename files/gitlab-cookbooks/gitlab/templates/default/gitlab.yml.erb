@@ -700,6 +700,15 @@ production: &base
       cron: "<%= @ci_runners_stale_group_runners_prune_worker_cron %>"
     <% end %>
 
+    # Periodically sync finished builds from p_ci_finished_build_ch_sync_events to ClickHouse
+    <% unless @click_house_ci_finished_builds_sync_worker_cron.nil? %>
+    click_house_ci_finished_builds_sync_worker:
+      cron: "<%= @click_house_ci_finished_builds_sync_worker_cron %>"
+      <% unless @click_house_ci_finished_builds_sync_worker_args.nil? %>
+      args: <%= @click_house_ci_finished_builds_sync_worker_args %>
+      <% end %>
+    <% end %>
+
   ## Geo
   # NOTE: These settings will only take effect if Geo is enabled
   geo:
