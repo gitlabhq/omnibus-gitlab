@@ -5,10 +5,13 @@ cd <%= node['gitlab']['gitlab_rails']['dir'] %>/working
 exec 2>&1
 <%= render("make_metrics_rundir.erb", cookbook: 'gitlab') %>
 <%= render("mount_point_check.erb", cookbook: 'gitlab') %>
+rubyopt="-W:no-experimental"
+
 exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
   -U <%= @options[:user] %>:<%= @options[:groupname] %> \
   -u <%= @options[:user] %>:<%= @options[:groupname] %> \
   /usr/bin/env \
+    RUBYOPT="${rubyopt}" \
     prometheus_multiproc_dir="${prometheus_run_dir}" \
     /opt/gitlab/embedded/service/gitlab-rails/bin/sidekiq-cluster \
       -e <%= node['gitlab']['gitlab_rails']['environment'] %> \

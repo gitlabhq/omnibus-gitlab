@@ -60,6 +60,8 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
           expect(content).to match(/chmod 0700 \/run\/gitlab\/puma/)
           expect(content).to match(/chown git \/run\/gitlab\/puma/)
           expect(content).to match(/export prometheus_run_dir=\'\/run\/gitlab\/puma\'/)
+          expect(content).to match(/rubyopt=\"-W:no-experimental\"/)
+          expect(content).to include(%(RUBYOPT="${rubyopt}"))
           expect(content).to match(%r(/opt/gitlab/embedded/bin/bundle exec puma -C /var/opt/gitlab/gitlab-rails/etc/puma.rb))
         }
     end
