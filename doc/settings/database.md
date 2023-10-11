@@ -447,6 +447,12 @@ packaged PostgreSQL server to a later version (if one is included in the
 package). This updates PostgreSQL to the [default shipped version](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html)
 during package upgrades, unless specifically [opted out](#opt-out-of-automatic-postgresql-upgrades).
 
+Before upgrading GitLab to a newer version, refer to the [version-specific changes](https://docs.gitlab.com/ee/update/#version-specific-upgrading-instructions)
+of the Linux package to see either:
+
+- When a database version has changed.
+- When an upgrade is warranted.
+
 WARNING:
 Before upgrading, it's important that you fully read this section before running any commands. For
 single-node installations, this upgrade needs downtime, as the database must be
@@ -477,6 +483,13 @@ the upgrade:
 
 ```shell
 sudo gitlab-ctl pg-upgrade
+```
+
+To upgrade to a specific PostgreSQL version, use the `-V` flag to append the
+version. For example, to upgrade to PostgreSQL 14:
+
+```shell
+sudo gitlab-ctl pg-upgrade -V 14
 ```
 
 NOTE:
@@ -533,63 +546,6 @@ To opt out of automatic PostgreSQL upgrades during GitLab package upgrades, run:
 ```shell
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
-
-#### GitLab 16.2 and later
-
-As of GitLab 16.2, PostgreSQL 13.11 and 14.8 are both shipped with the Linux package.
-During a package upgrade, the database isn't upgraded to PostgreSQL 14. If you
-want to upgrade to PostgreSQL 14, you must do it manually:
-
-```shell
-sudo gitlab-ctl pg-upgrade -V 14
-```
-
-PostgreSQL 14 isn't supported on Geo deployments and is [planned](https://gitlab.com/groups/gitlab-org/-/epics/9065)
-for future releases.
-
-#### GitLab 16.0 and later
-
-PostgreSQL version 12 is no longer supported and the binaries have been
-removed. To proceed, administrators must:
-
-1. Ensure the installation is using [PostgreSQL 13](#upgrade-packaged-postgresql-server)
-
-#### GitLab 15.11 and later
-
-In GitLab 15.11, PostgreSQL will automatically be upgraded to 13.x except for the following cases:
-
-The upgrade is skipped in any of the following cases:
-
-- You are running the database in high availability using Patroni.
-- Your database nodes are part of GitLab Geo configuration.
-- You have specifically [opted out](#opt-out-of-automatic-postgresql-upgrades).
-- You have `postgresql['version'] = 12` in your `gitlab.rb`
-
-Fault-tolerant and Geo installations support manual upgrades to PostgreSQL 13, see [Packaged PostgreSQL deployed in an HA/Geo Cluster](#packaged-postgresql-deployed-in-an-hageo-cluster).
-
-#### GitLab 15.0 and later
-
-As of GitLab 15.0, new installations will default to PostgreSQL 13.
-
-Existing single database node instances can update manually via:
-
-```shell
-sudo gitlab-ctl pg-upgrade -V 13
-```
-
-Until PostgreSQL 12 is removed, administrators may
-[pin the PostgreSQL version](#pin-the-packaged-postgresql-version-fresh-installs-only)
-if needed for compatibility or test environment reasons.
-
-[Fault tolerant and Geo installations require additional steps and planning](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#upgrading-postgresql-major-version-in-a-patroni-cluster).
-
-#### GitLab 14.0 and later
-
-PostgreSQL version 11 is no longer supported and the binaries have been
-removed. To proceed, administrators must:
-
-1. Ensure the installation is using [PostgreSQL 12](../settings/database.md#upgrade-packaged-postgresql-server)
-1. If using repmgr, [convert to using patroni](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#switching-from-repmgr-to-patroni)
 
 ### Revert packaged PostgreSQL server to the previous version
 
