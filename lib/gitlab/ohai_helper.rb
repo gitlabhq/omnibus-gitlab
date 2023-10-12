@@ -180,6 +180,10 @@ class OhaiHelper
       os_platform == 'raspbian'
     end
 
+    def is_32_bit?
+      `getconf LONG_BIT`.strip == "32"
+    end
+
     def gcc_target
       ohai['languages']['c']['gcc']['target']
     end
