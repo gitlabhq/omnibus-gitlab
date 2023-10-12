@@ -16,7 +16,7 @@
 
 name 'consul'
 
-version = Gitlab::Version.new('consul', 'v1.14.7')
+version = Gitlab::Version.new('consul', 'v1.16.2')
 default_version version.print(false)
 
 license 'MPL-2.0'
