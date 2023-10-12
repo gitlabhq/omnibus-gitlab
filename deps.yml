@@ -78,6 +78,7 @@ dependencies:
         replace_in_files:
         - filename: config/software/consul.rb
           pattern: "version = Gitlab::Version.new\\('consul', 'v(\\S+)'\\)"
+          range: '< 1.17.0'
       # go-crond
       https://github.com/webdevops/go-crond.git:
         replace_in_files:
