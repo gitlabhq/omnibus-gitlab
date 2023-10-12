@@ -158,8 +158,9 @@ build do
     'PATH' => "#{install_dir}/embedded/bin:#{Gitlab::Util.get_env('PATH')}",
     'SKIP_STORAGE_VALIDATION' => 'true',
     'SKIP_DATABASE_CONFIG_VALIDATION' => 'true',
-    'NODE_OPTIONS' => '--max_old_space_size=3584'
   }
+  assets_compile_env['NODE_OPTIONS'] = '--max_old_space_size=3584' if OhaiHelper.is_32_bit?
+
   assets_compile_env['NO_SOURCEMAPS'] = 'true' if Gitlab::Util.get_env('NO_SOURCEMAPS')
   command 'yarn install --pure-lockfile --production'
 
