@@ -80,12 +80,27 @@ module Redis
       redis_bind = Gitlab['redis']['bind'] || node['redis']['bind']
 
       Gitlab['gitlab_rails']['redis_host'] ||= redis_bind
-      Gitlab['gitlab_rails']['redis_port'] ||= Gitlab['redis']['port']
+
+      redis_port_config_key = if Gitlab['redis'].key?('port') && !Gitlab['redis']['port'].zero?
+                                # If Redis is specified to run on a non-TLS port
+                                'port'
+                              elsif Gitlab['redis'].key?('tls_port') && !Gitlab['redis']['tls_port'].zero?
+                                # If Redis is specified to run on a TLS port
+                                'tls_port'
+                              else
+                                # If Redis is running on neither ports, then it doesn't matter which
+                                # key we choose as both will return `nil`.
+                                'port'
+                              end
+
+      redis_port = Gitlab['redis'][redis_port_config_key]
+      Gitlab['gitlab_rails']['redis_port'] ||= redis_port
+
       Gitlab['gitlab_rails']['redis_password'] ||= Gitlab['redis']['master_password']
 
       Chef::Log.warn "gitlab-rails 'redis_host' is different than 'bind' value defined for managed redis instance. Are you sure you are pointing to the same redis instance?" if Gitlab['gitlab_rails']['redis_host'] != redis_bind
 
-      Chef::Log.warn "gitlab-rails 'redis_port' is different than 'port' value defined for managed redis instance. Are you sure you are pointing to the same redis instance?" if Gitlab['gitlab_rails']['redis_port'] != Gitlab['redis']['port']
+      Chef::Log.warn "gitlab-rails 'redis_port' is different than '#{redis_port_config_key}' value defined for managed redis instance. Are you sure you are pointing to the same redis instance?" if Gitlab['gitlab_rails']['redis_port'] != redis_port
 
       Chef::Log.warn "gitlab-rails 'redis_password' is different than 'master_password' value defined for managed redis instance. Are you sure you are pointing to the same redis instance?" if Gitlab['gitlab_rails']['redis_password'] != Gitlab['redis']['master_password']
     end

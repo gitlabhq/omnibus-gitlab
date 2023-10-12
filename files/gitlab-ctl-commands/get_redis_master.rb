@@ -23,6 +23,7 @@ add_command 'get-redis-master', 'Get connection details to Redis master', 2 do |
   # changed to `gitlab_rails`. Hence we try both.
   redis_sentinels = node_attributes.dig('gitlab', 'gitlab_rails', 'redis_sentinels') || node_attributes.dig('gitlab', 'gitlab-rails', 'redis_sentinels')
   redis_master_name = node_attributes['redis']['master_name']
+  redis_ssl = node_attributes.dig('gitlab', 'gitlab_rails', 'redis_ssl')
 
   master_host = nil
   master_port = nil
@@ -42,7 +43,25 @@ add_command 'get-redis-master', 'Get connection details to Redis master', 2 do |
   redis_sentinels.each do |sentinel|
     host = sentinel['host']
     port = sentinel['port']
-    command = "/opt/gitlab/embedded/bin/redis-cli -h #{host} -p #{port} SENTINEL get-master-addr-by-name #{redis_master_name}"
+
+    if redis_ssl
+      tls_arg = '--tls'
+
+      tls_settings = {
+        cacert: node_attributes.dig('gitlab', 'gitlab_rails', 'redis_tls_ca_cert_file'),
+        cacertdir: node_attributes.dig('gitlab', 'gitlab_rails', 'redis_tls_ca_cert_dir'),
+        cert: node_attributes.dig('gitlab', 'gitlab_rails', 'redis_tls_client_cert_file'),
+        key: node_attributes.dig('gitlab', 'gitlab_rails', 'redis_tls_client_key_file')
+      }
+
+      tls_settings.each do |key, value|
+        tls_arg += " --#{key} #{value}" if value
+      end
+    else
+      tls_arg = ''
+    end
+
+    command = "/opt/gitlab/embedded/bin/redis-cli -h #{host} -p #{port} #{tls_arg} SENTINEL get-master-addr-by-name #{redis_master_name}"
     output = GitlabCtl::Util.get_command_output(command).strip
     master_host, master_port = output.split("\n")
     break

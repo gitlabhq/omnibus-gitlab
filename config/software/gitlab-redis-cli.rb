@@ -41,6 +41,17 @@ error_echo()
   echo "$1" 2>& 1
 }
 
+set_tls_params()
+{
+  REDIS_PARAMS="${REDIS_PARAMS} -p ${redis_tls_port} --tls"
+  if [ "${redis_tls_auth_clients}" = "yes" ]; then
+    REDIS_PARAMS="${REDIS_PARAMS} --cacertdir ${redis_tls_cacert_dir} \
+      --cacert ${redis_tls_cacert_file} \
+      --cert ${redis_tls_cert_file} \
+      --key ${redis_tls_key_file}"
+  fi
+}
+
 gitlab_redis_cli_rc='/opt/gitlab/etc/gitlab-redis-cli-rc'
 
 if ! [ -f ${gitlab_redis_cli_rc} ] || ! [ -r ${gitlab_redis_cli_rc} ] ; then
@@ -52,10 +63,16 @@ fi
 
 . "${gitlab_redis_cli_rc}"
 
+
 if [ -e "${redis_socket}" ]; then
-	REDIS_PARAMS="-s ${redis_socket}"
+  REDIS_PARAMS="-s ${redis_socket}"
 else
-  REDIS_PARAMS="-h ${redis_host} -p ${redis_port}"
+  REDIS_PARAMS="-h ${redis_host}"
+  if ! [ "${redis_port}" = "0" ]; then
+    REDIS_PARAMS="${REDIS_PARAMS} -p ${redis_port}"
+  elif ! [ "${redis_tls_port}" = "0" ]; then
+    set_tls_params
+  fi
 fi
 
 REDISCLI_AUTH="$(awk '/^requirepass /{
@@ -66,7 +83,7 @@ REDISCLI_AUTH="$(awk '/^requirepass /{
 
 
 if [ -n "${REDISCLI_AUTH}" ]; then
-    export REDISCLI_AUTH
+  export REDISCLI_AUTH
 fi
 
 exec /opt/gitlab/embedded/bin/redis-cli $REDIS_PARAMS "$@"
