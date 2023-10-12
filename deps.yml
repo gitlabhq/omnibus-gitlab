@@ -212,6 +212,14 @@ dependencies:
           tag_filter:
             matching: '(\d+).(\d+)'
             sort_as: '$1.$2.0'
+      # curl
+      https://github.com/curl/curl.git:
+        replace_in_files:
+        - filename: config/software/curl.rb
+          pattern: "version = Gitlab::Version.new\\('curl', '(\\S+)'\\)"
+          tag_filter:
+            matching: 'curl-(\d+)_(\d+)_(\d+)'
+            sort_as: '$1.$2.$3'
       # deps that need updated filtering to work https://github.com/dropseed/deps-git/issues/2
       # krb5
       # https://github.com/krb5/krb5.git:
@@ -225,13 +233,6 @@ dependencies:
       #   - filename: config/software/libevent.rb
       #     pattern: "version = Gitlab::Version.new\\('libevent', '(release-\\d+\\.\\d+\\.\\d+-stable)'\\)"
       #     semver: false
-      # curl
-      # https://github.com/curl/curl.git:
-      #   replace_in_files:
-      #   - filename: config/software/curl.rb
-      #     pattern: "version = Gitlab::Version.new\\('curl', 'curl-(\\d+\\_\\d+\\_\\d+)'\\)"
-      #     semver: false
-      #     tag_prefix: 'curl-'
       # libicu
       # https://github.com/unicode-org/icu.git:
       #   replace_in_files:
