@@ -34,6 +34,10 @@ module Build
           Gitlab::Util.get_env('CI_API_V4_URL')
         end
 
+        def commit_ref_slug
+          Gitlab::Util.get_env('CI_COMMIT_REF_SLUG')
+        end
+
         def artifact_url(job_name, file_path)
           client = Gitlab::APIClient.new
           target_job_id = client.get_job_id(job_name)
