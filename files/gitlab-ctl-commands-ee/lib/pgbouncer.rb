@@ -133,10 +133,14 @@ module Pgbouncer
 
       databases = show_databases
 
-      # In `show databases` output, column 10 gives paused status of database
-      # (1 for paused and 0 for unpaused)
-      paused_status = databases.lines.find { |x| x.match(/#{@database}/) }.split('|')[10].strip
+      # Find the headings of the output from `SHOW DATABASES` to find out the location of the `paused` column
+      headings = databases.lines.first.split("|").map(&:strip)
+      paused_position = headings.index('paused')
 
+      # Find the paused value of the specified database
+      paused_status = databases.lines.find { |x| x.match(/#{@database}/) }.split('|')[paused_position].strip
+
+      # 1 for paused and 0 for unpaused
       paused_status == "1"
     end
 
