@@ -15,10 +15,6 @@ module Build
     }.freeze
 
     class << self
-      def qa_image
-        Gitlab::Util.get_env('QA_IMAGE') || "#{Gitlab::Util.get_env('CI_REGISTRY')}/#{Build::Info::Components::GitLabRails.project_path}/#{Build::Info::Package.name}-qa:#{Build::Info::Components::GitLabRails.ref(prepend_version: false)}"
-      end
-
       def gcp_release_bucket
         # All tagged builds are pushed to the release bucket
         # whereas regular branch builds use a separate one

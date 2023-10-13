@@ -75,7 +75,7 @@ module Build
       def qa_trigger_vars
         %W[
           QA_RELEASE=#{Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info::Docker.tag)}
-          QA_IMAGE=#{Build::Info.qa_image}
+          QA_IMAGE=#{Build::Info::QA.image}
           QA_TESTS=#{Gitlab::Util.get_env('QA_TESTS')}
           ALLURE_JOB_NAME=#{allure_job_name}-#{Build::Info::Package.edition}
           GITLAB_SEMVER_VERSION=#{Build::Info::Git.latest_stable_tag.tr('+', '-')}
