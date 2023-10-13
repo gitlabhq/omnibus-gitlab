@@ -90,11 +90,13 @@ RSpec.describe 'docker', type: :rake do
     end
 
     it 'pushes triggered images correctly' do
+      allow(ENV).to receive(:[]).with('CI_COMMIT_REF_SLUG').and_return('foo-bar')
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('registry.gitlab.com/gitlab-org/omnibus-gitlab')
       allow(ENV).to receive(:[]).with("IMAGE_TAG").and_return("omnibus-12345")
       allow(Build::Info::Docker).to receive(:tag).and_call_original
 
       expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce:omnibus-12345')
+      expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce:foo-bar')
       Rake::Task['docker:push:triggered'].invoke
     end
   end
