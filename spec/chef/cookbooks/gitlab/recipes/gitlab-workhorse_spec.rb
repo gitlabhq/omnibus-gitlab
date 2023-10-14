@@ -610,9 +610,11 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     it 'should generate config file with the specified values' do
       content = 'Sentinel = ["redis://:some+pass@127.0.0.1:26379","redis://:some+pass@127.0.8.1:12345"]'
       content_sentinel_master = 'SentinelMaster = "examplemaster"'
-      content_sentinel_password = 'Password = "examplepassword"'
+      content_password = 'Password = "examplepassword"'
+      content_sentinel_password = 'SentinelPassword = "some pass"'
       content_url = 'URL ='
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_password)
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_master)
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_password)
       expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
