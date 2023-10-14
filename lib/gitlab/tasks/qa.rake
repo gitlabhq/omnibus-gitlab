@@ -1,15 +1,15 @@
 require 'docker'
-require_relative '../docker_operations'
-require_relative '../build/qa'
+require 'json'
+
 require_relative '../build/check'
-require_relative '../build/info'
-require_relative "../build/info/git"
-require_relative "../build/info/components"
 require_relative '../build/gitlab_image'
+require_relative '../build/info/components'
+require_relative '../build/info/git'
+require_relative '../build/qa'
 require_relative '../build/qa_image'
 require_relative '../build/rat'
-require_relative "../util.rb"
-require 'json'
+require_relative '../docker_operations'
+require_relative '../util'
 
 namespace :qa do
   desc "Build QA Docker image"

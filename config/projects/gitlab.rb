@@ -17,7 +17,7 @@
 #
 
 require "#{Omnibus::Config.project_root}/lib/gitlab/build_iteration"
-require "#{Omnibus::Config.project_root}/lib/gitlab/build/info"
+require "#{Omnibus::Config.project_root}/lib/gitlab/build/info/package"
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/util"
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"

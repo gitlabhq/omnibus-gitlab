@@ -1,7 +1,7 @@
-require 'yaml'
 require 'uri'
+require 'yaml'
 
-require_relative "util.rb"
+require_relative 'util'
 
 module Gitlab
   class Version

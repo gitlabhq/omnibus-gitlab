@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-require "#{Omnibus::Config.project_root}/lib/gitlab/build/info"
+require "#{Omnibus::Config.project_root}/lib/gitlab/build/info/package"
 name 'package-scripts'
 
 license 'Apache-2.0'

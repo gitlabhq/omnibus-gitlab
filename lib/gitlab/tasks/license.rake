@@ -1,11 +1,11 @@
 require 'fileutils'
 require 'json'
-require_relative "../build/info.rb"
-require_relative "../build/check.rb"
-require_relative '../license/analyzer.rb'
-require_relative '../license/uploader.rb'
-require_relative '../license/collector.rb'
-require_relative "../util.rb"
+
+require_relative '../build/check'
+require_relative '../license/analyzer'
+require_relative '../license/collector'
+require_relative '../license/uploader'
+require_relative '../util'
 
 namespace :license do
   desc "Check licenses of bundled softwares"

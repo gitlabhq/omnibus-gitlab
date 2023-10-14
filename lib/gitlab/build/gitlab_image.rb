@@ -1,5 +1,5 @@
 require_relative 'image'
-require_relative 'info'
+require_relative 'info/package'
 
 module Build
   class GitlabImage

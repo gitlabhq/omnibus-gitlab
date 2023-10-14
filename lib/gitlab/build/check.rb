@@ -1,6 +1,6 @@
-require_relative "info.rb"
-require_relative "info/git"
-require_relative "../util.rb"
+require_relative '../util'
+require_relative 'info/git'
+require_relative 'info/package'
 
 module Build
   class Check

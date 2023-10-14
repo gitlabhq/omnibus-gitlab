@@ -1,4 +1,4 @@
-require_relative 'build/check.rb'
+require_relative 'build/check'
 
 # This module has tests in spec/gitlab/build_iteration_spec.rb
 module Gitlab

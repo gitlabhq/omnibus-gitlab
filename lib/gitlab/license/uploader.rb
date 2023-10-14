@@ -1,8 +1,9 @@
 require 'erb'
 require 'fileutils'
-require_relative '../build/info.rb'
-require_relative "../util.rb"
-require_relative 'base.rb'
+
+require_relative '../build/info/package'
+require_relative '../util'
+require_relative 'base'
 
 module License
   class Uploader < Base

@@ -1,4 +1,5 @@
 require_relative '../../util'
+require_relative 'ci'
 
 module Build
   class Info

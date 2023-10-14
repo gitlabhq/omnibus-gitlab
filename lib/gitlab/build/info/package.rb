@@ -1,5 +1,6 @@
 require 'omnibus'
 
+require_relative '../../build_iteration'
 require_relative '../../util'
 require_relative '../check'
 

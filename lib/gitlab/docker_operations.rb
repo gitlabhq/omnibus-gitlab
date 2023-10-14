@@ -1,6 +1,6 @@
 require 'docker'
 
-require_relative "util.rb"
+require_relative 'util'
 
 class DockerOperations
   def self.set_timeout

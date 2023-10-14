@@ -1,6 +1,5 @@
 require 'spec_helper'
-require 'gitlab/build/info'
-require 'gitlab/build/gitlab_image'
+require 'gitlab/build/info/package'
 
 RSpec.describe Build::Info::Package do
   before do

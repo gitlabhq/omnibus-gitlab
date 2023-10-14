@@ -1,3 +1,5 @@
+require_relative '../check'
+
 module Build
   class Info
     class Deploy

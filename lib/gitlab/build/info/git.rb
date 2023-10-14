@@ -1,3 +1,12 @@
+# `branch_name` and `tag_name` methods in this class calls
+# `Gitlab::Util.shellout_stdout` which uses `mixlib/shellout` under the hood.
+# However, we can't require `mixlib/shellout` in `Gitlab::Util` since it is
+# required by `Gitlab::Version`, which is in turn required by Gemfile. So, when
+# Gemfile is being evaluated, `mixlib/shellout` will become required, but it
+# won't be present in the bundle yet. Hence, we require it here, to demonstrate
+# the transitive dependency requirement this class has on `mixlib/shellout`.
+require 'mixlib/shellout'
+
 require_relative '../../util'
 require_relative '../check'
 require_relative 'ci'

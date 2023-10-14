@@ -1,5 +1,5 @@
-require_relative '../manifest/uploader.rb'
-require_relative '../manifest/collector.rb'
+require_relative '../manifest/collector'
+require_relative '../manifest/uploader'
 
 namespace :manifest do
   desc "Generate version manifest file of current release and push to AWS bucket"

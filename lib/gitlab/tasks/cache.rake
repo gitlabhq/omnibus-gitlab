@@ -1,5 +1,6 @@
 require 'fileutils'
-require_relative "../ohai_helper.rb"
+
+require_relative '../ohai_helper'
 
 namespace :cache do
   desc "Populate cache"

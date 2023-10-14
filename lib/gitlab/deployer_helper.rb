@@ -1,6 +1,8 @@
-require "http"
-require "json"
-require_relative "util.rb"
+require 'http'
+require 'json'
+
+require_relative 'build/info/docker'
+require_relative 'util'
 
 PipelineTriggerFailure = Class.new(StandardError)
 class DeployerHelper

@@ -1,5 +1,5 @@
-require 'retriable'
 require 'open3'
+require 'retriable'
 
 class SkopeoHelper
   ImageNotFoundError = Class.new(StandardError)

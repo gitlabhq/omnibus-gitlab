@@ -1,7 +1,7 @@
-require_relative "util"
-require_relative "ohai_helper"
-require_relative "build/check"
-require_relative "build/info/secrets"
+require_relative 'build/check'
+require_relative 'build/info/secrets'
+require_relative 'ohai_helper'
+require_relative 'util'
 
 require 'gitlab'
 

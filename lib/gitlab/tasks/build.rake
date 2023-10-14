@@ -1,17 +1,17 @@
 require 'fileutils'
-require_relative "../build.rb"
-require_relative "../build/check.rb"
-require_relative "../build/info.rb"
-require_relative "../build/info/git"
-require_relative "../build/info/package"
-require_relative '../build/facts'
-require_relative "../gcloud_helper.rb"
-require_relative "../ohai_helper.rb"
-require_relative '../version.rb'
-require_relative "../util.rb"
-require_relative "../package_size"
-require 'net/http'
 require 'json'
+require 'net/http'
+
+require_relative '../build'
+require_relative '../build/check'
+require_relative '../build/facts'
+require_relative '../build/info/git'
+require_relative '../build/info/package'
+require_relative '../gcloud_helper'
+require_relative '../ohai_helper'
+require_relative '../package_size'
+require_relative '../util'
+require_relative '../version'
 
 namespace :build do
   desc 'Start project build'

@@ -1,8 +1,8 @@
-require 'net/http'
-require 'json'
 require 'cgi'
+require 'json'
+require 'net/http'
 
-require_relative "../util.rb"
+require_relative '../util'
 
 module Build
   module Trigger
