@@ -186,7 +186,7 @@ RSpec.describe RedisHelper do
           expect(params[:password]).to eq('password_from.redis.master_password')
           expect(params[:sentinels].map(&:to_s)).to eq(%w[redis://sentinel1.example.com:12345 redis://sentinel2.example.com:12345])
           expect(params[:sentinelMaster]).to eq('master_from.redis.master_name')
-          expect(params[:sentinelPassword]).to eq('password_from.redis.master_password')
+          expect(params[:sentinelPassword]).to be_nil
           expect(params[:url].to_s).to eq("redis://:password_from.redis.master_password@master_from.redis.master_name/")
         end
       end

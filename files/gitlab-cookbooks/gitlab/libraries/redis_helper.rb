@@ -70,7 +70,7 @@ class RedisHelper
         password: redis_params.last,
         sentinels: redis_sentinel_urls('redis_sentinels'),
         sentinelMaster: redis['master_name'],
-        sentinelPassword: redis['master_password']
+        sentinelPassword: gitlab_rails['redis_sentinels_password']
       }
     end
   end

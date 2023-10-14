@@ -13,13 +13,13 @@ trusted_cidrs_for_x_forwarded_for = <%= @trusted_cidrs_for_x_forwarded_for.to_js
 
 <% if @workhorse_keywatcher %>
 [redis]
+Password = "<%= @password %>"
 <% if @sentinels.empty? %>
 URL = "<%= @redis_url %>"
-Password = "<%= @password %>"
 <% else %>
 Sentinel = <%= @sentinels.to_json %>
 SentinelMaster = "<%= @sentinel_master %>"
-Password = "<%= @master_password %>"
+SentinelPassword = "<%= @sentinel_password %>"
 <% end %>
 <% end %>
 
