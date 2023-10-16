@@ -25,6 +25,17 @@ skip_transitive_dependency_licensing true
 source path: File.expand_path('files/gitlab-selinux', Omnibus::Config.project_root)
 
 build do
+  policy_directory = File.expand_path('files/gitlab-selinux', Omnibus::Config.project_root)
+
+  # Only type enforcement (te) is provided in the current policy
+  Dir.glob("#{policy_directory}/*.te").each do |te_file|
+    mod_file = te_file.sub(/\.te$/, ".mod")
+    policy_file = te_file.sub(/\.te$/, ".pp")
+
+    command "checkmodule -M -m -o #{mod_file} #{te_file}", cwd: policy_directory
+    command "semodule_package -o #{policy_file} -m #{mod_file}", cwd: policy_directory
+  end
+
   mkdir "#{install_dir}/embedded/selinux"
-  sync './', "#{install_dir}/embedded/selinux/"
+  copy "#{policy_directory}/*.pp", "#{install_dir}/embedded/selinux"
 end

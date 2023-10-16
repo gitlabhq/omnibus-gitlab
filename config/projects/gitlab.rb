@@ -22,6 +22,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/util"
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 require "#{Omnibus::Config.project_root}/lib/gitlab/openssl_helper"
+require "#{Omnibus::Config.project_root}/files/gitlab-cookbooks/package/libraries/helpers/selinux_distro_helper.rb"
 
 gitlab_package_name = Build::Info::Package.name
 gitlab_package_file = File.join(Omnibus::Config.project_dir, 'gitlab', "#{gitlab_package_name}.rb")
@@ -104,6 +105,7 @@ if Build::Check.use_system_ssl?
 end
 
 dependency 'cacerts'
+dependency 'gitlab-selinux' if SELinuxDistroHelper.selinux_supported?
 dependency 'redis'
 dependency 'nginx'
 dependency 'mixlib-log'
@@ -146,7 +148,7 @@ dependency 'gitlab-ctl'
 dependency 'gitlab-psql'
 dependency 'gitlab-redis-cli'
 dependency 'gitlab-healthcheck'
-dependency 'gitlab-selinux'
+
 dependency 'gitlab-scripts'
 dependency 'gitlab-config-template'
 
