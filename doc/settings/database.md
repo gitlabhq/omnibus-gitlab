@@ -719,7 +719,9 @@ both the root and intermediate certificates.
 
 ### Backup and restore a non-packaged PostgreSQL database
 
-When using the [Rake backup create and restore task](https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system), GitLab will
+When using the [backup](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#backup-command)
+and [restore](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html#restore-for-linux-package-installations)
+commands, GitLab will
 attempt to use the packaged `pg_dump` command to create a database backup file
 and the packaged `psql` command to restore a backup. This will only work if
 they are the correct versions. Check the versions of the packaged `pg_dump` and
@@ -730,7 +732,7 @@ they are the correct versions. Check the versions of the packaged `pg_dump` and
 /opt/gitlab/embedded/bin/psql --version
 ```
 
-If these versions are different from your non-packaged external PostgreSQL, you may encounter the following error output when attempting to run a [Rake backup create task](https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system):
+If these versions are different from your non-packaged external PostgreSQL, you may encounter the following error output when attempting to run the [backup command](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#backup-command).
 
 ```plaintext
 Dumping PostgreSQL database gitlabhq_production ... pg_dump: error: server version: 13.3; pg_dump version: 12.6
@@ -762,8 +764,8 @@ these steps, using the correct path to the location you installed the new tools:
    They should now be the same as your non-packaged external PostgreSQL.
 
 After this is done, ensure that the backup and restore tasks are using the
-correct executables by running both the [backup](https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system) and
-[restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-a-previously-created-backup) tasks.
+correct executables by running both the [backup](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#backup-command) and
+[restore](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html#restore-for-linux-package-installations) commands.
 
 ### Upgrade a non-packaged PostgreSQL database
 
@@ -784,7 +786,7 @@ Before proceeding with the upgrade, note the following:
     The Linux package is tested for compatibility with the major releases of PostgreSQL that it ships with.
 - When using GitLab backup or restore, you _must_ keep the same version of GitLab.
   If you plan to upgrade to a later GitLab version as well, upgrade PostgreSQL first.
-- The [backup and restore Rake task](https://docs.gitlab.com/ee/raketasks/backup_restore.html#create-a-backup-of-the-gitlab-system)
+- The [backup and restore commands](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#backup-command)
   can be used to back up and restore the database to a later version of PostgreSQL.
 - If a PostgreSQL version is specified with `postgresql['version']` that doesn't ship
   with that Linux package release, the
@@ -816,7 +818,7 @@ The following example demonstrates upgrading from a database host running Postgr
    ```
 
 WARNING:
-The backup command requires [additional parameters](https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-and-restore-for-installations-using-pgbouncer)
+The backup command requires [additional parameters](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#back-up-and-restore-for-installations-using-pgbouncer)
 when your installation is using PgBouncer.
 
 1. Run the backup Rake task using the SKIP options to back up only the database.
@@ -838,14 +840,14 @@ when your installation is using PgBouncer.
    ```
 
    WARNING:
-   The backup command requires [additional parameters](https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-and-restore-for-installations-using-pgbouncer)
+   The backup command requires [additional parameters](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#back-up-and-restore-for-installations-using-pgbouncer)
    when your installation is using PgBouncer.
 
 1. Restore the database using the database backup file created earlier, and be
    sure to answer **no** when asked "This task will now rebuild the authorized_keys file":
 
    ```shell
-   # Use the backup timestamp https://docs.gitlab.com/ee/raketasks/backup_restore.html#backup-timestamp
+   # Use the backup timestamp https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#backup-timestamp
    sudo gitlab-backup restore BACKUP=<backup-timestamp>
    ```
 

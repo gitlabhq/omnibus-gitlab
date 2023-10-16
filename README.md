@@ -208,7 +208,7 @@ See [doc/settings/backups.md](doc/settings/backups.md#creating-an-application-ba
 
 ### Restoring an application backup
 
-See [backup restore documentation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#omnibus-installations).
+See [restore documentation](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html#restore-for-linux-package-installations).
 
 ### Backup and restore using non-packaged database
 
@@ -216,7 +216,7 @@ If you are using non-packaged database see [documentation on using non-packaged 
 
 ### Upload backups to remote (cloud) storage
 
-For details check [backup restore document of GitLab CE](https://gitlab.com/gitlab-org/gitlab-foss/blob/966f68b33e1f15f08e383ec68346ed1bd690b59b/doc/raketasks/backup_restore.md#upload-backups-to-remote-cloud-storage).
+For details check [backup documentation](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#upload-backups-to-a-remote-cloud-storage).
 
 ## Invoking Rake tasks
 

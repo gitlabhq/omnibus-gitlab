@@ -64,7 +64,7 @@ To update EE to JH:
 
 - If you installed GitLab using a deb/rpm package:
 
-  1. Take a [backup](https://docs.gitlab.com/ee/raketasks/backup_restore.html#back-up-gitlab).
+  1. Take a [backup](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html).
   1. Find the currently installed GitLab version:
 
      **For Debian/Ubuntu**
