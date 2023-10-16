@@ -42,6 +42,7 @@ dependency 'ngx_security_headers'
 
 build do
   cwd = "#{Omnibus::Config.source_dir}/nginx"
+  patch source: 'CVE-2023-44487.patch'
 
   command ['./auto/configure',
            "--prefix=#{install_dir}/embedded",
