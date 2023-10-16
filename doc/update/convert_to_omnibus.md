@@ -24,7 +24,7 @@ To convert your installation to using the Linux package:
 
 1. [Install GitLab using a Linux package](https://about.gitlab.com/install/).
 1. Copy the backup file to the directory `/var/opt/gitlab/backups/` of the new server.
-1. Restore the backup in the new installation ([detailed instructions](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-gitlab-installations)):
+1. Restore the backup in the new installation ([detailed instructions](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html#restore-for-linux-package-installations)):
 
    ```shell
    # This command will overwrite the contents of your GitLab database!
