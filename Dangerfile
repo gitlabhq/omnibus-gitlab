@@ -2,8 +2,9 @@
 
 require 'gitlab-dangerfiles'
 
-Gitlab::Dangerfiles.for_project(self) do |gitlab_dangerfiles|
+# Documentation reference: https://gitlab.com/gitlab-org/ruby/gems/gitlab-dangerfiles
+Gitlab::Dangerfiles.for_project(self, 'omnibus-gitlab') do |gitlab_dangerfiles|
   gitlab_dangerfiles.import_plugins
 
-  gitlab_dangerfiles.import_dangerfiles(except: %w[simple_roulette])
+  gitlab_dangerfiles.import_dangerfiles
 end
