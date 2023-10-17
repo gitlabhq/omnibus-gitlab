@@ -9,10 +9,8 @@ Set the title to: `Description of the original issue`
 ### Prior to starting the security release work
 
 - [ ] Read the [security process for developers] if you are not familiar with it.
-- [ ] Mark this [issue as related] to the Security Release tracking issue. You can find it on the topic of the `#releases` Slack channel.
 - Fill out the [Links section](#links):
   - [ ] Next to **Issue on Omnibus GitLab**, add a link to the `gitlab-org/omnibus-gitlab` issue that describes the security vulnerability.
-  - [ ] Next to **Security Release tracking issue**, add a link to the security release issue that will include this security issue.
 
 ### Development
 
@@ -27,11 +25,18 @@ After your merge request has been approved according to our approval guidelines,
 
 - [ ] Once the MR is ready to be merged, create MRs targeting the latest 3 stable branches
    * At this point, it might be easy to squash the commits from the MR into one
+   * Depending on when development is happening, you may need to wait for the last stable branch to be created. If the ~"security-notifications" label is applied to this issue, you will receive a ping when the branch is created.
 - [ ] Create each MR targeting the stable branch `X-Y-stable`, using the [Security Release merge request template].
    * Every merge request will have its own set of TODOs, so make sure to complete those.
 - [ ] On the "Related merge requests" section, ensure all MRs are linked to this issue.
    * This section should only list the merge requests created for this issue: One targeting `master` and the 3 backports.
 - [ ] If this issue requires less than 4 merge requests, post a message on the Security Release Tracking Issue and ping the Release Managers.
+
+#### Assigning to a release
+
+- [ ] When this issue is ready for release (all needed backports are approved and ready to be merged), apply the ~"security-target" label for it to be evaluated and linked to the next planned security release tracking issue.
+   * The `gitlab-release-tools-bot` evaluates and links issues with the label to the next planned security release tracking issue. If the bot finds the issue is not ready to be included in the security release, it will leave a comment on the issue explaining what needs to be done. 
+   * This issue will only be included in a security release if it is successfully linked to the security release tracking issue.
 
 #### Documentation and final details
 
@@ -48,7 +53,6 @@ After your merge request has been approved according to our approval guidelines,
 | Description | Link |
 | -------- | -------- |
 | Issue on [Omnibus GitLab](https://gitlab.com/gitlab-org/omnibus-gitlab/issues) | #TODO  |
-| Security Release tracking issue | #TODO  |
 
 #### Details
 
@@ -65,4 +69,4 @@ After your merge request has been approved according to our approval guidelines,
 [issue as related]: https://docs.gitlab.com/ee/user/project/issues/related_issues.html#adding-a-related-issue
 [security Release merge request template]: https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/.gitlab/merge_request_templates/Security%20Release.md
 
-/label ~security
+/labels ~security ~"security-notifications"
