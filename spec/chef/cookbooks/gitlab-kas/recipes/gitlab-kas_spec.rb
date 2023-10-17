@@ -612,24 +612,6 @@ RSpec.describe 'gitlab-kas' do
       end
     end
 
-    context 'when the certificate/key bundle is defined and websocket tunneling is enabled' do
-      before do
-        stub_gitlab_rb(
-          external_url: 'https://gitlab.example.com',
-          gitlab_kas: {
-            enable: true,
-            listen_websocket: true,
-            certificate_file: '/path/to/cert.pem',
-            key_file: '/path/to/key.pem',
-          }
-        )
-      end
-
-      it 'logs a warning' do
-        expect(chef_run).to run_ruby_block('websocket TLS termination')
-      end
-    end
-
     context 'log directory and runit group' do
       context 'default values' do
         it_behaves_like 'enabled logged service', 'gitlab-kas', true, { log_directory_owner: 'git' }

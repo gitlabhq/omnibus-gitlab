@@ -65,17 +65,6 @@ directory logging_settings[:log_directory] do
   recursive true
 end
 
-ruby_block 'websocket TLS termination' do
-  block do
-    message = [
-      "Enabling gitlab-kas API TLS termination and websocket tunnelling at the same time is not supported.",
-      "See <https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/issues/217>"
-    ]
-    LoggingHelper.warning(message.join("\n\n"))
-  end
-  only_if { node['gitlab_kas']['listen_websocket'] && node['gitlab_kas']['certificate_file'] && node['gitlab_kas']['key_file'] }
-end
-
 version_file 'Create version file for Gitlab KAS' do
   version_file_path File.join(working_dir, 'VERSION')
   version_check_cmd '/opt/gitlab/embedded/bin/gitlab-kas --version'
