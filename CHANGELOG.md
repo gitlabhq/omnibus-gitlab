@@ -3,6 +3,56 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.5.0 (2023-10-20)
+
+### Added (3 changes)
+
+- [Add settings to configure cronjob to sync finished builds to ClickHouse](gitlab-org/omnibus-gitlab@243c1668731fa0b363427cf2f64241f5517be8cc) ([merge request](gitlab-org/omnibus-gitlab!7169))
+- [Add Redis TLS settings for Rails](gitlab-org/omnibus-gitlab@987ae51381d6fdd48bffc0c0952b6ba419d5a215) ([merge request](gitlab-org/omnibus-gitlab!7151))
+- [Add Silent mode option to Geo promotion command](gitlab-org/omnibus-gitlab@863e617a40eac2bf82205df906cf8734ce38b523) ([merge request](gitlab-org/omnibus-gitlab!7102))
+
+### Fixed (7 changes)
+
+- [Make gitlab-redis-cli work when running behind SSL](gitlab-org/omnibus-gitlab@694194708687b84224e313db7ad6a4ea444ecdbb) ([merge request](gitlab-org/omnibus-gitlab!7151))
+- [Make get-redis-master command work when running behind SSL](gitlab-org/omnibus-gitlab@35770874243ccb0941d472b196e5e218c7e297e7) ([merge request](gitlab-org/omnibus-gitlab!7151))
+- [Support running Redis only over SSL](gitlab-org/omnibus-gitlab@66660c130f66c5039249403cdbcb711a80928fe5) ([merge request](gitlab-org/omnibus-gitlab!7151))
+- [Suppress Ruby experimental warning messages for Puma, Sidekiq](gitlab-org/omnibus-gitlab@30688f3941546029105d978df9e85aaea260d5f7) ([merge request](gitlab-org/omnibus-gitlab!7177))
+- [Fix unintialized constant exception handler error](gitlab-org/omnibus-gitlab@a3b93e5f7cbd6d4e8871219bca429ba3ba271f37) ([merge request](gitlab-org/omnibus-gitlab!7175))
+- [The gitlab-kas runit service should not be restarted in chef cookbooks](gitlab-org/omnibus-gitlab@ad5761e04849201365499c1cfc53345582edf9ed) ([merge request](gitlab-org/omnibus-gitlab!7144))
+- [Make Puma low-level handler return recommended status code](gitlab-org/omnibus-gitlab@d00fdf54a21f5058494a3c0d65626433217a70e7) ([merge request](gitlab-org/omnibus-gitlab!7161))
+
+### Changed (13 changes)
+
+- [Drop legacy unmigrated data checks](gitlab-org/omnibus-gitlab@f6ab1c8d23d8a2aca73c29e20564eb4e9dee1c4a) ([merge request](gitlab-org/omnibus-gitlab!7207))
+- [Update registry to v3.85.0-gitlab](gitlab-org/omnibus-gitlab@76c2213d52bf86a0ece2f87ea7ef735c6e03582b) ([merge request](gitlab-org/omnibus-gitlab!7205))
+- [Update gitlab-exporter from 13.2.0 to 13.4.1](gitlab-org/omnibus-gitlab@d6ca69e51f7317e944d7b2f2077095383afaa92e) ([merge request](gitlab-org/omnibus-gitlab!7167))
+- [Update Go from 1.20.8 to 1.20.10](gitlab-org/omnibus-gitlab@af91f5d44e0442774aa4c2aedca5746b0d7d0c98) ([merge request](gitlab-org/omnibus-gitlab!7201))
+- [Bump acme-client to version 2.0.15](gitlab-org/omnibus-gitlab@e5a044fc1b183e19f8e761a114e6338558e54c75) ([merge request](gitlab-org/omnibus-gitlab!7185))
+- [Bump consul to version 1.16.2](gitlab-org/omnibus-gitlab@693ea195ab2e479a8dc8990c42e6344e8a345cd3) ([merge request](gitlab-org/omnibus-gitlab!6612))
+- [Update container-registry from v3.83.0-gitlab to v3.84.0-gitlab](gitlab-org/omnibus-gitlab@3c937caf46dc2e7d75f4741f1f0a3919e5cd70c7) ([merge request](gitlab-org/omnibus-gitlab!7166))
+- [Update exiftool from 12.65 to 12.67](gitlab-org/omnibus-gitlab@dfe1cc440d958833d280b29b3c3189de8fb03978) ([merge request](gitlab-org/omnibus-gitlab!7173))
+- [Update Golang from 1.20.7 to 1.20.8](gitlab-org/omnibus-gitlab@8142e954b3575a8b3ce1148edc812a687a85379f) ([merge request](gitlab-org/omnibus-gitlab!7171))
+- [Update postgres_exporter from 0.13.2 to 0.14.0](gitlab-org/omnibus-gitlab@4d6ed82c19809a364b95fb058e5b5a5750177071) ([merge request](gitlab-org/omnibus-gitlab!7157))
+- [Update openssl from 1.1.1v to 1.1.1w](gitlab-org/omnibus-gitlab@983022c57ac48341d828031bfbf5faef8a0d3d25) ([merge request](gitlab-org/omnibus-gitlab!7145))
+- [Use XZ compression for DEB packages](gitlab-org/omnibus-gitlab@58ab1f380d7affb84a41eb6bb79ee68e14e91d2e) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/7128))
+- [Update gitlab-org/build/omnibus-mirror/alertmanager from 0.25.0 to 0.26.0](gitlab-org/omnibus-gitlab@b7af9aef0d6b10ea1bdbe710d123f66592785768) ([merge request](gitlab-org/omnibus-gitlab!7108))
+
+### Deprecated (1 change)
+
+- [Add deprecation message for openSUSE 15.4](gitlab-org/omnibus-gitlab@f4eb73ef6d3564f356947cabe9cf3059b86a9791) ([merge request](gitlab-org/omnibus-gitlab!7154))
+
+### Security (5 changes)
+
+- [Apply CVE-2023-44487 patch to NGINX](gitlab-org/omnibus-gitlab@df80aef13b9156837812b3d78f733d25df1f9e80) ([merge request](gitlab-org/omnibus-gitlab!7196))
+- [Update curl to v8.4.0](gitlab-org/omnibus-gitlab@81ae6735d144e6775f5b633640af4559121e7ce1) ([merge request](gitlab-org/omnibus-gitlab!7189))
+- [Mattermost Security Updates September 8, 2023](gitlab-org/omnibus-gitlab@46702c2aa6a5c2fbdf24a176a8e0415735e468e4)
+- [Consul RCE vulnerability `enable-script-checks`](gitlab-org/omnibus-gitlab@fe80bc2beef754bfe2b2a89c7716bb71eb24676e)
+- [ExifTool - Infinite loop when parsing BigTIFF files](gitlab-org/omnibus-gitlab@4eaa41160135087ab59138df3408036b9fcdab3d)
+
+### Other (1 change)
+
+- [Update Mattermost to 9.0.0](gitlab-org/omnibus-gitlab@fddabad069dad759b6f0937d66e88295530c28b0) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7168))
+
 ## 16.4.1 (2023-09-28)
 
 ### Security (3 changes)
