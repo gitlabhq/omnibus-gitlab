@@ -321,8 +321,8 @@ The following settings are affected in the `postgresql` block:
    postgresql['trust_auth_cidr_addresses'] = %w(127.0.0.1/24)
    postgresql['sql_user'] = "gitlab"
 
-   ##! SQL_USER_PASSWORD_HASH can be generated using the command `gitlab-ctl pg-password-md5 gitlab`,
-   ##! where `gitlab` is the name of the SQL user that connects to GitLab.
+   ##! SQL_USER_PASSWORD_HASH can be generated using the command `gitlab-ctl pg-password-md5 'gitlab'`,
+   ##! where 'gitlab' (single-quoted to avoid shell interpolation) is the name of the SQL user that connects to GitLab.
    postgresql['sql_user_password'] = "SQL_USER_PASSWORD_HASH"
 
    # force ssl on all connections defined in trust_auth_cidr_addresses and md5_auth_cidr_addresses
