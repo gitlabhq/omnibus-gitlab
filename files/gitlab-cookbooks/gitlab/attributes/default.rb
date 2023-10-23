@@ -427,6 +427,7 @@ default['gitlab']['gitlab_rails']['db_tcp_user_timeout'] = nil
 default['gitlab']['gitlab_rails']['db_application_name'] = nil
 
 default['gitlab']['gitlab_rails']['databases'] = {}
+default['gitlab']['gitlab_rails']['clickhouse_databases'] = {}
 
 # Automatic Database Reindexing
 # See https://docs.gitlab.com/omnibus/settings/database.html#automatic-database-reindexing

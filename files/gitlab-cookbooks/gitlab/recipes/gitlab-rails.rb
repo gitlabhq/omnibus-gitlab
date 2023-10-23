@@ -196,6 +196,18 @@ templatesymlink "Create a database.yml and create a symlink to Rails root" do
   sensitive true
 end
 
+templatesymlink "Create a clickhouse.yml and create a symlink to Rails root" do
+  link_from File.join(gitlab_rails_source_dir, "config/click_house.yml")
+  link_to File.join(gitlab_rails_etc_dir, "click_house.yml")
+  source "click_house.yml.erb"
+  owner "root"
+  group gitlab_group
+  mode "0640"
+  variables node['gitlab']['gitlab_rails'].to_hash
+  dependent_services.each { |svc| notifies :restart, svc }
+  sensitive true
+end
+
 redis_url = redis_helper.redis_url
 redis_sentinels = node['gitlab']['gitlab_rails']['redis_sentinels']
 redis_sentinels_password = node['gitlab']['gitlab_rails']['redis_sentinels_password']
