@@ -1,0 +1,16 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+production:
+  <% @clickhouse_databases.each do |database, attributes| %>
+  <%= database %>:
+    database: <%= quote(attributes['database']) %>
+    url: <%= quote(attributes['url']) %>
+    username: <%= quote(attributes['username']) %>
+    password: <%= quote(attributes['password']) %>
+    variables:
+      enable_http_compression: 1
+      date_time_input_format: basic # needed for CH cloud
+  <% end %>
+

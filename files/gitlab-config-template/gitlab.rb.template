@@ -765,6 +765,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['databases']['ci']['db_database'] = 'gitlabhq_production'
 # gitlab_rails['databases']['ci']['database_tasks'] = false
 
+### GitLab ClickHouse connection settings
+###! EXPERIMENTAL
+# gitlab_rails['clickhouse_databases']['main']['database'] = 'dbname'
+# gitlab_rails['clickhouse_databases']['main']['url'] = 'https://example.com/path'
+# gitlab_rails['clickhouse_databases']['main']['username'] = 'gitlab'
+# gitlab_rails['clickhouse_databases']['main']['password'] = 'password'
+
 ### GitLab Redis settings
 ###! Connect to your own Redis instance
 ###! Docs: https://docs.gitlab.com/omnibus/settings/redis.html
