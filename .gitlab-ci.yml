@@ -70,6 +70,7 @@ variables:
   SECURITY_PROJECT_PATH: 'gitlab-org/security/omnibus-gitlab'
   DEV_PROJECT_PATH: 'gitlab/omnibus-gitlab'
   QA_PROJECT_PATH: 'gitlab-org/build/omnibus-gitlab-mirror'
+  ARM64_RUNNER_TAG: 'arm64'
 
 .distribution-amd64-tags:
   - distribution-runner
@@ -77,7 +78,7 @@ variables:
 
 .distribution-arm64-tags:
   - distribution-runner
-  - arm64
+  - ${ARM64_RUNNER_TAG}
 
 .distribution-armhf-tags:
   - distribution-runner
