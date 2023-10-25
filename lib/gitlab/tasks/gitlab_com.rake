@@ -1,7 +1,9 @@
+require_relative '../build/check'
+require_relative '../util'
+require_relative '../build/info/deploy'
+require_relative '../build/info/package'
+require_relative '../deployer_helper'
 require_relative '../ohai_helper'
-require_relative '../deployer_helper.rb'
-require_relative "../util.rb"
-require_relative "../build/check"
 
 namespace :gitlab_com do
   desc 'Tasks related to gitlab.com.'
@@ -18,7 +20,7 @@ namespace :gitlab_com do
       next
     end
 
-    deploy_env = Build::Info.deploy_env
+    deploy_env = Build::Info::Deploy.environment
 
     if deploy_env.nil?
       puts 'Unable to determine which environment to deploy to, exiting...'
@@ -36,7 +38,7 @@ namespace :gitlab_com do
     trigger_ref = Gitlab::Util.get_env('DEPLOYER_TRIGGER_REF') || :master
 
     current_os = OhaiHelper.fetch_os_with_codename[0..1].join("-")
-    os_for_deployment = Build::Info::DEPLOYER_OS_MAPPING[Build::Info.deploy_env_key]
+    os_for_deployment = Build::Info::Deploy::OS_MAPPING[Build::Info::Deploy.environment_key]
     if current_os != os_for_deployment
       puts "Deployment to #{deploy_env} not to be triggered from this build (#{current_os})."
       next
