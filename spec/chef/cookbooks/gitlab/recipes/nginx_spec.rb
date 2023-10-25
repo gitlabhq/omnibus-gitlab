@@ -505,6 +505,15 @@ RSpec.describe 'nginx' do
       expect(chef_run).to render_file(gitlab_http_config).with_content('return 301 https://fauxhai.local:80$request_uri;')
     end
 
+    it 'creates a default VERSION file and restarts service' do
+      expect(chef_run).to create_version_file('Create version file for NGINX').with(
+        version_file_path: '/var/opt/gitlab/nginx/VERSION',
+        version_check_cmd: '/opt/gitlab/embedded/sbin/nginx -ver 2>&1'
+      )
+
+      expect(chef_run.version_file('Create version file for NGINX')).to notify('runit_service[nginx]').to(:restart)
+    end
+
     context 'when smartcard authentication is enabled' do
       let(:gitlab_smartcard_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-smartcard-http.conf' }
 

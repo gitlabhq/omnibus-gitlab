@@ -26,6 +26,12 @@ runit_service "nginx" do
   log_options logging_settings[:options]
 end
 
+version_file 'Create version file for NGINX' do
+  version_file_path File.join(node['gitlab']['nginx']['dir'], 'VERSION')
+  version_check_cmd '/opt/gitlab/embedded/sbin/nginx -ver 2>&1'
+  notifies :restart, 'runit_service[nginx]'
+end
+
 execute 'reload nginx' do
   command 'gitlab-ctl hup nginx'
   action :nothing
