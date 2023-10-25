@@ -1,4 +1,3 @@
-require_relative '../build/info/deploy'
 require_relative '../deployer_helper.rb'
 require_relative "../util.rb"
 
@@ -12,10 +11,10 @@ namespace :gitlab_com do
       exit
     end
 
-    deploy_env = Build::Info::Deploy.environment
+    deploy_env = Build::Info.deploy_env
     operating_systems = Build::Info::Package.file_list.map { |path| path.split("/")[1] }.uniq
 
-    unless operating_systems.include?(Build::Info::Deploy::OS_MAPPING[Build::Info::Deploy.environment_key])
+    unless operating_systems.include?(Build::Info::DEPLOYER_OS_MAPPING[Build::Info.deploy_env_key])
       puts "Deployment to #{deploy_env} not to be triggered from this build (#{operating_systems.join(',')})."
       exit
     end
