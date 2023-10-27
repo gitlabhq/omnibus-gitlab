@@ -997,3 +997,22 @@ local mirror that are no longer present in the corresponding GitLab repository.
 
 After the repository is synced, you can create a publication and distribution to
 make it available. See <https://docs.pulpproject.org/pulp_rpm/> for details.
+
+## Error: `E: connection refused to d20rj4el6vkp4c.cloudfront.net 443`
+
+When you install a package hosted on our package repository at `packages.gitlab.com`, your client will receive and follow a redirect to the CloudFront address `d20rj4el6vkp4c.cloudfront.net`. Servers in an air-gapped environment can receive the following errors: 
+
+```shell
+E: connection refused to d20rj4el6vkp4c.cloudfront.net 443
+```
+
+```shell
+Failed to connect to d20rj4el6vkp4c.cloudfront.net port 443: Connection refused
+```
+
+To resolve this issue, you have three options:
+
+- If you can allowlist by domain, add the endpoint `d20rj4el6vkp4c.cloudfront.net` to your firewall settings.
+- If you cannot allowlist by domain, add the [CloudFront IP address ranges](https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips) to your firewall settings. You must
+  keep this list synced with your firewall settings because they can change.
+- Manually download the package file and upload it to your server.
