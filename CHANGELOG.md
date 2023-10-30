@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.4.2 (2023-10-30)
+
+### Security (2 changes)
+
+- [Apply CVE-2023-44487 patch to NGINX](gitlab-org/security/omnibus-gitlab@f8c6d5b4f79d13c4db87925ad5f476a43fb56464) ([merge request](gitlab-org/security/omnibus-gitlab!381))
+- [Update curl to v8.4.0](gitlab-org/security/omnibus-gitlab@56b7cf4f033315e31a5dc765dcbefa46322f04c7) ([merge request](gitlab-org/security/omnibus-gitlab!383))
+
 ## 16.4.1 (2023-09-28)
 
 ### Security (3 changes)
