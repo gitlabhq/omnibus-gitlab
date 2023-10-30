@@ -115,6 +115,13 @@ No changes.
 
 - [Enable dual namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/omnibus-gitlab@6ddfb82c93158bdc25e3546625688e99cb400584) ([merge request](gitlab-org/omnibus-gitlab!7141))
 
+## 16.3.6 (2023-10-30)
+
+### Security (2 changes)
+
+- [Apply CVE-2023-44487 patch to NGINX](gitlab-org/security/omnibus-gitlab@5ee0faf8f90ecb15a9c4bb2dc6392eb96ce03631) ([merge request](gitlab-org/security/omnibus-gitlab!382))
+- [Update curl to v8.4.0](gitlab-org/security/omnibus-gitlab@4857a2153b226e77749c8e3b3182a247ceaef64c) ([merge request](gitlab-org/security/omnibus-gitlab!384))
+
 ## 16.3.5 (2023-09-28)
 
 ### Security (3 changes)
