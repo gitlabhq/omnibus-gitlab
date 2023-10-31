@@ -104,6 +104,17 @@ The certificate is renewed only if it expires in 30 days.
 For example, if you set it to renew on the 1st of every month at 00:00 and the
 certificate expires on the 31st, then the certificate will expire before it's renewed.
 
+Automatic renewals are managed with [go-crond](https://github.com/webdevops/go-crond).
+If wanted, one can pass [CLI arguments](https://github.com/webdevops/go-crond#usage) to
+go-crond by editing the `/etc/gitlab/gitlab.rb`:
+
+```ruby
+crond['flags'] = {
+  'log.json' = true,
+  'server.bind' = ':8040'
+}
+```
+
 To disable the automatic renewal:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
