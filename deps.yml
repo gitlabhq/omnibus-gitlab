@@ -220,6 +220,14 @@ dependencies:
           tag_filter:
             matching: 'curl-(\d+)_(\d+)_(\d+)'
             sort_as: '$1.$2.$3'
+      # pcre2
+      https://github.com/PCRE2Project/pcre2.git:
+        replace_in_files:
+        - filename: config/software/pcre2.rb
+          pattern: "Gitlab::Version.new\\('pcre2', '(\\S+)'\\)"
+          tag_filter:
+            matching: 'pcre2-(\d+).(\d+)'
+            sort_as: '$1.$2.0'
       # deps that need updated filtering to work https://github.com/dropseed/deps-git/issues/2
       # krb5
       # https://github.com/krb5/krb5.git:
