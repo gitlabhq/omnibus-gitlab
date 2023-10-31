@@ -20,11 +20,13 @@ directory node["crond"]["cron_d"] do
   owner "root"
 end
 
+crond_flags = CrondHelper.new(node).flags
+
 runit_service "crond" do
   owner "root"
   group "root"
   options({
-    cron_d: node['crond']['cron_d'],
+    flags: crond_flags,
     log_directory: logging_settings[:log_directory],
     log_user: logging_settings[:runit_owner],
     log_group: logging_settings[:runit_group]
