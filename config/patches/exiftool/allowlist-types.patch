@@ -1,18 +1,19 @@
 diff --git a/lib/Image/ExifTool.pm b/lib/Image/ExifTool.pm
-index e22e73c5..855c20db 100644
+index e9377841..c0d72b2c 100644
 --- a/lib/Image/ExifTool.pm
 +++ b/lib/Image/ExifTool.pm
-@@ -190,18 +190,10 @@ $defaultLang = 'en';    # default language
+@@ -190,19 +190,10 @@ $defaultLang = 'en';    # default language
  # 2) Put types with weak file signatures at end of list to avoid false matches
  # 3) PLIST must be in this list for the binary PLIST format, although it may
  #    cause a file to be checked twice for XML
 -@fileTypes = qw(JPEG EXV CRW DR4 TIFF GIF MRW RAF X3F JP2 PNG MIE MIFF PS PDF
 -                PSD XMP BMP WPG BPG PPM RIFF AIFF ASF MOV MPEG Real SWF PSP FLV
 -                OGG FLAC APE MPC MKV MXF DV PMP IND PGF ICC ITC FLIR FLIF FPF
--                LFP HTML VRD RTF FITS XCF DSS QTIF FPX PICT ZIP GZIP PLIST RAR
--                7Z BZ2 CZI TAR EXE EXR HDR CHM LNK WMF AVC DEX DPX RAW Font RSRC
--                M2TS MacOS PHP PCX DCX DWF DWG DXF WTV Torrent VCard LRI R3D AA
--                PDB PFM2 MRC LIF JXL MOI ISO ALIAS JSON MP3 DICOM PCD ICO TXT);
+-                LFP HTML VRD RTF FITS XISF XCF DSS QTIF FPX PICT ZIP GZIP PLIST
+-                RAR 7Z BZ2 CZI TAR EXE EXR HDR CHM LNK WMF AVC DEX DPX RAW Font
+-                RSRC M2TS MacOS PHP PCX DCX DWF DWG DXF WTV Torrent VCard LRI
+-                R3D AA PDB PFM2 MRC LIF JXL MOI ISO ALIAS JSON MP3 DICOM PCD ICO
+-                TXT);
 +@fileTypes = qw(JPEG TIFF);
  
  # file types that we can write (edit)
@@ -23,7 +24,7 @@ index e22e73c5..855c20db 100644
  my %writeTypes; # lookup for writable file types (hash filled if required)
  
  # file extensions that we can't write for various base types
-@@ -222,344 +214,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
+@@ -223,345 +214,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
  # (if extension may be more than one type, the type is a list where
  #  the writable type should come first if it exists)
  %fileTypeLookup = (
@@ -350,6 +351,7 @@ index e22e73c5..855c20db 100644
 -    X3F  => ['X3F',  'Sigma RAW format'],
 -    XCF  => ['XCF',  'GIMP native image format'],
 -    XHTML=> ['HTML', 'Extensible HyperText Markup Language'],
+-    XISF => ['XISF', 'Extensible Image Serialization Format'],
 -    XLA  => ['FPX',  'Microsoft Excel Add-in'],
 -    XLAM => [['ZIP','FPX'], 'Office Open XML Spreadsheet Add-in Macro-enabled'],
 -    XLS  => ['FPX',  'Microsoft Excel Spreadsheet'],
