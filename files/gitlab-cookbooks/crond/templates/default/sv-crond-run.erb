@@ -6,4 +6,4 @@ exec 2>&1
 
 exec chpst -P \
   /opt/gitlab/embedded/bin/go-crond \
-    --include=<%= @options[:cron_d] %>
+    <%= @options[:flags] %>

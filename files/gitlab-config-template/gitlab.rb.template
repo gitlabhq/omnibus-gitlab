@@ -3209,7 +3209,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # patroni['tls_verify'] = true
 
 ################################################################################
-# Consul (EEP only)
+# Consul (EE only)
 ################################################################################
 # consul['enable'] = false
 # consul['dir'] = '/var/opt/gitlab/consul'
@@ -3327,7 +3327,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #### encoded with base64
 # gitlab_rails['service_desk_email_auth_token'] = nil
 
-################################################################################
+#################################################################################
 ## Spamcheck (EE only)
 #################################################################################
 
@@ -3349,3 +3349,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/cers'
 # }
 # spamcheck['classifier']['log_directory'] = "/var/log/gitlab/spam-classifier"
+
+#################################################################################
+## (Go-)Crond
+#################################################################################
+# crond['log_directory'] = '/var/log/gitlab/crond'
+# crond['cron_d'] = '/var/opt/gitlab/crond'
+# crond['flags'] = {}
