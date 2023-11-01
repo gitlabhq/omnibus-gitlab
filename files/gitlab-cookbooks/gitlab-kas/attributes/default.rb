@@ -43,3 +43,18 @@ default['gitlab_kas']['env'] = {
 }
 
 default['gitlab-kas'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab_kas'].to_h }, "node['gitlab-kas']", "node['gitlab_kas']")
+
+# Defaults of the following settings are computed from `gitlab_rails`, and are
+# set in the library. If a new key is added here that needs to be computed from
+# the Rails counterpart, make sure it is added to the list in the library too
+default['gitlab_kas']['redis_socket'] = nil
+default['gitlab_kas']['redis_host'] = nil
+default['gitlab_kas']['redis_port'] = nil
+default['gitlab_kas']['redis_password'] = nil
+default['gitlab_kas']['redis_sentinels'] = nil
+default['gitlab_kas']['redis_sentinels_master_name'] = nil
+default['gitlab_kas']['redis_sentinels_password'] = nil
+default['gitlab_kas']['redis_ssl'] = nil
+default['gitlab_kas']['redis_tls_ca_cert_file'] = nil
+default['gitlab_kas']['redis_tls_client_cert_file'] = nil
+default['gitlab_kas']['redis_tls_client_key_file'] = nil

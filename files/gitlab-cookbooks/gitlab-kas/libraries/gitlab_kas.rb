@@ -25,6 +25,7 @@ module GitlabKas
       parse_gitlab_kas_enabled
       parse_gitlab_kas_external_url
       parse_gitlab_kas_internal_url
+      parse_redis_settings
     end
 
     def parse_address
@@ -103,6 +104,26 @@ module GitlabKas
 
       private_api_secret_key = Base64.strict_decode64(Gitlab['gitlab_kas']['private_api_secret_key'])
       raise "gitlab_kas['private_api_secret_key'] should be exactly 32 bytes" if private_api_secret_key.length != 32
+    end
+
+    def parse_redis_settings
+      settings_copied_from_gitlab_rails = %w[
+        redis_socket
+        redis_host
+        redis_port
+        redis_password
+        redis_sentinels
+        redis_sentinels_password
+        redis_ssl
+        redis_tls_ca_cert_file
+        redis_tls_client_cert_file
+        redis_tls_client_key_file
+      ]
+      settings_copied_from_gitlab_rails.each do |setting|
+        Gitlab['gitlab_kas'][setting] = Gitlab['gitlab_rails'][setting] || Gitlab['node']['gitlab']['gitlab_rails'][setting] unless Gitlab['gitlab_kas'].key?(setting)
+      end
+
+      Gitlab['gitlab_kas']['redis_sentinels_master_name'] = Gitlab['redis']['master_name'] || Gitlab['node']['redis']['master_name'] unless Gitlab['gitlab_kas'].key?('redis_sentinels_master_name')
     end
 
     private
