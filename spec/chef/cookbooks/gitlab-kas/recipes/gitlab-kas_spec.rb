@@ -714,6 +714,6 @@ RSpec.describe 'gitlab-kas' do
   def chef_run_load_yaml_template(chef_run, path)
     template = chef_run.template(path)
     file_content = ChefSpec::Renderer.new(chef_run, template).content
-    YAML.safe_load(file_content, [], [], true, symbolize_names: true)
+    YAML.safe_load(file_content, aliases: true, symbolize_names: true)
   end
 end

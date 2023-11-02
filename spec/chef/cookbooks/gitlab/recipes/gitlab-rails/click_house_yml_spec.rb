@@ -5,7 +5,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
     let(:chef_run) { ChefSpec::SoloRunner.new(step_into: 'templatesymlink').converge('gitlab::default') }
     let(:clickhouse_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/click_house.yml') }
     let(:clickhouse_yml_file_content) { ChefSpec::Renderer.new(chef_run, clickhouse_yml_template).content }
-    let(:clickhouse_yml) { YAML.safe_load(clickhouse_yml_file_content, [], [], true, symbolize_names: true) }
+    let(:clickhouse_yml) { YAML.safe_load(clickhouse_yml_file_content, aliases: true, symbolize_names: true) }
 
     before do
       allow(Gitlab).to receive(:[]).and_call_original

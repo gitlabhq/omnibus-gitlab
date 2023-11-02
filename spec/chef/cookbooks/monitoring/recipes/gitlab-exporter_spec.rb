@@ -52,9 +52,7 @@ RSpec.describe 'monitoring::gitlab-exporter' do
 
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
         .with_content { |content|
-          # Not disabling this Cop fails the test with:
-          # Psych::BadAlias: Unknown alias: db_common
-          settings = YAML.load(content) # rubocop:disable Security/YAMLLoad
+          settings = YAML.safe_load(content, aliases: true)
           expect(settings.dig('server', 'name')).to eq('webrick')
           expect(settings.dig('probes', 'database')).not_to be_nil
           expect(settings.dig('probes', 'ruby')).not_to be_nil
@@ -109,9 +107,7 @@ RSpec.describe 'monitoring::gitlab-exporter' do
     it 'populates TLS related settings in config file' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
         .with_content { |content|
-          # Not disabling this Cop fails the test with:
-          # Psych::BadAlias: Unknown alias: db_common
-          settings = YAML.load(content) # rubocop:disable Security/YAMLLoad
+          settings = YAML.safe_load(content, aliases: true)
           expect(settings.dig('server', 'tls_enabled')).to be_truthy
           expect(settings.dig('server', 'listen_address')).to eq('0.0.0.0')
           expect(settings.dig('server', 'listen_port')).to eq(8443)
@@ -174,7 +170,7 @@ RSpec.describe 'monitoring::gitlab-exporter' do
     it 'adds tranport options to elasticsearch config' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
         .with_content { |content|
-          transport_options = YAML.load(content) # rubocop:disable Security/YAMLLoad
+          transport_options = YAML.safe_load(content, aliases: true)
             .dig('probes', 'elasticsearch', 'opts').first['options']
           expect(transport_options).to eq({ 'headers' => { 'Authorization' => authorization } })
         }
