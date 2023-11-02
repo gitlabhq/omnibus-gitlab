@@ -14,7 +14,7 @@ dependencies:
   settings:
     gitlab_labels:
       - group::distribution
-      - section::enablement
+      - section::core platform
       - devops::systems
       - type::maintenance
       - maintenance::dependency
