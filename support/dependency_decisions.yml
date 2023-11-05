@@ -311,3 +311,10 @@
     :why: https://github.com/hashicorp/hcdiag/blob/v0.5.1/LICENSE
     :versions: [ v0.5.1 ]
     :when: 2023-09-21 13:01:15.019321901 Z
+- - :license
+  - "nhooyr.io/websocket"
+  - ISC
+  - :who: Mikhail Mazurskiy
+    :why: https://github.com/nhooyr/websocket/blob/v1.8.10/LICENSE.txt
+    :versions: [ v1.8.10 ]
+    :when: 2023-11-05 02:20:00.000000000 Z
