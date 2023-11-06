@@ -72,6 +72,7 @@ RSpec.describe 'pgbouncer' do
         expect(content).to match(/^listen_addr = 0\.0\.0\.0$/)
         expect(content).to match(/^listen_port = 6432$/)
         expect(content).to match(/^pool_mode = transaction$/)
+        expect(content).to match(/^max_prepared_statements = 0$/)
         expect(content).to match(/^server_reset_query = DISCARD ALL$/)
         expect(content).to match(/^application_name_add_host = 1$/)
         expect(content).to match(/^max_client_conn = 2048$/)
@@ -90,6 +91,7 @@ RSpec.describe 'pgbouncer' do
         expect(content).to match(/^admin_users = gitlab-psql, postgres, pgbouncer$/)
         expect(content).to match(/^stats_users = gitlab-psql, postgres, pgbouncer$/)
         expect(content).to match(/^ignore_startup_parameters = extra_float_digits$/)
+        expect(content).to match(/^track_extra_parameters = IntervalStyle$/)
         expect(content).to match(%r{^unix_socket_dir = /var/opt/gitlab/pgbouncer$})
         expect(content).to match(%r{^%include /var/opt/gitlab/pgbouncer/databases.ini})
         expect(content).to match(/^unix_socket_mode = 0777$/)
@@ -120,10 +122,12 @@ RSpec.describe 'pgbouncer' do
         expect(content).to match(/^autodb_idle_timeout = 3600$/)
         expect(content).to match(/^suspend_timeout = 10$/)
         expect(content).to match(/^idle_transaction_timeout = 0$/)
+        expect(content).to match(/^cancel_wait_timeout = 10$/)
         expect(content).to match(/^pkt_buf = 4096$/)
         expect(content).to match(/^listen_backlog = 128$/)
         expect(content).to match(/^sbuf_loopcnt = 5$/)
         expect(content).to match(/^max_packet_size = 2147483647$/)
+        expect(content).to match(/^so_reuseport = 0$/)
         expect(content).to match(/^tcp_defer_accept = 0$/)
         expect(content).to match(/^tcp_socket_buffer = 0$/)
         expect(content).to match(/^tcp_keepalive = 1$/)
@@ -141,6 +145,7 @@ RSpec.describe 'pgbouncer' do
         expect(content).not_to match(%r{^server_tls_cert_file =})
         expect(content).not_to match(%r{^max_db_connections =})
         expect(content).not_to match(%r{^max_user_connections =})
+        expect(content).not_to match(%r{^auth_dbname =})
       }
     end
 
@@ -222,6 +227,24 @@ RSpec.describe 'pgbouncer' do
           .with(user: 'fakeuser', group: 'gitlab-psql')
       end
     end
+
+    context 'peers' do
+      it 'configures the peers section' do
+        stub_gitlab_rb(
+          pgbouncer: {
+            enable: true,
+            peers: {
+              1 => { host: 'host1', port: '9001' },
+              2 => { host: 'host2', port: '9002' },
+            }
+          }
+        )
+        expect(chef_run).to render_file(pgbouncer_ini).with_content { |content|
+          expect(content).to match(%r{^1 = host=host1 port=9001$})
+          expect(content).to match(%r{^2 = host=host2 port=9002$})
+        }
+      end
+    end
   end
 
   context 'authentication' do
@@ -233,13 +256,15 @@ RSpec.describe 'pgbouncer' do
           pgbouncer: {
             enable: true,
             auth_hba_file: '/fake/hba_file',
-            auth_query: 'SELECT * FROM FAKETABLE'
+            auth_query: 'SELECT * FROM FAKETABLE',
+            auth_dbname: 'fakedb',
           }
         }
       )
       expect(chef_run).to render_file(pgbouncer_ini).with_content { |content|
         expect(content).to match(%r{^auth_hba_file = /fake/hba_file$})
         expect(content).to match(/^auth_query = SELECT \* FROM FAKETABLE$/)
+        expect(content).to match(/^auth_dbname = fakedb$/)
       }
     end
 
