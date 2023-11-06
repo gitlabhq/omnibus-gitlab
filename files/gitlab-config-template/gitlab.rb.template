@@ -3026,6 +3026,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['listen_addr'] = '0.0.0.0'
 # pgbouncer['listen_port'] = '6432'
 # pgbouncer['pool_mode'] = 'transaction'
+# pgbouncer['max_prepared_statements'] = 0
 # pgbouncer['server_reset_query'] = 'DISCARD ALL'
 # pgbouncer['application_name_add_host'] = '1'
 # pgbouncer['max_client_conn'] = '2048'
@@ -3042,6 +3043,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['admin_users'] = %w(gitlab-psql postgres pgbouncer)
 # pgbouncer['stats_users'] = %w(gitlab-psql postgres pgbouncer)
 # pgbouncer['ignore_startup_parameters'] = 'extra_float_digits'
+# pgbouncer['track_extra_parameters'] = %w(IntervalStyle)
 # pgbouncer['databases'] = {
 #   DATABASE_NAME: {
 #     host: HOSTNAME,
@@ -3058,6 +3060,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['unix_socket_group'] = nil
 # pgbouncer['auth_type'] = 'md5'
 # pgbouncer['auth_hba_file'] = nil
+# pgbouncer['auth_dbname'] = nil
 # pgbouncer['auth_query'] = 'SELECT username, password FROM public.pg_shadow_lookup($1)'
 # pgbouncer['users'] = {
 #   USERNAME: {
@@ -3088,10 +3091,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['autodb_idle_timeout'] = 3600
 # pgbouncer['suspend_timeout'] = 10
 # pgbouncer['idle_transaction_timeout'] = 0
+# pgbouncer['cancel_wait_timeout'] = 10
 # pgbouncer['pkt_buf'] = 4096
 # pgbouncer['listen_backlog'] = 128
 # pgbouncer['sbuf_loopcnt'] = 5
 # pgbouncer['max_packet_size'] = 2147483647
+# pgbouncer['so_reuseport'] = 0
 # pgbouncer['tcp_defer_accept'] = 0
 # pgbouncer['tcp_socket_buffer'] = 0
 # pgbouncer['tcp_keepalive'] = 1
@@ -3099,6 +3104,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # pgbouncer['tcp_keepidle'] = 0
 # pgbouncer['tcp_keepintvl'] = 0
 # pgbouncer['disable_pqexec'] = 0
+# default['pgbouncer']['peers'] = {}
 
 ## Pgbouncer client TLS options
 # pgbouncer['client_tls_sslmode'] = 'disable'
