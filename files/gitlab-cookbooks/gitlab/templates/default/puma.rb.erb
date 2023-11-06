@@ -71,7 +71,7 @@ directory '<%= @working_directory %>'
 
 workers <%= @worker_processes %>
 
-require_relative "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/cluster/lifecycle_events"
+require "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/cluster/lifecycle_events"
 
 on_restart do
   # Signal application hooks that we're about to restart
@@ -113,22 +113,16 @@ worker_timeout <%= @worker_timeout %>
 wait_for_less_busy_worker ENV.fetch('PUMA_WAIT_FOR_LESS_BUSY_WORKER', 0.001).to_f
 
 # Use customised JSON formatter for Puma log
-require_relative "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/puma_logging/json_formatter"
+require "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/puma_logging/json_formatter"
 
 json_formatter = Gitlab::PumaLogging::JSONFormatter.new
 log_formatter do |str|
     json_formatter.call(str)
 end
 
+require "<%= @install_dir %>/embedded/service/gitlab-rails/lib/gitlab/puma/error_handler"
+error_handler = Gitlab::Puma::ErrorHandler.new(ENV['RAILS_ENV'] == 'production')
+
 lowlevel_error_handler do |ex, env, status_code|
-  # Puma v6.4.0 added the status_code argument in
-  # https://github.com/puma/puma/pull/3094
-  status_code ||= 500
-
-  if Raven.configuration.capture_allowed?
-    Raven.capture_exception(ex, tags: { 'handler': 'puma_low_level' }, extra: { puma_env: env, status_code: status_code })
-  end
-
-  # note the below is just a Rack response
-  [status_code, {}, ["An error has occurred and reported in the system's low-level error handler."]]
+  error_handler.execute(ex, env, status_code)
 end
