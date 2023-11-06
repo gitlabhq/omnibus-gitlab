@@ -4,9 +4,10 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Omnibus GitLab Documentation **(FREE SELF)**
+# Linux package documentation **(FREE SELF)**
 
-Omnibus GitLab is a way to package different services and tools required to run GitLab, so that most users can install it without laborious configuration.
+The Linux package has different services and tools required to run GitLab. Most users can install it without laborious
+configuration.
 
 ## Package information
 
@@ -20,7 +21,7 @@ Omnibus GitLab is a way to package different services and tools required to run 
 
 ## Installation
 
-For installation details, see [Installing Omnibus GitLab](installation/index.md).
+For installation details, see [Install GitLab with the Linux package](installation/index.md).
 
 ## Running on a low-resource device (like a Raspberry Pi)
 
