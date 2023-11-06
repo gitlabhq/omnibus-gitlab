@@ -82,7 +82,7 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
       )
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
         expect(content).to match(/lowlevel_error_handler/)
-        expect(content).to include('Raven.capture_exception')
+        expect(content).to include('require "/opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/puma/error_handler"')
       }
     end
 
