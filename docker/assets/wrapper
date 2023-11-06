@@ -19,7 +19,7 @@ function failed_pg_upgrade() {
 
 function clean_stale_pids() {
     # cleanup known pid/socket files
-    for x in /opt/gitlab/sv /run ; do
+    for x in /opt/gitlab/sv /run /var/opt/gitlab ; do
         # find
         #  - any (s)ocket or regular (f)ile
         #  - by the name of "*.pid" or "socket.?"
