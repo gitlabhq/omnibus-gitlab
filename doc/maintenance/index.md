@@ -155,3 +155,68 @@ To remove the page, you simply run `sudo gitlab-ctl deploy-page down`. You can a
 As a side note, if you would like to restrict logging into GitLab and restrict
 changes to projects, you can [set projects as read-only](https://docs.gitlab.com/ee/administration/troubleshooting/gitlab_rails_cheat_sheet.html#make-a-project-read-only-can-only-be-done-in-the-console)
 , then put up the `Deploy in progress` page.
+
+## Rotate the secrets file
+
+If required for security purposes, you can rotate the `/etc/gitlab/gitlab-secrets.json` secrets file. In this file:
+
+- Do not rotate the `gitlab_rails` secrets because it contains the database encryption keys. If this secret is rotated, you see the same
+  behavior as [when the secrets file is lost](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#when-the-secrets-file-is-lost).
+- You can rotate all other secrets.
+
+If you have multiple nodes in your GitLab environment, choose one of your Rails node to perform the initial steps.
+
+To rotate the secrets:
+
+1. [Verify that the database values can be decrypted](https://docs.gitlab.com/ee/administration/raketasks/check.html#verify-database-values-can-be-decrypted-using-the-current-secrets) and either make note of any decryption errors shown, or resolve
+   them before proceeding.
+
+1. Recommended. Extract your current secrets for `gitlab_rails`. Save the output because you need this later:
+
+   ```shell
+   sudo grep "secret_key_base\|db_key_base\|otp_key_base\|encrypted_settings_key_base\|openid_connect_signing_key\|ci_jwt_signing_key" /etc/gitlab/gitlab-secrets.json
+   ```
+
+1. Move your current secrets file to a different location:
+
+   ```shell
+   sudo mv /etc/gitlab/gitlab-secrets.json /etc/gitlab/gitlab-secrets.json.old
+   ```
+
+1. [Reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#reconfigure-a-linux-package-installation). GitLab will
+   then generate a new `/etc/gitlab/gitlab-secrets.json` file with new secret values.
+
+1. If you extracted the previous secrets for `gitlab_rails`, edit the new `/etc/gitlab/gitlab-secrets.json` file and replace the key/value pairs
+   under `gitlab_rails` with the previous secrets output obtained earlier.
+
+1. [Reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#reconfigure-a-linux-package-installation) again
+   so the changes made to the secrets file are applied.
+
+1. [Restart GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#restart-a-linux-package-installation) to ensure all services
+   are using the new secrets.
+
+1. If you have multiple nodes in your GitLab environment, you must copy the secrets to all of your other nodes:
+
+   1. On all other nodes, move your current secrets file to a different location:
+   
+      ```shell
+      sudo mv /etc/gitlab/gitlab-secrets.json /etc/gitlab/gitlab-secrets.json.old
+      ```
+   
+   1. Copy the new `/etc/gitlab/gitlab-secrets.json` file from your Rails node onto all of your other GitLab nodes.
+
+   1. On all other nodes, [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#reconfigure-a-linux-package-installation)
+      on each node.
+
+   1. On all other nodes, [restart GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#restart-a-linux-package-installation) on each 
+      node to ensure all services are using the new secrets.
+
+   1. On all nodes, run a checksum match on the `/etc/gitlab/gitlab-secrets.json` file to confirm that the secrets match:
+
+      ```shell
+      sudo md5sum /etc/gitlab/gitlab-secrets.json
+      ```
+
+1. [Verify that the database values can be decrypted](https://docs.gitlab.com/ee/administration/raketasks/check.html#verify-database-values-can-be-decrypted-using-the-current-secrets). The output should match with the previous execution.
+  
+1. Confirm that GitLab is working as expected. If it is, it should be safe to delete the old secrets.
