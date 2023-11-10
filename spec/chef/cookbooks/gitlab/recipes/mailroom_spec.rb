@@ -26,7 +26,7 @@ RSpec.describe 'gitlab::mailroom' do
   shared_examples 'renders Microsoft Graph config' do
     let(:gitlab_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml') }
     let(:gitlab_yml_file_content) { ChefSpec::Renderer.new(chef_run, gitlab_yml_template).content }
-    let(:gitlab_yml) { YAML.safe_load(gitlab_yml_file_content, [], [], true, symbolize_names: true) }
+    let(:gitlab_yml) { YAML.safe_load(gitlab_yml_file_content, aliases: true, symbolize_names: true) }
     let(:inbox_options) do
       {
         tenant_id: 'MY-TENANT-ID',
@@ -58,7 +58,7 @@ RSpec.describe 'gitlab::mailroom' do
   shared_examples 'configured sidekiq delivery method' do
     let(:gitlab_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml') }
     let(:gitlab_yml_file_content) { ChefSpec::Renderer.new(chef_run, gitlab_yml_template).content }
-    let(:gitlab_yml) { YAML.safe_load(gitlab_yml_file_content, [], [], true, symbolize_names: true) }
+    let(:gitlab_yml) { YAML.safe_load(gitlab_yml_file_content, aliases: true, symbolize_names: true) }
 
     before do
       stub_gitlab_rb(
@@ -81,7 +81,7 @@ RSpec.describe 'gitlab::mailroom' do
   shared_examples 'configured webhook delivery method' do
     let(:gitlab_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/gitlab.yml') }
     let(:gitlab_yml_file_content) { ChefSpec::Renderer.new(chef_run, gitlab_yml_template).content }
-    let(:gitlab_yml) { YAML.safe_load(gitlab_yml_file_content, [], [], true, symbolize_names: true) }
+    let(:gitlab_yml) { YAML.safe_load(gitlab_yml_file_content, aliases: true, symbolize_names: true) }
 
     before do
       configured_mailroom = config_sections.each_with_object({}) do |config_section, memo|

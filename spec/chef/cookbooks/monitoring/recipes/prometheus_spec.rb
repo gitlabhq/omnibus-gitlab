@@ -383,7 +383,7 @@ RSpec.describe 'monitoring::prometheus' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:prometheus_yml_template) { chef_run.file('/var/opt/gitlab/prometheus/prometheus.yml') }
   let(:prometheus_yml_file_content) { ChefSpec::Renderer.new(chef_run, prometheus_yml_template).content }
-  let(:prometheus_yml) { YAML.safe_load(prometheus_yml_file_content, [], [], true, symbolize_names: true) }
+  let(:prometheus_yml) { YAML.safe_load(prometheus_yml_file_content, aliases: true, symbolize_names: true) }
 
   let(:default_vars) do
     {

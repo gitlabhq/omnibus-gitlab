@@ -309,7 +309,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
     context 'with TLS settings' do
       let(:resque_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/resque.yml') }
       let(:resque_yml_file_content) { ChefSpec::Renderer.new(chef_run, resque_yml_template).content }
-      let(:resque_yml) { YAML.safe_load(resque_yml_file_content, [], [], true, symbolize_names: true) }
+      let(:resque_yml) { YAML.safe_load(resque_yml_file_content, aliases: true, symbolize_names: true) }
 
       before do
         stub_gitlab_rb(
