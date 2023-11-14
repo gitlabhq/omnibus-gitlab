@@ -1,7 +1,7 @@
 GIT
   remote: https://gitlab.com/gitlab-org/omnibus.git
-  revision: 358f4af204fe9b2899ab99e0c8975b97c13dddf5
-  tag: 9.0.19.0
+  revision: bed44a1bd07586f2338ffc04e9fc25b74154ad63
+  tag: 9.0.19.1
   specs:
     omnibus (9.0.19)
       aws-sdk-s3 (~> 1.116.0)

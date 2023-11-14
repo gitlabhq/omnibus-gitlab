@@ -277,7 +277,7 @@ package :rpm do
   signing_passphrase Gitlab::Util.get_env('GPG_PASSPHRASE')
 
   # Enable XZ compression if selected
-  compress_xz = Gitlab::Util.get_env('COMPRESS_XZ') || 'false'
+  compress_xz = Gitlab::Util.get_env('COMPRESS_XZ') || 'true'
   if compress_xz == 'true'
     compression_type :xz
     compression_level 6
