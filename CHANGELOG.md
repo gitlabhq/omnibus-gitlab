@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.5.2 (2023-11-14)
+
+### Changed (1 change)
+
+- [Update postgres_exporter from 0.14.0 to 0.15.0](gitlab-org/omnibus-gitlab@868f34004db73bbfc2fc30a7d01ea92a8952a9e0) ([merge request](gitlab-org/omnibus-gitlab!7228))
+
 ## 16.5.1 (2023-10-30)
 
 No changes.
