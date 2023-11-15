@@ -117,7 +117,7 @@ below for details:
 
 ## Build packages for other operating systems
 
-Prerequisite:
+Prerequisites:
 
 - You must have permission to push branches to the `omnibus-gitlab` [release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab).
 
