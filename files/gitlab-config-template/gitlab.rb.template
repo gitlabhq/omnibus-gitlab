@@ -3012,7 +3012,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 # Pgbouncer (EE only)
-# See [GitLab PgBouncer documentation](http://docs.gitlab.com/omnibus/settings/database.html#enabling-pgbouncer-ee-only)
+# See [GitLab PgBouncer documentation](https://docs.gitlab.com/ee/administration/postgresql/pgbouncer.html)
 # See the [PgBouncer page](https://pgbouncer.github.io/config.html) for details
 ################################################################################
 # pgbouncer['enable'] = false
