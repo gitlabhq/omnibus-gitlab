@@ -41,6 +41,11 @@ class RailsMigrationHelper
       db_socket
     ).collect { |attribute| attributes_node[attribute] }
 
+    # To trigger a db:migrate run when new databases are introduced, so that
+    # those schema is populated in them.
+    database_names = attributes_node['databases']&.select { |_, details| details['enable'] }&.keys
+    connection_attributes << database_names if database_names
+
     Digest::MD5.hexdigest(Marshal.dump(connection_attributes))
   end
 end
