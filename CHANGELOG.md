@@ -3,6 +3,41 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.6.0 (2023-11-15)
+
+### Added (4 changes)
+
+- [Add support for new pgbouncer settings](gitlab-org/omnibus-gitlab@974974af884125bccec144282d2193a844a43baa) ([merge request](gitlab-org/omnibus-gitlab!7219))
+- [Add support for go-crond flags](gitlab-org/omnibus-gitlab@6688201fa652096a475fe62c6bab2705b56f3dea) ([merge request](gitlab-org/omnibus-gitlab!7220))
+- [Add support for configuring ClickHouse databases](gitlab-org/omnibus-gitlab@fcaa2ca36cba1273d98e1705bc64574cb4a7107c) ([merge request](gitlab-org/omnibus-gitlab!7179))
+- [Add Redis TLS settings for KAS](gitlab-org/omnibus-gitlab@b27aa99c06683b0916dab0be9efebf7c58d9eb9f) ([merge request](gitlab-org/omnibus-gitlab!7180))
+
+### Fixed (1 change)
+
+- [Restart NGINX on version change](gitlab-org/omnibus-gitlab@740875f52171c74d216586fb279e17b61fb7e62b) ([merge request](gitlab-org/omnibus-gitlab!7208))
+
+### Changed (11 changes)
+
+- [Update consul from 1.16.2 to 1.16.3](gitlab-org/omnibus-gitlab@70486715f96fb10c5a19a4be2e0a777c968e0669) ([merge request](gitlab-org/omnibus-gitlab!7224))
+- [Bump container-registry to version 3.86.1](gitlab-org/omnibus-gitlab@01bc24514755cc06421fe7e04b75099641d7d3c0) ([merge request](gitlab-org/omnibus-gitlab!7229))
+- [Consolidate Puma low-level handler](gitlab-org/omnibus-gitlab@3a9175fecdaf45a04cc69434a35f4bfd28df4b1a) ([merge request](gitlab-org/omnibus-gitlab!7212))
+- [Update postgres_exporter from 0.14.0 to 0.15.0](gitlab-org/omnibus-gitlab@3094e34bdff5e4ef8e4338c83e866e03474f75ac) ([merge request](gitlab-org/omnibus-gitlab!7221))
+- [Update exiftool from 12.67 to 12.68](gitlab-org/omnibus-gitlab@94f537f55dea652abf6d29c2a6c075fd295749ec) ([merge request](gitlab-org/omnibus-gitlab!7209))
+- [Update pgbouncer from 1.18 to 1.21](gitlab-org/omnibus-gitlab@142180c750141864e49b17b932cfc42f04520222) ([merge request](gitlab-org/omnibus-gitlab!7000))
+- [Bump rubygems to version 3.4.21](gitlab-org/omnibus-gitlab@0d73f537cb3fc8ceaac6264736f0d6108aa867e5) ([merge request](gitlab-org/omnibus-gitlab!7170))
+- [Update redis from 7.0.13 to 7.0.14](gitlab-org/omnibus-gitlab@81534a755975a8ff08d7288fd8af276234f32fc9) ([merge request](gitlab-org/omnibus-gitlab!7210))
+- [Bump prometheus to version 2.47.2](gitlab-org/omnibus-gitlab@2e9e75e675474770da89261edf97f616adc9e924) ([merge request](gitlab-org/omnibus-gitlab!7182))
+- [Escape special characters in postgresql password](gitlab-org/omnibus-gitlab@447eadeaf46297d64449662c43b99448bfa86e75) ([merge request](gitlab-org/omnibus-gitlab!7194))
+- [Enable modifying Redis settings for KAS separately](gitlab-org/omnibus-gitlab@b239f04dd73a79ab1c5cd2c9f1024125836f59cc) ([merge request](gitlab-org/omnibus-gitlab!7180))
+
+### Security (1 change)
+
+- [Update pcre2 from 10.40 to 10.42](gitlab-org/omnibus-gitlab@6641fe8a1f6b619293350508f265e13059de7886)
+
+### Other (1 change)
+
+- [Update Mattermost to 9.1.0](gitlab-org/omnibus-gitlab@3cedfa24af36c0f7d6d149ddd0956f5bce20d0e7) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7206))
+
 ## 16.5.2 (2023-11-14)
 
 ### Changed (1 change)
