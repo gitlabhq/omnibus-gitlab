@@ -5,7 +5,7 @@ return if helper.has_scoped_label_with_scope?("workflow")
 REVIEWERS_MESSAGE = <<~MSG
 Once your MR is ready for review you can comment `@gitlab-bot ready <@user>` to request the first review to someone. It's recommended that you pick the one suggested by the reviewer roulette. But you can ignore it and assign it to someone else if you see fit.
 
-Merge requests are handled according to the workflow documented in our [handbook](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/merge_requests.html#workflow) and should receive a response within the limit documented in our [Service-level objective (SLO)](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/merge_requests.html#service-level-objective).
+Merge requests are handled according to the workflow documented in our [handbook](https://about.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/merge_requests.html#workflow) and should receive a response within the limit documented in our [Service-level objective (SLO)](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/merge_requests.html#service-level-objective).
 
 If you don't receive a response from the reviewer within the SLO, please mention `@gitlab-org\/distribution`, or one of our [Project Maintainers](https://about.gitlab.com/handbook/engineering/projects/#omnibus-gitlab)
 MSG
