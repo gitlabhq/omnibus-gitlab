@@ -9,7 +9,6 @@ require_relative 'image'
 module Build
   class Info
     DEPLOYER_OS_MAPPING = {
-      'AUTO_DEPLOY_ENVIRONMENT' => 'ubuntu-xenial',
       'PATCH_DEPLOY_ENVIRONMENT' => 'ubuntu-bionic',
       'RELEASE_DEPLOY_ENVIRONMENT' => 'ubuntu-focal',
     }.freeze
@@ -36,9 +35,7 @@ module Build
       end
 
       def deploy_env_key
-        if Build::Check.is_auto_deploy_tag?
-          'AUTO_DEPLOY_ENVIRONMENT'
-        elsif Build::Check.is_rc_tag?
+        if Build::Check.is_rc_tag?
           'PATCH_DEPLOY_ENVIRONMENT'
         elsif Build::Check.is_latest_stable_tag?
           'RELEASE_DEPLOY_ENVIRONMENT'
@@ -52,7 +49,7 @@ module Build
 
         env = Gitlab::Util.get_env(key)
 
-        abort "Unable to determine which environment to deploy too, #{key} is empty" unless env
+        abort "Unable to determine which environment to deploy to, #{key} is empty" unless env
 
         puts "Ready to send trigger for environment(s): #{env}"
 
