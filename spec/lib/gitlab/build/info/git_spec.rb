@@ -26,6 +26,7 @@ RSpec.describe Build::Info::Git do
       context 'not in CI' do
         before do
           stub_env_var('CI_COMMIT_BRANCH', '')
+          stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', '')
           allow(Gitlab::Util).to receive(:shellout_stdout).with('git rev-parse --abbrev-ref HEAD').and_return('HEAD')
         end
 
@@ -37,12 +38,26 @@ RSpec.describe Build::Info::Git do
 
     context 'in branches' do
       context 'in CI' do
-        before do
-          stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
+        context 'in MR pipelines' do
+          before do
+            stub_env_var('CI_COMMIT_BRANCH', '')
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', 'my-feature-branch')
+          end
+
+          it 'returns branch name from CI variable' do
+            expect(described_class.branch_name).to eq('my-feature-branch')
+          end
         end
 
-        it 'returns branch name from CI variable' do
-          expect(described_class.branch_name).to eq('my-feature-branch')
+        context 'in regular branch pipelines' do
+          before do
+            stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', '')
+          end
+
+          it 'returns branch name from CI variable' do
+            expect(described_class.branch_name).to eq('my-feature-branch')
+          end
         end
       end
 
@@ -50,6 +65,7 @@ RSpec.describe Build::Info::Git do
         before do
           stub_env_var('CI_COMMIT_BRANCH', '')
           stub_env_var('CI_COMMIT_TAG', '')
+          stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', '')
           allow(Gitlab::Util).to receive(:shellout_stdout).with('git rev-parse --abbrev-ref HEAD').and_return('my-feature-branch')
         end
 

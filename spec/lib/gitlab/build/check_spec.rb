@@ -269,6 +269,16 @@ RSpec.describe Build::Check do
       end
     end
 
+    context 'when on a feature branch MR pipeline' do
+      before do
+        stub_mr_branch('my-feature-branch')
+      end
+
+      it 'returns true' do
+        expect(described_class.on_regular_branch?).to be_truthy
+      end
+    end
+
     context 'when on a stable branch' do
       before do
         stub_branch('15-6-stable')

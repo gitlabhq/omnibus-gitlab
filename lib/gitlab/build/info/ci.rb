@@ -7,7 +7,7 @@ module Build
     class CI
       class << self
         def branch_name
-          Gitlab::Util.get_env('CI_COMMIT_BRANCH')
+          Gitlab::Util.get_env('CI_COMMIT_BRANCH') || Gitlab::Util.get_env('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME')
         end
 
         def tag_name
