@@ -157,6 +157,7 @@ RSpec.describe 'registry recipe' do
           "connecttimeout" => "5s",
           "draintimeout" => "2m",
           "preparedstatements" => false,
+          "primary" => "primary.record.fqdn",
           "pool" => {
             "maxidle" => 25,
             "maxopen" => 25,
