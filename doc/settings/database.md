@@ -857,18 +857,19 @@ when your installation is using PgBouncer.
    sudo gitlab-ctl start
    ```
 
-1. After a upgrading PostgreSQL to a new major release:
-
-   - With Amazon RDS ([as recommended by AWS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.PostgreSQL.html)), or
-   - If the database server is running very high (near 100%) CPU utilization.
-
-   Recreating the table statistics will ensure efficient query plans are picked
-   and reduce database server CPU load.
-
-   Run the following query on the PostgreSQL database console:
+1. After upgrading PostgreSQL to a new major release, recreate the table statistics to ensure efficient query plans are picked and
+   to reduce database server CPU load.
+   
+   If the upgrade was "in-place" using `pg_upgrade`, run the following query on the PostgreSQL database console:
 
    ```SQL
    SET statement_timeout = 0; ANALYZE VERBOSE;
+   ```
+
+   If the upgrade used `pg_dump` and `pg_restore`, run the following query on the PostgreSQL database console:
+
+   ```SQL
+   SET statement_timeout = 0; VACUUM ANALYZE VERBOSE;
    ```
 
 ### Seed the database (fresh installs only)
