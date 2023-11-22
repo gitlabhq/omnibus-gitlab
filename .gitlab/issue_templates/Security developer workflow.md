@@ -24,13 +24,14 @@ After your merge request has been approved according to our approval guidelines,
 #### Backports
 
 - [ ] Once the MR is ready to be merged, create MRs targeting the latest 3 stable branches
+   * The 3 stable branches correspond to the versions in the title of the [Security Release Tracking Issue].
    * At this point, it might be easy to squash the commits from the MR into one
    * Depending on when development is happening, you may need to wait for the last stable branch to be created. If the ~"security-notifications" label is applied to this issue, you will receive a ping when the branch is created.
 - [ ] Create each MR targeting the stable branch `X-Y-stable`, using the [Security Release merge request template].
    * Every merge request will have its own set of TODOs, so make sure to complete those.
 - [ ] On the "Related merge requests" section, ensure all MRs are linked to this issue.
    * This section should only list the merge requests created for this issue: One targeting `master` and the 3 backports.
-- [ ] If this issue requires less than 4 merge requests, post a message on the Security Release Tracking Issue and ping the Release Managers.
+- [ ] If this issue requires less than `4` merge requests, add the ~"reduced backports" label.
 
 #### Assigning to a release
 
@@ -68,5 +69,6 @@ After your merge request has been approved according to our approval guidelines,
 [RM list]:  https://about.gitlab.com/release-managers/
 [issue as related]: https://docs.gitlab.com/ee/user/project/issues/related_issues.html#adding-a-related-issue
 [security Release merge request template]: https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/.gitlab/merge_request_templates/Security%20Release.md
+[Security Release Tracking Issue]: https://gitlab.com/gitlab-org/gitlab/-/issues/?label_name%5B%5D=upcoming%20security%20release
 
 /labels ~security ~"security-notifications"
