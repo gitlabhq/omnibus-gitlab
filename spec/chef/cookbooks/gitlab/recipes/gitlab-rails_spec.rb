@@ -588,6 +588,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
     gitlab_yml_path = '/var/opt/gitlab/gitlab-rails/etc/gitlab.yml'
     let(:gitlab_yml) { chef_run.template(gitlab_yml_path) }
     let(:gitlab_yml_templatesymlink) { chef_run.templatesymlink('Create a gitlab.yml and create a symlink to Rails root') }
+    let(:gitlab_yml_file_content) { ChefSpec::Renderer.new(chef_run, gitlab_yml).content }
+    let(:parsed_gitlab_yml) { YAML.safe_load(gitlab_yml_file_content, aliases: true, symbolize_names: true) }
 
     # NOTE: Test if we pass proper notifications to other resources
     describe 'rails cache management' do
@@ -614,6 +616,43 @@ RSpec.describe 'gitlab::gitlab-rails' do
         it 'should not run cache clear' do
           expect(chef_run).not_to run_execute(
             'clear the gitlab-rails cache')
+        end
+      end
+
+      context 'SSH settings' do
+        context 'defaults' do
+          it 'omits the SSH host and port' do
+            expect(parsed_gitlab_yml[:production][:gitlab][:ssh_host]).to be_nil
+            expect(parsed_gitlab_yml[:production][:gitlab_shell][:ssh_port]).to be_nil
+          end
+        end
+
+        context 'with a custom SSH hostname and port' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                gitlab_ssh_host: 'gitlab.example.com',
+                gitlab_shell_ssh_port: 2222
+              }
+            )
+          end
+
+          it 'renders the SSH host and port' do
+            expect(parsed_gitlab_yml[:production][:gitlab][:ssh_host]).to eq('gitlab.example.com')
+            expect(parsed_gitlab_yml[:production][:gitlab_shell][:ssh_port]).to eq(2222)
+          end
+        end
+
+        context 'with an invalid SSH hostname' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: { gitlab_ssh_host: 'gitlab.example.com:2222' }
+            )
+          end
+
+          it 'raises an exception' do
+            expect { chef_run }.to raise_error(RuntimeError, /If you wish to use a custom SSH port/)
+          end
         end
       end
     end

@@ -35,6 +35,7 @@ module GitlabRails
       parse_service_desk_email_logfile
       parse_maximum_request_duration
       validate_smtp_settings!
+      validate_ssh_settings!
     end
 
     def parse_directories
@@ -374,6 +375,24 @@ module GitlabRails
 
     def validate_smtp_settings!
       SmtpHelper.validate_smtp_settings!(Gitlab['gitlab_rails'])
+    end
+
+    def validate_ssh_settings!
+      host = Gitlab['gitlab_rails']['gitlab_ssh_host']
+
+      return unless host
+
+      URI::Generic.build(scheme: 'ssh', host: host)
+    rescue URI::InvalidComponentError
+      msg = <<~MSG
+gitlab_rails['gitlab_ssh_host'] is set to #{host}, but it must only contain a valid hostname.
+
+If you wish to use a custom SSH port (such as 2222), in /etc/gitlab/gitlab.rb set the hostname and port separately:
+
+gitlab_rails['gitlab_ssh_host'] = 'gitlab.example.com'
+gitlab_rails['gitlab_shell_ssh_port'] = 2222
+      MSG
+      raise msg
     end
 
     def public_path
