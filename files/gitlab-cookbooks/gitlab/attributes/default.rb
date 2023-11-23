@@ -817,6 +817,20 @@ default['gitlab']['gitlab_workhorse']['image_scaler_max_filesize'] = 250_000
 default['gitlab']['gitlab_workhorse']['consul_service_name'] = 'workhorse'
 default['gitlab']['gitlab_workhorse']['consul_service_meta'] = nil
 
+default['gitlab']['gitlab_workhorse']['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
+default['gitlab']['gitlab_workhorse']['redis_host'] = "127.0.0.1"
+default['gitlab']['gitlab_workhorse']['redis_port'] = nil
+default['gitlab']['gitlab_workhorse']['redis_database'] = nil
+default['gitlab']['gitlab_workhorse']['redis_username'] = nil
+default['gitlab']['gitlab_workhorse']['redis_password'] = nil
+default['gitlab']['gitlab_workhorse']['redis_ssl'] = false
+default['gitlab']['gitlab_workhorse']['redis_cluster_nodes'] = []
+default['gitlab']['gitlab_workhorse']['redis_sentinels'] = []
+default['gitlab']['gitlab_workhorse']['redis_sentinels_password'] = nil
+default['gitlab']['gitlab_workhorse']['redis_sentinel_master'] = nil
+default['gitlab']['gitlab_workhorse']['redis_sentinel_master_ip'] = nil
+default['gitlab']['gitlab_workhorse']['redis_sentinel_master_port'] = nil
+
 ####
 # mailroom
 ####
