@@ -17,6 +17,7 @@
 require_relative 'nginx.rb'
 require_relative '../../gitaly/libraries/gitaly.rb'
 require_relative '../../package/libraries/settings_dsl.rb'
+require_relative 'redis_helper'
 
 module GitlabRails
   ALLOWED_DATABASES = %w[main ci geo embedding].freeze
@@ -323,7 +324,16 @@ module GitlabRails
 
     def parse_encrypted_settings_path
       # This requires the parse_shared_dir to be executed before
-      Gitlab['gitlab_rails']['encrypted_settings_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'encrypted_settings')
+      encrypted_settings_path = Gitlab['gitlab_rails']['encrypted_settings_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'encrypted_settings')
+
+      RedisHelper::REDIS_INSTANCES.each do |instance|
+        Gitlab['gitlab_rails']["redis_#{instance}_encrypted_settings_file"] ||= Gitlab['gitlab_rails']['redis_encrypted_settings_file'] || File.join(encrypted_settings_path, "redis.#{instance}.yml.enc")
+      end
+
+      # NOTE: The default value of `redis_encrypted_settings_file` should be
+      # set only after the instance-specific ones are handled, or this default
+      # value will get used for the instance-specific settings.
+      Gitlab['gitlab_rails']['redis_encrypted_settings_file'] ||= File.join(encrypted_settings_path, 'redis.yml.enc')
     end
 
     def parse_pages_dir

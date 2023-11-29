@@ -440,7 +440,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
               redis_tls_ca_cert_dir: "/opt/gitlab/embedded/ssl/certs/",
               redis_tls_ca_cert_file: "/opt/gitlab/embedded/ssl/certs/cacert.pem",
               redis_tls_client_cert_file: nil,
-              redis_tls_client_key_file: nil
+              redis_tls_client_key_file: nil,
+              redis_encrypted_settings_file: "/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.#{instance}.yml.enc"
             )
 
             expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
@@ -482,7 +483,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
               redis_tls_ca_cert_dir: "/opt/gitlab/embedded/ssl/certs/",
               redis_tls_ca_cert_file: "/opt/gitlab/embedded/ssl/certs/cacert.pem",
               redis_tls_client_cert_file: nil,
-              redis_tls_client_key_file: nil
+              redis_tls_client_key_file: nil,
+              redis_encrypted_settings_file: "/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.#{instance}.yml.enc"
             )
 
             expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
@@ -524,7 +526,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
                 redis_tls_ca_cert_dir: "/opt/gitlab/embedded/ssl/certs/",
                 redis_tls_ca_cert_file: "/opt/gitlab/embedded/ssl/certs/cacert.pem",
                 redis_tls_client_cert_file: nil,
-                redis_tls_client_key_file: nil
+                redis_tls_client_key_file: nil,
+                redis_encrypted_settings_file: "/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.#{instance}.yml.enc"
               )
 
               expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
@@ -543,6 +546,42 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
         it 'still renders the default configuration file' do
           expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root')
+        end
+      end
+
+      describe 'encrypted_settings_file' do
+        cached(:chef_run) do
+          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+        end
+
+        let(:cache_secret_file) { '/etc/gitlab/cache.redis.enc' }
+        let(:global_secret_file) { '/etc/gitlab/global.redis.enc' }
+
+        context 'with separate file for an instance' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                redis_encrypted_settings_file: global_secret_file,
+                redis_cache_instance: 'redis://redis.cache.instance',
+                redis_cache_encrypted_settings_file: cache_secret_file,
+                redis_shared_state_instance: 'redis://redis.shared_state.instance'
+              }
+            )
+          end
+
+          it 'uses specified path for the cache instance' do
+            expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.cache.yml").with_content { |content|
+              generated_yml = YAML.safe_load(content)
+              expect(generated_yml.dig('production', 'secret_file')).to eq(cache_secret_file)
+            }
+          end
+
+          it 'uses global path for the shared state instance' do
+            expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.shared_state.yml").with_content { |content|
+              generated_yml = YAML.safe_load(content)
+              expect(generated_yml.dig('production', 'secret_file')).to eq(global_secret_file)
+            }
+          end
         end
       end
     end
