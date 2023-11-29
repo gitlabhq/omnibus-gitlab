@@ -13,7 +13,6 @@ See [the general developer security release guidelines](https://gitlab.com/gitla
 
 - [ ] **On "Related issues" section, write down the [Omnibus GitLab Security] issue it belongs to (i.e. `Related to <issue_id>`).**
 - [ ] MR targets `master`, or `X-Y-stable` for backports.
-- [ ] Milestone is set for the version this merge request applies to. A closed milestone can be assigned via [quick actions].
 - [ ] Title of this MR is the same as for all backports.
 - [ ] A [CHANGELOG entry] has been included, with `Changelog` trailer set to `security`.
 - [ ] Assign to a reviewer and maintainer, per our [Code Review process].
@@ -23,7 +22,6 @@ See [the general developer security release guidelines](https://gitlab.com/gitla
 
 ## Reviewer checklist
 
-- [ ] Correct milestone is applied and the title is matching across all backports
 - [ ] Assigned to `@gitlab-release-tools-bot` with passing CI pipelines
 
 /label ~security
