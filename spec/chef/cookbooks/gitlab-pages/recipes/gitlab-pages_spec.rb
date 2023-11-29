@@ -214,6 +214,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             auth_secret: 'auth_secret',
             auth_redirect_uri: 'https://projects.pages.example.com/auth',
             auth_scope: 'read_api',
+            auth_timeout: '10s',
             auth_cookie_session_timeout: '20m',
             access_control: true,
             insecure_ciphers: true,
@@ -271,6 +272,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             auth-client-secret=app_secret
             auth-secret=auth_secret
             auth-scope=read_api
+            auth-timeout=10s
             auth-cookie-session-timeout=20m
             zip-cache-expiration=120s
             zip-cache-cleanup=1m

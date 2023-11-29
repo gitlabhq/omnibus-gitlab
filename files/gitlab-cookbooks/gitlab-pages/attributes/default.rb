@@ -33,6 +33,7 @@ default['gitlab_pages']['gitlab_secret'] = nil
 default['gitlab_pages']['auth_redirect_uri'] = nil
 default['gitlab_pages']['auth_secret'] = nil
 default['gitlab_pages']['auth_scope'] = nil
+default['gitlab_pages']['auth_timeout'] = nil
 default['gitlab_pages']['auth_cookie_session_timeout'] = nil
 default['gitlab_pages']['insecure_ciphers'] = false
 default['gitlab_pages']['tls_min_version'] = nil
