@@ -13,6 +13,7 @@ production:
     <% end %>
   <% else %>
   url: <%= @redis_url %>
+  secret_file: <%= @redis_encrypted_settings_file %>
   <%- if @redis_ssl %>
   ssl_params:
     <%- if @redis_tls_ca_cert_dir %>ca_path: "<%= @redis_tls_ca_cert_dir %>"<% end %>

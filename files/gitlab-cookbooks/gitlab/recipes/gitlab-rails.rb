@@ -217,6 +217,7 @@ redis_tls_ca_cert_dir = node['gitlab']['gitlab_rails']['redis_tls_ca_cert_dir']
 redis_tls_ca_cert_file = node['gitlab']['gitlab_rails']['redis_tls_ca_cert_file']
 redis_tls_client_cert_file = node['gitlab']['gitlab_rails']['redis_tls_client_cert_file']
 redis_tls_client_key_file = node['gitlab']['gitlab_rails']['redis_tls_client_key_file']
+redis_encrypted_settings_file = node['gitlab']['gitlab_rails']['redis_encrypted_settings_file']
 
 templatesymlink "Create a secrets.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, "config/secrets.yml")
@@ -253,7 +254,8 @@ templatesymlink "Create a resque.yml and create a symlink to Rails root" do
     redis_tls_ca_cert_dir: redis_tls_ca_cert_dir,
     redis_tls_ca_cert_file: redis_tls_ca_cert_file,
     redis_tls_client_cert_file: redis_tls_client_cert_file,
-    redis_tls_client_key_file: redis_tls_client_key_file
+    redis_tls_client_key_file: redis_tls_client_key_file,
+    redis_encrypted_settings_file: redis_encrypted_settings_file
   )
   dependent_services.each { |svc| notifies :restart, svc }
   sensitive true
@@ -305,6 +307,7 @@ RedisHelper::REDIS_INSTANCES.each do |instance|
   ca_cert_file = node['gitlab']['gitlab_rails']["redis_#{instance}_tls_ca_cert_file"]
   certificate_file = node['gitlab']['gitlab_rails']["redis_#{instance}_tls_client_cert_file"]
   key_file = node['gitlab']['gitlab_rails']["redis_#{instance}_tls_client_key_file"]
+  instance_encrypted_settings_file = node['gitlab']['gitlab_rails']["redis_#{instance}_encrypted_settings_file"]
   from_filename = File.join(gitlab_rails_source_dir, "config/#{filename}")
   to_filename = File.join(gitlab_rails_etc_dir, filename)
 
@@ -329,7 +332,8 @@ RedisHelper::REDIS_INSTANCES.each do |instance|
       redis_tls_ca_cert_dir: ca_cert_dir,
       redis_tls_ca_cert_file: ca_cert_file,
       redis_tls_client_cert_file: certificate_file,
-      redis_tls_client_key_file: key_file
+      redis_tls_client_key_file: key_file,
+      redis_encrypted_settings_file: instance_encrypted_settings_file
     )
     dependent_services.each { |svc| notifies :restart, svc }
     action :delete if url.nil? && clusters.empty?
