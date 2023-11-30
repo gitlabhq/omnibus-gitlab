@@ -24,7 +24,7 @@ function clean_stale_pids() {
         #  - any (s)ocket or regular (f)ile
         #  - by the name of "*.pid" or "socket.?"
         #  - and delete them
-        find $x \
+        find $x -maxdepth 4 \
             \( \
               -type f \
               -o -type s \
