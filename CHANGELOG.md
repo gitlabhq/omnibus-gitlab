@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.6.1 (2023-11-30)
+
+### Security (2 changes)
+
+- [Mattermost Security Update](gitlab-org/security/omnibus-gitlab@9898f6677a65f4fb51bfdb025709baa0e453475c) ([merge request](gitlab-org/security/omnibus-gitlab!400))
+- [Update PostgreSQL 13 and 14](gitlab-org/security/omnibus-gitlab@75404c30511b06b394d26cad5f8d3dc276bae6c1) ([merge request](gitlab-org/security/omnibus-gitlab!395))
+
 ## 16.6.0 (2023-11-15)
 
 ### Added (4 changes)
@@ -37,6 +44,14 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Update Mattermost to 9.1.0](gitlab-org/omnibus-gitlab@3cedfa24af36c0f7d6d149ddd0956f5bce20d0e7) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7206))
+
+## 16.5.3 (2023-11-30)
+
+### Security (3 changes)
+
+- [Mattermost Security Update](gitlab-org/security/omnibus-gitlab@6c38a01a58026e26a25f305af4a0ef95c3b7b2b0) ([merge request](gitlab-org/security/omnibus-gitlab!398))
+- [Update PostgreSQL 13 and 14](gitlab-org/security/omnibus-gitlab@5a0dc2609a71a79e5feef626222c3d16cbddf3ee) ([merge request](gitlab-org/security/omnibus-gitlab!388))
+- [Update pcre2 from 10.40 to 10.42](gitlab-org/security/omnibus-gitlab@cea31886119e699644c44a6949fb072b959e197a) ([merge request](gitlab-org/security/omnibus-gitlab!385))
 
 ## 16.5.2 (2023-11-14)
 
@@ -97,6 +112,14 @@ No changes.
 ### Other (1 change)
 
 - [Update Mattermost to 9.0.0](gitlab-org/omnibus-gitlab@fddabad069dad759b6f0937d66e88295530c28b0) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7168))
+
+## 16.4.3 (2023-11-30)
+
+### Security (3 changes)
+
+- [Mattermost Security Update](gitlab-org/security/omnibus-gitlab@202321414df8854f841888f9758eba6a742237bb) ([merge request](gitlab-org/security/omnibus-gitlab!399))
+- [Update PostgreSQL 13 and 14](gitlab-org/security/omnibus-gitlab@b96f6ce9c130ad28407c537cff00888663a046c0) ([merge request](gitlab-org/security/omnibus-gitlab!389))
+- [Update pcre2 from 10.40 to 10.42](gitlab-org/security/omnibus-gitlab@9fc1d431c07d71f5030e23ac0ee46123b75adb3c) ([merge request](gitlab-org/security/omnibus-gitlab!378))
 
 ## 16.4.2 (2023-10-30)
 
