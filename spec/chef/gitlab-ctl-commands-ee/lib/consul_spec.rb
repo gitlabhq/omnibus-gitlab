@@ -1,8 +1,6 @@
 require 'spec_helper'
-
-$LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands-ee/lib')
-
 require 'consul'
+require 'consul_download'
 
 RSpec.describe ConsulHandler do
   describe '#initialize' do
@@ -26,6 +24,10 @@ RSpec.describe ConsulHandler do
   let(:consul_cmd) { '/opt/gitlab/embedded/bin/consul' }
 
   describe ConsulHandler::Kv do
+    before(:each) do
+      allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return('consul' => { 'binary_path' => consul_cmd })
+    end
+
     it 'allows nil values' do
       results = double('results', run_command: [], error!: nil, stdout: '')
       expect(Mixlib::ShellOut).to receive(:new).with("#{consul_cmd} kv put foo ").and_return(results)
@@ -59,6 +61,10 @@ RSpec.describe ConsulHandler do
   end
 
   describe ConsulHandler::Encrypt do
+    before(:each) do
+      allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return('consul' => { 'binary_path' => consul_cmd })
+    end
+
     describe '#keygen' do
       it 'returns the generated key' do
         generated_key = 'BYX6EPaUiUI0TDdm6gAMmmLnpJSwePJ33Xwh6rjCYbg='
@@ -76,5 +82,43 @@ RSpec.describe ConsulHandler do
         expect { described_class.keygen }.to raise_error(ConsulHandler::ConsulError, 'StandardError: oops')
       end
     end
+  end
+end
+
+RSpec.describe ConsulDownloadCommand do
+  let(:command) do
+    described_class.new([
+                          '', '',
+                          '--arch', 'amd64',
+                          '--output', '/tmp/consul',
+                          '--force', true,
+                          '--version', '1.16.1',
+                        ])
+  end
+
+  it 'downloads consul' do
+    consul_zip = Zip::OutputStream.write_buffer do |zio|
+      zio.put_next_entry("consul")
+      zio.write "binary"
+      zio.put_next_entry("foo")
+      zio.write "bar"
+    end
+    mock_response = Net::HTTPSuccess.new('1.0', '200', '')
+    expect(mock_response).to receive(:body).and_return(consul_zip.string)
+
+    expect(GitlabCtl::Util)
+      .to receive(:get_node_attributes)
+      .and_return({ 'kernel' => { 'machine' => 'amd64' } })
+    expect(Net::HTTP).to receive(:get_response)
+      .with(URI.parse('https://releases.hashicorp.com/consul/1.16.1/consul_1.16.1_linux_amd64.zip'))
+      .and_return(mock_response)
+    expect(File)
+      .to receive(:write)
+      .with('/tmp/consul', 'binary')
+    expect(File)
+      .to receive(:chmod)
+      .with(0755, '/tmp/consul')
+
+    command.run
   end
 end

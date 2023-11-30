@@ -58,6 +58,8 @@ RSpec.describe Geo::PitrFile do
   context 'when consul is enabled' do
     before do
       allow(Dir).to receive(:exist?).with('/opt/gitlab/service/consul').and_return(true)
+      allow(GitlabCtl::Util).to receive(:get_node_attributes)
+        .and_return({ 'consul' => { 'binary_path' => '/opt/gitlab/embedded/bin/consul' } })
     end
 
     it "uses consul" do

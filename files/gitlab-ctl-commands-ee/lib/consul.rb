@@ -1,4 +1,10 @@
 require 'mixlib/shellout'
+# For testing purposes, if the first path cannot be found load the second
+begin
+  require_relative '../../omnibus-ctl/lib/gitlab_ctl'
+rescue LoadError
+  require_relative '../../gitlab-ctl-commands/lib/gitlab_ctl'
+end
 
 class ConsulHandler
   WatcherError = Class.new(StandardError)
@@ -17,7 +23,7 @@ class ConsulHandler
 
   class << self
     def run_consul(cmd)
-      command = Mixlib::ShellOut.new("/opt/gitlab/embedded/bin/consul #{cmd}")
+      command = Mixlib::ShellOut.new("#{consul_binary} #{cmd}")
       command.run_command
       begin
         command.error!
@@ -27,6 +33,12 @@ class ConsulHandler
         raise ConsulError, "#{e}: #{command.stderr}"
       end
       command.stdout
+    end
+
+    private
+
+    def consul_binary
+      GitlabCtl::Util.get_node_attributes.dig('consul', 'binary_path')
     end
   end
 

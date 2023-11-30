@@ -20,6 +20,7 @@ logging_settings = logfiles_helper.logging_settings('consul')
 
 runit_service 'consul' do
   options({
+            binary_path: node['consul']['binary_path'],
             config_dir: node['consul']['config_dir'],
             custom_config_dir: node['consul']['custom_config_dir'],
             config_file: node['consul']['config_file'],
@@ -56,4 +57,18 @@ ruby_block 'warn pending consul restart' do
     LoggingHelper.warning(message)
   end
   only_if { consul_helper.running_version != consul_helper.installed_version }
+end
+
+ruby_block 'warn consul version mismatch' do
+  block do
+    message = <<~MESSAGE
+      The version of the installed consul service is different than what is expected.
+      Please run `gitlab-ctl consul-download --force` and restart consul to start
+      the new version:
+
+      https://docs.gitlab.com/ee/administration/consul.html#restart-consul
+    MESSAGE
+    LoggingHelper.warning(message)
+  end
+  only_if { consul_helper.installed_is_supported? }
 end

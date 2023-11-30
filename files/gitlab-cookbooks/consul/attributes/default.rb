@@ -1,4 +1,5 @@
 default['consul']['enable'] = false
+default['consul']['binary_path'] = '/opt/gitlab/embedded/bin/consul'
 default['consul']['dir'] = '/var/opt/gitlab/consul'
 default['consul']['username'] = 'gitlab-consul'
 default['consul']['group'] = 'gitlab-consul'
