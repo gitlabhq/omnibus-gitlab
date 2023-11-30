@@ -16,6 +16,8 @@
 
 name 'consul'
 
+# This version should be keep in sync with consul versions in
+# software/consul.rb and consul_helper.rb.
 version = Gitlab::Version.new('consul', 'v1.16.3')
 default_version version.print(false)
 

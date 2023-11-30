@@ -79,6 +79,13 @@ dependencies:
         - filename: config/software/consul.rb
           pattern: "version = Gitlab::Version.new\\('consul', 'v(\\S+)'\\)"
           range: '< 1.17.0'
+        - filename: files/gitlab-ctl-commands-ee/lib/consul_download.rb
+          pattern: "DEFAULT_VERSION = '(\\S+)'"
+          range: '< 1.17.0'
+        - filename: files/gitlab-cookbooks/consul/libraries/consul_helper.rb
+          pattern: "SUPPORTED_MINOR = '(\\S+)'"
+          tag_filter:
+            output_as: '$1.$2'
       # go-crond
       https://github.com/webdevops/go-crond.git:
         replace_in_files:
