@@ -45,6 +45,14 @@ omnibus-gitlab repository.
 
 - [Update Mattermost to 9.1.0](gitlab-org/omnibus-gitlab@3cedfa24af36c0f7d6d149ddd0956f5bce20d0e7) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7206))
 
+## 16.5.3 (2023-11-30)
+
+### Security (3 changes)
+
+- [Mattermost Security Update](gitlab-org/security/omnibus-gitlab@6c38a01a58026e26a25f305af4a0ef95c3b7b2b0) ([merge request](gitlab-org/security/omnibus-gitlab!398))
+- [Update PostgreSQL 13 and 14](gitlab-org/security/omnibus-gitlab@5a0dc2609a71a79e5feef626222c3d16cbddf3ee) ([merge request](gitlab-org/security/omnibus-gitlab!388))
+- [Update pcre2 from 10.40 to 10.42](gitlab-org/security/omnibus-gitlab@cea31886119e699644c44a6949fb072b959e197a) ([merge request](gitlab-org/security/omnibus-gitlab!385))
+
 ## 16.5.2 (2023-11-14)
 
 ### Changed (1 change)
