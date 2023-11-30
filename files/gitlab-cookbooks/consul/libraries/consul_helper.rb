@@ -9,6 +9,10 @@ class ConsulHelper
   # provide an `enable_service_#{service_name}` and `disable_service_#{service_name}` recipe
   SERVICES = %w(postgresql).freeze
 
+  # This version should be keep in sync with consul versions in
+  # software/consul.rb and consul_helper.rb.
+  SUPPORTED_MINOR = '1.16'.freeze
+
   def initialize(node)
     @node = node
     @default_configuration = {
@@ -176,7 +180,7 @@ class ConsulHelper
   def installed_version
     return unless OmnibusHelper.new(@node).service_up?('consul')
 
-    command = '/opt/gitlab/embedded/bin/consul version'
+    command = "#{@node['consul']['binary_path']} version"
     command_output = VersionHelper.version(command)
     raise "Execution of the command `#{command}` failed" unless command_output
 
@@ -193,6 +197,13 @@ class ConsulHelper
     info = response_code == '200' ? JSON.parse(response_body, symbolize_names: true) : {}
 
     info[:Config][:Version] unless info.empty?
+  end
+
+  def installed_is_supported?
+    major_installed, minor_installed = installed_version.split('.')[0..1]
+    major_supported, minor_supported = SUPPORTED_MINOR.split('.')
+
+    major_installed == major_supported && minor_installed == minor_supported
   end
 
   private

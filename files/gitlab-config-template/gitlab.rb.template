@@ -3233,6 +3233,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # Consul (EE only)
 ################################################################################
 # consul['enable'] = false
+# consul['binary_path'] = '/opt/gitlab/embedded/bin/consul'
 # consul['dir'] = '/var/opt/gitlab/consul'
 # consul['username'] = 'gitlab-consul'
 # consul['group'] = 'gitlab-consul'
