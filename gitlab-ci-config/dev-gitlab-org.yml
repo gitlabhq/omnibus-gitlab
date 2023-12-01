@@ -167,7 +167,7 @@
   cache: !reference [.tag-cache]
   retry: 2
   tags:
-  - promotion
+  - ${PACKAGE_PROMOTION_RUNNER_TAG}
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
@@ -203,7 +203,7 @@
   retry: 2
   cache: !reference [.tag-cache]
   tags:
-  - promotion
+  - ${PACKAGE_PROMOTION_RUNNER_TAG}
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
