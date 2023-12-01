@@ -26,18 +26,11 @@
     :versions: []
     :when: 2019-08-10 01:27:50.261004000 Z
 - - :license
-  - github.com/hashicorp/consul
-  - MPL2
-  - :who: Balasankar C
-    :why: https://github.com/hashicorp/consul/blob/v1.16.1/LICENSE
-    :versions: [ v1.16.1 ]
-    :when: 2018-09-05 14:21:19.937703316 Z
-- - :license
   - github.com/hashicorp/consul/api
   - MPL2
   - :who: Dustin Collins
     :why: https://github.com/hashicorp/consul/blob/api/v1.22.0/LICENSE
-    :versions: [ v1.22.0 ]
+    :versions: [ v1.25.1 ]
     :when: 2018-06-22 14:21:19.937703316 Z
 - - :license
   - gitlab.com/lupine/icu
@@ -87,20 +80,6 @@
     :why: https://github.com/aws/smithy-go/blob/main/LICENSE
     :versions: []
     :when: 2022-07-07 11:37:14.372184788 Z
-- - :license
-  - "./api"
-  - MPL2
-  - :who: Andrew Patterson
-    :why: https://github.com/hashicorp/consul/blob/v1.16.1/LICENSE
-    :versions: [ v1.16.1 ]
-    :when: 2022-09-08 20:30:35.688702200 Z
-- - :license
-  - "./sdk"
-  - MPL2
-  - :who: Andrew Patterson
-    :why: https://github.com/hashicorp/consul/blob/v1.16.1/LICENSE
-    :versions: [ v1.16.1 ]
-    :when: 2022-09-08 20:30:35.688702200 Z
 - - :license
   - github.com/circonus-labs/circonus-gometrics
   - NewBSD
@@ -203,8 +182,8 @@
   - github.com/hashicorp/nomad/api
   - MPL2
   - :who: Clemens Beck
-    :why: https://github.com/hashicorp/nomad/blob/3a687930bd3eb061b38be21485d6bada194bb796/LICENSE
-    :versions: [ v0.0.0-20230718173136-3a687930bd3e ]
+    :why: https://github.com/hashicorp/nomad/blob/515895c7690cdc72278018dc5dc58aca41204ccc/LICENSE
+    :versions: [ v0.0.0-20230721134942-515895c7690c ]
     :when: 2023-04-03 12:41:28.825087612 Z
 - - :license
   - github.com/kieler/elkjs
@@ -221,33 +200,12 @@
     :versions: [ v0.55.0 ]
     :when: 2023-05-25 06:56:28.063465516 Z
 - - :license
-  - "./proto-public"
-  - MPL2
-  - :who: Clemens Beck 
-    :why: https://github.com/hashicorp/consul/blob/v1.16.1/LICENSE
-    :versions: [ v1.16.1 ]
-    :when: 2023-05-25 06:59:56.730385964 Z
-- - :license
   - github.com/hashicorp/go-retryablehttp
   - MPL2
   - :who: Mikhail Mazurskiy
     :why: https://github.com/hashicorp/go-retryablehttp/blob/main/LICENSE
     :versions: []
     :when: 2023-07-17 06:00:00.000000000 Z
-- - :license
-  - "./troubleshoot"
-  - MPL2
-  - :who: Clemens Beck
-    :why: https://github.com/hashicorp/consul/blob/v1.16.1/LICENSE
-    :versions: [ v1.16.1 ]
-    :when: 2023-08-10 08:29:14.012981908 Z
-- - :license
-  - "./envoyextensions"
-  - MPL2
-  - :who: Clemens Beck
-    :why: https://github.com/hashicorp/consul/blob/v1.16.1/LICENSE
-    :versions: [ v1.16.1 ]
-    :when: 2023-08-10 08:29:14.012981908 Z
 - - :license
   - "github.com/hashicorp/go-raftchunking"
   - MPL2
@@ -266,8 +224,8 @@
   - "github.com/hashicorp/vault/api"
   - MPL2
   - :who: Clemens Beck
-    :why: https://github.com/hashicorp/vault/blob/v1.8.1/LICENSE
-    :versions: [ v1.8.1 ]
+    :why: https://github.com/hashicorp/vault/blob/v1.8.3/LICENSE
+    :versions: [ v1.8.3 ]
     :when: 2023-08-10 08:29:14.012981908 Z
 - - :license
   - "github.com/hashicorp/vault/sdk"
@@ -276,34 +234,6 @@
     :why: https://github.com/hashicorp/vault/blob/v0.7.0/LICENSE
     :versions: [ v0.7.0 ]
     :when: 2023-08-10 08:29:14.012981908 Z
-- - :license
-  - "github.com/hashicorp/consul/envoyextensions"
-  - MPL2
-  - :who: Clemens Beck
-    :why: https://github.com/hashicorp/consul/blob/envoyextensions/v0.4.1/LICENSE
-    :versions: [ v0.4.1 ]
-    :when: 2023-09-21 13:01:15.019321901 Z
-- - :license
-  - "github.com/hashicorp/consul/proto-public"
-  - MPL2
-  - :who: Clemens Beck
-    :why: https://github.com/hashicorp/consul/blob/proto-public/v0.4.1/LICENSE
-    :versions: [ v0.4.1 ]
-    :when: 2023-09-21 13:01:15.019321901 Z
-- - :license
-  - "github.com/hashicorp/consul/sdk"
-  - MPL2
-  - :who: Clemens Beck
-    :why: https://github.com/hashicorp/consul/blob/sdk/v0.14.1/LICENSE
-    :versions: [ v0.14.1 ]
-    :when: 2023-09-21 13:01:15.019321901 Z
-- - :license
-  - "github.com/hashicorp/consul/troubleshoot"
-  - MPL2
-  - :who: Clemens Beck
-    :why: https://github.com/hashicorp/consul/blob/troubleshoot/v0.3.1/LICENSE
-    :versions: [ v0.3.1 ]
-    :when: 2023-09-21 13:01:15.019321901 Z
 - - :license
   - "github.com/hashicorp/hcdiag"
   - MPL2
@@ -318,3 +248,38 @@
     :why: https://github.com/nhooyr/websocket/blob/v1.8.10/LICENSE.txt
     :versions: [ v1.8.10 ]
     :when: 2023-11-05 02:20:00.000000000 Z
+- - :license
+  - "./api"
+  - MPL2
+  - :who: Balasankar C
+    :why: https://github.com/hashicorp/consul/blob/v1.16.3/LICENSE
+    :versions: [] # Not specifying a version because LicenseFinder doesn't detect the version
+    :when: 2023-11-16 16:33:13.906807600 Z
+- - :license
+  - "./envoyextensions"
+  - MPL2
+  - :who: Balasankar C
+    :why: https://github.com/hashicorp/consul/blob/v1.16.3/LICENSE
+    :versions: [] # Not specifying a version because LicenseFinder doesn't detect the version
+    :when: 2023-11-16 16:33:26.430554680 Z
+- - :license
+  - "./proto-public"
+  - MPL2
+  - :who: Balasankar C
+    :why: https://github.com/hashicorp/consul/blob/v1.16.3/LICENSE
+    :versions: [] # Not specifying a version because LicenseFinder doesn't detect the version
+    :when: 2023-11-16 16:33:33.521129525 Z
+- - :license
+  - "./sdk"
+  - MPL2
+  - :who: Balasankar C
+    :why: https://github.com/hashicorp/consul/blob/v1.16.3/LICENSE
+    :versions: [] # Not specifying a version because LicenseFinder doesn't detect the version
+    :when: 2023-11-16 16:33:40.518177519 Z
+- - :license
+  - "./troubleshoot"
+  - MPL2
+  - :who: Balasankar C
+    :why: https://github.com/hashicorp/consul/blob/v1.16.3/LICENSE
+    :versions: [] # Not specifying a version because LicenseFinder doesn't detect the version
+    :when: 2023-11-16 16:33:46.242943747 Z
