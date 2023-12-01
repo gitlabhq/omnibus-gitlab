@@ -71,6 +71,7 @@ variables:
   DEV_PROJECT_PATH: 'gitlab/omnibus-gitlab'
   QA_PROJECT_PATH: 'gitlab-org/build/omnibus-gitlab-mirror'
   ARM64_RUNNER_TAG: 'arm64'
+  PACKAGE_PROMOTION_RUNNER_TAG: 'promotion'
 
 .distribution-amd64-tags:
   - distribution-runner
