@@ -1,5 +1,5 @@
 diff --git a/lib/Image/ExifTool.pm b/lib/Image/ExifTool.pm
-index e9377841..c0d72b2c 100644
+index 6c3a6292..90b57c2e 100644
 --- a/lib/Image/ExifTool.pm
 +++ b/lib/Image/ExifTool.pm
 @@ -190,19 +190,10 @@ $defaultLang = 'en';    # default language
@@ -24,7 +24,7 @@ index e9377841..c0d72b2c 100644
  my %writeTypes; # lookup for writable file types (hash filled if required)
  
  # file extensions that we can't write for various base types
-@@ -223,345 +214,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
+@@ -223,346 +214,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
  # (if extension may be more than one type, the type is a list where
  #  the writable type should come first if it exists)
  %fileTypeLookup = (
@@ -170,6 +170,7 @@ index e9377841..c0d72b2c 100644
 -    JPC  =>  'J2C',
 -    JPE  =>  'JPEG',
      JPEG => ['JPEG', 'Joint Photographic Experts Group'],
+-    JPH  => ['JP2',  'High-throughput JPEG 2000'],
 -    JPF  =>  'JP2',
      JPG =>   'JPEG',
 -    JPM  => ['JP2',  'JPEG 2000 compound image'],
