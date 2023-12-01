@@ -647,7 +647,6 @@ def guess_patroni_node_role
       node = Patroni::Client.new
       scope = @attributes.dig(:patroni, :scope)
       node_name = @attributes.dig(:patroni, :name)
-      consul_binary = @attributes.dig(:consul, :binary_path)
 
       if node.up?
         @instance_type = :patroni_leader if node.leader?
@@ -656,7 +655,7 @@ def guess_patroni_node_role
         failure_cause = :patroni_running_on_replica if @instance_type == :patroni_replica
         @instance_type == :patroni_leader || @instance_type == :patroni_standby_leader
       else
-        leader_name = GitlabCtl::Util.get_command_output("#{consul_binary} kv get /service/#{scope}/leader").strip
+        leader_name = GitlabCtl::Util.get_command_output("#{base_path}/embedded/bin/consul kv get /service/#{scope}/leader").strip
         @instance_type = node_name == leader_name ? :patroni_leader : :patroni_replica unless leader_name.nil? || leader_name.empty?
         failure_cause = :patroni_stopped_on_leader if @instance_type == :patroni_leader
         @instance_type == :patroni_replica
@@ -709,9 +708,8 @@ end
 
 def remove_patroni_cluster_state
   scope = @attributes.dig(:patroni, :scope) || ''
-  consul_binary = @attributes.dig(:consul, :binary_path)
   unless !scope.empty? && GitlabCtl::Util.progress_message('Wiping Patroni cluster state') do
-    run_command("#{consul_binary} kv delete -recurse /service/#{scope}/")
+    run_command("#{base_path}/embedded/bin/consul kv delete -recurse /service/#{scope}/")
   end
     die 'Unable to wipe the cluster state'
   end
