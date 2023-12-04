@@ -46,6 +46,7 @@ RSpec.describe ConsulHelper do
       allow_any_instance_of(described_class).to receive(:installed_version).and_call_original
       allow(Gitlab).to receive(:[]).and_call_original
       allow(VersionHelper).to receive(:version).with(/consul version/).and_return(consul_cli_output)
+      stub_const('ConsulHelper::SUPPORTED_MINOR', '1.7')
     end
 
     context 'when consul is not running' do
@@ -53,6 +54,10 @@ RSpec.describe ConsulHelper do
         allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('consul').and_return(false)
 
         expect(subject.installed_version).to be_nil
+      end
+
+      it 'detects the version as supported' do
+        expect(subject.installed_is_supported?).to be true
       end
     end
 
@@ -63,6 +68,20 @@ RSpec.describe ConsulHelper do
 
       it 'parses consul output properly' do
         expect(subject.installed_version).to eq('1.7.8')
+      end
+
+      it 'detects the version as supported' do
+        expect(subject.installed_is_supported?).to be true
+      end
+
+      context 'an unsupported minor version' do
+        before do
+          stub_const('ConsulHelper::SUPPORTED_MINOR', '1.8')
+        end
+
+        it 'detects the version as unsupported' do
+          expect(subject.installed_is_supported?).to be false
+        end
       end
     end
   end

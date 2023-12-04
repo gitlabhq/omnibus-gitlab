@@ -9,7 +9,9 @@ cd <%= @options[:dir] %>
 exec chpst -P -e <%= @options[:env_dir] %> \
 -U <%= @options[:user] %>:<%= @options[:groupname] %> \
 -u <%= @options[:user] %>:<%= @options[:groupname] %> \
-/opt/gitlab/embedded/bin/consul agent -config-file <%= @options[:config_file] %> \
+<%= @options[:binary_path] %> \
+  agent \
+  -config-file <%= @options[:config_file] %> \
   -config-dir <%= @options[:config_dir] %> \
   <% unless @options[:custom_config_dir].nil? -%>
   -config-dir <%= @options[:custom_config_dir] %> \
