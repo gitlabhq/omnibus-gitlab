@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
-redis_helper = RedisHelper.new(node)
+redis_helper = NewRedisHelper::GitlabWorkhorse.new(node)
 workhorse_helper = GitlabWorkhorseHelper.new(node)
 logfiles_helper = LogfilesHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('gitlab-workhorse')
@@ -89,7 +89,7 @@ end
 alt_document_root = node['gitlab']['gitlab_workhorse']['alt_document_root']
 shutdown_timeout = node['gitlab']['gitlab_workhorse']['shutdown_timeout']
 workhorse_keywatcher = node['gitlab']['gitlab_workhorse']['workhorse_keywatcher']
-redis_params = redis_helper.workhorse_params
+redis_params = redis_helper.redis_params
 config_file_path = File.join(working_dir, "config.toml")
 image_scaler_max_procs = node['gitlab']['gitlab_workhorse']['image_scaler_max_procs']
 image_scaler_max_filesize = node['gitlab']['gitlab_workhorse']['image_scaler_max_filesize']
