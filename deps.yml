@@ -123,23 +123,11 @@ dependencies:
         replace_in_files:
         - filename: config/software/remote-syslog.rb
           pattern: "default_version '(\\S+)'"
-      # rubygems and bundler
+      # rubygems
       https://github.com/rubygems/rubygems.git:
         replace_in_files:
         - filename: config/software/rubygems.rb
           pattern: "default_version '(\\S+)'"
-          range: '<= 3.x'
-        - filename: .gitlab-ci.yml
-          pattern: 'BUNDLER_VERSION: "(\\S+)"'
-          tag_filter:
-            matching: 'bundler-v(\\S+)'
-            sort_as: '$1'
-          range: '<= 3.x'
-        - filename: Gemfile.lock
-          pattern: 'BUNDLED WITH\n   (\\S+)'
-          tag_filter:
-            matching: 'bundler-v(\\S+)'
-            sort_as: '$1'
           range: '<= 3.x'
       # zlib
       https://github.com/madler/zlib.git:
