@@ -25,7 +25,7 @@ exec chpst -e <%= @options[:env_dir] %> -P \
   -U <%= @options[:user] %>:<%= @options[:groupname] %> \
   -u <%= @options[:user] %>:<%= @options[:groupname] %> \
 <% if @options[:use_wrapper] %>
-  <%= @options[:wrapper_path] %> <%= @options[:bin_path] %> <%= @options[:config_path] %>
+  <%= @options[:wrapper_path] %> <%= @options[:bin_path] %> serve <%= @options[:config_path] %>
 <% else %>
-  <%= @options[:bin_path] %> <%= @options[:config_path] %>
+  <%= @options[:bin_path] %> serve <%= @options[:config_path] %>
 <% end %>
