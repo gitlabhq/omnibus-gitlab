@@ -2,12 +2,13 @@ require 'fileutils'
 require 'optparse'
 
 require_relative './migrate'
+require_relative './import'
 
 module RegistryDatabase
   EXEC_PATH = '/opt/gitlab/embedded/bin/registry'.freeze
   CONFIG_PATH = '/var/opt/gitlab/registry/config.yml'.freeze
 
-  USAGE ||= <<~EOS.freeze
+  USAGE = <<~EOS.freeze
     Usage:
       gitlab-ctl registry-database command subcommand [options]
 
@@ -16,6 +17,7 @@ module RegistryDatabase
 
     COMMANDS:
       migrate                Manage schema migrations
+      import                 Import filesystem metadata into the database
   EOS
 
   def self.parse_options!(ctl, args)
@@ -52,7 +54,7 @@ module RegistryDatabase
   end
 
   def self.populate_commands(options)
-    database_docs_url = 'https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs-gitlab/database-migrations.md?ref_type=heads#administration'
+    database_docs_url = 'https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/database-migrations.md#administration'
 
     {
       'migrate' => OptionParser.new do |opts|
@@ -63,6 +65,13 @@ module RegistryDatabase
           warn "#{e}\n\n#{Migrate::USAGE}"
           exit 128
         end
+      end,
+
+      'import' => OptionParser.new do |parser|
+        Import.parse_options!(ARGV, parser, options)
+      rescue OptionParser::ParseError => e
+        warn "#{e}\n\n#{Import::USAGE}"
+        exit 128
       end,
     }
   end
@@ -85,23 +94,30 @@ module RegistryDatabase
 
     command = set_command(options)
 
+    puts "Executing command:\n#{command.join(' ')}\n"
+
     begin
       status = Kernel.system(*command)
       Kernel.exit!(1) unless status
     ensure
-      start!
+      start! unless running?
     end
   end
 
   def self.set_command(options)
-    command = [EXEC_PATH, "database", options[:command], options[:subcommand]]
-
+    command = [EXEC_PATH, "database", options[:command]]
     options.delete(:command)
+
+    command += [options[:subcommand]] unless options[:subcommand].nil?
     options.delete(:subcommand)
+
     needs_stop = options[:needs_stop]
     options.delete(:needs_stop)
 
-    continue?(needs_stop)
+    needs_read_only = options[:needs_read_only]
+    options.delete(:needs_read_only)
+
+    continue?(needs_stop, needs_read_only)
 
     command += ["-n", options[:limit]] unless options[:limit].nil?
     options.delete(:limit)
@@ -122,6 +138,11 @@ module RegistryDatabase
 
   def self.running?
     !GitlabCtl::Util.run_command("gitlab-ctl status #{service_name}").error?
+  end
+
+  def self.read_only?
+    config = YAML.load_file(CONFIG_PATH)
+    config.dig('storage', 'maintenance', 'readonly', 'enabled') == true
   end
 
   def self.start!
@@ -148,17 +169,22 @@ module RegistryDatabase
     "registry"
   end
 
-  def self.continue?(needs_stop)
-    return unless needs_stop && running?
+  def self.continue?(needs_stop, needs_read_only)
+    if needs_stop && running?
+      puts 'WARNING: Command cannot run while the container registry is running. ' \
+           'Stop the registry before proceeding? (y/n)'.color(:yellow)
 
-    puts 'WARNING: Migrations cannot be applied while the container registry is running. '\
-         'Stop the registry before proceeding? (y/n)'.color(:yellow)
-
-    if $stdin.gets.chomp.casecmp('y').zero?
-      stop!
-    else
-      puts "Exiting..."
-      exit 1
+      if $stdin.gets.chomp.casecmp('y').zero?
+        stop!
+      else
+        puts "Exiting..."
+        exit 1
+      end
     end
+
+    return unless running? && needs_read_only && !read_only?
+
+    puts 'Command requires the container registry to be in read-only mode. Exiting...'
+    exit 1
   end
 end
