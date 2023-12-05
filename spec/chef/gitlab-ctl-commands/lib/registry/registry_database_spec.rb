@@ -42,5 +42,12 @@ RSpec.describe RegistryDatabase do
         expect(received).to have_key(:command)
       end
     end
+
+    context 'when command is import' do
+      let(:command) { 'import' }
+
+      it_behaves_like 'unknown option is specified'
+      it_behaves_like 'parses command options'
+    end
   end
 end

@@ -105,7 +105,7 @@ module Migrate
   end
 
   def self.populate_subcommands(options)
-    database_docs_url = 'https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs-gitlab/database-migrations.md?ref_type=heads#administration'
+    database_docs_url = 'https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/database-migrations.md#administration'
 
     {
       'up' => OptionParser.new do |opts|
