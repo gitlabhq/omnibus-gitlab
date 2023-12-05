@@ -698,6 +698,30 @@ RSpec.describe 'gitaly' do
         .with_content(/svlogd -tt \/var\/log\/gitlab\/gitaly/)
     end
 
+    context 'when use_wrapper is defined' do
+      context 'with wrapper enabled' do
+        before do
+          stub_gitlab_rb(gitaly: { use_wrapper: true })
+        end
+
+        it 'renders the runit run script with the wrapper' do
+          expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/run')
+            .with_content(/\/opt\/gitlab\/embedded\/bin\/gitaly-wrapper/)
+        end
+      end
+
+      context 'with wrapper disabled' do
+        before do
+          stub_gitlab_rb(gitaly: { use_wrapper: false })
+        end
+
+        it 'renders the runit run script without the wrapper' do
+          expect(chef_run).not_to render_file('/opt/gitlab/sv/gitaly/run')
+            .with_content(/\/opt\/gitlab\/embedded\/bin\/gitaly-wrapper/)
+        end
+      end
+    end
+
     context 'when using git_data_dirs storage configuration' do
       context 'using local gitaly' do
         before do

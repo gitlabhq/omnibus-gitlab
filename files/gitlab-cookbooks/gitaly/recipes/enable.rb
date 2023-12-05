@@ -30,6 +30,7 @@ open_files_ulimit = node['gitaly']['open_files_ulimit']
 runtime_dir = node.dig('gitaly', 'configuration', 'runtime_dir')
 cgroups_mountpoint = node.dig('gitaly', 'configuration', 'cgroups', 'mountpoint')
 cgroups_hierarchy_root = node.dig('gitaly', 'configuration', 'cgroups', 'hierarchy_root')
+use_wrapper = node['gitaly']['use_wrapper']
 
 directory working_dir do
   owner account_helper.gitlab_user
@@ -145,6 +146,7 @@ runit_service 'gitaly' do
     open_files_ulimit: open_files_ulimit,
     cgroups_mountpoint: cgroups_mountpoint,
     cgroups_hierarchy_root: cgroups_hierarchy_root,
+    use_wrapper: use_wrapper,
   }.merge(params))
   log_options logging_settings[:options]
 end

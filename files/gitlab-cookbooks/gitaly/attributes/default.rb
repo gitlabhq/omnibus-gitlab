@@ -8,6 +8,7 @@ default['gitaly']['open_files_ulimit'] = 15000
 default['gitaly']['consul_service_name'] = 'gitaly'
 default['gitaly']['consul_service_meta'] = nil
 default['gitaly']['log_group'] = nil
+default['gitaly']['use_wrapper'] = true
 
 default['gitaly']['configuration'] = {
   runtime_dir: "#{node['gitaly']['dir']}/run",
