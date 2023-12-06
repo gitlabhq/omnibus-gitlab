@@ -28,7 +28,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
             path: "/var/opt/gitlab/gitlab-rails/shared/pages",
           },
           path: "/var/opt/gitlab/gitlab-rails/shared/pages",
-          port: nil
+          port: nil,
+          namespace_in_path: false
         )
       end
     end
@@ -42,7 +43,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
             gitlab_pages: {
               access_control: true,
               artifacts_server: false,
-              external_http: ['1.2.3.4']
+              external_http: ['1.2.3.4'],
+              namespace_in_path: true
             },
             gitlab_rails: {
               pages_path: '/random/path',
@@ -65,6 +67,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
               external_http: true,
               external_https: false,
               artifacts_server: false,
+              namespace_in_path: true,
               object_store: {
                 enabled: true,
                 remote_directory: 'foobar',
@@ -107,6 +110,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
               external_http: false,
               external_https: false,
               artifacts_server: true,
+              namespace_in_path: false,
               object_store: {
                 enabled: true,
                 remote_directory: 'foobar',

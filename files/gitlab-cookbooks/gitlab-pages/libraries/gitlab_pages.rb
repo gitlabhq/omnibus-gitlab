@@ -29,6 +29,7 @@ module GitlabPages
       parse_gitlab_pages_daemon
       parse_secrets
       parse_automatic_oauth_registration
+      parse_namespace_in_path
     end
 
     def parse_pages_external_url
@@ -133,6 +134,21 @@ module GitlabPages
       Gitlab['gitlab_pages']['register_as_oauth_app'] = false
 
       LoggingHelper.warning("Writing secrets to `gitlab-secrets.json` file is disabled. Hence, not automatically registering GitLab Pages as an Oauth App. So, GitLab SSO will not be available as a login option.")
+    end
+
+    def parse_namespace_in_path
+      # If GitLab Pages isn't enabled or namespace_in_path is isn't enabled, do nothing.
+      return unless Gitlab['gitlab_pages']['enable'] && Gitlab['gitlab_pages']['namespace_in_path']
+
+      Gitlab['pages_nginx']['namespace_in_path'] = Gitlab['gitlab_pages']['namespace_in_path']
+      url_scheme = Gitlab['gitlab_rails']['pages_https'] ? 'https' : 'http'
+
+      Gitlab['pages_nginx']['proxy_redirect'] = {
+        "~^#{url_scheme}://(projects\\.#{Gitlab['pages_nginx']['fqdn_regex']})/(.*)$" => "#{url_scheme}://$1/$2",
+        "~^#{url_scheme}://(.*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']})/(.*)$" => "#{url_scheme}://$2/$1/$3",
+        "~^//(.*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']})/(.*)$" => "/$1/$3",
+        "~^/(.*)$" => "/$namespace/$1",
+      }
     end
   end
 end

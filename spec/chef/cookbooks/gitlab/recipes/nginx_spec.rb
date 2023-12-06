@@ -889,6 +889,67 @@ RSpec.describe 'nginx' do
     end
   end
 
+  context 'for namespace_in_path' do
+    before do
+      stub_gitlab_rb(
+        external_url: 'https://gitlab.localhost',
+        pages_external_url: 'https://pages.localhost'
+      )
+    end
+
+    it 'default gitlab_pages namespace_in_path setting is disabled' do
+      expect(chef_run.node['gitlab_pages']['namespace_in_path']).to eql(false)
+    end
+
+    context 'when namespace_in_path is enabled in gitlab_pages' do
+      before do
+        stub_gitlab_rb(
+          gitlab_pages: { namespace_in_path: true }
+        )
+      end
+
+      it 'applies nginx namespace_in_path settings for gitlab-pages' do
+        expect(chef_run).to render_file(http_conf['pages']).with_content { |content|
+          expect(content).to include('server {').twice
+          expect(content).to include('server_name  ~^pages\.localhost$;')
+          expect(content).to include('location ~ ^/(?<namespace>[^/]+)/(?<project>.*)$ {')
+          expect(content).to include('rewrite ^/([^/]+)/(.*)$ /$2 break;')
+          expect(content).to include('proxy_set_header Host $1.$http_host;')
+          expect(content).to include('proxy_set_header X-Gitlab-Namespace-In-Path $namespace;')
+          expect(content).to include('proxy_redirect ~^https://(projects\.pages\.localhost)/(.*)$ https://$1/$2;')
+          expect(content).to include('proxy_redirect ~^https://(.*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
+          expect(content).to include('proxy_redirect ~^//(.*)\.(pages\.localhost)/(.*)$ /$1/$3;')
+          expect(content).to include('proxy_redirect ~^/(.*)$ /$namespace/$1;')
+          expect(content).to include('proxy_hide_header X-Gitlab-Namespace-In-Path;')
+        }
+      end
+    end
+
+    context 'when namespace_in_path is disabled in pages_nginx' do
+      before do
+        stub_gitlab_rb(
+          gitlab_pages: { namespace_in_path: false }
+        )
+      end
+
+      it 'does not apply nginx namespace_in_path settings for gitlab-pages' do
+        expect(chef_run).to render_file(http_conf['pages']).with_content { |content|
+          expect(content).to include('server {')
+          expect(content).not_to include('server_name  ~^pages\.localhost$;')
+          expect(content).not_to include('location ~ ^/(?<namespace>[^/]+)/(?<project>.*)$ {')
+          expect(content).not_to include('rewrite ^/([^/]+)/(.*)$ /$2 break;')
+          expect(content).not_to include('proxy_set_header Host $1.$http_host;')
+          expect(content).not_to include('proxy_set_header X-Gitlab-Namespace-In-Path $namespace;')
+          expect(content).not_to include('proxy_redirect ~^https://(projects\.pages\.localhost)/(.*)$ https://$1/$2;')
+          expect(content).not_to include('proxy_redirect ~^https://(.*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
+          expect(content).not_to include('proxy_redirect ~^//(.*)\.(pages\.localhost)/(.*)$ /$1/$3;')
+          expect(content).not_to include('proxy_redirect ~^/(.*)$ /$namespace/$1;')
+          expect(content).to include('proxy_hide_header X-Gitlab-Namespace-In-Path;')
+        }
+      end
+    end
+  end
+
   include_examples "consul service discovery", "nginx", "nginx"
 
   context 'log directory and runit group' do
