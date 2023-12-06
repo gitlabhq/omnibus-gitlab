@@ -377,6 +377,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       pages_object_store_enabled: node['gitlab']['gitlab_rails']['pages_object_store_enabled'],
       pages_object_store_remote_directory: node['gitlab']['gitlab_rails']['pages_object_store_remote_directory'],
       pages_object_store_connection: node['gitlab']['gitlab_rails']['pages_object_store_connection'],
+      pages_namespace_in_path: node['gitlab_pages']['namespace_in_path'],
       mattermost_host: mattermost_host,
       mattermost_enabled: node['mattermost']['enable'] || !mattermost_host.nil?,
       sidekiq: node['gitlab']['sidekiq'],

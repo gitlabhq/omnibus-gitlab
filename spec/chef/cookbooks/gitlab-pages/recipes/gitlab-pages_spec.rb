@@ -255,6 +255,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             redirects_max_path_segments: 50,
             redirects_max_rule_count: 2000,
             enable_disk: true,
+            namespace_in_path: true,
             env: {
               GITLAB_CONTINUOUS_PROFILING: "stackdriver?service=gitlab-pages",
             },
@@ -329,6 +330,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             redirects-max-path-segments=50
             redirects-max-rule-count=2000
             header=X-XSS-Protection: 1; mode=block;;X-Content-Type-Options: nosniff;;Test: Header
+            namespace-in-path=true
         EOS
 
         expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(expected_content)

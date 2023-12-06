@@ -23,101 +23,63 @@ server {
 }
 <% end %>
 
+<% if @namespace_in_path %>
+## Experimental - Handle requests having namespace in path
+## See https://gitlab.com/gitlab-org/gitlab/-/issues/211677
+server {
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% if @http2_enabled %> http2<% end %><% end %>;
+<% end %>
+  server_name  ~^<%= @fqdn_regex %>$;
+
+  <%= render "nginx-gitlab-pages-http-common-server.erb" %>
+
+  # Pass when namespace in path to pages daemon after the rewrite
+  location ~ ^/(?<namespace>[^/]+)/(?<project>.*)$ {
+    ## Rewrite remove namespace from path
+    rewrite ^/([^/]+)/(.*)$ /$2 break;
+
+    <% @proxy_set_headers.each do |header| %>
+      <% next if header[1].nil? %>
+      <% if header[0] == "Host" %>
+    ## Put namespace back in host from path
+    proxy_set_header <%= header[0] %> <%= "$1."+header[1] %>;
+      <% else %>
+    proxy_set_header <%= header[0] %> <%= header[1] %>;
+      <% end %>
+    <% end %>
+    proxy_set_header X-Gitlab-Namespace-In-Path $namespace;
+
+    <%= render "nginx-gitlab-pages-http-common-server.erb" %>
+
+    ## Put namespace in path from host before sending it to the user
+  <% @proxy_redirect.each do |redirect| %>
+    proxy_redirect <%= redirect[0] %> <%= redirect[1] %>;
+  <% end %>
+  }
+
+  <%= @custom_gitlab_server_config %>
+}
+<% end %>
+
 server {
 <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% if @http2_enabled %> http2<% end %><% end %>;
 <% end %>
   server_name  ~^(?<group>.*)\.<%= @fqdn_regex %>$;
-  server_tokens off; ## Don't show the nginx version number, a security best practice
 
-  ## Disable symlink traversal
-  disable_symlinks on;
+  <%= render "nginx-gitlab-pages-http-common-server.erb" %>
 
-  <% if @https %>
-  ## Strong SSL Security
-  ## https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
-  ssl_certificate <%= @ssl_certificate %>;
-  ssl_certificate_key <%= @ssl_certificate_key %>;
-  <% if @ssl_client_certificate %>
-  ssl_client_certificate <%= @ssl_client_certificate%>;
-  <% end %>
-  <% if @ssl_verify_client %>
-  ssl_verify_client <%= @ssl_verify_client%>;
-  ssl_verify_depth <%= @ssl_verify_depth%>;
-  <% end %>
-
-  # GitLab needs backwards compatible ciphers to retain compatibility with Java IDEs
-  ssl_ciphers '<%= @ssl_ciphers %>';
-  ssl_protocols  <%= @ssl_protocols %>;
-  ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
-  ssl_session_cache  <%= @ssl_session_cache %>;
-  ssl_session_tickets <%= @ssl_session_tickets %>;
-  ssl_session_timeout  <%= @ssl_session_timeout %>;
-
-  <% if @ssl_dhparam %>
-  ssl_dhparam <%= @ssl_dhparam %>;
-  <% end %>
-
-  <% if @ssl_password_file %>
-  ssl_password_file '<%= @ssl_password_file %>';
-  <% end %>
-  <% end %>
-
-  ## Real IP Module Config
-  ## http://nginx.org/en/docs/http/ngx_http_realip_module.html
-  <% if @real_ip_header %>
-  real_ip_header <%= @real_ip_header %>;
-  <% end %>
-  <% if @real_ip_recursive %>
-  real_ip_recursive <%= @real_ip_recursive %>;
-  <% end %>
-  <% @real_ip_trusted_addresses.each do |trusted_address| %>
-  set_real_ip_from <%= trusted_address %>;
-  <% end %>
-
-  ## HSTS Config
-  ## https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
-  <% unless @hsts_max_age.nil? || @hsts_max_age <= 0 %>
-  add_header Strict-Transport-Security "max-age=<%= @hsts_max_age -%>
-<% if @hsts_include_subdomains %>; includeSubdomains<% end %>";
-  <% end %>
-
-  ## Individual nginx logs for this GitLab vhost
-  access_log  <%= @log_directory %>/gitlab_pages_access.log gitlab_access;
-  error_log   <%= @log_directory %>/gitlab_pages_error.log <%= @error_log_level%>;
-
-  # Pass everything to pages daemon
+  # Pass everything to pages daemon when namespace in host
   location / {
     <% @proxy_set_headers.each do |header| %>
     <% next if header[1].nil? %>
     proxy_set_header <%= header[0] %> <%= header[1] %>;
     <% end %>
+    proxy_hide_header X-Gitlab-Namespace-In-Path;
 
-    # Prevent NGINX from caching pages in response to the pages `Cache-Control`
-    # header.
-    #
-    # Browsers already respect this directive and Pages can handle the request
-    # volume without help from NGINX.
-    #
-    # If this changes in the future, ensure `proxy_cache_key` is set to a value
-    # like `$scheme$host$request_uri`, as the default value does not take the
-    # Pages hostname into account, leading to incorrect responses being served.
-    #
-    # See https://gitlab.com/gitlab-org/gitlab-pages/issues/73
-    proxy_cache off;
-
-    <% if @proxy_custom_buffer_size -%>
-      proxy_buffers 8 <%= @proxy_custom_buffer_size %>;
-      proxy_buffer_size <%= @proxy_custom_buffer_size %>;
-    <% end -%>
-
-    proxy_http_version 1.1;
-    proxy_pass          http://<%= @pages_listen_proxy %>;
+    <%= render "nginx-gitlab-pages-http-common-location.erb" %>
   }
-
-  # Define custom error pages
-  error_page 403 /403.html;
-  error_page 404 /404.html;
 
   <%= @custom_gitlab_server_config %>
 }

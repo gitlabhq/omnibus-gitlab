@@ -2007,6 +2007,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
 # }
 
+# Experimental - Enable namespace in path
+# gitlab_pages['namespace_in_path'] = false
+
 ################################################################################
 ## GitLab Pages NGINX
 ################################################################################

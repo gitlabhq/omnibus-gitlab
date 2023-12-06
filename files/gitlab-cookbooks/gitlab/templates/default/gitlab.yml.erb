@@ -436,6 +436,7 @@ production: &base
     local_store:
       enabled: <%= @pages_local_store_enabled %>
       path: <%= @pages_local_store_path %>
+    namespace_in_path: <%= @pages_namespace_in_path %>
 
   ## Gravatar
   ## For Libravatar see: https://docs.gitlab.com/ee/customization/libravatar.html
