@@ -24,11 +24,11 @@ skip_transitive_dependency_licensing true
 
 # Follow the Ruby upgrade guide when changing the ruby version
 # link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
-current_ruby_version = '3.0.6'
+current_ruby_version = '3.1.4'
 
 # NOTE: When this value is updated, flip `USE_NEXT_RUBY_VERSION_IN_*` variable
 # to false to avoid surprises.
-next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.0.6'
+next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.1.4'
 
 # MRs targeting stable branches should use current Ruby version and ignore next
 # Ruby version. Also, we provide `USE_OLD_RUBY_VERSION` variable to force usage
