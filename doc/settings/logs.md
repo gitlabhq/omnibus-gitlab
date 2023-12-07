@@ -51,7 +51,11 @@ registry['log_directory'] = "/var/log/gitlab/registry"
 Gitaly and Mattermost have different log directory configs:
 
 ```ruby
-gitaly['configuration']['logging']['dir'] = "/var/log/gitlab/registry"
+gitaly['configuration'] = {
+   logging: {
+    dir: "/var/log/gitlab/registry"
+   }
+}
 mattermost['log_file_directory'] = "/var/log/gitlab/registry"
 ```
 
@@ -229,7 +233,11 @@ log format. Text formatting can be configured by setting the following
 in `/etc/gitlab/gitlab.rb` and then running `gitlab-ctl reconfigure` afterward:
 
 ```ruby
-gitaly['logging_format'] = ''
+gitaly['configuration'] = {
+   logging: {
+    format: ""
+   }
+}
 gitlab_shell['log_format'] = 'text'
 gitlab_workhorse['log_format'] = 'text'
 registry['log_formatter'] = 'text'
@@ -268,7 +276,11 @@ Registry, GitLab Shell and Gitaly:
    ```ruby
    registry['log_level'] = 'info'
    gitlab_shell['log_level'] = 'INFO'
-   gitaly['logging_level'] = 'warn'
+   gitaly['configuration'] = {
+     logging: {
+       level: "warn"
+     }
+   }
    ```
 
 1. Reconfigure GitLab:
