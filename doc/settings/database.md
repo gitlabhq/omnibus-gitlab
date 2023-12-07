@@ -600,6 +600,8 @@ update this setting in `/etc/gitlab/gitlab.rb`:
 gitlab_rails['databases']['ci']['enable'] = false
 ```
 
+In a multi-node environment, this setting should be updated on all Rails and Sidekiq nodes. 
+
 ## Using a non-packaged PostgreSQL database management server
 
 By default, GitLab is configured to use the PostgreSQL server that's included
