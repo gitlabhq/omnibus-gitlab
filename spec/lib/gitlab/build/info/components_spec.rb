@@ -30,7 +30,7 @@ RSpec.describe Build::Info::Components::GitLabRails do
         # On stable branches and tags, generate-facts will not populate version facts
         # So, the content of the VERSION file will be used as-is.
         it 'returns tag with v prefix' do
-          allow(File).to receive(:exist?).with(/gitlab-rails_version/).and_return(false)
+          allow(File).to receive(:exist?).with(/gitlab-rails.*version/).and_return(false)
           allow(File).to receive(:read).with(/VERSION/).and_return('15.7.0')
           expect(described_class.ref).to eq('v15.7.0')
         end
@@ -38,8 +38,8 @@ RSpec.describe Build::Info::Components::GitLabRails do
 
       context 'when on feature branches' do
         it 'returns commit SHA without any prefix' do
-          allow(File).to receive(:exist?).with(/gitlab-rails_version/).and_return(true)
-          allow(File).to receive(:read).with(/gitlab-rails_version/).and_return('arandomcommit')
+          allow(File).to receive(:exist?).with(/gitlab-rails.*version/).and_return(true)
+          allow(File).to receive(:read).with(/gitlab-rails.*version/).and_return('arandomcommit')
           expect(described_class.ref).to eq('arandomcommit')
         end
       end
@@ -50,7 +50,7 @@ RSpec.describe Build::Info::Components::GitLabRails do
         # On stable branches and tags, generate-facts will not populate version facts
         # So, whatever is on VERSION file, will be used.
         it 'returns tag without v prefix' do
-          allow(File).to receive(:exist?).with(/gitlab-rails_version/).and_return(false)
+          allow(File).to receive(:exist?).with(/gitlab-rails.*version/).and_return(false)
           allow(File).to receive(:read).with(/VERSION/).and_return('15.7.0')
           expect(described_class.ref(prepend_version: false)).to eq('15.7.0')
         end
@@ -58,8 +58,8 @@ RSpec.describe Build::Info::Components::GitLabRails do
 
       context 'when on feature branches' do
         it 'returns commit SHA without any prefix' do
-          allow(File).to receive(:exist?).with(/gitlab-rails_version/).and_return(true)
-          allow(File).to receive(:read).with(/gitlab-rails_version/).and_return('arandomcommit')
+          allow(File).to receive(:exist?).with(/gitlab-rails.*version/).and_return(true)
+          allow(File).to receive(:read).with(/gitlab-rails.*version/).and_return('arandomcommit')
           expect(described_class.ref(prepend_version: false)).to eq('arandomcommit')
         end
       end
