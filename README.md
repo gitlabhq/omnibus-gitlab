@@ -14,7 +14,7 @@ to make contributing as easy as possible.
 
 ## Documentation
 
-The documentation overview is in the [readme in the doc directory](doc/README.md).
+The documentation can be found in the [doc directory](doc/index.md).
 
 ## Omnibus fork
 
@@ -22,7 +22,7 @@ Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omni
 
 ## Deprecated links
 
-*We left the links below in the readme to preserve old links, but please use the [readme in the doc directory](doc/README.md) to browse the complete documentation.*
+*We left the links below in the readme to preserve old links, but please use the [doc directory](doc/index.md) to browse the complete documentation.*
 
 ## Contributing
 
@@ -37,7 +37,7 @@ Please follow the steps on the [downloads page][downloads].
 Your GitLab instance should be reachable over HTTP at the IP or hostname of your
 server. You can login as an admin user with username `root` and password `5iveL!fe`.
 
-See [doc/maintenance/README.md](doc/maintenance/README.md) for useful commands
+See [doc/maintenance/index.md](doc/maintenance/index.md) for useful commands
 to control/debug your GitLab instance.
 
 ### Configuration options
@@ -129,7 +129,7 @@ See [doc/settings/configuration.md](doc/settings/configuration.md#only-start-omn
 ### Updating
 
 Instructions for updating your Omnibus installation and upgrading from a manual
-installation are in the [update doc](doc/update/README.md).
+installation are in the [update directory](doc/update/).
 
 ### Uninstalling Omnibus GitLab
 
@@ -137,62 +137,57 @@ See [doc/installation/index.md](doc/installation/index.md#uninstall-the-linux-pa
 
 ### Common installation problems
 
-This section has been moved to the separate document [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md).
+This section has been moved to the separate document [doc/troubleshooting.md](doc/troubleshooting.md).
 
 Section below remains for historical reasons(mainly to not break existing links). Each section contains the link to the new location.
 
 #### Apt error 'The requested URL returned error: 403'
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#apt-error-the-requested-url-returned-error-403).
+See [doc/troubleshooting.md](doc/troubleshooting.md#apt-error-the-requested-url-returned-error-403).
 
 #### GitLab is unreachable in my browser
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#gitlab-is-unreachable-in-my-browser).
+See [doc/troubleshooting.md](doc/troubleshooting.md#gitlab-is-unreachable-in-my-browser).
 
 #### Emails are not being delivered
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#emails-are-not-being-delivered).
-
-#### Reconfigure freezes at `ruby_block[supervise_redis_sleep] action run`
-
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#reconfigure-freezes-at-ruby_blocksupervise_redis_sleep-action-run).
+See [doc/troubleshooting.md](doc/troubleshooting.md#emails-are-not-being-delivered).
 
 #### TCP ports for GitLab services are already taken
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#tcp-ports-for-gitlab-services-are-already-taken).
+See [doc/troubleshooting.md](doc/troubleshooting.md#tcp-ports-for-gitlab-services-are-already-taken).
 
 #### Git SSH access stops working on SELinux-enabled systems
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#git-ssh-access-stops-working-on-selinux-enabled-systems
-).
+See [doc/troubleshooting.md](doc/troubleshooting.md#selinux-enabled-systems).
 
 #### Postgres error 'FATAL:  could not create shared memory segment: Cannot allocate memory'
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#postgres-error-fatal-could-not-create-shared-memory-segment-cannot-allocate-memory).
+See [doc/troubleshooting.md](doc/troubleshooting.md#postgresql-error-fatal-could-not-create-shared-memory-segment-cannot-allocate-memory).
 
 #### Reconfigure complains about the GLIBC version
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#reconfigure-complains-about-the-glibc-version).
+See [doc/troubleshooting.md](doc/troubleshooting.md#reconfigure-complains-about-the-glibc-version).
 
 #### Reconfigure fails to create the git user
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#reconfigure-fails-to-create-the-git-user).
+See [doc/troubleshooting.md](doc/troubleshooting.md#reconfigure-fails-to-create-the-git-user).
 
 #### Failed to modify kernel parameters with sysctl
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#failed-to-modify-kernel-parameters-with-sysctl).
+See [doc/troubleshooting.md](doc/troubleshooting.md#failed-to-modify-kernel-parameters-with-sysctl).
 
 #### I am unable to install omnibus-gitlab without root access
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#i-am-unable-to-install-omnibus-gitlab-without-root-access).
+See [doc/troubleshooting.md](doc/troubleshooting.md#i-am-unable-to-install-omnibus-gitlab-without-root-access).
 
 #### gitlab-rake assets:precompile fails with 'Permission denied'
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
+See [doc/troubleshooting.md](doc/troubleshooting.md#gitlab-rake-assetsprecompile-fails-with-permission-denied).
 
 #### 'Short read or OOM loading DB' error
 
-See [doc/common_installation_problems/README.md](doc/common_installation_problems/README.md#short-read-or-oom-loading-db-error).
+See [doc/troubleshooting.md](doc/troubleshooting.md#short-read-or-oom-loading-db-error).
 
 ### Backups
 
