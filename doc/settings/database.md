@@ -42,7 +42,7 @@ of that setting in the running PostgreSQL instance.
 #### Automatic restart when the PostgreSQL version changes
 
 By default, Linux package installations automatically restart PostgreSQL when the underlying
-version changes, as suggested by the [upstream documentation](https://www.postgresql.org/docs/13/upgrading.html).
+version changes, as suggested by the [upstream documentation](https://www.postgresql.org/docs/14/upgrading.html).
 This behavior can be controlled using the `auto_restart_on_version_change` setting
 available for `postgresql` and `geo-postgresql`.
 
@@ -73,7 +73,7 @@ to avoid errors like the [one related to loading necessary libraries](#could-not
 Linux package installations automatically enable SSL on the PostgreSQL server, but it will accept
 both encrypted and unencrypted connections by default. Enforcing SSL requires
 using the `hostssl` configuration in `pg_hba.conf`. For more details, see the
-[`pg_hba.conf` documentation](https://www.postgresql.org/docs/13/auth-pg-hba-conf.html).
+[`pg_hba.conf` documentation](https://www.postgresql.org/docs/14/auth-pg-hba-conf.html).
 
 SSL support depends on the following files:
 
