@@ -197,7 +197,7 @@ RSpec.describe RedisHelper do
         it 'renders parameters for workhorse redis' do
           stub_gitlab_rb(baseline_config_with_sentinel.merge({
                                                                gitlab_rails: {
-                                                                 redis_workhorse_instance: "redis://:redis.workhorse.com:8888",
+                                                                 redis_workhorse_instance: "redis://:@redis.workhorse.com:8888",
                                                                  redis_workhorse_password: "workhorse.password"
                                                                }
                                                              }))
@@ -205,7 +205,7 @@ RSpec.describe RedisHelper do
           params = subject.workhorse_params
           expect(params[:password]).to eq('workhorse.password')
           expect(params[:sentinels]).to eq([])
-          expect(params[:url].to_s).to eq('redis://:redis.workhorse.com:8888')
+          expect(params[:url].to_s).to eq('redis://:@redis.workhorse.com:8888')
         end
       end
 
