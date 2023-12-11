@@ -410,6 +410,10 @@ templatesymlink "Create a gitlab_workhorse_secret and create a symlink to Rails 
   gitlab_workhorse_services.each { |svc| notifies :restart, svc }
 end
 
+gitlab_shell_secret_services = dependent_services
+gitlab_shell_secret_services += ['runit_service[gitaly]'] if omnibus_helper.should_notify?('gitaly')
+gitlab_shell_secret_services += ['runit_service[gitlab-sshd]'] if Services.enabled?('gitlab_sshd')
+
 templatesymlink "Create a gitlab_shell_secret and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, ".gitlab_shell_secret")
   link_to File.join(gitlab_rails_etc_dir, "gitlab_shell_secret")
@@ -419,7 +423,7 @@ templatesymlink "Create a gitlab_shell_secret and create a symlink to Rails root
   mode "0644"
   sensitive true
   variables(secret_token: node['gitlab']['gitlab_shell']['secret_token'])
-  dependent_services.each { |svc| notifies :restart, svc }
+  gitlab_shell_secret_services.each { |svc| notifies :restart, svc }
   notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?
 end
 
