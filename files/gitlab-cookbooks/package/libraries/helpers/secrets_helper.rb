@@ -1,6 +1,10 @@
 require 'openssl'
 
 class SecretsHelper
+  SECRETS_FILE = '/etc/gitlab/gitlab-secrets.json'.freeze
+  SECRETS_FILE_CHEF_ATTR = '_gitlab_secrets_file_path'.freeze
+  SKIP_GENERATE_SECRETS_CHEF_ATTR = '_skip_generate_secrets'.freeze
+
   def self.generate_hex(chars)
     SecureRandom.hex(chars)
   end
@@ -40,17 +44,17 @@ class SecretsHelper
   # Load the secrets from disk
   #
   # @return [Hash]  empty if no secrets
-  def self.load_gitlab_secrets
+  def self.load_gitlab_secrets(path = SecretsHelper::SECRETS_FILE)
     existing_secrets = {}
 
-    existing_secrets = Chef::JSONCompat.from_json(File.read("/etc/gitlab/gitlab-secrets.json")) if File.exist?("/etc/gitlab/gitlab-secrets.json")
+    existing_secrets = Chef::JSONCompat.from_json(File.read(path)) if File.exist?(path)
 
     existing_secrets
   end
 
   # Reads the secrets into the Gitlab config singleton
-  def self.read_gitlab_secrets
-    existing_secrets = load_gitlab_secrets
+  def self.read_gitlab_secrets(path = SecretsHelper::SECRETS_FILE)
+    existing_secrets = load_gitlab_secrets(path)
 
     existing_secrets.each do |k, v|
       if Gitlab[k]
@@ -59,7 +63,7 @@ class SecretsHelper
           Gitlab[k][pk] ||= p
         end
       else
-        warn("Ignoring section #{k} in /etc/gitlab/gitlab-secrets.json, does not exist in gitlab.rb")
+        warn("Ignoring section #{k} in #{path}, does not exist in gitlab.rb")
       end
     end
   end
@@ -130,11 +134,11 @@ class SecretsHelper
     secret_tokens
   end
 
-  def self.write_to_gitlab_secrets
+  def self.write_to_gitlab_secrets(path = SECRETS_FILE)
     secret_tokens = gather_gitlab_secrets
 
-    if File.directory?('/etc/gitlab')
-      File.open('/etc/gitlab/gitlab-secrets.json', 'w', 0600) do |f|
+    if File.directory?(File.dirname(path))
+      File.open(path, 'w', 0600) do |f|
         f.puts(Chef::JSONCompat.to_json_pretty(secret_tokens))
         f.chmod(0600)
       end

@@ -23,10 +23,11 @@ module GitlabCtl
         shell_out.stdout
       end
 
-      def run_command(command, live: false, user: nil, timeout: nil, env: {})
+      def run_command(command, live: false, user: nil, timeout: nil, env: {}, input: nil)
         timeout = Mixlib::ShellOut::DEFAULT_READ_TIMEOUT if timeout.nil?
         shell_out = Mixlib::ShellOut.new(command, timeout: timeout, environment: env)
         shell_out.user = user unless user.nil?
+        shell_out.input = input if input
         shell_out.live_stdout = $stdout if live
         shell_out.live_stderr = $stderr if live
         shell_out.run_command
@@ -171,6 +172,10 @@ module GitlabCtl
         return true if public_attributes_missing?
 
         !get_public_node_attributes.key?(attribute_key)
+      end
+
+      def master_cookbook
+        File.directory?('/opt/gitlab/embedded/cookbooks/gitlab-ee') ? 'gitlab-ee' : 'gitlab'
       end
     end
   end

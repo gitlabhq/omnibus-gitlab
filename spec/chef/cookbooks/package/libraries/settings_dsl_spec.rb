@@ -85,7 +85,7 @@ RSpec.describe SettingsDSL::Utils do
         end
 
         it 'generates warning about secrets not persisting' do
-          expect(LoggingHelper).to receive(:warning).with(/You've enabled generating default secrets but have disabled writing them to gitlab-secrets.json file/)
+          expect(LoggingHelper).to receive(:warning).with(/You've enabled generating default secrets but have disabled writing them to \/etc\/gitlab\/gitlab-secrets.json file/)
 
           chef_run
         end
