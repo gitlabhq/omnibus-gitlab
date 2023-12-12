@@ -22,7 +22,7 @@ omnibus_gem_version = Gitlab::Version.new('omnibus')
 #      grep "gem 'install " config/software/*
 gem 'omnibus', git: omnibus_gem_version.remote(Gitlab::Version::ALTERNATIVE_SOURCE), tag: omnibus_gem_version.print(false)
 source 'https://packagecloud.io/cinc-project/stable' do
-  gem 'chef', '~> 17.10.0'
+  gem 'chef', '~> 17.10.95'
   gem 'chef-cli', '~> 5.6.1'
   gem 'chef-utils'
   gem 'mixlib-versioning'
