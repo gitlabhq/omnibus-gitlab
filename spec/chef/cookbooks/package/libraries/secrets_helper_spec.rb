@@ -19,7 +19,7 @@ RSpec.describe 'secrets' do
     allow(File).to receive(:open).with('/etc/gitlab/initial_root_password', 'w', 0600).and_yield(double(:file, write: true)).once
   end
 
-  context 'when /etc/gitlab does not exist' do
+  context 'when the default directory does not exist' do
     it 'does not write secrets to the file' do
       allow(File).to receive(:directory?).with('/etc/gitlab').and_return(false)
       expect(File).not_to receive(:open).with('/etc/gitlab/gitlab-secrets.json', 'w')
@@ -28,7 +28,7 @@ RSpec.describe 'secrets' do
     end
   end
 
-  context 'when /etc/gitlab exists' do
+  context 'when the default directory does exists' do
     let(:file) { double(:file) }
     let(:new_secrets) { @new_secrets }
     let(:gitlab_rb_ci_jwt_signing_key) { SecretsHelper.generate_rsa(4096).to_pem }

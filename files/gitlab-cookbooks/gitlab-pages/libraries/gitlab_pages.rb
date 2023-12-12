@@ -27,7 +27,8 @@ module GitlabPages
     def parse_variables
       parse_pages_external_url
       parse_gitlab_pages_daemon
-      parse_secrets
+      # Only call parse_secrets when not generating a defaults secrets file.
+      parse_secrets unless Gitlab['node'][SecretsHelper::SECRETS_FILE_CHEF_ATTR]
       parse_automatic_oauth_registration
     end
 
