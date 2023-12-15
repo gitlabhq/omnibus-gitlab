@@ -921,6 +921,11 @@ RSpec.describe 'nginx' do
           expect(content).to include('proxy_redirect ~^//(.*)\.(pages\.localhost)/(.*)$ /$1/$3;')
           expect(content).to include('proxy_redirect ~^/(.*)$ /$namespace/$1;')
           expect(content).to include('proxy_hide_header X-Gitlab-Namespace-In-Path;')
+          # Below checks are to verify proper render entries are made
+          expect(content).to include('proxy_http_version 1.1;').twice
+          expect(content).to include('proxy_pass').twice
+          expect(content).to include('disable_symlinks on;').twice
+          expect(content).to include('server_tokens off;').twice
         }
       end
     end
@@ -945,6 +950,11 @@ RSpec.describe 'nginx' do
           expect(content).not_to include('proxy_redirect ~^//(.*)\.(pages\.localhost)/(.*)$ /$1/$3;')
           expect(content).not_to include('proxy_redirect ~^/(.*)$ /$namespace/$1;')
           expect(content).to include('proxy_hide_header X-Gitlab-Namespace-In-Path;')
+          # Below checks are to verify proper render entries are made
+          expect(content).to include('proxy_http_version 1.1;').once
+          expect(content).to include('proxy_pass').once
+          expect(content).to include('disable_symlinks on;').once
+          expect(content).to include('server_tokens off;').once
         }
       end
     end

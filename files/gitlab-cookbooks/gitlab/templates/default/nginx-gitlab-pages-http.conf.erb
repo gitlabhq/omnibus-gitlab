@@ -50,7 +50,7 @@ server {
     <% end %>
     proxy_set_header X-Gitlab-Namespace-In-Path $namespace;
 
-    <%= render "nginx-gitlab-pages-http-common-server.erb" %>
+    <%= render "nginx-gitlab-pages-http-common-location.erb" %>
 
     ## Put namespace in path from host before sending it to the user
   <% @proxy_redirect.each do |redirect| %>
