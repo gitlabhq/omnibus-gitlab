@@ -243,8 +243,8 @@ can use this.
    1. The CA file should be owned by the database user, and its permissions should be `0400`
 
    NOTE:
-   Don't use the filenames `server.crt` or `server.key` for these files. These
-   filenames are reserved for the internal use of `omnibus-gitlab`.
+   Don't use the file names `server.crt` or `server.key` for these files. These
+   file names are reserved for the internal use of `omnibus-gitlab`.
 
 1. Ensure the following is set in `gitlab.rb`:
 
