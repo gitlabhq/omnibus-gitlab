@@ -204,7 +204,7 @@ To add alternative domains to your Let's Encrypt certificate:
 
    ```shell
    sudo gitlab-ctl reconfigure
-   ```  
+   ```
 
 The resulting Let's Encrypt certificates generated for the main GitLab application will
 include the alternative domains specified. The generated files are located at:
@@ -378,7 +378,7 @@ doesn't affect NGINX. Instead, you must cause NGINX to
 gracefully:
 
 ```shell
-sudo gitlab-ctl hup nginx 
+sudo gitlab-ctl hup nginx
 sudo gitlab-ctl hup registry
 ```
 
@@ -445,7 +445,7 @@ GitLab, another certificate must be used on the GitLab instance.
 
 ## Use custom SSL ciphers
 
-By default, GitLab is using SSL ciphers that are a combination of testing on
+By default, the Linux package [uses SSL ciphers](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/0482fb343a4434ba3a2523a7fb576d2bbb2a3f5f/files/gitlab-cookbooks/gitlab/attributes/default.rb#L876) that are a combination of testing on
 <https://gitlab.com> and various best practices contributed by the GitLab community.
 
 To change the SSL ciphers:
