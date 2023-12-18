@@ -41,7 +41,7 @@ Versions of the primary GitLab components like GitLab Rails or Gitaly are contro
 
 Check the following table for more information:
 
-| Filename                            | Environment variable                 | Description |
+| File name                             | Environment variable                 | Description |
 | ------------------------------------ | ------------------------------------ | ----------- |
 | `VERSION`                              | `GITLAB_VERSION`                       | Controls the Git reference of the GitLab Rails application. By default, points to the `master` branch of the GitLab-FOSS repository. If you want to use the GitLab repository, set the environment variable `ee` to true. |
 | `GITALY_SERVER_VERSION`                | `GITALY_SERVER_VERSION`                | Git reference of the [Gitaly](https://gitlab.com/gitlab-org/gitaly) repository. |
