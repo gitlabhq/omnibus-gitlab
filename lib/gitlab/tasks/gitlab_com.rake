@@ -37,10 +37,14 @@ namespace :gitlab_com do
     # other than `master` in the deployer project
     trigger_ref = Gitlab::Util.get_env('DEPLOYER_TRIGGER_REF') || :master
 
-    current_os = OhaiHelper.fetch_os_with_codename[0..1].join("-")
+    # Find out the OS for which packages are built for. We can not use Ohai for
+    # this, as that will return the builder image being used to run this rake
+    # task. So, we detect the OS from the path of the packages.
+    package_os = Build::Info::Package.file_list.map { |path| path.split("/")[1] }.uniq.first
+
     os_for_deployment = Build::Info::Deploy::OS_MAPPING[Build::Info::Deploy.environment_key]
-    if current_os != os_for_deployment
-      puts "Deployment to #{deploy_env} not to be triggered from this build (#{current_os})."
+    if package_os != os_for_deployment
+      puts "Deployment to #{deploy_env} not to be triggered from this build (#{package_os})."
       next
     end
 

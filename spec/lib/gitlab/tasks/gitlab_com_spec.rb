@@ -47,7 +47,7 @@ RSpec.describe 'gitlab_com', type: :rake do
 
         context 'with the auto-deploy tag' do
           before do
-            allow(OhaiHelper).to receive(:fetch_os_with_codename).and_return(%w[ubuntu bionic])
+            allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(%w[pkg/ubuntu-bionic/gitlab-ee_16.7.0-ee.0_amd64.deb])
             allow(Build::Check).to receive(:is_auto_deploy?).and_return(true)
           end
 
@@ -58,7 +58,7 @@ RSpec.describe 'gitlab_com', type: :rake do
 
         context 'when running on Ubuntu 18.04' do
           before do
-            allow(OhaiHelper).to receive(:fetch_os_with_codename).and_return(%w[ubuntu bionic])
+            allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(%w[pkg/ubuntu-bionic/gitlab-ee_16.7.0-ee.0_amd64.deb])
           end
 
           context 'with a release candidate (RC) tag' do
@@ -89,7 +89,7 @@ RSpec.describe 'gitlab_com', type: :rake do
 
         context 'when running on Ubuntu 20.04' do
           before do
-            allow(OhaiHelper).to receive(:fetch_os_with_codename).and_return(%w[ubuntu focal])
+            allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(%w[pkg/ubuntu-focal/gitlab-ee_16.7.0-ee.0_amd64.deb])
           end
 
           context 'with a release candidate (RC) tag' do
