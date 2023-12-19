@@ -58,8 +58,6 @@ RSpec.describe 'monitoring::gitlab-exporter' do
           expect(settings.dig('probes', 'ruby')).not_to be_nil
           expect(settings.dig('probes', 'sidekiq')).not_to be_nil
           expect(settings.dig('probes', 'metrics', 'rows_count')).not_to be_nil
-          expect(settings.dig('probes', 'sidekiq', 'opts', 'probe_namespaced')).to be_truthy
-          expect(settings.dig('probes', 'sidekiq', 'opts', 'probe_non_namespaced')).to be_truthy
           expect(settings['server']).not_to include('tls_enabled')
 
           expect(content).to match(/host=\/var\/opt\/gitlab\/postgresql/)
