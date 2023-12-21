@@ -1141,6 +1141,93 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    describe 'gitlab_shell_secret' do
+      let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab_shell_secret and create a symlink to Rails root') }
+
+      context 'by default' do
+        cached(:chef_run) do
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
+        end
+
+        it 'creates the template' do
+          expect(chef_run).to create_templatesymlink("Create a gitlab_pages_secret and create a symlink to Rails root").with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644'
+          )
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink).to notify('runit_service[gitaly]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
+        end
+      end
+
+      context 'with gitlab-sshd enabled' do
+        let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab_shell_secret and create a symlink to Rails root') }
+
+        cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(
+              gitlab_sshd: { enable: true }
+            )
+          end
+
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
+        end
+
+        it 'creates the template' do
+          expect(chef_run).to create_templatesymlink("Create a gitlab_pages_secret and create a symlink to Rails root").with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644'
+          )
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink).to notify('runit_service[gitlab-sshd]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[gitaly]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
+        end
+      end
+
+      context 'with specific gitlab_shell_secret' do
+        let(:gitlab_shell_secret_token) { SecureRandom.base64(32) }
+
+        cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(
+              gitlab_shell: { secret_token: gitlab_shell_secret_token }
+            )
+          end
+
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
+        end
+
+        it 'renders the correct node attribute' do
+          expect(chef_run).to create_templatesymlink("Create a gitlab_shell_secret and create a symlink to Rails root").with_variables(
+            secret_token: gitlab_shell_secret_token
+          )
+        end
+
+        it 'uses the correct owner and permissions' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab_shell_secret and create a symlink to Rails root').with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644'
+          )
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink).to notify('runit_service[gitaly]').to(:restart).delayed
+          expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
+        end
+      end
+    end
+
     describe 'gitlab_pages_secret' do
       let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab_pages_secret and create a symlink to Rails root') }
 
