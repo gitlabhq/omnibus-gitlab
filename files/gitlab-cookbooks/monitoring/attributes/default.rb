@@ -135,6 +135,8 @@ default['monitoring']['gitlab_exporter']['prometheus_scrape_scheme'] = 'http'
 default['monitoring']['gitlab_exporter']['prometheus_scrape_tls_server_name'] = nil
 default['monitoring']['gitlab_exporter']['prometheus_scrape_tls_skip_verification'] = false
 
+default['monitoring']['gitlab_exporter']['extra_config_command'] = nil
+
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus_monitoring']['enable'] = true
 

@@ -2490,6 +2490,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Semantic metadata used when registering GitLab Exporter as a Consul service
 # gitlab_exporter['consul_service_meta'] = {}
 
+##! Command to generate extra configuration
+# gitlab_exporter['extra_config_command'] = nil
+
 # To completely disable prometheus, and all of it's exporters, set to false
 # prometheus_monitoring['enable'] = true
 

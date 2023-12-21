@@ -6,4 +6,5 @@ exec chpst -P -e <%= node['monitoring']['gitlab_exporter']['env_directory'] %> \
   -U <%= node['gitlab']['user']['username'] %>:<%= node['gitlab']['user']['group'] %> \
   -u <%= node['gitlab']['user']['username'] %>:<%= node['gitlab']['user']['group'] %> \
   /opt/gitlab/embedded/bin/gitlab-exporter web \
-    -c <%= node['monitoring']['gitlab_exporter']['home'] %>/gitlab-exporter.yml
+  -c <%= node['monitoring']['gitlab_exporter']['home'] %>/gitlab-exporter.yml<%- if node['monitoring']['gitlab_exporter']['extra_config_command'] %> \
+  --extra-config-command "<%= node['monitoring']['gitlab_exporter']['extra_config_command'] %>"<% end %>
