@@ -18,7 +18,7 @@ name 'consul'
 
 # This version should be keep in sync with consul versions in
 # consul_download.rb and consul_helper.rb.
-version = Gitlab::Version.new('consul', 'v1.16.3')
+version = Gitlab::Version.new('consul', 'v1.16.4')
 default_version version.print(false)
 
 license 'MPL-2.0'

@@ -195,10 +195,10 @@
 - - :license
   - github.com/hashicorp/hcp-sdk-go
   - MPL2
-  - :who: Clemens Beck
-    :why: https://github.com/hashicorp/hcp-sdk-go/blob/v0.55.0/LICENSE
-    :versions: [ v0.55.0 ]
-    :when: 2023-05-25 06:56:28.063465516 Z
+  - :who: Hossein Pursultani
+    :why: https://github.com/hashicorp/hcp-sdk-go/blob/main/LICENSE
+    :versions: [ ]
+    :when: 2023-12-19 03:10:09.742112532 Z
 - - :license
   - github.com/hashicorp/go-retryablehttp
   - MPL2

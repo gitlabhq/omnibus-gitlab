@@ -4,7 +4,7 @@ require 'zip'
 class ConsulDownloadCommand
   # This version should be keep in sync with consul versions in
   # software/consul.rb and consul_helper.rb.
-  DEFAULT_VERSION = '1.16.3'.freeze
+  DEFAULT_VERSION = '1.16.4'.freeze
 
   def initialize(args)
     @args = args
