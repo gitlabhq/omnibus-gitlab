@@ -17,7 +17,8 @@ RSpec.describe Import do
       [:all_repositories, 'all-repositories', true],
       [:step_one, 'step-one', false],
       [:step_two, 'step-two', true],
-      [:step_three, 'step-three', false]
+      [:step_three, 'step-three', false],
+      [:log_to_stdout, 'log-to-stdout', false]
     ]
 
     options_data.each do |option, option_name, read_only|
