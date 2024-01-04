@@ -118,13 +118,16 @@ module Prometheus
       user_config = Gitlab['redis_exporter']
 
       listen_address = user_config['listen_address'] || default_config['listen_address']
+      disable_client_name = Gitlab['gitlab_rails']['redis_enable_client'] == false
+
       default_config['flags'] = {
-        'web.listen-address' => listen_address,
-        'redis.addr' => "unix://#{Gitlab['node']['gitlab']['gitlab_rails']['redis_socket']}"
+        'web.listen-address' => listen_address
       }
 
+      default_config['flags']['set-client-name'] = 'false' if disable_client_name
       default_config['flags'].merge!(user_config['flags']) if user_config.key?('flags')
 
+      # redis.addr is set in the recipe
       Gitlab['redis_exporter']['flags'] = default_config['flags']
     end
 

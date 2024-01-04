@@ -43,13 +43,17 @@ env_dir redis_exporter_static_etc_dir do
 end
 
 runtime_flags = PrometheusHelper.new(node).flags('redis_exporter')
+redis_helper = NewRedisHelper::RedisExporter.new(node)
+redis_url = redis_helper.formatted_redis_url
+
 runit_service 'redis-exporter' do
   options({
     log_directory: logging_settings[:log_directory],
     log_user: logging_settings[:runit_owner],
     log_group: logging_settings[:runit_group],
     flags: runtime_flags,
-    env_dir: redis_exporter_static_etc_dir
+    env_dir: redis_exporter_static_etc_dir,
+    redis_url: redis_url,
   }.merge(params))
   log_options logging_settings[:options]
 end
