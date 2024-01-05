@@ -16,7 +16,7 @@
 #
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
-redis_helper = RedisHelper.new(node)
+redis_helper = NewRedisHelper::GitlabKAS.new(node)
 logfiles_helper = LogfilesHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('gitlab-kas')
 
@@ -26,23 +26,17 @@ gitlab_kas_static_etc_dir = '/opt/gitlab/etc/gitlab-kas'
 gitlab_kas_config_file = File.join(working_dir, 'gitlab-kas-config.yml')
 gitlab_kas_authentication_secret_file = File.join(working_dir, 'authentication_secret_file')
 gitlab_kas_private_api_authentication_secret_file = File.join(working_dir, 'private_api_authentication_secret_file')
-redis_host, redis_port, redis_password = redis_helper.kas_params
-redis_password_present = redis_password && !redis_password.empty?
-redis_sentinels = node['gitlab_kas']['redis_sentinels']
-redis_sentinels_master_name = node['gitlab_kas']['redis_sentinels_master_name']
-redis_sentinels_password = node['gitlab_kas']['redis_sentinels_password']
-redis_sentinels_password_present = redis_sentinels_password && !redis_sentinels_password.empty?
 
+redis_params = redis_helper.redis_params
+
+redis_password = redis_params[:password]
+redis_password_present = redis_password && !redis_password.empty?
 gitlab_kas_redis_password_file = File.join(working_dir, 'redis_password_file')
+
+redis_sentinels_password = redis_params[:sentinelPassword]
+redis_sentinels_password_present = redis_sentinels_password && !redis_sentinels_password.empty?
 gitlab_kas_redis_sentinels_password_file = File.join(working_dir, 'redis_sentinels_password_file')
-redis_default_port = URI::Redis::DEFAULT_PORT
-redis_network = redis_helper.redis_url.scheme == 'unix' ? 'unix' : 'tcp'
-redis_ssl = node['gitlab_kas']['redis_ssl']
-redis_address = if redis_network == 'tcp'
-                  "#{redis_host}:#{redis_port || redis_default_port}"
-                else
-                  node['gitlab_kas']['redis_socket']
-                end
+
 redis_tls_ca_cert_file = node['gitlab_kas']['redis_tls_ca_cert_file']
 redis_tls_client_cert_file = node['gitlab_kas']['redis_tls_client_cert_file']
 redis_tls_client_key_file = node['gitlab_kas']['redis_tls_client_key_file']
@@ -119,16 +113,16 @@ template gitlab_kas_config_file do
     node['gitlab_kas'].to_hash.merge(
       authentication_secret_file: gitlab_kas_authentication_secret_file,
       private_api_authentication_secret_file: gitlab_kas_private_api_authentication_secret_file,
-      redis_network: redis_network,
-      redis_address: redis_address,
-      redis_ssl: redis_ssl,
+      redis_network: redis_params[:network],
+      redis_address: redis_params[:address],
+      redis_ssl: redis_params[:ssl],
       redis_tls_ca_cert_file: redis_tls_ca_cert_file,
       redis_tls_client_cert_file: redis_tls_client_cert_file,
       redis_tls_client_key_file: redis_tls_client_key_file,
-      redis_default_port: redis_default_port,
+      redis_default_port: URI::Redis::DEFAULT_PORT,
       redis_password_file: redis_password_present ? gitlab_kas_redis_password_file : nil,
-      redis_sentinels_master_name: redis_sentinels_master_name,
-      redis_sentinels: redis_sentinels,
+      redis_sentinels_master_name: redis_params[:sentinelMaster],
+      redis_sentinels: redis_params[:sentinels],
       redis_sentinels_password_file: redis_sentinels_password_present ? gitlab_kas_redis_sentinels_password_file : nil
     )
   )

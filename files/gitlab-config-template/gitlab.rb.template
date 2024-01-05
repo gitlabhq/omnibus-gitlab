@@ -2143,7 +2143,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_kas['redis_port'] = '6379'
 # gitlab_kas['redis_password'] = nil
 
-# gitlab_kas['redis_sentinels'] = {}
+# gitlab_kas['redis_sentinels'] = []
 # gitlab_kas['redis_sentinels_master_name'] = nil
 # gitlab_kas['redis_sentinels_password'] = ''
 
