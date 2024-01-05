@@ -2,7 +2,7 @@ module NewRedisHelper
   class GitlabWorkhorse < NewRedisHelper::Base
     def redis_params
       {
-        url: redis_url,
+        url: redis_url.to_s,
         password: redis_credentials[:password],
         sentinels: sentinel_urls,
         sentinelMaster: master_name,
