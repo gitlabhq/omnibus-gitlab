@@ -52,7 +52,7 @@ module NewRedisHelper
         )
       end
 
-      uri.to_s
+      uri
     end
 
     private

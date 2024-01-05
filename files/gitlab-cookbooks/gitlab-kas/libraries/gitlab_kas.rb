@@ -107,6 +107,9 @@ module GitlabKas
     end
 
     def parse_redis_settings
+      # If KAS has separate Redis instance specified, do not copy any other settings
+      return if Gitlab['gitlab_kas'].key?('redis_host') || Gitlab['gitlab_kas'].key?('redis_socket')
+
       settings_copied_from_gitlab_rails = %w[
         redis_socket
         redis_host
@@ -120,10 +123,12 @@ module GitlabKas
         redis_tls_client_key_file
       ]
       settings_copied_from_gitlab_rails.each do |setting|
-        Gitlab['gitlab_kas'][setting] = Gitlab['gitlab_rails'][setting] || Gitlab['node']['gitlab']['gitlab_rails'][setting] unless Gitlab['gitlab_kas'].key?(setting)
+        Gitlab['node'].default['gitlab_kas'][setting] = Gitlab['node']['gitlab']['gitlab_rails'][setting]
+        Gitlab['gitlab_kas'][setting] = Gitlab['gitlab_rails'][setting] unless Gitlab['gitlab_kas'].key?(setting)
       end
 
-      Gitlab['gitlab_kas']['redis_sentinels_master_name'] = Gitlab['redis']['master_name'] || Gitlab['node']['redis']['master_name'] unless Gitlab['gitlab_kas'].key?('redis_sentinels_master_name')
+      Gitlab['node'].default['gitlab_kas']['redis_sentinels_master_name'] = Gitlab['node']['redis']['master_name']
+      Gitlab['gitlab_kas']['redis_sentinels_master_name'] = Gitlab['redis']['master_name'] unless Gitlab['gitlab_kas'].key?('redis_sentinels_master_name')
     end
 
     private

@@ -73,10 +73,6 @@ class RedisHelper
     end
   end
 
-  def kas_params
-    redis_params(service_config: @node['gitlab_kas'])
-  end
-
   def validate_instance_shard_config(instance)
     gitlab_rails = @node['gitlab']['gitlab_rails']
 
