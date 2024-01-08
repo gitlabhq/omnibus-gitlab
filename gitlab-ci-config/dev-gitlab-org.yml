@@ -322,12 +322,6 @@ AlmaLinux-9-branch:
 AlmaLinux-9-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
-OpenSUSE-15.4-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4:${BUILDER_IMAGE_REVISION}"
-  extends: .branch_template
-OpenSUSE-15.4-arm64-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_branch_template
 OpenSUSE-15.5-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -619,12 +613,6 @@ AlmaLinux-9:
 AlmaLinux-9-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
-OpenSUSE-15.4:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4:${BUILDER_IMAGE_REVISION}"
-  extends: .tag_template
-OpenSUSE-15.4-arm64:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_tag_template
 OpenSUSE-15.5:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
@@ -771,20 +759,6 @@ AlmaLinux-9-arm64-staging:
     - job: AlmaLinux-9-arm64
       optional: true
     - job: AlmaLinux-9-arm64-branch
-      optional: true
-OpenSUSE-15.4-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: OpenSUSE-15.4
-      optional: true
-    - job: OpenSUSE-15.4-branch
-      optional: true
-OpenSUSE-15.4-arm64-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: OpenSUSE-15.4-arm64
-      optional: true
-    - job: OpenSUSE-15.4-arm64-branch
       optional: true
 OpenSUSE-15.5-staging:
   extends: .staging_upload_template
@@ -942,14 +916,6 @@ AlmaLinux-9-arm64-release:
   extends: .production_release_template
   needs:
     - AlmaLinux-9-arm64
-OpenSUSE-15.4-release:
-  extends: .production_release_template
-  needs:
-    - OpenSUSE-15.4
-OpenSUSE-15.4-arm64-release:
-  extends: .production_release_template
-  needs:
-    - OpenSUSE-15.4-arm64
 OpenSUSE-15.5-release:
   extends: .production_release_template
   needs:

@@ -196,12 +196,6 @@ AmazonLinux-2-fips-check:
     USE_SYSTEM_SSL: "true"
 
 # zypper based
-OpenSUSE-15.4-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4:${BUILDER_IMAGE_REVISION}"
-  extends: .zypper-install
-OpenSUSE-15.4-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.4_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .zypper-arm-install
 OpenSUSE-15.5-check:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5:${BUILDER_IMAGE_REVISION}"
   extends: .zypper-install
