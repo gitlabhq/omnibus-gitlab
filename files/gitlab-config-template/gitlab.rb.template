@@ -3025,6 +3025,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## GitLab Geo Log Cursor Daemon (EE only)
 ################################################################################
 
+# geo_logcursor['enable'] = false
 # geo_logcursor['log_directory'] = '/var/log/gitlab/geo-logcursor'
 # geo_logcursor['log_group'] = nil
 
