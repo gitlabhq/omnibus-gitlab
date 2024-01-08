@@ -912,6 +912,8 @@ RSpec.describe 'nginx' do
         expect(chef_run).to render_file(http_conf['pages']).with_content { |content|
           expect(content).to include('server {').twice
           expect(content).to include('server_name  ~^pages\.localhost$;')
+          expect(content).to include('location ~ ^/(?<namespace>[^/]+)$ {')
+          expect(content).to include('return 301 $scheme://$http_host$request_uri/;')
           expect(content).to include('location ~ ^/(?<namespace>[^/]+)/(?<project>.*)$ {')
           expect(content).to include('rewrite ^/([^/]+)/(.*)$ /$2 break;')
           expect(content).to include('proxy_set_header Host $1.$http_host;')
@@ -919,6 +921,39 @@ RSpec.describe 'nginx' do
           expect(content).to include('proxy_redirect ~^https://(projects\.pages\.localhost)/(.*)$ https://$1/$2;')
           expect(content).to include('proxy_redirect ~^https://(.*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
           expect(content).to include('proxy_redirect ~^//(.*)\.(pages\.localhost)/(.*)$ /$1/$3;')
+          expect(content).to include('proxy_redirect ~^/(.*)$ /$namespace/$1;')
+          expect(content).to include('proxy_hide_header X-Gitlab-Namespace-In-Path;')
+          # Below checks are to verify proper render entries are made
+          expect(content).to include('proxy_http_version 1.1;').twice
+          expect(content).to include('proxy_pass').twice
+          expect(content).to include('disable_symlinks on;').twice
+          expect(content).to include('server_tokens off;').twice
+        }
+      end
+    end
+
+    context 'when namespace_in_path is enabled and pages_external_url has custom port in gitlab_pages' do
+      before do
+        stub_gitlab_rb(
+          gitlab_pages: { namespace_in_path: true },
+          pages_external_url: 'https://pages.localhost:25800'
+        )
+      end
+
+      it 'applies nginx namespace_in_path settings with custom port for gitlab-pages' do
+        expect(chef_run).to render_file(http_conf['pages']).with_content { |content|
+          expect(content).to include('server {').twice
+          expect(content).to include('listen *:25800 ssl http2;').twice
+          expect(content).to include('server_name  ~^pages\.localhost$;')
+          expect(content).to include('location ~ ^/(?<namespace>[^/]+)$ {')
+          expect(content).to include('return 301 $scheme://$http_host$request_uri/;')
+          expect(content).to include('location ~ ^/(?<namespace>[^/]+)/(?<project>.*)$ {')
+          expect(content).to include('rewrite ^/([^/]+)/(.*)$ /$2 break;')
+          expect(content).to include('proxy_set_header Host $1.$http_host;')
+          expect(content).to include('proxy_set_header X-Gitlab-Namespace-In-Path $namespace;')
+          expect(content).to include('proxy_redirect ~^https://(projects\.pages\.localhost:25800)/(.*)$ https://$1/$2;')
+          expect(content).to include('proxy_redirect ~^https://(.*)\.(pages\.localhost:25800)/(.*)$ https://$2/$1/$3;')
+          expect(content).to include('proxy_redirect ~^//(.*)\.(pages\.localhost:25800)/(.*)$ /$1/$3;')
           expect(content).to include('proxy_redirect ~^/(.*)$ /$namespace/$1;')
           expect(content).to include('proxy_hide_header X-Gitlab-Namespace-In-Path;')
           # Below checks are to verify proper render entries are made
@@ -941,6 +976,8 @@ RSpec.describe 'nginx' do
         expect(chef_run).to render_file(http_conf['pages']).with_content { |content|
           expect(content).to include('server {')
           expect(content).not_to include('server_name  ~^pages\.localhost$;')
+          expect(content).not_to include('location ~ ^/(?<namespace>[^/]+)$ {')
+          expect(content).not_to include('return 301 $scheme://$http_host$request_uri/;')
           expect(content).not_to include('location ~ ^/(?<namespace>[^/]+)/(?<project>.*)$ {')
           expect(content).not_to include('rewrite ^/([^/]+)/(.*)$ /$2 break;')
           expect(content).not_to include('proxy_set_header Host $1.$http_host;')

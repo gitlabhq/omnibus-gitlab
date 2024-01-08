@@ -32,7 +32,12 @@ server {
 <% end %>
   server_name  ~^<%= @fqdn_regex %>$;
 
-  <%= render "nginx-gitlab-pages-http-common-server.erb" %>
+<%= render "nginx-gitlab-pages-http-common-server.erb" %>
+
+  # In case of a unique domain URL, add a trailing '/' if it's missing
+  location ~ ^/(?<namespace>[^/]+)$ {
+    return 301 $scheme://$http_host$request_uri/;
+  }
 
   # Pass when namespace in path to pages daemon after the rewrite
   location ~ ^/(?<namespace>[^/]+)/(?<project>.*)$ {
@@ -50,7 +55,7 @@ server {
     <% end %>
     proxy_set_header X-Gitlab-Namespace-In-Path $namespace;
 
-    <%= render "nginx-gitlab-pages-http-common-location.erb" %>
+<%= render "nginx-gitlab-pages-http-common-location.erb" %>
 
     ## Put namespace in path from host before sending it to the user
   <% @proxy_redirect.each do |redirect| %>
@@ -68,7 +73,7 @@ server {
 <% end %>
   server_name  ~^(?<group>.*)\.<%= @fqdn_regex %>$;
 
-  <%= render "nginx-gitlab-pages-http-common-server.erb" %>
+<%= render "nginx-gitlab-pages-http-common-server.erb" %>
 
   # Pass everything to pages daemon when namespace in host
   location / {
@@ -78,7 +83,7 @@ server {
     <% end %>
     proxy_hide_header X-Gitlab-Namespace-In-Path;
 
-    <%= render "nginx-gitlab-pages-http-common-location.erb" %>
+<%= render "nginx-gitlab-pages-http-common-location.erb" %>
   }
 
   <%= @custom_gitlab_server_config %>
