@@ -36,6 +36,7 @@ RSpec.describe GitlabCtl::UpgradeCheck do
       '15.11.0' | '16.3'
       '16.2.0' | '16.3'
       '16.2.4' | '16.3'
+      '16.9.0' | '16.10'
     end
 
     with_them do
