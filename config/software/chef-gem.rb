@@ -37,6 +37,25 @@ build do
   patch source: "license/add-notice-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
+  # pin the version of faraday and faraday-net_http temporarily until
+  # conflicts between the version of net-http it requires and the version of
+  # net-http shipped in the Gemfile can be resolved
+  gem 'install faraday-net_http' \
+      " --clear-sources" \
+      " -s https://packagecloud.io/cinc-project/stable" \
+      " -s https://rubygems.org" \
+      " --version '3.0.2'" \
+      " --bindir '#{install_dir}/embedded/bin'" \
+      ' --no-document', env: env
+
+  gem 'install faraday' \
+      " --clear-sources" \
+      " -s https://packagecloud.io/cinc-project/stable" \
+      " -s https://rubygems.org" \
+      " --version '2.8.1'" \
+      " --bindir '#{install_dir}/embedded/bin'" \
+      ' --no-document', env: env
+
   gem 'install chef' \
       " --clear-sources" \
       " -s https://packagecloud.io/cinc-project/stable" \
