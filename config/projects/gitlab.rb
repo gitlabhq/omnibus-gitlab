@@ -105,6 +105,7 @@ if Build::Check.use_system_ssl?
 end
 
 dependency 'cacerts'
+dependency 'faraday-cage'
 dependency 'gitlab-selinux' if SELinuxDistroHelper.selinux_supported?
 dependency 'redis'
 dependency 'nginx'
