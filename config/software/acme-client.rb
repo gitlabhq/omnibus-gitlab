@@ -23,6 +23,7 @@ license_file 'LICENSE.txt'
 skip_transitive_dependency_licensing true
 
 dependency 'ruby'
+dependency 'rubygems'
 
 build do
   patch source: 'add-license-file.patch'
