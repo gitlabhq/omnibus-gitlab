@@ -99,6 +99,7 @@ if Build::Check.use_system_ssl?
 end
 
 dependency 'cacerts'
+dependency 'faraday-cage'
 dependency 'redis'
 dependency 'nginx'
 dependency 'mixlib-log'
