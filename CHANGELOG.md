@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.7.2 (2024-01-10)
+
+No changes.
+
+## 16.7.1 (2023-12-23)
+
+No changes.
+
 ## 16.7.0 (2023-12-20)
 
 ### Added (9 changes)
@@ -49,6 +57,14 @@ omnibus-gitlab repository.
 - [Mattermost Security Update](gitlab-org/omnibus-gitlab@feda92ec4fb2024eb397a1e0970ae5b7f407dad6)
 - [Update PostgreSQL 13 and 14](gitlab-org/omnibus-gitlab@cfa09e2d8ee45a4cdebfde8fc334df9f9cd428f2)
 
+## 16.6.4 (2024-01-11)
+
+No changes.
+
+## 16.6.3 (2023-12-23)
+
+No changes.
+
 ## 16.6.2 (2023-12-13)
 
 No changes.
@@ -94,6 +110,14 @@ No changes.
 ### Other (1 change)
 
 - [Update Mattermost to 9.1.0](gitlab-org/omnibus-gitlab@3cedfa24af36c0f7d6d149ddd0956f5bce20d0e7) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7206))
+
+## 16.5.6 (2024-01-11)
+
+No changes.
+
+## 16.5.5 (2023-12-23)
+
+No changes.
 
 ## 16.5.4 (2023-12-13)
 
@@ -167,6 +191,10 @@ No changes.
 
 - [Update Mattermost to 9.0.0](gitlab-org/omnibus-gitlab@fddabad069dad759b6f0937d66e88295530c28b0) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7168))
 
+## 16.4.5 (2024-01-11)
+
+No changes.
+
 ## 16.4.4 (2023-12-13)
 
 No changes.
@@ -236,6 +264,10 @@ No changes.
 ### Other (1 change)
 
 - [Enable dual namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/omnibus-gitlab@6ddfb82c93158bdc25e3546625688e99cb400584) ([merge request](gitlab-org/omnibus-gitlab!7141))
+
+## 16.3.7 (2024-01-11)
+
+No changes.
 
 ## 16.3.6 (2023-10-30)
 
@@ -308,6 +340,10 @@ No changes.
 ### Other (1 change)
 
 - [Enable cache to configure for Redis Cluster](gitlab-org/omnibus-gitlab@8c0aa6b59ad8be8b62e1a720cb370aadb29add05) ([merge request](gitlab-org/omnibus-gitlab!7079))
+
+## 16.2.9 (2024-01-11)
+
+No changes.
 
 ## 16.2.8 (2023-09-28)
 
@@ -390,6 +426,10 @@ No changes.
 ### Other (1 change)
 
 - [Remove GITLAB_METRICS_EXPORTER_VERSION file](gitlab-org/omnibus-gitlab@5afc28844d0abb8b18e3a4b0fea2dec283b757e2) ([merge request](gitlab-org/omnibus-gitlab!7030))
+
+## 16.1.6 (2024-01-11)
+
+No changes.
 
 ## 16.1.5 (2023-08-31)
 
