@@ -41,6 +41,8 @@ redis_tls_ca_cert_file = node['gitlab_kas']['redis_tls_ca_cert_file']
 redis_tls_client_cert_file = node['gitlab_kas']['redis_tls_client_cert_file']
 redis_tls_client_key_file = node['gitlab_kas']['redis_tls_client_key_file']
 
+extra_config_command = node['gitlab_kas']['extra_config_command']
+
 [
   working_dir,
   gitlab_kas_static_etc_dir
@@ -123,7 +125,8 @@ template gitlab_kas_config_file do
       redis_password_file: redis_password_present ? gitlab_kas_redis_password_file : nil,
       redis_sentinels_master_name: redis_params[:sentinelMaster],
       redis_sentinels: redis_params[:sentinels],
-      redis_sentinels_password_file: redis_sentinels_password_present ? gitlab_kas_redis_sentinels_password_file : nil
+      redis_sentinels_password_file: redis_sentinels_password_present ? gitlab_kas_redis_sentinels_password_file : nil,
+      extra_config_command: extra_config_command
     )
   )
   notifies :restart, 'runit_service[gitlab-kas]' if omnibus_helper.should_notify?('gitlab-kas')

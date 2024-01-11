@@ -58,3 +58,5 @@ default['gitlab_kas']['redis_ssl'] = nil
 default['gitlab_kas']['redis_tls_ca_cert_file'] = nil
 default['gitlab_kas']['redis_tls_client_cert_file'] = nil
 default['gitlab_kas']['redis_tls_client_key_file'] = nil
+
+default['gitlab_kas']['extra_config_command'] = nil

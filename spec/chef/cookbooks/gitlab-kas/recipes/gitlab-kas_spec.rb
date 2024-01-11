@@ -672,6 +672,28 @@ RSpec.describe 'gitlab-kas' do
     end
   end
 
+  describe 'extra config command' do
+    context 'by default' do
+      it 'is not renderered in the config file' do
+        expect(gitlab_kas_config_yml[:config]).to be_nil
+      end
+    end
+
+    context 'when specified' do
+      before do
+        stub_gitlab_rb(
+          gitlab_kas: {
+            extra_config_command: "/opt/kas-redis-config.sh"
+          }
+        )
+      end
+
+      it 'is rendered in the config file' do
+        expect(gitlab_kas_config_yml[:config]).to eq(command: "/opt/kas-redis-config.sh")
+      end
+    end
+  end
+
   describe 'chef_run.file calls' do
     def files
       @files ||= %w(
