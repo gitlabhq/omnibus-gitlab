@@ -341,6 +341,10 @@ No changes.
 
 - [Enable cache to configure for Redis Cluster](gitlab-org/omnibus-gitlab@8c0aa6b59ad8be8b62e1a720cb370aadb29add05) ([merge request](gitlab-org/omnibus-gitlab!7079))
 
+## 16.2.9 (2024-01-11)
+
+No changes.
+
 ## 16.2.8 (2023-09-28)
 
 ### Security (2 changes)
