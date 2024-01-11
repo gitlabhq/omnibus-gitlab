@@ -831,6 +831,8 @@ default['gitlab']['gitlab_workhorse']['redis_sentinel_master'] = nil
 default['gitlab']['gitlab_workhorse']['redis_sentinel_master_ip'] = nil
 default['gitlab']['gitlab_workhorse']['redis_sentinel_master_port'] = nil
 
+default['gitlab']['gitlab_workhorse']['extra_config_command'] = nil
+
 ####
 # mailroom
 ####

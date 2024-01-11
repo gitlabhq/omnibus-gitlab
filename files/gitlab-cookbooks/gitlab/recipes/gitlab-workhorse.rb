@@ -95,6 +95,7 @@ image_scaler_max_procs = node['gitlab']['gitlab_workhorse']['image_scaler_max_pr
 image_scaler_max_filesize = node['gitlab']['gitlab_workhorse']['image_scaler_max_filesize']
 trusted_cidrs_for_propagation = node['gitlab']['gitlab_workhorse']['trusted_cidrs_for_propagation']
 trusted_cidrs_for_x_forwarded_for = node['gitlab']['gitlab_workhorse']['trusted_cidrs_for_x_forwarded_for']
+extra_config_command = node['gitlab']['gitlab_workhorse']['extra_config_command']
 
 template config_file_path do
   source "workhorse-config.toml.erb"
@@ -114,7 +115,8 @@ template config_file_path do
     image_scaler_max_filesize: image_scaler_max_filesize,
     trusted_cidrs_for_propagation: trusted_cidrs_for_propagation,
     trusted_cidrs_for_x_forwarded_for: trusted_cidrs_for_x_forwarded_for,
-    object_store_toml: workhorse_helper.object_store_toml
+    object_store_toml: workhorse_helper.object_store_toml,
+    extra_config_command: extra_config_command
   )
   notifies :restart, "runit_service[gitlab-workhorse]"
   notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed if SELinuxHelper.enabled?

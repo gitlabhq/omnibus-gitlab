@@ -1152,6 +1152,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_workhorse['redis_sentinel_master_ip'] = nil
 # gitlab_workhorse['redis_sentinel_master_port'] = nil
 
+
+##! Command to generate extra configuration
+# gitlab_workhorse['extra_config_command'] = nil
+
 ################################################################################
 ## GitLab User Settings
 ##! Modify default git user.
