@@ -60,6 +60,12 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
         expect(content).not_to match(/propagateCorrelationID/)
       }
     end
+
+    it 'does not include config_command' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).not_to match(/config_command/)
+      }
+    end
   end
 
   context 'user and group' do
@@ -761,6 +767,22 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     it 'should not generate redis block in the configuration file' do
       expect(chef_run).to render_file(config_file).with_content { |content|
         expect(content).not_to match(/\[redis\]/m)
+      }
+    end
+  end
+
+  context 'with config_command specified' do
+    before do
+      stub_gitlab_rb(
+        gitlab_workhorse: {
+          extra_config_command: "/opt/workhorse-redis-config.sh"
+        }
+      )
+    end
+
+    it 'specifies config_command in the config file' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).to match(%r(config_command = "/opt/workhorse-redis-config.sh"))
       }
     end
   end
