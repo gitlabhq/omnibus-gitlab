@@ -194,6 +194,9 @@ gitlab_rails['env'] = {
 }
 ```
 
+NOTE:
+For [GitLab Geo](https://docs.gitlab.com/ee/administration/geo/), deployments using the above configuration must be added to each secondary site.
+
 ## OpenShift GitLab Development Setup
 
 See Omnibus GitLab [development setup](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/blob/master/doc/developer/guide.md) documentation.
