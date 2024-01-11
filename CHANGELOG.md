@@ -427,6 +427,10 @@ No changes.
 
 - [Remove GITLAB_METRICS_EXPORTER_VERSION file](gitlab-org/omnibus-gitlab@5afc28844d0abb8b18e3a4b0fea2dec283b757e2) ([merge request](gitlab-org/omnibus-gitlab!7030))
 
+## 16.1.6 (2024-01-11)
+
+No changes.
+
 ## 16.1.5 (2023-08-31)
 
 ### Security (2 changes)
