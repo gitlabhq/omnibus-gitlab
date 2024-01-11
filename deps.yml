@@ -233,7 +233,7 @@ dependencies:
         - filename: config/software/pcre2.rb
           pattern: "Gitlab::Version.new\\('pcre2', '(\\S+)'\\)"
           tag_filter:
-            matching: 'pcre2-(\d+).(\d+)'
+            matching: 'pcre2-(\d+).(\d+)$'
             sort_as: '$1.$2.0'
       # git-filter-repo
       https://github.com/newren/git-filter-repo.git:
