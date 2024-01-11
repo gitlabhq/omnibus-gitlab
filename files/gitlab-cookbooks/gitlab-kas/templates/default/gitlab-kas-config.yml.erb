@@ -91,3 +91,7 @@ private_api:
     certificate_file: <%= @private_api_certificate_file %>
     key_file: <%= @private_api_key_file %>
     <%- end %>
+config:
+  <%- if @extra_config_command %>
+  command: "<%= @extra_config_command %>"
+  <%- end %>

@@ -2156,6 +2156,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_kas['redis_tls_client_cert_file'] = nil
 # gitlab_kas['redis_tls_client_key_file'] = nil
 
+##! Command to generate extra configuration
+# gitlab_kas['extra_config_command'] = nil
+
 ################################################################################
 ## GitLab Suggested Reviewers (EE Only)
 ##! Docs: https://docs.gitlab.com/ee/user/project/merge_requests/reviews/#suggested-reviewers
