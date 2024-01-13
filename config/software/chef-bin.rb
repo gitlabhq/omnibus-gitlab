@@ -15,8 +15,9 @@
 #
 
 name 'chef-bin'
-# The version here should be in agreement with /Gemfile.lock so that our rspec
-# testing stays consistent with the package contents.
+# The version here should be in agreement with the chef-gem version and
+# /Gemfile.lock so that our rspec testing stays consistent with the package
+# contents.
 default_version '17.10.0'
 
 license 'Apache-2.0'
