@@ -17,9 +17,10 @@
 require 'mixlib/shellout'
 
 name 'chef-gem'
-# The version here should be in agreement with /Gemfile.lock so that our rspec
-# testing stays consistent with the package contents.
-default_version '17.10.95'
+# The version here should be in agreement with the chef-bin/cinc version and
+# /Gemfile.lock so that our rspec testing stays consistent with the package
+# contents.
+default_version '17.10.0'
 
 license 'Apache-2.0'
 license_file 'LICENSE'
@@ -48,6 +49,9 @@ build do
   block 'patch Chef files' do
     prefix_path = "#{install_dir}/embedded"
     gem_path = shellout!("#{embedded_bin('ruby')} -e \"puts Gem.path.find { |path| path.start_with?(\'#{prefix_path}\') }\"", env: env).stdout.chomp
+
+    patch source: "Version-17-EOL-detection.patch",
+          target: "#{gem_path}/gems/chef-#{version}/lib/chef/client.rb"
 
     patch source: "utf8-locale-support.patch",
           target: "#{gem_path}/gems/chef-config-#{version}/lib/chef-config/config.rb"
