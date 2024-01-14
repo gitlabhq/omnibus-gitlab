@@ -29,7 +29,7 @@ dependency 'libtool'
 
 version('3.2.1') { source sha256: 'd06ebb8e1d9a22d19e38d63fdb83954253f39bedc5d46232a05645685722ca37' }
 
-source url: "ftp://sourceware.org/pub/libffi/libffi-#{version}.tar.gz"
+source url: "https://sourceware.org/pub/libffi/libffi-#{version}.tar.gz"
 
 relative_path "libffi-#{version}"
 
