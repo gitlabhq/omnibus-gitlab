@@ -18,7 +18,7 @@ name 'chef-bin'
 # The version here should be in agreement with the chef-gem version and
 # /Gemfile.lock so that our rspec testing stays consistent with the package
 # contents.
-default_version '17.10.0'
+default_version '18.3.0'
 
 license 'Apache-2.0'
 license_file 'LICENSE'
@@ -32,6 +32,16 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
   patch source: 'add-license-file.patch'
 
+  # Temporary workaround because upstream inspec-core does not list this as
+  # a requirement and it causes failures during gitlab-ctl reconfigure in
+  # the QA job pipelines
+  gem 'install rubocop-ast' \
+    " --clear-sources" \
+      " -s https://packagecloud.io/cinc-project/stable" \
+      " -s https://rubygems.org" \
+      " --version '1.21.0'" \
+      " --bindir '#{install_dir}/embedded/bin'" \
+      ' --no-document', env: env
   gem 'install chef-bin' \
       " --clear-sources" \
       " -s https://packagecloud.io/cinc-project/stable" \
