@@ -28,6 +28,7 @@ module Import
     -1, --step-one pre-import         Perform step one of a multi-step import: alias for pre-import
     -2, --step-two all-repositories   Perform step two of a multi-step import: alias for all-repositories
     -3, --step-three common-blobs     Perform step three of a multi-step import: alias for common-blobs
+    -l, --log-to-stdout               Write detailed log to standard output instead of showing progress bars
   EOS
 
   def self.parse_options!(args, parser, options)
@@ -81,6 +82,9 @@ module Import
       options[:step_three] = '--step-three'
     end
 
+    parser.on('-l', '--log-to-stdout', indent('write detailed log to standard output instead of showing progress bars', DESC_INDENT)) do
+      options[:log_to_stdout] = '--log-to-stdout'
+    end
     parser.order!(args)
 
     options
