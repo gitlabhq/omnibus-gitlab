@@ -3,6 +3,38 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.8.0 (2024-01-17)
+
+### Added (2 changes)
+
+- [Add git-filter-repo](gitlab-org/omnibus-gitlab@829e0931e6c7621bccb2a92b639773e7ddc37e88) ([merge request](gitlab-org/omnibus-gitlab!7299))
+- [Add gitlab-ctl command for migrating to decomposed database setup](gitlab-org/omnibus-gitlab@5aa89afab58aed885a898af8e3e3e866b943eeeb) ([merge request](gitlab-org/omnibus-gitlab!7266))
+
+### Fixed (3 changes)
+
+- [Add support for custom port in namespace in path](gitlab-org/omnibus-gitlab@e14b44a2c0b11ed702b98e5db22f88f1182d9819) ([merge request](gitlab-org/omnibus-gitlab!7324))
+- [Fix upgrade check comparison](gitlab-org/omnibus-gitlab@6ec0bf3afbffd1824eba7d7c4244d5ec087868d4) ([merge request](gitlab-org/omnibus-gitlab!7332))
+- [Restart Gitaly when updating Gitlab-Shell token](gitlab-org/omnibus-gitlab@70c0a0e9de5dcc64f0a0a5e8e6d73a15f0e9f56a) ([merge request](gitlab-org/omnibus-gitlab!7297))
+
+### Changed (7 changes)
+
+- [Install faraday gem before other gem installations](gitlab-org/omnibus-gitlab@91db0bfed7a044f5da963add898c4fb36937ebd7) ([merge request](gitlab-org/omnibus-gitlab!7344))
+- [GitLab 16.7 is a required upgrade stop for 16.8 and above.](gitlab-org/omnibus-gitlab@e1382c15c687bcf16b362930951bd34990180f0c) ([merge request](gitlab-org/omnibus-gitlab!7245))
+- [Update gitlab-org/build/omnibus-mirror/redis_exporter from 1.54.0 to 1.56.0](gitlab-org/omnibus-gitlab@023823ba3b6afde0b545a1c9b66de07534c21c15) ([merge request](gitlab-org/omnibus-gitlab!7323))
+- [Update consul from 1.16 to 1.16.4](gitlab-org/omnibus-gitlab@fcfceceeef91a90614f40e5d84a8d9ad60d3d3ac) ([merge request](gitlab-org/omnibus-gitlab!7304))
+- [Update go-crond from 23.2.0 to 23.12.0](gitlab-org/omnibus-gitlab@27ea3efabe9e686affd576b05881820e43a3c53d) ([merge request](gitlab-org/omnibus-gitlab!7309))
+- [Update exiftool from 12.70 to 12.71](gitlab-org/omnibus-gitlab@eaa3bdc3ec802aff6b37e31fa6af4121328c1f4f) ([merge request](gitlab-org/omnibus-gitlab!7318))
+- [Update container-registry from v3.87.0-gitlab to v3.88.0-gitlab](gitlab-org/omnibus-gitlab@7e0c6179613c4f1760f7e1e11a88b7215ab20511) ([merge request](gitlab-org/omnibus-gitlab!7311))
+
+### Deprecated (1 change)
+
+- [Deprecate support for Ubuntu 18.04](gitlab-org/omnibus-gitlab@46b41730a4050b4efc0a14c74ecaa383b98abc65) ([merge request](gitlab-org/omnibus-gitlab!7298))
+
+### Removed (2 changes)
+
+- [Stop building for OpenSUSE 15.4](gitlab-org/omnibus-gitlab@d6d3933486f4b6d86320652882faa0019dc1aae7) ([merge request](gitlab-org/omnibus-gitlab!7331))
+- [Stop sidekiq namespaced probe for gitlab-exporter](gitlab-org/omnibus-gitlab@ff1df765a218a7b29ad6c4a9ccd6b091a2a10bfe) ([merge request](gitlab-org/omnibus-gitlab!7237))
+
 ## 16.7.3 (2024-01-13)
 
 No changes.
