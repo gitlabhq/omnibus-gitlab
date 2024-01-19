@@ -68,7 +68,7 @@ dependency 'jemalloc'
 
 version('3.0.6') { source sha256: '6e6cbd490030d7910c0ff20edefab4294dfcd1046f0f8f47f78b597987ac683e' }
 version('3.1.4') { source sha256: 'a3d55879a0dfab1d7141fdf10d22a07dbf8e5cdc4415da1bde06127d5cc3c7b6' }
-version('3.2.2') { source sha256: '96c57558871a6748de5bc9f274e93f4b5aad06cd8f37befa0e8d94e7b8a423bc' }
+version('3.2.3') { source sha256: 'af7f1757d9ddb630345988139211f1fd570ff5ba830def1cc7c468ae9b65c9ba' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
@@ -109,8 +109,13 @@ build do
   # 1. Enable custom patch created by ayufan that allows to count memory allocations
   #    per-thread. This is asked to be upstreamed as part of https://github.com/ruby/ruby/pull/3978
   # 2. Backport Ruby upstream patch to fix seg faults in libxml2/Nokogiri: https://bugs.ruby-lang.org/issues/19580
-  #    This has been merged for Ruby 3.3 but not yet backported: https://github.com/ruby/ruby/pull/7663
-  patches = %w[thread-memory-allocations fix-ruby-xfree-for-libxml2]
+  #    This has been merged for Ruby 3.2.3 but not yet backported: https://github.com/ruby/ruby/pull/7663
+  patches = if version.satisfies?('>= 3.2.3')
+              %w[thread-memory-allocations]
+            else
+              %w[thread-memory-allocations fix-ruby-xfree-for-libxml2]
+            end
+
   ruby_version = Gem::Version.new(version).canonical_segments[0..1].join('.')
 
   patches.each do |patch_name|
