@@ -425,6 +425,7 @@ default['gitlab']['gitlab_rails']['db_keepalives_interval'] = nil
 default['gitlab']['gitlab_rails']['db_keepalives_count'] = nil
 default['gitlab']['gitlab_rails']['db_tcp_user_timeout'] = nil
 default['gitlab']['gitlab_rails']['db_application_name'] = nil
+default['gitlab']['gitlab_rails']['db_extra_config_command'] = nil
 
 default['gitlab']['gitlab_rails']['databases'] = {}
 default['gitlab']['gitlab_rails']['clickhouse_databases'] = {}
