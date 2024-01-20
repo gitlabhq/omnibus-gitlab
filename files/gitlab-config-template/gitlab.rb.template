@@ -759,6 +759,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['db_application_name'] = nil
 # gitlab_rails['db_database_tasks'] = true
 
+##! Command to generate extra database configuration
+# gitlab_rails['db_extra_config_command'] = nil
+
 ### Gitlab decomposed database settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/database.html
 # gitlab_rails['databases']['main']['db_database'] = 'gitlabhq_production'

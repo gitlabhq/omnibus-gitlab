@@ -817,7 +817,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
               'db_sslcompression' => 0,
               'db_sslcert' => nil,
               'db_sslkey' => nil,
-              'db_application_name' => nil
+              'db_application_name' => nil,
+              'db_extra_config_command' => nil
             )
           )
         end
@@ -992,6 +993,29 @@ RSpec.describe 'gitlab::gitlab-rails' do
                 'db_sslkey' => '/etc/certs/db.key'
               )
             )
+          end
+        end
+
+        context 'when db_extra_config_command is specified' do
+          cached(:chef_run) do
+            ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default')
+          end
+
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                db_extra_config_command: '/opt/database-config.sh'
+              }
+            )
+          end
+
+          it 'uses specified value in database.yml' do
+            expect(chef_run).to create_templatesymlink('Create a database.yml and create a symlink to Rails root').with_variables(
+              hash_including(
+                'db_extra_config_command' => '/opt/database-config.sh'
+              )
+            )
+            expect(generated_yml_content.dig('production', 'config_command')).to eq('/opt/database-config.sh')
           end
         end
       end

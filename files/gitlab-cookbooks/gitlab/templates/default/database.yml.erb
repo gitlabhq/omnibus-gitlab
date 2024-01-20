@@ -3,6 +3,9 @@
 # and run `sudo gitlab-ctl reconfigure`.
 
 production:
+<% if !@db_extra_config_command.nil? -%>
+  config_command: <%= quote(@db_extra_config_command) %>
+<% end -%>
   <% # database.yml must always have `main` first, sort it to the front %>
   <% @databases.sort_by { |name, config| name == "main" ? 0 : 1 }.each do |database, attributes| %>
   <%= database %>:
