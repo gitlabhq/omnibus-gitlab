@@ -579,6 +579,10 @@ To disable automatic cache cleaning during installation:
 used as SaaS or on-premise. It's Open Source, and you can
 [browse its source code repositories](https://github.com/getsentry).
 
+WARNING:
+From GitLab 17.0, only Sentry versions 21.5.0 or later will be supported. If you use an earlier version of a Sentry instance that you host, you must
+[upgrade Sentry](https://develop.sentry.dev/self-hosted/releases/) to continue collecting errors from your GitLab environments.
+
 To configure Sentry:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
