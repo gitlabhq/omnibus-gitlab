@@ -15,7 +15,7 @@
 #
 
 name 'acme-client'
-default_version '2.0.15'
+default_version '2.0.16'
 
 license 'MIT'
 license_file 'LICENSE.txt'
