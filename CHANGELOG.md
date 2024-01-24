@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.7.4 (2024-01-24)
+
+### Security (2 changes)
+
+- [Update redis/redis from 7.0.14 to 7.0.15](gitlab-org/security/omnibus-gitlab@a16e096f88500397388091f663d324ab671c8e21) ([merge request](gitlab-org/security/omnibus-gitlab!411))
+- [Update libxml2 from 2.10.4 to 2.12.3](gitlab-org/security/omnibus-gitlab@caa3122f54abc31d3ad0c89d8b366f52100675f0) ([merge request](gitlab-org/security/omnibus-gitlab!403))
+
 ## 16.7.3 (2024-01-13)
 
 No changes.
