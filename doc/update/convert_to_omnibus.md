@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Upgrading from a non-Linux package installation to a Linux package installation **(FREE SELF)**
+# Upgrading from a non-Linux package installation to a Linux package installation
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 Upgrading from non-Linux package installations has not been tested by GitLab.
 

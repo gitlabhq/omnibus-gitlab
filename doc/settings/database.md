@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Database settings **(FREE SELF)**
+# Database settings
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 GitLab supports only the PostgreSQL database management system.
 
@@ -576,7 +580,7 @@ this.
 
 ### Configuring multiple database connections
 
-> The `gitlab:db:decomposition:connection_status` Rake task was [introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/111927) in GitLab 15.11.
+> - The `gitlab:db:decomposition:connection_status` Rake task was [introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/111927) in GitLab 15.11.
 
 In GitLab 16.0, GitLab defaults to using two database connections that point to the same PostgreSQL database.
 
@@ -1054,7 +1058,7 @@ parameters noted in the table below and then run `gitlab-ctl reconfigure`.
 
 ## Automatic database reindexing
 
-> [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/249662) in GitLab 13.5.
+> - [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/249662) in GitLab 13.5.
 
 WARNING:
 This is an experimental feature that isn't enabled by default.

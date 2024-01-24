@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Setting custom environment variables **(FREE SELF)**
+# Setting custom environment variables
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 If necessary you can set custom environment variables to be used by Puma,
 Sidekiq, Rails and Rake via `/etc/gitlab/gitlab.rb`. This can be useful in

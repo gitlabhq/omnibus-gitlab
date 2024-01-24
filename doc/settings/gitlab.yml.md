@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Changing `gitlab.yml` and `application.yml` settings **(FREE SELF)**
+# Changing `gitlab.yml` and `application.yml` settings
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 Some GitLab features can be customized through
 [`gitlab.yml`](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/config/gitlab.yml.example). If you want to change a `gitlab.yml` setting

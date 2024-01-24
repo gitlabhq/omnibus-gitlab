@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Configuring a Linux package installation **(FREE SELF)**
+# Configuring a Linux package installation
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 - [Asset proxy server](https://docs.gitlab.com/ee/security/asset_proxy.html)
 - [Backups](backups.md)

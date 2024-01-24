@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Install GitLab with the Linux package **(FREE SELF)**
+# Install GitLab with the Linux package
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 ## Prerequisites
 
@@ -44,7 +48,7 @@ For a complete list of settings, see the [README](../index.md#configuring) file.
 
 ### Set up the initial password
 
-> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5331) in GitLab 14.0.
+> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5331) in GitLab 14.0.
 
 By default, a Linux package installation automatically generates a password for the
 initial administrator user account (`root`) and stores it to
