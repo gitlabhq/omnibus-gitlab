@@ -107,6 +107,13 @@ No changes.
 - [Mattermost Security Update](gitlab-org/omnibus-gitlab@feda92ec4fb2024eb397a1e0970ae5b7f407dad6)
 - [Update PostgreSQL 13 and 14](gitlab-org/omnibus-gitlab@cfa09e2d8ee45a4cdebfde8fc334df9f9cd428f2)
 
+## 16.6.6 (2024-01-24)
+
+### Security (2 changes)
+
+- [Update redis/redis from 7.0.14 to 7.0.15](gitlab-org/security/omnibus-gitlab@afa93f1f3154f3f97b45f33bcadffd0b700f713b) ([merge request](gitlab-org/security/omnibus-gitlab!412))
+- [Update libxml2 from 2.10.4 to 2.12.3](gitlab-org/security/omnibus-gitlab@418f31a0556b7644fd6b23ac0d927230270fae9e) ([merge request](gitlab-org/security/omnibus-gitlab!404))
+
 ## 16.6.5 (2024-01-13)
 
 No changes.
