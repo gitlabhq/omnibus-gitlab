@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Backup **(FREE SELF)**
+# Backup
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 ## Backup and restore configuration on a Linux package installation
 
@@ -64,7 +68,7 @@ Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be
 
 ### Limit backup lifetime for configuration backups (prune old backups)
 
-> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5102) in GitLab 13.12.
+> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5102) in GitLab 13.12.
 
 GitLab configuration backups can be pruned using the same `backup_keep_time` setting that is
 [used for the GitLab application backups](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#limit-backup-lifetime-for-local-files-prune-old-backups)

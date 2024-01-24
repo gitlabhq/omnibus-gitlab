@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Logs on Linux package installations **(FREE SELF)**
+# Logs on Linux package installations
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 GitLab includes an [advanced log system](https://docs.gitlab.com/ee/administration/logs/index.html) where every service and component within GitLab will output system logs.
 Here are the configuration settings and tools for managing these logs on Linux package installations.
@@ -166,7 +170,11 @@ To manually trigger GitLab log rotation with `logrotate`, use the following comm
 /opt/gitlab/embedded/sbin/logrotate -fv -s /var/opt/gitlab/logrotate/logrotate.status /var/opt/gitlab/logrotate/logrotate.conf
 ```
 
-## UDP log forwarding **(PREMIUM SELF)**
+## UDP log forwarding
+
+DETAILS:
+**Tier:** Premium, Ultimate
+**Offering:** Self-managed
 
 Linux package installations can utilize the UDP logging feature in svlogd as well as sending non-svlogd logs to a syslog-compatible remote system using UDP.
 To configure a Linux package installation to send syslog-protocol messages via UDP, use the following settings:

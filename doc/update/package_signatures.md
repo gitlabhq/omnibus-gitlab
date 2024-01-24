@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Cryptographic details related to `omnibus-gitlab` packages **(FREE SELF)**
+# Cryptographic details related to `omnibus-gitlab` packages
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 GitLab uses a [packagecloud](https://packages.gitlab.com) instance to share the
 different OS packages it offers, and uses various cryptographic methods to
