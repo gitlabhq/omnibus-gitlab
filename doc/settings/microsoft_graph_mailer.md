@@ -4,9 +4,13 @@ group: Authentication and Authorization
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Microsoft Graph Mailer settings **(FREE SELF)**
+# Microsoft Graph Mailer settings
 
-> [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/8259) in GitLab 15.5.
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
+
+> - [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/8259) in GitLab 15.5.
 
 Prerequisites:
 

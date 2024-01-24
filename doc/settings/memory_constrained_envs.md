@@ -4,7 +4,11 @@ group: Application Performance
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Running GitLab in a memory-constrained environment **(FREE SELF)**
+# Running GitLab in a memory-constrained environment
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 GitLab requires a significant amount of memory when running with all features enabled.
 There are use-cases such as running GitLab on smaller installations where not all functionality

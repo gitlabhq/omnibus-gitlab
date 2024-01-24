@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Linux package documentation **(FREE SELF)**
+# Linux package documentation
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 The Linux package has different services and tools required to run GitLab. Most users can install it without laborious
 configuration.

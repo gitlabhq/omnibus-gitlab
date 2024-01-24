@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# SMTP settings **(FREE SELF)**
+# SMTP settings
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 If you would rather send application email via an SMTP server instead of via
 Sendmail or Postfix, add the following configuration information to
@@ -42,7 +46,7 @@ gitlab_rails['smtp_ca_file'] = '/path/to/your/cacert.pem'
 
 ## SMTP connection pooling
 
-> [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/230717) in GitLab 13.5.
+> - [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/230717) in GitLab 13.5.
 
 You can enable SMTP connection pooling with the following setting:
 
@@ -54,7 +58,7 @@ This allows Sidekiq workers to reuse SMTP connections for multiple jobs. The max
 
 ## Using encrypted credentials
 
-> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6276) in GitLab 14.3.
+> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6276) in GitLab 14.3.
 
 Instead of storing the SMTP credentials in the configuration files as plain text, you can optionally
 use an encrypted file for the SMTP credentials. To use this feature, you first need to enable

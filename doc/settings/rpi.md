@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Running on a Raspberry Pi **(FREE SELF)**
+# Running on a Raspberry Pi
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 In order to run GitLab Community Edition on a Raspberry Pi, you need the newest
 Pi 4 with at least 4GB of RAM for best results. You might be able to run GitLab

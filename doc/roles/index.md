@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Omnibus GitLab High Availability Roles **(FREE SELF)**
+# Omnibus GitLab High Availability Roles
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 Omnibus GitLab includes various software components/services to support running GitLab in
 a high availability configuration. By default, some of these supporting services
@@ -113,7 +117,7 @@ for configuration steps.
 
 ### Monitoring Roles
 
-> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/3404) in GitLab 12.1.
+> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/3404) in GitLab 12.1.
 
 Monitoring roles are used to set up monitoring of installations. For additional information, see the [Monitoring documentation](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html).
 
@@ -153,7 +157,7 @@ Documentation on the usage of the PostgreSQL Roles can be found in [Configuring 
 
 ### GitLab Pages Roles
 
-> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/4740) in GitLab 13.6.
+> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/4740) in GitLab 13.6.
 
 GitLab Pages roles are used to setup and configure GitLab Pages. For additional
 information, see the
@@ -167,7 +171,7 @@ information, see the
 
 ### Sidekiq Roles
 
-> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5365) in GitLab 14.1.
+> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5365) in GitLab 14.1.
 
 Sidekiq roles are used to setup and configure Sidekiq. For additional
 information, see the
@@ -181,7 +185,7 @@ information, see the
 
 ### Spamcheck Roles
 
-> [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5893) in GitLab 14.9.
+> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5893) in GitLab 14.9.
 
 Spamcheck roles are used to setup and configure Spamcheck services. For additional
 information, see the
