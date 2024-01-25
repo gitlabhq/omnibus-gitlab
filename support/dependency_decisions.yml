@@ -29,8 +29,8 @@
   - github.com/hashicorp/consul/api
   - MPL2
   - :who: Dustin Collins
-    :why: https://github.com/hashicorp/consul/blob/api/v1.22.0/LICENSE
-    :versions: [ v1.25.1 ]
+    :why: https://github.com/hashicorp/consul/blob/v1.26.1/api/LICENSE
+    :versions: [ v1.26.1 ]
     :when: 2018-06-22 14:21:19.937703316 Z
 - - :license
   - gitlab.com/lupine/icu
