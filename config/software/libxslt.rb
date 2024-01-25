@@ -15,7 +15,7 @@
 #
 
 name 'libxslt'
-default_version '1.1.35'
+default_version '1.1.39'
 
 license 'MIT'
 license_file 'COPYING'
@@ -26,7 +26,7 @@ dependency 'liblzma'
 dependency 'config_guess'
 
 # versions_list: url=https://download.gnome.org/sources/libxslt/1.1/ filter=*.tar.xz
-version('1.1.35') { source sha256: '8247f33e9a872c6ac859aa45018bc4c4d00b97e2feac9eebc10c93ce1f34dd79' }
+version('1.1.39') { source sha256: '2a20ad621148339b0759c4d4e96719362dee64c9a096dbba625ba053846349f0' }
 
 source url: "https://download.gnome.org/sources/libxslt/1.1/libxslt-#{version}.tar.xz"
 
