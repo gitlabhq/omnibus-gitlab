@@ -32,6 +32,7 @@ dependency 'ruby'
 dependency 'rubygems'
 dependency 'libffi'
 dependency 'rb-readline'
+dependency 'ruby-shadow'
 
 build do
   patch source: "license/add-license-file.patch"
