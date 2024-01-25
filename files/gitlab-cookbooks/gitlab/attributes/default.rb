@@ -175,6 +175,7 @@ default['gitlab']['gitlab_rails']['ssh_keys_expiring_soon_notification_worker_cr
 default['gitlab']['gitlab_rails']['ci_runners_stale_group_runners_prune_worker_cron'] = nil
 default['gitlab']['gitlab_rails']['ci_runner_versions_reconciliation_worker_cron'] = nil
 default['gitlab']['gitlab_rails']['ci_runners_stale_machines_cleanup_worker_cron'] = nil
+default['gitlab']['gitlab_rails']['ci_catalog_resources_process_sync_events_worker_cron'] = nil
 
 # Consolidated object storage config
 default['gitlab']['gitlab_rails']['object_store']['enabled'] = false

@@ -586,6 +586,12 @@ production: &base
       cron: "<%= @ci_runners_stale_machines_cleanup_worker_cron %>"
     <% end %>
 
+    # Periodically process catalog resource sync events
+    <% unless @ci_catalog_resources_process_sync_events_worker_cron.nil? %>
+    ci_catalog_resources_process_sync_events_worker:
+      cron: "<%= @ci_catalog_resources_process_sync_events_worker_cron %>"
+    <% end %>
+
     ##
     # GitLab EE only jobs:
 
