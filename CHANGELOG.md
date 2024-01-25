@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.8.1 (2024-01-24)
+
+### Security (2 changes)
+
+- [Update redis/redis from 7.0.14 to 7.0.15](gitlab-org/security/omnibus-gitlab@0a4d6ac1196ed040fd9215c84ab5f815868ccb01) ([merge request](gitlab-org/security/omnibus-gitlab!410))
+- [Update libxml2 from 2.10.4 to 2.12.3](gitlab-org/security/omnibus-gitlab@099d5ad9d1be83cd306b72ed5a9dbf4b538358fa) ([merge request](gitlab-org/security/omnibus-gitlab!409))
+
 ## 16.8.0 (2024-01-17)
 
 ### Added (2 changes)
@@ -34,6 +41,13 @@ omnibus-gitlab repository.
 
 - [Stop building for OpenSUSE 15.4](gitlab-org/omnibus-gitlab@d6d3933486f4b6d86320652882faa0019dc1aae7) ([merge request](gitlab-org/omnibus-gitlab!7331))
 - [Stop sidekiq namespaced probe for gitlab-exporter](gitlab-org/omnibus-gitlab@ff1df765a218a7b29ad6c4a9ccd6b091a2a10bfe) ([merge request](gitlab-org/omnibus-gitlab!7237))
+
+## 16.7.4 (2024-01-24)
+
+### Security (2 changes)
+
+- [Update redis/redis from 7.0.14 to 7.0.15](gitlab-org/security/omnibus-gitlab@a16e096f88500397388091f663d324ab671c8e21) ([merge request](gitlab-org/security/omnibus-gitlab!411))
+- [Update libxml2 from 2.10.4 to 2.12.3](gitlab-org/security/omnibus-gitlab@caa3122f54abc31d3ad0c89d8b366f52100675f0) ([merge request](gitlab-org/security/omnibus-gitlab!403))
 
 ## 16.7.3 (2024-01-13)
 
@@ -93,6 +107,13 @@ No changes.
 - [Mattermost Security Update](gitlab-org/omnibus-gitlab@feda92ec4fb2024eb397a1e0970ae5b7f407dad6)
 - [Update PostgreSQL 13 and 14](gitlab-org/omnibus-gitlab@cfa09e2d8ee45a4cdebfde8fc334df9f9cd428f2)
 
+## 16.6.6 (2024-01-24)
+
+### Security (2 changes)
+
+- [Update redis/redis from 7.0.14 to 7.0.15](gitlab-org/security/omnibus-gitlab@afa93f1f3154f3f97b45f33bcadffd0b700f713b) ([merge request](gitlab-org/security/omnibus-gitlab!412))
+- [Update libxml2 from 2.10.4 to 2.12.3](gitlab-org/security/omnibus-gitlab@418f31a0556b7644fd6b23ac0d927230270fae9e) ([merge request](gitlab-org/security/omnibus-gitlab!404))
+
 ## 16.6.5 (2024-01-13)
 
 No changes.
@@ -150,6 +171,10 @@ No changes.
 ### Other (1 change)
 
 - [Update Mattermost to 9.1.0](gitlab-org/omnibus-gitlab@3cedfa24af36c0f7d6d149ddd0956f5bce20d0e7) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7206))
+
+## 16.5.8 (2024-01-24)
+
+No changes.
 
 ## 16.5.7 (2024-01-13)
 
