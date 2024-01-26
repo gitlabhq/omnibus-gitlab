@@ -192,6 +192,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! request (default: 10)
 # gitlab_rails['webhook_timeout'] = 10
 
+### HTTP client settings
+###! This is for setting up the mutual TLS client cert and password for the certificate file.
+# gitlab_rails['http_client']['tls_client_cert_file'] = nil
+# gitlab_rails['http_client']['tls_client_cert_password'] = nil
+
 ### GraphQL Settings
 ###! Tells the rails application how long it has to complete a GraphQL request.
 ###! We suggest this value to be higher than the database timeout value

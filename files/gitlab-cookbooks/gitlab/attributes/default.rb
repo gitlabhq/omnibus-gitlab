@@ -615,6 +615,8 @@ default['gitlab']['gitlab_rails']['trusted_certs_dir'] = "/etc/gitlab/trusted-ce
 
 default['gitlab']['gitlab_rails']['webhook_timeout'] = nil
 
+default['gitlab']['gitlab_rails']['http_client'] = {}
+
 default['gitlab']['gitlab_rails']['graphql_timeout'] = nil
 
 default['gitlab']['gitlab_rails']['initial_root_password'] = nil

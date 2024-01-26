@@ -84,6 +84,34 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    describe 'HTTP client settings' do
+      context 'with default configuration' do
+        it 'renders gitlab.yml with empty HTTP client settings' do
+          expect(gitlab_yml[:production][:gitlab][:http_client]).to eq({})
+        end
+      end
+
+      context 'with mutual TLS settings configured' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              http_client: {
+                tls_client_cert_file: '/path/to/tls_cert_file',
+                tls_client_cert_password: 'somepassword'
+              }
+            }
+          )
+        end
+
+        it 'renders gitlab.yml with HTTP client settings' do
+          expect(gitlab_yml[:production][:gitlab][:http_client]).to eq(
+            tls_client_cert_file: '/path/to/tls_cert_file',
+            tls_client_cert_password: 'somepassword'
+          )
+        end
+      end
+    end
+
     describe 'SMIME email settings' do
       context 'with default configuration' do
         it 'renders gitlab.yml with SMIME email settings disabled' do
