@@ -1006,6 +1006,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   'connecttimeout' => '5s',
 #   'draintimeout' => '2m',
 #   'preparedstatements' => false,
+#   'primary' => 'primary.record.fqdn',
 #   'pool' => {
 #       'maxidle' => 25,
 #       'maxopen' => 25,
