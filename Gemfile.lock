@@ -20,35 +20,38 @@ GIT
 GEM
   remote: https://packagecloud.io/cinc-project/stable/
   specs:
-    chef (17.10.0)
+    chef (18.3.0)
       addressable
       aws-sdk-s3 (~> 1.91)
       aws-sdk-secretsmanager (~> 1.46)
-      chef-config (= 17.10.0)
-      chef-utils (= 17.10.0)
+      chef-config (= 18.3.0)
+      chef-utils (= 18.3.0)
       chef-vault
       chef-zero (>= 14.0.11)
       corefoundation (~> 0.3.4)
       diff-lcs (>= 1.2.4, < 1.6.0, != 1.4.0)
       erubis (~> 2.7)
-      ffi (>= 1.5.0)
+      ffi (>= 1.15.5)
       ffi-libarchive (~> 1.0, >= 1.0.3)
       ffi-yajl (~> 2.2)
       iniparse (~> 1.4)
-      inspec-core (~> 4.23)
+      inspec-core (>= 5)
       license-acceptance (>= 1.0.5, < 3)
       mixlib-archive (>= 0.4, < 2.0)
       mixlib-authentication (>= 2.1, < 4)
       mixlib-cli (>= 2.1.1, < 3.0)
       mixlib-log (>= 2.0.3, < 4.0)
       mixlib-shellout (>= 3.1.1, < 4.0)
-      net-sftp (>= 2.1.2, < 4.0)
-      ohai (~> 17.0)
+      net-ftp
+      net-sftp (>= 2.1.2, < 5.0)
+      ohai (~> 18.0)
       plist (~> 3.2)
-      proxifier (~> 1.0)
+      proxifier2 (~> 1.1)
       syslog-logger (~> 1.6)
-      train-core (~> 3.2, >= 3.2.28)
+      train-core (~> 3.10)
+      train-rest (>= 0.4.1)
       train-winrm (>= 0.2.5)
+      unf_ext (>= 0.0.8.2)
       uuidtools (>= 2.1.5, < 3.0)
       vault (~> 0.16)
     chef-cli (5.6.1)
@@ -63,14 +66,14 @@ GEM
       mixlib-shellout (>= 2.0, < 4.0)
       pastel (~> 0.7)
       solve (> 2.0, < 5.0)
-    chef-config (17.10.0)
+    chef-config (18.3.0)
       addressable
-      chef-utils (= 17.10.0)
+      chef-utils (= 18.3.0)
       fuzzyurl
       mixlib-config (>= 2.2.12, < 4.0)
       mixlib-shellout (>= 2.0, < 4.0)
       tomlrb (~> 1.2)
-    chef-utils (17.10.0)
+    chef-utils (18.3.0)
       concurrent-ruby
     chef-zero (15.0.11)
       ffi-yajl (~> 2.2)
@@ -79,31 +82,30 @@ GEM
       rack (~> 2.0, >= 2.0.6)
       uuidtools (~> 2.1)
       webrick
-    inspec-core (4.56.20)
+    inspec-core (5.22.36)
       addressable (~> 2.4)
       chef-telemetry (~> 1.0, >= 1.0.8)
-      faraday (>= 0.9.0, < 1.5)
-      faraday_middleware (~> 1.0)
-      hashie (>= 3.4, < 5.0)
+      faraday (>= 1, < 3)
+      faraday-follow_redirects (~> 0.3)
+      hashie (>= 3.4, < 6.0)
       license-acceptance (>= 0.2.13, < 3.0)
       method_source (>= 0.8, < 2.0)
       mixlib-log (~> 3.0)
       multipart-post (~> 2.0)
       parallel (~> 1.9)
-      parslet (>= 1.5, < 2.0)
+      parslet (>= 1.5, < 3.0)
       pry (~> 0.13)
-      rspec (>= 3.9, <= 3.11)
+      rspec (>= 3.9, <= 3.12)
       rspec-its (~> 1.2)
       rubyzip (>= 1.2.2, < 3.0)
       semverse (~> 3.0)
       sslshake (~> 1.2)
-      thor (>= 0.20, < 2.0)
+      thor (>= 0.20, < 1.3.0)
       tomlrb (>= 1.2, < 2.1)
-      train-core (~> 3.0)
+      train-core (~> 3.10)
       tty-prompt (~> 0.17)
       tty-table (~> 0.10)
     mixlib-versioning (1.2.12)
-    unf_ext (0.0.7.2)
 
 GEM
   remote: https://rubygems.org/
@@ -138,8 +140,8 @@ GEM
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
-    aws-sdk-secretsmanager (1.60.0)
-      aws-sdk-core (~> 3, >= 3.127.0)
+    aws-sdk-secretsmanager (1.75.0)
+      aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.5.2)
       aws-eventstream (~> 1, >= 1.0.2)
@@ -150,7 +152,7 @@ GEM
     chef-telemetry (1.1.1)
       chef-config
       concurrent-ruby (~> 1.0)
-    chef-vault (4.1.10)
+    chef-vault (4.1.11)
     chefspec (9.3.3)
       chef (>= 15)
       chef-cli
@@ -188,6 +190,7 @@ GEM
     danger-gitlab (8.0.0)
       danger
       gitlab (~> 4.2, >= 4.2.0)
+    date (3.3.4)
     debug (1.6.1)
       irb (>= 1.3.6)
       reline (>= 0.3.1)
@@ -202,7 +205,7 @@ GEM
       multi_json
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    erubi (1.11.0)
+    erubi (1.12.0)
     erubis (2.7.0)
     excon (0.76.0)
     fantaskspec (1.2.0)
@@ -219,19 +222,19 @@ GEM
     faraday-em_http (1.0.0)
     faraday-em_synchrony (1.0.0)
     faraday-excon (1.1.0)
+    faraday-follow_redirects (0.3.0)
+      faraday (>= 1, < 3)
     faraday-http-cache (2.4.1)
       faraday (>= 0.8)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
-    faraday_middleware (1.2.0)
-      faraday (~> 1.0)
     fauxhai-ng (8.7.0)
       net-ssh
     ffi (1.15.5)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    ffi-libarchive (1.1.3)
+    ffi-libarchive (1.1.13)
       ffi (~> 1.0)
     ffi-yajl (2.4.0)
       libyajl2 (>= 1.2)
@@ -334,7 +337,7 @@ GEM
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    logging (2.3.0)
+    logging (2.3.1)
       little-plugger (~> 1.1)
       multi_json (~> 1.14)
     memoist (0.16.2)
@@ -349,7 +352,7 @@ GEM
       mixlib-log
     mixlib-authentication (3.0.10)
     mixlib-cli (2.1.8)
-    mixlib-config (3.0.9)
+    mixlib-config (3.0.27)
       tomlrb
     mixlib-log (3.0.9)
     mixlib-shellout (3.2.7)
@@ -359,10 +362,15 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     nap (1.1.0)
-    net-scp (3.0.0)
-      net-ssh (>= 2.6.5, < 7.0.0)
-    net-sftp (3.0.0)
-      net-ssh (>= 5.0.0, < 7.0.0)
+    net-ftp (0.3.4)
+      net-protocol
+      time
+    net-protocol (0.2.2)
+      timeout
+    net-scp (4.0.0)
+      net-ssh (>= 2.6.5, < 8.0.0)
+    net-sftp (4.0.0)
+      net-ssh (>= 5.0.0, < 8.0.0)
     net-ssh (6.1.0)
     netrc (0.11.0)
     no_proxy_fix (0.1.2)
@@ -370,9 +378,9 @@ GEM
     octokit (4.25.1)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
-    ohai (17.9.0)
-      chef-config (>= 14.12, < 18)
-      chef-utils (>= 16.0, < 18)
+    ohai (18.1.3)
+      chef-config (>= 14.12, < 19)
+      chef-utils (>= 16.0, < 19)
       ffi (~> 1.9)
       ffi-yajl (~> 2.2)
       ipaddress
@@ -395,7 +403,7 @@ GEM
     parallel (1.19.2)
     parser (3.2.2.1)
       ast (~> 2.4.1)
-    parslet (1.8.2)
+    parslet (2.0.0)
     pastel (0.8.0)
       tty-color (~> 0.5)
     pedump (0.6.6)
@@ -404,13 +412,13 @@ GEM
       multipart-post (>= 2.0.0)
       rainbow
       zhexdump (>= 0.0.2)
-    plist (3.6.0)
+    plist (3.7.1)
     proc_to_ast (0.1.0)
       coderay
       parser
       unparser
-    proxifier (1.0.3)
-    pry (0.14.1)
+    proxifier2 (1.1.0)
+    pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.0)
@@ -522,18 +530,25 @@ GEM
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (1.2.1)
+    time (0.3.0)
+      date
+    timeout (0.4.1)
     toml-rb (2.2.0)
       citrus (~> 3.0, > 3.0)
     tomlib (0.6.0)
     tomlrb (1.3.0)
     trailblazer-option (0.1.2)
-    train-core (3.9.2)
+    train-core (3.11.0)
       addressable (~> 2.5)
       ffi (!= 1.13.0)
       json (>= 1.8, < 3.0)
       mixlib-shellout (>= 2.0, < 4.0)
-      net-scp (>= 1.2, < 4.0)
-      net-ssh (>= 2.9, < 7.0)
+      net-scp (>= 1.2, < 5.0)
+      net-ssh (>= 2.9, < 8.0)
+    train-rest (0.5.0)
+      aws-sigv4 (~> 1.5)
+      rest-client (~> 2.1)
+      train-core (~> 3.0)
     train-winrm (0.2.13)
       winrm (>= 2.3.6, < 3.0)
       winrm-elevated (~> 1.2.2)
@@ -561,13 +576,14 @@ GEM
     uber (0.1.0)
     unf (0.1.4)
       unf_ext
+    unf_ext (0.0.9.1)
     unicode-display_width (1.8.0)
     unicode_utils (1.4.0)
     unparser (0.6.7)
       diff-lcs (~> 1.3)
       parser (>= 3.2.0)
     uuidtools (2.2.0)
-    vault (0.16.0)
+    vault (0.18.2)
       aws-sigv4
     webrick (1.7.0)
     winrm (2.3.6)
@@ -600,7 +616,7 @@ PLATFORMS
 DEPENDENCIES
   aws-sdk-ec2
   aws-sdk-marketplacecatalog
-  chef (~> 17.10.0)!
+  chef (~> 18.3.0)!
   chef-cli (~> 5.6.1)!
   chef-utils!
   chefspec
@@ -615,7 +631,7 @@ DEPENDENCIES
   json
   knapsack
   mixlib-versioning!
-  ohai (~> 17.0)
+  ohai (~> 18.0)
   omnibus!
   omnibus-ctl (= 0.3.6)
   package_cloud
@@ -629,6 +645,7 @@ DEPENDENCIES
   thor (~> 1.2)
   toml-rb
   tomlib (~> 0.6.0)
+  unf_ext (~> 0.0.9.1)
   yard
 
 BUNDLED WITH

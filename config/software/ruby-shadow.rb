@@ -1,5 +1,6 @@
 #
-# Copyright 2016-2022 GitLab Inc.
+# Copyright 2012-2015 Chef Software, Inc.
+# Copyright 2017-2023 GitLab Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,27 +15,29 @@
 # limitations under the License.
 #
 
-name 'ohai'
-# The version here should be in agreement with /Gemfile.lock so that our rspec
-# testing stays consistent with the package contents.
-default_version '18.1.3'
+name 'ruby-shadow'
+# From https://github.com/chef/chef/blob/3c35bd0e1d17a5bfd779fab3cc7860ea1923dec6/Gemfile#L41-L44
+version = Gitlab::Version.new('ruby-shadow', '3b8ea40b0e943b5de721d956741308ce805a5c3c')
+default_version version.print(false)
+display_version version.print(false)
 
 license 'Apache-2.0'
 license_file 'LICENSE'
-license_file 'NOTICE'
 
 skip_transitive_dependency_licensing true
 
-dependency 'ruby'
 dependency 'rubygems'
 
+source git: version.remote
+
+relative_path 'ruby-shadow'
+
 build do
-  patch source: "license/add-license-file.patch"
-  patch source: "license/add-notice-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
-  gem 'install ohai' \
-      " --version '#{version}'" \
-      " --bindir '#{install_dir}/embedded/bin'" \
-      ' --no-document', env: env
+  # Remove existing built gems in case they exist in the current dir
+  delete 'ruby-shadow-*.gem'
+
+  gem 'build ruby-shadow.gemspec', env: env
+  gem 'install ruby-shadow-*.gem --no-document', env: env
 end
