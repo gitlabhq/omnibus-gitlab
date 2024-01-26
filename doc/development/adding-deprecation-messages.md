@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Omnibus GitLab deprecation process
 
-Besides following the [GitLab deprecation guidelines](https://about.gitlab.com/handbook/product/gitlab-the-product/#deprecations-removals-and-breaking-changes), we should also add deprecation messages
+Besides following the [GitLab deprecation guidelines](https://handbook.gitlab.com/handbook/product/gitlab-the-product/#deprecations-removals-and-breaking-changes), we should also add deprecation messages
 to the Omnibus GitLab package.
 
 Notifying GitLab administrators of the deprecation and removal of features through deprecation messages consists of:
