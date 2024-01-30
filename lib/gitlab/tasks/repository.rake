@@ -1,4 +1,4 @@
-require_relative '../package_repository.rb'
+require_relative '../package_repository'
 
 desc 'Package repository where the package will be stored'
 

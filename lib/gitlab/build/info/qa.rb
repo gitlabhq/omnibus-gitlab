@@ -1,3 +1,7 @@
+require_relative '../../util'
+require_relative 'components'
+require_relative 'package'
+
 module Build
   class Info
     class QA

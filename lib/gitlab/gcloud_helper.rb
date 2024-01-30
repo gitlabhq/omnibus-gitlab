@@ -1,5 +1,7 @@
 require 'google/cloud/storage'
-require_relative './build/info.rb'
+
+require_relative 'build/check'
+require_relative 'util'
 
 class GCloudHelper
   class << self
@@ -30,11 +32,15 @@ class GCloudHelper
     private
 
     def sa_file
-      Build::Info.gcp_release_bucket_sa_file
+      Gitlab::Util.get_env('GITLAB_COM_PKGS_SA_FILE')
     end
 
     def pkgs_bucket
-      Build::Info.gcp_release_bucket
+      # All tagged builds are pushed to the release bucket
+      # whereas regular branch builds use a separate one
+      gcp_pkgs_release_bucket = Gitlab::Util.get_env('GITLAB_COM_PKGS_RELEASE_BUCKET') || 'gitlab-com-pkgs-release'
+      gcp_pkgs_builds_bucket = Gitlab::Util.get_env('GITLAB_COM_PKGS_BUILDS_BUCKET') || 'gitlab-com-pkgs-builds'
+      Build::Check.on_tag? ? gcp_pkgs_release_bucket : gcp_pkgs_builds_bucket
     end
   end
 end

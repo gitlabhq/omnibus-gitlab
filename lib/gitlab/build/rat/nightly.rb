@@ -1,7 +1,8 @@
-require_relative '../trigger'
-require_relative '../info'
-require_relative "../../util"
 require 'cgi'
+
+require_relative '../../util'
+require_relative '../info/package'
+require_relative '../trigger'
 
 module Build
   class RAT

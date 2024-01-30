@@ -1,7 +1,7 @@
+require 'gitlab'
+
 require_relative 'build/info/ci'
 require_relative 'build/info/secrets'
-
-require 'gitlab'
 
 module Gitlab
   class APIClient

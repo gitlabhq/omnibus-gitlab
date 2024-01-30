@@ -1,5 +1,5 @@
-require_relative '../../util'
 require_relative '../../api_client'
+require_relative '../../util'
 require_relative '../check'
 
 module Build

@@ -1,9 +1,9 @@
 require_relative '../build/check'
-require_relative '../util'
 require_relative '../build/info/deploy'
 require_relative '../build/info/package'
 require_relative '../deployer_helper'
 require_relative '../ohai_helper'
+require_relative '../util'
 
 namespace :gitlab_com do
   desc 'Tasks related to gitlab.com.'

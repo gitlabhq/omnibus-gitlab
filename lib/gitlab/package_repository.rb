@@ -1,7 +1,8 @@
 require 'English'
-require_relative 'retriable.rb'
-require_relative 'build/info.rb'
-require_relative "util.rb"
+
+require_relative 'build/info/package'
+require_relative 'retriable'
+require_relative 'util'
 
 class PackageRepository
   PackageUploadError = Class.new(StandardError)

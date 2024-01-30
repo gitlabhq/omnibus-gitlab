@@ -87,3 +87,8 @@ Lint/RedundantSafeNavigation: # (new in 0.93)
   Enabled: true
 Style/ClassEqualityComparison: # (new in 0.93)
   Enabled: true
+
+Style/RedundantFileExtensionInRequire:
+  Enabled: true
+  Exclude:
+    - files/**/*

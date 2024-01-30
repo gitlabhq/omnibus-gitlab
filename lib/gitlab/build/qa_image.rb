@@ -1,7 +1,7 @@
+require_relative '../skopeo_helper'
+require_relative 'gitlab_image'
 require_relative 'image'
 require_relative 'info/qa'
-require_relative 'gitlab_image'
-require_relative '../skopeo_helper'
 
 module Build
   class QAImage

@@ -5,8 +5,8 @@
 
 require 'omnibus'
 require 'yaml'
-require 'gitlab/version'
-require_relative 'base.rb'
+
+require_relative 'base'
 
 module Manifest
   # Creates manifest for one edition based on the value of the "ee" environment

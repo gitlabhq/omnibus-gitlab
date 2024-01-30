@@ -1,4 +1,4 @@
-require_relative "../util.rb"
+require_relative '../util'
 
 module Manifest
   class Base

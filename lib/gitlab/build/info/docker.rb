@@ -1,3 +1,8 @@
+require_relative '../../util'
+require_relative '../check'
+require_relative '../info/ci'
+require_relative '../info/package'
+
 module Build
   class Info
     class Docker

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'gitlab/build'
 require 'gitlab/deployer_helper'
 
 RSpec.describe DeployerHelper do

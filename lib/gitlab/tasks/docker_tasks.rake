@@ -1,10 +1,11 @@
 require 'docker'
-require_relative '../docker_operations'
-require_relative '../build/info'
-require_relative '../build/info/ci'
+
 require_relative '../build/check'
 require_relative '../build/gitlab_image'
-require_relative "../util.rb"
+require_relative '../build/info/ci'
+require_relative '../build/info/docker'
+require_relative '../docker_operations'
+require_relative '../util'
 
 namespace :docker do
   namespace :build do

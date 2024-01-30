@@ -1,4 +1,4 @@
-require_relative '../build/info.rb'
+require_relative '../build/info/package'
 
 module License
   class Analyzer

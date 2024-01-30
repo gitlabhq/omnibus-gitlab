@@ -1,6 +1,6 @@
-require_relative 'info'
+require_relative '../util'
 require_relative '../docker_operations'
-require_relative "../util.rb"
+require_relative 'info/docker'
 
 module Build
   module Image

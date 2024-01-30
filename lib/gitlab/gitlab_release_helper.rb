@@ -1,5 +1,7 @@
 require 'json'
 
+require_relative 'build/info/package'
+
 class GitlabReleaseHelper
   class << self
     def release_details

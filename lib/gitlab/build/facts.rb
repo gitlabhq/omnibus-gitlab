@@ -1,6 +1,8 @@
+require_relative 'gitlab_image'
 require_relative 'info/docker'
 require_relative 'info/git'
 require_relative 'info/package'
+require_relative 'info/qa'
 
 module Build
   class Facts

@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'gitlab/build/facts'
-require 'gitlab/build/gitlab_image'
 
 RSpec.describe Build::Facts do
   let(:version_manifest_contents) do

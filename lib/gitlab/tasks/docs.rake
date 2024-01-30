@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 require 'date'
 require 'pathname'
-require "yaml"
+require 'yaml'
 
 #
 # https://docs.gitlab.com/ee/development/documentation/#move-or-rename-a-page

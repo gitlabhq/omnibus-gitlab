@@ -1,7 +1,8 @@
-require_relative '../aws_helper.rb'
-require_relative '../build/info.rb'
-require_relative '../build/check.rb'
 require 'omnibus'
+
+require_relative '../aws_helper'
+require_relative '../build/check'
+require_relative '../build/info/package'
 
 namespace :aws do
   namespace :ami do

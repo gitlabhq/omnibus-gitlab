@@ -1,5 +1,5 @@
-require_relative "../build/check.rb"
-require_relative "../package_size"
+require_relative '../build/check'
+require_relative '../package_size'
 
 namespace :check do
   desc "Check if working tree is clean"

@@ -1,8 +1,8 @@
 require 'erb'
 require 'fileutils'
-require_relative '../build/info.rb'
-require_relative "../util.rb"
-require_relative 'base.rb'
+
+require_relative '../util'
+require_relative 'base'
 
 module Manifest
   # Roots through the LICENSE_S3_BUCKET'and creates an html page with links to
