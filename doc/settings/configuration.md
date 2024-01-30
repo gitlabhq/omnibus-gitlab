@@ -119,24 +119,36 @@ If you have any issues, see the [troubleshooting section](#relative-url-troubles
 Linux package installations load all configuration from `/etc/gitlab/gitlab.rb` file.
 This file has strict file permissions and is owned by the `root` user. The reason for strict permissions
 and ownership is that `/etc/gitlab/gitlab.rb` is being executed as Ruby code by the `root` user during `gitlab-ctl reconfigure`. This means
-that users who have to write access to `/etc/gitlab/gitlab.rb` can add a configuration that is executed as code by `root`.
+that users who have write access to `/etc/gitlab/gitlab.rb` can add a configuration that is executed as code by `root`.
 
 In certain organizations, it is allowed to have access to the configuration files but not as the root user.
 You can include an external configuration file inside `/etc/gitlab/gitlab.rb` by specifying the path to the file:
 
-```ruby
-from_file "/home/admin/external_gitlab.rb"
-```
+1. Edit `/etc/gitlab/gitlab.rb`:
 
-Code you include into `/etc/gitlab/gitlab.rb` using `from_file` runs with `root` privileges when you run `sudo gitlab-ctl reconfigure`.
-Any configuration that is set in `/etc/gitlab/gitlab.rb` after `from_file` is included, takes precedence over the configuration from the included file.
+   ```ruby
+   from_file "/home/admin/external_gitlab.rb"
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+When you use `from_file`:
+
+- Code you include into `/etc/gitlab/gitlab.rb` using `from_file` runs with
+  `root` privileges when you reconfigure GitLab.
+- Any configuration that is set in `/etc/gitlab/gitlab.rb` after `from_file` is
+  included, takes precedence over the configuration from the included file.
 
 ## Read certificate from file
 
 Certificates can be stored as separate files and loaded into memory when running `sudo gitlab-ctl reconfigure`. Files containing
 certificates must be plaintext.
 
-In this example, the PostgreSQL server certificate is read directly from a file rather than copy and pasting into the `gitlab.rb` directly.
+In this example, the [PostgreSQL server certificate](database.md#configuring-ssl) is read directly from a file rather than copying and pasting into `/etc/gitlab/gitlab.rb` directly.
 
 ```ruby
 postgresql['internal_certificate'] = File.read('/path/to/server.crt')
@@ -219,14 +231,14 @@ endpoint and specify the `repository_storage` attribute.
 
 ## Change the name of the Git user or group
 
-NOTE:
+WARNING:
 We do not recommend changing the user or group of an existing installation because it can cause unpredictable side effects.
 
 By default, Linux package installations use the user name `git` for Git GitLab Shell login,
 ownership of the Git data itself, and SSH URL generation on the web interface.
 Similarly, the `git` group is used for group ownership of the Git data.
 
-To change the user and group:
+To change the user and group on a new Linux package installation:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
@@ -243,14 +255,27 @@ To change the user and group:
 
 If you are changing the username of an existing installation, the reconfigure run
 doesn't change the ownership of the nested directories, so you must do that manually.
-Make sure that the new user can access the `repositories` and `uploads` directories.
+
+At the very least, you must change ownership of the repositories and uploads
+directories:
+
+```shell
+sudo chown -R gitlab:gitlab /var/opt/gitlab/git-data/repositories
+sudo chown -R gitlab:gitlab /var/opt/gitlab/gitlab-rails/uploads
+```
 
 ## Specify numeric user and group identifiers
 
 Linux package installations create users for GitLab, PostgreSQL, Redis, NGINX, etc. To
 specify the numeric identifiers for these users:
 
-1. Edit `/etc/gitlab/gitlab.rb`:
+1. Write down the old user and group identifiers, as you might need them later:
+
+   ```shell
+   sudo cat /etc/passwd
+   ```
+
+1. Edit `/etc/gitlab/gitlab.rb` and change any of the identifiers you want:
 
    ```ruby
    user['uid'] = 1234
@@ -269,21 +294,23 @@ specify the numeric identifiers for these users:
    prometheus['gid'] = 1240
    ```
 
-1. Reconfigure GitLab:
+1. Stop, reconfigure, and then start GitLab:
 
    ```shell
+   sudo gitlab-ctl stop
    sudo gitlab-ctl reconfigure
+   sudo gitlab-ctl start
    ```
 
 1. Optional. If you're changing `user['uid']` and `user['gid']`, make sure to update the uid/guid of any files not managed by the Linux package
    directly, for example, the logs:
 
-```shell
-find /var/log/gitlab -uid <old_uid> | xargs -I:: chown git ::
-find /var/log/gitlab -gid <old_uid> | xargs -I:: chgrp git ::
-find /var/opt/gitlab -uid <old_uid> | xargs -I:: chown git ::
-find /var/opt/gitlab -gid <old_uid> | xargs -I:: chgrp git ::
-```
+   ```shell
+   find /var/log/gitlab -uid <old_uid> | xargs -I:: chown git ::
+   find /var/log/gitlab -gid <old_uid> | xargs -I:: chgrp git ::
+   find /var/opt/gitlab -uid <old_uid> | xargs -I:: chown git ::
+   find /var/opt/gitlab -gid <old_uid> | xargs -I:: chgrp git ::
+   ```
 
 ## Disable user and group account management
 
@@ -296,16 +323,16 @@ might need to disable account management done by the GitLab package.
 
 By default, the Linux package installations expect the following users and groups to exist:
 
-| Linux user and group | Required                                | Description                                                          |
-| -------------------- | --------------------------------------- | -------------------------------------------------------------------- |
-| `git`                | Yes                                     | GitLab user/group                                                    |
-| `gitlab-www`         | Yes                                     | Web server user/group                                                |
-| `gitlab-redis`       | Only when using the packaged Redis      | Redis user/group for GitLab                                          |
-| `gitlab-psql`        | Only when using the packaged PostgreSQL | PostgreSQL user/group                                                |
-| `gitlab-prometheus`  | Yes                                     | Prometheus user/group for Prometheus monitoring and various exporters|
-| `mattermost`         | Only when using GitLab Mattermost       | GitLab Mattermost user/group                                         |
-| `registry`           | Only when using GitLab Registry         | GitLab Registry user/group                                           |
-| `gitlab-consul`      | Only when using GitLab Consul           | GitLab Consul user/group                                             |
+| Linux user and group | Required                                | Description                                                           | Default home directory       | Default shell |
+| -------------------- | --------------------------------------- | --------------------------------------------------------------------- | ---------------------------- | ------------- |
+| `git`                | Yes                                     | GitLab user/group                                                     | `/var/opt/gitlab`            | `bin/sh`      |
+| `gitlab-www`         | Yes                                     | Web server user/group                                                 | `/var/opt/gitlab/nginx`      | `/bin/false`  |
+| `gitlab-prometheus`  | Yes                                     | Prometheus user/group for Prometheus monitoring and various exporters | `/var/opt/gitlab/prometheus` | `/bin/sh`     |
+| `gitlab-redis`       | Only when using the packaged Redis      | Redis user/group for GitLab                                           | `/var/opt/gitlab/redis`      | `/bin/false`  |
+| `gitlab-psql`        | Only when using the packaged PostgreSQL | PostgreSQL user/group                                                 | `/var/opt/gitlab/postgresql` | `/bin/sh`     |
+| `gitlab-consul`      | Only when using GitLab Consul           | GitLab Consul user/group                                              | `/var/opt/gitlab/consul`     | `/bin/sh`     |
+| `registry`           | Only when using GitLab Registry         | GitLab Registry user/group                                            | `/var/opt/gitlab/registry`   | `/bin/sh`     |
+| `mattermost`         | Only when using GitLab Mattermost       | GitLab Mattermost user/group                                          | `/var/opt/gitlab/mattermost` | `/bin/sh`     |
 
 To disable user and group accounts management:
 
@@ -319,8 +346,8 @@ To disable user and group accounts management:
 
    ```ruby
    # GitLab
-   user['username'] = "custom-gitlab"
-   user['group'] = "custom-gitlab"
+   user['username'] = "git"
+   user['group'] = "git"
    user['shell'] = "/bin/sh"
    user['home'] = "/var/opt/custom-gitlab"
 
@@ -330,11 +357,11 @@ To disable user and group accounts management:
    web_server['shell'] = '/bin/false'
    web_server['home'] = '/var/opt/gitlab/webserver'
 
-   # Postgresql (not needed when using external Postgresql)
-   postgresql['username'] = "postgres-gitlab"
-   postgresql['group'] = "postgres-gitlab"
-   postgresql['shell'] = "/bin/sh"
-   postgresql['home'] = "/var/opt/postgres-gitlab"
+   # Prometheus
+   prometheus['username'] = 'gitlab-prometheus'
+   prometheus['group'] = 'gitlab-prometheus'
+   prometheus['shell'] = '/bin/sh'
+   prometheus['home'] = '/var/opt/gitlab/prometheus'
 
    # Redis (not needed when using external Redis)
    redis['username'] = "redis-gitlab"
@@ -342,7 +369,26 @@ To disable user and group accounts management:
    redis['shell'] = "/bin/false"
    redis['home'] = "/var/opt/redis-gitlab"
 
-   # And so on for users/groups for GitLab Mattermost
+   # Postgresql (not needed when using external Postgresql)
+   postgresql['username'] = "postgres-gitlab"
+   postgresql['group'] = "postgres-gitlab"
+   postgresql['shell'] = "/bin/sh"
+   postgresql['home'] = "/var/opt/postgres-gitlab"
+
+   # Consul
+   consul['username'] = 'gitlab-consul'
+   consul['group'] = 'gitlab-consul'
+   consul['dir'] = "/var/opt/gitlab/registry"
+
+   # Registry
+   registry['username'] = "registry"
+   registry['group'] = "registry"
+   registry['dir'] = "/var/opt/gitlab/registry"
+
+   # Mattermost
+   mattermost['username'] = 'mattermost'
+   mattermost['group'] = 'mattermost'
+   mattermost['home'] = '/var/opt/gitlab/mattermost'
    ```
 
 1. Reconfigure GitLab:
@@ -363,7 +409,7 @@ To move an existing home directory, GitLab services need to be stopped and some 
 1. Stop GitLab:
 
    ```shell
-   gitlab-ctl stop
+   sudo gitlab-ctl stop
    ```
 
 1. Stop the runit server:
@@ -375,7 +421,7 @@ To move an existing home directory, GitLab services need to be stopped and some 
 1. Change the home directory:
 
    ```shell
-   usermod -d /path/to/home <username>
+   sudo usermod -d /path/to/home <username>
    ```
 
    If you had existing data, you need to manually copy/rsync it to the new location:
@@ -473,7 +519,8 @@ To disable the management of storage directories:
 ## Start Linux package installation services only after a given file system is mounted
 
 If you want to prevent Linux package installation services (NGINX, Redis, Puma, etc.)
-from starting before a given file system is mounted:
+from starting before a given file system is mounted, you can set the
+`high_availability['mountpoint']` setting:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
@@ -487,6 +534,9 @@ from starting before a given file system is mounted:
    ```shell
    sudo gitlab-ctl reconfigure
    ```
+
+   NOTE:
+   If the mount point doesn't exist, GitLab fails to reconfigure.
 
 ## Configure the runtime directory
 
@@ -522,8 +572,22 @@ To enable the Rails metrics again:
 
 ## Configure a failed authentication ban
 
-You can configure a [failed authentication ban](https://docs.gitlab.com/ee/security/rate_limits.html#failed-authentication-ban-for-git-and-container-registry)
-for Git and the container registry:
+You can configure a
+[failed authentication ban](https://docs.gitlab.com/ee/security/rate_limits.html#failed-authentication-ban-for-git-and-container-registry)
+for Git and the container registry. When a client is banned, a 403 error code
+is returned.
+
+The following settings can be configured:
+
+| Setting        | Description                                                                                                                                                                                    |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled`      | `false` by default. Set this to `true` to enable the Git and registry authentication ban.                                                                                                      |
+| `ip_whitelist` | IPs to not block. They must be formatted as strings in a Ruby array. You can use either single IPs or CIDR notation, for example, `["127.0.0.1", "127.0.0.2", "127.0.0.3", "192.168.0.1/24"]`. |
+| `maxretry`     | The maximum amount of times a request can be made in the specified time.                                                                                                                       |
+| `findtime`     | The maximum amount of time in seconds that failed requests can count against an IP before it's added to the denylist.                                                                          |
+| `bantime`      | The total amount of time in seconds that an IP is blocked.                                                                                                                                     |
+
+To configure the Git and container registry authentication ban:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
@@ -542,18 +606,6 @@ for Git and the container registry:
    ```shell
    sudo gitlab-ctl reconfigure
    ```
-
-The following settings can be configured:
-
-- `enabled`: By default, this is set to `false`. Set this to `true` to enable Rack Attack.
-- `ip_whitelist`: IPs to not block. They must be formatted as strings in a
-  Ruby array. CIDR notation is supported in GitLab 12.1 and later.
-  For example, `["127.0.0.1", "127.0.0.2", "127.0.0.3", "192.168.0.1/24"]`.
-- `maxretry`: The maximum amount of times a request can be made in the
-  specified time.
-- `findtime`: The maximum amount of time that failed requests can count against an IP
-  before it's added to the denylist (in seconds).
-- `bantime`: The total amount of time that an IP is blocked (in seconds).
 
 ## Disable automatic cache cleaning during installation
 
@@ -579,22 +631,27 @@ To disable automatic cache cleaning during installation:
 
 ## Error Reporting and Logging with Sentry
 
-[Sentry](https://sentry.io) is an error reporting and logging tool which can be
-used as SaaS or on-premise. It's Open Source, and you can
-[browse its source code repositories](https://github.com/getsentry).
-
 WARNING:
-From GitLab 17.0, only Sentry versions 21.5.0 or later will be supported. If you use an earlier version of a Sentry instance that you host, you must
-[upgrade Sentry](https://develop.sentry.dev/self-hosted/releases/) to continue collecting errors from your GitLab environments.
+From GitLab 17.0, only Sentry versions 21.5.0 or later will be supported. If
+you use an earlier version of a Sentry instance that you host, you must
+[upgrade Sentry](https://develop.sentry.dev/self-hosted/releases/) to continue
+collecting errors from your GitLab environments.
+
+Sentry is an open source error reporting and logging tool which can be used as
+SaaS (<https://sentry.io>) or [host it yourself](https://develop.sentry.dev/self-hosted/).
 
 To configure Sentry:
 
+1. Create a project in Sentry.
+1. Find the
+   [Data Source Name (DSN)](https://docs.sentry.io/product/sentry-basics/concepts/dsn-explainer/)
+   of the project you created.
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
    gitlab_rails['sentry_enabled'] = true
-   gitlab_rails['sentry_dsn'] = 'https://<key>@sentry.io/<project>'
-   gitlab_rails['sentry_clientside_dsn'] = 'https://<key>@sentry.io/<project>'
+   gitlab_rails['sentry_dsn'] = 'https://<public_key>@<host>/<project_id>'            # value used by the Rails SDK
+   gitlab_rails['sentry_clientside_dsn'] = 'https://<public_key>@<host>/<project_id>' # value used by the Browser JavaScript SDK
    gitlab_rails['sentry_environment'] = 'production'
    ```
 
@@ -927,3 +984,15 @@ Ran ["usermod", "-d", "/var/opt/gitlab", "git"] returned 8
 ```
 
 Make sure to stop `runit` before moving the home directory.
+
+### GitLab responds with 502 after changing the name of the Git user or group
+
+If you changed the [name of the Git user or group](#change-the-name-of-the-git-user-or-group)
+on an existing installation, this can cause many side effects.
+
+You can check for errors that relate to files unable to access and try to
+fix their permissions:
+
+```shell
+gitlab gitlab-ctl tail -f
+```
