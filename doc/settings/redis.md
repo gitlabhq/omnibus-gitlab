@@ -231,6 +231,10 @@ redis['io_threads'] = 4
 redis['io_threads_do_reads'] = true
 ```
 
+## Provide sensitive configuration to Redis clients without plain text storage
+
+For more information, see the example in [configuration documentation](../settings/configuration.md#provide-redis-password-to-client-components).
+
 ## Troubleshooting
 
 ### `x509: certificate signed by unknown authority`
