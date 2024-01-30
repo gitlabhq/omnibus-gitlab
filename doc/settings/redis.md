@@ -107,7 +107,7 @@ redis['tcp_timeout'] = "60"
 redis['tcp_keepalive'] = "300"
 ```
 
-## Announce ip from hostname
+## Announce IP from hostname
 
 Currently the only way to enable hostnames in Redis is by setting `redis['announce_ip']`. However,
 this would need to be set uniquely per Redis instance. `announce_ip_from_hostname` is a boolean that allows us to turn this on or off.
