@@ -928,6 +928,10 @@ see [Revert packaged PostgreSQL server to the previous version](#revert-packaged
 If you are doing a fresh install on an environment that previously had GitLab installed on it and you are using a pinned PostgreSQL version, first make
 sure that any folders that relate to PostgreSQL are deleted and that there are no PostgreSQL processes running on the instance.
 
+## Provide sensitive data configuration to GitLab Rails without plain text storage
+
+For more information, see the example in [configuration documentation](../settings/configuration.md#provide-the-postgresql-user-password-to-gitlab-rails).
+
 ### Troubleshooting
 
 #### Set `default_transaction_isolation` into `read committed`

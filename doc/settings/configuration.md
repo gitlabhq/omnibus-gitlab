@@ -731,6 +731,155 @@ If using a custom external proxy such as Apache, it may be necessary to add the 
 gitlab_rails['allowed_hosts'] = ['gitlab.example.com', '127.0.0.1', 'localhost']
 ```
 
+## Provide sensitive configuration to components without plain text storage
+
+Some components expose an `extra_config_command` option in `gitlab.rb`. This allows an external script to provide secrets
+dynamically rather than read them from plain text storage.
+
+The available options are:
+
+| `gitlab.rb` setting                          | Responsibility                                                                                                                                                   |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `gitlab_rails['redis_extra_config_command']` | Provides extra configuration to the Redis configuration files used by GitLab Rails application. (`resque.yml`, `redis.yml`, `redis.<redis_instance>.yml` files) |
+| `gitlab_rails['db_extra_config_command']`    | Provides extra configuration to the DB configuration file used by GitLab Rails application. (`database.yml`)                                                    |
+| `gitlab_kas['extra_config_command']`         | Provides extra configuration to GitLab agent server for Kubernetes (KAS).                                                                                       |
+| `gitlab_workhorse['extra_config_command']`   | Provides extra configuration to GitLab Workhorse.|
+| `gitlab_exporter['extra_config_command']`    | Provides extra configuration to GitLab Exporter.
+
+The value assigned to any of these options should be an absolute path to an executable script
+that writes the sensitive configuration in the required format to STDOUT. The
+components:
+
+1. Execute the supplied script.
+1. Replace values set by user and default configuration files with those emitted
+   by the script.
+
+### Provide Redis password to client components
+
+As an example, you can use the script and `gitlab.rb` snippet below to
+specify the password of a Redis server to the components that need to connect to
+Redis.
+
+1. Save the script below as `/opt/generate-redis-conf`
+
+   ```ruby
+   #!/opt/gitlab/embedded/bin/ruby
+
+   require 'json'
+   require 'yaml'
+
+   class RedisConfig
+     REDIS_PASSWORD = `echo "toomanysecrets"`.strip # Change the command inside backticks to fetch Redis password
+
+     class << self
+       def rails
+         puts YAML.dump({
+           'password' => REDIS_PASSWORD
+         })
+       end
+
+       def kas
+         puts YAML.dump({
+           'redis' => {
+             'password' => REDIS_PASSWORD
+           }
+         })
+       end
+
+       def workhorse
+         puts JSON.dump({
+           redis: {
+             password: REDIS_PASSWORD
+           }
+         })
+       end
+
+       def gitlab_exporter
+         puts YAML.dump({
+           'probes' => {
+             'sidekiq' => {
+               'opts' => {
+                 'redis_password' => REDIS_PASSWORD
+               }
+             }
+           }
+         })
+       end
+     end
+   end
+
+   def print_error_and_exit
+     $stdout.puts "Usage: redis_credentials <COMPONENT>"
+     $stderr.puts "Supported components are: rails, kas, workhorse, gitlab_exporter"
+
+     exit 1
+   end
+
+   print_error_and_exit if ARGV.length != 1
+
+   component = ARGV.shift
+   begin
+     RedisConfig.send(component.to_sym)
+   rescue NoMethodError
+     print_error_and_exit
+   end
+   ```
+
+1. Ensure the script created above is executable:
+
+   ```shell
+   chmod +x /opt/generate-redis-conf
+   ```
+
+1. Add the snippet below to `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['redis_extra_config_command'] = '/opt/generate-redis-conf rails'
+   gitlab_workhorse['extra_config_command'] = '/opt/generate-redis-conf workhorse'
+   gitlab_kas['extra_config_command'] = '/opt/generate-redis-conf kas'
+   gitlab_exporter['extra_config_command'] = '/opt/generate-redis-conf gitlab_exporter'
+   ```
+
+1. Run `sudo gitlab-ctl reconfigure`.
+
+### Provide the PostgreSQL user password to GitLab Rails
+
+As an example, you can use the script and configuration below to provide the
+password that GitLab Rails should use to connect to the PostgreSQL server.
+
+1. Save the script below as `/opt/generate-db-config`:
+
+   ```ruby
+   #!/opt/gitlab/embedded/bin/ruby
+
+   require 'yaml'
+
+   db_password = `echo "toomanysecrets"`.strip # Change the command inside backticks to fetch DB password
+
+   puts YAML.dump({
+    'main' => {
+      'password' => db_password
+    },
+    'ci' => {
+      'password' => db_password
+    }
+   })
+   ```
+
+1. Ensure the script created above is executable:
+
+   ```shell
+   chmod +x /opt/generate-db-config
+   ```
+
+1. Add the snippet below to `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['db_extra_config_command'] = '/opt/generate-db-config'
+   ```
+
+1. Run `sudo gitlab-ctl reconfigure`.
+
 ## Related topics
 
 - [Disable impersonation](https://docs.gitlab.com/ee/api/index.html#disable-impersonation)
