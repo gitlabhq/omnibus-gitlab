@@ -366,7 +366,8 @@ end
 def patroni_replica_upgrade
   stop_database
   create_links(@db_worker.target_version)
-  common_post_upgrade(false)
+  common_post_upgrade(!@geo_pg_enabled)
+  cleanup_data_dir
   geo_pg_upgrade
 end
 
@@ -374,7 +375,7 @@ def patroni_standby_leader_upgrade
   stop_database
   create_links(@db_worker.target_version)
   remove_patroni_cluster_state
-  common_post_upgrade(false)
+  common_post_upgrade(!@geo_pg_enabled)
   geo_pg_upgrade
 end
 
@@ -469,7 +470,6 @@ def geo_secondary_upgrade(tmp_dir, timeout)
   end
 
   geo_pg_upgrade
-  common_post_upgrade
 end
 
 def geo_pg_upgrade
@@ -493,6 +493,7 @@ def geo_pg_upgrade
   rescue GitlabCtl::Errors::ExecutionError
     die "Error running pg_upgrade on secondary, please check logs"
   end
+  common_post_upgrade
 end
 
 def get_locale_encoding
