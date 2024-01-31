@@ -84,25 +84,24 @@ This example uses the [Public Cloudflare DNS resolver](https://www.cloudflare.co
 ```shell
 $ dig registry.gitlab.com @1.1.1.1
 
-; <<>> DiG 9.16.1-Ubuntu <<>> registry.gitlab.com @1.1.1.1
+; <<>> DiG 9.18.18-0ubuntu0.22.04.1-Ubuntu <<>> registry.gitlab.com @1.1.1.1
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4128
-;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 3934
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
 
 ;; OPT PSEUDOSECTION:
 ; EDNS: version: 0, flags:; udp: 1232
 ;; QUESTION SECTION:
-;registry.gitlab.com.   IN  A
+;registry.gitlab.com.  IN A
 
 ;; ANSWER SECTION:
-registry.gitlab.com.  37  IN  A  104.18.27.123
-registry.gitlab.com.  37  IN  A  104.18.26.123
+registry.gitlab.com. 58 IN A 35.227.35.254
 
-;; Query time: 4 msec
-;; SERVER: 1.1.1.1#53(1.1.1.1)
-;; WHEN: Wed Jul 06 10:03:59 CEST 2022
-;; MSG SIZE  rcvd: 80
+;; Query time: 8 msec
+;; SERVER: 1.1.1.1#53(1.1.1.1) (UDP)
+;; WHEN: Wed Jan 31 11:16:51 CET 2024
+;; MSG SIZE  rcvd: 64
 
 ```
 
@@ -113,24 +112,25 @@ Make sure that the status is `NOERROR`, and that the `ANSWER SECTION` has the ac
 ```shell
 $ dig fake.gitlab.com @1.1.1.1
 
-; <<>> DiG 9.16.1-Ubuntu <<>> fake.gitlab.com @1.1.1.1
+; <<>> DiG 9.18.18-0ubuntu0.22.04.1-Ubuntu <<>> fake.gitlab.com @1.1.1.1
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 1502
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 25693
 ;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
 
 ;; OPT PSEUDOSECTION:
 ; EDNS: version: 0, flags:; udp: 1232
 ;; QUESTION SECTION:
-;fake.gitlab.com.    IN A
+;fake.gitlab.com.  IN A
 
 ;; AUTHORITY SECTION:
-gitlab.com.   3600 IN SOA diva.ns.cloudflare.com. dns.cloudflare.com. 2282080190 10000 2400 604800 3600
+gitlab.com.  1800 IN SOA diva.ns.cloudflare.com. dns.cloudflare.com. 2331688399 10000 2400 604800 1800
 
-;; Query time: 8 msec
-;; SERVER: 1.1.1.1#53(1.1.1.1)
-;; WHEN: Wed Jul 06 10:06:53 CEST 2022
+;; Query time: 12 msec
+;; SERVER: 1.1.1.1#53(1.1.1.1) (UDP)
+;; WHEN: Wed Jan 31 11:17:46 CET 2024
 ;; MSG SIZE  rcvd: 103
+
 ```
 
 In this example, the `status` is `NXDOMAIN`, and there is no `ANSWER SECTION`. The `SERVER` field tells you which DNS server was queried for the answer, in this case the [Public Cloudflare DNS resolver](https://www.cloudflare.com/en-gb/learning/dns/what-is-1.1.1.1/).
