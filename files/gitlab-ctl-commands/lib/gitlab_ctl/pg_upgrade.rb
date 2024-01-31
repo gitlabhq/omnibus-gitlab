@@ -16,6 +16,7 @@ module GitlabCtl
   class PgUpgrade
     include GitlabCtl::Util
     attr_accessor :base_path, :data_path, :tmp_dir, :timeout, :target_version, :initial_version, :psql_command, :port
+
     attr_writer :data_dir, :tmp_data_dir
 
     def initialize(base_path, data_path, target_version, tmp_dir = nil, timeout = nil, psql_command = nil, port = nil)
@@ -26,7 +27,7 @@ module GitlabCtl
       @target_version = target_version
       @initial_version = fetch_running_version
       @port = port || public_node_attributes['postgresql']['port']
-      @psql_command ||= "gitlab-psql"
+      @psql_command = psql_command || "gitlab-psql"
     end
 
     def data_dir
@@ -136,6 +137,10 @@ module GitlabCtl
       !Dir.empty?(path)
     end
 
+    def log(message)
+      $stderr.puts message
+    end
+
     def run_pg_upgrade
       unless GitlabCtl::Util.progress_message('Upgrading the data') do
         begin
@@ -147,17 +152,17 @@ module GitlabCtl
             "-B #{target_version_path}/bin "
           )
         rescue GitlabCtl::Errors::ExecutionError => e
-          $stderr.puts "Error upgrading the data to version #{target_version}"
-          $stderr.puts "STDOUT: #{e.stdout}"
-          $stderr.puts "STDERR: #{e.stderr}"
+          log "Error upgrading the data to version #{target_version}"
+          log "STDOUT: #{e.stdout}"
+          log "STDERR: #{e.stderr}"
           false
         rescue Mixlib::ShellOut::CommandTimeout
-          $stderr.puts
-          $stderr.puts "Timed out during the database upgrade.".color(:red)
-          $stderr.puts "To run with more time, remove the temporary directory #{tmp_data_dir}.#{target_version.major},".color(:red)
-          $stderr.puts "then re-run your previous command, adding the --timeout option.".color(:red)
-          $stderr.puts "See the docs for more information: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server".color(:red)
-          $stderr.puts "Or run gitlab-ctl pg-upgrade --help for usage".color(:red)
+          log
+          log "Timed out during the database upgrade.".color(:red)
+          log "To run with more time, remove the temporary directory #{tmp_data_dir}.#{target_version.major},".color(:red)
+          log "then re-run your previous command, adding the --timeout option.".color(:red)
+          log "See the docs for more information: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server".color(:red)
+          log "Or run gitlab-ctl pg-upgrade --help for usage".color(:red)
           false
         end
       end

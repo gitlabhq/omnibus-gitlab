@@ -29,6 +29,8 @@ postgresql_data_dir = File.join(node['gitlab']['geo_postgresql']['dir'], 'data')
 
 geo_pg_helper = GeoPgHelper.new(node)
 
+database_version = geo_pg_helper.database_version || geo_pg_helper.version
+
 directory node['gitlab']['geo_postgresql']['dir'] do
   owner postgresql_username
   mode '0755'
@@ -107,7 +109,8 @@ runit_service 'geo-postgresql' do
   options({
     log_directory: logging_settings[:log_directory],
     log_user: logging_settings[:runit_owner],
-    log_group: logging_settings[:runit_group]
+    log_group: logging_settings[:runit_group],
+    database_version: database_version.major
   }.merge(params))
   log_options logging_settings[:options]
 end

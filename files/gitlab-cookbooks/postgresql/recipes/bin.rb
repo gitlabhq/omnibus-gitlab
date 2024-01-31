@@ -20,12 +20,11 @@ pg_helper = PgHelper.new(node)
 geo_pg_helper = GeoPgHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 postgresql_install_dir = File.join(node['package']['install-dir'], 'embedded/postgresql')
-
-if Services.enabled?('postgresql')
-  running_db_version = pg_helper.database_version
-elsif Services.enabled?('geo_postgresql')
-  running_db_version = geo_pg_helper.database_version
-end
+running_db_version = if Services.enabled?('geo_postgresql') && !Services.enabled?('postgresql')
+                       geo_pg_helper.database_version
+                     else
+                       pg_helper.database_version
+                     end
 
 db_version = node['postgresql']['version'] || running_db_version
 db_path = Dir.glob("#{postgresql_install_dir}/#{db_version}*").min if db_version
