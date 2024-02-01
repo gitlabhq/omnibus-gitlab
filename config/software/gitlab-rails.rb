@@ -234,14 +234,20 @@ build do
   sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: %w(
     .git
     .gitignore
-    spec
+    app/assets
+    ee/app/assets
     ee/spec
     features
+    gems/*.yml
+    gems/*/spec
+    gems/config
+    gems/README.md
     qa
     rubocop
-    app/assets
+    spec
     vendor/assets
-    ee/app/assets
+    vendor/gems/*/spec
+    vendor/gems/README.md
     workhorse
   )
 
