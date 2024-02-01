@@ -932,57 +932,6 @@ sure that any folders that relate to PostgreSQL are deleted and that there are n
 
 For more information, see the example in [configuration documentation](../settings/configuration.md#provide-the-postgresql-user-password-to-gitlab-rails).
 
-### Troubleshooting
-
-#### Set `default_transaction_isolation` into `read committed`
-
-If you see errors similar to the following in your `production/sidekiq` log:
-
-```plaintext
-ActiveRecord::StatementInvalid PG::TRSerializationFailure: ERROR:  could not serialize access due to concurrent update
-```
-
-Chances are your database's `default_transaction_isolation` configuration is not
-in line with the GitLab application requirement. You can check this configuration by
-connecting to your PostgreSQL database and run `SHOW default_transaction_isolation;`.
-GitLab application expects `read committed` to be configured.
-
-This `default_transaction_isolation` configuration is set in your
-`postgresql.conf` file. You will need to restart/reload the database once you
-changed the configuration. This configuration comes by default in the packaged
-PostgreSQL server included with the Linux package.
-
-### Could not load library `plpgsql.so`
-
-You might see errors similar to the following while running Database migrations
-or in the PostgreSQL/Patroni logs:
-
-```plaintext
-ERROR:  could not load library "/opt/gitlab/embedded/postgresql/12/lib/plpgsql.so": /opt/gitlab/embedded/postgresql/12/lib/plpgsql.so: undefined symbol: EnsurePortalSnapshotExists
-```
-
-This error is caused due to not restarting PostgreSQL after the underlying
-version changed. To fix this error:
-
-1. Run one of the following commands:
-
-   ```shell
-   # For PostgreSQL
-   sudo gitlab-ctl restart postgresql
-
-   # For Patroni
-   sudo gitlab-ctl restart patroni
-
-   # For Geo PostgreSQL
-   sudo gitlab-ctl restart geo-postgresql
-   ```
-
-1. Reconfigure GitLab:
-
-   ```shell
-   sudo gitlab-ctl reconfigure
-   ```
-
 ## Application Settings for the Database
 
 ### Disabling automatic database migration
@@ -1291,3 +1240,54 @@ or as a PostgreSQL superuser:
 ```shell
 sudo gitlab-psql -d gitlabhq_production
 ```
+
+## Troubleshooting
+
+### Set `default_transaction_isolation` into `read committed`
+
+If you see errors similar to the following in your `production/sidekiq` log:
+
+```plaintext
+ActiveRecord::StatementInvalid PG::TRSerializationFailure: ERROR:  could not serialize access due to concurrent update
+```
+
+Chances are your database's `default_transaction_isolation` configuration is not
+in line with the GitLab application requirement. You can check this configuration by
+connecting to your PostgreSQL database and run `SHOW default_transaction_isolation;`.
+GitLab application expects `read committed` to be configured.
+
+This `default_transaction_isolation` configuration is set in your
+`postgresql.conf` file. You will need to restart/reload the database once you
+changed the configuration. This configuration comes by default in the packaged
+PostgreSQL server included with the Linux package.
+
+### Could not load library `plpgsql.so`
+
+You might see errors similar to the following while running Database migrations
+or in the PostgreSQL/Patroni logs:
+
+```plaintext
+ERROR:  could not load library "/opt/gitlab/embedded/postgresql/12/lib/plpgsql.so": /opt/gitlab/embedded/postgresql/12/lib/plpgsql.so: undefined symbol: EnsurePortalSnapshotExists
+```
+
+This error is caused due to not restarting PostgreSQL after the underlying
+version changed. To fix this error:
+
+1. Run one of the following commands:
+
+   ```shell
+   # For PostgreSQL
+   sudo gitlab-ctl restart postgresql
+
+   # For Patroni
+   sudo gitlab-ctl restart patroni
+
+   # For Geo PostgreSQL
+   sudo gitlab-ctl restart geo-postgresql
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
