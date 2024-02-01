@@ -1,5 +1,5 @@
 diff --git a/lib/Image/ExifTool.pm b/lib/Image/ExifTool.pm
-index 1e4f591a..737599f4 100644
+index b5349398..13d064e3 100644
 --- a/lib/Image/ExifTool.pm
 +++ b/lib/Image/ExifTool.pm
 @@ -190,19 +190,10 @@ $defaultLang = 'en';    # default language
@@ -11,9 +11,9 @@ index 1e4f591a..737599f4 100644
 -                OGG FLAC APE MPC MKV MXF DV PMP IND PGF ICC ITC FLIR FLIF FPF
 -                LFP HTML VRD RTF FITS XISF XCF DSS QTIF FPX PICT ZIP GZIP PLIST
 -                RAR 7Z BZ2 CZI TAR EXE EXR HDR CHM LNK WMF AVC DEX DPX RAW Font
--                RSRC M2TS MacOS PHP PCX DCX DWF DWG DXF WTV Torrent VCard LRI
--                R3D AA PDB PFM2 MRC LIF JXL MOI ISO ALIAS JSON MP3 DICOM PCD ICO
--                TXT AAC);
+-                JUMBF RSRC M2TS MacOS PHP PCX DCX DWF DWG DXF WTV Torrent VCard
+-                LRI R3D AA PDB PFM2 MRC LIF JXL MOI ISO ALIAS JSON MP3 DICOM PCD
+-                ICO TXT AAC);
 +@fileTypes = qw(JPEG TIFF);
  
  # file types that we can write (edit)
@@ -24,7 +24,7 @@ index 1e4f591a..737599f4 100644
  my %writeTypes; # lookup for writable file types (hash filled if required)
  
  # file extensions that we can't write for various base types
-@@ -224,347 +215,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
+@@ -224,349 +215,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
  # (if extension may be more than one type, the type is a list where
  #  the writable type should come first if it exists)
  %fileTypeLookup = (
@@ -64,6 +64,7 @@ index 1e4f591a..737599f4 100644
 -    BPG  => ['BPG',  'Better Portable Graphics'],
 -    BTF  => ['BTF',  'Big Tagged Image File Format'], #(unofficial)
 -    BZ2  => ['BZ2',  'BZIP2 archive'],
+-    C2PA => ['JUMBF','Coalition for Content Provenance and Authenticity'],
 -    CHM  => ['CHM',  'Microsoft Compiled HTML format'],
 -    CIFF => ['CRW',  'Camera Image File Format'],
 -    COS  => ['COS',  'Capture One Settings'],
@@ -178,6 +179,7 @@ index 1e4f591a..737599f4 100644
 -    JPS  => ['JPEG', 'JPEG Stereo image'],
 -    JPX  => ['JP2',  'JPEG 2000 with extensions'],
 -    JSON => ['JSON', 'JavaScript Object Notation'],
+-    JUMBF=> ['JUMBF','JPEG Universal Metadata Box Format'],
 -    JXL  => ['JXL',  'JPEG XL'],
 -    JXR  => ['TIFF', 'JPEG XR'],
 -    K25  => ['TIFF', 'Kodak DC25 RAW'],
