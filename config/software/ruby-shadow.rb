@@ -17,7 +17,7 @@
 
 name 'ruby-shadow'
 # From https://github.com/chef/chef/blob/3c35bd0e1d17a5bfd779fab3cc7860ea1923dec6/Gemfile#L41-L44
-version = Gitlab::Version.new('ruby-shadow', '3b8ea40b0e943b5de721d956741308ce805a5c3c')
+version = Gitlab::Version.new('ruby-shadow', 'e408599fdba93340500dad8922e9ca75072879de')
 default_version version.print(false)
 display_version version.print(false)
 
