@@ -128,6 +128,7 @@ build do
 
     ruby_ver = shellout!("#{embedded_bin('ruby')} -e 'puts RUBY_VERSION.match(/\\d+\\.\\d+/)[0]'", env: env).stdout.chomp
     gem_paths = {
+      'gitlab-glfm-markdown' => 'lib',
       'google-protobuf' => 'lib/google',
       'grpc' => 'src/ruby/lib/grpc',
       'prometheus-client-mmap' => 'lib',
