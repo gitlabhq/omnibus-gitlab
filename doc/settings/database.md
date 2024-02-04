@@ -307,9 +307,10 @@ The following settings are affected in the `postgresql` block:
 - `md5_auth_cidr_addresses`: A list of CIDR address blocks that are allowed to
   connect to the server, after authentication with a password.
 - `trust_auth_cidr_addresses`: A list of CIDR address blocks that are allowed
-  to connect to the server, without authentication of any kind. _Be very careful
-  with this setting._ It's suggested that this be limited to the loopback
-  address of `127.0.0.1/24` or even `127.0.0.1/32`.
+  to connect to the server, without authentication of any kind. You should
+  only set this setting to allow connections from nodes that need to connect,
+  such as GitLab Rails or Sidekiq. This includes local connections when deployed
+  on the same node or from components such as Postgres Exporter (`127.0.0.1/32`).
 - `sql_user`: Controls the expected username for MD5 authentication. This
   defaults to `gitlab`, and isn't a required setting.
 - `sql_user_password`: Sets the password that PostgreSQL will accept for MD5
