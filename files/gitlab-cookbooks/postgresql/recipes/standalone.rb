@@ -15,7 +15,7 @@ runit_service "postgresql" do
   options({
     log_directory: logging_settings[:log_directory],
     log_user: logging_settings[:runit_owner],
-    log_group: logging_settings[:runit_group],
+    log_group: logging_settings[:runit_group]
   }.merge(params))
   log_options logging_settings[:options]
 end
