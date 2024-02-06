@@ -30,7 +30,7 @@ that do not contain changes to bundled components.
 |Release Type|Example Pipelines|`build_iteration` String|
 |-|-|-|
 |non-tagged|feature branches, nightly builds|`0`|
-|tagged|releases|`(ce|ee).<OMNIBUS_RELEASE>`|
+|tagged|releases|`ce.<OMNIBUS_RELEASE>` or `ee.<OMNIBUS_RELEASE>` |
 
 The edition component, **ce** or **ee**, instructs package managers such as
 `apt` or `yum` to treat Enteprise Edition packages as an upgrade from
