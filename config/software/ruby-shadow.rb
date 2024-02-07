@@ -16,10 +16,8 @@
 #
 
 name 'ruby-shadow'
-# From https://github.com/chef/chef/blob/3c35bd0e1d17a5bfd779fab3cc7860ea1923dec6/Gemfile#L41-L44
-version = Gitlab::Version.new('ruby-shadow', 'e408599fdba93340500dad8922e9ca75072879de')
-default_version version.print(false)
-display_version version.print(false)
+
+default_version '2.5.1'
 
 license 'Apache-2.0'
 license_file 'LICENSE'
@@ -28,16 +26,13 @@ skip_transitive_dependency_licensing true
 
 dependency 'rubygems'
 
-source git: version.remote
-
-relative_path 'ruby-shadow'
-
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
-  # Remove existing built gems in case they exist in the current dir
-  delete 'ruby-shadow-*.gem'
-
-  gem 'build ruby-shadow.gemspec', env: env
-  gem 'install ruby-shadow-*.gem --no-document', env: env
+  gem 'install gitlab-ruby-shadow' \
+      " --clear-sources" \
+      " -s https://rubygems.org" \
+      " --version '#{version}'" \
+      " --bindir '#{install_dir}/embedded/bin'" \
+      ' --no-document', env: env
 end
