@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.7.5 (2024-02-07)
+
+### Security (1 change)
+
+- [Update PostgreSQL 13 and 14](gitlab-org/security/omnibus-gitlab@a05cf8c30949ef55987cfa23c4105cf8a16036fe) ([merge request](gitlab-org/security/omnibus-gitlab!415))
+
 ## 16.7.4 (2024-01-24)
 
 ### Security (2 changes)
