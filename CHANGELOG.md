@@ -48,6 +48,12 @@ omnibus-gitlab repository.
 - [Stop building for OpenSUSE 15.4](gitlab-org/omnibus-gitlab@d6d3933486f4b6d86320652882faa0019dc1aae7) ([merge request](gitlab-org/omnibus-gitlab!7331))
 - [Stop sidekiq namespaced probe for gitlab-exporter](gitlab-org/omnibus-gitlab@ff1df765a218a7b29ad6c4a9ccd6b091a2a10bfe) ([merge request](gitlab-org/omnibus-gitlab!7237))
 
+## 16.7.5 (2024-02-07)
+
+### Security (1 change)
+
+- [Update PostgreSQL 13 and 14](gitlab-org/security/omnibus-gitlab@a05cf8c30949ef55987cfa23c4105cf8a16036fe) ([merge request](gitlab-org/security/omnibus-gitlab!415))
+
 ## 16.7.4 (2024-01-24)
 
 ### Security (2 changes)
