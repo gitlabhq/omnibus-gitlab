@@ -67,6 +67,34 @@ RSpec.describe 'monitoring::redis-exporter' do
     end
   end
 
+  context 'when redis-exporter is enabled for an external Redis' do
+    let(:config_template) { chef_run.template('/opt/gitlab/sv/redis-exporter/log/config') }
+
+    before do
+      stub_gitlab_rb(
+        redis_exporter: { enable: true },
+        gitlab_rails: {
+          redis_host: '1.2.3.4',
+          redis_port: 6378,
+          redis_ssl: true,
+          redis_password: 'some-password',
+          redis_enable_client: false
+        }
+      )
+    end
+
+    it_behaves_like 'enabled runit service', 'redis-exporter', 'root', 'root'
+
+    it 'sets flags' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/run')
+        .with_content(/web.listen-address=localhost:9121/)
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/run')
+        .with_content(%r{redis.addr=rediss://:some-password@1.2.3.4:6378/})
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/run')
+        .with_content(/--set-client-name=false/)
+    end
+  end
+
   context 'when log dir is changed' do
     before do
       stub_gitlab_rb(

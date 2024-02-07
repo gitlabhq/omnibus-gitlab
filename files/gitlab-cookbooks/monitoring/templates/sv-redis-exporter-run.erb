@@ -5,4 +5,4 @@ umask 077
 exec chpst -P -e <%= @options[:env_dir] %> \
   -U <%= node['redis']['username'] %>:<%= node['gitlab']['user']['group'] %> \
   -u <%= node['redis']['username'] %>:<%= node['gitlab']['user']['group'] %> \
-  /opt/gitlab/embedded/bin/redis_exporter <%= @options[:flags] %>
+  /opt/gitlab/embedded/bin/redis_exporter <%= @options[:flags] %> --redis.addr=<%= @options[:redis_url] %>
