@@ -119,6 +119,12 @@ No changes.
 - [Mattermost Security Update](gitlab-org/omnibus-gitlab@feda92ec4fb2024eb397a1e0970ae5b7f407dad6)
 - [Update PostgreSQL 13 and 14](gitlab-org/omnibus-gitlab@cfa09e2d8ee45a4cdebfde8fc334df9f9cd428f2)
 
+## 16.6.7 (2024-02-07)
+
+### Security (1 change)
+
+- [Update PostgreSQL 13 and 14](gitlab-org/security/omnibus-gitlab@ec1b435b057d56cbac0e7c0d298a065f5a9df3c1) ([merge request](gitlab-org/security/omnibus-gitlab!416))
+
 ## 16.6.6 (2024-01-24)
 
 ### Security (2 changes)
