@@ -1255,6 +1255,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # sidekiq['log_format'] = "json"
 # sidekiq['shutdown_timeout'] = 4
 # sidekiq['interval'] = nil
+# sidekiq['concurrency'] = nil
 # sidekiq['max_concurrency'] = 20
 # sidekiq['min_concurrency'] = nil
 

@@ -344,6 +344,18 @@ module Gitlab
             removal: '17.0', # Removal issue: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8169
             note: "Starting with GitLab 17.0, this directive will be controlled by `postgres_exporter['flags'] = { 'collector.stat_user_tables' => bool }`."
           },
+          {
+            config_keys: %w(gitlab sidekiq min_concurrency),
+            deprecation: '16.9',
+            removal: '17.0',
+            note: "Starting with GitLab 17.0, `sidekiq['min_concurrency']` will be removed. Please follow https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#manage-thread-counts-explicitly to use `sidekiq['concurrency']` instead."
+          },
+          {
+            config_keys: %w(gitlab sidekiq max_concurrency),
+            deprecation: '16.9',
+            removal: '17.0',
+            note: "Starting with GitLab 17.0, `sidekiq['max_concurrency']` will be removed. Please follow https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#manage-thread-counts-explicitly to use `sidekiq['concurrency']` instead."
+          }
         ]
 
         deprecations += praefect_legacy_configuration_deprecations

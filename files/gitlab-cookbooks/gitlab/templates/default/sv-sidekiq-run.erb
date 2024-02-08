@@ -19,6 +19,9 @@ exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
       <% if node['gitlab']['sidekiq']['interval'] %>
       -i <%= node['gitlab']['sidekiq']['interval'] %> \
       <% end %>
+      <% if node['gitlab']['sidekiq']['concurrency'] %>
+      -c <%= node['gitlab']['sidekiq']['concurrency'] %> \
+      <% end %>
       <% if node['gitlab']['sidekiq']['max_concurrency'] %>
       -m <%= node['gitlab']['sidekiq']['max_concurrency'] %> \
       <% end %>
