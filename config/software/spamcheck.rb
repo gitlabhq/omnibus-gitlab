@@ -17,7 +17,7 @@
 #
 
 name 'spamcheck'
-version = Gitlab::Version.new('spamcheck', '0.3.0')
+version = Gitlab::Version.new('spamcheck', '0.3.2')
 
 default_version version.print
 
