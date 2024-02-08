@@ -708,7 +708,6 @@ default['gitlab']['sidekiq']['ha'] = false
 default['gitlab']['sidekiq']['log_directory'] = "/var/log/gitlab/sidekiq"
 default['gitlab']['sidekiq']['log_format'] = "json"
 default['gitlab']['sidekiq']['shutdown_timeout'] = 25
-default['gitlab']['sidekiq']['concurrency'] = 25
 default['gitlab']['sidekiq']['routing_rules'] = []
 
 # Sidekiq metrics server defaults
@@ -728,6 +727,7 @@ default['gitlab']['sidekiq']['health_checks_listen_port'] = 8092
 # Cluster specific settings
 default['gitlab']['sidekiq']['queue_selector'] = false
 default['gitlab']['sidekiq']['interval'] = nil
+default['gitlab']['sidekiq']['concurrency'] = nil
 default['gitlab']['sidekiq']['max_concurrency'] = 20
 default['gitlab']['sidekiq']['min_concurrency'] = nil
 default['gitlab']['sidekiq']['negate'] = false
