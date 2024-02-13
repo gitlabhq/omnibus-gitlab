@@ -34,3 +34,10 @@ SentinelPassword = "<%= @sentinel_password %>"
 [image_resizer]
   max_scaler_procs = <%= @image_scaler_max_procs %>
   max_filesize = <%= @image_scaler_max_filesize %>
+
+<%- unless @metadata_zip_reader_limit_bytes.nil? %>
+[metadata]
+  <%- if @metadata_zip_reader_limit_bytes %>
+  zip_reader_limit_bytes = <%= @metadata_zip_reader_limit_bytes %>
+  <%- end %>
+<%- end %>
