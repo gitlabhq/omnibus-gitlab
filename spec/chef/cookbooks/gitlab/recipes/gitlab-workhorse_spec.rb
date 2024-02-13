@@ -66,6 +66,12 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
         expect(content).not_to match(/config_command/)
       }
     end
+
+    it 'does not include metadata section' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).not_to match(/\[metadata\]/)
+      }
+    end
   end
 
   context 'user and group' do
@@ -783,6 +789,22 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     it 'specifies config_command in the config file' do
       expect(chef_run).to render_file(config_file).with_content { |content|
         expect(content).to match(%r(config_command = "/opt/workhorse-redis-config.sh"))
+      }
+    end
+  end
+
+  context 'with metadata_zip_reader_limit_bytes specified' do
+    before do
+      stub_gitlab_rb(
+        gitlab_workhorse: {
+          metadata_zip_reader_limit_bytes: 209715200
+        }
+      )
+    end
+
+    it 'specifies zip_reader_limit_bytes in the config file' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).to match(%r(\[metadata\]\n  zip_reader_limit_bytes = 209715200))
       }
     end
   end
