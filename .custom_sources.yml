@@ -154,6 +154,3 @@ ncurses:
 pgbouncer:
   remote: "git@dev.gitlab.org:omnibus-mirror/pgbouncer.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/pgbouncer.git"
-ruby-shadow:
-  remote: "git@dev.gitlab.org:omnibus-mirror/ruby-shadow.git"
-  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/ruby-shadow.git"
