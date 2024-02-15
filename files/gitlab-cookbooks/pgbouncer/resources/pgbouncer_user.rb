@@ -16,7 +16,6 @@ action :create do
     helper new_resource.helper
     password "md5#{new_resource.password}"
     action :create
-    notifies :run, "execute[Add pgbouncer auth function]", :immediately
   end
 
   pgbouncer_auth_function = new_resource.helper.pg_shadow_lookup
@@ -24,8 +23,8 @@ action :create do
   execute 'Add pgbouncer auth function' do
     command %(/opt/gitlab/bin/#{new_resource.helper.service_cmd} -d #{new_resource.database} -c '#{pgbouncer_auth_function}')
     user new_resource.account_helper.postgresql_user
-    not_if { new_resource.helper.has_function?(new_resource.database, "pg_shadow_lookup") }
-    only_if { new_resource.add_auth_function }
-    action :nothing
+    only_if { new_resource.add_auth_function && new_resource.helper.is_running? && new_resource.helper.is_ready? }
+    not_if { new_resource.helper.is_offline_or_readonly? || new_resource.helper.has_function?(new_resource.database, "pg_shadow_lookup") }
+    action :run
   end
 end
