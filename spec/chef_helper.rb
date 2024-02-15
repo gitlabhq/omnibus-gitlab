@@ -50,11 +50,19 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :chef) do
+    ssh_keygen_module = 'gitlab-7.2.0-ssh-keygen'
+    authorized_keys_module = 'gitlab-10.5.0-ssh-authorized-keys'
+    gitlab_shell_module = 'gitlab-13.5.0-gitlab-shell'
+    gitlab_unified_module = 'gitlab'
+
     stub_command('id -Z').and_return(false)
     stub_command("grep 'CS:123456:respawn:/opt/gitlab/embedded/bin/runsvdir-start' /etc/inittab").and_return('')
     stub_command(%r{\(test -f /var/opt/gitlab/gitlab-rails/upgrade-status/db-migrate-\h+-\) && \(cat /var/opt/gitlab/gitlab-rails/upgrade-status/db-migrate-\h+- | grep -Fx 0\)}).and_return(false)
     stub_command("getenforce | grep Disabled").and_return(true)
-    stub_command("semodule -l | grep '^#gitlab-7.2.0-ssh-keygen\\s'").and_return(true)
+    stub_command("semodule -l | grep '^#{ssh_keygen_module}([[:space:]]|$)'").and_return(true)
+    stub_command("semodule -l | grep '^#{authorized_keys_module}([[:space:]]|$)'").and_return(true)
+    stub_command("semodule -l | grep '^#{gitlab_shell_module}([[:space:]]|$)'").and_return(true)
+    stub_command("semodule -l | grep -E '^#{gitlab_unified_module}([[:space:]]|$)'").and_return(true)
     stub_command(%r{set \-x \&\& \[ \-d "[^"]\" \]}).and_return(false)
     stub_command(%r{set \-x \&\& \[ "\$\(stat \-\-printf='[^']*' \$\(readlink -f /[^\)]*\)\) }).and_return(false)
     stub_command('/opt/gitlab/embedded/bin/psql --version').and_return("fake_version")

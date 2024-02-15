@@ -4,6 +4,12 @@ class SELinuxHelper
   class << self
     include ShellOutHelper
 
+    def use_unified_policy?(node)
+      return false if node['package']['selinux_policy_version'].nil?
+
+      true
+    end
+
     def commands(node)
       ssh_dir = File.join(node['gitlab']['user']['home'], ".ssh")
       authorized_keys = node['gitlab']['gitlab_shell']['auth_file']
