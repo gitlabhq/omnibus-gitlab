@@ -1106,10 +1106,6 @@ Raspberry-Pi-2-Bullseye:
   extends: .rpi_tag_template
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:${BUILDER_IMAGE_REVISION}"
 
-Raspberry-Pi-2-Bookworm:
-  extends: .rpi_tag_template
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_12:${BUILDER_IMAGE_REVISION}"
-
 Raspberry-Pi-2-Buster-release:
   extends: .raspbian_release_template
   needs:
@@ -1119,11 +1115,6 @@ Raspberry-Pi-2-Bullseye-release:
   extends: .raspbian_release_template
   needs:
     - Raspberry-Pi-2-Bullseye
-
-Raspberry-Pi-2-Bookworm-release:
-  extends: .raspbian_release_template
-  needs:
-    - Raspberry-Pi-2-Bookworm
 
 AWS-CE-Release:
   variables:
