@@ -1,0 +1,39 @@
+module gitlab 1.0.0;
+
+############################
+# External policy components
+############################
+require {
+    type http_cache_port_t;
+    type httpd_t;
+    type init_tmp_t;
+    type ssh_keygen_t;
+    type sshd_t;
+    type sshd_t;
+    type var_log_t;
+
+    attribute file_type;
+
+    class file { open read getattr };
+    class sock_file { write read };
+    class tcp_socket name_connect;
+}
+
+################################
+# GitLab policy type definitions
+################################
+type gitlab_shell_t;
+
+typeattribute gitlab_shell_t file_type;
+
+#####################
+# Access Vector Rules
+#####################
+allow ssh_keygen_t init_tmp_t:file open;
+
+allow sshd_t http_cache_port_t:tcp_socket name_connect;
+allow sshd_t var_log_t:file open;
+allow sshd_t gitlab_shell_t:file { read open getattr };
+allow sshd_t gitlab_shell_t:sock_file write;
+
+allow httpd_t gitlab_shell_t:sock_file { read write };

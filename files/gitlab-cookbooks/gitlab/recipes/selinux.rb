@@ -17,21 +17,50 @@
 
 if SELinuxDistroHelper.selinux_supported?
   ssh_keygen_module = 'gitlab-7.2.0-ssh-keygen'
-  execute "semodule -i /opt/gitlab/embedded/selinux/#{ssh_keygen_module}.pp" do
-    not_if "getenforce | grep Disabled"
-    not_if "semodule -l | grep '^#{ssh_keygen_module}\\s'"
-  end
-
   authorized_keys_module = 'gitlab-10.5.0-ssh-authorized-keys'
-  execute "semodule -i /opt/gitlab/embedded/selinux/#{authorized_keys_module}.pp" do
-    not_if "getenforce | grep Disabled"
-    not_if "semodule -l | grep '^#{authorized_keys_module}\\s'"
-  end
-
   gitlab_shell_module = 'gitlab-13.5.0-gitlab-shell'
-  execute "semodule -i /opt/gitlab/embedded/selinux/#{gitlab_shell_module}.pp" do
-    not_if "getenforce | grep Disabled"
-    not_if "semodule -l | grep '^#{gitlab_shell_module}\\s'"
+  gitlab_unified_module = 'gitlab'
+
+  if SELinuxHelper.use_unified_policy?(node)
+    execute "semodule -i /opt/gitlab/embedded/selinux/#{gitlab_unified_module}.pp" do
+      not_if "getenforce | grep Disabled"
+      not_if "semodule -l | grep -E '^#{gitlab_unified_module}([[:space:]]|$)'"
+    end
+
+    execute "semodule -r #{ssh_keygen_module}" do
+      not_if "getenforce | grep Disabled"
+      only_if "semodule -l | grep -E '^#{ssh_keygen_module}([[:space:]]|$)'"
+    end
+
+    execute "semodule -r #{authorized_keys_module}" do
+      not_if "getenforce | grep Disabled"
+      only_if "semodule -l | grep -E '^#{authorized_keys_module}([[:space:]]|$)'"
+    end
+
+    execute "semodule -r #{gitlab_shell_module}" do
+      not_if "getenforce | grep Disabled"
+      only_if "semodule -l | grep -E '^#{gitlab_shell_module}([[:space:]]|$)'"
+    end
+  else
+    execute "semodule -i /opt/gitlab/embedded/selinux/#{ssh_keygen_module}.pp" do
+      not_if "getenforce | grep Disabled"
+      not_if "semodule -l | grep -E '^#{ssh_keygen_module}([[:space:]]|$)'"
+    end
+
+    execute "semodule -i /opt/gitlab/embedded/selinux/#{authorized_keys_module}.pp" do
+      not_if "getenforce | grep Disabled"
+      not_if "semodule -l | grep -E '^#{authorized_keys_module}([[:space:]]|$)'"
+    end
+
+    execute "semodule -i /opt/gitlab/embedded/selinux/#{gitlab_shell_module}.pp" do
+      not_if "getenforce | grep Disabled"
+      not_if "semodule -l | grep -E '^#{gitlab_shell_module}([[:space:]]|$)'"
+    end
+
+    execute "semodule -r #{gitlab_unified_module}" do
+      not_if "getenforce | grep Disabled"
+      only_if "semodule -l | grep -E '^#{gitlab_unified_module}([[:space:]]|$)'"
+    end
   end
 end
 
