@@ -8,8 +8,12 @@ RSpec.describe Pgbouncer::Databases do
   let(:fake_ohai) do
     {
       'gitlab' => {
-        'gitlab-rails' => {
-          'db_database' => 'fake_database'
+        'gitlab_rails' => {
+          'db_database' => 'fake_database',
+          'databases' => {
+            'main' => 'fake_database',
+            'ci' => 'fake_database_ci'
+          },
         },
       },
       'pgbouncer' => {
@@ -94,7 +98,7 @@ RSpec.describe Pgbouncer::Databases do
 
     it 'should generate an databases.ini with the default rails database' do
       expect(@obj.render).to eq(
-        "[databases]\n\nfake_database = \n\n"
+        "[databases]\n\nfake_database = dbname=fake_database\n\nfake_database_ci = dbname=fake_database_ci\n\n"
       )
     end
   end

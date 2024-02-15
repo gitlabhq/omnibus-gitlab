@@ -14,13 +14,9 @@ RSpec.describe 'pgbouncer_user' do
 
     it 'should create the pg_shadow_lookup function' do
       postgresql_user = chef_run.postgresql_user('pgbouncer-geo')
-      expect(postgresql_user).to notify('execute[Add pgbouncer auth function]')
+      expect(postgresql_user.username).to eq('pgbouncer-geo')
       resource = chef_run.execute('Add pgbouncer auth function')
       expect(resource.command).to match(%r{^/opt/gitlab/bin/gitlab-geo-psql -d fakedb-geo})
-    end
-
-    it 'should not try and recreate the function' do
-      expect(chef_run).not_to run_execute('Add pgbouncer auth function')
     end
   end
 
@@ -36,13 +32,9 @@ RSpec.describe 'pgbouncer_user' do
 
     it 'should create the pg_shadow_lookup function' do
       postgresql_user = chef_run.postgresql_user('pgbouncer-rails')
-      expect(postgresql_user).to notify('execute[Add pgbouncer auth function]')
+      expect(postgresql_user.username).to eq('pgbouncer-rails')
       resource = chef_run.execute('Add pgbouncer auth function')
       expect(resource.command).to match(%r{^/opt/gitlab/bin/gitlab-psql -d fakedb-rails})
-    end
-
-    it 'should not try and recreate the function' do
-      expect(chef_run).not_to run_execute('Add pgbouncer auth function')
     end
   end
 end

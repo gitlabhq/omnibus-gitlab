@@ -433,7 +433,7 @@ RSpec.describe 'gitlab-ee::default' do
 
   it 'should create the pgbouncer user on the database' do
     expect(chef_run).to include_recipe('pgbouncer::user')
-    expect(chef_run).to create_pgbouncer_user('rails').with(
+    expect(chef_run).to create_pgbouncer_user('rails:main').with(
       password: 'fakeuserpassword'
     )
   end

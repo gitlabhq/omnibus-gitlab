@@ -40,13 +40,12 @@ module Pgbouncer
     end
 
     def update_databases(original = {})
+      rails_databases = attributes.dig('gitlab', 'gitlab_rails', 'databases')&.values
+      rails_databases = rails_databases ? rails_databases.uniq : [DEFAULT_RAILS_DATABASE]
+
       updated = {}
 
-      if original.empty?
-        original = {
-          database => {}
-        }
-      end
+      original = rails_databases.to_h { |db| [db, {}] } if original.empty?
 
       original.each do |db, settings|
         settings.delete('password')
@@ -55,11 +54,18 @@ module Pgbouncer
 
         settings['auth_user'] = settings.delete('user') if settings.key?('user')
 
-        if db == @database
+        is_rails_db = rails_databases.include?(db)
+
+        if db == @database || is_rails_db
           settings['host'] = options['newhost'] if options['newhost']
           settings['port'] = options['port'] if options['port']
           settings['auth_user'] = options['user'] if options['user']
-          settings['dbname'] = options['pg_database'] if options['pg_database']
+
+          if is_rails_db
+            settings['dbname'] = db
+          elsif options['pg_database']
+            settings['dbname'] = options['pg_database']
+          end
         end
 
         settings.each do |setting, value|

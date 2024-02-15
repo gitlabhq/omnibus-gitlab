@@ -33,12 +33,18 @@ if pgb_helper.create_pgbouncer_user?('geo-postgresql')
 end
 
 if pgb_helper.create_pgbouncer_user?('postgresql') || pgb_helper.create_pgbouncer_user?('patroni')
-  pgbouncer_user 'rails' do
-    helper lazy { PgHelper.new(node) }
-    user node['postgresql']['pgbouncer_user']
-    password node['postgresql']['pgbouncer_user_password']
-    database node['gitlab']['gitlab_rails']['db_database']
-    add_auth_function default_auth_query.eql?(auth_query)
-    action :create
+  ignored_databases = %w[geo]
+  database_host = node['gitlab']['gitlab_rails']['db_host']
+  databases = node['gitlab']['gitlab_rails']['databases'].select { |db, details| details['enable'] && details['db_host'] == database_host && !ignored_databases.include?(db) }
+
+  databases.each do |db, settings|
+    pgbouncer_user "rails:#{db}" do
+      helper lazy { PgHelper.new(node) }
+      user node['postgresql']['pgbouncer_user']
+      password node['postgresql']['pgbouncer_user_password']
+      database settings['db_database']
+      add_auth_function default_auth_query.eql?(auth_query)
+      action :create
+    end
   end
 end
