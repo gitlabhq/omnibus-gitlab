@@ -593,9 +593,9 @@ individual custom certs in the `/etc/gitlab/trusted-certs` directory. They then
 get added to the bundle. They are added using openssl's `c_rehash` method, which
 only works on a [single certificate](#using-a-custom-certificate-chain).
 
-GitLab ships with the official [CAcert.org](http://www.cacert.org/)
-collection of trusted root certification authorities which are used to verify
-certificate authenticity.
+The Linux package ships with the official
+[Mozilla](https://wiki.mozilla.org/CA/Included_Certificates) collection of trusted root
+certification authorities which are used to verify certificate authenticity.
 
 NOTE:
 For installations that use self-signed certificates, the Linux package
