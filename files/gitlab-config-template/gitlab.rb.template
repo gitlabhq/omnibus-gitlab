@@ -521,6 +521,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     verify_certificates: true
 #     smartcard_auth: false
 #     active_directory: true
+#     smartcard_ad_cert_field: 'altSecurityIdentities'
+#     smartcard_ad_cert_format: null # 'issuer_and_serial_number', 'issuer_and_subject' , 'principal_name'
 #     allow_username_or_email_login: false
 #     lowercase_usernames: false
 #     block_auto_created_users: false
@@ -542,6 +544,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     verify_certificates: true
 #     smartcard_auth: false
 #     active_directory: true
+#     smartcard_ad_cert_field: 'altSecurityIdentities'
+#     smartcard_ad_cert_format: null # 'issuer_and_serial_number', 'issuer_and_subject' , 'principal_name'
 #     allow_username_or_email_login: false
 #     lowercase_usernames: false
 #     block_auto_created_users: false
