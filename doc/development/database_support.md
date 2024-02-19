@@ -6,33 +6,32 @@ provides the design and definitions.
 
 1. [Level 1](#level-1)
 1. [Level 2](#level-2)
-    1. [Examples](#examples)
-       1. [Example 1: Registry database objects](#example-1-registry-database-objects)
-       1. [Example 2: Registry database migrations](#example-2-registry-database-migrations)
-       1. [Example 3: Use database objects and migrations of Registry](#example-3-use-database-objects-and-migrations-of-registry)
-       1. [Example 4: Parametrized database objects resource for Rails](#example-4-parameterized-database-objects-resource-for-rails)
+   1. [Examples](#examples)
+      1. [Example 1: Registry database objects](#example-1-registry-database-objects)
+      1. [Example 2: Registry database migrations](#example-2-registry-database-migrations)
+      1. [Example 3: Use database objects and migrations of Registry](#example-3-use-database-objects-and-migrations-of-registry)
+      1. [Example 4: Parametrized database objects resource for Rails](#example-4-parameterized-database-objects-resource-for-rails)
 1. [Level 3](#level-3)
 1. [Level 4](#level-4)
 1. [Considerations](#considerations)
 1. [Bridge the gap](#bridge-the-gap)
-    1. [Reorganize the existing database operations](#reorganize-the-existing-database-operations)
-    1. [Support dedicated PgBouncer user for databases](#support-dedicated-pgbouncer-user-for-databases)
-    1. [Delay the population of PgBouncer database configuration](#delay-the-population-of-pgbouncer-database-configuration)
-    1. [Configurable Consul watch for databases](#configurable-consul-watch-for-databases)
-    1. [Helper class for general database migration requirements](#helper-class-for-general-database-migration-requirements)
+   1. [Reorganize the existing database operations](#reorganize-the-existing-database-operations)
+   1. [Support dedicated PgBouncer user for databases](#support-dedicated-pgbouncer-user-for-databases)
+   1. [Delay the population of PgBouncer database configuration](#delay-the-population-of-pgbouncer-database-configuration)
+   1. [Configurable Consul watch for databases](#configurable-consul-watch-for-databases)
+   1. [Helper class for general database migration requirements](#helper-class-for-general-database-migration-requirements)
 
 ## Level 1
 
-  1. Add the new database-related configuration attributes to `gitlab.rb`. Do
-     not forget to update `gitlab.rb.template`.
-  1. Update the Chef recipe to consume the configuration attributes. At this
-     level, the requirement is to pass down the attributes to the component,
-     generally its through configuration files or command-line arguments.
+1. Add the new database-related configuration attributes to `gitlab.rb`. Do
+   not forget to update `gitlab.rb.template`.
+1. Update the Chef recipe to consume the configuration attributes. At this
+   level, the requirement is to pass down the attributes to the component,
+   generally its through configuration files or command-line arguments.
 
 For example in `registry` cookbook:
 
 - `registry['database']` attribute is added to `gitlab.rb` (see [`attributes/default.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/565f7a73f721fa40efc936dfd735b849986ce0ac/files/gitlab-cookbooks/registry/attributes/default.rb#L39)).
-
 - The configuration template uses the attribute to configure registry (see [`templates/default/registry-config.yml.erb`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/565f7a73f721fa40efc936dfd735b849986ce0ac/files/gitlab-cookbooks/registry/templates/default/registry-config.yml.erb#L47)).
 
 ## Level 2
@@ -43,10 +42,10 @@ For example in `registry` cookbook:
 
 1. Create a `database_objects` custom resource in `resources/` directory of the
    cookbook with the default `nothing` action (a no-op action) and a `create`
-   action. The `create`  action can leverage the existing `postgresql` custom
+   action. The `create` action can leverage the existing `postgresql` custom
    resources to setup the required database objects for the component.
 
-   See: 
+   See:
    - `postgresql_user`
    - `postgresql_database`
    - `postgresql_schema`
@@ -329,13 +328,13 @@ end
    is enabled) or the name of the Consul service that is configured manually
    without Omnibus GitLab.
 
-1. Use `database_watch` custom resource<sup>[[Needs Implementation](#configurable-consul-watch-for-databases)]</sup>
+1. Use `database_watch` custom resource<sup>([Needs Implementation](#configurable-consul-watch-for-databases))</sup>
    to define a new Consul watch for the database cluster service. It notifies
    PgBouncer to update the logical database endpoint when the leader of the
    cluster changes. Pass the name of the Consul service, logical database, and
    any other PgBouncer options as parameters to the watch.
 
-_All `database_watch` resources must be placed in the `consul` cookbook_. As
+_All_ `database_watch` _resources must be placed in the_ `consul` _cookbook_. As
 opposed to the previous levels, this is the only place where database-related
 resources are concentrated in one cookbook, `consul`, and not managed in
 the same cookbooks as their associated components.
@@ -351,13 +350,13 @@ We don't want to introduce any breaking changes into `gitlab.rb`.
 - _No other resource should be involved with database setup_.
 
 - All custom resources _must be idempotent_. For example they must not fail
-   when an object already exist even though they are created or ran in another
-   cookbook. Instead they must be able to update the current state of the
-   database objects, configuration, or migrations based on the new user inputs.
+  when an object already exist even though they are created or ran in another
+  cookbook. Instead they must be able to update the current state of the
+  database objects, configuration, or migrations based on the new user inputs.
 
 - In HA mode, given that multiple physical nodes are involved, Omnibus GitLab
-   may encounter certain limitations to provide full automation of the
-   configuration. This is an acceptable limitation.
+  may encounter certain limitations to provide full automation of the
+  configuration. This is an acceptable limitation.
 
 ## Bridge the gap
 
@@ -441,16 +440,16 @@ cookbook. It defines a database-specific Consul watch for database a cluster
 service and passes the required information to a parameterized failover script
 to notify PgBouncer. The key attributes of this resource are:
 
-  1. The service name, that specifies which database cluster must be watched.
-     It could be the scope of the Patroni cluster when `patroni['register_service']`
-     is enabled or a Consul service name when it is manually configured.
+1. The service name, that specifies which database cluster must be watched.
+   It could be the scope of the Patroni cluster when `patroni['register_service']`
+   is enabled or a Consul service name when it is manually configured.
 
-  1. The database name that specifies which logical databases should be
-     reconfigured when the database cluster leader changes.
+1. The database name that specifies which logical databases should be
+   reconfigured when the database cluster leader changes.
 
 ### Helper class for general database migration requirements
 
-`MigrationHelper`<sup>[Needs implementation]</sup> implements general
+`MigrationHelper`<sup>(Needs implementation)</sup> implements general
 requirements of database migrations, including the central switch for enabling
 or disabling auto-migrations. It can also provides the mapping between the
 existing and new configuration attributes.
