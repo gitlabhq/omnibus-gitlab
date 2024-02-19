@@ -301,6 +301,8 @@ default['gitlab']['gitlab_rails']['ldap_admin_group'] = nil
 default['gitlab']['gitlab_rails']['ldap_sync_ssh_keys'] = nil
 default['gitlab']['gitlab_rails']['ldap_sync_time'] = nil
 default['gitlab']['gitlab_rails']['ldap_active_directory'] = nil
+default['gitlab']['gitlab_rails']['ldap_smartcard_ad_cert_field'] = nil
+default['gitlab']['gitlab_rails']['ldap_smartcard_ad_cert_format'] = nil
 ####
 
 default['gitlab']['gitlab_rails']['smartcard_enabled'] = false

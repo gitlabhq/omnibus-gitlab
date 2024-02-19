@@ -791,6 +791,8 @@ production: &base
     ## EE only
     group_base: <%= quote(@ldap_group_base) %>
     admin_group: <%= quote(@ldap_admin_group) %>
+    smartcard_ad_cert_field: <%= quote(@ldap_smartcard_ad_cert_field) %>
+    smartcard_ad_cert_format: <%= quote(@ldap_smartcard_ad_cert_format) %>
     sync_ssh_keys: <%= quote(@ldap_sync_ssh_keys) %>
     sync_time: <%= @ldap_sync_time %>
   <% end %>
