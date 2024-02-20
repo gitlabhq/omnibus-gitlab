@@ -29,7 +29,10 @@ source git: version.remote
 relative_path 'src/gitlab.com/gitlab-org/docker-distribution-pruner'
 
 build do
-  env = { 'GOPATH' => "#{Omnibus::Config.source_dir}/docker-distribution-pruner" }
+  env = {
+    'GOPATH' => "#{Omnibus::Config.source_dir}/docker-distribution-pruner",
+    'GOTOOLCHAIN' => 'local',
+  }
 
   command "go build -ldflags '-s -w' ./cmds/docker-distribution-pruner", env: env
 

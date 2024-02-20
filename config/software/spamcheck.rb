@@ -34,6 +34,7 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
   env['GOPATH'] = "#{Omnibus::Config.source_dir}/spamcheck"
   env['PATH'] = "#{env['PATH']}:#{env['GOPATH']}/bin"
+  env['GOTOOLCHAIN'] = 'local'
 
   mkdir "#{install_dir}/embedded/service"
   mkdir "#{install_dir}/embedded/bin"

@@ -33,7 +33,9 @@ relative_path 'src/github.com/hashicorp/consul'
 build do
   env = {}
   env['GOPATH'] = "#{Omnibus::Config.source_dir}/consul"
+  env['GOTOOLCHAIN'] = 'local'
   env['PATH'] = "#{Gitlab::Util.get_env('PATH')}:#{env['GOPATH']}/bin"
+
   command 'make dev', env: env
   mkdir "#{install_dir}/embedded/bin"
   copy 'bin/consul', "#{install_dir}/embedded/bin/"

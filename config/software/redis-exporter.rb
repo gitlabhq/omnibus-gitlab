@@ -34,6 +34,7 @@ build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/redis-exporter",
     'GO111MODULE' => 'on',
+    'GOTOOLCHAIN' => 'local',
   }
 
   ldflags = [

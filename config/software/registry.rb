@@ -36,7 +36,8 @@ build do
   cwd = "#{registry_source_dir}/#{relative_path}"
   env = {
     'GOPATH' => registry_source_dir,
-    'BUILDTAGS' => 'include_gcs include_oss'
+    'BUILDTAGS' => 'include_gcs include_oss',
+    'GOTOOLCHAIN' => 'local',
   }
 
   make "build", env: env, cwd: cwd

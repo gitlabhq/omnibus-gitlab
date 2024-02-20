@@ -37,6 +37,7 @@ build do
     'GOPATH' => "#{Omnibus::Config.source_dir}/node-exporter",
     'CGO_ENABLED' => '0', # Details: https://github.com/prometheus/node_exporter/issues/870
     'GO111MODULE' => 'on',
+    'GOTOOLCHAIN' => 'local',
   }
 
   prom_version = Prometheus::VersionFlags.new(version)
