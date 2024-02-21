@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.9.1 (2024-02-20)
+
+No changes.
+
 ## 16.9.0 (2024-02-14)
 
 ### Added (5 changes)
@@ -46,6 +50,10 @@ omnibus-gitlab repository.
 
 - [Update PostgreSQL 13 and 14](gitlab-org/omnibus-gitlab@8d6a65a402e0aa6fc7f826c424cb778f3e0d8b79)
 - [Update libxml2 from 2.10.4 to 2.12.3](gitlab-org/omnibus-gitlab@18f0dcced0f8597992b87bb0b01ae5d9f782842f)
+
+## 16.8.3 (2024-02-20)
+
+No changes.
 
 ## 16.8.2 (2024-02-07)
 
@@ -91,6 +99,10 @@ omnibus-gitlab repository.
 
 - [Stop building for OpenSUSE 15.4](gitlab-org/omnibus-gitlab@d6d3933486f4b6d86320652882faa0019dc1aae7) ([merge request](gitlab-org/omnibus-gitlab!7331))
 - [Stop sidekiq namespaced probe for gitlab-exporter](gitlab-org/omnibus-gitlab@ff1df765a218a7b29ad6c4a9ccd6b091a2a10bfe) ([merge request](gitlab-org/omnibus-gitlab!7237))
+
+## 16.7.6 (2024-02-20)
+
+No changes.
 
 ## 16.7.5 (2024-02-07)
 
