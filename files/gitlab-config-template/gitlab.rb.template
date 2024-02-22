@@ -1023,6 +1023,25 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # }
 
+### Registry garbage collection
+###! Docs: https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md?ref_type=heads#gc
+# registry['gc'] = { 
+#   'disabled' => false,
+#   'maxbackoff' => '24h',
+#   'noidlebackoff' => false,
+#   'transactiontimeout' => '10s',
+#   'reviewafter' => '24h',
+#   'manifests' => {
+#       'disabled' => false,
+#       'interval' => '5s'
+#   },
+#   'blobs' => {
+#       'disabled' => false,
+#       'interval' => '5s',
+#       'storagetimeout' => '5s'
+#   }
+# }
+
 ### Registry notifications endpoints
 # registry['notifications'] = [
 #   {
