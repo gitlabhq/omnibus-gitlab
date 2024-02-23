@@ -38,6 +38,7 @@ build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/alertmanager",
     'GO111MODULE' => 'on',
+    'GOTOOLCHAIN' => 'local',
   }
   exporter_source_dir = "#{Omnibus::Config.source_dir}/alertmanager"
   cwd = "#{exporter_source_dir}/src/#{go_source}"

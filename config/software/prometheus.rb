@@ -39,6 +39,7 @@ build do
   env = {
     'GOPATH' => prometheus_source_dir,
     'GO111MODULE' => 'on',
+    'GOTOOLCHAIN' => 'local',
   }
 
   prom_version = Prometheus::VersionFlags.new(version)

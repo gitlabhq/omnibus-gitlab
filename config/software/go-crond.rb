@@ -28,6 +28,7 @@ relative_path 'src/github.com/webdevops/go-crond'
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/go-crond",
+    'GOTOOLCHAIN' => 'local',
   }
 
   make 'build', env: env

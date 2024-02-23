@@ -34,6 +34,7 @@ relative_path 'src/github.com/wrouesnel/postgres_exporter'
 build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/postgres-exporter",
+    'GOTOOLCHAIN' => 'local',
   }
 
   prom_version = Prometheus::VersionFlags.new(version)

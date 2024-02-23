@@ -37,6 +37,7 @@ build do
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/pgbouncer-exporter",
     'GO111MODULE' => 'on',
+    'GOTOOLCHAIN' => 'local',
   }
   prom_version = Prometheus::VersionFlags.new(version)
 

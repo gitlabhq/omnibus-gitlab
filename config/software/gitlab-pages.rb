@@ -29,9 +29,12 @@ source git: version.remote
 relative_path 'src/gitlab.com/gitlab-org/gitlab-pages'
 
 build do
-  # This is required for GO15VENDOREXPERIMENT=1 to work properly,
-  # since it requires the package to be in $GOPATH/src/package
-  env = { 'GOPATH' => "#{Omnibus::Config.source_dir}/gitlab-pages" }
+  env = {
+    # This is required for GO15VENDOREXPERIMENT=1 to work properly,
+    # since it requires the package to be in $GOPATH/src/package
+    'GOPATH' => "#{Omnibus::Config.source_dir}/gitlab-pages",
+    'GOTOOLCHAIN' => 'local',
+  }
 
   # Pages compiles with CGO_ENABLED=0 by default, so we need to activate
   # FIPS mode explicitly.
