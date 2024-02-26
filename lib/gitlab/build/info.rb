@@ -116,7 +116,7 @@ module Build
       def release_file_contents
         repo = Gitlab::Util.get_env('PACKAGECLOUD_REPO') # Target repository
 
-        download_url = if /dev.gitlab.org/.match?(Build::Info::CI.api_v4_url)
+        download_url = if /dev.gitlab.org/.match?(Build::Info::CI.api_v4_url) || Build::Check.is_nightly?
                          Build::Info::CI.package_download_url
                        else
                          Build::Info::CI.triggered_package_download_url
