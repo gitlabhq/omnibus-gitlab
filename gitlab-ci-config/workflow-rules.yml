@@ -46,10 +46,7 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && $CI_COMMIT_REF_PROTECTED == "true"'
       variables:
         PIPELINE_TYPE: PROTECTED_TEST_PIPELINE
-    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && $CI_COMMIT_BRANCH'
-      variables:
-        PIPELINE_TYPE: GITLAB_BRANCH_TEST_PIPELINE
-    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $DEV_PROJECT_PATH && $NIGHTLY && $CI_COMMIT_BRANCH && ($ee == "true" || $GITLAB_VERSION =~ /-ee$/)'
+    - if: '$PIPELINE_TYPE == null && $NIGHTLY && $CI_COMMIT_BRANCH && ($ee == "true" || $GITLAB_VERSION =~ /-ee$/)'
       variables:
         PIPELINE_TYPE: EE_NIGHTLY_BUILD_PIPELINE
         CACHE_EDITION: "EE"
@@ -62,7 +59,7 @@ workflow:
       variables:
         PIPELINE_TYPE: EE_BRANCH_BUILD_PIPELINE
         CACHE_EDITION: "EE"
-    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $DEV_PROJECT_PATH && $NIGHTLY && $CI_COMMIT_BRANCH'
+    - if: '$PIPELINE_TYPE == null && $NIGHTLY && $CI_COMMIT_BRANCH'
       variables:
         PIPELINE_TYPE: CE_NIGHTLY_BUILD_PIPELINE
         CACHE_EDITION: "CE"
@@ -103,6 +100,9 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $SECURITY_PROJECT_PATH && $CI_COMMIT_REF_PROTECTED == "true"'
       variables:
         PIPELINE_TYPE: PROTECTED_TEST_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && $CI_COMMIT_BRANCH'
+      variables:
+        PIPELINE_TYPE: GITLAB_BRANCH_TEST_PIPELINE
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $SECURITY_PROJECT_PATH && $CI_COMMIT_BRANCH'
       variables:
         PIPELINE_TYPE: GITLAB_BRANCH_TEST_PIPELINE

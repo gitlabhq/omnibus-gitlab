@@ -35,7 +35,7 @@ class PackageRepository
 
   def upload(repository = nil, dry_run = false)
     if upload_user.nil?
-      puts "User for uploading to package server not specified!"
+      puts "Owner of the repository to which packages are being uploaded not specified! Set `PACKAGECLOUD_USER` environment variable."
       return
     end
 
@@ -51,20 +51,21 @@ class PackageRepository
       cmd = "LC_ALL='en_US.UTF-8' bin/package_cloud push #{upload_user}/#{pkg} --url=https://packages.gitlab.com"
       puts "Uploading...\n"
 
-      if dry_run
-        puts cmd
-      else
-        Retriable.with_context(:package_publish, on: PackageUploadError) do
-          result = `#{cmd}`
+      puts "Running the command: #{cmd}"
 
-          if child_process_status == 1
-            unless /filename: has already been taken/.match?(result)
-              puts 'Upload to package server failed!.'
-              raise PackageUploadError, "Upload to package server failed!."
-            end
+      next if dry_run
 
-            puts "Package #{pkg} has already been uploaded, skipping.\n"
+      Retriable.with_context(:package_publish, on: PackageUploadError) do
+        result = `#{cmd}`
+
+        if child_process_status == 1
+          unless /filename: has already been taken/.match?(result)
+            puts 'Upload to package server failed!.'
+            puts "The command returned the output: #{result}"
+            raise PackageUploadError, "Upload to package server failed!."
           end
+
+          puts "Package #{pkg} has already been uploaded, skipping.\n"
         end
       end
     end
@@ -119,6 +120,10 @@ class PackageRepository
   end
 
   def upload_user
+    # Even though the variable says "upload user", this is acutally the user
+    # who owns the repository to which packages are being uploaded. This
+    # information is only used to generate the path to the repository - the
+    # user who actually does the upload is known by the token.
     Gitlab::Util.get_env('PACKAGECLOUD_USER') if Gitlab::Util.get_env('PACKAGECLOUD_USER') && !Gitlab::Util.get_env('PACKAGECLOUD_USER').empty?
   end
 
