@@ -202,17 +202,17 @@ To rotate the secrets:
 1. If you have multiple nodes in your GitLab environment, you must copy the secrets to all of your other nodes:
 
    1. On all other nodes, move your current secrets file to a different location:
-   
+
       ```shell
       sudo mv /etc/gitlab/gitlab-secrets.json /etc/gitlab/gitlab-secrets.json.old
       ```
-   
+
    1. Copy the new `/etc/gitlab/gitlab-secrets.json` file from your Rails node onto all of your other GitLab nodes.
 
    1. On all other nodes, [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#reconfigure-a-linux-package-installation)
       on each node.
 
-   1. On all other nodes, [restart GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#restart-a-linux-package-installation) on each 
+   1. On all other nodes, [restart GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#restart-a-linux-package-installation) on each
       node to ensure all services are using the new secrets.
 
    1. On all nodes, run a checksum match on the `/etc/gitlab/gitlab-secrets.json` file to confirm that the secrets match:
