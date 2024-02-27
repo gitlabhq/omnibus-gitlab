@@ -11,7 +11,7 @@ class ConsulHelper
 
   # This version should be keep in sync with consul versions in
   # software/consul.rb and consul_download.rb.
-  SUPPORTED_MINOR = '1.16.5'.freeze
+  SUPPORTED_MINOR = '1.16.6'.freeze
 
   def initialize(node)
     @node = node
