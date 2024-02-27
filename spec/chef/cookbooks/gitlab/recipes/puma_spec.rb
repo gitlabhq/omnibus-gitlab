@@ -87,7 +87,7 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
     end
 
     it 'creates sysctl files' do
-      expect(chef_run).to create_gitlab_sysctl('net.core.somaxconn').with_value(1024)
+      expect(chef_run).to create_gitlab_sysctl('net.core.somaxconn').with_value(2048)
     end
   end
 
