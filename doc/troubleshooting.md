@@ -1004,7 +1004,7 @@ make it available. See <https://docs.pulpproject.org/pulp_rpm/> for details.
 
 ## Error: `E: connection refused to d20rj4el6vkp4c.cloudfront.net 443`
 
-When you install a package hosted on our package repository at `packages.gitlab.com`, your client will receive and follow a redirect to the CloudFront address `d20rj4el6vkp4c.cloudfront.net`. Servers in an air-gapped environment can receive the following errors: 
+When you install a package hosted on our package repository at `packages.gitlab.com`, your client will receive and follow a redirect to the CloudFront address `d20rj4el6vkp4c.cloudfront.net`. Servers in an air-gapped environment can receive the following errors:
 
 ```shell
 E: connection refused to d20rj4el6vkp4c.cloudfront.net 443

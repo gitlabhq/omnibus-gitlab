@@ -605,7 +605,7 @@ update this setting in `/etc/gitlab/gitlab.rb`:
 gitlab_rails['databases']['ci']['enable'] = false
 ```
 
-In a multi-node environment, this setting should be updated on all Rails and Sidekiq nodes. 
+In a multi-node environment, this setting should be updated on all Rails and Sidekiq nodes.
 
 ## Using a non-packaged PostgreSQL database management server
 
@@ -866,7 +866,7 @@ when your installation is using PgBouncer.
 
 1. After upgrading PostgreSQL to a new major release, recreate the table statistics to ensure efficient query plans are picked and
    to reduce database server CPU load.
-   
+
    If the upgrade was "in-place" using `pg_upgrade`, run the following query on the PostgreSQL database console:
 
    ```SQL
