@@ -103,7 +103,7 @@ template "Create Gitaly config.toml" do
             url: gitlab_url,
             relative_url_root: gitlab_relative_path,
             'http-settings': node.dig('gitlab', 'gitlab_shell', 'http_settings')
-          }.compact,
+          }.merge(node.dig('gitaly', 'configuration', 'gitlab') || {}).compact,
 
           # These options below were historically hard coded values in the template. They
           # are set here to retain the behavior of them not being overridable by the user.
