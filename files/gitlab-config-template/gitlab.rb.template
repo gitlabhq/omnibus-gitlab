@@ -2589,6 +2589,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 #       { key: 'http.http://example.com.proxy', value: 'http://example.proxy.com' },
 #     ],
 #   },
+#   gitlab: {
+#     url: 'http://localhost:9999',
+#     relative_url_root: '/gitlab-ee',
+#   },
 #   hooks: {
 #     custom_hooks_dir: '/var/opt/gitlab/gitaly/custom_hooks',
 #   },

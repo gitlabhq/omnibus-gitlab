@@ -1005,6 +1005,26 @@ RSpec.describe 'gitaly' do
     end
   end
 
+  context 'with custom gitlab values' do
+    before do
+      stub_gitlab_rb(
+        gitaly: {
+          configuration: {
+            gitlab: {
+              url: 'http://localhost:9999',
+              relative_url_root: '/gitlab-ee'
+            }
+          }
+        }
+      )
+    end
+
+    it 'creates config file with the custom gitlab values set' do
+      expect(chef_run).to render_file(config_path)
+        .with_content(%r{\[gitlab\]\s+url = "http://localhost:9999"\s+relative_url_root = "/gitlab-ee"})
+    end
+  end
+
   include_examples "consul service discovery", "gitaly", "gitaly"
 end
 
