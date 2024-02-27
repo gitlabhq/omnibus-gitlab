@@ -16,7 +16,7 @@
 #
 
 name 'omnibus-ctl'
-version = Gitlab::Version.new('omnibus-ctl', '0.6.0.1')
+version = Gitlab::Version.new('omnibus-ctl', 'v0.6.12')
 default_version version.print(false)
 display_version version.print(false)
 
@@ -37,6 +37,22 @@ build do
 
   # Remove existing built gems in case they exist in the current dir
   delete 'omnibus-ctl-*.gem'
+
+  # Install chef-utils and chef-config from Packagecloud server. Their version
+  # should match that of chef-gem
+  gem 'install chef-utils ' \
+      '--clear-sources ' \
+      "--version '18.3.0' " \
+      '-s https://packagecloud.io/cinc-project/stable ' \
+      '-s https://rubygems.org ' \
+      '--no-document', env: env
+
+  gem 'install chef-config ' \
+      '--clear-sources ' \
+      "--version '18.3.0' " \
+      '-s https://packagecloud.io/cinc-project/stable ' \
+      '-s https://rubygems.org ' \
+      '--no-document', env: env
 
   gem 'build omnibus-ctl.gemspec', env: env
   gem 'install omnibus-ctl-*.gem --no-document', env: env
