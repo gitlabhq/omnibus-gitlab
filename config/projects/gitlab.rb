@@ -163,6 +163,13 @@ dependency 'gitlab-shell'
 dependency 'gitlab-pages'
 dependency 'git'
 
+# `git-filter-repo` is a dependency of Gitaly. But placing it there will cause
+# it to be built early in the build list, which will in-turn cause `git` to be
+# built early. `git`, being built from `gitaly` source will bust cache often,
+# and cause unnecessary rebuilds. Hence, we are placing `git-filter-repo` as a
+# project dependency after `git`
+dependency 'git-filter-repo'
+
 # gitaly needs grpc to work correctly. These native extensions are built as part
 # of gitlab-rails build. So, gitlab-rails has to be built before gitaly. But
 # making gitaly depend on gitlab-rails will cause it to be built earlier,

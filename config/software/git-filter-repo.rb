@@ -27,7 +27,11 @@ license_file 'COPYING.mit'
 
 skip_transitive_dependency_licensing true
 
-dependency 'git'
+# Git is marked as a project dependency to be built before `git-filter-repo`.
+# Adding it as a software dependency to `git-filter-repo` will cause it to be
+# rebuilt early in the build list, bust cache, and cause everything after it to
+# be rebuilt.
+# dependency 'git'
 dependency 'python3'
 
 build do
