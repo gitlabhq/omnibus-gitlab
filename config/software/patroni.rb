@@ -16,7 +16,7 @@
 #
 
 name 'patroni'
-default_version '2.1.0'
+default_version '3.0.1'
 
 license 'MIT'
 license_file 'LICENSE'
