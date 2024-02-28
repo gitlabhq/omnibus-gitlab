@@ -173,6 +173,32 @@ RSpec.describe 'registry recipe' do
       end
     end
 
+    context 'when the registry garbage collector configuration is present' do
+      let(:gc_config) do
+        { "disabled" => false,
+          "maxbackoff" => "24h",
+          "noidlebackoff" => false,
+          "transactiontimeout" => "10s",
+          "reviewafter" => "24h",
+          "manifests" => {
+            "disabled" => false,
+            "interval" => "5s"
+          },
+          "blobs" => {
+            "disabled" => false,
+            "interval" => "5s",
+            "storagetimeout" => "5s"
+          } }
+      end
+
+      before { stub_gitlab_rb(registry: { gc: gc_config }) }
+
+      it 'creates registry config with gc' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(%r(^gc: {"disabled":false))
+      end
+    end
+
     context 'when a log formatter is specified' do
       before { stub_gitlab_rb(registry: { log_formatter: 'json' }) }
 
