@@ -135,13 +135,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
       ChefSpec::SoloRunner.converge('gitlab::default')
     end
 
-    it 'creates the git-data directory' do
-      expect(chef_run).to create_storage_directory('/tmp/git-data').with(owner: 'git', group: 'git', mode: '0700')
-    end
-
-    it 'creates the repositories directory' do
-      expect(chef_run).to create_storage_directory('/tmp/git-data/repositories').with(owner: 'git', group: 'git', mode: '2770')
-    end
+    include_examples "git data directory", "/tmp/git-data"
 
     it 'creates the shared directory' do
       expect(chef_run).to create_storage_directory('/tmp/shared').with(owner: 'git', group: 'gitlab-www', mode: '0751')
