@@ -6,16 +6,24 @@ SHELL ["/bin/sh", "-c"]
 # Default to supporting utf-8
 ENV LANG=C.UTF-8
 
+# Explicitly set supported locales
+COPY locale.gen /etc/locale.gen
+
 # Install required packages
 RUN apt-get update -q \
     && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
       busybox \
       ca-certificates \
+      locales \
       openssh-server \
       tzdata \
       wget \
       perl \
       libperl5.34 \
+    && locale-gen \
+    && cp -a /usr/lib/locale/locale-archive /tmp/locale-archive \
+    && DEBIAN_FRONTEND=noninteractive apt-get purge -yq locales \
+    && mv /tmp/locale-archive /usr/lib/locale/locale-archive \
     && rm -rf /var/lib/apt/lists/*
 
 # Use BusyBox
