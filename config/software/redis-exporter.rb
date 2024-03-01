@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require 'time'
 
 name 'redis-exporter'
-version = Gitlab::Version.new('redis-exporter', '1.57.0')
+version = Gitlab::Version.new('redis-exporter', '1.58.0')
 default_version version.print
 
 license 'MIT'
@@ -31,6 +31,8 @@ source git: version.remote
 relative_path 'src/github.com/oliver006/redis_exporter'
 
 build do
+  patch source: 'go-1-21.patch'
+
   env = {
     'GOPATH' => "#{Omnibus::Config.source_dir}/redis-exporter",
     'GO111MODULE' => 'on',
