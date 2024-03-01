@@ -29,7 +29,7 @@ script specified in the installation instructions.
 | EMail         | `packages@gitlab.com`                                |
 | Comment       | `package repository signing key`                     |
 | Fingerprint   | `F640 3F65 44A3 8863 DAA0 B6E0 3F01 618A 5131 2F3F` |
-| Expiry        | `2024-03-01`                                         |
+| Expiry        | `2026-02-27`                                         |
 
 This key is active from **2020-04-06**. Existing users who already have
 configured the GitLab apt/yum package repositories will have to fetch and add this
@@ -37,8 +37,8 @@ key to their trusted keyring again to continue installing packages from those
 repositories without apt/yum complaining about mismatches, which is described
 below.
 
-This key's expiration was extended from **2022-03-02** to **2024-03-01**.
-If you encounter a complaint of expiration on `2022-03-02`, perform the steps
+This key's expiration was extended from **2024-03-01** to **2026-02-27**.
+If you encounter a complaint of expiration on `2024-03-01`, perform the steps
 in [Update keys after expiry extension](#update-keys-after-expiry-extension)
 to incorporate the updated public key content.
 
