@@ -15,13 +15,13 @@ DETAILS:
 Prerequisites:
 
 - To use the Microsoft Graph API to send mails, you must first
-  [create an application](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app)
+  [create an application](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app)
   in the Azure Active Directory, and add the `Mail.Send`
   [application permission](https://learn.microsoft.com/en-us/graph/permissions-reference).
 - Set the application permissions to **App-only access**. Make sure the permissions are not set to **Delegated**.
 
 If you would rather send application emails using [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0&tabs=http)
-with [OAuth 2.0 client credentials flow](https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow),
+with [OAuth 2.0 client credentials flow](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow),
 add the following configuration information to `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
 
 ```ruby

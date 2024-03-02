@@ -122,7 +122,7 @@ always [upgrade to GitLab EE](https://docs.gitlab.com/ee/update/package/convert_
 ## Optimize Puma
 
 WARNING:
-This is an experimental [Alpha feature](https://docs.gitlab.com/ee/policy/alpha-beta-support.html#alpha-features) and subject to change without notice. The feature
+This is an experimental [Alpha feature](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#alpha-features) and subject to change without notice. The feature
 is not ready for production use. If you want to use this feature, we recommend testing
 with non-production data first. See the [known issues](https://docs.gitlab.com/ee/administration/operations/puma.html#puma-single-mode-known-issues)
 for additional details.
