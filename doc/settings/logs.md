@@ -77,7 +77,7 @@ The [runit-managed](../architecture/index.md#runit) services in Linux package in
   GitLab last wrote to that file.
 - `zmore` and `zgrep` allow viewing and searching through both compressed or uncompressed logs.
 
-Read the [svlogd documentation](http://smarden.org/runit/svlogd.8.html) for more information
+Read the [svlogd documentation](https://smarden.org/runit/svlogd.8.html) for more information
 about the files it generates.
 
 You can modify svlogd settings via `/etc/gitlab/gitlab.rb` with the following settings:

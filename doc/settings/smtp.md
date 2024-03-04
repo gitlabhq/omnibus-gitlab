@@ -507,9 +507,9 @@ The API Key you created must be entered in `smtp_password`.
 ### Brevo
 
 This configuration was tested with the Brevo [SMTP relay service](hhttps://www.brevo.com/free-smtp-server/). To grab the
-relevant account credentials via the URLs commented into this example, [log in to your Brevo account](https://account-app.brevo.com/account/login).
+relevant account credentials via the URLs commented into this example, [log in to your Brevo account](https://login.brevo.com).
 
-For further details, refer to the Brevo [help page](https://help.brevo.com/hc/en-us/articles/209462765-What-is-Sendinblue-SMTP).
+For further details, refer to the Brevo [help page](https://help.brevo.com/hc/en-us/articles/209462765-What-is-Brevo-SMTP).
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -790,7 +790,7 @@ gitlab_rails['smtp_tls'] = true
 ### FastMail
 
 FastMail requires an
-[App Password](https://www.fastmail.help/hc/en-us/articles/360058752854)
+[App Password](https://www.fastmail.help/hc/en-us/articles/360058752854-App-passwords)
 even when two-step verification is not enabled.
 
 ```ruby
@@ -1241,7 +1241,7 @@ gitlab_rails['gitlab_email_from'] = 'username@sina.com'
 
 ### Feishu mail
 
-Check out more details in the [help page](https://www.feishu.cn/hc/articles/360049068017) of Feishu mail.
+Check out more details in the [help page](https://www.feishu.cn/hc/en-US/articles/360049068017-admin-allow-members-to-access-feishu-mail-using-third-party-email-clients) of Feishu mail.
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1375,7 +1375,7 @@ following settings are set:
   gitlab_rails['smtp_tls'] = true
   ```
 
-For more details, read [about the confusion over SMTP ports, TLS, and STARTTLS](https://www.fastmail.help/hc/en-us/articles/360058753834).
+For more details, read [about the confusion over SMTP ports, TLS, and STARTTLS](https://www.fastmail.help/hc/en-us/articles/360058753834-SSL-TLS-and-STARTTLS).
 
 ### Emails not sending when using external Sidekiq
 
