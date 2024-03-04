@@ -351,7 +351,7 @@ You may have to repeat this process for other lines. For example, reconfigure fa
 ```plaintext
 kernel.shmall = 4194304
 kernel.sem = 250 32000 32 262
-net.core.somaxconn = 1024
+net.core.somaxconn = 2048
 kernel.shmmax = 17179869184
 ```
 
@@ -1020,3 +1020,24 @@ To resolve this issue, you have three options:
 - If you cannot allowlist by domain, add the [CloudFront IP address ranges](https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips) to your firewall settings. You must
   keep this list synced with your firewall settings because they can change.
 - Manually download the package file and upload it to your server.
+
+## Do I need to increase `net.core.somaxconn` ?
+
+The following may assist in identifying if the value of `net.core.somaxconn`
+is set too low:
+
+```shell
+$ netstat -ant | grep -c SYN_RECV
+4
+```
+
+The return value from `netstat -ant | grep -c SYN_RECV` is the number of connections
+waiting to be established. If the value is greater than `net.core.somaxconn`:
+
+```shell
+$ sysctl net.core.somaxconn
+net.core.somaxconn = 1024
+```
+
+You may experience timeouts or HTTP 502 errors and is recommended to increase this
+value by updating the `puma['somaxconn']` variable in your `gitlab.rb`.
