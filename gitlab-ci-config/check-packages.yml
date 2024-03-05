@@ -56,6 +56,7 @@ before_script:
     - !reference [.common_install_scripts, script]
     - apt install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
   tags: !reference [.distribution-amd64-tags]
+  retry: 2
 
 .yum-install: &yum-install
   stage: package
@@ -65,6 +66,7 @@ before_script:
     - !reference [.common_install_scripts, script]
     - yum install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
   tags: !reference [.distribution-amd64-tags]
+  retry: 2
 
 .zypper-install: &zypper-install
   stage: package
@@ -74,6 +76,7 @@ before_script:
     - !reference [.common_install_scripts, script]
     - zypper install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
   tags: !reference [.distribution-amd64-tags]
+  retry: 2
 
 .apt-arm-install: &apt-arm-install
   extends: .apt-install
