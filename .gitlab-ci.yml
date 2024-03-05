@@ -185,6 +185,7 @@ fetch-assets:
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
     - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
     - if: '$PIPELINE_TYPE == "DURATION_PLOTTER_PIPELINE"'
+  retry: 2
 
 generate-facts:
   extends: .gems-cache
@@ -210,6 +211,7 @@ generate-facts:
     - if: '$PIPELINE_TYPE == "FORK_MR_PIPELINE"'
     - when: never
   needs: []
+  retry: 2
 
 .notify:
   before_script:
