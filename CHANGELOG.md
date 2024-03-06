@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.9.2 (2024-03-06)
+
+### Security (1 change)
+
+- [Mattermost Security Updates February 14, 2024](gitlab-org/security/omnibus-gitlab@b0fdcb7d3f7a15f55156bfdfb8faeb8dddbfdae3) ([merge request](gitlab-org/security/omnibus-gitlab!419))
+
 ## 16.9.1 (2024-02-20)
 
 No changes.
@@ -50,6 +56,12 @@ No changes.
 
 - [Update PostgreSQL 13 and 14](gitlab-org/omnibus-gitlab@8d6a65a402e0aa6fc7f826c424cb778f3e0d8b79)
 - [Update libxml2 from 2.10.4 to 2.12.3](gitlab-org/omnibus-gitlab@18f0dcced0f8597992b87bb0b01ae5d9f782842f)
+
+## 16.8.4 (2024-03-06)
+
+### Security (1 change)
+
+- [Mattermost Security Updates February 14, 2024](gitlab-org/security/omnibus-gitlab@44a51aa75c9e1c3e06cc0e6d283112ac8c76a37d) ([merge request](gitlab-org/security/omnibus-gitlab!418))
 
 ## 16.8.3 (2024-02-20)
 
@@ -99,6 +111,12 @@ No changes.
 
 - [Stop building for OpenSUSE 15.4](gitlab-org/omnibus-gitlab@d6d3933486f4b6d86320652882faa0019dc1aae7) ([merge request](gitlab-org/omnibus-gitlab!7331))
 - [Stop sidekiq namespaced probe for gitlab-exporter](gitlab-org/omnibus-gitlab@ff1df765a218a7b29ad6c4a9ccd6b091a2a10bfe) ([merge request](gitlab-org/omnibus-gitlab!7237))
+
+## 16.7.7 (2024-03-06)
+
+### Security (1 change)
+
+- [Mattermost Security Updates February 14, 2024](gitlab-org/security/omnibus-gitlab@49f6b98dc7f08b3f1d5d2bad6c629bffc77976e6) ([merge request](gitlab-org/security/omnibus-gitlab!417))
 
 ## 16.7.6 (2024-02-20)
 
