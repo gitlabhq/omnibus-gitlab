@@ -59,6 +59,7 @@ RSpec.describe PackageRepository do
 
     context 'on non-stable branch' do
       before do
+        unset_all_env_variables
         allow(IO).to receive(:popen).with(%w[git describe]).and_return("8.1.0+rc1.ce.0-1685-gd2a2c51\n")
       end
 
@@ -72,6 +73,7 @@ RSpec.describe PackageRepository do
 
     context 'on a stable branch' do
       before do
+        unset_all_env_variables
         allow(IO).to receive(:popen).with(%w[git describe]).and_return("8.12.8+ce.0-1-gdac92d4\n")
       end
 
@@ -135,8 +137,12 @@ RSpec.describe PackageRepository do
   describe '#upload' do
     describe 'with staging repository' do
       context 'when upload user is not specified' do
+        before do
+          unset_all_env_variables
+        end
+
         it 'prints a message and aborts' do
-          expect { repo.upload('my-staging-repository', true) }.to output(%r{User for uploading to package server not specified!\n}).to_stdout
+          expect { repo.upload('my-staging-repository', true) }.to output(%r{Owner of the repository to which packages are being uploaded not specified}).to_stdout
         end
       end
 
@@ -276,6 +282,14 @@ RSpec.describe PackageRepository do
         expect { repo.upload(nil, true) }.to raise_exception(%r{Found unexpected contents in the directory:})
       end
     end
+  end
+
+  def unset_all_env_variables
+    stub_env_var('PACKAGECLOUD_TOKEN', nil)
+    stub_env_var('PACKAGECLOUD_USER', nil)
+    stub_env_var('PACKAGECLOUD_REPO', nil)
+    stub_env_var('RASPBERRY_REPO', nil)
+    stub_env_var('STAGING_REPO', nil)
   end
 
   def set_all_env_variables
