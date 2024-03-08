@@ -93,6 +93,8 @@ if OhaiHelper.arm?
   else
     runtime_dependency 'libatomic1'
   end
+
+  allowed_lib /libatomic.so.1/ if OhaiHelper.raspberry_pi?
 end
 
 # FIPs requires system OpenSSL packages to run
