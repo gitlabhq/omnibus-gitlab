@@ -30,9 +30,17 @@ module Build
         softwares = version_manifest['software']
         results = {}
         Gitlab::Version::COMPONENTS_ENV_VARS.keys.map do |component|
-          next unless softwares.key?(component)
+          # For both `gitlab-rails` and `gitlab-rails-ee`, the key in
+          # version-manifest.json is `gitlab-rails`
+          version_manifest_key = if component == 'gitlab-rails' || component == 'gitlab-rails-ee'
+                                   'gitlab-rails'
+                                 else
+                                   component
+                                 end
 
-          results[component] = softwares[component]['locked_version']
+          next unless softwares.key?(version_manifest_key)
+
+          results[component] = softwares[version_manifest_key]['locked_version']
         end
 
         results

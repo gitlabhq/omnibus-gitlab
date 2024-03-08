@@ -666,6 +666,8 @@ RAT:
     - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
       when: manual
       allow_failure: true
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+      allow_failure: true
   needs:
     - job: Trigger:package
       artifacts: false
