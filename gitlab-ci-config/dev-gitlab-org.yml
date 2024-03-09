@@ -433,6 +433,37 @@ Raspberry-Pi-2-Bookworm-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_12:${BUILDER_IMAGE_REVISION}"
   extends: .rpi_branch_template
 
+# This job runs only on nightly EE builds
+RAT-Nightly:
+  stage: slow_jobs
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
+  script:
+    - bundle exec rake qa:rat:nightly
+  cache: !reference [.branch-cache]
+  needs:
+    - Ubuntu-22.04-branch
+  allow_failure: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+
+# This job runs only on nightly EE builds
+RAT-Nightly-FIPS:
+  stage: slow_jobs
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
+  variables:
+    USE_SYSTEM_SSL: "true"
+    RAT_REFERENCE_ARCHITECTURE: "omnibus-gitlab-mrs-fips"
+  script:
+    - bundle exec rake qa:rat:nightly
+  cache: !reference [.branch-cache]
+  needs:
+    - AlmaLinux-8-fips-branch
+  allow_failure: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+
 ############################
 #     Release pipeline     #
 ############################

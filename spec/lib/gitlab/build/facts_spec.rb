@@ -69,7 +69,6 @@ RSpec.describe Build::Facts do
   let(:component_shas) do
     {
       'gitlab-rails' => '6f286d7717f419489a08a9918621f438256e397b',
-      'gitlab-rails-ee' => '6f286d7717f419489a08a9918621f438256e397b',
       'gitaly' => 'b55578ec476e8bc8ecd9775ee7e9960b52e0f6e0',
       'gitlab-shell' => '264d63e81cbf08e3ae75e84433b8d09af15f351f',
       'gitlab-pages' => 'b0cb1f0c0783db2f5176301e6528fe41e1b42abf',
