@@ -74,22 +74,23 @@ These additional variables are available to override or enable different build b
 
 These variables are required to release packages built by the pipeline.
 
-| Environment Variable                          | Description |
-| --------------------------------------------- | ----------- |
-| `STAGING_REPO`                                  | Repository at `packages.gitlab.com` where releases are uploaded prior to final release. |
-| `PACKAGECLOUD_USER`                             | Packagecloud username for pushing packages to `packages.gitlab.com`. |
-| `PACKAGECLOUD_TOKEN`                            | API access token for pushing packages to `packages.gitlab.com`. |
-| `LICENSE_S3_BUCKET`                             | Bucket for storing release license information published on the public page at `https://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html`. |
-| `LICENSE_AWS_SECRET_ACCESS_KEY`                 | Account secret to read/write from the S3 bucket containing license information. |
-| `LICENSE_AWS_ACCESS_KEY_ID`                     | Account ID to read/write from the S3 bucket containing license information. |
-| `GCP_SERVICE_ACCOUNT`                           | Used to read/write metrics in Google Object Storage. |
-| `DOCKERHUB_USERNAME`                            | Username used when pushing the Omnibus GitLab image to Docker Hub. |
-| `DOCKERHUB_PASSWORD`                            | Password used when pushing the Omnibus GitLab image to Docker Hub. |
-| `AWS_ULTIMATE_LICENSE_FILE`                     | GitLab Ultimate license to use the Ultimate AWS AMIs. |
-| `AWS_PREMIUM_LICENSE_FILE`                      | GitLab Premium license to use the Ultimate AWS AMIs. |
-| `AWS_AMI_SECRET_ACCESS_KEY`                     | Account secret for read/write access to publish the AWS AMIs. |
-| `AWS_AMI_ACCESS_KEY_ID`                         | Account ID for read/write access to publish the AWS AMIs. |
-| `AWS_MARKETPLACE_ARN`                           | AWS ARN to allow AWS Marketplace access our official AMIs. |
+| Environment Variable                          | Description                                                                                                                                 |
+| --------------------------------------------- | -----------                                                                                                                                 |
+| `STAGING_REPO`                                | Repository at `packages.gitlab.com` where releases are uploaded prior to final release.                                                     |
+| `PACKAGECLOUD_USER`                           | Packagecloud username for pushing packages to `packages.gitlab.com`.                                                                        |
+| `PACKAGECLOUD_TOKEN`                          | API access token for pushing packages to `packages.gitlab.com`.                                                                             |
+| `LICENSE_S3_BUCKET`                           | Bucket for storing release license information published on the public page at `https://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html`. |
+| `LICENSE_AWS_SECRET_ACCESS_KEY`               | Account secret to read/write from the S3 bucket containing license information.                                                             |
+| `LICENSE_AWS_ACCESS_KEY_ID`                   | Account ID to read/write from the S3 bucket containing license information.                                                                 |
+| `GCP_SERVICE_ACCOUNT`                         | Used to read/write metrics in Google Object Storage.                                                                                        |
+| `DOCKERHUB_USERNAME`                          | Username used when pushing the Omnibus GitLab image to Docker Hub.                                                                          |
+| `DOCKERHUB_PASSWORD`                          | Password used when pushing the Omnibus GitLab image to Docker Hub.                                                                          |
+| `AWS_ULTIMATE_LICENSE_FILE`                   | GitLab Ultimate license to use the Ultimate AWS AMIs.                                                                                       |
+| `AWS_PREMIUM_LICENSE_FILE`                    | GitLab Premium license to use the Ultimate AWS AMIs.                                                                                        |
+| `AWS_AMI_SECRET_ACCESS_KEY`                   | Account secret for read/write access to publish the AWS AMIs.                                                                               |
+| `AWS_AMI_ACCESS_KEY_ID`                       | Account ID for read/write access to publish the AWS AMIs.                                                                                   |
+| `AWS_MARKETPLACE_ARN`                         | AWS ARN to allow AWS Marketplace access our official AMIs.                                                                                  |
+| `PACKAGE_PROMOTION_RUNNER_TAG`                | Tag associated with the shared runners used to run package promotion jobs.                                                            |
 
 **Available:**
 
