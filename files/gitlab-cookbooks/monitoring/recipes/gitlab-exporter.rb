@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
-redis_helper = RedisHelper.new(node)
+redis_helper = NewRedisHelper::GitlabExporter.new(node)
 logfiles_helper = LogfilesHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('gitlab-exporter')
 gitlab_user = account_helper.gitlab_user
@@ -51,8 +51,7 @@ connection_string += if node['postgresql']['enabled']
                      else
                        " host=#{node['gitlab']['gitlab_rails']['db_host']} port=#{node['gitlab']['gitlab_rails']['db_port']} password=#{node['gitlab']['gitlab_rails']['db_password']}"
                      end
-
-redis_url = redis_helper.redis_url(support_sentinel_groupname: false)
+redis_params = redis_helper.redis_params
 
 template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
   source "gitlab-exporter.yml.erb"
@@ -64,9 +63,9 @@ template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
     probe_elasticsearch: node['monitoring']['gitlab_exporter']['probe_elasticsearch'],
     elasticsearch_url: node['monitoring']['gitlab_exporter']['elasticsearch_url'],
     elasticsearch_authorization: node['monitoring']['gitlab_exporter']['elasticsearch_authorization'],
-    redis_url: redis_url,
+    redis_url: redis_params[:url],
     connection_string: connection_string,
-    redis_enable_client: node['gitlab']['gitlab_rails']['redis_enable_client']
+    redis_enable_client: redis_params[:enable_client]
   )
   sensitive true
 end
