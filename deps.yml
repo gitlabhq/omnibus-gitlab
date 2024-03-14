@@ -125,7 +125,7 @@ dependencies:
       # openssl
       https://github.com/openssl/openssl.git:
         replace_in_files:
-        - filename: config/software/openssl.rb
+        - filename: config/software/openssl_1.rb
           pattern: "Gitlab::Version.new\\('openssl', 'OpenSSL_1_1_(\\S+)'\\)"
           tag_prefix: 'OpenSSL_1_1_'
           semver: false
