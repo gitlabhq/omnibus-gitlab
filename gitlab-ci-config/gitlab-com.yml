@@ -405,6 +405,7 @@ danger-review:
     BUNDLE_WITH: "danger"
   rules:
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
 
 Centos 7 knapsack: !reference [.knapsack]
 AlmaLinux 8 knapsack: !reference [.knapsack]
