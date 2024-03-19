@@ -170,6 +170,25 @@ To manually trigger GitLab log rotation with `logrotate`, use the following comm
 /opt/gitlab/embedded/sbin/logrotate -fv -s /var/opt/gitlab/logrotate/logrotate.status /var/opt/gitlab/logrotate/logrotate.conf
 ```
 
+### Increase how often logrotate is triggered
+
+The logrotate script triggers every 50 minutes and waits for 10 minutes before attempting to rotate the logs.
+
+To modify these values:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   logrotate['pre_sleep'] = 600   # sleep 10 minutes before rotating after start-up
+   logrotate['post_sleep'] = 3000 # wait 50 minutes after rotating
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
 ## UDP log forwarding
 
 DETAILS:
