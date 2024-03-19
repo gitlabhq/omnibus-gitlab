@@ -174,7 +174,14 @@ command is available.
 #### Diagnose and resolve SELinux issues
 
 Omnibus GitLab detects default path changes in `/etc/gitlab/gitlab.rb` and should apply
-the correct file contexts. For installations using custom data path configuration,
+the correct file contexts.
+
+NOTE:
+From GitLab 16.10 forward, administrators can try `gitlab-ctl apply-sepolicy`
+to automatically fix SELinux issues. Consult
+`gitlab-ctl apply-sepolicy --help` for runtime options.
+
+For installations using custom data path configuration,
 the administrator may have to manually resolve SELinux issues.
 
 Data paths may be altered via `gitlab.rb`, however, a common scenario forces the
