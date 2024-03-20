@@ -3,6 +3,60 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.10.0 (2024-03-20)
+
+### Added (3 changes)
+
+- [Allow setting custom gitlab config for Gitaly](gitlab-org/omnibus-gitlab@85cbfdeaba630d0ea93a2d635268d805c9ed2caf) ([merge request](gitlab-org/omnibus-gitlab!7430))
+- [Add config support for container registry garbage collection](gitlab-org/omnibus-gitlab@32205d5500a71c233cc0aee9bf9ab972098c9c09) by @fh1ch ([merge request](gitlab-org/omnibus-gitlab!7447))
+- [Add active directory + smart card settings to gitlab.yml](gitlab-org/omnibus-gitlab@aab55e28a6d639052a26a84fe83eff73ee97039f) ([merge request](gitlab-org/omnibus-gitlab!7422))
+
+### Fixed (2 changes)
+
+- [Add missing locales for compatibility](gitlab-org/omnibus-gitlab@76ea02722328a8a0bdb0aef2a31a7d4ec1d87271) ([merge request](gitlab-org/omnibus-gitlab!7448))
+- [Fix when namespace_in_path is enabled and host URL is duplicated in URL](gitlab-org/omnibus-gitlab@c42ac1299ef44d4fb9cc0aca20a71e7c56ccafa4) ([merge request](gitlab-org/omnibus-gitlab!7425))
+
+### Changed (22 changes)
+
+- [Bump exiftool to version 12.78](gitlab-org/omnibus-gitlab@611636861b3cb812493b5ee8fdd9e95447bab1d5) ([merge request](gitlab-org/omnibus-gitlab!7476))
+- [Update prometheus from 2.49.1 to 2.50.1](gitlab-org/omnibus-gitlab@ae1b022f7e609c4aa2d55fbed2913c67c330d5fd) ([merge request](gitlab-org/omnibus-gitlab!7450))
+- [Update gitlab-org/container-registry from v3.89.0-gitlab to v3.90.0-gitlab](gitlab-org/omnibus-gitlab@7729c171f175d0df9473bf0c619b782ac5e5333d) ([merge request](gitlab-org/omnibus-gitlab!7466))
+- [Update alertmanager from 0.26.0 to 0.27.0](gitlab-org/omnibus-gitlab@35fc7cdbe1ed7bed51d523b9d4c73cdc2ec4d17a) ([merge request](gitlab-org/omnibus-gitlab!7457))
+- [Update pgbouncer/pgbouncer from pgbouncer_1_22_0 to pgbouncer_1_22_1](gitlab-org/omnibus-gitlab@54f743487f434a91a2fd6b09236eb9cff1497ee4) ([merge request](gitlab-org/omnibus-gitlab!7463))
+- [Update package signature dates to reflect GPG key extension](gitlab-org/omnibus-gitlab@a08a59cccd0808e80e1315a06cc6c2a4c6a5ca99) ([merge request](gitlab-org/omnibus-gitlab!7461))
+- [Update redis_exporter from 1.57.0 to 1.58.0](gitlab-org/omnibus-gitlab@724cf04c7e729d22a0e8286a8d4aa48531259537) ([merge request](gitlab-org/omnibus-gitlab!7437))
+- [Update gitlab-org/container-registry from v3.88.1-gitlab to v3.89.0-gitlab](gitlab-org/omnibus-gitlab@eb7e3ec5a146ff0baa4d27be2c67fae57ab64a48) ([merge request](gitlab-org/omnibus-gitlab!7456))
+- [Update consul from 1.16.5 to 1.16.6](gitlab-org/omnibus-gitlab@6a21dbb79552c5a99907df54933dc1cd5ac06701) ([merge request](gitlab-org/omnibus-gitlab!7426))
+- [Bump omnibus-ctl to version 0.6.12](gitlab-org/omnibus-gitlab@abd6802ec9cc7374bc34fab67c55860808bf6752) ([merge request](gitlab-org/omnibus-gitlab!7371))
+- [Update https://git.code.sf.net/p/libpng/code from 1.6.42 to 1.6.43](gitlab-org/omnibus-gitlab@67bd9748630e237b2fe4784b1903782a0afb89dd) ([merge request](gitlab-org/omnibus-gitlab!7451))
+- [Update Go to 1.21.7](gitlab-org/omnibus-gitlab@36c16a04b4c5b3fade05805a1fb48bed3567c1ad) ([merge request](gitlab-org/omnibus-gitlab!7449))
+- [Bump acme-client to 2.0.17](gitlab-org/omnibus-gitlab@220a5e613ce730c757001b39680a7ea00711a872) ([merge request](gitlab-org/omnibus-gitlab!7427))
+- [Update pcre2 from 10.42 to 10.43](gitlab-org/omnibus-gitlab@9ab4f45e2634aedfa72473f6353155a4d0bc3a3b) ([merge request](gitlab-org/omnibus-gitlab!7438))
+- [Bump Mattermost to release 9.5.1](gitlab-org/omnibus-gitlab@990c12e042a6021ae030832db123a80d593a6a63) by @mvitale1989 ([merge request](gitlab-org/omnibus-gitlab!7441))
+- [Update rubygems from 3.5.5 to 3.5.6](gitlab-org/omnibus-gitlab@ea96fedde56cd62adaf31891608ff973dd6880c5) ([merge request](gitlab-org/omnibus-gitlab!7420))
+- [Update exiftool/exiftool from 12.76 to 12.77](gitlab-org/omnibus-gitlab@10f5cc49b925ea8670b9093bc5c292e7bae28069) ([merge request](gitlab-org/omnibus-gitlab!7439))
+- [Update gitlab-exporter from 14.2.0 to 14.3.0](gitlab-org/omnibus-gitlab@0ea3e6a015c20a830b5a673d7c34fba39076bc5a) ([merge request](gitlab-org/omnibus-gitlab!7428))
+- [Consolidate SELinux policy into one module](gitlab-org/omnibus-gitlab@362ebe59b7aeb56e7168274a25eb665df097698d) ([merge request](gitlab-org/omnibus-gitlab!7295))
+- [Update consul from 1.16.4 to 1.16.5](gitlab-org/omnibus-gitlab@907faf6f018acdfc9803cf0d8a035dfb090fd5e4) ([merge request](gitlab-org/omnibus-gitlab!7376))
+- [Bump pgbouncer to version 1.22.0](gitlab-org/omnibus-gitlab@a7a923407d21862ac57b0a04e3b3e4cf516f8a26) ([merge request](gitlab-org/omnibus-gitlab!7405))
+- [Use gitlab-ruby-shadow gem instead of shadow source](gitlab-org/omnibus-gitlab@2fc9d058a77cc8ff59514fc5377325ad0d5c7988) ([merge request](gitlab-org/omnibus-gitlab!7418))
+
+### Deprecated (1 change)
+
+- [Deprecate 'omnibus_gitconfig'](gitlab-org/omnibus-gitlab@06b5f23f1f9d7dfcd768e4b6546c275775ecc69e) ([merge request](gitlab-org/omnibus-gitlab!7469))
+
+### Removed (1 change)
+
+- [Remove Pi OS 12 release jobs](gitlab-org/omnibus-gitlab@9b66c619abc5c18420ee0570d116a29958c831f8) ([merge request](gitlab-org/omnibus-gitlab!7431))
+
+### Performance (1 change)
+
+- [Increase net.core.somaxconn default to 2048](gitlab-org/omnibus-gitlab@bed2944180f24ffb984322b249f4ef2f4a077049) ([merge request](gitlab-org/omnibus-gitlab!7454))
+
+### Other (1 change)
+
+- [Update Patroni to 3.0.1](gitlab-org/omnibus-gitlab@faba9e7605768373c4747fa7062ab36c7be74205) ([merge request](gitlab-org/omnibus-gitlab!6898))
+
 ## 16.9.2 (2024-03-06)
 
 ### Security (1 change)
