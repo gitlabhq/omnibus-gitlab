@@ -51,6 +51,15 @@ module Build
       SkopeoHelper.copy_image(source, target)
     end
 
+    def copy_image_to_gitlab_registry(final_tag)
+      source = source_image_address
+      target = gitlab_registry_image_address(tag: final_tag)
+
+      SkopeoHelper.login('gitlab-ci-token', Gitlab::Util.get_env('CI_JOB_TOKEN'), Gitlab::Util.get_env('CI_REGISTRY'))
+
+      SkopeoHelper.copy_image(source, target)
+    end
+
     def source_image_address
       raise NotImplementedError
     end
