@@ -55,6 +55,7 @@ RSpec.describe 'docker', type: :rake do
 
       allow(ENV).to receive(:[]).and_call_original
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('dev.gitlab.org:5005/gitlab/omnibus-gitlab')
+      allow(ENV).to receive(:[]).with('CI_COMMIT_REF_SLUG').and_return('foo-bar')
       allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
       allow(Build::Info::Docker).to receive(:tag).and_return('9.0.0')
       allow(DockerOperations).to receive(:authenticate).and_return(true)
@@ -65,6 +66,7 @@ RSpec.describe 'docker', type: :rake do
 
     it 'pushes to staging correctly' do
       expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0')
+      expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:foo-bar')
       Rake::Task['docker:push:staging'].invoke
     end
 

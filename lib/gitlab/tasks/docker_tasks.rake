@@ -28,6 +28,10 @@ namespace :docker do
     task :staging do
       Gitlab::Util.section('docker:push:staging') do
         Build::GitlabImage.tag_and_push_to_gitlab_registry(Build::Info::Docker.tag)
+
+        # Also tag with CI_COMMIT_REF_SLUG so that manual testing using Docker
+        # can use the same image name/tag.
+        Build::GitlabImage.tag_and_push_to_gitlab_registry(Build::Info::CI.commit_ref_slug)
       end
     end
 
