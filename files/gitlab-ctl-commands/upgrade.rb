@@ -334,7 +334,7 @@ def postgresql_upgrade_disabled?
 end
 
 def geo_detected?
-  (GitlabCtl::Util.roles(base_path) & %w[geo-primary geo-secondary]).any? || service_enabled?('geo-postgresql')
+  (GitlabCtl::Util.roles(base_path) & %w[geo_primary geo_secondary]).any? || service_enabled?('geo-postgresql')
 end
 
 def patroni_detected?
@@ -344,7 +344,7 @@ end
 def attempt_auto_pg_upgrade?
   # This must return false when the opt-in PostgreSQL version is the default for pg-upgrade,
   # otherwise it must be true.
-  false
+  true
 end
 
 def recommend_pg_upgrade?
