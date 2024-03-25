@@ -800,16 +800,16 @@ Before proceeding with the upgrade, note the following:
   [default version in the compatibility table](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html)
   determines which client binaries (such as the PostgreSQL backup/restore binaries) are active.
 
-The following example demonstrates upgrading from a database host running PostgreSQL 12 to another database host running PostgreSQL 13 and incurs downtime:
+The following example demonstrates upgrading from a database host running PostgreSQL 13 to another database host running PostgreSQL 14 and incurs downtime:
 
-1. Spin up a new PostgreSQL 13 database server that's set up according to the [database requirements](https://docs.gitlab.com/ee/install/requirements.html#database).
+1. Spin up a new PostgreSQL 14 database server that's set up according to the [database requirements](https://docs.gitlab.com/ee/install/requirements.html#database).
 
 1. Ensure that the compatible versions of `pg_dump` and `pg_restore` are being
    used on the GitLab Rails instance. To amend GitLab configuration, edit
    `/etc/gitlab/gitlab.rb` and specify the value of `postgresql['version']`:
 
     ```ruby
-    postgresql['version'] = 13
+    postgresql['version'] = 14
     ```
 
 1. Reconfigure GitLab:
@@ -835,10 +835,10 @@ when your installation is using PgBouncer.
    sudo gitlab-backup create SKIP=repositories,uploads,builds,artifacts,lfs,pages,registry
    ```
 
-1. Shutdown the PostgreSQL 12 database host.
+1. Shutdown the PostgreSQL 13 database host.
 
 1. Edit `/etc/gitlab/gitlab.rb` and update the `gitlab_rails['db_host']` setting
-   to point to the PostgreSQL database 13 host.
+   to point to the PostgreSQL database 14 host.
 
 1. Reconfigure GitLab:
 
@@ -910,12 +910,8 @@ gitlab_rails['initial_shared_runners_registration_token'] = 'token'
 
 ### Pin the packaged PostgreSQL version (fresh installs only)
 
-NOTE:
-GitLab 14.1 and onward shipped with both Postgres 12 and Postgres 13.
-GitLab 14.0 only ships with PostgreSQL 12. GitLab 13.3 and onward shipped both Postgres 11 and Postgres 12.
-GitLab 13.0 through 13.2 only shipped with PostgreSQL 11.
-
-The Linux package installation initializes PostgreSQL with the [default version](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html).
+The Linux package ships with [different PostgreSQL versions](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html)
+and initializes the default version if not specified otherwise.
 
 To initialize PostgreSQL with a non-default version, you can set `postgresql['version']` to the major version one of
 the [packaged PostgreSQL versions](https://docs.gitlab.com/ee/administration/package_information/postgresql_versions.html) prior to the initial reconfigure.
