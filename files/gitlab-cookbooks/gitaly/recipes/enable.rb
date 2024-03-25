@@ -32,6 +32,8 @@ cgroups_mountpoint = node.dig('gitaly', 'configuration', 'cgroups', 'mountpoint'
 cgroups_hierarchy_root = node.dig('gitaly', 'configuration', 'cgroups', 'hierarchy_root')
 use_wrapper = node['gitaly']['use_wrapper']
 
+include_recipe 'gitaly::git_data_dirs'
+
 directory working_dir do
   owner account_helper.gitlab_user
   mode '0700'

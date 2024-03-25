@@ -1033,6 +1033,26 @@ RSpec.describe 'gitaly::git_data_dirs' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+
+    stub_gitlab_rb(gitlab_rails: {
+                     enable: false,
+                   }, gitaly: {
+                     enable: true,
+                   }, git_data_dirs: {
+                     'default' => {
+                       'path' => '/tmp/git-data'
+                     }
+                   })
+  end
+
+  include_examples "git data directory", "/tmp/git-data"
+end
+
+RSpec.describe 'git_data_dirs configuration' do
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+
+  before do
+    allow(Gitlab).to receive(:[]).and_call_original
   end
 
   context 'when user has not specified git_data_dir' do
