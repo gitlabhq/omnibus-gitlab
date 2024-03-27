@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.10.1 (2024-03-27)
+
+### Security (1 change)
+
+- [Use February 2024 PostgreSQL patches](gitlab-org/security/omnibus-gitlab@0c024ae6e8c411cd46f807614bbc34358b8afd99) ([merge request](gitlab-org/security/omnibus-gitlab!424))
+
 ## 16.10.0 (2024-03-20)
 
 ### Added (3 changes)
@@ -57,6 +63,12 @@ omnibus-gitlab repository.
 
 - [Update Patroni to 3.0.1](gitlab-org/omnibus-gitlab@faba9e7605768373c4747fa7062ab36c7be74205) ([merge request](gitlab-org/omnibus-gitlab!6898))
 
+## 16.9.3 (2024-03-27)
+
+### Security (1 change)
+
+- [Use February 2024 PostgreSQL patches](gitlab-org/security/omnibus-gitlab@b393525dd209f7bda0fbf28e6a700db1931c1388) ([merge request](gitlab-org/security/omnibus-gitlab!422))
+
 ## 16.9.2 (2024-03-06)
 
 ### Security (1 change)
@@ -110,6 +122,12 @@ No changes.
 
 - [Update PostgreSQL 13 and 14](gitlab-org/omnibus-gitlab@8d6a65a402e0aa6fc7f826c424cb778f3e0d8b79)
 - [Update libxml2 from 2.10.4 to 2.12.3](gitlab-org/omnibus-gitlab@18f0dcced0f8597992b87bb0b01ae5d9f782842f)
+
+## 16.8.5 (2024-03-27)
+
+### Security (1 change)
+
+- [Use February 2024 PostgreSQL patches](gitlab-org/security/omnibus-gitlab@1fa15547b5bba266e32cdd1f3f41a513430e1af8) ([merge request](gitlab-org/security/omnibus-gitlab!423))
 
 ## 16.8.4 (2024-03-06)
 
