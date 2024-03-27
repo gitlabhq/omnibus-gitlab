@@ -29,9 +29,9 @@
   - github.com/hashicorp/consul/api
   - MPL2
   - :who: Dustin Collins
-    :why: https://github.com/hashicorp/consul/blob/api/v1.27.0/api/LICENSE
-    :versions: [ v1.27.0 ]
-    :when: 2024-02-26 14:21:19.937703316 Z
+    :why: https://github.com/hashicorp/consul/blob/api/v1.28.2/api/LICENSE
+    :versions: [ v1.28.2 ]
+    :when: 2024-03-25 14:21:19.937703316 Z
 - - :license
   - gitlab.com/lupine/icu
   - BSD-2-Clause
@@ -182,9 +182,9 @@
   - github.com/hashicorp/nomad/api
   - MPL2
   - :who: Clemens Beck
-    :why: https://github.com/hashicorp/nomad/blob/515895c7690cdc72278018dc5dc58aca41204ccc/LICENSE
-    :versions: [ v0.0.0-20230721134942-515895c7690c ]
-    :when: 2023-04-03 12:41:28.825087612 Z
+    :why: https://github.com/hashicorp/nomad/blob/3e7191ccb7028d40fcaed9b6010474b0dd136927/api/LICENSE
+    :versions: [ v0.0.0-20240306004928-3e7191ccb702 ]
+    :when: 2024-03-25 12:41:28.825087612 Z
 - - :license
   - github.com/kieler/elkjs
   - EPL-2.0
