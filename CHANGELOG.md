@@ -123,6 +123,12 @@ No changes.
 - [Update PostgreSQL 13 and 14](gitlab-org/omnibus-gitlab@8d6a65a402e0aa6fc7f826c424cb778f3e0d8b79)
 - [Update libxml2 from 2.10.4 to 2.12.3](gitlab-org/omnibus-gitlab@18f0dcced0f8597992b87bb0b01ae5d9f782842f)
 
+## 16.8.5 (2024-03-27)
+
+### Security (1 change)
+
+- [Use February 2024 PostgreSQL patches](gitlab-org/security/omnibus-gitlab@1fa15547b5bba266e32cdd1f3f41a513430e1af8) ([merge request](gitlab-org/security/omnibus-gitlab!423))
+
 ## 16.8.4 (2024-03-06)
 
 ### Security (1 change)
