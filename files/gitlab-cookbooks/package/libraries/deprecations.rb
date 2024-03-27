@@ -550,7 +550,12 @@ module Gitlab
         # Getting settings from gitlab.rb that are in deprecations list and
         # has been removed in incoming or a previous version.
         current_deprecations = list(existing_config).select { |deprecation| version >= Gem::Version.new(deprecation[type]) }
-        current_deprecations.select { |deprecation| !existing_config.dig(*deprecation[:config_keys]).nil? }
+
+        # If the value of the configuration is `nil` or an empty hash (in case
+        # of root configurations where ConfigMash logic in SettingsDSL will set
+        # an empty Hash as the default value), then the configuration is a
+        # valid deprecation that user has to be warned about.
+        current_deprecations.select { |deprecation| !(existing_config.dig(*deprecation[:config_keys]).nil? || (existing_config.dig(*deprecation[:config_keys]).is_a?(Hash) && existing_config.dig(*deprecation[:config_keys])&.empty?)) }
       end
 
       def check_config(incoming_version, existing_config, type = :removal)
