@@ -49,7 +49,7 @@ RSpec.describe 'aws:ami:create', type: :rake do
       allow(Build::Check).to receive(:on_tag?).and_return(true)
       allow(Build::Check).to receive(:is_auto_deploy?).and_return(false)
       allow(Build::Check).to receive(:is_rc_tag?).and_return(false)
-      allow(Build::Info::CI).to receive(:package_download_url).and_return('http://example.com')
+      allow(Build::Info::CI).to receive(:branch_build_package_download_url).and_return('http://example.com')
     end
 
     it 'should identify ce category correctly, if specified' do
@@ -129,7 +129,7 @@ RSpec.describe 'aws:ami:create', type: :rake do
       allow(Build::Check).to receive(:on_tag?).and_return(true)
       allow(Build::Check).to receive(:is_auto_deploy?).and_return(false)
       allow(Build::Check).to receive(:is_rc_tag?).and_return(true)
-      allow(Build::Info::CI).to receive(:package_download_url).and_return('http://example.com')
+      allow(Build::Info::CI).to receive(:branch_build_package_download_url).and_return('http://example.com')
     end
 
     it 'does not do anything' do
@@ -144,7 +144,7 @@ RSpec.describe 'aws:ami:create', type: :rake do
       allow(Build::Check).to receive(:on_tag?).and_return(true)
       allow(Build::Check).to receive(:is_auto_deploy?).and_return(true)
       allow(Build::Check).to receive(:is_rc_tag?).and_return(false)
-      allow(Build::Info::CI).to receive(:package_download_url).and_return('http://example.com')
+      allow(Build::Info::CI).to receive(:branch_build_package_download_url).and_return('http://example.com')
     end
 
     it 'does not do anything' do
