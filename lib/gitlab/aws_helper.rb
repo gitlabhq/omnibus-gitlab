@@ -29,7 +29,7 @@ class AWSHelper
       architecture = 'amd64'
     end
 
-    @download_url = Build::Info::CI.package_download_url(job_name: "Ubuntu-20.04", arch: architecture)
+    @download_url = Build::Info::CI.branch_build_package_download_url(job_name: "Ubuntu-20.04", arch: architecture)
 
     system(*%W[support/packer/packer_ami.sh #{@version} #{@type} #{@download_url} #{Build::Info::CI.job_token} #{@license_file}])
   end

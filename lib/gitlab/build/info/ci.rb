@@ -38,6 +38,26 @@ module Build
           Gitlab::Util.get_env('CI_COMMIT_REF_SLUG')
         end
 
+        def package_download_url
+          return Gitlab::Util.get_env('PACKAGE_URL') if Gitlab::Util.get_env('PACKAGE_URL')
+
+          # For builds running in dev.gitlab.org, or nightly pipelines in .com,
+          # use the artifact from `Ubuntu-22.04-branch` job. For the other build,
+          # which is essentially in triggered pipeline, use artifact from
+          # `Trigger:package` job.
+          if /dev.gitlab.org/.match?(Build::Info::CI.api_v4_url) || Build::Check.is_nightly?
+            Build::Info::CI.branch_build_package_download_url
+          else
+            Build::Info::CI.triggered_package_download_url(fips: false)
+          end
+        end
+
+        def fips_package_download_url
+          return Gitlab::Util.get_env('FIPS_PACKAGE_URL') if Gitlab::Util.get_env('FIPS_PACKAGE_URL')
+
+          Build::Info::CI.triggered_package_download_url(fips: false)
+        end
+
         def artifact_url(job_name, file_path)
           client = Gitlab::APIClient.new
           target_job_id = client.get_job_id(job_name)
@@ -55,7 +75,7 @@ module Build
           artifact_url(job_name, package_path)
         end
 
-        def package_download_url(job_name: "Ubuntu-22.04", arch: 'amd64')
+        def branch_build_package_download_url(job_name: "Ubuntu-22.04", arch: 'amd64')
           case job_name
           when /AlmaLinux-8/
             # In EL world, amd64 is called x86_64

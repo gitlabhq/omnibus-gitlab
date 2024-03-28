@@ -667,9 +667,15 @@ RAT:
     - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
       when: manual
       allow_failure: true
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+      allow_failure: true
   needs:
+    - job: Ubuntu-22.04-branch
+      artifacts: false
+      optional: true
     - job: Trigger:package
       artifacts: false
+      optional: true
     - job: generate-facts
       artifacts: true
 
@@ -679,8 +685,12 @@ RAT:FIPS:
     PACKAGE_URL: ${RAT_FIPS_PACKAGE_URL}
     REFERENCE_ARCHITECTURE: ${RAT_FIPS_REFERENCE_ARCHITECTURE}
   needs:
+    - job: Ubuntu-20.04-fips-branch
+      artifacts: false
+      optional: true
     - job: Trigger:package:fips
       artifacts: false
+      optional: true
     - job: generate-facts
       artifacts: true
 
