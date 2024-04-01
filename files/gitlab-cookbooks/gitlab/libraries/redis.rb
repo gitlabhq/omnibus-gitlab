@@ -78,8 +78,9 @@ module Redis
       return unless redis_managed?
 
       redis_bind = Gitlab['redis']['bind'] || node['redis']['bind']
+      Gitlab['redis']['default_host'] = redis_bind.split(' ').first
 
-      Gitlab['gitlab_rails']['redis_host'] ||= redis_bind
+      Gitlab['gitlab_rails']['redis_host'] ||= Gitlab['redis']['default_host']
 
       redis_port_config_key = if Gitlab['redis'].key?('port') && !Gitlab['redis']['port'].zero?
                                 # If Redis is specified to run on a non-TLS port
