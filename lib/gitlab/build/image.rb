@@ -1,4 +1,5 @@
 require_relative '../util'
+require_relative '../skopeo_helper'
 require_relative '../docker_operations'
 require_relative 'info/docker'
 
@@ -38,6 +39,20 @@ module Build
         final_tag
       )
       puts "Pushed #{dockerhub_image_name}:#{final_tag} to Docker Hub"
+    end
+
+    def copy_image_to_dockerhub(final_tag)
+      source = source_image_address
+      target = "#{dockerhub_image_name}:#{final_tag}"
+
+      SkopeoHelper.login('gitlab-ci-token', Gitlab::Util.get_env('CI_JOB_TOKEN'), Gitlab::Util.get_env('CI_REGISTRY'))
+      SkopeoHelper.login(Gitlab::Util.get_env('DOCKERHUB_USERNAME'), Gitlab::Util.get_env('DOCKERHUB_PASSWORD'), 'docker.io')
+
+      SkopeoHelper.copy_image(source, target)
+    end
+
+    def source_image_address
+      raise NotImplementedError
     end
 
     def write_release_file

@@ -38,28 +38,50 @@ namespace :docker do
 
     task :stable do
       Gitlab::Util.section('docker:push:stable') do
-        Build::GitlabImage.tag_and_push_to_dockerhub(Build::Info::Docker.tag)
+        if Gitlab::Util.get_env('USE_SKOPEO_FOR_DOCKER_RELEASE') == 'true'
+          Build::GitlabImage.copy_image_to_dockerhub(Build::Info::Docker.tag)
+        else
+          Build::GitlabImage.tag_and_push_to_dockerhub(Build::Info::Docker.tag)
+        end
       end
     end
 
     # Special tags
     task :nightly do
+      next unless Build::Check.is_nightly?
+
       Gitlab::Util.section('docker:push:nightly') do
-        Build::GitlabImage.tag_and_push_to_dockerhub('nightly') if Build::Check.is_nightly?
+        if Gitlab::Util.get_env('USE_SKOPEO_FOR_DOCKER_RELEASE') == 'true'
+          Build::GitlabImage.copy_image_to_dockerhub('nightly')
+        else
+          Build::GitlabImage.tag_and_push_to_dockerhub('nightly')
+        end
       end
     end
 
     # push as :rc tag, the :rc is always the latest tagged release
     task :rc do
+      next unless Build::Check.is_latest_tag?
+
       Gitlab::Util.section('docker:push:rc') do
-        Build::GitlabImage.tag_and_push_to_dockerhub('rc') if Build::Check.is_latest_tag?
+        if Gitlab::Util.get_env('USE_SKOPEO_FOR_DOCKER_RELEASE') == 'true'
+          Build::GitlabImage.copy_image_to_dockerhub('rc')
+        else
+          Build::GitlabImage.tag_and_push_to_dockerhub('rc')
+        end
       end
     end
 
     # push as :latest tag, the :latest is always the latest stable release
     task :latest do
+      next unless Build::Check.is_latest_stable_tag?
+
       Gitlab::Util.section('docker:push:latest') do
-        Build::GitlabImage.tag_and_push_to_dockerhub('latest') if Build::Check.is_latest_stable_tag?
+        if Gitlab::Util.get_env('USE_SKOPEO_FOR_DOCKER_RELEASE') == 'true'
+          Build::GitlabImage.copy_image_to_dockerhub('latest')
+        else
+          Build::GitlabImage.tag_and_push_to_dockerhub('latest')
+        end
       end
     end
 
@@ -78,6 +100,11 @@ namespace :docker do
   desc "Pull Docker Image from Registry"
   namespace :pull do
     task :staging do
+      if Gitlab::Util.get_env('USE_SKOPEO_FOR_DOCKER_RELEASE') == 'true'
+        puts "USE_SKOPEO_FOR_DOCKER_RELEASE is set. So skipping pulling image."
+        next
+      end
+
       Gitlab::Util.section('docker:pull:staging') do
         DockerOperations.authenticate("gitlab-ci-token", Gitlab::Util.get_env("CI_JOB_TOKEN"), Gitlab::Util.get_env('CI_REGISTRY'))
         Build::GitlabImage.pull

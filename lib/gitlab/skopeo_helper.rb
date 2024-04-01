@@ -34,7 +34,10 @@ class SkopeoHelper
       end
 
       puts "\nCopying image `#{source}` to `#{target}`"
-      status = system(*%W[skopeo copy docker://#{source} docker://#{target}])
+
+      # The --all flag is used to support multi-arch, so we can copy all images
+      # with a single command
+      status = system(*%W[skopeo copy --all docker://#{source} docker://#{target}])
 
       raise "Failed to copy image." unless status
     end

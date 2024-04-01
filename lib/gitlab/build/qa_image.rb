@@ -1,4 +1,3 @@
-require_relative '../skopeo_helper'
 require_relative 'gitlab_image'
 require_relative 'image'
 require_relative 'info/qa'
@@ -15,14 +14,8 @@ module Build
       "#{Build::GitlabImage.gitlab_registry_image_name}-qa"
     end
 
-    def self.copy_image_to_dockerhub(final_tag)
-      source = Build::Info::QA.image
-      target = "#{dockerhub_image_name}:#{final_tag}"
-
-      SkopeoHelper.login('gitlab-ci-token', Gitlab::Util.get_env('CI_JOB_TOKEN'), Gitlab::Util.get_env('CI_REGISTRY'))
-      SkopeoHelper.login(Gitlab::Util.get_env('DOCKERHUB_USERNAME'), Gitlab::Util.get_env('DOCKERHUB_PASSWORD'), 'docker.io')
-
-      SkopeoHelper.copy_image(source, target)
+    def self.source_image_address
+      Build::Info::QA.image
     end
   end
 end

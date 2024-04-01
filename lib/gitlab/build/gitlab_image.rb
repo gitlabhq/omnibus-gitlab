@@ -12,5 +12,9 @@ module Build
     def self.gitlab_registry_image_name
       Build::Info::Package.name
     end
+
+    def self.source_image_address
+      gitlab_registry_image_address(tag: Build::Info::Docker.tag)
+    end
   end
 end
