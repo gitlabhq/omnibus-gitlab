@@ -33,7 +33,7 @@ RSpec.describe SkopeoHelper do
     it 'calls skopeo copy command with correct arguments' do
       allow(Open3).to receive(:popen2e).with(*%w[skopeo inspect docker://foobar]).and_yield(nil, double(read: 'dummy_output'), double(value: double(success?: true)))
 
-      expect(described_class).to receive(:system).with(*%w[skopeo copy docker://foobar docker://dummy-target])
+      expect(described_class).to receive(:system).with(*%w[skopeo copy --all docker://foobar docker://dummy-target])
 
       described_class.copy_image('foobar', 'dummy-target')
     end
