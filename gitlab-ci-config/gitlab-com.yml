@@ -42,7 +42,7 @@
       - gems
       - assets_cache
       - node_modules
-    policy: pull
+    policy: $CACHE_POLICY
 
 .trigger-fips-package-cache:
   cache:
@@ -52,7 +52,7 @@
       - gems
       - assets_cache
       - node_modules
-    policy: pull
+    policy: $CACHE_POLICY
 
 .install-gems: &install-gems
   - gem install bundler:${BUNDLER_VERSION}
@@ -133,6 +133,8 @@
       junit: junit_rspec.xml
 
 .base-trigger-job-variables:
+  # In trigger jobs, we don't want to pollute cache
+  CACHE_POLICY: 'pull'
   ALTERNATIVE_SOURCES: 'true'
   SECURITY_SOURCES: ${SECURITY_SOURCES}
   BUILDER_IMAGE_REVISION: ${BUILDER_IMAGE_REVISION}
@@ -177,17 +179,6 @@
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
       when: manual
       variables: !reference [.ce-trigger-job-variables]
-
-.trigger-pipeline:
-  stage: trigger-qa
-  image: "${RUBY_IMAGE}"
-  allow_failure: true
-  rules:
-    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
-      when: manual
-  needs:
-    - job: Trigger:package
-      artifacts: false
 
 .review-docs:
   image: "${RUBY_IMAGE}-alpine"
@@ -258,22 +249,6 @@ update-gems-cache-for-docker-jobs:
   extends:
     - update-gems-cache
     - .docker_job
-
-update-trigger-package-cache:
-  extends: .trigger-package-cache
-  stage: update-cache
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
-  script:
-    - !reference [.build-package]
-    - echo "Cache is up to date!"
-  cache:
-    policy: push  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
-  tags: !reference [.distribution-amd64-tags]
-  rules:
-    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
-  needs:
-    - job: fetch-assets
-      optional: true
 
 ###########################
 #     Branch pipeline     #
@@ -526,25 +501,6 @@ update-knapsack:
 #     Trigger Pipeline     #
 ############################
 
-Trigger:package:
-  extends: .trigger-package-common
-  variables:
-    BASE_OS: "ubuntu_22.04"
-    PACKAGE_DIRECTORY: "pkg/ubuntu-jammy"
-
-Trigger:package:fips:
-  extends:
-    - .trigger-package-common
-    - .trigger-fips-package-cache
-  variables:
-    USE_SYSTEM_SSL: "true"
-    BASE_OS: "ubuntu_20.04_fips"
-    PACKAGE_DIRECTORY: "pkg/ubuntu-focal_fips"
-  allow_failure: true
-  rules:
-    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
-      when: manual
-
 package_size_check:
   extends: .trigger-package-cache
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
@@ -553,28 +509,10 @@ package_size_check:
     - bundle exec rake build:package:generate_sizefile
     - bundle exec rake check:package_size
   needs:
-    - job: Trigger:package
+    - job: Ubuntu-22.04-branch
       artifacts: false
   rules:
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
-
-Trigger:gitlab-docker:
-  extends:
-    - .docker_job
-    - .gems-cache
-  stage: trigger-docker
-  script:
-    - bundle exec rake docker:build:image
-    - bundle exec rake docker:push:triggered
-  rules:
-    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
-    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
-  needs:
-    - job: Trigger:package
-      artifacts: false
-    - job: generate-facts
-      optional: true
-      artifacts: true
 
 qa-subset-test:
   extends:
@@ -602,9 +540,10 @@ qa-subset-test:
   needs:
     - job: generate-facts
       artifacts: true
-    - job: Trigger:package
+    - job: Ubuntu-22.04-branch
       artifacts: false
-    - job: Trigger:gitlab-docker
+    - job: Docker-branch
+      optional: true
       artifacts: false
 
 qa-remaining-test-manual:
@@ -629,9 +568,10 @@ qa-remaining-test-manual:
   needs:
     - job: generate-facts
       artifacts: true
-    - job: Trigger:package
+    - job: Ubuntu-22.04-branch
       artifacts: false
-    - job: Trigger:gitlab-docker
+    - job: Docker-branch
+      optional: true
       artifacts: false
 
 letsencrypt-test:
@@ -647,7 +587,7 @@ letsencrypt-test:
       when: never
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
   needs:
-    - job: Trigger:gitlab-docker
+    - job: Docker-branch
       artifacts: false
 
 RAT:
@@ -672,10 +612,6 @@ RAT:
   needs:
     - job: Ubuntu-22.04-branch
       artifacts: false
-      optional: true
-    - job: Trigger:package
-      artifacts: false
-      optional: true
     - job: generate-facts
       artifacts: true
 
@@ -687,10 +623,6 @@ RAT:FIPS:
   needs:
     - job: Ubuntu-20.04-fips-branch
       artifacts: false
-      optional: true
-    - job: Trigger:package:fips
-      artifacts: false
-      optional: true
     - job: generate-facts
       artifacts: true
 
@@ -712,7 +644,7 @@ GET:Geo:
       when: manual
       allow_failure: true
   needs:
-    - job: Trigger:package
+    - job: Ubuntu-22.04-branch
       artifacts: false
     - job: generate-facts
       artifacts: true
@@ -793,7 +725,7 @@ pages:
 
 .build-package-on-all-os-vars:
   extends: .base-trigger-job-variables
-  SKIP_JOB_REGEX: '/Ubuntu-22.04|Docker|QA/'
+  SKIP_JOB_REGEX: '/Ubuntu-22.04|Ubuntu-20.04-fips|Docker|QA/'
   PIPELINE_TYPE: "${EDITION}_BRANCH_BUILD_PIPELINE"
   CACHE_EDITION: ${EDITION}
   ee: ${ee}

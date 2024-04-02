@@ -91,8 +91,8 @@ module Build
           GITLAB_SEMVER_VERSION=#{Build::Info::Git.latest_stable_tag.tr('+', '-')}
           RAT_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs'}
           RAT_FIPS_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_FIPS_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs-fips-ubuntu'}
-          RAT_PACKAGE_URL=#{Build::Info::CI.package_download_url}
-          RAT_FIPS_PACKAGE_URL=#{Build::Info::CI.fips_package_download_url}
+          RAT_PACKAGE_URL=#{Build::Info::CI.package_download_url(fips: false)}
+          RAT_FIPS_PACKAGE_URL=#{Build::Info::CI.package_download_url(job_name: 'Ubuntu-20.04', fips: true)}
         ]
       end
 
