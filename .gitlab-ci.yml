@@ -60,6 +60,7 @@ variables:
   DOCS_GITLAB_REPO_SUFFIX: "omnibus"
   CACHE_KEY_SUFFIX: '-v3'
   CACHE_EDITION: "CE"
+  CACHE_POLICY: 'pull-push'
   ISSUE_BOT_LABELS_EXTRA: "group::distribution"
   BUNDLER_VERSION: "2.5.6"
   # NOTE: When `NEXT_RUBY_VERSION` is updated, flip
