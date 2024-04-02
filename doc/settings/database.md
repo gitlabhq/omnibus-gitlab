@@ -582,6 +582,7 @@ this.
 ### Configuring multiple database connections
 
 > - The `gitlab:db:decomposition:connection_status` Rake task was [introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/111927) in GitLab 15.11.
+> - Support for single database will be [removed in GitLab 18.0](https://docs.gitlab.com/ee/update/deprecations.html#running-a-single-database-is-deprecated).
 
 In GitLab 16.0, GitLab defaults to using two database connections that point to the same PostgreSQL database.
 
