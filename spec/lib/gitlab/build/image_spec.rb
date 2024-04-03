@@ -159,7 +159,7 @@ RSpec.describe Build::Image do
             "PACKAGECLOUD_REPO=download-package",
             "RELEASE_PACKAGE=gitlab-ce",
             "RELEASE_VERSION=12.121.12-ce.0",
-            "DOWNLOAD_URL=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab-ce_12.121.12-ce.0_amd64.deb",
+            "DOWNLOAD_URL=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab.deb",
             "CI_JOB_TOKEN=NOT-CI-JOB-TOKEN\n"
           ].join("\n")
         end
@@ -180,7 +180,7 @@ RSpec.describe Build::Image do
             "PACKAGECLOUD_REPO=download-package",
             "RELEASE_PACKAGE=gitlab-ee",
             "RELEASE_VERSION=12.121.12-ee.0",
-            "DOWNLOAD_URL=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab-ee_12.121.12-ee.0_amd64.deb",
+            "DOWNLOAD_URL=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab.deb",
             "CI_JOB_TOKEN=NOT-CI-JOB-TOKEN\n"
           ].join("\n")
         end
