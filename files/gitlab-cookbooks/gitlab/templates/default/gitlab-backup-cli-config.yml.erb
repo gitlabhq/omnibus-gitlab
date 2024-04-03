@@ -1,0 +1,9 @@
+<% gitlab_rails_dir = node['gitlab']['gitlab_rails']['dir'] %>
+<% gitlab_rails_etc_dir = File.join(gitlab_rails_dir, 'etc') %>
+
+version: 1
+installation_type: "omnibus"
+gitlab:
+  config_path: <%= File.join(gitlab_rails_etc_dir, 'gitlab.yml') %>
+database:
+  config_path: <%= File.join(gitlab_rails_etc_dir, 'database.yml') %>
