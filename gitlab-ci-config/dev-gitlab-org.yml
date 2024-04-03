@@ -34,13 +34,11 @@
 .branch-cache: &branch-cache
   key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
   paths: !reference [.cache-paths]
-  policy: $CACHE_POLICY
 
 .tag-cache: &tag-cache
   # Use the same cache key as branch builds, by manually appending `-branch` substring.
   key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
   paths: !reference [.cache-paths]
-  policy: $CACHE_POLICY
 
 .branch_template: &branch_build
   stage: package
@@ -284,11 +282,6 @@ Ubuntu-20.04-branch:
 Ubuntu-22.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
-    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
-    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
 Debian-10-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
@@ -314,12 +307,6 @@ Ubuntu-20.04-arm64-branch:
 Ubuntu-22.04-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
-    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
-      when: manual
-      allow_failure: true
 CentOS-7-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -381,15 +368,6 @@ Ubuntu-18.04-fips-branch:
 Ubuntu-20.04-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
-    - if: '$PIPELINE_TYPE == "EE_BRANCH_BUILD_PIPELINE"'
-      when: manual
-      allow_failure: true
-    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
-      when: manual
-      allow_failure: true
 
 Docker-branch:
   extends: .docker_job
@@ -410,8 +388,6 @@ Docker-branch:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
-    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
-    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
 QA-branch:
   extends: .docker_job
