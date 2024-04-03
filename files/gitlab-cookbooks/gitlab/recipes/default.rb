@@ -83,6 +83,9 @@ include_recipe "gitlab::web-server"
 # `account` custom resource will not create them.
 include_recipe "gitlab::users"
 
+# Recipe for gitlab-backup-cli tool
+include_recipe "gitlab::gitlab-backup-cli"
+
 include_recipe "gitlab::gitlab-rails" if node['gitlab']['gitlab_rails']['enable']
 
 include_recipe "gitlab::selinux"

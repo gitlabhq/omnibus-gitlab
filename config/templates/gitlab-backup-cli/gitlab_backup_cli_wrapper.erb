@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Export the environment variables
+PATH="/opt/gitlab/embedded/bin${PATH+:}${PATH}"
+
+export PATH
+export GITLAB_BACKUP_CLI_CONFIG_FILE="<%= install_dir %>/etc/gitlab-backup-cli-config.yml"
+
+gitlab_backup_cli="<%= install_dir %>/embedded/service/gitlab-rails/bin/gitlab-backup-cli"
+
+error_echo()
+{
+  echo "$1" >&2
+}
+
+if [[ ! -f ${gitlab_backup_cli} ]] ; then
+  error_echo "$0 error: could not load ${gitlab_backup_cli}"
+  error_echo "Either you are not allowed to execute the binary, or it does not exist yet."
+  error_echo "You can generate it with: sudo gitlab-ctl reconfigure"
+  exit 1
+fi
+
+# Executes the gitlab-backup-cli tool with embedded ruby
+"${gitlab_backup_cli}" "${@}"
