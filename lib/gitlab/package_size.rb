@@ -13,7 +13,7 @@ class PackageSizeCheck
 
   class << self
     def fetch_sizefile
-      sizefile_url = Build::Info::CI.artifact_url("Trigger:package", "pkg/ubuntu-jammy/gitlab.deb.size")
+      sizefile_url = URI("#{Build::Info::CI.package_download_url}.size")
 
       # We have to use net/http here because `gitlab` gem's `download_job_artifact_file`
       # method doesn't support plain text files. It has to be either binary or valid JSON.
