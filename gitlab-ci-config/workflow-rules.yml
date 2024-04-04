@@ -28,6 +28,8 @@ workflow:
       variables:
         PIPELINE_TYPE: TRIGGER_CACHE_UPDATE_PIPELINE
         CACHE_EDITION: "GITLAB"
+        # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
+        CACHE_POLICY: 'push'
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $QA_PROJECT_PATH && $CACHE_UPDATE == "true"'
       variables:
         PIPELINE_TYPE: TRIGGER_CACHE_UPDATE_PIPELINE
