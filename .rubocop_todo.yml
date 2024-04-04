@@ -31,6 +31,7 @@ Fips/MD5:
     - 'config/software/gitlab-pg-ctl.rb'
     - 'config/software/gitlab-psql.rb'
     - 'config/software/gitlab-redis-cli.rb'
+    - 'config/software/gitlab-backup-cli.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/helpers/base_pg_helper.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/rails_migration_helper.rb'
     - 'files/gitlab-ctl-commands/lib/postgresql/password_hash.rb'
