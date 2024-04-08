@@ -83,7 +83,6 @@
 
 .rpi_branch_template: &rpi_branch_build
   extends: .branch_template
-  stage: slow_jobs
   variables:
     NO_SOURCEMAPS: "true"
   tags: !reference [.distribution-armhf-tags]
@@ -143,7 +142,6 @@
 
 .rpi_tag_template: &rpi_tag_build
   extends: .tag_template
-  stage: slow_jobs
   variables:
     NO_SOURCEMAPS: "true"
   tags: !reference [.distribution-armhf-tags]
@@ -224,7 +222,6 @@
   variables:
     RASPBERRY_REPO: "raspberry-pi2"
     INCLUDE_PACKAGECLOUD: "true"
-  stage: raspbian-release
   retry: 2
   rules:
     - !reference [.default_rules, rules]
@@ -1078,7 +1075,7 @@ manifest-upload:
       when: manual
 
 RAT-Tag:
-  stage: slow_jobs
+  stage: qa
   image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   script:
     - bundle exec rake qa:rat:tag

@@ -34,26 +34,6 @@
   needs:
     - rubocop
 
-.trigger-package-cache:
-  cache:
-    key: "Ubuntu-22.04-branch-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
-    paths:
-      - cache
-      - gems
-      - assets_cache
-      - node_modules
-    policy: $CACHE_POLICY
-
-.trigger-fips-package-cache:
-  cache:
-    key: "Ubuntu-22.04-fips-branch-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
-    paths:
-      - cache
-      - gems
-      - assets_cache
-      - node_modules
-    policy: $CACHE_POLICY
-
 .install-gems: &install-gems
   - gem install bundler:${BUNDLER_VERSION}
   - bundle config build.ffi --disable-system-libffi
@@ -61,33 +41,6 @@
   - bundle config set --local frozen 'true'
   - bundle install -j $(nproc)
   - bundle binstubs --all
-
-.trigger-package-common:
-  extends: .trigger-package-cache
-  variables:
-  image: "${BUILDER_IMAGE_REGISTRY}/${BASE_OS}:${BUILDER_IMAGE_REVISION}"
-  stage: trigger-package
-  script:
-    - !reference [.build-package]
-    # Renaming so we can easily generate the artifact URL
-    - mv $PACKAGE_DIRECTORY/*.deb $PACKAGE_DIRECTORY/gitlab.deb
-    - mv $PACKAGE_DIRECTORY/*.deb.size $PACKAGE_DIRECTORY/gitlab.deb.size
-  artifacts:
-    expire_in: 3 days
-    when: always
-    paths:
-      - pkg/
-  tags: !reference [.distribution-amd64-tags]
-  needs:
-    - job: fetch-assets
-      optional: true
-    - job: generate-facts
-      optional: true
-      artifacts: true
-  rules:
-    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
-    - if: '$PIPELINE_TYPE == "DURATION_PLOTTER_PIPELINE"'
-    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
 .spec_template: &spec_template
   extends: .gems-cache-os-dependent
@@ -164,7 +117,7 @@
   ee: "true"
 
 .ce-trigger-job:
-  stage: trigger-package
+  stage: qa
   trigger:
     include: '.gitlab-ci.yml'
     strategy: depend
@@ -502,9 +455,9 @@ update-knapsack:
 ############################
 
 package_size_check:
-  extends: .trigger-package-cache
+  extends: .gems-cache
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
-  stage: trigger-qa
+  stage: qa
   script:
     - bundle exec rake build:package:generate_sizefile
     - bundle exec rake check:package_size
@@ -517,7 +470,7 @@ package_size_check:
 qa-subset-test:
   extends:
     - .qa-template
-  stage: trigger-qa
+  stage: qa
   variables:
     QA_OMNIBUS_MR_TESTS: "only-smoke-reliable"
     QA_RUN_TYPE: ${CI_JOB_NAME}
@@ -549,7 +502,7 @@ qa-subset-test:
 qa-remaining-test-manual:
   extends:
     - .qa-template
-  stage: trigger-qa
+  stage: qa
   variables:
     QA_RUN_TYPE: ${CI_JOB_NAME}
     QA_OMNIBUS_MR_TESTS: "except-smoke-reliable"
@@ -576,7 +529,7 @@ qa-remaining-test-manual:
 
 letsencrypt-test:
   extends: .docker_job
-  stage: trigger-qa
+  stage: qa
   script:
     - echo "${CI_REGISTRY_PASSWORD}" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -591,7 +544,7 @@ letsencrypt-test:
       artifacts: false
 
 RAT:
-  stage: trigger-qa
+  stage: qa
   variables:
     PACKAGE_URL: ${RAT_PACKAGE_URL}
     REFERENCE_ARCHITECTURE: ${RAT_REFERENCE_ARCHITECTURE}
@@ -627,7 +580,7 @@ RAT:FIPS:
       artifacts: true
 
 GET:Geo:
-  stage: trigger-qa
+  stage: qa
   variables:
     ENVIRONMENT_ACTION: 'tmp-env'
     QA_IMAGE: ${QA_IMAGE}
@@ -731,7 +684,7 @@ pages:
   ee: ${ee}
 
 build-package-on-all-os:
-  stage: trigger-package
+  stage: package
   needs:
     - job: generate-facts
       artifacts: true
