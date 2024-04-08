@@ -12,14 +12,9 @@ stages:
   - qa-release
   - validate
   - metrics
-  - slow_jobs
-  - raspbian-release
   - aws-marketplace-release
   - notification_fail
-  - trigger-package
-  - trigger-docker
-  - trigger-ha-validate
-  - trigger-qa
+  - qa
   - verify
 
 include:
