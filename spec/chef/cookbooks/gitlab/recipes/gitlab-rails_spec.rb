@@ -4,7 +4,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
   using RSpec::Parameterized::TableSyntax
 
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
-  let(:redis_instances) { RedisHelper::REDIS_INSTANCES }
+  let(:redis_instances) { NewRedisHelper::GitlabRails::REDIS_INSTANCES }
   let(:redis_cluster_instances) { %w(cache rate_limiting cluster_rate_limiting) }
   let(:config_dir) { '/var/opt/gitlab/gitlab-rails/etc/' }
   let(:default_vars) do
@@ -420,7 +420,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
       context 'with allowed instances' do
         before do
           stub_gitlab_rb(
-            gitlab_rails: RedisHelper::ALLOWED_REDIS_CLUSTER_INSTANCE.to_h do |inst|
+            gitlab_rails: NewRedisHelper::GitlabRails::ALLOWED_REDIS_CLUSTER_INSTANCE.to_h do |inst|
               ["redis_#{inst}_cluster_nodes", { 'host' => 'cluster1.example.com', 'port' => '12345' }]
             end
           )

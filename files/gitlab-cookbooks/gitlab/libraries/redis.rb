@@ -18,7 +18,7 @@
 require 'open3'
 
 require_relative 'redis_uri.rb'
-require_relative 'redis_helper.rb'
+require_relative '../../package/libraries/helpers/new_redis_helper/gitlab_rails'
 
 module Redis
   CommandExecutionError = Class.new(StandardError)
@@ -32,37 +32,42 @@ module Redis
     end
 
     def parse_redis_settings
-      if RedisHelper::Checks.is_redis_tcp?
+      redis_helper = NewRedisHelper::Base
+      # node['redis'] need not reflect user's choice accurately here, since we
+      # also set redis['port'] programmatically, and hence can't depend on it.
+      # So we specify Gitlab['redis'] as the config to use.
+      if redis_helper.redis_server_over_tcp?(config: Gitlab['redis'])
         # The user wants Redis to listen via TCP instead of unix socket.
         Gitlab['redis']['unixsocket'] = false
 
         parse_redis_bind_address
         # Try to discover gitlab_rails redis connection params
         # based on redis daemon
-        parse_redis_daemon! unless RedisHelper::Checks.has_sentinels?
+        parse_redis_daemon! unless redis_helper.has_sentinels?(config: Gitlab['gitlab_rails'])
       end
 
-      Gitlab['redis']['master'] = false if RedisHelper::Checks.replica_role?
+      Gitlab['redis']['master'] = false if redis_helper.redis_replica_role?
 
       # When announce-ip is defined and announce-port not, infer the later from the main redis_port
       # This functionality makes sense for redis replicas but with sentinel, the redis role can swap
       # We introduce the option regardless the user defined de redis node as master or replica
       Gitlab['redis']['announce_port'] ||= Gitlab['redis']['port'] if Gitlab['redis']['announce_ip']
 
-      Gitlab['redis']['master_password'] ||= Gitlab['redis']['password'] if redis_managed? && (RedisHelper::Checks.sentinel_daemon_enabled? || RedisHelper::Checks.is_redis_replica? || Gitlab['redis_master_role']['enable'])
+      Gitlab['redis']['master_password'] ||= Gitlab['redis']['password'] if redis_managed? && (redis_helper.sentinel_daemon_enabled? || redis_helper.redis_replica?(config: Gitlab['redis']) || redis_helper.redis_master_role?)
 
-      return unless RedisHelper::Checks.sentinel_daemon_enabled? || RedisHelper::Checks.is_redis_replica?
+      return unless redis_helper.sentinel_daemon_enabled? || redis_helper.redis_replica?(config: Gitlab['redis'])
 
       raise "redis 'master_ip' is not defined" unless Gitlab['redis']['master_ip']
       raise "redis 'master_password' is not defined" unless Gitlab['redis']['master_password']
     end
 
     def parse_redis_sentinel_settings
-      return unless RedisHelper::Checks.sentinel_daemon_enabled?
+      redis_helper = NewRedisHelper::GitlabRails
+      return unless redis_helper.sentinel_daemon_enabled?
 
       Gitlab['gitlab_rails']['redis_sentinels_password'] ||= Gitlab['sentinel']['password']
 
-      RedisHelper::REDIS_INSTANCES.each do |instance|
+      redis_helper::REDIS_INSTANCES.each do |instance|
         Gitlab['gitlab_rails']["redis_#{instance}_sentinels_password"] ||= Gitlab['sentinel']['password']
       end
     end
