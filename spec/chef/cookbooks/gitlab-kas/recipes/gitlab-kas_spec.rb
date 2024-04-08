@@ -117,6 +117,9 @@ RSpec.describe 'gitlab-kas' do
           sentry_dsn: 'https://my_key:my_secret@sentry.io/test_project',
           sentry_environment: 'production',
           log_level: 'debug',
+          env: {
+            'OWN_PRIVATE_API_HOST' => 'fake-host.example.com'
+          }
         }
       )
     end
@@ -157,6 +160,10 @@ RSpec.describe 'gitlab-kas' do
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/authentication_secret_file").with_content(api_secret_key)
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/private_api_authentication_secret_file").with_content(private_api_secret_key)
     end
+
+    it 'sets OWN_PRIVATE_API_HOST' do
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-kas/env/OWN_PRIVATE_API_HOST').with_content('fake-host.example.com')
+    end
   end
 
   describe 'gitlab.yml configuration' do
@@ -186,7 +193,7 @@ RSpec.describe 'gitlab-kas' do
         )
       end
 
-      it 'has exernal URL with scheme `ws` instead of `wss`' do
+      it 'has external URL with scheme `ws` instead of `wss`' do
         expect(gitlab_yml[:production][:gitlab_kas]).to include(
           external_url: 'ws://gitlab.example.com/-/kubernetes-agent/'
         )
