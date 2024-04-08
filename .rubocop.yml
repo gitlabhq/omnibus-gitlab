@@ -78,6 +78,21 @@ Cop/AvoidUsingEnv:
     - lib/gitlab/util.rb
     - spec/lib/gitlab/util_spec.rb
 
+Cop/SpecifyDefaultVersion:
+  Enabled: true
+  Include:
+    - config/software/*.rb
+  Exclude:
+    # These files either use `path` source and doesn't need a default_version
+    # or is just a wrapper around other definitions
+    - config/software/gitlab-config-template.rb
+    - config/software/gitlab-cookbooks.rb
+    - config/software/gitlab-ctl-ee.rb
+    - config/software/gitlab-ctl.rb
+    - config/software/gitlab-scripts.rb
+    - config/software/gitlab-selinux.rb
+    - config/software/openssl.rb
+
 Style/MultilineIfModifier:
   Enabled: false
 
