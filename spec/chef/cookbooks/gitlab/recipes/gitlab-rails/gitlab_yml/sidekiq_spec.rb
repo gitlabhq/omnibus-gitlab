@@ -74,6 +74,28 @@ RSpec.describe 'gitlab::gitlab-rails' do
           )
         end
       end
+
+      context 'with a valid routing rules list containing shard details' do
+        before do
+          stub_gitlab_rb(
+            sidekiq: {
+              routing_rules: [
+                ["resource_boundary=cpu", "cpu_boundary"],
+                ["*", "default", "default"]
+              ]
+            }
+          )
+        end
+
+        it 'renders gitlab.yml with user specified value for sidekiq routing rules' do
+          expect(gitlab_yml[:production][:sidekiq][:routing_rules]).to eq(
+            [
+              ["resource_boundary=cpu", "cpu_boundary"],
+              ["*", "default", "default"]
+            ]
+          )
+        end
+      end
     end
   end
 end
