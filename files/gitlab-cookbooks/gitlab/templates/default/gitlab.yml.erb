@@ -453,8 +453,12 @@ production: &base
     log_format: <%= @sidekiq['log_format'] %>
     <% unless @sidekiq['routing_rules'].empty? %>
     routing_rules:
-      <% @sidekiq['routing_rules'].each do |query, queue| %>
+      <% @sidekiq['routing_rules'].each do |query, queue, shard_instance| %>
+        <% if shard_instance.nil? %>
       - [<%= quote(query) %>, <%= queue.nil? ? 'null' : quote(queue) %>]
+        <% else %>
+      - [<%= quote(query) %>, <%= queue.nil? ? 'null' : quote(queue) %>, <%= quote(shard_instance) %>]
+        <% end %>
       <% end %>
     <% end %>
 
