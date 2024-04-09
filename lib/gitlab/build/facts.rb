@@ -76,6 +76,7 @@ module Build
           BUILDER_IMAGE_REVISION=#{Gitlab::Util.get_env('BUILDER_IMAGE_REVISION')}
           BUILDER_IMAGE_REGISTRY=#{Gitlab::Util.get_env('BUILDER_IMAGE_REGISTRY')}
           PUBLIC_BUILDER_IMAGE_REGISTRY=#{Gitlab::Util.get_env('PUBLIC_BUILDER_IMAGE_REGISTRY')}
+          DEV_BUILDER_IMAGE_REGISTRY=#{Gitlab::Util.get_env('DEV_BUILDER_IMAGE_REGISTRY')}
           COMPILE_ASSETS=#{Gitlab::Util.get_env('COMPILE_ASSETS') || 'false'}
           EDITION=#{Build::Info::Package.edition.upcase}
           ee=#{Build::Check.is_ee? || 'false'}

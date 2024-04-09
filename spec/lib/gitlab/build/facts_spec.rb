@@ -197,6 +197,7 @@ RSpec.describe Build::Facts do
       stub_env_var('BUILDER_IMAGE_REVISION', '1.2.3')
       stub_env_var('BUILDER_IMAGE_REGISTRY', 'registry.example.com')
       stub_env_var('PUBLIC_BUILDER_IMAGE_REGISTRY', 'registry.example.com')
+      stub_env_var('DEV_BUILDER_IMAGE_REGISTRY', 'dev.gitlab.org:5005')
     end
 
     it 'returns correct variables' do
@@ -210,6 +211,7 @@ RSpec.describe Build::Facts do
         BUILDER_IMAGE_REVISION=1.2.3
         BUILDER_IMAGE_REGISTRY=registry.example.com
         PUBLIC_BUILDER_IMAGE_REGISTRY=registry.example.com
+        DEV_BUILDER_IMAGE_REGISTRY=dev.gitlab.org:5005
         COMPILE_ASSETS=false
         EDITION=CE
         ee=false
