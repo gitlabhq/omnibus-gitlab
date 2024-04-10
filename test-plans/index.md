@@ -9,3 +9,7 @@
 - [Mattermost](upgrade-mattermost-testplan.md)
 - [redis](upgrade-redis-testplan.md)
 - [rubygems](upgrade-rubygems-testplan.md)
+
+## Other changes
+
+- [GitLab Agent for Kubernetes](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/test-multi-node-kas.md) on a multi-node setup with TLS communication between nodes.
