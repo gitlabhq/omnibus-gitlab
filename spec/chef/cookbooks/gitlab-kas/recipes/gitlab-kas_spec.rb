@@ -72,6 +72,7 @@ RSpec.describe 'gitlab-kas' do
             },
             logging: {
               level: 'info',
+              grpc_level: 'error'
             },
             usage_reporting_period: '60s'
           },
@@ -117,6 +118,7 @@ RSpec.describe 'gitlab-kas' do
           sentry_dsn: 'https://my_key:my_secret@sentry.io/test_project',
           sentry_environment: 'production',
           log_level: 'debug',
+          grpc_log_level: 'debug',
           env: {
             'OWN_PRIVATE_API_HOST' => 'fake-host.example.com'
           }
@@ -144,7 +146,8 @@ RSpec.describe 'gitlab-kas' do
               network: 'tcp'
             },
             logging: {
-              level: 'debug'
+              level: 'debug',
+              grpc_level: 'debug'
             },
             usage_reporting_period: '120s',
             sentry: {

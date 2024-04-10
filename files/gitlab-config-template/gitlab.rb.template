@@ -2152,6 +2152,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Log configuration for GitLab KAS
 # gitlab_kas['log_level'] = 'info'
+# gitlab_kas['grpc_log_level'] = 'error'
 
 ##! Environment variables for GitLab KAS
 # gitlab_kas['env'] = {
