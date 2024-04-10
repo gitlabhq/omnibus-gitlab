@@ -34,6 +34,7 @@ default['gitlab_kas']['metrics_usage_reporting_period'] = 60
 default['gitlab_kas']['sentry_dsn'] = nil
 default['gitlab_kas']['sentry_environment'] = nil
 default['gitlab_kas']['log_level'] = 'info'
+default['gitlab_kas']['grpc_log_level'] = 'error'
 default['gitlab_kas']['dir'] = '/var/opt/gitlab/gitlab-kas'
 default['gitlab_kas']['log_directory'] = '/var/log/gitlab/gitlab-kas'
 default['gitlab_kas']['env_directory'] = '/opt/gitlab/etc/gitlab-kas/env'
