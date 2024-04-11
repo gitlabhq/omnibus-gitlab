@@ -17,11 +17,11 @@
   - [ ] `rubygems`
 
     ```shell
-    gem ls rubygems
+    gem list rubygems
     ```
 
   - [ ] `bundler`
 
     ```shell
-    gem ls bundler
+    gem list bundler
     ```
