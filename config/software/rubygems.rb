@@ -15,7 +15,7 @@
 #
 
 name 'rubygems'
-default_version '3.5.6'
+default_version '3.5.7'
 
 license 'MIT'
 license_file 'LICENSE.txt'
