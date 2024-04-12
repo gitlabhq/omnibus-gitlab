@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.8.7 (2024-04-12)
+
+### Fixed (1 change)
+
+- [Fix patroni no longer working with update to ydiff 1.3](gitlab-org/omnibus-gitlab@3d60627f653244fdbccb5ac4468d8925da6c833a) ([merge request](gitlab-org/omnibus-gitlab!7536))
+
 ## 16.8.6 (2024-04-09)
 
 No changes.
