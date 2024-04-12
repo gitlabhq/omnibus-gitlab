@@ -143,6 +143,12 @@ No changes.
 - [Update PostgreSQL 13 and 14](gitlab-org/omnibus-gitlab@8d6a65a402e0aa6fc7f826c424cb778f3e0d8b79)
 - [Update libxml2 from 2.10.4 to 2.12.3](gitlab-org/omnibus-gitlab@18f0dcced0f8597992b87bb0b01ae5d9f782842f)
 
+## 16.8.7 (2024-04-12)
+
+### Fixed (1 change)
+
+- [Fix patroni no longer working with update to ydiff 1.3](gitlab-org/omnibus-gitlab@3d60627f653244fdbccb5ac4468d8925da6c833a) ([merge request](gitlab-org/omnibus-gitlab!7536))
+
 ## 16.8.6 (2024-04-09)
 
 No changes.
