@@ -35,5 +35,13 @@ build do
   # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5701
   command "#{install_dir}/embedded/bin/pip3 install prettytable==0.7.2", env: env
 
+  # Pin ydiff to 1.2 since 1.3 requires cdiff:
+  # https://github.com/zalando/patroni/blob/634b44ee0586f063033074806a42b534a354cbff/docs/releases.rst
+  # According to Patroni 3.3.0 release notes, upgrading to this version
+  # should be enough to fix this problem. We should test unpinning
+  # this library once we update to Patroni 3.3.0.
+  # See: https://github.com/zalando/patroni/blob/634b44ee0586f063033074806a42b534a354cbff/docs/releases.rst
+  command "#{install_dir}/embedded/bin/pip3 install ydiff==1.2", env: env
+
   command "#{install_dir}/embedded/bin/pip3 install patroni[consul]==#{version}", env: env
 end
