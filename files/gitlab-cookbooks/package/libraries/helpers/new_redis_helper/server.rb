@@ -51,7 +51,7 @@ module NewRedisHelper
     end
 
     def redis_cli_tcp_connect_options(args)
-      args << ["-h #{redis['bind']}"]
+      args << ["-h #{redis['default_host']}"]
       port = redis['port'].to_i
 
       if port.zero?

@@ -31,6 +31,23 @@ RSpec.describe 'Redis' do
       let(:redis_host) { '1.2.3.4' }
       let(:redis_port) { 6370 }
 
+      context 'when binding to multiple addresses' do
+        before do
+          stub_gitlab_rb(
+            redis: {
+              bind: '1.2.3.4 5.6.7.8',
+              port: redis_port
+            }
+          )
+        end
+
+        it 'expects redis_host to match first bind value from redis' do
+          expect(node['gitlab']['gitlab_rails']['redis_host']).to eq '1.2.3.4'
+
+          subject.parse_redis_settings
+        end
+      end
+
       context 'when not using sentinels' do
         before do
           stub_gitlab_rb(
