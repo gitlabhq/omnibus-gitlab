@@ -19,7 +19,7 @@ account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 consul_helper = ConsulHelper.new(node)
 mailroom_helper = MailroomHelper.new(node)
-redis_helper = NewRedisHelper::GitlabRails.new(node)
+redis_helper = RedisHelper::GitlabRails.new(node)
 logfiles_helper = LogfilesHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('gitlab-rails')
 
@@ -283,7 +283,7 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
   sensitive true
 end
 
-NewRedisHelper::GitlabRails::REDIS_INSTANCES.each do |instance|
+RedisHelper::GitlabRails::REDIS_INSTANCES.each do |instance|
   filename = "redis.#{instance}.yml"
   url = node['gitlab']['gitlab_rails']["redis_#{instance}_instance"]
   sentinels = node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels"]

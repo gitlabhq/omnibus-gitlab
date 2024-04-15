@@ -1,6 +1,6 @@
 require_relative '../../../../gitlab/libraries/redis_uri'
 
-module NewRedisHelper
+module RedisHelper
   class Base
     attr_reader :node
 
@@ -44,11 +44,11 @@ module NewRedisHelper
         uri.path = socket
 
         if params[:password]
-          password = NewRedisHelper.encode_redis_password(params[:password])
+          password = RedisHelper.encode_redis_password(params[:password])
           uri.userinfo = ":#{password}"
         end
       else
-        uri = NewRedisHelper.build_redis_url(
+        uri = RedisHelper.build_redis_url(
           ssl: redis_ssl,
           host: params[:host],
           port: params[:port],
@@ -67,7 +67,7 @@ module NewRedisHelper
     # Few methods are used in both libraries and recipes. While used in
     # recipes, they work on the `node` object, and can follow the regular
     # pattern (by initializing an object of the relevant
-    # `NewRedisHelper::<Service>` class and calling the method). However, when
+    # `RedisHelper::<Service>` class and calling the method). However, when
     # used in libraries, they have to work on the `Gitlab` object, and should
     # be accessible as class methods (without having to create an object).
     # Hence, we make these methods class methods, with the config block they
@@ -180,7 +180,7 @@ module NewRedisHelper
     end
 
     def sentinel_urls
-      NewRedisHelper.build_sentinels_urls(sentinels: redis_sentinels, password: redis_sentinels_password)&.map(&:to_s)
+      RedisHelper.build_sentinels_urls(sentinels: redis_sentinels, password: redis_sentinels_password)&.map(&:to_s)
     end
 
     def support_sentinel_groupname?

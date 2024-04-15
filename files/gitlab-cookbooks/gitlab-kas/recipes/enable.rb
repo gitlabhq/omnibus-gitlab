@@ -16,7 +16,7 @@
 #
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
-redis_helper = NewRedisHelper::GitlabKAS.new(node)
+redis_helper = RedisHelper::GitlabKAS.new(node)
 logfiles_helper = LogfilesHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('gitlab-kas')
 

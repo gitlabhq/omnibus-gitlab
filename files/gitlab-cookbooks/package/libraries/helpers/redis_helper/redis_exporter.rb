@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module NewRedisHelper
-  class RedisExporter < NewRedisHelper::Base
+module RedisHelper
+  class RedisExporter < RedisHelper::Base
     def redis_params
       {
         url: redis_url

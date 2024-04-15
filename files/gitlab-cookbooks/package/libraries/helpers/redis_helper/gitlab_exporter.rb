@@ -1,5 +1,5 @@
-module NewRedisHelper
-  class GitlabExporter < NewRedisHelper::Base
+module RedisHelper
+  class GitlabExporter < RedisHelper::Base
     def redis_params
       {
         url: redis_url,

@@ -16,7 +16,7 @@
 #
 
 require_relative './redis_uri'
-require_relative '../../package/libraries/helpers/new_redis_helper'
+require_relative '../../package/libraries/helpers/redis_helper'
 
 module GitlabWorkhorse
   class << self
@@ -76,7 +76,7 @@ module GitlabWorkhorse
     # rubocop:disable Metrics/PerceivedComplexity
     def update_separate_redis_instance_settings
       if Gitlab['gitlab_workhorse']['redis_host']
-        uri_from_workhorse = NewRedisHelper.build_redis_url(
+        uri_from_workhorse = RedisHelper.build_redis_url(
           ssl: Gitlab['gitlab_workhorse']['redis_ssl'] || Gitlab['node']['gitlab']['gitlab_workhorse']['redis_ssl'],
           host: Gitlab['gitlab_workhorse']['redis_host'] || Gitlab['node']['gitlab']['gitlab_workhorse']['redis_host'],
           port: Gitlab['gitlab_workhorse']['redis_port'] || Gitlab['node']['gitlab']['gitlab_workhorse']['redis_port'],
@@ -84,7 +84,7 @@ module GitlabWorkhorse
           path: Gitlab['gitlab_workhorse']['redis_database'] || Gitlab['node']['gitlab']['gitlab_workhorse']['redis_database']
         ).to_s
 
-        uri_from_rails = NewRedisHelper.build_redis_url(
+        uri_from_rails = RedisHelper.build_redis_url(
           ssl: Gitlab['gitlab_rails']['redis_ssl'] || Gitlab['node']['gitlab']['gitlab_rails']['redis_ssl'],
           host: Gitlab['gitlab_rails']['redis_host'] || Gitlab['node']['gitlab']['gitlab_rails']['redis_host'],
           port: Gitlab['gitlab_rails']['redis_port'] || Gitlab['node']['gitlab']['gitlab_rails']['redis_port'],

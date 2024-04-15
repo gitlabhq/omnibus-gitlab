@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
-redis_helper = NewRedisHelper::GitlabExporter.new(node)
+redis_helper = RedisHelper::GitlabExporter.new(node)
 logfiles_helper = LogfilesHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('gitlab-exporter')
 gitlab_user = account_helper.gitlab_user

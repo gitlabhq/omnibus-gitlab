@@ -2,8 +2,8 @@
 
 require_relative '../version_helper'
 
-module NewRedisHelper
-  class Server < NewRedisHelper::Base
+module RedisHelper
+  class Server < RedisHelper::Base
     def installed_version
       return unless OmnibusHelper.new(@node).service_up?('redis')
 

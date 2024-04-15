@@ -1,5 +1,5 @@
-module NewRedisHelper
-  class GitlabKAS < NewRedisHelper::Base
+module RedisHelper
+  class GitlabKAS < RedisHelper::Base
     def redis_params
       {
         network: redis_network,
