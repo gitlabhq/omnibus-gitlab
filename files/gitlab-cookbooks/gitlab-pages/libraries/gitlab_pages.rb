@@ -145,18 +145,19 @@ module GitlabPages
       url_scheme = Gitlab['gitlab_rails']['pages_https'] ? 'https' : 'http'
 
       pages_port = Gitlab['gitlab_rails']['pages_port']
+      redirect_uri = Gitlab['gitlab_pages']['auth_redirect_uri'].gsub('.', '\.')
       # Add the following when pages_port is not 80 or 443
       Gitlab['pages_nginx']['proxy_redirect'] =
         if [80, 443].include?(pages_port)
           {
-            "~^#{url_scheme}://(projects\\.#{Gitlab['pages_nginx']['fqdn_regex']})/(.*)$" => "#{url_scheme}://$1/$2",
+            "~^(#{redirect_uri})(.*)$" => "$1$2",
             "~^#{url_scheme}://([^/]*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']})/(.*)$" => "#{url_scheme}://$2/$1/$3",
             "~^//([^/]*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']})/(.*)$" => "/$1/$3",
             "~^/(.*)$" => "/$namespace/$1",
           }
         else
           {
-            "~^#{url_scheme}://(projects\\.#{Gitlab['pages_nginx']['fqdn_regex']}:#{pages_port})/(.*)$" => "#{url_scheme}://$1/$2",
+            "~^(#{redirect_uri})(.*)$" => "$1$2",
             "~^#{url_scheme}://([^/]*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']}:#{pages_port})/(.*)$" => "#{url_scheme}://$2/$1/$3",
             "~^//([^/]*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']}:#{pages_port})/(.*)$" => "/$1/$3",
             "~^/(.*)$" => "/$namespace/$1",
