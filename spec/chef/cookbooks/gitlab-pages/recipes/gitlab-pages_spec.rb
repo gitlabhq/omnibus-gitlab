@@ -169,6 +169,44 @@ RSpec.describe 'gitlab::gitlab-pages' do
           chef_run
         end
       end
+
+      context 'when namespace in path is enabled' do
+        before do
+          stub_gitlab_rb(
+            pages_external_url: 'https://pages.example.com',
+            gitlab_pages: {
+              access_control: true,
+              namespace_in_path: true,
+            }
+          )
+        end
+
+        it 'renders pages config file with default auth-redirect-uri' do
+          expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content { |content|
+            expect(content).to match(%r{auth-redirect-uri=https://pages.example.com/projects/auth})
+            expect(content).to match(%r{namespace-in-path=true})
+          }
+        end
+      end
+
+      context 'with custom port and namespace in path is enabled' do
+        before do
+          stub_gitlab_rb(
+            pages_external_url: 'https://pages.example.com:8443',
+            gitlab_pages: {
+              access_control: true,
+              namespace_in_path: true,
+            }
+          )
+        end
+
+        it 'renders pages config file with default auth-redirect-uri' do
+          expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content { |content|
+            expect(content).to match(%r{auth-redirect-uri=https://pages.example.com:8443/projects/auth})
+            expect(content).to match(%r{namespace-in-path=true})
+          }
+        end
+      end
     end
 
     context 'with custom port' do

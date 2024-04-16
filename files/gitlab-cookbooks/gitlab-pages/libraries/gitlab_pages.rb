@@ -89,7 +89,12 @@ module GitlabPages
 
       pages_uri = URI(Gitlab['pages_external_url'].to_s)
       parsed_port = [80, 443].include?(pages_uri.port) ? "" : ":#{pages_uri.port}"
-      Gitlab['gitlab_pages']['auth_redirect_uri'] = pages_uri.scheme + '://projects.' + pages_uri.host + parsed_port + '/auth'
+
+      Gitlab['gitlab_pages']['auth_redirect_uri'] = if Gitlab['gitlab_pages']['namespace_in_path']
+                                                      "#{pages_uri.scheme}://#{pages_uri.host}#{parsed_port}/projects/auth"
+                                                    else
+                                                      "#{pages_uri.scheme}://projects.#{pages_uri.host}#{parsed_port}/auth"
+                                                    end
     end
 
     def authorize_with_gitlab
