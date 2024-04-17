@@ -137,6 +137,7 @@ module Registry
       # Use the registry defaults configured by the user but use the defaults from gitlab if they were not set
       user_configuration['default_notifications_timeout'] ||= gitlab_configuration['default_notifications_timeout']
       user_configuration['default_notifications_threshold'] ||= gitlab_configuration['default_notifications_threshold']
+      user_configuration['default_notifications_maxretries'] ||= gitlab_configuration['default_notifications_maxretries']
       user_configuration['default_notifications_backoff'] ||=  gitlab_configuration['default_notifications_backoff']
       user_configuration['default_notifications_headers'] ||=  gitlab_configuration['default_notifications_headers']
 
@@ -144,6 +145,7 @@ module Registry
         # Get the values from default if they are not set
         endpoint['timeout'] ||= user_configuration['default_notifications_timeout']
         endpoint['threshold'] ||= user_configuration['default_notifications_threshold']
+        endpoint['maxretries'] ||= user_configuration['default_notifications_maxretries']
         endpoint['backoff'] ||= user_configuration['default_notifications_backoff']
 
         # And merge the default headers with the ones specific to this endpoint

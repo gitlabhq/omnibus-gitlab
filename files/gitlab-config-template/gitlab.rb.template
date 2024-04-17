@@ -1052,7 +1052,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     'name' => 'test_endpoint',
 #     'url' => 'https://gitlab.example.com/notify2',
 #     'timeout' => '500ms',
-#     'threshold' => 5,
+#     'threshold' => 5, # DEPRECATED: use maxretries instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243
+#     'maxretries' => 5,
 #     'backoff' => '1s',
 #     'headers' => {
 #       "Authorization" => ["AUTHORIZATION_EXAMPLE_TOKEN"]
@@ -1062,6 +1063,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Default registry notifications
 # registry['default_notifications_timeout'] = "500ms"
 # registry['default_notifications_threshold'] = 5
+# registry['default_notifications_maxretries'] = 5
 # registry['default_notifications_backoff'] = "1s"
 # registry['default_notifications_headers'] = {}
 
