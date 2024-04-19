@@ -12,14 +12,17 @@ RSpec.describe 'docker', type: :rake do
     end
 
     it 'calls build command with correct parameters' do
-      allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('dev.gitlab.org:5005/gitlab/omnibus-gitlab')
+      allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('registry.com/group/repo')
+      allow(Build::Info::Docker).to receive(:tag).and_return('9.0.0')
       allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
       allow(Build::GitlabImage).to receive(:write_release_file).and_return(true)
       allow(File).to receive(:expand_path).and_return('/tmp/omnibus-gitlab/lib/gitlab/tasks/docker_tasks.rake')
-      allow(DockerOperations).to receive(:build).and_call_original
 
-      expect(DockerOperations).to receive(:build).with("/tmp/omnibus-gitlab/docker", "dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce", "latest")
-      expect(Docker::Image).to receive(:build_from_dir).with("/tmp/omnibus-gitlab/docker", { t: "dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:latest", pull: true })
+      allow(DockerHelper).to receive(:authenticate).and_return(true)
+      allow(DockerHelper).to receive(:build).and_return(true)
+      allow(DockerHelper).to receive(:create_builder).and_return(true)
+
+      expect(DockerHelper).to receive(:build).with("/tmp/omnibus-gitlab/docker", "registry.com/group/repo/gitlab-ce", '9.0.0')
       Rake::Task['docker:build:image'].invoke
     end
   end
@@ -82,11 +85,15 @@ RSpec.describe 'docker', type: :rake do
     describe 'docker:push:staging' do
       before do
         Rake::Task['docker:push:staging'].reenable
+        allow(ENV).to receive(:[]).with('CI_COMMIT_REF_SLUG').and_return('foo-bar')
+        allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('registry.gitlab.com/gitlab-org/omnibus-gitlab')
+        allow(SkopeoHelper).to receive(:copy_image).and_return(true)
+        allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
+        allow(Build::Info::Docker).to receive(:tag).and_return('1.2.3.4')
       end
 
-      it 'pushes to staging correctly' do
-        expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0')
-        expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:foo-bar')
+      it 'pushes triggered images correctly' do
+        expect(SkopeoHelper).to receive(:copy_image).with('registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce:1.2.3.4', 'registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce:foo-bar')
         Rake::Task['docker:push:staging'].invoke
       end
     end
@@ -183,13 +190,13 @@ RSpec.describe 'docker', type: :rake do
         Rake::Task['docker:push:triggered'].reenable
         allow(ENV).to receive(:[]).with('CI_COMMIT_REF_SLUG').and_return('foo-bar')
         allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('registry.gitlab.com/gitlab-org/omnibus-gitlab')
-        allow(ENV).to receive(:[]).with("IMAGE_TAG").and_return("omnibus-12345")
-        allow(Build::Info::Docker).to receive(:tag).and_call_original
+        allow(SkopeoHelper).to receive(:copy_image).and_return(true)
+        allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
+        allow(Build::Info::Docker).to receive(:tag).and_return('1.2.3.4')
       end
 
       it 'pushes triggered images correctly' do
-        expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce:omnibus-12345')
-        expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce:foo-bar')
+        expect(SkopeoHelper).to receive(:copy_image).with('registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce:1.2.3.4', 'registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ce:foo-bar')
         Rake::Task['docker:push:triggered'].invoke
       end
     end

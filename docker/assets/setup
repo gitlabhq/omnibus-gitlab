@@ -10,9 +10,19 @@ source /RELEASE
 sed -i "/DOWNLOAD_URL/d;/CI_JOB_TOKEN/d;" /RELEASE
 
 # Install GitLab
+if [[ "${TARGETARCH}" == "amd64" ]]; then
+  export DOWNLOAD_URL=${DOWNLOAD_URL_amd64}
+elif [[ "${TARGETARCH}" == "arm64" ]]; then
+  export DOWNLOAD_URL=${DOWNLOAD_URL_arm64}
+else
+  echo "Unknown TARGETARCH: DOWNLOAD_URL not set"
+fi
+
 DOWNLOAD_URL=${DOWNLOAD_URL} CI_JOB_TOKEN=${CI_JOB_TOKEN} /assets/download-package && dpkg -i /tmp/gitlab.deb 
 rm -rf /tmp/gitlab.deb /var/lib/apt/lists/*
 
+unset DOWNLOAD_URL_amd64
+unset DOWNLOAD_URL_arm64
 unset DOWNLOAD_URL
 unset CI_JOB_TOKEN
 

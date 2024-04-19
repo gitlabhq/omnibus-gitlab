@@ -315,6 +315,8 @@ Ubuntu-22.04-arm64-branch:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+      # TODO: When multi-arch images are built by default, make this an
+      # automatic job
       when: manual
       allow_failure: true
 CentOS-7-branch:
