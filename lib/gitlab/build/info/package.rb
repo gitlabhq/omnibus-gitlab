@@ -10,8 +10,8 @@ module Build
       PACKAGE_GLOB = "pkg/**/*.{deb,rpm}".freeze
 
       class << self
-        def name
-          return "gitlab-fips" if Check.use_system_ssl?
+        def name(fips: Check.use_system_ssl?)
+          return "gitlab-fips" if fips
           return "gitlab-ee" if Check.is_ee?
 
           "gitlab-ce"
@@ -32,7 +32,7 @@ module Build
         # package version will remain the same but contents of the package will be
         # different.
         # To resolve this, we append a PIPELINE_ID to change the name of the package
-        def semver_version
+        def semver_version(fips: Build::Check.use_system_ssl?)
           if Build::Check.on_tag?
             # timestamp is disabled in omnibus configuration
             Omnibus.load_configuration('omnibus.rb')
@@ -42,13 +42,13 @@ module Build
             latest_version = latest_git_tag && !latest_git_tag.empty? ? latest_git_tag[0, latest_git_tag.match("[+]").begin(0)] : '0.0.1'
             commit_sha = Build::Info::Git.commit_sha
             ver_tag = "#{latest_version}+" + (Build::Check.is_nightly? ? "rnightly" : "rfbranch")
-            ver_tag += ".fips" if Build::Check.use_system_ssl?
+            ver_tag += ".fips" if fips
             [ver_tag, Gitlab::Util.get_env('CI_PIPELINE_ID'), commit_sha].compact.join('.')
           end
         end
 
-        def release_version
-          semver = Info::Package.semver_version
+        def release_version(fips: Build::Check.use_system_ssl?)
+          semver = Info::Package.semver_version(fips: fips)
           "#{semver}-#{Gitlab::BuildIteration.new.build_iteration}"
         end
 
