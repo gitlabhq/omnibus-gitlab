@@ -157,7 +157,7 @@ module GitlabCtl
           log "STDERR: #{e.stderr}"
           false
         rescue Mixlib::ShellOut::CommandTimeout
-          log
+          log ""
           log "Timed out during the database upgrade.".color(:red)
           log "To run with more time, remove the temporary directory #{tmp_data_dir}.#{target_version.major},".color(:red)
           log "then re-run your previous command, adding the --timeout option.".color(:red)
