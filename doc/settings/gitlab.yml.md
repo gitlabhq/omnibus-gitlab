@@ -15,8 +15,8 @@ Some GitLab features can be customized through
 for a Linux package installation, you need to do so with `/etc/gitlab/gitlab.rb`. The
 translation works as follows. For a complete list of available options, visit the
 [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
-New installations starting from GitLab 7.6 have
-all the options of the template listed in `/etc/gitlab/gitlab.rb` by default.
+
+All the options of the template listed in `/etc/gitlab/gitlab.rb` are avilable by default.
 
 In `gitlab.yml`, you find structure like this:
 

@@ -52,9 +52,7 @@ registry['env'] = {
 }
 ```
 
-GitLab 11.6 and newer will attempt to use HTTP Basic
-Authentication when a username and password is included in the proxy
-URL. Older GitLab versions will omit the authentication details.
+GitLab will attempt to use HTTP Basic Authentication when a username and password is included in the proxy URL.
 
 Proxy settings use the `.` syntax for globing.
 

@@ -23,7 +23,7 @@ It is not recommended to store your configuration backup in the
 same place as your application data backup, see below.
 
 All configuration for Linux package installations is stored in `/etc/gitlab`. To backup your
-configuration, just run `sudo gitlab-ctl backup-etc` (introduced in GitLab 12.3). It creates a tar
+configuration, just run `sudo gitlab-ctl backup-etc`. It creates a tar
 archive in `/etc/gitlab/config_backup/`. Directory and backup files will be
 readable only to root.
 
@@ -67,8 +67,6 @@ NOTE:
 Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
 
 ### Limit backup lifetime for configuration backups (prune old backups)
-
-> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5102) in GitLab 13.12.
 
 GitLab configuration backups can be pruned using the same `backup_keep_time` setting that is
 [used for the GitLab application backups](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#limit-backup-lifetime-for-local-files-prune-old-backups)

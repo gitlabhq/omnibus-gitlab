@@ -178,22 +178,14 @@ After you have these files, enable SSL:
 
 To determine whether SSL is being used by clients, you can run:
 
-In [GitLab 14.2 and later](https://gitlab.com/gitlab-org/gitlab/-/issues/341210):
-
 ```shell
 sudo gitlab-rails dbconsole --database main
-```
-
-In GitLab 14.1 and earlier:
-
-```shell
-sudo gitlab-rails dbconsole
 ```
 
 At startup, you should see a banner as the following:
 
 ```plaintext
-psql (9.6.5)
+psql (13.14)
 SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: on)
 Type "help" for help.
 ```
@@ -480,7 +472,7 @@ To upgrade the PostgreSQL version, be sure that:
     (or update your database path).
   - Check the space available using `sudo df -h`. If the partition where the
     database resides doesn't have enough space, pass the argument `--tmp-dir $DIR`
-    to the command. GitLab 13.3 and above include an available disk space check and aborts
+    to the command. The upgrade task includes an available disk space check and aborts
     the upgrade if the requirements aren't met.
 
 After you confirm that the above checklist is satisfied, you can proceed with
@@ -1009,8 +1001,6 @@ parameters noted in the table below and then run `gitlab-ctl reconfigure`.
 
 ## Automatic database reindexing
 
-> - [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/249662) in GitLab 13.5.
-
 WARNING:
 This is an experimental feature that isn't enabled by default.
 
@@ -1140,23 +1130,6 @@ bandwidth. For example, at a transfer speed of 30 Mbps, and a database size of
 [PostgreSQL documentation](https://www.postgresql.org/docs/11/pgupgrade.html)
 for more.
 
-#### Disabling automatic PostgreSQL upgrades
-
-From GitLab 12.1 through GitLab 12.9, GitLab package upgrades try to upgrade
-PostgreSQL to version 10.x. In GitLab 12.10 and later, upgrades of PostgreSQL
-don't happen in an unattended manner when using Geo.
-
-Before upgrading to GitLab 12.1 through GitLab 12.9, we strongly recommend
-disabling unattended upgrades of PostgreSQL and manually upgrading PostgreSQL
-separately from upgrading the GitLab package to avoid any unintended downtime.
-
-You can disable unattended upgrades of PostgreSQL by running the following on
-all nodes running `postgresql` or `geo-postgresql`:
-
-```shell
-sudo touch /etc/gitlab/disable-postgresql-upgrade
-```
-
 #### How to upgrade PostgreSQL when using Geo
 
 To upgrade PostgreSQL, you will need the name of the replication slot, and the
@@ -1221,22 +1194,8 @@ replication user's password.
 If you need to connect to the PostgreSQL database, you can connect as the
 application user:
 
-In [GitLab 14.2 and later](https://gitlab.com/gitlab-org/gitlab/-/issues/341210):
-
 ```shell
 sudo gitlab-rails dbconsole --database main
-```
-
-In GitLab 14.1 and earlier:
-
-```shell
-sudo gitlab-rails dbconsole
-```
-
-or as a PostgreSQL superuser:
-
-```shell
-sudo gitlab-psql -d gitlabhq_production
 ```
 
 ## Troubleshooting
