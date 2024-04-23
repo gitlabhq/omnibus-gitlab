@@ -48,8 +48,6 @@ For a complete list of settings, see the [README](../index.md#configuring) file.
 
 ### Set up the initial password
 
-> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5331) in GitLab 14.0.
-
 By default, a Linux package installation automatically generates a password for the
 initial administrator user account (`root`) and stores it to
 `/etc/gitlab/initial_root_password` for at least 24 hours. For security reasons,

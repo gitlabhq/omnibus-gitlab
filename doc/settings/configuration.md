@@ -709,9 +709,8 @@ cross-site scripting (XSS) attacks. See
 [the Mozilla documentation on CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) for more
 details.
 
-GitLab 12.2 added support for
-[CSP and nonce-source with inline JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
-It is [not configured by default yet](https://gitlab.com/gitlab-org/gitlab/-/issues/30720).
+[CSP and nonce-source with inline JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src) is available on GitLab.com.
+It is [not configured by default](https://gitlab.com/gitlab-org/gitlab/-/issues/30720) on self-managed.
 
 NOTE:
 Improperly configuring the CSP rules could prevent GitLab from working
@@ -746,8 +745,7 @@ To add a CSP:
    }
    ```
 
-   [In GitLab 14.9 and later](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/80303), secure default values
-   are used for directives that aren't explicitly configured.
+   Secure default values are used for directives that aren't explicitly configured.
 
    To unset a CSP directive, set a value of `false`.
 

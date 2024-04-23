@@ -106,7 +106,7 @@ This error is thrown when `/etc/gitlab/gitlab.rb` configuration file contains
 configuration that is invalid or unsupported. Double check that there are no
 typos or that the configuration file does not contain obsolete configuration.
 
-You can check the latest available configuration by using `sudo gitlab-ctl diff-config` (Command available starting with GitLab 8.17) or check the latest [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
+You can check the latest available configuration by using `sudo gitlab-ctl diff-config` or check the latest [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 
 ## GitLab is unreachable in my browser
 
@@ -166,7 +166,7 @@ get their security context messed up. You can fix this by running `sudo
 gitlab-ctl reconfigure`, which sets the `gitlab_shell_t` security context on
 `/var/opt/gitlab/.ssh`.
 
-In GitLab 10.0 this behavior was improved by setting the context permanently using
+To improve this behavior, we set the context permanently using
 `semanage`. The runtime dependency `policycoreutils-python` has been added to the
 RPM package for RHEL based operating systems in order to ensure the `semanage`
 command is available.
@@ -537,7 +537,7 @@ how to override the default headers.
 
 ## Extension missing pg_trgm
 
-Starting from GitLab 8.6, [GitLab requires](https://docs.gitlab.com/ee/install/requirements.html#postgresql-requirements)
+[GitLab requires](https://docs.gitlab.com/ee/install/requirements.html#postgresql-requirements)
 the PostgreSQL extension `pg_trgm`.
 If you are using Omnibus GitLab package with the bundled database, the extension
 should be automatically enabled when you upgrade.
@@ -641,7 +641,7 @@ will need to switch to using `no_root_squash` in your NFS exports on the NFS ser
 
 This applies to operating systems using systemd (e.g. Ubuntu 18.04+, CentOS, etc.).
 
-Since GitLab 11.2, the `gitlab-runsvdir` starts during the `multi-user.target`
+`gitlab-runsvdir` starts during the `multi-user.target`
 instead of `basic.target`. If you are having trouble starting this service
 after upgrading GitLab, you may need to check that your system has properly
 booted all the required services for `multi-user.target` via the command:

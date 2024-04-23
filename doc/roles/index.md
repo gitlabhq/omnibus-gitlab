@@ -70,7 +70,7 @@ Documentation on the use of the Redis Roles can be found in [Configuring Redis f
 
   *By default, enables no other services.*
 
-- **redis_replica_role** (`gitlab-ee`, [introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/4168) in GitLab 13.0)
+- **redis_replica_role** (`gitlab-ee`)
 
   Enables the Redis service and monitoring
 
@@ -117,8 +117,6 @@ for configuration steps.
 
 ### Monitoring Roles
 
-> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/3404) in GitLab 12.1.
-
 Monitoring roles are used to set up monitoring of installations. For additional information, see the [Monitoring documentation](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html).
 
 - **monitoring_role** (`gitlab-ce`/`gitlab-ee`)
@@ -137,7 +135,7 @@ Documentation on the usage of the PostgreSQL Roles can be found in [Configuring 
 
   *By default, enables no other services.*
 
-- **patroni_role** (`gitlab-ee`, [introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/4851) in GitLab 13.8)
+- **patroni_role** (`gitlab-ee`)
 
   Enables the PostgreSQL, patroni, and Consul services on the machine
 
@@ -157,8 +155,6 @@ Documentation on the usage of the PostgreSQL Roles can be found in [Configuring 
 
 ### GitLab Pages Roles
 
-> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/4740) in GitLab 13.6.
-
 GitLab Pages roles are used to setup and configure GitLab Pages. For additional
 information, see the
 [GitLab Pages Administration documentation](https://docs.gitlab.com/ee/administration/pages/index.html)
@@ -171,8 +167,6 @@ information, see the
 
 ### Sidekiq Roles
 
-> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5365) in GitLab 14.1.
-
 Sidekiq roles are used to setup and configure Sidekiq. For additional
 information, see the
 [Sidekiq Administration documentation](https://docs.gitlab.com/ee/administration/sidekiq/index.html)
@@ -184,8 +178,6 @@ information, see the
   *By default, enables no other services.*
 
 ### Spamcheck Roles
-
-> - [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/5893) in GitLab 14.9.
 
 Spamcheck roles are used to setup and configure Spamcheck services. For additional
 information, see the

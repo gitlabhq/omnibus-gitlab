@@ -144,8 +144,7 @@ logrotate['enable'] = false
 
 ### Logrotate `notifempty` setting
 
-Since [GitLab 13.6](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/3820),
-the logrotate service runs with a non-configurable default of `notifempty`, resolving
+The logrotate service runs with a non-configurable default of `notifempty`, resolving
 the following issues:
 
 - Empty logs being rotated unnecessarily, and often many empty logs being stored.
