@@ -52,7 +52,7 @@ The environment variables used in `qa-subset-test` are the same that are used in
 
 ## QA-SUBSET-TEST child pipeline
 
-This pipeline runs a subset of all the orchestrated tests using GitLab QA project which in turn uses allure gem to generate report source files for each test that is executed and stores the files in a common folder. Certain orchestrated jobs like `instance`, `decomposition-single-db`, `decomposition-multiple-db` and `praefect` run only smoke and reliable tests which initially used to run the entire suite.
+This pipeline runs a subset of all the orchestrated tests using GitLab QA project which in turn uses allure gem to generate report source files for each test that is executed and stores the files in a common folder. Certain orchestrated jobs like `instance`, `decomposition-single-db`, `decomposition-multiple-db` and `praefect` run only smoke tests which initially used to run the entire suite.
 
 ### e2e-test-report job
 

@@ -473,7 +473,7 @@ qa-subset-test:
     - .qa-template
   stage: qa
   variables:
-    QA_OMNIBUS_MR_TESTS: "only-smoke-reliable"
+    QA_OMNIBUS_MR_TESTS: "only-smoke"
     QA_RUN_TYPE: ${CI_JOB_NAME}
     QA_SUITES: "QA::Scenario::Test::Integration::GitalyCluster,QA::Scenario::Test::Integration::InstanceSAML,QA::Scenario::Test::Integration::LDAPNoServer,QA::Scenario::Test::Integration::LDAPNoTLS,QA::Scenario::Test::Integration::LDAPTLS,QA::Scenario::Test::Integration::Mattermost,QA::Scenario::Test::Integration::Mtls,QA::Scenario::Test::Integration::ObjectStorageGcs,QA::Scenario::Test::Integration::RegistryTLS,QA::Scenario::Test::Integration::RegistryWithCDN,QA::Scenario::Test::Integration::SMTP,QA::Scenario::Test::Integration::Registry,QA::Scenario::Test::Instance::ObjectStorage,QA::Scenario::Test::Instance::RepositoryStorage,QA::Scenario::Test::Instance::GitlabPages,QA::Scenario::Test::Instance::Metrics,QA::EE::Scenario::Test::Integration::GroupSAML,QA::Scenario::Test::Instance::Smoke"
   rules:
@@ -506,7 +506,7 @@ qa-remaining-test-manual:
   stage: qa
   variables:
     QA_RUN_TYPE: ${CI_JOB_NAME}
-    QA_OMNIBUS_MR_TESTS: "except-smoke-reliable"
+    QA_OMNIBUS_MR_TESTS: "except-smoke"
     QA_SUITES: "QA::EE::Scenario::Test::Integration::Elasticsearch,QA::Scenario::Test::Integration::Import,QA::Scenario::Test::Integration::Integrations,QA::Scenario::Test::Integration::OAuth,QA::Scenario::Test::Integration::Jira,QA::Scenario::Test::Integration::ServicePingDisabled,QA::Scenario::Test::Instance::LargeSetup,QA::Scenario::Test::Instance::CloudActivation"
   rules:
     - if: '$SKIP_QA_TEST == "true"'
