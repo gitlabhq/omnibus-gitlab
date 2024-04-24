@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.11.1 (2024-04-24)
+
+### Fixed (1 change)
+
+- [Fix missing arguments when PostgreSQL upgrade times out](gitlab-org/security/omnibus-gitlab@cb3aa3360928fab97f3b58869d5e71623095c5ca)
+
 ## 16.11.0 (2024-04-17)
 
 ### Added (5 changes)
@@ -38,6 +44,10 @@ omnibus-gitlab repository.
 ### Security (1 change)
 
 - [Use February 2024 PostgreSQL patches](gitlab-org/omnibus-gitlab@bc78ec9e2d91882439c574bc18eaddd08f17f8d1)
+
+## 16.10.4 (2024-04-24)
+
+No changes.
 
 ## 16.10.3 (2024-04-12)
 
@@ -108,6 +118,10 @@ No changes.
 ### Other (1 change)
 
 - [Update Patroni to 3.0.1](gitlab-org/omnibus-gitlab@faba9e7605768373c4747fa7062ab36c7be74205) ([merge request](gitlab-org/omnibus-gitlab!6898))
+
+## 16.9.6 (2024-04-24)
+
+No changes.
 
 ## 16.9.5 (2024-04-12)
 
