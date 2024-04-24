@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.11.1 (2024-04-24)
+
+### Fixed (1 change)
+
+- [Fix missing arguments when PostgreSQL upgrade times out](gitlab-org/security/omnibus-gitlab@cb3aa3360928fab97f3b58869d5e71623095c5ca)
+
 ## 16.11.0 (2024-04-17)
 
 ### Added (5 changes)
