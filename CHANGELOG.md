@@ -119,6 +119,10 @@ No changes.
 
 - [Update Patroni to 3.0.1](gitlab-org/omnibus-gitlab@faba9e7605768373c4747fa7062ab36c7be74205) ([merge request](gitlab-org/omnibus-gitlab!6898))
 
+## 16.9.6 (2024-04-24)
+
+No changes.
+
 ## 16.9.5 (2024-04-12)
 
 ### Fixed (1 change)
