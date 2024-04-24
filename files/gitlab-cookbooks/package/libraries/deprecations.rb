@@ -328,14 +328,14 @@ module Gitlab
           },
           {
             config_keys: %w(gitlab sidekiq queue_selector),
-            deprecation: '15.9',
-            removal: '17.0',
+            deprecation: '15.9', # Remove message issue: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8495
+            removal: '17.0', # Removal issue: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2220
             note: "Starting with GitLab 17.0, running Sidekiq with queue selector (`sidekiq['queue_selector'] = true`) will be removed. We recommend to follow the steps at https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes, to run Sidekiq with multiple processes while listening to all queues."
           },
           {
             config_keys: %w(gitlab sidekiq negate),
-            deprecation: '15.9',
-            removal: '17.0',
+            deprecation: '15.9', # Remove message issue: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8495
+            removal: '17.0', # Removal issue: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2220
             note: "Starting with GitLab 17.0, running Sidekiq with negate (`sidekiq['negate'] = true`) will be removed. We recommend to follow the steps at https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes, to run Sidekiq with multiple processes while listening to all queues."
           },
           {

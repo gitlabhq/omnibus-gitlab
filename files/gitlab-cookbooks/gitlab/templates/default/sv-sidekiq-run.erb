@@ -28,17 +28,11 @@ exec chpst -e /opt/gitlab/etc/gitlab-rails/env -P \
       <% if node['gitlab']['sidekiq']['min_concurrency'] %>
       --min-concurrency <%= node['gitlab']['sidekiq']['min_concurrency'] %> \
       <% end %>
-      <% if node['gitlab']['sidekiq']['queue_selector'] %>
-      --queue-selector \
-      <% end %>
       <% if node['gitlab']['sidekiq']['shutdown_timeout'] %>
       --timeout <%= node['gitlab']['sidekiq']['shutdown_timeout'] %> \
       <% end %>
       <% node['gitlab']['sidekiq']['queue_groups'].each do |queue| %>
         "<%= queue %>" \
-      <% end %>
-      <% if node['gitlab']['sidekiq']['negate'] %>
-      --negate \
       <% end %>
 
 # Do not remove this line; it prevents trouble with the trailing backslashes above.
