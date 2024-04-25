@@ -30,6 +30,7 @@ module Redis
         # The user wants Redis to listen via TCP instead of unix socket.
         Gitlab['redis']['unixsocket'] = false
 
+        parse_redis_bind_address
         # Try to discover gitlab_rails redis connection params
         # based on redis daemon
         parse_redis_daemon! unless RedisHelper::Checks.has_sentinels?
@@ -74,12 +75,17 @@ module Redis
 
     private
 
-    def parse_redis_daemon!
+    def parse_redis_bind_address
       return unless redis_managed?
 
       redis_bind = Gitlab['redis']['bind'] || node['redis']['bind']
       Gitlab['redis']['default_host'] = redis_bind.split(' ').first
+    end
 
+    def parse_redis_daemon!
+      return unless redis_managed?
+
+      redis_bind = Gitlab['redis']['bind'] || node['redis']['bind']
       Gitlab['gitlab_rails']['redis_host'] ||= Gitlab['redis']['default_host']
 
       redis_port_config_key = if Gitlab['redis'].key?('port') && !Gitlab['redis']['port'].zero?

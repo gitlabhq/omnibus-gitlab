@@ -332,6 +332,34 @@ redis_socket=''
       expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-redis-cli-rc')
         .with_content(gitlab_redis_cli_rc)
     end
+
+    context 'with Sentinels configured' do
+      before do
+        stub_gitlab_rb(
+          redis: {
+            bind: redis_host,
+            port: redis_port,
+            ha: true,
+            master_ip: master_ip,
+            master_port: master_port,
+            master_password: 'password',
+            master: false
+          },
+          gitlab_rails: {
+            redis_sentinels: [
+              { 'host' => '127.0.0.1', 'port' => 2637 }
+            ]
+          }
+        )
+      end
+
+      it_behaves_like 'started down runit service', 'redis'
+
+      it 'creates gitlab-redis-cli-rc' do
+        expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-redis-cli-rc')
+          .with_content(gitlab_redis_cli_rc)
+      end
+    end
   end
 
   context 'with rename_commands disabled' do
