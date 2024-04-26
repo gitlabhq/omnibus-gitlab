@@ -37,12 +37,17 @@ module NewRedisHelper
                  redis_socket
                end
 
-      if socket && !has_sentinels?
-        uri = URI('unix:/')
-        uri.path = socket
-      else
-        params = redis_credentials
+      params = redis_credentials
 
+      if socket && !has_sentinels?
+        uri = URI("unix://")
+        uri.path = socket
+
+        if params[:password]
+          password = NewRedisHelper.encode_redis_password(params[:password])
+          uri.userinfo = ":#{password}"
+        end
+      else
         uri = NewRedisHelper.build_redis_url(
           ssl: redis_ssl,
           host: params[:host],

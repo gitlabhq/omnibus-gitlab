@@ -16,7 +16,7 @@ RSpec.describe NewRedisHelper::GitlabWorkhorse do
     context 'by default' do
       it 'returns information about the default Redis instance' do
         expect(subject.redis_params).to eq(
-          url: 'unix:/var/opt/gitlab/redis/redis.socket',
+          url: 'unix:///var/opt/gitlab/redis/redis.socket',
           password: nil,
           sentinels: [],
           sentinelMaster: 'gitlab-redis',
@@ -26,6 +26,26 @@ RSpec.describe NewRedisHelper::GitlabWorkhorse do
     end
 
     context 'with user specified values' do
+      context 'when password set for UNIX socket' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              redis_password: 'redis-password'
+            }
+          )
+        end
+
+        it 'returns a UNIX socket URL with password' do
+          expect(subject.redis_params).to eq(
+            url: 'unix://:redis-password@/var/opt/gitlab/redis/redis.socket',
+            password: 'redis-password',
+            sentinels: [],
+            sentinelMaster: 'gitlab-redis',
+            sentinelPassword: nil
+          )
+        end
+      end
+
       context 'when settings specified via gitlab_rails' do
         before do
           stub_gitlab_rb(

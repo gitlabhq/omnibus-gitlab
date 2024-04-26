@@ -28,5 +28,14 @@ module NewRedisHelper
         )
       end
     end
+
+    # RFC 3986 says that the userinfo value should be percent-encoded:
+    # https://datatracker.ietf.org/doc/html/rfc3986#section-3.2.1.
+    # Note that CGI.escape and URI.encode_www_form_component encodes
+    # a space as "+" instead of "%20". While this appears to be handled with
+    # the Ruby client, the Go client doesn't work with "+".
+    def encode_redis_password(password)
+      URI::Generic::DEFAULT_PARSER.escape(password)
+    end
   end
 end
