@@ -32,6 +32,17 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
   patch source: 'add-license-file.patch'
 
+  # TODO: rubocop-ast installs a later version of parser, which omits the AST::Processor
+  # mixin, causing breakage. This is a temporary workaround until a more permanent fix
+  # is in place: https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/7362
+  gem 'install parser' \
+    " --clear-sources" \
+      " -s https://packagecloud.io/cinc-project/stable" \
+      " -s https://rubygems.org" \
+    " --version '3.3.0.5'" \
+      " --bindir '#{install_dir}/embedded/bin'" \
+      ' --no-document', env: env
+
   # Temporary workaround because upstream inspec-core does not list this as
   # a requirement and it causes failures during gitlab-ctl reconfigure in
   # the QA job pipelines
