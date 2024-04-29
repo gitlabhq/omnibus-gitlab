@@ -590,16 +590,6 @@ sudo gitlab-rake gitlab:db:decomposition:connection_status
 
 If the task indicates that `max_connections` is high enough, then you can proceed with the upgrade.
 
-If, for any reason, you wish to remain on single connection, and you are upgrading
-from GitLab 15.11 or earlier to GitLab 16.0, or switch back to single database connection
-update this setting in `/etc/gitlab/gitlab.rb`:
-
-```ruby
-gitlab_rails['databases']['ci']['enable'] = false
-```
-
-In a multi-node environment, this setting should be updated on all Rails and Sidekiq nodes.
-
 ## Using a non-packaged PostgreSQL database management server
 
 By default, GitLab is configured to use the PostgreSQL server that's included
