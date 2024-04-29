@@ -1048,3 +1048,18 @@ net.core.somaxconn = 1024
 
 You may experience timeouts or HTTP 502 errors and is recommended to increase this
 value by updating the `puma['somaxconn']` variable in your `gitlab.rb`.
+
+## `exec request failed on channel 0` or `shell request failed on channel 0` errors
+
+When pulling or pushing by using Git over SSH, you might see the following errors:
+
+- `exec request failed on channel 0`
+- `shell request failed on channel 0`
+
+These errors can happen if the number of processes from the `git` user is above the limit.
+
+To try and resolve this issue:
+
+1. Increase the `nproc` setting for the `git` user in the `/etc/security/limits.conf` file on the nodes where `gitlab-shell` is running.
+   Typically, `gitlab-shell` runs on GitLab Rails nodes.
+1. Retry the pull or push Git command.
