@@ -57,7 +57,7 @@ variables:
   CACHE_EDITION: "CE"
   CACHE_POLICY: 'pull-push'
   ISSUE_BOT_LABELS_EXTRA: "group::distribution"
-  BUNDLER_VERSION: "2.5.7"
+  BUNDLER_VERSION: "2.5.9"
   # NOTE: When `NEXT_RUBY_VERSION` is updated, flip
   # `USE_NEXT_RUBY_VERSION_IN_*` variables to false to avoid surprises.
   NEXT_RUBY_VERSION: "3.1.4"
