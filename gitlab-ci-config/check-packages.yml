@@ -91,9 +91,6 @@ before_script:
   tags: !reference [.distribution-arm64-tags]
 
 # apt based
-Ubuntu-18.04-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
-  extends: .apt-install
 Ubuntu-20.04-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
@@ -140,13 +137,6 @@ Raspberry-Pi-2-Bullseye-check:
   variables:
     package_repository: 'raspberry-pi2'
   tags: !reference [.distribution-armhf-tags]
-Ubuntu-18.04-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04_fips:${BUILDER_IMAGE_REVISION}"
-  extends:
-    - .apt-install
-    - .ee-tag-only
-  variables:
-    USE_SYSTEM_SSL: "true"
 Ubuntu-20.04-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
   extends:
