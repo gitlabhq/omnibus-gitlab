@@ -142,7 +142,7 @@ gitlab_rails['smtp_force_ssl'] = false
 NOTE:
 Gmail has [strict sending limits](https://support.google.com/a/answer/166852)
 that can impair functionality as your organization grows. We strongly recommend using a
-transactional service like [SendGrid](https://sendgrid.com/) or [Mailgun](https://www.mailgun.com/)
+transactional service like [SendGrid](https://sendgrid.com/en-us) or [Mailgun](https://www.mailgun.com/)
 for teams using SMTP configuration.
 
 ```ruby
@@ -1216,7 +1216,7 @@ gitlab_rails['gitlab_email_from'] = 'username@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'username@example.com'
 ```
 
-Check the SMTP user name and SMTP user password from the ESS [dashboard](https://pfs.nifcloud.com/help/ess/dashboard.htm).
+Check the SMTP user name and SMTP user password from the ESS [dashboard](https://docs.nifcloud.com/ess/help/dashboard.htm).
 `gitlab_email_from` and `gitlab_email_reply_to` must be ESS authenticated sender email addresses.
 
 ### Sina mail
