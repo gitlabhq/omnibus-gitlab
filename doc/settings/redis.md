@@ -120,7 +120,7 @@ redis['announce_ip_from_hostname'] = true
 ## Setting the Redis Cache instance as an LRU
 
 Using multiple Redis instances allows you to configure Redis as a
-[Least Recently Used cache](https://redis.io/docs/manual/eviction/). Note you should only
+[Least Recently Used cache](https://redis.io/docs/latest/operate/rs/databases/memory-performance/eviction-policy/). Note you should only
 do this for the Redis cache, rate-limiting, and repository cache instances; the Redis queues, shared
 state instances, and tracechunks instances should never be configured as an LRU,
 since they contain data (e.g. Sidekiq jobs) that is expected to be persistent.
@@ -160,7 +160,7 @@ You can configure Redis to run behind SSL.
 NOTE:
 Some `redis-cli` binaries are not built with support for directly connecting to a Redis server over TLS.
 If your `redis-cli` doesn't support the `--tls` flag, you will have to use something like
-[`stunnel`](https://redis.com/blog/stunnel-secure-redis-ssl/) to connect to the
+[`stunnel`](https://redis.io/blog/stunnel-secure-redis-ssl/) to connect to the
 Redis server using `redis-cli` for any debugging purposes.
 
 ### Make GitLab client connect to Redis server over SSL

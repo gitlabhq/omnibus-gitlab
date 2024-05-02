@@ -82,7 +82,7 @@ cluster for all databases_ to _one cluster per database_.
 Therefore the HA configuration of logical databases must be independent of the
 deployment model.
 
-Consul [services](https://developer.hashicorp.com/consul/docs/srvices/configuration/services-configuration-reference)
+Consul [services](https://developer.hashicorp.com/consul/docs/services/configuration/services-configuration-reference)
 can have multiple health-checks and [watches](https://developer.hashicorp.com/consul/docs/dynamic-app-config/watches#service).
 At this level, Omnibus GitLab defines _a Consul service per database cluster_
 and _a service watch per logical database_.
