@@ -728,9 +728,7 @@ default['gitlab']['sidekiq']['health_checks_listen_port'] = 8092
 
 # Cluster specific settings
 default['gitlab']['sidekiq']['interval'] = nil
-default['gitlab']['sidekiq']['concurrency'] = nil
-default['gitlab']['sidekiq']['max_concurrency'] = 20
-default['gitlab']['sidekiq']['min_concurrency'] = nil
+default['gitlab']['sidekiq']['concurrency'] = 20
 default['gitlab']['sidekiq']['queue_groups'] = ['*']
 default['gitlab']['sidekiq']['consul_service_name'] = 'sidekiq'
 default['gitlab']['sidekiq']['consul_service_meta'] = nil

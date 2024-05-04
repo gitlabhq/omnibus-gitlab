@@ -346,14 +346,14 @@ module Gitlab
           },
           {
             config_keys: %w(gitlab sidekiq min_concurrency),
-            deprecation: '16.9',
-            removal: '17.0',
+            deprecation: '16.9', # Remove message issue: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8491
+            removal: '17.0', # Removal issue: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3422
             note: "Starting with GitLab 17.0, `sidekiq['min_concurrency']` will be removed. Please follow https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#manage-thread-counts-explicitly to use `sidekiq['concurrency']` instead."
           },
           {
             config_keys: %w(gitlab sidekiq max_concurrency),
-            deprecation: '16.9',
-            removal: '17.0',
+            deprecation: '16.9', # Remove message issue: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8491
+            removal: '17.0', # Removal issue: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3422
             note: "Starting with GitLab 17.0, `sidekiq['max_concurrency']` will be removed. Please follow https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#manage-thread-counts-explicitly to use `sidekiq['concurrency']` instead."
           },
           {

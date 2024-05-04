@@ -145,14 +145,14 @@ We observed 100-400MB of memory usage reduction configuring Puma this way.
 ## Optimize Sidekiq
 
 Sidekiq is a background processing daemon. When configured with GitLab by default
-it runs with a high concurrency mode of `50`. This does impact how much memory it can
+it runs with a concurrency mode of `20`. This does impact how much memory it can
 allocate at a given time. It is advised to configure it to use a significantly
 smaller value of `5` or `10` (preferred).
 
 In `/etc/gitlab/gitlab.rb`:
 
 ```ruby
-sidekiq['max_concurrency'] = 10
+sidekiq['concurrency'] = 10
 ```
 
 ## Optimize Gitaly
@@ -249,7 +249,7 @@ and disable the Prometheus Metrics feature:
    ```ruby
    puma['worker_processes'] = 0
 
-   sidekiq['max_concurrency'] = 10
+   sidekiq['concurrency'] = 10
 
    prometheus_monitoring['enable'] = false
 
