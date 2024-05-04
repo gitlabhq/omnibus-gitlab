@@ -26,7 +26,7 @@ RSpec.describe 'gitlab::sidekiq' do
           expect(content).to match(/rubyopt=\"-W:no-experimental\"/)
           expect(content).to include(%(RUBYOPT="${rubyopt}"))
           expect(content).to match(%r{bin/sidekiq-cluster})
-          expect(content).to match(/-m 20/) # max_concurrency
+          expect(content).to match(/-c 20/) # concurrency
           expect(content).to match(/--timeout 25/) # shutdown timeout
           expect(content).to match(/\*/) # all queues
         }
@@ -64,11 +64,19 @@ RSpec.describe 'gitlab::sidekiq' do
       before do
         stub_gitlab_rb(
           sidekiq: {
-            log_group: 'fugee'
+            log_group: 'fugee',
+            concurrency: 42
           }
         )
       end
       it_behaves_like 'enabled logged service', 'sidekiq', true, { log_directory_owner: 'git', log_group: 'fugee' }
+
+      it 'correctly renders out the sidekiq service file' do
+        expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/run")
+          .with_content { |content|
+            expect(content).to match(/-c 42/) # concurrency
+          }
+      end
     end
   end
 
