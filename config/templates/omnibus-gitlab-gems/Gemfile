@@ -1,0 +1,53 @@
+# THis defines the dependencies needed for Chef and its cookbooks to
+# run. Any dependency needed by `gitlab-ctl reconfigure` should be
+# included here.
+#
+# Note that you must avoid installing a gem from a Git source in this
+# file because Bundler installs gems from source in a different
+# directory than prepackaged gems. Gems installed from source cannot be
+# found with the Ruby interpreter unless `bundle exec` is used.
+source 'https://rubygems.org'
+
+# chef depends on unf_ext. This needs to be listed before Chef
+# since Cinc will look inside the Cinc RubyGems.
+gem 'unf_ext', '0.0.9.1'
+
+# The version here should be in agreement with /Gemfile.lock so that our rspec
+# testing stays consistent with the package contents.
+source 'https://packagecloud.io/cinc-project/stable' do
+  gem 'chef', '18.3.0'
+  gem 'chef-cli', '5.6.1'
+  gem 'chef-bin', '18.3.0'
+  gem 'chef-config', '18.3.0'
+  gem 'chef-zero', '15.0.11'
+  gem 'inspec-core', '6.6.0'
+end
+
+gem 'ohai', '18.1.3'
+# TODO: Include omnibus-ctl in the Gemfile
+# Currently omnibus-ctl is installed via config/software since we build
+# a custom version from the Git source for licensing reasons and for Ruby 3.2 fixes.
+gem 'acme-client', '2.0.17'
+gem 'rainbow', '3.1.1'
+gem 'gitlab-ruby-shadow', '2.5.1', require: 'shadow'
+gem 'tomlib', '0.6.0'
+gem 'mixlib-log', '3.0.9'
+gem 'remote_syslog', '1.6.15'
+
+# pin the version of faraday and faraday-net_http temporarily until
+# conflicts between the version of net-http it requires and the version of
+# net-http shipped in the Gemfile can be resolved
+gem 'faraday-net_http', '3.0.2'
+gem 'faraday', '2.8.1'
+
+# Temporary workaround because upstream inspec-core does not list this as
+# a requirement and it causes failures during gitlab-ctl reconfigure in
+# the QA job pipelines.
+# This can be dropped once https://github.com/inspec/inspec/pull/6925
+# has been merged and released.
+gem 'rubocop-ast', '1.21.0'
+
+# We need to install our own copy of license_finder since the
+# license_finder installed by gitlab-omnibus-builder appears to search
+# the builder gem directory instead of the Omnibus gem directory.
+gem 'license_finder', '7.1.0'
