@@ -35,10 +35,10 @@ env_variables['GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN'] = initial_runner_token
 ruby_block "check remote PG version" do
   block do
     remote_db_version = GitlabRailsEnvHelper.db_version
-    if remote_db_version && remote_db_version.to_f < 13
+    if remote_db_version && remote_db_version.to_f < 14
       LoggingHelper.warning(%q(
-        Note that PostgreSQL 13 is the minimum required PostgreSQL version in GitLab 16.0.
-        Support for PostgreSQL 12 has been removed.
+        Note that PostgreSQL 14 is the minimum required PostgreSQL version in GitLab 17.0.
+        Support for PostgreSQL 13 has been removed.
         To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server
       ))
     end
