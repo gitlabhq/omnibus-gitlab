@@ -1048,13 +1048,14 @@ QA-Tag:
 
 license-upload:
   stage: metrics
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   script:
     - bundle exec rake license:upload
   tags: !reference [.distribution-amd64-tags]
   cache: !reference [.tag-cache]
   needs:
-    - Ubuntu-18.04
+    - Ubuntu-22.04
+  allow_failure: true
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
@@ -1063,13 +1064,13 @@ license-upload:
 
 manifest-upload:
   stage: metrics
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   script:
     - bundle exec rake manifest:upload
   tags: !reference [.distribution-amd64-tags]
   cache: !reference [.tag-cache]
   needs:
-    - Ubuntu-18.04
+    - Ubuntu-22.04
   allow_failure: true
   rules:
     - !reference [.default_rules, rules]
