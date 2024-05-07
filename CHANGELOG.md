@@ -51,6 +51,10 @@ omnibus-gitlab repository.
 
 - [Use February 2024 PostgreSQL patches](gitlab-org/omnibus-gitlab@bc78ec9e2d91882439c574bc18eaddd08f17f8d1)
 
+## 16.10.5 (2024-05-07)
+
+No changes.
+
 ## 16.10.4 (2024-04-24)
 
 No changes.
