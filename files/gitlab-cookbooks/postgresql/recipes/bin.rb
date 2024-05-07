@@ -40,7 +40,7 @@ end
 ruby_block 'check_postgresql_version_is_deprecated' do
   block do
     LoggingHelper.warning(%q(
-      Note that PostgreSQL 13 is the minimum required PostgreSQL version in GitLab 16.0.
+      Note that PostgreSQL 14 is the minimum required PostgreSQL version in GitLab 17.0.
       To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server
     ))
   end

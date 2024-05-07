@@ -37,14 +37,14 @@ RSpec.describe 'gitlab::database-migrations' do
       before { stub_gitlab_rb(postgresql: { enable: false }) }
 
       it 'warns about outdated databases' do
-        allow(GitlabRailsEnvHelper).to receive(:db_version).and_return(12)
+        allow(GitlabRailsEnvHelper).to receive(:db_version).and_return(13)
 
         expect(migration_block).to notify('ruby_block[check remote PG version]').to(:run)
         expect(chef_run.ruby_block('check remote PG version').should_skip?(:run)).to be_falsey
 
         chef_run.ruby_block('check remote PG version').block.call
 
-        expect_logged_warning(/Support for PostgreSQL 12 has been removed/)
+        expect_logged_warning(/Support for PostgreSQL 13 has been removed/)
       end
     end
 
