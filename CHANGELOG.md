@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.11.2 (2024-05-07)
+
+### Fixed (1 change)
+
+- [Fix reconfigure failure if Redis node has Rails Sentinel config](gitlab-org/security/omnibus-gitlab@c097bfaf41a5081a4d22d99247c5dda5a8f7924e)
+
 ## 16.11.1 (2024-04-24)
 
 ### Fixed (1 change)
