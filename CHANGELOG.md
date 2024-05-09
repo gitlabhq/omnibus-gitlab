@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.9.8 (2024-05-09)
+
+### Fixed (1 change)
+
+- [Pin parser dependency in chef-bin](gitlab-org/omnibus-gitlab@a93949f0278b9c10b239274cfa07f6db93c5fa27) ([merge request](gitlab-org/omnibus-gitlab!7593))
+
 ## 16.9.7 (2024-05-07)
 
 No changes.
