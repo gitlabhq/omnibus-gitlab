@@ -31,3 +31,4 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 ## Technical notes
 
 - [AWS AMis and Marketplace Listing](aws_amis_and_marketplace_listings.md)
+- [Behind the scenes of `gitlab-ctl reconfigure`](reconfigure_in_detail.md)
