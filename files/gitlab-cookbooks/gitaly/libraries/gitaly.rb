@@ -27,6 +27,7 @@ module Gitaly
       parse_git_data_dirs
       parse_gitaly_storages
       parse_gitconfig
+      check_duplicate_storage_paths
     end
 
     def gitaly_address
@@ -158,6 +159,32 @@ module Gitaly
       }
 
       Chef::Mixin::DeepMerge.deep_merge!(tmp_source_hash, Gitlab['gitaly'])
+    end
+
+    # Validate that no storages are sharing the same path.
+    def check_duplicate_storage_paths
+      # Deep copy storages to avoid mutating the original.
+      storages = Marshal.load(Marshal.dump(Gitlab['gitaly']['configuration']['storage']))
+
+      storages.each do |storage|
+        storage[:realpath] =
+          begin
+            File.realpath(storage[:path])
+          rescue Errno::ENOENT
+            storage[:path]
+          end
+      end
+
+      realpath_duplicates = storages.group_by { |storage| storage[:realpath] }.select { |_, entries| entries.size > 1 }
+
+      return if realpath_duplicates.empty?
+
+      output = realpath_duplicates.map do |realpath, entries|
+        names = entries.map { |s| s[:name] }.join(', ')
+        "#{realpath}: #{names}"
+      end
+
+      raise "One or more Gitaly storages are accessible by multiple filesystem paths:\n  #{output.join('\n  ')}"
     end
 
     private
