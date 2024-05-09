@@ -294,12 +294,15 @@ in a Linux package installation, run as root:
 
 ## Configuring log level/verbosity
 
-You can configure the minimum log levels (verbosity) for the Container
-Registry, GitLab Shell and Gitaly:
+You can configure the minimum log levels (verbosity) for GitLab Rails,
+Container Registry, GitLab Shell and Gitaly:
 
 1. Edit `/etc/gitlab/gitlab.rb` and set the log levels:
 
    ```ruby
+   gitlab_rails['env'] = {
+     "GITLAB_LOG_LEVEL" => "WARN",
+   }
    registry['log_level'] = 'info'
    gitlab_shell['log_level'] = 'INFO'
    gitaly['configuration'] = {
@@ -317,8 +320,9 @@ Registry, GitLab Shell and Gitaly:
 
 NOTE:
 You [cannot edit](https://gitlab.com/groups/gitlab-org/-/epics/6034)
-the `log_level` for other GitLab logs, for example
-`production_json.log`, `sidekiq.log`, and so on.
+the `log_level` for certain GitLab logs, for example
+`production_json.log`, `graphql_json.log`, and so on.
+See also [Override default log level](https://docs.gitlab.com/ee/administration/logs/#override-default-log-level).
 
 ## Setting a custom log group
 
