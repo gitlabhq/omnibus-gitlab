@@ -24,11 +24,11 @@ skip_transitive_dependency_licensing true
 
 # Follow the Ruby upgrade guide when changing the ruby version
 # link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
-current_ruby_version = Gitlab::Util.get_env('RUBY_VERSION') || '3.1.4'
+current_ruby_version = Gitlab::Util.get_env('RUBY_VERSION') || '3.1.5'
 
 # NOTE: When this value is updated, flip `USE_NEXT_RUBY_VERSION_IN_*` variable
 # to false to avoid surprises.
-next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.1.4'
+next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.1.5'
 
 # MRs targeting stable branches should use current Ruby version and ignore next
 # Ruby version. Also, we provide `USE_SPECIFIED_RUBY_VERSION` variable to force
@@ -68,7 +68,9 @@ dependency 'jemalloc'
 
 version('3.0.6') { source sha256: '6e6cbd490030d7910c0ff20edefab4294dfcd1046f0f8f47f78b597987ac683e' }
 version('3.1.4') { source sha256: 'a3d55879a0dfab1d7141fdf10d22a07dbf8e5cdc4415da1bde06127d5cc3c7b6' }
+version('3.1.5') { source sha256: '3685c51eeee1352c31ea039706d71976f53d00ab6d77312de6aa1abaf5cda2c5' }
 version('3.2.3') { source sha256: 'af7f1757d9ddb630345988139211f1fd570ff5ba830def1cc7c468ae9b65c9ba' }
+version('3.2.4') { source sha256: 'c72b3c5c30482dca18b0f868c9075f3f47d8168eaf626d4e682ce5b59c858692' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
@@ -109,12 +111,17 @@ build do
   # 1. Enable custom patch created by ayufan that allows to count memory allocations
   #    per-thread. This is asked to be upstreamed as part of https://github.com/ruby/ruby/pull/3978
   # 2. Backport Ruby upstream patch to fix seg faults in libxml2/Nokogiri: https://bugs.ruby-lang.org/issues/19580
-  #    This has been merged for Ruby 3.2.3 but not yet backported: https://github.com/ruby/ruby/pull/7663
-  patches = if version.satisfies?('>= 3.2.3')
+  #    This has been merged for Ruby 3.2.3 and backported to 3.1.5.
+  patches = if version.satisfies?('>= 3.2.3') || version.satisfies?(['>= 3.1.5', '< 3.2.0'])
               %w[thread-memory-allocations]
             else
               %w[thread-memory-allocations fix-ruby-xfree-for-libxml2]
             end
+
+  # Due to https://bugs.ruby-lang.org/issues/20451, this patch is needed
+  # to compile Ruby 3.1.5 on platforms with libffi < 3.2. This patch pulls in
+  # https://github.com/ruby/ruby/pull/10696.
+  patches += %w[fiddle-closure] if version.satisfies?('= 3.1.5')
 
   ruby_version = Gem::Version.new(version).canonical_segments[0..1].join('.')
 
