@@ -33,13 +33,17 @@ class RedisHelper
 
     redis_socket = gitlab_rails['redis_socket']
     redis_socket = false if RedisHelper::Checks.is_gitlab_rails_redis_tcp?
+    params = redis_params(support_sentinel_groupname: support_sentinel_groupname)
 
     if redis_socket && !RedisHelper::Checks.has_sentinels?
-      uri = URI('unix:/')
+      uri = URI("unix://")
       uri.path = redis_socket
-    else
-      params = redis_params(support_sentinel_groupname: support_sentinel_groupname)
 
+      if params[2]
+        password = encode_redis_password(params[2])
+        uri.userinfo = ":#{password}"
+      end
+    else
       uri = build_redis_url(
         ssl: gitlab_rails['redis_ssl'],
         host: params[0],
@@ -95,6 +99,10 @@ class RedisHelper
     uri.password = CGI.escape(password) if password
 
     uri
+  end
+
+  def encode_redis_password(password)
+    URI::Generic::DEFAULT_PARSER.escape(password)
   end
 
   def redis_sentinel_urls(sentinels_key)

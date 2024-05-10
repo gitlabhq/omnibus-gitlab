@@ -210,20 +210,24 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
   context 'with redis settings' do
     let(:config_file) { '/var/opt/gitlab/gitlab-rails/etc/resque.yml' }
+    let(:resque_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/resque.yml') }
+    let(:resque_yml_file_content) { ChefSpec::Renderer.new(chef_run, resque_yml_template).content }
+    let(:resque_yml) { YAML.safe_load(resque_yml_file_content, aliases: true, symbolize_names: true) }
+
     let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
 
     context 'and default configuration' do
       it 'creates the config file with the required redis settings' do
         expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root').with_variables(
           hash_including(
-            redis_url: URI('unix:/var/opt/gitlab/redis/redis.socket'),
+            redis_url: URI('unix:///var/opt/gitlab/redis/redis.socket'),
             redis_sentinels: [],
             redis_enable_client: true
           )
         )
 
         expect(chef_run).to render_file(config_file).with_content { |content|
-          expect(content).to match(%r(url: unix:/var/opt/gitlab/redis/redis.socket$))
+          expect(content).to match(%r(url: unix:///var/opt/gitlab/redis/redis.socket$))
           expect(content).not_to match(/id:/)
         }
       end
@@ -231,14 +235,14 @@ RSpec.describe 'gitlab::gitlab-rails' do
       it 'creates cable.yml with the same settings' do
         expect(chef_run).to create_templatesymlink('Create a cable.yml and create a symlink to Rails root').with_variables(
           hash_including(
-            redis_url: URI('unix:/var/opt/gitlab/redis/redis.socket'),
+            redis_url: URI('unix:///var/opt/gitlab/redis/redis.socket'),
             redis_sentinels: [],
             redis_enable_client: true
           )
         )
 
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/cable.yml').with_content { |content|
-          expect(content).to match(%r(url: unix:/var/opt/gitlab/redis/redis.socket$))
+          expect(content).to match(%r(url: unix:///var/opt/gitlab/redis/redis.socket$))
         }
       end
 
@@ -301,10 +305,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
     end
 
     context 'with TLS settings' do
-      let(:resque_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/resque.yml') }
-      let(:resque_yml_file_content) { ChefSpec::Renderer.new(chef_run, resque_yml_template).content }
-      let(:resque_yml) { YAML.safe_load(resque_yml_file_content, aliases: true, symbolize_names: true) }
-
       before do
         stub_gitlab_rb(
           gitlab_rails: {
@@ -367,6 +367,38 @@ RSpec.describe 'gitlab::gitlab-rails' do
         it 'does not raise error' do
           expect { chef_run }.not_to raise_error(RuntimeError)
         end
+      end
+    end
+
+    context 'with a password and UNIX socket' do
+      let(:cable_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/cable.yml') }
+      let(:cable_yml_file_content) { ChefSpec::Renderer.new(chef_run, cable_yml_template).content }
+      let(:cable_yml) { YAML.safe_load(cable_yml_file_content, aliases: true, symbolize_names: true) }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_password: 'my pass',
+          }
+        )
+      end
+
+      it 'renders resque.yml with password' do
+        expected_output = {
+          url: "unix://:my%20pass@/var/opt/gitlab/redis/redis.socket",
+          secret_file: "/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.yml.enc"
+        }
+
+        expect(resque_yml[:production]).to eq(expected_output)
+      end
+
+      it 'creates cable.yml with password' do
+        expected_output = {
+          adapter: 'redis',
+          url: "unix://:my%20pass@/var/opt/gitlab/redis/redis.socket",
+        }
+
+        expect(cable_yml[:production]).to eq(expected_output)
       end
     end
 

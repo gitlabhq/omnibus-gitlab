@@ -49,7 +49,7 @@ RSpec.describe RedisHelper do
   context '#redis_url' do
     context 'with default configuration' do
       it 'returns a unix socket' do
-        expect(subject.redis_url.to_s).to eq('unix:/var/opt/gitlab/redis/redis.socket')
+        expect(subject.redis_url.to_s).to eq('unix:///var/opt/gitlab/redis/redis.socket')
       end
     end
 
