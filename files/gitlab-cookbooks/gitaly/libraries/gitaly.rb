@@ -163,6 +163,9 @@ module Gitaly
 
     # Validate that no storages are sharing the same path.
     def check_duplicate_storage_paths
+      # If Gitaly isn't running, there is no need to do this check.
+      return unless Services.enabled?('gitaly')
+
       # Deep copy storages to avoid mutating the original.
       storages = Marshal.load(Marshal.dump(Gitlab['gitaly']['configuration']['storage']))
 
