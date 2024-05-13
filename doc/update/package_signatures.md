@@ -88,12 +88,12 @@ There are mild differences between Yum and Dnf, but the underlying configuration
 
 1. Remove any existing key from the repository keyrings:
 
-    ```shell
-    for pubring in /var/cache/dnf/gitlab_gitlab-?e-*/pubring
-    do
-      gpg --homedir $pubring --delete-key F6403F6544A38863DAA0B6E03F01618A51312F3F
-    done
-    ```
+   ```shell
+   for pubring in /var/cache/dnf/*gitlab*/pubring
+   do
+     gpg --homedir $pubring --delete-key F6403F6544A38863DAA0B6E03F01618A51312F3F
+   done
+   ```
 
 1. Update the repository data/cache, which asks you to confirm keys:
 
