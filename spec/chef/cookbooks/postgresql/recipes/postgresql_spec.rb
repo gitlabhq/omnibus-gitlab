@@ -264,6 +264,14 @@ RSpec.describe 'postgresql' do
           .with_content(/log_lock_waits = 1/)
       end
 
+      it 'sets log_min_duration_statement' do
+        expect(chef_run.node['postgresql']['log_min_duration_statement'])
+          .to eq(1000)
+
+        expect(chef_run).to render_file(runtime_conf)
+          .with_content(/log_min_duration_statement = 1000/)
+      end
+
       it 'sets deadlock_timeout' do
         expect(chef_run.node['postgresql']['deadlock_timeout'])
           .to eq('5s')
