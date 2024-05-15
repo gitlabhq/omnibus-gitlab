@@ -43,7 +43,7 @@ build do
     prefix_path = "#{install_dir}/embedded"
     gem_path = shellout!("#{embedded_bin('ruby')} -e \"puts Gem.path.find { |path| path.start_with?(\'#{prefix_path}\') }\"", env: env).stdout.chomp
 
-    patch source: "Version-17-EOL-detection.patch",
+    patch source: "drop-eol-warning.patch",
           target: "#{gem_path}/gems/chef-#{version}/lib/chef/client.rb"
 
     patch source: "utf8-locale-support.patch",
