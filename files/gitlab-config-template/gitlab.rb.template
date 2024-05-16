@@ -817,6 +817,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # ]
 # gitlab_rails['redis_sentinels_password'] = 'sentinel-requirepass-goes-here'
 
+# gitlab_rails']['redis_sentinel_master'] = nil
+# gitlab_rails']['redis_sentinel_master_ip'] = nil
+# gitlab_rails']['redis_sentinel_master_port'] = nil
+
 #### Cluster support
 ####! Cluster support is only available for selected Redis instances. `resque.yml` will not
 ####! support cluster mode to maintain full-compatibility with the GitLab rails application.

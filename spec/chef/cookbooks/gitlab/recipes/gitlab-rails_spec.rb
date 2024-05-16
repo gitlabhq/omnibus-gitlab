@@ -302,6 +302,68 @@ RSpec.describe 'gitlab::gitlab-rails' do
           expect(content).to match(/id:$/)
         }
       end
+
+      context 'with Redis sentinels configured' do
+        let(:expected_output) do
+          {
+            production: {
+              url: 'redis://:toomanysecrets@gitlab-redis/',
+              sentinels: [
+                { host: '10.0.0.2', port: 26379 },
+                { host: '10.0.0.3', port: 26379 },
+                { host: '10.0.0.4', port: 26379 },
+              ],
+              secret_file: '/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.yml.enc',
+            }
+          }
+        end
+
+        context 'with Redis master details specified through redis subkey' do
+          before do
+            stub_gitlab_rb(
+              redis: {
+                enable: false,
+                master_name: 'gitlab-redis',
+                master_password: 'toomanysecrets'
+              },
+              gitlab_rails: {
+                redis_sentinels: [
+                  { host: '10.0.0.2', port: 26379 },
+                  { host: '10.0.0.3', port: 26379 },
+                  { host: '10.0.0.4', port: 26379 },
+                ]
+              }
+            )
+          end
+
+          it 'populates resque.yml with expected values' do
+            expect(resque_yml).to eq(expected_output)
+          end
+        end
+
+        context 'with Redis master details specified through gitlab_rails subkey' do
+          before do
+            stub_gitlab_rb(
+              redis: {
+                enable: false,
+              },
+              gitlab_rails: {
+                redis_sentinel_master: 'gitlab-redis',
+                redis_password: 'toomanysecrets',
+                redis_sentinels: [
+                  { host: '10.0.0.2', port: 26379 },
+                  { host: '10.0.0.3', port: 26379 },
+                  { host: '10.0.0.4', port: 26379 },
+                ]
+              }
+            )
+          end
+
+          it 'populates resque.yml with expected values' do
+            expect(resque_yml).to eq(expected_output)
+          end
+        end
+      end
     end
 
     context 'with TLS settings' do
