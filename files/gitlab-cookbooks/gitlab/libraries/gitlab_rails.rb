@@ -35,6 +35,7 @@ module GitlabRails
       parse_incoming_email_logfile
       parse_service_desk_email_logfile
       parse_maximum_request_duration
+      parse_redis_settings
       parse_redis_extra_config_command
       validate_smtp_settings!
       validate_ssh_settings!
@@ -336,6 +337,13 @@ module GitlabRails
       # set only after the instance-specific ones are handled, or this default
       # value will get used for the instance-specific settings.
       Gitlab['gitlab_rails']['redis_encrypted_settings_file'] ||= File.join(encrypted_settings_path, 'redis.yml.enc')
+    end
+
+    def parse_redis_settings
+      Gitlab['gitlab_rails']['redis_sentinel_master'] ||= Gitlab['redis']['master_name'] || Gitlab[:node]['redis']['master_name']
+      Gitlab['gitlab_rails']['redis_sentinel_master_ip'] ||= Gitlab['redis']['master_ip'] || Gitlab[:node]['redis']['master_ip']
+      Gitlab['gitlab_rails']['redis_sentinel_master_port'] ||= Gitlab['redis']['master_port'] || Gitlab[:node]['redis']['master_port']
+      Gitlab['gitlab_rails']['redis_password'] ||= Gitlab['redis']['master_password'] || Gitlab[:node]['redis']['master_password']
     end
 
     def parse_redis_extra_config_command
