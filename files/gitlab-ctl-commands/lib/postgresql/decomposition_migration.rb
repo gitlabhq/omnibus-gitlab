@@ -96,7 +96,7 @@ class PostgreSQL
 
     def run_migration
       puts "Copying data to new database..."
-      run_command("gitlab-rake gitlab:db:decomposition:migrate")
+      run_command("gitlab-rake gitlab:db:decomposition:migrate", timeout: 84_600)
     end
 
     def post_migrate
@@ -109,8 +109,8 @@ class PostgreSQL
       run_command("gitlab-ctl restart")
     end
 
-    def run_command(cmd)
-      GitlabCtl::Util.run_command(cmd).tap do |status|
+    def run_command(cmd, timeout: nil)
+      GitlabCtl::Util.run_command(cmd, timeout: timeout).tap do |status|
         if status.error?
           enable_background_migrations unless background_migrations_initally_disabled?
 

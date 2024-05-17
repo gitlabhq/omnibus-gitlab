@@ -45,16 +45,18 @@ RSpec.describe PostgreSQL::DecompositionMigration do
 
     context 'when external command fails' do
       before do
-        allow(GitlabCtl::Util).to receive(:run_command).and_return(command_fail)
+        allow(GitlabCtl::Util).to receive(:run_command).with(any_args).and_return(command_fail)
         allow(GitlabCtl::Util).to receive(:run_command).with(
-          "gitlab-rails runner \"Feature.enable(:execute_background_migrations) && Feature.enable(:execute_batched_migrations_on_schedule)\"\n"
+          "gitlab-rails runner \"Feature.enable(:execute_background_migrations) && Feature.enable(:execute_batched_migrations_on_schedule)\"\n",
+          timeout: nil
         ).and_return(command_ok)
       end
 
       context 'and background migrations are enabled before starting this script' do
         it 'enables background migrations and then exits' do
           expect(GitlabCtl::Util).to receive(:run_command).with(
-            "gitlab-rails runner \"Feature.enable(:execute_background_migrations) && Feature.enable(:execute_batched_migrations_on_schedule)\"\n"
+            "gitlab-rails runner \"Feature.enable(:execute_background_migrations) && Feature.enable(:execute_batched_migrations_on_schedule)\"\n",
+            timeout: nil
           ).and_return(command_ok)
 
           expect { instance.migrate! }.to raise_error(SystemExit)
@@ -76,13 +78,14 @@ RSpec.describe PostgreSQL::DecompositionMigration do
 
     context 'runs commands needed for migration to decomposed setup' do
       before do
-        allow(GitlabCtl::Util).to receive(:run_command).and_return(command_ok)
+        allow(GitlabCtl::Util).to receive(:run_command).with(any_args).and_return(command_ok)
       end
 
       context 'and background migrations are enabled before starting this script' do
         it 'disables background migrations' do
           expect(GitlabCtl::Util).to receive(:run_command).with(
-            "gitlab-rails runner \"Feature.disable(:execute_background_migrations) && Feature.disable(:execute_batched_migrations_on_schedule)\"\n"
+            "gitlab-rails runner \"Feature.disable(:execute_background_migrations) && Feature.disable(:execute_batched_migrations_on_schedule)\"\n",
+            timeout: nil
           ).and_return(command_ok)
 
           instance.migrate!
@@ -103,40 +106,45 @@ RSpec.describe PostgreSQL::DecompositionMigration do
 
       it 'stops Gitlab except for PostgreSQL' do
         expect(GitlabCtl::Util).to receive(:run_command).with(
-          "gitlab-ctl stop && gitlab-ctl start postgresql"
-        ).and_return(command_ok)
+          "gitlab-ctl stop && gitlab-ctl start postgresql",
+          timeout: nil
+        ).and_return(command_ok).once
 
         instance.migrate!
       end
 
       it 'calls the migration rake task' do
         expect(GitlabCtl::Util).to receive(:run_command).with(
-          "gitlab-rake gitlab:db:decomposition:migrate"
-        ).and_return(command_ok)
+          "gitlab-rake gitlab:db:decomposition:migrate",
+          timeout: 84_600
+        ).and_return(command_ok).once
 
         instance.migrate!
       end
 
       it 'runs the reconfigure task' do
         expect(GitlabCtl::Util).to receive(:run_command).with(
-          "gitlab-ctl reconfigure"
-        ).and_return(command_ok)
+          "gitlab-ctl reconfigure",
+          timeout: nil
+        ).and_return(command_ok).once
 
         instance.migrate!
       end
 
       it 'enables write locks' do
         expect(GitlabCtl::Util).to receive(:run_command).with(
-          "gitlab-rake gitlab:db:lock_writes"
-        ).and_return(command_ok)
+          "gitlab-rake gitlab:db:lock_writes",
+          timeout: nil
+        ).and_return(command_ok).once
 
         instance.migrate!
       end
 
       it 'restarts GitLab' do
         expect(GitlabCtl::Util).to receive(:run_command).with(
-          "gitlab-ctl restart"
-        ).and_return(command_ok)
+          "gitlab-ctl restart",
+          timeout: nil
+        ).and_return(command_ok).once
 
         instance.migrate!
       end
@@ -144,8 +152,9 @@ RSpec.describe PostgreSQL::DecompositionMigration do
       context 'and background migrations are enabled before starting this script' do
         it 'enables background migrations' do
           expect(GitlabCtl::Util).to receive(:run_command).with(
-            "gitlab-rails runner \"Feature.enable(:execute_background_migrations) && Feature.enable(:execute_batched_migrations_on_schedule)\"\n"
-          ).and_return(command_ok)
+            "gitlab-rails runner \"Feature.enable(:execute_background_migrations) && Feature.enable(:execute_batched_migrations_on_schedule)\"\n",
+            timeout: nil
+          ).and_return(command_ok).once
 
           instance.migrate!
         end
