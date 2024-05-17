@@ -173,13 +173,14 @@ add_command_under_category 'pg-upgrade', 'database',
     Kernel.exit 0
   end
 
-  log 'Checking for a newer version of PostgreSQL to install'
-  if @db_worker.target_version && Dir.exist?("#{INST_DIR}/#{@db_worker.target_version.major}")
-    log "Upgrading PostgreSQL to #{@db_worker.target_version}"
-  else
+  unless GitlabCtl::Util.progress_message('Checking for a newer version of PostgreSQL to install') do
+    @db_worker.target_version && Dir.exist?("#{INST_DIR}/#{@db_worker.target_version.major}")
+  end
     $stderr.puts 'No new version of PostgreSQL installed, nothing to upgrade to'
     Kernel.exit 0
   end
+
+  log "Upgrading PostgreSQL to #{@db_worker.target_version}"
 
   deprecation_message if @db_worker.target_version.major.to_f < 13
 
