@@ -78,7 +78,6 @@ module Gitlab
     attribute('postgres_exporter',  priority: 30)
     attribute('pgbouncer_exporter', priority: 30)
     attribute('gitlab_exporter',    priority: 30).use { GitlabExporter }
-    attribute('grafana')
   end
 
   ## Attributes under node['gitlab']
