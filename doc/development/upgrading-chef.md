@@ -17,14 +17,14 @@ to upgrade to the latest version and verify the functionality.
    git switch -c upgrade-chef-to-X
    ```
 
-1. Update the appropriate software entries in `config/software/`. Change `default_version` to be the newer version we're upgrading to for:
+1. Update the appropriate software entries in `config/templates/omnibus-gitlab-gems/Gemfile`.
+1. In the `config/templates/omnibus-gitlab-gems` directory, run `bundle update` for the updated gems:
 
-    1. chef-bin
-    1. chef-gem
-    1. chef-zero
-    1. ohai
+   ```shell
+   bundle update chef ohai
+   ```
 
-1. Update entries in `Gemfile` to the new version. At a mininum, the `chef` and `ohai` entries will need to be updated.
+1. Update entries in `Gemfile` to the new version. At a minimum, the `chef` and `ohai` entries will need to be updated.
 1. Update the bundle
 
    1. If this is a major version upgrade
@@ -44,7 +44,7 @@ to upgrade to the latest version and verify the functionality.
 1. Commit the changes
 
    ```shell
-   git add config/software/chef-{bin,gem,zero}.rb
+   git add config/templates/omnibus-gitlab-gems/Gemfile{,.lock}
    git add Gemfile{,.lock}
    git commit
    git push
