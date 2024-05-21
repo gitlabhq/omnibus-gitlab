@@ -32,19 +32,12 @@ dependency 'ruby'
 dependency 'rubygems'
 dependency 'libffi'
 dependency 'rb-readline'
+dependency 'omnibus-gitlab-gems'
 
 build do
   patch source: "license/add-license-file.patch"
   patch source: "license/add-notice-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
-
-  gem 'install chef' \
-      " --clear-sources" \
-      " -s https://packagecloud.io/cinc-project/stable" \
-      " -s https://rubygems.org" \
-      " --version '#{version}'" \
-      " --bindir '#{install_dir}/embedded/bin'" \
-      ' --no-document', env: env
 
   block 'patch Chef files' do
     prefix_path = "#{install_dir}/embedded"
