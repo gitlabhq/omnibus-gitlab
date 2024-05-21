@@ -30,23 +30,21 @@ dependency 'ruby'
 dependency 'rubygems'
 dependency 'libffi'
 dependency 'rb-readline'
+dependency 'omnibus-gitlab-gems'
 
 build do
   patch source: "license/add-license-file.patch"
   patch source: "license/add-notice-file.patch"
   env = with_standard_compiler_flags(with_embedded_path)
 
-  gem 'install chef' \
-      " --clear-sources" \
-      " -s https://packagecloud.io/cinc-project/stable" \
-      " -s https://rubygems.org" \
-      " --version '#{version}'" \
-      " --bindir '#{install_dir}/embedded/bin'" \
-      ' --no-document', env: env
+  block 'patch Chef files' do
+    prefix_path = "#{install_dir}/embedded"
+    gem_path = shellout!("#{embedded_bin('ruby')} -e \"puts Gem.path.find { |path| path.start_with?(\'#{prefix_path}\') }\"", env: env).stdout.chomp
 
-  patch source: "Version-17-EOL-detection.patch",
-        target: "#{install_dir}/embedded/lib/ruby/gems/3.0.0/gems/chef-#{version}/lib/chef/client.rb"
+    patch source: "Version-17-EOL-detection.patch",
+          target: "#{gem_path}/gems/chef-#{version}/lib/chef/client.rb"
 
-  patch source: "utf8-locale-support.patch",
-        target: "#{install_dir}/embedded/lib/ruby/gems/3.0.0/gems/chef-config-#{version}/lib/chef-config/config.rb"
+    patch source: "utf8-locale-support.patch",
+          target: "#{gem_path}/gems/chef-config-#{version}/lib/chef-config/config.rb"
+  end
 end

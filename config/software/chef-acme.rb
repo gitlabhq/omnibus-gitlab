@@ -32,7 +32,7 @@ source git: version.remote
 # Omnibus Build order: https://github.com/chef/omnibus/blob/c872e61c30d2b3f88ead03bd1254ff96d37059a3/lib/omnibus/library.rb#L64
 dependency 'gitlab-cookbooks' unless project.dependencies.include?('gitlab-cookbooks')
 
-dependency 'acme-client'
+dependency 'omnibus-gitlab-gems'
 dependency 'compat_resource'
 
 target_path = "#{install_dir}/embedded/cookbooks/acme"
