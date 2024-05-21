@@ -620,7 +620,7 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     end
 
     it 'should generate config file with the specified values' do
-      content = 'Sentinel = ["redis://:some+pass@127.0.0.1:26379","redis://:some+pass@127.0.8.1:12345"]'
+      content = 'Sentinel = ["redis://:some%20pass@127.0.0.1:26379","redis://:some%20pass@127.0.8.1:12345"]'
       content_sentinel_master = 'SentinelMaster = "examplemaster"'
       content_password = 'Password = "examplepassword"'
       content_sentinel_password = 'SentinelPassword = "some pass"'
@@ -686,7 +686,7 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
       end
 
       it 'should generate config file with the specified values' do
-        content = 'Sentinel = ["redis://:some+workhorse+pass@127.0.0.2:26379","redis://:some+workhorse+pass@127.0.8.2:12345"]'
+        content = 'Sentinel = ["redis://:some%20workhorse%20pass@127.0.0.2:26379","redis://:some%20workhorse%20pass@127.0.8.2:12345"]'
         content_sentinel_master = 'SentinelMaster = "worhorse.master"'
         content_sentinel_password = 'Password = "some workhorse pass"'
         content_url = 'URL ='

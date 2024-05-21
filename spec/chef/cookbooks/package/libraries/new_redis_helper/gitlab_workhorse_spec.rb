@@ -46,6 +46,26 @@ RSpec.describe NewRedisHelper::GitlabWorkhorse do
         end
       end
 
+      context 'when password set with a space' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              redis_password: 'redis password'
+            }
+          )
+        end
+
+        it 'ensures the password is encoded with %20' do
+          expect(subject.redis_params).to eq(
+            url: 'unix://:redis%20password@/var/opt/gitlab/redis/redis.socket',
+            password: 'redis password',
+            sentinels: [],
+            sentinelMaster: 'gitlab-redis',
+            sentinelPassword: nil
+          )
+        end
+      end
+
       context 'when settings specified via gitlab_rails' do
         before do
           stub_gitlab_rb(
