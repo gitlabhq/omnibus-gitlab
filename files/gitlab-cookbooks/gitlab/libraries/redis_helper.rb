@@ -96,7 +96,7 @@ class RedisHelper
     uri.port = port
     uri.path = path
     # In case the password has non-alphanumeric passwords, be sure to encode it
-    uri.password = CGI.escape(password) if password
+    uri.password = encode_redis_password(password) if password
 
     uri
   end
