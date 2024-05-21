@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.10.6 (2024-05-21)
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/security/omnibus-gitlab@ab098ceaf78a7467e9aa7fc853449a2bbfef20c0)
+
+### Security (1 change)
+
+- [Mattermost 2024-04 security update](gitlab-org/security/omnibus-gitlab@0185f82b5f76a1b8bf0742b5c3636de3dcf4d999) ([merge request](gitlab-org/security/omnibus-gitlab!427))
+
 ## 16.10.5 (2024-05-07)
 
 No changes.
