@@ -45,6 +45,16 @@ omnibus-gitlab repository.
 
 - [Update Mattermost to 9.7.1](gitlab-org/omnibus-gitlab@87ecb13f6b2d34d04c42a5ce879977e1dce81a12) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7551))
 
+## 16.11.3 (2024-05-21)
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/security/omnibus-gitlab@9fe621284a37b5e153b71c4ccaba4a1efe94a76f)
+
+### Security (1 change)
+
+- [Mattermost 2024-04 security update](gitlab-org/security/omnibus-gitlab@47c0bac5146e4d41b7aedb000f5212917be8d720) ([merge request](gitlab-org/security/omnibus-gitlab!426))
+
 ## 16.11.2 (2024-05-07)
 
 ### Fixed (1 change)
