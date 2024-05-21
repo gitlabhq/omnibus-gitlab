@@ -104,15 +104,10 @@ if Build::Check.use_system_ssl?
 end
 
 dependency 'cacerts'
-dependency 'faraday-cage'
+dependency 'omnibus-gitlab-gems'
 dependency 'redis'
 dependency 'nginx'
-dependency 'mixlib-log'
-dependency 'chef-zero'
-dependency 'ohai'
 dependency 'chef-gem'
-dependency 'chef-bin'
-dependency 'remote-syslog'
 dependency 'logrotate'
 dependency 'runit'
 dependency 'go-crond'
