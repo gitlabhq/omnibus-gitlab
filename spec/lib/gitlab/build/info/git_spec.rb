@@ -134,6 +134,12 @@ RSpec.describe Build::Info::Git do
   end
 
   describe '.latest_tag' do
+    before do
+      stub_env_var('CI_COMMIT_BRANCH', '')
+      stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', '')
+      stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', '')
+    end
+
     context 'on CE edition' do
       before do
         stub_is_ee(false)
@@ -178,6 +184,30 @@ RSpec.describe Build::Info::Git do
 
         it 'returns the latest available tag' do
           expect(described_class.latest_tag).to eq('16.1.1+ce.0')
+        end
+      end
+
+      context 'on merge requests' do
+        context 'when they target a feature branch' do
+          before do
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', 'my-feature-branch')
+            stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', 'master')
+          end
+
+          it 'returns the latest available tag' do
+            expect(described_class.latest_tag).to eq('16.1.1+ce.0')
+          end
+        end
+
+        context 'when they target a stable branch' do
+          before do
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', 'my-feature-branch')
+            stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', '15-10-stable')
+          end
+
+          it 'returns the latest tag in the stable version series' do
+            expect(described_class.latest_tag).to eq('15.10.0+ce.0')
+          end
         end
       end
     end
@@ -228,10 +258,40 @@ RSpec.describe Build::Info::Git do
           expect(described_class.latest_tag).to eq('16.1.1+ee.0')
         end
       end
+
+      context 'on merge requests' do
+        context 'when they target a feature branch' do
+          before do
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', 'my-feature-branch')
+            stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', 'master')
+          end
+
+          it 'returns the latest available tag' do
+            expect(described_class.latest_tag).to eq('16.1.1+ee.0')
+          end
+        end
+
+        context 'when they target a stable branch' do
+          before do
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', 'my-feature-branch')
+            stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', '15-10-stable')
+          end
+
+          it 'returns the latest tag in the stable version series' do
+            expect(described_class.latest_tag).to eq('15.10.0+ee.0')
+          end
+        end
+      end
     end
   end
 
   describe '.latest_stable_tag' do
+    before do
+      stub_env_var('CI_COMMIT_BRANCH', '')
+      stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', '')
+      stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', '')
+    end
+
     context 'on CE edition' do
       before do
         stub_is_ee(false)
@@ -276,6 +336,30 @@ RSpec.describe Build::Info::Git do
 
         it 'returns the latest available tag' do
           expect(described_class.latest_stable_tag).to eq('16.1.1+ce.0')
+        end
+      end
+
+      context 'on merge requests' do
+        context 'when they target a feature branch' do
+          before do
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', 'my-feature-branch')
+            stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', 'master')
+          end
+
+          it 'returns the latest available tag' do
+            expect(described_class.latest_tag).to eq('16.1.1+ce.0')
+          end
+        end
+
+        context 'when they target a stable branch' do
+          before do
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', 'my-feature-branch')
+            stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', '15-10-stable')
+          end
+
+          it 'returns the latest tag in the stable version series' do
+            expect(described_class.latest_tag).to eq('15.10.0+ce.0')
+          end
         end
       end
     end
@@ -324,6 +408,30 @@ RSpec.describe Build::Info::Git do
 
         it 'returns the latest available tag' do
           expect(described_class.latest_stable_tag).to eq('16.1.1+ee.0')
+        end
+      end
+
+      context 'on merge requests' do
+        context 'when they target a feature branch' do
+          before do
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', 'my-feature-branch')
+            stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', 'master')
+          end
+
+          it 'returns the latest available tag' do
+            expect(described_class.latest_tag).to eq('16.1.1+ee.0')
+          end
+        end
+
+        context 'when they target a stable branch' do
+          before do
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', 'my-feature-branch')
+            stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', '15-10-stable')
+          end
+
+          it 'returns the latest tag in the stable version series' do
+            expect(described_class.latest_tag).to eq('15.10.0+ee.0')
+          end
         end
       end
     end
