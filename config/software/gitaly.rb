@@ -29,7 +29,7 @@ skip_transitive_dependency_licensing true
 dependency 'pkg-config-lite'
 dependency 'ruby'
 dependency 'libicu'
-dependency 'tomlib'
+dependency 'omnibus-gitlab-gems'
 dependency 'git-filter-repo'
 
 # Technically, gitaly depends on git also. But because of how omnibus arranges
