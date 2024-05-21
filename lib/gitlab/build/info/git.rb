@@ -45,7 +45,9 @@ module Build
 
           return if tags.empty?
 
-          version = branch_name.delete_suffix('-stable').tr('-', '.') if Build::Check.on_stable_branch?
+          branch_for_version = Build::Info::CI.mr_target_branch_name || branch_name
+
+          version = branch_for_version.delete_suffix('-stable').tr('-', '.') if Build::Check.on_stable_branch? || Build::Check.mr_targetting_stable_branch?
           output = tags.find { |t| t.start_with?(version) } if version
 
           # If no tags corresponding to the stable branch version was found, we
@@ -63,7 +65,9 @@ module Build
 
           return if stable_tags.empty?
 
-          version = branch_name.delete_suffix('-stable').tr('-', '.') if Build::Check.on_stable_branch?
+          branch_for_version = Build::Info::CI.mr_target_branch_name || branch_name
+
+          version = branch_for_version.delete_suffix('-stable').tr('-', '.') if Build::Check.on_stable_branch? || Build::Check.mr_targetting_stable_branch?
 
           results = stable_tags.select { |t| t.start_with?(version) } if version
 
