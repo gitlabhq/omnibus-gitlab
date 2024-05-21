@@ -51,8 +51,8 @@ dependencies:
           pattern: "gem 'chef', '(\\S+)'"
           tag_prefix: 'v'
           range: '<= 18.x'
-        - filename: config/software/chef-bin.rb
-          pattern: "default_version '(\\S+)'"
+        - filename: config/templates/omnibus-gitlab-gems/Gemfile
+          pattern: "gem 'chef-bin', '(\\S+)'"
           tag_prefix: 'v'
           range: '<= 18.x'
       # ohai
@@ -65,10 +65,11 @@ dependencies:
       # mixlib-log
       https://github.com/chef/mixlib-log.git:
         replace_in_files:
-        - filename: config/software/mixlib-log.rb
-          pattern: "default_version '(\\S+)'"
+        - filename: config/templates/omnibus-gitlab-gems/Gemfile
+          pattern: "gem 'mixlib-log', '(\\S+)'"
       # chef-zero
       https://github.com/chef/chef-zero:
+        replace_in_files:
         - filename: config/templates/omnibus-gitlab-gems/Gemfile
           pattern: "gem 'chef-zero', '(\\S+)'"
       # compat_resource
