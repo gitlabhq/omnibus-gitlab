@@ -32,8 +32,8 @@ dependencies:
       # acme-client
       https://github.com/unixcharles/acme-client.git:
         replace_in_files:
-        - filename: config/software/acme-client.rb
-          pattern: "default_version '(\\S+)'"
+        - filename: config/templates/omnibus-gitlab-gems/Gemfile
+          pattern: "gem 'acme-client', '(\\S+)'"
           tag_prefix: 'v'
       # chef-acme
       https://github.com/schubergphilis/chef-acme.git:
@@ -50,15 +50,15 @@ dependencies:
       # chef-gem
       https://github.com/chef/chef.git:
         replace_in_files:
-        - filename: config/software/chef-gem.rb
-          pattern: "default_version '(\\S+)'"
+        - filename: config/templates/omnibus-gitlab-gems/Gemfile
+          pattern: "gem 'chef', '(\\S+)'"
           tag_prefix: 'v'
           range: '<= 17.x'
             # ohai
       https://github.com/chef/ohai.git:
         replace_in_files:
-        - filename: config/software/ohai.rb
-          pattern: "default_version '(\\S+)'"
+        - filename: config/templates/omnibus-gitlab-gems/Gemfile
+          pattern: "gem 'ohai', '(\\S+)'"
           tag_prefix: 'v'
           range: '<= 17.x'
       # mixlib-log
@@ -69,8 +69,8 @@ dependencies:
       # chef-zero
       https://github.com/chef/chef-zero:
         replace_in_files:
-        - filename: config/software/chef-zero.rb
-          pattern: "default_version '(\\S+)'"
+        - filename: config/templates/omnibus-gitlab-gems/Gemfile
+          pattern: "gem 'chef-zero', '(\\S+)'"
       # compat_resource
       https://github.com/chef-cookbooks/compat_resource.git:
         replace_in_files:
@@ -123,8 +123,8 @@ dependencies:
       # remote-syslog
       https://github.com/papertrail/remote_syslog.git:
         replace_in_files:
-        - filename: config/software/remote-syslog.rb
-          pattern: "default_version '(\\S+)'"
+        - filename: config/templates/omnibus-gitlab-gems/Gemfile
+          pattern: "gem 'remote_syslog', '(\\S+)'"
       # rubygems
       https://github.com/rubygems/rubygems.git:
         replace_in_files:

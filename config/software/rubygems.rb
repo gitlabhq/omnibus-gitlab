@@ -23,7 +23,6 @@ license_file 'LICENSE.txt'
 skip_transitive_dependency_licensing true
 
 dependency 'ruby'
-dependency 'faraday-cage'
 
 build do
   patch source: "license/add-license-file.patch"
