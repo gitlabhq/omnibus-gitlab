@@ -267,7 +267,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
             redis_host: 'redis.example.com',
             redis_port: 8888,
             redis_database: 2,
-            redis_password: 'mypass',
+            redis_password: 'my pass',
             redis_enable_client: false
           }
         )
@@ -276,14 +276,14 @@ RSpec.describe 'gitlab::gitlab-rails' do
       it 'creates the config file with custom host, port, password and database' do
         expect(chef_run).to create_templatesymlink('Create a resque.yml and create a symlink to Rails root').with_variables(
           hash_including(
-            redis_url: URI('redis://:mypass@redis.example.com:8888/2'),
+            redis_url: URI('redis://:my%20pass@redis.example.com:8888/2'),
             redis_sentinels: [],
             redis_enable_client: false
           )
         )
 
         expect(chef_run).to render_file(config_file).with_content { |content|
-          expect(content).to match(%r(url: redis://:mypass@redis.example.com:8888/2))
+          expect(content).to match(%r(url: redis://:my%20pass@redis.example.com:8888/2))
           expect(content).to match(/id:$/)
         }
       end
@@ -291,14 +291,14 @@ RSpec.describe 'gitlab::gitlab-rails' do
       it 'creates cable.yml with custom host, port, password and database' do
         expect(chef_run).to create_templatesymlink('Create a cable.yml and create a symlink to Rails root').with_variables(
           hash_including(
-            redis_url: URI('redis://:mypass@redis.example.com:8888/2'),
+            redis_url: URI('redis://:my%20pass@redis.example.com:8888/2'),
             redis_sentinels: [],
             redis_enable_client: false
           )
         )
 
         expect(chef_run).to render_file(config_file).with_content { |content|
-          expect(content).to match(%r(url: redis://:mypass@redis.example.com:8888/2))
+          expect(content).to match(%r(url: redis://:my%20pass@redis.example.com:8888/2))
           expect(content).to match(/id:$/)
         }
       end

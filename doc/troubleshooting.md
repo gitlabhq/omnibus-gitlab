@@ -1063,3 +1063,15 @@ To try and resolve this issue:
 1. Increase the `nproc` setting for the `git` user in the `/etc/security/limits.conf` file on the nodes where `gitlab-shell` is running.
    Typically, `gitlab-shell` runs on GitLab Rails nodes.
 1. Retry the pull or push Git command.
+
+## Hung installation after SSH connection loss
+
+If you're installing GitLab on a remote virtual machine and your SSH connection gets lost,
+the installation could hang with a zombie `dpkg` process. To resume the installation:
+
+1. Run `top` to find the process ID of the associated `apt` process, which is the parent of the `dpkg` process.
+1. Kill the `apt` process by running `sudo kill <PROCESS_ID>`.
+1. Only if doing a fresh install, run `sudo gitlab-ctl cleanse`. This step erases existing data, so must not be used on upgrades.
+1. Run `sudo dpkg configure -a`.
+1. Edit the `gitlab.rb` file to include the desired external URL and any other configuration that might be missing.
+1. Run `sudo gitlab-ctl reconfigure`.

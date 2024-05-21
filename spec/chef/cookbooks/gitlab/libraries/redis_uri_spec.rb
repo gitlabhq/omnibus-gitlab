@@ -2,6 +2,7 @@
 # are the ones we expect
 
 require 'spec_helper'
+require_relative '../../../../../files/gitlab-cookbooks/package/libraries/helpers/new_redis_helper'
 
 RSpec.describe URI::Redis do
   subject { URI('redis://localhost') }
@@ -48,8 +49,8 @@ RSpec.describe URI::Redis do
   end
 
   context 'with non-alphanumeric password' do
-    let(:password) { "&onBsidv6#XeKFd}=BDDyRrv" }
-    let(:escaped) { CGI.escape(password) }
+    let(:password) { "&onBsidv6# XeKFd}=BDDyRrv" }
+    let(:escaped) { NewRedisHelper.encode_redis_password(password) }
 
     it 'rejects unencoded passwords' do
       expect { subject.password = password }.to raise_error(URI::InvalidComponentError)
