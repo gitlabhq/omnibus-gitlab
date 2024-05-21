@@ -103,6 +103,16 @@ omnibus-gitlab repository.
 
 - [Use February 2024 PostgreSQL patches](gitlab-org/omnibus-gitlab@bc78ec9e2d91882439c574bc18eaddd08f17f8d1)
 
+## 16.10.6 (2024-05-21)
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/security/omnibus-gitlab@ab098ceaf78a7467e9aa7fc853449a2bbfef20c0)
+
+### Security (1 change)
+
+- [Mattermost 2024-04 security update](gitlab-org/security/omnibus-gitlab@0185f82b5f76a1b8bf0742b5c3636de3dcf4d999) ([merge request](gitlab-org/security/omnibus-gitlab!427))
+
 ## 16.10.5 (2024-05-07)
 
 No changes.
