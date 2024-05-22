@@ -923,8 +923,8 @@ RSpec.describe 'nginx' do
           expect(content).to include('proxy_set_header X-Gitlab-Namespace-In-Path $namespace;')
           expect(content).to include('proxy_redirect ~^(https://projects\.pages\.localhost/auth)(.*)$ $1$2;')
           expect(content).to include('proxy_redirect ~^https://([^/]*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
-          expect(content).to include('proxy_redirect ~^//([^/]*)\.(pages\.localhost)/(.*)$ /$1/$3;')
-          expect(content).to include('proxy_redirect ~^/(.*)$ /$namespace/$1;')
+          expect(content).to include('proxy_redirect ~^//([^/]*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
+          expect(content).to include('proxy_redirect ~^/(.*)$ https://pages\.localhost/$namespace/$1;')
           expect(content).to include('proxy_hide_header X-Gitlab-Namespace-In-Path;')
           # Below checks are to verify proper render entries are made
           expect(content).to include('proxy_http_version 1.1;').twice
@@ -959,8 +959,8 @@ RSpec.describe 'nginx' do
           expect(content).to include('proxy_set_header X-Gitlab-Namespace-In-Path $namespace;')
           expect(content).to include('proxy_redirect ~^(https://projects\.pages\.localhost/auth)(.*)$ $1$2;')
           expect(content).to include('proxy_redirect ~^https://([^/]*)\.(pages\.localhost:25800)/(.*)$ https://$2/$1/$3;')
-          expect(content).to include('proxy_redirect ~^//([^/]*)\.(pages\.localhost:25800)/(.*)$ /$1/$3;')
-          expect(content).to include('proxy_redirect ~^/(.*)$ /$namespace/$1;')
+          expect(content).to include('proxy_redirect ~^//([^/]*)\.(pages\.localhost:25800)/(.*)$ https://$2/$1/$3;')
+          expect(content).to include('proxy_redirect ~^/(.*)$ https://pages\.localhost:25800/$namespace/$1;')
           expect(content).to include('proxy_hide_header X-Gitlab-Namespace-In-Path;')
           # Below checks are to verify proper render entries are made
           expect(content).to include('proxy_http_version 1.1;').twice
@@ -988,10 +988,7 @@ RSpec.describe 'nginx' do
           expect(content).not_to include('rewrite ^/([^/]+)/(.*)$ /$2 break;')
           expect(content).not_to include('proxy_set_header Host $1.$http_host;')
           expect(content).not_to include('proxy_set_header X-Gitlab-Namespace-In-Path $namespace;')
-          expect(content).not_to include('proxy_redirect ~^https://(projects\.pages\.localhost)/(.*)$ https://$1/$2;')
-          expect(content).not_to include('proxy_redirect ~^https://([^/]*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
-          expect(content).not_to include('proxy_redirect ~^//([^/]*)\.(pages\.localhost)/(.*)$ /$1/$3;')
-          expect(content).not_to include('proxy_redirect ~^/(.*)$ /$namespace/$1;')
+          expect(content).not_to include('proxy_redirect')
           expect(content).to include('proxy_hide_header X-Gitlab-Namespace-In-Path;')
           # Below checks are to verify proper render entries are made
           expect(content).to include('proxy_http_version 1.1;').once
@@ -1024,8 +1021,8 @@ RSpec.describe 'nginx' do
           expect(content).to include('proxy_set_header X-Gitlab-Namespace-In-Path $namespace;')
           expect(content).to include('proxy_redirect ~^(https://customauth\.pages\.localhost/auth)(.*)$ $1$2;')
           expect(content).to include('proxy_redirect ~^https://([^/]*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
-          expect(content).to include('proxy_redirect ~^//([^/]*)\.(pages\.localhost)/(.*)$ /$1/$3;')
-          expect(content).to include('proxy_redirect ~^/(.*)$ /$namespace/$1;')
+          expect(content).to include('proxy_redirect ~^//([^/]*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
+          expect(content).to include('proxy_redirect ~^/(.*)$ https://pages\.localhost/$namespace/$1;')
           expect(content).to include('proxy_hide_header X-Gitlab-Namespace-In-Path;')
           # Below checks are to verify proper render entries are made
           expect(content).to include('proxy_http_version 1.1;').twice
