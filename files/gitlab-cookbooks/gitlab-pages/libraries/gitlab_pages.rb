@@ -157,15 +157,15 @@ module GitlabPages
           {
             "~^(#{redirect_uri})(.*)$" => "$1$2",
             "~^#{url_scheme}://([^/]*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']})/(.*)$" => "#{url_scheme}://$2/$1/$3",
-            "~^//([^/]*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']})/(.*)$" => "/$1/$3",
-            "~^/(.*)$" => "/$namespace/$1",
+            "~^//([^/]*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']})/(.*)$" => "#{url_scheme}://$2/$1/$3",
+            "~^/(.*)$" => "#{url_scheme}://#{Gitlab['pages_nginx']['fqdn_regex']}/$namespace/$1",
           }
         else
           {
             "~^(#{redirect_uri})(.*)$" => "$1$2",
             "~^#{url_scheme}://([^/]*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']}:#{pages_port})/(.*)$" => "#{url_scheme}://$2/$1/$3",
-            "~^//([^/]*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']}:#{pages_port})/(.*)$" => "/$1/$3",
-            "~^/(.*)$" => "/$namespace/$1",
+            "~^//([^/]*)\\.(#{Gitlab['pages_nginx']['fqdn_regex']}:#{pages_port})/(.*)$" => "#{url_scheme}://$2/$1/$3",
+            "~^/(.*)$" => "#{url_scheme}://#{Gitlab['pages_nginx']['fqdn_regex']}:#{pages_port}/$namespace/$1",
           }
         end
     end
