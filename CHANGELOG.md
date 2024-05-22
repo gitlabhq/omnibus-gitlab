@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.0.1 (2024-05-21)
+
+### Security (1 change)
+
+- [Mattermost 2024-04 security update](gitlab-org/security/omnibus-gitlab@d6853f8ce1627d7ba21b065c17995a107b9876db) ([merge request](gitlab-org/security/omnibus-gitlab!433))
+
 ## 17.0.0 (2024-05-15)
 
 ### Fixed (6 changes)
@@ -38,6 +44,16 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Update Mattermost to 9.7.1](gitlab-org/omnibus-gitlab@87ecb13f6b2d34d04c42a5ce879977e1dce81a12) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7551))
+
+## 16.11.3 (2024-05-21)
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/security/omnibus-gitlab@9fe621284a37b5e153b71c4ccaba4a1efe94a76f)
+
+### Security (1 change)
+
+- [Mattermost 2024-04 security update](gitlab-org/security/omnibus-gitlab@47c0bac5146e4d41b7aedb000f5212917be8d720) ([merge request](gitlab-org/security/omnibus-gitlab!426))
 
 ## 16.11.2 (2024-05-07)
 
@@ -86,6 +102,16 @@ omnibus-gitlab repository.
 ### Security (1 change)
 
 - [Use February 2024 PostgreSQL patches](gitlab-org/omnibus-gitlab@bc78ec9e2d91882439c574bc18eaddd08f17f8d1)
+
+## 16.10.6 (2024-05-21)
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/security/omnibus-gitlab@ab098ceaf78a7467e9aa7fc853449a2bbfef20c0)
+
+### Security (1 change)
+
+- [Mattermost 2024-04 security update](gitlab-org/security/omnibus-gitlab@0185f82b5f76a1b8bf0742b5c3636de3dcf4d999) ([merge request](gitlab-org/security/omnibus-gitlab!427))
 
 ## 16.10.5 (2024-05-07)
 
