@@ -34,7 +34,9 @@ sentinel_cfg = node['gitlab']['sentinel'].to_hash.merge(
 
 sentinel_service 'redis' do
   config_path File.join(node['gitlab']['sentinel']['dir'], 'sentinel.conf')
-  redis_configuration node['redis']
+  redis_configuration node['redis'].to_hash.merge(
+    master_password: node['redis']['extracted_master_password'] || node['redis']['master_password']
+  )
   sentinel_configuration sentinel_cfg
   logging_configuration node['gitlab']['logging']
 end

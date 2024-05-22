@@ -14,15 +14,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+require 'open3'
+
 require_relative 'redis_uri.rb'
 require_relative 'redis_helper.rb'
 
 module Redis
+  CommandExecutionError = Class.new(StandardError)
+
   class << self
     def parse_variables
       parse_redis_settings
       parse_redis_sentinel_settings
       parse_rename_commands
+      populate_extra_config
     end
 
     def parse_redis_settings
@@ -71,6 +77,43 @@ module Redis
 
     def redis_managed?
       Services.enabled?('redis')
+    end
+
+    def populate_extra_config
+      return unless Gitlab['redis']['extra_config_command']
+
+      command = Gitlab['redis']['extra_config_command']
+
+      begin
+        _, stdout_stderr, status = Open3.popen2e(*command.split(" "))
+      # If the command is path to a script and it doesn't exist, inform the user
+      rescue Errno::ENOENT
+        raise CommandExecutionError, "Redis: Execution of `#{command}` failed. File does not exist."
+      end
+
+      output = stdout_stderr.read
+      stdout_stderr.close
+
+      # Command execution failed. Inform the user.
+      raise CommandExecutionError, "Redis: Execution of `#{command}` failed with exit code #{status.value.exitstatus}. Output: #{output}" unless status.value.success?
+
+      Gitlab['redis']['extra_config'] = output
+      parse_redis_password_from_extra_config(output)
+    end
+
+    # Extract the password from generated config. This password is used by
+    # omnibus-gitlab library code to connect to Redis to get running version.
+    def parse_redis_password_from_extra_config(config)
+      passwords = {
+        password: %r{requirepass ['"](?<password>.*)['"]$},
+        master_password: %r{masterauth ['"](?<master_password>.*)['"]$}
+      }
+      config.lines.each do |config|
+        passwords.each do |setting, reg|
+          match = reg.match(config)
+          Gitlab['redis']["extracted_#{setting}"] = match[setting] if match
+        end
+      end
     end
 
     private

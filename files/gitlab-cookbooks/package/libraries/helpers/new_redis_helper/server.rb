@@ -37,6 +37,10 @@ module NewRedisHelper
 
     private
 
+    def redis_password
+      redis['extracted_password'] || redis['password']
+    end
+
     def redis_cli_connect_options
       args = []
       if redis_server_over_tcp?
@@ -45,7 +49,7 @@ module NewRedisHelper
         args << "-s #{redis['unixsocket']}"
       end
 
-      args << "-a '#{redis['password']}'" if redis['password']
+      args << "-a '#{redis_password}'" if redis_password
 
       args
     end
