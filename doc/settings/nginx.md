@@ -19,6 +19,9 @@ Users can configure NGINX settings differently for different services via
 available for `nginx` are also available for these `<service_nginx>` settings and
 share the same default values as GitLab NGINX.
 
+To operate NGINX for isolated services like Mattermost, you should use `gitlab_rails['enable'] = false` instead of `nginx['enable'] = false`.
+For more information, see [Running GitLab Mattermost on its own server](https://docs.gitlab.com/ee/integration/mattermost/#running-gitlab-mattermost-on-its-own-server).
+
 If modifying via `gitlab.rb`, users have to configure NGINX setting for each
 service separately. Settings given via `nginx['foo']` WILL NOT be replicated to
 service specific NGINX configuration (as `registry_nginx['foo']` or
@@ -367,7 +370,7 @@ You should create custom server blocks in the `/etc/gitlab/nginx/sites-available
 1. Run the following command:
 
    ```shell
-   sudo ln -s /etc/gitlab/nginx/sites-available/example.conf /etc/gitlab/nginx/sites-enabled/example.conf 
+   sudo ln -s /etc/gitlab/nginx/sites-available/example.conf /etc/gitlab/nginx/sites-enabled/example.conf
    ```
 
 You can add domains for server blocks [as an alternative name](ssl/index.md#add-alternative-domains-to-the-certificate)
