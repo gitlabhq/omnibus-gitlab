@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # What happens when `gitlab-ctl reconfigure` is run?
 
 Omnibus GitLab uses [Cinc](https://cinc.sh/) under the hood,
-which is a free-as-in-beer distribution of the open source software of [Chef Software Inc](https://docs.chef.io/). 
+which is a free-as-in-beer distribution of the open source software of [Chef Software Inc](https://docs.chef.io/).
 
 In very basic terms, a [Cinc client](https://cinc.sh/start/client/) run
 happens when `gitlab-ctl reconfigure` is run. This document elaborates
@@ -126,7 +126,7 @@ It is important to note that:
 
 - The `Gitlab` object stores keys as they are mentioned in `gitlab.rb`.
 - `node` stores them based on the defined nesting attribute-block-attribute hierarchy.
- 
+
 So, `gitlab_rails` settings from
 `gitlab.rb` are available as `Gitlab['gitlab_rails'][*]` while default values of
 those settings from attribute files are available at
