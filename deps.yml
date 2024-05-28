@@ -193,14 +193,6 @@ dependencies:
         - filename: config/software/libtiff.rb
           pattern: "Gitlab::Version.new\\('libtiff', 'v(\\S+)'\\)"
           tag_prefix: 'v'
-      # gitlab-registry
-      https://gitlab.com/gitlab-org/container-registry.git:
-        replace_in_files:
-        - filename: config/software/registry.rb
-          pattern: "Gitlab::Version.new\\('registry', '(\\S+)'\\)"
-          tag_filter:
-            matching: 'v(\S+)-gitlab'
-            sort_as: '$1'
       # pgbouncer
       https://github.com/pgbouncer/pgbouncer.git:
         replace_in_files:
