@@ -592,6 +592,8 @@ default['gitlab']['gitlab_rails']['redis_workhorse_tls_client_key_file'] = nil
 # used by workhorse to connect to a separate external redis instead of the omnibus-gitlab redis
 default['gitlab']['gitlab_rails']['redis_workhorse_sentinel_master'] = nil
 
+default['gitlab']['gitlab_rails']['session_store_session_cookie_token_prefix'] = ''
+
 default['gitlab']['gitlab_rails']['redis_yml_override'] = nil
 
 default['gitlab']['gitlab_rails']['smtp_enable'] = false
