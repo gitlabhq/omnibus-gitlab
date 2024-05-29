@@ -378,6 +378,7 @@ RSpec.describe 'registry' do
             ],
             default_notifications_timeout: '5000ms',
             default_notifications_threshold: 10,
+            default_notifications_maxretries: 5,
             default_notifications_backoff: '50s',
             default_notifications_headers: {
               "Authorization" => %w(AUTHORIZATION_EXAMPLE_TOKEN1 AUTHORIZATION_EXAMPLE_TOKEN2)
@@ -395,6 +396,8 @@ RSpec.describe 'registry' do
           .with_content(/"timeout":"5000ms"/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"threshold":10/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"maxretries":5/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"backoff":"50s"/)
       end
