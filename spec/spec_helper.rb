@@ -19,6 +19,14 @@ require 'knapsack'
 require 'gitlab/util'
 require 'rspec-parameterized'
 
+# Because our library directory is also named `gitlab`, it collides with
+# upstream 'gitlab' gem's code. So, we set a dummy value to the `VERSION`
+# constant so that the `gitlab` library can be required without issues. The
+# proper fix is renaming our directory to `omnibus_gitlab` to match convention.
+module Gitlab
+  VERSION = 'dummy-version'.freeze
+end
+
 # Load support libraries to provide common convenience methods for our tests
 Dir["./spec/support/**/*.rb"].each { |f| require f }
 

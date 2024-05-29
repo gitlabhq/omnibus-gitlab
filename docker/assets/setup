@@ -7,14 +7,14 @@ source /RELEASE
 
 # Remove sensitive content from RELEASE file. We can't remove the file because
 # we are using it in assets/wrapper.
-sed -i "/DOWNLOAD_URL/d;/TRIGGER_PRIVATE_TOKEN/d;" /RELEASE
+sed -i "/DOWNLOAD_URL/d;/CI_JOB_TOKEN/d;" /RELEASE
 
 # Install GitLab
-DOWNLOAD_URL=${DOWNLOAD_URL} TRIGGER_PRIVATE_TOKEN=${TRIGGER_PRIVATE_TOKEN} /assets/download-package && dpkg -i /tmp/gitlab.deb 
+DOWNLOAD_URL=${DOWNLOAD_URL} CI_JOB_TOKEN=${CI_JOB_TOKEN} /assets/download-package && dpkg -i /tmp/gitlab.deb 
 rm -rf /tmp/gitlab.deb /var/lib/apt/lists/*
 
 unset DOWNLOAD_URL
-unset TRIGGER_PRIVATE_TOKEN
+unset CI_JOB_TOKEN
 
 # Create sshd daemon
 mkdir -p /opt/gitlab/sv/sshd/supervise /opt/gitlab/sv/sshd/log/supervise
