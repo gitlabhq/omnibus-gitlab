@@ -806,6 +806,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 #### Redis local UNIX socket (will be disabled if TCP method is used)
 # gitlab_rails['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
 
+#### Session cookie settings
+# gitlab_rails['session_store_session_cookie_token_prefix'] = ''
+
 #### Sentinel support
 ####! To have Sentinel working, you must enable Redis TCP connection support
 ####! above and define a few Sentinel hosts below (to get a reliable setup

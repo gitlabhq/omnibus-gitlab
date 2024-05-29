@@ -1,0 +1,6 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+
+production:
+  session_cookie_token_prefix: <%= quote(@session_store_session_cookie_token_prefix) %>

@@ -326,6 +326,18 @@ RedisHelper::REDIS_INSTANCES.each do |instance|
   end
 end
 
+templatesymlink "Create a session_store.yml and create a symlink to Rails root" do
+  link_from File.join(gitlab_rails_source_dir, "config/session_store.yml")
+  link_to File.join(gitlab_rails_etc_dir, "session_store.yml")
+  source "session_store.yml.erb"
+  owner "root"
+  group gitlab_group
+  mode "0640"
+  variables node['gitlab']['gitlab_rails'].to_hash
+  dependent_services.each { |svc| notifies :restart, svc }
+  sensitive true
+end
+
 templatesymlink "Create a smtp_settings.rb and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, "config/initializers/smtp_settings.rb")
   link_to File.join(gitlab_rails_etc_dir, "smtp_settings.rb")
