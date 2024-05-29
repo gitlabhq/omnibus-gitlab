@@ -71,6 +71,8 @@ variables:
   DEV_PROJECT_PATH: 'gitlab/omnibus-gitlab'
   QA_PROJECT_PATH: 'gitlab-org/build/omnibus-gitlab-mirror'
   PACKAGE_PROMOTION_RUNNER_TAG: 'promotion'
+  NIGHTLY_REPO: 'nightly-builds'
+  NIGHTLY_FIPS_REPO: 'nightly-fips-builds'
 
 .distribution-amd64-tags:
   - distribution-runner
@@ -145,7 +147,10 @@ before_script:
       chmod -R 0600 ~/.ssh/;
     fi
   - bash scripts/ci/prepare_bundle.sh
-  - if [ -n "$NIGHTLY" ]; then export STAGING_REPO=nightly-builds; export FIPS_STAGING_REPO=nightly-fips-builds; fi
+  - if [ -n "$NIGHTLY" ]; then
+      export STAGING_REPO=${NIGHTLY_REPO};
+      export FIPS_STAGING_REPO=${NIGHTLY_FIPS_REPO};
+    fi
 
 fetch-assets:
   extends: .docker_job
