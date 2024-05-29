@@ -4,6 +4,7 @@ require 'json'
 
 require_relative '../build_iteration'
 require_relative "../util.rb"
+require_relative './info/ci'
 require_relative 'check'
 require_relative 'image'
 
@@ -287,19 +288,21 @@ module Build
 
       def release_file_contents
         repo = Gitlab::Util.get_env('PACKAGECLOUD_REPO') # Target repository
-        token = Gitlab::Util.get_env('TRIGGER_PRIVATE_TOKEN') # Token used for triggering a build
 
-        download_url = if token && !token.empty?
-                         Info.triggered_build_package_url
+        download_url = if /dev.gitlab.org/.match?(Build::Info::CI.api_v4_url) || Build::Check.is_nightly?
+                         Build::Info::CI.package_download_url
                        else
-                         Info.deb_package_download_url
+                         Build::Info::CI.triggered_package_download_url
                        end
+
+        raise "Unable to identify package download URL." unless download_url
+
         contents = []
         contents << "PACKAGECLOUD_REPO=#{repo.chomp}\n" if repo && !repo.empty?
         contents << "RELEASE_PACKAGE=#{Info.package}\n"
         contents << "RELEASE_VERSION=#{Info.release_version}\n"
-        contents << "DOWNLOAD_URL=#{download_url}\n" if download_url
-        contents << "TRIGGER_PRIVATE_TOKEN=#{token.chomp}\n" if token && !token.empty?
+        contents << "DOWNLOAD_URL=#{download_url}\n"
+        contents << "CI_JOB_TOKEN=#{Build::Info::CI.job_token}\n"
         contents.join
       end
 
