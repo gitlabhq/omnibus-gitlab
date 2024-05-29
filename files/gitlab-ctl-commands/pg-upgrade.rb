@@ -182,6 +182,13 @@ add_command_under_category 'pg-upgrade', 'database',
 
   log "Upgrading PostgreSQL to #{@db_worker.target_version}"
 
+  if GitlabCtl::Util.progress_message('Checking for previous failed upgrade attempts') do
+    File.exist?("#{@db_worker.tmp_data_dir}.#{@db_worker.initial_version.major}")
+  end
+    $stderr.puts "Detected a potential failed upgrade.  Directory #{@db_worker.tmp_data_dir}.#{@db_worker.initial_version.major} already exists."
+    Kernel.exit 1
+  end
+
   deprecation_message if @db_worker.target_version.major.to_f < 13
 
   target_data_dir = "#{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major}"
