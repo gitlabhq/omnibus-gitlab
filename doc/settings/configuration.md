@@ -795,11 +795,12 @@ The available options are:
 
 | `gitlab.rb` setting                          | Responsibility                                                                                                                                                   |
 | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `gitlab_rails['redis_extra_config_command']` | Provides extra configuration to the Redis configuration files used by GitLab Rails application. (`resque.yml`, `redis.yml`, `redis.<redis_instance>.yml` files) |
-| `gitlab_rails['db_extra_config_command']`    | Provides extra configuration to the DB configuration file used by GitLab Rails application. (`database.yml`)                                                    |
-| `gitlab_kas['extra_config_command']`         | Provides extra configuration to GitLab agent server for Kubernetes (KAS).                                                                                       |
-| `gitlab_workhorse['extra_config_command']`   | Provides extra configuration to GitLab Workhorse.|
-| `gitlab_exporter['extra_config_command']`    | Provides extra configuration to GitLab Exporter. |
+| `redis['extra_config_command']`              | Provides extra configuration to the Redis server configuration file.                                                                                             |
+| `gitlab_rails['redis_extra_config_command']` | Provides extra configuration to the Redis configuration files used by GitLab Rails application. (`resque.yml`, `redis.yml`, `redis.<redis_instance>.yml` files)  |
+| `gitlab_rails['db_extra_config_command']`    | Provides extra configuration to the DB configuration file used by GitLab Rails application. (`database.yml`)                                                     |
+| `gitlab_kas['extra_config_command']`         | Provides extra configuration to GitLab agent server for Kubernetes (KAS).                                                                                        |
+| `gitlab_workhorse['extra_config_command']`   | Provides extra configuration to GitLab Workhorse.                                                                                                                |
+| `gitlab_exporter['extra_config_command']`    | Provides extra configuration to GitLab Exporter.                                                                                                                 |
 
 The value assigned to any of these options should be an absolute path to an executable script
 that writes the sensitive configuration in the required format to STDOUT. The
@@ -809,11 +810,16 @@ components:
 1. Replace values set by user and default configuration files with those emitted
    by the script.
 
-### Provide Redis password to client components
+### Provide Redis password to Redis server and client components
 
-As an example, you can use the script and `gitlab.rb` snippet below to
-specify the password of a Redis server to the components that need to connect to
-Redis.
+As an example, you can use the script and `gitlab.rb` snippet below to specify
+the password to Redis server and components that need to connect to Redis.
+
+NOTE:
+When specifying password to Redis server, this method only saves the user from
+having the plaintext password in `gitlab.rb` file. The password will end up in
+plaintext in the Redis server configuration file present at
+`/var/opt/gitlab/redis/redis.conf`.
 
 1. Save the script below as `/opt/generate-redis-conf`
 
@@ -827,6 +833,11 @@ Redis.
      REDIS_PASSWORD = `echo "toomanysecrets"`.strip # Change the command inside backticks to fetch Redis password
 
      class << self
+       def server
+         puts "requirepass '#{REDIS_PASSWORD}'"
+         puts "masterauth '#{REDIS_PASSWORD}'"
+       end
+
        def rails
          puts YAML.dump({
            'password' => REDIS_PASSWORD
@@ -864,8 +875,8 @@ Redis.
    end
 
    def print_error_and_exit
-     $stdout.puts "Usage: redis_credentials <COMPONENT>"
-     $stderr.puts "Supported components are: rails, kas, workhorse, gitlab_exporter"
+     $stdout.puts "Usage: generate-redis-conf <COMPONENT>"
+     $stderr.puts "Supported components are: server, rails, kas, workhorse, gitlab_exporter"
 
      exit 1
    end
@@ -889,6 +900,8 @@ Redis.
 1. Add the snippet below to `/etc/gitlab/gitlab.rb`:
 
    ```ruby
+   redis['extra_config_command'] = '/opt/generate-redis-conf server'
+
    gitlab_rails['redis_extra_config_command'] = '/opt/generate-redis-conf rails'
    gitlab_workhorse['extra_config_command'] = '/opt/generate-redis-conf workhorse'
    gitlab_kas['extra_config_command'] = '/opt/generate-redis-conf kas'

@@ -71,3 +71,5 @@ default['redis']['announce_ip_from_hostname'] = false
 
 ## Runit settings
 default['redis']['runit_sv_timeout'] = nil
+
+default['redis']['extra_config_command'] = nil

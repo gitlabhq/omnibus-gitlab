@@ -517,6 +517,67 @@ redis_socket=''
     end
   end
 
+  context 'extra config command' do
+    context 'when extra_config_command points to a file that does not exist' do
+      before do
+        stub_gitlab_rb(
+          redis: {
+            extra_config_command: '/tmp/a-file-that-does-not-exist'
+          }
+        )
+      end
+
+      it 'raises error' do
+        expect { chef_run }.to raise_error(Redis::CommandExecutionError).with_message("Redis: Execution of `/tmp/a-file-that-does-not-exist` failed. File does not exist.")
+      end
+    end
+
+    context 'extra_config_command exits with a non-zero code' do
+      before do
+        stub_gitlab_rb(
+          redis: {
+            extra_config_command: 'bash /tmp/a-file-that-does-not-exist'
+          }
+        )
+      end
+
+      it 'raises error' do
+        expect { chef_run }.to raise_error(Redis::CommandExecutionError).with_message(/Redis.*exit code 127.*No such file or directory/)
+      end
+    end
+
+    context 'extra_config_command runs successfully' do
+      let(:code_file) { Tempfile.new(['redis-code', '.sh']) }
+
+      before do
+        file_content = <<~MSG
+          #!/usr/bin/env bash
+          echo 'requirepass "toomanysecrets"'
+        MSG
+
+        File.write(code_file.path, file_content)
+
+        stub_gitlab_rb(
+          redis: {
+            extra_config_command: "bash #{code_file.path}"
+          }
+        )
+      end
+
+      after do
+        code_file.close
+        code_file.unlink
+      end
+
+      it 'populates redis.conf with output from command' do
+        expect(chef_run).to render_file('/var/opt/gitlab/redis/redis.conf')
+          .with_content { |content|
+            expect(content).to match(/requirepass "toomanysecrets"/)
+          }
+      end
+    end
+  end
+
   context 'with redis disabled' do
     before do
       stub_gitlab_rb(redis: { enable: false })

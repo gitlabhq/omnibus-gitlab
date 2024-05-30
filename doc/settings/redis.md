@@ -233,7 +233,7 @@ redis['io_threads_do_reads'] = true
 
 ## Provide sensitive configuration to Redis clients without plain text storage
 
-For more information, see the example in [configuration documentation](../settings/configuration.md#provide-redis-password-to-client-components).
+For more information, see the example in [configuration documentation](../settings/configuration.md#provide-redis-password-to-redis-server-and-client-components).
 
 ## Troubleshooting
 

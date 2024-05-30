@@ -1952,3 +1952,9 @@ jemalloc-bg-thread yes
 # to suppress
 #
 # ignore-warnings ARM64-COW-BUG
+
+<% if @extra_config %>
+<% @extra_config.lines.each do |conf| %>
+<%= conf.chomp %>
+<% end %>
+<% end %>
