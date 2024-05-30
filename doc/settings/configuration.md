@@ -795,12 +795,12 @@ The available options are:
 
 | `gitlab.rb` setting                          | Responsibility                                                                                                                                                   |
 | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `redis['extra_config_command']`              | Provides extra configuration to the Redis server configuration file. |
-| `gitlab_rails['redis_extra_config_command']` | Provides extra configuration to the Redis configuration files used by GitLab Rails application. (`resque.yml`, `redis.yml`, `redis.<redis_instance>.yml` files) |
-| `gitlab_rails['db_extra_config_command']`    | Provides extra configuration to the DB configuration file used by GitLab Rails application. (`database.yml`)                                                    |
-| `gitlab_kas['extra_config_command']`         | Provides extra configuration to GitLab agent server for Kubernetes (KAS).                                                                                       |
-| `gitlab_workhorse['extra_config_command']`   | Provides extra configuration to GitLab Workhorse.|
-| `gitlab_exporter['extra_config_command']`    | Provides extra configuration to GitLab Exporter. |
+| `redis['extra_config_command']`              | Provides extra configuration to the Redis server configuration file.                                                                                             |
+| `gitlab_rails['redis_extra_config_command']` | Provides extra configuration to the Redis configuration files used by GitLab Rails application. (`resque.yml`, `redis.yml`, `redis.<redis_instance>.yml` files)  |
+| `gitlab_rails['db_extra_config_command']`    | Provides extra configuration to the DB configuration file used by GitLab Rails application. (`database.yml`)                                                     |
+| `gitlab_kas['extra_config_command']`         | Provides extra configuration to GitLab agent server for Kubernetes (KAS).                                                                                        |
+| `gitlab_workhorse['extra_config_command']`   | Provides extra configuration to GitLab Workhorse.                                                                                                                |
+| `gitlab_exporter['extra_config_command']`    | Provides extra configuration to GitLab Exporter.                                                                                                                 |
 
 The value assigned to any of these options should be an absolute path to an executable script
 that writes the sensitive configuration in the required format to STDOUT. The
