@@ -237,13 +237,13 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 
 ### SMTP.com
 
-You can use the [SMTP.com](https://www.smtp.com/) email service. [Retrieve your sender login and password](https://kb.smtp.com/article/1043-my-account-1)
+You can use the [SMTP.com](https://www.smtp.com/) email service. [Retrieve your sender login and password](https://knowledge.smtp.com/s/article/My-Account)
 from your account.
 
 To improve delivery by authorizing `SMTP.com` to send emails on behalf of your domain, you should:
 
 - Specify `from` and `reply_to` addresses using your GitLab domain name.
-- [Set up SPF and DKIM for the domain](https://kb.smtp.com/article/1039-email-authentication-spf-dkim-dmarc).
+- [Set up SPF and DKIM for the domain](https://knowledge.smtp.com/s/article/Email-authentication-SPF-DKIM-DMARC).
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -258,7 +258,7 @@ gitlab_rails['gitlab_email_from'] = 'user@your.gitlab.domain.com'
 gitlab_rails['gitlab_email_reply_to'] = 'user@your.gitlab.domain.com'
 ```
 
-Check the [SMTP.com Knowledge Base](https://kb.smtp.com/) for further assistance.
+Check the [SMTP.com Knowledge Base](https://knowledge.smtp.com/s/) for further assistance.
 
 ### SparkPost
 
@@ -478,7 +478,7 @@ gitlab_rails['smtp_tls'] = false
 
 ### SendGrid with API Key authentication
 
-If you don't want to supply a username/password, you can use an [API key](https://docs.sendgrid.com/for-developers/sending-email/getting-started-smtp):
+If you don't want to supply a username/password, you can use an [API key](https://www.twilio.com/docs/sendgrid/for-developers/sending-email/getting-started-smtp):
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1198,7 +1198,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 
 ### NIFCLOUD ESS
 
-[SMTP Interface](https://pfs.nifcloud.com/spec/ess/smtp.htm).
+[SMTP Interface](https://docs.nifcloud.com/ess/spec/smtp.htm).
 
 ```ruby
 gitlab_rails['smtp_enable'] = true

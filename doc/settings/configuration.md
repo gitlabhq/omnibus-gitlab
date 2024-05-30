@@ -644,7 +644,7 @@ To configure Sentry:
 
 1. Create a project in Sentry.
 1. Find the
-   [Data Source Name (DSN)](https://docs.sentry.io/product/sentry-basics/concepts/dsn-explainer/)
+   [Data Source Name (DSN)](https://docs.sentry.io/concepts/key-terms/dsn-explainer/)
    of the project you created.
 1. Edit `/etc/gitlab/gitlab.rb`:
 
@@ -655,11 +655,11 @@ To configure Sentry:
    gitlab_rails['sentry_environment'] = 'production'
    ```
 
-   The [Sentry environment](https://docs.sentry.io/product/sentry-basics/concepts/environments/)
+   The [Sentry environment](https://docs.sentry.io/concepts/key-terms/environments/)
    can be used to track errors and issues across several deployed GitLab
    environments, for example, lab, development, staging, and production.
 
-1. Optional. To set custom [Sentry tags](https://docs.sentry.io/product/sentry-basics/concepts/enrich-data/)
+1. Optional. To set custom [Sentry tags](https://docs.sentry.io/concepts/key-terms/enrich-data/)
    on every event sent from a particular server, the `GITLAB_SENTRY_EXTRA_TAGS`
    an environment variable can be set. This variable is a JSON-encoded hash representing any
    tags that should be passed to Sentry for all exceptions from that server.
