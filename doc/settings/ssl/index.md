@@ -582,7 +582,7 @@ To change the max age value:
    sudo gitlab-ctl reconfigure
    ```
 
-For more information on HSTS and NGINX, see <https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/>.
+For more information on HSTS and NGINX, see <https://blog.nginx.org/blog/http-strict-transport-security-hsts-and-nginx>.
 
 ## Install custom public certificates
 
