@@ -786,6 +786,24 @@ If using a custom external proxy such as Apache, it may be necessary to add the 
 gitlab_rails['allowed_hosts'] = ['gitlab.example.com', '127.0.0.1', 'localhost']
 ```
 
+## Session cookie configuration
+
+To change the prefix of the generated web session cookie values:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['session_store_session_cookie_token_prefix'] = 'custom_prefix_'
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+The default value is an empty string `""`.
+
 ## Provide sensitive configuration to components without plain text storage
 
 Some components expose an `extra_config_command` option in `gitlab.rb`. This allows an external script to provide secrets
