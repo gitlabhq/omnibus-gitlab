@@ -89,7 +89,6 @@ default['monitoring']['postgres_exporter']['flags'] = {
   'collector.postmaster' => true
 }
 default['monitoring']['postgres_exporter']['sslmode'] = nil
-default['monitoring']['postgres_exporter']['per_table_stats'] = nil
 default['monitoring']['postgres_exporter']['consul_service_name'] = 'postgres-exporter'
 default['monitoring']['postgres_exporter']['consul_service_meta'] = nil
 
