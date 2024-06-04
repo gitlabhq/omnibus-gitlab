@@ -26,7 +26,7 @@ The tests in the pipeline are currently triggered manually by
 
 ### Trigger:ce/ee-package job
 
-These jobs can be triggered manually once the `generate-facts` job is completed. On triggering these jobs, a child pipeline is created.
+These jobs can be triggered manually after the `generate-facts` job is completed. On triggering these jobs, a child pipeline is created.
 
 The child pipeline, called `TRIGGERED_CE/EE_PIPELINE` is generated in the Omnibus-GitLab repository
 
