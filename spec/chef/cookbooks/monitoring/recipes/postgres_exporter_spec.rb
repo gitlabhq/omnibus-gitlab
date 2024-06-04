@@ -151,11 +151,11 @@ RSpec.describe 'monitoring::postgres-exporter' do
       stub_gitlab_rb(
         postgres_exporter: {
           flags: {
-            'some.flag' => 'foo'
+            'some.flag' => 'foo',
+            'collector.stat_user_tables' => true,
           },
           listen_address: 'localhost:9700',
           enable: true,
-          per_table_stats: true,
           sslmode: 'require',
           env: {
             'USER_SETTING' => 'asdf1234'
