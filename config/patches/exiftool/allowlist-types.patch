@@ -1,8 +1,8 @@
 diff --git a/lib/Image/ExifTool.pm b/lib/Image/ExifTool.pm
-index b5349398..13d064e3 100644
+index 4108ad09..100068fc 100644
 --- a/lib/Image/ExifTool.pm
 +++ b/lib/Image/ExifTool.pm
-@@ -190,19 +190,10 @@ $defaultLang = 'en';    # default language
+@@ -191,19 +191,10 @@ $defaultLang = 'en';    # default language
  # 2) Put types with weak file signatures at end of list to avoid false matches
  # 3) PLIST must be in this list for the binary PLIST format, although it may
  #    cause a file to be checked twice for XML
@@ -13,7 +13,7 @@ index b5349398..13d064e3 100644
 -                RAR 7Z BZ2 CZI TAR EXE EXR HDR CHM LNK WMF AVC DEX DPX RAW Font
 -                JUMBF RSRC M2TS MacOS PHP PCX DCX DWF DWG DXF WTV Torrent VCard
 -                LRI R3D AA PDB PFM2 MRC LIF JXL MOI ISO ALIAS JSON MP3 DICOM PCD
--                ICO TXT AAC);
+-                NKA ICO TXT AAC);
 +@fileTypes = qw(JPEG TIFF);
  
  # file types that we can write (edit)
@@ -24,7 +24,7 @@ index b5349398..13d064e3 100644
  my %writeTypes; # lookup for writable file types (hash filled if required)
  
  # file extensions that we can't write for various base types
-@@ -224,349 +215,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
+@@ -225,351 +216,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
  # (if extension may be more than one type, the type is a list where
  #  the writable type should come first if it exists)
  %fileTypeLookup = (
@@ -229,10 +229,12 @@ index b5349398..13d064e3 100644
 -  # NDPI => ['TIFF', 'Hamamatsu NanoZoomer Digital Pathology Image'],
 -    NEF  => ['TIFF', 'Nikon (RAW) Electronic Format'],
 -    NEWER => 'COS',
+-    NKA  => ['NKA',  'Nikon NX Studio Settings'],
 -    NKSC => ['XMP',  'Nikon Sidecar'],
 -    NMBTEMPLATE => ['ZIP','Apple Numbers Template'],
 -    NRW  => ['TIFF', 'Nikon RAW (2)'],
 -    NUMBERS => ['ZIP','Apple Numbers spreadsheet'],
+-    NXD  => ['XMP',  'Nikon NX-D Settings'],
 -    O    => ['EXE',  'Relocatable Object'],
 -    ODB  => ['ZIP',  'Open Document Database'],
 -    ODC  => ['ZIP',  'Open Document Chart'],
