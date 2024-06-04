@@ -882,7 +882,7 @@ RSpec.describe 'gitaly' do
             end
 
             it 'raises an error' do
-              expect { chef_run }.to raise_error(/One or more Gitaly storages are accessible by multiple filesystem paths:.*: default.*: realpath/m)
+              expect { chef_run }.to raise_error(/Multiple Gitaly storages are sharing the same filesystem path:.*: default.*: realpath/m)
             end
           end
         end

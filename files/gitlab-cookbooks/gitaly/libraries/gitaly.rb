@@ -187,7 +187,7 @@ module Gitaly
         "#{realpath}: #{names}"
       end
 
-      raise "One or more Gitaly storages are accessible by multiple filesystem paths:\n  #{output.join('\n  ')}"
+      raise "Multiple Gitaly storages are sharing the same filesystem path:\n  #{output.join('\n  ')}"
     end
 
     private
