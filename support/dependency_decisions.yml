@@ -181,10 +181,11 @@
 - - :license
   - github.com/hashicorp/nomad/api
   - MPL2
-  - :who: Clemens Beck
-    :why: https://github.com/hashicorp/nomad/blob/3e7191ccb7028d40fcaed9b6010474b0dd136927/api/LICENSE
-    :versions: [ v0.0.0-20240306004928-3e7191ccb702 ]
-    :when: 2024-03-25 12:41:28.825087612 Z
+  - :who: Dmytro Makovey
+    :why: https://github.com/hashicorp/nomad/blob/74d8bc5d011e2b91b316559450658db69e5e5359/api/LICENSE
+    :versions: 
+      - v0.0.0-20240418183417-ea5f2f6748c7
+    :when: 2024-06-05 00:26:28.825087612 Z
 - - :license
   - github.com/kieler/elkjs
   - EPL-2.0
