@@ -274,7 +274,7 @@ docs-lint links:
   before_script: []
   script:
     # Check Markdown links
-    - lychee --offline --include-fragments doc/**/*.md
+    - lychee --offline --include-fragments doc
   rules:
     - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
