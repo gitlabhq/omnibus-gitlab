@@ -194,3 +194,12 @@ header=<%= @headers.join(';;') %>
 <%- if @namespace_in_path -%>
 namespace-in-path=<%= @namespace_in_path %>
 <%-end -%>
+<%- if @client_cert -%>
+client-cert=<%= @client_cert %>
+<%-end -%>
+<%- if @client_key -%>
+client-key=<%= @client_key %>
+<%-end -%>
+<%- if @client_ca_certs -%>
+client-ca-certs=<%= @client_ca_certs %>
+<%-end -%>

@@ -84,6 +84,10 @@ default['gitlab_pages']['redirects_max_rule_count'] = nil
 default['gitlab_pages']['register_as_oauth_app'] = true
 # Experimental - Enable namespace in path
 default['gitlab_pages']['namespace_in_path'] = false
+# Mutual TLS used with GitLab API
+default['gitlab_pages']['client_cert'] = nil
+default['gitlab_pages']['client_key'] = nil
+default['gitlab_pages']['client_ca_certs'] = nil
 
 # Temporarily retain support for `node['gitlab-pages'][*]` usage in
 # `/etc/gitlab/gitlab.rb`

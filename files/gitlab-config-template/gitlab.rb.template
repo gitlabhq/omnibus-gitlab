@@ -2076,6 +2076,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # Experimental - Enable namespace in path
 # gitlab_pages['namespace_in_path'] = false
 
+##! Configure GitLab Pages client cert and client key which will be used as mutual TLS with GitLab API
+# gitlab_pages['client_cert'] = "/path/to/client.crt"
+# gitlab_pages['client_key'] = "/path/to/client.key"
+##! Configure root CA certs used to sign client certs which will be used with GitLab API
+# gitlab_pages['client_ca_certs'] = "/path/to/ca.crt"
+
 ################################################################################
 ## GitLab Pages NGINX
 ################################################################################

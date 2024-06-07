@@ -294,6 +294,9 @@ RSpec.describe 'gitlab::gitlab-pages' do
             redirects_max_rule_count: 2000,
             enable_disk: true,
             namespace_in_path: true,
+            client_cert: "/path/to/client.crt",
+            client_key: "/path/to/client.key",
+            client_ca_certs: "/path/to/ca.crt",
             env: {
               GITLAB_CONTINUOUS_PROFILING: "stackdriver?service=gitlab-pages",
             },
@@ -369,6 +372,9 @@ RSpec.describe 'gitlab::gitlab-pages' do
             redirects-max-rule-count=2000
             header=X-XSS-Protection: 1; mode=block;;X-Content-Type-Options: nosniff;;Test: Header
             namespace-in-path=true
+            client-cert=/path/to/client.crt
+            client-key=/path/to/client.key
+            client-ca-certs=/path/to/ca.crt
         EOS
 
         expect(chef_run).to render_file("/var/opt/gitlab/pages/gitlab-pages-config").with_content(expected_content)
