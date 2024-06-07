@@ -13,7 +13,7 @@ DETAILS:
 ## Prerequisites
 
 - [Installation Requirements](https://docs.gitlab.com/ee/install/requirements.html).
-- If you want to access your GitLab instance via a domain name, like `mygitlabinstance.com`,
+- If you want to access your GitLab instance by using a domain name, like `mygitlabinstance.com`,
   make sure the domain correctly points to the IP of the server where GitLab is being
   installed. You can check this using the command `host mygitlabinstance.com`.
 - If you want to use HTTPS on your GitLab instance, make sure you have the SSL
