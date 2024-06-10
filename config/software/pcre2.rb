@@ -16,7 +16,7 @@
 
 name 'pcre2'
 
-version = Gitlab::Version.new('pcre2', 'pcre2-10.43')
+version = Gitlab::Version.new('pcre2', 'pcre2-10.44')
 default_version version.print(false)
 display_version version.print(false).delete_prefix('pcre2-')
 
