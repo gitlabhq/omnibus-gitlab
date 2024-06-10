@@ -1075,3 +1075,19 @@ the installation could hang with a zombie `dpkg` process. To resume the installa
 1. Run `sudo dpkg configure -a`.
 1. Edit the `gitlab.rb` file to include the desired external URL and any other configuration that might be missing.
 1. Run `sudo gitlab-ctl reconfigure`.
+
+## Redis-related error when reconfiguring GitLab
+
+You might encounter the following error when reconfiguring GitLab:
+
+```plaintext
+RuntimeError: redis_service[redis] (redis::enable line 19) had an error: RuntimeError: ruby_block[warn pending redis restart] (redis::enable line 77) had an error: RuntimeError: Execution of the command /opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket INFO failed with a non-zero exit code (1)
+```
+
+To resolve this problem, run the following commands:
+
+```shell
+sudo /opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket
+sudo gitlab-ctl reconfigure
+sudo gitlab-ctl restart
+```
