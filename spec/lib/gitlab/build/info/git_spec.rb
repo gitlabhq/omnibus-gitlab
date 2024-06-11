@@ -5,8 +5,8 @@ RSpec.describe Build::Info::Git do
   before do
     stub_default_package_version
 
-    ce_tags = "16.1.1+ce.0\n16.0.0+rc42.ce.0\n15.11.1+ce.0\n15.11.0+ce.0\n15.10.0+ce.0\n15.10.0+rc42.ce.0"
-    ee_tags = "16.1.1+ee.0\n16.0.0+rc42.ee.0\n15.11.1+ee.0\n15.11.0+ee.0\n15.10.0+ee.0\n15.10.0+rc42.ee.0"
+    ce_tags = "16.1.1+ce.0\n16.0.0+rc42.ce.0\n15.11.1+ce.0\n15.11.0+ce.0\n15.10.0+ce.0\n15.10.0+rc42.ce.0\n15.1.0+ce.0\n"
+    ee_tags = "16.1.1+ee.0\n16.0.0+rc42.ee.0\n15.11.1+ee.0\n15.11.0+ee.0\n15.10.0+ee.0\n15.10.0+rc42.ee.0\n15.1.0+ee.0\n"
     allow(Gitlab::Util).to receive(:shellout_stdout).with(/git -c versionsort.*ce/).and_return(ce_tags)
     allow(Gitlab::Util).to receive(:shellout_stdout).with(/git -c versionsort.*ee/).and_return(ee_tags)
   end
@@ -225,6 +225,17 @@ RSpec.describe Build::Info::Git do
             expect(described_class.latest_tag).to eq('15.10.0+ce.0')
           end
         end
+
+        context 'when they target 15-1-stable' do
+          before do
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', 'my-feature-branch')
+            stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', '15-1-stable')
+          end
+
+          it 'returns the latest tag in the 15.1 series' do
+            expect(described_class.latest_tag).to eq('15.1.0+ce.0')
+          end
+        end
       end
     end
 
@@ -363,7 +374,7 @@ RSpec.describe Build::Info::Git do
           end
 
           it 'returns the latest available tag' do
-            expect(described_class.latest_tag).to eq('16.1.1+ce.0')
+            expect(described_class.latest_stable_tag).to eq('16.1.1+ce.0')
           end
         end
 
@@ -374,7 +385,18 @@ RSpec.describe Build::Info::Git do
           end
 
           it 'returns the latest tag in the stable version series' do
-            expect(described_class.latest_tag).to eq('15.10.0+ce.0')
+            expect(described_class.latest_stable_tag).to eq('15.10.0+ce.0')
+          end
+        end
+
+        context 'when they target 15-1-stable' do
+          before do
+            stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', 'my-feature-branch')
+            stub_env_var('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', '15-1-stable')
+          end
+
+          it 'returns the latest tag in the 15.1 series' do
+            expect(described_class.latest_stable_tag).to eq('15.1.0+ce.0')
           end
         end
       end
