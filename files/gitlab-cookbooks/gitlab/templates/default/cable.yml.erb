@@ -1,4 +1,7 @@
 production:
+  <%- if @redis_extra_config_command -%>
+  config_command: "<%= @redis_extra_config_command %>"
+  <%- end -%>
   adapter: redis
   url: <%= @redis_url %>
   <% if !@redis_enable_client %>
