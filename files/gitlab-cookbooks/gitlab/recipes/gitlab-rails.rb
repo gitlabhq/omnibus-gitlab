@@ -272,7 +272,13 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
   owner "root"
   group "root"
   mode "0644"
-  variables(redis_url: url, redis_sentinels: sentinels, redis_sentinels_password: sentinels_password, redis_enable_client: redis_enable_client)
+  variables(
+    redis_url: url,
+    redis_sentinels: sentinels,
+    redis_sentinels_password: sentinels_password,
+    redis_enable_client: redis_enable_client,
+    redis_extra_config_command: redis_extra_config_command
+  )
   dependent_services.each { |svc| notifies :restart, svc }
   sensitive true
 end

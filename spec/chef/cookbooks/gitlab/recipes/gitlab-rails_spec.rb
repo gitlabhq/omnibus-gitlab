@@ -695,6 +695,13 @@ RSpec.describe 'gitlab::gitlab-rails' do
               expect(generated_yml.dig('production', 'config_command')).to eq(global_command)
             }
           end
+
+          it 'populates cable.yml with specified config command' do
+            expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/cable.yml").with_content { |content|
+              generated_yml = YAML.safe_load(content)
+              expect(generated_yml.dig('production', 'config_command')).to eq(global_command)
+            }
+          end
         end
 
         context 'with separate command for an instance' do
