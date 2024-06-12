@@ -51,6 +51,36 @@ module GitlabSpec
       allow(ENV).to receive(:[]).with(var).and_return(value)
     end
 
+    def stub_branch(branch)
+      stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', '')
+
+      stub_env_var('CI_COMMIT_BRANCH', branch)
+      allow(Gitlab::Util).to receive(:shellout_stdout).with('git rev-parse --abbrev-ref HEAD').and_return(branch)
+
+      stub_env_var('CI_COMMIT_TAG', '')
+      allow(Gitlab::Util).to receive(:shellout_stdout).with('git describe --tags --exact-match').and_raise(Gitlab::Util::ShellOutExecutionError.new("git describe --tags --exact-match", 128, "", "fatal: no tag exactly matches '#{branch}'"))
+    end
+
+    def stub_mr_branch(branch)
+      stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', branch)
+
+      stub_env_var('CI_COMMIT_BRANCH', '')
+      allow(Gitlab::Util).to receive(:shellout_stdout).with('git rev-parse --abbrev-ref HEAD').and_return('HEAD')
+
+      stub_env_var('CI_COMMIT_TAG', '')
+      allow(Gitlab::Util).to receive(:shellout_stdout).with('git describe --tags --exact-match').and_raise(Gitlab::Util::ShellOutExecutionError.new("git describe --tags --exact-match", 128, "", "fatal: no tag exactly matches '#{branch}'"))
+    end
+
+    def stub_tag(tag)
+      stub_env_var('CI_COMMIT_TAG', tag)
+      allow(Gitlab::Util).to receive(:shellout_stdout).with('git describe --tags --exact-match').and_return(tag)
+
+      stub_env_var('CI_COMMIT_BRANCH', '')
+      allow(Gitlab::Util).to receive(:shellout_stdout).with('git rev-parse --abbrev-ref HEAD').and_return('HEAD')
+
+      stub_env_var('CI_MERGE_REQUEST_SOURCE_BRANCH_NAME', '')
+    end
+
     def stub_is_package_version(package, value = nil)
       allow(File).to receive(:read).with('VERSION').and_return(value ? "1.2.3-#{package}" : '1.2.3')
     end
