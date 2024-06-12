@@ -144,6 +144,21 @@ RSpec.describe Build::Facts do
       before do
         allow(Build::Check).to receive(:on_tag?).and_return(false)
         allow(Build::Check).to receive(:on_stable_branch?).and_return(true)
+        allow(Build::Check).to receive(:mr_targetting_stable_branch?).and_return(false)
+      end
+
+      it 'does not generate version files as build facts' do
+        expect(described_class).not_to receive(:get_component_shas)
+
+        described_class.generate_version_files
+      end
+    end
+
+    context 'on branches targetting a stable branch' do
+      before do
+        allow(Build::Check).to receive(:on_tag?).and_return(false)
+        allow(Build::Check).to receive(:on_stable_branch?).and_return(false)
+        allow(Build::Check).to receive(:mr_targetting_stable_branch?).and_return(true)
       end
 
       it 'does not generate version files as build facts' do
@@ -157,6 +172,7 @@ RSpec.describe Build::Facts do
       before do
         allow(Build::Check).to receive(:on_tag?).and_return(false)
         allow(Build::Check).to receive(:on_stable_branch?).and_return(false)
+        allow(Build::Check).to receive(:mr_targetting_stable_branch?).and_return(false)
         allow(described_class).to receive(:get_component_shas).and_return(component_shas)
       end
 
