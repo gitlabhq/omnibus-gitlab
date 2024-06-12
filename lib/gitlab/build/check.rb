@@ -98,6 +98,10 @@ module Build
       def on_regular_branch?
         Build::Info::Git.branch_name && !on_stable_branch?
       end
+
+      def mr_targetting_stable_branch?
+        Build::Info::CI.mr_target_branch_name&.match?(/^\d+-\d+-stable$/)
+      end
     end
   end
 end

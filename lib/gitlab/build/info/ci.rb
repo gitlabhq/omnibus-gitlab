@@ -38,6 +38,10 @@ module Build
           Gitlab::Util.get_env('CI_COMMIT_REF_SLUG')
         end
 
+        def mr_target_branch_name
+          Gitlab::Util.get_env('CI_MERGE_REQUEST_TARGET_BRANCH_NAME')
+        end
+
         def artifact_url(job_name, file_path)
           client = Gitlab::APIClient.new
           target_job_id = client.get_job_id(job_name)
