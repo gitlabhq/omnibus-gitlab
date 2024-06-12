@@ -1,0 +1,13 @@
+diff --git a/Makefile.common b/Makefile.common
+index 0acfb9d80..8fede188e 100644
+--- a/Makefile.common
++++ b/Makefile.common
+@@ -40,7 +40,7 @@ PROMU        := $(FIRST_GOPATH)/bin/promu
+ pkgs          = ./...
+ 
+ ifeq (arm, $(GOHOSTARCH))
+-	GOHOSTARM ?= $(shell GOARM= $(GO) env GOARM)
++	GOHOSTARM ?= $(shell GOARM= $(GO) env GOARM | cut -d, -f1)
+ 	GO_BUILD_PLATFORM ?= $(GOHOSTOS)-$(GOHOSTARCH)v$(GOHOSTARM)
+ else
+ 	GO_BUILD_PLATFORM ?= $(GOHOSTOS)-$(GOHOSTARCH)

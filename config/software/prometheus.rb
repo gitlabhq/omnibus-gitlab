@@ -44,6 +44,8 @@ build do
 
   prom_version = Prometheus::VersionFlags.new(version)
 
+  patch source: 'rpi-correct-platform.patch' if OhaiHelper.raspberry_pi?
+
   make 'build', env: env, cwd: cwd
   command "go build -tags netgo,builtinassets,stringlabels -ldflags '#{prom_version.print_ldflags}' ./cmd/prometheus", env: env, cwd: cwd
 
