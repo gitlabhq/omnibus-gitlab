@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.0.2 (2024-06-11)
+
+No changes.
+
 ## 17.0.1 (2024-05-21)
 
 ### Security (1 change)
@@ -44,6 +48,10 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Update Mattermost to 9.7.1](gitlab-org/omnibus-gitlab@87ecb13f6b2d34d04c42a5ce879977e1dce81a12) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7551))
+
+## 16.11.4 (2024-06-11)
+
+No changes.
 
 ## 16.11.3 (2024-05-21)
 
@@ -102,6 +110,10 @@ omnibus-gitlab repository.
 ### Security (1 change)
 
 - [Use February 2024 PostgreSQL patches](gitlab-org/omnibus-gitlab@bc78ec9e2d91882439c574bc18eaddd08f17f8d1)
+
+## 16.10.7 (2024-06-11)
+
+No changes.
 
 ## 16.10.6 (2024-05-21)
 
