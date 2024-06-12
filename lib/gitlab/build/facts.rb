@@ -41,7 +41,7 @@ module Build
       def generate_version_files
         # Do not build version facts for tags and stable branches because
         # those jobs MUST use the VERSION files
-        return if Build::Check.on_tag? || Build::Check.on_stable_branch?
+        return if Build::Check.on_tag? || Build::Check.on_stable_branch? || Build::Check.mr_targetting_stable_branch?
 
         get_component_shas('build_facts/version-manifest.json').each do |component, sha|
           File.write("build_facts/#{component}_version", sha) unless sha.nil?
