@@ -1,4 +1,5 @@
 require_relative "info.rb"
+require_relative "info/git"
 require_relative "../util.rb"
 
 module Build
@@ -46,7 +47,7 @@ module Build
       end
 
       def is_auto_deploy_tag?
-        AUTO_DEPLOY_TAG_REGEX.match?(Build::Info.current_git_tag)
+        AUTO_DEPLOY_TAG_REGEX.match?(Build::Info::Git.tag_name)
       end
 
       def is_auto_deploy_branch?
@@ -59,7 +60,7 @@ module Build
       end
 
       def is_rc_tag?
-        Build::Info.current_git_tag.include?("+rc")
+        Build::Info::Git.tag_name&.include?("+rc")
       end
 
       def ci_commit_tag?
@@ -67,11 +68,11 @@ module Build
       end
 
       def is_latest_stable_tag?
-        match_tag?(Info.latest_stable_tag)
+        match_tag?(Info::Git.latest_stable_tag)
       end
 
       def is_latest_tag?
-        match_tag?(Info.latest_tag)
+        match_tag?(Info::Git.latest_tag)
       end
 
       def is_nightly?
@@ -91,11 +92,15 @@ module Build
       end
 
       def on_stable_branch?
-        Build::Info.branch_name&.match?(/^\d+-\d+-stable$/)
+        Build::Info::Git.branch_name&.match?(/^\d+-\d+-stable$/)
       end
 
       def on_regular_branch?
-        Build::Info.branch_name && !on_stable_branch?
+        Build::Info::Git.branch_name && !on_stable_branch?
+      end
+
+      def mr_targetting_stable_branch?
+        Build::Info::CI.mr_target_branch_name&.match?(/^\d+-\d+-stable$/)
       end
     end
   end

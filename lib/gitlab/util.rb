@@ -1,5 +1,17 @@
 module Gitlab
   class Util
+    class ShellOutExecutionError < StandardError
+      attr_accessor :stdout, :stderr
+
+      def initialize(command, exitcode, stdout, stderr)
+        @stdout = stdout
+        @stderr = stderr
+        msg = "Execution of command `#{command}` failed with exit code #{exitcode}."
+
+        super(msg)
+      end
+    end
+
     class << self
       def get_env(key)
         value = ENV[key]&.strip
@@ -26,6 +38,24 @@ module Gitlab
         yield
 
         $stdout.puts "section_end:#{Time.now.to_i}:#{name}\r\e[0K"
+      end
+
+      def shellout_stdout(cmd)
+        output = Mixlib::ShellOut.new(cmd)
+        output.run_command
+
+        raise ShellOutExecutionError.new(cmd, output.status.exitstatus, output.stdout, output.stderr) unless output.status.exitstatus.zero?
+
+        stdout = output.stdout&.chomp&.strip
+
+        stdout unless stdout&.empty?
+      end
+
+      def fetch_fact_from_file(fact)
+        return unless File.exist?("build_facts/#{fact}")
+
+        content = File.read("build_facts/#{fact}").strip
+        return content unless content.empty?
       end
     end
   end
