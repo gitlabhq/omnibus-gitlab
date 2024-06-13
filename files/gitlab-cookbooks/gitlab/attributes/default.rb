@@ -90,6 +90,7 @@ default['gitlab']['gitlab_rails']['gitlab_email_smime_cert_file'] = '/etc/gitlab
 default['gitlab']['gitlab_rails']['gitlab_email_smime_ca_certs_file'] = nil
 default['gitlab']['gitlab_rails']['gitlab_username_changing_enabled'] = nil
 default['gitlab']['gitlab_rails']['gitlab_default_theme'] = nil
+default['gitlab']['gitlab_rails']['custom_html_header_tags'] = nil
 default['gitlab']['gitlab_rails']['gitlab_default_projects_features_issues'] = nil
 default['gitlab']['gitlab_rails']['gitlab_default_projects_features_merge_requests'] = nil
 default['gitlab']['gitlab_rails']['gitlab_default_projects_features_wiki'] = nil
