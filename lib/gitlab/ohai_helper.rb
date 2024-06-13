@@ -65,6 +65,8 @@ class OhaiHelper
         'focal'
       when /^22\.04/
         'jammy'
+      when /^24\.04/
+        'noble'
       end
     end
 

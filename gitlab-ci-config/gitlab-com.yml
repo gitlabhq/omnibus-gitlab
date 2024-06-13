@@ -349,6 +349,7 @@ Debian 12 knapsack: !reference [.knapsack]
 OpenSUSE 15.5 knapsack: !reference [.knapsack]
 Ubuntu 20.04 knapsack: !reference [.knapsack]
 Ubuntu 22.04 knapsack: !reference [.knapsack]
+Ubuntu 24.04 knapsack: !reference [.knapsack]
 AmazonLinux 2 knapsack: !reference [.knapsack]
 AmazonLinux 2023 knapsack: !reference [.knapsack]
 
@@ -379,6 +380,12 @@ Ubuntu 22.04 specs:
   parallel: 6
   needs:
   - Ubuntu 22.04 knapsack
+Ubuntu 24.04 specs:
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/ubuntu_24.04-ruby:${BUILDER_IMAGE_REVISION}"
+  extends: .chef_spec_template
+  parallel: 6
+  needs:
+  - Ubuntu 24.04 knapsack
 Debian 10 specs :
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/debian_10-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template

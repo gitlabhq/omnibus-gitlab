@@ -103,6 +103,12 @@ Ubuntu-22.04-check:
 Ubuntu-22.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-arm-install
+Ubuntu-24.04-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+Ubuntu-24.04-arm64-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-arm-install
 Debian-10-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install

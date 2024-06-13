@@ -46,6 +46,9 @@ build do
     elsif ohai['platform'] == 'amazon' && ohai['platform_version'] == '2'
       env['CC'] = "/usr/bin/gcc10-gcc"
       env['CXX'] = "/usr/bin/gcc10-g++"
+    elsif ohai['platform'] == 'ubuntu' && ohai['platform_version'].start_with?('24.')
+      env['CC'] = "/usr/bin/gcc-10"
+      env['CXX'] = "/usr/bin/g++-10"
     end
   end
 
