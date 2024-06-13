@@ -901,12 +901,12 @@ RSpec.describe 'nginx' do
       expect(chef_run.node['gitlab_pages']['namespace_in_path']).to eql(false)
     end
 
-    context 'when namespace_in_path is enabled in gitlab_pages' do
+    context 'when namespace_in_path is enabled and access_control is enabled in gitlab_pages' do
       before do
         stub_gitlab_rb(
           gitlab_pages: {
             namespace_in_path: true,
-            auth_redirect_uri: 'https://projects.pages.localhost/auth',
+            access_control: true,
           }
         )
       end
@@ -921,7 +921,41 @@ RSpec.describe 'nginx' do
           expect(content).to include('rewrite ^/([^/]+)/(.*)$ /$2 break;')
           expect(content).to include('proxy_set_header Host $1.$http_host;')
           expect(content).to include('proxy_set_header X-Gitlab-Namespace-In-Path $namespace;')
-          expect(content).to include('proxy_redirect ~^(https://projects\.pages\.localhost/auth)(.*)$ $1$2;')
+          expect(content).to include('proxy_redirect ~^(https://pages\.localhost/projects/auth)(.*)$ $1$2;')
+          expect(content).to include('proxy_redirect ~^https://([^/]*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
+          expect(content).to include('proxy_redirect ~^//([^/]*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
+          expect(content).to include('proxy_redirect ~^/(.*)$ https://pages\.localhost/$namespace/$1;')
+          expect(content).to include('proxy_hide_header X-Gitlab-Namespace-In-Path;')
+          # Below checks are to verify proper render entries are made
+          expect(content).to include('proxy_http_version 1.1;').twice
+          expect(content).to include('proxy_pass').twice
+          expect(content).to include('disable_symlinks on;').twice
+          expect(content).to include('server_tokens off;').twice
+        }
+      end
+    end
+
+    context 'when namespace_in_path is enabled and access_control is disabled in gitlab_pages' do
+      before do
+        stub_gitlab_rb(
+          gitlab_pages: {
+            namespace_in_path: true,
+            access_control: false,
+          }
+        )
+      end
+
+      it 'applies nginx namespace_in_path settings for gitlab-pages' do
+        expect(chef_run).to render_file(http_conf['pages']).with_content { |content|
+          expect(content).to include('server {').twice
+          expect(content).to include('server_name  ~^pages\.localhost$;')
+          expect(content).to include('location ~ ^/(?<namespace>[^/]+)$ {')
+          expect(content).to include('return 301 $scheme://$http_host$request_uri/;')
+          expect(content).to include('location ~ ^/(?<namespace>[^/]+)/(?<project>.*)$ {')
+          expect(content).to include('rewrite ^/([^/]+)/(.*)$ /$2 break;')
+          expect(content).to include('proxy_set_header Host $1.$http_host;')
+          expect(content).to include('proxy_set_header X-Gitlab-Namespace-In-Path $namespace;')
+          expect(content).not_to include('proxy_redirect ~^(https://pages\.localhost/projects/auth)(.*)$ $1$2;')
           expect(content).to include('proxy_redirect ~^https://([^/]*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
           expect(content).to include('proxy_redirect ~^//([^/]*)\.(pages\.localhost)/(.*)$ https://$2/$1/$3;')
           expect(content).to include('proxy_redirect ~^/(.*)$ https://pages\.localhost/$namespace/$1;')
@@ -941,7 +975,7 @@ RSpec.describe 'nginx' do
           pages_external_url: 'https://pages.localhost:25800',
           gitlab_pages: {
             namespace_in_path: true,
-            auth_redirect_uri: 'https://projects.pages.localhost/auth',
+            access_control: true,
           }
         )
       end
@@ -957,7 +991,7 @@ RSpec.describe 'nginx' do
           expect(content).to include('rewrite ^/([^/]+)/(.*)$ /$2 break;')
           expect(content).to include('proxy_set_header Host $1.$http_host;')
           expect(content).to include('proxy_set_header X-Gitlab-Namespace-In-Path $namespace;')
-          expect(content).to include('proxy_redirect ~^(https://projects\.pages\.localhost/auth)(.*)$ $1$2;')
+          expect(content).to include('proxy_redirect ~^(https://pages\.localhost:25800/projects/auth)(.*)$ $1$2;')
           expect(content).to include('proxy_redirect ~^https://([^/]*)\.(pages\.localhost:25800)/(.*)$ https://$2/$1/$3;')
           expect(content).to include('proxy_redirect ~^//([^/]*)\.(pages\.localhost:25800)/(.*)$ https://$2/$1/$3;')
           expect(content).to include('proxy_redirect ~^/(.*)$ https://pages\.localhost:25800/$namespace/$1;')
