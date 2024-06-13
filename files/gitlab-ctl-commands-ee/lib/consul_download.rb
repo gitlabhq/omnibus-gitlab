@@ -4,7 +4,7 @@ require 'zip'
 class ConsulDownloadCommand
   # This version should be keep in sync with consul versions in
   # software/consul.rb and consul_helper.rb.
-  DEFAULT_VERSION = '1.16.6'.freeze
+  DEFAULT_VERSION = '1.18.2'.freeze
 
   def initialize(args)
     @args = args
@@ -27,7 +27,7 @@ class ConsulDownloadCommand
     response = Net::HTTP.get_response(download_url)
 
     if response.code != '200'
-      warn("Error downloading consul from #{download_url}: #{resp.code}")
+      warn("Error downloading consul from #{download_url}: #{response.code}")
       return
     end
 
