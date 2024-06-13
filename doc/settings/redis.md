@@ -48,6 +48,7 @@ managed by the Linux package reachable via TCP:
    ```ruby
    redis['port'] = 6379
    redis['bind'] = '127.0.0.1'
+   redis['password'] = 'redis-password-goes-here'
    ```
 
 1. Save the file and reconfigure GitLab for the changes to take effect:
