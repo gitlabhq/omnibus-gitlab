@@ -225,9 +225,9 @@
   - "github.com/hashicorp/vault/api"
   - MPL2
   - :who: Clemens Beck
-    :why: https://github.com/hashicorp/vault/blob/v1.8.3/LICENSE
-    :versions: [ v1.8.3 ]
-    :when: 2023-08-10 08:29:14.012981908 Z
+    :why: https://github.com/hashicorp/vault/blob/v1.12.2/LICENSE
+    :versions: [ v1.12.2 ]
+    :when: 2024-06-10 07:20:00.000000000 Z
 - - :license
   - "github.com/hashicorp/vault/sdk"
   - MPL2
@@ -252,35 +252,49 @@
 - - :license
   - "./api"
   - MPL2
-  - :who: Balasankar C
-    :why: https://github.com/hashicorp/consul/blob/v1.16.3/LICENSE
+  - :who: Clemens Beck
+    :why: https://github.com/hashicorp/consul/blob/v1.18.2/api/LICENSE
     :versions: [] # Not specifying a version because LicenseFinder doesn't detect the version
-    :when: 2023-11-16 16:33:13.906807600 Z
+    :when: 2024-06-10 07:20:00.000000000 Z
 - - :license
   - "./envoyextensions"
-  - MPL2
-  - :who: Balasankar C
-    :why: https://github.com/hashicorp/consul/blob/v1.16.3/LICENSE
+  - BSL-Hashicorp
+  - :who: Clemens Beck
+    :why: https://github.com/hashicorp/consul/blob/v1.18.2/LICENSE
     :versions: [] # Not specifying a version because LicenseFinder doesn't detect the version
-    :when: 2023-11-16 16:33:26.430554680 Z
+    :when: 2024-06-10 07:20:00.000000000 Z
 - - :license
   - "./proto-public"
   - MPL2
-  - :who: Balasankar C
-    :why: https://github.com/hashicorp/consul/blob/v1.16.3/LICENSE
+  - :who: Clemens Beck
+    :why: https://github.com/hashicorp/consul/blob/v1.18.2/proto-public/LICENSE
     :versions: [] # Not specifying a version because LicenseFinder doesn't detect the version
-    :when: 2023-11-16 16:33:33.521129525 Z
+    :when: 2024-06-10 07:20:00.000000000 Z
 - - :license
   - "./sdk"
   - MPL2
-  - :who: Balasankar C
-    :why: https://github.com/hashicorp/consul/blob/v1.16.3/LICENSE
+  - :who: Clemens Beck
+    :why: https://github.com/hashicorp/consul/blob/v1.18.2/sdk/LICENSE
     :versions: [] # Not specifying a version because LicenseFinder doesn't detect the version
-    :when: 2023-11-16 16:33:40.518177519 Z
+    :when: 2024-06-10 07:20:00.000000000 Z
 - - :license
   - "./troubleshoot"
-  - MPL2
-  - :who: Balasankar C
-    :why: https://github.com/hashicorp/consul/blob/v1.16.3/LICENSE
+  - BSL-Hashicorp
+  - :who: Clemens Beck
+    :why: https://github.com/hashicorp/consul/blob/v1.18.2/LICENSE
     :versions: [] # Not specifying a version because LicenseFinder doesn't detect the version
-    :when: 2023-11-16 16:33:46.242943747 Z
+    :when: 2024-06-10 07:20:00.000000000 Z
+- - :license
+  - "github.com/hashicorp/go-discover"
+  - MPL2
+  - :who: Clemens Beck
+    :why: https://github.com/hashicorp/go-discover/blob/e89ebd1b2f65c80bb2dd21570c12a2957c9aad82/LICENSE
+    :versions: [ v0.0.0-20230724184603-e89ebd1b2f65 ]
+    :when: 2024-06-05 11:30:00.000000000 Z
+- - :license
+  - "github.com/hashicorp/go-immutable-radix/v2"
+  - MPL2
+  - :who: Clemens Beck
+    :why: https://github.com/hashicorp/go-immutable-radix/blob/v2.1.0/LICENSE
+    :versions: [ v2.1.0 ]
+    :when: 2024-06-05 11:30:00.000000000 Z

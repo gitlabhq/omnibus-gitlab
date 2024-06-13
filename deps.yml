@@ -82,10 +82,10 @@ dependencies:
         replace_in_files:
         - filename: config/software/consul.rb
           pattern: "version = Gitlab::Version.new\\('consul', 'v(\\S+)'\\)"
-          range: '< 1.17.0'
+          range: '< 1.19.0'
         - filename: files/gitlab-ctl-commands-ee/lib/consul_download.rb
           pattern: "DEFAULT_VERSION = '(\\S+)'"
-          range: '< 1.17.0'
+          range: '< 1.19.0'
         - filename: files/gitlab-cookbooks/consul/libraries/consul_helper.rb
           pattern: "SUPPORTED_MINOR = '(\\S+)'"
           tag_filter:
