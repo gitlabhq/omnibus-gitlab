@@ -15,6 +15,7 @@
 ## limitations under the License.
 #
 
+require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 name 'omnibus-gitlab-gems'
 
 default_version '20240110'
@@ -49,6 +50,7 @@ build do
   target_gemfile = File.join(gemfile_dir, 'Gemfile')
   env['BUNDLE_GEMFILE'] = target_gemfile
   bundle "config set --local frozen 'true'", env: env
+  bundle 'config force_ruby_platform true', env: env if OhaiHelper.ruby_native_gems_unsupported?
   bundle "install --jobs #{workers} --retry 5", env: env
   bundle "exec license_finder report --project_path=#{gemfile_dir} --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json", env: env
   copy "license.json", "#{install_dir}/licenses/omnibus-gitlab-gems.json"
