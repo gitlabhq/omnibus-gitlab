@@ -306,8 +306,7 @@ The following settings are affected in the `postgresql` block:
 - `sql_user`: Controls the expected username for MD5 authentication. This
   defaults to `gitlab`, and isn't a required setting.
 - `sql_user_password`: Sets the password that PostgreSQL will accept for MD5
-  authentication. Replace `securesqlpassword` in the following example with an
-  acceptable password.
+  authentication.
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
@@ -320,6 +319,7 @@ The following settings are affected in the `postgresql` block:
 
    ##! SQL_USER_PASSWORD_HASH can be generated using the command `gitlab-ctl pg-password-md5 'gitlab'`,
    ##! where 'gitlab' (single-quoted to avoid shell interpolation) is the name of the SQL user that connects to GitLab.
+   ##! You will be prompted for a password which other clients will use to authenticate with database, such as `securesqlpassword` in the below section.
    postgresql['sql_user_password'] = "SQL_USER_PASSWORD_HASH"
 
    # force ssl on all connections defined in trust_auth_cidr_addresses and md5_auth_cidr_addresses
@@ -380,6 +380,12 @@ directly restarting the service with `gitlab-ctl restart postgresql`.
 Some included scripts of the Linux package (such as `gitlab-psql`) expect the
 connections to PostgreSQL to be handled over the UNIX socket, and may not function
 properly. You can enable TCP/IP without disabling UNIX sockets.
+
+To test access from other clients, you can run:
+
+```shell
+sudo gitlab-rails dbconsole --database main
+```
 
 ### Enabling PostgreSQL WAL (Write Ahead Log) Archiving
 
