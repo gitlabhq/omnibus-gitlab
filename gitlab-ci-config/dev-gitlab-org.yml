@@ -283,6 +283,10 @@ Ubuntu-22.04-branch:
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
     - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
+Ubuntu-24.04-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04:${BUILDER_IMAGE_REVISION}"
+  extends: .branch_template
+
 Debian-10-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -315,6 +319,9 @@ Ubuntu-22.04-arm64-branch:
       # automatic job
       when: manual
       allow_failure: true
+Ubuntu-24.04-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .arm64_branch_template
 CentOS-7-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -558,11 +565,17 @@ Debian-12:
 Debian-12-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
+Ubuntu-24.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04:${BUILDER_IMAGE_REVISION}"
+  extends: .tag_template
 Ubuntu-20.04-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
 Ubuntu-22.04-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .arm64_tag_template
+Ubuntu-24.04-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
 CentOS-7:
   image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
@@ -681,12 +694,26 @@ Debian-12-arm64-staging:
       optional: true
     - job: Debian-12-arm64-branch
       optional: true
+Ubuntu-24.04-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: Ubuntu-24.04
+      optional: true
+    - job: Ubuntu-24.04-branch
+      optional: true
 Ubuntu-20.04-arm64-staging:
   extends: .staging_upload_template
   needs:
     - job: Ubuntu-20.04-arm64
       optional: true
     - job: Ubuntu-20.04-arm64-branch
+      optional: true
+Ubuntu-24.04-arm64-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: Ubuntu-24.04-arm64
+      optional: true
+    - job: Ubuntu-24.04-arm64-branch
       optional: true
 CentOS-7-staging:
   extends: .staging_upload_template
@@ -816,6 +843,10 @@ Ubuntu-22.04-release:
   extends: .production_release_template
   needs:
     - Ubuntu-22.04
+Ubuntu-24.04-release:
+  extends: .production_release_template
+  needs:
+    - Ubuntu-24.04
 Ubuntu-20.04-arm64-release:
   extends: .production_release_template
   needs:
@@ -824,6 +855,10 @@ Ubuntu-22.04-arm64-release:
   extends: .production_release_template
   needs:
     - Ubuntu-22.04-arm64
+Ubuntu-24.04-arm64-release:
+  extends: .production_release_template
+  needs:
+    - Ubuntu-24.04-arm64
 Debian-10-release:
   extends: .production_release_template
   needs:
