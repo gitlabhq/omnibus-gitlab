@@ -844,6 +844,26 @@ RSpec.describe 'gitlab::gitlab-rails' do
             expect { chef_run }.to raise_error(RuntimeError, /If you wish to use a custom SSH port/)
           end
         end
+
+        context 'with custom html header tags' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                custom_html_header_tags: '<script src="https://example.com/cookie-consent.js"></script><link rel="stylesheet" href="https://example.com/cookie-consent.css"/>'
+              }
+            )
+          end
+
+          it 'renders the custom_html_header_tags' do
+            expect(parsed_gitlab_yml[:production][:gitlab][:custom_html_header_tags]).to eq('<script src="https://example.com/cookie-consent.js"></script><link rel="stylesheet" href="https://example.com/cookie-consent.css"/>')
+          end
+        end
+
+        context 'without custom html header tags' do
+          it 'does not render the custom_html_header_tags' do
+            expect(parsed_gitlab_yml[:production][:gitlab][:custom_html_header_tags]).to be_nil
+          end
+        end
       end
     end
   end
