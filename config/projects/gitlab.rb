@@ -112,6 +112,7 @@ dependency 'gitlab-selinux' if SELinuxDistroHelper.selinux_supported?
 dependency 'redis'
 dependency 'nginx'
 dependency 'chef-gem'
+dependency 'inspec-gem'
 dependency 'logrotate'
 dependency 'runit'
 dependency 'go-crond'
