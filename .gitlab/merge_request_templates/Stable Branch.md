@@ -27,7 +27,7 @@ The process of backporting bug fixes into stable branches is tracked as part of 
 * Refer to the [internal pilot] issue for feedback or questions.
 * Refer to the [patch release runbook for engineers and maintainers] for guidance.
 
-[severity label]: https://about.gitlab.com/handbook/engineering/quality/issue-triage/#severity
+[severity label]: https://handbook.gitlab.com/handbook/engineering/infrastructure/engineering-productivity/issue-triage/#severity
 [internal pilot]: https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2886
 [patch release runbook for engineers and maintainers]: https://gitlab.com/gitlab-org/release/docs/-/blob/master/general/patch/process_new.md
 
