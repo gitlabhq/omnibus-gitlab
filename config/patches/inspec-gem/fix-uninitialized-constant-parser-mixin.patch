@@ -1,0 +1,45 @@
+From c9bb58e9087b2fe5f211ce042bbce767397ca548 Mon Sep 17 00:00:00 2001
+Message-ID: <c9bb58e9087b2fe5f211ce042bbce767397ca548.1715881810.git.stanhu@gmail.com>
+From: Stan Hu <stanhu@gmail.com>
+Date: Thu, 2 May 2024 01:46:33 -0700
+Subject: [PATCH] Fix uninitialized constant Parser::AST::Processor::Mixin
+ (#7030)
+
+parser 3.3.1.0 introduced
+https://github.com/whitequark/parser/pull/1000, which causes this
+failure:
+
+```
+% bundle exec ruby -Itest test/unit/profiles/profile_test.rb
+inspec/lib/inspec/utils/profile_ast_helpers.rb:7:in `<class:CollectorBase>': uninitialized constant Parser::AST::Processor::Mixin (NameError)
+
+        include Parser::AST::Processor::Mixin
+                                      ^^^^^^^
+```
+
+Fix this by inherting from `Parser::AST::Processor` instead.
+
+Closes #7029
+
+Signed-off-by: Stan Hu <stanhu@gmail.com>
+---
+ lib/inspec/utils/profile_ast_helpers.rb | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/lib/inspec/utils/profile_ast_helpers.rb b/lib/inspec/utils/profile_ast_helpers.rb
+index 8e00206f8..299e85bd5 100644
+--- a/lib/inspec/utils/profile_ast_helpers.rb
++++ b/lib/inspec/utils/profile_ast_helpers.rb
+@@ -3,8 +3,7 @@ require "rubocop-ast"
+ module Inspec
+   class Profile
+     class AstHelper
+-      class CollectorBase
+-        include Parser::AST::Processor::Mixin
++      class CollectorBase < Parser::AST::Processor
+         include RuboCop::AST::Traversal
+ 
+         attr_reader :memo
+-- 
+2.45.0
+
