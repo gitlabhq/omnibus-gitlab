@@ -758,7 +758,7 @@ To add a CSP:
 ## Set initial root password on installation
 
 The initial password for the administrator user `root` can be set at installation time. For more information, see
-[Set up the initial password](../installation/index.md#set-up-the-initial-password).
+[Set up the initial password](../installation/index.md#set-up-the-initial-account).
 
 ## Set allowed hosts to prevent host header attacks
 

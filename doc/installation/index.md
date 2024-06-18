@@ -46,12 +46,15 @@ For a complete list of settings, see the [README](../index.md#configuring) file.
   Set up the Prometheus monitoring included in the Linux package.
 - [GitLab High Availability Roles](../roles/index.md).
 
-### Set up the initial password
+### Set up the initial account
 
 By default, a Linux package installation automatically generates a password for the
 initial administrator user account (`root`) and stores it to
 `/etc/gitlab/initial_root_password` for at least 24 hours. For security reasons,
 after 24 hours, this file is automatically removed by the first `gitlab-ctl reconfigure`.
+
+The default account is tied to a randomly-generated email address. To override
+this, pass the `GITLAB_ROOT_EMAIL` environment variable to the installation command.
 
 NOTE:
 If GitLab can't detect a valid hostname for the server during the
@@ -64,12 +67,12 @@ To provide a custom initial root password, you have two options:
   the hostname for the server is set up correctly:
 
   ```shell
-  sudo GITLAB_ROOT_PASSWORD="<strongpassword>" EXTERNAL_URL="http://gitlab.example.com" apt install gitlab-ee
+  sudo GITLAB_ROOT_EMAIL="<gitlab_admin@example.com>" GITLAB_ROOT_PASSWORD="<strongpassword>" EXTERNAL_URL="http://gitlab.example.com" apt install gitlab-ee
   ```
 
   If during the installation GitLab doesn't automatically perform a
-  reconfigure, you have to pass the `GITLAB_ROOT_PASSWORD` variable to the
-  first `gitlab-ctl reconfigure` run.
+  reconfigure, you have to pass the `GITLAB_ROOT_PASSWORD` or `GITLAB_ROOT_EMAIL`
+  variable to the first `gitlab-ctl reconfigure` run.
 
 - Before the first reconfigure, edit `/etc/gitlab/gitlab.rb` (create it if it
   doesn't exist) and set:
