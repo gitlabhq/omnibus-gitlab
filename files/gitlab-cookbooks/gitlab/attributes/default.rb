@@ -777,6 +777,7 @@ default['gitlab']['gitlab_sshd']['client_alive_interval'] = nil
 default['gitlab']['gitlab_sshd']['ciphers'] = nil
 default['gitlab']['gitlab_sshd']['kex_algorithms'] = nil
 default['gitlab']['gitlab_sshd']['macs'] = nil
+default['gitlab']['gitlab_sshd']['public_key_algorithms'] = nil
 default['gitlab']['gitlab_sshd']['login_grace_time'] = 60
 default['gitlab']['gitlab_sshd']['host_keys_dir'] = '/var/opt/gitlab/gitlab-sshd'
 default['gitlab']['gitlab_sshd']['host_keys_glob'] = 'ssh_host_*_key'

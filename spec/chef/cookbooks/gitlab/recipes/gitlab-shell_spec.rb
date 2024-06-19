@@ -267,7 +267,7 @@ RSpec.describe 'gitlab::gitlab-shell' do
     let(:templatesymlink) { chef_run.templatesymlink('Create a config.yml and create a symlink to Rails root') }
     let(:expected_sshd_keys) do
       %w[listen proxy_protocol proxy_policy web_listen concurrent_sessions_limit client_alive_interval
-         grace_period login_grace_time proxy_header_timeout macs kex_algorithms ciphers host_key_files host_key_certs]
+         grace_period login_grace_time proxy_header_timeout macs kex_algorithms ciphers public_key_algorithms host_key_files host_key_certs]
     end
 
     before do
@@ -348,6 +348,24 @@ RSpec.describe 'gitlab::gitlab-shell' do
           expect(data['sshd'].keys).to match_array(expected_sshd_keys)
           expect(data['sshd']['host_key_files']).to eq(host_keys)
           expect(data['sshd']['host_key_certs']).to eq(host_certs)
+        }
+      end
+    end
+
+    context 'with custom public_key_algorithms' do
+      before do
+        stub_gitlab_rb(
+          gitlab_sshd: {
+            enable: true,
+            public_key_algorithms: %w(ssh-ed25519 ecdsa-sha2-nistp256 rsa-sha2-256 rsa-sha2-512),
+          }
+        )
+      end
+
+      it 'renders gitlab-sshd config' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml').with_content { |content|
+          data = YAML.safe_load(content)
+          expect(data['sshd']['public_key_algorithms']).to eq(%w(ssh-ed25519 ecdsa-sha2-nistp256 rsa-sha2-256 rsa-sha2-512))
         }
       end
     end
