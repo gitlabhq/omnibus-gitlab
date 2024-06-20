@@ -638,6 +638,22 @@ dependency_update:
   rules:
     - if: '$PIPELINE_TYPE == "DEPS_IO_VERSION_CHECK_PIPELINE"'
 
+validate_renovate_checksum:
+  image: docker.io/bash:5.2-alpine3.20
+  stage: prepare
+  before_script:
+    - apk add git
+  script:
+    - ./scripts/renovate/checksums/update_all.sh
+    - mismatches="$(git status --porcelain)"
+    - if [ -n "$mismatches" ]; then
+        echo "Checksum mismatch detected"; 
+        echo "$mismatches"; 
+        exit 1; 
+      fi
+  rules:
+    - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
+
 validate_packer_changes:
   before_script: []
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/debian_packer:${BUILDER_IMAGE_REVISION}"
