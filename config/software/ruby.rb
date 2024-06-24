@@ -28,7 +28,7 @@ current_ruby_version = Gitlab::Util.get_env('RUBY_VERSION') || '3.1.5'
 
 # NOTE: When this value is updated, flip `USE_NEXT_RUBY_VERSION_IN_*` variable
 # to false to avoid surprises.
-next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.1.5'
+next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.2.4'
 
 # MRs targeting stable branches should use current Ruby version and ignore next
 # Ruby version. Also, we provide `USE_SPECIFIED_RUBY_VERSION` variable to force
