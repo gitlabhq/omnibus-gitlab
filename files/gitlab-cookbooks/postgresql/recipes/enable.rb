@@ -30,7 +30,8 @@ postgresql_data_dir = File.join(node['postgresql']['dir'], "data")
 
 directory node['postgresql']['dir'] do
   owner postgresql_username
-  mode "0755"
+  group postgresql_group
+  mode "2775"
   recursive true
 end
 

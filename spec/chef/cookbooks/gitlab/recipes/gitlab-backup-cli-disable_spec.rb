@@ -16,7 +16,7 @@
 
 require 'chef_helper'
 
-RSpec.describe 'gitlab::gitlab-backup-cli' do
+RSpec.describe 'gitlab::gitlab-backup-cli-disable' do
   let(:chef_runner) do
     ChefSpec::SoloRunner.new do |node|
       node.normal['package']['install-dir'] = '/opt/gitlab'
@@ -30,47 +30,22 @@ RSpec.describe 'gitlab::gitlab-backup-cli' do
   let(:template_path) { '/opt/gitlab/etc/gitlab-backup-cli-config.yml' }
 
   context 'by default' do
-    it 'does not run' do
-      expect(chef_run).not_to include_recipe('gitlab::gitlab-backup-cli')
-    end
-  end
-
-  context 'when enabled' do
-    before do
-      allow(Gitlab).to receive(:[]).and_call_original
-      stub_gitlab_rb(
-        gitlab_backup_cli: {
-          enable: true
-        }
-      )
+    it 'is included' do
+      expect(chef_run).to include_recipe('gitlab::gitlab-backup-cli_disable')
     end
 
-    it 'includes the recipe' do
-      expect(chef_run).to include_recipe('gitlab::gitlab-backup-cli')
+    it 'removes the gitlab-backup-cli-config.yml template' do
+      expect(chef_run).to delete_template(template_path)
     end
 
-    it 'creates gitlab-backup-cli-config.yml template' do
-      expect(chef_run).to create_template(template_path).with(
-        owner: 'root',
-        group: 'root',
-        mode: '0644',
-        source: 'gitlab-backup-cli-config.yml.erb',
-        sensitive: true
-      )
+    it 'removes the gitlab-backup user' do
+      expect(chef_run).to remove_account('GitLab Backup User')
     end
 
-    it 'creates a gitlab-backup user' do
-      expect(chef_run).to create_account('GitLab Backup User').with(
-        username: 'gitlab-backup',
-        groupname: 'gitlab-backup',
-        home: '/var/opt/gitlab/backups'
-      )
-    end
-
-    it 'adds the gitlab-backup user to the appropriate groups' do
+    it 'removes the gitlab-backup user from the appropriate groups' do
       %w[git gitlab-psql registry].each do |group|
         expect(chef_run).to manage_group(group).with(
-          members: ['gitlab-backup'],
+          excluded_members: ['gitlab-backup'],
           append: true
         )
       end

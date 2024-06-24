@@ -32,7 +32,8 @@ end
 
 directory node['postgresql']['home'] do
   owner postgresql_username
-  mode "0755"
+  group postgresql_group
+  mode "2775"
   recursive true
 end
 

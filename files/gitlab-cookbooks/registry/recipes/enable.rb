@@ -43,7 +43,8 @@ end
 directory "create #{working_dir} and set the owner" do
   path working_dir
   owner account_helper.registry_user
-  mode '0700'
+  group account_helper.registry_group
+  mode '2770'
   recursive true
 end
 

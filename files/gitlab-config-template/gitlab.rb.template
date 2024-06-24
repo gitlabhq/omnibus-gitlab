@@ -3491,3 +3491,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 # crond['log_directory'] = '/var/log/gitlab/crond'
 # crond['cron_d'] = '/var/opt/gitlab/crond'
 # crond['flags'] = {}
+
+####
+# gitlab-backup-cli settings
+####
+# gitlab_backup_cli['enable'] = false
+# gitlab_backup_cli['user'] = 'gitlab-backup'
+# gitlab_backup_cli['group'] = 'gitlab-backup'
+# gitlab_backup_cli['dir'] = '/var/opt/gitlab/backups'
+# gitlab_backup_cli['additional_groups'] = %w[git gitlab-psql registry]

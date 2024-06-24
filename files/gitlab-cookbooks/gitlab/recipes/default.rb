@@ -83,9 +83,6 @@ include_recipe "gitlab::web-server"
 # `account` custom resource will not create them.
 include_recipe "gitlab::users"
 
-# Recipe for gitlab-backup-cli tool
-include_recipe "gitlab::gitlab-backup-cli"
-
 include_recipe "gitlab::gitlab-rails" if node['gitlab']['gitlab_rails']['enable']
 
 include_recipe "gitlab::selinux"
@@ -191,6 +188,13 @@ include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable']
 
 # Recipe which handles all prometheus related services
 include_recipe "monitoring"
+
+# Recipe for gitlab-backup-cli tool
+if node['gitlab']['gitlab_backup_cli']['enable']
+  include_recipe "gitlab::gitlab-backup-cli"
+else
+  include_recipe "gitlab::gitlab-backup-cli_disable"
+end
 
 if node['gitlab']['gitlab_rails']['database_reindexing']['enable']
   include_recipe 'gitlab::database_reindexing_enable'
