@@ -121,7 +121,7 @@ To fetch the latest repository signing key, users can run the `curl` command
 used to add GitLab repository, as mentioned in the [install page](https://about.gitlab.com/install/),
 again. It will fetch the new key and add it to the user's keyring.
 
-Or, users can manually fetch and add the new key using the following commands
+Or, users can manually fetch and add the new key using the following commands:
 
 ```shell
 # Download the new key
@@ -134,6 +134,10 @@ sudo apt-key add /tmp/omnibus_gitlab_gpg.key
 # CentOS/OpenSUSE/SLES
 sudo rpm --import /tmp/omnibus_gitlab_gpg.key
 ```
+
+NOTE:
+Make sure that the new key has the necessary permissions to be properly recognized by your OS, which should be `644`. You can set the permissions by running
+the following command: `chmod 644 <keyfile>`.
 
 ### Previous keys
 
