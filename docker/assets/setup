@@ -54,6 +54,7 @@ groupadd -g 994 mattermost
 groupadd -g 993 registry
 groupadd -g 992 gitlab-prometheus
 groupadd -g 991 gitlab-consul
+groupadd -g 990 gitlab-backup
 
 # Create accounts
 ## The git account is created with * as crypted password as ssh treats the account as locked if it has a ! 
@@ -66,3 +67,8 @@ useradd -m -u 994 -g mattermost -m -s /bin/sh -d /var/opt/gitlab/mattermost matt
 useradd -m -u 993 -g registry -m -s /bin/sh -d /var/opt/gitlab/registry registry
 useradd -m -u 992 -g gitlab-prometheus -m -s /bin/sh -d /var/opt/gitlab/prometheus gitlab-prometheus
 useradd -m -u 991 -g gitlab-consul -m -s /bin/sh -d /var/opt/gitlab/consul gitlab-consul
+useradd -m -u 990 -g gitlab-backup -m -s /bin/sh -d /var/opt/gitlab/backups gitlab-backup
+
+# The gitlab-backup user needs access to these groups for backup/restore purposes
+usermod -a -G gitlab-psql,registry,git gitlab-backup
+

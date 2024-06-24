@@ -123,5 +123,6 @@ module Gitlab
     attribute('high_availability')
     attribute('web_server')
     attribute('prometheus_monitoring')
+    attribute('gitlab_backup_cli')
   end
 end

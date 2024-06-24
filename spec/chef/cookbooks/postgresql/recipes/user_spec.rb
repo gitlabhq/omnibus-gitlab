@@ -26,7 +26,8 @@ RSpec.describe 'postgresql::user' do
     it 'creates postgresql base directory' do
       directory_params = {
         owner: 'gitlab-psql',
-        mode: '0755',
+        group: 'gitlab-psql',
+        mode: '2775',
         recursive: true
       }
       expect(chef_run).to create_directory('/var/opt/gitlab/postgresql').with(directory_params)
@@ -66,14 +67,20 @@ RSpec.describe 'postgresql::user' do
     it 'creates postgresql base directory' do
       directory_params = {
         owner: 'gitlab-psql',
-        mode: '0755',
+        group: 'gitlab-psql',
+        mode: '2775',
         recursive: true
       }
       expect(chef_run).to create_directory('/mypghomedir').with(directory_params)
     end
 
     it 'creates necessary directories' do
-      expect(chef_run).to create_directory('/mypghomedir').with(owner: 'gitlab-psql', mode: '0755', recursive: true)
+      expect(chef_run).to create_directory('/mypghomedir').with(
+        owner: 'gitlab-psql',
+        group: 'gitlab-psql',
+        mode: '2775',
+        recursive: true
+      )
     end
   end
 end

@@ -919,7 +919,12 @@ RSpec.describe 'default directories' do
   context 'postgresql directory' do
     context 'with default settings' do
       it 'creates postgresql directory' do
-        expect(chef_run).to create_directory('/var/opt/gitlab/postgresql').with(owner: 'gitlab-psql', mode: '0755', recursive: true)
+        expect(chef_run).to create_directory('/var/opt/gitlab/postgresql').with(
+          owner: 'gitlab-psql',
+          group: 'gitlab-psql',
+          mode: '2775',
+          recursive: true
+        )
       end
     end
 
@@ -933,7 +938,12 @@ RSpec.describe 'default directories' do
       end
 
       it 'creates postgresql directory with custom path' do
-        expect(chef_run).to create_directory('/mypgdir').with(owner: 'gitlab-psql', mode: '0755', recursive: true)
+        expect(chef_run).to create_directory('/mypgdir').with(
+          owner: 'gitlab-psql',
+          group: 'gitlab-psql',
+          mode: '2775',
+          recursive: true
+        )
       end
     end
   end

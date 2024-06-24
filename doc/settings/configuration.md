@@ -333,6 +333,7 @@ By default, the Linux package installations expect the following users and group
 | `gitlab-consul`      | Only when using GitLab Consul           | GitLab Consul user/group                                              | `/var/opt/gitlab/consul`     | `/bin/sh`     |
 | `registry`           | Only when using GitLab Registry         | GitLab Registry user/group                                            | `/var/opt/gitlab/registry`   | `/bin/sh`     |
 | `mattermost`         | Only when using GitLab Mattermost       | GitLab Mattermost user/group                                          | `/var/opt/gitlab/mattermost` | `/bin/sh`     |
+| `gitlab-backup`      | Only when using `gitlab-backup-cli`     | GitLab Backup Cli User                                                | `/var/opt/gitlab/backups`    | `/bin/sh`     |
 
 To disable user and group accounts management:
 
@@ -487,7 +488,7 @@ Enabling this setting prevents the creation of the following directories:
 
 | Default location                                       | Permissions   | Ownership        | Purpose                            |
 |--------------------------------------------------------|---------------|------------------|------------------------------------|
-| `/var/opt/gitlab/git-data`                             | `0700`        | `git:git`        | Holds repositories directory       |
+| `/var/opt/gitlab/git-data`                             | `2770`        | `git:git`        | Holds repositories directory       |
 | `/var/opt/gitlab/git-data/repositories`                | `2770`        | `git:git`        | Holds Git repositories             |
 | `/var/opt/gitlab/gitlab-rails/shared`                  | `0751`        | `git:gitlab-www` | Holds large object directories     |
 | `/var/opt/gitlab/gitlab-rails/shared/artifacts`        | `0700`        | `git:git`        | Holds CI artifacts                 |

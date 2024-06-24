@@ -25,7 +25,7 @@ Mash.new(Gitlab['git_data_dirs']).each do |_name, git_data_directory|
   storage_directory git_data_directory['path'] do
     owner gitlab_user
     group gitlab_group
-    mode "0700"
+    mode "2770"
   end
 end
 

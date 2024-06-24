@@ -1096,3 +1096,12 @@ default['gitlab']['omnibus-gitconfig'] = Gitlab::Deprecations::NodeAttribute.new
 default['gitlab']['runtime-dir'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['runtime_dir'] }, "node['gitlab']['runtime-dir']", "node['gitlab']['runtime_dir']")
 default['gitlab']['storage-check'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['storage_check'].to_h }, "node['gitlab']['storage-check']", "node['gitlab']['storage_check']")
 default['gitlab']['web-server'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['web_server'].to_h }, "node['gitlab']['web-server']", "node['gitlab']['web_server']")
+
+####
+# gitlab-backup-cli settings
+####
+default['gitlab']['gitlab_backup_cli']['enable'] = false
+default['gitlab']['gitlab_backup_cli']['user'] = 'gitlab-backup'
+default['gitlab']['gitlab_backup_cli']['group'] = 'gitlab-backup'
+default['gitlab']['gitlab_backup_cli']['dir'] = '/var/opt/gitlab/backups'
+default['gitlab']['gitlab_backup_cli']['additional_groups'] = %w[git gitlab-psql registry]
