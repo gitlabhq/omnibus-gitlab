@@ -8,6 +8,10 @@
 # found with the Ruby interpreter unless `bundle exec` is used.
 source 'https://rubygems.org'
 
+# To ensure LD_LIBRARY_PATH includes /opt/gitlab/embedded/lib avoid
+# the precompiled native gems.
+gem 'ffi', '1.17.0', force_ruby_platform: true
+
 # chef depends on unf_ext. This needs to be listed before Chef
 # since Cinc will look inside the Cinc RubyGems.
 gem 'unf_ext', '0.0.9.1'

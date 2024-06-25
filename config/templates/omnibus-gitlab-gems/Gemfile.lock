@@ -401,6 +401,7 @@ DEPENDENCIES
   chef-zero (= 15.0.11)!
   faraday (= 2.8.1)
   faraday-net_http (= 3.0.2)
+  ffi (= 1.17.0)
   gitlab-ruby-shadow (= 2.5.1)
   inspec-core (= 6.6.0)!
   license_finder (= 7.1.0)
