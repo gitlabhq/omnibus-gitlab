@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.11.5 (2024-06-25)
+
+### Fixed (1 change)
+
+- [Fix stable version tag identification for 16.1.x releases](gitlab-org/security/omnibus-gitlab@0a4a4884fc221e2ff6191e0331a24852717b60ab)
+
 ## 16.11.4 (2024-06-11)
 
 No changes.
