@@ -261,6 +261,16 @@ No changes.
 
 - [Update Patroni to 3.0.1](gitlab-org/omnibus-gitlab@faba9e7605768373c4747fa7062ab36c7be74205) ([merge request](gitlab-org/omnibus-gitlab!6898))
 
+## 16.9.9 (2024-06-25)
+
+### Fixed (1 change)
+
+- [Fix stable version tag identification for 16.1.x releases](gitlab-org/omnibus-gitlab@8215e3264d77bef11f7aeabefcd5f10ddf68eb44) ([merge request](gitlab-org/omnibus-gitlab!7702))
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/omnibus-gitlab@f69987a94c8e109a94acf0aa1d61cd0ba1de88fa) ([merge request](gitlab-org/omnibus-gitlab!7584))
+
 ## 16.9.8 (2024-05-09)
 
 ### Fixed (1 change)
