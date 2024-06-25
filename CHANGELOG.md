@@ -111,6 +111,12 @@ No changes.
 
 - [Update Mattermost to 9.7.1](gitlab-org/omnibus-gitlab@87ecb13f6b2d34d04c42a5ce879977e1dce81a12) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7551))
 
+## 16.11.5 (2024-06-25)
+
+### Fixed (1 change)
+
+- [Fix stable version tag identification for 16.1.x releases](gitlab-org/security/omnibus-gitlab@0a4a4884fc221e2ff6191e0331a24852717b60ab)
+
 ## 16.11.4 (2024-06-11)
 
 No changes.
