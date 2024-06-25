@@ -524,6 +524,17 @@ No changes.
 - [Mattermost Security Update](gitlab-org/omnibus-gitlab@feda92ec4fb2024eb397a1e0970ae5b7f407dad6)
 - [Update PostgreSQL 13 and 14](gitlab-org/omnibus-gitlab@cfa09e2d8ee45a4cdebfde8fc334df9f9cd428f2)
 
+## 16.6.8 (2024-06-25)
+
+### Fixed (2 changes)
+
+- [Fix stable version tag identification for 16.1.x releases](gitlab-org/omnibus-gitlab@bd347c975d3a28497154c0edc5a5866c3b16444f) ([merge request](gitlab-org/omnibus-gitlab!7699))
+- [Fix patroni no longer working with update to ydiff 1.3](gitlab-org/omnibus-gitlab@a052a09e36fd8e4be0a7b94b0d34580003338bf4) ([merge request](gitlab-org/omnibus-gitlab!7635))
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/omnibus-gitlab@d32fdce3192f622f8b67a0a731823a28bd1d887c) ([merge request](gitlab-org/omnibus-gitlab!7675))
+
 ## 16.6.7 (2024-02-07)
 
 ### Security (1 change)
