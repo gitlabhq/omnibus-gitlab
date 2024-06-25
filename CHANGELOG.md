@@ -355,6 +355,12 @@ No changes.
 - [Update PostgreSQL 13 and 14](gitlab-org/omnibus-gitlab@8d6a65a402e0aa6fc7f826c424cb778f3e0d8b79)
 - [Update libxml2 from 2.10.4 to 2.12.3](gitlab-org/omnibus-gitlab@18f0dcced0f8597992b87bb0b01ae5d9f782842f)
 
+## 16.8.8 (2024-06-25)
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/omnibus-gitlab@823559c2c4a9295d26ebc4c261c540753a6fb5d2) ([merge request](gitlab-org/omnibus-gitlab!7671))
+
 ## 16.8.7 (2024-04-12)
 
 ### Fixed (1 change)
