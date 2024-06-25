@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.8.8 (2024-06-25)
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/omnibus-gitlab@823559c2c4a9295d26ebc4c261c540753a6fb5d2) ([merge request](gitlab-org/omnibus-gitlab!7671))
+
 ## 16.8.7 (2024-04-12)
 
 ### Fixed (1 change)
