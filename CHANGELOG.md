@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.1.1 (2024-06-25)
+
+No changes.
+
 ## 17.1.0 (2024-06-19)
 
 ### Added (5 changes)
@@ -55,6 +59,12 @@ omnibus-gitlab repository.
 
 - [Bump Mattermost to version 9.8.0](gitlab-org/omnibus-gitlab@a68aad1971f3be597e4e1d32562f5db467a1b1ef) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7622))
 
+## 17.0.3 (2024-06-25)
+
+### Fixed (1 change)
+
+- [Fix stable version tag identification for 16.1.x releases](gitlab-org/security/omnibus-gitlab@b4c4c01c83ce863b87475da68fe6f31f62b1df90)
+
 ## 17.0.2 (2024-06-11)
 
 No changes.
@@ -100,6 +110,12 @@ No changes.
 ### Other (1 change)
 
 - [Update Mattermost to 9.7.1](gitlab-org/omnibus-gitlab@87ecb13f6b2d34d04c42a5ce879977e1dce81a12) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7551))
+
+## 16.11.5 (2024-06-25)
+
+### Fixed (1 change)
+
+- [Fix stable version tag identification for 16.1.x releases](gitlab-org/security/omnibus-gitlab@0a4a4884fc221e2ff6191e0331a24852717b60ab)
 
 ## 16.11.4 (2024-06-11)
 
