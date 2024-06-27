@@ -328,10 +328,11 @@ review-docs-cleanup:
     - ./trigger-build.rb docs cleanup
 
 include:
-  - component: ${CI_SERVER_FQDN}/gitlab-org/components/danger-review/danger-review@1.2.0
+  - component: ${CI_SERVER_FQDN}/gitlab-org/components/danger-review/danger-review@1.4.0
+    inputs:
+      job_stage: "check"
 
 danger-review:
-  stage: check
   variables:
     BUNDLE_WITH: "danger"
   rules:
