@@ -436,18 +436,19 @@ RSpec.describe 'gitlab::gitlab-rails' do
       let(:cable_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/cable.yml') }
       let(:cable_yml_file_content) { ChefSpec::Renderer.new(chef_run, cable_yml_template).content }
       let(:cable_yml) { YAML.safe_load(cable_yml_file_content, aliases: true, symbolize_names: true) }
+      let(:encoded_password) { "my%20pass%40" }
 
       before do
         stub_gitlab_rb(
           gitlab_rails: {
-            redis_password: 'my pass',
+            redis_password: 'my pass@',
           }
         )
       end
 
       it 'renders resque.yml with password' do
         expected_output = {
-          url: "unix://:my%20pass@/var/opt/gitlab/redis/redis.socket",
+          url: "unix://:#{encoded_password}@/var/opt/gitlab/redis/redis.socket",
           secret_file: "/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.yml.enc"
         }
 
@@ -457,7 +458,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
       it 'creates cable.yml with password' do
         expected_output = {
           adapter: 'redis',
-          url: "unix://:my%20pass@/var/opt/gitlab/redis/redis.socket",
+          url: "unix://:#{encoded_password}@/var/opt/gitlab/redis/redis.socket",
         }
 
         expect(cable_yml[:production]).to eq(expected_output)

@@ -1,5 +1,5 @@
 require_relative 'redis_uri.rb'
-require 'cgi'
+require 'erb'
 
 class RedisHelper
   REDIS_INSTANCES = %w[cache queues shared_state trace_chunks rate_limiting sessions repository_cache cluster_rate_limiting workhorse].freeze
@@ -102,7 +102,7 @@ class RedisHelper
   end
 
   def encode_redis_password(password)
-    URI::Generic::DEFAULT_PARSER.escape(password)
+    ERB::Util.url_encode(password)
   end
 
   def redis_sentinel_urls(sentinels_key)
