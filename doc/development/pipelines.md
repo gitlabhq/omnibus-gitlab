@@ -217,7 +217,7 @@ This job is run only on [Development repository](https://gitlab.com/gitlab-org/o
 
 We have tests covering our Chef recipes and libraries using `RSpec` and
 `Chefspec`. They are parallelized with the help of
-[knapsack](https://github.com/ArturT/knapsack).
+[knapsack](https://github.com/KnapsackPro/knapsack).
 
 This job pulls in the knapsack reports of previous pipeline runs from the cache
 and gets them in place for the current spec runs.
@@ -511,10 +511,10 @@ This job is run only on [Development repository](https://gitlab.com/gitlab-org/o
 
 ### `valdiate_packer_changes`
 
-This job checks if the [packer configuration files](https://dev.gitlab.org/gitlab/omnibus-gitlab/-/tree/master/support/packer) are valid or not.
+This job checks if the packer configuration files: `https://dev.gitlab.org/gitlab/omnibus-gitlab/-/tree/master/support/packer` are valid or not.
 
-This job is run only on [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and [Security mirror](https://gitlab.com/gitlab-org/security/omnibus-gitlab), when any of
-the [packer configuration files](https://dev.gitlab.org/gitlab/omnibus-gitlab/-/tree/master/support/packer) are modified.
+This job is run only on [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and Security mirror: `https://gitlab.com/gitlab-org/security/omnibus-gitlab`, when any of
+the packer configuration files: `https://dev.gitlab.org/gitlab/omnibus-gitlab/-/tree/master/support/packer` are modified.
 
 ### `pages`
 

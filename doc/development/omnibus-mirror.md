@@ -15,7 +15,7 @@ The system consists of two groups, one on GitLab.com, and the other on `dev.gitl
    1. Pull mirrors of the upstream source, and push mirrors to the corresponding `dev.gitlab.org` project.
    1. Publically available. Should be available to the `trigger-package` pipeline, as well as community developers for building custom `omnibus-gitlab` packages
 
-1. [`dev.gitlab.org` projects](https://dev.gitlab.org/omnibus-mirror)
+1. `dev.gitlab.org` projects: `https://dev.gitlab.org/omnibus-mirror`
 
    1. Pipelines on `dev.gitlab.org` use these projects to build `omnibus-gitlab` projects. This includes the package releases, as well as builds used by GitLab Team members to build custom `omnibus-gitlab` packages for all supported platforms.
 

@@ -502,7 +502,7 @@ The API Key you created must be entered in `smtp_password`.
 
 ### Brevo
 
-This configuration was tested with the Brevo [SMTP relay service](hhttps://www.brevo.com/free-smtp-server/). To grab the
+This configuration was tested with the Brevo [SMTP relay service](https://www.brevo.com/free-smtp-server/). To grab the
 relevant account credentials via the URLs commented into this example, [log in to your Brevo account](https://login.brevo.com).
 
 For further details, refer to the Brevo [help page](https://help.brevo.com/hc/en-us/articles/209462765-What-is-Brevo-SMTP).
@@ -1105,7 +1105,7 @@ gitlab_rails['gitlab_email_from'] = 'your-user@your-domain.de'
 
 ### AWS Workmail
 
-From the [AWS workmail documentation](https://docs.aws.amazon.com/workmail/latest/userguide/using_IMAP_client.html):
+From the [AWS workmail documentation](https://docs.aws.amazon.com/workmail/latest/userguide/using_IMAP.html):
 
 ```ruby
 gitlab_rails['smtp_enable'] = true

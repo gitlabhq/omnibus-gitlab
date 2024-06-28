@@ -1251,5 +1251,5 @@ If the database CPU load is very high, it could be caused by the [auto cancel re
 To work around this issue:
 
 - You can allocate more CPU resources to the database server.
-- If Sidekiq is overloaded, you might need to [add more Sidekiq processes](https://gitlab.com/gitlab-org/gitlab/-/administration/sidekiq/extra_sidekiq_processes.md#start-multiple-processes) for the `ci_cancel_redundant_pipelines` queue if your projects have a very large number of pipelines.
+- If Sidekiq is overloaded, you might need to [add more Sidekiq processes](https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes) for the `ci_cancel_redundant_pipelines` queue if your projects have a very large number of pipelines.
 - You can enable the `disable_cancel_redundant_pipelines_service` feature flag to disable this setting instance-wide and see if the CPU load goes down. This disables the feature for all projects, and can lead to increased resource use by pipelines that are no longer being cancelled automatically.
