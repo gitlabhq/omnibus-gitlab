@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # Handling broken master pipelines
 
 We currently run [nightly pipelines](pipelines.md#scheduled-pipelines) for
-building both CE and EE package in [our Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab).
+building both CE and EE package in our Release mirror: `https://dev.gitlab.org/gitlab/omnibus-gitlab`.
 This mirror is configured to send pipeline failure notifications to
 `#g_distribution` channel on Slack. A broken master pipeline gets priority over
 other scheduled work as per our [development guidelines](https://handbook.gitlab.com/handbook/engineering/workflow/#resolution-of-broken-master).

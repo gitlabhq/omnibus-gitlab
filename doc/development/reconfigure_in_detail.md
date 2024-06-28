@@ -23,8 +23,8 @@ two files as inputs:
 
 - A configuration file named [`solo.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/solo.rb).
 - An attribute file named `dna.json`, which is created during build time and loads:
-  - For CE, the [`gitlab`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/gitlab) cookbook.
-  - For EE, the [`gitlab-ee`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/gitlab-ee) cookbook.
+  - For CE, the [`gitlab`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/tree/master/files/gitlab-cookbooks/gitlab) cookbook.
+  - For EE, the [`gitlab-ee`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/tree/master/files/gitlab-cookbooks/gitlab-ee) cookbook.
 
 Cinc then follows its [two-pass model of execution](https://coderanger.net/two-pass/) for the selected cookbook.
 

@@ -229,7 +229,7 @@ end
 #### Log Directory
 
 The example settings referenced above that include `logging_settings` make use of
-the [`LogfilesHelper`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/tree/master/files/gitlab-cookbooks/gitlab/libraries/logfiles_helper.rb)
+the [`LogfilesHelper`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/gitlab/libraries/logfiles_helper.rb)
 class in order to provide a consistent reference to the configuration settings
 for the service log directory, the log group assigned to the log directory, and
 the group used for svlogd execution.

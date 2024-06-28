@@ -119,7 +119,7 @@ below for details:
 
 Prerequisites:
 
-- You must have permission to push branches to the `omnibus-gitlab` [release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab).
+- You must have permission to push branches to the `omnibus-gitlab` release mirror: `https://dev.gitlab.org/gitlab/omnibus-gitlab`.
 
 Use the release mirror to:
 
@@ -130,10 +130,10 @@ To build packages for other operating systems:
 
 1. Modify `*_VERSION` files or environment variables as specified in the
    previous section if needed. You might want to set the `ee` environment variable in
-   the [CI configuration](https://gitlab.com/gitlab-org/omnibus-gitlab/.gitlab-ci.yml)
+   the [CI configuration](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/.gitlab-ci.yml)
    to `true` to use a commit from the GitLab repository instead of GitLab-FOSS.
 
 1. Push your branch to the release mirror and check the
-   [pipelines](https://dev.gitlab.org/gitlab/omnibus-gitlab/-/pipelines).
+   pipelines: `https://dev.gitlab.org/gitlab/omnibus-gitlab/-/pipelines`.
 
 1. The pipeline builds packages for all supported operating systems and a Docker image.

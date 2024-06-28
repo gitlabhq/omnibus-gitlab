@@ -647,7 +647,7 @@ sudo usermod -aG gitlab-www www-data
 Other than the Passenger configuration in place of Puma and the lack of HTTPS
 (although this could be enabled) these files are mostly identical to:
 
-- [Bundled GitLab NGINX configuration](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb)
+- [Bundled GitLab NGINX configuration](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb)
 
 Don't forget to restart NGINX to load the new configuration (on Debian-based
 systems `sudo service nginx restart`).

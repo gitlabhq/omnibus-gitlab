@@ -35,14 +35,14 @@ Since we deploy GitLab.com using Omnibus GitLab packages, we need a separate
 remote to build the packages in case of a problem with GitLab.com or due to
 a security release of a package.
 
-This remote is located on <https://dev.gitlab.org/>. The only difference between the
-Omnibus GitLab project on <https://dev.gitlab.org/> and other public remotes is that the
+This remote is located on `https://dev.gitlab.org`. The only difference between the
+Omnibus GitLab project on `https://dev.gitlab.org` and other public remotes is that the
 project has active GitLab CI and has specific runners assigned to the project
 which run on the build servers. This is also the case for all GitLab components,
-eg. GitLab Shell is exactly the same on <https://dev.gitlab.org/> as it is on GitLab.com.
+eg. GitLab Shell is exactly the same on `https://dev.gitlab.org` as it is on GitLab.com.
 
-All build servers run [GitLab Runner](https://gitlab.com/gitlab-org/gitlab-ci-multi-runner) and all runners use a deploy key
-to connect to the projects on <https://dev.gitlab.org/>. The build servers also have
+All build servers run [GitLab Runner](https://gitlab.com/gitlab-org/gitlab-runner) and all runners use a deploy key
+to connect to the projects on `https://dev.gitlab.org`. The build servers also have
 access to official package repository at <https://packages.gitlab.com> and to a special
 Amazon S3 bucket which stores the test packages.
 
@@ -57,7 +57,7 @@ of important things for Omnibus GitLab will be done:
   (eg. `VERSION`, `GITLAB_SHELL_VERSION`) and written to the Omnibus GitLab repository.
 1. A specific Git tag will be created and synced to Omnibus GitLab repositories.
 
-When the Omnibus GitLab repository on <https://dev.gitlab.org/> gets updated, GitLab CI
+When the Omnibus GitLab repository on `https://dev.gitlab.org` gets updated, GitLab CI
 build gets triggered.
 
 The specific steps can be seen in the `.gitlab-ci.yml` file in the Omnibus GitLab
@@ -65,7 +65,7 @@ repository. The builds are executed on all platforms at the same time.
 
 During the build, Omnibus GitLab will pull external libraries from their source
 locations and GitLab components like GitLab, GitLab Shell, GitLab Workhorse, and
-so on will be pulled from <https://dev.gitlab.org/>.
+so on will be pulled from `https://dev.gitlab.org`.
 
 Once the build completes and the .deb or .rpm packages are built, depending on
 the build type package will be pushed to <https://packages.gitlab.com> or to a temporary
@@ -86,7 +86,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
 
 1. Use `support/set-revisions` to set the revisions of files in
    `config/software/`. It will take tag names and look up the Git SHA1's, and set
-   the download sources to <https://dev.gitlab.org/>. Use `set-revisions --ee` for an EE
+   the download sources to `https://dev.gitlab.org`. Use `set-revisions --ee` for an EE
    release:
 
    ```shell
@@ -126,18 +126,18 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
    | `v7.10.4-ee`     | `7.10.4+ee.0`, `7.10.4+ee.1`, `...`         |
    | `v7.11.0.rc1-ee` | `7.11.0+rc1.ee.0`, `7.11.0+rc1.ee.1`, `...` |
 
-1. Push the branch and the tag to both <https://gitlab.com> and <https://dev.gitlab.org/>:
+1. Push the branch and the tag to both <https://gitlab.com> and `https://dev.gitlab.org`:
 
    ```shell
    git push git@gitlab.com:gitlab-org/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
    git push git@dev.gitlab.org:gitlab/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
    ```
 
-   Pushing an annotated tag to <https://dev.gitlab.org/> triggers a package release.
+   Pushing an annotated tag to `https://dev.gitlab.org` triggers a package release.
 
 ### Publishing the packages
 
-You can track the progress of package building on <https://dev.gitlab.org/gitlab/omnibus-gitlab/builds>.
+You can track the progress of package building on `https://dev.gitlab.org/gitlab/omnibus-gitlab/builds`.
 They are pushed to [packagecloud repositories](https://packages.gitlab.com/gitlab/) automatically after
 successful builds.
 
