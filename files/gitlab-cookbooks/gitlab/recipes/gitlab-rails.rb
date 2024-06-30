@@ -200,6 +200,9 @@ redis_tls_client_cert_file = node['gitlab']['gitlab_rails']['redis_tls_client_ce
 redis_tls_client_key_file = node['gitlab']['gitlab_rails']['redis_tls_client_key_file']
 redis_encrypted_settings_file = node['gitlab']['gitlab_rails']['redis_encrypted_settings_file']
 redis_extra_config_command = node['gitlab']['gitlab_rails']['redis_extra_config_command']
+redis_connect_timeout = node['gitlab']['gitlab_rails']['redis_connect_timeout']
+redis_read_timeout = node['gitlab']['gitlab_rails']['redis_read_timeout']
+redis_write_timeout = node['gitlab']['gitlab_rails']['redis_write_timeout']
 
 templatesymlink "Create a secrets.yml and create a symlink to Rails root" do
   link_from File.join(gitlab_rails_source_dir, "config/secrets.yml")
@@ -238,7 +241,10 @@ templatesymlink "Create a resque.yml and create a symlink to Rails root" do
     redis_tls_client_cert_file: redis_tls_client_cert_file,
     redis_tls_client_key_file: redis_tls_client_key_file,
     redis_encrypted_settings_file: redis_encrypted_settings_file,
-    redis_extra_config_command: redis_extra_config_command
+    redis_extra_config_command: redis_extra_config_command,
+    redis_connect_timeout: redis_connect_timeout,
+    redis_read_timeout: redis_read_timeout,
+    redis_write_timeout: redis_write_timeout
   )
   dependent_services.each { |svc| notifies :restart, svc }
   sensitive true

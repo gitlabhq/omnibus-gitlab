@@ -5,6 +5,15 @@ production:
   <% if !@redis_enable_client %>
   id:
   <% end %>
+  <% if @redis_connect_timeout %>
+  connect_timeout: <%= @redis_connect_timeout %>
+  <% end %>
+  <% if @redis_read_timeout %>
+  read_timeout: <%= @redis_read_timeout %>
+  <% end %>
+  <% if @redis_write_timeout %>
+  write_timeout: <%= @redis_write_timeout %>
+  <% end %>
   <% if defined?(@cluster_nodes) && !@cluster_nodes.empty? %>
   <%- if @cluster_username %>username: <%= @cluster_username %><% end %>
   <%- if @cluster_password %>password: <%= @cluster_password %><% end %>
