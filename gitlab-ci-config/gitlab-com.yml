@@ -577,7 +577,7 @@ qa-test:
       pipeline_variables: true
     include:
       - project: gitlab-org/gitlab
-        ref: master
+        ref: 16-0-stable-ee
         file: .gitlab/ci/package-and-test/main.gitlab-ci.yml
   rules:
     - if: '$SKIP_QA_TEST == "true"'
