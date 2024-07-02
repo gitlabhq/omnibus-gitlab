@@ -179,7 +179,7 @@
       pipeline_variables: true
     include:
       - project: gitlab-org/gitlab
-        ref: master
+        ref: 16-11-stable-ee
         file: .gitlab/ci/package-and-test/main.gitlab-ci.yml
 
 #####################
