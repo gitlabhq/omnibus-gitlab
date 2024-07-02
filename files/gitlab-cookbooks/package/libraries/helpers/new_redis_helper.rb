@@ -1,4 +1,4 @@
-require 'cgi'
+require 'erb'
 require_relative '../../../gitlab/libraries/redis_uri'
 
 module NewRedisHelper
@@ -35,7 +35,7 @@ module NewRedisHelper
     # a space as "+" instead of "%20". While this appears to be handled with
     # the Ruby client, the Go client doesn't work with "+".
     def encode_redis_password(password)
-      URI::Generic::DEFAULT_PARSER.escape(password)
+      ERB::Util.url_encode(password)
     end
   end
 end

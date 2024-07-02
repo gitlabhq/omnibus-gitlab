@@ -48,8 +48,8 @@ RSpec.describe URI::Redis do
   end
 
   context 'with non-alphanumeric password' do
-    let(:password) { "&onBsidv6#XeKFd}=BDDyRrv" }
-    let(:escaped) { CGI.escape(password) }
+    let(:password) { "&onBsidv6# XeKFd}=BDDyRrv/?@[]" }
+    let(:escaped) { NewRedisHelper.encode_redis_password(password) }
 
     it 'rejects unencoded passwords' do
       expect { subject.password = password }.to raise_error(URI::InvalidComponentError)
