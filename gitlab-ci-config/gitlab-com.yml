@@ -178,8 +178,8 @@
       yaml_variables: true
       pipeline_variables: true
     include:
-      - project: gitlab-org/gitlab
-        ref: master
+      - project: ${QA_TESTS_UPSTREAM_PROJECT}
+        ref: ${QA_TESTS_REF}
         file: .gitlab/ci/package-and-test/main.gitlab-ci.yml
 
 #####################

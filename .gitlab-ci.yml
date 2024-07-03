@@ -67,6 +67,8 @@ variables:
   PACKAGE_PROMOTION_RUNNER_TAG: 'promotion'
   NIGHTLY_REPO: 'nightly-builds'
   NIGHTLY_FIPS_REPO: 'nightly-fips-builds'
+  QA_TESTS_UPSTREAM_PROJECT: 'gitlab-org/gitlab'
+  QA_TESTS_REF: 'master'
 
 .distribution-amd64-tags:
   - distribution-runner
