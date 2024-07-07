@@ -865,7 +865,7 @@ when your installation is using PgBouncer.
    If the upgrade used `pg_dump` and `pg_restore`, run the following query on the PostgreSQL database console:
 
    ```SQL
-   SET statement_timeout = 0; VACUUM ANALYZE VERBOSE;
+   SET statement_timeout = 0; VACUUM VERBOSE ANALYZE;
    ```
 
 ### Seed the database (fresh installs only)
