@@ -1084,10 +1084,13 @@ You might encounter the following error when reconfiguring GitLab:
 RuntimeError: redis_service[redis] (redis::enable line 19) had an error: RuntimeError: ruby_block[warn pending redis restart] (redis::enable line 77) had an error: RuntimeError: Execution of the command /opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket INFO failed with a non-zero exit code (1)
 ```
 
-To resolve this problem, run the following commands:
+The error message indicates that Redis might have restarted or shut down while trying to establish a connection with `redis-cli`. Given that recipe runs
+`gitlab-ctl restart redis` and tries to check the version right away, there might be a race condition that causes the error.
+
+To resolve this problem, run the following command:
 
 ```shell
-sudo /opt/gitlab/embedded/bin/redis-cli -s /var/opt/gitlab/redis/redis.socket
 sudo gitlab-ctl reconfigure
-sudo gitlab-ctl restart
 ```
+
+If that fails, check the output of `gitlab-ctl tail redis` and try to run `redis-cli`.
