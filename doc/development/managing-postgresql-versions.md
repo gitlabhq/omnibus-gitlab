@@ -26,7 +26,7 @@ The [`gitlab-ctl pg-upgrade` command](https://gitlab.com/gitlab-org/omnibus-gitl
 
 ### Automatic upgrades
 
-The [`gitlab-ctl pg-upgrade` command](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-ctl-commands/pg-upgrade.rb) is run on every upgrade. The default version used in the upgrade and revert command need to changed when wanting to change with PostgreSQL version gets automatically upgraded to during install.
+The [`gitlab-ctl pg-upgrade` command](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-ctl-commands/pg-upgrade.rb) is executed during every upgrade. To change the default PostgreSQL version used during the upgrade and revert processes, you must adjust the configuration to specify the desired PostgreSQL version that will be automatically upgraded during installation.
 
 ## Removing an older version
 
