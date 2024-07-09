@@ -93,7 +93,7 @@ GEM
 GEM
   remote: https://rubygems.org/
   specs:
-    acme-client (2.0.17)
+    acme-client (2.0.18)
       faraday (>= 1.0, < 3.0.0)
       faraday-retry (>= 1.0, < 3.0.0)
     activesupport (7.0.8)
@@ -393,7 +393,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acme-client (= 2.0.17)
+  acme-client (= 2.0.18)
   chef (= 18.3.0)!
   chef-bin (= 18.3.0)!
   chef-cli (= 5.6.1)!
