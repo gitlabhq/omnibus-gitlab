@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.1.2 (2024-07-09)
+
+### Fixed (2 changes)
+
+- [Fix Redis password handling with reserved characters](gitlab-org/security/omnibus-gitlab@1b64825adbabddcd445b3dd09638471b6a63f1a7)
+- [Force ffi gem to use Ruby platform gem](gitlab-org/security/omnibus-gitlab@8a0e3a7c79c702f6959ef240d894d6fb1c7fd7d7)
+
 ## 17.1.1 (2024-06-25)
 
 No changes.
