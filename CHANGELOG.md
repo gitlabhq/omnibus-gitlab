@@ -66,6 +66,12 @@ No changes.
 
 - [Bump Mattermost to version 9.8.0](gitlab-org/omnibus-gitlab@a68aad1971f3be597e4e1d32562f5db467a1b1ef) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7622))
 
+## 17.0.4 (2024-07-09)
+
+### Fixed (1 change)
+
+- [Fix Redis password handling with reserved characters](gitlab-org/security/omnibus-gitlab@b70160bd9c9a3b8a9bc3ea94ea44dbd3f174c8b3)
+
 ## 17.0.3 (2024-06-25)
 
 ### Fixed (1 change)
