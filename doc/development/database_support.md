@@ -49,7 +49,7 @@ For example in `registry` cookbook:
 1. Create a `database_objects` custom resource in `resources/` directory of the
    cookbook with the default `nothing` action (a no-op action) and a `create`
    action. The `create` action can leverage the existing `postgresql` custom
-   resources to setup the required database objects for the component.
+   resources to set up the required database objects for the component.
 
    See:
    - `postgresql_user`

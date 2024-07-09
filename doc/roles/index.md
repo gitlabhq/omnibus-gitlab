@@ -155,7 +155,7 @@ Documentation on the usage of the PostgreSQL Roles can be found in [Configuring 
 
 ### GitLab Pages Roles
 
-GitLab Pages roles are used to setup and configure GitLab Pages. For additional
+GitLab Pages roles are used to set up and configure GitLab Pages. For additional
 information, see the
 [GitLab Pages Administration documentation](https://docs.gitlab.com/ee/administration/pages/index.html)
 
@@ -167,7 +167,7 @@ information, see the
 
 ### Sidekiq Roles
 
-Sidekiq roles are used to setup and configure Sidekiq. For additional
+Sidekiq roles are used to set up and configure Sidekiq. For additional
 information, see the
 [Sidekiq Administration documentation](https://docs.gitlab.com/ee/administration/sidekiq/index.html)
 
@@ -179,7 +179,7 @@ information, see the
 
 ### Spamcheck Roles
 
-Spamcheck roles are used to setup and configure Spamcheck services. For additional
+Spamcheck roles are used to set up and configure Spamcheck services. For additional
 information, see the
 [Spamcheck documentation](https://docs.gitlab.com/ee/administration/reporting/spamcheck.html)
 

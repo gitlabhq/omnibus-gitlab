@@ -421,7 +421,7 @@ Mattermost unless you manually add them in `nginx.conf`.
 
 ### Configuration
 
-First, you'll need to setup your `/etc/gitlab/gitlab.rb` to disable the built-in
+First, you'll need to set up your `/etc/gitlab/gitlab.rb` to disable the built-in
 NGINX and Puma:
 
 ```ruby
