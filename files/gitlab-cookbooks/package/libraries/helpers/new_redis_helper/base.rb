@@ -60,6 +60,61 @@ module NewRedisHelper
       uri
     end
 
+    def connect_to_redis_over_tcp?
+      gitlab_rb_attr['redis_host']
+    end
+
+    # Few methods are used in both libraries and recipes. While used in
+    # recipes, they work on the `node` object, and can follow the regular
+    # pattern (by initializing an object of the relevant
+    # `NewRedisHelper::<Service>` class and calling the method). However, when
+    # used in libraries, they have to work on the `Gitlab` object, and should
+    # be accessible as class methods (without having to create an object).
+    # Hence, we make these methods class methods, with the config block they
+    # work on being passed as an argument. Then the instance methods just call
+    # these class methods with the correct arguments. The libraries can also
+    # directly call these class methods.
+    def has_sentinels?
+      self.class.has_sentinels?(config: node_attr)
+    end
+
+    def redis_server_over_tcp?
+      self.class.redis_server_over_tcp?(config: redis)
+    end
+
+    def redis_replica?
+      self.class.redis_replica?(config: redis)
+    end
+
+    class << self
+      def has_sentinels?(config: nil)
+        config['redis_sentinels'] && !config['redis_sentinels'].empty?
+      end
+
+      def redis_server_over_tcp?(config: nil)
+        config['port']&.positive? || config['tls_port']&.positive?
+      end
+
+      def redis_replica?(config: nil)
+        config['master'] == false
+      end
+
+      # The following methods doesn't work on node object at all and are
+      # independent of the Redis client service using them, and hence makes
+      # sense to be just class methods
+      def redis_master_role?
+        Gitlab['redis_master_role']['enable']
+      end
+
+      def redis_replica_role?
+        Gitlab['redis_replica_role']['enable']
+      end
+
+      def sentinel_daemon_enabled?
+        Services.enabled?('sentinel')
+      end
+    end
+
     private
 
     def node_access_keys
@@ -78,22 +133,6 @@ module NewRedisHelper
 
     def redis
       @node['redis']
-    end
-
-    def redis_server_over_tcp?
-      redis['port']&.positive? || redis['tls_port']&.positive?
-    end
-
-    def connect_to_redis_over_tcp?
-      gitlab_rb_attr['redis_host']
-    end
-
-    def redis_replica?
-      redis['master'] == false
-    end
-
-    def sentinel_daemon_enabled?
-      Services.enabled?('sentinel')
     end
 
     def master_name
@@ -138,10 +177,6 @@ module NewRedisHelper
 
     def redis_database
       node_attr['redis_database']
-    end
-
-    def has_sentinels?
-      node_attr['redis_sentinels'] && !node_attr['redis_sentinels'].empty?
     end
 
     def sentinel_urls

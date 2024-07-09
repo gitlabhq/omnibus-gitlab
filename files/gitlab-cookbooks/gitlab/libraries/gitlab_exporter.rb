@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 require_relative 'redis_uri.rb'
-require_relative 'redis_helper.rb'
+require_relative '../../package/libraries/helpers/new_redis_helper/base'
 
 module GitlabExporter
   class << self
@@ -30,7 +30,7 @@ module GitlabExporter
       # that.
       return if Gitlab['gitlab_exporter'].key?('probe_sidekiq') && !Gitlab['gitlab_exporter']['probe_sidekiq'].nil?
 
-      Gitlab['gitlab_exporter']['probe_sidekiq'] = !RedisHelper::Checks.has_sentinels?
+      Gitlab['gitlab_exporter']['probe_sidekiq'] = !NewRedisHelper::Base.has_sentinels?(config: Gitlab['gitlab_rails'])
     end
 
     def validate_tls_config
