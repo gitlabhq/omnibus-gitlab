@@ -31,7 +31,7 @@ gem 'ohai', '18.1.3'
 # TODO: Include omnibus-ctl in the Gemfile
 # Currently omnibus-ctl is installed via config/software since we build
 # a custom version from the Git source for licensing reasons and for Ruby 3.2 fixes.
-gem 'acme-client', '2.0.17'
+gem 'acme-client', '2.0.18'
 gem 'rainbow', '3.1.1'
 gem 'gitlab-ruby-shadow', '2.5.1', require: 'shadow'
 gem 'tomlib', '0.6.0'
