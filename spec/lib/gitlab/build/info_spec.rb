@@ -7,6 +7,11 @@ RSpec.describe Build::Info do
     stub_default_package_version
     stub_env_var('GITLAB_ALTERNATIVE_REPO', nil)
     stub_env_var('ALTERNATIVE_PRIVATE_TOKEN', nil)
+
+    ce_tags = "16.1.1+ce.0\n16.0.0+rc42.ce.0\n15.11.1+ce.0\n15.11.0+ce.0\n15.10.0+ce.0\n15.10.0+rc42.ce.0"
+    ee_tags = "16.1.1+ee.0\n16.0.0+rc42.ee.0\n15.11.1+ee.0\n15.11.0+ee.0\n15.10.0+ee.0\n15.10.0+rc42.ee.0"
+    allow(described_class).to receive(:`).with(/git -c versionsort.*ce/).and_return(ce_tags)
+    allow(described_class).to receive(:`).with(/git -c versionsort.*ee/).and_return(ee_tags)
   end
 
   describe '.package' do
@@ -44,8 +49,8 @@ RSpec.describe Build::Info do
     it 'defaults to an initial build version when there are no matching tags' do
       allow(Build::Check).to receive(:on_tag?).and_return(false)
       allow(Build::Check).to receive(:is_nightly?).and_return(false)
-      allow(Build::Info).to receive(:latest_tag).and_return('')
-      allow(Build::Info).to receive(:commit_sha).and_return('ffffffff')
+      allow(Build::Info::Git).to receive(:latest_tag).and_return('')
+      allow(Build::Info::Git).to receive(:commit_sha).and_return('ffffffff')
       stub_env_var('CI_PIPELINE_ID', '5555')
 
       expect(described_class.release_version).to eq('0.0.1+rfbranch.5555.ffffffff-ce.1')
@@ -86,120 +91,6 @@ RSpec.describe Build::Info do
     end
   end
 
-  # Specs for latest_tag and for latest_stable_tag are not really useful since
-  # we are stubbing out shell out to git. However, they are showing what we
-  # expect to see.
-  describe '.latest_tag' do
-    context 'when running against stable branches' do
-      before do
-        stub_is_ee(false)
-        stub_env_var('CI_COMMIT_BRANCH', '14-10-stable')
-        allow(described_class).to receive(:`).with(/git describe --exact-match/).and_return('12.121.12+rc7.ce.0')
-        allow(described_class).to receive(:`).with(/git -c versionsort.prereleaseSuffix=rc tag -l /).and_return('12.121.12+rc7.ce.0')
-      end
-
-      it 'calls the shell command with correct arguments' do
-        expect(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '14.10*[+.]ce.*' --sort=-v:refname | head -1")
-
-        described_class.latest_tag
-      end
-    end
-
-    describe 'for CE' do
-      before do
-        stub_env_var('CI_COMMIT_BRANCH', 'foo-feature-branch')
-        stub_is_ee(false)
-        allow(described_class).to receive(:`).with("git describe --exact-match 2>/dev/null").and_return('12.121.12+rc7.ce.0')
-        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | head -1").and_return('12.121.12+rc7.ce.0')
-      end
-
-      it 'returns the version of correct edition' do
-        expect(described_class.latest_tag).to eq('12.121.12+rc7.ce.0')
-      end
-
-      it 'calls the shell command with correct arguments' do
-        expect(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | head -1")
-
-        described_class.latest_tag
-      end
-    end
-
-    describe 'for EE' do
-      before do
-        stub_env_var('CI_COMMIT_BRANCH', 'foo-feature-branch')
-        stub_is_ee(true)
-        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ee.*' --sort=-v:refname | head -1").and_return('12.121.12+rc7.ee.0')
-      end
-
-      it 'returns the version of correct edition' do
-        expect(described_class.latest_tag).to eq('12.121.12+rc7.ee.0')
-      end
-    end
-  end
-
-  describe '.latest_stable_tag' do
-    describe 'for CE' do
-      before do
-        stub_env_var('CI_COMMIT_BRANCH', 'foo-feature-branch')
-        stub_is_ee(nil)
-        allow(described_class).to receive(:`).with("git describe --exact-match 2>/dev/null").and_return('12.121.12+ce.0')
-        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return('12.121.12+ce.0')
-      end
-
-      it 'returns the version of correct edition' do
-        expect(described_class.latest_stable_tag).to eq('12.121.12+ce.0')
-      end
-    end
-
-    describe 'for EE' do
-      before do
-        stub_env_var('CI_COMMIT_BRANCH', 'foo-feature-branch')
-        stub_is_ee(true)
-        allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ee.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return('12.121.12+ee.0')
-      end
-
-      it 'returns the version of correct edition' do
-        expect(described_class.latest_stable_tag).to eq('12.121.12+ee.0')
-      end
-    end
-
-    describe 'on stable branches' do
-      before do
-        stub_env_var('CI_COMMIT_BRANCH', '15-11-stable')
-        stub_is_ee(false)
-      end
-
-      context 'when no tags exist in the stable branch' do
-        before do
-          allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '15.11*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return(nil)
-        end
-
-        it 'returns the latest available stable tag' do
-          # Twice because we are calling the method two times - once to check
-          # the return value and another time to check if the message is
-          # printed
-          expect(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '15.11*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").twice
-          expect(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").twice.and_return('15.10.3+ce.0')
-
-          expect(described_class.latest_stable_tag).to eq('15.10.3+ce.0')
-          expect { described_class.latest_stable_tag }.to output(/No tags found in 15.11.x series/).to_stdout
-        end
-      end
-
-      context 'when tags exist in the stable branch' do
-        before do
-          allow(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '15.11*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1").and_return('15.11.0+ce.0')
-        end
-
-        it 'returns the latest available stable tag' do
-          expect(described_class).to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '15.11*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1")
-          expect(described_class).not_to receive(:`).with("git -c versionsort.prereleaseSuffix=rc tag -l '*[+.]ce.*' --sort=-v:refname | awk '!/rc/' | head -1")
-          expect(described_class.latest_stable_tag).to eq('15.11.0+ce.0')
-        end
-      end
-    end
-  end
-
   describe '.gitlab_version' do
     describe 'GITLAB_VERSION variable specified' do
       it 'returns passed value' do
@@ -213,15 +104,6 @@ RSpec.describe Build::Info do
         allow(File).to receive(:read).with("VERSION").and_return("8.5.6")
         expect(described_class.gitlab_version).to eq('8.5.6')
       end
-    end
-  end
-
-  describe '.previous_version' do
-    it 'detects previous version correctly' do
-      allow(described_class).to receive(:`).with("git describe --exact-match 2>/dev/null").and_return('10.4.0+ee.0')
-      allow(Build::Info).to receive(:`).with(/git -c versionsort/).and_return("10.4.0+ee.0\n10.3.5+ee.0")
-
-      expect(described_class.previous_version).to eq("10.3.5-ee.0")
     end
   end
 

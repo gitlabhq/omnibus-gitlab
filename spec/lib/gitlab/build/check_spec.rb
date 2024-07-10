@@ -92,13 +92,13 @@ RSpec.describe Build::Check do
       it 'returns true if it is an rc release' do
         # This will be the case if latest_tag is eg. 9.3.0+rc6.ce.0
         # or 9.3.0+ce.0
-        allow(Build::Info).to receive(:latest_tag).and_return('9.3.0+rc6.ce.0') # This line only is only an example, stubbing is not needed.
+        allow(Build::Info::Git).to receive(:latest_tag).and_return('9.3.0+rc6.ce.0') # This line only is only an example, stubbing is not needed.
         allow(described_class).to receive(:match_tag?).and_return(true)
         expect(described_class.is_latest_tag?).to be_truthy
       end
 
       it 'returns true if it is not an rc release' do
-        allow(Build::Info).to receive(:latest_tag).and_return('9.3.0+ce.0') # This line only is only an example, stubbing is not needed.
+        allow(Build::Info::Git).to receive(:latest_tag).and_return('9.3.0+ce.0') # This line only is only an example, stubbing is not needed.
         allow(described_class).to receive(:match_tag?).and_return(false)
         expect(described_class.is_latest_tag?).to be_falsey
       end
@@ -108,13 +108,13 @@ RSpec.describe Build::Check do
       it 'returns true if it is a stable release' do
         # This will be the case if latest_tag is eg. 9.3.0+ce.0
         # It will not be the case if the tag is 9.3.0+rc6.ce.0
-        allow(Build::Info).to receive(:latest_stable_tag).and_return('9.3.0+ce.0') # This line only is only an example, stubbing is not needed.
+        allow(Build::Info::Git).to receive(:latest_stable_tag).and_return('9.3.0+ce.0') # This line only is only an example, stubbing is not needed.
         allow(described_class).to receive(:match_tag?).and_return(true)
         expect(described_class.is_latest_stable_tag?).to be_truthy
       end
 
       it 'returns true if it is not a stable release' do
-        allow(Build::Info).to receive(:latest_stable_tag).and_return('9.3.0+rc6.ce.0') # This line only is only an example, stubbing is not needed.
+        allow(Build::Info::Git).to receive(:latest_stable_tag).and_return('9.3.0+rc6.ce.0') # This line only is only an example, stubbing is not needed.
         allow(described_class).to receive(:match_tag?).and_return(false)
         expect(described_class.is_latest_stable_tag?).to be_falsey
       end
@@ -136,12 +136,12 @@ RSpec.describe Build::Check do
   describe 'is_rc_tag?' do
     it 'returns true if it looks like an rc tag' do
       # It will be the case if the tag is 9.3.0+rc6.ce.0
-      allow(Build::Info).to receive(:current_git_tag).and_return('9.3.0+rc6.ce.0')
+      allow(Build::Info::Git).to receive(:tag_name).and_return('9.3.0+rc6.ce.0')
       expect(described_class.is_rc_tag?).to be_truthy
     end
     it 'returns false if it does not look like an rc tag' do
       # This not be the case if tag is eg. 9.3.0+ce.0
-      allow(Build::Info).to receive(:current_git_tag).and_return('9.3.0+ce.0')
+      allow(Build::Info::Git).to receive(:tag_name).and_return('9.3.0+ce.0')
       expect(described_class.is_rc_tag?).to be_falsey
     end
   end
@@ -149,7 +149,7 @@ RSpec.describe Build::Check do
   describe 'is_auto_deploy?' do
     it 'returns true if it looks like an auto-deploy tag' do
       # This is the case if the tag is 11.10.12345+5159f2949cb.59c9fa631
-      allow(Build::Info).to receive(:current_git_tag).and_return('11.10.12345+5159f2949cb.59c9fa631')
+      allow(Build::Info::Git).to receive(:tag_name).and_return('11.10.12345+5159f2949cb.59c9fa631')
       expect(described_class.is_auto_deploy?).to be_truthy
     end
 
@@ -157,7 +157,7 @@ RSpec.describe Build::Check do
       # This not be the case if ag is eg. 9.3.0+ce.0
       allow(Gitlab::Util).to receive(:get_env).with('CI_COMMIT_REF_NAME').and_return('a-random-branch')
 
-      allow(Build::Info).to receive(:current_git_tag).and_return('9.3.0+ce.0')
+      allow(Build::Info::Git).to receive(:tag_name).and_return('9.3.0+ce.0')
       expect(described_class.is_auto_deploy?).to be_falsey
     end
   end
@@ -172,7 +172,7 @@ RSpec.describe Build::Check do
   describe 'on_stable_branch?' do
     context 'when on a stable branch' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', '14-10-stable')
+        stub_branch('14-10-stable')
       end
 
       it 'returns true' do
@@ -182,7 +182,7 @@ RSpec.describe Build::Check do
 
     context 'when on a regular branch' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
+        stub_branch('my-feature-branch')
       end
 
       it 'returns false' do
@@ -192,7 +192,7 @@ RSpec.describe Build::Check do
 
     context 'when using a a tag' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', '')
+        stub_tag('1.2.3')
       end
 
       it 'returns false' do
@@ -204,7 +204,7 @@ RSpec.describe Build::Check do
   describe 'on_regular_tag?' do
     context 'when on a regular branch' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
+        stub_branch('my-feature-branch')
         allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(false)
       end
 
@@ -215,7 +215,7 @@ RSpec.describe Build::Check do
 
     context 'when on a stable branch' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', '15-6-stable')
+        stub_branch('15-6-stable')
         allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(false)
       end
 
@@ -226,8 +226,7 @@ RSpec.describe Build::Check do
 
     context 'when on RC tag' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', '')
-        stub_env_var('CI_COMMIT_TAG', '15.8.0+rc42.ce.0')
+        stub_tag('15.8.0+rc42.ce.0')
         allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(true)
       end
 
@@ -238,8 +237,7 @@ RSpec.describe Build::Check do
 
     context 'when on stable tag' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', '')
-        stub_env_var('CI_COMMIT_TAG', '15.8.0+ce.0')
+        stub_tag('15.8.0+ce.0')
         allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(true)
       end
 
@@ -250,9 +248,7 @@ RSpec.describe Build::Check do
 
     context 'when on auto-deploy tag' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', '')
-        stub_env_var('CI_COMMIT_TAG', '15.8.202301050320+b251a9da107.0e5d6807f3a')
-        allow(Build::Info).to receive(:current_git_tag).and_return('15.8.202301050320+b251a9da107.0e5d6807f3a')
+        stub_tag('15.8.202301050320+b251a9da107.0e5d6807f3a')
         allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(true)
       end
 
@@ -265,19 +261,27 @@ RSpec.describe Build::Check do
   describe 'on_regular_branch?' do
     context 'when on a regular branch' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', 'my-feature-branch')
-        allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(false)
+        stub_branch('my-feature-branch')
       end
 
-      it 'returns false' do
+      it 'returns true' do
+        expect(described_class.on_regular_branch?).to be_truthy
+      end
+    end
+
+    context 'when on a feature branch MR pipeline' do
+      before do
+        stub_mr_branch('my-feature-branch')
+      end
+
+      it 'returns true' do
         expect(described_class.on_regular_branch?).to be_truthy
       end
     end
 
     context 'when on a stable branch' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', '15-6-stable')
-        allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(false)
+        stub_branch('15-6-stable')
       end
 
       it 'returns false' do
@@ -287,9 +291,7 @@ RSpec.describe Build::Check do
 
     context 'when on RC tag' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', '')
-        stub_env_var('CI_COMMIT_TAG', '15.8.0+rc42.ce.0')
-        allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(true)
+        stub_tag('15.8.0+rc42.ce.0')
       end
 
       it 'returns true' do
@@ -299,9 +301,7 @@ RSpec.describe Build::Check do
 
     context 'when on stable tag' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', '')
-        stub_env_var('CI_COMMIT_TAG', '15.8.0+ce.0')
-        allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(true)
+        stub_tag('15.8.0+ce.0')
       end
 
       it 'returns true' do
@@ -311,10 +311,7 @@ RSpec.describe Build::Check do
 
     context 'when on auto-deploy tag' do
       before do
-        stub_env_var('CI_COMMIT_BRANCH', '')
-        stub_env_var('CI_COMMIT_TAG', '15.8.202301050320+b251a9da107.0e5d6807f3a')
-        allow(Build::Info).to receive(:current_git_tag).and_return('15.8.202301050320+b251a9da107.0e5d6807f3a')
-        allow(described_class).to receive(:system).with(/git describe --exact-match/).and_return(true)
+        stub_tag('15.8.202301050320+b251a9da107.0e5d6807f3a')
       end
 
       it 'returns false' do

@@ -2,6 +2,7 @@ require 'fileutils'
 require_relative "../build.rb"
 require_relative "../build/check.rb"
 require_relative "../build/info.rb"
+require_relative "../build/info/git"
 require_relative '../build/facts'
 require_relative "../gcloud_helper.rb"
 require_relative "../ohai_helper.rb"
@@ -27,12 +28,12 @@ namespace :build do
   namespace :docker do
     desc 'Show latest available tag. Includes unstable releases.'
     task :latest_tag do
-      puts Build::Info.latest_tag
+      puts Build::Info::Git.latest_tag
     end
 
     desc 'Show latest stable tag.'
     task :latest_stable_tag do
-      puts Build::Info.latest_stable_tag
+      puts Build::Info::Git.latest_stable_tag
     end
   end
 

@@ -2,6 +2,7 @@ require 'omnibus'
 require 'net/http'
 require 'json'
 
+require_relative 'info/git'
 require_relative '../build_iteration'
 require_relative "../util.rb"
 require_relative './info/ci'
@@ -10,8 +11,6 @@ require_relative 'image'
 
 module Build
   class Info
-    TagsNotFoundError = Class.new(StandardError)
-
     DEPLOYER_OS_MAPPING = {
       'AUTO_DEPLOY_ENVIRONMENT' => 'ubuntu-xenial',
       'PATCH_DEPLOY_ENVIRONMENT' => 'ubuntu-bionic',
@@ -20,13 +19,6 @@ module Build
     PACKAGE_GLOB = "pkg/**/*.{deb,rpm}".freeze
 
     class << self
-      def fetch_fact_from_file(fact)
-        return unless File.exist?("build_facts/#{fact}")
-
-        content = File.read("build_facts/#{fact}").strip
-        return content unless content.empty?
-      end
-
       def package
         return "gitlab-fips" if Check.use_system_ssl?
         return "gitlab-ee" if Check.is_ee?
@@ -50,61 +42,18 @@ module Build
           Omnibus.load_configuration('omnibus.rb')
           Omnibus::BuildVersion.semver
         else
-          latest_git_tag = Info.latest_tag.strip
+          latest_git_tag = Info::Git.latest_tag.strip
           latest_version = latest_git_tag && !latest_git_tag.empty? ? latest_git_tag[0, latest_git_tag.match("[+]").begin(0)] : '0.0.1'
-          commit_sha = Build::Info.commit_sha
+          commit_sha = Build::Info::Git.commit_sha
           ver_tag = "#{latest_version}+" + (Build::Check.is_nightly? ? "rnightly" : "rfbranch")
           ver_tag += ".fips" if Build::Check.use_system_ssl?
           [ver_tag, Gitlab::Util.get_env('CI_PIPELINE_ID'), commit_sha].compact.join('.')
         end
       end
 
-      def branch_name
-        Gitlab::Util.get_env('CI_COMMIT_BRANCH')
-      end
-
-      def commit_sha
-        commit_sha_raw = Gitlab::Util.get_env('CI_COMMIT_SHA') || `git rev-parse HEAD`.strip
-        commit_sha_raw[0, 8]
-      end
-
       def release_version
         semver = Info.semver_version
         "#{semver}-#{Gitlab::BuildIteration.new.build_iteration}"
-      end
-
-      # TODO, merge latest_tag with latest_stable_tag
-      # TODO, add tests, needs a repo clone
-      def latest_tag
-        unless (fact_from_file = fetch_fact_from_file(__method__)).nil?
-          return fact_from_file
-        end
-
-        version = branch_name.delete_suffix('-stable').tr('-', '.') if Build::Check.on_stable_branch?
-
-        `git -c versionsort.prereleaseSuffix=rc tag -l '#{version}#{Info.tag_match_pattern}' --sort=-v:refname | head -1`.chomp
-      end
-
-      def latest_stable_tag(level: 1)
-        unless (fact_from_file = fetch_fact_from_file(__method__)).nil?
-          return fact_from_file
-        end
-
-        version = branch_name.delete_suffix('-stable').tr('-', '.') if Build::Check.on_stable_branch?
-
-        # Level decides tag at which position you want. Level one gives you
-        # latest stable tag, two gives you the one just before it and so on.
-        output = `git -c versionsort.prereleaseSuffix=rc tag -l '#{version}#{Info.tag_match_pattern}' --sort=-v:refname | awk '!/rc/' | head -#{level}`&.split("\n")&.last
-
-        # If no tags exist that start with the specified version, we need to
-        # fall back to the available latest stable tag. For that, we run the
-        # same command without the version in the filter argument.
-        raise TagsNotFoundError if output.nil?
-
-        output
-      rescue TagsNotFoundError
-        puts "No tags found in #{version}.x series. Falling back to latest available tag."
-        `git -c versionsort.prereleaseSuffix=rc tag -l '#{Info.tag_match_pattern}' --sort=-v:refname | awk '!/rc/' | head -#{level}`.split("\n").last
       end
 
       def docker_tag
@@ -141,12 +90,6 @@ module Build
         #    anyway pointing to immutable references (git tags), and hence we
         #    can directly use it.
         Gitlab::Version.new('gitlab-rails').print(prepend_version)
-      end
-
-      def previous_version
-        # Get the second latest git tag
-        previous_tag = Info.latest_stable_tag(level: 2)
-        previous_tag.tr("+", "-")
       end
 
       def gitlab_rails_project_path
@@ -304,10 +247,6 @@ module Build
         contents << "DOWNLOAD_URL=#{download_url}\n"
         contents << "CI_JOB_TOKEN=#{Build::Info::CI.job_token}\n"
         contents.join
-      end
-
-      def current_git_tag
-        `git describe --exact-match 2>/dev/null`.chomp
       end
 
       def image_reference
