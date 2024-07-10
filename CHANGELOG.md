@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.1.2 (2024-07-09)
+
+### Fixed (2 changes)
+
+- [Fix Redis password handling with reserved characters](gitlab-org/security/omnibus-gitlab@1b64825adbabddcd445b3dd09638471b6a63f1a7)
+- [Force ffi gem to use Ruby platform gem](gitlab-org/security/omnibus-gitlab@8a0e3a7c79c702f6959ef240d894d6fb1c7fd7d7)
+
 ## 17.1.1 (2024-06-25)
 
 No changes.
@@ -59,6 +66,12 @@ No changes.
 
 - [Bump Mattermost to version 9.8.0](gitlab-org/omnibus-gitlab@a68aad1971f3be597e4e1d32562f5db467a1b1ef) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7622))
 
+## 17.0.4 (2024-07-09)
+
+### Fixed (1 change)
+
+- [Fix Redis password handling with reserved characters](gitlab-org/security/omnibus-gitlab@b70160bd9c9a3b8a9bc3ea94ea44dbd3f174c8b3)
+
 ## 17.0.3 (2024-06-25)
 
 ### Fixed (1 change)
@@ -110,6 +123,10 @@ No changes.
 ### Other (1 change)
 
 - [Update Mattermost to 9.7.1](gitlab-org/omnibus-gitlab@87ecb13f6b2d34d04c42a5ce879977e1dce81a12) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7551))
+
+## 16.11.6 (2024-07-09)
+
+No changes.
 
 ## 16.11.5 (2024-06-25)
 
