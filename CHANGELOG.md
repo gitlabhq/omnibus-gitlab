@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.0.4 (2024-07-09)
+
+### Fixed (1 change)
+
+- [Fix Redis password handling with reserved characters](gitlab-org/security/omnibus-gitlab@b70160bd9c9a3b8a9bc3ea94ea44dbd3f174c8b3)
+
 ## 17.0.3 (2024-06-25)
 
 ### Fixed (1 change)
