@@ -49,7 +49,7 @@ RSpec.describe URI::Redis do
   end
 
   context 'with non-alphanumeric password' do
-    let(:password) { "&onBsidv6# XeKFd}=BDDyRrv/?@[]" }
+    let(:password) { "&onBsidv6# XeKFd}=BDDyRrv/?@[]()<>*" }
     let(:escaped) { NewRedisHelper.encode_redis_password(password) }
 
     it 'rejects unencoded passwords' do
