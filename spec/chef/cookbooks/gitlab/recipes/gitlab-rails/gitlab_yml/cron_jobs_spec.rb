@@ -54,6 +54,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'ci_runners_stale_machines_cleanup_worker'               | 'ci_runners_stale_machines_cleanup_worker_cron'
         'click_house_ci_finished_builds_sync_worker'             | 'click_house_ci_finished_builds_sync_worker_cron'
         'ci_catalog_resources_process_sync_events_worker'        | 'ci_catalog_resources_process_sync_events_worker_cron'
+        'ci_click_house_finished_pipelines_sync_worker'          | 'ci_click_house_finished_pipelines_sync_worker_cron'
       end
 
       with_them do
