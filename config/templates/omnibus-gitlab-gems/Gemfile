@@ -1,0 +1,50 @@
+# THis defines the dependencies needed for Chef and its cookbooks to
+# run. Any dependency needed by `gitlab-ctl reconfigure` should be
+# included here.
+#
+# Note that you must avoid installing a gem from a Git source in this
+# file because Bundler installs gems from source in a different
+# directory than prepackaged gems. Gems installed from source cannot be
+# found with the Ruby interpreter unless `bundle exec` is used.
+source 'https://rubygems.org'
+
+# Pinned because ffi 1.17.0 shipped precompiled native gems which
+# do not work on older glibc versions
+gem 'ffi', '1.16.3'
+
+# chef depends on unf_ext. This needs to be listed before Chef
+# since Cinc will look inside the Cinc RubyGems.
+gem 'unf_ext', '0.0.8.2'
+
+# The version here should be in agreement with /Gemfile.lock so that our rspec
+# testing stays consistent with the package contents.
+source 'https://packagecloud.io/cinc-project/stable' do
+  gem 'chef', '17.10.0'
+  gem 'chef-bin', '17.10.0'
+  gem 'chef-config', '17.10.0'
+  gem 'chef-zero', '15.0.11'
+  gem 'inspec-core', '4.56.58'
+end
+
+gem 'ohai', '17.9.4'
+# TODO: Include omnibus-ctl in the Gemfile
+# Currently omnibus-ctl is installed via config/software since we build
+# a custom version from the Git source for licensing reasons and for Ruby 3.2 fixes.
+gem 'acme-client', '2.0.15'
+gem 'rainbow', '3.1.1'
+gem 'tomlib', '0.6.0'
+gem 'mixlib-log', '3.0.9'
+gem 'remote_syslog', '1.6.15'
+
+# pin the version of faraday and faraday-net_http temporarily until
+# conflicts between the version of net-http it requires and the version of
+# net-http shipped in the Gemfile can be resolved
+gem 'faraday-net_http', '1.0.1'
+gem 'faraday', '1.4.3'
+
+# We need to install our own copy of license_finder since the
+# license_finder installed by gitlab-omnibus-builder appears to search
+# the builder gem directory instead of the Omnibus gem directory.
+gem 'license_finder', '7.0.1'
+
+gem 'net-sftp', '3.0.0'
