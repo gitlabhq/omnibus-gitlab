@@ -752,6 +752,7 @@ default['gitlab']['gitlab_shell']['auth_file'] = nil
 default['gitlab']['gitlab_shell']['git_trace_log_file'] = nil
 default['gitlab']['gitlab_shell']['migration'] = { enabled: true, features: [] }
 default['gitlab']['gitlab_shell']['ssl_cert_dir'] = "#{node['package']['install-dir']}/embedded/ssl/certs/"
+default['gitlab']['gitlab_shell']['lfs_pure_ssh_protocol'] = false
 # DEPRECATED! Not used by gitlab-shell
 default['gitlab']['gitlab_shell']['git_data_directories'] = {
   "default" => { "path" => "/var/opt/gitlab/git-data" }
