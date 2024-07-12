@@ -59,6 +59,9 @@ sudo gitlab-ctl stop
 
 # Restart all GitLab components
 sudo gitlab-ctl restart
+
+# Restart all GitLab components except given services ... (e.g. gitaly, redis)
+sudo gitlab-ctl restart-except gitaly redis
 ```
 
 Note that on a single-core server it may take up to a minute to restart Puma and
