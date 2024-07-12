@@ -245,9 +245,9 @@
   - "nhooyr.io/websocket"
   - ISC
   - :who: Mikhail Mazurskiy
-    :why: https://github.com/nhooyr/websocket/blob/v1.8.10/LICENSE.txt
-    :versions: [ v1.8.10 ]
-    :when: 2023-11-05 02:20:00.000000000 Z
+    :why: https://github.com/nhooyr/websocket/blob/v1.8.11/LICENSE.txt
+    :versions: [ v1.8.11 ]
+    :when: 2024-07-12 13:20:00.000000000 Z
 - - :license
   - "./api"
   - MPL2
