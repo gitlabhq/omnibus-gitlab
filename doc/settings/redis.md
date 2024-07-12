@@ -232,6 +232,18 @@ redis['io_threads'] = 4
 redis['io_threads_do_reads'] = true
 ```
 
+### Client Timeouts
+
+By default, the [Ruby client for Redis](https://github.com/redis-rb/redis-client?tab=readme-ov-file#configuration)
+uses a 1-second default for the connect, read, and write timeouts. You may need to tune these values to account for local network latency.
+For example, if you see `Connection timed out - user specified timeout` errors, you may need to raise `connect_timeout`:
+
+```ruby
+gitlab_rails['redis_connect_timeout'] = 3
+gitlab_rails['redis_read_timeout'] = 1
+gitlab_rails['redis_write_timeout'] = 1
+```
+
 ## Provide sensitive configuration to Redis clients without plain text storage
 
 For more information, see the example in [configuration documentation](../settings/configuration.md#provide-redis-password-to-redis-server-and-client-components).

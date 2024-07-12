@@ -810,6 +810,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_tls_ca_cert_file'] = '/opt/gitlab/embedded/ssl/certs/cacert.pem'
 # gitlab_rails['redis_tls_client_cert_file'] = nil
 # gitlab_rails['redis_tls_client_key_file'] = nil
+# gitlab_rails['redis_connect_timeout'] = nil
+# gitlab_rails['redis_read_timeout'] = nil
+# gitlab_rails['redis_write_timeout'] = nil
 
 #### Redis local UNIX socket (will be disabled if TCP method is used)
 # gitlab_rails['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
