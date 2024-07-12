@@ -33,7 +33,8 @@ RSpec.describe 'gitlab::gitlab-shell' do
           gitlab_url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket',
           gitlab_relative_path: '',
           ssl_cert_dir: '/opt/gitlab/embedded/ssl/certs/',
-          gitlab_sshd: nil
+          gitlab_sshd: nil,
+          lfs_pure_ssh_protocol: false
         )
       )
     end
@@ -50,6 +51,7 @@ RSpec.describe 'gitlab::gitlab-shell' do
         expect(data['gitlab_relative_path']).to be_nil
         expect(data['ssl_cert_dir']).to eq('/opt/gitlab/embedded/ssl/certs/')
         expect(data['sshd']).to be_nil
+        expect(data['lfs']).to be_nil
       }
     end
   end
@@ -241,6 +243,18 @@ RSpec.describe 'gitlab::gitlab-shell' do
             gitlab_relative_path: ''
           )
         )
+      end
+    end
+
+    context 'with lfs_pure_ssh_protocol enabled' do
+      it 'create config file with provided values' do
+        stub_gitlab_rb(gitlab_shell: { lfs_pure_ssh_protocol: true })
+
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml').with_content { |content|
+          data = YAML.safe_load(content)
+
+          expect(data['lfs']).to eq("pure_ssh_protocol" => true)
+        }
       end
     end
   end

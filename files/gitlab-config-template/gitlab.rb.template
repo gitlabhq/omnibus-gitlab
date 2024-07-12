@@ -1040,7 +1040,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Registry garbage collection
 ###! Docs: https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md?ref_type=heads#gc
-# registry['gc'] = { 
+# registry['gc'] = {
 #   'disabled' => false,
 #   'maxbackoff' => '24h',
 #   'noidlebackoff' => false,
@@ -1357,6 +1357,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! **We do not recommend changing this directory.**
 # gitlab_shell['dir'] = "/var/opt/gitlab/gitlab-shell"
+
+# gitlab_shell['lfs_pure_ssh_protocol'] = false
 
 ################################################################################
 ## gitlab-sshd

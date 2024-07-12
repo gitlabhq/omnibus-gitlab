@@ -145,7 +145,8 @@ templatesymlink "Create a config.yml and create a symlink to Rails root" do
         git_trace_log_file: node['gitlab']['gitlab_shell']['git_trace_log_file'],
         migration: node['gitlab']['gitlab_shell']['migration'],
         ssl_cert_dir: node['gitlab']['gitlab_shell']['ssl_cert_dir'],
-        gitlab_sshd: gitlab_sshd_enabled ? sshd_helper.json_config : nil
+        gitlab_sshd: gitlab_sshd_enabled ? sshd_helper.json_config : nil,
+        lfs_pure_ssh_protocol: node['gitlab']['gitlab_shell']['lfs_pure_ssh_protocol']
       }
     end
   )

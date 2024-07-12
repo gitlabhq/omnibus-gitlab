@@ -63,3 +63,8 @@ git_trace_log_file: "<%= @git_trace_log_file %>"
 <% if @gitlab_sshd %>
 sshd: <%= @gitlab_sshd.to_json %>
 <% end %>
+
+<%- if @lfs_pure_ssh_protocol -%>
+lfs:
+  pure_ssh_protocol: <%= @lfs_pure_ssh_protocol %>
+<%- end -%>
