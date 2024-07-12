@@ -607,14 +607,14 @@ GET:Geo:
       artifacts: true
 
 dependency_scanning:
-  image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:2.4"
+  image: "registry.gitlab.com/gitlab-org/security-products/gitlab-depscan:3.0.0"
   stage: validate
   variables:
     REPORT_PATH: ./
-    NVD_DB_UPDATE: "true"
   before_script: []
   script:
-    - /gitlab-depscan.sh build_facts/version-manifest.json
+    - git clone --depth 1 https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/gitlab-org/secure/vulnerability-research/advisories/nvd-mirror-json-data-v2.git /opt/nvd-mirror-json-data-v2
+    - /gitlab-depscan.sh build_facts/version-manifest.json "" /opt/nvd-mirror-json-data-v2
   rules:
     - if: '$PIPELINE_TYPE == "DEPENDENCY_SCANNING_PIPELINE"'
     - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
