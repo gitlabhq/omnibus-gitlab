@@ -28,8 +28,10 @@ skip_transitive_dependency_licensing true
 source git: version.remote
 
 build do
-  env = { 'TARGET_DIRECTORY' => "#{Omnibus::Config.source_dir}/gitlab-kas/build" }
-
+  env = {
+    'TARGET_DIRECTORY' => "#{Omnibus::Config.source_dir}/gitlab-kas/build",
+    'GIT_REF' => version.print,
+  }
   make 'kas', env: env
 
   mkdir "#{install_dir}/embedded/bin/"
