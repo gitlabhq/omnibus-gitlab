@@ -18,7 +18,7 @@
 require 'open3'
 
 require_relative 'redis_uri.rb'
-require_relative '../../package/libraries/helpers/new_redis_helper/gitlab_rails'
+require_relative '../../package/libraries/helpers/redis_helper/gitlab_rails'
 
 module Redis
   CommandExecutionError = Class.new(StandardError)
@@ -32,7 +32,7 @@ module Redis
     end
 
     def parse_redis_settings
-      redis_helper = NewRedisHelper::Base
+      redis_helper = RedisHelper::Base
       # node['redis'] need not reflect user's choice accurately here, since we
       # also set redis['port'] programmatically, and hence can't depend on it.
       # So we specify Gitlab['redis'] as the config to use.
@@ -62,7 +62,7 @@ module Redis
     end
 
     def parse_redis_sentinel_settings
-      redis_helper = NewRedisHelper::GitlabRails
+      redis_helper = RedisHelper::GitlabRails
       return unless redis_helper.sentinel_daemon_enabled?
 
       Gitlab['gitlab_rails']['redis_sentinels_password'] ||= Gitlab['sentinel']['password']

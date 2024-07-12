@@ -74,8 +74,8 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
     describe 'pending restart check' do
       context 'when running version is same as installed version' do
         before do
-          allow_any_instance_of(NewRedisHelper::Server).to receive(:running_version).and_return('3.2.12')
-          allow_any_instance_of(NewRedisHelper::Server).to receive(:installed_version).and_return('3.2.12')
+          allow_any_instance_of(RedisHelper::Server).to receive(:running_version).and_return('3.2.12')
+          allow_any_instance_of(RedisHelper::Server).to receive(:installed_version).and_return('3.2.12')
         end
 
         it 'does not raise a warning' do
@@ -85,8 +85,8 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
 
       context 'when running version is different than installed version' do
         before do
-          allow_any_instance_of(NewRedisHelper::Server).to receive(:running_version).and_return('3.2.12')
-          allow_any_instance_of(NewRedisHelper::Server).to receive(:installed_version).and_return('5.0.9')
+          allow_any_instance_of(RedisHelper::Server).to receive(:running_version).and_return('3.2.12')
+          allow_any_instance_of(RedisHelper::Server).to receive(:installed_version).and_return('5.0.9')
         end
 
         it 'raises a warning' do

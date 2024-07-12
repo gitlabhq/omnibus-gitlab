@@ -1,7 +1,7 @@
 require 'erb'
 require_relative '../../../gitlab/libraries/redis_uri'
 
-module NewRedisHelper
+module RedisHelper
   class << self
     def build_redis_url(ssl:, host:, port:, path:, password:)
       scheme = ssl ? 'rediss:/' : 'redis:/'

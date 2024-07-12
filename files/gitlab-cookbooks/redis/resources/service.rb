@@ -4,7 +4,7 @@ property :socket_group, String
 property :dir, String, default: lazy { node['redis']['dir'] }
 property :account_helper, default: lazy { AccountHelper.new(node) }, sensitive: true
 property :omnibus_helper, default: lazy { OmnibusHelper.new(node) }, sensitive: true
-property :redis_helper, default: lazy { NewRedisHelper::Server.new(node) }, sensitive: true
+property :redis_helper, default: lazy { RedisHelper::Server.new(node) }, sensitive: true
 property :runit_sv_timeout, [Integer, nil], default: lazy { node['redis']['runit_sv_timeout'] }
 property :logfiles_helper, default: lazy { LogfilesHelper.new(node) }, sensitive: true
 

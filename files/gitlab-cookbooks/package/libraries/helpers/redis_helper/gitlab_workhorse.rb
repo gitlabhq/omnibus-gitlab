@@ -1,5 +1,5 @@
-module NewRedisHelper
-  class GitlabWorkhorse < NewRedisHelper::Base
+module RedisHelper
+  class GitlabWorkhorse < RedisHelper::Base
     def redis_params
       {
         url: redis_url.to_s,

@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 account_helper = AccountHelper.new(node)
-redis_helper = NewRedisHelper::GitlabWorkhorse.new(node)
+redis_helper = RedisHelper::GitlabWorkhorse.new(node)
 workhorse_helper = GitlabWorkhorseHelper.new(node)
 logfiles_helper = LogfilesHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('gitlab-workhorse')
