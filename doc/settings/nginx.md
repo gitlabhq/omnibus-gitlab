@@ -291,7 +291,7 @@ Request buffering can be disabled selectively on specific locations by changing 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['request_buffering_off_path_regex'] = "/api/v\\d/jobs/\\d+/artifacts$|/import/gitlab_project$|\\.git/git-receive-pack$|\\.git/gitlab-lfs/objects|\\.git/info/lfs/objects/batch$"
+   nginx['request_buffering_off_path_regex'] = "/api/v\\d/jobs/\\d+/artifacts$|/import/gitlab_project$|\\.git/git-receive-pack$|\\.git/ssh-receive-pack$|\\.git/ssh-upload-pack$|\\.git/gitlab-lfs/objects|\\.git/info/lfs/objects/batch$"
    ```
 
 1. Reconfigure GitLab, and [HUP](https://nginx.org/en/docs/control.html)
