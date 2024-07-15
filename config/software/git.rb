@@ -57,6 +57,10 @@ build do
   # Similar is the case for SLES OSs also.
   git_cflags += ' -std=gnu99' if OhaiHelper.get_centos_version.to_i == 7 || OhaiHelper.os_platform == 'sles'
 
+  # NOTE: the Git software definition is in the process of being deprecated in favour of bundling
+  # Git with Gitaly. Any changes to the following build options must be replicated to the Gitaly
+  # software definition at config/software/gitaly.rb in the env hash. See
+  # https://gitlab.com/gitlab-org/gitaly/-/issues/6195 for more information.
   build_options = [
     "# Added by Omnibus git software definition git.rb",
     "GIT_APPEND_BUILD_OPTIONS += CURLDIR=#{install_dir}/embedded",
