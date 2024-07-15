@@ -148,10 +148,14 @@ RSpec.describe LoggingHelper do
         one
         two
 
+        Update the configuration in your gitlab.rb file or GITLAB_OMNIBUS_CONFIG environment.
+
 
         Deprecations:
         three
         four
+
+        Update the configuration in your gitlab.rb file or GITLAB_OMNIBUS_CONFIG environment.
 
 
         Warnings:

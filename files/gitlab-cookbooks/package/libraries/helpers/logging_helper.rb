@@ -86,6 +86,11 @@ module LoggingHelper
     new_messages = generated.map { |m| m[:message] }
     puts new_messages.join("\n")
     puts
+
+    return unless [:removal, :deprecation].include?(type)
+
+    puts "Update the configuration in your gitlab.rb file or GITLAB_OMNIBUS_CONFIG environment."
+    puts
   end
 
   # Report on any messages generated during reconfigure
