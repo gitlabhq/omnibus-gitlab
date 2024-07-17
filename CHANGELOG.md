@@ -3,6 +3,38 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.2.0 (2024-07-17)
+
+### Added (6 changes)
+
+- [Add support for configuring Redis client timeouts](gitlab-org/omnibus-gitlab@c9ae8f7debedc1e476975da43f26b98f4d8f8a9f) ([merge request](gitlab-org/omnibus-gitlab!7749))
+- [Add restart-except command to gitlab-ctl](gitlab-org/omnibus-gitlab@4b65b13a599f343f6410ac16b7fae377a6b755b5) ([merge request](gitlab-org/omnibus-gitlab!7769))
+- [Support Pure-SSH LFS protocol in gitlab-shell](gitlab-org/omnibus-gitlab@cec387b24301d07254d04b17222ad2d03f545bbb) ([merge request](gitlab-org/omnibus-gitlab!7740))
+- [Pages NGINX configuration for namespace in path](gitlab-org/omnibus-gitlab@dcc7d66cef4e08d2a0819c165f6c11de663a2152) ([merge request](gitlab-org/omnibus-gitlab!7733))
+- [Add gitlab-backup user](gitlab-org/omnibus-gitlab@da7efdf5b7065ea0ca5536bebd83263470e7e10a) ([merge request](gitlab-org/omnibus-gitlab!7664))
+- [Add public_key_algorithms option for gitlab-sshd](gitlab-org/omnibus-gitlab@411a749784fd2be573757962d01f6383c41cb5d6) by @bufferoverflow ([merge request](gitlab-org/omnibus-gitlab!7660))
+
+### Fixed (4 changes)
+
+- [Fix Redis password handling with reserved characters](gitlab-org/omnibus-gitlab@990f8b58cd8fac9a12f83b3bd21e2e287ac60d55) ([merge request](gitlab-org/omnibus-gitlab!7742))
+- [Propagate AWS_DEFAULT_REGION to Docker environment](gitlab-org/omnibus-gitlab@4568dcc677ab9645b29ec6ed443e94d6e5d388ef) ([merge request](gitlab-org/omnibus-gitlab!7741))
+- [Attempt to retry twice to determine Redis server version](gitlab-org/omnibus-gitlab@63179771a3edb60934803caf486f4ed2a4c714af) ([merge request](gitlab-org/omnibus-gitlab!7738))
+- [Force ffi gem to use Ruby platform gem](gitlab-org/omnibus-gitlab@bdf7221985c60390a90a1cd0295bb29c007b55b0) ([merge request](gitlab-org/omnibus-gitlab!7730))
+
+### Changed (11 changes)
+
+- [Update gitlab-org/build/omnibus-mirror/prometheus from 2.53.0 to 2.53.1](gitlab-org/omnibus-gitlab@4e9d1f7f454d2324c9ff2ac2380642a257323357) ([merge request](gitlab-org/omnibus-gitlab!7782))
+- [Bump acme-client to version 2.0.18](gitlab-org/omnibus-gitlab@451caaf2f5761bc84986d2b0700f538192323070) ([merge request](gitlab-org/omnibus-gitlab!7723))
+- [Update prometheus from 2.52.1 to 2.53.0](gitlab-org/omnibus-gitlab@07681a79e7d060f3e8a0efcdbb462a325c137be9) ([merge request](gitlab-org/omnibus-gitlab!7731))
+- [Update dependency registry to v4.6.0-gitlab](gitlab-org/omnibus-gitlab@98243907b3458fafda6706850da7be6d673f5c02) ([merge request](gitlab-org/omnibus-gitlab!7746))
+- [Bump mattermost to version 9.9.0](gitlab-org/omnibus-gitlab@6b4f510f8d408e3222d9121e6fd3c118555c70f2) by @mvitale1989 ([merge request](gitlab-org/omnibus-gitlab!7729))
+- [Update dependency libxml2 to v2.13.1](gitlab-org/omnibus-gitlab@a5de4367a20748c9c7407805df12bd4c49d08262) ([merge request](gitlab-org/omnibus-gitlab!7735))
+- [Update redis_exporter from 1.59.0 to 1.61.0](gitlab-org/omnibus-gitlab@1b9ad5ef0c7ab935e40bc08a6af6de8e1a848d2e) ([merge request](gitlab-org/omnibus-gitlab!7658))
+- [Update curl from 8.6.0 to 8.8.0](gitlab-org/omnibus-gitlab@f23e1b577b2abe433cde78303d01f09d8f90b67d) by @ghost1 ([merge request](gitlab-org/omnibus-gitlab!7542))
+- [Bump exiftool to version 12.87](gitlab-org/omnibus-gitlab@86ab581d12b0551de0d50c3fa6fabe27c19d1587) ([merge request](gitlab-org/omnibus-gitlab!7686))
+- [Bump container registry to 4.5.0](gitlab-org/omnibus-gitlab@0d661c9c18c8eb55612e2036e2b0f6b280422e71) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!7647))
+- [Disable request buffering for new SSH endpoints](gitlab-org/omnibus-gitlab@f836d021aa3d187becae5aba18548e99750fd6de) ([merge request](gitlab-org/omnibus-gitlab!7713))
+
 ## 17.1.2 (2024-07-09)
 
 ### Fixed (2 changes)
