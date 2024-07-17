@@ -171,7 +171,9 @@
     GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
     ALLURE_MERGE_REQUEST_IID: $CI_MERGE_REQUEST_IID
   inherit:
-   variables: false
+   variables:
+     - QA_TESTS_UPSTREAM_PROJECT
+     - QA_TESTS_REF
   trigger:
     strategy: depend
     forward:
