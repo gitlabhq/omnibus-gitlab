@@ -143,6 +143,14 @@ Raspberry-Pi-2-Bullseye-check:
   variables:
     package_repository: 'raspberry-pi2'
   tags: !reference [.distribution-armhf-tags]
+Raspberry-Pi-2-Bookworm-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_12:${BUILDER_IMAGE_REVISION}"
+  extends:
+    - .apt-install
+    - .ce-tag-only
+  variables:
+    package_repository: 'raspberry-pi2'
+  tags: !reference [.distribution-armhf-tags]
 Ubuntu-20.04-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
   extends:
