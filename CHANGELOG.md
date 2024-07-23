@@ -879,6 +879,17 @@ No changes.
 
 - [Enable dual namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/omnibus-gitlab@6ddfb82c93158bdc25e3546625688e99cb400584) ([merge request](gitlab-org/omnibus-gitlab!7141))
 
+## 16.3.8 (2024-07-23)
+
+### Fixed (2 changes)
+
+- [Fix stable version tag identification for 16.1.x releases](gitlab-org/omnibus-gitlab@34bac52e253a700be2493667aa3bef779c261237) ([merge request](gitlab-org/omnibus-gitlab!7696))
+- [Fix patroni no longer working with update to ydiff 1.3](gitlab-org/omnibus-gitlab@940715ce3b58133889a3392364f45dc9b84e561f) ([merge request](gitlab-org/omnibus-gitlab!7638))
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/omnibus-gitlab@19c7f02acf3668351cc8c91cdd9071c18063e582) ([merge request](gitlab-org/omnibus-gitlab!7679))
+
 ## 16.3.7 (2024-01-11)
 
 No changes.
