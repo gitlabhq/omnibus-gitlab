@@ -71,7 +71,7 @@ build do
   env['NEEDS_LIBICONV'] = 'YesPlease'
   env['NO_R_TO_GCC_LINKER'] = 'YesPlease'
   env['INSTALL_SYMLINKS'] = 'YesPlease'
-  env['CFLAGS'] = "\"#{git_cflags}\""
+  env['CFLAGS'] = git_cflags
 
   if Build::Check.use_system_ssl?
     env['CMAKE_FLAGS'] = OpenSSLHelper.cmake_flags
