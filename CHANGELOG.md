@@ -3,6 +3,18 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.2.10 (2024-07-23)
+
+### Fixed (3 changes)
+
+- [Ensure the consul home directory has execute flags set](gitlab-org/omnibus-gitlab@d74131805885ae7cc7205cb3f2dc303e60d9a299) by @twk3 ([merge request](gitlab-org/omnibus-gitlab!7779))
+- [Fix stable version tag identification for 16.1.x releases](gitlab-org/omnibus-gitlab@308c0701fbb03a8673f6a8103c904cf75f4c739f) ([merge request](gitlab-org/omnibus-gitlab!7695))
+- [Fix patroni no longer working with update to ydiff 1.3](gitlab-org/omnibus-gitlab@80bd2f3cb2448573af9be5821fa4bdce7315c201) ([merge request](gitlab-org/omnibus-gitlab!7639))
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/omnibus-gitlab@7c365398d1f5be28d6ebb9cc86605d9893b108c4) ([merge request](gitlab-org/omnibus-gitlab!7680))
+
 ## 16.2.9 (2024-01-11)
 
 No changes.
