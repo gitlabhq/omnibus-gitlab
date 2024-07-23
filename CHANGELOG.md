@@ -513,6 +513,10 @@ No changes.
 - [Stop building for OpenSUSE 15.4](gitlab-org/omnibus-gitlab@d6d3933486f4b6d86320652882faa0019dc1aae7) ([merge request](gitlab-org/omnibus-gitlab!7331))
 - [Stop sidekiq namespaced probe for gitlab-exporter](gitlab-org/omnibus-gitlab@ff1df765a218a7b29ad6c4a9ccd6b091a2a10bfe) ([merge request](gitlab-org/omnibus-gitlab!7237))
 
+## 16.7.9 (2024-07-23)
+
+No changes.
+
 ## 16.7.8 (2024-06-25)
 
 ### Fixed (2 changes)
