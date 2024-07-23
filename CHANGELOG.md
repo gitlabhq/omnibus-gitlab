@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 16.4.6 (2024-07-23)
+
+### Fixed (2 changes)
+
+- [Fix stable version tag identification for 16.1.x releases](gitlab-org/omnibus-gitlab@ca22dcc284fc8d37ba67ef27d9802bea3aae3b52) ([merge request](gitlab-org/omnibus-gitlab!7697))
+- [Fix patroni no longer working with update to ydiff 1.3](gitlab-org/omnibus-gitlab@32f7253299eb5cc59631970af73eb5dcf0a5bed3) ([merge request](gitlab-org/omnibus-gitlab!7637))
+
+### Changed (1 change)
+
+- [Use bundler to install Omnibus gems](gitlab-org/omnibus-gitlab@d44f2b6d83a70bed05c4805fffb9b62652dd44cc) ([merge request](gitlab-org/omnibus-gitlab!7678))
+
 ## 16.4.5 (2024-01-11)
 
 No changes.
