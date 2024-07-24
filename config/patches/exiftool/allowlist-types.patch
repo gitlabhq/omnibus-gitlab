@@ -1,8 +1,8 @@
 diff --git a/lib/Image/ExifTool.pm b/lib/Image/ExifTool.pm
-index 4108ad09..100068fc 100644
+index 9782d281..c588042d 100644
 --- a/lib/Image/ExifTool.pm
 +++ b/lib/Image/ExifTool.pm
-@@ -191,19 +191,10 @@ $defaultLang = 'en';    # default language
+@@ -192,19 +192,10 @@ $defaultLang = 'en';    # default language
  # 2) Put types with weak file signatures at end of list to avoid false matches
  # 3) PLIST must be in this list for the binary PLIST format, although it may
  #    cause a file to be checked twice for XML
@@ -24,7 +24,7 @@ index 4108ad09..100068fc 100644
  my %writeTypes; # lookup for writable file types (hash filled if required)
  
  # file extensions that we can't write for various base types
-@@ -225,351 +216,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
+@@ -226,351 +217,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
  # (if extension may be more than one type, the type is a list where
  #  the writable type should come first if it exists)
  %fileTypeLookup = (
@@ -229,7 +229,7 @@ index 4108ad09..100068fc 100644
 -  # NDPI => ['TIFF', 'Hamamatsu NanoZoomer Digital Pathology Image'],
 -    NEF  => ['TIFF', 'Nikon (RAW) Electronic Format'],
 -    NEWER => 'COS',
--    NKA  => ['NKA',  'Nikon NX Studio Settings'],
+-    NKA  => ['NKA',  'Nikon NX Studio Adjustments'],
 -    NKSC => ['XMP',  'Nikon Sidecar'],
 -    NMBTEMPLATE => ['ZIP','Apple Numbers Template'],
 -    NRW  => ['TIFF', 'Nikon RAW (2)'],
@@ -378,10 +378,10 @@ index 4108ad09..100068fc 100644
  # typical extension for each file type (if different than FileType)
 diff --git a/lib/Image/ExifTool/AIFF.pm b/lib/Image/ExifTool/AIFF.pm
 deleted file mode 100644
-index f2c7a68d..00000000
+index 5c2ffded..00000000
 --- a/lib/Image/ExifTool/AIFF.pm
 +++ /dev/null
-@@ -1,312 +0,0 @@
+@@ -1,316 +0,0 @@
 -#------------------------------------------------------------------------------
 -# File:         AIFF.pm
 -#
@@ -402,7 +402,7 @@ index f2c7a68d..00000000
 -use Image::ExifTool qw(:DataAccess :Utils);
 -use Image::ExifTool::ID3;
 -
--$VERSION = '1.12';
+-$VERSION = '1.13';
 -
 -# information for time/date-based tags (time zero is Jan 1, 1904)
 -my %timeInfo = (
@@ -610,9 +610,13 @@ index f2c7a68d..00000000
 -        # AIFF chunks are padded to an even number of bytes
 -        my $len2 = $len + ($len & 0x01);
 -        if ($len2 > 100000000) {
--            if ($len2 >= 0x80000000 and not $et->Options('LargeFileSupport')) {
--                $et->Warn('End of processing at large chunk (LargeFileSupport not enabled)');
--                last;
+-            if ($len2 >= 0x80000000) {
+-                if (not $et->Options('LargeFileSupport')) {
+-                    $et->Warn('End of processing at large chunk (LargeFileSupport not enabled)');
+-                    last;
+-                } elsif ($et->Options('LargeFileSupport') eq '2') {
+-                    $et->WarnOnce('Skipping large chunk (LargeFileSupport is 2)');
+-                }
 -            }
 -            if ($tagInfo) {
 -                $et->Warn("Skipping large $$tagInfo{Name} chunk (> 100 MB)");
