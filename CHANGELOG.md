@@ -106,6 +106,10 @@ No changes.
 
 - [Bump Mattermost to version 9.8.0](gitlab-org/omnibus-gitlab@a68aad1971f3be597e4e1d32562f5db467a1b1ef) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7622))
 
+## 17.0.5 (2024-07-24)
+
+No changes.
+
 ## 17.0.4 (2024-07-09)
 
 ### Fixed (1 change)
