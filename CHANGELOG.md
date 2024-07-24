@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.2.1 (2024-07-24)
+
+No changes.
+
 ## 17.2.0 (2024-07-17)
 
 ### Added (6 changes)
@@ -34,6 +38,10 @@ omnibus-gitlab repository.
 - [Bump exiftool to version 12.87](gitlab-org/omnibus-gitlab@86ab581d12b0551de0d50c3fa6fabe27c19d1587) ([merge request](gitlab-org/omnibus-gitlab!7686))
 - [Bump container registry to 4.5.0](gitlab-org/omnibus-gitlab@0d661c9c18c8eb55612e2036e2b0f6b280422e71) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!7647))
 - [Disable request buffering for new SSH endpoints](gitlab-org/omnibus-gitlab@f836d021aa3d187becae5aba18548e99750fd6de) ([merge request](gitlab-org/omnibus-gitlab!7713))
+
+## 17.1.3 (2024-07-24)
+
+No changes.
 
 ## 17.1.2 (2024-07-09)
 
@@ -97,6 +105,10 @@ No changes.
 ### Other (1 change)
 
 - [Bump Mattermost to version 9.8.0](gitlab-org/omnibus-gitlab@a68aad1971f3be597e4e1d32562f5db467a1b1ef) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!7622))
+
+## 17.0.5 (2024-07-24)
+
+No changes.
 
 ## 17.0.4 (2024-07-09)
 
