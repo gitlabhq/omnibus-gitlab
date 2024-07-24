@@ -59,7 +59,7 @@ build do
 
   # NOTE: the Git software definition is in the process of being deprecated in favour of bundling
   # Git with Gitaly. Any changes to the following build options must be replicated to the Gitaly
-  # software definition at config/software/gitaly.rb in the env hash. See
+  # software definition at config/software/gitaly.rb in git_append_build_options. See
   # https://gitlab.com/gitlab-org/gitaly/-/issues/6195 for more information.
   build_options = [
     "# Added by Omnibus git software definition git.rb",
