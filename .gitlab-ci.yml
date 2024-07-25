@@ -68,7 +68,7 @@ variables:
   NIGHTLY_REPO: 'nightly-builds'
   NIGHTLY_FIPS_REPO: 'nightly-fips-builds'
   QA_TESTS_UPSTREAM_PROJECT: 'gitlab-org/gitlab'
-  QA_TESTS_REF: 'master'
+  QA_TESTS_REF: '17-2-stable-ee'
 
 .distribution-amd64-tags:
   - distribution-runner
