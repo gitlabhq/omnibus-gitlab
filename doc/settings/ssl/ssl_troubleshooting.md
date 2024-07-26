@@ -110,11 +110,6 @@ Files other than `cacert.pem` and `README.md` stored in
 
 ## Custom Certificates Missing or Skipped
 
-GitLab versions ***8.9.0***, ***8.9.1***, and ***8.9.2*** all mistakenly used the
-`/etc/gitlab/ssl/trusted-certs/` directory. This directory is safe to remove if it
-is empty. If it still contains custom certificates then move them to `/etc/gitlab/trusted-certs/`
-and run `gitlab-ctl reconfigure`.
-
 If no symlinks are created in `/opt/gitlab/embedded/ssl/certs/` and you see
 the message "Skipping `cert.pem`" after running `gitlab-ctl reconfigure`, that
 means there may be one of four issues:
