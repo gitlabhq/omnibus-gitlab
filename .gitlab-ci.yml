@@ -43,7 +43,7 @@ default:
   - armhf
 
 ### For services that need a docker daemon
-.docker_job: &docker_job
+.docker_job:
   image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools:${BUILDER_IMAGE_REVISION}"
   variables:
     DOCKER_DRIVER: overlay2
@@ -67,7 +67,7 @@ default:
     paths:
       - gems
 
-.build-package: &build-package
+.build-package:
   - bundle exec rake cache:populate
   - bundle exec rake cache:restore
   - bundle exec rake build:project

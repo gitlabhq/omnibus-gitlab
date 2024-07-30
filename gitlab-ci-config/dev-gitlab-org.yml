@@ -21,7 +21,7 @@
   paths:
     - pkg/
 
-.package-artifacts-release: &package-artifacts-release
+.package-artifacts-release:
   <<: *package-artifacts
   expire_in: 7 days
 
@@ -31,18 +31,18 @@
   - assets_cache
   - node_modules
 
-.branch-cache: &branch-cache
+.branch-cache:
   key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
   paths: !reference [.cache-paths]
   policy: $CACHE_POLICY
 
-.tag-cache: &tag-cache
+.tag-cache:
   # Use the same cache key as branch builds, by manually appending `-branch` substring.
   key: "${CI_JOB_NAME}-branch-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
   paths: !reference [.cache-paths]
   policy: $CACHE_POLICY
 
-.branch_template: &branch_build
+.branch_template:
   stage: package
   script:
     - support/import_gpg_secrets.sh
@@ -66,7 +66,7 @@
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
 
-.fips_branch_template: &fips_branch_build
+.fips_branch_template:
   extends: .branch_template
   variables:
     USE_SYSTEM_SSL: "true"
@@ -77,11 +77,11 @@
       when: manual
       allow_failure: true
 
-.arm64_branch_template: &arm64_branch_build
+.arm64_branch_template:
   extends: .branch_template
   tags: !reference [.distribution-arm64-tags]
 
-.rpi_branch_template: &rpi_branch_build
+.rpi_branch_template:
   extends: .branch_template
   variables:
     NO_SOURCEMAPS: "true"
@@ -93,7 +93,7 @@
     - if: '$PIPELINE_TYPE == "CE_NIGHTLY_BUILD_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_BRANCH_BUILD_PIPELINE" && $CI_PIPELINE_SOURCE == "parent_pipeline"'
 
-.tag_template: &tag_build
+.tag_template:
   stage: package
   script:
     # Always compile assets for auto-deploy builds,
@@ -128,7 +128,7 @@
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
 
-.fips_tag_template: &fips_tag_build
+.fips_tag_template:
   extends: .tag_template
   variables:
     USE_SYSTEM_SSL: "true"
@@ -136,11 +136,11 @@
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 
-.arm64_tag_template: &arm64_tag_build
+.arm64_tag_template:
   extends: .tag_template
   tags: !reference [.distribution-arm64-tags]
 
-.rpi_tag_template: &rpi_tag_build
+.rpi_tag_template:
   extends: .tag_template
   variables:
     NO_SOURCEMAPS: "true"
@@ -152,7 +152,7 @@
 ### This stage is used for uploading packages
 ### 1. To a staging package repository
 ### 2. Always ran on dev.gitlab.org
-.staging_upload_template: &staging_upload
+.staging_upload_template:
   stage: staging_upload
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   variables:
@@ -169,7 +169,7 @@
     - !reference [.skip_release_jobs, rules]
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
 
-.fips_staging_upload_template: &fips_staging_upload
+.fips_staging_upload_template:
   extends: .staging_upload_template
   variables:
     USE_SYSTEM_SSL: "true"
@@ -179,7 +179,7 @@
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
 
-.staging_upload_with_deployment_template: &staging_upload_with_deployment
+.staging_upload_with_deployment_template:
   extends: .staging_upload_template
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
@@ -189,7 +189,7 @@
 ### 1. It is a manual action
 ### 2. It will upload the package to public, user facing repositories
 ### 3. Only ran on dev.gitlab.org
-.production_release_template: &production_release
+.production_release_template:
   stage: package-and-image-release
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   variables:
@@ -206,7 +206,7 @@
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
 
-.fips_release_template: &fips_release
+.fips_release_template:
   extends: .production_release_template
   variables:
     USE_SYSTEM_SSL: "true"
@@ -217,7 +217,7 @@
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
 
-.raspbian_release_template: &raspbian_release
+.raspbian_release_template:
   extends: .production_release_template
   variables:
     RASPBERRY_REPO: "raspberry-pi2"
@@ -229,7 +229,7 @@
     - if: '$PIPELINE_TYPE =~ /^CE_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
 
-.aws_ami_build: &aws_ami_build
+.aws_ami_build:
   stage: package-and-image-release
   image: "${BUILDER_IMAGE_REGISTRY}/debian_packer:${BUILDER_IMAGE_REVISION}"
   script:
@@ -251,7 +251,7 @@
     - if: '$PIPELINE_TYPE =~ /_TAG_BUILD_PIPELINE$/'
       when: manual
 
-.aws_marketplace_release: &aws_marketplace_release
+.aws_marketplace_release:
   image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools:${BUILDER_IMAGE_REVISION}"
   stage: aws-marketplace-release
   script:

@@ -17,7 +17,7 @@
       - knapsack/
   artifacts: !reference [.knapsack-artifacts]
 
-.knapsack: &prepare_knapsack
+.knapsack:
   extends: .knapsack-state
   stage: prepare
   before_script: []
@@ -34,7 +34,7 @@
   needs:
     - rubocop
 
-.install-gems: &install-gems
+.install-gems:
   - gem install bundler:${BUNDLER_VERSION}
   - bundle config build.ffi --disable-system-libffi
   - bundle config set --local path 'gems'
@@ -42,7 +42,7 @@
   - bundle install -j $(nproc)
   - bundle binstubs --all
 
-.spec_template: &spec_template
+.spec_template:
   extends: .gems-cache-os-dependent
   stage: tests
   before_script:
@@ -650,9 +650,9 @@ validate_renovate_checksum:
     - ./scripts/renovate/checksums/update_all.sh
     - mismatches="$(git status --porcelain)"
     - if [ -n "$mismatches" ]; then
-        echo "Checksum mismatch detected"; 
-        echo "$mismatches"; 
-        exit 1; 
+        echo "Checksum mismatch detected";
+        echo "$mismatches";
+        exit 1;
       fi
   rules:
     - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
