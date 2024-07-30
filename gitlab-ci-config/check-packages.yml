@@ -7,7 +7,7 @@ variables:
   # hardcoding the dev registry for SLES jobs.
   DEV_BUILDER_IMAGE_REGISTRY: 'dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder'
 
-.ee-tag-only: &ee-tag-only
+.ee-tag-only:
   rules:
     # SLES job might not have connection to RMT server to install additional packages
     # FIPS packages won't necessarily work in a non-fips environment
@@ -15,7 +15,7 @@ variables:
       when: never
     - if: '$CI_COMMIT_TAG =~ /^.*ee\.\d.*$/'
 
-.ce-tag-only: &ce-tag-only
+.ce-tag-only:
   rules:
     # RPi packages are not uploaded to pre-release repo.
     - if: '$deploy_instance == "true"'
@@ -37,7 +37,7 @@ variables:
 before_script:
   - bash scripts/ci/prepare_bundle.sh
 
-.job_base: &job_base
+.job_base:
   stage: package
   script:
     - bash scripts/ci/install_package.sh
@@ -45,33 +45,33 @@ before_script:
   tags: !reference [.distribution-amd64-tags]
   retry: 2
 
-.apt-install: &apt-install
+.apt-install:
   extends: .job_base
   variables:
     package_type: deb
     package_manager: apt
 
-.yum-install: &yum-install
+.yum-install:
   extends: .job_base
   variables:
     package_type: rpm
     package_manager: yum
 
-.zypper-install: &zypper-install
+.zypper-install:
   extends: .job_base
   variables:
     package_type: rpm
     package_manager: zypper
 
-.apt-arm-install: &apt-arm-install
+.apt-arm-install:
   extends: .apt-install
   tags: !reference [.distribution-arm64-tags]
 
-.yum-arm-install: &yum-arm-install
+.yum-arm-install:
   extends: .yum-install
   tags: !reference [.distribution-arm64-tags]
 
-.zypper-arm-install: &zypper-arm-install
+.zypper-arm-install:
   extends: .zypper-install
   tags: !reference [.distribution-arm64-tags]
 
