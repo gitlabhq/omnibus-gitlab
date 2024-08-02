@@ -16,7 +16,7 @@
 
 name 'curl'
 
-version = Gitlab::Version.new('curl', 'curl-8_8_0')
+version = Gitlab::Version.new('curl', 'curl-8_9_1')
 
 default_version version.print(false)
 display_version version.print(false).delete_prefix('curl-').tr('_', '.')
