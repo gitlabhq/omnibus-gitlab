@@ -15,7 +15,7 @@
 #
 
 name 'libarchive'
-default_version '3.6.2'
+default_version '3.7.4'
 
 license 'BSD-2-Clause'
 license_file 'COPYING'
@@ -23,7 +23,7 @@ license_file 'COPYING'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.libarchive.org/downloads/libarchive-#{version}.tar.gz",
-       sha256: 'ba6d02f15ba04aba9c23fd5f236bb234eab9d5209e95d1c4df85c44d5f19b9b3'
+       sha256: '7875d49596286055b52439ed42f044bd8ad426aa4cc5aabd96bfe7abb971d5e8'
 
 relative_path "libarchive-#{version}"
 

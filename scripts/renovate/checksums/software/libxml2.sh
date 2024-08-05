@@ -5,11 +5,8 @@
 
 set -eo pipefail
 
-libxml2_build_file="config/software/libxml2.rb"
-
-get_target_version() {
-  sed -nr "s|default_version '(.*)'|\1|p" "$libxml2_build_file"
-}
+source "$(dirname "$0")/shared.sh"
+build_file="config/software/libxml2.rb"
 
 get_checksum() {
   local version="$1"
@@ -21,13 +18,6 @@ get_checksum() {
   wget -q -O - "$checksum_file_url" | awk -v file="$archive_name" '{if($2==file){print $1}}'
 }
 
-replace_checksum() {
-  local new_checksum="$1"
-  local libxml2_build_file="config/software/libxml2.rb"
-
-  sed -i "s|sha256: '\w*'|sha256: '${new_checksum}'|" "$libxml2_build_file"
-}
-
-version=$(get_target_version)
+version=$(get_default_version "$build_file")
 checksum=$(get_checksum "$version")
-replace_checksum "$checksum"
+replace_sha256_checksum "$checksum" "$build_file"
