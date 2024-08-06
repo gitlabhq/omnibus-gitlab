@@ -285,6 +285,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             rate_limit_tls_source_ip_burst: 51,
             rate_limit_tls_domain: 1001,
             rate_limit_tls_domain_burst: 10001,
+            rate_limit_subnets_allow_list: ["10.1.1.0/24", "10.1.2.0/24"],
             server_read_timeout: "1m",
             server_read_header_timeout: "2m",
             server_write_timeout: "3m",
@@ -363,6 +364,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             rate-limit-tls-source-ip-burst=51
             rate-limit-tls-domain=1001
             rate-limit-tls-domain-burst=10001
+            rate-limit-subnets-allow-list=10.1.1.0/24,10.1.2.0/24
             server-read-timeout=1m
             server-read-header-timeout=2m
             server-write-timeout=3m
