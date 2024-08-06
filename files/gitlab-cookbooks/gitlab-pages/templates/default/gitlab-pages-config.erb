@@ -167,6 +167,9 @@ rate-limit-tls-domain=<%= @rate_limit_tls_domain %>
 <%- if @rate_limit_tls_domain_burst -%>
 rate-limit-tls-domain-burst=<%= @rate_limit_tls_domain_burst %>
 <%-end -%>
+<%- unless @rate_limit_subnets_allow_list.empty? -%>
+rate-limit-subnets-allow-list=<%= @rate_limit_subnets_allow_list.join(',') %>
+<%- end -%>
 <%- if @server_read_timeout -%>
 server-read-timeout=<%= @server_read_timeout %>
 <%-end -%>
