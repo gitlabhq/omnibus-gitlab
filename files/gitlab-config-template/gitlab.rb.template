@@ -149,7 +149,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['gitlab_default_projects_features_container_registry'] = true
 
 ### Automatic issue closing
-###! See https://docs.gitlab.com/ee/customization/issue_closing.html for more
+###! See https://docs.gitlab.com/ee/administration/issue_closing_pattern.html for more
 ###! information about this pattern.
 # gitlab_rails['gitlab_issue_closing_pattern'] = "\b((?:[Cc]los(?:e[sd]?|ing)|\b[Ff]ix(?:e[sd]|ing)?|\b[Rr]esolv(?:e[sd]?|ing)|\b[Ii]mplement(?:s|ed|ing)?)(:?) +(?:(?:issues? +)?%{issue_ref}(?:(?:, *| +and +)?)|([A-Z][A-Z0-9_]+-\d+))+)"
 
@@ -664,7 +664,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['backup_storage_class'] = 'STANDARD'
 
 ###! Skip parts of the backup. Comma separated.
-###! Docs: https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#excluding-specific-directories-from-the-backup
+###! Docs: https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#excluding-specific-data-from-the-backup
 #gitlab_rails['env'] = {
 #    "SKIP" => "db,uploads,repositories,builds,artifacts,lfs,registry,pages"
 #}
@@ -691,7 +691,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['encrypted_settings_path'] = '/var/opt/gitlab/gitlab-rails/shared/encrypted_settings'
 
 ### Wait for file system to be mounted
-###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#only-start-omnibus-gitlab-services-after-a-given-file-system-is-mounted
+###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#start-linux-package-installation-services-only-after-a-given-file-system-is-mounted
 # high_availability['mountpoint'] = ["/var/opt/gitlab/git-data", "/var/opt/gitlab/gitlab-rails/shared"]
 
 ### GitLab Shell settings for GitLab
@@ -1020,7 +1020,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 
 ### Registry database
-###! Docs: https://docs.gitlab.com/ee/administration/packages/container_registry.html?tab=Linux+package+%28Omnibus%29#configure-a-metadata-database-for-the-container-registry
+###! Docs: https://docs.gitlab.com/ee/administration/packages/container_registry_metadata_database.html#new-installations
 # registry['database'] = {
 #   'enabled' => true,
 #   'host' => 'localhost',
@@ -1295,7 +1295,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! GitLab allows one to start multiple sidekiq processes. These
 ##! processes can be used to consume a dedicated set of queues. This
 ##! can be used to ensure certain queues are able to handle additional workload.
-##! https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html
+##! https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html
 
 # sidekiq['enable'] = true
 # sidekiq['log_directory'] = "/var/log/gitlab/sidekiq"
@@ -1354,7 +1354,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Git trace log file.
 ###! If set, git commands receive GIT_TRACE* environment variables
-###! Docs: https://git-scm.com/book/es/v2/Git-Internals-Environment-Variables#Debugging
+###! Docs: https://git-scm.com/book/en/v2/Git-Internals-Environment-Variables#_debugging
 ###! An absolute path starting with / - the trace output will be appended to
 ###! that file. It needs to exist so we can check permissions and avoid
 ###! throwing warnings to the users.
@@ -1619,7 +1619,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! **To enable only Redis service in this machine, uncomment
 ###!   one of the lines below (choose master or replica instance types).**
 ###! Docs: https://docs.gitlab.com/omnibus/settings/redis.html
-###!       https://docs.gitlab.com/ee/administration/high_availability/redis.html
+###!       https://docs.gitlab.com/ee/administration/redis/replication_and_failover.html
 # redis_master_role['enable'] = true
 # redis_replica_role['enable'] = true
 
@@ -1632,7 +1632,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! **You need a master replica Redis replication to be able to do failover**
 ###! **Please read the documentation before enabling it to understand the
 ###!   caveats:**
-###! Docs: https://docs.gitlab.com/ee/administration/high_availability/redis.html
+###! Docs: https://docs.gitlab.com/ee/administration/redis/replication_and_failover.html
 
 ### Replication support
 #### Replica Redis instance
@@ -1718,7 +1718,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['ssl_prefer_server_ciphers'] = "off"
 
 ##! **Recommended by: https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
-##!                   https://cipherli.st/**
 # nginx['ssl_protocols'] = "TLSv1.2 TLSv1.3"
 
 ##! **Recommended in: https://nginx.org/en/docs/http/ngx_http_ssl_module.html**
@@ -1735,7 +1734,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['listen_addresses'] = ['*', '[::]']
 
 ##! **Defaults to forcing web browsers to always communicate using only HTTPS**
-##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-http-strict-transport-security
+##! Docs: https://docs.gitlab.com/omnibus/settings/ssl/#configure-the-http-strict-transport-security-hsts
 # nginx['hsts_max_age'] = 63072000
 # nginx['hsts_include_subdomains'] = false
 
@@ -1750,11 +1749,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['listen_port'] = nil
 
 ##! **Override only if your reverse proxy internally communicates over HTTP**
-##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl
+##! Docs: https://docs.gitlab.com/omnibus/settings/ssl/#configure-a-reverse-proxy-or-load-balancer-ssl-termination
 # nginx['listen_https'] = nil
 
 ##! **Override only if you use a reverse proxy with proxy protocol enabled**
-##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#configuring-proxy-protocol
+##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#configuring-the-proxy-protocol
 # nginx['proxy_protocol'] = false
 
 # nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
@@ -1893,7 +1892,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Runtime directory
-##! Docs: https://docs.gitlab.com//omnibus/settings/configuration.html#configuring-runtime-directory
+##! Docs: https://docs.gitlab.com//omnibus/settings/configuration.html#configure-the-runtime-directory
 ################################################################################
 
 # runtime_dir '/run'
@@ -2240,7 +2239,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## GitLab Mattermost
-##! Docs: https://docs.gitlab.com/omnibus/gitlab-mattermost
+##! Docs: https://docs.gitlab.com/ee/integration/mattermost/
 ################################################################################
 
 # mattermost_external_url 'http://mattermost.example.com'
@@ -2333,7 +2332,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ###! **To enable only Monitoring service in this machine, uncomment
 ###!   the line below.**
-###! Docs: https://docs.gitlab.com/ee/administration/high_availability
 # monitoring_role['enable'] = true
 
 # prometheus['enable'] = true
@@ -2360,7 +2358,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # Prometheus can scrape additional jobs via scrape_configs.  The default automatically
 # includes all of the exporters supported by the omnibus config.
 #
-# See: https://prometheus.io/docs/operating/configuration/#<scrape_config>
+# See: https://prometheus.io/docs/operating/configuration/#scrape_config
 #
 # Example:
 #
@@ -2829,7 +2827,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # letsencrypt['key_size'] = 2048
 # letsencrypt['owner'] = 'root'
 # letsencrypt['wwwroot'] = '/var/opt/gitlab/nginx/www'
-# See http://docs.gitlab.com/omnibus/settings/ssl.html#automatic-renewal for more on these sesttings
+# See https://docs.gitlab.com/omnibus/settings/ssl/index.html#renew-the-certificates-automatically for more on these settings
 # letsencrypt['auto_renew'] = true
 # letsencrypt['auto_renew_hour'] = 0
 # letsencrypt['auto_renew_minute'] = nil # Should be a number or cron expression, if specified.
@@ -2951,7 +2949,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## GitLab Sentinel (EE Only)
-##! Docs: http://docs.gitlab.com/ce/administration/high_availability/redis.html#high-availability-with-sentinel
+##! Docs: https://docs.gitlab.com/ee/administration/redis/replication_and_failover.html
 ################################################################################
 
 ##! **Make sure you configured all redis['master_*'] keys above before
@@ -2959,7 +2957,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! To enable Sentinel and disable all other services in this machine,
 ##! uncomment the line below (if you've enabled Redis role, it will keep it).
-##! Docs: https://docs.gitlab.com/ee/administration/high_availability/redis.html
+##! Docs: https://docs.gitlab.com/ee/administration/redis/replication_and_failover.html
 # redis_sentinel_role['enable'] = true
 
 # sentinel['enable'] = true
@@ -3053,16 +3051,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 ## Additional Database Settings (EE only)
-##! Docs: https://docs.gitlab.com/ee/administration/database_load_balancing.html
+##! Docs: https://docs.gitlab.com/ee/administration/postgresql/database_load_balancing.html
 ################################################################################
 # gitlab_rails['db_load_balancing'] = { 'hosts' => ['secondary1.example.com'] }
 
 ################################################################################
 ## GitLab Geo
-##! Docs: https://docs.gitlab.com/ee/gitlab-geo
+##! Docs: https://docs.gitlab.com/ee/administration/geo/
 ################################################################################
 ##! Geo roles 'geo_primary_role' and 'geo_secondary_role' are set above with
-##! other roles. For more information, see: https://docs.gitlab.com/omnibus/roles/index.html#roles.
+##! other roles. For more information, see: https://docs.gitlab.com/omnibus/roles/index.html#roles .
 
 # This is an optional identifier which Geo nodes can use to identify themselves.
 # For example, if external_url is the same for two secondaries, you must specify
@@ -3132,8 +3130,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ################################################################################
 # Pgbouncer (EE only)
-# See [GitLab PgBouncer documentation](https://docs.gitlab.com/ee/administration/postgresql/pgbouncer.html)
-# See the [PgBouncer page](https://pgbouncer.github.io/config.html) for details
+# See the GitLab PgBouncer documentation: https://docs.gitlab.com/ee/administration/postgresql/pgbouncer.html
+# See the PgBouncer page http://www.pgbouncer.org/config.html for details
 ################################################################################
 # pgbouncer['enable'] = false
 # pgbouncer['log_directory'] = '/var/log/gitlab/pgbouncer'
@@ -3419,7 +3417,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Service desk email
 ###! Allow users to create new service desk issues by sending an email to
 ###! service desk address.
-###! Docs: https://docs.gitlab.com/ee/user/project/service_desk.html
+###! Docs: https://docs.gitlab.com/ee/user/project/service_desk/index.html
 # gitlab_rails['service_desk_email_enabled'] = false
 
 #### Service Desk Mailbox Settings (via `mail_room`)
