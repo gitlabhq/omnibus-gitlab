@@ -201,4 +201,4 @@ issue-bot:
     # 0. Tags
     # 1. Master branch - includes scheduled pipelines also
     # 2. Stable branches
-    - when: always
+    - when: on_failure
