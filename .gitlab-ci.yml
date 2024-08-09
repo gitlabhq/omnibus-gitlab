@@ -190,7 +190,15 @@ issue-bot:
   image: registry.gitlab.com/gitlab-org/distribution/issue-bot:latest
   script: /issue-bot
   rules:
-    - if: '$CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH'
+    # Not needed in non-protected (feature) branches
+    - if: '$CI_COMMIT_REF_PROTECTED != "true"'
       when: never
-    - if: '$PIPELINE_TYPE == "PROTECTED_TEST_PIPELINE"'
-      when: on_failure
+    # Not needed in omnibus-gitlab-mirror
+    - if: '$CI_PROJECT_PATH == $QA_PROJECT_PATH'
+      when: never
+    # The remaining scenarios are all important pipelines we want to be
+    # notified about
+    # 0. Tags
+    # 1. Master branch - includes scheduled pipelines also
+    # 2. Stable branches
+    - when: always
