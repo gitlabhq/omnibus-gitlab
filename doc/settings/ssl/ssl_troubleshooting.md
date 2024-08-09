@@ -318,6 +318,8 @@ If the two outputs differ like the previous example, there's a mismatch between
 the certificate and key. Contact the provider of the SSL certificate for
 further support.
 
+<!-- markdownlint-disable line-length -->
+
 ## Using GitLab Runner with a GitLab instance configured with internal CA certificate or self-signed certificate
 
 Besides getting the errors mentioned in
@@ -333,6 +335,8 @@ x509: certificate signed by unknown authority
 ```
 
 Follow the details in [Self-signed certificates or custom Certification Authorities for GitLab Runner](https://docs.gitlab.com/runner/configuration/tls-self-signed.html).
+
+<!-- markdownlint-enable line-length -->
 
 ## Mirroring a remote GitLab repository that uses a self-signed SSL certificate
 
