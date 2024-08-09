@@ -246,6 +246,8 @@ postgresql['shared_buffers'] = "100MB"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
+<!-- markdownlint-disable line-length -->
+
 ## PostgreSQL error `FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied`
 
 By default, PostgreSQL tries to detect the shared memory type to use. If you don't
@@ -258,6 +260,8 @@ postgresql['dynamic_shared_memory_type'] = 'none'
 ```
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
+
+<!-- markdownlint-enable line-length -->
 
 ## PostgreSQL error `FATAL:  remaining connection slots are reserved for non-replication superuser connections`
 
@@ -789,6 +793,8 @@ GitLab services will be unable to establish network connections.
 This can be resolved by fixing the DNS configurations (or `/etc/hosts`) to
 resolve the hosts to an **IPv4** address instead of **IPv6**.
 
+<!-- markdownlint-disable line-length -->
+
 ## `URI::InvalidComponentError (bad component(expected host component: my_url.tld)` when `external_url` contains underscores
 
 If you have set `external_url` with underscores (for example `https://my_company.example.com`), you may face the following issues with CI/CD:
@@ -815,6 +821,8 @@ lib/gitlab/i18n.rb:79:in `with_user_locale'
 ```
 
 As a workaround, avoid using underscores in `external_url`. There is an open issue about it: [Setting `external_url` with underscore results in a broken GitLab CI/CD functionality](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6077).
+
+<!-- markdownlint-enable line-length -->
 
 ## Upgrade fails with `timeout: run: /opt/gitlab/service/gitaly` error
 

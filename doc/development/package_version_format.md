@@ -115,8 +115,9 @@ will be the image tag for a Docker built from a GitLab CE package with version
 
 The special cases that deviate from this general rule is listed below.
 
-### Triggered builds in [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror)
+### Triggered builds in QA mirror
 
+When builds are triggered in the [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror),
 Docker images created as part of triggered pipeline (for Package and QA run) has
 their tag decided depending on where the trigger originated. If the trigger
 originated from an `omnibus-gitlab` pipeline, the image tag is the slug of the
