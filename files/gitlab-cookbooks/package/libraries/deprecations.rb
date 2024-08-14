@@ -343,6 +343,12 @@ module Gitlab
             deprecation: '17.1',
             removal: '18.0',
             note: "`registry['default_notifications_threshold'] will be removed in 18.0. Please use `default_notifications_maxretries` instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243."
+          },
+          {
+            config_keys: %w(gitlab gitlab_shell migration),
+            deprecation: '17.4',
+            removal: '18.0',
+            note: "`gitlab_shell['migration'] will be ignored from 17.3 and removed in 18.0. See https://gitlab.com/groups/gitlab-org/-/epics/14845."
           }
         ]
 
