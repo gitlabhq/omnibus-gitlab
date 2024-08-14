@@ -4,7 +4,7 @@ module Build
   class Info
     class Deploy
       OS_MAPPING = {
-        'PATCH_DEPLOY_ENVIRONMENT' => 'ubuntu-bionic',
+        'PATCH_DEPLOY_ENVIRONMENT' => 'ubuntu-focal',
         'RELEASE_DEPLOY_ENVIRONMENT' => 'ubuntu-focal',
       }.freeze
 

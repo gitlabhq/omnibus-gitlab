@@ -47,43 +47,12 @@ RSpec.describe 'gitlab_com', type: :rake do
 
         context 'with the auto-deploy tag' do
           before do
-            allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(%w[pkg/ubuntu-bionic/gitlab-ee_16.7.0-ee.0_amd64.deb])
+            allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(%w[pkg/ubuntu-focal/gitlab-ee_16.7.0-ee.0_amd64.deb])
             allow(Build::Check).to receive(:is_auto_deploy?).and_return(true)
           end
 
           it 'shows a warning' do
             expect { Rake::Task['gitlab_com:deployer'].invoke }.to output(/Auto-deploys are handled in release-tools, exiting.../).to_stdout
-          end
-        end
-
-        context 'when running on Ubuntu 18.04' do
-          before do
-            allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(%w[pkg/ubuntu-bionic/gitlab-ee_16.7.0-ee.0_amd64.deb])
-          end
-
-          context 'with a release candidate (RC) tag' do
-            before do
-              allow(Build::Check).to receive(:is_rc_tag?).and_return(true)
-            end
-
-            it 'triggers deployment to specified environment' do
-              expect(DeployerHelper).to receive(:new).with('dummy-token', 'patch-environment', :master)
-
-              Rake::Task['gitlab_com:deployer'].invoke
-            end
-          end
-
-          context 'with a stable tag' do
-            before do
-              allow(Build::Check).to receive(:is_rc_tag?).and_return(false)
-              allow(Build::Check).to receive(:is_latest_stable_tag?).and_return(true)
-            end
-
-            it 'does not trigger deployment' do
-              expect(DeployerHelper).not_to receive(:new)
-
-              Rake::Task['gitlab_com:deployer'].invoke
-            end
           end
         end
 
@@ -97,8 +66,8 @@ RSpec.describe 'gitlab_com', type: :rake do
               allow(Build::Check).to receive(:is_rc_tag?).and_return(true)
             end
 
-            it 'does not trigger deployment' do
-              expect(DeployerHelper).not_to receive(:new)
+            it 'triggers deployment to the patch environment' do
+              expect(DeployerHelper).to receive(:new).with('dummy-token', 'patch-environment', :master)
 
               Rake::Task['gitlab_com:deployer'].invoke
             end
@@ -110,7 +79,7 @@ RSpec.describe 'gitlab_com', type: :rake do
               allow(Build::Check).to receive(:is_latest_stable_tag?).and_return(true)
             end
 
-            it 'triggers deployment to specified environment' do
+            it 'triggers deployment to release environment' do
               expect(DeployerHelper).to receive(:new).with('dummy-token', 'release-environment', :master)
 
               Rake::Task['gitlab_com:deployer'].invoke
