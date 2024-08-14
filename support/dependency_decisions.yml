@@ -249,6 +249,13 @@
     :versions: [ v1.8.11 ]
     :when: 2024-07-12 13:20:00.000000000 Z
 - - :license
+  - "github.com/coder/websocket"
+  - ISC
+  - :who: Mikhail Mazurskiy
+    :why: https://github.com/coder/websocket/blob/v1.8.12/LICENSE.txt
+    :versions: [ v1.8.12 ]
+    :when: 2024-08-12 02:30:00.000000000 Z
+- - :license
   - "./api"
   - MPL2
   - :who: Clemens Beck
