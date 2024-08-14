@@ -3,6 +3,25 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.3.0 (2024-08-14)
+
+### Added (1 change)
+
+- [Add rate_limit_bypass_cidrs parameter for Pages](gitlab-org/omnibus-gitlab@0c311178488533a9f7621eb5cdfbd5e7a031b231) ([merge request](gitlab-org/omnibus-gitlab!7820))
+
+### Changed (10 changes)
+
+- [Bump exiftool to version 12.92](gitlab-org/omnibus-gitlab@000389a90b5334746ecbaa9710f30779876b61ec) ([merge request](gitlab-org/omnibus-gitlab!7813))
+- [Update curl from 8.8.0 to 8.9.0](gitlab-org/omnibus-gitlab@02c415c10315ee26175472a4e6c6c1ddc6d4aa63) ([merge request](gitlab-org/omnibus-gitlab!7812))
+- [Update dependency registry to v4.7.0-gitlab](gitlab-org/omnibus-gitlab@4a9f41e6108fecdcbc7e4cd90451da60bc7afd96) ([merge request](gitlab-org/omnibus-gitlab!7826))
+- [Bump Mattermost to version 9.10.0](gitlab-org/omnibus-gitlab@bd0bc0399c9def9b708429538db391c3c078a151) by @mvitale1989 ([merge request](gitlab-org/omnibus-gitlab!7798))
+- [Clean up YAML anchors in CI config](gitlab-org/omnibus-gitlab@beb08cc4d7de76dc49827b73eddfb3c7e9f32e37) ([merge request](gitlab-org/omnibus-gitlab!7400))
+- [Update dependency libxml2 to v2.13.3](gitlab-org/omnibus-gitlab@645b7adb516adb05443a06c5a28c8bbbfe6b7780) ([merge request](gitlab-org/omnibus-gitlab!7811))
+- [Update exiftool from 12.87 to 12.89](gitlab-org/omnibus-gitlab@32c3026628b6eed8306c511ff53e823b80887d91) ([merge request](gitlab-org/omnibus-gitlab!7789))
+- [Update gitlab-org/build/omnibus-mirror/redis_exporter from 1.61.0 to 1.62.0](gitlab-org/omnibus-gitlab@f9579c7fe9d01cc74de867e34242193c6f5af54c) ([merge request](gitlab-org/omnibus-gitlab!7799))
+- [Update gitlab-org/build/omnibus-mirror/node_exporter from 1.8.1 to 1.8.2](gitlab-org/omnibus-gitlab@6bf6d71a74bac14b9e8576205ee2a1ade2c60cf0) ([merge request](gitlab-org/omnibus-gitlab!7790))
+- [Update dependency libxml2 to v2.13.2](gitlab-org/omnibus-gitlab@f9e32b45a092e1798f15687054ffb04ea08bdf22) ([merge request](gitlab-org/omnibus-gitlab!7772))
+
 ## 17.2.2 (2024-08-06)
 
 No changes.
