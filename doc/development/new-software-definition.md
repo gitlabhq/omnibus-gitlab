@@ -81,7 +81,7 @@ the software and its dependencies. Once you've confirmed the software builds on 
 build and confirm it there. To use this:
 
 1. [Setup your development environment](setup.md)
-1. Copy the [simple.rb](examples/simple.rb) file into your projects
+1. Copy the [simple.rb](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/doc/development/examples/simple.rb) file into your projects
 
    ```shell
    cp doc/development/examples/simple.rb config/projects/
