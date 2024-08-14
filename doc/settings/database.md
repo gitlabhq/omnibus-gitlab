@@ -531,6 +531,18 @@ You can run `ANALYZE` manually if the query above returned any rows:
 sudo gitlab-psql -c 'SET statement_timeout = 0; ANALYZE VERBOSE;'
 ```
 
+The execution time of the `ANALYZE` command can vary significantly depending on your database size. To monitor the progress of this operation,
+you can periodically run the following query in another console session. The `tables_remaining` column should gradually reach `0`:
+
+```shell
+sudo gitlab-psql -c "
+SELECT
+    COUNT(*) AS total_tables,
+    SUM(CASE WHEN last_analyze IS NULL OR last_analyze < (NOW() - INTERVAL '2 hours') THEN 1 ELSE 0 END) AS tables_remaining
+FROM pg_stat_user_tables;
+"
+```
+
 _After you have verified that your GitLab instance is running correctly_, you
 can clean up the old database files:
 
@@ -860,6 +872,16 @@ when your installation is using PgBouncer.
 
    ```SQL
    SET statement_timeout = 0; ANALYZE VERBOSE;
+   ```
+
+   The execution time of the `ANALYZE` command can vary significantly depending on your database size. To monitor the progress of this operation,
+   you can periodically run the following query in another PostgreSQL database console. The `tables_remaining` column should gradually reach `0`:
+
+   ```SQL
+   SELECT
+     COUNT(*) AS total_tables,
+     SUM(CASE WHEN last_analyze IS NULL OR last_analyze < (NOW() - INTERVAL '2 hours') THEN 1 ELSE 0 END) AS tables_remaining
+   FROM pg_stat_user_tables;
    ```
 
    If the upgrade used `pg_dump` and `pg_restore`, run the following query on the PostgreSQL database console:
