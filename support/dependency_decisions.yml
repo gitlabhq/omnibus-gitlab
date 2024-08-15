@@ -29,9 +29,9 @@
   - github.com/hashicorp/consul/api
   - MPL2
   - :who: Clemens Beck
-    :why: https://github.com/hashicorp/consul/blob/api/v1.29.1/api/LICENSE
-    :versions: [ v1.29.1 ]
-    :when: 2024-06-24 08:50:00.000000000 Z
+    :why: https://github.com/hashicorp/consul/blob/api/v1.29.2/api/LICENSE
+    :versions: [ v1.29.2 ]
+    :when: 2024-08-12 11:15:00.000000000 Z
 - - :license
   - gitlab.com/lupine/icu
   - BSD-2-Clause
@@ -182,8 +182,8 @@
   - github.com/hashicorp/nomad/api
   - MPL2
   - :who: Clemens Beck
-    :why: https://github.com/hashicorp/nomad/blob/e73d8bb1140d203535d62ef767420acd1a12ac92/api/LICENSE
-    :versions: [ v0.0.0-20240604134157-e73d8bb1140d ]
+    :why: https://github.com/hashicorp/nomad/blob/3d93bd3778f354d187d1d05c00150988e75d42a1/api/LICENSE 
+    :versions: [ v0.0.0-20240717122358-3d93bd3778f3 ]
     :when: 2024-06-24 08:50:00.000000000 Z
 - - :license
   - github.com/kieler/elkjs

@@ -146,12 +146,6 @@ dependencies:
         - filename: config/software/zlib.rb
           pattern: "Gitlab::Version.new\\('zlib', 'v(\\S+)'\\)"
           tag_prefix: 'v'
-      # prometheus
-      https://gitlab.com/gitlab-org/build/omnibus-mirror/prometheus.git:
-        replace_in_files:
-        - filename: config/software/prometheus.rb
-          pattern: "Gitlab::Version.new\\('prometheus', '(\\S+)'\\)"
-          tag_prefix: 'v'
       # gitlab-exporter
       https://gitlab.com/gitlab-org/gitlab-exporter.git:
         replace_in_files:
