@@ -11,7 +11,7 @@ end
 
 # Docker options
 ## Prevent Postgres from trying to allocate 25% of total memory
-postgresql['shared_buffers'] = '1MB'
+postgresql['shared_buffers'] = '256MB'
 
 # Disable Prometheus node_exporter inside Docker.
 node_exporter['enable'] = false
