@@ -1416,6 +1416,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['connect_port'] = 5432
 
 ##! **recommend value is 1/4 of total RAM, up to 14GB.**
+# For Docker containers, the default of 256 MB is set in docker/assets/gitlab.rb.
+# Otherwise, 1/4 of the total RAM is used in files/gitlab-cookbooks/postgresql/attributes/default.rb.
 # postgresql['shared_buffers'] = "256MB"
 
 ### Advanced settings
