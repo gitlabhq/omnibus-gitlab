@@ -1,5 +1,6 @@
 stages:
   - package
+  - image
 
 variables:
   # BUILDER_IMAGE_REGISTRY is incorrectly passed from parent pipeline due to
@@ -204,3 +205,18 @@ SLES-15.2-check:
   extends:
     - .zypper-install
     - .ee-tag-only
+
+Docker:
+  stage: image
+  needs: []
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - name: docker:23.0.5-dind
+      alias: localhost
+  image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools:latest"
+  script:
+    - bash scripts/ci/deploy_docker.sh
+  tags: !reference [.distribution-amd64-tags]
+  retry: 2

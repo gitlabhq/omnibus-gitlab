@@ -1149,6 +1149,7 @@ check-packages-functionality:
         deploy_instance: "true"
         package_repository: "pre-release"
         package_repo_token: "${PRE_RELEASE_REPO_TOKEN}:@"
+        image_registry: "${CI_REGISTRY_IMAGE}"
 
 # Check if the packages are available from public repositories
 check-packages-availability:
