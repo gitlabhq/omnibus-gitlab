@@ -36,6 +36,12 @@ omnibus-gitlab repository.
 - [Update gitlab-org/build/omnibus-mirror/node_exporter from 1.8.1 to 1.8.2](gitlab-org/omnibus-gitlab@6bf6d71a74bac14b9e8576205ee2a1ade2c60cf0) ([merge request](gitlab-org/omnibus-gitlab!7790))
 - [Update dependency libxml2 to v2.13.2](gitlab-org/omnibus-gitlab@f9e32b45a092e1798f15687054ffb04ea08bdf22) ([merge request](gitlab-org/omnibus-gitlab!7772))
 
+## 17.2.3 (2024-08-20)
+
+### Security (1 change)
+
+- [Mattermost 2024-07 Security Update](gitlab-org/security/omnibus-gitlab@109c3fb3f783030013a426cf1ccd1be41f272c12) ([merge request](gitlab-org/security/omnibus-gitlab!446))
+
 ## 17.2.2 (2024-08-06)
 
 No changes.
