@@ -29,6 +29,6 @@ variables:
   PACKAGE_PROMOTION_RUNNER_TAG: promotion
   NIGHTLY_REPO: nightly-builds
   NIGHTLY_FIPS_REPO: nightly-fips-builds
-  QA_TESTS_UPSTREAM_PROJECT: gitlab-org/security/gitlab-foss
-  QA_TESTS_REF: 17-3-stable
+  QA_TESTS_UPSTREAM_PROJECT: gitlab-org/security/gitlab
+  QA_TESTS_REF: 17-3-stable-ee
   OPENSSL_VERSION: 3.2.1
