@@ -1159,7 +1159,7 @@ replication user's password.
    sudo gitlab-psql -qt -c 'select slot_name from pg_replication_slots'
    ```
 
-   If you can't find your `slot_name` here, or there is no output returned, your Geo secondaries may not be healthy. In that case, make sure the [secondaries are healthy and replication is working](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#check-the-health-of-the-secondary-node).
+   If you can't find your `slot_name` here, or there is no output returned, your Geo secondaries may not be healthy. In that case, make sure the [secondaries are healthy and replication is working](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting/common.html#health-check-rake-task).
 
    Even if the query is empty, you can try to reinitialize the secondary database with the `slot_name` found on the [Geo sites admin area](https://docs.gitlab.com/ee/administration/geo_sites.html).
 

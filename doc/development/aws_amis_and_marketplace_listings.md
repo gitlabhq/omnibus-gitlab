@@ -27,7 +27,7 @@ builder. Each Community AMI listed above has a corresponding packer
 configuration file to specify the build and AMI attributes and an update script
 to install the GitLab package and configure the AMI's startup behaviors. The
 update script downloads the Ubuntu 22.04 package and installs it on the VM. It
-also installs a [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init)
+also installs a [`cloud-init`](https://docs.aws.amazon.com/linux/al2/ug/what-is-amazon-linux.html#amazon-linux-cloud-init)
 script which automatically configures (with a `gitlab-ctl reconfigure` run) the
 GitLab instance to work with the VM's external IP address on startup.
 
