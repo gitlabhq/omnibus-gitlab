@@ -1132,7 +1132,7 @@ AWS-EE-Premium-Release:
 
 # Before publishing the package, try installing the package from pre-release
 # repo and run `gitlab-ctl reconfigure`
-check-package-functionality:
+check-packages-functionality:
   stage: staging_verify
   # Make the job non-blocking until we analyze the pipeline duration and
   # failure rate. Otherwise a failure or delay in this pipeline can affect the
