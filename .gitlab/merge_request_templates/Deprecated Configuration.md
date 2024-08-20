@@ -1,4 +1,5 @@
 <!-- Read through https://docs.gitlab.com/omnibus/development/add-remove-configuration-options.html -->
+
 ## What does this MR do?
 
 <!-- Briefly describe what this MR is about. -->
@@ -28,7 +29,7 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] MR has a green pipeline on GitLab.com
 - [ ] Pipeline is green on the [dev.gitlab.org](https://dev.gitlab.org/gitlab/omnibus-gitlab/-/pipelines) mirror for this branch if the change is touching anything besides documentation or internal cookbooks. Please note that feature branches are not automatically mirrored to dev.gitlab.org, and should be manually pushed whenever necessary.
 - [ ] `trigger-package` has a green pipeline running against latest commit
-- [ ] When ready for review, MR is labeled "~workflow::ready for review" per the [Distribution MR workflow](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/merge_requests.html)
+- [ ] When ready for review, MR is labeled ~"workflow::ready for review" per the [Distribution MR workflow](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/merge_requests.html)
 
 ### Expected (please provide an explanation if not completing)
 

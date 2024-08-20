@@ -1,5 +1,6 @@
 <!-- After merging changes to this template, update the `Default description template for merge requests` -->
 <!-- found under Settings - General Merge Requests -->
+
 ## What does this MR do?
 
 <!-- Briefly describe what this MR is about. -->
@@ -21,7 +22,7 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] MR title and description are up to date, accurate, and descriptive.
 - [ ] MR targeting the appropriate branch.
 - [ ] Latest Merge Result pipeline is green.
-- [ ] When ready for review, MR is labeled "~workflow::ready for review" per the [Distribution MR workflow](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/merge_requests.html).
+- [ ] When ready for review, MR is labeled ~"workflow::ready for review" per the [Distribution MR workflow](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/merge_requests.html).
 
 #### For GitLab team members
 
