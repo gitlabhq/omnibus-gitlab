@@ -138,7 +138,7 @@ Similar to the previous command, if you need superuser access to the bundled
 Geo tracking database (`geo-postgresql`), you can use the `gitlab-geo-psql`.
 It takes the same arguments as the regular `psql` command. For HA, see more
 about the necessary arguments in:
-[Checking Configuration](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#checking-configuration)
+[Checking Configuration](https://docs.gitlab.com/ee/administration/geo/replication/multiple_servers.html)
 
 ```shell
 # Superuser psql access to GitLab's Geo tracking database
