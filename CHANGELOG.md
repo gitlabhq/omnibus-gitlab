@@ -3,6 +3,20 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.3.1 (2024-08-20)
+
+### Fixed (1 change)
+
+- [Raise default PostgreSQL shared buffers minimum to 256 MB](gitlab-org/security/omnibus-gitlab@b84f187f1de7d7329a7f028df4a3adaf18ace742)
+
+### Deprecated (1 change)
+
+- [Add debian 10 (Buster) os deprecated OS list](gitlab-org/security/omnibus-gitlab@bab929ec49f87c3d2690f9d46ad1281284a4124f)
+
+### Security (1 change)
+
+- [Mattermost 2024-07 Security Update](gitlab-org/security/omnibus-gitlab@01514b0807e290d792b19264a7d1f95b7d3392e7) ([merge request](gitlab-org/security/omnibus-gitlab!447))
+
 ## 17.3.0 (2024-08-14)
 
 ### Added (1 change)
@@ -21,6 +35,16 @@ omnibus-gitlab repository.
 - [Update gitlab-org/build/omnibus-mirror/redis_exporter from 1.61.0 to 1.62.0](gitlab-org/omnibus-gitlab@f9579c7fe9d01cc74de867e34242193c6f5af54c) ([merge request](gitlab-org/omnibus-gitlab!7799))
 - [Update gitlab-org/build/omnibus-mirror/node_exporter from 1.8.1 to 1.8.2](gitlab-org/omnibus-gitlab@6bf6d71a74bac14b9e8576205ee2a1ade2c60cf0) ([merge request](gitlab-org/omnibus-gitlab!7790))
 - [Update dependency libxml2 to v2.13.2](gitlab-org/omnibus-gitlab@f9e32b45a092e1798f15687054ffb04ea08bdf22) ([merge request](gitlab-org/omnibus-gitlab!7772))
+
+## 17.2.4 (2024-08-21)
+
+No changes.
+
+## 17.2.3 (2024-08-20)
+
+### Security (1 change)
+
+- [Mattermost 2024-07 Security Update](gitlab-org/security/omnibus-gitlab@109c3fb3f783030013a426cf1ccd1be41f272c12) ([merge request](gitlab-org/security/omnibus-gitlab!446))
 
 ## 17.2.2 (2024-08-06)
 
@@ -61,6 +85,16 @@ No changes.
 - [Bump exiftool to version 12.87](gitlab-org/omnibus-gitlab@86ab581d12b0551de0d50c3fa6fabe27c19d1587) ([merge request](gitlab-org/omnibus-gitlab!7686))
 - [Bump container registry to 4.5.0](gitlab-org/omnibus-gitlab@0d661c9c18c8eb55612e2036e2b0f6b280422e71) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!7647))
 - [Disable request buffering for new SSH endpoints](gitlab-org/omnibus-gitlab@f836d021aa3d187becae5aba18548e99750fd6de) ([merge request](gitlab-org/omnibus-gitlab!7713))
+
+## 17.1.6 (2024-08-21)
+
+No changes.
+
+## 17.1.5 (2024-08-20)
+
+### Security (1 change)
+
+- [Mattermost 2024-07 Security Update](gitlab-org/security/omnibus-gitlab@a4d7ec686bce6e939e18982c8de2723c723f2a42) ([merge request](gitlab-org/security/omnibus-gitlab!441))
 
 ## 17.1.4 (2024-08-06)
 
