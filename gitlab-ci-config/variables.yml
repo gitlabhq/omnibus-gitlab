@@ -40,4 +40,4 @@ variables:
   NIGHTLY_FIPS_REPO: 'nightly-fips-builds'
   QA_TESTS_UPSTREAM_PROJECT: 'gitlab-org/gitlab'
   QA_TESTS_REF: 'master'
-  OPENSSL_VERSION: '3.2.1'
+  OPENSSL_VERSION: '1.1.1'
