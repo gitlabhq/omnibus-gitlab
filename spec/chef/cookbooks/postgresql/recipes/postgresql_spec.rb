@@ -304,6 +304,24 @@ RSpec.describe 'postgresql' do
           runtime_conf
         ).with_content(/synchronous_commit = on/)
       end
+
+      it 'sets log_connections setting' do
+        expect(chef_run.node['postgresql']['log_connections'])
+          .to eq('off')
+
+        expect(chef_run).to render_file(
+          runtime_conf
+        ).with_content(/log_connections = off/)
+      end
+
+      it 'sets log_disconnections setting' do
+        expect(chef_run.node['postgresql']['log_disconnections'])
+          .to eq('off')
+
+        expect(chef_run).to render_file(
+          runtime_conf
+        ).with_content(/log_disconnections = off/)
+      end
     end
 
     context 'when rendering pg_hba.conf' do
@@ -425,6 +443,8 @@ RSpec.describe 'postgresql' do
                          max_standby_streaming_delay: '120s',
                          archive_command: 'command',
                          archive_timeout: '120',
+                         log_connections: 'on',
+                         log_disconnections: 'on'
                        })
       end
 
@@ -460,6 +480,24 @@ RSpec.describe 'postgresql' do
         expect(chef_run).to render_file(
           runtime_conf
         ).with_content(/archive_timeout = 120/)
+      end
+
+      it 'sets log_connections setting' do
+        expect(chef_run.node['postgresql']['log_connections'])
+          .to eq('on')
+
+        expect(chef_run).to render_file(
+          runtime_conf
+        ).with_content(/log_connections = on/)
+      end
+
+      it 'sets log_disconnections setting' do
+        expect(chef_run.node['postgresql']['log_disconnections'])
+          .to eq('on')
+
+        expect(chef_run).to render_file(
+          runtime_conf
+        ).with_content(/log_disconnections = on/)
       end
     end
 

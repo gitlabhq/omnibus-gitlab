@@ -90,6 +90,8 @@ default['postgresql']['log_directory'] = "/var/log/gitlab/postgresql"
 default['postgresql']['log_truncate_on_rotation'] = nil
 default['postgresql']['log_rotation_age'] = nil
 default['postgresql']['log_rotation_size'] = nil
+default['postgresql']['log_connections'] = 'off'
+default['postgresql']['log_disconnections'] = 'off'
 
 # Replication settings
 default['postgresql']['sql_replication_user'] = "gitlab_replicator"
