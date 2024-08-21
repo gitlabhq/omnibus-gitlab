@@ -1426,6 +1426,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['log_truncate_on_rotation'] = nil
 # postgresql['log_rotation_age'] = nil
 # postgresql['log_rotation_size'] = nil
+# postgresql['log_connections'] = "off"
+# postgresql['log_disconnections'] = "off"
 ##! 'username' affects the system and PostgreSQL user accounts created during installation and cannot be changed
 ##! on an existing installation. See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3606 for more details.
 # postgresql['username'] = "gitlab-psql"

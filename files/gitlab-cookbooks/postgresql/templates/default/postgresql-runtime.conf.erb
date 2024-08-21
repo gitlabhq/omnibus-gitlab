@@ -80,6 +80,14 @@ log_min_duration_statement = <%= @log_min_duration_statement %>  # -1 is disable
 log_checkpoints = <%= @log_checkpoints %>
 <% end %>
 
+<% if @log_connections %>
+log_connections = <%= @log_connections %>
+<% end %>
+
+<% if @log_disconnections %>
+log_disconnections = <%= @log_disconnections %>
+<% end %>
+
 log_line_prefix = '<%= @log_line_prefix %>' # default '', special values:
           #   %a = application name
           #   %u = user name
