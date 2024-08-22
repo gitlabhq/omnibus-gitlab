@@ -17,7 +17,7 @@
 
 name 'git-filter-repo'
 
-version = Gitlab::Version.new('git-filter-repo', 'v2.38.0')
+version = Gitlab::Version.new('git-filter-repo', 'v2.45.0')
 default_version version.print(false)
 
 license 'MIT'
