@@ -92,40 +92,40 @@ before_script:
 
 # apt based
 Ubuntu-18.04-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04:latest"
   extends: .apt-install
 Ubuntu-20.04-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:latest"
   extends: .apt-install
 Ubuntu-20.04-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:latest"
   extends: .apt-arm-install
 Ubuntu-22.04-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:latest"
   extends: .apt-install
 Ubuntu-22.04-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:latest"
   extends: .apt-arm-install
 Debian-10-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:latest"
   extends: .apt-install
 Debian-10-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:latest"
   extends: .apt-arm-install
 Debian-11-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_11:latest"
   extends: .apt-install
 Debian-11-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_11_arm64:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_11_arm64:latest"
   extends: .apt-arm-install
 Debian-12-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_12:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_12:latest"
   extends: .apt-install
 Debian-12-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:latest"
   extends: .apt-arm-install
 Raspberry-Pi-2-Buster-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:latest"
   extends:
     - .apt-install
     - .ce-tag-only
@@ -133,7 +133,7 @@ Raspberry-Pi-2-Buster-check:
     package_repository: 'raspberry-pi2'
   tags: !reference [.distribution-armhf-tags]
 Raspberry-Pi-2-Bullseye-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:latest"
   extends:
     - .apt-install
     - .ce-tag-only
@@ -141,14 +141,14 @@ Raspberry-Pi-2-Bullseye-check:
     package_repository: 'raspberry-pi2'
   tags: !reference [.distribution-armhf-tags]
 Ubuntu-18.04-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_18.04_fips:latest"
   extends:
     - .apt-install
     - .ee-tag-only
   variables:
     USE_SYSTEM_SSL: "true"
 Ubuntu-20.04-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:latest"
   extends:
     - .apt-install
     - .ee-tag-only
@@ -157,41 +157,41 @@ Ubuntu-20.04-fips-check:
 
 # yum based
 CentOS-7-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:latest"
   extends: .yum-install
 AlmaLinux-8-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:latest"
   extends: .yum-install
 AlmaLinux-8-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_arm64:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_arm64:latest"
   extends: .yum-arm-install
 AlmaLinux-9-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9:latest"
   extends: .yum-install
 AlmaLinux-9-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_arm64:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_arm64:latest"
   extends: .yum-arm-install
 AmazonLinux-2-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:latest"
   extends: .yum-install
 AmazonLinux-2-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:latest"
   extends: .yum-arm-install
 AmazonLinux-2023-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023:latest"
   extends: .yum-install
 AmazonLinux-2023-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:latest"
   extends: .yum-arm-install
 AlmaLinux-8-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:latest"
   extends:
     - .yum-install
     - .ee-tag-only
   variables:
     USE_SYSTEM_SSL: "true"
 AmazonLinux-2-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:latest"
   extends:
     - .yum-install
     - .ee-tag-only
@@ -200,18 +200,18 @@ AmazonLinux-2-fips-check:
 
 # zypper based
 OpenSUSE-15.5-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5:latest"
   extends: .zypper-install
 OpenSUSE-15.5-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5_arm64:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5_arm64:latest"
   extends: .zypper-arm-install
 SLES-12.5-check:
-  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
+  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_12sp5:latest"
   extends:
     - .zypper-install
     - .ee-tag-only
 SLES-15.2-check:
-  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
+  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_15sp2:latest"
   extends:
     - .zypper-install
     - .ee-tag-only
