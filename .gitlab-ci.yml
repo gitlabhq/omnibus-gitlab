@@ -8,6 +8,7 @@ stages:
   - image
   - scan-dependencies
   - staging_upload
+  - staging_verify
   - package-and-image-release
   - qa-release
   - validate
