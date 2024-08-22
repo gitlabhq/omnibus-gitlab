@@ -9,10 +9,17 @@ variables:
 
 .ee-tag-only: &ee-tag-only
   rules:
+    # SLES job might not have connection to RMT server to install additional packages
+    # FIPS packages won't necessarily work in a non-fips environment
+    - if: '$deploy_instance == "true"'
+      when: never
     - if: '$CI_COMMIT_TAG =~ /^.*ee\.\d.*$/'
 
 .ce-tag-only: &ce-tag-only
   rules:
+    # RPi packages are not uploaded to pre-release repo.
+    - if: '$deploy_instance == "true"'
+      when: never
     - if: '$CI_COMMIT_TAG =~ /^.*ce\.\d.*$/'
 
 .distribution-amd64-tags:
@@ -30,53 +37,31 @@ variables:
 before_script:
   - bash scripts/ci/prepare_bundle.sh
 
-.common_install_scripts: &common_install_scripts
+.job_base: &job_base
+  stage: package
   script:
-    - export package_name_version_dist=$(bundle exec rake build:package:name_version 2>&1 | tail -n1)
-    - export package_name=$(bundle exec rake build:package:name)
-    - if [ -z "${package_repository}" ]; then
-        export package_repository=${package_name};
-      fi
-    - if [ -z "${package_name}" ]; then
-      echo "Unable to detect GitLab edition. Exiting.";
-      exit 1;
-      fi
-    - if [ -z "${package_type}" ]; then
-      echo "Package manager (apt/yum/zypper) not specified. Exiting.";
-      exit 1;
-      fi
-    - echo "Installing ${package_name} using https://packages.gitlab.com/install/repositories/gitlab/${package_repository}/script.${package_type}.sh"
-    - curl https://packages.gitlab.com/install/repositories/gitlab/${package_repository}/script.${package_type}.sh | bash
+    - bash scripts/ci/install_package.sh
+    - bash scripts/ci/deploy_package.sh
+  tags: !reference [.distribution-amd64-tags]
+  retry: 2
 
 .apt-install: &apt-install
-  stage: package
+  extends: .job_base
   variables:
     package_type: deb
-  script:
-    - !reference [.common_install_scripts, script]
-    - apt install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
-  tags: !reference [.distribution-amd64-tags]
-  retry: 2
+    package_manager: apt
 
 .yum-install: &yum-install
-  stage: package
+  extends: .job_base
   variables:
     package_type: rpm
-  script:
-    - !reference [.common_install_scripts, script]
-    - yum install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
-  tags: !reference [.distribution-amd64-tags]
-  retry: 2
+    package_manager: yum
 
 .zypper-install: &zypper-install
-  stage: package
+  extends: .job_base
   variables:
     package_type: rpm
-  script:
-    - !reference [.common_install_scripts, script]
-    - zypper install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
-  tags: !reference [.distribution-amd64-tags]
-  retry: 2
+    package_manager: zypper
 
 .apt-arm-install: &apt-arm-install
   extends: .apt-install

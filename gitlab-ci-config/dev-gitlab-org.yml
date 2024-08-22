@@ -1131,7 +1131,28 @@ AWS-EE-Premium-Release:
   needs:
     - AWS-Premium
 
-check-packages:
+# Before publishing the package, try installing the package from pre-release
+# repo and run `gitlab-ctl reconfigure`
+check-packages-functionality:
+  stage: staging_verify
+  # Make the job non-blocking until we analyze the pipeline duration and
+  # failure rate. Otherwise a failure or delay in this pipeline can affect the
+  # entire release pipeline.
+  allow_failure: true
+  trigger:
+    include: '/gitlab-ci-config/check-packages.yml'
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$SKIP_PACKAGE_FUNCTIONALITY_CHECK'
+      when: never
+    - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
+      variables:
+        deploy_instance: "true"
+        package_repository: "pre-release"
+        package_repo_token: "${PRE_RELEASE_REPO_TOKEN}:@"
+
+# Check if the packages are available from public repositories
+check-packages-availability:
   stage: verify
   trigger:
     include: '/gitlab-ci-config/check-packages.yml'
