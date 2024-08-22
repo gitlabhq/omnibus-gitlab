@@ -1,5 +1,12 @@
-FROM ubuntu:22.04
-MAINTAINER GitLab Inc. <support@gitlab.com>
+ARG BASE_IMAGE=docker.io/ubuntu:22.04
+FROM $BASE_IMAGE
+
+ARG BASE_IMAGE
+LABEL org.opencontainers.image.authors="GitLab Distribution Team <distribution-be@gitlab.com>" \
+      org.opencontainers.image.documentation="https://docs.gitlab.com/ee/install/docker/" \
+      org.opencontainers.image.source="https://gitlab.com/gitlab-org/omnibus-gitlab" \
+      org.opencontainers.image.title="GitLab Omnibus Docker" \
+      org.opencontainers.image.base.name=$BASE_IMAGE
 
 SHELL ["/bin/sh", "-c"]
 
@@ -30,7 +37,7 @@ RUN apt-get update -q \
     && rm -rf /var/lib/apt/lists/*
 
 # Use BusyBox
-ENV EDITOR /bin/vi
+ENV EDITOR=/bin/vi
 RUN busybox --install \
     && { \
         echo '#!/bin/sh'; \
@@ -57,10 +64,10 @@ RUN chmod -R og-w /assets RELEASE ; \
   /assets/setup
 
 # Allow to access embedded tools
-ENV PATH /opt/gitlab/embedded/bin:/opt/gitlab/bin:/assets:$PATH
+ENV PATH=/opt/gitlab/embedded/bin:/opt/gitlab/bin:/assets:$PATH
 
 # Resolve error: TERM environment variable not set.
-ENV TERM xterm
+ENV TERM=xterm
 
 # Expose web & ssh
 EXPOSE 443 80 22
