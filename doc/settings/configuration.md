@@ -980,7 +980,7 @@ password that GitLab Rails should use to connect to the PostgreSQL server.
   - Insert custom NGINX settings into the GitLab server block
   - Insert custom settings into the NGINX configuration
   - Enable `nginx_status`
-- [Use a non-packaged web-server](nginx.md#using-a-non-bundled-web-server)
+- [Use a non-packaged web-server](nginx.md#use-a-non-bundled-web-server)
 - [Use a non-packaged PostgreSQL database management server](database.md)
 - [Use a non-packaged Redis instance](redis.md)
 - [Add `ENV` vars to the GitLab runtime environment](environment-variables.md)
