@@ -10,6 +10,9 @@ DETAILS:
 **Tier:** Free, Premium, Ultimate
 **Offering:** Self-managed
 
+This page provides configuration information for administrators and DevOps engineers configuring NGINX for GitLab installations.
+It includes essential instructions for optimizing performance and security specific to bundled NGINX (Linux package), Helm charts, or custom setups.
+
 ## Service-specific NGINX settings
 
 Users can configure NGINX settings differently for different services via
@@ -85,7 +88,7 @@ for the changes to take effect.
 
 This way you can specify any header supported by NGINX you require.
 
-## Configuring GitLab `trusted_proxies` and the NGINX `real_ip` module
+## Configure GitLab trusted proxies and NGINX `real_ip` module
 
 By default, NGINX and GitLab will log the IP address of the connected client.
 
@@ -114,7 +117,7 @@ in from those IPs.
 Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure)
 for the changes to take effect.
 
-## Configuring the PROXY protocol
+## Configure the PROXY protocol
 
 If you want to use a proxy like HAProxy in front of GitLab using the [PROXY protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt),
 you need to enable this setting. Do not forget to set the `real_ip_trusted_addresses` also as needed:
@@ -135,7 +138,7 @@ you need to enable this setting. Do not forget to set the `real_ip_trusted_addre
 Once enabled, NGINX only accepts PROXY protocol traffic on these listeners.
 Ensure to also adjust any other environments you might have, like monitoring checks.
 
-## Using a non-bundled web-server
+## Use a non-bundled web server
 
 By default, the Linux package installs GitLab with bundled NGINX.
 Linux package installations allow webserver access through the `gitlab-www` user, which resides
@@ -214,7 +217,12 @@ will have to perform the following steps:
    - If you use SSL, the location of your SSL keys.
    - The location of your log files.
 
-## Setting the NGINX listen address or addresses
+## NGINX configuration options
+
+GitLab provides various configuration options to customize NGINX behavior for your specific needs.
+Use these reference items to fine-tune your NGINX setup and optimize GitLab performance and security.
+
+### Setting the NGINX listen addresses
 
 By default NGINX will accept incoming connections on all local IPv4 addresses.
 You can change the list of addresses in `/etc/gitlab/gitlab.rb`.
@@ -227,7 +235,7 @@ mattermost_nginx['listen_addresses'] = ['*', '[::]']
 pages_nginx['listen_addresses'] = ['*', '[::]']
 ```
 
-## Setting the NGINX listen port
+### Setting the NGINX listen port
 
 By default NGINX will listen on the port specified in `external_url` or
 implicitly use the right port (80 for HTTP, 443 for HTTPS). If you are running
@@ -238,7 +246,7 @@ something else. For example, to use port 8081:
 nginx['listen_port'] = 8081
 ```
 
-## Verbosity level of NGINX logs
+### Verbosity level of NGINX logs
 
 By default NGINX will log at the `error` verbosity level. You may log at a different level
 by changing the log level. For example, to enable `debug` logging:
@@ -249,7 +257,7 @@ nginx['error_log_level'] = "debug"
 
 Valid values can be found from the [NGINX documentation](https://nginx.org/en/docs/ngx_core_module.html#error_log).
 
-## Setting the Referrer-Policy header
+### Setting the Referrer-Policy header
 
 By default, GitLab sets the `Referrer-Policy` header to `strict-origin-when-cross-origin` on all responses.
 
@@ -272,7 +280,7 @@ Note that setting this to `origin` or `no-referrer` would break some features in
 
 - <https://www.w3.org/TR/referrer-policy/>
 
-## Disabling Gzip compression
+### Disabling Gzip compression
 
 By default, GitLab enables Gzip compression for text data over 10240 bytes. To
 disable this behavior:
@@ -284,7 +292,7 @@ nginx['gzip_enabled'] = false
 NOTE:
 The `gzip` setting only works for the main GitLab application and not for the other services.
 
-## Disabling proxy request buffering
+### Disabling proxy request buffering
 
 Request buffering can be disabled selectively on specific locations by changing `request_buffering_off_path_regex`.
 
@@ -302,7 +310,7 @@ Request buffering can be disabled selectively on specific locations by changing 
    sudo gitlab-ctl hup nginx
    ```
 
-## Configure `robots.txt`
+### Configure `robots.txt`
 
 To configure [`robots.txt`](https://www.robotstxt.org/robotstxt.html) for your instance, specify a custom `robots.txt` file by adding a [custom NGINX configuration](#inserting-custom-nginx-settings-into-the-gitlab-server-block):
 
@@ -318,7 +326,7 @@ To configure [`robots.txt`](https://www.robotstxt.org/robotstxt.html) for your i
    sudo gitlab-ctl reconfigure
    ```
 
-## Inserting custom NGINX settings into the GitLab server block
+### Inserting custom NGINX settings into the GitLab server block
 
 Please keep in mind that these custom settings may create conflicts if the
 same settings are defined in your `gitlab.rb` file.
@@ -337,7 +345,7 @@ NGINX.
 This inserts the defined string into the end of the `server` block of
 `/var/opt/gitlab/nginx/conf/gitlab-http.conf`.
 
-### Notes
+#### Notes
 
 - If you're adding a new location, you might need to include
 
@@ -353,7 +361,7 @@ This inserts the defined string into the end of the `server` block of
 - You cannot add the root `/` location or the `/assets` location as those already
   exist in `gitlab-http.conf`.
 
-## Inserting custom settings into the NGINX configuration
+### Inserting custom settings into the NGINX configuration
 
 If you need to add custom settings into the NGINX configuration, for example to include
 existing server blocks, you can use the following setting.
@@ -385,7 +393,7 @@ This inserts the defined string into the end of the `http` block of
 Custom NGINX settings inside the `/etc/gitlab/` directory are backed up to `/etc/gitlab/config_backup/`
 during an upgrade and when `sudo gitlab-ctl backup-etc` is manually executed.
 
-## Custom error pages
+### Custom error pages
 
 You can use `custom_error_pages` to modify text on the default GitLab error page.
 This can be used for any valid HTTP error code; e.g 404, 502.
@@ -409,9 +417,9 @@ This would result in the 404 error page below.
 Run `gitlab-ctl reconfigure` to rewrite the NGINX configuration and restart
 NGINX.
 
-## Using an existing Passenger/NGINX installation
+### Using an existing Passenger and NGINX installation
 
-In some cases you may want to host GitLab using an existing Passenger/NGINX
+In some cases you may want to host GitLab using an existing Passenger and NGINX
 installation but still have the convenience of updating and installing using
 the Linux packages.
 
@@ -419,7 +427,7 @@ NOTE:
 When disabling NGINX, you won't be able to access other services included in a Linux package installation such as
 Mattermost unless you manually add them in `nginx.conf`.
 
-### Configuration
+#### Configuration
 
 First, you'll need to set up your `/etc/gitlab/gitlab.rb` to disable the built-in
 NGINX and Puma:
@@ -443,7 +451,7 @@ web_server['external_users'] = ['www-data']
 
 Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
-### Vhost (server block)
+#### Vhost (server block)
 
 In your custom Passenger/NGINX installation, create the following site configuration file:
 
@@ -584,11 +592,11 @@ to do so simply uncomment:
 
 Then run `sudo service nginx reload`.
 
-## Enabling/Disabling `nginx_status`
+### Enabling and disabling `nginx_status`
 
 By default you will have an NGINX health-check endpoint configured at `127.0.0.1:8060/nginx_status` to monitor your NGINX server status.
 
-### The following information will be displayed
+The following information is displayed:
 
 ```plaintext
 Active connections: 1
@@ -606,7 +614,7 @@ Reading: 0 Writing: 1 Waiting: 0
 - Writing: NGINX reads request bodies, processes requests, or writes responses to a client
 - Waiting: Keep-alive connections. This number depends on the keepalive-timeout.
 
-### Configuration options
+#### Configuration options
 
 Edit `/etc/gitlab/gitlab.rb`:
 
@@ -633,7 +641,7 @@ nginx['status'] = {
 
 Make sure you run `sudo gitlab-ctl reconfigure` for the changes to take effect.
 
-#### Warning
+##### Configuring user permissions for uploads
 
 To ensure that user uploads are accessible your NGINX user (usually `www-data`)
 should be added to the `gitlab-www` group. This can be done using the following command:
@@ -642,7 +650,7 @@ should be added to the `gitlab-www` group. This can be done using the following 
 sudo usermod -aG gitlab-www www-data
 ```
 
-## Templates
+### Templates
 
 Other than the Passenger configuration in place of Puma and the lack of HTTPS
 (although this could be enabled) these files are mostly identical to:

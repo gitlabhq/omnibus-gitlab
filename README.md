@@ -74,7 +74,7 @@ See [doc/settings/nginx.md](doc/settings/nginx.md#change-the-default-port-and-th
 
 #### Use non-packaged web-server
 
-For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/nginx.md](doc/settings/nginx.md#using-a-non-bundled-web-server).
+For using an existing Nginx, Passenger, or Apache webserver see [doc/settings/nginx.md](doc/settings/nginx.md#use-a-non-bundled-web-server).
 
 #### Using a non-packaged PostgreSQL database management server
 
