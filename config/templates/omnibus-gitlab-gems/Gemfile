@@ -20,14 +20,14 @@ gem 'unf_ext', '0.0.9.1'
 # testing stays consistent with the package contents.
 source 'https://packagecloud.io/cinc-project/stable' do
   gem 'chef', '18.3.0'
-  gem 'chef-cli', '5.6.1'
+  gem 'chef-cli', '5.6.14'
   gem 'chef-bin', '18.3.0'
   gem 'chef-config', '18.3.0'
   gem 'chef-zero', '15.0.11'
   gem 'inspec-core', '6.6.0'
 end
 
-gem 'ohai', '18.1.3'
+gem 'ohai', '18.1.18'
 # TODO: Include omnibus-ctl in the Gemfile
 # Currently omnibus-ctl is installed via config/software since we build
 # a custom version from the Git source for licensing reasons and for Ruby 3.2 fixes.
