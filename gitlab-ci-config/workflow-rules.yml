@@ -33,6 +33,8 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $QA_PROJECT_PATH && $CACHE_UPDATE == "true"'
       variables:
         PIPELINE_TYPE: TRIGGER_CACHE_UPDATE_PIPELINE
+        # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
+        CACHE_POLICY: 'push'
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $QA_PROJECT_PATH && $DURATION_PLOTTER == "true" && $CI_PIPELINE_SOURCE == "schedule"'
       variables:
         PIPELINE_TYPE: DURATION_PLOTTER_PIPELINE
