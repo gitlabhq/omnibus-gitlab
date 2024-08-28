@@ -15,7 +15,7 @@
 #
 
 name 'exiftool'
-version = Gitlab::Version.new('exiftool', '12.92')
+version = Gitlab::Version.new('exiftool', '12.93')
 default_version version.print(false)
 
 license 'GPL-1.0 or Artistic'
