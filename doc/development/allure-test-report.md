@@ -32,7 +32,7 @@ The child pipeline, called `TRIGGERED_CE/EE_PIPELINE` is generated in the Omnibu
 
 ## TRIGGERED_CE/EE_PIPELINE child pipeline
 
-This child pipeline consists of a job called `qa-subset-test` which uses the `package-and-test/main.gitlab-ci.yml` file of the main GitLab project.
+This child pipeline consists of a job called `qa-subset-test` which uses the `test-on-omnibus/main.gitlab-ci.yml` file of the main GitLab project.
 
 ### qa-subset-test job
 
@@ -86,11 +86,11 @@ subgraph QA flow in omnibus pipeline
 
     subgraph Trigger:CE/EE-job Child Pipeline
         A1["`**_trigger-qa_** stage <br> **_qa-subset-test_** job`"]
-        A3(["`_package-and-test/main.gitlab-ci.yml_ <br> from _gitlab-org/gitlab_`"])
+        A3(["`_test-on-omnibus/main.gitlab-ci.yml_ <br> from _gitlab-org/gitlab_`"])
     end
 
     subgraph qa-subset-test Child Pipeline
-        A2["`from <br> **_package-and-test/main.gitlab-ci.yml_** in **_gitlab-org/gitlab_**`"]
+        A2["`from <br> **_test-on-omnibus/main.gitlab-ci.yml_** in **_gitlab-org/gitlab_**`"]
         B1["`**_report_** stage <br> **_e2e-test-report_** job`"]
         B2(["`_.generate-allure-report-base_ job from<br> _quality/pipeline-common_`"])
         C1["`**_allure-report-publisher_** gem`"]
