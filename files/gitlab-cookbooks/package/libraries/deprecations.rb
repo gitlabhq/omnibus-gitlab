@@ -327,12 +327,6 @@ module Gitlab
             note: "Starting with GitLab 15.5, jemalloc is compiled in with the Ruby interpreter and can no longer be disabled."
           },
           {
-            config_keys: %w(postgres_exporter per_table_stats),
-            deprecation: '16.4', # Remove message issue: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8170
-            removal: '17.1', # Removed in https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8169. This deprecation entry can be removed after the next upgrade stop.
-            note: "Starting with GitLab 17.0, this directive will be controlled by `postgres_exporter['flags'] = { 'collector.stat_user_tables' => bool }`."
-          },
-          {
             config_keys: %w(gitlab omnibus_gitconfig),
             deprecation: '16.10',
             removal: '17.0',
