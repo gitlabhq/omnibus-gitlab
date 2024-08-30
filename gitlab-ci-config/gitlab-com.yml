@@ -182,7 +182,7 @@
     include:
       - project: ${QA_TESTS_UPSTREAM_PROJECT}
         ref: ${QA_TESTS_REF}
-        file: .gitlab/ci/package-and-test/main.gitlab-ci.yml
+        file: .gitlab/ci/test-on-omnibus/main.gitlab-ci.yml
 
 #####################
 # Cache update jobs #
