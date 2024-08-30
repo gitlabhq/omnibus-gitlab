@@ -173,7 +173,8 @@ class OmnibusHelper
     {
       'opensuseleap-15.4' => 'GitLab 16.8',
       'ubuntu-18.04' => 'GitLab 17.0',
-      'debian-10' => 'GitLab 17.6'
+      'debian-10' => 'GitLab 17.6',
+      'centos-7' => 'GitLab 17.6'
     }
   end
 
