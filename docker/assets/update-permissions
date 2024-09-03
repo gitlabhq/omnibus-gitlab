@@ -33,6 +33,7 @@ if id -u git; then
 	# Fix data storage
 	chown_if_exists -R git:git /var/opt/gitlab/.ssh
 	chown_if_exists -R git:git /var/opt/gitlab/.gitconfig
+	chown_if_exists -R git:git /var/opt/gitlab/gitaly
 	chown_if_exists -R git:git /var/opt/gitlab/git-data
 	chmod_if_exists 2770 /var/opt/gitlab/git-data/repositories
 	chown_if_exists -R git:git /var/opt/gitlab/gitlab-ci/builds
