@@ -95,7 +95,16 @@ RSpec.describe 'GitLabRoles' do
 
       expect(ApplicationRole).to have_received(:load_role)
       expect(Gitlab['gitlab_rails']['enable']).to eq true
+      expect(Gitlab['nginx']['enable']).to eq true
       expect(Services).to have_received(:enable_group).with('rails').once
+    end
+
+    it 'leaves nginx disabled when requested' do
+      stub_gitlab_rb(application_role: { enable: true }, nginx: { enable: false })
+
+      Gitlab.load_roles
+
+      expect(Gitlab['nginx']['enable']).to eq false
     end
   end
 

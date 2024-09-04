@@ -19,6 +19,7 @@ module ApplicationRole
     return unless Gitlab['application_role']['enable']
 
     Gitlab['gitlab_rails']['enable'] = true if Gitlab['gitlab_rails']['enable'].nil?
+    Gitlab['nginx']['enable'] = true if Gitlab['nginx']['enable'].nil?
 
     Services.enable_group('rails')
   end
