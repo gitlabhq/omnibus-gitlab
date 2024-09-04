@@ -136,6 +136,11 @@ build do
   # 3. https://bugzilla.redhat.com/show_bug.cgi?id=1783554
   patch source: 'ruby-disable-copy-file-range.patch', plevel: 1, env: env if version.start_with?('2.7') && (centos? || rhel?)
 
+  # OpenSSL 3 dropped the methods FIPS_mode and FIPS_mode_set. However, Ruby
+  # only dropped them in version 3.3.0 We are cherry-picking
+  # https://github.com/ruby/ruby/commit/678d41bc51f.
+  patch source: 'fix-ruby-fips-symbols.patch', plevel: 1, env: env if version.satisfies?('< 3.3.0')
+
   configure_command = ['--with-out-ext=dbm,readline',
                        '--enable-shared',
                        '--with-jemalloc',
