@@ -15,8 +15,8 @@
 # limitations under the License.
 #
 
-name 'postgresql'
-default_version '14.11'
+name 'postgresql_new'
+default_version '16.4'
 
 license 'PostgreSQL'
 license_file 'COPYRIGHT'
@@ -26,15 +26,16 @@ skip_transitive_dependency_licensing true
 dependency 'zlib'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'libedit'
+dependency 'libicu'
 dependency 'ncurses'
 dependency 'libossp-uuid'
 dependency 'config_guess'
 
-version '14.11' do
-  source sha256: 'a670bd7dce22dcad4297b261136b3b1d4a09a6f541719562aa14ca63bf2968a8'
+version '16.4' do
+  source sha256: '971766d645aa73e93b9ef4e3be44201b4f45b5477095b049125403f9f3386d6f'
 end
 
-major_version = '14'
+major_version = '16'
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
 
@@ -48,8 +49,6 @@ build do
   prefix = "#{install_dir}/embedded/postgresql/#{major_version}"
   update_config_guess(target: 'config')
 
-  patch source: 'no_docs.patch', target: 'GNUmakefile.in'
-
   command './configure' \
           " --prefix=#{prefix}" \
           ' --with-libedit-preferred' \
@@ -57,17 +56,10 @@ build do
           ' --with-uuid=ossp', env: env
 
   make "world -j #{workers}", env: env
-  make 'install-world', env: env
+  make 'install-world-bin', env: env
 
-  # NOTE: There are several dependencies which require these files in these
-  # locations and have dependency on `postgresql_new`. So when this block is
-  # changed to be in the `postgresql` software definition for default PG
-  # version changes, change those dependencies to `postgresql`.
-  block 'link bin files' do
-    Dir.glob("#{prefix}/bin/*").each do |bin_file|
-      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
-    end
-  end
+  libpq = 'libpq.so.5'
+  link "#{prefix}/lib/#{libpq}", "#{install_dir}/embedded/lib/#{libpq}"
 end
 
 # exclude headers and static libraries from package
