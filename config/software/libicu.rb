@@ -18,7 +18,7 @@
 
 name 'libicu'
 
-version = Gitlab::Version.new('libicu', 'release-57-1')
+version = Gitlab::Version.new('libicu', 'release-63-1')
 
 default_version version.print(false)
 display_version version.print(false).delete_prefix('release-').tr('-', '.')
@@ -38,8 +38,7 @@ build do
   command ['./runConfigureICU',
            'Linux/gcc',
            "--prefix=#{install_dir}/embedded",
-           '--with-data-packaging=files',
-           '--enable-shared',
+           '--with-data-packaging=archive',
            '--without-samples'].join(' '), env: env, cwd: cwd
 
   make "-j #{workers}", env: env, cwd: cwd
