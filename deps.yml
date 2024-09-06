@@ -134,12 +134,6 @@ dependencies:
         replace_in_files:
         - filename: config/templates/omnibus-gitlab-gems/Gemfile
           pattern: "gem 'remote_syslog', '(\\S+)'"
-      # rubygems
-      https://github.com/rubygems/rubygems.git:
-        replace_in_files:
-        - filename: config/software/rubygems.rb
-          pattern: "default_version '(\\S+)'"
-          range: '<= 3.x'
       # zlib
       https://github.com/madler/zlib.git:
         replace_in_files:
@@ -163,12 +157,6 @@ dependencies:
         - filename: config/software/postgres-exporter.rb
           pattern: "Gitlab::Version.new\\('postgres-exporter', '(\\S+)'\\)"
           tag_prefix: 'v'
-      # pgbouncer-exporter
-      https://gitlab.com/gitlab-org/build/omnibus-mirror/pgbouncer_exporter.git:
-        replace_in_files:
-        - filename: config/software/pgbouncer-exporter.rb
-          pattern: "Gitlab::Version.new\\('pgbouncer-exporter', '(\\S+)'\\)"
-          tag_prefix: 'v'
       # redis-exporter
       https://gitlab.com/gitlab-org/build/omnibus-mirror/redis_exporter.git:
         replace_in_files:
@@ -187,14 +175,6 @@ dependencies:
         - filename: config/software/libtiff.rb
           pattern: "Gitlab::Version.new\\('libtiff', 'v(\\S+)'\\)"
           tag_prefix: 'v'
-      # pgbouncer
-      https://github.com/pgbouncer/pgbouncer.git:
-        replace_in_files:
-        - filename: config/software/pgbouncer.rb
-          pattern: "Gitlab::Version.new\\('pgbouncer', '(\\S+)'\\)"
-          tag_filter:
-            matching: 'pgbouncer_(\d+)_(\d+)_(\d+)'
-            sort_as: '$1.$2.$3'
       # redis
       https://github.com/redis/redis.git:
         replace_in_files:
