@@ -155,7 +155,7 @@ postgresql['port'] = 2345
 puma['port'] = 3456
 ```
 
-For NGINX port changes please see [Setting the NGINX listen port](settings/nginx.md#setting-the-nginx-listen-port).
+For NGINX port changes please see [Setting the NGINX listen port](settings/nginx.md#set-the-nginx-listen-port).
 
 ## Git user does not have SSH access
 
