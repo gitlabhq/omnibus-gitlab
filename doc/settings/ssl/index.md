@@ -191,7 +191,7 @@ To configure GitLab to use a custom ACME server:
 
 You can add alternative domains (or subject alternative names) to the Let's Encrypt certificate.
 This can be helpful if you would like to use the [bundled NGINX](../nginx.md) as a
-[reverse proxy for other backend applications](../nginx.md#inserting-custom-settings-into-the-nginx-configuration).
+[reverse proxy for other backend applications](../nginx.md#insert-custom-settings-into-the-nginx-configuration).
 
 The DNS records for the alternative domains must point to the GitLab instance.
 
