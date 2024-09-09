@@ -65,6 +65,9 @@
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
+    # Include it in TRIGGER_CACHE_UPDATE_PIPELINE pipeline cache used by
+    # nightlies and triggered builds are refreshed periodically
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
 .fips_branch_template:
   extends: .branch_template
@@ -73,6 +76,9 @@
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+    # Include it in TRIGGER_CACHE_UPDATE_PIPELINE pipeline cache used by
+    # nightlies and triggered builds are refreshed periodically
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_BRANCH_BUILD_PIPELINE"'
       when: manual
       allow_failure: true
@@ -92,6 +98,9 @@
     - if: '$PIPELINE_TYPE == "CE_BRANCH_BUILD_PIPELINE"'
     - if: '$PIPELINE_TYPE == "CE_NIGHTLY_BUILD_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_BRANCH_BUILD_PIPELINE" && $CI_PIPELINE_SOURCE == "parent_pipeline"'
+    # Include it in TRIGGER_CACHE_UPDATE_PIPELINE pipeline cache used by
+    # nightlies and triggered builds are refreshed periodically
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
 .tag_template:
   stage: package
