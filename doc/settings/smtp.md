@@ -283,6 +283,8 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_user_name'] = "your.email@domain.com"
 gitlab_rails['smtp_password'] = "your.password"
 gitlab_rails['smtp_domain'] = "domain.com"
+gitlab_rails['gitlab_email_from'] = 'gitlab@domain.com'
+gitlab_rails['gitlab_email_reply_to'] = 'noreply@domain.com'
 ```
 
 ### Zoho Mail
