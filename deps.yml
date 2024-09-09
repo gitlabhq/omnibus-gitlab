@@ -181,14 +181,6 @@ dependencies:
         - filename: config/software/redis.rb
           pattern: "Gitlab::Version.new\\('redis', '(\\S+)'\\)"
           range: '< 7.2.0'
-       # exiftool
-      https://github.com/exiftool/exiftool.git:
-        replace_in_files:
-        - filename: config/software/exiftool.rb
-          pattern: "Gitlab::Version.new\\('exiftool', '(\\S+)'\\)"
-          tag_filter:
-            matching: '(\d+).(\d+)'
-            sort_as: '$1.$2.0'
       # curl
       https://github.com/curl/curl.git:
         replace_in_files:
