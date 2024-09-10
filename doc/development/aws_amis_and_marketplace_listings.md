@@ -9,13 +9,13 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 GitLab caters to the AWS ecosystem via the following methods
 
 1. Community AMIs
-    1. [GitLab CE](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Images:visibility=public-images;owner=782774275127;search=GitLab%20CE;sort=desc:name) - amd64 and arm64
-    1. [GitLab EE](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Images:visibility=public-images;owner=782774275127;search=GitLab%20EE;sort=desc:name) (Unlicensed) - amd64 and arm64
+   1. [GitLab CE](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Images:visibility=public-images;owner=782774275127;search=GitLab%20CE;sort=desc:name) - amd64 and arm64
+   1. [GitLab EE](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Images:visibility=public-images;owner=782774275127;search=GitLab%20EE;sort=desc:name) (Unlicensed) - amd64 and arm64
 
 1. [AWS Marketplace listing](https://aws.amazon.com/marketplace/seller-profile?id=9657c703-ca56-4b54-b029-9ded0fadd970)
-    1. [GitLab CE](https://aws.amazon.com/marketplace/pp/prodview-w6ykryurkesjq?sr=0-3&ref_=beagle&applicationId=AWSMPContessa)
-    1. [GitLab EE Premium (5 seat pre-licensed)](https://aws.amazon.com/marketplace/pp/prodview-amk6tacbois2k?sr=0-1&ref_=beagle&applicationId=AWSMPContessa)
-    1. [GitLab EE Ultimate (5 seat pre-licensed)](https://aws.amazon.com/marketplace/pp/prodview-g6ktjmpuc33zk?sr=0-2&ref_=beagle&applicationId=AWSMPContessa)
+   1. [GitLab CE](https://aws.amazon.com/marketplace/pp/prodview-w6ykryurkesjq?sr=0-3&ref_=beagle&applicationId=AWSMPContessa)
+   1. [GitLab EE Premium (5 seat pre-licensed)](https://aws.amazon.com/marketplace/pp/prodview-amk6tacbois2k?sr=0-1&ref_=beagle&applicationId=AWSMPContessa)
+   1. [GitLab EE Ultimate (5 seat pre-licensed)](https://aws.amazon.com/marketplace/pp/prodview-g6ktjmpuc33zk?sr=0-2&ref_=beagle&applicationId=AWSMPContessa)
 
 ## Building the AMIs
 

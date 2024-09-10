@@ -199,10 +199,10 @@ To add alternative domains to your Let's Encrypt certificate:
 
 1. Edit `/etc/gitlab/gitlab.rb` and add the alternative domains:
 
-    ```ruby
-    # Separate multiple domains with commas
-    letsencrypt['alt_names'] = ['another-application.example.com']
-    ```
+   ```ruby
+   # Separate multiple domains with commas
+   letsencrypt['alt_names'] = ['another-application.example.com']
+   ```
 
 1. Reconfigure GitLab:
 

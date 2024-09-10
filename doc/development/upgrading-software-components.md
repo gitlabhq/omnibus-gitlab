@@ -62,13 +62,10 @@ Create a new branch from the target branch (usually `master` of the
 
 ### Modify `config/software/<component.rb>`
 
-1. Find the corresponding configure file for the component that you want to
- update in the `config/software` directory. For example
- `config/software/prometheus.rb` is used for the Prometheus component.
-
-1. Change the version to the version you want to update to. If applicable, also
-change the corresponding `sha256` to the value of the corresponding version
-source tarball.
+1. Find the corresponding configure file for the component that you want to update in the `config/software` directory.
+   For example, `config/software/prometheus.rb` is used for the Prometheus component.
+1. Change the version to the version you want to update to. If applicable, also change the corresponding `sha256` to the
+   value of the corresponding version source tarball.
 
 ### Add or modify any required patches
 

@@ -78,12 +78,12 @@ To override the default headers:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
-  ```ruby
-  nginx['proxy_set_headers'] = {
-    "X-Forwarded-Proto" => "http",
-    "CUSTOM_HEADER" => "VALUE"
-  }
-  ```
+   ```ruby
+   nginx['proxy_set_headers'] = {
+     "X-Forwarded-Proto" => "http",
+     "CUSTOM_HEADER" => "VALUE"
+   }
+   ```
 
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
    for the changes to take effect.
@@ -501,7 +501,7 @@ To set up GitLab with an existing Passenger and NGINX installation:
    ```
 
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
-  for the changes to take effect.
+   for the changes to take effect.
 
 #### Configure the virtual host (server block)
 

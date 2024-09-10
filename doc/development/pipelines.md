@@ -23,26 +23,26 @@ NOTE:
 Unless specified otherwise, the listed users/groups have permission to both merge, and push to
 protected branches.
 
-1. Development repository
-    1. `master`: Maintainers, [Delivery team](https://gitlab.com/gitlab-org/delivery)
-    1. `*-stable` : [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
-    1. `*-stable-ee` : [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
-    1. `*-auto-deploy-*` : Maintainers, [`delivery` group](https://gitlab.com/gitlab-org/delivery), [`managers` group](https://gitlab.com/gitlab-org/release/managers)
+1. Development repository:
+   1. `master`: Maintainers, [Delivery team](https://gitlab.com/gitlab-org/delivery)
+   1. `*-stable` : [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+   1. `*-stable-ee` : [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+   1. `*-auto-deploy-*` : Maintainers, [`delivery` group](https://gitlab.com/gitlab-org/delivery), [`managers` group](https://gitlab.com/gitlab-org/release/managers)
 
 1. Release mirror:
-    1. `master`: Maintainers
-    1. `*-stable` : Maintainers
-    1. `*-stable-ee` : Maintainers
-    1. `*-auto-deploy-*` : Maintainers
+   1. `master`: Maintainers
+   1. `*-stable` : Maintainers
+   1. `*-stable-ee` : Maintainers
+   1. `*-auto-deploy-*` : Maintainers
 
 1. Security mirror:
-    1. `master`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
-    1. `*-stable`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
-    1. `*-stable-ee`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
-    1. `*-auto-deploy-*`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+   1. `master`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+   1. `*-stable`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+   1. `*-stable-ee`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+   1. `*-auto-deploy-*`: [GitLab Release Tools Bot](https://gitlab.com/gitlab-release-tools-bot), [GitLab Bot](https://gitlab.com/gitlab-bot), [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
 
 1. QA mirror:
-    1. `master`: Developers (Merge only), Maintainers
+   1. `master`: Developers (Merge only), Maintainers
 
 NOTE:
 Developers get access to `master` branch in QA mirror because
@@ -57,10 +57,10 @@ Unless specified otherwise, the listed users/groups have permission to both merg
 protected tags.
 
 1. Development repository:
-    1. `*` : Maintainers, [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
+   1. `*` : Maintainers, [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
 
 1. Release mirror:
-    1. `*`: Maintainers
+   1. `*`: Maintainers
 
 1. Security mirror: Nil
 
