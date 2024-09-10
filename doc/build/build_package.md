@@ -13,11 +13,11 @@ are in the [`GitLab Omnibus Builder`](https://gitlab.com/gitlab-org/gitlab-omnib
 project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-builder/container_registry).
 
 1. [Install Docker Engine](https://docs.docker.com/engine/install/).
-    - Docker Engine is a requirement, not Docker Desktop.
-    - **Notice:** [Docker Desktop for Mac](https://docs.docker.com/desktop/install/mac-install/) requires a
-      paid subscription for commercial use, in accordance with
-      [Docker Subscription Service Agreement](https://www.docker.com/legal/docker-subscription-service-agreement/).
-      Consider alternatives.
+   - Docker Engine is a requirement, not Docker Desktop.
+   - **Notice:** [Docker Desktop for Mac](https://docs.docker.com/desktop/install/mac-install/) requires a paid
+     subscription for commercial use, in accordance with
+     [Docker Subscription Service Agreement](https://www.docker.com/legal/docker-subscription-service-agreement/).
+     Consider alternatives.
 
 1. Pull the Docker image for the OS you want to build a package for. The current
    version of the image used officially by `omnibus-gitlab` is referred to in the
@@ -135,9 +135,9 @@ you can build packages using the provided Rake tasks:
 
 1. Run the Rake task to build the package:
 
-    ```shell
-    bundle exec rake build:project
-    ```
+   ```shell
+   bundle exec rake build:project
+   ```
 
 The packages are built and made available in the `~/omnibus-gitlab/pkg`
 directory.

@@ -79,17 +79,17 @@ If initially your SMTP configuration looked like:
 
 1. In `/etc/gitlab/gitlab.rb`:
 
-  ```ruby
-  gitlab_rails['smtp_enable'] = true
-  gitlab_rails['smtp_address'] = "smtp.server"
-  gitlab_rails['smtp_port'] = 465
-  gitlab_rails['smtp_user_name'] = "smtp user"
-  gitlab_rails['smtp_password'] = "smtp password"
-  gitlab_rails['smtp_domain'] = "example.com"
-  gitlab_rails['smtp_authentication'] = "login"
-  gitlab_rails['smtp_enable_starttls_auto'] = true
-  gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
-  ```
+   ```ruby
+   gitlab_rails['smtp_enable'] = true
+   gitlab_rails['smtp_address'] = "smtp.server"
+   gitlab_rails['smtp_port'] = 465
+   gitlab_rails['smtp_user_name'] = "smtp user"
+   gitlab_rails['smtp_password'] = "smtp password"
+   gitlab_rails['smtp_domain'] = "example.com"
+   gitlab_rails['smtp_authentication'] = "login"
+   gitlab_rails['smtp_enable_starttls_auto'] = true
+   gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+   ```
 
 1. Edit the encrypted secret:
 

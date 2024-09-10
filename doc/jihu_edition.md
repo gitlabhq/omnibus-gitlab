@@ -119,30 +119,27 @@ To update EE to JH:
 
 - If you installed GitLab using Docker:
 
-   1. Follow the [Docker update guide](https://docs.gitlab.com/ee/install/docker.html)
-      and replace `gitlab/gitlab-ee:latest` with the following:
+  1. Follow the [Docker update guide](https://docs.gitlab.com/ee/install/docker.html) and replace
+     `gitlab/gitlab-ee:latest` with the following:
 
-      ```shell
-      registry.gitlab.com/gitlab-jh/omnibus-gitlab/gitlab-jh:<version>
-      ```
+     ```shell
+     registry.gitlab.com/gitlab-jh/omnibus-gitlab/gitlab-jh:<version>
+     ```
 
-      Where `<version>` is the currently installed GitLab version, which
-      you can find with:
+     Where `<version>` is the currently installed GitLab version, which you can find with:
 
-      ```shell
-      sudo docker ps | grep gitlab/gitlab-ee | awk '{print $2}'
-      ```
+     ```shell
+     sudo docker ps | grep gitlab/gitlab-ee | awk '{print $2}'
+     ```
 
-      The output should be similar to: `gitlab/gitlab-ee:13.10.0-ee.0`, so
-      in this case, `<version>` equals to `13.10.0`.
+     The output should be similar to: `gitlab/gitlab-ee:13.10.0-ee.0`, so in this case, `<version>` equals to `13.10.0`.
 
-   1. Go to the GitLab administration panel of your server (`/admin/license/new`) and
-      upload your JiHu Edition license file. If you have an EE license already installed
-      prior to updating to JiHu, the EE license is automatically deactivated when JH
-      is installed.
+  1. Go to the GitLab administration panel of your server (`/admin/license/new`) and upload your JiHu Edition license
+     file. If you have an EE license already installed prior to updating to JiHu, the EE license is automatically
+     deactivated when JH is installed.
 
-That's it! You can now use GitLab JiHu Edition! To update to a newer
-version, see [Install or update a JiHu Package](#install-or-update-a-jihu-edition-package).
+That's it! You can now use GitLab JiHu Edition! To update to a newer version, see
+[Install or update a JiHu Package](#install-or-update-a-jihu-edition-package).
 
 ## Go back to GitLab Enterprise Edition
 

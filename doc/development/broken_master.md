@@ -18,9 +18,8 @@ This is a transient error due to connection issues between runner manager
 machine and `dev.gitlab.org`.
 
 1. Sign in to [runner manager machine](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/maintenance/build-infrastructure/#runner-manager-machines).
-
 1. Run the following command to force a connection between runner and GitLab
 
-    ```shell
-    sudo gitlab-runner verify
-    ```
+   ```shell
+   sudo gitlab-runner verify
+   ```
