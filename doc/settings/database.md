@@ -1166,6 +1166,9 @@ replication user's password.
 1. Gather the replication user's password. It was set while setting up Geo in
    [Step 1. Configure the primary site](https://docs.gitlab.com/ee/administration/geo/setup/database.html#step-1-configure-the-primary-site).
 
+1. Optional. [Pause replication on each **secondary** site](https://docs.gitlab.com/ee/administration/geo/index.html#pausing-and-resuming-replication)
+   to protect their disaster recovery (DR) capability.
+
 1. Manually upgrade PostgreSQL on the Geo primary. Run on the Geo primary's
    database node:
 
@@ -1198,7 +1201,9 @@ replication user's password.
    `pg_hba.conf` file. This is needed because `replicate-geo-database`
    replicates the primary's file to the secondary.
 
-1. Restart `puma`, `sidekiq`, and `geo-logcursor`.
+1. If you paused replication in step 3,
+   [resume replication on each **secondary**](https://docs.gitlab.com/ee/administration/geo/index.html#pausing-and-resuming-replication).
+   Then, restart `puma`, `sidekiq`, and `geo-logcursor`.
 
    ```shell
    sudo gitlab-ctl hup puma
