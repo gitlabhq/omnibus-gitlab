@@ -585,6 +585,16 @@ RAT:FIPS:
     - job: generate-facts
       artifacts: true
 
+RAT:ref_arch_envs:
+  extends: RAT
+  parallel:
+    matrix:
+      - REFERENCE_ARCHITECTURE: [1k, 2k, 3k, 10k]
+  rules:
+    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
+      when: manual
+      allow_failure: true
+
 GET:Geo:
   stage: qa
   variables:
