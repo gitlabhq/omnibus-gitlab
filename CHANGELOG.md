@@ -94,6 +94,10 @@ No changes.
 - [Bump container registry to 4.5.0](gitlab-org/omnibus-gitlab@0d661c9c18c8eb55612e2036e2b0f6b280422e71) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!7647))
 - [Disable request buffering for new SSH endpoints](gitlab-org/omnibus-gitlab@f836d021aa3d187becae5aba18548e99750fd6de) ([merge request](gitlab-org/omnibus-gitlab!7713))
 
+## 17.1.7 (2024-09-11)
+
+No changes.
+
 ## 17.1.6 (2024-08-21)
 
 No changes.
