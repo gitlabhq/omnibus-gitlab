@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.3.2 (2024-09-11)
+
+No changes.
+
 ## 17.3.1 (2024-08-20)
 
 ### Fixed (1 change)
@@ -35,6 +39,10 @@ omnibus-gitlab repository.
 - [Update gitlab-org/build/omnibus-mirror/redis_exporter from 1.61.0 to 1.62.0](gitlab-org/omnibus-gitlab@f9579c7fe9d01cc74de867e34242193c6f5af54c) ([merge request](gitlab-org/omnibus-gitlab!7799))
 - [Update gitlab-org/build/omnibus-mirror/node_exporter from 1.8.1 to 1.8.2](gitlab-org/omnibus-gitlab@6bf6d71a74bac14b9e8576205ee2a1ade2c60cf0) ([merge request](gitlab-org/omnibus-gitlab!7790))
 - [Update dependency libxml2 to v2.13.2](gitlab-org/omnibus-gitlab@f9e32b45a092e1798f15687054ffb04ea08bdf22) ([merge request](gitlab-org/omnibus-gitlab!7772))
+
+## 17.2.5 (2024-09-11)
+
+No changes.
 
 ## 17.2.4 (2024-08-21)
 
@@ -85,6 +93,10 @@ No changes.
 - [Bump exiftool to version 12.87](gitlab-org/omnibus-gitlab@86ab581d12b0551de0d50c3fa6fabe27c19d1587) ([merge request](gitlab-org/omnibus-gitlab!7686))
 - [Bump container registry to 4.5.0](gitlab-org/omnibus-gitlab@0d661c9c18c8eb55612e2036e2b0f6b280422e71) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!7647))
 - [Disable request buffering for new SSH endpoints](gitlab-org/omnibus-gitlab@f836d021aa3d187becae5aba18548e99750fd6de) ([merge request](gitlab-org/omnibus-gitlab!7713))
+
+## 17.1.7 (2024-09-11)
+
+No changes.
 
 ## 17.1.6 (2024-08-21)
 
