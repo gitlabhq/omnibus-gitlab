@@ -568,6 +568,8 @@ RAT:
       allow_failure: true
     - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
       allow_failure: true
+      variables:
+        NIGHTLY: 'true'
   needs:
     - job: Ubuntu-22.04-branch
       artifacts: false
