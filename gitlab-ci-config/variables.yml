@@ -41,3 +41,4 @@ variables:
   QA_TESTS_UPSTREAM_PROJECT: 'gitlab-org/gitlab'
   QA_TESTS_REF: 'master'
   OPENSSL_VERSION: '1.1.1'
+  FF_TIMESTAMPS: true
