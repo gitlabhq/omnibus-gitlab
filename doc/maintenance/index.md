@@ -181,7 +181,7 @@ To rotate the secrets:
 1. Recommended. Extract your current secrets for `gitlab_rails`. Save the output because you need this later:
 
    ```shell
-   sudo grep "secret_key_base\|db_key_base\|otp_key_base\|encrypted_settings_key_base\|openid_connect_signing_key\|ci_jwt_signing_key" /etc/gitlab/gitlab-secrets.json
+   sudo grep "secret_key_base\|db_key_base\|otp_key_base\|encrypted_settings_key_base\|openid_connect_signing_key" /etc/gitlab/gitlab-secrets.json
    ```
 
 1. Move your current secrets file to a different location:
@@ -225,5 +225,5 @@ To rotate the secrets:
       ```
 
 1. [Verify that the database values can be decrypted](https://docs.gitlab.com/ee/administration/raketasks/check.html#verify-database-values-can-be-decrypted-using-the-current-secrets). The output should match with the previous execution.
-  
+
 1. Confirm that GitLab is working as expected. If it is, it should be safe to delete the old secrets.
