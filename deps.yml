@@ -181,14 +181,6 @@ dependencies:
         - filename: config/software/redis.rb
           pattern: "Gitlab::Version.new\\('redis', '(\\S+)'\\)"
           range: '< 7.2.0'
-      # curl
-      https://github.com/curl/curl.git:
-        replace_in_files:
-        - filename: config/software/curl.rb
-          pattern: "version = Gitlab::Version.new\\('curl', '(\\S+)'\\)"
-          tag_filter:
-            matching: 'curl-(\d+)_(\d+)_(\d+)'
-            sort_as: '$1.$2.$3'
       # pcre2
       https://github.com/PCRE2Project/pcre2.git:
         replace_in_files:
