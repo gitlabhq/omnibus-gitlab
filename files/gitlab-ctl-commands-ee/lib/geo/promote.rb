@@ -121,7 +121,7 @@ module Geo
     def patroni_node_role
       return @patroni_node_role if defined?(@patroni_node_role)
 
-      unless progress_message('Attempting to detect the role of this Patroni node') do
+      unless progress_message('Attempting to detect the Patroni role of this node') do
         node = Patroni::Client.new
         @patroni_node_role = :standby_leader if node.standby_leader?
         @patroni_node_role = :leader if node.leader?
@@ -129,7 +129,7 @@ module Geo
 
         PATRONI_NODE_ROLES.include?(@patroni_node_role)
       end
-        die('Unable to detect the role of this Patroni node.')
+        die('Unable to detect the Patroni role of this node.')
       end
 
       @patroni_node_role
