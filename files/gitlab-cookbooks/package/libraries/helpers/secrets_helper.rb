@@ -120,6 +120,9 @@ class SecretsHelper
         'incoming_email_auth_token' => Gitlab['mailroom']['incoming_email_auth_token'],
         'service_desk_email_auth_token' => Gitlab['mailroom']['service_desk_email_auth_token'],
       },
+      'gitaly' => {
+        'gitlab_secret' => Gitlab['gitaly']['gitlab_secret']
+      }
     }
 
     if Gitlab['mattermost']['gitlab_enable']

@@ -89,6 +89,16 @@ end
 
 gitlab_url, gitlab_relative_path = WebServerHelper.internal_api_url(node)
 
+secret_file = node['gitaly']['configuration']['gitlab']['secret_file']
+file secret_file do
+  owner "root"
+  group "root"
+  mode "0644"
+  sensitive true
+  content node['gitaly']['gitlab_secret']
+  notifies :restart, 'runit_service[gitaly]' if omnibus_helper.should_notify?('gitaly')
+end
+
 template "Create Gitaly config.toml" do
   path config_path
   source "gitaly-config.toml.erb"

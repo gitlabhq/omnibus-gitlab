@@ -64,8 +64,10 @@ RSpec.describe 'gitaly' do
   let(:pack_objects_cache_enabled) { true }
   let(:pack_objects_cache_dir) { '/pack-objects-cache' }
   let(:pack_objects_cache_max_age) { '10m' }
+
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    allow(SecretsHelper).to receive(:generate_hex).and_return('4ecd22c031fee5c7368a5a102f76dc41')
   end
 
   context 'by default' do
@@ -84,6 +86,10 @@ RSpec.describe 'gitaly' do
       expect(chef_run.version_file('Create version file for Gitaly')).to notify('runit_service[gitaly]').to(:hup)
     end
 
+    it 'creates secret file for authenticating with GitLab' do
+      expect(chef_run).to create_file('/var/opt/gitlab/gitaly/.gitlab_secret').with_content('4ecd22c031fee5c7368a5a102f76dc41')
+    end
+
     it 'populates gitaly config.toml with defaults' do
       expect(get_rendered_toml(chef_run, '/var/opt/gitlab/gitaly/config.toml')).to eq(
         {
@@ -95,7 +101,8 @@ RSpec.describe 'gitaly' do
           },
           gitlab: {
             relative_url_root: '',
-            url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket'
+            url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket',
+            secret_file: '/var/opt/gitlab/gitaly/.gitlab_secret'
           },
           'gitlab-shell': {
             dir: '/opt/gitlab/embedded/service/gitlab-shell'
@@ -129,6 +136,56 @@ RSpec.describe 'gitaly' do
 
     it 'deletes the old internal sockets directory' do
       expect(chef_run).to delete_directory("/var/opt/gitlab/gitaly/internal_sockets")
+    end
+  end
+
+  context 'with a user specified GitLab secret' do
+    context 'when the Gitlab Shell and Gitaly secrets match' do
+      before do
+        stub_gitlab_rb(
+          gitaly: {
+            gitlab_secret: 'my-super-secret-password'
+          },
+          gitlab_shell: {
+            secret_token: 'my-super-secret-password'
+          }
+        )
+      end
+
+      it 'populates the secret file with specified value' do
+        expect(chef_run).to create_file('/var/opt/gitlab/gitaly/.gitlab_secret').with_content('my-super-secret-password')
+      end
+
+      it 'does not log a warning' do
+        expect(LoggingHelper).not_to receive(:warning).with("Gitaly and GitLab Shell specifies different secrets to authenticate with GitLab")
+
+        chef_run
+      end
+    end
+
+    context 'when the Gitlab Shell and Gitaly secrets differ' do
+      before do
+        stub_gitlab_rb(
+          gitaly: {
+            gitlab_secret: 'password-for-gitaly'
+          },
+          gitlab_shell: {
+            secret_token: 'password-for-shell'
+          }
+        )
+
+        allow(LoggingHelper).to receive(:warning).and_call_original
+      end
+
+      it 'populates the secret file with specified value' do
+        expect(chef_run).to create_file('/var/opt/gitlab/gitaly/.gitlab_secret').with_content('password-for-gitaly')
+      end
+
+      it 'logs a secret mismatch warning' do
+        expect(LoggingHelper).to receive(:warning).with("Gitaly and GitLab Shell specifies different secrets to authenticate with GitLab")
+
+        chef_run
+      end
     end
   end
 
@@ -425,6 +482,7 @@ RSpec.describe 'gitaly' do
           gitlab: {
             url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket',
             relative_url_root: '',
+            secret_file: '/var/opt/gitlab/gitaly/.gitlab_secret'
           },
           logging: {
             dir: 'overridden_logging_path',
@@ -618,7 +676,8 @@ RSpec.describe 'gitaly' do
               read_timeout: 123,
               user: 'user123'
             },
-            url: 'http://localhost:3000'
+            url: 'http://localhost:3000',
+            secret_file: '/var/opt/gitlab/gitaly/.gitlab_secret'
           },
           'gitlab-shell': {
             dir: '/opt/gitlab/embedded/service/gitlab-shell'
