@@ -487,3 +487,28 @@ due to the potential security issues associated with disabling this option at gl
 ```shell
 git config --global http.sslVerify false
 ```
+
+## Upgrade to OpenSSL 3
+
+Starting from [version 17.5](https://docs.gitlab.com/ee/update/versions/gitlab_17_changes.html#1750),
+GitLab uses OpenSSL 3. Some of the older TLS protocols and cipher suites, or
+weaker TLS certificates for external integrations may be incompatible with
+OpenSSL 3 defaults.
+
+With the upgrade to OpenSSL 3:
+
+- TLS 1.2 or higher is required for all incoming and outgoing TLS connections.
+- TLS certificates must have at least 112 bits of security. RSA, DSA, and DH
+  keys shorter than 2048 bits, and ECC keys shorter than 224 bits are
+  prohibited.
+
+You can encounter one of the following error messages:
+
+- `no protocols available` when the TLS connection uses a protocol older than
+  TLS 1.2.
+- `certificate key too weak` when the TLS certificate less than 112 bits of
+  security.
+- `unsupported cipher algorithm` when a legacy cipher is requested.
+
+Use the [OpenSSL 3 guide](openssl_3.md) to identify and assess the compatibility
+of your external integrations.

@@ -30,6 +30,16 @@ The following table shows which method each GitLab service supports.
 | Mattermost | [Yes](https://docs.gitlab.com/ee/integration/mattermost/index.html#running-gitlab-mattermost-with-https) | [Yes](#enable-the-lets-encrypt-integration) |
 | GitLab Pages | [Yes](https://docs.gitlab.com/ee/administration/pages/#wildcard-domains-with-tls-support) | No |
 
+## OpenSSL 3 upgrade
+
+Starting from [version 17.5](https://docs.gitlab.com/ee/update/versions/gitlab_17_changes.html#1750),
+GitLab uses OpenSSL 3. Some of the older TLS protocols and cipher suites, or
+weaker TLS certificates for external integrations may be incompatible with
+OpenSSL 3 defaults.
+
+Before upgrading to GitLab 17.5, use the [OpenSSL 3 guide](openssl_3.md) to
+identify and assess the compatibility of your external integrations.
+
 ## Enable the Let's Encrypt integration
 
 [Let's Encrypt](https://letsencrypt.org) is enabled by default if `external_url`
