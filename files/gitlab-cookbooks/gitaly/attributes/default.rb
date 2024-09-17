@@ -22,5 +22,8 @@ default['gitaly']['configuration'] = {
     use_bundled_binaries: true,
     bin_path: "#{node['package']['install-dir']}/embedded/bin/git"
   },
-  storage: []
+  storage: [],
+  gitlab: {
+    secret_file: "#{node['gitaly']['dir']}/.gitlab_secret"
+  }
 }

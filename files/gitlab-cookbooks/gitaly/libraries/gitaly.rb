@@ -30,6 +30,16 @@ module Gitaly
       check_duplicate_storage_paths
     end
 
+    def parse_secrets
+      # The secret should be same between GitLab Rails, GitLab Shell, and
+      # Gitaly. GitLab Shell has a priority of 10, which means it gets parsed
+      # before Gitaly and Gitlab['gitlab_shell']['secret_token'] will
+      # definitely have a value.
+      Gitlab['gitaly']['gitlab_secret'] ||= Gitlab['gitlab_shell']['secret_token']
+
+      LoggingHelper.warning("Gitaly and GitLab Shell specifies different secrets to authenticate with GitLab") if Gitlab['gitaly']['gitlab_secret'] != Gitlab['gitlab_shell']['secret_token']
+    end
+
     def gitaly_address
       listen_addr = user_config.dig('configuration', 'listen_addr')         || package_default.dig('configuration', 'listen_addr')
       socket_path = user_config.dig('configuration', 'socket_path')         || package_default.dig('configuration', 'socket_path')
