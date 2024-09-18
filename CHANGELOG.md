@@ -3,6 +3,47 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.4.0 (2024-09-18)
+
+### Added (1 change)
+
+- [Allow setting of log_connections / log_disconnections logging config in postgres](gitlab-org/omnibus-gitlab@81b523322de505e0db78ac9e414bbb091c0a6569) by @yushao.sqpc ([merge request](gitlab-org/omnibus-gitlab!7834))
+
+### Fixed (3 changes)
+
+- [Add other necessary paths in update-permissions](gitlab-org/omnibus-gitlab@498f6c0765224ff003f6c76a7460f6769c4d42a1) by @taoyouh ([merge request](gitlab-org/omnibus-gitlab!5408))
+- [Make Ruby 3.1 and 3.2 work with OpenSSL 3 in FIPS mode](gitlab-org/omnibus-gitlab@3c8c29201be5ffd2f36442134b5c4cd265419203) ([merge request](gitlab-org/omnibus-gitlab!7906))
+- [Raise default PostgreSQL shared buffers minimum to 256 MB](gitlab-org/omnibus-gitlab@20505e8b83c3f6ee25c4ceacc09156fce38901cb) ([merge request](gitlab-org/omnibus-gitlab!7860))
+
+### Changed (13 changes)
+
+- [Update dependency exiftool/exiftool to v12.96](gitlab-org/omnibus-gitlab@d94e84091823823882b74e136ee36e005ab60318) ([merge request](gitlab-org/omnibus-gitlab!7915))
+- [Bump libicu from 57.1 to 63.1](gitlab-org/omnibus-gitlab@bb9fb02b247079a9ec2961d742ba54fe19078af4) ([merge request](gitlab-org/omnibus-gitlab!7908))
+- [Enable nginx with application_role](gitlab-org/omnibus-gitlab@e4fa9e190b66a3d607b56c08efa71c2fe8f18590) ([merge request](gitlab-org/omnibus-gitlab!7858))
+- [Bump exiftool to version 12.93](gitlab-org/omnibus-gitlab@84ae4206b53103760319fc01404af2c911eb4a09) ([merge request](gitlab-org/omnibus-gitlab!7873))
+- [Bump pgbouncer to 1.23.1](gitlab-org/omnibus-gitlab@31a84b4e8b2218eca419cbb20a3fbc5f8055ab3b) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!7837))
+- [Update dependency prometheus/prometheus to v2.54.1](gitlab-org/omnibus-gitlab@d9a080f626d31df5c7579ac98e8feae0e8daf723) ([merge request](gitlab-org/omnibus-gitlab!7888))
+- [Bump Mattermost to version 9.11.0](gitlab-org/omnibus-gitlab@c05c82a123b90989f24c0966b144f355ab14d012) by @mvitale1989 ([merge request](gitlab-org/omnibus-gitlab!7865))
+- [Update dependency registry to v4.8.0-gitlab](gitlab-org/omnibus-gitlab@f48afbd727e126c5f147ea4a72d71b177b04deeb) ([merge request](gitlab-org/omnibus-gitlab!7883))
+- [Update dependency pgbouncer_exporter to v0.9.0](gitlab-org/omnibus-gitlab@535b40a83d746d1a91c2121a7960b3673ee063de) ([merge request](gitlab-org/omnibus-gitlab!7838))
+- [Update chef](gitlab-org/omnibus-gitlab@2b665a33e79be1c9f4611e798924a7370cca79e7) ([merge request](gitlab-org/omnibus-gitlab!7866))
+- [Update dependency git-filter-repo to v2.45.0](gitlab-org/omnibus-gitlab@5f704a5382daf94247a9cc7330d8be06eb6332dd) ([merge request](gitlab-org/omnibus-gitlab!7864))
+- [Update Prometheus from 2.53.1 to 2.54.0](gitlab-org/omnibus-gitlab@9c48128f1f50577807e6a4bb71a94020db2d056c) ([merge request](gitlab-org/omnibus-gitlab!7844))
+- [Update dependency rubygems to v3.5.17](gitlab-org/omnibus-gitlab@a2d9595397acb07fca2596c85d600ab12fa56f68) ([merge request](gitlab-org/omnibus-gitlab!7836))
+
+### Deprecated (2 changes)
+
+- [Add debian 10 (Buster) os deprecated OS list](gitlab-org/omnibus-gitlab@6c3021a418e1162401860957fe8fcfd2ab805f2c) ([merge request](gitlab-org/omnibus-gitlab!7854))
+- [Deprecate gitlab_shell['migration'] setting](gitlab-org/omnibus-gitlab@de6c84f6c764776a0596f1dab993e9003efc6390) ([merge request](gitlab-org/omnibus-gitlab!7787))
+
+### Security (1 change)
+
+- [Bump mattermost to version 9.10.1](gitlab-org/omnibus-gitlab@8941963db56a46083c3478cf2ac3ca28c08f8b34) ([merge request](gitlab-org/omnibus-gitlab!7851))
+
+### Other (1 change)
+
+- [Replace perl with perl-interpreter for RHEL >= 8](gitlab-org/omnibus-gitlab@5aeb6c93311b493c5ad79de1bf2a9ccac590a487) by @vtardiveau ([merge request](gitlab-org/omnibus-gitlab!7796))
+
 ## 17.3.3 (2024-09-16)
 
 No changes.
