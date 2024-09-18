@@ -18,7 +18,9 @@ module MonitoringRole
   def self.load_role
     return unless Gitlab['monitoring_role']['enable']
 
-    Gitlab['gitlab_rails']['auto_migrate'] ||= false
+    # Do not run GitLab Rails related recipes unless explicitly enabled
+    Gitlab['gitlab_rails']['enable'] ||= false
+
     Services.enable_group('monitoring_role')
   end
 end

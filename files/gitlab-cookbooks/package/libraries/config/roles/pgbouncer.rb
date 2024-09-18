@@ -18,6 +18,9 @@ module PgbouncerRole
   def self.load_role
     return unless Gitlab['pgbouncer_role']['enable']
 
+    # Do not run GitLab Rails related recipes unless explicitly enabled
+    Gitlab['gitlab_rails']['enable'] ||= false
+
     Services.enable_group('pgbouncer_role')
   end
 end

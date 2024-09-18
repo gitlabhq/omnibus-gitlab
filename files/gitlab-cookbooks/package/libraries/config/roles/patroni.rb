@@ -18,6 +18,11 @@ module PatroniRole
   def self.load_role
     return unless Gitlab['patroni_role']['enable']
 
+    # We need to set Gitlab['gitlab_rails']['enable'] to true because DB
+    # creation in database_objects resource is gated on whether Rails is
+    # enabled or not.
+    Gitlab['gitlab_rails']['enable'] = true if Gitlab['gitlab_rails']['enable'].nil?
+
     Services.enable_group('patroni_role')
   end
 end

@@ -18,7 +18,7 @@ module SpamcheckRole
   def self.load_role
     return unless Gitlab['spamcheck_role']['enable']
 
-    # Turning off GitLab Rails unless explicitly enabled.
+    # Do not run GitLab Rails related recipes unless explicitly enabled
     Gitlab['gitlab_rails']['enable'] ||= false
 
     Services.enable_group('spamcheck_role')

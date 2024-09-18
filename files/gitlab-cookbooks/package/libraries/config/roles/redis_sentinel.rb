@@ -16,6 +16,11 @@
 
 module RedisSentinelRole
   def self.load_role
-    Services.enable('sentinel') if Gitlab['redis_sentinel_role']['enable']
+    return unless Gitlab['redis_sentinel_role']['enable']
+
+    # Do not run GitLab Rails related recipes unless explicitly enabled
+    Gitlab['gitlab_rails']['enable'] ||= false
+
+    Services.enable('sentinel')
   end
 end

@@ -19,7 +19,12 @@ module RedisMasterRole
     master_role = Gitlab['redis_master_role']['enable']
     replica_role = Gitlab['redis_replica_role']['enable']
 
+    return unless master_role || replica_role
+
     raise 'Cannot define both redis_master_role and redis_replica_role in the same machine.' if master_role && replica_role
+
+    # Do not run GitLab Rails related recipes unless explicitly enabled
+    Gitlab['gitlab_rails']['enable'] ||= false
 
     Services.enable_group('redis_node') if master_role || replica_role
   end
