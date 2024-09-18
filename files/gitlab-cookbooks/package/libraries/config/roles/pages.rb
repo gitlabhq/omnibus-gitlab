@@ -18,7 +18,7 @@ module PagesRole
   def self.load_role
     return unless Gitlab['pages_role']['enable']
 
-    # Turning off GitLab Rails unless explicitly enabled.
+    # Do not run GitLab Rails related recipes unless explicitly enabled
     Gitlab['gitlab_rails']['enable'] ||= false
 
     Services.enable_group('pages_role')

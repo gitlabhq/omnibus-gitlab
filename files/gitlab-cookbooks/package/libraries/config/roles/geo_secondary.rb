@@ -29,8 +29,13 @@ module GeoSecondaryRole
     Gitlab['postgresql']['max_standby_archive_delay'] ||= '60s'
     Gitlab['postgresql']['max_standby_streaming_delay'] ||= '60s'
     Gitlab['postgresql']['hot_standby'] ||= 'on'
-    Gitlab['gitlab_rails']['auto_migrate'] ||= false
+
+    # Run GitLab Rails related recipes only if required
     Gitlab['gitlab_rails']['enable'] = rails_needed?
+
+    # Do not attempt to run DB migrations unless explicitly specified to
+    Gitlab['gitlab_rails']['auto_migrate'] ||= false
+
     Gitlab[WebServerHelper.service_name]['worker_processes'] ||= number_of_worker_processes
   end
 

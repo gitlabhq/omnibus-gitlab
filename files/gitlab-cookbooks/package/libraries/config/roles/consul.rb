@@ -18,6 +18,9 @@ module ConsulRole
   def self.load_role
     return unless Gitlab['consul_role']['enable']
 
+    # Do not run GitLab Rails related recipes unless explicitly enabled
+    Gitlab['gitlab_rails']['enable'] ||= false
+
     Services.enable_group('consul_role')
   end
 end

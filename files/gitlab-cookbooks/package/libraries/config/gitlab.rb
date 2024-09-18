@@ -28,19 +28,21 @@ module Gitlab
   git_data_dirs ConfigMash.new
 
   ## Roles
+
+  # Roles that depend on gitlab_rails['enable'] should be processed first
   role('application').use { ApplicationRole }
+  role('sidekiq').use { SidekiqRole }
+  role('postgres').use { PostgresRole }
+  role('patroni').use { PatroniRole }
   role('redis_sentinel').use { RedisSentinelRole }
   role('redis_master').use { RedisMasterRole }
   role('redis_replica')
   role('geo_primary',   manage_services: false).use { GeoPrimaryRole }
   role('geo_secondary', manage_services: false).use { GeoSecondaryRole }
   role('monitoring').use { MonitoringRole }
-  role('postgres').use { PostgresRole }
   role('pgbouncer').use { PgbouncerRole }
-  role('patroni').use { PatroniRole }
   role('consul').use { ConsulRole }
   role('pages').use { PagesRole }
-  role('sidekiq').use { SidekiqRole }
   role('spamcheck').use { SpamcheckRole }
 
   ## Attributes directly on the node

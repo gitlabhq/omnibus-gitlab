@@ -18,7 +18,9 @@ module SidekiqRole
   def self.load_role
     return unless Gitlab['sidekiq_role']['enable']
 
+    # Do not run any DB migrations
     Gitlab['gitlab_rails']['auto_migrate'] ||= false
+
     Services.enable_group('sidekiq_role')
   end
 end
