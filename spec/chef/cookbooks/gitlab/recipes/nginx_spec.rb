@@ -681,7 +681,7 @@ RSpec.describe 'nginx' do
     it { is_expected.not_to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security/) }
   end
 
-  it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security "max-age=63072000";/) }
+  it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security "max-age=63072000" always;/) }
 
   context 'when referrer_policy is disabled' do
     before do
@@ -715,7 +715,7 @@ RSpec.describe 'nginx' do
       stub_gitlab_rb(nginx: { hsts_include_subdomains: true })
     end
 
-    it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security "max-age=63072000; includeSubdomains";/) }
+    it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security "max-age=63072000; includeSubdomains" always;/) }
   end
 
   context 'when max-age is set to 10' do

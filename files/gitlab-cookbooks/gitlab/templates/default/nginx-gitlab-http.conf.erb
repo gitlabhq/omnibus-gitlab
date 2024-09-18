@@ -127,7 +127,7 @@ server { ## HTTPS server
   ## https://www.nginx.com/blog/http-strict-transport-security-hsts-and-nginx/
   <% unless @hsts_max_age.nil? || @hsts_max_age <= 0 %>
   add_header Strict-Transport-Security "max-age=<%= @hsts_max_age -%>
-<% if @hsts_include_subdomains %>; includeSubdomains<% end %>";
+<% if @hsts_include_subdomains %>; includeSubdomains<% end %>" always;
   <% end %>
 
   <% if @referrer_policy %>
