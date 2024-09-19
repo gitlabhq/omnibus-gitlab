@@ -24,7 +24,7 @@ RSpec.describe 'generate_secrets' do
   def stub_check_secrets
     rails_keys = new_secrets['gitlab_rails']
     hex_keys = rails_keys.values_at('db_key_base', 'otp_key_base', 'secret_key_base', 'encrypted_settings_key_base')
-    rsa_keys = rails_keys.values_at('openid_connect_signing_key', 'ci_jwt_signing_key')
+    rsa_keys = rails_keys.values_at('openid_connect_signing_key')
 
     expect(rails_keys.to_a.uniq).to eq(rails_keys.to_a)
     expect(hex_keys).to all(match(hex_key))
@@ -80,7 +80,7 @@ RSpec.describe 'generate_secrets' do
       it 'writes new secrets to the file, with different values for each' do
         rails_keys = new_secrets['gitlab_rails']
         hex_keys = rails_keys.values_at('db_key_base', 'otp_key_base', 'secret_key_base', 'encrypted_settings_key_base')
-        rsa_keys = rails_keys.values_at('openid_connect_signing_key', 'ci_jwt_signing_key')
+        rsa_keys = rails_keys.values_at('openid_connect_signing_key')
 
         expect(rails_keys.to_a.uniq).to eq(rails_keys.to_a)
         expect(hex_keys).to all(match(hex_key))
