@@ -398,6 +398,10 @@ No changes.
 
 - [Use February 2024 PostgreSQL patches](gitlab-org/omnibus-gitlab@bc78ec9e2d91882439c574bc18eaddd08f17f8d1)
 
+## 16.10.10 (2024-09-19)
+
+No changes.
+
 ## 16.10.9 (2024-07-23)
 
 No changes.
