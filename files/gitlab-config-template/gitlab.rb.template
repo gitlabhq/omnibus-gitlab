@@ -1365,6 +1365,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_shell['dir'] = "/var/opt/gitlab/gitlab-shell"
 
 # gitlab_shell['lfs_pure_ssh_protocol'] = false
+# gitlab_shell['pat'] = { enabled: true, allowed_scopes: [] }
 
 ################################################################################
 ## gitlab-sshd

@@ -68,3 +68,8 @@ sshd: <%= @gitlab_sshd.to_json %>
 lfs:
   pure_ssh_protocol: <%= @lfs_pure_ssh_protocol %>
 <%- end -%>
+
+<%- if @pat -%>
+pat:
+  <%= @pat.to_json %>
+<% end %>
