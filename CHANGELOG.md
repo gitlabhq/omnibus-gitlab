@@ -1073,6 +1073,10 @@ No changes.
 
 - [Enable dual namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/omnibus-gitlab@6ddfb82c93158bdc25e3546625688e99cb400584) ([merge request](gitlab-org/omnibus-gitlab!7141))
 
+## 16.3.9 (2024-09-20)
+
+No changes.
+
 ## 16.3.8 (2024-07-23)
 
 ### Fixed (2 changes)
