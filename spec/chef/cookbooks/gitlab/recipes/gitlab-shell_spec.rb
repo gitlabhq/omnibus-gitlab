@@ -34,7 +34,8 @@ RSpec.describe 'gitlab::gitlab-shell' do
           gitlab_relative_path: '',
           ssl_cert_dir: '/opt/gitlab/embedded/ssl/certs/',
           gitlab_sshd: nil,
-          lfs_pure_ssh_protocol: false
+          lfs_pure_ssh_protocol: false,
+          pat: { enabled: true, allowed_scopes: [] }
         )
       )
     end
@@ -52,6 +53,7 @@ RSpec.describe 'gitlab::gitlab-shell' do
         expect(data['ssl_cert_dir']).to eq('/opt/gitlab/embedded/ssl/certs/')
         expect(data['sshd']).to be_nil
         expect(data['lfs']).to be_nil
+        expect(data['pat']).to eq({ "enabled" => true, "allowed_scopes" => [] })
       }
     end
   end
@@ -155,6 +157,30 @@ RSpec.describe 'gitlab::gitlab-shell' do
             migration: {
               enabled: false,
               features: []
+            }
+          )
+        )
+      end
+    end
+
+    context 'when pat is disabled (set to false)' do
+      before do
+        stub_gitlab_rb(
+          gitlab_shell: {
+            pat: {
+              enabled: false,
+              allowed_scopes: []
+            }
+          }
+        )
+      end
+
+      it 'creates the config file with pat disabled' do
+        expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
+          hash_including(
+            pat: {
+              enabled: false,
+              allowed_scopes: []
             }
           )
         )
