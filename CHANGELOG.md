@@ -1361,6 +1361,10 @@ No changes.
 
 - [Update Mattermost to 7.10.2](gitlab-org/omnibus-gitlab@fd50c589d70fb6b32ea5ad9f169ea7209e550e2d) by @akis.maziotis ([merge request](gitlab-org/omnibus-gitlab!6905))
 
+## 16.0.10 (2024-09-23)
+
+No changes.
+
 ## 16.0.9 (2024-07-23)
 
 ### Fixed (3 changes)
