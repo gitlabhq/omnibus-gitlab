@@ -50,6 +50,12 @@ omnibus-gitlab repository.
 
 - [Replace perl with perl-interpreter for RHEL >= 8](gitlab-org/omnibus-gitlab@5aeb6c93311b493c5ad79de1bf2a9ccac590a487) by @vtardiveau ([merge request](gitlab-org/omnibus-gitlab!7796))
 
+## 17.3.4 (2024-09-24)
+
+### Security (1 change)
+
+- [Mattermost Security Updates August 27, 2024](gitlab-org/security/omnibus-gitlab@af78e3b2a9adec052e8582b3296efa08a27d3063) ([merge request](gitlab-org/security/omnibus-gitlab!450))
+
 ## 17.3.3 (2024-09-16)
 
 No changes.
