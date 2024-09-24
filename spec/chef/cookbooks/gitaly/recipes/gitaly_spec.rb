@@ -61,6 +61,7 @@ RSpec.describe 'gitaly' do
   let(:cgroups_repositories_memory_bytes) { 1048576 }
   let(:cgroups_repositories_cpu_shares) { 128 }
   let(:cgroups_repositories_cpu_quota_us) { 200000 }
+  let(:cgroups_repositories_max_cgroups_per_repo) { 2 }
   let(:pack_objects_cache_enabled) { true }
   let(:pack_objects_cache_dir) { '/pack-objects-cache' }
   let(:pack_objects_cache_max_age) { '10m' }
@@ -223,6 +224,7 @@ RSpec.describe 'gitaly' do
                 memory_bytes: cgroups_repositories_memory_bytes,
                 cpu_shares: cgroups_repositories_cpu_shares,
                 cpu_quota_us: cgroups_repositories_cpu_quota_us,
+                max_cgroups_per_repo: cgroups_repositories_max_cgroups_per_repo,
               }
             },
           },
@@ -243,6 +245,7 @@ RSpec.describe 'gitaly' do
         %r{memory_bytes = #{cgroups_repositories_memory_bytes}},
         %r{cpu_shares = #{cgroups_repositories_cpu_shares}},
         %r{cpu_quota_us = #{cgroups_repositories_cpu_quota_us}},
+        %r{max_cgroups_per_repo = #{cgroups_repositories_max_cgroups_per_repo}},
       ].map(&:to_s).join('\s+'))
 
       expect(chef_run).to render_file(config_path).with_content { |content|
