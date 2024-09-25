@@ -29,7 +29,7 @@ variables:
   PACKAGE_PROMOTION_RUNNER_TAG: promotion
   NIGHTLY_REPO: nightly-builds
   NIGHTLY_FIPS_REPO: nightly-fips-builds
-  QA_TESTS_UPSTREAM_PROJECT: gitlab-org/gitlab
+  QA_TESTS_UPSTREAM_PROJECT: gitlab-org/security/gitlab
   QA_TESTS_REF: 17-4-stable-ee
   OPENSSL_VERSION: 1.1.1
   FF_TIMESTAMPS: true
