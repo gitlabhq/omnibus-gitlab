@@ -18,7 +18,7 @@ It includes essential instructions for optimizing performance and security speci
 To configure NGINX settings for different services, edit the `gitlab.rb` file.
 
 WARNING:
-Incorrect or incompatible configuration 
+Incorrect or incompatible configuration
 might cause the service to become unavailable.
 
 Use `nginx['<setting>']` keys to configure settings for the GitLab Rails application.

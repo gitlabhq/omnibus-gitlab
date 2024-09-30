@@ -13,7 +13,7 @@ GitLab caters to the AWS ecosystem via the following methods
    1. [GitLab EE](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Images:visibility=public-images;owner=782774275127;search=GitLab%20EE;sort=desc:name) (Unlicensed) - amd64 and arm64
 
 1. [AWS Marketplace listing](https://aws.amazon.com/marketplace/seller-profile?id=9657c703-ca56-4b54-b029-9ded0fadd970)
-   1. [GitLab Premium Self-Managed and Duo Pro (license)](https://aws.amazon.com/marketplace/pp/prodview-vehcu2drxakic) 
+   1. [GitLab Premium Self-Managed and Duo Pro (license)](https://aws.amazon.com/marketplace/pp/prodview-vehcu2drxakic)
    1. [GitLab Ultimate Self-Managed and Duo Pro (license)](https://aws.amazon.com/marketplace/pp/prodview-si5mlpxc22ni2)
 
 ## Building the AMIs
