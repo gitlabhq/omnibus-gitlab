@@ -48,5 +48,8 @@ build do
 
     patch source: "utf8-locale-support.patch",
           target: "#{gem_path}/gems/chef-config-#{version}/lib/chef-config/config.rb"
+
+    patch source: "drop-net-http-warning.patch",
+          target: "#{gem_path}/gems/chef-#{version}/lib/chef/monkey_patches/net-http.rb"
   end
 end
