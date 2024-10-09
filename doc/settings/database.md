@@ -489,10 +489,10 @@ sudo gitlab-ctl pg-upgrade
 ```
 
 To upgrade to a specific PostgreSQL version, use the `-V` flag to append the
-version. For example, to upgrade to PostgreSQL 14:
+version. For example, to upgrade to PostgreSQL 16:
 
 ```shell
-sudo gitlab-ctl pg-upgrade -V 14
+sudo gitlab-ctl pg-upgrade -V 16
 ```
 
 NOTE:
@@ -576,10 +576,10 @@ a target version for scenarios where more than two PostgreSQL versions are shipp
 the package (for example: GitLab 12.8 where PostgreSQL 9.6.x, 10.x, and 11.x are
 shipped).
 
-To specify a target PostgreSQL version of 12:
+To specify a target PostgreSQL version of 14:
 
 ```shell
-gitlab-ctl revert-pg-upgrade -V 12
+gitlab-ctl revert-pg-upgrade -V 14
 ```
 
 If the target version is not specified, it will use the version in `/var/opt/gitlab/postgresql-version.old`
