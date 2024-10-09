@@ -54,6 +54,10 @@ No changes.
 
 - [Replace perl with perl-interpreter for RHEL >= 8](gitlab-org/omnibus-gitlab@5aeb6c93311b493c5ad79de1bf2a9ccac590a487) by @vtardiveau ([merge request](gitlab-org/omnibus-gitlab!7796))
 
+## 17.3.5 (2024-10-09)
+
+No changes.
+
 ## 17.3.4 (2024-09-24)
 
 ### Security (1 change)
