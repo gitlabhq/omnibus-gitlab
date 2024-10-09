@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.4.2 (2024-10-09)
+
+No changes.
+
 ## 17.4.1 (2024-09-24)
 
 ### Security (1 change)
@@ -50,6 +54,10 @@ omnibus-gitlab repository.
 
 - [Replace perl with perl-interpreter for RHEL >= 8](gitlab-org/omnibus-gitlab@5aeb6c93311b493c5ad79de1bf2a9ccac590a487) by @vtardiveau ([merge request](gitlab-org/omnibus-gitlab!7796))
 
+## 17.3.5 (2024-10-09)
+
+No changes.
+
 ## 17.3.4 (2024-09-24)
 
 ### Security (1 change)
@@ -96,6 +104,10 @@ No changes.
 - [Update gitlab-org/build/omnibus-mirror/redis_exporter from 1.61.0 to 1.62.0](gitlab-org/omnibus-gitlab@f9579c7fe9d01cc74de867e34242193c6f5af54c) ([merge request](gitlab-org/omnibus-gitlab!7799))
 - [Update gitlab-org/build/omnibus-mirror/node_exporter from 1.8.1 to 1.8.2](gitlab-org/omnibus-gitlab@6bf6d71a74bac14b9e8576205ee2a1ade2c60cf0) ([merge request](gitlab-org/omnibus-gitlab!7790))
 - [Update dependency libxml2 to v2.13.2](gitlab-org/omnibus-gitlab@f9e32b45a092e1798f15687054ffb04ea08bdf22) ([merge request](gitlab-org/omnibus-gitlab!7772))
+
+## 17.2.9 (2024-10-09)
+
+No changes.
 
 ## 17.2.8 (2024-09-25)
 
