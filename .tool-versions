@@ -1,2 +1,5 @@
 ruby 3.1.4
+
+# For linting documentation
+markdownlint-cli2 0.14.0
 vale 3.7.1
