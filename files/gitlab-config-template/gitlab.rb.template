@@ -2666,6 +2666,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #       memory_bytes: 12884901888,
 #       cpu_shares: 128,
 #       cpu_quota_us: 200000
+#       max_cgroups_per_repo: 2
 #     },
 #   },
 #   concurrency: [
