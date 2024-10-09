@@ -230,6 +230,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  'enabled' => false,
 #  'report_only' => false,
 #  # Each directive is a String (e.g. "'self'").
+#  # This section only needs to be set if you need custom CSP directives
+#  # See https://docs.gitlab.com/omnibus/settings/configuration.html#set-a-content-security-policy
 #  'directives' => {
 #    'base_uri' => nil,
 #    'child_src' => nil,
