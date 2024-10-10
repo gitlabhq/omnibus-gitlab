@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Upgrading to OpenSSL 3
 
-Starting from [version 17.5](https://docs.gitlab.com/ee/update/versions/gitlab_17_changes.html#1750),
+Starting from [version 17.7](https://docs.gitlab.com/ee/update/versions/gitlab_17_changes.html#1770),
 GitLab uses OpenSSL 3. This version of OpenSSL is a major release with notable
 deprecations and changes to the default behavior of OpenSSL (for more details
 see the [OpenSSL 3 migration guide](https://docs.openssl.org/3.0/man7/migration_guide/)).
