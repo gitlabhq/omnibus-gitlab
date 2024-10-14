@@ -17,7 +17,7 @@ When [configuring NGINX](nginx.md), you might encounter the following issues.
 The workaround is to make sure you don't have the `proxy_set_header` configuration in
 `nginx['custom_gitlab_server_config']` settings.
 Instead, use the
-[`roxy_set_headers`](ssl/index.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination)
+[`proxy_set_headers`](ssl/index.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination)
 configuration in your `gitlab.rb` file.
 
 ## Error: `Received fatal alert: handshake_failure`
