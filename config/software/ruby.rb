@@ -159,4 +159,7 @@ build do
   configure(*configure_command, env: env)
   make "-j #{workers}", env: env
   make "-j #{workers} install", env: env
+
+  # Install OpenSSL gem for FIPS fixes
+  gem "install openssl --version '#{Gitlab::Util.get_env('OPENSSL_GEM_VERSION')}' --force --no-document"
 end

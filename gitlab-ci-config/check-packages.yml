@@ -180,6 +180,13 @@ AlmaLinux-8-fips-check:
     - .ee-tag-only
   variables:
     USE_SYSTEM_SSL: "true"
+AlmaLinux-9-fips-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:latest"
+  extends:
+    - .yum-install
+    - .ee-tag-only
+  variables:
+    USE_SYSTEM_SSL: "true"
 AmazonLinux-2-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:latest"
   extends:
