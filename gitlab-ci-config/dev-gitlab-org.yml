@@ -377,6 +377,9 @@ AmazonLinux-2-fips-branch:
 AlmaLinux-8-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
+AlmaLinux-9-fips-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_branch_template
 Ubuntu-20.04-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
@@ -628,6 +631,9 @@ AmazonLinux-2-fips:
 AlmaLinux-8-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
+AlmaLinux-9-fips:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_tag_template
 Ubuntu-20.04-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
@@ -826,6 +832,13 @@ AlmaLinux-8-fips-staging:
       optional: true
     - job: AlmaLinux-8-fips-branch
       optional: true
+AlmaLinux-9-fips-staging:
+  extends: .fips_staging_upload_template
+  needs:
+    - job: AlmaLinux-9-fips
+      optional: true
+    - job: AlmaLinux-9-fips-branch
+      optional: true
 Ubuntu-20.04-fips-staging:
   extends: .fips_staging_upload_template
   needs:
@@ -953,6 +966,10 @@ AlmaLinux-8-fips-release:
   extends: .fips_release_template
   needs:
     - AlmaLinux-8-fips
+AlmaLinux-9-fips-release:
+  extends: .fips_release_template
+  needs:
+    - AlmaLinux-9-fips
 Ubuntu-20.04-fips-release:
   extends: .fips_release_template
   needs:
