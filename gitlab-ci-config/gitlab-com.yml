@@ -344,7 +344,6 @@ danger-review:
 Centos 7 knapsack: !reference [.knapsack]
 AlmaLinux 8 knapsack: !reference [.knapsack]
 AlmaLinux 9 knapsack: !reference [.knapsack]
-Debian 10 knapsack: !reference [.knapsack]
 Debian 11 knapsack: !reference [.knapsack]
 Debian 12 knapsack: !reference [.knapsack]
 OpenSUSE 15.5 knapsack: !reference [.knapsack]
@@ -387,12 +386,6 @@ Ubuntu 24.04 specs:
   parallel: 6
   needs:
   - Ubuntu 24.04 knapsack
-Debian 10 specs :
-  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/debian_10-ruby:${BUILDER_IMAGE_REVISION}"
-  extends: .chef_spec_template
-  parallel: 6
-  needs:
-  - Debian 10 knapsack
 Debian 11 specs :
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/debian_11-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template

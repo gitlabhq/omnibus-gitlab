@@ -287,12 +287,6 @@ Ubuntu-24.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
 
-Debian-10-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
-  extends: .branch_template
-Debian-10-arm64-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_branch_template
 Debian-11-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -550,12 +544,6 @@ Ubuntu-22.04-arm64-staging:
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|NIGHTLY)_BUILD_PIPELINE$/'
 
 ### Package builds
-Debian-10:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:${BUILDER_IMAGE_REVISION}"
-  extends: .tag_template
-Debian-10-arm64:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_tag_template
 Debian-11:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
@@ -658,20 +646,6 @@ Docker:
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
 ### Staging uploads
-Debian-10-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: Debian-10
-      optional: true
-    - job: Debian-10-branch
-      optional: true
-Debian-10-arm64-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: Debian-10-arm64
-      optional: true
-    - job: Debian-10-arm64-branch
-      optional: true
 Debian-11-staging:
   extends: .staging_upload_template
   needs:
@@ -872,14 +846,6 @@ Ubuntu-24.04-arm64-release:
   extends: .production_release_template
   needs:
     - Ubuntu-24.04-arm64
-Debian-10-release:
-  extends: .production_release_template
-  needs:
-    - Debian-10
-Debian-10-arm64-release:
-  extends: .production_release_template
-  needs:
-    - Debian-10-arm64
 Debian-11-release:
   extends: .production_release_template
   needs:

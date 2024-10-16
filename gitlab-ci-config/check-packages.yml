@@ -95,12 +95,6 @@ Ubuntu-24.04-check:
 Ubuntu-24.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:latest"
   extends: .apt-arm-install
-Debian-10-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_10:latest"
-  extends: .apt-install
-Debian-10-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_10_arm64:latest"
-  extends: .apt-arm-install
 Debian-11-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:latest"
   extends: .apt-install
