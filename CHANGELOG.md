@@ -3,6 +3,45 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.5.0 (2024-10-16)
+
+### Added (3 changes)
+
+- [gitaly: Add max_cgroups_per_repo configuration](gitlab-org/omnibus-gitlab@cdee42c42fd213652d36495c161c647ce686db6e) ([merge request](gitlab-org/omnibus-gitlab!7952))
+- [Support PAT configuration for gitlab-shell](gitlab-org/omnibus-gitlab@b25d4fada43a1d77ce1bb1932301fbb8f2c80bbd) ([merge request](gitlab-org/omnibus-gitlab!7887))
+- [Add exiftool test plan](gitlab-org/omnibus-gitlab@c01d3b8785ff2d6f6723aabdca5d4b286cd790b8) ([merge request](gitlab-org/omnibus-gitlab!7926))
+
+### Changed (16 changes)
+
+- [Update dependency libarchive to v3.7.5](gitlab-org/omnibus-gitlab@f5bfff76a50a81b28eea2bbb40e71c4c13b54756) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!7934))
+- [Bump Mattermost to version 10.0.1](gitlab-org/omnibus-gitlab@e0032c2fd779a2b4482b26529f3ca11a3f77373c) by @mvitale1989 ([merge request](gitlab-org/omnibus-gitlab!7940))
+- [Update dependency libtiff/libtiff to v4.7.0](gitlab-org/omnibus-gitlab@824909ce03f93786decd1bd65e97e986595b4209) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!7941))
+- [Support single node upgrades to PostgreSQL 16](gitlab-org/omnibus-gitlab@bc784792dd4ad4a228d85f0c039a36a600994bad) ([merge request](gitlab-org/omnibus-gitlab!7959))
+- [Drop the Chef warning about net/http patch for Ruby 3.1](gitlab-org/omnibus-gitlab@bc1a8bf742165f2158425b0297901b215a8a3da0) ([merge request](gitlab-org/omnibus-gitlab!7966))
+- [Switch to Ruby 3.2](gitlab-org/omnibus-gitlab@769ef2ade393b647626c5bd8f6d2fbeb84af0ded) ([merge request](gitlab-org/omnibus-gitlab!7899))
+- [Update dependency registry to v4.10.0-gitlab](gitlab-org/omnibus-gitlab@fc68ba50ad553a559fcca98623ba83a8adda508a) ([merge request](gitlab-org/omnibus-gitlab!7965))
+- [Update dependency acme-client to v2.0.19](gitlab-org/omnibus-gitlab@97d75a56a2cc806f8b8ea021b79e2989210d61de) ([merge request](gitlab-org/omnibus-gitlab!7963))
+- [Bump redis_exporter to 1.63.0](gitlab-org/omnibus-gitlab@fee81bce6415a6e3dade68fe1098b1ccf3fed140) ([merge request](gitlab-org/omnibus-gitlab!7933))
+- [Bump Go to 1.22.7](gitlab-org/omnibus-gitlab@290c6c562a41829b0cacc5b6ead5caa44aa8a658) ([merge request](gitlab-org/omnibus-gitlab!7956))
+- [Bump libpng to version 1.6.44](gitlab-org/omnibus-gitlab@0ec38899ec9f42ab63e699d8b54c5668c72e4887) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!7953))
+- [Set Strict-Transport-Security header on error pages](gitlab-org/omnibus-gitlab@b151682980f5af654cf6d76b4e61c88ca77e6984) by @galwood ([merge request](gitlab-org/omnibus-gitlab!7907))
+- [Update dependency curl/curl to curl-8_10_1](gitlab-org/omnibus-gitlab@551513052e23f8ea451da9f87962f508a5ecce67) ([merge request](gitlab-org/omnibus-gitlab!7944))
+- [Update dependency libxml2 to v2.13.4](gitlab-org/omnibus-gitlab@dffb4a3b8c53c626183a17f29d78fcea7fe4aa1c) ([merge request](gitlab-org/omnibus-gitlab!7943))
+- [Update dependency curl/curl to curl-8_10_0](gitlab-org/omnibus-gitlab@c704112a504cf78a83fab1c7bd2335228c1fdf3b) ([merge request](gitlab-org/omnibus-gitlab!7937))
+- [Update dependency registry to v4.9.0-gitlab](gitlab-org/omnibus-gitlab@b9d4c4629d95229de08150633571097a3a87642f) ([merge request](gitlab-org/omnibus-gitlab!7928))
+
+### Removed (1 change)
+
+- [Remove 'ci_jwt_signing_key' secret migrated to ApplicationSetting](gitlab-org/omnibus-gitlab@2983a41c0c6f70ef429b8f36c69b34a0994b7a3e) ([merge request](gitlab-org/omnibus-gitlab!7930))
+
+### Security (1 change)
+
+- [Mattermost Security Updates August 27, 2024](gitlab-org/omnibus-gitlab@8fcabe318c06e1a2cb2c8fa4ed67330ffc312c1b)
+
+### Other (1 change)
+
+- [Improve Patroni role detection message](gitlab-org/omnibus-gitlab@f5daf8f1ae2cf9c5f64d3b8a51272232281ab825) ([merge request](gitlab-org/omnibus-gitlab!7939))
+
 ## 17.4.2 (2024-10-09)
 
 No changes.
