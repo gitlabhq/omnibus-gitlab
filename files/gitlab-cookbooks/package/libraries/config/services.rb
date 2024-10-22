@@ -26,7 +26,7 @@ module Services
     service 'sidekiq',            groups: [DEFAULT_GROUP, 'rails', 'sidekiq', 'sidekiq_role']
     service 'gitlab_exporter',    groups: [DEFAULT_GROUP, 'rails', 'monitoring']
     service 'gitlab_workhorse',   groups: [DEFAULT_GROUP, 'rails']
-    service 'gitaly',             groups: [DEFAULT_GROUP, 'rails']
+    service 'gitaly',             groups: [DEFAULT_GROUP, 'rails', 'gitaly_role']
     service 'redis',              groups: [DEFAULT_GROUP, 'redis', 'redis_node']
     service 'redis_exporter',     groups: [DEFAULT_GROUP, 'redis', 'redis_node', 'monitoring']
     service 'postgresql',         groups: [DEFAULT_GROUP, 'postgres', 'postgres_role', 'patroni_role']
