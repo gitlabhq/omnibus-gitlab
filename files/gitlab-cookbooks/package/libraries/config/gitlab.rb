@@ -44,6 +44,7 @@ module Gitlab
   role('consul').use { ConsulRole }
   role('pages').use { PagesRole }
   role('spamcheck').use { SpamcheckRole }
+  role('gitaly').use { GitalyRole }
 
   ## Attributes directly on the node
   attribute('package').use { Package }

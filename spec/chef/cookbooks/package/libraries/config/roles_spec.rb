@@ -122,4 +122,16 @@ RSpec.describe 'GitLabRoles' do
       expect(Services).to have_received(:enable_group).with('monitoring_role').once
     end
   end
+
+  include_context 'recipes'
+
+  describe 'GitalyRole' do
+    context 'by default' do
+      include_examples 'enable only default service recipes'
+    end
+
+    context 'when enabled' do
+      include_examples 'enable recipes required for the service only', ['gitaly_role'], ['gitaly::enable', 'gitaly::git_data_dirs'], ['gitaly::disable']
+    end
+  end
 end

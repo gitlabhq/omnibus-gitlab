@@ -188,3 +188,14 @@ information, see the
   Configures the server with spamcheck and spam-classifier services.
 
   *By default, enables no other services.*
+
+### Gitaly Roles
+
+Gitaly roles are used to set up and configure Gitaly services. For additional
+information, see the [Gitaly documentation](https://docs.gitlab.com/ee/administration/gitaly/)
+
+- **gitaly_role** (`gitlab-ce`/`gitlab-ee`)
+
+  Configures the server with Gitaly service.
+
+  *By default, enables no other services.*
