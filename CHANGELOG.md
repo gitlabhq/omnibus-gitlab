@@ -48,6 +48,12 @@ omnibus-gitlab repository.
 
 - [Improve Patroni role detection message](gitlab-org/omnibus-gitlab@f5daf8f1ae2cf9c5f64d3b8a51272232281ab825) ([merge request](gitlab-org/omnibus-gitlab!7939))
 
+## 17.4.3 (2024-10-22)
+
+### Fixed (1 change)
+
+- [Ensure PostgreSQL 16 is included in GitLab CE](gitlab-org/security/omnibus-gitlab@424f61d1b51343865b26fd1f4fca0c7f633e4e49)
+
 ## 17.4.2 (2024-10-09)
 
 No changes.
