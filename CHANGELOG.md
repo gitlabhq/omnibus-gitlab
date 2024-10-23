@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.4.3 (2024-10-22)
+
+### Fixed (1 change)
+
+- [Ensure PostgreSQL 16 is included in GitLab CE](gitlab-org/security/omnibus-gitlab@424f61d1b51343865b26fd1f4fca0c7f633e4e49)
+
 ## 17.4.2 (2024-10-09)
 
 No changes.
