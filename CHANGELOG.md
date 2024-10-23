@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.5.1 (2024-10-22)
+
+### Fixed (1 change)
+
+- [Ensure postgresql_new is included in GitLab CE](gitlab-org/security/omnibus-gitlab@a51fd4d371d0d2e0550b82aa3501c6e3b6c5e3ee)
+
 ## 17.5.0 (2024-10-16)
 
 ### Added (3 changes)
@@ -41,6 +47,12 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Improve Patroni role detection message](gitlab-org/omnibus-gitlab@f5daf8f1ae2cf9c5f64d3b8a51272232281ab825) ([merge request](gitlab-org/omnibus-gitlab!7939))
+
+## 17.4.3 (2024-10-22)
+
+### Fixed (1 change)
+
+- [Ensure PostgreSQL 16 is included in GitLab CE](gitlab-org/security/omnibus-gitlab@424f61d1b51343865b26fd1f4fca0c7f633e4e49)
 
 ## 17.4.2 (2024-10-09)
 
@@ -92,6 +104,10 @@ No changes.
 ### Other (1 change)
 
 - [Replace perl with perl-interpreter for RHEL >= 8](gitlab-org/omnibus-gitlab@5aeb6c93311b493c5ad79de1bf2a9ccac590a487) by @vtardiveau ([merge request](gitlab-org/omnibus-gitlab!7796))
+
+## 17.3.6 (2024-10-22)
+
+No changes.
 
 ## 17.3.5 (2024-10-09)
 
