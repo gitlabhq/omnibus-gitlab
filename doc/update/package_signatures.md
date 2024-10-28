@@ -261,14 +261,14 @@ The `debsig-verify` package has a [slew of dependencies](https://packages.debian
 1. Download and import the package signing public key
 
    ```shell
-   curl -JLO "https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg"
-   gpg --import gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
+   curl -JLO "https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-3D645A26AB9FBD22.pub.gpg"
+   gpg --import gitlab-gitlab-ee-3D645A26AB9FBD22.pub.gpg
    ```
 
 1. Extract the signature file (`_gpgorigin`)
 
    ```shell
-   ar x gitlab-ce-xxx.deb _gpgorigin
+   ar x gitlab-xxx.deb _gpgorigin
    ```
 
 1. Verify the signature matches the content
@@ -287,6 +287,24 @@ gpg:                using RSA key DBEF89774DDB9EB37D9FC3A03CFCF9BAF27EAB47
 gpg:                issuer "support@gitlab.com"
 gpg: Good signature from "GitLab, Inc. <support@gitlab.com>" [unknown]
 Primary key fingerprint: DBEF 8977 4DDB 9EB3 7D9F  C3A0 3CFC F9BA F27E AB47
+```
+
+If the verification fails with `gpg: BAD signature from "GitLab, Inc. <support@gitlab.com>" [unknown]`, ensure:
+
+- The file names are written in correct order.
+- The file names match the content of the archive.
+
+Depending on what Linux distribution you use, the content of the archive might have a different suffix. This means you need to adjust the command accordingly.
+To confirm the content of the archive, run `ar t gitlab-xxx.deb`.
+
+For example, for Ubuntu Focal (20.04):
+
+```shell
+$ ar t gitlab-ee_17.4.2-ee.0_amd64.deb 
+debian-binary
+control.tar.xz
+data.tar.xz
+_gpgorigin
 ```
 
 ##### Configuring debsigs
