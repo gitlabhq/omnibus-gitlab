@@ -1,0 +1,64 @@
+RAT:
+  stage: qa
+  variables:
+    PACKAGE_URL: ${RAT_PACKAGE_URL}
+    REFERENCE_ARCHITECTURE: ${RAT_REFERENCE_ARCHITECTURE}
+    QA_IMAGE: ${QA_IMAGE}
+  trigger:
+    project: ${RAT_PROJECT_PATH}
+    branch: 'master'
+    strategy: depend
+    forward:
+      pipeline_variables: false
+      yaml_variables: true
+  rules:
+    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
+      when: manual
+      allow_failure: true
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+      allow_failure: true
+      variables:
+        NIGHTLY: 'true'
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+      allow_failure: true
+      variables:
+        PRE_RELEASE: 'true'
+        PACKAGE_VERSION: ${RAT_PACKAGE_VERSION}
+  needs:
+    - job: Ubuntu-22.04-branch
+      artifacts: false
+      optional: true
+    - job: Ubuntu-22.04
+      artifacts: false
+      optional: true
+    - job: generate-facts
+      artifacts: true
+
+RAT:FIPS:
+  extends: RAT
+  variables:
+    PACKAGE_URL: ${RAT_FIPS_PACKAGE_URL}
+    REFERENCE_ARCHITECTURE: ${RAT_FIPS_REFERENCE_ARCHITECTURE}
+  rules:
+    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
+      when: manual
+      allow_failure: true
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+      allow_failure: true
+      variables:
+        NIGHTLY: 'true'
+  needs:
+    - job: Ubuntu-20.04-fips-branch
+      artifacts: false
+    - job: generate-facts
+      artifacts: true
+
+RAT:ref_arch_envs:
+  extends: RAT
+  parallel:
+    matrix:
+      - REFERENCE_ARCHITECTURE: [1k, 2k, 3k, 10k]
+  rules:
+    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
+      when: manual
+      allow_failure: true

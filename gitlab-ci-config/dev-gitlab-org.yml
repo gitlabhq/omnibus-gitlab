@@ -1057,19 +1057,6 @@ manifest-upload:
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
 
-RAT-Tag:
-  stage: qa
-  image: "dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
-  script:
-    - bundle exec rake qa:rat:tag
-  cache: !reference [.tag-cache]
-  needs:
-    - Ubuntu-22.04
-  allow_failure: true
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
-
 Raspberry-Pi-2-Buster:
   extends: .rpi_tag_template
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
