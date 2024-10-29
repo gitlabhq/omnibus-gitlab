@@ -21,6 +21,7 @@ stages:
 include:
   - local: '/gitlab-ci-config/workflow-rules.yml'
   - local: '/gitlab-ci-config/variables.yml'
+  - local: '/gitlab-ci-config/rat.yml'
   - local: '/gitlab-ci-config/dev-gitlab-org.yml'
   - local: '/gitlab-ci-config/gitlab-com.yml'
     rules:

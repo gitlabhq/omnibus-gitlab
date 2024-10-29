@@ -7,7 +7,6 @@ require_relative '../build/info/components'
 require_relative '../build/info/git'
 require_relative '../build/qa'
 require_relative '../build/qa_image'
-require_relative '../build/rat'
 require_relative '../docker_operations'
 require_relative '../util'
 
@@ -108,22 +107,6 @@ namespace :qa do
       image_address = Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info::Docker.tag)
       Dir.chdir('letsencrypt-test') do
         system({ 'IMAGE' => image_address }, './test.sh')
-      end
-    end
-  end
-
-  namespace :rat do
-    desc "Trigger a RAT pipeline using nightly package"
-    task :nightly do
-      Gitlab::Util.section('qa:rat:validate') do
-        Build::RAT::NightlyPipeline.invoke!.wait!(timeout: 3600 * 4)
-      end
-    end
-
-    desc "Trigger a RAT pipeline using tag package"
-    task :tag do
-      Gitlab::Util.section('qa:rat:validate') do
-        Build::RAT::TagPipeline.invoke!.wait!(timeout: 3600 * 4)
       end
     end
   end

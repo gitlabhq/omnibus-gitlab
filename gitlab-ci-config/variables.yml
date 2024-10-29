@@ -43,3 +43,4 @@ variables:
   OPENSSL_VERSION: '1.1.1'
   FF_TIMESTAMPS: true
   OPENSSL_GEM_VERSION: '~> 3.2.0'
+  RAT_PROJECT_PATH: 'gitlab-org/distribution/reference-architecture-tester'
