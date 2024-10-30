@@ -18,9 +18,6 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && $DEPENDENCY_SCANNING == "true" && $CI_PIPELINE_SOURCE == "schedule"'
       variables:
         PIPELINE_TYPE: DEPENDENCY_SCANNING_PIPELINE
-    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && $DEPS_PIPELINE == "true"'
-      variables:
-        PIPELINE_TYPE: DEPS_IO_VERSION_CHECK_PIPELINE
     - if: '$PIPELINE_TYPE == null && $CACHE_UPDATE == "true" && $CI_PIPELINE_SOURCE == "schedule"'
       variables:
         PIPELINE_TYPE: CACHE_UPDATE_PIPELINE
@@ -38,9 +35,6 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $QA_PROJECT_PATH && $DURATION_PLOTTER == "true" && $CI_PIPELINE_SOURCE == "schedule"'
       variables:
         PIPELINE_TYPE: DURATION_PLOTTER_PIPELINE
-    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^deps/'
-      variables:
-        PIPELINE_TYPE: DEPS_IO_VERSION_BUMP_PIPELINE
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && ($CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^docs-/ || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /-docs$/)'
       variables:
         PIPELINE_TYPE: DOCS_PIPELINE

@@ -96,8 +96,6 @@ needed. The different pipeline types are documented in the below table:
 | Pipeline type                    | Mirror(s) where the pipeline runs | Remarks                                                                                                                |
 | -------------------------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `DEPENDENCY_SCANNING_PIPELINE`   | Canonical                         | Check for security vulnerabilities in dependencies. Requires `DEPENDENCY_SCANNING` variable to be set to `true`.       |
-| `DEPS_IO_VERSION_BUMP_PIPELINE`  | Canonical                         | On branch pushes done by `deps.io`. Requires branches to have `deps-` prefix.                                          |
-| `DEPS_IO_VERSION_CHECK_PIPELINE` | Canonical                         | Run `deps` to detect updates. Requires `DEPS_PIPELINE` variable to be set to `true`.                                   |
 | `LICENSE_PAGE_UPDATE_PIPELINE`   | Canonical                         | Update license pages. Requires `PAGES_UPDATE` variable to be set to `true`.                                            |
 | `CACHE_UPDATE_PIPELINE`          | Canonical, QA                     | Update the gem cache and package build cache. Requires `CACHE_UPDATE` variable to be set to `true`.                    |
 | `DURATION_PLOTTER_PIPELINE`      | QA                                | Package build to plot duration of builds. Requires `DURATION_PLOTTER` variable to be set to `true`.                    |
@@ -137,21 +135,19 @@ tests.
 
 ### Scheduled pipelines
 
-In [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab), there are two scheduled pipelines.
+In [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab), there is one scheduled pipeline.
 
-1. `Dependencies Update` - Pipeline to check for outdated dependencies using the
-   [`dependency_update`](#dependency_update) job.
 1. `Generate license pages` - Pipeline to populate [License collection webpage](https://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html)
    with license information from the S3 bucket.
 
-In [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab), there are two scheduled pipelines
+In [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab), there are two scheduled pipelines.
 
 1. `CE nightly` - Pipeline to build nightly packages and Docker images for
    GitLab CE
 1. `EE nightly` - Pipeline to build nightly packages and Docker images for
    GitLab EE
 
-Other mirrors doesn't have any scheduled pipelines
+Other mirrors doesn't have any scheduled pipelines.
 
 ### Auto-deploy pipelines
 
@@ -491,24 +487,6 @@ Jobs that extends from the `.gems-cache` and `.trigger-package-cache` shared `ca
 
 These caches are updated in scheduled pipelines by `update-gems-cache` and `update-trigger-package-cache` jobs respectively, when the `CACHE_UPDATE` exists.
 
-### `dependency_update`
-
-This job makes use of Dependencies.io to automatically check for version updates
-of various components that we include in our package and open merge request
-against [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) if an update is found.
-
-This job is run only on [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab), on scheduled pipelines when
-`DEPS_PIPELINE` variable exists.
-
-### `dependencies_io_check`
-
-This job automatically triggers a e2e:test-on-omnibus pipeline in [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror),
-(similar to `Trigger:ce-package` job), when a merge request is made by
-`dependency_update` job.
-
-This job is run only on [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) when the branch name starts with
-`deps` (this is the format that `dependency_update` job uses for merge requests)
-
 ### `valdiate_packer_changes`
 
 This job checks if the packer configuration files: `https://dev.gitlab.org/gitlab/omnibus-gitlab/-/tree/master/support/packer` are valid or not.
@@ -522,6 +500,4 @@ This job is associated with GitLab Pages, and generates a static website
 containing license information of various components included in the package for
 each release of GitLab.
 
-This job is run only on [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and on scheduled pipelines which
-does not have the `DEPS_PIPELINE` variable (to differentiate it from
-`dependency_update` runs).
+This job is run only on [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab).
