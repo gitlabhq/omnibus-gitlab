@@ -222,8 +222,6 @@ Trigger:ee-package:
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
       when: manual
       variables: !reference [.ee-trigger-job-variables]
-    - if: '$PIPELINE_TYPE == "DEPS_IO_VERSION_BUMP_PIPELINE"'
-      variables: !reference [.ee-trigger-job-variables]
 
 rubocop:
   extends: .gems-cache
@@ -587,16 +585,6 @@ dependency_scanning:
       dependency_scanning: gl-dependency-scanning-report.json
     paths:
       - dependency_report.txt
-
-dependency_update:
-  image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools:${BUILDER_IMAGE_REVISION}"
-  stage: prepare
-  before_script: []
-  script:
-    - curl https://deps.app/install.sh | bash -s -- -b $HOME/bin
-    - $HOME/bin/deps ci
-  rules:
-    - if: '$PIPELINE_TYPE == "DEPS_IO_VERSION_CHECK_PIPELINE"'
 
 validate_renovate_checksum:
   image: docker.io/bash:5.2-alpine3.20
