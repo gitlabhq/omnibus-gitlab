@@ -378,6 +378,120 @@ RSpec.describe 'gitlab::gitlab-rails' do
             expect(resque_yml).to eq(expected_output)
           end
         end
+
+        context 'with Redis Sentinels password configured' do
+          let(:cable_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/cable.yml') }
+          let(:cable_yml_file_content) { ChefSpec::Renderer.new(chef_run, cable_yml_template).content }
+          let(:cable_yml) { YAML.safe_load(cable_yml_file_content, aliases: true, symbolize_names: true) }
+          let(:sentinel_password) { "global sentinel pass" }
+          let(:expected_output) do
+            {
+              production: {
+                url: 'redis://:toomanysecrets@gitlab-redis/',
+                sentinels: [
+                  { host: '10.0.0.2', port: 26379, password: sentinel_password },
+                  { host: '10.0.0.3', port: 26379, password: sentinel_password },
+                  { host: '10.0.0.4', port: 26379, password: sentinel_password },
+                ],
+                secret_file: '/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.yml.enc',
+              }
+            }
+          end
+          let(:expected_cable_output) do
+            {
+              production: {
+                adapter: 'redis',
+                url: 'redis://:toomanysecrets@gitlab-redis/',
+                sentinels: [
+                  { host: '10.0.0.2', port: 26379, password: sentinel_password },
+                  { host: '10.0.0.3', port: 26379, password: sentinel_password },
+                  { host: '10.0.0.4', port: 26379, password: sentinel_password },
+                ]
+              }
+            }
+          end
+
+          before do
+            stub_gitlab_rb(
+              redis: {
+                enable: true,
+                master_name: 'gitlab-redis',
+                master_password: 'toomanysecrets'
+              },
+              gitlab_rails: {
+                redis_sentinels_password: 'global sentinel pass',
+                redis_sentinels: [
+                  { host: '10.0.0.2', port: 26379 },
+                  { host: '10.0.0.3', port: 26379 },
+                  { host: '10.0.0.4', port: 26379 },
+                ]
+              }
+            )
+          end
+
+          it 'populates resque.yml with expected values' do
+            expect(resque_yml).to eq(expected_output)
+            expect(cable_yml).to eq(expected_cable_output)
+          end
+
+          context 'with ActionCable Redis Sentinels defined' do
+            let(:expected_output) do
+              {
+                production: {
+                  url: 'redis://:toomanysecrets@gitlab-redis/',
+                  sentinels: [
+                    { host: '10.0.0.2', port: 26379, password: sentinel_password },
+                    { host: '10.0.0.3', port: 26379, password: sentinel_password },
+                    { host: '10.0.0.4', port: 26379, password: sentinel_password },
+                  ],
+                  secret_file: '/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.yml.enc',
+                }
+              }
+            end
+            let(:expected_cable_output) do
+              {
+                production: {
+                  adapter: 'redis',
+                  url: 'redis://:fakepass@fake.redis.actioncable.com:8888/2',
+                  sentinels: [
+                    { host: '10.0.0.5', port: 26379 },
+                    { host: '10.0.0.6', port: 26379 },
+                    { host: '10.0.0.7', port: 26379 },
+                  ]
+                }
+              }
+            end
+
+            before do
+              stub_gitlab_rb(
+                redis: {
+                  enable: true,
+                  master_name: 'gitlab-redis',
+                  master_password: 'toomanysecrets'
+                },
+                gitlab_rails: {
+                  redis_sentinels_password: 'global sentinel pass',
+                  redis_sentinels: [
+                    { host: '10.0.0.2', port: 26379 },
+                    { host: '10.0.0.3', port: 26379 },
+                    { host: '10.0.0.4', port: 26379 },
+                  ],
+                  redis_actioncable_instance: "redis://:fakepass@fake.redis.actioncable.com:8888/2",
+                  redis_actioncable_sentinels: [
+                    { host: '10.0.0.5', port: 26379 },
+                    { host: '10.0.0.6', port: 26379 },
+                    { host: '10.0.0.7', port: 26379 },
+                  ]
+                }
+              )
+            end
+
+            it 'populates resque.yml with expected values' do
+              expect(resque_yml).to eq(expected_output)
+              expect(cable_yml).to eq(expected_cable_output)
+            end
+          end
+        end
       end
     end
 
