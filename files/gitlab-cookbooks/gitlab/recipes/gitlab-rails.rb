@@ -265,6 +265,7 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
   url = node['gitlab']['gitlab_rails']['redis_actioncable_instance']
   sentinels = node['gitlab']['gitlab_rails']['redis_actioncable_sentinels']
   sentinels_password = node['gitlab']['gitlab_rails']['redis_actioncable_sentinels_password']
+  sentinels_password ||= redis_sentinels_password if sentinels.nil? || sentinels.empty?
 
   if url.nil?
     url = redis_url
