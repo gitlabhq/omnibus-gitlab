@@ -3,6 +3,7 @@
 ## Updating components
 
 <!-- Keep this list sorted alphabetically. -->
+- [exiftool](upgrade-exiftool-testplan.md)
 - [gitlab-exporter](upgrade-gitlab-exporter-testplan.md)
 - [golang](upgrade-golang-testplan.md)
 - [go-crond](upgrade-go-crond-testplan.md)
