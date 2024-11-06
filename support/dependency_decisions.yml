@@ -304,3 +304,9 @@
     :why: https://github.com/antlr4-go/antlr/blob/main/LICENSE
     :versions: []
     :when: 2024-07-29 11:00:00.000000000 Z
+- - :license
+  - gitlab.com/gitlab-org/go/icu
+  - BSD-2-Clause
+  - :who: Stan Hu
+    :why: https://gitlab.com/gitlab-org/go/icu/blob/master/README.md#licence
+    :when: 2024-11-05 11:00:00.000000000 Z
