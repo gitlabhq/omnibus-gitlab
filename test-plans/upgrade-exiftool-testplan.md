@@ -10,4 +10,4 @@
   * [ ] Uploaded image to issue.
   * [ ] Downloaded image from issue.
   * [ ] Verified downloaded issue has no metadata.
-  * [ ] Equivalent update MR in omnibus
+  * [ ] Equivalent update MR in CNG
