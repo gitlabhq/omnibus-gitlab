@@ -77,8 +77,12 @@ to work best with the available resources. Check out the [documentation](setting
 - [Upgrade from Community Edition to Enterprise Edition](https://docs.gitlab.com/ee/update/package/convert_to_ee.html)
 - [Upgrade to the latest version](https://docs.gitlab.com/ee/update/package/#upgrade-using-the-official-repositories)
 - [Downgrade to an earlier version](https://docs.gitlab.com/ee/update/package/downgrade.html)
-- [Upgrade from a non-Linux package PostgreSQL to a Linux package installation using a backup](update/convert_to_omnibus.md#upgrading-from-a-non-linux-package-postgresql-to-a-linux-package-installation-using-a-backup)
-- [Upgrade from a non-Linux package PostgreSQL to a Linux package installation in-place](update/convert_to_omnibus.md#upgrading-from-a-non-linux-package-postgresql-to-a-linux-package-installation-in-place)
+
+## Converting
+
+- [Convert a self-compiled installation to a Linux package installation](update/convert_to_omnibus.md)
+- [Convert an external PostgreSQL to a Linux package installation by using a backup](update/convert_to_omnibus.md#convert-an-external-postgresql-to-a-linux-package-installation-by-using-a-backup)
+- [Convert an external PostgreSQL to a Linux package installation in-place](update/convert_to_omnibus.md#convert-an-external-postgresql-to-a-linux-package-installation-in-place)
 
 ## Troubleshooting
 
