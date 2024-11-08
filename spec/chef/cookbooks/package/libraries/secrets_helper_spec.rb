@@ -5,6 +5,7 @@ RSpec.describe 'secrets' do
   let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
 
   HEX_KEY = /\h{128}/.freeze
+  ALPHANUMERIC_KEY = /\A[A-Za-z0-9]{32}\Z/m.freeze
   RSA_KEY = /\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m.freeze
 
   def stub_gitlab_secrets_json(secrets)
@@ -50,10 +51,16 @@ RSpec.describe 'secrets' do
       it 'writes new secrets to the file, with different values for each' do
         rails_keys = new_secrets['gitlab_rails']
         hex_keys = rails_keys.values_at('db_key_base', 'otp_key_base', 'secret_key_base', 'encrypted_settings_key_base')
+        alphanumeric_keys = rails_keys.values_at(
+          'active_record_encryption_primary_key',
+          'active_record_encryption_deterministic_key',
+          'active_record_encryption_key_derivation_salt'
+        ).flatten
         rsa_keys = rails_keys.values_at('openid_connect_signing_key')
 
         expect(rails_keys.to_a.uniq).to eq(rails_keys.to_a)
         expect(hex_keys).to all(match(HEX_KEY))
+        expect(alphanumeric_keys.flatten).to all(match(ALPHANUMERIC_KEY))
         expect(rsa_keys).to all(match(RSA_KEY))
       end
 
@@ -224,7 +231,10 @@ RSpec.describe 'secrets' do
             gitlab_rails: {
               secret_token: 'json_rails_secret_token',
               jws_private_key: 'json_rails_jws_private_key',
-              encrypted_settings_key_base: 'encrypted_settings_key_base'
+              encrypted_settings_key_base: 'encrypted_settings_key_base',
+              active_record_encryption_primary_key: ['primary_key'],
+              active_record_encryption_deterministic_key: ['deterministic_key'],
+              active_record_encryption_key_derivation_salt: 'key_derivation_salt'
             }
           )
 
@@ -259,7 +269,10 @@ RSpec.describe 'secrets' do
                 'secret_key_base' => 'rb_ci_db_key_base',
                 'otp_key_base' => 'json_rails_secret_token',
                 'encrypted_settings_key_base' => 'encrypted_settings_key_base',
-                'openid_connect_signing_key' => 'json_rails_jws_private_key'
+                'openid_connect_signing_key' => 'json_rails_jws_private_key',
+                'active_record_encryption_primary_key' => ['primary_key'],
+                'active_record_encryption_deterministic_key' => ['deterministic_key'],
+                'active_record_encryption_key_derivation_salt' => 'key_derivation_salt'
               }
             }
           )

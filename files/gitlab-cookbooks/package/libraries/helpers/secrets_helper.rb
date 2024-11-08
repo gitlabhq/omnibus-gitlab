@@ -17,6 +17,10 @@ class SecretsHelper
     SecureRandom.urlsafe_base64(bytes)
   end
 
+  def self.generate_alphanumeric(chars)
+    SecureRandom.alphanumeric(chars)
+  end
+
   def self.generate_rsa(bits)
     OpenSSL::PKey::RSA.new(bits)
   end
@@ -81,7 +85,10 @@ class SecretsHelper
         'db_key_base' => Gitlab['gitlab_rails']['db_key_base'],
         'otp_key_base' => Gitlab['gitlab_rails']['otp_key_base'],
         'encrypted_settings_key_base' => Gitlab['gitlab_rails']['encrypted_settings_key_base'],
-        'openid_connect_signing_key' => Gitlab['gitlab_rails']['openid_connect_signing_key']
+        'openid_connect_signing_key' => Gitlab['gitlab_rails']['openid_connect_signing_key'],
+        'active_record_encryption_primary_key' => Gitlab['gitlab_rails']['active_record_encryption_primary_key'],
+        'active_record_encryption_deterministic_key' => Gitlab['gitlab_rails']['active_record_encryption_deterministic_key'],
+        'active_record_encryption_key_derivation_salt' => Gitlab['gitlab_rails']['active_record_encryption_key_derivation_salt']
       },
       'gitlab_pages' => {
         'gitlab_secret' => Gitlab['gitlab_pages']['gitlab_secret'],

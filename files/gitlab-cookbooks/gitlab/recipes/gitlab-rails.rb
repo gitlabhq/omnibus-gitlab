@@ -217,7 +217,10 @@ templatesymlink "Create a secrets.yml and create a symlink to Rails root" do
               'secret_key_base' => node['gitlab']['gitlab_rails']['secret_key_base'],
               'otp_key_base' => node['gitlab']['gitlab_rails']['otp_key_base'],
               'encrypted_settings_key_base' => node['gitlab']['gitlab_rails']['encrypted_settings_key_base'],
-              'openid_connect_signing_key' => node['gitlab']['gitlab_rails']['openid_connect_signing_key']
+              'openid_connect_signing_key' => node['gitlab']['gitlab_rails']['openid_connect_signing_key'],
+              'active_record_encryption_primary_key' => node['gitlab']['gitlab_rails']['active_record_encryption_primary_key'],
+              'active_record_encryption_deterministic_key' => node['gitlab']['gitlab_rails']['active_record_encryption_deterministic_key'],
+              'active_record_encryption_key_derivation_salt' => node['gitlab']['gitlab_rails']['active_record_encryption_key_derivation_salt']
             } })
   dependent_services.each { |svc| notifies :restart, svc }
 end
