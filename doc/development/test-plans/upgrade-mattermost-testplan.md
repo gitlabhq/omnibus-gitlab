@@ -1,6 +1,8 @@
 # Mattermost component upgrade test plan
 
-<!-- Copy and paste the following into your MR description. -->
+Copy the following test plan to a comment of the merge request that upgrades the component.
+
+```markdown
 ## Test plan
 
 ### Build tests
@@ -25,10 +27,10 @@ and ran the following actions, checks, and tests:
 
   Both URLs should point to the same system so that GitLab and Mattermost are co-located. Example:
 
-  ```yaml
-  external_url 'gitlab.example.com'
-  mattermost_external_url 'mattermost.example.com'
-  ```
+    ```yaml
+    external_url 'gitlab.example.com'
+    mattermost_external_url 'mattermost.example.com'
+    ```
 
 - [ ] Ran `gitlab-ctl reconfigure`.
 - [ ] Connected to `gitlab.example.com`.
@@ -70,10 +72,10 @@ fresh OS installation. Run the following actions, checks, and tests:
 
   Both URLs should point to the same system so that GitLab and Mattermost are co-located. Example:
 
-  ```yaml
-  external_url 'gitlab.example.com'
-  mattermost_external_url 'mattermost.example.com'
-  ```
+    ```yaml
+    external_url 'gitlab.example.com'
+    mattermost_external_url 'mattermost.example.com'
+    ```
 
 - [ ] Ran `gitlab-ctl reconfigure`.
 - [ ] Connected to `gitlab.example.com`.
@@ -114,3 +116,4 @@ following actions, checks, and tests:
 - [ ] Verified GitLab issue notification.
 
   - [ ] Created an issue in the test project. Verified that the notification for the issue appeared in Mattermost for the GitLab user.
+```
