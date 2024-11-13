@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.5.2 (2024-11-12)
+
+### Security (1 change)
+
+- [Mattermost Security Updates October 28, 2024](gitlab-org/security/omnibus-gitlab@0a6921ae920c72a290d2767a66295cdb27ec29f8) ([merge request](gitlab-org/security/omnibus-gitlab!454))
+
 ## 17.5.1 (2024-10-22)
 
 ### Fixed (1 change)
@@ -47,6 +53,12 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Improve Patroni role detection message](gitlab-org/omnibus-gitlab@f5daf8f1ae2cf9c5f64d3b8a51272232281ab825) ([merge request](gitlab-org/omnibus-gitlab!7939))
+
+## 17.4.4 (2024-11-12)
+
+### Security (1 change)
+
+- [Mattermost Security Updates October 28, 2024](gitlab-org/security/omnibus-gitlab@5122d852dce165dfd2191f4629d737afa953c384) ([merge request](gitlab-org/security/omnibus-gitlab!455))
 
 ## 17.4.3 (2024-10-22)
 
@@ -104,6 +116,12 @@ No changes.
 ### Other (1 change)
 
 - [Replace perl with perl-interpreter for RHEL >= 8](gitlab-org/omnibus-gitlab@5aeb6c93311b493c5ad79de1bf2a9ccac590a487) by @vtardiveau ([merge request](gitlab-org/omnibus-gitlab!7796))
+
+## 17.3.7 (2024-11-12)
+
+### Security (1 change)
+
+- [Mattermost Security Updates October 28, 2024](gitlab-org/security/omnibus-gitlab@922810247174143884cc541cf9bd98fe0df75789) ([merge request](gitlab-org/security/omnibus-gitlab!456))
 
 ## 17.3.6 (2024-10-22)
 
