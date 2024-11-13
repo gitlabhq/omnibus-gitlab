@@ -1,5 +1,8 @@
 # `go-crond` component upgrade test plan
 
+Copy the following test plan to a comment of the merge request that upgrades the component.
+
+````markdown
 ## Test plan
 
 - [ ] Check [releases](https://github.com/webdevops/go-crond/releases) for potentially breaking changes.
@@ -27,13 +30,14 @@
 
 - [ ] Set crontab entry to a few minutes ahead and make sure cert request renewal occurs
 
-   ```shell
-   cat /var/opt/gitlab/crond/letsencrypt-renew
-   27 0 */4 * * root /opt/gitlab/bin/gitlab-ctl renew-le-certs
-   sudo vi /var/opt/gitlab/crond/letsencrypt-renew
-   cat var/opt/gitlab/crond/letsencrypt-renew
-   30 18 26 * * root /opt/gitlab/bin/gitlab-ctl renew-le-certs
-   sudo gitlab-ctl restart crond
-   sudo gitlab-ctl tail crond
-   sudo gitlab-ctl tail crond | grep "/opt/gitlab/bin/gitlab-ctl renew"
-   ```
+  ```shell
+  cat /var/opt/gitlab/crond/letsencrypt-renew
+  27 0 */4 * * root /opt/gitlab/bin/gitlab-ctl renew-le-certs
+  sudo vi /var/opt/gitlab/crond/letsencrypt-renew
+  cat var/opt/gitlab/crond/letsencrypt-renew
+  30 18 26 * * root /opt/gitlab/bin/gitlab-ctl renew-le-certs
+  sudo gitlab-ctl restart crond
+  sudo gitlab-ctl tail crond
+  sudo gitlab-ctl tail crond | grep "/opt/gitlab/bin/gitlab-ctl renew"
+  ```
+````
