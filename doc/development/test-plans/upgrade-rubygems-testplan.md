@@ -2,7 +2,7 @@
 
 Copy the following test plan to a comment of the merge request that upgrades the component.
 
-```markdown
+````markdown
 ## Test plan
 
 - [ ] Checked rubygems [changelog](https://github.com/rubygems/rubygems/blob/master/CHANGELOG.md) for potential breaking changes.
@@ -17,7 +17,6 @@ Copy the following test plan to a comment of the merge request that upgrades the
 - [ ] Performed a successful GitLab Community Edition (CE) build on
   `dev.gitlab.org`.
 - Checked installed gem versions:
-
   - [ ] `rubygems`
 
     ```shell
@@ -29,4 +28,4 @@ Copy the following test plan to a comment of the merge request that upgrades the
     ```shell
     gem list bundler
     ```
-```
+````

@@ -2,7 +2,7 @@
 
 Copy the following test plan to a comment of the merge request that upgrades the component.
 
-```markdown
+````markdown
 ## Test plan
 
 - [ ] QA tests passed for FIPS and non FIPS builds, including triggering the `build-package-on-all-os` job
@@ -10,52 +10,52 @@ Copy the following test plan to a comment of the merge request that upgrades the
 - [ ] Confirmed Omnibus-built services that are owned by distribution are working
   - [ ] Prometheus - (is scraping metrics)
 
-     ```shell
-     curl 'localhost:9090/api/v1/query?query=up'
-     ```
+    ```shell
+    curl 'localhost:9090/api/v1/query?query=up'
+    ```
 
   - [ ] PgBouncer exporter - (metrics endpoint returns data)
 
-     1. [Configure PgBouncer](https://docs.gitlab.com/ee/administration/postgresql/pgbouncer.html).
-     1. Run:
+    1. [Configure PgBouncer](https://docs.gitlab.com/ee/administration/postgresql/pgbouncer.html).
+    1. Run:
 
-        ```shell
-        curl "http://localhost:9188/metrics"
-        ```
+       ```shell
+       curl "http://localhost:9188/metrics"
+       ```
 
   - [ ] `redis-exporter` - (metrics endpoint returns data)
 
-     ```shell
-     curl "http://localhost:9121/metrics"
-     ```
+    ```shell
+    curl "http://localhost:9121/metrics"
+    ```
 
   - [ ] `postgres-exporter` - (metrics endpoint returns data)
 
-     ```shell
-     curl "http://localhost:9187/metrics"
-     ```
+    ```shell
+    curl "http://localhost:9187/metrics"
+    ```
 
   - [ ] `node-exporter` - (metrics endpoint returns data)
 
-     ```shell
-     curl "http://localhost:9100/metrics"
-     ```
+    ```shell
+    curl "http://localhost:9100/metrics"
+    ```
 
   - [ ] `alertmanager` - (test trigger an alert)
 
-     1. Set `prometheus['listen_address'] = '0.0.0.0:9090'` in `/etc/gitlab/gitlab.rb` and run `sudo gitlab-ctl reconfigure`.
-     1. Shut down `gitaly` service:
+    1. Set `prometheus['listen_address'] = '0.0.0.0:9090'` in `/etc/gitlab/gitlab.rb` and run `sudo gitlab-ctl reconfigure`.
+    1. Shut down `gitaly` service:
 
-        ```shell
-        gitlab-ctl stop gitaly
-        ```
+       ```shell
+       gitlab-ctl stop gitaly
+       ```
 
-     1. Wait 5 minutes and check Prometheus console `http://<gitlab host>:9090/alerts?search=` for service down alert.
-     1. Start `gitaly` service:
+    1. Wait 5 minutes and check Prometheus console `http://<gitlab host>:9090/alerts?search=` for service down alert.
+    1. Start `gitaly` service:
 
-        ```shell
-        gitlab-ctl start gitaly
-        ```
+       ```shell
+       gitlab-ctl start gitaly
+       ```
 
-     1. Wait 5 minutes and check Prometheus console `http://<gitlab host>:9090/alerts?search=` for service back up.
-```
+    1. Wait 5 minutes and check Prometheus console `http://<gitlab host>:9090/alerts?search=` for service back up.
+````

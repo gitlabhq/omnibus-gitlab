@@ -2,7 +2,7 @@
 
 Copy the following test plan to a comment of the merge request that upgrades the component.
 
-```markdown
+````markdown
 ## Test plan
 
 - [ ] Performed a successful GitLab Enterprise Edition (EE) build on all supported platforms (include `build-package-on-all-os` job).
@@ -28,7 +28,6 @@ Copy the following test plan to a comment of the merge request that upgrades the
     - [ ] Imported a project (confirms Sidekiq works)
     - [ ] Checked `gitlab-kas` log for Redis errors
     - [ ] Performed failover
-
 - [ ] Updates
   - [ ] Updated on single node:
     - [ ] Verified that you get the message:
@@ -42,7 +41,6 @@ Copy the following test plan to a comment of the merge request that upgrades the
     - [ ] Checked `gitlab-kas log` for Redis errors
     - [ ] Checked `redis-exporter logs` for errors
     - [ ] Confirmed `gitlab-redis-cli` command connects to Redis
-
   - [ ] Updated [HA Sentinel/Redis nodes](https://docs.gitlab.com/ee/update/zero_downtime.html#redis-ha-using-sentinel)
     - [ ] Verified that you get the message:
 
@@ -56,4 +54,4 @@ Copy the following test plan to a comment of the merge request that upgrades the
     - [ ] Checked `redis-exporter` logs for errors
     - [ ] Confirmed `gitlab-redis-cli` command connects to Redis on a Redis node
     - [ ] Performed failover
-```
+````
