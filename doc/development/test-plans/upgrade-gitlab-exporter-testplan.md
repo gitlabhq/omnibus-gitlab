@@ -6,9 +6,7 @@ Copy the following test plan to a comment of the merge request that upgrades the
 ## Test plan
 
 - [ ] Check [`gitlab-exporter` project repository](https://gitlab.com/gitlab-org/ruby/gems/gitlab-exporter) for potential breaking changes.
-
 - [ ] Green pipeline with `Trigger:ee-package` and `build-package-on-all-os`.
-
 - [ ] `gitlab-exporter` starts. Run `sudo gitlab-ctl status gitlab-exporter` and check output
   to ensure `gitlab-exporter` started successfully.
 
@@ -32,5 +30,5 @@ Copy the following test plan to a comment of the merge request that upgrades the
 
   ```shell
   curl --silent "http://localhost:9090/metrics" | grep gitlab_exporter
-  ``` 
+  ```
 ````
