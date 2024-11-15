@@ -41,7 +41,7 @@ account "Mattermost user and group" do
   ugid mattermost_group
   groupname mattermost_group
   gid mattermost_gid
-  shell '/bin/sh'
+  shell '/usr/sbin/nologin'
   home mattermost_home
   manage node['gitlab']['manage_accounts']['enable']
 end
