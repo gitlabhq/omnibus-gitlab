@@ -38,3 +38,5 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] Tests updated
 - [ ] Equivalent MR/issue for the [GitLab Chart](https://gitlab.com/gitlab-org/charts/gitlab) opened
 - [ ] Notify Product for inclusion in release notes
+
+/assign me
