@@ -346,6 +346,12 @@ OpenSUSE-15.5-branch:
 OpenSUSE-15.5-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
+OpenSUSE-15.6-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6:${BUILDER_IMAGE_REVISION}"
+  extends: .branch_template
+OpenSUSE-15.6-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .arm64_branch_template
 AmazonLinux-2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -598,6 +604,12 @@ OpenSUSE-15.5:
 OpenSUSE-15.5-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
+OpenSUSE-15.6:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6:${BUILDER_IMAGE_REVISION}"
+  extends: .tag_template
+OpenSUSE-15.6-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .arm64_tag_template
 AmazonLinux-2:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
@@ -753,6 +765,20 @@ OpenSUSE-15.5-arm64-staging:
       optional: true
     - job: OpenSUSE-15.5-arm64-branch
       optional: true
+OpenSUSE-15.6-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: OpenSUSE-15.6
+      optional: true
+    - job: OpenSUSE-15.6-branch
+      optional: true
+OpenSUSE-15.6-arm64-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: OpenSUSE-15.6-arm64
+      optional: true
+    - job: OpenSUSE-15.6-arm64-branch
+      optional: true
 AmazonLinux-2-staging:
   extends: .staging_upload_template
   needs:
@@ -899,6 +925,14 @@ OpenSUSE-15.5-arm64-release:
   extends: .production_release_template
   needs:
     - OpenSUSE-15.5-arm64
+OpenSUSE-15.6-release:
+  extends: .production_release_template
+  needs:
+    - OpenSUSE-15.6
+OpenSUSE-15.6-arm64-release:
+  extends: .production_release_template
+  needs:
+    - OpenSUSE-15.6-arm64
 AmazonLinux-2-release:
   extends: .production_release_template
   needs:
