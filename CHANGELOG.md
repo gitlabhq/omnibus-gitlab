@@ -3,6 +3,39 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.6.0 (2024-11-20)
+
+### Added (2 changes)
+
+- [Build packages for OpenSUSE Leap 15.6](gitlab-org/omnibus-gitlab@b59f129da304ebaca649f3f3a79dc4e41babdd20) ([merge request](gitlab-org/omnibus-gitlab!7993))
+- [Add Gitaly role](gitlab-org/omnibus-gitlab@650266f8d4941af54a3531e49365c074cb399ad0) ([merge request](gitlab-org/omnibus-gitlab!7942))
+
+### Fixed (2 changes)
+
+- [Make ActionCable Redis settings use default Redis Sentinel password](gitlab-org/omnibus-gitlab@1acd2a70d0e30ad84d0724c66d5cdc6cb8c1819b) ([merge request](gitlab-org/omnibus-gitlab!7945))
+- [Ensure PostgreSQL 16 is included in GitLab CE](gitlab-org/omnibus-gitlab@4bd75976c0ad0695ed9847ed43ffc6c44fb86741) ([merge request](gitlab-org/omnibus-gitlab!7994))
+
+### Changed (14 changes)
+
+- [Update dependency exiftool to v12.99](gitlab-org/omnibus-gitlab@f5ab7cf69b2b1f3e566963187c299247e2aea99a) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8014))
+- [Update dependency prometheus to v2.55.1](gitlab-org/omnibus-gitlab@6bf9433f7f70b54ff3cebd5f25b1174e27075109) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8016))
+- [Update dependency curl to 8.11.0](gitlab-org/omnibus-gitlab@b1046b08eca4081814633fe36d503713c66eec22) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8023))
+- [Update nginx to release 1.27.1](gitlab-org/omnibus-gitlab@8079a493abdba776db5ff4b7303721eb8f572f56) ([merge request](gitlab-org/omnibus-gitlab!8007))
+- [Update dependency redis-exporter to v1.66.0](gitlab-org/omnibus-gitlab@159fa53f6c701e89e3abbe5d098d8424b18e5f52) ([merge request](gitlab-org/omnibus-gitlab!8021))
+- [Update dependency rubygems to v3.5.23](gitlab-org/omnibus-gitlab@34d4840350cfc3a35dd472caa8ad23ae8d986791) ([merge request](gitlab-org/omnibus-gitlab!8020))
+- [Update logrotate from 3.21.0 to 3.22.0](gitlab-org/omnibus-gitlab@ef237f5cec3648bd6498c0b3944cd98a0bc0393f) ([merge request](gitlab-org/omnibus-gitlab!7659))
+- [Update dependency registry to v4.13.0-gitlab](gitlab-org/omnibus-gitlab@4c35930db3e517d59f70079b5df7f1f308e24978) ([merge request](gitlab-org/omnibus-gitlab!8017))
+- [Update dependency registry to v4.12.0-gitlab](gitlab-org/omnibus-gitlab@026f420403af439a65530662630939f9bea7788c) ([merge request](gitlab-org/omnibus-gitlab!8000))
+- [Update dependency pgbouncer_exporter to v0.10.2](gitlab-org/omnibus-gitlab@f28b1e336e2bb09169141ea8ca22b3d8181c8567) ([merge request](gitlab-org/omnibus-gitlab!8005))
+- [Update dependency redis-exporter to v1.65.0](gitlab-org/omnibus-gitlab@f4a24ddb52cc8661e0c8f91b66a2ce359032e5b2) ([merge request](gitlab-org/omnibus-gitlab!7969))
+- [Update dependency pgbouncer_exporter to v0.10.1](gitlab-org/omnibus-gitlab@db1ce382622b657d05744a4e860835d290c9502e) ([merge request](gitlab-org/omnibus-gitlab!7971))
+- [Update dependency libarchive/libarchive to v3.7.7](gitlab-org/omnibus-gitlab@9266d1152e9b5da0623e6d4084e3584117506249) ([merge request](gitlab-org/omnibus-gitlab!7989))
+- [Update dependency rubygems to v3.5.18](gitlab-org/omnibus-gitlab@2829d736aa82219a0879ffe886610eef315b9b02) ([merge request](gitlab-org/omnibus-gitlab!7885))
+
+### Removed (1 change)
+
+- [Stop building Debian 10 packages](gitlab-org/omnibus-gitlab@85810e56f20374ed463aed067bd1d2e058f41622) ([merge request](gitlab-org/omnibus-gitlab!7990))
+
 ## 17.5.2 (2024-11-12)
 
 ### Security (1 change)
