@@ -1153,16 +1153,21 @@ check-packages-functionality:
   allow_failure: true
   trigger:
     include: '/gitlab-ci-config/check-packages.yml'
+  variables:
+    deploy_instance: "true"
+    package_repository: "${STAGING_REPO}"
+    package_repo_token: "${STAGING_REPO_TOKEN}:@"
+    image_registry: "${CI_REGISTRY_IMAGE}"
   rules:
     - !reference [.default_rules, rules]
     - if: '$SKIP_PACKAGE_FUNCTIONALITY_CHECK'
       when: never
-    - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /CE_(RC|TAG)_BUILD_PIPELINE$/'
       variables:
-        deploy_instance: "true"
-        package_repository: "${STAGING_REPO}"
-        package_repo_token: "${STAGING_REPO_TOKEN}:@"
-        image_registry: "${CI_REGISTRY_IMAGE}"
+        PIPELINE_TYPE: 'CE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE'
+    - if: '$PIPELINE_TYPE =~ /EE_(RC|TAG)_BUILD_PIPELINE$/'
+      variables:
+        PIPELINE_TYPE: 'EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE'
 
 # Check if the packages are available from public repositories
 check-packages-availability:
@@ -1171,7 +1176,12 @@ check-packages-availability:
     include: '/gitlab-ci-config/check-packages.yml'
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /_TAG_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /CE_TAG_BUILD_PIPELINE$/'
+      variables:
+        PIPELINE_TYPE: 'CE_CHECK_PACKAGE_AVAILABILITY_PIPELINE'
+    - if: '$PIPELINE_TYPE =~ /EE_TAG_BUILD_PIPELINE$/'
+      variables:
+        PIPELINE_TYPE: 'EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE'
 
 create-gitlab-release:
   stage: package-and-image-release
