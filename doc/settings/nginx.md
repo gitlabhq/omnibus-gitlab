@@ -704,6 +704,82 @@ To configure NGINX status options:
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
    for the changes to take effect.
 
+#### Configure advanced metrics with VTS module
+
+GitLab includes the NGINX VTS (Virtual host Traffic Status) module to provide additional performance metrics, including latency percentiles.
+
+Before enabling the VTS module with histogram buckets, consider these impacts:
+
+- Memory usage increases to store metrics data. The impact scales with the number of virtual hosts and traffic volume.
+- Calculating histogram metrics on each request consumes a small amount of CPU.
+- If you are collecting these metrics in Prometheus, you need additional storage.
+
+For high-traffic installations, monitor system resources after enabling these metrics to ensure performance remains within acceptable limits.
+
+To enable advanced latency metrics:
+
+1. Create a custom NGINX configuration file:
+
+   ```shell
+   sudo mkdir -p /etc/gitlab/nginx/conf.d/
+   sudo vim /etc/gitlab/nginx/conf.d/vts-custom.conf
+   ```
+
+1. Add these settings to enable histogram buckets and filtering:
+
+   ```nginx
+   vhost_traffic_status_histogram_buckets 0.005 0.01 0.05 0.1 0.25 0.5 1 2.5 5 10;
+   vhost_traffic_status_filter_by_host on;
+   vhost_traffic_status_filter on;
+   vhost_traffic_status_filter_by_set_key $server_name server::*;
+   ```
+
+1. To configure GitLab to include your custom settings, add the following to `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   nginx['custom_nginx_config'] = "include /etc/gitlab/nginx/conf.d/vts-custom.conf;"
+   ```
+
+1. Reconfigure and restart NGINX:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   sudo gitlab-ctl restart nginx
+   ```
+
+After enabling these settings, you can use Prometheus queries to monitor various latency metrics:
+
+```plaintext
+# Average response time
+rate(nginx_vts_server_request_seconds_total[5m]) / rate(nginx_vts_server_requests_total{code=~"2xx|3xx|4xx|5xx"}[5m])
+
+# P90 latency
+histogram_quantile(0.90, rate(nginx_vts_server_request_duration_seconds_bucket[5m]))
+
+# P99 latency
+histogram_quantile(0.99, rate(nginx_vts_server_request_duration_seconds_bucket[5m]))
+
+# Average upstream response time
+rate(nginx_vts_upstream_response_seconds_total[5m]) / rate(nginx_vts_upstream_requests_total{code=~"2xx|3xx|4xx|5xx"}[5m])
+
+# P90 upstream latency
+histogram_quantile(0.90, rate(nginx_vts_upstream_response_duration_seconds_bucket[5m]))
+
+# P99 upstream latency
+histogram_quantile(0.99, rate(nginx_vts_upstream_response_duration_seconds_bucket[5m]))
+```
+
+For GitLab Workhorse-specific metrics, you can use:
+
+```plaintext
+# 90th percentile upstream latency for GitLab Workhorse
+histogram_quantile(0.90, rate(nginx_vts_upstream_response_duration_seconds_bucket{upstream="gitlab-workhorse"}[5m]))
+
+# Average upstream response time for GitLab Workhorse
+rate(nginx_vts_upstream_response_seconds_total{upstream="gitlab-workhorse"}[5m]) /
+rate(nginx_vts_upstream_requests_total{upstream="gitlab-workhorse",code=~"2xx|3xx|4xx|5xx"}[5m])
+```
+
 #### Configure user permissions for uploads
 
 To ensure user uploads are accessible, add your NGINX user (usually `www-data`) to the `gitlab-www`
