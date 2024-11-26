@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.6.1 (2024-11-26)
+
+No changes.
+
 ## 17.6.0 (2024-11-20)
 
 ### Added (2 changes)
@@ -35,6 +39,10 @@ omnibus-gitlab repository.
 ### Removed (1 change)
 
 - [Stop building Debian 10 packages](gitlab-org/omnibus-gitlab@85810e56f20374ed463aed067bd1d2e058f41622) ([merge request](gitlab-org/omnibus-gitlab!7990))
+
+## 17.5.3 (2024-11-26)
+
+No changes.
 
 ## 17.5.2 (2024-11-12)
 
@@ -86,6 +94,10 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Improve Patroni role detection message](gitlab-org/omnibus-gitlab@f5daf8f1ae2cf9c5f64d3b8a51272232281ab825) ([merge request](gitlab-org/omnibus-gitlab!7939))
+
+## 17.4.5 (2024-11-26)
+
+No changes.
 
 ## 17.4.4 (2024-11-12)
 
