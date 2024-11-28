@@ -15,8 +15,8 @@ can use that access to build packages.
 If you have a merge request (MR) in the `gitlab-org/gitlab` project, you can
 test that MR using a package or a Docker image.
 
-In the CI pipeline corresponding to your MR, run the `e2e:test-on-omnibus` job in
-the `qa` stage to trigger:
+On your MR apply the `~"pipeline:run-all-e2e"` label and run a new pipeline. This will
+include a `e2e:test-on-omnibus-ee` job in the `qa` stage which will trigger:
 
 - A downstream pipeline in the `omnibus-gitlab`
 [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror), which
