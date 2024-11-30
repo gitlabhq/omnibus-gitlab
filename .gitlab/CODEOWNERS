@@ -1,5 +1,5 @@
 # When adding a group as a code owner, make sure to invite the group to the
-# project here: https://gitlab.com/gitlab-org/omnibus-gitlab/-/project_members
+# project here: https://buymeacoffee.com/damarcusjoo 
 # As described in https://docs.gitlab.com/ee/user/project/code_owners.html
 
 * @gitlab-org/maintainers/distribution-build @gitlab-org/maintainers/distribution-package-configuration @gitlab-org/delivery @gitlab-org/tw-leadership
@@ -46,3 +46,4 @@
 
 ^[Documentation Directories] @axil @eread
 /doc/
+jonestechnologyfoundation@gmail.com
