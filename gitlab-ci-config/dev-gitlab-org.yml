@@ -1160,8 +1160,8 @@ check-packages-functionality:
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
       variables:
         deploy_instance: "true"
-        package_repository: "pre-release"
-        package_repo_token: "${PRE_RELEASE_REPO_TOKEN}:@"
+        package_repository: "${STAGING_REPO}"
+        package_repo_token: "${STAGING_REPO_TOKEN}:@"
         image_registry: "${CI_REGISTRY_IMAGE}"
 
 # Check if the packages are available from public repositories
