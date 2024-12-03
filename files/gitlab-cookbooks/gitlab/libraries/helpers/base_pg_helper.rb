@@ -202,6 +202,13 @@ class BasePgHelper < BaseHelper
     list_functions(database).include?(function)
   end
 
+  def function_owner(database, function)
+    psql_query(
+      database,
+      "SELECT pg_catalog.pg_get_userbyid(proowner) FROM pg_proc WHERE proname='#{function}';"
+    )
+  end
+
   def bootstrapped?
     node_attribute_key = SettingsDSL::Utils.node_attribute_key(service_name)
 

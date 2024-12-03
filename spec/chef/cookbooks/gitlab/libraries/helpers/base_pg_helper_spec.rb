@@ -333,4 +333,23 @@ RSpec.describe BasePgHelper do
       end
     end
   end
+
+  context 'when handling database functions' do
+    let(:function_stdout) { double(stdout: 'function-owner') }
+    let(:empty_stdout) { double(stdout: '') }
+    describe '#function_owner' do
+      it 'returns the correct owner' do
+        allow(subject).to receive(:do_shell_out)
+        .with("/opt/gitlab/bin/gitlab-psql -d 'database' -c \"SELECT pg_catalog.pg_get_userbyid(proowner) FROM pg_proc WHERE proname='function';\" -tA")
+        .and_return(function_stdout)
+        expect(subject.function_owner('database', 'function')).to eq('function-owner')
+      end
+      it 'is empty if the function does not exist' do
+        allow(subject).to receive(:do_shell_out)
+        .with("/opt/gitlab/bin/gitlab-psql -d 'database' -c \"SELECT pg_catalog.pg_get_userbyid(proowner) FROM pg_proc WHERE proname='not_a_function';\" -tA")
+        .and_return(empty_stdout)
+        expect(subject.function_owner('database', 'not_a_function')).to be_empty
+      end
+    end
+  end
 end
