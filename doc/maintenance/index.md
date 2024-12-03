@@ -181,7 +181,7 @@ To rotate the secrets:
 1. Recommended. Extract your current secrets for `gitlab_rails`. Save the output because you need this later:
 
    ```shell
-   sudo grep "secret_key_base\|db_key_base\|otp_key_base\|encrypted_settings_key_base\|openid_connect_signing_key" /etc/gitlab/gitlab-secrets.json
+   sudo grep "secret_key_base\|db_key_base\|otp_key_base\|encrypted_settings_key_base\|openid_connect_signing_key\|active_record_encryption_primary_key\|active_record_encryption_deterministic_key\|active_record_encryption_key_derivation_salt" /etc/gitlab/gitlab-secrets.json
    ```
 
 1. Move your current secrets file to a different location:

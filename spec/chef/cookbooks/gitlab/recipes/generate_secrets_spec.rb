@@ -15,21 +15,8 @@ RSpec.describe 'generate_secrets' do
   optional_path = '/etc/mygitlab/mysecrets.json'.freeze
   hex_key = /\h{128}/.freeze
   rsa_key = /\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m.freeze
+  alphanumeric_key_regex = /\A[A-Za-z0-9]{32}\Z/m.freeze
   default_secrets_error_regexp = %r{You have enabled writing to the default secrets file location with package\['generate_secrets_json_file'].*}
-
-  def stub_gitlab_secrets_json(secrets)
-    allow(File).to receive(:read).with(SecretsHelper::SECRETS_FILE).and_return(JSON.generate(secrets))
-  end
-
-  def stub_check_secrets
-    rails_keys = new_secrets['gitlab_rails']
-    hex_keys = rails_keys.values_at('db_key_base', 'otp_key_base', 'secret_key_base', 'encrypted_settings_key_base')
-    rsa_keys = rails_keys.values_at('openid_connect_signing_key')
-
-    expect(rails_keys.to_a.uniq).to eq(rails_keys.to_a)
-    expect(hex_keys).to all(match(hex_key))
-    expect(rsa_keys).to all(match(rsa_key))
-  end
 
   before do
     allow(File).to receive(:directory?).and_call_original
@@ -80,10 +67,16 @@ RSpec.describe 'generate_secrets' do
       it 'writes new secrets to the file, with different values for each' do
         rails_keys = new_secrets['gitlab_rails']
         hex_keys = rails_keys.values_at('db_key_base', 'otp_key_base', 'secret_key_base', 'encrypted_settings_key_base')
+        alphanumeric_keys = rails_keys.values_at(
+          'active_record_encryption_primary_key',
+          'active_record_encryption_deterministic_key',
+          'active_record_encryption_key_derivation_salt'
+        ).flatten
         rsa_keys = rails_keys.values_at('openid_connect_signing_key')
 
         expect(rails_keys.to_a.uniq).to eq(rails_keys.to_a)
         expect(hex_keys).to all(match(hex_key))
+        expect(alphanumeric_keys.flatten).to all(match(alphanumeric_key_regex))
         expect(rsa_keys).to all(match(rsa_key))
       end
     end

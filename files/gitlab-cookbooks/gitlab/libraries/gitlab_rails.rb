@@ -78,6 +78,19 @@ module GitlabRails
       Gitlab['gitlab_rails']['encrypted_settings_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['openid_connect_signing_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
 
+      # 1. We set the following two keys as an array to support keys rotation.
+      #    The last key in the array is always used to encrypt data:
+      #    https://github.com/rails/rails/blob/v7.0.8.4/activerecord/lib/active_record/encryption/key_provider.rb#L21
+      #    while all the keys are used (in the order they're defined) to decrypt data:
+      #    https://github.com/rails/rails/blob/v7.0.8.4/activerecord/lib/active_record/encryption/cipher.rb#L26.
+      #    This allows to rotate keys by adding a new key as the last key, and start a re-encryption process that
+      #    runs in the background: https://gitlab.com/gitlab-org/gitlab/-/issues/494976
+      # 2. We use the same method and length as Rails' defaults:
+      #    https://github.com/rails/rails/blob/v7.0.8.4/activerecord/lib/active_record/railties/databases.rake#L537-L540
+      Gitlab['gitlab_rails']['active_record_encryption_primary_key'] ||= [SecretsHelper.generate_alphanumeric(32)]
+      Gitlab['gitlab_rails']['active_record_encryption_deterministic_key'] ||= [SecretsHelper.generate_alphanumeric(32)]
+      Gitlab['gitlab_rails']['active_record_encryption_key_derivation_salt'] ||= SecretsHelper.generate_alphanumeric(32)
+
       return unless Gitlab['gitlab_rails']['initial_root_password'].nil?
 
       Gitlab['gitlab_rails']['initial_root_password'] = SecretsHelper.generate_base64(32)

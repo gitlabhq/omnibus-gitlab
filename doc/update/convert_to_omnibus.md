@@ -47,7 +47,8 @@ To convert your self-compiled installation to a Linux package installation:
    `gitlab.yml`, `puma.rb`, and `smtp_settings.rb`. For all available options, see the
    [`gitlab.rb` template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 1. Copy the secrets from the old self-compiled installation to the new Linux package installation:
-   1. Restore secrets related to Rails. Copy the values of `db_key_base`, `secret_key_base` and `otp_key_base` from
+   1. Restore secrets related to Rails. Copy the values of `db_key_base`, `secret_key_base`,
+      `otp_key_base`, `encrypted_settings_key_base`, `openid_connect_signing_key`, and `active_record_encryption` from
       `/home/git/gitlab/config/secrets.yml` (self-compiled installation) to the equivalent
       ones in `/etc/gitlab/gitlab-secrets.json` (Linux package installation).
    1. Copy the contents of `/home/git/gitlab-shell/.gitlab_shell_secret` (self-compiled installation) to `secret_token`
@@ -65,6 +66,11 @@ To convert your self-compiled installation to a Linux package installation:
            "secret_key_base": "...",
            "db_key_base": "...",
            "otp_key_base": "...",
+           "encrypted_settings_key_base": "...",
+           "openid_connect_signing_key": "...",
+           "active_record_encryption_primary_key": [ "..."],
+           "active_record_encryption_deterministic_key": ["..."],
+           "active_record_encryption_key_derivation_salt": "...",
          }
          ...
        }
