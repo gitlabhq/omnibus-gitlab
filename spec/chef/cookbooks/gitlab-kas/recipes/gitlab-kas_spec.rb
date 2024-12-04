@@ -62,7 +62,8 @@ RSpec.describe 'gitlab-kas' do
               listen: {
                 address: 'localhost:8154',
               },
-              url_path_prefix: '/'
+              url_path_prefix: '/',
+              websocket_token_secret_file: "/var/opt/gitlab/gitlab-kas/websocket_token_secret_file"
             }
           ),
           observability: {
@@ -93,6 +94,7 @@ RSpec.describe 'gitlab-kas' do
     it 'correctly renders the KAS authentication secret files' do
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/authentication_secret_file").with_content { |content| Base64.strict_decode64(content).size == 32 }
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/private_api_authentication_secret_file").with_content { |content| Base64.strict_decode64(content).size == 32 }
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/websocket_token_secret_file").with_content { |content| Base64.strict_decode64(content).size == 72 }
     end
 
     it 'sets OWN_PRIVATE_API_URL and SSL_CERT_DIR' do
@@ -104,6 +106,7 @@ RSpec.describe 'gitlab-kas' do
   context 'with user settings' do
     let(:api_secret_key) { Base64.strict_encode64('1' * 32) }
     let(:private_api_secret_key) { Base64.strict_encode64('2' * 32) }
+    let(:websocket_token_secret_key) { Base64.strict_encode64('3' * 72) }
 
     before do
       stub_gitlab_rb(
@@ -111,6 +114,7 @@ RSpec.describe 'gitlab-kas' do
         gitlab_kas: {
           api_secret_key: api_secret_key,
           private_api_secret_key: private_api_secret_key,
+          websocket_token_secret_key: websocket_token_secret_key,
           listen_address: 'localhost:5006',
           listen_websocket: false,
           observability_listen_address: '0.0.0.0:8151',
@@ -162,6 +166,7 @@ RSpec.describe 'gitlab-kas' do
     it 'correctly renders the KAS authentication secret files' do
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/authentication_secret_file").with_content(api_secret_key)
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/private_api_authentication_secret_file").with_content(private_api_secret_key)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/websocket_token_secret_file").with_content(websocket_token_secret_key)
     end
 
     it 'sets OWN_PRIVATE_API_HOST' do
@@ -709,6 +714,7 @@ RSpec.describe 'gitlab-kas' do
       @files ||= %w(
         /var/opt/gitlab/gitlab-kas/authentication_secret_file
         /var/opt/gitlab/gitlab-kas/private_api_authentication_secret_file
+        /var/opt/gitlab/gitlab-kas/websocket_token_secret_file
         /var/opt/gitlab/gitlab-kas/redis_password_file
         /var/opt/gitlab/gitlab-kas/redis_sentinels_password_file
       )

@@ -116,6 +116,7 @@ RSpec.describe 'gitlab::mailroom' do
 
     context 'auth token is not specified' do
       before do
+        allow(SecretsHelper).to receive(:generate_base64).and_call_original
         allow(SecretsHelper).to receive(:generate_base64).with(32).and_return("a" * 32)
       end
 
