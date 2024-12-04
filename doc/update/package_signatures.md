@@ -141,7 +141,7 @@ To fetch the latest repository signing key:
 
 ## Package signatures
 
-This section provides methods for verifying the signatures of GitLab produced-packages, both manually and automatically
+This section provides methods for verifying the signatures of GitLab-produced packages, both manually and automatically
 where supported.
 
 ### RPM-based distributions
