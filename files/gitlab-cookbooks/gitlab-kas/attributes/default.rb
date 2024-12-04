@@ -25,6 +25,7 @@ default['gitlab_kas']['internal_api_key_file'] = nil
 default['gitlab_kas']['kubernetes_api_listen_address'] = 'localhost:8154'
 default['gitlab_kas']['kubernetes_api_certificate_file'] = nil
 default['gitlab_kas']['kubernetes_api_key_file'] = nil
+default['gitlab_kas']['websocket_token_secret_key'] = nil
 default['gitlab_kas']['private_api_secret_key'] = nil
 default['gitlab_kas']['private_api_listen_address'] = 'localhost:8155'
 default['gitlab_kas']['private_api_listen_network'] = 'tcp'

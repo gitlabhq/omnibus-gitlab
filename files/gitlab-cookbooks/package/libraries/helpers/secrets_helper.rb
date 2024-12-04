@@ -99,7 +99,8 @@ class SecretsHelper
       },
       'gitlab_kas' => {
         'api_secret_key' => Gitlab['gitlab_kas']['api_secret_key'],
-        'private_api_secret_key' => Gitlab['gitlab_kas']['private_api_secret_key']
+        'private_api_secret_key' => Gitlab['gitlab_kas']['private_api_secret_key'],
+        'websocket_token_secret_key' => Gitlab['gitlab_kas']['websocket_token_secret_key']
       },
       'suggested_reviewers' => {
         'api_secret_key' => Gitlab['suggested_reviewers']['api_secret_key']

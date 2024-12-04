@@ -21,6 +21,7 @@ agent:
       key_file: <%= @kubernetes_api_key_file %>
       <%- end %>
     url_path_prefix: /
+    websocket_token_secret_file: <%= @websocket_token_secret_file %>
   info_cache_ttl: <%= @agent_info_cache_ttl %>s
   info_cache_error_ttl: <%= @agent_info_cache_error_ttl %>s
 gitlab:

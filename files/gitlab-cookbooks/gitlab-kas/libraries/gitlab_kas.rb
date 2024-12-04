@@ -91,6 +91,7 @@ module GitlabKas
     def parse_secrets
       Gitlab['gitlab_kas']['api_secret_key'] ||= Base64.strict_encode64(SecretsHelper.generate_hex(16))
       Gitlab['gitlab_kas']['private_api_secret_key'] ||= Base64.strict_encode64(SecretsHelper.generate_hex(16))
+      Gitlab['gitlab_kas']['websocket_token_secret_key'] ||= SecretsHelper.generate_base64(72)
     end
 
     def validate_secrets
@@ -100,10 +101,15 @@ module GitlabKas
         raise "gitlab_kas['api_secret_key'] should be exactly 32 bytes" if api_secret_key.length != 32
       end
 
-      return unless Gitlab['gitlab_kas']['private_api_secret_key']
+      if Gitlab['gitlab_kas']['private_api_secret_key']
+        private_api_secret_key = Base64.strict_decode64(Gitlab['gitlab_kas']['private_api_secret_key'])
+        raise "gitlab_kas['private_api_secret_key'] should be exactly 32 bytes" if private_api_secret_key.length != 32
+      end
 
-      private_api_secret_key = Base64.strict_decode64(Gitlab['gitlab_kas']['private_api_secret_key'])
-      raise "gitlab_kas['private_api_secret_key'] should be exactly 32 bytes" if private_api_secret_key.length != 32
+      return unless Gitlab['gitlab_kas']['websocket_token_secret_key']
+
+      websocket_token_secret_key = Base64.strict_decode64(Gitlab['gitlab_kas']['websocket_token_secret_key'])
+      raise "gitlab_kas['websocket_token_secret_key'] should be exactly 72 bytes" if websocket_token_secret_key.length != 72
     end
 
     def parse_redis_settings

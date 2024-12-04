@@ -26,6 +26,7 @@ gitlab_kas_static_etc_dir = '/opt/gitlab/etc/gitlab-kas'
 gitlab_kas_config_file = File.join(working_dir, 'gitlab-kas-config.yml')
 gitlab_kas_authentication_secret_file = File.join(working_dir, 'authentication_secret_file')
 gitlab_kas_private_api_authentication_secret_file = File.join(working_dir, 'private_api_authentication_secret_file')
+gitlab_kas_websocket_token_secret_file = File.join(working_dir, 'websocket_token_secret_file')
 
 redis_params = redis_helper.redis_params
 
@@ -86,6 +87,14 @@ file gitlab_kas_private_api_authentication_secret_file do
   notifies :restart, 'runit_service[gitlab-kas]' if omnibus_helper.should_notify?('gitlab-kas')
 end
 
+file gitlab_kas_websocket_token_secret_file do
+  content node['gitlab_kas']['websocket_token_secret_key']
+  owner 'root'
+  group account_helper.gitlab_group
+  mode '0640'
+  notifies :restart, 'runit_service[gitlab-kas]' if omnibus_helper.should_notify?('gitlab-kas')
+end
+
 file gitlab_kas_redis_password_file do
   content redis_password
   owner 'root'
@@ -115,6 +124,7 @@ template gitlab_kas_config_file do
     node['gitlab_kas'].to_hash.merge(
       authentication_secret_file: gitlab_kas_authentication_secret_file,
       private_api_authentication_secret_file: gitlab_kas_private_api_authentication_secret_file,
+      websocket_token_secret_file: gitlab_kas_websocket_token_secret_file,
       redis_network: redis_params[:network],
       redis_address: redis_params[:address],
       redis_ssl: redis_params[:ssl],

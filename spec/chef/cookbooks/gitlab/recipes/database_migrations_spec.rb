@@ -105,7 +105,8 @@ RSpec.describe 'gitlab::database-migrations' do
 
       context 'not set' do
         before do
-          allow(SecretsHelper).to receive(:generate_base64).and_return('LFQLd2ayKNpthh+Ehxqy7ROxsmpzACy55EcOYoMfRlk=')
+          allow(SecretsHelper).to receive(:generate_base64).and_call_original
+          allow(SecretsHelper).to receive(:generate_base64).with(32).and_return('LFQLd2ayKNpthh+Ehxqy7ROxsmpzACy55EcOYoMfRlk=')
         end
 
         it 'generates a random root password and runs DB migration with GITLAB_ROOT_PASSWORD set to it' do
@@ -133,7 +134,8 @@ RSpec.describe 'gitlab::database-migrations' do
 
     context 'initial license file' do
       before do
-        allow(SecretsHelper).to receive(:generate_base64).and_return('LFQLd2ayKNpthh+Ehxqy7ROxsmpzACy55EcOYoMfRlk=')
+        allow(SecretsHelper).to receive(:generate_base64).and_call_original
+        allow(SecretsHelper).to receive(:generate_base64).with(32).and_return('LFQLd2ayKNpthh+Ehxqy7ROxsmpzACy55EcOYoMfRlk=')
       end
 
       it 'detects license file from /etc/gitlab' do
