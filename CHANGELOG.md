@@ -103,6 +103,10 @@ No changes.
 
 - [Improve Patroni role detection message](gitlab-org/omnibus-gitlab@f5daf8f1ae2cf9c5f64d3b8a51272232281ab825) ([merge request](gitlab-org/omnibus-gitlab!7939))
 
+## 17.4.6 (2024-12-10)
+
+No changes.
+
 ## 17.4.5 (2024-11-26)
 
 No changes.
