@@ -44,6 +44,10 @@ No changes.
 
 - [Stop building Debian 10 packages](gitlab-org/omnibus-gitlab@85810e56f20374ed463aed067bd1d2e058f41622) ([merge request](gitlab-org/omnibus-gitlab!7990))
 
+## 17.5.4 (2024-12-10)
+
+No changes.
+
 ## 17.5.3 (2024-11-26)
 
 No changes.
