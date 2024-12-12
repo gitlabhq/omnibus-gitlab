@@ -82,7 +82,7 @@ before_script:
   # package edition (CE/EE). For child pipelines from
   # TRIGGERED_(CE|EE)_PIPELINE, we don't want exit early, but try to build
   # everything.
-  - if [[ "${CI_PIPELINE_SOURCE}" != "parent_pipeline" ]]; then
+  - if [[ "${CI_PIPELINE_SOURCE}" != "parent_pipeline" ]] && [[ "${CI_PIPELINE_SOURCE}" != "pipeline" ]]; then
       export CE_ONLY=(Raspberry);
       export EE_ONLY=(SLES RAT);
       for job in "${CE_ONLY[@]}"; do
