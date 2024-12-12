@@ -123,6 +123,7 @@ Ubuntu-20.04-fips-check:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
+    USE_SYSTEM_LIBGCRYPT: "true"
 
 # yum based
 CentOS-7-check:
@@ -159,6 +160,7 @@ AlmaLinux-8-fips-check:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
+    USE_SYSTEM_LIBGCRYPT: "true"
 AlmaLinux-9-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:latest"
   extends: .yum-install
@@ -166,6 +168,7 @@ AlmaLinux-9-fips-check:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
+    USE_SYSTEM_LIBGCRYPT: "true"
 AmazonLinux-2-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:latest"
   extends: .yum-install
@@ -173,6 +176,7 @@ AmazonLinux-2-fips-check:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
+    USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 
 # zypper based
 OpenSUSE-15.5-check:
