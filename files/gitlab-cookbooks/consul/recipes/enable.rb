@@ -27,6 +27,7 @@ account "Consul user and group" do
   ugid account_helper.consul_group
   groupname account_helper.consul_group
   gid node['consul']['gid']
+  shell '/usr/sbin/nologin'
   home node['consul']['dir']
   manage node['gitlab']['manage_accounts']['enable']
 end
