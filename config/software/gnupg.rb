@@ -17,12 +17,13 @@
 name 'gnupg'
 default_version '2.2.41'
 
-dependency 'libassuan'
-dependency 'npth'
-dependency 'libgcrypt'
-dependency 'libksba'
-dependency 'zlib'
 dependency 'bzip2'
+dependency 'libassuan'
+dependency 'libgcrypt' unless Build::Check.use_system_libgcrypt?
+dependency 'libgpg-error'
+dependency 'libksba'
+dependency 'npth'
+dependency 'zlib'
 
 license 'LGPL-2.1'
 license_file 'COPYING.LGPL3'
@@ -39,14 +40,24 @@ build do
   # For gnupg to build fine in Debian Wheezy and Centos ^
   env['LDFLAGS'] << " -lrt"
 
-  config_flags = ""
+  prefix = "#{install_dir}/embedded"
+
+  configure_command = [
+    './configure',
+    "--prefix=#{prefix}",
+    '--disable-doc',
+    '--without-readline',
+    '--disable-sqlite',
+    '--disable-gnutls',
+    '--disable-dirmngr',
+    "--with-libgpg-error-prefix=#{prefix}",
+  ]
+
   # CentOS 6 doesn't have inotify, which will raise an error
   # IN_EXCL_UNLINK undeclared. Hence disabling it explicitly.
-  config_flags = "ac_cv_func_inotify_init=no" if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^6/
+  configure_command << "ac_cv_func_inotify_init=no" if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^6/
 
-  prefix = "#{install_dir}/embedded"
-  command './configure ' \
-    "--prefix=#{prefix} --with-libgpg-error-prefix=#{prefix} --disable-doc --without-readline --disable-sqlite --disable-gnutls --disable-dirmngr #{config_flags}", env: env
+  command configure_command.join(' '), env: env
 
   make "-j #{workers}", env: env
   make 'install', env: env

@@ -32,8 +32,15 @@ relative_path "libassuan-#{version}"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   prefix = "#{install_dir}/embedded"
-  command './configure ' \
-    "--prefix=#{prefix} --with-libgpg-error-prefix=#{prefix} --disable-doc", env: env
+
+  configure_command = [
+    './configure',
+    "--prefix=#{prefix}",
+    '--disable-doc',
+    "--with-libgpg-error-prefix=#{prefix}",
+  ]
+
+  command configure_command.join(' '), env: env
 
   make "-j #{workers}", env: env
   make 'install', env: env

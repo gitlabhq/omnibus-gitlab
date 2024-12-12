@@ -101,12 +101,23 @@ if OhaiHelper.arm?
   allowed_lib /libatomic.so.1/ if OhaiHelper.raspberry_pi?
 end
 
-# FIPs requires system OpenSSL packages to run
+# FIPS requires system OpenSSL packages to run
 if Build::Check.use_system_ssl?
   if rhel?
     runtime_dependency 'openssl-perl'
   else
     runtime_dependency 'openssl'
+  end
+end
+
+# FIPS requires system libgcrypt packages to run.
+if Build::Check.use_system_libgcrypt?
+  allowed_lib /libgcrypt\.so/
+
+  if rhel?
+    runtime_dependency 'libgcrypt'
+  else
+    runtime_dependency 'libgcrypt20'
   end
 end
 

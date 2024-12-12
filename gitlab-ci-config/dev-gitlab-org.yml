@@ -73,6 +73,7 @@
   extends: .branch_template
   variables:
     USE_SYSTEM_SSL: "true"
+    USE_SYSTEM_LIBGCRYPT: "true"
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
@@ -141,6 +142,7 @@
   extends: .tag_template
   variables:
     USE_SYSTEM_SSL: "true"
+    USE_SYSTEM_LIBGCRYPT: "true"
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
@@ -182,6 +184,7 @@
   extends: .staging_upload_template
   variables:
     USE_SYSTEM_SSL: "true"
+    USE_SYSTEM_LIBGCRYPT: "true"
     INCLUDE_PACKAGECLOUD: "true"
   rules:
     - !reference [.default_rules, rules]
@@ -219,6 +222,7 @@
   extends: .production_release_template
   variables:
     USE_SYSTEM_SSL: "true"
+    USE_SYSTEM_LIBGCRYPT: "true"
     INCLUDE_PACKAGECLOUD: "true"
   rules:
     - !reference [.default_rules, rules]
@@ -383,6 +387,8 @@ SLES-15.2-branch:
 AmazonLinux-2-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
+  variables:
+    USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 AlmaLinux-8-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
@@ -637,6 +643,8 @@ SLES-15.2:
 AmazonLinux-2-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
+  variables:
+    USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 AlmaLinux-8-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
@@ -829,6 +837,8 @@ SLES-15.2-staging:
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 AmazonLinux-2-fips-staging:
   extends: .fips_staging_upload_template
+  variables:
+    USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
   needs:
     - job: AmazonLinux-2-fips
       optional: true
@@ -971,6 +981,8 @@ AmazonLinux-2-fips-release:
   extends: .fips_release_template
   needs:
     - AmazonLinux-2-fips
+  variables:
+    USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 AlmaLinux-8-fips-release:
   extends: .fips_release_template
   needs:
