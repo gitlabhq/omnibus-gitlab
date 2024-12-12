@@ -286,19 +286,27 @@
 Ubuntu-20.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(NIGHTLY|BRANCH|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
 Ubuntu-22.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /(NIGHTLY|BRANCH|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
     - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
 Ubuntu-24.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(NIGHTLY|BRANCH|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
 Debian-11-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
@@ -401,6 +409,7 @@ Ubuntu-20.04-fips-branch:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_BRANCH_BUILD_PIPELINE"'
       when: manual
       allow_failure: true
@@ -540,7 +549,7 @@ Ubuntu-20.04-staging:
       optional: true
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 
 Ubuntu-22.04-staging:
   extends: .staging_upload_template
@@ -551,7 +560,7 @@ Ubuntu-22.04-staging:
       optional: true
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 
 Ubuntu-22.04-arm64-staging:
   extends: .staging_upload_template
@@ -710,6 +719,9 @@ Ubuntu-24.04-staging:
       optional: true
     - job: Ubuntu-24.04-branch
       optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 Ubuntu-20.04-arm64-staging:
   extends: .staging_upload_template
   needs:
@@ -865,6 +877,11 @@ Ubuntu-20.04-fips-staging:
       optional: true
     - job: Ubuntu-20.04-fips-branch
       optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
 
 ### Package releases
 Ubuntu-20.04-release:
@@ -1180,6 +1197,12 @@ check-packages-functionality:
     - if: '$PIPELINE_TYPE =~ /EE_(RC|TAG)_BUILD_PIPELINE$/'
       variables:
         PIPELINE_TYPE: 'EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE'
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
+      variables:
+        ee: 'true'
+        PIPELINE_TYPE: 'INTERNAL_RELEASE_CHECK_PACKAGE_PIPELINE'
+        INTERNAL_RELEASE: 'true'
+        INTERNAL_RELEASE_ITERATION: "${INTERNAL_RELEASE_ITERATION}"
 
 # Check if the packages are available from public repositories
 check-packages-availability:

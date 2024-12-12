@@ -30,6 +30,10 @@ before_script:
     - bash scripts/ci/deploy_package.sh
   tags: !reference [.distribution-amd64-tags]
   retry: 2
+  rules:
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_CHECK_PACKAGE_PIPELINE"'
+      when: never
+    - when: always
 
 .apt-install:
   extends: .job_base
@@ -65,18 +69,24 @@ before_script:
 Ubuntu-20.04-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:latest"
   extends: .apt-install
+  rules:
+    - when: always
 Ubuntu-20.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:latest"
   extends: .apt-arm-install
 Ubuntu-22.04-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:latest"
   extends: .apt-install
+  rules:
+    - when: always
 Ubuntu-22.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:latest"
   extends: .apt-arm-install
 Ubuntu-24.04-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04:latest"
   extends: .apt-install
+  rules:
+    - when: always
 Ubuntu-24.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:latest"
   extends: .apt-arm-install
@@ -121,6 +131,7 @@ Ubuntu-20.04-fips-check:
   extends: .apt-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_CHECK_PACKAGE_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "true"
@@ -216,3 +227,7 @@ Docker:
     - bash scripts/ci/deploy_docker.sh
   tags: !reference [.distribution-amd64-tags]
   retry: 2
+  rules:
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_CHECK_PACKAGE_PIPELINE"'
+      when: never
+    - when: always

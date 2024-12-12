@@ -49,6 +49,17 @@ RSpec.describe Build::Info::Package do
         stub_env_var('CI_PIPELINE_ID', '12345')
       end
 
+      context 'for internal releases' do
+        before do
+          allow(Build::Info::Package).to receive(:internal_release_iteration).and_return(1)
+          allow(Build::Check).to receive(:is_internal_release?).and_return(true)
+        end
+
+        it 'returns computed version as expected' do
+          expect(described_class.semver_version).to eq('16.2.0+internal1')
+        end
+      end
+
       context 'on nightlies' do
         before do
           allow(Build::Check).to receive(:is_nightly?).and_return(true)
