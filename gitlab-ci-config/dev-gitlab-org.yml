@@ -721,7 +721,7 @@ Ubuntu-24.04-staging:
       optional: true
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 Ubuntu-20.04-arm64-staging:
   extends: .staging_upload_template
   needs:
