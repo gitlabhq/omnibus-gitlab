@@ -128,6 +128,7 @@ default['gitlab']['gitlab_rails']['geo_secondary_usage_data_cron_worker'] = nil
 default['gitlab']['gitlab_rails']['geo_prune_event_log_worker_cron'] = nil
 default['gitlab']['gitlab_rails']['geo_repository_verification_primary_batch_worker_cron'] = nil
 default['gitlab']['gitlab_rails']['geo_repository_verification_secondary_scheduler_worker_cron'] = nil
+default['gitlab']['gitlab_rails']['geo_metrics_update_worker_cron'] = nil
 default['gitlab']['gitlab_rails']['analytics_usage_trends_count_job_trigger_worker_cron'] = nil
 default['gitlab']['gitlab_rails']['member_invitation_reminder_emails_worker_cron'] = nil
 default['gitlab']['gitlab_rails']['user_status_cleanup_batch_worker_cron'] = nil
