@@ -1,6 +1,6 @@
 #
 # Copyright:: Copyright (c) 2013-2014 Chef Software, Inc.
-# Copyright:: Copyright (c) 2016-2021 GitLab B.V.
+# Copyright:: Copyright (c) 2016-2021 GitLab Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
