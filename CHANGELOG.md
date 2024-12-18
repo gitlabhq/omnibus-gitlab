@@ -3,6 +3,29 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.7.0 (2024-12-18)
+
+### Added (2 changes)
+
+- [Generate and configure KAS WebSocket Token secret](gitlab-org/omnibus-gitlab@41a5e73e75b6b8be06717f4ac521c0ca4659fad6) ([merge request](gitlab-org/omnibus-gitlab!8054))
+- [Add ActiveRecord::Encryption secrets](gitlab-org/omnibus-gitlab@3d132d5fc664142e06a3cf8eba534e17c375613f) ([merge request](gitlab-org/omnibus-gitlab!8026))
+
+### Fixed (2 changes)
+
+- [FIPS packages: Use system libgcrypt](gitlab-org/omnibus-gitlab@e5c4fca06547807a9619b2adf49b5dbfddf6a85c) ([merge request](gitlab-org/omnibus-gitlab!8048))
+- [Ensure pg_shadow_lookup is owned by the correct user](gitlab-org/omnibus-gitlab@62c175794e3fd400361e8c46e0df4b2fe938adfd) ([merge request](gitlab-org/omnibus-gitlab!8041))
+
+### Changed (8 changes)
+
+- [Disallow login for consul account](gitlab-org/omnibus-gitlab@26189c586613a6369b1a0db7860999e90bf411bd) ([merge request](gitlab-org/omnibus-gitlab!8039))
+- [Update dependency danger-review to v2](gitlab-org/omnibus-gitlab@a97ddd945f10a50a89e3917d0dc2601f4abc06c0) ([merge request](gitlab-org/omnibus-gitlab!8063))
+- [Update dependency danger-review to v1.4.2](gitlab-org/omnibus-gitlab@c24f2da0eed76d841febc206b8924a7fd392b09a) ([merge request](gitlab-org/omnibus-gitlab!8062))
+- [Bump Mattermost to 10.2.0](gitlab-org/omnibus-gitlab@bf06b350d4ba59f5fd8be7d581dd5b34e0d2dd81) by @mvitale1989 ([merge request](gitlab-org/omnibus-gitlab!8065))
+- [Update python from 3.9.17 to 3.9.21](gitlab-org/omnibus-gitlab@c1db6e21f68b0678b530af01f8b255fbb5294090) ([merge request](gitlab-org/omnibus-gitlab!8061))
+- [Update dependency git-filter-repo to v2.47.0](gitlab-org/omnibus-gitlab@fb520cb5cab1bdf2bd06500f3e32c4f15ec824cc) ([merge request](gitlab-org/omnibus-gitlab!8060))
+- [Make gitlab-ctl commands exit 1 on non-existent services](gitlab-org/omnibus-gitlab@7f55ceba286b0e725ab1f551f5c03636e9053b27) ([merge request](gitlab-org/omnibus-gitlab!8037))
+- [Update bundled OpenSSL from 1.1.1 to 3.4.0](gitlab-org/omnibus-gitlab@8f76ff2cf1576b95f27cf744b16b0548cf5c624b) ([merge request](gitlab-org/omnibus-gitlab!8049))
+
 ## 17.6.2 (2024-12-10)
 
 No changes.
