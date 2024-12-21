@@ -2612,6 +2612,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/",
 #  'WRAPPER_JSON_LOGGING' => true
 # }
+# gitaly['gitlab_secret'] = <secret>
+
 
 # gitaly['open_files_ulimit'] = 15000 # Maximum number of open files allowed for the gitaly process
 ##! Service name used to register Gitaly as a Consul service
