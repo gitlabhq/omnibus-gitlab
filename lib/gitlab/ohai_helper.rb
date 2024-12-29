@@ -198,16 +198,20 @@ class OhaiHelper
       os_platform == 'sles' && get_suse_version.to_i == 12
     end
 
-    # Currently rake-compiler-dock uses a Ubuntu 20.04 image to create the
-    # native gem for the aarch64-linux platform. As a result, anything
-    # using a glibc older than v2.29 will not work. We need to compile
-    # gems for these platforms.
+    # rake-compiler-dock v1.7.0 uses an Ubuntu 20.04 image to create
+    # precompiled native gems. As a result, precompiled gems will
+    # require glibc v2.29 or higher. On older platforms, we need to
+    # recompile these gems for them to work.
     def ruby_native_gems_unsupported?
       %w[
-        el-8_aarch64
+        amazon-2
         amazon-2_aarch64
         debian-buster_aarch64
+        el-7
+        el-8
+        el-8_aarch64
         raspbian-buster_aarch64
+        sles-12.5
       ].include?(platform_dir)
     end
   end
