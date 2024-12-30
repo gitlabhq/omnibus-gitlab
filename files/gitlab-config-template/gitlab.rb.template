@@ -1003,6 +1003,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['uid'] = nil
 # registry['gid'] = nil
 # registry['dir'] = "/var/opt/gitlab/registry"
+# registry['shell'] = "/usr/sbin/nologin"
 # registry['registry_http_addr'] = "127.0.0.1:5000"
 # registry['debug_addr'] = "localhost:5001"
 # registry['log_directory'] = "/var/log/gitlab/registry"

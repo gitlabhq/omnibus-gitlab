@@ -95,6 +95,10 @@ RSpec.describe 'registry recipe' do
 
     it_behaves_like 'renders a valid YAML file', '/var/opt/gitlab/registry/config.yml'
 
+    it 'creates the registry user and group with the correct parameters' do
+      expect(chef_run).to create_account('Docker registry user and group').with(username: 'registry', groupname: 'registry', shell: '/usr/sbin/nologin', home: '/var/opt/gitlab/registry')
+    end
+
     it 'creates a default VERSION file and restarts service' do
       expect(chef_run).to create_version_file('Create version file for Registry').with(
         version_file_path: '/var/opt/gitlab/registry/VERSION',

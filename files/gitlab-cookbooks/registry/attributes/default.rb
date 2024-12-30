@@ -20,6 +20,7 @@ default['registry']['group'] = "registry"
 default['registry']['uid'] = nil
 default['registry']['gid'] = nil
 default['registry']['dir'] = "/var/opt/gitlab/registry"
+default['registry']['shell'] = "/usr/sbin/nologin"
 default['registry']['log_directory'] = "/var/log/gitlab/registry"
 default['registry']['env_directory'] = "/opt/gitlab/etc/registry/env"
 default['registry']['env'] = {
