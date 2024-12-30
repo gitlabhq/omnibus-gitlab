@@ -21,6 +21,7 @@ registry_uid = node['registry']['uid']
 registry_gid = node['registry']['gid']
 
 working_dir = node['registry']['dir']
+registry_shell = node['registry']['shell']
 log_format = node['registry']['log_formatter']
 env_directory = node['registry']['env_directory']
 
@@ -35,7 +36,7 @@ account "Docker registry user and group" do
   ugid account_helper.registry_group
   groupname account_helper.registry_group
   gid registry_gid
-  shell '/bin/sh'
+  shell registry_shell
   home working_dir
   manage node['gitlab']['manage_accounts']['enable']
 end

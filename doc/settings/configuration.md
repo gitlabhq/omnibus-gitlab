@@ -385,6 +385,7 @@ To disable user and group accounts management:
    registry['username'] = "registry"
    registry['group'] = "registry"
    registry['dir'] = "/var/opt/gitlab/registry"
+   registry['shell'] = "/usr/sbin/nologin"
 
    # Mattermost
    mattermost['username'] = 'mattermost'
