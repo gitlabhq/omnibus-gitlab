@@ -1,4 +1,4 @@
-require 'chef_helper'
+require 'spec_helper'
 
 RSpec.describe Gitlab::Deprecations do
   let(:valid_config) { { gitlab: { nginx: { listen_addresses: "SomeRandomString" } } } }
@@ -122,30 +122,6 @@ RSpec.describe Gitlab::Deprecations do
         }
       ]
       expect(described_class.identify_deprecated_config(invalid_config, ["mattermost"], mattermost_supported_keys, "10.2", "11.0")).to eq(output)
-    end
-  end
-
-  describe '.remove_git_data_dirs' do
-    context 'when git_data_dirs is specified' do
-      it 'raises warning' do
-        config = {
-          git_data_dirs: {
-            default: {
-              path: 'abc',
-              gitaly_address: 'unix:/var/gitaly.socket'
-            },
-            valid: {
-              gitaly_address: 'unix:/var/gitaly.socket'
-            }
-          }
-        }
-
-        deprecated_message = "* git_data_dirs has been deprecated since 17.8 and will be removed in 18.0. See https://docs.gitlab.com/omnibus/settings/configuration.html#migrating-from-git_data_dirs for migration instructions."
-        expect(described_class.remove_git_data_dirs('17.8', config, :deprecation, '17.8', '18.0')).to eq([deprecated_message])
-
-        removed_message = "* git_data_dirs has been deprecated since 17.8 and was removed in 18.0. See https://docs.gitlab.com/omnibus/settings/configuration.html#migrating-from-git_data_dirs for migration instructions."
-        expect(described_class.remove_git_data_dirs('18.0', config, :removal, '17.8', '18.0')).to eq([removed_message])
-      end
     end
   end
 

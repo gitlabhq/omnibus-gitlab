@@ -125,14 +125,9 @@ RSpec.describe 'gitlab::gitlab-rails' do
                                        uploads_directory: '/tmp/uploads',
                                        uploads_storage_path: '/tmp/uploads_storage' },
                        gitlab_ci: { builds_directory: '/tmp/builds' },
-                       gitaly: {
-                         configuration: {
-                           storage: [
-                             {
-                               'name' => 'some_storage',
-                               'path' => '/tmp/git-data/repositories'
-                             }
-                           ]
+                       git_data_dirs: {
+                         "some_storage" => {
+                           "path" => "/tmp/git-data"
                          }
                        })
       end
@@ -140,7 +135,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
       ChefSpec::SoloRunner.converge('gitlab::default')
     end
 
-    include_examples "git data directory", "/tmp/git-data/repositories"
+    include_examples "git data directory", "/tmp/git-data"
 
     it 'creates the shared directory' do
       expect(chef_run).to create_storage_directory('/tmp/shared').with(owner: 'git', group: 'gitlab-www', mode: '0751')

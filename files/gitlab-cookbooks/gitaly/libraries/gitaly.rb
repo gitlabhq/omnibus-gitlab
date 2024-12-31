@@ -24,6 +24,7 @@ module Gitaly
     include OutputHelper
 
     def parse_variables
+      parse_git_data_dirs
       parse_gitaly_storages
       parse_gitconfig
       check_duplicate_storage_paths
@@ -54,82 +55,37 @@ module Gitaly
       end
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    def parse_gitaly_storages
-      # Merge all three forms of configuration into a single hash. We'll redistribute the configuration
-      # from here later on.
-      combined_storages = {}
-      Gitlab['git_data_dirs'].each do |name, details|
-        entry = {
-          'gitaly_address' => details['gitaly_address'] || gitaly_address,
-          'gitaly_token' => details['gitaly_token'],
-        }
-        entry['path'] = File.join(details['path'] || details[:path], 'repositories') if details['path'] || details[:path]
+    def parse_git_data_dirs
+      Gitlab['git_data_dirs'] = { "default" => { "path" => "/var/opt/gitlab/git-data" } } if Gitlab['git_data_dirs'].empty?
 
-        combined_storages[name] = entry
+      Gitlab['git_data_dirs'].map do |name, details|
+        Gitlab['git_data_dirs'][name]['path'] = details[:path] || details['path'] || '/var/opt/gitlab/git-data'
       end
 
-      Gitlab['gitlab_rails']['repositories_storages']&.each do |name, details|
-        entry = {
-          'gitaly_address' => details['gitaly_address'] || gitaly_address,
-          'gitaly_token' => details['gitaly_token'],
-        }
-        entry['path'] = File.join(details['path'], 'repositories') if details['path']
-        combined_storages[name] = if combined_storages[name]
-                                    combined_storages[name].merge(entry)
-                                  else
-                                    entry
-                                  end
-      end
+      Gitlab['gitlab_rails']['repositories_storages'] =
+        Hash[Mash.new(Gitlab['git_data_dirs']).map do |name, data_directory|
+          shard_gitaly_address = data_directory['gitaly_address'] || gitaly_address
 
-      if Gitlab['gitaly'].dig('configuration', 'storage')
-        Gitlab['gitaly']['configuration']['storage'].each do |storage|
-          entry = {
-            'path' => storage['path'],
-          }
+          defaults = { 'path' => File.join(data_directory['path'], 'repositories'), 'gitaly_address' => shard_gitaly_address }
+          params = data_directory.merge(defaults)
 
-          combined_storages[storage['name']] = if combined_storages[storage['name']]
-                                                 combined_storages[storage['name']].merge(entry)
-                                               else
-                                                 entry
-                                               end
-        end
-      end
-
-      # If empty, we need to supply a default storage.
-      if combined_storages.empty?
-        combined_storages['default'] = {
-          'gitaly_address' => gitaly_address,
-          'path' => '/var/opt/gitlab/git-data/repositories'
-        }
-      end
-
-      # Redistribute the configuration amongst the various keys. When git_data_dirs is removed, we can simply
-      # remove the corresponding logic here.
-      Gitlab['git_data_dirs'] = {}
-      Gitlab['gitlab_rails']['repositories_storages'] = {}
-      Gitlab['gitaly']['configuration'] ||= {} # don't override the config if provided
-      Gitlab['gitaly']['configuration']['storage'] = []
-
-      combined_storages.each do |name, details|
-        details['gitaly_address'] = gitaly_address unless details['gitaly_address']
-
-        # The path shouldn't be set in git_data_dirs or repository_storages, since Rails shouldn't care about it.
-        without_path = details.clone.except('path')
-        Gitlab['git_data_dirs'][name] = without_path
-        Gitlab['gitlab_rails']['repositories_storages'][name] = without_path
-
-        # If the path doesn't exist, it means the current storage belongs to an external Gitaly and we don't
-        # need to generate a corresponding storage entry.
-        next unless details['path']
-
-        Gitlab['gitaly']['configuration']['storage'] << {
-          name: name.to_s,
-          path: details['path']
-        }
-      end
+          [name, params]
+        end]
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+    def parse_gitaly_storages
+      return unless Gitlab['gitaly'].dig('configuration', 'storage').nil?
+
+      storages = []
+      Gitlab['gitlab_rails']['repositories_storages'].each do |key, value|
+        storages << {
+          'name' => key,
+          'path' => value['path']
+        }
+      end
+      Gitlab['gitaly']['configuration'] ||= {}
+      Gitlab['gitaly']['configuration']['storage'] = storages
+    end
 
     # Compute the default gitconfig from the old Omnibus gitconfig setting.
     # This depends on the Gitlab cookbook having been parsed already.
@@ -217,8 +173,8 @@ module Gitaly
 
     # Validate that no storages are sharing the same path.
     def check_duplicate_storage_paths
-      # If Gitaly isn't running or storages aren't configured, there is no need to do this check.
-      return unless Services.enabled?('gitaly') && Gitlab['gitaly'].dig('configuration', 'storage')
+      # If Gitaly isn't running, there is no need to do this check.
+      return unless Services.enabled?('gitaly')
 
       # Deep copy storages to avoid mutating the original.
       storages = Marshal.load(Marshal.dump(Gitlab['gitaly']['configuration']['storage']))
