@@ -171,7 +171,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Download location
 ###! When a user clicks e.g. 'Download zip' on a project, a temporary zip file
 ###! is created in the following directory.
-###! Should not be the same path, or a sub directory of any of the `git_data_dirs`
+###! Should not be the same path, or a sub directory of any of the `gitaly['configuration'].storage` paths.
 # gitlab_rails['gitlab_repository_downloads_path'] = 'tmp/repositories'
 
 ### Gravatar Settings
@@ -685,16 +685,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 #gitlab_rails['env'] = {
 #    "SKIP" => "db,uploads,repositories,builds,artifacts,lfs,registry,pages"
 #}
-
-### For setting up different data storing directory
-###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#store-git-data-in-an-alternative-directory
-###! **If you want to use a single non-default directory to store git data use a
-###!   path that doesn't contain symlinks.**
-# git_data_dirs({
-#   "default" => {
-#     "path" => "/mnt/nfs-01/git-data"
-#    }
-# })
 
 ### Gitaly settings
 # gitlab_rails['gitaly_token'] = 'secret token'

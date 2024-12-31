@@ -22,6 +22,8 @@ gitlab_group = account_helper.gitlab_group
 # Holds git-data, by default one shard at /var/opt/gitlab/git-data
 # Can be changed by user using git_data_dirs option
 Mash.new(Gitlab['git_data_dirs']).each do |_name, git_data_directory|
+  next unless git_data_directory['path']
+
   storage_directory git_data_directory['path'] do
     owner gitlab_user
     group gitlab_group
@@ -29,11 +31,10 @@ Mash.new(Gitlab['git_data_dirs']).each do |_name, git_data_directory|
   end
 end
 
-# Holds git repositories, by default at /var/opt/gitlab/git-data/repositories
-# Should not be changed by user. Different permissions to git_data_dir set.
-repositories_storages = node['gitlab']['gitlab_rails']['repositories_storages']
-repositories_storages.each do |_name, repositories_storage|
-  storage_directory repositories_storage['path'] do
+# Create the Git storage directories. There may be no directories if external Gitaly is used.
+repositories_storages = Gitlab['gitaly'].dig('configuration', 'storage') || []
+repositories_storages.each do |repositories_storage|
+  storage_directory repositories_storage[:path] do
     owner gitlab_user
     group gitlab_group
     mode "2770"
