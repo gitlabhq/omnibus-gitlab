@@ -149,21 +149,8 @@ To convert an external PostgreSQL installation to a Linux package PostgreSQL ins
    # Use your own GitLab URL here
    external_url 'http://gitlab.example.com'
 
-   # We assume your repositories are in /home/git/repositories (default for source installs) and that Gitaly
-   # listens on a socket at /home/git/gitlab/tmp/sockets/private/gitaly.socket
-   gitaly['configuration'] = {
-     storage: [
-       {
-         name: 'default',
-         path: '/home/git/repositories'
-       }
-     ]
-   }
-   gitlab_rails['repositories_storages'] = {
-     default: {
-       gitaly_address: '/home/git/gitlab/tmp/sockets/private/gitaly.socket'
-     }
-   }
+   # We assume your repositories are in /home/git/repositories (default for source installs)
+   git_data_dirs({ 'default' => { 'path' => '/home/git' } })
 
    # Re-use the PostgreSQL that is already running on your system
    postgresql['enable'] = false

@@ -10,6 +10,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         expect(gitlab_yml[:production][:repositories][:storages]).to eq(
           default: {
             gitaly_address: 'unix:/var/opt/gitlab/gitaly/gitaly.socket',
+            path: '/var/opt/gitlab/git-data/repositories'
           }
         )
       end
@@ -20,6 +21,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         stub_gitlab_rb(
           git_data_dirs: {
             second_storage: {
+              path: '/tmp/foobar',
               gitaly_address: 'unix:/var/gitaly.socket'
             }
           }
@@ -30,6 +32,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         expect(gitlab_yml[:production][:repositories][:storages]).to eq(
           second_storage: {
             gitaly_address: 'unix:/var/gitaly.socket',
+            path: '/tmp/foobar/repositories'
           }
         )
       end
@@ -49,6 +52,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
           expect(gitlab_yml[:production][:repositories][:storages]).to eq(
             default: {
               gitaly_address: 'unix:/var/gitaly.socket',
+              path: '/var/opt/gitlab/git-data/repositories'
             }
           )
         end
