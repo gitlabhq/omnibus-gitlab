@@ -116,7 +116,7 @@ means there may be one of four issues:
 
 1. The file in `/etc/gitlab/trusted-certs/` is a symlink
 1. The file is not a valid PEM- or DER-encoded certificate
-1. Perl is not installed on the operating system which is needed for c_rehash to properly symlink certificates
+1. Perl is not installed on the operating system which is needed for `c_rehash` to properly symlink certificates
 1. The certificate contains the string `TRUSTED`
 
 Test the certificate's validity using the commands below:
