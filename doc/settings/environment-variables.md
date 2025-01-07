@@ -91,3 +91,7 @@ gitlab_rails['env'] = {
     "https_proxy" => "http://<USERNAME>:<PASSWORD>@example.com:8080"
 }
 ```
+
+### Error: `Connection reset by peer` when mirroring repositories
+
+If the `no_proxy` value includes port numbers in the URLs, it may cause DNS resolution failures. Remove any port numbers from the `no_proxy` URLs to resolve this issue.
