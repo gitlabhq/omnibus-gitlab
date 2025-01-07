@@ -74,7 +74,7 @@ options that you can use to enforce specific TLS version or ciphers:
    openssl version
    ```
 
-1. Use the following example script that checks if a server supports the ciphers
+1. Use the following example shell script that checks if a server supports the ciphers
    and TLS versions:
 
    ```shell
