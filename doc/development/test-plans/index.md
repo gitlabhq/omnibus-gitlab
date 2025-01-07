@@ -9,6 +9,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 ## Updating components
 
 <!-- Keep this list sorted alphabetically. -->
+- [`curl`](upgrade-curl-testplan.md) 
 - [`exiftool`](upgrade-exiftool-testplan.md)
 - [`gitlab-exporter`](upgrade-gitlab-exporter-testplan.md)
 - [Go](upgrade-golang-testplan.md)
