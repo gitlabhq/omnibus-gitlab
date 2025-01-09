@@ -54,7 +54,6 @@ module GitlabRails
       parse_ci_secure_files_dir
       parse_encrypted_settings_path
       parse_pages_dir
-      parse_repository_storage
     end
 
     def transform_secrets
@@ -359,19 +358,6 @@ module GitlabRails
       # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['pages_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'pages')
       Gitlab['gitlab_rails']['pages_local_store_path'] ||= Gitlab['gitlab_rails']['pages_path']
-    end
-
-    def parse_repository_storage
-      return if Gitlab['gitlab_rails']['repositories_storages']
-
-      gitaly_address = Gitaly.gitaly_address
-
-      Gitlab['gitlab_rails']['repositories_storages'] ||= {
-        "default" => {
-          "path" => "/var/opt/gitlab/git-data/repositories",
-          "gitaly_address" => gitaly_address
-        }
-      }
     end
 
     def parse_gitlab_trusted_proxies

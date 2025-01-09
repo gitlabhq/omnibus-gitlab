@@ -154,27 +154,78 @@ In this example, the [PostgreSQL server certificate](database.md#configuring-ssl
 postgresql['internal_certificate'] = File.read('/path/to/server.crt')
 ```
 
+## Migrating from `git_data_dirs`
+
+Starting in 18.0, `git_data_dirs` will no longer be a supported means of configuring
+Gitaly storage locations. If you explicitly define `git_data_dirs`, you'll need to
+migrate the configuration.
+
+For example, if your `/etc/gitlab/gitlab.rb` configuration is as follows:
+
+```ruby
+git_data_dirs({
+  "default" => {
+    "path" => "/mnt/nas/git-data"
+   }
+})
+```
+
+you'll need to redefine the configuration under `gitaly['configuration']` instead.
+Note that the `/repositories` suffix must be appended to the path, as it was previously
+appended by Omnibus internally.
+
+```ruby
+gitaly['configuration'] = {
+  storage: [
+    {
+      name: 'default',
+      path: '/mnt/nas/git-data/repositories',
+    },
+  ],
+}
+```
+
+It's important to note that the parent directory of the `path` must also be managed by
+Omnibus. Following the example above, Omnibus will need to modify the permissions of
+`/mnt/nas/git-data` on reconfiguration and may store data in that directory during
+runtime. You should select an appropriate `path` that allows for this behavior.
+
 ## Store Git data in an alternative directory
 
 By default, Linux package installations store the Git repository data under
-`/var/opt/gitlab/git-data`. The repositories are stored in a subfolder called
-`repositories`.
+`/var/opt/gitlab/git-data/repositories`, and the Gitaly service listens on
+`unix:/var/opt/gitlab/gitaly/gitaly.socket`.
 
-To change the location of the `git-data` parent directory:
+To change the location of the directory,
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   git_data_dirs({ "default" => { "path" => "/mnt/nas/git-data" } })
+   gitaly['configuration'] = {
+     storage: [
+       {
+         name: 'default',
+         path: '/mnt/nas/git-data/repositories',
+       },
+     ],
+   }
    ```
 
    You can also add more than one Git data directory:
 
    ```ruby
-   git_data_dirs({
-     "default" => { "path" => "/var/opt/gitlab/git-data" },
-     "alternative" => { "path" => "/mnt/nas/git-data" }
-   })
+   gitaly['configuration'] = {
+     storage: [
+       {
+         name: 'default',
+         path: '/var/opt/gitlab/git-data/repositories',
+       },
+       {
+         name: 'alternative',
+         path: '/mnt/nas/git-data/repositories',
+       },
+     ],
+   }
    ```
 
    The target directories and any of its subpaths must not be a symlink.
@@ -220,8 +271,7 @@ To change the location of the `git-data` parent directory:
       sudo gitlab-ctl start
       ```
 
-If you're running Gitaly on a separate server, remember to also include the
-`gitaly_address` for each Git data directory. See
+If you're running Gitaly on a separate server, see
 [the documentation on configuring Gitaly](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configure-gitaly-clients).
 
 If you're not looking to move all repositories, but instead want to move specific
