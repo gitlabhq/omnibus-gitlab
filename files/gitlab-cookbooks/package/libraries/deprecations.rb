@@ -343,7 +343,7 @@ module Gitlab
             deprecation: '17.4',
             removal: '18.0',
             note: "`gitlab_shell['migration'] will be ignored from 17.3 and removed in 18.0. See https://gitlab.com/groups/gitlab-org/-/epics/14845."
-          }
+          },
         ]
 
         deprecations += praefect_legacy_configuration_deprecations
@@ -584,6 +584,8 @@ module Gitlab
 
         messages += deprecate_registry_notifications(incoming_version, existing_config, type, ['registry', 'notifications'], 'threshold', 17.1, 18.0)
 
+        messages += remove_git_data_dirs(incoming_version, existing_config, type, '17.8', '18.0')
+
         messages
       end
 
@@ -610,6 +612,20 @@ module Gitlab
           message =  "* #{config_keys[0]}[#{key}] has been deprecated since #{deprecated_version} and will be removed in #{removed_version}."
           message += " #{note}" if note
           messages << message
+        end
+
+        messages
+      end
+
+      def remove_git_data_dirs(incoming_version, existing_config, type, deprecated_version, removed_version)
+        return [] unless existing_config[:git_data_dirs]
+
+        messages = []
+
+        if Gem::Version.new(incoming_version) >= Gem::Version.new(removed_version) && type == :removal
+          messages << "* git_data_dirs has been deprecated since #{deprecated_version} and was removed in #{removed_version}. See https://docs.gitlab.com/omnibus/settings/configuration.html#migrating-from-git_data_dirs for migration instructions."
+        elsif Gem::Version.new(incoming_version) >= Gem::Version.new(deprecated_version) && type == :deprecation
+          messages << "* git_data_dirs has been deprecated since #{deprecated_version} and will be removed in #{removed_version}. See https://docs.gitlab.com/omnibus/settings/configuration.html#migrating-from-git_data_dirs for migration instructions."
         end
 
         messages
