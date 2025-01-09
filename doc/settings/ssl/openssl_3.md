@@ -89,7 +89,7 @@ options that you can use to enforce specific TLS version or ciphers:
        # NOTE: The cipher will be combined with any TLSv1.3 cipher suites that
        # have been configured.
        if openssl s_client -${tls_version} -cipher "${cipher}" -connect ${SERVER} </dev/null >/dev/null 2>&1; then
-         echo "\t${cipher}"
+         printf "\t%s\n" "${cipher}"
        fi
      done
    done
