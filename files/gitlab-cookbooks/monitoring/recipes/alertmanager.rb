@@ -70,6 +70,7 @@ file 'Alertmanager config' do
   owner prometheus_user
   mode '0644'
   notifies :restart, 'runit_service[alertmanager]'
+  sensitive true
 end
 
 runtime_flags = PrometheusHelper.new(node).kingpin_flags('alertmanager')
