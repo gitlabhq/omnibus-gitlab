@@ -363,6 +363,7 @@ templatesymlink "Create a smtp_settings.rb and create a symlink to Rails root" d
   dependent_services.each { |svc| notifies :restart, svc }
 
   action :delete unless node['gitlab']['gitlab_rails']['smtp_enable']
+  sensitive true
 end
 
 templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
