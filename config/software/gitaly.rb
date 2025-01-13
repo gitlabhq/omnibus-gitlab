@@ -56,14 +56,13 @@ build do
 
   git_cflags = '-fno-omit-frame-pointer'
 
-  # CentOS 7 uses gcc v4.8.5, which uses C90 (`-std=gnu90`) by default.
+  # SLES uses gcc v4.8.5 with C90 (`-std=gnu90`) by default.
   # C11 is a newer standard than C90, and gcc v5.1.0 switched the default
   # from `std=gnu90` to `std=gnu11`.
   # Git v2.35 added a balloon test that will fail the build if
   # C99 is not supported. On other platforms, C11 may be required
   # (https://gitlab.com/gitlab-org/gitlab-git/-/commit/7bc341e21b5).
-  # Similar is the case for SLES OSs also.
-  git_cflags += ' -std=gnu99' if OhaiHelper.get_centos_version.to_i == 7 || OhaiHelper.os_platform == 'sles'
+  git_cflags += ' -std=gnu99' if OhaiHelper.os_platform == 'sles'
 
   git_append_build_options = [
     "# Added by Omnibus git software definition gitaly.rb",

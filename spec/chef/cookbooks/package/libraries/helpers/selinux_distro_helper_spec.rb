@@ -15,7 +15,6 @@ RSpec.describe SELinuxDistroHelper do
       'centos' | '8.0' | true
       'centos' | '8' | true
       'centos' | '9' | true
-      'centos' | '7.0' | true
       'amzn' | '2' | true
       'notadistro' | '42' | false
       nil | '7' | false

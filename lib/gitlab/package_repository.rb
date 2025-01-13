@@ -39,8 +39,7 @@ class PackageRepository
       return
     end
 
-    # For CentOS 6 and 7 we will upload the same package to Scientific and Oracle Linux
-    # For all other OSs, we only upload one package.
+    # For CentOS 8 and 9 we upload the same package to the Oracle Linux repository.
     upload_list = package_list(repository)
     raise "No packages found for upload. Are artifacts available?" if upload_list.empty?
 
@@ -97,10 +96,8 @@ class PackageRepository
       # We can copy EL packages to Oracle and Scientific Linux repos also as
       # they are binary compatible.
       enterprise_linux_additional_uploads = {
-        '6' => %w(scientific ol),
-        '7' => %w(scientific ol),
-        '8' => %w(ol), # There is no Scientific Linux 8
-        '9' => %w(ol), # There is no Scientific Linux 9
+        '8' => %w(ol),
+        '9' => %w(ol),
       }
 
       source_os, target_os = enterprise_linux_additional_uploads.find { |os| platform.match?(/^el\/#{os}/) }

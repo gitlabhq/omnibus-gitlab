@@ -190,10 +190,6 @@ class OhaiHelper
       ohai['languages']['c']['gcc']['target']
     end
 
-    def centos7?
-      ohai['platform'] == 'centos' && get_centos_version.to_i == 7
-    end
-
     def sles12?
       os_platform == 'sles' && get_suse_version.to_i == 12
     end

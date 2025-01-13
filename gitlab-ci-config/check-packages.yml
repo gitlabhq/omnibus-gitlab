@@ -137,9 +137,6 @@ Ubuntu-20.04-fips-check:
     USE_SYSTEM_LIBGCRYPT: "true"
 
 # yum based
-CentOS-7-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:latest"
-  extends: .yum-install
 AlmaLinux-8-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:latest"
   extends: .yum-install
