@@ -102,14 +102,6 @@ Debian-12-check:
 Debian-12-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:latest"
   extends: .apt-arm-install
-Raspberry-Pi-2-Buster-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:latest"
-  extends: .apt-install
-  rules:
-    - if: '$PIPELINE_TYPE == "CE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
-  variables:
-    package_repository: 'raspberry-pi2'
-  tags: !reference [.distribution-armhf-tags]
 Raspberry-Pi-2-Bullseye-check:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:latest"
   extends: .apt-install

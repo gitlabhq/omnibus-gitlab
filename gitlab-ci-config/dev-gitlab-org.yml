@@ -468,10 +468,6 @@ QA-branch:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
 
-Raspberry-Pi-2-Buster-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
-  extends: .rpi_branch_template
-
 Raspberry-Pi-2-Bullseye-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:${BUILDER_IMAGE_REVISION}"
   extends: .rpi_branch_template
@@ -1103,10 +1099,6 @@ manifest-upload:
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
 
-Raspberry-Pi-2-Buster:
-  extends: .rpi_tag_template
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:${BUILDER_IMAGE_REVISION}"
-
 Raspberry-Pi-2-Bullseye:
   extends: .rpi_tag_template
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:${BUILDER_IMAGE_REVISION}"
@@ -1114,11 +1106,6 @@ Raspberry-Pi-2-Bullseye:
 Raspberry-Pi-2-Bookworm:
   extends: .rpi_tag_template
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_12:${BUILDER_IMAGE_REVISION}"
-
-Raspberry-Pi-2-Buster-release:
-  extends: .raspbian_release_template
-  needs:
-    - Raspberry-Pi-2-Buster
 
 Raspberry-Pi-2-Bullseye-release:
   extends: .raspbian_release_template
