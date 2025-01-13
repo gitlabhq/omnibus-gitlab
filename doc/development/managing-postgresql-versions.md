@@ -22,7 +22,7 @@ The version that should be installed by default is controlled by using the 'link
 
 ## Upgrading
 
-The [`gitlab-ctl pg-upgrade` command](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-ctl-commands/pg-upgrade.rb) is used to upgrade from `postgresql_old` or `postgresql` to `postgresql_new`. See our [documentation for how to use it](../settings/database.md#upgrade-packaged-postgresql-server)
+The [`gitlab-ctl pg-upgrade` command](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-ctl-commands/pg-upgrade.rb) is used to upgrade from `postgresql_old` or `postgresql` to `postgresql_new`. See our [documentation for how to use it](../settings/database.md#upgrade-packaged-postgresql-server).
 
 ### Automatic upgrades
 
