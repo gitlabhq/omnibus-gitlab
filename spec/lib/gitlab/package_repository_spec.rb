@@ -153,14 +153,13 @@ RSpec.describe PackageRepository do
 
         context 'with artifacts available' do
           before do
-            allow(Build::Info::Package).to receive(:file_list).and_return(['pkg/el-6/gitlab-ce.rpm'])
+            allow(Build::Info::Package).to receive(:file_list).and_return(['pkg/el-9/gitlab-ce.rpm'])
           end
 
           it 'in dry run mode prints the upload commands' do
             expect { repo.upload('my-staging-repository', true) }.to output(%r{Uploading...\n}).to_stdout
-            expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/scientific/6 pkg/el-6/gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
-            expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/ol/6 pkg/el-6/gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
-            expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/el/6 pkg/el-6/gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
+            expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/ol/9 pkg/el-9/gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
+            expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/el/9 pkg/el-9/gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
           end
 
           it 'retries upload if it fails' do

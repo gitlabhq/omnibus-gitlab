@@ -363,7 +363,6 @@ danger-review:
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
 
-Centos 7 knapsack: !reference [.knapsack]
 AlmaLinux 8 knapsack: !reference [.knapsack]
 AlmaLinux 9 knapsack: !reference [.knapsack]
 Debian 11 knapsack: !reference [.knapsack]
@@ -421,12 +420,6 @@ Debian 12 specs :
   parallel: 6
   needs:
   - Debian 12 knapsack
-Centos 7 specs :
-  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/centos_7-ruby:${BUILDER_IMAGE_REVISION}"
-  extends: .chef_spec_template
-  parallel: 6
-  needs:
-  - Centos 7 knapsack
 AlmaLinux 8 specs :
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/almalinux_8-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template

@@ -337,9 +337,6 @@ Ubuntu-22.04-arm64-branch:
 Ubuntu-24.04-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
-CentOS-7-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
-  extends: .branch_template
 AlmaLinux-8-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -598,9 +595,6 @@ Ubuntu-22.04-arm64:
 Ubuntu-24.04-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
-CentOS-7:
-  image: "${BUILDER_IMAGE_REGISTRY}/centos_7:${BUILDER_IMAGE_REVISION}"
-  extends: .tag_template
 AlmaLinux-8:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
@@ -735,13 +729,6 @@ Ubuntu-24.04-arm64-staging:
     - job: Ubuntu-24.04-arm64
       optional: true
     - job: Ubuntu-24.04-arm64-branch
-      optional: true
-CentOS-7-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: CentOS-7
-      optional: true
-    - job: CentOS-7-branch
       optional: true
 AlmaLinux-8-staging:
   extends: .staging_upload_template
@@ -924,10 +911,6 @@ Debian-12-arm64-release:
   extends: .production_release_template
   needs:
     - Debian-12-arm64
-CentOS-7-release:
-  extends: .production_release_template
-  needs:
-    - CentOS-7
 AlmaLinux-8-release:
   extends: .production_release_template
   needs:

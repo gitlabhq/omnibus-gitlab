@@ -37,8 +37,6 @@ relative_path "gnupg-#{version}"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-  # For gnupg to build fine in Debian Wheezy and Centos ^
-  env['LDFLAGS'] << " -lrt"
 
   prefix = "#{install_dir}/embedded"
 
@@ -52,10 +50,6 @@ build do
     '--disable-dirmngr',
     "--with-libgpg-error-prefix=#{prefix}",
   ]
-
-  # CentOS 6 doesn't have inotify, which will raise an error
-  # IN_EXCL_UNLINK undeclared. Hence disabling it explicitly.
-  configure_command << "ac_cv_func_inotify_init=no" if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^6/
 
   command configure_command.join(' '), env: env
 

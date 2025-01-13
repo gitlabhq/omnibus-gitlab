@@ -34,13 +34,6 @@ env = with_standard_compiler_flags(with_embedded_path)
 relative_path "jemalloc-#{version}"
 
 build do
-  # CentOS 6 doesn't have a new enough version of autoconf so we have to
-  # use the one packaged in EPEL
-  if ohai['platform'] =~ /centos/ && ohai['platform_version'] =~ /^6/
-    command 'sed -i -e s:autoconf:autoconf268: autogen.sh', env: env
-    env['AUTOCONF'] = '/usr/bin/autoconf268'
-  end
-
   autogen_command = [
     './autogen.sh',
     '--enable-prof',

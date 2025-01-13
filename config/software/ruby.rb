@@ -88,7 +88,7 @@ env['CFLAGS'] << " -DOPENSSL_FIPS" if Build::Check.use_system_ssl?
 env['CFLAGS'] << ' -O3 -g -pipe'
 
 # Workaround for https://bugs.ruby-lang.org/issues/19161
-env['CFLAGS'] << ' -std=gnu99' if OhaiHelper.get_centos_version.to_i == 7 || OhaiHelper.os_platform == 'sles'
+env['CFLAGS'] << ' -std=gnu99' if OhaiHelper.os_platform == 'sles'
 
 build do
   env['CFLAGS'] << ' -fno-omit-frame-pointer'
