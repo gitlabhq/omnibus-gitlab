@@ -201,6 +201,7 @@ class OhaiHelper
     def ruby_native_gems_unsupported?
       %w[
         amazon-2
+        amazon-2_fips
         amazon-2_aarch64
         debian-buster_aarch64
         el-7
