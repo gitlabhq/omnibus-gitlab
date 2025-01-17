@@ -179,12 +179,6 @@ AmazonLinux-2-fips-check:
     USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 
 # zypper based
-OpenSUSE-15.5-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5:latest"
-  extends: .zypper-install
-OpenSUSE-15.5-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.5_arm64:latest"
-  extends: .zypper-arm-install
 OpenSUSE-15.6-check:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6:latest"
   extends: .zypper-install
