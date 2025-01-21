@@ -204,8 +204,8 @@ class OhaiHelper
         amazon-2_fips
         amazon-2_aarch64
         debian-buster_aarch64
-        el-7
         el-8
+        el-8_fips
         el-8_aarch64
         raspbian-buster_aarch64
         sles-12.5
