@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.8.1 (2025-01-22)
+
+No changes.
+
 ## 17.8.0 (2025-01-15)
 
 ### Added (1 change)
@@ -31,6 +35,10 @@ omnibus-gitlab repository.
 
 - [CI: Stop building RHEL 7 packages](gitlab-org/omnibus-gitlab@5f4845ea82e4b9bb35f8fa2041098bb9724c7252) ([merge request](gitlab-org/omnibus-gitlab!8097))
 - [Drop RaspberryPi OS Buster builds](gitlab-org/omnibus-gitlab@317c5f3894faf5eab32f4fd2e546565d7b1553e2) ([merge request](gitlab-org/omnibus-gitlab!8105))
+
+## 17.7.3 (2025-01-22)
+
+No changes.
 
 ## 17.7.2 (2025-01-15)
 
@@ -62,6 +70,10 @@ No changes.
 - [Update dependency git-filter-repo to v2.47.0](gitlab-org/omnibus-gitlab@fb520cb5cab1bdf2bd06500f3e32c4f15ec824cc) ([merge request](gitlab-org/omnibus-gitlab!8060))
 - [Make gitlab-ctl commands exit 1 on non-existent services](gitlab-org/omnibus-gitlab@7f55ceba286b0e725ab1f551f5c03636e9053b27) ([merge request](gitlab-org/omnibus-gitlab!8037))
 - [Update bundled OpenSSL from 1.1.1 to 3.4.0](gitlab-org/omnibus-gitlab@8f76ff2cf1576b95f27cf744b16b0548cf5c624b) ([merge request](gitlab-org/omnibus-gitlab!8049))
+
+## 17.6.4 (2025-01-22)
+
+No changes.
 
 ## 17.6.3 (2025-01-08)
 
