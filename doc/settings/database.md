@@ -22,7 +22,7 @@ Thus you have two options for database servers to use with a Linux package insta
 
 ### Reconfigure and PostgreSQL restarts
 
-Linux package installations normally restart any service on reconfigure if configuration settings for that service were
+Linux package installations usually restart any service on reconfigure if configuration settings for that service were
 changed in the `gitlab.rb` file. PostgreSQL is unique in that some of its settings take effect
 with a reload (HUP), while others require PostgreSQL to be restarted. Because administrators
 frequently want more control over exactly when PostgreSQL is restarted, Linux package installations are configured
