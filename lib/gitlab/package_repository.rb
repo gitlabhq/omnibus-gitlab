@@ -40,6 +40,7 @@ class PackageRepository
     end
 
     # For CentOS 8 and 9 we upload the same package to the Oracle Linux repository.
+    # For OpenSUSE Leap we upload the same package to the SLES repository.
     upload_list = package_list(repository)
     raise "No packages found for upload. Are artifacts available?" if upload_list.empty?
 
@@ -93,31 +94,26 @@ class PackageRepository
       platform = platform_name.gsub(/_.*/, '').tr("-", "/") # "ubuntu/xenial"
       target_repository = repository || target # staging override or the rest, eg. "unstable"
 
-      # We can copy EL packages to Oracle and Scientific Linux repos also as
-      # they are binary compatible.
-      enterprise_linux_additional_uploads = {
-        '8' => %w(ol),
-        '9' => %w(ol),
-      }
+      list << "#{target_repository}/#{platform} #{package_path}" # "unstable/ubuntu/xenial gitlab-ce.deb"
 
-      source_os, target_os = enterprise_linux_additional_uploads.find { |os| platform.match?(/^el\/#{os}/) }
-
-      if source_os && target_os
-        target_os.each do |distro|
-          platform_path = platform.gsub('el', distro)
-
-          list << "#{target_repository}/#{platform_path} #{package_path}"
-        end
+      # Also upload Enterprise Linux to Oracle Linux repo.
+      if platform.start_with?("el/")
+        additional_platform = platform.gsub('el', 'ol')
+        list << "#{target_repository}/#{additional_platform} #{package_path}"
       end
 
-      list << "#{target_repository}/#{platform} #{package_path}" # "unstable/ubuntu/xenial gitlab-ce.deb"
+      # Also upload OpenSUSE Leap to repo.
+      if platform.start_with?("opensuse/")
+        additional_platform = platform.gsub('opensuse', 'sles')
+        list << "#{target_repository}/#{additional_platform} #{package_path}"
+      end
     end
 
     list
   end
 
   def upload_user
-    # Even though the variable says "upload user", this is acutally the user
+    # Even though the variable says "upload user", this is actually the user
     # who owns the repository to which packages are being uploaded. This
     # information is only used to generate the path to the repository - the
     # user who actually does the upload is known by the token.
