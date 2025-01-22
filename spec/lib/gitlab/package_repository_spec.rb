@@ -171,6 +171,18 @@ RSpec.describe PackageRepository do
 
             expect { repo.upload('my-staging-repository', false) }.to raise_error(described_class::PackageUploadError)
           end
+
+          context 'with OpenSUSE Leap 15.6 artifact' do
+            before do
+              allow(Build::Info::Package).to receive(:file_list).and_return(['pkg/opensuse-15.6_aarch64/gitlab-ce.rpm'])
+            end
+
+            it 'uploads the package to SLES and Leap repositories' do
+              expect { repo.upload('my-staging-repository', true) }.to output(%r{Uploading...\n}).to_stdout
+              expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/opensuse/15.6 pkg/opensuse-15.6_aarch64/gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
+              expect { repo.upload('my-staging-repository', true) }.to output(%r{bin/package_cloud push gitlab/my-staging-repository/sles/15.6 pkg/opensuse-15.6_aarch64/gitlab-ce.rpm --url=https://packages.gitlab.com\n}).to_stdout
+            end
+          end
         end
 
         context 'with artifacts unavailable' do
