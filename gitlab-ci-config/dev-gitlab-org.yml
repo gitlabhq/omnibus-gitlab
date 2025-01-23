@@ -388,6 +388,9 @@ AmazonLinux-2-fips-branch:
   extends: .fips_branch_template
   variables:
     USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
+AmazonLinux-2023-fips-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_fips:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_branch_template
 AlmaLinux-8-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
@@ -632,6 +635,9 @@ AmazonLinux-2-fips:
   extends: .fips_tag_template
   variables:
     USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
+AmazonLinux-2023-fips:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_fips:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_tag_template
 AlmaLinux-8-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
@@ -813,6 +819,13 @@ AmazonLinux-2-fips-staging:
       optional: true
     - job: AmazonLinux-2-fips-branch
       optional: true
+AmazonLinux-2023-fips-staging:
+  extends: .fips_staging_upload_template
+  needs:
+    - job: AmazonLinux-2023-fips
+      optional: true
+    - job: AmazonLinux-2023-fips-branch
+      optional: true
 AlmaLinux-8-fips-staging:
   extends: .fips_staging_upload_template
   needs:
@@ -945,6 +958,10 @@ AmazonLinux-2-fips-release:
     - AmazonLinux-2-fips
   variables:
     USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
+AmazonLinux-2023-fips-release:
+  extends: .fips_release_template
+  needs:
+    - AmazonLinux-2023-fips
 AlmaLinux-8-fips-release:
   extends: .fips_release_template
   needs:

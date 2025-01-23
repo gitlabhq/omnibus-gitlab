@@ -111,7 +111,7 @@ end
 if Build::Check.use_system_libgcrypt?
   allowed_lib /libgcrypt\.so/
 
-  if rhel?
+  if rhel? || amazon?
     runtime_dependency 'libgcrypt'
   else
     runtime_dependency 'libgcrypt20'

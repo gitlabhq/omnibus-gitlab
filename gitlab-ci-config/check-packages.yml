@@ -177,6 +177,15 @@ AmazonLinux-2-fips-check:
   variables:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
+AmazonLinux-2023-fips-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_fips:latest"
+  extends: .yum-install
+  rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
+  variables:
+    USE_SYSTEM_SSL: "true"
+    USE_SYSTEM_LIBGCRYPT: "true"
+
 
 # zypper based
 OpenSUSE-15.6-check:
