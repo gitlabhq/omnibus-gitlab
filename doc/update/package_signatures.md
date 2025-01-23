@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
-**Offering:** Self-managed
+**Offering:** GitLab Self-Managed
 
 We use a [packagecloud](https://packagecloud.io) instance at <https://packages.gitlab.com> to share the
 different OS packages we offer.

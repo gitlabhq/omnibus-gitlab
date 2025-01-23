@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
-**Offering:** Self-managed
+**Offering:** GitLab Self-Managed
 
 GitLab includes an [advanced log system](https://docs.gitlab.com/ee/administration/logs/index.html) where every service and component within GitLab will output system logs.
 Here are the configuration settings and tools for managing these logs on Linux package installations.
@@ -192,7 +192,7 @@ To modify these values:
 
 DETAILS:
 **Tier:** Premium, Ultimate
-**Offering:** Self-managed
+**Offering:** GitLab Self-Managed
 
 Linux package installations can utilize the UDP logging feature in svlogd as well as sending non-svlogd logs to a syslog-compatible remote system using UDP.
 To configure a Linux package installation to send syslog-protocol messages via UDP, use the following settings:

@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
-**Offering:** Self-managed
+**Offering:** GitLab Self-Managed
 
 If necessary you can set custom environment variables to be used by Puma,
 Sidekiq, Rails and Rake via `/etc/gitlab/gitlab.rb`. This can be useful in
