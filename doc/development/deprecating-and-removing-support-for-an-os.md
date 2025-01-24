@@ -48,7 +48,7 @@ the OS information to the [`OmnibusHelper#deprecated_os_list`](https://gitlab.co
 You must tell customer-facing teams about the deprecation and upcoming removal
 of support for the OS. Announce the deprecation in the following Slack channels:
 
-1. `#support_self_managed` - Support team catering to our self-managed customers.
+1. `#support_self_managed` - Support team catering to our GitLab Self-Managed customers.
 1. `#customer-success` - Customer Success team of our Sales division.
 
 ## Remove support for an OS

@@ -28,7 +28,7 @@ To display the correct repository clone links to your users,
 you must provide GitLab with the URL your users use to reach the repository.
 You can use the IP of your server, but a Fully Qualified Domain Name (FQDN)
 is preferred. See the [DNS documentation](dns.md)
-for more details about the use of DNS in a self-managed GitLab instance.
+for more details about the use of DNS in a GitLab Self-Managed instance.
 
 To change the external URL:
 
@@ -762,7 +762,7 @@ cross-site scripting (XSS) attacks. See
 details.
 
 [CSP and nonce-source with inline JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src) is available on GitLab.com.
-It is [not configured by default](https://gitlab.com/gitlab-org/gitlab/-/issues/30720) on self-managed.
+It is [not configured by default](https://gitlab.com/gitlab-org/gitlab/-/issues/30720) on GitLab Self-Managed.
 
 NOTE:
 Improperly configuring the CSP rules could prevent GitLab from working
