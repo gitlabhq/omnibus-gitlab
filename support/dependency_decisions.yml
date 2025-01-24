@@ -310,3 +310,10 @@
   - :who: Stan Hu
     :why: https://gitlab.com/gitlab-org/go/icu/blob/master/README.md#licence
     :when: 2024-11-05 11:00:00.000000000 Z
+- - :license
+  - "github.com/hashicorp/memberlist"
+  - MPL2
+  - :who: Andrew Patterson
+    :why: https://github.com/hashicorp/memberlist/blob/master/LICENSE
+    :versions: [ v0.5.1 ]
+    :when: 2025-01-23 11:30:00.000000000 Z
