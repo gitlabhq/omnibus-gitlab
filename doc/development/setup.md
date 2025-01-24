@@ -133,7 +133,7 @@ This ensures that your new work is behaving as expected, and not breaking anythi
 
 ### Trigger QA pipeline against deployed instance
 
-If there is sustained network access to the deployed instance, you can trigger GitLab QA tests against the deployed instance using the [GitLab QA Executor](https://gitlab.com/gitlab-org/quality/gitlab-qa-executor) project. It contains CI configuration to run GitLab QA against self-managed GitLab environments with parallelization.
+If there is sustained network access to the deployed instance, you can trigger GitLab QA tests against the deployed instance using the [GitLab QA Executor](https://gitlab.com/gitlab-org/quality/gitlab-qa-executor) project. It contains CI configuration to run GitLab QA against GitLab Self-Managed environments with parallelization.
 
 ## Run specific chefspec tests
 
