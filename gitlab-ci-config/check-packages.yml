@@ -8,21 +8,6 @@ variables:
   # hardcoding the dev registry for SLES jobs.
   DEV_BUILDER_IMAGE_REGISTRY: 'dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder'
 
-.ee-tag-only:
-  rules:
-    # SLES job might not have connection to RMT server to install additional packages
-    # FIPS packages won't necessarily work in a non-fips environment
-    - if: '$deploy_instance == "true"'
-      when: never
-    - if: '$CI_COMMIT_TAG =~ /^.*ee\.\d.*$/'
-
-.ce-tag-only:
-  rules:
-    # RPi packages are not uploaded to pre-release repo.
-    - if: '$deploy_instance == "true"'
-      when: never
-    - if: '$CI_COMMIT_TAG =~ /^.*ce\.\d.*$/'
-
 .distribution-amd64-tags:
   - distribution-runner
   - amd64
@@ -45,6 +30,10 @@ before_script:
     - bash scripts/ci/deploy_package.sh
   tags: !reference [.distribution-amd64-tags]
   retry: 2
+  rules:
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_CHECK_PACKAGE_PIPELINE"'
+      when: never
+    - when: always
 
 .apt-install:
   extends: .job_base
@@ -80,18 +69,24 @@ before_script:
 Ubuntu-20.04-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:latest"
   extends: .apt-install
+  rules:
+    - when: always
 Ubuntu-20.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:latest"
   extends: .apt-arm-install
 Ubuntu-22.04-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:latest"
   extends: .apt-install
+  rules:
+    - when: always
 Ubuntu-22.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:latest"
   extends: .apt-arm-install
 Ubuntu-24.04-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04:latest"
   extends: .apt-install
+  rules:
+    - when: always
 Ubuntu-24.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:latest"
   extends: .apt-arm-install
@@ -115,33 +110,34 @@ Debian-12-arm64-check:
   extends: .apt-arm-install
 Raspberry-Pi-2-Buster-check:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_10:latest"
-  extends:
-    - .apt-install
-    - .ce-tag-only
+  extends: .apt-install
+  rules:
+    - if: '$PIPELINE_TYPE == "CE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     package_repository: 'raspberry-pi2'
   tags: !reference [.distribution-armhf-tags]
 Raspberry-Pi-2-Bullseye-check:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:latest"
-  extends:
-    - .apt-install
-    - .ce-tag-only
+  extends: .apt-install
+  rules:
+    - if: '$PIPELINE_TYPE == "CE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     package_repository: 'raspberry-pi2'
   tags: !reference [.distribution-armhf-tags]
 Raspberry-Pi-2-Bookworm-check:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_12:latest"
-  extends:
-    - .apt-install
-    - .ce-tag-only
+  extends: .apt-install
+  rules:
+    - if: '$PIPELINE_TYPE == "CE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     package_repository: 'raspberry-pi2'
   tags: !reference [.distribution-armhf-tags]
 Ubuntu-20.04-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:latest"
-  extends:
-    - .apt-install
-    - .ee-tag-only
+  extends: .apt-install
+  rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_CHECK_PACKAGE_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
 
@@ -175,23 +171,23 @@ AmazonLinux-2023-arm64-check:
   extends: .yum-arm-install
 AlmaLinux-8-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:latest"
-  extends:
-    - .yum-install
-    - .ee-tag-only
+  extends: .yum-install
+  rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
 AlmaLinux-9-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:latest"
-  extends:
-    - .yum-install
-    - .ee-tag-only
+  extends: .yum-install
+  rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
 AmazonLinux-2-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:latest"
-  extends:
-    - .yum-install
-    - .ee-tag-only
+  extends: .yum-install
+  rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
 
@@ -204,14 +200,14 @@ OpenSUSE-15.5-arm64-check:
   extends: .zypper-arm-install
 SLES-12.5-check:
   image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_12sp5:latest"
-  extends:
-    - .zypper-install
-    - .ee-tag-only
+  extends: .zypper-install
+  rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
 SLES-15.2-check:
   image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_15sp2:latest"
-  extends:
-    - .zypper-install
-    - .ee-tag-only
+  extends: .zypper-install
+  rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
 
 Docker:
   stage: image
@@ -227,3 +223,7 @@ Docker:
     - bash scripts/ci/deploy_docker.sh
   tags: !reference [.distribution-amd64-tags]
   retry: 2
+  rules:
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_CHECK_PACKAGE_PIPELINE"'
+      when: never
+    - when: always

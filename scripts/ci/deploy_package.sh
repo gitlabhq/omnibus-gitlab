@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-if [ "${deploy_instance}" != "true" ]; then
+if [ "${deploy_instance}" != "true" ] || [ "${USE_SYSTEM_SSL}" == "true" ]; then
   exit 0;
 fi
 
