@@ -47,6 +47,10 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && $CI_PIPELINE_SOURCE == "merge_request_event"'
       variables:
         PIPELINE_TYPE: GITLAB_MR_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $INTERNAL_RELEASE == "true" && $INTERNAL_RELEASE_ITERATION && $CI_PROJECT_PATH == $DEV_PROJECT_PATH && $CI_COMMIT_BRANCH =~ /^.*-stable$/'
+      variables:
+        PIPELINE_TYPE: INTERNAL_RELEASE_BUILD_PIPELINE
+        CACHE_EDITION: "STABLE"
     - if: '$PIPELINE_TYPE == null && $NIGHTLY && $CI_COMMIT_BRANCH && ($ee == "true" || $GITLAB_VERSION =~ /-ee$/)'
       variables:
         PIPELINE_TYPE: EE_NIGHTLY_BUILD_PIPELINE

@@ -38,18 +38,37 @@ module Build
             Omnibus.load_configuration('omnibus.rb')
             Omnibus::BuildVersion.semver
           else
+            # Non-tag builds have their versions relative to the latest git tag
+            # in the repo
             latest_git_tag = Info::Git.latest_tag.strip
             latest_version = latest_git_tag && !latest_git_tag.empty? ? latest_git_tag[0, latest_git_tag.match("[+]").begin(0)] : '0.0.1'
-            commit_sha = Build::Info::Git.commit_sha
-            ver_tag = "#{latest_version}+" + (Build::Check.is_nightly? ? "rnightly" : "rfbranch")
-            ver_tag += ".fips" if fips
-            [ver_tag, Gitlab::Util.get_env('CI_PIPELINE_ID'), commit_sha].compact.join('.')
+
+            # For internal release builds, we append `internal` suffix.
+            if Build::Check.is_internal_release?
+              "#{latest_version}+internal#{internal_release_iteration}"
+            else
+              # For nightly builds, we append `rnightly`
+              # For other regular feature branch builds, we append `rfbranch`
+              ver_tag = "#{latest_version}+" + (Build::Check.is_nightly? ? "rnightly" : "rfbranch")
+
+              # Differentiate between FIPS and regular builds
+              ver_tag += ".fips" if fips
+
+              # `CI_PIPELINE_ID` and commit SHA are appended to differentiate
+              # between two pipelines against same branch
+              commit_sha = Build::Info::Git.commit_sha
+              [ver_tag, Gitlab::Util.get_env('CI_PIPELINE_ID'), commit_sha].compact.join('.')
+            end
           end
         end
 
         def release_version(fips: Build::Check.use_system_ssl?)
           semver = Info::Package.semver_version(fips: fips)
           "#{semver}-#{Gitlab::BuildIteration.new.build_iteration}"
+        end
+
+        def internal_release_iteration
+          Gitlab::Util.get_env('INTERNAL_RELEASE_ITERATION')
         end
 
         def file_list
