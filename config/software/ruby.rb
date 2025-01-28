@@ -72,6 +72,7 @@ version('3.2.4') { source sha256: 'c72b3c5c30482dca18b0f868c9075f3f47d8168eaf626
 version('3.2.5') { source sha256: 'ef0610b498f60fb5cfd77b51adb3c10f4ca8ed9a17cb87c61e5bea314ac34a16' }
 version('3.2.6') { source sha256: 'd9cb65ecdf3f18669639f2638b63379ed6fbb17d93ae4e726d4eb2bf68a48370' }
 version('3.3.6') { source sha256: '8dc48fffaf270f86f1019053f28e51e4da4cce32a36760a0603a9aee67d7fd8d' }
+version('3.3.7') { source sha256: '9c37c3b12288c7aec20ca121ce76845be5bb5d77662a24919651aaf1d12c8628' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
