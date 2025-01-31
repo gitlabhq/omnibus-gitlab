@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Managing PostgreSQL versions
 ---
-
-# Managing PostgreSQL versions
 
 The PostgreSQL Global Development Group typically releases [one major version of PostgreSQL each year](https://www.postgresql.org/support/versioning/), usually in the third quarter. Our goal is to balance supporting and adopting new PostgreSQL features with the downtime and administrative costs of having our users upgrade. GitLab aims to support two versions of PostgreSQL at any given time. This means that prior to adding a new version of PostgreSQL, we will remove the oldest version of PostgreSQL that we support, and bump the minimally required PostgreSQL version up by one major version. PostgreSQL removals are only done in major GitLab releases.
 

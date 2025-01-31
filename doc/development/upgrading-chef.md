@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Upgrading Chef
 ---
-
-# Upgrading Chef
 
 Chef is a major part of `omnibus-gitlab`, and periodically needs to be updated. Follow these steps
 to upgrade to the latest version and verify the functionality.

@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Convert a self-compiled installation to a Linux package installation
 ---
-
-# Convert a self-compiled installation to a Linux package installation
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
@@ -16,7 +15,7 @@ package instance.
 When converting a self-compiled installation:
 
 - You must convert to the exact same version of GitLab.
-- You must [configure settings in `/etc/gitlab/gitlab.rb`](../index.md#configuring) because settings in files such as
+- You must [configure settings in `/etc/gitlab/gitlab.rb`](../_index.md#configuring) because settings in files such as
   `gitlab.yml`, `puma.rb` and `smtp_settings.rb` are lost.
 
 WARNING:
@@ -193,4 +192,4 @@ To convert an external PostgreSQL installation to a Linux package PostgreSQL ins
 1. If you can log into the GitLab web interface, reboot your server to make sure none of the old services interfere with
    the Linux package installation.
 1. If you are using special features such as LDAP, you must put your settings in `gitlab.rb`. For more information,
-   see the [settings documentation](../settings/index.md).
+   see the [settings documentation](../settings/_index.md).

@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Set up your development environment
 ---
-
-# Set up your development environment
 
 Development of the Linux package can be done using an existing package available
 from the [Downloads page](https://about.gitlab.com/install/). To know how to set up
@@ -179,7 +178,7 @@ As root in your development server run:
 ## Use Customers Portal Staging in GitLab
 
 To connect your GitLab instance to Customers Portal Staging, you can set the following
-[custom environment variables](../settings/environment-variables.md#setting-custom-environment-variables)
+[custom environment variables](../settings/environment-variables.md)
 in `/etc/gitlab/gitlab.rb` by supplying them in a `gitlab_rails['env']` hash. Set:
 
 - `GITLAB_LICENSE_MODE` to `test`

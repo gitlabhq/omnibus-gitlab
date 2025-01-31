@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Upgrading software components
 ---
-
-# Upgrading software components
 
 The Linux package is created from a series of software components, some of which
 are developed by GitLab and others which are sourced from free and open source

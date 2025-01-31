@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Add or change behavior during package install and upgrade
 ---
-
-# Add or change behavior during package install and upgrade
 
 ## Test changes during install/upgrade
 

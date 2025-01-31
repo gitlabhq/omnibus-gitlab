@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Repositories, branches, and CI pipelines
 ---
-
-# Repositories, branches, and CI pipelines
 
 `omnibus-gitlab` CI pipeline is a moderately complex one with pipelines split
 between all the mirrors of the project:

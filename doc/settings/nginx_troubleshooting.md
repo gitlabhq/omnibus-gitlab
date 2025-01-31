@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Troubleshooting NGINX
 ---
-
-# Troubleshooting NGINX
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
@@ -17,7 +16,7 @@ When [configuring NGINX](nginx.md), you might encounter the following issues.
 The workaround is to make sure you don't have the `proxy_set_header` configuration in
 `nginx['custom_gitlab_server_config']` settings.
 Instead, use the
-[`proxy_set_headers`](ssl/index.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination)
+[`proxy_set_headers`](ssl/_index.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination)
 configuration in your `gitlab.rb` file.
 
 ## Error: `Received fatal alert: handshake_failure`

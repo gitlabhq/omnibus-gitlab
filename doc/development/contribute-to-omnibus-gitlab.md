@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Contribute to Omnibus GitLab
 ---
-
-# Contribute to Omnibus GitLab
 
 ## Common enhancement tasks
 
@@ -25,7 +24,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 ## Build and test your enhancement
 
-- [Building your own package](../build/index.md)
+- [Building your own package](../build/_index.md)
 - [Building a package from a custom branch](../build/team_member_docs.md#test-an-omnibus-gitlab-project-mr)
 
 ## Submit your enhancement for review

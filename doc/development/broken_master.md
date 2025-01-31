@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Handling broken master pipelines
 ---
-
-# Handling broken master pipelines
 
 We currently run [nightly pipelines](pipelines.md#scheduled-pipelines) for
 building both CE and EE package in our Release mirror: `https://dev.gitlab.org/gitlab/omnibus-gitlab`.

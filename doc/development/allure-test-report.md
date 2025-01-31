@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Test Report Generation in Omnibus-GitLab
 ---
-
-# Test Report Generation in Omnibus-GitLab
 
 The following three pipelines are created while generating the allure-report
 

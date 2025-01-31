@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: NGINX settings
 ---
-
-# NGINX settings
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
@@ -50,11 +49,11 @@ mattermost_nginx['redirect_http_to_https'] = true
 By default, Linux package installations do not use HTTPS. To enable HTTPS for
 `gitlab.example.com`:
 
-- [Use Let's Encrypt for free, automated HTTPS](ssl/index.md#enable-the-lets-encrypt-integration).
-- [Manually configure HTTPS with your own certificates](ssl/index.md#configure-https-manually).
+- [Use Let's Encrypt for free, automated HTTPS](ssl/_index.md#enable-the-lets-encrypt-integration).
+- [Manually configure HTTPS with your own certificates](ssl/_index.md#configure-https-manually).
 
 If you use a proxy, load balancer, or other external device to terminate SSL for the GitLab host name,
-see [External, proxy, and load balancer SSL termination](ssl/index.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination).
+see [External, proxy, and load balancer SSL termination](ssl/_index.md#configure-a-reverse-proxy-or-load-balancer-ssl-termination).
 
 ## Change the default proxy headers
 
@@ -439,7 +438,7 @@ For example, to create and enable custom server blocks:
    sudo gitlab-ctl restart nginx
    ```
 
-You can add domains for server blocks [as an alternative name](ssl/index.md#add-alternative-domains-to-the-certificate)
+You can add domains for server blocks [as an alternative name](ssl/_index.md#add-alternative-domains-to-the-certificate)
 to the generated Let's Encrypt SSL certificate.
 
 Custom NGINX settings inside the `/etc/gitlab/` directory are backed up to `/etc/gitlab/config_backup/`

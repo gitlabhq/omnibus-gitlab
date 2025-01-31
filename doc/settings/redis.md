@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Configuring Redis
 ---
-
-# Configuring Redis
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
@@ -183,7 +182,7 @@ To activate GitLab client support for SSL:
 ## SSL certificates
 
 If you're using custom SSL certificates for Redis, be sure to add them
-to the [trusted certificates](../settings/ssl/index.md#install-custom-public-certificates).
+to the [trusted certificates](../settings/ssl/_index.md#install-custom-public-certificates).
 
 ## Renamed commands
 

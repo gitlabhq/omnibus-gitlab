@@ -2,13 +2,12 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Contribute to Omnibus GitLab development
 ---
-
-# Contribute to Omnibus GitLab development
 
 ## Getting started
 
-1. [Understanding the Omnibus GitLab Architecture](../architecture/index.md)
+1. [Understanding the Omnibus GitLab Architecture](../architecture/_index.md)
 1. [Setting up a local development environment](setup.md)
 
 ## How everyone can contribute to Omnibus GitLab
@@ -23,7 +22,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 - [CI variables](ci-variables.md)
 - [Repositories, branches and CI pipelines](pipelines.md)
-- [Release process](../release/index.md)
+- [Release process](../release/_index.md)
 - [Version format of packages, Docker images and other artifacts](package_version_format.md)
 - [Handling broken master pipelines](broken_master.md)
 - [Handling vulnerabilities](vulnerabilities.md)

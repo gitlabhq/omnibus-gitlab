@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Omnibus GitLab deprecation process
 ---
-
-# Omnibus GitLab deprecation process
 
 Besides following the [GitLab deprecation guidelines](https://handbook.gitlab.com/handbook/product/gitlab-the-product/#deprecations-removals-and-breaking-changes), we should also add deprecation messages
 to the Omnibus GitLab package.

@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Omnibus GitLab High Availability Roles
 ---
-
-# Omnibus GitLab High Availability Roles
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
