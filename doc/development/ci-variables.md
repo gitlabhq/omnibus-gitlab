@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: CI Variables
 ---
-
-# CI Variables
 
 `omnibus-gitlab` [CI pipelines](pipelines.md) use variables provided by the CI environment to change build behavior between mirrors and
 keep sensitive data out of the repositories.

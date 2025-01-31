@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Troubleshooting SSL
 ---
-
-# Troubleshooting SSL
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
@@ -14,9 +13,9 @@ This page contains a list of common SSL-related errors and scenarios that you
 may encounter while working with GitLab. It should serve as an addition to the
 main SSL documentation:
 
-- [Configure SSL for a Linux package installation](index.md).
+- [Configure SSL for a Linux package installation](_index.md).
 - [Self-signed certificates or custom Certification Authorities for GitLab Runner](https://docs.gitlab.com/runner/configuration/tls-self-signed.html).
-- [Configure HTTPS manually](index.md#configure-https-manually).
+- [Configure HTTPS manually](_index.md#configure-https-manually).
 
 ## Useful OpenSSL Debugging Commands
 
@@ -25,7 +24,7 @@ at the source. These commands are part of the standard OpenSSL library of tools 
 debugging.
 
 NOTE:
-GitLab includes its own [custom-compiled version of OpenSSL](index.md#details-on-how-gitlab-and-ssl-work)
+GitLab includes its own [custom-compiled version of OpenSSL](_index.md#details-on-how-gitlab-and-ssl-work)
 that all GitLab libraries are linked against. It's important to run the following commands using
 this OpenSSL version.
 
@@ -69,25 +68,25 @@ this OpenSSL version.
 
 1. `SSL certificate problem: unable to get local issuer certificate`
 
-   This error indicates the client cannot get the root CA. To fix this, you can either [trust the root CA](index.md#install-custom-public-certificates) of the server you are trying to connect to on the client or [modify the certificate](index.md#configure-https-manually) to present the full chained certificate on the server you are trying to connect to.
+   This error indicates the client cannot get the root CA. To fix this, you can either [trust the root CA](_index.md#install-custom-public-certificates) of the server you are trying to connect to on the client or [modify the certificate](_index.md#configure-https-manually) to present the full chained certificate on the server you are trying to connect to.
 
    NOTE:
    It is recommended to use the full certificate chain in order to prevent SSL errors when clients connect. The full certificate chain order should consist of the server certificate first, followed by all intermediate certificates, with the root CA last.
 
 1. `unable to verify the first certificate`
 
-   This error indicates that an incomplete certificate chain is being presented by the server. To fix this error, you will need to [replace server's certificate with the full chained certificate](index.md#configure-https-manually). The full certificate chain order should consist of the server certificate first, followed by all intermediate certificates, with the root CA last.
+   This error indicates that an incomplete certificate chain is being presented by the server. To fix this error, you will need to [replace server's certificate with the full chained certificate](_index.md#configure-https-manually). The full certificate chain order should consist of the server certificate first, followed by all intermediate certificates, with the root CA last.
 
    NOTE:
    If you get this error while running the system OpenSSL utility instead of the `/opt/gitlab/embedded/bin/openssl` utility, make sure you update your CA certificates at the OS level to fix it.
 
 1. `certificate signed by unknown authority`
 
-   This error indicates that the client does not trust the certificate or CA. To fix this error, the client connecting to server will need to [trust the certificate or CA](index.md#install-custom-public-certificates).
+   This error indicates that the client does not trust the certificate or CA. To fix this error, the client connecting to server will need to [trust the certificate or CA](_index.md#install-custom-public-certificates).
 
 1. `SSL certificate problem: self signed certificate in certificate chain`
 
-   This error indicates that the client does not trust the certificate or CA. To fix this error, the client connecting to server will need to [trust the certificate or CA](index.md#install-custom-public-certificates).
+   This error indicates that the client does not trust the certificate or CA. To fix this error, the client connecting to server will need to [trust the certificate or CA](_index.md#install-custom-public-certificates).
 
 1. `x509: certificate relies on legacy Common Name field, use SANs instead`
 
@@ -215,7 +214,7 @@ When you reconfigure, there are common scenarios under which Let's Encrypt may f
   letsencrypt_certificate[gitlab.domain.com] (letsencrypt::http_authorization line 3) had an error: RuntimeError: acme_certificate[staging]  (/opt/gitlab/embedded/cookbooks/cache/cookbooks/letsencrypt/resources/certificate.rb line 20) had an error: RuntimeError: [gitlab.domain.com] Validation failed for domain gitlab.domain.com
   ```
 
-  If you run into issues reconfiguring GitLab due to Let's Encrypt [make sure you have ports 80 and 443 open and accessible](index.md#enable-the-lets-encrypt-integration).
+  If you run into issues reconfiguring GitLab due to Let's Encrypt [make sure you have ports 80 and 443 open and accessible](_index.md#enable-the-lets-encrypt-integration).
 
 - Your domain's Certification Authority Authorization (CAA) record does not allow Let's Encrypt to issue a certificate for your domain. Look for the following error in the reconfigure output:
 
@@ -374,7 +373,7 @@ To fix this problem:
 - Add the self-signed certificate from the remote GitLab instance to the
   `/etc/gitlab/trusted-certs` directory on the local GitLab instance, and then
   run `sudo gitlab-ctl reconfigure` as per the instructions for
-  [installing custom public certificates](index.md#install-custom-public-certificates).
+  [installing custom public certificates](_index.md#install-custom-public-certificates).
 - If your local GitLab instance was installed using the Helm Charts, you can
   [add your self-signed certificate to your GitLab instance](https://docs.gitlab.com/runner/install/kubernetes.html#providing-a-custom-certificate-for-accessing-gitlab).
 

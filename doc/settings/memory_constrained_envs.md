@@ -2,9 +2,8 @@
 stage: Data Stores
 group: Cloud Connector
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Running GitLab in a memory-constrained environment
 ---
-
-# Running GitLab in a memory-constrained environment
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate

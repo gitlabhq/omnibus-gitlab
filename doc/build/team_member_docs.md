@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: GitLab Team member's guide to using official build infrastructure
 ---
-
-# GitLab Team member's guide to using official build infrastructure
 
 If you are a GitLab team member, you have access to the build
 infrastructure or to the colleagues who have access to the infrastructure. You

@@ -5,9 +5,8 @@ authors: [ "@pursultani" ]
 approvers: [ "@product-manager", "@engineering-manager" ]
 owning-stage: "~devops::systems"
 participating-stages: []
+title: Multiple databases support
 ---
-
-# Multiple databases support
 
 ## Summary
 
@@ -15,7 +14,7 @@ This document explains how to support a component with one or more databases. It
 describes different levels of support and offers an implementation model for
 each level to overcome the several challenges of the [recommended deployment models](https://docs.gitlab.com/ee/administration/reference_architectures/).
 
-The [architecture page](../index.md#multiple-databases) provides some
+The [architecture page](../_index.md#multiple-databases) provides some
 background on this subject.
 
 A [development document](../../development/database_support.md) accompanies this

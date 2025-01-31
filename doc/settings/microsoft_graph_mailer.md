@@ -2,9 +2,8 @@
 stage: Manage
 group: Authentication and Authorization
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#designated-technical-writers
+title: Microsoft Graph Mailer settings
 ---
-
-# Microsoft Graph Mailer settings
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate

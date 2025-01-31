@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: DNS settings
 ---
-
-# DNS settings
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
@@ -20,7 +19,7 @@ domain name is:
 - Required for HTTPS.
 
   NOTE:
-  To take advantage of the [Let's Encrypt integration](ssl/index.md#enable-the-lets-encrypt-integration) (automatic SSL certificates),
+  To take advantage of the [Let's Encrypt integration](ssl/_index.md#enable-the-lets-encrypt-integration) (automatic SSL certificates),
   your instance's domain name must be resolvable over the public internet.
 
 ## Use a name registrar

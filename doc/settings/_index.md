@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Configuring a Linux package installation
 ---
-
-# Configuring a Linux package installation
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
@@ -27,5 +26,5 @@ DETAILS:
 - [Raspberry Pi](rpi.md)
 - [Redis](redis.md)
 - [SMTP](smtp.md)
-- [SSL](ssl/index.md)
+- [SSL](ssl/_index.md)
 - [Image scaling](image_scaling.md)

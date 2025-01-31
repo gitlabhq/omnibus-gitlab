@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Deprecate and remove support for a supported operating system
 ---
-
-# Deprecate and remove support for a supported operating system
 
 GitLab provides Omnibus packages for operating systems (OS) only until their end of life (EOL).
 After the EOL date of the OS, GitLab stops releasing official

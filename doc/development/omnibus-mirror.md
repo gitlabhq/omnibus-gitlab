@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: omnibus-mirror
 ---
-
-# omnibus-mirror
 
 In order to minimize the dependency on external resources during our build and release process, we maintain a mirror of various software dependencies within GitLab resources.
 

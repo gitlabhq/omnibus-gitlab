@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Troubleshooting Omnibus GitLab installation issues
 ---
-
-# Troubleshooting Omnibus GitLab installation issues
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
@@ -503,7 +502,7 @@ Faraday::SSLError (SSL_connect returned=1 errno=0 state=SSLv3 read server certif
 
 when GitLab tries to connect with the internal services like GitLab Shell.
 
-To fix these errors, see the [Install Custom Public Certificates](settings/ssl/index.md#install-custom-public-certificates) section.
+To fix these errors, see the [Install Custom Public Certificates](settings/ssl/_index.md#install-custom-public-certificates) section.
 
 ## error: proxyRoundTripper: XXX failed with: "net/http: timeout awaiting response headers"
 
@@ -843,7 +842,7 @@ Refer to [issue 341573](https://gitlab.com/gitlab-org/gitlab/-/issues/341573) fo
 
 Because of a [known issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7776), you can see the reconfigure process stuck at
 `ruby_block[wait for logrotate service socket] action run` after uninstalling GitLab and trying to install it again. This problem occurs when one of the `systemctl` commands are
-not executed when [uninstalling GitLab](installation/index.md#uninstall-the-linux-package-omnibus).
+not executed when [uninstalling GitLab](installation/_index.md#uninstall-the-linux-package-omnibus).
 
 To resolve this issue:
 

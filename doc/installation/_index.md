@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Install GitLab with the Linux package
 ---
-
-# Install GitLab with the Linux package
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
@@ -26,14 +25,14 @@ DETAILS:
 ## Installation and Configuration
 
 These configuration settings are commonly used when configuring a Linux package installation.
-For a complete list of settings, see the [README](../index.md#configuring) file.
+For a complete list of settings, see the [README](../_index.md#configuring) file.
 
 - [Installing GitLab](https://about.gitlab.com/install/).
   - [Manually downloading and installing a GitLab package](https://docs.gitlab.com/ee/update/package/#download-a-package-manually).
 - [Setting up a domain name/URL](../settings/configuration.md#configure-the-external-url-for-gitlab)
   for the GitLab Instance so that it can be accessed easily.
 - [Enabling HTTPS](../settings/nginx.md#enable-https).
-- [Enabling notification emails](../settings/smtp.md#smtp-settings).
+- [Enabling notification emails](../settings/smtp.md).
 - [Enabling replying via email](https://docs.gitlab.com/ee/administration/reply_by_email.html#set-it-up).
   - [Installing and configuring Postfix](https://docs.gitlab.com/ee/administration/reply_by_email_postfix_setup.html).
 - [Enabling container registry on GitLab](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-domain-configuration).
@@ -44,7 +43,7 @@ For a complete list of settings, see the [README](../index.md#configuring) file.
 - [GitLab Mattermost](https://docs.gitlab.com/ee/integration/mattermost/). Set up the Mattermost messaging app that ships with the Linux package.
 - [GitLab Prometheus](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html)
   Set up the Prometheus monitoring included in the Linux package.
-- [GitLab High Availability Roles](../roles/index.md).
+- [GitLab High Availability Roles](../roles/_index.md).
 
 ### Set up the initial account
 

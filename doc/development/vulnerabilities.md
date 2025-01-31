@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Handle vulnerabilities detected by dependency scanning
 ---
-
-# Handle vulnerabilities detected by dependency scanning
 
 A scheduled pipeline runs `dependency_scanning` job every night. This job adds new
 vulnerabilities to the

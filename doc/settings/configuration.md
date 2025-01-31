@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Configuration options for Linux package installations
 ---
-
-# Configuration options for Linux package installations
 
 DETAILS:
 **Tier:** Free, Premium, Ultimate
@@ -50,7 +49,7 @@ To change the external URL:
    ```
 
    In the previous examples we use plain HTTP. If you want to use HTTPS, see
-   how to [configure SSL](ssl/index.md).
+   how to [configure SSL](ssl/_index.md).
 
 1. Reconfigure GitLab:
 
@@ -810,7 +809,7 @@ To add a CSP:
 ## Set initial root password on installation
 
 The initial password for the administrator user `root` can be set at installation time. For more information, see
-[Set up the initial password](../installation/index.md#set-up-the-initial-account).
+[Set up the initial password](../installation/_index.md#set-up-the-initial-account).
 
 ## Set allowed hosts to prevent host header attacks
 

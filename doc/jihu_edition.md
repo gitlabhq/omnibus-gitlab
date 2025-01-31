@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: JiHu Edition
 ---
-
-# JiHu Edition
 
 NOTE:
 This section is only relevant if you are a customer in the Chinese market.
@@ -41,7 +40,7 @@ The first time GitLab JiHu Edition is installed, you are redirected to a passwor
 the password for the initial administrator account and you are redirected
 back to the login screen. Use the default account's username `root` to log in.
 
-For detailed instructions, see [installation and configuration](installation/index.md#installation-and-configuration).
+For detailed instructions, see [installation and configuration](installation/_index.md#installation-and-configuration).
 
 Additionally, you can navigate to the GitLab administration panel of your server and
 [upload your JiHu Edition license file](https://docs.gitlab.com/ee/administration/license.html#uploading-your-license).

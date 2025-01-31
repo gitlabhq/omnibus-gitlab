@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Build a GitLab Docker image locally
 ---
-
-# Build a GitLab Docker image locally
 
 The GitLab Docker image uses the Ubuntu 22.04 package created by
 `omnibus-gitlab`. Most of the files needed for building a Docker image

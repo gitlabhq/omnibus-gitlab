@@ -2,9 +2,8 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+title: Adding new `gitlab-ctl` commands
 ---
-
-# Adding new `gitlab-ctl` commands
 
 New `gitlab-ctl` commands can be added to two directory : `files/gitlab-ctl-commands` and `files/gitlab-ctl-commands-ee`. Chef stores `gitlab-ctl` commands in `/opt/gitlab/embedded/service/omnibus-ctl`.
 
