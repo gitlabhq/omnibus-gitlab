@@ -2200,7 +2200,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   # it can be on localhost for simplicity.
 #   # Use OWN_PRIVATE_API_CIDR + OWN_PRIVATE_API_PORT (optional) + OWN_PRIVATE_API_SCHEME (optional) if you cannot
 #   # specify a correct address for each KAS instance in OWN_PRIVATE_API_URL.
-#   'OWN_PRIVATE_API_URL' => 'grpc://localhost:8155'
+#   # 'OWN_PRIVATE_API_URL' => 'grpc://localhost:8155'
 #   # 'OWN_PRIVATE_API_CIDR' => '10.0.0.0/8', # IPv4 example
 #   # 'OWN_PRIVATE_API_CIDR' => '2001:db8:8a2e:370::7334/64', # IPv6 example
 #   # 'OWN_PRIVATE_API_PORT' => '8155', # if not set, port from private_api_listen_address is used

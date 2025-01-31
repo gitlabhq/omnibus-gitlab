@@ -41,7 +41,6 @@ default['gitlab_kas']['log_directory'] = '/var/log/gitlab/gitlab-kas'
 default['gitlab_kas']['env_directory'] = '/opt/gitlab/etc/gitlab-kas/env'
 default['gitlab_kas']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
-  'OWN_PRIVATE_API_URL' => 'grpc://localhost:8155'
 }
 
 default['gitlab-kas'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab_kas'].to_h }, "node['gitlab-kas']", "node['gitlab_kas']")

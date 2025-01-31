@@ -97,8 +97,7 @@ RSpec.describe 'gitlab-kas' do
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-kas/websocket_token_secret_file").with_content { |content| Base64.strict_decode64(content).size == 72 }
     end
 
-    it 'sets OWN_PRIVATE_API_URL and SSL_CERT_DIR' do
-      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-kas/env/OWN_PRIVATE_API_URL').with_content('grpc://localhost:8155')
+    it 'sets SSL_CERT_DIR' do
       expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-kas/env/SSL_CERT_DIR').with_content('/opt/gitlab/embedded/ssl/certs/')
     end
   end
