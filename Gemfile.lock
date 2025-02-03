@@ -354,7 +354,8 @@ GEM
     mixlib-cli (2.1.8)
     mixlib-config (3.0.27)
       tomlrb
-    mixlib-log (3.0.9)
+    mixlib-log (3.2.0)
+      ffi (~> 1.9, <= 1.17.0)
     mixlib-shellout (3.2.7)
       chef-utils
     molinillo (0.8.0)
