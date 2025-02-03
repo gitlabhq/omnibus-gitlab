@@ -607,7 +607,7 @@ GEM
       winrm (~> 2.0)
     wisper (2.0.1)
     wmi-lite (1.0.7)
-    yard (0.9.26)
+    yard (0.9.37)
     zeitwerk (2.4.2)
     zhexdump (0.0.2)
 
