@@ -218,7 +218,8 @@ GEM
     mixlib-cli (2.1.8)
     mixlib-config (3.0.27)
       tomlrb
-    mixlib-log (3.0.9)
+    mixlib-log (3.2.0)
+      ffi (~> 1.9, <= 1.17.0)
     mixlib-shellout (3.2.8)
       chef-utils
     molinillo (0.8.0)
@@ -410,7 +411,7 @@ DEPENDENCIES
   gitlab-ruby-shadow (= 2.5.1)
   inspec-core (= 6.6.0)!
   license_finder (= 7.1.0)
-  mixlib-log (= 3.0.9)
+  mixlib-log (= 3.2.0)
   ohai (= 18.1.18)
   rainbow (= 3.1.1)
   remote_syslog (= 1.6.15)

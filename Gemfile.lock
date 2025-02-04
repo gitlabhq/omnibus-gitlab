@@ -230,7 +230,7 @@ GEM
     faraday-net_http_persistent (1.2.0)
     fauxhai-ng (8.7.0)
       net-ssh
-    ffi (1.15.5)
+    ffi (1.17.0)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
@@ -354,7 +354,8 @@ GEM
     mixlib-cli (2.1.8)
     mixlib-config (3.0.27)
       tomlrb
-    mixlib-log (3.0.9)
+    mixlib-log (3.2.0)
+      ffi (~> 1.9, <= 1.17.0)
     mixlib-shellout (3.2.7)
       chef-utils
     molinillo (0.8.0)
@@ -606,7 +607,7 @@ GEM
       winrm (~> 2.0)
     wisper (2.0.1)
     wmi-lite (1.0.7)
-    yard (0.9.26)
+    yard (0.9.37)
     zeitwerk (2.4.2)
     zhexdump (0.0.2)
 
@@ -623,6 +624,7 @@ DEPENDENCIES
   debug
   docker-api
   fantaskspec
+  ffi (= 1.17.0)
   gitlab
   gitlab-dangerfiles (~> 3.0)
   gitlab-styles (~> 9.0)
