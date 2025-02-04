@@ -17,6 +17,7 @@ title: Omnibus GitLab test plans
 - [Mattermost](upgrade-mattermost-testplan.md)
 - [Redis](upgrade-redis-testplan.md)
 - [Rubygems](upgrade-rubygems-testplan.md)
+- [`nginx`](upgrade-nginx-testplan.md)
 
 ## Other changes
 
