@@ -57,21 +57,24 @@ the GitLab package and are "external".
 ## Assessing compatibility with OpenSSL 3
 
 You can use different tools to verify compatibility of the external integration
-endpoints. Regardless of the tool that your're using, you need to check the
+endpoints. Regardless of the tool that you're using, you need to check the
 supported TLS version and cipher suites.
 
 ### `openssl` command-line tool
 
-You can use [`openssl s_client`](https://docs.openssl.org/3.0/man1/openssl-s_client/)
-command-line tool to connect to TLS-enabled server. It has a wide range of
-options that you can use to enforce specific TLS version or ciphers:
+You can use the [`openssl s_client`](https://docs.openssl.org/3.0/man1/openssl-s_client/)
+command-line tool to connect to a TLS-enabled server. It has a wide range of
+options that you can use to enforce specific TLS versions or ciphers.
 
-1. Make sure that you are using the OpenSSL 3 command-line tool by checking
-   the version:
+1. With the system `openssl` client, make sure that you are using the OpenSSL 3 command-line tool by checking the version:
 
    ```shell
    openssl version
    ```
+
+   You perform this check with the system OpenSSL client to ensure compatibility when
+   [the version of OpenSSL provided with GitLab](_index.md#details-on-how-gitlab-and-ssl-work) has been upgraded to
+   version 3.
 
 1. Use the following example shell script that checks if a server supports the ciphers
    and TLS versions:
