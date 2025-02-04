@@ -31,13 +31,19 @@ The following table shows which method each GitLab service supports.
 
 ## OpenSSL 3 upgrade
 
-Starting from [version 17.5](https://docs.gitlab.com/ee/update/versions/gitlab_17_changes.html#1750),
+Starting from [version 17.7](https://docs.gitlab.com/ee/update/versions/gitlab_17_changes.html#1770),
 GitLab uses OpenSSL 3. Some of the older TLS protocols and cipher suites, or
 weaker TLS certificates for external integrations may be incompatible with
 OpenSSL 3 defaults.
 
-Before upgrading to GitLab 17.5, use the [OpenSSL 3 guide](openssl_3.md) to
+Before upgrading to GitLab 17.7, use the [OpenSSL 3 guide](openssl_3.md) to
 identify and assess the compatibility of your external integrations.
+
+After upgrading to GitLab 17.7, you can verify that GitLab is using OpenSSL 3 with the following command:
+
+```shell
+/opt/gitlab/embedded/bin/openssl version
+```
 
 ## Enable the Let's Encrypt integration
 
