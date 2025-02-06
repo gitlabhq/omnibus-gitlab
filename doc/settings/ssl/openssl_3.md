@@ -32,7 +32,7 @@ Here is a preliminary list of integrations that you can use:
 - Authentication and authorization
   - [LDAP servers](https://docs.gitlab.com/ee/administration/auth/ldap/)
   - [OmniAuth providers](https://docs.gitlab.com/ee/integration/omniauth.html),
-     esp. uncommon providers, for example for SAML or Shibboleth.
+     especially uncommon providers, for example for SAML or Shibboleth.
   - [Authorized applications](https://docs.gitlab.com/ee/integration/oauth_provider.html#view-all-authorized-applications)
 - Email
   - [Incoming email](https://docs.gitlab.com/ee/administration/incoming_email.html#configuration-examples)
