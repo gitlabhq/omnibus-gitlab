@@ -21,10 +21,35 @@ RSpec.describe 'gitlab::gitlab-selinux' do
 
   context 'when running on selinux' do
     before do
+      allow(SELinuxDistroHelper).to receive(:selinux_supported?).and_return(true)
       allow_any_instance_of(ShellOutHelper).to receive(:success?).with('id -Z').and_return(true)
     end
 
-    let(:bash_block) { chef_run.bash('Set proper security context on ssh files for selinux') }
+    context 'when using unified policy' do
+      before do
+        allow(SELinuxHelper).to receive(:use_unified_policy?).and_return(true)
+      end
+
+      it 'sets retries to 3 for semodule commands', type: :chef do
+        expect(chef_run.execute("semodule -i /opt/gitlab/embedded/selinux/gitlab.pp")).to have_attributes(retries: 3, retry_delay: 5)
+        expect(chef_run.execute("semodule -r gitlab-7.2.0-ssh-keygen")).to have_attributes(retries: 3, retry_delay: 5)
+        expect(chef_run.execute("semodule -r gitlab-10.5.0-ssh-authorized-keys")).to have_attributes(retries: 3, retry_delay: 5)
+        expect(chef_run.execute("semodule -r gitlab-13.5.0-gitlab-shell")).to have_attributes(retries: 3, retry_delay: 5)
+      end
+    end
+
+    context 'when not using unified policy' do
+      before do
+        allow(SELinuxHelper).to receive(:use_unified_policy?).and_return(false)
+      end
+
+      it 'sets retries to 3 for semodule commands', type: :chef do
+        expect(chef_run.execute("semodule -r gitlab")).to have_attributes(retries: 3, retry_delay: 5)
+        expect(chef_run.execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-7.2.0-ssh-keygen.pp")).to have_attributes(retries: 3, retry_delay: 5)
+        expect(chef_run.execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-10.5.0-ssh-authorized-keys.pp")).to have_attributes(retries: 3, retry_delay: 5)
+        expect(chef_run.execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-13.5.0-gitlab-shell.pp")).to have_attributes(retries: 3, retry_delay: 5)
+      end
+    end
 
     it 'should run the semanage bash command' do
       expect(templatesymlink).to notify('bash[Set proper security context on ssh files for selinux]').delayed
