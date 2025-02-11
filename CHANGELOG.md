@@ -83,6 +83,12 @@ No changes.
 - [Make gitlab-ctl commands exit 1 on non-existent services](gitlab-org/omnibus-gitlab@7f55ceba286b0e725ab1f551f5c03636e9053b27) ([merge request](gitlab-org/omnibus-gitlab!8037))
 - [Update bundled OpenSSL from 1.1.1 to 3.4.0](gitlab-org/omnibus-gitlab@8f76ff2cf1576b95f27cf744b16b0548cf5c624b) ([merge request](gitlab-org/omnibus-gitlab!8049))
 
+## 17.6.5 (2025-02-11)
+
+### Security (1 change)
+
+- [Mattermost Security Updates January 22, 2025](gitlab-org/security/omnibus-gitlab@1a35412e3cb443a49f5292c5cd2c52b67d886917) ([merge request](gitlab-org/security/omnibus-gitlab!461))
+
 ## 17.6.4 (2025-01-22)
 
 No changes.
