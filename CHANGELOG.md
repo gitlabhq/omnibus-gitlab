@@ -42,6 +42,12 @@ No changes.
 - [CI: Stop building RHEL 7 packages](gitlab-org/omnibus-gitlab@5f4845ea82e4b9bb35f8fa2041098bb9724c7252) ([merge request](gitlab-org/omnibus-gitlab!8097))
 - [Drop RaspberryPi OS Buster builds](gitlab-org/omnibus-gitlab@317c5f3894faf5eab32f4fd2e546565d7b1553e2) ([merge request](gitlab-org/omnibus-gitlab!8105))
 
+## 17.7.4 (2025-02-11)
+
+### Security (1 change)
+
+- [Mattermost Security Updates January 22, 2025](gitlab-org/security/omnibus-gitlab@413e46fd42b8bbca0751e7f6ddfb2e9c6d6e7980) ([merge request](gitlab-org/security/omnibus-gitlab!460))
+
 ## 17.7.3 (2025-01-22)
 
 No changes.
