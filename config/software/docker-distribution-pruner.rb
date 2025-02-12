@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
-version = Gitlab::Version.new('docker-distribution-pruner', '0.3.1')
+version = Gitlab::Version.new('docker-distribution-pruner', '0.3.2')
 
 name 'docker-distribution-pruner'
 default_version version.print
