@@ -97,6 +97,12 @@ options that you can use to enforce specific TLS versions or ciphers.
    done
    ```
 
+In some cases, like when connecting to a PostgreSQL database or to an SMTP server, you must supply the `-starttls` option to establish a TLS connection. Refer to the [OpenSSL documentation](https://docs.openssl.org/master/man1/openssl-s_client/#options) for more details. For example:
+
+```shell
+openssl s_client -connect YOUR_DATABASE_SERVER:5432 -tls1_2 -starttls postgres
+```
+
 ### Nmap `ssl-enum-ciphers` script
 
 Nmap's [`ssl-enum-ciphers` script](https://nmap.org/nsedoc/scripts/ssl-enum-ciphers.html)
