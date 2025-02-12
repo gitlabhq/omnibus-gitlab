@@ -14,7 +14,7 @@ to make contributing as easy as possible.
 
 ## Documentation
 
-The documentation can be found in the [doc directory](doc/index.md).
+The documentation can be found in the [doc directory](doc/_index.md).
 
 ## Omnibus fork
 
@@ -22,7 +22,7 @@ Omnibus GitLab is using a fork of [omnibus project](https://github.com/chef/omni
 
 ## Deprecated links
 
-*We left the links below in the readme to preserve old links, but please use the [doc directory](doc/index.md) to browse the complete documentation.*
+*We left the links below in the readme to preserve old links, but please use the [doc directory](doc/_index.md) to browse the complete documentation.*
 
 ## Contributing
 
@@ -37,7 +37,7 @@ Please follow the steps on the [downloads page][downloads].
 Your GitLab instance should be reachable over HTTP at the IP or hostname of your
 server. You can login as an admin user with username `root` and password `5iveL!fe`.
 
-See [doc/maintenance/index.md](doc/maintenance/index.md) for useful commands
+See [doc/maintenance/index.md](doc/maintenance/_index.md) for useful commands
 to control/debug your GitLab instance.
 
 ### Configuration options
@@ -133,7 +133,7 @@ installation are in the [update directory](doc/update/).
 
 ### Uninstalling Omnibus GitLab
 
-See [doc/installation/index.md](doc/installation/index.md#uninstall-the-linux-package-omnibus).
+See [doc/installation/\_index.md](doc/installation/_index.md#uninstall-the-linux-package-omnibus).
 
 ### Common installation problems
 
@@ -215,7 +215,7 @@ For details check [backup documentation](https://docs.gitlab.com/ee/administrati
 
 ## Invoking Rake tasks
 
-See [doc/maintenance/index.md](doc/maintenance/index.md#invoking-rake-tasks).
+See [doc/maintenance/\_index.md](doc/maintenance/_index.md#invoking-rake-tasks).
 
 ## Directory structure
 
@@ -284,14 +284,14 @@ See [doc/settings/database.md](doc/settings/database.md).
 
 ## Building your own package
 
-See [the separate build documentation](doc/build/index.md).
+See [the separate build documentation](doc/build/_index.md).
 
 ## Running a custom GitLab version
 
 It is not recommended to make changes to any of the files in `/opt/gitlab`
 after installing omnibus-gitlab: they will either conflict with or be
 overwritten by future updates. If you want to run a custom version of GitLab
-you can [build your own package](doc/build/index.md) or use [another installation
+you can [build your own package](doc/build/_index.md) or use [another installation
 method][CE README].
 
 ## Acknowledgments
