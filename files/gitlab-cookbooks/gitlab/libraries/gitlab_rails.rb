@@ -20,7 +20,7 @@ require_relative '../../package/libraries/settings_dsl.rb'
 require_relative '../../package/libraries/helpers/redis_helper/gitlab_rails'
 
 module GitlabRails
-  ALLOWED_DATABASES = %w[main ci geo embedding].freeze
+  ALLOWED_DATABASES = %w[main ci geo embedding sec].freeze
   MAIN_DATABASES = %w[main geo].freeze
   SHARED_DATABASE_ATTRIBUTES = %w[db_host db_port db_database].freeze
 

@@ -233,6 +233,12 @@ RSpec.describe 'gitlab::gitlab-rails' do
                     enable: true,
                     db_load_balancing: {},
                     db_database_tasks: true
+                  },
+                  sec: {
+                    db_host: 'the-sec-host',
+                    enable: true,
+                    db_connect_timeout: 50,
+                    db_database_tasks: false
                   }
                 }
               }
@@ -250,6 +256,9 @@ RSpec.describe 'gitlab::gitlab-rails' do
             expect(database_yml[:production][:embedding][:connect_timeout]).to eq(30)
             expect(database_yml[:production][:embedding][:load_balancing]).to eq({})
             expect(database_yml[:production][:embedding][:database_tasks]).to eq(true)
+            expect(database_yml[:production][:sec][:host]).to eq('the-sec-host')
+            expect(database_yml[:production][:sec][:connect_timeout]).to eq(50)
+            expect(database_yml[:production][:sec][:database_tasks]).to eq(false)
           end
         end
 
