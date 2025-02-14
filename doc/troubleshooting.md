@@ -63,7 +63,7 @@ You already have GitLab repositories configured, and ran `apt-get update`,
 `apt-get install` or `yum install`, and saw errors like the following:
 
 ```plaintext
-The following signatures couldn’t be verified because the public key is not available: NO_PUBKEY 3F01618A51312F3F
+The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 3F01618A51312F3F
 ```
 
 or

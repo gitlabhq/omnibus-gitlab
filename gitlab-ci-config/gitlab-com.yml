@@ -281,9 +281,8 @@ docs-lint links:
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
 
 docs-lint hugo:
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/hugomods/hugo:exts-0.142.0
+  image: hugomods/hugo:exts-0.142.0
   stage: check
-  when: manual # Drop this when Hugo launches
   rules:
     - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
