@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: DNS settings
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 The Domain Name System (DNS) is the naming system used to match IP addresses
 with domain names.
@@ -18,9 +21,12 @@ domain name is:
 - Easier to remember and use.
 - Required for HTTPS.
 
-  NOTE:
-  To take advantage of the [Let's Encrypt integration](ssl/_index.md#enable-the-lets-encrypt-integration) (automatic SSL certificates),
+  {{< alert type="note" >}}
+
+To take advantage of the [Let's Encrypt integration](ssl/_index.md#enable-the-lets-encrypt-integration) (automatic SSL certificates),
   your instance's domain name must be resolvable over the public internet.
+
+  {{< /alert >}}
 
 ## Use a name registrar
 

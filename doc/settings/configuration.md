@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Configuration options for Linux package installations
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 To configure GitLab, set the relevant options in the `/etc/gitlab/gitlab.rb` file.
 
@@ -15,8 +18,11 @@ To configure GitLab, set the relevant options in the `/etc/gitlab/gitlab.rb` fil
 contains a complete list of available options. New installations have all the
 options of the template listed in `/etc/gitlab/gitlab.rb` by default.
 
-NOTE:
+{{< alert type="note" >}}
+
 The examples provided when you edit `/etc/gitlab/gitlab.rb` might not always reflect the default settings for an instance.
+
+{{< /alert >}}
 
 For a list of default settings, see the
 [package defaults](https://docs.gitlab.com/ee/administration/package_information/defaults.html).
@@ -83,9 +89,12 @@ sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee
 
 ## Configure a relative URL for GitLab
 
-NOTE:
+{{< alert type="note" >}}
+
 For self-compiled (source) installations, there is a
 [separate document](https://docs.gitlab.com/ee/install/relative_url.html).
+
+{{< /alert >}}
 
 While we recommended installing GitLab in its own (sub)domain, sometimes
 it is not possible. In that case, GitLab can also
@@ -280,8 +289,11 @@ endpoint and specify the `repository_storage` attribute.
 
 ## Change the name of the Git user or group
 
-WARNING:
+{{< alert type="warning" >}}
+
 We do not recommend changing the user or group of an existing installation because it can cause unpredictable side effects.
+
+{{< /alert >}}
 
 By default, Linux package installations use the user name `git` for Git GitLab Shell login,
 ownership of the Git data itself, and SSH URL generation on the web interface.
@@ -586,8 +598,11 @@ from starting before a given file system is mounted, you can set the
    sudo gitlab-ctl reconfigure
    ```
 
-   NOTE:
-   If the mount point doesn't exist, GitLab fails to reconfigure.
+   {{< alert type="note" >}}
+
+If the mount point doesn't exist, GitLab fails to reconfigure.
+
+   {{< /alert >}}
 
 ## Configure the runtime directory
 
@@ -682,11 +697,14 @@ To disable automatic cache cleaning during installation:
 
 ## Error Reporting and Logging with Sentry
 
-WARNING:
+{{< alert type="warning" >}}
+
 From GitLab 17.0, only Sentry versions 21.5.0 or later will be supported. If
 you use an earlier version of a Sentry instance that you host, you must
 [upgrade Sentry](https://develop.sentry.dev/self-hosted/releases/) to continue
 collecting errors from your GitLab environments.
+
+{{< /alert >}}
 
 Sentry is an open source error reporting and logging tool which can be used as
 SaaS (<https://sentry.io>) or [host it yourself](https://develop.sentry.dev/self-hosted/).
@@ -763,10 +781,13 @@ details.
 [CSP and nonce-source with inline JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src) is available on GitLab.com.
 It is [not configured by default](https://gitlab.com/gitlab-org/gitlab/-/issues/30720) on GitLab Self-Managed.
 
-NOTE:
+{{< alert type="note" >}}
+
 Improperly configuring the CSP rules could prevent GitLab from working
 properly. Before rolling out a policy, you may also want to change
 `report_only` to `true` to test the configuration.
+
+{{< /alert >}}
 
 To add a CSP:
 
@@ -884,11 +905,14 @@ components:
 As an example, you can use the script and `gitlab.rb` snippet below to specify
 the password to Redis server and components that need to connect to Redis.
 
-NOTE:
+{{< alert type="note" >}}
+
 When specifying password to Redis server, this method only saves the user from
 having the plaintext password in `gitlab.rb` file. The password will end up in
 plaintext in the Redis server configuration file present at
 `/var/opt/gitlab/redis/redis.conf`.
+
+{{< /alert >}}
 
 1. Save the script below as `/opt/generate-redis-conf`
 

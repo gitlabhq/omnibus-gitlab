@@ -1,10 +1,4 @@
 ---
-status: proposed
-creation-date: "2023-10-02"
-authors: [ "@pursultani" ]
-approvers: [ "@product-manager", "@engineering-manager" ]
-owning-stage: "~devops::systems"
-participating-stages: []
 title: Multiple databases support
 ---
 

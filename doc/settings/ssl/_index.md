@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Configure SSL for a Linux package installation
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 The Linux package supports several common use cases for SSL configuration.
 
@@ -16,9 +19,12 @@ By default, HTTPS is not enabled. To enable HTTPS, you can:
 - Use Let's Encrypt for free, automated HTTPS.
 - Manually configure HTTPS with your own certificates.
 
-NOTE:
+{{< alert type="note" >}}
+
 If you use a proxy, load balancer or some other external device to terminate SSL for the GitLab host name,
 see [External, proxy, and load balancer SSL termination](#configure-a-reverse-proxy-or-load-balancer-ssl-termination).
+
+{{< /alert >}}
 
 The following table shows which method each GitLab service supports.
 
@@ -118,10 +124,13 @@ To explicitly set the renewal times:
    sudo gitlab-ctl reconfigure
    ```
 
-NOTE:
+{{< alert type="note" >}}
+
 The certificate is renewed only if it expires in 30 days.
 For example, if you set it to renew on the 1st of every month at 00:00 and the
 certificate expires on the 31st, then the certificate will expire before it's renewed.
+
+{{< /alert >}}
 
 Automatic renewals are managed with [go-crond](https://github.com/webdevops/go-crond).
 If wanted, one can pass [CLI arguments](https://github.com/webdevops/go-crond#usage) to
@@ -233,13 +242,16 @@ include the alternative domains specified. The generated files are located at:
 
 ## Configure HTTPS manually
 
-WARNING:
+{{< alert type="warning" >}}
+
 The NGINX configuration tells browsers and clients to only communicate with your
 GitLab instance over a secure connection for the next 365 days using
 [HSTS](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security).
 See [Configure the HTTP Strict Transport Security](#configure-the-http-strict-transport-security-hsts)
 for more configuration options. If enabling HTTPS, you must provide a
 secure connection to your instance for at least the next 24 months.
+
+{{< /alert >}}
 
 To enable HTTPS:
 
@@ -333,8 +345,11 @@ traffic to HTTPS:
    sudo gitlab-ctl reconfigure
    ```
 
-NOTE:
+{{< alert type="note" >}}
+
 This behavior is enabled by default when using the [Let's Encrypt integration](#enable-the-lets-encrypt-integration).
+
+{{< /alert >}}
 
 ### Change the default HTTPS port
 
@@ -535,9 +550,12 @@ If changing the ciphers is not an option, you can disable the HTTP/2 support:
    sudo gitlab-ctl reconfigure
    ```
 
-NOTE:
+{{< alert type="note" >}}
+
 The HTTP/2 setting only works for the main GitLab application and not for the other services,
 like GitLab Pages, Container Registry, and Mattermost.
+
+{{< /alert >}}
 
 ## Enable 2-way SSL client authentication
 
@@ -567,9 +585,12 @@ enable 2-way SSL:
 
 ## Configure the HTTP Strict Transport Security (HSTS)
 
-NOTE:
+{{< alert type="note" >}}
+
 The HSTS settings only work for the main GitLab application and not for the other services,
 like GitLab Pages, Container Registry, and Mattermost.
+
+{{< /alert >}}
 
 HTTP Strict Transport Security (HSTS) is enabled by default and it informs browsers that
 they should only contact the website using HTTPS. When a browser visits a
@@ -612,11 +633,14 @@ The Linux package ships with the official
 [Mozilla](https://wiki.mozilla.org/CA/Included_Certificates) collection of trusted root
 certification authorities which are used to verify certificate authenticity.
 
-NOTE:
+{{< alert type="note" >}}
+
 For installations that use self-signed certificates, the Linux package
 provides a way to manage these certificates. For more technical details how
 this works, see the [details](#details-on-how-gitlab-and-ssl-work)
 at the bottom of this page.
+
+{{< /alert >}}
 
 To install custom public certificates:
 

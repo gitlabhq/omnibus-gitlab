@@ -5,18 +5,24 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: SMTP settings
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 If you would rather send application email via an SMTP server instead of via
 Sendmail or Postfix, add the following configuration information to
 `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
 
-WARNING:
+{{< alert type="warning" >}}
+
 Your `smtp_password` should not contain any String delimiters used in
 Ruby or YAML (f.e. `'`) to avoid unexpected behavior during the processing of
 config settings.
+
+{{< /alert >}}
 
 There are [example configurations](#example-configurations) at the end of this page.
 
@@ -138,11 +144,14 @@ gitlab_rails['smtp_force_ssl'] = false
 
 ### Gmail
 
-NOTE:
+{{< alert type="note" >}}
+
 Gmail has [strict sending limits](https://support.google.com/a/answer/166852)
 that can impair functionality as your organization grows. We strongly recommend using a
 transactional service like [SendGrid](https://sendgrid.com/en-us) or [Mailgun](https://www.mailgun.com/)
 for teams using SMTP configuration.
+
+{{< /alert >}}
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1387,8 +1396,11 @@ For more details, review the [example configuration](https://docs.gitlab.com/ee/
 
 ### Email not sent
 
-WARNING:
+{{< alert type="warning" >}}
+
 Any command that changes data directly could be damaging if not run correctly, or under the right conditions. We highly recommend running them in a test environment with a backup of the instance ready to be restored, just in case.
+
+{{< /alert >}}
 
 If you have correctly configured an email server, but email is not sent:
 
@@ -1433,8 +1445,11 @@ This error occurs when both `gitlab_rails['smtp_enable_starttls_auto']` and `git
 
 ## Disable all outgoing email
 
-NOTE:
+{{< alert type="note" >}}
+
 This will disable **all** outgoing email from your GitLab instance, including but not limited to notification emails, direct mentions, and password reset emails.
+
+{{< /alert >}}
 
 In order to disable **all** outgoing email, you can edit or add the following line to `/etc/gitlab/gitlab.rb`:
 

@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: NGINX settings
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 This page provides configuration information for administrators and DevOps engineers configuring NGINX for GitLab installations.
 It includes essential instructions for optimizing performance and security specific to bundled NGINX (Linux package), Helm charts, or custom setups.
@@ -16,9 +19,12 @@ It includes essential instructions for optimizing performance and security speci
 
 To configure NGINX settings for different services, edit the `gitlab.rb` file.
 
-WARNING:
+{{< alert type="warning" >}}
+
 Incorrect or incompatible configuration
 might cause the service to become unavailable.
+
+{{< /alert >}}
 
 Use `nginx['<setting>']` keys to configure settings for the GitLab Rails application.
 GitLab provides similar keys for other services like
@@ -302,8 +308,11 @@ To change this header:
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
    for the changes to take effect.
 
-WARNING:
+{{< alert type="warning" >}}
+
 Setting this to `origin` or `no-referrer` breaks GitLab features that require the full referrer URL.
+
+{{< /alert >}}
 
 For more information, see the [Referrer Policy specification](https://www.w3.org/TR/referrer-policy/).
 
@@ -320,8 +329,11 @@ By default, GitLab enables Gzip compression for text data over 10240 bytes. To d
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
    for the changes to take effect.
 
-NOTE:
+{{< alert type="note" >}}
+
 The `gzip` setting applies only to the main GitLab application, not to other services.
+
+{{< /alert >}}
 
 ### Disable proxy request buffering
 
@@ -381,8 +393,11 @@ To add custom settings to the NGINX `server` block for GitLab:
 This inserts the defined string at the end of the `server` block in
 `/var/opt/gitlab/nginx/conf/gitlab-http.conf`.
 
-WARNING:
+{{< alert type="warning" >}}
+
 Custom settings might conflict with settings defined elsewhere in your `gitlab.rb` file.
+
+{{< /alert >}}
 
 #### Notes
 

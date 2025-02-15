@@ -5,8 +5,11 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: JiHu Edition
 ---
 
-NOTE:
+{{< alert type="note" >}}
+
 This section is only relevant if you are a customer in the Chinese market.
+
+{{< /alert >}}
 
 GitLab licensed its technology to a new independent Chinese company, called JiHu.
 This independent company will help drive adoption of the GitLab complete DevOps
@@ -25,11 +28,14 @@ that you can use as part of the installation process.
 
 ## Install or update a JiHu Edition package
 
-NOTE:
+{{< alert type="note" >}}
+
 If you are installing for the first time, you have to pass the
 `EXTERNAL_URL="<GitLab URL>"` variable to set your preferred domain name. Installation
 automatically configures and starts GitLab at that URL. Enabling HTTPS requires
 [additional configuration](settings/nginx.md#enable-https) to specify the certificates.
+
+{{< /alert >}}
 
 Please refer to the [GitLab Jihu Edition Install](https://gitlab.cn/install/) page
 for more details on installing or updating a JiHu Edition package.

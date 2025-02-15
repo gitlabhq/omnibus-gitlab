@@ -55,9 +55,12 @@ to use a container for development.
 1. Get the GitLab CE nightly package from the [Nightly Build repository](https://packages.gitlab.com/gitlab/nightly-builds)
    and install it using the instructions given on that page.
 
-   NOTE:
-   On Ubuntu Xenial, you may have to install `tzdata`. This
+   {{< alert type="note" >}}
+
+On Ubuntu Xenial, you may have to install `tzdata`. This
    [issue is reported in #4769](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4679).
+
+   {{< /alert >}}
 
 1. Configure and start GitLab.
 1. Check if you can access the GitLab instance from your host browser on `<ip address of host>`.
@@ -193,8 +196,11 @@ gitlab_rails['env'] = {
 }
 ```
 
-NOTE:
+{{< alert type="note" >}}
+
 For [GitLab Geo](https://docs.gitlab.com/ee/administration/geo/), deployments using the above configuration must be added to each secondary site.
+
+{{< /alert >}}
 
 ## OpenShift GitLab Development Setup
 

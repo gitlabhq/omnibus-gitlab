@@ -54,8 +54,11 @@ environment variable is set to the commit SHA corresponding to the pipeline.
 Other environment variables, if not specified, are populated from
 their corresponding files and passed on to the triggered pipeline.
 
-NOTE:
+{{< alert type="note" >}}
+
 Environment variables take precedence over `*_VERSION` files.
+
+{{< /alert >}}
 
 ### Temporarily specify a component version
 

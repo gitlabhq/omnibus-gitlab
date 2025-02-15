@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Configuring Redis
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 ## Using an alternate local Redis instance
 
@@ -157,11 +160,14 @@ You can configure Redis to run behind SSL.
    sudo gitlab-ctl reconfigure
    ```
 
-NOTE:
+{{< alert type="note" >}}
+
 Some `redis-cli` binaries are not built with support for directly connecting to a Redis server over TLS.
 If your `redis-cli` doesn't support the `--tls` flag, you will have to use something like
 [`stunnel`](https://redis.io/blog/stunnel-secure-redis-ssl/) to connect to the
 Redis server using `redis-cli` for any debugging purposes.
+
+{{< /alert >}}
 
 ### Make GitLab client connect to Redis server over SSL
 

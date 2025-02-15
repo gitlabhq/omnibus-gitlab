@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Running GitLab in a memory-constrained environment
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 GitLab requires a significant amount of memory when running with all features enabled.
 There are use-cases such as running GitLab on smaller installations where not all functionality
@@ -120,11 +123,14 @@ always [upgrade to GitLab EE](https://docs.gitlab.com/ee/update/package/convert_
 
 ## Optimize Puma
 
-WARNING:
+{{< alert type="warning" >}}
+
 This is an experimental [Alpha feature](https://docs.gitlab.com/ee/policy/development_stages_support.html#alpha-features) and subject to change without notice. The feature
 is not ready for production use. If you want to use this feature, we recommend testing
 with non-production data first. See the [known issues](https://docs.gitlab.com/ee/administration/operations/puma.html#puma-single-mode-known-issues)
 for additional details.
+
+{{< /alert >}}
 
 GitLab by default runs with a configuration that is designed to handle many concurrent connections.
 

@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Convert a self-compiled installation to a Linux package installation
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 If you installed GitLab by using the self-compiled installation method, you can convert your instance to a Linux
 package instance.
@@ -18,8 +21,11 @@ When converting a self-compiled installation:
 - You must [configure settings in `/etc/gitlab/gitlab.rb`](../_index.md#configuring) because settings in files such as
   `gitlab.yml`, `puma.rb` and `smtp_settings.rb` are lost.
 
-WARNING:
+{{< alert type="warning" >}}
+
 Converting from self-compiled installations has not been tested by GitLab.
+
+{{< /alert >}}
 
 To convert your self-compiled installation to a Linux package installation:
 

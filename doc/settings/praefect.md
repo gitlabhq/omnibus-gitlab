@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Gitaly Cluster
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 [Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) provides
 fault-tolerant storage for repositories. It uses Praefect as a router and transaction manager for
