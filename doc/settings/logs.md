@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Logs on Linux package installations
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 GitLab includes an [advanced log system](https://docs.gitlab.com/ee/administration/logs/index.html) where every service and component within GitLab will output system logs.
 Here are the configuration settings and tools for managing these logs on Linux package installations.
@@ -189,9 +192,12 @@ To modify these values:
 
 ## UDP log forwarding
 
-DETAILS:
-**Tier:** Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 Linux package installations can utilize the UDP logging feature in svlogd as well as sending non-svlogd logs to a syslog-compatible remote system using UDP.
 To configure a Linux package installation to send syslog-protocol messages via UDP, use the following settings:
@@ -202,9 +208,12 @@ logging['udp_log_shipping_host'] = '1.2.3.4' # Your syslog server
 logging['udp_log_shipping_port'] = 1514 # Optional, defaults to 514 (syslog)
 ```
 
-NOTE:
+{{< alert type="note" >}}
+
 Setting `udp_log_shipping_host` will [add a `svlogd_prefix`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/logging.rb)
 for the specified hostname and service for each of the [runit-managed](../architecture/_index.md#runit) services.
+
+{{< /alert >}}
 
 Example log messages:
 
@@ -238,9 +247,12 @@ Structured logs can be exported via JSON to be parsed by Elasticsearch,
 Splunk, or another log management system.
 The JSON format is enabled by default for all services that support it.
 
-NOTE:
+{{< alert type="note" >}}
+
 PostgreSQL does not support JSON logging without an
 external plugin. However, it does support logging in CSV format:
+
+{{< /alert >}}
 
 ```ruby
 postgresql['log_destination'] = 'csvlog'
@@ -270,8 +282,11 @@ sidekiq['log_format'] = 'text'
 gitlab_pages['log_format'] = 'text'
 ```
 
-NOTE:
+{{< alert type="note" >}}
+
 There are a few variations in attribute names for the log format depending on the service involved (for example, Container Registry uses `log_formatter`, Gitaly and Praefect both use `logging_format`). See [Issue #4280](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4280) for more details.
+
+{{< /alert >}}
 
 ## rbtrace
 
@@ -317,11 +332,14 @@ Container Registry, GitLab Shell and Gitaly:
    sudo gitlab-ctl reconfigure
    ```
 
-NOTE:
+{{< alert type="note" >}}
+
 You [cannot edit](https://gitlab.com/groups/gitlab-org/-/epics/6034)
 the `log_level` for certain GitLab logs, for example
 `production_json.log`, `graphql_json.log`, and so on.
 See also [Override default log level](https://docs.gitlab.com/ee/administration/logs/#override-default-log-level).
+
+{{< /alert >}}
 
 ## Setting a custom log group
 

@@ -5,11 +5,18 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Microsoft Graph Mailer settings
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
 
-> - [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/8259) in GitLab 15.5.
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
+
+{{< history >}}
+
+- [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/8259) in GitLab 15.5.
+
+{{< /history >}}
 
 Prerequisites:
 

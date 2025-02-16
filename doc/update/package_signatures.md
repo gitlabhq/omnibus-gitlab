@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Linux package signatures
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 We use a [packagecloud](https://packagecloud.io) instance at <https://packages.gitlab.com> to share the
 different OS packages we offer.
@@ -35,9 +38,9 @@ This key is active from **2020-04-06**.
 The key's expiry was extended from **2024-03-01** to **2026-02-27**. If you encounter an expiration of `2024-03-01`,
 follow the instructions below.
 
-::Tabs
+{{< tabs >}}
 
-:::TabTitle Debian-based distributions
+{{< tab title="Debian-based distributions" >}}
 
 packagecloud made used `apt-key`, which [is deprecated](https://blog.packagecloud.io/secure-solutions-for-apt-key-add-deprecated-messages/)
 . Manually installed or configured repositories from some distributions, such as [TurnKey Linux](https://www.turnkeylinux.org/),
@@ -76,7 +79,9 @@ are already using the `signed-by` support in Debian package source lists.
    apt-key list 3F01618A51312F3F
    ```
 
-:::TabTitle RPM-based distributions
+{{< /tab >}}
+
+{{< tab title="RPM-based distributions" >}}
 
 YUM and DNF have small differences, but the underlying configuration is identical:
 
@@ -95,7 +100,9 @@ YUM and DNF have small differences, but the underlying configuration is identica
    dnf check-update
    ```
 
-::EndTabs
+{{< /tab >}}
+
+{{< /tabs >}}
 
 ### Fetch latest signing key
 
@@ -109,21 +116,25 @@ To fetch the latest repository signing key:
 
 1. Import the key:
 
-   ::Tabs
+   {{< tabs >}}
 
-   :::TabTitle Debian/Ubuntu/Raspbian
+   {{< tab title="Debian/Ubuntu/Raspbian" >}}
 
    ```shell
    sudo apt-key add /tmp/omnibus_gitlab_gpg.key
    ```
 
-   :::TabTitle CentOS/OpenSUSE/SLES
+   {{< /tab >}}
+
+   {{< tab title="CentOS/OpenSUSE/SLES" >}}
 
    ```shell
    sudo rpm --import /tmp/omnibus_gitlab_gpg.key
    ```
 
-   ::EndTabs
+      {{< /tab >}}
+
+   {{< /tabs >}}
 
 1. Make sure that the new key has the necessary permissions to be properly recognized by your OS, which should be `644`.
    You can set the permissions by running:

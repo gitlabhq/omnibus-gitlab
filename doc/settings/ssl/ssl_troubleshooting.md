@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Troubleshooting SSL
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 This page contains a list of common SSL-related errors and scenarios that you
 may encounter while working with GitLab. It should serve as an addition to the
@@ -23,10 +26,13 @@ Sometimes it's helpful to get a better picture of the SSL certificate chain by v
 at the source. These commands are part of the standard OpenSSL library of tools for diagnostics and
 debugging.
 
-NOTE:
+{{< alert type="note" >}}
+
 GitLab includes its own [custom-compiled version of OpenSSL](_index.md#details-on-how-gitlab-and-ssl-work)
 that all GitLab libraries are linked against. It's important to run the following commands using
 this OpenSSL version.
+
+{{< /alert >}}
 
 - Perform a test connection to the host over HTTPS. Replace `HOSTNAME` with your GitLab URL
   (excluding HTTPS), and replace `port` with the port that serves HTTPS connections (usually 443):
@@ -70,15 +76,21 @@ this OpenSSL version.
 
    This error indicates the client cannot get the root CA. To fix this, you can either [trust the root CA](_index.md#install-custom-public-certificates) of the server you are trying to connect to on the client or [modify the certificate](_index.md#configure-https-manually) to present the full chained certificate on the server you are trying to connect to.
 
-   NOTE:
-   It is recommended to use the full certificate chain in order to prevent SSL errors when clients connect. The full certificate chain order should consist of the server certificate first, followed by all intermediate certificates, with the root CA last.
+   {{< alert type="note" >}}
+
+It is recommended to use the full certificate chain in order to prevent SSL errors when clients connect. The full certificate chain order should consist of the server certificate first, followed by all intermediate certificates, with the root CA last.
+
+   {{< /alert >}}
 
 1. `unable to verify the first certificate`
 
    This error indicates that an incomplete certificate chain is being presented by the server. To fix this error, you will need to [replace server's certificate with the full chained certificate](_index.md#configure-https-manually). The full certificate chain order should consist of the server certificate first, followed by all intermediate certificates, with the root CA last.
 
-   NOTE:
-   If you get this error while running the system OpenSSL utility instead of the `/opt/gitlab/embedded/bin/openssl` utility, make sure you update your CA certificates at the OS level to fix it.
+   {{< alert type="note" >}}
+
+If you get this error while running the system OpenSSL utility instead of the `/opt/gitlab/embedded/bin/openssl` utility, make sure you update your CA certificates at the OS level to fix it.
+
+   {{< /alert >}}
 
 1. `certificate signed by unknown authority`
 
@@ -100,12 +112,15 @@ ERROR: Not a certificate: /opt/gitlab/embedded/ssl/certs/FILE. Move it from /opt
 
 Check `/opt/gitlab/embedded/ssl/certs` and remove any files other than `README.md` that aren't valid X.509 certificates.
 
-NOTE:
+{{< alert type="note" >}}
+
 Running `gitlab-ctl reconfigure` constructs symlinks named from the subject hashes
 of your custom public certificates and places them in `/opt/gitlab/embedded/ssl/certs/`.
 Broken symlinks in `/opt/gitlab/embedded/ssl/certs/` will be automatically removed.
 Files other than `cacert.pem` and `README.md` stored in
 `/opt/gitlab/embedded/ssl/certs/` will be moved into the `/etc/gitlab/trusted-certs/`.
+
+{{< /alert >}}
 
 ## Custom Certificates Missing or Skipped
 
@@ -201,10 +216,13 @@ Where HOSTNAME is the hostname of the certificate.
 
 ## Let's Encrypt fails on reconfigure
 
-NOTE:
+{{< alert type="note" >}}
+
 You can test your domain using the [Let's Debug](https://letsdebug.net/)
 diagnostic tool. It can help you figure out why you can't issue a Let's Encrypt
 certificate.
+
+{{< /alert >}}
 
 When you reconfigure, there are common scenarios under which Let's Encrypt may fail:
 
@@ -479,9 +497,12 @@ git config --system http.sslbackend openssl
 
 Alternatively, you can ignore SSL verification by running:
 
-WARNING:
+{{< alert type="warning" >}}
+
 Proceed with caution when [ignoring SSL](https://git-scm.com/docs/git-config#Documentation/git-config.txt-httpsslVerify)
 due to the potential security issues associated with disabling this option at global level. Use this option _only_ when troubleshooting, and reinstate SSL verification immediately after.
+
+{{< /alert >}}
 
 ```shell
 git config --global http.sslVerify false

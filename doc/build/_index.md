@@ -5,10 +5,13 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Building `omnibus-gitlab` packages and Docker images locally
 ---
 
-NOTE:
+{{< alert type="note" >}}
+
 If you are a GitLab team member, you have access to our CI infrastructure which
 can be used to build these artifacts. Check the [documentation](team_member_docs.md)
 for more details.
+
+{{< /alert >}}
 
 ## `omnibus-gitlab` packages
 
@@ -22,10 +25,13 @@ How to build a custom package locally is described in the
 
 ## All-in-one Docker image
 
-NOTE:
+{{< alert type="note" >}}
+
 If you want individual Docker images for each GitLab component instead of the
 all-in-one monolithic one, check out the
 [CNG](https://gitlab.com/gitlab-org/build/CNG) repository.
+
+{{< /alert >}}
 
 The GitLab all-in-one Docker image uses the `omnibus-gitlab` package built for
 Ubuntu 22.04 under the hood. The Dockerfile is optimized to be used in a CI

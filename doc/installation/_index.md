@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Install GitLab with the Linux package
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 ## Prerequisites
 
@@ -55,9 +58,12 @@ after 24 hours, this file is automatically removed by the first `gitlab-ctl reco
 The default account is tied to a randomly-generated email address. To override
 this, pass the `GITLAB_ROOT_EMAIL` environment variable to the installation command.
 
-NOTE:
+{{< alert type="note" >}}
+
 If GitLab can't detect a valid hostname for the server during the
 installation, a reconfigure does not run.
+
+{{< /alert >}}
 
 To provide a custom initial root password, you have two options:
 
@@ -104,10 +110,13 @@ database, configuration) or remove all of them:
    sudo gitlab-ctl stop && sudo gitlab-ctl remove-accounts
    ```
 
-   NOTE:
-   If you have problems removing accounts or groups, run `userdel` or `groupdel` manually
+   {{< alert type="note" >}}
+
+If you have problems removing accounts or groups, run `userdel` or `groupdel` manually
    to delete them. You might also want to manually remove the leftover user home directories
    from `/home/`.
+
+   {{< /alert >}}
 
 1. Choose whether to keep your data or remove all of them:
 

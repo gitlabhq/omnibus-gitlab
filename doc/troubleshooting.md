@@ -5,9 +5,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Troubleshooting Omnibus GitLab installation issues
 ---
 
-DETAILS:
-**Tier:** Free, Premium, Ultimate
-**Offering:** GitLab Self-Managed
+{{< details >}}
+
+- Tier: Free, Premium, Ultimate
+- Offering: GitLab Self-Managed
+
+{{< /details >}}
 
 Use this page to learn about common issues users can encounter when installing Omnibus GitLab packages.
 
@@ -123,8 +126,11 @@ registry_external_url "https://registry.example.com"
 mattermost_external_url "https://mattermost.example.com"
 ```
 
-NOTE:
+{{< alert type="note" >}}
+
 Don't add the equal sign (`=`) between `external_url` and the value.
+
+{{< /alert >}}
 
 ## Emails are not being delivered
 
@@ -175,10 +181,13 @@ command is available.
 Omnibus GitLab detects default path changes in `/etc/gitlab/gitlab.rb` and should apply
 the correct file contexts.
 
-NOTE:
+{{< alert type="note" >}}
+
 From GitLab 16.10 forward, administrators can try `gitlab-ctl apply-sepolicy`
 to automatically fix SELinux issues. Consult
 `gitlab-ctl apply-sepolicy --help` for runtime options.
+
+{{< /alert >}}
 
 For installations using custom data path configuration,
 the administrator may have to manually resolve SELinux issues.
