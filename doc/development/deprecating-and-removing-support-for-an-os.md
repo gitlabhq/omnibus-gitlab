@@ -14,7 +14,7 @@ packages. The following content documents how to:
 
 ## Check for upcoming EOL dates for supported OS
 
-Check [supported operating systems](https://docs.gitlab.com/ee/administration/package_information/supported_os.html)
+Check [supported operating systems](https://docs.gitlab.com/administration/package_information/supported_os/)
 to see EOL dates for supported OS.
 
 Slack reminders to check the EOL dates are sent to the Distribution team's Slack

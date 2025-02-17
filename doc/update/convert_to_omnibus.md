@@ -38,7 +38,7 @@ To convert your self-compiled installation to a Linux package installation:
 
 1. [Install GitLab using a Linux package](https://about.gitlab.com/install/).
 1. Copy the backup file to the directory `/var/opt/gitlab/backups/` of the new server.
-1. Restore the backup in the new installation ([detailed instructions](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html#restore-for-linux-package-installations)):
+1. Restore the backup in the new installation ([detailed instructions](https://docs.gitlab.com/administration/backup_restore/restore_gitlab/#restore-for-linux-package-installations)):
 
    ```shell
    # This command will overwrite the contents of your GitLab database!
@@ -95,13 +95,13 @@ To convert your self-compiled installation to a Linux package installation:
 
 ## Convert an external PostgreSQL to a Linux package installation by using a backup
 
-You can convert an [external PostgreSQL installation](https://docs.gitlab.com/ee/administration/postgresql/external.html)
+You can convert an [external PostgreSQL installation](https://docs.gitlab.com/administration/postgresql/external/)
 to a Linux package PostgreSQL installation by using a backup. You must use the same GitLab version when you do this.
 
 To convert an external PostgreSQL installation to a Linux package PostgreSQL installation by using a backup:
 
-1. [Create a backup from the non-Linux package installation](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html)
-1. [Restoring the backup in the Linux package installation](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html#restore-for-linux-package-installations).
+1. [Create a backup from the non-Linux package installation](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/)
+1. [Restoring the backup in the Linux package installation](https://docs.gitlab.com/administration/backup_restore/restore_gitlab/#restore-for-linux-package-installations).
 1. Run the `check` task:
 
    ```shell
@@ -118,7 +118,7 @@ This assumes that `gitlab-shell` is located in `/home/git`.
 
 ## Convert an external PostgreSQL to a Linux package installation in-place
 
-You can convert an [external PostgreSQL installation](https://docs.gitlab.com/ee/administration/postgresql/external.html)
+You can convert an [external PostgreSQL installation](https://docs.gitlab.com/administration/postgresql/external/)
 to a Linux package PostgreSQL installation in-place.
 
 These instructions assume:

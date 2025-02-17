@@ -268,7 +268,7 @@ following issues:
   More details here: https://curl.haxx.se/docs/sslcerts.html
   ```
 
-- Testing by using the [rails console](https://docs.gitlab.com/ee/administration/operations/rails_console.html#starting-a-rails-console-session)
+- Testing by using the [rails console](https://docs.gitlab.com/administration/operations/rails_console/#starting-a-rails-console-session)
   also fails:
 
   ```ruby
@@ -284,7 +284,7 @@ following issues:
   ```
 
 - The error `SSL certificate problem: unable to get local issuer certificate`
-  is displayed when setting up a [mirror](https://docs.gitlab.com/ee/user/project/repository/mirror/index.html)
+  is displayed when setting up a [mirror](https://docs.gitlab.com/user/project/repository/mirror/)
   from this GitLab instance.
 - `openssl` works when specifying the path to the certificate:
 
@@ -357,7 +357,7 @@ Follow the details in [Self-signed certificates or custom Certification Authorit
 
 ## Mirroring a remote GitLab repository that uses a self-signed SSL certificate
 
-When configuring a local GitLab instance to [mirror a repository](https://docs.gitlab.com/ee/user/project/repository/mirror/index.html)
+When configuring a local GitLab instance to [mirror a repository](https://docs.gitlab.com/user/project/repository/mirror/)
 from a remote GitLab instance that uses a self-signed certificate, you may see
 the `SSL certificate problem: self signed certificate` error message in the
 user interface.
@@ -477,7 +477,7 @@ Some of these errors come from the Excon Ruby gem, and could be generated in
 circumstances where GitLab is configured to initiate an HTTPS session to a
 remote server that is serving only HTTP.
 
-One scenario is that you're using [object storage](https://docs.gitlab.com/ee/administration/object_storage.html), which
+One scenario is that you're using [object storage](https://docs.gitlab.com/administration/object_storage/), which
 isn't served under HTTPS. GitLab is misconfigured and attempts a TLS handshake,
 but the object storage responds with plain HTTP.
 
@@ -510,7 +510,7 @@ git config --global http.sslVerify false
 
 ## Upgrade to OpenSSL 3
 
-Starting from [version 17.7](https://docs.gitlab.com/ee/update/versions/gitlab_17_changes.html#1770),
+Starting from [version 17.7](https://docs.gitlab.com/update/versions/gitlab_17_changes/#1770),
 GitLab uses OpenSSL 3. Some of the older TLS protocols and cipher suites, or
 weaker TLS certificates for external integrations may be incompatible with
 OpenSSL 3 defaults.

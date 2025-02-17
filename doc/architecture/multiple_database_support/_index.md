@@ -6,7 +6,7 @@ title: Multiple databases support
 
 This document explains how to support a component with one or more databases. It
 describes different levels of support and offers an implementation model for
-each level to overcome the several challenges of the [recommended deployment models](https://docs.gitlab.com/ee/administration/reference_architectures/).
+each level to overcome the several challenges of the [recommended deployment models](https://docs.gitlab.com/administration/reference_architectures/).
 
 The [architecture page](../_index.md#multiple-databases) provides some
 background on this subject.

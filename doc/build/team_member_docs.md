@@ -74,7 +74,7 @@ Temporarily specify a component version using any of the following methods:
   merge. We recommend you open an unresolved discussion on this diff in the
   MR so you remember to revert it.
 
-- Pass the environment variable as a [Git push option](https://docs.gitlab.com/ee/user/project/push_options.html#push-options-for-gitlab-cicd).
+- Pass the environment variable as a [Git push option](https://docs.gitlab.com/user/project/push_options/#push-options-for-gitlab-cicd).
 
   ```shell
   git push <REMOTE> -o ci.variable="<ENV_VAR>=<VALUE>"

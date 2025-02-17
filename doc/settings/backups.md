@@ -80,7 +80,7 @@ Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be
 ### Limit backup lifetime for configuration backups (prune old backups)
 
 GitLab configuration backups can be pruned using the same `backup_keep_time` setting that is
-[used for the GitLab application backups](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#limit-backup-lifetime-for-local-files-prune-old-backups)
+[used for the GitLab application backups](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#limit-backup-lifetime-for-local-files-prune-old-backups)
 
 To make use of this setting, edit `/etc/gitlab/gitlab.rb`:
 
@@ -121,7 +121,7 @@ lost/leaked/stolen together with the keys needed to decrypt it.
 ## Creating an application backup
 
 To create a backup of your repositories and GitLab metadata, follow the
-[backup create documentation](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html).
+[backup create documentation](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/).
 
 Backup create will store a tar file in `/var/opt/gitlab/backups`.
 
@@ -137,7 +137,7 @@ gitlab_rails['backup_path'] = '/mnt/backups'
 
 {{< alert type="warning" >}}
 
-The backup command requires [additional parameters](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#back-up-and-restore-for-installations-using-pgbouncer)
+The backup command requires [additional parameters](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#back-up-and-restore-for-installations-using-pgbouncer)
 when your installation is using PgBouncer, for either performance reasons or when using it with a Patroni cluster.
 
 {{< /alert >}}
@@ -163,7 +163,7 @@ To persist these backups outside the container, mount volumes in the following d
 {{< /alert >}}
 
 1. `/secret/gitlab/backups`.
-1. `/var/opt/gitlab` for [all application data](https://docs.gitlab.com/ee/install/docker.html#set-up-the-volumes-location), which includes backups.
+1. `/var/opt/gitlab` for [all application data](https://docs.gitlab.com/install/docker/#set-up-the-volumes-location), which includes backups.
 1. `/var/opt/gitlab/backups` (optional). The `gitlab-backup` tool writes to this directory [by default](#creating-an-application-backup).
    While this directory is nested inside `/var/opt/gitlab`, [Docker sorts these mounts](https://github.com/moby/moby/pull/8055), allowing them to work in harmony.
 
@@ -174,7 +174,7 @@ To persist these backups outside the container, mount volumes in the following d
 
 ## Restoring an application backup
 
-See [restore documentation](https://docs.gitlab.com/ee/administration/backup_restore/restore_gitlab.html).
+See [restore documentation](https://docs.gitlab.com/administration/backup_restore/restore_gitlab/).
 
 ## Backup and restore using non-packaged database
 
@@ -182,7 +182,7 @@ If you are using non-packaged database see [documentation on using non-packaged 
 
 ## Upload backups to remote (cloud) storage
 
-For details check [backup documentation](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#upload-backups-to-a-remote-cloud-storage).
+For details check [backup documentation](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#upload-backups-to-a-remote-cloud-storage).
 
 ## Manually manage backup directory
 

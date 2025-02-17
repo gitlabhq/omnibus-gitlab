@@ -21,7 +21,7 @@ Copy the following test plan to a comment of the merge request that upgrades the
 
   - [ ] PgBouncer exporter - (metrics endpoint returns data)
 
-    1. [Configure PgBouncer](https://docs.gitlab.com/ee/administration/postgresql/pgbouncer.html).
+    1. [Configure PgBouncer](https://docs.gitlab.com/administration/postgresql/pgbouncer/).
     1. Run:
 
        ```shell

@@ -14,7 +14,7 @@ title: Install GitLab with the Linux package
 
 ## Prerequisites
 
-- [Installation Requirements](https://docs.gitlab.com/ee/install/requirements.html).
+- [Installation Requirements](https://docs.gitlab.com/install/requirements/).
 - If you want to access your GitLab instance by using a domain name, like `mygitlabinstance.com`,
   make sure the domain correctly points to the IP of the server where GitLab is being
   installed. You can check this using the command `host mygitlabinstance.com`.
@@ -31,20 +31,20 @@ These configuration settings are commonly used when configuring a Linux package 
 For a complete list of settings, see the [README](../_index.md#configuring) file.
 
 - [Installing GitLab](https://about.gitlab.com/install/).
-  - [Manually downloading and installing a GitLab package](https://docs.gitlab.com/ee/update/package/#download-a-package-manually).
+  - [Manually downloading and installing a GitLab package](https://docs.gitlab.com/update/package/#download-a-package-manually).
 - [Setting up a domain name/URL](../settings/configuration.md#configure-the-external-url-for-gitlab)
   for the GitLab Instance so that it can be accessed easily.
 - [Enabling HTTPS](../settings/nginx.md#enable-https).
 - [Enabling notification emails](../settings/smtp.md).
-- [Enabling replying via email](https://docs.gitlab.com/ee/administration/reply_by_email.html#set-it-up).
-  - [Installing and configuring Postfix](https://docs.gitlab.com/ee/administration/reply_by_email_postfix_setup.html).
-- [Enabling container registry on GitLab](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-domain-configuration).
+- [Enabling replying via email](https://docs.gitlab.com/administration/reply_by_email/#set-it-up).
+  - [Installing and configuring Postfix](https://docs.gitlab.com/administration/reply_by_email_postfix_setup/).
+- [Enabling container registry on GitLab](https://docs.gitlab.com/administration/packages/container_registry/#container-registry-domain-configuration).
   - You require SSL certificates for the domain used for container registry.
-- [Enabling GitLab Pages](https://docs.gitlab.com/ee/administration/pages/).
+- [Enabling GitLab Pages](https://docs.gitlab.com/administration/pages/).
   - If you want HTTPS enabled, you must get wildcard certificates.
-- [Enabling Elasticsearch](https://docs.gitlab.com/ee/integration/advanced_search/elasticsearch.html).
-- [GitLab Mattermost](https://docs.gitlab.com/ee/integration/mattermost/). Set up the Mattermost messaging app that ships with the Linux package.
-- [GitLab Prometheus](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html)
+- [Enabling Elasticsearch](https://docs.gitlab.com/integration/advanced_search/elasticsearch/).
+- [GitLab Mattermost](https://docs.gitlab.com/integration/mattermost/). Set up the Mattermost messaging app that ships with the Linux package.
+- [GitLab Prometheus](https://docs.gitlab.com/administration/monitoring/prometheus/)
   Set up the Prometheus monitoring included in the Linux package.
 - [GitLab High Availability Roles](../roles/_index.md).
 
@@ -90,12 +90,12 @@ Both of these methods apply only during the initial database seeding, which happ
 during the first reconfigure. For subsequent reconfigure runs, neither of
 the aforementioned methods have any effect. In that case, use the random
 password in `/etc/gitlab/initial_root_password` to log in, or
-[reset the root password](https://docs.gitlab.com/ee/security/reset_user_password.html).
+[reset the root password](https://docs.gitlab.com/security/reset_user_password/).
 
 ## Using Docker image
 
 You can also use the Docker images provided by GitLab to install and configure a GitLab instance.
-Check the [documentation](https://docs.gitlab.com/ee/install/docker.html) to know more.
+Check the [documentation](https://docs.gitlab.com/install/docker/) to know more.
 
 ## Uninstall the Linux package (Omnibus)
 

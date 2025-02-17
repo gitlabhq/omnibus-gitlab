@@ -19,7 +19,7 @@ package for older Pis, as their CPU and RAM are insufficient.
 
 Starting from GitLab version 18.0, we will no longer provide 32-bit packages for Raspberry Pi. You should use 64-bit Raspberry Pi OS and
 [install the `arm64` Debian packages](https://about.gitlab.com/install/#debian). For information on backing up data on a 32-bit OS and restoring it to a 64-bit OS, see
-[Upgrading operating systems for PostgreSQL](https://docs.gitlab.com/ee/administration/postgresql/upgrading_os.html).
+[Upgrading operating systems for PostgreSQL](https://docs.gitlab.com/administration/postgresql/upgrading_os/).
 
 ## Configure Swap
 
@@ -45,7 +45,7 @@ Debian, and follow the instructions to install GitLab.
 ### Manually download GitLab
 
 If your distribution of choice is Debian-based, you
-can [manually download](https://docs.gitlab.com/ee/update/package/#upgrade-using-a-manually-downloaded-package)
+can [manually download](https://docs.gitlab.com/update/package/#upgrade-using-a-manually-downloaded-package)
 GitLab and install it.
 
 ## Reduce running processes
@@ -83,4 +83,4 @@ Pi using the USB interface.
 
 You can improve the GitLab performance on the Pi by connecting GitLab to
 external [database](database.md#using-a-non-packaged-postgresql-database-management-server)
-and [Redis](https://docs.gitlab.com/ee/administration/redis/standalone.html) instances.
+and [Redis](https://docs.gitlab.com/administration/redis/standalone/) instances.

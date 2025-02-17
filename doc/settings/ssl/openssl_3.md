@@ -5,7 +5,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Upgrading to OpenSSL 3
 ---
 
-Starting from [version 17.7](https://docs.gitlab.com/ee/update/versions/gitlab_17_changes.html#1770),
+Starting from [version 17.7](https://docs.gitlab.com/update/versions/gitlab_17_changes/#1770),
 GitLab uses OpenSSL 3. This version of OpenSSL is a major release with notable
 deprecations and changes to the default behavior of OpenSSL (for more details
 see the [OpenSSL 3 migration guide](https://docs.openssl.org/3.0/man7/migration_guide/)).
@@ -30,24 +30,24 @@ GitLab web interface under the project, group, or admin **Settings**.
 Here is a preliminary list of integrations that you can use:
 
 - Authentication and authorization
-  - [LDAP servers](https://docs.gitlab.com/ee/administration/auth/ldap/)
-  - [OmniAuth providers](https://docs.gitlab.com/ee/integration/omniauth.html),
+  - [LDAP servers](https://docs.gitlab.com/administration/auth/ldap/)
+  - [OmniAuth providers](https://docs.gitlab.com/integration/omniauth/),
      especially uncommon providers, for example for SAML or Shibboleth.
-  - [Authorized applications](https://docs.gitlab.com/ee/integration/oauth_provider.html#view-all-authorized-applications)
+  - [Authorized applications](https://docs.gitlab.com/integration/oauth_provider/#view-all-authorized-applications)
 - Email
-  - [Incoming email](https://docs.gitlab.com/ee/administration/incoming_email.html#configuration-examples)
-  - [Service Desk](https://docs.gitlab.com/ee/user/project/service_desk/configure.html)
+  - [Incoming email](https://docs.gitlab.com/administration/incoming_email/#configuration-examples)
+  - [Service Desk](https://docs.gitlab.com/user/project/service_desk/configure/)
   - [SMTP servers](../smtp.md)
-- [Project integrations](https://docs.gitlab.com/ee/user/project/integrations/index.html)
-- [External issue trackers](https://docs.gitlab.com/ee/integration/external-issue-tracker.html)
-- [Webhooks](https://docs.gitlab.com/ee/user/project/integrations/webhooks.html)
-- [External PostgreSQL](https://docs.gitlab.com/ee/administration/postgresql/external.html)
-- [External Redis](https://docs.gitlab.com/ee/administration/redis/replication_and_failover_external.html)
-- [Object storage](https://docs.gitlab.com/ee/administration/object_storage.html)
-- [ClickHouse](https://docs.gitlab.com/ee/integration/clickhouse.html)
+- [Project integrations](https://docs.gitlab.com/user/project/integrations/)
+- [External issue trackers](https://docs.gitlab.com/integration/external-issue-tracker/)
+- [Webhooks](https://docs.gitlab.com/user/project/integrations/webhooks/)
+- [External PostgreSQL](https://docs.gitlab.com/administration/postgresql/external/)
+- [External Redis](https://docs.gitlab.com/administration/redis/replication_and_failover_external/)
+- [Object storage](https://docs.gitlab.com/administration/object_storage/)
+- [ClickHouse](https://docs.gitlab.com/integration/clickhouse/)
 - Monitoring
-  - [External Prometheus server](https://docs.gitlab.com/ee/administration/monitoring/prometheus/#using-an-external-prometheus-server)
-  - [Grafana](https://docs.gitlab.com/ee/administration/monitoring/performance/grafana_configuration.html)
+  - [External Prometheus server](https://docs.gitlab.com/administration/monitoring/prometheus/#using-an-external-prometheus-server)
+  - [Grafana](https://docs.gitlab.com/administration/monitoring/performance/grafana_configuration/)
   - [Remote Prometheus](../prometheus.md#remote-readwrite)
 
 All components that are shipped with the Linux package are compatible with

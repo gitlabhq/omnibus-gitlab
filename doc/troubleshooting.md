@@ -293,7 +293,7 @@ To fix this problem, you have two options:
      sudo gitlab-ctl reconfigure
      ```
 
-- Or, you can consider [using PgBouncer](https://docs.gitlab.com/ee/administration/postgresql/pgbouncer.html) which is a connection pooler for PostgreSQL.
+- Or, you can consider [using PgBouncer](https://docs.gitlab.com/administration/postgresql/pgbouncer/) which is a connection pooler for PostgreSQL.
 
 ## Reconfigure complains about the GLIBC version
 
@@ -481,7 +481,7 @@ sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
 
 ## 'Short read or OOM loading DB' error
 
-Try [cleaning the old Redis session](https://docs.gitlab.com/ee/administration/operations/index.html).
+Try [cleaning the old Redis session](https://docs.gitlab.com/administration/operations/).
 
 ## Apt error 'The requested URL returned error: 403'
 
@@ -527,7 +527,7 @@ You can increase the default timeout value by setting the value in `/etc/gitlab/
 gitlab_workhorse['proxy_headers_timeout'] = "2m0s"
 ```
 
-Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#omnibus-gitlab-reconfigure) for the changes to take effect.
+Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) for the changes to take effect.
 
 ## The change you wanted was rejected
 
@@ -549,7 +549,7 @@ how to override the default headers.
 
 ## Extension missing pg_trgm
 
-[GitLab requires](https://docs.gitlab.com/ee/install/requirements.html#postgresql-requirements)
+[GitLab requires](https://docs.gitlab.com/install/requirements/#postgresql-requirements)
 the PostgreSQL extension `pg_trgm`.
 If you are using Omnibus GitLab package with the bundled database, the extension
 should be automatically enabled when you upgrade.
@@ -609,7 +609,7 @@ above, and finally restart the container.
 
 ## Errno::ENOMEM: Cannot allocate memory during backup or upgrade
 
-[GitLab requires](https://docs.gitlab.com/ee/install/requirements.html#memory)
+[GitLab requires](https://docs.gitlab.com/install/requirements/#memory)
 2GB of available memory to run without errors. Having 2GB of memory installed may
 not be enough depending on the resource usage of other processes on your server.
 If GitLab runs fine when not upgrading or running a backup, then adding more swap
@@ -810,7 +810,7 @@ If you have set `external_url` with underscores (for example `https://my_company
 - It will not be possible to open project's **Settings > CI/CD** page.
 - Runners will not pick up jobs and will fail with an error 500.
 
-If that's the case, [`production.log`](https://docs.gitlab.com/ee/administration/logs/index.html#productionlog) will contain the following error:
+If that's the case, [`production.log`](https://docs.gitlab.com/administration/logs/#productionlog) will contain the following error:
 
 ```plaintext
 Completed 500 Internal Server Error in 50ms (ActiveRecord: 4.9ms | Elasticsearch: 0.0ms | Allocations: 17672)

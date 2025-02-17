@@ -19,8 +19,8 @@ Notifying GitLab administrators of the deprecation and removal of features throu
 
 Before you add a deprecation message, make sure to read:
 
-- [When can a feature be deprecated](https://docs.gitlab.com/ee/development/deprecation_guidelines/#when-can-a-feature-be-deprecated).
-- [Omnibus GitLab deprecation policy](https://docs.gitlab.com/ee/administration/package_information/deprecation_policy.html).
+- [When can a feature be deprecated](https://docs.gitlab.com/development/deprecation_guidelines/#when-can-a-feature-be-deprecated).
+- [Omnibus GitLab deprecation policy](https://docs.gitlab.com/administration/package_information/deprecation_policy/).
 
 ## Adding deprecation messages
 
@@ -41,7 +41,7 @@ deprecations = [
             config_keys: %w(gitlab sidekiq cluster),
             deprecation: '13.0',
             removal: '14.0',
-            note: "Running sidekiq directly is deprecated. Please see https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html for how to use sidekiq-cluster."
+            note: "Running sidekiq directly is deprecated. Please see https://docs.gitlab.com/administration/operations/extra_sidekiq_processes/ for how to use sidekiq-cluster."
           },
 ...
 ]
@@ -83,7 +83,7 @@ configuration against their scheduled removal date, before allowing the GitLab p
 
 Additionaly, we have users who might skip multiple GitLab versions when upgrading. For that reason, we recommend deprecation
 messages to only be removed in the next planned required stop following the removal milestone, as per our
-[upgrade paths](https://docs.gitlab.com/ee/update/index.html#upgrade-paths). For example:
+[upgrade paths](https://docs.gitlab.com/update/#upgrade-paths). For example:
 
 - A deprecation message was added in 15.8.
 - The old configuration was removed from the codebase in 16.0.

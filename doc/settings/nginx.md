@@ -33,7 +33,7 @@ Configurations for `nginx` are also available for these `<service_nginx>` settin
 share the same default values as GitLab NGINX.
 
 To operate NGINX for isolated services like Mattermost, use `gitlab_rails['enable'] = false` instead of `nginx['enable'] = false`.
-For more information, see [Running GitLab Mattermost on its own server](https://docs.gitlab.com/ee/integration/mattermost/#running-gitlab-mattermost-on-its-own-server).
+For more information, see [Running GitLab Mattermost on its own server](https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-on-its-own-server).
 
 When you modify the `gitlab.rb` file, configure NGINX settings for each
 service separately.
@@ -90,7 +90,7 @@ To override the default headers:
    }
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 You can specify any header supported by NGINX.
@@ -120,7 +120,7 @@ By default, Linux package installations use the IP addresses in `real_ip_trusted
 as GitLab trusted proxies.
 The trusted proxy configuration prevents users from being listed as signed in from those IP addresses.
 
-Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
 for the changes to take effect.
 
 ## Configure the PROXY protocol
@@ -137,7 +137,7 @@ To use a proxy like HAProxy in front of GitLab with the
    nginx['real_ip_trusted_addresses'] = [ "127.0.0.0/8", "IP_OF_THE_PROXY/32"]
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 After you enable this setting, NGINX only accepts PROXY protocol traffic on these listeners.
@@ -245,7 +245,7 @@ To change the list of addresses:
    pages_nginx['listen_addresses'] = ['*', '[::]']
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 ### Set the NGINX listen port
@@ -263,7 +263,7 @@ To change the listen port:
    nginx['listen_port'] = 8081
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 ### Change the verbosity level of NGINX logs
@@ -278,7 +278,7 @@ To change the log level:
    nginx['error_log_level'] = "debug"
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 For valid log level values, see the [NGINX documentation](https://nginx.org/en/docs/ngx_core_module.html#error_log).
@@ -305,7 +305,7 @@ To change this header:
    nginx['referrer_policy'] = false
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 {{< alert type="warning" >}}
@@ -326,7 +326,7 @@ By default, GitLab enables Gzip compression for text data over 10240 bytes. To d
    nginx['gzip_enabled'] = false
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 {{< alert type="note" >}}
@@ -345,7 +345,7 @@ To disable request buffering for specific locations:
    nginx['request_buffering_off_path_regex'] = "/api/v\\d/jobs/\\d+/artifacts$|/import/gitlab_project$|\\.git/git-receive-pack$|\\.git/ssh-receive-pack$|\\.git/ssh-upload-pack$|\\.git/gitlab-lfs/objects|\\.git/info/lfs/objects/batch$"
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 1. Reload NGINX configuration gracefully:
 
@@ -370,7 +370,7 @@ To configure a custom [`robots.txt`](https://www.robotstxt.org/robotstxt.html) f
 
    Replace `/path/to/custom/robots.txt` with the actual path to your custom `robots.txt` file.
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 This configuration adds a [custom NGINX setting](#insert-custom-nginx-settings-into-the-gitlab-server-block)
@@ -387,7 +387,7 @@ To add custom settings to the NGINX `server` block for GitLab:
    nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 This inserts the defined string at the end of the `server` block in
@@ -425,7 +425,7 @@ To add custom settings to the NGINX configuration:
    nginx['custom_nginx_config'] = "include /etc/gitlab/nginx/sites-enabled/*.conf;"
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 This inserts the defined string at the end of the `http` block in
@@ -477,7 +477,7 @@ To modify text on the default GitLab error pages:
 
    This example modifies the default 404 error page. You can use this format for any valid HTTP error code, such as 404 or 502.
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 The result for the 404 error page would look like this:
@@ -514,7 +514,7 @@ To set up GitLab with an existing Passenger and NGINX installation:
    web_server['external_users'] = ['www-data']
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 #### Configure the virtual host (server block)
@@ -715,7 +715,7 @@ To configure NGINX status options:
    }
    ```
 
-1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#linux-package-installations)
+1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
 #### Configure advanced metrics with VTS module

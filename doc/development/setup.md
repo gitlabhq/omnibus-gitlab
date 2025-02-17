@@ -198,7 +198,7 @@ gitlab_rails['env'] = {
 
 {{< alert type="note" >}}
 
-For [GitLab Geo](https://docs.gitlab.com/ee/administration/geo/), deployments using the above configuration must be added to each secondary site.
+For [GitLab Geo](https://docs.gitlab.com/administration/geo/), deployments using the above configuration must be added to each secondary site.
 
 {{< /alert >}}
 

@@ -31,13 +31,13 @@ The following table shows which method each GitLab service supports.
 | Service | Manual SSL | Let's Encrypt integration |
 |-|-|-|
 | GitLab instance domain | [Yes](#configure-https-manually) | [Yes](#enable-the-lets-encrypt-integration) |
-| Container Registry | [Yes](https://docs.gitlab.com/ee/administration/packages/container_registry.html#configure-container-registry-under-its-own-domain) | [Yes](#enable-the-lets-encrypt-integration) |
-| Mattermost | [Yes](https://docs.gitlab.com/ee/integration/mattermost/index.html#running-gitlab-mattermost-with-https) | [Yes](#enable-the-lets-encrypt-integration) |
-| GitLab Pages | [Yes](https://docs.gitlab.com/ee/administration/pages/#wildcard-domains-with-tls-support) | No |
+| Container Registry | [Yes](https://docs.gitlab.com/administration/packages/container_registry/#configure-container-registry-under-its-own-domain) | [Yes](#enable-the-lets-encrypt-integration) |
+| Mattermost | [Yes](https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-with-https) | [Yes](#enable-the-lets-encrypt-integration) |
+| GitLab Pages | [Yes](https://docs.gitlab.com/administration/pages/#wildcard-domains-with-tls-support) | No |
 
 ## OpenSSL 3 upgrade
 
-Starting from [version 17.7](https://docs.gitlab.com/ee/update/versions/gitlab_17_changes.html#1770),
+Starting from [version 17.7](https://docs.gitlab.com/update/versions/gitlab_17_changes/#1770),
 GitLab uses OpenSSL 3. Some of the older TLS protocols and cipher suites, or
 weaker TLS certificates for external integrations may be incompatible with
 OpenSSL 3 defaults.
@@ -442,7 +442,7 @@ The external load balancer may need access to a GitLab endpoint
 that returns a `200` status code (for installations requiring login, the root
 page returns a `302` redirect to the login page). In that case, it's
 recommended to leverage a
-[health check endpoint](https://docs.gitlab.com/ee/administration/monitoring/health_check.html).
+[health check endpoint](https://docs.gitlab.com/administration/monitoring/health_check/).
 
 Other bundled components, like the Container Registry, GitLab Pages, or Mattermost,
 use a similar strategy for proxied SSL. Set the particular component's `*_external_url` with `https://` and
