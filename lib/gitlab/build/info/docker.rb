@@ -14,8 +14,8 @@ module Build
         def release_file_contents
           repo = Gitlab::Util.get_env('PACKAGECLOUD_REPO') # Target repository
           download_urls = {}.tap do |urls|
-            urls[:amd64] = Build::Info::CI.package_download_url
-            urls[:arm64] = Build::Info::CI.package_download_url(arch: 'arm64')
+            urls[:amd64] = Build::Info::CI.package_download_url(job_name: 'Ubuntu-24.04')
+            urls[:arm64] = Build::Info::CI.package_download_url(job_name: 'Ubuntu-24.04', arch: 'arm64')
           end
 
           raise "Unable to identify package download URLs." if download_urls.empty?

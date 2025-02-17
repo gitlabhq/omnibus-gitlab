@@ -19,7 +19,7 @@ include a `e2e:test-on-omnibus-ee` job in the `qa` stage which triggers:
 
 - A downstream pipeline in the `omnibus-gitlab`
 [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror), which
-gives you an Ubuntu 22.04 package and an all-in-one Docker image for testing.
+gives you an Ubuntu 24.04 package and an all-in-one Docker image for testing.
 - A `gitlab-qa` run using these artifacts as well.
 
 ## Test an `omnibus-gitlab` project MR
@@ -129,7 +129,7 @@ Prerequisites:
 
 Use the release mirror to:
 
-- Build a package for an operating system other than Ubuntu 22.04.
+- Build a package for an operating system other than Ubuntu 24.04.
 - Ensure packages with your changes can be built on all operating systems.
 
 To build packages for other operating systems:

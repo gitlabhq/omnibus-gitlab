@@ -109,8 +109,8 @@ RSpec.describe Build::Image do
             "PACKAGECLOUD_REPO=download-package",
             "RELEASE_PACKAGE=gitlab-ce",
             "RELEASE_VERSION=12.121.12-ce.0",
-            "DOWNLOAD_URL_amd64=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab-ce_12.121.12-ce.0_amd64.deb",
-            "DOWNLOAD_URL_arm64=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-jammy_aarch64/gitlab-ce_12.121.12-ce.0_arm64.deb",
+            "DOWNLOAD_URL_amd64=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-noble/gitlab-ce_12.121.12-ce.0_amd64.deb",
+            "DOWNLOAD_URL_arm64=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-noble_aarch64/gitlab-ce_12.121.12-ce.0_arm64.deb",
             "CI_JOB_TOKEN=NOT-CI-JOB-TOKEN\n"
           ].join("\n")
         end
@@ -131,8 +131,8 @@ RSpec.describe Build::Image do
             "PACKAGECLOUD_REPO=download-package",
             "RELEASE_PACKAGE=gitlab-ee",
             "RELEASE_VERSION=12.121.12-ee.0",
-            "DOWNLOAD_URL_amd64=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab-ee_12.121.12-ee.0_amd64.deb",
-            "DOWNLOAD_URL_arm64=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-jammy_aarch64/gitlab-ee_12.121.12-ee.0_arm64.deb",
+            "DOWNLOAD_URL_amd64=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-noble/gitlab-ee_12.121.12-ee.0_amd64.deb",
+            "DOWNLOAD_URL_arm64=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-noble_aarch64/gitlab-ee_12.121.12-ee.0_arm64.deb",
             "CI_JOB_TOKEN=NOT-CI-JOB-TOKEN\n"
           ].join("\n")
         end
@@ -161,8 +161,8 @@ RSpec.describe Build::Image do
             "PACKAGECLOUD_REPO=download-package",
             "RELEASE_PACKAGE=gitlab-ce",
             "RELEASE_VERSION=12.121.12-ce.0",
-            "DOWNLOAD_URL_amd64=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab-ce_12.121.12-ce.0_amd64.deb",
-            "DOWNLOAD_URL_arm64=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-jammy_aarch64/gitlab-ce_12.121.12-ce.0_arm64.deb",
+            "DOWNLOAD_URL_amd64=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-noble/gitlab-ce_12.121.12-ce.0_amd64.deb",
+            "DOWNLOAD_URL_arm64=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-noble_aarch64/gitlab-ce_12.121.12-ce.0_arm64.deb",
             "CI_JOB_TOKEN=NOT-CI-JOB-TOKEN\n"
           ].join("\n")
         end
@@ -183,8 +183,8 @@ RSpec.describe Build::Image do
             "PACKAGECLOUD_REPO=download-package",
             "RELEASE_PACKAGE=gitlab-ee",
             "RELEASE_VERSION=12.121.12-ee.0",
-            "DOWNLOAD_URL_amd64=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-jammy/gitlab-ee_12.121.12-ee.0_amd64.deb",
-            "DOWNLOAD_URL_arm64=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-jammy_aarch64/gitlab-ee_12.121.12-ee.0_arm64.deb",
+            "DOWNLOAD_URL_amd64=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-noble/gitlab-ee_12.121.12-ee.0_amd64.deb",
+            "DOWNLOAD_URL_arm64=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-noble_aarch64/gitlab-ee_12.121.12-ee.0_arm64.deb",
             "CI_JOB_TOKEN=NOT-CI-JOB-TOKEN\n"
           ].join("\n")
         end
