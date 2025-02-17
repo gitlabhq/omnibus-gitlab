@@ -146,7 +146,7 @@ the user or the `RAILS_ENV` environment variable; this is taken care of by the
 ## Starting a Rails console session
 
 For more information, see
-[Rails console](https://docs.gitlab.com/ee/administration/operations/rails_console.html#starting-a-rails-console-session).
+[Rails console](https://docs.gitlab.com/administration/operations/rails_console/#starting-a-rails-console-session).
 
 ## Starting a PostgreSQL superuser `psql` session
 
@@ -170,7 +170,7 @@ Similar to the previous command, if you need superuser access to the bundled
 Geo tracking database (`geo-postgresql`), you can use the `gitlab-geo-psql`.
 It takes the same arguments as the regular `psql` command. For HA, see more
 about the necessary arguments in:
-[Checking Configuration](https://docs.gitlab.com/ee/administration/geo/replication/multiple_servers.html)
+[Checking Configuration](https://docs.gitlab.com/administration/geo/replication/multiple_servers/)
 
 ```shell
 # Superuser psql access to GitLab's Geo tracking database
@@ -181,7 +181,7 @@ sudo gitlab-geo-psql -d gitlabhq_geo_production
 
 Container Registry can use considerable amounts of disk space. To clear up
 unused layers, the registry includes a
-[garbage collect command](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-garbage-collection).
+[garbage collect command](https://docs.gitlab.com/administration/packages/container_registry/#container-registry-garbage-collection).
 
 ## Restrict users from logging into GitLab
 
@@ -192,7 +192,7 @@ will be shown an arbitrary `Deploy in progress` page.
 To remove the page, you simply run `sudo gitlab-ctl deploy-page down`. You can also check the status of the deploy page with `sudo gitlab-ctl deploy-page status`.
 
 As a side note, if you would like to restrict logging into GitLab and restrict
-changes to projects, you can [set projects as read-only](https://docs.gitlab.com/ee/administration/troubleshooting/gitlab_rails_cheat_sheet.html#make-a-project-read-only-can-only-be-done-in-the-console)
+changes to projects, you can [set projects as read-only](https://docs.gitlab.com/administration/troubleshooting/gitlab_rails_cheat_sheet/#make-a-project-read-only-can-only-be-done-in-the-console)
 , then put up the `Deploy in progress` page.
 
 ## Rotate the secrets file
@@ -200,14 +200,14 @@ changes to projects, you can [set projects as read-only](https://docs.gitlab.com
 If required for security purposes, you can rotate the `/etc/gitlab/gitlab-secrets.json` secrets file. In this file:
 
 - Do not rotate the `gitlab_rails` secrets because it contains the database encryption keys. If this secret is rotated, you see the same
-  behavior as [when the secrets file is lost](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#when-the-secrets-file-is-lost).
+  behavior as [when the secrets file is lost](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#when-the-secrets-file-is-lost).
 - You can rotate all other secrets.
 
 If you have multiple nodes in your GitLab environment, choose one of your Rails node to perform the initial steps.
 
 To rotate the secrets:
 
-1. [Verify that the database values can be decrypted](https://docs.gitlab.com/ee/administration/raketasks/check.html#verify-database-values-can-be-decrypted-using-the-current-secrets) and either make note of any decryption errors shown, or resolve
+1. [Verify that the database values can be decrypted](https://docs.gitlab.com/administration/raketasks/check/#verify-database-values-can-be-decrypted-using-the-current-secrets) and either make note of any decryption errors shown, or resolve
    them before proceeding.
 
 1. Recommended. Extract your current secrets for `gitlab_rails`. Save the output because you need this later:
@@ -222,16 +222,16 @@ To rotate the secrets:
    sudo mv /etc/gitlab/gitlab-secrets.json /etc/gitlab/gitlab-secrets.json.old
    ```
 
-1. [Reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#reconfigure-a-linux-package-installation). GitLab will
+1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation). GitLab will
    then generate a new `/etc/gitlab/gitlab-secrets.json` file with new secret values.
 
 1. If you extracted the previous secrets for `gitlab_rails`, edit the new `/etc/gitlab/gitlab-secrets.json` file and replace the key/value pairs
    under `gitlab_rails` with the previous secrets output obtained earlier.
 
-1. [Reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#reconfigure-a-linux-package-installation) again
+1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) again
    so the changes made to the secrets file are applied.
 
-1. [Restart GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#restart-a-linux-package-installation) to ensure all services
+1. [Restart GitLab](https://docs.gitlab.com/administration/restart_gitlab/#restart-a-linux-package-installation) to ensure all services
    are using the new secrets.
 
 1. If you have multiple nodes in your GitLab environment, you must copy the secrets to all of your other nodes:
@@ -244,10 +244,10 @@ To rotate the secrets:
 
    1. Copy the new `/etc/gitlab/gitlab-secrets.json` file from your Rails node onto all of your other GitLab nodes.
 
-   1. On all other nodes, [reconfigure GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#reconfigure-a-linux-package-installation)
+   1. On all other nodes, [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation)
       on each node.
 
-   1. On all other nodes, [restart GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#restart-a-linux-package-installation) on each
+   1. On all other nodes, [restart GitLab](https://docs.gitlab.com/administration/restart_gitlab/#restart-a-linux-package-installation) on each
       node to ensure all services are using the new secrets.
 
    1. On all nodes, run a checksum match on the `/etc/gitlab/gitlab-secrets.json` file to confirm that the secrets match:
@@ -256,6 +256,6 @@ To rotate the secrets:
       sudo md5sum /etc/gitlab/gitlab-secrets.json
       ```
 
-1. [Verify that the database values can be decrypted](https://docs.gitlab.com/ee/administration/raketasks/check.html#verify-database-values-can-be-decrypted-using-the-current-secrets). The output should match with the previous execution.
+1. [Verify that the database values can be decrypted](https://docs.gitlab.com/administration/raketasks/check/#verify-database-values-can-be-decrypted-using-the-current-secrets). The output should match with the previous execution.
 
 1. Confirm that GitLab is working as expected. If it is, it should be safe to delete the old secrets.

@@ -25,7 +25,7 @@ The examples provided when you edit `/etc/gitlab/gitlab.rb` might not always ref
 {{< /alert >}}
 
 For a list of default settings, see the
-[package defaults](https://docs.gitlab.com/ee/administration/package_information/defaults.html).
+[package defaults](https://docs.gitlab.com/administration/package_information/defaults/).
 
 ## Configure the external URL for GitLab
 
@@ -38,7 +38,7 @@ for more details about the use of DNS in a GitLab Self-Managed instance.
 To change the external URL:
 
 1. Optional. Before you change the external URL, determine if you have previously
-   defined a [custom **Home page URL** or **After sign-out path**](https://docs.gitlab.com/ee/administration/settings/sign_in_restrictions.html#sign-in-information).
+   defined a [custom **Home page URL** or **After sign-out path**](https://docs.gitlab.com/administration/settings/sign_in_restrictions/#sign-in-information).
    Both of these settings might cause unintentional redirecting after configuring
    a new external URL. If you have defined any URLs, remove them completely.
 
@@ -65,7 +65,7 @@ To change the external URL:
 
 1. Optional. If you had been using GitLab for a while, after you change the
    external URL, you should also
-   [invalidate the Markdown cache](https://docs.gitlab.com/ee/administration/invalidate_markdown_cache.html).
+   [invalidate the Markdown cache](https://docs.gitlab.com/administration/invalidate_markdown_cache/).
 
 ### Specify the external URL at the time of installation
 
@@ -92,7 +92,7 @@ sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee
 {{< alert type="note" >}}
 
 For self-compiled (source) installations, there is a
-[separate document](https://docs.gitlab.com/ee/install/relative_url.html).
+[separate document](https://docs.gitlab.com/install/relative_url/).
 
 {{< /alert >}}
 
@@ -280,11 +280,11 @@ To change the location of the directory,
       ```
 
 If you're running Gitaly on a separate server, see
-[the documentation on configuring Gitaly](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configure-gitaly-clients).
+[the documentation on configuring Gitaly](https://docs.gitlab.com/administration/gitaly/configure_gitaly/#configure-gitaly-clients).
 
 If you're not looking to move all repositories, but instead want to move specific
 projects between existing repository storages, use the
-[Edit Project API](https://docs.gitlab.com/ee/api/projects.html#edit-project)
+[Edit Project API](https://docs.gitlab.com/api/projects/#edit-project)
 endpoint and specify the `repository_storage` attribute.
 
 ## Change the name of the Git user or group
@@ -639,7 +639,7 @@ To enable the Rails metrics again:
 ## Configure a failed authentication ban
 
 You can configure a
-[failed authentication ban](https://docs.gitlab.com/ee/security/rate_limits.html#failed-authentication-ban-for-git-and-container-registry)
+[failed authentication ban](https://docs.gitlab.com/security/rate_limits/#failed-authentication-ban-for-git-and-container-registry)
 for Git and the container registry. When a client is banned, a 403 error code
 is returned.
 
@@ -1043,9 +1043,9 @@ password that GitLab Rails should use to connect to the PostgreSQL server.
 
 ## Related topics
 
-- [Disable impersonation](https://docs.gitlab.com/ee/api/index.html#disable-impersonation)
-- [Set up LDAP sign-in](https://docs.gitlab.com/ee/administration/auth/ldap/index.html)
-- [Smartcard authentication](https://docs.gitlab.com/ee/administration/auth/smartcard.html)
+- [Disable impersonation](https://docs.gitlab.com/api/#disable-impersonation)
+- [Set up LDAP sign-in](https://docs.gitlab.com/administration/auth/ldap/)
+- [Smartcard authentication](https://docs.gitlab.com/administration/auth/smartcard/)
 - [Set up NGINX](nginx.md) for things like:
   - Set up HTTPS
   - Redirect `HTTP` requests to `HTTPS`
@@ -1060,8 +1060,8 @@ password that GitLab Rails should use to connect to the PostgreSQL server.
 - [Add `ENV` vars to the GitLab runtime environment](environment-variables.md)
 - [Changing `gitlab.yml` and `application.yml` settings](gitlab.yml.md)
 - [Send application email via SMTP](smtp.md)
-- [Set up OmniAuth (Google, Twitter, GitHub login)](https://docs.gitlab.com/ee/integration/omniauth.html)
-- [Adjust Puma settings](https://docs.gitlab.com/ee/administration/operations/puma.html)
+- [Set up OmniAuth (Google, Twitter, GitHub login)](https://docs.gitlab.com/integration/omniauth/)
+- [Adjust Puma settings](https://docs.gitlab.com/administration/operations/puma/)
 
 ## Troubleshooting
 

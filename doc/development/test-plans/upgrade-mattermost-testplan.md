@@ -47,11 +47,11 @@ and ran the following actions, checks, and tests:
 - [ ] Verified that when creating a group in GitLab, checking the box for **Create a Mattermost team for this group** also created a team in Mattermost and the GitLab user is a member of that team.
 - [ ] Created a test project within the group created in the previous step and initialize with a `README`.
 - [ ] Verified Mattermost slash command operation:
-  - [ ] Enabled slash commands using [GitLab documentation](https://docs.gitlab.com/ee/user/project/integrations/mattermost_slash_commands.html#configure-automatically).
+  - [ ] Enabled slash commands using [GitLab documentation](https://docs.gitlab.com/user/project/integrations/mattermost_slash_commands/#configure-automatically).
   - [ ] Tested slash commands by creating a new issue from the Mattermost instance. After following the prompt to re-authorize, the issue should have been successfully created in GitLab.
 - [ ] Verified GitLab issue notification.
-  - [ ] Configured incoming web hooks in Mattermost using the [GitLab Documentation](https://docs.gitlab.com/ee/user/project/integrations/mattermost.html). Note that you have to configure both Mattermost and GitLab.
-  - [ ] Using the created web hook, followed the documentation for adding [notification support](https://docs.gitlab.com/ee/user/project/integrations/mattermost.html#configure-mattermost-to-receive-gitlab-notifications).
+  - [ ] Configured incoming web hooks in Mattermost using the [GitLab Documentation](https://docs.gitlab.com/user/project/integrations/mattermost/). Note that you have to configure both Mattermost and GitLab.
+  - [ ] Using the created web hook, followed the documentation for adding [notification support](https://docs.gitlab.com/user/project/integrations/mattermost/#configure-mattermost-to-receive-gitlab-notifications).
   - [ ] Created an issue in the test project. Verified that the notification for the issue appeared in Mattermost for the GitLab user.
 
 ### Upgrade installation tests
@@ -87,11 +87,11 @@ fresh OS installation. Run the following actions, checks, and tests:
 - [ ] Verified that when creating a group in GitLab, checking the box for **Create a Mattermost team for this group** also created a team in Mattermost and the GitLab user is a member of that team.
 - [ ] Created a test project within the group created in the previous step and initialized with a `README`.
 - [ ] Verified Mattermost slash command operation:
-  - [ ] Enabled slash commands using [GitLab documentation](https://docs.gitlab.com/ee/user/project/integrations/mattermost_slash_commands.html#configure-automatically).
+  - [ ] Enabled slash commands using [GitLab documentation](https://docs.gitlab.com/user/project/integrations/mattermost_slash_commands/#configure-automatically).
   - [ ] Tested slash commands by creating a new issue from the Mattermost instance. After following the prompt to re-authorize, the issue should have been successfully created in GitLab.
 - [ ] Verified GitLab issue notification.
-  - [ ] Configured incoming web hooks in Mattermost using the [GitLab Documentation](https://docs.gitlab.com/ee/user/project/integrations/mattermost.html). Note that you have to configure both Mattermost and GitLab.
-  - [ ] Using the created web hook, followed the documentation for adding [notification support](https://docs.gitlab.com/ee/user/project/integrations/mattermost.html#configure-mattermost-to-receive-gitlab-notifications).
+  - [ ] Configured incoming web hooks in Mattermost using the [GitLab Documentation](https://docs.gitlab.com/user/project/integrations/mattermost/). Note that you have to configure both Mattermost and GitLab.
+  - [ ] Using the created web hook, followed the documentation for adding [notification support](https://docs.gitlab.com/user/project/integrations/mattermost/#configure-mattermost-to-receive-gitlab-notifications).
   - [ ] Created an issue in the test project. Verified that the notification for the issue appears in Mattermost for the GitLab user.
 
 Upgrade GitLab with a Linux package created with the new Mattermost version. Run the

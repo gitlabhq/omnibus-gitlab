@@ -63,19 +63,19 @@ managed by the Linux package reachable via TCP:
 
 If you'd like to set up Redis in a separate server than the GitLab application,
 you can use the
-[bundled Redis from a Linux package installation](https://docs.gitlab.com/ee/administration/redis/standalone.html).
+[bundled Redis from a Linux package installation](https://docs.gitlab.com/administration/redis/standalone/).
 
 ## Running with multiple Redis instances
 
-See <https://docs.gitlab.com/ee/administration/redis/replication_and_failover.html#running-multiple-redis-clusters>.
+See <https://docs.gitlab.com/administration/redis/replication_and_failover/#running-multiple-redis-clusters>.
 
 ## Redis Sentinel
 
-See <https://docs.gitlab.com/ee/administration/redis/replication_and_failover.html>.
+See <https://docs.gitlab.com/administration/redis/replication_and_failover/>.
 
 ## Using Redis in a failover setup
 
-See <https://docs.gitlab.com/ee/administration/redis/replication_and_failover.html>.
+See <https://docs.gitlab.com/administration/redis/replication_and_failover/>.
 
 ## Using Google Cloud Memorystore
 

@@ -75,5 +75,5 @@ feature toggle off:
 Feature.disable(:dynamic_image_resizing)
 ```
 
-Refer to the [Feature Flags documentation](https://docs.gitlab.com/ee/administration/feature_flags.html)
+Refer to the [Feature Flags documentation](https://docs.gitlab.com/administration/feature_flags/)
 to learn how to work with feature flags.

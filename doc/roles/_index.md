@@ -58,7 +58,7 @@ a `gitlab-ee` Omnibus package. It will be mentioned next to each role.
 
 ### Redis Server Roles
 
-Documentation on the use of the Redis Roles can be found in [Configuring Redis for Scaling](https://docs.gitlab.com/ee/administration/redis/index.html)
+Documentation on the use of the Redis Roles can be found in [Configuring Redis for Scaling](https://docs.gitlab.com/administration/redis/)
 
 - **redis_sentinel_role** (`gitlab-ee`)
 
@@ -81,7 +81,7 @@ Documentation on the use of the Redis Roles can be found in [Configuring Redis f
 ### GitLab Geo Roles
 
 The GitLab Geo roles are used for configuration of GitLab Geo sites. See the
-[Geo Setup Documentation](https://docs.gitlab.com/ee/administration/geo/setup/index.html)
+[Geo Setup Documentation](https://docs.gitlab.com/administration/geo/setup/)
 for configuration steps.
 
 - **geo_primary_role** (`gitlab-ee`)
@@ -91,7 +91,7 @@ for configuration steps.
   - Configures a single-node PostgreSQL database as a leader for streaming replication.
   - Prevents automatic upgrade of PostgreSQL since it requires downtime of streaming replication to Geo secondary sites.
   - Enables all single-node GitLab services including NGINX, Puma, Redis, and Sidekiq. If you are segregating services, then you must explicitly disable unwanted services in `/etc/gitlab/gitlab.rb`. Therefore, this role is only useful on a single-node PostgreSQL in a Geo primary site.
-  - Cannot be used to set up a PostgreSQL cluster in a Geo primary site. Instead, see [Geo multi-node database replication](https://docs.gitlab.com/ee/administration/geo/setup/database.html#multi-node-database-replication).
+  - Cannot be used to set up a PostgreSQL cluster in a Geo primary site. Instead, see [Geo multi-node database replication](https://docs.gitlab.com/administration/geo/setup/database/#multi-node-database-replication).
 
   *By default, enables standard single-node GitLab services including NGINX, Puma, Redis, and Sidekiq.*
 
@@ -110,16 +110,16 @@ for configuration steps.
   This role is intended to be used in a Geo secondary site running on a single
   node. If using this role in a Geo site with multiple nodes, undesired
   services will need to be explicitly disabled in `/etc/gitlab/gitlab.rb`. See
-  [Geo for multiple nodes](https://docs.gitlab.com/ee/administration/geo/replication/multiple_servers.html).
+  [Geo for multiple nodes](https://docs.gitlab.com/administration/geo/replication/multiple_servers/).
 
   This role should not be used to set up a PostgreSQL cluster in a Geo secondary
-  site. Instead, see [Geo multi-node database replication](https://docs.gitlab.com/ee/administration/geo/setup/database.html#multi-node-database-replication).
+  site. Instead, see [Geo multi-node database replication](https://docs.gitlab.com/administration/geo/setup/database/#multi-node-database-replication).
 
   *By default, enables all of the GitLab default single node services. (NGINX, Puma, Redis, Sidekiq, etc)*
 
 ### Monitoring Roles
 
-Monitoring roles are used to set up monitoring of installations. For additional information, see the [Monitoring documentation](https://docs.gitlab.com/ee/administration/monitoring/prometheus/index.html).
+Monitoring roles are used to set up monitoring of installations. For additional information, see the [Monitoring documentation](https://docs.gitlab.com/administration/monitoring/prometheus/).
 
 - **monitoring_role** (`gitlab-ce`/`gitlab-ee`)
 
@@ -129,7 +129,7 @@ Monitoring roles are used to set up monitoring of installations. For additional 
 
 ### PostgreSQL Roles
 
-Documentation on the usage of the PostgreSQL Roles can be found in [Configuring PostgreSQL for Scaling](https://docs.gitlab.com/ee/administration/postgresql/index.html)
+Documentation on the usage of the PostgreSQL Roles can be found in [Configuring PostgreSQL for Scaling](https://docs.gitlab.com/administration/postgresql/)
 
 - **postgres_role** (`gitlab-ce`/`gitlab-ee`)
 
@@ -159,7 +159,7 @@ Documentation on the usage of the PostgreSQL Roles can be found in [Configuring 
 
 GitLab Pages roles are used to set up and configure GitLab Pages. For additional
 information, see the
-[GitLab Pages Administration documentation](https://docs.gitlab.com/ee/administration/pages/index.html)
+[GitLab Pages Administration documentation](https://docs.gitlab.com/administration/pages/)
 
 - **pages_role** (`gitlab-ce`/`gitlab-ee`)
 
@@ -171,7 +171,7 @@ information, see the
 
 Sidekiq roles are used to set up and configure Sidekiq. For additional
 information, see the
-[Sidekiq Administration documentation](https://docs.gitlab.com/ee/administration/sidekiq/index.html)
+[Sidekiq Administration documentation](https://docs.gitlab.com/administration/sidekiq/)
 
 - **sidekiq_role** (`gitlab-ce`/`gitlab-ee`)
 
@@ -183,7 +183,7 @@ information, see the
 
 Spamcheck roles are used to set up and configure Spamcheck services. For additional
 information, see the
-[Spamcheck documentation](https://docs.gitlab.com/ee/administration/reporting/spamcheck.html)
+[Spamcheck documentation](https://docs.gitlab.com/administration/reporting/spamcheck/)
 
 - **spamcheck_role** (`gitlab-ee`)
 
@@ -194,7 +194,7 @@ information, see the
 ### Gitaly Roles
 
 Gitaly roles are used to set up and configure Gitaly services. For additional
-information, see the [Gitaly documentation](https://docs.gitlab.com/ee/administration/gitaly/)
+information, see the [Gitaly documentation](https://docs.gitlab.com/administration/gitaly/)
 
 - **gitaly_role** (`gitlab-ce`/`gitlab-ee`)
 

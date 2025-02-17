@@ -52,7 +52,7 @@ Generally, the process is similar to:
 1. Edit the configuration file `(/etc/gitlab/gitlab.rb)` with your preferred [GitLab settings](#gitlab-settings-that-use-dns).
 
 To learn more about the DNS records, see the
-[DNS records overview](https://docs.gitlab.com/ee/user/project/pages/custom_domains_ssl_tls_certification/dns_concepts.html).
+[DNS records overview](https://docs.gitlab.com/user/project/pages/custom_domains_ssl_tls_certification/dns_concepts/).
 
 ## Use a dynamic DNS service
 
@@ -70,10 +70,10 @@ The following GitLab settings correspond to DNS entries.
 | GitLab setting | Description | Configuration |
 | -------------- | ----------- | ------------- |
 | `external_url` | This URL interacts with the main GitLab instance. It's used when cloning over SSH/HTTP/HTTPS and when accessing the web UI. GitLab Runner uses this URL to communicate with the instance. | [Configure the `external_url`](configuration.md#configure-the-external-url-for-gitlab). |
-| `registry_external_url` | This URL is used to interact with the [Container Registry](https://docs.gitlab.com/ee/user/packages/container_registry/). It can be used by the Let's Encrypt integration. This URL can also use the same DNS entry as `external_url` but on a different port. | [Configure the `registry_external_url`](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-domain-configuration). |
-| `mattermost_external_url` | This URL is used for the [bundled Mattermost](https://docs.gitlab.com/ee/integration/mattermost/) software. It can be used by the Let's Encrypt integration. | [Configure the `mattermost_external_url`](https://docs.gitlab.com/ee/integration/mattermost/#getting-started). |
-| `pages_external_url` | By default, projects that use [GitLab Pages](https://docs.gitlab.com/ee/user/project/pages/) deploy to a sub-domain of this value. | [Configure the `pages_external_url`](https://docs.gitlab.com/ee/administration/pages/#configuration). |
-| Auto DevOps domain | If you use Auto DevOps to deploy projects, this domain can be used to deploy software. It can be defined at an instance, or cluster level. This is configured using the GitLab UI, and not in `/etc/gitlab/gitlab.rb`. | [Configure the Auto DevOps domain](https://docs.gitlab.com/ee/topics/autodevops/requirements.html#auto-devops-base-domain). |
+| `registry_external_url` | This URL is used to interact with the [Container Registry](https://docs.gitlab.com/user/packages/container_registry/). It can be used by the Let's Encrypt integration. This URL can also use the same DNS entry as `external_url` but on a different port. | [Configure the `registry_external_url`](https://docs.gitlab.com/administration/packages/container_registry/#container-registry-domain-configuration). |
+| `mattermost_external_url` | This URL is used for the [bundled Mattermost](https://docs.gitlab.com/integration/mattermost/) software. It can be used by the Let's Encrypt integration. | [Configure the `mattermost_external_url`](https://docs.gitlab.com/integration/mattermost/#getting-started). |
+| `pages_external_url` | By default, projects that use [GitLab Pages](https://docs.gitlab.com/user/project/pages/) deploy to a sub-domain of this value. | [Configure the `pages_external_url`](https://docs.gitlab.com/administration/pages/#configuration). |
+| Auto DevOps domain | If you use Auto DevOps to deploy projects, this domain can be used to deploy software. It can be defined at an instance, or cluster level. This is configured using the GitLab UI, and not in `/etc/gitlab/gitlab.rb`. | [Configure the Auto DevOps domain](https://docs.gitlab.com/topics/autodevops/requirements/#auto-devops-base-domain). |
 
 ## Troubleshooting
 

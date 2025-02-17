@@ -347,7 +347,7 @@ the same cookbooks as their associated components.
 The reason for this exception is that the watches run on the PgBouncer nodes,
 where `pgbouncer_role` is used. All components, except PgBouncer and Consul,
 are disabled. Note that this is in line with existing user configuration since
-it is [the recommended configuration for PgBouncer node](https://docs.gitlab.com/ee/administration/postgresql/replication_and_failover.html#configure-pgbouncer-nodes).
+it is [the recommended configuration for PgBouncer node](https://docs.gitlab.com/administration/postgresql/replication_and_failover/#configure-pgbouncer-nodes).
 We don't want to introduce any breaking changes into `gitlab.rb`.
 
 ## Considerations
@@ -390,7 +390,7 @@ each component cookbook to create its own PgBouncer users.
 
 ### Support dedicated PgBouncer user for databases
 
-The current `pgbouncer` cookbook [_mostly_ supports multiple databases](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#configure-a-new-pgbouncer-database-with-pool_mode--session).
+The current `pgbouncer` cookbook [_mostly_ supports multiple databases](https://docs.gitlab.com/administration/gitaly/praefect/#configure-a-new-pgbouncer-database-with-pool_mode--session).
 
 The `pgbouncer` cookbook only creates PgBouncer users for the main Rails database. This
 is why non-Rails applications connect with the same PgBouncer user created for Rails.

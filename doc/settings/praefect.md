@@ -12,16 +12,16 @@ title: Gitaly Cluster
 
 {{< /details >}}
 
-[Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) provides
+[Gitaly Cluster](https://docs.gitlab.com/administration/gitaly/praefect/) provides
 fault-tolerant storage for repositories. It uses Praefect as a router and transaction manager for
 Gitaly.
 
 ## Enable Gitaly Cluster
 
 By default, Gitaly Cluster is not enabled. For information on enabling Gitaly Cluster, see
-the Gitaly Cluster [setup instructions](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#setup-instructions).
+the Gitaly Cluster [setup instructions](https://docs.gitlab.com/administration/gitaly/praefect/#setup-instructions).
 
 ## Update GitLab when Gitaly Cluster is enabled
 
 For information on updating GitLab with Gitaly Cluster enabled, see the
-[specific instructions](https://docs.gitlab.com/ee/update/zero_downtime.html#gitaly-cluster).
+[specific instructions](https://docs.gitlab.com/update/zero_downtime/#gitaly-cluster).

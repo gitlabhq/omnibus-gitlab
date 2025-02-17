@@ -47,7 +47,7 @@ because it is overwritten on the next `gitlab-ctl reconfigure` run.
 
 ## Adding a new setting to `gitlab.yml`
 
-First, consider not adding a setting to `gitlab.yml`. See **Settings** under [GitLab-specific concerns](https://docs.gitlab.com/ee/development/code_review.html#gitlab-specific-concerns).
+First, consider not adding a setting to `gitlab.yml`. See **Settings** under [GitLab-specific concerns](https://docs.gitlab.com/development/code_review/#gitlab-specific-concerns).
 
 Don't forget to update the following 5 files when adding a new setting:
 
