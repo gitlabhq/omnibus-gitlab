@@ -8,7 +8,7 @@ variable "aws_secret_key" {
   type = string
 }
 
-# download_url is the URL used to download the Ubuntu Focal GitLab Omnibus
+# download_url is the URL used to download the Ubuntu Noble GitLab Omnibus
 # debian package.
 variable "download_url" {
   type = string
@@ -86,7 +86,7 @@ variable "ami_prefix" {
 data "amazon-ami" "base_ami" {
   access_key = "${var.aws_access_key}"
   filters = {
-    name                = "ubuntu/images/*ubuntu-focal-20.04-amd64-server-*"
+    name                = "ubuntu/images/*ubuntu-noble-24.04-amd64-server-*"
     root-device-type    = "ebs"
     virtualization-type = "hvm"
   }

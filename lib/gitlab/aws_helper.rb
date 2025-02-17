@@ -29,7 +29,7 @@ class AWSHelper
       architecture = 'amd64'
     end
 
-    @download_url = Build::Info::CI.package_download_url(job_name: "Ubuntu-20.04", arch: architecture)
+    @download_url = Build::Info::CI.package_download_url(job_name: "Ubuntu-24.04", arch: architecture)
 
     system(*%W[support/packer/packer_ami.sh #{@version} #{@type} #{@download_url} #{Build::Info::CI.job_token} #{@license_file}])
   end
@@ -121,7 +121,7 @@ class AWSHelper
                 "AccessRoleArn" => Gitlab::Util.get_env('AWS_MARKETPLACE_ARN'),
                 "UserName" => "ubuntu",
                 "OperatingSystemName" => "UBUNTU",
-                "OperatingSystemVersion" => "20.04"
+                "OperatingSystemVersion" => "24.04"
               },
               "UsageInstructions" => "https://docs.gitlab.com/ee/install/aws/",
               "RecommendedInstanceType" => "c5.xlarge",
