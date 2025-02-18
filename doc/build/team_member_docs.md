@@ -15,7 +15,7 @@ If you have a merge request (MR) in the `gitlab-org/gitlab` project, you can
 test that MR using a package or a Docker image.
 
 On your MR apply the `~"pipeline:run-all-e2e"` label and run a new pipeline. This will
-include a `e2e:test-on-omnibus-ee` job in the `qa` stage which will trigger:
+include a `e2e:test-on-omnibus-ee` job in the `qa` stage which triggers:
 
 - A downstream pipeline in the `omnibus-gitlab`
 [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror), which
