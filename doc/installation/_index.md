@@ -89,7 +89,7 @@ To provide a custom initial root password, you have two options:
 Both of these methods apply only during the initial database seeding, which happens
 during the first reconfigure. For subsequent reconfigure runs, neither of
 the aforementioned methods have any effect. In that case, use the random
-password in `/etc/gitlab/initial_root_password` to log in, or
+password in `/etc/gitlab/initial_root_password` to sign in, or
 [reset the root password](https://docs.gitlab.com/security/reset_user_password/).
 
 ## Using Docker image
