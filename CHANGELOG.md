@@ -3,6 +3,51 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.9.0 (2025-02-19)
+
+### Added (3 changes)
+
+- [Allow configuring a sec database](gitlab-org/omnibus-gitlab@0b0d62879e97c8cf71109d999c2f8c1eed5016ff) ([merge request](gitlab-org/omnibus-gitlab!7727))
+- [Add AmazonLinux 2023 FIPS build](gitlab-org/omnibus-gitlab@8b150f0fdff8147030465cf0c019e22c7efa05b1) ([merge request](gitlab-org/omnibus-gitlab!8101))
+- [Add support for SLES 15.6](gitlab-org/omnibus-gitlab@7206664186bec70a7084bedc163def2bff8b6923) ([merge request](gitlab-org/omnibus-gitlab!8121))
+
+### Fixed (2 changes)
+
+- [Add retry mechanism to selinux cookbook](gitlab-org/omnibus-gitlab@dfa194195a83bd5ae9caed60f8bed2c37a9927f0) ([merge request](gitlab-org/omnibus-gitlab!8149))
+- [Exclude external_diffs from pre-inst backup](gitlab-org/omnibus-gitlab@afc82d0bddf64285296b046c317a0053c9533478) ([merge request](gitlab-org/omnibus-gitlab!8098))
+
+### Changed (16 changes)
+
+- [Update Go from 1.23.2 to 1.23.6](gitlab-org/omnibus-gitlab@4bbf85636d3e79f683cc6f8bc43159b567ec732c) ([merge request](gitlab-org/omnibus-gitlab!8163))
+- [Bump nginx to version 1.27.4](gitlab-org/omnibus-gitlab@081824f0418989164ae9296c5dd50f600c050f17) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8159))
+- [Update dependency gitlab-exporter to v15.2.0](gitlab-org/omnibus-gitlab@61e32d09632823a84d8ce4e89d00e4bb515d1ba6) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8147))
+- [Update mixlib-log to v3.2.0](gitlab-org/omnibus-gitlab@ffecaba8418bbc1095c980dfdda83614bbc5b0e9) ([merge request](gitlab-org/omnibus-gitlab!8150))
+- [Update ffi gem to v1.17.0](gitlab-org/omnibus-gitlab@bc0f0f854a18953ddab8a93d2ff3adff71bd7536) ([merge request](gitlab-org/omnibus-gitlab!8150))
+- [Drop default value of KAS's OWN_PRIVATE_API_URL variable](gitlab-org/omnibus-gitlab@a5a21d1b41e7f6c2f6e78c3bb9e562f206a05b25) ([merge request](gitlab-org/omnibus-gitlab!8146))
+- [Bump rubygems version](gitlab-org/omnibus-gitlab@693869b4b1ffcb073f5dce3d27f600879e396d02) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8129))
+- [Bump nginx to version 1.27.3](gitlab-org/omnibus-gitlab@ed7d57211c79cc778cb5b319810f4ba732ccd431) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8130))
+- [Update dependency pgbouncer/pgbouncer to pgbouncer_1_24_0](gitlab-org/omnibus-gitlab@8c68ee6d893483d482fd89888d4ae9eeeb1860ab) ([merge request](gitlab-org/omnibus-gitlab!8110))
+- [Bump rubygems to v3.6.2](gitlab-org/omnibus-gitlab@2c31b90676f60c70f72c6b76f330cf4df61d78ad) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8122))
+- [Recompile native gems for SLES 15.2](gitlab-org/omnibus-gitlab@7389f284cd71ac8c8b922e4d21577977904a48ad) ([merge request](gitlab-org/omnibus-gitlab!8125))
+- [Update dependency alertmanager to v0.28.0](gitlab-org/omnibus-gitlab@a32f0f081969bfb29441214850e272134546b9e8) ([merge request](gitlab-org/omnibus-gitlab!8124))
+- [Update dependency container-registry to v4.15.0-gitlab](gitlab-org/omnibus-gitlab@b4fbd412f17c1d71b0b48f5132455770987b388d) ([merge request](gitlab-org/omnibus-gitlab!8073))
+- [Add support for building Ruby 3.2.6 and 3.3.6](gitlab-org/omnibus-gitlab@02101962ffd6fa32f34f395fa6cb08b32a240967) ([merge request](gitlab-org/omnibus-gitlab!8107))
+- [Update dependency rubygems to v3.6.1](gitlab-org/omnibus-gitlab@4930eec97626a6cb3a44a9e86de4212c64d5f62f) ([merge request](gitlab-org/omnibus-gitlab!8081))
+- [Update dependency redis-exporter to v1.67.0](gitlab-org/omnibus-gitlab@ca4cfaa83cf411d7ab57e5f11561651af7b136ad) ([merge request](gitlab-org/omnibus-gitlab!8079))
+
+### Deprecated (1 change)
+
+- [Deprecate docker-distribution-pruner](gitlab-org/omnibus-gitlab@8db54cf4b8aa23e198fc8fda9f8274177c3e30df) ([merge request](gitlab-org/omnibus-gitlab!8169))
+
+### Removed (1 change)
+
+- [Stop building OpenSUSE Leap 15.5 packages](gitlab-org/omnibus-gitlab@dc5660b483899c626ad52a19ce05a2ff0b0ffb3a) ([merge request](gitlab-org/omnibus-gitlab!8116))
+
+### Security (2 changes)
+
+- [Mattermost Security Updates January 22, 2025](gitlab-org/omnibus-gitlab@ba088a767e486d04258843b3bf3e9023c0deed76)
+- [Update rexml for CVE-2024-49761](gitlab-org/omnibus-gitlab@08af5a25a26fb8f119b623bdb9b20800282d9b9b) ([merge request](gitlab-org/omnibus-gitlab!8115))
+
 ## 17.8.2 (2025-02-11)
 
 ### Security (1 change)
