@@ -16,7 +16,7 @@
 
 name 'pcre2'
 
-version = Gitlab::Version.new('pcre2', 'pcre2-10.44')
+version = Gitlab::Version.new('pcre2', 'pcre2-10.45')
 default_version version.print(false)
 display_version version.print(false).delete_prefix('pcre2-')
 
@@ -36,6 +36,8 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
   env['CFLAGS'] << ' -std=c99'
 
+  command "git submodule init", env: env
+  command "git submodule update", env: env
   update_config_guess
 
   command "./autogen.sh", env: env
