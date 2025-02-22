@@ -180,4 +180,10 @@ build do
 
   # Install OpenSSL gem for FIPS fixes
   gem "install openssl --version '#{Gitlab::Util.get_env('OPENSSL_GEM_VERSION')}' --force --no-document"
+
+  block 'ensure default gem directories are preserved' do
+    Dir["#{install_dir}/embedded/lib/ruby/gems/#{ruby_version}.0/gems/*/"].each do |dir|
+      File.write(File.join(dir, '.gitkeep'), '') if File.directory?(dir)
+    end
+  end
 end
