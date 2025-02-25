@@ -54,4 +54,4 @@ gem 'rubocop-ast', '1.21.0'
 # We need to install our own copy of license_finder since the
 # license_finder installed by gitlab-omnibus-builder appears to search
 # the builder gem directory instead of the Omnibus gem directory.
-gem 'license_finder', '7.1.0'
+gem 'license_finder', '7.2.1'
