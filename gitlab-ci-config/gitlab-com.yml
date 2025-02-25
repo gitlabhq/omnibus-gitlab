@@ -149,7 +149,6 @@
     - chmod 755 trigger-build.rb
   variables:
     GIT_STRATEGY: none
-    DOCS_REVIEW_APPS_DOMAIN: docs.gitlab-review.app
     # By default, deploy the Review App using the `main` branch of the `gitlab-org/gitlab-docs` project
     DOCS_BRANCH: main
   allow_failure: true
@@ -335,7 +334,7 @@ review-docs-deploy:
     auto_stop_in: 2 weeks
     on_stop: review-docs-cleanup
   script:
-  - ./trigger-build.rb docs-hugo deploy
+  - ./trigger-build.rb docs deploy
 
 # Cleanup remote environment of docs-gitlab-com
 review-docs-cleanup:
@@ -345,7 +344,7 @@ review-docs-cleanup:
     name: review-docs/mr-${CI_MERGE_REQUEST_IID}
     action: stop
   script:
-  - ./trigger-build.rb docs-hugo cleanup
+  - ./trigger-build.rb docs cleanup
 
 include:
   - component: ${CI_SERVER_FQDN}/gitlab-org/components/danger-review/danger-review@2.0.0
