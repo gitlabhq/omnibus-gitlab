@@ -36,7 +36,7 @@ For a complete list of settings, see the [README](../_index.md#configuring) file
   for the GitLab Instance so that it can be accessed easily.
 - [Enabling HTTPS](../settings/nginx.md#enable-https).
 - [Enabling notification emails](../settings/smtp.md).
-- [Enabling replying via email](https://docs.gitlab.com/administration/reply_by_email/#set-it-up).
+- [Enabling replying by email](https://docs.gitlab.com/administration/reply_by_email/#set-it-up).
   - [Installing and configuring Postfix](https://docs.gitlab.com/administration/reply_by_email_postfix_setup/).
 - [Enabling container registry on GitLab](https://docs.gitlab.com/administration/packages/container_registry/#container-registry-domain-configuration).
   - You require SSL certificates for the domain used for container registry.
