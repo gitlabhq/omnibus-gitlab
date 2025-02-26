@@ -74,6 +74,7 @@ Azure
 B-tree
 backfilling
 backfills
+backoff
 backport
 backported
 backporting
@@ -182,7 +183,10 @@ Coinbase
 colocate
 colocated
 colocating
+Colorama
+Command Palette
 commit's
+committer's
 CommonMark
 compilable
 composable
@@ -220,14 +224,16 @@ CTAs
 CTEs
 CUnit
 customappsso
+CVE
 CVEs
+CVSS
 CWEs
 cybersecurity
 CycloneDX
 Dangerfile
 DAST
-Database Lab Engine
 Database Lab
+Database Lab Engine
 Databricks
 Datadog
 datasource
@@ -248,6 +254,7 @@ deduplicated
 deduplicates
 deduplicating
 deduplication
+Deepin
 delegators
 deliverables
 denormalization
@@ -326,9 +333,11 @@ enqueued
 enqueues
 enricher
 enrichers
+Entra
 enum
 enums
 Enviroments
+EPSS
 ESLint
 ESXi
 ETag
@@ -372,6 +381,7 @@ Flutterwave
 Flycheck
 focusable
 Forgerock
+Forky
 formatters
 Fortanix
 Fortinet
@@ -406,9 +416,11 @@ globals
 globbing
 globstar
 globstars
+GLQL's
 Gmail
 Godep
 Golang
+Goldmark
 Gollum
 Google
 goroutine
@@ -455,9 +467,9 @@ hyperparameter
 hyperparameters
 iCalendar
 iCloud
+IDE's
 idempotence
 IDEs
-IDE's
 idmapper
 Iglu
 IIFEs
@@ -505,8 +517,11 @@ kanban
 kanbans
 kaniko
 Karma
+Kata
 KCachegrind
+keepalive
 Kerberos
+KEV
 Keycloak
 keyless
 keyset
@@ -527,8 +542,8 @@ kubectl
 Kubernetes
 Kubesec
 Kucoin
-Kustomize
 Kustomization
+Kustomize
 kwargs
 Laravel
 LaunchDarkly
@@ -536,12 +551,13 @@ ldapsearch
 Lefthook
 Leiningen
 Lemmy
-LLM
-LLMs
 libFuzzer
 Libgcrypt
 Libravatar
+LinuxMint
 liveness
+LLM
+LLMs
 lockfile
 lockfiles
 Lodash
@@ -557,6 +573,7 @@ Lookbook
 lookups
 loopback
 LSP
+Lts
 Lua
 Lucene
 Lucidchart
@@ -640,6 +657,7 @@ nosniff
 noteable
 noteables
 npm
+NTFSSecurity
 NuGet
 nullability
 nullable
@@ -653,7 +671,6 @@ offboarded
 offboarding
 offboards
 OIDs
-OKRs
 OKRs
 Okta
 OLM
@@ -671,6 +688,7 @@ OSs
 OTel
 outdent
 Overcommit
+Packagecloud
 Packagist
 packfile
 packfiles
@@ -695,8 +713,8 @@ pgvector
 Phabricator
 phaser
 phasers
-phpenv
 Phorge
+phpenv
 PHPUnit
 PIDs
 Pinia
@@ -758,6 +776,7 @@ pseudonymizer
 Pulumi
 Puma
 Pumble
+Pylint
 PyPI
 pytest
 Python
@@ -903,6 +922,8 @@ SHAs
 shfmt
 Shippo
 Shopify
+shortcode
+shortcodes
 Sidekiq
 Sigstore
 Silverlight
@@ -1008,6 +1029,7 @@ swimlane
 swimlanes
 syncable
 Sysbench
+Sysbox
 syscall
 syscalls
 syslog
@@ -1055,6 +1077,7 @@ triaged
 triages
 triaging
 Trivy
+Trixie
 Truststore
 truthy
 Twilio
@@ -1066,6 +1089,11 @@ Ubuntu
 Udemy
 UI
 UIDs
+ulimit
+Ulyana
+Ulyssa
+Uma
+Una
 unapplied
 unapprove
 unapproved
@@ -1220,7 +1248,9 @@ worktree
 worktrees
 Worldline
 Xcode
+Xenial
 Xeon
+Xerus
 XPath
 Yandex
 YouTrack

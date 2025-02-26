@@ -196,6 +196,9 @@ To disable backup directory management, in `/etc/gitlab/gitlab.rb` set:
 gitlab_rails['manage_backup_path'] = false
 ```
 
-WARNING:
+{{< alert type="warning" >}}
+
 If you set this configuration option, it is up to you to create the directory specified in `gitlab_rails['backup_path']` and to set permissions
 which will allow user specified in `user['username']` to have correct access. Failing to do so will prevent GitLab from creating the backup archive.
+
+{{< /alert >}}

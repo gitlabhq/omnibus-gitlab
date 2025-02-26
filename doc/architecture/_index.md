@@ -187,7 +187,7 @@ where possible, to decrease the time required for running the entire test suite.
 
 So, of the components described above, some (such as software definitions, project metadata, and tests) find use during the package building, in a build environment, and some (such as Chef cookbooks and recipes, GitLab configuration file, runit, and `gitlab-ctl` commands) are used to configure the user's installed instance.
 
-## Work life cycle of Omnibus GitLab
+## Work lifecycle of Omnibus GitLab
 
 ### What happens during package building
 
