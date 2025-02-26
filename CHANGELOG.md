@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.8.4 (2025-02-26)
+
+### Changed (1 change)
+
+- [Update dependency gitlab-exporter to v15.2.0](gitlab-org/security/omnibus-gitlab@64ea396b59ca8e294cea4046788693126c04e28b)
+
 ## 17.8.3 (2025-02-21)
 
 No changes.
