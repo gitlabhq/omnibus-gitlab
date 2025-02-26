@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.9.1 (2025-02-26)
+
+No changes.
+
 ## 17.9.0 (2025-02-19)
 
 ### Added (3 changes)
@@ -48,6 +52,12 @@ omnibus-gitlab repository.
 - [Mattermost Security Updates January 22, 2025](gitlab-org/omnibus-gitlab@ba088a767e486d04258843b3bf3e9023c0deed76)
 - [Update rexml for CVE-2024-49761](gitlab-org/omnibus-gitlab@08af5a25a26fb8f119b623bdb9b20800282d9b9b) ([merge request](gitlab-org/omnibus-gitlab!8115))
 
+## 17.8.4 (2025-02-26)
+
+### Changed (1 change)
+
+- [Update dependency gitlab-exporter to v15.2.0](gitlab-org/security/omnibus-gitlab@64ea396b59ca8e294cea4046788693126c04e28b)
+
 ## 17.8.3 (2025-02-21)
 
 No changes.
@@ -90,6 +100,10 @@ No changes.
 
 - [CI: Stop building RHEL 7 packages](gitlab-org/omnibus-gitlab@5f4845ea82e4b9bb35f8fa2041098bb9724c7252) ([merge request](gitlab-org/omnibus-gitlab!8097))
 - [Drop RaspberryPi OS Buster builds](gitlab-org/omnibus-gitlab@317c5f3894faf5eab32f4fd2e546565d7b1553e2) ([merge request](gitlab-org/omnibus-gitlab!8105))
+
+## 17.7.6 (2025-02-26)
+
+No changes.
 
 ## 17.7.5 (2025-02-21)
 
