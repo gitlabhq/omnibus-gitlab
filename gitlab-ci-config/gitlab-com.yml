@@ -280,14 +280,13 @@ docs-lint links:
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
 
 docs-lint hugo:
-  image: hugomods/hugo:exts-0.142.0
+  image: registry.gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/docs-gitlab-com-builder:hugo-0.142.0
   stage: check
   rules:
     - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
   before_script:
-    - apk add --no-cache git make nodejs npm bash
     - git clone --depth 1 https://gitlab.com/gitlab-org/technical-writing/docs-gitlab-com.git
     - cd docs-gitlab-com
     - make add-latest-icons
