@@ -22,6 +22,15 @@ With the upgrade to OpenSSL 3:
   keys shorter than 2048 bits, and ECC keys shorter than 224 bits are
   prohibited.
 
+## No operating system upgrades needed
+
+No operating system upgrades are needed for GitLab to support OpenSSL 3. For the
+Linux packages and Helm Chart, GitLab CE and EE ships its own version of
+OpenSSL and does not use the operating system's OpenSSL
+version. However, [FIPS builds](https://docs.gitlab.com/ee/development/fips_compliance.html) do
+use the operating system's OpenSSL because that library is expected to
+be FIPS-certified.
+
 ## Identifying external integrations
 
 External integrations can be configured either with `gitlab.rb` or through the
