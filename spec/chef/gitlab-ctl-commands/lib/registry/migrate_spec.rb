@@ -44,7 +44,7 @@ RSpec.describe Migrate do
 
     shared_examples 'parses dry_run option' do
       it 'parses dry-run correctly' do
-        expected_options = { subcommand: command, dry_run: '-d' }
+        expected_options = { subcommand: command, dry_run: '-d', needs_stop: false }
 
         expect(Migrate.parse_options!(%W(migrate #{command} -d), {})).to eq(expected_options)
       end
@@ -59,7 +59,7 @@ RSpec.describe Migrate do
       it_behaves_like 'parses dry_run option'
 
       it 'parses subcommand correctly' do
-        expected_options = { subcommand: 'up', limit: '5', skip_post_deploy: '-s', needs_stop: true }
+        expected_options = { subcommand: 'up', limit: '5', skip_post_deploy: '-s', needs_stop: false }
 
         expect(Migrate.parse_options!(%W(migrate #{command} -s -l 5), {})).to eq(expected_options)
       end

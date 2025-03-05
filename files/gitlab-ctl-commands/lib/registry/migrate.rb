@@ -196,11 +196,11 @@ module Migrate
   end
 
   def self.needs_stop!(options)
-    case options[:subcommand]
-    when 'up', 'down'
-      options[:needs_stop] = true unless options.has_key? :dry_run
-    else
-      options[:needs_stop] = false
-    end
+    options[:needs_stop] =
+      if options[:subcommand] == 'down' && !options.key?(:dry_run)
+        true
+      else
+        false
+      end
   end
 end
