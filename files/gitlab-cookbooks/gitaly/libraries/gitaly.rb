@@ -253,6 +253,10 @@ module Gitaly
       raise "Multiple Gitaly storages are sharing the same filesystem path:\n  #{output.join('\n  ')}"
     end
 
+    def cgroups_v2?(mountpoint)
+      `stat -fc %T "#{mountpoint}"`.strip == 'cgroup2fs'
+    end
+
     private
 
     def user_config

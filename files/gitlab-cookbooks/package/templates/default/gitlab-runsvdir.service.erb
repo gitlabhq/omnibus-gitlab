@@ -3,6 +3,8 @@ Description=GitLab Runit supervision process
 After=<%= @systemd_after %>
 
 [Service]
+Slice=gitlab.slice
+Delegate=memory cpu
 ExecStart=/opt/gitlab/embedded/bin/runsvdir-start
 Restart=always
 <% if @tasks_max %>
