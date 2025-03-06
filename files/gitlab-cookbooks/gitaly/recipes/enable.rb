@@ -28,8 +28,10 @@ pid_file = File.join(working_dir, "gitaly.pid")
 json_logging = node.dig('gitaly', 'configuration', 'logging', 'format').eql?('json')
 open_files_ulimit = node['gitaly']['open_files_ulimit']
 runtime_dir = node.dig('gitaly', 'configuration', 'runtime_dir')
-cgroups_mountpoint = node.dig('gitaly', 'configuration', 'cgroups', 'mountpoint')
-cgroups_hierarchy_root = node.dig('gitaly', 'configuration', 'cgroups', 'hierarchy_root')
+cgroups_enabled = node.dig('gitaly', 'configuration', 'cgroups', 'repositories', 'count')&.positive?
+cgroups_mountpoint = node.dig('gitaly', 'configuration', 'cgroups', 'mountpoint') || '/sys/fs/cgroup'
+cgroups_hierarchy_root = node.dig('gitaly', 'configuration', 'cgroups', 'hierarchy_root') || File.join('gitlab.slice', 'gitaly')
+cgroups_parent_cgroup_procs_file = File.join(cgroups_mountpoint, File.dirname(cgroups_hierarchy_root), 'cgroup.procs')
 use_wrapper = node['gitaly']['use_wrapper']
 
 include_recipe 'gitaly::git_data_dirs'
@@ -128,13 +130,22 @@ template "Create Gitaly config.toml" do
               ignore_gitconfig: true
             }
           ),
+          # Omnibus provides defaults for the mountpoint and hierarchy_root if not explicitly
+          # set by the user. This provides a working out-of-box configuration since we override
+          # runsv's cgroup subtree location in gitlab-runsvdir.service.erb.
+          cgroups: cgroups_enabled && (node.dig('gitaly', 'configuration', 'cgroups') || {}).merge(
+            {
+              mountpoint: cgroups_mountpoint,
+              hierarchy_root: cgroups_hierarchy_root,
+            }
+          ) || nil,
           'gitlab-shell': (node.dig('gitaly', 'configuration', 'gitlab-shell') || {}).merge(
             {
               dir: '/opt/gitlab/embedded/service/gitlab-shell'
             }
           ),
         }
-      )
+      ).compact
     }
   )
   notifies :hup, "runit_service[gitaly]" if omnibus_helper.should_notify?('gitaly')
@@ -143,6 +154,7 @@ end
 
 runit_service 'gitaly' do
   start_down node['gitaly']['ha']
+
   options({
     user: account_helper.gitlab_user,
     groupname: account_helper.gitlab_group,
@@ -158,6 +170,9 @@ runit_service 'gitaly' do
     open_files_ulimit: open_files_ulimit,
     cgroups_mountpoint: cgroups_mountpoint,
     cgroups_hierarchy_root: cgroups_hierarchy_root,
+    cgroups_enabled: cgroups_enabled,
+    cgroups_v2_enabled: Gitaly.cgroups_v2?(cgroups_mountpoint),
+    cgroups_parent_cgroup_procs_file: cgroups_parent_cgroup_procs_file,
     use_wrapper: use_wrapper,
   }.merge(params))
   log_options logging_settings[:options]

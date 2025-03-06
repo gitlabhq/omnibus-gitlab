@@ -12,11 +12,17 @@ exec 2>&1
 
 <%= render("mount_point_check.erb", cookbook: 'gitlab') %>
 
-<% if @options[:cgroups_mountpoint] && @options[:cgroups_hierarchy_root] %>
-<% %w(cpu memory).each do |resource| %>
+<% if @options[:cgroups_enabled] %>
+  <% if @options[:cgroups_v2_enabled] %>
+mkdir -m 0700 -p <%= File.join(@options[:cgroups_mountpoint], @options[:cgroups_hierarchy_root]) %>
+chown -R <%= @options[:user] %>:<%= @options[:groupname] %> <%= File.join(@options[:cgroups_mountpoint], @options[:cgroups_hierarchy_root]) %>
+chown <%= @options[:user] %>:<%= @options[:groupname] %> <%= @options[:cgroups_parent_cgroup_procs_file] %>
+  <% else %>
+    <% %w(cpu memory).each do |resource| %>
 mkdir -m 0700 -p <%= File.join(@options[:cgroups_mountpoint], resource, @options[:cgroups_hierarchy_root]) %>
 chown <%= @options[:user] %>:<%= @options[:groupname] %> <%= File.join(@options[:cgroups_mountpoint], resource, @options[:cgroups_hierarchy_root]) %>
-<% end %>
+    <% end %>
+  <% end %>
 <% end %>
 
 cd <%= @options[:working_dir] %>

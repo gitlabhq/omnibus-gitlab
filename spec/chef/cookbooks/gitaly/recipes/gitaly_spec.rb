@@ -462,7 +462,12 @@ RSpec.describe 'gitaly' do
               },
             ],
             cgroups: {
+              mountpoint: '/mycgroups',
+              hierarchy_root: 'myroot',
               cpu_shares: 100,
+              repositories: {
+                count: 10
+              }
             },
           }
         }
@@ -501,7 +506,12 @@ RSpec.describe 'gitaly' do
             }
           ],
           cgroups: {
-            cpu_shares: 100
+            mountpoint: '/mycgroups',
+            hierarchy_root: 'myroot',
+            cpu_shares: 100,
+            repositories: {
+              count: 10
+            }
           }
         }
       )
@@ -758,13 +768,32 @@ RSpec.describe 'gitaly' do
         .with_content(%r{ulimit -n #{open_files_ulimit}})
     end
 
-    it 'renders the runit run script with cgroup root creation' do
-      expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/run').with_content { |content|
-        expect(content).to match(%r{mkdir -m 0700 -p #{cgroups_mountpoint}/memory/#{cgroups_hierarchy_root}})
-        expect(content).to match(%r{mkdir -m 0700 -p #{cgroups_mountpoint}/cpu/#{cgroups_hierarchy_root}})
-        expect(content).to match(%r{chown foo:bar #{cgroups_mountpoint}/memory/#{cgroups_hierarchy_root}})
-        expect(content).to match(%r{chown foo:bar #{cgroups_mountpoint}/cpu/#{cgroups_hierarchy_root}})
-      }
+    context 'with cgroups v2' do
+      before do
+        allow(Gitaly).to receive(:cgroups_v2?).and_return true
+      end
+
+      it 'renders the runit run script with cgroup root creation' do
+        expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/run').with_content { |content|
+          expect(content).to match(%r{mkdir -m 0700 -p #{cgroups_mountpoint}})
+          expect(content).to match(%r{chown -R foo:bar #{cgroups_mountpoint}})
+        }
+      end
+    end
+
+    context 'with cgroups v1' do
+      before do
+        allow(Gitaly).to receive(:cgroups_v2?).and_return false
+      end
+
+      it 'renders the runit run script with cgroup root creation' do
+        expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/run').with_content { |content|
+          expect(content).to match(%r{mkdir -m 0700 -p #{cgroups_mountpoint}/memory/#{cgroups_hierarchy_root}})
+          expect(content).to match(%r{mkdir -m 0700 -p #{cgroups_mountpoint}/cpu/#{cgroups_hierarchy_root}})
+          expect(content).to match(%r{chown foo:bar #{cgroups_mountpoint}/memory/#{cgroups_hierarchy_root}})
+          expect(content).to match(%r{chown foo:bar #{cgroups_mountpoint}/cpu/#{cgroups_hierarchy_root}})
+        }
+      end
     end
 
     it 'populates sv related log files' do
