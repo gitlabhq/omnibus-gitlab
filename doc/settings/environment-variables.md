@@ -23,7 +23,7 @@ example:
 gitlab_rails['env'] = {
     "http_proxy" => "http://<USERNAME>:<PASSWORD>@example.com:8080",
     "https_proxy" => "http://<USERNAME>:<PASSWORD>@example.com:8080"
-#    "no_proxy" => ".yourdomain.com"  # Wildcard syntax if you need your internal domain to bypass proxy
+#    "no_proxy" => ".yourdomain.com"  # Wildcard syntax if you need your internal domain to bypass proxy. Do not specify a port.
 }
 ```
 
