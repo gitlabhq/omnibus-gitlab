@@ -104,6 +104,12 @@ source "amazon-ebs" "base_ami" {
   ami_users       = ["684062674729", "679593333241"]
   ena_support     = true
   instance_type   = "m3.medium"
+  launch_block_device_mappings {
+    device_name = "/dev/sda1"
+    volume_size = 20
+    volume_type = "gp2"
+    delete_on_termination = true
+  }
   region          = "us-east-1"
   secret_key      = "${var.aws_secret_key}"
   snapshot_users  = ["684062674729", "679593333241"]
