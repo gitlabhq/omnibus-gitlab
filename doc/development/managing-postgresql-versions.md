@@ -100,4 +100,8 @@ latest bundled version. By using the latest version we rely on backward compatib
 
 ## Known issues
 
-Geo uses streaming replication, which requires that the entire secondary database be resynced after a major PostgreSQL upgrade. This can cause hours or days of downtime, and as such, we do not recommend auto upgrades for Geo customers. Starting in 12.10, automatic PostgreSQL upgrades are disabled if Geo is detected.
+Geo uses streaming replication, which resynchronizes the entire secondary database after a major PostgreSQL upgrade. Because this resynchronization can cause hours or days
+of downtime, you should not do automatic upgrades if you use Geo.
+
+Automatic PostgreSQL upgrades are disabled in some, but not all, cases when Geo is also configured. Therefore you should
+[opt out of automatic PostgreSQL upgrades](../settings/database.md#opt-out-of-automatic-postgresql-upgrades) and only perform PostgreSQL upgrades deliberately.
