@@ -95,4 +95,7 @@ probes:
     rows_count:
       class_name: Database::RowCountProber
       <<: *db_common
+    pg_sequences:
+      class_name: Database::PgSequencesProber
+      <<: *db_common
 <% end -%>
