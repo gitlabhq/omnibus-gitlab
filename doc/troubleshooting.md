@@ -231,7 +231,7 @@ Keep in mind that the Git user must have access to the system so please review
 your security settings at `/etc/security/access.conf` and make sure the Git user
 is not blocked.
 
-## PostgreSQL error `FATAL:  could not create shared memory segment: Cannot allocate memory`
+## Error: `FATAL: could not create shared memory segment: Cannot allocate memory`
 
 The packaged PostgreSQL instance tries to allocate 25% of total memory as
 shared memory. On some Linux (virtual) servers, there is less shared memory
@@ -254,9 +254,7 @@ postgresql['shared_buffers'] = "100MB"
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-<!-- markdownlint-disable line-length -->
-
-## PostgreSQL error `FATAL:  could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied`
+## Error: `FATAL: could not open shared memory segment "/PostgreSQL.XXXXXXXXXX": Permission denied`
 
 By default, PostgreSQL tries to detect the shared memory type to use. If you don't
 have shared memory enabled, you might see this error in `/var/log/gitlab/postgresql/current`.
@@ -269,9 +267,7 @@ postgresql['dynamic_shared_memory_type'] = 'none'
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-<!-- markdownlint-enable line-length -->
-
-## PostgreSQL error `FATAL:  remaining connection slots are reserved for non-replication superuser connections`
+## Error: `FATAL: remaining connection slots are reserved for non-replication superuser connections`
 
 PostgreSQL has a setting for the maximum number of the concurrent connections
 to the database server. If you see this error, it means that your GitLab instance is trying to exceed
