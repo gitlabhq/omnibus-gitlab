@@ -25,7 +25,7 @@ skip_transitive_dependency_licensing true
 dependency 'config_guess'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
-version = Gitlab::Version.new('redis', '7.0.15')
+version = Gitlab::Version.new('redis', '7.2.7')
 default_version version.print(false)
 
 source git: version.remote
@@ -49,10 +49,8 @@ build do
 
   # jemallocs page size must be >= to the runtime pagesize
   # Use large for arm/newer platforms based on debian rules:
-  # https://salsa.debian.org/debian/jemalloc/-/blob/c0a88c37a551be7d12e4863435365c9a6a51525f/debian/rules#L8-23
-  env['EXTRA_JEMALLOC_CONFIGURE_FLAGS'] = (OhaiHelper.arm64? ? '--with-lg-page=16' : '--with-lg-page=12')
-
-  patch source: 'jemalloc-extra-config-flags.patch'
+  # https://salsa.debian.org/debian/jemalloc/-/blob/241fec81556098d6840e3684d2b4b69fea9258ef/debian/rules#L8-23
+  env['JEMALLOC_CONFIGURE_OPTS'] = (OhaiHelper.arm64? ? ' --with-lg-page=16' : ' --with-lg-page=12')
 
   update_config_guess
 
