@@ -31,7 +31,7 @@ dependency 'redis'
 
 env = with_standard_compiler_flags(with_embedded_path)
 
-relative_path "jemalloc-#{version}"
+relative_path "jemalloc-#{version.print}"
 
 build do
   autogen_command = [
