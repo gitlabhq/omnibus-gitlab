@@ -213,11 +213,15 @@ To configure GitLab to use a custom ACME server:
 
 ### Add alternative domains to the certificate
 
-You can add alternative domains (or subject alternative names) to the Let's Encrypt certificate.
+By default, GitLab sets the Common Name (CN) and Subject Alternative Name (SAN) of the certificate
+to the hostname specified in `external_url`.
+
+You can add additional alternative domains (or subject alternative names) to the Let's Encrypt certificate.
 This can be helpful if you would like to use the [bundled NGINX](../nginx.md) as a
 [reverse proxy for other backend applications](../nginx.md#insert-custom-settings-into-the-nginx-configuration).
 
-The DNS records for the alternative domains must point to the GitLab instance.
+The DNS records for the alternative domains must point to the GitLab instance. The `external_url` hostname must
+be included in the list of Subject Alternative Names.
 
 To add alternative domains to your Let's Encrypt certificate:
 
@@ -225,7 +229,7 @@ To add alternative domains to your Let's Encrypt certificate:
 
    ```ruby
    # Separate multiple domains with commas
-   letsencrypt['alt_names'] = ['another-application.example.com']
+   letsencrypt['alt_names'] = ['gitlab.example.com', 'another-application.example.com']
    ```
 
 1. Reconfigure GitLab:

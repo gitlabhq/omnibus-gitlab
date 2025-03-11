@@ -35,12 +35,14 @@ class LetsEncryptHelper
 
     return if !Gitlab['external_url'] || File.exist?(Gitlab["#{service}_nginx"]["ssl_certificate"])
 
+    external_uri = URI(Gitlab['external_url'])
+
     # If the default certficate file is missing, configure as an alt_name
     # of the letsencrypt managed certificate
-    Gitlab['letsencrypt']['alt_names'] ||= []
+    # Always start with the external_uri hostname in the alt_names for RFC 9525 compliance
+    Gitlab['letsencrypt']['alt_names'] ||= [external_uri.host]
     Gitlab['letsencrypt']['alt_names'] << uri.host
 
-    external_uri = URI(Gitlab['external_url'])
     Gitlab["#{service}_nginx"]["ssl_certificate"] = "/etc/gitlab/ssl/#{external_uri.host}.crt"
     Gitlab["#{service}_nginx"]["ssl_certificate_key"] = "/etc/gitlab/ssl/#{external_uri.host}.key"
 

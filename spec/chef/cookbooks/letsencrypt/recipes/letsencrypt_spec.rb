@@ -110,6 +110,7 @@ RSpec.describe 'letsencrypt::enable' do
 
     it 'creates a self signed certificate' do
       expect(chef_run).to create_acme_selfsigned('fakehost.example.com').with(
+        alt_names: match_array(['fakehost.example.com', 'fakereg.example.com', 'fakemost.example.com']),
         key: '/etc/gitlab/ssl/fakehost.example.com.key',
         crt: '/etc/gitlab/ssl/fakehost.example.com.crt'
       )
