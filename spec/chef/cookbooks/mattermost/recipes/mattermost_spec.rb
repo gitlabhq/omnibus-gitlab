@@ -288,12 +288,12 @@ RSpec.describe 'gitlab::mattermost' do
       end
 
       it 'adds itself to letsencrypt alt_names' do
-        expect(chef_run.node['letsencrypt']['alt_names']).to eql(['mattermost.example.com'])
+        expect(chef_run.node['letsencrypt']['alt_names']).to match_array(['gitlab.example.com', 'mattermost.example.com'])
       end
 
       it 'is reflected in the acme_selfsigned' do
         expect(chef_run).to create_acme_selfsigned('gitlab.example.com').with(
-          alt_names: ['mattermost.example.com']
+          alt_names: match_array(['gitlab.example.com', 'mattermost.example.com'])
         )
       end
     end
@@ -304,12 +304,12 @@ RSpec.describe 'gitlab::mattermost' do
       end
 
       it 'does not alter letsencrypt alt_names' do
-        expect(chef_run.node['letsencrypt']['alt_names']).to eql([])
+        expect(chef_run.node['letsencrypt']['alt_names']).to eql(['gitlab.example.com'])
       end
 
       it 'is reflected in the acme_selfsigned' do
         expect(chef_run).to create_acme_selfsigned('gitlab.example.com').with(
-          alt_names: []
+          alt_names: ['gitlab.example.com']
         )
       end
     end

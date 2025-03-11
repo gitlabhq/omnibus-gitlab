@@ -35,6 +35,10 @@ end
 
 # If this is the first run, then nginx won't be working due to missing certificates
 acme_selfsigned site.host do
+  # Add the hostname as a default alt name, since alt names are now required on TLS certs (see RFC 9525)
+  node.default['letsencrypt']['alt_names'] ||= []
+  node.default['letsencrypt']['alt_names'] << site.host
+
   alt_names node['letsencrypt']['alt_names']
   crt node['gitlab']['nginx']['ssl_certificate']
   key node['gitlab']['nginx']['ssl_certificate_key']

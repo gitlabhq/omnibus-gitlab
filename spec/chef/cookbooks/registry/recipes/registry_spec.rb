@@ -61,12 +61,12 @@ RSpec.describe 'registry recipe' do
       end
 
       it 'adds itself to letsencrypt alt_names' do
-        expect(chef_run.node['letsencrypt']['alt_names']).to eql(['registry.example.com'])
+        expect(chef_run.node['letsencrypt']['alt_names']).to match_array(['gitlab.example.com', 'registry.example.com'])
       end
 
       it 'is reflected in the acme_selfsigned' do
         expect(chef_run).to create_acme_selfsigned('gitlab.example.com').with(
-          alt_names: ['registry.example.com']
+          alt_names: match_array(['gitlab.example.com', 'registry.example.com'])
         )
       end
     end
@@ -77,12 +77,12 @@ RSpec.describe 'registry recipe' do
       end
 
       it 'does not alter letsencrypt alt_names' do
-        expect(chef_run.node['letsencrypt']['alt_names']).to eql([])
+        expect(chef_run.node['letsencrypt']['alt_names']).to eql(['gitlab.example.com'])
       end
 
       it 'is reflected in the acme_selfsigned' do
         expect(chef_run).to create_acme_selfsigned('gitlab.example.com').with(
-          alt_names: []
+          alt_names: ['gitlab.example.com']
         )
       end
     end
