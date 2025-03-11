@@ -1,10 +1,13 @@
 #!/bin/bash
 
+# If the instance has enabled only IMDSv2 Metadata server, we need to use a token.
+METADATA_TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 300")
+
 get_ec2_address()
 {
   url=$1
   # Try collecting fqdn if it is set correctly
-  fqdn=$(/opt/gitlab/embedded/bin/curl -s ${url})
+  fqdn=$(/opt/gitlab/embedded/bin/curl -H "X-aws-ec2-metadata-token: $METADATA_TOKEN" -s ${url})
   if [ -n "${fqdn}" ]; then
     # Checking if curl returned an XML message
     word="<?xml"
@@ -32,7 +35,7 @@ fi
 # some other means.
 EXISTING_ROOT_PASSWORD=$(sudo grep "^gitlab_rails.*initial_root_password.*" /etc/gitlab/gitlab.rb | cut -d '=' -f2- | xargs)
 if [ -z "${EXISTING_ROOT_PASSWORD}" ] && [ -z "${GITLAB_ROOT_PASSWORD}" ]; then
-  GITLAB_ROOT_PASSWORD=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+  GITLAB_ROOT_PASSWORD=$(curl -H "X-aws-ec2-metadata-token: $METADATA_TOKEN" http://169.254.169.254/latest/meta-data/instance-id)
 fi
 
 sudo GITLAB_ROOT_PASSWORD=${GITLAB_ROOT_PASSWORD} gitlab-ctl reconfigure
