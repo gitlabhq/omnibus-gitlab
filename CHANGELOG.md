@@ -113,6 +113,12 @@ No changes.
 - [CI: Stop building RHEL 7 packages](gitlab-org/omnibus-gitlab@5f4845ea82e4b9bb35f8fa2041098bb9724c7252) ([merge request](gitlab-org/omnibus-gitlab!8097))
 - [Drop RaspberryPi OS Buster builds](gitlab-org/omnibus-gitlab@317c5f3894faf5eab32f4fd2e546565d7b1553e2) ([merge request](gitlab-org/omnibus-gitlab!8105))
 
+## 17.7.7 (2025-03-11)
+
+### Security (1 change)
+
+- [Bump PostgreSQL versions to 14.17 and 16.8](gitlab-org/security/omnibus-gitlab@6c44be66c10144355e944891fa98d4b4942e890d) ([merge request](gitlab-org/security/omnibus-gitlab!462))
+
 ## 17.7.6 (2025-02-26)
 
 No changes.
