@@ -58,6 +58,12 @@ No changes.
 - [Mattermost Security Updates January 22, 2025](gitlab-org/omnibus-gitlab@ba088a767e486d04258843b3bf3e9023c0deed76)
 - [Update rexml for CVE-2024-49761](gitlab-org/omnibus-gitlab@08af5a25a26fb8f119b623bdb9b20800282d9b9b) ([merge request](gitlab-org/omnibus-gitlab!8115))
 
+## 17.8.5 (2025-03-11)
+
+### Security (1 change)
+
+- [Bump PostgreSQL versions to 14.17 and 16.8](gitlab-org/security/omnibus-gitlab@f1c66d440a4df400ea68d23804a572ae07a7c797) ([merge request](gitlab-org/security/omnibus-gitlab!465))
+
 ## 17.8.4 (2025-02-26)
 
 ### Changed (1 change)
