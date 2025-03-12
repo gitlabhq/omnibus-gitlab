@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.9.2 (2025-03-11)
+
+### Security (1 change)
+
+- [Bump PostgreSQL versions to 14.17 and 16.8](gitlab-org/security/omnibus-gitlab@57b9b055c30c553569f14f33137fe773ec429831) ([merge request](gitlab-org/security/omnibus-gitlab!466))
+
 ## 17.9.1 (2025-02-26)
 
 No changes.
@@ -52,6 +58,12 @@ No changes.
 - [Mattermost Security Updates January 22, 2025](gitlab-org/omnibus-gitlab@ba088a767e486d04258843b3bf3e9023c0deed76)
 - [Update rexml for CVE-2024-49761](gitlab-org/omnibus-gitlab@08af5a25a26fb8f119b623bdb9b20800282d9b9b) ([merge request](gitlab-org/omnibus-gitlab!8115))
 
+## 17.8.5 (2025-03-11)
+
+### Security (1 change)
+
+- [Bump PostgreSQL versions to 14.17 and 16.8](gitlab-org/security/omnibus-gitlab@f1c66d440a4df400ea68d23804a572ae07a7c797) ([merge request](gitlab-org/security/omnibus-gitlab!465))
+
 ## 17.8.4 (2025-02-26)
 
 ### Changed (1 change)
@@ -100,6 +112,12 @@ No changes.
 
 - [CI: Stop building RHEL 7 packages](gitlab-org/omnibus-gitlab@5f4845ea82e4b9bb35f8fa2041098bb9724c7252) ([merge request](gitlab-org/omnibus-gitlab!8097))
 - [Drop RaspberryPi OS Buster builds](gitlab-org/omnibus-gitlab@317c5f3894faf5eab32f4fd2e546565d7b1553e2) ([merge request](gitlab-org/omnibus-gitlab!8105))
+
+## 17.7.7 (2025-03-11)
+
+### Security (1 change)
+
+- [Bump PostgreSQL versions to 14.17 and 16.8](gitlab-org/security/omnibus-gitlab@6c44be66c10144355e944891fa98d4b4942e890d) ([merge request](gitlab-org/security/omnibus-gitlab!462))
 
 ## 17.7.6 (2025-02-26)
 
