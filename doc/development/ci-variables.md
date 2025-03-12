@@ -108,6 +108,7 @@ These additional variables are available to override or enable different build b
 | `GITLAB_COM_PKGS_RELEASE_BUCKET`                | GCS bucket where release packages are pushed. |
 | `GITLAB_COM_PKGS_BUILDS_BUCKET`                 | GCS bucket where regular branch packages are pushed. |
 | `GITLAB_COM_PKGS_SA_FILE`                       | Service account key used for pushing release packages for SaaS deployments, it must have write access to the pkgs bucket. |
+| `GITLAB_NAMESPACE`                              | Used to override image URLs in the Dev instance, since the top-level name there diverges from `gitlab-org` to `gitlab`. |
 
 ## Unknown/outdated variables
 
