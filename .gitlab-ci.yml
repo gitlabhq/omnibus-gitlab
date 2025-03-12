@@ -187,7 +187,7 @@ notify:slack-fail:scheduled-master:
 
 issue-bot:
   stage: notification_fail
-  image: registry.gitlab.com/gitlab-org/distribution/issue-bot:latest
+  image: "${CI_REGISTRY}/${GITLAB_NAMESPACE}/distribution/issue-bot:latest"
   script: /issue-bot
   rules:
     # Not needed in non-protected (feature) branches
