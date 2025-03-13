@@ -599,6 +599,20 @@ default['gitlab']['gitlab_rails']['redis_workhorse_tls_client_key_file'] = nil
 # used by workhorse to connect to a separate external redis instead of the omnibus-gitlab redis
 default['gitlab']['gitlab_rails']['redis_workhorse_sentinel_master'] = nil
 
+default['gitlab']['gitlab_rails']['cell'] = {
+  enabled: false,
+  id: nil,
+  database: {
+    skip_sequence_alteration: false
+  },
+  topology_service_client: {
+    address: 'topology-service.gitlab.example.com:443',
+    ca_file: '/home/git/gitlab/config/topology-service-ca.pem',
+    certificate_file: '/home/git/gitlab/config/topology-service-cert.pem',
+    private_key_file: '/home/git/gitlab/config/topology-service-key.pem'
+  }
+}
+
 default['gitlab']['gitlab_rails']['session_store_session_cookie_token_prefix'] = ''
 
 default['gitlab']['gitlab_rails']['redis_yml_override'] = nil
