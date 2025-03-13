@@ -67,6 +67,9 @@ module Build
           when /Ubuntu-22.04/
             folder = 'ubuntu-jammy'
             package_file_name = "#{Info::Package.name(fips: fips)}_#{Info::Package.release_version(fips: fips).gsub('+', '%2B')}_#{arch}.deb"
+          when /Ubuntu-24.04/
+            folder = 'ubuntu-noble'
+            package_file_name = "#{Info::Package.name(fips: fips)}_#{Info::Package.release_version(fips: fips).gsub('+', '%2B')}_#{arch}.deb"
           end
 
           if arch == 'arm64'
