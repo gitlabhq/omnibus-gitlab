@@ -1338,6 +1338,22 @@ send a test email:
 Notify.test_email('destination_email@address.com', 'Message Subject', 'Message Body').deliver_now
 ```
 
+## Configuring SPF, DKIM, and DMARC
+
+After you configure SMTP on your GitLab instance, you should configure as many of the following protocols as possible:
+
+- [Sender Policy Framework (SPF)](https://en.wikipedia.org/wiki/Sender_Policy_Framework).
+- [DomainKeys Identified Mail (DKIM)](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail).
+- [Domain-based Message Authentication, Reporting and Conformance (DMARC)](https://en.wikipedia.org/wiki/DMARC).
+
+These protocols work together to verify email sender identity and prevent email spoofing.
+
+Your DNS provider determines which protocols you can configure and how to configure them. As an example, you can see
+you would [configure these protocols for Cloudflare](https://www.cloudflare.com/en-au/learning/email-security/dmarc-dkim-spf/)
+if Cloudflare was your DNS provider.
+
+For more information, see [Understanding SPF, DKIM, and DMARC: A Simple Guide](https://github.com/nicanorflavier/spf-dkim-dmarc-simplified).
+
 ## Troubleshooting
 
 ### Outgoing connections to port 25 is blocked on major cloud providers
