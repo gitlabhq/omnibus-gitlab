@@ -413,6 +413,20 @@ production: &base
     issuer: <%= @registry_issuer %>
     notification_secret: <%= @registry_notification_secret %>
 
+  <%- if @cell['enabled'] -%>
+  ## Cells
+  cell:
+    enabled: true
+    id: <%= @cell['id'] %>
+    database:
+      skip_sequence_alteration: <%= @cell['database']['skip_sequence_alteration'] %>
+    topology_service_client:
+      address: <%= quote(@cell['topology_service_client']['address']) %>
+      ca_file: <%= quote(@cell['topology_service_client']['ca_file']) %>
+      certificate_file: <%= quote(@cell['topology_service_client']['certificate_file']) %>
+      private_key_file: <%= quote(@cell['topology_service_client']['private_key_file']) %>
+
+  <%- end -%>
   ## Kubernetes Agent Server
   gitlab_kas:
     enabled: <%= @gitlab_kas_enabled %>

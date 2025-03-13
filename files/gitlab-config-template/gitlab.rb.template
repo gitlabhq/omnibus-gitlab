@@ -826,6 +826,21 @@ external_url 'GENERATED_EXTERNAL_URL'
 #### Redis local UNIX socket (will be disabled if TCP method is used)
 # gitlab_rails['redis_socket'] = "/var/opt/gitlab/redis/redis.socket"
 
+#### Cells
+# gitlab_rails['cell'] = {
+#   enabled: false,
+#   id: nil,
+#   database: {
+#     skip_sequence_alteration: false
+#   },
+#   topology_service_client: {
+#     address: 'topology-service.gitlab.example.com:443',
+#     ca_file: 'path/to/your/ca/.pem',
+#     certificate_file: 'path/to/your/cert/.pem',
+#     private_key_file: 'path/to/your/key/.pem'
+#   }
+# }
+
 #### Session cookie settings
 # gitlab_rails['session_store_session_cookie_token_prefix'] = ''
 
