@@ -314,7 +314,7 @@ RSpec.describe 'nginx' do
       }
     end
 
-    it 'disables proxy for api urls' do
+    it 'disables proxy cache for api urls' do
       expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
         expect(content).to include("location ~ ^/api/v\\d {\n    proxy_cache off;")
       }
@@ -671,6 +671,18 @@ RSpec.describe 'nginx' do
           }
         end
       end
+    end
+  end
+
+  context 'when relative URLs are used' do
+    before do
+      stub_gitlab_rb(gitlab_rails: { gitlab_relative_url: '/gitlab' })
+    end
+
+    it 'disables proxy cache for relative URLs' do
+      expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
+        expect(content).to include("location ~ ^/gitlab/api/v\\d {\n    proxy_cache off;")
+      }
     end
   end
 

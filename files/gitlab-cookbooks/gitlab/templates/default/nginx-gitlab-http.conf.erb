@@ -183,7 +183,7 @@ server { ## HTTPS server
     proxy_request_buffering off;
   }
 
-  location ~ ^/api/v\d {
+  location ~ <%= "^#{@api_path}/v\\d" %> {
     proxy_cache off;
     proxy_pass http://gitlab-workhorse;
     proxy_intercept_errors off;

@@ -141,10 +141,14 @@ nginx_vars['https'] = if nginx_vars['listen_https'].nil?
 
 nginx_vars['gzip'] = node['gitlab']['nginx']['gzip_enabled'] ? "on" : "off"
 
+root_path = node['gitlab']['gitlab_rails']['gitlab_relative_url'] || '/'
+api_path = root_path == "/" ? "/api" : File.join(root_path, "/api")
+
 nginx_gitlab_http_vars = nginx_vars.merge(
   fqdn: node['gitlab']['gitlab_rails']['gitlab_host'],
   port: node['gitlab']['gitlab_rails']['gitlab_port'],
-  path: node['gitlab']['gitlab_rails']['gitlab_relative_url'] || '/',
+  path: root_path,
+  api_path: api_path,
   registry_api_url: node['gitlab']['gitlab_rails']['registry_api_url'],
   letsencrypt_enable: node['letsencrypt']['enable'],
   # These addresses will be allowed through plain http, even if `redirect_http_to_https` is enabled
