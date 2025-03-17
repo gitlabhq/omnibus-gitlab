@@ -14,12 +14,10 @@ module Geo
   # PromoteDb promotes standby database as usual "pg-ctl promote" but
   # if point-in-time LSN file is found, the database will be recovered to that state first
   class PromoteDb
-    PITR_FILE_NAME = 'geo-pitr-file'
-    CONSUL_PITR_KEY = 'promote-db'
-
     attr_accessor :base_path, :postgresql_dir_path
 
     def initialize(ctl)
+      @ctl = ctl
       @base_path = ctl.base_path
       @postgresql_dir_path = GitlabCtl::Util.get_public_node_attributes.dig('postgresql', 'dir')
     end
@@ -63,7 +61,7 @@ module Geo
     end
 
     def lsn_from_pitr_file
-      lsn = Geo::PitrFile.new("#{postgresql_dir_path}/data/#{PITR_FILE_NAME}", consul_key: CONSUL_PITR_KEY).get
+      lsn = Geo::PitrFile.new(@ctl).get
       lsn.empty? ? nil : lsn
     rescue Geo::PitrFileError
       # It is not an error if the file does not exist
