@@ -20,14 +20,11 @@ module Geo
     end
 
     def execute!
-      @replication_process.send(@action.to_sym)
-
+      process_action
       process_pitr_file
-    rescue Geo::PsqlError => e
-      puts "Postgres encountered an error: #{e.message}"
-      exit 1
-    rescue Geo::RakeError => e
-      puts "Rake encountered an error: #{e.message}"
+    rescue Geo::PitrFileError => e
+      puts "Geo point-in-time recovery file encountered an error: #{e.message}. The #{action} process was aborted."
+      process_action(reverse_action) if reverse_action
       exit 1
     end
 
@@ -39,8 +36,18 @@ module Geo
 
     attr_reader :action, :ctl
 
+    def process_action(act = action)
+      @replication_process.send(act.to_sym)
+    rescue Geo::PsqlError => e
+      puts "Postgres encountered an error: #{e.message}"
+      exit 1
+    rescue Geo::RakeError => e
+      puts "Rake encountered an error: #{e.message}"
+      exit 1
+    end
+
     def process_pitr_file
-      geo_pitr_file = Geo::PitrFile.new("#{ctl.data_path}/postgresql/data/#{Geo::PromoteDb::PITR_FILE_NAME}", consul_key: Geo::PromoteDb::CONSUL_PITR_KEY)
+      geo_pitr_file = Geo::PitrFile.new(ctl)
 
       if action == 'pause'
         puts "* Create Geo point-in-time recovery file".color(:green)
@@ -77,6 +84,14 @@ module Geo
       end
 
       opts_parser.parse!(arguments)
+    end
+
+    def reverse_action
+      if action == 'pause'
+        'resume'
+      elsif action == 'resume'
+        'pause'
+      end
     end
   end
 end

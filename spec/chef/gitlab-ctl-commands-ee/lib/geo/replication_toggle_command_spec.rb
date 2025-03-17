@@ -9,10 +9,13 @@ require 'gitlab_ctl/util'
 RSpec.describe Geo::ReplicationToggleCommand do
   let(:status) { double('Command status', error?: false) }
   let(:arguments) { [] }
-  let(:ctl_instance) { double('gitlab-ctl instance', base_path: '', data_path: 'data_path') }
+  let(:ctl_instance) { double('gitlab-ctl instance', base_path: '', data_path: 'ctl_data_path') }
 
   before do
     allow_any_instance_of(Geo::ReplicationToggleCommand).to receive(:current_lsn).and_return('16/B374D848')
+    allow(GitlabCtl::Util)
+      .to receive(:get_public_node_attributes)
+        .and_return({ 'postgresql' => { 'dir' => 'data_path/postgresql' } })
   end
 
   describe 'pause' do
@@ -43,6 +46,16 @@ RSpec.describe Geo::ReplicationToggleCommand do
 
         expect { subject.execute! }.to output(/Create Geo point-in-time recovery file/).to_stdout
       end
+    end
+
+    it 'rescues, resumes and exits if pitr file creation has an error' do
+      expect_any_instance_of(Geo::ReplicationProcess).to receive(:pause)
+      expect_any_instance_of(Geo::PitrFile).to receive(:create).and_raise(Geo::PitrFileError, "Oh nose!")
+
+      expect do
+        expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume)
+        expect { subject.execute! }.to raise_error(SystemExit)
+      end.to output(/Geo point-in-time recovery file encountered an error: Oh nose!/).to_stdout
     end
   end
 
@@ -75,12 +88,34 @@ RSpec.describe Geo::ReplicationToggleCommand do
       end.to output(/Rake encountered an error: Oh nose!/).to_stdout
     end
 
+    it 'rescues, resumes and exits if pitr file creation has an error' do
+      expect_any_instance_of(Geo::PitrFile).to receive(:delete).and_raise(Geo::PitrFileError, "Oh nose!")
+      expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume)
+
+      expect do
+        expect_any_instance_of(Geo::ReplicationProcess).to receive(:pause)
+        expect { subject.execute! }.to raise_error(SystemExit)
+      end.to output(/Geo point-in-time recovery file encountered an error: Oh nose!/).to_stdout
+    end
+
     context 'database specified' do
       let(:arguments) { %w(--db_name=database_i_want) }
 
       it 'uses the specified database' do
         expect(Geo::ReplicationProcess).to receive(:new).with(any_args, { db_name: 'database_i_want' }).and_call_original
         expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume)
+
+        expect { subject.execute! }.to output(/Remove Geo point-in-time recovery file/).to_stdout
+      end
+    end
+
+    context 'with package update after a pause' do
+      it 'calls resume' do
+        allow(File).to receive(:exist?).with('data_path/postgresql/data/geo-pitr-file').and_return(false)
+        allow(File).to receive(:exist?).with('ctl_data_path/postgresql/data/geo-pitr-file').and_return(true)
+
+        expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume)
+        expect(File).to receive(:delete).with('ctl_data_path/postgresql/data/geo-pitr-file').and_return(1)
 
         expect { subject.execute! }.to output(/Remove Geo point-in-time recovery file/).to_stdout
       end
