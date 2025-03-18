@@ -86,8 +86,6 @@
       junit: junit_rspec.xml
 
 .base-trigger-job-variables:
-  # In trigger jobs, we don't want to pollute cache
-  CACHE_POLICY: 'pull'
   ALTERNATIVE_SOURCES: 'true'
   SECURITY_SOURCES: ${SECURITY_SOURCES}
   BUILDER_IMAGE_REVISION: ${BUILDER_IMAGE_REVISION}

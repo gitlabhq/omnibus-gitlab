@@ -32,7 +32,9 @@
   - node_modules
 
 .branch-cache:
-  key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}"
+  key: "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}-${CI_COMMIT_REF_SLUG}"
+  fallback_keys:
+    - "${CI_JOB_NAME}-${BUILDER_IMAGE_REVISION}-${CACHE_EDITION}${CACHE_KEY_SUFFIX}-${CI_DEFAULT_BRANCH}"
   paths: !reference [.cache-paths]
   policy: $CACHE_POLICY
 
