@@ -3,6 +3,48 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.10.0 (2025-03-19)
+
+### Added (1 change)
+
+- [Enable 'pg_sequences' metric for GitLab Exporter](gitlab-org/omnibus-gitlab@ff78e13f5f521d332ff97dabfff08ed94ebae981) ([merge request](gitlab-org/omnibus-gitlab!8213))
+
+### Fixed (6 changes)
+
+- [Use `postgresql['dir']` directory when it exists](gitlab-org/omnibus-gitlab@8c588c7879c34edcfda842a9f49e128a76128687) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/8203))
+- [Use AWS Metadata token for fetching instance info](gitlab-org/omnibus-gitlab@8a31b01b376290c7c0d8cce41d8ab419893214d9) ([merge request](gitlab-org/omnibus-gitlab!8230))
+- [Add Subject Alternative Name to generated self-signed TLS certificates](gitlab-org/omnibus-gitlab@f6055c9e72f40efd0475bdf18426101e0fdd4da2) by @ionisageek ([merge request](gitlab-org/omnibus-gitlab!8206))
+- [Make Gitaly configuration work with cgroups v2](gitlab-org/omnibus-gitlab@05d53ce00c38aec6a06a6f535cffecb40f70a571) ([merge request](gitlab-org/omnibus-gitlab!7968))
+- [Disable proxy cache for relative URLs](gitlab-org/omnibus-gitlab@5f9e01bbc1ee77c3119481b395cc2b0ea802a35a) ([merge request](gitlab-org/omnibus-gitlab!8204))
+- [Ensure Ruby default gem directories are preserved in cache](gitlab-org/omnibus-gitlab@b71bdbe7d53f704cdeb27ed5b1a846819af9dc66) ([merge request](gitlab-org/omnibus-gitlab!8193))
+
+### Changed (20 changes)
+
+- [Update dependency bundler to v2.6.6](gitlab-org/omnibus-gitlab@7cfe25c6a0333fdb6fcdbe1ee7cf44a74a1ea89c) ([merge request](gitlab-org/omnibus-gitlab!8237))
+- [Use Ubuntu 24.04 for AWS AMIs](gitlab-org/omnibus-gitlab@426705d41896e1b4a90c711780d53f9f1255ab66) ([merge request](gitlab-org/omnibus-gitlab!8179))
+- [Rename assets/wrapper to assets/init-container](gitlab-org/omnibus-gitlab@2f7c4ceb64b4f86b14fc375b65ec22b290e03946) ([merge request](gitlab-org/omnibus-gitlab!8211))
+- [Update dependency openssl to v3.4.1](gitlab-org/omnibus-gitlab@56de0e84f0d4e6b30074889f8fb69eb2f85e0897) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8173))
+- [Update dependency alertmanager to v0.28.1](gitlab-org/omnibus-gitlab@d26eec81815e669775564c0475a3bacfcdf06235) ([merge request](gitlab-org/omnibus-gitlab!8223))
+- [Update dependency container-registry to v4.17.1-gitlab](gitlab-org/omnibus-gitlab@ff83fcda179da8cd7ffb18e795d4fcc995b298f5) ([merge request](gitlab-org/omnibus-gitlab!8123))
+- [Do not require stopping the registry to apply up DB migrations](gitlab-org/omnibus-gitlab@6e52ae6b66a5ab34de0740c8620079040b5d9771) ([merge request](gitlab-org/omnibus-gitlab!8202))
+- [Update FIPS Go from 1.23.4 to 1.23.6](gitlab-org/omnibus-gitlab@e798a7c1082d2c8f93103e6ec56c4bf8969fb1ff) ([merge request](gitlab-org/omnibus-gitlab!8209))
+- [Bump bundler to version 2.6.5](gitlab-org/omnibus-gitlab@a847a5d74e284a89286c9b32b68e768cf8079675) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8197))
+- [Update to PG 14.7 and 16.8](gitlab-org/omnibus-gitlab@62a681833679a955b00b830628ccbfccf7f1cd17) ([merge request](gitlab-org/omnibus-gitlab!8201))
+- [Bump Mattermost to 10.4.2](gitlab-org/omnibus-gitlab@02d348cf0d96a583087829eba510329a7c214a7c) by @mvitale1989 ([merge request](gitlab-org/omnibus-gitlab!8117))
+- [Default to PostgreSQL 16 for fresh installs](gitlab-org/omnibus-gitlab@e80d330391d2da8fbba5a39a58ab1e9cbaf75e5b) ([merge request](gitlab-org/omnibus-gitlab!8198))
+- [Bump rubygems to version 3.6.5](gitlab-org/omnibus-gitlab@9518863b2a9c99bab471dda0ad660f106fe248f3) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8180))
+- [Update omnibus-gitlab-gems to Bundler v2.6.5](gitlab-org/omnibus-gitlab@92d323d6d26636ca9dcf4d142cbe9c54bf4f5068) ([merge request](gitlab-org/omnibus-gitlab!8194))
+- [Update to license_finder v7.2.1](gitlab-org/omnibus-gitlab@78e29c1ba452341d606ae1c61001be195a99911f) ([merge request](gitlab-org/omnibus-gitlab!8189))
+- [Bump node-exporter to version 1.9.0](gitlab-org/omnibus-gitlab@fb94fb2064d2034ae45fa30d14a28271ebfbbf00) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8176))
+- [Bump PCRE2 to version 10.45](gitlab-org/omnibus-gitlab@edf99c07bb61c6db21a4942e972f7b970beed151) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8155))
+- [Bump curl to 8.12.1](gitlab-org/omnibus-gitlab@3a967ca0dfb13661e22c77365b40509751930fb1) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8157))
+- [Update dependency libxml2 to v2.13.6](gitlab-org/omnibus-gitlab@c4cfb33dd67dee4bc6fbcfe061bd51629479b091) ([merge request](gitlab-org/omnibus-gitlab!8184))
+- [Update dependency acme-client to v2.0.20](gitlab-org/omnibus-gitlab@bde62aea218f51c970784b6f7789afce07295584) ([merge request](gitlab-org/omnibus-gitlab!8175))
+
+### Other (1 change)
+
+- [Add support for cells configuration](gitlab-org/omnibus-gitlab@51e44a0968143f3e51ca2c48d2a80372d7b95184) ([merge request](gitlab-org/omnibus-gitlab!8145))
+
 ## 17.9.2 (2025-03-11)
 
 ### Security (1 change)
