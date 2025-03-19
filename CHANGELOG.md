@@ -29,7 +29,7 @@ omnibus-gitlab repository.
 - [Do not require stopping the registry to apply up DB migrations](gitlab-org/omnibus-gitlab@6e52ae6b66a5ab34de0740c8620079040b5d9771) ([merge request](gitlab-org/omnibus-gitlab!8202))
 - [Update FIPS Go from 1.23.4 to 1.23.6](gitlab-org/omnibus-gitlab@e798a7c1082d2c8f93103e6ec56c4bf8969fb1ff) ([merge request](gitlab-org/omnibus-gitlab!8209))
 - [Bump bundler to version 2.6.5](gitlab-org/omnibus-gitlab@a847a5d74e284a89286c9b32b68e768cf8079675) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8197))
-- [Update to PG 14.7 and 16.8](gitlab-org/omnibus-gitlab@62a681833679a955b00b830628ccbfccf7f1cd17) ([merge request](gitlab-org/omnibus-gitlab!8201))
+- [Update to PG 14.17 and 16.8](gitlab-org/omnibus-gitlab@d2ea1ab95a020b6252901819a2842e0d07228284) ([merge request](gitlab-org/omnibus-gitlab!8216))
 - [Bump Mattermost to 10.4.2](gitlab-org/omnibus-gitlab@02d348cf0d96a583087829eba510329a7c214a7c) by @mvitale1989 ([merge request](gitlab-org/omnibus-gitlab!8117))
 - [Default to PostgreSQL 16 for fresh installs](gitlab-org/omnibus-gitlab@e80d330391d2da8fbba5a39a58ab1e9cbaf75e5b) ([merge request](gitlab-org/omnibus-gitlab!8198))
 - [Bump rubygems to version 3.6.5](gitlab-org/omnibus-gitlab@9518863b2a9c99bab471dda0ad660f106fe248f3) by @gitlab-dependency-update-bot ([merge request](gitlab-org/omnibus-gitlab!8180))
