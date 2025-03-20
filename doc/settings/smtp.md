@@ -144,6 +144,11 @@ gitlab_rails['smtp_force_ssl'] = false
 
 ### Gmail
 
+Prerequisites:
+
+- [2-step verification enabled](https://support.google.com/accounts/answer/185839).
+- Recommended. An [app password](https://support.google.com/mail/answer/185833).
+
 {{< alert type="note" >}}
 
 Gmail has [strict sending limits](https://support.google.com/a/answer/166852)
@@ -167,10 +172,6 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'peer' # Can be: 'none', 'peer', 'cli
 ```
 
 _Don't forget to change `my.email@gmail.com` to your email address and `my-gmail-password` to your own password._
-
-_If you encounter authentication errors, ensure you have [allowed less secure apps to access the account](https://support.google.com/accounts/answer/6010255)
- or try [turning on 2-step validation](https://support.google.com/accounts/answer/185839)
- and using [an application password](https://support.google.com/mail/answer/185833)._
 
 ### Google SMTP relay
 
