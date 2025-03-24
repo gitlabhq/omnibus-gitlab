@@ -273,6 +273,25 @@ PostgreSQL has a setting for the maximum number of the concurrent connections
 to the database server. If you see this error, it means that your GitLab instance is trying to exceed
 this limit on the number of concurrent connections.
 
+To check maximum connections and available connections:
+
+1. Open a PostgreSQL database console:
+
+   ```shell
+   sudo gitlab-psql
+   ```
+
+1. Execute the following query in the database console:
+
+   ```sql
+   SELECT 
+     (SELECT setting::int FROM pg_settings WHERE name = 'max_connections') AS max_connections,
+     COUNT(*) AS current_connections,
+     COUNT(*) FILTER (WHERE state = 'active') AS active_connections,
+     ((SELECT setting::int FROM pg_settings WHERE name = 'max_connections') - COUNT(*)) AS remaining_connections
+   FROM pg_stat_activity;
+   ```
+
 To fix this problem, you have two options:
 
 - Either increase the max connections value:
