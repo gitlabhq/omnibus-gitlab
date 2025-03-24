@@ -10,7 +10,7 @@ build_file="config/software/libarchive.rb"
 
 get_checksum() {
   local version="$1"
-  local archive_name="*libarchive-${version}.tar.gz"
+  local archive_name="libarchive-${version}.tar.gz"
 
   wget -q -O - "https://libarchive.org/downloads/sha256sums" | awk -v file="$archive_name" '{if($2==file){print $1}}'
 }
