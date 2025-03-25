@@ -1720,7 +1720,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 # nginx['enable'] = true
-# nginx['client_max_body_size'] = '250m'
+# nginx['client_max_body_size'] = '0'
 # nginx['redirect_http_to_https'] = false
 # nginx['redirect_http_to_https_port'] = 80
 
@@ -1752,7 +1752,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # nginx['ssl_dhparam'] = nil # Path to dhparams.pem, eg. /etc/gitlab/ssl/dhparams.pem
 # nginx['ssl_password_file'] = nil # Path to file with passphrases for ssl certificate secret keys
-# nginx['listen_addresses'] = ['*', '[::]']
+# nginx['listen_addresses'] = ['*']
 
 ##! **Defaults to forcing web browsers to always communicate using only HTTPS**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/ssl/#configure-the-http-strict-transport-security-hsts
@@ -1785,14 +1785,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #  "Host" => "$http_host_with_default",
 #  "X-Real-IP" => "$remote_addr",
 #  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
-#  "X-Forwarded-Proto" => "https",
-#  "X-Forwarded-Ssl" => "on",
 #  "Upgrade" => "$http_upgrade",
 #  "Connection" => "$connection_upgrade"
 # }
 # nginx['proxy_cache_path'] = 'proxy_cache keys_zone=gitlab:10m max_size=1g levels=1:2'
 # nginx['proxy_cache'] = 'gitlab'
-# nginx['proxy_custom_buffer_size'] = '4k'
+# nginx['proxy_custom_buffer_size'] = nil
 # nginx['http2_enabled'] = true
 # nginx['real_ip_trusted_addresses'] = []
 # nginx['real_ip_header'] = nil
