@@ -47,27 +47,35 @@ http {
   }
 
   # Remove private_token from the request URI
-  # In:  /foo?private_token=unfiltered&authenticity_token=unfiltered&rss_token=unfiltered&...
-  # Out: /foo?private_token=[FILTERED]&authenticity_token=unfiltered&rss_token=unfiltered&...
+  # In:  /foo?private_token=unfiltered&authenticity_token=unfiltered&rss_token=unfiltered&token=glptt-unfiltered&...
+  # Out: /foo?private_token=[FILTERED]&authenticity_token=unfiltered&rss_token=unfiltered&token=glptt-unfiltered...
   map $request_uri $temp_request_uri_1 {
     default $request_uri;
     ~(?i)^(?<start>.*)(?<temp>[\?&]private[\-_]token)=[^&]*(?<rest>.*)$ "$start$temp=[FILTERED]$rest";
   }
 
   # Remove authenticity_token from the request URI
-  # In:  /foo?private_token=[FILTERED]&authenticity_token=unfiltered&rss_token=unfiltered&...
-  # Out: /foo?private_token=[FILTERED]&authenticity_token=[FILTERED]&rss_token=unfiltered&...
+  # In:  /foo?private_token=[FILTERED]&authenticity_token=unfiltered&rss_token=unfiltered&token=glptt-unfiltered&..
+  # Out: /foo?private_token=[FILTERED]&authenticity_token=[FILTERED]&rss_token=unfiltered&token=glptt-unfiltered&..
   map $temp_request_uri_1 $temp_request_uri_2 {
     default $temp_request_uri_1;
     ~(?i)^(?<start>.*)(?<temp>[\?&]authenticity[\-_]token)=[^&]*(?<rest>.*)$ "$start$temp=[FILTERED]$rest";
   }
 
   # Remove rss_token from the request URI
-  # In:  /foo?private_token=[FILTERED]&authenticity_token=[FILTERED]&rss_token=unfiltered&...
-  # Out: /foo?private_token=[FILTERED]&authenticity_token=[FILTERED]&rss_token=[FILTERED]&...
-  map $temp_request_uri_2 $filtered_request_uri {
+  # In:  /foo?private_token=[FILTERED]&authenticity_token=[FILTERED]&rss_token=unfiltered&token=glptt-unfiltered&...
+  # Out: /foo?private_token=[FILTERED]&authenticity_token=[FILTERED]&rss_token=[FILTERED]&token=glptt-unfiltered&...
+  map $temp_request_uri_2 $temp_request_uri_3 {
     default $temp_request_uri_2;
     ~(?i)^(?<start>.*)(?<temp>[\?&]rss[\-_]token)=[^&]*(?<rest>.*)$ "$start$temp=[FILTERED]$rest";
+  }
+
+  # Remove pipeline trigger token from the request URI
+  # In:  /foo?private_token=[FILTERED]&authenticity_token=[FILTERED]&rss_token=[FILTERED]&token=glptt-unfiltered&...
+  # Out: /foo?private_token=[FILTERED]&authenticity_token=[FILTERED]&rss_token=[FILTERED]&token=[FILTERED]&...
+  map $temp_request_uri_3 $filtered_request_uri {
+    default $temp_request_uri_3;
+    ~(?i)^(?<start>.*)(?<temp>[\?&]token)=glptt-[^&]*(?<rest>.*)$ "$start$temp=[FILTERED]$rest";
   }
 
   # A version of the referer without the query string
