@@ -104,10 +104,6 @@ module Gitaly
         }
       end
 
-      # Redistribute the configuration amongst the various keys. When git_data_dirs is removed, we can simply
-      # remove the corresponding logic here.
-      Gitlab['git_data_dirs'] = {}
-
       # Don't override the config if provided
       Gitlab['gitlab_rails']['repositories_storages'] ||= {}
       Gitlab['gitaly']['configuration'] ||= {}
@@ -121,7 +117,6 @@ module Gitaly
 
         # The path shouldn't be set in git_data_dirs or repository_storages, since Rails shouldn't care about it.
         without_path = details.clone.except('path')
-        Gitlab['git_data_dirs'][name] = without_path
         Gitlab['gitlab_rails']['repositories_storages'][name] = without_path if update_rails_storage_config
 
         # If user had specified `gitaly['configuration']['storage']`, then do
