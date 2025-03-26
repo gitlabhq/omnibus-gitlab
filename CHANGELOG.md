@@ -49,6 +49,12 @@ No changes.
 
 - [Add support for cells configuration](gitlab-org/omnibus-gitlab@51e44a0968143f3e51ca2c48d2a80372d7b95184) ([merge request](gitlab-org/omnibus-gitlab!8145))
 
+## 17.9.3 (2025-03-26)
+
+### Changed (1 change)
+
+- [Backport: Bump container registry to v4.15.2](gitlab-org/security/omnibus-gitlab@df7e29f524671fa9f037efe7bfd26f6fa360b5c6)
+
 ## 17.9.2 (2025-03-11)
 
 ### Security (1 change)
