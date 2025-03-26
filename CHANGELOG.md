@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.10.1 (2025-03-26)
+
+No changes.
+
 ## 17.10.0 (2025-03-19)
 
 ### Added (1 change)
@@ -44,6 +48,12 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Add support for cells configuration](gitlab-org/omnibus-gitlab@51e44a0968143f3e51ca2c48d2a80372d7b95184) ([merge request](gitlab-org/omnibus-gitlab!8145))
+
+## 17.9.3 (2025-03-26)
+
+### Changed (1 change)
+
+- [Backport: Bump container registry to v4.15.2](gitlab-org/security/omnibus-gitlab@df7e29f524671fa9f037efe7bfd26f6fa360b5c6)
 
 ## 17.9.2 (2025-03-11)
 
@@ -99,6 +109,10 @@ No changes.
 
 - [Mattermost Security Updates January 22, 2025](gitlab-org/omnibus-gitlab@ba088a767e486d04258843b3bf3e9023c0deed76)
 - [Update rexml for CVE-2024-49761](gitlab-org/omnibus-gitlab@08af5a25a26fb8f119b623bdb9b20800282d9b9b) ([merge request](gitlab-org/omnibus-gitlab!8115))
+
+## 17.8.6 (2025-03-26)
+
+No changes.
 
 ## 17.8.5 (2025-03-11)
 
