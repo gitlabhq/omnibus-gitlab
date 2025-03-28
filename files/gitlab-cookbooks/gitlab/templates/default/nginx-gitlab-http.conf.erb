@@ -67,7 +67,7 @@ server { ## HTTPS redirect server
 
 server { ## HTTPS server
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% if @http2_enabled %> http2<% end %><% end %>;
+  listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% end %>;
 
   <% if @kerberos_enabled && @kerberos_use_dedicated_port %>
   listen <%= listen_address %>:<%= @kerberos_port %><% if @kerberos_https %> ssl<% end %>;
@@ -81,7 +81,10 @@ server { ## HTTPS server
   ## Or if you want to accept large git objects over http
   client_max_body_size <%= @client_max_body_size %>;
 
-  <% if @https %>
+<% if @https %>
+  <% if @http2_enabled %>
+  http2 on;
+  <% end %>
   ## Strong SSL Security
   ## https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
   ssl_certificate <%= @ssl_certificate %>;
@@ -109,7 +112,7 @@ server { ## HTTPS server
   <% if @ssl_password_file %>
   ssl_password_file '<%= @ssl_password_file %>';
   <% end %>
-  <% end %>
+<% end %>
 
   ## Real IP Module Config
   ## http://nginx.org/en/docs/http/ngx_http_realip_module.html

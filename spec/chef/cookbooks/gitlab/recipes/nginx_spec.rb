@@ -529,7 +529,8 @@ RSpec.describe 'nginx' do
       it 'listens on a separate port' do
         expect(chef_run).to render_file(gitlab_smartcard_http_config).with_content { |content|
           expect(content).to include('server_name fauxhai.local;')
-          expect(content).to include('listen *:3444 ssl http2;')
+          expect(content).to include('listen *:3444 ssl;')
+          expect(content).to include('http2 on;')
         }
       end
 
@@ -559,7 +560,8 @@ RSpec.describe 'nginx' do
         it 'sets smartcard nginx server name' do
           expect(chef_run).to render_file(gitlab_smartcard_http_config).with_content { |content|
             expect(content).to include('server_name smartcard.fauxhai.local;')
-            expect(content).to include('listen *:3444 ssl http2;')
+            expect(content).to include('listen *:3444 ssl;')
+            expect(content).to include('http2 on;')
           }
         end
       end

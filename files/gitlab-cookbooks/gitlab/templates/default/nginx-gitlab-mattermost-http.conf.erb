@@ -34,13 +34,16 @@ server { ## HTTPS redirect server
 
 server { ## HTTPS server
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% if @http2_enabled %> http2<% end %><% end %>;
+  listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% end %>;
 <% end %>
   server_name <%= @fqdn %>;
   server_tokens off;     # don't show the version number, a security best practice
   client_max_body_size <%= @client_max_body_size %>;
 
-  <% if @https %>
+<% if @https %>
+  <% if @http2_enabled %>
+  http2 on;
+  <% end %>
   ssl_certificate <%= @ssl_certificate %>;
   ssl_certificate_key <%= @ssl_certificate_key %>;
   <% if @ssl_client_certificate %>
@@ -63,7 +66,7 @@ server { ## HTTPS server
   <% if @ssl_password_file %>
   ssl_password_file '<%= @ssl_password_file %>';
   <% end %>
-  <% end %>
+<% end %>
 
   ## Real IP Module Config
   ## http://nginx.org/en/docs/http/ngx_http_realip_module.html
