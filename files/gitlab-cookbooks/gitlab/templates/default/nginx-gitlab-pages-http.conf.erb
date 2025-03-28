@@ -30,7 +30,7 @@ server {
 
 server {
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% if @http2_enabled %> http2<% end %><% end %>;
+  listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% end %>;
 <% end %>
 <% if @namespace_in_path %>
   ## Experimental - Handle requests having namespace in path
@@ -45,6 +45,9 @@ server {
   disable_symlinks on;
 
 <% if @https %>
+  <% if @http2_enabled %>
+  http2 on;
+  <% end %>
   ## Strong SSL Security
   ## https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
   ssl_certificate <%= @ssl_certificate %>;
