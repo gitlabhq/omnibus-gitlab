@@ -208,12 +208,7 @@ SLES-15.2-check:
 Docker:
   stage: image
   needs: []
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_HOST: tcp://docker:2375
-  services:
-    - name: docker:23.0.5-dind
-      alias: localhost
+  extends: .dind
   image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools:latest"
   script:
     - bash scripts/ci/deploy_docker.sh
