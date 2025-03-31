@@ -127,3 +127,19 @@ These additional variables are available to override or enable different build b
 | `ASSETS_AWS_SECRET_ACCESS_KEY`                  | |
 | `ASSETS_AWS_ACCESS_KEY_ID`                      | |
 | `AMI_LICENSE_FILE`                              | |
+
+## DockerHub variables
+
+By default, CI uses images from DockerHub. The default/shared runners
+and the distribution runners use a DockerHub mirror to avoid hitting
+rate limits.
+
+If you use custom runnners, that don't use caching or mirroring, you
+should enable the dependency proxy by setting the `DOCKERHUB_PREFIX`
+to your proxy, for example
+`DOCKERHUB_PREFIX: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}`, and
+`DEPENDENCY_PROXY_LOGIN="true"`.
+
+The container build context by default uses the gcr DockerHub mirror. This
+behavior can be changed by overriding the `DOCKER_OPTIONS` or `DOCKER_MIRROR`
+variables.

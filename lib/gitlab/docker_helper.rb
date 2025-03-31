@@ -44,7 +44,7 @@ class DockerHelper < DockerOperations
       commands += %W[-f #{dockerfile}] if dockerfile
 
       buildargs&.each do |arg|
-        commands += %W[--build-arg='#{arg}']
+        commands += %W[--build-arg #{arg}]
       end
 
       puts "Running command: #{commands.join(' ')}"
