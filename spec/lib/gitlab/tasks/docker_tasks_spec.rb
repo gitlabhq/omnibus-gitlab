@@ -13,6 +13,7 @@ RSpec.describe 'docker', type: :rake do
 
     it 'calls build command with correct parameters' do
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('registry.com/group/repo')
+      allow(ENV).to receive(:[]).with('UBUNTU_IMAGE').and_return('ubuntu:stable')
       allow(Build::Info::Docker).to receive(:tag).and_return('9.0.0')
       allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
       allow(Build::GitlabImage).to receive(:write_release_file).and_return(true)
@@ -22,7 +23,8 @@ RSpec.describe 'docker', type: :rake do
       allow(DockerHelper).to receive(:build).and_return(true)
       allow(DockerHelper).to receive(:create_builder).and_return(true)
 
-      expect(DockerHelper).to receive(:build).with("/tmp/omnibus-gitlab/docker", "registry.com/group/repo/gitlab-ce", '9.0.0')
+      expect(DockerHelper).to receive(:build)
+        .with('/tmp/omnibus-gitlab/docker', 'registry.com/group/repo/gitlab-ce', '9.0.0', buildargs: ['BASE_IMAGE=ubuntu:stable'])
       Rake::Task['docker:build:image'].invoke
     end
   end
