@@ -15,8 +15,27 @@ namespace :docker do
       Gitlab::Util.section('docker:build:image') do
         Build::GitlabImage.write_release_file
         location = File.absolute_path(File.join(File.dirname(File.expand_path(__FILE__)), "../../../docker"))
-        DockerHelper.authenticate(username: "gitlab-ci-token", password: Gitlab::Util.get_env("CI_JOB_TOKEN"), registry: Gitlab::Util.get_env('CI_REGISTRY'))
-        DockerHelper.build(location, Build::GitlabImage.gitlab_registry_image_address, Build::Info::Docker.tag)
+
+        DockerHelper.authenticate(username: "gitlab-ci-token",
+                                  password: Gitlab::Util.get_env('CI_JOB_TOKEN'),
+                                  registry: Gitlab::Util.get_env('CI_REGISTRY'))
+
+        dp_login = Gitlab::Util.get_env('DEPENDENCY_PROXY_LOGIN')
+
+        if dp_login == 'true'
+          puts "Logging in to dependency proxy"
+          DockerHelper.authenticate(username: Gitlab::Util.get_env('CI_DEPENDENCY_PROXY_USER'),
+                                    password: Gitlab::Util.get_env('CI_DEPENDENCY_PROXY_PASSWORD'),
+                                    registry: Gitlab::Util.get_env('CI_DEPENDENCY_PROXY_SERVER'))
+        else
+          puts "Skipping login to dependency proxy (DEPENDENCY_PROXY_LOGIN=#{dp_login})"
+        end
+
+        build_args = []
+        base_image = Gitlab::Util.get_env('UBUNTU_IMAGE')
+        build_args << "BASE_IMAGE=#{base_image}" if base_image
+
+        DockerHelper.build(location, Build::GitlabImage.gitlab_registry_image_address, Build::Info::Docker.tag, buildargs: build_args)
       end
     end
   end

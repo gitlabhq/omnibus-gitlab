@@ -166,7 +166,7 @@ generate-facts:
 .notify:
   before_script:
     - apk add --no-cache curl
-  image: "alpine"
+  image: ${ALPINE_IMAGE}
   stage: notification_fail
 
 notify:slack-fail:scheduled-master:
