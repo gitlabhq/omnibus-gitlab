@@ -584,6 +584,9 @@ To opt out of automatic PostgreSQL upgrades during GitLab package upgrades, run:
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
+If you use the Omnibus Docker image, you can disable automatic upgrades by
+setting the `GITLAB_SKIP_PG_UPGRADE` environment variable to `true`.
+
 ### Revert packaged PostgreSQL server to the previous version
 
 {{< alert type="warning" >}}
@@ -833,16 +836,16 @@ Before proceeding with the upgrade, note the following:
   [default version in the compatibility table](https://docs.gitlab.com/administration/package_information/postgresql_versions/)
   determines which client binaries (such as the PostgreSQL backup/restore binaries) are active.
 
-The following example demonstrates upgrading from a database host running PostgreSQL 13 to another database host running PostgreSQL 14 and incurs downtime:
+The following example demonstrates upgrading from a database host running PostgreSQL 14 to another database host running PostgreSQL 16 and incurs downtime:
 
-1. Spin up a new PostgreSQL 14 database server that's set up according to the [database requirements](https://docs.gitlab.com/install/requirements/#database).
+1. Spin up a new PostgreSQL 16 database server that's set up according to the [database requirements](https://docs.gitlab.com/install/requirements/#database).
 
 1. Ensure that the compatible versions of `pg_dump` and `pg_restore` are being
    used on the GitLab Rails instance. To amend GitLab configuration, edit
    `/etc/gitlab/gitlab.rb` and specify the value of `postgresql['version']`:
 
    ```ruby
-   postgresql['version'] = 14
+   postgresql['version'] = 16
    ```
 
 1. Reconfigure GitLab:
@@ -871,10 +874,10 @@ when your installation is using PgBouncer.
    sudo gitlab-backup create SKIP=repositories,uploads,builds,artifacts,lfs,pages,registry
    ```
 
-1. Shutdown the PostgreSQL 13 database host.
+1. Shutdown the PostgreSQL 14 database host.
 
 1. Edit `/etc/gitlab/gitlab.rb` and update the `gitlab_rails['db_host']` setting
-   to point to the PostgreSQL database 14 host.
+   to point to the PostgreSQL database 16 host.
 
 1. Reconfigure GitLab:
 
@@ -967,7 +970,7 @@ and initializes the default version if not specified otherwise.
 
 To initialize PostgreSQL with a non-default version, you can set `postgresql['version']` to the major version one of
 the [packaged PostgreSQL versions](https://docs.gitlab.com/administration/package_information/postgresql_versions/) prior to the initial reconfigure.
-For example, in GitLab 15.0 you can use `postgresql['version'] = 12` to use PostgreSQL 12 instead of the default of PostgreSQL 13.
+For example, in GitLab 17.10 you can use `postgresql['version'] = 14` to use PostgreSQL 14 instead of the default of PostgreSQL 16.
 
 {{< alert type="warning" >}}
 
