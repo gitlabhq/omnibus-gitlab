@@ -52,8 +52,8 @@ default:
     DOCKER_MIRROR: "https://mirror.gcr.io"
     DOCKER_OPTIONS: "--registry-mirror ${DOCKER_MIRROR}"
   services:
-    - name: docker:28.0.2-dind
-      alias: localhost
+    - name: ${DOCKER_DIND_IMAGE}
+      alias: docker
       entrypoint: [ "sh", "-c", "dockerd-entrypoint.sh $DOCKER_OPTIONS" ]
 
 .docker_job:
@@ -178,7 +178,7 @@ generate-facts:
 .notify:
   before_script:
     - apk add --no-cache curl
-  image: "alpine"
+  image: ${ALPINE_IMAGE}
   stage: notification_fail
 
 notify:slack-fail:scheduled-master:
