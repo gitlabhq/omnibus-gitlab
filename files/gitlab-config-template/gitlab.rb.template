@@ -1567,7 +1567,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Version settings
 # Set this if you have disabled the bundled PostgreSQL but still want to use the backup rake tasks
-# postgresql['version'] = 14
+# postgresql['version'] = 16
 
 
 ##! Automatically restart PostgreSQL service when version changes.
