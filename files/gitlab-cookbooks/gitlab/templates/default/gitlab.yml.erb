@@ -90,6 +90,12 @@ production: &base
     ##   6 - Blue
     default_theme: <%= @gitlab_default_theme %> # default: 2
 
+    ## Color Modes
+    ##   1 - light mode
+    ##   2 - dark mode
+    ##   3 - auto (system)
+    default_color_mode: <%= @gitlab_default_color_mode %> # default: 1
+
     <% unless @custom_html_header_tags.nil? %>
     ## Custom html header tags
     # In some cases some custom header tags are needed
