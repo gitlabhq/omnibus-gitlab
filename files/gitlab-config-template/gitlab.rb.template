@@ -147,6 +147,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! `10` for Light Red
 # gitlab_rails['gitlab_default_theme'] = 2
 
+### Default Color Mode
+### Available values:
+##! `1`  for Light mode
+##! `2`  for Dark mode
+##! `3`  for Auto (follow system preferences)
+# gitlab_rails['gitlab_default_color_mode'] = 1
+
 ### Custom html header tags
 ###! See https://docs.gitlab.com/ee/administration/custom_html_header_tags.html for more
 # In some cases some custom header tags are needed

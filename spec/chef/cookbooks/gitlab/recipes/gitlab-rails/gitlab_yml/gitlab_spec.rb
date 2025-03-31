@@ -275,5 +275,27 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    describe 'Change default theme settings' do
+      context 'with default configuration' do
+        it 'render gitlab.yml without default_color_mode' do
+          expect(gitlab_yml[:production][:gitlab][:default_color_mode]).to be nil
+        end
+      end
+
+      context 'with user specified configuration' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              gitlab_default_color_mode: 2
+            }
+          )
+        end
+
+        it 'render gitlab.yml with user specified value for default_color_mode' do
+          expect(gitlab_yml[:production][:gitlab][:default_color_mode]).to eq(2)
+        end
+      end
+    end
   end
 end
