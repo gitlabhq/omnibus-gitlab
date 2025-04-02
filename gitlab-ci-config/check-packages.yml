@@ -8,6 +8,9 @@ variables:
   # hardcoding the dev registry for SLES jobs.
   DEV_BUILDER_IMAGE_REGISTRY: 'dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder'
 
+include:
+  - local: '/gitlab-ci-config/dind-config.yml'
+
 .distribution-amd64-tags:
   - distribution-runner
   - amd64
