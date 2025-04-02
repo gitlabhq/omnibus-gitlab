@@ -68,13 +68,32 @@ build do
     "GIT_APPEND_BUILD_OPTIONS += NEEDS_LIBICONV=YesPlease",
     "GIT_APPEND_BUILD_OPTIONS += NO_R_TO_GCC_LINKER=YesPlease",
     "GIT_APPEND_BUILD_OPTIONS += INSTALL_SYMLINKS=YesPlease",
-    "GIT_APPEND_BUILD_OPTIONS += CFLAGS=\"#{git_cflags}\""
+    "GIT_APPEND_BUILD_OPTIONS += CFLAGS=\"#{git_cflags}\"",
+    # Gitaly compiles Git with build type "debugoptimized" by default, which
+    # includes debug symbols. We don't want them in order to reduce package
+    # size, so we override the build type to "release" instead.
+    "GIT_APPEND_MESON_BUILD_OPTIONS += -Dbuildtype=release"
   ]
 
+  use_meson = Gitlab::Util.get_env('GITALY_USE_MESON') || 'true'
+  if use_meson == 'true'
+    # Use Meson to build Git. This only impacts Git v2.48.0 and newer, older
+    # version will still be built with the old and venerable Makefile. Once
+    # Gitaly has deprecated support for older versions we can drop the infra
+    # for Makefiles.
+    #
+    # Note that with Meson, we don't have to manually configure all dependency
+    # locations anymore. Instead, those dependencies will now be picked up via
+    # the PKG_CONFIG_PATH.
+    build_options << "USE_MESON=YesPlease"
+  end
+
   if Build::Check.use_system_ssl?
+    env['PKG_CONFIG_PATH'] = "#{OpenSSLHelper.pkg_config_dirs}:#{install_dir}/embedded/lib/pkgconfig"
     env['FIPS_MODE'] = '1'
   else
     build_options << "GIT_APPEND_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded"
+    env['PKG_CONFIG_PATH'] = "#{install_dir}/embedded/lib/pkgconfig"
   end
 
   sm_version_override_git_repo_url = Gitlab::Util.get_env('SELF_MANAGED_VERSION_REGEX_OVERRIDE_GIT_REPO_URL')
