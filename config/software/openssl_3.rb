@@ -38,7 +38,7 @@ build do
 
   configure_args = [
     "--prefix=#{install_dir}/embedded",
-    "--libdir=#{install_dir}/embedded/lib",
+    "--libdir=lib",
     'no-unit-test',
     'no-docs',
     'no-comp',
