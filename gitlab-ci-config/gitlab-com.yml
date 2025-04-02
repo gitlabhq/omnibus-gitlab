@@ -105,6 +105,8 @@
   TOP_UPSTREAM_SOURCE_JOB: ${TOP_UPSTREAM_SOURCE_JOB}
   TOP_UPSTREAM_SOURCE_SHA: ${TOP_UPSTREAM_SOURCE_SHA}
   TOP_UPSTREAM_SOURCE_REF: ${TOP_UPSTREAM_SOURCE_REF}
+  DEPENDENCY_PROXY_LOGIN: ${DEPENDENCY_PROXY_LOGIN}
+  DOCKERHUB_PREFIX: ${DOCKERHUB_PREFIX}
 
 .ce-trigger-job-variables:
   extends: .base-trigger-job-variables
@@ -135,7 +137,7 @@
       variables: !reference [.ce-trigger-job-variables]
 
 .review-docs:
-  image: "${RUBY_IMAGE}-alpine"
+  image: "${RUBY_ALPINE_IMAGE}"
   stage: post-test
   cache: {}
   needs: []
@@ -600,7 +602,7 @@ dependency_scanning:
       - dependency_report.txt
 
 validate_renovate_checksum:
-  image: docker.io/bash:5.2-alpine3.20
+  image: ${BASH_IMAGE}
   stage: prepare
   before_script:
     - apk add git
