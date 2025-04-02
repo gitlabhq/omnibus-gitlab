@@ -89,7 +89,7 @@ RSpec.describe DockerHelper do
     end
 
     context 'when build_args are specified' do
-      let(:expected_args) { %w[docker buildx build /tmp/foo -t sample:value --platform=linux/amd64 --push --build-arg='FOO=BAR'] }
+      let(:expected_args) { %w[docker buildx build /tmp/foo -t sample:value --platform=linux/amd64 --push --build-arg FOO=BAR] }
 
       it 'calls docker build command with correct arguments' do
         expect(Open3).to receive(:popen2e).with(*expected_args)
