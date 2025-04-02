@@ -2,7 +2,7 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
-title: Troubleshooting Omnibus GitLab installation issues
+title: Troubleshooting Linux package installation
 ---
 
 {{< details >}}
@@ -12,7 +12,7 @@ title: Troubleshooting Omnibus GitLab installation issues
 
 {{< /details >}}
 
-Use this page to learn about common issues users can encounter when installing Omnibus GitLab packages.
+Use this page to learn about common issues users can encounter when installing Linux packages.
 
 ## Hash Sum mismatch when downloading packages
 
@@ -41,7 +41,7 @@ dpkg -i gitlab-ce_8.1.0-ce.0_amd64.deb
 
 ## Installation on openSUSE and SLES platforms warns about unknown key signature
 
-Omnibus GitLab packages are [signed with GPG keys](update/package_signatures.md) in
+Linux packages are [signed with GPG keys](update/package_signatures.md) in
 addition to the package repositories providing signed metadata. This ensures
 authenticity and integrity of the packages that are distributed to the users.
 However, the package manager used in openSUSE and SLES operating systems may
@@ -178,7 +178,7 @@ command is available.
 
 #### Diagnose and resolve SELinux issues
 
-Omnibus GitLab detects default path changes in `/etc/gitlab/gitlab.rb` and should apply
+Linux packages detect default path changes in `/etc/gitlab/gitlab.rb` and should apply
 the correct file contexts.
 
 {{< alert type="note" >}}
@@ -319,9 +319,9 @@ $ gitlab-ctl reconfigure
 /opt/gitlab/embedded/bin/ruby: /lib64/libc.so.6: version `GLIBC_2.17' not found (required by /opt/gitlab/embedded/lib/libruby.so.2.1)
 ```
 
-This can happen if the omnibus package you installed was built for a different
+This can happen if the Linux package you installed was built for a different
 OS release than the one on your server. Double-check that you downloaded and
-installed the correct Omnibus GitLab package for your operating system.
+installed the correct Linux package for your operating system.
 
 ## Reconfigure fails to create the Git user
 
@@ -329,7 +329,7 @@ This can happen if you run `sudo gitlab-ctl reconfigure` as the Git user.
 Switch to another user.
 
 More importantly: do not give sudo rights to the Git user or to any of the
-other users used by Omnibus GitLab. Bestowing unnecessary privileges on a
+other users used by the Linux package. Bestowing unnecessary privileges on a
 system user weakens the security of your system.
 
 ## Failed to modify kernel parameters with sysctl
@@ -402,7 +402,7 @@ is different for each error). See the last line of this snippet.
   +kernel.shmall = 4194304
 ```
 
-## I am unable to install Omnibus GitLab without root access
+## I am unable to install GitLab without root access
 
 Occasionally people ask if they can install GitLab without root access.
 This is problematic for several reasons.
@@ -410,15 +410,15 @@ This is problematic for several reasons.
 ### Installing the .deb or .rpm
 
 To our knowledge there is no clean way to install Debian or RPM
-packages as a non-privileged user. You cannot install Omnibus GitLab
-RPM's because the Omnibus build process does not create source RPM's.
+packages as a non-privileged user. You cannot install Linux package
+RPM's because the build process does not create source RPM's.
 
 ### Hassle-free hosting on port 80 and 443
 
 The most common way to deploy GitLab is to have a web server
 (NGINX/Apache) running on the same server as GitLab, with the web
 server listening on a privileged (below-1024) TCP port. In
-Omnibus GitLab we provide this convenience by bundling an
+Linux packages, we provide this convenience by bundling an
 automatically configured NGINX service that needs to run its master
 process as root to open ports 80 and 443.
 
@@ -427,20 +427,20 @@ the bundled NGINX service, but this puts the burden on them to keep
 the NGINX configuration in tune with GitLab during application
 updates.
 
-### Isolation between Omnibus services
+### Isolation between services
 
-Bundled services in Omnibus GitLab (GitLab itself, NGINX, PostgreSQL,
+Bundled services in Linux packages (GitLab itself, NGINX, PostgreSQL,
 Redis, Mattermost) are isolated from each other using Unix user
 accounts. Creating and managing these user accounts requires root
-access. By default, Omnibus GitLab will create the required Unix
+access. By default, Linux packages create the required Unix
 accounts during `gitlab-ctl reconfigure` but that behavior can be
 [disabled](settings/configuration.md#disable-user-and-group-account-management).
 
-In principle Omnibus GitLab could do with only 2 user accounts (one
+In principle, Linux packages could do with only 2 user accounts (one
 for GitLab and one for Mattermost) if we give each application its own
 runit (runsvdir), PostgreSQL and Redis process. But this would be a
 major change in the `gitlab-ctl reconfigure` Chef code and it would
-probably create major upgrade pain for all existing Omnibus GitLab
+probably create major upgrade pain for all existing Linux package
 installations. (We would probably have to rearrange the directory
 structure under `/var/opt/gitlab`.)
 
@@ -453,7 +453,7 @@ This can only be done with root access.
 ## `gitlab-rake assets:precompile` fails with 'Permission denied'
 
 Some users report that running `gitlab-rake assets:precompile` does not work
-with the omnibus packages. The short answer to this is: do not run that
+with the Linux packages. The short answer to this is: do not run that
 command, it is only for GitLab installations from source.
 
 The GitLab web interface uses CSS and JavaScript files, called 'assets' in Ruby
@@ -466,13 +466,13 @@ developer-friendly format to an end-user friendly (compact, fast) format; that
 is what the `rake assets:precompile` script is for.
 
 When you install GitLab from source (which was the only way to do it before we
-had omnibus packages) you need to convert the assets on your GitLab server
+had Linux packages), you must convert the assets on your GitLab server
 every time you update GitLab. People used to overlook this step and there are
 still posts, comments and mails out there on the internet where users recommend
 each other to run `rake assets:precompile` (which has now been renamed
-`gitlab:assets:compile`). With the omnibus packages things are different: when
-we build the package [we compile the assets for you](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/1cfe925e0c015df7722bb85eddc0b4a3b59c1211/config/software/gitlab-rails.rb#L74).
-When you install GitLab with an omnibus package, the converted assets are
+`gitlab:assets:compile`). With the Linux packages things are different. When
+we build the package, [we compile the assets for you](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/1cfe925e0c015df7722bb85eddc0b4a3b59c1211/config/software/gitlab-rails.rb#L74).
+When you install GitLab with a Linux package, the converted assets are
 already there! That is why you do not need to run `rake assets:precompile` when
 you install GitLab from a package.
 
@@ -566,12 +566,12 @@ how to override the default headers.
 
 [GitLab requires](https://docs.gitlab.com/install/requirements/#postgresql-requirements)
 the PostgreSQL extension `pg_trgm`.
-If you are using Omnibus GitLab package with the bundled database, the extension
+If you are using a Linux package with the bundled database, the extension
 should be automatically enabled when you upgrade.
 
 If you however, are using an external (non-packaged) database, you will need to
-enable the extension manually. The reason for this is that Omnibus GitLab
-package with external database has no way of confirming if the extension exists,
+enable the extension manually. The reason for this is that Linux package instances
+with an external database have no way of confirming if the extension exists,
 and it also doesn't have a way of enabling the extension.
 
 To fix this issue, you'll need to first install the `pg_trgm` extension.
@@ -875,7 +875,7 @@ To resolve this issue:
 
 ## Mirroring the GitLab `yum` repository with Pulp or Red Hat Satellite fails
 
-Direct mirroring of the Omnibus GitLab `yum` repositories located at <https://packages.gitlab.com/gitlab/> with [Pulp](https://pulpproject.org/) or
+Direct mirroring of the Linux package `yum` repositories located at <https://packages.gitlab.com/gitlab/> with [Pulp](https://pulpproject.org/) or
 [Red Hat Satellite](https://www.redhat.com/en/technologies/management/satellite) fails
 when syncing. Different errors are caused by different software:
 

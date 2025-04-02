@@ -73,7 +73,7 @@ See [settings/logs.md.](../settings/logs.md)
 
 ## Starting and stopping
 
-After Omnibus GitLab is installed and configured, your server has a runit
+After the Linux package is installed and configured, your server has a runit
 service directory (`runsvdir`) process running that gets started at boot via
 `/etc/inittab` or the `/etc/init/gitlab-runsvdir.conf` Upstart resource. You
 should not have to deal with the `runsvdir` process directly; you can use the
@@ -161,7 +161,7 @@ sudo gitlab-psql -d gitlabhq_production
 
 This will only work after you have run `gitlab-ctl reconfigure` at
 least once. The `gitlab-psql` command cannot be used to connect to a
-remote PostgreSQL server, nor to connect to a local non-Omnibus PostgreSQL
+remote PostgreSQL server, nor to connect to a local non-Linux package PostgreSQL
 server.
 
 ### Starting a PostgreSQL superuser `psql` session in Geo tracking database

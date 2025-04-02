@@ -27,7 +27,7 @@ project's [Container Registry](https://gitlab.com/gitlab-org/gitlab-omnibus-buil
    docker pull registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/debian_10:${BUILDER_IMAGE_REVISION}
    ```
 
-1. Clone the Omnibus GitLab source and change to the cloned directory:
+1. Clone the `omnibus-gitlab` source and change to the cloned directory:
 
    ```shell
    git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git ~/omnibus-gitlab
@@ -167,6 +167,8 @@ the package cache directory (`/var/cache/omnibus/pkg`):
 bin/omnibus clean --purge gitlab
 ```
 
+<!-- vale gitlab_base.SubstitutionWarning = NO -->
+
 ## Get help on Omnibus
 
 For help with the Omnibus command-line interface, run the
@@ -175,3 +177,5 @@ For help with the Omnibus command-line interface, run the
 ```shell
 bin/omnibus help
 ```
+
+<!-- vale gitlab_base.SubstitutionWarning = YES -->

@@ -88,8 +88,4 @@ to work best with the available resources. Check out the [documentation](setting
 
 ## Troubleshooting
 
-For troubleshooting details, see [Troubleshooting Omnibus GitLab installation issues](troubleshooting.md).
-
-## Omnibus GitLab developer documentation
-
-See the [development documentation](development/_index.md)
+For troubleshooting details, see [Troubleshooting Linux package installation](troubleshooting.md).

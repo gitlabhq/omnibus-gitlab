@@ -2,7 +2,7 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
-title: Omnibus GitLab High Availability Roles
+title: High availability roles
 ---
 
 {{< details >}}
@@ -12,9 +12,9 @@ title: Omnibus GitLab High Availability Roles
 
 {{< /details >}}
 
-Omnibus GitLab includes various software components/services to support running GitLab in
+Linux packages include various software components/services to support running GitLab in
 a high availability configuration. By default, some of these supporting services
-are disabled, and Omnibus GitLab is configured to run as a single node installation.
+are disabled, and GitLab is configured to run as a single node installation.
 Each service can be enabled or disabled using configuration settings in `/etc/gitlab/gitlab.rb`,
 but the introduction of `roles` allows you to easily enable a group of services,
 and provides better default configuration based on the high availability roles you
@@ -48,7 +48,7 @@ roles ['geo_primary_role']
 
 The majority of the following roles will only work on a
 [GitLab Enterprise Edition](https://about.gitlab.com/install/ce-or-ee/), meaning
-a `gitlab-ee` Omnibus package. It will be mentioned next to each role.
+a `gitlab-ee` Linux package. It will be mentioned next to each role.
 
 ### GitLab App Role
 

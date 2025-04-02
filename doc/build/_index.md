@@ -15,10 +15,14 @@ for more details.
 
 ## `omnibus-gitlab` packages
 
+<!-- vale gitlab_base.SubstitutionWarning = NO -->
+
 `omnibus-gitlab` uses [Omnibus](https://github.com/chef/omnibus) for
 building packages for the supported operating systems. Omnibus detects
 the OS where it is being used and build packages for that OS. You should use a
 Docker container corresponding to the OS as the environment for building packages.
+
+<!-- vale gitlab_base.SubstitutionWarning = YES -->
 
 How to build a custom package locally is described in the
 [dedicated document](build_package.md).
