@@ -584,7 +584,7 @@ To opt out of automatic PostgreSQL upgrades during GitLab package upgrades, run:
 sudo touch /etc/gitlab/disable-postgresql-upgrade
 ```
 
-If you use the Omnibus Docker image, you can disable automatic upgrades by
+If you use the Docker image, you can disable automatic upgrades by
 setting the `GITLAB_SKIP_PG_UPGRADE` environment variable to `true`.
 
 ### Revert packaged PostgreSQL server to the previous version

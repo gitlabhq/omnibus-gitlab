@@ -102,10 +102,14 @@ of manually running new pipelines.
 
 ## Use a specific mirror or fork of a GitLab component
 
+<!-- vale gitlab_base.SubstitutionWarning = NO -->
+
 The repository sources for most software that Omnibus builds are in
 the `.custom_sources.yml` file in the `omnibus-gitlab` repository. You can override
 the main GitLab components using environment variables. Check the table
 below for details:
+
+<!-- vale gitlab_base.SubstitutionWarning = YES -->
 
 | Environment variable                          | Description |
 | --------------------------------------------- | ----------- |

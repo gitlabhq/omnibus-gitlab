@@ -179,8 +179,8 @@ git_data_dirs({
 ```
 
 you'll need to redefine the configuration under `gitaly['configuration']` instead.
-Note that the `/repositories` suffix must be appended to the path, as it was previously
-appended by Omnibus internally.
+Note that the `/repositories` suffix must be appended to the path because it was previously
+appended internally.
 
 ```ruby
 gitaly['configuration'] = {
@@ -193,10 +193,14 @@ gitaly['configuration'] = {
 }
 ```
 
+<!-- vale gitlab_base.SubstitutionWarning = NO -->
+
 It's important to note that the parent directory of the `path` must also be managed by
-Omnibus. Following the example above, Omnibus will need to modify the permissions of
+Omnibus. Following the example above, Omnibus must modify the permissions of
 `/mnt/nas/git-data` on reconfiguration and may store data in that directory during
 runtime. You should select an appropriate `path` that allows for this behavior.
+
+<!-- vale gitlab_base.SubstitutionWarning = YES -->
 
 ## Store Git data in an alternative directory
 

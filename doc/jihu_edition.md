@@ -53,7 +53,7 @@ Additionally, you can navigate to the GitLab administration panel of your server
 
 ## Update GitLab Enterprise Edition to JiHu Edition
 
-To update an existing GitLab Enterprise Edition (EE) server installed using the Omnibus GitLab
+To update an existing GitLab Enterprise Edition (EE) server installed using the Linux
 packages to GitLab JiHu Edition (JH), you install the JiHu Edition (JH)
 package on top of EE.
 
