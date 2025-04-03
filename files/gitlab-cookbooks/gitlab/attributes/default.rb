@@ -349,6 +349,8 @@ default['gitlab']['gitlab_rails']['omniauth_cas3_session_duration'] = nil
 default['gitlab']['gitlab_rails']['omniauth_allow_bypass_two_factor'] = nil
 default['gitlab']['gitlab_rails']['omniauth_saml_message_max_byte_size'] = nil
 
+default['gitlab']['gitlab_rails']['oidc_provider_openid_id_token_expire_in_seconds'] = nil
+
 default['gitlab']['gitlab_rails']['forti_authenticator_enabled'] = false
 default['gitlab']['gitlab_rails']['forti_authenticator_host'] = nil
 default['gitlab']['gitlab_rails']['forti_authenticator_port'] = 443

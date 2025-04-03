@@ -1151,6 +1151,14 @@ production: &base
   consul:
     api_url: "<%= @consul_api_url %>"
 
+  <%- if @oidc_provider_openid_id_token_expire_in_seconds -%>
+  ## OIDC settings
+  oidc_provider:
+    # Configure a custom duration for ID Tokens.
+    # By default, GitLab ID tokens expire after 120 seconds.
+    openid_id_token_expire_in_seconds: <%= @oidc_provider_openid_id_token_expire_in_seconds %>
+  <%- end -%>
+
   #
   # 5. Extra customization
   # ==========================
