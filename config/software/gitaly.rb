@@ -96,8 +96,14 @@ build do
 
   if Build::Check.use_system_ssl?
     env['CMAKE_FLAGS'] = OpenSSLHelper.cmake_flags
-    env['PKG_CONFIG_PATH'] = "#{OpenSSLHelper.pkg_config_dirs}:#{install_dir}/embedded/lib/pkgconfig"
     env['FIPS_MODE'] = '1'
+
+    pkg_config_overrides = File.join(project_dir, 'pkg-config-overrides')
+    mkdir pkg_config_overrides
+    OpenSSLHelper.pkg_config_files.each_value do |file|
+      copy file, pkg_config_overrides
+    end
+    env['PKG_CONFIG_PATH'] = "#{pkg_config_overrides}:#{install_dir}/embedded/lib/pkgconfig"
   else
     git_append_build_options << "GIT_APPEND_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded"
     env['PKG_CONFIG_PATH'] = "#{install_dir}/embedded/lib/pkgconfig"
