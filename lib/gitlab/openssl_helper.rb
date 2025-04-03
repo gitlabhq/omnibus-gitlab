@@ -2,7 +2,7 @@ require_relative 'linker_helper'
 
 class OpenSSLHelper
   @base_libs = %w[libssl libcrypto]
-  @pkg_config_files = { "libssl.pc" => nil, "libcrypto.pc" => nil }
+  @pkg_config_files = { "openssl.pc" => nil, "libssl.pc" => nil, "libcrypto.pc" => nil }
   @deps = []
   @cursor = 2
 
@@ -47,7 +47,7 @@ class OpenSSLHelper
     end
 
     def pkg_config_files?
-      @pkg_config_files.values.compact.length >= 2
+      @pkg_config_files.values.compact.length >= 3
     end
 
     def system_pkg_config_dirs
