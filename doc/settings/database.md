@@ -151,15 +151,6 @@ After you have these files, enable SSL:
 
 1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) to apply the configuration changes.
 
-1. Restart PostgreSQL for the changes to take effect:
-
-   ```shell
-   gitlab-ctl restart postgresql
-   ```
-
-   If PostgreSQL fails to start, check the logs (for example,
-   `/var/log/gitlab/postgresql/current`) for more details.
-
 #### Disabling SSL
 
 1. Add the following to `/etc/gitlab/gitlab.rb`:
@@ -720,15 +711,6 @@ socket:
 
 1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) to apply the configuration changes.
 
-1. Restart PostgreSQL for the changes to take effect:
-
-   ```shell
-   gitlab-ctl restart postgresql
-   ```
-
-   If PostgreSQL fails to start, check the logs (for example,
-   `/var/log/gitlab/postgresql/current`) for more details.
-
 #### Require SSL and verify server certificate against CA bundle
 
 PostgreSQL can be configured to require SSL and verify the server certificate
@@ -750,15 +732,6 @@ both the root and intermediate certificates.
    article on AWS.
 
 1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) to apply the configuration changes.
-
-1. Restart PostgreSQL for the changes to take effect:
-
-   ```shell
-   gitlab-ctl restart postgresql
-   ```
-
-   If PostgreSQL fails to start, check the logs (for example,
-   `/var/log/gitlab/postgresql/current`) for more details.
 
 ### Backup and restore a non-packaged PostgreSQL database
 
