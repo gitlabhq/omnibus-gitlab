@@ -618,7 +618,8 @@ module Gitlab
       end
 
       def remove_git_data_dirs(incoming_version, existing_config, type, deprecated_version, removed_version)
-        return [] unless existing_config[:git_data_dirs]
+        applied_config = existing_config.dig('gitlab', 'git_data_dirs')
+        return [] if applied_config.nil? || applied_config.empty?
 
         messages = []
 

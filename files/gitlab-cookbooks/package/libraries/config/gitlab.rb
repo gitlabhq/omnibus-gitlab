@@ -25,7 +25,6 @@ module Gitlab
   node nil
   roles nil
   edition :ce
-  git_data_dirs ConfigMash.new
 
   ## Roles
 
@@ -103,6 +102,7 @@ module Gitlab
     attribute('mailroom',         priority: 20).use { IncomingEmail }
     attribute('storage_check',    priority: 30).use { StorageCheck }
     attribute('nginx',            priority: 40).use { Nginx } # Parse nginx last so all external_url are parsed before it
+    attribute('git_data_dirs',           default: ConfigMash.new)
     attribute('external_url',            default: nil)
     attribute('registry_external_url',   default: nil)
     attribute('mattermost_external_url', default: nil)
