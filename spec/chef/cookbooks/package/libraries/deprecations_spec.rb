@@ -129,13 +129,15 @@ RSpec.describe Gitlab::Deprecations do
     context 'when git_data_dirs is specified' do
       it 'raises warning' do
         config = {
-          git_data_dirs: {
-            default: {
-              path: 'abc',
-              gitaly_address: 'unix:/var/gitaly.socket'
-            },
-            valid: {
-              gitaly_address: 'unix:/var/gitaly.socket'
+          "gitlab" => {
+            "git_data_dirs" => {
+              "default" => {
+                "path" => "abc",
+                "gitaly_address" => "unix:/var/gitaly.socket"
+              },
+              "valid" => {
+                "gitaly_address" => "unix:/var/gitaly.socket"
+              }
             }
           }
         }
