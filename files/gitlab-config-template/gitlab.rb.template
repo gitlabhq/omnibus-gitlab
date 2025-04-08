@@ -702,6 +702,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Gitaly settings
 # gitlab_rails['gitaly_token'] = 'secret token'
+# gitlab_rails['repositories_storages'] = {
+#   'default' => {
+#     'gitaly_address' => 'tcp://praefect-lb:2305',
+#     'gitaly_token' => 'secret_token'
+#   }
+# }
 
 ### For storing GitLab application uploads, eg. LFS objects, build artifacts
 ###! Docs: https://docs.gitlab.com/ee/development/shared_files.html
@@ -2727,6 +2733,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     dir: '/var/opt/gitlab/git-data/repositories/+gitaly/PackObjectsCache',
 #     max_age: '5m',
 #   },
+#   storage: [
+#     {
+#       name: 'gitaly-1',
+#       path: '/var/opt/gitlab/git-data/repositories',
+#     },    
+#   ],
 # }
 
 ################################################################################
