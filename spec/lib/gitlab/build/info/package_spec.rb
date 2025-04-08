@@ -55,6 +55,16 @@ RSpec.describe Build::Info::Package do
           allow(Build::Check).to receive(:is_internal_release?).and_return(true)
         end
 
+        context 'even if a tag matches the SHA' do
+          before do
+            allow(Build::Check).to receive(:on_tag?).and_return(true)
+          end
+
+          it 'returns computed version as expected' do
+            expect(described_class.semver_version).to eq('16.2.0+internal1')
+          end
+        end
+
         it 'returns computed version as expected' do
           expect(described_class.semver_version).to eq('16.2.0+internal1')
         end
