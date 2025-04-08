@@ -33,7 +33,7 @@ module Build
         # different.
         # To resolve this, we append a PIPELINE_ID to change the name of the package
         def semver_version(fips: Build::Check.use_system_ssl?)
-          if Build::Check.on_tag?
+          if Build::Check.on_tag? && !Build::Check.is_internal_release?
             # timestamp is disabled in omnibus configuration
             Omnibus.load_configuration('omnibus.rb')
             Omnibus::BuildVersion.semver
