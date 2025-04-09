@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.10.4 (2025-04-09)
+
+No changes.
+
 ## 17.10.3 (2025-04-02)
 
 No changes.
@@ -56,6 +60,10 @@ No changes.
 ### Other (1 change)
 
 - [Add support for cells configuration](gitlab-org/omnibus-gitlab@51e44a0968143f3e51ca2c48d2a80372d7b95184) ([merge request](gitlab-org/omnibus-gitlab!8145))
+
+## 17.9.6 (2025-04-09)
+
+No changes.
 
 ## 17.9.5 (2025-04-02)
 
@@ -125,6 +133,10 @@ No changes.
 
 - [Mattermost Security Updates January 22, 2025](gitlab-org/omnibus-gitlab@ba088a767e486d04258843b3bf3e9023c0deed76)
 - [Update rexml for CVE-2024-49761](gitlab-org/omnibus-gitlab@08af5a25a26fb8f119b623bdb9b20800282d9b9b) ([merge request](gitlab-org/omnibus-gitlab!8115))
+
+## 17.8.7 (2025-04-09)
+
+No changes.
 
 ## 17.8.6 (2025-03-26)
 
