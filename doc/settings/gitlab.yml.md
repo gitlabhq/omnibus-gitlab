@@ -2,7 +2,7 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
-title: Changing `gitlab.yml` and `application.yml` settings
+title: Changing configuration file settings
 ---
 
 {{< details >}}
@@ -18,7 +18,7 @@ for a Linux package installation, you need to do so with `/etc/gitlab/gitlab.rb`
 translation works as follows. For a complete list of available options, visit the
 [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 
-All the options of the template listed in `/etc/gitlab/gitlab.rb` are avilable by default.
+All the options of the template listed in `/etc/gitlab/gitlab.rb` are available by default.
 
 In `gitlab.yml`, you find structure like this:
 
