@@ -10,15 +10,14 @@ variables:
   ASSET_PATH: assets-${CI_COMMIT_REF_SLUG}
   COMPILE_ASSETS: 'false'
   BUNDLE_PATH__SYSTEM: 'false'
-  # CI images
-  DOCKERHUB_PREFIX: "docker.io" # Set to dependency proxy if rate limits become a problem.
+  DOCKERHUB_PREFIX: docker.io
   RUBY_IMAGE: "${DOCKERHUB_PREFIX}/ruby:3.0"
   RUBY_ALPINE_IMAGE: "${RUBY_IMAGE}-alpine"
   BASH_IMAGE: "${DOCKERHUB_PREFIX}/bash:5.2-alpine3.20"
   ALPINE_IMAGE: "${DOCKERHUB_PREFIX}/alpine:3.21"
   UBUNTU_IMAGE: "${DOCKERHUB_PREFIX}/ubuntu:22.04"
   DOCKER_DIND_IMAGE: "${DOCKERHUB_PREFIX}/docker:28.0.4-dind"
-  DEPENDENCY_PROXY_LOGIN: "false"
+  DEPENDENCY_PROXY_LOGIN: 'false'
   AUTO_DEPLOY_TAG_REGEX: "^\\d+\\.\\d+\\.\\d+\\+[^ ]{7,}\\.[^ ]{7,}$"
   AUTO_DEPLOY_ENVIRONMENT: pre
   OMNIBUS_GITLAB_MIRROR_ID: '14588374'
