@@ -20,6 +20,8 @@ name 'omnibus-gitlab-gems'
 
 default_version '20250223'
 
+source path: File.expand_path('config/templates/omnibus-gitlab-gems', Omnibus::Config.project_root)
+
 license 'MIT'
 license_file 'LICENSE'
 
@@ -36,12 +38,9 @@ dependency 'rubygems'
 
 build do
   gemfile_dir = "#{install_dir}/embedded/service/omnibus-gitlab"
-
   mkdir gemfile_dir
-  gemfile = File.join(Omnibus::Config.project_root, 'config/templates/omnibus-gitlab-gems/Gemfile')
-  gemfile_lock = "#{gemfile}.lock"
 
-  [gemfile, gemfile_lock].each do |filename|
+  %w[Gemfile Gemfile.lock].each do |filename|
     copy filename, gemfile_dir
   end
 
