@@ -1,3 +1,12 @@
+spec:
+  inputs:
+    skip_qa_test:
+      type: boolean
+      default: false
+      description: "If true, skips running QA tests for the current pipeline."
+
+---
+
 stages:
   - check
   - prepare
@@ -26,6 +35,8 @@ include:
   - local: '/gitlab-ci-config/gitlab-com.yml'
     rules:
       - if: '$CI_SERVER_HOST == "gitlab.com"'
+    inputs:
+      skip_qa_test: $[[ inputs.skip_qa_test ]]
 
 default:
   tags:
