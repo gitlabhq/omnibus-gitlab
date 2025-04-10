@@ -70,6 +70,7 @@ default['gitlab']['gitlab_rails']['env'] = {
   'SSL_CERT_FILE' => "#{node['package']['install-dir']}/embedded/ssl/cert.pem"
 }
 
+default['gitlab']['gitlab_rails']['initial_gitlab_product_usage_data'] = nil
 default['gitlab']['gitlab_rails']['internal_api_url'] = nil
 default['gitlab']['gitlab_rails']['uploads_directory'] = "/var/opt/gitlab/gitlab-rails/uploads"
 default['gitlab']['gitlab_rails']['auto_migrate'] = true
