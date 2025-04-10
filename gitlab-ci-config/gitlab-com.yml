@@ -269,8 +269,17 @@ docs-lint markdown:
   needs: []
   before_script: []
   script:
+    # Add config for code quality report formatting
+    - printf "outputFormatters\u003A\n  -\n    - 'markdownlint-cli2-formatter-codequality'\n    - severity\u003A 'blocker'\n" >> .markdownlint-cli2.yaml
     # Lint Markdown
     - markdownlint-cli2 'doc/**/*.md'
+  artifacts:
+    when: always
+    expire_in: 2 weeks
+    paths:
+      - markdownlint-cli2-codequality.json
+    reports:
+      codequality: markdownlint-cli2-codequality.json
   rules:
     - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
