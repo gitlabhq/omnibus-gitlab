@@ -513,7 +513,7 @@ module Gitlab
       end
 
       def next_major_version
-        version_manifest = JSON.parse(File.read("/opt/gitlab/version-manifest.json"))
+        version_manifest = JSON.load_file("/opt/gitlab/version-manifest.json")
         major_version = version_manifest['build_version'].split(".")[0]
         (major_version.to_i + 1).to_s
       rescue StandardError

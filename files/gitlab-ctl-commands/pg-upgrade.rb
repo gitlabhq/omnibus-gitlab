@@ -744,7 +744,7 @@ def copy_patroni_dynamic_config
 end
 
 def version_from_manifest(software)
-  @versions = JSON.parse(File.read("#{base_path}/version-manifest.json")) if @versions.nil?
+  @versions = JSON.load_file("#{base_path}/version-manifest.json") if @versions.nil?
   return @versions['software'][software]['described_version'] if @versions['software'].key?(software)
 
   nil
