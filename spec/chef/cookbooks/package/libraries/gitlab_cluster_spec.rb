@@ -151,7 +151,7 @@ RSpec.describe GitlabCluster, :cluster_config do
   end
 
   def read_file_content(fullpath)
-    JSON.parse(File.read(fullpath))
+    JSON.load_file(fullpath)
   end
 
   def write_file_content(fullpath, content)

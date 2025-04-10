@@ -56,7 +56,7 @@ class GitlabReleaseHelper
         # page, as they are only accessible via AWS Marketplace
         next if manifest_file.match?(/(premium|ultimate)/)
 
-        manifest_data = JSON.parse(File.read(manifest_file))
+        manifest_data = JSON.load_file(manifest_file)
 
         name = manifest_data['builds'].first['custom_data']['name']
 

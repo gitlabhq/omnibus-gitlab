@@ -257,7 +257,7 @@ def survey_release_version
   manifest_file = '/opt/gitlab/version-manifest.json'
   return unless File.exist?(manifest_file)
 
-  version_manifest = JSON.parse(File.read(manifest_file))
+  version_manifest = JSON.load_file(manifest_file)
   version_components = version_manifest['build_version'].split('.')
   version_components[0, 2].join('-')
 end

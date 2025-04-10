@@ -41,7 +41,7 @@ module GitlabCtl
 
       def parse_json_file(file)
         begin
-          data = ::JSON.parse(File.read(file))
+          data = ::JSON.load_file(file)
         rescue JSON::ParserError
           raise GitlabCtl::Errors::NodeError,
                 "Error reading #{file}, has reconfigure been run yet?"

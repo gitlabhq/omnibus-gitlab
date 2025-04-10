@@ -26,7 +26,7 @@ module Build
       def get_component_shas(version_manifest_file = 'version-manifest.json')
         return {} unless File.exist?(version_manifest_file)
 
-        version_manifest = JSON.parse(File.read(version_manifest_file))
+        version_manifest = JSON.load_file(version_manifest_file)
         softwares = version_manifest['software']
         results = {}
         Gitlab::Version::COMPONENTS_ENV_VARS.keys.map do |component|

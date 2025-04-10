@@ -36,7 +36,7 @@ add_command 'check-config', 'Check if there are any configuration in gitlab.rb t
     Kernel.exit 1
   end
 
-  node_json = JSON.parse(File.read(node_json_file))
+  node_json = JSON.load_file(node_json_file)
   unless node_json.key?("normal")
     log "Malformed configuration JSON file found at #{node_json_file}."
     log "This usually happens when your last run of `gitlab-ctl reconfigure` didn't complete successfully."
