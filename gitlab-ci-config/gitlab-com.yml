@@ -624,7 +624,8 @@ dependency_scanning:
 
 validate_renovate_checksum:
   image: ${BASH_IMAGE}
-  stage: prepare
+  stage: check
+  needs: []
   before_script:
     - apk add git
   script:
