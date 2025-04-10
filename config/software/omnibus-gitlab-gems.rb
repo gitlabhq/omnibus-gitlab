@@ -18,7 +18,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 name 'omnibus-gitlab-gems'
 
-default_version '20250223'
+default_version '20250328'
 
 license 'MIT'
 license_file 'LICENSE'
