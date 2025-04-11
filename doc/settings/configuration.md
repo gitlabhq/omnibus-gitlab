@@ -168,7 +168,7 @@ Starting in 18.0, `git_data_dirs` will no longer be a supported means of configu
 Gitaly storage locations. If you explicitly define `git_data_dirs`, you'll need to
 migrate the configuration.
 
-For example, if your `/etc/gitlab/gitlab.rb` configuration is as follows:
+For example, for the Gitaly service, if your `/etc/gitlab/gitlab.rb` configuration is as follows:
 
 ```ruby
 git_data_dirs({
@@ -201,6 +201,26 @@ Omnibus. Following the example above, Omnibus must modify the permissions of
 runtime. You should select an appropriate `path` that allows for this behavior.
 
 <!-- vale gitlab_base.SubstitutionWarning = YES -->
+
+For Rails and Sidekiq clients, if your `/etc/gitlab/gitlab.rb` configuration is as follows:
+
+```ruby
+git_data_dirs({
+  "default" => {
+    "gitaly_address" => "tcp://gitaly1.internal:8075"
+   }
+})
+```
+
+you'll need to redefine the configuration under `gitlab_rails['repositories_storages']` instead.
+
+```ruby
+gitlab_rails['repositories_storages'] = {
+  "default" => {
+    "gitaly_address" => "tcp://gitaly1.internal:8075"
+  }
+}
+```
 
 ## Store Git data in an alternative directory
 
