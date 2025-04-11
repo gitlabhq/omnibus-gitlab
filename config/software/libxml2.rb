@@ -21,7 +21,7 @@ license 'MIT'
 license_file 'COPYING'
 skip_transitive_dependency_licensing true
 
-dependency 'zlib'
+dependency 'zlib-ng'
 dependency 'libiconv'
 dependency 'liblzma'
 dependency 'config_guess'

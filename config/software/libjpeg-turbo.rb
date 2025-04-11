@@ -24,7 +24,7 @@ license 'BSD-3-Clause'
 license_file 'LICENSE.md'
 license_file 'README.ijg'
 
-dependency 'zlib'
+dependency 'zlib-ng'
 
 source git: version.remote
 

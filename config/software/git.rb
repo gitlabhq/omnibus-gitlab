@@ -35,7 +35,7 @@ vendor 'gitlab'
 skip_transitive_dependency_licensing true
 
 # Runtime dependency
-dependency 'zlib'
+dependency 'zlib-ng'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'curl'
 dependency 'pcre2'

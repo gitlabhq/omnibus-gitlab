@@ -32,7 +32,7 @@ dependency 'libicu'
 dependency 'omnibus-gitlab-gems'
 
 # Dependencies for building Git as part of Gitaly
-dependency 'zlib'
+dependency 'zlib-ng'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'curl'
 dependency 'pcre2'

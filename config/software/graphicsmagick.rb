@@ -25,7 +25,7 @@ skip_transitive_dependency_licensing true
 dependency 'libpng'
 dependency 'libjpeg-turbo'
 dependency 'libtiff'
-dependency 'zlib'
+dependency 'zlib-ng'
 
 source url: "https://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/#{version}/GraphicsMagick-#{version}.tar.gz",
        sha256: '1e6723c48c4abbb31197fadf8396b2d579d97e197123edc70a4f057f0533d563'

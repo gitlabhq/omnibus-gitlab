@@ -22,7 +22,7 @@ default_version version.print(false)
 display_version version.print(false).delete_prefix('curl-').tr('_', '.')
 
 # Runtime dependency
-dependency 'zlib'
+dependency 'zlib-ng'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'libtool'
 

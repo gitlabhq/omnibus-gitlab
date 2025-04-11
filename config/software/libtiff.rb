@@ -25,7 +25,7 @@ license_file 'COPYRIGHT'
 skip_transitive_dependency_licensing true
 
 dependency 'libtool'
-dependency 'zlib'
+dependency 'zlib-ng'
 dependency 'liblzma'
 dependency 'libjpeg-turbo'
 dependency 'config_guess'
