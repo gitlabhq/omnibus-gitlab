@@ -38,8 +38,8 @@ rm -f /etc/gitlab/gitlab.rb
 
 # Patch omnibus package
 sed -i "s/external_url 'GENERATED_EXTERNAL_URL'/# external_url 'GENERATED_EXTERNAL_URL'/" /opt/gitlab/etc/gitlab.rb.template
-sed -i "s/\/etc\/gitlab\/gitlab.rb/\/assets\/gitlab.rb/" /opt/gitlab/embedded/cookbooks/gitlab/recipes/show_config.rb
-sed -i "s/\/etc\/gitlab\/gitlab.rb/\/assets\/gitlab.rb/" /opt/gitlab/embedded/cookbooks/gitlab/recipes/config.rb
+sed -i "s#/etc/gitlab/gitlab.rb#/assets/gitlab.rb#g" /opt/gitlab/embedded/cookbooks/gitlab/recipes/show_config.rb
+sed -i "s#/etc/gitlab/gitlab.rb#/assets/gitlab.rb#g" /opt/gitlab/embedded/cookbooks/gitlab/recipes/config.rb
 
 # Set install type to docker
 echo 'gitlab-docker' > /opt/gitlab/embedded/service/gitlab-rails/INSTALLATION_TYPE
