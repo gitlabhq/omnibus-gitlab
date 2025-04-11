@@ -25,7 +25,7 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-dependency 'zlib'
+dependency 'zlib-ng'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
 version '1.0.8' do

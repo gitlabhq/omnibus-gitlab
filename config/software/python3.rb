@@ -27,7 +27,7 @@ default_version '3.9.22'
 
 dependency 'libedit'
 dependency 'ncurses'
-dependency 'zlib'
+dependency 'zlib-ng'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'bzip2'
 dependency 'libffi'

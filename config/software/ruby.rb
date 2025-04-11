@@ -57,7 +57,7 @@ end
 
 fips_enabled = Build::Check.use_system_ssl?
 
-dependency 'zlib'
+dependency 'zlib-ng'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 dependency 'libffi'
 dependency 'libyaml'

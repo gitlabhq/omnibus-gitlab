@@ -82,9 +82,9 @@ nginx-module-vts:
 ngx_security_headers:
   remote: "git@dev.gitlab.org:omnibus-mirror/ngx_security_headers.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/ngx_security_headers.git"
-zlib:
-  remote: "git@dev.gitlab.org:omnibus-mirror/zlib.git"
-  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/zlib.git"
+zlib-ng:
+  remote: "git@dev.gitlab.org:omnibus-mirror/zlib-ng.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/zlib-ng.git"
 openssl:
   remote: "git@dev.gitlab.org:omnibus-mirror/openssl.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/openssl.git"

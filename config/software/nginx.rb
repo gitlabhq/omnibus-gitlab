@@ -32,7 +32,7 @@ source git: version.remote
 # From https://www.nginx.com/resources/admin-guide/installing-nginx-open-source/
 # Runtime dependencies
 dependency 'pcre'
-dependency 'zlib'
+dependency 'zlib-ng'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
 # Include the nginx-module-vts for metrics.

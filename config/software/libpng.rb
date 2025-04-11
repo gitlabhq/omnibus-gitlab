@@ -24,7 +24,7 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-dependency 'zlib'
+dependency 'zlib-ng'
 
 source git: version.remote
 

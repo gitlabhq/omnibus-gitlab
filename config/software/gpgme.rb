@@ -20,7 +20,7 @@ default_version '1.18.0'
 
 dependency 'libassuan'
 dependency 'gnupg'
-dependency 'zlib'
+dependency 'zlib-ng'
 
 license 'LGPL-2.1'
 license_file 'COPYING.LESSER'

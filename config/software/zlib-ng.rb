@@ -14,14 +14,14 @@
 # limitations under the License.
 #
 
-name 'zlib'
-version = Gitlab::Version.new('zlib', 'v1.3.1')
+name 'zlib-ng'
+version = Gitlab::Version.new('zlib-ng', '2.2.4')
 default_version version.print(false)
 
 source git: version.remote
 
 license 'Zlib'
-license_file 'README'
+license_file 'LICENSE.md'
 skip_transitive_dependency_licensing true
 
 build do
@@ -34,7 +34,12 @@ build do
   # call this library's functions.
   env['CFLAGS'] << ' -fno-omit-frame-pointer'
 
-  configure env: env
+  configure_command = [
+    # Compile with zlib-compatible API.
+    '--zlib-compat'
+  ]
+
+  configure(*configure_command, env: env)
 
   make "-j #{workers}", env: env
   make "-j #{workers} install", env: env

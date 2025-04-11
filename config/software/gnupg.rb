@@ -23,7 +23,7 @@ dependency 'libgcrypt' unless Build::Check.use_system_libgcrypt?
 dependency 'libgpg-error'
 dependency 'libksba'
 dependency 'npth'
-dependency 'zlib'
+dependency 'zlib-ng'
 
 license 'LGPL-2.1'
 license_file 'COPYING.LGPL3'
