@@ -35,4 +35,4 @@ package['modify_kernel_parameters'] = false
 eval ENV["GITLAB_OMNIBUS_CONFIG"].to_s # rubocop:disable Security/Eval
 
 # Load configuration stored in /etc/gitlab/gitlab.rb
-from_file("/etc/gitlab/gitlab.rb")
+from_file("/etc/gitlab/gitlab.rb") if File.exist?('/etc/gitlab/gitlab.rb')
