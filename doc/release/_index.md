@@ -26,9 +26,9 @@ built on CentOS6 servers, Debian 8 packages on Debian 8 servers and so on).
 The number of build servers varies but there is always at least one build
 server per platform.
 
-The `omnibus-gitlab` project fully utilizes GitLab CI. This means that each push
-to the `omnibus-gitlab` repository will trigger a build in GitLab CI which will
-then create a package.
+The `omnibus-gitlab` project fully uses GitLab CI/CD. This means that each push
+to the `omnibus-gitlab` repository triggers a build in GitLab CI/CD which
+then creates a package.
 
 Since we deploy GitLab.com using Linux packages, we need a separate
 remote to build the packages in case of a problem with GitLab.com or due to
