@@ -321,6 +321,38 @@ docs-lint hugo:
     # See https://gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/-/blob/main/scripts/check-index-filenames.sh
     - make check-index-pages SEARCH_DIR="../doc"
 
+# Translation delivery of docs 
+# Perform linting on translated documentation Markdown files
+docs-lint-i18n content:
+  image: $DOCS_LINT_IMAGE
+  stage: check
+  cache: {}
+  needs: []
+  before_script: []
+  script:
+    # Lint prose
+    - vale --minAlertLevel error --filter='.Name matches "gitlab_docs"' doc-locale
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "DOCS_LOCALIZATION_PIPELINE"'
+
+docs-lint-i18n markdown:
+  image: $DOCS_LINT_IMAGE
+  stage: check
+  cache: {}
+  needs: []
+  before_script: []
+  script:
+    # Lint Markdown
+    - markdownlint-cli2 'doc-locale/**/*.md'
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "DOCS_LOCALIZATION_PIPELINE"'
+
 yard:
   extends: .gems-cache
   image: "${RUBY_IMAGE}"

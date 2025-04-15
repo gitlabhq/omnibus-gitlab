@@ -46,3 +46,7 @@
 
 ^[Documentation Directories] @axil @eread
 /doc/
+
+## Localization
+[Localization Team] @gitlab-com/localization/maintainers
+/doc-locale/**
