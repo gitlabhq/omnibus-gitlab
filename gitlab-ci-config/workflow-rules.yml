@@ -35,6 +35,13 @@ workflow:
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $QA_PROJECT_PATH && $DURATION_PLOTTER == "true" && $CI_PIPELINE_SOURCE == "schedule"'
       variables:
         PIPELINE_TYPE: DURATION_PLOTTER_PIPELINE
+    # i18n docs delivery pipeline
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && ($CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^docs-i18n/ || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /-docs-i18n$/)'
+      variables:
+        PIPELINE_TYPE: DOCS_LOCALIZATION_PIPELINE
+    - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == "gitlab-com/localization/tech-docs-forked-projects/prod/omnibus-gitlab"'
+      variables:
+        PIPELINE_TYPE: DOCS_LOCALIZATION_PIPELINE
     - if: '$PIPELINE_TYPE == null && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH && ($CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^docs-/ || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /-docs$/)'
       variables:
         PIPELINE_TYPE: DOCS_PIPELINE
