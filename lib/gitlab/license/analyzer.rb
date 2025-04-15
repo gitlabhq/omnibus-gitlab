@@ -34,11 +34,14 @@ module License
       'indexof',            # MIT Licensed - https://github.com/component/indexof/blob/master/LICENSE
       'map-stream',         # MIT Licensed - https://github.com/dominictarr/map-stream/blob/master/LICENCE
       'object-component',   # MIT Licensed - https://github.com/component/object/blob/master/LICENSE
+      'pdf-core',           # Custom License - https://gitlab.com/gitlab-com/legal-and-compliance/-/issues/2565
+      'prawn',              # Custom License - https://gitlab.com/gitlab-com/legal-and-compliance/-/issues/2565
       'exiftool',           # License similar to Perl, which is under either GPL v1 or Artistic license - https://www.sno.phy.queensu.ca/~phil/exiftool/#license
       'github.com/cloudflare/tableflip', # BSD-3-Clause Licensed - https://github.com/cloudflare/tableflip/blob/master/LICENSE
       'gitlab.com/gitlab-org/golang-archive-zip', # BSD-3-Clause Licensed - https://gitlab.com/gitlab-org/golang-archive-zip/-/blob/c8e752e2d582090de40338553ef00ef08b89c905/LICENSE
       'spam-classifier',    # GitLab project and we can distribute the obfuscated binaries
       'syslog_protocol',    # MIT Licensed - https://github.com/eric/syslog_protocol?tab=readme-ov-file#todo
+      'ttfunk',             # Custom License - https://gitlab.com/gitlab-com/legal-and-compliance/-/issues/2565
       'elkjs',              # EPL 2.0 - https://github.com/kieler/elkjs/blob/master/LICENSE.md
       'consul',             # BSL - consul - https://gitlab.com/gitlab-com/Product/-/issues/12681#note_1620313057
       './troubleshoot',     # BSL - consul/troubleshoot module
