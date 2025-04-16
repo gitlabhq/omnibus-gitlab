@@ -92,6 +92,7 @@ build do
     # locations anymore. Instead, those dependencies will now be picked up via
     # the PKG_CONFIG_PATH.
     git_append_build_options << "USE_MESON=YesPlease"
+    env['CFLAGS'] << ' -fno-omit-frame-pointer'
   end
 
   if Build::Check.use_system_ssl?
