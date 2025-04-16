@@ -528,7 +528,7 @@ RSpec.describe Geo::Promote, '#execute' do
     end
 
     def read_file_content(fullpath)
-      JSON.parse(File.read(fullpath))
+      JSON.load_file(fullpath)
     end
   end
 end

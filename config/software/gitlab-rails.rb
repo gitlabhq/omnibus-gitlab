@@ -183,8 +183,8 @@ build do
   # Merge rails and workhorse license files.
   block "Merge license files of rails and workhorse" do
     require 'json'
-    rails_licenses = JSON.parse(File.read("#{Omnibus::Config.source_dir}/gitlab-rails/rails-license.json"))['dependencies']
-    workhorse_licenses = JSON.parse(File.read("#{Omnibus::Config.source_dir}/gitlab-rails/workhorse/workhorse-license.json"))['dependencies']
+    rails_licenses = JSON.load_file("#{Omnibus::Config.source_dir}/gitlab-rails/rails-license.json")['dependencies']
+    workhorse_licenses = JSON.load_file("#{Omnibus::Config.source_dir}/gitlab-rails/workhorse/workhorse-license.json")['dependencies']
     output = { dependencies: rails_licenses.concat(workhorse_licenses).uniq }
     File.write("#{install_dir}/licenses/gitlab-rails.json", JSON.pretty_generate(output))
   end

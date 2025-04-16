@@ -203,7 +203,7 @@ class OmnibusHelper
   def self.parse_current_version
     return unless File.exist?("/opt/gitlab/version-manifest.json")
 
-    version_manifest = JSON.parse(File.read("/opt/gitlab/version-manifest.json"))
+    version_manifest = JSON.load_file("/opt/gitlab/version-manifest.json")
     version_components = version_manifest['build_version'].split(".")
     version_components[0, 2].join(".")
   end
