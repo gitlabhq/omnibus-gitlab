@@ -3,6 +3,42 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.11.0 (2025-04-16)
+
+### Added (4 changes)
+
+- [Allow users to disable product usage data setting](gitlab-org/omnibus-gitlab@bbb46d9e828bf03c20a6e85fc0b579eb62b1f20c) ([merge request](gitlab-org/omnibus-gitlab!8190))
+- [Enable setting a custom duration for ID Tokens](gitlab-org/omnibus-gitlab@8a0ad72ce2001a45d9134a59bab55f9bb126496d) by @ndrpnt ([merge request](gitlab-org/omnibus-gitlab!8192))
+- [Allow configuring GitLab Color Mode](gitlab-org/omnibus-gitlab@cd154d248734197ed0d66b002e6f09fd1a2c6238) by @Emzi0767 ([merge request](gitlab-org/omnibus-gitlab!8185))
+- [Bump Mattermost to version 10.6.1](gitlab-org/omnibus-gitlab@51af64280e06b821588af1146df0b193e4cb75d0) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8270))
+
+### Fixed (2 changes)
+
+- [Fixup: address JSON loading as fixed UTF-8 encoding](gitlab-org/omnibus-gitlab@b8a04a8fe7ce68420b546ee4a64fc54b54cc5283) ([merge request](gitlab-org/omnibus-gitlab!8284))
+- [Migrate to new http2 NGINX directive](gitlab-org/omnibus-gitlab@065803fc9f8fcc5fd0c1b27a52e9612856c833e0) ([merge request](gitlab-org/omnibus-gitlab!8251))
+
+### Changed (11 changes)
+
+- [Update dependency libarchive to v3.7.9](gitlab-org/omnibus-gitlab@7dcee165a23183dbec479f3641c0447adef8f547) ([merge request](gitlab-org/omnibus-gitlab!8292))
+- [Update dependency python/cpython to v3.9.22](gitlab-org/omnibus-gitlab@b77e3bfe4198ccc7ccef956576cd397358a23a2d) ([merge request](gitlab-org/omnibus-gitlab!8313))
+- [Update dependency curl/curl to curl-8_13_0](gitlab-org/omnibus-gitlab@c4647579c000667870490c190e4236191ef49f61) ([merge request](gitlab-org/omnibus-gitlab!8296))
+- [Update dependency node-exporter to v1.9.1](gitlab-org/omnibus-gitlab@0a37ed00beb69176f1984f7f48222d5fab342b77) ([merge request](gitlab-org/omnibus-gitlab!8293))
+- [Auto upgrade single node installs to PostgreSQL 16](gitlab-org/omnibus-gitlab@80d864690856e121a6361868f57de5bcc25e17d4) ([merge request](gitlab-org/omnibus-gitlab!8210))
+- [Update dependency container-registry to v4.19.0-gitlab](gitlab-org/omnibus-gitlab@1e20ca8fc498a0e4c7279d0ecf50f5e3b7aceab2) ([merge request](gitlab-org/omnibus-gitlab!8268))
+- [Update dependency rubygems to v3.6.6](gitlab-org/omnibus-gitlab@0717bb0e45d78004882ba3f421bdb38d86ec813a) ([merge request](gitlab-org/omnibus-gitlab!8238))
+- [Update dependency libarchive/libarchive to v3.7.8](gitlab-org/omnibus-gitlab@433bca0095a666d2ebbac72ee6dea247d9d63099) ([merge request](gitlab-org/omnibus-gitlab!8253))
+- [Update dependency redis-exporter to v1.69.0](gitlab-org/omnibus-gitlab@b37a517e38c2013f9bf7d150c413e6ff6b9716d5) ([merge request](gitlab-org/omnibus-gitlab!8222))
+- [Update dependency container-registry to v4.18.0-gitlab](gitlab-org/omnibus-gitlab@79abdd8e4c94ff31ed8e4322853f63a018ec3c5b) ([merge request](gitlab-org/omnibus-gitlab!8245))
+- [Update Redis from 7.0.15 to 7.2.7](gitlab-org/omnibus-gitlab@a546016c1cae79612c954e8f6eb2aec3a18d8be6) ([merge request](gitlab-org/omnibus-gitlab!8226))
+
+### Security (1 change)
+
+- [Do not log pipeline trigger tokens in access log](gitlab-org/omnibus-gitlab@53dce0ad789892a84ac18a244b809dec36f7dc99) by @mmslkr ([merge request](gitlab-org/omnibus-gitlab!8241))
+
+### Other (1 change)
+
+- [Update NGINX template comments to default values](gitlab-org/omnibus-gitlab@0993f75f3d6e5cdd4a9cb12252d9e5023591d9d8) ([merge request](gitlab-org/omnibus-gitlab!8256))
+
 ## 17.10.4 (2025-04-09)
 
 No changes.
