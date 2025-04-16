@@ -160,7 +160,7 @@ where supported.
 | ------------  | --------------------------------------------------- |
 | Name          | `GitLab, Inc.`                                      |
 | EMail         | `support@gitlab.com`                                |
-| Fingerprint   | `6F12 CD06 BE4D 13F0 A42B 423C 54FD 41A2 47E8 C97E` |
+| Fingerprint   | `98BF DB87 FCF1 0076 416C 1E0B AD99 7ACC 82DD 593D` |
 | Expiry        | `2026-02-14`                                        |
 
 #### Older package signing keys
@@ -279,7 +279,7 @@ If you don't want to install dependencies installed by `debsig-verify`, you can 
 1. Verify the signature matches the content:
 
    ```shell
-   ar p gitlab-xxx.deb debian-binary control.tar.gz data.tar.gz | gpg --verify _gpgorigin -
+   ar p gitlab-xxx.deb debian-binary control.tar.xz data.tar.xz | gpg --verify _gpgorigin -
    ```
 
    The output of this command should appear like this:
