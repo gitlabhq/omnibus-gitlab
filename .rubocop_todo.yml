@@ -14,7 +14,7 @@ CodeReuse/ActiveRecord:
 Cop/AvoidReturnFromBlocks:
   Exclude:
     - 'files/gitlab-cookbooks/consul/libraries/consul_helper.rb'
-    - 'files/gitlab-ctl-commands-ee/lib/patroni.rb'
+    - 'files/gitlab-ctl-commands-ee/lib/gitlab_ctl/patroni.rb'
     - 'files/gitlab-ctl-commands-ee/lib/gitlab_ctl/postgresql/ee.rb'
     - 'lib/gitlab/tasks/build.rake'
 

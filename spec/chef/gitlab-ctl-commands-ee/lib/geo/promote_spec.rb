@@ -3,7 +3,7 @@ require 'geo/promote'
 require 'geo/promote_db'
 require 'gitlab_ctl/util'
 
-require_relative('../../../../../files/gitlab-ctl-commands-ee/lib/patroni')
+require_relative('../../../../../files/gitlab-ctl-commands-ee/lib/gitlab_ctl/patroni')
 
 RSpec.describe Geo::Promote, '#execute' do
   let(:base_path) { '/opt/gitlab/embedded' }
@@ -415,7 +415,7 @@ RSpec.describe Geo::Promote, '#execute' do
 
       context 'on a Patroni standby leader' do
         before do
-          allow(Patroni::Client).to receive(:new).and_return(double(standby_leader?: true, leader?: false, replica?: false))
+          allow(GitlabCtl::Patroni::Client).to receive(:new).and_return(double(standby_leader?: true, leader?: false, replica?: false))
         end
 
         include_examples 'promotes a Patroni leader'
@@ -423,7 +423,7 @@ RSpec.describe Geo::Promote, '#execute' do
 
       context 'on a Patroni leader' do
         before do
-          allow(Patroni::Client).to receive(:new).and_return(double(standby_leader?: false, leader?: true, replica?: false))
+          allow(GitlabCtl::Patroni::Client).to receive(:new).and_return(double(standby_leader?: false, leader?: true, replica?: false))
         end
 
         include_examples 'promotes a Patroni leader'
@@ -431,7 +431,7 @@ RSpec.describe Geo::Promote, '#execute' do
 
       context 'on a Patroni replica' do
         before do
-          allow(Patroni::Client).to receive(:new).and_return(double(standby_leader?: false, leader?: false, replica?: true))
+          allow(GitlabCtl::Patroni::Client).to receive(:new).and_return(double(standby_leader?: false, leader?: false, replica?: true))
         end
 
         it 'does not promote the PostgreSQL database' do

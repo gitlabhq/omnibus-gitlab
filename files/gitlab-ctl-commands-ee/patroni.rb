@@ -1,13 +1,13 @@
 require 'optparse'
 
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/patroni"
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/patroni"
 
 add_command_under_category('patroni', 'database', 'Interact with Patroni', 2) do
   begin
-    options = Patroni.parse_options(ARGV)
+    options = GitlabCtl::Patroni.parse_options(ARGV)
   rescue OptionParser::ParseError => e
-    warn "#{e}\n\n#{Patroni.usage}"
+    warn "#{e}\n\n#{GitlabCtl::Patroni.usage}"
     exit 128
   end
 
@@ -15,7 +15,7 @@ add_command_under_category('patroni', 'database', 'Interact with Patroni', 2) do
   when 'bootstrap'
     log 'Bootstrapping the current node'
     begin
-      status = Patroni.init_db options
+      status = GitlabCtl::Patroni.init_db options
       log status.stdout
       if status.error?
         warn '===STDERR==='
@@ -26,7 +26,7 @@ add_command_under_category('patroni', 'database', 'Interact with Patroni', 2) do
       end
 
       log 'Copying PostgreSQL configuration'
-      Patroni.copy_config options
+      GitlabCtl::Patroni.copy_config options
 
       log 'Current node is bootstrapped'
       exit 0
@@ -37,7 +37,7 @@ add_command_under_category('patroni', 'database', 'Interact with Patroni', 2) do
 
   when 'check-leader'
     begin
-      if Patroni.leader? options
+      if GitlabCtl::Patroni.leader? options
         warn 'I am the leader.' unless options[:quiet]
         exit 0
       else
@@ -51,7 +51,7 @@ add_command_under_category('patroni', 'database', 'Interact with Patroni', 2) do
 
   when 'check-replica'
     begin
-      if Patroni.replica? options
+      if GitlabCtl::Patroni.replica? options
         warn 'I am a replica.' unless options[:quiet]
         exit 0
       else
@@ -65,7 +65,7 @@ add_command_under_category('patroni', 'database', 'Interact with Patroni', 2) do
 
   when 'check-standby-leader'
     begin
-      if Patroni.standby_leader? options
+      if GitlabCtl::Patroni.standby_leader? options
         warn 'I am the leader.' unless options[:quiet]
         exit 0
       else
@@ -79,7 +79,7 @@ add_command_under_category('patroni', 'database', 'Interact with Patroni', 2) do
 
   when 'reinitialize-replica'
     begin
-      Patroni.reinitialize_replica options
+      GitlabCtl::Patroni.reinitialize_replica options
       exit 0
     rescue StandardError => e
       warn "Error while reinitializing replica on the current node: #{e}" unless options[:quiet]
@@ -94,13 +94,13 @@ add_command_under_category('patroni', 'database', 'Interact with Patroni', 2) do
 
     command = options[:command].match?(/[_?]/) ? nil : options[:command].to_sym
 
-    if command.nil? || !Patroni.respond_to?(command) || Patroni.method(command).arity != 1
+    if command.nil? || !GitlabCtl::Patroni.respond_to?(command) || GitlabCtl::Patroni.method(command).arity != 1
       warn "Unknown Patroni command: #{options[:command]}"
       exit 128
     end
 
     begin
-      status = Patroni.send(command, options)
+      status = GitlabCtl::Patroni.send(command, options)
       log status.stdout
       if status.error?
         warn status.stderr
