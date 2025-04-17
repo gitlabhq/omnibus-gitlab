@@ -1,12 +1,12 @@
 require 'spec_helper'
-require 'consul'
-require 'consul_download'
+require 'gitlab_ctl/consul'
+require 'gitlab_ctl/consul_download'
 
-RSpec.describe ConsulHandler do
+RSpec.describe GitlabCtl::ConsulHandler do
   describe '#initialize' do
     it 'creates instance based on args' do
-      instance = ConsulHandler.new([nil, nil, 'consul', 'kv', 'set'], 'rspec')
-      expect(instance.command).to eq(ConsulHandler::Kv)
+      instance = GitlabCtl::ConsulHandler.new([nil, nil, 'consul', 'kv', 'set'], 'rspec')
+      expect(instance.command).to eq(GitlabCtl::ConsulHandler::Kv)
       expect(instance.subcommand).to eq('set')
       expect(instance.input).to eq('rspec')
     end
@@ -14,7 +14,7 @@ RSpec.describe ConsulHandler do
 
   describe '#execute' do
     it 'calls the method on command' do
-      instance = ConsulHandler.new([nil, nil, 'consul', 'kv', 'set'], 'rspec')
+      instance = GitlabCtl::ConsulHandler.new([nil, nil, 'consul', 'kv', 'set'], 'rspec')
       instance.command = spy
       expect(instance.command).to receive(:set).with('rspec')
       instance.execute
@@ -23,7 +23,7 @@ RSpec.describe ConsulHandler do
 
   let(:consul_cmd) { '/opt/gitlab/embedded/bin/consul' }
 
-  describe ConsulHandler::Kv do
+  describe GitlabCtl::ConsulHandler::Kv do
     before(:each) do
       allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return('consul' => { 'binary_path' => consul_cmd })
     end
@@ -54,13 +54,13 @@ RSpec.describe ConsulHandler do
         end
 
         it 'raises an error' do
-          expect { described_class.get('foo') }.to raise_error(ConsulHandler::ConsulError, 'StandardError: oops')
+          expect { described_class.get('foo') }.to raise_error(GitlabCtl::ConsulHandler::ConsulError, 'StandardError: oops')
         end
       end
     end
   end
 
-  describe ConsulHandler::Encrypt do
+  describe GitlabCtl::ConsulHandler::Encrypt do
     before(:each) do
       allow(GitlabCtl::Util).to receive(:get_node_attributes).and_return('consul' => { 'binary_path' => consul_cmd })
     end
@@ -79,13 +79,13 @@ RSpec.describe ConsulHandler do
         allow(results).to receive(:error!).and_raise(StandardError)
         allow(Mixlib::ShellOut).to receive(:new).with("#{consul_cmd} keygen").and_return(results)
 
-        expect { described_class.keygen }.to raise_error(ConsulHandler::ConsulError, 'StandardError: oops')
+        expect { described_class.keygen }.to raise_error(GitlabCtl::ConsulHandler::ConsulError, 'StandardError: oops')
       end
     end
   end
 end
 
-RSpec.describe ConsulDownloadCommand do
+RSpec.describe GitlabCtl::ConsulDownloadCommand do
   let(:command) do
     described_class.new([
                           '', '',
