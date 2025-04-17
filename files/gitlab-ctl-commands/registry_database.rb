@@ -17,17 +17,17 @@
 require 'optparse'
 
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
-require "#{base_path}/embedded/service/omnibus-ctl/lib/registry/registry_database"
+require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/registry/database"
 
 add_command_under_category('registry-database', 'container-registry', 'Manage Container Registry database.', 2) do
   begin
-    options = RegistryDatabase.parse_options!(self, ARGV)
+    options = GitlabCtl::Registry::Database.parse_options!(self, ARGV)
   rescue OptionParser::ParseError => e
-    warn "#{e}\n\n#{RegistryDatabase::USAGE}"
+    warn "#{e}\n\n#{GitlabCtl::Registry::Database::USAGE}"
     exit 128
   end
 
   puts "Running #{options[:command]} #{options[:subcommand]}"
-  RegistryDatabase.execute(options)
+  GitlabCtl::Registry::Database.execute(options)
   exit 0
 end

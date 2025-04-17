@@ -1,8 +1,8 @@
 require 'optparse'
 
-require_relative('../../../../../files/gitlab-ctl-commands/lib/registry/import')
+require_relative '../../../../../../files/gitlab-ctl-commands/lib/gitlab_ctl/registry/import'
 
-RSpec.describe Import do
+RSpec.describe GitlabCtl::Registry::Import do
   describe '.parse_options!' do
     before do
       allow(Kernel).to receive(:exit) { |code| raise "Kernel.exit(#{code})" }
@@ -26,7 +26,7 @@ RSpec.describe Import do
         expected_options = { option => "--#{option_name}" }
         expected_options[:needs_read_only] = true if read_only
 
-        result = Import.parse_options!(%W[import --#{option_name}], OptionParser.new, {})
+        result = GitlabCtl::Registry::Import.parse_options!(%W[import --#{option_name}], OptionParser.new, {})
         expect(result).to eq(expected_options)
       end
     end
