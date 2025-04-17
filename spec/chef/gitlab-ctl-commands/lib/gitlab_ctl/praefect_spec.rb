@@ -1,9 +1,9 @@
 require 'spec_helper'
 require 'optparse'
 
-require_relative('../../../../files/gitlab-ctl-commands/lib/praefect')
+require_relative '../../../../../files/gitlab-ctl-commands/lib/gitlab_ctl/praefect'
 
-RSpec.describe Praefect do
+RSpec.describe GitlabCtl::Praefect do
   describe '.parse_options!' do
     before do
       allow(Kernel).to receive(:exit) { |code| raise "Kernel.exit(#{code})" }
@@ -11,39 +11,39 @@ RSpec.describe Praefect do
 
     shared_examples 'unknown option is specified' do
       it 'throws an error' do
-        expect { Praefect.parse_options!(%W(praefect #{command} --unknown)) }.to raise_error(OptionParser::InvalidOption, /unknown/)
+        expect { GitlabCtl::Praefect.parse_options!(%W(praefect #{command} --unknown)) }.to raise_error(OptionParser::InvalidOption, /unknown/)
       end
     end
 
     it 'throws an error when command is not specified' do
-      expect { Praefect.parse_options!(%w(praefect)) }.to raise_error(OptionParser::ParseError, /Praefect command is not specified/)
+      expect { GitlabCtl::Praefect.parse_options!(%w(praefect)) }.to raise_error(OptionParser::ParseError, /Praefect command is not specified/)
     end
 
     it 'throws an error when unknown command is specified' do
-      expect { Praefect.parse_options!(%w(praefect unknown-command)) }.to raise_error(OptionParser::ParseError, /Unknown Praefect command: unknown-command/)
+      expect { GitlabCtl::Praefect.parse_options!(%w(praefect unknown-command)) }.to raise_error(OptionParser::ParseError, /Unknown Praefect command: unknown-command/)
     end
 
     shared_examples 'parses repository options' do
       it 'throws an error when an argument for --virtual-storage-name is not specified' do
-        expect { Praefect.parse_options!(%W(praefect #{command} --dir dir --virtual-storage-name)) }.to raise_error(OptionParser::MissingArgument, /virtual-storage-name/)
+        expect { GitlabCtl::Praefect.parse_options!(%W(praefect #{command} --dir dir --virtual-storage-name)) }.to raise_error(OptionParser::MissingArgument, /virtual-storage-name/)
       end
 
       it 'throws an error when --virtual-storage-name is not specified' do
-        expect { Praefect.parse_options!(%W(praefect #{command} --dir dir)) }.to raise_error(OptionParser::ParseError, /Option --virtual-storage-name must be specified/)
+        expect { GitlabCtl::Praefect.parse_options!(%W(praefect #{command} --dir dir)) }.to raise_error(OptionParser::ParseError, /Option --virtual-storage-name must be specified/)
       end
 
       it 'throws an error when an argument for --repository-relative-path is not specified' do
-        expect { Praefect.parse_options!(%W(praefect #{command} --dir dir --repository-relative-path)) }.to raise_error(OptionParser::MissingArgument, /repository-relative-path/)
+        expect { GitlabCtl::Praefect.parse_options!(%W(praefect #{command} --dir dir --repository-relative-path)) }.to raise_error(OptionParser::MissingArgument, /repository-relative-path/)
       end
 
       it 'throws an error when --repository-relative-path is not specified' do
-        expect { Praefect.parse_options!(%W(praefect #{command} --dir dir --virtual-storage-name name)) }.to raise_error(OptionParser::ParseError, /Option --repository-relative-path must be specified/)
+        expect { GitlabCtl::Praefect.parse_options!(%W(praefect #{command} --dir dir --virtual-storage-name name)) }.to raise_error(OptionParser::ParseError, /Option --repository-relative-path must be specified/)
       end
 
       it 'successfully parses correct params' do
         expected_options = { command: command, dir: 'dir', virtual_storage_name: 'name', repository_relative_path: 'path' }
 
-        expect(Praefect.parse_options!(%W(praefect #{command} --dir dir --virtual-storage-name name --repository-relative-path path))).to eq(expected_options)
+        expect(GitlabCtl::Praefect.parse_options!(%W(praefect #{command} --dir dir --virtual-storage-name name --repository-relative-path path))).to eq(expected_options)
       end
     end
 
@@ -54,35 +54,35 @@ RSpec.describe Praefect do
       it_behaves_like 'unknown option is specified'
 
       it 'successfully parses apply' do
-        expect(Praefect.parse_options!(%W(praefect #{command}
-                                          --dir dir
-                                          --virtual-storage-name name
-                                          --repository-relative-path path
-                                          --apply))).to include(apply: true)
+        expect(GitlabCtl::Praefect.parse_options!(%W(praefect #{command}
+                                                     --dir dir
+                                                     --virtual-storage-name name
+                                                     --repository-relative-path path
+                                                     --apply))).to include(apply: true)
 
-        expect(Praefect.parse_options!(%W(praefect #{command}
-                                          --dir dir
-                                          --virtual-storage-name name
-                                          --repository-relative-path path
-                                          --apply something))).to include(apply: true)
+        expect(GitlabCtl::Praefect.parse_options!(%W(praefect #{command}
+                                                     --dir dir
+                                                     --virtual-storage-name name
+                                                     --repository-relative-path path
+                                                     --apply something))).to include(apply: true)
 
-        expect(Praefect.parse_options!(%W(praefect #{command}
-                                          --dir dir
-                                          --virtual-storage-name name
-                                          --repository-relative-path path))).not_to include(:apply)
+        expect(GitlabCtl::Praefect.parse_options!(%W(praefect #{command}
+                                                     --dir dir
+                                                     --virtual-storage-name name
+                                                     --repository-relative-path path))).not_to include(:apply)
       end
 
       it 'successfully parses db-only' do
-        expect(Praefect.parse_options!(%W(praefect #{command}
-                                          --dir dir
-                                          --virtual-storage-name name
-                                          --repository-relative-path path
-                                          --db-only))).to include(db_only: true)
+        expect(GitlabCtl::Praefect.parse_options!(%W(praefect #{command}
+                                                     --dir dir
+                                                     --virtual-storage-name name
+                                                     --repository-relative-path path
+                                                     --db-only))).to include(db_only: true)
 
-        expect(Praefect.parse_options!(%W(praefect #{command}
-                                          --dir dir
-                                          --virtual-storage-name name
-                                          --repository-relative-path path))).not_to include(:db_only)
+        expect(GitlabCtl::Praefect.parse_options!(%W(praefect #{command}
+                                                     --dir dir
+                                                     --virtual-storage-name name
+                                                     --repository-relative-path path))).not_to include(:db_only)
       end
     end
 
@@ -106,12 +106,12 @@ RSpec.describe Praefect do
                              authoritative_storage: 'storage-1',
                              replicate_immediately: true }
 
-        expect(Praefect.parse_options!(%W(praefect #{command}
-                                          --dir dir
-                                          --virtual-storage-name name
-                                          --repository-relative-path path
-                                          --authoritative-storage storage-1
-                                          --replicate-immediately))).to eq(expected_options)
+        expect(GitlabCtl::Praefect.parse_options!(%W(praefect #{command}
+                                                     --dir dir
+                                                     --virtual-storage-name name
+                                                     --repository-relative-path path
+                                                     --authoritative-storage storage-1
+                                                     --replicate-immediately))).to eq(expected_options)
       end
     end
 
@@ -125,9 +125,9 @@ RSpec.describe Praefect do
                              dir: 'dir',
                              virtual_storage_name: 'name' }
 
-        expect(Praefect.parse_options!(%W(praefect #{command}
-                                          --dir dir
-                                          --virtual-storage-name name))).to eq(expected_options)
+        expect(GitlabCtl::Praefect.parse_options!(%W(praefect #{command}
+                                                     --dir dir
+                                                     --virtual-storage-name name))).to eq(expected_options)
       end
     end
 
@@ -137,7 +137,7 @@ RSpec.describe Praefect do
           expect(msg.to_s).to match(/gitlab-ctl praefect command/)
         end
 
-        expect { Praefect.parse_options!(%w(praefect -h)) }.to raise_error('Kernel.exit(0)')
+        expect { GitlabCtl::Praefect.parse_options!(%w(praefect -h)) }.to raise_error('Kernel.exit(0)')
       end
 
       ['remove-repository', 'track-repository'].each do |cmd|
@@ -146,7 +146,7 @@ RSpec.describe Praefect do
             expect(msg.to_s).to match(/gitlab-ctl praefect #{cmd}/)
           end
 
-          expect { Praefect.parse_options!(%W(praefect #{cmd} -h)) }.to raise_error('Kernel.exit(0)')
+          expect { GitlabCtl::Praefect.parse_options!(%W(praefect #{cmd} -h)) }.to raise_error('Kernel.exit(0)')
         end
       end
     end
@@ -160,7 +160,7 @@ RSpec.describe Praefect do
         allow(File).to receive(:exists?).twice.and_return(false)
         expect(Kernel).to receive(:abort).and_raise('aborted')
 
-        expect { Praefect.execute({}) }.to raise_error('aborted')
+        expect { GitlabCtl::Praefect.execute({}) }.to raise_error('aborted')
       end
     end
 
@@ -169,7 +169,7 @@ RSpec.describe Praefect do
         allow(File).to receive(:exist?).and_return(true)
         expect(Kernel).not_to receive(:abort)
         args = [
-          Praefect::EXEC_PATH, '-config', 'dir/config.toml', command,
+          GitlabCtl::Praefect::EXEC_PATH, '-config', 'dir/config.toml', command,
         ]
 
         args += command_args
@@ -182,7 +182,7 @@ RSpec.describe Praefect do
           dir: 'dir'
         }
 
-        Praefect.execute(common_options.merge(command_options))
+        GitlabCtl::Praefect.execute(common_options.merge(command_options))
       end
     end
 
