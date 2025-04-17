@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-$LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands-ee/lib')
+$LOAD_PATH << File.join(__dir__, '../../../../files/gitlab-ctl-commands-ee/lib')
 
-require 'pgbouncer'
+require 'gitlab_ctl/pgbouncer'
 
-RSpec.describe Pgbouncer::Databases do
+RSpec.describe GitlabCtl::Pgbouncer::Databases do
   let(:fake_ohai) do
     {
       'gitlab' => {
@@ -42,12 +42,12 @@ RSpec.describe Pgbouncer::Databases do
     allow(File).to receive(:read).and_call_original
     allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return(fake_ohai)
     allow(File).to receive(:read).with('/fakedata/pgbouncer/databases.json').and_return(fake_databases_json)
-    @obj = Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
+    @obj = GitlabCtl::Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
   end
 
   context 'default behavior' do
     it 'allows creating a new object' do
-      expect(@obj.class).to be(Pgbouncer::Databases)
+      expect(@obj.class).to be(GitlabCtl::Pgbouncer::Databases)
     end
 
     it 'creates the database object' do
@@ -75,7 +75,7 @@ RSpec.describe Pgbouncer::Databases do
       }
       allow(File).to receive(:exist?).with('/another/databases.json').and_return(true)
       allow(File).to receive(:read).with('/another/databases.json').and_return(fake_databases_json)
-      @obj = Pgbouncer::Databases.new(options, '/fakeinstall', '/fakedata')
+      @obj = GitlabCtl::Pgbouncer::Databases.new(options, '/fakeinstall', '/fakedata')
     end
 
     it 'sets the custom options' do
@@ -93,7 +93,7 @@ RSpec.describe Pgbouncer::Databases do
   context 'with empty databases.json' do
     before do
       allow(File).to receive(:read).with('/fakedata/pgbouncer/databases.json').and_return({}.to_s)
-      @obj = Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
+      @obj = GitlabCtl::Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
     end
 
     it 'should generate an databases.ini with the default rails database' do
@@ -124,7 +124,7 @@ RSpec.describe Pgbouncer::Databases do
     end
 
     it 'includes the component database in the fallback-seeded set' do
-      obj = Pgbouncer::Databases.new({ 'newhost' => 'newhost.local' }, '/fakeinstall', '/fakedata')
+      obj = GitlabCtl::Pgbouncer::Databases.new({ 'newhost' => 'newhost.local' }, '/fakeinstall', '/fakedata')
       expect(obj.databases).to have_key('gate_production')
       expect(obj.databases['gate_production']).to include('host=newhost.local')
       expect(obj.databases['gate_production']).to include('dbname=gate_production')
@@ -176,12 +176,12 @@ RSpec.describe Pgbouncer::Databases do
     end
 
     it 'propagates --newhost to enabled component databases' do
-      obj = Pgbouncer::Databases.new({ 'newhost' => 'newhost.local' }, '/fakeinstall', '/fakedata')
+      obj = GitlabCtl::Pgbouncer::Databases.new({ 'newhost' => 'newhost.local' }, '/fakeinstall', '/fakedata')
       expect(obj.databases['gate_production']).to include('host=newhost.local')
     end
 
     it 'returns only enabled entries from component_database_names' do
-      obj = Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
+      obj = GitlabCtl::Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
       expect(obj.component_database_names).to eq(['gate_production'])
     end
   end
@@ -212,7 +212,7 @@ RSpec.describe Pgbouncer::Databases do
 
     it 'sets dbname to each entry name, not the --pg-database target' do
       options = { 'pg_database' => 'gate_production', 'newhost' => 'newhost.local' }
-      obj = Pgbouncer::Databases.new(options, '/fakeinstall', '/fakedata')
+      obj = GitlabCtl::Pgbouncer::Databases.new(options, '/fakeinstall', '/fakedata')
 
       expect(obj.databases['gate_production']).to include('dbname=gate_production')
       expect(obj.databases['openbao']).to include('dbname=openbao')
@@ -238,7 +238,7 @@ RSpec.describe Pgbouncer::Databases do
     end
 
     it 'ignores non-Hash entries' do
-      obj = Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
+      obj = GitlabCtl::Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
       expect(obj.component_database_names).to eq(['ok'])
     end
   end
@@ -251,7 +251,7 @@ RSpec.describe Pgbouncer::Databases do
     end
 
     it 'returns an empty list' do
-      obj = Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
+      obj = GitlabCtl::Pgbouncer::Databases.new({}, '/fakeinstall', '/fakedata')
       expect(obj.component_database_names).to eq([])
     end
   end
