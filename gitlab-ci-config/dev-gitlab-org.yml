@@ -78,13 +78,10 @@
     USE_SYSTEM_LIBGCRYPT: "true"
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE"'
     # Include it in TRIGGER_CACHE_UPDATE_PIPELINE pipeline cache used by
     # nightlies and triggered builds are refreshed periodically
     - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
-    - if: '$PIPELINE_TYPE == "EE_BRANCH_BUILD_PIPELINE"'
-      when: manual
-      allow_failure: true
 
 .arm64_branch_template:
   extends: .branch_template
@@ -331,9 +328,18 @@ Ubuntu-22.04-arm64-branch:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
-    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/ && $CI_PIPELINE_SOURCE != "pipeline"'
+      changes:
+       - Gemfile
+       - Gemfile.lock
+       - config/software/**
+       - config/patches/**
+      when: always
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/ && $BUILD_ON_ALL_OS == "true"'
+      when: always
       # TODO: When multi-arch images are built by default, make this an
       # automatic job
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
       when: manual
       allow_failure: true
 Ubuntu-24.04-arm64-branch:
@@ -406,11 +412,17 @@ Ubuntu-20.04-fips-branch:
   extends: .fips_branch_template
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE"'
     - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
-    - if: '$PIPELINE_TYPE == "EE_BRANCH_BUILD_PIPELINE"'
-      when: manual
-      allow_failure: true
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/ && $CI_PIPELINE_SOURCE != "pipeline"'
+      changes:
+       - Gemfile
+       - Gemfile.lock
+       - config/software/**
+       - config/patches/**
+      when: always
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/ && $BUILD_ON_ALL_OS == "true"'
+      when: always
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
       when: manual
       allow_failure: true
