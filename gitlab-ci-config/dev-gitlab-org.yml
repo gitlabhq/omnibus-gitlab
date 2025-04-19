@@ -78,7 +78,7 @@
     USE_SYSTEM_LIBGCRYPT: "true"
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE == "EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE"'
+    - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE/'
     # Include it in TRIGGER_CACHE_UPDATE_PIPELINE pipeline cache used by
     # nightlies and triggered builds are refreshed periodically
     - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
@@ -412,7 +412,7 @@ Ubuntu-20.04-fips-branch:
   extends: .fips_branch_template
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE == "EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE"'
+    - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE/'
     - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/ && $CI_PIPELINE_SOURCE != "pipeline"'
       changes:
