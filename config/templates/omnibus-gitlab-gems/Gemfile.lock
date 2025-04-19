@@ -165,7 +165,7 @@ GEM
     faraday-net_http (3.0.2)
     faraday-retry (2.2.1)
       faraday (~> 2.0)
-    ffi (1.17.0)
+    ffi (1.17.2)
     ffi-libarchive (1.1.14)
       ffi (~> 1.0)
     ffi-yajl (2.6.0)
@@ -220,8 +220,8 @@ GEM
     mixlib-cli (2.1.8)
     mixlib-config (3.0.27)
       tomlrb
-    mixlib-log (3.2.0)
-      ffi (~> 1.9, <= 1.17.0)
+    mixlib-log (3.2.3)
+      ffi (>= 1.15.5)
     mixlib-shellout (3.2.8)
       chef-utils
     molinillo (0.8.0)
@@ -407,11 +407,11 @@ DEPENDENCIES
   chef-zero (= 15.0.11)!
   faraday (= 2.8.1)
   faraday-net_http (= 3.0.2)
-  ffi (= 1.17.0)
+  ffi (= 1.17.2)
   gitlab-ruby-shadow (= 2.5.1)
   inspec-core (= 6.6.0)!
   license_finder (= 7.2.1)
-  mixlib-log (= 3.2.0)
+  mixlib-log (= 3.2.3)
   ohai (= 18.1.18)
   rainbow (= 3.1.1)
   remote_syslog-gitlab (= 0.0.2)
