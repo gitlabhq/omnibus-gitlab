@@ -17,7 +17,7 @@
 
 require 'rainbow/ext/string'
 
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
+require "gitlab_ctl"
 
 # For testing purposes, if the first path cannot be found load the second
 begin

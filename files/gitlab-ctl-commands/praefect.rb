@@ -1,7 +1,7 @@
 require 'optparse'
 
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/praefect"
+require "gitlab_ctl"
+require "gitlab_ctl/praefect"
 
 add_command_under_category('praefect', 'gitaly', 'Interact with Gitaly cluster', 2) do
   begin

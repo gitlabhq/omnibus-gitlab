@@ -11,8 +11,8 @@
 # limitations under the License.
 #
 
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/generate_secrets"
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/util"
+require "gitlab_ctl/generate_secrets"
+require "gitlab_ctl/util"
 
 add_command 'generate-secrets', 'Generates secrets used in gitlab.rb', 2 do |cmd_name|
   begin

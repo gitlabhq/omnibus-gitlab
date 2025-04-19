@@ -17,7 +17,7 @@
 
 require 'shellwords'
 
-require_relative 'lib/gitlab_ctl/registry/garbage_collect'
+require 'gitlab_ctl/registry/garbage_collect'
 
 add_command_under_category 'registry-garbage-collect', 'container-registry', 'Run Container Registry garbage collection.', 2 do |cmd_name, path|
   result = GitlabCtl::Registry::GarbageCollect.new(self, path, ARGV).execute!

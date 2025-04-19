@@ -16,8 +16,8 @@
 #
 require 'optparse'
 
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/registry/database"
+require "gitlab_ctl"
+require "gitlab_ctl/registry/database"
 
 add_command_under_category('registry-database', 'container-registry', 'Manage Container Registry database.', 2) do
   begin

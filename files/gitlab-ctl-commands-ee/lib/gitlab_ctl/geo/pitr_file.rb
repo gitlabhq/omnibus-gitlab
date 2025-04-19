@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'promote_db'
-require_relative '../consul'
+require 'gitlab_ctl/consul'
 
 module GitlabCtl
   module Geo

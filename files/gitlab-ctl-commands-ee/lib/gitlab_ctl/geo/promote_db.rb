@@ -3,12 +3,7 @@
 require 'rainbow/ext/string'
 require_relative 'pitr_file'
 
-# The first path works on production, while the second path works for tests
-begin
-  require_relative '../../../../omnibus-ctl/lib/gitlab_ctl/util'
-rescue LoadError
-  require_relative '../../../../gitlab-ctl-commands/lib/gitlab_ctl/util'
-end
+require 'gitlab_ctl/util'
 
 module GitlabCtl
   module Geo

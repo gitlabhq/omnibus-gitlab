@@ -1,4 +1,4 @@
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/upgrade_check"
+require "gitlab_ctl/upgrade_check"
 
 add_command('upgrade-check', 'Check if the upgrade is acceptable', 2) do
   old_version = ARGV[3]

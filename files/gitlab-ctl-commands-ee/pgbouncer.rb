@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/pgbouncer"
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/postgresql"
+require "gitlab_ctl/pgbouncer"
+require "gitlab_ctl/postgresql"
 
 add_command_under_category('pgb-console', 'pgbouncer', 'Connect to the pgbouncer console', 2) do
   pgb = get_client
