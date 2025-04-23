@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.11.1 (2025-04-22)
+
+No changes.
+
 ## 17.11.0 (2025-04-16)
 
 ### Added (4 changes)
@@ -38,6 +42,10 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Update NGINX template comments to default values](gitlab-org/omnibus-gitlab@0993f75f3d6e5cdd4a9cb12252d9e5023591d9d8) ([merge request](gitlab-org/omnibus-gitlab!8256))
+
+## 17.10.5 (2025-04-22)
+
+No changes.
 
 ## 17.10.4 (2025-04-09)
 
@@ -96,6 +104,10 @@ No changes.
 ### Other (1 change)
 
 - [Add support for cells configuration](gitlab-org/omnibus-gitlab@51e44a0968143f3e51ca2c48d2a80372d7b95184) ([merge request](gitlab-org/omnibus-gitlab!8145))
+
+## 17.9.7 (2025-04-22)
+
+No changes.
 
 ## 17.9.6 (2025-04-09)
 
