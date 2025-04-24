@@ -539,8 +539,6 @@ qa-subset-test:
   rules:
     - if: '"$[[ inputs.skip_qa_test ]]" == "true"'
       when: never
-    - if: '$SKIP_QA_TEST == "true"' # Deprecated: It will be removed once rolling out `inputs.skip_qa_test`.
-      when: never
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_CE_PIPELINE/ && $MANUAL_QA_TEST == "true"'
       when: manual
       allow_failure: true
@@ -572,8 +570,6 @@ qa-remaining-test-manual:
     QA_SUITES: "QA::EE::Scenario::Test::Integration::Elasticsearch,QA::Scenario::Test::Integration::Import,QA::Scenario::Test::Integration::Integrations,QA::Scenario::Test::Integration::OAuth,QA::Scenario::Test::Integration::Jira,QA::Scenario::Test::Integration::ServicePingDisabled,QA::Scenario::Test::Instance::LargeSetup,QA::Scenario::Test::Instance::CloudActivation"
   rules:
     - if: '"$[[ inputs.skip_qa_test ]]" == "true"'
-      when: never
-    - if: '$SKIP_QA_TEST == "true"' # Deprecated: It will be removed once rolling out `inputs.skip_qa_test`.
       when: never
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_CE_PIPELINE/'
       when: manual
