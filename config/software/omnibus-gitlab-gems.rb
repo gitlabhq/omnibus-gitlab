@@ -18,7 +18,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 name 'omnibus-gitlab-gems'
 
-default_version '20250328'
+default_version '20250418'
 
 source path: File.expand_path('config/templates/omnibus-gitlab-gems', Omnibus::Config.project_root)
 
