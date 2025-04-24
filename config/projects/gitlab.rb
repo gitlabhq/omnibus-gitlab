@@ -128,7 +128,6 @@ dependency 'inspec-gem'
 dependency 'logrotate'
 dependency 'runit'
 dependency 'go-crond'
-dependency 'docker-distribution-pruner'
 
 if Build::Check.include_ee?
   dependency 'consul'
