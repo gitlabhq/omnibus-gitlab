@@ -17,7 +17,7 @@ namespace :license do
       puts "Checking licenses via the contents of '#{install_dir}/dependency_licenses.json'"
       raise StandardError, "Unable to open #{install_dir}/dependency_licenses.json" unless File.exist?("#{install_dir}/dependency_licenses.json")
 
-      json_data = JSON.parse(File.read("#{install_dir}/dependency_licenses.json"))
+      json_data = JSON.load_file("#{install_dir}/dependency_licenses.json")
 
       puts "###### BEGIN LICENSE CHECK ######"
       violations = License::Analyzer.analyze(json_data)

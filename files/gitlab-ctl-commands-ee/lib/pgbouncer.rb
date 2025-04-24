@@ -34,7 +34,7 @@ module Pgbouncer
       @json_file = options['databases_json'] || database_json
       @template_file = "#{@install_path}/embedded/cookbooks/gitlab-ee/templates/default/databases.ini.erb"
       @database = options['database'] || Databases.rails_database(attributes: @attributes)
-      @databases = update_databases(JSON.parse(File.read(@json_file))) if File.exist?(@json_file)
+      @databases = update_databases(JSON.load_file(@json_file)) if File.exist?(@json_file)
       @userinfo = GitlabCtl::Util.userinfo(options['host_user']) if options['host_user']
       @groupinfo = GitlabCtl::Util.groupinfo(options['host_group']) if options['host_group']
     end

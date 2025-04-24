@@ -59,7 +59,7 @@ module License
 
     def load_data
       dest_dir = File.join(@licenses_path, @edition, @current_minor_version)
-      @json_data = JSON.parse(File.read("#{dest_dir}/#{@current_version}.json")).sort
+      @json_data = JSON.load_file("#{dest_dir}/#{@current_version}.json").sort
     end
 
     def generate_package_page
