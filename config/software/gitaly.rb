@@ -78,7 +78,8 @@ build do
     # Gitaly compiles Git with build type "debugoptimized" by default, which
     # includes debug symbols. We don't want them in order to reduce package
     # size, so we override the build type to "release" instead.
-    "GIT_APPEND_MESON_BUILD_OPTIONS += -Dbuildtype=release"
+    "GIT_APPEND_MESON_BUILD_OPTIONS += -Dbuildtype=release",
+    "GIT_APPEND_MESON_BUILD_OPTIONS += --native-file=#{File.join(project_dir, 'meson.ini')}"
   ]
 
   use_meson = Gitlab::Util.get_env('GITALY_USE_MESON') || 'true'
@@ -115,6 +116,13 @@ build do
   block do
     File.open(File.join(project_dir, 'config.mak'), 'a') do |file|
       file.print git_append_build_options.join("\n")
+    end
+
+    File.open(File.join(project_dir, 'meson.ini'), 'a') do |file|
+      file.print <<-EOS
+        [binaries]
+        sh = '/bin/sh'
+      EOS
     end
   end
 
