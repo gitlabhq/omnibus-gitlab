@@ -2,7 +2,7 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
-title: Add or remove Omnibus GitLab configuration options
+title: Add or remove configuration options
 ---
 
 ## Add a configuration option
@@ -21,7 +21,7 @@ Adding a configuration option may happen during any release milestone.
 ## Remove a configuration option
 
 Distribution follows a strict process when removing configuration options to
-minimize disruptions for Omnibus GitLab administrators.
+minimize disruptions for Linux package administrators.
 
 1. Create an issue for deprecating the configuration option.
 1. Create an issue for removing the configuration option that happens no

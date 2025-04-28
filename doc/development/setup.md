@@ -64,15 +64,15 @@ On Ubuntu Xenial, you may have to install `tzdata`. This
 
 1. Configure and start GitLab.
 1. Check if you can access the GitLab instance from your host browser on `<ip address of host>`.
-1. Install the basic tools used for developing Omnibus GitLab:
+1. Install the basic tools used for developing `omnibus-gitlab`:
 
    ```shell
    sudo apt-get install git
    ```
 
-## Get the source of Omnibus GitLab
+## Get the source of `omnibus-gitlab`
 
-1. Get the source code of Omnibus GitLab from the [repository on GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab):
+1. Get the source code of `omnibus-gitlab` from the [repository on GitLab.com](https://gitlab.com/gitlab-org/omnibus-gitlab):
 
    ```shell
    git clone https://gitlab.com/gitlab-org/omnibus-gitlab.git ~/omnibus-gitlab
@@ -153,7 +153,7 @@ You can also test your changes against the current tests (or to test your newly 
    cd ~/omnibus-gitlab
    ```
 
-1. Install the required gems inside the omnibus directory:
+1. Install the required gems inside the `omnibus-gitlab` directory:
 
    ```shell
    /usr/bin/bundle install --path vendor/bundle
@@ -204,4 +204,4 @@ For [GitLab Geo](https://docs.gitlab.com/administration/geo/), deployments using
 
 ## OpenShift GitLab Development Setup
 
-See Omnibus GitLab [development setup](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/blob/master/doc/developer/guide.md) documentation.
+See [development setup](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/blob/master/doc/developer/guide.md) documentation.

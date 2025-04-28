@@ -22,11 +22,11 @@ to onboard a new maintainer through separation of these core responsibilities.
 ### Build scope
 
 The build scope covers all the parts of the codebase that build the artifacts
-used to ship Omnibus GitLab.
+used to ship the Linux package.
 
 This includes:
 
-1. Omnibus project configurations and component software definitions.
+1. `omnibus-gitlab` project configurations and component software definitions.
 1. Patches used in software definitions.
 1. Libraries and Rake tasks used for build, release, and other maintenance
    activities.

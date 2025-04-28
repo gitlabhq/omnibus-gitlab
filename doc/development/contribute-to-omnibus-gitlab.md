@@ -2,13 +2,13 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
-title: Contribute to Omnibus GitLab
+title: Get started with Linux package development
 ---
 
 ## Common enhancement tasks
 
 - [Adding and removing configuration options](add-remove-configuration-options.md)
-- [Adding a new Service to Omnibus GitLab](new-services.md)
+- [Adding a new service](new-services.md)
 - [Adding deprecation messages](adding-deprecation-messages.md)
 - [Adding an attribute to `public_attributes.json`](public-attributes.md)
 - [Adding a `gitlab-ctl` command](gitlab-ctl-commands.md)
@@ -32,7 +32,7 @@ title: Contribute to Omnibus GitLab
 ### Merge request guidelines
 
 If you are working on a new feature or an issue which doesn't have an entry on
-the Omnibus GitLab issue tracker, it is always a better idea to create an issue
+the issue tracker, it is always a better idea to create an issue
 and mention that you will be working on it as this will help to prevent
 duplication of work. Also, others may be able to provide input regarding the
 issue, which can help you in your task.

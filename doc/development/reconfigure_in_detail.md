@@ -5,7 +5,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: What happens when `gitlab-ctl reconfigure` is run?
 ---
 
-Omnibus GitLab uses [Cinc](https://cinc.sh/) under the hood,
+The Linux package uses [Cinc](https://cinc.sh/) under the hood,
 which is a free-as-in-beer distribution of the open source software of [Chef Software Inc](https://docs.chef.io/).
 
 In very basic terms, a [Cinc client](https://cinc.sh/start/client/) run
@@ -84,7 +84,7 @@ default values may only happen **_after_** `gitlab.rb` gets parsed.
 
 #### What goes in to the `gitlab.rb` file?
 
-Omnibus GitLab uses a module named `Gitlab` to store the settings specified in
+The Linux package uses a module named `Gitlab` to store the settings specified in
 `gitlab.rb`. This module, which extends `Mixlib::Config` module, can work as a
 configuration hash. In the
 [definition of this module](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/package/libraries/config/gitlab.rb),
@@ -144,7 +144,7 @@ this behavior.
 Many attributes required for GitLab functionality are secrets that need to
 persist across reconfigure runs and, in multi-node setups, across different
 nodes. Moreover, if the user did not specify values for these secrets then
-Omnibus GitLab must create them to function. For this purpose, each library file
+the Linux package must create them to function. For this purpose, each library file
 specifies a `parse_secrets` method similar to the `parse_variables` method. This
 method generates secrets, unless explicitly disabled, if none have been specified
 in the `gitlab.rb` file.
@@ -167,7 +167,7 @@ the `node` object contains the final attribute list.
 
 A user configures the system with `gitlab.rb` to match the requirement. In
 certain scenarios, however, we need to perform alterations without changes
-to the `gitlab.rb` file. Omnibus GitLab writes to a different file,
+to the `gitlab.rb` file. The Linux package writes to a different file,
 `/etc/gitlab/gitlab-cluster.json`, that overrides user-specified values in
 `gitlab.rb`. The `gitlab-ctl` command or a reconfigure dynamically populates
 this file and it gets read and merged over the `node` attributes at the end

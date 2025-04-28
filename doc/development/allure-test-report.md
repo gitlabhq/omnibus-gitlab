@@ -2,23 +2,23 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
-title: Test Report Generation in Omnibus-GitLab
+title: Test report generation
 ---
 
-The following three pipelines are created while generating the allure-report
+The following three pipelines are created while generating the allure-report:
 
-- Omnibus pipeline
+- `omnibus-gitlab` pipeline
 - TRIGGERED_CE/EE_PIPELINE child pipeline (Manually Triggered)
 - QA-SUBSET-TEST child pipeline
 
-## Omnibus MR Pipeline
+## `omnibus-gitlab` MR Pipeline
 
-An Omnibus-GitLab project MR pipeline can be triggered in two ways
+An `omnibus-gitlab` project MR pipeline can be triggered in two ways:
 
 - manually running the pipeline
 - a MR exists and a commit is pushed to the repository
 
-The tests in the pipeline are currently triggered manually by
+The tests in the pipeline are currently triggered manually by:
 
 - `Trigger:ce-package` job
 - `Trigger:ee-package` job
@@ -27,7 +27,7 @@ The tests in the pipeline are currently triggered manually by
 
 These jobs can be triggered manually after the `generate-facts` job is completed. On triggering these jobs, a child pipeline is created.
 
-The child pipeline, called `TRIGGERED_CE/EE_PIPELINE` is generated in the Omnibus-GitLab repository
+The child pipeline, called `TRIGGERED_CE/EE_PIPELINE` is generated in the `omnibus-gitlab` repository.
 
 ## TRIGGERED_CE/EE_PIPELINE child pipeline
 
@@ -35,8 +35,8 @@ This child pipeline consists of a job called `qa-subset-test` which uses the `te
 
 ### qa-subset-test job
 
-The `qa-subset-test` job triggers another child pipeline in the Omnibus-GitLab repository
-To get an allure report snapshot as a comment in the MR, following environment variables need to be passed to `qa-subset-test`
+The `qa-subset-test` job triggers another child pipeline in the `omnibus-gitlab` repository.
+To get an allure report snapshot as a comment in the MR, following environment variables need to be passed to `qa-subset-test`.
 
 | Environment Variable              | Description |
 | ----------------------------------|-------------|
@@ -61,7 +61,7 @@ It also posts the allure report as a comment on the MR having the ID passed in `
 
 [allure-report-publisher](https://github.com/andrcuns/allure-report-publisher) is a gem which uses allure in the backend. It has been catered for GitLab to upload the report and post the comment to MR.
 
-The entire flow of QA in omnibus MR pipeline is as follows
+The entire flow of QA in `omnibus-gitlab` MR pipeline is as follows
 
 ```mermaid
 %%{init: {'theme':'base'}}%%

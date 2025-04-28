@@ -2,7 +2,7 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
-title: Adding a new Software Definition to Omnibus GitLab
+title: Adding a new software definition
 ---
 
 In order to add a new component to GitLab, you should follow these steps:
@@ -13,15 +13,15 @@ In order to add a new component to GitLab, you should follow these steps:
 ## Fetch and compile the software during build
 
 [Software Definitions](../architecture/_index.md#software-definitions), which
-can be found in `/config/software`, specify where omnibus should fetch the
+can be found in `/config/software`, specify where the Linux package should fetch the
 software, how to compile it and install it to the required folder. This part of
-the project is run when we build the Omnibus package for GitLab.
+the project is run when we build the Linux package for GitLab.
 
 When adding a component that should be fetched from Git the clone address of the
 repositories of the local mirror and upstream should be added to
 `/.custom_sources.yml`.
 
-The local mirror should be created in the [omnibus-mirror project](omnibus-mirror.md) by a member of the Distribution team.
+The local mirror should be created in the [`omnibus-mirror` project](omnibus-mirror.md) by a member of the Distribution team.
 
 See other Software services in the directory for examples on how to include your
 software service.

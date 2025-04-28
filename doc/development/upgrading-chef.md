@@ -59,4 +59,4 @@ to upgrade to the latest version and verify the functionality.
 
 ## Bonus points
 
-1. Read through the Changelog and Release notes, identify any improvements, new features, or bug fixes which may apply to omnibus and open follow up issues
+1. Read through the Changelog and Release notes, identify any improvements, new features, or bug fixes which may apply to `omnibus-gitlab` and open follow up issues
