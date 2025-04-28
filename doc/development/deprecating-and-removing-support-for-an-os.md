@@ -5,7 +5,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Deprecate and remove support for a supported operating system
 ---
 
-GitLab provides Omnibus packages for operating systems (OS) only until their end of life (EOL).
+GitLab provides Linux packages for operating systems (OS) only until their end of life (EOL).
 After the EOL date of the OS, GitLab stops releasing official
 packages. The following content documents how to:
 

@@ -2,11 +2,11 @@
 stage: Systems
 group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
-title: Omnibus GitLab deprecation process
+title: Linux package deprecation process
 ---
 
 Besides following the [GitLab deprecation guidelines](https://handbook.gitlab.com/handbook/product/gitlab-the-product/#deprecations-removals-and-breaking-changes), we should also add deprecation messages
-to the Omnibus GitLab package.
+to the Linux package.
 
 Notifying GitLab administrators of the deprecation and removal of features through deprecation messages consists of:
 
@@ -20,7 +20,7 @@ Notifying GitLab administrators of the deprecation and removal of features throu
 Before you add a deprecation message, make sure to read:
 
 - [When can a feature be deprecated](https://docs.gitlab.com/development/deprecation_guidelines/#when-can-a-feature-be-deprecated).
-- [Omnibus GitLab deprecation policy](https://docs.gitlab.com/administration/package_information/deprecation_policy/).
+- [Linux package deprecation policy](https://docs.gitlab.com/administration/package_information/deprecation_policy/).
 
 ## Adding deprecation messages
 
@@ -64,7 +64,7 @@ version, and it will display the provided `note`.
 ### `removal`
 
 `removal` is where you set the `<major>.<minor>` version that will no longer support the change at all.
-This should almost always be a major release. The Omnibus package runs a script at the beginning of installation that ensures you don't have any removed configuration in your settings. The install will fail early, before making any changes, if it finds configuration that is no longer supported. Similarly, running `gitlab-ctl reconfigure` will also check the `gitlab.rb` file for removed configs. This is to tackle situations where users simply copy `gitlab.rb` from an older instance to a newer one.
+This should almost always be a major release. The Linux package runs a script at the beginning of installation that ensures you don't have any removed configuration in your settings. The install will fail early, before making any changes, if it finds configuration that is no longer supported. Similarly, running `gitlab-ctl reconfigure` will also check the `gitlab.rb` file for removed configs. This is to tackle situations where users simply copy `gitlab.rb` from an older instance to a newer one.
 
 ### `note`
 

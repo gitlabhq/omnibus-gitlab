@@ -5,6 +5,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Create Patches
 ---
 
+<!-- vale gitlab_base.SubstitutionWarning = NO -->
+
 You can manually modify an external dependency to:
 
 - Make sure that dependency works with Omnibus embedded packaging.
@@ -15,6 +17,8 @@ You can manually modify an external dependency to:
 Omnibus has a specific [DSL](https://github.com/chef/omnibus#software) and
 conventions to ship and apply patches automatically as part of the build
 process.
+
+<!-- vale gitlab_base.SubstitutionWarning = YES -->
 
 To apply patch files, store `.patch` files that contain the changes in a
 specific directory structure using the `patch` DSL method:

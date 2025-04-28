@@ -12,7 +12,7 @@ vulnerabilities to the
 Slack notifications tell `#g_distribution` on Slack when new
 vulnerabilities are detected. Complete the following steps when you receive this notification.
 
-1. Visit the [Omnibus Vulnerability Report](https://gitlab.com/gitlab-org/omnibus-gitlab/-/security/vulnerability_report)
+1. Visit the [`omnibus-gitlab` Vulnerability Report](https://gitlab.com/gitlab-org/omnibus-gitlab/-/security/vulnerability_report)
    and locate the appropriate vulnerability. If the vulnerability is legitimate:
 
    - Select `Create Issue` to open a confidential issue in the
@@ -35,7 +35,7 @@ vulnerabilities are detected. Complete the following steps when you receive this
 1. After the MR that fixes the vulnerability has been merged, and the corresponding
    issue is closed:
 
-   - Visit the [Omnibus Vulnerability Report](https://gitlab.com/gitlab-org/omnibus-gitlab/-/security/vulnerability_report).
+   - Visit the [`omnibus-gitlab` Vulnerability Report](https://gitlab.com/gitlab-org/omnibus-gitlab/-/security/vulnerability_report).
    - Locate the appropriate vulnerability and set the status to `Resolved` if not
    already done automatically.
 

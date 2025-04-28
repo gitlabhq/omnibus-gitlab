@@ -6,7 +6,7 @@ title: Database support
 ---
 
 This document provides details and examples on how to implement database support
-for an Omnibus GitLab component. The [architecture blueprint](../architecture/multiple_database_support/_index.md)
+for a Linux package component. The [architecture blueprint](../architecture/multiple_database_support/_index.md)
 provides the design and definitions.
 
 1. [Level 1](#level-1)
@@ -331,7 +331,7 @@ end
    service of the database cluster. This is either the name of the scope of the
    Patroni cluster (when automatic service registry for Patroni, i.e. `patroni['register_service']`,
    is enabled) or the name of the Consul service that is configured manually
-   without Omnibus GitLab.
+   without the Linux package.
 
 1. Use `database_watch` custom resource<sup>([Needs Implementation](#configurable-consul-watch-for-databases))</sup>
    to define a new Consul watch for the database cluster service. It notifies
@@ -359,7 +359,7 @@ We don't want to introduce any breaking changes into `gitlab.rb`.
   cookbook. Instead they must be able to update the current state of the
   database objects, configuration, or migrations based on the new user inputs.
 
-- In HA mode, given that multiple physical nodes are involved, Omnibus GitLab
+- In HA mode, given that multiple physical nodes are involved, the Linux package
   may encounter certain limitations to provide full automation of the
   configuration. This is an acceptable limitation.
 
@@ -424,7 +424,7 @@ problematic because the Consul watch scripts are not fully configurable.
 
 The current implementation has several limitations:
 
-1. Omnibus GitLab uses `postgresql` service that is [explicitly defined](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/consul/recipes/enable_service_postgresql.rb)
+1. The Linux package uses `postgresql` service that is [explicitly defined](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/consul/recipes/enable_service_postgresql.rb)
    in `consul` cookbook. This service, that is currently being used to notify
    PgBouncer, is a leftover of the transition from RepMgr to Patroni. It must
    be replaced with the Consul service that [Patroni registers](https://patroni.readthedocs.io/en/latest/yaml_configuration.html#consul).
@@ -436,7 +436,7 @@ The current implementation has several limitations:
    is associated to a Consul watch for `postgresql` service and is not capable
    of handling multiple databases because [database name can not be changed](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/a9c14f6cfcc9fe0d9e98da7d04f43c5772d5f768/files/gitlab-cookbooks/consul/libraries/watch_helper.rb#L50).
 
-We need to extend the current Omnibus GitLab capability to use Consul watches to
+We need to extend the current Linux package capability to use Consul watches to
 track Patroni services, find cluster leaders, and notify PgBouncer with a
 parameterized failover script.
 

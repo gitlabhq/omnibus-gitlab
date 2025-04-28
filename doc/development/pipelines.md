@@ -121,8 +121,8 @@ needed. The different pipeline types are documented in the below table:
 | `EE_RC_BUILD_PIPELINE`           | Release                           | Builds when EE RC tags are pushed.                                                                                     |
 | `EE_TAG_BUILD_PIPELINE`          | Release                           | Builds when stable EE tags are pushed.                                                                                 |
 | `TRIGGER_CACHE_UPDATE_PIPELINE`  | QA                                | Updates build cache of triggered QA pipelines. Requires `CACHE_UPDATE` variable to be set to `true`.                   |
-| `TRIGGERED_CE_PIPELINE`          | QA                                | Triggered e2e:test-on-omnibus build with CE packages and images.                                                            |
-| `TRIGGERED_EE_PIPELINE`          | QA                                | Triggered e2e:test-on-omnibus build with EE packages and images.                                                            |
+| `TRIGGERED_CE_PIPELINE`          | QA                                | Triggered `e2e:test-on-omnibus` build with CE packages and images.                                                     |
+| `TRIGGERED_EE_PIPELINE`          | QA                                | Triggered `e2e:test-on-omnibus` build with EE packages and images.                                                     |
 | `FORK_BRANCH_TEST_PIPELINE`      | Forks                             | Test suite when run on forks of the project. Does not include trigger jobs and other unwanted jobs like danger-review. |
 | `FORK_MR_PIPELINE`               | Forks                             | On MRs from forks of the project. Does not include trigger jobs.                                                       |
 
@@ -138,7 +138,7 @@ and [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab).
 Tag pushes to [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) starts a pipeline with the
 [release jobs](#release-jobs). Tag pushes to [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and
 [Security mirror](https://gitlab.com/gitlab-org/security/omnibus-gitlab) behaves as regular branch pushes (except that they don't have an option
-to start a e2e:test-on-omnibus pipeline) and run basic stylistic checks and unit
+to start a `e2e:test-on-omnibus` pipeline) and run basic stylistic checks and unit
 tests.
 
 ### Scheduled pipelines
@@ -168,7 +168,7 @@ environments - will be part of this pipeline.
 
 ### Triggered pipelines
 
-We use triggered pipelines to run a "e2e:test-on-omnibus" pipeline in the
+We use triggered pipelines to run a `e2e:test-on-omnibus` pipeline in the
 [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror). These can be triggered either from a pipeline in the
 [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) or [GitLab project](https://gitlab.com/gitlab-org/gitlab).
 
@@ -255,7 +255,7 @@ developers to get a package or Docker image for testing, or to run a full QA
 suite against their MR's changes.
 
 To debug QA failures, refer to the [Investigate QA failures](https://handbook.gitlab.com/handbook/engineering/infrastructure/test-platform/self-managed-platform-team/distribution/#investigate-qa-failures)
-section. This job also generates Allure report, see more information and the demo at [Test Report Generation in Omnibus-GitLab](allure-test-report.md).
+section. This job also generates an Allure report. For more information and a demo of the Allure report, see [test report generation](allure-test-report.md).
 
 This job is run only on [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and [Security mirror](https://gitlab.com/gitlab-org/security/omnibus-gitlab) on branch
 pipelines.

@@ -37,7 +37,7 @@ Marketplace listings.
 
 ## Releasing to AWS Marketplace
 
-In addition to building the AMIs during the release process, Omnibus GitLab
+In addition to building the AMIs during the release process, the `omnibus-gitlab`
 tag pipeline also publishes the new version of the respective AWS Marketplace
 listing. The private AMIs mentioned above are used to back these listings. As
 part of release pipeline, we submit a changeset to publish the new version.

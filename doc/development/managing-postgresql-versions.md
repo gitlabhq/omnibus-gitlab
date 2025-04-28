@@ -31,11 +31,11 @@ The [`gitlab-ctl pg-upgrade` command](https://gitlab.com/gitlab-org/omnibus-gitl
 
 When it is time to remove an older version, create an epic with issues to track the following:
 
-1. Remove the old version from Omnibus.
+1. Remove the old version from the Linux package.
 1. Remove the old version from the Helm install.
 1. To minimize CI costs, remove the older version from test suites (before doing this, check that .com is not using the old version still).
 1. Remove references to that version of PostgreSQL in the GitLab user documentation.
-1. Start printing deprecation notices in the release post three GitLab versions before a major PostgreSQL version is removed. If the PostgreSQL version is a version that will be removed within three releases, print deprecation notices in the Admin UI and during the GitLab upgrade process, regardless of whether it is an Omnibus-managed PostgreSQL database or an external database.
+1. Start printing deprecation notices in the release post three GitLab versions before a major PostgreSQL version is removed. If the PostgreSQL version is a version that will be removed within three releases, print deprecation notices in the Admin UI and during the GitLab upgrade process, regardless of whether it is an Linux package-managed PostgreSQL database or an external database.
 
 For removals, perform the following steps:
 
@@ -69,7 +69,7 @@ For removals, perform the following steps:
 Test upgrades and fresh installs for the following environments:
 
 1. Single node.
-1. Install with a separate database node managed by Omnibus.
+1. Install with a separate database node managed by the Linux package.
 1. HA database cluster with 3 or more database nodes in the cluster.
 1. Geo installations with a single node primary and single node secondary (`postgresql` and `geo-postgresql` on the same secondary node).
 1. Geo installations with a HA database cluster on the primary.
@@ -86,7 +86,7 @@ If the default PostgreSQL version is changing:
 
 If the minimally required version is changing:
 
-1. GitLab upgrade errors out if an old version of Omnibus-managed PostgreSQL is still installed.
+1. GitLab upgrade errors out if an old version of Linux package-managed PostgreSQL is still installed.
 
 If the above tests are manual, we risk missing a breaking change that is introduced after the manual tests have been performed. We should automate as many of these tests as possible.
 
