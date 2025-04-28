@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=docker.io/ubuntu:22.04
+ARG BASE_IMAGE=docker.io/ubuntu:24.04
 FROM $BASE_IMAGE
 
 ARG BASE_IMAGE
@@ -28,7 +28,7 @@ RUN apt-get update -q \
       tzdata \
       wget \
       perl \
-      libperl5.34 \
+      libperl5.38 \
       libatomic1 \
     && locale-gen \
     && cp -a /usr/lib/locale/locale-archive /tmp/locale-archive \

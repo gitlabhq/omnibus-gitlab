@@ -22,7 +22,7 @@ variables:
   RUBY_ALPINE_IMAGE: "${RUBY_IMAGE}-alpine"
   BASH_IMAGE: "${DOCKERHUB_PREFIX}/bash:5.2-alpine3.20"
   ALPINE_IMAGE: "${DOCKERHUB_PREFIX}/alpine:3.21"
-  UBUNTU_IMAGE: "${DOCKERHUB_PREFIX}/ubuntu:22.04"
+  UBUNTU_IMAGE: "${DOCKERHUB_PREFIX}/ubuntu:24.04"
   DOCKER_DIND_IMAGE: "${DOCKERHUB_PREFIX}/docker:28.0.4-dind"
   DEPENDENCY_PROXY_LOGIN: "false"
   # Format of the auto-deploy tag for auto-deploy builds.

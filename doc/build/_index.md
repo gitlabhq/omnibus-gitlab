@@ -38,7 +38,7 @@ all-in-one monolithic one, check out the
 {{< /alert >}}
 
 The GitLab all-in-one Docker image uses the `omnibus-gitlab` package built for
-Ubuntu 22.04 under the hood. The Dockerfile is optimized to be used in a CI
+Ubuntu 24.04 under the hood. The Dockerfile is optimized to be used in a CI
 environment, with the expectation of packages being available over the Internet.
 
 We're looking at improving this situation

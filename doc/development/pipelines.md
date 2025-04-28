@@ -334,7 +334,7 @@ only on EE branches.
 #### `Docker-branch`
 
 This job builds a GitLab Docker image using the package built during the Ubuntu
-22.04-branch job. The image is pushed to the GitLab container registry.
+24.04-branch job. The image is pushed to the GitLab container registry.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on branch and nightly pipelines.
 
@@ -389,7 +389,7 @@ Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tag
 ### `Docker`
 
 This job builds a GitLab Docker image using the package built during the Ubuntu
-22.04-branch job. The image is pushed to the internal GitLab container registry.
+24.04-branch job. The image is pushed to the internal GitLab container registry.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
