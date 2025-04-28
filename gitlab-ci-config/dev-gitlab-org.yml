@@ -515,6 +515,15 @@ Ubuntu-22.04:
   # Also build for auto-deploy tags
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
+Ubuntu-24.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04:${BUILDER_IMAGE_REVISION}"
+  stage: package
+  extends: .tag_template
+  rules:
+    - !reference [.default_rules, rules]
+  # Also build for auto-deploy tags
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
+
 ## Build the docker image for QA
 ## This is necessary for the deployment
 ## pipeline so it must happen before
@@ -581,6 +590,17 @@ Ubuntu-22.04-arm64-staging:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|NIGHTLY)_BUILD_PIPELINE$/'
 
+Ubuntu-24.04-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: Ubuntu-24.04
+      optional: true
+    - job: Ubuntu-24.04-branch
+      optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
+
 ### Package builds
 Debian-11:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
@@ -594,9 +614,6 @@ Debian-12:
 Debian-12-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
-Ubuntu-24.04:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04:${BUILDER_IMAGE_REVISION}"
-  extends: .tag_template
 Ubuntu-20.04-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
@@ -714,16 +731,6 @@ Debian-12-arm64-staging:
       optional: true
     - job: Debian-12-arm64-branch
       optional: true
-Ubuntu-24.04-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: Ubuntu-24.04
-      optional: true
-    - job: Ubuntu-24.04-branch
-      optional: true
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 Ubuntu-20.04-arm64-staging:
   extends: .staging_upload_template
   needs:
