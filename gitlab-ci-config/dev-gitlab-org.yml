@@ -694,6 +694,8 @@ Docker:
   needs:
     - job: Ubuntu-22.04
       artifacts: false
+    - job: Ubuntu-24.04
+      artifacts: false
     - job: generate-facts
       optional: true
       artifacts: true
