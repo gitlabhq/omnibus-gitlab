@@ -1001,6 +1001,28 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    context 'custom CI ID Tokens config' do
+      context 'defaults' do
+        it 'sets the default value as nil' do
+          expect(parsed_gitlab_yml[:production][:ci_id_tokens]).to be_nil
+        end
+      end
+
+      context 'when ci_id_tokens_issuer_url is set' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              ci_id_tokens_issuer_url: 'https://example.com'
+            }
+          )
+        end
+
+        it 'renders the ci_id_tokens_issuer_url in smtp_settings.rb' do
+          expect(parsed_gitlab_yml[:production][:ci_id_tokens][:issuer_url]).to eq('https://example.com')
+        end
+      end
+    end
   end
 
   context 'with environment variables' do

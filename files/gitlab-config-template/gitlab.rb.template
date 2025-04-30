@@ -637,6 +637,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 #! Docs: https://docs.gitlab.com/administration/auth/oidc/?tab=Linux+package+%28Omnibus%29#configure-a-custom-duration-for-id-tokens
 # gitlab_rails['oidc_provider_openid_id_token_expire_in_seconds'] = 120
 
+
+### JWT ID Token settings
+# Configure a custom issuer url for CI JWT ID tokens
+# gitlab_rails['ci_id_tokens_issuer_url'] = https://example-oidc-configuration-bucket.s3.eu-north-1.amazonaws.com
+
 ### FortiAuthenticator authentication settings
 # gitlab_rails['forti_authenticator_enabled'] = false
 # gitlab_rails['forti_authenticator_host'] = 'forti_authenticator.example.com'
