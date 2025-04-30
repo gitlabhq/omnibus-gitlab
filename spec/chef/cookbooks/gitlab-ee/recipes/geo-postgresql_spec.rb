@@ -400,14 +400,28 @@ RSpec.describe 'geo postgresql when version mismatches occur' do
 
   context 'running version differs from data version' do
     before do
-      allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('expectation'))
-      allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return(PGVersion.new('expectation'))
-      allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return(PGVersion.new('reality'))
+      allow_any_instance_of(GeoPgHelper).to receive(:version).and_return(PGVersion.new('16'))
+      allow_any_instance_of(GeoPgHelper).to receive(:running_version).and_return(PGVersion.new('16'))
+      allow_any_instance_of(GeoPgHelper).to receive(:database_version).and_return(PGVersion.new('14'))
     end
 
     it 'does not warn the user that a restart is needed' do
       allow_any_instance_of(GeoPgHelper).to receive(:is_running?).and_return(true)
       expect(chef_run).not_to run_ruby_block('warn pending geo-postgresql restart')
+    end
+
+    it 'creates the runit log/run file using chpst to run with the pinned postgres version' do
+      allow_any_instance_of(GeoPgHelper).to receive(:pinned_postgresql_version).and_return(PGVersion.new('13'))
+
+      expect(chef_run).to render_file("/opt/gitlab/sv/geo-postgresql/run").with_content { |content|
+        expect(content).to match(/opt\/gitlab\/embedded\/postgresql\/13\/bin\/postgres/)
+      }
+    end
+
+    it 'creates the runit log/run file using chpst to run with the real database version' do
+      expect(chef_run).to render_file("/opt/gitlab/sv/geo-postgresql/run").with_content { |content|
+        expect(content).to match(/opt\/gitlab\/embedded\/postgresql\/14\/bin\/postgres/)
+      }
     end
   end
 

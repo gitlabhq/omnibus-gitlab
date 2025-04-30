@@ -12,6 +12,17 @@ class GeoPgHelper < BasePgHelper
     'gitlab-geo-psql'
   end
 
+  def pinned_postgresql_version
+    pinned_version = node['postgresql']['version']
+    return unless pinned_version
+
+    # Check the pinned version is valid
+    db_path = Dir.glob("#{postgresql_install_dir}/#{pinned_version}*").min
+    return unless db_path
+
+    PGVersion.parse(pinned_version.to_s)
+  end
+
   private
 
   def connection_info

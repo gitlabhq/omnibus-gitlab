@@ -330,6 +330,10 @@ class BasePgHelper < BaseHelper
     ::File.absolute_path(node['postgresql']['ssl_key_file'], config_dir)
   end
 
+  def postgresql_install_dir
+    ::File.join(node['package']['install-dir'], 'embedded/postgresql')
+  end
+
   private
 
   def stringify_hash_values(options)

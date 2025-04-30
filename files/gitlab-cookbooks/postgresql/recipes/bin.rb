@@ -19,7 +19,7 @@ include_recipe 'postgresql::directory_locations'
 pg_helper = PgHelper.new(node)
 geo_pg_helper = GeoPgHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
-postgresql_install_dir = File.join(node['package']['install-dir'], 'embedded/postgresql')
+postgresql_install_dir = pg_helper.postgresql_install_dir
 running_db_version = if Services.enabled?('geo_postgresql') && !Services.enabled?('postgresql')
                        geo_pg_helper.database_version
                      else

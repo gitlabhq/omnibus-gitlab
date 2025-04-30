@@ -29,7 +29,7 @@ postgresql_data_dir = File.join(node['gitlab']['geo_postgresql']['dir'], 'data')
 
 geo_pg_helper = GeoPgHelper.new(node)
 
-database_version = geo_pg_helper.database_version || geo_pg_helper.version
+database_version = geo_pg_helper.pinned_postgresql_version || geo_pg_helper.database_version || geo_pg_helper.version
 
 directory node['gitlab']['geo_postgresql']['dir'] do
   owner postgresql_username
