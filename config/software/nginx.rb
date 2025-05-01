@@ -43,6 +43,10 @@ dependency 'ngx_security_headers'
 build do
   cwd = "#{Omnibus::Config.source_dir}/nginx"
 
+  nginx_module_dir = File.join(install_dir, "src", "nginx_modules")
+  nginx_module_vts_dir = File.join(nginx_module_dir, "nginx-module-vts")
+  ngx_security_headers_dir = File.join(nginx_module_dir, "ngx_security_headers")
+
   command ['./auto/configure',
            "--prefix=#{install_dir}/embedded",
            '--with-http_ssl_module',
@@ -53,8 +57,8 @@ build do
            '--with-http_sub_module',
            '--with-ipv6',
            '--with-debug',
-           "--add-module=#{Omnibus::Config.source_dir}/nginx-module-vts",
-           "--add-module=#{Omnibus::Config.source_dir}/ngx_security_headers",
+           "--add-module=#{nginx_module_vts_dir}",
+           "--add-module=#{ngx_security_headers_dir}",
            "--with-ld-opt=-L#{install_dir}/embedded/lib",
            "--with-cc-opt=\"-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include\""].join(' '), cwd: cwd
   command "make -j #{workers}", env: { 'LD_RUN_PATH' => "#{install_dir}/embedded/lib" }, cwd: cwd
