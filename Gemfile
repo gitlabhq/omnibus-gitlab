@@ -56,7 +56,7 @@ group :packagecloud, optional: true do
 end
 
 group :danger, optional: true do
-  gem 'gitlab-dangerfiles', '~> 3.0', require: false
+  gem 'gitlab-dangerfiles', '~> 4.9', require: false
 end
 
 group :rubocop do
