@@ -29,5 +29,11 @@ Gitlab::Dangerfiles.for_project(self, 'omnibus-gitlab') do |gitlab_dangerfiles|
     %r{\Aspec/chef/} => [:configure]
   }
 
+  gitlab_dangerfiles.config.custom_labels_for_categories = {
+    build: '~"Category:Build"',
+    docs: '~"docs"',
+    configure: '~"Category:Configuration'
+  }
+
   gitlab_dangerfiles.import_dangerfiles
 end
