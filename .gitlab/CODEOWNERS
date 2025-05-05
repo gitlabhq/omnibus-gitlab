@@ -50,3 +50,4 @@
 ## Localization
 [Localization Team] @gitlab-com/localization/maintainers
 /doc-locale/**
+/argo_translation.yml
