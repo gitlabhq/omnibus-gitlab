@@ -15,7 +15,7 @@
 #
 
 name 'graphicsmagick'
-default_version '1.3.36'
+default_version '1.3.45'
 
 license 'MIT'
 license_file 'Copyright.txt'
@@ -27,8 +27,8 @@ dependency 'libjpeg-turbo'
 dependency 'libtiff'
 dependency 'zlib-ng'
 
-source url: "https://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/#{version}/GraphicsMagick-#{version}.tar.gz",
-       sha256: '1e6723c48c4abbb31197fadf8396b2d579d97e197123edc70a4f057f0533d563'
+source url: "https://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/#{version}/GraphicsMagick-#{version}.tar.xz",
+       sha256: 'dcea5167414f7c805557de2d7a47a9b3147bcbf617b91f5f0f4afe5e6543026b'
 
 relative_path "GraphicsMagick-#{version}"
 
