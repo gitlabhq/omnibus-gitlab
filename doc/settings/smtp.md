@@ -147,7 +147,7 @@ gitlab_rails['smtp_force_ssl'] = false
 Prerequisites:
 
 - [2-step verification enabled](https://support.google.com/accounts/answer/185839).
-- Recommended. An [app password](https://support.google.com/mail/answer/185833).
+- An [app password](https://support.google.com/mail/answer/185833).
 
 {{< alert type="note" >}}
 
