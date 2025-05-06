@@ -162,7 +162,7 @@ add_command_under_category 'pg-upgrade', 'database',
     @attributes['postgresql']['version'].nil?
   end
     log "postgresql['version'] is set in /etc/gitlab/gitlab.rb. Not checking for a PostgreSQL upgrade"
-    deprecation_message if @attributes['postgresql']['version'].to_f < 13
+    deprecation_message if @attributes['postgresql']['version'].to_f < 16
     Kernel.exit 0
   end
 
@@ -189,7 +189,7 @@ add_command_under_category 'pg-upgrade', 'database',
     Kernel.exit 1
   end
 
-  deprecation_message if @db_worker.target_version.major.to_f < 13
+  deprecation_message if @db_worker.target_version.major.to_f < 16
 
   target_data_dir = "#{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major}"
   if @db_worker.upgrade_artifact_exists?(target_data_dir)
@@ -755,7 +755,11 @@ def old_version
 end
 
 def default_version
-  PGVersion.parse(version_from_manifest('postgresql_new')) || PGVersion.parse(version_from_manifest('postgresql'))
+  # Once the new version is the default and recommended version, modify the
+  # return statement to try postgresql_new first.
+
+  # PGVersion.parse(version_from_manifest('postgresql_new')) || PGVersion.parse(version_from_manifest('postgresql'))
+  PGVersion.parse(version_from_manifest('postgresql'))
 end
 
 def new_version
