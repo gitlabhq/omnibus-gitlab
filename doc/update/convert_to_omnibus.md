@@ -48,7 +48,7 @@ To convert your self-compiled installation to a Linux package installation:
    The restore takes a few minutes depending on the size of your database and Git data.
 
 1. Because all settings are stored in `/etc/gitlab/gitlab.rb` in Linux package installations, you must reconfigure
-   the new installation . Individual settings must be manually moved from self-compiled installation files such as
+   the new installation. Individual settings must be manually moved from self-compiled installation files such as
    `gitlab.yml`, `puma.rb`, and `smtp_settings.rb`. For all available options, see the
    [`gitlab.rb` template](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template).
 1. Copy the secrets from the old self-compiled installation to the new Linux package installation:
