@@ -79,7 +79,7 @@ the changes work as expected.
 1. Author or review 3 merge requests which refactor build related code.
 
 1. **OPTIONAL**: Author or review 1 merge request which modifies the `omnibus` project. This
-   is an optional requirement , because updates to `omnibus` itself are
+   is an optional requirement, because updates to `omnibus` itself are
    comparatively rare. It is highly recommended that the Maintainers look through
    the commits we have [added on top of the upstream tag](https://gitlab.com/gitlab-org/omnibus/-/compare/9.0.19...9.0.19-stable).
 

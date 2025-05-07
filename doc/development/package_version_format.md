@@ -68,7 +68,7 @@ from a stable release package.
 
 #### Nightly builds
 
-For nightly packages , the version format is
+For nightly packages, the version format is
 `<latest stable git tag>+rnightly.<pipeline id>.<omnibus-gitlab SHA>-<build iteration>`.
 
 As noted above, `build iteration` for nightly builds is set to `0`. An example
