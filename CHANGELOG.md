@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.11.2 (2025-05-07)
+
+### Fixed (1 change)
+
+- [config/git: Fix misdetected shell path](gitlab-org/security/omnibus-gitlab@c6d9d1e4bcb669f3e74c8d1616c8226981afce1d)
+
 ## 17.11.1 (2025-04-22)
 
 No changes.
@@ -42,6 +48,10 @@ No changes.
 ### Other (1 change)
 
 - [Update NGINX template comments to default values](gitlab-org/omnibus-gitlab@0993f75f3d6e5cdd4a9cb12252d9e5023591d9d8) ([merge request](gitlab-org/omnibus-gitlab!8256))
+
+## 17.10.6 (2025-05-07)
+
+No changes.
 
 ## 17.10.5 (2025-04-22)
 
@@ -104,6 +114,10 @@ No changes.
 ### Other (1 change)
 
 - [Add support for cells configuration](gitlab-org/omnibus-gitlab@51e44a0968143f3e51ca2c48d2a80372d7b95184) ([merge request](gitlab-org/omnibus-gitlab!8145))
+
+## 17.9.8 (2025-05-07)
+
+No changes.
 
 ## 17.9.7 (2025-04-22)
 
