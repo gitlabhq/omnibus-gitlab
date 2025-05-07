@@ -49,6 +49,10 @@ No changes.
 
 - [Update NGINX template comments to default values](gitlab-org/omnibus-gitlab@0993f75f3d6e5cdd4a9cb12252d9e5023591d9d8) ([merge request](gitlab-org/omnibus-gitlab!8256))
 
+## 17.10.6 (2025-05-07)
+
+No changes.
+
 ## 17.10.5 (2025-04-22)
 
 No changes.
