@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.11.2 (2025-05-07)
+
+### Fixed (1 change)
+
+- [config/git: Fix misdetected shell path](gitlab-org/security/omnibus-gitlab@c6d9d1e4bcb669f3e74c8d1616c8226981afce1d)
+
 ## 17.11.1 (2025-04-22)
 
 No changes.
