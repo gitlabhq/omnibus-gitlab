@@ -115,6 +115,10 @@ No changes.
 
 - [Add support for cells configuration](gitlab-org/omnibus-gitlab@51e44a0968143f3e51ca2c48d2a80372d7b95184) ([merge request](gitlab-org/omnibus-gitlab!8145))
 
+## 17.9.8 (2025-05-07)
+
+No changes.
+
 ## 17.9.7 (2025-04-22)
 
 No changes.
