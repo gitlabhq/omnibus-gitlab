@@ -29,4 +29,12 @@ skip_transitive_dependency_licensing true
 
 source git: version.remote
 
-# This is a source-only package for nginx.
+# This is a source-only package for nginx, but we need to populate /opt/gitlab
+# to ensure Omnibus build cache extracts the right tag.
+build do
+  dest_dir = File.join(install_dir, "src", "nginx_modules", name)
+
+  mkdir dest_dir
+
+  sync './', dest_dir
+end
