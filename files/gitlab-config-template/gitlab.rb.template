@@ -1454,7 +1454,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['port'] = 5432
 
 ##! Only used when Patroni is enabled. This is the port that PostgreSQL responds to other
-##! cluster members. This port is used by Patroni to advertize the PostgreSQL connection
+##! cluster members. This port is used by Patroni to advertise the PostgreSQL connection
 ##! endpoint to the cluster. By default it is the same as postgresql['port'].
 # postgresql['connect_port'] = 5432
 
