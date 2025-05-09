@@ -1396,9 +1396,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_shell['auth_file'] = "/var/opt/gitlab/.ssh/authorized_keys"
 
-### Migration to Go feature flags
-# gitlab_shell['migration'] = { enabled: true, features: [] } # DEPRECATED: see https://gitlab.com/groups/gitlab-org/-/epics/14845.
-
 ### Git trace log file.
 ###! If set, git commands receive GIT_TRACE* environment variables
 ###! Docs: https://git-scm.com/book/en/v2/Git-Internals-Environment-Variables#_debugging
