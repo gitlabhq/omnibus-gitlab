@@ -183,6 +183,9 @@ default['gitlab']['gitlab_rails']['ci_runner_versions_reconciliation_worker_cron
 default['gitlab']['gitlab_rails']['ci_runners_stale_machines_cleanup_worker_cron'] = nil
 default['gitlab']['gitlab_rails']['ci_catalog_resources_process_sync_events_worker_cron'] = nil
 
+default['gitlab']['gitlab_rails']['signed_cookie_salt'] = nil
+default['gitlab']['gitlab_rails']['authenticated_encrypted_cookie_salt'] = nil
+
 # Consolidated object storage config
 default['gitlab']['gitlab_rails']['object_store']['enabled'] = false
 default['gitlab']['gitlab_rails']['object_store']['connection'] = {}
