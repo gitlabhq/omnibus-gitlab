@@ -27,9 +27,12 @@ DOWNLOAD_URL_amd64=https://example.com/gitlab-ee_13.2.00-ee.0_amd64.deb
 - `DOWNLOAD_URL_amd64` specifies the URL for amd64 where that package can be downloaded from.
 - `DOWNLOAD_URL_arm64` specifies the URL for arm64 where that package can be downloaded from.
 
-NOTE **Note:**
+{{< alert type="note" >}}
+
 We're looking at improving this situation, and using locally available packages
 [in issue #5550](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5550).
+
+{{< /alert >}}
 
 ## Build the Docker image
 
