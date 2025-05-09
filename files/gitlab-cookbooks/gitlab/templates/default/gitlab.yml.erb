@@ -157,6 +157,10 @@ production: &base
     ## Enable or disable product usage data in the GitLab instance.
     initial_gitlab_product_usage_data: <%= @initial_gitlab_product_usage_data %>
 
+    ## Session cookie settings
+    signed_cookie_salt: <%= @signed_cookie_salt %>
+    authenticated_encrypted_cookie_salt: <%= @authenticated_encrypted_cookie_salt %>
+
   # Allows delivery of emails using Microsoft Graph API with OAuth 2.0 client credentials flow.
   microsoft_graph_mailer:
     enabled: <%= @microsoft_graph_mailer_enabled %>

@@ -281,6 +281,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! IP whitelist controlling access to monitoring endpoints
 # gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128']
 
+### Session settings
+
+# gitlab_rails['signed_cookie_salt'] = 'signed cookie'
+# gitlab_rails['authenticated_encrypted_cookie_salt'] = 'authenticated encrypted cookie'
+
 ### Shutdown settings
 ###! Defines an interval to block healthcheck,
 ###! but continue accepting application requests.
@@ -762,7 +767,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Product Usage Data
 # This setting enables product usage data in the GitLab instance.
-# It will be read on initial installation only. Once GitLab is up and running, 
+# It will be read on initial installation only. Once GitLab is up and running,
 # this setting should be toggled from the admin pages in the UI.
 # gitlab_rails['initial_gitlab_product_usage_data'] = nil
 
@@ -2743,7 +2748,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     {
 #       name: 'gitaly-1',
 #       path: '/var/opt/gitlab/git-data/repositories',
-#     },    
+#     },
 #   ],
 # }
 

@@ -319,5 +319,30 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    describe 'Session cookie salts' do
+      context 'with default configuration' do
+        it 'renders gitlab.yml with default values for cookie salts' do
+          expect(gitlab_yml[:production][:gitlab][:signed_cookie_salt]).to be_nil
+          expect(gitlab_yml[:production][:gitlab][:authenticated_encrypted_cookie_salt]).to be_nil
+        end
+      end
+
+      context 'with user specified configuration' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              signed_cookie_salt: 'custom_signed_salt',
+              authenticated_encrypted_cookie_salt: 'custom_encrypted_salt'
+            }
+          )
+        end
+
+        it 'renders gitlab.yml with user specified values for cookie salts' do
+          expect(gitlab_yml[:production][:gitlab][:signed_cookie_salt]).to eq('custom_signed_salt')
+          expect(gitlab_yml[:production][:gitlab][:authenticated_encrypted_cookie_salt]).to eq('custom_encrypted_salt')
+        end
+      end
+    end
   end
 end
