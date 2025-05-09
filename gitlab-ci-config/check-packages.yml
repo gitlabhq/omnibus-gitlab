@@ -109,6 +109,8 @@ Raspberry-Pi-2-Bullseye-check:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:latest"
   extends: .apt-install
   rules:
+    - if: '$DISABLE_RPI_BUILDS == "true"'
+      when: never
     - if: '$PIPELINE_TYPE == "CE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     package_repository: 'raspberry-pi2'
@@ -117,6 +119,8 @@ Raspberry-Pi-2-Bookworm-check:
   image: "${BUILDER_IMAGE_REGISTRY}/rpi_12:latest"
   extends: .apt-install
   rules:
+    - if: '$DISABLE_RPI_BUILDS == "true"'
+      when: never
     - if: '$PIPELINE_TYPE == "CE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     package_repository: 'raspberry-pi2'
