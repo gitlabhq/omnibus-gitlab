@@ -95,6 +95,8 @@
   retry: 1
   rules:
     - !reference [.default_rules, rules]
+    - if: '$DISABLE_RPI_BUILDS == "true"'
+      when: never
     - if: '$PIPELINE_TYPE == "CE_BRANCH_BUILD_PIPELINE"'
     - if: '$PIPELINE_TYPE == "CE_NIGHTLY_BUILD_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_BRANCH_BUILD_PIPELINE" && $CI_PIPELINE_SOURCE == "parent_pipeline"'
@@ -157,6 +159,8 @@
   tags: !reference [.distribution-armhf-tags]
   rules:
     - !reference [.default_rules, rules]
+    - if: '$DISABLE_RPI_BUILDS == "true"'
+      when: never
     - if: '$PIPELINE_TYPE =~ /^CE_(RC|TAG)_BUILD_PIPELINE$/'
 
 ### This stage is used for uploading packages
@@ -238,6 +242,8 @@
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
+    - if: '$DISABLE_RPI_BUILDS == "true"'
+      when: never
     - if: '$PIPELINE_TYPE =~ /^CE_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
 
@@ -1167,6 +1173,7 @@ check-packages-functionality:
     package_repository: "${STAGING_REPO}"
     package_repo_token: "${STAGING_REPO_TOKEN}:@"
     image_registry: "${CI_REGISTRY_IMAGE}"
+    DISABLE_RPI_BUILDS: "${DISABLE_RPI_BUILDS}"
   rules:
     - !reference [.default_rules, rules]
     - if: '$SKIP_PACKAGE_FUNCTIONALITY_CHECK'
@@ -1194,6 +1201,7 @@ check-packages-availability:
     - if: '$PIPELINE_TYPE =~ /CE_TAG_BUILD_PIPELINE$/'
       variables:
         PIPELINE_TYPE: 'CE_CHECK_PACKAGE_AVAILABILITY_PIPELINE'
+        DISABLE_RPI_BUILDS: "${DISABLE_RPI_BUILDS}"
     - if: '$PIPELINE_TYPE =~ /EE_TAG_BUILD_PIPELINE$/'
       variables:
         PIPELINE_TYPE: 'EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE'
