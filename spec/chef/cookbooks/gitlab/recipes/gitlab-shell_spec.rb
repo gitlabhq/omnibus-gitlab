@@ -29,7 +29,6 @@ RSpec.describe 'gitlab::gitlab-shell' do
           secret_file: '/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret',
           log_file: '/var/log/gitlab/gitlab-shell/gitlab-shell.log',
           log_format: "json",
-          migration: { enabled: true, features: [] },
           gitlab_url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket',
           gitlab_relative_path: '',
           ssl_cert_dir: '/opt/gitlab/embedded/ssl/certs/',
@@ -47,7 +46,6 @@ RSpec.describe 'gitlab::gitlab-shell' do
         expect(data['secret_file']).to eq('/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret')
         expect(data['log_file']).to eq('/var/log/gitlab/gitlab-shell/gitlab-shell.log')
         expect(data['log_format']).to eq('json')
-        expect(data['migration']).to eq({ "enabled" => true, "features" => [] })
         expect(data['gitlab_url']).to eq('http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket')
         expect(data['gitlab_relative_path']).to be_nil
         expect(data['ssl_cert_dir']).to eq('/opt/gitlab/embedded/ssl/certs/')
@@ -118,11 +116,7 @@ RSpec.describe 'gitlab::gitlab-shell' do
     before do
       stub_gitlab_rb(
         gitlab_shell: {
-          log_format: 'json',
-          migration: {
-            enabled: true,
-            features: ['discover']
-          }
+          log_format: 'json'
         }
       )
     end
@@ -130,37 +124,9 @@ RSpec.describe 'gitlab::gitlab-shell' do
     it 'creates the config file with custom values' do
       expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
         hash_including(
-          log_format: 'json',
-          migration: {
-            enabled: true,
-            features: ['discover']
-          }
+          log_format: 'json'
         )
       )
-    end
-
-    context 'migration is disabled (set to false)' do
-      before do
-        stub_gitlab_rb(
-          gitlab_shell: {
-            migration: {
-              enabled: false,
-              features: []
-            }
-          }
-        )
-      end
-
-      it 'creates the config file with migration disabled' do
-        expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
-          hash_including(
-            migration: {
-              enabled: false,
-              features: []
-            }
-          )
-        )
-      end
     end
 
     context 'when pat is disabled (set to false)' do
