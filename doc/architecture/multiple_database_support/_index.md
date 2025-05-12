@@ -28,13 +28,13 @@ blueprint. It details the implementation model and provides a few examples.
 
 ### Terminology
 
-|Term|Definition|
-|-|-|
-|Database|A _logical_ database that a component, such as Rails application, uses. For example, `gitlabhq_production`. A component can have more than one database.|
-|Database server| A _standalone process_ or a _cluster_ that provides PostgreSQL database service. Not to be confused with database objects or data.|
-|Database objects| Anything that is created with Data Definition Language (DDL), such as `DATABASE`, `SCHEMA`, `ROLE`, or `FUNCTION`. It may include reference data or indices as well. These are partially created by Omnibus GitLab and the rest are created by application-specific _database migrations_.|
-|Standalone database server| A single PostgreSQL database server. It can be accessed through a PgBouncer instance.|
-|Database server cluster|Encompasses multiple PostgreSQL database servers, managed by Patroni services, backed by a Consul cluster, accessible by using one or more PgBouncer instances, and may include an HAProxy (in TCP mode) as a frontend.|
+| Term                       | Definition |
+|----------------------------|------------|
+| Database                   | A _logical_ database that a component, such as Rails application, uses. For example, `gitlabhq_production`. A component can have more than one database. |
+| Database server            | A _standalone process_ or a _cluster_ that provides PostgreSQL database service. Not to be confused with database objects or data. |
+| Database objects           | Anything that is created with Data Definition Language (DDL), such as `DATABASE`, `SCHEMA`, `ROLE`, or `FUNCTION`. It may include reference data or indices as well. These are partially created by Omnibus GitLab and the rest are created by application-specific _database migrations_. |
+| Standalone database server | A single PostgreSQL database server. It can be accessed through a PgBouncer instance. |
+| Database server cluster    | Encompasses multiple PostgreSQL database servers, managed by Patroni services, backed by a Consul cluster, accessible by using one or more PgBouncer instances, and may include an HAProxy (in TCP mode) as a frontend. |
 
 ### Levels of support
 
