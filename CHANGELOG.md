@@ -3,6 +3,44 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.0.0 (2025-05-14)
+
+### Added (1 change)
+
+- [Add configurable session cookie salts](gitlab-org/omnibus-gitlab@e251e489302ed42538dd84eed7b15c46bdb7da25) ([merge request](gitlab-org/omnibus-gitlab!8394))
+
+### Fixed (5 changes)
+
+- [Fix NGINX modules not always building with the right tag](gitlab-org/omnibus-gitlab@677d44bac25b0f702f930ca0e03d4f6a951b7b18) ([merge request](gitlab-org/omnibus-gitlab!8386))
+- [Use pinned version when setting up geo DB](gitlab-org/omnibus-gitlab@5a9e7af32100e34b96a171fae942e6d081409e84) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/8254))
+- [config/git: Fix misdetected shell path](gitlab-org/omnibus-gitlab@26a03e0f33802bc4d2fbe9c5f211ce0c16a636e2) ([merge request](gitlab-org/omnibus-gitlab!8361))
+- [Restore frame pointers in Git](gitlab-org/omnibus-gitlab@44b9880d9f67cad47af5b03147bad8b2c4bdded3) ([merge request](gitlab-org/omnibus-gitlab!8316))
+- [Ensure /assets/gitlab.rb is used in Docker](gitlab-org/omnibus-gitlab@e2612820e15f92c7ceab7192376f3625595db3b2) ([merge request](gitlab-org/omnibus-gitlab!8304))
+
+### Changed (12 changes)
+
+- [Update to build with Go 1.23.9](gitlab-org/omnibus-gitlab@6183e2ef5bf1e3c1411d6aae31f46f66899b3267) ([merge request](gitlab-org/omnibus-gitlab!8409))
+- [Update dependency graphicsmagick to v1.3.45](gitlab-org/omnibus-gitlab@ed8a129b51b385ae98dc54e4c7946c3fc913787d) ([merge request](gitlab-org/omnibus-gitlab!8388))
+- [Update Mattermost to version 10.7.1](gitlab-org/omnibus-gitlab@393e37135f3eea0a16d19d40b5cde681bb920268) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8367))
+- [Update dependency redis-exporter to v1.71.0](gitlab-org/omnibus-gitlab@318cc02d9ad4cc67f1b6dc7e88d27e7a1d12b1aa) ([merge request](gitlab-org/omnibus-gitlab!8389))
+- [Update dependency container-registry to v4.21.0-gitlab](gitlab-org/omnibus-gitlab@710096b00e3ff9fe4dba27e16c6153f577df15b6) ([merge request](gitlab-org/omnibus-gitlab!8373))
+- [Use Ubuntu 24.04 as base for Docker image](gitlab-org/omnibus-gitlab@f19bec560f729a0ab9fcbf7fb7cdc0107ec4b382) ([merge request](gitlab-org/omnibus-gitlab!8182))
+- [Update ffi and mixlib-log gems](gitlab-org/omnibus-gitlab@4938528973a2b56e3df136c0b3798dfa4bbdfcbd) ([merge request](gitlab-org/omnibus-gitlab!8350))
+- [Update dependency container-registry to v4.20.0-gitlab](gitlab-org/omnibus-gitlab@8ca643c20086d971861d9aa062f9da0759e73122) ([merge request](gitlab-org/omnibus-gitlab!8340))
+- [Bump bundler to 2.6.7](gitlab-org/omnibus-gitlab@519fce7624e358323666131a92209c4b605617fe) ([merge request](gitlab-org/omnibus-gitlab!8291))
+- [Bump rubygems to 3.6.7](gitlab-org/omnibus-gitlab@03231e4c234ed59f95f2c50dfdd3c8fa78314480) ([merge request](gitlab-org/omnibus-gitlab!8294))
+- [Update dependency redis-exporter to v1.70.0](gitlab-org/omnibus-gitlab@4cc9a8d01fbad4d3664d67c4b43a5a3b13578943) ([merge request](gitlab-org/omnibus-gitlab!8325))
+- [Update dependency libxml2 to v2.14.1](gitlab-org/omnibus-gitlab@9c8d89b8917b4b7052685dd5777c7e164712a2a4) ([merge request](gitlab-org/omnibus-gitlab!8298))
+
+### Removed (2 changes)
+
+- [Remove gitlab_shell['migration'] setting](gitlab-org/omnibus-gitlab@e6387c7a2745c21fbad732fb0b954e1c297ef499) ([merge request](gitlab-org/omnibus-gitlab!8399))
+- [Stop producing Raspberry Pi packages](gitlab-org/omnibus-gitlab@5a2c1bf30b7f986ee26768d7a2049a782f357852) ([merge request](gitlab-org/omnibus-gitlab!8341))
+
+### Security (1 change)
+
+- [Mattermost Security Updates April 15, 2025](gitlab-org/omnibus-gitlab@b93233ad9807f5b1e30cce9386601a1db8544b72) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8360))
+
 ## 17.11.2 (2025-05-07)
 
 ### Fixed (1 change)
