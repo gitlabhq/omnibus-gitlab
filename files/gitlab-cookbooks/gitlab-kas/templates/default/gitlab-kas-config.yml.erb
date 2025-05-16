@@ -9,10 +9,6 @@ agent:
     <%- end %>
   configuration:
     poll_period: <%= @agent_configuration_poll_period %>s
-  gitops:
-    poll_period: <%= @agent_gitops_poll_period %>s
-    project_info_cache_ttl: <%= @agent_gitops_project_info_cache_ttl %>s
-    project_info_cache_error_ttl: <%= @agent_gitops_project_info_cache_error_ttl %>s
   kubernetes_api:
     listen:
       address: <%= @kubernetes_api_listen_address %>
