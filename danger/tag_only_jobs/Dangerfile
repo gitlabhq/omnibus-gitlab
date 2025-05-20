@@ -1,0 +1,56 @@
+TAG_ONLY_JOB_MESSAGE = <<~MSG.freeze
+Job definition changes detected in configurations that only run in TAG and
+release pipelines.
+
+Double check that each changed job has any newly included or referenced
+configuration files in scope.
+
+> [!warning] Check Stable Branches in the Support Window
+>
+> If your changes are deemed to impact the release process, they **MUST** be backported to the
+> stable branches within the [maintenance policy](https://docs.gitlab.com/policy/maintenance/).
+MSG
+
+PROD_ONLY_CONFIGS = [
+  'gitlab-ci-config/check-packages.yml',
+  'lib/gitlab/tasks/build.rake',
+  'lib/gitlab/build',
+  'lib/gitlab/build/image.rb',
+  'lib/gitlab/build/qa.rb',
+  'lib/gitlab/build/trigger.rb',
+  'lib/gitlab/build/gitlab_image.rb',
+  'lib/gitlab/build/info',
+  'lib/gitlab/build/info/qa.rb',
+  'lib/gitlab/build/info/components.rb',
+  'lib/gitlab/build/info/secrets.rb',
+  'lib/gitlab/build/info/docker.rb',
+  'lib/gitlab/build/info/ci.rb',
+  'lib/gitlab/build/info/deploy.rb',
+  'lib/gitlab/build/info/package.rb',
+  'lib/gitlab/build/info/git.rb',
+  'lib/gitlab/build/check.rb',
+  'lib/gitlab/build/qa_image.rb',
+  'lib/gitlab/build/facts.rb',
+  'lib/gitlab/build.rb',
+  'lib/gitlab/build_iteration.rb',
+  'lib/gitlab/tasks/release.rake',
+  'lib/gitlab/gitlab_release_helper.rb'
+].freeze
+
+def tag_only_ci_configurations(files)
+  to_review = []
+
+  files.each do |file|
+    review = PROD_ONLY_CONFIGS.any? do |pattern|
+      file.start_with?(pattern)
+    end
+
+    to_review << file if review
+  end
+
+  to_review
+end
+
+has_tag_only_jobs = !tag_only_ci_configurations(helper.all_changed_files).empty?
+
+warn format(TAG_ONLY_JOB_MESSAGE) if has_tag_only_jobs
