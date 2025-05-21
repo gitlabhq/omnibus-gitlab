@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.0.1 (2025-05-21)
+
+No changes.
+
 ## 18.0.0 (2025-05-14)
 
 ### Added (1 change)
@@ -40,6 +44,12 @@ omnibus-gitlab repository.
 ### Security (1 change)
 
 - [Mattermost Security Updates April 15, 2025](gitlab-org/omnibus-gitlab@b93233ad9807f5b1e30cce9386601a1db8544b72) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8360))
+
+## 17.11.3 (2025-05-21)
+
+### Security (1 change)
+
+- [Mattermost Security Updates April 29, 2025](gitlab-org/security/omnibus-gitlab@ac3ac0374006ec569536f7c78d41860af5ee1465) ([merge request](gitlab-org/security/omnibus-gitlab!469))
 
 ## 17.11.2 (2025-05-07)
 
@@ -86,6 +96,12 @@ No changes.
 ### Other (1 change)
 
 - [Update NGINX template comments to default values](gitlab-org/omnibus-gitlab@0993f75f3d6e5cdd4a9cb12252d9e5023591d9d8) ([merge request](gitlab-org/omnibus-gitlab!8256))
+
+## 17.10.7 (2025-05-21)
+
+### Security (1 change)
+
+- [Mattermost Security Updates April 29, 2025](gitlab-org/security/omnibus-gitlab@47c1be7400e7c75eeb73a0d581a0b9c57842b89e) ([merge request](gitlab-org/security/omnibus-gitlab!470))
 
 ## 17.10.6 (2025-05-07)
 
