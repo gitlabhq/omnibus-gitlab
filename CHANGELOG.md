@@ -45,6 +45,12 @@ No changes.
 
 - [Mattermost Security Updates April 15, 2025](gitlab-org/omnibus-gitlab@b93233ad9807f5b1e30cce9386601a1db8544b72) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8360))
 
+## 17.11.3 (2025-05-21)
+
+### Security (1 change)
+
+- [Mattermost Security Updates April 29, 2025](gitlab-org/security/omnibus-gitlab@ac3ac0374006ec569536f7c78d41860af5ee1465) ([merge request](gitlab-org/security/omnibus-gitlab!469))
+
 ## 17.11.2 (2025-05-07)
 
 ### Fixed (1 change)
