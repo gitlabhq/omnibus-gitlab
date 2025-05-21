@@ -28,10 +28,7 @@ source 'https://packagecloud.io/cinc-project/stable' do
   gem 'mixlib-versioning'
 end
 # Avoid the precompiled native gems because Omnibus specs need to run on older glibc versions.
-# Pin this to 1.17.0 because mixlib-log only allows up to 1.17.0. See:
-# - https://github.com/chef/mixlib-log/pull/81
-# - https://github.com/ffi/ffi/issues/1139
-gem 'ffi', '1.17.0', force_ruby_platform: true
+gem 'ffi', '1.17.2', force_ruby_platform: true
 gem 'unf_ext', '~>0.0.9.1'
 gem 'ohai', '~> 18.0'
 gem 'rainbow', '~> 2.2' # This is used by gitlab-ctl and the chef formatter
