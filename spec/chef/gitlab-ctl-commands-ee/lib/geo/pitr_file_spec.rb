@@ -5,7 +5,6 @@ RSpec.describe Geo::PitrFile do
   let(:lsn) { 'imafakelsn' }
   let(:postgres_path) { 'postgresql/dir' }
   let(:filepath) { "#{postgres_path}/data/geo-pitr-file" }
-  let(:fallback_path) { "ctl_data_path/postgresql/data/geo-pitr-file" }
   let(:ctl_instance) { double('gitlab-ctl instance', base_path: '', data_path: 'ctl_data_path') }
 
   subject { described_class.new(ctl_instance) }
@@ -31,7 +30,6 @@ RSpec.describe Geo::PitrFile do
     context '#delete' do
       it 'removes the pitr file' do
         allow(File).to receive(:exist?).with(filepath).and_return(true)
-        allow(File).to receive(:exist?).with(fallback_path).and_return(false)
 
         expect(File).to receive(:delete).with(filepath)
 
@@ -56,16 +54,8 @@ RSpec.describe Geo::PitrFile do
         expect(subject.get).to eq(lsn)
       end
 
-      it 'returns the fallback lsn if the file does not exist' do
-        allow(File).to receive(:exist?).with(filepath).and_return(false)
-        allow(File).to receive(:read).with(fallback_path).and_return(lsn)
-
-        expect(subject.get).to eq(lsn)
-      end
-
-      it 'raises an error if the file and fallback do not exist' do
-        allow(File).to receive(:exist?).with(filepath).and_return(false)
-        allow(File).to receive(:read).with(fallback_path).and_raise(Errno::ENOENT)
+      it 'raises an error if the file does not exist' do
+        allow(File).to receive(:read).with(filepath).and_raise(Errno::ENOENT)
 
         expect { subject.get }.to raise_error(Geo::PitrFileError, "Unable to fetch PITR")
       end

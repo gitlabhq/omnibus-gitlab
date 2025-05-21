@@ -108,17 +108,5 @@ RSpec.describe Geo::ReplicationToggleCommand do
         expect { subject.execute! }.to output(/Remove Geo point-in-time recovery file/).to_stdout
       end
     end
-
-    context 'with package update after a pause' do
-      it 'calls resume' do
-        allow(File).to receive(:exist?).with('data_path/postgresql/data/geo-pitr-file').and_return(false)
-        allow(File).to receive(:exist?).with('ctl_data_path/postgresql/data/geo-pitr-file').and_return(true)
-
-        expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume)
-        expect(File).to receive(:delete).with('ctl_data_path/postgresql/data/geo-pitr-file').and_return(1)
-
-        expect { subject.execute! }.to output(/Remove Geo point-in-time recovery file/).to_stdout
-      end
-    end
   end
 end
