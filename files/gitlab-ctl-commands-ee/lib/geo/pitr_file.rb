@@ -5,7 +5,7 @@ require_relative '../consul'
 
 module Geo
   class PitrFile
-    attr_accessor :filepath, :consul_key, :fallback_filepath
+    attr_accessor :filepath, :consul_key
 
     NAMESPACE = 'geo/pitr'
     PITR_FILE_NAME = 'geo-pitr-file'
@@ -15,10 +15,6 @@ module Geo
     def initialize(ctl)
       @filepath = "#{GitlabCtl::Util.get_public_node_attributes.dig('postgresql', 'dir')}/data/#{PITR_FILE_NAME}"
       @consul_key = "#{NAMESPACE}/#{CONSUL_PITR_KEY}".downcase
-
-      # TODO: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8970
-      # Remove the line below after required stop, to ensure that nobody will be using the fallback path anymore
-      @fallback_filepath = "#{ctl.data_path}/postgresql/data/#{PITR_FILE_NAME}"
     end
 
     def use_consul?
@@ -41,11 +37,8 @@ module Geo
     def delete
       if use_consul?
         ConsulHandler::Kv.delete(consul_key)
-      else
-        File.delete(filepath) if File.exist?(filepath)
-        # TODO: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8970
-        # Remove the line below after required stop, to ensure that nobody will be using the fallback path anymore
-        File.delete(fallback_filepath) if File.exist?(fallback_filepath)
+      elsif File.exist?(filepath)
+        File.delete(filepath)
       end
     rescue Errno::ENOENT, ConsulHandler::ConsulError
       raise PitrFileError, "Unable to delete PITR"
@@ -54,13 +47,8 @@ module Geo
     def get
       if use_consul?
         ConsulHandler::Kv.get(consul_key)
-      elsif File.exist?(filepath)
-        File.read(filepath)
       else
-        # TODO: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/8970
-        # Remove the line below as well as the check for file existence above after required stop,
-        # to ensure that nobody will be using the fallback path anymore
-        File.read(fallback_filepath)
+        File.read(filepath)
       end
     rescue Errno::ENOENT, ConsulHandler::ConsulError
       raise PitrFileError, "Unable to fetch PITR"
