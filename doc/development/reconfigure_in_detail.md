@@ -68,9 +68,9 @@ in `/etc/gitlab/gitlab.rb` file.
 
 In the above statement, we mention two types of default values:
 
-- **Static:** Static default values are specified in various
+- **Static**: Static default values are specified in various
   attribute files in different cookbooks and are independently set.
-- **Computed:** Computed default values are used in scenarios where the
+- **Computed**: Computed default values are used in scenarios where the
   default value for a setting depends on either the static default
   value or user-specified value of another setting.
 

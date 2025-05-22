@@ -1029,13 +1029,13 @@ The Linux package sets no defaults for these values and instead uses the default
 provided by the PostgreSQL adapter. Override them in `gitlab.rb` using the
 parameters noted in the table below and then run `gitlab-ctl reconfigure`.
 
-| PostgreSQL parameter | `gitlab.rb` parameter |
-|-|-|
-| `keepalives` | `gitlab_rails['db_keepalives']` |
-| `keepalives_idle` | `gitlab_rails['db_keepalives_idle']` |
+| PostgreSQL parameter  | `gitlab.rb` parameter |
+|-----------------------|-----------------------|
+| `keepalives`          | `gitlab_rails['db_keepalives']` |
+| `keepalives_idle`     | `gitlab_rails['db_keepalives_idle']` |
 | `keepalives_interval` | `gitlab_rails['db_keepalives_interval']` |
-| `keepalives_count` | `gitlab_rails['db_keepalives_count']` |
-| `tcp_user_timeout` | `gitlab_rails['db_tcp_user_timeout']` |
+| `keepalives_count`    | `gitlab_rails['db_keepalives_count']` |
+| `tcp_user_timeout`    | `gitlab_rails['db_tcp_user_timeout']` |
 
 ## Automatic database reindexing
 

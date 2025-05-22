@@ -409,7 +409,7 @@ might need to disable account management done by the GitLab package.
 By default, the Linux package installations expect the following users and groups to exist:
 
 | Linux user and group | Required                                | Description                                                           | Default home directory       | Default shell |
-| -------------------- | --------------------------------------- | --------------------------------------------------------------------- | ---------------------------- | ------------- |
+|----------------------|-----------------------------------------|-----------------------------------------------------------------------|------------------------------|---------------|
 | `git`                | Yes                                     | GitLab user/group                                                     | `/var/opt/gitlab`            | `bin/sh`      |
 | `gitlab-www`         | Yes                                     | Web server user/group                                                 | `/var/opt/gitlab/nginx`      | `/bin/false`  |
 | `gitlab-prometheus`  | Yes                                     | Prometheus user/group for Prometheus monitoring and various exporters | `/var/opt/gitlab/prometheus` | `/bin/sh`     |
@@ -572,22 +572,22 @@ permissions if this setting is set.
 
 Enabling this setting prevents the creation of the following directories:
 
-| Default location                                       | Permissions   | Ownership        | Purpose                            |
-|--------------------------------------------------------|---------------|------------------|------------------------------------|
-| `/var/opt/gitlab/git-data`                             | `2770`        | `git:git`        | Holds repositories directory       |
-| `/var/opt/gitlab/git-data/repositories`                | `2770`        | `git:git`        | Holds Git repositories             |
-| `/var/opt/gitlab/gitlab-rails/shared`                  | `0751`        | `git:gitlab-www` | Holds large object directories     |
-| `/var/opt/gitlab/gitlab-rails/shared/artifacts`        | `0700`        | `git:git`        | Holds CI artifacts                 |
-| `/var/opt/gitlab/gitlab-rails/shared/external-diffs`   | `0700`        | `git:git`        | Holds external merge request diffs |
-| `/var/opt/gitlab/gitlab-rails/shared/lfs-objects`      | `0700`        | `git:git`        | Holds LFS objects                  |
-| `/var/opt/gitlab/gitlab-rails/shared/packages`         | `0700`        | `git:git`        | Holds package repository           |
-| `/var/opt/gitlab/gitlab-rails/shared/dependency_proxy` | `0700`        | `git:git`        | Holds dependency proxy             |
-| `/var/opt/gitlab/gitlab-rails/shared/terraform_state`  | `0700`        | `git:git`        | Holds terraform state              |
-| `/var/opt/gitlab/gitlab-rails/shared/ci_secure_files`  | `0700`        | `git:git`        | Holds uploaded secure files        |
-| `/var/opt/gitlab/gitlab-rails/shared/pages`            | `0750`        | `git:gitlab-www` | Holds user pages                   |
-| `/var/opt/gitlab/gitlab-rails/uploads`                 | `0700`        | `git:git`        | Holds user attachments             |
-| `/var/opt/gitlab/gitlab-ci/builds`                     | `0700`        | `git:git`        | Holds CI build logs                |
-| `/var/opt/gitlab/.ssh`                                 | `0700`        | `git:git`        | Holds authorized keys              |
+| Default location                                       | Permissions | Ownership        | Purpose |
+|--------------------------------------------------------|-------------|------------------|---------|
+| `/var/opt/gitlab/git-data`                             | `2770`      | `git:git`        | Holds repositories directory |
+| `/var/opt/gitlab/git-data/repositories`                | `2770`      | `git:git`        | Holds Git repositories |
+| `/var/opt/gitlab/gitlab-rails/shared`                  | `0751`      | `git:gitlab-www` | Holds large object directories |
+| `/var/opt/gitlab/gitlab-rails/shared/artifacts`        | `0700`      | `git:git`        | Holds CI artifacts |
+| `/var/opt/gitlab/gitlab-rails/shared/external-diffs`   | `0700`      | `git:git`        | Holds external merge request diffs |
+| `/var/opt/gitlab/gitlab-rails/shared/lfs-objects`      | `0700`      | `git:git`        | Holds LFS objects |
+| `/var/opt/gitlab/gitlab-rails/shared/packages`         | `0700`      | `git:git`        | Holds package repository |
+| `/var/opt/gitlab/gitlab-rails/shared/dependency_proxy` | `0700`      | `git:git`        | Holds dependency proxy |
+| `/var/opt/gitlab/gitlab-rails/shared/terraform_state`  | `0700`      | `git:git`        | Holds terraform state |
+| `/var/opt/gitlab/gitlab-rails/shared/ci_secure_files`  | `0700`      | `git:git`        | Holds uploaded secure files |
+| `/var/opt/gitlab/gitlab-rails/shared/pages`            | `0750`      | `git:gitlab-www` | Holds user pages |
+| `/var/opt/gitlab/gitlab-rails/uploads`                 | `0700`      | `git:git`        | Holds user attachments |
+| `/var/opt/gitlab/gitlab-ci/builds`                     | `0700`      | `git:git`        | Holds CI build logs |
+| `/var/opt/gitlab/.ssh`                                 | `0700`      | `git:git`        | Holds authorized keys |
 
 To disable the management of storage directories:
 
@@ -669,13 +669,13 @@ is returned.
 
 The following settings can be configured:
 
-| Setting        | Description                                                                                                                                                                                    |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `enabled`      | `false` by default. Set this to `true` to enable the Git and registry authentication ban.                                                                                                      |
+| Setting        | Description |
+|----------------|-------------|
+| `enabled`      | `false` by default. Set this to `true` to enable the Git and registry authentication ban. |
 | `ip_whitelist` | IPs to not block. They must be formatted as strings in a Ruby array. You can use either single IPs or CIDR notation, for example, `["127.0.0.1", "127.0.0.2", "127.0.0.3", "192.168.0.1/24"]`. |
-| `maxretry`     | The maximum amount of times a request can be made in the specified time.                                                                                                                       |
-| `findtime`     | The maximum amount of time in seconds that failed requests can count against an IP before it's added to the denylist.                                                                          |
-| `bantime`      | The total amount of time in seconds that an IP is blocked.                                                                                                                                     |
+| `maxretry`     | The maximum amount of times a request can be made in the specified time. |
+| `findtime`     | The maximum amount of time in seconds that failed requests can count against an IP before it's added to the denylist. |
+| `bantime`      | The total amount of time in seconds that an IP is blocked. |
 
 To configure the Git and container registry authentication ban:
 
@@ -907,14 +907,14 @@ dynamically rather than read them from plain text storage.
 
 The available options are:
 
-| `gitlab.rb` setting                          | Responsibility                                                                                                                                                   |
-| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `redis['extra_config_command']`              | Provides extra configuration to the Redis server configuration file.                                                                                             |
-| `gitlab_rails['redis_extra_config_command']` | Provides extra configuration to the Redis configuration files used by GitLab Rails application. (`resque.yml`, `redis.yml`, `redis.<redis_instance>.yml` files)  |
-| `gitlab_rails['db_extra_config_command']`    | Provides extra configuration to the DB configuration file used by GitLab Rails application. (`database.yml`)                                                     |
-| `gitlab_kas['extra_config_command']`         | Provides extra configuration to GitLab agent server for Kubernetes (KAS).                                                                                        |
-| `gitlab_workhorse['extra_config_command']`   | Provides extra configuration to GitLab Workhorse.                                                                                                                |
-| `gitlab_exporter['extra_config_command']`    | Provides extra configuration to GitLab Exporter.                                                                                                                 |
+| `gitlab.rb` setting                          | Responsibility |
+|----------------------------------------------|----------------|
+| `redis['extra_config_command']`              | Provides extra configuration to the Redis server configuration file. |
+| `gitlab_rails['redis_extra_config_command']` | Provides extra configuration to the Redis configuration files used by GitLab Rails application. (`resque.yml`, `redis.yml`, `redis.<redis_instance>.yml` files) |
+| `gitlab_rails['db_extra_config_command']`    | Provides extra configuration to the DB configuration file used by GitLab Rails application. (`database.yml`) |
+| `gitlab_kas['extra_config_command']`         | Provides extra configuration to GitLab agent server for Kubernetes (KAS). |
+| `gitlab_workhorse['extra_config_command']`   | Provides extra configuration to GitLab Workhorse. |
+| `gitlab_exporter['extra_config_command']`    | Provides extra configuration to GitLab Exporter. |
 
 The value assigned to any of these options should be an absolute path to an executable script
 that writes the sensitive configuration in the required format to STDOUT. The

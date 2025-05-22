@@ -38,10 +38,10 @@ This child pipeline consists of a job called `qa-subset-test` which uses the `te
 The `qa-subset-test` job triggers another child pipeline in the `omnibus-gitlab` repository.
 To get an allure report snapshot as a comment in the MR, following environment variables need to be passed to `qa-subset-test`.
 
-| Environment Variable              | Description |
-| ----------------------------------|-------------|
-|   `GITLAB_AUTH_TOKEN`             | This is used to give access to the Danger bot to post comment in `omnibus-gitlab` repository. We are using  `$DANGER_GITLAB_API_TOKEN` which is also being used for other Danger bot related access in `omnibugs-gitlab` as mentioned [ci-variable](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/doc/development/ci-variables.md)        |
-|  `ALLURE_MERGE_REQUEST_IID`       | This denotes the MR ID which will be used by [e2e-test-report-job](#e2e-test-report-job) which inturn used `allure-report-publisher` to post message to MR with provided ID e.g. !6190 |
+| Environment Variable       | Description |
+|----------------------------|-------------|
+| `GITLAB_AUTH_TOKEN`        | This is used to give access to the Danger bot to post comment in `omnibus-gitlab` repository. We are using  `$DANGER_GITLAB_API_TOKEN` which is also being used for other Danger bot related access in `omnibugs-gitlab` as mentioned [ci-variable](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/doc/development/ci-variables.md) |
+| `ALLURE_MERGE_REQUEST_IID` | This denotes the MR ID which will be used by [e2e-test-report-job](#e2e-test-report-job) which inturn used `allure-report-publisher` to post message to MR with provided ID e.g. !6190 |
 
 ### qa-remaining-test-manual
 

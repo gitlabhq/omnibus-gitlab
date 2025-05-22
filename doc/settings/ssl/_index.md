@@ -28,12 +28,12 @@ see [External, proxy, and load balancer SSL termination](#configure-a-reverse-pr
 
 The following table shows which method each GitLab service supports.
 
-| Service | Manual SSL | Let's Encrypt integration |
-|-|-|-|
-| GitLab instance domain | [Yes](#configure-https-manually) | [Yes](#enable-the-lets-encrypt-integration) |
-| Container Registry | [Yes](https://docs.gitlab.com/administration/packages/container_registry/#configure-container-registry-under-its-own-domain) | [Yes](#enable-the-lets-encrypt-integration) |
-| Mattermost | [Yes](https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-with-https) | [Yes](#enable-the-lets-encrypt-integration) |
-| GitLab Pages | [Yes](https://docs.gitlab.com/administration/pages/#wildcard-domains-with-tls-support) | No |
+| Service                | Manual SSL                                                                                                                   | Let's Encrypt integration |
+|------------------------|------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| GitLab instance domain | [Yes](#configure-https-manually)                                                                                             | [Yes](#enable-the-lets-encrypt-integration) |
+| Container Registry     | [Yes](https://docs.gitlab.com/administration/packages/container_registry/#configure-container-registry-under-its-own-domain) | [Yes](#enable-the-lets-encrypt-integration) |
+| Mattermost             | [Yes](https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-with-https)                                  | [Yes](#enable-the-lets-encrypt-integration) |
+| GitLab Pages           | [Yes](https://docs.gitlab.com/administration/pages/#wildcard-domains-with-tls-support)                                       | No                        |
 
 ## OpenSSL 3 upgrade
 
