@@ -22,24 +22,16 @@ class DockerHelper < DockerOperations
       Kernel.exit 1
     end
 
-    # TODO: When multi-arch images are built by default, modify `platforms`
-    # array to include `linux/arm64` also
-    def build(location, image, tag, dockerfile: nil, buildargs: nil, platforms: %w[linux/amd64], push: true)
+    def build(location, image, tag, dockerfile: nil, buildargs: nil, arch: Gitlab::Util.get_env('DOCKER_ARCH'), push: true)
       create_builder
 
       commands = %W[docker buildx build #{location} -t #{image}:#{tag}]
 
-      if (env_var_platforms = Gitlab::Util.get_env('DOCKER_BUILD_PLATFORMS'))
-        platforms.append(env_var_platforms.split(",").map(&:strip))
-      end
+      # We need to specify a platform so that TARGETARCH variable is populated
+      arch ||= 'amd64'
+      commands += %W[--platform=linux/#{arch}]
 
-      platforms.uniq!
-
-      commands += %W[--platform=#{platforms.join(',')}]
-
-      # If specified to push, we must push to registry. Even if not, if the
-      # image being built is multiarch, we must push to registry.
-      commands += %w[--push] if push || platforms.length > 1
+      commands += %w[--push] if push
 
       commands += %W[-f #{dockerfile}] if dockerfile
 
@@ -86,6 +78,28 @@ class DockerHelper < DockerOperations
       else
         puts "Cleaning of omnibus-gitlab-builder instance failed."
         puts "Output: #{stdout_stderr.read}"
+      end
+    end
+
+    def combine_images(name, tag, tag_list)
+      destination_image = "#{name}:#{tag}"
+      source_images = [].tap do |sources|
+        tag_list.each do |input_tag|
+          sources << "#{name}:#{input_tag}"
+        end
+      end
+
+      commands = %W[docker buildx imagetools create -t #{destination_image}] + source_images
+      commands.flatten
+
+      puts "Running command: #{commands.join(' ').inspect}"
+
+      Open3.popen2e(*commands) do |_, stdout_stderr, status|
+        while line = stdout_stderr.gets
+          puts line
+        end
+
+        Kernel.exit 1 unless status.value.success?
       end
     end
   end

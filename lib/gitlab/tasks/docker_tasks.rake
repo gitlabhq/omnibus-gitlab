@@ -35,7 +35,7 @@ namespace :docker do
         base_image = Gitlab::Util.get_env('UBUNTU_IMAGE')
         build_args << "BASE_IMAGE=#{base_image}" if base_image
 
-        DockerHelper.build(location, Build::GitlabImage.gitlab_registry_image_address, Build::Info::Docker.tag, buildargs: build_args)
+        DockerHelper.build(location, Build::GitlabImage.gitlab_registry_image_address, Build::Info::Docker.arch_tag, buildargs: build_args)
       end
     end
   end
@@ -49,7 +49,7 @@ namespace :docker do
         # registry with `Build::Info::Docker.tag` as the tag. Also copy the
         # image with `CI_COMMIT_REF_SLUG` as the tag so that manual testing
         # using Docker can use the same image name/tag.
-        Build::GitlabImage.copy_image_to_gitlab_registry(Build::Info::CI.commit_ref_slug)
+        Build::GitlabImage.copy_image_to_gitlab_registry(Build::Info::Docker.arch_tag(Build::Info::CI.commit_ref_slug))
       end
     end
 
@@ -109,7 +109,7 @@ namespace :docker do
         # `Build::Info::Docker.tag` as the tag. Also copy the image with
         # `CI_COMMIT_REF_SLUG` as the tag so that manual testing using Docker
         # can use the same image name/tag.
-        Build::GitlabImage.copy_image_to_gitlab_registry(Build::Info::CI.commit_ref_slug)
+        Build::GitlabImage.copy_image_to_gitlab_registry(Build::Info::Docker.arch_tag(Build::Info::CI.commit_ref_slug))
       end
     end
   end
@@ -126,6 +126,22 @@ namespace :docker do
         DockerOperations.authenticate("gitlab-ci-token", Gitlab::Util.get_env("CI_JOB_TOKEN"), Gitlab::Util.get_env('CI_REGISTRY'))
         Build::GitlabImage.pull
       end
+    end
+  end
+
+  desc "Combine images with different architectures to a single multiarch image"
+  task :combine_images do
+    Gitlab::Util.section('docker:combine_images') do
+      DockerHelper.authenticate(username: "gitlab-ci-token",
+                                password: Gitlab::Util.get_env('CI_JOB_TOKEN'),
+                                registry: Gitlab::Util.get_env('CI_REGISTRY'))
+      image = Build::GitlabImage.gitlab_registry_image_address
+      tag = Build::Info::Docker.tag
+      amd64_tag = Build::Info::Docker.arch_tag(arch: 'amd64')
+      arm64_tag = Build::Info::Docker.arch_tag(arch: 'arm64')
+      DockerHelper.combine_images(image, tag, [amd64_tag, arm64_tag])
+
+      puts "Combined #{amd64_tag} and #{arm64_tag} tags to #{image}:#{tag}"
     end
   end
 end

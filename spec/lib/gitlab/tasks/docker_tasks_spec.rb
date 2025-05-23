@@ -203,6 +203,22 @@ RSpec.describe 'docker', type: :rake do
       end
     end
   end
+
+  describe 'docker:combine_images' do
+    before do
+      Rake::Task['docker:push:triggered'].reenable
+      allow(DockerHelper).to receive(:authenticate).and_return(true)
+      allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return('registry.gitlab.com/foo/bar')
+      allow(Build::Info::Docker).to receive(:tag).and_return('18.0.0')
+      allow(Gitlab::Util).to receive(:get_env).and_call_original
+    end
+
+    it 'combines the two images' do
+      expect(DockerHelper).to receive(:combine_images).with('registry.gitlab.com/foo/bar', '18.0.0', %w[18.0.0-amd64 18.0.0-arm64])
+
+      Rake::Task['docker:combine_images'].invoke
+    end
+  end
 end
 
 RSpec.describe 'docker_operations' do
