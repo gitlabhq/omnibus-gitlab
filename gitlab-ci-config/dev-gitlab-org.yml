@@ -314,6 +314,15 @@ Ubuntu-24.04-branch:
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
     - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
+Ubuntu-24.04-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .arm64_branch_template
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(NIGHTLY|BRANCH|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
+
 Debian-11-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -349,9 +358,6 @@ Ubuntu-22.04-arm64-branch:
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
       when: manual
       allow_failure: true
-Ubuntu-24.04-arm64-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_branch_template
 AlmaLinux-8-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -434,17 +440,66 @@ Ubuntu-20.04-fips-branch:
       when: manual
       allow_failure: true
 
-Docker-branch:
+Docker-branch-amd64:
   extends: .docker_job
   stage: image
+  variables:
+    DOCKER_ARCH: 'amd64'
   script:
-  - bundle exec rake docker:build:image
-  - bundle exec rake docker:push:staging
-  - bundle exec rake docker:push:nightly
+    - bundle exec rake docker:build:image
   tags: !reference [.distribution-amd64-tags]
   cache: !reference [.branch-cache]
   needs:
     - job: Ubuntu-24.04-branch
+      artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
+  retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
+
+Docker-branch-arm64:
+  extends: .docker_job
+  image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools_arm64:${BUILDER_IMAGE_REVISION}"
+  stage: image
+  variables:
+    DOCKER_ARCH: 'arm64'
+  script:
+    - bundle exec rake docker:build:image
+  tags: !reference [.distribution-arm64-tags]
+  cache: !reference [.branch-cache]
+  needs:
+    - job: Ubuntu-24.04-arm64-branch
+      artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
+  retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
+    - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
+    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
+
+Docker-branch:
+  extends: .docker_job
+  stage: image
+  script:
+    - bundle exec rake docker:combine_images
+    - bundle exec rake docker:push:staging
+    - bundle exec rake docker:push:nightly
+  tags: !reference [.distribution-amd64-tags]
+  cache: !reference [.branch-cache]
+  needs:
+    - job: Docker-branch-amd64
+      artifacts: false
+    - job: Docker-branch-arm64
       artifacts: false
     - job: generate-facts
       optional: true
@@ -527,7 +582,16 @@ Ubuntu-24.04:
   extends: .tag_template
   rules:
     - !reference [.default_rules, rules]
-  # Also build for auto-deploy tags
+    # Also build for auto-deploy tags
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
+
+Ubuntu-24.04-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:${BUILDER_IMAGE_REVISION}"
+  stage: package
+  extends: .arm64_tag_template
+  rules:
+    - !reference [.default_rules, rules]
+    # Also build for auto-deploy tags
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
 ## Build the docker image for QA
@@ -626,9 +690,6 @@ Ubuntu-20.04-arm64:
 Ubuntu-22.04-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
-Ubuntu-24.04-arm64:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_tag_template
 AlmaLinux-8:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
@@ -689,18 +750,61 @@ Ubuntu-20.04-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
 
-Docker:
+Docker-amd64:
   extends: .docker_job
   stage: image
+  variables:
+    DOCKER_ARCH: 'amd64'
   script:
-  - bundle exec rake docker:build:image
-  - bundle exec rake docker:push:staging
+    - bundle exec rake docker:build:image
   tags: !reference [.distribution-amd64-tags]
   cache: !reference [.tag-cache]
   needs:
     - job: Ubuntu-22.04
       artifacts: false
     - job: Ubuntu-24.04
+      artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
+  retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
+
+Docker-arm64:
+  extends: .docker_job
+  image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools_arm64:${BUILDER_IMAGE_REVISION}"
+  stage: image
+  variables:
+    DOCKER_ARCH: 'arm64'
+  script:
+    - bundle exec rake docker:build:image
+  tags: !reference [.distribution-arm64-tags]
+  cache: !reference [.tag-cache]
+  needs:
+    - job: Ubuntu-24.04-arm64
+      artifacts: false
+    - job: generate-facts
+      optional: true
+      artifacts: true
+  retry: 1
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
+
+Docker:
+  extends: .docker_job
+  stage: image
+  script:
+    - bundle exec rake docker:combine_images
+    - bundle exec rake docker:push:staging
+  tags: !reference [.distribution-amd64-tags]
+  cache: !reference [.tag-cache]
+  needs:
+    - job: Docker-amd64
+      artifacts: false
+    - job: Docker-arm64
       artifacts: false
     - job: generate-facts
       optional: true

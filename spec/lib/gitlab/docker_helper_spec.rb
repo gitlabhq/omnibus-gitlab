@@ -42,49 +42,47 @@ RSpec.describe DockerHelper do
       allow(Open3).to receive(:popen2e).with("docker", "buildx", "build", any_args).and_yield(nil, stdout_stderr_mock, status_mock)
     end
 
-    context 'when a single platform is specified' do
-      context 'when push is not explicitly disabled' do
-        let(:expected_args) { %w[docker buildx build /tmp/foo -t sample:value --platform=linux/amd64 --push] }
-
-        it 'calls docker build command with correct arguments' do
-          expect(Open3).to receive(:popen2e).with(*expected_args)
-
-          described_class.build('/tmp/foo', 'sample', 'value')
-        end
-      end
-
-      context 'when push is explicitly disabled' do
-        let(:expected_args) { %w[docker buildx build /tmp/foo -t sample:value --platform=linux/amd64] }
-
-        it 'calls docker build command with correct arguments' do
-          expect(Open3).to receive(:popen2e).with(*expected_args)
-
-          described_class.build('/tmp/foo', 'sample', 'value', push: false)
-        end
-      end
-    end
-
-    context 'when multiple platforms are specified via env vars' do
-      before do
-        stub_env_var('DOCKER_BUILD_PLATFORMS', 'linux/arm64')
-      end
-
-      let(:expected_args) { %w[docker buildx build /tmp/foo -t sample:value --platform=linux/amd64,linux/arm64 --push] }
+    context 'when push is not explicitly disabled' do
+      let(:expected_args) { %w[docker buildx build /tmp/foo -t sample:value --platform=linux/amd64 --push] }
 
       it 'calls docker build command with correct arguments' do
         expect(Open3).to receive(:popen2e).with(*expected_args)
 
         described_class.build('/tmp/foo', 'sample', 'value')
       end
+    end
 
-      context 'even if push is explicitly disabled' do
-        let(:expected_args) { %w[docker buildx build /tmp/foo -t sample:value --platform=linux/amd64,linux/arm64 --push] }
+    context 'when push is explicitly disabled' do
+      let(:expected_args) { %w[docker buildx build /tmp/foo -t sample:value --platform=linux/amd64] }
 
-        it 'calls docker build command with correct arguments' do
-          expect(Open3).to receive(:popen2e).with(*expected_args)
+      it 'calls docker build command with correct arguments' do
+        expect(Open3).to receive(:popen2e).with(*expected_args)
 
-          described_class.build('/tmp/foo', 'sample', 'value', push: false)
-        end
+        described_class.build('/tmp/foo', 'sample', 'value', push: false)
+      end
+    end
+
+    context 'when an architecture is not specified' do
+      let(:expected_args) { %w[docker buildx build /tmp/foo -t sample:value --platform=linux/amd64 --push] }
+
+      it 'calls docker build command with correct arguments' do
+        expect(Open3).to receive(:popen2e).with(*expected_args)
+
+        described_class.build('/tmp/foo', 'sample', 'value')
+      end
+    end
+
+    context 'when an architecture is not specified' do
+      before do
+        stub_env_var('DOCKER_ARCH', 'arm64')
+      end
+
+      let(:expected_args) { %w[docker buildx build /tmp/foo -t sample:value --platform=linux/arm64 --push] }
+
+      it 'calls docker build command with correct arguments' do
+        expect(Open3).to receive(:popen2e).with(*expected_args)
+
+        described_class.build('/tmp/foo', 'sample', 'value')
       end
     end
 
@@ -141,6 +139,16 @@ RSpec.describe DockerHelper do
 
         described_class.cleanup_existing_builder
       end
+    end
+  end
+
+  describe '.combine_images' do
+    let(:expected_args) { %w[docker buildx imagetools create -t foo:bar foo:bar-amd64 foo:bar-arm64] }
+
+    it 'calls docker build command with correct arguments' do
+      expect(Open3).to receive(:popen2e).with(*expected_args)
+
+      described_class.combine_images('foo', 'bar', %w[bar-amd64 bar-arm64])
     end
   end
 end

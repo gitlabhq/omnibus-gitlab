@@ -11,6 +11,12 @@ module Build
           Gitlab::Util.get_env('IMAGE_TAG') || Build::Info::Package.release_version.tr('+', '-')
         end
 
+        def arch_tag(general_tag = tag.dup, arch: Gitlab::Util.get_env('DOCKER_ARCH'))
+          general_tag.concat("-#{arch}") if arch
+
+          general_tag
+        end
+
         def release_file_contents
           repo = Gitlab::Util.get_env('PACKAGECLOUD_REPO') # Target repository
           download_urls = {}.tap do |urls|
