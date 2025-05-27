@@ -156,17 +156,17 @@ where supported.
 
 ### Details of current package signing key
 
-| Key attribute | Value                                               |
-| ------------  | --------------------------------------------------- |
-| Name          | `GitLab, Inc.`                                      |
-| EMail         | `support@gitlab.com`                                |
+| Key attribute | Value |
+|---------------|-------|
+| Name          | `GitLab, Inc.` |
+| EMail         | `support@gitlab.com` |
 | Fingerprint   | `98BF DB87 FCF1 0076 416C 1E0B AD99 7ACC 82DD 593D` |
-| Expiry        | `2026-02-14`                                        |
+| Expiry        | `2026-02-14` |
 
 #### Older package signing keys
 
-| Sl. No. | Key ID                                              | Revocation date | Expiry date  | Download location                                                                                         |
-| ------- | --------------------------------------------------- | --------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
+| Sl. No. | Key ID                                              | Revocation date | Expiry date  | Download location |
+|---------|-----------------------------------------------------|-----------------|--------------|-------------------|
 | 1       | `9E71 648F 3A35 EA00 CAE4 43E7 1155 1132 6BA7 34DA` | `2025-02-14`    | `2025-07-01` | [Download](https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-3D645A26AB9FBD22.pub.gpg) |
 
 ### RPM-based distributions
