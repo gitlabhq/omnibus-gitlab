@@ -410,7 +410,7 @@ By default, the Linux package installations expect the following users and group
 
 | Linux user and group | Required                                | Description                                                           | Default home directory       | Default shell |
 |----------------------|-----------------------------------------|-----------------------------------------------------------------------|------------------------------|---------------|
-| `git`                | Yes                                     | GitLab user/group                                                     | `/var/opt/gitlab`            | `bin/sh`      |
+| `git`                | Yes                                     | GitLab user/group                                                     | `/var/opt/gitlab`            | `/bin/sh`      |
 | `gitlab-www`         | Yes                                     | Web server user/group                                                 | `/var/opt/gitlab/nginx`      | `/bin/false`  |
 | `gitlab-prometheus`  | Yes                                     | Prometheus user/group for Prometheus monitoring and various exporters | `/var/opt/gitlab/prometheus` | `/bin/sh`     |
 | `gitlab-redis`       | Only when using the packaged Redis      | Redis user/group for GitLab                                           | `/var/opt/gitlab/redis`      | `/bin/false`  |
