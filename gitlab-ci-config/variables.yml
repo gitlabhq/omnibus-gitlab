@@ -37,7 +37,7 @@ variables:
   CACHE_EDITION: "CE"
   CACHE_POLICY: 'pull-push'
   ISSUE_BOT_LABELS_EXTRA: "group::distribution"
-  BUNDLER_VERSION: "2.6.8"
+  BUNDLER_VERSION: "2.6.9"
   GET_GEO_TAG: "0.7.4"
   GITLAB_NAMESPACE: "gitlab-org"
   CANONICAL_PROJECT_PATH: 'gitlab-org/omnibus-gitlab'
