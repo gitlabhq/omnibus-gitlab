@@ -40,8 +40,6 @@ default['gitlab_kas']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
 }
 
-default['gitlab-kas'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab_kas'].to_h }, "node['gitlab-kas']", "node['gitlab_kas']")
-
 # Defaults of the following settings are computed from `gitlab_rails`, and are
 # set in the library. If a new key is added here that needs to be computed from
 # the Rails counterpart, make sure it is added to the list in the library too

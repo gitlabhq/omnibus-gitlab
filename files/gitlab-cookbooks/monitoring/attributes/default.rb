@@ -138,13 +138,3 @@ default['monitoring']['gitlab_exporter']['extra_config_command'] = nil
 
 # To completely disable prometheus, and all of it's exporters, set to false
 default['gitlab']['prometheus_monitoring']['enable'] = true
-
-# Temporarily retain support for `node['monitoring']['*-exporter'][*]` usage in
-# `/etc/gitlab/gitlab.rb`
-# TODO: Remove support in 16.0
-default['monitoring']['node-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['node_exporter'].to_h }, "node['monitoring']['node-exporter']", "node['monitoring']['node_exporter']")
-default['monitoring']['redis-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['redis_exporter'].to_h }, "node['monitoring']['redis-exporter']", "node['monitoring']['redis_exporter']")
-default['monitoring']['postgres-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['postgres_exporter'].to_h }, "node['monitoring']['postgres-exporter']", "node['monitoring']['postgres_exporter']")
-default['monitoring']['pgbouncer-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['pgbouncer_exporter'].to_h }, "node['monitoring']['pgbouncer-exporter']", "node['monitoring']['pgbouncer_exporter']")
-default['monitoring']['gitlab-exporter'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['monitoring']['gitlab_exporter'].to_h }, "node['monitoring']['gitlab-exporter']", "node['monitoring']['gitlab_exporter']")
-default['gitlab']['prometheus-monitoring'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['prometheus_monitoring'].to_h }, "node['gitlab']['prometheus-monitoring']", "node['gitlab']['prometheus_monitoring']")
