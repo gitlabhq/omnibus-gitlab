@@ -335,8 +335,8 @@ module Gitlab
           {
             config_keys: %w(registry default_notifications_threshold),
             deprecation: '17.1',
-            removal: '18.0',
-            note: "`registry['default_notifications_threshold'] will be removed in 18.0. Please use `default_notifications_maxretries` instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243."
+            removal: '19.0',
+            note: "`registry['default_notifications_threshold'] will be removed in 19.0. Please use `default_notifications_maxretries` instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243."
           },
           {
             config_keys: %w(gitlab gitlab_shell migration),
@@ -582,7 +582,7 @@ module Gitlab
         messages += deprecate_only_if_value(incoming_version, existing_config, type, ['praefect'], 'failover_election_strategy', 'sql', '13.12', '14.0', note: praefect_note, ignore_deprecation: true)
         messages += deprecate_only_if_value(incoming_version, existing_config, type, ['praefect'], 'failover_election_strategy', 'local', '13.12', '14.0', note: praefect_note, ignore_deprecation: true)
 
-        messages += deprecate_registry_notifications(incoming_version, existing_config, type, ['registry', 'notifications'], 'threshold', 17.1, 18.0)
+        messages += deprecate_registry_notifications(incoming_version, existing_config, type, ['registry', 'notifications'], 'threshold', 17.1, 19.0)
 
         messages += remove_git_data_dirs(incoming_version, existing_config, type, '17.8', '18.0')
 
@@ -641,7 +641,7 @@ module Gitlab
           case key
           when "threshold"
             <<~EOS
-              Starting with GitLab 18.0, `registry['notifications'][{'threshold'=> value}] will be removed.
+              Starting with GitLab 19.0, `registry['notifications'][{'threshold'=> value}] will be removed.
               Please use `maxretries` instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243.
             EOS
           else
