@@ -1103,28 +1103,6 @@ default['gitlab']['storage_check']['enable'] = false
 default['gitlab']['storage_check']['target'] = nil
 default['gitlab']['storage_check']['log_directory'] = '/var/log/gitlab/storage-check'
 
-default['gitlab']['gitlab-shell'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_shell'].to_h }, "node['gitlab']['gitlab-shell']", "node['gitlab']['gitlab_shell']")
-default['gitlab']['remote-syslog'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['remote_syslog'].to_h }, "node['gitlab']['remote-syslog']", "node['gitlab']['remote_syslog']")
-default['gitlab']['gitlab-workhorse'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_workhorse'].to_h }, "node['gitlab']['gitlab-workhorse']", "node['gitlab']['gitlab_workhorse']")
-default['gitlab']['mattermost-nginx'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['mattermost_nginx'].to_h }, "node['gitlab']['mattermost-nginx']", "node['gitlab']['mattermost_nginx']")
-default['gitlab']['pages-nginx'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['pages_nginx'].to_h }, "node['gitlab']['pages-nginx']", "node['gitlab']['pages_nginx']")
-default['gitlab']['registry-nginx'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['registry_nginx'].to_h }, "node['gitlab']['registry-nginx']", "node['gitlab']['registry_nginx']")
-default['gitlab']['gitlab-kas-nginx'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_kas_nginx'].to_h }, "node['gitlab']['gitlab-kas-nginx']", "node['gitlab']['gitlab_kas_nginx']")
-default['gitlab']['gitlab-rails'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_rails'].to_h }, "node['gitlab']['gitlab-rails']", "node['gitlab']['gitlab_rails']")
-default['gitlab']['external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['external_url'] }, "node['gitlab']['external-url']", "node['gitlab']['external_url']")
-default['gitlab']['gitlab-kas-external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_kas_external_url'] }, "node['gitlab']['gitlab-kas-external-url']", "node['gitlab']['gitlab_kas_external_url']")
-default['gitlab']['mattermost-external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['mattermost_external_url'] }, "node['gitlab']['mattermost-external-url']", "node['gitlab']['mattermost_external_url']")
-default['gitlab']['pages-external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['pages_external_url'] }, "node['gitlab']['pages-external-url']", "node['gitlab']['pages_external_url']")
-default['gitlab']['registry-external-url'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['registry_external_url'] }, "node['gitlab']['registry-external-url']", "node['gitlab']['registry_external_url']")
-default['gitlab']['gitlab-ci'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['gitlab_ci'].to_h }, "node['gitlab']['gitlab-ci']", "node['gitlab']['gitlab_ci']")
-default['gitlab']['high-availability'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['high_availability'].to_h }, "node['gitlab']['high-availability']", "node['gitlab']['high_availability']")
-default['gitlab']['manage-accounts'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['manage_accounts'].to_h }, "node['gitlab']['manage-accounts']", "node['gitlab']['manage_accounts']")
-default['gitlab']['manage-storage-directories'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['manage_storage_directories'].to_h }, "node['gitlab']['manage-storage-directories']", "node['gitlab']['manage_storage_directories']")
-default['gitlab']['omnibus-gitconfig'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['omnibus_gitconfig'].to_h }, "node['gitlab']['omnibus-gitconfig']", "node['gitlab']['omnibus_gitconfig']")
-default['gitlab']['runtime-dir'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['runtime_dir'] }, "node['gitlab']['runtime-dir']", "node['gitlab']['runtime_dir']")
-default['gitlab']['storage-check'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['storage_check'].to_h }, "node['gitlab']['storage-check']", "node['gitlab']['storage_check']")
-default['gitlab']['web-server'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab']['web_server'].to_h }, "node['gitlab']['web-server']", "node['gitlab']['web_server']")
-
 ####
 # gitlab-backup-cli settings
 ####

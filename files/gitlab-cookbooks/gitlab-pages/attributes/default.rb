@@ -89,8 +89,3 @@ default['gitlab_pages']['namespace_in_path'] = false
 default['gitlab_pages']['client_cert'] = nil
 default['gitlab_pages']['client_key'] = nil
 default['gitlab_pages']['client_ca_certs'] = nil
-
-# Temporarily retain support for `node['gitlab-pages'][*]` usage in
-# `/etc/gitlab/gitlab.rb`
-# TODO: Remove support in 16.0
-default['gitlab-pages'] = Gitlab::Deprecations::NodeAttribute.new(proc { node['gitlab_pages'].to_h }, "node['gitlab-pages']", "node['gitlab_pages']")
