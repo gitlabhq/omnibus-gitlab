@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'nginx-module-vts'
-version = Gitlab::Version.new('nginx-module-vts', '0.2.2')
+version = Gitlab::Version.new('nginx-module-vts', '0.2.3')
 default_version version.print
 
 license 'BSD-2-Clause'
