@@ -16,7 +16,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
           artifacts_server: true,
           external_http: false,
           external_https: false,
-          custom_domain_mode: nil,
           host: nil,
           https: false,
           object_store: {
@@ -67,7 +66,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
               https: true,
               external_http: true,
               external_https: false,
-              custom_domain_mode: "http",
               artifacts_server: false,
               namespace_in_path: true,
               object_store: {
@@ -96,9 +94,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
               pages_object_store_enabled: true,
               pages_object_store_remote_directory: 'foobar',
               pages_object_store_connection: aws_connection_hash
-            },
-            gitlab_pages: {
-              custom_domain_mode: 'https'
             }
           )
         end
@@ -114,7 +109,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
               https: true,
               external_http: false,
               external_https: false,
-              custom_domain_mode: 'https',
               artifacts_server: true,
               namespace_in_path: false,
               object_store: {
@@ -143,9 +137,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
             )
           end
 
-          it 'renders gitlab.yml with pages.external_https set to true and pages.custom_domain_mode set to https' do
+          it 'renders gitlab.yml with pages.external_https set to true' do
             expect(gitlab_yml[:production][:pages][:external_https]).to be true
-            expect(gitlab_yml[:production][:pages][:custom_domain_mode]).to eq('https')
           end
         end
 
@@ -160,27 +153,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
             )
           end
 
-          it 'renders gitlab.yml with pages.external_https set to true and pages.custom_domain_mode set to https' do
+          it 'renders gitlab.yml with pages.external_https set to true' do
             expect(gitlab_yml[:production][:pages][:external_https]).to be true
-            expect(gitlab_yml[:production][:pages][:custom_domain_mode]).to eq('https')
-          end
-        end
-      end
-
-      describe 'for custom domain settings' do
-        context 'when invalid custom_domain_mode is used' do
-          before do
-            stub_gitlab_rb(
-              external_url: 'https://gitlab.example.com',
-              pages_external_url: 'https://pages.example.com',
-              gitlab_pages: {
-                custom_domain_mode: 'invalid'
-              }
-            )
-          end
-
-          it 'renders gitlab.yml with pages.custom_domain_mode set to blank' do
-            expect(gitlab_yml[:production][:pages][:custom_domain_mode]).to be_nil
           end
         end
       end
