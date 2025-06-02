@@ -14,18 +14,24 @@ title: Backup
 
 ## Backup and restore configuration on a Linux package installation
 
-It is recommended to keep a copy of `/etc/gitlab`, or at least of
-`/etc/gitlab/gitlab-secrets.json`, in a safe place. If you ever
-need to restore a GitLab application backup you need to also restore
-`gitlab-secrets.json`. If you do not, GitLab users who are using
-two-factor authentication will lose access to your GitLab server
-and 'secure variables' stored in GitLab CI will be lost.
+All configuration for Linux package installations is stored in `/etc/gitlab`.
+It is recommended to keep a copy of your [configuration and certificates](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#data-not-included-in-a-backup)
+in a safe place, that's separate from your GitLab application backups.
+This reduces the chance that your encrypted application data will be
+lost or leaked or stolen together with the keys needed to decrypt it.
 
-It is not recommended to store your configuration backup in the
-same place as your application data backup, see below.
+In particular, the `gitlab-secrets.json` file (and possibly also the `gitlab.rb`
+file) contain database encryption keys to protect sensitive data
+in the SQL database:
 
-All configuration for Linux package installations is stored in `/etc/gitlab`. To backup your
-configuration, just run `sudo gitlab-ctl backup-etc`. It creates a tar
+- [Two-factor authentication](https://docs.gitlab.com/security/two_factor_authentication/) (2FA) user secrets
+- [Secure Files](https://docs.gitlab.com/ci/secure_files/)
+
+If those files are lost, 2FA users will lose access to
+their [GitLab account](https://docs.gitlab.com/user/profile/)
+and 'secure variables' will be lost from CI configurations.
+
+To back up your configuration, run `sudo gitlab-ctl backup-etc`. It creates a tar
 archive in `/etc/gitlab/config_backup/`. Directory and backup files will be
 readable only to root.
 
@@ -102,21 +108,6 @@ If no parameter is provided the default is `--delete-old-backups`, which will de
 older than the current time minus the `backup_keep_time`, if `backup_keep_time` is greater than 0.
 
 {{< /alert >}}
-
-### Separate configuration backups from application data
-
-Do not store your GitLab application backups (Git repositories, SQL
-data) in the same place as your configuration backup (`/etc/gitlab`).
-The `gitlab-secrets.json` file (and possibly also the `gitlab.rb`
-file) contain database encryption keys to protect sensitive data
-in the SQL database:
-
-- GitLab two-factor authentication (2FA) user secrets ('QR codes')
-- GitLab CI 'secure variables'
-
-If you separate your configuration backup from your application data backup,
-you reduce the chance that your encrypted application data will be
-lost/leaked/stolen together with the keys needed to decrypt it.
 
 ## Creating an application backup
 
