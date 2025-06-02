@@ -4,6 +4,7 @@
 default['gitlab_pages']['enable'] = false
 default['gitlab_pages']['external_http'] = []
 default['gitlab_pages']['external_https'] = []
+default['gitlab_pages']['custom_domain_mode'] = nil
 default['gitlab_pages']['external_https_proxyv2'] = []
 default['gitlab_pages']['listen_proxy'] = "localhost:8090"
 default['gitlab_pages']['gitlab_server'] = nil

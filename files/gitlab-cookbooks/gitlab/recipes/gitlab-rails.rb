@@ -377,6 +377,19 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   mattermost_host = Gitlab['mattermost_external_url'] || node['gitlab']['gitlab_rails']['mattermost_host']
   has_jh_cookbook = File.exist?('/opt/gitlab/embedded/cookbooks/gitlab-jh')
 
+  pages_external_https = node['gitlab_pages']['external_https'] || []
+  pages_external_https_proxyv2 = node['gitlab_pages']['external_https_proxyv2'] || []
+  pages_external_http = node['gitlab_pages']['external_http'] || []
+  pages_custom_domain_mode = node['gitlab_pages']['custom_domain_mode']
+
+  if pages_external_https.any? || pages_external_https_proxyv2.any?
+    pages_custom_domain_mode = 'https'
+  elsif pages_external_http.any?
+    pages_custom_domain_mode = 'http'
+  elsif !%w[http https].include?(pages_custom_domain_mode.to_s.downcase)
+    pages_custom_domain_mode = nil
+  end
+
   variables(
     node['gitlab']['gitlab_rails'].to_hash.merge(
       gitlab_ci_all_broken_builds: node['gitlab']['gitlab_ci']['gitlab_ci_all_broken_builds'],
@@ -385,6 +398,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       pages_external_http: node['gitlab_pages']['external_http'],
       pages_external_https: node['gitlab_pages']['external_https'],
       pages_external_https_proxyv2: node['gitlab_pages']['external_https_proxyv2'],
+      pages_custom_domain_mode: pages_custom_domain_mode,
       pages_artifacts_server: node['gitlab_pages']['artifacts_server'],
       pages_access_control: node['gitlab_pages']['access_control'],
       pages_object_store_enabled: node['gitlab']['gitlab_rails']['pages_object_store_enabled'],

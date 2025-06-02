@@ -468,6 +468,7 @@ production: &base
     https: <%= @pages_https %>
     external_http: <%= !@pages_external_http.empty? %>
     external_https: <%= !@pages_external_https.empty? || !@pages_external_https_proxyv2.empty? %>
+    custom_domain_mode: <%= @pages_custom_domain_mode %>
     artifacts_server: <%= @pages_artifacts_server %>
     object_store:
       enabled: <%= @pages_object_store_enabled %>
