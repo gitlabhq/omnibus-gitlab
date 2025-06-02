@@ -33,7 +33,7 @@ Pick one of the existing cookbooks to configure your service within, or create a
 new cookbook if your service warrants its own.
 
 Within the cookbook there should be an `attributes/default.rb` file. This is where
-you want to define the [Default Attributes](../architecture/_index.md#default-attributes)
+you want to define the [Default Attributes](architecture/_index.md#default-attributes)
 for your service. For a service you should define an `enable` option by default.
 
 ```ruby
@@ -102,7 +102,7 @@ ee_attribute('best_service')
 
 ### Add service configuration to the settings template
 
-We maintain a [global configuration template](../architecture/_index.md#global-gitlab-configuration-template)
+We maintain a [global configuration template](architecture/_index.md#global-gitlab-configuration-template)
 where examples of how to configure the services are available, commented out.
 
 This file becomes the `/etc/gitlab/gitlab.rb` on fresh installs of the package.
@@ -125,7 +125,7 @@ when it makes the most sense.
 ## Include the service in the services list
 
 In order to allow the service to be easily enable/disabled within the recipes, it
-should be added to the [services list](../architecture/_index.md#services)
+should be added to the [services list](architecture/_index.md#services)
 and given appropriate groups.
 
 In the `files/gitlab-cookbooks/package/libraries/config/services.rb` file, add the

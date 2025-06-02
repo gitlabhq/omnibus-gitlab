@@ -6,7 +6,7 @@ title: Database support
 ---
 
 This document provides details and examples on how to implement database support
-for a Linux package component. The [architecture blueprint](../architecture/multiple_database_support/_index.md)
+for a Linux package component. The [architecture blueprint](architecture/multiple_database_support/_index.md)
 provides the design and definitions.
 
 1. [Level 1](#level-1)
