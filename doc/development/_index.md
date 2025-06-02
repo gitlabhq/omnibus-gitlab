@@ -7,7 +7,7 @@ title: Contribute to Linux package development
 
 ## Getting started
 
-1. [Understanding the Linux package architecture](../architecture/_index.md)
+1. [Understanding the Linux package architecture](architecture/_index.md)
 1. [Setting up a local development environment](setup.md)
 
 ## How everyone can contribute
