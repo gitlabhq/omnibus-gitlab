@@ -27,9 +27,9 @@ unset DOWNLOAD_URL
 unset CI_JOB_TOKEN
 
 # Create sshd daemon
-mkdir -p /opt/gitlab/sv/sshd/supervise /opt/gitlab/sv/sshd/log/supervise
+mkdir -p /opt/gitlab/sv/sshd/supervise /opt/gitlab/sv/sshd/log/supervise /opt/gitlab/etc/sshd/env
 mkfifo /opt/gitlab/sv/sshd/supervise/ok /opt/gitlab/sv/sshd/log/supervise/ok
-printf "#!/bin/sh\nexec 2>&1\numask 077\nexec /usr/sbin/sshd -D -f /assets/sshd_config -e" > /opt/gitlab/sv/sshd/run
+printf "#!/bin/sh\nexec 2>&1\numask 077\nexec chpst -P -u root:root -U root:root -e /opt/gitlab/etc/sshd/env /usr/sbin/sshd -D -f /assets/sshd_config -e" > /opt/gitlab/sv/sshd/run
 printf "#!/bin/sh\nexec svlogd -tt /var/log/gitlab/sshd" > /opt/gitlab/sv/sshd/log/run
 chmod a+x /opt/gitlab/sv/sshd/run /opt/gitlab/sv/sshd/log/run
 
