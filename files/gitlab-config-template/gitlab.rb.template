@@ -245,7 +245,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Content Security Policy
 ###! Customize if you want to enable the Content-Security-Policy header, which
 ###! can help thwart JavaScript cross-site scripting (XSS) attacks.
-###! See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+###! See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP
 # gitlab_rails['content_security_policy'] = {
 #  'enabled' => false,
 #  'report_only' => false,

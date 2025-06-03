@@ -215,7 +215,7 @@ To disable this functionality:
 
 ## Lazy freeing
 
-Redis 4 introduced [lazy freeing](http://antirez.com/news/93). This can improve performance when freeing large values.
+Redis 4 introduced [lazy freeing](https://antirez.com/news/93). This can improve performance when freeing large values.
 
 This setting defaults to `false`. To enable it, you can use:
 

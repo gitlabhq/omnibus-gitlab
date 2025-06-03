@@ -56,7 +56,7 @@ To learn more about the DNS records, see the
 
 ## Use a dynamic DNS service
 
-For non-production use, you can use a dynamic DNS service, such as [nip.io](https://nip.io).
+For non-production use, you can use a dynamic DNS service, such as [nip.io](https://nip.io/).
 
 We do not recommend these for any production or long-lived instances, as they are often:
 

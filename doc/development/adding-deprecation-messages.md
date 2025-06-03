@@ -5,7 +5,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: Linux package deprecation process
 ---
 
-Besides following the [GitLab deprecation guidelines](https://handbook.gitlab.com/handbook/product/gitlab-the-product/#deprecations-removals-and-breaking-changes), we should also add deprecation messages
+Besides following the [GitLab deprecation guidelines](https://docs.gitlab.com/development/deprecation_guidelines/), we should also add deprecation messages
 to the Linux package.
 
 Notifying GitLab administrators of the deprecation and removal of features through deprecation messages consists of:
