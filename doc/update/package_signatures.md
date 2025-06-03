@@ -167,7 +167,7 @@ where supported.
 
 | Sl. No. | Key ID                                              | Revocation date | Expiry date  | Download location |
 |---------|-----------------------------------------------------|-----------------|--------------|-------------------|
-| 1       | `9E71 648F 3A35 EA00 CAE4 43E7 1155 1132 6BA7 34DA` | `2025-02-14`    | `2025-07-01` | [Download](https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-3D645A26AB9FBD22.pub.gpg) |
+| 1       | `9E71 648F 3A35 EA00 CAE4 43E7 1155 1132 6BA7 34DA` | `2025-02-14`    | `2025-07-01` | `https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-3D645A26AB9FBD22.pub.gpg` |
 
 ### RPM-based distributions
 

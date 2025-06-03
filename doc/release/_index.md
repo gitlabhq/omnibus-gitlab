@@ -128,7 +128,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
    | `v7.10.4-ee`     | `7.10.4+ee.0`, `7.10.4+ee.1`, `...`         |
    | `v7.11.0.rc1-ee` | `7.11.0+rc1.ee.0`, `7.11.0+rc1.ee.1`, `...` |
 
-1. Push the branch and the tag to both <https://gitlab.com> and `https://dev.gitlab.org`:
+1. Push the branch and the tag to both `https://gitlab.com` and `https://dev.gitlab.org`:
 
    ```shell
    git push git@gitlab.com:gitlab-org/omnibus-gitlab.git 6-6-stable 6.6.0+ce.0
@@ -157,4 +157,4 @@ New images should be released within 3 business days of the package release.
 
 Image specific release documentation:
 
-- (**Deprecated**) [OpenShift](https://docs.gitlab.com/charts/development/release.html).
+- (**Deprecated**) [OpenShift](https://docs.gitlab.com/charts/development/release/).

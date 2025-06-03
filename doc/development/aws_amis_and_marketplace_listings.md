@@ -19,7 +19,7 @@ GitLab caters to the AWS ecosystem via the following methods
 
 AMIs are built as part of regular release process in the tag pipelines that run
 in the [Build mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab), and use the
-Ubuntu 22.04 packages under the hood. They are built using [`packer`](https://www.packer.io/)
+Ubuntu 22.04 packages under the hood. They are built using [`packer`](https://developer.hashicorp.com/packer)
 with their [`Amazon EBS`](https://developer.hashicorp.com/packer/integrations/hashicorp/amazon/latest/components/builder/ebs)
 builder. Each Community AMI listed above has a corresponding packer
 configuration file to specify the build and AMI attributes and an update script

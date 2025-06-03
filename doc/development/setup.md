@@ -16,7 +16,7 @@ to use a container for development.
 
 ## Set up a container
 
-1. Install Docker for your OS as per the [official Docker installation docs](https://docs.docker.com/get-docker/).
+1. Install Docker for your OS as per the [official Docker installation docs](https://docs.docker.com/get-started/get-docker/).
 
 1. Pull the GitLab CE nightly image:
 

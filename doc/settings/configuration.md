@@ -731,7 +731,7 @@ collecting errors from your GitLab environments.
 {{< /alert >}}
 
 Sentry is an open source error reporting and logging tool which can be used as
-SaaS (<https://sentry.io>) or [host it yourself](https://develop.sentry.dev/self-hosted/).
+SaaS (<https://sentry.io/welcome/>) or [host it yourself](https://develop.sentry.dev/self-hosted/).
 
 To configure Sentry:
 
@@ -799,10 +799,10 @@ is tracked in [this issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues
 
 Setting a Content Security Policy (CSP) can help thwart JavaScript
 cross-site scripting (XSS) attacks. See
-[the Mozilla documentation on CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) for more
+[the Mozilla documentation on CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) for more
 details.
 
-[CSP and nonce-source with inline JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src) is available on GitLab.com.
+[CSP and nonce-source with inline JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/script-src) is available on GitLab.com.
 It is [not configured by default](https://gitlab.com/gitlab-org/gitlab/-/issues/30720) on GitLab Self-Managed.
 
 {{< alert type="note" >}}

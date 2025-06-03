@@ -254,7 +254,7 @@ run a package build and QA for development purposes. This can be used by
 developers to get a package or Docker image for testing, or to run a full QA
 suite against their MR's changes.
 
-To debug QA failures, refer to the [Investigate QA failures](https://handbook.gitlab.com/handbook/engineering/infrastructure/test-platform/self-managed-platform-team/distribution/#investigate-qa-failures)
+To debug QA failures, refer to the [Investigate QA failures](https://handbook.gitlab.com/handbook/engineering/testing/distribution/#investigate-qa-failures)
 section. This job also generates an Allure report. For more information and a demo of the Allure report, see [test report generation](allure-test-report.md).
 
 This job is run only on [Development repository](https://gitlab.com/gitlab-org/omnibus-gitlab) and [Security mirror](https://gitlab.com/gitlab-org/security/omnibus-gitlab) on branch
