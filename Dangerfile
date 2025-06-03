@@ -9,6 +9,11 @@ Gitlab::Dangerfiles.for_project(self, 'omnibus-gitlab') do |gitlab_dangerfiles|
 
   gitlab_dangerfiles.config.files_to_category = {
     %r{\Adoc/} => [:docs],
+    %r{\Aargo_translation.yml/} => [:docs],
+    %r{\Adoc-locale/} => [:docs],
+    %r{\A.markdownlint-cli2.yaml/} => [:docs],
+    %r{\A.vale.ini/} => [:docs],
+    %r{\A.yardopts/} => [:docs],
     %r{\ADangerfile} => [:build],
     %r{\AGemfile} => [:build],
     %r{\AGemfile.lock} => [:build],
@@ -26,12 +31,13 @@ Gitlab::Dangerfiles.for_project(self, 'omnibus-gitlab') do |gitlab_dangerfiles|
     %r{\Aspec/lib/} => [:build],
     %r{\Aletsencrypt-test/} => [:configure],
     %r{\Afiles/} => [:configure],
-    %r{\Aspec/chef/} => [:configure]
+    %r{\Aspec/chef/} => [:configure],
+    %r{.*} => [:build]
   }
 
   gitlab_dangerfiles.config.custom_labels_for_categories = {
     build: '~"Category:Build"',
-    docs: '~"docs"',
+    docs: '~"documentation"',
     configure: '~"Category:Configuration"'
   }
 
