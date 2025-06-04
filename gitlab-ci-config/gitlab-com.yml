@@ -723,7 +723,7 @@ pages:
 
 .build-package-on-all-os-vars:
   extends: .base-trigger-job-variables
-  SKIP_JOB_REGEX: '/Ubuntu-22.04|Ubuntu-20.04-fips|Docker|QA/'
+  SKIP_JOB_REGEX: '/Ubuntu-24.04|Ubuntu-22.04|Ubuntu-20.04-fips|Docker|QA/'
   PIPELINE_TYPE: "${EDITION}_BRANCH_BUILD_PIPELINE"
   CACHE_EDITION: ${EDITION}
   ee: ${ee}
