@@ -1166,6 +1166,14 @@ production: &base
     openid_id_token_expire_in_seconds: <%= @oidc_provider_openid_id_token_expire_in_seconds %>
   <%- end -%>
 
+  <%- if @ci_id_tokens_issuer_url -%>
+  ## CI ID Tokens settings
+  ci_id_tokens:
+    # Configure a custom issuer URL for CI ID Tokens.
+    # By default, GitLab instance URL is used.
+    issuer_url: <%= @ci_id_tokens_issuer_url %>
+  <%- end -%>
+
   #
   # 5. Extra customization
   # ==========================
