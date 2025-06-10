@@ -1,0 +1,15 @@
+# Vault integration configuration for accessing Group Access Tokens
+# Reference: doc/build/vault_integration.md
+
+.vault-integration:
+  # Base template for jobs that need to retrieve secrets from Vault
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: https://vault.gitlab.net
+  secrets:
+    ALTERNATIVE_PRIVATE_TOKEN:
+      vault: ci/metadata/access_tokens/gitlab-com/gitlab-org/security/_group_access_tokens/build-token/token@ci
+
+# Template for jobs that need access to private repositories
+.with-build-token:
+  extends: .vault-integration

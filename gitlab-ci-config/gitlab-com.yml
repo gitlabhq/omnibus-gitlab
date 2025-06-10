@@ -97,6 +97,7 @@ spec:
 .base-trigger-job-variables:
   ALTERNATIVE_SOURCES: 'true'
   SECURITY_SOURCES: ${SECURITY_SOURCES}
+  ALTERNATIVE_PRIVATE_TOKEN: ${ALTERNATIVE_PRIVATE_TOKEN}
   BUILDER_IMAGE_REVISION: ${BUILDER_IMAGE_REVISION}
   BUILDER_IMAGE_REGISTRY: ${BUILDER_IMAGE_REGISTRY}
   PUBLIC_BUILDER_IMAGE_REGISTRY: ${PUBLIC_BUILDER_IMAGE_REGISTRY}
@@ -127,6 +128,7 @@ spec:
   ee: "true"
 
 .ce-trigger-job:
+  extends: .with-build-token
   stage: qa
   trigger:
     include:
@@ -334,7 +336,7 @@ docs-lint hugo:
     # See https://gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/-/blob/main/scripts/check-index-filenames.sh
     - make check-index-pages SEARCH_DIR="../doc"
 
-# Translation delivery of docs 
+# Translation delivery of docs
 # Perform linting on translated documentation Markdown files
 docs-lint-i18n content:
   image: $DOCS_LINT_IMAGE
@@ -729,6 +731,7 @@ pages:
   ee: ${ee}
 
 build-package-on-all-os:
+  extends: .with-build-token
   stage: package
   needs:
     - job: generate-facts

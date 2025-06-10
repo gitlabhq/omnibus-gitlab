@@ -150,7 +150,9 @@ module Gitlab
       return "" unless sources
 
       if channel == SECURITY_SOURCE
-        attach_remote_credential(sources[channel], Gitlab::Util.get_env("CI_JOB_TOKEN")) || sources[::Gitlab::Version.fallback_sources_channel]
+        # Use ALTERNATIVE_PRIVATE_TOKEN if available, otherwise fall back to CI_JOB_TOKEN
+        token = Gitlab::Util.get_env("ALTERNATIVE_PRIVATE_TOKEN") || Gitlab::Util.get_env("CI_JOB_TOKEN")
+        attach_remote_credential(sources[channel], token) || sources[::Gitlab::Version.fallback_sources_channel]
       else
         sources[channel]
       end
