@@ -81,6 +81,10 @@ if [ "${GITLAB_ALLOW_SHA1_RSA}" == 'true' ]; then
   printf '\n# Enabled/Disabled via GITLAB_ALLOW_SHA1_RSA=[true/false]\nHostKeyAlgorithms +ssh-rsa\nPubkeyAcceptedKeyTypes +ssh-rsa' >> /assets/sshd_config
 fi
 
+if [[ -n "${OPENSSL_FORCE_FIPS_MODE}" ]]; then
+  echo "${OPENSSL_FORCE_FIPS_MODE}" > /opt/gitlab/etc/sshd/env/OPENSSL_FORCE_FIPS_MODE
+fi
+
 # Check if this is a valid upgrade path
 # If the VERSION file doesn't exist, then this is not an upgrade
 if old_version=$(cat /var/opt/gitlab/gitlab-rails/VERSION)
