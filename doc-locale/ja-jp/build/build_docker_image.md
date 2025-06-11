@@ -22,7 +22,7 @@ DOWNLOAD_URL_amd64=https://example.com/gitlab-ee_13.2.00-ee.0_amd64.deb
 - `DOWNLOAD_URL_amd64`は、そのパッケージをダウンロードできるamd64のURLを指定します。
 - `DOWNLOAD_URL_arm64`は、そのパッケージをダウンロードできるarm64のURLを指定します。
 
-注 **注：**この状況の改善と、ローカルで利用可能なパッケージの使用については、[イシュー#5550](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5550)で検討しています。
+注 **注**この状況の改善と、ローカルで利用可能なパッケージの使用については、[イシュー#5550](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5550)で検討しています。
 
 ## Dockerイメージをビルドする
 
