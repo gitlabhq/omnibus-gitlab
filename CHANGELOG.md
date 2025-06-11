@@ -109,6 +109,12 @@ No changes.
 
 - [Update NGINX template comments to default values](gitlab-org/omnibus-gitlab@0993f75f3d6e5cdd4a9cb12252d9e5023591d9d8) ([merge request](gitlab-org/omnibus-gitlab!8256))
 
+## 17.10.8 (2025-06-11)
+
+### Security (1 change)
+
+- [Default X-Forwarded-For to $remote_addr in GitLab NGINX config](gitlab-org/security/omnibus-gitlab@9e6ca048b32559c9a6cb0db19aed357f4a7573b8) ([merge request](gitlab-org/security/omnibus-gitlab!473))
+
 ## 17.10.7 (2025-05-21)
 
 ### Security (1 change)
