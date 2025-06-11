@@ -51,6 +51,12 @@ No changes.
 
 - [Mattermost Security Updates April 15, 2025](gitlab-org/omnibus-gitlab@b93233ad9807f5b1e30cce9386601a1db8544b72) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8360))
 
+## 17.11.4 (2025-06-11)
+
+### Security (1 change)
+
+- [Default X-Forwarded-For to $remote_addr in GitLab NGINX config](gitlab-org/security/omnibus-gitlab@1eb5ddc33753cd57064b12d45f79a209b4705c37) ([merge request](gitlab-org/security/omnibus-gitlab!472))
+
 ## 17.11.3 (2025-05-21)
 
 ### Security (1 change)
