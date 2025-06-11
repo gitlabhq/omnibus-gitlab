@@ -121,7 +121,8 @@ RSpec.describe 'nginx' do
       expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to eql(nginx_headers({
                                                                                            "Host" => "$http_host_with_default",
                                                                                            "Upgrade" => "$http_upgrade",
-                                                                                           "Connection" => "$connection_upgrade"
+                                                                                           "Connection" => "$connection_upgrade",
+                                                                                           "X-Forwarded-For" => "$remote_addr"
                                                                                          }))
       expect(chef_run.node['gitlab']['registry_nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
       expect(chef_run.node['gitlab']['mattermost_nginx']['proxy_set_headers']).to eql(nginx_headers({
@@ -156,7 +157,8 @@ RSpec.describe 'nginx' do
       )
 
       expect_headers = nginx_headers(set_headers)
-      expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to(
+        include(expect_headers.merge({ "X-Forwarded-For" => "$remote_addr" })))
       expect(chef_run.node['gitlab']['mattermost_nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab']['registry_nginx']['proxy_set_headers']).to include(expect_headers)
 
@@ -183,7 +185,8 @@ RSpec.describe 'nginx' do
                                                                                            "X-Forwarded-Proto" => "https",
                                                                                            "X-Forwarded-Ssl" => "on",
                                                                                            "Upgrade" => "$http_upgrade",
-                                                                                           "Connection" => "$connection_upgrade"
+                                                                                           "Connection" => "$connection_upgrade",
+                                                                                           "X-Forwarded-For" => "$remote_addr"
                                                                                          }))
 
       expect(chef_run.node['gitlab']['registry_nginx']['proxy_set_headers']).to eql(nginx_headers({
@@ -227,7 +230,7 @@ RSpec.describe 'nginx' do
         "gitlab_kas_nginx" => { proxy_set_headers: set_headers }
       )
 
-      expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers.merge("X-Forwarded-For" => "$remote_addr"))
       expect(chef_run.node['gitlab']['mattermost_nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab']['registry_nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab']['pages_nginx']['proxy_set_headers']).to include(expect_headers)
@@ -247,7 +250,7 @@ RSpec.describe 'nginx' do
         "gitlab_kas_nginx" => { proxy_set_headers: set_headers }
       )
 
-      expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab']['nginx']['proxy_set_headers']).to include(expect_headers.merge("X-Forwarded-For" => "$remote_addr"))
       expect(chef_run.node['gitlab']['mattermost_nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab']['registry_nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab']['pages_nginx']['proxy_set_headers']).to include(expect_headers)
