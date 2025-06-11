@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.11.4 (2025-06-11)
+
+### Security (1 change)
+
+- [Default X-Forwarded-For to $remote_addr in GitLab NGINX config](gitlab-org/security/omnibus-gitlab@1eb5ddc33753cd57064b12d45f79a209b4705c37) ([merge request](gitlab-org/security/omnibus-gitlab!472))
+
 ## 17.11.3 (2025-05-21)
 
 ### Security (1 change)
