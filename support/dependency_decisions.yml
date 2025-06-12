@@ -317,3 +317,9 @@
     :why: https://github.com/hashicorp/memberlist/blob/master/LICENSE
     :versions: [ v0.5.1 ]
     :when: 2025-01-23 11:30:00.000000000 Z
+- - :license
+  - "gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/clients/gopb"
+  - MIT
+  - :who: Igor Drozdov
+    :why: https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/clients/gopb/LICENSE
+    :when: 2025-06-17 11:00:00.000000000 Z
