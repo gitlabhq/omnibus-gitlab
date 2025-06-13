@@ -730,7 +730,6 @@ pages:
   ee: ${ee}
 
 build-package-on-all-os:
-  extends: .with-build-token
   stage: package
   needs:
     - job: generate-facts
