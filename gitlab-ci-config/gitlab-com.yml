@@ -128,7 +128,6 @@ spec:
   ee: "true"
 
 .ce-trigger-job:
-  extends: .with-build-token
   stage: qa
   trigger:
     include:
