@@ -283,6 +283,8 @@ To enable HTTPS:
    sudo mkdir -p /etc/gitlab/ssl
    sudo chmod 755 /etc/gitlab/ssl
    sudo cp gitlab.example.com.key gitlab.example.com.crt /etc/gitlab/ssl/
+   sudo chmod 644 /etc/gitlab/ssl/gitlab.example.com.crt
+   sudo chmod 600 /etc/gitlab/ssl/gitlab.example.com.key
    ```
 
    In the example, the hostname is `gitlab.example.com`, so the Linux package installation
