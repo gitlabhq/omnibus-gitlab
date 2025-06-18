@@ -3,6 +3,37 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.1.0 (2025-06-18)
+
+### Added (2 changes)
+
+- [Add custom_domain_mode parameter for pages](gitlab-org/omnibus-gitlab@c29543dd9b05fb8417914389788850c9423ca90d) ([merge request](gitlab-org/omnibus-gitlab!8419))
+- [Add ci_id_tokens.issuer_url setting to gitlab.yml](gitlab-org/omnibus-gitlab@bac76086a93e5cb38e94e9d4f0e0ae5d1a2bdbb1) ([merge request](gitlab-org/omnibus-gitlab!8382))
+
+### Changed (17 changes)
+
+- [Bump redis to v7.2.9](gitlab-org/omnibus-gitlab@8bead4c420bab8720b051c9d7fb4aef4c0672062) ([merge request](gitlab-org/omnibus-gitlab!8405))
+- [Update dependency cpython to v3.9.23](gitlab-org/omnibus-gitlab@a9e3ed3d97f533f7f47086c7e765a287269c90f3) ([merge request](gitlab-org/omnibus-gitlab!8465))
+- [Bump container-registry to 4.23.1](gitlab-org/omnibus-gitlab@9cc0107defcdd97f1519fa249f14e687622425b5) ([merge request](gitlab-org/omnibus-gitlab!8466))
+- [Update dependency rubygems to v3.6.9](gitlab-org/omnibus-gitlab@d53223196f2c63db61756cb83e0f4958cb2df7d1) ([merge request](gitlab-org/omnibus-gitlab!8421))
+- [Honor OPENSSL_FORCE_FIPS_MODE in Docker sshd configuration](gitlab-org/omnibus-gitlab@4b49eb18ee544fa77a32cb2e58cd85b4c6aa68cd) ([merge request](gitlab-org/omnibus-gitlab!8450))
+- [Update dependency container-registry to v4.23.0-gitlab](gitlab-org/omnibus-gitlab@b6ff95e04853d8235b6a206a0fba6c4114e13bfd) ([merge request](gitlab-org/omnibus-gitlab!8461))
+- [Update dependency acme-client to v2.0.21](gitlab-org/omnibus-gitlab@38bc03362c662f4f6bc8469ecd1bf7fe7778ecca) ([merge request](gitlab-org/omnibus-gitlab!8246))
+- [Update dependency nginx-module-vts to v0.2.3](gitlab-org/omnibus-gitlab@c635d20bb6b81e98d84dabc3762a408568567a45) ([merge request](gitlab-org/omnibus-gitlab!8089))
+- [Remove default_notifications_threshold deprecation](gitlab-org/omnibus-gitlab@3ccc28d6b596d8d68d38fc2495ea72aea94dbcd1) ([merge request](gitlab-org/omnibus-gitlab!8426))
+- [Update dependency bundler to v2.6.9](gitlab-org/omnibus-gitlab@4e2a4c943c01139c795bd888f63e2cf58bcd9120) ([merge request](gitlab-org/omnibus-gitlab!8438))
+- [Update dependency gitlab-exporter to v15.4.0](gitlab-org/omnibus-gitlab@83cffc48f883cc9ef948cb9e8353c1bcd5304934) ([merge request](gitlab-org/omnibus-gitlab!8434))
+- [Update dependency redis-exporter to v1.73.0](gitlab-org/omnibus-gitlab@c933ce1f898968333e13d7015c06927b7bdd2851) ([merge request](gitlab-org/omnibus-gitlab!8418))
+- [Update dependency container-registry to v4.22.0-gitlab](gitlab-org/omnibus-gitlab@841bb34c7982623f4c349d8db6dbca3337d0c214) ([merge request](gitlab-org/omnibus-gitlab!8428))
+- [Update dependency nginx/nginx to release-1.28.0](gitlab-org/omnibus-gitlab@002bded8aceb3d2cd9e4bcd876f8e82acaccae55) ([merge request](gitlab-org/omnibus-gitlab!8415))
+- [Update dependency rubygems to v3.6.8](gitlab-org/omnibus-gitlab@3c7ad25f68468f53cc8796d4a1b1ba39e287db9a) ([merge request](gitlab-org/omnibus-gitlab!8327))
+- [Update dependency bundler to v2.6.8](gitlab-org/omnibus-gitlab@2b8a29f00e536b796b15f53330daebbcfde81b89) ([merge request](gitlab-org/omnibus-gitlab!8329))
+- [Update dependency libpng to v1.6.47](gitlab-org/omnibus-gitlab@6447e3132736404665f3232ad79720e564ba7228) ([merge request](gitlab-org/omnibus-gitlab!8196))
+
+### Security (1 change)
+
+- [Default X-Forwarded-For to $remote_addr in GitLab NGINX config](gitlab-org/omnibus-gitlab@4acb83d31b955946b25ae51876b7e001b04f5d1a)
+
 ## 18.0.2 (2025-06-11)
 
 ### Security (1 change)
