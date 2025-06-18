@@ -172,6 +172,7 @@ class OmnibusHelper
     # example: deprecated_os = { 'raspbian-8' => 'GitLab 11.8' }
     {
       'sles-15.2' => 'GitLab 18.0',
+      'ubuntu-20.04' => 'GitLab 18.9',
     }
   end
 
