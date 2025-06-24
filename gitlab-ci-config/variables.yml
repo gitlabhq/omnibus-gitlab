@@ -55,3 +55,5 @@ variables:
   OPENSSL_GEM_VERSION: '~> 3.2.0'
   RAT_PROJECT_PATH: 'gitlab-org/distribution/reference-architecture-tester'
   DISABLE_RPI_BUILDS: 'true'
+  PUBLIC_IMAGE_ARCHIVE_REGISTRY: 'registry.gitlab.com'
+  PUBLIC_IMAGE_ARCHIVE_REGISTRY_PATH: 'gitlab-org/public-image-archive'

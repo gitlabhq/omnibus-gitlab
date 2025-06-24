@@ -60,6 +60,14 @@ module Build
       SkopeoHelper.copy_image(source, target)
     end
 
+    def copy_image_to_external_registry(registry, path, username, password, tag)
+      source = source_image_address
+      target = "#{registry}/#{path}/#{gitlab_registry_image_name}:#{tag}"
+
+      SkopeoHelper.login(username, password, registry)
+      SkopeoHelper.copy_image(source, target)
+    end
+
     def source_image_address
       raise NotImplementedError
     end

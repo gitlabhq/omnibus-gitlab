@@ -56,6 +56,16 @@ namespace :docker do
     task :stable do
       Gitlab::Util.section('docker:push:stable') do
         Build::GitlabImage.copy_image_to_dockerhub(Build::Info::Docker.tag)
+
+        next if Gitlab::Util.get_env('DISABLE_PUBLIC_IMAGE_UPLOAD') == 'true'
+
+        Build::GitlabImage.copy_image_to_external_registry(
+          Gitlab::Util.get_env('PUBLIC_IMAGE_ARCHIVE_REGISTRY'),
+          Gitlab::Util.get_env('PUBLIC_IMAGE_ARCHIVE_REGISTRY_PATH'),
+          Gitlab::Util.get_env('PUBLIC_IMAGE_ARCHIVE_REGISTRY_USERNAME'),
+          Gitlab::Util.get_env('PUBLIC_IMAGE_ARCHIVE_REGISTRY_PASSWORD'),
+          Build::Info::Docker.tag
+        )
       end
     end
 
