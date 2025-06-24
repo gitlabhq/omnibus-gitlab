@@ -12,14 +12,14 @@ title: Linux package signatures
 
 {{< /details >}}
 
-We use a [packagecloud](https://packagecloud.io) instance at <https://packages.gitlab.com> to share the
+We use a [Packagecloud](https://packagecloud.io) instance at <https://packages.gitlab.com> to share the
 different OS packages we offer.
 
 The instance uses various cryptographic methods to ensure the integrity of these packages.
 
 ## Package repository metadata signing keys
 
-The APT and YUM repositories on the packagecloud instance use a GPG key to
+The APT and YUM repositories on the Packagecloud instance use a GPG key to
 sign their metadata. This key is automatically installed by the repository setup
 script specified in the installation instructions.
 
@@ -42,8 +42,8 @@ follow the instructions below.
 
 {{< tab title="Debian-based distributions" >}}
 
-packagecloud made used `apt-key`, which [is deprecated](https://blog.packagecloud.io/secure-solutions-for-apt-key-add-deprecated-messages/)
-. Manually installed or configured repositories from some distributions, such as [TurnKey Linux](https://www.turnkeylinux.org/),
+Packagecloud made used `apt-key`, which [is deprecated](https://blog.packagecloud.io/secure-solutions-for-apt-key-add-deprecated-messages/).
+Manually installed or configured repositories from some distributions, such as [TurnKey Linux](https://www.turnkeylinux.org/),
 are already using the `signed-by` support in Debian package source lists.
 
 1. Determine if you're using `apt-key` or `signed-by`:
