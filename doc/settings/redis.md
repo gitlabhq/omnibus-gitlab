@@ -128,7 +128,7 @@ do this for the Redis cache, rate-limiting, and repository cache instances; the 
 state instances, and tracechunks instances should never be configured as an LRU,
 since they contain data (e.g. Sidekiq jobs) that is expected to be persistent.
 
-To cap memory usage at 32GB, you can use:
+To cap memory usage at 32 GB, you can use:
 
 ```ruby
 redis['maxmemory'] = "32gb"

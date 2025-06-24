@@ -75,14 +75,14 @@ The [runit-managed](../development/architecture/_index.md#runit) services in Lin
 - Logs are written to a file called `current`.
 - Periodically, this log is compressed and renamed using the TAI64N format, for
   example: `@400000005f8eaf6f1a80ef5c.s`.
-- The filesystem datestamp on the compressed logs will be consistent with the time
+- The file system datestamp on the compressed logs will be consistent with the time
   GitLab last wrote to that file.
 - `zmore` and `zgrep` allow viewing and searching through both compressed or uncompressed logs.
 
-Read the [svlogd documentation](https://smarden.org/runit/svlogd.8) for more information
+Read the [`svlogd` documentation](https://smarden.org/runit/svlogd.8) for more information
 about the files it generates.
 
-You can modify svlogd settings via `/etc/gitlab/gitlab.rb` with the following settings:
+You can modify `svlogd` settings in `/etc/gitlab/gitlab.rb` with the following settings:
 
 ```ruby
 # Below are the default values

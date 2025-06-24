@@ -175,7 +175,7 @@ _Don't forget to change `my.email@gmail.com` to your email address and `my-gmail
 
 ### Google SMTP relay
 
-You can route outgoing non-Gmail messages through Google [using Google's SMTP relay service](https://support.google.com/a/answer/2956491?hl=en).
+You can route outgoing non-Gmail messages through Google [using the Google SMTP relay service](https://support.google.com/a/answer/2956491?hl=en).
 
 ```ruby
 gitlab_rails['smtp_enable'] = true

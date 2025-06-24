@@ -40,7 +40,7 @@ Versions of the primary GitLab components like GitLab Rails or Gitaly are contro
 
 Check the following table for more information:
 
-| File name                              | Environment variable                   | Description |
+| Filename                               | Environment variable                   | Description |
 |----------------------------------------|----------------------------------------|-------------|
 | `VERSION`                              | `GITLAB_VERSION`                       | Controls the Git reference of the GitLab Rails application. By default, points to the `master` branch of the GitLab-FOSS repository. If you want to use the GitLab repository, set the environment variable `ee` to true. |
 | `GITALY_SERVER_VERSION`                | `GITALY_SERVER_VERSION`                | Git reference of the [Gitaly](https://gitlab.com/gitlab-org/gitaly) repository. |
@@ -83,8 +83,12 @@ Temporarily specify a component version using any of the following methods:
   git push <REMOTE> -o ci.variable="<ENV_VAR_1>=<VALUE_1>" -o ci.variable="<ENV_VAR_2>=<VALUE_2>"
   ```
 
-  **`Note`**: This works only if you have some changes to push. If remote is
+  {{< alert type="note" >}}
+
+  This works only if you have some changes to push. If remote is
   already updated with your local branch, no new pipeline is created.
+
+  {{< /alert >}}
 
 - Manually run the pipeline from UI while specifying the environment variables.
 

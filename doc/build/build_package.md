@@ -92,7 +92,7 @@ again:
 
 1. Fetch the assets Docker image that corresponds to the ref of GitLab or
    GitLab-FOSS you are building. For example, to pull the asset image
-   corresponding to latest master ref, run the following:
+   corresponding to the latest `master` ref, run the following:
 
    ```shell
    docker pull registry.gitlab.com/gitlab-org/gitlab/gitlab-assets-ee:master
