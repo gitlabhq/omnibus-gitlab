@@ -86,6 +86,16 @@ default:
   - bundle exec rake cache:bundle
   - bundle exec rake build:component_shas
 
+.vault-integration:
+  # Base template for jobs that need to retrieve secrets from Vault
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: https://vault.gitlab.net
+
+# Overridden when vault-integration.yml is imported
+.with-build-token:
+  extends: .vault-integration
+
 before_script:
   - echo "PIPELINE_TYPE detected as ${PIPELINE_TYPE}"
   # Exit early if building on an OS for which we don't provide the specified
