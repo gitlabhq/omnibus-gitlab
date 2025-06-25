@@ -70,6 +70,8 @@ module Gitlab
 
       @read_version = version || get_software_version
       @project_root = File.join(File.dirname(__dir__), '../')
+
+      detect_alt_token
     end
 
     def get_software_version
