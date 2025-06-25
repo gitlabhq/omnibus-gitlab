@@ -13,7 +13,7 @@ title: Running on a Raspberry Pi
 {{< /details >}}
 
 In order to run GitLab Community Edition on a Raspberry Pi, you need the newest
-Pi 4 with at least 4GB of RAM for best results. You might be able to run GitLab
+Pi 4 with at least 4 GB of RAM for best results. You might be able to run GitLab
 on lower resources, like a Pi 3 or newer, but it is not recommended. We do not
 package for older Pis, as their CPU and RAM are insufficient.
 
@@ -24,7 +24,7 @@ Starting from GitLab version 18.0, we will no longer provide 32-bit packages for
 ## Configure Swap
 
 Even with a newer Pi, the first setting you will want to change is to ensure
-the device has enough memory available by expanding the swap space to 4GB.
+the device has enough memory available by expanding the swap space to 4 GB.
 
 On Raspbian, swap can be configured in `/etc/dphys-swapfile`.
 See [the manpage](https://manpages.ubuntu.com/manpages/lunar/en/man8/dphys-swapfile.8.html) for available settings.
@@ -73,7 +73,7 @@ some running processes:
 
 You can boost GitLab performance with a few settings.
 
-### Use a proper harddrive
+### Use a proper hard drive
 
 GitLab will perform best if you mount `/var/opt/gitlab` and the swapfile from a
 hard drive rather than the SD card. You can attach an external hard drive to the

@@ -70,9 +70,9 @@ prometheus['external_labels'] = {
 
 No external labels are set by default.
 
-## node_exporter
+## `node_exporter`
 
-The node_exporter provides system level metrics.
+The `node_exporter` provides system level metrics.
 
 Additional metrics collectors are enabled by default. For example, `mountstats` is used to collect metrics about NFS mounts.
 

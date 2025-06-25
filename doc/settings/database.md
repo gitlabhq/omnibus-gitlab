@@ -841,7 +841,7 @@ when your installation is using PgBouncer.
 {{< /alert >}}
 
 1. Run the backup Rake task using the SKIP options to back up only the database.
-   Make a note of the backup file name; you'll use it later to restore.
+   Make a note of the backup filename; you'll use it later to restore.
 
    ```shell
    sudo gitlab-backup create SKIP=repositories,uploads,builds,artifacts,lfs,pages,registry
@@ -866,7 +866,7 @@ when your installation is using PgBouncer.
    {{< /alert >}}
 
 1. Restore the database using the database backup file created earlier, and be
-   sure to answer **no** when asked "This task will now rebuild the authorized_keys file":
+   sure to answer **no** when asked "This task will now rebuild the `authorized_keys` file":
 
    ```shell
    # Use the backup timestamp https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#backup-timestamp
@@ -982,7 +982,7 @@ The next time hosts carrying the above configuration are reconfigured, the migra
 
 To avoid schema-related post-upgrade errors, the host marked as [the deploy node](https://docs.gitlab.com/update/zero_downtime/#multi-node--ha-deployment) must have `gitlab_rails['auto_migrate'] = true` during upgrades.
 
-### Setting client statement_timeout
+### Setting client `statement_timeout`
 
 The amount of time that Rails will wait for a database transaction to complete
 before timing out can now be adjusted with the `gitlab_rails['db_statement_timeout']`
@@ -1267,7 +1267,7 @@ connecting to your PostgreSQL database and run `SHOW default_transaction_isolati
 GitLab application expects `read committed` to be configured.
 
 This `default_transaction_isolation` configuration is set in your
-`postgresql.conf` file. You will need to restart/reload the database once you
+`postgresql.conf` file. You will need to restart/reload the database after you
 changed the configuration. This configuration comes by default in the packaged
 PostgreSQL server included with the Linux package.
 

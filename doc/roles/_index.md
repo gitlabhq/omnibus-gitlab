@@ -52,7 +52,7 @@ a `gitlab-ee` Linux package. It will be mentioned next to each role.
 
 ### GitLab App Role
 
-- **application_role** (`gitlab-ce`/`gitlab-ee`)
+- `application_role` (`gitlab-ce`/`gitlab-ee`)
 
   The GitLab App role is used to configure an instance where only GitLab is running. Redis, PostgreSQL, and Consul services are disabled by default.
 
@@ -60,19 +60,19 @@ a `gitlab-ee` Linux package. It will be mentioned next to each role.
 
 Documentation on the use of the Redis Roles can be found in [Configuring Redis for Scaling](https://docs.gitlab.com/administration/redis/)
 
-- **redis_sentinel_role** (`gitlab-ee`)
+- `redis_sentinel_role` (`gitlab-ee`)
 
   Enables the sentinel service on the machine,
 
   *By default, enables no other services.*
 
-- **redis_master_role** (`gitlab-ee`)
+- `redis_master_role` (`gitlab-ee`)
 
   Enables the Redis service and monitoring, and allows configuring the master password
 
   *By default, enables no other services.*
 
-- **redis_replica_role** (`gitlab-ee`)
+- `redis_replica_role` (`gitlab-ee`)
 
   Enables the Redis service and monitoring
 
@@ -84,18 +84,18 @@ The GitLab Geo roles are used for configuration of GitLab Geo sites. See the
 [Geo Setup Documentation](https://docs.gitlab.com/administration/geo/setup/)
 for configuration steps.
 
-- **geo_primary_role** (`gitlab-ee`)
+- `geo_primary_role` (`gitlab-ee`)
 
   This role:
 
   - Configures a single-node PostgreSQL database as a leader for streaming replication.
-  - Prevents automatic upgrade of PostgreSQL since it requires downtime of streaming replication to Geo secondary sites.
+  - Prevents automatic upgrade of PostgreSQL because it requires downtime of streaming replication to Geo secondary sites.
   - Enables all single-node GitLab services including NGINX, Puma, Redis, and Sidekiq. If you are segregating services, then you must explicitly disable unwanted services in `/etc/gitlab/gitlab.rb`. Therefore, this role is only useful on a single-node PostgreSQL in a Geo primary site.
   - Cannot be used to set up a PostgreSQL cluster in a Geo primary site. Instead, see [Geo multi-node database replication](https://docs.gitlab.com/administration/geo/setup/database/#multi-node-database-replication).
 
   *By default, enables standard single-node GitLab services including NGINX, Puma, Redis, and Sidekiq.*
 
-- **geo_secondary_role** (`gitlab-ee`)
+- `geo_secondary_role` (`gitlab-ee`)
 
   - Configures the secondary read-only replica database for incoming
     replication.
@@ -121,7 +121,7 @@ for configuration steps.
 
 Monitoring roles are used to set up monitoring of installations. For additional information, see the [Monitoring documentation](https://docs.gitlab.com/administration/monitoring/prometheus/).
 
-- **monitoring_role** (`gitlab-ce`/`gitlab-ee`)
+- `monitoring_role` (`gitlab-ce`/`gitlab-ee`)
 
   Configures a central monitoring server to collect metrics and provide dashboards.
 
@@ -131,25 +131,25 @@ Monitoring roles are used to set up monitoring of installations. For additional 
 
 Documentation on the usage of the PostgreSQL Roles can be found in [Configuring PostgreSQL for Scaling](https://docs.gitlab.com/administration/postgresql/)
 
-- **postgres_role** (`gitlab-ce`/`gitlab-ee`)
+- `postgres_role` (`gitlab-ce`/`gitlab-ee`)
 
   Enables the PostgreSQL service on the machine
 
   *By default, enables no other services.*
 
-- **patroni_role** (`gitlab-ee`)
+- `patroni_role` (`gitlab-ee`)
 
-  Enables the PostgreSQL, patroni, and Consul services on the machine
+  Enables the PostgreSQL, Patroni, and Consul services on the machine
 
   *By default, enables no other services.*
 
-- **pgbouncer_role** (`gitlab-ee`)
+- `pgbouncer_role` (`gitlab-ee`)
 
   Enables the PgBouncer and Consul services on the machine
 
   *By default, enables no other services.*
 
-- **consul_role** (`gitlab-ee`)
+- `consul_role` (`gitlab-ee`)
 
   Enables the Consul service on the machine
 
@@ -161,7 +161,7 @@ GitLab Pages roles are used to set up and configure GitLab Pages. For additional
 information, see the
 [GitLab Pages Administration documentation](https://docs.gitlab.com/administration/pages/)
 
-- **pages_role** (`gitlab-ce`/`gitlab-ee`)
+- `pages_role` (`gitlab-ce`/`gitlab-ee`)
 
   Configures the server with a GitLab Pages instance.
 
@@ -173,7 +173,7 @@ Sidekiq roles are used to set up and configure Sidekiq. For additional
 information, see the
 [Sidekiq Administration documentation](https://docs.gitlab.com/administration/sidekiq/)
 
-- **sidekiq_role** (`gitlab-ce`/`gitlab-ee`)
+- `sidekiq_role` (`gitlab-ce`/`gitlab-ee`)
 
   Configures the server with Sidekiq service.
 
@@ -185,9 +185,9 @@ Spamcheck roles are used to set up and configure Spamcheck services. For additio
 information, see the
 [Spamcheck documentation](https://docs.gitlab.com/administration/reporting/spamcheck/)
 
-- **spamcheck_role** (`gitlab-ee`)
+- `spamcheck_role` (`gitlab-ee`)
 
-  Configures the server with spamcheck and spam-classifier services.
+  Configures the server with Spamcheck and spam-classifier services.
 
   *By default, enables no other services.*
 
@@ -196,7 +196,7 @@ information, see the
 Gitaly roles are used to set up and configure Gitaly services. For additional
 information, see the [Gitaly documentation](https://docs.gitlab.com/administration/gitaly/)
 
-- **gitaly_role** (`gitlab-ce`/`gitlab-ee`)
+- `gitaly_role` (`gitlab-ce`/`gitlab-ee`)
 
   Configures the server with Gitaly service.
 

@@ -75,7 +75,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
 ### On your development machine
 
 1. Pick a tag of GitLab to package (e.g. `v6.6.0`).
-1. Create a release branch in your `omnibus-gitlab` repo (e.g. `6-6-stable`).
+1. Create a release branch in your `omnibus-gitlab` repository (for example, `6-6-stable`).
 1. If the release branch already exists, for instance because you are doing a
    patch release, make sure to pull the latest changes to your local machine:
 
@@ -140,7 +140,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
 ### Publishing the packages
 
 You can track the progress of package building on `https://dev.gitlab.org/gitlab/omnibus-gitlab/builds`.
-They are pushed to [packagecloud repositories](https://packages.gitlab.com/gitlab/) automatically after
+They are pushed to [Packagecloud repositories](https://packages.gitlab.com/gitlab/) automatically after
 successful builds.
 
 ### Updating cloud images

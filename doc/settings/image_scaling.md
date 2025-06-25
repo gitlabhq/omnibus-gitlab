@@ -46,7 +46,7 @@ to ensure that the system remains available even under high load.
 
 ### Maximum image file size
 
-By default, GitLab only rescales images that are at most 250kB in size. This is to prevent excessive
+By default, GitLab only rescales images that are at most 250 kB in size. This is to prevent excessive
 memory consumption on Workhorse nodes and to keep latencies in reasonable bounds. Beyond a certain
 file size, it is in fact faster overall to just serve the original image instead.
 
@@ -64,7 +64,7 @@ If you want to lower or raise the maximum allowed file size:
    sudo gitlab-ctl reconfigure
    ```
 
-This would allow images up to 1MB to be rescaled (the unit is Byte).
+This would allow images up to 1 MB to be rescaled (the unit is Byte).
 
 ### Disabling the image scaler
 

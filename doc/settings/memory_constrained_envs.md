@@ -64,9 +64,9 @@ of your system is good enough to run GitLab on a constrained environment.
 
 These systems provide adequate performance to run a small installations of GitLab:
 
-- [Raspberry PI 4 2GB](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/).
-- [DigitalOcean Basic 2GB with SSD](https://www.digitalocean.com/pricing).
-- [Scaleway DEV1-S 2GB/20GB](https://www.scaleway.com/en/pricing/).
+- [Raspberry PI 4 2 GB](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/).
+- [DigitalOcean Basic 2 GB with SSD](https://www.digitalocean.com/pricing).
+- [Scaleway DEV1-S 2 GB/20 GB](https://www.scaleway.com/en/pricing/).
 - [GCS e2-small](https://cloud.google.com/compute/docs/machine-resource).
 
 ## Configure Swap
@@ -80,7 +80,7 @@ due to how GitLab functions, much of the memory that is allocated is not frequen
 swap allows the application to run and function normally, and use swap only from time to time.
 
 A general guideline is to configure swap to be around 50% of the available memory. For memory constrained
-environments, it is advised to configure at least 1GB of swap for the system. There are a number of guides
+environments, it is advised to configure at least 1 GB of swap for the system. There are a number of guides
 on how to do it:
 
 - [How to Add Swap Space on Ubuntu 20.04](https://linuxize.com/post/how-to-add-swap-space-on-ubuntu-20-04/)
@@ -205,7 +205,7 @@ In `/etc/gitlab/gitlab.rb`:
 prometheus_monitoring['enable'] = false
 ```
 
-We observed 200MB of memory usage reduction configuring GitLab this way.
+We observed 200 MB of memory usage reduction configuring GitLab this way.
 
 ## Configure how GitLab handles memory
 
