@@ -8,7 +8,8 @@
       aud: https://vault.gitlab.net
   secrets:
     ALTERNATIVE_PRIVATE_TOKEN:
-      vault: ci/access_tokens/gitlab-com/gitlab-org/security/_group_access_tokens/build-token/token@ci
+      file: false
+      vault: access_tokens/gitlab-com/gitlab-org/security/_group_access_tokens/build-token/token@ci
 
 # Template for jobs that need access to private repositories
 .with-build-token:
