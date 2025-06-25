@@ -2,4 +2,5 @@ ruby 3.2.6
 
 # For linting documentation
 markdownlint-cli2 0.17.2
+lychee 0.18.1
 vale 3.11.2
