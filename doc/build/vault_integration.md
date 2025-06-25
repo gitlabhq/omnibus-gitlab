@@ -4,16 +4,18 @@ This document describes how Omnibus GitLab integrates with HashiCorp Vault to re
 
 ## Overview
 
-When building GitLab packages, Omnibus needs to access private repositories that contain security-sensitive components. Previously, this was handled using the `CI_JOB_TOKEN` from the `gitlab-bot` user, which had broad permissions. With the centralization of mirror configurations in `infra-mgmt`, we now use a dedicated Group Access Token stored in Vault.
+When building GitLab packages, Omnibus needs to access private repositories that contain security-sensitive components. Previously, this was handled using the `CI_JOB_TOKEN` from the `gitlab-bot` user, which had broad permissions. With the centralization of mirror configurations in [`infra-mgmt`], we now use a dedicated Group Access Token stored in Vault.
 
 ## Group Access Token
 
 The Group Access Token is stored in Vault at the following path:
+
 ```
 ci/metadata/access_tokens/gitlab-com/gitlab-org/security/_group_access_tokens/build-token
 ```
 
 This token has:
+
 - **Role**: Developer
 - **Scope**: `read_repository`
 - **Access**: GitLab.com security group and its projects
@@ -36,8 +38,8 @@ Jobs that need access to private repositories should extend the `.with-build-tok
 my-build-job:
   extends: .with-build-token
   script:
-    - # Your build commands here
-    - # ALTERNATIVE_PRIVATE_TOKEN is automatically available
+    -  # Your build commands here
+    -  # ALTERNATIVE_PRIVATE_TOKEN is automatically available
 ```
 
 ## How It Works
@@ -60,7 +62,7 @@ The `lib/gitlab/version.rb` file has been updated to:
 
 1. **Security**: Reduced token scope (read-only repository access)
 2. **Maintainability**: Centralized token management through Vault
-3. **Compatibility**: Seamless integration with existing `infra-mgmt` workflows
+3. **Compatibility**: Seamless integration with existing [`infra-mgmt`] workflows
 4. **Reliability**: Automatic token rotation capabilities
 
 ## Troubleshooting
@@ -88,3 +90,5 @@ If Vault authentication fails:
 1. Check that `VAULT_ID_TOKEN` is properly configured
 2. Verify the `aud` field matches the Vault server URL
 3. Ensure the GitLab project has the necessary Vault role permissions
+
+[`infra-mgmt`]: https://gitlab.com/gitlab-com/gl-infra/infra-mgmt

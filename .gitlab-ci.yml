@@ -34,6 +34,9 @@ include:
   - local: '/gitlab-ci-config/dev-gitlab-org.yml'
   - local: '/gitlab-ci-config/dind-config.yml'
   - local: '/gitlab-ci-config/vault-integration.yml'
+    rules:
+      # doc/build/vault_integration.md
+      - if: '$CI_PROJECT_PATH == "gitlab-org/security/omnibus-gitlab"'
   - local: '/gitlab-ci-config/gitlab-com.yml'
     rules:
       - if: '$CI_SERVER_HOST == "gitlab.com"'
