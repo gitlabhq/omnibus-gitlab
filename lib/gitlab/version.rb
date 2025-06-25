@@ -135,7 +135,7 @@ module Gitlab
                  Gitlab::Util.get_env("GITLAB_KAS_ALTERNATIVE_REPO")
                end
 
-      if remote && use_alt_token
+      if remote && detect_alt_token
         attach_remote_credential(remote, use_alt_token)
       else
         remote
@@ -164,12 +164,15 @@ module Gitlab
     private
 
     # Detect if ALTERNATIVE_PRIVATE_TOKEN is set, output the fact that we use it and return it instead of CI_JOB_TOKEN
+    def detect_alt_token
+      return unless Gitlab::Util.get_env("ALTERNATIVE_PRIVATE_TOKEN").nil?
+
+      puts "Detected ALTERNATIVE_PRIVATE_TOKEN environment variable. Private token will be used in source fetches."
+    end
+
     def use_alt_token
       token = Gitlab::Util.get_env("ALTERNATIVE_PRIVATE_TOKEN")
       return if token.nil?
-
-      puts "Detected ALTERNATIVE_PRIVATE_TOKEN environment variable. Private token will be used in source fetches."
-      token
     end
 
     def attach_remote_credential(url, token)
