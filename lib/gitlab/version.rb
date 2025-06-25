@@ -167,7 +167,7 @@ module Gitlab
 
     # Detect if ALTERNATIVE_PRIVATE_TOKEN is set, output the fact that we use it and return it instead of CI_JOB_TOKEN
     def detect_alt_token
-      return unless Gitlab::Util.get_env("ALTERNATIVE_PRIVATE_TOKEN").nil?
+      return if Gitlab::Util.get_env("ALTERNATIVE_PRIVATE_TOKEN").nil?
 
       puts "Detected ALTERNATIVE_PRIVATE_TOKEN environment variable. Private token will be used in source fetches."
     end

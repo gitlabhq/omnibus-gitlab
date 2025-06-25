@@ -27,6 +27,16 @@ stages:
   - qa
   - verify
 
+.vault-integration:
+  # Base template for jobs that need to retrieve secrets from Vault
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: https://vault.gitlab.net
+
+# Overridden when vault-integration.yml is imported
+.with-build-token:
+  extends: .vault-integration
+
 include:
   - local: '/gitlab-ci-config/workflow-rules.yml'
   - local: '/gitlab-ci-config/variables.yml'
@@ -85,16 +95,6 @@ default:
   - bundle exec rake build:package:sync
   - bundle exec rake cache:bundle
   - bundle exec rake build:component_shas
-
-.vault-integration:
-  # Base template for jobs that need to retrieve secrets from Vault
-  id_tokens:
-    VAULT_ID_TOKEN:
-      aud: https://vault.gitlab.net
-
-# Overridden when vault-integration.yml is imported
-.with-build-token:
-  extends: .vault-integration
 
 before_script:
   - echo "PIPELINE_TYPE detected as ${PIPELINE_TYPE}"
