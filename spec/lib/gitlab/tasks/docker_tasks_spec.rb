@@ -29,41 +29,6 @@ RSpec.describe 'docker', type: :rake do
     end
   end
 
-  describe 'docker:pull:staging' do
-    before do
-      Rake::Task['docker:pull:staging'].reenable
-      allow(ENV).to receive(:[]).and_call_original
-    end
-
-    context 'when USE_SKOPEO_FOR_DOCKER_RELEASE is set' do
-      before do
-        stub_env_var('USE_SKOPEO_FOR_DOCKER_RELEASE', 'true')
-      end
-
-      it 'does not pull image' do
-        expect(Docker::Image).not_to receive(:create).with('fromImage' => 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0')
-        Rake::Task['docker:pull:staging'].invoke
-      end
-    end
-
-    context 'when USE_SKOPEO_FOR_DOCKER_RELEASE is not set' do
-      before do
-        stub_env_var('USE_SKOPEO_FOR_DOCKER_RELEASE', 'false')
-      end
-
-      it 'pulls in correct image' do
-        allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('dev.gitlab.org:5005/gitlab/omnibus-gitlab')
-        allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
-        allow(Build::Info::Docker).to receive(:tag).and_return('9.0.0')
-        allow(DockerOperations).to receive(:authenticate).and_return(true)
-        allow(SkopeoHelper).to receive(:login).and_return(true)
-
-        expect(Docker::Image).to receive(:create).with('fromImage' => 'dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0')
-        Rake::Task['docker:pull:staging'].invoke
-      end
-    end
-  end
-
   describe 'docker:push' do
     let(:dummy_image) { Docker::Image.new(Docker::Connection.new("test", {}), "id" => "test") }
     let(:dummy_creds) { { username: "test", password: "test" } }
@@ -106,26 +71,9 @@ RSpec.describe 'docker', type: :rake do
         allow(Build::Check).to receive(:is_nightly?).and_return(true)
       end
 
-      context 'when USE_SKOPEO_FOR_DOCKER_RELEASE is set' do
-        before do
-          stub_env_var('USE_SKOPEO_FOR_DOCKER_RELEASE', 'true')
-        end
-
-        it 'copies nightly images correctly' do
-          expect(SkopeoHelper).to receive(:copy_image).with('dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0', 'gitlab/gitlab-ce:nightly')
-          Rake::Task['docker:push:nightly'].invoke
-        end
-      end
-
-      context 'when USE_SKOPEO_FOR_DOCKER_RELEASE is not set' do
-        before do
-          stub_env_var('USE_SKOPEO_FOR_DOCKER_RELEASE', 'false')
-        end
-
-        it 'pushes nightly images correctly' do
-          expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-ce:nightly')
-          Rake::Task['docker:push:nightly'].invoke
-        end
+      it 'copies nightly images correctly' do
+        expect(SkopeoHelper).to receive(:copy_image).with('dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0', 'gitlab/gitlab-ce:nightly')
+        Rake::Task['docker:push:nightly'].invoke
       end
     end
 
@@ -135,26 +83,9 @@ RSpec.describe 'docker', type: :rake do
         allow(Build::Check).to receive(:is_latest_stable_tag?).and_return(true)
       end
 
-      context 'when USE_SKOPEO_FOR_DOCKER_RELEASE is set' do
-        before do
-          stub_env_var('USE_SKOPEO_FOR_DOCKER_RELEASE', 'true')
-        end
-
-        it 'copies latest images correctly' do
-          expect(SkopeoHelper).to receive(:copy_image).with('dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0', 'gitlab/gitlab-ce:latest')
-          Rake::Task['docker:push:latest'].invoke
-        end
-      end
-
-      context 'when USE_SKOPEO_FOR_DOCKER_RELEASE is not set' do
-        before do
-          stub_env_var('USE_SKOPEO_FOR_DOCKER_RELEASE', 'false')
-        end
-
-        it 'pushes latest images correctly' do
-          expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-ce:latest')
-          Rake::Task['docker:push:latest'].invoke
-        end
+      it 'copies latest images correctly' do
+        expect(SkopeoHelper).to receive(:copy_image).with('dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0', 'gitlab/gitlab-ce:latest')
+        Rake::Task['docker:push:latest'].invoke
       end
     end
 
@@ -164,26 +95,9 @@ RSpec.describe 'docker', type: :rake do
         allow(Build::Check).to receive(:is_latest_tag?).and_return(true)
       end
 
-      context 'when USE_SKOPEO_FOR_DOCKER_RELEASE is set' do
-        before do
-          stub_env_var('USE_SKOPEO_FOR_DOCKER_RELEASE', 'true')
-        end
-
-        it 'copies rc images correctly' do
-          expect(SkopeoHelper).to receive(:copy_image).with('dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0', 'gitlab/gitlab-ce:rc')
-          Rake::Task['docker:push:rc'].invoke
-        end
-      end
-
-      context 'when USE_SKOPEO_FOR_DOCKER_RELEASE is not set' do
-        before do
-          stub_env_var('USE_SKOPEO_FOR_DOCKER_RELEASE', 'false')
-        end
-
-        it 'pushes rc images correctly' do
-          expect(dummy_image).to receive(:push).with(dummy_creds, repo_tag: 'gitlab/gitlab-ce:rc')
-          Rake::Task['docker:push:rc'].invoke
-        end
+      it 'copies rc images correctly' do
+        expect(SkopeoHelper).to receive(:copy_image).with('dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0', 'gitlab/gitlab-ce:rc')
+        Rake::Task['docker:push:rc'].invoke
       end
     end
 
