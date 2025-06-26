@@ -5,7 +5,7 @@ namespace :release do
   task package: ["check:on_tag", "build:project", "build:package:sync"]
 
   desc "Release docker image"
-  task docker: ["docker:pull:staging", "docker:push:stable", "docker:push:rc", "docker:push:latest"]
+  task docker: ["docker:push:stable", "docker:push:rc", "docker:push:latest"]
 
   desc "Release QA image"
   # For downstream users like JiHu to retain original behavior
