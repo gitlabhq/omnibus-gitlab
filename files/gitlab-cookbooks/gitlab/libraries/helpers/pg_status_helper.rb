@@ -1,5 +1,5 @@
 # This is a helper to establish the listening status of PostgreSQL
-require_relative 'base_helper'
+require_relative '../../../package/libraries/helpers/base_helper'
 require_relative '../../../package/libraries/helpers/shell_out_helper'
 
 class PgStatusHelper

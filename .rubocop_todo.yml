@@ -388,7 +388,7 @@ Style/StringConcatenation:
   Exclude:
     - 'config/software/runit.rb'
     - 'files/gitlab-cookbooks/gitlab-pages/libraries/gitlab_pages.rb'
-    - 'files/gitlab-cookbooks/gitlab/libraries/redis_uri.rb'
+    - 'files/gitlab-cookbooks/package/libraries/redis_uri.rb'
     - 'files/gitlab-cookbooks/package/libraries/certificate_helper.rb'
     - 'files/gitlab-cookbooks/package/libraries/deprecations.rb'
     - 'lib/gitlab/package_repository.rb'

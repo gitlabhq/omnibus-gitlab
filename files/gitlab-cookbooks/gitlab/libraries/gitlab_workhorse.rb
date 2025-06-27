@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-require_relative './redis_uri'
+require_relative '../../package/libraries/redis_uri'
 require_relative '../../package/libraries/helpers/redis_helper'
 
 module GitlabWorkhorse

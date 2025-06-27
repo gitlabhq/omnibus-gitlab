@@ -17,7 +17,7 @@
 
 require 'open3'
 
-require_relative 'redis_uri.rb'
+require_relative '../../package/libraries/redis_uri'
 require_relative '../../package/libraries/helpers/redis_helper/gitlab_rails'
 
 module Redis
