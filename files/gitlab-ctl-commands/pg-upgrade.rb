@@ -18,7 +18,7 @@
 require 'rainbow'
 
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
-require "#{base_path}/embedded/service/omnibus-ctl/lib/postgresql"
+require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/postgresql"
 
 INST_DIR = "#{base_path}/embedded/postgresql".freeze
 REVERT_VERSION_FILE = "#{data_path}/postgresql-version.old".freeze

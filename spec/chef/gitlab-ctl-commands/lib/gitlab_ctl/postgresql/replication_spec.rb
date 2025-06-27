@@ -1,9 +1,9 @@
 require 'spec_helper'
-$LOAD_PATH << File.join(__dir__, '../../../../files/gitlab-ctl-commands/lib')
+$LOAD_PATH << File.join(__dir__, '../../../../files/gitlab-ctl-commands/lib/gitlab_ctl')
 
-require 'postgresql/replication'
+require 'gitlab_ctl/postgresql/replication'
 
-RSpec.describe PostgreSQL::Replication do
+RSpec.describe GitlabCtl::PostgreSQL::Replication do
   let(:ctl) { spy('gitlab ctl') }
   let(:util) { spy('gitlab ctl util', error?: false) }
   let(:attributes) { spy('node attributes spy') }

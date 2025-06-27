@@ -1,7 +1,7 @@
 require 'mixlib/shellout'
 require 'timeout'
 require_relative 'postgresql/pgpass'
-require_relative 'gitlab_ctl/util'
+require_relative 'util'
 
 module GitlabCtl
   class PostgreSQL

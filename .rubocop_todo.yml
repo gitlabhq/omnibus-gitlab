@@ -15,7 +15,7 @@ Cop/AvoidReturnFromBlocks:
   Exclude:
     - 'files/gitlab-cookbooks/consul/libraries/consul_helper.rb'
     - 'files/gitlab-ctl-commands-ee/lib/patroni.rb'
-    - 'files/gitlab-ctl-commands-ee/lib/postgresql/ee.rb'
+    - 'files/gitlab-ctl-commands-ee/lib/gitlab_ctl/postgresql/ee.rb'
     - 'lib/gitlab/tasks/build.rake'
 
 # Offense count: 41
@@ -34,7 +34,7 @@ Fips/MD5:
     - 'config/software/gitlab-backup-cli.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/helpers/base_pg_helper.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/rails_migration_helper.rb'
-    - 'files/gitlab-ctl-commands/lib/postgresql/password_hash.rb'
+    - 'files/gitlab-ctl-commands/lib/gitlab_ctl/postgresql/password_hash.rb'
 
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
@@ -71,7 +71,7 @@ Layout/SpaceAroundMethodCallOperator:
   Exclude:
     - 'spec/chef/cookbooks/package/libraries/helpers/logging_helper_spec.rb'
     - 'spec/chef/cookbooks/postgresql/recipes/postgresql_spec.rb'
-    - 'spec/chef/gitlab-ctl-commands-ee/lib/postgresql/ee_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands-ee/lib/gitlab_ctl/postgresql/ee_spec.rb'
 
 # Offense count: 3
 # This cop supports safe autocorrection (--autocorrect).
@@ -113,7 +113,7 @@ Lint/ConstantDefinitionInBlock:
 # Offense count: 1
 Lint/DuplicateMethods:
   Exclude:
-    - 'files/gitlab-ctl-commands/lib/postgresql/pgpass.rb'
+    - 'files/gitlab-ctl-commands/lib/gitlab_ctl/postgresql/pgpass.rb'
 
 # Offense count: 2
 Lint/MixedRegexpCaptureTypes:
@@ -304,7 +304,7 @@ Style/RedundantAssignment:
 Style/RedundantBegin:
   Exclude:
     - 'files/gitlab-ctl-commands/lib/gitlab_ctl/pg_upgrade.rb'
-    - 'files/gitlab-ctl-commands/lib/postgresql.rb'
+    - 'files/gitlab-ctl-commands/lib/gitlab_ctl/postgresql.rb'
     - 'files/gitlab-ctl-commands/pg-upgrade.rb'
 
 # Offense count: 2
@@ -378,7 +378,7 @@ Style/StderrPuts:
     - 'files/gitlab-ctl-commands-ee/pgbouncer.rb'
     - 'files/gitlab-ctl-commands/letsencrypt.rb'
     - 'files/gitlab-ctl-commands/lib/gitlab_ctl/pg_upgrade.rb'
-    - 'files/gitlab-ctl-commands/lib/postgresql/replication.rb'
+    - 'files/gitlab-ctl-commands/lib/gitlab_ctl/postgresql/replication.rb'
     - 'files/gitlab-ctl-commands/pg-upgrade.rb'
 
 # Offense count: 8
@@ -425,7 +425,7 @@ Style/WordArray:
     - 'files/gitlab-cookbooks/gitlab/libraries/nginx.rb'
     - 'files/gitlab-cookbooks/package/libraries/config/services.rb'
     - 'files/gitlab-cookbooks/package/libraries/deprecations.rb'
-    - 'files/gitlab-ctl-commands-ee/lib/postgresql/ee.rb'
+    - 'files/gitlab-ctl-commands-ee/lib/gitlab_ctl/postgresql/ee.rb'
     - 'files/gitlab-ctl-commands/lib/praefect.rb'
     - 'lib/gitlab/ohai_helper.rb'
     - 'spec/chef/cookbooks/gitlab/recipes/gitlab-rails/gitlab_yml/omniauth_spec.rb'

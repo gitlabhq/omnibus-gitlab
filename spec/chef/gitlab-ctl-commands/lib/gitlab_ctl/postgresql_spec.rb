@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-$LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
+$LOAD_PATH << File.join(__dir__, '../../../../../files/gitlab-ctl-commands/lib')
 
-require 'postgresql'
+require 'gitlab_ctl/postgresql'
 
 RSpec.describe GitlabCtl::PostgreSQL do
   describe "#postgresql_username" do
