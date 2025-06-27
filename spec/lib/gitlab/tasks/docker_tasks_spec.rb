@@ -34,8 +34,6 @@ RSpec.describe 'docker', type: :rake do
     let(:dummy_creds) { { username: "test", password: "test" } }
 
     before do
-      Rake::Task['docker:push:stable'].reenable
-
       allow(ENV).to receive(:[]).and_call_original
       allow(ENV).to receive(:[]).with('CI_REGISTRY_IMAGE').and_return('dev.gitlab.org:5005/gitlab/omnibus-gitlab')
       allow(ENV).to receive(:[]).with('CI_COMMIT_REF_SLUG').and_return('foo-bar')
@@ -47,6 +45,24 @@ RSpec.describe 'docker', type: :rake do
       allow(dummy_image).to receive(:tag).and_return(true)
       allow(SkopeoHelper).to receive(:login).and_return(true)
       allow(SkopeoHelper).to receive(:copy_image).and_return(true)
+    end
+
+    describe 'docker:push:stable' do
+      before do
+        Rake::Task['docker:push:stable'].reenable
+        stub_env_var('PUBLIC_IMAGE_ARCHIVE_REGISTRY', 'registry.gitlab.com')
+        stub_env_var('PUBLIC_IMAGE_ARCHIVE_REGISTRY_PATH', 'foobar/public-image-archive')
+      end
+
+      it 'pushes images to dockerhub' do
+        expect(SkopeoHelper).to receive(:copy_image).with('dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0', 'gitlab/gitlab-ce:9.0.0')
+        Rake::Task['docker:push:stable'].invoke
+      end
+
+      it 'pushes image to public registry' do
+        expect(SkopeoHelper).to receive(:copy_image).with('dev.gitlab.org:5005/gitlab/omnibus-gitlab/gitlab-ce:9.0.0', 'registry.gitlab.com/foobar/public-image-archive/gitlab-ce:9.0.0')
+        Rake::Task['docker:push:stable'].invoke
+      end
     end
 
     describe 'docker:push:staging' do
