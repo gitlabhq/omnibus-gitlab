@@ -46,7 +46,7 @@ The first time GitLab JiHu Edition is installed, you are redirected to a passwor
 the password for the initial administrator account and you are redirected
 back to the login screen. Use the default account's username `root` to log in.
 
-For detailed instructions, see [installation and configuration](installation/_index.md#installation-and-configuration).
+For detailed instructions, see [installation and configuration](https://docs.gitlab.com/install/package/).
 
 Additionally, you can navigate to the GitLab administration panel of your server and
 [upload your JiHu Edition license file](https://docs.gitlab.com/administration/license/#uploading-your-license).

@@ -18,7 +18,7 @@ package instance.
 When converting a self-compiled installation:
 
 - You must convert to the exact same version of GitLab.
-- You must [configure settings in `/etc/gitlab/gitlab.rb`](../_index.md#configuring) because settings in files such as
+- You must [configure settings in `/etc/gitlab/gitlab.rb`](../settings/configuration.md) because settings in files such as
   `gitlab.yml`, `puma.rb` and `smtp_settings.rb` are lost.
 
 {{< alert type="warning" >}}

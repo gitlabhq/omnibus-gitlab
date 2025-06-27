@@ -866,7 +866,7 @@ Refer to [issue 341573](https://gitlab.com/gitlab-org/gitlab/-/issues/341573) fo
 
 Because of a [known issue](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7776), you can see the reconfigure process stuck at
 `ruby_block[wait for logrotate service socket] action run` after uninstalling GitLab and trying to install it again. This problem occurs when one of the `systemctl` commands are
-not executed when [uninstalling GitLab](installation/_index.md#uninstall-the-linux-package-omnibus).
+not executed when [uninstalling GitLab](https://docs.gitlab.com/install/package/#uninstall-the-linux-package).
 
 To resolve this issue:
 
