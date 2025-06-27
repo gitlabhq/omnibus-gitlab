@@ -1,4 +1,4 @@
-require_relative '../../../../gitlab/libraries/redis_uri'
+require_relative '../../redis_uri'
 
 module RedisHelper
   class Base

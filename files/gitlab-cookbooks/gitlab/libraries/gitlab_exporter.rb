@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require_relative 'redis_uri.rb'
+require_relative '../../package/libraries/redis_uri'
 require_relative '../../package/libraries/helpers/redis_helper/base'
 
 module GitlabExporter

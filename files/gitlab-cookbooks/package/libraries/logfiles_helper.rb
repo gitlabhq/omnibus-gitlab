@@ -185,7 +185,7 @@ class LogfilesHelper < AccountHelper
     logrotate_services = node['logrotate']['services']
     available_settings = Gitlab.settings
 
-    logrotate_services.each do |svc|
+    logrotate_services&.each do |svc|
       # In `Gitlab.settings`, settings aren't hyphenated, but use underscores.
       setting_name = svc.tr('-', '_')
 

@@ -1,5 +1,5 @@
 # This is a base class to be inherited by PG Helpers
-require_relative 'base_helper'
+require_relative '../../../package/libraries/helpers/base_helper'
 require_relative '../pg_version'
 
 class BasePgHelper < BaseHelper

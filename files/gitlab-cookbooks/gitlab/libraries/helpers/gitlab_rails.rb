@@ -1,4 +1,4 @@
-require_relative 'base_helper'
+require_relative '../../../package/libraries/helpers/base_helper'
 
 class GitlabRailsHelper < BaseHelper
   attr_accessor :node
