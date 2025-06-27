@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-$LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands/lib')
-$LOAD_PATH << File.join(__dir__, '../../../files/gitlab-ctl-commands-ee/lib')
+$LOAD_PATH << File.join(__dir__, '../../../../../../files/gitlab-ctl-commands/lib')
+$LOAD_PATH << File.join(__dir__, '../../../../../../files/gitlab-ctl-commands-ee/lib')
 
 require 'gitlab_ctl/util'
-require 'postgresql/ee'
+require 'gitlab_ctl/postgresql/ee'
 
 RSpec.describe GitlabCtl::PostgreSQL::EE do
   describe "#get_primary" do

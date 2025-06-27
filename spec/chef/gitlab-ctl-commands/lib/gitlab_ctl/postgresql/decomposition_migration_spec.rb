@@ -1,10 +1,10 @@
 require 'spec_helper'
-$LOAD_PATH << File.join(__dir__, '../../../../files/gitlab-ctl-commands/lib')
+$LOAD_PATH << File.join(__dir__, '../../../../../../files/gitlab-ctl-commands/lib')
 
 require 'gitlab_ctl/util'
-require 'postgresql/decomposition_migration'
+require 'gitlab_ctl/postgresql/decomposition_migration'
 
-RSpec.describe PostgreSQL::DecompositionMigration do
+RSpec.describe GitlabCtl::PostgreSQL::DecompositionMigration do
   let(:ctl) { spy('gitlab ctl') }
   let(:confirmation) { StringIO.new('y') }
   let(:command_ok) { spy('command spy', error?: false) }
