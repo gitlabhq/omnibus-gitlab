@@ -851,11 +851,6 @@ To add a CSP:
    sudo gitlab-ctl reconfigure
    ```
 
-## Set initial root password on installation
-
-The initial password for the administrator user `root` can be set at installation time. For more information, see
-[Set up the initial password](../installation/_index.md#set-up-the-initial-account).
-
 ## Set allowed hosts to prevent host header attacks
 
 To prevent GitLab from accepting a host header other than
