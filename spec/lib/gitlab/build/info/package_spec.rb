@@ -70,6 +70,29 @@ RSpec.describe Build::Info::Package do
         end
       end
 
+      context 'for release environments' do
+        before do
+          allow(Build::Check).to receive(:is_release_environment?).and_return(true)
+          allow(Build::Info::CI).to receive(:branch_name).and_return('16-2-stable')
+          allow(Build::Info::CI).to receive(:parent_pipeline_id).and_return('12345')
+          allow(Build::Info::CI).to receive(:parent_pipeline_commit_short_sha).and_return('abc123')
+        end
+
+        context 'even if a tag matches the SHA' do
+          before do
+            allow(Build::Check).to receive(:on_tag?).and_return(true)
+          end
+
+          it 'returns computed version as expected' do
+            expect(described_class.semver_version).to eq('16-2-stable-12345-abc123')
+          end
+        end
+
+        it 'returns computed version as expected' do
+          expect(described_class.semver_version).to eq('16-2-stable-12345-abc123')
+        end
+      end
+
       context 'on nightlies' do
         before do
           allow(Build::Check).to receive(:is_nightly?).and_return(true)
