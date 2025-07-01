@@ -75,3 +75,5 @@ build do
   make env: env
   make 'install', env: env
 end
+
+project.exclude "embedded/bin/c_rehash"

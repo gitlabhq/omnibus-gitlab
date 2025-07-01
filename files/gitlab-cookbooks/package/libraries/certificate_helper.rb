@@ -122,16 +122,16 @@ class CertificateHelper
 
   def link_certificates
     update_permissions
-    rehash_status = c_rehash
+    rehash_status = rehash
     unless rehash_status.zero?
-      LoggingHelper.warning("Rehashing of trusted certificates present in `/etc/gitlab/trusted-certs` failed. If on a FIPS-enabled machine, ensure `c_rehash` binary is available in $PATH.")
+      LoggingHelper.warning("Rehashing of trusted certificates present in `/etc/gitlab/trusted-certs` failed. If on a FIPS-enabled machine, ensure `openssl` or `c_rehash` binary is available in $PATH.")
       return
     end
     link_to_omnibus_ssl_directory
     log_directory_hash
   end
 
-  # c_rehash ran so we now have valid hashed names
+  # openssl_rehash ran so we now have valid hashed names
   # Skip all files that are not symlinks
   # If they are symlinks, make sure they are valid certificates
   def link_to_omnibus_ssl_directory
@@ -156,9 +156,16 @@ class CertificateHelper
     FileUtils.chmod(0644, file_list)
   end
 
-  def c_rehash
-    cmd = "c_rehash #{@trusted_certs_dir}"
-    result = do_shell_out_with_embedded_path(cmd)
+  def rehash
+    result = do_shell_out_with_embedded_path("openssl rehash #{@trusted_certs_dir}")
+
+    # Fallback to `c_rehash` for FIPS systems that do not support `openssl rehash`.
+    # NOTES:
+    # - OpenSSL still exits with 0 on invalid commands.
+    # - This fallback can be removed once we drop support for AmazonLinux 2.
+    openssl_rehash_invalid = result.stderr.downcase.include?('invalid command')
+    result = do_shell_out_with_embedded_path("c_rehash rehash #{@trusted_certs_dir}") if openssl_rehash_invalid
+
     result.exitstatus
   end
 

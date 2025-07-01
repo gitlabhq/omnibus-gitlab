@@ -66,7 +66,7 @@ else
   runtime_dependency 'openssh-server'
 end
 
-# perl is required for exiftool and openssh certificate hashing
+# perl is required for exiftool
 
 if rhel?
   case OhaiHelper.get_centos_version
@@ -100,7 +100,7 @@ end
 
 # FIPS requires system OpenSSL packages to run
 if Build::Check.use_system_ssl?
-  if rhel?
+  if amazon? && OhaiHelper.get_amazon_version == 2
     runtime_dependency 'openssl-perl'
   else
     runtime_dependency 'openssl'
