@@ -33,7 +33,7 @@ module Build
         # different.
         # To resolve this, we append a PIPELINE_ID to change the name of the package
         def semver_version(fips: Build::Check.use_system_ssl?)
-          if Build::Check.on_tag? && !Build::Check.is_internal_release?
+          if Build::Check.on_tag? && !Build::Check.is_internal_release? && !Build::Check.is_release_environment?
             # timestamp is disabled in omnibus configuration
             Omnibus.load_configuration('omnibus.rb')
             Omnibus::BuildVersion.semver
@@ -46,6 +46,8 @@ module Build
             # For internal release builds, we append `internal` suffix.
             if Build::Check.is_internal_release?
               "#{latest_version}+internal#{internal_release_iteration}"
+            elsif Build::Check.is_release_environment?
+              "#{Build::Info::CI.branch_name}-#{Build::Info::CI.parent_pipeline_id}-#{Build::Info::CI.parent_pipeline_commit_short_sha}"
             else
               # For nightly builds, we append `rnightly`
               # For other regular feature branch builds, we append `rfbranch`
