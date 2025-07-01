@@ -206,11 +206,6 @@ SLES-12.5-check:
   extends: .zypper-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
-SLES-15.2-check:
-  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_15sp2:latest"
-  extends: .zypper-install
-  rules:
-    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
 
 Docker:
   stage: image

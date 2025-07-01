@@ -397,15 +397,6 @@ SLES-12.5-branch:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
-SLES-15.2-branch:
-  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
-  extends: .branch_template
-  variables:
-    DOCKER_AUTH_CONFIG: $DEV_BUILDER_DOCKER_AUTH_CONFIG
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
-    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 AmazonLinux-2-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
@@ -726,12 +717,6 @@ SLES-12.5:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
-SLES-15.2:
-  image: "${BUILDER_IMAGE_REGISTRY}/sles_15sp2:${BUILDER_IMAGE_REVISION}"
-  extends: .tag_template
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 AmazonLinux-2-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
@@ -937,16 +922,6 @@ SLES-12.5-staging:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
-SLES-15.2-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: SLES-15.2
-      optional: true
-    - job: SLES-15.2-branch
-      optional: true
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 AmazonLinux-2-fips-staging:
   extends: .fips_staging_upload_template
   variables:
@@ -1075,15 +1050,6 @@ SLES-12.5-release:
   extends: .production_release_template
   needs:
     - SLES-12.5
-  rules:
-    - !reference [.default_rules, rules]
-    - !reference [.skip_release_jobs, rules]
-    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
-      when: manual
-SLES-15.2-release:
-  extends: .production_release_template
-  needs:
-    - SLES-15.2
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]

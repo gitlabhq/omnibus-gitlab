@@ -209,7 +209,6 @@ class OhaiHelper
         el-8_aarch64
         raspbian-buster_aarch64
         sles-12.5
-        sles-15.2
       ].include?(platform_dir)
     end
   end
