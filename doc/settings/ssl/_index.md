@@ -632,7 +632,7 @@ Some environments connect to external resources for various tasks and GitLab
 allows these connections to use HTTPS, and supports connections with self-signed certificates.
 GitLab has its own ca-cert bundle that you can add certs to by placing the
 individual custom certs in the `/etc/gitlab/trusted-certs` directory. They then
-get added to the bundle. They are added using openssl's `c_rehash` method, which
+get added to the bundle. They are added using the `openssl rehash` command, which
 only works on a [single certificate](#using-a-custom-certificate-chain).
 
 The Linux package ships with the official
@@ -698,7 +698,7 @@ compiled to look for certificates in `/opt/gitlab/embedded/ssl/certs`.
 
 The Linux package manages custom certificates by symlinking any certificate that
 gets added to `/etc/gitlab/trusted-certs/` to `/opt/gitlab/embedded/ssl/certs`
-using the [c_rehash](https://www.openssl.org/docs/manmaster/man1/c_rehash.html)
+using the [openssl rehash](https://docs.openssl.org/3.1/man1/openssl-rehash/)
 tool. For example, let's suppose we add `customcacert.pem` to
 `/etc/gitlab/trusted-certs/`:
 
