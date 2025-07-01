@@ -89,6 +89,10 @@ module Build
         Gitlab::Util.get_env('INTERNAL_RELEASE') == 'true'
       end
 
+      def is_release_environment?
+        Gitlab::Util.get_env('RELEASE_ENVIRONMENT_BUILD') == 'true'
+      end
+
       def no_changes?
         system(*%w[git diff --quiet])
       end

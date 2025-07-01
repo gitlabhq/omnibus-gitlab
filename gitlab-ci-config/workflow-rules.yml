@@ -52,6 +52,10 @@ workflow:
       variables:
         PIPELINE_TYPE: INTERNAL_RELEASE_BUILD_PIPELINE
         CACHE_EDITION: "STABLE"
+    - if: '$PIPELINE_TYPE == null && $RELEASE_ENVIRONMENT_BUILD == "true" && $CI_PROJECT_PATH == $SECURITY_PROJECT_PATH && $CI_COMMIT_BRANCH =~ /^.*-stable$/'
+      variables:
+        PIPELINE_TYPE: RELEASE_ENVIRONMENT_BUILD_PIPELINE
+        CACHE_EDITION: "STABLE"
     - if: '$PIPELINE_TYPE == null && $NIGHTLY && $CI_COMMIT_BRANCH && ($ee == "true" || $GITLAB_VERSION =~ /-ee$/)'
       variables:
         PIPELINE_TYPE: EE_NIGHTLY_BUILD_PIPELINE
