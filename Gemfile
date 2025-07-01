@@ -62,7 +62,7 @@ end
 
 group :test do
   gem 'debug'
-  gem 'chefspec'
+  gem 'chefspec', git: 'https://github.com/chef/chefspec' # Use git source because the last update to Rubygems was in July 2024.
   gem 'omnibus-ctl', '0.3.6'
   gem 'fantaskspec'
   gem 'rspec_junit_formatter'

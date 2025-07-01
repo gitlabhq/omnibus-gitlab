@@ -1,4 +1,16 @@
 GIT
+  remote: https://github.com/chef/chefspec
+  revision: 2f1237bb09264b182500eb924a95be3c85afb567
+  specs:
+    chefspec (9.3.15)
+      chef (>= 15)
+      chef-cli
+      fauxhai-chef (>= 9.3)
+      logger (< 1.6)
+      rspec (~> 3.0)
+      rspec-expectations (<= 3.12.3)
+
+GIT
   remote: https://gitlab.com/gitlab-org/omnibus.git
   revision: 1593bf41308800cbc8e51602d07e17ce1a92107a
   tag: 9.0.19.3
@@ -154,11 +166,6 @@ GEM
       chef-config
       concurrent-ruby (~> 1.0)
     chef-vault (4.1.11)
-    chefspec (9.3.3)
-      chef (>= 15)
-      chef-cli
-      fauxhai-ng (>= 7.5)
-      rspec (~> 3.0)
     citrus (3.0.2)
     claide (1.1.0)
     claide-plugins (0.9.2)
@@ -230,8 +237,9 @@ GEM
       faraday (>= 0.8)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
-    fauxhai-ng (8.7.0)
+    fauxhai-chef (9.3.26)
       net-ssh
+      ohai (>= 13.0)
     ffi (1.17.2)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
@@ -340,6 +348,7 @@ GEM
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
+    logger (1.5.3)
     logging (2.3.1)
       little-plugger (~> 1.1)
       multi_json (~> 1.14)
@@ -623,7 +632,7 @@ DEPENDENCIES
   chef (~> 18.3.0)!
   chef-cli (~> 5.6.1)!
   chef-utils!
-  chefspec
+  chefspec!
   debug
   docker-api
   fantaskspec
