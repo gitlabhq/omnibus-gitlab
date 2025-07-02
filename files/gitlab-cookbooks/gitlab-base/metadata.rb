@@ -15,7 +15,7 @@ depends 'package'
 # We explicitly depend on gitlab and gitlab-ee until they are refactored and
 # deals with only GitLab Rails
 depends 'gitlab'
-depends 'gitlab-ee'
+depends 'gitlab-ee' if Dir.exist?("#{File.expand_path('..', __dir__)}/gitlab-ee")
 
 cookbooks = Dir.children(File.expand_path("..", __dir__)).select { |f| File.directory?(f) } - %w[package gitlab gitlab-ee]
 cookbooks.each do |cookbook|
