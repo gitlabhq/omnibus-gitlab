@@ -47,7 +47,9 @@ module Build
             if Build::Check.is_internal_release?
               "#{latest_version}+internal#{internal_release_iteration}"
             elsif Build::Check.is_release_environment?
-              "#{Build::Info::CI.branch_name}-#{Build::Info::CI.parent_pipeline_id}-#{Build::Info::CI.parent_pipeline_commit_short_sha}"
+              # Convert branch name from 18-1-stable to 18.1+stable
+              converted_branch_name = Build::Info::CI.branch_name.gsub(/(\d+)-(\d+)-stable/, '\1.\2+stable')
+              "#{converted_branch_name}.#{Build::Info::CI.parent_pipeline_id}.#{Build::Info::CI.parent_pipeline_commit_short_sha}"
             else
               # For nightly builds, we append `rnightly`
               # For other regular feature branch builds, we append `rfbranch`

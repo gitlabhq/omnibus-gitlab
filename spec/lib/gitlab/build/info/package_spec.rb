@@ -84,12 +84,12 @@ RSpec.describe Build::Info::Package do
           end
 
           it 'returns computed version as expected' do
-            expect(described_class.semver_version).to eq('16-2-stable-12345-abc123')
+            expect(described_class.semver_version).to eq('16.2+stable.12345.abc123')
           end
         end
 
         it 'returns computed version as expected' do
-          expect(described_class.semver_version).to eq('16-2-stable-12345-abc123')
+          expect(described_class.semver_version).to eq('16.2+stable.12345.abc123')
         end
       end
 
