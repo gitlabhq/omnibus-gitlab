@@ -72,7 +72,7 @@ After GitLab is reconfigured, you can look at the auto generated YAML configurat
 
 ## Tail process logs
 
-See [settings/logs.md.](../settings/logs.md)
+See [Logs on Linux package installations](../settings/logs.md).
 
 ## Starting and stopping
 
@@ -172,8 +172,8 @@ server.
 Similar to the previous command, if you need superuser access to the bundled
 Geo tracking database (`geo-postgresql`), you can use the `gitlab-geo-psql`.
 It takes the same arguments as the regular `psql` command. For HA, see more
-about the necessary arguments in:
-[Checking Configuration](https://docs.gitlab.com/administration/geo/replication/multiple_servers/)
+about the necessary arguments in
+[Checking Configuration](https://docs.gitlab.com/administration/geo/replication/multiple_servers/).
 
 ```shell
 # Superuser psql access to GitLab's Geo tracking database

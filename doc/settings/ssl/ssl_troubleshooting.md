@@ -78,7 +78,7 @@ this OpenSSL version.
 
    {{< alert type="note" >}}
 
-It is recommended to use the full certificate chain in order to prevent SSL errors when clients connect. The full certificate chain order should consist of the server certificate first, followed by all intermediate certificates, with the root CA last.
+   It is recommended to use the full certificate chain in order to prevent SSL errors when clients connect. The full certificate chain order should consist of the server certificate first, followed by all intermediate certificates, with the root CA last.
 
    {{< /alert >}}
 
@@ -88,7 +88,7 @@ It is recommended to use the full certificate chain in order to prevent SSL erro
 
    {{< alert type="note" >}}
 
-If you get this error while running the system OpenSSL utility instead of the `/opt/gitlab/embedded/bin/openssl` utility, make sure you update your CA certificates at the OS level to fix it.
+   If you get this error while running the system OpenSSL utility instead of the `/opt/gitlab/embedded/bin/openssl` utility, make sure you update your CA certificates at the OS level to fix it.
 
    {{< /alert >}}
 

@@ -23,7 +23,7 @@ domain name is:
 
   {{< alert type="note" >}}
 
-To take advantage of the [Let's Encrypt integration](ssl/_index.md#enable-the-lets-encrypt-integration) (automatic SSL certificates),
+  To take advantage of the [Let's Encrypt integration](ssl/_index.md#enable-the-lets-encrypt-integration) (automatic SSL certificates),
   your instance's domain name must be resolvable over the public internet.
 
   {{< /alert >}}

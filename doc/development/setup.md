@@ -57,7 +57,7 @@ to use a container for development.
 
    {{< alert type="note" >}}
 
-On Ubuntu Xenial, you may have to install `tzdata`. This
+   On Ubuntu Xenial, you may have to install `tzdata`. This
    [issue is reported in #4769](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4679).
 
    {{< /alert >}}
