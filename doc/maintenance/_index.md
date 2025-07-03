@@ -262,3 +262,16 @@ To rotate the secrets:
 1. [Verify that the database values can be decrypted](https://docs.gitlab.com/administration/raketasks/check/#verify-database-values-can-be-decrypted-using-the-current-secrets). The output should match with the previous execution.
 
 1. Confirm that GitLab is working as expected. If it is, it should be safe to delete the old secrets.
+
+## Deprecations
+
+Run `sudo gitlab-ctl check-config` to check your Omnibus configuration for flags to be removed in a
+future GitLab version.
+
+The command supports the following arguments:
+
+- `--version <Version>`: The target GitLab version you want to check your configuration against.
+- `--no-fail`: To not exit with a failure code even if any deprecations/removals are found.
+
+When you upgrade GitLab, this configuration check runs automatically. If you prefer to skip
+this check during upgrades, create an file at `/etc/gitlab/skip-fail-config-check`.

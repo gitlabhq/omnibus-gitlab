@@ -47,20 +47,26 @@ add_command 'check-config', 'Check if there are any configuration in gitlab.rb t
   end
   existing_config = node_json['normal']
 
-  messages = Gitlab::Deprecations.check_config(parse_version, existing_config, :removal)
+  opts = parse_opts
+  messages = Gitlab::Deprecations.check_config(opts[:version], existing_config, :removal)
   Kernel.exit 0 if messages.empty?
 
   log messages.join("\n")
   log 'Deprecations found. Please correct them and try again.'
-  Kernel.exit 1
+  Kernel.exit opts[:fail_exit_code]
 end
 
-def parse_version
-  version = ""
+def parse_opts
+  options = { fail_exit_code: 1 }
+
   OptionParser.new do |opts|
-    opts.on('-vVER', '--version=VER', 'Version to be installed') do |input_version|
-      version = input_version
+    opts.on('-vVER', '--version=VER', 'Version to be installed') do |version|
+      options[:version] = version
+    end
+    opts.on('-n', '--no-fail', 'Show deprecation warnings but do not exit with error code') do
+      options[:fail_exit_code] = 0
     end
   end.parse!(ARGV)
-  version
+
+  options
 end
