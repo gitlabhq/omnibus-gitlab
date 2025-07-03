@@ -68,12 +68,6 @@ directory "#{install_dir}/embedded/etc" do
   action :create
 end
 
-template "#{install_dir}/embedded/etc/gitconfig" do
-  source "gitconfig-system.erb"
-  mode 0755
-  variables gitconfig: node.dig('gitlab', 'omnibus_gitconfig', 'system') || {}
-end
-
 # This recipe needs to run before gitlab-rails
 # because we add `gitlab-www` user to some groups created by that recipe
 include_recipe "gitlab::web-server"

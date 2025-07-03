@@ -42,8 +42,7 @@ template File.join(gitlab_home, ".gitconfig") do
   owner gitlab_username
   group gitlab_group
   mode "0644"
-  variables(user_options: node['gitlab']['user'],
-            system_core_options: node.dig('gitlab', 'omnibus_gitconfig', 'system', 'core') || [])
+  variables(user_options: node['gitlab']['user'])
 end
 
 # The directory will remain empty in Omnibus GitLab use-case.

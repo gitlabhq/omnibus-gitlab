@@ -33,12 +33,6 @@ module Gitlab
         # deprecations += identify_deprecated_config(existing_config, ['gitlab', 'foobar'], {}, "13.12", "14.0", "Support for foobar will be removed in GitLab 14.0")
         [
           {
-            config_keys: %w(gitlab omnibus_gitconfig),
-            deprecation: '16.10',
-            removal: '17.0',
-            note: "`omnibus_gitconfig` will be removed in GitLab 17.0. For details and migration instructions, please see: https://docs.gitlab.com/ee/update/versions/gitlab_16_changes.html#gitlabomnibus_gitconfig-deprecation"
-          },
-          {
             config_keys: %w(registry default_notifications_threshold),
             deprecation: '17.1',
             removal: '19.0',

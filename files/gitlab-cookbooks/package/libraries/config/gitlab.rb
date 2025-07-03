@@ -112,7 +112,6 @@ module Gitlab
     attribute('git_data_dir',            default: nil)
     attribute('actioncable')
     attribute('bootstrap')
-    attribute('omnibus_gitconfig')
     attribute('manage_accounts')
     attribute('manage_storage_directories')
     attribute('user')
