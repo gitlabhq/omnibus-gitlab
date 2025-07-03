@@ -359,7 +359,7 @@ docs-lint-i18n markdown:
   before_script: []
   script:
     # Lint Markdown
-    - markdownlint-cli2 'doc-locale/**/*.md'
+    - cd doc-locale && markdownlint-cli2 --config .markdownlint/.markdownlint-cli2.yaml '**/*.md'
   rules:
     - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
