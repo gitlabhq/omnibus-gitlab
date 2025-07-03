@@ -72,23 +72,23 @@ To update EE to JH:
   1. Take a [backup](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/).
   1. Find the currently installed GitLab version:
 
-     **For Debian/Ubuntu**
+     - For Debian/Ubuntu:
 
-     ```shell
-     sudo apt-cache policy gitlab-ee | grep Installed
-     ```
+       ```shell
+       sudo apt-cache policy gitlab-ee | grep Installed
+       ```
 
-     The output should be similar to `Installed: 13.10.0-ee.0`, so the installed
-     version is `13.10.0-ee.0`.
+       The output should be similar to `Installed: 13.10.0-ee.0`, so the installed
+       version is `13.10.0-ee.0`.
 
-     **For CentOS/RHEL**
+     - For CentOS/RHEL:
 
-     ```shell
-     sudo rpm -q gitlab-ee
-     ```
+       ```shell
+       sudo rpm -q gitlab-ee
+       ```
 
-     The output should be similar to `gitlab-ee-13.10.0-ee.0.el8.x86_64`, so
-     the installed version is `13.10.0-ee.0`.
+       The output should be similar to `gitlab-ee-13.10.0-ee.0.el8.x86_64`, so
+       the installed version is `13.10.0-ee.0`.
 
   1. Follow the same steps as when
      [installing the JiHu Edition package](#install-or-update-a-jihu-edition-package) for
@@ -109,18 +109,18 @@ To update EE to JH:
   1. Confirm that GitLab is working as expected, then remove the old
      Enterprise Edition repository:
 
-     **For Debian/Ubuntu**
+     - For Debian/Ubuntu:
 
-     ```shell
-     sudo rm /etc/apt/sources.list.d/gitlab_gitlab-ee.list
-     ```
+       ```shell
+       sudo rm /etc/apt/sources.list.d/gitlab_gitlab-ee.list
+       ```
 
-     **For CentOS/RHEL**
+     - For CentOS/RHEL:
 
-     ```shell
-     sudo rm /etc/yum.repos.d/gitlab_gitlab-ee.repo
-     sudo dnf config-manager --disable gitlab_gitlab-ee
-     ```
+       ```shell
+       sudo rm /etc/yum.repos.d/gitlab_gitlab-ee.repo
+       sudo dnf config-manager --disable gitlab_gitlab-ee
+       ```
 
 - If you installed GitLab using Docker:
 
@@ -152,5 +152,5 @@ To downgrade the JiHu Edition installation to GitLab Enterprise Edition (EE), in
 
 Depending on the preferred installation method for GitLab EE, either:
 
-- Use the official GitLab package repository and [install GitLab EE](https://about.gitlab.com/install/?version=ee), or
+- Use the official GitLab package repository and [install GitLab EE](https://about.gitlab.com/install/?version=ee).
 - Download the GitLab EE package and [manually install it](https://docs.gitlab.com/update/package/#upgrade-using-a-manually-downloaded-package).

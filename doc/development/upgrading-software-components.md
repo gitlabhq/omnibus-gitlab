@@ -11,7 +11,7 @@ projects. Software components can be updated individually as new features, bug
 fixes, and security vulnerabilities become available.
 
 Software component upgrades can be risky, especially when non-backwards
-compatible changes are made. Considering [Semantic versioning](https://semver.org/)], examining changelogs, and examining release
+compatible changes are made. Considering [Semantic versioning](https://semver.org/), examining changelogs, and examining release
 notes can give a sense of the amount of risk involved in an upgrade. In all
 cases, upgrades should be thoroughly tested before merging.
 
@@ -42,7 +42,7 @@ Source for internal software components is downloaded from a project's GitLab
 repository. Versions used in a build are set by the Git reference contained in
 the project's corresponding `*VERSION` files. These versions can be overridden
 by environment variables. For more information, see
-[Use specific branches or versions of a GitLab component](../build/team_member_docs.md#use-specific-branches-or-versions-of-a-gitlab-component).
+[Use specific branches or versions of a GitLab component](../development/team_members.md#use-specific-branches-or-versions-of-a-gitlab-component).
 
 Updates to internal software components are done by merge requests in the
 corresponding repository.
@@ -56,7 +56,7 @@ A typical workflow for updating an internal software component.
 External contributors should create a fork of the
 [`gitlab-org/omnibus-gitlab`](https://gitlab.com/gitlab-org/omnibus-gitlab) repository.
 
-Create a new branch from the target branch (usually `master` of the
+Create a new branch from the target branch (usually `master`) of the
 [`gitlab-org/omnibus-gitlab`](https://gitlab.com/gitlab-org/omnibus-gitlab) repository.
 
 ### Modify `config/software/<component.rb>`

@@ -25,7 +25,7 @@ title: Get started with Linux package development
 ## Build and test your enhancement
 
 - [Building your own package](../build/_index.md)
-- [Building a package from a custom branch](../build/team_member_docs.md#test-an-omnibus-gitlab-project-mr)
+- [Building a package from a custom branch](../development/team_members.md#test-an-omnibus-gitlab-project-mr)
 
 ## Submit your enhancement for review
 

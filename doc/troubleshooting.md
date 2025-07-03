@@ -45,7 +45,7 @@ Linux packages are [signed with GPG keys](update/package_signatures.md) in
 addition to the package repositories providing signed metadata. This ensures
 authenticity and integrity of the packages that are distributed to the users.
 However, the package manager used in openSUSE and SLES operating systems may
-sometime raise false warnings with these signatures, similar to
+sometime raise false warnings with these signatures, similar to:
 
 ```plaintext
 File 'repomd.xml' from repository 'gitlab_gitlab-ce' is signed with an unknown key '14219A96E15E78F4'. Continue? [yes/no] (no):
@@ -407,20 +407,20 @@ is different for each error). See the last line of this snippet.
 Occasionally people ask if they can install GitLab without root access.
 This is problematic for several reasons.
 
-### Installing the .deb or .rpm
+### Installing the `.deb` or `.rpm`
 
 To our knowledge there is no clean way to install Debian or RPM
 packages as a non-privileged user. You cannot install Linux package
 RPM's because the build process does not create source RPM's.
 
-### Hassle-free hosting on port 80 and 443
+### Hassle-free hosting on port `80` and `443`
 
 The most common way to deploy GitLab is to have a web server
 (NGINX/Apache) running on the same server as GitLab, with the web
 server listening on a privileged (below-1024) TCP port. In
 Linux packages, we provide this convenience by bundling an
 automatically configured NGINX service that needs to run its master
-process as root to open ports 80 and 443.
+process as root to open ports `80` and `443`.
 
 If this is problematic, administrators installing GitLab can disable
 the bundled NGINX service, but this puts the burden on them to keep
@@ -441,8 +441,8 @@ for GitLab and one for Mattermost) if we give each application its own
 runit (runsvdir), PostgreSQL and Redis process. But this would be a
 major change in the `gitlab-ctl reconfigure` Chef code and it would
 probably create major upgrade pain for all existing Linux package
-installations. (We would probably have to rearrange the directory
-structure under `/var/opt/gitlab`.)
+installations. We would probably have to rearrange the directory
+structure under `/var/opt/gitlab`.
 
 ### Tweaking the operating system for better performance
 
@@ -450,13 +450,13 @@ During `gitlab-ctl reconfigure` we set and install several sysctl
 tweaks to improve PostgreSQL performance and increase connection limits.
 This can only be done with root access.
 
-## `gitlab-rake assets:precompile` fails with 'Permission denied'
+## `gitlab-rake assets:precompile` fails with `Permission denied`
 
 Some users report that running `gitlab-rake assets:precompile` does not work
 with the Linux packages. The short answer to this is: do not run that
 command, it is only for GitLab installations from source.
 
-The GitLab web interface uses CSS and JavaScript files, called 'assets' in Ruby
+The GitLab web interface uses CSS and JavaScript files, called "assets" in Ruby
 on Rails-speak. In the [upstream GitLab repository](https://gitlab.com/gitlab-org/gitlab-foss/tree/master/app/assets)
 these files are stored in a developer-friendly way: easy to read and edit. When
 you are a normal user of GitLab, you do not want these files to be in the
@@ -494,11 +494,11 @@ sudo NO_PRIVILEGE_DROP=true USE_DB=false gitlab-rake gitlab:assets:clean gitlab:
 sudo chown -R git:git /var/opt/gitlab/gitlab-rails/tmp/cache
 ```
 
-## 'Short read or OOM loading DB' error
+## Error: `Short read or OOM loading DB`
 
 Try [cleaning the old Redis session](https://docs.gitlab.com/administration/operations/).
 
-## Apt error 'The requested URL returned error: 403'
+## Error: `The requested URL returned error: 403`
 
 When trying to install GitLab using the apt repo if you receive an error similar to:
 
@@ -508,7 +508,7 @@ W: Failed to fetch https://packages.gitlab.com/gitlab/gitlab-ce/DISTRO/dists/COD
 
 check if there is a repository cacher in front of your server, like for example `apt-cacher-ng`.
 
-Add the following line to apt-cacher-ng config(eg. in  `/etc/apt-cacher-ng/acng.conf`):
+Add the following line to apt-cacher-ng config (for example in `/etc/apt-cacher-ng/acng.conf`):
 
 ```shell
 PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com|*\.cloudfront\.net)
@@ -528,7 +528,7 @@ when GitLab tries to connect with the internal services like GitLab Shell.
 
 To fix these errors, see the [Install Custom Public Certificates](settings/ssl/_index.md#install-custom-public-certificates) section.
 
-## error: proxyRoundTripper: XXX failed with: "net/http: timeout awaiting response headers"
+## Error: `proxyRoundTripper: XXX failed with: "net/http: timeout awaiting response headers"`
 
 If GitLab Workhorse doesn't receive an answer from
 GitLab within 1 minute (default), it will serve a 502 page.
@@ -562,7 +562,7 @@ for your environment.
 See [Change the default proxy headers section of NGINX doc](settings/nginx.md#change-the-default-proxy-headers) for details on
 how to override the default headers.
 
-## Extension missing pg_trgm
+## Extension missing `pg_trgm`
 
 [GitLab requires](https://docs.gitlab.com/install/requirements/#postgresql-requirements)
 the PostgreSQL extension `pg_trgm`.
@@ -581,7 +581,7 @@ The extension is located in the `postgresql-contrib` package. For Debian:
 sudo apt-get install postgresql-contrib
 ```
 
-Once the extension is installed, access the `psql` as superuser and enable the
+After the extension is installed, access the `psql` as superuser and enable the
 extension.
 
 1. Access `psql` as superuser:
@@ -614,7 +614,7 @@ above, and finally restart the container.
    docker exec -it gitlab bash
    ```
 
-1. Run the commands above
+1. Run the commands above.
 
 1. Restart the container:
 
@@ -622,7 +622,7 @@ above, and finally restart the container.
    docker restart gitlab
    ```
 
-## Errno::ENOMEM: Cannot allocate memory during backup or upgrade
+## Error: `Errno::ENOMEM: Cannot allocate memory during backup or upgrade`
 
 [GitLab requires](https://docs.gitlab.com/install/requirements/#memory)
 2GB of available memory to run without errors. Having 2GB of memory installed may
@@ -631,7 +631,7 @@ If GitLab runs fine when not upgrading or running a backup, then adding more swa
 should solve your problem. If you see the server using swap during normal usage,
 you can add more RAM to improve performance.
 
-## NGINX error: 'could not build server_names_hash, you should increase server_names_hash_bucket_size'
+## NGINX error: `could not build server_names_hash, you should increase server_names_hash_bucket_size`
 
 If your external URL for GitLab is longer than the default bucket size (64 bytes),
 NGINX may stop working and show this error in the logs. To allow larger server
@@ -643,7 +643,7 @@ nginx['server_names_hash_bucket_size'] = 128
 
 Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
-## Reconfigure fails due to "'root' cannot chown" with NFS root_squash
+## Reconfigure fails due to `'root' cannot chown` with NFS root_squash
 
 ```shell
 $ gitlab-ctl reconfigure
@@ -662,7 +662,7 @@ This can happen if you have directories mounted using NFS and configured in `roo
 mode. Reconfigure is not able to properly set the ownership of your directories. You
 will need to switch to using `no_root_squash` in your NFS exports on the NFS server, or
 [disable storage directory management](settings/configuration.md#disable-storage-directories-management)
- and manage the permissions yourself.
+and manage the permissions yourself.
 
 ## `gitlab-runsvdir` not starting
 
@@ -780,7 +780,7 @@ completed, restart `gitlab-runsvdir` service for changes to take effect.
 sudo systemctl restart gitlab-runsvdir
 ```
 
-## Errno::EAFNOSUPPORT: Address family not supported by protocol - socket(2)
+## Error: `Errno::EAFNOSUPPORT: Address family not supported by protocol - socket(2)`
 
 When starting up GitLab, if an error similar to the following is observed:
 
@@ -818,7 +818,7 @@ resolve the hosts to an **IPv4** address instead of **IPv6**.
 
 <!-- markdownlint-disable line-length -->
 
-## `URI::InvalidComponentError (bad component(expected host component: my_url.tld)` when `external_url` contains underscores
+## Error: `URI::InvalidComponentError (bad component(expected host component: my_url.tld)` when `external_url` contains underscores
 
 If you have set `external_url` with underscores (for example `https://my_company.example.com`), you may face the following issues with CI/CD:
 
@@ -903,9 +903,9 @@ Refer to [issue 2766](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/2766
 To work around the issue:
 
 1. Use an alternative RPM repository mirroring tool like `reposync` or
-`createrepo` to make a local copy of the official GitLab `yum` repository. These
-tools recreate the repository metadata in the local data, which includes
-creating a fully-populated `filelists.xml.gz` file.
+   `createrepo` to make a local copy of the official GitLab `yum` repository. These
+   tools recreate the repository metadata in the local data, which includes
+   creating a fully-populated `filelists.xml.gz` file.
 1. Point Pulp or Satellite at the local mirror.
 
 ### Local mirror example
@@ -942,7 +942,7 @@ configuring and securing your web server.
 1. Add a `Directory` stanza to `/etc/httpd/conf/httpd.conf`:
 
    ```apache
-   <Directory “/var/www/html/repos“>
+   <Directory "/var/www/html/repos">
    Options All Indexes FollowSymLinks
    Require all granted
    </Directory>
@@ -1059,7 +1059,7 @@ To resolve this issue, you have three options:
   keep this list synced with your firewall settings because they can change.
 - Manually download the package file and upload it to your server.
 
-## Do I need to increase `net.core.somaxconn` ?
+## Check if `net.core.somaxconn` is set too low
 
 The following may assist in identifying if the value of `net.core.somaxconn`
 is set too low:
@@ -1080,7 +1080,7 @@ net.core.somaxconn = 1024
 You may experience timeouts or HTTP 502 errors and is recommended to increase this
 value by updating the `puma['somaxconn']` variable in your `gitlab.rb`.
 
-## `exec request failed on channel 0` or `shell request failed on channel 0` errors
+## Error: `exec request failed on channel 0` or `shell request failed on channel 0`
 
 When pulling or pushing by using Git over SSH, you might see the following errors:
 

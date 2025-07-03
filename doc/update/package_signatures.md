@@ -205,7 +205,7 @@ To check if package signature checking is active on an existing install, compare
    ```plaintext
    repo_gpgcheck=1
    gpgcheck=1
-    ```
+   ```
 
    or
 

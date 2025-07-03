@@ -212,7 +212,7 @@ git_data_dirs({
 })
 ```
 
-you'll need to redefine the configuration under `gitlab_rails['repositories_storages']` instead.
+You'll need to redefine the configuration under `gitlab_rails['repositories_storages']` instead:
 
 ```ruby
 gitlab_rails['repositories_storages'] = {
@@ -410,7 +410,7 @@ By default, the Linux package installations expect the following users and group
 
 | Linux user and group | Required                                | Description                                                           | Default home directory       | Default shell |
 |----------------------|-----------------------------------------|-----------------------------------------------------------------------|------------------------------|---------------|
-| `git`                | Yes                                     | GitLab user/group                                                     | `/var/opt/gitlab`            | `/bin/sh`      |
+| `git`                | Yes                                     | GitLab user/group                                                     | `/var/opt/gitlab`            | `/bin/sh`     |
 | `gitlab-www`         | Yes                                     | Web server user/group                                                 | `/var/opt/gitlab/nginx`      | `/bin/false`  |
 | `gitlab-prometheus`  | Yes                                     | Prometheus user/group for Prometheus monitoring and various exporters | `/var/opt/gitlab/prometheus` | `/bin/sh`     |
 | `gitlab-redis`       | Only when using the packaged Redis      | Redis user/group for GitLab                                           | `/var/opt/gitlab/redis`      | `/bin/false`  |
@@ -624,7 +624,7 @@ from starting before a given file system is mounted, you can set the
 
    {{< alert type="note" >}}
 
-If the mount point doesn't exist, GitLab fails to reconfigure.
+   If the mount point doesn't exist, GitLab fails to reconfigure.
 
    {{< /alert >}}
 
@@ -1091,7 +1091,7 @@ relative URL configuration (like missing images or unresponsive components),
 please raise an issue in [GitLab](https://gitlab.com/gitlab-org/gitlab)
 with the `Frontend` label.
 
-### `Mixlib::ShellOut::ShellCommandFailed: linux_user[GitLab user and group]`
+### Error: `Mixlib::ShellOut::ShellCommandFailed: linux_user[GitLab user and group]`
 
 When [moving the home directory for a user](#move-the-home-directory-for-a-user),
 if the runit service is not stopped and the home directories are not manually

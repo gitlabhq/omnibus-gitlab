@@ -95,9 +95,9 @@ To make use of this setting, edit `/etc/gitlab/gitlab.rb`:
    gitlab_rails['backup_keep_time'] = 604800
    ```
 
-The default `backup_keep_time` setting is `0` - which keeps all GitLab configuration and application backups.
+The default `backup_keep_time` setting is `0`, which keeps all GitLab configuration and application backups.
 
-Once a `backup_keep_time` is set - you can run `sudo gitlab-ctl backup-etc --delete-old-backups` to prune all
+After a `backup_keep_time` is set, you can run `sudo gitlab-ctl backup-etc --delete-old-backups` to prune all
 backups older than the current time minus the `backup_keep_time`.
 
 You can provide the parameter `--no-delete-old-backups` if you want to keep all existing backups.
