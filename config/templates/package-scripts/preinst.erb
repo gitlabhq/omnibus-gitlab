@@ -9,6 +9,7 @@ mkdir -p /var/log/gitlab/reconfigure
 
 skip_backup_file=/etc/gitlab/skip-auto-backup
 skip_reconfigure_file=/etc/gitlab/skip-auto-reconfigure
+skip_fail_config_check=/etc/gitlab/skip-fail-config-check
 
 # environment may contain these - clear them out
 OLD_VERSION_STRING=""
@@ -28,12 +29,21 @@ greater_version()
 }
 
 config_check() {
-if [ -e "${DEST_DIR}/embedded/service/omnibus-ctl/check_config.rb" ] ; then
-  ${DEST_DIR}/bin/gitlab-ctl check-config --version=${NEW_MINOR_VERSION}
-  if [ $? -ne 0 ]; then
+  # Check if config check is available.
+  if [ ! -e "${DEST_DIR}/embedded/service/omnibus-ctl/check_config.rb" ] ; then
+    return
+  fi
+
+  # Check deprecations but never fail.
+  if [ -e "${skip_fail_config_check}" ] ; then
+    "${DEST_DIR}"/bin/gitlab-ctl check-config --version="${NEW_MINOR_VERSION}" --no-fail
+    return
+  fi
+
+  # Check deprecations and fail on violations.
+  if ! "${DEST_DIR}"/bin/gitlab-ctl check-config --version="${NEW_MINOR_VERSION}" ; then
     exit 1
   fi
-fi
 }
 
 upgrade_check() {
