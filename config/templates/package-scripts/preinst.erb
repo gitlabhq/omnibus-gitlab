@@ -3,7 +3,7 @@
 
 DEST_DIR=<%= install_dir %>
 NEW_MAJOR_VERSION=<%= build_version.split(".")[0] %>
-NEW_MINOR_VERSION=<%= build_version.split(".")[0,2].join(".") %>
+NEW_MINOR_VERSION=<%= build_version.sub(/\+.*/, '').split(".")[0,2].join(".") %>
 
 mkdir -p /var/log/gitlab/reconfigure
 
