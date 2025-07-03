@@ -1950,21 +1950,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # runtime_dir '/run'
 
 ################################################################################
-## Git
-##! Advanced setting for configuring git system settings for omnibus-gitlab
-##! internal git
-################################################################################
-
-##! The format of the Omnibus gitconfig is:
-##! { "section" => ["subsection = value"] }
-##! For example:
-##! { "pack" => ["threads = 1"] }
-##! For multiple options under one header use array of comma separated values,
-##! eg.:
-##! { "receive" => ["fsckObjects = true"], "alias" => ["st = status", "co = checkout"] }
-# omnibus_gitconfig['system'] = {}
-
-################################################################################
 ## GitLab Pages
 ##! Docs: https://docs.gitlab.com/ee/administration/pages/
 ################################################################################

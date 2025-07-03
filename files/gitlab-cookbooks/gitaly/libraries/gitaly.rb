@@ -25,7 +25,6 @@ module Gitaly
 
     def parse_variables
       parse_gitaly_storages
-      parse_gitconfig
       check_duplicate_storage_paths
     end
 
@@ -134,90 +133,6 @@ module Gitaly
       end
     end
     # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-
-    # Compute the default gitconfig from the old Omnibus gitconfig setting.
-    # This depends on the Gitlab cookbook having been parsed already.
-    def parse_gitconfig
-      # If the administrator has set `gitaly[:configuration][:git][:config]` then we do not add a
-      # fallback gitconfig.
-      return unless Gitlab['gitaly'].dig('configuration', 'git', 'config').nil?
-
-      # Furthermore, if the administrator has not overridden the
-      # `omnibus_gitconfig` we do not have to migrate anything either. Most
-      # importantly, we are _not_ interested in migrating defaults.
-      return if Gitlab['omnibus_gitconfig']['system'].nil?
-
-      # We use the old system-level Omnibus gitconfig as the default value...
-      omnibus_gitconfig = Gitlab['omnibus_gitconfig']['system'].flat_map do |section, entries|
-        entries.map do |entry|
-          key, value = entry.split('=', 2)
-
-          raise "Invalid entry detected in omnibus_gitconfig['system']: '#{entry}' should be in the form key=value" if key.nil? || value.nil?
-
-          "#{section}.#{key.strip}=#{value.strip}"
-        end
-      end
-
-      # ... but remove any of its values that had been part of the default
-      # configuration when introducing the Gitaly gitconfig. We do not want to
-      # inject our old default values into Gitaly anymore given that it is
-      # setting its own defaults nowadays. Furthermore, we must not inject the
-      # `core.fsyncObjectFiles` config entry, which has been deprecated in Git.
-      omnibus_gitconfig -= [
-        'pack.threads=1',
-        'receive.advertisePushOptions=true',
-        'receive.fsckObjects=true',
-        'repack.writeBitmaps=true',
-        'transfer.hideRefs=^refs/tmp/',
-        'transfer.hideRefs=^refs/keep-around/',
-        'transfer.hideRefs=^refs/remotes/',
-        'core.alternateRefsCommand="exit 0 #"',
-        'core.fsyncObjectFiles=true',
-        'fetch.writeCommitGraph=true'
-      ]
-
-      # The configuration format has changed. Previously, we had a map of
-      # top-level config entry keys to their sublevel entry keys which also
-      # included a value. The new format is an array of hashes with key and
-      # value entries.
-      gitaly_gitconfig = omnibus_gitconfig.map do |config|
-        # Split up the `foo.bar=value` to obtain the left-hand and right-hand sides of the assignment
-        section_subsection_and_key, value = config.split('=', 2)
-
-        # We need to split up the left-hand side. This can either be of the
-        # form `core.gc`, or of the form `http "http://example.com".insteadOf`.
-        # We thus split from the right side at the first dot we see.
-        key, section_and_subsection = section_subsection_and_key.reverse.split('.', 2)
-        key.reverse!
-
-        # And then we need to potentially split the section/subsection if we
-        # have `http "http://example.com"` now.
-        section, subsection = section_and_subsection.reverse!.split(' ', 2)
-        subsection&.gsub!(/\A"|"\Z/, '')
-
-        # So that we have finally split up the section, subsection, key and
-        # value. It is fine for the `subsection` to be `nil` here in case there
-        # is none.
-        { 'section' => section, 'subsection' => subsection, 'key' => key, 'value' => value }
-      end
-
-      return unless gitaly_gitconfig.any?
-
-      tmp_source_hash = {
-        configuration: {
-          git: {
-            config: gitaly_gitconfig.map do |entry|
-              {
-                key: [entry['section'], entry['subsection'], entry['key']].compact.join('.'),
-                value: entry['value']
-              }
-            end
-          }
-        }
-      }
-
-      Chef::Mixin::DeepMerge.deep_merge!(tmp_source_hash, Gitlab['gitaly'])
-    end
 
     # Validate that no storages are sharing the same path.
     def check_duplicate_storage_paths

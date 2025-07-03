@@ -56,7 +56,6 @@ RSpec.describe 'gitlab::users' do
               "uid" => nil,
               "username" => "git"
             },
-            system_core_options: expected_options,
           }
         }
 
@@ -71,64 +70,6 @@ RSpec.describe 'gitlab::users' do
     end
 
     context 'with default attributes' do
-      let(:expected_options) { [] }
-      let(:expected_content) do
-        # rubocop:disable Layout/TrailingWhitespace
-        <<-EOF
-#{gitconfig_header}
-[user]
-        name = GitLab
-        email = gitlab@fauxhai.local
-[core]
-        autocrlf = input
-        
-[gc]
-        auto = 0
-        EOF
-        # rubocop:enable Layout/TrailingWhitespace
-      end
-
-      it_behaves_like 'a rendered .gitconfig'
-    end
-
-    context 'with non-core gitconfig' do
-      let(:expected_options) { [] }
-      let(:expected_content) do
-        # rubocop:disable Layout/TrailingWhitespace
-        <<-EOF
-#{gitconfig_header}
-[user]
-        name = GitLab
-        email = gitlab@fauxhai.local
-[core]
-        autocrlf = input
-        
-[gc]
-        auto = 0
-        EOF
-        # rubocop:enable Layout/TrailingWhitespace
-      end
-
-      before do
-        stub_gitlab_rb(
-          omnibus_gitconfig: {
-            system: {
-              pack: ["threads=1"],
-            }
-          }
-        )
-      end
-
-      it_behaves_like 'a rendered .gitconfig'
-    end
-
-    context 'with core gitconfig' do
-      let(:expected_options) do
-        [
-          'example = value'
-        ]
-      end
-
       let(:expected_content) do
         <<-EOF
 #{gitconfig_header}
@@ -137,20 +78,9 @@ RSpec.describe 'gitlab::users' do
         email = gitlab@fauxhai.local
 [core]
         autocrlf = input
-        example = value
 [gc]
         auto = 0
         EOF
-      end
-
-      before do
-        stub_gitlab_rb(
-          omnibus_gitconfig: {
-            system: {
-              core: ["example = value"],
-            }
-          }
-        )
       end
 
       it_behaves_like 'a rendered .gitconfig'
