@@ -387,6 +387,8 @@ RSpec.describe 'gitlab::gitlab-pages' do
           .with_content('stackdriver?service=gitlab-pages')
         expect(chef_run).to render_file("/opt/gitlab/etc/gitlab-pages/env/SSL_CERT_DIR")
           .with_content('/opt/gitlab/embedded/ssl/certs')
+        expect(chef_run).to render_file("/opt/gitlab/etc/gitlab-pages/env/GODEBUG")
+          .with_content('tlsmlkem=0')
       end
     end
 

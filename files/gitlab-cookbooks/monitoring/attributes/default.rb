@@ -13,7 +13,8 @@ default['monitoring']['prometheus']['home'] = '/var/opt/gitlab/prometheus'
 default['monitoring']['prometheus']['log_directory'] = '/var/log/gitlab/prometheus'
 default['monitoring']['prometheus']['env_directory'] = '/opt/gitlab/etc/prometheus/env'
 default['monitoring']['prometheus']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 default['monitoring']['prometheus']['remote_read'] = []
 default['monitoring']['prometheus']['remote_write'] = []
@@ -36,7 +37,8 @@ default['monitoring']['alertmanager']['home'] = '/var/opt/gitlab/alertmanager'
 default['monitoring']['alertmanager']['log_directory'] = '/var/log/gitlab/alertmanager'
 default['monitoring']['alertmanager']['env_directory'] = '/opt/gitlab/etc/alertmanager/env'
 default['monitoring']['alertmanager']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 default['monitoring']['alertmanager']['listen_address'] = 'localhost:9093'
 default['monitoring']['alertmanager']['admin_email'] = nil
@@ -54,7 +56,8 @@ default['monitoring']['node_exporter']['home'] = '/var/opt/gitlab/node-exporter'
 default['monitoring']['node_exporter']['log_directory'] = '/var/log/gitlab/node-exporter'
 default['monitoring']['node_exporter']['env_directory'] = '/opt/gitlab/etc/node-exporter/env'
 default['monitoring']['node_exporter']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 default['monitoring']['node_exporter']['listen_address'] = 'localhost:9100'
 default['monitoring']['node_exporter']['consul_service_name'] = 'node-exporter'
@@ -67,7 +70,8 @@ default['monitoring']['redis_exporter']['enable'] = false
 default['monitoring']['redis_exporter']['log_directory'] = "/var/log/gitlab/redis-exporter"
 default['monitoring']['redis_exporter']['env_directory'] = '/opt/gitlab/etc/redis-exporter/env'
 default['monitoring']['redis_exporter']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 default['monitoring']['redis_exporter']['listen_address'] = 'localhost:9121'
 default['monitoring']['redis_exporter']['consul_service_name'] = 'redis-exporter'
@@ -82,7 +86,8 @@ default['monitoring']['postgres_exporter']['log_directory'] = "/var/log/gitlab/p
 default['monitoring']['postgres_exporter']['listen_address'] = 'localhost:9187'
 default['monitoring']['postgres_exporter']['env_directory'] = '/opt/gitlab/etc/postgres-exporter/env'
 default['monitoring']['postgres_exporter']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 default['monitoring']['postgres_exporter']['flags'] = {
   'collector.stat_user_tables' => false,
@@ -100,7 +105,8 @@ default['monitoring']['pgbouncer_exporter']['log_directory'] = "/var/log/gitlab/
 default['monitoring']['pgbouncer_exporter']['listen_address'] = 'localhost:9188'
 default['monitoring']['pgbouncer_exporter']['env_directory'] = '/opt/gitlab/etc/pgbouncer-exporter/env'
 default['monitoring']['pgbouncer_exporter']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 
 ####

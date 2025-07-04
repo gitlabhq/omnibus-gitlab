@@ -67,7 +67,7 @@ default['gitlab']['gitlab_rails']['env'] = {
   # Details: https://blog.packagecloud.io/eng/2017/02/21/set-environment-variable-save-thousands-of-system-calls/
   'TZ' => ':/etc/localtime',
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
-  'SSL_CERT_FILE' => "#{node['package']['install-dir']}/embedded/ssl/cert.pem"
+  'SSL_CERT_FILE' => "#{node['package']['install-dir']}/embedded/ssl/cert.pem",
 }
 
 default['gitlab']['gitlab_rails']['initial_gitlab_product_usage_data'] = nil
@@ -860,7 +860,8 @@ default['gitlab']['gitlab_workhorse']['env_directory'] = '/opt/gitlab/etc/gitlab
 default['gitlab']['gitlab_workhorse']['env'] = {
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/bin:/usr/bin",
   'HOME' => node['gitlab']['user']['home'],
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 default['gitlab']['gitlab_workhorse']['image_scaler_max_procs'] = [2, node.dig('cpu', 'total').to_i / 2, node.dig('cpu', 'real').to_i / 2].max
 default['gitlab']['gitlab_workhorse']['image_scaler_max_filesize'] = 250_000

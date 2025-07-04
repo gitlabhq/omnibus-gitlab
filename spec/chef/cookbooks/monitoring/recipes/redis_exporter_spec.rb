@@ -5,7 +5,8 @@ RSpec.describe 'monitoring::redis-exporter' do
   let(:node) { chef_run.node }
   let(:default_vars) do
     {
-      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
+      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+      'GODEBUG' => 'tlsmlkem=0',
     }
   end
 

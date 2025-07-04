@@ -24,7 +24,8 @@ default['registry']['shell'] = "/usr/sbin/nologin"
 default['registry']['log_directory'] = "/var/log/gitlab/registry"
 default['registry']['env_directory'] = "/opt/gitlab/etc/registry/env"
 default['registry']['env'] = {
-  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 default['registry']['log_level'] = "info"
 default['registry']['log_formatter'] = 'text'

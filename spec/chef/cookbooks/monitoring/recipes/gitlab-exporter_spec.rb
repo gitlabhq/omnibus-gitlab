@@ -9,7 +9,7 @@ RSpec.describe 'monitoring::gitlab-exporter' do
       'RUBY_GC_HEAP_FREE_SLOTS_MIN_RATIO' => 0.055,
       'RUBY_GC_HEAP_FREE_SLOTS_MAX_RATIO' => 0.111,
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
-      'SSL_CERT_FILE' => '/opt/gitlab/embedded/ssl/cert.pem'
+      'SSL_CERT_FILE' => '/opt/gitlab/embedded/ssl/cert.pem',
     }
   end
 

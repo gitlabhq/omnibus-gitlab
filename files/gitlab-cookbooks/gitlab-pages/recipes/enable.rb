@@ -105,6 +105,7 @@ end
 
 node.default['gitlab_pages']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 
 env_dir env_directory do

@@ -81,7 +81,8 @@ node.default['gitaly']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
   # wrapper script parameters
   'GITALY_PID_FILE' => pid_file,
-  'WRAPPER_JSON_LOGGING' => json_logging.to_s
+  'WRAPPER_JSON_LOGGING' => json_logging.to_s,
+  'GODEBUG' => "tlsmlkem=0",
 }
 
 env_dir env_directory do

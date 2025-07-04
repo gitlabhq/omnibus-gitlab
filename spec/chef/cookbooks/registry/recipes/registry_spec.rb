@@ -262,7 +262,8 @@ RSpec.describe 'registry' do
   let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
   let(:default_vars) do
     {
-      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
+      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+      'GODEBUG' => "tlsmlkem=0",
     }
   end
 

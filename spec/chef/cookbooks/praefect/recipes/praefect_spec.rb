@@ -62,6 +62,8 @@ RSpec.describe 'praefect' do
         .with_content('true')
       expect(chef_run).to render_file(File.join(env_dir, "SSL_CERT_DIR"))
         .with_content('/opt/gitlab/embedded/ssl/certs/')
+      expect(chef_run).to render_file(File.join(env_dir, "GODEBUG"))
+        .with_content('tlsmlkem=0')
     end
 
     it 'renders the service run file with wrapper' do

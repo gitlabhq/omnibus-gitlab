@@ -36,6 +36,7 @@ RSpec.describe 'gitaly' do
       'PYTHONPATH' => '/opt/gitlab/embedded/lib/python3.9/site-packages',
       'WRAPPER_JSON_LOGGING' => 'true',
       "GITALY_PID_FILE" => '/var/opt/gitlab/gitaly/gitaly.pid',
+      'GODEBUG' => "tlsmlkem=0",
     }
   end
 
