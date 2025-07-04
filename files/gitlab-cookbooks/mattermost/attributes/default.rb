@@ -23,7 +23,8 @@ default['mattermost']['home'] = '/var/opt/gitlab/mattermost'
 default['mattermost']['database_name'] = 'mattermost_production'
 default['mattermost']['env_directory'] = '/opt/gitlab/etc/mattermost/env'
 default['mattermost']['env'] = {
-  'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/"
+  'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 
 default['mattermost']['log_file_directory'] = '/var/log/gitlab/mattermost'

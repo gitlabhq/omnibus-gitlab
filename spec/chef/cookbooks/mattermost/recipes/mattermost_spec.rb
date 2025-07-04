@@ -25,6 +25,7 @@ RSpec.describe 'gitlab::mattermost' do
       'MM_SQLSETTINGS_DRIVERNAME' => 'postgres',
       'MM_TEAMSETTINGS_SITENAME' => 'GitLab Mattermost',
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+      'GODEBUG' => "tlsmlkem=0",
     }
   end
 

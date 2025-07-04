@@ -388,6 +388,7 @@ RSpec.describe 'monitoring::prometheus' do
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+      'GODEBUG' => 'tlsmlkem=0',
     }
   end
 

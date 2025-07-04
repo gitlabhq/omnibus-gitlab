@@ -10,6 +10,7 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+      'GODEBUG' => "tlsmlkem=0",
       'HOME' => '/var/opt/gitlab',
       'PATH' => '/opt/gitlab/bin:/opt/gitlab/embedded/bin:/bin:/usr/bin'
     }

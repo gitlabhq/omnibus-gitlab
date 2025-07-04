@@ -100,6 +100,10 @@ RSpec.describe 'gitlab-kas' do
     it 'sets SSL_CERT_DIR' do
       expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-kas/env/SSL_CERT_DIR').with_content('/opt/gitlab/embedded/ssl/certs/')
     end
+
+    it 'sets GODEBUG' do
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-kas/env/GODEBUG').with_content('tlsmlkem=0')
+    end
   end
 
   context 'with user settings' do

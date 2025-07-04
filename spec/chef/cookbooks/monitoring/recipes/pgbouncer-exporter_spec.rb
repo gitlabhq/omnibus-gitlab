@@ -20,7 +20,8 @@ RSpec.describe 'monitoring::pgbouncer-exporter' do
   let(:config_yaml) { '/var/opt/gitlab/pgbouncer-exporter/pgbouncer-exporter.yaml' }
   let(:default_vars) do
     {
-      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
+      'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+      'GODEBUG' => 'tlsmlkem=0',
     }
   end
 

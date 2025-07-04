@@ -13,6 +13,7 @@ default['spamcheck']['log_directory'] = '/var/log/gitlab/spamcheck'
 default['spamcheck']['env_directory'] = '/opt/gitlab/etc/spamcheck/env'
 default['spamcheck']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 
 default['spamcheck']['classifier']['log_directory'] = '/var/log/gitlab/spam-classifier'

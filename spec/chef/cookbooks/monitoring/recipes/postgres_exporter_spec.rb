@@ -7,6 +7,7 @@ RSpec.describe 'monitoring::postgres-exporter' do
     {
       'DATA_SOURCE_NAME' => 'host=/var/opt/gitlab/postgresql user=gitlab-psql database=gitlabhq_production',
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+      'GODEBUG' => 'tlsmlkem=0',
     }
   end
 

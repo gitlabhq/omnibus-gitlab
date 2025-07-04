@@ -38,6 +38,7 @@ default['gitlab_kas']['log_directory'] = '/var/log/gitlab/gitlab-kas'
 default['gitlab_kas']['env_directory'] = '/opt/gitlab/etc/gitlab-kas/env'
 default['gitlab_kas']['env'] = {
   'SSL_CERT_DIR' => "#{node['package']['install-dir']}/embedded/ssl/certs/",
+  'GODEBUG' => "tlsmlkem=0",
 }
 
 # Defaults of the following settings are computed from `gitlab_rails`, and are

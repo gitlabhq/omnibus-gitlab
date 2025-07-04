@@ -74,7 +74,8 @@ RSpec.describe 'spamcheck' do
 
       it 'creates env directory with default variables' do
         expect(chef_run).to create_env_dir('/opt/gitlab/etc/spamcheck/env').with_variables(
-          'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/'
+          'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+          'GODEBUG' => "tlsmlkem=0"
         )
       end
 
@@ -231,6 +232,7 @@ RSpec.describe 'spamcheck' do
       it 'creates env directory with user specified and default variables' do
         expect(chef_run).to create_env_dir('/env/spamcheck').with_variables(
           'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
+          'GODEBUG' => "tlsmlkem=0",
           'FOO' => 'BAR'
         )
       end
