@@ -16,7 +16,7 @@
 
 name 'rsync'
 
-default_version '3.2.7'
+default_version '3.4.1'
 
 license 'GPL v3'
 license_file 'COPYING'
@@ -25,11 +25,8 @@ skip_transitive_dependency_licensing true
 
 dependency 'popt'
 
-version '3.2.7' do
-  source sha256: '4e7d9d3f6ed10878c58c5fb724a67dacf4b6aac7340b13e488fb2dc41346f2bb'
-end
-
-source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz"
+source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz",
+       sha256: '2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52'
 
 relative_path "rsync-#{version}"
 
