@@ -155,6 +155,23 @@ RSpec.describe 'registry recipe' do
       end
     end
 
+    context 'when registry reporting is enabled' do
+      let(:reporting_config) do
+        { "sentry" => {
+          "enabled" => true,
+          "dsn" => "https://<key>@sentry.io/<project>",
+          "environment" => "production"
+        } }
+      end
+
+      before { stub_gitlab_rb(registry: { reporting: reporting_config }) }
+
+      it 'creates registry config with reporting' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content('reporting: {"sentry":{"enabled":true,"dsn":"https://<key>@sentry.io/<project>","environment":"production"}}')
+      end
+    end
+
     context 'when the registry metadata database is enabled' do
       let(:database_config) do
         { "enabled" => true,

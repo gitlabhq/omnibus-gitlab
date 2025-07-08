@@ -44,6 +44,7 @@ default['registry']['database']['dbname'] = "registry"
 default['registry']['database']['port'] = 5432
 default['registry']['database']['sslmode'] = "prefer"
 default['registry']['gc'] = nil
+default['registry']['reporting'] = nil
 
 ####
 # Notifications

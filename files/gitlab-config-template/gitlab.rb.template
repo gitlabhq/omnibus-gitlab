@@ -1121,6 +1121,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # }
 
+### Registry Reporting
+###! Docs: https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md?ref_type=heads#reporting
+# registry['reporting'] = {
+#   'sentry' => {
+#     'enabled' => true,
+#     'dsn' => 'https://<key>@sentry.io/<project>',
+#     'environment' => 'production'
+#   }
+# }
+
 ### Registry notifications endpoints
 # registry['notifications'] = [
 #   {
