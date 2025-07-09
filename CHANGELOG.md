@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.0.4 (2025-07-09)
+
+### Security (1 change)
+
+- [Update rsync from 3.2.7 to 3.4.1](gitlab-org/security/omnibus-gitlab@7155140c3bf2fee5e12faa76e6960e01601b1353) ([merge request](gitlab-org/security/omnibus-gitlab!481))
+
 ## 18.0.3 (2025-06-24)
 
 No changes.
