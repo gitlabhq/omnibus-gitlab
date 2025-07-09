@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.1.2 (2025-07-09)
+
+### Security (1 change)
+
+- [Update rsync from 3.2.7 to 3.4.1](gitlab-org/security/omnibus-gitlab@4b5ecf1a0636c647bbfc703a79774cceda4cac8a) ([merge request](gitlab-org/security/omnibus-gitlab!480))
+
 ## 18.1.1 (2025-06-24)
 
 No changes.
@@ -37,6 +43,12 @@ No changes.
 ### Security (1 change)
 
 - [Default X-Forwarded-For to $remote_addr in GitLab NGINX config](gitlab-org/omnibus-gitlab@4acb83d31b955946b25ae51876b7e001b04f5d1a)
+
+## 18.0.4 (2025-07-09)
+
+### Security (1 change)
+
+- [Update rsync from 3.2.7 to 3.4.1](gitlab-org/security/omnibus-gitlab@7155140c3bf2fee5e12faa76e6960e01601b1353) ([merge request](gitlab-org/security/omnibus-gitlab!481))
 
 ## 18.0.3 (2025-06-24)
 
@@ -89,6 +101,12 @@ No changes.
 ### Security (1 change)
 
 - [Mattermost Security Updates April 15, 2025](gitlab-org/omnibus-gitlab@b93233ad9807f5b1e30cce9386601a1db8544b72) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8360))
+
+## 17.11.6 (2025-07-09)
+
+### Security (1 change)
+
+- [Update rsync from 3.2.7 to 3.4.1](gitlab-org/security/omnibus-gitlab@12d3d78ebdba54160beb7ee2c5f44867be65c05c) ([merge request](gitlab-org/security/omnibus-gitlab!482))
 
 ## 17.11.5 (2025-06-24)
 
