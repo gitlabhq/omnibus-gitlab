@@ -668,7 +668,8 @@ If you receive a 403 Forbidden error, ensure Passenger is enabled in `/etc/nginx
 ### Configure NGINX status monitoring
 
 By default, GitLab configures an NGINX health-check endpoint at `127.0.0.1:8060/nginx_status` to
-monitor your NGINX server status.
+monitor your NGINX server status. When the virtual host traffic status (VTS) module is enabled (default), 
+this port also serves Prometheus metrics at `127.0.0.1:8060/metrics`.
 
 The endpoint displays the following information:
 
@@ -698,13 +699,24 @@ To configure NGINX status options:
    nginx['status'] = {
     "listen_addresses" => ["127.0.0.1"],
     "fqdn" => "dev.example.com",
-    "port" => 9999,
     "options" => {
-      "access_log" => "on", # Disable logs for stats
+      "access_log" => "off", # Disable logs for stats
       "allow" => "127.0.0.1", # Only allow access from localhost
       "deny" => "all" # Deny access to anyone else
     }
    }
+   ```
+
+{{< alert type="note" >}}
+
+When VTS is enabled, do not include `"stub_status" => "on"` in options. This setting applies to all endpoints and causes `/metrics` to return the basic `nginx_status` output instead of Prometheus metrics.
+
+{{< /alert >}}
+
+   To disable VTS and use only basic `nginx_status` metrics:
+
+   ```ruby
+   nginx['status']['vts_enable'] = false
    ```
 
    To disable the NGINX status endpoint:
@@ -732,7 +744,13 @@ For high-traffic installations, monitor system resources after enabling these me
 
 To enable advanced latency metrics:
 
-1. Create a custom NGINX configuration file:
+1. Add the following configuration to `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   nginx['custom_gitlab_server_config'] = "vhost_traffic_status_histogram_buckets 0.005 0.01 0.05 0.1 0.25 0.5 1 2.5 5 10;"
+   ```
+
+   Or, create a custom NGINX configuration file:
 
    ```shell
    sudo mkdir -p /etc/gitlab/nginx/conf.d/
