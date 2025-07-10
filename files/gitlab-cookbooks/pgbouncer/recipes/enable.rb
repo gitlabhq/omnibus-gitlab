@@ -57,6 +57,7 @@ template "#{node['pgbouncer']['data_directory']}/pg_auth" do
 end
 
 runit_service 'pgbouncer' do
+  control %w[t]
   options(
     username: node['postgresql']['username'],
     groupname: node['postgresql']['group'],

@@ -1,0 +1,42 @@
+#!/bin/sh
+
+exec 2>&1
+
+# The following is a workaround for:
+#
+#   https://www.pgbouncer.org/changelog.html#pgbouncer-123x
+#
+# SIGTERM doesn't cause immediate shutdown of the PgBouncer process anymore.
+# It now does a “super safe shutdown”: waiting for all clients to disconnect
+# before shutting down. This is a minor breaking change. If you relied on the
+# old behaviour of SIGTERM you should now use SIGQUIT.
+
+PID=$(cat /opt/gitlab/service/pgbouncer/supervise/pid)
+
+if [ -n "${PID}" ]; then
+    TIMEOUT="${SVWAIT:-7}"  # 7 is the default runit timeout
+
+    # Send SIGTERM first for “super safe shutdown”
+    echo "Sending TERM signal first for safe shutdown"
+
+    kill -TERM "${PID}" 2>/dev/null || exit 0
+
+    # Wait for graceful shutdown with timeout set with SVWAIT
+    echo "Waiting up to ${TIMEOUT} seconds for service to shutdown safely"
+
+    for _i in $(seq 1 "${TIMEOUT}"); do
+        if ! kill -0 "${PID}" 2>/dev/null; then
+            # Process has terminated
+            echo "Process has terminated"
+
+            exit 0
+        fi
+
+        sleep 1
+    done
+
+    # Send SIGQUIT for immediate shutdown
+    echo "Sending QUIT signal for immediate shutdown"
+
+    kill -QUIT "${PID}" 2>/dev/null
+fi

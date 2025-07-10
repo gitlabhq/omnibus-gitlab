@@ -15,7 +15,7 @@
 #
 
 name 'pgbouncer'
-version = Gitlab::Version.new('pgbouncer', 'pgbouncer_1_22_1')
+version = Gitlab::Version.new('pgbouncer', 'pgbouncer_1_24_1')
 default_version version.print(false)
 
 license 'ISC'
