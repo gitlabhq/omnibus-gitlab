@@ -1361,6 +1361,23 @@ gitlab_rails['gitlab_email_from'] = "<the Proton email address for which you gen
 gitlab_rails['gitlab_email_reply_to'] = "<the Proton email address for which you generated the SMTP token>"
 ```
 
+### Sendamatic
+
+For more information on using Sendamatic, see [Sendamatic Docs](https://docs.sendamatic.net).
+
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "in.smtp.sendamatic.net"
+gitlab_rails['smtp_port'] = 587
+gitlab_rails['smtp_user_name'] = "<mail credential user>" # https://docs.sendamatic.net/mail-credentials/
+gitlab_rails['smtp_password'] = "<mail credential password>"
+gitlab_rails['smtp_domain'] = "<mail identity domain>"    # https://docs.sendamatic.net/mail-identities/
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['gitlab_email_from'] = "example@<mail identity domain>"
+gitlab_rails['gitlab_email_reply_to'] = "example@<mail identity domain>"
+```
+
 ### More examples are welcome
 
 If you have figured out an example configuration yourself please send a Merge
