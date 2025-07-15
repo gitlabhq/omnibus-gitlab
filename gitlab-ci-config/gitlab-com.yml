@@ -10,6 +10,12 @@ spec:
 # This config lists the jobs that will be run on omnibus-gitlab project in
 # gitlab.com.
 
+include:
+  - component: ${CI_SERVER_FQDN}/gitlab-org/components/danger-review/danger-review@2.1.0
+    inputs:
+      job_stage: "check"
+  - template: 'Jobs/Container-Scanning.gitlab-ci.yml'
+
 #############
 # Templates #
 #############
@@ -411,11 +417,6 @@ review-docs-cleanup:
   script:
   - ./trigger-build.rb docs cleanup
 
-include:
-  - component: ${CI_SERVER_FQDN}/gitlab-org/components/danger-review/danger-review@2.1.0
-    inputs:
-      job_stage: "check"
-
 danger-review:
   variables:
     BUNDLE_WITH: "danger"
@@ -663,6 +664,33 @@ dependency_scanning:
       dependency_scanning: gl-dependency-scanning-report.json
     paths:
       - dependency_report.txt
+
+container_scanning:
+  stage: validate
+  before_script: []
+  variables:
+    CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: false
+    CS_TRIVY_DETECTION_PRIORITY: "comprehensive"
+    CS_SEVERITY_THRESHOLD: "UNKNOWN"
+    CS_IMAGE: "${CI_REGISTRY_IMAGE}/${IMAGE_EDITION}:${CI_COMMIT_REF_SLUG}"
+  needs:
+    - job: Docker-branch
+  rules:
+    # Enable only on EE because otherwise CE nightly pipeline run will
+    # overwrite the ones from EE nightly run as both run against master branch
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+      variables:
+        IMAGE_EDITION: 'gitlab-ee'
+    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
+      when: manual
+      allow_failure: true
+      variables:
+        IMAGE_EDITION: 'gitlab-ee'
+    - if: '$PIPELINE_TYPE == "TRIGGERED_CE_PIPELINE"'
+      when: manual
+      allow_failure: true
+      variables:
+        IMAGE_EDITION: 'gitlab-ce'
 
 validate_renovate_checksum:
   image: ${BASH_IMAGE}
