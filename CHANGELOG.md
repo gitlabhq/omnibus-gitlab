@@ -3,6 +3,39 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.2.0 (2025-07-16)
+
+### Added (1 change)
+
+- [Preinstall: Optionally skip config check](gitlab-org/omnibus-gitlab@b5ba64498620a8c1017b8468e80e2537c3561ba1) ([merge request](gitlab-org/omnibus-gitlab!8470))
+
+### Fixed (2 changes)
+
+- [Remove X-Content-Type-Options header for assets](gitlab-org/omnibus-gitlab@959185aa2008aeec2d864d02f180897e22886b8b) ([merge request](gitlab-org/omnibus-gitlab!8537))
+- [Change SIGTERM behaviour for PgBouncer](gitlab-org/omnibus-gitlab@96d6b822e077935d5f50224396cb9213de39bc93) ([merge request](gitlab-org/omnibus-gitlab!8511))
+
+### Changed (11 changes)
+
+- [Bump Mattermost to version 10.9.1](gitlab-org/omnibus-gitlab@31dfc5be91fd4ff49740bbced37d3db5c04a3fd4) by @christian.hueser.hzdr ([merge request](gitlab-org/omnibus-gitlab!8517))
+- [Update dependency gitlab-exporter to v15.6.0](gitlab-org/omnibus-gitlab@47a59243762e08c57a902728c222ba9842a4125f) ([merge request](gitlab-org/omnibus-gitlab!8550))
+- [Update dependency container-registry to v4.24.0-gitlab](gitlab-org/omnibus-gitlab@2843fa1c1a075cf43572e2a2d530f2ceaeb1d735) ([merge request](gitlab-org/omnibus-gitlab!8542))
+- [Update dependency bundler to v2.6.9](gitlab-org/omnibus-gitlab@20a775e0a6982d0ac94976eb32a33104856f4ae0) ([merge request](gitlab-org/omnibus-gitlab!8456))
+- [Update dependency curl to 8.14.1](gitlab-org/omnibus-gitlab@9c437e166947f4effbb4c5cecce27a177a83fe69) ([merge request](gitlab-org/omnibus-gitlab!8497))
+- [Use `openssl rehash` instead of `c_rehash`](gitlab-org/omnibus-gitlab@82ff0c22abc337336c161b815b701d4515bd56f7) ([merge request](gitlab-org/omnibus-gitlab!8306))
+- [Update dependency gitlab-exporter to v15.5.0](gitlab-org/omnibus-gitlab@e0a3573cc852c11df6859a30025b6eed27196b38) ([merge request](gitlab-org/omnibus-gitlab!8514))
+- [Update dependency container-registry to v4.23.2-gitlab](gitlab-org/omnibus-gitlab@ff62051a1008c080ce12d2af078b67c342d2c754) ([merge request](gitlab-org/omnibus-gitlab!8512))
+- [Bump libxml2 to 2.14.4](gitlab-org/omnibus-gitlab@f4295a656944436ca167dcdeb73e205d24b4a6a7) ([merge request](gitlab-org/omnibus-gitlab!8362))
+- [Bump libarchive to 3.8.1](gitlab-org/omnibus-gitlab@11a980bf1c4b6fc3e4d038ce2ce5d16e189b0c87) ([merge request](gitlab-org/omnibus-gitlab!8430))
+- [Update dependency pgbouncer_exporter to v0.11.0](gitlab-org/omnibus-gitlab@a1c3af7a9d0b8e07439f62b9ba72716bf2fc891e) ([merge request](gitlab-org/omnibus-gitlab!8482))
+
+### Removed (1 change)
+
+- [Stop building for SLES 15.2](gitlab-org/omnibus-gitlab@33b035b6f648e90f103ca25363835f6d71abab88) ([merge request](gitlab-org/omnibus-gitlab!8524))
+
+### Security (1 change)
+
+- [Update rsync from 3.2.7 to 3.4.1](gitlab-org/omnibus-gitlab@5deb671cb00cef4a22f0abd0000e2657658ecd4c)
+
 ## 18.1.2 (2025-07-09)
 
 ### Security (1 change)
