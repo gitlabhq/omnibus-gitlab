@@ -50,3 +50,6 @@ database: <%= @database.to_json %>
 <% if @gc %>
 gc: <%= @gc.to_json %>
 <% end %>
+<% if registry_helper.redis_enabled? %>
+redis: <%= @redis.to_json %>
+<% end %>

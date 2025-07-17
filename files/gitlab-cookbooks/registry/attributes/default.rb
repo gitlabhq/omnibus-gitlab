@@ -50,3 +50,13 @@ default['registry']['default_notifications_threshold'] = 5
 default['registry']['default_notifications_maxretries'] = 5
 default['registry']['default_notifications_backoff'] = "1s"
 default['registry']['default_notifications_headers'] = {}
+
+####
+# Redis
+####
+#
+default['registry']['redis'] = {
+  'loadbalancing' => {
+    'enabled' => false
+  }
+}

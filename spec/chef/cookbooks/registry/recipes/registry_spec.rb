@@ -514,6 +514,71 @@ RSpec.describe 'registry' do
       end
     end
 
+    context 'when registry load balancing is enabled and configured' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            redis: {
+              loadbalancing: {
+                enabled: true,
+                addr: 'redis1.local:6379,redis2.local:6379',
+                username: 'redis',
+                password: 'redis_password',
+                mainname: 'main-redis',
+                sentinelusername: 'sentinel',
+                sentinelpassword: 'redis_sentinel_password',
+                db: 1,
+                dialtimeout: '5s',
+                readtimeout: '10s',
+                writetimeout: '15s',
+                tls: {
+                  enabled: true,
+                  insecure: true
+                },
+                pool: {
+                  size: 32,
+                  maxlifetime: '2h',
+                  idletimeout: '500s'
+                }
+              }
+            }
+          }
+        )
+      end
+
+      it 'creates registry config with specified value' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content { |content|
+            config = YAML.safe_load(content)
+
+            expect(config['redis']).to eq({
+                                            'loadbalancing' => {
+                                              'enabled' => true,
+                                              'addr' => 'redis1.local:6379,redis2.local:6379',
+                                              'username' => 'redis',
+                                              'password' => 'redis_password',
+                                              'db' => 1,
+                                              'mainname' => 'main-redis',
+                                              'sentinelusername' => 'sentinel',
+                                              'sentinelpassword' => 'redis_sentinel_password',
+                                              'dialtimeout' => '5s',
+                                              'readtimeout' => '10s',
+                                              'writetimeout' => '15s',
+                                              'tls' => {
+                                                'enabled' => true,
+                                                'insecure' => true
+                                              },
+                                              'pool' => {
+                                                'size' => 32,
+                                                'maxlifetime' => '2h',
+                                                'idletimeout' => '500s'
+                                              },
+                                            }
+                                          })
+          }
+      end
+    end
+
     context 'when registry has custom environment variables configured' do
       before do
         stub_gitlab_rb(registry: { env: { 'HTTP_PROXY' => 'my-proxy' } })

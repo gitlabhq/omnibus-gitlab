@@ -1143,6 +1143,30 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['default_notifications_backoff'] = "1s"
 # registry['default_notifications_headers'] = {}
 
+### Registry Redis
+# registry['redis'] = {
+#   'loadbalancing' => {
+#     'enabled' => true,
+#     'addr' => 'localhost:16379,localhost:26379',
+#     'username' => 'registry',
+#     'password' => 'secret',
+#     'db' => 0,
+#     'dialtimeout' => '10ms',
+#     'readtimeout' => '10ms',
+#     'writetimeout' => '10ms',
+#     'tls' => {
+#       'enabled' => true,
+#       'insecure' => true
+#     },
+#     'pool' => {
+#       'size' => 10,
+#       'maxlifetime' => '1h',
+#       'idletimeout' => '300s'
+#     }
+#   }
+# }
+
+
 ################################################################################
 ## Error Reporting and Logging with Sentry
 ################################################################################

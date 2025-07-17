@@ -16,6 +16,7 @@
 #
 account_helper = AccountHelper.new(node)
 logfiles_helper = LogfilesHelper.new(node)
+registry_helper = RegistryHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('registry')
 registry_uid = node['registry']['uid']
 registry_gid = node['registry']['gid']
@@ -85,6 +86,7 @@ template "#{working_dir}/config.yml" do
   source "registry-config.yml.erb"
   owner account_helper.registry_user
   variables node['registry'].to_hash.merge(node['gitlab']['gitlab_rails'].to_hash)
+  helper(:registry_helper) { registry_helper }
   mode "0644"
   notifies :restart, "runit_service[registry]"
 end
