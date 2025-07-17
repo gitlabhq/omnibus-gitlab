@@ -204,7 +204,10 @@ class OmnibusHelper
     return unless File.exist?("/opt/gitlab/version-manifest.json")
 
     version_manifest = JSON.load_file("/opt/gitlab/version-manifest.json")
-    version_components = version_manifest['build_version'].split(".")
+    build_version = version_manifest['build_version']
+
+    # Trim semver build info (18.1+stable => 18.1)
+    version_components = build_version.sub(/\+.*/, '').split(".")
     version_components[0, 2].join(".")
   end
 
