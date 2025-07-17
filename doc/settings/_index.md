@@ -17,7 +17,7 @@ title: Configuring a Linux package installation
 - [Configuration options](configuration.md)
 - [Database](database.md)
 - [Environment variables](environment-variables.md)
-- [Gitaly Cluster](praefect.md)
+- [Gitaly Cluster (Praefect)](praefect.md)
 - [`gitlab.yml`](gitlab.yml.md)
 - [LDAP](https://docs.gitlab.com/administration/auth/ldap/)
 - [Logs](logs.md)
