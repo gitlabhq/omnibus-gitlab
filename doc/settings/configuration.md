@@ -89,19 +89,22 @@ sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee
 
 ## Configure a relative URL for GitLab
 
-{{< alert type="note" >}}
-
-For self-compiled (source) installations, there is a
-[separate document](https://docs.gitlab.com/install/relative_url/).
-
-{{< /alert >}}
-
 While we recommended installing GitLab in its own (sub)domain, sometimes
 it is not possible. In that case, GitLab can also
 be installed under a relative URL, for example, `https://example.com/gitlab`.
 
 By changing the URL, all remote URLs change as well, so you must
 manually edit them in any local repository that points to your GitLab instance.
+
+{{< alert type="note" >}}
+
+Because of a [known issue](https://gitlab.com/gitlab-org/gitlab/-/issues/456427), relative URLs will
+break the proxy between [GitLab Geo](https://docs.gitlab.com/administration/geo/) sites.
+
+{{< /alert >}}
+
+These instructions are for Linux package installations. For instructions for self-compiled (source) installations, see
+[install GitLab under a relative URL](https://docs.gitlab.com/install/relative_url/).
 
 To enable relative URL in GitLab:
 
