@@ -449,6 +449,15 @@ existing installation
 
 ### Upgrade packaged PostgreSQL server
 
+{{< alert type="note" >}}
+
+If you have a Patroni cluster (PostgreSQL HA) managed by GitLab, use the following documentation instead:
+
+- [Upgrading PostgreSQL major version in a Patroni cluster](https://docs.gitlab.com/administration/postgresql/replication_and_failover/#upgrading-postgresql-major-version-in-a-patroni-cluster)
+- [Near-zero-downtime upgrade of PostgreSQL in a Patroni cluster](https://docs.gitlab.com/administration/postgresql/replication_and_failover/#near-zero-downtime-upgrade-of-postgresql-in-a-patroni-cluster)
+
+{{< /alert >}}
+
 The Linux package provides the `gitlab-ctl pg-upgrade` command to update the
 packaged PostgreSQL server to a later version (if one is included in the
 package). This updates PostgreSQL to the [default shipped version](https://docs.gitlab.com/administration/package_information/postgresql_versions/)
