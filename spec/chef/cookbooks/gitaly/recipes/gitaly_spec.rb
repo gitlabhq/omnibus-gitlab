@@ -23,8 +23,6 @@ RSpec.describe 'gitaly' do
   let(:auth_transitioning) { true }
   let(:graceful_restart_timeout) { '20m' }
   let(:git_catfile_cache_size) { 50 }
-  let(:git_bin_path) { '/path/to/usr/bin/git' }
-  let(:use_bundled_git) { true }
   let(:open_files_ulimit) { 10000 }
   let(:default_vars) do
     {
@@ -97,9 +95,7 @@ RSpec.describe 'gitaly' do
         {
           bin_dir: '/opt/gitlab/embedded/bin',
           git: {
-            bin_path: '/opt/gitlab/embedded/bin/git',
             ignore_gitconfig: true,
-            use_bundled_binaries: true
           },
           gitlab: {
             relative_url_root: '',
@@ -265,9 +261,6 @@ RSpec.describe 'gitaly' do
             logging: {
               dir: 'overridden_logging_path'
             },
-            git: {
-              bin_path: 'overridden_git_bin_path'
-            },
             custom_section: {
               custom_key: 'custom_value'
             },
@@ -299,9 +292,7 @@ RSpec.describe 'gitaly' do
           bin_dir: '/opt/gitlab/embedded/bin',
           custom_section: { custom_key: 'custom_value' },
           git: {
-            bin_path: 'overridden_git_bin_path',
             ignore_gitconfig: true,
-            use_bundled_binaries: true,
           },
           gitlab: {
             url: 'http+unix://%2Fvar%2Fopt%2Fgitlab%2Fgitlab-workhorse%2Fsockets%2Fsocket',
@@ -360,9 +351,7 @@ RSpec.describe 'gitaly' do
             runtime_dir: runtime_dir,
             git: {
               signing_key: gpg_signing_key_path,
-              bin_path: git_bin_path,
               catfile_cache_size: git_catfile_cache_size,
-              use_bundled_binaries: false,
             },
             prometheus: {
               grpc_latency_buckets: prometheus_grpc_latency_buckets
@@ -503,11 +492,9 @@ RSpec.describe 'gitaly' do
             storages: %w(storage0 storage1)
           },
           git: {
-            bin_path: '/path/to/usr/bin/git',
             catfile_cache_size: 50,
             ignore_gitconfig: true,
             signing_key: '/path/to/signing_key.gpg',
-            use_bundled_binaries: false
           },
           gitlab: {
             'http-settings': {

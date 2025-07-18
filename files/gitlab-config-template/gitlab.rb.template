@@ -2695,8 +2695,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   },
 #   git: {
 #     catfile_cache_size: 100, # Number of 'git cat-file' processes kept around for re-use
-#     bin_path: '/opt/gitlab/embedded/bin/git', # A custom path for the 'git' executable
-#     use_bundled_binaries: true, # Whether to use bundled Git.
 #     signing_key: '/var/opt/gitlab/gitaly/signing_key.gpg',
 #     ## Gitaly knows to set up the required default configuration for spawned Git
 #     ## commands automatically. It should thus not be required to configure anything

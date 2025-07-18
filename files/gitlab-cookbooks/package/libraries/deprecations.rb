@@ -141,6 +141,9 @@ module Gitlab
 
         messages += remove_git_data_dirs(incoming_version, existing_config, type, '17.8', '18.0')
 
+        messages += remove_gitaly_use_bundled_binaries(incoming_version, existing_config, type, '18.3', '19.0')
+        messages += remove_gitaly_bin_path(incoming_version, existing_config, type, '18.3', '19.0')
+
         messages
       end
 
@@ -182,6 +185,34 @@ module Gitlab
           messages << "* git_data_dirs has been deprecated since #{deprecated_version} and was removed in #{removed_version}. See https://docs.gitlab.com/omnibus/settings/configuration.html#migrating-from-git_data_dirs for migration instructions."
         elsif Gem::Version.new(incoming_version) >= Gem::Version.new(deprecated_version) && type == :deprecation
           messages << "* git_data_dirs has been deprecated since #{deprecated_version} and will be removed in #{removed_version}. See https://docs.gitlab.com/omnibus/settings/configuration.html#migrating-from-git_data_dirs for migration instructions."
+        end
+
+        messages
+      end
+
+      def remove_gitaly_use_bundled_binaries(incoming_version, config, type, deprecated_version, removed_version)
+        messages = []
+
+        unless config.dig('gitaly', 'configuration', 'git', 'use_bundled_binaries').nil?
+          if Gem::Version.new(incoming_version) >= Gem::Version.new(removed_version) && type == :removal
+            messages << "* gitaly['configuration']['git']['use_bundled_binaries'] has been deprecated since #{deprecated_version} and is ignored by Gitaly. Bundled Git is now the default and only supported method. Support for this setting in `gitlab.rb` was removed in #{removed_version}."
+          elsif Gem::Version.new(incoming_version) >= Gem::Version.new(deprecated_version) && type == :deprecation
+            messages << "* gitaly['configuration']['git']['use_bundled_binaries'] has been deprecated since #{deprecated_version} and is ignored by Gitaly. Bundled Git is now the default and only supported method. Support for this setting in `gitlab.rb` will be removed in #{removed_version}."
+          end
+        end
+
+        messages
+      end
+
+      def remove_gitaly_bin_path(incoming_version, config, type, deprecated_version, removed_version)
+        messages = []
+
+        unless config.dig('gitaly', 'configuration', 'git', 'bin_path').nil?
+          if Gem::Version.new(incoming_version) >= Gem::Version.new(removed_version) && type == :removal
+            messages << "* gitaly['configuration']['git']['bin_path'] has been deprecated since #{deprecated_version} and is ignored by Gitaly. Bundled Git is now the default and only supported method. Support for this setting in `gitlab.rb` was removed in #{removed_version}."
+          elsif Gem::Version.new(incoming_version) >= Gem::Version.new(deprecated_version) && type == :deprecation
+            messages << "* gitaly['configuration']['git']['bin_path'] has been deprecated since #{deprecated_version} and is ignored by Gitaly. Bundled Git is now the default and only supported method. Support for this setting in `gitlab.rb` will be removed in #{removed_version}."
+          end
         end
 
         messages
