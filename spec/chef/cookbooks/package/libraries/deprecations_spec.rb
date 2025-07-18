@@ -151,6 +151,49 @@ RSpec.describe Gitlab::Deprecations do
     end
   end
 
+  describe '.remove_gitaly_use_bundled_binaries' do
+    context 'when use_bundled_binaries is specified' do
+      it 'raises warning' do
+        config = {
+          "gitaly" => {
+            "configuration" => {
+              "git" => {
+                "use_bundled_binaries" => true
+              }
+            }
+          }
+        }
+
+        deprecated_message = "* gitaly['configuration']['git']['use_bundled_binaries'] has been deprecated since 18.3 and is ignored by Gitaly. Bundled Git is now the default and only supported method. Support for this setting in `gitlab.rb` will be removed in 19.0."
+        expect(described_class.remove_gitaly_use_bundled_binaries('18.3', config, :deprecation, '18.3', '19.0')).to eq([deprecated_message])
+
+        removed_message = "* gitaly['configuration']['git']['use_bundled_binaries'] has been deprecated since 18.3 and is ignored by Gitaly. Bundled Git is now the default and only supported method. Support for this setting in `gitlab.rb` was removed in 19.0."
+        expect(described_class.remove_gitaly_use_bundled_binaries('19.0', config, :removal, '18.3', '19.0')).to eq([removed_message])
+      end
+    end
+  end
+
+  describe '.remove_gitaly_bin_path' do
+    context 'when bin_path is specified' do
+      it 'raises warning' do
+        config = {
+          "gitaly" => {
+            "configuration" => {
+              "git" => {
+                "bin_path" => "/usr/bin/git"
+              }
+            }
+          }
+        }
+        deprecated_message = "* gitaly['configuration']['git']['bin_path'] has been deprecated since 18.3 and is ignored by Gitaly. Bundled Git is now the default and only supported method. Support for this setting in `gitlab.rb` will be removed in 19.0."
+        expect(described_class.remove_gitaly_bin_path('18.3', config, :deprecation, '18.3', '19.0')).to eq([deprecated_message])
+
+        removed_message = "* gitaly['configuration']['git']['bin_path'] has been deprecated since 18.3 and is ignored by Gitaly. Bundled Git is now the default and only supported method. Support for this setting in `gitlab.rb` was removed in 19.0."
+        expect(described_class.remove_gitaly_bin_path('19.0', config, :removal, '18.3', '19.0')).to eq([removed_message])
+      end
+    end
+  end
+
   describe '.deprecate_only_if_value' do
     let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
 
