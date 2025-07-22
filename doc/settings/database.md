@@ -967,7 +967,7 @@ sure that any folders that relate to PostgreSQL are deleted and that there are n
 
 ## Provide sensitive data configuration to GitLab Rails without plain text storage
 
-For more information, see the example in [configuration documentation](../settings/configuration.md#provide-the-postgresql-user-password-to-gitlab-rails).
+For more information, see the example in [configuration documentation](configuration.md#provide-the-postgresql-user-password-to-gitlab-rails).
 
 ## Application Settings for the Database
 

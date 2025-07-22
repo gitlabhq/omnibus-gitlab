@@ -2,6 +2,8 @@
 # Base Markdownlint configuration
 # Extended Markdownlint configuration in doc/.markdownlint/
 # See https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md for explanations of each rule
+customRules:
+  - "./doc/.markdownlint/rules/unnecessary_traversal.js"
 config:
   # First, set the default
   default: true
@@ -25,7 +27,7 @@ config:
   no-emphasis-as-heading: false     # MD036
   no-inline-html: false             # MD033
   no-trailing-punctuation:          # MD026
-    punctuation: ".,;:!。，；：！？"
+    punctuation: ".,;:!。，；：！"
   no-trailing-spaces: false         # MD009
   ol-prefix:                        # MD029
     style: "one"

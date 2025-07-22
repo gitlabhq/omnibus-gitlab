@@ -42,7 +42,7 @@ Source for internal software components is downloaded from a project's GitLab
 repository. Versions used in a build are set by the Git reference contained in
 the project's corresponding `*VERSION` files. These versions can be overridden
 by environment variables. For more information, see
-[Use specific branches or versions of a GitLab component](../development/team_members.md#use-specific-branches-or-versions-of-a-gitlab-component).
+[Use specific branches or versions of a GitLab component](team_members.md#use-specific-branches-or-versions-of-a-gitlab-component).
 
 Updates to internal software components are done by merge requests in the
 corresponding repository.
