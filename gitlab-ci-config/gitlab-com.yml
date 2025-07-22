@@ -340,7 +340,7 @@ docs-lint hugo:
     # See https://gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/-/blob/main/scripts/check-index-filenames.sh
     - make check-index-pages SEARCH_DIR="../doc"
 
-# Translation delivery of docs 
+# Translation delivery of docs
 # Perform linting on translated documentation Markdown files
 docs-lint-i18n content:
   image: $DOCS_LINT_IMAGE

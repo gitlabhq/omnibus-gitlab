@@ -144,6 +144,14 @@ RSpec.describe Gitlab::Version do
           expect(subject.remote).to eq('https://gitlab-ci-token:CJT@gitlab.com/gitlab-org/security/gitlab.git')
         end
 
+        context 'with SECURITY_PRIVATE_TOKEN' do
+          it 'returns "security" link attached with credential from custom_sources yml' do
+            stub_env_var('SECURITY_PRIVATE_TOKEN', 'APT')
+
+            expect(subject.remote).to eq('https://gitlab-ci-token:APT@gitlab.com/gitlab-org/security/gitlab.git')
+          end
+        end
+
         context 'when "security" link is in not URI compliant' do
           before do
             allow(YAML).to receive(:load_file)

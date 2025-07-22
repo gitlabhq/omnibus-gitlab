@@ -27,12 +27,26 @@ stages:
   - qa
   - verify
 
+.vault-integration:
+  # Base template for jobs that need to retrieve secrets from Vault
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: https://vault.gitlab.net
+
 include:
   - local: '/gitlab-ci-config/workflow-rules.yml'
   - local: '/gitlab-ci-config/variables.yml'
   - local: '/gitlab-ci-config/rat.yml'
   - local: '/gitlab-ci-config/dev-gitlab-org.yml'
   - local: '/gitlab-ci-config/dind-config.yml'
+  - local: '/gitlab-ci-config/vault-security-secrets.yml'
+    rules:
+      # doc/build/vault_integration.md
+      - if: '$CI_PROJECT_PATH == $SECURITY_PROJECT_PATH'
+  - local: '/gitlab-ci-config/vault-public-secrets.yml'
+    rules:
+      # doc/build/vault_integration.md
+      - if: '$CI_PROJECT_PATH != $SECURITY_PROJECT_PATH'
   - local: '/gitlab-ci-config/gitlab-com.yml'
     rules:
       - if: '$CI_SERVER_HOST == "gitlab.com"'
@@ -124,7 +138,9 @@ before_script:
     fi
 
 fetch-assets:
-  extends: .docker_job
+  extends:
+    - .docker_job
+    - .with-build-token
   stage: prepare
   timeout: 1 hour
   before_script: []
@@ -150,7 +166,9 @@ fetch-assets:
   retry: 2
 
 generate-facts:
-  extends: .gems-cache
+  extends:
+    - .gems-cache
+    - .with-build-token
   stage: prepare
   image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools:${BUILDER_IMAGE_REVISION}"
   script:
