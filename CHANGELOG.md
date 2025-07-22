@@ -40,6 +40,10 @@ No changes.
 
 - [Update rsync from 3.2.7 to 3.4.1](gitlab-org/omnibus-gitlab@5deb671cb00cef4a22f0abd0000e2657658ecd4c)
 
+## 18.1.3 (2025-07-22)
+
+No changes.
+
 ## 18.1.2 (2025-07-09)
 
 ### Security (1 change)
