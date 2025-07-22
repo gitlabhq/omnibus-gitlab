@@ -159,6 +159,7 @@ dependency 'gitlab-psql'
 dependency 'gitlab-backup-cli'
 dependency 'gitlab-redis-cli'
 dependency 'gitlab-healthcheck'
+dependency 'gitlabsos'
 
 dependency 'gitlab-scripts'
 dependency 'gitlab-config-template'

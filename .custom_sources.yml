@@ -25,6 +25,9 @@ gitlab-kas:
   remote: "git@dev.gitlab.org:gitlab/cluster-integration/gitlab-agent.git"
   alternative: "https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git"
   security: "https://gitlab.com/gitlab-org/security/cluster-integration/gitlab-agent.git"
+gitlabsos:
+  remote: "git@dev.gitlab.org:omnibus-mirror/gitlabsos.git"
+  alternative: "https://gitlab.com/gitlab-com/support/toolbox/gitlabsos.git"
 config_guess:
   remote: "git@dev.gitlab.org:omnibus-mirror/config_guess.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/config_guess.git"
