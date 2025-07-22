@@ -13,6 +13,7 @@ usr_bin_symlinks=(
   "${DEST_DIR}/bin/gitlab-backup"
   "${DEST_DIR}/bin/gitlab-redis-cli"
   "${DEST_DIR}/bin/gitlab-backup-cli"
+  "${DEST_DIR}/embedded/service/gitlabsos/gitlabsos"
 )
 
 error_exit()
