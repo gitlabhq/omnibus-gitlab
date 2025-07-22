@@ -85,6 +85,12 @@ No changes.
 
 - [Default X-Forwarded-For to $remote_addr in GitLab NGINX config](gitlab-org/omnibus-gitlab@4acb83d31b955946b25ae51876b7e001b04f5d1a)
 
+## 18.0.5 (2025-07-22)
+
+### Changed (1 change)
+
+- [Update dependency container-registry to v4.21.4-gitlab](gitlab-org/security/omnibus-gitlab@6b582a1b2f34cf818c10cfa4895efb04404a61b2)
+
 ## 18.0.4 (2025-07-09)
 
 ### Security (1 change)
