@@ -566,6 +566,16 @@ RSpec.describe 'postgresql' do
   end
 
   context 'when enabling extensions' do
+    it 'creates the amcheck extension when it is possible' do
+      allow_any_instance_of(PgHelper).to receive(:extension_can_be_enabled?).with('amcheck', 'gitlabhq_production').and_return(true)
+      expect(chef_run).to enable_postgresql_extension('amcheck')
+    end
+
+    it 'does not create the amcheck extension when it is possible' do
+      allow_any_instance_of(PgHelper).to receive(:extension_can_be_enabled?).with('amcheck', 'gitlabhq_production').and_return(false)
+      expect(chef_run).not_to run_execute('enable amcheck extension')
+    end
+
     it 'creates the pg_trgm extension when it is possible' do
       allow_any_instance_of(PgHelper).to receive(:extension_can_be_enabled?).with('pg_trgm', 'gitlabhq_production').and_return(true)
       expect(chef_run).to enable_postgresql_extension('pg_trgm')

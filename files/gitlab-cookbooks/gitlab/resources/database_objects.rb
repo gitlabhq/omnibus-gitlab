@@ -49,6 +49,11 @@ action :create do
       only_if { rails_enabled }
     end
 
+    postgresql_extension 'amcheck' do
+      database database_name
+      action :enable
+    end
+
     postgresql_extension 'pg_trgm' do
       database database_name
       action :enable
