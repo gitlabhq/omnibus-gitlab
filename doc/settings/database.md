@@ -1239,7 +1239,8 @@ replication user's password.
 
 1. If you paused replication in step 3,
    [resume replication on each **secondary**](https://docs.gitlab.com/administration/geo/#pausing-and-resuming-replication).
-   Then, restart `puma`, `sidekiq`, and `geo-logcursor`.
+
+1. Restart `puma`, `sidekiq`, and `geo-logcursor`.
 
    ```shell
    sudo gitlab-ctl hup puma
@@ -1247,7 +1248,7 @@ replication user's password.
    sudo gitlab-ctl restart geo-logcursor
    ```
 
-1. Navigate to `https://your_primary_server/admin/geo/nodes` and ensure that all nodes are healthy.
+1. Navigate to `https://your_primary_server/admin/geo/sites` and ensure that all Geo sites are healthy.
 
 ## Connecting to the PostgreSQL database
 
