@@ -172,6 +172,52 @@ RSpec.describe Build::Check do
     end
   end
 
+  describe 'run_on_ci?' do
+    it 'returns true when GITLAB_CI environment variable is set' do
+      allow(Gitlab::Util).to receive(:get_env).with('GITLAB_CI').and_return('true')
+      expect(described_class.run_on_ci?).to be_truthy
+    end
+
+    it 'returns false when GITLAB_CI environment variable is not set' do
+      allow(Gitlab::Util).to receive(:get_env).with('GITLAB_CI').and_return(nil)
+      expect(described_class.run_on_ci?).to be_falsey
+    end
+  end
+
+  describe 'on_tag?' do
+    context 'when running on CI' do
+      before do
+        allow(described_class).to receive(:run_on_ci?).and_return(true)
+      end
+
+      it 'returns the correct value based on ci_commit_tag? result' do
+        [
+          { ci_commit_tag_result: true, expected: be_truthy },
+          { ci_commit_tag_result: false, expected: be_falsey }
+        ].each do |test_case|
+          allow(described_class).to receive(:ci_commit_tag?).and_return(test_case[:ci_commit_tag_result])
+          expect(described_class.on_tag?).to test_case[:expected]
+        end
+      end
+    end
+
+    context 'when not running on CI' do
+      before do
+        allow(described_class).to receive(:run_on_ci?).and_return(false)
+      end
+
+      it 'returns the correct value based on git describe --exact-match result' do
+        [
+          { git_result: true, expected: be_truthy },
+          { git_result: false, expected: be_falsey }
+        ].each do |test_case|
+          allow(described_class).to receive(:system).with('git describe --exact-match > /dev/null 2>&1').and_return(test_case[:git_result])
+          expect(described_class.on_tag?).to test_case[:expected]
+        end
+      end
+    end
+  end
+
   describe 'on_stable_branch?' do
     context 'when on a stable branch' do
       before do

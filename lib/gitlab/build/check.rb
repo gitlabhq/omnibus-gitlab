@@ -97,7 +97,15 @@ module Build
         system(*%w[git diff --quiet])
       end
 
+      def run_on_ci?
+        Gitlab::Util.get_env('GITLAB_CI')
+      end
+
       def on_tag?
+        # On GitLab CI, check if it is a tag pipeline
+        return ci_commit_tag? if run_on_ci?
+
+        # Fallback to git describe for local/non-CI environments
         system('git describe --exact-match > /dev/null 2>&1')
       end
 
