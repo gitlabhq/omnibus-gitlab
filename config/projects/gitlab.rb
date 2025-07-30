@@ -164,6 +164,8 @@ dependency 'gitlabsos'
 dependency 'gitlab-scripts'
 dependency 'gitlab-config-template'
 
+dependency 'fast-stats'
+
 # Build GitLab components at the end because except for tag pipelines, we build
 # from `main`/`master`, and this can invalidate cache easily. Git is built from
 # gitaly sources, and hence falls under the same category.
