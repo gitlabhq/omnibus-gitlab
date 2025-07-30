@@ -1062,7 +1062,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['validation_enabled'] = false
 # registry['autoredirect'] = false
 # registry['compatibility_schema1_enabled'] = false
-# registry['database'] = nil
 
 ### Registry backend storage
 ###! Docs: https://docs.gitlab.com/ee/administration/packages/container_registry.html#configure-storage-for-the-container-registry
@@ -1082,13 +1081,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### Registry database
 ###! Docs: https://docs.gitlab.com/ee/administration/packages/container_registry_metadata_database.html#new-installations
 # registry['database'] = {
-#   'enabled' => true,
+#   'enabled' => false,
 #   'host' => 'localhost',
 #   'port' => 5432,
-#   'user' => 'postgres',
-#   'password' => 'postgres',
+#   'user' => 'registry',
+#   'password' => 'registry',
 #   'dbname' => 'registry',
-#   'sslmode' => 'verify-full',
+#   'sslmode' => 'prefer',
 #   'sslcert' => '/path/to/client.crt',
 #   'sslkey' => '/path/to/client.key',
 #   'sslrootcert' => '/path/to/root.crt',
@@ -1530,6 +1529,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['shared_preload_libraries'] = nil
 # postgresql['dynamic_shared_memory_type'] = nil
 # postgresql['hot_standby'] = "off"
+
+### Registry Metadata Database Settings
+### automated support via the GitLab-managed PostgreSQL
+### is under development.
+# postgresql['registry']['user'] = "registry"
+# postgresql['registry']['password'] = nil
+# postgresql['registry']['dbname'] = "registry"
+# postgresql['registry']['auto_create'] = true
 
 ### SSL settings
 ###! See https://www.postgresql.org/docs/13/static/runtime-config-connection.html#GUC-SSL-CERT-FILE for more details

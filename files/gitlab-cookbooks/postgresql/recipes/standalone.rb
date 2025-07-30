@@ -35,6 +35,23 @@ database_objects 'postgresql' do
   not_if { pg_helper.replica? }
 end
 
+include_recipe 'registry::database_objects' if node.dig('postgresql', 'registry', 'auto_create')
+
+ruby_block 'warn registry auto_create is disabled' do
+  block do
+    message = <<~MESSAGE
+      You disabled postgresql['registry']['auto_create']. This config is temoprary.
+      It will be removed when the database registry becomes mandatory.
+      When we decide on a date, it will be communicated on
+      https://docs.gitlab.com/update/deprecations/
+    MESSAGE
+
+    LoggingHelper.warning(message)
+  end
+
+  only_if { !node.dig('postgresql', 'registry', 'auto_create') }
+end
+
 version_file 'Create version file for PostgreSQL' do
   version_file_path File.join(node['postgresql']['dir'], 'VERSION')
   version_check_cmd "/opt/gitlab/embedded/bin/postgres --version"

@@ -34,30 +34,33 @@ RSpec.shared_context 'recipes' do
   end
 
   let(:default_service_enable_recipes) do
-    ["gitlab::gitlab-rails",
-     "gitaly::git_data_dirs",
-     "gitlab::rails_pages_shared_path",
-     "gitlab::gitlab-shell",
-     "redis::enable",
-     "gitaly::enable",
-     "postgresql::enable",
-     "postgresql::user",
-     "postgresql::sysctl",
-     "postgresql::standalone",
-     "gitlab-kas::enable",
-     "gitlab::database_migrations",
-     "gitlab::puma",
-     "gitlab::sidekiq",
-     "gitlab::gitlab-workhorse",
-     "gitlab::nginx",
-     "nginx::enable",
-     "gitlab::gitlab-healthcheck",
-     "monitoring::gitlab-exporter",
-     "monitoring::redis-exporter",
-     "monitoring::prometheus",
-     "monitoring::alertmanager",
-     "monitoring::postgres-exporter",
-     "gitlab-ee::suggested_reviewers"]
+    [
+      "gitlab::gitlab-rails",
+      "gitaly::git_data_dirs",
+      "gitlab::rails_pages_shared_path",
+      "gitlab::gitlab-shell",
+      "redis::enable",
+      "gitaly::enable",
+      "postgresql::enable",
+      "postgresql::user",
+      "postgresql::sysctl",
+      "postgresql::standalone",
+      "gitlab-kas::enable",
+      "gitlab::database_migrations",
+      "gitlab::puma",
+      "gitlab::sidekiq",
+      "gitlab::gitlab-workhorse",
+      "gitlab::nginx",
+      "nginx::enable",
+      "gitlab::gitlab-healthcheck",
+      "monitoring::gitlab-exporter",
+      "monitoring::redis-exporter",
+      "monitoring::prometheus",
+      "monitoring::alertmanager",
+      "monitoring::postgres-exporter",
+      "gitlab-ee::suggested_reviewers",
+      "registry::database_objects"
+    ]
   end
 
   let(:default_service_disable_recipes) do

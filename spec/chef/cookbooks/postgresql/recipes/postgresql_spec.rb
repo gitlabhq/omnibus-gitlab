@@ -640,6 +640,50 @@ RSpec.describe 'postgresql' do
     end
   end
 
+  context 'registry database objects' do
+    context 'when auto_create is true' do
+      before do
+        stub_gitlab_rb(
+          postgresql: {
+            registry: {
+              auto_create: true
+            }
+          }
+        )
+      end
+
+      it 'includes the registry::database_objects recipe' do
+        expect(chef_run).to include_recipe('registry::database_objects')
+      end
+    end
+
+    context 'when auto_create is false' do
+      before do
+        stub_gitlab_rb(
+          postgresql: {
+            registry: {
+              auto_create: false
+            }
+          }
+        )
+      end
+
+      it 'does not include the registry::database_objects recipe' do
+        expect(chef_run).not_to include_recipe('registry::database_objects')
+      end
+
+      it 'shows a warning about the temporary config' do
+        expect(chef_run).to run_ruby_block('warn registry auto_create is disabled')
+      end
+    end
+
+    context 'when auto_create is not set (default)' do
+      it 'does includes the registry::database_objects recipe' do
+        expect(chef_run).to include_recipe('registry::database_objects')
+      end
+    end
+  end
+
   context 'log directory and runit group' do
     context 'default values' do
       it_behaves_like 'enabled logged service', 'postgresql', true, { log_directory_owner: 'gitlab-psql' }

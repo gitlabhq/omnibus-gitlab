@@ -28,6 +28,7 @@ module Registry
       parse_registry
       # parsing the registry notifications
       parse_registry_notifications
+      parse_database_configuration
     end
 
     ##
@@ -155,6 +156,35 @@ module Registry
         # fill it in separately for GitLab application
         Gitlab['gitlab_rails']['registry_notification_secret'] ||= endpoint['headers']['Authorization'].last if endpoint['name'] == 'geo_event'
       end
+    end
+
+    def parse_database_configuration
+      # Set database defaults based on user configuration or calculated values
+      database_config = Gitlab['registry']['database'] || {}
+
+      # Host is taken preferrably from top to bottom:
+      database_config['host'] ||=
+        Gitlab['postgresql']['listen_address'] ||
+        Gitlab['node']['postgresql']['listen_address'] ||
+        Gitlab['postgresql']['dir'] ||
+        Gitlab['node']['postgresql']['dir']
+      # If multiple address are set, we take the first.
+      database_config['host'] = take_first_address(database_config['host'])
+
+      Gitlab['registry']['database'] = database_config
+    end
+
+    def take_first_address(address_list)
+      return address_list unless address_list&.include?(',')
+
+      warning = [
+        "Received multiple postgresql address values.",
+        "First address from '#{address_list}' will be used for registry database."
+      ].join("\n  ")
+
+      warn(warning)
+
+      address_list.split(',')[0]
     end
 
     def generate_registry_keypair
