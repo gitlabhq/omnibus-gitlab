@@ -77,6 +77,30 @@ RSpec.describe BasePgHelper do
     end
   end
 
+  describe '#user_exists?' do
+    it 'calls out to psql_cmd' do
+      expect(subject).to receive(:psql_cmd).with(
+        [
+          "-d 'template1'",
+          "-c 'select usename from pg_user' -A",
+          '|grep -x testuser'
+        ])
+      subject.user_exists?('testuser')
+    end
+
+    context 'user present' do
+      it 'returns true when user exists' do
+        allow(subject).to receive(:psql_cmd) { true }
+        expect(subject.user_exists?('testuser')).to be_truthy
+      end
+
+      it 'returns false when user does not exist' do
+        allow(subject).to receive(:psql_cmd) { false }
+        expect(subject.user_exists?('testuser')).to be_falsey
+      end
+    end
+  end
+
   describe '#extension_enabled?' do
     it 'will check with psql_cmd when database present' do
       expect(subject).to receive(:psql_cmd).with(

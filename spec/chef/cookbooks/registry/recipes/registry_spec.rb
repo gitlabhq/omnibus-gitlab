@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'registry recipe' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service registry_database_objects)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -146,6 +146,15 @@ RSpec.describe 'registry recipe' do
       end
     end
 
+    context "when GitLab-managed PostgreSQL is enabled" do
+      before { stub_gitlab_rb(postgresql: { enable: true }) }
+
+      it 'populates default registry database config' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content('database: {"enabled":false,"user":"registry","dbname":"registry","port":5432,"sslmode":"prefer","host":"/var/opt/gitlab/postgresql"}')
+      end
+    end
+
     context 'when the registry metadata database is enabled' do
       let(:database_config) do
         { "enabled" => true,
@@ -247,6 +256,56 @@ RSpec.describe 'registry recipe' do
     end
   end
 
+  context 'registry database objects' do
+    context 'when PostgreSQL is enabled' do
+      before do
+        stub_gitlab_rb(
+          registry_external_url: 'https://registry.example.com',
+          postgresql: { enable: true }
+        )
+      end
+
+      it 'creates registry_database_objects resource with only_if condition' do
+        expect(chef_run).to create_registry_database_objects('default')
+
+        # Find the resource and verify it exists
+        resource = chef_run.find_resource(:registry_database_objects, 'default')
+        expect(resource).not_to be_nil
+
+        # Since postgresql is enabled, the resource should be created
+        expect(chef_run.node.dig('postgresql', 'enable')).to be_truthy
+      end
+
+      it 'creates postgresql_user and postgresql_database when registry_database_objects is executed' do
+        expect(chef_run).to create_postgresql_user('registry')
+        expect(chef_run).to create_postgresql_database('registry')
+      end
+    end
+
+    context 'when PostgreSQL is disabled' do
+      before do
+        stub_gitlab_rb(
+          registry_external_url: 'https://registry.example.com',
+          postgresql: { enable: false }
+        )
+      end
+
+      it 'creates registry_database_objects resource but does not execute due to only_if condition' do
+        # The resource should not be created at all when postgresql is disabled
+        # because the only_if condition prevents it from being included in the resource collection
+        expect(chef_run).not_to create_registry_database_objects('default')
+
+        # Verify postgresql is disabled in the node
+        expect(chef_run.node.dig('postgresql', 'enable')).to be_falsey
+      end
+
+      it 'does not create postgresql_user and postgresql_database when only_if condition is false' do
+        expect(chef_run).not_to create_postgresql_user('registry')
+        expect(chef_run).not_to create_postgresql_database('registry')
+      end
+    end
+  end
+
   context 'when user and group are specified' do
     before { stub_gitlab_rb(registry_external_url: 'https://registry.example.com', registry: { username: 'registryuser', group: 'registrygroup' }) }
     it 'make registry run file start registry under correct user' do
@@ -259,7 +318,7 @@ RSpec.describe 'registry recipe' do
 end
 
 RSpec.describe 'registry' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service registry_database_objects)).converge('gitlab::default') }
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
@@ -620,7 +679,7 @@ RSpec.describe 'registry' do
 end
 
 RSpec.describe 'auto enabling registry' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service registry_database_objects)).converge('gitlab::default') }
   let(:registry_config) { '/var/opt/gitlab/registry/config.yml' }
   let(:nginx_config) { '/var/opt/gitlab/nginx/conf/gitlab-registry.conf' }
 

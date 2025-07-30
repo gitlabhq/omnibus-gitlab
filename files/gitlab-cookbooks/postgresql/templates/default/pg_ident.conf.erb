@@ -44,5 +44,8 @@ gitlab  <%= node['gitlab']['user']['username'] %>  <%= @sql_user %>
 <% if @sql_mattermost_user %>
 gitlab  <%= node['mattermost']['username'] %>  <%= @sql_mattermost_user %>
 <% end %>
+<% if node.key?('registry') %>
+gitlab  <%= node['registry']['username'] %>  <%= node['registry']['database']['user'] %>
+<% end %>
 # Default to a 1-1 mapping between system usernames and Postgres usernames
 gitlab  /^(.*)$  \1
