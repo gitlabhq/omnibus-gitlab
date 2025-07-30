@@ -17,7 +17,7 @@ Copy the following test plan to a comment of the merge request that upgrades the
 
     ```shell
     IMAGE='registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ee:renovate-curl-curl-8-x'
-    
+
     docker run -it --rm --platform="linux/amd64" \
     $IMAGE curl --version | head -n1
     ```
@@ -27,7 +27,7 @@ Copy the following test plan to a comment of the merge request that upgrades the
     ```shell
     docker run -it --rm --platform="linux/amd64" \
     $IMAGE curl -L -so /dev/null -w "%{http_code}\n" gitlab.com
-    
+
     200
     ```
 ````

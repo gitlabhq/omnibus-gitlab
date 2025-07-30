@@ -98,7 +98,7 @@ To track the removal of deprecation messages:
    {
      config_keys: ...
      deprecation: '15.8', # Remove message Issue: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/XYZ
-     removal: '16.0', 
+     removal: '16.0',
      note: "..."
    },
    ```

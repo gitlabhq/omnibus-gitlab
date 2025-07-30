@@ -284,7 +284,7 @@ To check maximum connections and available connections:
 1. Execute the following query in the database console:
 
    ```sql
-   SELECT 
+   SELECT
      (SELECT setting::int FROM pg_settings WHERE name = 'max_connections') AS max_connections,
      COUNT(*) AS current_connections,
      COUNT(*) FILTER (WHERE state = 'active') AS active_connections,
