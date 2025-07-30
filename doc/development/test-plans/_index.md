@@ -18,6 +18,7 @@ title: Omnibus GitLab test plans
 - [Redis](upgrade-redis-testplan.md)
 - [Rubygems](upgrade-rubygems-testplan.md)
 - [`nginx`](upgrade-nginx-testplan.md)
+- [`libxml2`](upgrade-libxml2-testplan.md)
 
 ## Other changes
 
