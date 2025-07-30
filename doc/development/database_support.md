@@ -166,7 +166,7 @@ action :run do
 
   account_helper = AccountHelper.new(node)
   logfiles_helper = LogfilesHelper.new(node)
-  logging_settings = logfiles_helper.logging_settings('registry')  
+  logging_settings = logfiles_helper.logging_settings('registry')
 
   bash_hide_env "migrate registry database: #{new_resource.name}" do
     code <<-EOH
@@ -223,7 +223,7 @@ end
 registry_database_migrations 'up' do
   direction :up
   only_if { node['registry']['database']['enable'] }
-  not_if { pg_helper.replica? }  
+  not_if { pg_helper.replica? }
 end
 
 # ...

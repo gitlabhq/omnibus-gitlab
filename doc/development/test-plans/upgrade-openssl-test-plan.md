@@ -12,8 +12,8 @@ Copy the following test plan to a comment of the merge request that upgrades the
 
 - [ ] Performed a successful GitLab Enterprise Edition (EE) build on all supported platforms (include `build-package-on-all-os` job).
 - [ ] Ran `qa-subset-test` as well as manual `qa-remaining-test-manual` CI/CD test job for both GitLab Enterprise Edition and GitLab Community Edition.
-- [ ] Install a custom CA 
-  
+- [ ] Install a custom CA
+
   - [ ] Generate a custom CA
 
     ```shell

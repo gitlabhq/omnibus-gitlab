@@ -668,7 +668,7 @@ If you receive a 403 Forbidden error, ensure Passenger is enabled in `/etc/nginx
 ### Configure NGINX status monitoring
 
 By default, GitLab configures an NGINX health-check endpoint at `127.0.0.1:8060/nginx_status` to
-monitor your NGINX server status. When the virtual host traffic status (VTS) module is enabled (default), 
+monitor your NGINX server status. When the virtual host traffic status (VTS) module is enabled (default),
 this port also serves Prometheus metrics at `127.0.0.1:8060/metrics`.
 
 The endpoint displays the following information:

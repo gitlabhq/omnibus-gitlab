@@ -23,7 +23,7 @@ that upgrades the component.
 
     ```shell
     IMAGE='registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ee:renovate-nginx-nginx-1-x'
-    
+
     docker run -it --rm --platform="linux/amd64" \
     $IMAGE /opt/gitlab/embedded/sbin/nginx -v
 
@@ -56,7 +56,7 @@ that upgrades the component.
         }
     }
     EOF
-    
+
     /opt/gitlab/embedded/sbin/nginx -c /nginx.conf
     curl -s -D - "http://127.0.0.1" -o /dev/null
     # You should not see "Server:" header in the response
