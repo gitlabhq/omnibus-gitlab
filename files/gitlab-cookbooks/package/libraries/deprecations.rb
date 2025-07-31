@@ -90,7 +90,7 @@ module Gitlab
       def applicable_deprecations(incoming_version, existing_config, type)
         # Return the list of deprecations or removals that are applicable with
         # a given list of configuration for a specific version.
-        incoming_version = next_major_version if incoming_version.empty?
+        incoming_version = next_major_version if incoming_version&.empty?
         return [] unless incoming_version
 
         version = Gem::Version.new(incoming_version)

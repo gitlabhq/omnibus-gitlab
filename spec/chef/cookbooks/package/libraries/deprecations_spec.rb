@@ -98,6 +98,10 @@ RSpec.describe Gitlab::Deprecations do
       expect(described_class.check_config("11.0", valid_config)).to eq([])
     end
 
+    it 'handles nil incoming version' do
+      expect(described_class.check_config(nil, valid_config)).to eq([])
+    end
+
     it 'detects deprecated configuration for specified version and ignores not yet deprecated ones' do
       message_1 = "* nginx['listen_address'] has been deprecated since 8.10 and was removed in 11.0. Use nginx['listen_addresses'] instead."
       message_2 = "* gitlab_rails['stuck_ci_builds_worker_cron'] has been deprecated since 9.0 and was removed in 12.0. Use gitlab_rails['stuck_ci_jobs_worker_cron'] instead."
