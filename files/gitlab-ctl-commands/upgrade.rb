@@ -174,51 +174,43 @@ def stale_files_check
   puts "\n"
 end
 
-def get_color_strings
-  # Check if terminal supports colored outputs.
-  if system("which tput > /dev/null") && `tput colors`.strip.to_i >= 8
-    # ANSI color codes for yellow and reset color. For printing beautiful ASCII art.
-    yellow_string = "\e[33m%s"
-    no_color_string = "\e(B\e[m%s"
-  else
-    yellow_string = "%s"
-    no_color_string = "%s"
-  end
-  [yellow_string, no_color_string]
-end
-
 def print_tanuki_art
-  tanuki_art = '
-       *.                  *.
-      ***                 ***
-     *****               *****
-    .******             *******
-    ********            ********
-   ,,,,,,,,,***********,,,,,,,,,
-  ,,,,,,,,,,,*********,,,,,,,,,,,
-  .,,,,,,,,,,,*******,,,,,,,,,,,,
-      ,,,,,,,,,*****,,,,,,,,,.
-         ,,,,,,,****,,,,,,
-            .,,,***,,,,
-                ,*,.
-  '
-  # Get the proper color strings if terminal supports them
-  yellow_string, no_color_string = get_color_strings
-  puts yellow_string % tanuki_art
-  puts no_color_string % "\n"
-end
+  # Check if terminal supports colored outputs
+  use_colors = system("which tput > /dev/null 2>&1") && `tput colors`.strip.to_i >= 8
 
-def print_gitlab_art
-  gitlab_art = '
-     _______ __  __          __
-    / ____(_) /_/ /   ____ _/ /_
-   / / __/ / __/ /   / __ `/ __ \
-  / /_/ / / /_/ /___/ /_/ / /_/ /
-  \____/_/\__/_____/\__,_/_.___/
-  '
-  yellow_string, no_color_string = get_color_strings
-  puts yellow_string % gitlab_art
-  puts no_color_string % "\n"
+  if use_colors
+    orange_01p = "\033[38;2;252;161;33m"
+    orange_02p = "\033[38;2;252;109;38m"
+    orange_03p = "\033[38;2;226;67;41m"
+    reset = "\033[0m"
+  else
+    orange_01p = orange_02p = orange_03p = reset = ''
+  end
+
+  tanuki_art = <<-LOGO
+         #{orange_03p}.#{reset}                        #{orange_03p}..#{reset}
+        #{orange_03p}:c:#{reset}                      #{orange_03p},cc'#{reset}
+       #{orange_03p}:ccc:#{reset}                    #{orange_03p}'cccc.#{reset}
+      #{orange_03p}:ccccc,#{reset}                   #{orange_03p}cccccc#{reset}
+     #{orange_03p}.ccccccc#{reset}                  #{orange_03p}:cccccc:#{reset}
+     #{orange_03p}cccccccc:#{reset}                #{orange_03p}.cccccccc'#{reset}
+    #{orange_03p}:ccccccccc;..............'cccccccccc'#{reset}
+   #{orange_03p}cccccccccccccccccccccccccccccccccccccc'#{reset}
+  #{orange_02p}:ooolc#{reset}#{orange_03p}cccccccccccccccccccccccccccc#{reset}#{orange_02p}cllooo#{reset}
+  #{orange_02p}oooooooll#{reset}#{orange_03p}cccccccccccccccccccccc#{reset}#{orange_02p}clooooooo#{reset}
+  #{orange_02p};oooooooooll#{reset}#{orange_03p}cccccccccccccccc#{reset}#{orange_02p}cloooooooool#{reset}
+   #{orange_02p}ooooooooooool#{reset}#{orange_03p}cccccccccccc#{reset}#{orange_02p}loooooooooooo.#{reset}
+    #{orange_02p}.oooooooooooool#{reset}#{orange_03p}cccccc#{reset}#{orange_02p}lloooooooooooo;#{reset}
+       #{orange_02p}coooooooooooool#{reset}#{orange_03p}l#{reset}#{orange_02p}looooooooooooo.#{reset}
+          #{orange_02p}looooooood#{reset}#{orange_01p}xkkx#{reset}#{orange_02p}ddoooooooo.#{reset}
+            #{orange_02p}.oood#{reset}#{orange_01p}xkkkkkkkkx#{reset}#{orange_02p}dooo;#{reset}
+               #{orange_01p}.kkkkkkkkkkkk:#{reset}
+                  #{orange_01p};kkkkkkx#{reset}
+                     #{orange_01p}:d#{reset}
+  LOGO
+
+  puts tanuki_art
+  puts "\n"
 end
 
 def pg_upgrade_check
@@ -264,7 +256,6 @@ end
 
 def print_welcome_and_exit
   print_tanuki_art
-  print_gitlab_art
 
   external_url = ENV['EXTERNAL_URL']
   puts "Thank you for installing GitLab!"
@@ -294,7 +285,6 @@ def print_welcome_and_exit
 end
 
 def print_upgrade_and_exit
-  print_gitlab_art
   puts "Upgrade complete! If your GitLab server is misbehaving try running"
   puts "  sudo gitlab-ctl restart"
   puts "before anything else."
