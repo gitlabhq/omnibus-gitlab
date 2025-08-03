@@ -69,7 +69,8 @@ build do
     "--without-ca-bundle",
     "--with-ca-fallback",
     "--without-zstd",
-    "-without-libpsl"
+    "--without-libpsl",
+    "--without-brotli"
   ]
 
   openssl_library_path = "=#{install_dir}/embedded" unless Build::Check.use_system_ssl?
