@@ -121,6 +121,38 @@ build do
   bundle "config set --local without #{bundle_without.join(' ')}", env: env
   bundle "install --jobs #{workers} --retry 5", env: env
 
+  block 'delete extraneous devfile binaries' do
+    next unless OhaiHelper.ruby_native_gems_unsupported?
+
+    # On systems where we force the Ruby platform and avoid precompiled
+    # gems, the devfile ships with giant binaries:
+    #
+    # $ ls -al /opt/gitlab//embedded/lib/ruby/gems/3.2.0/gems/devfile-0.4.4/bin
+    # total 281020
+    # drwxr-xr-x. 2 root root      131 Aug  5 17:26 .
+    # drwxr-xr-x. 5 root root       39 Aug  5 17:24 ..
+    # -rwxr-xr-x. 1 root root 58315578 Jul 22 12:38 devfile
+    # -rwxr-xr-x. 1 root root 58573008 Jul 22 12:38 devfile-amd64-darwin
+    # -rwxr-xr-x. 1 root root 58315578 Jul 22 12:38 devfile-amd64-linux
+    # -rwxr-xr-x. 1 root root 56558658 Jul 22 12:38 devfile-arm64-darwin
+    # -rwxr-xr-x. 1 root root 55987900 Jul 22 12:38 devfile-arm64-linux
+    #
+    # The gem only needs the platform-specific version: https://gitlab.com/gitlab-org/ruby/gems/devfile-gem/-/blob/0.4.6/lib/devfile.rb?ref_type=tags#L13-16
+    devfile_bin = shellout!("#{embedded_bin('ruby')} -rdevfile -e 'puts Devfile::Parser::FILE_PATH'", env: env).stdout.strip
+
+    # We don't need to ship macOS binaries
+    binaries_to_delete = Dir["#{devfile_bin}-*darwin"] + [devfile_bin]
+
+    binaries_to_delete <<
+      if OhaiHelper.arm?
+        "#{devfile_bin}-amd64-linux"
+      else
+        "#{devfile_bin}-arm64-linux"
+      end
+
+    File.unlink(*binaries_to_delete)
+  end
+
   block 'delete unneeded precompiled shared libraries' do
     next if OhaiHelper.ruby_native_gems_unsupported?
 
