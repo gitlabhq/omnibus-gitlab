@@ -263,8 +263,6 @@ To change the location of the directory,
    }
    ```
 
-   The target directories and any of its subpaths must not be a symlink.
-
 1. Reconfigure GitLab:
 
    ```shell
