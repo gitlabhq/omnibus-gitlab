@@ -53,3 +53,6 @@ gc: <%= @gc.to_json %>
 <% if registry_helper.redis_enabled? %>
 redis: <%= @redis.to_json %>
 <% end %>
+<% if @reporting %>
+reporting: <%= @reporting.to_json %>
+<% end %>
