@@ -2016,7 +2016,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Configure the maximum length of URIs accepted by GitLab Pages
 ##! By default is limited for security reasons. Set 0 for unlimited
-# gitlab_pages['max_uri_length'] = 1024
+# gitlab_pages['max_uri_length'] = 2048
 
 ##! Setting the propagate_correlation_id to true allows installations behind a reverse proxy
 ##! generate and set a correlation ID to requests sent to GitLab Pages. If a reverse proxy
