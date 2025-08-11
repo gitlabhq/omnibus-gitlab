@@ -31,6 +31,9 @@ gitlabsos:
 config_guess:
   remote: "git@dev.gitlab.org:omnibus-mirror/config_guess.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/config_guess.git"
+fast-stats:
+  remote: "git@dev.gitlab.org:omnibus-mirror/fast-stats.git"
+  alternative: "https://gitlab.com/gitlab-com/support/toolbox/fast-stats.git"
 omnibus:
   remote: "https://dev.gitlab.org/gitlab/omnibus.git"
   alternative: "https://gitlab.com/gitlab-org/omnibus.git"
