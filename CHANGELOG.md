@@ -95,6 +95,10 @@ No changes.
 
 - [Default X-Forwarded-For to $remote_addr in GitLab NGINX config](gitlab-org/omnibus-gitlab@4acb83d31b955946b25ae51876b7e001b04f5d1a)
 
+## 18.0.6 (2025-08-12)
+
+No changes.
+
 ## 18.0.5 (2025-07-22)
 
 ### Changed (1 change)
