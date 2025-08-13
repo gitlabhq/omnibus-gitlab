@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.2.2 (2025-08-12)
+
+### Fixed (1 change)
+
+- [Fix deprecation check failing on nil values](gitlab-org/security/omnibus-gitlab@529d34fbbffca1f4877e8fb58bef3a0e1d9c3034)
+
 ## 18.2.1 (2025-07-22)
 
 No changes.
