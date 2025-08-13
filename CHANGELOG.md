@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.2.2 (2025-08-12)
+
+### Fixed (1 change)
+
+- [Fix deprecation check failing on nil values](gitlab-org/security/omnibus-gitlab@529d34fbbffca1f4877e8fb58bef3a0e1d9c3034)
+
 ## 18.2.1 (2025-07-22)
 
 No changes.
@@ -39,6 +45,10 @@ No changes.
 ### Security (1 change)
 
 - [Update rsync from 3.2.7 to 3.4.1](gitlab-org/omnibus-gitlab@5deb671cb00cef4a22f0abd0000e2657658ecd4c)
+
+## 18.1.4 (2025-08-12)
+
+No changes.
 
 ## 18.1.3 (2025-07-22)
 
@@ -84,6 +94,10 @@ No changes.
 ### Security (1 change)
 
 - [Default X-Forwarded-For to $remote_addr in GitLab NGINX config](gitlab-org/omnibus-gitlab@4acb83d31b955946b25ae51876b7e001b04f5d1a)
+
+## 18.0.6 (2025-08-12)
+
+No changes.
 
 ## 18.0.5 (2025-07-22)
 
