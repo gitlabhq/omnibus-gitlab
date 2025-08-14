@@ -43,6 +43,7 @@ default['registry']['database']['user'] = "registry"
 default['registry']['database']['dbname'] = "registry"
 default['registry']['database']['port'] = 5432
 default['registry']['database']['sslmode'] = "prefer"
+default['registry']['auto_migrate'] = true
 default['registry']['gc'] = nil
 default['registry']['reporting'] = nil
 

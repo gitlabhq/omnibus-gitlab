@@ -1080,6 +1080,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Registry database
 ###! Docs: https://docs.gitlab.com/ee/administration/packages/container_registry_metadata_database.html#new-installations
+# registry['auto_migrate'] = true
 # registry['database'] = {
 #   'enabled' => false,
 #   'host' => 'localhost',
