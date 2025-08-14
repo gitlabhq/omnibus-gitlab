@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 17.11.7 (2025-08-14)
+
+### Changed (1 change)
+
+- [Update dependency container-registry to v4.19.2-gitlab](gitlab-org/omnibus-gitlab@ae9c5a85983eb490325b57f0ae52bd3c03142c78) ([merge request](gitlab-org/omnibus-gitlab!8544))
+
 ## 17.11.6 (2025-07-09)
 
 ### Security (1 change)
