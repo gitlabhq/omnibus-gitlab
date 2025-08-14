@@ -163,6 +163,12 @@ No changes.
 
 - [Mattermost Security Updates April 15, 2025](gitlab-org/omnibus-gitlab@b93233ad9807f5b1e30cce9386601a1db8544b72) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8360))
 
+## 17.11.7 (2025-08-14)
+
+### Changed (1 change)
+
+- [Update dependency container-registry to v4.19.2-gitlab](gitlab-org/omnibus-gitlab@ae9c5a85983eb490325b57f0ae52bd3c03142c78) ([merge request](gitlab-org/omnibus-gitlab!8544))
+
 ## 17.11.6 (2025-07-09)
 
 ### Security (1 change)
