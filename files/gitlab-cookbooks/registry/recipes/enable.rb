@@ -106,3 +106,5 @@ version_file 'Create version file for Registry' do
   version_check_cmd '/opt/gitlab/embedded/bin/registry --version'
   notifies :restart, "runit_service[registry]"
 end
+
+include_recipe 'registry::database_migrations'

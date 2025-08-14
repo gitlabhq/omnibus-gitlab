@@ -7,6 +7,15 @@ RSpec.describe 'registry recipe' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
+  it 'sets default attributes' do
+    expect(chef_run.node['registry']['auto_migrate']).to eq(true)
+    expect(chef_run.node['registry']['database']['enabled']).to eq(false)
+    expect(chef_run.node['registry']['database']['user']).to eq('registry')
+    expect(chef_run.node['registry']['database']['dbname']).to eq('registry')
+    expect(chef_run.node['registry']['database']['port']).to eq(5432)
+    expect(chef_run.node['registry']['database']['sslmode']).to eq('prefer')
+  end
+
   describe 'letsencrypt' do
     before do
       stub_gitlab_rb(
@@ -94,6 +103,10 @@ RSpec.describe 'registry recipe' do
     it_behaves_like 'enabled registry service'
 
     it_behaves_like 'renders a valid YAML file', '/var/opt/gitlab/registry/config.yml'
+
+    it 'includes the database_migrations recipe' do
+      expect(chef_run).to include_recipe('registry::database_migrations')
+    end
 
     it 'creates the registry user and group with the correct parameters' do
       expect(chef_run).to create_account('Docker registry user and group').with(username: 'registry', groupname: 'registry', shell: '/usr/sbin/nologin', home: '/var/opt/gitlab/registry')

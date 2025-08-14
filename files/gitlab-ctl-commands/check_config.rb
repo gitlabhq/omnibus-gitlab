@@ -15,7 +15,12 @@
 # limitations under the License.
 #
 
-require "#{base_path}/embedded/cookbooks/package/libraries/deprecations"
+# For testing purposes, if the first path cannot be found load the second
+begin
+  require_relative '../../cookbooks/package/libraries/deprecations'
+rescue LoadError
+  require_relative '../gitlab-cookbooks/package/libraries/deprecations'
+end
 require 'json'
 require_relative "lib/gitlab_ctl/util"
 
