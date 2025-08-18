@@ -20,6 +20,7 @@ module Postgresql
     def parse_variables
       parse_connect_port
       parse_mattermost_postgresql_settings
+      parse_registry_postgresql_settings
       parse_wal_keep_size
     end
 
@@ -53,6 +54,21 @@ module Postgresql
                                               else
                                                 wal_keep_size
                                               end
+    end
+
+    def parse_registry_postgresql_settings
+      # Set PostgreSQL registry database defaults based on registry settings
+      # This ensures registry settings are the single source of truth
+      Gitlab['postgresql']['registry'] ||= {}
+
+      # Use registry database settings as defaults for PostgreSQL registry configuration
+      registry_db_config = Gitlab['registry']['database'] || {}
+      node_db_config = Gitlab['node']['registry']['database'] || {}
+
+      # Merge each key using the fallback chain
+      %w[dbname user password port sslmode].each do |key|
+        Gitlab['postgresql']['registry'][key] ||= registry_db_config[key] || node_db_config[key]
+      end
     end
 
     def parse_connect_port

@@ -19,10 +19,7 @@ default['postgresql']['sql_user_password'] = nil
 default['postgresql']['sql_mattermost_user'] = "gitlab_mattermost"
 default['postgresql']['port'] = 5432
 default['postgresql']['connect_port'] = nil
-# Registry Database Objects
-default['postgresql']['registry']['user'] = "registry"
-default['postgresql']['registry']['password'] = nil
-default['postgresql']['registry']['dbname'] = "registry"
+# Registry Database Objects - dynamically set in PostgreSQL library based on registry settings
 default['postgresql']['registry']['auto_create'] = true
 # Postgres allow multi listen_address, comma-separated values.
 # If used, first address from the list will be use for connection
