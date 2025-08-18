@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.2.4 (2025-08-18)
+
+### Changed (1 change)
+
+- [Build with Go 1.24.5](gitlab-org/omnibus-gitlab@96c74dfe2a4245c05cfebf061d0f17c0c56b01f9) ([merge request](gitlab-org/omnibus-gitlab!8658))
+
 ## 18.2.3 (2025-08-18)
 
 No changes.
