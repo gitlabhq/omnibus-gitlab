@@ -119,7 +119,6 @@ These additional variables are available to override or enable different build b
 | `TAKEOFF_TRIGGER_PROJECT`      |             |
 | `RELEASE_TRIGGER_TOKEN`        |             |
 | `GITLAB_DEV`                   |             |
-| `GET_SOURCES_ATTEMPTS`         | A GitLab Runner variable used to control how many times runner tries to fetch the Git repository. |
 | `FOG_REGION`                   |             |
 | `FOG_PROVIDER`                 |             |
 | `FOG_DIRECTORY`                |             |
