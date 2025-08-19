@@ -33,6 +33,10 @@ source git: version.remote
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   mkdir "#{install_dir}/embedded/service/gitlab-shell"
+
+  env['GOTOOLCHAIN'] = 'local'
+  env['FIPS_MODE'] = '1' if Build::Check.use_system_ssl?
+
   command 'make build', env: env
   sync './', "#{install_dir}/embedded/service/gitlab-shell/", exclude: ['.git', '.gitignore', 'go', 'go_build']
 end
