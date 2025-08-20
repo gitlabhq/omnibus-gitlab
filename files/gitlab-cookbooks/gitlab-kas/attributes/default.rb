@@ -28,6 +28,7 @@ default['gitlab_kas']['private_api_listen_address'] = 'localhost:8155'
 default['gitlab_kas']['private_api_listen_network'] = 'tcp'
 default['gitlab_kas']['private_api_certificate_file'] = nil
 default['gitlab_kas']['private_api_key_file'] = nil
+default['gitlab_kas']['workspaces']['enabled'] = false
 default['gitlab_kas']['metrics_usage_reporting_period'] = 60
 default['gitlab_kas']['sentry_dsn'] = nil
 default['gitlab_kas']['sentry_environment'] = nil
