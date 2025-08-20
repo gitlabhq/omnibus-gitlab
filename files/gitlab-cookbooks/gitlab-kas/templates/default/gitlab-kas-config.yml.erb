@@ -89,6 +89,16 @@ private_api:
     certificate_file: <%= @private_api_certificate_file %>
     key_file: <%= @private_api_key_file %>
     <%- end %>
+
+workspaces:
+  enabled: <%= @workspaces['enabled'] %>
+  <%- if @workspaces['listen'] %>
+  listen: 
+    network: <%= @workspaces['listen']['network'] %>
+    address: <%= @workspaces['listen']['address'] %>
+    listen_grace_period: <%= @workspaces['listen']['listen_grace_period'] %>
+    shutdown_grace_period: <%= @workspaces['listen']['shutdown_grace_period'] %>
+  <%- end %>
 config:
   <%- if @extra_config_command %>
   command: "<%= @extra_config_command %>"

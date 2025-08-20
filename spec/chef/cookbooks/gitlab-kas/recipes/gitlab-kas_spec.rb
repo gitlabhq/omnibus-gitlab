@@ -84,6 +84,9 @@ RSpec.describe 'gitlab-kas' do
               network: "tcp"
             },
           },
+          workspaces: {
+            enabled: false
+          },
           gitlab: hash_including(
             external_url: 'https://gitlab.example.com'
           )
@@ -126,6 +129,15 @@ RSpec.describe 'gitlab-kas' do
           sentry_environment: 'production',
           log_level: 'debug',
           grpc_log_level: 'debug',
+          workspaces: {
+            enabled: true,
+            listen: {
+              network: 'tcp4',
+              address: '0.0.0.0:9000',
+              listen_grace_period: '2s',
+              shutdown_grace_period: '100s'
+            },
+          },
           env: {
             'OWN_PRIVATE_API_HOST' => 'fake-host.example.com'
           }
@@ -161,6 +173,15 @@ RSpec.describe 'gitlab-kas' do
               dsn: 'https://my_key:my_secret@sentry.io/test_project',
               environment: 'production'
             }
+          },
+          workspaces: {
+            enabled: true,
+            listen: {
+              network: "tcp4",
+              address: "0.0.0.0:9000",
+              listen_grace_period: "2s",
+              shutdown_grace_period: "100s",
+            },
           }
         )
       )
