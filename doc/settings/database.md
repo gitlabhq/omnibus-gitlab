@@ -683,6 +683,8 @@ sure that PostgreSQL is set up according to the [database requirements document]
 
 1. [Seed the database](#seed-the-database-fresh-installs-only).
 
+1. Optional. [Enable the container registry metadata database](https://docs.gitlab.com/administration/packages/container_registry_metadata_database/).
+
 ### UNIX socket configuration for non-packaged PostgreSQL
 
 If you want to use your system's PostgreSQL server (installed on the same system
