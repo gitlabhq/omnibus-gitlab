@@ -3,6 +3,48 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.3.0 (2025-08-20)
+
+### Added (6 changes)
+
+- [Feat: add registry database auto-migrations](gitlab-org/omnibus-gitlab@374c8a96e6033ecb9f7f1f781cbd20e2b23b3641) ([merge request](gitlab-org/omnibus-gitlab!8592))
+- [Add container registry reporting config](gitlab-org/omnibus-gitlab@56b66271ffd5e825692b7339055273fc4fde0674) by @bufferoverflow ([merge request](gitlab-org/omnibus-gitlab!8548))
+- [Build and ship fast-stats](gitlab-org/omnibus-gitlab@2c9e9652c214bd7f12c67bbe5d334913ceb6d8c2) ([merge request](gitlab-org/omnibus-gitlab!8618))
+- [Automatically create registry database as part of reconfigure](gitlab-org/omnibus-gitlab@9d5b887e80e6139c8a54e30425ff87cfc8e507b7) ([merge request](gitlab-org/omnibus-gitlab!8491))
+- [Add gitlabsos script to Linux package](gitlab-org/omnibus-gitlab@df27402b6ae66fff725662e16e8ec04cf72155b9) ([merge request](gitlab-org/omnibus-gitlab!8565))
+- [Add container registry load balancing config](gitlab-org/omnibus-gitlab@2ba8e5321d7d550fac5d068995f8139f1683988d) ([merge request](gitlab-org/omnibus-gitlab!8468))
+
+### Fixed (1 change)
+
+- [Fix deprecation check failing on nil values](gitlab-org/omnibus-gitlab@a773d76dce05fba0bd027359dadfaa57da750d79) ([merge request](gitlab-org/omnibus-gitlab!8616))
+
+### Changed (16 changes)
+
+- [Feat: base postgresql settings on registry database settings](gitlab-org/omnibus-gitlab@30706511bb054b4d35c7545577ad04e9416ffd72) ([merge request](gitlab-org/omnibus-gitlab!8623))
+- [Build with Go 1.24.5](gitlab-org/omnibus-gitlab@55311babf2451aa0c51f4018ff4c62501ac27fd4) ([merge request](gitlab-org/omnibus-gitlab!8657))
+- [Update gitlabsos digest to ccb1edb](gitlab-org/omnibus-gitlab@2fb229cf3116135cb6b7bb715f353618460d4c87) ([merge request](gitlab-org/omnibus-gitlab!8609))
+- [Update logo used in installation script messages](gitlab-org/omnibus-gitlab@171e423516bd019958348dfa951e9426a0c7a3f4) ([merge request](gitlab-org/omnibus-gitlab!8485))
+- [Update dependency redis to v7.2.10](gitlab-org/omnibus-gitlab@62200d53fa0b751789c61a26bbf61065c3087fca) ([merge request](gitlab-org/omnibus-gitlab!8613))
+- [Update rack to 2.2.17](gitlab-org/omnibus-gitlab@7c6fef50f262ac3d80c4878b5c654982d89d122e) ([merge request](gitlab-org/omnibus-gitlab!8612))
+- [Update Ruby version to 3.2.8](gitlab-org/omnibus-gitlab@710817a0e310e3d99b8ea3b62c4e735e1fdcd75e) ([merge request](gitlab-org/omnibus-gitlab!8605))
+- [Update Ruby version from 3.2.5 to 3.2.6](gitlab-org/omnibus-gitlab@8fc8f87370b0650802765be2798be50493cdcb4b) ([merge request](gitlab-org/omnibus-gitlab!8601))
+- [Update Mattermost to version 10.10.1](gitlab-org/omnibus-gitlab@ae0bc2f1760538cb46a9f2817f5c73f34238f3a7) by @christian.hueser.hzdr ([merge request](gitlab-org/omnibus-gitlab!8602))
+- [Update dependency bundler to v2.7.1](gitlab-org/omnibus-gitlab@5a07303ecea4c972205e4d6452fb46e82c7284e0) ([merge request](gitlab-org/omnibus-gitlab!8572))
+- [Update dependency container-registry to v4.25.0-gitlab](gitlab-org/omnibus-gitlab@2f06609c5080f5a336f63fe53eaf36580e28592d) ([merge request](gitlab-org/omnibus-gitlab!8578))
+- [Update dependency libxml2 to v2.14.5](gitlab-org/omnibus-gitlab@b4021b2ecf8330cae9ff5f5976283a68a345260a) ([merge request](gitlab-org/omnibus-gitlab!8569))
+- [Update dependency nginx/nginx to release-1.29.0](gitlab-org/omnibus-gitlab@edc81f116606e2c7d4051e140a51faba1c0ea840) ([merge request](gitlab-org/omnibus-gitlab!8557))
+- [Update dependency redis-exporter to v1.74.0](gitlab-org/omnibus-gitlab@af1b5974b7b28defd2368407cf7b2c467bfbb26b) ([merge request](gitlab-org/omnibus-gitlab!8472))
+- [Update dependency libpng to v1.6.50](gitlab-org/omnibus-gitlab@f0f53098d84e9bc0989764a8ee5412fb8e38d831) ([merge request](gitlab-org/omnibus-gitlab!8453))
+- [Update dependency acme-client to v2.0.22](gitlab-org/omnibus-gitlab@f72174610ef609aeab10512dc00f801bd7897057) ([merge request](gitlab-org/omnibus-gitlab!8530))
+
+### Deprecated (1 change)
+
+- [Deprecate bin_path and use_bundled_binaries in Gitaly config](gitlab-org/omnibus-gitlab@9c6c031d35b0876511df8292bbf9bf54bbe192be) ([merge request](gitlab-org/omnibus-gitlab!8549))
+
+### Other (1 change)
+
+- [Update pages max_uri_length to 2048 in gitlab.rb template](gitlab-org/omnibus-gitlab@577648c9b2d3e956101627df5ddad46ddaf7a3d7) ([merge request](gitlab-org/omnibus-gitlab!8626))
+
 ## 18.2.2 (2025-08-12)
 
 ### Fixed (1 change)
