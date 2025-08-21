@@ -322,7 +322,7 @@ docs-lint hugo:
       if [[ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ [0-9]+-[0-9]+-stable ]]; then
         MAJOR=$(echo "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" | cut -d '-' -f 1)
         MINOR=$(echo "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" | cut -d '-' -f 2)
-        # Convert Omnibus GitLab style (17-9-stable-ee) to GitLab Docs style (17.9)
+        # Convert Omnibus GitLab style (17-9-stable) to GitLab Docs style (17.9)
         DOCS_BRANCH=$MAJOR.$MINOR
         echo "Using docs-gitlab-com branch $DOCS_BRANCH instead of main"
       fi
@@ -386,6 +386,39 @@ docs-i18n-lint paths:
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
     - if: '$PIPELINE_TYPE == "DOCS_LOCALIZATION_PIPELINE"'
+
+# Test hugo build with localized documentation
+docs-lint-i18n hugo:
+  image: registry.gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/docs-gitlab-com-builder:hugo-0.145.0
+  stage: check
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "DOCS_LOCALIZATION_PIPELINE"'
+  variables:
+    DOCS_BRANCH: "main"
+  before_script:
+    # Check if the job is running against a stable branch. If running against a stable branch, check out the
+    # corresponding version of the GitLab Docs project instead of using the 'main' branch.
+    - |
+      if [[ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ [0-9]+-[0-9]+-stable ]]; then
+        MAJOR=$(echo "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" | cut -d '-' -f 1)
+        MINOR=$(echo "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" | cut -d '-' -f 2)
+        # Convert Omnibus GitLab style (17-9-stable) to GitLab Docs style (17.9)
+        DOCS_BRANCH=$MAJOR.$MINOR
+        echo "Using docs-gitlab-com branch $DOCS_BRANCH instead of main"
+      fi
+    # Clone the GitLab Docs project
+    - git clone --depth 1 --filter=tree:0 --branch $DOCS_BRANCH https://gitlab.com/gitlab-org/technical-writing/docs-gitlab-com.git
+    - cd docs-gitlab-com
+    - make add-latest-icons
+  script:
+    # Test that Hugo will build
+    - hugo --gc --printPathWarnings --panicOnWarning --environment test
+    # Test for invalid index pages
+    # See https://gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/-/blob/main/scripts/check-index-filenames.sh
+    - make check-index-pages SEARCH_DIR="../doc-locale"
 
 yard:
   extends: .gems-cache
