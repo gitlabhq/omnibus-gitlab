@@ -83,9 +83,71 @@ the changes work as expected.
    comparatively rare. It is highly recommended that the Maintainers look through
    the commits we have [added on top of the upstream tag](https://gitlab.com/gitlab-org/omnibus/-/compare/9.0.19...9.0.19-stable).
 
-### Deploy scope
+### Operate scope
 
-TBA
+The operate scope covers all the parts of the codebase that handle the installation,
+configuration, and operation of GitLab at the user site.
+
+This includes:
+
+1. Chef cookbooks and recipes in the `files/` directory.
+1. Configuration file templates and `gitlab-ctl` command definitions.
+1. Test specifications in the `spec/` directory.
+1. Documentation in the `doc/` directory (shared with Build scope).
+1. Helper libraries and custom Chef resources for deployment and operations.
+
+Ideally, an operate-scoped maintainer of `omnibus-gitlab` should have
+strong Ruby and Chef expertise, with familiarity in Omnibus DSL being
+beneficial. They should understand GitLab architectural design and
+deployment patterns, particularly for high availability and multi-node
+configurations as outlined in the [Reference Architecture](https://docs.gitlab.com/ee/administration/reference_architectures/index.html).
+
+The following checklist provides a guideline to evaluate the progress of a
+maintainer in the operate scope:
+
+**Prerequisites:**
+
+1. Demonstrate a good understanding of GitLab instance architectural design
+   and the Omnibus project, particularly HA and multi-node support.
+
+1. Show familiarity with Reference Architecture and downstream projects that
+   use Omnibus, such as GitLab Environment Toolkit (GET) and cloud-native
+   hybrid (CNH) deployments in GitLab Dedicated platform.
+
+**Required Experience:**
+
+Contribution in at least 3 of the following categories:
+
+1. **Configuration Management**: Adding, removing, and deprecating configuration
+   options in `gitlab.rb`. This includes understanding how configuration changes
+   propagate through the system and affect service behavior.
+
+1. **Command Line Tools**: Adding a new `gitlab-ctl` command or fixing an
+   existing one. This demonstrates understanding of the operational interface
+   that administrators use to manage GitLab.
+
+1. **Service Management**: Adding a new service or updating an existing service.
+   This includes understanding service dependencies, startup sequences, and
+   `runit` mechanics.
+
+1. **Testing**: Writing test cases and test scenarios, especially with ChefSpec
+   and RSpec. This ensures familiarity with the testing patterns used to
+   validate operational changes.
+
+1. **Chef Development**: Working with Chef helper libraries and custom resources.
+   This demonstrates deep understanding of the Chef framework used for
+   configuration management.
+
+**Highly Recommended Experience:**
+
+1. **HA Components**: Implementing a feature or fixing one for Omnibus HA
+   components (PostgreSQL, Patroni, PgBouncer, Consul, Redis, Sentinel).
+
+1. **Database Operations**: Understanding PostgreSQL upgrade nuances and
+   database migration processes.
+
+1. **CI Integration**: Exposure to CI pipeline configuration and how it
+   relates to operational testing and validation.
 
 ### Architectural changes
 
