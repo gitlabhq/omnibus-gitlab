@@ -47,15 +47,4 @@ if pgb_helper.create_pgbouncer_user?('postgresql') || pgb_helper.create_pgbounce
       action :create
     end
   end
-
-  if node.dig('postgresql', 'registry', 'auto_create')
-    pgbouncer_user 'registry' do
-      helper lazy { PgHelper.new(node) }
-      user node['postgresql']['pgbouncer_user']
-      password node['postgresql']['pgbouncer_user_password']
-      database node['registry']['database']['dbname']
-      add_auth_function default_auth_query.eql?(auth_query)
-      action :create
-    end
-  end
 end

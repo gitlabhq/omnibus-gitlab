@@ -22,7 +22,7 @@ RSpec.describe 'gitlab-ee::pgbouncer_user' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
-  describe 'create the pgbouncer users' do
+  context 'create the rails pgbouncer user' do
     before do
       allow(Gitlab).to receive(:[]).and_call_original
       stub_gitlab_rb(
@@ -31,63 +31,19 @@ RSpec.describe 'gitlab-ee::pgbouncer_user' do
             enable: true,
             pgbouncer_user: 'pgbouncer-rails',
             pgbouncer_user_password: 'fakepassword'
-          },
-          registry: {
-            database: {
-              dbname: 'pgbouncer-registry'
-            }
           }
         }
       )
     end
 
-    it 'should call pgbouncer_user with the correct values' do
+    it 'should call pgbouncer_user with the correct values for rails' do
       expect(chef_run).to create_pgbouncer_user('rails:main').with(
         database: 'gitlabhq_production',
-        password: 'fakepassword',
-        user: 'pgbouncer-rails',
-        add_auth_function: true
-      )
-      expect(chef_run).to create_pgbouncer_user('registry').with(
-        database: 'pgbouncer-registry',
         password: 'fakepassword',
         user: 'pgbouncer-rails',
         add_auth_function: true
       )
       expect(chef_run).not_to create_pgbouncer_user('geo')
-    end
-  end
-
-  context 'registry auto_create is disabled' do
-    before do
-      allow(Gitlab).to receive(:[]).and_call_original
-      stub_gitlab_rb(
-        {
-          postgresql: {
-            enable: true,
-            pgbouncer_user: 'pgbouncer-rails',
-            pgbouncer_user_password: 'fakepassword',
-            registry: {
-              auto_create: false
-            }
-          },
-          registry: {
-            database: {
-              dbname: 'pgbouncer-registry'
-            }
-          }
-        }
-      )
-    end
-
-    it 'should not create pgbouncer_user for registry database' do
-      expect(chef_run).to create_pgbouncer_user('rails:main').with(
-        database: 'gitlabhq_production',
-        password: 'fakepassword',
-        user: 'pgbouncer-rails',
-        add_auth_function: true
-      )
-      expect(chef_run).not_to create_pgbouncer_user('registry')
     end
   end
 
@@ -102,11 +58,6 @@ RSpec.describe 'gitlab-ee::pgbouncer_user' do
             enable: true,
             pgbouncer_user: 'pgbouncer-rails',
             pgbouncer_user_password: 'fakepassword'
-          },
-          registry: {
-            database: {
-              dbname: 'pgbouncer-registry'
-            }
           }
         }
       )
@@ -117,9 +68,6 @@ RSpec.describe 'gitlab-ee::pgbouncer_user' do
         add_auth_function: false
       )
       expect(chef_run).to create_pgbouncer_user('rails:ci').with(
-        add_auth_function: false
-      )
-      expect(chef_run).to create_pgbouncer_user('registry').with(
         add_auth_function: false
       )
     end
@@ -143,7 +91,6 @@ RSpec.describe 'gitlab-ee::pgbouncer_user' do
       expect(chef_run).not_to create_pgbouncer_user('rails:main')
       expect(chef_run).not_to create_pgbouncer_user('rails:ci')
       expect(chef_run).not_to create_pgbouncer_user('geo')
-      expect(chef_run).not_to create_pgbouncer_user('registry')
     end
   end
 
@@ -171,7 +118,6 @@ RSpec.describe 'gitlab-ee::pgbouncer_user' do
       )
       expect(chef_run).not_to create_pgbouncer_user('rails:main')
       expect(chef_run).not_to create_pgbouncer_user('rails:ci')
-      expect(chef_run).not_to create_pgbouncer_user('registry')
     end
   end
 end
