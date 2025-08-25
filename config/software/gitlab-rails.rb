@@ -127,7 +127,8 @@ build do
     # On systems where we force the Ruby platform and avoid precompiled
     # gems, the devfile ships with giant binaries:
     #
-    # $ ls -al /opt/gitlab//embedded/lib/ruby/gems/3.2.0/gems/devfile-0.4.4/bin
+    # For version <= 0.4.4 it looks like this:
+    # $ ls -al /opt/gitlab/embedded/lib/ruby/gems/3.2.0/gems/devfile-0.4.4/bin
     # total 281020
     # drwxr-xr-x. 2 root root      131 Aug  5 17:26 .
     # drwxr-xr-x. 5 root root       39 Aug  5 17:24 ..
@@ -137,20 +138,44 @@ build do
     # -rwxr-xr-x. 1 root root 56558658 Jul 22 12:38 devfile-arm64-darwin
     # -rwxr-xr-x. 1 root root 55987900 Jul 22 12:38 devfile-arm64-linux
     #
-    # The gem only needs the platform-specific version: https://gitlab.com/gitlab-org/ruby/gems/devfile-gem/-/blob/0.4.6/lib/devfile.rb?ref_type=tags#L13-16
+    # For version > 0.4.4 it looks like this:
+    # $ ls -al /opt/gitlab/embedded/lib/ruby/gems/3.2.0/gems/devfile-0.4.7/out
+    # total 448536
+    # drwxr-xr-x@ 6 root  root       192 Aug 22 13:00 .
+    # drwxr-xr-x@ 5 root  root       160 Aug 22 13:00 ..
+    # -rwxr-xr-x@ 1 root  root  58630352 Aug 22 13:00 devfile-amd64-darwin
+    # -rwxr-xr-x@ 1 root  root  58376874 Aug 22 13:00 devfile-amd64-linux
+    # -rwxr-xr-x@ 1 root  root  56624706 Aug 22 13:00 devfile-arm64-darwin
+    # -rwxr-xr-x@ 1 root  root  56006164 Aug 22 13:00 devfile-arm64-linux
+    #
+    # The gem only needs the platform-specific version: https://gitlab.com/gitlab-org/ruby/gems/devfile-gem/-/blob/0.4.7/lib/devfile.rb?ref_type=tags#L13-16
     devfile_bin = shellout!("#{embedded_bin('ruby')} -rdevfile -e 'puts Devfile::Parser::FILE_PATH'", env: env).stdout.strip
+    devfile_version = shellout!("#{embedded_bin('ruby')} -rdevfile -e 'puts Devfile::Parser::DEVFILE_GEMSPEC.version'", env: env).stdout.strip
 
-    # We don't need to ship macOS binaries
-    binaries_to_delete = Dir["#{devfile_bin}-*darwin"] + [devfile_bin]
+    binaries_to_delete = []
 
-    binaries_to_delete <<
-      if OhaiHelper.arm?
-        "#{devfile_bin}-amd64-linux"
-      else
-        "#{devfile_bin}-arm64-linux"
-      end
+    if devfile_version > Gem::Version.new('0.4.4')
+      # FILE_PATH now points to platform-specific binary (e.g., devfile-amd64-linux)
+      # Find all devfile binaries in the out directory and remove everything except the platform-specific one
+      devfile_out_dir = File.dirname(devfile_bin)
 
-    File.unlink(*binaries_to_delete)
+      all_binaries = Dir["#{devfile_out_dir}/devfile*"]
+      binaries_to_delete = all_binaries.reject { |binary| binary == devfile_bin }
+    else
+      # Legacy logic for devfile gem <= 0.4.4
+      # FILE_PATH points to generic 'devfile' binary, platform-specific binaries have suffixes
+      # We don't need to ship macOS binaries
+      binaries_to_delete = Dir["#{devfile_bin}-*darwin"] + [devfile_bin]
+
+      binaries_to_delete <<
+        if OhaiHelper.arm?
+          "#{devfile_bin}-amd64-linux"
+        else
+          "#{devfile_bin}-arm64-linux"
+        end
+    end
+
+    File.unlink(*binaries_to_delete) unless binaries_to_delete.empty?
   end
 
   block 'delete unneeded precompiled shared libraries' do
