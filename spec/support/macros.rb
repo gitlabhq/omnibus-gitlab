@@ -123,8 +123,7 @@ module GitlabSpec
     def converge_config(*recipes, is_ee: false)
       Gitlab[:node] = nil
       Services.add_services('gitlab-ee', Services::EEServices.list) if is_ee
-      config_recipe = is_ee ? 'gitlab-ee::config' : 'gitlab::config'
-      ChefSpec::SoloRunner.converge(config_recipe, *recipes)
+      ChefSpec::SoloRunner.converge('gitlab-base::config', *recipes)
     end
 
     # Return the full path for the spec fixtures folder

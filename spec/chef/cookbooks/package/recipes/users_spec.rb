@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-RSpec.describe 'gitlab::users' do
+RSpec.describe 'package::users' do
   let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
 
   before do

@@ -1,6 +1,6 @@
 require 'chef_helper'
 
-RSpec.describe 'gitlab::config' do
+RSpec.describe 'gitlab-base::config' do
   cached(:chef_run) { converge_config }
   let(:node) { chef_run.node }
 

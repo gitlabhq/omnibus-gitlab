@@ -29,7 +29,7 @@ RSpec.describe 'sysctl' do
   end
 
   context 'when modify_kernel_parameters is false' do
-    let(:chef_run) { runner.converge("gitlab::config", "package::sysctl", "test_package::gitlab_sysctl_create") }
+    let(:chef_run) { runner.converge("gitlab-base::config", "package::sysctl", "test_package::gitlab_sysctl_create") }
 
     before do
       allow(Gitlab).to receive(:[]).and_call_original

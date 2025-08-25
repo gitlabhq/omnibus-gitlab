@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'postgresql::user' do
-  cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config', 'postgresql::user') }
+  cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'postgresql::user') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -44,7 +44,7 @@ RSpec.describe 'postgresql::user' do
   end
 
   context 'when using custom values for directories' do
-    cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config', 'postgresql::user') }
+    cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'postgresql::user') }
 
     before do
       stub_gitlab_rb(

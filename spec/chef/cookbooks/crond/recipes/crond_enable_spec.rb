@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'crond::enable' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::config', 'crond::enable') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'crond::enable') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

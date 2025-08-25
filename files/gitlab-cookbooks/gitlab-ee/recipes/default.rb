@@ -16,7 +16,7 @@
 #
 
 # Add the EE specific services to the services list. Common services will be
-# added in the `gitlab::config` recipe.
+# added in the `package::config` recipe.
 Services.add_services('gitlab-ee', Services::EEServices.list)
 
 include_recipe 'gitlab::default'

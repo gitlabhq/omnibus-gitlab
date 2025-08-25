@@ -1098,7 +1098,7 @@ if the runit service is not stopped and the home directories are not manually
 moved for the user, GitLab will encounter an error while reconfiguring:
 
 ```plaintext
-account[GitLab user and group] (gitlab::users line 28) had an error: Mixlib::ShellOut::ShellCommandFailed: linux_user[GitLab user and group] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/package/resources/account.rb line 51) had an error: Mixlib::ShellOut::ShellCommandFailed: Expected process to exit with [0], but received '8'
+account[GitLab user and group] (package::users line 28) had an error: Mixlib::ShellOut::ShellCommandFailed: linux_user[GitLab user and group] (/opt/gitlab/embedded/cookbooks/cache/cookbooks/package/resources/account.rb line 51) had an error: Mixlib::ShellOut::ShellCommandFailed: Expected process to exit with [0], but received '8'
 ---- Begin output of ["usermod", "-d", "/var/opt/gitlab", "git"] ----
 STDOUT:
 STDERR: usermod: user git is currently used by process 1234

@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'database_objects' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(database_objects postgresql_extension)).converge('gitlab::config', 'test_postgresql::postgresql_database_objects') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(database_objects postgresql_extension)).converge('gitlab-base::config', 'test_postgresql::postgresql_database_objects') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
