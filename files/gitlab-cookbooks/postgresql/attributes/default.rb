@@ -102,6 +102,7 @@ default['postgresql']['wal_log_hints'] = "off"
 default['postgresql']['max_wal_senders'] = 0
 default['postgresql']['wal_keep_segments'] = 10
 default['postgresql']['wal_keep_size'] = nil
+default['postgresql']['max_slot_wal_keep_size'] = -1
 default['postgresql']['hot_standby'] = "off"
 default['postgresql']['max_standby_archive_delay'] = "30s"
 default['postgresql']['max_standby_streaming_delay'] = "30s"

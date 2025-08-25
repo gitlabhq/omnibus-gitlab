@@ -49,6 +49,7 @@ archive_timeout = <%= @archive_timeout %>    # force a logfile segment switch af
 # - Replication
 <% if (pg_helper.database_version || pg_helper.version).major.to_f >= 13 %>
 wal_keep_size = <%= @wal_keep_size %>
+max_slot_wal_keep_size = <%= @max_slot_wal_keep_size %>
 <% else %>
 wal_keep_segments = <%= @wal_keep_segments %>
 <% end %>
