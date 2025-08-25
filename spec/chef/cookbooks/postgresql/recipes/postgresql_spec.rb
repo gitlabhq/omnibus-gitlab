@@ -11,8 +11,8 @@ RSpec.describe 'postgresql' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
-    allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('best_version'))
-    allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('best_version'))
+    allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('16.0'))
+    allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('16.0'))
     allow_any_instance_of(PgHelper).to receive(:running_version).and_return(PGVersion.new('best_version'))
   end
 
@@ -186,6 +186,11 @@ RSpec.describe 'postgresql' do
         expect(chef_run).to render_file(
           runtime_conf
         ).with_content(%r(^log_directory = '/var/log/gitlab/postgresql'))
+      end
+
+      it 'sets max_slot_wal_keep_size to unlimited' do
+        expect(chef_run.node['postgresql']['max_slot_wal_keep_size'])
+          .to eq(-1)
       end
 
       it 'disables hot_standby_feedback' do
@@ -444,7 +449,8 @@ RSpec.describe 'postgresql' do
                          archive_command: 'command',
                          archive_timeout: '120',
                          log_connections: 'on',
-                         log_disconnections: 'on'
+                         log_disconnections: 'on',
+                         max_slot_wal_keep_size: '2GB'
                        })
       end
 
@@ -498,6 +504,12 @@ RSpec.describe 'postgresql' do
         expect(chef_run).to render_file(
           runtime_conf
         ).with_content(/log_disconnections = on/)
+      end
+
+      it 'sets max_slot_wal_keep_size' do
+        expect(chef_run).to render_file(
+          runtime_conf
+        ).with_content(/^max_slot_wal_keep_size = 2GB/)
       end
     end
 
@@ -699,24 +711,6 @@ RSpec.describe 'postgresql' do
       end
       it_behaves_like 'enabled logged service', 'postgresql', true, { log_directory_owner: 'gitlab-psql', log_group: 'fugee' }
     end
-  end
-end
-
-RSpec.describe 'postgresql 16' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service postgresql_config)).converge('gitlab::default') }
-  let(:postgresql_conf) { File.join(postgresql_data_dir, 'postgresql.conf') }
-  let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
-
-  before do
-    allow_any_instance_of(PgHelper).to receive(:version).and_return(PGVersion.new('16.0'))
-    allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('16.0'))
-  end
-
-  it 'configures wal_keep_size instead of wal_keep_segments' do
-    expect(chef_run).to render_file(runtime_conf).with_content { |content|
-      expect(content).to include("wal_keep_size")
-      expect(content).not_to include("wal_keep_segments")
-    }
   end
 end
 
