@@ -3,7 +3,7 @@
 require 'chef_helper'
 
 RSpec.describe 'Sentinel' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config') }
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config') }
   let(:node) { chef_run.node }
   subject { ::Sentinel }
   before do

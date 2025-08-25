@@ -21,4 +21,4 @@
 Services.add_services('gitlab-ee', Services::EEServices.list)
 
 # Use the gitlab cookbook config
-include_recipe 'gitlab::config'
+include_recipe 'package::config'

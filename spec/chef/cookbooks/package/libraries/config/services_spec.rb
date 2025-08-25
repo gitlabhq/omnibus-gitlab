@@ -29,7 +29,7 @@ RSpec.describe Services do
 
   describe 'service' do
     let(:runner) { ChefSpec::SoloRunner.new }
-    let(:chef_run) { runner.converge('gitlab::config') }
+    let(:chef_run) { runner.converge('gitlab-base::config') }
     let(:node) { runner.node }
 
     before { Services.add_services('gitlab', Services::BaseServices.list) }
@@ -41,7 +41,7 @@ RSpec.describe Services do
         stub_gitlab_rb(redis: { enable: true }, mattermost: { enable: false })
         Services.disable('redis')
         Services.enable('mattermost')
-        runner.converge('gitlab::config')
+        runner.converge('gitlab-base::config')
 
         expect(node['redis']['enable']).to be true
         expect(node['mattermost']['enable']).to be false
@@ -175,7 +175,7 @@ RSpec.describe Services do
 
   describe 'group' do
     let(:runner) { ChefSpec::SoloRunner.new }
-    let(:chef_run) { runner.converge('gitlab::config') }
+    let(:chef_run) { runner.converge('gitlab-base::config') }
     let(:node) { runner.node }
 
     before { Services.add_services('gitlab', Services::BaseServices.list) }
@@ -187,7 +187,7 @@ RSpec.describe Services do
         stub_gitlab_rb(redis: { enable: true }, postgresql: { enable: false })
         Services.disable_group('redis')
         Services.enable_group('postgres')
-        runner.converge('gitlab::config')
+        runner.converge('gitlab-base::config')
 
         expect(node['redis']['enable']).to be true
         expect(node['mattermost']['enable']).to be false

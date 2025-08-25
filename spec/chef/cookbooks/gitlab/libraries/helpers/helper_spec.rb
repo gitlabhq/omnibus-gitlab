@@ -2,6 +2,9 @@ require 'chef_helper'
 
 RSpec.shared_examples 'Postgres helpers' do |service_name, service_cmd, edition|
   let(:chef_run) do
+    # Config recipe is available in gitlab-base cookbook
+    edition = "gitlab-base" if edition == "gitlab"
+
     ChefSpec::SoloRunner.new do |node|
       node.normal['gitlab'][service_name]['dir'] = '/fakedir'
       node.normal['package']['install-dir'] = '/fake/install/dir'

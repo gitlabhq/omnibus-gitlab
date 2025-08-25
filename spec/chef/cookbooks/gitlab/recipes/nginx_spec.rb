@@ -9,7 +9,7 @@ RSpec.describe 'gitlab::nginx' do
   end
 
   let(:chef_run) do
-    chef_runner.converge('gitlab::config', 'gitlab::nginx')
+    chef_runner.converge('gitlab-base::config', 'gitlab::nginx')
   end
 
   let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-http.conf' }
@@ -999,7 +999,7 @@ RSpec.describe 'gitlab::nginx with no total CPUs' do
   end
 
   let(:chef_run) do
-    chef_runner.converge('gitlab::config', 'gitlab::nginx')
+    chef_runner.converge('gitlab-base::config', 'gitlab::nginx')
   end
 
   it 'sets worker_processes to 16' do

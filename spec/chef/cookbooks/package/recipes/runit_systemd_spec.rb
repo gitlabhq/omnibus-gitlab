@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'package::runit_systemd' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::config', 'package::runit_systemd') }
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'package::runit_systemd') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

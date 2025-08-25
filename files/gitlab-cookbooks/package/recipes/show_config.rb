@@ -1,5 +1,7 @@
 #
-# Copyright:: Copyright (c) 2018 GitLab Inc.
+# Copyright:: Copyright (c) 2012 Opscode, Inc.
+# Copyright:: Copyright (c) 2014 GitLab Inc.
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,6 +16,11 @@
 # limitations under the License.
 #
 
-include_recipe 'package::config'
+Gitlab[:node] = node
+Gitlab.from_file("/etc/gitlab/gitlab.rb") if File.exist?("/etc/gitlab/gitlab.rb")
 
-include_recipe 'letsencrypt::enable' if node['gitlab']['nginx']['enable'] && node['letsencrypt']['enable']
+config = Gitlab.generate_config(node['fqdn'])
+config = Chef::Mixin::DeepMerge.merge(config, GitlabCluster.config.all)
+
+puts Chef::JSONCompat.to_json_pretty(config)
+return

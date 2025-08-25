@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-include_recipe 'gitlab::config'
+include_recipe 'package::config'
 
 account_helper = AccountHelper.new(node)
 

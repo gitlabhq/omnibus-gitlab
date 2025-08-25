@@ -1,26 +1,4 @@
-#
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
-# Copyright:: Copyright (c) 2014 GitLab Inc.
-# License:: Apache License, Version 2.0
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+# This is here so that tests can continue to use `gitlab::show_config` recipe
+# so that all the necessary cookbooks will get loaded
 
-Gitlab[:node] = node
-Gitlab.from_file("/etc/gitlab/gitlab.rb") if File.exist?("/etc/gitlab/gitlab.rb")
-
-config = Gitlab.generate_config(node['fqdn'])
-config = Chef::Mixin::DeepMerge.merge(config, GitlabCluster.config.all)
-
-puts Chef::JSONCompat.to_json_pretty(config)
-return
+include_recipe "package::show_config"
