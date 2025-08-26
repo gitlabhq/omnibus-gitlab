@@ -51,6 +51,10 @@ omnibus-gitlab repository.
 
 - [Update pages max_uri_length to 2048 in gitlab.rb template](gitlab-org/omnibus-gitlab@577648c9b2d3e956101627df5ddad46ddaf7a3d7) ([merge request](gitlab-org/omnibus-gitlab!8626))
 
+## 18.2.5 (2025-08-26)
+
+No changes.
+
 ## 18.2.4 (2025-08-18)
 
 ### Changed (1 change)
