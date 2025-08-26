@@ -6,7 +6,7 @@ set -euo pipefail
 PATH="/opt/gitlab/embedded/bin${PATH+:}${PATH}"
 
 export PATH
-export GITLAB_BACKUP_CLI_CONFIG_FILE="<%= install_dir %>/etc/gitlab-backup-cli-config.yml"
+export GITLAB_BACKUP_CONTEXT_FILE="<%= install_dir %>/etc/gitlab-backup-cli-context.yml"
 
 gitlab_backup_cli="<%= install_dir %>/embedded/service/gitlab-rails/bin/gitlab-backup-cli"
 
