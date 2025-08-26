@@ -369,7 +369,7 @@ GEM
     uuidtools (2.2.0)
     vault (0.18.2)
       aws-sigv4
-    webrick (1.8.1)
+    webrick (1.9.1)
     winrm (2.3.9)
       builder (>= 2.1.2)
       erubi (~> 1.8)
