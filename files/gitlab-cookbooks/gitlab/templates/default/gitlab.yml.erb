@@ -1174,6 +1174,10 @@ production: &base
     issuer_url: <%= @ci_id_tokens_issuer_url %>
   <%- end -%>
 
+  <%- if @openbao && @openbao['url'] -%>
+  openbao: <%= @openbao.to_json %>
+  <%- end -%>
+
   #
   # 5. Extra customization
   # ==========================
