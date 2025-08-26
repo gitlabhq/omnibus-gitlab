@@ -692,6 +692,11 @@ default['gitlab']['gitlab_rails']['gitlab_kas_external_url'] = nil
 default['gitlab']['gitlab_rails']['gitlab_kas_internal_url'] = nil
 default['gitlab']['gitlab_rails']['gitlab_kas_external_k8s_proxy_url'] = nil
 
+###
+# OpenBao
+###
+default['gitlab']['gitlab_rails']['openbao'] = {}
+
 ####
 # Puma
 ####
