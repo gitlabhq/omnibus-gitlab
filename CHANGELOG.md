@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.3.1 (2025-08-26)
+
+### Fixed (1 change)
+
+- [Update Mattermost to v10.10.2](gitlab-org/security/omnibus-gitlab@188ca72d1d89b17c087709c380ca212d0f656cd4)
+
 ## 18.3.0 (2025-08-20)
 
 ### Added (6 changes)
