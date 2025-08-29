@@ -27,7 +27,6 @@ RSpec.describe 'gitlab::gitlab-backup-cli' do
     chef_runner.converge('gitlab::default')
   end
 
-  let(:config_path) { '/opt/gitlab/etc/gitlab-backup-cli-config.yml' }
   let(:context_path) { '/opt/gitlab/etc/gitlab-backup-context.yml' }
 
   context 'by default' do
@@ -58,10 +57,6 @@ RSpec.describe 'gitlab::gitlab-backup-cli' do
         source: 'gitlab-backup-context.yml.erb',
         sensitive: true
       )
-    end
-
-    it 'deletes gitlab-backup-cli-config.yml template' do
-      expect(chef_run).to delete_template(config_path)
     end
 
     it 'creates a gitlab-backup user' do
