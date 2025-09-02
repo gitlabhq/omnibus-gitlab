@@ -15,13 +15,13 @@
 # limitations under the License.
 
 install_dir = node['package']['install-dir']
-gitlab_backup_cli_config_file = "#{install_dir}/etc/gitlab-backup-cli-config.yml"
+gitlab_backup_context_file = "#{install_dir}/etc/gitlab-backup-context.yml"
 
-template gitlab_backup_cli_config_file do
+template gitlab_backup_context_file do
   owner 'root'
   group 'root'
   mode  '0644'
-  source 'gitlab-backup-cli-config.yml.erb'
+  source 'gitlab-backup-context.yml.erb'
   sensitive true
 end
 

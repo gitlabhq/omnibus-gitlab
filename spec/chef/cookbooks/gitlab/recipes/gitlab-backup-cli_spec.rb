@@ -27,7 +27,7 @@ RSpec.describe 'gitlab::gitlab-backup-cli' do
     chef_runner.converge('gitlab::default')
   end
 
-  let(:template_path) { '/opt/gitlab/etc/gitlab-backup-cli-config.yml' }
+  let(:context_path) { '/opt/gitlab/etc/gitlab-backup-context.yml' }
 
   context 'by default' do
     it 'does not run' do
@@ -49,12 +49,12 @@ RSpec.describe 'gitlab::gitlab-backup-cli' do
       expect(chef_run).to include_recipe('gitlab::gitlab-backup-cli')
     end
 
-    it 'creates gitlab-backup-cli-config.yml template' do
-      expect(chef_run).to create_template(template_path).with(
+    it 'creates gitlab-backup-context.yml template' do
+      expect(chef_run).to create_template(context_path).with(
         owner: 'root',
         group: 'root',
         mode: '0644',
-        source: 'gitlab-backup-cli-config.yml.erb',
+        source: 'gitlab-backup-context.yml.erb',
         sensitive: true
       )
     end
