@@ -323,3 +323,9 @@
   - :who: Igor Drozdov
     :why: https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/clients/gopb/LICENSE
     :when: 2025-06-17 11:00:00.000000000 Z
+- - :license
+  - github.com/bsm/redislock
+  - Apache2
+  - :who: Pawel Rozlach
+    :why: https://github.com/bsm/redislock/blob/main/LICENSE
+    :when: 2025-09-01 19:43:55.000000000 Z
