@@ -33,8 +33,10 @@ Fips/MD5:
     - 'config/software/gitlab-redis-cli.rb'
     - 'config/software/gitlab-backup-cli.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/helpers/base_pg_helper.rb'
+    - 'files/gitlab-cookbooks/gitlab/libraries/postgresql.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/rails_migration_helper.rb'
     - 'files/gitlab-ctl-commands/lib/gitlab_ctl/postgresql/password_hash.rb'
+    - 'spec/chef/cookbooks/gitlab/libraries/postgresql_spec.rb'
 
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
