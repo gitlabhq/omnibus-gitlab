@@ -66,9 +66,16 @@ module Postgresql
       node_db_config = Gitlab['node']['registry']['database'] || {}
 
       # Merge each key using the fallback chain
-      %w[dbname user password port sslmode].each do |key|
+      %w[dbname user port sslmode].each do |key|
         Gitlab['postgresql']['registry'][key] ||= registry_db_config[key] || node_db_config[key]
       end
+
+      return if Gitlab['postgresql']['registry']['password'] || !registry_db_config['password']
+
+      # Convert plaintext password to PostgreSQL MD5 format
+      username = registry_db_config['user'] || node_db_config['user']
+      md5_password = Digest::MD5.hexdigest(registry_db_config['password'] + username.to_s)
+      Gitlab['postgresql']['registry']['password'] = md5_password
     end
 
     def parse_connect_port

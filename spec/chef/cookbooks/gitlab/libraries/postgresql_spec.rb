@@ -28,7 +28,7 @@ RSpec.describe Postgresql do
 
         expect(Gitlab['postgresql']['registry']['dbname']).to eq('custom_registry_db')
         expect(Gitlab['postgresql']['registry']['user']).to eq('custom_registry_user')
-        expect(Gitlab['postgresql']['registry']['password']).to eq('custom_password')
+        expect(Gitlab['postgresql']['registry']['password']).to eq(Digest::MD5.hexdigest("custom_passwordcustom_registry_user"))
         expect(Gitlab['postgresql']['registry']['port']).to eq(5433)
         expect(Gitlab['postgresql']['registry']['sslmode']).to eq('require')
       end
