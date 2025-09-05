@@ -307,7 +307,7 @@ docs-lint links:
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
 
 docs-lint hugo:
-  image: registry.gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/docs-gitlab-com-builder:hugo-0.145.0
+  image: registry.gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/docs-gitlab-com-builder:hugo-0.148.2
   stage: check
   rules:
     - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
@@ -389,7 +389,7 @@ docs-i18n-lint paths:
 
 # Test hugo build with localized documentation
 docs-lint-i18n hugo:
-  image: registry.gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/docs-gitlab-com-builder:hugo-0.145.0
+  image: registry.gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/docs-gitlab-com-builder:hugo-0.148.2
   stage: check
   rules:
     - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
