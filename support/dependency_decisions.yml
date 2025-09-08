@@ -245,9 +245,9 @@
   - "github.com/coder/websocket"
   - ISC
   - :who: Clemens Beck
-    :why: https://github.com/coder/websocket/blob/v1.8.13/LICENSE.txt
-    :versions: [ v1.8.13 ]
-    :when: 2025-03-17 14:05:00.000000000 Z
+    :why: https://github.com/coder/websocket/blob/v1.8.14/LICENSE.txt
+    :versions: [ v1.8.13, v1.8.14 ]
+    :when: 2025-09-08 06:55:00.000000000 Z
 - - :license
   - "./api"
   - MPL2
