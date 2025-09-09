@@ -22,9 +22,11 @@ RSpec.describe 'puma_config' do
         expect(content).to match(%r(^bind 'tcp://127.0.0.1:8080'))
         expect(content).to match(%r(^directory '/var/opt/gitlab/gitlab-rails/working'))
         expect(content).to match(%r(^require "/opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/cluster/lifecycle_events"$))
-        expect(content).to match(/^options = { workers: 2 }$/)
+        expect(content).to match(/  options = { workers: 2 }$/)
         expect(content).to match(/^preload_app!$/)
         expect(content).to match(%r(^require "/opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/puma_logging/json_formatter"$))
+        expect(content).to match(%r(Gitlab::Cluster::LifecycleEvents.set_puma_options options))
+        expect(content).to match(%r(Gitlab::Cluster::LifecycleEvents\.set_puma_worker_count\(2\)))
       }
     end
   end
