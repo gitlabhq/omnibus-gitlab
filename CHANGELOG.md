@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.3.2 (2025-09-09)
+
+No changes.
+
 ## 18.3.1 (2025-08-26)
 
 ### Fixed (1 change)
@@ -50,6 +54,10 @@ omnibus-gitlab repository.
 ### Other (1 change)
 
 - [Update pages max_uri_length to 2048 in gitlab.rb template](gitlab-org/omnibus-gitlab@577648c9b2d3e956101627df5ddad46ddaf7a3d7) ([merge request](gitlab-org/omnibus-gitlab!8626))
+
+## 18.2.6 (2025-09-09)
+
+No changes.
 
 ## 18.2.5 (2025-08-26)
 
@@ -107,6 +115,10 @@ No changes.
 ### Security (1 change)
 
 - [Update rsync from 3.2.7 to 3.4.1](gitlab-org/omnibus-gitlab@5deb671cb00cef4a22f0abd0000e2657658ecd4c)
+
+## 18.1.6 (2025-09-09)
+
+No changes.
 
 ## 18.1.5 (2025-08-26)
 
