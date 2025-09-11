@@ -162,8 +162,11 @@ class CertificateHelper
     # Fallback to `c_rehash` for FIPS systems that do not support `openssl rehash`.
     # NOTES:
     # - OpenSSL still exits with 0 on invalid commands.
-    # - This fallback can be removed once we drop support for AmazonLinux 2.
-    openssl_rehash_invalid = result.stderr.downcase.include?('invalid command')
+    # - This fallback can be removed once we drop support for AmazonLinux 2 and
+    #   handle multiple certificates gracefully with `openssl rehash`.
+    stderr_output = result.stderr.downcase
+    # From https://github.com/openssl/openssl/blob/a5cd06f7fff3b4484946812191097b5e080b7610/apps/rehash.c#L267-L275
+    openssl_rehash_invalid = stderr_output.include?('invalid command') || stderr_output.include?('does not contain exactly one certificate')
     result = do_shell_out_with_embedded_path("c_rehash rehash #{@trusted_certs_dir}") if openssl_rehash_invalid
 
     result.exitstatus
