@@ -19,6 +19,14 @@ RSpec.describe 'gitlab::gitlab-healthcheck' do
         .with_content(%r{flags=\(--insecure\)})
     end
 
+    it 'correctly renders the healthcheck-rc file if using proxy protocol' do
+      stub_gitlab_rb(
+        nginx: { proxy_protocol: true }
+      )
+      expect(chef_run).to render_file("/opt/gitlab/etc/gitlab-healthcheck-rc")
+        .with_content(%r{flags=\(--haproxy-protocol --insecure\)})
+    end
+
     it 'correctly renders out the healthcheck-rc file when using https' do
       stub_gitlab_rb(external_url: 'https://gitlab.example.com')
       expect(chef_run).to render_file("/opt/gitlab/etc/gitlab-healthcheck-rc")
