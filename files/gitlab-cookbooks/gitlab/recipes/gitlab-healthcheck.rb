@@ -27,6 +27,7 @@ if node['gitlab']['nginx']['enable']
   # Check first allowed_host, fallback to checking localhost
   allowed_hosts = node['gitlab']['gitlab_rails']['allowed_hosts']
   flags << "--header \"Host: #{allowed_hosts[0]}\"" unless allowed_hosts.empty?
+  flags << '--haproxy-protocol' if node['gitlab']['nginx']['proxy_protocol']
   flags << '--insecure'
   host = "localhost:#{node['gitlab']['nginx']['listen_port']}"
 else
