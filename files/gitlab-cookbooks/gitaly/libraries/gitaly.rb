@@ -29,6 +29,14 @@ module Gitaly
     end
 
     def parse_secrets
+      # The secret should be same between GitLab Rails and Gitaly.
+      # Rails has a priority of 15, which means it gets parsed before Gitaly.
+      # and Gitlab['gitlab_rails']['gitaly_token'] will already be parsed
+      # or populated with a default.
+      Gitlab['gitaly']['configuration'] ||= {}
+      Gitlab['gitaly']['configuration']['auth'] ||= {}
+      Gitlab['gitaly']['configuration']['auth']['token'] ||= Gitlab['gitlab_rails']['gitaly_token']
+
       # The secret should be same between GitLab Rails, GitLab Shell, and
       # Gitaly. GitLab Shell has a priority of 10, which means it gets parsed
       # before Gitaly and Gitlab['gitlab_shell']['secret_token'] will

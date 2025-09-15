@@ -430,6 +430,9 @@ Ubuntu-20.04-fips-branch:
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
       when: manual
       allow_failure: true
+Ubuntu-22.04-fips-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_branch_template
 
 Docker-branch-amd64:
   extends: .docker_job
@@ -734,6 +737,9 @@ AlmaLinux-9-fips:
 Ubuntu-20.04-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
+Ubuntu-22.04-fips:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:${BUILDER_IMAGE_REVISION}"
+  extends: .fips_tag_template
 
 Docker-amd64:
   extends: .docker_job
@@ -964,6 +970,13 @@ Ubuntu-20.04-fips-staging:
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+Ubuntu-22.04-fips-staging:
+  extends: .fips_staging_upload_template
+  needs:
+    - job: Ubuntu-22.04-fips
+      optional: true
+    - job: Ubuntu-22.04-fips-branch
+      optional: true
 
 ### Package releases
 Ubuntu-20.04-release:
@@ -1077,6 +1090,10 @@ Ubuntu-20.04-fips-release:
   extends: .fips_release_template
   needs:
     - Ubuntu-20.04-fips
+Ubuntu-22.04-fips-release:
+  extends: .fips_release_template
+  needs:
+    - Ubuntu-22.04-fips
 
 Docker-Release:
   extends: .docker_job
