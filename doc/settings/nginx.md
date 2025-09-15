@@ -147,9 +147,9 @@ Adjust any other environments you might have, such as monitoring checks.
 
 {{< alert type="note" >}}
 
-GitLab provides the following content on setting up a non-bundled web server for guidance only.
+GitLab provides information on setting up a non-bundled web server for guidance only.
 Troubleshooting a non-bundled component is considered [outside the scope of support](https://about.gitlab.com/support/statement-of-support/#out-of-scope-for-all-self-managed-and-saas-users). 
-If you have any questions or have issues when using a non-bundled web server, please refer to the non-bundled web server documentation.
+If you have any questions or issues when using a non-bundled web server, see the non-bundled web server documentation.
 
 {{< /alert >}}
 
