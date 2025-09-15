@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require_relative '../../package/libraries/helpers/fips_helper'
+
 account_helper = AccountHelper.new(node)
 omnibus_helper = OmnibusHelper.new(node)
 logfiles_helper = LogfilesHelper.new(node)

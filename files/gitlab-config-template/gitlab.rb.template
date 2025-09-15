@@ -283,6 +283,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Session settings
 
+###! Define custom active dispatch salts. These need to be in sync on all rails nodes.
+###! Required longer values on some FIPS systems.
 # gitlab_rails['signed_cookie_salt'] = 'signed cookie'
 # gitlab_rails['authenticated_encrypted_cookie_salt'] = 'authenticated encrypted cookie'
 

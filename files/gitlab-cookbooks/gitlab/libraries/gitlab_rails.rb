@@ -18,6 +18,7 @@ require_relative 'nginx.rb'
 require_relative '../../gitaly/libraries/gitaly.rb'
 require_relative '../../package/libraries/settings_dsl.rb'
 require_relative '../../package/libraries/helpers/redis_helper/gitlab_rails'
+require_relative '../../package/libraries/helpers/fips_helper'
 
 module GitlabRails
   ALLOWED_DATABASES = %w[main ci geo embedding sec].freeze
@@ -89,6 +90,12 @@ module GitlabRails
       Gitlab['gitlab_rails']['active_record_encryption_primary_key'] ||= [SecretsHelper.generate_alphanumeric(32)]
       Gitlab['gitlab_rails']['active_record_encryption_deterministic_key'] ||= [SecretsHelper.generate_alphanumeric(32)]
       Gitlab['gitlab_rails']['active_record_encryption_key_derivation_salt'] ||= SecretsHelper.generate_alphanumeric(32)
+
+      if FipsHelper.fips_ubuntu_22_or_newer?
+        Gitlab['gitlab_rails']['signed_cookie_salt'] ||= SecretsHelper.generate_alphanumeric(32)
+        Gitlab['gitlab_rails']['authenticated_encrypted_cookie_salt'] ||= SecretsHelper.generate_alphanumeric(32)
+        Gitlab['gitlab_rails']['gitaly_token'] ||= SecretsHelper.generate_alphanumeric(32)
+      end
 
       return unless Gitlab['gitlab_rails']['initial_root_password'].nil?
 

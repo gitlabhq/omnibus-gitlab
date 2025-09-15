@@ -93,6 +93,7 @@ RSpec.describe 'gitaly' do
     it 'populates gitaly config.toml with defaults' do
       expect(get_rendered_toml(chef_run, '/var/opt/gitlab/gitaly/config.toml')).to eq(
         {
+          auth: {},
           bin_dir: '/opt/gitlab/embedded/bin',
           git: {
             ignore_gitconfig: true,
@@ -286,6 +287,7 @@ RSpec.describe 'gitaly' do
     it 'renders config.toml with' do
       expect(get_rendered_toml(chef_run, '/var/opt/gitlab/gitaly/config.toml')).to eq(
         {
+          'auth': {},
           'gitlab-shell': {
             dir: '/opt/gitlab/embedded/service/gitlab-shell'
           },

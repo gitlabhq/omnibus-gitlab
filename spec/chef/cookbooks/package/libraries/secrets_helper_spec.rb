@@ -2,6 +2,7 @@ require 'chef_helper'
 require 'base64'
 
 RSpec.describe 'secrets' do
+  let(:newer_fips) { false }
   let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
 
   HEX_KEY = /\h{128}/.freeze
@@ -34,6 +35,7 @@ RSpec.describe 'secrets' do
     let(:new_secrets) { @new_secrets }
 
     before do
+      allow(FipsHelper).to receive(:fips_ubuntu_22_or_newer?).and_return(newer_fips)
       allow(SecretsHelper).to receive(:system)
       allow(File).to receive(:directory?).with('/etc/gitlab').and_return(true)
       allow(File).to receive(:open).with('/etc/gitlab/gitlab-secrets.json', 'w', 0600).and_yield(file).once
@@ -62,6 +64,32 @@ RSpec.describe 'secrets' do
         expect(hex_keys).to all(match(HEX_KEY))
         expect(alphanumeric_keys.flatten).to all(match(ALPHANUMERIC_KEY))
         expect(rsa_keys).to all(match(RSA_KEY))
+      end
+
+      it 'writes nil active dispatch salts' do
+        expect(new_secrets['gitlab_rails']).to have_key('signed_cookie_salt')
+        expect(new_secrets['gitlab_rails']['signed_cookie_salt']).to be_nil
+
+        expect(new_secrets['gitlab_rails']).to have_key('authenticated_encrypted_cookie_salt')
+        expect(new_secrets['gitlab_rails']['authenticated_encrypted_cookie_salt']).to be_nil
+      end
+
+      context 'on newer FIPS systems' do
+        let(:newer_fips) { true }
+
+        it 'writes active dispatch salts with a sufficient length' do
+          expect(new_secrets['gitlab_rails']['signed_cookie_salt'])
+            .to have_attributes(size: (be >= 32))
+          expect(new_secrets['gitlab_rails']['authenticated_encrypted_cookie_salt'])
+            .to have_attributes(size: (be >= 32))
+        end
+
+        it 'writes a default gitaly auth token' do
+          expect(new_secrets['gitlab_rails']['gitaly_token'])
+            .to have_attributes(size: (be >= 16))
+          expect(new_secrets['gitlab_rails']['gitaly_token'])
+            .to eq(new_secrets['gitaly']['configuration']['auth']['token'])
+        end
       end
 
       it 'does not write legacy keys' do

@@ -64,7 +64,11 @@ class SecretsHelper
       if Gitlab[k]
         v.each do |pk, p|
           # Note: Specifying a secret in gitlab.rb will take precedence over "gitlab-secrets.json"
-          Gitlab[k][pk] ||= p
+          if p.is_a?(Hash)
+            Gitlab[k][pk] = p.merge(Gitlab[k][pk] || {})
+          else
+            Gitlab[k][pk] ||= p
+          end
         end
       else
         warn("Ignoring section #{k} in #{path}, does not exist in gitlab.rb")
@@ -88,7 +92,10 @@ class SecretsHelper
         'openid_connect_signing_key' => Gitlab['gitlab_rails']['openid_connect_signing_key'],
         'active_record_encryption_primary_key' => Gitlab['gitlab_rails']['active_record_encryption_primary_key'],
         'active_record_encryption_deterministic_key' => Gitlab['gitlab_rails']['active_record_encryption_deterministic_key'],
-        'active_record_encryption_key_derivation_salt' => Gitlab['gitlab_rails']['active_record_encryption_key_derivation_salt']
+        'active_record_encryption_key_derivation_salt' => Gitlab['gitlab_rails']['active_record_encryption_key_derivation_salt'],
+        'signed_cookie_salt' => Gitlab['gitlab_rails']['signed_cookie_salt'],
+        'authenticated_encrypted_cookie_salt' => Gitlab['gitlab_rails']['authenticated_encrypted_cookie_salt'],
+        'gitaly_token' => Gitlab['gitlab_rails']['gitaly_token'],
       },
       'gitlab_pages' => {
         'gitlab_secret' => Gitlab['gitlab_pages']['gitlab_secret'],
@@ -128,7 +135,12 @@ class SecretsHelper
         'service_desk_email_auth_token' => Gitlab['mailroom']['service_desk_email_auth_token'],
       },
       'gitaly' => {
-        'gitlab_secret' => Gitlab['gitaly']['gitlab_secret']
+        'gitlab_secret' => Gitlab['gitaly']['gitlab_secret'],
+        'configuration' => {
+          'auth' => {
+            'token' => Gitlab['gitaly'].dig('configuration', 'auth', 'token'),
+          }
+        }
       }
     }
 
