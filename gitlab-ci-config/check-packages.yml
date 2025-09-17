@@ -137,6 +137,8 @@ Ubuntu-20.04-fips-check:
 Ubuntu-22.04-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:latest"
   extends: .apt-install
+  rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "true"
