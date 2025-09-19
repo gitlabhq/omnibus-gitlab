@@ -215,15 +215,18 @@ RSpec.describe OmnibusHelper do
 
     it 'stores root password to /etc/gitlab/initial_root_password' do
       content = <<~EOS
-        # WARNING: This value is valid only in the following conditions
-        #          1. If provided manually (either via `GITLAB_ROOT_PASSWORD` environment variable or via `gitlab_rails['initial_root_password']` setting in `gitlab.rb`, it was provided before database was seeded for the first time (usually, the first reconfigure run).
-        #          2. Password hasn't been changed manually, either via UI or via command line.
+        # WARNING: This password is only valid if ALL of the following are true:
+        #          • You set it manually via the GITLAB_ROOT_PASSWORD environment variable
+        #            OR the gitlab_rails['initial_root_password'] setting in /etc/gitlab/gitlab.rb
+        #          • You set it BEFORE the initial database setup (typically during first installation)
+        #          • You have NOT changed the password since then (via web UI or command line)
         #
-        #          If the password shown here doesn't work, you must reset the admin password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
+        #          If this password doesn't work, reset the admin password using:
+        #          https://docs.gitlab.com/security/reset_user_password/#reset-the-root-password
 
         Password: foobar123
 
-        # NOTE: This file will be automatically deleted in the first reconfigure run after 24 hours.
+        # NOTE: This file is automatically deleted after 24 hours on the next reconfigure run.
       EOS
 
       expect(file).to receive(:write).with(content)
@@ -319,7 +322,7 @@ RSpec.describe OmnibusHelper do
             Username: root
             Password: foobar123
 
-            NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to reset the password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
+            NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to change the password following https://docs.gitlab.com/user/profile/user_passwords/#change-your-password.
           EOS
 
           described_class.new(converge_config.node).print_root_account_details
@@ -345,7 +348,7 @@ RSpec.describe OmnibusHelper do
             Username: root
             Password: You didn't opt-in to print initial root password to STDOUT.
 
-            NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to reset the password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
+            NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to change the password following https://docs.gitlab.com/user/profile/user_passwords/#change-your-password.
           EOS
 
           described_class.new(converge_config.node).print_root_account_details

@@ -100,15 +100,18 @@ class OmnibusHelper
     return unless node['gitlab']['bootstrap']['enable']
 
     content = <<~EOS
-      # WARNING: This value is valid only in the following conditions
-      #          1. If provided manually (either via `GITLAB_ROOT_PASSWORD` environment variable or via `gitlab_rails['initial_root_password']` setting in `gitlab.rb`, it was provided before database was seeded for the first time (usually, the first reconfigure run).
-      #          2. Password hasn't been changed manually, either via UI or via command line.
+      # WARNING: This password is only valid if ALL of the following are true:
+      #          • You set it manually via the GITLAB_ROOT_PASSWORD environment variable
+      #            OR the gitlab_rails['initial_root_password'] setting in /etc/gitlab/gitlab.rb
+      #          • You set it BEFORE the initial database setup (typically during first installation)
+      #          • You have NOT changed the password since then (via web UI or command line)
       #
-      #          If the password shown here doesn't work, you must reset the admin password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
+      #          If this password doesn't work, reset the admin password using:
+      #          https://docs.gitlab.com/security/reset_user_password/#reset-the-root-password
 
       Password: #{node['gitlab']['gitlab_rails']['initial_root_password']}
 
-      # NOTE: This file will be automatically deleted in the first reconfigure run after 24 hours.
+      # NOTE: This file is automatically deleted after 24 hours on the next reconfigure run.
     EOS
 
     File.open('/etc/gitlab/initial_root_password', 'w', 0600) do |f|
@@ -149,7 +152,7 @@ class OmnibusHelper
       Username: root
       #{password_string}
 
-      NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to reset the password following https://docs.gitlab.com/ee/security/reset_user_password.html#reset-your-root-password.
+      NOTE: Because these credentials might be present in your log files in plain text, it is highly recommended to change the password following https://docs.gitlab.com/user/profile/user_passwords/#change-your-password.
     EOS
 
     LoggingHelper.note(message)
@@ -194,7 +197,7 @@ class OmnibusHelper
     message = <<~EOS
       Your OS, #{os_string}, will be deprecated soon.
       Starting with #{deprecated_os[matching_list.first]}, packages will not be built for it.
-      Switch or upgrade to a supported OS, see https://docs.gitlab.com/ee/administration/package_information/supported_os.html for more information.
+      Switch or upgrade to a supported platform, see https://docs.gitlab.com/install/package/#supported-platforms for more information.
     EOS
 
     LoggingHelper.deprecation(message)
