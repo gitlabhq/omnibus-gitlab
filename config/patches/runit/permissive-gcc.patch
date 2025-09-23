@@ -1,0 +1,8 @@
+--- a/conf-cc	2025-09-20 20:26:28.902827599 +0000
++++ b/conf-cc	2025-09-20 20:26:33.869756257 +0000
+@@ -1,4 +1,4 @@
+-gcc -O2 -Wall
++gcc -O2 -Wall -fpermissive
+ 
+ gcc -O2 -Wimplicit -Wunused -Wcomment -Wchar-subscripts -Wuninitialized -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings
+ 
