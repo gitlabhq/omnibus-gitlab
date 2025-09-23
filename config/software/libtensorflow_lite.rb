@@ -28,6 +28,7 @@ skip_transitive_dependency_licensing true
 
 build do
   env = {}
+  source_dir = "#{Omnibus::Config.source_dir}/libtensorflow_lite/"
   build_dir = "#{Omnibus::Config.source_dir}/libtensorflow_lite/tflite_build"
 
   mkdir "#{install_dir}/embedded/lib"
@@ -50,6 +51,18 @@ build do
   end
 
   command "cmake #{Omnibus::Config.source_dir}/libtensorflow_lite/tensorflow/lite/c", cwd: build_dir, env: env
+
+  # as part of the build configuration tensorflow downloads dependencies like
+  # abseil into the build directory. When we need to patch these dependencies,
+  # we must do so after the initial cmake configuration.
+  # The patches below should likely be removed after upgrading tensorflow from 2.6.0
+  if ohai['platform'] == 'debian' && ohai['platform_version'].start_with?('13')
+    patch source: 'tensorflow-standard-ints.patch', cwd: source_dir, env: env
+    patch source: 'abseil-standard-ints.patch', cwd: build_dir, env: env
+    patch source: 'flatbuffers-gcc-ignore-overflow-false-positives.patch', cwd: build_dir, env: env
+    patch source: 'xnnpack-gcc-permissive.patch', cwd: build_dir, env: env
+  end
+
   command "cmake --build . -j #{workers}", cwd: build_dir, env: env
   move "#{build_dir}/libtensorflowlite_c.*", "#{install_dir}/embedded/lib"
 end
