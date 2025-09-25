@@ -89,33 +89,9 @@ http {
   vhost_traffic_status_zone;
   <% end -%>
 
-  upstream gitlab-workhorse {
-    server <%= "unix:" if node['gitlab']['gitlab_workhorse']['listen_network'] == "unix" %><%= node['gitlab']['gitlab_workhorse']['listen_addr'] %>;
-  }
+  include upstream_definitions/*.conf;
 
-  <% if @gitlab_http_config %>
-  include <%= @gitlab_http_config %>;
-  <% end %>
-
-  <% if @gitlab_smartcard_http_config %>
-  include <%= @gitlab_smartcard_http_config %>;
-  <% end %>
-
-  <% if @gitlab_pages_http_config %>
-  include <%= @gitlab_pages_http_config %>;
-  <% end %>
-
-  <% if @gitlab_mattermost_http_config %>
-  include <%= @gitlab_mattermost_http_config %>;
-  <% end %>
-
-  <% if @gitlab_registry_http_config %>
-  include <%= @gitlab_registry_http_config %>;
-  <% end %>
-
-  <% if @gitlab_kas_http_config %>
-  include <%= @gitlab_kas_http_config %>;
-  <% end %>
+  include service_conf/*.conf;
 
   <% if @nginx_status_config %>
   include <%= @nginx_status_config %>;

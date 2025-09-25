@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'registry recipe' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service registry_database_objects)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service registry_database_objects nginx_configuration)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -29,7 +29,7 @@ RSpec.describe 'registry recipe' do
     describe 'HTTP to HTTPS redirection' do
       context 'by default' do
         it 'is enabled' do
-          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-registry.conf').with_content("return 301 https://registry.example.com$request_uri;")
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-registry.conf').with_content("return 301 https://registry.example.com$request_uri;")
         end
       end
 
@@ -45,8 +45,8 @@ RSpec.describe 'registry recipe' do
         end
 
         it 'is disabled' do
-          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-registry.conf')
-          expect(chef_run).not_to render_file('/var/opt/gitlab/nginx/conf/gitlab-registry.conf').with_content("return 301 https://registry.example.com$request_uri;")
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-registry.conf')
+          expect(chef_run).not_to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-registry.conf').with_content("return 301 https://registry.example.com$request_uri;")
         end
       end
 
@@ -59,7 +59,7 @@ RSpec.describe 'registry recipe' do
         end
 
         it 'is enabled and has correct redirect URL in nginx config' do
-          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-registry.conf').with_content("return 301 https://gitlab.example.com:5005$request_uri;")
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-registry.conf').with_content("return 301 https://gitlab.example.com:5005$request_uri;")
         end
       end
     end
@@ -709,9 +709,9 @@ RSpec.describe 'registry' do
 end
 
 RSpec.describe 'auto enabling registry' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service registry_database_objects)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service registry_database_objects nginx_configuration)).converge('gitlab::default') }
   let(:registry_config) { '/var/opt/gitlab/registry/config.yml' }
-  let(:nginx_config) { '/var/opt/gitlab/nginx/conf/gitlab-registry.conf' }
+  let(:nginx_config) { '/var/opt/gitlab/nginx/conf/service_conf/gitlab-registry.conf' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

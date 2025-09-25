@@ -2,7 +2,7 @@ require 'chef_helper'
 
 RSpec.describe 'gitlab::nginx' do
   let(:chef_runner) do
-    ChefSpec::SoloRunner.new(step_into: %w(runit_service)) do |node|
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)) do |node|
       node.normal['gitlab']['nginx']['enable'] = true
       node.normal['package']['install-dir'] = '/opt/gitlab'
     end
@@ -12,7 +12,7 @@ RSpec.describe 'gitlab::nginx' do
     chef_runner.converge('gitlab-base::config', 'gitlab::nginx')
   end
 
-  let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-http.conf' }
+  let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -69,10 +69,10 @@ RSpec.describe 'gitlab::nginx' do
 end
 
 RSpec.describe 'nginx' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)).converge('gitlab::default') }
   subject { chef_run }
 
-  let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-http.conf' }
+  let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf' }
   let(:nginx_status_config) { /include \/var\/opt\/gitlab\/nginx\/conf\/nginx-status\.conf;/ }
 
   let(:basic_nginx_headers) do
@@ -86,17 +86,28 @@ RSpec.describe 'nginx' do
 
   let(:http_conf) do
     {
+      "gitlab" => "/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf",
+      "mattermost" => "/var/opt/gitlab/nginx/conf/service_conf/gitlab-mattermost.conf",
+      "registry" => "/var/opt/gitlab/nginx/conf/service_conf/gitlab-registry.conf",
+      "pages" => "/var/opt/gitlab/nginx/conf/service_conf/gitlab-pages.conf",
+      "gitlab_kas" => "/var/opt/gitlab/nginx/conf/service_conf/gitlab-kas.conf"
+    }
+  end
+
+  let(:old_http_conf) do
+    {
       "gitlab" => "/var/opt/gitlab/nginx/conf/gitlab-http.conf",
-      "mattermost" => "/var/opt/gitlab/nginx/conf/gitlab-mattermost-http.conf",
+      "smartcard" => "/var/opt/gitlab/nginx/conf/gitlab-smartcard-http.conf",
       "registry" => "/var/opt/gitlab/nginx/conf/gitlab-registry.conf",
       "pages" => "/var/opt/gitlab/nginx/conf/gitlab-pages.conf",
+      "mattermost" => "/var/opt/gitlab/nginx/conf/gitlab-mattermost-http.conf",
       "gitlab_kas" => "/var/opt/gitlab/nginx/conf/gitlab-kas.conf"
     }
   end
 
   let(:metrics_http_conf) do
     {
-      "gitlab-health" => "/var/opt/gitlab/nginx/conf/gitlab-health.conf",
+      "gitlab-health" => "/var/opt/gitlab/nginx/conf/service_conf/gitlab-health.partial",
       "nginx-status" => "/var/opt/gitlab/nginx/conf/nginx-status.conf"
     }
   end
@@ -518,7 +529,7 @@ RSpec.describe 'nginx' do
     end
 
     context 'when smartcard authentication is enabled' do
-      let(:gitlab_smartcard_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-smartcard-http.conf' }
+      let(:gitlab_smartcard_http_config) { '/var/opt/gitlab/nginx/conf/service_conf/gitlab-smartcard.conf' }
 
       before do
         stub_gitlab_rb(
@@ -571,7 +582,7 @@ RSpec.describe 'nginx' do
     end
 
     context 'when smartcard authentication is disabled' do
-      let(:gitlab_smartcard_http_config) { '/var/opt/gitlab/nginx/conf/gitlab-smartcard-http.conf' }
+      let(:gitlab_smartcard_http_config) { '/var/opt/gitlab/nginx/conf/service_conf/gitlab-smartcard.conf' }
 
       before do
         stub_gitlab_rb(gitlab_rails: { smartcard_enabled: false })
@@ -579,6 +590,12 @@ RSpec.describe 'nginx' do
 
       it 'should not add the gitlab smartcard config' do
         expect(chef_run).not_to render_file(gitlab_smartcard_http_config)
+      end
+    end
+
+    it 'cleans old config files' do
+      old_http_conf.each do |_, conf_file|
+        expect(chef_run).to delete_template(conf_file)
       end
     end
   end
@@ -994,7 +1011,7 @@ end
 RSpec.describe 'gitlab::nginx with no total CPUs' do
   let(:chef_runner) do
     ChefSpec::SoloRunner.new(
-      step_into: %w(runit_service),
+      step_into: %w(runit_service nginx_configuration),
       path: 'spec/chef/fixtures/fauxhai/ubuntu/16.04-no-total-cpus.json')
   end
 
