@@ -100,6 +100,16 @@ No changes.
 
 - [Update pages max_uri_length to 2048 in gitlab.rb template](gitlab-org/omnibus-gitlab@577648c9b2d3e956101627df5ddad46ddaf7a3d7) ([merge request](gitlab-org/omnibus-gitlab!8626))
 
+## 18.2.7 (2025-09-25)
+
+### Fixed (1 change)
+
+- [Fall back to c_rehash if there are multiple TLS certificates](gitlab-org/security/omnibus-gitlab@75f07890195b30377a9e20832c97deee6357af00)
+
+### Security (1 change)
+
+- [Update PostgreSQL 16.8 to 16.10](gitlab-org/security/omnibus-gitlab@a49f37531d0ab44e06d25c1c16bffa6ece3b5d5c) ([merge request](gitlab-org/security/omnibus-gitlab!486))
+
 ## 18.2.6 (2025-09-09)
 
 No changes.
