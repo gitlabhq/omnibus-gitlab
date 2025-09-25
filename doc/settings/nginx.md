@@ -399,7 +399,7 @@ To add custom settings to the NGINX `server` block for GitLab:
    for the changes to take effect.
 
 This inserts the defined string at the end of the `server` block in
-`/var/opt/gitlab/nginx/conf/gitlab-http.conf`.
+`/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf`.
 
 {{< alert type="warning" >}}
 
@@ -420,7 +420,7 @@ Custom settings might conflict with settings defined elsewhere in your `gitlab.r
   Without these, any sub-location might return a 404 error.
 
 - You cannot add the root `/` location or the `/assets` location, as they already
-  exist in `gitlab-http.conf`.
+  exist in `gitlab-rails.conf`.
 
 ### Insert custom settings into the NGINX configuration
 
@@ -831,7 +831,7 @@ sudo usermod -aG gitlab-www www-data
 
 ### Templates
 
-The configuration files are similar to the [bundled GitLab NGINX configuration](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-http.conf.erb), with these differences:
+The configuration files are similar to the [bundled GitLab NGINX configuration](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/gitlab/templates/default/nginx-gitlab-rails.conf.erb), with these differences:
 
 - Passenger configuration is used instead of Puma.
 - HTTPS is not enabled by default, but you can enable it.

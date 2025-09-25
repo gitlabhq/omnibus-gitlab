@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::mattermost' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)).converge('gitlab::default') }
   let(:default_vars) do
     {
       'MM_FILESETTINGS_DIRECTORY' => '/var/opt/gitlab/mattermost/data',
@@ -261,7 +261,7 @@ RSpec.describe 'gitlab::mattermost' do
     describe 'HTTP to HTTPS redirection' do
       context 'by default' do
         it 'is enabled' do
-          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-mattermost-http.conf').with_content("return 301 https://mattermost.example.com:443$request_uri;")
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-mattermost.conf').with_content("return 301 https://mattermost.example.com:443$request_uri;")
         end
       end
 
@@ -277,8 +277,8 @@ RSpec.describe 'gitlab::mattermost' do
         end
 
         it 'is disabled' do
-          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/gitlab-mattermost-http.conf')
-          expect(chef_run).not_to render_file('/var/opt/gitlab/nginx/conf/gitlab-mattermost.conf').with_content("return 301 https://mattermost.example.com:443$request_uri;")
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-mattermost.conf')
+          expect(chef_run).not_to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-mattermost.conf').with_content("return 301 https://mattermost.example.com:443$request_uri;")
         end
       end
     end

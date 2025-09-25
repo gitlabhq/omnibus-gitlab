@@ -1,0 +1,3 @@
+upstream gitlab-workhorse {
+  server <%= "#{@workhorse_scheme}#{@workhorse_listen_addr}" %>;
+}

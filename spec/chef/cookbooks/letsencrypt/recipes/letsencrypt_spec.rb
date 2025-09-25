@@ -39,7 +39,7 @@ RSpec.describe 'enabling letsencrypt' do
 end
 
 RSpec.describe 'letsencrypt::enable' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(nginx_configuration)).converge('gitlab::default') }
   let(:node) { chef_run.node }
 
   let(:https_redirect_block) { %r!server { ## HTTPS redirect server(.*)} ## end HTTPS redirect server!m }
@@ -79,9 +79,9 @@ RSpec.describe 'letsencrypt::enable' do
       using RSpec::Parameterized::TableSyntax
 
       where(:redirect_config_key, :nginx_config_file) do
-        'nginx' | '/var/opt/gitlab/nginx/conf/gitlab-http.conf'
-        'mattermost_nginx' | '/var/opt/gitlab/nginx/conf/gitlab-mattermost-http.conf'
-        'registry_nginx' | '/var/opt/gitlab/nginx/conf/gitlab-registry.conf'
+        'nginx' | '/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf'
+        'mattermost_nginx' | '/var/opt/gitlab/nginx/conf/service_conf/gitlab-mattermost.conf'
+        'registry_nginx' | '/var/opt/gitlab/nginx/conf/service_conf/gitlab-registry.conf'
       end
 
       with_them do

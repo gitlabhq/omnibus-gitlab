@@ -20,13 +20,21 @@ omnibus_helper = OmnibusHelper.new(node)
 logfiles_helper = LogfilesHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('nginx')
 
-nginx_dir = node['gitlab']['nginx']['dir']
-nginx_conf_dir = File.join(nginx_dir, "conf")
+nginx_helper = OmnibusGitlab::NginxHelper.new(node)
+
+nginx_dir = nginx_helper.nginx_dir
+nginx_conf_dir = nginx_helper.conf_dir
+nginx_service_conf_dir = nginx_helper.service_conf_dir
+nginx_upstream_definition_dir = nginx_helper.upstream_definition_dir
+nginx_extra_metrics_dir = nginx_helper.extra_metrics_dir
 
 # These directories do not need to be writable for gitlab-www
 [
   nginx_dir,
-  nginx_conf_dir
+  nginx_conf_dir,
+  nginx_service_conf_dir,
+  nginx_upstream_definition_dir,
+  nginx_extra_metrics_dir
 ].each do |dir_name|
   directory dir_name do
     owner 'root'
@@ -52,13 +60,15 @@ end
 
 nginx_config = File.join(nginx_conf_dir, "nginx.conf")
 
-gitlab_rails_http_conf = File.join(nginx_conf_dir, "gitlab-http.conf")
-gitlab_rails_smartcard_http_conf = File.join(nginx_conf_dir, "gitlab-smartcard-http.conf")
-gitlab_rails_health_conf = File.join(nginx_conf_dir, "gitlab-health.conf")
-gitlab_pages_http_conf = File.join(nginx_conf_dir, "gitlab-pages.conf")
-gitlab_registry_http_conf = File.join(nginx_conf_dir, "gitlab-registry.conf")
-gitlab_mattermost_http_conf = File.join(nginx_conf_dir, "gitlab-mattermost-http.conf")
-gitlab_kas_http_conf = File.join(nginx_conf_dir, "gitlab-kas.conf")
+gitlab_rails_http_conf = nginx_helper.service_conf_path('rails')
+gitlab_rails_smartcard_http_conf = nginx_helper.service_conf_path('smartcard')
+# Health configuration is not to be included in global nginx.conf file. It is
+# only included from the rails conf file. Hence it gets a .partial suffix
+gitlab_rails_health_conf = nginx_helper.service_conf_path('health', suffix: 'partial')
+gitlab_pages_http_conf = nginx_helper.service_conf_path('pages')
+gitlab_registry_http_conf = nginx_helper.service_conf_path('registry')
+gitlab_mattermost_http_conf = nginx_helper.service_conf_path('mattermost')
+gitlab_kas_http_conf = nginx_helper.service_conf_path('kas')
 nginx_status_conf = File.join(nginx_conf_dir, "nginx-status.conf")
 
 # If the service is enabled, check if we are using internal nginx
@@ -159,11 +169,19 @@ nginx_gitlab_http_vars = nginx_vars.merge(
   ]
 )
 
-template gitlab_rails_http_conf do
-  source "nginx-gitlab-http.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+workhorse_scheme = node['gitlab']['gitlab_workhorse']['listen_network'] == "unix" ? "unix:" : ""
+workhorse_listen_addr = node['gitlab']['gitlab_workhorse']['listen_addr']
+
+nginx_configuration 'gitlab-workhorse-upstream' do
+  source "nginx-gitlab-workhorse-upstream.conf.erb"
+  path nginx_helper.upstream_definition_conf_path('gitlab-workhorse')
+  variables({
+              workhorse_scheme: workhorse_scheme,
+              workhorse_listen_addr: workhorse_listen_addr
+            })
+end
+
+nginx_configuration 'rails' do
   variables(
     # lazy evaluate here since letsencrypt::enable sets redirect_http_to_https to true
     lazy do
@@ -178,7 +196,7 @@ template gitlab_rails_http_conf do
       )
     end
   )
-  notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")
+
   action gitlab_rails_enabled ? :create : :delete
 end
 
@@ -197,30 +215,25 @@ gitlab_rails_smartcard_nginx_vars = {
 
 gitlab_rails_smartcard_nginx_vars['fqdn'] = node['gitlab']['gitlab_rails']['smartcard_client_certificate_required_host'] unless node['gitlab']['gitlab_rails']['smartcard_client_certificate_required_host'].nil?
 
-template gitlab_rails_smartcard_http_conf do
-  source "nginx-gitlab-http.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+nginx_configuration 'smartcard' do
+  source "nginx-gitlab-rails.conf.erb"
   variables(
     # lazy evaluate here since letsencrypt::enable sets redirect_http_to_https to true
     lazy do
       nginx_gitlab_http_vars.merge(gitlab_rails_smartcard_nginx_vars)
     end
   )
-  notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")
+
   action gitlab_rails_smartcard_enabled ? :create : :delete
 end
 
-template gitlab_rails_health_conf do
+nginx_configuration 'health' do
   source "nginx-gitlab-health.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  path gitlab_rails_health_conf
   variables(
     nginx_gitlab_http_vars
   )
-  notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")
+
   action(gitlab_rails_enabled || gitlab_rails_smartcard_enabled ? :create : :delete)
 end
 
@@ -232,18 +245,14 @@ pages_nginx_vars['https'] = if pages_nginx_vars['listen_https'].nil?
                               pages_nginx_vars['listen_https']
                             end
 
-template gitlab_pages_http_conf do
-  source "nginx-gitlab-pages-http.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+nginx_configuration 'pages' do
   variables(pages_nginx_vars.merge(
               {
                 pages_path: node['gitlab']['gitlab_rails']['pages_path'],
                 pages_listen_proxy: node['gitlab_pages']['listen_proxy']
               }
             ))
-  notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")
+
   action gitlab_pages_enabled ? :create : :delete
 end
 
@@ -251,11 +260,7 @@ registry_nginx_vars = node['gitlab']['registry_nginx'].to_hash
 
 registry_nginx_vars['https'] = registry_nginx_vars['listen_https'] unless registry_nginx_vars['listen_https'].nil?
 
-template gitlab_registry_http_conf do
-  source "nginx-gitlab-registry-http.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+nginx_configuration 'registry' do
   variables(registry_nginx_vars.merge(
               {
                 registry_api_url: node['gitlab']['gitlab_rails']['registry_api_url'],
@@ -266,7 +271,7 @@ template gitlab_registry_http_conf do
                 redirect_http_to_https: node['gitlab']['registry_nginx']['redirect_http_to_https']
               }
             ))
-  notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")
+
   action gitlab_registry_enabled ? :create : :delete
 end
 
@@ -278,11 +283,7 @@ mattermost_nginx_vars['https'] = if mattermost_nginx_vars['listen_https'].nil?
                                    mattermost_nginx_vars['listen_https']
                                  end
 
-template gitlab_mattermost_http_conf do
-  source "nginx-gitlab-mattermost-http.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+nginx_configuration 'mattermost' do
   variables(mattermost_nginx_vars.merge(
               {
                 fqdn: node['mattermost']['host'],
@@ -293,18 +294,14 @@ template gitlab_mattermost_http_conf do
                 redirect_http_to_https: node['gitlab']['mattermost_nginx']['redirect_http_to_https']
               }
             ))
-  notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")
+
   action gitlab_mattermost_enabled ? :create : :delete
 end
 
 gitlab_kas_nginx_vars = node['gitlab']['gitlab_kas_nginx'].to_hash
 gitlab_kas_nginx_vars['https'] = gitlab_kas_nginx_vars['listen_https'] unless gitlab_kas_nginx_vars['listen_https'].nil?
 
-template gitlab_kas_http_conf do
-  source 'nginx-gitlab-kas-http.conf.erb'
-  owner 'root'
-  group 'root'
-  mode '0644'
+nginx_configuration 'kas' do
   variables(gitlab_kas_nginx_vars.merge(
               {
                 fqdn: node['gitlab']['gitlab_kas_nginx']['host'],
@@ -315,8 +312,16 @@ template gitlab_kas_http_conf do
                 letsencrypt_enable: node['letsencrypt']['enable']
               }
             ))
-  notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?('nginx')
+
   action gitlab_kas_enabled ? :create : :delete
+end
+
+nginx_configuration 'rails-metrics' do
+  source "nginx-gitlab-rails-metrics.conf.erb"
+  path nginx_helper.extra_metrics_conf_path('gitlab-rails')
+  variables({
+              options: node['gitlab']['nginx']['status']['options'],
+            })
 end
 
 template nginx_status_conf do
@@ -384,5 +389,22 @@ include_recipe 'nginx::enable'
 if node['gitlab']['bootstrap']['enable']
   execute "/opt/gitlab/bin/gitlab-ctl start nginx" do
     retries 20
+  end
+end
+
+# Cleanup old config files
+# TODO: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/9316
+%w[
+  http
+  smartcard-http
+  mattermost-http
+  pages
+  registry
+  kas
+].each do |component|
+  old_conf_file = File.join(nginx_conf_dir, "gitlab-#{component}.conf")
+
+  template old_conf_file do
+    action :delete
   end
 end
