@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.3.3 (2025-09-25)
+
+### Fixed (2 changes)
+
+- [Fall back to c_rehash if there are multiple TLS certificates](gitlab-org/security/omnibus-gitlab@0d4b40e179e32828778766863ec09e77245317c9)
+- [Fix registry matadata database password creation](gitlab-org/security/omnibus-gitlab@30d46185d64b36abb660c102f0983bbff9bc39b7)
+
+### Security (1 change)
+
+- [Update PostgreSQL 16.8 to 16.10](gitlab-org/security/omnibus-gitlab@1bf9b6b14b863d064dfc124d6d86f88ae327c695) ([merge request](gitlab-org/security/omnibus-gitlab!487))
+
 ## 18.3.2 (2025-09-09)
 
 No changes.
