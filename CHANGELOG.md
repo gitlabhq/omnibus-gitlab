@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.4.1 (2025-09-25)
+
+### Security (1 change)
+
+- [Update PostgreSQL 16.8 to 16.10](gitlab-org/security/omnibus-gitlab@f3b6b2922d413de3706fd430ec184b61cc1e6639) ([merge request](gitlab-org/security/omnibus-gitlab!488))
+
 ## 18.4.0 (2025-09-17)
 
 ### Added (4 changes)
