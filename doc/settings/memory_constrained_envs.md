@@ -24,11 +24,15 @@ With some adjustments, GitLab can run comfortably on much lower specifications t
 [minimum requirements](https://docs.gitlab.com/install/requirements/) or the
 [reference architectures](https://docs.gitlab.com/administration/reference_architectures/).
 
-The following sections contain advice that allows GitLab to run in environments
-that do not meet the minimum requirements. While most GitLab parts should be
+While most GitLab parts should be
 functional with these settings in place, you may experience unexpected degradation
-of both product functionality and performance. You should be able to run GitLab
-with up to 5 developers with individual Git projects no larger than 100 MB.
+of both product functionality and performance.
+
+{{< alert type="note" >}}
+
+The following sections describe how to run GitLab with up to 5 developers with individual Git repositories no larger than 100 MB.
+
+{{< /alert >}}
 
 ## Minimum requirements for constrained environments
 
