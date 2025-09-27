@@ -36,6 +36,11 @@ build do
   # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4008
   patch source: 'log-status.patch'
 
+  # Warnings like implicit-function-declaration and incompatible-pointer-types
+  # are errors (promoted from warnings) in gcc 14 and up.
+  # That breaks this runit version so -fpermissive downgrades them.
+  patch source: 'permissive-gcc.patch'
+
   env = with_standard_compiler_flags(with_embedded_path)
 
   # Put runit where we want it, not where they tell us to
