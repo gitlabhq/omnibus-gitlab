@@ -11,6 +11,14 @@ GIT
       rspec-expectations (<= 3.12.3)
 
 GIT
+  remote: https://github.com/chef/fauxhai
+  revision: fd8e32e1eb2adcf2b2cb13fde809ad82ef464125
+  specs:
+    fauxhai-chef (9.4.10)
+      net-ssh
+      ohai (>= 13.0)
+
+GIT
   remote: https://gitlab.com/gitlab-org/omnibus.git
   revision: 1593bf41308800cbc8e51602d07e17ce1a92107a
   tag: 9.0.19.3
@@ -237,9 +245,6 @@ GEM
       faraday (>= 0.8)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
-    fauxhai-chef (9.3.26)
-      net-ssh
-      ohai (>= 13.0)
     ffi (1.17.2)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
@@ -636,6 +641,7 @@ DEPENDENCIES
   debug
   docker-api
   fantaskspec
+  fauxhai-chef (~> 9.4.10)!
   ffi (= 1.17.2)
   gitlab
   gitlab-dangerfiles (~> 4.9)
