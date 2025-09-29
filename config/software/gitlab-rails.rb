@@ -60,6 +60,13 @@ dependency 'exiftool'
 if EE
   dependency 'pgbouncer'
   dependency 'patroni'
+
+  # yarn installs both glibc and musl versions, and nodejs dynamically
+  # chooses between them at runtime. It's not easy to exclude the musl
+  # binaries without yarn v2, so let's just ignore these files
+  # because they should never be used.
+  whitelist_file %r{#{install_dir}/embedded/service/gitlab-rails/ee/frontend_islands/apps/duo_next/node_modules/lightningcss-linux-.*-musl/lightningcss\.linux-.*-musl\.node}
+  whitelist_file %r{#{install_dir}/embedded/service/gitlab-rails/ee/frontend_islands/apps/duo_next/node_modules/@tailwindcss/oxide-linux-.*-musl/tailwindcss-oxide\.linux-.*-musl\.node}
 end
 
 # libatomic is a runtime_dependency of the grpc gem for armhf/aarch64 platforms
