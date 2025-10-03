@@ -17,10 +17,9 @@
 
 name 'krb5'
 
-version = Gitlab::Version.new('krb5', 'krb5-1.17')
-
+version = Gitlab::Version.new('krb5', 'krb5-1.22.1-final')
 default_version version.print(false)
-display_version version.print(false).delete_prefix('krb5-')
+display_version version.print(false).delete_prefix('krb5-').delete_suffix('-final')
 
 license 'MIT'
 license_file 'NOTICE'
@@ -34,15 +33,6 @@ source git: version.remote
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   cwd = "#{Omnibus::Config.source_dir}/krb5/src"
-
-  # Add configure option allowing libkeyutils to be disabled even if
-  # it is detected
-  #
-  # TEMPORARY: 1.17 uses configure.in, but because autoconf is moving to
-  # having this file named configure.ac, the upstream patches that now
-  move "#{cwd}/configure.in", "#{cwd}/configure.ac"
-  patch source: 'Add-option-to-build-without-libkeyutils.patch'
-  move "#{cwd}/configure.ac", "#{cwd}/configure.in"
 
   command "autoreconf", env: env, cwd: cwd
   command './configure' \
