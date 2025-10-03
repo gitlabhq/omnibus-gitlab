@@ -1,0 +1,11 @@
+--- a/xnnpack/CMakeLists.txt	2025-09-22 06:25:50.487362940 +0000
++++ b/xnnpack/CMakeLists.txt	2025-09-22 06:26:06.396132337 +0000
+@@ -59,7 +59,7 @@
+ 
+ IF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+   # Disable "note: parameter passing for argument of type ... changed/will change in ..."
+-  ADD_COMPILE_OPTIONS("-Wno-psabi")
++  ADD_COMPILE_OPTIONS("-Wno-psabi" "-Wno-incompatible-pointer-types")
+ ENDIF()
+ 
+ # ---[ Build flags

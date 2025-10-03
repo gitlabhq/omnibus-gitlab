@@ -1,0 +1,10 @@
+--- a/abseil-cpp/absl/strings/internal/str_format/extension.h	2025-09-21 20:16:36.707536956 +0000
++++ b/abseil-cpp/absl/strings/internal/str_format/extension.h	2025-09-21 20:16:25.557915104 +0000
+@@ -21,6 +21,7 @@
+ #include <cstddef>
+ #include <cstring>
+ #include <ostream>
++#include <cstdint>
+ 
+ #include "absl/base/config.h"
+ #include "absl/base/port.h"

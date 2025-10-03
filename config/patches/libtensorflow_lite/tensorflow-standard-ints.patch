@@ -1,0 +1,10 @@
+--- a/tensorflow/lite/kernels/internal/spectrogram.cc	2025-09-21 20:38:42.471487986 +0000
++++ b/tensorflow/lite/kernels/internal/spectrogram.cc	2025-09-21 20:38:36.610839174 +0000
+@@ -17,6 +17,7 @@
+ 
+ #include <assert.h>
+ #include <math.h>
++#include <cstdint>
+ 
+ #include "third_party/fft2d/fft.h"
+ 
