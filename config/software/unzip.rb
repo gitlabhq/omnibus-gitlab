@@ -19,7 +19,7 @@
 name 'unzip'
 
 # Version tied to Debian's release, not downloaded source version.
-default_version '6.0.27'
+default_version '6.0.29'
 
 license 'Info-ZIP'
 license_file 'LICENSE'
@@ -35,6 +35,13 @@ relative_path 'unzip60'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+
+  # from https://sources.debian.org/src/unzip/6.0-29/debian/rules
+  unzip_cflags = "#{env['CFLAGS']} -DACORN_FTYPE_NFS -DWILD_STOP_AT_DIR "\
+                  "-DLARGE_FILE_SUPPORT -DUNICODE_SUPPORT -DUNICODE_WCHAR "\
+                  "-DUTF8_MAYBE_NATIVE -DNO_LCHMOD -DDATE_FORMAT=DF_YMD "\
+                  "-DIZ_HAVE_UXUIDGID -DNOMEMCPY "\
+                  "-DNO_WORKING_ISPRINT -I."
 
   # This software follows Debian as an upstream to ensure CVEs are resolved
   # and automatic scanners can detect the updated versions with fixes.
@@ -77,8 +84,11 @@ build do
   patch source: '26-cve-2019-13232-fix-bug-in-uzinflate.patch'
   patch source: '27-zipgrep-avoid-test-errors.patch'
   patch source: '28-cve-2022-0529-and-cve-2022-0530.patch'
+  patch source: '29-handle-windows-zip64-files.patch'
+  patch source: '30-drop-conflicting-declarations.patch'
+  patch source: '31-fix-zipgrep.patch'
 
   make '-f unix/Makefile clean', env: env
-  make "-j #{workers} -f unix/Makefile generic", env: env
+  make "-j #{workers} -f unix/Makefile CF='#{unzip_cflags}' unzips", env: env
   make "-f unix/Makefile prefix=#{install_dir}/embedded install", env: env
 end
