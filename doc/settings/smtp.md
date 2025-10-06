@@ -66,7 +66,7 @@ use an encrypted file for the SMTP credentials. To use this feature, you first n
 [GitLab encrypted configuration](https://docs.gitlab.com/administration/encrypted_configuration/).
 
 The encrypted configuration for SMTP exists in an encrypted YAML file. By default the file will be created at
-`/var/opt/gitlab/gitlab-rails/shared/encrypted_configuration/smtp.yaml.enc`. This location is configurable in the GitLab configuration.
+`/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/smtp.yaml.enc`. This location is configurable in the GitLab configuration.
 
 The unencrypted contents of the file should be a subset of the settings from your `smtp_*'` settings in the `gitlab_rails`
 configuration block.
