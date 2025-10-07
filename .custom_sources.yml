@@ -157,3 +157,6 @@ ncurses:
 pgbouncer:
   remote: "git@dev.gitlab.org:omnibus-mirror/pgbouncer.git"
   alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/pgbouncer.git"
+cosign:
+  remote: "git@dev.gitlab.org:omnibus-mirror/cosign.git"
+  alternative: "https://gitlab.com/gitlab-org/build/omnibus-mirror/cosign.git"

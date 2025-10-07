@@ -343,3 +343,39 @@
   - :who: Pawel Rozlach
     :why: https://github.com/bsm/redislock/blob/main/LICENSE
     :when: 2025-09-01 19:43:55.000000000 Z
+- - :license
+  - github.com/alibabacloud-go/cr-20160607
+  - Apache2
+  - :who: Sam Joan Roque-Worcel
+    :why: https://github.com/alibabacloud-go/cr-20160607/blob/master/LICENSE
+    :when: 2025-10-01 19:43:55.000000000 Z
+- - :license
+  - github.com/awslabs/amazon-ecr-credential-helper/ecr-login
+  - Apache2
+  - :who: Sam Joan Roque-Worcel
+    :why: https://github.com/awslabs/amazon-ecr-credential-helper/blob/main/LICENSE
+    :when: 2025-10-01 19:43:55.000000000 Z
+- - :license
+  - github.com/hashicorp/go-secure-stdlib/parseutil
+  - MPL2
+  - :who: Sam Joan Roque-Worcel
+    :why: https://github.com/hashicorp/go-secure-stdlib/blob/main/LICENSE 
+    :when: 2025-10-01 19:43:55.000000000 Z
+- - :license
+  - github.com/hashicorp/vault/api
+  - MPL2
+  - :who: Sam Joan Roque-Worcel
+    :why: https://github.com/hashicorp/vault/blob/main/api/LICENSE
+    :when: 2025-10-01 19:43:55.000000000 Z
+- - :license
+  - github.com/in-toto/attestation
+  - Apache2
+  - :who: Sam Joan Roque-Worcel
+    :why: https://github.com/in-toto/attestation/blob/main/LICENSE
+    :when: 2025-10-01 19:43:55.000000000 Z
+- - :license
+  - github.com/in-toto/in-toto-golang
+  - Apache2
+  - :who: Sam Joan Roque-Worcel
+    :why: https://github.com/in-toto/in-toto-golang/blob/master/LICENSE
+    :when: 2025-10-01 19:43:55.000000000 Z
