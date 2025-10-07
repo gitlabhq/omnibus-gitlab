@@ -463,6 +463,7 @@ AlmaLinux 8 knapsack: !reference [.knapsack]
 AlmaLinux 9 knapsack: !reference [.knapsack]
 Debian 11 knapsack: !reference [.knapsack]
 Debian 12 knapsack: !reference [.knapsack]
+Debian 13 knapsack: !reference [.knapsack]
 OpenSUSE 15.6 knapsack: !reference [.knapsack]
 Ubuntu 20.04 knapsack: !reference [.knapsack]
 Ubuntu 22.04 knapsack: !reference [.knapsack]
@@ -515,6 +516,12 @@ Debian 12 specs :
   parallel: 6
   needs:
   - Debian 12 knapsack
+Debian 13 specs :
+  image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/debian_13-ruby:${BUILDER_IMAGE_REVISION}"
+  extends: .chef_spec_template
+  parallel: 6
+  needs:
+  - Debian 13 knapsack
 AlmaLinux 8 specs :
   image: "${PUBLIC_BUILDER_IMAGE_REGISTRY}/almalinux_8-ruby:${BUILDER_IMAGE_REVISION}"
   extends: .chef_spec_template
