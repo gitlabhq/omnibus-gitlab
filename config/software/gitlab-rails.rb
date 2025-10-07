@@ -56,6 +56,7 @@ dependency 'unzip'
 dependency 'gpgme'
 dependency 'graphicsmagick'
 dependency 'exiftool'
+dependency 'cosign'
 
 if EE
   dependency 'pgbouncer'
