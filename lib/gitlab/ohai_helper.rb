@@ -84,6 +84,8 @@ class OhaiHelper
         'bullseye'
       when /^12/
         'bookworm'
+      when /^13/
+        'trixie'
       end
     end
 

@@ -335,6 +335,12 @@ Debian-12-branch:
 Debian-12-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
+Debian-13-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_13:${BUILDER_IMAGE_REVISION}"
+  extends: .branch_template
+Debian-13-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_13_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .arm64_branch_template
 Ubuntu-20.04-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
@@ -678,6 +684,12 @@ Debian-12:
 Debian-12-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
+Debian-13:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_13:${BUILDER_IMAGE_REVISION}"
+  extends: .tag_template
+Debian-13-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_13_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .arm64_tag_template
 Ubuntu-20.04-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
@@ -833,6 +845,20 @@ Debian-12-arm64-staging:
     - job: Debian-12-arm64
       optional: true
     - job: Debian-12-arm64-branch
+      optional: true
+Debian-13-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: Debian-13
+      optional: true
+    - job: Debian-13-branch
+      optional: true
+Debian-13-arm64-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: Debian-13-arm64
+      optional: true
+    - job: Debian-13-arm64-branch
       optional: true
 Ubuntu-20.04-arm64-staging:
   extends: .staging_upload_template
@@ -1019,6 +1045,14 @@ Debian-12-arm64-release:
   extends: .production_release_template
   needs:
     - Debian-12-arm64
+Debian-13-release:
+  extends: .production_release_template
+  needs:
+    - Debian-13
+Debian-13-arm64-release:
+  extends: .production_release_template
+  needs:
+    - Debian-13-arm64
 AlmaLinux-8-release:
   extends: .production_release_template
   needs:
