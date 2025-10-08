@@ -11,6 +11,7 @@ RSpec.describe 'logrotate' do
     let(:config_template) { chef_run.template('/opt/gitlab/sv/logrotate/log/config') }
 
     it_behaves_like "enabled runit service", "logrotate", "root", "root"
+    it_behaves_like 'a service with proper supervise directories', 'logrotate'
 
     it 'populates the files with expected configuration' do
       expect(config_template).to notify('ruby_block[reload_log_service]')

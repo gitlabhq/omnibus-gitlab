@@ -78,6 +78,7 @@ RSpec.describe 'monitoring::postgres-exporter' do
     end
 
     it_behaves_like 'enabled runit service', 'postgres-exporter', 'root', 'root'
+    it_behaves_like 'a service with proper supervise directories', 'postgres-exporter'
 
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/postgres-exporter/env').with_variables(default_vars)

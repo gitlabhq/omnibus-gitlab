@@ -78,6 +78,8 @@ RSpec.describe 'gitlab::sidekiq' do
           }
       end
     end
+
+    it_behaves_like 'a service with proper supervise directories', 'sidekiq'
   end
 
   include_examples "consul service discovery", "sidekiq", "sidekiq"

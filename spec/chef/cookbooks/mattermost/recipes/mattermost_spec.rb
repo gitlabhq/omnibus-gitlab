@@ -55,6 +55,8 @@ RSpec.describe 'gitlab::mattermost' do
       it_behaves_like "enabled runit service", "mattermost", "root", "root"
     end
 
+    it_behaves_like 'a service with proper supervise directories', 'mattermost'
+
     context 'custom user and group' do
       before do
         stub_gitlab_rb(

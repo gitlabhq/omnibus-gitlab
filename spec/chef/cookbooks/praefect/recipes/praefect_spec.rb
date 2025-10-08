@@ -445,6 +445,8 @@ RSpec.describe 'praefect' do
         end
         it_behaves_like 'enabled logged service', 'praefect', true, { log_directory_owner: 'git', log_group: 'fugee' }
       end
+
+      it_behaves_like 'a service with proper supervise directories', 'praefect'
     end
 
     include_examples "consul service discovery", "praefect", "praefect"
