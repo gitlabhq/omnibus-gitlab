@@ -108,6 +108,10 @@ No changes.
 
 - [Update pages max_uri_length to 2048 in gitlab.rb template](gitlab-org/omnibus-gitlab@577648c9b2d3e956101627df5ddad46ddaf7a3d7) ([merge request](gitlab-org/omnibus-gitlab!8626))
 
+## 18.2.8 (2025-10-08)
+
+No changes.
+
 ## 18.2.7 (2025-09-25)
 
 ### Fixed (1 change)
