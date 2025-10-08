@@ -31,7 +31,7 @@ source git: version.remote
 
 # From https://www.nginx.com/resources/admin-guide/installing-nginx-open-source/
 # Runtime dependencies
-dependency 'pcre'
+dependency 'pcre2'
 dependency 'zlib-ng'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
