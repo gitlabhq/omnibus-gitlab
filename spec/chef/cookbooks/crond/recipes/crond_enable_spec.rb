@@ -70,4 +70,6 @@ RSpec.describe 'crond::enable' do
       it_behaves_like 'enabled logged service', 'crond', true, { log_directory_owner: 'root', log_group: 'fugee' }
     end
   end
+
+  it_behaves_like 'a service with proper supervise directories', 'crond'
 end

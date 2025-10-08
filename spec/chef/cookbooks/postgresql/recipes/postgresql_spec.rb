@@ -40,6 +40,7 @@ RSpec.describe 'postgresql' do
 
   context 'with default settings' do
     it_behaves_like 'enabled runit service', 'postgresql', 'root', 'root', 'gitlab-psql', 'gitlab-psql', true
+    it_behaves_like 'a service with proper supervise directories', 'postgresql'
 
     context 'when rendering postgresql.conf' do
       it 'correctly sets the shared_preload_libraries default setting' do
@@ -369,6 +370,7 @@ RSpec.describe 'postgresql' do
     end
 
     it_behaves_like 'enabled runit service', 'postgresql', 'root', 'root', 'foo', 'bar', true
+    it_behaves_like 'a service with proper supervise directories', 'postgresql'
 
     context 'when rendering postgresql.conf' do
       it 'correctly sets the shared_preload_libraries setting' do

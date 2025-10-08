@@ -408,6 +408,8 @@ RSpec.describe 'gitlab::gitlab-pages' do
         it_behaves_like 'configured logrotate service', 'gitlab-pages', 'git', 'fugee'
         it_behaves_like 'enabled logged service', 'gitlab-pages', true, { log_directory_owner: 'git', log_group: 'fugee' }
       end
+
+      it_behaves_like 'a service with proper supervise directories', 'gitlab-pages'
     end
   end
 end

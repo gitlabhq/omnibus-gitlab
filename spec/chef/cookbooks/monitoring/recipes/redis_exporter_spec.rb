@@ -42,6 +42,7 @@ RSpec.describe 'monitoring::redis-exporter' do
     end
 
     it_behaves_like 'enabled runit service', 'redis-exporter', 'root', 'root'
+    it_behaves_like 'a service with proper supervise directories', 'redis-exporter'
 
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/redis-exporter/env').with_variables(default_vars)
@@ -85,6 +86,7 @@ RSpec.describe 'monitoring::redis-exporter' do
     end
 
     it_behaves_like 'enabled runit service', 'redis-exporter', 'root', 'root'
+    it_behaves_like 'a service with proper supervise directories', 'redis-exporter'
 
     it 'sets flags' do
       expect(chef_run).to render_file('/opt/gitlab/sv/redis-exporter/run')

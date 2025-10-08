@@ -302,6 +302,16 @@ class Chef
           action :create
         end
 
+        directory ::File.join(service_dir_name, 'supervise') do
+          mode '0755'
+          action :create
+        end
+
+        directory ::File.join(service_dir_name, 'log', 'supervise') do
+          mode '0755'
+          action :create
+        end
+
         ruby_block "wait for #{new_resource.service_name} service socket" do
           block do
             wait_for_service
@@ -314,16 +324,6 @@ class Chef
 
         # Support supervisor owner and groups http://smarden.org/runit/faq.html#user
         if new_resource.supervisor_owner || new_resource.supervisor_group
-          directory ::File.join(service_dir_name, 'supervise') do
-            mode '0755'
-            action :create
-          end
-
-          directory ::File.join(service_dir_name, 'log', 'supervise') do
-            mode '0755'
-            action :create
-          end
-
           %w(ok status control).each do |target|
             file ::File.join(service_dir_name, 'supervise', target) do
               owner new_resource.supervisor_owner || 'root'

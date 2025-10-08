@@ -111,6 +111,8 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
       it_behaves_like 'configured logrotate service', 'gitlab-workhorse', 'git', 'fugee'
       it_behaves_like 'enabled logged service', 'gitlab-workhorse', true, { log_directory_owner: 'git', log_group: 'fugee' }
     end
+
+    it_behaves_like 'a service with proper supervise directories', 'gitlab-workhorse'
   end
 
   context 'with environment variables' do
