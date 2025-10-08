@@ -36,6 +36,7 @@ RSpec.describe 'monitoring::gitlab-exporter' do
     end
 
     it_behaves_like 'enabled runit service', 'gitlab-exporter', 'root', 'root'
+    it_behaves_like 'a service with proper supervise directories', 'gitlab-exporter'
 
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitlab-exporter/env').with_variables(default_env_vars)

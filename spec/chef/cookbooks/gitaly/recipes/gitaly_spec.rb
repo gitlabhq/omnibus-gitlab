@@ -204,6 +204,8 @@ RSpec.describe 'gitaly' do
       it_behaves_like 'configured logrotate service', 'gitaly', 'git', 'fugee'
       it_behaves_like 'enabled logged service', 'gitaly', true, { log_directory_owner: 'git', log_group: 'fugee' }
     end
+
+    it_behaves_like 'a service with proper supervise directories', 'gitaly'
   end
 
   context 'sets cgroups settings' do

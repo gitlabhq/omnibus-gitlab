@@ -58,6 +58,7 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
     end
 
     it_behaves_like 'enabled runit service', 'redis', 'root', 'root'
+    it_behaves_like 'a service with proper supervise directories', 'redis'
 
     it 'uses a 0 second startup delay' do
       expect(chef_run).to render_file('/opt/gitlab/sv/redis/run')
@@ -156,6 +157,7 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
     end
 
     it_behaves_like 'enabled runit service', 'redis', 'root', 'root'
+    it_behaves_like 'a service with proper supervise directories', 'redis'
 
     it 'uses a 10 second startup delay' do
       expect(chef_run).to render_file('/opt/gitlab/sv/redis/run')

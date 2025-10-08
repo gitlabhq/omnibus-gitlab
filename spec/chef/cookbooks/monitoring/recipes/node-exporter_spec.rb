@@ -23,6 +23,7 @@ RSpec.describe 'monitoring::node-exporter' do
     end
 
     it_behaves_like 'enabled runit service', 'node-exporter', 'root', 'root'
+    it_behaves_like 'a service with proper supervise directories', 'node-exporter'
 
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/node-exporter/env').with_variables(default_vars)

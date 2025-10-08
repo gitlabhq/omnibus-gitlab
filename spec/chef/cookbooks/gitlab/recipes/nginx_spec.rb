@@ -1001,6 +1001,8 @@ RSpec.describe 'nginx' do
       it_behaves_like 'configured logrotate service', 'nginx', 'root', 'fugee'
       it_behaves_like 'enabled logged service', 'nginx', true, { log_directory_owner: 'root', log_group: 'fugee' }
     end
+
+    it_behaves_like 'a service with proper supervise directories', 'nginx'
   end
 
   def nginx_headers(additional_headers)

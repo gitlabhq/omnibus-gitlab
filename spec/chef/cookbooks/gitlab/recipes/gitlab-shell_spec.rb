@@ -394,5 +394,7 @@ RSpec.describe 'gitlab::gitlab-shell' do
         it_behaves_like 'enabled logged service', 'gitlab-sshd', false, { log_directory_owner: 'git', log_group: 'fugee' }
       end
     end
+
+    it_behaves_like 'a service with proper supervise directories', 'gitlab-sshd'
   end
 end

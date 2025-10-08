@@ -81,6 +81,8 @@ RSpec.describe 'spamcheck' do
 
       it_behaves_like "enabled runit service", "spamcheck", "root", "root"
       it_behaves_like "enabled runit service", "spam-classifier", "root", "root"
+      it_behaves_like 'a service with proper supervise directories', 'spamcheck'
+      it_behaves_like 'a service with proper supervise directories', 'spam-classifier'
 
       it 'creates runit files for spamcheck service' do
         expected_content = <<~EOS
@@ -239,6 +241,8 @@ RSpec.describe 'spamcheck' do
 
       it_behaves_like "enabled runit service", "spamcheck", "root", "root"
       it_behaves_like "enabled runit service", "spam-classifier", "root", "root"
+      it_behaves_like 'a service with proper supervise directories', 'spamcheck'
+      it_behaves_like 'a service with proper supervise directories', 'spam-classifier'
 
       it 'creates runit files for spamcheck service' do
         expected_content = <<~EOS

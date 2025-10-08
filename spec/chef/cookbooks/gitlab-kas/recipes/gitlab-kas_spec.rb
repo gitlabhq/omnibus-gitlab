@@ -708,6 +708,8 @@ RSpec.describe 'gitlab-kas' do
         it_behaves_like 'configured logrotate service', 'gitlab-kas', 'git', 'fugee'
         it_behaves_like 'enabled logged service', 'gitlab-kas', true, { log_directory_owner: 'git', log_group: 'fugee' }
       end
+
+      it_behaves_like 'a service with proper supervise directories', 'gitlab-kas'
     end
   end
 

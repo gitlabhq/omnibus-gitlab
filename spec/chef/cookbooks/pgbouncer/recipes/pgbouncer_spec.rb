@@ -56,6 +56,7 @@ RSpec.describe 'pgbouncer' do
     end
 
     it_behaves_like 'enabled runit service', 'pgbouncer', 'root', 'root'
+    it_behaves_like 'a service with proper supervise directories', 'pgbouncer'
 
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/pgbouncer/env').with_variables(default_vars)

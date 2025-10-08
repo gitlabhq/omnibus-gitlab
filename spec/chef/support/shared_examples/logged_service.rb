@@ -31,3 +31,17 @@ RSpec.shared_examples 'enabled logged service' do |svc_name, is_runit = false, s
     end
   end
 end
+
+RSpec.shared_examples 'a service with proper supervise directories' do |svc_name|
+  it 'creates the supervise directory with 0755 permissions' do
+    expect(chef_run).to create_directory("/opt/gitlab/service/#{svc_name}/supervise").with(
+      mode: '0755'
+    )
+  end
+
+  it 'creates the log supervise directory with 0755 permissions' do
+    expect(chef_run).to create_directory("/opt/gitlab/service/#{svc_name}/log/supervise").with(
+      mode: '0755'
+    )
+  end
+end

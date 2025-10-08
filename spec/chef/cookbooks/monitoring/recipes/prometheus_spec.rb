@@ -418,6 +418,7 @@ RSpec.describe 'monitoring::prometheus' do
     end
 
     it_behaves_like 'enabled runit service', 'prometheus', 'root', 'root'
+    it_behaves_like 'a service with proper supervise directories', 'prometheus'
 
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/prometheus/env').with_variables(default_vars)
