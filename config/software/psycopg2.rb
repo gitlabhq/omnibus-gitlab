@@ -16,7 +16,7 @@
 #
 
 name 'psycopg2'
-version = Gitlab::Version.new('psycopg2', '2_8_6')
+version = Gitlab::Version.new('psycopg2', '2.9.10')
 default_version version.print(false)
 
 license 'LGPL'
