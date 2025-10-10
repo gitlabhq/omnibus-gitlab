@@ -591,31 +591,25 @@ setting the `GITLAB_SKIP_PG_UPGRADE` environment variable to `true`.
 
 {{< alert type="warning" >}}
 
-This operation will revert your current database, including its data, to its state
-before your last upgrade. Be sure to create a backup before attempting to downgrade
-your packaged PostgreSQL database.
+This operation reverts your current database, including its data, to its state before your last upgrade. Be sure to
+create a backup before attempting to revert your packaged PostgreSQL database.
 
 {{< /alert >}}
 
-On GitLab versions which ship multiple PostgreSQL versions, users can downgrade
-an already upgraded PostgreSQL version to the earlier version using the `gitlab-ctl
-revert-pg-upgrade` command. This command also supports the `-V` flag to specify
-a target version for scenarios where more than two PostgreSQL versions are shipped in
-the package (for example: GitLab 12.8 where PostgreSQL 9.6.x, 10.x, and 11.x are
-shipped).
-
-To specify a target PostgreSQL version of 14:
+Earlier versions of the Linux package bundle multiple versions of PostgreSQL. If you use one of these versions, you can
+use the `gitlab-ctl revert-pg-upgrade` command to revert to an earlier PostgreSQL version supported by the Linux package.
+This command also supports the `-V` flag to specify a target version. For example, to revert to PostgreSQL version 14:
 
 ```shell
 gitlab-ctl revert-pg-upgrade -V 14
 ```
 
-If the target version is not specified, it will use the version in `/var/opt/gitlab/postgresql-version.old`
+If the target version is not specified, the command uses the version in `/var/opt/gitlab/postgresql-version.old`
 if available. Otherwise, it falls back to the default version shipped with GitLab.
 
-On other GitLab versions that ship only one PostgreSQL version, you can't
-downgrade your PostgreSQL version. You must downgrade GitLab to an older version for
-this.
+If you use a version of the Linux package that ships only one PostgreSQL version, you can't revert your PostgreSQL
+version. For these versions of the Linux package, you must roll back GitLab to an earlier version to use an earlier
+version of PostgreSQL.
 
 ### Configuring multiple database connections
 
