@@ -24,7 +24,8 @@ if [ -n "${PID}" ]; then
     # Wait for graceful shutdown with timeout set with SVWAIT
     echo "Waiting up to ${TIMEOUT} seconds for service to shutdown safely"
 
-    for _i in $(seq 1 "${TIMEOUT}"); do
+    _i=1
+    while [ "$_i" -le "$TIMEOUT" ]; do
         if ! kill -0 "${PID}" 2>/dev/null; then
             # Process has terminated
             echo "Process has terminated"
@@ -33,6 +34,7 @@ if [ -n "${PID}" ]; then
         fi
 
         sleep 1
+        _i=$(( _i + 1 ))
     done
 
     # Send SIGQUIT for immediate shutdown
