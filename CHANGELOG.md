@@ -3,6 +3,29 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.5.0 (2025-10-15)
+
+### Added (1 change)
+
+- [Provide packages for Debian 13](gitlab-org/omnibus-gitlab@9785430e59653631c50a6e32037b20cd517e7da6) ([merge request](gitlab-org/omnibus-gitlab!8718))
+
+### Fixed (2 changes)
+
+- [Use 0755 permissions for all supervise directories](gitlab-org/omnibus-gitlab@1f0f28658bdafa72c527ef2576463b23ff369d65) by @hristiyan.ivanov ([merge request](gitlab-org/omnibus-gitlab!8748))
+- [Install tzdata-legacy in Dockerfile](gitlab-org/omnibus-gitlab@3b0447c5fcb98a523b06af3e9c336b7e20766797) ([merge request](gitlab-org/omnibus-gitlab!8759))
+
+### Changed (5 changes)
+
+- [Bump container-registry to v4.28.0-gitlab](gitlab-org/omnibus-gitlab@e21a72bcbea4293623bf59eacf81b7c89333e3d7) ([merge request](gitlab-org/omnibus-gitlab!8746))
+- [Update dependency python/cpython to v3.9.24](gitlab-org/omnibus-gitlab@3bc7932c050701cee06477a9c23cc0399471b06d) ([merge request](gitlab-org/omnibus-gitlab!8781))
+- [Add cosign binary to gitab-rails](gitlab-org/omnibus-gitlab@eae5bfabc4eda99bfb64871fa7874500b4faad3d) ([merge request](gitlab-org/omnibus-gitlab!8724))
+- [Update unzip to 6.0.29](gitlab-org/omnibus-gitlab@6b909786557569c5db689333b368e7474e2b35f8) ([merge request](gitlab-org/omnibus-gitlab!8745))
+- [Refactor post-installation messages](gitlab-org/omnibus-gitlab@e8e97b038f51e04e88e528008d9a7cf1d8cae88e) ([merge request](gitlab-org/omnibus-gitlab!8737))
+
+### Security (1 change)
+
+- [Update PostgreSQL 16.8 to 16.10](gitlab-org/omnibus-gitlab@6cf1dc30f8259915730ecfb89f10eae33811d566)
+
 ## 18.4.2 (2025-10-08)
 
 No changes.
