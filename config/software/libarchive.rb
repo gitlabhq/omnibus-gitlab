@@ -15,7 +15,7 @@
 #
 
 name 'libarchive'
-default_version '3.8.1'
+default_version '3.8.2'
 
 license 'BSD-2-Clause'
 license_file 'COPYING'
