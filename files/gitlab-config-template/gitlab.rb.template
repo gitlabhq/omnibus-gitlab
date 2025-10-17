@@ -1144,7 +1144,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     'name' => 'test_endpoint',
 #     'url' => 'https://gitlab.example.com/notify2',
 #     'timeout' => '500ms',
-#     'threshold' => 5, # DEPRECATED: use maxretries instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243
+#     'threshold' => 5, # DEPRECATED: use maxretries instead https://docs.gitlab.com/administration/packages/container_registry/#configure-container-registry-notifications
 #     'maxretries' => 5,
 #     'backoff' => '1s',
 #     'headers' => {
