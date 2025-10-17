@@ -75,7 +75,7 @@ RSpec.describe 'patroni cookbook' do
           bin_dir: '/opt/gitlab/embedded/bin',
           data_dir: '/var/opt/gitlab/postgresql/data',
           config_dir: '/var/opt/gitlab/postgresql/data',
-          listen: :'5432',
+          listen: ":5432",
           connect_address: "#{Patroni.private_ipv4}:5432",
           use_unix_socket: true,
           parameters: {
@@ -129,7 +129,7 @@ RSpec.describe 'patroni cookbook' do
           }
         },
         restapi: {
-          listen: :'8008',
+          listen: ":8008",
           connect_address: "#{Patroni.private_ipv4}:8008",
           allowlist_include_members: false
         },
@@ -153,7 +153,7 @@ RSpec.describe 'patroni cookbook' do
           bin_dir: '/opt/gitlab/embedded/bin',
           data_dir: '/var/opt/gitlab/postgresql/data',
           config_dir: '/var/opt/gitlab/postgresql/data',
-          listen: :'5432',
+          listen: ':5432',
           connect_address: "#{Patroni.private_ipv4}:5432",
           use_unix_socket: true,
           parameters: {
@@ -207,7 +207,7 @@ RSpec.describe 'patroni cookbook' do
           }
         },
         restapi: {
-          listen: :'8008',
+          listen: ':8008',
           connect_address: "#{Patroni.private_ipv4}:8008",
           allowlist_include_members: false
         },
@@ -272,8 +272,11 @@ RSpec.describe 'patroni cookbook' do
           pgbouncer_user: 'test_pgbouncer_user',
           pgbouncer_user_password: '2bc94731612abb74aea7805a41dfcb09',
           connect_port: 15432,
+          listen_address: '[::]',
+          port: 5555,
         },
         patroni: {
+          listen_address: '[::1]',
           enable: true,
           scope: 'test-scope',
           name: 'test-node-name',
@@ -283,12 +286,12 @@ RSpec.describe 'patroni cookbook' do
           master_start_timeout: 600,
           use_slots: false,
           use_pg_rewind: true,
-          connect_address: '1.2.3.4',
+          connect_address: '[::ffff:1.2.3.4]',
           connect_port: 18008,
           username: 'gitlab',
           password: 'restapipassword',
           replication_password: 'fakepassword',
-          allowlist: ['1.2.3.4/32', '127.0.0.1/32'],
+          allowlist: ['1.2.3.4/32', '127.0.0.1/32', '::ffff:1.1.1.1/128'],
           allowlist_include_members: false,
           remove_data_directory_on_diverged_timelines: true,
           remove_data_directory_on_rewind_failure: true,
@@ -331,7 +334,8 @@ RSpec.describe 'patroni cookbook' do
           }
         )
         expect(cfg[:consul][:service_check_interval]).to eq('20s')
-        expect(cfg[:postgresql][:connect_address]).to eq('1.2.3.4:15432')
+        expect(cfg[:postgresql][:listen]).to eq('[::]:5555')
+        expect(cfg[:postgresql][:connect_address]).to eq('[::ffff:1.2.3.4]:15432')
         expect(cfg[:postgresql][:authentication]).to eq(
           superuser: {
             username: 'test_psql_user'
@@ -348,12 +352,13 @@ RSpec.describe 'patroni cookbook' do
           restore_command: "/opt/wal-g/bin/wal-g wal-fetch %f %p"
         )
         expect(cfg[:restapi]).to include(
-          connect_address: '1.2.3.4:18008',
+          listen: '[::1]:8008',
+          connect_address: '[::ffff:1.2.3.4]:18008',
           authentication: {
             username: 'gitlab',
             password: 'restapipassword'
           },
-          allowlist: ['1.2.3.4/32', '127.0.0.1/32'],
+          allowlist: ['1.2.3.4/32', '127.0.0.1/32', '::ffff:1.1.1.1/128'],
           allowlist_include_members: false
         )
         expect(cfg[:bootstrap][:dcs]).to include(

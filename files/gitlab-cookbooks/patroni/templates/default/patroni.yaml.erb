@@ -10,8 +10,8 @@ postgresql:
   bin_dir: <%= "#{node['package']['install-dir']}/embedded/bin" %>
   data_dir: <%= File.join(@postgresql_defaults['dir'], 'data') %>
   config_dir: <%= File.join(@postgresql_defaults['dir'], 'data') %>
-  listen: <%= @postgresql_defaults['listen_address'] %>:<%= @postgresql_defaults['port'] %>
-  connect_address: <%= @connect_address %>:<%= @postgresql_defaults['connect_port'] %>
+  listen: "<%= "#{@postgresql_defaults['listen_address']}:#{@postgresql_defaults['port']}" %>"
+  connect_address: "<%= "#{@connect_address}:#{@postgresql_defaults['connect_port']}" %>"
   use_unix_socket: true
   parameters:
     unix_socket_directories: <%= @postgresql_defaults['unix_socket_directory'] %>
@@ -39,8 +39,8 @@ bootstrap:
   gitlab_ctl:
     command: /opt/gitlab/bin/gitlab-ctl patroni bootstrap --srcdir=<%= File.join(@dir, 'data') %>
 restapi:
-  listen: <%= @listen_address %>:<%= @port %>
-  connect_address: <%= @connect_address %>:<%= @connect_port %>
+  listen: "<%= "#{@listen_address}:#{@port}" %>"
+  connect_address: "<%= "#{@connect_address}:#{@connect_port}" %>"
   <% if @username %>
   authentication:
     username: <%= @username %>
@@ -49,7 +49,7 @@ restapi:
   <% unless @allowlist.nil? || @allowlist.empty? %>
   allowlist:
   <% @allowlist.each do |cidr| %>
-    - <%= cidr %>
+    - "<%= cidr %>"
   <% end %>
   <% end %>
   allowlist_include_members: <%= @allowlist_include_members %>
