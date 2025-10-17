@@ -8,7 +8,7 @@ title: Building `omnibus-gitlab` packages and Docker images locally
 {{< alert type="note" >}}
 
 If you are a GitLab team member, you have access to our CI infrastructure which
-can be used to build these artifacts. Check the [documentation](team_member_docs.md)
+can be used to build these artifacts. Check the [documentation](../development/team_members.md)
 for more details.
 
 {{< /alert >}}
