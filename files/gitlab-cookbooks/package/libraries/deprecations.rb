@@ -32,11 +32,14 @@ module Gitlab
         # this method.
         # deprecations += identify_deprecated_config(existing_config, ['gitlab', 'foobar'], {}, "13.12", "14.0", "Support for foobar will be removed in GitLab 14.0")
         [
+          # NOTE(prozlach): Ideally we would remove this option in 22.0 but
+          # this would consist a braking change. So for now we just set a
+          # far-away-in-the-future deprecation version.
           {
             config_keys: %w(registry default_notifications_threshold),
             deprecation: '17.1',
-            removal: '19.0',
-            note: "`registry['default_notifications_threshold'] will be removed in 19.0. Please use `default_notifications_maxretries` instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243."
+            removal: '23.0',
+            note: "`registry['default_notifications_threshold'] will be removed in 23.0. Please use `default_notifications_maxretries` instead https://docs.gitlab.com/administration/packages/container_registry/#configure-container-registry-notifications."
           },
           {
             config_keys: %w(gitlab gitlab_shell migration),
