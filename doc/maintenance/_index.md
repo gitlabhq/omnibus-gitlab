@@ -203,7 +203,7 @@ changes to projects, you can [set projects as read-only](https://docs.gitlab.com
 If required for security purposes, you can rotate the `/etc/gitlab/gitlab-secrets.json` secrets file. In this file:
 
 - Do not rotate the `gitlab_rails` secrets because it contains the database encryption keys. If this secret is rotated, you see the same
-  behavior as [when the secrets file is lost](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#when-the-secrets-file-is-lost).
+  behavior as [when the secrets file is lost](https://docs.gitlab.com/administration/backup_restore/troubleshooting_backup_gitlab/#when-the-secrets-file-is-lost).
 - You can rotate all other secrets.
 
 If you have multiple nodes in your GitLab environment, choose one of your Rails node to perform the initial steps.
