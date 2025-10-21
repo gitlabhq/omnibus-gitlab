@@ -16,7 +16,7 @@ module GitlabCtl
       end
 
       def min_version
-        ENV['MIN_VERSION'] || '18.2'.freeze
+        ENV['MIN_VERSION'] || '18.5'.freeze
       end
     end
   end
