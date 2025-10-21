@@ -15,7 +15,7 @@
 #
 
 name 'libgpg-error'
-default_version '1.46'
+default_version '1.56'
 
 license 'LGPL-2.1'
 license_file 'COPYING.LIB'
@@ -23,7 +23,7 @@ license_file 'COPYING.LIB'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-#{version}.tar.bz2",
-       sha256: 'b7e11a64246bbe5ef37748de43b245abd72cfcd53c9ae5e7fc5ca59f1c81268d'
+       sha256: '82c3d2deb4ad96ad3925d6f9f124fe7205716055ab50e291116ef27975d169c0'
 
 relative_path "libgpg-error-#{version}"
 
