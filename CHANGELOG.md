@@ -30,6 +30,10 @@ No changes.
 
 - [Update PostgreSQL 16.8 to 16.10](gitlab-org/omnibus-gitlab@6cf1dc30f8259915730ecfb89f10eae33811d566)
 
+## 18.4.3 (2025-10-21)
+
+No changes.
+
 ## 18.4.2 (2025-10-08)
 
 No changes.
