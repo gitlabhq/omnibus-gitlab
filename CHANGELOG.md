@@ -72,6 +72,10 @@ No changes.
 - [Update dependency nginx-module-vts to v0.2.4](gitlab-org/omnibus-gitlab@d252971ee66e884423776c68a3af62ae9641fa45) ([merge request](gitlab-org/omnibus-gitlab!8452))
 - [Enable amcheck extension for postgres](gitlab-org/omnibus-gitlab@650078f9b655327e73c3a24f36db55aea4c90490) ([merge request](gitlab-org/omnibus-gitlab!8589))
 
+## 18.3.5 (2025-10-21)
+
+No changes.
+
 ## 18.3.4 (2025-10-08)
 
 No changes.
