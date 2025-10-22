@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.5.1 (2025-10-21)
+
+No changes.
+
 ## 18.5.0 (2025-10-15)
 
 ### Added (1 change)
@@ -25,6 +29,10 @@ omnibus-gitlab repository.
 ### Security (1 change)
 
 - [Update PostgreSQL 16.8 to 16.10](gitlab-org/omnibus-gitlab@6cf1dc30f8259915730ecfb89f10eae33811d566)
+
+## 18.4.3 (2025-10-21)
+
+No changes.
 
 ## 18.4.2 (2025-10-08)
 
@@ -63,6 +71,10 @@ No changes.
 - [Update dependency container-registry to v4.26.1-gitlab](gitlab-org/omnibus-gitlab@7fc1e2bd84a3e49d8eab09f413b1abda3888645d) ([merge request](gitlab-org/omnibus-gitlab!8655))
 - [Update dependency nginx-module-vts to v0.2.4](gitlab-org/omnibus-gitlab@d252971ee66e884423776c68a3af62ae9641fa45) ([merge request](gitlab-org/omnibus-gitlab!8452))
 - [Enable amcheck extension for postgres](gitlab-org/omnibus-gitlab@650078f9b655327e73c3a24f36db55aea4c90490) ([merge request](gitlab-org/omnibus-gitlab!8589))
+
+## 18.3.5 (2025-10-21)
+
+No changes.
 
 ## 18.3.4 (2025-10-08)
 
