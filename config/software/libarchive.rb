@@ -23,7 +23,7 @@ license_file 'COPYING'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.libarchive.org/downloads/libarchive-#{version}.tar.gz",
-       sha256: 'bde832a5e3344dc723cfe9cc37f8e54bde04565bfe6f136bc1bd31ab352e9fab'
+       sha256: '5f2d3c2fde8dc44583a61165549dc50ba8a37c5947c90fc02c8e5ce7f1cfb80d'
 
 relative_path "libarchive-#{version}"
 
