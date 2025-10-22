@@ -543,7 +543,7 @@ RSpec.describe 'nginx' do
       it 'listens on a separate port' do
         expect(chef_run).to render_file(gitlab_smartcard_http_config).with_content { |content|
           expect(content).to include('server_name fauxhai.local;')
-          expect(content).to include('listen *:3444 ssl;')
+          expect(content).to include('listen *:3444 default_server ssl;')
           expect(content).to include('http2 on;')
         }
       end
@@ -574,7 +574,7 @@ RSpec.describe 'nginx' do
         it 'sets smartcard nginx server name' do
           expect(chef_run).to render_file(gitlab_smartcard_http_config).with_content { |content|
             expect(content).to include('server_name smartcard.fauxhai.local;')
-            expect(content).to include('listen *:3444 ssl;')
+            expect(content).to include('listen *:3444 default_server ssl;')
             expect(content).to include('http2 on;')
           }
         end
@@ -851,9 +851,14 @@ RSpec.describe 'nginx' do
       end
 
       it 'applies nginx proxy_protocol settings' do
-        http_conf.each_value do |conf|
+        http_conf.each do |key, conf|
           expect(chef_run).to render_file(conf).with_content { |content|
-            expect(content).to match(/listen .*:\d+ proxy_protocol/)
+            if key == 'gitlab'
+              expect(content).to match(/listen .*:\d+ default_server proxy_protocol/)
+            else
+              expect(content).to match(/listen .*:\d+ proxy_protocol/)
+            end
+
             expect(content).to include('real_ip_header proxy_protocol;')
             expect(content).to include('proxy_set_header X-Real-IP $proxy_protocol_addr;')
             expect(content).to include('proxy_set_header X-Forwarded-For $proxy_protocol_addr;')
