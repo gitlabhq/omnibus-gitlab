@@ -263,7 +263,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             sentry_environment: 'production',
             headers: ['X-XSS-Protection: 1; mode=block', 'X-Content-Type-Options: nosniff', 'Test: Header'],
             server_shutdown_timeout: "30s",
-            gitlab_client_http_timeout: "10s",
+            gitlab_client_http_timeout: "60s",
             gitlab_client_jwt_expiry: "30s",
             zip_cache_expiration: "120s",
             zip_cache_cleanup: "1m",
@@ -342,7 +342,7 @@ RSpec.describe 'gitlab::gitlab-pages' do
             tls-min-version=tls1.0
             tls-max-version=tls1.2
             server-shutdown-timeout=30s
-            gitlab-client-http-timeout=10s
+            gitlab-client-http-timeout=60s
             gitlab-client-jwt-expiry=30s
             listen-http=external_pages.example.com,localhost:9000
             listen-https=external_pages.example.com,localhost:9001
