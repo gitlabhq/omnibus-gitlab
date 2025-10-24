@@ -1,0 +1,10 @@
+--- a/autogen.sh	2025-10-21 13:50:51.892038494 +0200
++++ b/autogen.sh	2025-10-21 13:51:42.518294671 +0200
+@@ -4,6 +4,7 @@
+ 
+ set -x
+ 
++libtoolize --force --copy || retval=$?
+ autoreconf --install --force || retval=$?
+ 
+ exit $retval
