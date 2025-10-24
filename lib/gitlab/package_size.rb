@@ -46,9 +46,11 @@ class PackageSizeCheck
       package_size = File.read(package_sizefile).strip.to_i / 1024.0**2
       success = package_size <= permitted_size
 
+      puts "Package size #{package_size.round(2)} MB"
+
       return if success
 
-      puts "Package size #{package_size.round(2)}MB above threshold of #{permitted_size}MB."
+      puts "Package size is above threshold of #{permitted_size} MB."
       alert(package_size, permitted_size)
       exit 1
     end
