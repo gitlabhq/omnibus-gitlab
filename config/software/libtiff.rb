@@ -15,7 +15,7 @@
 #
 
 name 'libtiff'
-version = Gitlab::Version.new('libtiff', 'v4.7.0')
+version = Gitlab::Version.new('libtiff', 'v4.7.1')
 
 default_version version.print(false)
 
@@ -35,9 +35,14 @@ source git: version.remote
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  env['CFLAGS'] = "-std=c99 #{env['CFLAGS']}" if ohai['platform'] == 'suse' &&
+    ohai['platform_version'].start_with?('12.')
+
   # Patch the code to download config.guess and config.sub. We instead copy
   # the ones we vendor to the correct location.
   patch source: 'remove-config-guess-sub-download.patch'
+
+  patch source: 'add-libtoolize-call-to-autogen.patch'
 
   command './autogen.sh', env: env
   update_config_guess(target: 'config')

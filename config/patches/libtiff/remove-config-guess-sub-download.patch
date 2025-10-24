@@ -1,21 +1,21 @@
-diff --git a/autogen.sh b/autogen.sh
-index 2e6c6bd0..544c99aa 100755
---- a/autogen.sh
-+++ b/autogen.sh
-@@ -16,16 +16,5 @@ aclocal -I ./m4 || retval=$?
- autoheader || retval=$?
- automake --foreign --add-missing --copy || retval=$?
- autoconf || retval=$?
+--- a/autogen.sh	2025-09-30 08:20:30.410715017 +0000
++++ b/autogen.sh	2025-09-30 08:20:53.344761706 +0000
+@@ -6,18 +6,4 @@
+ 
+ autoreconf --install --force || retval=$?
+ 
 -# Get latest config.guess and config.sub from upstream master since
--# these are often out of date.
+-# these are often out of date.  This requires network connectivity and
+-# sometimes the site is down, a failure here does not result in
+-# failure of the whole script.
 -for file in config.guess config.sub
 -do
 -    echo "$0: getting $file..."
--    wget -q --timeout=5 -O config/$file.tmp \
+-    wget --timeout=5 -O config/$file.tmp \
 -      "https://git.savannah.gnu.org/cgit/config.git/plain/${file}" \
 -      && mv -f config/$file.tmp config/$file \
--      && chmod a+x config/$file || retval=$?
+-      && chmod a+x config/$file
 -    rm -f config/$file.tmp
 -done
-
+-
  exit $retval
