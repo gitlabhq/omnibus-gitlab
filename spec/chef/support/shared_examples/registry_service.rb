@@ -98,4 +98,8 @@ RSpec.shared_examples 'enabled registry service' do
     expect(chef_run.node['registry']['storage']['delete'])
       .to eql('enabled' => true)
   end
+
+  it 'configures runit service with supervisor_group' do
+    expect(chef_run).to enable_runit_service('registry').with(supervisor_group: 'registry')
+  end
 end
