@@ -98,6 +98,8 @@ runit_service 'registry' do
     log_group: logging_settings[:runit_group],
     log_format: log_format
   }.merge(params))
+  supervisor_owner account_helper.registry_user
+  supervisor_group account_helper.registry_group
   log_options logging_settings[:options]
 end
 
