@@ -1,5 +1,6 @@
-# registry/recipes/database_objects.rb
-
+# CAUTION: This recipe is only to be used by the PostgreSQL node
+# because it's the only node which has access to the `postgresql`
+# user with permission to create database objects.
 pg_helper = PgHelper.new(node)
 
 registry_database_objects 'default' do
@@ -7,5 +8,4 @@ registry_database_objects 'default' do
   action :create
   only_if { node.dig('postgresql', 'enable') }
   not_if { pg_helper.replica? }
-  # TODO: notifies :create, 'registry_database_migrations[up]', :immediately if pg_helper.is_ready?
 end
