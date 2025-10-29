@@ -208,7 +208,10 @@ RSpec.describe 'registry recipe' do
           } }
       end
 
-      before { stub_gitlab_rb(registry: { database: database_config }) }
+      before do
+        stub_gitlab_rb(registry: { database: database_config })
+        allow_any_instance_of(RegistryPgHelper).to receive(:is_ready?).and_return(true)
+      end
 
       it 'creates registry config with database' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')

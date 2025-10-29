@@ -14,9 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+registry_pg_helper = RegistryPgHelper.new(node)
 
 # Run database migrations for the Container Registry
 registry_database_migrations 'registry' do
   action :run
-  only_if { node['registry']['database']['enabled'] && node['registry']['auto_migrate'] }
+  only_if do
+    node['registry']['database']['enabled'] &&
+      node['registry']['auto_migrate'] &&
+      registry_pg_helper.is_ready?
+  end
 end
