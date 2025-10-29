@@ -199,6 +199,14 @@ build do
     end
   end
 
+  block 'remove unneeded gems' do
+    # Most Ruby 3.3 and 3.4 versions ship with rexml 3.3.9 or 3.4.0 by default (https://stdgems.org/rexml/).
+    # Uninstall these versions because we've already updated to use the 3.4.2+.
+    %w[3.3.9 3.4.0].each do |version|
+      command "#{embedded_bin('gem')} uninstall rexml -v #{version}"
+    end
+  end
+
   # In order to compile the assets, we need to get to a state where rake can
   # load the Rails environment.
   copy 'config/gitlab.yml.example', 'config/gitlab.yml'
