@@ -33,7 +33,7 @@ As a demonstration, the first line of the previous example can be interpreted as
 - `Nginx` is the process name.
 - `972` is the process identifier.
 - NGINX has been running for 7 seconds (`7s`).
-- `log` indicates a [svlogd logging process](https://manpages.ubuntu.com/manpages/lunar/en/man8/svlogd.8.html) attached to the preceding process.
+- `log` indicates a [svlogd logging process](https://manpages.ubuntu.com/manpages/noble/en/man8/svlogd.8.html) attached to the preceding process.
 - `971` is the process identifier for the logging process.
 - The logging process has been running for 7 seconds (`7s`).
 
@@ -194,9 +194,9 @@ will be shown an arbitrary `Deploy in progress` page.
 
 To remove the page, you simply run `sudo gitlab-ctl deploy-page down`. You can also check the status of the deploy page with `sudo gitlab-ctl deploy-page status`.
 
-As a side note, if you would like to restrict logging into GitLab and restrict
-changes to projects, you can [set projects as read-only](https://docs.gitlab.com/administration/troubleshooting/gitlab_rails_cheat_sheet/#make-a-project-read-only-can-only-be-done-in-the-console)
-, then put up the `Deploy in progress` page.
+As a side note, if you would like to restrict logging into GitLab and restrict changes to projects,
+you can [set projects as read-only](https://docs.gitlab.com/administration/read_only_gitlab/#make-the-repositories-read-only),
+then put up the `Deploy in progress` page.
 
 ## Rotate the secrets file
 

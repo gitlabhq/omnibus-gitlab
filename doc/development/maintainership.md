@@ -100,7 +100,7 @@ Ideally, an operate-scoped maintainer of `omnibus-gitlab` should have
 strong Ruby and Chef expertise, with familiarity in Omnibus DSL being
 beneficial. They should understand GitLab architectural design and
 deployment patterns, particularly for high availability and multi-node
-configurations as outlined in the [Reference Architecture](https://docs.gitlab.com/ee/administration/reference_architectures/index.html).
+configurations as outlined in the [reference architectures](https://docs.gitlab.com/administration/reference_architectures/).
 
 The following checklist provides a guideline to evaluate the progress of a
 maintainer in the operate scope:

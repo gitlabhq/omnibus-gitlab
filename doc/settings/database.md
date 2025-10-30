@@ -130,7 +130,7 @@ After you have these files, enable SSL:
    Relative paths will be rooted in the PostgreSQL data directory
    (`/var/opt/gitlab/postgresql/data` by default).
 
-1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) to apply the configuration changes.
+1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) to apply the configuration changes.
 
 1. Restart PostgreSQL for the changes to take effect:
 
@@ -149,7 +149,7 @@ After you have these files, enable SSL:
    gitlab_rails['db_sslmode'] = 'require'
    ```
 
-1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) to apply the configuration changes.
+1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) to apply the configuration changes.
 
 #### Disabling SSL
 
@@ -159,7 +159,7 @@ After you have these files, enable SSL:
    postgresql['ssl'] = 'off'
    ```
 
-1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) to apply the configuration changes.
+1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) to apply the configuration changes.
 
 1. Restart PostgreSQL for the changes to take effect:
 
@@ -412,7 +412,7 @@ To enable WAL Archiving:
    postgresql['archive_timeout'] = "60"
    ```
 
-1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) for the changes to take effect. This will result in a database restart.
+1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) for the changes to take effect. This will result in a database restart.
 
 ### Store PostgreSQL data in a different directory
 
@@ -643,7 +643,7 @@ PostgreSQL.
 {{< alert type="warning" >}}
 
 If you are using a non-packaged PostgreSQL server, you need to make
-sure that PostgreSQL is set up according to the [database requirements document](https://docs.gitlab.com/install/requirements/#database).
+sure that PostgreSQL is set up according to the [database requirements](https://docs.gitlab.com/install/requirements/#postgresql).
 
 {{< /alert >}}
 
@@ -673,7 +673,7 @@ sure that PostgreSQL is set up according to the [database requirements document]
 
      If you use multiple addresses in `gitlab_rails['db_host']`, comma-separated, the first address in the list will be used for the connection.
 
-1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) for the changes to take effect.
+1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) for the changes to take effect.
 
 1. [Seed the database](#seed-the-database-fresh-installs-only).
 
@@ -714,7 +714,7 @@ socket:
    gitlab_rails['db_sslmode'] = 'require'
    ```
 
-1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) to apply the configuration changes.
+1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) to apply the configuration changes.
 
 #### Require SSL and verify server certificate against CA bundle
 
@@ -736,7 +736,7 @@ both the root and intermediate certificates.
    in the [using SSL/TLS to Encrypt a Connection to a DB Instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.SSL.html)
    article on AWS.
 
-1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) to apply the configuration changes.
+1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) to apply the configuration changes.
 
 ### Backup and restore a non-packaged PostgreSQL database
 
@@ -801,7 +801,7 @@ Before proceeding with the upgrade, note the following:
 
 - Check compatibility between GitLab releases and PostgreSQL versions:
   - Read about which GitLab versions introduced a requirement for a
-    [minimum PostgreSQL version](https://docs.gitlab.com/install/requirements/#postgresql-requirements).
+    [minimum PostgreSQL version](https://docs.gitlab.com/install/requirements/#postgresql).
   - Read about significant changes to the PostgreSQL versions which
     [shipped with the Linux package](https://docs.gitlab.com/administration/package_information/postgresql_versions/):
     The Linux package is tested for compatibility with the major releases of PostgreSQL that it ships with.
@@ -816,7 +816,7 @@ Before proceeding with the upgrade, note the following:
 
 The following example demonstrates upgrading from a database host running PostgreSQL 14 to another database host running PostgreSQL 16 and incurs downtime:
 
-1. Spin up a new PostgreSQL 16 database server that's set up according to the [database requirements](https://docs.gitlab.com/install/requirements/#database).
+1. Spin up a new PostgreSQL 16 database server that's set up according to the [database requirements](https://docs.gitlab.com/install/requirements/#postgresql).
 
 1. Ensure that the compatible versions of `pg_dump` and `pg_restore` are being
    used on the GitLab Rails instance. To amend GitLab configuration, edit
@@ -1171,7 +1171,7 @@ replication user's password.
 
    You will be prompted for the replication user's password of the primary. Replace `SECONDARY_SLOT_NAME` with the slot name retrieved from the first step above.
 
-1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) on the Geo **secondary database** to update the
+1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) on the Geo **secondary database** to update the
    `pg_hba.conf` file. This is needed because `replicate-geo-database`
    replicates the primary's file to the secondary.
 

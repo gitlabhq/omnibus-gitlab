@@ -139,8 +139,7 @@ for additional details.
 GitLab by default runs with a configuration that is designed to handle many concurrent connections.
 
 For small installations, which do not require high throughput,
-consider [disabling](https://docs.gitlab.com/administration/operations/puma/#memory-constrained-environments)
-Puma [Clustered mode](https://github.com/puma/puma#clustered-mode).
+consider [disabling Puma clustered mode](https://docs.gitlab.com/administration/operations/puma/#disable-puma-clustered-mode-in-memory-constrained-environments).
 As the result, only a single Puma process would serve the application.
 
 In `/etc/gitlab/gitlab.rb`:
