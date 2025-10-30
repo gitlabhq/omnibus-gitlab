@@ -62,17 +62,17 @@ build do
     (ohai['platform_family'] =~ /^debian/ && ohai['platform_version'] =~ /^1[123]/) ||
       (ohai['platform'] =~ /^ubuntu/ && ohai['platform_version'] =~ /^22/)
 
-  with_openssl = ''
+  openssl_dir = Build::Check.use_system_ssl? ? "/usr" : "#{install_dir}/embedded"
   if (ohai['platform'] =~ /^amzn/ || ohai['platform'] =~ /^amazon/) && (ohai['platform_version'] == "2023")
     patch source: 'custom-openssl.patch'
-    with_openssl = "--with-openssl=/usr/local/openssl"
+    openssl_dir = "/usr/local/openssl"
   end
 
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
            '--enable-shared',
            '--with-readline=editline',
-           with_openssl,
+           "--with-openssl=#{openssl_dir}",
            '--with-dbmliborder='].join(' '), env: env
   make env: env
   make 'install', env: env
