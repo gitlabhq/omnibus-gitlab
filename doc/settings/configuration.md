@@ -315,7 +315,7 @@ If you're running Gitaly on a separate server, see
 
 If you're not looking to move all repositories, but instead want to move specific
 projects between existing repository storages, use the
-[Edit Project API](https://docs.gitlab.com/api/projects/#edit-project)
+[Edit Project API](https://docs.gitlab.com/api/projects/#edit-a-project)
 endpoint and specify the `repository_storage` attribute.
 
 ## Change the name of the Git user or group
@@ -1069,7 +1069,7 @@ password that GitLab Rails should use to connect to the PostgreSQL server.
 
 ## Related topics
 
-- [Disable impersonation](https://docs.gitlab.com/api/#disable-impersonation)
+- [Disable impersonation](https://docs.gitlab.com/api/rest/authentication/#disable-impersonation)
 - [Set up LDAP sign-in](https://docs.gitlab.com/administration/auth/ldap/)
 - [Smartcard authentication](https://docs.gitlab.com/administration/auth/smartcard/)
 - [Set up NGINX](nginx.md) for things like:

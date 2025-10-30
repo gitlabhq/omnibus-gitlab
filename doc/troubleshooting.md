@@ -542,7 +542,7 @@ You can increase the default timeout value by setting the value in `/etc/gitlab/
 gitlab_workhorse['proxy_headers_timeout'] = "2m0s"
 ```
 
-Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#omnibus-gitlab-reconfigure) for the changes to take effect.
+Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) for the changes to take effect.
 
 ## The change you wanted was rejected
 
@@ -564,7 +564,7 @@ how to override the default headers.
 
 ## Extension missing `pg_trgm`
 
-[GitLab requires](https://docs.gitlab.com/install/requirements/#postgresql-requirements)
+[GitLab requires](https://docs.gitlab.com/install/postgresql_extensions/)
 the PostgreSQL extension `pg_trgm`.
 If you are using a Linux package with the bundled database, the extension
 should be automatically enabled when you upgrade.

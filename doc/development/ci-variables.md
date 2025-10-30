@@ -26,9 +26,9 @@ These variables are required to build packages in the pipeline.
 These additional variables are available to override or enable different build behavior.
 
 | Environment Variable           | Description |
-|--------------------------------|-------------|
+| ------------------------------ | ----------- |
 | `AWS_MAX_ATTEMPTS`             | Maximum number of times an S3 command should retry. |
-| `USE_S3_CACHE`                 | Set to any value and Omnibus will cache fetched software sources in an s3 bucket. [Upstream documentation](https://www.rubydoc.info/github/chef/omnibus/Omnibus%2FConfig:use_s3_caching). |
+| `USE_S3_CACHE`                 | Set to any value and Omnibus will cache fetched software sources in an s3 bucket. |
 | `CACHE_AWS_ACCESS_KEY_ID`      | Account ID to read/write from the s3 bucket containing the s3 software fetch cache. |
 | `CACHE_AWS_SECRET_ACCESS_KEY`  | Account secret to read/write from the s3 bucket containing the s3 software fetch cache. |
 | `CACHE_AWS_BUCKET`             | S3 bucket name for the software fetch cache. |

@@ -393,7 +393,7 @@ each component cookbook to create its own PgBouncer users.
 
 ### Support dedicated PgBouncer user for databases
 
-The current `pgbouncer` cookbook [_mostly_ supports multiple databases](https://docs.gitlab.com/administration/gitaly/praefect/#configure-a-new-pgbouncer-database-with-pool_mode--session).
+The current `pgbouncer` cookbook [_mostly_ supports multiple databases](https://docs.gitlab.com/administration/gitaly/praefect/configure/#use-pgbouncer).
 
 The `pgbouncer` cookbook only creates PgBouncer users for the main Rails database. This
 is why non-Rails applications connect with the same PgBouncer user created for Rails.

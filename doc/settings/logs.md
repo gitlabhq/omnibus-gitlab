@@ -233,7 +233,7 @@ By default the NGINX access logs will use a version of the 'combined' NGINX
 format, designed to hide potentially sensitive information embedded in query strings.
 If you want to use a custom log format string you can specify it
 in `/etc/gitlab/gitlab.rb` - see
-[the NGINX documentation](http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format)
+[the NGINX documentation](https://nginx.org/en/docs/http/ngx_http_log_module.html#log_format)
 for format details.
 
 ```ruby
