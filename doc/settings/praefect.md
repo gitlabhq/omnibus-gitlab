@@ -24,4 +24,4 @@ the Gitaly Cluster (Praefect) [setup instructions](https://docs.gitlab.com/admin
 ## Update GitLab when Gitaly Cluster (Praefect) is enabled
 
 For information on updating GitLab with Gitaly Cluster (Praefect) enabled, see the
-[specific instructions](https://docs.gitlab.com/update/zero_downtime/#praefect-gitaly-cluster).
+[specific instructions](https://docs.gitlab.com/update/zero_downtime/#upgrade-gitaly-cluster-praefect-nodes).

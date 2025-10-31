@@ -153,4 +153,4 @@ To downgrade the JiHu Edition installation to GitLab Enterprise Edition (EE), in
 Depending on the preferred installation method for GitLab EE, either:
 
 - Use the official GitLab package repository and [install GitLab EE](https://about.gitlab.com/install/?version=ee).
-- Download the GitLab EE package and [manually install it](https://docs.gitlab.com/update/package/#upgrade-using-a-manually-downloaded-package).
+- Download the GitLab EE package and [manually install it](https://docs.gitlab.com/update/package/#upgrade-with-a-downloaded-package).

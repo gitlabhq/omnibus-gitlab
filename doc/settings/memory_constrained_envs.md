@@ -123,24 +123,15 @@ than [GitLab Community Edition (CE)](https://about.gitlab.com/install/?version=c
 increase compute and memory requirements.
 
 When memory consumption is the primary concern, install GitLab CE. You can
-always [upgrade to GitLab EE](https://docs.gitlab.com/update/package/convert_to_ee/) later.
+always [upgrade to GitLab EE](https://docs.gitlab.com/update/convert_to_ee/package/) later.
 
 ## Optimize Puma
 
-{{< alert type="warning" >}}
+By default, GitLab runs with a configuration designed to handle many concurrent connections.
 
-This is an experimental [Alpha feature](https://docs.gitlab.com/policy/development_stages_support/#alpha-features) and subject to change without notice. The feature
-is not ready for production use. If you want to use this feature, we recommend testing
-with non-production data first. See the [known issues](https://docs.gitlab.com/administration/operations/puma/#puma-single-mode-known-issues)
-for additional details.
-
-{{< /alert >}}
-
-GitLab by default runs with a configuration that is designed to handle many concurrent connections.
-
-For small installations, which do not require high throughput,
-consider [disabling Puma clustered mode](https://docs.gitlab.com/administration/operations/puma/#disable-puma-clustered-mode-in-memory-constrained-environments).
-As the result, only a single Puma process would serve the application.
+For small installations that do not require high throughput,
+[disable Puma Clustered mode](https://docs.gitlab.com/administration/operations/puma/#disable-puma-clustered-mode-in-memory-constrained-environments).
+This configuration runs only a single Puma process to serve the application.
 
 In `/etc/gitlab/gitlab.rb`:
 
@@ -148,7 +139,7 @@ In `/etc/gitlab/gitlab.rb`:
 puma['worker_processes'] = 0
 ```
 
-We observed 100-400MB of memory usage reduction configuring Puma this way.
+We observed 100-400 MB of memory usage reduction with this optimization.
 
 ## Optimize Sidekiq
 

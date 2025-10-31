@@ -34,7 +34,10 @@ prometheus['remote_read'] = [
 ]
 ```
 
-For more documentation on the options available, see the [remote write](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cremote_write%3E) and [remote read](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cremote_read%3E) sections of the official documentation.
+For more information about configuration options, see information about Prometheus configuration:
+
+- [`remote_write`](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write).
+- [`remote_read`](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read).
 
 ## Rules files
 

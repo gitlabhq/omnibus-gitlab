@@ -79,17 +79,13 @@ In the [NGINX logs](https://docs.gitlab.com/administration/logs/#nginx-logs), yo
 Request Entity Too Large
 ```
 
-This issue occurs when you have increased the [max import size](https://docs.gitlab.com/administration/settings/import_and_export_settings/#max-import-size).
+This error occurs when your request exceeds the maximum allowed body size.
+If you recently increased the [max import size](https://docs.gitlab.com/administration/settings/import_and_export_settings/#max-import-size),
+you must also update the NGINX configuration.
 
-To resolve this, increase the
-[client max body size](http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size).
+To resolve this, configure the [`client_max_body_size`](https://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size) directive:
 
-In a Kubernetes-based GitLab installation, this setting is
-[named differently](https://docs.gitlab.com/charts/charts/gitlab/webservice/#proxybodysize).
-
-To increase the value of `client_max_body_size`:
-
-1. Edit `/etc/gitlab/gitlab.rb` and set the preferred value:
+1. Edit `/etc/gitlab/gitlab.rb` and increase the value for the client max body size:
 
    ```ruby
    nginx['client_max_body_size'] = '250m'
@@ -102,6 +98,9 @@ To increase the value of `client_max_body_size`:
    ```shell
    sudo gitlab-ctl hup nginx
    ```
+
+For Kubernetes installations, configure [`proxyBodySize`](https://docs.gitlab.com/charts/charts/gitlab/webservice/#proxybodysize)
+instead of `client_max_body_size`.
 
 ## Security scan warning: `NGINX HTTP Server Detection`
 

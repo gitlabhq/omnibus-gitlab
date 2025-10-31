@@ -616,7 +616,6 @@ version of PostgreSQL.
 {{< history >}}
 
 - The `gitlab:db:decomposition:connection_status` Rake task was [introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/111927) in GitLab 15.11.
-- Support for single database will be [removed in a future release](https://docs.gitlab.com/update/deprecations/#running-a-single-database-is-deprecated).
 
 {{< /history >}}
 
@@ -985,7 +984,8 @@ plain-text passwords.
 
 The next time hosts carrying the above configuration are reconfigured, the migration steps are not performed.
 
-To avoid schema-related post-upgrade errors, the host marked as [the deploy node](https://docs.gitlab.com/update/zero_downtime/#multi-node--ha-deployment) must have `gitlab_rails['auto_migrate'] = true` during upgrades.
+To avoid schema-related post-upgrade errors, the host marked as [the deploy node](https://docs.gitlab.com/update/zero_downtime/) must have
+`gitlab_rails['auto_migrate'] = true` during upgrades.
 
 ### Setting client `statement_timeout`
 
