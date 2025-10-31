@@ -190,7 +190,7 @@ To use another web server like Apache or an existing NGINX installation:
    Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 
    If you use SELinux and your web server runs under a restricted SELinux profile, you might need to
-   [loosen the restrictions on your web server](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/web-server/apache#selinux-modifications).
+   [configure SELinux permissions](https://gitlab.com/gitlab-org/gitlab-recipes/-/blob/master/web-server/apache/README.md#selinux-modifications).
 
    Ensure the web server user has the correct permissions on all directories used by the external web server.
    Otherwise, you might receive `failed (XX: Permission denied) while reading upstream` errors.
@@ -289,7 +289,7 @@ To change the log level:
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
-For valid log level values, see the [NGINX documentation](https://nginx.org/en/docs/ngx_core_module.html#error_log).
+For valid log level values, see the ['error_log' directive](https://nginx.org/en/docs/ngx_core_module.html#error_log).
 
 ### Set the Referrer-Policy header
 

@@ -17,17 +17,14 @@ Pi 4 with at least 4 GB of RAM for best results. You might be able to run GitLab
 on lower resources, like a Pi 3 or newer, but it is not recommended. We do not
 package for older Pis, as their CPU and RAM are insufficient.
 
-Starting from GitLab version 18.0, we will no longer provide 32-bit packages for Raspberry Pi. You should use 64-bit Raspberry Pi OS and
-[install the `arm64` Debian packages](https://about.gitlab.com/install/#debian). For information on backing up data on a 32-bit OS and restoring it to a 64-bit OS, see
+Starting from GitLab version 18.0, we will no longer provide 32-bit packages for Raspberry Pi.
+You should use 64-bit Raspberry Pi OS and [install the `arm64` Debian packages](https://docs.gitlab.com/install/package/debian/).
+For information on backing up data on a 32-bit OS and restoring it to a 64-bit OS, see
 [Upgrading operating systems for PostgreSQL](https://docs.gitlab.com/administration/postgresql/upgrading_os/).
 
-## Configure Swap
+## Configure swap
 
-Even with a newer Pi, the first setting you will want to change is to ensure
-the device has enough memory available by expanding the swap space to 4 GB.
-
-On Raspbian, swap can be configured in `/etc/dphys-swapfile`.
-See [the manpage](https://manpages.ubuntu.com/manpages/lunar/en/man8/dphys-swapfile.8.html) for available settings.
+To ensure the device has enough memory available, expand the swap space to 4 GB.
 
 ## Install GitLab
 
@@ -45,7 +42,7 @@ Debian, and follow the instructions to install GitLab.
 ### Manually download GitLab
 
 If your distribution of choice is Debian-based, you
-can [manually download](https://docs.gitlab.com/update/package/#upgrade-using-a-manually-downloaded-package)
+can [manually download](https://docs.gitlab.com/update/package/#upgrade-with-a-downloaded-package)
 GitLab and install it.
 
 ## Reduce running processes
