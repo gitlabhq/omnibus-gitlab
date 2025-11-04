@@ -56,7 +56,8 @@ build do
   # abseil into the build directory. When we need to patch these dependencies,
   # we must do so after the initial cmake configuration.
   # The patches below should likely be removed after upgrading tensorflow from 2.6.0
-  if ohai['platform'] == 'debian' && ohai['platform_version'].start_with?('13')
+  if (ohai['platform'] == 'debian' && ohai['platform_version'].start_with?('13')) ||
+      (ohai['platform'] == 'almalinux' && ohai['platform_version'].start_with?('10.'))
     patch source: 'tensorflow-standard-ints.patch', cwd: source_dir, env: env
     patch source: 'abseil-standard-ints.patch', cwd: build_dir, env: env
     patch source: 'flatbuffers-gcc-ignore-overflow-false-positives.patch', cwd: build_dir, env: env

@@ -162,6 +162,12 @@ AlmaLinux-9-check:
 AlmaLinux-9-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_arm64:latest"
   extends: .yum-arm-install
+AlmaLinux-10-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10:latest"
+  extends: .yum-install
+AlmaLinux-10-arm64-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10_arm64:latest"
+  extends: .yum-arm-install
 AmazonLinux-2-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:latest"
   extends: .yum-install
