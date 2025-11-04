@@ -649,8 +649,6 @@ letsencrypt-test:
   stage: qa
   script:
     - echo "${CI_REGISTRY_PASSWORD}" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
-    - curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    - chmod +x /usr/local/bin/docker-compose
     - bundle exec rake qa:test_letsencrypt
   rules:
     - if: '$TOP_UPSTREAM_SOURCE_PROJECT == "gitlab-org/gitlab"'

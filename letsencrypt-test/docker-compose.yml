@@ -1,4 +1,3 @@
-version: '3'
 services:
   gitlab:
     image: ${IMAGE}
@@ -21,12 +20,10 @@ services:
         ipv4_address: 10.30.50.10
 
   pebble:
-    image: letsencrypt/pebble:v2.3.1  # https://hub.docker.com/r/letsencrypt/pebble
+    image: ghcr.io/letsencrypt/pebble:2.8.0
     hostname: pebble
-    command: pebble -config /test/config/pebble-config.json -strict false -dnsserver 10.30.50.3:8053
+    command: -config /test/config/pebble-config.json -dnsserver 10.30.50.3:8053
     environment:
-      # TODO(@cpu): Delete this explicit GODEBUG env var once Pebble is built with Go 1.13.x which defaults TLS 1.3 to on
-      GODEBUG: "tls13=1"
       PEBBLE_VA_NOSLEEP: '1'  # https://github.com/letsencrypt/pebble#testing-at-full-speed
       PEBBLE_WFE_NONCEREJECT: '0'  # https://github.com/letsencrypt/pebble#invalid-anti-replay-nonce-errors
     volumes:
@@ -41,8 +38,8 @@ services:
         ipv4_address: 10.30.50.2
 
   challtestsrv:  # https://github.com/letsencrypt/pebble/tree/master/cmd/pebble-challtestsrv
-    image: letsencrypt/pebble-challtestsrv:v2.3.1  # https://hub.docker.com/r/letsencrypt/pebble-challtestsrv
-    command: pebble-challtestsrv -http01 ":80"
+    image: ghcr.io/letsencrypt/pebble-challtestsrv:2.8.0
+    command: -defaultIPv6 "" -defaultIPv4 10.30.50.10
     ports:
     - 8055:8055  # HTTP Management API
     networks:
