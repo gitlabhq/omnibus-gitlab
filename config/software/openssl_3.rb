@@ -31,47 +31,53 @@ display_version version.print(false).delete_prefix('openssl-')
 
 vendor 'openssl'
 
-source git: version.remote
+# UBT does not produce Arm64 binaries yet.
+if Build::Check.use_ubt?
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, display_version, "7acba11b9a620f7f47888a5722f360b499accb70ecca3f22deed33cc5928e38a", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+    configure_args = [
+      "--prefix=#{install_dir}/embedded",
+      "--libdir=lib",
+      'no-unit-test',
+      'no-docs',
+      'no-comp',
+      'no-idea',
+      'no-mdc2',
+      'no-rc5',
+      'no-ssl3',
+      'no-zlib',
+      'shared',
+    ]
 
-  configure_args = [
-    "--prefix=#{install_dir}/embedded",
-    "--libdir=lib",
-    'no-unit-test',
-    'no-docs',
-    'no-comp',
-    'no-idea',
-    'no-mdc2',
-    'no-rc5',
-    'no-ssl3',
-    'no-zlib',
-    'shared',
-  ]
+    prefix = if linux? && s390x?
+               # With gcc > 4.3 on s390x there is an error building
+               # with inline asm enabled
+               './Configure linux64-s390x -DOPENSSL_NO_INLINE_ASM'
+             elsif OhaiHelper.raspberry_pi?
+               # 32-bit arm OSs require linking against libatomic
+               './Configure linux-latomic'
+             else
+               './config'
+             end
+    configure_cmd = "#{prefix} disable-gost"
 
-  prefix = if linux? && s390x?
-             # With gcc > 4.3 on s390x there is an error building
-             # with inline asm enabled
-             './Configure linux64-s390x -DOPENSSL_NO_INLINE_ASM'
-           elsif OhaiHelper.raspberry_pi?
-             # 32-bit arm OSs require linking against libatomic
-             './Configure linux-latomic'
-           else
-             './config'
-           end
-  configure_cmd = "#{prefix} disable-gost"
+    # Out of abundance of caution, we put the feature flags first and then
+    # the crazy platform specific compiler flags at the end.
+    configure_args << env['CFLAGS'] << env['LDFLAGS']
 
-  # Out of abundance of caution, we put the feature flags first and then
-  # the crazy platform specific compiler flags at the end.
-  configure_args << env['CFLAGS'] << env['LDFLAGS']
+    configure_command = configure_args.unshift(configure_cmd).join(' ')
 
-  configure_command = configure_args.unshift(configure_cmd).join(' ')
+    command configure_command, env: env, in_msys_bash: true
 
-  command configure_command, env: env, in_msys_bash: true
-
-  make 'depend', env: env
-  # make -j N on openssl is not reliable
-  make env: env
-  make 'install', env: env
+    make 'depend', env: env
+    # make -j N on openssl is not reliable
+    make env: env
+    make 'install', env: env
+  end
 end
