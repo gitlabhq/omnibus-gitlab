@@ -376,6 +376,12 @@ AlmaLinux-9-branch:
 AlmaLinux-9-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
+AlmaLinux-10-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10:${BUILDER_IMAGE_REVISION}"
+  extends: .branch_template
+AlmaLinux-10-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .arm64_branch_template
 OpenSUSE-15.6-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -708,6 +714,12 @@ AlmaLinux-9:
 AlmaLinux-9-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
+AlmaLinux-10:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10:${BUILDER_IMAGE_REVISION}"
+  extends: .tag_template
+AlmaLinux-10-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .arm64_tag_template
 OpenSUSE-15.6:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
@@ -902,6 +914,20 @@ AlmaLinux-9-arm64-staging:
       optional: true
     - job: AlmaLinux-9-arm64-branch
       optional: true
+AlmaLinux-10-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: AlmaLinux-10
+      optional: true
+    - job: AlmaLinux-10-branch
+      optional: true
+AlmaLinux-10-arm64-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: AlmaLinux-10-arm64
+      optional: true
+    - job: AlmaLinux-10-arm64-branch
+      optional: true
 OpenSUSE-15.6-staging:
   extends: .staging_upload_template
   needs:
@@ -1069,6 +1095,14 @@ AlmaLinux-9-arm64-release:
   extends: .production_release_template
   needs:
     - AlmaLinux-9-arm64
+AlmaLinux-10-release:
+  extends: .production_release_template
+  needs:
+    - AlmaLinux-10
+AlmaLinux-10-arm64-release:
+  extends: .production_release_template
+  needs:
+    - AlmaLinux-10-arm64
 OpenSUSE-15.6-release:
   extends: .production_release_template
   needs:

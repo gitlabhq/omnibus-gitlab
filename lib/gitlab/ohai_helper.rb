@@ -99,6 +99,8 @@ class OhaiHelper
         '8'
       when /^9\./
         '9'
+      when /^10\./
+        '10'
       end
     end
 

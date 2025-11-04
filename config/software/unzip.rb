@@ -88,6 +88,12 @@ build do
   patch source: '30-drop-conflicting-declarations.patch'
   patch source: '31-fix-zipgrep.patch'
 
+  # Fix build on GCC15: https://bugs.gentoo.org/943727.
+  if ohai['platform'] == 'almalinux' &&
+      ohai['platform_version'].start_with?('10.')
+    env['CC'] = "/usr/bin/gcc -std=gnu89"
+  end
+
   make '-f unix/Makefile clean', env: env
   make "-j #{workers} -f unix/Makefile CF='#{unzip_cflags}' unzips", env: env
   make "-f unix/Makefile prefix=#{install_dir}/embedded install", env: env
