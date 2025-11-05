@@ -167,6 +167,10 @@ class OhaiHelper
       end
     end
 
+    def arch
+      ohai['kernel']['machine']
+    end
+
     def armhf?
       # armv* (Arm 32-bit)
       /armv/.match?(ohai['kernel']['machine'])

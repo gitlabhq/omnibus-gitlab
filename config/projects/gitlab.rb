@@ -23,6 +23,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/util"
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 require "#{Omnibus::Config.project_root}/lib/gitlab/openssl_helper"
 require "#{Omnibus::Config.project_root}/files/gitlab-cookbooks/package/libraries/helpers/selinux_distro_helper.rb"
+require "#{Omnibus::Config.project_root}/lib/gitlab/build/ubt.rb"
 
 gitlab_package_name = Build::Info::Package.name
 gitlab_package_file = File.join(Omnibus::Config.project_dir, 'gitlab', "#{gitlab_package_name}.rb")

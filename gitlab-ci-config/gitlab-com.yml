@@ -240,6 +240,32 @@ Trigger:ee-package:
       when: manual
       variables: !reference [.ee-trigger-job-variables]
 
+###########################
+#     UBT pipelines       #
+###########################
+      
+Trigger:ce-package-ubt:
+  variables:
+    UBT_TEST_BUILD: "true"
+    # Make sure we don't collide with production CE cache
+    CACHE_KEY_SUFFIX: "${CACHE_KEY_SUFFIX}-ubt"
+  extends: .ce-trigger-job
+
+Trigger:ee-package-ubt:
+  variables:
+    UBT_TEST_BUILD: "true"
+    # Make sure we don't collide with production EE cache
+    CACHE_KEY_SUFFIX: "${CACHE_KEY_SUFFIX}-ubt"
+  extends: .ce-trigger-job
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_BRANCH_TEST_PIPELINE$/'
+      when: manual
+      variables: !reference [.ee-trigger-job-variables]
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
+      when: manual
+      variables: !reference [.ee-trigger-job-variables]
+
+
 rubocop:
   extends: .gems-cache
   stage: check
@@ -804,6 +830,7 @@ pages:
   PIPELINE_TYPE: "${EDITION}_BRANCH_BUILD_PIPELINE"
   CACHE_EDITION: ${EDITION}
   ee: ${ee}
+  UBT_TEST_BUILD: ${UBT_TEST_BUILD}
 
 build-package-on-all-os:
   stage: package
