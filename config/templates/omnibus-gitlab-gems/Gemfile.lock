@@ -267,7 +267,7 @@ GEM
       method_source (~> 1.0)
     public_suffix (5.0.5)
     racc (1.7.3)
-    rack (2.2.17)
+    rack (2.2.20)
     rainbow (3.1.1)
     remote_syslog-gitlab (0.0.2)
       em-resolv-replace
@@ -413,7 +413,7 @@ DEPENDENCIES
   license_finder (= 7.2.1)
   mixlib-log (= 3.2.3)
   ohai (= 18.1.18)
-  rack (= 2.2.17)
+  rack (= 2.2.20)
   rainbow (= 3.1.1)
   remote_syslog-gitlab (= 0.0.2)
   rubocop-ast (= 1.21.0)
