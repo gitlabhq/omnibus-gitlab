@@ -12,6 +12,10 @@ module Build
         def ci_job_token
           Build::Info::CI.job_token
         end
+
+        def ubt_fetch_token
+          Gitlab::Util.get_env("UBT_FETCH_TOKEN")
+        end
       end
     end
   end

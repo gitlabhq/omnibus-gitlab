@@ -147,3 +147,9 @@ To build packages for other operating systems:
    pipelines: `https://dev.gitlab.org/gitlab/omnibus-gitlab/-/pipelines`.
 
 1. The pipeline builds packages for all supported operating systems and a Docker image.
+
+## UBT integration
+
+| Environment variable                            | Description |
+|-------------------------------------------------|-------------|
+| `UBT_FETCH_TOKEN`                               | When running outside of CI provide token to fetch UBT artifacts |

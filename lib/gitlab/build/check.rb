@@ -38,6 +38,11 @@ module Build
         Gitlab::Util.get_env('USE_SYSTEM_SSL') == 'true' || fips?
       end
 
+      def use_ubt?
+        # Until we get UBT builds for arm64 we should avoid using precompiled binaries
+        Gitlab::Util.get_env('UBT_TEST_BUILD') == 'true' && !OhaiHelper.arm?
+      end
+
       def use_system_libgcrypt?
         # Once we implement the `fips?` TODO, we can get rid of this variable and
         # gate on `fips?` alone.
