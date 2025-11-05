@@ -36,7 +36,7 @@ gem 'rainbow', '3.1.1'
 gem 'gitlab-ruby-shadow', '2.5.1', require: 'shadow'
 gem 'tomlib', '0.6.0'
 gem 'mixlib-log', '3.2.3'
-gem 'rack', '2.2.17'
+gem 'rack', '2.2.20'
 gem 'remote_syslog-gitlab', '0.0.2'
 
 # pin the version of faraday and faraday-net_http temporarily until
