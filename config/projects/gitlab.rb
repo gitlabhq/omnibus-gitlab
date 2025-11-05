@@ -294,6 +294,8 @@ exclude 'embedded/lib/ruby/gems/*/gems/*pg_query-*/ext'
 exclude 'embedded/lib/python*/**/*.exe'
 # Exclude whl files from Python libraries.
 exclude 'embedded/lib/python*/**/*.whl'
+# Exclude setuptools from Python libraries. Only used for psycopg build.
+exclude 'embedded/lib/python*/site-packages/setuptools'
 
 # Enable signing packages
 package :rpm do
