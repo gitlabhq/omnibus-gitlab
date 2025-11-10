@@ -231,10 +231,10 @@ We observed much more stable memory usage during the execution of the applicatio
 GitLab uses internal data structures to measure different aspects of itself.
 These features are no longer needed if monitoring is disabled.
 
-To disable these features you need to go to Admin Area of GitLab
+To disable these features, go to the **Admin** area of GitLab
 and disable the Prometheus Metrics feature:
 
-1. On the left sidebar, at the bottom, select **Admin Area**.
+1. On the left sidebar, at the bottom, select **Admin**. If you've [turned on the new navigation](https://docs.gitlab.com/user/interface_redesign/#turn-new-navigation-on-or-off), in the upper-right corner, select **Admin**.
 1. Select **Settings > Metrics and profiling**.
 1. Expand **Metrics - Prometheus**.
 1. Disable **Enable Prometheus Metrics**.
