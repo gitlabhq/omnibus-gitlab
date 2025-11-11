@@ -44,6 +44,7 @@ acme_selfsigned site.host do
   key node['gitlab']['nginx']['ssl_certificate_key']
   key_size node['letsencrypt']['key_size']
   notifies :restart, 'runit_service[nginx]', :immediately
+  only_if { !::File.exist?(node['gitlab']['nginx']['ssl_certificate']) }
 end
 
 include_recipe "letsencrypt::#{node['letsencrypt']['authorization_method']}_authorization"

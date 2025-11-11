@@ -10,6 +10,8 @@ property :key_size, [Integer, nil]
 property :crt, [String, nil]
 property :group, [String, nil]
 property :contact, [String, Array, nil]
+property :key_type, String
+property :ec_curve, String
 
 actions :create
 default_action :create
