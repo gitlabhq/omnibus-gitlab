@@ -417,6 +417,24 @@ docs-lint-i18n markdown:
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
     - if: '$PIPELINE_TYPE == "DOCS_LOCALIZATION_PIPELINE"'
 
+# Perform link checking on translated documentation Markdown files
+docs-i18n-lint links:
+  image: $DOCS_LINT_IMAGE
+  stage: check
+  cache: {}
+  needs: []
+  before_script: []
+  when: manual
+  allow_failure: true
+  script:
+    # Check Markdown links
+    - lychee --offline --include-fragments doc-locale
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "DOCS_LOCALIZATION_PIPELINE"'
+
 # Verify localized documentation files have corresponding English versions
 docs-i18n-lint paths:
   image: $DOCS_LINT_IMAGE
