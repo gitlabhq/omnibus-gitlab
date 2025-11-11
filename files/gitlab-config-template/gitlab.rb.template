@@ -2565,7 +2565,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis_exporter['log_directory'] = '/var/log/gitlab/redis-exporter'
 # redis_exporter['log_group'] = nil
 # redis_exporter['flags'] = {
-#   'redis.addr' => "unix:///var/opt/gitlab/redis/redis.socket",
+#   'redis.password' => 'your-redis-password',
+#   'namespace' => 'redis',
+#   'web.listen-address' => ':9121',
+#   'web.telemetry-path' => '/metrics'
 # }
 # redis_exporter['env_directory'] = '/opt/gitlab/etc/redis-exporter/env'
 # redis_exporter['env'] = {
