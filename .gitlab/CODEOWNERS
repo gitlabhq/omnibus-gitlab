@@ -20,9 +20,9 @@
 !/doc/**/*.png
 
 ## Localization files that do not need `*` rule approval,
-## but still require an approval from the localization team.
-/doc-locale/** @gitlab-com/localization/maintainers
-/argo_translation.yml @gitlab-com/localization/maintainers
+## but still require an approval from the localization team (covered by later [Localization Team] rules).
+!/doc-locale/**
+!/argo_translation.yml
 
 ## Technical writing files that do not need `*` rule approval,
 ## but still require an approval from a TW team DRI for each file.
