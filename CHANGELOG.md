@@ -3,6 +3,21 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.5.2 (2025-11-11)
+
+### Fixed (1 change)
+
+- [Fix NGINX not routing traffic to the right server](gitlab-org/security/omnibus-gitlab@1b8607e1cd6b19dd6a4a73b0c9f120e2fb31047c)
+
+### Changed (2 changes)
+
+- [Upgrade Rack to 2.2.20](gitlab-org/security/omnibus-gitlab@8f03b9f8e665a142ff6d7964138300ec0e1992b9)
+- [Bump redis to v7.2.11](gitlab-org/security/omnibus-gitlab@e466df49bea633d6d028113c86f340b4997e32cf)
+
+### Security (1 change)
+
+- [Update libxslt from 1.1.41 to 1.1.43](gitlab-org/security/omnibus-gitlab@a940735d6e0e2fa00ecb667a8272d897756f5bfb) ([merge request](gitlab-org/security/omnibus-gitlab!492))
+
 ## 18.5.1 (2025-10-21)
 
 No changes.
@@ -29,6 +44,17 @@ No changes.
 ### Security (1 change)
 
 - [Update PostgreSQL 16.8 to 16.10](gitlab-org/omnibus-gitlab@6cf1dc30f8259915730ecfb89f10eae33811d566)
+
+## 18.4.4 (2025-11-11)
+
+### Changed (2 changes)
+
+- [Upgrade Rack to 2.2.20](gitlab-org/security/omnibus-gitlab@f3fac5a1bc96291c35968584f13a5f7972cd306e)
+- [Bump redis to v7.2.11](gitlab-org/security/omnibus-gitlab@38ec997dc6bd8a12c43465109d9c99c79e1d2d85)
+
+### Security (1 change)
+
+- [Update libxslt from 1.1.41 to 1.1.43](gitlab-org/security/omnibus-gitlab@a16fe4ab629eb478e625c35f00167794f12e5249) ([merge request](gitlab-org/security/omnibus-gitlab!491))
 
 ## 18.4.3 (2025-10-21)
 
@@ -71,6 +97,17 @@ No changes.
 - [Update dependency container-registry to v4.26.1-gitlab](gitlab-org/omnibus-gitlab@7fc1e2bd84a3e49d8eab09f413b1abda3888645d) ([merge request](gitlab-org/omnibus-gitlab!8655))
 - [Update dependency nginx-module-vts to v0.2.4](gitlab-org/omnibus-gitlab@d252971ee66e884423776c68a3af62ae9641fa45) ([merge request](gitlab-org/omnibus-gitlab!8452))
 - [Enable amcheck extension for postgres](gitlab-org/omnibus-gitlab@650078f9b655327e73c3a24f36db55aea4c90490) ([merge request](gitlab-org/omnibus-gitlab!8589))
+
+## 18.3.6 (2025-11-11)
+
+### Changed (2 changes)
+
+- [Upgrade Rack to 2.2.20](gitlab-org/security/omnibus-gitlab@2ee0c0e2ac7fb402ef249c997d473d8056bcd968)
+- [Bump redis to v7.2.11](gitlab-org/security/omnibus-gitlab@28a7d656d8109da75907f4c6c424bf28d09b8bff)
+
+### Security (1 change)
+
+- [Update libxslt from 1.1.41 to 1.1.43](gitlab-org/security/omnibus-gitlab@e04b2137bbdcd7e0ce933b833b9ab9a4bdcbc6ed) ([merge request](gitlab-org/security/omnibus-gitlab!490))
 
 ## 18.3.5 (2025-10-21)
 
