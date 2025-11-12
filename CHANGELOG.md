@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.3.6 (2025-11-11)
+
+### Changed (2 changes)
+
+- [Upgrade Rack to 2.2.20](gitlab-org/security/omnibus-gitlab@2ee0c0e2ac7fb402ef249c997d473d8056bcd968)
+- [Bump redis to v7.2.11](gitlab-org/security/omnibus-gitlab@28a7d656d8109da75907f4c6c424bf28d09b8bff)
+
+### Security (1 change)
+
+- [Update libxslt from 1.1.41 to 1.1.43](gitlab-org/security/omnibus-gitlab@e04b2137bbdcd7e0ce933b833b9ab9a4bdcbc6ed) ([merge request](gitlab-org/security/omnibus-gitlab!490))
+
 ## 18.3.5 (2025-10-21)
 
 No changes.
