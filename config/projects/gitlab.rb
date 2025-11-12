@@ -101,7 +101,7 @@ end
 
 # FIPS requires system OpenSSL packages to run
 if Build::Check.use_system_ssl?
-  if amazon? && OhaiHelper.get_amazon_version == 2
+  if OhaiHelper.amazon_linux_2?
     runtime_dependency 'openssl-perl'
   else
     runtime_dependency 'openssl'
