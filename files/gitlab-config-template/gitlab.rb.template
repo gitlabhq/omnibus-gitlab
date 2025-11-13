@@ -880,8 +880,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # }
 
 #### OpenBao (GitLab Secret Manager)
+#### Beta: these attributes are subject to change without
+####       a breaking change announcement.
 # gitlab_rails['openbao']['url'] = nil
 # gitlab_rails['openbao']['internal_url'] = nil
+# gitlab_rails['openbao']['authentication_token_secret_file_path'] = nil
 
 #### Session cookie settings
 # gitlab_rails['session_store_session_cookie_token_prefix'] = ''
