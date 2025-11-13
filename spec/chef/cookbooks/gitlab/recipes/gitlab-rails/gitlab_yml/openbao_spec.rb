@@ -46,5 +46,23 @@ RSpec.describe 'gitlab::gitlab-rails' do
           .to eq('http://internal.openbao.example.com')
       end
     end
+
+    context 'with a user defined authentication_token_secret_file_path' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            openbao: {
+              url: 'http://openbao.example.com',
+              authentication_token_secret_file_path: '/path/to/authentication_token_secret_file'
+            }
+          }
+        )
+      end
+
+      it 'renders gitlab.yml with specified authentication_token_secret_file_path' do
+        expect(gitlab_yml[:production][:openbao][:authentication_token_secret_file_path])
+          .to eq('/path/to/authentication_token_secret_file')
+      end
+    end
   end
 end
