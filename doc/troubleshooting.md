@@ -270,7 +270,7 @@ Run `sudo gitlab-ctl reconfigure` for the change to take effect.
 ## Error: `FATAL: remaining connection slots are reserved for non-replication superuser connections`
 
 PostgreSQL has a setting for the maximum number of the concurrent connections
-to the database server. If you see this error, it means that your GitLab instance is trying to exceed
+to the database server. The default limit is 400. If you see this error, it means that your GitLab instance is trying to exceed
 this limit on the number of concurrent connections.
 
 To check maximum connections and available connections:
@@ -306,6 +306,12 @@ To fix this problem, you have two options:
 
      ```shell
      sudo gitlab-ctl reconfigure
+     ```
+
+  1. Restart GitLab:
+
+     ```shell
+     sudo gitlab-ctl restart
      ```
 
 - Or, you can consider [using PgBouncer](https://docs.gitlab.com/administration/postgresql/pgbouncer/) which is a connection pooler for PostgreSQL.
