@@ -121,6 +121,12 @@ class OhaiHelper
       end
     end
 
+    # TODO: Remove once Amazon Linux 2 is end-of-life. Until that happens,
+    # this combination happens so often it makes sense to make a shorthand.
+    def amazon_linux_2?
+      os_platform == 'amazon' && get_amazon_version == '2'
+    end
+
     def get_amazon_version
       ohai['platform_version']&.split(".")&.first
     end
