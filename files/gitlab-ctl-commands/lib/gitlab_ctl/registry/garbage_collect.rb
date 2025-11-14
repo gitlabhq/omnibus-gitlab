@@ -1,3 +1,5 @@
+require_relative './database'
+
 module GitlabCtl
   module Registry
     class GarbageCollect
@@ -13,6 +15,8 @@ module GitlabCtl
       end
 
       def execute!
+        Dir.chdir(GitlabCtl::Registry::Database.registry_dir)
+
         unless enabled?
           log "Container registry is not enabled, exiting..."
           return
