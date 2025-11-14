@@ -9,6 +9,7 @@ module GitlabCtl
     module Database
       EXEC_PATH = '/opt/gitlab/embedded/bin/registry'.freeze
       CONFIG_PATH = '/var/opt/gitlab/registry/config.yml'.freeze
+      DEFAULT_REGISTRY_DIR = '/var/opt/gitlab/registry'.freeze
 
       USAGE = <<~EOS.freeze
         Usage:
@@ -21,6 +22,18 @@ module GitlabCtl
           migrate                Manage schema migrations
           import                 Import filesystem metadata into the database
       EOS
+
+      def self.registry_dir
+        begin
+          dir = GitlabCtl::Util.get_public_node_attributes.dig('registry', 'dir')
+        rescue GitlabCtl::Errors::NodeError
+          # Public attributes file doesn't exist yet or is malformed
+          dir = nil
+        end
+
+        # Fall back to default if dir is nil
+        dir || DEFAULT_REGISTRY_DIR
+      end
 
       def self.parse_options!(ctl, args)
         @ctl = ctl
@@ -83,6 +96,8 @@ module GitlabCtl
       end
 
       def self.execute(options)
+        Dir.chdir(registry_dir)
+
         unless enabled?
           log "Container registry is not enabled, exiting..."
           return
