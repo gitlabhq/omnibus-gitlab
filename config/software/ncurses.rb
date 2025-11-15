@@ -62,7 +62,8 @@ build do
     '--without-ada',
     '--without-cxx-binding',
     '--without-debug',
-    '--without-manpages'
+    '--without-manpages',
+    '--enable-pc-files'
   ]
 
   command configure_command.join(' '), env: env
