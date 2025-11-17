@@ -95,8 +95,10 @@ build do
 
     pkg_config_overrides = File.join(project_dir, 'pkg-config-overrides')
     mkdir pkg_config_overrides
-    OpenSSLHelper.pkg_config_files.each_value do |file|
-      copy file, pkg_config_overrides
+    OpenSSLHelper.pkg_config_files.each_pair do |file_name, file_path|
+      copy file_path, pkg_config_overrides
+      # Don't laugh, it works.  No matter what AmazonLinux 2 asks for - tell it that it wants OpenSSL 1.1 or bust.
+      copy file_path, File.join(pkg_config_overrides, file_name.gsub(/11.pc$/, '.pc')) if OhaiHelper.amazon_linux_2?
     end
     env['PKG_CONFIG_PATH'] = "#{pkg_config_overrides}:#{install_dir}/embedded/lib/pkgconfig"
   else
