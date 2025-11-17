@@ -41,7 +41,7 @@ Copy the following test plan to a comment of the merge request that upgrades the
   gpg --armor --export "$GITLAB_EMAIL"
   ```
 - [ ] Configured the GPG key.
-  - Edit your profile and add the gpg key listed. 
+  - Edit your profile and add the gpg key listed.
   - After importing your gpg key copy its ID from the profile page. It is the first string shown. Its short version is also visible as the output from the gpg --list-signatures command above.
   ```shell
    export GPG_KEY_ID="CHANGE_THIS_KEY_ID"
