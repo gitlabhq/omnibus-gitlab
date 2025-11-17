@@ -822,11 +822,10 @@ GitLab services will be unable to establish network connections.
 This can be resolved by fixing the DNS configurations (or `/etc/hosts`) to
 resolve the hosts to an **IPv4** address instead of **IPv6**.
 
-<!-- markdownlint-disable line-length -->
+## Error: `... bad component(expected host component: my_url.tld)` when `external_url` contains underscores
 
-## Error: `URI::InvalidComponentError (bad component(expected host component: my_url.tld)` when `external_url` contains underscores
-
-If you have set `external_url` with underscores (for example `https://my_company.example.com`), you may face the following issues with CI/CD:
+If you have set `external_url` with underscores (for example `https://my_company.example.com`),
+you might face the following issues with CI/CD:
 
 - It will not be possible to open project's **Settings > CI/CD** page.
 - Runners will not pick up jobs and will fail with an error 500.
@@ -849,9 +848,8 @@ lib/gitlab/i18n.rb:73:in `with_locale'
 lib/gitlab/i18n.rb:79:in `with_user_locale'
 ```
 
-As a workaround, avoid using underscores in `external_url`. There is an open issue about it: [Setting `external_url` with underscore results in a broken GitLab CI/CD functionality](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6077).
-
-<!-- markdownlint-enable line-length -->
+As a workaround, avoid using underscores in `external_url`. There is an open issue about it:
+[Setting `external_url` with underscore results in a broken GitLab CI/CD functionality](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/6077).
 
 ## Upgrade fails with `timeout: run: /opt/gitlab/service/gitaly` error
 
