@@ -12,3 +12,17 @@ components:
     ignored_paths:
       - 'doc/.*/**'
       - 'doc/development/**'
+      # Redirects: See Redirects component for more info
+      - 'doc/installation/_index.md'
+      - 'doc/_index.md'
+
+  # Redirects list generated 2025-10-31
+  # This list contains all Redirects files. It is auto generated through the monthly maintenance tasks.
+  # See https://gitlab.com/gitlab-com/localization/docs-site-localization/-/blob/main/.gitlab/issue_templates/monthly-maintenance-tasks.md
+  - name: Redirects
+    create_request: false
+    paths:
+      - source: 'doc/installation/_index.md'
+        target: 'doc-locale/{{language}}/installation/_index.md'
+      - source: 'doc/_index.md'
+        target: 'doc-locale/{{language}}/_index.md'
