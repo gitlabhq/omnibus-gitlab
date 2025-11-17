@@ -22,12 +22,12 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 # Date of the file is in a comment at the start, or in the changelog
-default_version '2022.07.19'
+default_version '2025.11.04'
 display_version version.tr('.', '')
 
-version '2022.07.19' do
+version '2025.11.04' do
   # sha256sum only for the latest PEM is available at https://curl.se/ca/cacert.pem.sha256
-  source sha256: '6ed95025fba2aef0ce7b647607225745624497f876d74ef6ec22b26e73e9de77'
+  source sha256: '8ac40bdd3d3e151a6b4078d2b2029796e8f843e3f86fbf2adbc4dd9f05e79def'
 end
 
 # Source URL looks like https://curl.haxx.se/ca/cacert-2018-01-17.pem. The
