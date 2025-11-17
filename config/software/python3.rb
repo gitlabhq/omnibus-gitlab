@@ -21,8 +21,8 @@ name 'python3'
 # files/gitlab-config-template/gitlab.rb.template
 # files/gitlab-cookbooks/gitaly/recipes/enable.rb
 # files/gitlab-cookbooks/gitlab/attributes/default.rb
-# spec/chef/recipes/gitaly_spec.rb
-# spec/chef/recipes/gitlab-rails_spec.rb
+# spec/chef/cookbooks/gitaly/recipes/gitaly_spec.rb
+# spec/chef/cookbooks/gitlab/recipes/gitlab-rails_spec.rb
 default_version '3.9.24'
 
 dependency 'libedit'
