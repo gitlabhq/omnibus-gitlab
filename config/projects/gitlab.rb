@@ -103,6 +103,7 @@ end
 if Build::Check.use_system_ssl?
   if OhaiHelper.amazon_linux_2?
     runtime_dependency 'openssl-perl'
+    runtime_dependency 'openssl11'
   else
     runtime_dependency 'openssl'
   end

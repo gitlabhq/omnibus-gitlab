@@ -76,6 +76,8 @@ build do
   openssl_library_path = "=#{install_dir}/embedded" unless Build::Check.use_system_ssl?
   configure_command << "--with-openssl#{openssl_library_path}"
 
+  patch source: '0001-Patch-curl-OpenSSL-m4-for-AL2-FIPS-pkg-config.patch' if OhaiHelper.amazon_linux_2? && Build::Check.use_system_ssl?
+
   command "autoreconf -fi", env: env
   command configure_command.join(' '), env: env
 
