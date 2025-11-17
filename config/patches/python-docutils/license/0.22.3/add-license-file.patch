@@ -1,21 +1,24 @@
-diff --color -Naur a/COPYING.txt b/COPYING.txt
---- a/COPYING.txt	1969-12-31 18:00:00
-+++ b/COPYING.txt	2023-03-09 14:11:28
-@@ -0,0 +1,157 @@
+diff --git a/COPYING.rst b/COPYING.rst
+index e69de29..4df8a1d 100644
+--- a/COPYING.rst
++++ b/COPYING.rst
+@@ -0,0 +1,151 @@
++.. include:: docs/header0.rst
++
 +==================
 + Copying Docutils
 +==================
 +
 +:Author: David Goodger
 +:Contact: goodger@python.org
-+:Date: $Date: 2022-05-30 18:54:46 +0200 (Mo, 30. Mai 2022) $
++:Date: $Date: 2024-11-10 00:36:49 +0100 (So, 10. Nov 2024) $
 +:Web site: https://docutils.sourceforge.io/
 +:Copyright: This document has been placed in the public domain.
 +
 +Most of the files included in this project have been placed in the
 +public domain, and therefore have no license requirements and no
 +restrictions on copying or usage; see the `Public Domain Dedication`_
-+below.  There are a few exceptions_, listed below.
++below.  There are exceptions_, listed below.
 +Files in the Sandbox_ are not distributed with Docutils releases and
 +may have different license terms.
 +
@@ -81,7 +84,7 @@ diff --color -Naur a/COPYING.txt b/COPYING.txt
 +  (released under a "revised" `BSD 3-Clause License`_ included in the file)
 +  and smartypants.py © 2004, 2007 Chad Miller.
 +  Released under the terms of the `BSD 2-Clause License`_
-+  (`local copy <licenses/BSD-2-Clause.txt>`__).
++  (`local copy <licenses/BSD-2-Clause.rst>`__).
 +
 +  .. _SmartyPants: http://daringfireball.net/projects/smartypants/
 +
@@ -89,53 +92,46 @@ diff --color -Naur a/COPYING.txt b/COPYING.txt
 +
 +  Copyright © Jens Jørgen Mortensen, Günter Milde.
 +  Released under the terms of the `BSD 2-Clause License`_
-+  (`local copy <licenses/BSD-2-Clause.txt>`__).
++  (`local copy <licenses/BSD-2-Clause.rst>`__).
 +
-+* docutils/utils/math/math2html.py,
-+  docutils/writers/html5_polyglot/math.css
++* | docutils/utils/math/math2html.py,
++  | docutils/writers/html5_polyglot/math.css
 +
 +  Copyright © 2009,2010 Alex Fernández; 2021 Günter Milde
 +
 +  These files were part of eLyXer_, released under the `GNU
 +  General Public License`_ version 3 or later. The author relicensed
 +  them for Docutils under the terms of the `BSD 2-Clause License`_
-+  (`local copy <licenses/BSD-2-Clause.txt>`__).
++  (`local copy <licenses/BSD-2-Clause.rst>`__).
 +
 +  .. _eLyXer: https://github.com/alexfernandez/elyxer
 +
-+* docutils/__main__.py,
-+  docutils/parsers/commonmark_wrapper.py,
-+  docutils/parsers/recommonmark_wrapper.py,
-+  docutils/utils/error_reporting.py,
-+  docutils/utils/math/__init__.py,
-+  docutils/utils/math/latex2mathml.py,
-+  docutils/utils/math/tex2mathml_extern.py,
-+  docutils/utils/punctuation_chars.py,
-+  docutils/utils/smartquotes.py,
-+  docutils/writers/html5_polyglot/__init__.py,
-+  docutils/writers/html5_polyglot/*.css,
-+  docutils/writers/latex2e/docutils.sty,
-+  docutils/writers/xetex/__init__.py,
-+  test/test_parsers/test_recommonmark/\*.py,
-+  test/test_parsers/test_rst/test_directives/test__init__.py,
-+  test/test_parsers/test_rst/test_directives/test_code_parsing.py,
-+  test/test_parsers/test_rst/test_line_length_limit_default.py,
-+  test/test_parsers/test_rst/test_line_length_limit.py,
-+  test/test_writers/test_latex2e_misc.py,
-+  test/transforms/test_smartquotes.py,
-+  tools/docutils-cli.py,
-+  tools/rst2html5.py
++* | docutils/__main__.py,
++  | docutils/parsers/commonmark_wrapper.py,
++  | docutils/parsers/recommonmark_wrapper.py,
++  | docutils/utils/error_reporting.py,
++  | docutils/utils/math/__init__.py,
++  | docutils/utils/math/latex2mathml.py,
++  | docutils/utils/math/tex2mathml_extern.py,
++  | docutils/utils/punctuation_chars.py,
++  | docutils/utils/smartquotes.py,
++  | docutils/writers/html5_polyglot/__init__.py,
++  | docutils/writers/html5_polyglot/\*.css,
++  | docutils/writers/latex2e/docutils.sty,
++  | docutils/writers/xetex/__init__.py,
++  | test/test_parsers/test_recommonmark/\*.py,
++  | test/test_parsers/test_rst/test_directives/test__init__.py,
++  | test/test_parsers/test_rst/test_directives/test_code_parsing.py,
++  | test/test_parsers/test_rst/test_line_length_limit_default.py,
++  | test/test_parsers/test_rst/test_line_length_limit.py,
++  | test/test_writers/test_latex2e_misc.py,
++  | test/transforms/test_smartquotes.py,
++  | tools/docutils-cli.py,
++  | tools/rst2html5.py
 +
 +  Copyright © Günter Milde.
 +  Released under the terms of the `BSD 2-Clause License`_
-+  (`local copy <licenses/BSD-2-Clause.txt>`__).
-+
-+* docutils/utils/roman.py
-+
-+  copyright by Mark Pilgrim, released under the
-+  `Python 2.1.1 license`_ (`local copy`__).
-+
-+  __ licenses/python-2-1-1.txt
++  (`local copy <licenses/BSD-2-Clause.rst>`__).
 +
 +* tools/editors/emacs/rst.el
 +
@@ -143,7 +139,7 @@ diff --color -Naur a/COPYING.txt b/COPYING.txt
 +  released under the `GNU General Public License`_ version 3 or later
 +  (`local copy`__).
 +
-+  __ licenses/gpl-3-0.txt
++  __ licenses/gpl-3-0.rst
 +
 +All used licenses are OSI-approved_ and GPL-compatible_.
 +
@@ -152,7 +148,6 @@ diff --color -Naur a/COPYING.txt b/COPYING.txt
 +
 +.. _sandbox: https://docutils.sourceforge.io/sandbox/README.html
 +.. _licenses: licenses/
-+.. _Python 2.1.1 license: https://docs.python.org/3/license.html
 +.. _GNU General Public License: https://www.gnu.org/copyleft/gpl.html
 +.. _BSD 2-Clause License: http://opensource.org/licenses/BSD-2-Clause
 +.. _BSD 3-Clause License: https://opensource.org/licenses/BSD-3-Clause
