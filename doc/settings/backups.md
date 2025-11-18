@@ -15,7 +15,7 @@ title: Backup
 ## Backup and restore configuration on a Linux package installation
 
 All configuration for Linux package installations is stored in `/etc/gitlab`.
-It is recommended to keep a copy of your [configuration and certificates](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#data-not-included-in-a-backup)
+You should keep a copy of your [configuration and certificates](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#data-not-included-in-a-backup)
 in a safe place, that's separate from your GitLab application backups.
 This reduces the chance that your encrypted application data will be
 lost or leaked or stolen together with the keys needed to decrypt it.

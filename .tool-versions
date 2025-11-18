@@ -1,6 +1,6 @@
 ruby 3.2.8
 
 # For linting documentation
-markdownlint-cli2 0.17.2
-lychee 0.18.1
-vale 3.11.2
+markdownlint-cli2 0.19.0
+lychee 0.21.0
+vale 3.13.0

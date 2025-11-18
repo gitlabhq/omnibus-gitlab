@@ -32,7 +32,7 @@ variables:
   AUTO_DEPLOY_ENVIRONMENT: 'pre'
   OMNIBUS_GITLAB_MIRROR_ID: "14588374"
   DOCS_GITLAB_REPO_SUFFIX: "omnibus"
-  DOCS_LINT_IMAGE: registry.gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/lint-markdown:alpine-3.21-vale-3.11.2-markdownlint2-0.17.2-lychee-0.18.1
+  DOCS_LINT_IMAGE: registry.gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/lint-markdown:alpine-3.22-vale-3.13.0-markdownlint2-0.19.0-lychee-0.21.0
   CACHE_KEY_SUFFIX: '-v3'
   CACHE_EDITION: "CE"
   CACHE_POLICY: 'pull-push'
