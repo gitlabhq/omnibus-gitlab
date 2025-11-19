@@ -3,6 +3,40 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.6.0 (2025-11-19)
+
+### Added (1 change)
+
+- [Provide packages for Alma Linux 10](gitlab-org/omnibus-gitlab@8d128fff5f4493b9ac4ec4e09693528d372bcc1a) ([merge request](gitlab-org/omnibus-gitlab!8523))
+
+### Fixed (3 changes)
+
+- [Fix registry gitlab-ctl permissions with sudo -u registry](gitlab-org/omnibus-gitlab@114c5e4dc0f3cfb0dee0f7fbb112538d0a7e4eb3) ([merge request](gitlab-org/omnibus-gitlab!8817))
+- [Fix registry sv permissions](gitlab-org/omnibus-gitlab@132ee7d131454164366848bdd734b7a732decd66) ([merge request](gitlab-org/omnibus-gitlab!8794))
+- [Fix NGINX not routing traffic to the right server](gitlab-org/omnibus-gitlab@86ef5a3fb2890e731a499ef3af67b6a40c74b874) ([merge request](gitlab-org/omnibus-gitlab!8805))
+
+### Changed (15 changes)
+
+- [Update SSH config in Docker to use only strong algorithms](gitlab-org/omnibus-gitlab@c1c9400f5d7e546227213158fd0c77d42e3919da) by @stanley.foerster ([merge request](gitlab-org/omnibus-gitlab!8806))
+- [Update dependency container-registry to v4.31.0-gitlab](gitlab-org/omnibus-gitlab@fec2f12f9135b85b5e192f3f821205ebf7c66020) ([merge request](gitlab-org/omnibus-gitlab!8846))
+- [Bump GraphicsMagick to v1.3.46](gitlab-org/omnibus-gitlab@8c17455fa866b7269299003e6897a111b1f411f6) ([merge request](gitlab-org/omnibus-gitlab!8823))
+- [Upgrade Rack to 2.2.20](gitlab-org/omnibus-gitlab@bed9617c4206058796f72927b49a073620e260b1) ([merge request](gitlab-org/omnibus-gitlab!8796))
+- [Update Mattermost to version 10.11.2](gitlab-org/omnibus-gitlab@6afa7d4504e5200d56cba596a4a4d511d03c8020) by @christian.hueser.hzdr ([merge request](gitlab-org/omnibus-gitlab!8703))
+- [Bump container-registry to 4.30.0](gitlab-org/omnibus-gitlab@d5ec84ed39f6491ce9d35076f7bef63b942383f3) ([merge request](gitlab-org/omnibus-gitlab!8813))
+- [Bump libtiff to version 4.7.1](gitlab-org/omnibus-gitlab@bc0004665c8b01ab7477e86d17e560c904ff315e) ([merge request](gitlab-org/omnibus-gitlab!8766))
+- [Bump redis to v7.2.11](gitlab-org/omnibus-gitlab@75738a58dfda82ec82ae92a9c56b712449a3e0e1) ([merge request](gitlab-org/omnibus-gitlab!8774))
+- [Reduce risk of 502 error in huge namespaces](gitlab-org/omnibus-gitlab@9d31550a8be980797c37ebecc230cefa4d7c42a5) ([merge request](gitlab-org/omnibus-gitlab!8801))
+- [Bump redis-exporter to version 1.79.0](gitlab-org/omnibus-gitlab@5274811d06936ab93d12816d33d4b15d0a113268) ([merge request](gitlab-org/omnibus-gitlab!8799))
+- [Extend registry threshold removal to 23.0](gitlab-org/omnibus-gitlab@4d61e7225f883c3570ea5cf180959e11cdea5411) ([merge request](gitlab-org/omnibus-gitlab!8790))
+- [Bump container registry version to v4.29.0-gitlab](gitlab-org/omnibus-gitlab@a29e351184951ceccc759310708099e6d31ea4fb) ([merge request](gitlab-org/omnibus-gitlab!8789))
+- [Bump redis-exporter to v1.77.0](gitlab-org/omnibus-gitlab@aa86a2072ef69b6f90fa646440d194ccde7b007c) ([merge request](gitlab-org/omnibus-gitlab!8642))
+- [Update dependency libarchive/libarchive to v3.8.2](gitlab-org/omnibus-gitlab@3c6be4e47245eb544c1e174fbc85b75ab1096425) ([merge request](gitlab-org/omnibus-gitlab!8795))
+- [Update acme](gitlab-org/omnibus-gitlab@5faa426da47e136767bc0b50972368dc4b96bd9c) ([merge request](gitlab-org/omnibus-gitlab!8610))
+
+### Security (1 change)
+
+- [Update libxslt from 1.1.41 to 1.1.43](gitlab-org/omnibus-gitlab@5f3194f33a7303543d9e48e5791d7f7f284929f3)
+
 ## 18.5.2 (2025-11-11)
 
 ### Fixed (1 change)
