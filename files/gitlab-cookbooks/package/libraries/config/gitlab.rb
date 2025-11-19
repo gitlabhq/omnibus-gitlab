@@ -89,7 +89,6 @@ module Gitlab
     ee_attribute('geo_secondary', priority: 20).use { GeoSecondary }
     ee_attribute('geo_logcursor')
     ee_attribute('sentinel').use { Sentinel }
-    ee_attribute('suggested_reviewers').use { SuggestedReviewers }
 
     # Base GitLab attributes
     attribute('gitlab_sshd',      priority: 5)

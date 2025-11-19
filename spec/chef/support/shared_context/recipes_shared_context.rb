@@ -58,7 +58,6 @@ RSpec.shared_context 'recipes' do
       "monitoring::prometheus",
       "monitoring::alertmanager",
       "monitoring::postgres-exporter",
-      "gitlab-ee::suggested_reviewers",
       "registry::database_objects"
     ]
   end

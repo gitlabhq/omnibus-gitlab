@@ -59,8 +59,5 @@ else
   include_recipe 'gitlab-ee::geo-secondary_disable'
 end
 
-# Suggested Reviewers
-include_recipe 'gitlab-ee::suggested_reviewers' if rails_enable
-
 # Create the pgbouncer users
 include_recipe 'pgbouncer::user'

@@ -109,9 +109,6 @@ class SecretsHelper
         'private_api_secret_key' => Gitlab['gitlab_kas']['private_api_secret_key'],
         'websocket_token_secret_key' => Gitlab['gitlab_kas']['websocket_token_secret_key']
       },
-      'suggested_reviewers' => {
-        'api_secret_key' => Gitlab['suggested_reviewers']['api_secret_key']
-      },
       'registry' => {
         'http_secret' => Gitlab['registry']['http_secret'],
         'internal_certificate' => Gitlab['registry']['internal_certificate'],
