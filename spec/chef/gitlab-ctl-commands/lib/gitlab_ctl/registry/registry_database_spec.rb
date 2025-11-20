@@ -100,4 +100,78 @@ RSpec.describe GitlabCtl::Registry::Database do
       end
     end
   end
+
+  describe '.set_command' do
+    let(:options) { { command: 'migrate', subcommand: 'up' } }
+    let(:expected_base_command) do
+      [
+        '/opt/gitlab/embedded/bin/registry',
+        'database',
+        'migrate',
+        'up',
+        '/var/opt/gitlab/registry/config.yml'
+      ]
+    end
+
+    before do
+      allow(described_class).to receive(:continue?)
+      # Mock Etc.getpwuid to return root user
+      allow(Etc).to receive(:getpwuid).and_return(double(name: 'root'))
+    end
+
+    context 'when running as root' do
+      context 'with default registry user configuration' do
+        before do
+          allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({})
+        end
+
+        it 'applies privilege drop using chpst' do
+          result = described_class.set_command(options)
+          expected_command = [
+            '/opt/gitlab/embedded/bin/chpst',
+            '-u', 'registry:registry'
+          ] + expected_base_command
+
+          expect(result).to eq(expected_command)
+        end
+      end
+
+      context 'with custom registry user configuration' do
+        before do
+          allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return(
+            {
+              'registry' => {
+                'username' => 'custom-registry',
+                'group' => 'custom-group'
+              }
+            }
+          )
+        end
+
+        it 'applies privilege drop using custom user and group' do
+          result = described_class.set_command(options)
+          expected_command = [
+            '/opt/gitlab/embedded/bin/chpst',
+            '-u', 'custom-registry:custom-group'
+          ] + expected_base_command
+
+          expect(result).to eq(expected_command)
+        end
+      end
+    end
+
+    context 'when running as registry user' do
+      before do
+        # Mock Etc.getpwuid to return registry user
+        allow(Etc).to receive(:getpwuid).and_return(double(name: 'registry'))
+        allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({})
+      end
+
+      it 'does not apply privilege drop' do
+        result = described_class.set_command(options)
+        expect(result).to eq(expected_base_command)
+        expect(result).not_to include('/opt/gitlab/embedded/bin/chpst')
+      end
+    end
+  end
 end

@@ -3,6 +3,7 @@ require 'optparse'
 
 require_relative './migrate'
 require_relative './import'
+require_relative '../../gitlab_ctl'
 
 module GitlabCtl
   module Registry
@@ -146,7 +147,17 @@ module GitlabCtl
         # always set the config file at the end
         command += [CONFIG_PATH]
 
-        command
+        # Apply privilege drop pattern following gitlab-psql precedent
+        registry_user, registry_group = get_registry_user_info
+        current_user = Etc.getpwuid(Process.euid).name
+
+        if current_user == registry_user
+          # Already running as registry user, no privilege drop needed
+          command
+        else
+          # Need to drop privileges to registry user for proper PostgreSQL peer authentication
+          ['/opt/gitlab/embedded/bin/chpst', '-u', "#{registry_user}:#{registry_group}", *command]
+        end
       end
 
       def self.log(msg)
@@ -203,6 +214,16 @@ module GitlabCtl
 
         puts 'Command requires the container registry to be in read-only mode. Exiting...'
         exit 1
+      end
+
+      def self.get_registry_user_info
+        node_attributes = GitlabCtl::Util.get_public_node_attributes
+        registry_user = node_attributes.dig('registry', 'username') || 'registry'
+        registry_group = node_attributes.dig('registry', 'group') || 'registry'
+        [registry_user, registry_group]
+      rescue GitlabCtl::Errors::NodeError
+        # Fallback to defaults if node attributes are not available
+        %w[registry registry]
       end
     end
   end

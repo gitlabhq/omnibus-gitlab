@@ -8,7 +8,9 @@ class RegistryHelper < BaseHelper
   def public_attributes
     {
       'registry' => {
-        'dir' => node['registry']['dir']
+        'dir' => node['registry']['dir'],
+        'username' => node['registry']['username'],
+        'group' => node['registry']['group']
       }
     }
   end
