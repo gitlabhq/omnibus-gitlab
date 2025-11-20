@@ -18,6 +18,8 @@ module SidekiqRole
   def self.load_role
     return unless Gitlab['sidekiq_role']['enable']
 
+    # Run GitLab Rails related recipes unless explicitly disabled
+    Gitlab['gitlab_rails']['enable'] = true if Gitlab['gitlab_rails']['enable'].nil?
     # Do not run any DB migrations
     Gitlab['gitlab_rails']['auto_migrate'] ||= false
 
