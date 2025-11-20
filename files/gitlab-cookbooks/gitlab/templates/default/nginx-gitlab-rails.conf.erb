@@ -34,7 +34,7 @@
 ## Redirects all HTTP traffic to the HTTPS host
 server { ## HTTPS redirect server
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @redirect_http_to_https_port %> default_server<% if @proxy_protocol %> proxy_protocol<% end %>;
+  listen <%= listen_address %>:<%= @redirect_http_to_https_port %><% if @default_server_enabled %> default_server<% end %><% if @proxy_protocol %> proxy_protocol<% end %>;
 <% end %>
 
   server_name <%= @fqdn %>;
@@ -67,10 +67,10 @@ server { ## HTTPS redirect server
 
 server { ## HTTPS server
 <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:<%= @listen_port %> default_server<% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% end %>;
+  listen <%= listen_address %>:<%= @listen_port %><% if @default_server_enabled %> default_server<% end %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% end %>;
 
   <% if @kerberos_enabled && @kerberos_use_dedicated_port %>
-  listen <%= listen_address %>:<%= @kerberos_port %> default_server<% if @kerberos_https %> ssl<% end %>;
+  listen <%= listen_address %>:<%= @kerberos_port %><% if @default_server_enabled %> default_server<% end %><% if @kerberos_https %> ssl<% end %>;
   <% end %>
 
 <% end %>
