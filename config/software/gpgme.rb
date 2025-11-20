@@ -27,19 +27,25 @@ license_file 'COPYING.LESSER'
 
 skip_transitive_dependency_licensing true
 
-source url: "https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-#{version}.tar.bz2",
-       sha256: '361d4eae47ce925dba0ea569af40e7b52c645c4ae2e65e5621bf1b6cdd8b0e9e'
+if Build::Check.use_ubt?
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, default_version, "0a7cb7bb86faf3ad63f418131dcdce36a77bb3a4465a3afdbcbbc7242590ff78", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source url: "https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-#{version}.tar.bz2",
+         sha256: '361d4eae47ce925dba0ea569af40e7b52c645c4ae2e65e5621bf1b6cdd8b0e9e'
 
-relative_path "gpgme-#{version}"
+  relative_path "gpgme-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
-  env['CFLAGS'] << ' -std=c99'
-  command './configure ' \
-    "--prefix=#{install_dir}/embedded --disable-doc --disable-languages", env: env
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
+    env['CFLAGS'] << ' -std=c99'
+    command './configure ' \
+      "--prefix=#{install_dir}/embedded --disable-doc --disable-languages", env: env
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
 
 project.exclude 'embedded/bin/gpgme-config'
