@@ -18,29 +18,35 @@ name 'zlib-ng'
 version = Gitlab::Version.new('zlib-ng', '2.2.4')
 default_version version.print(false)
 
-source git: version.remote
-
 license 'Zlib'
 license_file 'LICENSE.md'
 skip_transitive_dependency_licensing true
 
-build do
-  env = with_standard_compiler_flags
+# UBT does not produce Arm64 binaries yet.
+if Build::Check.use_ubt?
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, default_version, "9b426ec7d6c86c1d0f0c3d6130de60b7a8233c420ce8aee82c0f31d30e9ad2ce", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
+  build do
+    env = with_standard_compiler_flags
 
-  # Default from `configure` in upstream zlib
-  env['CFLAGS'] << ' -O3'
+    # Default from `configure` in upstream zlib
+    env['CFLAGS'] << ' -O3'
 
-  # Enable frame-pointers to support profiling processes that
-  # call this library's functions.
-  env['CFLAGS'] << ' -fno-omit-frame-pointer'
+    # Enable frame-pointers to support profiling processes that
+    # call this library's functions.
+    env['CFLAGS'] << ' -fno-omit-frame-pointer'
 
-  configure_command = [
-    # Compile with zlib-compatible API.
-    '--zlib-compat'
-  ]
+    configure_command = [
+      # Compile with zlib-compatible API.
+      '--zlib-compat'
+    ]
 
-  configure(*configure_command, env: env)
+    configure(*configure_command, env: env)
 
-  make "-j #{workers}", env: env
-  make "-j #{workers} install", env: env
+    make "-j #{workers}", env: env
+    make "-j #{workers} install", env: env
+  end
 end
