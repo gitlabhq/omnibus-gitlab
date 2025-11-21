@@ -134,4 +134,20 @@ RSpec.describe 'GitLabRoles' do
       include_examples 'enable recipes required for the service only', ['gitaly_role'], ['gitaly::enable', 'gitaly::git_data_dirs'], ['gitaly::disable']
     end
   end
+
+  describe 'SidekiqRole' do
+    before do
+      allow(SidekiqRole).to receive(:load_role).and_call_original
+    end
+
+    it 'enables the rails services' do
+      stub_gitlab_rb(sidekiq_role: { enable: true })
+
+      Gitlab.load_roles
+
+      expect(SidekiqRole).to have_received(:load_role)
+      expect(Gitlab['gitlab_rails']['enable']).to eq true
+      expect(Services).to have_received(:enable_group).with('sidekiq_role').once
+    end
+  end
 end
