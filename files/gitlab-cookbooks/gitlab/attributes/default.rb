@@ -965,6 +965,7 @@ default['gitlab']['nginx']['real_ip_trusted_addresses'] = [] # Each entry create
 default['gitlab']['nginx']['real_ip_header'] = nil
 default['gitlab']['nginx']['real_ip_recursive'] = nil
 default['gitlab']['nginx']['server_names_hash_bucket_size'] = 64
+default['gitlab']['nginx']['default_server_enabled'] = true
 # HSTS
 default['gitlab']['nginx']['hsts_max_age'] = 63072000 # settings from by https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=intermediate&openssl=1.1.1d&ocsp=false&guideline=5.6
 default['gitlab']['nginx']['hsts_include_subdomains'] = false

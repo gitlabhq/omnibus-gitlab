@@ -519,6 +519,31 @@ RSpec.describe 'nginx' do
       expect(chef_run).to render_file(gitlab_http_config).with_content('return 301 https://fauxhai.local:80$request_uri;')
     end
 
+    context 'when redirect_http_to_https is enabled' do
+      before do
+        stub_gitlab_rb(nginx: { listen_https: true, redirect_http_to_https: true })
+      end
+
+      it 'includes default_server in redirect server block by default' do
+        expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
+          expect(content).to match(/server \{ ## HTTPS redirect server.*listen \*:80 default_server;/m)
+        }
+      end
+
+      context 'when default_server_enabled is false' do
+        before do
+          stub_gitlab_rb(nginx: { listen_https: true, redirect_http_to_https: true, default_server_enabled: false })
+        end
+
+        it 'does not include default_server in redirect server block' do
+          expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
+            expect(content).to match(/server \{ ## HTTPS redirect server.*listen \*:80;/m)
+            expect(content).not_to match(/server \{ ## HTTPS redirect server.*listen \*:80 default_server;/m)
+          }
+        end
+      end
+    end
+
     it 'creates a default VERSION file and restarts service' do
       expect(chef_run).to create_version_file('Create version file for NGINX').with(
         version_file_path: '/var/opt/gitlab/nginx/VERSION',
@@ -526,6 +551,37 @@ RSpec.describe 'nginx' do
       )
 
       expect(chef_run.version_file('Create version file for NGINX')).to notify('runit_service[nginx]').to(:restart)
+    end
+
+    context 'when default_server_enabled is true' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://localhost',
+          nginx: { default_server_enabled: true }
+        )
+      end
+
+      it 'includes default_server in listen directives' do
+        expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
+          expect(content).to include('listen *:443 default_server ssl;')
+        }
+      end
+    end
+
+    context 'when default_server_enabled is false' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://localhost',
+          nginx: { default_server_enabled: false }
+        )
+      end
+
+      it 'does not include default_server in listen directives' do
+        expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
+          expect(content).to include('listen *:443 ssl;')
+          expect(content).not_to include('listen *:443 default_server ssl;')
+        }
+      end
     end
 
     context 'when smartcard authentication is enabled' do
