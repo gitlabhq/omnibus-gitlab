@@ -4,17 +4,81 @@ require 'gitlab/package_repository/base'
 RSpec.describe PackageRepository::Base do
   let(:base_instance) { described_class.new }
 
+  before do
+    allow(ENV).to receive(:[]).and_call_original
+  end
+
   describe 'abstract methods' do
     it 'raises NotImplementedError for #upload' do
       expect { base_instance.upload }.to raise_error(NotImplementedError, /must implement #upload/)
     end
 
-    it 'raises NotImplementedError for #target' do
-      expect { base_instance.target }.to raise_error(NotImplementedError, /must implement #target/)
-    end
-
     it 'raises NotImplementedError for #user' do
       expect { base_instance.user }.to raise_error(NotImplementedError, /must implement #user/)
+    end
+  end
+
+  describe '#target' do
+    context 'when PULP_REPO is set' do
+      before do
+        stub_env_var('PULP_REPO', 'pulp-test-repo')
+      end
+
+      it 'returns the PULP_REPO value' do
+        expect(base_instance.target).to eq('pulp-test-repo')
+      end
+    end
+
+    context 'when PACKAGECLOUD_REPO is set' do
+      before do
+        stub_env_var('PULP_REPO', nil)
+        stub_env_var('PACKAGECLOUD_REPO', 'packagecloud-test-repo')
+      end
+
+      it 'returns the PACKAGECLOUD_REPO value' do
+        expect(base_instance.target).to eq('packagecloud-test-repo')
+      end
+    end
+
+    context 'when RASPBERRY_REPO is set' do
+      before do
+        stub_env_var('PULP_REPO', nil)
+        stub_env_var('PACKAGECLOUD_REPO', nil)
+        stub_env_var('RASPBERRY_REPO', 'raspi-repo')
+      end
+
+      it 'returns the RASPBERRY_REPO value' do
+        expect(base_instance.target).to eq('raspi-repo')
+      end
+    end
+
+    context 'when no environment variables are set' do
+      before do
+        stub_env_var('PULP_REPO', nil)
+        stub_env_var('PACKAGECLOUD_REPO', nil)
+        stub_env_var('RASPBERRY_REPO', nil)
+      end
+
+      context 'on RC build' do
+        before do
+          allow(IO).to receive(:popen).with(%w[git describe]).and_return("8.12.0+rc1.ee.0\n")
+        end
+
+        it 'returns unstable' do
+          expect(base_instance.target).to eq('unstable')
+        end
+      end
+
+      context 'on stable build' do
+        before do
+          allow(IO).to receive(:popen).with(%w[git describe]).and_return("8.12.8+ce.0\n")
+          allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
+        end
+
+        it 'returns the package name' do
+          expect(base_instance.target).to eq('gitlab-ce')
+        end
+      end
     end
   end
 

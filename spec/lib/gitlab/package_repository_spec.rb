@@ -17,6 +17,16 @@ RSpec.describe PackageRepository do
       end
     end
 
+    context 'when REPOSITORY_TYPE is pulp' do
+      before do
+        stub_env_var('REPOSITORY_TYPE', 'pulp')
+      end
+
+      it 'returns a PulpRepository instance' do
+        expect(PackageRepository.new).to be_a(PackageRepository::PulpRepository)
+      end
+    end
+
     context 'when REPOSITORY_TYPE is not set' do
       before do
         stub_env_var('REPOSITORY_TYPE', nil)
@@ -46,6 +56,16 @@ RSpec.describe PackageRepository do
 
       it 'returns packagecloud' do
         expect(PackageRepository.repository_type).to eq 'packagecloud'
+      end
+    end
+
+    context 'when REPOSITORY_TYPE is set to pulp' do
+      before do
+        stub_env_var('REPOSITORY_TYPE', 'pulp')
+      end
+
+      it 'returns pulp' do
+        expect(PackageRepository.repository_type).to eq 'pulp'
       end
     end
 
