@@ -21,10 +21,20 @@ class PackageRepository
       raise NotImplementedError, "#{self.class} must implement #upload"
     end
 
-    # Abstract method: Must be implemented by subclasses
+    # Returns the target repository name
+    # Priority: PULP_REPO env var > PACKAGECLOUD_REPO env var > RASPBERRY_REPO env var > RC repository > Package name
+    # For legacy reason, in most places PACKAGECLOUD_REPO is still used. If PULP_REPO is specified, it must be for Pulp
     # @return [String] The target repository name
     def target
-      raise NotImplementedError, "#{self.class} must implement #target"
+      # Override for Pulp (with legacy PackageCloud fallback)
+      return Gitlab::Util.get_env('PULP_REPO') if Gitlab::Util.get_env('PULP_REPO') && !Gitlab::Util.get_env('PULP_REPO').empty?
+      return Gitlab::Util.get_env('PACKAGECLOUD_REPO') if Gitlab::Util.get_env('PACKAGECLOUD_REPO') && !Gitlab::Util.get_env('PACKAGECLOUD_REPO').empty?
+
+      # Repository for raspberry pi
+      return Gitlab::Util.get_env('RASPBERRY_REPO') if Gitlab::Util.get_env('RASPBERRY_REPO') && !Gitlab::Util.get_env('RASPBERRY_REPO').empty?
+
+      rc_repository = repository_for_rc
+      rc_repository || Build::Info::Package.name
     end
 
     # Abstract method: Must be implemented by subclasses
@@ -56,6 +66,29 @@ class PackageRepository
 
     private
 
+    # Validates the package directory structure
+    # @param path [String] The package path to validate
+    # @raise [RuntimeError] If the directory structure is unexpected
+    # @return [Array<String>] The validated platform path array
+    def validate_package_path(path)
+      platform_path = path.split("/") # ['pkg', 'ubuntu-xenial_aarch64', 'gitlab-ee_18.6.deb']
+
+      return platform_path if platform_path.size == 3
+
+      list_dir_contents = Dir.glob("pkg/**/*").join("\n")
+      raise "Found unexpected contents in the directory:\n#{list_dir_contents}"
+    end
+
+    # Adds additional platform entries for cross-compatible distributions
+    # Subclasses must implement this to add platform-specific entries
+    # @param list [Array] The list to append additional entries to
+    # @param platform [String] The platform identifier
+    # @param args [Hash] Additional arguments needed to create entries
+    # @return [void]
+    def add_additional_platforms(list, platform, **args)
+      raise NotImplementedError, "#{self.class} must implement #add_additional_platforms"
+    end
+
     # Gets the exit status of the last child process
     # @return [Integer] The exit status code
     def child_process_status
@@ -77,4 +110,7 @@ class PackageRepository
       end
     end
   end
+
+  # Re-export the exception class at the module level for easier access
+  PackageUploadError = Base::PackageUploadError
 end

@@ -1,22 +1,10 @@
 require_relative 'base'
+require 'pathname'
 
 class PackageRepository
   # PackageCloud repository implementation for uploading packages to PackageCloud.
   # Uses the package_cloud CLI to upload packages to various Linux distributions.
   class PackageCloudRepository < Base
-    # Returns the target repository name for PackageCloud
-    # Priority: PACKAGECLOUD_REPO env var > RASPBERRY_REPO env var > RC repository > Package name
-    # @return [String] The target repository name
-    def target
-      # Override for PackageCloud
-      return Gitlab::Util.get_env('PACKAGECLOUD_REPO') if Gitlab::Util.get_env('PACKAGECLOUD_REPO') && !Gitlab::Util.get_env('PACKAGECLOUD_REPO').empty?
-      # Repository for raspberry pi
-      return Gitlab::Util.get_env('RASPBERRY_REPO') if Gitlab::Util.get_env('RASPBERRY_REPO') && !Gitlab::Util.get_env('RASPBERRY_REPO').empty?
-
-      rc_repository = repository_for_rc
-      rc_repository || Build::Info::Package.name
-    end
-
     # Returns the PackageCloud user/owner
     # @return [String, nil] The PackageCloud user from PACKAGECLOUD_USER environment variable
     def user
@@ -77,35 +65,57 @@ class PackageRepository
       list = []
 
       Build::Info::Package.file_list.each do |path|
-        platform_path = path.split("/") # ['pkg', 'ubuntu-xenial_aarch64', 'gitlab-ce.deb']
-
-        if platform_path.size != 3
-          list_dir_contents = `ls -la pkg/`
-          raise "Found unexpected contents in the directory:\n #{list_dir_contents}"
-        end
+        platform_path = validate_package_path(path)
 
         platform_name = platform_path[1] # "ubuntu-xenial_aarch64"
         package_name = platform_path[2] # "gitlab-ce.deb"
-        package_path = "#{platform_path[0]}/#{platform_name}/#{package_name}"
+        package_path = Pathname(platform_path[0]).join(platform_name, package_name).to_s
         platform = platform_name.gsub(/_.*/, '').tr("-", "/") # "ubuntu/xenial"
         target_repository = repository || target # staging override or the rest, eg. "unstable"
 
         list << "#{target_repository}/#{platform} #{package_path}" # "unstable/ubuntu/xenial gitlab-ce.deb"
 
-        # Also upload Enterprise Linux to Oracle Linux repo.
-        if platform.start_with?("el/")
-          additional_platform = platform.gsub('el', 'ol')
-          list << "#{target_repository}/#{additional_platform} #{package_path}"
-        end
-
-        # Also upload OpenSUSE Leap to repo.
-        if platform.start_with?("opensuse/")
-          additional_platform = platform.gsub('opensuse', 'sles')
-          list << "#{target_repository}/#{additional_platform} #{package_path}"
-        end
+        # Add additional platform entries (EL to OL, OpenSUSE to SLES)
+        add_additional_platforms(list, platform,
+                                 package_path: package_path,
+                                 target_repository: target_repository)
       end
 
       list
+    end
+
+    # Adds additional platform entries for cross-compatible distributions
+    # @param list [Array] The list to append additional entries to
+    # @param platform [String] The platform identifier
+    # @param args [Hash] Additional arguments (package_path, target_repository)
+    # @return [void]
+    def add_additional_platforms(list, platform, **args)
+      add_oracle_linux_platform(list, platform, **args)
+      add_sles_platform(list, platform, **args)
+    end
+
+    # Adds Oracle Linux platform entry for Enterprise Linux packages
+    # @param list [Array] The list to append additional entries to
+    # @param platform [String] The platform identifier
+    # @param args [Hash] Additional arguments
+    # @return [void]
+    def add_oracle_linux_platform(list, platform, **args)
+      return unless platform.start_with?("el/")
+
+      additional_platform = platform.gsub('el', 'ol')
+      list << "#{args[:target_repository]}/#{additional_platform} #{args[:package_path]}"
+    end
+
+    # Adds SLES platform entry for OpenSUSE packages
+    # @param list [Array] The list to append additional entries to
+    # @param platform [String] The platform identifier
+    # @param args [Hash] Additional arguments
+    # @return [void]
+    def add_sles_platform(list, platform, **args)
+      return unless platform.start_with?("opensuse/")
+
+      additional_platform = platform.gsub('opensuse', 'sles')
+      list << "#{args[:target_repository]}/#{additional_platform} #{args[:package_path]}"
     end
   end
 end
