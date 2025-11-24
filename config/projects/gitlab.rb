@@ -71,7 +71,7 @@ end
 
 if rhel?
   case OhaiHelper.get_centos_version
-  when '8', '9'
+  when '8', '9', '10'
     runtime_dependency 'policycoreutils-python-utils'
     runtime_dependency 'perl-interpreter'
   end
