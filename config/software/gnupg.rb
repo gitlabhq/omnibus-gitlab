@@ -30,29 +30,35 @@ license_file 'COPYING.LGPL3'
 
 skip_transitive_dependency_licensing true
 
-source url: "https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-#{version}.tar.bz2",
-       sha256: '13f3291007a5e8546fcb7bc0c6610ce44aaa9b3995059d4f8145ba09fd5be3e1'
+if Build::Check.use_ubt?
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, default_version, "a149c3db2f8e17c48198fecb0c1c5f31135a652fa34ead73fc19d1ab8e7e217c", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source url: "https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-#{version}.tar.bz2",
+         sha256: '13f3291007a5e8546fcb7bc0c6610ce44aaa9b3995059d4f8145ba09fd5be3e1'
 
-relative_path "gnupg-#{version}"
+  relative_path "gnupg-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  prefix = "#{install_dir}/embedded"
+    prefix = "#{install_dir}/embedded"
 
-  configure_command = [
-    './configure',
-    "--prefix=#{prefix}",
-    '--disable-doc',
-    '--without-readline',
-    '--disable-sqlite',
-    '--disable-gnutls',
-    '--disable-dirmngr',
-    "--with-libgpg-error-prefix=#{prefix}",
-  ]
+    configure_command = [
+      './configure',
+      "--prefix=#{prefix}",
+      '--disable-doc',
+      '--without-readline',
+      '--disable-sqlite',
+      '--disable-gnutls',
+      '--disable-dirmngr',
+      "--with-libgpg-error-prefix=#{prefix}",
+    ]
 
-  command configure_command.join(' '), env: env
+    command configure_command.join(' '), env: env
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end

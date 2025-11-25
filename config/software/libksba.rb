@@ -24,18 +24,24 @@ license_file 'COPYING.LGPLv3'
 
 skip_transitive_dependency_licensing true
 
-source url: "https://www.gnupg.org/ftp/gcrypt/libksba/libksba-#{version}.tar.bz2",
-       sha256: '3f72c68db30971ebbf14367527719423f0a4d5f8103fc9f4a1c01a9fa440de5c'
+if Build::Check.use_ubt?
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, default_version, "b90c2684ed5950d32c10e6dcb181b33fa1085aa23f0ec556d8edc8ef133cbb89", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source url: "https://www.gnupg.org/ftp/gcrypt/libksba/libksba-#{version}.tar.bz2",
+         sha256: '3f72c68db30971ebbf14367527719423f0a4d5f8103fc9f4a1c01a9fa440de5c'
 
-relative_path "libksba-#{version}"
+  relative_path "libksba-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
-  command './configure ' \
-    "--prefix=#{install_dir}/embedded --disable-doc", env: env
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
+    command './configure ' \
+      "--prefix=#{install_dir}/embedded --disable-doc", env: env
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
 
 project.exclude "embedded/bin/ksba-config"
