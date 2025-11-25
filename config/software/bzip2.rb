@@ -28,25 +28,30 @@ skip_transitive_dependency_licensing true
 dependency 'zlib-ng'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
-version '1.0.8' do
-  source sha512: '083f5e675d73f3233c7930ebe20425a533feedeaaa9d8cc86831312a6581cefbe6ed0d08d2fa89be81082f2a5abdabca8b3c080bf97218a1bd59dc118a30b9f3'
-end
-source url: "https://sourceware.org/pub/bzip2/#{name}-#{version}.tar.gz"
+if Build::Check.use_ubt?
+  source Build::UBT.source_args(name, default_version, "9f56684d0216a6ee7e0ed92b2508b51f889af060475285c28f2d7641569c82c5", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  version '1.0.8' do
+    source sha512: '083f5e675d73f3233c7930ebe20425a533feedeaaa9d8cc86831312a6581cefbe6ed0d08d2fa89be81082f2a5abdabca8b3c080bf97218a1bd59dc118a30b9f3'
+  end
+  source url: "https://sourceware.org/pub/bzip2/#{name}-#{version}.tar.gz"
 
-relative_path "#{name}-#{version}"
+  relative_path "#{name}-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  # Avoid warning where .rodata cannot be used when making a shared object
-  env['CFLAGS'] << ' -fPIC'
+    # Avoid warning where .rodata cannot be used when making a shared object
+    env['CFLAGS'] << ' -fPIC'
 
-  # The list of arguments to pass to make
-  args = "PREFIX='#{install_dir}/embedded' VERSION='#{version}'"
+    # The list of arguments to pass to make
+    args = "PREFIX='#{install_dir}/embedded' VERSION='#{version}'"
 
-  patch source: 'makefile_take_env_vars.patch', env: env
+    patch source: 'makefile_take_env_vars.patch', env: env
 
-  make args.to_s, env: env
-  make "#{args} -f Makefile-libbz2_so", env: env
-  make "#{args} install", env: env
+    make args.to_s, env: env
+    make "#{args} -f Makefile-libbz2_so", env: env
+    make "#{args} install", env: env
+  end
 end
