@@ -12,9 +12,13 @@ class PackageRepository
       # @param package_name [String] The package file name
       # @return [PackageType] The appropriate package type instance
       def self.from_filename(package_name)
-        raise "Unknown package type for file: #{package_name}" unless package_name.end_with?('.deb')
-
-        DebPackage.new
+        if package_name.end_with?('.deb')
+          DebPackage.new
+        elsif package_name.end_with?('.rpm')
+          RpmPackage.new
+        else
+          raise "Unknown package type for file: #{package_name}"
+        end
       end
 
       # Returns the package type name
@@ -23,11 +27,11 @@ class PackageRepository
         raise NotImplementedError, "Subclasses must implement type_name"
       end
 
-      # Transforms the platform name according to package type rules
-      # @param platform_name [String] The raw platform name (e.g., "ubuntu-xenial_aarch64")
-      # @return [String] The transformed platform name
-      def transform_platform(platform_name)
-        raise NotImplementedError, "Subclasses must implement transform_platform"
+      # Extracts distribution path from platform directory name
+      # @param platform_dir [String] The platform directory name (e.g., "ubuntu-focal_aarch64", "el-8_aarch64")
+      # @return [String] The distribution path (e.g., "ubuntu/focal", "el/8/aarch64")
+      def extract_distribution(platform_dir)
+        raise NotImplementedError, "Subclasses must implement extract_distribution"
       end
 
       # Builds the upload command for this package type
@@ -52,9 +56,20 @@ class PackageRepository
         'deb'
       end
 
-      # For deb packages, strip architecture suffix from platform name
-      def transform_platform(platform_name)
-        platform_name.gsub(/_.*/, '') # "ubuntu-xenial_aarch64" -> "ubuntu-xenial"
+      # Extracts distribution path from platform directory name for Debian packages
+      # Examples:
+      #   "ubuntu-focal_aarch64" -> "ubuntu/focal"
+      #   "ubuntu-focal_fips" -> "ubuntu/focal"
+      #   "ubuntu-focal" -> "ubuntu/focal"
+      # @param platform_dir [String] The platform directory name
+      # @return [String] The distribution path
+      def extract_distribution(platform_dir)
+        # Remove architecture or fips suffix (anything after _)
+        base_platform = platform_dir.gsub(/_.*/, '')
+
+        # Split distro-version and convert to path
+        # "ubuntu-focal" -> "ubuntu/focal"
+        base_platform.sub('-', '/')
       end
 
       # Builds the upload command for Debian packages
@@ -65,6 +80,57 @@ class PackageRepository
           "--repository", repository_name,
           "--distribution", distribution,
           "--component", component,
+          "--chunk-size", chunk_size.to_s
+        ]
+      end
+    end
+
+    # RPM package type
+    class RpmPackage < PackageType
+      def initialize
+        super('.rpm')
+      end
+
+      def type_name
+        'rpm'
+      end
+
+      # Extracts distribution path from platform directory name for RPM packages
+      # Examples:
+      #   "el-8_aarch64" -> "el/8/aarch64"
+      #   "el-8" -> "el/8/x86_64"
+      #   "amazon-2023_aarch64" -> "amazon/2023/aarch64"
+      #   "opensuse-15.6" -> "opensuse/15.6/x86_64"
+      #   "opensuse-15.6_fips" -> "opensuse/15.6/x86_64"
+      # @param platform_dir [String] The platform directory name
+      # @return [String] The distribution path
+      def extract_distribution(platform_dir)
+        # Remove fips suffix if present
+        clean_platform = platform_dir.gsub(/_fips$/, '')
+
+        # Extract architecture if present, default to x86_64
+        if clean_platform =~ /^(.+)_(aarch64|x86_64)$/
+          base = Regexp.last_match(1)
+          arch = Regexp.last_match(2)
+        else
+          base = clean_platform
+          arch = 'x86_64'
+        end
+
+        # Split distro-version and convert to path with architecture
+        # "el-8" -> "el/8/x86_64"
+        # "amazon-2023" -> "amazon/2023/x86_64"
+        parts = base.split('-', 2)
+        "#{parts[0]}/#{parts[1]}/#{arch}"
+      end
+
+      # Builds the upload command for RPM packages
+      # Does not include --distribution and --component flags, as compared to the deb upload command
+      def build_upload_command(file_path:, repository_name:, distribution:, component:, chunk_size:)
+        [
+          "pulp", type_name, "content", "-t", "package", "upload",
+          "--file", file_path,
+          "--repository", repository_name,
           "--chunk-size", chunk_size.to_s
         ]
       end

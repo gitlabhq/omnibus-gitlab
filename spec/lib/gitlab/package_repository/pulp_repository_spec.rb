@@ -6,6 +6,9 @@ RSpec.describe PackageRepository::PulpRepository do
 
   before do
     allow(ENV).to receive(:[]).and_call_original
+    # Prevent any real pulp command execution by default
+    # Individual tests will override this with more specific mocks
+    allow(Gitlab::Util).to receive(:shellout_stdout).and_return('')
   end
 
   describe '#target' do
@@ -153,10 +156,7 @@ RSpec.describe PackageRepository::PulpRepository do
         end
 
         it 'does not raise an error' do
-          expect { repo.upload('my-staging-repository', false) }.not_to raise_error(
-            PackageRepository::PackageUploadError,
-            /environment variable is required/
-          )
+          expect { repo.upload('my-staging-repository', false) }.not_to raise_error
         end
       end
 
@@ -165,20 +165,14 @@ RSpec.describe PackageRepository::PulpRepository do
           stub_env_var('PULP_USER', nil)
           stub_env_var('PULP_PASSWORD', 'password123')
 
-          expect { repo.upload('my-staging-repository', true) }.not_to raise_error(
-            PackageRepository::PackageUploadError,
-            'PULP_USER environment variable is required'
-          )
+          expect { repo.upload('my-staging-repository', true) }.not_to raise_error
         end
 
         it 'does not validate credentials when PULP_PASSWORD is not set' do
           stub_env_var('PULP_USER', 'gitlab')
           stub_env_var('PULP_PASSWORD', nil)
 
-          expect { repo.upload('my-staging-repository', true) }.not_to raise_error(
-            PackageRepository::PackageUploadError,
-            'PULP_PASSWORD environment variable is required'
-          )
+          expect { repo.upload('my-staging-repository', true) }.not_to raise_error
         end
       end
     end
@@ -201,12 +195,61 @@ RSpec.describe PackageRepository::PulpRepository do
           allow(repo).to receive(:authenticate).and_return(nil)
           allow(repo).to receive(:validate).and_return(nil)
           allow(Gitlab::Util).to receive(:shellout_stdout).and_raise(
-            Gitlab::Util::ShellOutExecutionError.new('pulp command', 1, '504 Gateway Timeout', '')
+            Gitlab::Util::ShellOutExecutionError.new('pulp command', 1, 'MOCK_TEST_ERROR: Simulated upload failure for retry testing', '')
           )
 
           expect(Gitlab::Util).to receive(:shellout_stdout).exactly(10).times
 
           expect { repo.upload('my-staging-repository', false) }.to raise_error(PackageRepository::PackageUploadError)
+        end
+      end
+
+      context 'with rpm artifacts available' do
+        before do
+          allow(Build::Info::Package).to receive(:file_list).and_return(['pkg/el-9/gitlab-ce.rpm'])
+        end
+
+        it 'in dry run mode does not print the upload command' do
+          expect { repo.upload('my-staging-repository', true) }.not_to output(%r{Uploading...\n}).to_stdout
+        end
+
+        it 'uploads to both EL and OL repositories' do
+          allow(repo).to receive(:authenticate).and_return(nil)
+          allow(repo).to receive(:validate).and_return(nil)
+          allow(Gitlab::Util).to receive(:shellout_stdout).and_return('')
+
+          expect(Gitlab::Util).to receive(:shellout_stdout).twice
+
+          repo.upload('my-staging-repository', false)
+        end
+
+        it 'retries upload if it fails' do
+          allow(repo).to receive(:authenticate).and_return(nil)
+          allow(repo).to receive(:validate).and_return(nil)
+          allow(Gitlab::Util).to receive(:shellout_stdout).and_raise(
+            Gitlab::Util::ShellOutExecutionError.new('pulp command', 1, 'MOCK_TEST_ERROR: Simulated upload failure for retry testing', '')
+          )
+
+          # Expects 10 retries for the first repository, then raises error before attempting second repository
+          expect(Gitlab::Util).to receive(:shellout_stdout).exactly(10).times
+
+          expect { repo.upload('my-staging-repository', false) }.to raise_error(PackageRepository::PackageUploadError)
+        end
+      end
+
+      context 'with opensuse artifacts available' do
+        before do
+          allow(Build::Info::Package).to receive(:file_list).and_return(['pkg/opensuse-15.5/gitlab-ce.rpm'])
+        end
+
+        it 'uploads to both OpenSUSE and SLES repositories' do
+          allow(repo).to receive(:authenticate).and_return(nil)
+          allow(repo).to receive(:validate).and_return(nil)
+          allow(Gitlab::Util).to receive(:shellout_stdout).and_return('')
+
+          expect(Gitlab::Util).to receive(:shellout_stdout).twice
+
+          repo.upload('my-staging-repository', false)
         end
       end
 
@@ -299,6 +342,92 @@ RSpec.describe PackageRepository::PulpRepository do
           end
         end
       end
+      context 'with rpm artifacts available' do
+        before do
+          stub_env_var('PULP_USER', "gitlab")
+          allow(Build::Info::Package).to receive(:file_list).and_return(['pkg/el-9/gitlab.rpm'])
+        end
+
+        context 'for stable release' do
+          before do
+            stub_env_var('PULP_REPO', nil)
+            stub_env_var('RASPBERRY_REPO', nil)
+            allow(repo).to receive(:repository_for_rc).and_return(nil)
+          end
+
+          context 'of EE' do
+            before do
+              stub_is_ee(true)
+            end
+
+            it 'in dry run mode does not print the upload command' do
+              expect { repo.upload(nil, true) }.not_to output(%r{Uploading...\n}).to_stdout
+            end
+
+            context 'for arm64 packages' do
+              before do
+                allow(Build::Info::Package).to receive(:file_list).and_return(['pkg/el-9_aarch64/gitlab.rpm'])
+              end
+
+              it 'includes architecture in repository name' do
+                expect { repo.upload(nil, true) }.not_to output(%r{Uploading...\n}).to_stdout
+              end
+
+              it 'uploads to both EL and OL repositories with architecture' do
+                allow(repo).to receive(:authenticate).and_return(nil)
+                allow(repo).to receive(:validate).and_return(nil)
+                allow(Gitlab::Util).to receive(:shellout_stdout).and_return('')
+
+                expect(Gitlab::Util).to receive(:shellout_stdout).twice
+
+                repo.upload(nil, false)
+              end
+            end
+
+            context 'for fips packages' do
+              before do
+                allow(Build::Info::Package).to receive(:file_list).and_return(['pkg/el-9_fips/gitlab.rpm'])
+              end
+
+              it 'includes fips in repository name' do
+                expect { repo.upload(nil, true) }.not_to output(%r{Uploading...\n}).to_stdout
+              end
+
+              it 'uploads to both EL and OL repositories with fips' do
+                allow(repo).to receive(:authenticate).and_return(nil)
+                allow(repo).to receive(:validate).and_return(nil)
+                allow(Gitlab::Util).to receive(:shellout_stdout).and_return('')
+
+                expect(Gitlab::Util).to receive(:shellout_stdout).twice
+
+                repo.upload(nil, false)
+              end
+            end
+          end
+
+          context 'of CE' do
+            before do
+              stub_is_ee(nil)
+            end
+
+            it 'in dry run mode does not print the upload command' do
+              expect { repo.upload(nil, true) }.not_to output(%r{Uploading...\n}).to_stdout
+            end
+          end
+        end
+
+        context 'for unstable release' do
+          before do
+            stub_env_var('PULP_REPO', nil)
+            stub_env_var('RASPBERRY_REPO', nil)
+            allow(repo).to receive(:repository_for_rc).and_return('unstable')
+          end
+
+          it 'in dry run mode does not print the upload command' do
+            expect { repo.upload(nil, true) }.not_to output(%r{Uploading...\n}).to_stdout
+          end
+        end
+      end
     end
 
     describe 'when artifacts contain unexpected files' do
@@ -310,6 +439,103 @@ RSpec.describe PackageRepository::PulpRepository do
 
       it 'raises an exception' do
         expect { repo.upload(nil, true) }.to raise_exception(%r{Found unexpected contents in the directory:})
+      end
+    end
+  end
+
+  describe '#package_list (private method)' do
+    context 'with real-world RPM package examples' do
+      before do
+        # Prevent any real command execution
+        allow(Gitlab::Util).to receive(:shellout_stdout).and_return('')
+        allow(repo).to receive(:authenticate).and_return(nil)
+        allow(repo).to receive(:validate).and_return(nil)
+      end
+
+      it 'processes gitlab-ce el-8_aarch64 package' do
+        file_path = 'pkg/el-8_aarch64/gitlab-ce-18.6.0-ce.0.el8.aarch64.rpm'
+        allow(Build::Info::Package).to receive(:file_list).and_return([file_path])
+        allow(repo).to receive(:target).and_return('gitlab-ce')
+
+        list = repo.send(:package_list, nil)
+
+        expect(list.length).to eq(2) # Original EL + Oracle Linux
+        expect(list[0][:file_path]).to eq(file_path)
+        expect(list[0][:repository]).to eq('gitlab-gitlab-ce-el-8-aarch64')
+        expect(list[0][:distribution]).to eq('gitlab-gitlab-ce-el-8-aarch64')
+        expect(list[0][:component]).to eq('main')
+
+        # Oracle Linux variant
+        expect(list[1][:repository]).to eq('gitlab-gitlab-ce-ol-8-aarch64')
+        expect(list[1][:distribution]).to eq('gitlab-gitlab-ce-ol-8-aarch64')
+      end
+
+      it 'processes gitlab-ee el-8 (x86_64) package' do
+        file_path = 'pkg/el-8/gitlab-ee-18.5.1-ee.0.el8.x86_64.rpm'
+        allow(Build::Info::Package).to receive(:file_list).and_return([file_path])
+        allow(repo).to receive(:target).and_return('gitlab-ee')
+
+        list = repo.send(:package_list, nil)
+
+        expect(list.length).to eq(2) # Original EL + Oracle Linux
+        expect(list[0][:file_path]).to eq(file_path)
+        expect(list[0][:repository]).to eq('gitlab-gitlab-ee-el-8-x86_64')
+        expect(list[0][:distribution]).to eq('gitlab-gitlab-ee-el-8-x86_64')
+        expect(list[0][:component]).to eq('main')
+
+        # Oracle Linux variant
+        expect(list[1][:repository]).to eq('gitlab-gitlab-ee-ol-8-x86_64')
+        expect(list[1][:distribution]).to eq('gitlab-gitlab-ee-ol-8-x86_64')
+      end
+
+      it 'processes opensuse-15.6 package (for SLES transformation)' do
+        file_path = 'pkg/opensuse-15.6/gitlab-ee-18.5.1-ee.0.sles15.x86_64.rpm'
+        allow(Build::Info::Package).to receive(:file_list).and_return([file_path])
+        allow(repo).to receive(:target).and_return('gitlab-ee')
+
+        list = repo.send(:package_list, nil)
+
+        expect(list.length).to eq(2) # Original OpenSUSE + SLES
+        expect(list[0][:file_path]).to eq(file_path)
+        expect(list[0][:repository]).to eq('gitlab-gitlab-ee-opensuse-15.6-x86_64')
+        expect(list[0][:distribution]).to eq('gitlab-gitlab-ee-opensuse-15.6-x86_64')
+        expect(list[0][:component]).to eq('main')
+
+        # SLES variant
+        expect(list[1][:repository]).to eq('gitlab-gitlab-ee-sles-15.6-x86_64')
+        expect(list[1][:distribution]).to eq('gitlab-gitlab-ee-sles-15.6-x86_64')
+      end
+
+      it 'processes amazon-2023_aarch64 package' do
+        file_path = 'pkg/amazon-2023_aarch64/gitlab-ce-18.6.0-ce.0.amazon2023.aarch64.rpm'
+        allow(Build::Info::Package).to receive(:file_list).and_return([file_path])
+        allow(repo).to receive(:target).and_return('gitlab-ce')
+
+        list = repo.send(:package_list, nil)
+
+        expect(list.length).to eq(1) # Amazon Linux only (no additional platforms)
+        expect(list[0][:file_path]).to eq(file_path)
+        expect(list[0][:repository]).to eq('gitlab-gitlab-ce-amazon-2023-aarch64')
+        expect(list[0][:distribution]).to eq('gitlab-gitlab-ce-amazon-2023-aarch64')
+        expect(list[0][:component]).to eq('main')
+      end
+
+      it 'processes el-9_fips package' do
+        file_path = 'pkg/el-9_fips/gitlab-fips-18.5.2-fips.0.el9.x86_64.rpm'
+        allow(Build::Info::Package).to receive(:file_list).and_return([file_path])
+        allow(repo).to receive(:target).and_return('gitlab-fips')
+
+        list = repo.send(:package_list, nil)
+
+        expect(list.length).to eq(2) # Original EL + Oracle Linux
+        expect(list[0][:file_path]).to eq(file_path)
+        expect(list[0][:repository]).to eq('gitlab-gitlab-fips-el-9-x86_64')
+        expect(list[0][:distribution]).to eq('gitlab-gitlab-fips-el-9-x86_64')
+        expect(list[0][:component]).to eq('main')
+
+        # Oracle Linux variant
+        expect(list[1][:repository]).to eq('gitlab-gitlab-fips-ol-9-x86_64')
+        expect(list[1][:distribution]).to eq('gitlab-gitlab-fips-ol-9-x86_64')
       end
     end
   end

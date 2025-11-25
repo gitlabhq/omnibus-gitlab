@@ -143,7 +143,7 @@ RSpec.describe PackageRepository::PackageCloudRepository do
           end
 
           it 'retries upload if it fails' do
-            allow(repo).to receive(:`).and_return('504 Gateway Timeout')
+            allow(repo).to receive(:`).and_return('MOCK_TEST_ERROR: Simulated upload failure for retry testing')
             allow(repo).to receive(:child_process_status).and_return(1)
             allow(repo).to receive(:validate).and_return(nil)
 
