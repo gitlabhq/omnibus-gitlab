@@ -107,6 +107,16 @@ No changes.
 
 - [Update PostgreSQL 16.8 to 16.10](gitlab-org/omnibus-gitlab@6cf1dc30f8259915730ecfb89f10eae33811d566)
 
+## 18.4.5 (2025-11-25)
+
+### Fixed (1 change)
+
+- [Merge branch 'fix-registry-commands-permission-for-non-docker' into 'master'](gitlab-org/security/omnibus-gitlab@96a196873a53a3e192ae650128de174acec9bfd2)
+
+### Security (1 change)
+
+- [Filter all token query parameters in nginx access logs](gitlab-org/security/omnibus-gitlab@f671d8897de06c22d97edfd849f9b7c81b678058) ([merge request](gitlab-org/security/omnibus-gitlab!498))
+
 ## 18.4.4 (2025-11-11)
 
 ### Changed (2 changes)
