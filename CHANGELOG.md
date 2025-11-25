@@ -3,6 +3,20 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.5.3 (2025-11-25)
+
+### Added (1 change)
+
+- [Add nginx['default_server_enabled'] configuration parameter](gitlab-org/security/omnibus-gitlab@6328224e052b3170b8df0c1db49696b015a6aa72)
+
+### Fixed (1 change)
+
+- [Merge branch 'fix-registry-commands-permission-for-non-docker' into 'master'](gitlab-org/security/omnibus-gitlab@2f38ba3b1e81db46cb4b3beaba1a800a0c033a92)
+
+### Security (1 change)
+
+- [Filter all token query parameters in nginx access logs](gitlab-org/security/omnibus-gitlab@7672960f9c54c8892e37d4a7659563046ec41255) ([merge request](gitlab-org/security/omnibus-gitlab!497))
+
 ## 18.5.2 (2025-11-11)
 
 ### Fixed (1 change)
