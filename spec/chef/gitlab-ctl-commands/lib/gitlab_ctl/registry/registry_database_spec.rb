@@ -1,3 +1,5 @@
+$LOAD_PATH << File.join(__dir__, '../../../../../../files/gitlab-ctl-commands/lib')
+require 'gitlab_ctl'
 require 'optparse'
 
 require_relative '../../../../../../files/gitlab-ctl-commands/lib/gitlab_ctl/registry/database'
@@ -49,6 +51,53 @@ RSpec.describe GitlabCtl::Registry::Database do
 
       it_behaves_like 'unknown option is specified'
       it_behaves_like 'parses command options'
+    end
+  end
+
+  describe '.registry_dir' do
+    context 'when public attributes contain registry dir' do
+      before do
+        allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'registry' => { 'dir' => '/custom/registry' } })
+      end
+
+      it 'returns the configured registry directory' do
+        expect(described_class.registry_dir).to eq('/custom/registry')
+      end
+    end
+
+    context 'when public attributes are empty' do
+      before do
+        allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({})
+      end
+
+      it 'returns the default registry directory' do
+        expect(described_class.registry_dir).to eq('/var/opt/gitlab/registry')
+      end
+    end
+
+    context 'when public attributes file does not exist' do
+      before do
+        allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_raise(GitlabCtl::Errors::NodeError, "Node attributes JSON file not found")
+      end
+
+      it 'returns the default registry directory' do
+        expect(described_class.registry_dir).to eq('/var/opt/gitlab/registry')
+      end
+    end
+  end
+
+  describe '.execute' do
+    context "when service is disabled" do
+      before do
+        allow(described_class).to receive(:registry_dir).and_return('/var/opt/gitlab/registry')
+        allow(described_class).to receive(:enabled?).and_return(false)
+        allow(described_class).to receive(:log)
+      end
+
+      it 'changes to the registry directory before executing' do
+        expect(Dir).to receive(:chdir).with('/var/opt/gitlab/registry')
+        described_class.execute({})
+      end
     end
   end
 end
