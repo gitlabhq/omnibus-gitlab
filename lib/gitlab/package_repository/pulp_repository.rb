@@ -127,29 +127,27 @@ class PackageRepository
       Build::Info::Package.file_list.each do |path|
         platform_path = validate_package_path(path)
 
-        platform_name = platform_path[1] # "ubuntu-xenial_aarch64" or "el-9_aarch64"
+        platform_dir = platform_path[1] # "ubuntu-focal_aarch64" or "el-8_aarch64"
         package_name = platform_path[2] # "gitlab-ce.deb" or "gitlab-ce.rpm"
-        package_path = Pathname(platform_path[0]).join(platform_name, package_name).to_s
+        package_path = Pathname(platform_path[0]).join(platform_dir, package_name).to_s
         target_repository = repository || target # staging override or the rest, eg. "unstable"
 
         package_type = PackageType.from_filename(package_name)
-        platform = package_type.transform_platform(platform_name)
+        os_dist = package_type.extract_distribution(platform_dir)
 
-        repository_name = "gitlab-#{target_repository}-#{platform}" # gitlab-pre-release-ubuntu-xenial or gitlab-gitlab-ee-el-9-aarch64
-        distribution = repository_name # Special setup we do with Pulp
-
+        repository_name = "gitlab-#{target_repository}-#{os_dist.tr('/', '-')}"
         component = 'main'
 
         list << {
           file_path: package_path,
           repository: repository_name,
-          distribution: distribution,
+          distribution: repository_name, # repository and distribution are always the same
           component: component,
           package_type: package_type
         }
 
         # Add additional platform entries (EL to OL, OpenSUSE to SLES)
-        add_additional_platforms(list, platform,
+        add_additional_platforms(list, platform_dir,
                                  package_path: package_path,
                                  target_repository: target_repository,
                                  component: component,
@@ -161,30 +159,31 @@ class PackageRepository
 
     # Adds additional platform entries for cross-compatible distributions
     # @param list [Array] The list to append additional entries to
-    # @param platform [String] The platform identifier
+    # @param platform_dir [String] The platform directory name (e.g., "el-8_aarch64", "opensuse-15.6")
     # @param args [Hash] Additional arguments (package_path, target_repository, component, package_type)
     # @return [void]
-    def add_additional_platforms(list, platform, **args)
-      add_oracle_linux_platform(list, platform, **args)
-      add_sles_platform(list, platform, **args)
+    def add_additional_platforms(list, platform_dir, **args)
+      add_oracle_linux_platform(list, platform_dir, **args)
+      add_sles_platform(list, platform_dir, **args)
     end
 
     # Adds Oracle Linux platform entry for Enterprise Linux packages
     # @param list [Array] The list to append additional entries to
-    # @param platform [String] The platform identifier
+    # @param platform_dir [String] The platform directory name (e.g., "el-8_aarch64")
     # @param args [Hash] Additional arguments
     # @return [void]
-    def add_oracle_linux_platform(list, platform, **args)
-      return unless platform.start_with?("el-")
+    def add_oracle_linux_platform(list, platform_dir, **args)
+      return unless platform_dir.start_with?("el-")
 
-      additional_platform = platform.gsub('el-', 'ol-')
-      additional_repository_name = "gitlab-#{args[:target_repository]}-#{additional_platform}"
-      additional_distribution = additional_repository_name
+      # Transform the OS distribution: "el/8/aarch64" -> "ol/8/aarch64"
+      original_os_dist = args[:package_type].extract_distribution(platform_dir)
+      additional_os_dist = original_os_dist.sub('el/', 'ol/')
+      additional_repository_name = "gitlab-#{args[:target_repository]}-#{additional_os_dist.tr('/', '-')}"
 
       list << {
         file_path: args[:package_path],
         repository: additional_repository_name,
-        distribution: additional_distribution,
+        distribution: additional_repository_name, # repository and distribution are always the same
         component: args[:component],
         package_type: args[:package_type]
       }
@@ -192,20 +191,21 @@ class PackageRepository
 
     # Adds SLES platform entry for OpenSUSE packages
     # @param list [Array] The list to append additional entries to
-    # @param platform [String] The platform identifier
+    # @param platform_dir [String] The platform directory name (e.g., "opensuse-15.6")
     # @param args [Hash] Additional arguments
     # @return [void]
-    def add_sles_platform(list, platform, **args)
-      return unless platform.start_with?("opensuse-")
+    def add_sles_platform(list, platform_dir, **args)
+      return unless platform_dir.start_with?("opensuse-")
 
-      additional_platform = platform.gsub('opensuse-', 'sles-')
-      additional_repository_name = "gitlab-#{args[:target_repository]}-#{additional_platform}"
-      additional_distribution = additional_repository_name
+      # Transform the OS distribution: "opensuse/15.6/x86_64" -> "sles/15.6/x86_64"
+      original_os_dist = args[:package_type].extract_distribution(platform_dir)
+      additional_os_dist = original_os_dist.sub('opensuse/', 'sles/')
+      additional_repository_name = "gitlab-#{args[:target_repository]}-#{additional_os_dist.tr('/', '-')}"
 
       list << {
         file_path: args[:package_path],
         repository: additional_repository_name,
-        distribution: additional_distribution,
+        distribution: additional_repository_name, # repository and distribution are always the same
         component: args[:component],
         package_type: args[:package_type]
       }

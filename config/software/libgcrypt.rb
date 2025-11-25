@@ -25,19 +25,24 @@ license_file 'COPYING.LIB'
 
 skip_transitive_dependency_licensing true
 
-source url: "https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-#{version}.tar.bz2",
-       sha256: 'ea849c83a72454e3ed4267697e8ca03390aee972ab421e7df69dfe42b65caaf7'
+if Build::Check.use_ubt?
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, default_version, "fb8f078a00e76f99df6f4e1560005eb7fa6d3fd2760a17dce731e47f8664165e", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source url: "https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-#{version}.tar.bz2",
+         sha256: 'ea849c83a72454e3ed4267697e8ca03390aee972ab421e7df69dfe42b65caaf7'
 
-relative_path "libgcrypt-#{version}"
+  relative_path "libgcrypt-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
-  configure_options = ["--prefix=#{install_dir}/embedded", "--disable-doc"]
-  configure_options += %w(host build).map { |w| "--#{w}=#{OhaiHelper.gcc_target}" } if OhaiHelper.raspberry_pi?
-  configure(*configure_options, env: env)
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
+    configure_options = ["--prefix=#{install_dir}/embedded", "--disable-doc"]
+    configure_options += %w(host build).map { |w| "--#{w}=#{OhaiHelper.gcc_target}" } if OhaiHelper.raspberry_pi?
+    configure(*configure_options, env: env)
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
-
 project.exclude "embedded/bin/libgcrypt-config"

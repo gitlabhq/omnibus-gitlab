@@ -22,28 +22,34 @@ license_file 'COPYING.LIB'
 
 skip_transitive_dependency_licensing true
 
-source url: "https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-#{version}.tar.bz2",
-       sha256: '8e8c2fcc982f9ca67dcbb1d95e2dc746b1739a4668bc20b3a3c5be632edb34e4'
-
 dependency 'libgpg-error'
 
-relative_path "libassuan-#{version}"
+if Build::Check.use_ubt?
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, default_version, "749d240de12345d8363916c847f4403efc32c960ab953667763820a7d35e1c91", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source url: "https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-#{version}.tar.bz2",
+         sha256: '8e8c2fcc982f9ca67dcbb1d95e2dc746b1739a4668bc20b3a3c5be632edb34e4'
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
-  prefix = "#{install_dir}/embedded"
+  relative_path "libassuan-#{version}"
 
-  configure_command = [
-    './configure',
-    "--prefix=#{prefix}",
-    '--disable-doc',
-    "--with-libgpg-error-prefix=#{prefix}",
-  ]
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
+    prefix = "#{install_dir}/embedded"
 
-  command configure_command.join(' '), env: env
+    configure_command = [
+      './configure',
+      "--prefix=#{prefix}",
+      '--disable-doc',
+      "--with-libgpg-error-prefix=#{prefix}",
+    ]
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    command configure_command.join(' '), env: env
+
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
 
 project.exclude "embedded/bin/libassuan-config"
