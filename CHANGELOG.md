@@ -3,6 +3,20 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.6.1 (2025-11-25)
+
+### Added (1 change)
+
+- [Add nginx['default_server_enabled'] configuration parameter](gitlab-org/security/omnibus-gitlab@458f50637f0ef726e2e35f424de0c905eec72e14)
+
+### Fixed (1 change)
+
+- [Merge branch 'cherry-pick-778a97e3' into '18-6-stable'](gitlab-org/security/omnibus-gitlab@7f0b4f971833f7671d133746da11c8a03526e76d)
+
+### Security (1 change)
+
+- [Filter all token query parameters in nginx access logs](gitlab-org/security/omnibus-gitlab@27e583a0812a78fedccbeca62fbd82ad0a4b0ddb) ([merge request](gitlab-org/security/omnibus-gitlab!500))
+
 ## 18.6.0 (2025-11-19)
 
 ### Added (1 change)
