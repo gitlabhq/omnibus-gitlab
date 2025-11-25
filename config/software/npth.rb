@@ -22,18 +22,24 @@ license_file 'COPYING.LIB'
 
 skip_transitive_dependency_licensing true
 
-source url: "https://www.gnupg.org/ftp/gcrypt/npth/npth-#{version}.tar.bz2",
-       sha256: '1393abd9adcf0762d34798dc34fdcf4d0d22a8410721e76f1e3afcd1daa4e2d1'
+if Build::Check.use_ubt?
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, default_version, "07c721e32428b88195d07851b594ed22d06120489b19adfb5f0693e71433efaa", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source url: "https://www.gnupg.org/ftp/gcrypt/npth/npth-#{version}.tar.bz2",
+         sha256: '1393abd9adcf0762d34798dc34fdcf4d0d22a8410721e76f1e3afcd1daa4e2d1'
 
-relative_path "npth-#{version}"
+  relative_path "npth-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
-  command './configure ' \
-    "--prefix=#{install_dir}/embedded --disable-doc", env: env
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
+    command './configure ' \
+      "--prefix=#{install_dir}/embedded --disable-doc", env: env
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
 
 project.exclude "embedded/bin/npth-config"
