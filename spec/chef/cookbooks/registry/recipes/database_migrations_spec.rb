@@ -68,5 +68,133 @@ RSpec.describe 'registry::database_migrations' do
         expect(chef_run).not_to run_registry_database_migrations('registry')
       end
     end
+
+    context 'with external PostgreSQL' do
+      before do
+        stub_gitlab_rb(
+          registry_external_url: 'https://registry.example.com',
+          postgresql: { enable: false },
+          registry: { database: database_config }
+        )
+      end
+
+      it 'runs migrations even when embedded PostgreSQL is disabled' do
+        expect(chef_run).to run_registry_database_migrations('registry')
+      end
+    end
+  end
+
+  context 'when database.enabled is set to "prefer"' do
+    let(:database_config) do
+      { "enabled" => 'prefer' }
+    end
+
+    context 'with GitLab-managed PostgreSQL enabled' do
+      before do
+        stub_gitlab_rb(
+          registry_external_url: 'https://registry.example.com',
+          postgresql: { enable: true },
+          registry: { database: database_config }
+        )
+      end
+
+      it 'runs migrations when embedded PostgreSQL is available' do
+        expect(chef_run).to run_registry_database_migrations('registry')
+      end
+
+      context 'when auto_migrate is disabled' do
+        before do
+          stub_gitlab_rb(
+            registry_external_url: 'https://registry.example.com',
+            postgresql: { enable: true },
+            registry: {
+              database: database_config,
+              auto_migrate: false
+            }
+          )
+        end
+
+        it 'does not run migrations' do
+          expect(chef_run).not_to run_registry_database_migrations('registry')
+        end
+      end
+
+      context 'when database is not ready' do
+        before do
+          allow(registry_pg_helper).to receive(:is_ready?).and_return(false)
+        end
+
+        it 'does not run migrations' do
+          expect(chef_run).not_to run_registry_database_migrations('registry')
+        end
+      end
+    end
+
+    context 'with external PostgreSQL (embedded disabled)' do
+      before do
+        stub_gitlab_rb(
+          registry_external_url: 'https://registry.example.com',
+          postgresql: { enable: false },
+          registry: { database: database_config }
+        )
+      end
+
+      it 'does not run migrations when embedded PostgreSQL is disabled' do
+        expect(chef_run).not_to run_registry_database_migrations('registry')
+      end
+
+      it 'does not check if database is ready' do
+        chef_run
+        expect(registry_pg_helper).not_to have_received(:is_ready?)
+      end
+    end
+  end
+
+  context 'when database.enabled is set to "true" (string)' do
+    let(:database_config) do
+      { "enabled" => 'true' }
+    end
+
+    before do
+      stub_gitlab_rb(
+        registry_external_url: 'https://registry.example.com',
+        registry: { database: database_config }
+      )
+    end
+
+    it 'runs migrations with string "true" value' do
+      expect(chef_run).to run_registry_database_migrations('registry')
+    end
+
+    context 'with external PostgreSQL' do
+      before do
+        stub_gitlab_rb(
+          registry_external_url: 'https://registry.example.com',
+          postgresql: { enable: false },
+          registry: { database: database_config }
+        )
+      end
+
+      it 'runs migrations even when embedded PostgreSQL is disabled' do
+        expect(chef_run).to run_registry_database_migrations('registry')
+      end
+    end
+  end
+
+  context 'when database.enabled is set to "false" (string)' do
+    let(:database_config) do
+      { "enabled" => 'false' }
+    end
+
+    before do
+      stub_gitlab_rb(
+        registry_external_url: 'https://registry.example.com',
+        registry: { database: database_config }
+      )
+    end
+
+    it 'does not run migrations with string "false" value' do
+      expect(chef_run).not_to run_registry_database_migrations('registry')
+    end
   end
 end

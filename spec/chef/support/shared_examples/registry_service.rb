@@ -64,7 +64,7 @@ RSpec.shared_examples 'enabled registry service' do
         expect(content).to match(/health:\s*storagedriver:\s*enabled:\s*true/)
         expect(content).to match(/log:\s*level: info\s*formatter:\s*text/)
         expect(content).to match(/validation:\s*disabled: true$/)
-        expect(content).to match(/^database: {"enabled":false,"user":"registry","dbname":"registry","port":5432,"sslmode":"prefer","host":"\/var\/opt\/gitlab\/postgresql"}/)
+        expect(content).to match(/^database: {"enabled":"false","user":"registry","dbname":"registry","port":5432,"sslmode":"prefer","host":"\/var\/opt\/gitlab\/postgresql"}/)
         expect(content).not_to match(/^compatibility:/)
         expect(content).not_to match(/^middleware:/)
         expect(content).not_to match(/^gc:/)

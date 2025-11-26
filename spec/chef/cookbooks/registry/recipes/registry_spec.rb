@@ -9,7 +9,7 @@ RSpec.describe 'registry recipe' do
 
   it 'sets default attributes' do
     expect(chef_run.node['registry']['auto_migrate']).to eq(true)
-    expect(chef_run.node['registry']['database']['enabled']).to eq(false)
+    expect(chef_run.node['registry']['database']['enabled']).to eq("false")
     expect(chef_run.node['registry']['database']['user']).to eq('registry')
     expect(chef_run.node['registry']['database']['dbname']).to eq('registry')
     expect(chef_run.node['registry']['database']['port']).to eq(5432)
@@ -164,7 +164,104 @@ RSpec.describe 'registry recipe' do
 
       it 'populates default registry database config' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-          .with_content('database: {"enabled":false,"user":"registry","dbname":"registry","port":5432,"sslmode":"prefer","host":"/var/opt/gitlab/postgresql"}')
+          .with_content('database: {"enabled":"false","user":"registry","dbname":"registry","port":5432,"sslmode":"prefer","host":"/var/opt/gitlab/postgresql"}')
+      end
+
+      context 'when database.enabled is set to prefer' do
+        before do
+          stub_gitlab_rb(
+            postgresql: { enable: true },
+            registry: { database: { enabled: 'prefer' } }
+          )
+          allow_any_instance_of(RegistryPgHelper).to receive(:is_ready?).and_return(true)
+        end
+
+        it 'renders prefer in the config file' do
+          expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+            .with_content('database: {"enabled":"prefer"')
+        end
+      end
+
+      context 'when database.enabled is set to true' do
+        before do
+          stub_gitlab_rb(
+            postgresql: { enable: true },
+            registry: { database: { enabled: true } }
+          )
+          allow_any_instance_of(RegistryPgHelper).to receive(:is_ready?).and_return(true)
+        end
+
+        it 'renders true in the config file' do
+          expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+            .with_content('database: {"enabled":true')
+        end
+      end
+
+      context 'when database.enabled is set to "true" (string)' do
+        before do
+          stub_gitlab_rb(
+            postgresql: { enable: true },
+            registry: { database: { enabled: 'true' } }
+          )
+          allow_any_instance_of(RegistryPgHelper).to receive(:is_ready?).and_return(true)
+        end
+
+        it 'renders the string value in the config file' do
+          expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+            .with_content('database: {"enabled":"true"')
+        end
+      end
+    end
+
+    context "when GitLab-managed PostgreSQL is disabled (external database)" do
+      before { stub_gitlab_rb(postgresql: { enable: false }) }
+
+      context 'when database.enabled is set to prefer' do
+        before do
+          stub_gitlab_rb(
+            postgresql: { enable: false },
+            registry: { database: { enabled: 'prefer' } }
+          )
+        end
+
+        it 'overrides prefer to false in the config file' do
+          expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+            .with_content('database: {"enabled":"false"')
+        end
+
+        it 'does not render prefer in the config file' do
+          expect(chef_run).not_to render_file('/var/opt/gitlab/registry/config.yml')
+            .with_content('database: {"enabled":"prefer"')
+        end
+      end
+
+      context 'when database.enabled is explicitly set to true' do
+        before do
+          stub_gitlab_rb(
+            postgresql: { enable: false },
+            registry: { database: { enabled: true } }
+          )
+          allow_any_instance_of(RegistryPgHelper).to receive(:is_ready?).and_return(true)
+        end
+
+        it 'respects the explicit true value for external database' do
+          expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+            .with_content('database: {"enabled":true')
+        end
+      end
+
+      context 'when database.enabled is set to false' do
+        before do
+          stub_gitlab_rb(
+            postgresql: { enable: false },
+            registry: { database: { enabled: false } }
+          )
+        end
+
+        it 'renders false in the config file' do
+          expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+            .with_content('database: {"enabled":false')
+        end
       end
     end
 
