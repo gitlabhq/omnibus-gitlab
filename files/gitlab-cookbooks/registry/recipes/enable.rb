@@ -21,6 +21,17 @@ logging_settings = logfiles_helper.logging_settings('registry')
 registry_uid = node['registry']['uid']
 registry_gid = node['registry']['gid']
 
+# Warn if prefer mode is being overridden
+if registry_helper.must_override_database_prefer_mode?
+  LoggingHelper.warning(
+    "Registry database mode is set to 'prefer', but GitLab-managed PostgreSQL is disabled. " \
+    "The registry will be configure to use filesystem metadata instead of the database. " \
+    "To use the database with external PostgreSQL, set registry['database']['enabled'] = 'true' " \
+    "and ensure the registry database has been manually created: " \
+    "https://docs.gitlab.com/administration/packages/container_registry_metadata_database/#using-an-external-database"
+  )
+end
+
 working_dir = node['registry']['dir']
 registry_shell = node['registry']['shell']
 log_format = node['registry']['log_formatter']
@@ -85,7 +96,7 @@ end
 template "#{working_dir}/config.yml" do
   source "registry-config.yml.erb"
   owner account_helper.registry_user
-  variables node['registry'].to_hash.merge(node['gitlab']['gitlab_rails'].to_hash)
+  variables(node['registry'].to_hash.merge(node['gitlab']['gitlab_rails'].to_hash))
   helper(:registry_helper) { registry_helper }
   mode "0644"
   notifies :restart, "runit_service[registry]"

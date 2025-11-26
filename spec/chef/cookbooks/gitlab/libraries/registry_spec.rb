@@ -61,6 +61,7 @@ RSpec.describe Registry do
     before do
       allow(Gitlab).to receive(:[]).and_call_original
       allow(Gitlab).to receive(:warn)
+      allow(Gitlab['node']).to receive(:[]).with('registry').and_return({ 'database' => { 'enabled' => 'false' } })
     end
 
     describe 'host priority' do

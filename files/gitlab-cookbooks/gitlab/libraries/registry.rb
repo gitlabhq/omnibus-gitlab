@@ -16,6 +16,7 @@
 #
 
 require_relative 'nginx.rb'
+require_relative 'postgresql.rb'
 
 module Registry
   class << self
@@ -170,6 +171,23 @@ module Registry
         Gitlab['node']['postgresql']['dir']
       # If multiple address are set, we take the first.
       database_config['host'] = take_first_address(database_config['host'])
+
+      # Apply default for enabled if the user hasn't explicitly set it,
+      # before the prefer mode override logic. This will be important if we ever
+      # change the registry database enabled default to "prefer", which is planned.
+      # We can't use short-circuit (||=) because the value might be legit set to false
+      database_config['enabled'] = Gitlab['node']['registry']['database']['enabled'] if database_config['enabled'].nil?
+
+      # Normalize database.enabled: if set to "prefer" but embedded PostgreSQL is disabled,
+      # override to "false" since migrations cannot run without a guaranteed registry database
+      # which is only guaranteed to exist in GitLab-managed PostgreSQL, since on external
+      # databases the user has to create it manually. Aside: on multi-nodes where Registry
+      # lives on a different node than the database, prefer will also be overridden to false
+      # as the registry service does not know if it's talking to a GitLab-managed database.
+      if database_config['enabled'] == 'prefer' && !Postgresql.postgresql_managed?
+        database_config['enabled'] = 'false'
+        database_config['_prefer_mode_overridden'] = true
+      end
 
       Gitlab['registry']['database'] = database_config
     end
