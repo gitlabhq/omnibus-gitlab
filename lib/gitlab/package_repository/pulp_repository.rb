@@ -27,7 +27,7 @@ class PackageRepository
       upload_list.each do |pkg_info|
         file_path = pkg_info[:file_path]
         repository_name = pkg_info[:repository]
-        distribution = pkg_info[:distribution]
+        distribution_version = pkg_info[:distribution_version]
         component = pkg_info[:component]
         package_type = pkg_info[:package_type]
 
@@ -35,7 +35,7 @@ class PackageRepository
         upload_cmd = package_type.build_upload_command(
           file_path: file_path,
           repository_name: repository_name,
-          distribution: distribution,
+          distribution_version: distribution_version,
           component: component,
           chunk_size: chunk_size
         )
@@ -137,11 +137,12 @@ class PackageRepository
 
         repository_name = "gitlab-#{target_repository}-#{os_dist.tr('/', '-')}"
         component = 'main'
+        distribution_version = extract_distribution_version(os_dist)
 
         list << {
           file_path: package_path,
           repository: repository_name,
-          distribution: repository_name, # repository and distribution are always the same
+          distribution_version: distribution_version,
           component: component,
           package_type: package_type
         }
@@ -179,14 +180,30 @@ class PackageRepository
       original_os_dist = args[:package_type].extract_distribution(platform_dir)
       additional_os_dist = original_os_dist.sub('el/', 'ol/')
       additional_repository_name = "gitlab-#{args[:target_repository]}-#{additional_os_dist.tr('/', '-')}"
+      distribution_version = extract_distribution_version(additional_os_dist)
 
       list << {
         file_path: args[:package_path],
         repository: additional_repository_name,
-        distribution: additional_repository_name, # repository and distribution are always the same
+        distribution_version: distribution_version,
         component: args[:component],
         package_type: args[:package_type]
       }
+    end
+
+    # Extracts the distribution version from the OS distribution path
+    # @param os_dist [String] The OS distribution path (e.g., "ubuntu/focal", "el/8/aarch64")
+    # @return [String] The distribution version (e.g., "focal", "8")
+    def extract_distribution_version(os_dist)
+      # Split by '/' and get the second part (the version)
+      # "ubuntu/focal" -> "focal"
+      # "el/8/aarch64" -> "8"
+      return nil if os_dist.nil? || os_dist.empty?
+
+      parts = os_dist.split('/')
+      raise "Invalid OS distribution format: '#{os_dist}'. Expected format: 'distro/version' or 'distro/version/arch'" if parts.length < 2
+
+      parts[1]
     end
 
     # Adds SLES platform entry for OpenSUSE packages
@@ -201,11 +218,12 @@ class PackageRepository
       original_os_dist = args[:package_type].extract_distribution(platform_dir)
       additional_os_dist = original_os_dist.sub('opensuse/', 'sles/')
       additional_repository_name = "gitlab-#{args[:target_repository]}-#{additional_os_dist.tr('/', '-')}"
+      distribution_version = extract_distribution_version(additional_os_dist)
 
       list << {
         file_path: args[:package_path],
         repository: additional_repository_name,
-        distribution: additional_repository_name, # repository and distribution are always the same
+        distribution_version: distribution_version,
         component: args[:component],
         package_type: args[:package_type]
       }

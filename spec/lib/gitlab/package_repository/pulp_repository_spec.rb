@@ -444,6 +444,99 @@ RSpec.describe PackageRepository::PulpRepository do
   end
 
   describe '#package_list (private method)' do
+    context 'with real-world DEB package examples' do
+      before do
+        # Prevent any real command execution
+        allow(Gitlab::Util).to receive(:shellout_stdout).and_return('')
+        allow(repo).to receive(:authenticate).and_return(nil)
+        allow(repo).to receive(:validate).and_return(nil)
+      end
+
+      it 'processes gitlab-ce ubuntu-focal_aarch64 package' do
+        file_path = 'pkg/ubuntu-focal_aarch64/gitlab-ce_18.6.0-ce.0_arm64.deb'
+        allow(Build::Info::Package).to receive(:file_list).and_return([file_path])
+        allow(repo).to receive(:target).and_return('gitlab-ce')
+
+        list = repo.send(:package_list, nil)
+
+        expect(list.length).to eq(1) # DEB packages don't have additional platforms
+        expect(list[0][:file_path]).to eq(file_path)
+        expect(list[0][:repository]).to eq('gitlab-gitlab-ce-ubuntu-focal')
+        expect(list[0][:distribution_version]).to eq('focal')
+        expect(list[0][:component]).to eq('main')
+      end
+
+      it 'processes gitlab-ee ubuntu-focal_aarch64 package' do
+        file_path = 'pkg/ubuntu-focal_aarch64/gitlab-ee_18.6.0-ee.0_arm64.deb'
+        allow(Build::Info::Package).to receive(:file_list).and_return([file_path])
+        allow(repo).to receive(:target).and_return('gitlab-ee')
+
+        list = repo.send(:package_list, nil)
+
+        expect(list.length).to eq(1)
+        expect(list[0][:file_path]).to eq(file_path)
+        expect(list[0][:repository]).to eq('gitlab-gitlab-ee-ubuntu-focal')
+        expect(list[0][:distribution_version]).to eq('focal')
+        expect(list[0][:component]).to eq('main')
+      end
+
+      it 'processes nightly-builds ubuntu-focal package' do
+        file_path = 'pkg/ubuntu-focal/gitlab-ce_18.6.0+rnightly.2174954246.cc6d74b0-0_amd64.deb'
+        allow(Build::Info::Package).to receive(:file_list).and_return([file_path])
+        allow(repo).to receive(:target).and_return('nightly-builds')
+
+        list = repo.send(:package_list, nil)
+
+        expect(list.length).to eq(1)
+        expect(list[0][:file_path]).to eq(file_path)
+        expect(list[0][:repository]).to eq('gitlab-nightly-builds-ubuntu-focal')
+        expect(list[0][:distribution_version]).to eq('focal')
+        expect(list[0][:component]).to eq('main')
+      end
+
+      it 'processes pre-release ubuntu-focal package' do
+        file_path = 'pkg/ubuntu-focal/gitlab-ee_18.5.0-ee.0_amd64.deb'
+        allow(Build::Info::Package).to receive(:file_list).and_return([file_path])
+        allow(repo).to receive(:target).and_return('pre-release')
+
+        list = repo.send(:package_list, nil)
+
+        expect(list.length).to eq(1)
+        expect(list[0][:file_path]).to eq(file_path)
+        expect(list[0][:repository]).to eq('gitlab-pre-release-ubuntu-focal')
+        expect(list[0][:distribution_version]).to eq('focal')
+        expect(list[0][:component]).to eq('main')
+      end
+
+      it 'processes gitlab-fips ubuntu-focal_fips package' do
+        file_path = 'pkg/ubuntu-focal_fips/gitlab-fips_18.3.6-fips.0_amd64.deb'
+        allow(Build::Info::Package).to receive(:file_list).and_return([file_path])
+        allow(repo).to receive(:target).and_return('gitlab-fips')
+
+        list = repo.send(:package_list, nil)
+
+        expect(list.length).to eq(1)
+        expect(list[0][:file_path]).to eq(file_path)
+        expect(list[0][:repository]).to eq('gitlab-gitlab-fips-ubuntu-focal')
+        expect(list[0][:distribution_version]).to eq('focal')
+        expect(list[0][:component]).to eq('main')
+      end
+
+      it 'processes nightly-fips-builds ubuntu-focal_fips package' do
+        file_path = 'pkg/ubuntu-focal_fips/gitlab-fips_18.6.0+rnightly.fips.2174954242.cc6d74b0-0_amd64.deb'
+        allow(Build::Info::Package).to receive(:file_list).and_return([file_path])
+        allow(repo).to receive(:target).and_return('nightly-fips-builds')
+
+        list = repo.send(:package_list, nil)
+
+        expect(list.length).to eq(1)
+        expect(list[0][:file_path]).to eq(file_path)
+        expect(list[0][:repository]).to eq('gitlab-nightly-fips-builds-ubuntu-focal')
+        expect(list[0][:distribution_version]).to eq('focal')
+        expect(list[0][:component]).to eq('main')
+      end
+    end
+
     context 'with real-world RPM package examples' do
       before do
         # Prevent any real command execution
@@ -462,12 +555,12 @@ RSpec.describe PackageRepository::PulpRepository do
         expect(list.length).to eq(2) # Original EL + Oracle Linux
         expect(list[0][:file_path]).to eq(file_path)
         expect(list[0][:repository]).to eq('gitlab-gitlab-ce-el-8-aarch64')
-        expect(list[0][:distribution]).to eq('gitlab-gitlab-ce-el-8-aarch64')
+        expect(list[0][:distribution_version]).to eq('8')
         expect(list[0][:component]).to eq('main')
 
         # Oracle Linux variant
         expect(list[1][:repository]).to eq('gitlab-gitlab-ce-ol-8-aarch64')
-        expect(list[1][:distribution]).to eq('gitlab-gitlab-ce-ol-8-aarch64')
+        expect(list[1][:distribution_version]).to eq('8')
       end
 
       it 'processes gitlab-ee el-8 (x86_64) package' do
@@ -480,12 +573,12 @@ RSpec.describe PackageRepository::PulpRepository do
         expect(list.length).to eq(2) # Original EL + Oracle Linux
         expect(list[0][:file_path]).to eq(file_path)
         expect(list[0][:repository]).to eq('gitlab-gitlab-ee-el-8-x86_64')
-        expect(list[0][:distribution]).to eq('gitlab-gitlab-ee-el-8-x86_64')
+        expect(list[0][:distribution_version]).to eq('8')
         expect(list[0][:component]).to eq('main')
 
         # Oracle Linux variant
         expect(list[1][:repository]).to eq('gitlab-gitlab-ee-ol-8-x86_64')
-        expect(list[1][:distribution]).to eq('gitlab-gitlab-ee-ol-8-x86_64')
+        expect(list[1][:distribution_version]).to eq('8')
       end
 
       it 'processes opensuse-15.6 package (for SLES transformation)' do
@@ -498,12 +591,12 @@ RSpec.describe PackageRepository::PulpRepository do
         expect(list.length).to eq(2) # Original OpenSUSE + SLES
         expect(list[0][:file_path]).to eq(file_path)
         expect(list[0][:repository]).to eq('gitlab-gitlab-ee-opensuse-15.6-x86_64')
-        expect(list[0][:distribution]).to eq('gitlab-gitlab-ee-opensuse-15.6-x86_64')
+        expect(list[0][:distribution_version]).to eq('15.6')
         expect(list[0][:component]).to eq('main')
 
         # SLES variant
         expect(list[1][:repository]).to eq('gitlab-gitlab-ee-sles-15.6-x86_64')
-        expect(list[1][:distribution]).to eq('gitlab-gitlab-ee-sles-15.6-x86_64')
+        expect(list[1][:distribution_version]).to eq('15.6')
       end
 
       it 'processes amazon-2023_aarch64 package' do
@@ -516,7 +609,7 @@ RSpec.describe PackageRepository::PulpRepository do
         expect(list.length).to eq(1) # Amazon Linux only (no additional platforms)
         expect(list[0][:file_path]).to eq(file_path)
         expect(list[0][:repository]).to eq('gitlab-gitlab-ce-amazon-2023-aarch64')
-        expect(list[0][:distribution]).to eq('gitlab-gitlab-ce-amazon-2023-aarch64')
+        expect(list[0][:distribution_version]).to eq('2023')
         expect(list[0][:component]).to eq('main')
       end
 
@@ -530,12 +623,12 @@ RSpec.describe PackageRepository::PulpRepository do
         expect(list.length).to eq(2) # Original EL + Oracle Linux
         expect(list[0][:file_path]).to eq(file_path)
         expect(list[0][:repository]).to eq('gitlab-gitlab-fips-el-9-x86_64')
-        expect(list[0][:distribution]).to eq('gitlab-gitlab-fips-el-9-x86_64')
+        expect(list[0][:distribution_version]).to eq('9')
         expect(list[0][:component]).to eq('main')
 
         # Oracle Linux variant
         expect(list[1][:repository]).to eq('gitlab-gitlab-fips-ol-9-x86_64')
-        expect(list[1][:distribution]).to eq('gitlab-gitlab-fips-ol-9-x86_64')
+        expect(list[1][:distribution_version]).to eq('9')
       end
     end
   end

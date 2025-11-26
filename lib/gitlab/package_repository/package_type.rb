@@ -37,11 +37,11 @@ class PackageRepository
       # Builds the upload command for this package type
       # @param file_path [String] Path to the package file
       # @param repository_name [String] Repository name
-      # @param distribution [String] Distribution name (may not be used by all package types)
+      # @param distribution_version [String] Distribution version (may not be used by all package types)
       # @param component [String] Component name (may not be used by all package types)
       # @param chunk_size [Integer] Chunk size for upload
       # @return [Array] The upload command as an array
-      def build_upload_command(file_path:, repository_name:, distribution:, component:, chunk_size:)
+      def build_upload_command(file_path:, repository_name:, distribution_version:, component:, chunk_size:)
         raise NotImplementedError, "Subclasses must implement build_upload_command"
       end
     end
@@ -73,12 +73,12 @@ class PackageRepository
       end
 
       # Builds the upload command for Debian packages
-      def build_upload_command(file_path:, repository_name:, distribution:, component:, chunk_size:)
+      def build_upload_command(file_path:, repository_name:, distribution_version:, component:, chunk_size:)
         [
           "pulp", type_name, "content", "upload",
           "--file", file_path,
           "--repository", repository_name,
-          "--distribution", distribution,
+          "--distribution", distribution_version,
           "--component", component,
           "--chunk-size", chunk_size.to_s
         ]
@@ -126,7 +126,7 @@ class PackageRepository
 
       # Builds the upload command for RPM packages
       # Does not include --distribution and --component flags, as compared to the deb upload command
-      def build_upload_command(file_path:, repository_name:, distribution:, component:, chunk_size:)
+      def build_upload_command(file_path:, repository_name:, distribution_version:, component:, chunk_size:)
         [
           "pulp", type_name, "content", "-t", "package", "upload",
           "--file", file_path,

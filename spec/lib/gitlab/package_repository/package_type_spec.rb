@@ -110,7 +110,7 @@ RSpec.describe PackageRepository::PulpRepository::DebPackage do
       cmd = package_type.build_upload_command(
         file_path: 'pkg/ubuntu-focal/gitlab-ce.deb',
         repository_name: 'gitlab-unstable-ubuntu-focal',
-        distribution: 'gitlab-unstable-ubuntu-focal',
+        distribution_version: 'focal',
         component: 'main',
         chunk_size: 10_000_000
       )
@@ -118,22 +118,22 @@ RSpec.describe PackageRepository::PulpRepository::DebPackage do
       expect(cmd).to eq(['pulp', 'deb', 'content', 'upload',
                          '--file', 'pkg/ubuntu-focal/gitlab-ce.deb',
                          '--repository', 'gitlab-unstable-ubuntu-focal',
-                         '--distribution', 'gitlab-unstable-ubuntu-focal',
+                         '--distribution', 'focal',
                          '--component', 'main',
                          '--chunk-size', '10000000'])
     end
 
-    it 'uses repository_name as distribution' do
+    it 'uses distribution version instead of repository name' do
       cmd = package_type.build_upload_command(
-        file_path: 'pkg/ubuntu-focal/gitlab-ce.deb',
-        repository_name: 'gitlab-gitlab-ee-ubuntu-focal',
-        distribution: 'gitlab-gitlab-ee-ubuntu-focal',
+        file_path: 'pkg/ubuntu-noble/gitlab-ce.deb',
+        repository_name: 'gitlab-gitlab-ee-ubuntu-noble',
+        distribution_version: 'noble',
         component: 'main',
         chunk_size: 10_000_000
       )
 
-      expect(cmd[7]).to eq('gitlab-gitlab-ee-ubuntu-focal') # --repository value
-      expect(cmd[9]).to eq('gitlab-gitlab-ee-ubuntu-focal') # --distribution value
+      expect(cmd[7]).to eq('gitlab-gitlab-ee-ubuntu-noble') # --repository value
+      expect(cmd[9]).to eq('noble') # --distribution value
     end
   end
 end
@@ -217,16 +217,16 @@ RSpec.describe PackageRepository::PulpRepository::RpmPackage do
   describe '#build_upload_command' do
     it 'builds correct rpm upload command' do
       cmd = package_type.build_upload_command(
-        file_path: 'pkg/el-9/gitlab-ce.rpm',
-        repository_name: 'gitlab-unstable-el-9-x86_64',
-        distribution: 'gitlab-unstable-el-9-x86_64',
+        file_path: 'pkg/el-8/gitlab-ce.rpm',
+        repository_name: 'gitlab-unstable-el-8-x86_64',
+        distribution_version: '8',
         component: 'main',
         chunk_size: 10_000_000
       )
 
       expect(cmd).to eq(['pulp', 'rpm', 'content', '-t', 'package', 'upload',
-                         '--file', 'pkg/el-9/gitlab-ce.rpm',
-                         '--repository', 'gitlab-unstable-el-9-x86_64',
+                         '--file', 'pkg/el-8/gitlab-ce.rpm',
+                         '--repository', 'gitlab-unstable-el-8-x86_64',
                          '--chunk-size', '10000000'])
     end
 
@@ -234,7 +234,7 @@ RSpec.describe PackageRepository::PulpRepository::RpmPackage do
       cmd = package_type.build_upload_command(
         file_path: 'pkg/el-9_aarch64/gitlab-ce.rpm',
         repository_name: 'gitlab-unstable-el-9-aarch64',
-        distribution: 'gitlab-unstable-el-9-aarch64',
+        distribution_version: '9',
         component: 'main',
         chunk_size: 10_000_000
       )
@@ -249,7 +249,7 @@ RSpec.describe PackageRepository::PulpRepository::RpmPackage do
       cmd = package_type.build_upload_command(
         file_path: 'pkg/el-9/gitlab-ce.rpm',
         repository_name: 'gitlab-unstable-el-9-x86_64',
-        distribution: 'gitlab-unstable-el-9-x86_64',
+        distribution_version: '9',
         component: 'main',
         chunk_size: 10_000_000
       )
