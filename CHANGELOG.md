@@ -3,6 +3,20 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.6.1 (2025-11-25)
+
+### Added (1 change)
+
+- [Add nginx['default_server_enabled'] configuration parameter](gitlab-org/security/omnibus-gitlab@458f50637f0ef726e2e35f424de0c905eec72e14)
+
+### Fixed (1 change)
+
+- [Merge branch 'cherry-pick-778a97e3' into '18-6-stable'](gitlab-org/security/omnibus-gitlab@7f0b4f971833f7671d133746da11c8a03526e76d)
+
+### Security (1 change)
+
+- [Filter all token query parameters in nginx access logs](gitlab-org/security/omnibus-gitlab@27e583a0812a78fedccbeca62fbd82ad0a4b0ddb) ([merge request](gitlab-org/security/omnibus-gitlab!500))
+
 ## 18.6.0 (2025-11-19)
 
 ### Added (1 change)
@@ -36,6 +50,20 @@ omnibus-gitlab repository.
 ### Security (1 change)
 
 - [Update libxslt from 1.1.41 to 1.1.43](gitlab-org/omnibus-gitlab@5f3194f33a7303543d9e48e5791d7f7f284929f3)
+
+## 18.5.3 (2025-11-25)
+
+### Added (1 change)
+
+- [Add nginx['default_server_enabled'] configuration parameter](gitlab-org/security/omnibus-gitlab@6328224e052b3170b8df0c1db49696b015a6aa72)
+
+### Fixed (1 change)
+
+- [Merge branch 'fix-registry-commands-permission-for-non-docker' into 'master'](gitlab-org/security/omnibus-gitlab@2f38ba3b1e81db46cb4b3beaba1a800a0c033a92)
+
+### Security (1 change)
+
+- [Filter all token query parameters in nginx access logs](gitlab-org/security/omnibus-gitlab@7672960f9c54c8892e37d4a7659563046ec41255) ([merge request](gitlab-org/security/omnibus-gitlab!497))
 
 ## 18.5.2 (2025-11-11)
 
@@ -78,6 +106,16 @@ No changes.
 ### Security (1 change)
 
 - [Update PostgreSQL 16.8 to 16.10](gitlab-org/omnibus-gitlab@6cf1dc30f8259915730ecfb89f10eae33811d566)
+
+## 18.4.5 (2025-11-25)
+
+### Fixed (1 change)
+
+- [Merge branch 'fix-registry-commands-permission-for-non-docker' into 'master'](gitlab-org/security/omnibus-gitlab@96a196873a53a3e192ae650128de174acec9bfd2)
+
+### Security (1 change)
+
+- [Filter all token query parameters in nginx access logs](gitlab-org/security/omnibus-gitlab@f671d8897de06c22d97edfd849f9b7c81b678058) ([merge request](gitlab-org/security/omnibus-gitlab!498))
 
 ## 18.4.4 (2025-11-11)
 
