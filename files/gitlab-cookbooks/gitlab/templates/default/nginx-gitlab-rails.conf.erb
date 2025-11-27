@@ -202,6 +202,12 @@ server { ## HTTPS server
     proxy_intercept_errors off;
   }
 
+  location <%= File.join(@path, 'gitlab.agent.') %> {
+    <% agent_grpc_scheme = (node['gitlab_kas']['certificate_file'] && node['gitlab_kas']['key_file'] ? 'grpcs' : 'grpc') %>
+    grpc_pass <%= agent_grpc_scheme %>://<%= node['gitlab_kas']['listen_address'] %>;
+    proxy_intercept_errors off;
+  }
+
   location <%= File.join(@path, '-/kubernetes-agent/k8s-proxy/') %> {
     proxy_pass http://<%= node['gitlab_kas']['kubernetes_api_listen_address'] %>/;
     proxy_buffering off;
