@@ -70,49 +70,49 @@ before_script:
 
 # apt based
 Ubuntu-20.04-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   rules:
     - when: always
 Ubuntu-20.04-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-arm-install
 Ubuntu-22.04-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   rules:
     - when: always
 Ubuntu-22.04-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-arm-install
 Ubuntu-24.04-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   rules:
     - when: always
 Ubuntu-24.04-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-arm-install
 Debian-11-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_11:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
 Debian-11-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_11_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_11_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-arm-install
 Debian-12-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_12:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_12:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
 Debian-12-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_12_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-arm-install
 Debian-13-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_13:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_13:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
 Debian-13-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/debian_13_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/debian_13_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-arm-install
 Raspberry-Pi-2-Bullseye-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_11:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   rules:
     - if: '$DISABLE_RPI_BUILDS == "true"'
@@ -122,7 +122,7 @@ Raspberry-Pi-2-Bullseye-check:
     package_repository: 'raspberry-pi2'
   tags: !reference [.distribution-armhf-tags]
 Raspberry-Pi-2-Bookworm-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/rpi_12:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/rpi_12:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   rules:
     - if: '$DISABLE_RPI_BUILDS == "true"'
@@ -132,7 +132,7 @@ Raspberry-Pi-2-Bookworm-check:
     package_repository: 'raspberry-pi2'
   tags: !reference [.distribution-armhf-tags]
 Ubuntu-20.04-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
@@ -141,7 +141,7 @@ Ubuntu-20.04-fips-check:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "true"
 Ubuntu-22.04-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
@@ -151,37 +151,37 @@ Ubuntu-22.04-fips-check:
 
 # yum based
 AlmaLinux-8-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
 AlmaLinux-8-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .yum-arm-install
 AlmaLinux-9-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
 AlmaLinux-9-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .yum-arm-install
 AlmaLinux-10-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
 AlmaLinux-10-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .yum-arm-install
 AmazonLinux-2-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
 AmazonLinux-2-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .yum-arm-install
 AmazonLinux-2023-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
 AmazonLinux-2023-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .yum-arm-install
 AlmaLinux-8-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
@@ -189,7 +189,7 @@ AlmaLinux-8-fips-check:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "true"
 AlmaLinux-9-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
@@ -197,7 +197,7 @@ AlmaLinux-9-fips-check:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "true"
 AmazonLinux-2-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
@@ -205,7 +205,7 @@ AmazonLinux-2-fips-check:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 AmazonLinux-2023-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_fips:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_fips:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
@@ -213,16 +213,15 @@ AmazonLinux-2023-fips-check:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "true"
 
-
 # zypper based
 OpenSUSE-15.6-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6:${BUILDER_IMAGE_REVISION}"
   extends: .zypper-install
 OpenSUSE-15.6-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6_arm64:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .zypper-arm-install
 SLES-12.5-check:
-  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_12sp5:latest"
+  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
   extends: .zypper-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
@@ -231,7 +230,7 @@ Docker:
   stage: image
   needs: []
   extends: .dind
-  image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools:latest"
+  image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools:${BUILDER_IMAGE_REVISION}"
   script:
     - bash scripts/ci/deploy_docker.sh
   tags: !reference [.distribution-amd64-tags]
