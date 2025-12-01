@@ -25,22 +25,30 @@ skip_transitive_dependency_licensing true
 
 dependency 'popt'
 
-source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz",
-       sha256: '2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52'
+if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
+  # NOTE: We cannot use UBT binaries in FIPS builds
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  # FIXME: version has drifted in Omnibus vs UBT builds
+  source Build::UBT.source_args(name, "3.4.1", "ca5264107125053f83556759df620f3a70926c12168a41353aa8e3144284d61b", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz",
+         sha256: '2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52'
 
-relative_path "rsync-#{version}"
+  relative_path "rsync-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  command './configure' \
-          " --prefix=#{install_dir}/embedded" \
-          " --disable-iconv" \
-          " --disable-xxhash" \
-          " --disable-zstd" \
-          " --disable-lz4" \
-          , env: env
+    command './configure' \
+            " --prefix=#{install_dir}/embedded" \
+            " --disable-iconv" \
+            " --disable-xxhash" \
+            " --disable-zstd" \
+            " --disable-lz4" \
+            , env: env
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
