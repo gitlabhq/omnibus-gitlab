@@ -410,7 +410,7 @@ Custom settings might conflict with settings defined elsewhere in your `gitlab.r
 #### Disable the default server
 
 By default, the bundled NGINX includes `default_server` in the `listen` directives of the GitLab server block.
-This configuration causes NGINX to use this server block as 
+This configuration causes NGINX to use this server block as
 the default for any requests that do not match other server blocks.
 
 If you need to add your own custom server block with `default_server` (for example, when using `nginx['custom_gitlab_server_config']`),
@@ -425,7 +425,7 @@ you must disable the default server in the GitLab configuration:
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
-This approach removes `default_server` from the `listen` directives so you can 
+This approach removes `default_server` from the `listen` directives so you can
 define your own default server block.
 
 #### Notes

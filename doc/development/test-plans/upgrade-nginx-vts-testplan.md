@@ -12,7 +12,7 @@ that upgrades the component.
 
 - [ ] Checked `nginx-vts` module [changelog](https://github.com/vozlt/nginx-module-vts/blob/master/CHANGELOG.md) for potential breaking changes.
 - [ ] Started a new pipeline and trigger `Trigger::ee-package`.
-- [ ] Started a new pipeline on `dev.gitlab.org` for the branch. 
+- [ ] Started a new pipeline on `dev.gitlab.org` for the branch.
   - Rebase to tip of `dev/master` if needed.
 - Test the library:
   - [ ] Confirm `nginx` has `vts` support
