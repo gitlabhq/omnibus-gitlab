@@ -28,34 +28,42 @@ dependency 'openssl' unless Build::Check.use_system_ssl?
 version = Gitlab::Version.new('redis', '7.2.11')
 default_version version.print(false)
 
-source git: version.remote
+if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
+  # NOTE: We cannot use UBT binaries in FIPS builds
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  # FIXME: version has drifted in Omnibus vs UBT builds
+  source Build::UBT.source_args(name, "7.2.11", "3960dbfce8e3897a0a5614feb805a697f10d3237408cf46f7874c673290f30b2", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
 
-# libatomic is a runtime_dependency of redis for armhf/aarch64 platforms
-if OhaiHelper.arm?
-  whitelist_file "#{install_dir}/embedded/bin/redis-benchmark"
-  whitelist_file "#{install_dir}/embedded/bin/redis-check-aof"
-  whitelist_file "#{install_dir}/embedded/bin/redis-check-rdb"
-  whitelist_file "#{install_dir}/embedded/bin/redis-cli"
-  whitelist_file "#{install_dir}/embedded/bin/redis-server"
-end
+  # libatomic is a runtime_dependency of redis for armhf/aarch64 platforms
+  if OhaiHelper.arm?
+    whitelist_file "#{install_dir}/embedded/bin/redis-benchmark"
+    whitelist_file "#{install_dir}/embedded/bin/redis-check-aof"
+    whitelist_file "#{install_dir}/embedded/bin/redis-check-rdb"
+    whitelist_file "#{install_dir}/embedded/bin/redis-cli"
+    whitelist_file "#{install_dir}/embedded/bin/redis-server"
+  end
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path).merge(
-    'PREFIX' => "#{install_dir}/embedded"
-  )
+  build do
+    env = with_standard_compiler_flags(with_embedded_path).merge(
+      'PREFIX' => "#{install_dir}/embedded"
+    )
 
-  env['CFLAGS'] << ' -fno-omit-frame-pointer'
-  env['LDFLAGS'] << ' -latomic' if OhaiHelper.raspberry_pi?
+    env['CFLAGS'] << ' -fno-omit-frame-pointer'
+    env['LDFLAGS'] << ' -latomic' if OhaiHelper.raspberry_pi?
 
-  # jemallocs page size must be >= to the runtime pagesize
-  # Use large for arm/newer platforms based on debian rules:
-  # https://salsa.debian.org/debian/jemalloc/-/blob/241fec81556098d6840e3684d2b4b69fea9258ef/debian/rules#L8-23
-  env['JEMALLOC_CONFIGURE_OPTS'] = (OhaiHelper.arm64? ? ' --with-lg-page=16' : ' --with-lg-page=12')
+    # jemallocs page size must be >= to the runtime pagesize
+    # Use large for arm/newer platforms based on debian rules:
+    # https://salsa.debian.org/debian/jemalloc/-/blob/241fec81556098d6840e3684d2b4b69fea9258ef/debian/rules#L8-23
+    env['JEMALLOC_CONFIGURE_OPTS'] = (OhaiHelper.arm64? ? ' --with-lg-page=16' : ' --with-lg-page=12')
 
-  update_config_guess
+    update_config_guess
 
-  make_args = ['BUILD_TLS=yes']
-  make_args << 'uname_M=armv6l' if OhaiHelper.raspberry_pi?
-  make "-j #{workers} #{make_args.join(' ')}", env: env
-  make 'install', env: env
+    make_args = ['BUILD_TLS=yes']
+    make_args << 'uname_M=armv6l' if OhaiHelper.raspberry_pi?
+    make "-j #{workers} #{make_args.join(' ')}", env: env
+    make 'install', env: env
+  end
 end
