@@ -32,57 +32,64 @@ license_file 'COPYING'
 
 skip_transitive_dependency_licensing true
 
-source git: version.remote
+if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
+  # NOTE: We cannot use UBT binaries in FIPS builds
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, "#{display_version}-2ubt", "32463efcb97bce62d27e55914d2988adc83d64a75c06e36363a69eb5bae9e751", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
-  env['ACLOCAL_PATH'] = "#{install_dir}/embedded/share/aclocal"
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
+    env['ACLOCAL_PATH'] = "#{install_dir}/embedded/share/aclocal"
 
-  delete "#{project_dir}/src/tool_hugehelp.c"
+    delete "#{project_dir}/src/tool_hugehelp.c"
 
-  configure_command = [
-    './configure',
-    "--prefix=#{install_dir}/embedded",
-    "--disable-option-checking",
-    '--disable-manual',
-    '--disable-debug',
-    '--enable-optimize',
-    '--disable-ldap',
-    '--disable-ldaps',
-    '--disable-rtsp',
-    '--enable-proxy',
-    "--disable-pop3",
-    "--disable-imap",
-    "--disable-smtp",
-    "--disable-gopher",
-    '--disable-dependency-tracking',
-    '--enable-ipv6',
-    "--without-libidn2",
-    '--without-librtmp',
-    "--without-zsh-functions-dir",
-    "--without-fish-functions-dir",
-    "--disable-mqtt",
-    '--without-libssh2',
-    '--without-nghttp2',
-    "--with-zlib=#{install_dir}/embedded",
-    "--without-ca-path",
-    "--without-ca-bundle",
-    "--with-ca-fallback",
-    "--without-zstd",
-    "--without-libpsl",
-    "--without-brotli"
-  ]
+    configure_command = [
+      './configure',
+      "--prefix=#{install_dir}/embedded",
+      "--disable-option-checking",
+      '--disable-manual',
+      '--disable-debug',
+      '--enable-optimize',
+      '--disable-ldap',
+      '--disable-ldaps',
+      '--disable-rtsp',
+      '--enable-proxy',
+      "--disable-pop3",
+      "--disable-imap",
+      "--disable-smtp",
+      "--disable-gopher",
+      '--disable-dependency-tracking',
+      '--enable-ipv6',
+      "--without-libidn2",
+      '--without-librtmp',
+      "--without-zsh-functions-dir",
+      "--without-fish-functions-dir",
+      "--disable-mqtt",
+      '--without-libssh2',
+      '--without-nghttp2',
+      "--with-zlib=#{install_dir}/embedded",
+      "--without-ca-path",
+      "--without-ca-bundle",
+      "--with-ca-fallback",
+      "--without-zstd",
+      "--without-libpsl",
+      "--without-brotli"
+    ]
 
-  openssl_library_path = "=#{install_dir}/embedded" unless Build::Check.use_system_ssl?
-  configure_command << "--with-openssl#{openssl_library_path}"
+    openssl_library_path = "=#{install_dir}/embedded" unless Build::Check.use_system_ssl?
+    configure_command << "--with-openssl#{openssl_library_path}"
 
-  patch source: '0001-Patch-curl-OpenSSL-m4-for-AL2-FIPS-pkg-config.patch' if OhaiHelper.amazon_linux_2? && Build::Check.use_system_ssl?
+    patch source: '0001-Patch-curl-OpenSSL-m4-for-AL2-FIPS-pkg-config.patch' if OhaiHelper.amazon_linux_2? && Build::Check.use_system_ssl?
 
-  command "autoreconf -fi", env: env
-  command configure_command.join(' '), env: env
+    command "autoreconf -fi", env: env
+    command configure_command.join(' '), env: env
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
 
 project.exclude 'embedded/bin/curl-config'
