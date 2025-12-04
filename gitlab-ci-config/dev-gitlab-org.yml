@@ -183,6 +183,14 @@
     - !reference [.skip_release_jobs, rules]
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
 
+.pulp_staging_upload_template:
+  extends: .staging_upload_template
+  stage: pulp_staging_upload
+  allow_failure: true
+  timeout: 15 minutes
+  variables:
+    REPOSITORY_TYPE: "pulp"
+
 .fips_staging_upload_template:
   extends: .staging_upload_template
   variables:
@@ -191,8 +199,16 @@
     INCLUDE_PACKAGECLOUD: "true"
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
-    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
+
+.pulp_fips_staging_upload_template:
+  extends: .pulp_staging_upload_template
+  variables:
+    USE_SYSTEM_SSL: "true"
+    USE_SYSTEM_LIBGCRYPT: "true"
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
 
 .staging_upload_with_deployment_template:
   extends: .staging_upload_template
@@ -632,8 +648,30 @@ Ubuntu-20.04-staging:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 
+Ubuntu-20.04-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: Ubuntu-20.04
+      optional: true
+    - job: Ubuntu-20.04-branch
+      optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
+
 Ubuntu-22.04-staging:
   extends: .staging_upload_template
+  needs:
+    - job: Ubuntu-22.04
+      optional: true
+    - job: Ubuntu-22.04-branch
+      optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
+
+Ubuntu-22.04-staging-pulp:
+  extends: .pulp_staging_upload_template
   needs:
     - job: Ubuntu-22.04
       optional: true
@@ -654,8 +692,30 @@ Ubuntu-22.04-arm64-staging:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|NIGHTLY)_BUILD_PIPELINE$/'
 
+Ubuntu-22.04-arm64-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: Ubuntu-22.04-arm64
+      optional: true
+    - job: Ubuntu-22.04-arm64-branch
+      optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|NIGHTLY)_BUILD_PIPELINE$/'
+
 Ubuntu-24.04-staging:
   extends: .staging_upload_template
+  needs:
+    - job: Ubuntu-24.04
+      optional: true
+    - job: Ubuntu-24.04-branch
+      optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE|RELEASE_ENVIRONMENT)_BUILD_PIPELINE$/'
+
+Ubuntu-24.04-staging-pulp:
+  extends: .pulp_staging_upload_template
   needs:
     - job: Ubuntu-24.04
       optional: true
@@ -813,6 +873,15 @@ Debian-11-staging:
       optional: true
     - job: Debian-11-branch
       optional: true
+
+Debian-11-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: Debian-11
+      optional: true
+    - job: Debian-11-branch
+      optional: true
+
 Debian-11-arm64-staging:
   extends: .staging_upload_template
   needs:
@@ -820,6 +889,15 @@ Debian-11-arm64-staging:
       optional: true
     - job: Debian-11-arm64-branch
       optional: true
+
+Debian-11-arm64-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: Debian-11-arm64
+      optional: true
+    - job: Debian-11-arm64-branch
+      optional: true
+
 Debian-12-staging:
   extends: .staging_upload_template
   needs:
@@ -827,6 +905,15 @@ Debian-12-staging:
       optional: true
     - job: Debian-12-branch
       optional: true
+
+Debian-12-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: Debian-12
+      optional: true
+    - job: Debian-12-branch
+      optional: true
+
 Debian-12-arm64-staging:
   extends: .staging_upload_template
   needs:
@@ -834,6 +921,15 @@ Debian-12-arm64-staging:
       optional: true
     - job: Debian-12-arm64-branch
       optional: true
+
+Debian-12-arm64-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: Debian-12-arm64
+      optional: true
+    - job: Debian-12-arm64-branch
+      optional: true
+
 Ubuntu-20.04-arm64-staging:
   extends: .staging_upload_template
   needs:
@@ -841,6 +937,15 @@ Ubuntu-20.04-arm64-staging:
       optional: true
     - job: Ubuntu-20.04-arm64-branch
       optional: true
+
+Ubuntu-20.04-arm64-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: Ubuntu-20.04-arm64
+      optional: true
+    - job: Ubuntu-20.04-arm64-branch
+      optional: true
+
 Ubuntu-24.04-arm64-staging:
   extends: .staging_upload_template
   needs:
@@ -848,6 +953,15 @@ Ubuntu-24.04-arm64-staging:
       optional: true
     - job: Ubuntu-24.04-arm64-branch
       optional: true
+
+Ubuntu-24.04-arm64-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: Ubuntu-24.04-arm64
+      optional: true
+    - job: Ubuntu-24.04-arm64-branch
+      optional: true
+
 AlmaLinux-8-staging:
   extends: .staging_upload_template
   needs:
@@ -855,6 +969,15 @@ AlmaLinux-8-staging:
       optional: true
     - job: AlmaLinux-8-branch
       optional: true
+
+AlmaLinux-8-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: AlmaLinux-8
+      optional: true
+    - job: AlmaLinux-8-branch
+      optional: true
+
 AlmaLinux-8-arm64-staging:
   extends: .staging_upload_template
   needs:
@@ -862,6 +985,15 @@ AlmaLinux-8-arm64-staging:
       optional: true
     - job: AlmaLinux-8-arm64-branch
       optional: true
+
+AlmaLinux-8-arm64-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: AlmaLinux-8-arm64
+      optional: true
+    - job: AlmaLinux-8-arm64-branch
+      optional: true
+
 AlmaLinux-9-staging:
   extends: .staging_upload_template
   needs:
@@ -869,6 +1001,15 @@ AlmaLinux-9-staging:
       optional: true
     - job: AlmaLinux-9-branch
       optional: true
+
+AlmaLinux-9-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: AlmaLinux-9
+      optional: true
+    - job: AlmaLinux-9-branch
+      optional: true
+
 AlmaLinux-9-arm64-staging:
   extends: .staging_upload_template
   needs:
@@ -876,6 +1017,15 @@ AlmaLinux-9-arm64-staging:
       optional: true
     - job: AlmaLinux-9-arm64-branch
       optional: true
+
+AlmaLinux-9-arm64-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: AlmaLinux-9-arm64
+      optional: true
+    - job: AlmaLinux-9-arm64-branch
+      optional: true
+
 OpenSUSE-15.6-staging:
   extends: .staging_upload_template
   needs:
@@ -883,6 +1033,15 @@ OpenSUSE-15.6-staging:
       optional: true
     - job: OpenSUSE-15.6-branch
       optional: true
+
+OpenSUSE-15.6-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: OpenSUSE-15.6
+      optional: true
+    - job: OpenSUSE-15.6-branch
+      optional: true
+
 OpenSUSE-15.6-arm64-staging:
   extends: .staging_upload_template
   needs:
@@ -890,6 +1049,15 @@ OpenSUSE-15.6-arm64-staging:
       optional: true
     - job: OpenSUSE-15.6-arm64-branch
       optional: true
+
+OpenSUSE-15.6-arm64-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: OpenSUSE-15.6-arm64
+      optional: true
+    - job: OpenSUSE-15.6-arm64-branch
+      optional: true
+
 AmazonLinux-2-staging:
   extends: .staging_upload_template
   needs:
@@ -897,6 +1065,15 @@ AmazonLinux-2-staging:
       optional: true
     - job: AmazonLinux-2-branch
       optional: true
+
+AmazonLinux-2-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: AmazonLinux-2
+      optional: true
+    - job: AmazonLinux-2-branch
+      optional: true
+
 AmazonLinux-2-arm64-staging:
   extends: .staging_upload_template
   needs:
@@ -904,6 +1081,15 @@ AmazonLinux-2-arm64-staging:
       optional: true
     - job: AmazonLinux-2-arm64-branch
       optional: true
+
+AmazonLinux-2-arm64-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: AmazonLinux-2-arm64
+      optional: true
+    - job: AmazonLinux-2-arm64-branch
+      optional: true
+
 AmazonLinux-2023-staging:
   extends: .staging_upload_template
   needs:
@@ -911,6 +1097,15 @@ AmazonLinux-2023-staging:
       optional: true
     - job: AmazonLinux-2023-branch
       optional: true
+
+AmazonLinux-2023-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: AmazonLinux-2023
+      optional: true
+    - job: AmazonLinux-2023-branch
+      optional: true
+
 AmazonLinux-2023-arm64-staging:
   extends: .staging_upload_template
   needs:
@@ -918,6 +1113,15 @@ AmazonLinux-2023-arm64-staging:
       optional: true
     - job: AmazonLinux-2023-arm64-branch
       optional: true
+
+AmazonLinux-2023-arm64-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: AmazonLinux-2023-arm64
+      optional: true
+    - job: AmazonLinux-2023-arm64-branch
+      optional: true
+
 SLES-12.5-staging:
   extends: .staging_upload_template
   needs:
@@ -928,6 +1132,18 @@ SLES-12.5-staging:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+
+SLES-12.5-staging-pulp:
+  extends: .pulp_staging_upload_template
+  needs:
+    - job: SLES-12.5
+      optional: true
+    - job: SLES-12.5-branch
+      optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+
 AmazonLinux-2-fips-staging:
   extends: .fips_staging_upload_template
   variables:
@@ -937,6 +1153,17 @@ AmazonLinux-2-fips-staging:
       optional: true
     - job: AmazonLinux-2-fips-branch
       optional: true
+
+AmazonLinux-2-fips-staging-pulp:
+  extends: .pulp_fips_staging_upload_template
+  variables:
+    USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
+  needs:
+    - job: AmazonLinux-2-fips
+      optional: true
+    - job: AmazonLinux-2-fips-branch
+      optional: true
+
 AmazonLinux-2023-fips-staging:
   extends: .fips_staging_upload_template
   needs:
@@ -944,6 +1171,15 @@ AmazonLinux-2023-fips-staging:
       optional: true
     - job: AmazonLinux-2023-fips-branch
       optional: true
+
+AmazonLinux-2023-fips-staging-pulp:
+  extends: .pulp_fips_staging_upload_template
+  needs:
+    - job: AmazonLinux-2023-fips
+      optional: true
+    - job: AmazonLinux-2023-fips-branch
+      optional: true
+
 AlmaLinux-8-fips-staging:
   extends: .fips_staging_upload_template
   needs:
@@ -951,6 +1187,15 @@ AlmaLinux-8-fips-staging:
       optional: true
     - job: AlmaLinux-8-fips-branch
       optional: true
+
+AlmaLinux-8-fips-staging-pulp:
+  extends: .pulp_fips_staging_upload_template
+  needs:
+    - job: AlmaLinux-8-fips
+      optional: true
+    - job: AlmaLinux-8-fips-branch
+      optional: true
+
 AlmaLinux-9-fips-staging:
   extends: .fips_staging_upload_template
   needs:
@@ -958,6 +1203,15 @@ AlmaLinux-9-fips-staging:
       optional: true
     - job: AlmaLinux-9-fips-branch
       optional: true
+
+AlmaLinux-9-fips-staging-pulp:
+  extends: .pulp_fips_staging_upload_template
+  needs:
+    - job: AlmaLinux-9-fips
+      optional: true
+    - job: AlmaLinux-9-fips-branch
+      optional: true
+
 Ubuntu-20.04-fips-staging:
   extends: .fips_staging_upload_template
   needs:
@@ -967,11 +1221,31 @@ Ubuntu-20.04-fips-staging:
       optional: true
   rules:
     - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
-    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+
+Ubuntu-20.04-fips-staging-pulp:
+  extends: .pulp_fips_staging_upload_template
+  needs:
+    - job: Ubuntu-20.04-fips
+      optional: true
+    - job: Ubuntu-20.04-fips-branch
+      optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
+
 Ubuntu-22.04-fips-staging:
   extends: .fips_staging_upload_template
+  needs:
+    - job: Ubuntu-22.04-fips
+      optional: true
+    - job: Ubuntu-22.04-fips-branch
+      optional: true
+
+Ubuntu-22.04-fips-staging-pulp:
+  extends: .pulp_fips_staging_upload_template
   needs:
     - job: Ubuntu-22.04-fips
       optional: true
