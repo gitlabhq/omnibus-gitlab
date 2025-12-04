@@ -658,6 +658,7 @@ default['gitlab']['gitlab_rails']['initial_license_file'] = nil
 default['gitlab']['gitlab_rails']['initial_shared_runners_registration_token'] = nil
 default['gitlab']['gitlab_rails']['display_initial_root_password'] = false
 default['gitlab']['gitlab_rails']['store_initial_root_password'] = false
+default['gitlab']['gitlab_rails']['action_cable_allowed_origins'] = []
 default['gitlab']['gitlab_rails']['trusted_proxies'] = []
 default['gitlab']['gitlab_rails']['content_security_policy'] = nil
 default['gitlab']['gitlab_rails']['allowed_hosts'] = []

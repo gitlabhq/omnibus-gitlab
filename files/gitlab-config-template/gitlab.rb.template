@@ -235,6 +235,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! and lower than the worker timeout set in puma. (default: 30)
 # gitlab_rails['graphql_timeout'] = 30
 
+### ActionCable allowed request origins
+###! Customize if you browse your GitLab application through multiple URLs
+###! If you have GitLab Geo enabled, then add the external URLs of every site:
+# gitlab_rails['action_cable_allowed_origins'] = []
+
 ### Trusted proxies
 ###! Customize if you have GitLab behind a reverse proxy which is running on a
 ###! different machine.
@@ -3184,7 +3189,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 # gitlab_rails['geo_registry_replication_enabled'] = true
 # gitlab_rails['geo_registry_replication_primary_api_url'] = 'https://example.com:5050'
-
 
 ################################################################################
 ## GitLab Geo Secondary (EE only)

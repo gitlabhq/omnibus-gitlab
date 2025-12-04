@@ -169,6 +169,28 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    describe 'ActionCable allowed request origins' do
+      context 'with default configuration' do
+        it 'does not render action_cable_allowed_origins in gitlab.yml' do
+          expect(gitlab_yml[:production][:gitlab][:action_cable_allowed_origins]).to be nil
+        end
+      end
+
+      context 'with user specified configuration' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              action_cable_allowed_origins: ['example.com', 'foobar.com']
+            }
+          )
+        end
+
+        it 'renders specified action_cable_allowed_origins in gitlab.yml' do
+          expect(gitlab_yml[:production][:gitlab][:action_cable_allowed_origins]).to eq(['example.com', 'foobar.com'])
+        end
+      end
+    end
+
     describe 'Application settings cache expiry' do
       context 'with default configuration' do
         it 'renders gitlab.yml without application settings cache expiry' do
