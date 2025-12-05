@@ -10,12 +10,19 @@ RSpec.describe SELinuxDistroHelper do
       'redhat' | '2.0' | false
       'redhat' | '7.0' | true
       'redhat' | '8.0' | true
+      'redhat' | '9.0' | true
+      'redhat' | '10.0' | true
+      'redhat' | '11.0' | false
       'almalinux' | '8.0' | true
       'almalinux' | '9.0' | true
+      'almalinux' | '10.0' | true
       'centos' | '8.0' | true
       'centos' | '8' | true
       'centos' | '9' | true
+      'centos' | '10' | true
       'amzn' | '2' | true
+      'amzn' | '2023' | true
+      'amzn' | '2025' | false
       'notadistro' | '42' | false
       nil | '7' | false
       nil | '8' | false

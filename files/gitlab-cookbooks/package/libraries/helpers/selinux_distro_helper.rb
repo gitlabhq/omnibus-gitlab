@@ -1,21 +1,19 @@
 class SELinuxDistroHelper
   REDHAT_RELEASE_FILE = '/etc/redhat-release'.freeze
   OS_RELEASE_FILE = '/etc/os-release'.freeze
+  MIN_SUPPORTED_RHEL_VERSION = 7
+  MAX_SUPPORTED_RHEL_VERSION = 10
 
   def self.selinux_supported?
-    system_is_rhel7? || system_is_rhel8? || system_is_rhel9? || system_is_amazon_linux2? || system_is_amazon_linux2023?
+    system_is_supported_rhel? || system_is_amazon_linux2? || system_is_amazon_linux2023?
   end
 
-  def self.system_is_rhel7?
-    platform_family == 'rhel' && platform_version&.start_with?('7.')
-  end
+  def self.system_is_supported_rhel?
+    return false unless platform_family == 'rhel'
+    return false if platform_version.nil?
 
-  def self.system_is_rhel8?
-    platform_family == 'rhel' && (platform_version&.start_with?('8.') || platform_version.eql?('8'))
-  end
-
-  def self.system_is_rhel9?
-    platform_family == 'rhel' && (platform_version&.start_with?('9.') || platform_version.eql?('9'))
+    major_version = platform_version.split('.').first.to_i
+    major_version >= MIN_SUPPORTED_RHEL_VERSION && major_version <= MAX_SUPPORTED_RHEL_VERSION
   end
 
   def self.system_is_amazon_linux2?
