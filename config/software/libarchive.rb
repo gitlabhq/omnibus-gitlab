@@ -22,47 +22,53 @@ license_file 'COPYING'
 
 skip_transitive_dependency_licensing true
 
-source url: "https://www.libarchive.org/downloads/libarchive-#{version}.tar.gz",
-       sha256: '5f2d3c2fde8dc44583a61165549dc50ba8a37c5947c90fc02c8e5ce7f1cfb80d'
+if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
+  # NOTE: We cannot use UBT binaries in FIPS builds
+  source Build::UBT.source_args(name, "3.8.2-1ubt", "e656efce8afe1bce706681843bacf7aab88da51bfcf4b4e09f8feea3c1e81b2a", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source url: "https://www.libarchive.org/downloads/libarchive-#{version}.tar.gz",
+         sha256: '5f2d3c2fde8dc44583a61165549dc50ba8a37c5947c90fc02c8e5ce7f1cfb80d'
 
-relative_path "libarchive-#{version}"
+  relative_path "libarchive-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  # If libarchive is present in system library locations and not bundled with
-  # omnibus-gitlab package, then Chef will incorrectly attempt to use it, and
-  # can potentially fail as seen from
-  # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7741. Hence, we need
-  # to bundle libarchive in the package. But, we don't need support for any of
-  # the possible extensions as we are not using it's functionality at all. So,
-  # when it comes to these extensions, YAGNI. Hence disabling all that can be
-  # disabled.
-  disable_flags = [
-    '--without-zlib',
-    '--without-bz2lib',
-    '--without-libb2',
-    '--without-iconv',
-    '--without-lz4',
-    '--without-zstd',
-    '--without-lzma',
-    '--without-cng',
-    '--without-openssl',
-    '--without-xml2',
-    '--without-expat',
-    '--without-lzo2',
-    '--without-mbedtls',
-    '--without-nettle',
-    '--disable-posix-regex-lib',
-    '--disable-xattr',
-    '--disable-acl',
-    '--disable-bsdtar',
-    '--disable-bsdcat',
-    '--disable-bsdcpio',
-  ]
+    # If libarchive is present in system library locations and not bundled with
+    # omnibus-gitlab package, then Chef will incorrectly attempt to use it, and
+    # can potentially fail as seen from
+    # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/7741. Hence, we need
+    # to bundle libarchive in the package. But, we don't need support for any of
+    # the possible extensions as we are not using it's functionality at all. So,
+    # when it comes to these extensions, YAGNI. Hence disabling all that can be
+    # disabled.
+    disable_flags = [
+      '--without-zlib',
+      '--without-bz2lib',
+      '--without-libb2',
+      '--without-iconv',
+      '--without-lz4',
+      '--without-zstd',
+      '--without-lzma',
+      '--without-cng',
+      '--without-openssl',
+      '--without-xml2',
+      '--without-expat',
+      '--without-lzo2',
+      '--without-mbedtls',
+      '--without-nettle',
+      '--disable-posix-regex-lib',
+      '--disable-xattr',
+      '--disable-acl',
+      '--disable-bsdtar',
+      '--disable-bsdcat',
+      '--disable-bsdcpio',
+    ]
 
-  configure disable_flags.join(' '), env: env
+    configure disable_flags.join(' '), env: env
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
