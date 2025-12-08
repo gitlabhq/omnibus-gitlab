@@ -105,7 +105,7 @@ server {
   # Pass everything to gitlab_kas daemon
   location / {
     proxy_http_version 1.1;
-    proxy_pass http://<%= @gitlab_kas_listen_address %>/;
+    proxy_pass <%= node['gitlab_kas']['upstream_http_scheme'] %>://<%= @gitlab_kas_listen_address %>/;
 
     <% @proxy_set_headers.each do |header| %>
     <% next if header[1].nil? %>
@@ -130,9 +130,14 @@ server {
     proxy_intercept_errors off;
   }
 
+  location /gitlab.agent. {
+    grpc_pass <%= node['gitlab_kas']['upstream_grpc_scheme'] %>://<%= @gitlab_kas_listen_address %>;
+    proxy_intercept_errors off;
+  }
+
   location /k8s-proxy/ {
     proxy_http_version 1.1;
-    proxy_pass http://<%= @gitlab_kas_k8s_proxy_listen_address %>/;
+    proxy_pass <%= node['gitlab_kas']['upstream_http_scheme'] %>://<%= @gitlab_kas_k8s_proxy_listen_address %>/;
 
     <% @proxy_set_headers.each do |header| %>
     <% next if header[1].nil? %>
@@ -159,7 +164,7 @@ server {
 
   location = /k8s-proxy/ {
     proxy_http_version 1.1;
-    proxy_pass http://<%= @gitlab_kas_k8s_proxy_listen_address %>/;
+    proxy_pass <%= node['gitlab_kas']['upstream_http_scheme'] %>://<%= @gitlab_kas_k8s_proxy_listen_address %>/;
 
     <% @proxy_set_headers.each do |header| %>
     <% next if header[1].nil? %>
