@@ -351,5 +351,6 @@ build do
   command "#{install_dir}/embedded/bin/ruby #{install_dir}/embedded/bin/gitlab-gem-license-generator"
   delete "#{install_dir}/embedded/bin/gitlab-gem-license-generator"
 
-  delete "#{install_dir}/embedded/service/gitlab-rails/ee/frontend_islands/apps/duo_next/node_modules" if EE
+  delete "#{install_dir}/embedded/service/gitlab-rails/ee/frontend_islands/node_modules" if EE
+  command "find #{install_dir}/embedded/service/gitlab-rails/ee/frontend_islands/apps -name 'node_modules' -type d -exec rm -rf {} +" if EE
 end
