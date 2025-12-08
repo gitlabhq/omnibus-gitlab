@@ -26,6 +26,7 @@ module GitlabKas
       parse_gitlab_kas_external_url
       parse_gitlab_kas_internal_url
       parse_redis_settings
+      parse_upstream_tls
     end
 
     def parse_address
@@ -135,6 +136,12 @@ module GitlabKas
 
       Gitlab['node'].default['gitlab_kas']['redis_sentinels_master_name'] = Gitlab['node']['redis']['master_name']
       Gitlab['gitlab_kas']['redis_sentinels_master_name'] = Gitlab['redis']['master_name'] unless Gitlab['gitlab_kas'].key?('redis_sentinels_master_name')
+    end
+
+    def parse_upstream_tls
+      upstream_tls = !!Gitlab['gitlab_kas']['certificate_file'] && !!Gitlab['gitlab_kas']['key_file']
+      Gitlab['gitlab_kas']['upstream_http_scheme'] = upstream_tls ? 'https' : 'http'
+      Gitlab['gitlab_kas']['upstream_grpc_scheme'] = upstream_tls ? 'grpcs' : 'grpc'
     end
 
     private

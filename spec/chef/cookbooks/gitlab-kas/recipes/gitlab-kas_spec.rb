@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab-kas' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir templatesymlink)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir templatesymlink nginx_configuration)).converge('gitlab::default') }
   let(:gitlab_kas_config_yml) { chef_run_load_yaml_template(chef_run, '/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml') }
 
   before do
@@ -106,6 +106,12 @@ RSpec.describe 'gitlab-kas' do
 
     it 'sets GODEBUG' do
       expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-kas/env/GODEBUG').with_content('tlsmlkem=0')
+    end
+
+    it 'uses HTTP and GRPC schemes to proxy for non-TLS upstream' do
+      expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf').with_content(%r{proxy_pass http://localhost:8150/;})
+      expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf').with_content(%r{proxy_pass http://localhost:8154/;})
+      expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf').with_content(%r{grpc_pass grpc://localhost:8150;})
     end
   end
 
@@ -670,6 +676,12 @@ RSpec.describe 'gitlab-kas' do
             }
           )
         )
+      end
+
+      it 'uses HTTPS and GRPCS schemes to proxy for TLS upstream' do
+        expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf').with_content(%r{proxy_pass https://localhost:8150/;})
+        expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf').with_content(%r{proxy_pass https://localhost:8154/;})
+        expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf').with_content(%r{grpc_pass grpcs://localhost:8150;})
       end
     end
 
