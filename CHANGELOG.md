@@ -61,6 +61,10 @@ omnibus-gitlab repository.
 
 - [Update libxslt from 1.1.41 to 1.1.43](gitlab-org/omnibus-gitlab@5f3194f33a7303543d9e48e5791d7f7f284929f3)
 
+## 18.5.4 (2025-12-10)
+
+No changes.
+
 ## 18.5.3 (2025-11-25)
 
 ### Added (1 change)
