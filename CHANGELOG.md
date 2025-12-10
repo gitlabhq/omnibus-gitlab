@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.6.2 (2025-12-10)
+
+### Fixed (1 change)
+
+- [Fix RHEL 10 not working with SELinux](gitlab-org/security/omnibus-gitlab@f2814a02cd1e9dc8d82796609a9f719ee3e58daa)
+
+### Changed (1 change)
+
+- [Bump Container Registry to v4.31.1-gitlab](gitlab-org/security/omnibus-gitlab@d33ef50596d2ab912e1c155e5d94bc08fc53946f)
+
 ## 18.6.1 (2025-11-25)
 
 ### Added (1 change)
