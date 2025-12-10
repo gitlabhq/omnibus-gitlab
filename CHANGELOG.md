@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.6.2 (2025-12-10)
+
+### Fixed (1 change)
+
+- [Fix RHEL 10 not working with SELinux](gitlab-org/security/omnibus-gitlab@f2814a02cd1e9dc8d82796609a9f719ee3e58daa)
+
+### Changed (1 change)
+
+- [Bump Container Registry to v4.31.1-gitlab](gitlab-org/security/omnibus-gitlab@d33ef50596d2ab912e1c155e5d94bc08fc53946f)
+
 ## 18.6.1 (2025-11-25)
 
 ### Added (1 change)
@@ -50,6 +60,10 @@ omnibus-gitlab repository.
 ### Security (1 change)
 
 - [Update libxslt from 1.1.41 to 1.1.43](gitlab-org/omnibus-gitlab@5f3194f33a7303543d9e48e5791d7f7f284929f3)
+
+## 18.5.4 (2025-12-10)
+
+No changes.
 
 ## 18.5.3 (2025-11-25)
 
@@ -106,6 +120,10 @@ No changes.
 ### Security (1 change)
 
 - [Update PostgreSQL 16.8 to 16.10](gitlab-org/omnibus-gitlab@6cf1dc30f8259915730ecfb89f10eae33811d566)
+
+## 18.4.6 (2025-12-10)
+
+No changes.
 
 ## 18.4.5 (2025-11-25)
 
