@@ -187,7 +187,7 @@
   extends: .staging_upload_template
   stage: pulp_staging_upload
   allow_failure: true
-  timeout: 15 minutes
+  timeout: 35 minutes
   variables:
     REPOSITORY_TYPE: "pulp"
 
@@ -241,7 +241,7 @@
   extends: .production_release_template
   stage: pulp-package-release
   allow_failure: true
-  timeout: 15 minutes
+  timeout: 35 minutes
   variables:
     REPOSITORY_TYPE: "pulp"
   rules:
