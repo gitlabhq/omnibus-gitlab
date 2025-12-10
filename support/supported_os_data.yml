@@ -1,0 +1,92 @@
+ubuntu:
+  versions:
+    20.04:
+      ce: true
+      ee: true
+      arm64: true
+      fips: true
+      eol: 2025-05-31
+    22.04:
+      ce: true
+      ee: true
+      arm64: true
+      fips: true
+      eol: 2027-04-01
+    24.04:
+      ce: true
+      ee: true
+      arm64: true
+      fips: false
+      eol: 2029-04-25
+debian:
+  eol_date_key: extendedSupport
+  versions:
+    11:
+      ce: true
+      ee: true
+      arm64: true
+      fips: false
+      eol: 2026-08-31
+    12:
+      ce: true
+      ee: true
+      arm64: true
+      fips: false
+      eol: 2028-05-30
+almalinux:
+  versions:
+    8:
+      ce: true
+      ee: true
+      arm64: true
+      fips: true
+      eol: 2029-03-01
+    9:
+      ce: true
+      ee: true
+      arm64: true
+      fips: true
+      eol: 2032-05-31
+    10:
+      ce: true
+      ee: true
+      arm64: true
+      fips: false
+      eol: 2035-05-31
+opensuseleap:
+  versions:
+    15.6:
+      ce: true
+      ee: true
+      arm64: true
+      fips: false
+      eol: 2025-12-31
+amazon:
+  eol_product_key: 'Amazon-Linux'
+  versions:
+    2:
+      ce: true
+      ee: true
+      arm64: true
+      fips: true
+      eol: 2026-06-30
+    2023:
+      ce: true
+      ee: true
+      arm64: true
+      fips: true
+      eol: 2029-06-30
+suse:
+  versions:
+    12.5:
+      ce: false
+      ee: true
+      arm64: false
+      fips: false
+      eol: 2027-10-31
+    15.6:
+      ce: false
+      ee: true
+      arm64: false
+      fips: false
+      eol: 2025-12-31

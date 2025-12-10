@@ -213,6 +213,8 @@ build do
   copy 'config/database.yml.postgresql', 'config/database.yml'
   copy 'config/secrets.yml.example', 'config/secrets.yml'
 
+  copy "#{Omnibus::Config.project_root}/support/supported_os_data.yml", "supported_os_data.yml"
+
   # Copy asset cache and node modules from cache location to source directory
   move "#{Omnibus::Config.project_root}/assets_cache", "#{Omnibus::Config.source_dir}/gitlab-rails/tmp/cache"
   move "#{Omnibus::Config.project_root}/node_modules", "#{Omnibus::Config.source_dir}/gitlab-rails"
