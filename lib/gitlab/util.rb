@@ -40,8 +40,12 @@ module Gitlab
         $stdout.puts "section_end:#{Time.now.to_i}:#{name}\r\e[0K"
       end
 
-      def shellout_stdout(cmd)
-        output = Mixlib::ShellOut.new(cmd)
+      def shellout_stdout(cmd, timeout: nil, stream: false)
+        options = {}
+        options[:timeout] = timeout unless timeout.nil?
+        options[:live_stream] = $stdout if stream
+
+        output = Mixlib::ShellOut.new(cmd, options)
         output.run_command
 
         raise ShellOutExecutionError.new(cmd, output.status.exitstatus, output.stdout, output.stderr) unless output.status.exitstatus.zero?

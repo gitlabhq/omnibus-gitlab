@@ -47,7 +47,8 @@ class PackageRepository
           puts "Running the command: #{upload_cmd.join(' ')}"
 
           begin
-            Gitlab::Util.shellout_stdout(upload_cmd)
+            command_timeout = Gitlab::Util.get_env('PULP_UPLOAD_TIMEOUT') || 1800
+            Gitlab::Util.shellout_stdout(upload_cmd, timeout: command_timeout.to_i, stream: true)
           rescue Gitlab::Util::ShellOutExecutionError => e
             warn 'Upload to Pulp server failed!.'
             warn "The command returned the output: #{e.stdout}#{e.stderr}"
