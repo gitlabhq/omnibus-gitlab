@@ -101,7 +101,7 @@ if [[ ! -e /etc/gitlab/gitlab.rb ]]; then
 	chmod 0600 /etc/gitlab/gitlab.rb
 fi
 
-# Generate ssh host key for the first time
+# Generate ssh host keys for the first time
 if [[ ! -f /etc/gitlab/ssh_host_rsa_key ]]; then
 	echo "Generating ssh_host_rsa_key..."
 	ssh-keygen -f /etc/gitlab/ssh_host_rsa_key -N '' -t rsa
@@ -136,11 +136,16 @@ ln -fs /etc/gitlab/ssh_host_ed25519_key.pub /etc/ssh/ssh_host_ed25519_key.pub
 # Remove all services, the reconfigure will create them
 echo "Preparing services..."
 rm -f /opt/gitlab/service/*
-ln -s /opt/gitlab/sv/sshd /opt/gitlab/service
-ln -sf /opt/gitlab/embedded/bin/sv /opt/gitlab/init/sshd
-mkdir -p /var/run/sshd
-mkdir -p /var/log/gitlab/sshd
 mkdir -p /var/log/gitlab/reconfigure
+
+if [[ "${GITLAB_DISABLE_OPENSSH}" != 'true' ]]; then
+	echo "Preparing OpenSSH service..."
+
+	ln -s /opt/gitlab/sv/sshd /opt/gitlab/service
+	ln -sf /opt/gitlab/embedded/bin/sv /opt/gitlab/init/sshd
+	mkdir -p /var/run/sshd
+	mkdir -p /var/log/gitlab/sshd
+fi
 
 if [ -n "${GITLAB_PRE_RECONFIGURE_SCRIPT+x}" ]; then
   echo "Running Pre Reconfigure Script..."
