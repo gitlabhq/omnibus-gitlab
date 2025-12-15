@@ -87,9 +87,16 @@ end
 # git_user is valid.
 bash "Set proper security context on ssh files for selinux" do
   code lazy { SELinuxHelper.commands(node) }
-  only_if "id -Z"
+  only_if { SELinuxHelper.enabled? && !SELinuxHelper.context_set?(node) }
   not_if { !node['gitlab']['gitlab_rails']['enable'] }
   action :nothing
   retries SELINUX_OPERATION_RETRIES
   retry_delay SELINUX_OPERATION_RETRY_DELAY
+end
+
+# Ensure selinux context is set at the end of the run, even if no files changed
+ruby_block "Check SELinux setup" do
+  block { true }
+  only_if { SELinuxHelper.enabled? && !SELinuxHelper.context_set?(node) }
+  notifies :run, 'bash[Set proper security context on ssh files for selinux]', :delayed
 end
