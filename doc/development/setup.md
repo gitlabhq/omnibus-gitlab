@@ -186,15 +186,19 @@ in `/etc/gitlab/gitlab.rb` by supplying them in a `gitlab_rails['env']` hash. Se
 
 - `GITLAB_LICENSE_MODE` to `test`
 - `CUSTOMER_PORTAL_URL` to `https://customers.staging.gitlab.com`
+- `CLOUD_CONNECTOR_BASE_URL` to `https://cloud.staging.gitlab.com`
 
 For example:
 
 ```ruby
 gitlab_rails['env'] = {
     "GITLAB_LICENSE_MODE" => "test",
-    "CUSTOMER_PORTAL_URL" => "https://customers.staging.gitlab.com"
+    "CUSTOMER_PORTAL_URL" => "https://customers.staging.gitlab.com",
+    "CLOUD_CONNECTOR_BASE_URL" => "https://cloud.staging.gitlab.com"
 }
 ```
+
+Run `gitlab-ctl reconfigure` to apply.
 
 {{< alert type="note" >}}
 
