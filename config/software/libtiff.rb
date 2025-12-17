@@ -30,30 +30,37 @@ dependency 'liblzma'
 dependency 'libjpeg-turbo'
 dependency 'config_guess'
 
-source git: version.remote
+if Build::Check.use_ubt?
+  ubt_version = version.print(false).delete_prefix('v')
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, ubt_version, "be827086538b8a45fea0bab670905b0e9a3e44ef7dd839f59c33d6935d91dab3", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  env['CFLAGS'] = "-std=c99 #{env['CFLAGS']}" if ohai['platform'] == 'suse' &&
-    ohai['platform_version'].start_with?('12.')
+    env['CFLAGS'] = "-std=c99 #{env['CFLAGS']}" if ohai['platform'] == 'suse' &&
+      ohai['platform_version'].start_with?('12.')
 
-  # Patch the code to download config.guess and config.sub. We instead copy
-  # the ones we vendor to the correct location.
-  patch source: 'remove-config-guess-sub-download.patch'
+    # Patch the code to download config.guess and config.sub. We instead copy
+    # the ones we vendor to the correct location.
+    patch source: 'remove-config-guess-sub-download.patch'
 
-  patch source: 'add-libtoolize-call-to-autogen.patch'
+    patch source: 'add-libtoolize-call-to-autogen.patch'
 
-  command './autogen.sh', env: env
-  update_config_guess(target: 'config')
+    command './autogen.sh', env: env
+    update_config_guess(target: 'config')
 
-  configure_command = [
-    './configure',
-    '--disable-zstd',
-    "--prefix=#{install_dir}/embedded"
-  ]
+    configure_command = [
+      './configure',
+      '--disable-zstd',
+      "--prefix=#{install_dir}/embedded"
+    ]
 
-  command configure_command.join(' '), env: env
+    command configure_command.join(' '), env: env
 
-  make "-j #{workers} install", env: env
+    make "-j #{workers} install", env: env
+  end
 end
