@@ -3,6 +3,37 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.7.0 (2025-12-17)
+
+### Added (7 changes)
+
+- [Make it possible to disable OpenSSH server in Docker image](gitlab-org/omnibus-gitlab@8c26acb5d4abc6d8428fc3656190284777c43a5e) by @TobiX ([merge request](gitlab-org/omnibus-gitlab!8780))
+- [Enable HTTPS scheme for KAS TLS upstream](gitlab-org/omnibus-gitlab@fdbb12b5dba7a993416b901988a7c9a6bb135a43) ([merge request](gitlab-org/omnibus-gitlab!8942))
+- [Add new Geo setting to gitlab.yml](gitlab-org/omnibus-gitlab@39b0b5788633ac6a93ba8eb7a0129ac52d163f90) ([merge request](gitlab-org/omnibus-gitlab!8910))
+- [Enable gRPC ingress on KAS](gitlab-org/omnibus-gitlab@cfd0253cab56fd3ad8d97d627763e81f1b37854c) ([merge request](gitlab-org/omnibus-gitlab!8857))
+- [Add support for registry database prefer mode](gitlab-org/omnibus-gitlab@38e09490b53d990073a2dca82fdb84cdf0742602) ([merge request](gitlab-org/omnibus-gitlab!8874))
+- [Add nginx['default_server_enabled'] configuration parameter](gitlab-org/omnibus-gitlab@264daf9214aa2661d17ef25dd730e1ad0513c7b9) ([merge request](gitlab-org/omnibus-gitlab!8912))
+- [Use chpst to force regstry user on migrations](gitlab-org/omnibus-gitlab@8b216c5a84f55890fa2182d3b85332ec87d77555) ([merge request](gitlab-org/omnibus-gitlab!8812))
+
+### Fixed (3 changes)
+
+- [Fail reconfigure if SELinux commands cannot be run](gitlab-org/omnibus-gitlab@c2edc03543ebce0a673deee4da51c3dc140137fe) ([merge request](gitlab-org/omnibus-gitlab!8955))
+- [Fix builds in JiHu build system](gitlab-org/omnibus-gitlab@1fcc36c368fed4eddf60f50fe74d9cf8d30fddd1) by @zhanghaiwei55 ([merge request](gitlab-org/omnibus-gitlab!8931))
+- [Fix RHEL 10 not working with SELinux](gitlab-org/omnibus-gitlab@d1234bda253e7e079dba5a3356d3af892b964fde) ([merge request](gitlab-org/omnibus-gitlab!8954))
+
+### Changed (5 changes)
+
+- [Revert update to sshd_config mandating stronger algorithms](gitlab-org/omnibus-gitlab@e80206ee7469a30e474e61641deccfa87bbaa3a4) ([merge request](gitlab-org/omnibus-gitlab!8937))
+- [Update cacerts to 2025-11-04](gitlab-org/omnibus-gitlab@77e385b96617d7059dd6f1e4afaddc9d1672d47f) ([merge request](gitlab-org/omnibus-gitlab!8897))
+- [Update dependency container-registry to v4.32.0-gitlab](gitlab-org/omnibus-gitlab@d34f5287aefcde014dae99c0111f010ed1b18b41) ([merge request](gitlab-org/omnibus-gitlab!8925))
+- [Bump Rack to 2.2.21](gitlab-org/omnibus-gitlab@6869638b67ab2d9f6228460e4408d0def438f952) ([merge request](gitlab-org/omnibus-gitlab!8886))
+- [Update dependency Image::ExifTool to v13](gitlab-org/omnibus-gitlab@9628bb8365060e9a32c6ca09427735fd8bd9b682) ([merge request](gitlab-org/omnibus-gitlab!8848))
+
+### Security (2 changes)
+
+- [Mattermost Security Updates November 21, 2025](gitlab-org/omnibus-gitlab@f2992d6bee98355878a08c7fb00b4600c121d68c) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8956))
+- [Filter all token query parameters in nginx access logs](gitlab-org/omnibus-gitlab@3dab3a55e4de1755711819a10190528f3ad7686d)
+
 ## 18.6.2 (2025-12-10)
 
 ### Fixed (1 change)
