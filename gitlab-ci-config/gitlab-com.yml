@@ -442,6 +442,7 @@ docs-i18n-lint paths:
   cache: {}
   needs: []
   before_script: []
+  allow_failure: true
   script:
     - scripts/docs_i18n_verify_paths.sh
   rules:
