@@ -28,29 +28,36 @@ dependency 'config_guess'
 # versions_list: url=https://download.gnome.org/sources/libxslt/1.1/ filter=*.tar.xz
 version('1.1.43') { source sha256: '5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a' }
 
-source url: "https://download.gnome.org/sources/libxslt/1.1/libxslt-#{version}.tar.xz"
+if Build::Check.use_ubt?
+  # versions_list: url=https://download.gnome.org/sources/libxslt/1.1/ filter=*.tar.xz
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, "#{default_version}-2ubt", "bd9da0cbb5b2e07f1e5ed8f0b488f235cf4c894dcfc24fd833e4cdeabeaea1c9", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source url: "https://download.gnome.org/sources/libxslt/1.1/libxslt-#{version}.tar.xz"
 
-relative_path "libxslt-#{version}"
+  relative_path "libxslt-#{version}"
 
-build do
-  update_config_guess
+  build do
+    update_config_guess
 
-  env = with_standard_compiler_flags(with_embedded_path)
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  # the libxslt configure script iterates directories specified in
-  # --with-libxml-prefix looking for the libxml2 config script. That
-  # iteration treats colons as a delimiter so we are using a cygwin
-  # style path to accommodate
-  configure_commands = [
-    "--with-libxml-prefix=#{install_dir.sub('C:', '/C')}/embedded",
-    '--without-python',
-    '--without-crypto'
-  ]
+    # the libxslt configure script iterates directories specified in
+    # --with-libxml-prefix looking for the libxml2 config script. That
+    # iteration treats colons as a delimiter so we are using a cygwin
+    # style path to accommodate
+    configure_commands = [
+      "--with-libxml-prefix=#{install_dir.sub('C:', '/C')}/embedded",
+      '--without-python',
+      '--without-crypto'
+    ]
 
-  configure(*configure_commands, env: env)
+    configure(*configure_commands, env: env)
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
 
 project.exclude 'embedded/lib/xsltConf.sh'
