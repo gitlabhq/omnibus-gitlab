@@ -1,3 +1,3 @@
 {
-  "run_list": [ "recipe[package::show_config]" ]
+  "run_list": [ "recipe[gitlab-base::show_config]" ]
 }

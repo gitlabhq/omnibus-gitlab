@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'package::show_config' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::show_config') }
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::show_config') }
 
   it 'outputs user-defined gitlab.rb configuration to stdout' do
     allow(Gitlab).to receive(:[]).and_call_original
