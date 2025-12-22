@@ -64,39 +64,52 @@ It also posts the allure report as a comment on the MR having the ID passed in `
 The entire flow of QA in `omnibus-gitlab` MR pipeline is as follows
 
 ```mermaid
-%%{init: {'theme':'base'}}%%
-graph TD
-    B0 --->|MR Pipeline Triggered on each commit| A0
-    A0 ---->|Creates Child Pipeline| A1
-    A1 ---->|Creates Child Pipelines| A2
-    A2 -->|"Once tests are successful <br> calls e2e-test-report job"| B1
-    B2 -.-|includes| B1
-    B1 -->|Runs| C1
-    A3 -.-|includes| A1
-    C1 -.->|uploads report| C2
-    C1 -.->|Posts report link as a comment on MR| B0
-    C3 -.->|pulls| B2
-subgraph QA flow in omnibus pipeline
+flowchart TD
+  B0 --->|MR Pipeline Triggered on each commit| A0
+  A0 ---->|Creates Child Pipeline| A1
+  A1 ---->|Creates Child Pipelines| A2
+  A2 -->|"Once tests are successful calls e2e-test-report job"| B1
+  A3 -.-|includes| A1
+  B2 -.-|includes| B1
+  B1 -->|Runs| C1
+  C1 -.->|uploads report| C2
+  C1 -.->|Posts report link as a comment on MR| B0
+  C3 -.->|pulls| B2
 
-    subgraph Omnibus Parent Pipeline
-        B0((Merge <br> Request))
-        A0["`**_trigger-package_** stage <br> Manual **_Trigger:ce/ee-package_** job kicked off`"]
-        end
+  subgraph "Omnibus parent pipeline"
+    direction LR
+    B0(["Merge request"])
+    A0["<strong>trigger-package</strong> stage
+        Manual <strong>Trigger:ce/ee-package</strong>
+        job kicked off"]
+  end
 
-    subgraph Trigger:CE/EE-job Child Pipeline
-        A1["`**_trigger-qa_** stage <br> **_qa-subset-test_** job`"]
-        A3(["`_test-on-omnibus/main.gitlab-ci.yml_ <br> from _gitlab-org/gitlab_`"])
-    end
+  subgraph Trigger: CE/EE-job Child Pipeline
+    direction TB
+    A1["<strong>trigger-qa</strong> stage
+        <strong>qa-subset-test</strong> job"]
+    A3(["<code>test-on-omnibus/main.gitlab-ci.yml</code>
+         from <code>gitlab-org/gitlab</code>"])
+  end
 
-    subgraph qa-subset-test Child Pipeline
-        A2["`from <br> **_test-on-omnibus/main.gitlab-ci.yml_** in **_gitlab-org/gitlab_**`"]
-        B1["`**_report_** stage <br> **_e2e-test-report_** job`"]
-        B2(["`_.generate-allure-report-base_ job from<br> _quality/pipeline-common_`"])
-        C1["`**_allure-report-publisher_** gem`"]
-        C2[("`AWS S3 <br> **_gitlab-qa-allure-report_** <br> in <br> **_eng-quality-ops-ci-cd-shared-infra_** <br> project`")]
-        C3["`pulls <br> image _andrcuns/allure-report-publisher:1.6.0_`"]
-        end
-end
+  subgraph qa-subset-test Child Pipeline
+      A2["from
+          <code>test-on-omnibus/main.gitlab-ci.yml</code>
+          in
+          <code>gitlab-org/gitlab</code>"]
+      B1["<strong>report</strong> stage
+          <strong>e2e-test-report<strong> job"]
+      B2(["<strong>.generate-allure-report-base</strong> job
+           from <code>quality/pipeline-common</code>"])
+      C1["<code>allure-report-publisher</code> gem"]
+      C2[("AWS S3
+           <code>gitlab-qa-allure-report</code>
+           in
+           <code>eng-quality-ops-ci-cd-shared-infra</code>
+           project")]
+      C3["pulls
+          <code>image _andrcuns/allure-report-publisher:1.6.0</code>"]
+  end
 ```
 
 ## Demo for Allure report & QA pipelines
