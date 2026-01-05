@@ -270,11 +270,21 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
   url = node['gitlab']['gitlab_rails']['redis_actioncable_instance']
   sentinels = node['gitlab']['gitlab_rails']['redis_actioncable_sentinels']
   sentinels_password = node['gitlab']['gitlab_rails']['redis_actioncable_sentinels_password']
+  actioncable_redis_ssl = node['gitlab']['gitlab_rails']['redis_actioncable_ssl']
+  ca_cert_dir = node['gitlab']['gitlab_rails']['redis_actioncable_tls_ca_cert_dir']
+  ca_cert_file = node['gitlab']['gitlab_rails']['redis_actioncable_tls_ca_cert_file']
+  certificate_file = node['gitlab']['gitlab_rails']['redis_actioncable_tls_client_cert_file']
+  key_file = node['gitlab']['gitlab_rails']['redis_actioncable_tls_client_key_file']
   sentinels_password ||= redis_sentinels_password if sentinels.nil? || sentinels.empty?
 
   if url.nil?
     url = redis_url
     sentinels = redis_sentinels
+    actioncable_redis_ssl = redis_ssl
+    ca_cert_dir = redis_tls_ca_cert_dir
+    ca_cert_file = redis_tls_ca_cert_file
+    certificate_file = redis_tls_client_cert_file
+    key_file = redis_tls_client_key_file
   end
 
   link_from File.join(gitlab_rails_source_dir, "config/cable.yml")
@@ -288,6 +298,11 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
     redis_sentinels: sentinels,
     redis_sentinels_password: sentinels_password,
     redis_enable_client: redis_enable_client,
+    redis_ssl: actioncable_redis_ssl,
+    redis_tls_ca_cert_dir: ca_cert_dir,
+    redis_tls_ca_cert_file: ca_cert_file,
+    redis_tls_client_cert_file: certificate_file,
+    redis_tls_client_key_file: key_file,
     redis_extra_config_command: redis_extra_config_command
   )
   dependent_services.each { |svc| notifies :restart, svc }
