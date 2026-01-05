@@ -589,6 +589,64 @@ RSpec.describe 'gitlab-kas' do
             expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/redis_sentinels_password_file').with_content('some pass')
           end
         end
+
+        context 'when Sentinel TLS is enabled' do
+          before do
+            sentinel_params[:gitlab_rails]['redis_sentinels_ssl'] = true
+
+            stub_gitlab_rb(sentinel_params)
+          end
+
+          it 'enables TLS in to the kas config' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content { |content|
+              kas_redis_cfg = YAML.safe_load(content)['redis']
+
+              expect(kas_redis_cfg).to(
+                include(
+                  'sentinel' => {
+                    'master_name' => 'example-redis',
+                    'addresses' => [
+                      'a:1',
+                      'b:2',
+                      'c:6379'
+                    ],
+                    'tls' => {
+                      'enabled' => true
+                    }
+                  }
+                )
+              )
+            }
+          end
+        end
+
+        context 'when Sentinel TLS is disabled' do
+          before do
+            sentinel_params[:gitlab_rails]['redis_sentinels_ssl'] = false
+
+            stub_gitlab_rb(sentinel_params)
+          end
+
+          it 'does not enable TLS in the kas config' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content { |content|
+              kas_redis_cfg = YAML.safe_load(content)['redis']
+
+              expect(kas_redis_cfg).to(
+                include(
+                  'sentinel' => {
+                    'master_name' => 'example-redis',
+                    'addresses' => [
+                      'a:1',
+                      'b:2',
+                      'c:6379'
+                    ]
+                  }
+                )
+              )
+              expect(kas_redis_cfg['sentinel']).not_to include('tls')
+            }
+          end
+        end
       end
     end
 

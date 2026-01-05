@@ -24,6 +24,9 @@ URL = "<%= @redis_url %>"
 Sentinel = <%= @sentinels.to_json %>
 SentinelMaster = "<%= @sentinel_master %>"
 SentinelPassword = "<%= @sentinel_password %>"
+<%- if @sentinels_ssl %>
+[Sentinel.tls]
+<%- end %>
 <% end %>
 <% end %>
 

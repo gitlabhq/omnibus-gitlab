@@ -469,6 +469,7 @@ default['gitlab']['gitlab_rails']['redis_socket'] = "/var/opt/gitlab/redis/redis
 default['gitlab']['gitlab_rails']['redis_enable_client'] = true
 default['gitlab']['gitlab_rails']['redis_sentinels'] = []
 default['gitlab']['gitlab_rails']['redis_sentinels_password'] = nil
+default['gitlab']['gitlab_rails']['redis_sentinels_ssl'] = false
 default['gitlab']['gitlab_rails']['redis_sentinel_master'] = nil
 default['gitlab']['gitlab_rails']['redis_sentinel_master_ip'] = nil
 default['gitlab']['gitlab_rails']['redis_sentinel_master_port'] = nil

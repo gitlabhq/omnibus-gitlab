@@ -20,7 +20,8 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
           password: nil,
           sentinels: [],
           sentinelMaster: 'gitlab-redis',
-          sentinelPassword: nil
+          sentinelPassword: nil,
+          sentinelTLS: false
         )
       end
     end
@@ -41,7 +42,8 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
             password: 'redis-password',
             sentinels: [],
             sentinelMaster: 'gitlab-redis',
-            sentinelPassword: nil
+            sentinelPassword: nil,
+            sentinelTLS: false
           )
         end
       end
@@ -61,7 +63,8 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
             password: 'redis password',
             sentinels: [],
             sentinelMaster: 'gitlab-redis',
-            sentinelPassword: nil
+            sentinelPassword: nil,
+            sentinelTLS: false
           )
         end
       end
@@ -82,7 +85,8 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
             password: 'redis-password',
             sentinels: [],
             sentinelMaster: 'gitlab-redis',
-            sentinelPassword: nil
+            sentinelPassword: nil,
+            sentinelTLS: false
           )
         end
       end
@@ -105,7 +109,8 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
             password: 'different-redis-password',
             sentinels: [],
             sentinelMaster: 'gitlab-redis',
-            sentinelPassword: nil
+            sentinelPassword: nil,
+            sentinelTLS: false
           )
         end
       end
@@ -133,7 +138,8 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
               password: 'redis-workhorse-password',
               sentinels: [],
               sentinelMaster: 'gitlab-redis',
-              sentinelPassword: nil
+              sentinelPassword: nil,
+              sentinelTLS: false
             )
           end
 
@@ -169,7 +175,8 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
               password: 'redis-password',
               sentinels: [],
               sentinelMaster: 'gitlab-redis',
-              sentinelPassword: nil
+              sentinelPassword: nil,
+              sentinelTLS: false
             )
           end
 
@@ -211,7 +218,8 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
                 "redis://:workhorse-sentinel-password@10.0.0.3:26379"
               ],
               sentinelMaster: 'redis-for-workhorse',
-              sentinelPassword: 'workhorse-sentinel-password'
+              sentinelPassword: 'workhorse-sentinel-password',
+              sentinelTLS: false
             )
           end
 
@@ -228,6 +236,42 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
                   { host: '10.0.0.3', port: 26379, password: 'workhorse-sentinel-password' },
                 ]
               }
+            )
+          end
+        end
+
+        context 'when Redis master settings are specified via redis key with SSL enabled' do
+          before do
+            stub_gitlab_rb(
+              gitlab_workhorse: {
+                redis_host: 'workhorse.redis.host',
+                redis_sentinels: [
+                  { host: '10.0.0.1', port: 26379 },
+                  { host: '10.0.0.2', port: 26379 },
+                  { host: '10.0.0.3', port: 26379 }
+                ],
+                redis_sentinels_password: 'workhorse-sentinel-password',
+                redis_sentinels_ssl: true
+              },
+              redis: {
+                master_name: 'redis-for-workhorse',
+                master_password: 'redis-password'
+              }
+            )
+          end
+
+          it 'returns information about the provided Redis instance with sentinelTLS enabled' do
+            expect(subject.redis_params).to eq(
+              url: 'redis://:redis-password@redis-for-workhorse/',
+              password: 'redis-password',
+              sentinels: [
+                "rediss://:workhorse-sentinel-password@10.0.0.1:26379",
+                "rediss://:workhorse-sentinel-password@10.0.0.2:26379",
+                "rediss://:workhorse-sentinel-password@10.0.0.3:26379"
+              ],
+              sentinelMaster: 'redis-for-workhorse',
+              sentinelPassword: 'workhorse-sentinel-password',
+              sentinelTLS: true
             )
           end
         end

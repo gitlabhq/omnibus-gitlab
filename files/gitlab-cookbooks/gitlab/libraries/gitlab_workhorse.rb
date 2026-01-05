@@ -99,7 +99,7 @@ module GitlabWorkhorse
         Gitlab['gitlab_rails']['redis_workhorse_instance'] = "unix://#{workhorse_redis_socket}" if workhorse_redis_socket != rails_redis_socket
       end
 
-      %w[username password cluster_nodes sentinels sentinel_master sentinels_password].each do |setting|
+      %w[username password cluster_nodes sentinels sentinel_master sentinels_password sentinels_ssl].each do |setting|
         Gitlab['gitlab_rails']["redis_workhorse_#{setting}"] ||= Gitlab['gitlab_workhorse']["redis_#{setting}"]
       end
     end
@@ -108,7 +108,7 @@ module GitlabWorkhorse
     # rubocop:enable Metrics/PerceivedComplexity
 
     def parse_global_rails_redis_settings
-      %w[ssl host socket port password database sentinels sentinels_password].each do |setting|
+      %w[ssl host socket port password database sentinels sentinels_password sentinels_ssl].each do |setting|
         Gitlab['gitlab_workhorse']["redis_#{setting}"] ||= Gitlab['gitlab_rails']["redis_#{setting}"]
       end
     end
@@ -134,7 +134,7 @@ module GitlabWorkhorse
         end
       end
 
-      %w[username password cluster_nodes sentinels sentinel_master sentinels_password].each do |setting|
+      %w[username password cluster_nodes sentinels sentinel_master sentinels_password sentinels_ssl].each do |setting|
         Gitlab['gitlab_workhorse']["redis_#{setting}"] ||= Gitlab['gitlab_rails']["redis_workhorse_#{setting}"]
       end
     end

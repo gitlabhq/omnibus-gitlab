@@ -904,6 +904,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   {'host' => '127.0.0.1', 'port' => 26379},
 # ]
 # gitlab_rails['redis_sentinels_password'] = 'sentinel-requirepass-goes-here'
+# gitlab_rails['redis_sentinels_ssl'] = false
 
 # gitlab_rails['redis_sentinel_master'] = nil
 # gitlab_rails['redis_sentinel_master_ip'] = nil

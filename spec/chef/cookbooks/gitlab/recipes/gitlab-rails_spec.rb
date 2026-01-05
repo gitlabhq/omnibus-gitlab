@@ -452,6 +452,32 @@ RSpec.describe 'gitlab::gitlab-rails' do
             expect(cable_yml).to eq(expected_cable_output)
           end
 
+          context 'with Sentinel SSL enabled' do
+            before do
+              stub_gitlab_rb(
+                redis: {
+                  enable: true,
+                  master_name: 'gitlab-redis',
+                  master_password: 'toomanysecrets'
+                },
+                gitlab_rails: {
+                  redis_sentinels_password: 'global sentinel pass',
+                  redis_sentinels_ssl: true,
+                  redis_sentinels: [
+                    { host: '10.0.0.2', port: 26379 },
+                    { host: '10.0.0.3', port: 26379 },
+                    { host: '10.0.0.4', port: 26379 },
+                  ]
+                }
+              )
+            end
+
+            it 'populates resque.yml and cable.yml with ssl: true' do
+              expect(resque_yml[:production][:sentinels]).to all(include(ssl: true))
+              expect(cable_yml[:production][:sentinels]).to all(include(ssl: true))
+            end
+          end
+
           context 'with ActionCable Redis Sentinels defined' do
             let(:expected_output) do
               {
@@ -696,6 +722,49 @@ RSpec.describe 'gitlab::gitlab-rails' do
           expect(cable_yml[:production][:ssl_params]).to eq(resque_yml[:production][:ssl_params])
         end
       end
+
+      context 'with Redis Sentinels and TLS' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              redis_ssl: true,
+              redis_tls_ca_cert_dir: '/tmp/certs',
+              redis_tls_ca_cert_file: '/tmp/ca.crt',
+              redis_tls_client_cert_file: '/tmp/self_signed.crt',
+              redis_tls_client_key_file: '/tmp/self_signed.key',
+              redis_sentinels: [
+                { host: '10.0.0.1', port: 26379 },
+                { host: '10.0.0.2', port: 26379 },
+                { host: '10.0.0.3', port: 26379 }
+              ],
+              redis_sentinels_password: 'sentinel-password',
+              redis_sentinels_ssl: false
+            },
+            redis: {
+              master_name: 'gitlab-redis',
+              master_password: 'redis-password'
+            }
+          )
+        end
+
+        it 'renders resque.yml with ssl: true for Redis connection' do
+          expect(resque_yml[:production][:ssl]).to eq(true)
+          expect(resque_yml[:production][:ssl_params]).not_to be_nil
+        end
+
+        it 'renders cable.yml with ssl: true for Redis connection' do
+          cable_yml_template = chef_run.template('/var/opt/gitlab/gitlab-rails/etc/cable.yml')
+          cable_yml_file_content = ChefSpec::Renderer.new(chef_run, cable_yml_template).content
+          cable_yml = YAML.safe_load(cable_yml_file_content, aliases: true, symbolize_names: true)
+
+          expect(cable_yml[:production][:ssl]).to eq(true)
+        end
+
+        it 'renders sentinels without ssl when redis_sentinels_ssl is false' do
+          expect(resque_yml[:production][:sentinels]).not_to be_nil
+          expect(resque_yml[:production][:sentinels].all? { |s| s[:ssl].nil? }).to eq(true)
+        end
+      end
     end
 
     shared_examples 'instances does not support redis cluster' do |instance|
@@ -825,6 +894,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
               redis_url: nil,
               redis_sentinels: [],
               redis_sentinels_password: nil,
+              redis_sentinels_ssl: false,
               redis_enable_client: false,
               cluster_nodes: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
               cluster_username: instance,
@@ -869,6 +939,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
               redis_url: "redis://:fakepass@fake.redis.#{instance}.com:8888/2",
               redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
               redis_sentinels_password: nil,
+              redis_sentinels_ssl: false,
               redis_enable_client: false,
               cluster_nodes: [],
               cluster_username: nil,
@@ -913,6 +984,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
                 redis_url: "redis://:fakepass@fake.redis.#{instance}.com:8888/2",
                 redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
                 redis_sentinels_password: 'sentinelpass',
+                redis_sentinels_ssl: false,
                 redis_enable_client: false,
                 cluster_nodes: [],
                 cluster_username: nil,

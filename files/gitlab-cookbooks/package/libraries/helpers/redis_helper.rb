@@ -15,12 +15,12 @@ module RedisHelper
       uri
     end
 
-    def build_sentinels_urls(sentinels:, password:)
+    def build_sentinels_urls(sentinels:, password:, ssl:)
       return [] if sentinels.nil? || sentinels.empty?
 
       sentinels.map do |sentinel|
         build_redis_url(
-          ssl: sentinel['ssl'],
+          ssl: ssl || sentinel['ssl'],
           host: sentinel['host'],
           port: sentinel['port'],
           path: '',

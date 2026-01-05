@@ -27,6 +27,8 @@ production:
   url: <%= @redis_url %>
   secret_file: <%= @redis_encrypted_settings_file %>
   <%- if @redis_ssl %>
+  <%# For redis-rb v5+, if Sentinel is enabled the ssl flag is needed because rediss:// is ignored in URL (see https://github.com/redis-rb/redis-client/pull/277). %>
+  ssl: true
   ssl_params:
     <%- if @redis_tls_ca_cert_dir %>ca_path: "<%= @redis_tls_ca_cert_dir %>"<% end %>
     <%- if @redis_tls_ca_cert_file %>ca_file: "<%= @redis_tls_ca_cert_file %>"<% end %>
@@ -39,7 +41,12 @@ production:
     -
       host: <%= sentinel['host'] %>
       port: <%= sentinel['port'] %>
-      <%- if @redis_sentinels_password %>password: "<%= @redis_sentinels_password %>"<% end %>
+      <%- if @redis_sentinels_password %>
+      password: "<%= @redis_sentinels_password %>"
+      <%- end -%>
+      <%- if @redis_sentinels_ssl %>
+      ssl: true
+      <%- end -%>
     <% end %>
   <% end %>
   <% end %>
