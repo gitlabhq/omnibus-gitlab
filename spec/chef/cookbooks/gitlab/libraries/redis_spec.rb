@@ -203,6 +203,63 @@ RSpec.describe 'Redis' do
               expect(node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels_password"]).to eq('sentinel pass!')
             end
           end
+
+          context 'when instance-specific sentinel SSL is not set' do
+            it 'instance Sentinel SSL settings default to false' do
+              RedisHelper::GitlabRails::REDIS_INSTANCES.each do |instance|
+                expect(node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels_ssl"]).to eq(false)
+              end
+            end
+          end
+
+          context 'when global sentinel SSL is enabled' do
+            before do
+              stub_gitlab_rb(
+                sentinel: {
+                  enable: true,
+                  password: 'sentinel pass!'
+                },
+                redis: {
+                  password: redis_password,
+                  master_ip: '10.0.0.0'
+                },
+                gitlab_rails: {
+                  redis_sentinels_ssl: true
+                }
+              )
+            end
+
+            it 'instance Sentinel SSL settings are populated from global setting' do
+              RedisHelper::GitlabRails::REDIS_INSTANCES.each do |instance|
+                expect(node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels_ssl"]).to eq(true)
+              end
+            end
+          end
+
+          context 'when instance-specific sentinel SSL is explicitly set' do
+            before do
+              stub_gitlab_rb(
+                sentinel: {
+                  enable: true,
+                  password: 'sentinel pass!'
+                },
+                redis: {
+                  password: redis_password,
+                  master_ip: '10.0.0.0'
+                },
+                gitlab_rails: {
+                  redis_sentinels_ssl: false,
+                  redis_cache_sentinels_ssl: true
+                }
+              )
+            end
+
+            it 'instance-specific setting takes precedence over global setting' do
+              expect(node['gitlab']['gitlab_rails']['redis_cache_sentinels_ssl']).to eq(true)
+              # Other instances should use the global setting
+              expect(node['gitlab']['gitlab_rails']['redis_queues_sentinels_ssl']).to eq(false)
+            end
+          end
         end
 
         context 'announce_ip is defined' do

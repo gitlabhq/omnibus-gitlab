@@ -103,14 +103,17 @@ module GitlabWorkhorse
         Gitlab['gitlab_rails']["redis_workhorse_#{setting}"] ||= Gitlab['gitlab_workhorse']["redis_#{setting}"]
       end
     end
+
     # rubocop:enable Metrics/CyclomaticComplexity
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/PerceivedComplexity
-
     def parse_global_rails_redis_settings
       %w[ssl host socket port password database sentinels sentinels_password sentinels_ssl].each do |setting|
         Gitlab['gitlab_workhorse']["redis_#{setting}"] ||= Gitlab['gitlab_rails']["redis_#{setting}"]
       end
+
+      # Populate instance-specific sentinel SSL settings from global settings if not already set
+      Gitlab['gitlab_rails']['redis_workhorse_sentinels_ssl'] ||= Gitlab['gitlab_rails']['redis_sentinels_ssl']
     end
 
     def parse_separate_redis_instance_settings
