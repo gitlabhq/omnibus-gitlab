@@ -164,6 +164,11 @@ nginx_gitlab_http_vars = nginx_vars.merge(
   # These addresses will be allowed through plain http, even if `redirect_http_to_https` is enabled
   monitoring_addresses: [
     { url: '/-/health', format: 'txt' },
+    { url: '/health_check', format: 'txt' },
+    { url: '/health_check/database', format: 'txt' },
+    { url: '/health_check/migrations', format: 'txt' },
+    { url: '/health_check/cache', format: 'txt' },
+    { url: '/health_check/geo', format: 'txt' },
     { url: '/-/readiness', format: 'json' },
     { url: '/-/liveness', format: 'json' },
   ]
