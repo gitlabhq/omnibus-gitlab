@@ -56,6 +56,16 @@ probes:
     opts:
       redis_url: "<%= @redis_url %>"
       redis_enable_client: <%= @redis_enable_client %>
+      <%- if @redis_sentinels && !@redis_sentinels.empty? %>
+      redis_sentinels:
+        <%- @redis_sentinels.each do |sentinel| %>
+        - host: <%= sentinel['host'] %>
+          port: <%= sentinel['port'] %>
+        <%- end %>
+      <%- if @redis_sentinels_password %>
+      redis_sentinel_password: "<%= @redis_sentinels_password %>"
+      <%- end -%>
+      <%- end %>
 <% end %>
 
 <% if @probe_elasticsearch && @elasticsearch_url %>
