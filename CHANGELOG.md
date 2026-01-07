@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.7.1 (2026-01-07)
+
+### Security (1 change)
+
+- [Update libpng version to 1.6.51](gitlab-org/security/omnibus-gitlab@bc1bb97c674965d3d1582f9313d446f8c4ab194d) ([merge request](gitlab-org/security/omnibus-gitlab!505))
+
 ## 18.7.0 (2025-12-17)
 
 ### Added (7 changes)
