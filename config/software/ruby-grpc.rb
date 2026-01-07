@@ -60,7 +60,8 @@ build do
       shellout!("rm -f #{gemfile}")
       shellout!("#{gem_bin} fetch grpc -v #{version} --platform ruby")
       shellout!("#{gem_bin} patch -p1 #{gemfile} #{patch_path}")
-      shellout!("#{gem_bin} install --platform ruby --no-document #{gemfile}", env: env)
+      shellout!("#{gem_bin} install --platform ruby --no-document #{gemfile}",
+                { env: env, live_stream: log.live_stream(:info) })
     end
 
     shellout!("#{gem_bin} uninstall gem-patch")
