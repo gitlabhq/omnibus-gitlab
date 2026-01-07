@@ -125,6 +125,9 @@ module GitlabKas
         redis_sentinels
         redis_sentinels_password
         redis_sentinels_ssl
+        redis_sentinels_tls_ca_cert_file
+        redis_sentinels_tls_client_cert_file
+        redis_sentinels_tls_client_key_file
         redis_ssl
         redis_tls_ca_cert_file
         redis_tls_client_cert_file

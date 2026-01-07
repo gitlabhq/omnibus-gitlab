@@ -620,6 +620,44 @@ RSpec.describe 'gitlab-kas' do
           end
         end
 
+        context 'when Sentinel TLS is enabled with certificates' do
+          before do
+            sentinel_params[:gitlab_rails]['redis_sentinels_ssl'] = true
+            sentinel_params[:gitlab_kas] = {
+              redis_sentinels_tls_ca_cert_file: '/etc/gitlab/sentinel_ca.crt',
+              redis_sentinels_tls_client_cert_file: '/etc/gitlab/sentinel_client.crt',
+              redis_sentinels_tls_client_key_file: '/etc/gitlab/sentinel_client.key'
+            }
+
+            stub_gitlab_rb(sentinel_params)
+          end
+
+          it 'renders Sentinel TLS configuration with certificates in the kas config' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content { |content|
+              kas_redis_cfg = YAML.safe_load(content)['redis']
+
+              expect(kas_redis_cfg).to(
+                include(
+                  'sentinel' => {
+                    'master_name' => 'example-redis',
+                    'addresses' => [
+                      'a:1',
+                      'b:2',
+                      'c:6379'
+                    ],
+                    'tls' => {
+                      'enabled' => true,
+                      'ca_certificate_file' => '/etc/gitlab/sentinel_ca.crt',
+                      'certificate_file' => '/etc/gitlab/sentinel_client.crt',
+                      'key_file' => '/etc/gitlab/sentinel_client.key'
+                    }
+                  }
+                )
+              )
+            }
+          end
+        end
+
         context 'when Sentinel TLS is disabled' do
           before do
             sentinel_params[:gitlab_rails]['redis_sentinels_ssl'] = false
@@ -681,6 +719,51 @@ RSpec.describe 'gitlab-kas' do
 
       it 'renders the password file with KAS specific value' do
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/redis_password_file').with_content('kas_redis_password')
+      end
+    end
+
+    context 'when Sentinel TLS certificate settings are copied from gitlab_rails' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_rails: {
+            redis_sentinels: [
+              { host: 'a', port: 1 },
+              { host: 'b', port: 2 }
+            ],
+            redis_sentinels_ssl: true,
+            redis_sentinels_tls_ca_cert_file: '/etc/gitlab/sentinel_ca.crt',
+            redis_sentinels_tls_client_cert_file: '/etc/gitlab/sentinel_client.crt',
+            redis_sentinels_tls_client_key_file: '/etc/gitlab/sentinel_client.key'
+          },
+          redis: {
+            master_name: 'example-redis'
+          }
+        )
+      end
+
+      it 'copies Sentinel TLS certificate settings to gitlab_kas' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content { |content|
+          kas_redis_cfg = YAML.safe_load(content)['redis']
+
+          expect(kas_redis_cfg).to(
+            include(
+              'sentinel' => {
+                'master_name' => 'example-redis',
+                'addresses' => [
+                  'a:1',
+                  'b:2'
+                ],
+                'tls' => {
+                  'enabled' => true,
+                  'ca_certificate_file' => '/etc/gitlab/sentinel_ca.crt',
+                  'certificate_file' => '/etc/gitlab/sentinel_client.crt',
+                  'key_file' => '/etc/gitlab/sentinel_client.key'
+                }
+              }
+            )
+          )
+        }
       end
     end
   end

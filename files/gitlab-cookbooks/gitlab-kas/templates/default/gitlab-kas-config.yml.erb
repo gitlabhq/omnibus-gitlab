@@ -73,6 +73,15 @@ redis:
     <%- if @redis_sentinels_ssl %>
     tls:
       enabled: true
+      <%- if @redis_sentinels_tls_ca_cert_file %>
+      ca_certificate_file: "<%= @redis_sentinels_tls_ca_cert_file %>"
+      <%- end %>
+      <%- if @redis_sentinels_tls_client_cert_file %>
+      certificate_file: "<%= @redis_sentinels_tls_client_cert_file %>"
+      <%- end %>
+      <%- if @redis_sentinels_tls_client_key_file %>
+      key_file: "<%= @redis_sentinels_tls_client_key_file %>"
+      <%- end %>
     <%- end %>
   <%- end %>
 api:
