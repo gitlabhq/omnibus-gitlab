@@ -105,6 +105,12 @@ omnibus-gitlab repository.
 
 - [Update libxslt from 1.1.41 to 1.1.43](gitlab-org/omnibus-gitlab@5f3194f33a7303543d9e48e5791d7f7f284929f3)
 
+## 18.5.5 (2026-01-07)
+
+### Security (1 change)
+
+- [Update libpng version to 1.6.51](gitlab-org/security/omnibus-gitlab@8580c6394cd93434c71e2bd75d2efdf0a36b8ce4) ([merge request](gitlab-org/security/omnibus-gitlab!503))
+
 ## 18.5.4 (2025-12-10)
 
 No changes.
