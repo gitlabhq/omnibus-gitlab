@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.7.1 (2026-01-07)
+
+### Security (1 change)
+
+- [Update libpng version to 1.6.51](gitlab-org/security/omnibus-gitlab@bc1bb97c674965d3d1582f9313d446f8c4ab194d) ([merge request](gitlab-org/security/omnibus-gitlab!505))
+
 ## 18.7.0 (2025-12-17)
 
 ### Added (7 changes)
@@ -33,6 +39,13 @@ omnibus-gitlab repository.
 
 - [Mattermost Security Updates November 21, 2025](gitlab-org/omnibus-gitlab@f2992d6bee98355878a08c7fb00b4600c121d68c) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8956))
 - [Filter all token query parameters in nginx access logs](gitlab-org/omnibus-gitlab@3dab3a55e4de1755711819a10190528f3ad7686d)
+
+## 18.6.3 (2026-01-07)
+
+### Security (2 changes)
+
+- [Update libpng version to 1.6.51](gitlab-org/security/omnibus-gitlab@59ab1b7a5759fac4f0730dfa7a4297235c10fc7d) ([merge request](gitlab-org/security/omnibus-gitlab!502))
+- [Mattermost Security Updates November 21, 2025](gitlab-org/security/omnibus-gitlab@48c388bf5390e47ca3be57e37aadc33f18cddbe7)
 
 ## 18.6.2 (2025-12-10)
 
@@ -91,6 +104,12 @@ omnibus-gitlab repository.
 ### Security (1 change)
 
 - [Update libxslt from 1.1.41 to 1.1.43](gitlab-org/omnibus-gitlab@5f3194f33a7303543d9e48e5791d7f7f284929f3)
+
+## 18.5.5 (2026-01-07)
+
+### Security (1 change)
+
+- [Update libpng version to 1.6.51](gitlab-org/security/omnibus-gitlab@8580c6394cd93434c71e2bd75d2efdf0a36b8ce4) ([merge request](gitlab-org/security/omnibus-gitlab!503))
 
 ## 18.5.4 (2025-12-10)
 
