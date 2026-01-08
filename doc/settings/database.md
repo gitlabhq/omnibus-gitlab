@@ -249,9 +249,10 @@ can use this.
    postgresql['ssl_ca_file'] = 'PATH_TO_CA_FILE'
    postgresql['listen_address'] = 'IP_ADDRESS'
    postgresql['cert_auth_addresses'] = {
-   'IP_ADDRESS' => {
-     'database' => 'gitlabhq_production',
-     'user' => 'gitlab'
+     'IP_ADDRESS' => {
+       'database' => 'gitlabhq_production',
+       'user' => 'gitlab'
+     }
    }
    ```
 
