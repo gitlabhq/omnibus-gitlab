@@ -53,7 +53,7 @@ RSpec.describe 'gitlab::letsencrypt' do
         allow(File).to receive(:file?).and_call_original
         allow(File).to receive(:file?).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(true)
         allow(File).to receive(:read).with(anything).and_call_original
-        allow(File).to receive(:read).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(OpenSSL::PKey::RSA.new(2048))
+        allow(File).to receive(:read).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(OpenSSL::PKey::RSA.new(2048).to_pem)
 
         stub_gitlab_rb(
           external_url: 'https://fakehost.example.com',
@@ -81,6 +81,61 @@ RSpec.describe 'gitlab::letsencrypt' do
     it 'reloads nginx' do
       prod_cert = chef_run.acme_certificate('production')
       expect(prod_cert).to notify('execute[reload nginx]').to(:run)
+    end
+
+    context 'with EC certificates' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://fakehost.example.com',
+          letsencrypt: {
+            enable: true,
+            key_type: 'ec'
+          }
+        )
+      end
+
+      it 'creates a staging certificate with key_type ec' do
+        expect(chef_run).to create_acme_certificate('staging').with(
+          key_type: 'ec'
+        )
+      end
+
+      it 'creates a production certificate with key_type ec' do
+        expect(chef_run).to create_acme_certificate('production').with(
+          key_type: 'ec'
+        )
+      end
+    end
+
+    context 'specifying a different ec_curve' do
+      before do
+        allow(File).to receive(:file?).and_call_original
+        allow(File).to receive(:file?).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(true)
+        allow(File).to receive(:read).with(anything).and_call_original
+        allow(File).to receive(:read).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(OpenSSL::PKey::EC.generate('prime256v1').to_pem)
+
+        stub_gitlab_rb(
+          external_url: 'https://fakehost.example.com',
+          letsencrypt: {
+            enable: true,
+            key_type: 'ec',
+            ec_curve: 'secp384r1'
+          }
+        )
+      end
+
+      it 'deletes and recreates the SSL files' do
+        expect(chef_run).to delete_file('/etc/gitlab/ssl/fakehost.example.com.key')
+        expect(chef_run).to delete_file('/etc/gitlab/ssl/fakehost.example.com.crt')
+
+        expect(chef_run).to create_acme_certificate('production').with(
+          crt: '/etc/gitlab/ssl/fakehost.example.com.crt',
+          key: '/etc/gitlab/ssl/fakehost.example.com.key',
+          ec_curve: 'secp384r1',
+          wwwroot: '/var/opt/gitlab/nginx/www',
+          sensitive: true
+        )
+      end
     end
 
     context 'with extra options' do

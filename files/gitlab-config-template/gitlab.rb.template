@@ -2945,6 +2945,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # letsencrypt['contact_emails'] = [] # This should be an array of email addresses to add as contacts
 # letsencrypt['group'] = 'root'
 # letsencrypt['key_size'] = 2048
+# letsencrypt['key_type'] = 'rsa'
+# letsencrypt['ec_curve'] = nil # Supported EC curves: prime256v1, secp384r1, secp521r1
 # letsencrypt['owner'] = 'root'
 # letsencrypt['wwwroot'] = '/var/opt/gitlab/nginx/www'
 ##! See https://docs.gitlab.com/omnibus/settings/ssl/index.html#renew-the-certificates-automatically for more on these settings

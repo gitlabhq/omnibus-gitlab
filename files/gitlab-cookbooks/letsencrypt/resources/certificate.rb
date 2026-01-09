@@ -8,6 +8,8 @@ property :alt_names, Array, default: lazy { node['letsencrypt']['alt_names'] }
 property :key_size, [Integer, nil], default: lazy { node['letsencrypt']['key_size'] }
 property :crt, [String, nil], default: lazy { node['letsencrypt']['crt'] }
 property :group, [String, nil], default: lazy { node['letsencrypt']['group'] }
+property :key_type, String, default: lazy { node['letsencrypt']['key_type'] }
+property :ec_curve, [String, nil], default: lazy { node['letsencrypt']['ec_curve'] }
 property :acme_staging_endpoint, [String, nil], default: lazy { node['letsencrypt']['acme_staging_endpoint'] }
 property :acme_production_endpoint, [String, nil], default: lazy { node['letsencrypt']['acme_production_endpoint'] }
 property :chain, [String, nil],
@@ -25,12 +27,27 @@ action :create do
   helper = LetsEncryptHelper.new(node)
   contact_info = helper.contact
   target_key_size = new_resource.key_size || node['acme']['key_size']
+  target_ec_curve = new_resource.ec_curve || node['acme']['ec_curve']
 
-  if ::File.file?("#{new_resource.key}-staging")
-    staging_key = OpenSSL::PKey::RSA.new ::File.read "#{new_resource.key}-staging"
-    staging_key_size = staging_key.n.num_bits
+  if new_resource.key_type == 'rsa' && ::File.file?("#{new_resource.key}-staging")
+    staging_key = OpenSSL::PKey.read ::File.read "#{new_resource.key}-staging"
+    staging_key_size = staging_key.n.num_bits if staging_key.is_a?(OpenSSL::PKey::RSA)
 
     if staging_key_size != target_key_size
+      file "#{new_resource.key}-staging" do
+        action :delete
+      end
+      file "#{new_resource.crt}-staging" do
+        action :delete
+      end
+    end
+  end
+
+  if new_resource.key_type == 'ec' && ::File.file?("#{new_resource.key}-staging")
+    staging_key = OpenSSL::PKey.read ::File.read "#{new_resource.key}-staging"
+    staging_key_ec_curve = staging_key.group.curve_name if staging_key.is_a?(OpenSSL::PKey::EC)
+
+    if staging_key_ec_curve != target_ec_curve
       file "#{new_resource.key}-staging" do
         action :delete
       end
@@ -53,6 +70,8 @@ action :create do
     dir new_resource.acme_staging_endpoint
     wwwroot new_resource.wwwroot
     sensitive true
+    key_type new_resource.key_type
+    ec_curve new_resource.ec_curve unless new_resource.ec_curve.nil?
   end
 
   ruby_block 'reset private key' do
@@ -66,11 +85,25 @@ action :create do
     action :delete
   end
 
-  if ::File.file?(new_resource.key)
-    production_key = OpenSSL::PKey::RSA.new ::File.read new_resource.key
-    production_key_size = production_key.n.num_bits
+  if new_resource.key_type == 'rsa' && ::File.file?(new_resource.key)
+    production_key = OpenSSL::PKey.read ::File.read new_resource.key
+    production_key_size = production_key.n.num_bits if production_key.is_a?(OpenSSL::PKey::RSA)
 
     if production_key_size != target_key_size
+      file new_resource.key do
+        action :delete
+      end
+      file new_resource.crt do
+        action :delete
+      end
+    end
+  end
+
+  if new_resource.key_type == 'ec' && ::File.file?(new_resource.key)
+    production_key = OpenSSL::PKey.read ::File.read new_resource.key
+    production_key_ec_curve = production_key.group.curve_name if production_key.is_a?(OpenSSL::PKey::EC)
+
+    if production_key_ec_curve != target_ec_curve
       file new_resource.key do
         action :delete
       end
@@ -94,6 +127,8 @@ action :create do
     wwwroot new_resource.wwwroot
     notifies :run, 'execute[reload nginx]'
     sensitive true
+    key_type new_resource.key_type
+    ec_curve new_resource.ec_curve unless new_resource.ec_curve.nil?
   end
 
   # Delete the private key_file
