@@ -191,6 +191,84 @@ RSpec.describe 'monitoring::gitlab-exporter' do
           expect(content).to match(/redis_enable_client: false/)
         }
     end
+
+    context 'with Redis Sentinels configured' do
+      before do
+        stub_gitlab_rb(
+          gitlab_exporter: { enable: true, probe_sidekiq: true },
+          gitlab_rails: {
+            redis_enable_client: false,
+            redis_sentinels: [
+              { host: '10.0.0.1', port: 26379 },
+              { host: '10.0.0.2', port: 26379 },
+              { host: '10.0.0.3', port: 26379 }
+            ],
+            redis_sentinels_password: 'sentinel-password'
+          },
+          redis: {
+            master_name: 'gitlab-redis',
+            master_password: 'redis-password'
+          }
+        )
+      end
+
+      it 'renders Sentinels configuration' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
+          .with_content { |content|
+            settings = YAML.safe_load(content, aliases: true)
+            redis_url = settings.dig('probes', 'sidekiq', 'opts', 'redis_url')
+            expect(redis_url).to eq("redis://:redis-password@gitlab-redis/")
+
+            redis_ssl = settings.dig('probes', 'sidekiq', 'opts', 'ssl')
+            expect(redis_ssl).to be nil
+
+            sentinel_password = settings.dig('probes', 'sidekiq', 'opts', 'redis_sentinel_password')
+            expect(sentinel_password).to eq('sentinel-password')
+
+            sentinels = settings.dig('probes', 'sidekiq', 'opts', 'redis_sentinels')
+            expect(sentinels).not_to be_nil
+            expect(sentinels.length).to eq(3)
+            expect(sentinels[0]).to eq({ 'host' => '10.0.0.1', 'port' => 26379 })
+            expect(sentinels[1]).to eq({ 'host' => '10.0.0.2', 'port' => 26379 })
+            expect(sentinels[2]).to eq({ 'host' => '10.0.0.3', 'port' => 26379 })
+          }
+      end
+
+      context 'with Sentinel SSL enabled' do
+        before do
+          stub_gitlab_rb(
+            gitlab_exporter: { enable: true, probe_sidekiq: true },
+            gitlab_rails: {
+              redis_enable_client: false,
+              redis_sentinels: [
+                { host: '10.0.0.1', port: 26379 },
+                { host: '10.0.0.2', port: 26379 },
+                { host: '10.0.0.3', port: 26379 }
+              ],
+              redis_sentinels_password: 'sentinel-password',
+              redis_sentinels_ssl: true,
+              redis_ssl: true
+            },
+            redis: {
+              master_name: 'gitlab-redis',
+              master_password: 'redis-password'
+            }
+          )
+        end
+
+        it 'renders sentinels configuration with TLS enabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
+            .with_content { |content|
+              settings = YAML.safe_load(content, aliases: true)
+              sentinels = settings.dig('probes', 'sidekiq', 'opts', 'redis_sentinels')
+              expect(sentinels.length).to eq(3)
+              expect(sentinels[0]).to eq({ 'host' => '10.0.0.1', 'port' => 26379 })
+              expect(sentinels[1]).to eq({ 'host' => '10.0.0.2', 'port' => 26379 })
+              expect(sentinels[2]).to eq({ 'host' => '10.0.0.3', 'port' => 26379 })
+            }
+        end
+      end
+    end
   end
 
   context 'when log dir is changed' do

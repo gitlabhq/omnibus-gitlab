@@ -70,6 +70,19 @@ redis:
     <%- if @redis_sentinels_password_file %>
     sentinel_password_file: <%= @redis_sentinels_password_file %>
     <%- end %>
+    <%- if @redis_sentinels_ssl %>
+    tls:
+      enabled: true
+      <%- if @redis_sentinels_tls_ca_cert_file %>
+      ca_certificate_file: "<%= @redis_sentinels_tls_ca_cert_file %>"
+      <%- end %>
+      <%- if @redis_sentinels_tls_client_cert_file %>
+      certificate_file: "<%= @redis_sentinels_tls_client_cert_file %>"
+      <%- end %>
+      <%- if @redis_sentinels_tls_client_key_file %>
+      key_file: "<%= @redis_sentinels_tls_client_key_file %>"
+      <%- end %>
+    <%- end %>
   <%- end %>
 api:
   listen:
@@ -93,7 +106,7 @@ private_api:
 workspaces:
   enabled: <%= @workspaces['enabled'] %>
   <%- if @workspaces['listen'] %>
-  listen: 
+  listen:
     network: <%= @workspaces['listen']['network'] %>
     address: <%= @workspaces['listen']['address'] %>
     listen_grace_period: <%= @workspaces['listen']['listen_grace_period'] %>

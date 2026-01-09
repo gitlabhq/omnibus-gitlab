@@ -6,7 +6,8 @@ module RedisHelper
         password: redis_credentials[:password],
         sentinels: sentinel_urls,
         sentinelMaster: master_name,
-        sentinelPassword: redis_sentinels_password
+        sentinelPassword: redis_sentinels_password,
+        sentinelTLS: redis_sentinels_ssl
       }
     end
 

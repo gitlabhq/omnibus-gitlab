@@ -812,5 +812,55 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     end
   end
 
+  context 'with Sentinels and TLS enabled' do
+    before do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          redis_sentinels: [
+            { 'host' => '127.0.0.1', 'port' => 26379 },
+            { 'host' => '127.0.8.1', 'port' => 12345 }
+          ],
+          redis_sentinels_ssl: true
+        },
+        redis: {
+          master_name: 'examplemaster',
+          master_password: '***************'
+        }
+      )
+    end
+
+    it 'should generate config file with rediss:// URLs and Sentinel.tls section' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).to include(%(Sentinel = ["rediss://127.0.0.1:26379","rediss://127.0.8.1:12345"]))
+        expect(content).to match(/\[Sentinel\.tls\]/)
+      }
+    end
+  end
+
+  context 'with Sentinels and TLS disabled' do
+    before do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          redis_sentinels: [
+            { 'host' => '127.0.0.1', 'port' => 26379 },
+            { 'host' => '127.0.8.1', 'port' => 12345 }
+          ],
+          redis_sentinels_ssl: false
+        },
+        redis: {
+          master_name: 'examplemaster',
+          master_password: '***************'
+        }
+      )
+    end
+
+    it 'should generate URLs with with redis:// scheme and omit Sentinel.tls section' do
+      expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(content).to include(%(Sentinel = ["redis://127.0.0.1:26379","redis://127.0.8.1:12345"]))
+        expect(content).not_to match(/\[Sentinel\.tls\]/)
+      }
+    end
+  end
+
   include_examples "consul service discovery", "gitlab_workhorse", "workhorse"
 end

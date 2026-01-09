@@ -69,6 +69,7 @@ module Redis
 
       redis_helper::REDIS_INSTANCES.each do |instance|
         Gitlab['gitlab_rails']["redis_#{instance}_sentinels_password"] ||= Gitlab['sentinel']['password']
+        Gitlab['gitlab_rails']["redis_#{instance}_sentinels_ssl"] ||= Gitlab['gitlab_rails']['redis_sentinels_ssl']
       end
     end
 

@@ -122,4 +122,45 @@ RSpec.describe 'GitlabWorkhorse' do
       end
     end
   end
+
+  context '.parse_redis_settings' do
+    context 'when global redis_sentinels_ssl is set' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_sentinels_ssl: true
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it 'populates redis_workhorse_sentinels_ssl from global setting' do
+        expect(node['gitlab']['gitlab_rails']['redis_workhorse_sentinels_ssl']).to eq(true)
+      end
+    end
+
+    context 'when instance-specific redis_workhorse_sentinels_ssl is set' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_sentinels_ssl: false,
+            redis_workhorse_sentinels_ssl: true
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it 'keeps the instance-specific setting' do
+        expect(node['gitlab']['gitlab_rails']['redis_workhorse_sentinels_ssl']).to eq(true)
+      end
+    end
+  end
 end

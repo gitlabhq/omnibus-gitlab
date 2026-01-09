@@ -42,6 +42,10 @@ redis_tls_ca_cert_file = node['gitlab_kas']['redis_tls_ca_cert_file']
 redis_tls_client_cert_file = node['gitlab_kas']['redis_tls_client_cert_file']
 redis_tls_client_key_file = node['gitlab_kas']['redis_tls_client_key_file']
 
+redis_sentinels_tls_ca_cert_file = node['gitlab_kas']['redis_sentinels_tls_ca_cert_file']
+redis_sentinels_tls_client_cert_file = node['gitlab_kas']['redis_sentinels_tls_client_cert_file']
+redis_sentinels_tls_client_key_file = node['gitlab_kas']['redis_sentinels_tls_client_key_file']
+
 extra_config_command = node['gitlab_kas']['extra_config_command']
 
 [
@@ -136,6 +140,9 @@ template gitlab_kas_config_file do
       redis_sentinels_master_name: redis_params[:sentinelMaster],
       redis_sentinels: redis_params[:sentinels],
       redis_sentinels_password_file: redis_sentinels_password_present ? gitlab_kas_redis_sentinels_password_file : nil,
+      redis_sentinels_tls_ca_cert_file: redis_sentinels_tls_ca_cert_file,
+      redis_sentinels_tls_client_cert_file: redis_sentinels_tls_client_cert_file,
+      redis_sentinels_tls_client_key_file: redis_sentinels_tls_client_key_file,
       extra_config_command: extra_config_command
     )
   )

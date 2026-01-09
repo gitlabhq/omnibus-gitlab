@@ -3,7 +3,10 @@ module RedisHelper
     def redis_params
       {
         url: redis_url,
-        enable_client: enable_client
+        enable_client: enable_client,
+        sentinels: redis_sentinels,
+        sentinels_password: redis_sentinels_password,
+        sentinels_ssl: redis_sentinels_ssl
       }
     end
 
@@ -19,7 +22,7 @@ module RedisHelper
     end
 
     def support_sentinel_groupname?
-      false
+      true
     end
   end
 end

@@ -151,6 +151,10 @@ module RedisHelper
       node_attr['redis_sentinels_password']
     end
 
+    def redis_sentinels_ssl
+      !!node_attr['redis_sentinels_ssl']
+    end
+
     def redis_socket
       node_attr['redis_socket']
     end
@@ -180,7 +184,7 @@ module RedisHelper
     end
 
     def sentinel_urls
-      RedisHelper.build_sentinels_urls(sentinels: redis_sentinels, password: redis_sentinels_password)&.map(&:to_s)
+      RedisHelper.build_sentinels_urls(sentinels: redis_sentinels, password: redis_sentinels_password, ssl: redis_sentinels_ssl)&.map(&:to_s)
     end
 
     def support_sentinel_groupname?
