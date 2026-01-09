@@ -86,6 +86,7 @@ build do
   workhorse_env = { 'GOTOOLCHAIN' => 'local' }
   workhorse_flags = " FIPS_MODE=1" if Build::Check.use_system_ssl?
   make "install -C workhorse PREFIX=#{install_dir}/embedded#{workhorse_flags}", env: workhorse_env
+  command 'go clean -modcache', env: env
 
   bundle_without = %w(development test)
 
@@ -230,6 +231,7 @@ build do
 
   assets_compile_env['NO_SOURCEMAPS'] = 'true' if Gitlab::Util.get_env('NO_SOURCEMAPS')
   command 'yarn install --pure-lockfile --production'
+  command 'yarn cache clean'
 
   # process PO files and generate MO and JSON files
   bundle 'exec rake gettext:compile', env: assets_compile_env

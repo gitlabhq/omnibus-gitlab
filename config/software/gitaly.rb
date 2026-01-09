@@ -129,6 +129,7 @@ build do
   end
 
   make "install PREFIX=#{install_dir}/embedded", env: env
+  command 'go clean -modcache', env: env
 
   command "license_finder report --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=licenses.json"
   copy "licenses.json", "#{install_dir}/licenses/gitaly.json"
