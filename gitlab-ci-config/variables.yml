@@ -3,7 +3,7 @@ variables:
   BUILDER_IMAGE_REGISTRY: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder
   DEV_BUILDER_IMAGE_REGISTRY: dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder
   PUBLIC_BUILDER_IMAGE_REGISTRY: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder
-  BUILDER_IMAGE_REVISION: "5.46.0"
+  BUILDER_IMAGE_REVISION: 5.46.0
   ASSET_REGISTRY: "${CI_REGISTRY}"
   ASSET_SYNC_EXISTING_REMOTE_FILES: keep
   ASSET_SYNC_GZIP_COMPRESSION: 'true'
@@ -38,8 +38,8 @@ variables:
   PACKAGE_PROMOTION_RUNNER_TAG: promotion
   NIGHTLY_REPO: nightly-builds
   NIGHTLY_FIPS_REPO: nightly-fips-builds
-  QA_TESTS_UPSTREAM_PROJECT: gitlab-org/gitlab
-  QA_TESTS_REF: 18-8-stable-ee
+  QA_TESTS_UPSTREAM_PROJECT: gitlab-org/gitlab-foss
+  QA_TESTS_REF: 18-8-stable
   OPENSSL_VERSION: 3.4.1
   FF_TIMESTAMPS: true
   FF_USE_FASTZIP: true
