@@ -3,6 +3,26 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.8.0 (2026-01-14)
+
+### Added (2 changes)
+
+- [Enable support for EC (Elliptic Curve) certificates](gitlab-org/omnibus-gitlab@c6af4e3e711cc0262e68aa775e50237e75327db8) by @hristiyan.ivanov ([merge request](gitlab-org/omnibus-gitlab!8871))
+- [Add support for Sentinel TLS](gitlab-org/omnibus-gitlab@c38552e14868965b0beb4113f667a5fdf2b1cd04) ([merge request](gitlab-org/omnibus-gitlab!9011))
+
+### Fixed (1 change)
+
+- [Make show-config command use recipe from gitlab-base cookbook](gitlab-org/omnibus-gitlab@e51e4d08e01372f2b8ab31b55b195e1060dd7281) ([merge request](gitlab-org/omnibus-gitlab!8825))
+
+### Changed (2 changes)
+
+- [Bump PostgreSQL to version 16.11](gitlab-org/omnibus-gitlab@92afade4b6ae8e294abe9e5138a6fb0d8b7a8748) ([merge request](gitlab-org/omnibus-gitlab!8982))
+- [Update dependency container-registry to v4.33.0-gitlab](gitlab-org/omnibus-gitlab@2c69b0aad61b4376100ca062d4818110e02fe22b) ([merge request](gitlab-org/omnibus-gitlab!9006))
+
+### Security (1 change)
+
+- [Update libpng version to 1.6.51](gitlab-org/omnibus-gitlab@b254195b909ca79070bfca50fa501ecaa8ad4f37)
+
 ## 18.7.1 (2026-01-07)
 
 ### Security (1 change)
