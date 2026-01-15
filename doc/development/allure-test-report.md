@@ -65,9 +65,9 @@ The entire flow of QA in `omnibus-gitlab` MR pipeline is as follows
 
 ```mermaid
 flowchart TD
-  B0 --->|MR Pipeline Triggered on each commit| A0
-  A0 ---->|Creates Child Pipeline| A1
-  A1 ---->|Creates Child Pipelines| A2
+  B0 --->|MR pipeline triggered on each commit| A0
+  A0 ---->|Creates child pipeline| A1
+  A1 ---->|Creates child pipelines| A2
   A2 -->|"Once tests are successful calls e2e-test-report job"| B1
   A3 -.-|includes| A1
   B2 -.-|includes| B1
@@ -84,7 +84,7 @@ flowchart TD
         job kicked off"]
   end
 
-  subgraph Trigger: CE/EE-job Child Pipeline
+  subgraph Trigger: CE/EE-job child pipeline
     direction TB
     A1["<strong>trigger-qa</strong> stage
         <strong>qa-subset-test</strong> job"]
@@ -92,23 +92,24 @@ flowchart TD
          from <code>gitlab-org/gitlab</code>"])
   end
 
-  subgraph qa-subset-test Child Pipeline
-      A2["from
-          <code>test-on-omnibus/main.gitlab-ci.yml</code>
-          in
-          <code>gitlab-org/gitlab</code>"]
-      B1["<strong>report</strong> stage
-          <strong>e2e-test-report<strong> job"]
-      B2(["<strong>.generate-allure-report-base</strong> job
-           from <code>quality/pipeline-common</code>"])
-      C1["<code>allure-report-publisher</code> gem"]
-      C2[("AWS S3
-           <code>gitlab-qa-allure-report</code>
-           in
-           <code>eng-quality-ops-ci-cd-shared-infra</code>
-           project")]
-      C3["pulls
-          <code>image _andrcuns/allure-report-publisher:1.6.0</code>"]
+  subgraph qa-subset-test
+    direction TB
+    A2["from
+        <code>test-on-omnibus/main.gitlab-ci.yml</code>
+        in
+        <code>gitlab-org/gitlab</code>"]
+    B1["<strong>report</strong> stage
+        <strong>e2e-test-report<strong> job"]
+    B2(["<strong>.generate-allure-report-base</strong> job
+         from <code>quality/pipeline-common</code>"])
+    C1["<code>allure-report-publisher</code> gem"]
+    C2[("AWS S3
+         <code>gitlab-qa-allure-report</code>
+         in
+         <code>eng-quality-ops-ci-cd-shared-infra</code>
+         project")]
+    C3["pulls
+        <code>image _andrcuns/allure-report-publisher:1.6.0</code>"]
   end
 ```
 
