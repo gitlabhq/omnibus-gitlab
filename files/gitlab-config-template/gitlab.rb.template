@@ -1384,8 +1384,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # puma['log_directory'] = "/var/log/gitlab/puma"
 
 ###! **Only change these settings if you understand well what they mean**
-###! Docs: https://github.com/schneems/puma_worker_killer
-# puma['per_worker_max_memory_mb'] = 1024
+###! Docs: https://github.com/zombocom/puma_worker_killer
+###! GitLab defaults: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/memory/watchdog/configurator.rb
+# puma['per_worker_max_memory_mb'] = 1500
 
 # puma['exporter_enabled'] = false
 # puma['exporter_address'] = "127.0.0.1"

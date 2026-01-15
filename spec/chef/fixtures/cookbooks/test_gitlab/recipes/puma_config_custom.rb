@@ -6,7 +6,7 @@ puma_config '/var/opt/gitlab/gitlab-rails/etc/puma.rb' do
   listen_tcp '127.0.0.1:8080'
   working_directory '/var/opt/gitlab/gitlab-rails/working'
   worker_processes 2
-  per_worker_max_memory_mb 1000
+  per_worker_max_memory_mb 1200
   install_dir '/opt/custom/gitlab'
   cookbook 'gitlab'
 
