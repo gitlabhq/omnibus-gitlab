@@ -112,6 +112,8 @@ template config_file_path do
     sentinel_master: redis_params[:sentinelMaster],
     sentinel_password: redis_params[:sentinelPassword],
     sentinels_ssl: redis_params[:sentinelTLS],
+    sentinel_tls_options: redis_params[:sentinelTLSOptions],
+    redis_tls_options: redis_params[:redisTLS],
     shutdown_timeout: shutdown_timeout,
     image_scaler_max_procs: image_scaler_max_procs,
     image_scaler_max_filesize: image_scaler_max_filesize,

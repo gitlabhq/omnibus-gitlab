@@ -155,6 +155,30 @@ module RedisHelper
       !!node_attr['redis_sentinels_ssl']
     end
 
+    def redis_tls_client_cert_file
+      node_attr['redis_tls_client_cert_file']
+    end
+
+    def redis_tls_client_key_file
+      node_attr['redis_tls_client_key_file']
+    end
+
+    def redis_tls_ca_cert_file
+      node_attr['redis_tls_ca_cert_file']
+    end
+
+    def redis_sentinels_tls_ca_cert_file
+      node_attr['redis_sentinels_tls_ca_cert_file']
+    end
+
+    def redis_sentinels_tls_client_cert_file
+      node_attr['redis_sentinels_tls_client_cert_file']
+    end
+
+    def redis_sentinels_tls_client_key_file
+      node_attr['redis_sentinels_tls_client_key_file']
+    end
+
     def redis_socket
       node_attr['redis_socket']
     end

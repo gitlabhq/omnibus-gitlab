@@ -812,55 +812,147 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     end
   end
 
-  context 'with Sentinels and TLS enabled' do
-    before do
-      stub_gitlab_rb(
-        gitlab_rails: {
-          redis_sentinels: [
-            { 'host' => '127.0.0.1', 'port' => 26379 },
-            { 'host' => '127.0.8.1', 'port' => 12345 }
-          ],
-          redis_sentinels_ssl: true
-        },
-        redis: {
-          master_name: 'examplemaster',
-          master_password: '***************'
-        }
-      )
-    end
-
-    it 'should generate config file with rediss:// URLs and Sentinel.tls section' do
-      expect(chef_run).to render_file(config_file).with_content { |content|
-        expect(content).to include(%(Sentinel = ["rediss://127.0.0.1:26379","rediss://127.0.8.1:12345"]))
-        expect(content).to match(/\[Sentinel\.tls\]/)
-      }
-    end
-  end
-
-  context 'with Sentinels and TLS disabled' do
-    before do
-      stub_gitlab_rb(
-        gitlab_rails: {
-          redis_sentinels: [
-            { 'host' => '127.0.0.1', 'port' => 26379 },
-            { 'host' => '127.0.8.1', 'port' => 12345 }
-          ],
-          redis_sentinels_ssl: false
-        },
-        redis: {
-          master_name: 'examplemaster',
-          master_password: '***************'
-        }
-      )
-    end
-
-    it 'should generate URLs with with redis:// scheme and omit Sentinel.tls section' do
-      expect(chef_run).to render_file(config_file).with_content { |content|
-        expect(content).to include(%(Sentinel = ["redis://127.0.0.1:26379","redis://127.0.8.1:12345"]))
-        expect(content).not_to match(/\[Sentinel\.tls\]/)
-      }
-    end
-  end
-
   include_examples "consul service discovery", "gitlab_workhorse", "workhorse"
+
+  context 'Redis and Sentinel TLS configuration' do
+    context 'with Sentinels TLS enabled' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_sentinels: [
+              { 'host' => '127.0.0.1', 'port' => 26379 },
+              { 'host' => '127.0.8.1', 'port' => 12345 }
+            ],
+            redis_sentinels_ssl: true,
+            redis_sentinels_password: 'sentinelspass'
+          },
+          redis: {
+            master_name: 'examplemaster',
+            master_password: 'masterpassword'
+          }
+        )
+      end
+
+      it 'generates config with rediss:// URLs and empty Sentinel.tls section' do
+        config = get_rendered_toml(chef_run, config_file)
+
+        expect(config[:redis][:Sentinel]).to eq(
+          [
+            "rediss://:sentinelspass@127.0.0.1:26379",
+            "rediss://:sentinelspass@127.0.8.1:12345"
+          ])
+        expect(config[:redis][:SentinelMaster]).to eq('examplemaster')
+        expect(config[:redis][:SentinelPassword]).to eq('sentinelspass')
+        expect(config[:redis][:Password]).to eq('masterpassword')
+        expect(config[:Sentinel][:tls].keys).to be_empty
+        expect(config[:redis]).not_to have_key(:URL)
+      end
+    end
+
+    context 'with TLS enabled for both Redis and Sentinels' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_ssl: 'true',
+            redis_sentinels: [
+              { 'host' => '127.0.0.1', 'port' => 26379 },
+              { 'host' => '127.0.8.1', 'port' => 12345 }
+            ],
+            redis_sentinels_ssl: true,
+            redis_sentinels_password: 'sentinel pass',
+            redis_tls_ca_cert_file: '/etc/gitlab/ssl/redis-bundle.crt',
+            redis_tls_client_cert_file: '/etc/gitlab/ssl/redis-client.crt',
+            redis_tls_client_key_file: '/etc/gitlab/ssl/redis-client.key'
+          },
+          redis: {
+            master_name: 'examplemaster',
+            master_password: 'masterpassword'
+          }
+        )
+      end
+
+      it 'generates config with rediss:// URLs and redis.tls certificates' do
+        config = get_rendered_toml(chef_run, config_file)
+
+        expect(config[:redis][:Sentinel]).to eq(
+          [
+            "rediss://:sentinel%20pass@127.0.0.1:26379",
+            "rediss://:sentinel%20pass@127.0.8.1:12345"
+          ])
+        expect(config[:redis][:SentinelMaster]).to eq('examplemaster')
+        expect(config[:redis][:SentinelPassword]).to eq('sentinel pass')
+        expect(config[:redis][:tls]).to include(
+          ca_certificate: '/etc/gitlab/ssl/redis-bundle.crt',
+          certificate: '/etc/gitlab/ssl/redis-client.crt',
+          key: '/etc/gitlab/ssl/redis-client.key'
+        )
+        expect(config[:Sentinel][:tls].keys).to be_empty
+      end
+    end
+
+    context 'with Sentinels TLS certificates configured' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_sentinels: [
+              { 'host' => '127.0.0.1', 'port' => 26379 },
+              { 'host' => '127.0.8.1', 'port' => 12345 }
+            ],
+            redis_sentinels_ssl: true,
+            redis_sentinels_tls_ca_cert_file: '/etc/gitlab/sentinel-certs/ca.crt',
+            redis_sentinels_tls_client_cert_file: '/etc/gitlab/sentinel-certs/client.crt',
+            redis_sentinels_tls_client_key_file: '/etc/gitlab/sentinel-certs/client.key'
+          },
+          redis: {
+            master_name: 'examplemaster',
+            master_password: 'masterpassword'
+          }
+        )
+      end
+
+      it 'generates config with Sentinel.tls certificates' do
+        config = get_rendered_toml(chef_run, config_file)
+
+        expect(config[:redis][:Sentinel]).to eq(
+          [
+            "rediss://127.0.0.1:26379",
+            "rediss://127.0.8.1:12345"
+          ])
+        expect(config[:redis][:SentinelMaster]).to eq('examplemaster')
+        expect(config[:redis][:SentinelPassword]).to eq('')
+        expect(config[:Sentinel][:tls]).to include(
+          ca_certificate: '/etc/gitlab/sentinel-certs/ca.crt',
+          certificate: '/etc/gitlab/sentinel-certs/client.crt',
+          key: '/etc/gitlab/sentinel-certs/client.key'
+        )
+      end
+    end
+
+    context 'with Sentinels TLS CA certificate only' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_sentinels: [
+              { 'host' => '127.0.0.1', 'port' => 26379 }
+            ],
+            redis_sentinels_ssl: true,
+            redis_sentinels_tls_ca_cert_file: '/etc/gitlab/sentinel-certs/ca.crt'
+          },
+          redis: {
+            master_name: 'examplemaster',
+            master_password: 'masterpassword'
+          }
+        )
+      end
+
+      it 'generates config with only CA certificate in Sentinel.tls' do
+        config = get_rendered_toml(chef_run, config_file)
+
+        expect(config[:redis][:Sentinel]).to eq(["rediss://127.0.0.1:26379"])
+        expect(config[:redis][:SentinelMaster]).to eq('examplemaster')
+        expect(config[:redis][:SentinelPassword]).to eq('')
+        expect(config[:Sentinel][:tls]).to eq(ca_certificate: '/etc/gitlab/sentinel-certs/ca.crt')
+      end
+    end
+  end
 end

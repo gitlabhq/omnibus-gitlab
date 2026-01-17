@@ -51,6 +51,10 @@ module GitlabWorkhorse
         (Gitlab['gitlab_rails']['redis_workhorse_sentinels'] &&
          !Gitlab['gitlab_rails']['redis_workhorse_sentinels'].empty?)
 
+      rails_shared_state_redis_configured =
+        (Gitlab['gitlab_rails']['redis_shared_state_sentinels'] &&
+         !Gitlab['gitlab_rails']['redis_shared_state_sentinels'].empty?)
+
       if gitlab_workhorse_redis_configured
         # Parse settings from `redis['master_*']` first.
         parse_redis_master_settings
@@ -63,12 +67,23 @@ module GitlabWorkhorse
         # `gitlab_workhorse['redis_*']`.
         parse_separate_redis_instance_settings
         parse_redis_master_settings
+      elsif rails_shared_state_redis_configured
+        # If user hasn't specified workhorse-specific sentinels but has
+        # shared state sentinels, use those as a fallback
+        Gitlab['gitlab_workhorse']['redis_sentinels'] ||= Gitlab['gitlab_rails']['redis_shared_state_sentinels']
+        Gitlab['gitlab_workhorse']['redis_sentinels_password'] ||= Gitlab['gitlab_rails']['redis_shared_state_sentinels_password']
+        parse_redis_master_settings
       else
         # If user hasn't specified any separate Redis settings for Workhorse,
         # copy the global settings from GitLab Rails
         parse_global_rails_redis_settings
         parse_redis_master_settings
       end
+
+      # Always populate Sentinel TLS settings from global settings if not already set
+      populate_sentinel_tls_settings_from_global
+      # Always populate Redis client TLS settings from global settings if not already set
+      populate_redis_tls_settings_from_global
     end
 
     # rubocop:disable Metrics/CyclomaticComplexity
@@ -114,6 +129,20 @@ module GitlabWorkhorse
 
       # Populate instance-specific sentinel SSL settings from global settings if not already set
       Gitlab['gitlab_rails']['redis_workhorse_sentinels_ssl'] ||= Gitlab['gitlab_rails']['redis_sentinels_ssl']
+    end
+
+    def populate_sentinel_tls_settings_from_global
+      # Populate Sentinel TLS certificate settings from global settings if not already set
+      %w[sentinels_tls_ca_cert_file sentinels_tls_client_cert_file sentinels_tls_client_key_file].each do |setting|
+        Gitlab['gitlab_workhorse']["redis_#{setting}"] ||= Gitlab['gitlab_rails']["redis_#{setting}"]
+      end
+    end
+
+    def populate_redis_tls_settings_from_global
+      # Populate Redis client TLS certificate settings from global settings if not already set
+      %w[tls_ca_cert_file tls_client_cert_file tls_client_key_file].each do |setting|
+        Gitlab['gitlab_workhorse']["redis_#{setting}"] ||= Gitlab['gitlab_rails']["redis_#{setting}"]
+      end
     end
 
     def parse_separate_redis_instance_settings

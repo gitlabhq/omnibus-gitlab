@@ -1319,8 +1319,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_workhorse['redis_sentinels_password'] = nil
 # gitlab_workhorse['redis_sentinels_ssl'] = false
 # gitlab_workhorse['redis_sentinels_tls_ca_cert_file'] = nil
-# gitlab_workhorse['redis_sentinels_tls_cert_file'] = nil
-# gitlab_workhorse['redis_sentinels_tls_key_file'] = nil
+# gitlab_workhorse['redis_sentinels_tls_client_cert_file'] = nil
+# gitlab_workhorse['redis_sentinels_tls_client_key_file'] = nil
 # gitlab_workhorse['redis_sentinel_master'] = nil
 # gitlab_workhorse['redis_sentinel_master_ip'] = nil
 # gitlab_workhorse['redis_sentinel_master_port'] = nil
