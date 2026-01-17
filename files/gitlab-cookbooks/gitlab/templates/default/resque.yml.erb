@@ -46,6 +46,10 @@ production:
       <%- end -%>
       <%- if @redis_sentinels_ssl %>
       ssl: true
+      ssl_params:
+        <%- if @redis_sentinels_tls_ca_cert_file %>ca_file: "<%= @redis_sentinels_tls_ca_cert_file %>"<% end %>
+        <%- if @redis_sentinels_tls_client_cert_file %>cert: "<%= @redis_sentinels_tls_client_cert_file %>"<% end %>
+        <%- if @redis_sentinels_tls_client_key_file %>key: "<%= @redis_sentinels_tls_client_key_file %>"<% end %>
       <%- end -%>
     <% end %>
   <% end %>

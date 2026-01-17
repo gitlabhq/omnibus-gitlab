@@ -195,6 +195,9 @@ redis_url = redis_helper.redis_params[:url]
 redis_sentinels = node['gitlab']['gitlab_rails']['redis_sentinels']
 redis_sentinels_password = node['gitlab']['gitlab_rails']['redis_sentinels_password']
 redis_sentinels_ssl = node['gitlab']['gitlab_rails']['redis_sentinels_ssl']
+redis_sentinels_tls_ca_cert_file = node['gitlab']['gitlab_rails']['redis_sentinels_tls_ca_cert_file']
+redis_sentinels_tls_client_cert_file = node['gitlab']['gitlab_rails']['redis_sentinels_tls_client_cert_file']
+redis_sentinels_tls_client_key_file = node['gitlab']['gitlab_rails']['redis_sentinels_tls_client_key_file']
 redis_enable_client = node['gitlab']['gitlab_rails']['redis_enable_client']
 redis_ssl = node['gitlab']['gitlab_rails']['redis_ssl']
 redis_tls_ca_cert_dir = node['gitlab']['gitlab_rails']['redis_tls_ca_cert_dir']
@@ -240,6 +243,9 @@ templatesymlink "Create a resque.yml and create a symlink to Rails root" do
     redis_sentinels: redis_sentinels,
     redis_sentinels_password: redis_sentinels_password,
     redis_sentinels_ssl: redis_sentinels_ssl,
+    redis_sentinels_tls_ca_cert_file: redis_sentinels_tls_ca_cert_file,
+    redis_sentinels_tls_client_cert_file: redis_sentinels_tls_client_cert_file,
+    redis_sentinels_tls_client_key_file: redis_sentinels_tls_client_key_file,
     redis_enable_client: redis_enable_client,
     redis_ssl: redis_ssl,
     redis_tls_ca_cert_dir: redis_tls_ca_cert_dir,
@@ -279,6 +285,9 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
   key_file = node['gitlab']['gitlab_rails']['redis_actioncable_tls_client_key_file']
   sentinels_password ||= redis_sentinels_password if sentinels.nil? || sentinels.empty?
   sentinels_ssl = node['gitlab']['gitlab_rails']['redis_actioncable_sentinels_ssl']
+  sentinels_tls_ca_cert_file = node['gitlab']['gitlab_rails']['redis_actioncable_sentinels_tls_ca_cert_file']
+  sentinels_tls_client_cert_file = node['gitlab']['gitlab_rails']['redis_actioncable_sentinels_tls_client_cert_file']
+  sentinels_tls_client_key_file = node['gitlab']['gitlab_rails']['redis_actioncable_sentinels_tls_client_key_file']
 
   if url.nil?
     url = redis_url
@@ -289,6 +298,17 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
     certificate_file = redis_tls_client_cert_file
     key_file = redis_tls_client_key_file
     sentinels_ssl = redis_sentinels_ssl
+    sentinels_tls_ca_cert_file = redis_sentinels_tls_ca_cert_file
+    sentinels_tls_client_cert_file = redis_sentinels_tls_client_cert_file
+    sentinels_tls_client_key_file = redis_sentinels_tls_client_key_file
+  elsif sentinels.nil? || sentinels.empty?
+    # If ActionCable has a custom instance but no sentinels, fall back to global sentinels
+    sentinels = redis_sentinels
+    sentinels_password ||= redis_sentinels_password
+    sentinels_ssl ||= redis_sentinels_ssl
+    sentinels_tls_ca_cert_file ||= redis_sentinels_tls_ca_cert_file
+    sentinels_tls_client_cert_file ||= redis_sentinels_tls_client_cert_file
+    sentinels_tls_client_key_file ||= redis_sentinels_tls_client_key_file
   end
 
   link_from File.join(gitlab_rails_source_dir, "config/cable.yml")
@@ -302,6 +322,9 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
     redis_sentinels: sentinels,
     redis_sentinels_password: sentinels_password,
     redis_sentinels_ssl: sentinels_ssl,
+    redis_sentinels_tls_ca_cert_file: sentinels_tls_ca_cert_file,
+    redis_sentinels_tls_client_cert_file: sentinels_tls_client_cert_file,
+    redis_sentinels_tls_client_key_file: sentinels_tls_client_key_file,
     redis_enable_client: redis_enable_client,
     redis_ssl: actioncable_redis_ssl,
     redis_tls_ca_cert_dir: ca_cert_dir,
