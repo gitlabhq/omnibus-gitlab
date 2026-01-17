@@ -262,9 +262,93 @@ RSpec.describe 'monitoring::gitlab-exporter' do
               settings = YAML.safe_load(content, aliases: true)
               sentinels = settings.dig('probes', 'sidekiq', 'opts', 'redis_sentinels')
               expect(sentinels.length).to eq(3)
-              expect(sentinels[0]).to eq({ 'host' => '10.0.0.1', 'port' => 26379 })
-              expect(sentinels[1]).to eq({ 'host' => '10.0.0.2', 'port' => 26379 })
-              expect(sentinels[2]).to eq({ 'host' => '10.0.0.3', 'port' => 26379 })
+
+              # Verify each sentinel has ssl flag (but no ssl_params since no certs configured)
+              sentinels.each do |sentinel|
+                expect(sentinel['ssl']).to eq(true)
+                expect(sentinel['ssl_params']).to be_nil
+              end
+            }
+        end
+      end
+
+      context 'with Sentinel TLS certificates configured' do
+        before do
+          stub_gitlab_rb(
+            gitlab_exporter: { enable: true, probe_sidekiq: true },
+            gitlab_rails: {
+              redis_enable_client: false,
+              redis_sentinels: [
+                { host: '10.0.0.1', port: 26379 },
+                { host: '10.0.0.2', port: 26379 }
+              ],
+              redis_sentinels_password: 'sentinel-password',
+              redis_sentinels_ssl: true,
+              redis_sentinels_tls_ca_cert_file: '/etc/gitlab/sentinel-certs/ca.crt',
+              redis_sentinels_tls_client_cert_file: '/etc/gitlab/sentinel-certs/client.crt',
+              redis_sentinels_tls_client_key_file: '/etc/gitlab/sentinel-certs/client.key',
+              redis_ssl: true
+            },
+            redis: {
+              master_name: 'gitlab-redis',
+              master_password: 'redis-password'
+            }
+          )
+        end
+
+        it 'renders sentinels configuration with ssl_params' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
+            .with_content { |content|
+              settings = YAML.safe_load(content, aliases: true)
+              sentinels = settings.dig('probes', 'sidekiq', 'opts', 'redis_sentinels')
+              expect(sentinels.length).to eq(2)
+
+              # Verify each sentinel has ssl and ssl_params
+              sentinels.each do |sentinel|
+                expect(sentinel['ssl']).to eq(true)
+                expect(sentinel['ssl_params']).not_to be_nil
+                expect(sentinel['ssl_params']['ca_file']).to eq('/etc/gitlab/sentinel-certs/ca.crt')
+                expect(sentinel['ssl_params']['cert']).to eq('/etc/gitlab/sentinel-certs/client.crt')
+                expect(sentinel['ssl_params']['key']).to eq('/etc/gitlab/sentinel-certs/client.key')
+              end
+            }
+        end
+      end
+
+      context 'with Sentinel TLS but only partial certificates configured' do
+        before do
+          stub_gitlab_rb(
+            gitlab_exporter: { enable: true, probe_sidekiq: true },
+            gitlab_rails: {
+              redis_enable_client: false,
+              redis_sentinels: [
+                { host: '10.0.0.1', port: 26379 }
+              ],
+              redis_sentinels_password: 'sentinel-password',
+              redis_sentinels_ssl: true,
+              redis_sentinels_tls_ca_cert_file: '/etc/gitlab/sentinel-certs/ca.crt',
+              redis_ssl: true
+            },
+            redis: {
+              master_name: 'gitlab-redis',
+              master_password: 'redis-password'
+            }
+          )
+        end
+
+        it 'renders sentinels configuration with only configured ssl_params' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
+            .with_content { |content|
+              settings = YAML.safe_load(content, aliases: true)
+              sentinels = settings.dig('probes', 'sidekiq', 'opts', 'redis_sentinels')
+              expect(sentinels.length).to eq(1)
+
+              sentinel = sentinels[0]
+              expect(sentinel['ssl']).to eq(true)
+              expect(sentinel['ssl_params']).not_to be_nil
+              expect(sentinel['ssl_params']['ca_file']).to eq('/etc/gitlab/sentinel-certs/ca.crt')
+              expect(sentinel['ssl_params']['cert']).to be_nil
+              expect(sentinel['ssl_params']['key']).to be_nil
             }
         end
       end
@@ -324,6 +408,56 @@ RSpec.describe 'monitoring::gitlab-exporter' do
       expect(chef_run).to render_file('/opt/gitlab/sv/gitlab-exporter/run')
         .with_content { |content|
           expect(content).to match(%r{--extra-config-command "/opt/exporter-redis-config.sh"})
+        }
+    end
+  end
+
+  context 'with Redis client TLS configured' do
+    before do
+      stub_gitlab_rb(
+        gitlab_exporter: { enable: true, probe_sidekiq: true },
+        gitlab_rails: {
+          redis_ssl: true,
+          redis_tls_ca_cert_file: '/etc/gitlab/ssl/redis-ca.crt',
+          redis_tls_client_cert_file: '/etc/gitlab/ssl/redis-client.crt',
+          redis_tls_client_key_file: '/etc/gitlab/ssl/redis-client.key'
+        }
+      )
+    end
+
+    it 'renders Redis client TLS configuration' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
+        .with_content { |content|
+          settings = YAML.safe_load(content, aliases: true)
+          redis_ssl_params = settings.dig('probes', 'sidekiq', 'opts', 'redis_ssl_params')
+          expect(redis_ssl_params).not_to be_nil
+          expect(redis_ssl_params['ca_file']).to eq('/etc/gitlab/ssl/redis-ca.crt')
+          expect(redis_ssl_params['cert']).to eq('/etc/gitlab/ssl/redis-client.crt')
+          expect(redis_ssl_params['key']).to eq('/etc/gitlab/ssl/redis-client.key')
+        }
+    end
+  end
+
+  context 'with Redis client TLS but only CA certificate configured' do
+    before do
+      stub_gitlab_rb(
+        gitlab_exporter: { enable: true, probe_sidekiq: true },
+        gitlab_rails: {
+          redis_ssl: true,
+          redis_tls_ca_cert_file: '/etc/gitlab/ssl/redis-ca.crt'
+        }
+      )
+    end
+
+    it 'renders Redis client TLS configuration with only CA certificate' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
+        .with_content { |content|
+          settings = YAML.safe_load(content, aliases: true)
+          redis_ssl_params = settings.dig('probes', 'sidekiq', 'opts', 'redis_ssl_params')
+          expect(redis_ssl_params).not_to be_nil
+          expect(redis_ssl_params['ca_file']).to eq('/etc/gitlab/ssl/redis-ca.crt')
+          expect(redis_ssl_params['cert']).to be_nil
+          expect(redis_ssl_params['key']).to be_nil
         }
     end
   end
