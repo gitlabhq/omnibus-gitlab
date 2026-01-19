@@ -15,7 +15,7 @@
 #
 
 name 'libxml2'
-default_version '2.14.5'
+default_version '2.15.1'
 
 license 'MIT'
 license_file 'COPYING'
@@ -23,11 +23,10 @@ skip_transitive_dependency_licensing true
 
 dependency 'zlib-ng'
 dependency 'libiconv'
-dependency 'liblzma'
 dependency 'config_guess'
 
 # version_list: url=https://download.gnome.org/sources/libxml2/2.12/ filter=*.tar.xz
-version('2.14.5') { source sha256: '03d006f3537616833c16c53addcdc32a0eb20e55443cba4038307e3fa7d8d44b' }
+version('2.15.1') { source sha256: 'c008bac08fd5c7b4a87f7b8a71f283fa581d80d80ff8d2efd3b26224c39bc54c' }
 
 minor_version = version.sub(/.\d*$/, "")
 
@@ -41,7 +40,6 @@ build do
   configure_command = [
     "--with-zlib=#{install_dir}/embedded",
     "--with-iconv=#{install_dir}/embedded",
-    "--with-lzma=#{install_dir}/embedded",
     '--with-sax1', # required for nokogiri to compile
     '--without-python',
     '--without-icu'
