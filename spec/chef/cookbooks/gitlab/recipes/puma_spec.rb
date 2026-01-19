@@ -105,7 +105,7 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
           port: 9000,
           socket: '/tmp/puma.socket',
           state_path: '/tmp/puma.state',
-          per_worker_max_memory_mb: 1000
+          per_worker_max_memory_mb: 1200
         }
       )
     end
@@ -118,7 +118,7 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
         worker_processes: 4,
         min_threads: 5,
         max_threads: 10,
-        per_worker_max_memory_mb: 1000
+        per_worker_max_memory_mb: 1200
       )
       expect(chef_run).to render_file("/opt/gitlab/sv/gitlab-workhorse/run").with_content { |content|
         expect(content).to match(%r(-authSocket /tmp/puma.socket))
