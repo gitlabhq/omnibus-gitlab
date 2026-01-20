@@ -25,32 +25,38 @@ dependency 'zlib-ng'
 dependency 'libiconv'
 dependency 'config_guess'
 
-# version_list: url=https://download.gnome.org/sources/libxml2/2.12/ filter=*.tar.xz
-version('2.15.1') { source sha256: 'c008bac08fd5c7b4a87f7b8a71f283fa581d80d80ff8d2efd3b26224c39bc54c' }
+if Build::Check.use_ubt?
+  # NOTE: We cannot use UBT binaries in FIPS builds
+  source Build::UBT.source_args(name, "2.14.5-2ubt", "8e531c2555e9437156ebbd57ced4e09081d0955fce25cca79a670cd6a67f7d6f", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  # version_list: url=https://download.gnome.org/sources/libxml2/2.12/ filter=*.tar.xz
+  version('2.15.1') { source sha256: 'c008bac08fd5c7b4a87f7b8a71f283fa581d80d80ff8d2efd3b26224c39bc54c' }
 
-minor_version = version.sub(/.\d*$/, "")
+  minor_version = version.sub(/.\d*$/, "")
 
-source url: "https://download.gnome.org/sources/libxml2/#{minor_version}/libxml2-#{version}.tar.xz"
+  source url: "https://download.gnome.org/sources/libxml2/#{minor_version}/libxml2-#{version}.tar.xz"
 
-relative_path "libxml2-#{version}"
+  relative_path "libxml2-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  configure_command = [
-    "--with-zlib=#{install_dir}/embedded",
-    "--with-iconv=#{install_dir}/embedded",
-    '--with-sax1', # required for nokogiri to compile
-    '--without-python',
-    '--without-icu'
-  ]
+    configure_command = [
+      "--with-zlib=#{install_dir}/embedded",
+      "--with-iconv=#{install_dir}/embedded",
+      '--with-sax1', # required for nokogiri to compile
+      '--without-python',
+      '--without-icu'
+    ]
 
-  update_config_guess
+    update_config_guess
 
-  configure(*configure_command, env: env)
+    configure(*configure_command, env: env)
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
 
 project.exclude 'embedded/lib/xml2Conf.sh'
