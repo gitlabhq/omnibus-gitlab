@@ -27,7 +27,7 @@ dependency 'config_guess'
 # NOTE: 2.4.6 2.4.2 do not compile on solaris2 yet
 version('2.4.6') { source sha256: 'e3bd4d5d3d025a36c21dd6af7ea818a2afcd4dfc1ea5a17b39d7854bcd0c06e3' }
 
-source url: "https://ftpmirror.gnu.org/gnu/libtool/libtool-#{version}.tar.gz"
+source url: "https://ftpmirror.gnu.org/libtool/libtool-#{version}.tar.gz"
 
 relative_path "libtool-#{version}"
 

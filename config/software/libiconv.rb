@@ -28,7 +28,7 @@ skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
 
-source url: "https://ftpmirror.gnu.org/pub/gnu/libiconv/libiconv-#{version}.tar.gz",
+source url: "https://ftpmirror.gnu.org/libiconv/libiconv-#{version}.tar.gz",
        sha256: 'ccf536620a45458d26ba83887a983b96827001e92a13847b45e4925cc8913178'
 
 relative_path "libiconv-#{version}"
