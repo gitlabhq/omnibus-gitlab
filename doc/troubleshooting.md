@@ -1063,6 +1063,16 @@ To resolve this issue, you have three options:
   keep this list synced with your firewall settings because they can change.
 - Manually download the package file and upload it to your server.
 
+## Error: `503 Service Unavailable` for package storage operations
+
+Some package storage components are served through Google Cloud Storage (GCS). These components require outbound HTTPS access to the GCS endpoint in addition to the public APT repository endpoint. If `apt update` fails with a `503 Service Unavailable` error, access to `storage.googleapis.com/packages-ops` is blocked.
+
+To resolve this error, make sure your firewall rules allow outbound HTTPS (port `443`) connections to:
+
+- `packages.gitlab.com`
+- `storage.googleapis.com`
+- `packages-ops` bucket on Google Cloud Storage
+
 ## Check if `net.core.somaxconn` is set too low
 
 The following may assist in identifying if the value of `net.core.somaxconn`
