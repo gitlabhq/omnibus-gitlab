@@ -28,7 +28,7 @@ current_ruby_version = Gitlab::Util.get_env('RUBY_VERSION') || '3.2.8'
 
 # NOTE: When this value is updated, flip `USE_NEXT_RUBY_VERSION_IN_*` variable
 # to false to avoid surprises.
-next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.3.10'
+next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.4.8'
 
 # MRs targeting stable branches should use current Ruby version and ignore next
 # Ruby version. Also, we provide `USE_SPECIFIED_RUBY_VERSION` variable to force
@@ -81,6 +81,7 @@ version('3.3.10') { source sha256: 'b555baa467a306cfc8e6c6ed24d0d27b27e9a1bed1d9
 version('3.4.2') { source sha256: '41328ac21f2bfdd7de6b3565ef4f0dd7543354d37e96f157a1552a6bd0eb364b' }
 version('3.4.5') { source sha256: '1d88d8a27b442fdde4aa06dc99e86b0bbf0b288963d8433112dd5fac798fd5ee' }
 version('3.4.7') { source sha256: '23815a6d095696f7919090fdc3e2f9459b2c83d57224b2e446ce1f5f7333ef36' }
+version('3.4.8') { source sha256: '53c4ddad41fbb6189f1f5ee0db57a51d54bd1f87f8755b3d68604156a35b045b' }
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
