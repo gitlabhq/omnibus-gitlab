@@ -1,24 +1,30 @@
 diff --git a/lib/Image/ExifTool.pm b/lib/Image/ExifTool.pm
-index 7c9d0169..0d6f82cd 100644
+index aa64c9a8..8ea35b0c 100644
 --- a/lib/Image/ExifTool.pm
 +++ b/lib/Image/ExifTool.pm
-@@ -193,14 +193,7 @@ $defaultLang = 'en';    # default language
+@@ -193,19 +193,10 @@ $defaultLang = 'en';    # default language
  # 2) Put types with weak file signatures at end of list to avoid false matches
  # 3) PLIST must be in this list for the binary PLIST format, although it may
  #    cause a file to be checked twice for XML
 -@fileTypes = qw(JPEG EXV CRW DR4 TIFF GIF MRW RAF X3F JP2 PNG MIE MIFF PS PDF
--                PSD XMP BMP WPG BPG PPM RIFF AIFF ASF MOV MPEG Real SWF PSP FLV
--                OGG FLAC APE MPC MKV MXF DV PMP IND PGF ICC ITC FLIR FLIF FPF
--                LFP HTML VRD RTF FITS XISF XCF DSS QTIF FPX PICT ZIP GZIP PLIST
--                RAR 7Z BZ2 CZI TAR EXE EXR HDR CHM LNK WMF AVC DEX DPX RAW Font
--                JUMBF RSRC M2TS MacOS PHP PCX DCX DWF DWG DXF WTV Torrent VCard
--                LRI R3D AA PDB PFM2 MRC LIF JXL MOI ISO ALIAS PCAP JSON MP3
--                TNEF DICOM PCD NKA ICO TXT AAC);
+-                PSD XMP BMP WPG BPG PPM WV RIFF AIFF ASF MOV MPEG Real SWF PSP
+-                FLV OGG FLAC APE MPC MKV MXF DV PMP IND PGF ICC ITC FLIR FLIF
+-                FPF LFP HTML VRD RTF FITS XISF XCF DSF DSS QTIF FPX PICT ZIP
+-                GZIP PLIST RAR 7Z BZ2 CZI TAR EXE EXR HDR CHM LNK WMF AVC DEX
+-                DPX RAW Font JUMBF RSRC M2TS MacOS PHP PCX DCX DWF DWG DXF WTV
+-                Torrent VCard LRI R3D AA PDB PFM2 MRC LIF JXL MOI ISO ALIAS PCAP
+-                JSON MP3 KVAR TNEF DICOM PCD NKA ICO TXT AAC);
 +@fileTypes = qw(JPEG TIFF);
  
  # file types that we can write (edit)
- my @writeTypes = qw(JPEG TIFF GIF CRW MRW ORF RAF RAW PNG MIE PSD XMP PPM EPS
-@@ -227,355 +220,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
+-my @writeTypes = qw(JPEG TIFF GIF CRW MRW ORF RAF RAW PNG MIE PSD XMP PPM EPS
+-                    X3F PS PDF ICC VRD DR4 JP2 JXL EXIF AI AIT IND MOV EXV FLIF
+-                    RIFF);
++my @writeTypes = qw(JPEG TIFF);
+ my %writeTypes; # lookup for writable file types (hash filled if required)
+ 
+ # file extensions that we can't write for various base types
+@@ -227,361 +218,9 @@ my %createTypes = map { $_ => 1 } qw(XMP ICC MIE VRD DR4 EXIF EXV);
  # (if extension may be more than one type, the type is a list where
  #  the writable type should come first if it exists)
  %fileTypeLookup = (
@@ -99,6 +105,7 @@ index 7c9d0169..0d6f82cd 100644
 -    DPX  => ['DPX',  'Digital Picture Exchange' ],
 -    DR4  => ['DR4',  'Canon VRD version 4 Recipe'],
 -    DS2  => ['DSS',  'Digital Speech Standard 2'],
+-    DSF  => ['DSF',  'DSF Stream File'],
 -    DSS  => ['DSS',  'Digital Speech Standard'],
 -    DV   => ['DV',   'Digital Video'],
 -    DVB  => ['MOV',  'Digital Video Broadcasting'],
@@ -181,13 +188,15 @@ index 7c9d0169..0d6f82cd 100644
 -    KDC  => ['TIFF', 'Kodak Digital Camera RAW'],
 -    KEY  => ['ZIP',  'Apple Keynote presentation'],
 -    KTH  => ['ZIP',  'Apple Keynote Theme'],
+-    KVAR => ['KVAR', 'Kandao Video Asset Resource'], #PH (NC)
 -    LA   => ['RIFF', 'Lossless Audio'],
 -    LFP  => ['LFP',  'Lytro Light Field Picture'],
 -    LFR  =>  'LFP', # (Light Field RAW)
 -    LIF  => ['LIF',  'Leica Image File'],
 -    LNK  => ['LNK',  'Windows shortcut'],
+-    LRF  => ['MOV',  'Low-Resolution video File'], # (DJI)
 -    LRI  => ['LRI',  'Light RAW'],
--    LRV  => ['MOV',  'Low-Resolution Video'],
+-    LRV  => ['MOV',  'Low-Resolution Video'], # (GoPro)
 -    M2T  =>  'M2TS',
 -    M2TS => ['M2TS', 'MPEG-2 Transport Stream'],
 -    M2V  => ['MPEG', 'MPEG-2 Video'],
@@ -338,6 +347,7 @@ index 7c9d0169..0d6f82cd 100644
 -    TTF  => ['Font', 'True Type Font'],
 -    TUB  => 'PSP',
 -    TXT  => ['TXT',  'Text file'],
+-    URL  => ['LNK',  'Windows shortcut URL'],
 -    VCARD=> ['VCard','Virtual Card'],
 -    VCF  => 'VCARD',
 -    VOB  => ['MPEG', 'Video Object'],
@@ -351,7 +361,8 @@ index 7c9d0169..0d6f82cd 100644
 -    WMA  => ['ASF',  'Windows Media Audio'],
 -    WMF  => ['WMF',  'Windows Metafile Format'],
 -    WMV  => ['ASF',  'Windows Media Video'],
--    WV   => ['RIFF', 'WavePack lossless audio'],
+-    WV   => ['WV',   'WavPack Audio'],
+-    WVP  =>  'WV',
 -    X3F  => ['X3F',  'Sigma RAW format'],
 -    XCF  => ['XCF',  'GIMP native image format'],
 -    XHTML=> ['HTML', 'Extensible HyperText Markup Language'],
@@ -366,6 +377,7 @@ index 7c9d0169..0d6f82cd 100644
 -    XLTM => [['ZIP','FPX'], 'Office Open XML Spreadsheet Template Macro-enabled'],
 -    XLTX => [['ZIP','FPX'], 'Office Open XML Spreadsheet Template'],
 -    XMP  => ['XMP',  'Extensible Metadata Platform'],
+-    VSDX => ['ZIP',  'Visio Diagram Document'],
 -    WOFF => ['Font', 'Web Open Font Format'],
 -    WOFF2=> ['Font', 'Web Open Font Format 2'],
 -    WPG  => ['WPG',  'WordPerfect Graphics'],
