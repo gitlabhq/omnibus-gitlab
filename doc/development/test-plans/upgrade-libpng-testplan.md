@@ -29,7 +29,7 @@ Copy the following test plan to a comment of the merge request that upgrades the
     -rotate 180 \
     -fill white \
     /tmp/date.png
-  
+
   ; echo $?
   ```
 
