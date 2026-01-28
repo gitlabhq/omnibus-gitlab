@@ -26,19 +26,25 @@ license_file 'README.ijg'
 
 dependency 'zlib-ng'
 
-source git: version.remote
+if Build::Check.use_ubt?
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, default_version, "deb11c8fa3c1aa35cdbf81c8c45fa09db985f304175f1b8004de17495299f53a", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  configure_command = [
-    'cmake',
-    '-G"Unix Makefiles"',
-    "-DCMAKE_INSTALL_LIBDIR:PATH=lib", # ensure lib64 isn't used
-    "-DCMAKE_INSTALL_PREFIX=#{install_dir}/embedded"
-  ]
+    configure_command = [
+      'cmake',
+      '-G"Unix Makefiles"',
+      "-DCMAKE_INSTALL_LIBDIR:PATH=lib", # ensure lib64 isn't used
+      "-DCMAKE_INSTALL_PREFIX=#{install_dir}/embedded"
+    ]
 
-  command configure_command.join(' '), env: env
+    command configure_command.join(' '), env: env
 
-  make "-j #{workers} install", env: env
+    make "-j #{workers} install", env: env
+  end
 end
