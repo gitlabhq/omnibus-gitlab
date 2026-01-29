@@ -1066,6 +1066,37 @@ RSpec.describe 'nginx' do
     it_behaves_like 'a service with proper supervise directories', 'nginx'
   end
 
+  context 'log_format_escape configuration' do
+    context 'when log_format_escape is not set' do
+      it 'defaults to "default"' do
+        expect(chef_run.node['gitlab']['nginx']['log_format_escape']).to eq('default')
+      end
+
+      it 'renders nginx.conf with escape=default' do
+        expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/nginx.conf').with_content { |content|
+          expect(content).to include("log_format gitlab_access escape=default")
+          expect(content).to include("log_format gitlab_mattermost_access escape=default")
+        }
+      end
+    end
+
+    context 'when log_format_escape is set to json' do
+      before do
+        stub_gitlab_rb(
+          nginx: { log_format_escape: 'json' },
+          mattermost_nginx: { log_format_escape: 'json' }
+        )
+      end
+
+      it 'renders nginx.conf with escape=json' do
+        expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/nginx.conf').with_content { |content|
+          expect(content).to include("log_format gitlab_access escape=json")
+          expect(content).to include("log_format gitlab_mattermost_access escape=json")
+        }
+      end
+    end
+  end
+
   def nginx_headers(additional_headers)
     basic_nginx_headers.merge(additional_headers)
   end
