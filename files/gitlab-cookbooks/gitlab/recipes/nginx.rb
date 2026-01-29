@@ -361,6 +361,8 @@ end
 
 nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']
 nginx_vars['gitlab_mattermost_access_log_format'] = node['gitlab']['mattermost_nginx']['log_format']
+nginx_vars['gitlab_nginx_log_format_escape'] = node['gitlab']['nginx']['log_format_escape']
+nginx_vars['gitlab_mattermost_log_format_escape'] = node['gitlab']['mattermost_nginx']['log_format_escape']
 
 template nginx_config do
   source "nginx.conf.erb"

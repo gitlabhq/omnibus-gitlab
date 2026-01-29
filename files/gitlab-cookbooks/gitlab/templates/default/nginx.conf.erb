@@ -14,8 +14,8 @@ events {
 }
 
 http {
-  log_format gitlab_access '<%= @gitlab_access_log_format %>';
-  log_format gitlab_mattermost_access '<%= @gitlab_mattermost_access_log_format %>';
+  log_format gitlab_access escape=<%= @gitlab_nginx_log_format_escape %> '<%= @gitlab_access_log_format %>';
+  log_format gitlab_mattermost_access escape=<%= @gitlab_mattermost_log_format_escape %> '<%= @gitlab_mattermost_access_log_format %>';
 
   hide_server_tokens <%= @hide_server_tokens %>;
 
