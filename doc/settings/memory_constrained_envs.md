@@ -196,10 +196,19 @@ Some of the default services, like monitoring, are not essential for GitLab to f
 In `/etc/gitlab/gitlab.rb`:
 
 ```ruby
+alertmanager['enable'] = false
+gitlab_exporter['enable'] = false
+gitlab_kas['enable'] = false
+node_exporter['enable'] = false
+postgres_exporter['enable'] = false
 prometheus_monitoring['enable'] = false
+prometheus['enable'] = false
+puma['exporter_enabled'] = false
+redis_exporter['enable'] = false
+sidekiq['metrics_enabled'] = false
 ```
 
-We observed 200 MB of memory usage reduction configuring GitLab this way.
+We observed 300 MB of memory usage reduction configuring GitLab this way.
 
 ## Configure how GitLab handles memory
 
