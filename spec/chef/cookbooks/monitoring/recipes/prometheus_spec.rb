@@ -49,6 +49,18 @@ RSpec.describe 'monitoring::prometheus' do
       ]
     }
   end
+  let(:pgbouncer_scrape_config) do
+    {
+      job_name: "pgbouncer",
+      static_configs: [
+        {
+          targets: [
+            "localhost:9188"
+          ]
+        }
+      ]
+    }
+  end
   let(:node_scrape_config) do
     {
       job_name: "node",
@@ -592,6 +604,26 @@ RSpec.describe 'monitoring::prometheus' do
         )
       end
       it_behaves_like 'enabled logged service', 'prometheus', true, { log_directory_owner: 'gitlab-prometheus', log_group: 'fugee' }
+    end
+  end
+
+  context 'pgbouncer_exporter' do
+    before do
+      Gitlab[:node] = nil
+      Services.add_services('gitlab-ee', Services::EEServices.list)
+      stub_gitlab_rb(
+        prometheus: {
+          enable: true
+        },
+        pgbouncer_exporter: {
+          enable: true
+        }
+      )
+    end
+
+    it 'includes pgbouncer scrape config' do
+      generated_config = prometheus_yml[:scrape_configs].find { |item| item[:job_name] == 'pgbouncer' }
+      expect(generated_config).to eq(pgbouncer_scrape_config)
     end
   end
 
