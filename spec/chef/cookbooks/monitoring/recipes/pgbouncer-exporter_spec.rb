@@ -64,6 +64,49 @@ RSpec.describe 'monitoring::pgbouncer-exporter' do
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/pgbouncer-exporter/env').with_variables(default_vars)
     end
+
+    it 'renders the run script with connection string and listen address' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/pgbouncer-exporter/run')
+        .with_content { |content|
+          expect(content).to match(/--pgBouncer\.connectionString=/)
+          expect(content).to match(/--web\.listen-address=/)
+        }
+    end
+  end
+
+  context 'with custom connection string and listen address' do
+    before do
+      stub_gitlab_rb(
+        pgbouncer_exporter: {
+          enable: true,
+          listen_address: 'localhost:9127'
+        },
+        pgbouncer: {
+          enable: true,
+          databases: {
+            gitlabhq_production: {
+              host: '1.2.3.4'
+            }
+          }
+        },
+        postgresql: {
+          pgbouncer_user: 'pgbouncer',
+          pgbouncer_user_password: 'pgbouncer_password'
+        }
+      )
+    end
+
+    it 'renders the run script with custom listen address' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/pgbouncer-exporter/run')
+        .with_content(/--web\.listen-address="localhost:9127"/)
+    end
+
+    it 'renders the run script with pgbouncer connection string' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/pgbouncer-exporter/run')
+        .with_content { |content|
+          expect(content).to match(/--pgBouncer\.connectionString=/)
+        }
+    end
   end
 
   context 'log directory and runit group' do

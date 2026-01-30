@@ -235,6 +235,7 @@ module Prometheus
       workhorse_scrape_config
       exporter_scrape_config('node')
       exporter_scrape_config('postgres')
+      exporter_scrape_config('pgbouncer')
       exporter_scrape_config('redis')
       nginx_scrape_config
       prometheus_scrape_configs
