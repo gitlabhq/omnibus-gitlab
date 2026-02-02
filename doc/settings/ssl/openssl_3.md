@@ -27,7 +27,7 @@ With the upgrade to OpenSSL 3:
 No operating system upgrades are needed for GitLab to support OpenSSL 3. For the
 Linux packages and Helm Chart, GitLab CE and EE ships its own version of
 OpenSSL and does not use the operating system's OpenSSL
-version. However, [FIPS builds](https://docs.gitlab.com/ee/development/fips_compliance.html) do
+version. However, [FIPS builds](https://docs.gitlab.com/development/fips_gitlab/) do
 use the operating system's OpenSSL because that library is expected to
 be FIPS-certified.
 

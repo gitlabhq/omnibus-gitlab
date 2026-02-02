@@ -35,7 +35,7 @@ deprecations = [
             config_keys: %w(gitlab postgresql data_dir),
             deprecation: '11.6',
             removal: '14.0',
-            note: "Please see https://docs.gitlab.com/omnibus/settings/database.html#store-postgresql-data-in-a-different-directory for how to use postgresql['dir']"
+            note: "Please see https://docs.gitlab.com/omnibus/settings/database/#store-postgresql-data-in-a-different-directory for how to use postgresql['dir']"
           },
           {
             config_keys: %w(gitlab sidekiq cluster),

@@ -17,7 +17,7 @@ may encounter while working with GitLab. It should serve as an addition to the
 main SSL documentation:
 
 - [Configure SSL for a Linux package installation](_index.md).
-- [Self-signed certificates or custom Certification Authorities for GitLab Runner](https://docs.gitlab.com/runner/configuration/tls-self-signed.html).
+- [Self-signed certificates or custom Certification Authorities for GitLab Runner](https://docs.gitlab.com/runner/configuration/tls-self-signed/).
 - [Configure HTTPS manually](_index.md#configure-https-manually).
 
 ## Useful OpenSSL Debugging Commands
@@ -338,7 +338,7 @@ https://gitlab.domain.tld/api/v4/jobs/request: Post https://gitlab.domain.tld/ap
 x509: certificate signed by unknown authority
 ```
 
-Follow the details in [Self-signed certificates or custom Certification Authorities for GitLab Runner](https://docs.gitlab.com/runner/configuration/tls-self-signed.html).
+Follow the details in [Self-signed certificates or custom Certification Authorities for GitLab Runner](https://docs.gitlab.com/runner/configuration/tls-self-signed/).
 
 ## Mirroring a remote GitLab repository that uses a self-signed SSL certificate
 
@@ -378,7 +378,7 @@ To fix this problem:
   run `sudo gitlab-ctl reconfigure` as per the instructions for
   [installing custom public certificates](_index.md#install-custom-public-certificates).
 - If your local GitLab instance was installed using the Helm Charts, you can
-  [add your self-signed certificate to your GitLab instance](https://docs.gitlab.com/runner/install/kubernetes.html#providing-a-custom-certificate-for-accessing-gitlab).
+  [add your self-signed certificate to your GitLab instance](https://docs.gitlab.com/runner/install/kubernetes_helm_chart_configuration/#access-gitlab-with-a-custom-certificate).
 
 You may also get another error message when trying to mirror a repository from
 a remote GitLab instance that uses a self-signed certificate:
