@@ -22,21 +22,27 @@ name 'config_guess'
 version = Gitlab::Version.new('config_guess', 'c9092d05347c925a26f6887980e185206e13f9d6')
 default_version version.print(false)
 
-# occasionally http protocol downloads get 500s, so we use git://
-source git: version.remote
-
 # http://savannah.gnu.org/projects/config
 license 'GPL-3.0 (with exception)'
 license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-relative_path "config_guess-#{version.print}"
+if Build::Check.use_ubt?
+  # NOTE: We cannot use UBT binaries in FIPS builds
+  source Build::UBT.source_args(name, '0.c9092d05347c925a26f6887980e185206e13f9d6', "3d9414d0cd21b29781b63c720d967f0610bbd84e604c7de3d388f3b2d126444a", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  # occasionally http protocol downloads get 500s, so we use git://
+  source git: version.remote
 
-build do
-  patch source: 'add-license-file.patch'
-  mkdir "#{install_dir}/embedded/lib/config_guess"
+  relative_path "config_guess-#{version.print}"
 
-  copy "#{project_dir}/config.guess", "#{install_dir}/embedded/lib/config_guess/config.guess"
-  copy "#{project_dir}/config.sub", "#{install_dir}/embedded/lib/config_guess/config.sub"
+  build do
+    patch source: 'add-license-file.patch'
+    mkdir "#{install_dir}/embedded/lib/config_guess"
+
+    copy "#{project_dir}/config.guess", "#{install_dir}/embedded/lib/config_guess/config.guess"
+    copy "#{project_dir}/config.sub", "#{install_dir}/embedded/lib/config_guess/config.sub"
+  end
 end
