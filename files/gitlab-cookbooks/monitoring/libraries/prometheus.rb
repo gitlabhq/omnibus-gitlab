@@ -467,6 +467,11 @@ module Prometheus
       # Don't parse if exporter is explicitly disabled
       return unless Services.enabled?("#{exporter}_exporter") || service_discovery
 
+      existing_scrape_configs = Array(Gitlab['prometheus']['scrape_configs'])
+
+      # If the user has already defined a scrape_config for this exporter, don't add ours
+      return if existing_scrape_configs.any? { |cfg| cfg['job_name'] == exporter || cfg[:job_name] == exporter }
+
       if service_discovery
         default_config = {
           'job_name' => exporter,
@@ -487,7 +492,7 @@ module Prometheus
         }
       end
 
-      default_scrape_configs = [] << default_config << Gitlab['prometheus']['scrape_configs']
+      default_scrape_configs = [] << default_config << existing_scrape_configs
       Gitlab['prometheus']['scrape_configs'] = default_scrape_configs.compact.flatten
     end
 

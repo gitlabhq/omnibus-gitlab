@@ -625,6 +625,24 @@ RSpec.describe 'monitoring::prometheus' do
       generated_config = prometheus_yml[:scrape_configs].find { |item| item[:job_name] == 'pgbouncer' }
       expect(generated_config).to eq(pgbouncer_scrape_config)
     end
+
+    it 'does not duplicate pgbouncer scrape config when user config already defines it' do
+      Gitlab[:node] = nil
+      Services.add_services('gitlab-ee', Services::EEServices.list)
+      stub_gitlab_rb(
+        prometheus: {
+          enable: true,
+          scrape_configs: [pgbouncer_scrape_config]
+        },
+        pgbouncer_exporter: {
+          enable: true
+        }
+      )
+
+      matching = prometheus_yml[:scrape_configs].select { |item| item[:job_name] == 'pgbouncer' }
+      expect(matching.size).to eq(1)
+      expect(matching.first).to eq(pgbouncer_scrape_config)
+    end
   end
 
   include_examples "consul service discovery", "prometheus", "prometheus"
