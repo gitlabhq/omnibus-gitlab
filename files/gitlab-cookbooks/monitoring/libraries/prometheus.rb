@@ -470,7 +470,10 @@ module Prometheus
       existing_scrape_configs = Array(Gitlab['prometheus']['scrape_configs'])
 
       # If the user has already defined a scrape_config for this exporter, don't add ours
-      return if existing_scrape_configs.any? { |cfg| cfg['job_name'] == exporter || cfg[:job_name] == exporter }
+      if existing_scrape_configs.any? { |cfg| cfg['job_name'] == exporter || cfg[:job_name] == exporter }
+        LoggingHelper.warning("Not creating a default #{exporter} scrape_config due to a pre-existing configuration")
+        return
+      end
 
       if service_discovery
         default_config = {
