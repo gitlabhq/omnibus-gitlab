@@ -35,6 +35,12 @@ No changes.
 
 - [Update libpng version to 1.6.51](gitlab-org/omnibus-gitlab@b254195b909ca79070bfca50fa501ecaa8ad4f37)
 
+## 18.7.3 (2026-02-04)
+
+### Changed (1 change)
+
+- [Bump PostgreSQL to version 16.11](gitlab-org/omnibus-gitlab@c60349d5992e60f4e41312ec6ffaf4d1342378cb) ([merge request](gitlab-org/omnibus-gitlab!9081))
+
 ## 18.7.2 (2026-01-20)
 
 No changes.
