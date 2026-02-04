@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.6.5 (2026-02-04)
+
+### Changed (1 change)
+
+- [Bump PostgreSQL to version 16.11](gitlab-org/omnibus-gitlab@3a74ae607a8b87fb45089305d88d92541cdfdd49) ([merge request](gitlab-org/omnibus-gitlab!9082))
+
 ## 18.6.4 (2026-01-20)
 
 No changes.
