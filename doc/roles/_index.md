@@ -93,7 +93,7 @@ for configuration steps.
   - Enables all single-node GitLab services including NGINX, Puma, Redis, and Sidekiq. If you are segregating services, then you must explicitly disable unwanted services in `/etc/gitlab/gitlab.rb`. Therefore, this role is only useful on a single-node PostgreSQL in a Geo primary site.
   - Cannot be used to set up a PostgreSQL cluster in a Geo primary site. Instead, see [Geo multi-node database replication](https://docs.gitlab.com/administration/geo/setup/database/#multi-node-database-replication).
 
-  *By default, enables standard single-node GitLab services including NGINX, Puma, Redis, and Sidekiq.*
+  By default, enables standard single-node GitLab services including NGINX, Puma, Redis, and Sidekiq.
 
 - `geo_secondary_role` (`gitlab-ee`)
 
@@ -115,7 +115,7 @@ for configuration steps.
   This role should not be used to set up a PostgreSQL cluster in a Geo secondary
   site. Instead, see [Geo multi-node database replication](https://docs.gitlab.com/administration/geo/setup/database/#multi-node-database-replication).
 
-  *By default, enables all of the GitLab default single node services. (NGINX, Puma, Redis, Sidekiq, etc)*
+  By default, enables all of the GitLab default single node services including NGINX, Puma, Redis, and Sidekiq.
 
 ### Monitoring Roles
 

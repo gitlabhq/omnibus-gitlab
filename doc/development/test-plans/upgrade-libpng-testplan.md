@@ -15,10 +15,13 @@ Copy the following test plan to a comment of the merge request that upgrades the
 - [ ] Checked the library version:
   - [ ] Install `binutils`.
   - [ ] Check output and ensure the updated version is installed.
+
     ```shell
     strings /opt/gitlab/embedded/lib/libpng16.so.16|grep "libpng version"
     ```
+
 - [ ] Check that graphicsMagick can use `libpng` with a PNG:
+
   ```shell
   # get a suitable PNG to manipulate
   cp \

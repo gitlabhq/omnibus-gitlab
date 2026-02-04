@@ -14,10 +14,12 @@ Copy the following test plan to a comment of the merge request that upgrades the
 - [ ] Green pipeline with `Trigger:ee-package` and `build-package-on-all-os`.
 - [ ] `redis-exporter` starts. Run `sudo gitlab-ctl status redis-exporter` and check output
 - [ ] Check the version.
+
   ```shell
   /opt/gitlab/embedded/bin/redis_exporter -version
   INFO[0000] Redis Metrics Exporter 1.74.0    build date:     sha1:     Go: go1.24.5    GOOS: linux    GOARCH: amd64
   ```
+
   To ensure `redis-exporter` started successfully.
 
   ```shell

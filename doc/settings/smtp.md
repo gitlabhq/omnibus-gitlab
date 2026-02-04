@@ -78,23 +78,21 @@ The supported configuration items for the encrypted file are:
 
 The encrypted contents can be configured with the [SMTP secret edit Rake command](https://docs.gitlab.com/administration/raketasks/smtp/).
 
-**Configuration**
+For example, if your SMTP configuration in `/etc/gitlab/gitlab.rb` is:
 
-If initially your SMTP configuration looked like:
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.server"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "smtp user"
+gitlab_rails['smtp_password'] = "smtp password"
+gitlab_rails['smtp_domain'] = "example.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+```
 
-1. In `/etc/gitlab/gitlab.rb`:
-
-   ```ruby
-   gitlab_rails['smtp_enable'] = true
-   gitlab_rails['smtp_address'] = "smtp.server"
-   gitlab_rails['smtp_port'] = 465
-   gitlab_rails['smtp_user_name'] = "smtp user"
-   gitlab_rails['smtp_password'] = "smtp password"
-   gitlab_rails['smtp_domain'] = "example.com"
-   gitlab_rails['smtp_authentication'] = "login"
-   gitlab_rails['smtp_enable_starttls_auto'] = true
-   gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
-   ```
+To reconfigure:
 
 1. Edit the encrypted secret:
 

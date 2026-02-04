@@ -48,7 +48,7 @@ Higher levels indicate more integration into Omnibus GitLab.
 #### Level 1
 
 Configure the component with user-provided parameters from `gitlab.rb` to work
-with the database server. For example,  `database.yml` is rendered with database
+with the database server. For example, `database.yml` is rendered with database
 server connection details of the Rails application or database parameters of
 Container Registry are passed to its `config.yml`.
 
