@@ -82,6 +82,12 @@ No changes.
 - [Mattermost Security Updates November 21, 2025](gitlab-org/omnibus-gitlab@f2992d6bee98355878a08c7fb00b4600c121d68c) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8956))
 - [Filter all token query parameters in nginx access logs](gitlab-org/omnibus-gitlab@3dab3a55e4de1755711819a10190528f3ad7686d)
 
+## 18.6.5 (2026-02-04)
+
+### Changed (1 change)
+
+- [Bump PostgreSQL to version 16.11](gitlab-org/omnibus-gitlab@3a74ae607a8b87fb45089305d88d92541cdfdd49) ([merge request](gitlab-org/omnibus-gitlab!9082))
+
 ## 18.6.4 (2026-01-20)
 
 No changes.
