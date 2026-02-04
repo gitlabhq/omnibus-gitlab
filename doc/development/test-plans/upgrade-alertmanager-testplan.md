@@ -16,7 +16,7 @@ Copy the following test plan to a comment of the merge request that upgrades the
 - [ ] Installed and verified that the component version has been upgraded.
 
   ```shell
-  $ /opt/gitlab/embedded/bin/alertmanager --version
+  /opt/gitlab/embedded/bin/alertmanager --version
   ```
 
 - [ ] Verified basic functionality.
@@ -38,5 +38,4 @@ Copy the following test plan to a comment of the merge request that upgrades the
        ```
 
   - [ ]  Wait 5 minutes and check Prometheus console `http://<gitlab host>:9090/alerts?search=` for service back up.
-
 ````

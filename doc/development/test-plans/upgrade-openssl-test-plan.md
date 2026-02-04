@@ -17,8 +17,8 @@ Copy the following test plan to a comment of the merge request that upgrades the
   - [ ] Generate a custom CA
 
     ```shell
-    $ openssl genrsa -des3 -out customca.key 2048
-    $ openssl req -x509 -new -nodes -key customca.key -sha256 -days 365 -out customca.crt
+    openssl genrsa -des3 -out customca.key 2048
+    openssl req -x509 -new -nodes -key customca.key -sha256 -days 365 -out customca.crt
     ```
 
   - [ ] Copy the custom CA certificate to `/etc/gitlab/trusted-certs/`

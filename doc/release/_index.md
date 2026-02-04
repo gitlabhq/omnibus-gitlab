@@ -53,7 +53,7 @@ of important things will be done:
 
 1. All remotes of the project will be synced.
 1. The versions of components will be read from GitLab CE/EE repository
-  (eg. `VERSION`, `GITLAB_SHELL_VERSION`) and written to the `omnibus-gitlab` repository.
+   (for example, `VERSION`, `GITLAB_SHELL_VERSION`) and written to the `omnibus-gitlab` repository.
 1. A specific Git tag will be created and synced to `omnibus-gitlab` repositories.
 
 When the `omnibus-gitlab` repository on `https://dev.gitlab.org` gets updated, GitLab CI

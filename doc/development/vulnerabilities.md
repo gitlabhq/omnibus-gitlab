@@ -16,10 +16,10 @@ vulnerabilities are detected. Complete the following steps when you receive this
    and locate the appropriate vulnerability. If the vulnerability is legitimate:
 
    - Select `Create Issue` to open a confidential issue in the
-   [`omnibus-gitlab` issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues).
+     [`omnibus-gitlab` issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues).
    - Change the vulnerability status to `Confirmed`. If the vulnerability turns
-   out to be a false positive, duplicate, or otherwise not actionable, change the
-   status to `Dismiss`.
+     out to be a false positive, duplicate, or otherwise not actionable, change the
+     status to `Dismiss`.
 
 1. Label the issue with the `security` and `For Scheduling` labels. The GitLab
    Security team is then made aware of this issue due to the automation by
@@ -37,7 +37,7 @@ vulnerabilities are detected. Complete the following steps when you receive this
 
    - Visit the [`omnibus-gitlab` Vulnerability Report](https://gitlab.com/gitlab-org/omnibus-gitlab/-/security/vulnerability_report).
    - Locate the appropriate vulnerability and set the status to `Resolved` if not
-   already done automatically.
+     already done automatically.
 
 1. If the issue is a no-op for our use case, set its status to `Dismissed` in the
    [Vulnerability Report](https://gitlab.com/gitlab-org/omnibus-gitlab/-/security/vulnerability_report)
