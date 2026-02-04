@@ -78,6 +78,7 @@ Test upgrades and fresh installs for the following environments:
 1. After testing that upgrades to the newest version work, confirm that `revert-pg-upgrade` successfully downgrades to the previously used version, including on a Geo secondary standalone tracking database.
 1. If the default PostgreSQL version changes, test GitLab upgrades with external PostgreSQL databases.
 1. Back up and restore.
+
 If the default PostgreSQL version is changing:
 
 1. Auto upgrades on a single node install, separate database node, HA cluster.
