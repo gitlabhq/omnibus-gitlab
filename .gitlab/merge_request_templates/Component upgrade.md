@@ -24,6 +24,8 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] Component test plan copied into MR description.
 - [ ] Latest merged results pipeline is green.
 - [ ] When ready for review, MR is labeled ~"workflow::ready for review" per the [Distribution MR workflow](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/merge_requests/).
+- [ ] Ensure the equivalent update for [Cloud Native GitLab](https://gitlab.com/gitlab-org/build/CNG/-/merge_requests) exists.
+- [ ] Update the UBT version has been updated and referenced in the merge request if applicable.
 
 #### For GitLab team members
 
