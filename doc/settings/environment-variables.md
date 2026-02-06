@@ -81,6 +81,51 @@ Perform a reconfigure:
 sudo gitlab-ctl reconfigure
 ```
 
+## Noteworthy environment variables
+
+### `TMPDIR`
+
+Ruby and other components use the `TMPDIR` environment variable to determine
+where to store temporary files. By default, this is `/tmp`.
+
+You may need to configure a custom temporary directory if:
+
+- Your `/tmp` is mounted as `tmpfs` with limited space.
+- Large files (such as LFS objects or CI artifacts) cause `/tmp` to fill up.
+- [Geo secondary sites](https://docs.gitlab.com/ee/administration/geo/) run out
+  of space in `/tmp` during object storage replication.
+
+To configure a custom temporary directory:
+
+1. Create the directory and set permissions:
+
+   ```shell
+   sudo mkdir -p /var/opt/gitlab/tmp
+   sudo chown git:git /var/opt/gitlab/tmp
+   sudo chmod 700 /var/opt/gitlab/tmp
+   ```
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['env'] = { 'TMPDIR' => '/var/opt/gitlab/tmp' }
+   ```
+
+1. Reconfigure and restart GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   sudo gitlab-ctl restart
+   ```
+
+1. Verify the setting:
+
+   ```shell
+   sudo gitlab-rails runner "puts ENV['TMPDIR']"
+   ```
+
+   The output should display your configured path.
+
 ## Troubleshooting
 
 ### An environment variable is not being set
