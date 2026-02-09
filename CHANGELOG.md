@@ -45,6 +45,12 @@ No changes.
 
 - [Update libpng version to 1.6.51](gitlab-org/omnibus-gitlab@b254195b909ca79070bfca50fa501ecaa8ad4f37)
 
+## 18.7.4 (2026-02-09)
+
+### Security (1 change)
+
+- [Mattermost Security Updates January 15, 2026](gitlab-org/security/omnibus-gitlab@d009987ce6ba179a171ed29e8380021c92a7dcd0)
+
 ## 18.7.3 (2026-02-04)
 
 ### Changed (1 change)
