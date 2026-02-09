@@ -98,6 +98,12 @@ No changes.
 - [Mattermost Security Updates November 21, 2025](gitlab-org/omnibus-gitlab@f2992d6bee98355878a08c7fb00b4600c121d68c) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8956))
 - [Filter all token query parameters in nginx access logs](gitlab-org/omnibus-gitlab@3dab3a55e4de1755711819a10190528f3ad7686d)
 
+## 18.6.6 (2026-02-09)
+
+### Security (1 change)
+
+- [Mattermost Security Updates January 15, 2026](gitlab-org/security/omnibus-gitlab@48e6fdee86991eb5f51479b0967a9b2bedf74d60)
+
 ## 18.6.5 (2026-02-04)
 
 ### Changed (1 change)
