@@ -18,10 +18,12 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
         expect(subject.redis_params).to eq(
           url: 'unix:///var/opt/gitlab/redis/redis.socket',
           password: nil,
+          redisTLS: nil,
           sentinels: [],
           sentinelMaster: 'gitlab-redis',
           sentinelPassword: nil,
-          sentinelTLS: false
+          sentinelTLS: false,
+          sentinelTLSOptions: nil
         )
       end
     end
@@ -40,10 +42,12 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
           expect(subject.redis_params).to eq(
             url: 'unix://:redis-password@/var/opt/gitlab/redis/redis.socket',
             password: 'redis-password',
+            redisTLS: nil,
             sentinels: [],
             sentinelMaster: 'gitlab-redis',
             sentinelPassword: nil,
-            sentinelTLS: false
+            sentinelTLS: false,
+            sentinelTLSOptions: nil
           )
         end
       end
@@ -61,10 +65,12 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
           expect(subject.redis_params).to eq(
             url: 'unix://:redis%20password@/var/opt/gitlab/redis/redis.socket',
             password: 'redis password',
+            redisTLS: nil,
             sentinels: [],
             sentinelMaster: 'gitlab-redis',
             sentinelPassword: nil,
-            sentinelTLS: false
+            sentinelTLS: false,
+            sentinelTLSOptions: nil
           )
         end
       end
@@ -83,10 +89,12 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
           expect(subject.redis_params).to eq(
             url: 'redis://:redis-password@my.redis.host/',
             password: 'redis-password',
+            redisTLS: nil,
             sentinels: [],
             sentinelMaster: 'gitlab-redis',
             sentinelPassword: nil,
-            sentinelTLS: false
+            sentinelTLS: false,
+            sentinelTLSOptions: nil
           )
         end
       end
@@ -107,10 +115,12 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
           expect(subject.redis_params).to eq(
             url: 'redis://:different-redis-password@different.workhorse.redis.instance/',
             password: 'different-redis-password',
+            redisTLS: nil,
             sentinels: [],
             sentinelMaster: 'gitlab-redis',
             sentinelPassword: nil,
-            sentinelTLS: false
+            sentinelTLS: false,
+            sentinelTLSOptions: nil
           )
         end
       end
@@ -136,10 +146,12 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
             expect(subject.redis_params).to eq(
               url: 'redis://:redis-workhorse-password@workhorse.redis.host/',
               password: 'redis-workhorse-password',
+              redisTLS: nil,
               sentinels: [],
               sentinelMaster: 'gitlab-redis',
               sentinelPassword: nil,
-              sentinelTLS: false
+              sentinelTLS: false,
+              sentinelTLSOptions: nil
             )
           end
 
@@ -173,10 +185,12 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
             expect(subject.redis_params).to eq(
               url: 'redis://:redis-password@my.redis.host/',
               password: 'redis-password',
+              redisTLS: nil,
               sentinels: [],
               sentinelMaster: 'gitlab-redis',
               sentinelPassword: nil,
-              sentinelTLS: false
+              sentinelTLS: false,
+              sentinelTLSOptions: nil
             )
           end
 
@@ -212,6 +226,7 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
             expect(subject.redis_params).to eq(
               url: 'redis://:redis-password@redis-for-workhorse/',
               password: 'redis-password',
+              redisTLS: nil,
               sentinels: [
                 "redis://:workhorse-sentinel-password@10.0.0.1:26379",
                 "redis://:workhorse-sentinel-password@10.0.0.2:26379",
@@ -219,7 +234,8 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
               ],
               sentinelMaster: 'redis-for-workhorse',
               sentinelPassword: 'workhorse-sentinel-password',
-              sentinelTLS: false
+              sentinelTLS: false,
+              sentinelTLSOptions: nil
             )
           end
 
@@ -264,6 +280,7 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
             expect(subject.redis_params).to eq(
               url: 'redis://:redis-password@redis-for-workhorse/',
               password: 'redis-password',
+              redisTLS: nil,
               sentinels: [
                 "rediss://:workhorse-sentinel-password@10.0.0.1:26379",
                 "rediss://:workhorse-sentinel-password@10.0.0.2:26379",
@@ -271,7 +288,8 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
               ],
               sentinelMaster: 'redis-for-workhorse',
               sentinelPassword: 'workhorse-sentinel-password',
-              sentinelTLS: true
+              sentinelTLS: true,
+              sentinelTLSOptions: {}
             )
           end
         end

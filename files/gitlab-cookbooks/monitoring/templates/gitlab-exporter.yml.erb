@@ -56,11 +56,36 @@ probes:
     opts:
       redis_url: "<%= @redis_url %>"
       redis_enable_client: <%= @redis_enable_client %>
+      <%- if @redis_ssl_params %>
+      redis_ssl_params:
+        <%- if @redis_ssl_params[:ca_file] %>
+        ca_file: "<%= @redis_ssl_params[:ca_file] %>"
+        <%- end %>
+        <%- if @redis_ssl_params[:cert] %>
+        cert: "<%= @redis_ssl_params[:cert] %>"
+        <%- end %>
+        <%- if @redis_ssl_params[:key] %>
+        key: "<%= @redis_ssl_params[:key] %>"
+        <%- end %>
+      <%- end %>
       <%- if @redis_sentinels && !@redis_sentinels.empty? %>
       redis_sentinels:
         <%- @redis_sentinels.each do |sentinel| %>
         - host: <%= sentinel['host'] %>
           port: <%= sentinel['port'] %>
+          <%- if @redis_sentinels_ssl %>
+          ssl: true
+          ssl_params:
+            <%- if @redis_sentinels_tls_ca_cert_file %>
+            ca_file: "<%= @redis_sentinels_tls_ca_cert_file %>"
+            <%- end %>
+            <%- if @redis_sentinels_tls_client_cert_file %>
+            cert: "<%= @redis_sentinels_tls_client_cert_file %>"
+            <%- end %>
+            <%- if @redis_sentinels_tls_client_key_file %>
+            key: "<%= @redis_sentinels_tls_client_key_file %>"
+            <%- end %>
+          <%- end %>
         <%- end %>
       <%- if @redis_sentinels_password %>
       redis_sentinel_password: "<%= @redis_sentinels_password %>"

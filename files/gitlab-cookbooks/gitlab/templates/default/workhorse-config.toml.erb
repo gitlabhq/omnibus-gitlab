@@ -15,20 +15,37 @@ trusted_cidrs_for_x_forwarded_for = <%= @trusted_cidrs_for_x_forwarded_for.to_js
 config_command = "<%= @extra_config_command %>"
 <%- end %>
 
-<% if @workhorse_keywatcher %>
+<%- if @workhorse_keywatcher %>
 [redis]
 Password = "<%= @password %>"
-<% if @sentinels.empty? %>
+<%- if @sentinels.empty? %>
 URL = "<%= @redis_url %>"
-<% else %>
+<%- else %>
 Sentinel = <%= @sentinels.to_json %>
 SentinelMaster = "<%= @sentinel_master %>"
 SentinelPassword = "<%= @sentinel_password %>"
 <%- if @sentinels_ssl %>
 [Sentinel.tls]
+<%- if @sentinel_tls_options %>
+<%- %i[certificate key ca_certificate].each do |key| %>
+  <%- value = @sentinel_tls_options[key] %>
+  <%- if value %>
+  <%= key %> = "<%= "#{value}" %>"
+  <%- end %>
 <%- end %>
-<% end %>
-<% end %>
+<%- end %>
+<%- end %>
+<%- end %>
+<%- if @redis_tls_options %>
+[redis.tls]
+<%- %i[certificate key ca_certificate].each do |key| %>
+  <%- value = @redis_tls_options[key] %>
+  <%- if value %>
+  <%= key %> = "<%= "#{value}" %>"
+  <%- end %>
+<%- end %>
+<%- end %>
+<%- end %>
 
 <%- if @object_store_toml %>
 <%= @object_store_toml %>

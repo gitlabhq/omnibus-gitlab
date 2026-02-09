@@ -162,5 +162,121 @@ RSpec.describe 'GitlabWorkhorse' do
         expect(node['gitlab']['gitlab_rails']['redis_workhorse_sentinels_ssl']).to eq(true)
       end
     end
+
+    shared_examples 'propagates sentinel TLS certificate from global setting' do |attr, path|
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            attr => path
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it "populates gitlab_workhorse #{attr} from global setting" do
+        expect(node['gitlab']['gitlab_workhorse'][attr]).to eq(path)
+      end
+    end
+
+    it_behaves_like 'propagates sentinel TLS certificate from global setting',
+                    :redis_sentinels_tls_ca_cert_file, '/etc/gitlab/ssl/ca.crt'
+    it_behaves_like 'propagates sentinel TLS certificate from global setting',
+                    :redis_sentinels_tls_client_cert_file, '/etc/gitlab/ssl/client.crt'
+    it_behaves_like 'propagates sentinel TLS certificate from global setting',
+                    :redis_sentinels_tls_client_key_file, '/etc/gitlab/ssl/client.key'
+
+    context 'when instance-specific redis_sentinel_tls_ca_cert_file is set' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_sentinels_tls_ca_cert_file: '/etc/gitlab/ssl/ca.crt'
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix',
+            redis_sentinels_tls_ca_cert_file: '/etc/gitlab/ssl/custom-ca.crt'
+          }
+        )
+      end
+
+      it 'keeps the instance-specific setting' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinels_tls_ca_cert_file']).to eq('/etc/gitlab/ssl/custom-ca.crt')
+      end
+    end
+
+    shared_examples 'sets redis TLS certificate on workhorse' do |attr, path|
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_workhorse: {
+            listen_network: 'unix',
+            attr => path
+          }
+        )
+      end
+
+      it "sets #{attr}" do
+        expect(node['gitlab']['gitlab_workhorse'][attr]).to eq(path)
+      end
+    end
+
+    it_behaves_like 'sets redis TLS certificate on workhorse',
+                    :redis_tls_ca_cert_file, '/etc/gitlab/ssl/redis-ca.crt'
+    it_behaves_like 'sets redis TLS certificate on workhorse',
+                    :redis_tls_client_cert_file, '/etc/gitlab/ssl/redis-client.crt'
+    it_behaves_like 'sets redis TLS certificate on workhorse',
+                    :redis_tls_client_key_file, '/etc/gitlab/ssl/redis-client.key'
+
+    shared_examples 'propagates redis TLS certificate from global setting' do |attr, path|
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            attr => path
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it "populates gitlab_workhorse #{attr} from global setting" do
+        expect(node['gitlab']['gitlab_workhorse'][attr]).to eq(path)
+      end
+    end
+
+    it_behaves_like 'propagates redis TLS certificate from global setting',
+                    :redis_tls_ca_cert_file, '/etc/gitlab/ssl/redis-bundle.crt'
+    it_behaves_like 'propagates redis TLS certificate from global setting',
+                    :redis_tls_client_cert_file, '/etc/gitlab/ssl/redis-client.crt'
+    it_behaves_like 'propagates redis TLS certificate from global setting',
+                    :redis_tls_client_key_file, '/etc/gitlab/ssl/redis-client.key'
+
+    context 'when instance-specific redis_tls_ca_cert_file is set' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_tls_ca_cert_file: '/etc/gitlab/ssl/redis-bundle.crt'
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix',
+            redis_tls_ca_cert_file: '/etc/gitlab/ssl/custom-redis-ca.crt'
+          }
+        )
+      end
+
+      it 'keeps the instance-specific setting' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_tls_ca_cert_file']).to eq('/etc/gitlab/ssl/custom-redis-ca.crt')
+      end
+    end
   end
 end

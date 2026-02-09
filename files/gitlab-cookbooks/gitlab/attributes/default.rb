@@ -470,6 +470,9 @@ default['gitlab']['gitlab_rails']['redis_enable_client'] = true
 default['gitlab']['gitlab_rails']['redis_sentinels'] = []
 default['gitlab']['gitlab_rails']['redis_sentinels_password'] = nil
 default['gitlab']['gitlab_rails']['redis_sentinels_ssl'] = false
+default['gitlab']['gitlab_rails']['redis_sentinels_tls_ca_cert_file'] = nil
+default['gitlab']['gitlab_rails']['redis_sentinels_tls_client_cert_file'] = nil
+default['gitlab']['gitlab_rails']['redis_sentinels_tls_client_key_file'] = nil
 default['gitlab']['gitlab_rails']['redis_sentinel_master'] = nil
 default['gitlab']['gitlab_rails']['redis_sentinel_master_ip'] = nil
 default['gitlab']['gitlab_rails']['redis_sentinel_master_port'] = nil
@@ -533,6 +536,9 @@ default['gitlab']['gitlab_rails']['redis_actioncable_instance'] = nil
 default['gitlab']['gitlab_rails']['redis_actioncable_sentinels'] = []
 default['gitlab']['gitlab_rails']['redis_actioncable_sentinels_password'] = nil
 default['gitlab']['gitlab_rails']['redis_actioncable_sentinels_ssl'] = false
+default['gitlab']['gitlab_rails']['redis_actioncable_sentinels_tls_ca_cert_file'] = nil
+default['gitlab']['gitlab_rails']['redis_actioncable_sentinels_tls_client_cert_file'] = nil
+default['gitlab']['gitlab_rails']['redis_actioncable_sentinels_tls_client_key_file'] = nil
 default['gitlab']['gitlab_rails']['redis_actioncable_username'] = nil
 default['gitlab']['gitlab_rails']['redis_actioncable_password'] = nil
 default['gitlab']['gitlab_rails']['redis_actioncable_encrypted_settings_file'] = nil
@@ -893,9 +899,17 @@ default['gitlab']['gitlab_workhorse']['redis_cluster_nodes'] = []
 default['gitlab']['gitlab_workhorse']['redis_sentinels'] = []
 default['gitlab']['gitlab_workhorse']['redis_sentinels_password'] = nil
 default['gitlab']['gitlab_workhorse']['redis_sentinels_ssl'] = false
+default['gitlab']['gitlab_workhorse']['redis_sentinels_tls_ca_cert_file'] = nil
+default['gitlab']['gitlab_workhorse']['redis_sentinels_tls_client_cert_file'] = nil
+default['gitlab']['gitlab_workhorse']['redis_sentinels_tls_client_key_file'] = nil
 default['gitlab']['gitlab_workhorse']['redis_sentinel_master'] = nil
 default['gitlab']['gitlab_workhorse']['redis_sentinel_master_ip'] = nil
 default['gitlab']['gitlab_workhorse']['redis_sentinel_master_port'] = nil
+
+# Redis client TLS settings
+default['gitlab']['gitlab_workhorse']['redis_tls_ca_cert_file'] = nil
+default['gitlab']['gitlab_workhorse']['redis_tls_client_cert_file'] = nil
+default['gitlab']['gitlab_workhorse']['redis_tls_client_key_file'] = nil
 
 default['gitlab']['gitlab_workhorse']['extra_config_command'] = nil
 

@@ -64,9 +64,13 @@ template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
     elasticsearch_url: node['monitoring']['gitlab_exporter']['elasticsearch_url'],
     elasticsearch_authorization: node['monitoring']['gitlab_exporter']['elasticsearch_authorization'],
     redis_url: redis_params[:url],
+    redis_ssl_params: redis_params[:ssl_params],
     redis_sentinels: redis_params[:sentinels],
     redis_sentinels_password: redis_params[:sentinels_password],
     redis_sentinels_ssl: redis_params[:sentinels_ssl],
+    redis_sentinels_tls_ca_cert_file: redis_params[:sentinels_tls_ca_cert_file],
+    redis_sentinels_tls_client_cert_file: redis_params[:sentinels_tls_client_cert_file],
+    redis_sentinels_tls_client_key_file: redis_params[:sentinels_tls_client_key_file],
     connection_string: connection_string,
     redis_enable_client: redis_params[:enable_client]
   )
