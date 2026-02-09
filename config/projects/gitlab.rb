@@ -124,6 +124,7 @@ dependency 'cacerts'
 dependency 'omnibus-gitlab-gems'
 dependency 'gitlab-selinux' if SELinuxDistroHelper.selinux_supported?
 dependency 'redis'
+dependency 'valkey'
 dependency 'nginx'
 dependency 'chef-gem'
 dependency 'inspec-gem'
