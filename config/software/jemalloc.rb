@@ -33,8 +33,9 @@ if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
 else
   source git: version.remote
 
-  # Ensure redis is compiled first so it can build its own jemalloc
+  # Ensure redis and valkey are compiled first so they can build their own jemalloc
   dependency 'redis'
+  dependency 'valkey'
 
   env = with_standard_compiler_flags(with_embedded_path)
 
