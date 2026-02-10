@@ -6,9 +6,10 @@ sleep <%= node['redis']['startup_delay'] %>
 ulimit -n <%= @options[:open_files_ulimit] %>
 <% end %>
 umask 077
+<% server_binary = node['redis']['backend'] == 'valkey' ? 'valkey-server' : 'redis-server' %>
 exec chpst -P \
   -U <%= node['redis']['username'] %>:<%= node['redis']['group'] %> \
   -u <%= node['redis']['username'] %>:<%= node['redis']['group'] %> \
-  /opt/gitlab/embedded/bin/redis-server \
+  /opt/gitlab/embedded/bin/<%= server_binary %> \
   <%= File.join(node[@options[:service]]['dir'], "redis.conf") %><% if node['redis']['announce_ip_from_hostname'] %> \
   --replica-announce-ip "$(hostname -f)"<% end %>

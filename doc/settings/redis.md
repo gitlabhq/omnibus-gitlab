@@ -253,6 +253,61 @@ gitlab_rails['redis_write_timeout'] = 1
 
 For more information, see the example in [configuration documentation](configuration.md#provide-redis-password-to-redis-server-and-client-components).
 
+## Using Valkey instead of Redis (Beta)
+
+{{< details >}}
+
+- Status: [Beta](https://docs.gitlab.com/policy/development_stages_support/#beta)
+
+{{< /details >}}
+
+{{< alert type="warning" >}}
+
+This feature is in [beta](https://docs.gitlab.com/policy/development_stages_support/#beta) and subject to change without notice.
+
+{{< /alert >}}
+
+[Valkey](https://valkey.io/) is a Redis-compatible key-value store that can be used as a drop-in replacement for Redis.
+Valkey is compatible with Redis OSS 7.2 and all earlier open source Redis versions.
+
+To use Valkey instead of Redis:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   redis['backend'] = 'valkey'
+   ```
+
+1. Reconfigure GitLab for the changes to take effect:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+When `redis['backend']` is set to `valkey`:
+
+- The Redis service uses `valkey-server` instead of `redis-server`.
+- The Sentinel service uses `valkey-sentinel` instead of `redis-sentinel`.
+- All other Redis settings (ports, passwords, paths, etc.) remain the same.
+
+### Caveats
+
+When using Valkey, be aware of the following:
+
+- The service name remains `redis`. Use `gitlab-ctl restart redis` to manage the service, not `gitlab-ctl restart valkey`.
+- Log files are written to `/var/log/gitlab/redis/`, not a separate `valkey` directory.
+- The data directory remains `/var/opt/gitlab/redis/`.
+- The configuration file remains `redis.conf`.
+- `gitlab-ctl` toolings still use `redis-cli` for Redis interactions.
+- When using `valkey-cli` for troubleshooting, use the same socket/host/port as you would with `redis-cli`:
+
+  ```shell
+  sudo /opt/gitlab/embedded/bin/valkey-cli -s /var/opt/gitlab/redis/redis.socket
+  ```
+
+For more information about migrating from Redis to Valkey, see the
+[Valkey migration documentation](https://valkey.io/topics/migration/).
+
 ## Troubleshooting
 
 ### `x509: certificate signed by unknown authority`

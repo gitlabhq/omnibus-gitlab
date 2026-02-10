@@ -73,3 +73,6 @@ default['redis']['announce_ip_from_hostname'] = false
 default['redis']['runit_sv_timeout'] = nil
 
 default['redis']['extra_config_command'] = nil
+
+# When set to 'valkey', uses valkey-server instead of redis-server
+default['redis']['backend'] = 'redis'
