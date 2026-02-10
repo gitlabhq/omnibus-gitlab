@@ -1806,6 +1806,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # redis['io_threads'] = 4
 # redis['io_threads_do_reads'] = true
 
+### Valkey backend (Beta)
+###! Use Valkey instead of Redis. This feature is in Beta and subject to change.
+###! When enabled, uses valkey-server/valkey-sentinel instead of redis-server/redis-sentinel.
+###! All other Redis settings remain the same.
+###! Docs: https://docs.gitlab.com/omnibus/settings/redis.html#using-valkey-instead-of-redis-beta
+# redis['backend'] = 'redis'  # 'redis' (default) or 'valkey'
+
 ################################################################################
 ## GitLab Web server
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#using-a-non-bundled-web-server

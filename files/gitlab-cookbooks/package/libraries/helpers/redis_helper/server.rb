@@ -7,12 +7,17 @@ module RedisHelper
     def installed_version
       return unless OmnibusHelper.new(@node).service_up?('redis')
 
-      command = '/opt/gitlab/embedded/bin/redis-server --version'
+      server_binary = valkey_enabled? ? 'valkey-server' : 'redis-server'
+      command = "/opt/gitlab/embedded/bin/#{server_binary} --version"
 
       command_output = VersionHelper.version(command)
       raise "Execution of the command `#{command}` failed" unless command_output
 
-      version_match = command_output.match(/Redis server v=(?<redis_version>\d*\.\d*\.\d*)/)
+      version_match = if valkey_enabled?
+                        command_output.match(/[Ss]erver v=(?<redis_version>\d*\.\d*\.\d*)/)
+                      else
+                        command_output.match(/Redis server v=(?<redis_version>\d*\.\d*\.\d*)/)
+                      end
       raise "Execution of the command `#{command}` generated unexpected output `#{command_output.strip}`" unless version_match
 
       version_match['redis_version']
@@ -21,7 +26,8 @@ module RedisHelper
     def running_version
       return unless OmnibusHelper.new(@node).service_up?('redis')
 
-      commands = ['/opt/gitlab/embedded/bin/redis-cli']
+      cli_binary = valkey_enabled? ? 'valkey-cli' : 'redis-cli'
+      commands = ["/opt/gitlab/embedded/bin/#{cli_binary}"]
       commands << redis_cli_connect_options
       commands << "INFO"
       command = commands.join(" ")
@@ -33,6 +39,10 @@ module RedisHelper
       raise "Execution of the command `#{command}` generated unexpected output `#{command_output.strip}`" unless version_match
 
       version_match['redis_version']
+    end
+
+    def valkey_enabled?
+      @node['redis']['backend'] == 'valkey'
     end
 
     private

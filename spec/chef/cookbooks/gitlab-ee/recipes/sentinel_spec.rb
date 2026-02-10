@@ -239,6 +239,55 @@ RSpec.describe 'gitlab::redis' do
     end
   end
 
+  context 'when redis backend is valkey' do
+    before do
+      stub_gitlab_rb(
+        redis: {
+          backend: 'valkey',
+          master_ip: redis_master_ip,
+          master_password: redis_master_password
+        },
+        redis_sentinel_role: { enable: true }
+      )
+    end
+
+    it 'uses valkey-sentinel in run script' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/sentinel/run')
+        .with_content(%r{/opt/gitlab/embedded/bin/valkey-sentinel})
+    end
+
+    it 'does not use redis-sentinel binary' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/sentinel/run')
+        .with_content { |content|
+          expect(content).not_to match(%r{/opt/gitlab/embedded/bin/redis-sentinel})
+        }
+    end
+  end
+
+  context 'when redis backend is redis (default)' do
+    before do
+      stub_gitlab_rb(
+        redis: {
+          master_ip: redis_master_ip,
+          master_password: redis_master_password
+        },
+        redis_sentinel_role: { enable: true }
+      )
+    end
+
+    it 'uses redis-sentinel binary in run script' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/sentinel/run')
+        .with_content(%r{/opt/gitlab/embedded/bin/redis-sentinel})
+    end
+
+    it 'does not use valkey-sentinel binary' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/sentinel/run')
+        .with_content { |content|
+          expect(content).not_to match(%r{/opt/gitlab/embedded/bin/valkey-sentinel})
+        }
+    end
+  end
+
   context 'log directory and runit group' do
     context 'default values' do
       before do
