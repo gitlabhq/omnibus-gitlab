@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.8.4 (2026-02-09)
+
+### Changed (1 change)
+
+- [Bump builder to use Go 1.24.12](gitlab-org/security/omnibus-gitlab@c7d33bfe681446c17c7eb59fa7f41f949ad16ead)
+
+### Security (1 change)
+
+- [Mattermost Security Updates January 15, 2026](gitlab-org/security/omnibus-gitlab@83daeb979ebb753e4b52299fb4ea09e30dcd3603)
+
 ## 18.8.3 (2026-02-04)
 
 No changes.
