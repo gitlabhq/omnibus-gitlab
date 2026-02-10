@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.8.4 (2026-02-09)
+
+### Changed (1 change)
+
+- [Bump builder to use Go 1.24.12](gitlab-org/security/omnibus-gitlab@c7d33bfe681446c17c7eb59fa7f41f949ad16ead)
+
+### Security (1 change)
+
+- [Mattermost Security Updates January 15, 2026](gitlab-org/security/omnibus-gitlab@83daeb979ebb753e4b52299fb4ea09e30dcd3603)
+
 ## 18.8.3 (2026-02-04)
 
 No changes.
@@ -34,6 +44,12 @@ No changes.
 ### Security (1 change)
 
 - [Update libpng version to 1.6.51](gitlab-org/omnibus-gitlab@b254195b909ca79070bfca50fa501ecaa8ad4f37)
+
+## 18.7.4 (2026-02-09)
+
+### Security (1 change)
+
+- [Mattermost Security Updates January 15, 2026](gitlab-org/security/omnibus-gitlab@d009987ce6ba179a171ed29e8380021c92a7dcd0)
 
 ## 18.7.3 (2026-02-04)
 
@@ -81,6 +97,12 @@ No changes.
 
 - [Mattermost Security Updates November 21, 2025](gitlab-org/omnibus-gitlab@f2992d6bee98355878a08c7fb00b4600c121d68c) by @Normo ([merge request](gitlab-org/omnibus-gitlab!8956))
 - [Filter all token query parameters in nginx access logs](gitlab-org/omnibus-gitlab@3dab3a55e4de1755711819a10190528f3ad7686d)
+
+## 18.6.6 (2026-02-09)
+
+### Security (1 change)
+
+- [Mattermost Security Updates January 15, 2026](gitlab-org/security/omnibus-gitlab@48e6fdee86991eb5f51479b0967a9b2bedf74d60)
 
 ## 18.6.5 (2026-02-04)
 
