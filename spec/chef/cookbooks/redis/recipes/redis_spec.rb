@@ -587,4 +587,38 @@ redis_socket=''
 
     it_behaves_like 'disabled runit service', 'redis', 'root', 'root'
   end
+
+  context 'when redis backend is valkey' do
+    before do
+      stub_gitlab_rb(
+        redis: { backend: 'valkey' }
+      )
+    end
+
+    it 'uses valkey-server binary in run script' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis/run')
+        .with_content(%r{/opt/gitlab/embedded/bin/valkey-server})
+    end
+
+    it 'does not use redis-server binary' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis/run')
+        .with_content { |content|
+          expect(content).not_to match(%r{/opt/gitlab/embedded/bin/redis-server})
+        }
+    end
+  end
+
+  context 'when redis backend is redis (default)' do
+    it 'uses redis-server binary in run script' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis/run')
+        .with_content(%r{/opt/gitlab/embedded/bin/redis-server})
+    end
+
+    it 'does not use valkey-server binary' do
+      expect(chef_run).to render_file('/opt/gitlab/sv/redis/run')
+        .with_content { |content|
+          expect(content).not_to match(%r{/opt/gitlab/embedded/bin/valkey-server})
+        }
+    end
+  end
 end

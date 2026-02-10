@@ -29,7 +29,8 @@ class SentinelHelper
   def running_version
     return unless OmnibusHelper.new(@node).service_up?('sentinel')
 
-    command = "/opt/gitlab/embedded/bin/redis-cli #{redis_cli_connect_options} INFO"
+    cli_binary = valkey_backend? ? 'valkey-cli' : 'redis-cli'
+    command = "/opt/gitlab/embedded/bin/#{cli_binary} #{redis_cli_connect_options} INFO"
     env =
       if sentinel['password']
         { 'REDISCLI_AUTH' => sentinel['password'] }
@@ -50,15 +51,27 @@ class SentinelHelper
   def installed_version
     return unless OmnibusHelper.new(@node).service_up?('sentinel')
 
-    command = '/opt/gitlab/embedded/bin/redis-sentinel --version'
+    command = if valkey_backend?
+                '/opt/gitlab/embedded/bin/valkey-sentinel --version'
+              else
+                '/opt/gitlab/embedded/bin/redis-sentinel --version'
+              end
 
     command_output = VersionHelper.version(command)
     raise "Execution of the command `#{command}` failed" unless command_output
 
-    version_match = command_output.match(/Redis server v=(?<redis_version>\d*\.\d*\.\d*)/)
+    version_match = if valkey_backend?
+                      command_output.match(/[Ss]erver v=(?<redis_version>\d*\.\d*\.\d*)/)
+                    else
+                      command_output.match(/Redis server v=(?<redis_version>\d*\.\d*\.\d*)/)
+                    end
     raise "Execution of the command `#{command}` generated unexpected output `#{command_output.strip}`" unless version_match
 
     version_match['redis_version']
+  end
+
+  def valkey_backend?
+    redis['backend'] == 'valkey'
   end
 
   private
