@@ -278,5 +278,194 @@ RSpec.describe 'GitlabWorkhorse' do
         expect(node['gitlab']['gitlab_workhorse']['redis_tls_ca_cert_file']).to eq('/etc/gitlab/ssl/custom-redis-ca.crt')
       end
     end
+
+    context 'when shared state redis sentinels with master name are configured' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_shared_state_sentinels: [
+              { host: 'sentinel1', port: 26379 },
+              { host: 'sentinel2', port: 26379 }
+            ],
+            redis_shared_state_sentinel_master: 'mymaster'
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it 'populates workhorse redis sentinels and master from shared state' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinels']).to eq(
+          [
+            { 'host' => 'sentinel1', 'port' => 26379 },
+            { 'host' => 'sentinel2', 'port' => 26379 }
+          ])
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinel_master']).to eq('mymaster')
+      end
+    end
+
+    context 'when workhorse-specific redis is configured' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_shared_state_instance: 'redis://shared-state-redis:6379/0'
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix',
+            redis_host: 'workhorse-redis',
+            redis_port: 6380
+          }
+        )
+      end
+
+      it 'uses workhorse-specific redis instead of shared state' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_host']).to eq('workhorse-redis')
+        expect(node['gitlab']['gitlab_workhorse']['redis_port']).to eq(6380)
+      end
+    end
+
+    context 'when rails workhorse redis is configured' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_workhorse_instance: 'redis://rails-workhorse-redis:6379/0',
+            redis_shared_state_instance: 'redis://shared-state-redis:6379/0'
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it 'uses rails workhorse redis instead of shared state' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_host']).to eq('rails-workhorse-redis')
+        expect(node['gitlab']['gitlab_workhorse']['redis_port']).to eq(6379)
+      end
+    end
+
+    context 'when shared state redis instance with password and sentinels are configured' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_shared_state_instance: 'redis://:mypassword@gitlab-redis-persistence',
+            redis_shared_state_sentinels: [
+              { host: 'redis0-gitlab.example.com', port: 26379 },
+              { host: 'redis1-gitlab.example.com', port: 26379 },
+              { host: 'redis2-gitlab.example.com', port: 26379 }
+            ]
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it 'sets sentinel_master from instance URI hostname' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinel_master']).to eq('gitlab-redis-persistence')
+      end
+
+      it 'sets redis_password from instance URI password' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_password']).to eq('mypassword')
+      end
+
+      it 'populates redis sentinels from shared state' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinels']).to eq(
+          [
+            { 'host' => 'redis0-gitlab.example.com', 'port' => 26379 },
+            { 'host' => 'redis1-gitlab.example.com', 'port' => 26379 },
+            { 'host' => 'redis2-gitlab.example.com', 'port' => 26379 }
+          ])
+      end
+    end
+
+    context 'when shared state redis instance with password but no sentinels' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_shared_state_instance: 'redis://:mypassword@shared-state-redis:6379/0'
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it 'sets redis_password from instance URI' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_password']).to eq('mypassword')
+      end
+
+      it 'does not set sentinels_password' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinels_password']).to be_nil
+      end
+    end
+
+    context 'when workhorse redis instance with password and sentinels are configured' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_workhorse_instance: 'redis://:workhorse-password@workhorse-redis-master',
+            redis_workhorse_sentinels: [
+              { host: 'sentinel1.example.com', port: 26379 },
+              { host: 'sentinel2.example.com', port: 26379 }
+            ]
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it 'sets sentinel_master from instance URI hostname' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinel_master']).to eq('workhorse-redis-master')
+      end
+
+      it 'sets redis_password from instance URI password' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_password']).to eq('workhorse-password')
+      end
+
+      it 'populates redis sentinels from workhorse config' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinels']).to eq(
+          [
+            { 'host' => 'sentinel1.example.com', 'port' => 26379 },
+            { 'host' => 'sentinel2.example.com', 'port' => 26379 }
+          ])
+      end
+    end
+
+    context 'when workhorse redis instance with password but no sentinels' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_workhorse_instance: 'redis://:workhorse-password@workhorse-redis:6379/0'
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it 'sets redis_password from instance URI' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_password']).to eq('workhorse-password')
+      end
+
+      it 'does not set sentinels_password' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinels_password']).to be_nil
+      end
+    end
   end
 end
