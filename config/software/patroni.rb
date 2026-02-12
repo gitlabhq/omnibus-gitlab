@@ -16,7 +16,7 @@
 #
 
 name 'patroni'
-default_version '3.0.1'
+default_version '3.3.1'
 
 license 'MIT'
 license_file 'LICENSE'
@@ -44,4 +44,9 @@ build do
   command "#{install_dir}/embedded/bin/pip3 install ydiff==1.2", env: env
 
   command "#{install_dir}/embedded/bin/pip3 install patroni[consul]==#{version}", env: env
+
+  # The available_parameters module introduced in 3.0.3 breaks file traversal. This was fixed in 4.0.0.
+  # https://github.com/patroni/patroni/pull/3152
+  patch source: "permission-denied.patch",
+        target: "#{install_dir}/embedded/lib/python3.9/site-packages/patroni/postgresql/available_parameters/__init__.py"
 end
