@@ -27,14 +27,16 @@ dependency 'cacerts'
 version = Gitlab::Version.new('openssl', "openssl-#{Gitlab::Util.get_env('OPENSSL_VERSION')}")
 
 default_version version.print(false)
-display_version version.print(false).delete_prefix('openssl-')
+version_string = version.print(false).delete_prefix('openssl-')
+display_version version_string
 
 vendor 'openssl'
 
 # UBT does not produce Arm64 binaries yet.
 if Build::Check.use_ubt?
   # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  source Build::UBT.source_args(name, display_version, "7acba11b9a620f7f47888a5722f360b499accb70ecca3f22deed33cc5928e38a", OhaiHelper.arch)
+  ubt_version = "#{version_string}-1ubt"
+  source Build::UBT.source_args(name, ubt_version, "1feaa222bd8f6dbe825615b301339c7b933ce75ce5641d9ec2fe41e7d98ca747", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source git: version.remote
