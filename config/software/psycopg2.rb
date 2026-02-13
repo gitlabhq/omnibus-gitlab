@@ -28,6 +28,7 @@ source git: version.remote
 
 dependency 'python3'
 dependency 'postgresql_new'
+dependency 'python-setuptools'
 
 pg_major_version = '17'
 

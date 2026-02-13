@@ -1,16 +1,14 @@
-diff --git a/setup.py b/setup.py
-index 4b3c3f3..caf1b7e 100644
---- a/setup.py
-+++ b/setup.py
-@@ -2444,6 +2444,11 @@ class PyBuildExt(build_ext):
-             ))
- 
-     def detect_nis(self):
-+        # We do not want to include nis module as it links with system tirpc
-+        # and thus fails healthcheck.
-+        self.missing.append('nis')
-+        return
-+
-         if MS_WINDOWS or CYGWIN or HOST_PLATFORM == 'qnx6':
-             self.missing.append('nis')
-             return
+diff --git a/Modules/Setup.stdlib.in b/Modules/Setup.stdlib.in
+index 5e587dd..3691220 100644
+--- a/Modules/Setup.stdlib.in
++++ b/Modules/Setup.stdlib.in
+@@ -113,7 +113,8 @@
+ @MODULE_MMAP_TRUE@mmap mmapmodule.c
+ # FreeBSD: nis/yp APIs are in libc
+ # Linux: glibc has deprecated SUN RPC, APIs are in libnsl and libtirpc (bpo-32521)
+-@MODULE_NIS_TRUE@nis nismodule.c
++# We do not want to include nis module as it links with system tirpc and thus fails healthcheck.
++# @MODULE_NIS_TRUE@nis nismodule.c
+ # needs sys/soundcard.h or linux/soundcard.h (Linux, FreeBSD)
+ @MODULE_OSSAUDIODEV_TRUE@ossaudiodev ossaudiodev.c
+ @MODULE__POSIXSUBPROCESS_TRUE@_posixsubprocess _posixsubprocess.c

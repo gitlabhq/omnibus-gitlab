@@ -17,13 +17,13 @@
 #
 
 name 'python3'
-# If bumping from 3.9.x to something higher, be sure to update the following files with the new path:
+# If bumping from 3.12.x to something higher, be sure to update the following files with the new path:
 # files/gitlab-config-template/gitlab.rb.template
 # files/gitlab-cookbooks/gitaly/recipes/enable.rb
 # files/gitlab-cookbooks/gitlab/attributes/default.rb
 # spec/chef/cookbooks/gitaly/recipes/gitaly_spec.rb
 # spec/chef/cookbooks/gitlab/recipes/gitlab-rails_spec.rb
-default_version '3.9.24'
+default_version '3.12.12'
 
 dependency 'libedit'
 dependency 'ncurses'
@@ -40,7 +40,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       sha256: '9a32cfc683aecaadbd9ed891ac2af9451ff37f48a00a2d8e1f4ecd9c2a1ffdcb'
+       sha256: '487c908ddf4097a1b9ba859f25fe46d22ccaabfb335880faac305ac62bffb79b'
 
 relative_path "Python-#{version}"
 
@@ -48,13 +48,11 @@ LIB_PATH = %W(#{install_dir}/embedded/lib #{install_dir}/embedded/lib64 #{instal
 
 env = {
   'CFLAGS' => "-I#{install_dir}/embedded/include -O3 -g -pipe",
-  'LDFLAGS' => "-Wl,-rpath,#{LIB_PATH.join(',-rpath,')} -L#{LIB_PATH.join(' -L')} -I#{install_dir}/embedded/include"
+  'LDFLAGS' => "-Wl,-rpath,#{LIB_PATH.join(',-rpath,')} -L#{LIB_PATH.join(' -L')} -I#{install_dir}/embedded/include",
+  'PKG_CONFIG_PATH' => "#{install_dir}/embedded/lib/pkgconfig"
 }
 
 build do
-  # Patches below are a backport of https://github.com/python/cpython/pull/24189
-  patch source: 'readline-3-9.patch'
-
   # Patch to avoid building nis module in Debian 11. If nis is built, it gets
   # linked to system `nsl` and `tirpc` libraries and thus fails omnibus
   # healthcheck in Debian 11 and Ubuntu 22.04.
@@ -63,11 +61,6 @@ build do
       (ohai['platform'] =~ /^ubuntu/ && ohai['platform_version'] =~ /^22/)
 
   openssl_dir = Build::Check.use_system_ssl? ? "/usr" : "#{install_dir}/embedded"
-  if (ohai['platform'] =~ /^amzn/ || ohai['platform'] =~ /^amazon/) && (ohai['platform_version'] == "2023")
-    patch source: 'custom-openssl.patch'
-    openssl_dir = "/usr/local/openssl"
-  end
-
   command ['./configure',
            "--prefix=#{install_dir}/embedded",
            '--enable-shared',
@@ -77,10 +70,10 @@ build do
   make env: env
   make 'install', env: env
 
-  delete("#{install_dir}/embedded/lib/python3.9/lib-dynload/dbm.*")
-  delete("#{install_dir}/embedded/lib/python3.9/lib-dynload/_sqlite3.*")
-  delete("#{install_dir}/embedded/lib/python3.9/test")
-  command "find #{install_dir}/embedded/lib/python3.9 -name '__pycache__' -type d -print -exec rm -r {} +"
+  delete("#{install_dir}/embedded/lib/python3.12/lib-dynload/dbm.*")
+  delete("#{install_dir}/embedded/lib/python3.12/lib-dynload/_sqlite3.*")
+  delete("#{install_dir}/embedded/lib/python3.12/test")
+  command "find #{install_dir}/embedded/lib/python3.12 -name '__pycache__' -type d -print -exec rm -r {} +"
 end
 
 project.exclude "embedded/bin/python3*-config"

@@ -48,5 +48,5 @@ build do
   # The available_parameters module introduced in 3.0.3 breaks file traversal. This was fixed in 4.0.0.
   # https://github.com/patroni/patroni/pull/3152
   patch source: "permission-denied.patch",
-        target: "#{install_dir}/embedded/lib/python3.9/site-packages/patroni/postgresql/available_parameters/__init__.py"
+        target: "#{install_dir}/embedded/lib/python3.12/site-packages/patroni/postgresql/available_parameters/__init__.py"
 end
