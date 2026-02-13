@@ -29,5 +29,7 @@ build do
   patch source: 'add-license-file.patch'
 
   env = with_standard_compiler_flags(with_embedded_path)
-  gem "install gitlab-exporter --no-document --version #{version}", env: env
+  args = "--no-document --version #{version}"
+  args += " --platform ruby" if OhaiHelper.ruby_native_gems_unsupported?
+  gem "install gitlab-exporter #{args}", env: env
 end
