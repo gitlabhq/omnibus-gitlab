@@ -125,7 +125,7 @@ RSpec.describe 'gitaly' do
 
     it 'renders the runit run script with defaults' do
       expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/run')
-        .with_content(%r{ulimit -n 15000})
+        .with_content(%r{ulimit -n 30000})
     end
 
     it 'does not append timestamp in logs if logging format is json' do

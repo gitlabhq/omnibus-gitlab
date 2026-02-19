@@ -2729,7 +2729,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitaly['gitlab_secret'] = <secret>
 
 
-# gitaly['open_files_ulimit'] = 15000 # Maximum number of open files allowed for the gitaly process
+# gitaly['open_files_ulimit'] = 30000 # Maximum number of open files allowed for the gitaly process
 ##! Service name used to register Gitaly as a Consul service
 # gitaly['consul_service_name'] = 'gitaly'
 ##! Semantic metadata used when registering Gitaly as a Consul service
