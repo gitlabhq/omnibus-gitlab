@@ -326,10 +326,11 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
               production: {
                 url: 'redis://:redis-password@workhorse.redis.host/',
                 secret_file: '/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.workhorse.yml.enc',
+                sentinel_password: 'workhorse-sentinel-password',
                 sentinels: [
-                  { host: '10.0.0.1', port: 26379, password: 'workhorse-sentinel-password' },
-                  { host: '10.0.0.2', port: 26379, password: 'workhorse-sentinel-password' },
-                  { host: '10.0.0.3', port: 26379, password: 'workhorse-sentinel-password' },
+                  { host: '10.0.0.1', port: 26379 },
+                  { host: '10.0.0.2', port: 26379 },
+                  { host: '10.0.0.3', port: 26379 },
                 ]
               }
             )

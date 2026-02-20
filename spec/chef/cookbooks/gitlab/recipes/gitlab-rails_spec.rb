@@ -406,10 +406,11 @@ RSpec.describe 'gitlab::gitlab-rails' do
             {
               production: {
                 url: 'redis://:toomanysecrets@gitlab-redis/',
+                sentinel_password: sentinel_password,
                 sentinels: [
-                  { host: '10.0.0.2', port: 26379, password: sentinel_password },
-                  { host: '10.0.0.3', port: 26379, password: sentinel_password },
-                  { host: '10.0.0.4', port: 26379, password: sentinel_password },
+                  { host: '10.0.0.2', port: 26379 },
+                  { host: '10.0.0.3', port: 26379 },
+                  { host: '10.0.0.4', port: 26379 },
                 ],
                 secret_file: '/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.yml.enc',
               }
@@ -420,10 +421,11 @@ RSpec.describe 'gitlab::gitlab-rails' do
               production: {
                 adapter: 'redis',
                 url: 'redis://:toomanysecrets@gitlab-redis/',
+                sentinel_password: sentinel_password,
                 sentinels: [
-                  { host: '10.0.0.2', port: 26379, password: sentinel_password },
-                  { host: '10.0.0.3', port: 26379, password: sentinel_password },
-                  { host: '10.0.0.4', port: 26379, password: sentinel_password },
+                  { host: '10.0.0.2', port: 26379 },
+                  { host: '10.0.0.3', port: 26379 },
+                  { host: '10.0.0.4', port: 26379 },
                 ]
               }
             }
@@ -483,10 +485,11 @@ RSpec.describe 'gitlab::gitlab-rails' do
               {
                 production: {
                   url: 'redis://:toomanysecrets@gitlab-redis/',
+                  sentinel_password: sentinel_password,
                   sentinels: [
-                    { host: '10.0.0.2', port: 26379, password: sentinel_password },
-                    { host: '10.0.0.3', port: 26379, password: sentinel_password },
-                    { host: '10.0.0.4', port: 26379, password: sentinel_password },
+                    { host: '10.0.0.2', port: 26379 },
+                    { host: '10.0.0.3', port: 26379 },
+                    { host: '10.0.0.4', port: 26379 },
                   ],
                   secret_file: '/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.yml.enc',
                 }
@@ -1067,7 +1070,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
             generated_yml = YAML.safe_load(content)
             expect(generated_yml.dig('production', 'url')).to eq("redis://:fakepass@fake.redis.actioncable.com:8888/2")
             expect(generated_yml.dig('production', 'cluster')).to eq(nil)
-            expect(generated_yml.dig('production', 'sentinels')).to eq([{ "host" => 'actioncable', 'port' => 1234, 'password' => 'some pass' }, { 'host' => 'actioncable', 'port' => 3456, 'password' => 'some pass' }])
+            expect(generated_yml.dig('production', 'sentinel_password')).to eq('some pass')
+            expect(generated_yml.dig('production', 'sentinels')).to eq([{ "host" => 'actioncable', 'port' => 1234 }, { 'host' => 'actioncable', 'port' => 3456 }])
           }
         end
       end
@@ -1201,7 +1205,8 @@ RSpec.describe 'gitlab::gitlab-rails' do
               expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
                 generated_yml = YAML.safe_load(content)
                 expect(generated_yml.dig('production', 'url')).to eq("redis://:fakepass@fake.redis.#{instance}.com:8888/2")
-                expect(generated_yml.dig('production', 'sentinels')).to eq([{ "host" => instance, "port" => 1234, "password" => 'sentinelpass' }, { "host" => instance, "port" => 3456, "password" => 'sentinelpass' }])
+                expect(generated_yml.dig('production', 'sentinel_password')).to eq('sentinelpass')
+                expect(generated_yml.dig('production', 'sentinels')).to eq([{ "host" => instance, "port" => 1234 }, { "host" => instance, "port" => 3456 }])
                 expect(generated_yml.dig('production', 'cluster')).to eq(nil)
                 expect(generated_yml.dig('production', 'username')).to eq(nil)
                 expect(generated_yml.dig('production', 'password')).to eq(nil)
