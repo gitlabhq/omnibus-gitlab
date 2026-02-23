@@ -4,7 +4,7 @@ default['gitaly']['dir'] = "/var/opt/gitlab/gitaly"
 default['gitaly']['env_directory'] = "/opt/gitlab/etc/gitaly/env"
 # default['gitaly']['env'] is set in ../recipes/enable.rb
 default['gitaly']['bin_path'] = "/opt/gitlab/embedded/bin/gitaly"
-default['gitaly']['open_files_ulimit'] = 15000
+default['gitaly']['open_files_ulimit'] = 30000
 default['gitaly']['consul_service_name'] = 'gitaly'
 default['gitaly']['consul_service_meta'] = nil
 default['gitaly']['log_group'] = nil
