@@ -11,8 +11,8 @@ Copy the following test plan to a comment of the merge request that upgrades the
 ## Test plan
 
 - [ ] Checked `libxslt` [changelog](https://gitlab.gnome.org/GNOME/libxslt/-/blob/master/NEWS) for potential breaking changes and security fixes.
-- [ ] Start a new pipeline and trigger `Trigger::ee-package`. 
-- [ ] Deploy GitLab. 
+- [ ] Start a new pipeline and trigger `Trigger::ee-package`.
+- [ ] Deploy GitLab.
 
 ### Verify libxslt version and dependencies
 
@@ -35,14 +35,14 @@ Copy the following test plan to a comment of the merge request that upgrades the
 
   ```markdown
   ## Test HTML in Markdown
-  
+
   <details>
   <summary>Click to expand</summary>
-  
+
   This is **Markdown** with <em>HTML</em> tags.
-  
+
   </details>
-  
+
   <dl>
     <dt>Definition</dt>
     <dd>Description with <strong>formatting</strong></dd>
