@@ -31,11 +31,11 @@ script specified in the installation instructions.
 | EMail         | `packages@gitlab.com` |
 | Comment       | `package repository signing key` |
 | Fingerprint   | `F640 3F65 44A3 8863 DAA0 B6E0 3F01 618A 5131 2F3F` |
-| Expiry        | `2026-02-27` |
+| Expiry        | `2028-02-06` |
 
-This key is active from **2020-04-06**.
+This key is active from **2020-03-02**.
 
-The key's expiry was extended from **2024-03-01** to **2026-02-27**. If you encounter an expiration of `2024-03-01`,
+The key's expiry was extended from **2026-02-27** to **2028-02-06**. If you encounter an expiration of `2026-02-27`,
 follow the instructions below.
 
 {{< tabs >}}
@@ -161,7 +161,7 @@ where supported.
 | Name          | `GitLab, Inc.` |
 | EMail         | `support@gitlab.com` |
 | Fingerprint   | `98BF DB87 FCF1 0076 416C 1E0B AD99 7ACC 82DD 593D` |
-| Expiry        | `2026-02-14` |
+| Expiry        | `2028-02-16` |
 
 #### Older package signing keys
 
@@ -180,7 +180,7 @@ To verify a package on an RPM based distribution, ensure that the GitLab, Inc. p
 keychain. For example:
 
 ```shell
-rpm -q gpg-pubkey-82dd593d-67aefdd8 --qf '%{name}-%{version}-%{release} --> %{summary}'
+rpm -q gpg-pubkey-98bfdb87fcf10076416c1e0bad997acc82dd593d-67aefdd8 --qf '%{name}-%{version}-%{release} --> %{summary}'
 ```
 
 This command produces either:
@@ -244,7 +244,7 @@ for configuration. To use this script, you need to download the public key and t
 curl -JLO "https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-CB947AD886C8E8FD.pub.gpg"
 curl -JLO "https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/scripts/gitlab-debsigs.sh"
 chmod +x gitlab-debsigs.sh
-sudo ./gitlab-debsigs.sh gitlab-gitlab-ee-CB947AD886C8E8FD.pub.gpg
+sudo ./gitlab-debsigs.sh CB947AD886C8E8FD.pub.gpg
 ```
 
 #### Verify with `debsig-verify`
@@ -267,7 +267,7 @@ If you don't want to install dependencies installed by `debsig-verify`, you can 
 
    ```shell
    curl -JLO "https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-CB947AD886C8E8FD.pub.gpg"
-   gpg --import gitlab-gitlab-ee-CB947AD886C8E8FD.pub.gpg
+   gpg --import CB947AD886C8E8FD.pub.gpg
    ```
 
 1. Extract the signature file `_gpgorigin`:
@@ -285,11 +285,11 @@ If you don't want to install dependencies installed by `debsig-verify`, you can 
    The output of this command should appear like this:
 
    ```shell
-   gpg: Signature made Tue Aug 01 22:21:11 2017 UTC
-   gpg:                using RSA key DBEF89774DDB9EB37D9FC3A03CFCF9BAF27EAB47
+   gpg: Signature made Wed Feb 18 18:07:22 2026 UTC
+   gpg:                using RSA key 98BFDB87FCF10076416C1E0BAD997ACC82DD593D
    gpg:                issuer "support@gitlab.com"
    gpg: Good signature from "GitLab, Inc. <support@gitlab.com>" [unknown]
-   Primary key fingerprint: DBEF 8977 4DDB 9EB3 7D9F  C3A0 3CFC F9BA F27E AB47
+   Primary key fingerprint: 98BF DB87 FCF1 0076 416C  1E0B AD99 7ACC 82DD 593D
    ```
 
 If the verification fails with `gpg: BAD signature from "GitLab, Inc. <support@gitlab.com>" [unknown]`, ensure:
