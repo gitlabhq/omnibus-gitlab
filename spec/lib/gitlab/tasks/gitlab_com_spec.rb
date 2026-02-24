@@ -11,7 +11,6 @@ RSpec.describe 'gitlab_com', type: :rake do
 
       allow(ENV).to receive(:[]).and_call_original
       stub_env_var('PATCH_DEPLOY_ENVIRONMENT', 'patch-environment')
-      stub_env_var('RELEASE_DEPLOY_ENVIRONMENT', 'release-environment')
       allow(DeployerHelper).to receive(:new).and_return(double(trigger_deploy: 'dummy-url'))
     end
 
@@ -72,19 +71,6 @@ RSpec.describe 'gitlab_com', type: :rake do
               Rake::Task['gitlab_com:deployer'].invoke
             end
           end
-
-          context 'with a stable tag' do
-            before do
-              allow(Build::Check).to receive(:is_rc_tag?).and_return(false)
-              allow(Build::Check).to receive(:is_latest_stable_tag?).and_return(true)
-            end
-
-            it 'triggers deployment to release environment' do
-              expect(DeployerHelper).to receive(:new).with('dummy-token', 'release-environment', :master)
-
-              Rake::Task['gitlab_com:deployer'].invoke
-            end
-          end
         end
 
         context 'running on any other operating system' do
@@ -95,19 +81,6 @@ RSpec.describe 'gitlab_com', type: :rake do
           context 'with a release candidate (RC) tag' do
             before do
               allow(Build::Check).to receive(:is_rc_tag?).and_return(true)
-            end
-
-            it 'does not trigger deployment' do
-              expect(DeployerHelper).not_to receive(:new)
-
-              Rake::Task['gitlab_com:deployer'].invoke
-            end
-          end
-
-          context 'with a stable tag' do
-            before do
-              allow(Build::Check).to receive(:is_rc_tag?).and_return(false)
-              allow(Build::Check).to receive(:is_latest_stable_tag?).and_return(true)
             end
 
             it 'does not trigger deployment' do
