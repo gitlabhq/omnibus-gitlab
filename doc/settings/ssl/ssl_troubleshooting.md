@@ -482,12 +482,9 @@ git config --system http.sslbackend openssl
 
 Alternatively, you can ignore SSL verification by running:
 
-{{< alert type="warning" >}}
-
-Proceed with caution when [ignoring SSL](https://git-scm.com/docs/git-config#Documentation/git-config.txt-httpsslVerify)
-due to the potential security issues associated with disabling this option at global level. Use this option _only_ when troubleshooting, and reinstate SSL verification immediately after.
-
-{{< /alert >}}
+> [!warning]
+> Proceed with caution when [ignoring SSL](https://git-scm.com/docs/git-config#Documentation/git-config.txt-httpsslVerify)
+> due to the potential security issues associated with disabling this option at global level. Use this option _only_ when troubleshooting, and reinstate SSL verification immediately after.
 
 ```shell
 git config --global http.sslVerify false

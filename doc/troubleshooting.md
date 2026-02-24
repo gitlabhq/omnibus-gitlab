@@ -126,11 +126,8 @@ registry_external_url "https://registry.example.com"
 mattermost_external_url "https://mattermost.example.com"
 ```
 
-{{< alert type="note" >}}
-
-Don't add the equal sign (`=`) between `external_url` and the value.
-
-{{< /alert >}}
+> [!note]
+> Don't add the equal sign (`=`) between `external_url` and the value.
 
 ## Emails are not being delivered
 

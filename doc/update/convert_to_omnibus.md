@@ -21,11 +21,8 @@ When converting a self-compiled installation:
 - You must [configure settings in `/etc/gitlab/gitlab.rb`](../settings/configuration.md) because settings in files such as
   `gitlab.yml`, `puma.rb` and `smtp_settings.rb` are lost.
 
-{{< alert type="warning" >}}
-
-Converting from self-compiled installations has not been tested by GitLab.
-
-{{< /alert >}}
+> [!warning]
+> Converting from self-compiled installations has not been tested by GitLab.
 
 To convert your self-compiled installation to a Linux package installation:
 
