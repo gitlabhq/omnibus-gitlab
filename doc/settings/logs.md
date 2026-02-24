@@ -208,12 +208,9 @@ logging['udp_log_shipping_host'] = '1.2.3.4' # Your syslog server
 logging['udp_log_shipping_port'] = 1514 # Optional, defaults to 514 (syslog)
 ```
 
-{{< alert type="note" >}}
-
-Setting `udp_log_shipping_host` will [add a `svlogd_prefix`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/logging.rb)
-for the specified hostname and service for each of the [runit-managed](../development/architecture/_index.md#runit) services.
-
-{{< /alert >}}
+> [!note]
+> Setting `udp_log_shipping_host` will [add a `svlogd_prefix`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/libraries/logging.rb)
+> for the specified hostname and service for each of the [runit-managed](../development/architecture/_index.md#runit) services.
 
 Example log messages:
 
@@ -247,12 +244,9 @@ Structured logs can be exported via JSON to be parsed by Elasticsearch,
 Splunk, or another log management system.
 The JSON format is enabled by default for all services that support it.
 
-{{< alert type="note" >}}
-
-PostgreSQL does not support JSON logging without an
-external plugin. However, it does support logging in CSV format:
-
-{{< /alert >}}
+> [!note]
+> PostgreSQL does not support JSON logging without an
+> external plugin. However, it does support logging in CSV format:
 
 ```ruby
 postgresql['log_destination'] = 'csvlog'
@@ -282,11 +276,8 @@ sidekiq['log_format'] = 'text'
 gitlab_pages['log_format'] = 'text'
 ```
 
-{{< alert type="note" >}}
-
-There are a few variations in attribute names for the log format depending on the service involved (for example, Container Registry uses `log_formatter`, Gitaly and Praefect both use `logging_format`). See [Issue #4280](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4280) for more details.
-
-{{< /alert >}}
+> [!note]
+> There are a few variations in attribute names for the log format depending on the service involved (for example, Container Registry uses `log_formatter`, Gitaly and Praefect both use `logging_format`). See [Issue #4280](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4280) for more details.
 
 ## rbtrace
 

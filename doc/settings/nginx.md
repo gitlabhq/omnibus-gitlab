@@ -19,12 +19,9 @@ It includes essential instructions for optimizing performance and security speci
 
 To configure NGINX settings for different services, edit the `gitlab.rb` file.
 
-{{< alert type="warning" >}}
-
-Incorrect or incompatible configuration
-might cause the service to become unavailable.
-
-{{< /alert >}}
+> [!warning]
+> Incorrect or incompatible configuration
+> might cause the service to become unavailable.
 
 Use `nginx['<setting>']` keys to configure settings for the GitLab Rails application.
 GitLab provides similar keys for other services like
@@ -316,11 +313,8 @@ To change this header:
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
-{{< alert type="warning" >}}
-
-Setting this to `origin` or `no-referrer` breaks GitLab features that require the full referrer URL.
-
-{{< /alert >}}
+> [!warning]
+> Setting this to `origin` or `no-referrer` breaks GitLab features that require the full referrer URL.
 
 For more information, see the [Referrer Policy specification](https://www.w3.org/TR/referrer-policy/).
 
@@ -337,11 +331,8 @@ By default, GitLab enables Gzip compression for text data over 10240 bytes. To d
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
    for the changes to take effect.
 
-{{< alert type="note" >}}
-
-The `gzip` setting applies only to the main GitLab application, not to other services.
-
-{{< /alert >}}
+> [!note]
+> The `gzip` setting applies only to the main GitLab application, not to other services.
 
 ### Disable proxy request buffering
 
@@ -401,11 +392,8 @@ To add custom settings to the NGINX `server` block for GitLab:
 This inserts the defined string at the end of the `server` block in
 `/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf`.
 
-{{< alert type="warning" >}}
-
-Custom settings might conflict with settings defined elsewhere in your `gitlab.rb` file.
-
-{{< /alert >}}
+> [!warning]
+> Custom settings might conflict with settings defined elsewhere in your `gitlab.rb` file.
 
 #### Disable the default server
 
@@ -736,11 +724,8 @@ To configure NGINX status options:
    }
    ```
 
-{{< alert type="note" >}}
-
-When VTS is enabled, do not include `"stub_status" => "on"` in options. This setting applies to all endpoints and causes `/metrics` to return the basic `nginx_status` output instead of Prometheus metrics.
-
-{{< /alert >}}
+> [!note]
+> When VTS is enabled, do not include `"stub_status" => "on"` in options. This setting applies to all endpoints and causes `/metrics` to return the basic `nginx_status` output instead of Prometheus metrics.
 
    To disable VTS and use only basic `nginx_status` metrics:
 

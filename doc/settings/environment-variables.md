@@ -63,12 +63,9 @@ your proxy has its own SSL certificate and SSL enabled. This means, even for
 the `https_proxy` value, you should usually specify a value as
 `http://<USERNAME>:<PASSWORD>@example.com:8080`.
 
-{{< alert type="note" >}}
-
-DNS rebind protection is disabled when either the HTTP_PROXY or the HTTPS_PROXY environment variable is set,
-and the domain DNS can't be resolved.
-
-{{< /alert >}}
+> [!note]
+> DNS rebind protection is disabled when either the HTTP_PROXY or the HTTPS_PROXY environment variable is set,
+> and the domain DNS can't be resolved.
 
 ## Applying the changes
 

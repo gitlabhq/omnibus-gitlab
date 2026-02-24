@@ -28,11 +28,8 @@ While most GitLab parts should be
 functional with these settings in place, you may experience unexpected degradation
 of both product functionality and performance.
 
-{{< alert type="note" >}}
-
-The following sections describe how to run GitLab with up to 5 developers with individual Git repositories no larger than 100 MB.
-
-{{< /alert >}}
+> [!note]
+> The following sections describe how to run GitLab with up to 5 developers with individual Git repositories no larger than 100 MB.
 
 ## Minimum requirements for constrained environments
 

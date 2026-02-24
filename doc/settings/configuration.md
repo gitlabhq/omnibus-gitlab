@@ -18,11 +18,8 @@ To configure GitLab, set the relevant options in the `/etc/gitlab/gitlab.rb` fil
 contains a complete list of available options. New installations have all the
 options of the template listed in `/etc/gitlab/gitlab.rb` by default.
 
-{{< alert type="note" >}}
-
-The examples provided when you edit `/etc/gitlab/gitlab.rb` might not always reflect the default settings for an instance.
-
-{{< /alert >}}
+> [!note]
+> The examples provided when you edit `/etc/gitlab/gitlab.rb` might not always reflect the default settings for an instance.
 
 For a list of default settings, see the
 [package defaults](https://docs.gitlab.com/administration/package_information/defaults/).
@@ -95,12 +92,9 @@ sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee
 
 {{< /details >}}
 
-{{< alert type="warning" >}}
-
-Configuring a relative URL for GitLab has [known issues with Geo](https://gitlab.com/gitlab-org/gitlab/-/issues/456427) and
-[testing limitations](https://gitlab.com/gitlab-org/gitlab/-/issues/439943).
-
-{{< /alert >}}
+> [!warning]
+> Configuring a relative URL for GitLab has [known issues with Geo](https://gitlab.com/gitlab-org/gitlab/-/issues/456427) and
+> [testing limitations](https://gitlab.com/gitlab-org/gitlab/-/issues/439943).
 
 While we recommended installing GitLab in its own (sub)domain, sometimes
 it is not possible. In that case, GitLab can also
@@ -320,11 +314,8 @@ endpoint and specify the `repository_storage` attribute.
 
 ## Change the name of the Git user or group
 
-{{< alert type="warning" >}}
-
-We do not recommend changing the user or group of an existing installation because it can cause unpredictable side effects.
-
-{{< /alert >}}
+> [!warning]
+> We do not recommend changing the user or group of an existing installation because it can cause unpredictable side effects.
 
 By default, Linux package installations use the user name `git` for Git GitLab Shell login,
 ownership of the Git data itself, and SSH URL generation on the web interface.

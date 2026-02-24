@@ -59,11 +59,8 @@ weekday, Tuesday (day 2) through Saturday (day 6):
 15 04 * * 2-6  gitlab-ctl backup-etc && cd /etc/gitlab/config_backup && cp $(ls -t | head -n1) /secret/gitlab/backups/
 ```
 
-{{< alert type="note" >}}
-
-Make sure that `/secret/gitlab/backups/` exists.
-
-{{< /alert >}}
+> [!note]
+> Make sure that `/secret/gitlab/backups/` exists.
 
 You can extract the tar file as follows.
 
@@ -77,11 +74,8 @@ sudo tar -xf gitlab_config_1487687824_2017_02_21.tar -C /
 Remember to run `sudo gitlab-ctl reconfigure` after restoring a configuration
 backup.
 
-{{< alert type="note" >}}
-
-Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
-
-{{< /alert >}}
+> [!note]
+> Your machines SSH host keys are stored in a separate location at `/etc/ssh/`. Be sure to also [backup and restore those keys](https://superuser.com/questions/532040/copy-ssh-keys-from-one-server-to-another-server/532079#532079) to avoid man-in-the-middle attack warnings if you have to perform a full machine restore.
 
 ### Limit backup lifetime for configuration backups (prune old backups)
 
@@ -102,12 +96,9 @@ backups older than the current time minus the `backup_keep_time`.
 
 You can provide the parameter `--no-delete-old-backups` if you want to keep all existing backups.
 
-{{< alert type="warning" >}}
-
-If no parameter is provided the default is `--delete-old-backups`, which will delete any backups
-older than the current time minus the `backup_keep_time`, if `backup_keep_time` is greater than 0.
-
-{{< /alert >}}
+> [!warning]
+> If no parameter is provided the default is `--delete-old-backups`, which will delete any backups
+> older than the current time minus the `backup_keep_time`, if `backup_keep_time` is greater than 0.
 
 ## Creating an application backup
 
@@ -126,12 +117,9 @@ gitlab_rails['backup_path'] = '/mnt/backups'
 
 ## Creating backups for GitLab instances in Docker containers
 
-{{< alert type="warning" >}}
-
-The backup command requires [additional parameters](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#back-up-and-restore-for-installations-using-pgbouncer)
-when your installation is using PgBouncer, for either performance reasons or when using it with a Patroni cluster.
-
-{{< /alert >}}
+> [!warning]
+> The backup command requires [additional parameters](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#back-up-and-restore-for-installations-using-pgbouncer)
+> when your installation is using PgBouncer, for either performance reasons or when using it with a Patroni cluster.
 
 Backups can be scheduled on the host by prepending `docker exec -t <your container name>` to the commands.
 
@@ -147,11 +135,8 @@ Backup configuration and secrets:
 docker exec -t <your container name> /bin/sh -c 'gitlab-ctl backup-etc && cd /etc/gitlab/config_backup && cp $(ls -t | head -n1) /secret/gitlab/backups/'
 ```
 
-{{< alert type="note" >}}
-
-To persist these backups outside the container, mount volumes in the following directories:
-
-{{< /alert >}}
+> [!note]
+> To persist these backups outside the container, mount volumes in the following directories:
 
 1. `/secret/gitlab/backups`.
 1. `/var/opt/gitlab` for [all application data](https://docs.gitlab.com/install/docker/installation/#create-a-directory-for-the-volumes), which includes backups.
@@ -187,9 +172,6 @@ To disable backup directory management, in `/etc/gitlab/gitlab.rb` set:
 gitlab_rails['manage_backup_path'] = false
 ```
 
-{{< alert type="warning" >}}
-
-If you set this configuration option, it is up to you to create the directory specified in `gitlab_rails['backup_path']` and to set permissions
-which will allow user specified in `user['username']` to have correct access. Failing to do so will prevent GitLab from creating the backup archive.
-
-{{< /alert >}}
+> [!warning]
+> If you set this configuration option, it is up to you to create the directory specified in `gitlab_rails['backup_path']` and to set permissions
+> which will allow user specified in `user['username']` to have correct access. Failing to do so will prevent GitLab from creating the backup archive.

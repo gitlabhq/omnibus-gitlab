@@ -18,12 +18,9 @@ between all the mirrors of the project:
 
 ### Protected branches
 
-{{< alert type="note" >}}
-
-Unless specified otherwise, the listed users/groups have permission to both merge, and push to
-protected branches.
-
-{{< /alert >}}
+> [!note]
+> Unless specified otherwise, the listed users/groups have permission to both merge, and push to
+> protected branches.
 
 1. Development repository:
    1. `master`: Maintainers, [Delivery team](https://gitlab.com/gitlab-org/delivery)
@@ -57,12 +54,9 @@ situation.
 
 ### Protected Tags
 
-{{< alert type="note" >}}
-
-Unless specified otherwise, the listed users/groups have permission to both merge, and push to
-protected tags.
-
-{{< /alert >}}
+> [!note]
+> Unless specified otherwise, the listed users/groups have permission to both merge, and push to
+> protected tags.
 
 1. Development repository:
    1. `*` : Maintainers, [Delivery team](https://gitlab.com/gitlab-org/delivery), [Release Managers](https://gitlab.com/gitlab-org/release/managers)
@@ -354,11 +348,8 @@ to an S3 bucket in addition to making them available as artifacts.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
-{{< alert type="note" >}}
-
-Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tags.
-
-{{< /alert >}}
+> [!note]
+> Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tags.
 
 ### `<OS_NAME>-staging`
 
@@ -367,11 +358,8 @@ repository in [Packagecloud instance](https://packages.gitlab.com).
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
-{{< alert type="note" >}}
-
-Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tags.
-
-{{< /alert >}}
+> [!note]
+> Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tags.
 
 ### `<OS_NAME>-release`
 
@@ -380,11 +368,8 @@ repository in [Packagecloud instance](https://packages.gitlab.com).
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
-{{< alert type="note" >}}
-
-Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tags.
-
-{{< /alert >}}
+> [!note]
+> Raspberry Pi jobs are run only on CE tags while SLES jobs are run only on EE tags.
 
 ### `Docker`
 

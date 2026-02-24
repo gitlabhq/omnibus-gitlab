@@ -5,11 +5,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 title: JiHu Edition
 ---
 
-{{< alert type="note" >}}
-
-This section is only relevant if you are a customer in the Chinese market.
-
-{{< /alert >}}
+> [!note]
+> This section is only relevant if you are a customer in the Chinese market.
 
 GitLab licensed its technology to a new independent Chinese company, called JiHu.
 This independent company will help drive adoption of the GitLab complete DevOps

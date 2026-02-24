@@ -51,11 +51,8 @@ their applicability:
 1. If merge request introduces change in user facing configuration, update to [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)
 1. [Changelog entry](https://docs.gitlab.com/development/changelog/) to inform about the change, if necessary.
 
-{{< alert type="note" >}}
-
-Ensure shared runners are enabled for your fork in order for our automated tests to run:
-
-{{< /alert >}}
+> [!note]
+> Ensure shared runners are enabled for your fork in order for our automated tests to run:
 
 1. Go to **Settings -> CI/CD**.
 1. Expand Runners settings.

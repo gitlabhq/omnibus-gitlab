@@ -70,12 +70,9 @@ To disable automatic restarts when the PostgreSQL version changes:
    sudo gitlab-ctl reconfigure
    ```
 
-{{< alert type="note" >}}
-
-It is highly recommended to restart PostgreSQL when the underlying version changes,
-to avoid errors like the [one related to loading necessary libraries](#could-not-load-library-plpgsqlso).
-
-{{< /alert >}}
+> [!note]
+> It is highly recommended to restart PostgreSQL when the underlying version changes,
+> to avoid errors like the [one related to loading necessary libraries](#could-not-load-library-plpgsqlso).
 
 ### Configuring SSL
 
@@ -430,12 +427,9 @@ This consists of:
 
 To change the location of the PostgreSQL data
 
-{{< alert type="warning" >}}
-
-If you have an existing database, you need to move the data to the new location
-first.
-
-{{< /alert >}}
+> [!warning]
+> If you have an existing database, you need to move the data to the new location
+> first.
 
 {{< alert type="warning" >}}
 
@@ -479,12 +473,9 @@ size of your database.
 
 {{< /alert >}}
 
-{{< alert type="note" >}}
-
-If you encounter any problems during the upgrade, raise an issue with a full
-description at the [`omnibus-gitlab` issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab).
-
-{{< /alert >}}
+> [!note]
+> If you encounter any problems during the upgrade, raise an issue with a full
+> description at the [`omnibus-gitlab` issue tracker](https://gitlab.com/gitlab-org/omnibus-gitlab).
 
 To upgrade the PostgreSQL version, be sure that:
 
@@ -590,12 +581,9 @@ setting the `GITLAB_SKIP_PG_UPGRADE` environment variable to `true`.
 
 ### Revert packaged PostgreSQL server to the previous version
 
-{{< alert type="warning" >}}
-
-This operation reverts your current database, including its data, to its state before your last upgrade. Be sure to
-create a backup before attempting to revert your packaged PostgreSQL database.
-
-{{< /alert >}}
+> [!warning]
+> This operation reverts your current database, including its data, to its state before your last upgrade. Be sure to
+> create a backup before attempting to revert your packaged PostgreSQL database.
 
 Earlier versions of the Linux package bundle multiple versions of PostgreSQL. If you use one of these versions, you can
 use the `gitlab-ctl revert-pg-upgrade` command to revert to an earlier PostgreSQL version supported by the Linux package.
@@ -640,12 +628,9 @@ By default, GitLab is configured to use the PostgreSQL server that's included
 in the Linux package. You can also reconfigure it to use an external instance of
 PostgreSQL.
 
-{{< alert type="warning" >}}
-
-If you are using a non-packaged PostgreSQL server, you need to make
-sure that PostgreSQL is set up according to the [database requirements](https://docs.gitlab.com/install/requirements/#postgresql).
-
-{{< /alert >}}
+> [!warning]
+> If you are using a non-packaged PostgreSQL server, you need to make
+> sure that PostgreSQL is set up according to the [database requirements](https://docs.gitlab.com/install/requirements/#postgresql).
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
@@ -838,12 +823,9 @@ The following example demonstrates upgrading from a database host running Postgr
    sudo gitlab-ctl stop
    ```
 
-{{< alert type="warning" >}}
-
-The backup command requires [additional parameters](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#back-up-and-restore-for-installations-using-pgbouncer)
-when your installation is using PgBouncer.
-
-{{< /alert >}}
+> [!warning]
+> The backup command requires [additional parameters](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#back-up-and-restore-for-installations-using-pgbouncer)
+> when your installation is using PgBouncer.
 
 1. Run the backup Rake task using the SKIP options to back up only the database.
    Make a note of the backup filename; you'll use it later to restore.
@@ -911,11 +893,8 @@ when your installation is using PgBouncer.
 
 ### Seed the database (fresh installs only)
 
-{{< alert type="warning" >}}
-
-This is a destructive command; do not run it on an existing database.
-
-{{< /alert >}}
+> [!warning]
+> This is a destructive command; do not run it on an existing database.
 
 The Linux package installation does not seed your external database. Run the following command
 to import the schema and create the first administration user:
@@ -1045,11 +1024,8 @@ parameters noted in the table below and then run `gitlab-ctl reconfigure`.
 
 ## Automatic database reindexing
 
-{{< alert type="warning" >}}
-
-This is an experimental feature that isn't enabled by default.
-
-{{< /alert >}}
+> [!warning]
+> This is an experimental feature that isn't enabled by default.
 
 Recreates database indexes in the background (called "reindexing"). This can
 be used to remove bloated space that has accumulated in indexes and helps to maintain healthy and

@@ -200,11 +200,8 @@ gitlab_rails['env'] = {
 
 Run `gitlab-ctl reconfigure` to apply.
 
-{{< alert type="note" >}}
-
-For [GitLab Geo](https://docs.gitlab.com/administration/geo/), deployments using the above configuration must be added to each secondary site.
-
-{{< /alert >}}
+> [!note]
+> For [GitLab Geo](https://docs.gitlab.com/administration/geo/), deployments using the above configuration must be added to each secondary site.
 
 ## OpenShift GitLab Development Setup
 
