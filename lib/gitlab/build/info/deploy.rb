@@ -5,16 +5,11 @@ module Build
     class Deploy
       OS_MAPPING = {
         'PATCH_DEPLOY_ENVIRONMENT' => 'ubuntu-focal',
-        'RELEASE_DEPLOY_ENVIRONMENT' => 'ubuntu-focal',
       }.freeze
 
       class << self
         def environment_key
-          if Build::Check.is_rc_tag?
-            'PATCH_DEPLOY_ENVIRONMENT'
-          elsif Build::Check.is_latest_stable_tag?
-            'RELEASE_DEPLOY_ENVIRONMENT'
-          end
+          'PATCH_DEPLOY_ENVIRONMENT' if Build::Check.is_rc_tag?
         end
 
         def environment
