@@ -17,14 +17,14 @@ production:
     <%- if @redis_tls_client_key_file %>key_file: "<%= @redis_tls_client_key_file %>"<% end %>
   <% end %>
   <% unless @redis_sentinels.empty? %>
+  <%- if @redis_sentinels_password %>
+  sentinel_password: "<%= @redis_sentinels_password %>"
+  <%- end -%>
   sentinels:
     <% @redis_sentinels.each do |sentinel| %>
     -
       host: <%= sentinel['host'] %>
       port: <%= sentinel['port'] %>
-      <%- if @redis_sentinels_password %>
-      password: "<%= @redis_sentinels_password %>"
-      <%- end -%>
       <%- if @redis_sentinels_ssl %>
       ssl: true
       ssl_params:
