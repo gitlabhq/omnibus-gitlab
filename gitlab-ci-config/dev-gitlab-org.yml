@@ -210,11 +210,11 @@
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
 
-.staging_upload_with_deployment_template:
+.staging_upload_with_rc_deployment_template:
   extends: .staging_upload_template
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
-    - if [ -n "$DEPLOYER_TRIGGER_TOKEN" ]; then bundle exec rake gitlab_com:deployer; fi
+    - if [ -n "$DEPLOYER_TRIGGER_TOKEN" ] && [[ "$PIPELINE_TYPE" =~ _RC_BUILD_PIPELINE$ ]]; then bundle exec rake gitlab_com:deployer; fi
 
 ### This stage is ran only on tag:
 ### 1. It is a manual action
@@ -667,15 +667,13 @@ Docker-QA:
 
 ###########################################################
 ## Upload and deploy to staging or preprod for GitLab.com
-## * Regular tagged releases are deployed to staging
-## * Regular patch releases, RCs and tags that are
-##   not auto-deploys are deployed to
-##   $PATCH_DEPLOY_ENVIRONMENT, set in CI vars
+## * RC (release candidate) tags are deployed to $PATCH_DEPLOY_ENVIRONMENT (pre.gitlab.com)
+## * Release tags only upload packages (no deployment)
 ##
 ##  Ubuntu 22.04: used for all omnibus installation
 
 Ubuntu-20.04-staging:
-  extends: .staging_upload_with_deployment_template
+  extends: .staging_upload_with_rc_deployment_template
   needs:
     - job: Ubuntu-20.04
       optional: true
