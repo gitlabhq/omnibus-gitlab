@@ -424,11 +424,10 @@ docs-i18n-lint links:
   cache: {}
   needs: []
   before_script: []
-  when: manual
   allow_failure: true
   script:
     # Check Markdown links
-    - lychee --offline --include-fragments doc-locale
+    - lychee --offline --include-fragments --exclude "\.(png|jpg|gif|svg)$"  --exclude "ja-jp/development.*#" doc-locale
   rules:
     - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
