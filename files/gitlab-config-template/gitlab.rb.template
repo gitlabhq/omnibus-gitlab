@@ -1865,6 +1865,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # nginx['ssl_session_timeout'] = "1d"
 
 # nginx['ssl_dhparam'] = nil # Path to dhparams.pem, eg. /etc/gitlab/ssl/dhparams.pem
+# nginx['ssl_ecdh_curve'] = nil # Specifies a curve for ECDHE ciphers, eg. 'secp384r1'
+# nginx['ssl_conf_command'] = nil # Array of OpenSSL configuration commands, eg. ["Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256"]
 # nginx['ssl_password_file'] = nil # Path to file with passphrases for ssl certificate secret keys
 # nginx['listen_addresses'] = ['*']
 
