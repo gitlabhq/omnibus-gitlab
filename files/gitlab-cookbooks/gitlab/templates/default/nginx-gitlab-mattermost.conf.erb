@@ -63,6 +63,14 @@ server { ## HTTPS server
   ssl_dhparam <%= @ssl_dhparam %>;
   <% end %>
 
+  <% if @ssl_ecdh_curve %>
+  ssl_ecdh_curve <%= @ssl_ecdh_curve %>;
+  <% end %>
+
+  <% Array(@ssl_conf_command).each do |command| %>
+  ssl_conf_command <%= command %>;
+  <% end %>
+
   <% if @ssl_password_file %>
   ssl_password_file '<%= @ssl_password_file %>';
   <% end %>
