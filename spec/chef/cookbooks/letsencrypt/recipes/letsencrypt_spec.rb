@@ -65,6 +65,10 @@ RSpec.describe 'letsencrypt::enable' do
         external_url: 'https://fakehost.example.com',
         mattermost_external_url: 'https://fakemost.example.com',
         registry_external_url: 'https://fakereg.example.com',
+        pages_external_url: 'https://fakepages.example.com',
+        gitlab_pages: {
+          namespace_in_path: true
+        },
         letsencrypt: {
           enable: true
         }
@@ -82,6 +86,7 @@ RSpec.describe 'letsencrypt::enable' do
         'nginx' | '/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf'
         'mattermost_nginx' | '/var/opt/gitlab/nginx/conf/service_conf/gitlab-mattermost.conf'
         'registry_nginx' | '/var/opt/gitlab/nginx/conf/service_conf/gitlab-registry.conf'
+        'pages_nginx' | '/var/opt/gitlab/nginx/conf/service_conf/gitlab-pages.conf'
       end
 
       with_them do
@@ -110,7 +115,7 @@ RSpec.describe 'letsencrypt::enable' do
 
     it 'creates a self signed certificate' do
       expect(chef_run).to create_acme_selfsigned('fakehost.example.com').with(
-        alt_names: match_array(['fakehost.example.com', 'fakereg.example.com', 'fakemost.example.com']),
+        alt_names: match_array(['fakehost.example.com', 'fakereg.example.com', 'fakemost.example.com', 'fakepages.example.com']),
         key: '/etc/gitlab/ssl/fakehost.example.com.key',
         crt: '/etc/gitlab/ssl/fakehost.example.com.crt'
       )

@@ -18,6 +18,7 @@
 require_relative '../../gitlab/libraries/helpers/authorizer_helper'
 require_relative '../../package/libraries/helpers/shell_out_helper'
 require_relative '../../package/libraries/helpers/logging_helper'
+require_relative '../../letsencrypt/libraries/helper'
 
 module GitlabPages
   class << self
@@ -53,6 +54,10 @@ module GitlabPages
         Gitlab['gitlab_rails']['pages_https'] = true
         Gitlab['pages_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['pages_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+
+        # LetsEncrypt can only be used with single-domain sites and not wildcard domains
+        LetsEncryptHelper.add_service_alt_name("pages") if Gitlab['gitlab_pages']['namespace_in_path']
+
         Nginx.parse_proxy_headers('pages_nginx', true)
       else
         raise "Unsupported GitLab Pages external URL scheme: #{uri.scheme}"

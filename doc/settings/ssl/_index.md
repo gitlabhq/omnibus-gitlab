@@ -33,7 +33,7 @@ The following table shows which method each GitLab service supports.
 | GitLab instance domain | [Yes](#configure-https-manually)                                                                                             | [Yes](#enable-the-lets-encrypt-integration) |
 | Container Registry     | [Yes](https://docs.gitlab.com/administration/packages/container_registry/#configure-container-registry-under-its-own-domain) | [Yes](#enable-the-lets-encrypt-integration) |
 | Mattermost             | [Yes](https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-with-https)                                  | [Yes](#enable-the-lets-encrypt-integration) |
-| GitLab Pages           | [Yes](https://docs.gitlab.com/administration/pages/#wildcard-domains-with-tls-support)                                       | No                        |
+| GitLab Pages           | [Yes](https://docs.gitlab.com/administration/pages/#wildcard-domains-with-tls-support)                                       | [Yes](#enable-the-lets-encrypt-integration)                        |
 
 ## OpenSSL 3 upgrade
 
@@ -80,6 +80,10 @@ To enable Let's Encrypt:
 
    ## Mattermost (optional), must use https protocol
    mattermost_external_url "https://mattermost.example.com"
+
+   ## GitLab Pages (optional), must use https protocol
+   pages_external_url "https://pages.example.com"
+   gitlab_pages['namespace_in_path'] = true      # Required to enable single-domain sites
    ```
 
    - Certificates expire every 90 days. Email addresses you specify for `contact_emails` receive an

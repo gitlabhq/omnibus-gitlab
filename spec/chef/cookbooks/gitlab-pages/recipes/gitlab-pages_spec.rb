@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::gitlab-pages' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir nginx_configuration)).converge('gitlab::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -410,6 +410,77 @@ RSpec.describe 'gitlab::gitlab-pages' do
       end
 
       it_behaves_like 'a service with proper supervise directories', 'gitlab-pages'
+    end
+  end
+
+  describe 'letsencrypt' do
+    before do
+      stub_gitlab_rb(
+        external_url: 'https://gitlab.example.com',
+        pages_external_url: 'https://pages.example.com',
+        gitlab_pages: {
+          namespace_in_path: true
+        }
+      )
+
+      allow(File).to receive(:exist?).and_call_original
+    end
+
+    describe 'HTTP to HTTPS redirection' do
+      context 'by default' do
+        it 'is enabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-pages.conf').with_content("return 301 https://$http_host:$request_uri;")
+        end
+      end
+
+      context 'if disabled in gitlab.rb' do
+        before do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            pages_external_url: 'https://pages.example.com',
+            pages_nginx: {
+              redirect_http_to_https: false
+            }
+          )
+        end
+
+        it 'is disabled' do
+          expect(chef_run).to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-pages.conf')
+          expect(chef_run).not_to render_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-pages.conf').with_content("https://$http_host:$request_uri;")
+        end
+      end
+    end
+
+    context 'default certificate file is missing' do
+      before do
+        allow(File).to receive(:exist?).with('/etc/gitlab/ssl/pages.example.com.crt').and_return(false)
+      end
+
+      it 'adds itself to letsencrypt alt_names' do
+        expect(chef_run.node['letsencrypt']['alt_names']).to match_array(['gitlab.example.com', 'pages.example.com'])
+      end
+
+      it 'is reflected in the acme_selfsigned' do
+        expect(chef_run).to create_acme_selfsigned('gitlab.example.com').with(
+          alt_names: match_array(['gitlab.example.com', 'pages.example.com'])
+        )
+      end
+    end
+
+    context 'default certificate file is present' do
+      before do
+        allow(File).to receive(:exist?).with('/etc/gitlab/ssl/pages.example.com.crt').and_return(true)
+      end
+
+      it 'does not alter letsencrypt alt_names' do
+        expect(chef_run.node['letsencrypt']['alt_names']).to eql(['gitlab.example.com'])
+      end
+
+      it 'is reflected in the acme_selfsigned' do
+        expect(chef_run).to create_acme_selfsigned('gitlab.example.com').with(
+          alt_names: ['gitlab.example.com']
+        )
+      end
     end
   end
 end
