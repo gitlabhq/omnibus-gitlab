@@ -254,7 +254,8 @@ nginx_configuration 'pages' do
   variables(pages_nginx_vars.merge(
               {
                 pages_path: node['gitlab']['gitlab_rails']['pages_path'],
-                pages_listen_proxy: node['gitlab_pages']['listen_proxy']
+                pages_listen_proxy: node['gitlab_pages']['listen_proxy'],
+                letsencrypt_enable: node['letsencrypt']['enable']
               }
             ))
 

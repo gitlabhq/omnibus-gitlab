@@ -11,7 +11,7 @@
 
 <% if @https && @redirect_http_to_https %>
 ## Redirects all HTTP traffic to the HTTPS host
-server {
+server { ## HTTPS redirect server
 <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @redirect_http_to_https_port %><% if @proxy_protocol %> proxy_protocol<% end %>;
 <% end %>
@@ -22,13 +22,23 @@ server {
   server_name  ~^(?<group>.*)\.<%= @fqdn_regex %>$;
 <% end %>
   server_tokens off; ## Don't show the nginx version number, a security best practice
-  return 301 https://$http_host:<%= @port %>$request_uri;
+
+  <% if @letsencrypt_enable && @namespace_in_path %>
+  location /.well-known/acme-challenge/ {
+    root <%= @dir %>/www/;
+  }
+  <% end %>
+
+  location / {
+    return 301 https://$http_host:<%= @port %>$request_uri;
+  }
+
   access_log  <%= @log_directory %>/gitlab_pages_access.log gitlab_access;
   error_log   <%= @log_directory %>/gitlab_pages_error.log <%= @error_log_level%>;
-}
+} ## end HTTPS redirect server
 <% end %>
 
-server {
+server { ## HTTPS server
 <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @listen_port %><% if @proxy_protocol %> proxy_protocol<% end %><% if @https %> ssl<% end %>;
 <% end %>
@@ -112,6 +122,12 @@ server {
   error_page 403 /403.html;
   error_page 404 /404.html;
 
+  <% if @letsencrypt_enable && @namespace_in_path %>
+  location /.well-known/acme-challenge/ {
+    root <%= @dir %>/www/;
+  }
+  <% end %>
+
   # Pass everything to pages daemon when namespace in host
   location / {
     <% @proxy_set_headers.each do |header| %>
@@ -142,4 +158,4 @@ server {
   }
 
   <%= @custom_gitlab_server_config %>
-}
+} ## end HTTPS server
