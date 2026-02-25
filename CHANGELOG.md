@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.9.1 (2026-02-24)
+
+No changes.
+
 ## 18.9.0 (2026-02-18)
 
 ### Added (4 changes)
@@ -39,6 +43,10 @@ omnibus-gitlab repository.
 ### Security (1 change)
 
 - [Mattermost Security Updates January 15, 2026](gitlab-org/omnibus-gitlab@0b48af1e6492d3f178e74e3e878302ee3faa9081) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9083))
+
+## 18.8.5 (2026-02-24)
+
+No changes.
 
 ## 18.8.4 (2026-02-09)
 
@@ -81,6 +89,10 @@ No changes.
 ### Security (1 change)
 
 - [Update libpng version to 1.6.51](gitlab-org/omnibus-gitlab@b254195b909ca79070bfca50fa501ecaa8ad4f37)
+
+## 18.7.5 (2026-02-24)
+
+No changes.
 
 ## 18.7.4 (2026-02-09)
 
