@@ -457,6 +457,73 @@ RSpec.describe 'nginx' do
         }
       end
     end
+
+    context 'ssl_ecdh_curve configuration' do
+      context 'when ssl_ecdh_curve is not set' do
+        it 'does not render ssl_ecdh_curve' do
+          expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
+            expect(content).not_to include("ssl_ecdh_curve")
+          }
+        end
+      end
+
+      context 'when ssl_ecdh_curve is set to secp384r1' do
+        before do
+          stub_gitlab_rb(
+            nginx: { ssl_ecdh_curve: 'secp384r1' },
+            mattermost_nginx: { ssl_ecdh_curve: 'secp384r1' },
+            registry_nginx: { ssl_ecdh_curve: 'secp384r1' },
+            pages_nginx: { ssl_ecdh_curve: 'secp384r1' },
+            gitlab_kas_nginx: { ssl_ecdh_curve: 'secp384r1' }
+          )
+        end
+
+        it 'renders ssl_ecdh_curve in all nginx configs' do
+          http_conf.each_value do |conf|
+            expect(chef_run).to render_file(conf).with_content { |content|
+              expect(content).to include("ssl_ecdh_curve secp384r1;")
+            }
+          end
+        end
+      end
+    end
+
+    context 'ssl_conf_command configuration' do
+      context 'when ssl_conf_command is not set' do
+        it 'does not render ssl_conf_command' do
+          expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
+            expect(content).not_to include("ssl_conf_command")
+          }
+        end
+      end
+
+      context 'when ssl_conf_command is set' do
+        before do
+          stub_gitlab_rb(
+            nginx: { ssl_conf_command: ["Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256", "Options PrioritizeChaCha"] },
+            mattermost_nginx: { ssl_conf_command: "Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256" },
+            registry_nginx: { ssl_conf_command: ["Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256"] },
+            pages_nginx: { ssl_conf_command: "Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256" },
+            gitlab_kas_nginx: { ssl_conf_command: ["Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256"] }
+          )
+        end
+
+        it 'renders ssl_conf_command entries in all nginx configs' do
+          # gitlab with multiple commands (array format)
+          expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
+            expect(content).to include("ssl_conf_command Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256;")
+            expect(content).to include("ssl_conf_command Options PrioritizeChaCha;")
+          }
+
+          # other services with single command (string or array with one element)
+          ['mattermost', 'registry', 'pages', 'gitlab_kas'].each do |service|
+            expect(chef_run).to render_file(http_conf[service]).with_content { |content|
+              expect(content).to include("ssl_conf_command Ciphersuites TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256;")
+            }
+          end
+        end
+      end
+    end
   end
 
   context 'when is enabled' do
