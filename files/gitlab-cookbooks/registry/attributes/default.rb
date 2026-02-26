@@ -46,7 +46,7 @@ default['registry']['database']['sslmode'] = "prefer"
 default['registry']['auto_migrate'] = true
 default['registry']['gc'] = nil
 default['registry']['reporting'] = nil
-
+default['registry']['http_draintimeout'] = 0
 ####
 # Notifications
 ####

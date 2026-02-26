@@ -139,6 +139,22 @@ RSpec.describe 'registry recipe' do
       end
     end
 
+    context 'when registry http_draintimeout is not set' do
+      it 'creates registry config with http_draintimeout set to default 0' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/^http:\n(?:.*\n)*?\s{2}draintimeout: 0$/)
+      end
+    end
+
+    context 'when registry http_draintimeout is set' do
+      before { stub_gitlab_rb(registry: { http_draintimeout: 30 }) }
+
+      it 'creates registry config with http_draintimeout = 30' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/^http:\n(?:.*\n)*?\s{2}draintimeout: 30$/)
+      end
+    end
+
     context 'when registry middleware is enabled' do
       let(:middleware_config) do
         { "storage" => [
