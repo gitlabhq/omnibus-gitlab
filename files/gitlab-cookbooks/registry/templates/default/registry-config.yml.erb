@@ -21,6 +21,7 @@ http:
       enabled: true
       path: /metrics
   <% end %>
+  draintimeout: <%= @http_draintimeout %>
 health:
   storagedriver:
     enabled: <%= @health_storagedriver_enabled %>

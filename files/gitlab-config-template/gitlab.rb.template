@@ -1087,6 +1087,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # registry['validation_enabled'] = false
 # registry['autoredirect'] = false
 # registry['compatibility_schema1_enabled'] = false
+# registry['http_draintimeout'] = 0
 
 ### Registry backend storage
 ###! Docs: https://docs.gitlab.com/ee/administration/packages/container_registry.html#configure-storage-for-the-container-registry
