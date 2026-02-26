@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'cosign'
-version = Gitlab::Version.new('cosign', '2.5.3')
+version = Gitlab::Version.new('cosign', '3.0.4')
 default_version version.print
 
 license 'APACHE-2.0'
