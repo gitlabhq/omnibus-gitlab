@@ -491,6 +491,11 @@ To upgrade the PostgreSQL version, be sure that:
     database resides doesn't have enough space, pass the argument `--tmp-dir $DIR`
     to the command. The upgrade task includes an available disk space check and aborts
     the upgrade if the requirements aren't met.
+    - If you use a custom temporary directory, ensure it has the correct user and group
+      ownership. Run `ls -la /var/opt/gitlab/postgresql/data` to check the owner and
+      group, then set the same ownership on the temporary directory with
+      `sudo chown <user>:<group> $DIR`. For default installations, the owner
+      is `gitlab-psql`, and the command is `sudo chown gitlab-psql:gitlab-psql $DIR`.
 
 After you confirm that the above checklist is satisfied, you can proceed with
 the upgrade:
