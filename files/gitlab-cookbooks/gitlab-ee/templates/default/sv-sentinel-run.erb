@@ -5,14 +5,9 @@ umask 077
 
 <% user = @options[:user] %>
 <% group = @options[:groupname] %>
-<% if node['redis']['backend'] == 'valkey' %>
-<%   sentinel_cmd = '/opt/gitlab/embedded/bin/valkey-sentinel' %>
-<% else %>
-<%   sentinel_cmd = '/opt/gitlab/embedded/bin/redis-sentinel' %>
-<% end %>
 exec chpst -P \
   -U <%= user %>:<%= group %> \
   -u <%= user %>:<%= group %> \
-  <%= sentinel_cmd %> \
+  /opt/gitlab/embedded/bin/<%= @options[:sentinel_binary] %> \
   <%= @options[:config_path] %><% if node['redis']['announce_ip_from_hostname'] %> \
   '--sentinel announce-ip' "$(hostname -f)"<% end %>
