@@ -95,7 +95,6 @@ These additional variables are available to override or enable different build b
 
 | Environment Variable             | Description |
 |----------------------------------|-------------|
-| `RELEASE_DEPLOY_ENVIRONMENT`     | Deployment name used for [`gitlab.com` deployer](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md) trigger if current ref is a stable tag. |
 | `PATCH_DEPLOY_ENVIRONMENT`       | Deployment name used for the [`gitlab.com` deployer](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md) trigger if current ref is a release candidate tag. |
 | `AUTO_DEPLOY_ENVIRONMENT`        | Deployment name used for the [`gitlab.com` deployer](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md) trigger if current ref is an auto-deploy tag. |
 | `DEPLOYER_TRIGGER_PROJECT`       | GitLab project ID for the repository used for the [`gitlab.com` deployer](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md). |
