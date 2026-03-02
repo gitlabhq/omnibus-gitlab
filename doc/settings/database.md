@@ -876,14 +876,14 @@ The following example demonstrates upgrading from a database host running Postgr
 
    If the upgrade was "in-place" using `pg_upgrade`, run the following query on the PostgreSQL database console:
 
-   ```SQL
+   ```sql
    SET statement_timeout = 0; ANALYZE VERBOSE;
    ```
 
    The execution time of the `ANALYZE` command can vary significantly depending on your database size. To monitor the progress of this operation,
    you can periodically run the following query in another PostgreSQL database console. The `tables_remaining` column should gradually reach `0`:
 
-   ```SQL
+   ```sql
    SELECT
      COUNT(*) AS total_tables,
      SUM(CASE WHEN last_analyze IS NULL OR last_analyze < (NOW() - INTERVAL '2 hours') THEN 1 ELSE 0 END) AS tables_remaining
@@ -892,7 +892,7 @@ The following example demonstrates upgrading from a database host running Postgr
 
    If the upgrade used `pg_dump` and `pg_restore`, run the following query on the PostgreSQL database console:
 
-   ```SQL
+   ```sql
    SET statement_timeout = 0; VACUUM VERBOSE ANALYZE;
    ```
 
