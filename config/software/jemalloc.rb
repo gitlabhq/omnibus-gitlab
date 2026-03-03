@@ -24,6 +24,10 @@ license_file 'COPYING'
 
 skip_transitive_dependency_licensing true
 
+# Ensure redis and valkey are compiled first so they can build their own jemalloc
+dependency 'redis'
+dependency 'valkey'
+
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
   # NOTE: We cannot use UBT binaries in FIPS builds
   # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
@@ -32,10 +36,6 @@ if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
   build(&Build::UBT.install)
 else
   source git: version.remote
-
-  # Ensure redis and valkey are compiled first so they can build their own jemalloc
-  dependency 'redis'
-  dependency 'valkey'
 
   env = with_standard_compiler_flags(with_embedded_path)
 
