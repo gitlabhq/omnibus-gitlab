@@ -1267,6 +1267,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
             expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/redis.shared_state.yml').with_content { |content|
               generated_yml = YAML.safe_load(content)
               expect(generated_yml.dig('production', 'url')).to eq('redis://:fakepass@fake.redis.shared_state.com:8888/2')
+              expect(generated_yml.dig('production', 'sentinel_password')).to eq('shared_state_sentinel_pass')
 
               sentinels = generated_yml.dig('production', 'sentinels')
               expect(sentinels).not_to be_nil
@@ -1274,7 +1275,6 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
               sentinels.each do |sentinel|
                 expect(sentinel['host']).to eq('shared_state')
-                expect(sentinel['password']).to eq('shared_state_sentinel_pass')
                 expect(sentinel['ssl']).to eq(true)
                 expect(sentinel['ssl_params']).to include(
                   'ca_file' => '/etc/gitlab/sentinel-certs/shared_state/ca.crt',
