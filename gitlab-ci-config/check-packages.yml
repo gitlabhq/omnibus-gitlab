@@ -135,6 +135,7 @@ Ubuntu-20.04-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
     - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_CHECK_PACKAGE_PIPELINE"'
   variables:
@@ -144,6 +145,7 @@ Ubuntu-22.04-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
@@ -184,6 +186,7 @@ AlmaLinux-8-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
@@ -192,6 +195,7 @@ AlmaLinux-9-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
@@ -200,6 +204,7 @@ AmazonLinux-2-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
@@ -208,6 +213,7 @@ AmazonLinux-2023-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_fips:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
+    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
   variables:
     USE_SYSTEM_SSL: "true"
