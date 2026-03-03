@@ -927,6 +927,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_cache_sentinels'] = nil
 # gitlab_rails['redis_cache_sentinels_password'] = nil
 # gitlab_rails['redis_cache_sentinels_ssl'] = false
+# gitlab_rails['redis_cache_sentinels_tls_ca_cert_file'] = nil
+# gitlab_rails['redis_cache_sentinels_tls_client_cert_file'] = nil
+# gitlab_rails['redis_cache_sentinels_tls_client_key_file'] = nil
 # gitlab_rails['redis_cache_username'] = nil
 # gitlab_rails['redis_cache_password'] = nil
 # gitlab_rails['redis_cache_cluster_nodes'] = nil
@@ -938,6 +941,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_queues_sentinels'] = nil
 # gitlab_rails['redis_queues_sentinels_password'] = nil
 # gitlab_rails['redis_queues_sentinels_ssl'] = false
+# gitlab_rails['redis_queues_sentinels_tls_ca_cert_file'] = nil
+# gitlab_rails['redis_queues_sentinels_tls_client_cert_file'] = nil
+# gitlab_rails['redis_queues_sentinels_tls_client_key_file'] = nil
 # gitlab_rails['redis_queues_username'] = nil
 # gitlab_rails['redis_queues_password'] = nil
 # gitlab_rails['redis_queues_cluster_nodes'] = nil
@@ -949,6 +955,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_shared_state_sentinels'] = nil
 # gitlab_rails['redis_shared_state_sentinels_password'] = nil
 # gitlab_rails['redis_shared_state_sentinels_ssl'] = false
+# gitlab_rails['redis_shared_state_sentinels_tls_ca_cert_file'] = nil
+# gitlab_rails['redis_shared_state_sentinels_tls_client_cert_file'] = nil
+# gitlab_rails['redis_shared_state_sentinels_tls_client_key_file'] = nil
 # gitlab_rails['redis_shared_state_username'] = nil
 # gitlab_rails['redis_shared_state_password'] = nil
 # gitlab_rails['redis_shared_state_cluster_nodes'] = nil
@@ -960,6 +969,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_trace_chunks_sentinels'] = nil
 # gitlab_rails['redis_trace_chunks_sentinels_password'] = nil
 # gitlab_rails['redis_trace_chunks_sentinels_ssl'] = false
+# gitlab_rails['redis_trace_chunks_sentinels_tls_ca_cert_file'] = nil
+# gitlab_rails['redis_trace_chunks_sentinels_tls_client_cert_file'] = nil
+# gitlab_rails['redis_trace_chunks_sentinels_tls_client_key_file'] = nil
 # gitlab_rails['redis_trace_chunks_username'] = nil
 # gitlab_rails['redis_trace_chunks_password'] = nil
 # gitlab_rails['redis_trace_chunks_cluster_nodes'] = nil
@@ -971,6 +983,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_actioncable_sentinels'] = nil
 # gitlab_rails['redis_actioncable_sentinels_password'] = nil
 # gitlab_rails['redis_actioncable_sentinels_ssl'] = false
+# gitlab_rails['redis_actioncable_sentinels_tls_ca_cert_file'] = nil
+# gitlab_rails['redis_actioncable_sentinels_tls_client_cert_file'] = nil
+# gitlab_rails['redis_actioncable_sentinels_tls_client_key_file'] = nil
 # gitlab_rails['redis_actioncable_username'] = nil
 # gitlab_rails['redis_actioncable_password'] = nil
 # gitlab_rails['redis_actioncable_cluster_nodes'] = nil
@@ -982,6 +997,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_rate_limiting_sentinels'] = nil
 # gitlab_rails['redis_rate_limiting_sentinels_password'] = nil
 # gitlab_rails['redis_rate_limiting_sentinels_ssl'] = false
+# gitlab_rails['redis_rate_limiting_sentinels_tls_ca_cert_file'] = nil
+# gitlab_rails['redis_rate_limiting_sentinels_tls_client_cert_file'] = nil
+# gitlab_rails['redis_rate_limiting_sentinels_tls_client_key_file'] = nil
 # gitlab_rails['redis_rate_limiting_username'] = nil
 # gitlab_rails['redis_rate_limiting_password'] = nil
 # gitlab_rails['redis_rate_limiting_cluster_nodes'] = nil
@@ -993,6 +1011,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_sessions_sentinels'] = nil
 # gitlab_rails['redis_sessions_sentinels_password'] = nil
 # gitlab_rails['redis_sessions_sentinels_ssl'] = false
+# gitlab_rails['redis_sessions_sentinels_tls_ca_cert_file'] = nil
+# gitlab_rails['redis_sessions_sentinels_tls_client_cert_file'] = nil
+# gitlab_rails['redis_sessions_sentinels_tls_client_key_file'] = nil
 # gitlab_rails['redis_sessions_username'] = nil
 # gitlab_rails['redis_sessions_password'] = nil
 # gitlab_rails['redis_sessions_cluster_nodes'] = nil
@@ -1004,6 +1025,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_cluster_rate_limiting_sentinels'] = nil
 # gitlab_rails['redis_cluster_rate_limiting_sentinels_password'] = nil
 # gitlab_rails['redis_cluster_rate_limiting_sentinels_ssl'] = false
+# gitlab_rails['redis_cluster_rate_limiting_sentinels_tls_ca_cert_file'] = nil
+# gitlab_rails['redis_cluster_rate_limiting_sentinels_tls_client_cert_file'] = nil
+# gitlab_rails['redis_cluster_rate_limiting_sentinels_tls_client_key_file'] = nil
 # gitlab_rails['redis_cluster_rate_limiting_username'] = nil
 # gitlab_rails['redis_cluster_rate_limiting_password'] = nil
 # gitlab_rails['redis_cluster_rate_limiting_cluster_nodes'] = nil
@@ -1015,6 +1039,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_repository_cache_sentinels'] = nil
 # gitlab_rails['redis_repository_cache_sentinels_password'] = nil
 # gitlab_rails['redis_repository_cache_sentinels_ssl'] = false
+# gitlab_rails['redis_repository_cache_sentinels_tls_ca_cert_file'] = nil
+# gitlab_rails['redis_repository_cache_sentinels_tls_client_cert_file'] = nil
+# gitlab_rails['redis_repository_cache_sentinels_tls_client_key_file'] = nil
 # gitlab_rails['redis_repository_cache_username'] = nil
 # gitlab_rails['redis_repository_cache_password'] = nil
 # gitlab_rails['redis_repository_cache_cluster_nodes'] = nil
@@ -1026,6 +1053,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_workhorse_sentinels'] = nil
 # gitlab_rails['redis_workhorse_sentinels_password'] = nil
 # gitlab_rails['redis_workhorse_sentinels_ssl'] = false
+# gitlab_rails['redis_workhorse_sentinels_tls_ca_cert_file'] = nil
+# gitlab_rails['redis_workhorse_sentinels_tls_client_cert_file'] = nil
+# gitlab_rails['redis_workhorse_sentinels_tls_client_key_file'] = nil
 # gitlab_rails['redis_workhorse_username'] = nil
 # gitlab_rails['redis_workhorse_password'] = nil
 # gitlab_rails['redis_workhorse_cluster_nodes'] = nil

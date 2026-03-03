@@ -344,6 +344,9 @@ RedisHelper::GitlabRails::REDIS_INSTANCES.each do |instance|
   sentinels_password = node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels_password"]
   sentinels_ssl = node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels_ssl"]
   clusters = node['gitlab']['gitlab_rails']["redis_#{instance}_cluster_nodes"]
+  sentinels_tls_ca_cert_file = node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels_tls_ca_cert_file"]
+  sentinels_tls_client_cert_file = node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels_tls_client_cert_file"]
+  sentinels_tls_client_key_file = node['gitlab']['gitlab_rails']["redis_#{instance}_sentinels_tls_client_key_file"]
   username = node['gitlab']['gitlab_rails']["redis_#{instance}_username"]
   password = node['gitlab']['gitlab_rails']["redis_#{instance}_password"]
   redis_ssl = node['gitlab']['gitlab_rails']["redis_#{instance}_ssl"]
@@ -370,6 +373,9 @@ RedisHelper::GitlabRails::REDIS_INSTANCES.each do |instance|
       redis_sentinels: sentinels,
       redis_sentinels_password: sentinels_password,
       redis_sentinels_ssl: sentinels_ssl,
+      redis_sentinels_tls_ca_cert_file: sentinels_tls_ca_cert_file,
+      redis_sentinels_tls_client_cert_file: sentinels_tls_client_cert_file,
+      redis_sentinels_tls_client_key_file: sentinels_tls_client_key_file,
       redis_enable_client: redis_enable_client,
       cluster_nodes: clusters,
       cluster_username: username,

@@ -1099,6 +1099,9 @@ RSpec.describe 'gitlab::gitlab-rails' do
               redis_sentinels: [],
               redis_sentinels_password: nil,
               redis_sentinels_ssl: false,
+              redis_sentinels_tls_ca_cert_file: nil,
+              redis_sentinels_tls_client_cert_file: nil,
+              redis_sentinels_tls_client_key_file: nil,
               redis_enable_client: false,
               cluster_nodes: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
               cluster_username: instance,
@@ -1144,6 +1147,9 @@ RSpec.describe 'gitlab::gitlab-rails' do
               redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
               redis_sentinels_password: nil,
               redis_sentinels_ssl: false,
+              redis_sentinels_tls_ca_cert_file: nil,
+              redis_sentinels_tls_client_cert_file: nil,
+              redis_sentinels_tls_client_key_file: nil,
               redis_enable_client: false,
               cluster_nodes: [],
               cluster_username: nil,
@@ -1189,6 +1195,9 @@ RSpec.describe 'gitlab::gitlab-rails' do
                 redis_sentinels: [{ "host" => instance, "port" => "1234" }, { "host" => instance, "port" => "3456" }],
                 redis_sentinels_password: 'sentinelpass',
                 redis_sentinels_ssl: false,
+                redis_sentinels_tls_ca_cert_file: nil,
+                redis_sentinels_tls_client_cert_file: nil,
+                redis_sentinels_tls_client_key_file: nil,
                 redis_enable_client: false,
                 cluster_nodes: [],
                 cluster_username: nil,
@@ -1214,6 +1223,66 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
               expect(chef_run).not_to delete_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml")
             end
+          end
+        end
+
+        context 'with shared_state instance having Sentinel TLS certificates' do
+          before do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                redis_enable_client: false,
+                redis_shared_state_instance: 'redis://:fakepass@fake.redis.shared_state.com:8888/2',
+                redis_shared_state_sentinels: [{ host: 'shared_state', port: '1234' }, { host: 'shared_state', port: '3456' }],
+                redis_shared_state_sentinels_password: 'shared_state_sentinel_pass',
+                redis_shared_state_sentinels_ssl: true,
+                redis_shared_state_sentinels_tls_ca_cert_file: '/etc/gitlab/sentinel-certs/shared_state/ca.crt',
+                redis_shared_state_sentinels_tls_client_cert_file: '/etc/gitlab/sentinel-certs/shared_state/client.crt',
+                redis_shared_state_sentinels_tls_client_key_file: '/etc/gitlab/sentinel-certs/shared_state/client.key'
+              }
+            )
+          end
+
+          it 'renders redis.shared_state.yml with Sentinel TLS settings' do
+            expect(chef_run).to create_templatesymlink('Create a redis.shared_state.yml and create a symlink to Rails root').with_variables(
+              redis_url: 'redis://:fakepass@fake.redis.shared_state.com:8888/2',
+              redis_sentinels: [{ 'host' => 'shared_state', 'port' => '1234' }, { 'host' => 'shared_state', 'port' => '3456' }],
+              redis_sentinels_password: 'shared_state_sentinel_pass',
+              redis_sentinels_ssl: true,
+              redis_sentinels_tls_ca_cert_file: '/etc/gitlab/sentinel-certs/shared_state/ca.crt',
+              redis_sentinels_tls_client_cert_file: '/etc/gitlab/sentinel-certs/shared_state/client.crt',
+              redis_sentinels_tls_client_key_file: '/etc/gitlab/sentinel-certs/shared_state/client.key',
+              redis_enable_client: false,
+              cluster_nodes: [],
+              cluster_username: nil,
+              cluster_password: nil,
+              redis_ssl: false,
+              redis_tls_ca_cert_dir: '/opt/gitlab/embedded/ssl/certs/',
+              redis_tls_ca_cert_file: '/opt/gitlab/embedded/ssl/certs/cacert.pem',
+              redis_tls_client_cert_file: nil,
+              redis_tls_client_key_file: nil,
+              redis_encrypted_settings_file: '/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.shared_state.yml.enc',
+              redis_extra_config_command: nil
+            )
+
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/redis.shared_state.yml').with_content { |content|
+              generated_yml = YAML.safe_load(content)
+              expect(generated_yml.dig('production', 'url')).to eq('redis://:fakepass@fake.redis.shared_state.com:8888/2')
+
+              sentinels = generated_yml.dig('production', 'sentinels')
+              expect(sentinels).not_to be_nil
+              expect(sentinels.length).to eq(2)
+
+              sentinels.each do |sentinel|
+                expect(sentinel['host']).to eq('shared_state')
+                expect(sentinel['password']).to eq('shared_state_sentinel_pass')
+                expect(sentinel['ssl']).to eq(true)
+                expect(sentinel['ssl_params']).to include(
+                  'ca_file' => '/etc/gitlab/sentinel-certs/shared_state/ca.crt',
+                  'cert' => '/etc/gitlab/sentinel-certs/shared_state/client.crt',
+                  'key' => '/etc/gitlab/sentinel-certs/shared_state/client.key'
+                )
+              end
+            }
           end
         end
 
