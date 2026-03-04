@@ -15,7 +15,7 @@
 #
 
 name 'libxml2'
-default_version '2.15.1'
+default_version '2.15.2'
 
 license 'MIT'
 license_file 'COPYING'
@@ -31,7 +31,7 @@ if Build::Check.use_ubt?
   build(&Build::UBT.install)
 else
   # version_list: url=https://download.gnome.org/sources/libxml2/2.12/ filter=*.tar.xz
-  version('2.15.1') { source sha256: 'c008bac08fd5c7b4a87f7b8a71f283fa581d80d80ff8d2efd3b26224c39bc54c' }
+  version('2.15.2') { source sha256: 'c8b9bc81f8b590c33af8cc6c336dbff2f53409973588a351c95f1c621b13d09d' }
 
   minor_version = version.sub(/.\d*$/, "")
 
