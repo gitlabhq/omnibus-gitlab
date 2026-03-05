@@ -719,6 +719,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Gitaly settings
 # gitlab_rails['gitaly_token'] = 'secret token'
+# gitlab_rails['gitaly_client_max_attempts'] = 4
+# gitlab_rails['gitaly_client_max_backoff'] = '1.4s'
 # gitlab_rails['repositories_storages'] = {
 #   'default' => {
 #     'gitaly_address' => 'tcp://praefect-lb:2305',
@@ -2740,6 +2742,12 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## Gitaly
 ##! Docs: https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html
 ################################################################################
+
+##! Default configuration for Gitaly clients
+##! Settings here applies to all components that supports
+##! those settings, unless overwritten at the component level.
+# gitaly_client['max_attempts'] = 4
+# gitaly_client['max_backoff'] = '1.4s'
 
 ##! The gitaly['enable'] option exists for the purpose of cluster
 ##! deployments, see https://docs.gitlab.com/ee/administration/gitaly/index.html .

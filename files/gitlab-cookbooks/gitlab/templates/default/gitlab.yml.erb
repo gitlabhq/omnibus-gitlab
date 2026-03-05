@@ -1044,6 +1044,8 @@ production: &base
   # this option will disappear.
   gitaly:
     client_path: /opt/gitlab/embedded/bin
+    client_max_attempts: <%= @gitaly_max_attempts %>
+    client_max_backoff: <%= quote(@gitaly_max_backoff) %>
     token: <%= @gitaly_token.to_s.to_json %>
 
 

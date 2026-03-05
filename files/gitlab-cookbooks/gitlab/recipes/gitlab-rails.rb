@@ -25,6 +25,12 @@ redis_helper = RedisHelper::GitlabRails.new(node)
 logfiles_helper = LogfilesHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('gitlab-rails')
 
+gitaly_client_max_backoff = node['gitlab']['gitlab_rails']['gitaly_client_max_backoff'] ||
+  node['gitlab']['gitaly_client']['max_backoff']
+
+gitaly_client_max_attempts = node['gitlab']['gitlab_rails']['gitaly_client_max_attempts'] ||
+  node['gitlab']['gitaly_client']['max_attempts']
+
 gitlab_rails_source_dir = "/opt/gitlab/embedded/service/gitlab-rails"
 gitlab_rails_dir = node['gitlab']['gitlab_rails']['dir']
 gitlab_rails_etc_dir = File.join(gitlab_rails_dir, "etc")
@@ -453,7 +459,9 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       prometheus_server_address: node['gitlab']['gitlab_rails']['prometheus_address'] || node['monitoring']['prometheus']['listen_address'],
       consul_api_url: node['consul']['enable'] ? consul_helper.api_url : nil,
       mailroom_internal_api_url: mailroom_helper.internal_api_url,
-      has_jh_cookbook: has_jh_cookbook
+      has_jh_cookbook: has_jh_cookbook,
+      gitaly_max_attempts: gitaly_client_max_attempts,
+      gitaly_max_backoff: gitaly_client_max_backoff
     )
   )
   dependent_services.each { |svc| notifies :restart, svc }
