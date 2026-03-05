@@ -311,12 +311,12 @@ end
 def common_pre_upgrade(enable_maintenance = true)
   maintenance_mode('enable') if enable_maintenance
 
-  locale, collate, encoding = get_locale_encoding
+  encoding = get_locale_encoding
 
   stop_database
   create_links(@db_worker.target_version)
   create_temp_data_dir
-  initialize_new_db(locale, collate, encoding)
+  initialize_new_db(encoding)
 end
 
 def common_post_upgrade(disable_maintenance = true)
@@ -506,18 +506,16 @@ end
 
 def get_locale_encoding
   begin
-    locale = @db_worker.fetch_lc_ctype
-    collate = @db_worker.fetch_lc_collate
     encoding = @db_worker.fetch_server_encoding
   rescue GitlabCtl::Errors::ExecutionError => e
-    log 'There was an error fetching locale and encoding information from the database'
+    log 'There was an error fetching encoding information from the database'
     log 'Please ensure the database is running and functional before running pg-upgrade'
     log "STDOUT: #{e.stdout}"
     log "STDERR: #{e.stderr}"
     die 'Please check error logs'
   end
 
-  [locale, collate, encoding]
+  encoding
 end
 
 def create_temp_data_dir
@@ -539,16 +537,13 @@ def create_temp_data_dir
   end
 end
 
-def initialize_new_db(locale, collate, encoding)
+def initialize_new_db(encoding)
   unless GitlabCtl::Util.progress_message('Initializing the new database') do
     begin
       @db_worker.run_pg_command(
         "#{@db_worker.target_version_path}/bin/initdb " \
         "-D #{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major} " \
-        "--locale #{locale} " \
-        "--encoding #{encoding} " \
-        " --lc-collate=#{collate} " \
-        "--lc-ctype=#{locale}"
+        "--encoding #{encoding} "
       )
     rescue GitlabCtl::Errors::ExecutionError => e
       log "Error initializing database for #{@db_worker.target_version}"
