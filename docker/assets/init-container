@@ -151,8 +151,16 @@ fi
 echo "Starting services..."
 GITLAB_OMNIBUS_CONFIG= /opt/gitlab/embedded/bin/runsvdir-start &
 
-echo "Configuring GitLab..."
-gitlab-ctl reconfigure
+# Skip reconfigure only if GitLab was bootstrapped and `GITLAB_SKIP_RECONFIGURE` is set
+if [ -f "/var/opt/gitlab/bootstrapped" ] && [ "${GITLAB_SKIP_RECONFIGURE}" == 'true' ]; then
+    echo "Skipped reconfigure because GITLAB_SKIP_RECONFIGURE is set."
+    echo "Configuration updates and changes will not happen"
+    echo "without a reconfigure. Unset GITLAB_SKIP_RECONFIGURE"
+    echo "to process these updates."
+else
+    echo "Configuring GitLab..."
+    gitlab-ctl reconfigure
+fi
 
 # This must be false when the opt-in PostgreSQL version is the default for pg-upgrade,
 # otherwise it must be true.
