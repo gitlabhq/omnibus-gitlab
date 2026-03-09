@@ -28,18 +28,24 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-source git: version.remote
+if Build::Check.use_ubt?
+  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
+  source Build::UBT.source_args(name, "#{display_version}-1ubt", "8f7707883e8841d4c75155a96f0317db7d8356ab82488240c78036abf1ade628", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
 
-relative_path "libevent-#{version.print}-stable"
+  relative_path "libevent-#{version.print}-stable"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
-  env['ACLOCAL_PATH'] = "#{install_dir}/embedded/share/aclocal"
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
+    env['ACLOCAL_PATH'] = "#{install_dir}/embedded/share/aclocal"
 
-  command './autogen.sh', env: env
-  command './configure ' \
-    "--prefix=#{install_dir}/embedded", env: env
+    command './autogen.sh', env: env
+    command './configure ' \
+      "--prefix=#{install_dir}/embedded", env: env
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
