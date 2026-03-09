@@ -27,45 +27,50 @@ dependency 'libjpeg-turbo'
 dependency 'libtiff'
 dependency 'zlib-ng'
 
-source url: "https://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/#{version}/GraphicsMagick-#{version}.tar.xz",
-       sha256: 'c7c706a505e9c6c3764156bb94a0c9644d79131785df15a89c9f8721d1abd061'
+if Build::Check.use_ubt?
+  source Build::UBT.source_args(name, "#{default_version}-1ubt", "59ed889d826abaf7b713887dc517aa7512f885b6a66cd8431a30e3433a0d23a3", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source url: "https://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/#{version}/GraphicsMagick-#{version}.tar.xz",
+         sha256: 'c7c706a505e9c6c3764156bb94a0c9644d79131785df15a89c9f8721d1abd061'
 
-relative_path "GraphicsMagick-#{version}"
+  relative_path "GraphicsMagick-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  configure_command = [
-    './configure',
-    "--prefix=#{install_dir}/embedded",
-    '--disable-openmp',
-    '--without-magick-plus-plus',
-    '--with-perl=no',
-    '--without-bzlib',
-    '--without-dps',
-    '--without-fpx',
-    '--without-gslib',
-    '--without-jbig',
-    '--without-webp',
-    '--without-jp2',
-    '--without-lcms2',
-    '--without-trio',
-    '--without-ttf',
-    '--without-umem',
-    '--without-wmf',
-    '--without-xml',
-    '--without-x',
-    '--with-tiff=yes',
-    '--with-lzma=yes',
-    '--with-jpeg=yes',
-    '--with-zlib=yes',
-    '--with-png=yes',
-    "--with-sysroot=#{install_dir}/embedded",
-    "--without-zstd"
-  ]
+    configure_command = [
+      './configure',
+      "--prefix=#{install_dir}/embedded",
+      '--disable-openmp',
+      '--without-magick-plus-plus',
+      '--with-perl=no',
+      '--without-bzlib',
+      '--without-dps',
+      '--without-fpx',
+      '--without-gslib',
+      '--without-jbig',
+      '--without-webp',
+      '--without-jp2',
+      '--without-lcms2',
+      '--without-trio',
+      '--without-ttf',
+      '--without-umem',
+      '--without-wmf',
+      '--without-xml',
+      '--without-x',
+      '--with-tiff=yes',
+      '--with-lzma=yes',
+      '--with-jpeg=yes',
+      '--with-zlib=yes',
+      '--with-png=yes',
+      "--with-sysroot=#{install_dir}/embedded",
+      "--without-zstd"
+    ]
 
-  command configure_command.join(' '), env: env
+    command configure_command.join(' '), env: env
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
