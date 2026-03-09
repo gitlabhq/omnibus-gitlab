@@ -1,0 +1,12 @@
+diff --git a/ext/extconf.rb b/ext/extconf.rb
+index 60bd519..26a1fcb 100755
+--- a/ext/extconf.rb
++++ b/ext/extconf.rb
+@@ -54,7 +54,6 @@ have_func("rb_io_descriptor")
+ have_func("&rb_process_status_wait")
+ have_func("rb_fiber_current")
+ have_func("&rb_fiber_raise")
+-have_func("epoll_pwait2")
+ 
+ have_header("ruby/io/buffer.h")
+ 
