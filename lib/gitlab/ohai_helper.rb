@@ -208,6 +208,10 @@ class OhaiHelper
       os_platform == 'sles' && get_suse_version.to_i == 12
     end
 
+    def el_9?
+      os_platform == 'el' && get_centos_version == '9'
+    end
+
     # rake-compiler-dock v1.7.0 uses an Ubuntu 20.04 image to create
     # precompiled native gems. As a result, precompiled gems will
     # require glibc v2.29 or higher. On older platforms, we need to
