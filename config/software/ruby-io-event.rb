@@ -49,6 +49,9 @@ build do
 
     _locations, patch_path = find_file('config/patches', 'remove-epoll-pwait2.patch')
 
+    # v1.14.4 contains https://github.com/socketry/io-event/pull/159
+    next if io_event_versions.any? { |version| Gem::Version.new(version) >= Gem::Version.new('1.14.4') }
+
     shellout!("#{gem_bin} install --no-document gem-patch -v 0.1.6")
     shellout!("#{gem_bin} uninstall --force --all io-event")
 
