@@ -157,6 +157,7 @@ module GitlabCtl
             if limit.nil? || limit.to_i <= 0
 
           options[:limit] = limit
+          options[:limit_flag] = '-n'
         end
       end
 

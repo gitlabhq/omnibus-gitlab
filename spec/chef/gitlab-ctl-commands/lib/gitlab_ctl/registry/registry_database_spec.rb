@@ -173,5 +173,47 @@ RSpec.describe GitlabCtl::Registry::Database do
         expect(result).not_to include('/opt/gitlab/embedded/bin/chpst')
       end
     end
+
+    context 'with gc-stats command and format option' do
+      let(:options) { { command: 'gc-stats', format: 'json', format_flag: '--format', needs_stop: false, needs_read_only: false } }
+
+      before do
+        allow(Etc).to receive(:getpwuid).and_return(double(name: 'registry'))
+        allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({})
+      end
+
+      it 'includes format flag and value in command' do
+        result = described_class.set_command(options)
+        expect(result).to include('--format', 'json')
+      end
+    end
+
+    context 'with gc-stats command and limit option' do
+      let(:options) { { command: 'gc-stats', limit: '5', limit_flag: '--limit', needs_stop: false, needs_read_only: false } }
+
+      before do
+        allow(Etc).to receive(:getpwuid).and_return(double(name: 'registry'))
+        allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({})
+      end
+
+      it 'includes limit flag and value in command' do
+        result = described_class.set_command(options)
+        expect(result).to include('--limit', '5')
+      end
+    end
+
+    context 'with migrate command and limit option' do
+      let(:options) { { command: 'migrate', subcommand: 'up', limit: '5', limit_flag: '-n', needs_stop: false } }
+
+      before do
+        allow(Etc).to receive(:getpwuid).and_return(double(name: 'registry'))
+        allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({})
+      end
+
+      it 'includes limit flag and value in command' do
+        result = described_class.set_command(options)
+        expect(result).to include('-n', '5')
+      end
+    end
   end
 end
