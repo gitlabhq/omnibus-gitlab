@@ -54,6 +54,12 @@ No changes.
 
 - [Mattermost Security Updates January 15, 2026](gitlab-org/omnibus-gitlab@0b48af1e6492d3f178e74e3e878302ee3faa9081) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9083))
 
+## 18.8.6 (2026-03-10)
+
+### Security (1 change)
+
+- [Mattermost Security Updates February 18, 2026](gitlab-org/security/omnibus-gitlab@1c66255c12b11fdde0bb8c60dcde52f81f89193d)
+
 ## 18.8.5 (2026-02-24)
 
 No changes.
