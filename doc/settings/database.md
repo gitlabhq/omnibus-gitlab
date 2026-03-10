@@ -1062,6 +1062,10 @@ You can change the schedule by refining the following settings:
    sudo gitlab-ctl reconfigure
    ```
 
+> [!note]
+> If you have a Helm chart instance, you can instead enable the database reindexing CronJob in
+> [the Toolbox chart](https://docs.gitlab.com/charts/charts/gitlab/toolbox/#configure-periodic-database-reindexing).
+
 ## Packaged PostgreSQL deployed in an HA/Geo Cluster
 
 ### Upgrading a GitLab HA cluster
