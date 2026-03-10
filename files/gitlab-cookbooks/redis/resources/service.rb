@@ -73,7 +73,8 @@ action :create do
       log_directory: logging_settings[:log_directory],
       log_user: logging_settings[:runit_owner],
       log_group: logging_settings[:runit_group],
-      open_files_ulimit: open_files_ulimit
+      open_files_ulimit: open_files_ulimit,
+      server_binary: new_resource.redis_helper.server_binary
     }.merge(new_resource))
     sv_timeout new_resource.runit_sv_timeout
     log_options logging_settings[:options]
