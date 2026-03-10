@@ -3,6 +3,7 @@ require 'optparse'
 
 require_relative './migrate'
 require_relative './import'
+require_relative './gc_stats'
 require_relative '../../gitlab_ctl'
 
 module GitlabCtl
@@ -22,6 +23,7 @@ module GitlabCtl
         COMMANDS:
           migrate                Manage schema migrations
           import                 Import filesystem metadata into the database
+          gc-stats               Show online garbage collection health statistics
       EOS
 
       def self.registry_dir
@@ -89,6 +91,13 @@ module GitlabCtl
             warn "#{e}\n\n#{GitlabCtl::Registry::Import::USAGE}"
             exit 128
           end,
+
+          'gc-stats' => OptionParser.new do |parser|
+            GitlabCtl::Registry::GcStats.parse_options!(ARGV, parser, options)
+          rescue OptionParser::ParseError => e
+            warn "#{e}\n\n#{GitlabCtl::Registry::GcStats::USAGE}"
+            exit 128
+          end,
         }
       end
 
@@ -137,8 +146,13 @@ module GitlabCtl
 
         continue?(needs_stop, needs_read_only)
 
-        command += ["-n", options[:limit]] unless options[:limit].nil?
+        command += [options[:format_flag], options[:format]] unless options[:format].nil?
+        options.delete(:format)
+        options.delete(:format_flag)
+
+        command += [options[:limit_flag], options[:limit]] unless options[:limit].nil?
         options.delete(:limit)
+        options.delete(:limit_flag)
 
         options.each do |_, opt|
           command.append(opt)

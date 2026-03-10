@@ -59,7 +59,7 @@ RSpec.describe GitlabCtl::Registry::Migrate do
       it_behaves_like 'parses dry_run option'
 
       it 'parses subcommand correctly' do
-        expected_options = { subcommand: 'up', limit: '5', skip_post_deploy: '-s', needs_stop: false }
+        expected_options = { subcommand: 'up', limit: '5', limit_flag: '-n', skip_post_deploy: '-s', needs_stop: false }
 
         expect(GitlabCtl::Registry::Migrate.parse_options!(%W(migrate #{command} -s -l 5), {})).to eq(expected_options)
       end
@@ -80,7 +80,7 @@ RSpec.describe GitlabCtl::Registry::Migrate do
       end
 
       it 'parses subcommand correctly with options' do
-        expected_options = { subcommand: 'down', force: '-f', limit: '10', needs_stop: true }
+        expected_options = { subcommand: 'down', force: '-f', limit: '10', limit_flag: '-n', needs_stop: true }
 
         expect(GitlabCtl::Registry::Migrate.parse_options!(%W(migrate #{command} -f -l 10), {})).to eq(expected_options)
       end
