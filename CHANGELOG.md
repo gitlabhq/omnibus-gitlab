@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.7.6 (2026-03-10)
+
+### Changed (1 change)
+
+- [Backport Go 1.25.7 to GitLab 18.7](gitlab-org/security/omnibus-gitlab@19a3ff587863ef5a7911e10ad749d64d8a582fb0)
+
+### Security (1 change)
+
+- [Mattermost Security Updates February 18, 2026](gitlab-org/security/omnibus-gitlab@7520435b04c25c6ff7d921acb555b35ec722ec18)
+
 ## 18.7.5 (2026-02-24)
 
 No changes.
