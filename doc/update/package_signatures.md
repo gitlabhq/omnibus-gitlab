@@ -34,6 +34,7 @@ The following key is used to sign the repository metadata.
 | Comment       | `package repository signing key` |
 | Fingerprint   | `F640 3F65 44A3 8863 DAA0 B6E0 3F01 618A 5131 2F3F` |
 | Expiry        | `2028-02-06` |
+| Download location | `https://packages.gitlab.com/gpg.key` | 
 
 - Active from **2020-04-06**.
 - Expiry was extended from **2024-03-01** to **2026-02-27**.
@@ -85,16 +86,23 @@ To fetch the latest repository signing key:
 {{< tab title="CentOS/OpenSUSE/SLES" >}}
 
 1. [Verify `repo_gpgcheck` is active](#verify-if-signature-check-is-active).
-1. Automatically fetch and accept the latest signing key:
+1. Get the list of currently installed keys and remove them:
 
    ```shell
-   sudo dnf check-update
+   rpm -q gpg-pubkey --qf '%{NAME}-%{VERSION}-%{RELEASE}\t%{SUMMARY}\n' | grep -i gitlab | xargs sudo rpm -e
    ```
 
-   or
+1. Purge dnf cache:
 
    ```shell
-   sudo yum check-update
+   sudo rm -rf /var/cache/dnf
+   ```
+
+1. [Add the GitLab package repository again](https://docs.gitlab.com/install/package/almalinux/#add-the-gitlab-package-repository).
+1. Rebuild the cache:
+
+   ```shell
+   sudo dnf makecache
    ```
 
 {{< /tab >}}
@@ -124,6 +132,7 @@ The following key is used to sign the repository metadata.
 | EMail         | `support@gitlab.com` |
 | Fingerprint   | `98BF DB87 FCF1 0076 416C 1E0B AD99 7ACC 82DD 593D` |
 | Expiry        | `2028-02-16` |
+| Download location | `https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-CB947AD886C8E8FD.pub.gpg` | 
 
 ### Previous package signing keys
 
@@ -160,11 +169,13 @@ rpm --import https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-e
 
 To check if package signature checking is active on an existing install, compare the content of the repository file:
 
-1. Check if the repository file exist: `file /etc/yum.repos.d/gitlab_gitlab-ce.repo`.
-1. Check that signature checking is active: `grep gpgcheck /etc/yum.repos.d/gitlab_gitlab-ce.repo`. This command should
+1. Check if the repository file exist: `file /etc/yum.repos.d/gitlab_gitlab-*.repo`.
+1. Check that signature checking is active: `grep gpgcheck /etc/yum.repos.d/gitlab_gitlab-*.repo`. This command should
    output:
 
    ```plaintext
+   repo_gpgcheck=1
+   gpgcheck=1
    repo_gpgcheck=1
    gpgcheck=1
    ```
@@ -174,9 +185,11 @@ To check if package signature checking is active on an existing install, compare
    ```plaintext
    repo_gpgcheck=1
    pkg_gpgcheck=1
+   repo_gpgcheck=1
+   pkg_gpgcheck=1
    ```
 
-If the file does not exist, you don't have the repository installed. If the file exists, but the output shows
+If the file do not exist, you don't have the repository installed. If the file exists, but the output shows
 `gpgpcheck=0`, then you must edit that value to enable it.
 
 #### Verify a Linux package `rpm` file
