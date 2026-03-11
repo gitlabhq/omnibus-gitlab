@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.9.2 (2026-03-10)
+
+### Fixed (1 change)
+
+- [Simplify pg-upgrade initdb by removing locale parameters](gitlab-org/security/omnibus-gitlab@8c8f657456b5a87fc907459cc44befb0065f1061)
+
+### Security (1 change)
+
+- [Mattermost Security Updates February 18, 2026](gitlab-org/security/omnibus-gitlab@0473e6a186a1ecb5ab960de9532b5a5760b83076)
+
 ## 18.9.1 (2026-02-24)
 
 No changes.
@@ -43,6 +53,12 @@ No changes.
 ### Security (1 change)
 
 - [Mattermost Security Updates January 15, 2026](gitlab-org/omnibus-gitlab@0b48af1e6492d3f178e74e3e878302ee3faa9081) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9083))
+
+## 18.8.6 (2026-03-10)
+
+### Security (1 change)
+
+- [Mattermost Security Updates February 18, 2026](gitlab-org/security/omnibus-gitlab@1c66255c12b11fdde0bb8c60dcde52f81f89193d)
 
 ## 18.8.5 (2026-02-24)
 
@@ -89,6 +105,16 @@ No changes.
 ### Security (1 change)
 
 - [Update libpng version to 1.6.51](gitlab-org/omnibus-gitlab@b254195b909ca79070bfca50fa501ecaa8ad4f37)
+
+## 18.7.6 (2026-03-10)
+
+### Changed (1 change)
+
+- [Backport Go 1.25.7 to GitLab 18.7](gitlab-org/security/omnibus-gitlab@19a3ff587863ef5a7911e10ad749d64d8a582fb0)
+
+### Security (1 change)
+
+- [Mattermost Security Updates February 18, 2026](gitlab-org/security/omnibus-gitlab@7520435b04c25c6ff7d921acb555b35ec722ec18)
 
 ## 18.7.5 (2026-02-24)
 
