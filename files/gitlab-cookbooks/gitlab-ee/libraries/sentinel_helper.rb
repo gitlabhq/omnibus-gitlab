@@ -29,8 +29,7 @@ class SentinelHelper
   def running_version
     return unless OmnibusHelper.new(@node).service_up?('sentinel')
 
-    cli_binary = valkey_backend? ? 'valkey-cli' : 'redis-cli'
-    command = "/opt/gitlab/embedded/bin/#{cli_binary} #{redis_cli_connect_options} INFO"
+    command = "/opt/gitlab/embedded/bin/#{redis_helper.cli_binary} #{redis_cli_connect_options} INFO"
     env =
       if sentinel['password']
         { 'REDISCLI_AUTH' => sentinel['password'] }
@@ -42,25 +41,25 @@ class SentinelHelper
 
     raise "Execution of the command `#{command}` failed" unless command_output
 
-    version_match = command_output.match(/redis_version:(?<redis_version>\d*\.\d*\.\d*)/)
+    version_match = if redis_helper.valkey_enabled?
+                      command_output.match(/valkey_version:(?<version>\d*\.\d*\.\d*)/)
+                    else
+                      command_output.match(/redis_version:(?<version>\d*\.\d*\.\d*)/)
+                    end
     raise "Execution of the command `#{command}` generated unexpected output `#{command_output.strip}`" unless version_match
 
-    version_match['redis_version']
+    version_match['version']
   end
 
   def installed_version
     return unless OmnibusHelper.new(@node).service_up?('sentinel')
 
-    command = if valkey_backend?
-                '/opt/gitlab/embedded/bin/valkey-sentinel --version'
-              else
-                '/opt/gitlab/embedded/bin/redis-sentinel --version'
-              end
+    command = "/opt/gitlab/embedded/bin/#{redis_helper.sentinel_binary} --version"
 
     command_output = VersionHelper.version(command)
     raise "Execution of the command `#{command}` failed" unless command_output
 
-    version_match = if valkey_backend?
+    version_match = if redis_helper.valkey_enabled?
                       command_output.match(/[Ss]erver v=(?<redis_version>\d*\.\d*\.\d*)/)
                     else
                       command_output.match(/Redis server v=(?<redis_version>\d*\.\d*\.\d*)/)
@@ -70,8 +69,8 @@ class SentinelHelper
     version_match['redis_version']
   end
 
-  def valkey_backend?
-    redis['backend'] == 'valkey'
+  def redis_helper
+    @redis_helper ||= RedisHelper::Server.new(@node)
   end
 
   private

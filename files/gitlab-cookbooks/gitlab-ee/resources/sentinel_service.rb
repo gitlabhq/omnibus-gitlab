@@ -8,6 +8,7 @@ property :redis_configuration, Hash
 property :sentinel_configuration, Hash
 property :logging_configuration, Hash
 property :sentinel_service_name, String, default: 'sentinel'
+property :redis_helper, default: lazy { RedisHelper::Server.new(node) }, sensitive: true
 
 action :enable do
   sentinel_log_dir = new_resource.sentinel_configuration['log_directory']
@@ -58,7 +59,8 @@ action :enable do
         config_path: new_resource.config_path,
         log_directory: sentinel_log_dir,
         log_user: sentinel_log_user,
-        log_group: sentinel_log_group
+        log_group: sentinel_log_group,
+        sentinel_binary: new_resource.redis_helper.sentinel_binary
       }.merge(new_resource)
     )
     log_options new_resource.redis_configuration.to_hash.merge(new_resource.logging_configuration.to_hash)
