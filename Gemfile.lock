@@ -440,6 +440,7 @@ GEM
       method_source (~> 1.0)
     pstore (0.2.0)
     public_suffix (5.0.0)
+    racc (1.7.3)
     rack (2.2.4)
     rainbow (2.2.2)
       rake
@@ -655,6 +656,7 @@ DEPENDENCIES
   omnibus!
   omnibus-ctl (= 0.3.6)
   package_cloud
+  racc (= 1.7.3)
   rainbow (~> 2.2)
   rake
   retriable

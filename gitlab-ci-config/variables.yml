@@ -8,7 +8,7 @@ variables:
   # To be used for images that exist only on dev.gitlab.org
   DEV_BUILDER_IMAGE_REGISTRY: 'dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder'
   PUBLIC_BUILDER_IMAGE_REGISTRY: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder"
-  BUILDER_IMAGE_REVISION: "5.50.0"
+  BUILDER_IMAGE_REVISION: "5.52.0"
   # The registry to pull the assets image from
   ASSET_REGISTRY: "${CI_REGISTRY}"
   ASSET_SYNC_EXISTING_REMOTE_FILES: "keep"
@@ -18,7 +18,7 @@ variables:
   BUNDLE_PATH__SYSTEM: "false"
   # CI images
   DOCKERHUB_PREFIX: "docker.io" # Set to dependency proxy if rate limits become a problem.
-  RUBY_IMAGE: "${DOCKERHUB_PREFIX}/ruby:3.2"
+  RUBY_IMAGE: "${DOCKERHUB_PREFIX}/ruby:3.3"
   RUBY_ALPINE_IMAGE: "${RUBY_IMAGE}-alpine"
   BASH_IMAGE: "${DOCKERHUB_PREFIX}/bash:5.2-alpine3.20"
   ALPINE_IMAGE: "${DOCKERHUB_PREFIX}/alpine:3.21"
