@@ -102,11 +102,19 @@ To configure a custom temporary directory:
    sudo chmod 700 /var/opt/gitlab/tmp
    ```
 
-1. Edit `/etc/gitlab/gitlab.rb`:
+1. Edit `/etc/gitlab/gitlab.rb` to set `TMPDIR` for both Rails and Workhorse:
 
    ```ruby
    gitlab_rails['env'] = { 'TMPDIR' => '/var/opt/gitlab/tmp' }
+   gitlab_workhorse['env'] = { 'TMPDIR' => '/var/opt/gitlab/tmp' }
    ```
+
+   > [!note]
+   > Both values **must** point to the same directory. When uploading CI/CD artifacts
+   > with object storage enabled, Workhorse generates a metadata file in its
+   > `TMPDIR` and passes the path to Rails. Rails validates that the file is in
+   > an allowed directory (which includes its own `TMPDIR`). If these values
+   > differ, artifact uploads fail with `400 Bad Request`.
 
 1. Reconfigure and restart GitLab:
 
@@ -138,6 +146,31 @@ gitlab_rails['env'] = {
     "https_proxy" => "http://<USERNAME>:<PASSWORD>@example.com:8080"
 }
 ```
+
+### CI/CD artifact uploads fail with `400 Bad Request` after changing `TMPDIR`
+
+If CI/CD artifact uploads return `400 Bad Request` with `Content-Type: text/plain`
+after configuring a [custom `TMPDIR`](#tmpdir), the most likely cause is a mismatch between
+the `TMPDIR` values for Rails and Workhorse.
+
+To resolve this:
+
+1. Ensure both values match in `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['env'] = { 'TMPDIR' => '/var/opt/gitlab/tmp' }
+   gitlab_workhorse['env'] = { 'TMPDIR' => '/var/opt/gitlab/tmp' }
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+You can confirm the mismatch by checking Workhorse logs for the failing
+correlation ID. Look for `metadata.gz` entries with `local_temp_path` pointing
+to a different directory than your configured `TMPDIR`.
 
 ### Error: `Connection reset by peer` when mirroring repositories
 
