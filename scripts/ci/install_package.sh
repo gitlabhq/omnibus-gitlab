@@ -30,5 +30,11 @@ fi
 echo "Installing ${package_name} using https://${package_repo_token}packages.gitlab.com/install/repositories/gitlab/${package_repository}/script.${package_type}.sh"
 curl https://${package_repo_token}packages.gitlab.com/install/repositories/gitlab/${package_repository}/script.${package_type}.sh | bash
 
+# Add zypper-specific flag to auto-import GPG keys during package installation
+# and to ensure non-interactive package install
+if [ "${package_manager}" = "zypper" ]; then
+  package_manager="zypper --gpg-auto-import-keys --non-interactive"
+fi
+
 # Install GitLab
 ${package_manager} install -y ${package_name_version_dist} || (echo "Failed to install ${package_name_version_dist}" && exit 1)
