@@ -22,7 +22,7 @@ RSpec.describe Gitlab::ConfigMash do
       mash['param1'] = 'value1'
       expect(mash['param1']).to eq 'value1'
       expect(mash['param2']).to be_nil
-      expect { mash['param2']['nested'] }.to raise_error(NoMethodError, /nil:NilClass/)
+      expect { mash['param2']['nested'] }.to raise_error(NoMethodError, /undefined method.*\[\].*(nil:NilClass|for nil)/)
     end
 
     it 'allows nested undefined reads when in an auto-vivify block' do
