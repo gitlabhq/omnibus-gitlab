@@ -360,7 +360,6 @@ For more information about the `hup` command, see the
 To configure a custom [`robots.txt`](https://www.robotstxt.org/robotstxt.html) file for your instance:
 
 1. Create your custom `robots.txt` file and note its path.
-
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby

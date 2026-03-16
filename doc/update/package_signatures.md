@@ -34,7 +34,7 @@ The following key is used to sign the repository metadata.
 | Comment       | `package repository signing key` |
 | Fingerprint   | `F640 3F65 44A3 8863 DAA0 B6E0 3F01 618A 5131 2F3F` |
 | Expiry        | `2028-02-06` |
-| Download location | `https://packages.gitlab.com/gpg.key` | 
+| Download location | `https://packages.gitlab.com/gpg.key` |
 
 - Active from **2020-04-06**.
 - Expiry was extended from **2024-03-01** to **2026-02-27**.
@@ -132,7 +132,7 @@ The following key is used to sign the repository metadata.
 | EMail         | `support@gitlab.com` |
 | Fingerprint   | `98BF DB87 FCF1 0076 416C 1E0B AD99 7ACC 82DD 593D` |
 | Expiry        | `2028-02-16` |
-| Download location | `https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-CB947AD886C8E8FD.pub.gpg` | 
+| Download location | `https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-CB947AD886C8E8FD.pub.gpg` |
 
 ### Previous package signing keys
 

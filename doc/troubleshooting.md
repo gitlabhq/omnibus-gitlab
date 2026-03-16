@@ -657,7 +657,6 @@ above, and finally restart the container.
    ```
 
 1. Run the commands above.
-
 1. Restart the container:
 
    ```shell

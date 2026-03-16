@@ -1432,9 +1432,9 @@ OpenSSL::SSL::SSLError (SSL_connect returned=1 errno=0 state=error: wrong versio
 This error is usually due to incorrect settings:
 
 - If your SMTP provider is using port 25 or 587, SMTP connections start
-**unencrypted** but can be upgraded via
-[STARTTLS](https://en.wikipedia.org/wiki/Opportunistic_TLS). Be sure the
-following settings are set:
+  **unencrypted** but can be upgraded via
+  [STARTTLS](https://en.wikipedia.org/wiki/Opportunistic_TLS). Be sure the
+  following settings are set:
 
   ```ruby
   gitlab_rails['smtp_enable_starttls_auto'] = true
@@ -1443,7 +1443,7 @@ following settings are set:
   ```
 
 - If your SMTP provider is using port 465, SMTP connections start
-**encrypted** over TLS. Ensure the following line is present:
+  **encrypted** over TLS. Ensure the following line is present:
 
   ```ruby
   gitlab_rails['smtp_tls'] = true

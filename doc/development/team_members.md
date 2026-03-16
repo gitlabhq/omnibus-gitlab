@@ -18,8 +18,8 @@ On your MR apply the `~"pipeline:run-all-e2e"` label and run a new pipeline. Thi
 include a `e2e:test-on-omnibus-ee` job in the `qa` stage which triggers:
 
 - A downstream pipeline in the `omnibus-gitlab`
-[QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror), which
-gives you an Ubuntu 24.04 package and an all-in-one Docker image for testing.
+  [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror), which
+  gives you an Ubuntu 24.04 package and an all-in-one Docker image for testing.
 - A `gitlab-qa` run using these artifacts as well.
 
 ## Test an `omnibus-gitlab` project MR

@@ -128,7 +128,6 @@ After you have these files, enable SSL:
    (`/var/opt/gitlab/postgresql/data` by default).
 
 1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) to apply the configuration changes.
-
 1. Restart PostgreSQL for the changes to take effect:
 
    ```shell
@@ -157,7 +156,6 @@ After you have these files, enable SSL:
    ```
 
 1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) to apply the configuration changes.
-
 1. Restart PostgreSQL for the changes to take effect:
 
    ```shell
@@ -664,9 +662,7 @@ PostgreSQL.
      If you use multiple addresses in `gitlab_rails['db_host']`, comma-separated, the first address in the list will be used for the connection.
 
 1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) for the changes to take effect.
-
 1. [Seed the database](#seed-the-database-fresh-installs-only).
-
 1. Optional. [Enable the container registry metadata database](https://docs.gitlab.com/administration/packages/container_registry_metadata_database/).
 
 ### UNIX socket configuration for non-packaged PostgreSQL
@@ -807,7 +803,6 @@ Before proceeding with the upgrade, note the following:
 The following example demonstrates upgrading from a database host running PostgreSQL 14 to another database host running PostgreSQL 16 and incurs downtime:
 
 1. Spin up a new PostgreSQL 16 database server that's set up according to the [database requirements](https://docs.gitlab.com/install/requirements/#postgresql).
-
 1. Ensure that the compatible versions of `pg_dump` and `pg_restore` are being
    used on the GitLab Rails instance. To amend GitLab configuration, edit
    `/etc/gitlab/gitlab.rb` and specify the value of `postgresql['version']`:
@@ -840,10 +835,8 @@ The following example demonstrates upgrading from a database host running Postgr
    ```
 
 1. Shutdown the PostgreSQL 14 database host.
-
 1. Edit `/etc/gitlab/gitlab.rb` and update the `gitlab_rails['db_host']` setting
    to point to the PostgreSQL database 16 host.
-
 1. Reconfigure GitLab:
 
    ```shell

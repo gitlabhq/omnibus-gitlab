@@ -319,7 +319,6 @@ properly added to the list of trusted certificates for the server. To
 check whether this is an issue:
 
 1. Check Workhorse logs in `/var/log/gitlab/gitlab-workhorse/current`.
-
 1. If you see messages that look like:
 
    ```plaintext
@@ -341,7 +340,6 @@ suggests the client is not sending a password. GitLab logs may help
 troubleshoot this error:
 
 1. Check Workhorse logs in `/var/log/gitlab/gitlab-workhorse/current`.
-
 1. If you see messages that look like:
 
    ```plaintext

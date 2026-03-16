@@ -344,11 +344,10 @@ when adding `log_group` settings.
 Setting a global or per-service `log_group` will:
 
 - Change the permissions on the per-service log directories (or all log directories
-if using the global setting) to `0750` to allow the configured group members to
-read the contents of the log directory.
-
+  if using the global setting) to `0750` to allow the configured group members to
+  read the contents of the log directory.
 - Configure [runit](#runit-logs) to write and rotate logs using the specified
-`log_group` : either per-service or for all runit-managed services.
+  `log_group` : either per-service or for all runit-managed services.
 
 ### Custom log group limitations
 
