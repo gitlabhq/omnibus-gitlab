@@ -64,5 +64,23 @@ RSpec.describe 'gitlab::gitlab-rails' do
           .to eq('/path/to/authentication_token_secret_file')
       end
     end
+
+    context 'with a user defined jwt_audience' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            openbao: {
+              url: 'http://openbao.example.com',
+              jwt_audience: 'https://secondary.geo.example.com'
+            }
+          }
+        )
+      end
+
+      it 'renders gitlab.yml with specified jwt_audience' do
+        expect(gitlab_yml[:production][:openbao][:jwt_audience])
+          .to eq('https://secondary.geo.example.com')
+      end
+    end
   end
 end
