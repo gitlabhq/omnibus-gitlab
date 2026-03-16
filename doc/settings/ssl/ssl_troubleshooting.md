@@ -230,7 +230,6 @@ When you reconfigure, there are common scenarios under which Let's Encrypt may f
   ```
 
 - If you're using a test domain such as `gitlab.example.com`, without a certificate, you'll see the `unable to request certificate` error shown above. In that case, disable Let's Encrypt by setting `letsencrypt['enable'] = false` in `/etc/gitlab/gitlab.rb`.
-
 - [Let's Encrypt enforces rate limits](https://letsencrypt.org/docs/rate-limits/),
   which is at the top-level domain. In case you're using your cloud provider's
   hostname as the `external_url`, for example `*.cloudapp.azure.com`, Let's

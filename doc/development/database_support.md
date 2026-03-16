@@ -356,12 +356,10 @@ We don't want to introduce any breaking changes into `gitlab.rb`.
 ## Considerations
 
 - _No other resource should be involved with database setup_.
-
 - All custom resources _must be idempotent_. For example they must not fail
   when an object already exist even though they are created or ran in another
   cookbook. Instead they must be able to update the current state of the
   database objects, configuration, or migrations based on the new user inputs.
-
 - In HA mode, given that multiple physical nodes are involved, the Linux package
   may encounter certain limitations to provide full automation of the
   configuration. This is an acceptable limitation.

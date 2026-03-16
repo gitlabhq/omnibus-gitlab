@@ -1,7 +1,7 @@
 ---
 stage: Manage
 group: Authentication and Authorization
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#designated-technical-writers
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see <https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments>
 title: Microsoft Graph Mailer settings
 ---
 
@@ -69,7 +69,6 @@ The full error message is:
 To resolve this error:
 
 1. Verify your API permissions are correct by reviewing the [application permission](https://learn.microsoft.com/en-us/graph/permissions-reference).
-
 1. Set the following fields to the email address for the account you're using:
    - `gitlab_rails['gitlab_email_from']`.
    - `gitlab_rails['gitlab_email_reply_to']`.

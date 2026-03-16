@@ -56,9 +56,9 @@ When the OS EOL date has passed, open an merge request to the `omnibus-gitlab` p
 remove CI/CD jobs for that OS from the CI/CD configuration. These jobs include:
 
 - Spec jobs that run in the
-[development repository](https://gitlab.com/gitlab-org/omnibus-gitlab)
+  [development repository](https://gitlab.com/gitlab-org/omnibus-gitlab)
 - Package build and release jobs that run in the
-[Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab).
+  [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab).
 
 Message the PM and all other necessary Slack channels to tell every stakeholder
 about the removal of support.

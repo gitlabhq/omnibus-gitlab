@@ -260,7 +260,6 @@ To rotate the secrets:
       ```
 
 1. [Verify that the database values can be decrypted](https://docs.gitlab.com/administration/raketasks/check/#verify-database-values-can-be-decrypted-using-the-current-secrets). The output should match with the previous execution.
-
 1. Confirm that GitLab is working as expected. If it is, it should be safe to delete the old secrets.
 
 ## Deprecations

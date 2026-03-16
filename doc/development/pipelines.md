@@ -65,7 +65,6 @@ situation.
    1. `*`: Maintainers
 
 1. Security mirror: Nil
-
 1. QA mirror: Nil
 
 ## Mirroring between repositories

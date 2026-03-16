@@ -24,9 +24,7 @@ vulnerabilities are detected. Complete the following steps when you receive this
 1. Label the issue with the `security` and `For Scheduling` labels. The GitLab
    Security team is then made aware of this issue due to the automation by
    escalator: `https://gitlab.com/gitlab-com/gl-security/automation/escalator`.
-
 1. The Security team triages and schedules the issue with the help of Distribution.
-
 1. If the issue is actionable for us, the Security team:
 
    - Schedules the issue based on its severity and priority.
