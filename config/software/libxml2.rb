@@ -18,7 +18,7 @@ name 'libxml2'
 default_version '2.15.1'
 
 license 'MIT'
-license_file 'COPYING'
+license_file 'Copyright'
 skip_transitive_dependency_licensing true
 
 dependency 'zlib-ng'
