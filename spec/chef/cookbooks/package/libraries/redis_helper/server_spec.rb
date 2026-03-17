@@ -171,6 +171,29 @@ RSpec.describe RedisHelper::Server do
       it 'parses redis-server output properly' do
         expect(subject.installed_version).to eq('3.2.12')
       end
+
+      context 'when valkey backend is used' do
+        let(:valkey_server_output) { 'Server v=7.2.11 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=abc123' }
+
+        before do
+          stub_gitlab_rb(
+            redis: {
+              backend: 'valkey'
+            }
+          )
+          allow(VersionHelper).to receive(:version).with(/valkey-server --version/).and_return(valkey_server_output)
+        end
+
+        it 'calls VersionHelper.version with valkey-server' do
+          expect(VersionHelper).to receive(:version).with('/opt/gitlab/embedded/bin/valkey-server --version')
+
+          subject.installed_version
+        end
+
+        it 'parses valkey-server output properly' do
+          expect(subject.installed_version).to eq('7.2.11')
+        end
+      end
     end
   end
 end
