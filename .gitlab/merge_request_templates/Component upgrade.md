@@ -25,7 +25,8 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] Latest merged results pipeline is green.
 - [ ] When ready for review, MR is labeled ~"workflow::ready for review" per the [Distribution MR workflow](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/merge_requests/).
 - [ ] Ensure the equivalent update for [Cloud Native GitLab](https://gitlab.com/gitlab-org/build/CNG/-/merge_requests) exists.
-- [ ] Update the UBT version has been updated and referenced in the merge request if applicable.
+- [ ] UBT version and corresponding checksum hash have been updated and referenced in the merge request if applicable.
+  - [ ] UBT EE pipeline (`Trigger:ee-package-ubt`) is green
 
 #### For GitLab team members
 
