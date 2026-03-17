@@ -18,7 +18,7 @@ name 'libxslt'
 default_version '1.1.43'
 
 license 'MIT'
-license_file 'COPYING'
+license_file 'Copyright'
 skip_transitive_dependency_licensing true
 
 dependency 'libxml2'

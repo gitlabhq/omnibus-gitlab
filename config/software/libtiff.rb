@@ -20,7 +20,7 @@ version = Gitlab::Version.new('libtiff', 'v4.7.1')
 default_version version.print(false)
 
 license 'libtiff' # BSD-3 Clause compatible
-license_file 'COPYRIGHT'
+license_file 'LICENSE.md'
 
 skip_transitive_dependency_licensing true
 
