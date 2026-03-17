@@ -1809,7 +1809,7 @@ AWS-EE-Premium-Release:
     - AWS-Premium
 
 # Before publishing the package, try installing the package from pre-release
-# repo and run `gitlab-ctl reconfigure`
+# repo from Pulp and run `gitlab-ctl reconfigure`
 check-packages-functionality:
   stage: staging_verify
   trigger:
