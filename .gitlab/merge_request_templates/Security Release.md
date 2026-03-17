@@ -23,6 +23,8 @@ See [the general developer security release guidelines](https://gitlab.com/gitla
 ## Reviewer checklist
 
 - [ ] Assigned to `@gitlab-release-tools-bot` with passing CI pipelines
+- [ ] The UBT version and corresponding checksum hash have been updated and referenced in the merge request if applicable.
+  - [ ] UBT EE pipeline (`Trigger:ee-package-ubt`) is green
 
 ## AppSec checklist
 

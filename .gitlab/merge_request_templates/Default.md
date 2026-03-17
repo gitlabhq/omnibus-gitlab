@@ -23,6 +23,8 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] MR targeting the appropriate branch.
 - [ ] Latest Merge Result pipeline is green.
 - [ ] When ready for review, MR is labeled ~"workflow::ready for review" per the [Distribution MR workflow](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/merge_requests/).
+- [ ] The UBT version and corresponding checksum hash have been updated and referenced in the merge request if applicable.
+  - [ ] UBT EE pipeline (`Trigger:ee-package-ubt`) is green
 
 #### For GitLab team members
 
