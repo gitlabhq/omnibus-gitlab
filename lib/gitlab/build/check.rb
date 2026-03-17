@@ -39,8 +39,16 @@ module Build
       end
 
       def use_ubt?
-        # Until we get UBT builds for arm64 we should avoid using precompiled binaries
-        Gitlab::Util.get_env('UBT_TEST_BUILD') == 'true' && !OhaiHelper.arm?
+        return false unless Gitlab::Util.get_env('UBT_TEST_BUILD') == 'true'
+
+        # Until we get UBT builds for arm64 we should avoid using precompiled binaries.
+        return false if OhaiHelper.arm?
+
+        # SLES and AL2 should not be built with UBT as they are not supported.
+        return false if OhaiHelper.sles12?
+        return false if OhaiHelper.amazon_linux_2?
+
+        true
       end
 
       def use_system_libgcrypt?
