@@ -3,6 +3,34 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.10.0 (2026-03-18)
+
+### Added (5 changes)
+
+- [Introduce jwt_audience on omnibus gitlab](gitlab-org/omnibus-gitlab@8f3fa410640fcd7e271cc2f312fd749a78d4b1f1) ([merge request](gitlab-org/omnibus-gitlab!9201))
+- [Docs: Add gitlab_workhorse TMPDIR requirement to environment variables](gitlab-org/omnibus-gitlab@a5b3bcb950521246696fb0c8e3d1f77d1dfd8538) ([merge request](gitlab-org/omnibus-gitlab!9204))
+- [gitaly: Add support for configuring Gitaly client retries](gitlab-org/omnibus-gitlab@2eb85d11e3c6a2f684d9cde54aa317a3e05b7e2d) ([merge request](gitlab-org/omnibus-gitlab!9015))
+- [Add Registry http drain timeout option](gitlab-org/omnibus-gitlab@5d50977b00475abe4a86ddbbdb535fc97c8a7c26) by @kivarum ([merge request](gitlab-org/omnibus-gitlab!8951))
+- [Add Nginx ssl_ecdh_curve and ssl_conf_command options](gitlab-org/omnibus-gitlab@248888b073af12da25ab4ae450b200af5fa9c754) ([merge request](gitlab-org/omnibus-gitlab!9137))
+
+### Fixed (3 changes)
+
+- [Simplify pg-upgrade initdb by removing locale parameters](gitlab-org/omnibus-gitlab@88dd442b9a2b8259a0f6a1db4cfd62cd6fc828ba) ([merge request](gitlab-org/omnibus-gitlab!9160))
+- [Fix Valkey version detection](gitlab-org/omnibus-gitlab@4cb8fc57e35edc4270aa37f90b79c63a07249fbc) ([merge request](gitlab-org/omnibus-gitlab!9167))
+- [Fix Redis Sentinel password support](gitlab-org/omnibus-gitlab@5fbe6aafef1ef7f88e73b5c07df39c84ada5525b) ([merge request](gitlab-org/omnibus-gitlab!9148))
+
+### Changed (4 changes)
+
+- [Update images tag to 5.52.0](gitlab-org/omnibus-gitlab@1d2f8a50835bf6af8c94643d9c483aba4f72536f) ([merge request](gitlab-org/omnibus-gitlab!9202))
+- [Jemalloc build should always come after redis and valkey](gitlab-org/omnibus-gitlab@64e93c813850a4b20e3198965835ca5bc3c8928a) ([merge request](gitlab-org/omnibus-gitlab!9142))
+- [Add FIPS package checks to functionality verification pipeline](gitlab-org/omnibus-gitlab@92075a3d57856751e53a139c8d188862603b2ae0) ([merge request](gitlab-org/omnibus-gitlab!9168))
+- [Allow acme challenge for gitlab pages with namespace_in_path config](gitlab-org/omnibus-gitlab@9b121d775ebaa9bdcfa5c253d3cce5eddadab00c) by @banhartt ([merge request](gitlab-org/omnibus-gitlab!9136))
+
+### Security (2 changes)
+
+- [Mattermost Security Updates February 23, 2026](gitlab-org/omnibus-gitlab@06bdb8a7037d64db1b24338ce6dae3925a10007a) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9189))
+- [Mattermost Security Updates February 13, 2026](gitlab-org/omnibus-gitlab@43ad3263651d869efea332e255365b61b391970b) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9139))
+
 ## 18.9.2 (2026-03-10)
 
 ### Fixed (1 change)
