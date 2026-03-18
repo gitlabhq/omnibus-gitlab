@@ -29,27 +29,33 @@ license_file 'NOTICE'
 
 skip_transitive_dependency_licensing true
 
-source git: version.remote
+if Build::Check.use_ubt?
+  ubt_version = version.print(false)
+  source Build::UBT.source_args(name, "#{ubt_version}-1ubt", "8f7f76e3b2c663910bc12d24b2e94e78ede9c0f257ae9a39f3c4919df5281fb5", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
 
-go_source = 'github.com/prometheus/alertmanager'
-relative_path "src/#{go_source}"
+  go_source = 'github.com/prometheus/alertmanager'
+  relative_path "src/#{go_source}"
 
-build do
-  env = {
-    'GOPATH' => "#{Omnibus::Config.source_dir}/alertmanager",
-    'GO111MODULE' => 'on',
-    'GOTOOLCHAIN' => 'local',
-  }
-  exporter_source_dir = "#{Omnibus::Config.source_dir}/alertmanager"
-  cwd = "#{exporter_source_dir}/src/#{go_source}"
+  build do
+    env = {
+      'GOPATH' => "#{Omnibus::Config.source_dir}/alertmanager",
+      'GO111MODULE' => 'on',
+      'GOTOOLCHAIN' => 'local',
+    }
+    exporter_source_dir = "#{Omnibus::Config.source_dir}/alertmanager"
+    cwd = "#{exporter_source_dir}/src/#{go_source}"
 
-  prom_version = Prometheus::VersionFlags.new(version)
+    prom_version = Prometheus::VersionFlags.new(version)
 
-  command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/alertmanager", env: env, cwd: cwd
+    command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/alertmanager", env: env, cwd: cwd
 
-  mkdir "#{install_dir}/embedded/bin/"
-  copy 'alertmanager', "#{install_dir}/embedded/bin/"
+    mkdir "#{install_dir}/embedded/bin/"
+    copy 'alertmanager', "#{install_dir}/embedded/bin/"
 
-  command "license_finder report --enabled-package-managers godep gomodules --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"
-  copy "license.json", "#{install_dir}/licenses/alertmanager.json"
+    command "license_finder report --enabled-package-managers godep gomodules --decisions-file=#{Omnibus::Config.project_root}/support/dependency_decisions.yml --format=json --columns name version licenses texts notice --save=license.json"
+    copy "license.json", "#{install_dir}/licenses/alertmanager.json"
+  end
 end
