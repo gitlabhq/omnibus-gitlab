@@ -674,6 +674,16 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
 # gitlab_rails['backup_gitaly_backup_path'] = "/opt/gitlab/embedded/bin/gitaly-backup"
 
+# gitlab_rails['backup_role'] = false
+# gitlab_rails['backup_registry_user'] = "registry_backup"
+# gitlab_rails['backup_registry_password'] = nil
+# gitlab_rails['restore_registry_user'] = "registry_restore"
+# gitlab_rails['restore_registry_password'] = nil
+# gitlab_rails['backup_registry']['database_connection'] = { 
+#   'port' => 5432,
+#   'dbname' => "registry"
+# }
+
 ###! Docs: https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#backup-archive-permissions
 # gitlab_rails['backup_archive_permissions'] = 0644
 
@@ -1610,6 +1620,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 ### is under development.
 # postgresql['registry']['user'] = "registry"
 # postgresql['registry']['password'] = nil
+# postgresql['registry']['database_backup_username'] = "registry_backup"
+# postgresql['registry']['database_backup_password'] = nil
+# postgresql['registry']['database_restore_username'] = "registry_restore"
+# postgresql['registry']['database_restore_password'] = nil
 # postgresql['registry']['dbname'] = "registry"
 # postgresql['registry']['auto_create'] = true
 

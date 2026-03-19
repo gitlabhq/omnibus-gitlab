@@ -1,0 +1,7 @@
+<%# Only define variables if they are not empty -%>
+<% unless @username.to_s.empty? -%>
+REGISTRY_DATABASE_USER=<%= @username %>
+<% end -%>
+<% unless @password.to_s.empty? -%>
+REGISTRY_DATABASE_PASSWORD=<%= @password %>
+<% end -%>

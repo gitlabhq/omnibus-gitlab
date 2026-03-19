@@ -8,6 +8,8 @@ RSpec.describe 'registry::database_migrations' do
     allow(Gitlab).to receive(:[]).and_call_original
     allow(RegistryPgHelper).to receive(:new).and_return(registry_pg_helper)
     allow(registry_pg_helper).to receive(:is_ready?).and_return(true)
+    # Stubs for backup_credentials.rb recipe
+    allow(registry_pg_helper).to receive(:database_enabled?).and_return(false)
   end
 
   context 'with default values (database.enable:false && auto_migrate:true)' do
@@ -27,6 +29,9 @@ RSpec.describe 'registry::database_migrations' do
     end
 
     before do
+      # Stub database_enabled? to return true for this context
+      allow(registry_pg_helper).to receive(:database_enabled?).and_return(true)
+
       stub_gitlab_rb(
         registry_external_url: 'https://registry.example.com',
         registry: { database: database_config }
@@ -91,6 +96,9 @@ RSpec.describe 'registry::database_migrations' do
 
     context 'with GitLab-managed PostgreSQL enabled' do
       before do
+        # Stub database_enabled? to return true when PostgreSQL is available
+        allow(registry_pg_helper).to receive(:database_enabled?).and_return(true)
+
         stub_gitlab_rb(
           registry_external_url: 'https://registry.example.com',
           postgresql: { enable: true },
@@ -156,6 +164,9 @@ RSpec.describe 'registry::database_migrations' do
     end
 
     before do
+      # Stub database_enabled? to return true for string 'true' value
+      allow(registry_pg_helper).to receive(:database_enabled?).and_return(true)
+
       stub_gitlab_rb(
         registry_external_url: 'https://registry.example.com',
         registry: { database: database_config }

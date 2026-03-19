@@ -190,6 +190,12 @@ else
   include_recipe "gitlab::gitlab-backup-cli_disable"
 end
 
+if node['gitlab']['gitlab_rails']['backup_role']
+  include_recipe "gitlab::registry_enable_backup_restore_credentials"
+else
+  include_recipe "gitlab::registry_disable_backup_restore_credentials"
+end
+
 if node['gitlab']['gitlab_rails']['database_reindexing']['enable']
   include_recipe 'gitlab::database_reindexing_enable'
 else

@@ -103,6 +103,7 @@ RSpec.shared_context 'recipes' do
       "pgbouncer::disable",
       "patroni::disable",
       "gitlab-ee::geo-secondary_disable",
+      "gitlab::registry_disable_backup_restore_credentials",
     ]
   end
 

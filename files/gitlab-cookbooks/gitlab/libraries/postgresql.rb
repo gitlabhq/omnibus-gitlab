@@ -57,25 +57,21 @@ module Postgresql
     end
 
     def parse_registry_postgresql_settings
-      # Set PostgreSQL registry database defaults based on registry settings
-      # This ensures registry settings are the single source of truth
       Gitlab['postgresql']['registry'] ||= {}
 
-      # Use registry database settings as defaults for PostgreSQL registry configuration
+      Gitlab['registry'] ||= {}
       registry_db_config = Gitlab['registry']['database'] || {}
-      node_db_config = Gitlab['node']['registry']['database'] || {}
+      registry_node_db_config = Gitlab['node']['registry']['database']
+      merge_registry_db_config(registry_db_config, registry_node_db_config)
+      process_registry_main_user(registry_db_config, registry_node_db_config)
 
-      # Merge each key using the fallback chain
-      %w[dbname user port sslmode].each do |key|
-        Gitlab['postgresql']['registry'][key] ||= registry_db_config[key] || node_db_config[key]
-      end
-
-      return if Gitlab['postgresql']['registry']['password'] || !registry_db_config['password']
-
-      # Convert plaintext password to PostgreSQL MD5 format
-      username = registry_db_config['user'] || node_db_config['user']
-      md5_password = Digest::MD5.hexdigest(registry_db_config['password'] + username.to_s)
-      Gitlab['postgresql']['registry']['password'] = md5_password
+      rails_config = Gitlab['gitlab_rails'] || {}
+      rails_node_config = Gitlab['node']['gitlab']['gitlab_rails']
+      Gitlab['postgresql'] ||= {}
+      psql_config = Gitlab['postgresql']['registry'] || {}
+      psql_node_config = Gitlab['node']['postgresql']['registry']
+      process_registry_backup_user(rails_config, rails_node_config, psql_config, psql_node_config)
+      process_registry_restore_user(rails_config, rails_node_config, psql_config, psql_node_config)
     end
 
     def parse_connect_port
@@ -94,6 +90,51 @@ module Postgresql
       )
 
       [cert.to_pem, key.to_pem]
+    end
+
+    private
+
+    def convert_password_to_md5(password, username)
+      return nil if password.nil?
+
+      Digest::MD5.hexdigest(password + username.to_s)
+    end
+
+    def merge_registry_db_config(registry_db_config, node_db_config)
+      %w[dbname user port sslmode].each do |key|
+        Gitlab['postgresql']['registry'][key] ||= registry_db_config[key] || node_db_config[key]
+      end
+    end
+
+    def process_registry_main_user(registry_db_config, node_db_config)
+      return if Gitlab['postgresql']['registry']['password'] || !registry_db_config['password']
+
+      username = registry_db_config['user'] || node_db_config['user']
+      Gitlab['postgresql']['registry']['password'] = convert_password_to_md5(registry_db_config['password'], username)
+    end
+
+    def process_registry_backup_user(rails_config, rails_node_config, psql_config, psql_node_config)
+      username = rails_config['backup_registry_user']
+      username ||= psql_config['database_backup_username']
+      username ||= rails_node_config['backup_registry_user']
+      username ||= psql_node_config['database_backup_username']
+      password = rails_config['backup_registry_password']
+      password ||= psql_config['database_backup_password']
+
+      Gitlab['postgresql']['registry']['database_backup_username'] = username
+      Gitlab['postgresql']['registry']['database_backup_password'] = convert_password_to_md5(password, username)
+    end
+
+    def process_registry_restore_user(rails_config, rails_node_config, psql_config, psql_node_config)
+      username = rails_config['restore_registry_user']
+      username ||= psql_config['database_restore_username']
+      username ||= rails_node_config['restore_registry_user']
+      username ||= psql_node_config['database_restore_username']
+      password = rails_config['restore_registry_password']
+      password ||= psql_config['database_restore_password']
+
+      Gitlab['postgresql']['registry']['database_restore_username'] = username
+      Gitlab['postgresql']['registry']['database_restore_password'] = convert_password_to_md5(password, username)
     end
   end
 end

@@ -1,0 +1,22 @@
+<%# Only define variables if they are not empty -%>
+<% unless @database_host.to_s.empty? -%>
+REGISTRY_DATABASE_HOST=<%= @database_host %>
+<% end -%>
+<% unless @database_port.to_s.empty? -%>
+REGISTRY_DATABASE_PORT=<%= @database_port %>
+<% end -%>
+<% unless @database_name.to_s.empty? -%>
+REGISTRY_DATABASE_NAME=<%= @database_name %>
+<% end -%>
+<% unless @database_sslmode.to_s.empty? -%>
+REGISTRY_DATABASE_SSLMODE=<%= @database_sslmode %>
+<% end -%>
+<% unless @database_sslcert.to_s.empty? -%>
+REGISTRY_DATABASE_SSLCERT=<%= @database_sslcert %>
+<% end -%>
+<% unless @database_sslkey.to_s.empty? -%>
+REGISTRY_DATABASE_SSLKEY=<%= @database_sslkey %>
+<% end -%>
+<% unless @database_sslrootcert.to_s.empty? -%>
+REGISTRY_DATABASE_SSLROOTCERT=<%= @database_sslrootcert %>
+<% end -%>
