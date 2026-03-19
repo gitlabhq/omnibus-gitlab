@@ -24,15 +24,19 @@ license_file 'COPYING'
 skip_transitive_dependency_licensing true
 
 dependency 'popt'
+if Build::Check.use_ubt?
+  source Build::UBT.source_args(name, "#{default_version}-1ubt", "0652894f5061a93ac596db2ecd847a183b08f5e29e02c0c6939819287dc99119", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
 
-source git: version.remote
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+    command './autogen.sh', env: env
+    command './configure' " --prefix=#{install_dir}/embedded --without-selinux", env: env
+    make "-j #{workers}", env: env
 
-  command './autogen.sh', env: env
-  command './configure' " --prefix=#{install_dir}/embedded --without-selinux", env: env
-  make "-j #{workers}", env: env
-
-  make 'install', env: env
+    make 'install', env: env
+  end
 end
