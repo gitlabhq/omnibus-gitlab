@@ -142,13 +142,10 @@ Adjust any other environments you might have, such as monitoring checks.
 
 ## Use a non-bundled web server
 
-{{< alert type="note" >}}
-
-GitLab provides information on setting up a non-bundled web server for guidance only.
-Troubleshooting a non-bundled component is considered [outside the scope of support](https://about.gitlab.com/support/statement-of-support/#out-of-scope-for-all-self-managed-and-saas-users).
-If you have any questions or issues when using a non-bundled web server, see the non-bundled web server documentation.
-
-{{< /alert >}}
+> [!note]
+> GitLab provides information on setting up a non-bundled web server for guidance only.
+> Troubleshooting a non-bundled component is considered [outside the scope of support](https://about.gitlab.com/support/statement-of-support/#out-of-scope-for-all-self-managed-and-saas-users).
+> If you have any questions or issues when using a non-bundled web server, see the non-bundled web server documentation.
 
 By default, the Linux package installs GitLab with bundled NGINX.
 Linux package installations allow web server access through the `gitlab-www` user, which resides

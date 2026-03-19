@@ -114,11 +114,8 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
    git tag -a 6.6.0+ce.0 -m 'Pin GitLab to v6.6.0'
    ```
 
-   {{< alert type="warning" >}}
-
-   Do NOT use a hyphen `-` anywhere in the `omnibus-gitlab` tag.
-
-   {{< /alert >}}
+   > [!warning]
+   > Do NOT use a hyphen `-` anywhere in the `omnibus-gitlab` tag.
 
    Examples of converting an upstream tag to an `omnibus-gitlab` tag sequence:
 

@@ -35,13 +35,10 @@ To back up your configuration, run `sudo gitlab-ctl backup-etc`. It creates a ta
 archive in `/etc/gitlab/config_backup/`. Directory and backup files will be
 readable only to root.
 
-{{< alert type="note" >}}
-
-Running `sudo gitlab-ctl backup-etc --backup-path <DIRECTORY>` will place
-the backup in the specified directory. The directory will be created if it
-does not exist. Absolute paths are recommended.
-
-{{< /alert >}}
+> [!note]
+> Running `sudo gitlab-ctl backup-etc --backup-path <DIRECTORY>` will place
+> the backup in the specified directory. The directory will be created if it
+> does not exist. Absolute paths are recommended.
 
 To create a daily application backup, edit the cron table for user root:
 
