@@ -229,12 +229,9 @@ can use this.
    1. The key file should be owned by the database user, and its permissions should be `0400`
    1. The CA file should be owned by the database user, and its permissions should be `0400`
 
-   {{< alert type="note" >}}
-
-   Don't use the file names `server.crt` or `server.key` for these files. These
-   file names are reserved for the internal use of `omnibus-gitlab`.
-
-   {{< /alert >}}
+   > [!note]
+   > Don't use the file names `server.crt` or `server.key` for these files. These
+   > file names are reserved for the internal use of `omnibus-gitlab`.
 
 1. Ensure the following is set in `gitlab.rb`:
 
@@ -425,15 +422,11 @@ This consists of:
 
 To change the location of the PostgreSQL data
 
+If you have an existing database, you need to move the data to the new location first.
+
 > [!warning]
-> If you have an existing database, you need to move the data to the new location
-> first.
-
-{{< alert type="warning" >}}
-
-This is an intrusive operation. It cannot be done without downtime on an
-existing installation
-{{< /alert >}}
+> This is an intrusive operation. It cannot be done without downtime on an
+> existing installation
 
 1. If this is an existing installation, stop GitLab: `gitlab-ctl stop`.
 1. Update `postgresql['dir']` to the desired location.
@@ -442,14 +435,10 @@ existing installation
 
 ### Upgrade packaged PostgreSQL server
 
-{{< alert type="note" >}}
-
 If you have a Patroni cluster (PostgreSQL HA) managed by GitLab, use the following documentation instead:
 
 - [Upgrading PostgreSQL major version in a Patroni cluster](https://docs.gitlab.com/administration/postgresql/replication_and_failover/#upgrading-postgresql-major-version-in-a-patroni-cluster)
 - [Near-zero-downtime upgrade of PostgreSQL in a Patroni cluster](https://docs.gitlab.com/administration/postgresql/replication_and_failover/#near-zero-downtime-upgrade-of-postgresql-in-a-patroni-cluster)
-
-{{< /alert >}}
 
 The Linux package provides the `gitlab-ctl pg-upgrade` command to update the
 packaged PostgreSQL server to a later version (if one is included in the
@@ -462,14 +451,10 @@ of the Linux package to see either:
 - When a database version has changed.
 - When an upgrade is warranted.
 
-{{< alert type="warning" >}}
-
-Before upgrading, it's important that you fully read this section before running any commands. For
+It's important that you fully read this section before running any commands. For
 single-node installations, this upgrade needs downtime, as the database must be
 down while the upgrade is being performed. The length of time depends on the
 size of your database.
-
-{{< /alert >}}
 
 > [!note]
 > If you encounter any problems during the upgrade, raise an issue with a full
@@ -509,13 +494,10 @@ version. For example, to upgrade to PostgreSQL 16:
 sudo gitlab-ctl pg-upgrade -V 16
 ```
 
-{{< alert type="note" >}}
-
-`pg-upgrade` can take arguments; for example, you can set the timeout for the
-execution of the underlying commands (`--timeout=1d2h3m4s5ms`). Run `gitlab-ctl pg-upgrade -h`
-to see the full list.
-
-{{< /alert >}}
+> [!note]
+> `pg-upgrade` can take arguments; for example, you can set the timeout for the
+> execution of the underlying commands (`--timeout=1d2h3m4s5ms`). Run `gitlab-ctl pg-upgrade -h`
+> to see the full list.
 
 `gitlab-ctl pg-upgrade` performs the following steps:
 
@@ -633,7 +615,8 @@ PostgreSQL.
 
 > [!warning]
 > If you are using a non-packaged PostgreSQL server, you need to make
-> sure that PostgreSQL is set up according to the [database requirements](https://docs.gitlab.com/install/requirements/#postgresql).
+> sure that PostgreSQL is set up according to the
+> [database requirements](https://docs.gitlab.com/install/requirements/#postgresql).
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
@@ -824,7 +807,8 @@ The following example demonstrates upgrading from a database host running Postgr
    ```
 
 > [!warning]
-> The backup command requires [additional parameters](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#back-up-and-restore-for-installations-using-pgbouncer)
+> The backup command requires
+> [additional parameters](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#back-up-and-restore-for-installations-using-pgbouncer)
 > when your installation is using PgBouncer.
 
 1. Run the backup Rake task using the SKIP options to back up only the database.
@@ -843,12 +827,10 @@ The following example demonstrates upgrading from a database host running Postgr
    sudo gitlab-ctl reconfigure
    ```
 
-   {{< alert type="warning" >}}
-
-   The backup command requires [additional parameters](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#back-up-and-restore-for-installations-using-pgbouncer)
-   when your installation is using PgBouncer.
-
-   {{< /alert >}}
+   > [!warning]
+   > The backup command requires
+   > [additional parameters](https://docs.gitlab.com/administration/backup_restore/backup_gitlab/#back-up-and-restore-for-installations-using-pgbouncer)
+   > when your installation is using PgBouncer.
 
 1. Restore the database using the database backup file created earlier, and be
    sure to answer **no** when asked "This task will now rebuild the `authorized_keys` file":
@@ -927,13 +909,10 @@ To initialize PostgreSQL with a non-default version, you can set `postgresql['ve
 the [packaged PostgreSQL versions](https://docs.gitlab.com/administration/package_information/postgresql_versions/) prior to the initial reconfigure.
 For example, in GitLab 17.10 you can use `postgresql['version'] = 14` to use PostgreSQL 14 instead of the default of PostgreSQL 16.
 
-{{< alert type="warning" >}}
-
-Setting `postgresql['version']` while using the PostgreSQL packaged with the Linux package after the initial reconfigure will
-throw errors about the data directory being initialized on a different version of PostgreSQL. If this is encountered,
-see [Revert packaged PostgreSQL server to the previous version](#revert-packaged-postgresql-server-to-the-previous-version).
-
-{{< /alert >}}
+> [!warning]
+> Setting `postgresql['version']` while using the PostgreSQL packaged with the Linux package after the initial reconfigure will
+> throw errors about the data directory being initialized on a different version of PostgreSQL. If this is encountered,
+> see [Revert packaged PostgreSQL server to the previous version](#revert-packaged-postgresql-server-to-the-previous-version).
 
 If you are doing a fresh install on an environment that previously had GitLab installed on it and you are using a pinned PostgreSQL version, first make
 sure that any folders that relate to PostgreSQL are deleted and that there are no PostgreSQL processes running on the instance.
@@ -1086,19 +1065,16 @@ PostgreSQL is described below.
 
 #### Caveats when upgrading PostgreSQL with Geo
 
-{{< alert type="warning" >}}
-
-When using Geo, upgrading PostgreSQL requires downtime on all secondaries
-because it requires re-initializing PostgreSQL replication to Geo
-**secondaries**. This is due to the way PostgreSQL streaming replication works.
-Re-initializing replication copies all data from the primary again, so it can
-take a long time depending mostly on the size of the database and available
-bandwidth. For example, at a transfer speed of 30 Mbps, and a database size of
-100 GB, resynchronization could take approximately 8 hours. See
-[PostgreSQL documentation](https://www.postgresql.org/docs/11/pgupgrade.html)
-for more.
-
-{{< /alert >}}
+> [!warning]
+> When using Geo, upgrading PostgreSQL requires downtime on all secondaries
+> because it requires re-initializing PostgreSQL replication to Geo
+> **secondaries**. This is due to the way PostgreSQL streaming replication works.
+> Re-initializing replication copies all data from the primary again, so it can
+> take a long time depending mostly on the size of the database and available
+> bandwidth. For example, at a transfer speed of 30 Mbps, and a database size of
+> 100 GB, resynchronization could take approximately 8 hours. See
+> [PostgreSQL documentation](https://www.postgresql.org/docs/11/pgupgrade.html)
+> for more.
 
 #### How to upgrade PostgreSQL when using Geo
 

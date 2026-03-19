@@ -16,13 +16,10 @@ If you would rather send application email via an SMTP server instead of via
 Sendmail or Postfix, add the following configuration information to
 `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
 
-{{< alert type="warning" >}}
-
-Your `smtp_password` should not contain any String delimiters used in
-Ruby or YAML (f.e. `'`) to avoid unexpected behavior during the processing of
-config settings.
-
-{{< /alert >}}
+> [!warning]
+> Your `smtp_password` should not contain any String delimiters used in
+> Ruby or YAML (f.e. `'`) to avoid unexpected behavior during the processing of
+> config settings.
 
 There are [example configurations](#example-configurations) at the end of this page.
 
@@ -147,14 +144,11 @@ Prerequisites:
 - [2-step verification enabled](https://support.google.com/accounts/answer/185839).
 - An [app password](https://support.google.com/mail/answer/185833).
 
-{{< alert type="note" >}}
-
-Gmail has [strict sending limits](https://support.google.com/a/answer/166852)
-that can impair functionality as your organization grows. We strongly recommend using a
-transactional service like [SendGrid](https://sendgrid.com/en-us) or [Mailgun](https://www.mailgun.com/)
-for teams using SMTP configuration.
-
-{{< /alert >}}
+> [!note]
+> Gmail has [strict sending limits](https://support.google.com/a/answer/166852)
+> that can impair functionality as your organization grows. We strongly recommend using a
+> transactional service like [SendGrid](https://sendgrid.com/en-us) or [Mailgun](https://www.mailgun.com/)
+> for teams using SMTP configuration.
 
 ```ruby
 gitlab_rails['smtp_enable'] = true

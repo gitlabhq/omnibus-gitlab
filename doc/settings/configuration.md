@@ -620,11 +620,8 @@ from starting before a given file system is mounted, you can set the
    sudo gitlab-ctl reconfigure
    ```
 
-   {{< alert type="note" >}}
-
-   If the mount point doesn't exist, GitLab fails to reconfigure.
-
-   {{< /alert >}}
+   > [!note]
+   > If the mount point doesn't exist, GitLab fails to reconfigure.
 
 ## Configure the runtime directory
 
@@ -719,14 +716,11 @@ To disable automatic cache cleaning during installation:
 
 ## Error Reporting and Logging with Sentry
 
-{{< alert type="warning" >}}
-
-From GitLab 17.0, only Sentry versions 21.5.0 or later will be supported. If
-you use an earlier version of a Sentry instance that you host, you must
-[upgrade Sentry](https://develop.sentry.dev/self-hosted/releases/) to continue
-collecting errors from your GitLab environments.
-
-{{< /alert >}}
+> [!warning]
+> In GitLab 17.0 and later, only Sentry versions 21.5.0 or later will be supported. If
+> you use an earlier version of a Sentry instance that you host, you must
+> [upgrade Sentry](https://develop.sentry.dev/self-hosted/releases/) to continue
+> collecting errors from your GitLab environments.
 
 Sentry is an open source error reporting and logging tool which can be used as
 SaaS (<https://sentry.io/welcome/>) or [host it yourself](https://develop.sentry.dev/self-hosted/).
@@ -803,13 +797,10 @@ details.
 [CSP and nonce-source with inline JavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/script-src) is available on GitLab.com.
 It is [not configured by default](https://gitlab.com/gitlab-org/gitlab/-/issues/30720) on GitLab Self-Managed.
 
-{{< alert type="note" >}}
-
-Improperly configuring the CSP rules could prevent GitLab from working
-properly. Before rolling out a policy, you may also want to change
-`report_only` to `true` to test the configuration.
-
-{{< /alert >}}
+> [!note]
+> Improperly configuring the CSP rules could prevent GitLab from working
+> properly. Before rolling out a policy, you may also want to change
+> `report_only` to `true` to test the configuration.
 
 To add a CSP:
 
@@ -922,14 +913,11 @@ components:
 As an example, you can use the script and `gitlab.rb` snippet below to specify
 the password to Redis server and components that need to connect to Redis.
 
-{{< alert type="note" >}}
-
-When specifying password to Redis server, this method only saves the user from
-having the plaintext password in `gitlab.rb` file. The password will end up in
-plaintext in the Redis server configuration file present at
-`/var/opt/gitlab/redis/redis.conf`.
-
-{{< /alert >}}
+> [!note]
+> When specifying password to Redis server, this method only saves the user from
+> having the plaintext password in `gitlab.rb` file. The password will end up in
+> plaintext in the Redis server configuration file present at
+> `/var/opt/gitlab/redis/redis.conf`.
 
 1. Save the script below as `/opt/generate-redis-conf`
 

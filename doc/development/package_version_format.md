@@ -15,14 +15,11 @@ pipelines generally produce three types of packages:
 - nightly builds
 - tagged release builds
 
-{{< alert type="note" >}}
-
-The `build_iteration` portion of versions strings conveys a specific meaning
-and contributes to how `build_version` is computed. The next sections are
-written with that in mind as `build_iteration` must be understood first even
-though it comes last in the version string.
-
-{{< /alert >}}
+> [!note]
+> The `build_iteration` portion of versions strings conveys a specific meaning
+> and contributes to how `build_version` is computed. The next sections are
+> written with that in mind as `build_iteration` must be understood first even
+> though it comes last in the version string.
 
 ### Build Iteration
 

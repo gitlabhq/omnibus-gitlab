@@ -25,14 +25,11 @@ that you can use as part of the installation process.
 
 ## Install or update a JiHu Edition package
 
-{{< alert type="note" >}}
-
-If you are installing for the first time, you have to pass the
-`EXTERNAL_URL="<GitLab URL>"` variable to set your preferred domain name. Installation
-automatically configures and starts GitLab at that URL. Enabling HTTPS requires
-[additional configuration](settings/nginx.md#enable-https) to specify the certificates.
-
-{{< /alert >}}
+> [!note]
+> If you are installing for the first time, you have to pass the
+> `EXTERNAL_URL="<GitLab URL>"` variable to set your preferred domain name. Installation
+> automatically configures and starts GitLab at that URL. Enabling HTTPS requires
+> [additional configuration](settings/nginx.md#enable-https) to specify the certificates.
 
 Please refer to the [GitLab Jihu Edition Install](https://gitlab.cn/install/) page
 for more details on installing or updating a JiHu Edition package.

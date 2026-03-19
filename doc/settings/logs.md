@@ -323,14 +323,11 @@ Container Registry, GitLab Shell and Gitaly:
    sudo gitlab-ctl reconfigure
    ```
 
-{{< alert type="note" >}}
-
-You [cannot edit](https://gitlab.com/groups/gitlab-org/-/epics/6034)
-the `log_level` for certain GitLab logs, for example
-`production_json.log`, `graphql_json.log`, and so on.
-See also [Override default log level](https://docs.gitlab.com/administration/logs/#override-default-log-level).
-
-{{< /alert >}}
+> [!note]
+> You [cannot edit](https://gitlab.com/groups/gitlab-org/-/epics/6034)
+> the `log_level` for certain GitLab logs, for example
+> `production_json.log`, `graphql_json.log`, and so on.
+> See also [Override default log level](https://docs.gitlab.com/administration/logs/#override-default-log-level).
 
 ## Setting a custom log group
 

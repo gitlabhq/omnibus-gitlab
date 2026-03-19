@@ -43,14 +43,11 @@ between all the mirrors of the project:
 1. QA mirror:
    1. `master`: Developers (Merge only), Maintainers
 
-{{< alert type="note" >}}
-
-Developers get access to `master` branch in QA mirror because
-that's required to run a triggered pipeline against the branch. There is an
-[open issue](https://gitlab.com/gitlab-org/gitlab/-/issues/24585) to change this
-situation.
-
-{{< /alert >}}
+> [!note]
+> Developers get access to `master` branch in QA mirror because
+> that's required to run a triggered pipeline against the branch. There is an
+> [open issue](https://gitlab.com/gitlab-org/gitlab/-/issues/24585) to change this
+> situation.
 
 ### Protected Tags
 

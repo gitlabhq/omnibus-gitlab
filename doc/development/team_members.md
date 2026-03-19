@@ -80,12 +80,9 @@ Temporarily specify a component version using any of the following methods:
   git push <REMOTE> -o ci.variable="<ENV_VAR_1>=<VALUE_1>" -o ci.variable="<ENV_VAR_2>=<VALUE_2>"
   ```
 
-  {{< alert type="note" >}}
-
-  This works only if you have some changes to push. If remote is
-  already updated with your local branch, no new pipeline is created.
-
-  {{< /alert >}}
+  > [!note]
+  > This works only if you have some changes to push. If remote is
+  > already updated with your local branch, no new pipeline is created.
 
 - Manually run the pipeline from UI while specifying the environment variables.
 

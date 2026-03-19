@@ -54,12 +54,9 @@ to use a container for development.
 1. Get the GitLab CE nightly package from the [Nightly Build repository](https://packages.gitlab.com/gitlab/nightly-builds)
    and install it using the instructions given on that page.
 
-   {{< alert type="note" >}}
-
-   On Ubuntu Xenial, you may have to install `tzdata`. This
-   [issue is reported in #4769](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4679).
-
-   {{< /alert >}}
+   > [!note]
+   > On Ubuntu Xenial, you may have to install `tzdata`. This
+   > [issue is reported in #4769](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/4679).
 
 1. Configure and start GitLab.
 1. Check if you can access the GitLab instance from your host browser on `<ip address of host>`.
