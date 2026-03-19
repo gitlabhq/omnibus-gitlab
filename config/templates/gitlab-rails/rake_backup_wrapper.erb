@@ -78,6 +78,15 @@ backup_create() {
       ;;
   esac
 
+  # Load registry backup credentials for backup operation
+  registry_backup_env_dir='<%= install_dir %>/etc/gitlab-backup/env'
+  if [ -d "${registry_backup_env_dir}" ] ; then
+    set -a
+    [ -f "${registry_backup_env_dir}/env-connection" ] && . "${registry_backup_env_dir}/env-connection"
+    [ -f "${registry_backup_env_dir}/env-backup_user" ] && . "${registry_backup_env_dir}/env-backup_user"
+    set +a
+  fi
+
   <%= install_dir %>/bin/gitlab-rake gitlab:backup:create ${@}
 }
 
@@ -99,6 +108,15 @@ backup_restore() {
     *)
       ;;
   esac
+
+  # Load registry backup credentials for restore operation
+  registry_backup_env_dir='<%= install_dir %>/etc/gitlab-backup/env'
+  if [ -d "${registry_backup_env_dir}" ] ; then
+    set -a
+    [ -f "${registry_backup_env_dir}/env-connection" ] && . "${registry_backup_env_dir}/env-connection"
+    [ -f "${registry_backup_env_dir}/env-restore_user" ] && . "${registry_backup_env_dir}/env-restore_user"
+    set +a
+  fi
 
   if [ -n "${registry_dir}" ]; then
     # Transfer ownership to git user to ensure that recovery won't fail on 

@@ -72,7 +72,13 @@
 <% end %>
 <% end %>
 
+<% if @registry && @registry['database_backup_username'] && @registry['database_backup_password'] %>
 # "local" is for Unix domain socket connections only
+local   <%= @registry['dbname'] %>         <%= @registry['database_backup_username'] %>                     md5
+<% end %>
+<% if @registry && @registry['database_restore_username'] && @registry['database_restore_password'] %>
+local   <%= @registry['dbname'] %>         <%= @registry['database_restore_username'] %>                     md5
+<% end %>
 local   all         all                               peer map=gitlab
 
 <% @trust_auth_cidr_addresses.each do |cidr| %>
@@ -86,6 +92,12 @@ host<% if @hostssl %>ssl<% end %>    replication <%= @sql_replication_user %> <%
 host<% if @hostssl %>ssl<% end %>    all         all         <%= cidr %>           md5
   <% if @sql_replication_user %>
 host<% if @hostssl %>ssl<% end %>    replication <%= @sql_replication_user %> <%= cidr %>     md5
+  <% end %>
+  <% if @registry && @registry['database_backup_username'] && @registry['database_backup_password'] %>
+host<% if @hostssl %>ssl<% end %>    <%= @registry['dbname'] %>         <%= @registry['database_backup_username'] %>         <%= cidr %>           md5
+  <% end %>
+  <% if @registry && @registry['database_restore_username'] && @registry['database_restore_password'] %>
+host<% if @hostssl %>ssl<% end %>    <%= @registry['dbname'] %>         <%= @registry['database_restore_username'] %>         <%= cidr %>           md5
   <% end %>
 <% end %>
 

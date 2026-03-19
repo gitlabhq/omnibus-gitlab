@@ -389,6 +389,15 @@ default['gitlab']['gitlab_rails']['backup_multipart_chunk_size'] = nil
 default['gitlab']['gitlab_rails']['backup_encryption'] = nil
 default['gitlab']['gitlab_rails']['backup_encryption_key'] = nil
 default['gitlab']['gitlab_rails']['backup_storage_class'] = nil
+default['gitlab']['gitlab_rails']['backup_role'] = false
+default['gitlab']['gitlab_rails']['backup_registry_user'] = "registry_backup"
+default['gitlab']['gitlab_rails']['backup_registry_password'] = nil
+default['gitlab']['gitlab_rails']['restore_registry_user'] = "registry_restore"
+default['gitlab']['gitlab_rails']['restore_registry_password'] = nil
+default['gitlab']['gitlab_rails']['backup_registry']['database_connection'] = {
+  'port' => 5432,
+  'dbname' => "registry"
+}
 
 # Path to the GitLab Shell installation
 # defaults to /opt/gitlab/embedded/service/gitlab-shell/. The install-dir path is set at build time

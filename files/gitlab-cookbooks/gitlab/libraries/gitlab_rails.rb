@@ -38,6 +38,7 @@ module GitlabRails
       parse_maximum_request_duration
       parse_redis_settings
       parse_redis_extra_config_command
+      parse_registry_postgresql_settings
       validate_smtp_settings!
       validate_ssh_settings!
     end
@@ -361,6 +362,30 @@ module GitlabRails
       end
     end
 
+    def parse_registry_postgresql_settings
+      Gitlab['registry'] ||= {}
+      registry_db_config = Gitlab['registry']['database'] || {}
+      registry_node_db_config = Gitlab['node']['registry']['database']
+      rails_node_db_config = Gitlab['node']['gitlab']['gitlab_rails']['backup_registry']['database_connection']
+      Gitlab['gitlab_rails'] ||= {}
+      Gitlab['gitlab_rails']['backup_registry'] ||= {}
+      Gitlab['gitlab_rails']['backup_registry']['database_connection'] ||= {}
+      rails_db_config = Gitlab['gitlab_rails']['backup_registry']['database_connection']
+
+      %w[host port dbname sslmode sslcert sslkey sslrootcert].each do |key|
+        rails_db_config[key] = registry_db_config[key] || rails_db_config[key] || registry_node_db_config[key] || rails_node_db_config[key]
+      end
+
+      # Registry.parse_database_configuration (which computes registry database host
+      # from PostgreSQL settings) runs after GitlabRails (priority 19 vs 15), so we
+      # must apply the same fallback logic here.
+      rails_db_config['host'] ||=
+        Gitlab['postgresql']['listen_address'] ||
+        Gitlab['node']['postgresql']['listen_address'] ||
+        Gitlab['postgresql']['dir'] ||
+        Gitlab['node']['postgresql']['dir']
+    end
+
     def parse_pages_dir
       # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['pages_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'pages')
@@ -414,6 +439,36 @@ gitlab_rails['gitlab_ssh_host'] = 'gitlab.example.com'
 gitlab_rails['gitlab_shell_ssh_port'] = 2222
       MSG
       raise msg
+    end
+
+    # Returns variables hash for connection template
+    def registry_connection_variables
+      db = Gitlab['node'].dig('gitlab', 'gitlab_rails', 'backup_registry', 'database_connection') || {}
+      {
+        database_host: db['host'],
+        database_port: db['port'],
+        database_name: db['dbname'],
+        database_sslmode: db['sslmode'],
+        database_sslcert: db['sslcert'],
+        database_sslkey: db['sslkey'],
+        database_sslrootcert: db['sslrootcert']
+      }
+    end
+
+    # Returns variables hash for backup user template
+    def backup_user_variables
+      {
+        username: Gitlab['node']['gitlab']['gitlab_rails']['backup_registry_user'],
+        password: Gitlab['node']['gitlab']['gitlab_rails']['backup_registry_password']
+      }
+    end
+
+    # Returns variables hash for restore user template
+    def restore_user_variables
+      {
+        username: Gitlab['node']['gitlab']['gitlab_rails']['restore_registry_user'],
+        password: Gitlab['node']['gitlab']['gitlab_rails']['restore_registry_password']
+      }
     end
 
     def public_path

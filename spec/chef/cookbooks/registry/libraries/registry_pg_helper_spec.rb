@@ -37,4 +37,90 @@ RSpec.describe RegistryPgHelper do
       expect(connection_info.dbhost).not_to be_nil
     end
   end
+
+  describe '#database_enabled?' do
+    context 'when database is enabled with true' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            database: { enabled: true }
+          }
+        )
+      end
+
+      it 'returns true' do
+        expect(helper.database_enabled?).to be true
+      end
+    end
+
+    context 'when database is enabled with string "true"' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            database: { enabled: 'true' }
+          }
+        )
+      end
+
+      it 'returns true' do
+        expect(helper.database_enabled?).to be true
+      end
+    end
+
+    context 'when database is enabled with string "prefer"' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            database: { enabled: 'prefer' }
+          }
+        )
+      end
+
+      it 'returns true' do
+        expect(helper.database_enabled?).to be true
+      end
+    end
+
+    context 'when database is disabled with false' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            database: { enabled: false }
+          }
+        )
+      end
+
+      it 'returns false' do
+        expect(helper.database_enabled?).to be false
+      end
+    end
+
+    context 'when database is disabled with string "false"' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            database: { enabled: 'false' }
+          }
+        )
+      end
+
+      it 'returns false' do
+        expect(helper.database_enabled?).to be false
+      end
+    end
+
+    context 'when database enabled is nil' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            database: { enabled: nil }
+          }
+        )
+      end
+
+      it 'returns false' do
+        expect(helper.database_enabled?).to be false
+      end
+    end
+  end
 end
