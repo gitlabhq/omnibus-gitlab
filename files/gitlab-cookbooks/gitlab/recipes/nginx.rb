@@ -314,6 +314,10 @@ nginx_configuration 'kas' do
                 listen_port: node['gitlab']['gitlab_kas_nginx']['port'],
                 gitlab_kas_listen_address: node['gitlab_kas']['listen_address'],
                 gitlab_kas_k8s_proxy_listen_address: node['gitlab_kas']['kubernetes_api_listen_address'],
+                gitlab_kas_k8s_proxy_connect_timeout: gitlab_kas_nginx_vars['k8s_proxy_connect_timeout'],
+                gitlab_kas_k8s_proxy_send_timeout: gitlab_kas_nginx_vars['k8s_proxy_send_timeout'],
+                gitlab_kas_k8s_proxy_read_timeout: gitlab_kas_nginx_vars['k8s_proxy_read_timeout'],
+                gitlab_kas_k8s_proxy_max_temp_file_size: gitlab_kas_nginx_vars['k8s_proxy_max_temp_file_size'],
                 gitlab_kas_listen_https: gitlab_kas_nginx_vars['listen_https'],
                 letsencrypt_enable: node['letsencrypt']['enable']
               }

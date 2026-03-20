@@ -819,6 +819,58 @@ RSpec.describe 'nginx' do
     end
   end
 
+  context 'KAS and kas_nginx enabled with default k8s proxy settings' do
+    before do
+      stub_gitlab_rb(
+        gitlab_kas: { enable: true },
+        gitlab_kas_nginx: {
+          enable: true
+        }
+      )
+    end
+
+    it 'renders default KAS k8s proxy settings' do
+      expect(chef_run).to render_file(http_conf['gitlab_kas']).with_content { |content|
+        expect(content).to match(%r{location /k8s-proxy/.*proxy_connect_timeout 5s;}m)
+        expect(content).to match(%r{location /k8s-proxy/.*proxy_send_timeout 60s;}m)
+        expect(content).to match(%r{location /k8s-proxy/.*proxy_read_timeout 7200s;}m)
+        expect(content).to match(%r{location /k8s-proxy/.*proxy_max_temp_file_size 1024m;}m)
+        expect(content).to match(%r{location = /k8s-proxy/.*proxy_connect_timeout 5s;}m)
+        expect(content).to match(%r{location = /k8s-proxy/.*proxy_send_timeout 60s;}m)
+        expect(content).to match(%r{location = /k8s-proxy/.*proxy_read_timeout 7200s;}m)
+        expect(content).to match(%r{location = /k8s-proxy/.*proxy_max_temp_file_size 1024m;}m)
+      }
+    end
+  end
+
+  context 'KAS and kas_nginx enabled with custom k8s proxy settings' do
+    before do
+      stub_gitlab_rb(
+        gitlab_kas: { enable: true },
+        gitlab_kas_nginx: {
+          enable: true,
+          k8s_proxy_connect_timeout: "20",
+          k8s_proxy_send_timeout: "600",
+          k8s_proxy_read_timeout: "600",
+          k8s_proxy_max_temp_file_size: "2048m"
+        }
+      )
+    end
+
+    it 'renders custom KAS k8s proxy settings' do
+      expect(chef_run).to render_file(http_conf['gitlab_kas']).with_content { |content|
+        expect(content).to match(%r{location /k8s-proxy/.*proxy_connect_timeout 20s;}m)
+        expect(content).to match(%r{location /k8s-proxy/.*proxy_send_timeout 600s;}m)
+        expect(content).to match(%r{location /k8s-proxy/.*proxy_read_timeout 600s;}m)
+        expect(content).to match(%r{location /k8s-proxy/.*proxy_max_temp_file_size 2048m;}m)
+        expect(content).to match(%r{location = /k8s-proxy/.*proxy_connect_timeout 20s;}m)
+        expect(content).to match(%r{location = /k8s-proxy/.*proxy_send_timeout 600s;}m)
+        expect(content).to match(%r{location = /k8s-proxy/.*proxy_read_timeout 600s;}m)
+        expect(content).to match(%r{location = /k8s-proxy/.*proxy_max_temp_file_size 2048m;}m)
+      }
+    end
+  end
+
   context 'when relative URLs are used' do
     before do
       stub_gitlab_rb(gitlab_rails: { gitlab_relative_url: '/gitlab' })

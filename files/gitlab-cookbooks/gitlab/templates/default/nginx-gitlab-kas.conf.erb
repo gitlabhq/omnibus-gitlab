@@ -159,11 +159,11 @@ server {
       proxy_buffer_size <%= @proxy_custom_buffer_size %>;
     <% end -%>
 
-    proxy_connect_timeout 5s;
-    proxy_send_timeout 60s;
-    proxy_read_timeout 60s;
+    proxy_connect_timeout <%= @gitlab_kas_k8s_proxy_connect_timeout %>s;
+    proxy_send_timeout <%= @gitlab_kas_k8s_proxy_send_timeout %>s;
+    proxy_read_timeout <%= @gitlab_kas_k8s_proxy_read_timeout %>s;
 
-    proxy_max_temp_file_size 1024m;
+    proxy_max_temp_file_size <%= @gitlab_kas_k8s_proxy_max_temp_file_size %>;
 
     proxy_redirect off;
 
@@ -186,11 +186,11 @@ server {
       proxy_buffer_size <%= @proxy_custom_buffer_size %>;
     <% end -%>
 
-    proxy_connect_timeout 5s;
-    proxy_send_timeout 60s;
-    proxy_read_timeout 60s;
+    proxy_connect_timeout <%= @gitlab_kas_k8s_proxy_connect_timeout %>s;
+    proxy_send_timeout <%= @gitlab_kas_k8s_proxy_send_timeout %>s;
+    proxy_read_timeout <%= @gitlab_kas_k8s_proxy_read_timeout %>s;
 
-    proxy_max_temp_file_size 1024m;
+    proxy_max_temp_file_size <%= @gitlab_kas_k8s_proxy_max_temp_file_size %>;
 
     proxy_redirect off;
 
