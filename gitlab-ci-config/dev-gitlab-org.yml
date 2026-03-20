@@ -650,7 +650,7 @@ deployer-trigger:
     - if: '$PIPELINE_TYPE =~ /_RC_BUILD_PIPELINE$/'
 
 Ubuntu-22.04-staging:
-  extends: .staging_upload_template
+  extends: .staging_upload_with_rc_deployment_template
   needs:
     - job: Ubuntu-22.04
       optional: true
