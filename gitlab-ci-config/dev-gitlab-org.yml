@@ -15,11 +15,6 @@
     - if: '$SKIP_RELEASE == "true"'
       when: never
 
-.skip_unless_packagecloud_enabled:
-  rules:
-    - if: '$PACKAGECLOUD_ENABLED != "true"'
-      when: never
-
 .package-artifacts: &package-artifacts
   when: always
   expire_in: 1 day
@@ -174,6 +169,8 @@
 .staging_upload_template:
   stage: staging_upload
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
+  variables:
+    INCLUDE_PACKAGECLOUD: "true"
   script:
     - if [[ "${USE_SYSTEM_SSL}" == "true" ]]; then export STAGING_REPO=${FIPS_STAGING_REPO}; fi
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
@@ -181,13 +178,7 @@
   retry: 2
   tags:
   - ${PACKAGE_PROMOTION_RUNNER_TAG}
-
-.packagecloud_staging_upload_template:
-  extends: .staging_upload_template
-  variables:
-    INCLUDE_PACKAGECLOUD: "true"
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
@@ -195,23 +186,18 @@
 .pulp_staging_upload_template:
   extends: .staging_upload_template
   stage: pulp_staging_upload
-  variables:
-    REPOSITORY_TYPE: "pulp"
   allow_failure: true
   timeout: 35 minutes
-  rules:
-    - !reference [.default_rules, rules]
-    - !reference [.skip_release_jobs, rules]
-    - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
+  variables:
+    REPOSITORY_TYPE: "pulp"
 
-.packagecloud_fips_staging_upload_template:
-  extends: .packagecloud_staging_upload_template
+.fips_staging_upload_template:
+  extends: .staging_upload_template
   variables:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "true"
     INCLUDE_PACKAGECLOUD: "true"
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
 
@@ -224,8 +210,8 @@
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
 
-.packagecloud_staging_upload_with_rc_deployment_template:
-  extends: .packagecloud_staging_upload_template
+.staging_upload_with_rc_deployment_template:
+  extends: .staging_upload_template
   script:
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
     - if [ -n "$DEPLOYER_TRIGGER_TOKEN" ] && [[ "$PIPELINE_TYPE" =~ _RC_BUILD_PIPELINE$ ]]; then bundle exec rake gitlab_com:deployer; fi
@@ -246,26 +232,20 @@
   tags:
   - ${PACKAGE_PROMOTION_RUNNER_TAG}
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
       when: manual
 
 .pulp_production_release_template:
+  extends: .production_release_template
   stage: pulp-package-release
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
-  variables:
-    REPOSITORY_TYPE: "pulp"
-  script:
-    - bundle exec rake repository:upload:production
-  retry: 2
-  cache: !reference [.tag-cache]
-  tags:
-  - ${PACKAGE_PROMOTION_RUNNER_TAG}
   allow_failure: true
   timeout: 35 minutes
+  variables:
+    REPOSITORY_TYPE: "pulp"
   rules:
+    # Copy from ".production_release_template"
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
     # Does not run the job manually. Instead, use `needs` in each `-release-pulp` job to run after the
@@ -279,7 +259,6 @@
     USE_SYSTEM_LIBGCRYPT: "true"
     INCLUDE_PACKAGECLOUD: "true"
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
@@ -302,7 +281,6 @@
     INCLUDE_PACKAGECLOUD: "true"
   retry: 2
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
     - if: '$DISABLE_RPI_BUILDS == "true"'
@@ -695,14 +673,13 @@ Docker-QA:
 ##  Ubuntu 22.04: used for all omnibus installation
 
 Ubuntu-20.04-staging:
-  extends: .packagecloud_staging_upload_with_rc_deployment_template
+  extends: .staging_upload_with_rc_deployment_template
   needs:
     - job: Ubuntu-20.04
       optional: true
     - job: Ubuntu-20.04-branch
       optional: true
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 
@@ -718,14 +695,13 @@ Ubuntu-20.04-staging-pulp:
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 
 Ubuntu-22.04-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: Ubuntu-22.04
       optional: true
     - job: Ubuntu-22.04-branch
       optional: true
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 
@@ -741,14 +717,13 @@ Ubuntu-22.04-staging-pulp:
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 
 Ubuntu-22.04-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: Ubuntu-22.04-arm64
       optional: true
     - job: Ubuntu-22.04-arm64-branch
       optional: true
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|NIGHTLY)_BUILD_PIPELINE$/'
 
@@ -764,14 +739,13 @@ Ubuntu-22.04-arm64-staging-pulp:
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|NIGHTLY)_BUILD_PIPELINE$/'
 
 Ubuntu-24.04-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: Ubuntu-24.04
       optional: true
     - job: Ubuntu-24.04-branch
       optional: true
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE|RELEASE_ENVIRONMENT)_BUILD_PIPELINE$/'
 
@@ -940,7 +914,7 @@ Docker:
 
 ### Staging uploads
 Debian-11-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: Debian-11
       optional: true
@@ -956,7 +930,7 @@ Debian-11-staging-pulp:
       optional: true
 
 Debian-11-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: Debian-11-arm64
       optional: true
@@ -972,7 +946,7 @@ Debian-11-arm64-staging-pulp:
       optional: true
 
 Debian-12-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: Debian-12
       optional: true
@@ -988,7 +962,7 @@ Debian-12-staging-pulp:
       optional: true
 
 Debian-12-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: Debian-12-arm64
       optional: true
@@ -1004,7 +978,7 @@ Debian-12-arm64-staging-pulp:
       optional: true
 
 Debian-13-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: Debian-13
       optional: true
@@ -1020,7 +994,7 @@ Debian-13-staging-pulp:
       optional: true
 
 Debian-13-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: Debian-13-arm64
       optional: true
@@ -1036,7 +1010,7 @@ Debian-13-arm64-staging-pulp:
       optional: true
 
 Ubuntu-20.04-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: Ubuntu-20.04-arm64
       optional: true
@@ -1052,7 +1026,7 @@ Ubuntu-20.04-arm64-staging-pulp:
       optional: true
 
 Ubuntu-24.04-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: Ubuntu-24.04-arm64
       optional: true
@@ -1068,7 +1042,7 @@ Ubuntu-24.04-arm64-staging-pulp:
       optional: true
 
 AlmaLinux-8-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: AlmaLinux-8
       optional: true
@@ -1084,7 +1058,7 @@ AlmaLinux-8-staging-pulp:
       optional: true
 
 AlmaLinux-8-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: AlmaLinux-8-arm64
       optional: true
@@ -1100,7 +1074,7 @@ AlmaLinux-8-arm64-staging-pulp:
       optional: true
 
 AlmaLinux-9-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: AlmaLinux-9
       optional: true
@@ -1116,7 +1090,7 @@ AlmaLinux-9-staging-pulp:
       optional: true
 
 AlmaLinux-9-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: AlmaLinux-9-arm64
       optional: true
@@ -1132,7 +1106,7 @@ AlmaLinux-9-arm64-staging-pulp:
       optional: true
 
 AlmaLinux-10-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: AlmaLinux-10
       optional: true
@@ -1148,7 +1122,7 @@ AlmaLinux-10-staging-pulp:
       optional: true
 
 AlmaLinux-10-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: AlmaLinux-10-arm64
       optional: true
@@ -1164,7 +1138,7 @@ AlmaLinux-10-arm64-staging-pulp:
       optional: true
 
 OpenSUSE-15.6-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: OpenSUSE-15.6
       optional: true
@@ -1180,7 +1154,7 @@ OpenSUSE-15.6-staging-pulp:
       optional: true
 
 OpenSUSE-15.6-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: OpenSUSE-15.6-arm64
       optional: true
@@ -1196,7 +1170,7 @@ OpenSUSE-15.6-arm64-staging-pulp:
       optional: true
 
 AmazonLinux-2-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: AmazonLinux-2
       optional: true
@@ -1212,7 +1186,7 @@ AmazonLinux-2-staging-pulp:
       optional: true
 
 AmazonLinux-2-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: AmazonLinux-2-arm64
       optional: true
@@ -1228,7 +1202,7 @@ AmazonLinux-2-arm64-staging-pulp:
       optional: true
 
 AmazonLinux-2023-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: AmazonLinux-2023
       optional: true
@@ -1244,7 +1218,7 @@ AmazonLinux-2023-staging-pulp:
       optional: true
 
 AmazonLinux-2023-arm64-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: AmazonLinux-2023-arm64
       optional: true
@@ -1260,14 +1234,13 @@ AmazonLinux-2023-arm64-staging-pulp:
       optional: true
 
 SLES-12.5-staging:
-  extends: .packagecloud_staging_upload_template
+  extends: .staging_upload_template
   needs:
     - job: SLES-12.5
       optional: true
     - job: SLES-12.5-branch
       optional: true
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 
@@ -1283,7 +1256,7 @@ SLES-12.5-staging-pulp:
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 
 AmazonLinux-2-fips-staging:
-  extends: .packagecloud_fips_staging_upload_template
+  extends: .fips_staging_upload_template
   variables:
     USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
   needs:
@@ -1303,7 +1276,7 @@ AmazonLinux-2-fips-staging-pulp:
       optional: true
 
 AmazonLinux-2023-fips-staging:
-  extends: .packagecloud_fips_staging_upload_template
+  extends: .fips_staging_upload_template
   needs:
     - job: AmazonLinux-2023-fips
       optional: true
@@ -1319,7 +1292,7 @@ AmazonLinux-2023-fips-staging-pulp:
       optional: true
 
 AlmaLinux-8-fips-staging:
-  extends: .packagecloud_fips_staging_upload_template
+  extends: .fips_staging_upload_template
   needs:
     - job: AlmaLinux-8-fips
       optional: true
@@ -1335,7 +1308,7 @@ AlmaLinux-8-fips-staging-pulp:
       optional: true
 
 AlmaLinux-9-fips-staging:
-  extends: .packagecloud_fips_staging_upload_template
+  extends: .fips_staging_upload_template
   needs:
     - job: AlmaLinux-9-fips
       optional: true
@@ -1351,14 +1324,13 @@ AlmaLinux-9-fips-staging-pulp:
       optional: true
 
 Ubuntu-20.04-fips-staging:
-  extends: .packagecloud_fips_staging_upload_template
+  extends: .fips_staging_upload_template
   needs:
     - job: Ubuntu-20.04-fips
       optional: true
     - job: Ubuntu-20.04-fips-branch
       optional: true
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
@@ -1376,7 +1348,7 @@ Ubuntu-20.04-fips-staging-pulp:
     - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
 
 Ubuntu-22.04-fips-staging:
-  extends: .packagecloud_fips_staging_upload_template
+  extends: .fips_staging_upload_template
   needs:
     - job: Ubuntu-22.04-fips
       optional: true
@@ -1613,7 +1585,6 @@ SLES-12.5-release:
   needs:
     - SLES-12.5
   rules:
-    - !reference [.skip_unless_packagecloud_enabled, rules]
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
