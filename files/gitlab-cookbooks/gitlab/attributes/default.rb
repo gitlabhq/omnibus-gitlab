@@ -1171,6 +1171,10 @@ default['gitlab']['gitlab_kas_nginx']['proxy_set_headers'] = {
   "X-Scheme" => "$scheme",
   "X-Original-Forwarded-For" => "$http_x_forwarded_for"
 }
+default['gitlab']['gitlab_kas_nginx']['k8s_proxy_connect_timeout'] = "5"
+default['gitlab']['gitlab_kas_nginx']['k8s_proxy_send_timeout'] = "60"
+default['gitlab']['gitlab_kas_nginx']['k8s_proxy_read_timeout'] = "7200"
+default['gitlab']['gitlab_kas_nginx']['k8s_proxy_max_temp_file_size'] = "1024m"
 
 ####
 # Storage check
