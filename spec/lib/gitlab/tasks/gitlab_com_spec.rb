@@ -55,9 +55,9 @@ RSpec.describe 'gitlab_com', type: :rake do
           end
         end
 
-        context 'when running on Ubuntu 20.04' do
+        context 'when running on Ubuntu 22.04' do
           before do
-            allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(%w[pkg/ubuntu-focal/gitlab-ee_16.7.0-ee.0_amd64.deb])
+            allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(%w[pkg/ubuntu-jammy/gitlab-ee_16.7.0-ee.0_amd64.deb])
           end
 
           context 'with a release candidate (RC) tag' do

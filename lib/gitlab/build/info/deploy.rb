@@ -4,7 +4,7 @@ module Build
   class Info
     class Deploy
       OS_MAPPING = {
-        'PATCH_DEPLOY_ENVIRONMENT' => 'ubuntu-focal',
+        'PATCH_DEPLOY_ENVIRONMENT' => 'ubuntu-jammy',
       }.freeze
 
       class << self

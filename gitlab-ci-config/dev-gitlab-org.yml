@@ -673,7 +673,7 @@ Docker-QA:
 ##  Ubuntu 22.04: used for all omnibus installation
 
 Ubuntu-20.04-staging:
-  extends: .staging_upload_with_rc_deployment_template
+  extends: .staging_upload_template
   needs:
     - job: Ubuntu-20.04
       optional: true
@@ -695,7 +695,7 @@ Ubuntu-20.04-staging-pulp:
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 
 Ubuntu-22.04-staging:
-  extends: .staging_upload_template
+  extends: .staging_upload_with_rc_deployment_template
   needs:
     - job: Ubuntu-22.04
       optional: true
