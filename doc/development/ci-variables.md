@@ -109,7 +109,6 @@ These additional variables are available to override or enable different build b
 | `GITLAB_COM_PKGS_BUILDS_BUCKET`  | GCS bucket where regular branch packages are pushed. |
 | `GITLAB_COM_PKGS_SA_FILE`        | Service account key used for pushing release packages for SaaS deployments, it must have write access to the pkgs bucket. |
 | `GITLAB_NAMESPACE`               | Used to override image URLs in the Dev instance, since the top-level name there diverges from `gitlab-org` to `gitlab`. |
-| `PACKAGECLOUD_ENABLED`           | Set to `"true"` to enable uploading packages to PackageCloud (`packages.gitlab.com`). Defaults to `"false"`. See [decommissioning issue](https://gitlab.com/gitlab-org/build/team-tasks/-/work_items/177). |
 
 ## Unknown/outdated variables
 
