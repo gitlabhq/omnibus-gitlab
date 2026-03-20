@@ -29,6 +29,7 @@ Gitlab::Dangerfiles.for_project(self, 'omnibus-gitlab') do |gitlab_dangerfiles|
     %r{\Ascripts/} => [:build],
     %r{\Asupport/} => [:build],
     %r{\Aspec/lib/} => [:build],
+    %r{\Aha-tests/} => [:configure],
     %r{\Aletsencrypt-test/} => [:configure],
     %r{\Afiles/} => [:configure],
     %r{\Aspec/chef/} => [:configure],

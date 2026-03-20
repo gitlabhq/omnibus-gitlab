@@ -1,0 +1,89 @@
+services:
+  consul:
+    image: ${IMAGE}
+    hostname: consul
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        roles ['consul_role']
+        consul['configuration'] = {
+          server: true,
+          bootstrap_expect: 1,
+          client_addr: '0.0.0.0',
+        }
+        logging['svlogd_size'] = 200 * 1024 * 1024
+    networks:
+      patroni-net:
+        ipv4_address: 10.31.50.2
+    healthcheck:
+      test: ["CMD", "/opt/gitlab/embedded/bin/consul", "members"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  postgres-primary:
+    image: ${IMAGE}
+    hostname: postgres-primary
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        roles ['patroni_role']
+        patroni['enable'] = true
+        patroni['replication_password'] = 'replication_password'
+        patroni['listen_address'] = '0.0.0.0'
+        patroni['connect_address'] = 'postgres-primary'
+        patroni['consul']['url'] = 'http://10.31.50.2:8500'
+        consul['configuration'] = { retry_join: %w(10.31.50.2) }
+        postgresql['listen_address'] = '*'
+        postgresql['trust_auth_cidr_addresses'] = %w(10.31.50.0/24 127.0.0.1/32)
+        postgresql['pgbouncer_user_password'] = ''
+        postgresql['connect_port'] = 5432
+        gitlab_rails['auto_migrate'] = false
+        logging['svlogd_size'] = 200 * 1024 * 1024
+    networks:
+      patroni-net:
+        ipv4_address: 10.31.50.10
+    depends_on:
+      consul:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8008/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  postgres-replica:
+    image: ${IMAGE}
+    hostname: postgres-replica
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        roles ['patroni_role']
+        patroni['enable'] = true
+        patroni['replication_password'] = 'replication_password'
+        patroni['listen_address'] = '0.0.0.0'
+        patroni['connect_address'] = 'postgres-replica'
+        patroni['consul']['url'] = 'http://10.31.50.2:8500'
+        consul['configuration'] = { retry_join: %w(10.31.50.2) }
+        postgresql['listen_address'] = '*'
+        postgresql['trust_auth_cidr_addresses'] = %w(10.31.50.0/24 127.0.0.1/32)
+        postgresql['pgbouncer_user_password'] = ''
+        postgresql['connect_port'] = 5432
+        gitlab_rails['auto_migrate'] = false
+        logging['svlogd_size'] = 200 * 1024 * 1024
+    networks:
+      patroni-net:
+        ipv4_address: 10.31.50.11
+    depends_on:
+      postgres-primary:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8008/replica || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+networks:
+  patroni-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.31.50.0/24

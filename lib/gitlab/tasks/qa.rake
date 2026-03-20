@@ -110,4 +110,15 @@ namespace :qa do
       end
     end
   end
+
+  desc "Run Patroni HA smoke tests"
+  task :test_patroni_ha do
+    Gitlab::Util.section('qa:test_patroni_ha') do
+      Gitlab::Util.set_env_if_missing('CI_REGISTRY_IMAGE', 'registry.gitlab.com/gitlab-org/build/omnibus-gitlab-mirror')
+      image_address = Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info::Docker.tag)
+      Dir.chdir('ha-tests/patroni') do
+        sh({ 'IMAGE' => image_address }, './test')
+      end
+    end
+  end
 end
