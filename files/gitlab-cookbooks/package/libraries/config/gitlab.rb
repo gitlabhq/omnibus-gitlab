@@ -44,6 +44,7 @@ module Gitlab
   role('pages').use { PagesRole }
   role('spamcheck').use { SpamcheckRole }
   role('gitaly').use { GitalyRole }
+  role('backup', manage_services: false).use { BackupRole }
 
   ## Attributes directly on the node
   attribute('package').use { Package }
