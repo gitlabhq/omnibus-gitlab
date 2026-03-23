@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'alertmanager'
-version = Gitlab::Version.new('alertmanager', '0.28.1')
+version = Gitlab::Version.new('alertmanager', '0.31.1')
 default_version version.print
 
 license 'APACHE-2.0'
@@ -31,7 +31,7 @@ skip_transitive_dependency_licensing true
 
 if Build::Check.use_ubt?
   ubt_version = version.print(false)
-  source Build::UBT.source_args(name, "#{ubt_version}-1ubt", "8f7f76e3b2c663910bc12d24b2e94e78ede9c0f257ae9a39f3c4919df5281fb5", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{ubt_version}-1ubt", "e24b0cee204c13138708b7db34e00d8e9c859112b250d742a7634c8e76421de9", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source git: version.remote

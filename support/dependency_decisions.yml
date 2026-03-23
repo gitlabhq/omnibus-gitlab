@@ -334,10 +334,10 @@
 - - :license
   - "github.com/hashicorp/memberlist"
   - MPL2
-  - :who: Andrew Patterson
+  - :who: Adam Chu
     :why: https://github.com/hashicorp/memberlist/blob/master/LICENSE
-    :versions: [ v0.5.1 ]
-    :when: 2025-01-23 11:30:00.000000000 Z
+    :versions: [ v0.5.4 ]
+    :when: 2026-02-20 10:05:00.000000000 Z
 - - :license
   - "gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/clients/gopb"
   - MIT
