@@ -18,7 +18,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper"
 require 'shellwords'
 
 name 'ruby-io-event'
-description 'Rebuilds Ruby io-event gem with epoll_pwait2 support removed for EL 9'
+description 'Rebuilds Ruby io-event gem with epoll_pwait2 support removed'
 # This is a placeholder version since this software definition rebuilds an already-installed gem
 # rather than building from a source. The actual version is determined by the installed io-event gem.
 default_version '0.0.1'
@@ -30,9 +30,10 @@ skip_transitive_dependency_licensing true
 dependency 'ruby'
 
 build do
-  block 'rebuild io-event gem without epoll_pwait2 for EL 9' do
-    # Only apply this patch for EL 9 (RHEL, Alma, Rocky, etc.)
-    next unless OhaiHelper.el_9?
+  block 'rebuild io-event gem without epoll_pwait2 for distributions with backported support' do
+    # Distributions such as EL9 and AmazonLinux backported epoll_pwait2 from glibc 2.35 to 2.34,
+    # but not all users are using the latest versions. Disable epoll_pwait2 to ensure compatibility.
+    next unless OhaiHelper.glibc_2_34?
 
     env = with_standard_compiler_flags(with_embedded_path)
     gem_bin = embedded_bin('gem')
