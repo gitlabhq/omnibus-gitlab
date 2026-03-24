@@ -196,7 +196,7 @@ dependency 'git-filter-repo'
 dependency 'gitlab-rails'
 dependency 'gitaly'
 dependency 'ruby-grpc' if Build::Check.use_system_ssl?
-dependency 'ruby-io-event' if OhaiHelper.el_9?
+dependency 'ruby-io-event' if OhaiHelper.glibc_2_34?
 
 # Package scripts
 dependency 'package-scripts'

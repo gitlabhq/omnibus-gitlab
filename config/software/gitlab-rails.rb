@@ -117,7 +117,7 @@ build do
   # tagged as GLIBC_2.35, causing binaries built there to fail on
   # systems with a true glibc 2.34 (e.g. RedHat 9.6). Disable the use of epoll_pwait2
   # with https://github.com/socketry/io-event/pull/159.
-  bundle 'config build.io-event --disable-epoll_pwait2', env: env if OhaiHelper.el_9?
+  bundle 'config build.io-event --disable-epoll_pwait2', env: env if OhaiHelper.glibc_2_34?
   bundle 'config build.gpgme --use-system-libraries', env: env
   bundle "config build.nokogiri --use-system-libraries --with-xml2-include=#{install_dir}/embedded/include/libxml2 --with-xslt-include=#{install_dir}/embedded/include/libxslt", env: env
   bundle 'config build.grpc --with-ldflags=-Wl,--no-as-needed --with-dldflags=-latomic', env: env if OhaiHelper.raspberry_pi?
