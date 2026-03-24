@@ -18,7 +18,6 @@ stages:
   - scan-dependencies
   - staging_upload
   - pulp_staging_upload
-  - deploy
   - staging_verify
   - package-and-image-release
   - pulp-package-release
