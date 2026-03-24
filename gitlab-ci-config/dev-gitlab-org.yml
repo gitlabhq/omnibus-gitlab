@@ -194,7 +194,6 @@
 
 .pulp_staging_upload_template:
   extends: .staging_upload_template
-  stage: pulp_staging_upload
   timeout: 35 minutes
   variables:
     REPOSITORY_TYPE: "pulp"
@@ -251,16 +250,14 @@
 
 .pulp_production_release_template:
   extends: .production_release_template
-  stage: pulp-package-release
   timeout: 35 minutes
   variables:
     REPOSITORY_TYPE: "pulp"
   rules:
     - !reference [.default_rules, rules]
     - !reference [.skip_release_jobs, rules]
-    # Does not run the job manually. Instead, use `needs` in each `-release-pulp` job to run after the
-    # corresponding `-release` job
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
+      when: manual
 
 .packagecloud_fips_release_template:
   extends: .packagecloud_production_release_template
@@ -1402,7 +1399,6 @@ Ubuntu-20.04-release:
 Ubuntu-20.04-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Ubuntu-20.04-release
     - Ubuntu-20.04
 Ubuntu-22.04-release:
   extends: .packagecloud_production_release_template
@@ -1411,7 +1407,6 @@ Ubuntu-22.04-release:
 Ubuntu-22.04-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Ubuntu-22.04-release
     - Ubuntu-22.04
 Ubuntu-24.04-release:
   extends: .packagecloud_production_release_template
@@ -1420,7 +1415,6 @@ Ubuntu-24.04-release:
 Ubuntu-24.04-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Ubuntu-24.04-release
     - Ubuntu-24.04
 Ubuntu-20.04-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1429,7 +1423,6 @@ Ubuntu-20.04-arm64-release:
 Ubuntu-20.04-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Ubuntu-20.04-arm64-release
     - Ubuntu-20.04-arm64
 Ubuntu-22.04-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1438,7 +1431,6 @@ Ubuntu-22.04-arm64-release:
 Ubuntu-22.04-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Ubuntu-22.04-arm64-release
     - Ubuntu-22.04-arm64
 Ubuntu-24.04-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1447,7 +1439,6 @@ Ubuntu-24.04-arm64-release:
 Ubuntu-24.04-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Ubuntu-24.04-arm64-release
     - Ubuntu-24.04-arm64
 Debian-11-release:
   extends: .packagecloud_production_release_template
@@ -1456,7 +1447,6 @@ Debian-11-release:
 Debian-11-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Debian-11-release
     - Debian-11
 Debian-11-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1465,7 +1455,6 @@ Debian-11-arm64-release:
 Debian-11-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Debian-11-arm64-release
     - Debian-11-arm64
 Debian-12-release:
   extends: .packagecloud_production_release_template
@@ -1474,7 +1463,6 @@ Debian-12-release:
 Debian-12-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Debian-12-release
     - Debian-12
 Debian-12-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1483,7 +1471,6 @@ Debian-12-arm64-release:
 Debian-12-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Debian-12-arm64-release
     - Debian-12-arm64
 Debian-13-release:
   extends: .packagecloud_production_release_template
@@ -1492,7 +1479,6 @@ Debian-13-release:
 Debian-13-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Debian-13-release
     - Debian-13
 Debian-13-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1501,7 +1487,6 @@ Debian-13-arm64-release:
 Debian-13-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - Debian-13-arm64-release
     - Debian-13-arm64
 AlmaLinux-8-release:
   extends: .packagecloud_production_release_template
@@ -1510,7 +1495,6 @@ AlmaLinux-8-release:
 AlmaLinux-8-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - AlmaLinux-8-release
     - AlmaLinux-8
 AlmaLinux-8-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1519,7 +1503,6 @@ AlmaLinux-8-arm64-release:
 AlmaLinux-8-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - AlmaLinux-8-arm64-release
     - AlmaLinux-8-arm64
 AlmaLinux-9-release:
   extends: .packagecloud_production_release_template
@@ -1528,7 +1511,6 @@ AlmaLinux-9-release:
 AlmaLinux-9-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - AlmaLinux-9-release
     - AlmaLinux-9
 AlmaLinux-9-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1537,7 +1519,6 @@ AlmaLinux-9-arm64-release:
 AlmaLinux-9-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - AlmaLinux-9-arm64-release
     - AlmaLinux-9-arm64
 AlmaLinux-10-release:
   extends: .packagecloud_production_release_template
@@ -1546,7 +1527,6 @@ AlmaLinux-10-release:
 AlmaLinux-10-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - AlmaLinux-10-release
     - AlmaLinux-10
 AlmaLinux-10-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1555,7 +1535,6 @@ AlmaLinux-10-arm64-release:
 AlmaLinux-10-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - AlmaLinux-10-arm64-release
     - AlmaLinux-10-arm64
 OpenSUSE-15.6-release:
   extends: .packagecloud_production_release_template
@@ -1564,7 +1543,6 @@ OpenSUSE-15.6-release:
 OpenSUSE-15.6-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - OpenSUSE-15.6-release
     - OpenSUSE-15.6
 OpenSUSE-15.6-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1573,7 +1551,6 @@ OpenSUSE-15.6-arm64-release:
 OpenSUSE-15.6-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - OpenSUSE-15.6-arm64-release
     - OpenSUSE-15.6-arm64
 AmazonLinux-2-release:
   extends: .packagecloud_production_release_template
@@ -1582,7 +1559,6 @@ AmazonLinux-2-release:
 AmazonLinux-2-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - AmazonLinux-2-release
     - AmazonLinux-2
 AmazonLinux-2-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1591,7 +1567,6 @@ AmazonLinux-2-arm64-release:
 AmazonLinux-2-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - AmazonLinux-2-arm64-release
     - AmazonLinux-2-arm64
 AmazonLinux-2023-release:
   extends: .packagecloud_production_release_template
@@ -1600,7 +1575,6 @@ AmazonLinux-2023-release:
 AmazonLinux-2023-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - AmazonLinux-2023-release
     - AmazonLinux-2023
 AmazonLinux-2023-arm64-release:
   extends: .packagecloud_production_release_template
@@ -1609,7 +1583,6 @@ AmazonLinux-2023-arm64-release:
 AmazonLinux-2023-arm64-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - AmazonLinux-2023-arm64-release
     - AmazonLinux-2023-arm64
 SLES-12.5-release:
   extends: .packagecloud_production_release_template
@@ -1624,7 +1597,6 @@ SLES-12.5-release:
 SLES-12.5-release-pulp:
   extends: .pulp_production_release_template
   needs:
-    - SLES-12.5-release
     - SLES-12.5
   rules:
     - !reference [.default_rules, rules]
@@ -1642,7 +1614,6 @@ AmazonLinux-2-fips-release-pulp:
   variables:
     USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
   needs:
-    - AmazonLinux-2-fips-release
     - AmazonLinux-2-fips
 AmazonLinux-2023-fips-release:
   extends: .packagecloud_fips_release_template
@@ -1651,7 +1622,6 @@ AmazonLinux-2023-fips-release:
 AmazonLinux-2023-fips-release-pulp:
   extends: .pulp_fips_release_template
   needs:
-    - AmazonLinux-2023-fips-release
     - AmazonLinux-2023-fips
 AlmaLinux-8-fips-release:
   extends: .packagecloud_fips_release_template
@@ -1660,7 +1630,6 @@ AlmaLinux-8-fips-release:
 AlmaLinux-8-fips-release-pulp:
   extends: .pulp_fips_release_template
   needs:
-    - AlmaLinux-8-fips-release
     - AlmaLinux-8-fips
 AlmaLinux-9-fips-release:
   extends: .packagecloud_fips_release_template
@@ -1669,7 +1638,6 @@ AlmaLinux-9-fips-release:
 AlmaLinux-9-fips-release-pulp:
   extends: .pulp_fips_release_template
   needs:
-    - AlmaLinux-9-fips-release
     - AlmaLinux-9-fips
 Ubuntu-20.04-fips-release:
   extends: .packagecloud_fips_release_template
@@ -1678,7 +1646,6 @@ Ubuntu-20.04-fips-release:
 Ubuntu-20.04-fips-release-pulp:
   extends: .pulp_fips_release_template
   needs:
-    - Ubuntu-20.04-fips-release
     - Ubuntu-20.04-fips
 Ubuntu-22.04-fips-release:
   extends: .packagecloud_fips_release_template
@@ -1687,7 +1654,6 @@ Ubuntu-22.04-fips-release:
 Ubuntu-22.04-fips-release-pulp:
   extends: .pulp_fips_release_template
   needs:
-    - Ubuntu-22.04-fips-release
     - Ubuntu-22.04-fips
 
 Docker-Release:
