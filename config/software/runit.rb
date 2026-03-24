@@ -22,49 +22,56 @@ license_file '../package/COPYING'
 
 skip_transitive_dependency_licensing true
 
-version '2.1.2' do
-  source sha256: '6fd0160cb0cf1207de4e66754b6d39750cff14bb0aa66ab49490992c0c47ba18'
+if Build::Check.use_ubt?
+  source Build::UBT.source_args(name, "#{default_version}-1ubt", "1f3a280d3d1f48d03c2b5ba04c99d9cf415599885926f5b7c0ca7e918061efeb", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  version '2.1.2' do
+    source sha256: '6fd0160cb0cf1207de4e66754b6d39750cff14bb0aa66ab49490992c0c47ba18'
+  end
+
+  source url: "http://smarden.org/runit/runit-#{version}.tar.gz"
+
+  relative_path "admin/runit-#{version}/src"
+
+  build do
+    # Patch runit to not consider status of log service associated with a service
+    # on determining output of status command. For details, check
+    # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4008
+    patch source: 'log-status.patch'
+
+    # Warnings like implicit-function-declaration and incompatible-pointer-types
+    # are errors (promoted from warnings) in gcc 14 and up.
+    # That breaks this runit version so -fpermissive downgrades them.
+    patch source: 'permissive-gcc.patch'
+
+    env = with_standard_compiler_flags(with_embedded_path)
+
+    # Put runit where we want it, not where they tell us to
+    command 'sed -i -e "s/^char\ \*varservice\ \=\"\/service\/\";$/char\ \*varservice\ \=\"' + install_dir.gsub('/', '\\/') + '\/service\/\";/" sv.c', env: env
+
+    # TODO: the following is not idempotent
+    command 'sed -i -e s:-static:: Makefile', env: env
+
+    # Build it
+    make env: env
+    make 'check', env: env
+
+    # Move it
+    mkdir "#{install_dir}/embedded/bin"
+    copy "#{project_dir}/chpst",      "#{install_dir}/embedded/bin"
+    copy "#{project_dir}/runit",      "#{install_dir}/embedded/bin"
+    copy "#{project_dir}/runit-init", "#{install_dir}/embedded/bin"
+    copy "#{project_dir}/runsv",      "#{install_dir}/embedded/bin"
+    copy "#{project_dir}/runsvchdir", "#{install_dir}/embedded/bin"
+    copy "#{project_dir}/runsvdir",   "#{install_dir}/embedded/bin"
+    copy "#{project_dir}/sv",         "#{install_dir}/embedded/bin"
+    copy "#{project_dir}/svlogd",     "#{install_dir}/embedded/bin"
+    copy "#{project_dir}/utmpset",    "#{install_dir}/embedded/bin"
+  end
 end
 
-source url: "http://smarden.org/runit/runit-#{version}.tar.gz"
-
-relative_path "admin/runit-#{version}/src"
-
 build do
-  # Patch runit to not consider status of log service associated with a service
-  # on determining output of status command. For details, check
-  # https://gitlab.com/gitlab-org/omnibus-gitlab/issues/4008
-  patch source: 'log-status.patch'
-
-  # Warnings like implicit-function-declaration and incompatible-pointer-types
-  # are errors (promoted from warnings) in gcc 14 and up.
-  # That breaks this runit version so -fpermissive downgrades them.
-  patch source: 'permissive-gcc.patch'
-
-  env = with_standard_compiler_flags(with_embedded_path)
-
-  # Put runit where we want it, not where they tell us to
-  command 'sed -i -e "s/^char\ \*varservice\ \=\"\/service\/\";$/char\ \*varservice\ \=\"' + install_dir.gsub('/', '\\/') + '\/service\/\";/" sv.c', env: env
-
-  # TODO: the following is not idempotent
-  command 'sed -i -e s:-static:: Makefile', env: env
-
-  # Build it
-  make env: env
-  make 'check', env: env
-
-  # Move it
-  mkdir "#{install_dir}/embedded/bin"
-  copy "#{project_dir}/chpst",      "#{install_dir}/embedded/bin"
-  copy "#{project_dir}/runit",      "#{install_dir}/embedded/bin"
-  copy "#{project_dir}/runit-init", "#{install_dir}/embedded/bin"
-  copy "#{project_dir}/runsv",      "#{install_dir}/embedded/bin"
-  copy "#{project_dir}/runsvchdir", "#{install_dir}/embedded/bin"
-  copy "#{project_dir}/runsvdir",   "#{install_dir}/embedded/bin"
-  copy "#{project_dir}/sv",         "#{install_dir}/embedded/bin"
-  copy "#{project_dir}/svlogd",     "#{install_dir}/embedded/bin"
-  copy "#{project_dir}/utmpset",    "#{install_dir}/embedded/bin"
-
   erb source: 'runsvdir-start.erb',
       dest: "#{install_dir}/embedded/bin/runsvdir-start",
       mode: 0755,
