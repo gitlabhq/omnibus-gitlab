@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.10.1 (2026-03-24)
+
+No changes.
+
 ## 18.10.0 (2026-03-18)
 
 ### Added (5 changes)
@@ -30,6 +34,12 @@ omnibus-gitlab repository.
 
 - [Mattermost Security Updates February 23, 2026](gitlab-org/omnibus-gitlab@06bdb8a7037d64db1b24338ce6dae3925a10007a) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9189))
 - [Mattermost Security Updates February 13, 2026](gitlab-org/omnibus-gitlab@43ad3263651d869efea332e255365b61b391970b) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9139))
+
+## 18.9.3 (2026-03-24)
+
+### Security (1 change)
+
+- [Mattermost Security Updates February 23, 2026](gitlab-org/security/omnibus-gitlab@77cf83510d038ebffbb81d71be5c259c8dd0aa78)
 
 ## 18.9.2 (2026-03-10)
 
@@ -81,6 +91,12 @@ No changes.
 ### Security (1 change)
 
 - [Mattermost Security Updates January 15, 2026](gitlab-org/omnibus-gitlab@0b48af1e6492d3f178e74e3e878302ee3faa9081) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9083))
+
+## 18.8.7 (2026-03-24)
+
+### Security (1 change)
+
+- [Mattermost Security Updates February 23, 2026](gitlab-org/security/omnibus-gitlab@3a365695a71d01bbfeb17b5c7ecf58bd73f18476)
 
 ## 18.8.6 (2026-03-10)
 
