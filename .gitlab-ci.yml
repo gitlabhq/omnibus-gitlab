@@ -4,6 +4,10 @@ spec:
       type: boolean
       default: false
       description: "If true, skips running QA tests for the current pipeline."
+    skip_qa_full:
+      type: boolean
+      default: true
+      description: "If true, hides the qa-full trigger jobs."
 
 ---
 
@@ -53,6 +57,7 @@ include:
       - if: '$CI_SERVER_HOST == "gitlab.com"'
     inputs:
       skip_qa_test: $[[ inputs.skip_qa_test ]]
+      skip_qa_full: $[[ inputs.skip_qa_full ]]
 
 default:
   tags:

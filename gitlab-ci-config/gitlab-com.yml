@@ -4,9 +4,11 @@ spec:
       type: boolean
       default: false
       description: "If true, skips running QA tests for the current pipeline."
-
+    skip_qa_full:
+      type: boolean
+      default: true
+      description: "If true, hides the qa-full trigger jobs."
 ---
-
 # This config lists the jobs that will be run on omnibus-gitlab project in
 # gitlab.com.
 
@@ -139,6 +141,7 @@ include:
       - local: '.gitlab-ci.yml'
         inputs:
           skip_qa_test: $[[ inputs.skip_qa_test ]]
+          skip_qa_full: $[[ inputs.skip_qa_full ]]
     strategy: depend
   needs:
     - job: generate-facts
@@ -151,6 +154,16 @@ include:
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
       when: manual
       variables: !reference [.ce-trigger-job-variables]
+
+.ubt-trigger-job:
+  extends: .ce-trigger-job
+  trigger:
+    include:
+      - local: ".gitlab-ci.yml"
+        inputs:
+          skip_qa_test: $[[ inputs.skip_qa_test ]]
+          skip_qa_full: false
+    strategy: depend
 
 .review-docs:
   image: "${RUBY_ALPINE_IMAGE}"
@@ -243,20 +256,20 @@ Trigger:ee-package:
 ###########################
 #     UBT pipelines       #
 ###########################
-      
+
 Trigger:ce-package-ubt:
   variables:
     UBT_TEST_BUILD: "true"
     # Make sure we don't collide with production CE cache
     CACHE_KEY_SUFFIX: "${CACHE_KEY_SUFFIX}-ubt"
-  extends: .ce-trigger-job
+  extends: .ubt-trigger-job
 
 Trigger:ee-package-ubt:
   variables:
     UBT_TEST_BUILD: "true"
     # Make sure we don't collide with production EE cache
     CACHE_KEY_SUFFIX: "${CACHE_KEY_SUFFIX}-ubt"
-  extends: .ce-trigger-job
+  extends: .ubt-trigger-job
   rules:
     - if: '$PIPELINE_TYPE =~ /_BRANCH_TEST_PIPELINE$/'
       when: manual
@@ -264,7 +277,6 @@ Trigger:ee-package-ubt:
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
       when: manual
       variables: !reference [.ee-trigger-job-variables]
-
 
 rubocop:
   extends: .gems-cache
@@ -722,6 +734,54 @@ patroni-ha-test:
   needs:
     - job: Docker-branch
       artifacts: false
+
+.qa-full:
+  stage: qa
+  needs:
+    - job: generate-facts
+      artifacts: true
+  trigger:
+    project: "gitlab-org/distribution/build-architecture/sandbox/qa-runner-extra"
+    branch: "main"
+    forward:
+      yaml_variables: true
+      pipeline_variables: true
+    inputs:
+      pipeline-type: qa
+      # package-build-pipeline: '$CI_PIPELINE_ID' this may work in the future
+  variables:
+    PACKAGE_BUILD_PIPELINE: $CI_PIPELINE_ID
+  allow_failure: true
+
+qa-full-ce:
+  extends: .qa-full
+  trigger:
+    inputs:
+      package-variants: ce
+  rules:
+    - if: '"$[[ inputs.skip_qa_full ]]" == "true"'
+      when: never
+    - if: "$PIPELINE_TYPE =~ /TRIGGERED_CE_PIPELINE/"
+      when: manual
+    - if: '$PIPELINE_TYPE == "CE_BRANCH_BUILD_PIPELINE"'
+      when: manual
+    - if: '$PIPELINE_TYPE == "CE_NIGHTLY_BUILD_PIPELINE"'
+      when: manual
+
+qa-full-ee:
+  extends: .qa-full
+  trigger:
+    inputs:
+      package-variants: "ee,fips"
+  rules:
+    - if: '"$[[ inputs.skip_qa_full ]]" == "true"'
+      when: never
+    - if: "$PIPELINE_TYPE =~ /TRIGGERED_EE_PIPELINE/"
+      when: manual
+    - if: '$PIPELINE_TYPE == "EE_BRANCH_BUILD_PIPELINE"'
+      when: manual
+    - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
+      when: manual
 
 GET:Geo:
   stage: qa
