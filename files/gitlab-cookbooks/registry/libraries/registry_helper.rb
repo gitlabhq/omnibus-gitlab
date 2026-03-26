@@ -2,7 +2,8 @@ class RegistryHelper < BaseHelper
   attr_reader :node
 
   def redis_enabled?
-    !!node.dig('registry', 'redis', 'loadbalancing', 'enabled')
+    redis = node.dig('registry', 'redis') || {}
+    redis.any? { |_k, v| v.is_a?(Hash) && v['enabled'] }
   end
 
   def public_attributes

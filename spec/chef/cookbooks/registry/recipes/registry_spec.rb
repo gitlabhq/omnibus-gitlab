@@ -757,6 +757,9 @@ RSpec.describe 'registry' do
             config = YAML.safe_load(content)
 
             expect(config['redis']).to eq({
+                                            'cache' => {
+                                              'enabled' => false
+                                            },
                                             'loadbalancing' => {
                                               'enabled' => true,
                                               'addr' => 'redis1.local:6379,redis2.local:6379',
@@ -778,6 +781,156 @@ RSpec.describe 'registry' do
                                                 'maxlifetime' => '2h',
                                                 'idletimeout' => '500s'
                                               },
+                                            }
+                                          })
+          }
+      end
+    end
+
+    context 'when registry redis cache is enabled and configured' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            redis: {
+              cache: {
+                enabled: true,
+                addr: 'redis-cache.local:6379',
+                mainname: 'cache-redis',
+                password: 'redis_password',
+                sentinelpassword: 'redis_sentinel_password',
+                db: 0,
+                dialtimeout: '10ms',
+                readtimeout: '10ms',
+                writetimeout: '10ms'
+              },
+              tls: {
+                enabled: true,
+                insecure: true
+              },
+              loadbalancing: { enabled: false },
+              pool: {
+                size: 10,
+                maxlifetime: '1h',
+                idletimeout: '300s'
+              }
+            }
+          }
+        )
+      end
+
+      it 'creates registry config with redis cache settings' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content { |content|
+            config = YAML.safe_load(content)
+            expect(config['redis']).to eq({
+                                            'cache' => {
+                                              'enabled' => true,
+                                              'addr' => 'redis-cache.local:6379',
+                                              'mainname' => 'cache-redis',
+                                              'password' => 'redis_password',
+                                              'sentinelpassword' => 'redis_sentinel_password',
+                                              'db' => 0,
+                                              'dialtimeout' => '10ms',
+                                              'readtimeout' => '10ms',
+                                              'writetimeout' => '10ms'
+                                            },
+                                            'tls' => {
+                                              'enabled' => true,
+                                              'insecure' => true
+                                            },
+                                            'loadbalancing' => {
+                                              'enabled' => false
+                                            },
+                                            'pool' => {
+                                              'size' => 10,
+                                              'maxlifetime' => '1h',
+                                              'idletimeout' => '300s'
+                                            }
+                                          })
+          }
+      end
+    end
+
+    context 'when both registry redis loadbalancing and cache are enabled' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            redis: {
+              loadbalancing: {
+                enabled: true,
+                addr: 'redis-lb1.local:6379,redis-lb2.local:6379',
+                username: 'redis',
+                password: 'lb_password',
+                mainname: 'main-redis',
+                sentinelusername: 'sentinel',
+                sentinelpassword: 'sentinel_password',
+                db: 1,
+                dialtimeout: '5s',
+                readtimeout: '10s',
+                writetimeout: '15s'
+              },
+              cache: {
+                enabled: true,
+                addr: 'redis-cache.local:6379',
+                mainname: 'cache-redis',
+                password: 'cache_password',
+                sentinelpassword: 'cache_sentinel_password',
+                db: 0,
+                dialtimeout: '10ms',
+                readtimeout: '10ms',
+                writetimeout: '10ms'
+              },
+              tls: {
+                enabled: true,
+                insecure: true
+              },
+              pool: {
+                size: 16,
+                maxlifetime: '1h',
+                idletimeout: '300s'
+              }
+            }
+          }
+        )
+      end
+
+      it 'renders registry config with both loadbalancing and cache sections' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content { |content|
+            config = YAML.safe_load(content)
+            expect(config['redis']).to eq({
+                                            'loadbalancing' => {
+                                              'enabled' => true,
+                                              'addr' => 'redis-lb1.local:6379,redis-lb2.local:6379',
+                                              'username' => 'redis',
+                                              'password' => 'lb_password',
+                                              'mainname' => 'main-redis',
+                                              'sentinelusername' => 'sentinel',
+                                              'sentinelpassword' => 'sentinel_password',
+                                              'db' => 1,
+                                              'dialtimeout' => '5s',
+                                              'readtimeout' => '10s',
+                                              'writetimeout' => '15s'
+                                            },
+                                            'cache' => {
+                                              'enabled' => true,
+                                              'addr' => 'redis-cache.local:6379',
+                                              'mainname' => 'cache-redis',
+                                              'password' => 'cache_password',
+                                              'sentinelpassword' => 'cache_sentinel_password',
+                                              'db' => 0,
+                                              'dialtimeout' => '10ms',
+                                              'readtimeout' => '10ms',
+                                              'writetimeout' => '10ms'
+                                            },
+                                            'tls' => {
+                                              'enabled' => true,
+                                              'insecure' => true
+                                            },
+                                            'pool' => {
+                                              'size' => 16,
+                                              'maxlifetime' => '1h',
+                                              'idletimeout' => '300s'
                                             }
                                           })
           }
