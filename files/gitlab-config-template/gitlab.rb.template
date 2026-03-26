@@ -1236,12 +1236,23 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     'tls' => {
 #       'enabled' => true,
 #       'insecure' => true
-#     },
-#     'pool' => {
-#       'size' => 10,
-#       'maxlifetime' => '1h',
-#       'idletimeout' => '300s'
 #     }
+#   },
+#   'cache' => {
+#     'enabled' => true,
+#     'addr' => 'localhost:16379,localhost:26379',
+#     'username' => 'registry',
+#     'password' => 'secret',
+#     'db' => 0,
+#     'dialtimeout' => '10ms',
+#     'readtimeout' => '10ms',
+#     'writetimeout' => '10ms'
+#   },
+# 
+#   'pool' => {
+#     'size' => 10,
+#     'maxlifetime' => '1h',
+#     'idletimeout' => '300s'
 #   }
 # }
 

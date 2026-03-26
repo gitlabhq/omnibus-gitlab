@@ -64,5 +64,8 @@ default['registry']['default_notifications_headers'] = {}
 default['registry']['redis'] = {
   'loadbalancing' => {
     'enabled' => false
+  },
+  'cache' => {
+    'enabled' => false
   }
 }
