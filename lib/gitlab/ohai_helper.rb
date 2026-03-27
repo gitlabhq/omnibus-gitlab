@@ -208,8 +208,12 @@ class OhaiHelper
       os_platform == 'sles' && get_suse_version.to_i == 12
     end
 
-    def el_9?
-      os_platform == 'el' && get_centos_version == '9'
+    def glibc_version
+      ohai['languages']['c']['glibc']['version']
+    end
+
+    def glibc_2_34?
+      glibc_version == '2.34'
     end
 
     # rake-compiler-dock v1.7.0 uses an Ubuntu 20.04 image to create
