@@ -23,26 +23,31 @@ skip_transitive_dependency_licensing true
 
 dependency 'ncurses'
 dependency 'config_guess'
-
-version('20150325-3.1') { source sha256: 'c88a5e4af83c5f40dda8455886ac98923a9c33125699742603a88a0253fcc8c5' }
-
-source url: "http://www.thrysoee.dk/editline/libedit-#{version}.tar.gz"
-
-if version == '20141030-3.1'
-  # released tar file has name discrepency in folder name for this version
-  relative_path 'libedit-20141029-3.1'
+if Build::Check.use_ubt?
+  ubt_version = default_version.tr('-', '_')
+  source Build::UBT.source_args(name, "#{ubt_version}-2ubt", "cd8d493f8d4eb15ae10d66383a0a26a71ea95c311e0f584dd54388b23e801e39", OhaiHelper.arch)
+  build(&Build::UBT.install)
 else
-  relative_path "libedit-#{version}"
-end
+  version('20150325-3.1') { source sha256: 'c88a5e4af83c5f40dda8455886ac98923a9c33125699742603a88a0253fcc8c5' }
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  source url: "http://www.thrysoee.dk/editline/libedit-#{version}.tar.gz"
 
-  update_config_guess
+  if version == '20141030-3.1'
+    # released tar file has name discrepency in folder name for this version
+    relative_path 'libedit-20141029-3.1'
+  else
+    relative_path "libedit-#{version}"
+  end
 
-  command './configure' \
-          " --prefix=#{install_dir}/embedded", env: env
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  make "-j #{workers}", env: env
-  make "-j #{workers} install", env: env
+    update_config_guess
+
+    command './configure' \
+            " --prefix=#{install_dir}/embedded", env: env
+
+    make "-j #{workers}", env: env
+    make "-j #{workers} install", env: env
+  end
 end
