@@ -137,7 +137,7 @@ the build type package will be pushed to <https://packages.gitlab.com> or to a t
 ### Publishing the packages
 
 You can track the progress of package building on `https://dev.gitlab.org/gitlab/omnibus-gitlab/builds`.
-They are pushed to [Packagecloud repositories](https://packages.gitlab.com/gitlab/) automatically after
+They are pushed to our [`packages.gitlab.com` repositories](https://packages.gitlab.com/gitlab/) automatically after
 successful builds.
 
 ### Updating cloud images
