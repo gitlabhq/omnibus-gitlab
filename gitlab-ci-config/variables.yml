@@ -38,14 +38,14 @@ variables:
   PACKAGE_PROMOTION_RUNNER_TAG: promotion
   NIGHTLY_REPO: nightly-builds
   NIGHTLY_FIPS_REPO: nightly-fips-builds
-  QA_TESTS_UPSTREAM_PROJECT: gitlab-org/security/gitlab
-  QA_TESTS_REF: 18-8-stable-ee
+  QA_TESTS_UPSTREAM_PROJECT: gitlab-org/gitlab-foss
+  QA_TESTS_REF: 18-8-stable
   OPENSSL_VERSION: 3.4.1
   FF_TIMESTAMPS: true
   FF_USE_FASTZIP: true
   OPENSSL_GEM_VERSION: "~> 3.3.2"
   RAT_PROJECT_PATH: gitlab-org/distribution/reference-architecture-tester
   DISABLE_RPI_BUILDS: 'true'
-  PUBLIC_IMAGE_ARCHIVE_REGISTRY: 'registry.gitlab.com'
-  PUBLIC_IMAGE_ARCHIVE_REGISTRY_PATH: 'gitlab-org/public-image-archive'
-  PACKAGECLOUD_ENABLED: "false"
+  PUBLIC_IMAGE_ARCHIVE_REGISTRY: registry.gitlab.com
+  PUBLIC_IMAGE_ARCHIVE_REGISTRY_PATH: gitlab-org/public-image-archive
+  PACKAGECLOUD_ENABLED: 'false'
