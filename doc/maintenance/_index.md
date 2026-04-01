@@ -262,6 +262,37 @@ To rotate the secrets:
 1. [Verify that the database values can be decrypted](https://docs.gitlab.com/administration/raketasks/check/#verify-database-values-can-be-decrypted-using-the-current-secrets). The output should match with the previous execution.
 1. Confirm that GitLab is working as expected. If it is, it should be safe to delete the old secrets.
 
+## Enable bash completion for `gitlab-ctl`
+
+The Linux package includes a bash completion script for the `gitlab-ctl` command. To enable it, source the completion script in your shell configuration file.
+
+The completion script is located at `/opt/gitlab/embedded/share/bash-completion/completions/gitlab-ctl-bash-completion`.
+
+To enable bash completion:
+
+1. Add the following line to your shell configuration file (`.bashrc`, `.bash_profile`, or equivalent):
+
+   ```shell
+   source /opt/gitlab/embedded/share/bash-completion/completions/gitlab-ctl-bash-completion
+   ```
+
+1. Reload your shell configuration:
+
+   ```shell
+   source ~/.bashrc
+   ```
+
+After enabling, you can use tab completion with `gitlab-ctl` commands:
+
+```shell
+gitlab-ctl <TAB>
+```
+
+The completion script requires the `bash-completion` package to be installed on your system. If you don't have it installed, you can install it using your system's package manager:
+
+- Debian/Ubuntu: `sudo apt-get install bash-completion`
+- RHEL/CentOS: `sudo yum install bash-completion`
+
 ## Deprecations
 
 Run `sudo gitlab-ctl check-config` to check your Omnibus configuration for flags to be removed in a

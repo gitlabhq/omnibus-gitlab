@@ -26,5 +26,9 @@ source path: File.expand_path('files/gitlab-scripts', Omnibus::Config.project_ro
 
 build do
   mkdir "#{install_dir}/embedded/bin/"
+  mkdir "#{install_dir}/embedded/share/bash-completion/completions/"
+
+  copy 'gitlab-ctl-bash-completion', "#{install_dir}/embedded/share/bash-completion/completions/"
+  delete 'gitlab-ctl-bash-completion'
   copy '*', "#{install_dir}/embedded/bin/"
 end
