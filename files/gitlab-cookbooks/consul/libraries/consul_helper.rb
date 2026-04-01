@@ -32,6 +32,7 @@ class ConsulHelper
     @default_server_configuration = {
       'bootstrap_expect' => 3
     }
+    @default_server_configuration['server_rejoin_age_max'] = node['consul']['server_rejoin_age_max'] unless node['consul']['server_rejoin_age_max'].nil?
   end
 
   def server?
