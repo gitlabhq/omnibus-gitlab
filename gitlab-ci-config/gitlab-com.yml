@@ -772,7 +772,7 @@ qa-full-ee:
   extends: .qa-full
   trigger:
     inputs:
-      package-variants: "ee,fips"
+      package-variants: "ee"
   rules:
     - if: '"$[[ inputs.skip_qa_full ]]" == "true"'
       when: never
