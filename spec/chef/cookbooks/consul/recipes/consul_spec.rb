@@ -172,6 +172,30 @@ RSpec.describe 'consul' do
           expect(content).to match(%r{"bootstrap_expect":3})
         }
       end
+
+      it 'does not set server_rejoin_age_max by default' do
+        expect(chef_run).to render_file(consul_conf).with_content { |content|
+          expect(content).not_to match(%r{"server_rejoin_age_max":})
+        }
+      end
+
+      context 'with server_rejoin_age_max configured' do
+        before do
+          stub_gitlab_rb(
+            consul: {
+              enable: true,
+              configuration: { server: true },
+              server_rejoin_age_max: '0'
+            }
+          )
+        end
+
+        it 'includes server_rejoin_age_max in the configuration' do
+          expect(chef_run).to render_file(consul_conf).with_content { |content|
+            expect(content).to match(%r{"server_rejoin_age_max":"0"})
+          }
+        end
+      end
     end
 
     describe 'pending restart check' do

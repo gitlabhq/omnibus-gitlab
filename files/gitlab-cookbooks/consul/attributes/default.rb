@@ -33,3 +33,5 @@ default['consul']['tls_ca_file'] = nil
 default['consul']['tls_certificate_file'] = nil
 default['consul']['tls_key_file'] = nil
 default['consul']['tls_verify_client'] = nil
+
+default['consul']['server_rejoin_age_max'] = nil

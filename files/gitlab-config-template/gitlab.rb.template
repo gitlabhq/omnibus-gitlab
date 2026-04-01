@@ -3616,6 +3616,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # consul['tls_key_file'] = nil
 # consul['tls_verify_client'] = nil
 
+### Server rejoin age
+##! Controls the maximum age of a stale server attempting to rejoin a cluster
+##! (introduced in Consul 1.15). Consul will refuse to start a server that has
+##! been offline longer than this duration, requiring manual deletion of
+##! server_metadata.json to recover. Must be at least 6h. Increase this value
+##! if your environment is regularly shut down for more than the default 7 days.
+##! Default: nil (uses Consul's built-in default of 168h / 7 days)
+# consul['server_rejoin_age_max'] = '168h'
+
 ################################################################################
 ## Service desk email settings
 ################################################################################
