@@ -1,0 +1,181 @@
+#!/bin/bash
+
+# -e: exit on error, -u: treat unset variables as errors, -o pipefail: catch failures in pipes
+set -euo pipefail
+
+DEFAULT_IMAGE="gitlab/gitlab-ee:nightly"
+IMAGE="${IMAGE:-$DEFAULT_IMAGE}"
+CLEANUP="${CLEANUP:-1}"
+
+# Navigate to repo root to read PG versions from config/software/
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+
+cleanup() {
+  local exitcode=$?
+  [ "$CLEANUP" != "1" ] && { echo 'skipping cleanup'; exit $exitcode; }
+  echo "exit code: $exitcode, running cleanup"
+  docker compose down -v
+  exit $exitcode
+}
+trap cleanup EXIT
+
+log() { echo "[$(date -u +%H:%M:%S)] $*"; }
+pass() { log "PASS: $*"; }
+fail() { log "FAIL: $*" >&2; exit 1; }
+
+pg_major_from_software() {
+  grep "default_version" "${REPO_ROOT}/config/software/$1.rb" | grep -oE '[0-9]+' | head -1
+}
+
+wait_for_healthy() {
+  local service="$1"
+  local max_attempts="${2:-120}"
+  local attempt=0
+
+  log "Waiting for $service to be healthy..."
+  while ! docker compose ps "$service" | grep -q "healthy"; do
+    attempt=$((attempt + 1))
+    [ $attempt -ge $max_attempts ] && fail "$service did not become healthy after ${max_attempts}s"
+    sleep 1
+  done
+  pass "$service is healthy"
+}
+
+pgbench_init() {
+  local service="$1"
+  log "Initialising pgbench dataset on $service..."
+  # pgbench must run as the gitlab-psql OS user which owns the PostgreSQL socket
+  docker compose exec -T "$service" \
+    su - gitlab-psql -c "/opt/gitlab/embedded/bin/pgbench --initialize --scale=1 -h /var/opt/gitlab/postgresql gitlabhq_production" > /dev/null 2>&1
+  pass "$service: pgbench dataset initialised"
+}
+
+assert_pgbench_rows() {
+  local service="$1"
+  local expected="${2:-100000}"
+
+  local actual
+  actual=$(docker compose exec -T "$service" \
+    su - gitlab-psql -c "psql -h /var/opt/gitlab/postgresql gitlabhq_production -c 'SELECT count(*) FROM pgbench_accounts;' -t" 2>/dev/null | tr -d ' \n')
+
+  if [ "$actual" = "$expected" ]; then
+    pass "$service: pgbench_accounts has $actual rows"
+  else
+    fail "$service: pgbench_accounts has $actual rows (expected $expected)"
+  fi
+}
+
+assert_pg_version() {
+  local service="$1"
+  local expected_major="$2"
+
+  local actual
+  actual=$(docker compose exec -T "$service" \
+    su - gitlab-psql -c "psql -h /var/opt/gitlab/postgresql -d template1 -c 'SHOW server_version;' -t" 2>/dev/null | tr -d ' \n' | cut -d. -f1)
+
+  if [ "$actual" = "$expected_major" ]; then
+    pass "$service: PostgreSQL version is $actual (expected $expected_major)"
+  else
+    fail "$service: PostgreSQL version is $actual (expected $expected_major)"
+  fi
+}
+
+assert_patroni_api() {
+  local service="$1"
+  local endpoint="$2"
+  local expected_http="${3:-200}"
+
+  local http_code
+  http_code=$(docker compose exec -T "$service" \
+    curl -s -o /dev/null -w "%{http_code}" "http://localhost:8008${endpoint}")
+
+  if [ "$http_code" = "$expected_http" ]; then
+    pass "$service: Patroni API ${endpoint} returned HTTP $http_code"
+  else
+    fail "$service: Patroni API ${endpoint} returned HTTP $http_code (expected $expected_http)"
+  fi
+}
+
+run_pg_upgrade() {
+  local service="$1"
+  local role_flag="$2"
+  # Run silently on success; re-run to surface output if it fails
+  if ! docker compose exec -T "$service" \
+    gitlab-ctl pg-upgrade "$role_flag" --no-wait --target-version=$TO_MAJOR > /dev/null 2>&1; then
+    docker compose exec -T "$service" gitlab-ctl pg-upgrade "$role_flag" --no-wait --target-version=$TO_MAJOR 2>&1 | sed "s/^/[$service] /" || true
+    fail "$service: pg-upgrade to PG${TO_MAJOR} failed"
+  fi
+}
+
+wait_for_patroni_endpoint() {
+  local service="$1"
+  local endpoint="$2"
+  local max_attempts="${3:-120}"
+  local attempt=0
+
+  log "Waiting for $service Patroni API $endpoint..."
+  while true; do
+    local http_code
+    http_code=$(docker compose exec -T "$service" \
+      curl -s -o /dev/null -w "%{http_code}" "http://localhost:8008${endpoint}" 2>/dev/null || echo "000")  # "000" on curl failure keeps the variable set for the comparison below
+    [ "$http_code" = "200" ] && break
+    attempt=$((attempt + 1))
+    [ $attempt -ge $max_attempts ] && fail "$service $endpoint did not return 200 after ${max_attempts}s"
+    sleep 1
+  done
+  pass "$service: Patroni API $endpoint returned 200"
+}
+
+main() {
+  cd "$(dirname "$0")"
+  export IMAGE
+
+  FROM_MAJOR=$(pg_major_from_software postgresql)
+  TO_MAJOR=$(pg_major_from_software postgresql_new)
+
+  log "Starting Patroni PG upgrade test with image: $IMAGE"
+  log "Detected PG versions: current=${FROM_MAJOR}, new=${TO_MAJOR}"
+
+  if [ "$FROM_MAJOR" = "$TO_MAJOR" ]; then
+    log "SKIP: postgresql and postgresql_new are both major version ${FROM_MAJOR}, no upgrade path available"
+    exit 0
+  fi
+
+  log "--- Stage 1: Start cluster ---"
+  docker compose up -d consul
+  wait_for_healthy consul 60
+  docker compose up -d postgres-primary
+  wait_for_healthy postgres-primary 120
+  docker compose up -d postgres-replica
+  wait_for_healthy postgres-replica 120
+
+  log "--- Stage 2: Seed data and verify cluster on PG${FROM_MAJOR} ---"
+  pgbench_init postgres-primary
+  assert_pgbench_rows postgres-primary
+  assert_pg_version postgres-primary "$FROM_MAJOR"
+  assert_pg_version postgres-replica "$FROM_MAJOR"
+  assert_patroni_api postgres-primary /health 200
+  assert_patroni_api postgres-replica /replica 200
+
+  log "--- Stage 3: Upgrade leader (postgres-primary) to PG${TO_MAJOR} ---"
+  run_pg_upgrade postgres-primary --leader
+  wait_for_patroni_endpoint postgres-primary /health 120
+
+  log "--- Stage 4: Verify leader upgraded to PG${TO_MAJOR} ---"
+  assert_pg_version postgres-primary "$TO_MAJOR"
+  assert_patroni_api postgres-primary /health 200
+  assert_pgbench_rows postgres-primary
+
+  log "--- Stage 5: Upgrade replica (postgres-replica) to PG${TO_MAJOR} ---"
+  run_pg_upgrade postgres-replica --replica
+  wait_for_patroni_endpoint postgres-replica /replica 120
+
+  log "--- Stage 6: Verify replica upgraded to PG${TO_MAJOR} ---"
+  assert_pg_version postgres-replica "$TO_MAJOR"
+  assert_patroni_api postgres-replica /replica 200
+  assert_pgbench_rows postgres-replica
+
+  log "--- All checks passed ---"
+}
+
+main
