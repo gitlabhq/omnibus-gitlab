@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# This script provides bash completion for gitlab-ctl commands.
+# It dynamically discovers available commands, caches them for performance,
+# and provides completion suggestions.
+
+# The main completion function bash will call
+_gitlab_ctl() {
+    # These variables will hold the current/previous words being typed (cur, prev)
+    local cur prev
+    _init_completion || return
+
+    # Setup cache directory using XDG spec if available. Otherwise, default to ~/.cache
+    local cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/gitlab-ctl-bash-completion"
+    local commands_file="${cache_dir}/commands"
+
+    # Create cache dir if it doesn't exist
+    mkdir -p "${cache_dir}"
+
+    # Function to discover and cache available gitlab-ctl commands
+    update_commands_cache() {
+        # Parse gitlab-ctl help output to get all commands
+        # Filter lines starting with a lowercase word and extract the command name
+        # Throw away the first line (it's a syntax example)
+        gitlab-ctl help 2>/dev/null | \
+            awk 'NR>1 && /^[[:space:]]*[a-z].*/ {print}' | \
+            sort -u > "${commands_file}.tmp"
+
+        # Only update cache if we successfully got commands
+        if [[ -s "${commands_file}.tmp" ]]; then
+            mv "${commands_file}.tmp" "${commands_file}"
+        else
+            rm -f "${commands_file}.tmp"
+        fi
+    }
+
+    # Check if cache exists or if cache older than 1 day. Create/update cache if true
+    if [[ ! -f "${commands_file}" ]] || [[ $(find "${commands_file}" -mtime +1) ]]; then
+        update_commands_cache
+    fi
+
+    # Read cached commands into variables
+    local commands=""
+    [[ -f "${commands_file}" ]] && commands=$(<"${commands_file}")
+
+    # If we're completing right after 'gitlab-ctl', suggest available commands
+    if [[ "${prev}" == "gitlab-ctl" ]]; then
+        COMPREPLY=($(compgen -W "${commands}" -- "${cur}"))
+        return 0
+    fi
+}
+
+# Register the completion function for the gitlab-ctl command
+complete -F _gitlab_ctl gitlab-ctl
