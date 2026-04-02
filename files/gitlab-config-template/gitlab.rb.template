@@ -679,7 +679,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['backup_registry_password'] = nil
 # gitlab_rails['restore_registry_user'] = "registry_restore"
 # gitlab_rails['restore_registry_password'] = nil
-# gitlab_rails['backup_registry']['database_connection'] = { 
+# gitlab_rails['backup_registry']['database_connection'] = {
 #   'port' => 5432,
 #   'dbname' => "registry"
 # }
@@ -1248,7 +1248,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 #     'readtimeout' => '10ms',
 #     'writetimeout' => '10ms'
 #   },
-# 
 #   'pool' => {
 #     'size' => 10,
 #     'maxlifetime' => '1h',
@@ -3720,3 +3719,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_backup_cli['group'] = 'gitlab-backup'
 # gitlab_backup_cli['dir'] = '/var/opt/gitlab/backups'
 # gitlab_backup_cli['additional_groups'] = %w[git gitlab-psql registry]
+
+################################################################################
+## Omnibus Adjacent Kubernetes (OAK) Configuration
+## Beta: These settings are subject to change
+################################################################################
+# oak['enable'] = false
+# oak['network_address'] = '10.0.0.1'  # The K8s pod network IP that Omnibus listens on
+
+# oak['components']['openbao']['enable'] = true
+# oak['components']['openbao']['address'] = 'openbao.k8s.example.com'

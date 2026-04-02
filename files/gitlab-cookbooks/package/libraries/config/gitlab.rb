@@ -49,6 +49,7 @@ module Gitlab
   ## Attributes directly on the node
   attribute('package').use { Package }
   attribute('registry',     priority: 19).use { Registry } # After LetsEncrypt, but before Postgresql
+  attribute('oak',          priority: 19).use { Oak }
   attribute('redis',        priority: 20).use { Redis }
   attribute('postgresql',   priority: 20).use { Postgresql }
   attribute('gitlab_kas',   priority: 20).use { GitlabKas }

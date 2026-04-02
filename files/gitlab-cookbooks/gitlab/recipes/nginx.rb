@@ -420,3 +420,13 @@ end
     action :delete
   end
 end
+
+def gitlab_oak_component_enabled?(name)
+  !!node.dig('oak', 'components', name, 'enable')
+end
+
+node['oak']['components'].each do |name, config|
+  nginx_configuration name do
+    action gitlab_oak_component_enabled?(name) ? 'create' : 'delete'
+  end
+end
