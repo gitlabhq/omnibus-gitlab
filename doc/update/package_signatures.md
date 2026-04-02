@@ -12,14 +12,13 @@ title: Linux package signatures
 
 {{< /details >}}
 
-We use a [Packagecloud](https://packagecloud.io) instance at <https://packages.gitlab.com> to share the
-different OS packages we offer.
+We maintain a package hosting system to share the different OS packages we offer at <https://packages.gitlab.com>.
 
 The instance uses various cryptographic methods to ensure the integrity of these packages.
 
 ## Package repository metadata signing key
 
-The APT and YUM repositories on the Packagecloud instance use a GPG key to
+The APT and YUM repositories use a GPG key to
 sign their metadata. This key is automatically installed by the repository setup
 script specified in the installation instructions.
 
@@ -34,7 +33,7 @@ The following key is used to sign the repository metadata.
 | Comment       | `package repository signing key` |
 | Fingerprint   | `F640 3F65 44A3 8863 DAA0 B6E0 3F01 618A 5131 2F3F` |
 | Expiry        | `2028-02-06` |
-| Download location | `https://packages.gitlab.com/gpg.key` |
+| Download location | `https://packages.gitlab.com/gpgkey/gpg.key` |
 
 - Active from **2020-04-06**.
 - Expiry was extended from **2024-03-01** to **2026-02-27**.
@@ -57,15 +56,15 @@ To fetch the latest repository signing key:
    sudo mkdir -p /etc/apt/keyrings
    sudo curl --fail --silent --show-error \
         --output /etc/apt/keyrings/gitlab-keyring.asc \
-        --url "https://packages.gitlab.com/gpg.key"
+        --url "https://packages.gitlab.com/gpgkey/gpg.key"
    ```
 
 1. Update your repository source file to reference the key. Edit `/etc/apt/sources.list.d/gitlab_gitlab-ee.list` (or `gitlab_gitlab-ce.list`),
    and add `[signed-by=/etc/apt/keyrings/gitlab-keyring.asc]` after `deb`:
 
    ```plaintext
-   deb [signed-by=/etc/apt/keyrings/gitlab-keyring.asc] https://packages.gitlab.com/gitlab/gitlab-ee/<os>/ <codename> main
-   deb-src [signed-by=/etc/apt/keyrings/gitlab-keyring.asc] https://packages.gitlab.com/gitlab/gitlab-ee/<os>/ <codename> main
+   deb [signed-by=/etc/apt/keyrings/gitlab-keyring.asc] https://packages.gitlab.com/gitlab/gitlab-ee/<os>/<codename> <codename> main
+   deb-src [signed-by=/etc/apt/keyrings/gitlab-keyring.asc] https://packages.gitlab.com/gitlab/gitlab-ee/<os>/<codename> <codename> main
    ```
 
 > [!note]
@@ -77,7 +76,7 @@ To fetch the latest repository signing key:
 > run the following as root to update the public keys for GitLab repositories:
 >
 > ```shell
-> curl -s "https://packages.gitlab.com/gpg.key" | apt-key add -
+> curl -s "https://packages.gitlab.com/gpgkey/gpg.key" | apt-key add -
 > apt-key list 3F01618A51312F3F
 > ```
 
