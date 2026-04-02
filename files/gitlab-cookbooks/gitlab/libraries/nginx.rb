@@ -22,6 +22,17 @@ module Nginx
     def parse_variables
       parse_nginx_listen_ports
       parse_nginx_proxy_protocol
+      parse_nginx_listen_addresses
+    end
+
+    def parse_nginx_listen_addresses
+      return unless Gitlab['oak']['enable']
+
+      listen_addresses = Gitlab['nginx']['listen_addresses'] ||
+        Gitlab['node']['gitlab']['nginx']['listen_addresses']
+      return if listen_addresses.include?(Gitlab['oak']['network_address'])
+
+      Gitlab['nginx']['listen_addresses'] = listen_addresses + [Gitlab['oak']['network_address']]
     end
 
     def generate_host_header(fqdn, port, is_https)
