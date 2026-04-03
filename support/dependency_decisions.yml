@@ -386,3 +386,9 @@
   - :who: Sam Joan Roque-Worcel
     :why: https://github.com/in-toto/in-toto-golang/blob/master/LICENSE
     :when: 2025-10-01 19:43:55.000000000 Z
+- - :license
+  - "gitlab.com/gitlab-org/orbit/knowledge-graph/clients/gkgpb"
+  - MIT
+  - :who: Angelo Rivera
+    :why: https://gitlab.com/gitlab-org/orbit/knowledge-graph/-/blob/main/clients/gkgpb/LICENSE
+    :when: 2026-04-02 15:00:00.000000000 Z
