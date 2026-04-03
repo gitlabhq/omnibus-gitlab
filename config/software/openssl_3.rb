@@ -36,12 +36,15 @@ vendor 'openssl'
 if Build::Check.use_ubt?
   # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
   ubt_version = "#{version_string}-1ubt"
-  source Build::UBT.source_args(name, ubt_version, "1feaa222bd8f6dbe825615b301339c7b933ce75ce5641d9ec2fe41e7d98ca747", OhaiHelper.arch)
+  source Build::UBT.source_args(name, ubt_version, "bbddbe2b68cd733eb194db34e1dc78cd5f8ca718c550d4dca8970f328fa259ba", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source git: version.remote
   build do
     env = with_standard_compiler_flags(with_embedded_path)
+
+    # SLES uses gcc with C90 by default, but OpenSSL 3.x requires C99
+    env['CFLAGS'] << ' -std=gnu99' if OhaiHelper.os_platform == 'sles'
 
     configure_args = [
       "--prefix=#{install_dir}/embedded",
