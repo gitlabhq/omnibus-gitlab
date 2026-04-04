@@ -135,7 +135,7 @@ dependency 'go-crond'
 if Build::Check.include_ee?
   dependency 'consul'
   dependency 'pgbouncer-exporter'
-  unless OhaiHelper.raspberry_pi?
+  unless OhaiHelper.raspberry_pi? || OhaiHelper.sles12?
     dependency 'spamcheck'
     dependency 'spam-classifier'
   end
