@@ -1809,10 +1809,13 @@ AWS-EE-Premium-Release:
 
 # Before publishing the package, try installing the package from pre-release
 # repo from Pulp and run `gitlab-ctl reconfigure`
+# On failure, Release Managers should consult the Build team before proceeding 
+# with the release
 check-packages-functionality:
   stage: staging_verify
   trigger:
     include: '/gitlab-ci-config/check-packages.yml'
+    strategy: mirror
   variables:
     deploy_instance: "true"
     package_repository: "${STAGING_REPO}"
