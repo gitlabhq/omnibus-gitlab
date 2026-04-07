@@ -17,54 +17,24 @@ Pi 4 with at least 4 GB of RAM for best results. You might be able to run GitLab
 on lower resources, like a Pi 3 or newer, but it is not recommended. We do not
 package for older Pis, as their CPU and RAM are insufficient.
 
-Starting from GitLab version 18.0, we will no longer provide 32-bit packages for Raspberry Pi.
-You should use 64-bit Raspberry Pi OS and [install the `arm64` Debian packages](https://docs.gitlab.com/install/package/debian/).
-For information on backing up data on a 32-bit OS and restoring it to a 64-bit OS, see
-[Upgrading operating systems for PostgreSQL](https://docs.gitlab.com/administration/postgresql/upgrading_os/).
-
-## Configure swap
-
 To ensure the device has enough memory available, expand the swap space to 4 GB.
 
 ## Install GitLab
 
-The recommended and supported way to install GitLab is by using the GitLab
-official repository.
+Starting from GitLab version 18.0, we no longer provide 32-bit packages for Raspberry Pi.
 
-Only the [official Raspberry Pi 64-bit distribution](https://www.raspberrypi.com/software/) is
-supported.
+You should use [64-bit Raspberry Pi OS](https://www.raspberrypi.com/software/operating-systems/) and
+[install GitLab using the `arm64` Debian packages](https://docs.gitlab.com/install/package/debian/).
 
-### Install GitLab via the official repository
-
-Visit the [installation page](https://about.gitlab.com/install/), choose
-Debian, and follow the instructions to install GitLab.
-
-### Manually download GitLab
-
-If your distribution of choice is Debian-based, you
-can [manually download](https://docs.gitlab.com/update/package/#upgrade-with-a-downloaded-package)
-GitLab and install it.
+For information on backing up data on a 32-bit OS and restoring it to a 64-bit OS, see
+[Upgrading operating systems for PostgreSQL](https://docs.gitlab.com/administration/postgresql/upgrading_os/).
 
 ## Reduce running processes
 
 If you find that your Pi is struggling to run GitLab, you can reduce
-some running processes:
+some running processes.
 
-1. Open `/etc/gitlab/gitlab.rb` and change the following settings:
-
-   ```ruby
-   # Reduce the number of running workers to the minimum in order to reduce memory usage
-   puma['worker_processes'] = 2
-   sidekiq['concurrency'] = 9
-   # Turn off monitoring to reduce idle cpu and disk usage
-   prometheus_monitoring['enable'] = false
-   ```
-
-1. Reconfigure GitLab:
-
-   ```shell
-   sudo gitlab-ctl reconfigure
-   ```
+For more information, see how to run GitLab in a [memory-constrained environment](memory_constrained_envs.md).
 
 ## Additional recommendations
 
