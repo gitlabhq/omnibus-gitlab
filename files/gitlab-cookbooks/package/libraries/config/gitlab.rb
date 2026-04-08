@@ -92,7 +92,7 @@ module Gitlab
     ee_attribute('sentinel').use { Sentinel }
 
     # Base GitLab attributes
-    attribute('gitlab_sshd',      priority: 5)
+    attribute('gitlab_sshd',      priority: 5).use { GitlabSshd }
     attribute('gitaly_client',    priority: 5)
     attribute('gitlab_shell',     priority: 10).use { GitlabShell } # Parse shell before rails for data dir settings
     attribute('gitlab_rails',     priority: 15).use { GitlabRails } # Parse rails first as others may depend on it

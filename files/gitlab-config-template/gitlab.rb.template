@@ -1568,6 +1568,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_sshd['host_keys_glob'] = 'ssh_host_*_key'
 # gitlab_sshd['host_certs_dir'] = '/var/opt/gitlab/gitlab-sshd'
 # gitlab_sshd['host_certs_glob'] = 'ssh_host_*-cert.pub'
+###! Trusted user CA public key files for instance-level SSH certificate authentication.
+###! For example: ['/etc/gitlab/ssh_user_ca.pub']
+# gitlab_sshd['trusted_user_ca_keys'] = nil
 
 ################################################################
 ## GitLab PostgreSQL

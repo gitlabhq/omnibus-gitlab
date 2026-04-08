@@ -874,6 +874,7 @@ default['gitlab']['gitlab_sshd']['host_keys_dir'] = '/var/opt/gitlab/gitlab-sshd
 default['gitlab']['gitlab_sshd']['host_keys_glob'] = 'ssh_host_*_key'
 default['gitlab']['gitlab_sshd']['host_certs_dir'] = '/var/opt/gitlab/gitlab-sshd'
 default['gitlab']['gitlab_sshd']['host_certs_glob'] = 'ssh_host_*-cert.pub'
+default['gitlab']['gitlab_sshd']['trusted_user_ca_keys'] = nil
 
 ####
 # Web server

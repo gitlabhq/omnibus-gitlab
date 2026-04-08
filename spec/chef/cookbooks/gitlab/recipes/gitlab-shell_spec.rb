@@ -273,7 +273,7 @@ RSpec.describe 'gitlab::gitlab-shell' do
     let(:templatesymlink) { chef_run.templatesymlink('Create a config.yml and create a symlink to Rails root') }
     let(:expected_sshd_keys) do
       %w[listen proxy_protocol proxy_policy web_listen concurrent_sessions_limit client_alive_interval
-         grace_period login_grace_time proxy_header_timeout macs kex_algorithms ciphers public_key_algorithms host_key_files host_key_certs]
+         grace_period login_grace_time proxy_header_timeout macs kex_algorithms ciphers public_key_algorithms host_key_files host_key_certs trusted_user_ca_keys]
     end
 
     before do
@@ -372,6 +372,24 @@ RSpec.describe 'gitlab::gitlab-shell' do
         expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml').with_content { |content|
           data = YAML.safe_load(content)
           expect(data['sshd']['public_key_algorithms']).to eq(%w(ssh-ed25519 ecdsa-sha2-nistp256 rsa-sha2-256 rsa-sha2-512))
+        }
+      end
+    end
+
+    context 'with custom trusted_user_ca_keys' do
+      before do
+        stub_gitlab_rb(
+          gitlab_sshd: {
+            enable: true,
+            trusted_user_ca_keys: ['/etc/gitlab/ssh_user_ca.pub', '/etc/gitlab/ssh_user_ca2.pub'],
+          }
+        )
+      end
+
+      it 'renders gitlab-sshd config with trusted_user_ca_keys' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-shell/config.yml').with_content { |content|
+          data = YAML.safe_load(content)
+          expect(data['sshd']['trusted_user_ca_keys']).to eq(['/etc/gitlab/ssh_user_ca.pub', '/etc/gitlab/ssh_user_ca2.pub'])
         }
       end
     end
