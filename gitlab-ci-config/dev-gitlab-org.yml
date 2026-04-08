@@ -175,8 +175,6 @@
   cache: !reference [.tag-cache]
   retry: 2
   timeout: 35 minutes
-  variables:
-    REPOSITORY_TYPE: "pulp"
   tags:
   - ${PACKAGE_PROMOTION_RUNNER_TAG}
   rules:
@@ -206,8 +204,6 @@
   retry: 2
   timeout: 35 minutes
   cache: !reference [.tag-cache]
-  variables:
-    REPOSITORY_TYPE: "pulp"
   tags:
   - ${PACKAGE_PROMOTION_RUNNER_TAG}
   rules:

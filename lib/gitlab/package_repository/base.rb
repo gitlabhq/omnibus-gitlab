@@ -22,13 +22,10 @@ class PackageRepository
     end
 
     # Returns the target repository name
-    # Priority: PULP_REPO env var > PACKAGECLOUD_REPO env var > RASPBERRY_REPO env var > RC repository > Package name
-    # For legacy reason, in most places PACKAGECLOUD_REPO is still used. If PULP_REPO is specified, it must be for Pulp
+    # Priority: PULP_REPO env var > RASPBERRY_REPO env var > RC repository > Package name
     # @return [String] The target repository name
     def target
-      # Override for Pulp (with legacy PackageCloud fallback)
       return Gitlab::Util.get_env('PULP_REPO') if Gitlab::Util.get_env('PULP_REPO') && !Gitlab::Util.get_env('PULP_REPO').empty?
-      return Gitlab::Util.get_env('PACKAGECLOUD_REPO') if Gitlab::Util.get_env('PACKAGECLOUD_REPO') && !Gitlab::Util.get_env('PACKAGECLOUD_REPO').empty?
 
       # Repository for raspberry pi
       return Gitlab::Util.get_env('RASPBERRY_REPO') if Gitlab::Util.get_env('RASPBERRY_REPO') && !Gitlab::Util.get_env('RASPBERRY_REPO').empty?

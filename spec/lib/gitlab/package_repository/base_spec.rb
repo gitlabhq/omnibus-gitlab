@@ -29,21 +29,9 @@ RSpec.describe PackageRepository::Base do
       end
     end
 
-    context 'when PACKAGECLOUD_REPO is set' do
-      before do
-        stub_env_var('PULP_REPO', nil)
-        stub_env_var('PACKAGECLOUD_REPO', 'packagecloud-test-repo')
-      end
-
-      it 'returns the PACKAGECLOUD_REPO value' do
-        expect(base_instance.target).to eq('packagecloud-test-repo')
-      end
-    end
-
     context 'when RASPBERRY_REPO is set' do
       before do
         stub_env_var('PULP_REPO', nil)
-        stub_env_var('PACKAGECLOUD_REPO', nil)
         stub_env_var('RASPBERRY_REPO', 'raspi-repo')
       end
 
@@ -55,7 +43,6 @@ RSpec.describe PackageRepository::Base do
     context 'when no environment variables are set' do
       before do
         stub_env_var('PULP_REPO', nil)
-        stub_env_var('PACKAGECLOUD_REPO', nil)
         stub_env_var('RASPBERRY_REPO', nil)
       end
 
