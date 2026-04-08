@@ -50,9 +50,9 @@ source /RELEASE
 echo "Thank you for using GitLab Docker Image!"
 echo "Current version: $RELEASE_PACKAGE=$RELEASE_VERSION"
 echo ""
-if [[ "$PACKAGECLOUD_REPO" == "unstable" ]]; then
-	echo "You are using UNSTABLE version of $RELEASE_PACKAGE!"
-	echo ""
+if [[ "$PULP_REPO" == "unstable" ]]; then
+  echo "You are using UNSTABLE version of $RELEASE_PACKAGE!"
+  echo ""
 fi
 echo "Configure GitLab for your system by editing /etc/gitlab/gitlab.rb file"
 echo "And restart this container to reload settings."

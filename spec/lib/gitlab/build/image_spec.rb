@@ -93,6 +93,7 @@ RSpec.describe Build::Image do
   describe '.write_release_file' do
     before do
       stub_env_var('CI_JOB_TOKEN', 'NOT-CI-JOB-TOKEN')
+      stub_env_var('PULP_REPO', nil)
     end
 
     describe 'for builds in dev.gitlab.org' do
@@ -192,6 +193,21 @@ RSpec.describe Build::Image do
         it 'returns build version and iteration with env variable' do
           expect(ComponentImage.write_release_file).to eq(release_file_content)
         end
+      end
+    end
+
+    describe 'when PULP_REPO is set' do
+      before do
+        stub_env_var('CI_API_V4_URL', 'https://dev.gitlab.org/api/v4')
+        stub_env_var('CI_PROJECT_ID', '283')
+        stub_env_var('CI_PIPELINE_ID', '12345')
+        stub_env_var('PULP_REPO', 'unstable')
+        allow(Build::Info::Package).to receive(:name).and_return('gitlab-ce')
+        allow(Build::Info::Package).to receive(:release_version).and_return('12.121.12-ce.0')
+      end
+
+      it 'includes PULP_REPO in the release file' do
+        expect(ComponentImage.write_release_file).to include("PULP_REPO=unstable\n")
       end
     end
   end

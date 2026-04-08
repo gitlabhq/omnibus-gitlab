@@ -31,6 +31,8 @@ module Build
           contents << "DOWNLOAD_URL_amd64=#{download_urls[:amd64]}\n"
           contents << "DOWNLOAD_URL_arm64=#{download_urls[:arm64]}\n"
           contents << "CI_JOB_TOKEN=#{Build::Info::CI.job_token}\n"
+          repo = Gitlab::Util.get_env('PULP_REPO')
+          contents << "PULP_REPO=#{repo.chomp}\n" if repo && !repo.empty?
           contents.join
         end
       end
