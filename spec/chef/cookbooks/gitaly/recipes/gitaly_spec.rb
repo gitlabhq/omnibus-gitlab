@@ -128,6 +128,10 @@ RSpec.describe 'gitaly' do
         .with_content(%r{ulimit -n 30000})
     end
 
+    it 'sets sv_timeout on the gitaly runit_service' do
+      expect(chef_run.find_resource('runit_service', 'gitaly').sv_timeout).to eq(65)
+    end
+
     it 'does not append timestamp in logs if logging format is json' do
       expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/log/run')
         .with_content(/svlogd \/var\/log\/gitlab\/gitaly/)
@@ -573,6 +577,10 @@ RSpec.describe 'gitaly' do
     it 'renders the runit run script with custom values' do
       expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/run')
         .with_content(%r{ulimit -n #{open_files_ulimit}})
+    end
+
+    it 'enables sv_timeout on the gitaly runit_service' do
+      expect(chef_run.find_resource('runit_service', 'gitaly').sv_timeout).to eq(1205)
     end
 
     context 'with cgroups v2' do
