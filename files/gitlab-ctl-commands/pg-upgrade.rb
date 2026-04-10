@@ -750,11 +750,7 @@ def old_version
 end
 
 def default_version
-  # Once the new version is the default and recommended version, modify the
-  # return statement to try postgresql_new first.
-
-  # PGVersion.parse(version_from_manifest('postgresql_new')) || PGVersion.parse(version_from_manifest('postgresql'))
-  PGVersion.parse(version_from_manifest('postgresql'))
+  PGVersion.parse(version_from_manifest('postgresql_new')) || PGVersion.parse(version_from_manifest('postgresql'))
 end
 
 def new_version

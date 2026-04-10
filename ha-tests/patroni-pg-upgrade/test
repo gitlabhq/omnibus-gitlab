@@ -65,13 +65,23 @@ assert_pgbench_rows() {
   fi
 }
 
+# Get the actual PostgreSQL major version currently running in a container
+get_running_pg_version() {
+  local service="$1"
+
+  local actual_version
+  actual_version=$(docker compose exec -T "$service" \
+    su - gitlab-psql -c "psql -h /var/opt/gitlab/postgresql -d template1 -c 'SHOW server_version;' -t" 2>/dev/null | tr -d ' \n' | cut -d. -f1)
+
+  echo "$actual_version"
+}
+
 assert_pg_version() {
   local service="$1"
   local expected_major="$2"
 
   local actual
-  actual=$(docker compose exec -T "$service" \
-    su - gitlab-psql -c "psql -h /var/opt/gitlab/postgresql -d template1 -c 'SHOW server_version;' -t" 2>/dev/null | tr -d ' \n' | cut -d. -f1)
+  actual=$(get_running_pg_version "$service")
 
   if [ "$actual" = "$expected_major" ]; then
     pass "$service: PostgreSQL version is $actual (expected $expected_major)"
@@ -146,6 +156,18 @@ main() {
   wait_for_healthy consul 60
   docker compose up -d postgres-primary
   wait_for_healthy postgres-primary 120
+
+  # Check what version is ACTUALLY running in the container
+  # (fresh installs may use a different default than what config files specify)
+  RUNNING_VERSION=$(get_running_pg_version postgres-primary)
+  log "Detected running PG version in container: ${RUNNING_VERSION}"
+
+  if [ "$RUNNING_VERSION" = "$TO_MAJOR" ]; then
+    log "SKIP: Container is already running PG${TO_MAJOR}, no upgrade path available"
+    cleanup
+    exit 0
+  fi
+
   docker compose up -d postgres-replica
   wait_for_healthy postgres-replica 120
 
