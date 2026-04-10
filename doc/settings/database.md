@@ -48,7 +48,7 @@ of that setting in the running PostgreSQL instance.
 #### Automatic restart when the PostgreSQL version changes
 
 By default, Linux package installations automatically restart PostgreSQL when the underlying
-version changes, as suggested by the [upstream documentation](https://www.postgresql.org/docs/16/upgrading.html).
+version changes, as suggested by the [upstream documentation](https://www.postgresql.org/docs/17/upgrading.html).
 This behavior can be controlled using the `auto_restart_on_version_change` setting
 available for `postgresql` and `geo-postgresql`.
 
@@ -79,7 +79,7 @@ To disable automatic restarts when the PostgreSQL version changes:
 Linux package installations automatically enable SSL on the PostgreSQL server, but it will accept
 both encrypted and unencrypted connections by default. Enforcing SSL requires
 using the `hostssl` configuration in `pg_hba.conf`. For more details, see the
-[`pg_hba.conf` documentation](https://www.postgresql.org/docs/16/auth-pg-hba-conf.html).
+[`pg_hba.conf` documentation](https://www.postgresql.org/docs/17/auth-pg-hba-conf.html).
 
 SSL support depends on the following files:
 
@@ -98,7 +98,7 @@ must be readable by the `gitlab-psql` user. Linux package installations manage t
 the files for you, but if the paths are customized, you must ensure that the
 `gitlab-psql` can access the directory in the files are placed in.
 
-For more details, see the [PostgreSQL documentation](https://www.postgresql.org/docs/16/ssl-tcp.html).
+For more details, see the [PostgreSQL documentation](https://www.postgresql.org/docs/17/ssl-tcp.html).
 
 Note that `server.crt` and `server.key` may be different from the default SSL
 certificates used to access GitLab. For example, suppose the external hostname
