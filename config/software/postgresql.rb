@@ -16,7 +16,7 @@
 #
 
 name 'postgresql'
-default_version '16.11'
+default_version '16.13'
 major_version = default_version.split('.')[0]
 
 license 'PostgreSQL'
@@ -34,11 +34,11 @@ dependency 'config_guess'
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
   # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  source Build::UBT.source_args("postgresql-all", "#{default_version}-3ubt", "f827c8b25d984a6f9aec2d0d61d301920556601c473acd57ff492f02d576ad1e", OhaiHelper.arch)
+  source Build::UBT.source_args("postgresql-all", "#{default_version}-3ubt", "767155d794e277df7931b97f5ecc066d650d87ec74990383d7f7df39b486147e", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   version default_version do
-    source sha256: '6deb08c23d03d77d8f8bd1c14049eeef64aef8968fd8891df2dfc0b42f178eac'
+    source sha256: 'dc2ddbbd245c0265a689408e3d2f2f3f9ba2da96bd19318214b313cdd9797287'
   end
 
   source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
