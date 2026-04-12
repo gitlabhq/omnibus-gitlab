@@ -33,7 +33,7 @@ gem 'ohai', '18.1.18'
 # a custom version from the Git source for licensing reasons and for Ruby 3.2 fixes.
 gem 'acme-client', '2.0.28'
 gem 'rainbow', '3.1.1'
-gem 'gitlab-ruby-shadow', '2.5.1', require: 'shadow'
+gem 'gitlab-ruby-shadow', '2.6.0', require: 'shadow'
 gem 'tomlib', '0.6.0'
 gem 'mixlib-log', '3.2.3'
 gem 'rack', '2.2.21'
