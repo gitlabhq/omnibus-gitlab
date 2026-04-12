@@ -30,6 +30,7 @@ pid_file = File.join(working_dir, "gitaly.pid")
 json_logging = node.dig('gitaly', 'configuration', 'logging', 'format').eql?('json')
 open_files_ulimit = node['gitaly']['open_files_ulimit']
 runtime_dir = node.dig('gitaly', 'configuration', 'runtime_dir')
+graceful_restart_timeout = node.dig('gitaly', 'configuration', 'graceful_restart_timeout') || '1m'
 cgroups_enabled = node.dig('gitaly', 'configuration', 'cgroups', 'repositories', 'count')&.positive?
 cgroups_mountpoint = node.dig('gitaly', 'configuration', 'cgroups', 'mountpoint') || '/sys/fs/cgroup'
 cgroups_hierarchy_root = node.dig('gitaly', 'configuration', 'cgroups', 'hierarchy_root') || File.join('gitlab.slice', 'gitaly')
@@ -178,6 +179,8 @@ runit_service 'gitaly' do
     cgroups_parent_cgroup_procs_file: cgroups_parent_cgroup_procs_file,
     use_wrapper: use_wrapper,
   }.merge(params))
+  # Ensure gitaly has time to do its graceful restart before runit times out and fails
+  sv_timeout (Gitaly.parse_duration(graceful_restart_timeout) / 1000) + 5
   log_options logging_settings[:options]
 end
 

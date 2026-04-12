@@ -117,11 +117,12 @@ Lint/DuplicateMethods:
   Exclude:
     - 'files/gitlab-ctl-commands/lib/gitlab_ctl/postgresql/pgpass.rb'
 
-# Offense count: 2
+# Offense count: 3
 Lint/MixedRegexpCaptureTypes:
   Exclude:
     - 'files/gitlab-cookbooks/gitlab/libraries/pg_version.rb'
     - 'files/gitlab-ctl-commands/lib/gitlab_ctl/util.rb'
+    - 'files/gitlab-cookbooks/package/libraries/helpers/duration_helper.rb'
 
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
