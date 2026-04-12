@@ -17,10 +17,12 @@
 
 require 'chef/mash'
 require 'tomlib'
+require_relative '../../package/libraries/helpers/duration_helper.rb'
 require_relative '../../package/libraries/helpers/output_helper.rb'
 
 module Gitaly
   class << self
+    include DurationHelper
     include OutputHelper
 
     def parse_variables
