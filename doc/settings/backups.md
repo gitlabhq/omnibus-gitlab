@@ -172,3 +172,106 @@ gitlab_rails['manage_backup_path'] = false
 > [!warning]
 > If you set this configuration option, it is up to you to create the directory specified in `gitlab_rails['backup_path']` and to set permissions
 > which will allow user specified in `user['username']` to have correct access. Failing to do so will prevent GitLab from creating the backup archive.
+
+## Container Registry metadata database backup credentials
+
+{{< history >}}
+
+- [Introduced] in GitLab [18.11](https://gitlab.com/groups/gitlab-org/-/work_items/21179).
+
+{{< /history >}}
+
+When using `gitlab-backup` to back up the Container Registry metadata database,
+GitLab must store credentials that allow it to connect to the registry PostgreSQL
+database. These credentials are written to restricted files on disk and picked up
+by the backup tool at runtime.
+
+### Enable the backup role
+
+To enable creation of the registry credential files:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['backup_role'] = true
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+### Single-node installations
+
+On a single-node installation where Container Registry is co-located with GitLab,
+the database connection settings are automatically derived from the `registry['database']`
+configuration. You only need to set the credentials for the backup and restore PostgreSQL
+roles:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['backup_role'] = true
+
+   # Credentials for the PostgreSQL role used when creating backups
+   gitlab_rails['backup_registry_user']     = 'registry_backup'  # default
+   gitlab_rails['backup_registry_password'] = '<backup_password>'
+
+   # Credentials for the PostgreSQL role used when restoring backups
+   gitlab_rails['restore_registry_user']     = 'registry_restore'  # default
+   gitlab_rails['restore_registry_password'] = '<restore_password>'
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+### Multi-node installations (dedicated backup node)
+
+For multi-node installations, or when running `gitlab-backup` on a dedicated
+backup node that does not have Container Registry co-located, specify the
+connection details explicitly:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['backup_role'] = true
+
+   gitlab_rails['backup_registry']['database_connection'] = {
+     'host'        => 'registry-db.example.com',
+     'port'        => 5432,           # default
+     'dbname'      => 'registry',     # default
+     'sslmode'     => 'require',
+     'sslcert'     => '/path/to/client.crt',
+     'sslkey'      => '/path/to/client.key',
+     'sslrootcert' => '/path/to/ca.crt'
+   }
+
+   gitlab_rails['backup_registry_user']      = 'registry_backup'
+   gitlab_rails['backup_registry_password']  = '<backup_password>'
+   gitlab_rails['restore_registry_user']     = 'registry_restore'
+   gitlab_rails['restore_registry_password'] = '<restore_password>'
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+### Credential files
+
+After `sudo gitlab-ctl reconfigure`, the following files are created under
+`/opt/gitlab/etc/gitlab-backup/env/`:
+
+| File | Environment variables written |
+| ---- | ----------------------------- |
+| `env-connection` | `REGISTRY_DATABASE_HOST`, `REGISTRY_DATABASE_PORT`, `REGISTRY_DATABASE_NAME`, `REGISTRY_DATABASE_SSLMODE`, `REGISTRY_DATABASE_SSLCERT`, `REGISTRY_DATABASE_SSLKEY`, `REGISTRY_DATABASE_SSLROOTCERT` |
+| `env-backup_user` | `REGISTRY_DATABASE_USER`, `REGISTRY_DATABASE_PASSWORD` (backup role credentials) |
+| `env-restore_user` | `REGISTRY_DATABASE_USER`, `REGISTRY_DATABASE_PASSWORD` (restore role credentials) |
+
+All files are owned by `root:root` with `0400` permissions. The parent directory has `0750` permissions.
+Only variables with non-empty values are written to the files.
