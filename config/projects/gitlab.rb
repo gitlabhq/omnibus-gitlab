@@ -145,7 +145,7 @@ dependency 'redis-exporter'
 dependency 'postgres-exporter'
 dependency 'prometheus'
 dependency 'gitlab-exporter'
-dependency 'mattermost'
+dependency 'mattermost' unless OhaiHelper.sles12?
 
 # Components that depend on the contents of this repository tends to dirty the
 # cache frequently than vendored components.
