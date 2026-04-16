@@ -21,7 +21,7 @@
 
 ## Localization files that do not need `*` rule approval,
 ## but still require an approval from the localization team (covered by later [Localization Team] rules).
-!/doc-locale/**
+!/doc-locale/
 !/argo_translation.yml
 
 ## Technical writing files that do not need `*` rule approval,
