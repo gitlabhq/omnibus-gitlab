@@ -347,6 +347,7 @@ docs-lint links:
 docs-lint hugo:
   image: registry.gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/docs-gitlab-com-builder:hugo-0.150.1
   stage: check
+  retry: 1
   rules:
     - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
