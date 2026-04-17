@@ -196,6 +196,11 @@ dependency 'git-filter-repo'
 dependency 'gitlab-rails'
 dependency 'gitaly'
 dependency 'ruby-grpc' if Build::Check.use_system_ssl?
+# To ensure LD_LIBRARY_PATH includes /opt/gitlab/embedded/lib we need to
+# recompile the Ruby ffi gem instead of relying on the precompiled
+# native gems. For older platforms, we already recompile all native gems
+# with `bundle config force_ruby_platform true`.
+dependency 'ruby-ffi' unless OhaiHelper.ruby_native_gems_unsupported?
 
 # Package scripts
 dependency 'package-scripts'
