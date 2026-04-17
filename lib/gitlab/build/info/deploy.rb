@@ -3,10 +3,6 @@ require_relative '../check'
 module Build
   class Info
     class Deploy
-      OS_MAPPING = {
-        'PATCH_DEPLOY_ENVIRONMENT' => 'ubuntu-jammy',
-      }.freeze
-
       class << self
         def environment_key
           'PATCH_DEPLOY_ENVIRONMENT' if Build::Check.is_rc_tag?
