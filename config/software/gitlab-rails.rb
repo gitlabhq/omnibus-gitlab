@@ -289,8 +289,27 @@ build do
   # Cleanup after bundle
   # Delete all .gem archives
   command "find #{install_dir} -name '*.gem' -type f -print -delete"
-  # Delete all docs
-  command "find #{install_dir}/embedded/lib/ruby/gems -name 'doc' -type d -print -exec rm -r {} +"
+
+  # Delete other unwanted files and folders from gems
+  # [pattern, type, action]
+  gems_dir = "#{install_dir}/embedded/lib/ruby/gems"
+  cleanup_rules = [
+    ['.gitlab-ci.yml', 'f', :delete],
+    ['.gitignore',     'f', :delete],
+    ['.travis.yml',    'f', :delete],
+    ['.rubocop*.yml',  'f', :delete],
+    ['.rspec',         'f', :delete],
+    ['.github',        'd', :delete_recursive],
+    ['doc',            'd', :delete_recursive],
+  ]
+  cleanup_rules.each do |pattern, type, action|
+    case action
+    when :delete
+      command "find #{gems_dir} -name '#{pattern}' -type #{type} -print -delete"
+    when :delete_recursive
+      command "find #{gems_dir} -name '#{pattern}' -type #{type} -print -exec rm -r {} +"
+    end
+  end
 
   # Because db/structure.sql is modified by `rake db:migrate` after installation,
   # keep a copy of structure.sql around in case we need it. (I am looking at you,
@@ -317,6 +336,7 @@ build do
     vendor/gems/*/spec
     vendor/gems/README.md
     workhorse
+    .gitlab
   )
 
   mkdir "#{install_dir}/bin/"
