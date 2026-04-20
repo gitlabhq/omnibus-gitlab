@@ -3,9 +3,6 @@
 gem install bundler:${BUNDLER_VERSION}
 bundle config set --local path 'gems'
 bundle config set --local without 'rubocop'
-if [ "$INCLUDE_PACKAGECLOUD" = "true" ]; then
-    bundle config set --local with 'packagecloud';
-fi
 # If OMNIBUS_GEM_SOURCE is set, then check it out as a local override to the
 # omnibus gem. The local overide does not change the Gemfile.lock. As part of
 # the build pipeline, we are checking whether the state of the repository is
