@@ -24,21 +24,26 @@ skip_transitive_dependency_licensing true
 
 dependency 'config_guess'
 
-source url: "https://ftp.osuosl.org/pub/blfs/conglomeration/popt/popt-#{version}.tar.gz",
-       sha256: 'e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8'
+if Build::Check.use_ubt?
+  source Build::UBT.source_args(name, "#{default_version}-1ubt", "2f61295b4ac610888981af7ac1c2d109d17aec688013d16ad62d82c232abc608", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source url: "https://ftp.osuosl.org/pub/blfs/conglomeration/popt/popt-#{version}.tar.gz",
+         sha256: 'e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8'
 
-relative_path "popt-#{version}"
+  relative_path "popt-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  update_config_guess
+    update_config_guess
 
-  # --disable-nls => Disable localization support.
-  command './configure' \
-          " --prefix=#{install_dir}/embedded" \
-          ' --disable-nls', env: env
+    # --disable-nls => Disable localization support.
+    command './configure' \
+            " --prefix=#{install_dir}/embedded" \
+            ' --disable-nls', env: env
 
-  make "-j #{workers}", env: env
-  make 'install', env: env
+    make "-j #{workers}", env: env
+    make 'install', env: env
+  end
 end
