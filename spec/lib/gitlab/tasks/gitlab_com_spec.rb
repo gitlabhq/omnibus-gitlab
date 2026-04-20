@@ -46,7 +46,6 @@ RSpec.describe 'gitlab_com', type: :rake do
 
         context 'with the auto-deploy tag' do
           before do
-            allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(%w[pkg/ubuntu-focal/gitlab-ee_16.7.0-ee.0_amd64.deb])
             allow(Build::Check).to receive(:is_auto_deploy?).and_return(true)
           end
 
@@ -55,39 +54,15 @@ RSpec.describe 'gitlab_com', type: :rake do
           end
         end
 
-        context 'when running on Ubuntu 20.04' do
+        context 'with a release candidate (RC) tag' do
           before do
-            allow(Dir).to receive(:glob).with("pkg/**/*.{deb,rpm}").and_return(%w[pkg/ubuntu-focal/gitlab-ee_16.7.0-ee.0_amd64.deb])
+            allow(Build::Check).to receive(:is_rc_tag?).and_return(true)
           end
 
-          context 'with a release candidate (RC) tag' do
-            before do
-              allow(Build::Check).to receive(:is_rc_tag?).and_return(true)
-            end
+          it 'triggers deployment to the patch environment' do
+            expect(DeployerHelper).to receive(:new).with('dummy-token', 'patch-environment', :master)
 
-            it 'triggers deployment to the patch environment' do
-              expect(DeployerHelper).to receive(:new).with('dummy-token', 'patch-environment', :master)
-
-              Rake::Task['gitlab_com:deployer'].invoke
-            end
-          end
-        end
-
-        context 'running on any other operating system' do
-          before do
-            allow(OhaiHelper).to receive(:fetch_os_with_codename).and_return(%w[debian buster])
-          end
-
-          context 'with a release candidate (RC) tag' do
-            before do
-              allow(Build::Check).to receive(:is_rc_tag?).and_return(true)
-            end
-
-            it 'does not trigger deployment' do
-              expect(DeployerHelper).not_to receive(:new)
-
-              Rake::Task['gitlab_com:deployer'].invoke
-            end
+            Rake::Task['gitlab_com:deployer'].invoke
           end
         end
       end
