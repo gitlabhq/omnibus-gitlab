@@ -29,16 +29,16 @@
   - github.com/hashicorp/consul/api
   - MPL2
   - :who: Balasankar C
-    :why: https://github.com/hashicorp/consul/blob/api/v1.31.2/api/LICENSE
-    :versions: [ v1.32.0 ]
-    :when: 2025-10-13 11:15:00.000000000 Z
+    :why: https://github.com/hashicorp/consul/blob/api/v1.32.1/api/LICENSE
+    :versions: [ v1.32.1 ]
+    :when: 2026-04-13 00:00:00.000000000 Z
 - - :license
   - github.com/hashicorp/go-version
   - MPL2
   - :who: Balasankar C
-    :why: https://github.com/hashicorp/go-version/blob/v1.7.0/LICENSE
-    :versions: [ v1.7.0 ]
-    :when: 2025-10-13 11:20:00.000000000 Z
+    :why: https://github.com/hashicorp/go-version/blob/v1.8.0/LICENSE
+    :versions: [ v1.8.0 ]
+    :when: 2026-04-13 00:00:00.000000000 Z
 - - :license
   - github.com/hashicorp/consul-awsauth
   - MPL2
@@ -196,9 +196,9 @@
   - github.com/hashicorp/nomad/api
   - MPL2
   - :who: Balasankar C
-    :why: https://github.com/hashicorp/nomad/blob/e3ac00f30eec/api/LICENSE
-    :versions: [ v0.0.0-20241218080744-e3ac00f30eec ]
-    :when: 2025-05-02 11:15:00.000000000 Z
+    :why: https://github.com/hashicorp/nomad/blob/b27b0c2e019a/api/LICENSE
+    :versions: [ v0.0.0-20260324203407-b27b0c2e019a ]
+    :when: 2026-04-13 00:00:00.000000000 Z
 - - :license
   - github.com/kieler/elkjs
   - EPL-2.0
