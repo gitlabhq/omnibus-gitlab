@@ -30,8 +30,6 @@ sudo apt-get update
 sudo apt-get clean
 ```
 
-See [Joe Damato's from Packagecloud comment](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/628#note_1824330) and [his blog article](https://blog.packagecloud.io/apt-hash-sum-mismatch/) for more context.
-
 Another workaround is to download the package manually by selecting the correct package from the [CE packages](https://packages.gitlab.com/gitlab/gitlab-ce) or [EE packages](https://packages.gitlab.com/gitlab/gitlab-ee) repository:
 
 ```shell
@@ -53,9 +51,8 @@ File 'repomd.xml' from repository 'gitlab_gitlab-ce' is signed with an unknown k
 ```
 
 This is a known bug with zypper where zypper ignores the `gpgkey` keyword in the
-repository configuration file. With later versions of Packagecloud, there may be
-improvements regarding this, but currently users have to manually agree to
-package installation.
+repository configuration file. Users will need to manually agree to
+package installation when prompted.
 
 So, in openSUSE or SLES systems, if such a warning is displayed, it is safe to
 continue installation.
@@ -75,12 +72,11 @@ or
 https://packages.gitlab.com/gitlab/gitlab-ee/el/7/x86_64/repodata/repomd.xml: [Errno -1] repomd.xml signature could not be verified for gitlab-ee
 ```
 
-This is because on April 2020, GitLab changed the GPG keys used to sign
-metadata of the apt and yum repositories available through the
-[Packagecloud instance](https://packages.gitlab.com). If you see this error, it
-generally means you do not have the public keys currently used to sign
-repository metadata in your keyring. To fix this error, follow the
-[steps to fetch the new key](update/package_signatures.md#fetch-the-latest-repository-signing-key).
+This error generally means you do not have the public keys currently used to sign
+repository metadata in your keyring. GitLab periodically rotates the GPG keys used
+to sign metadata of the apt and yum repositories. For details about current and
+previous keys, see [package signatures](update/package_signatures.md). To fix this
+error, follow the [steps to fetch the new key](update/package_signatures.md#fetch-the-latest-repository-signing-key).
 
 ## Reconfigure shows an error: `NoMethodError - undefined method '[]=' for nil:NilClass`
 
@@ -514,7 +510,7 @@ Add the following line to apt-cacher-ng config (for example in `/etc/apt-cacher-
 PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com|*\.cloudfront\.net)
 ```
 
-Read more about `apt-cacher-ng` and the reasons why this change is needed [on the packagecloud blog](https://blog.packagecloud.io/using-apt-cacher-ng-with-ssl-tls/).
+For more details on why this passthrough rule is required and how to configure it, refer to the `apt-cacher-ng` documentation for HTTPS/TLS repositories.
 
 ## Mirroring packages for multiple distributions using apt-mirror fails
 
