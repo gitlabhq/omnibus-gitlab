@@ -300,3 +300,4 @@ This omnibus installer project is based on the awesome work done by Chef in
 [install-about]: https://about.gitlab.com/install/
 [install-docs]: https://docs.gitlab.com/install/package/
 [gitlab.rb.template]: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
+
