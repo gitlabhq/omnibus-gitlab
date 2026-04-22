@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.11.1 (2026-04-21)
+
+No changes.
+
 ## 18.11.0 (2026-04-15)
 
 ### Added (3 changes)
@@ -48,6 +52,24 @@ omnibus-gitlab repository.
 
 - [Add Knowledge Graph Go module to license allowlist](gitlab-org/omnibus-gitlab@5b926604bd8492c3d5e7393e0080de3fabfd44ba) ([merge request](gitlab-org/omnibus-gitlab!9278))
 
+## 18.10.4 (2026-04-21)
+
+### Fixed (1 change)
+
+- [Ensure postgresql_new is included in GitLab CE](gitlab-org/security/omnibus-gitlab@6d07a9d097684ec3889b333739e51455694ee4c6)
+
+### Changed (1 change)
+
+- [Merge branch 'bump-sv-timeout-gitaly' into 'master'](gitlab-org/security/omnibus-gitlab@d6f2281a44e0ff379c28e0cd220fa4722497ecc2)
+
+### Removed (1 change)
+
+- [Remove Mattermost for SLES-12.5](gitlab-org/security/omnibus-gitlab@d86ae88a73cabac29e771a6d31459277da324173)
+
+### Security (1 change)
+
+- [Merge branch '595580-bump-rack-version' into 'master'](gitlab-org/security/omnibus-gitlab@d9402eeb5010b3fb28422764b5123a7d7bfbdad1)
+
 ## 18.10.3 (2026-04-07)
 
 No changes.
@@ -87,6 +109,16 @@ No changes.
 
 - [Mattermost Security Updates February 23, 2026](gitlab-org/omnibus-gitlab@06bdb8a7037d64db1b24338ce6dae3925a10007a) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9189))
 - [Mattermost Security Updates February 13, 2026](gitlab-org/omnibus-gitlab@43ad3263651d869efea332e255365b61b391970b) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9139))
+
+## 18.9.6 (2026-04-21)
+
+### Removed (1 change)
+
+- [Remove Mattermost for SLES-12.5](gitlab-org/security/omnibus-gitlab@c8aefd45a62b1b71277cd91356fe07570217c708)
+
+### Security (1 change)
+
+- [Merge branch '595580-bump-rack-version' into 'master'](gitlab-org/security/omnibus-gitlab@5d211c35139f9a4329a2684660bc3060ae35699a)
 
 ## 18.9.5 (2026-04-07)
 
