@@ -25,7 +25,7 @@ skip_transitive_dependency_licensing true
 dependency 'config_guess'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
-version = Gitlab::Version.new('redis', '7.2.11')
+version = Gitlab::Version.new('redis', '7.2.13')
 default_version version.print(false)
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
