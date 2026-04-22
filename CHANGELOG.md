@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.9.6 (2026-04-21)
+
+### Removed (1 change)
+
+- [Remove Mattermost for SLES-12.5](gitlab-org/security/omnibus-gitlab@c8aefd45a62b1b71277cd91356fe07570217c708)
+
+### Security (1 change)
+
+- [Merge branch '595580-bump-rack-version' into 'master'](gitlab-org/security/omnibus-gitlab@5d211c35139f9a4329a2684660bc3060ae35699a)
+
 ## 18.9.5 (2026-04-07)
 
 No changes.
