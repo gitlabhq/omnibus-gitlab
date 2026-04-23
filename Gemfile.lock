@@ -250,7 +250,7 @@ GEM
       faraday (>= 0.8)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
-    ffi (1.17.2)
+    ffi (1.17.4)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
@@ -652,7 +652,7 @@ DEPENDENCIES
   docker-api
   fantaskspec
   fauxhai-chef (~> 9.4.10)!
-  ffi (= 1.17.2)
+  ffi (= 1.17.4)
   gitlab
   gitlab-dangerfiles (~> 4.9)
   gitlab-styles (~> 9.0)
