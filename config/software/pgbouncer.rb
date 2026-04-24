@@ -17,6 +17,7 @@
 name 'pgbouncer'
 version = Gitlab::Version.new('pgbouncer', 'pgbouncer_1_24_1')
 default_version version.print(false)
+display_version version.print(false).delete_prefix('pgbouncer_').tr("_", ".")
 
 license 'ISC'
 license_file 'COPYRIGHT'
@@ -26,24 +27,29 @@ skip_transitive_dependency_licensing true
 dependency 'libevent'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
-source git: version.remote
+if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
+  source Build::UBT.source_args(name, "#{display_version}-1ubt", "14b84324575da69d70162d06c31e8b0a068b7a7b16c230b821ef612c9b482edc", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
-  cwd = "#{Omnibus::Config.source_dir}/pgbouncer"
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
+    cwd = "#{Omnibus::Config.source_dir}/pgbouncer"
 
-  command %w[git submodule init], cwd: cwd
-  command %w[git submodule update], cwd: cwd
-  command './autogen.sh', env: env, cwd: cwd
+    command %w[git submodule init], cwd: cwd
+    command %w[git submodule update], cwd: cwd
+    command './autogen.sh', env: env, cwd: cwd
 
-  prefix = "#{install_dir}/embedded"
-  configure_command = ["./configure", "--prefix=#{prefix}", "--with-libevent=#{prefix}"]
-  configure_command << "--with-openssl=#{prefix}" unless Build::Check.use_system_ssl?
-  command configure_command.join(' '), env: env, cwd: cwd
+    prefix = "#{install_dir}/embedded"
+    configure_command = ["./configure", "--prefix=#{prefix}", "--with-libevent=#{prefix}"]
+    configure_command << "--with-openssl=#{prefix}" unless Build::Check.use_system_ssl?
+    command configure_command.join(' '), env: env, cwd: cwd
 
-  # Disable building of docs to avoid the need for pandoc
-  command 'sed -i -e "/^dist_man_MANS =/d" Makefile', env: env, cwd: cwd
+    # Disable building of docs to avoid the need for pandoc
+    command 'sed -i -e "/^dist_man_MANS =/d" Makefile', env: env, cwd: cwd
 
-  make "-j #{workers}", env: env, cwd: cwd
-  make 'install', env: env, cwd: cwd
+    make "-j #{workers}", env: env, cwd: cwd
+    make 'install', env: env, cwd: cwd
+  end
 end
