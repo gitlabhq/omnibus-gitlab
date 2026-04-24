@@ -8,7 +8,7 @@
 # found with the Ruby interpreter unless `bundle exec` is used.
 source 'https://rubygems.org'
 
-gem 'ffi', '1.17.2'
+gem 'ffi', '1.17.4'
 
 # chef depends on unf_ext. This needs to be listed before Chef
 # since Cinc will look inside the Cinc RubyGems.
