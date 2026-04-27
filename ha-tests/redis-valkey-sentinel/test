@@ -1,0 +1,196 @@
+#!/bin/bash
+
+# -e: exit on error, -u: treat unset variables as errors, -o pipefail: catch failures in pipes
+set -euo pipefail
+
+DEFAULT_IMAGE="gitlab/gitlab-ee:latest"
+IMAGE="${IMAGE:-$DEFAULT_IMAGE}"
+CLEANUP="${CLEANUP:-1}"
+
+# Must match redis['password'] and sentinel['master_name'] in docker-compose.yml
+REDIS_PASSWORD="redis_password"
+MASTER_NAME="gitlab-redis"
+
+cleanup() {
+  local exitcode=$?
+  [ "$CLEANUP" != "1" ] && { echo 'skipping cleanup'; exit $exitcode; }
+  echo "exit code: $exitcode, running cleanup"
+  docker compose down -v
+  exit $exitcode
+}
+trap cleanup EXIT
+
+log() { echo "[$(date -u +%H:%M:%S)] $*"; }
+pass() { log "PASS: $*"; }
+fail() { log "FAIL: $*" >&2; exit 1; }
+
+wait_for_healthy() {
+  local service="$1"
+  local max_attempts="${2:-60}"
+  local attempt=0
+
+  log "Waiting for $service to be healthy..."
+  while ! docker compose ps "$service" | grep -qw "(healthy)"; do
+    attempt=$((attempt + 1))
+    [ $attempt -ge $max_attempts ] && fail "$service did not become healthy after ${max_attempts}s"
+    sleep 1
+  done
+  pass "$service is healthy"
+}
+
+# Run redis-cli or valkey-cli depending on which backend the service uses
+redis_cmd() {
+  local service="$1"
+  local backend="$2"
+  shift 2
+  local cli
+  # Select the correct CLI binary — this is what validates Redis/Valkey cross-compatibility
+  cli=$( [ "$backend" = "valkey" ] && echo "valkey-cli" || echo "redis-cli" )
+  docker compose exec -T "$service" \
+    /opt/gitlab/embedded/bin/$cli -h 127.0.0.1 -p 6379 -a "$REDIS_PASSWORD" "$@" 2>/dev/null
+}
+
+assert_role() {
+  local service="$1"
+  local backend="$2"
+  local expected_role="$3"
+
+  local actual
+  actual=$(redis_cmd "$service" "$backend" role | head -1 | tr -d '[:space:]')
+
+  if [ "$actual" = "$expected_role" ]; then
+    pass "$service: role is $actual"
+  else
+    fail "$service: role is $actual (expected $expected_role)"
+  fi
+}
+
+assert_replication_connected() {
+  local service="$1"
+  local backend="$2"
+  local expected_primary="10.31.51.2"
+
+  local master_host
+  master_host=$(redis_cmd "$service" "$backend" info replication | grep "^master_host:" | tr -d '[:space:]' | cut -d: -f2)
+
+  if [ "$master_host" = "$expected_primary" ]; then
+    pass "$service: connected to primary at $master_host"
+  else
+    fail "$service: connected to '$master_host' (expected primary at $expected_primary)"
+  fi
+}
+
+seed_data() {
+  local service="$1"
+  local backend="$2"
+  log "Seeding test keys on $service..."
+  for i in $(seq 1 10); do
+    redis_cmd "$service" "$backend" set "test:key:$i" "value:$i" > /dev/null
+  done
+  pass "$service: seeded 10 test keys"
+}
+
+assert_keys_present() {
+  local service="$1"
+  local backend="$2"
+
+  local count
+  count=$(redis_cmd "$service" "$backend" dbsize | tr -d ' \r\n')
+
+  if [ "$count" = "10" ]; then
+    pass "$service: all 10 test keys present"
+  else
+    fail "$service: found $count test keys (expected 10)"
+  fi
+}
+
+# Polls both valkey replicas until one becomes primary; sets PROMOTED_MASTER to the elected service name.
+wait_for_any_promotion() {
+  local max_attempts="${1:-90}"
+  local attempt=0
+  PROMOTED_MASTER=""
+
+  log "Waiting for a valkey replica to be promoted to primary..."
+  while true; do
+    for svc in valkey-replica-1 valkey-replica-2; do
+      local role
+      # "000" on exec failure keeps the variable set for the comparison below
+      role=$(redis_cmd "$svc" valkey role 2>/dev/null | head -1 | tr -d '[:space:]' || echo "000")
+      if [ "$role" = "master" ]; then
+        PROMOTED_MASTER="$svc"
+        pass "$svc promoted to primary"
+        return 0
+      fi
+    done
+    attempt=$((attempt + 1))
+    [ $attempt -ge $max_attempts ] && fail "No valkey replica was promoted to primary after ${max_attempts}s"
+    sleep 1
+  done
+}
+
+assert_sentinel_master() {
+  local service="$1"
+  local backend="$2"
+  local expected_ip="$3"
+  local cli max_attempts=30 attempt=0
+  cli=$( [ "$backend" = "valkey" ] && echo "valkey-cli" || echo "redis-cli" )
+
+  # Retry — sentinels may take a moment to converge on the primary after startup
+  while true; do
+    local actual_ip
+    actual_ip=$(docker compose exec -T "$service" \
+      /opt/gitlab/embedded/bin/$cli -h 127.0.0.1 -p 26379 sentinel get-master-addr-by-name "$MASTER_NAME" 2>/dev/null \
+      | head -1 | tr -d '[:space:]' || true)
+    if [ "$actual_ip" = "$expected_ip" ]; then
+      pass "$service: sentinel reports primary at $actual_ip"
+      return 0
+    fi
+    attempt=$((attempt + 1))
+    [ $attempt -ge $max_attempts ] && fail "$service: sentinel reports primary at '$actual_ip' (expected $expected_ip)"
+    sleep 1
+  done
+}
+
+main() {
+  cd "$(dirname "$0")"
+  export IMAGE
+
+  log "Starting Redis/Valkey Sentinel HA smoke test with image: $IMAGE"
+
+  log "--- Stage 1: Start cluster ---"
+  docker compose up -d redis-primary
+  wait_for_healthy redis-primary 120
+  docker compose up -d valkey-replica-1 valkey-replica-2
+  wait_for_healthy valkey-replica-1 120
+  wait_for_healthy valkey-replica-2 120
+
+  log "--- Stage 2: Assert roles ---"
+  assert_role redis-primary redis master
+  assert_role valkey-replica-1 valkey slave
+  assert_role valkey-replica-2 valkey slave
+  assert_replication_connected valkey-replica-1 valkey
+  assert_replication_connected valkey-replica-2 valkey
+
+  log "--- Stage 3: Seed data and assert replication ---"
+  seed_data redis-primary redis
+  assert_keys_present redis-primary redis
+  # Allow brief replication lag before asserting on replicas
+  sleep 2
+  assert_keys_present valkey-replica-1 valkey
+  assert_keys_present valkey-replica-2 valkey
+
+  log "--- Stage 4: Assert sentinel topology ---"
+  assert_sentinel_master redis-primary redis 10.31.51.2
+  assert_sentinel_master valkey-replica-1 valkey 10.31.51.2
+  assert_sentinel_master valkey-replica-2 valkey 10.31.51.2
+
+  log "--- Stage 5: Failover ---"
+  # stop (SIGTERM) triggers a graceful shutdown, allowing sentinel to detect failure and promote a replica
+  docker compose stop redis-primary
+  wait_for_any_promotion 90
+  assert_keys_present "$PROMOTED_MASTER" valkey
+
+  log "--- All checks passed ---"
+}
+
+main

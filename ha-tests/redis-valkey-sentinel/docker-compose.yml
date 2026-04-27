@@ -1,0 +1,113 @@
+services:
+  redis-primary:
+    image: ${IMAGE}
+    hostname: redis-primary
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        roles ['redis_master_role', 'redis_sentinel_role']
+        redis['backend'] = 'redis'
+        redis['bind'] = '0.0.0.0'
+        redis['port'] = 6379
+        redis['password'] = 'redis_password'
+        redis['master_ip'] = '10.31.51.2'
+        redis['master_port'] = 6379
+        redis['master_password'] = 'redis_password'
+        redis['announce_ip'] = '10.31.51.2'
+        sentinel['bind'] = '0.0.0.0'
+        sentinel['quorum'] = 2
+        sentinel['master_name'] = 'gitlab-redis'
+        sentinel['master_ip'] = '10.31.51.2'
+        sentinel['master_port'] = 6379
+        sentinel['master_password'] = 'redis_password'
+        sentinel['announce_ip'] = '10.31.51.2'
+        sentinel['down_after_milliseconds'] = 3000
+        sentinel['failover_timeout'] = 10000
+        logging['svlogd_size'] = 200 * 1024 * 1024
+    networks:
+      sentinel-net:
+        ipv4_address: 10.31.51.2
+    healthcheck:
+      test: ["CMD", "/opt/gitlab/embedded/bin/redis-cli", "-h", "127.0.0.1", "-p", "6379", "-a", "redis_password", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  valkey-replica-1:
+    image: ${IMAGE}
+    hostname: valkey-replica-1
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        roles ['redis_replica_role', 'redis_sentinel_role']
+        redis['backend'] = 'valkey'
+        redis['bind'] = '0.0.0.0'
+        redis['port'] = 6379
+        redis['password'] = 'redis_password'
+        redis['master_ip'] = '10.31.51.2'
+        redis['master_port'] = 6379
+        redis['master_password'] = 'redis_password'
+        redis['announce_ip'] = '10.31.51.3'
+        sentinel['bind'] = '0.0.0.0'
+        sentinel['quorum'] = 2
+        sentinel['master_name'] = 'gitlab-redis'
+        sentinel['master_ip'] = '10.31.51.2'
+        sentinel['master_port'] = 6379
+        sentinel['master_password'] = 'redis_password'
+        sentinel['announce_ip'] = '10.31.51.3'
+        sentinel['down_after_milliseconds'] = 3000
+        sentinel['failover_timeout'] = 10000
+        logging['svlogd_size'] = 200 * 1024 * 1024
+    networks:
+      sentinel-net:
+        ipv4_address: 10.31.51.3
+    depends_on:
+      redis-primary:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/opt/gitlab/embedded/bin/valkey-cli", "-h", "127.0.0.1", "-p", "6379", "-a", "redis_password", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  valkey-replica-2:
+    image: ${IMAGE}
+    hostname: valkey-replica-2
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        roles ['redis_replica_role', 'redis_sentinel_role']
+        redis['backend'] = 'valkey'
+        redis['bind'] = '0.0.0.0'
+        redis['port'] = 6379
+        redis['password'] = 'redis_password'
+        redis['master_ip'] = '10.31.51.2'
+        redis['master_port'] = 6379
+        redis['master_password'] = 'redis_password'
+        redis['announce_ip'] = '10.31.51.4'
+        sentinel['bind'] = '0.0.0.0'
+        sentinel['quorum'] = 2
+        sentinel['master_name'] = 'gitlab-redis'
+        sentinel['master_ip'] = '10.31.51.2'
+        sentinel['master_port'] = 6379
+        sentinel['master_password'] = 'redis_password'
+        sentinel['announce_ip'] = '10.31.51.4'
+        sentinel['down_after_milliseconds'] = 3000
+        sentinel['failover_timeout'] = 10000
+        logging['svlogd_size'] = 200 * 1024 * 1024
+    networks:
+      sentinel-net:
+        ipv4_address: 10.31.51.4
+    depends_on:
+      redis-primary:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/opt/gitlab/embedded/bin/valkey-cli", "-h", "127.0.0.1", "-p", "6379", "-a", "redis_password", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+networks:
+  sentinel-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.31.51.0/24
