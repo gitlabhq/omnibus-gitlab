@@ -18,7 +18,7 @@
 
 name 'nginx'
 
-version = Gitlab::Version.new('nginx', 'release-1.29.4')
+version = Gitlab::Version.new('nginx', 'release-1.29.8')
 default_version version.print(false)
 display_version version.print(false).delete_prefix('release-')
 
@@ -29,7 +29,7 @@ skip_transitive_dependency_licensing true
 
 if Build::Check.use_ubt?
   # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  source Build::UBT.source_args(name, "#{display_version}-1ubt", "0a490688603acc068a94af1544c4d3e00be932cbc03bd47c5c8ba4823be1905f", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{display_version}-1ubt", "75ae5cd0cd70deb4fdc638bd1bf5cbafe53192ea3cd79afeffd944d969f20138", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source git: version.remote
