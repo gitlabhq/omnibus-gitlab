@@ -12,13 +12,13 @@ RSpec.describe 'registry::database_migrations' do
     allow(registry_pg_helper).to receive(:database_enabled?).and_return(false)
   end
 
-  context 'with default values (database.enable:false && auto_migrate:true)' do
+  context 'with default values (database.enable:prefer && auto_migrate:true)' do
     before do
       # Test with default values from attributes
       stub_gitlab_rb(registry_external_url: 'https://registry.example.com')
     end
 
-    it 'does not run migrations when database is disabled by default' do
+    it 'does not run migrations when database_enabled? is stubbed to false' do
       expect(chef_run).not_to run_registry_database_migrations('registry')
     end
   end

@@ -9,7 +9,7 @@ RSpec.describe 'registry recipe' do
 
   it 'sets default attributes' do
     expect(chef_run.node['registry']['auto_migrate']).to eq(true)
-    expect(chef_run.node['registry']['database']['enabled']).to eq("false")
+    expect(chef_run.node['registry']['database']['enabled']).to eq("prefer")
     expect(chef_run.node['registry']['database']['user']).to eq('registry')
     expect(chef_run.node['registry']['database']['dbname']).to eq('registry')
     expect(chef_run.node['registry']['database']['port']).to eq(5432)
@@ -180,7 +180,7 @@ RSpec.describe 'registry recipe' do
 
       it 'populates default registry database config' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-          .with_content('database: {"enabled":"false","user":"registry","dbname":"registry","port":5432,"sslmode":"prefer","host":"/var/opt/gitlab/postgresql"}')
+          .with_content('database: {"enabled":"prefer","user":"registry","dbname":"registry","port":5432,"sslmode":"prefer","host":"/var/opt/gitlab/postgresql"}')
       end
 
       context 'when database.enabled is set to prefer' do

@@ -173,9 +173,8 @@ module Registry
       database_config['host'] = take_first_address(database_config['host'])
 
       # Apply default for enabled if the user hasn't explicitly set it,
-      # before the prefer mode override logic. This will be important if we ever
-      # change the registry database enabled default to "prefer", which is planned.
-      # We can't use short-circuit (||=) because the value might be legit set to false
+      # before the prefer mode override logic. We can't use short-circuit (||=)
+      # because the value might be legitimately set to false.
       database_config['enabled'] = Gitlab['node']['registry']['database']['enabled'] if database_config['enabled'].nil?
 
       # Normalize database.enabled: if set to "prefer" but embedded PostgreSQL is disabled,
