@@ -162,7 +162,7 @@ add_command_under_category 'pg-upgrade', 'database',
     @attributes['postgresql']['version'].nil?
   end
     log "postgresql['version'] is set in /etc/gitlab/gitlab.rb. Not checking for a PostgreSQL upgrade"
-    deprecation_message if @attributes['postgresql']['version'].to_f < 16
+    deprecation_message if @attributes['postgresql']['version'].to_f < 17
     Kernel.exit 0
   end
 
@@ -189,7 +189,7 @@ add_command_under_category 'pg-upgrade', 'database',
     Kernel.exit 1
   end
 
-  deprecation_message if @db_worker.target_version.major.to_f < 16
+  deprecation_message if @db_worker.target_version.major.to_f < 17
 
   target_data_dir = "#{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major}"
   if @db_worker.upgrade_artifact_exists?(target_data_dir)
@@ -750,7 +750,11 @@ def old_version
 end
 
 def default_version
-  PGVersion.parse(version_from_manifest('postgresql_new')) || PGVersion.parse(version_from_manifest('postgresql'))
+  # Once the new version is the default and recommended version, modify the
+  # return statement to try postgresql_new first.
+
+  # PGVersion.parse(version_from_manifest('postgresql_new')) || PGVersion.parse(version_from_manifest('postgresql'))
+  PGVersion.parse(version_from_manifest('postgresql'))
 end
 
 def new_version
@@ -882,9 +886,9 @@ end
 
 def deprecation_message
   log '=== WARNING ==='
-  log "Note that PostgreSQL #{default_version.major} is the minimum required PostgreSQL version in GitLab 16.0"
+  log "Note that PostgreSQL #{default_version.major} is the minimum required PostgreSQL version in GitLab 19.0"
   log 'See docs for more information: https://about.gitlab.com/handbook/engineering/development/enablement/data_stores/database/postgresql-upgrade-cadence.html'
-  log "PostgreSQL #{old_version.major} has been removed in GitLab 16.0."
+  log "PostgreSQL #{old_version.major} has been removed in GitLab 19.0."
   log 'Please consider upgrading your PostgreSQL version soon.'
   log 'To upgrade, please see: https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server'
   log '=== WARNING ==='
