@@ -98,6 +98,7 @@ RSpec.configure do |config|
     end
 
     allow_any_instance_of(PgHelper).to receive(:database_version).and_return(PGVersion.new('9.2'))
+    allow_any_instance_of(RegistryPgHelper).to receive(:is_ready?).and_return(false)
 
     stub_expected_owner?
 

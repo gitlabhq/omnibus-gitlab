@@ -118,8 +118,8 @@ RSpec.describe RegistryPgHelper do
         )
       end
 
-      it 'returns false' do
-        expect(helper.database_enabled?).to be false
+      it 'returns true because the default resolves to prefer' do
+        expect(helper.database_enabled?).to be true
       end
     end
   end
