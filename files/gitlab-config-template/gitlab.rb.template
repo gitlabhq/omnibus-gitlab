@@ -3730,5 +3730,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 # oak['enable'] = false
 # oak['network_address'] = '10.0.0.1'  # The K8s pod network IP that Omnibus listens on
 
+## OpenBao component (GitLab Secrets Manager)
+## When enabled, gitlab-ctl reconfigure will:
+##   1. Add an NGINX reverse proxy that routes the external URL to the OpenBao service.
+##   2. Auto-configure gitlab_rails['openbao'] URLs (url + internal_url).
 # oak['components']['openbao']['enable'] = true
-# oak['components']['openbao']['address'] = 'openbao.k8s.example.com'
+# oak['components']['openbao']['internal_url'] = 'http://10.0.0.5:8200'  # full URL where OpenBao is reachable (e.g. LoadBalancer or Kubernetes service URL)
+# oak['components']['openbao']['external_url'] = 'http://openbao.example.com'  # Domain (and optional port) to serve OpenBao on via NGINX

@@ -66,6 +66,75 @@ RSpec.describe 'gitlab::nginx' do
       expect(content).not_to include("proxy_intercept_errors on")
     }
   end
+
+  context 'OAK OpenBao nginx configuration' do
+    let(:openbao_conf_path) { '/var/opt/gitlab/nginx/conf/service_conf/gitlab-openbao.conf' }
+
+    context 'when OAK OpenBao component is enabled' do
+      let(:chef_runner) do
+        ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)) do |node|
+          node.normal['gitlab']['nginx']['enable'] = true
+          node.normal['package']['install-dir'] = '/opt/gitlab'
+          node.normal['oak']['enable'] = true
+          node.normal['oak']['network_address'] = '10.0.0.1'
+          node.normal['oak']['components']['openbao'] = {
+            'enable' => true,
+            'internal_url' => 'http://10.0.0.5:8200',
+            'fqdn' => 'openbao.example.com',
+            'listen_port' => 80
+          }
+        end
+      end
+
+      it 'renders the OpenBao nginx config file' do
+        expect(chef_run).to render_file(openbao_conf_path)
+      end
+
+      it 'uses the configured fqdn as server_name' do
+        expect(chef_run).to render_file(openbao_conf_path)
+          .with_content(/server_name openbao\.example\.com;/)
+      end
+
+      it 'listens on port 80' do
+        expect(chef_run).to render_file(openbao_conf_path)
+          .with_content(/listen .*:80;/)
+      end
+
+      it 'proxies all traffic to the OpenBao internal_url' do
+        expect(chef_run).to render_file(openbao_conf_path)
+          .with_content(/proxy_pass http:\/\/10\.0\.0\.5:8200;/)
+      end
+
+      it 'uses a root location block' do
+        expect(chef_run).to render_file(openbao_conf_path)
+          .with_content(/location \/ \{/)
+      end
+
+      it 'forwards Host header' do
+        expect(chef_run).to render_file(openbao_conf_path)
+          .with_content(/proxy_set_header Host \$http_host;/)
+      end
+    end
+
+    context 'when OAK OpenBao component is disabled' do
+      let(:chef_runner) do
+        ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)) do |node|
+          node.normal['gitlab']['nginx']['enable'] = true
+          node.normal['package']['install-dir'] = '/opt/gitlab'
+          node.normal['oak']['enable'] = true
+          node.normal['oak']['network_address'] = '10.0.0.1'
+          node.normal['oak']['components']['openbao'] = {
+            'enable' => false,
+            'internal_url' => 'http://10.0.0.5:8200'
+          }
+        end
+      end
+
+      it 'deletes the OpenBao nginx config file' do
+        expect(chef_run).to delete_file(openbao_conf_path)
+      end
+    end
+  end
 end
 
 RSpec.describe 'nginx' do
