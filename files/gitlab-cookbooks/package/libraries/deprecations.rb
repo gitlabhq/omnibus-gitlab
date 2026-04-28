@@ -140,7 +140,7 @@ module Gitlab
       def additional_deprecations(incoming_version, existing_config, type)
         messages = []
 
-        messages += deprecate_registry_notifications(incoming_version, existing_config, type, ['registry', 'notifications'], 'threshold', 17.1, 19.0)
+        messages += deprecate_registry_notifications(incoming_version, existing_config, type, ['registry', 'notifications'], 'threshold', 17.1, 23.0)
 
         messages += remove_git_data_dirs(incoming_version, existing_config, type, '17.8', '18.0')
 
@@ -230,7 +230,7 @@ module Gitlab
           case key
           when "threshold"
             <<~EOS
-              Starting with GitLab 19.0, `registry['notifications'][{'threshold'=> value}] will be removed.
+              Starting with GitLab 23.0, `registry['notifications'][{'threshold'=> value}] will be removed.
               Please use `maxretries` instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243.
             EOS
           else

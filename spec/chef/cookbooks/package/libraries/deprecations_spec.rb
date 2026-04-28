@@ -129,6 +129,56 @@ RSpec.describe Gitlab::Deprecations do
     end
   end
 
+  describe '.deprecate_registry_notifications' do
+    let(:config_with_threshold) do
+      {
+        "registry" => {
+          "notifications" => [
+            { "threshold" => 5 }
+          ]
+        }
+      }
+    end
+
+    let(:config_without_threshold) do
+      {
+        "registry" => {
+          "notifications" => [
+            { "url" => "https://example.com" }
+          ]
+        }
+      }
+    end
+
+    context 'when threshold is set in registry notifications' do
+      it 'raises deprecation warning with correct removal version' do
+        deprecated_message = "*registry['notifications'][{threshold => value}] has been deprecated since 17.1 and will be removed in 23.0. " \
+                             "Starting with GitLab 23.0, `registry['notifications'][{'threshold'=> value}] will be removed.\n" \
+                             "Please use `maxretries` instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243.\n"
+        expect(described_class.deprecate_registry_notifications('17.1', config_with_threshold, :deprecation, ['registry', 'notifications'], 'threshold', 17.1, 23.0)).to eq([deprecated_message])
+      end
+
+      it 'raises removal warning with correct removal version' do
+        removed_message = "* registry['notifications'][{threshold => value}] has been deprecated since 17.1 and was removed in 23.0. " \
+                          "Starting with GitLab 23.0, `registry['notifications'][{'threshold'=> value}] will be removed.\n" \
+                          "Please use `maxretries` instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243.\n"
+        expect(described_class.deprecate_registry_notifications('23.0', config_with_threshold, :removal, ['registry', 'notifications'], 'threshold', 17.1, 23.0)).to eq([removed_message])
+      end
+    end
+
+    context 'when threshold is not set in registry notifications' do
+      it 'does not raise warning' do
+        expect(described_class.deprecate_registry_notifications('23.0', config_without_threshold, :removal, ['registry', 'notifications'], 'threshold', 17.1, 23.0)).to eq([])
+      end
+    end
+
+    context 'when registry notifications is not configured' do
+      it 'does not raise warning' do
+        expect(described_class.deprecate_registry_notifications('23.0', {}, :removal, ['registry', 'notifications'], 'threshold', 17.1, 23.0)).to eq([])
+      end
+    end
+  end
+
   describe '.remove_git_data_dirs' do
     context 'when git_data_dirs is specified' do
       it 'raises warning' do
