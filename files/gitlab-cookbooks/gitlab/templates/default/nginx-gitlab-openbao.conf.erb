@@ -1,0 +1,34 @@
+# This file is managed by gitlab-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/gitlab/gitlab.rb
+# and run `sudo gitlab-ctl reconfigure`.
+#
+# OAK OpenBao reverse proxy – forwards traffic arriving at the configured
+# external URL to the OpenBao service address in the Kubernetes cluster.
+
+server {
+<% @listen_addresses.each do |listen_address| %>
+  listen <%= listen_address %>:<%= @listen_port %>;
+<% end %>
+  server_name <%= @fqdn %>;
+  server_tokens off;
+
+  access_log  <%= @log_directory %>/gitlab_openbao_access.log gitlab_access;
+  error_log   <%= @log_directory %>/gitlab_openbao_error.log;
+
+  location / {
+    proxy_pass <%= @openbao_internal_url %>;
+    proxy_http_version 1.1;
+
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    proxy_read_timeout 60s;
+    proxy_connect_timeout 5s;
+    proxy_send_timeout 60s;
+
+    proxy_redirect off;
+    proxy_buffering off;
+  }
+}

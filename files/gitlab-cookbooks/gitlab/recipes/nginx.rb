@@ -421,12 +421,21 @@ end
   end
 end
 
-def gitlab_oak_component_enabled?(name)
-  !!node.dig('oak', 'components', name, 'enable')
-end
-
 node['oak']['components'].each do |name, config|
+  oak_component_enabled = !!config['enable']
+  nginx_vars = case name
+               when 'openbao'
+                 {
+                   fqdn: config['fqdn'],
+                   listen_addresses: node['gitlab']['nginx']['listen_addresses'],
+                   listen_port: config['listen_port'],
+                   openbao_internal_url: config['internal_url'],
+                   log_directory: node['gitlab']['nginx']['log_directory']
+                 }
+               end
+
   nginx_configuration name do
-    action gitlab_oak_component_enabled?(name) ? 'create' : 'delete'
+    variables(nginx_vars) if nginx_vars
+    action oak_component_enabled ? 'create' : 'delete'
   end
 end

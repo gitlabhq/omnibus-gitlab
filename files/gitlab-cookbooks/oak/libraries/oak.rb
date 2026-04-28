@@ -17,12 +17,16 @@
 # OAK (Omnibus-to-Kubernetes bridge) provides configuration and helpers for
 # Omnibus components that need to communicate with services deployed in a
 # Kubernetes cluster (e.g. OpenBao as an Advanced Component).
+require_relative 'openbao'
+
 module Oak
   class << self
     def parse_variables
       return unless enabled?
 
       raise "OAK is enabled but `oak['network_address']` is not set." if Gitlab['oak']['network_address'].nil? || Gitlab['oak']['network_address'].empty?
+
+      Oak::OpenBao.parse_variables
     end
 
     # Returns true when OAK integration is explicitly enabled by the user.
