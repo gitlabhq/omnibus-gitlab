@@ -27,7 +27,7 @@ dependency 'config_guess'
 
 if Build::Check.use_ubt?
   # NOTE: We cannot use UBT binaries in FIPS builds
-  source Build::UBT.source_args(name, "2.14.5-2ubt", "8e531c2555e9437156ebbd57ced4e09081d0955fce25cca79a670cd6a67f7d6f", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{default_version}-2ubt", "759a032a498da19b523c8cb68c5cf11aa3e5197884a716afb7c5526fdd24b373", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   # version_list: url=https://download.gnome.org/sources/libxml2/2.12/ filter=*.tar.xz
