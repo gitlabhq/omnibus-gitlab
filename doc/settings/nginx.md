@@ -315,6 +315,32 @@ To change this header:
 
 For more information, see the [Referrer Policy specification](https://www.w3.org/TR/referrer-policy/).
 
+### Cross-Origin-Resource-Policy header and Mermaid diagrams
+
+If you configure a `Cross-Origin-Resource-Policy` (CORP) header with the `same-site` or
+`same-origin` value, Mermaid diagrams silently fail to render.
+
+For example:
+
+```ruby
+nginx['custom_gitlab_server_config'] = "add_header Cross-Origin-Resource-Policy same-site;"
+```
+
+The Mermaid sandboxed iframe intentionally omits the `allow-same-origin` sandbox attribute.
+This causes the iframe to have a null origin. Browsers block null-origin
+resource loads when CORP is set to `same-site` or `same-origin`, because null satisfies neither
+policy.
+
+To allow Mermaid diagrams to render, use `cross-origin`:
+
+```ruby
+nginx['custom_gitlab_server_config'] = "add_header Cross-Origin-Resource-Policy cross-origin;"
+```
+
+> [!warning]
+> `cross-origin` is less restrictive than `same-site` or `same-origin`. Review your security
+> requirements before using this setting.
+
 ### Disable Gzip compression
 
 By default, GitLab enables Gzip compression for text data over 10240 bytes. To disable Gzip compression:
