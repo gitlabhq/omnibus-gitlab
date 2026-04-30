@@ -1,0 +1,76 @@
+#!/bin/bash
+set -e
+
+echo "==> Running OpenBao NGINX reverse proxy tests"
+
+docker exec -i "${CONTAINER}" bash -s << 'SCRIPT'
+set -e
+
+OPENBAO_CONF="/var/opt/gitlab/nginx/conf/service_conf/gitlab-openbao.conf"
+
+echo "==> Starting mock OpenBao backend on port 8200"
+python3 -m http.server 8200 &>/dev/null &
+MOCK_PID=$!
+sleep 1
+
+echo "==> Writing baseline gitlab.rb (no OAK config)"
+mkdir -p /etc/gitlab
+cat > /etc/gitlab/gitlab.rb << 'GITLAB_RB'
+external_url 'http://gitlab.example.com'
+GITLAB_RB
+
+echo "==> Running gitlab-ctl reconfigure (baseline)"
+gitlab-ctl reconfigure
+
+echo "==> Verifying OpenBao NGINX config is absent (baseline)"
+test ! -f "${OPENBAO_CONF}" \
+  && echo "  PASS config file does not exist" \
+  || { echo "  FAIL config file exists unexpectedly at ${OPENBAO_CONF}"; exit 1; }
+
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --header "Host: openbao.example.com" http://localhost:80/)
+
+echo "  Baseline request returned HTTP ${HTTP_CODE}"
+test "${HTTP_CODE}" != "200" \
+  && echo "  PASS proxy not active before OAK config" \
+  || { echo "  FAIL got 200 before OAK config was applied"; exit 1; }
+
+echo "==> Writing OAK gitlab.rb configuration"
+cat > /etc/gitlab/gitlab.rb << 'GITLAB_RB'
+external_url 'http://gitlab.example.com'
+
+oak['enable'] = true
+oak['network_address'] = '10.0.0.1'
+oak['components'] = {
+  'openbao' => {
+    'enable' => true,
+    'internal_url' => 'http://127.0.0.1:8200',
+    'external_url' => 'http://openbao.example.com'
+  }
+}
+GITLAB_RB
+
+echo "==> Running gitlab-ctl reconfigure"
+gitlab-ctl reconfigure
+
+echo "==> Verifying OpenBao NGINX reverse proxy config"
+test -f "${OPENBAO_CONF}" \
+  && echo "  PASS config file exists at ${OPENBAO_CONF}" \
+  || { echo "  FAIL ${OPENBAO_CONF} not found"; exit 1; }
+grep -q "server_name openbao.example.com" "${OPENBAO_CONF}" \
+  && echo "  PASS server_name is openbao.example.com" \
+  || { echo "  FAIL server_name not found"; cat "${OPENBAO_CONF}"; exit 1; }
+grep -q "proxy_pass http://127.0.0.1:8200" "${OPENBAO_CONF}" \
+  && echo "  PASS proxy_pass is http://127.0.0.1:8200" \
+  || { echo "  FAIL proxy_pass not found"; cat "${OPENBAO_CONF}"; exit 1; }
+
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --header "Host: openbao.example.com" http://localhost:80/)
+
+echo "  OpenBao proxy returned HTTP ${HTTP_CODE}"
+test "${HTTP_CODE}" = "200" \
+  && echo "  PASS proxy routed to mock backend" \
+  || { echo "  FAIL expected 200 got ${HTTP_CODE}"; exit 1; }
+
+kill "${MOCK_PID}" 2>/dev/null || true
+
+echo "==> OAK NGINX tests passed!"
+SCRIPT
