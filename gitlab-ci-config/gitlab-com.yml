@@ -722,6 +722,22 @@ letsencrypt-test:
     - job: Docker-branch
       artifacts: false
 
+OAK:smoke-test:
+  extends: .docker_job
+  stage: qa
+  script:
+    - echo "${CI_REGISTRY_PASSWORD}" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - bundle exec rake qa:test_oak
+  rules:
+    - if: '$TOP_UPSTREAM_SOURCE_PROJECT == "gitlab-org/gitlab"'
+      when: never
+    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
+      when: manual
+      allow_failure: true
+  needs:
+    - job: Docker-branch
+      artifacts: false
+
 patroni-ha-test:
   extends: .docker_job
   stage: qa

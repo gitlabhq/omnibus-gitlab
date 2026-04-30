@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+
+IMAGE="${IMAGE:-gitlab/gitlab-ee:nightly}"
+CONTAINER="oak-smoke-test-$$"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+echo "==> Running OAK smoke tests against ${IMAGE}"
+
+cleanup() {
+  docker rm -f "${CONTAINER}" 2>/dev/null || true
+}
+trap cleanup EXIT
+
+docker run -d --name "${CONTAINER}" --entrypoint="" "${IMAGE}" \
+  bash -c "touch /etc/sysctl.conf && /opt/gitlab/embedded/bin/runsvdir-start"
+
+export CONTAINER
+
+"${SCRIPT_DIR}/nginx-test"
