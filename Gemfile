@@ -49,11 +49,6 @@ gem 'retriable'
 gem 'tomlib', '~> 0.6.0'
 gem 'google-cloud-storage'
 
-group :packagecloud, optional: true do
-  gem 'package_cloud'
-  gem 'thor', '~> 1.2'
-end
-
 group :danger, optional: true do
   gem 'gitlab-dangerfiles', '~> 4.9', require: false
 end
