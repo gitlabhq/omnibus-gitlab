@@ -86,7 +86,7 @@ if [ -n "${REDISCLI_AUTH}" ]; then
   export REDISCLI_AUTH
 fi
 
-exec /opt/gitlab/embedded/bin/redis-cli $REDIS_PARAMS "$@"
+exec /opt/gitlab/embedded/bin/${redis_backend:-redis}-cli $REDIS_PARAMS "$@"
       EOH
     end
   end

@@ -307,6 +307,24 @@ When `redis['backend']` is set to `valkey`:
 - The Sentinel service uses `valkey-sentinel` instead of `redis-sentinel`.
 - All other Redis settings (ports, passwords, paths, etc.) remain the same.
 
+#### Service management
+
+To ensure backward compatibility and a seamless transition, the service structure remains consistent regardless of whether you use Redis or Valkey as the backend:
+
+- The service name is `redis`. Use `gitlab-ctl restart redis` to manage the service.
+- Log files are written to `/var/log/gitlab/redis/`.
+- The data directory is `/var/opt/gitlab/redis/`.
+- The configuration file is `redis.conf`.
+- `gitlab-ctl` commands use the appropriate CLI tool (`redis-cli` or `valkey-cli`) based on the configured backend.
+- For troubleshooting, use the wrapper script which automatically detects the active backend:
+
+  ```shell
+  sudo gitlab-redis-cli
+  ```
+
+For more information about migrating from Redis to Valkey, see the
+[Valkey migration documentation](https://valkey.io/topics/migration/).
+
 ## Troubleshooting
 
 ### `x509: certificate signed by unknown authority`

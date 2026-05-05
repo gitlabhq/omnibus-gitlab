@@ -12,6 +12,7 @@ RSpec.describe 'redis' do
     let(:gitlab_redis_cli_rc) do
       <<-EOF
 redis_dir='/var/opt/gitlab/redis'
+redis_backend='redis'
 redis_host=''
 redis_port='0'
 redis_tls_port=''
@@ -212,6 +213,7 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
     let(:gitlab_redis_cli_rc) do
       <<-EOF
 redis_dir='/var/opt/gitlab/redis'
+redis_backend='redis'
 redis_host='1.2.3.4'
 redis_port='6370'
 redis_tls_port=''
@@ -252,6 +254,7 @@ redis_socket=''
     let(:gitlab_redis_cli_rc) do
       <<-EOF
 redis_dir='/var/opt/gitlab/redis'
+redis_backend='redis'
 redis_host='1.2.3.4'
 redis_port='6370'
 redis_tls_port=''
@@ -297,6 +300,7 @@ redis_socket=''
     let(:gitlab_redis_cli_rc) do
       <<-EOF
 redis_dir='/var/opt/gitlab/redis'
+redis_backend='redis'
 redis_host='1.2.3.4'
 redis_port='6370'
 redis_tls_port=''
@@ -439,6 +443,7 @@ redis_socket=''
     let(:gitlab_redis_cli_rc) do
       <<-EOF
 redis_dir='/var/opt/gitlab/redis'
+redis_backend='redis'
 redis_host='127.0.0.1'
 redis_port='0'
 redis_tls_port='6380'
@@ -606,6 +611,11 @@ redis_socket=''
           expect(content).not_to match(%r{/opt/gitlab/embedded/bin/redis-server})
         }
     end
+
+    it 'renders gitlab-redis-cli-rc with valkey backend' do
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-redis-cli-rc')
+        .with_content("redis_backend='valkey'")
+    end
   end
 
   context 'when redis backend is redis (default)' do
@@ -619,6 +629,11 @@ redis_socket=''
         .with_content { |content|
           expect(content).not_to match(%r{/opt/gitlab/embedded/bin/valkey-server})
         }
+    end
+
+    it 'renders gitlab-redis-cli-rc with redis backend' do
+      expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-redis-cli-rc')
+        .with_content("redis_backend='redis'")
     end
   end
 end
