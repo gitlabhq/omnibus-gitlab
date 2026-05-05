@@ -116,6 +116,83 @@ RSpec.describe 'gitlab::nginx' do
       end
     end
 
+    context 'when OAK OpenBao component is enabled with HTTPS' do
+      let(:chef_runner) do
+        ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)) do |node|
+          node.normal['gitlab']['nginx']['enable'] = true
+          node.normal['package']['install-dir'] = '/opt/gitlab'
+          node.normal['oak']['enable'] = true
+          node.normal['oak']['network_address'] = '10.0.0.1'
+          node.normal['oak']['components']['openbao'] = {
+            'enable' => true,
+            'internal_url' => 'http://10.0.0.5:8200',
+            'fqdn' => 'openbao.example.com',
+            'listen_port' => 443,
+            'https' => true,
+            'ssl_certificate' => '/etc/gitlab/ssl/openbao.example.com.crt',
+            'ssl_certificate_key' => '/etc/gitlab/ssl/openbao.example.com.key'
+          }
+        end
+      end
+
+      it 'listens on port 443 with ssl' do
+        expect(chef_run).to render_file(openbao_conf_path)
+          .with_content(/listen .*:443 ssl;/)
+      end
+
+      it 'includes ssl_certificate directive' do
+        expect(chef_run).to render_file(openbao_conf_path)
+          .with_content(%r{ssl_certificate /etc/gitlab/ssl/openbao\.example\.com\.crt;})
+      end
+
+      it 'includes ssl_certificate_key directive' do
+        expect(chef_run).to render_file(openbao_conf_path)
+          .with_content(%r{ssl_certificate_key /etc/gitlab/ssl/openbao\.example\.com\.key;})
+      end
+
+      it 'does not render an HTTP redirect block without redirect_http_to_https' do
+        expect(chef_run).not_to render_file(openbao_conf_path)
+          .with_content(/return 301 https/)
+      end
+    end
+
+    context 'when OAK OpenBao component is enabled with HTTPS and redirect_http_to_https' do
+      let(:chef_runner) do
+        ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)) do |node|
+          node.normal['gitlab']['nginx']['enable'] = true
+          node.normal['package']['install-dir'] = '/opt/gitlab'
+          node.normal['letsencrypt']['enable'] = true
+          node.normal['oak']['enable'] = true
+          node.normal['oak']['network_address'] = '10.0.0.1'
+          node.normal['oak']['components']['openbao'] = {
+            'enable' => true,
+            'internal_url' => 'http://10.0.0.5:8200',
+            'fqdn' => 'openbao.example.com',
+            'listen_port' => 443,
+            'https' => true,
+            'ssl_certificate' => '/etc/gitlab/ssl/gitlab.example.com.crt',
+            'ssl_certificate_key' => '/etc/gitlab/ssl/gitlab.example.com.key',
+            'redirect_http_to_https' => true
+          }
+        end
+      end
+
+      it 'renders an HTTP to HTTPS redirect block' do
+        expect(chef_run).to render_file(openbao_conf_path)
+          .with_content(/return 301 https:\/\/openbao\.example\.com\$request_uri;/)
+      end
+
+      it 'includes the ACME challenge location in the redirect block' do
+        expect(chef_run).to render_file(openbao_conf_path)
+          .with_content(/location \/\.well-known\/acme-challenge\//)
+      end
+
+      it 'includes the ACME challenge location in the main server block' do
+        expect(chef_run).to render_file(openbao_conf_path)
+          .with_content(/(location \/\.well-known\/acme-challenge\/.*){2}/m)
+      end
+    end
+
     context 'when OAK OpenBao component is disabled' do
       let(:chef_runner) do
         ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)) do |node|

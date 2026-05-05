@@ -167,5 +167,181 @@ RSpec.describe Oak::OpenBao do
         expect(Gitlab['gitlab_rails']['openbao']['internal_url']).to eq('http://10.0.0.5:8200')
       end
     end
+
+    context 'when external_url uses https' do
+      before do
+        stub_gitlab_rb(
+          oak: {
+            enable: true,
+            network_address: '10.0.0.1',
+            components: { 'openbao' => { 'enable' => true, 'internal_url' => 'http://10.0.0.5:8200', 'external_url' => 'https://openbao.example.com' } }
+          }
+        )
+      end
+
+      it 'sets https to true' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['https']).to be true
+      end
+
+      it 'sets listen_port to 443' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['listen_port']).to eq(443)
+      end
+
+      it 'sets a default ssl_certificate path derived from the fqdn' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['ssl_certificate'])
+          .to eq('/etc/gitlab/ssl/openbao.example.com.crt')
+      end
+
+      it 'sets a default ssl_certificate_key path derived from the fqdn' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['ssl_certificate_key'])
+          .to eq('/etc/gitlab/ssl/openbao.example.com.key')
+      end
+
+      it 'does not set redirect_http_to_https without letsencrypt' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['redirect_http_to_https']).to be_nil
+      end
+    end
+
+    context 'when external_url uses https and user provides custom cert paths' do
+      before do
+        stub_gitlab_rb(
+          oak: {
+            enable: true,
+            network_address: '10.0.0.1',
+            components: {
+              'openbao' => {
+                'enable' => true,
+                'internal_url' => 'http://10.0.0.5:8200',
+                'external_url' => 'https://openbao.example.com',
+                'ssl_certificate' => '/etc/ssl/custom.crt',
+                'ssl_certificate_key' => '/etc/ssl/custom.key'
+              }
+            }
+          }
+        )
+      end
+
+      it 'respects the user-provided ssl_certificate' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['ssl_certificate']).to eq('/etc/ssl/custom.crt')
+      end
+
+      it 'respects the user-provided ssl_certificate_key' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['ssl_certificate_key']).to eq('/etc/ssl/custom.key')
+      end
+    end
+
+    context 'when https and letsencrypt is enabled' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          letsencrypt: { enable: true },
+          oak: {
+            enable: true,
+            network_address: '10.0.0.1',
+            components: { 'openbao' => { 'enable' => true, 'internal_url' => 'http://10.0.0.5:8200', 'external_url' => 'https://openbao.example.com' } }
+          }
+        )
+        allow(::File).to receive(:exist?).and_call_original
+        allow(::File).to receive(:exist?).with('/etc/gitlab/ssl/openbao.example.com.crt').and_return(false)
+      end
+
+      it 'adds the openbao fqdn to letsencrypt alt_names' do
+        described_class.parse_variables
+
+        expect(Gitlab['letsencrypt']['alt_names']).to include('openbao.example.com')
+      end
+
+      it 'shares the main gitlab ssl_certificate' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['ssl_certificate'])
+          .to eq('/etc/gitlab/ssl/gitlab.example.com.crt')
+      end
+
+      it 'shares the main gitlab ssl_certificate_key' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['ssl_certificate_key'])
+          .to eq('/etc/gitlab/ssl/gitlab.example.com.key')
+      end
+
+      it 'enables redirect_http_to_https' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['redirect_http_to_https']).to be true
+      end
+    end
+
+    context 'when https and letsencrypt is enabled but cert already exists' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          letsencrypt: { enable: true },
+          oak: {
+            enable: true,
+            network_address: '10.0.0.1',
+            components: { 'openbao' => { 'enable' => true, 'internal_url' => 'http://10.0.0.5:8200', 'external_url' => 'https://openbao.example.com' } }
+          }
+        )
+        allow(::File).to receive(:exist?).and_call_original
+        allow(::File).to receive(:exist?).with('/etc/gitlab/ssl/openbao.example.com.crt').and_return(true)
+      end
+
+      it 'does not add the openbao fqdn to letsencrypt alt_names' do
+        described_class.parse_variables
+
+        expect(Gitlab['letsencrypt']['alt_names']).to be_nil
+      end
+
+      it 'keeps the default ssl_certificate path' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['ssl_certificate'])
+          .to eq('/etc/gitlab/ssl/openbao.example.com.crt')
+      end
+    end
+
+    context 'when https and letsencrypt is enabled but user set redirect_http_to_https explicitly' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          letsencrypt: { enable: true },
+          oak: {
+            enable: true,
+            network_address: '10.0.0.1',
+            components: {
+              'openbao' => {
+                'enable' => true,
+                'internal_url' => 'http://10.0.0.5:8200',
+                'external_url' => 'https://openbao.example.com',
+                'redirect_http_to_https' => false
+              }
+            }
+          }
+        )
+        allow(::File).to receive(:exist?).and_call_original
+        allow(::File).to receive(:exist?).with('/etc/gitlab/ssl/openbao.example.com.crt').and_return(false)
+      end
+
+      it 'respects the user-set redirect_http_to_https value' do
+        described_class.parse_variables
+
+        expect(Gitlab['oak']['components']['openbao']['redirect_http_to_https']).to be false
+      end
+    end
   end
 end

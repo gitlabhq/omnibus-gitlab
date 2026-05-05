@@ -423,19 +423,28 @@ end
 
 node['oak']['components'].each do |name, config|
   oak_component_enabled = !!config['enable']
-  nginx_vars = case name
-               when 'openbao'
-                 {
-                   fqdn: config['fqdn'],
-                   listen_addresses: node['gitlab']['nginx']['listen_addresses'],
-                   listen_port: config['listen_port'],
-                   openbao_internal_url: config['internal_url'],
-                   log_directory: node['gitlab']['nginx']['log_directory']
-                 }
-               end
 
   nginx_configuration name do
-    variables(nginx_vars) if nginx_vars
+    variables(
+      # lazy evaluate here since letsencrypt::enable sets redirect_http_to_https to true
+      lazy do
+        case name
+        when 'openbao'
+          node['gitlab']['nginx'].to_hash.merge(
+            fqdn: config['fqdn'],
+            listen_port: config['listen_port'],
+            openbao_internal_url: config['internal_url'],
+            https: config['https'],
+            ssl_certificate: config['ssl_certificate'],
+            ssl_certificate_key: config['ssl_certificate_key'],
+            redirect_http_to_https: config['redirect_http_to_https'],
+            letsencrypt_enable: node['letsencrypt']['enable']
+          )
+        else
+          {}
+        end
+      end
+    )
     action oak_component_enabled ? 'create' : 'delete'
   end
 end

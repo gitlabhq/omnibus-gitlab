@@ -3734,6 +3734,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## When enabled, gitlab-ctl reconfigure will:
 ##   1. Add an NGINX reverse proxy that routes the external URL to the OpenBao service.
 ##   2. Auto-configure gitlab_rails['openbao'] URLs (url + internal_url).
+## Use https:// in external_url to enable TLS. When letsencrypt['enable'] is true, the
+## OpenBao hostname is automatically added as a SAN to the Let's Encrypt certificate.
 # oak['components']['openbao']['enable'] = true
 # oak['components']['openbao']['internal_url'] = 'http://10.0.0.5:8200'  # full URL where OpenBao is reachable (e.g. LoadBalancer or Kubernetes service URL)
-# oak['components']['openbao']['external_url'] = 'http://openbao.example.com'  # Domain (and optional port) to serve OpenBao on via NGINX
+# oak['components']['openbao']['external_url'] = 'https://openbao.example.com'  # Domain (and optional port) to serve OpenBao on via NGINX
+## SSL certificate paths (auto-derived from external_url hostname when not set):
+# oak['components']['openbao']['ssl_certificate'] = '/etc/gitlab/ssl/openbao.example.com.crt'
+# oak['components']['openbao']['ssl_certificate_key'] = '/etc/gitlab/ssl/openbao.example.com.key'
+## Redirect HTTP to HTTPS (enabled automatically when using Let's Encrypt):
+# oak['components']['openbao']['redirect_http_to_https'] = true
