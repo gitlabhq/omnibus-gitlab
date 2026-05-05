@@ -26,6 +26,7 @@ module Oak
         validate_external_url
         parse_external_url
         validate_internal_url
+        parse_ssl if https?
         parse_rails_openbao_urls
       end
 
@@ -35,14 +36,46 @@ module Oak
 
       private
 
+      def https?
+        !!Gitlab['oak']['components']['openbao']['https']
+      end
+
       def parse_external_url
         uri = URI(Gitlab['oak']['components']['openbao']['external_url'].to_s)
 
         raise "OAK OpenBao external URL must include a scheme and FQDN, " \
-          "e.g. http://openbao.example.com" unless uri.host
+          "such as http://openbao.example.com" unless uri.host
 
         Gitlab['oak']['components']['openbao']['fqdn'] ||= uri.host
         Gitlab['oak']['components']['openbao']['listen_port'] ||= uri.port
+        Gitlab['oak']['components']['openbao']['https'] ||= (uri.scheme == 'https')
+      end
+
+      def parse_ssl
+        fqdn = Gitlab['oak']['components']['openbao']['fqdn']
+
+        Gitlab['oak']['components']['openbao']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{fqdn}.crt"
+        Gitlab['oak']['components']['openbao']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{fqdn}.key"
+
+        parse_letsencrypt(fqdn)
+      end
+
+      def parse_letsencrypt(fqdn)
+        return unless Gitlab['letsencrypt']['enable']
+        return unless Gitlab['external_url']
+        return if ::File.exist?(Gitlab['oak']['components']['openbao']['ssl_certificate'].to_s)
+
+        external_uri = URI(Gitlab['external_url'])
+
+        Gitlab['letsencrypt']['alt_names'] ||= []
+        Gitlab['letsencrypt']['alt_names'] |= [external_uri.host, fqdn]
+
+        Gitlab['oak']['components']['openbao']['ssl_certificate'] = "/etc/gitlab/ssl/#{external_uri.host}.crt"
+        Gitlab['oak']['components']['openbao']['ssl_certificate_key'] = "/etc/gitlab/ssl/#{external_uri.host}.key"
+
+        return if Gitlab['oak']['components']['openbao'].key?('redirect_http_to_https')
+
+        Gitlab['oak']['components']['openbao']['redirect_http_to_https'] = true
       end
 
       def parse_rails_openbao_urls
