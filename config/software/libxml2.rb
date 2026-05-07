@@ -15,7 +15,7 @@
 #
 
 name 'libxml2'
-default_version '2.15.2'
+default_version '2.15.3'
 
 license 'MIT'
 license_file 'Copyright'
@@ -27,11 +27,11 @@ dependency 'config_guess'
 
 if Build::Check.use_ubt?
   # NOTE: We cannot use UBT binaries in FIPS builds
-  source Build::UBT.source_args(name, "2.14.5-2ubt", "8e531c2555e9437156ebbd57ced4e09081d0955fce25cca79a670cd6a67f7d6f", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{default_version}-2ubt", "759a032a498da19b523c8cb68c5cf11aa3e5197884a716afb7c5526fdd24b373", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   # version_list: url=https://download.gnome.org/sources/libxml2/2.12/ filter=*.tar.xz
-  version('2.15.2') { source sha256: 'c8b9bc81f8b590c33af8cc6c336dbff2f53409973588a351c95f1c621b13d09d' }
+  version('2.15.3') { source sha256: '78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07' }
 
   minor_version = version.sub(/.\d*$/, "")
 
