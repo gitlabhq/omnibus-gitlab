@@ -37,7 +37,7 @@ skip_transitive_dependency_licensing true
 # Runtime dependency
 dependency 'zlib-ng'
 dependency 'openssl' unless Build::Check.use_system_ssl?
-dependency 'curl'
+dependency 'curl' unless Build::Check.use_system_ssl?
 dependency 'pcre2'
 dependency 'libiconv'
 
@@ -62,7 +62,6 @@ build do
   # https://gitlab.com/gitlab-org/gitaly/-/issues/6195 for more information.
   build_options = [
     "# Added by Omnibus git software definition git.rb",
-    "GIT_APPEND_BUILD_OPTIONS += CURLDIR=#{install_dir}/embedded",
     "GIT_APPEND_BUILD_OPTIONS += ICONVDIR=#{install_dir}/embedded",
     "GIT_APPEND_BUILD_OPTIONS += ZLIB_PATH=#{install_dir}/embedded",
     "GIT_APPEND_BUILD_OPTIONS += NEEDS_LIBICONV=YesPlease",
@@ -91,11 +90,16 @@ build do
   end
 
   if Build::Check.use_system_ssl?
+    env['CMAKE_FLAGS'] = "#{OpenSSLHelper.cmake_flags} #{CurlHelper.cmake_flags}"
     env['FIPS_MODE'] = '1'
 
     pkg_config_overrides = File.join(project_dir, 'pkg-config-overrides')
     mkdir pkg_config_overrides
-    OpenSSLHelper.pkg_config_files.each_pair do |file_name, file_path|
+
+    # Combine both helpers' pkg_config_files into a single hash
+    combined_pkg_config_files = CurlHelper.pkg_config_files.merge(OpenSSLHelper.pkg_config_files)
+
+    combined_pkg_config_files.each_pair do |file_name, file_path|
       copy file_path, pkg_config_overrides
       # Don't laugh, it works.  No matter what AmazonLinux 2 asks for - tell it that it wants OpenSSL 1.1 or bust.
       copy file_path, File.join(pkg_config_overrides, file_name.gsub(/11.pc$/, '.pc')) if OhaiHelper.amazon_linux_2?
@@ -103,6 +107,7 @@ build do
     env['PKG_CONFIG_PATH'] = "#{pkg_config_overrides}:#{install_dir}/embedded/lib/pkgconfig"
   else
     build_options << "GIT_APPEND_BUILD_OPTIONS += OPENSSLDIR=#{install_dir}/embedded"
+    build_options << "GIT_APPEND_BUILD_OPTIONS += CURLDIR=#{install_dir}/embedded"
     env['PKG_CONFIG_PATH'] = "#{install_dir}/embedded/lib/pkgconfig"
   end
 

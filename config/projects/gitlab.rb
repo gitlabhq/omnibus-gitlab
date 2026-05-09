@@ -22,6 +22,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/util"
 require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 require "#{Omnibus::Config.project_root}/lib/gitlab/openssl_helper"
+require "#{Omnibus::Config.project_root}/lib/gitlab/curl_helper"
 require "#{Omnibus::Config.project_root}/files/gitlab-cookbooks/package/libraries/helpers/selinux_distro_helper.rb"
 require "#{Omnibus::Config.project_root}/lib/gitlab/build/ubt.rb"
 
@@ -107,6 +108,9 @@ if Build::Check.use_system_ssl?
   else
     runtime_dependency 'openssl'
   end
+
+  # FIPS requires system CURL Packages
+  runtime_dependency 'curl'
 end
 
 # FIPS requires system libgcrypt packages to run.
@@ -209,6 +213,9 @@ dependency 'version-manifest'
 
 if Build::Check.use_system_ssl?
   OpenSSLHelper.allowed_libs.each do |lib|
+    allowed_lib /#{lib}\.so/
+  end
+  CurlHelper.allowed_libs.each do |lib|
     allowed_lib /#{lib}\.so/
   end
 end

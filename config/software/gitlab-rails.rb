@@ -44,7 +44,7 @@ dependency 'ruby'
 dependency 'rubygems'
 dependency 'libxml2'
 dependency 'libxslt'
-dependency 'curl'
+dependency 'curl' unless Build::Check.use_system_ssl?
 dependency 'rsync'
 dependency 'libicu'
 dependency 'postgresql'
@@ -91,7 +91,7 @@ build do
   bundle_without = %w(development test)
 
   if Build::Check.use_system_ssl?
-    env['CMAKE_FLAGS'] = OpenSSLHelper.cmake_flags
+    env['CMAKE_FLAGS'] = "#{OpenSSLHelper.cmake_flags} #{CurlHelper.cmake_flags}"
     # We need to add /opt/gitlab/embedded/lib/pkgconfig for the gpgme gem since we manually install its
     # dependencies. We can drop this once when any of the two issues are resolved:
     # 1. https://github.com/ueno/ruby-gpgme/issues/167
