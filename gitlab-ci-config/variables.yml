@@ -58,3 +58,8 @@ variables:
   DISABLE_RPI_BUILDS: 'true'
   PUBLIC_IMAGE_ARCHIVE_REGISTRY: 'registry.gitlab.com'
   PUBLIC_IMAGE_ARCHIVE_REGISTRY_PATH: 'gitlab-org/public-image-archive'
+  GIT_CONFIG_COUNT: 2
+  GIT_CONFIG_KEY_0: 'credential.https://gitlab.com.helper'
+  GIT_CONFIG_VALUE_0: '!f() { echo username=gitlab-ci-token; echo "password=${CI_JOB_TOKEN}"; }; f'
+  GIT_CONFIG_KEY_1: 'http."https://gitlab.com".proactiveAuth'
+  GIT_CONFIG_VALUE_1: 'basic'
