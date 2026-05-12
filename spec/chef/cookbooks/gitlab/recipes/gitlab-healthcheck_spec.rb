@@ -82,4 +82,18 @@ RSpec.describe 'gitlab::gitlab-healthcheck' do
       expect(chef_run).not_to render_file("/opt/gitlab/etc/gitlab-healthcheck-rc")
     end
   end
+
+  context 'on a non-web node' do
+    before do
+      stub_gitlab_rb(nginx: { enable: false }, gitlab_workhorse: { enable: false })
+    end
+
+    it 'does not render the healthcheck-rc file' do
+      expect(chef_run).not_to render_file("/opt/gitlab/etc/gitlab-healthcheck-rc")
+    end
+
+    it 'deletes any stale healthcheck-rc file' do
+      expect(chef_run).to delete_file("/opt/gitlab/etc/gitlab-healthcheck-rc")
+    end
+  end
 end

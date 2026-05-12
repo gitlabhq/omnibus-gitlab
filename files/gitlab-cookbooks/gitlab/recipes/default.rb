@@ -181,8 +181,10 @@ end
 # removed in 19.0; this stops the supervised service from a prior install.
 # Safe to drop once the `mattermost` deprecation entry expires.
 include_recipe 'mattermost::disable'
-# Configure healthcheck if we have nginx or workhorse enabled
-include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable'] || node["gitlab"]["gitlab_workhorse"]["enable"]
+
+# Healthcheck runs on every node; the recipe decides per role whether
+# to render the rc file (web nodes) or delete a stale one (non-web nodes).
+include_recipe "gitlab::gitlab-healthcheck"
 
 # Recipe which handles all prometheus related services
 include_recipe "monitoring"

@@ -15,42 +15,26 @@
 # limitations under the License.
 #
 
-workhorse_helper = GitlabWorkhorseHelper.new(node)
-flags = []
+healthcheck = GitlabHealthcheckHelper.new(node)
+url = healthcheck.url
+flags = healthcheck.flags
 
-# If nginx is disabled we will use workhorse for the healthcheck
-if node['gitlab']['nginx']['enable']
-  listen_https = node['gitlab']['nginx']['listen_https']
-  # Fallback to the setting derived from external_url
-  listen_https = node['gitlab']['gitlab_rails']['gitlab_https'] if listen_https.nil?
-  schema = listen_https ? 'https' : 'http'
-  # Check first allowed_host, fallback to checking localhost
-  allowed_hosts = node['gitlab']['gitlab_rails']['allowed_hosts']
-  flags << "--header \"Host: #{allowed_hosts[0]}\"" unless allowed_hosts.empty?
-  flags << '--haproxy-protocol' if node['gitlab']['nginx']['proxy_protocol']
-  flags << '--insecure'
-  host = "localhost:#{node['gitlab']['nginx']['listen_port']}"
-else
-  # Always use http for workhorse
-  schema = 'http'
-  use_socket = workhorse_helper.unix_socket?
-  socket_path = use_socket ? node['gitlab']['gitlab_workhorse']['listen_addr'] : ''
-  if use_socket
-    flags << '--unix-socket'
-    flags << socket_path
-  else
-    flags << '--insecure'
+if url
+  template "/opt/gitlab/etc/gitlab-healthcheck-rc" do
+    owner 'root'
+    group 'root'
+    variables(
+      {
+        url: url,
+        flags: flags.join(' ')
+      }
+    )
   end
-  host = use_socket ? 'localhost' : node['gitlab']['gitlab_workhorse']['listen_addr']
-end
-
-template "/opt/gitlab/etc/gitlab-healthcheck-rc" do
-  owner 'root'
-  group 'root'
-  variables(
-    {
-      url: "#{schema}://#{host}#{Gitlab['gitlab_rails']['gitlab_relative_url']}/help",
-      flags: flags.join(' ')
-    }
-  )
+else
+  # No URL for this role: ensure no stale rc file lingers from a previous
+  # role. Without this, the bash script would source an out-of-date URL
+  # after a node is reconfigured.
+  file "/opt/gitlab/etc/gitlab-healthcheck-rc" do
+    action :delete
+  end
 end
