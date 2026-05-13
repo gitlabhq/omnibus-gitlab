@@ -60,6 +60,10 @@ No changes.
 
 - [Add Knowledge Graph Go module to license allowlist](gitlab-org/omnibus-gitlab@5b926604bd8492c3d5e7393e0080de3fabfd44ba) ([merge request](gitlab-org/omnibus-gitlab!9278))
 
+## 18.10.6 (2026-05-13)
+
+No changes.
+
 ## 18.10.5 (2026-04-28)
 
 No changes.
