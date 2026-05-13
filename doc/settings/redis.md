@@ -252,22 +252,15 @@ For more information, see the example in [configuration documentation](configura
 
 ## Using Valkey instead of Redis
 
-{{< details >}}
-
-- Status: Beta
-
-{{< /details >}}
-
 {{< history >}}
 
-- [Introduced] in GitLab 18.9 as a [beta](https://docs.gitlab.com/policy/development_stages_support/#beta).
+- [Introduced](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/9113) in GitLab 18.9 as a [beta](https://docs.gitlab.com/policy/development_stages_support/#beta).
+- [Generally available](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/9383) in GitLab 19.0.
 
 {{< /history >}}
 
 [Valkey](https://valkey.io/) is a Redis-compatible key-value store that can be used as a drop-in replacement for Redis.
 Valkey is compatible with Redis OSS 7.2 and all earlier open source Redis versions.
-
-Using Valkey instead of Redis is a [beta](https://docs.gitlab.com/policy/development_stages_support/#beta) feature.
 
 When using Valkey:
 
