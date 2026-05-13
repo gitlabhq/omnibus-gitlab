@@ -29,7 +29,7 @@ version = Gitlab::Version.new('redis', '7.2.13')
 default_version version.print(false)
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
-  source Build::UBT.source_args(name, "#{default_version}-1ubt", "507c154fd7a616138cceb709e882265972f84904ed1ac64b114ff7bad3e87a66", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{default_version}-2ubt", "146f6c543bea31be8880bcc4fab9629139d621dae1a1ab2307fe0029932a6840", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source git: version.remote
