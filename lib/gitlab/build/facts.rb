@@ -93,7 +93,7 @@ module Build
           RAT_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs'}
           RAT_FIPS_REFERENCE_ARCHITECTURE=#{Gitlab::Util.get_env('RAT_FIPS_REFERENCE_ARCHITECTURE') || 'omnibus-gitlab-mrs-fips-ubuntu'}
           RAT_PACKAGE_URL=#{Build::Info::CI.package_download_url(fips: false)}
-          RAT_FIPS_PACKAGE_URL=#{Build::Info::CI.package_download_url(job_name: 'Ubuntu-20.04', fips: true)}
+          RAT_FIPS_PACKAGE_URL=#{Build::Info::CI.package_download_url(job_name: 'Ubuntu-22.04', fips: true)}
           RAT_PACKAGE_VERSION=#{Build::Info::Package.name_version}
         ]
       end

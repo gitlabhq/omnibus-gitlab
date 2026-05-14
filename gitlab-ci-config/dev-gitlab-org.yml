@@ -255,7 +255,7 @@
     paths:
       - support/packer/manifests
   needs:
-    - Ubuntu-20.04
+    - Ubuntu-24.04
   retry: 1
   rules:
     - !reference [.default_rules, rules]
@@ -281,14 +281,6 @@
 
 # fetch-assets job from .gitlab-ci.yml file runs here
 # generate-assets job from .gitlab-ci.yml file runs here
-
-Ubuntu-20.04-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
-  extends: .branch_template
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /(NIGHTLY|BRANCH|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
-    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
 Ubuntu-22.04-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
@@ -334,9 +326,6 @@ Debian-13-branch:
   extends: .branch_template
 Debian-13-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_13_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_branch_template
-Ubuntu-20.04-arm64-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
 Ubuntu-22.04-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
@@ -417,8 +406,8 @@ AlmaLinux-8-fips-branch:
 AlmaLinux-9-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
-Ubuntu-20.04-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
+Ubuntu-22.04-fips-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
   rules:
     - !reference [.default_rules, rules]
@@ -436,9 +425,6 @@ Ubuntu-20.04-fips-branch:
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
       when: manual
       allow_failure: true
-Ubuntu-22.04-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:${BUILDER_IMAGE_REVISION}"
-  extends: .fips_branch_template
 
 Docker-branch-amd64:
   extends: .docker_job
@@ -558,15 +544,6 @@ Raspberry-Pi-2-Bookworm-branch:
 
 # fetch-assets job from .gitlab-ci.yml file runs here
 
-Ubuntu-20.04:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04:${BUILDER_IMAGE_REVISION}"
-  stage: package
-  extends: .tag_template
-  rules:
-    - !reference [.default_rules, rules]
-  # Also build for auto-deploy tags
-    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
-
 Ubuntu-22.04:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
   stage: package
@@ -624,17 +601,6 @@ Docker-QA:
 ## * Release tags only upload packages (no deployment)
 ##
 ##  Ubuntu 22.04: used for all omnibus installation
-
-Ubuntu-20.04-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: Ubuntu-20.04
-      optional: true
-    - job: Ubuntu-20.04-branch
-      optional: true
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE)_BUILD_PIPELINE$/'
 
 deployer-trigger:
   extends: .staging_upload_template
@@ -701,9 +667,6 @@ Debian-13:
 Debian-13-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_13_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
-Ubuntu-20.04-arm64:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_tag_template
 Ubuntu-22.04-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
@@ -762,9 +725,6 @@ AlmaLinux-8-fips:
   extends: .fips_tag_template
 AlmaLinux-9-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:${BUILDER_IMAGE_REVISION}"
-  extends: .fips_tag_template
-Ubuntu-20.04-fips:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_20.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
 Ubuntu-22.04-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:${BUILDER_IMAGE_REVISION}"
@@ -881,14 +841,6 @@ Debian-13-arm64-staging:
     - job: Debian-13-arm64
       optional: true
     - job: Debian-13-arm64-branch
-      optional: true
-
-Ubuntu-20.04-arm64-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: Ubuntu-20.04-arm64
-      optional: true
-    - job: Ubuntu-20.04-arm64-branch
       optional: true
 
 Ubuntu-24.04-arm64-staging:
@@ -1040,18 +992,6 @@ AlmaLinux-9-fips-staging:
     - job: AlmaLinux-9-fips-branch
       optional: true
 
-Ubuntu-20.04-fips-staging:
-  extends: .fips_staging_upload_template
-  needs:
-    - job: Ubuntu-20.04-fips
-      optional: true
-    - job: Ubuntu-20.04-fips-branch
-      optional: true
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
-    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
-
 Ubuntu-22.04-fips-staging:
   extends: .fips_staging_upload_template
   needs:
@@ -1061,10 +1001,6 @@ Ubuntu-22.04-fips-staging:
       optional: true
 
 ### Package releases
-Ubuntu-20.04-release:
-  extends: .production_release_template
-  needs:
-    - Ubuntu-20.04
 Ubuntu-22.04-release:
   extends: .production_release_template
   needs:
@@ -1073,10 +1009,6 @@ Ubuntu-24.04-release:
   extends: .production_release_template
   needs:
     - Ubuntu-24.04
-Ubuntu-20.04-arm64-release:
-  extends: .production_release_template
-  needs:
-    - Ubuntu-20.04-arm64
 Ubuntu-22.04-arm64-release:
   extends: .production_release_template
   needs:
@@ -1184,10 +1116,6 @@ AlmaLinux-9-fips-release:
   extends: .fips_release_template
   needs:
     - AlmaLinux-9-fips
-Ubuntu-20.04-fips-release:
-  extends: .fips_release_template
-  needs:
-    - Ubuntu-20.04-fips
 Ubuntu-22.04-fips-release:
   extends: .fips_release_template
   needs:
@@ -1345,7 +1273,7 @@ AWS-EE-Premium-Release:
 
 # Before publishing the package, try installing the package from pre-release
 # repo from Pulp and run `gitlab-ctl reconfigure`
-# On failure, Release Managers should consult the Build team before proceeding 
+# On failure, Release Managers should consult the Build team before proceeding
 # with the release
 check-packages-functionality:
   stage: staging_verify
