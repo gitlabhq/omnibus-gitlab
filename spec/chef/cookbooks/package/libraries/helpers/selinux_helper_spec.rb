@@ -46,6 +46,10 @@ RSpec.describe SELinuxHelper do
       allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret').and_return(true)
       allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-shell/config.yml').and_return(true)
       allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-workhorse/sockets').and_return(true)
+      # No contexts defined yet - fresh install path, all commands use -a
+      allow(SELinuxHelper).to receive(:existing_fcontext_patterns).and_return([])
+      # commands must never shell out directly - it must always go through existing_fcontext_patterns
+      expect(Mixlib::ShellOut).not_to receive(:new).with('semanage fcontext -l')
     end
 
     def semanage_fcontext(filename)
@@ -117,9 +121,89 @@ RSpec.describe SELinuxHelper do
         end
       end
     end
+
+    context 'when some fcontext paths are already defined' do
+      before do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with('/var/opt/gitlab/.ssh').and_return(true)
+        allow(File).to receive(:exist?).with('/var/opt/gitlab/.ssh/authorized_keys').and_return(true)
+        allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret').and_return(true)
+        allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-shell/config.yml').and_return(true)
+        allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-workhorse/sockets').and_return(true)
+        allow(SELinuxHelper).to receive(:existing_fcontext_patterns).and_return(
+          ['/var/opt/gitlab/.ssh(/.*)?',
+           '/var/opt/gitlab/.ssh/authorized_keys']
+        )
+      end
+
+      it 'uses -m for already-defined paths and -a for new ones' do
+        lines = SELinuxHelper.commands(chef_run.node)
+
+        expect(lines).to include("semanage fcontext -m -t gitlab_shell_t '/var/opt/gitlab/.ssh(/.*)?'")
+        expect(lines).to include("semanage fcontext -m -t gitlab_shell_t '/var/opt/gitlab/.ssh/authorized_keys'")
+        expect(lines).to include("semanage fcontext -a -t gitlab_shell_t '/var/opt/gitlab/gitlab-shell/config.yml'")
+        expect(lines).to include("semanage fcontext -a -t gitlab_shell_t '/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret'")
+        expect(lines).to include("semanage fcontext -a -t gitlab_shell_t '/var/opt/gitlab/gitlab-workhorse/sockets'")
+      end
+    end
+  end
+
+  context 'when querying existing fcontext patterns' do
+    context 'when semanage succeeds' do
+      before do
+        allow(Mixlib::ShellOut).to receive(:new).with('semanage fcontext -l').and_return(
+          double(run_command: double(exitstatus: 0, stdout: <<~OUTPUT, stderr: ''))
+            SELinux fcontext                                   type               Context
+
+            /var/opt/gitlab/.ssh(/.*)?    all files    system_u:object_r:gitlab_shell_t:s0
+            /var/opt/gitlab/.ssh/authorized_keys    all files    system_u:object_r:gitlab_shell_t:s0
+            /other/path=value    all files    system_u:object_r:other_t:s0
+            /foo = /bar
+          OUTPUT
+        )
+      end
+
+      it 'returns only fcontext path entries, ignoring headers, blank lines and equivalences' do
+        patterns = SELinuxHelper.existing_fcontext_patterns
+        expect(patterns).to include('/var/opt/gitlab/.ssh(/.*)?', '/var/opt/gitlab/.ssh/authorized_keys', '/other/path=value')
+        expect(patterns).not_to include('SELinux', '/foo', nil)
+      end
+    end
+
+    context 'when semanage fails' do
+      before do
+        allow(Mixlib::ShellOut).to receive(:new).with('semanage fcontext -l').and_return(
+          double(run_command: double(exitstatus: 1, stdout: '', stderr: 'error'))
+        )
+      end
+
+      it 'raises an error rather than silently returning empty and forcing -a' do
+        expect { SELinuxHelper.existing_fcontext_patterns }.to raise_error(/error running semanage/)
+      end
+    end
   end
 
   context 'when checking if SELinux context is set' do
+    context 'when the recursive ssh_dir context is absent but authorized_keys context is present' do
+      let(:semanage_output) do
+        <<~OUTPUT
+          /var/opt/gitlab/.ssh/authorized_keys               all files          system_u:object_r:gitlab_shell_t:s0
+          /var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret all files          system_u:object_r:gitlab_shell_t:s0
+          /var/opt/gitlab/gitlab-shell/config.yml            all files          system_u:object_r:gitlab_shell_t:s0
+          /var/opt/gitlab/gitlab-workhorse/sockets           all files          system_u:object_r:gitlab_shell_t:s0
+        OUTPUT
+      end
+
+      before do
+        allow(Mixlib::ShellOut).to receive(:new).with('semanage fcontext -l').and_return(
+          double(run_command: double(exitstatus: 0, stdout: semanage_output, stderr: ''))
+        )
+      end
+
+      it 'returns false because /var/opt/gitlab/.ssh(/.*)? is absent' do
+        expect(SELinuxHelper.context_set?(node)).to be false
+      end
+    end
     context 'when semanage fcontext -l succeeds with all contexts set' do
       let(:semanage_output) do
         <<~OUTPUT
