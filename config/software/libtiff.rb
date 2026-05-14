@@ -41,9 +41,6 @@ else
   build do
     env = with_standard_compiler_flags(with_embedded_path)
 
-    env['CFLAGS'] = "-std=c99 #{env['CFLAGS']}" if ohai['platform'] == 'suse' &&
-      ohai['platform_version'].start_with?('12.')
-
     # Patch the code to download config.guess and config.sub. We instead copy
     # the ones we vendor to the correct location.
     patch source: 'remove-config-guess-sub-download.patch'

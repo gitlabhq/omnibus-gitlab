@@ -203,19 +203,6 @@ AmazonLinux-2023-fips-check:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "true"
 
-# zypper based
-OpenSUSE-15.6-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6:${BUILDER_IMAGE_REVISION}"
-  extends: .zypper-install
-OpenSUSE-15.6-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .zypper-arm-install
-SLES-12.5-check:
-  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
-  extends: .zypper-install
-  rules:
-    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
-
 Docker:
   stage: image
   needs: []

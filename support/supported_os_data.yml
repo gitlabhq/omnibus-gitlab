@@ -53,14 +53,6 @@ almalinux:
       arm64: true
       fips: false
       eol: 2035-05-31
-opensuseleap:
-  versions:
-    15.6:
-      ce: true
-      ee: true
-      arm64: true
-      fips: false
-      eol: 2025-12-31
 amazon:
   eol_product_key: 'Amazon-Linux'
   versions:
@@ -76,17 +68,3 @@ amazon:
       arm64: true
       fips: true
       eol: 2029-06-30
-suse:
-  versions:
-    12.5:
-      ce: false
-      ee: true
-      arm64: false
-      fips: false
-      eol: 2027-10-31
-    15.6:
-      ce: false
-      ee: true
-      arm64: false
-      fips: false
-      eol: 2025-12-31

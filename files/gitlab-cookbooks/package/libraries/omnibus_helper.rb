@@ -175,9 +175,6 @@ class OmnibusHelper
     # example: deprecated_os = { 'raspbian-8' => 'GitLab 11.8' }
     {
       'ubuntu-20.04' => 'GitLab 19.0',
-      'opensuseleap-15.6' => 'GitLab 19.0',
-      'suse-12.5' => 'GitLab 19.0',
-      'suse-15.6' => 'GitLab 19.0',
       # Use $ anchor to avoid matching amazon-2023 (AL2023 is still supported)
       'amazon-2$' => 'GitLab 19.1',
     }
