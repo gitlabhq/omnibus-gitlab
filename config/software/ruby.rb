@@ -133,6 +133,13 @@ build do
   # https://github.com/ruby/ruby/pull/10696.
   patches += %w[fiddle-closure] if version.satisfies?('= 3.1.5')
 
+  # Backport of https://github.com/ruby/ruby/pull/15840 to fix
+  # https://bugs.ruby-lang.org/issues/21685, giving the hot thread
+  # scheduler priority when transferring control between threads.
+  # The fix is included upstream in Ruby 4.1, so this patch is only
+  # needed for 3.3, 3.4, and 4.0.
+  patches += %w[thread-scheduler-priority] if version.satisfies?('>= 3.3.0', '< 4.1.0')
+
   ruby_version = Gem::Version.new(version).canonical_segments[0..1].join('.')
 
   patches.each do |patch_name|
