@@ -69,9 +69,6 @@ module Build
             arch = 'x86_64' if arch == 'amd64'
             folder = 'el-8'
             package_file_name = "#{Info::Package.name(fips: fips)}-#{Info::Package.release_version(fips: fips).gsub('+', '%2B')}.el8.#{arch}.rpm"
-          when /Ubuntu-20.04/
-            folder = 'ubuntu-focal'
-            package_file_name = "#{Info::Package.name(fips: fips)}_#{Info::Package.release_version(fips: fips).gsub('+', '%2B')}_#{arch}.deb"
           when /Ubuntu-22.04/
             folder = 'ubuntu-jammy'
             package_file_name = "#{Info::Package.name(fips: fips)}_#{Info::Package.release_version(fips: fips).gsub('+', '%2B')}_#{arch}.deb"

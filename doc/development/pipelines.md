@@ -398,21 +398,21 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 
 ### `AWS`
 
-This job builds the unlicensed AWS AMIs using the Ubuntu 20.04 package.
+This job builds the unlicensed AWS AMIs using the Ubuntu 24.04 package.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on tag pipelines.
 
 ### `AWS-Ultimate`
 
 This job builds an AWS AMI with embedded Ultimate licenses using the Ubuntu
-20.04 package.
+24.04 package.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on EE tag pipelines.
 
 ### `AWS-Premium`
 
 This job builds an AWS AMI with embedded Premium licenses using the Ubuntu
-20.04 package.
+24.04 package.
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) and on EE tag pipelines.
 

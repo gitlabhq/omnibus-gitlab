@@ -48,7 +48,7 @@ RAT:FIPS:
       variables:
         NIGHTLY: 'true'
   needs:
-    - job: Ubuntu-20.04-fips-branch
+    - job: Ubuntu-22.04-fips-branch
       artifacts: false
     - job: generate-facts
       artifacts: true
