@@ -48,7 +48,6 @@ dependency 'curl' unless Build::Check.use_system_ssl?
 dependency 'rsync'
 dependency 'libicu'
 dependency 'postgresql'
-dependency 'postgresql_new'
 dependency 'python-docutils'
 dependency 'krb5'
 dependency 'registry'
