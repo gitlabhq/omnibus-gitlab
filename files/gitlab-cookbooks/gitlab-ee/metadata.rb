@@ -15,4 +15,3 @@ depends "gitlab"
 depends 'consul'
 depends 'patroni'
 depends 'pgbouncer'
-depends 'spamcheck'

@@ -139,10 +139,6 @@ dependency 'go-crond'
 if Build::Check.include_ee?
   dependency 'consul'
   dependency 'pgbouncer-exporter'
-  unless OhaiHelper.raspberry_pi? || OhaiHelper.sles12?
-    dependency 'spamcheck'
-    dependency 'spam-classifier'
-  end
 end
 dependency 'alertmanager'
 dependency 'node-exporter'
@@ -348,9 +344,6 @@ exclude '.package_util'
 exclude 'embedded/lib/python*/**/*.dist-info'
 exclude 'embedded/lib/python*/**/*.egg-info'
 exclude 'embedded/lib/python*/**/__pycache__'
-
-# exclude Spamcheck application source and libraries
-exclude 'embedded/service/spamcheck/app'
 
 package_user 'root'
 package_group 'root'

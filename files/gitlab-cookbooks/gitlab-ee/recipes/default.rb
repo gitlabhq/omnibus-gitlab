@@ -38,7 +38,6 @@ end
   consul
   pgbouncer
   patroni
-  spamcheck
 ).each do |service|
   if node[service]['enable']
     include_recipe "#{service}::enable"

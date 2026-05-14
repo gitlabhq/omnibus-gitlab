@@ -179,18 +179,6 @@ information, see the
 
   *By default, enables no other services.*
 
-### Spamcheck Roles
-
-Spamcheck roles are used to set up and configure Spamcheck services. For additional
-information, see the
-[Spamcheck documentation](https://docs.gitlab.com/administration/reporting/spamcheck/)
-
-- `spamcheck_role` (`gitlab-ee`)
-
-  Configures the server with Spamcheck and spam-classifier services.
-
-  *By default, enables no other services.*
-
 ### Gitaly Roles
 
 Gitaly roles are used to set up and configure Gitaly services. For additional

@@ -57,8 +57,6 @@ class LogfilesHelper < AccountHelper
       'sidekiq' => { username: gitlab_user, group: gitlab_group },
       'storage-check' => { username: gitlab_user, group: gitlab_group },
       'sentinel' => { username: redis_user, group: redis_group },
-      'spamcheck' => { username: gitlab_user, group: gitlab_group },
-      'spam-classifier' => { username: gitlab_user, group: gitlab_group }
     }
   end
 
@@ -72,21 +70,11 @@ class LogfilesHelper < AccountHelper
   end
 
   def service_settings(service)
-    case service
-    when 'spam-classifier'
-      # special case for `spam-classifier`
-      if parent = service_parent('spamcheck')
-        node[parent]['spamcheck']['classifier']
-      else
-        node['spamcheck']['classifier']
-      end
+    node_attribute_key = SettingsDSL::Utils.node_attribute_key(service)
+    if parent = service_parent(service)
+      node[parent][node_attribute_key]
     else
-      node_attribute_key = SettingsDSL::Utils.node_attribute_key(service)
-      if parent = service_parent(service)
-        node[parent][node_attribute_key]
-      else
-        node[node_attribute_key]
-      end
+      node[node_attribute_key]
     end
   end
 
