@@ -365,12 +365,6 @@ AlmaLinux-10-branch:
 AlmaLinux-10-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
-OpenSUSE-15.6-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6:${BUILDER_IMAGE_REVISION}"
-  extends: .branch_template
-OpenSUSE-15.6-arm64-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_branch_template
 AmazonLinux-2-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -383,15 +377,6 @@ AmazonLinux-2023-branch:
 AmazonLinux-2023-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
-SLES-12.5-branch:
-  image: "${DEV_BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
-  extends: .branch_template
-  variables:
-    DOCKER_AUTH_CONFIG: $DEV_BUILDER_DOCKER_AUTH_CONFIG
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /EE_(NIGHTLY|BRANCH)_BUILD_PIPELINE$/'
-    - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 AmazonLinux-2-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
@@ -688,12 +673,6 @@ AlmaLinux-10:
 AlmaLinux-10-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
-OpenSUSE-15.6:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6:${BUILDER_IMAGE_REVISION}"
-  extends: .tag_template
-OpenSUSE-15.6-arm64:
-  image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_tag_template
 AmazonLinux-2:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
@@ -706,12 +685,6 @@ AmazonLinux-2023:
 AmazonLinux-2023-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
-SLES-12.5:
-  image: "${BUILDER_IMAGE_REGISTRY}/sles_12sp5:${BUILDER_IMAGE_REVISION}"
-  extends: .tag_template
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 AmazonLinux-2-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
@@ -899,22 +872,6 @@ AlmaLinux-10-arm64-staging:
     - job: AlmaLinux-10-arm64-branch
       optional: true
 
-OpenSUSE-15.6-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: OpenSUSE-15.6
-      optional: true
-    - job: OpenSUSE-15.6-branch
-      optional: true
-
-OpenSUSE-15.6-arm64-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: OpenSUSE-15.6-arm64
-      optional: true
-    - job: OpenSUSE-15.6-arm64-branch
-      optional: true
-
 AmazonLinux-2-staging:
   extends: .staging_upload_template
   needs:
@@ -946,17 +903,6 @@ AmazonLinux-2023-arm64-staging:
       optional: true
     - job: AmazonLinux-2023-arm64-branch
       optional: true
-
-SLES-12.5-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: SLES-12.5
-      optional: true
-    - job: SLES-12.5-branch
-      optional: true
-  rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
 
 AmazonLinux-2-fips-staging:
   extends: .fips_staging_upload_template
@@ -1065,14 +1011,6 @@ AlmaLinux-10-arm64-release:
   extends: .production_release_template
   needs:
     - AlmaLinux-10-arm64
-OpenSUSE-15.6-release:
-  extends: .production_release_template
-  needs:
-    - OpenSUSE-15.6
-OpenSUSE-15.6-arm64-release:
-  extends: .production_release_template
-  needs:
-    - OpenSUSE-15.6-arm64
 AmazonLinux-2-release:
   extends: .production_release_template
   needs:
@@ -1089,15 +1027,6 @@ AmazonLinux-2023-arm64-release:
   extends: .production_release_template
   needs:
     - AmazonLinux-2023-arm64
-SLES-12.5-release:
-  extends: .production_release_template
-  needs:
-    - SLES-12.5
-  rules:
-    - !reference [.default_rules, rules]
-    - !reference [.skip_release_jobs, rules]
-    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
-
 AmazonLinux-2-fips-release:
   extends: .fips_release_template
   variables:

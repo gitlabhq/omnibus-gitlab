@@ -35,13 +35,7 @@ build do
   mkdir build_dir.to_s
 
   block 'use a custom compiler for OSs with older gcc' do
-    if ohai['platform'] == 'suse' && ohai['platform_version'].start_with?('12.')
-      env['CC'] = "/usr/bin/gcc-5"
-      env['CXX'] = "/usr/bin/g++-5"
-    elsif ohai['platform'] == 'opensuseleap' && ohai['platform_version'].start_with?('15.')
-      env['CC'] = "/usr/bin/gcc-8"
-      env['CXX'] = "/usr/bin/g++-8"
-    elsif ohai['platform'] == 'amazon' && ohai['platform_version'] == '2'
+    if ohai['platform'] == 'amazon' && ohai['platform_version'] == '2'
       env['CC'] = "/usr/bin/gcc10-gcc"
       env['CXX'] = "/usr/bin/gcc10-g++"
     elsif ohai['platform'] == 'ubuntu' && ohai['platform_version'].start_with?('24.')

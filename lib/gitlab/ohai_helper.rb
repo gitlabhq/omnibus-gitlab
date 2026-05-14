@@ -40,10 +40,6 @@ class OhaiHelper
         'el'
       when 'almalinux'
         'el'
-      when 'opensuse', 'opensuseleap'
-        'opensuse'
-      when 'suse'
-        'sles'
       when 'amazon', 'aws', 'amzn'
         'amazon'
       else
@@ -104,23 +100,6 @@ class OhaiHelper
       end
     end
 
-    def get_opensuse_version
-      ohai['platform_version']
-    end
-
-    def get_suse_version
-      case ohai['platform_version']
-      when /^15\.2/
-        '15.2'
-      when /^12\.2/
-        '12.2'
-      when /^12\.5/
-        '12.5'
-      when /^11\./
-        '11.4'
-      end
-    end
-
     # TODO: Remove once Amazon Linux 2 is end-of-life. Until that happens,
     # this combination happens so often it makes sense to make a shorthand.
     def amazon_linux_2?
@@ -143,10 +122,6 @@ class OhaiHelper
         version = get_centos_version
       when 'almalinux'
         version = get_centos_version
-      when 'opensuse', 'opensuseleap'
-        version = get_opensuse_version
-      when 'suse'
-        version = get_suse_version
       when 'amazon', 'aws', 'amzn'
         version = get_amazon_version
       end
@@ -204,10 +179,6 @@ class OhaiHelper
       ohai['languages']['c']['gcc']['target']
     end
 
-    def sles12?
-      os_platform == 'sles' && get_suse_version.to_i == 12
-    end
-
     def glibc_version
       ohai['languages']['c']['glibc']['version']
     end
@@ -230,7 +201,6 @@ class OhaiHelper
         el-8_fips
         el-8_aarch64
         raspbian-buster_aarch64
-        sles-12.5
       ].include?(platform_dir)
     end
   end

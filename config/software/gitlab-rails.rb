@@ -99,12 +99,7 @@ build do
     env['PKG_CONFIG_PATH'] = "#{OpenSSLHelper.pkg_config_dirs}:/opt/gitlab/embedded/lib/pkgconfig"
   end
 
-  env['CFLAGS'] = '-std=gnu99' if OhaiHelper.os_platform == 'sles'
-
-  # Special configuration for Rust extensions, which require clang 3.9+.
-  if OhaiHelper.sles12?
-    env['BINDGEN_EXTRA_CLANG_ARGS'] = "-I/usr/lib64/clang/7.0.1/include"
-  elsif OhaiHelper.raspberry_pi?
+  if OhaiHelper.raspberry_pi?
     # This is needed to workaround a bug in QEMU: https://gitlab.com/gitlab-org/gitlab-omnibus-builder/-/issues/60
     # This has to be a tmpfs or some other filesystem other than ext4.
     env['CARGO_HOME'] = '/run'
