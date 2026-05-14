@@ -16,7 +16,7 @@
 #
 
 name 'postgresql'
-default_version '16.13'
+default_version '17.8'
 major_version = default_version.split('.')[0]
 
 license 'PostgreSQL'
@@ -34,11 +34,11 @@ dependency 'config_guess'
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
   # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  source Build::UBT.source_args("postgresql-all", "#{default_version}-3ubt", "767155d794e277df7931b97f5ecc066d650d87ec74990383d7f7df39b486147e", OhaiHelper.arch)
+  source Build::UBT.source_args("postgresql-all", "#{default_version}-3ubt", "4d185ffb559765004b730fc06419e5a1c04344624ce3132babafd261483e703b", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   version default_version do
-    source sha256: 'dc2ddbbd245c0265a689408e3d2f2f3f9ba2da96bd19318214b313cdd9797287'
+    source sha256: 'a88d195dd93730452d0cfa1a11896720d6d1ba084bc2be7d7fc557fa4e4158a0'
   end
 
   source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
@@ -59,8 +59,24 @@ else
             ' --with-openssl' \
             ' --with-uuid=ossp', env: env
 
-    make "world -j #{workers}", env: env
+    make "world-bin -j #{workers}", env: env
     make 'install-world-bin', env: env
+  end
+end
+
+build do
+  prefix = "#{install_dir}/embedded/postgresql/#{major_version}"
+  libpq = 'libpq.so.5'
+  link "#{prefix}/lib/#{libpq}", "#{install_dir}/embedded/lib/#{libpq}"
+
+  # NOTE: There are several dependencies which require these files in these
+  # locations and have dependency on `postgresql_new`. So when this block is
+  # changed to be in the `postgresql` software definition for default PG
+  # version changes, change those dependencies to `postgresql`.
+  block 'link bin files' do
+    Dir.glob("#{prefix}/bin/*").each do |bin_file|
+      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
+    end
   end
 end
 
