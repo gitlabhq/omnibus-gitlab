@@ -157,16 +157,6 @@ Sidekiqロールは、Sidekiqを設定するために使用されます。詳細
 
   *デフォルトでは、他のサービスは有効になりません。*
 
-### Spamcheckロール {#spamcheck-roles}
-
-Spamcheckロールは、Spamcheckサービスを設定するために使用されます。詳細については、[Spamcheckドキュメント](https://docs.gitlab.com/administration/reporting/spamcheck/)を参照してください
-
-- `spamcheck_role`（`gitlab-ee`）
-
-  Spamcheckおよびスパム分類子サービスを使用してサーバーを設定します。
-
-  *デフォルトでは、他のサービスは有効になりません。*
-
 ### Gitalyロール {#gitaly-roles}
 
 Gitalyロールは、Gitalyサービスを設定するために使用されます。詳細については、[Gitalyドキュメント](https://docs.gitlab.com/administration/gitaly/)を参照してください

@@ -42,7 +42,6 @@ module Gitlab
   role('pgbouncer').use { PgbouncerRole }
   role('consul').use { ConsulRole }
   role('pages').use { PagesRole }
-  role('spamcheck').use { SpamcheckRole }
   role('gitaly').use { GitalyRole }
   role('backup', manage_services: false).use { BackupRole }
 
@@ -58,7 +57,6 @@ module Gitlab
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul').use { Consul }
-  attribute('spamcheck')
   attribute('patroni').use { Patroni }
   attribute('gitaly').use { Gitaly }
   attribute('praefect')

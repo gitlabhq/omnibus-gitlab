@@ -82,7 +82,6 @@ RSpec.shared_context 'recipes' do
 
   let(:extra_disable_recipes) do
     [
-      "spamcheck::disable",
       "praefect::disable",
       "crond::disable",
       "gitlab::mailroom_disable",
