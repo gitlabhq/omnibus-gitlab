@@ -21,6 +21,7 @@ title: Configuring a Linux package installation
 - [`gitlab.yml`](gitlab.yml.md)
 - [LDAP](https://docs.gitlab.com/administration/auth/ldap/)
 - [Logs](logs.md)
+- [Mattermost](https://docs.gitlab.com/integration/mattermost/)
 - [NGINX](nginx.md)
 - [Pages](https://docs.gitlab.com/administration/pages/)
 - [Prometheus Monitoring](prometheus.md)

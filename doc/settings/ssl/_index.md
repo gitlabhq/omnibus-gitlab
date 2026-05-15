@@ -29,6 +29,7 @@ The following table shows which method each GitLab service supports.
 |------------------------|------------------------------------------------------------------------------------------------------------------------------|---------------------------|
 | GitLab instance domain | [Yes](#configure-https-manually)                                                                                             | [Yes](#enable-the-lets-encrypt-integration) |
 | Container Registry     | [Yes](https://docs.gitlab.com/administration/packages/container_registry/#configure-container-registry-under-its-own-domain) | [Yes](#enable-the-lets-encrypt-integration) |
+| Mattermost             | [Yes](https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-with-https)                                  | [Yes](#enable-the-lets-encrypt-integration) |
 | GitLab Pages           | [Yes](https://docs.gitlab.com/administration/pages/#wildcard-domains-with-tls-support)                                       | [Yes](#enable-the-lets-encrypt-integration)                        |
 
 ## OpenSSL 3 upgrade
@@ -73,6 +74,9 @@ To enable Let's Encrypt:
    ## Container Registry (optional), must use https protocol
    registry_external_url "https://registry.example.com"
    #registry_nginx['ssl_certificate'] = "path/to/cert"      # Must be absent or commented out
+
+   ## Mattermost (optional), must use https protocol
+   mattermost_external_url "https://mattermost.example.com"
 
    ## GitLab Pages (optional), must use https protocol
    pages_external_url "https://pages.example.com"
@@ -438,7 +442,7 @@ page returns a `302` redirect to the login page). In that case, it's
 recommended to leverage a
 [health check endpoint](https://docs.gitlab.com/administration/monitoring/health_check/).
 
-Other bundled components, like the Container Registry or GitLab Pages,
+Other bundled components, like the Container Registry, GitLab Pages, or Mattermost,
 use a similar strategy for proxied SSL. Set the particular component's `*_external_url` with `https://` and
 prefix the `nginx[...]` configuration with the component name. For example, the
 GitLab Container Registry configuration is prefixed with `registry_`:
@@ -452,7 +456,7 @@ GitLab Container Registry configuration is prefixed with `registry_`:
    registry_nginx['listen_https'] = false
    ```
 
-   The same format can be used for Pages (`pages_` prefix).
+   The same format can be used for Pages (`pages_` prefix) and Mattermost (`mattermost_` prefix).
 
 1. Reconfigure GitLab:
 
@@ -462,7 +466,7 @@ GitLab Container Registry configuration is prefixed with `registry_`:
 
 1. Optional. You may need to configure your reverse proxy or load balancer to
    forward certain headers (for example `Host`, `X-Forwarded-Ssl`, `X-Forwarded-For`,
-   `X-Forwarded-Port`) to GitLab. If you forget
+   `X-Forwarded-Port`) to GitLab (and Mattermost if you use one). If you forget
    this step, you may see improper redirections or errors, like
    "422 Unprocessable Entity" or "Can't verify CSRF token authenticity".
 
@@ -546,7 +550,7 @@ If changing the ciphers is not an option, you can disable the HTTP/2 support:
 
 > [!note]
 > The HTTP/2 setting only works for the main GitLab application and not for the other services,
-> like GitLab Pages and Container Registry.
+> like GitLab Pages, Container Registry, and Mattermost.
 
 ## Enable 2-way SSL client authentication
 
@@ -578,7 +582,7 @@ enable 2-way SSL:
 
 > [!note]
 > The HSTS settings only work for the main GitLab application and not for the other services,
-> like GitLab Pages and Container Registry.
+> like GitLab Pages, Container Registry, and Mattermost.
 
 HTTP Strict Transport Security (HSTS) is enabled by default and it informs browsers that
 they should only contact the website using HTTPS. When a browser visits a

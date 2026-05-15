@@ -112,13 +112,14 @@ Try [specifying](settings/configuration.md#configure-the-external-url-for-gitlab
 `/etc/gitlab/gitlab.rb`. Also check your firewall settings; port 80 (HTTP) or
 443 (HTTPS) might be closed on your GitLab server.
 
-Note that specifying the `external_url` for GitLab, or any other bundled service (such as
-the Registry) doesn't follow the `key=value` format that other parts of `gitlab.rb` follow. Make sure
+Note that specifying the `external_url` for GitLab, or any other bundled service (Registry and
+Mattermost) doesn't follow the `key=value` format that other parts of `gitlab.rb` follow. Make sure
 that you have them set in the following format:
 
 ```ruby
 external_url "https://gitlab.example.com"
 registry_external_url "https://registry.example.com"
+mattermost_external_url "https://mattermost.example.com"
 ```
 
 > [!note]
@@ -425,11 +426,19 @@ updates.
 ### Isolation between services
 
 Bundled services in Linux packages (GitLab itself, NGINX, PostgreSQL,
-and Redis) are isolated from each other using Unix user
+Redis, Mattermost) are isolated from each other using Unix user
 accounts. Creating and managing these user accounts requires root
 access. By default, Linux packages create the required Unix
 accounts during `gitlab-ctl reconfigure` but that behavior can be
 [disabled](settings/configuration.md#disable-user-and-group-account-management).
+
+In principle, Linux packages could do with only 2 user accounts (one
+for GitLab and one for Mattermost) if we give each application its own
+runit (runsvdir), PostgreSQL and Redis process. But this would be a
+major change in the `gitlab-ctl reconfigure` Chef code and it would
+probably create major upgrade pain for all existing Linux package
+installations. We would probably have to rearrange the directory
+structure under `/var/opt/gitlab`.
 
 ### Tweaking the operating system for better performance
 

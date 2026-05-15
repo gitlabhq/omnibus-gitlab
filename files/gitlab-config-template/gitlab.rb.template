@@ -543,8 +543,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['usage_ping_enabled'] = true
 
 ### GitLab Mattermost
-###! Set this to the externally reachable URL of your standalone Mattermost
-###! instance so that GitLab can integrate with it for slash commands and OAuth.
+###! These settings are void if Mattermost is installed on the same omnibus
+###! install
 # gitlab_rails['mattermost_host'] = "https://mattermost.example.com"
 
 ### LDAP Settings
@@ -2426,6 +2426,70 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Command to generate extra configuration
 # gitlab_kas['extra_config_command'] = nil
+
+################################################################################
+## GitLab Mattermost
+##! Docs: https://docs.gitlab.com/ee/integration/mattermost/
+################################################################################
+
+# mattermost_external_url 'http://mattermost.example.com'
+
+# mattermost['enable'] = false
+# mattermost['username'] = 'mattermost'
+# mattermost['group'] = 'mattermost'
+# mattermost['uid'] = nil
+# mattermost['gid'] = nil
+# mattermost['home'] = '/var/opt/gitlab/mattermost'
+# mattermost['database_name'] = 'mattermost_production'
+# mattermost['env'] = {
+#   'SSL_CERT_DIR' => "/opt/gitlab/embedded/ssl/certs/",
+#   'GODEBUG` => "tlsmlkem=0",
+# }
+# mattermost['service_address'] = "127.0.0.1"
+# mattermost['service_port'] = "8065"
+# mattermost['service_site_url'] = nil
+# mattermost['service_allowed_untrusted_internal_connections'] = ""
+# mattermost['service_enable_api_team_deletion'] = true
+# mattermost['team_site_name'] = "GitLab Mattermost"
+# mattermost['sql_driver_name'] = 'mysql'
+# mattermost['sql_data_source'] = "mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8"
+# mattermost['log_file_directory'] = '/var/log/gitlab/mattermost/'
+# mattermost['gitlab_enable'] = false
+# mattermost['gitlab_id'] = "12345656"
+# mattermost['gitlab_secret'] = "123456789"
+# mattermost['gitlab_scope'] = ""
+# mattermost['gitlab_auth_endpoint'] = "http://gitlab.example.com/oauth/authorize"
+# mattermost['gitlab_token_endpoint'] = "http://gitlab.example.com/oauth/token"
+# mattermost['gitlab_user_api_endpoint'] = "http://gitlab.example.com/api/v4/user"
+# mattermost['file_directory'] = "/var/opt/gitlab/mattermost/data"
+# mattermost['plugin_directory'] = "/var/opt/gitlab/mattermost/plugins"
+# mattermost['plugin_client_directory'] = "/var/opt/gitlab/mattermost/client-plugins"
+
+################################################################################
+## Mattermost NGINX
+################################################################################
+
+##! All the settings defined in the "GitLab Nginx" section are also available in
+##! this "Mattermost NGINX" section, using the key `mattermost_nginx`.  However,
+##! those settings should be explicitly set. That is, settings given as
+##! `nginx['some_setting']` WILL NOT be automatically replicated as
+##! `mattermost_nginx['some_setting']` and should be set separately.
+
+##! Below you can find settings that are exclusive to "Mattermost NGINX"
+# mattermost_nginx['enable'] = false
+
+# mattermost_nginx['custom_gitlab_mattermost_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
+# mattermost_nginx['proxy_set_headers'] = {
+#   "Host" => "$http_host",
+#   "X-Real-IP" => "$remote_addr",
+#   "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+#   "X-Frame-Options" => "SAMEORIGIN",
+#   "X-Forwarded-Proto" => "https",
+#   "X-Forwarded-Ssl" => "on",
+#   "Upgrade" => "$http_upgrade",
+#   "Connection" => "$connection_upgrade"
+# }
+
 
 ################################################################################
 ## Registry NGINX

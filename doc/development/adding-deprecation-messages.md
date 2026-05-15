@@ -51,7 +51,7 @@ deprecations = [
 
 `config_keys` represents a list of keys, which can be used to traverse the configuration hash available
 from `/opt/gitlab/embedded/nodes/{fqdn}.json` to reach a specific configuration.
-For example `%w(registry default_notifications_threshold)` means `registry['default_notifications_threshold']` setting.
+For example `%w(mattermost log_file_directory)` means `mattermost['log_file_directory']` setting.
 Similarly, `%w(gitlab nginx listen_addresses)` means `gitlab['nginx']['listen_addresses']`.
 We internally convert it to `nginx['listen_addresses']`, which is what we use in `/etc/gitlab/gitlab.rb`.
 

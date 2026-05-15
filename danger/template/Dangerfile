@@ -15,6 +15,8 @@ ATTRIBUTE_FILES = [
   'files/gitlab-cookbooks/gitlab-ee/libraries/',
   'files/gitlab-cookbooks/letsencrypt/attributes/default.rb',
   'files/gitlab-cookbooks/letsencrypt/libraries/',
+  'files/gitlab-cookbooks/mattermost/attributes/default.rb',
+  'files/gitlab-cookbooks/mattermost/libraries/',
   'files/gitlab-cookbooks/package/attributes/default.rb',
   'files/gitlab-cookbooks/package/libraries/',
   'files/gitlab-cookbooks/registry/attributes/default.rb',

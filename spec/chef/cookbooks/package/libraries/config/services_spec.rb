@@ -38,11 +38,13 @@ RSpec.describe Services do
       let!(:runner) { ChefSpec::SoloRunner.new { |node| Gitlab[:node] = node } }
 
       it 'node service settings are overridden by gitlab.rb changes' do
-        stub_gitlab_rb(redis: { enable: true })
+        stub_gitlab_rb(redis: { enable: true }, mattermost: { enable: false })
         Services.disable('redis')
+        Services.enable('mattermost')
         runner.converge('gitlab-base::config')
 
         expect(node['redis']['enable']).to be true
+        expect(node['mattermost']['enable']).to be false
       end
     end
 
@@ -51,10 +53,17 @@ RSpec.describe Services do
         chef_run
         Services.disable('redis')
         expect(node['redis']['enable']).to be false
+
+        Services.enable('mattermost')
+        expect(node['mattermost']['enable']).to be true
       end
 
       it 'supports exceptions' do
         chef_run
+        Services.disable('mattermost')
+        Services.enable('mattermost', except: 'mattermost')
+        expect(node['mattermost']['enable']).to be false
+
         Services.enable('redis')
         Services.disable('redis', except: 'redis')
         expect(node['redis']['enable']).to be true
@@ -70,14 +79,16 @@ RSpec.describe Services do
         expect(node['postgresql']['enable']).to be false
         expect(node['gitaly']['enable']).to be false
 
-        Services.enable('registry', 'mailroom')
+        Services.enable('mattermost', 'registry', 'mailroom')
+        expect(node['mattermost']['enable']).to be true
         expect(node['registry']['enable']).to be true
         expect(node['gitlab']['mailroom']['enable']).to be true
       end
 
       it 'supports single exceptions' do
         Services.disable('registry')
-        Services.enable('registry', 'mailroom', except: 'registry')
+        Services.enable('mattermost', 'registry', 'mailroom', except: 'registry')
+        expect(node['mattermost']['enable']).to be true
         expect(node['registry']['enable']).to be false
         expect(node['gitlab']['mailroom']['enable']).to be true
 
@@ -90,7 +101,8 @@ RSpec.describe Services do
 
       it 'supports multiple exceptions' do
         Services.disable('registry', 'mailroom')
-        Services.enable('registry', 'mailroom', except: %w(registry mailroom))
+        Services.enable('mattermost', 'registry', 'mailroom', except: %w(registry mailroom))
+        expect(node['mattermost']['enable']).to be true
         expect(node['registry']['enable']).to be false
         expect(node['gitlab']['mailroom']['enable']).to be false
 
@@ -120,6 +132,7 @@ RSpec.describe Services do
         Services.enable(Services::ALL_SERVICES, except: 'registry')
         expect(node['redis']['enable']).to be true
         expect(node['postgresql']['enable']).to be true
+        expect(node['mattermost']['enable']).to be true
         expect(node['registry']['enable']).to be false
       end
 
@@ -128,6 +141,7 @@ RSpec.describe Services do
         Services.disable(Services::ALL_SERVICES, except: 'redis')
         expect(node['redis']['enable']).to be true
         expect(node['postgresql']['enable']).to be false
+        expect(node['mattermost']['enable']).to be false
         expect(node['registry']['enable']).to be false
       end
     end
@@ -141,6 +155,7 @@ RSpec.describe Services do
         expect(node['redis']['enable']).to be true
         expect(node['postgresql']['enable']).to be true
         expect(node['gitaly']['enable']).to be true
+        expect(node['mattermost']['enable']).to be true
         expect(node['gitlab']['mailroom']['enable']).to be false
         expect(node['registry']['enable']).to be false
       end
@@ -151,6 +166,7 @@ RSpec.describe Services do
         expect(node['redis']['enable']).to be false
         expect(node['postgresql']['enable']).to be true
         expect(node['gitaly']['enable']).to be true
+        expect(node['mattermost']['enable']).to be false
         expect(node['gitlab']['mailroom']['enable']).to be false
         expect(node['registry']['enable']).to be false
       end
@@ -174,7 +190,7 @@ RSpec.describe Services do
         runner.converge('gitlab-base::config')
 
         expect(node['redis']['enable']).to be true
-        expect(node['postgresql']['enable']).to be false
+        expect(node['mattermost']['enable']).to be false
       end
     end
 

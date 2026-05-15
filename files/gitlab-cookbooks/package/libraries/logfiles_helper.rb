@@ -39,6 +39,7 @@ class LogfilesHelper < AccountHelper
       'gitlab-workhorse' => { username: gitlab_user, group: gitlab_group },
       'logrotate' => { username: 'root', group: 'root' },
       'mailroom' => { username: gitlab_user, group: gitlab_group },
+      'mattermost' => { username: mattermost_user, group: mattermost_group, mode: '0755' },
       'nginx' => { username: 'root', group: 'root' },
       'node-exporter' => { username: prometheus_user, group: prometheus_group },
       'patroni' => { username: postgresql_user, group: postgresql_group },
@@ -81,6 +82,9 @@ class LogfilesHelper < AccountHelper
     case service
     when 'gitaly'
       service_settings('gitaly')['configuration']['logging']['dir']
+    when 'mattermost'
+      # mattermost uses 'log_file_directory' instead of 'log_directory'
+      service_settings('mattermost')['log_file_directory']
     else
       service_settings(service)['log_directory']
     end

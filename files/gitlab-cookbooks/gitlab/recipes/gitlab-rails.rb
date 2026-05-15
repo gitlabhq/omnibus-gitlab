@@ -433,7 +433,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
   group gitlab_group
   mode "0640"
 
-  mattermost_host = node['gitlab']['gitlab_rails']['mattermost_host'] || Gitlab['mattermost_external_url']
+  mattermost_host = Gitlab['mattermost_external_url'] || node['gitlab']['gitlab_rails']['mattermost_host']
   has_jh_cookbook = File.exist?('/opt/gitlab/embedded/cookbooks/gitlab-jh')
 
   variables(
@@ -451,7 +451,7 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       pages_object_store_connection: node['gitlab']['gitlab_rails']['pages_object_store_connection'],
       pages_namespace_in_path: node['gitlab_pages']['namespace_in_path'],
       mattermost_host: mattermost_host,
-      mattermost_enabled: !mattermost_host.nil?,
+      mattermost_enabled: node['mattermost']['enable'] || !mattermost_host.nil?,
       sidekiq: node['gitlab']['sidekiq'],
       puma: node['gitlab']['puma'],
       gitlab_shell_authorized_keys_file: node['gitlab']['gitlab_shell']['auth_file'],
