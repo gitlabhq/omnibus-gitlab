@@ -45,9 +45,7 @@ compatibility:
 notifications:
   endpoints: <%= @notifications.to_json %>
 <% end %>
-<% if @database %>
 database: <%= @database.to_json %>
-<% end %>
 <% if @gc %>
 gc: <%= @gc.to_json %>
 <% end %>
