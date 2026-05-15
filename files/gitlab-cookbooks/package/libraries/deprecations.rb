@@ -47,6 +47,18 @@ module Gitlab
             removal: '18.0',
             note: "`gitlab_shell['migration'] will be ignored from 17.3 and removed in 18.0. See https://gitlab.com/groups/gitlab-org/-/epics/14845."
           },
+          {
+            config_keys: %w(mattermost),
+            deprecation: '19.0',
+            removal: '19.0',
+            note: "Bundled Mattermost has been removed from the Linux package in 19.0; `mattermost[...]` keys are no longer supported. Deploy Mattermost separately and point GitLab at it with `gitlab_rails['mattermost_host']`. See https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-on-its-own-server for setup instructions."
+          },
+          {
+            config_keys: %w(gitlab mattermost_external_url),
+            deprecation: '19.0',
+            removal: '20.0',
+            note: "`mattermost_external_url` is deprecated. Use `gitlab_rails['mattermost_host']` instead. See https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-on-its-own-server."
+          },
         ]
       end
 

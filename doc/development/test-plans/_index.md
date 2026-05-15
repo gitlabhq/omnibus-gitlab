@@ -14,7 +14,6 @@ title: Omnibus GitLab test plans
 - [`gitlab-exporter`](upgrade-gitlab-exporter-testplan.md)
 - [Go](upgrade-golang-testplan.md)
 - [`go-crond`](upgrade-go-crond-testplan.md)
-- [Mattermost](upgrade-mattermost-testplan.md)
 - [Redis](upgrade-redis-testplan.md)
 - [Rubygems](upgrade-rubygems-testplan.md)
 - [`nginx`](upgrade-nginx-testplan.md)

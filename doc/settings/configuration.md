@@ -371,8 +371,6 @@ specify the numeric identifiers for these users:
    web_server['gid'] = 1237
    registry['uid'] = 1238
    registry['gid'] = 1238
-   mattermost['uid'] = 1239
-   mattermost['gid'] = 1239
    prometheus['uid'] = 1240
    prometheus['gid'] = 1240
    ```
@@ -415,7 +413,6 @@ By default, the Linux package installations expect the following users and group
 | `gitlab-psql`        | Only when using the packaged PostgreSQL | PostgreSQL user/group                                                 | `/var/opt/gitlab/postgresql` | `/bin/sh`     |
 | `gitlab-consul`      | Only when using GitLab Consul           | GitLab Consul user/group                                              | `/var/opt/gitlab/consul`     | `/bin/sh`     |
 | `registry`           | Only when using GitLab Registry         | GitLab Registry user/group                                            | `/var/opt/gitlab/registry`   | `/bin/sh`     |
-| `mattermost`         | Only when using GitLab Mattermost       | GitLab Mattermost user/group                                          | `/var/opt/gitlab/mattermost` | `/bin/sh`     |
 | `gitlab-backup`      | Only when using `gitlab-backup-cli`     | GitLab Backup Cli User                                                | `/var/opt/gitlab/backups`    | `/bin/sh`     |
 
 To disable user and group accounts management:
@@ -469,11 +466,6 @@ To disable user and group accounts management:
    registry['group'] = "registry"
    registry['dir'] = "/var/opt/gitlab/registry"
    registry['shell'] = "/usr/sbin/nologin"
-
-   # Mattermost
-   mattermost['username'] = 'mattermost'
-   mattermost['group'] = 'mattermost'
-   mattermost['home'] = '/var/opt/gitlab/mattermost'
    ```
 
 1. Reconfigure GitLab:
