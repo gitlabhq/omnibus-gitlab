@@ -25,26 +25,21 @@ To configure NGINX settings for different services, edit the `gitlab.rb` file.
 
 Use `nginx['<setting>']` keys to configure settings for the GitLab Rails application.
 GitLab provides similar keys for other services like
-`pages_nginx`, `mattermost_nginx`, and `registry_nginx`.
+`pages_nginx` and `registry_nginx`.
 Configurations for `nginx` are also available for these `<service_nginx>` settings, and
 share the same default values as GitLab NGINX.
-
-To operate NGINX for isolated services like Mattermost, use `gitlab_rails['enable'] = false` instead of `nginx['enable'] = false`.
-For more information, see [Running GitLab Mattermost on its own server](https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-on-its-own-server).
 
 When you modify the `gitlab.rb` file, configure NGINX settings for each
 service separately.
 Settings specified using `nginx['foo']` are not replicated to
-service-specific NGINX configurations (such as `registry_nginx['foo']` or
-`mattermost_nginx['foo']`).
+service-specific NGINX configurations (such as `registry_nginx['foo']`).
 For example, to configure HTTP to HTTPS
-redirection for GitLab, Mattermost and Registry, add the following settings
+redirection for GitLab and Registry, add the following settings
 to `gitlab.rb`:
 
 ```ruby
 nginx['redirect_http_to_https'] = true
 registry_nginx['redirect_http_to_https'] = true
-mattermost_nginx['redirect_http_to_https'] = true
 ```
 
 ## Enable HTTPS
@@ -243,7 +238,6 @@ To change the list of addresses:
    # Listen on all IPv4 and IPv6 addresses
    nginx['listen_addresses'] = ["0.0.0.0", "[::]"]
    registry_nginx['listen_addresses'] = ['*', '[::]']
-   mattermost_nginx['listen_addresses'] = ['*', '[::]']
    pages_nginx['listen_addresses'] = ['*', '[::]']
    ```
 
@@ -527,8 +521,8 @@ The result for the 404 error page would look like this:
 
 You can host GitLab with an existing Passenger and NGINX installation and still use Linux packages for updates and installation.
 
-If you disable NGINX, you can't access other services included in a Linux package installation, such as
-Mattermost, unless you manually add them to `nginx.conf`.
+If you disable NGINX, you can't access other services included in a Linux package installation
+unless you manually add them to `nginx.conf`.
 
 #### Configuration
 

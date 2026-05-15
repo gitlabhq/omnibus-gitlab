@@ -19,7 +19,6 @@ module Postgresql
   class << self
     def parse_variables
       parse_connect_port
-      parse_mattermost_postgresql_settings
       parse_registry_postgresql_settings
       parse_wal_keep_size
     end
@@ -28,20 +27,6 @@ module Postgresql
       gitlab_postgresql_crt, gitlab_postgresql_key = generate_postgresql_keypair
       Gitlab['postgresql']['internal_certificate'] ||= gitlab_postgresql_crt
       Gitlab['postgresql']['internal_key'] ||= gitlab_postgresql_key
-    end
-
-    def parse_mattermost_postgresql_settings
-      value_from_gitlab_rb = Gitlab['mattermost']['sql_data_source']
-
-      user = Gitlab['postgresql']['sql_mattermost_user'] || Gitlab['node']['postgresql']['sql_mattermost_user']
-      unix_socket_directory = Gitlab['postgresql']['unix_socket_directory'] || Gitlab['node']['postgresql']['unix_socket_directory']
-      postgres_directory = Gitlab['postgresql']['dir'] || Gitlab['node']['postgresql']['dir']
-      port = Gitlab['postgresql']['port'] || Gitlab['node']['postgresql']['port']
-      database_name = Gitlab['mattermost']['database_name'] || Gitlab['node']['mattermost']['database_name']
-      host = unix_socket_directory || postgres_directory
-
-      value_from_attributes = "user=#{user} host=#{host} port=#{port} dbname=#{database_name}"
-      Gitlab['mattermost']['sql_data_source'] = value_from_gitlab_rb || value_from_attributes
     end
 
     def parse_wal_keep_size

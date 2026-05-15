@@ -77,7 +77,7 @@ class SecretsHelper
   end
 
   def self.gather_gitlab_secrets # rubocop:disable Metrics/AbcSize
-    secret_tokens = {
+    {
       'gitlab_workhorse' => {
         'secret_token' => Gitlab['gitlab_workhorse']['secret_token'],
       },
@@ -117,12 +117,6 @@ class SecretsHelper
       'letsencrypt' => {
         'auto_enabled' => Gitlab['letsencrypt']['auto_enabled']
       },
-      'mattermost' => {
-        'email_invite_salt' => Gitlab['mattermost']['email_invite_salt'],
-        'file_public_link_salt' => Gitlab['mattermost']['file_public_link_salt'],
-        'sql_at_rest_encrypt_key' => Gitlab['mattermost']['sql_at_rest_encrypt_key'],
-        'register_as_oauth_app' => Gitlab['mattermost']['register_as_oauth_app']
-      },
       'postgresql' => {
         'internal_certificate' => Gitlab['postgresql']['internal_certificate'],
         'internal_key' => Gitlab['postgresql']['internal_key']
@@ -140,17 +134,6 @@ class SecretsHelper
         }
       }
     }
-
-    if Gitlab['mattermost']['gitlab_enable']
-      gitlab_oauth = {
-        'gitlab_enable' => Gitlab['mattermost']['gitlab_enable'],
-        'gitlab_secret' => Gitlab['mattermost']['gitlab_secret'],
-        'gitlab_id' => Gitlab['mattermost']['gitlab_id'],
-      }
-      secret_tokens['mattermost'].merge!(gitlab_oauth)
-    end
-
-    secret_tokens
   end
 
   def self.write_to_gitlab_secrets(path = SECRETS_FILE)

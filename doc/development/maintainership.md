@@ -66,8 +66,6 @@ the progress of a trainee-maintainer in the build scope.
      1. Go
      1. Python
 
-1. Author or review a Mattermost version update merge request. Ensures familiarity with its update
-   process and Distribution team's communication process with the Mattermost team.
 1. Author or review merge requests which update 5 other components.
 1. Author or review 3 merge requests which modify CI configuration.
 1. Author or review 3 merge requests which refactor build related code.

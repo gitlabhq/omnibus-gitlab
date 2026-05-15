@@ -60,8 +60,7 @@ module Gitlab
   attribute('patroni').use { Patroni }
   attribute('gitaly').use { Gitaly }
   attribute('praefect')
-  attribute('mattermost',   priority: 30).use { GitlabMattermost } # Mattermost checks if GitLab is enabled on the same box
-  attribute('letsencrypt',  priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry and Mattermost
+  attribute('letsencrypt', priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry
   attribute('crond')
   attribute('logrotate')
 
@@ -117,7 +116,6 @@ module Gitlab
     attribute('user')
     attribute('gitlab_ci')
     attribute('sidekiq').use { Sidekiq }
-    attribute('mattermost_nginx')
     attribute('pages_nginx')
     attribute('registry_nginx')
     attribute('gitlab_kas_nginx')

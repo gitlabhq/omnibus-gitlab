@@ -54,14 +54,6 @@ class AccountHelper
     node['postgresql']['group']
   end
 
-  def mattermost_user
-    node['mattermost']['username']
-  end
-
-  def mattermost_group
-    node['mattermost']['group']
-  end
-
   def registry_user
     node['registry']['username']
   end
@@ -92,7 +84,6 @@ class AccountHelper
       #{web_server_user}
       #{redis_user}
       #{postgresql_user}
-      #{mattermost_user}
       #{registry_user}
       #{prometheus_user}
       #{consul_user}
@@ -105,7 +96,6 @@ class AccountHelper
       #{web_server_group}
       #{redis_group}
       #{postgresql_group}
-      #{mattermost_group}
       #{registry_group}
       #{consul_group}
       #{prometheus_group}
