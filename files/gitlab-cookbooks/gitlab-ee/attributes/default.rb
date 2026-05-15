@@ -89,7 +89,6 @@ default['gitlab']['geo_postgresql']['unix_socket_directory'] = nil
 default['gitlab']['geo_postgresql']['ssl'] = 'off'
 # Postgres User's Environment Path
 default['gitlab']['geo_postgresql']['sql_user'] = 'gitlab_geo'
-default['gitlab']['geo_postgresql']['sql_mattermost_user'] = nil
 default['gitlab']['geo_postgresql']['port'] = 5431
 
 # Mininum of 1/8 of total memory and Maximum of 1024MB as sane defaults

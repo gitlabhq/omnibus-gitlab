@@ -47,7 +47,6 @@ module Logging
         gitlab-exporter
         logrotate
         mailroom
-        mattermost
         nginx
         node-exporter
         pgbouncer

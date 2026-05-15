@@ -166,7 +166,6 @@ end
 %w(
   gitlab-pages
   registry
-  mattermost
   gitlab-kas
   letsencrypt
 ).each do |cookbook|
@@ -177,6 +176,11 @@ end
     include_recipe "#{cookbook}::disable"
   end
 end
+
+# Always disable the legacy bundled Mattermost runit service. The binary was
+# removed in 19.0; this stops the supervised service from a prior install.
+# Safe to drop once the `mattermost` deprecation entry expires.
+include_recipe 'mattermost::disable'
 # Configure healthcheck if we have nginx or workhorse enabled
 include_recipe "gitlab::gitlab-healthcheck" if node['gitlab']['nginx']['enable'] || node["gitlab"]["gitlab_workhorse"]["enable"]
 
