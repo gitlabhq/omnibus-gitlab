@@ -57,6 +57,7 @@ module Gitlab
   attribute('repmgr')
   attribute('repmgrd')
   attribute('consul').use { Consul }
+  attribute('spamcheck') # Remove at the next upgrade stop. Retained to enable the deprecation notice in 19.0.
   attribute('patroni').use { Patroni }
   attribute('gitaly').use { Gitaly }
   attribute('praefect')
