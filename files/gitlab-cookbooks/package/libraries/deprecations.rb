@@ -59,6 +59,12 @@ module Gitlab
             removal: '20.0',
             note: "`mattermost_external_url` is deprecated. Use `gitlab_rails['mattermost_host']` instead. See https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-on-its-own-server."
           },
+          {
+            config_keys: %w(spamcheck),
+            deprecation: '19.0',
+            removal: '19.0',
+            note: "Spamcheck has been removed from the Linux package in 19.0. If you currently use the bundled Spamcheck, you can deploy it separately using Docker. No data migration is required. See https://gitlab.com/gitlab-org/omnibus-gitlab/-/work_items/9608."
+          },
         ]
       end
 

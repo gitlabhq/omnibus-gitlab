@@ -365,4 +365,22 @@ RSpec.describe Gitlab::Deprecations do
       expect(messages).not_to include(a_string_matching(/mattermost_external_url/))
     end
   end
+
+  describe 'spamcheck removal entry' do
+    before do
+      allow(Gitlab::Deprecations).to receive(:list).and_call_original
+    end
+
+    let(:config_with_spamcheck) { { 'spamcheck' => { 'enable' => true } } }
+
+    it 'reports spamcheck as removed in 19.0' do
+      messages = described_class.check_config('19.0', config_with_spamcheck, :removal)
+      expect(messages).to include(a_string_matching(/spamcheck has been deprecated since 19\.0 and was removed in 19\.0/))
+    end
+
+    it 'is silent when no spamcheck config is present' do
+      messages = described_class.check_config('19.0', {}, :removal)
+      expect(messages).not_to include(a_string_matching(/spamcheck/))
+    end
+  end
 end
