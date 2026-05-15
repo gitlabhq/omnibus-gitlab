@@ -15,6 +15,13 @@
 # limitations under the License.
 #
 
+# The bundled Mattermost binary was removed in 19.0. This recipe stops and
+# unsupervises any leftover runit service from an earlier install so it does
+# not keep running in the background after upgrade. The matching NGINX
+# reverse-proxy config is removed alongside the other service configs in
+# `gitlab::nginx`. Safe to delete once the `mattermost` deprecation entry is
+# removed at the next required upgrade stop.
+
 runit_service "mattermost" do
   action :disable
 end

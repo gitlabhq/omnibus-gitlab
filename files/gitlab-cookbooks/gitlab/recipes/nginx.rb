@@ -67,7 +67,6 @@ gitlab_rails_smartcard_http_conf = nginx_helper.service_conf_path('smartcard')
 gitlab_rails_health_conf = nginx_helper.service_conf_path('health', suffix: 'partial')
 gitlab_pages_http_conf = nginx_helper.service_conf_path('pages')
 gitlab_registry_http_conf = nginx_helper.service_conf_path('registry')
-gitlab_mattermost_http_conf = nginx_helper.service_conf_path('mattermost')
 gitlab_kas_http_conf = nginx_helper.service_conf_path('kas')
 nginx_status_conf = File.join(nginx_conf_dir, "nginx-status.conf")
 
@@ -83,12 +82,6 @@ gitlab_rails_smartcard_enabled = if node['gitlab']['gitlab_rails']['enable']
                                  else
                                    false
                                  end
-
-gitlab_mattermost_enabled = if node['mattermost']['enable']
-                              node['gitlab']['mattermost_nginx']['enable']
-                            else
-                              false
-                            end
 
 gitlab_pages_enabled = if node['gitlab']['gitlab_rails']['pages_enabled']
                          node['gitlab']['pages_nginx']['enable']
@@ -119,11 +112,6 @@ nginx_vars = nginx_vars.to_hash.merge!({
 # Include the config file for gitlab-health in nginx.conf later
 nginx_vars = nginx_vars.to_hash.merge!({
                                          gitlab_health_conf: gitlab_rails_enabled || gitlab_rails_smartcard_enabled ? gitlab_rails_health_conf : nil
-                                       })
-
-# Include the config file for gitlab mattermost in nginx.conf later
-nginx_vars = nginx_vars.to_hash.merge!({
-                                         gitlab_mattermost_http_config: gitlab_mattermost_enabled ? gitlab_mattermost_http_conf : nil
                                        })
 
 # Include the config file for gitlab pages in nginx.conf later
@@ -281,27 +269,12 @@ nginx_configuration 'registry' do
   action gitlab_registry_enabled ? :create : :delete
 end
 
-mattermost_nginx_vars = node['gitlab']['mattermost_nginx'].to_hash
-
-mattermost_nginx_vars['https'] = if mattermost_nginx_vars['listen_https'].nil?
-                                   node['mattermost']['service_use_ssl']
-                                 else
-                                   mattermost_nginx_vars['listen_https']
-                                 end
-
+# The bundled Mattermost reverse-proxy was removed in 19.0. Always delete its
+# rendered config to clean up leftovers from earlier installs. Safe to remove
+# once the `mattermost` deprecation entry is dropped at the next required
+# upgrade stop.
 nginx_configuration 'mattermost' do
-  variables(mattermost_nginx_vars.merge(
-              {
-                fqdn: node['mattermost']['host'],
-                port: node['mattermost']['port'],
-                service_port: node['mattermost']['service_port'],
-                service_address: node['mattermost']['service_address'],
-                letsencrypt_enable: node['letsencrypt']['enable'],
-                redirect_http_to_https: node['gitlab']['mattermost_nginx']['redirect_http_to_https']
-              }
-            ))
-
-  action gitlab_mattermost_enabled ? :create : :delete
+  action :delete
 end
 
 gitlab_kas_nginx_vars = node['gitlab']['gitlab_kas_nginx'].to_hash
@@ -365,9 +338,7 @@ consul_service node['gitlab']['nginx']['consul_service_name'] do
 end
 
 nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']
-nginx_vars['gitlab_mattermost_access_log_format'] = node['gitlab']['mattermost_nginx']['log_format']
 nginx_vars['gitlab_nginx_log_format_escape'] = node['gitlab']['nginx']['log_format_escape']
-nginx_vars['gitlab_mattermost_log_format_escape'] = node['gitlab']['mattermost_nginx']['log_format_escape']
 
 template nginx_config do
   source "nginx.conf.erb"
@@ -409,7 +380,6 @@ end
 %w[
   http
   smartcard-http
-  mattermost-http
   pages
   registry
   kas

@@ -16,7 +16,6 @@ default['postgresql']['home'] = nil
 default['postgresql']['user_path'] = "#{node['package']['install-dir']}/embedded/bin:#{node['package']['install-dir']}/bin:$PATH"
 default['postgresql']['sql_user'] = "gitlab"
 default['postgresql']['sql_user_password'] = nil
-default['postgresql']['sql_mattermost_user'] = "gitlab_mattermost"
 default['postgresql']['port'] = 5432
 default['postgresql']['connect_port'] = nil
 # Registry Database Objects - dynamically set in PostgreSQL library based on registry settings
