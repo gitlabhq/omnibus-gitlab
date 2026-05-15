@@ -314,6 +314,7 @@ Style/RedundantBegin:
 # This cop supports safe autocorrection (--autocorrect).
 Style/RedundantConditional:
   Exclude:
+    - 'files/gitlab-cookbooks/mattermost/recipes/enable.rb'
     - 'files/gitlab-ctl-commands-ee/lib/geo/replication.rb'
 
 # Offense count: 63

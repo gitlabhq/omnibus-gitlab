@@ -37,6 +37,7 @@ module Services
     service 'gitlab_pages',       groups: ['pages_role']
     service 'gitlab_kas',         groups: [DEFAULT_GROUP, 'rails']
     service 'mailroom'
+    service 'mattermost'
     service 'registry'
     service 'storage_check'
     service 'crond'

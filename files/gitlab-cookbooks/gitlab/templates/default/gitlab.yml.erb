@@ -462,7 +462,6 @@ production: &base
     clientside_dsn: <%= @sentry_clientside_dsn %>
     environment: <%= @sentry_environment %> # e.g. development, staging, production
 
-  ## Mattermost (external)
   mattermost:
     enabled: <%= @mattermost_enabled %>
     host: <%= @mattermost_host %>

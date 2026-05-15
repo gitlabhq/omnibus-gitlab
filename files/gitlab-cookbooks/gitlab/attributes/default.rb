@@ -86,7 +86,6 @@ default['gitlab']['gitlab_rails']['gitlab_ssh_user'] = nil
 default['gitlab']['gitlab_rails']['gitlab_ssh_host'] = nil
 default['gitlab']['gitlab_rails']['time_zone'] = nil
 default['gitlab']['gitlab_rails']['cdn_host'] = nil
-default['gitlab']['gitlab_rails']['mattermost_host'] = nil
 default['gitlab']['gitlab_rails']['gitlab_email_from'] = nil
 default['gitlab']['gitlab_rails']['gitlab_email_display_name'] = nil
 default['gitlab']['gitlab_rails']['gitlab_email_subject_suffix'] = nil
@@ -1111,6 +1110,22 @@ default['gitlab']['gitlab_ci']['schedule_builds_minute'] = "0"
 
 default['gitlab']['gitlab_ci']['gitlab_ci_all_broken_builds'] = nil
 default['gitlab']['gitlab_ci']['gitlab_ci_add_pusher'] = nil
+
+####
+# Mattermost NGINX
+####
+default['gitlab']['mattermost_nginx'] = default['gitlab']['nginx'].dup
+default['gitlab']['mattermost_nginx']['enable'] = false
+default['gitlab']['mattermost_nginx']['proxy_set_headers'] = {
+  "Host" => "$http_host",
+  "X-Real-IP" => "$remote_addr",
+  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+  "X-Forwarded-Proto" => "$scheme",
+  "X-Frame-Options" => "SAMEORIGIN",
+  "Upgrade" => "$http_upgrade",
+  "Connection" => "$connection_upgrade"
+}
+default['gitlab']['mattermost_nginx']['referrer_policy'] = 'strict-origin-when-cross-origin'
 
 ####
 # GitLab Pages NGINX

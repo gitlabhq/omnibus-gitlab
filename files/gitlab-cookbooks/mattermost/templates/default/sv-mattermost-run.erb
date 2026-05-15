@@ -1,0 +1,9 @@
+#!/bin/sh
+exec 2>&1
+cd /opt/gitlab/embedded/service/mattermost
+exec chpst -e <%= node['mattermost']['env_directory'] %> \
+  -P \
+  -U <%= node['mattermost']['username'] %>:<%= node['mattermost']['group'] %> \
+  -u <%= node['mattermost']['username'] %>:<%= node['mattermost']['group'] %> \
+  /opt/gitlab/embedded/bin/mattermost \
+  --config <%= node['mattermost']['home'] %>/config.json

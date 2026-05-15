@@ -54,7 +54,7 @@ registry['log_directory'] = "/var/log/gitlab/registry"
 ...
 ```
 
-Gitaly has a different log directory config:
+Gitaly and Mattermost have different log directory configs:
 
 ```ruby
 gitaly['configuration'] = {
@@ -62,6 +62,7 @@ gitaly['configuration'] = {
     dir: "/var/log/gitlab/registry"
    }
 }
+mattermost['log_file_directory'] = "/var/log/gitlab/registry"
 ```
 
 Run `sudo gitlab-ctl reconfigure` to configure your instance with these settings.
@@ -234,6 +235,7 @@ for format details.
 
 ```ruby
 nginx['log_format'] = 'my format string $foo $bar'
+mattermost_nginx['log_format'] = 'my format string $foo $bar'
 ```
 
 ## JSON logging

@@ -50,14 +50,15 @@ module Nginx
     def parse_nginx_listen_ports
       [
         [%w(nginx listen_port), %w(gitlab_rails gitlab_port)],
+        [%w(mattermost_nginx listen_port), %w(mattermost port)],
         [%w(pages_nginx listen_port), %w(gitlab_rails pages_port)],
 
       ].each do |left, right|
         next unless Gitlab[left.first][left.last].nil?
 
         # This conditional is required until all services are extracted to
-        # their own cookbook. Some attributes are on node['gitlab'] and
-        # others are exposed directly on node.
+        # their own cookbook. Mattermost exists directly on node while
+        # others exists on node['gitlab']
         node_attribute_key = SettingsDSL::Utils.node_attribute_key(right.first)
         service_attribute_key = right.last
         default_set_gitlab_port = if Gitlab['node']['gitlab'].key?(node_attribute_key)
@@ -74,6 +75,7 @@ module Nginx
     def parse_nginx_proxy_protocol
       [
         'nginx',
+        'mattermost_nginx',
         'pages_nginx',
         'registry_nginx',
         'gitlab_kas_nginx'
