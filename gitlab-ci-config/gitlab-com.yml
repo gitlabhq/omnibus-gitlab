@@ -712,6 +712,7 @@ OAK:smoke-test:
   extends: .docker_job
   stage: qa
   script:
+    - apt-get update -qq && apt-get install -y -qq bats
     - echo "${CI_REGISTRY_PASSWORD}" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - bundle exec rake qa:test_oak
   rules:
