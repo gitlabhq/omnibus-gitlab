@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
 IMAGE="${IMAGE:-gitlab/gitlab-ee:nightly}"
@@ -8,6 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "==> Running OAK smoke tests against ${IMAGE}"
 
 cleanup() {
+  docker exec "${CONTAINER}" bash -c "kill \$(cat /tmp/mock-server.pid 2>/dev/null) 2>/dev/null || true" 2>/dev/null || true
   docker rm -f "${CONTAINER}" 2>/dev/null || true
 }
 trap cleanup EXIT
@@ -15,6 +16,12 @@ trap cleanup EXIT
 docker run -d --name "${CONTAINER}" --entrypoint="" "${IMAGE}" \
   bash -c "touch /etc/sysctl.conf && /opt/gitlab/embedded/bin/runsvdir-start"
 
+docker exec "${CONTAINER}" bash -c "
+  python3 -m http.server 8200 &>/dev/null &
+  echo \$! > /tmp/mock-server.pid
+  sleep 1
+"
+
 export CONTAINER
 
-"${SCRIPT_DIR}/nginx-test"
+bats "${SCRIPT_DIR}/nginx-baseline.bats" "${SCRIPT_DIR}/nginx-openbao.bats"
