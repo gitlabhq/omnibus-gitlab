@@ -383,4 +383,60 @@ RSpec.describe Gitlab::Deprecations do
       expect(messages).not_to include(a_string_matching(/spamcheck/))
     end
   end
+
+  describe 'when any configuration key gets deprecated' do
+    before do
+      allow(Gitlab::Deprecations).to receive(:list).and_call_original
+    end
+
+    it 'can successfully throw a deprecation warning' do
+      missing = []
+      attribute_blocks = described_class.singleton_class::ATTRIBUTE_BLOCKS
+
+      Gitlab::Deprecations.list.each do |deprecation|
+        keys = deprecation[:config_keys].dup
+        keys.shift if attribute_blocks.include?(keys[0])
+
+        top_level_key =
+          if keys.first == 'roles'
+            "#{SettingsDSL::Utils.node_attribute_key(keys[1])}_role"
+          else
+            SettingsDSL::Utils.node_attribute_key(keys[0])
+          end
+
+        previous_strict_mode = Gitlab.config_strict_mode
+        Gitlab.config_strict_mode true
+        begin
+          Gitlab.public_send(top_level_key.to_sym)
+        rescue Mixlib::Config::UnknownConfigOptionError => e
+          missing << {
+            config_keys: deprecation[:config_keys],
+            top_level_key: top_level_key,
+            error: e.message
+          }
+        ensure
+          Gitlab.config_strict_mode previous_strict_mode
+        end
+      end
+
+      # Save the failure message to avoid output duplication.
+      failure_message =
+        if missing.any?
+          details = missing.map do |m|
+            "  - top_level_key=#{m[:top_level_key].inspect} from config_keys=#{m[:config_keys].inspect}"
+          end.join("\n")
+
+          "These deprecated config_keys have no matching Mixlib::Config configurable on Gitlab. " \
+            "Users with the deprecated setting in /etc/gitlab/gitlab.rb will see\n" \
+            "  Mixlib::Config::UnknownConfigOptionError: Reading unsupported config value <key>.\n" \
+            "from strict mode instead of the deprecation warning:\n\n" \
+            "#{details}\n\n" \
+            "Fix: keep `attribute('<key>')` (or the equivalent role/attribute_block registration) in " \
+            "files/gitlab-cookbooks/package/libraries/config/gitlab.rb until the deprecation entry " \
+            "itself is removed from Gitlab::Deprecations.list."
+        end
+
+      expect(missing).to be_empty, failure_message
+    end
+  end
 end
