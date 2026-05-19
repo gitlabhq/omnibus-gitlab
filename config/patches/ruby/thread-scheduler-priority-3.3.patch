@@ -1,0 +1,285 @@
+From ec15d4c8daa0bccc9b63530200f842683c98a155 Mon Sep 17 00:00:00 2001
+Message-ID: <ec15d4c8daa0bccc9b63530200f842683c98a155.1778699436.git.stanhu@gmail.com>
+From: Jacob Lacouture <jpl-coconut@github.com>
+Date: Wed, 13 May 2026 12:09:52 -0700
+Subject: [PATCH] Give the hot thread scheduler priority
+
+Backport of ruby/ruby#15840 to v3.3.11.
+
+This is an alternative fix to issue 21685 (https://bugs.ruby-lang.org/issues/21685).
+The previous fix was https://github.com/ruby/ruby/pull/15294.
+
+Whereas the old PR deferred the thread-switch, relying on a timer thread
+to wake up some time later and perform the switch if the original thread
+was still blocked, this new PR switches immediately, but gives the
+original thread the opportunity to retake control (aborting the
+transfer) if the new thread hasn't taken control yet.
+
+Nice features of this approach:
+- Much simpler. No new threads. No need to update tests.
+- There are no magic numbers (i.e. the 50usec delay).
+- More efficient control transfer when it does need to happen, due to
+  a slow call. It is direct to the new thread, rather than introducing
+  an intermediate switch through the monitor thread.
+
+[v3.3.11 backport note] In v3.3.11 the body of
+thread_sched_to_waiting_common was already refactored into
+thread_sched_to_waiting_common0 (shared with thread_sched_to_dead_common).
+The new runnable_hot_th assignment is therefore lifted into
+thread_sched_to_waiting_common before delegating to _common0, rather
+than being inlined alongside native_thread_dedicated_inc as in the
+upstream patch.
+---
+ thread.c         |  6 ++---
+ thread_none.c    |  4 +--
+ thread_pthread.c | 64 +++++++++++++++++++++++++++++++++++++++++++++---
+ thread_pthread.h |  8 ++++++
+ thread_win32.c   | 12 ++++++---
+ 5 files changed, 81 insertions(+), 13 deletions(-)
+
+diff --git a/thread.c b/thread.c
+index b2b5177d4e..ff4040523f 100644
+--- a/thread.c
++++ b/thread.c
+@@ -176,7 +176,7 @@ static inline void blocking_region_end(rb_thread_t *th, struct rb_blocking_regio
+ #define THREAD_BLOCKING_BEGIN(th) do { \
+   struct rb_thread_sched * const sched = TH_SCHED(th); \
+   RB_VM_SAVE_MACHINE_CONTEXT(th); \
+-  thread_sched_to_waiting((sched), (th));
++  thread_sched_to_waiting((sched), (th), true);
+ 
+ #define THREAD_BLOCKING_END(th) \
+   thread_sched_to_running((sched), (th)); \
+@@ -200,7 +200,7 @@ static inline void blocking_region_end(rb_thread_t *th, struct rb_blocking_regio
+         /* Important that this is inlined into the macro, and not part of \
+          * blocking_region_begin - see bug #20493 */ \
+         RB_VM_SAVE_MACHINE_CONTEXT(th); \
+-        thread_sched_to_waiting(TH_SCHED(th), th); \
++        thread_sched_to_waiting(TH_SCHED(th), th, false); \
+         exec; \
+         blocking_region_end(th, &__region); \
+     }; \
+@@ -1866,7 +1866,7 @@ rb_thread_call_with_gvl(void *(*func)(void *), void *data1)
+     int released = blocking_region_begin(th, brb, prev_unblock.func, prev_unblock.arg, FALSE);
+     RUBY_ASSERT_ALWAYS(released);
+     RB_VM_SAVE_MACHINE_CONTEXT(th);
+-    thread_sched_to_waiting(TH_SCHED(th), th);
++    thread_sched_to_waiting(TH_SCHED(th), th, true);
+     return r;
+ }
+ 
+diff --git a/thread_none.c b/thread_none.c
+index d3b533110e..edbacc3cc8 100644
+--- a/thread_none.c
++++ b/thread_none.c
+@@ -30,11 +30,11 @@ thread_sched_to_running(struct rb_thread_sched *sched, rb_thread_t *th)
+ }
+ 
+ static void
+-thread_sched_to_waiting(struct rb_thread_sched *sched, rb_thread_t *th)
++thread_sched_to_waiting(struct rb_thread_sched *sched, rb_thread_t *th, bool yield_immediately)
+ {
+ }
+ 
+-#define thread_sched_to_dead thread_sched_to_waiting
++#define thread_sched_to_dead(a,b) thread_sched_to_waiting(a,b,true)
+ 
+ static void
+ thread_sched_yield(struct rb_thread_sched *sched, rb_thread_t *th)
+diff --git a/thread_pthread.c b/thread_pthread.c
+index 53ad08d782..3a7de5d8c5 100644
+--- a/thread_pthread.c
++++ b/thread_pthread.c
+@@ -707,8 +707,12 @@ thread_sched_readyq_contain_p(struct rb_thread_sched *sched, rb_thread_t *th)
+ {
+     rb_thread_t *rth;
+     ccan_list_for_each(&sched->readyq, rth, sched.node.readyq) {
+-        if (rth == th) return true;
++        if (rth == th) {
++            VM_ASSERT(th->sched.node.is_ready);
++            return true;
++        }
+     }
++    VM_ASSERT(!th->sched.node.is_ready);
+     return false;
+ }
+ 
+@@ -729,6 +733,8 @@ thread_sched_deq(struct rb_thread_sched *sched)
+     }
+     else {
+         next_th = ccan_list_pop(&sched->readyq, rb_thread_t, sched.node.readyq);
++        VM_ASSERT(next_th->sched.node.is_ready);
++        next_th->sched.node.is_ready = false;
+ 
+         VM_ASSERT(sched->readyq_cnt > 0);
+         sched->readyq_cnt--;
+@@ -761,6 +767,7 @@ thread_sched_enq(struct rb_thread_sched *sched, rb_thread_t *ready_th)
+     }
+ 
+     ccan_list_add_tail(&sched->readyq, &ready_th->sched.node.readyq);
++    ready_th->sched.node.is_ready = true;
+     sched->readyq_cnt++;
+ }
+ 
+@@ -844,6 +851,30 @@ thread_sched_wait_running_turn(struct rb_thread_sched *sched, rb_thread_t *th, b
+     VM_ASSERT(th == GET_THREAD());
+ 
+     if (th != sched->running) {
++        // TODO: This optimization should also be made to work for MN_THREADS
++        if (th->has_dedicated_nt && th == sched->runnable_hot_th && (sched->running == NULL || sched->running->has_dedicated_nt)) {
++            RUBY_DEBUG_LOG("(nt) stealing: hot-th:%u.  running:%u", rb_th_serial(th), rb_th_serial(sched->running));
++
++            // If there is a thread set to run, move it back to the front of the readyq
++            if (sched->running != NULL) {
++                rb_thread_t *running = sched->running;
++                VM_ASSERT(!thread_sched_readyq_contain_p(sched, running));
++                running->sched.node.is_ready = true;
++                ccan_list_add(&sched->readyq, &running->sched.node.readyq);
++                sched->readyq_cnt++;
++            }
++
++            // Pull off the ready queue and start running.
++            if (th->sched.node.is_ready) {
++                VM_ASSERT(thread_sched_readyq_contain_p(sched, th));
++                ccan_list_del_init(&th->sched.node.readyq);
++                th->sched.node.is_ready = false;
++                sched->readyq_cnt--;
++            }
++            thread_sched_set_running(sched, th);
++            rb_ractor_thread_switch(th->ractor, th);
++        }
++
+         // already deleted from running threads
+         // VM_ASSERT(!ractor_sched_running_threads_contain_p(th->vm, th)); // need locking
+ 
+@@ -860,6 +891,15 @@ thread_sched_wait_running_turn(struct rb_thread_sched *sched, rb_thread_t *th, b
+                 }
+                 thread_sched_set_lock_owner(sched, th);
+ 
++                if (sched->runnable_hot_th != NULL && sched->runnable_hot_th_waiting) {
++                    VM_ASSERT(sched->runnable_hot_th != th);
++                    // Give the hot thread a chance to preempt, if it's actively spinning.
++                    // On multicore, this reduces the rate of core-switching. On single-core it
++                    // should mostly be a nop, since the other thread can't be concurrently spinning.
++                    thread_sched_unlock(sched, th);
++                    thread_sched_lock(sched, th);
++                }
++
+                 RUBY_DEBUG_LOG("(nt) wakeup %s", sched->running == th ? "success" : "failed");
+                 if (th == sched->running) {
+                     rb_ractor_thread_switch(th->ractor, th);
+@@ -908,6 +948,11 @@ thread_sched_wait_running_turn(struct rb_thread_sched *sched, rb_thread_t *th, b
+         thread_sched_add_running_thread(sched, th);
+     }
+ 
++    // Control transfer to the current thread is now complete. The original thread
++    // cannot steal control at this point.
++    sched->runnable_hot_th = NULL;
++    sched->runnable_hot_th_waiting = 0;
++
+     // VM_ASSERT(ractor_sched_running_threads_contain_p(th->vm, th)); need locking
+     RB_INTERNAL_THREAD_HOOK(RUBY_INTERNAL_THREAD_EVENT_RESUMED, th);
+ }
+@@ -944,6 +989,13 @@ thread_sched_to_running_common(struct rb_thread_sched *sched, rb_thread_t *th)
+ static void
+ thread_sched_to_running(struct rb_thread_sched *sched, rb_thread_t *th)
+ {
++    // We are reading and writing these sched fields without lock cover, but
++    // there are no correctness issues resulting from stale cache or delayed writeback.
++    // When it works, this causes the next-scheduled thread to yield the sched lock
++    // briefly so that we can grab it if we're still spinning (not descheduled yet).
++    if (sched->runnable_hot_th == th) {
++        sched->runnable_hot_th_waiting = 1;
++    }
+     thread_sched_lock(sched, th);
+     {
+         thread_sched_to_running_common(sched, th);
+@@ -1025,9 +1077,13 @@ thread_sched_to_dead(struct rb_thread_sched *sched, rb_thread_t *th)
+ //
+ // This thread will run dedicated task (th->nt->dedicated++).
+ static void
+-thread_sched_to_waiting_common(struct rb_thread_sched *sched, rb_thread_t *th)
++thread_sched_to_waiting_common(struct rb_thread_sched *sched, rb_thread_t *th, bool yield_immediately)
+ {
+     RUBY_DEBUG_LOG("dedicated:%d", th->nt->dedicated);
++    if (!yield_immediately) {
++        sched->runnable_hot_th = th;
++        sched->runnable_hot_th_waiting = 0;
++    }
+     thread_sched_to_waiting_common0(sched, th, false);
+ }
+ 
+@@ -1035,11 +1091,11 @@ thread_sched_to_waiting_common(struct rb_thread_sched *sched, rb_thread_t *th)
+ //
+ // This thread will run a dedicated task.
+ static void
+-thread_sched_to_waiting(struct rb_thread_sched *sched, rb_thread_t *th)
++thread_sched_to_waiting(struct rb_thread_sched *sched, rb_thread_t *th, bool yield_immediately)
+ {
+     thread_sched_lock(sched, th);
+     {
+-        thread_sched_to_waiting_common(sched, th);
++        thread_sched_to_waiting_common(sched, th, yield_immediately);
+     }
+     thread_sched_unlock(sched, th);
+ }
+diff --git a/thread_pthread.h b/thread_pthread.h
+index 26a88ca933..72f95e67fd 100644
+--- a/thread_pthread.h
++++ b/thread_pthread.h
+@@ -50,6 +50,9 @@ struct rb_thread_sched_item {
+         // connected to ractor->threads.sched.reqdyq
+         // locked by ractor->threads.sched.lock
+         struct ccan_list_node readyq;
++        // Indicates whether thread is on the readyq.
++        // There is no clear relationship between this and th->status.
++        bool is_ready;
+ 
+         // connected to vm->ractor.sched.timeslice_threads
+         // locked by vm->ractor.sched.lock
+@@ -120,6 +123,11 @@ struct rb_thread_sched {
+     struct rb_thread_struct *lock_owner;
+ #endif
+     struct rb_thread_struct *running; // running thread or NULL
++    // Most recently running thread or NULL. If this thread wakes up before the newly running
++    // thread completes the transfer of control, it can interrupt and resume running.
++    // The new thread clears this field when it takes control.
++    struct rb_thread_struct *runnable_hot_th;
++    int runnable_hot_th_waiting;
+     bool is_running;
+     bool is_running_timeslice;
+     bool enable_mn_threads;
+diff --git a/thread_win32.c b/thread_win32.c
+index 4fd488db60..f13887455f 100644
+--- a/thread_win32.c
++++ b/thread_win32.c
+@@ -131,18 +131,22 @@ thread_sched_to_running(struct rb_thread_sched *sched, rb_thread_t *th)
+     if (GVL_DEBUG) fprintf(stderr, "gvl acquire (%p): acquire\n", th);
+ }
+ 
+-#define thread_sched_to_dead thread_sched_to_waiting
+-
+ static void
+-thread_sched_to_waiting(struct rb_thread_sched *sched, rb_thread_t *th)
++thread_sched_to_waiting(struct rb_thread_sched *sched, rb_thread_t *th, bool yield_immediately)
+ {
+     ReleaseMutex(sched->lock);
+ }
+ 
++static void
++thread_sched_to_dead(struct rb_thread_sched *sched, rb_thread_t *th)
++{
++    thread_sched_to_waiting(sched, th, true);
++}
++
+ static void
+ thread_sched_yield(struct rb_thread_sched *sched, rb_thread_t *th)
+ {
+-    thread_sched_to_waiting(sched, th);
++    thread_sched_to_waiting(sched, th, true);
+     native_thread_yield();
+     thread_sched_to_running(sched, th);
+ }
+-- 
+2.52.0
+
