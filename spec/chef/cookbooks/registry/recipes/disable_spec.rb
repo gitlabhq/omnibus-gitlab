@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'registry::disable' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'registry::disable') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

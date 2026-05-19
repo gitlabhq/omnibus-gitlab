@@ -6,7 +6,7 @@ RSpec.describe 'gitlab::registry_enable_backup_restore_credentials' do
   end
 
   let(:chef_run) do
-    chef_runner.converge('gitlab-ee::default')
+    chef_runner.converge('gitlab-base::config', 'gitlab::registry_enable_backup_restore_credentials')
   end
 
   before do

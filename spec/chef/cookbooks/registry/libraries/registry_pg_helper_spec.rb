@@ -2,7 +2,7 @@ require 'chef_helper'
 
 RSpec.describe RegistryPgHelper do
   let(:node) { chef_run.node }
-  let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
+  let(:chef_run) { converge_config }
   let(:helper) { described_class.new(node) }
 
   before do

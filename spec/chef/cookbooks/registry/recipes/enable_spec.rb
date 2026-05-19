@@ -6,7 +6,7 @@ RSpec.describe 'registry::enable' do
   end
 
   let(:chef_run) do
-    chef_runner.converge('gitlab-ee::default')
+    chef_runner.converge('gitlab-base::config', 'registry::enable')
   end
 
   before do

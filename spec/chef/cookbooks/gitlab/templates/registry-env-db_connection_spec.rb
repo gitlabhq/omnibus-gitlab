@@ -6,7 +6,10 @@ RSpec.describe 'registry-env-db_connection.erb template' do
   end
 
   let(:chef_run) do
-    chef_runner.converge('gitlab-ee::default')
+    # The registry-env-db_connection.erb template is rendered by
+    # gitlab/recipes/registry_enable_backup_restore_credentials.rb,
+    # not by registry::enable.
+    chef_runner.converge('gitlab-base::config', 'registry::enable', 'gitlab::registry_enable_backup_restore_credentials')
   end
 
   let(:template_path) { '/opt/gitlab/etc/gitlab-backup/env/env-connection' }

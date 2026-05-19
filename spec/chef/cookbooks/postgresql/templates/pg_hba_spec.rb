@@ -9,7 +9,7 @@ RSpec.describe 'pg_hba.conf.erb template' do
   end
 
   let(:chef_run) do
-    chef_runner.converge('gitlab-ee::default')
+    chef_runner.converge('gitlab-base::config', 'postgresql::enable')
   end
 
   let(:template_path) { '/fakedir/data/pg_hba.conf' }
