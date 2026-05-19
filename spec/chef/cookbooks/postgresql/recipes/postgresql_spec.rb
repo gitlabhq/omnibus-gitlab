@@ -148,6 +148,33 @@ RSpec.describe 'postgresql' do
         .with_content(/-----BEGIN RSA PRIVATE KEY-----/)
     end
 
+    it 'generates SSL files with mode 0600 when pg_rewind is enabled' do
+      # pg_rewind opens server.crt / server.key with O_RDWR even though it
+      # only reads them, so 0400 (`r--`) fails the open with EACCES. The
+      # lazy mode block in `postgresql::enable` relaxes the files to 0600
+      # in that branch - see
+      # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5746.
+      stub_gitlab_rb(
+        postgresql: { ssl_cert_file: 'certfile', ssl_key_file: 'keyfile' },
+        patroni: { use_pg_rewind: true }
+      )
+
+      absolute_cert_path = File.join(postgresql_data_dir, 'certfile')
+      absolute_key_path = File.join(postgresql_data_dir, 'keyfile')
+
+      expect(chef_run).to create_file(absolute_cert_path).with(
+        user: 'gitlab-psql',
+        group: 'gitlab-psql',
+        mode: 0600
+      )
+
+      expect(chef_run).to create_file(absolute_key_path).with(
+        user: 'gitlab-psql',
+        group: 'gitlab-psql',
+        mode: 0600
+      )
+    end
+
     context 'when rendering runtime.conf' do
       it 'correctly sets the log_line_prefix default setting' do
         expect(chef_run.node['postgresql']['log_line_prefix'])
