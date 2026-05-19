@@ -1,7 +1,8 @@
 require 'chef_helper'
 
 RSpec.describe Gitaly do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  # `node['gitaly']['env']` is populated by the gitaly::enable recipe.
+  cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'gitaly::enable') }
   before { allow(Gitlab).to receive(:[]).and_call_original }
 
   describe 'by default' do
