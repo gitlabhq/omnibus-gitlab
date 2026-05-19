@@ -1,7 +1,10 @@
 require 'chef_helper'
 
 RSpec.describe 'consul::enable_service_postgresql' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
+  # `consul::enable_service_postgresql` notifies `execute[reload consul]`,
+  # which is defined in `consul::enable_daemon` - include it so the
+  # notification target resolves at compile time.
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'consul::enable_daemon', 'consul::enable_service_postgresql') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

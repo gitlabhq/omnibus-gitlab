@@ -1,7 +1,12 @@
 require 'chef_helper'
 
 RSpec.describe 'consul' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
+  # Converge only the consul recipe (much smaller than 'gitlab-ee::default').
+  def consul_chef_run(recipe = 'consul::enable')
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', recipe)
+  end
+
+  let(:chef_run) { consul_chef_run }
   let(:consul_conf) { '/var/opt/gitlab/consul/config.json' }
   let(:consul_conf_chef_file) { chef_run.file(consul_conf) }
   let(:consul_conf_file_content) { ChefSpec::Renderer.new(chef_run, consul_conf_chef_file).content }
@@ -12,12 +17,22 @@ RSpec.describe 'consul' do
   end
 
   context 'disabled by default' do
+    cached(:chef_run) { consul_chef_run('consul::disable') }
+
     it 'includes the disable recipe' do
       expect(chef_run).to include_recipe('consul::disable')
     end
   end
 
   describe 'consul::disable' do
+    cached(:chef_run) { consul_chef_run('consul::disable') }
+
+    before do
+      # The 'disabled runit service' shared example sets this stub inside an
+      # `it` block; the cached converge needs it set up in advance.
+      allow_any_instance_of(Chef::Provider::RunitService).to receive(:enabled?).and_return(true)
+    end
+
     it_behaves_like 'disabled runit service', 'consul'
   end
 
@@ -38,7 +53,19 @@ RSpec.describe 'consul' do
     end
 
     describe 'consul::enable' do
-      it_behaves_like 'enabled runit service', 'consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul', true
+      cached(:chef_run) { consul_chef_run }
+
+      before do
+        # The 'runit service with supervisor owner' shared example sets this
+        # stub inside an `it` block; the cached converge needs it set in advance.
+        %w(ok status control).each do |target|
+          file_name = ::File.join('/opt/gitlab/service/consul/log/supervise', target)
+          allow_any_instance_of(OmnibusHelper).to receive(:expected_owner?).with(file_name, 'gitlab-consul', 'gitlab-consul').and_return(false)
+        end
+      end
+
+      it_behaves_like 'enabled runit service', 'consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul', 'gitlab-consul'
+      it_behaves_like 'runit service with supervisor owner', 'consul', 'gitlab-consul', 'gitlab-consul'
 
       it 'creates the consul system user and group' do
         expect(chef_run).to create_account('Consul user and group').with(username: 'gitlab-consul', groupname: 'gitlab-consul')
@@ -113,6 +140,8 @@ RSpec.describe 'consul' do
     end
 
     context 'with non-default options' do
+      cached(:chef_run) { consul_chef_run }
+
       before do
         stub_gitlab_rb(
           consul: {
@@ -128,6 +157,13 @@ RSpec.describe 'consul' do
             }
           }
         )
+        # See note in 'consul::enable' describe above - needed for the
+        # 'runit service with supervisor owner' shared example with cached
+        # chef_run.
+        %w(ok status control).each do |target|
+          file_name = ::File.join('/opt/gitlab/service/consul/log/supervise', target)
+          allow_any_instance_of(OmnibusHelper).to receive(:expected_owner?).with(file_name, 'foo', 'bar').and_return(false)
+        end
       end
 
       it 'allows the user to specify node name' do
@@ -150,10 +186,13 @@ RSpec.describe 'consul' do
         }
       end
 
-      it_behaves_like 'enabled runit service', 'consul', 'foo', 'bar', 'foo', 'bar', true
+      it_behaves_like 'enabled runit service', 'consul', 'foo', 'bar', 'foo', 'bar'
+      it_behaves_like 'runit service with supervisor owner', 'consul', 'foo', 'bar'
     end
 
     context 'server enabled' do
+      cached(:chef_run) { consul_chef_run }
+
       before do
         stub_gitlab_rb(
           consul: {
@@ -180,6 +219,8 @@ RSpec.describe 'consul' do
       end
 
       context 'with server_rejoin_age_max configured' do
+        cached(:chef_run) { consul_chef_run }
+
         before do
           stub_gitlab_rb(
             consul: {
@@ -199,7 +240,12 @@ RSpec.describe 'consul' do
     end
 
     describe 'pending restart check' do
+      # Each sub-context caches its own chef_run - the `warn pending consul
+      # restart` only_if guard evaluates at converge time, so each version-stub
+      # set needs its own converge.
       context 'when running version is same as installed version' do
+        cached(:chef_run) { consul_chef_run }
+
         before do
           allow_any_instance_of(ConsulHelper).to receive(:running_version).and_return('1.9.6')
           allow_any_instance_of(ConsulHelper).to receive(:installed_version).and_return('1.9.6')
@@ -211,6 +257,8 @@ RSpec.describe 'consul' do
       end
 
       context 'when running version is different than installed version' do
+        cached(:chef_run) { consul_chef_run }
+
         before do
           allow_any_instance_of(ConsulHelper).to receive(:running_version).and_return('1.6.4')
           allow_any_instance_of(ConsulHelper).to receive(:installed_version).and_return('1.9.6')
@@ -278,6 +326,8 @@ RSpec.describe 'consul' do
   describe 'TLS configuration' do
     context 'in client mode' do
       context 'by default' do
+        cached(:chef_run) { consul_chef_run }
+
         before do
           stub_gitlab_rb(
             consul: {
@@ -300,6 +350,8 @@ RSpec.describe 'consul' do
       end
 
       context 'with user specified values' do
+        cached(:chef_run) { consul_chef_run }
+
         before do
           stub_gitlab_rb(
             consul: {
@@ -333,6 +385,8 @@ RSpec.describe 'consul' do
 
     context 'in server mode' do
       context 'by default' do
+        cached(:chef_run) { consul_chef_run }
+
         before do
           stub_gitlab_rb(
             consul: {
@@ -358,6 +412,8 @@ RSpec.describe 'consul' do
       end
 
       context 'with user specified values' do
+        cached(:chef_run) { consul_chef_run }
+
         before do
           stub_gitlab_rb(
             consul: {
@@ -390,6 +446,8 @@ RSpec.describe 'consul' do
     end
 
     context 'using both dedicated consul TLS configuration settings and general configuration hash' do
+      cached(:chef_run) { consul_chef_run }
+
       before do
         stub_gitlab_rb(
           consul: {
@@ -428,6 +486,8 @@ RSpec.describe 'consul' do
       end
 
       context 'using deprecated settings' do
+        cached(:chef_run) { consul_chef_run }
+
         before do
           stub_gitlab_rb(
             consul: {
@@ -468,6 +528,8 @@ RSpec.describe 'consul' do
   end
 
   describe 'using deprecated ACL token settings' do
+    cached(:chef_run) { consul_chef_run }
+
     before do
       stub_gitlab_rb(
         consul: {
@@ -505,6 +567,8 @@ RSpec.describe 'consul' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { consul_chef_run }
+
       before do
         stub_gitlab_rb(
           consul: {
@@ -516,6 +580,8 @@ RSpec.describe 'consul' do
     end
 
     context 'custom values' do
+      cached(:chef_run) { consul_chef_run }
+
       before do
         stub_gitlab_rb(
           consul: {

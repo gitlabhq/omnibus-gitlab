@@ -11,7 +11,7 @@ RSpec.describe 'consul_service' do
     end
 
     context 'with service address and port properties' do
-      let(:chef_run) { runner.converge('test_consul::consul_service_address_port') }
+      cached(:chef_run) { runner.converge('test_consul::consul_service_address_port') }
 
       it 'creates the Consul service file' do
         expect(chef_run).to render_file('/var/opt/gitlab/consul/config.d/node-exporter-service.json')
@@ -25,7 +25,7 @@ RSpec.describe 'consul_service' do
     end
 
     context 'with a socket property and no reload' do
-      let(:chef_run) { runner.converge('test_consul::consul_service_socket') }
+      cached(:chef_run) { runner.converge('test_consul::consul_service_socket') }
 
       it 'creates the Consul service file' do
         expect(chef_run).to render_file('/var/opt/gitlab/consul/config.d/node-exporter-service.json')
@@ -50,7 +50,7 @@ RSpec.describe 'consul_service' do
 
   context 'delete' do
     context 'default do reload' do
-      let(:chef_run) { runner.converge('test_consul::consul_service_delete') }
+      cached(:chef_run) { runner.converge('test_consul::consul_service_delete') }
 
       it 'deletes the Consul service file' do
         expect(chef_run).to delete_file('/var/opt/gitlab/consul/config.d/delete-me-service.json')

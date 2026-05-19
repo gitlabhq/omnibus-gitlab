@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'consul::watchers' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'consul::watchers') }
   let(:watcher_conf) { '/var/opt/gitlab/consul/config.d/watcher_postgresql.json' }
   let(:watcher_check) { '/var/opt/gitlab/consul/scripts/failover_postgresql_in_pgbouncer' }
   let(:any_service_conf) { '/var/opt/gitlab/consul/config.d/any_service.conf' }
