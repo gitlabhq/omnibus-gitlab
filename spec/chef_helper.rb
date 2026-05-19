@@ -73,6 +73,13 @@ RSpec.configure do |config|
     allow_any_instance_of(RedisHelper::Server).to receive(:running_version).and_return('3.2.12')
     allow_any_instance_of(ConsulHelper).to receive(:installed_version).and_return('1.9.6')
     allow_any_instance_of(ConsulHelper).to receive(:running_version).and_return('1.9.6')
+
+    # The `gitlab-6.1.0` API client gem's `Gitlab.method_missing` constructs
+    # `Gitlab::Client` (which raises without credentials) before delegating
+    # to super, shadowing Mixlib::Config's handler on our local `module
+    # Gitlab`. Stub the client so `respond_to?` returns false and dispatch
+    # reaches super.
+    allow(Gitlab).to receive(:client).and_return(Object.new)
     stub_command('/sbin/init --version | grep upstart')
     stub_command('systemctl | grep "\-\.mount"')
     # ChefSpec::SoloRunner doesn't support Chef.event_handler, so stub it
