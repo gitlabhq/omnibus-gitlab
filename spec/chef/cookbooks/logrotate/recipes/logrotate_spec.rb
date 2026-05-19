@@ -1,13 +1,19 @@
 require 'chef_helper'
 
 RSpec.describe 'logrotate' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  def logrotate_chef_run(recipe = 'logrotate::enable')
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', recipe)
+  end
+
+  let(:chef_run) { logrotate_chef_run }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
   context 'when logrotate is enabled' do
+    cached(:chef_run) { logrotate_chef_run }
+
     let(:config_template) { chef_run.template('/opt/gitlab/sv/logrotate/log/config') }
 
     it_behaves_like "enabled runit service", "logrotate", "root", "root"
@@ -42,10 +48,14 @@ RSpec.describe 'logrotate' do
 
     context 'log directory and runit group' do
       context 'default values' do
+        cached(:chef_run) { logrotate_chef_run }
+
         it_behaves_like 'enabled logged service', 'logrotate', true, { log_directory_owner: 'root' }
       end
 
       context 'custom values' do
+        cached(:chef_run) { logrotate_chef_run }
+
         before do
           stub_gitlab_rb(
             logrotate: {
@@ -59,8 +69,13 @@ RSpec.describe 'logrotate' do
   end
 
   context 'when logrotate is disabled' do
+    cached(:chef_run) { logrotate_chef_run('logrotate::disable') }
+
     before do
       stub_gitlab_rb(logrotate: { enable: false })
+      # The 'disabled runit service' shared example sets this stub inside an
+      # `it` block; the cached converge needs it set up in advance.
+      allow_any_instance_of(Chef::Provider::RunitService).to receive(:enabled?).and_return(true)
     end
 
     it_behaves_like "disabled runit service", "logrotate"

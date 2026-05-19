@@ -1,7 +1,10 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::logrotate_folder_and_configs_spec' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  # Note: this file's examples add `stub_gitlab_rb` *inside* `it` blocks, so we
+  # keep `let(:chef_run)` (no `cached(:chef_run)`) - caching would freeze the
+  # converge to whatever stubs the first example happened to set.
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'logrotate::folders_and_configs') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

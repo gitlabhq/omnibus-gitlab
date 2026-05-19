@@ -1,7 +1,11 @@
 require 'chef_helper'
 
 RSpec.describe 'monitoring::node-exporter' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  def node_exporter_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'monitoring::node-exporter')
+  end
+
+  let(:chef_run) { node_exporter_chef_run }
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
@@ -14,6 +18,8 @@ RSpec.describe 'monitoring::node-exporter' do
   end
 
   context 'when node-exporter is enabled' do
+    cached(:chef_run) { node_exporter_chef_run }
+
     let(:config_template) { chef_run.template('/opt/gitlab/sv/node-exporter/log/config') }
 
     before do
@@ -74,6 +80,13 @@ RSpec.describe 'monitoring::node-exporter' do
   end
 
   context 'when node-exporter is enabled and prometheus is enabled' do
+    # The node.rules file is rendered by the prometheus recipe, not the
+    # node-exporter recipe, so this context needs to converge both.
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(step_into: %w(runit_service))
+                          .converge('gitlab-base::config', 'monitoring::prometheus', 'monitoring::node-exporter')
+    end
+
     before do
       stub_gitlab_rb(
         prometheus: { enable: true },
@@ -88,6 +101,8 @@ RSpec.describe 'monitoring::node-exporter' do
   end
 
   context 'with user provided settings' do
+    cached(:chef_run) { node_exporter_chef_run }
+
     before do
       stub_gitlab_rb(
         node_exporter: {
@@ -129,6 +144,8 @@ RSpec.describe 'monitoring::node-exporter' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { node_exporter_chef_run }
+
       before do
         stub_gitlab_rb(node_exporter: { enable: true })
       end
@@ -136,6 +153,8 @@ RSpec.describe 'monitoring::node-exporter' do
     end
 
     context 'custom values' do
+      cached(:chef_run) { node_exporter_chef_run }
+
       before do
         stub_gitlab_rb(
           node_exporter: {

@@ -17,7 +17,13 @@ alertmanager_yml_output = <<-ALERTMANAGERYML
 ALERTMANAGERYML
 
 RSpec.describe 'monitoring::alertmanager' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  # Converge only the alertmanager recipe (which include_recipes 'monitoring::user')
+  # instead of the world-pulling 'gitlab::default'.
+  def alertmanager_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'monitoring::alertmanager')
+  end
+
+  let(:chef_run) { alertmanager_chef_run }
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
@@ -30,6 +36,8 @@ RSpec.describe 'monitoring::alertmanager' do
   end
 
   context 'when alertmanager is enabled' do
+    cached(:chef_run) { alertmanager_chef_run }
+
     let(:config_template) { chef_run.template('/opt/gitlab/sv/alertmanager/log/config') }
 
     before do
@@ -91,6 +99,8 @@ RSpec.describe 'monitoring::alertmanager' do
   end
 
   context 'with user provided settings' do
+    cached(:chef_run) { alertmanager_chef_run }
+
     before do
       stub_gitlab_rb(
         prometheus: { enable: true },
@@ -146,10 +156,14 @@ RSpec.describe 'monitoring::alertmanager' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { alertmanager_chef_run }
+
       it_behaves_like 'enabled logged service', 'alertmanager', true, { log_directory_owner: 'gitlab-prometheus' }
     end
 
     context 'custom values' do
+      cached(:chef_run) { alertmanager_chef_run }
+
       before do
         stub_gitlab_rb(
           alertmanager: {

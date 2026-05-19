@@ -1,7 +1,11 @@
 require 'chef_helper'
 
 RSpec.describe 'monitoring::gitlab-exporter' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  def gitlab_exporter_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'monitoring::gitlab-exporter')
+  end
+
+  let(:chef_run) { gitlab_exporter_chef_run }
   let(:default_env_vars) do
     {
       'MALLOC_CONF' => 'dirty_decay_ms:0,muzzy_decay_ms:0',
@@ -18,6 +22,8 @@ RSpec.describe 'monitoring::gitlab-exporter' do
   end
 
   context 'when gitlab-exporter is enabled' do
+    cached(:chef_run) { gitlab_exporter_chef_run }
+
     let(:config_template) { chef_run.template('/opt/gitlab/sv/gitlab-exporter/log/config') }
 
     before do
@@ -72,6 +78,8 @@ RSpec.describe 'monitoring::gitlab-exporter' do
   end
 
   context 'with custom user and group' do
+    cached(:chef_run) { gitlab_exporter_chef_run }
+
     before do
       stub_gitlab_rb(
         gitlab_exporter: {
@@ -88,6 +96,8 @@ RSpec.describe 'monitoring::gitlab-exporter' do
   end
 
   context 'with TLS settings' do
+    cached(:chef_run) { gitlab_exporter_chef_run }
+
     before do
       allow(::File).to receive(:exist?).and_call_original
       allow(::File).to receive(:exist?).with(%r{/tmp/server.(crt|key)}).and_return(true)
@@ -373,6 +383,8 @@ RSpec.describe 'monitoring::gitlab-exporter' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { gitlab_exporter_chef_run }
+
       before do
         stub_gitlab_rb(gitlab_exporter: { enable: true })
       end
@@ -380,6 +392,8 @@ RSpec.describe 'monitoring::gitlab-exporter' do
     end
 
     context 'custom values' do
+      cached(:chef_run) { gitlab_exporter_chef_run }
+
       before do
         stub_gitlab_rb(
           gitlab_exporter: {
