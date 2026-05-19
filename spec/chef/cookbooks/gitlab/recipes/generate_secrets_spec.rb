@@ -16,7 +16,7 @@ RSpec.describe 'generate_secrets' do
   hex_key = /\h{128}/.freeze
   rsa_key = /\A-----BEGIN RSA PRIVATE KEY-----\n.+\n-----END RSA PRIVATE KEY-----\n\Z/m.freeze
   alphanumeric_key_regex = /\A[A-Za-z0-9]{32}\Z/m.freeze
-  default_secrets_error_regexp = %r{You have enabled writing to the default secrets file location with package\['generate_secrets_json_file'].*}
+  default_secrets_error_regexp = %r{You have enabled writing to the default secrets file location with package\['generate_secrets_json_file'\].*}
 
   before do
     allow(File).to receive(:directory?).and_call_original
