@@ -25,14 +25,11 @@ skip_transitive_dependency_licensing true
 dependency 'config_guess'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
-version = Gitlab::Version.new('redis', '7.2.11')
+version = Gitlab::Version.new('redis', '7.2.13')
 default_version version.print(false)
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
-  # NOTE: We cannot use UBT binaries in FIPS builds
-  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  # FIXME: version has drifted in Omnibus vs UBT builds
-  source Build::UBT.source_args(name, "7.2.11", "3960dbfce8e3897a0a5614feb805a697f10d3237408cf46f7874c673290f30b2", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{default_version}-2ubt", "146f6c543bea31be8880bcc4fab9629139d621dae1a1ab2307fe0029932a6840", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source git: version.remote
