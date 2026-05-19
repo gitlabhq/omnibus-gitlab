@@ -2,11 +2,14 @@ require 'chef_helper'
 
 RSpec.describe 'gitlab::gitlab-workhorse' do
   let(:node_cpus) { 1 }
-  let(:chef_run) do
+
+  def workhorse_chef_run(node_cpus: 1)
     ChefSpec::SoloRunner.new(step_into: %w(runit_service)) do |node|
       node.automatic['cpu']['total'] = node_cpus
-    end.converge('gitlab::default')
+    end.converge('gitlab-base::config', 'gitlab::gitlab-workhorse')
   end
+
+  let(:chef_run) { workhorse_chef_run(node_cpus: node_cpus) }
   let(:default_vars) do
     {
       'SSL_CERT_DIR' => '/opt/gitlab/embedded/ssl/certs/',
@@ -22,6 +25,8 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
   end
 
   context 'by default' do
+    cached(:chef_run) { workhorse_chef_run }
+
     it 'creates a default VERSION file and restarts service' do
       expect(chef_run).to create_version_file('Create version file for Workhorse').with(
         version_file_path: '/var/opt/gitlab/gitlab-workhorse/VERSION',
@@ -77,11 +82,15 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
 
   context 'user and group' do
     context 'default values' do
+      cached(:chef_run) { workhorse_chef_run }
+
       it_behaves_like "enabled runit service", "gitlab-workhorse", "root", "root"
       it_behaves_like 'enabled logged service', 'gitlab-workhorse', true, { log_directory_owner: 'git' }
     end
 
     context 'custom values' do
+      cached(:chef_run) { workhorse_chef_run }
+
       before do
         stub_gitlab_rb(
           user: {
@@ -97,10 +106,19 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { workhorse_chef_run }
+
       it_behaves_like 'enabled logged service', 'gitlab-workhorse', true, { log_directory_owner: 'git' }
     end
 
     context 'custom values' do
+      # 'configured logrotate service' shared example asserts on
+      # /var/opt/gitlab/logrotate/logrotate.d/gitlab-workhorse, rendered by
+      # logrotate::folders_and_configs (not gitlab::gitlab-workhorse).
+      cached(:chef_run) do
+        ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'gitlab::gitlab-workhorse', 'logrotate::folders_and_configs')
+      end
+
       before do
         stub_gitlab_rb(
           gitlab_workhorse: {
