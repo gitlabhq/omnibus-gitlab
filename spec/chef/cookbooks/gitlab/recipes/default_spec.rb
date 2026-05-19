@@ -1,27 +1,35 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::default' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  def default_chef_run
+    ChefSpec::SoloRunner.converge('gitlab::default')
+  end
+
+  let(:chef_run) { default_chef_run }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
-  it 'creates the user config directory' do
-    expect(chef_run).to create_directory('/etc/gitlab').with(
-      user: 'root',
-      group: 'root',
-      mode: '0775'
-    )
-  end
+  context 'with default configuration' do
+    cached(:chef_run) { default_chef_run }
 
-  it 'creates the var opt data config directory' do
-    expect(chef_run).to create_directory('Create /var/opt/gitlab').with(
-      path: '/var/opt/gitlab',
-      user: 'root',
-      group: 'root',
-      mode: '0755'
-    )
+    it 'creates the user config directory' do
+      expect(chef_run).to create_directory('/etc/gitlab').with(
+        user: 'root',
+        group: 'root',
+        mode: '0775'
+      )
+    end
+
+    it 'creates the var opt data config directory' do
+      expect(chef_run).to create_directory('Create /var/opt/gitlab').with(
+        path: '/var/opt/gitlab',
+        user: 'root',
+        group: 'root',
+        mode: '0755'
+      )
+    end
   end
 
   context 'with logrotate' do

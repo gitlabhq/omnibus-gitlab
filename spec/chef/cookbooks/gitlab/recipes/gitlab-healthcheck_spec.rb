@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::gitlab-healthcheck' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'gitlab::gitlab-healthcheck') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -78,8 +78,12 @@ RSpec.describe 'gitlab::gitlab-healthcheck' do
     end
 
     it 'does not render the healthcheck-rc file when workhorse workhorse is disabled' do
+      # Needs gitlab::default - the `include_recipe 'gitlab::gitlab-healthcheck'`
+      # gate (on `nginx.enable || gitlab_workhorse.enable`) only runs in the
+      # full default recipe.
       stub_gitlab_rb(nginx: { enable: false }, gitlab_workhorse: { enable: false })
-      expect(chef_run).not_to render_file("/opt/gitlab/etc/gitlab-healthcheck-rc")
+      gitlab_default_run = ChefSpec::SoloRunner.converge('gitlab::default')
+      expect(gitlab_default_run).not_to render_file("/opt/gitlab/etc/gitlab-healthcheck-rc")
     end
   end
 end

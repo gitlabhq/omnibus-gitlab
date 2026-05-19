@@ -24,12 +24,19 @@ RSpec.describe 'gitlab::gitlab-backup-cli' do
   end
 
   let(:chef_run) do
-    chef_runner.converge('gitlab::default')
+    chef_runner.converge('gitlab-base::config', 'gitlab::gitlab-backup-cli')
   end
 
   let(:context_path) { '/opt/gitlab/etc/gitlab-backup-context.yml' }
 
   context 'by default' do
+    # Needs gitlab::default - the dispatch that gates
+    # `gitlab::gitlab-backup-cli` on `gitlab_backup_cli.enable` only
+    # runs in the full default recipe.
+    let(:chef_run) do
+      chef_runner.converge('gitlab::default')
+    end
+
     it 'does not run' do
       expect(chef_run).not_to include_recipe('gitlab::gitlab-backup-cli')
     end

@@ -23,8 +23,8 @@ RSpec.describe 'gitlab::gitlab-backup-cli-disable' do
     end
   end
 
-  let(:chef_run) do
-    chef_runner.converge('gitlab::default')
+  cached(:chef_run) do
+    chef_runner.converge('gitlab-base::config', 'gitlab::gitlab-backup-cli_disable')
   end
 
   let(:context_path) { '/opt/gitlab/etc/gitlab-backup-context.yml' }

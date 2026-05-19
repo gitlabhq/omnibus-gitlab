@@ -17,13 +17,24 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::storage-check' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'gitlab::storage-check') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
   describe 'when disabled' do
+    # Converge the disable recipe directly; pre-apply the
+    # RunitService#enabled? stub that the 'disabled runit service'
+    # shared example sets inside an `it`.
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'gitlab::storage-check_disable')
+    end
+
+    before do
+      allow_any_instance_of(Chef::Provider::RunitService).to receive(:enabled?).and_return(true)
+    end
+
     it_behaves_like 'disabled runit service', 'storage-check'
   end
 

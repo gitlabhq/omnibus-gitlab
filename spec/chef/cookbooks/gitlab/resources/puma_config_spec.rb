@@ -6,7 +6,7 @@ RSpec.describe 'puma_config' do
   end
 
   context 'create' do
-    let(:chef_run) { runner.converge('test_gitlab::puma_config_create') }
+    cached(:chef_run) { runner.converge('test_gitlab::puma_config_create') }
 
     it 'creates necessary directories' do
       expect(chef_run).to create_directory('/var/opt/gitlab/gitlab-rails/etc')
@@ -32,7 +32,7 @@ RSpec.describe 'puma_config' do
   end
 
   context 'create with default puma config' do
-    let(:chef_run) { runner.converge('test_gitlab::puma_config_create') }
+    cached(:chef_run) { runner.converge('test_gitlab::puma_config_create') }
 
     it 'renders puma.rb file' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
@@ -42,7 +42,7 @@ RSpec.describe 'puma_config' do
   end
 
   context 'create with custom Puma settings' do
-    let(:chef_run) { runner.converge('test_gitlab::puma_config_custom') }
+    cached(:chef_run) { runner.converge('test_gitlab::puma_config_custom') }
 
     it 'renders puma.rb file' do
       expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/puma.rb').with_content { |content|
