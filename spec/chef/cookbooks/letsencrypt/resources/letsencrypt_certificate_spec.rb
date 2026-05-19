@@ -1,9 +1,23 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::letsencrypt' do
-  let(:chef_run) do
-    ChefSpec::SoloRunner.new(step_into: %(letsencrypt_certificate)).converge('gitlab::default')
+  # Generate one RSA/EC pair per process and reuse across examples - the
+  # production code parses them to detect key type but never inspects their
+  # actual contents, so they can be opaque PEM fixtures.
+  def self.test_rsa_2048_pem
+    @test_rsa_2048_pem ||= OpenSSL::PKey::RSA.new(2048).to_pem
   end
+
+  def self.test_ec_prime256v1_pem
+    @test_ec_prime256v1_pem ||= OpenSSL::PKey::EC.generate('prime256v1').to_pem
+  end
+
+  # Converges only what's needed to exercise letsencrypt_certificate.
+  def letsencrypt_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(letsencrypt_certificate)).converge('gitlab-base::config', 'letsencrypt::enable')
+  end
+
+  let(:chef_run) { letsencrypt_chef_run }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -16,6 +30,8 @@ RSpec.describe 'gitlab::letsencrypt' do
   end
 
   context 'with NGINX running' do
+    cached(:chef_run) { letsencrypt_chef_run }
+
     before do
       allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
       allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('nginx').and_return(true)
@@ -49,11 +65,13 @@ RSpec.describe 'gitlab::letsencrypt' do
     end
 
     context 'specifying a different key_size' do
+      cached(:chef_run) { letsencrypt_chef_run }
+
       before do
         allow(File).to receive(:file?).and_call_original
         allow(File).to receive(:file?).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(true)
         allow(File).to receive(:read).with(anything).and_call_original
-        allow(File).to receive(:read).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(OpenSSL::PKey::RSA.new(2048).to_pem)
+        allow(File).to receive(:read).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(self.class.test_rsa_2048_pem)
 
         stub_gitlab_rb(
           external_url: 'https://fakehost.example.com',
@@ -84,6 +102,8 @@ RSpec.describe 'gitlab::letsencrypt' do
     end
 
     context 'with EC certificates' do
+      cached(:chef_run) { letsencrypt_chef_run }
+
       before do
         stub_gitlab_rb(
           external_url: 'https://fakehost.example.com',
@@ -108,11 +128,13 @@ RSpec.describe 'gitlab::letsencrypt' do
     end
 
     context 'specifying a different ec_curve' do
+      cached(:chef_run) { letsencrypt_chef_run }
+
       before do
         allow(File).to receive(:file?).and_call_original
         allow(File).to receive(:file?).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(true)
         allow(File).to receive(:read).with(anything).and_call_original
-        allow(File).to receive(:read).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(OpenSSL::PKey::EC.generate('prime256v1').to_pem)
+        allow(File).to receive(:read).with('/etc/gitlab/ssl/fakehost.example.com.key').and_return(self.class.test_ec_prime256v1_pem)
 
         stub_gitlab_rb(
           external_url: 'https://fakehost.example.com',
@@ -139,6 +161,8 @@ RSpec.describe 'gitlab::letsencrypt' do
     end
 
     context 'with extra options' do
+      cached(:chef_run) { letsencrypt_chef_run }
+
       before do
         stub_gitlab_rb(
           external_url: 'https://fakehost.example.com',
@@ -161,6 +185,8 @@ RSpec.describe 'gitlab::letsencrypt' do
   end
 
   context 'when NGINX is not running' do
+    cached(:chef_run) { letsencrypt_chef_run }
+
     before do
       allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
       allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('nginx').and_return(false)
