@@ -1,7 +1,11 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab-kas' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir templatesymlink nginx_configuration)).converge('gitlab::default') }
+  def kas_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir templatesymlink nginx_configuration)).converge('gitlab::default')
+  end
+
+  let(:chef_run) { kas_chef_run }
   let(:gitlab_kas_config_yml) { chef_run_load_yaml_template(chef_run, '/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml') }
 
   before do
@@ -116,6 +120,8 @@ RSpec.describe 'gitlab-kas' do
   end
 
   context 'with user settings' do
+    cached(:chef_run) { kas_chef_run }
+
     let(:api_secret_key) { Base64.strict_encode64('1' * 32) }
     let(:private_api_secret_key) { Base64.strict_encode64('2' * 32) }
     let(:websocket_token_secret_key) { Base64.strict_encode64('3' * 72) }
@@ -282,6 +288,8 @@ RSpec.describe 'gitlab-kas' do
     end
 
     context 'with GitLab on a relative URL' do
+      cached(:chef_run) { kas_chef_run }
+
       before do
         stub_gitlab_rb(
           external_url: 'https://example.com/gitlab'
@@ -383,6 +391,8 @@ RSpec.describe 'gitlab-kas' do
   describe 'redis config' do
     context 'when same as gitlab_rails' do
       context 'when there is a password' do
+        cached(:chef_run) { kas_chef_run }
+
         before do
           stub_gitlab_rb(
             external_url: 'https://gitlab.example.com',
@@ -407,6 +417,8 @@ RSpec.describe 'gitlab-kas' do
       end
 
       context 'when there is no password' do
+        cached(:chef_run) { kas_chef_run }
+
         before do
           stub_gitlab_rb(
             external_url: 'https://gitlab.example.com',
@@ -559,6 +571,8 @@ RSpec.describe 'gitlab-kas' do
         end
 
         context 'when there is a Sentinel password' do
+          cached(:chef_run) { kas_chef_run }
+
           before do
             sentinel_params[:gitlab_rails]['redis_sentinels_password'] = 'some pass'
 
@@ -689,6 +703,8 @@ RSpec.describe 'gitlab-kas' do
     end
 
     context 'when different from gitlab_rails' do
+      cached(:chef_run) { kas_chef_run }
+
       before do
         stub_gitlab_rb(
           gitlab_rails: {

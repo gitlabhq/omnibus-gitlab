@@ -387,7 +387,7 @@ RSpec.describe OmnibusHelper do
             end
 
             it 'writes initial root password to /etc/gitlab/initial_root_password' do
-              chef_run = ChefSpec::SoloRunner.converge('gitlab::default')
+              chef_run = converge_config
               subject = described_class.new(chef_run.node)
 
               expect(subject).to receive(:write_root_password)

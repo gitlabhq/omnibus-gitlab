@@ -16,7 +16,11 @@
 require 'chef_helper'
 
 RSpec.describe 'pgbouncer' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
+  def pgbouncer_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default')
+  end
+
+  let(:chef_run) { pgbouncer_chef_run }
   let(:pgbouncer_ini) { '/var/opt/gitlab/pgbouncer/pgbouncer.ini' }
   let(:databases_json) { '/var/opt/gitlab/pgbouncer/databases.json' }
   let(:default_vars) do
@@ -384,6 +388,12 @@ RSpec.describe 'pgbouncer' do
     end
 
     context 'when disabled by default' do
+      cached(:chef_run) { pgbouncer_chef_run }
+
+      before do
+        allow_any_instance_of(Chef::Provider::RunitService).to receive(:enabled?).and_return(true)
+      end
+
       it_behaves_like 'disabled runit service', 'pgbouncer'
 
       it 'includes the pgbouncer_disable recipe' do
@@ -394,6 +404,8 @@ RSpec.describe 'pgbouncer' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { pgbouncer_chef_run }
+
       before do
         stub_gitlab_rb(pgbouncer: { enable: true })
       end
@@ -401,6 +413,8 @@ RSpec.describe 'pgbouncer' do
     end
 
     context 'custom values' do
+      cached(:chef_run) { pgbouncer_chef_run }
+
       before do
         stub_gitlab_rb(
           pgbouncer: {

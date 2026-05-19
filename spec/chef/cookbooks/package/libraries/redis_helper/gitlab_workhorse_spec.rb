@@ -1,7 +1,8 @@
 require 'chef_helper'
 
 RSpec.describe RedisHelper::GitlabWorkhorse do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+  # `redis.workhorse.yml` is rendered by gitlab::gitlab-rails.
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-base::config', 'gitlab::gitlab-rails') }
   let(:workhorse_redis_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/redis.workhorse.yml') }
   let(:workhorse_redis_yml_file_content) { ChefSpec::Renderer.new(chef_run, workhorse_redis_yml_template).content }
   let(:workhorse_redis_yml) { YAML.safe_load(workhorse_redis_yml_file_content, aliases: true, symbolize_names: true) }

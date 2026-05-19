@@ -2,7 +2,7 @@ require 'chef_helper'
 
 RSpec.describe PatroniHelper do
   let(:chef_run) do
-    ChefSpec::SoloRunner.new(step_into: %w(patroni)).converge('gitlab-ee::default')
+    ChefSpec::SoloRunner.new(step_into: %w(patroni)).converge('gitlab-base::config', 'patroni::enable')
   end
 
   subject(:helper) { PatroniHelper.new(chef_run.node) }

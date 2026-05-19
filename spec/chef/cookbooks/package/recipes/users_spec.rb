@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'package::users' do
-  let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab-base::config', 'package::users') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

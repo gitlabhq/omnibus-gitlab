@@ -3,7 +3,9 @@ require 'base64'
 
 RSpec.describe 'secrets' do
   let(:newer_fips) { false }
-  let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
+  # The secrets.yml templatesymlink and /var/opt/gitlab/gitlab-rails/etc/secret
+  # delete are emitted by gitlab::gitlab-rails.
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'gitlab::gitlab-rails') }
 
   HEX_KEY = /\h{128}/.freeze
   ALPHANUMERIC_KEY = /\A[A-Za-z0-9]{32}\Z/m.freeze
