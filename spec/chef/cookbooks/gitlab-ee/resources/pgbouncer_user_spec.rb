@@ -3,7 +3,7 @@ RSpec.describe 'pgbouncer_user' do
   let(:runner) { ChefSpec::SoloRunner.new(step_into: ['pgbouncer_user']) }
 
   context 'create geo' do
-    let(:chef_run) { runner.converge('test_gitlab_ee::pgbouncer_user_create_geo') }
+    cached(:chef_run) { runner.converge('test_gitlab_ee::pgbouncer_user_create_geo') }
     it 'should create the pgbouncer user' do
       expect(chef_run).to create_postgresql_user('pgbouncer-geo').with(
         helper: an_instance_of(GeoPgHelper),
@@ -21,7 +21,7 @@ RSpec.describe 'pgbouncer_user' do
   end
 
   context 'create rails' do
-    let(:chef_run) { runner.converge('test_gitlab_ee::pgbouncer_user_create_rails') }
+    cached(:chef_run) { runner.converge('test_gitlab_ee::pgbouncer_user_create_rails') }
     it 'should create the pgbouncer user' do
       expect(chef_run).to create_postgresql_user('pgbouncer-rails').with(
         helper: an_instance_of(PgHelper),

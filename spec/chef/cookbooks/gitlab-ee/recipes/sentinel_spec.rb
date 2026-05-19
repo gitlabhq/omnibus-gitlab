@@ -1,7 +1,11 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::redis' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(redis_service sentinel_service runit_service)).converge('gitlab-ee::default') }
+  def sentinel_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(redis_service sentinel_service runit_service)).converge('gitlab-ee::default')
+  end
+
+  let(:chef_run) { sentinel_chef_run }
   let(:redis_master_ip) { '1.1.1.1' }
   let(:redis_announce_ip) { '10.10.10.10' }
   let(:redis_master_password) { 'blahblahblah' }
@@ -14,6 +18,8 @@ RSpec.describe 'gitlab::redis' do
   end
 
   describe 'When sentinel is disabled' do
+    cached(:chef_run) { sentinel_chef_run }
+
     before do
       stub_gitlab_rb(
         redis: {
@@ -25,6 +31,7 @@ RSpec.describe 'gitlab::redis' do
           enable: false,
         }
       )
+      allow_any_instance_of(Chef::Provider::RunitService).to receive(:enabled?).and_return(true)
     end
 
     it_behaves_like 'disabled runit service', 'sentinel', 'root', 'root'
@@ -45,37 +52,42 @@ RSpec.describe 'gitlab::redis' do
           }
         )
       end
-      it 'creates redis user and group' do
-        expect(chef_run).to create_account('user and group for sentinel').with(username: 'gitlab-redis', groupname: 'gitlab-redis')
-      end
 
-      it 'renders sentinel config file with default values' do
-        expect(chef_run).to render_file('/var/opt/gitlab/sentinel/sentinel.conf')
-          .with_content { |content|
-            expect(content).to match(%r{bind 0.0.0.0})
-            expect(content).to match(%r{port 26379})
-            expect(content).to match(%r{sentinel announce-ip 10.10.10.10})
-            expect(content).to match(%r{sentinel monitor gitlab-redis 1.1.1.1 6379 1})
-            expect(content).to match(%r{sentinel down-after-milliseconds gitlab-redis 10000})
-            expect(content).to match(%r{sentinel failover-timeout gitlab-redis 60000})
-            expect(content).to match(%r{sentinel auth-pass gitlab-redis blahblahblah})
-            expect(content).not_to match(%r{^tls})
-            expect(content).not_to match(%r{^requirepass})
-            expect(content).to match(%r{SENTINEL resolve-hostnames no})
-            expect(content).to match(%r{SENTINEL announce-hostnames no})
+      context 'with no overrides' do
+        cached(:chef_run) { sentinel_chef_run }
+
+        it 'creates redis user and group' do
+          expect(chef_run).to create_account('user and group for sentinel').with(username: 'gitlab-redis', groupname: 'gitlab-redis')
+        end
+
+        it 'renders sentinel config file with default values' do
+          expect(chef_run).to render_file('/var/opt/gitlab/sentinel/sentinel.conf')
+            .with_content { |content|
+              expect(content).to match(%r{bind 0.0.0.0})
+              expect(content).to match(%r{port 26379})
+              expect(content).to match(%r{sentinel announce-ip 10.10.10.10})
+              expect(content).to match(%r{sentinel monitor gitlab-redis 1.1.1.1 6379 1})
+              expect(content).to match(%r{sentinel down-after-milliseconds gitlab-redis 10000})
+              expect(content).to match(%r{sentinel failover-timeout gitlab-redis 60000})
+              expect(content).to match(%r{sentinel auth-pass gitlab-redis blahblahblah})
+              expect(content).not_to match(%r{^tls})
+              expect(content).not_to match(%r{^requirepass})
+              expect(content).to match(%r{SENTINEL resolve-hostnames no})
+              expect(content).to match(%r{SENTINEL announce-hostnames no})
+            }
+        end
+
+        it 'renders redis service definition without --replica-announce-ip' do
+          expect(chef_run).to render_file(redis_sv_run).with_content { |content|
+            expect(content).not_to match(%r{--replica-announce-ip "\$\(hostname -f\)"})
           }
-      end
+          expect(chef_run).to render_file(sentinel_sv_run).with_content { |content|
+            expect(content).not_to match(%r{'--sentinel announce-ip' "\$\(hostname -f\)"})
+          }
+        end
 
-      it 'renders redis service definition without --replica-announce-ip' do
-        expect(chef_run).to render_file(redis_sv_run).with_content { |content|
-          expect(content).not_to match(%r{--replica-announce-ip "\$\(hostname -f\)"})
-        }
-        expect(chef_run).to render_file(sentinel_sv_run).with_content { |content|
-          expect(content).not_to match(%r{'--sentinel announce-ip' "\$\(hostname -f\)"})
-        }
+        it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
       end
-
-      it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
 
       context 'user overrides sentinel_use_hostnames' do
         before do
@@ -136,17 +148,22 @@ RSpec.describe 'gitlab::redis' do
           }
         )
       end
-      it 'creates redis user and group' do
-        expect(chef_run).to create_account('user and group for sentinel').with(username: 'foo', groupname: 'bar')
-      end
 
-      it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
+      context 'with no overrides' do
+        cached(:chef_run) { sentinel_chef_run }
 
-      it 'uses hostnames' do
-        expect(chef_run).to render_file(sentinel_conf).with_content { |content|
-          expect(content).to match(%r{SENTINEL resolve-hostnames yes})
-          expect(content).to match(%r{SENTINEL announce-hostnames yes})
-        }
+        it 'creates redis user and group' do
+          expect(chef_run).to create_account('user and group for sentinel').with(username: 'foo', groupname: 'bar')
+        end
+
+        it_behaves_like 'enabled runit service', 'sentinel', 'root', 'root'
+
+        it 'uses hostnames' do
+          expect(chef_run).to render_file(sentinel_conf).with_content { |content|
+            expect(content).to match(%r{SENTINEL resolve-hostnames yes})
+            expect(content).to match(%r{SENTINEL announce-hostnames yes})
+          }
+        end
       end
 
       context 'user overrides sentinel_use_hostnames' do
@@ -240,6 +257,8 @@ RSpec.describe 'gitlab::redis' do
   end
 
   context 'when redis backend is valkey' do
+    cached(:chef_run) { sentinel_chef_run }
+
     before do
       stub_gitlab_rb(
         redis: {
@@ -265,6 +284,8 @@ RSpec.describe 'gitlab::redis' do
   end
 
   context 'when redis backend is redis (default)' do
+    cached(:chef_run) { sentinel_chef_run }
+
     before do
       stub_gitlab_rb(
         redis: {
@@ -290,6 +311,8 @@ RSpec.describe 'gitlab::redis' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { sentinel_chef_run }
+
       before do
         stub_gitlab_rb(
           redis: {
@@ -307,6 +330,8 @@ RSpec.describe 'gitlab::redis' do
     end
 
     context 'custom values' do
+      cached(:chef_run) { sentinel_chef_run }
+
       before do
         stub_gitlab_rb(
           redis: {
