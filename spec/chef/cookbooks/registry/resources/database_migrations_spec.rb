@@ -33,9 +33,9 @@ RSpec.describe 'registry_database_migrations' do
       )
     end
 
-    it 'sets correct log file path with timestamp' do
+    it 'uses a single rolling log file' do
       expect(chef_run).to run_bash_hide_env('migrate registry database: up').with(
-        code: match(%r{LOG_FILE="/var/log/gitlab/registry/db-migrations-\$\(date \+%Y-%m-%d-%H-%M-%S\)\.log"})
+        code: match(%r{LOG_FILE="/var/log/gitlab/registry/db-migrations\.log"})
       )
     end
 
@@ -45,9 +45,15 @@ RSpec.describe 'registry_database_migrations' do
       )
     end
 
-    it 'pipes output to log file' do
+    it 'appends migration output to the log file' do
       expect(chef_run).to run_bash_hide_env('migrate registry database: up').with(
-        code: match(/2>& 1 \| tee \$\{LOG_FILE\}/)
+        code: match(/2>& 1 \| tee -a \$\{LOG_FILE\}/)
+      )
+    end
+
+    it 'writes a run header to the log file' do
+      expect(chef_run).to run_bash_hide_env('migrate registry database: up').with(
+        code: match(/echo ".*registry database migrate up.*" >> \$\{LOG_FILE\}/)
       )
     end
 
