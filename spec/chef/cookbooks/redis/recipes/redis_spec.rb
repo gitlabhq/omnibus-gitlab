@@ -1,14 +1,23 @@
 require 'chef_helper'
 
 RSpec.describe 'redis' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(redis_service runit_service)).converge('gitlab::default') }
   let(:redis_conf) { '/var/opt/gitlab/redis/redis.conf' }
+
+  # Converges the smallest recipe set that exercises the redis cookbook (and the
+  # SettingsDSL `parse_variables` chain that runs Redis.populate_extra_config).
+  def redis_chef_run(recipe = 'redis::enable')
+    ChefSpec::SoloRunner.new(step_into: %w(redis_service runit_service)).converge('gitlab-base::config', recipe)
+  end
+
+  let(:chef_run) { redis_chef_run }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
   context 'by default' do
+    cached(:chef_run) { redis_chef_run }
+
     let(:gitlab_redis_cli_rc) do
       <<-EOF
 redis_dir='/var/opt/gitlab/redis'
@@ -74,7 +83,12 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
     end
 
     describe 'pending restart check' do
+      # Each sub-context caches its own chef_run - the `warn pending redis
+      # restart` only_if guard evaluates at converge time, so each RedisHelper
+      # version stub set needs its own converge.
       context 'when running version is same as installed version' do
+        cached(:chef_run) { redis_chef_run }
+
         before do
           allow_any_instance_of(RedisHelper::Server).to receive(:running_version).and_return('3.2.12')
           allow_any_instance_of(RedisHelper::Server).to receive(:installed_version).and_return('3.2.12')
@@ -86,6 +100,8 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
       end
 
       context 'when running version is different than installed version' do
+        cached(:chef_run) { redis_chef_run }
+
         before do
           allow_any_instance_of(RedisHelper::Server).to receive(:running_version).and_return('3.2.12')
           allow_any_instance_of(RedisHelper::Server).to receive(:installed_version).and_return('5.0.9')
@@ -99,6 +115,8 @@ redis_socket='/var/opt/gitlab/redis/redis.socket'
   end
 
   context 'with user specified values' do
+    cached(:chef_run) { redis_chef_run }
+
     before do
       stub_gitlab_rb(
         redis: {
@@ -246,6 +264,8 @@ redis_socket=''
   end
 
   context 'with a replica configured' do
+    cached(:chef_run) { redis_chef_run }
+
     let(:redis_host) { '1.2.3.4' }
     let(:redis_port) { 6370 }
     let(:master_ip) { '10.0.0.0' }
@@ -292,6 +312,8 @@ redis_socket=''
   end
 
   context 'in HA mode with Sentinels' do
+    cached(:chef_run) { redis_chef_run }
+
     let(:redis_host) { '1.2.3.4' }
     let(:redis_port) { 6370 }
     let(:master_ip) { '10.0.0.0' }
@@ -340,6 +362,8 @@ redis_socket=''
     end
 
     context 'with Sentinels configured' do
+      cached(:chef_run) { redis_chef_run }
+
       before do
         stub_gitlab_rb(
           redis: {
@@ -440,6 +464,8 @@ redis_socket=''
   end
 
   context 'with tls settings specified' do
+    cached(:chef_run) { redis_chef_run }
+
     let(:gitlab_redis_cli_rc) do
       <<-EOF
 redis_dir='/var/opt/gitlab/redis'
@@ -509,10 +535,14 @@ redis_socket=''
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { redis_chef_run }
+
       it_behaves_like 'enabled logged service', 'redis', true, { log_directory_owner: 'gitlab-redis' }
     end
 
     context 'custom values' do
+      cached(:chef_run) { redis_chef_run }
+
       before do
         stub_gitlab_rb(
           redis: {
@@ -525,6 +555,13 @@ redis_socket=''
   end
 
   context 'extra config command' do
+    def stub_extra_config_command(*argv, output:, success:, exitstatus: 0)
+      stdout_stderr = instance_double(IO, read: output, close: nil)
+      status_value = instance_double(Process::Status, success?: success, exitstatus: exitstatus)
+      wait_thread = instance_double(Thread, value: status_value)
+      allow(Open3).to receive(:popen2e).with(*argv).and_return([nil, stdout_stderr, wait_thread])
+    end
+
     context 'when extra_config_command points to a file that does not exist' do
       before do
         stub_gitlab_rb(
@@ -532,6 +569,7 @@ redis_socket=''
             extra_config_command: '/tmp/a-file-that-does-not-exist'
           }
         )
+        allow(Open3).to receive(:popen2e).with('/tmp/a-file-that-does-not-exist').and_raise(Errno::ENOENT)
       end
 
       it 'raises error' do
@@ -546,6 +584,12 @@ redis_socket=''
             extra_config_command: 'bash /tmp/a-file-that-does-not-exist'
           }
         )
+        stub_extra_config_command(
+          'bash', '/tmp/a-file-that-does-not-exist',
+          output: 'bash: /tmp/a-file-that-does-not-exist: No such file or directory',
+          success: false,
+          exitstatus: 127
+        )
       end
 
       it 'raises error' do
@@ -554,26 +598,17 @@ redis_socket=''
     end
 
     context 'extra_config_command runs successfully' do
-      let(:code_file) { Tempfile.new(['redis-code', '.sh']) }
-
       before do
-        file_content = <<~MSG
-          #!/usr/bin/env bash
-          echo 'requirepass "toomanysecrets"'
-        MSG
-
-        File.write(code_file.path, file_content)
-
         stub_gitlab_rb(
           redis: {
-            extra_config_command: "bash #{code_file.path}"
+            extra_config_command: 'bash /tmp/redis-code.sh'
           }
         )
-      end
-
-      after do
-        code_file.close
-        code_file.unlink
+        stub_extra_config_command(
+          'bash', '/tmp/redis-code.sh',
+          output: %(requirepass "toomanysecrets"\n),
+          success: true
+        )
       end
 
       it 'populates redis.conf with output from command' do
@@ -586,14 +621,21 @@ redis_socket=''
   end
 
   context 'with redis disabled' do
+    cached(:chef_run) { redis_chef_run('redis::disable') }
+
     before do
       stub_gitlab_rb(redis: { enable: false })
+      # The 'disabled runit service' shared example sets this stub inside an
+      # `it` block; the cached converge needs it set up in advance.
+      allow_any_instance_of(Chef::Provider::RunitService).to receive(:enabled?).and_return(true)
     end
 
     it_behaves_like 'disabled runit service', 'redis', 'root', 'root'
   end
 
   context 'when redis backend is valkey' do
+    cached(:chef_run) { redis_chef_run }
+
     before do
       stub_gitlab_rb(
         redis: { backend: 'valkey' }
@@ -619,6 +661,8 @@ redis_socket=''
   end
 
   context 'when redis backend is redis (default)' do
+    cached(:chef_run) { redis_chef_run }
+
     it 'uses redis-server binary in run script' do
       expect(chef_run).to render_file('/opt/gitlab/sv/redis/run')
         .with_content(%r{/opt/gitlab/embedded/bin/redis-server})

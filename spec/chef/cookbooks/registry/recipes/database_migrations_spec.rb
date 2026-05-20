@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'registry::database_migrations' do
-  let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab-base::config', 'registry::database_migrations') }
   let(:registry_pg_helper) { instance_double(RegistryPgHelper) }
 
   before do

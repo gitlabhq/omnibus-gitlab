@@ -2,7 +2,7 @@ require 'chef_helper'
 
 RSpec.describe 'gitlab::gitlab-rails' do
   describe 'Session store settings' do
-    let(:chef_run) { ChefSpec::SoloRunner.new(step_into: 'templatesymlink').converge('gitlab::default') }
+    let(:chef_run) { ChefSpec::SoloRunner.new(step_into: 'templatesymlink').converge('gitlab-base::config', 'gitlab::gitlab-rails') }
     let(:session_store_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/session_store.yml') }
     let(:session_store_yml_file_content) { ChefSpec::Renderer.new(chef_run, session_store_yml_template).content }
     let(:session_store_yml) { YAML.safe_load(session_store_yml_file_content, aliases: true, symbolize_names: true) }

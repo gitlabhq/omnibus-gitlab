@@ -1,13 +1,14 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
-  let(:chef_run) do
-    runner = ChefSpec::SoloRunner.new(
+  def puma_chef_run
+    ChefSpec::SoloRunner.new(
       step_into: %w(runit_service puma_config),
       path: 'spec/chef/fixtures/fauxhai/ubuntu/16.04.json'
-    )
-    runner.converge('gitlab::default')
+    ).converge('gitlab-base::config', 'gitlab::puma')
   end
+
+  let(:chef_run) { puma_chef_run }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -33,10 +34,20 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
 
     context 'log directory and runit group' do
       context 'default values' do
+        cached(:chef_run) { puma_chef_run }
+
         it_behaves_like 'enabled logged service', 'puma', true, { log_directory_owner: 'git' }
       end
 
       context 'custom values' do
+        # 'configured logrotate service' needs logrotate::folders_and_configs.
+        cached(:chef_run) do
+          ChefSpec::SoloRunner.new(
+            step_into: %w(runit_service puma_config),
+            path: 'spec/chef/fixtures/fauxhai/ubuntu/16.04.json'
+          ).converge('gitlab-base::config', 'gitlab::puma', 'logrotate::folders_and_configs')
+        end
+
         before do
           stub_gitlab_rb(
             puma: {
@@ -94,6 +105,15 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
   end
 
   context 'with custom Puma settings' do
+    # This `it` asserts on /opt/gitlab/sv/gitlab-workhorse/run, which is
+    # rendered by gitlab::gitlab-workhorse - not by gitlab::puma.
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(
+        step_into: %w(runit_service puma_config),
+        path: 'spec/chef/fixtures/fauxhai/ubuntu/16.04.json'
+      ).converge('gitlab-base::config', 'gitlab::puma', 'gitlab::gitlab-workhorse')
+    end
+
     before do
       stub_gitlab_rb(
         puma: {
@@ -128,6 +148,14 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
   end
 
   context 'with SSL enabled' do
+    # One example asserts on /opt/gitlab/sv/gitlab-workhorse/run.
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(
+        step_into: %w(runit_service puma_config),
+        path: 'spec/chef/fixtures/fauxhai/ubuntu/16.04.json'
+      ).converge('gitlab-base::config', 'gitlab::puma', 'gitlab::gitlab-workhorse')
+    end
+
     let(:base_params) do
       {
         puma: {
@@ -306,19 +334,22 @@ RSpec.describe 'gitlab::puma with Ubuntu 16.04' do
 end
 
 RSpec.describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
-  let(:chef_run) do
-    runner = ChefSpec::SoloRunner.new(
+  def puma_no_tmpfs_chef_run
+    ChefSpec::SoloRunner.new(
       path: 'spec/chef/fixtures/fauxhai/ubuntu/16.04-no-run-tmpfs.json',
       step_into: %w(runit_service)
-    )
-    runner.converge('gitlab::default')
+    ).converge('gitlab-base::config', 'gitlab::puma')
   end
+
+  let(:chef_run) { puma_no_tmpfs_chef_run }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
   context 'when puma is enabled on a node with no /run or /dev/shm tmpfs' do
+    cached(:chef_run) { puma_no_tmpfs_chef_run }
+
     it_behaves_like 'enabled runit service', 'puma', 'root', 'root'
 
     it 'populates the files with expected configuration' do
@@ -332,19 +363,22 @@ RSpec.describe 'gitlab::puma Ubuntu 16.04 with no tmpfs' do
 end
 
 RSpec.describe 'gitlab::puma Ubuntu 16.04 Docker' do
-  let(:chef_run) do
-    runner = ChefSpec::SoloRunner.new(
+  def puma_docker_chef_run
+    ChefSpec::SoloRunner.new(
       path: 'spec/chef/fixtures/fauxhai/ubuntu/16.04-docker.json',
       step_into: %w(runit_service)
-    )
-    runner.converge('gitlab::default')
+    ).converge('gitlab-base::config', 'gitlab::puma')
   end
+
+  let(:chef_run) { puma_docker_chef_run }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
   context 'when puma is enabled on a node with a /dev/shm tmpfs' do
+    cached(:chef_run) { puma_docker_chef_run }
+
     it_behaves_like 'enabled runit service', 'puma', 'root', 'root'
 
     it 'populates the files with expected configuration' do
@@ -363,7 +397,7 @@ RSpec.describe 'gitlab::puma with more CPUs' do
       step_into: %w(runit_service),
       path: 'spec/chef/fixtures/fauxhai/ubuntu/16.04-more-cpus.json'
     )
-    runner.converge('gitlab::default')
+    runner.converge('gitlab-base::config', 'gitlab::puma')
   end
 
   before do
@@ -391,7 +425,7 @@ RSpec.describe 'gitlab::puma with no total CPUs' do
       step_into: %w(runit_service),
       path: 'spec/chef/fixtures/fauxhai/ubuntu/16.04-no-total-cpus.json'
     )
-    runner.converge('gitlab::default')
+    runner.converge('gitlab-base::config', 'gitlab::puma')
   end
 
   before do
@@ -419,7 +453,7 @@ RSpec.describe 'gitlab::puma with Raspberry Pi 4' do
       step_into: %w(runit_service),
       path: 'spec/chef/fixtures/fauxhai/ubuntu/22.04-rpi4.json'
     )
-    runner.converge('gitlab::default')
+    runner.converge('gitlab-base::config', 'gitlab::puma')
   end
 
   before do

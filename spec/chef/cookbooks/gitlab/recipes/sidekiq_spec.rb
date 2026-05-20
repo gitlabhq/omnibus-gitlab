@@ -1,19 +1,22 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::sidekiq' do
-  let(:chef_run) do
-    runner = ChefSpec::SoloRunner.new(
+  def sidekiq_chef_run
+    ChefSpec::SoloRunner.new(
       step_into: %w(sidekiq_service runit_service),
       path: 'spec/chef/fixtures/fauxhai/ubuntu/16.04.json'
-    )
-    runner.converge('gitlab::default')
+    ).converge('gitlab-base::config', 'gitlab::sidekiq')
   end
+
+  let(:chef_run) { sidekiq_chef_run }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
   context 'with default values' do
+    cached(:chef_run) { sidekiq_chef_run }
+
     it 'correctly renders out the sidekiq service file' do
       expect(chef_run).to render_file("/opt/gitlab/sv/sidekiq/run")
         .with_content { |content|
@@ -37,12 +40,16 @@ RSpec.describe 'gitlab::sidekiq' do
 
   describe 'log_format' do
     context 'by default' do
+      cached(:chef_run) { sidekiq_chef_run }
+
       it 'does not pass timestamp flag to svlogd' do
         expect(chef_run).not_to render_file("/opt/gitlab/sv/sidekiq/log/run").with_content(/-tt/)
       end
     end
 
     context 'when user specifies text log format' do
+      cached(:chef_run) { sidekiq_chef_run }
+
       before do
         stub_gitlab_rb(
           sidekiq: { log_format: 'text' }
@@ -57,10 +64,14 @@ RSpec.describe 'gitlab::sidekiq' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { sidekiq_chef_run }
+
       it_behaves_like 'enabled logged service', 'sidekiq', true, { log_directory_owner: 'git' }
     end
 
     context 'custom values' do
+      cached(:chef_run) { sidekiq_chef_run }
+
       before do
         stub_gitlab_rb(
           sidekiq: {

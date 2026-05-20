@@ -3,7 +3,10 @@
 require 'chef_helper'
 
 RSpec.describe 'default directories' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  # The directory resource for `node['postgresql']['dir']` is in
+  # postgresql::enable, not postgresql::directory_locations (which
+  # only sets node defaults for unix_socket_directory and home).
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'postgresql::enable') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

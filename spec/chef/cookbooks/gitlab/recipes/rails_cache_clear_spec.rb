@@ -6,7 +6,7 @@ require 'chef_helper'
 # attribute value with gilab.rb setting.
 
 RSpec.describe 'gitlab::rails-cache-clear' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'gitlab::gitlab-rails') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

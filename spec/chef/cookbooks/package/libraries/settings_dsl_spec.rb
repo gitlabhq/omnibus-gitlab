@@ -18,7 +18,7 @@ RSpec.describe SettingsDSL::Utils do
   end
 
   describe 'secrets generation' do
-    let(:chef_run) { ChefSpec::SoloRunner.new.converge('gitlab::default') }
+    let(:chef_run) { converge_config }
 
     before do
       allow(Gitlab).to receive(:[]).and_call_original

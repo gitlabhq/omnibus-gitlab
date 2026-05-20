@@ -392,7 +392,12 @@ RSpec.describe 'monitoring::prometheus' do
       }
     }
   end
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  # Converge only the prometheus recipe (smaller than 'gitlab::default').
+  def prometheus_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'monitoring::prometheus')
+  end
+
+  let(:chef_run) { prometheus_chef_run }
   let(:prometheus_yml_template) { chef_run.file('/var/opt/gitlab/prometheus/prometheus.yml') }
   let(:prometheus_yml_file_content) { ChefSpec::Renderer.new(chef_run, prometheus_yml_template).content }
   let(:prometheus_yml) { YAML.safe_load(prometheus_yml_file_content, aliases: true, symbolize_names: true) }
@@ -409,6 +414,8 @@ RSpec.describe 'monitoring::prometheus' do
   end
 
   context 'when prometheus is enabled' do
+    cached(:chef_run) { prometheus_chef_run }
+
     let(:config_template) { chef_run.template('/opt/gitlab/sv/prometheus/log/config') }
 
     before do
@@ -608,6 +615,8 @@ RSpec.describe 'monitoring::prometheus' do
   end
 
   context 'pgbouncer_exporter' do
+    cached(:chef_run) { prometheus_chef_run }
+
     before do
       Gitlab[:node] = nil
       Services.add_services('gitlab-ee', Services::EEServices.list)

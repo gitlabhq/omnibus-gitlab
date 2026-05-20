@@ -17,7 +17,7 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab-ee::pgbouncer_user' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'pgbouncer::user') }
   before do
     allow(Gitlab).to receive(:[]).and_call_original
   end
@@ -59,6 +59,11 @@ RSpec.describe 'gitlab-ee::pgbouncer_user' do
   end
 
   context 'patroni is enabled' do
+    # Needs gitlab-ee::default - `node['patroni']['enable']` (read by
+    # the suppression gate in pgbouncer/recipes/user.rb) only gets
+    # populated through the full patroni_role dispatch chain.
+    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+
     before do
       allow(Gitlab).to receive(:[]).and_call_original
       stub_gitlab_rb(

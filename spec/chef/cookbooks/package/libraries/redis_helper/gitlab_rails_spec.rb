@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe RedisHelper::GitlabRails do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab::default') }
+  let(:chef_run) { converge_config }
 
   subject { described_class.new(chef_run.node) }
 

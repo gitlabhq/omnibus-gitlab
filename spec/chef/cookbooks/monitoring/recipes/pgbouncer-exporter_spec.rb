@@ -16,7 +16,7 @@
 require 'chef_helper'
 
 RSpec.describe 'monitoring::pgbouncer-exporter' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'monitoring::pgbouncer-exporter') }
   let(:config_yaml) { '/var/opt/gitlab/pgbouncer-exporter/pgbouncer-exporter.yaml' }
   let(:default_vars) do
     {

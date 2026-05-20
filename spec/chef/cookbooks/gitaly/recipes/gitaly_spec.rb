@@ -1,7 +1,12 @@
 require 'chef_helper'
 
 RSpec.describe 'gitaly' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  # Converge only what's needed to exercise the gitaly recipes.
+  def gitaly_chef_run(recipe = 'gitaly::enable')
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', recipe)
+  end
+
+  let(:chef_run) { gitaly_chef_run }
   let(:config_path) { '/var/opt/gitlab/gitaly/config.toml' }
   let(:gitaly_config) { chef_run.template(config_path) }
   let(:runtime_dir) { '/var/opt/gitlab/gitaly/user_defined/run' }
@@ -71,6 +76,8 @@ RSpec.describe 'gitaly' do
   end
 
   context 'by default' do
+    cached(:chef_run) { gitaly_chef_run }
+
     it_behaves_like "enabled runit service", "gitaly", "root", "root"
 
     it 'creates expected directories with correct permissions' do
@@ -144,6 +151,8 @@ RSpec.describe 'gitaly' do
 
   context 'with a user specified GitLab secret' do
     context 'when the Gitlab Shell and Gitaly secrets match' do
+      cached(:chef_run) { gitaly_chef_run }
+
       before do
         stub_gitlab_rb(
           gitaly: {
@@ -167,6 +176,9 @@ RSpec.describe 'gitaly' do
     end
 
     context 'when the Gitlab Shell and Gitaly secrets differ' do
+      # No cached chef_run - one example sets a
+      # `expect(LoggingHelper).to receive(:warning)` before referencing
+      # `chef_run`, which needs the converge to run after.
       before do
         stub_gitlab_rb(
           gitaly: {
@@ -194,10 +206,19 @@ RSpec.describe 'gitaly' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { gitaly_chef_run }
+
       it_behaves_like 'enabled logged service', 'gitaly', true, { log_directory_owner: 'git' }
     end
 
     context 'custom values' do
+      # The 'configured logrotate service' shared example asserts on a file
+      # rendered by `logrotate::folders_and_configs`, so include it.
+      cached(:chef_run) do
+        ChefSpec::SoloRunner.new(step_into: %w(runit_service))
+                            .converge('gitlab-base::config', 'gitaly::enable', 'logrotate::folders_and_configs')
+      end
+
       before do
         stub_gitlab_rb(
           gitaly: {
@@ -213,6 +234,8 @@ RSpec.describe 'gitaly' do
   end
 
   context 'sets cgroups settings' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb(
         gitaly: {
@@ -259,6 +282,8 @@ RSpec.describe 'gitaly' do
   end
 
   context 'with some defaults overridden with custom configuration' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb(
         gitaly: {
@@ -334,6 +359,8 @@ RSpec.describe 'gitaly' do
   end
 
   context 'with default settings' do
+    cached(:chef_run) { gitaly_chef_run }
+
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab_rails']['repositories_storages'])
         .to eql('default' => { 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' })
@@ -346,6 +373,8 @@ RSpec.describe 'gitaly' do
   end
 
   context 'with user settings' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb(
         gitaly: {
@@ -584,6 +613,8 @@ RSpec.describe 'gitaly' do
     end
 
     context 'with cgroups v2' do
+      cached(:chef_run) { gitaly_chef_run }
+
       before do
         allow(Gitaly).to receive(:cgroups_v2?).and_return true
       end
@@ -597,6 +628,8 @@ RSpec.describe 'gitaly' do
     end
 
     context 'with cgroups v1' do
+      cached(:chef_run) { gitaly_chef_run }
+
       before do
         allow(Gitaly).to receive(:cgroups_v2?).and_return false
       end
@@ -618,6 +651,8 @@ RSpec.describe 'gitaly' do
 
     context 'when use_wrapper is defined' do
       context 'with wrapper enabled' do
+        cached(:chef_run) { gitaly_chef_run }
+
         before do
           stub_gitlab_rb(gitaly: { use_wrapper: true })
         end
@@ -629,6 +664,8 @@ RSpec.describe 'gitaly' do
       end
 
       context 'with wrapper disabled' do
+        cached(:chef_run) { gitaly_chef_run }
+
         before do
           stub_gitlab_rb(gitaly: { use_wrapper: false })
         end
@@ -641,6 +678,8 @@ RSpec.describe 'gitaly' do
     end
 
     context 'when storages are left to defaults' do
+      cached(:chef_run) { gitaly_chef_run }
+
       before do
         stub_gitlab_rb(
           gitaly: {
@@ -668,6 +707,8 @@ RSpec.describe 'gitaly' do
     context 'when storages are correctly configured' do
       context 'using local gitaly' do
         context 'with git_data_dirs' do
+          cached(:chef_run) { gitaly_chef_run }
+
           before do
             stub_gitlab_rb(
               gitaly: {
@@ -698,6 +739,8 @@ RSpec.describe 'gitaly' do
         end
 
         context "with gitaly['configuration']['storage']" do
+          cached(:chef_run) { gitaly_chef_run }
+
           before do
             stub_gitlab_rb(
               gitaly: {
@@ -734,6 +777,8 @@ RSpec.describe 'gitaly' do
 
       context 'using external gitaly' do
         context 'with git_data_dirs' do
+          cached(:chef_run) { gitaly_chef_run }
+
           before do
             stub_gitlab_rb(
               gitaly: {
@@ -755,6 +800,8 @@ RSpec.describe 'gitaly' do
         end
 
         context 'with repositories_storages' do
+          cached(:chef_run) { gitaly_chef_run }
+
           before do
             stub_gitlab_rb(
               gitaly: {
@@ -779,6 +826,8 @@ RSpec.describe 'gitaly' do
 
       # https://gitlab.com/gitlab-org/gitlab-qa/-/blob/50425989c764e135ca92a6276583581e2cffd35e/lib/gitlab/qa/scenario/test/instance/repository_storage.rb#L44
       context 'using a default storage on an external gitaly' do
+        cached(:chef_run) { gitaly_chef_run }
+
         before do
           stub_gitlab_rb(
             gitaly: {
@@ -843,6 +892,8 @@ RSpec.describe 'gitaly' do
     end
 
     context 'when different storages on separate nodes have the same path' do
+      cached(:chef_run) { gitaly_chef_run }
+
       before do
         stub_gitlab_rb(
           gitaly: {
@@ -881,6 +932,10 @@ RSpec.describe 'gitaly' do
         let(:symlink_path) { File.join(other_dir, 'symlink') }
 
         context 'when Gitaly is not enabled' do
+          # Converge the disable recipe - enable would run the storage
+          # validation regardless of the stub, breaking this test.
+          cached(:chef_run) { gitaly_chef_run('gitaly::disable') }
+
           before do
             File.symlink(real_path, symlink_path)
             stub_gitlab_rb(
@@ -920,6 +975,8 @@ RSpec.describe 'gitaly' do
         end
 
         context 'when Gitaly is enabled' do
+          cached(:chef_run) { gitaly_chef_run }
+
           before do
             File.symlink(real_path, symlink_path)
             stub_gitlab_rb(
@@ -961,6 +1018,8 @@ RSpec.describe 'gitaly' do
 
     context 'when using repositories_storages and Gitaly storage configuration' do
       context 'using local gitaly' do
+        cached(:chef_run) { gitaly_chef_run }
+
         before do
           stub_gitlab_rb(
             gitaly: {
@@ -1001,6 +1060,8 @@ RSpec.describe 'gitaly' do
       end
 
       context 'using external gitaly' do
+        cached(:chef_run) { gitaly_chef_run }
+
         before do
           stub_gitlab_rb(
             gitaly: {
@@ -1025,8 +1086,13 @@ RSpec.describe 'gitaly' do
   end
 
   context 'when gitaly is disabled' do
+    cached(:chef_run) { gitaly_chef_run('gitaly::disable') }
+
     before do
       stub_gitlab_rb(gitaly: { enable: false })
+      # The 'disabled runit service' shared example sets this stub inside an
+      # `it` block; the cached converge needs it set up in advance.
+      allow_any_instance_of(Chef::Provider::RunitService).to receive(:enabled?).and_return(true)
     end
 
     it_behaves_like "disabled runit service", "gitaly"
@@ -1041,6 +1107,8 @@ RSpec.describe 'gitaly' do
 
   context 'when not using concurrency configuration' do
     context 'when max_queue_size and max_queue_wait are empty' do
+      cached(:chef_run) { gitaly_chef_run }
+
       before do
         stub_gitlab_rb(
           {
@@ -1068,6 +1136,8 @@ RSpec.describe 'gitaly' do
     end
 
     context 'when max_per_repo is empty' do
+      cached(:chef_run) { gitaly_chef_run }
+
       before do
         stub_gitlab_rb(
           {
@@ -1094,6 +1164,8 @@ RSpec.describe 'gitaly' do
     end
 
     context 'when max_queue_wait is set' do
+      cached(:chef_run) { gitaly_chef_run }
+
       before do
         stub_gitlab_rb(
           {
@@ -1119,12 +1191,16 @@ RSpec.describe 'gitaly' do
   end
 
   context 'populates default env variables' do
+    cached(:chef_run) { gitaly_chef_run }
+
     it 'creates necessary env variable files' do
       expect(chef_run).to create_env_dir('/opt/gitlab/etc/gitaly/env').with_variables(default_vars)
     end
   end
 
   context 'computes env variables based on other values' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb(
         {
@@ -1148,6 +1224,8 @@ RSpec.describe 'gitaly' do
 
   context 'with a non-default workhorse unix socket' do
     context 'with only a listen address set' do
+      cached(:chef_run) { gitaly_chef_run }
+
       before do
         stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/fake/workhorse/socket' })
       end
@@ -1159,6 +1237,8 @@ RSpec.describe 'gitaly' do
     end
 
     context 'with only a socket directory set' do
+      cached(:chef_run) { gitaly_chef_run }
+
       before do
         stub_gitlab_rb(gitlab_workhorse: { sockets_directory: '/fake/workhorse/sockets' })
       end
@@ -1170,6 +1250,8 @@ RSpec.describe 'gitaly' do
     end
 
     context 'with a listen_address and a sockets_directory set' do
+      cached(:chef_run) { gitaly_chef_run }
+
       before do
         stub_gitlab_rb(gitlab_workhorse: { listen_addr: '/sockets/in/the/wind', sockets_directory: '/sockets/in/the' })
       end
@@ -1182,6 +1264,8 @@ RSpec.describe 'gitaly' do
   end
 
   context 'with a tcp workhorse listener' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb(
         external_url: 'http://example.com/gitlab',
@@ -1201,6 +1285,8 @@ RSpec.describe 'gitaly' do
   end
 
   context 'with relative path in external_url' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb(external_url: 'http://example.com/gitlab')
     end
@@ -1223,6 +1309,8 @@ RSpec.describe 'gitaly' do
   end
 
   context 'with custom gitlab values' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb(
         gitaly: {
@@ -1246,7 +1334,7 @@ RSpec.describe 'gitaly' do
 end
 
 RSpec.describe 'gitaly::git_data_dirs' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'gitaly::enable') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -1266,7 +1354,11 @@ RSpec.describe 'gitaly::git_data_dirs' do
 end
 
 RSpec.describe 'git_data_dirs configuration' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  def gitaly_chef_run
+    ChefSpec::SoloRunner.converge('gitlab-base::config', 'gitaly::enable')
+  end
+
+  let(:chef_run) { gitaly_chef_run }
   let(:config_path) { '/var/opt/gitlab/gitaly/config.toml' }
 
   before do
@@ -1274,6 +1366,8 @@ RSpec.describe 'git_data_dirs configuration' do
   end
 
   context 'when user has not specified git_data_dir' do
+    cached(:chef_run) { gitaly_chef_run }
+
     it 'correctly sets the repository storage directories' do
       expect(chef_run.node['gitlab']['gitlab_rails']['repositories_storages'])
         .to eql('default' => { 'gitaly_address' => 'unix:/var/opt/gitlab/gitaly/gitaly.socket' })
@@ -1286,6 +1380,8 @@ RSpec.describe 'git_data_dirs configuration' do
   end
 
   context 'when gitaly is set to use a listen_addr' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb(git_data_dirs: {
                        'default' => {
@@ -1311,6 +1407,8 @@ RSpec.describe 'git_data_dirs configuration' do
   end
 
   context 'when gitaly is set to use a tls_listen_addr' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb(git_data_dirs: {
                        'default' => {
@@ -1336,6 +1434,8 @@ RSpec.describe 'git_data_dirs configuration' do
   end
 
   context 'when both tls and socket' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb(git_data_dirs: {
                        'default' => {
@@ -1361,6 +1461,8 @@ RSpec.describe 'git_data_dirs configuration' do
   end
 
   context 'when git_data_dirs is set to multiple directories' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb({
                        git_data_dirs: {
@@ -1386,6 +1488,8 @@ RSpec.describe 'git_data_dirs configuration' do
   end
 
   context 'when git_data_dirs is set to multiple directories with different gitaly addresses' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb({
                        git_data_dirs: {
@@ -1411,6 +1515,8 @@ RSpec.describe 'git_data_dirs configuration' do
   end
 
   context 'when path not defined in git_data_dirs' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       stub_gitlab_rb(
         {
@@ -1428,6 +1534,8 @@ RSpec.describe 'git_data_dirs configuration' do
   end
 
   context 'when git_data_dirs is set with symbol keys rather than string keys' do
+    cached(:chef_run) { gitaly_chef_run }
+
     before do
       with_symbol_keys = {
         default: { path: '/tmp/default/git-data' },

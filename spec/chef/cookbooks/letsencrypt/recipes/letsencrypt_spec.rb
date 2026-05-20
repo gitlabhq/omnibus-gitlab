@@ -39,7 +39,11 @@ RSpec.describe 'enabling letsencrypt' do
 end
 
 RSpec.describe 'letsencrypt::enable' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(nginx_configuration)).converge('gitlab::default') }
+  def letsencrypt_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(nginx_configuration)).converge('gitlab::default')
+  end
+
+  let(:chef_run) { letsencrypt_chef_run }
   let(:node) { chef_run.node }
 
   let(:https_redirect_block) { %r!server { ## HTTPS redirect server(.*)} ## end HTTPS redirect server!m }
@@ -133,6 +137,8 @@ RSpec.describe 'letsencrypt::enable' do
 
     context 'auto_renew' do
       context 'default' do
+        cached(:chef_run) { letsencrypt_chef_run }
+
         it 'enables crond' do
           expect(chef_run).to include_recipe('crond::enable')
         end
@@ -154,6 +160,8 @@ RSpec.describe 'letsencrypt::enable' do
       end
 
       context 'false' do
+        cached(:chef_run) { letsencrypt_chef_run }
+
         before do
           stub_gitlab_rb(letsencrypt: { enable: true, auto_renew: false })
           allow_any_instance_of(PgHelper).to receive(:is_standby?).and_return false

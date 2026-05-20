@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab-ee::geo-secondary_disable' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-base::config', 'gitlab-ee::geo-secondary_disable') }
   let(:database_yml_template) { chef_run.template('/var/opt/gitlab/gitlab-rails/etc/database.yml') }
   let(:database_yml_file_content) { ChefSpec::Renderer.new(chef_run, database_yml_template).content }
   let(:database_yml) { YAML.safe_load(database_yml_file_content, aliases: true, symbolize_names: true) }

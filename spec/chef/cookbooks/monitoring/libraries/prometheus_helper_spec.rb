@@ -23,7 +23,7 @@ RSpec.describe PrometheusHelper do
   context 'flags for prometheus' do
     context 'with default options' do
       it 'returns the correct default config string' do
-        chef_run.converge('gitlab::default')
+        chef_run.converge('gitlab-base::config', 'monitoring::prometheus')
         expect(subject.flags('prometheus')).to eq(
           '--web.listen-address=localhost:9090 --storage.tsdb.path=/var/opt/gitlab/prometheus/data --config.file=/var/opt/gitlab/prometheus/prometheus.yml')
       end
@@ -34,7 +34,7 @@ RSpec.describe PrometheusHelper do
 
       it 'does not return the correct string if any attributes have been changed' do
         chef_run.node.normal['monitoring']['prometheus']['home'] = '/fake/dir'
-        chef_run.converge('gitlab::default')
+        chef_run.converge('gitlab-base::config', 'monitoring::prometheus')
 
         expect(subject.flags('prometheus')).to eq(
           '--web.listen-address=localhost:9090 --storage.tsdb.path=/fake/dir/data --config.file=/fake/dir/prometheus.yml')

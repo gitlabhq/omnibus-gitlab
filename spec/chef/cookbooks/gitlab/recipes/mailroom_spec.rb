@@ -17,7 +17,16 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::mailroom' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink)).converge('gitlab::default') }
+  # Many mailroom tests assert on:
+  # - /var/opt/gitlab/gitlab-rails/etc/gitlab.yml (rendered by gitlab::gitlab-rails)
+  # - templatesymlink for gitlab_incoming_email_secret (gitlab::gitlab-rails)
+  # - /var/opt/gitlab/logrotate/logrotate.d/mailroom (logrotate::folders_and_configs)
+  # So this file needs more than just gitlab::mailroom.
+  def mailroom_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink)).converge('gitlab-base::config', 'gitlab::gitlab-rails', 'gitlab::mailroom', 'logrotate::folders_and_configs')
+  end
+
+  let(:chef_run) { mailroom_chef_run }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -213,6 +222,16 @@ RSpec.describe 'gitlab::mailroom' do
   end
 
   describe 'when disabled' do
+    # Converge the disable recipe; pre-apply the RunitService#enabled? stub
+    # that the 'disabled runit service' shared example sets inside an `it`.
+    cached(:chef_run) do
+      ChefSpec::SoloRunner.new(step_into: %w(runit_service templatesymlink)).converge('gitlab-base::config', 'gitlab::mailroom_disable')
+    end
+
+    before do
+      allow_any_instance_of(Chef::Provider::RunitService).to receive(:enabled?).and_return(true)
+    end
+
     it_behaves_like 'disabled runit service', 'mailroom'
   end
 
@@ -228,9 +247,17 @@ RSpec.describe 'gitlab::mailroom' do
         )
       end
 
-      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
-      it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
-      it_behaves_like 'enabled logged service', 'mailroom', true, { log_directory_owner: 'git' }
+      # Keep on let - the 'configured sidekiq delivery method' shared
+      # example calls `stub_gitlab_rb(delivery_method: 'sidekiq')` in its
+      # own `before`, which has to take effect before its converge.
+      context 'with default delivery method' do
+        cached(:chef_run) { mailroom_chef_run }
+
+        it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
+        it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
+        it_behaves_like 'enabled logged service', 'mailroom', true, { log_directory_owner: 'git' }
+      end
+
       it_behaves_like 'configured sidekiq delivery method'
     end
 
@@ -246,13 +273,20 @@ RSpec.describe 'gitlab::mailroom' do
         )
       end
 
-      it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
-      it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
-      it_behaves_like 'enabled logged service', 'mailroom', true, { log_directory_owner: 'git' }
+      context 'with default delivery method' do
+        cached(:chef_run) { mailroom_chef_run }
+
+        it_behaves_like 'enabled runit service', 'mailroom', 'root', 'root'
+        it_behaves_like 'configured logrotate service', 'mailroom', 'git', 'git'
+        it_behaves_like 'enabled logged service', 'mailroom', true, { log_directory_owner: 'git' }
+      end
+
       it_behaves_like 'configured sidekiq delivery method'
     end
 
     context 'default values' do
+      cached(:chef_run) { mailroom_chef_run }
+
       let(:config_sections) { %i[incoming_email] }
 
       before do
@@ -272,6 +306,8 @@ RSpec.describe 'gitlab::mailroom' do
     end
 
     context 'custom values' do
+      cached(:chef_run) { mailroom_chef_run }
+
       let(:config_sections) { %i[incoming_email] }
 
       before do
@@ -342,6 +378,8 @@ RSpec.describe 'gitlab::mailroom' do
   end
 
   context 'with specified exit_log_format' do
+    cached(:chef_run) { mailroom_chef_run }
+
     before do
       stub_gitlab_rb(
         gitlab_rails: {
@@ -362,6 +400,8 @@ RSpec.describe 'gitlab::mailroom' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { mailroom_chef_run }
+
       before do
         stub_gitlab_rb(gitlab_rails: { incoming_email_enabled: true })
       end
@@ -369,6 +409,8 @@ RSpec.describe 'gitlab::mailroom' do
     end
 
     context 'custom values' do
+      cached(:chef_run) { mailroom_chef_run }
+
       before do
         stub_gitlab_rb(
           gitlab_rails: {

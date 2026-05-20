@@ -3,7 +3,7 @@
 require 'chef_helper'
 
 RSpec.describe 'postgresql::bin' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'postgresql::bin') }
   let(:gitlab_psql_rc) do
     <<-EOF
 psql_user='gitlab-psql'

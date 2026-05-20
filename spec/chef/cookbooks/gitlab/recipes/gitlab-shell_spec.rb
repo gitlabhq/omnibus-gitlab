@@ -1,7 +1,11 @@
 require 'chef_helper'
 
 RSpec.describe 'gitlab::gitlab-shell' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab::default') }
+  def gitlab_shell_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab-base::config', 'gitlab::gitlab-shell')
+  end
+
+  let(:chef_run) { gitlab_shell_chef_run }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -23,6 +27,8 @@ RSpec.describe 'gitlab::gitlab-shell' do
   end
 
   context 'with default settings' do
+    cached(:chef_run) { gitlab_shell_chef_run }
+
     it 'create config file in default location with default values' do
       expect(chef_run).to create_templatesymlink('Create a config.yml and create a symlink to Rails root').with_variables(
         hash_including(
@@ -69,6 +75,8 @@ RSpec.describe 'gitlab::gitlab-shell' do
   end
 
   context 'when using the default auth_file location' do
+    cached(:chef_run) { gitlab_shell_chef_run }
+
     before { stub_gitlab_rb(user: { home: '/tmp/user' }) }
 
     it 'creates the ssh dir in the user\'s home directory' do
@@ -85,6 +93,8 @@ RSpec.describe 'gitlab::gitlab-shell' do
   end
 
   context 'when using a different location for auth_file' do
+    cached(:chef_run) { gitlab_shell_chef_run }
+
     before { stub_gitlab_rb(user: { home: '/tmp/user' }, gitlab_shell: { auth_file: '/tmp/ssh/authorized_keys' }) }
 
     it 'creates the ssh dir in the user\'s home directory' do
@@ -253,10 +263,19 @@ RSpec.describe 'gitlab::gitlab-shell' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { gitlab_shell_chef_run }
+
       it_behaves_like 'enabled logged service', 'gitlab-shell', false, { log_directory_owner: 'git' }
     end
 
     context 'custom values' do
+      # 'configured logrotate service' shared example asserts on
+      # /var/opt/gitlab/logrotate/logrotate.d/gitlab-shell, rendered by
+      # logrotate::folders_and_configs (not gitlab::gitlab-shell).
+      cached(:chef_run) do
+        ChefSpec::SoloRunner.new(step_into: %w(templatesymlink runit_service)).converge('gitlab-base::config', 'gitlab::gitlab-shell', 'logrotate::folders_and_configs')
+      end
+
       before do
         stub_gitlab_rb(
           gitlab_shell: {
@@ -289,6 +308,8 @@ RSpec.describe 'gitlab::gitlab-shell' do
     end
 
     context 'with default host key and cert globs' do
+      cached(:chef_run) { gitlab_shell_chef_run }
+
       let(:host_key) { %w(/tmp/host_keys/ssh_key) }
       let(:default_host_key_glob) { '/var/opt/gitlab/gitlab-sshd/ssh_host_*_key' }
       let(:default_host_cert_glob) { '/var/opt/gitlab/gitlab-sshd/ssh_host_*-cert.pub' }
@@ -396,10 +417,14 @@ RSpec.describe 'gitlab::gitlab-shell' do
 
     context 'log directory and runit group' do
       context 'default values' do
+        cached(:chef_run) { gitlab_shell_chef_run }
+
         it_behaves_like 'enabled logged service', 'gitlab-sshd', false, { log_directory_owner: 'git' }
       end
 
       context 'custom values' do
+        cached(:chef_run) { gitlab_shell_chef_run }
+
         before do
           stub_gitlab_rb(
             gitlab_sshd: {

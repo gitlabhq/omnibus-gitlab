@@ -58,14 +58,17 @@ RSpec.describe 'package::runit' do
   end
 
   context 'explicitly disabled' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+    # This context asserts `include_recipe` is *not* called for the
+    # runit_* sub-recipes, so set the node attr directly instead of
+    # routing through stub_gitlab_rb + gitlab-base::config.
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new do |node|
+        node.normal['package']['detect_init'] = false
+      end.converge('package::runit')
+    end
 
     before do
-      stub_gitlab_rb(
-        package: {
-          detect_init: false
-        }
-      )
+      allow_any_instance_of(Chef::Recipe).to receive(:include_recipe)
     end
 
     it 'does not run any recipe' do

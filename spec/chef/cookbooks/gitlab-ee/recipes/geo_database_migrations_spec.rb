@@ -7,6 +7,9 @@ require 'chef_helper'
 #
 
 RSpec.describe 'gitlab-ee::geo-database-migrations' do
+  # Needs gitlab-ee::default - `node['geo_postgresql']['enable']` only
+  # gets populated through the full geo_secondary_role dispatch chain
+  # that gates `rails_migration[gitlab-geo tracking]`'s notifications.
   let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
 
   before do

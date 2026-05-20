@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe RailsMigrationHelper do
-  cached(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  cached(:chef_run) { converge_config }
   subject(:helper) { described_class.new(chef_run.node) }
 
   context '#migrated?' do

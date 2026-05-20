@@ -6,7 +6,7 @@ RSpec.describe 'templatesymlink' do
   end
 
   context 'create' do
-    let(:chef_run) { runner.converge('test_package::templatesymlink_create') }
+    cached(:chef_run) { runner.converge('test_package::templatesymlink_create') }
 
     it 'creates symlinks' do
       expect(chef_run).to create_link('/opt/gitlab/embedded/service/gitlab-rails/config/database.yml')

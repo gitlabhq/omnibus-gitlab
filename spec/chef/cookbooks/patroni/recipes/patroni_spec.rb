@@ -6,9 +6,11 @@ RSpec.describe 'patroni cookbook' do
     allow(Gitlab).to receive(:[]).and_call_original
   end
 
-  let(:chef_run) do
+  def patroni_chef_run
     ChefSpec::SoloRunner.new(step_into: %w(database_objects)).converge('gitlab-ee::default')
   end
+
+  let(:chef_run) { patroni_chef_run }
 
   it 'should be disabled by default' do
     expect(chef_run).to include_recipe('patroni::disable')
@@ -260,6 +262,8 @@ RSpec.describe 'patroni cookbook' do
   end
 
   context 'when enabled with specific config' do
+    cached(:chef_run) { patroni_chef_run }
+
     before do
       stub_gitlab_rb(
         roles: %w(postgres_role),
@@ -409,6 +413,8 @@ RSpec.describe 'patroni cookbook' do
   end
 
   context 'when standby cluster is enabled' do
+    cached(:chef_run) { patroni_chef_run }
+
     before do
       stub_gitlab_rb(
         roles: %w(postgres_role),

@@ -1,7 +1,11 @@
 require 'chef_helper'
 
 RSpec.describe 'praefect' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab::default') }
+  def praefect_chef_run(recipe = 'praefect::enable')
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir)).converge('gitlab-base::config', recipe)
+  end
+
+  let(:chef_run) { praefect_chef_run }
   let(:prometheus_grpc_latency_buckets) do
     [0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]
   end
@@ -11,10 +15,19 @@ RSpec.describe 'praefect' do
   end
 
   context 'when the defaults are used' do
+    cached(:chef_run) { praefect_chef_run('praefect::disable') }
+
+    before do
+      # The 'disabled runit service' shared example sets this stub inside an
+      # `it` block; the cached converge needs it set up in advance.
+      allow_any_instance_of(Chef::Provider::RunitService).to receive(:enabled?).and_return(true)
+    end
+
     it_behaves_like 'disabled runit service', 'praefect'
   end
 
   context 'when praefect is enabled' do
+    cached(:chef_run) { praefect_chef_run }
     let(:config_path) { '/var/opt/gitlab/praefect/config.toml' }
     let(:env_dir) { '/opt/gitlab/etc/praefect/env' }
     let(:auth_transitioning) { false }
@@ -73,6 +86,8 @@ RSpec.describe 'praefect' do
     end
 
     context 'with defaults overridden with custom configuration' do
+      cached(:chef_run) { praefect_chef_run }
+
       before do
         stub_gitlab_rb(
           {
@@ -184,6 +199,8 @@ RSpec.describe 'praefect' do
     end
 
     context 'with custom settings' do
+      cached(:chef_run) { praefect_chef_run }
+
       let(:dir) { nil }
       let(:socket_path) { '/var/opt/gitlab/praefect/praefect.socket' }
       let(:auth_token) { 'secrettoken123' }
@@ -413,11 +430,17 @@ RSpec.describe 'praefect' do
     end
 
     describe 'database migrations' do
-      it 'runs the migrations' do
-        expect(chef_run).to run_bash('migrate praefect database')
+      context 'with auto_migrate on (default)' do
+        cached(:chef_run) { praefect_chef_run }
+
+        it 'runs the migrations' do
+          expect(chef_run).to run_bash('migrate praefect database')
+        end
       end
 
       context 'with auto_migrate off' do
+        cached(:chef_run) { praefect_chef_run }
+
         before { stub_gitlab_rb(praefect: { auto_migrate: false }) }
 
         it 'skips running the migrations' do
@@ -428,6 +451,8 @@ RSpec.describe 'praefect' do
 
     context 'log directory and runit group' do
       context 'default values' do
+        cached(:chef_run) { praefect_chef_run }
+
         before do
           stub_gitlab_rb(praefect: { enable: true })
         end
@@ -435,6 +460,8 @@ RSpec.describe 'praefect' do
       end
 
       context 'custom values' do
+        cached(:chef_run) { praefect_chef_run }
+
         before do
           stub_gitlab_rb(
             praefect: {

@@ -53,6 +53,8 @@ RSpec.describe 'registry_database_objects' do
   end
 
   context 'when backup and restore credentials are fully defined' do
+    cached(:chef_run) { chef_runner.converge('test_registry::registry_database_objects_run') }
+
     it 'creates the backup user with minimal privileges' do
       expect(chef_run).to create_postgresql_user('registry_backup').with(
         password: 'md5md5backuppassword',
@@ -147,6 +149,7 @@ RSpec.describe 'registry_database_objects' do
         'database_backup_password' => nil
       }
     end
+    cached(:chef_run) { chef_runner.converge('test_registry::registry_database_objects_run') }
 
     it 'does not create the backup user' do
       expect(chef_run).not_to create_postgresql_user('registry_backup')

@@ -6,7 +6,10 @@ require 'chef_helper'
 # to the resource block.
 
 RSpec.describe 'gitlab::database-migrations' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+  # `rails_migration[gitlab-rails]` in `gitlab::database_migrations` notifies
+  # `execute[clear the gitlab-rails cache]` (defined in `gitlab::gitlab-rails`),
+  # which must be in the converge so the notification target resolves.
+  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-base::config', 'gitlab::gitlab-rails', 'gitlab::database_migrations') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original

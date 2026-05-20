@@ -249,7 +249,7 @@ RSpec.describe Gitlab::Deprecations do
   end
 
   describe '.deprecate_only_if_value' do
-    let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab::default') }
+    let(:chef_run) { converge_config }
 
     before do
       allow(Gitlab).to receive(:[]).and_call_original

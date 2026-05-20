@@ -6,7 +6,7 @@ def get_env_string(username, groupname)
   env_string
 end
 
-RSpec.shared_examples 'enabled runit service' do |svc_name, owner, group, username = nil, groupname = nil, has_supervisor = nil|
+RSpec.shared_examples 'enabled runit service' do |svc_name, owner, group, username = nil, groupname = nil|
   it 'creates directories' do
     expect(chef_run).to create_directory("/opt/gitlab/sv/#{svc_name}").with(
       owner: owner,
@@ -73,28 +73,28 @@ RSpec.shared_examples 'enabled runit service' do |svc_name, owner, group, userna
   it 'creates the symlink to the service directory' do
     expect(chef_run).to create_link("/opt/gitlab/init/#{svc_name}").with(to: '/opt/gitlab/embedded/bin/sv')
   end
+end
 
-  context 'gitlab customization' do
-    # These are specs related to changes we have made to the upstream runit cookbook
-    before do
-      skip "Service does not have a supervisor" unless has_supervisor
-
-      %w(ok status control).each do |target|
-        file_name = ::File.join('/opt/gitlab/service', svc_name, 'log', 'supervise', target)
-        allow_any_instance_of(OmnibusHelper).to receive(:expected_owner?).with(file_name, username, groupname).and_return(false)
-      end
+# For services that pass `supervisor_owner` / `supervisor_group` to
+# runit_service. Asserts the supervise log files are touched with that
+# owner/group so a non-root user can run `sv status` etc.
+# See http://smarden.org/runit/faq.html#user
+RSpec.shared_examples 'runit service with supervisor owner' do |svc_name, supervisor_owner, supervisor_group|
+  before do
+    %w(ok status control).each do |target|
+      file_name = ::File.join('/opt/gitlab/service', svc_name, 'log', 'supervise', target)
+      allow_any_instance_of(OmnibusHelper).to receive(:expected_owner?).with(file_name, supervisor_owner, supervisor_group).and_return(false)
     end
+  end
 
-    it 'sets the supervise log files with correct permissions' do
-      # For some services, we set the ownership on the sv log files to allow supervisor_owner to run commands
-      expect(chef_run).to create_directory("/opt/gitlab/service/#{svc_name}/log/supervise").with(mode: '0755')
-      %w(ok status control).each do |target|
-        file_name = ::File.join('/opt/gitlab/service', svc_name, 'log', 'supervise', target)
-        expect(chef_run).to touch_file(file_name).with(
-          owner: username,
-          group: groupname
-        )
-      end
+  it 'sets the supervise log files with correct permissions' do
+    expect(chef_run).to create_directory("/opt/gitlab/service/#{svc_name}/log/supervise").with(mode: '0755')
+    %w(ok status control).each do |target|
+      file_name = ::File.join('/opt/gitlab/service', svc_name, 'log', 'supervise', target)
+      expect(chef_run).to touch_file(file_name).with(
+        owner: supervisor_owner,
+        group: supervisor_group
+      )
     end
   end
 end

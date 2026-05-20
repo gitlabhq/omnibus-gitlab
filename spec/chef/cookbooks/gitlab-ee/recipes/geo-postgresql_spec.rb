@@ -1,7 +1,11 @@
 require 'chef_helper'
 
 RSpec.describe 'geo postgresql' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
+  def geo_postgresql_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'gitlab-ee::geo-postgresql')
+  end
+
+  let(:chef_run) { geo_postgresql_chef_run }
   let(:postgresql_conf) { '/var/opt/gitlab/geo-postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/geo-postgresql/data/runtime.conf' }
   let(:pg_hba_conf) { '/var/opt/gitlab/geo-postgresql/data/pg_hba.conf' }
@@ -68,6 +72,8 @@ RSpec.describe 'geo postgresql' do
       it_behaves_like 'enabled runit service', 'geo-postgresql', 'root', 'root'
 
       context 'when rendering postgresql.conf' do
+        cached(:chef_run) { geo_postgresql_chef_run }
+
         it 'correctly sets the shared_preload_libraries default setting' do
           expect(chef_run.node['gitlab']['geo_postgresql']['shared_preload_libraries']).to be_nil
 
@@ -113,6 +119,8 @@ RSpec.describe 'geo postgresql' do
         end
       end
       context 'when rendering runtime.conf' do
+        cached(:chef_run) { geo_postgresql_chef_run }
+
         it 'correctly sets the log_line_prefix default setting' do
           expect(chef_run.node['gitlab']['geo_postgresql']['log_line_prefix']).to be_nil
 
@@ -288,6 +296,8 @@ RSpec.describe 'geo postgresql' do
       end
 
       context 'when rendering postgresql.conf' do
+        cached(:chef_run) { geo_postgresql_chef_run }
+
         it 'sets the dynamic_shared_memory_type' do
           expect(chef_run).to render_file(
             postgresql_conf
@@ -315,6 +325,8 @@ RSpec.describe 'geo postgresql' do
       end
 
       context 'when rendering runtime.conf' do
+        cached(:chef_run) { geo_postgresql_chef_run }
+
         it 'correctly sets the log_line_prefix setting' do
           expect(chef_run.node['gitlab']['geo_postgresql']['log_line_prefix']).to eql('%a')
 
@@ -346,8 +358,15 @@ RSpec.describe 'geo postgresql' do
     end
 
     context 'when geo postgres is disabled' do
+      # Converge the disable recipe directly; pre-apply RunitService#enabled?
+      # for the 'disabled runit service' shared example.
+      cached(:chef_run) do
+        ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'gitlab-ee::geo-postgresql_disable')
+      end
+
       before do
         stub_gitlab_rb(geo_postgresql: { enable: false })
+        allow_any_instance_of(Chef::Provider::RunitService).to receive(:enabled?).and_return(true)
       end
 
       it_behaves_like 'disabled runit service', 'geo-postgresql'
@@ -356,7 +375,11 @@ RSpec.describe 'geo postgresql' do
 end
 
 RSpec.describe 'geo postgresql when version mismatches occur' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-ee::default') }
+  def geo_postgresql_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'gitlab-ee::geo-postgresql')
+  end
+
+  let(:chef_run) { geo_postgresql_chef_run }
   let(:postgresql_conf) { '/var/opt/gitlab/geo-postgresql/data/postgresql.conf' }
   let(:runtime_conf) { '/var/opt/gitlab/geo-postgresql/data/runtime.conf' }
 
@@ -427,6 +450,8 @@ RSpec.describe 'geo postgresql when version mismatches occur' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { geo_postgresql_chef_run }
+
       before do
         stub_gitlab_rb(geo_postgresql: { enable: true })
       end
@@ -434,6 +459,8 @@ RSpec.describe 'geo postgresql when version mismatches occur' do
     end
 
     context 'custom values' do
+      cached(:chef_run) { geo_postgresql_chef_run }
+
       before do
         stub_gitlab_rb(
           geo_postgresql: {

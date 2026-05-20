@@ -1,7 +1,11 @@
 require 'chef_helper'
 
 RSpec.describe 'monitoring::redis-exporter' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  def redis_exporter_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'monitoring::redis-exporter')
+  end
+
+  let(:chef_run) { redis_exporter_chef_run }
   let(:node) { chef_run.node }
   let(:default_vars) do
     {
@@ -33,6 +37,8 @@ RSpec.describe 'monitoring::redis-exporter' do
   end
 
   context 'when redis-exporter is enabled' do
+    cached(:chef_run) { redis_exporter_chef_run }
+
     let(:config_template) { chef_run.template('/opt/gitlab/sv/redis-exporter/log/config') }
 
     before do
@@ -70,6 +76,8 @@ RSpec.describe 'monitoring::redis-exporter' do
   end
 
   context 'when redis-exporter is enabled for an external Redis' do
+    cached(:chef_run) { redis_exporter_chef_run }
+
     let(:config_template) { chef_run.template('/opt/gitlab/sv/redis-exporter/log/config') }
 
     before do
@@ -115,6 +123,8 @@ RSpec.describe 'monitoring::redis-exporter' do
   end
 
   context 'with user provided settings' do
+    cached(:chef_run) { redis_exporter_chef_run }
+
     before do
       stub_gitlab_rb(
         redis_exporter: {
@@ -153,6 +163,8 @@ RSpec.describe 'monitoring::redis-exporter' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { redis_exporter_chef_run }
+
       before do
         stub_gitlab_rb(redis_exporter: { enable: true })
       end
@@ -160,6 +172,8 @@ RSpec.describe 'monitoring::redis-exporter' do
     end
 
     context 'custom values' do
+      cached(:chef_run) { redis_exporter_chef_run }
+
       before do
         stub_gitlab_rb(
           redis_exporter: {

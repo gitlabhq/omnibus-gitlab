@@ -1,7 +1,12 @@
 require 'chef_helper'
 
 RSpec.describe 'monitoring::postgres-exporter' do
-  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab::default') }
+  # Converge only the postgres-exporter recipe (smaller than 'gitlab::default').
+  def postgres_exporter_chef_run
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service)).converge('gitlab-base::config', 'monitoring::postgres-exporter')
+  end
+
+  let(:chef_run) { postgres_exporter_chef_run }
   let(:node) { chef_run.node }
   let(:default_vars) do
     {
@@ -69,6 +74,8 @@ RSpec.describe 'monitoring::postgres-exporter' do
   end
 
   context 'when postgres-exporter is enabled' do
+    cached(:chef_run) { postgres_exporter_chef_run }
+
     let(:config_template) { chef_run.template('/opt/gitlab/sv/postgres-exporter/log/config') }
 
     before do
@@ -149,6 +156,8 @@ RSpec.describe 'monitoring::postgres-exporter' do
   end
 
   context 'with user provided settings' do
+    cached(:chef_run) { postgres_exporter_chef_run }
+
     before do
       stub_gitlab_rb(
         postgres_exporter: {
@@ -195,6 +204,8 @@ RSpec.describe 'monitoring::postgres-exporter' do
 
   context 'log directory and runit group' do
     context 'default values' do
+      cached(:chef_run) { postgres_exporter_chef_run }
+
       before do
         stub_gitlab_rb(postgres_exporter: { enable: true })
       end
@@ -202,6 +213,8 @@ RSpec.describe 'monitoring::postgres-exporter' do
     end
 
     context 'custom values' do
+      cached(:chef_run) { postgres_exporter_chef_run }
+
       before do
         stub_gitlab_rb(
           postgres_exporter: {
