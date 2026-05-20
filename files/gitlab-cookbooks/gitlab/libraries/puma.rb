@@ -58,7 +58,15 @@ module Puma
       return 1 if Gitlab['node']['cpu'].nil?
 
       # lscpu may return 0 for total number of CPUs: https://github.com/chef/ohai/issues/1755
-      [Gitlab['node']['cpu']['total'].to_i, Gitlab['node']['cpu']['real'].to_i].max
+      ohai_cpus = [Gitlab['node']['cpu']['total'].to_i, Gitlab['node']['cpu']['real'].to_i].max
+
+      # Ohai reads physical host CPU count and is unaware of cgroup CPU limits
+      # (e.g. in LXC/Docker containers). `nproc` is cgroup-aware and reflects
+      # the effective CPU count available to the process. Take the minimum so
+      # that container CPU limits are always respected.
+      # See: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/9830
+      nproc = nproc_cpu_count
+      nproc.positive? ? [ohai_cpus, nproc].min : ohai_cpus
     end
 
     # See how many worker processes fit in the system.
@@ -69,6 +77,12 @@ module Puma
     end
 
     private
+
+    def nproc_cpu_count
+      Integer(`nproc 2>/dev/null`.strip)
+    rescue StandardError
+      0
+    end
 
     def puma_socket
       user_config_or_default('socket')

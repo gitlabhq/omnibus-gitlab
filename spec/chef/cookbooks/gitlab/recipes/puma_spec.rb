@@ -402,6 +402,9 @@ RSpec.describe 'gitlab::puma with more CPUs' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    # Stub nproc to match the fixture's CPU count so the worker calculation
+    # is not affected by the actual CPU count of the CI runner.
+    allow(Puma).to receive(:nproc_cpu_count).and_return(16)
   end
 
   context 'when puma is enabled' do
@@ -430,6 +433,9 @@ RSpec.describe 'gitlab::puma with no total CPUs' do
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
+    # Stub nproc to match the fixture's CPU count so the worker calculation
+    # is not affected by the actual CPU count of the CI runner.
+    allow(Puma).to receive(:nproc_cpu_count).and_return(16)
   end
 
   context 'when puma is enabled' do

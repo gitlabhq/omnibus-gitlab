@@ -488,6 +488,12 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
       end.converge('gitlab-ee::default')
     end
 
+    before do
+      # Stub nproc to match the fixture CPU count so the worker calculation
+      # is not affected by the actual CPU count of the CI runner.
+      allow(Puma).to receive(:nproc_cpu_count).and_return(16)
+    end
+
     it 'reduces the number of puma workers on secondary node' do
       stub_gitlab_rb(geo_secondary_role: { enable: true })
 
