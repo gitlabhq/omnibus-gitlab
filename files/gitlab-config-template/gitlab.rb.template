@@ -1413,6 +1413,14 @@ external_url 'GENERATED_EXTERNAL_URL'
 # puma['enable'] = true
 # puma['ha'] = false
 # puma['worker_timeout'] = 60
+##! The number of Puma worker processes. When not set, this is calculated
+##! automatically as the minimum of:
+##!   - the number of CPUs available to the process (via `nproc`, which
+##!     respects cgroup CPU limits in LXC or Docker containers), and
+##!   - the number of workers that fit in available RAM (reserving 1.5 GB
+##!     for other processes, with ~1 GB per Puma worker).
+##! The result is clamped to a minimum of 2 (required for the web editor).
+##! Set this explicitly if auto-detection produces incorrect results.
 # puma['worker_processes'] = 2
 # puma['min_threads'] = 4
 # puma['max_threads'] = 4
