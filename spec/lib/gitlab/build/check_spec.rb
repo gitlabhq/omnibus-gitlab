@@ -239,7 +239,7 @@ RSpec.describe Build::Check do
       end
     end
 
-    context 'when using a a tag' do
+    context 'when using a tag' do
       before do
         stub_tag('1.2.3')
       end

@@ -28,7 +28,7 @@ RSpec.describe 'rails_migration' do
     end
 
     context 'when database has been migrated already' do
-      it 'doesnt execute the bash script' do
+      it 'does not execute the bash script' do
         expect_any_instance_of(RailsMigrationHelper).to receive(:migrated?) { true }
 
         expect(chef_run).not_to run_bash_hide_env('migrate gitlab-test database')

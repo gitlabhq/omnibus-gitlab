@@ -1,5 +1,5 @@
 # These tests confirm that calling the generate_secrets recipe works correctly
-# both when using the default path and and when using anoptional path to the
+# both when using the default path and when using an optional path to the
 # secrets file. It tests that the file is created and contains secrets. It does
 # not exhaustively test the resulting secrets file contents. Those tests are
 # left to secrets_helper_spec.rb.

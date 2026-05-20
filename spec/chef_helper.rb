@@ -108,7 +108,7 @@ RSpec.configure do |config|
 
     stub_expected_owner?
 
-    # Reset the Gitlab config singelton
+    # Reset the Gitlab config singleton
     #
     # Gitlab.reset (from mixlib-config) should be enough, but we end up
     # undefining properties.

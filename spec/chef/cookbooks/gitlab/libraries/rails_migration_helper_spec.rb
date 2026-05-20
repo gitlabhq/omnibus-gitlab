@@ -11,7 +11,7 @@ RSpec.describe RailsMigrationHelper do
       expect(helper.migrated?).to be_truthy
     end
 
-    it 'returns false when status file doesnt exist' do
+    it 'returns false when status file does not exist' do
       allow(helper).to receive(:db_migrate_status_file) { File.join(fixture_path, 'migration/non-existent-migration') }
 
       expect(helper.migrated?).to be_falsey
