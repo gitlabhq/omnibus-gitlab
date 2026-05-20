@@ -239,7 +239,7 @@ RSpec.describe 'gitlab-ee::geo-secondary' do
                      gitlab_rails: { enable: true })
     end
 
-    it 'allows gitlab_rails to be overriden' do
+    it 'allows gitlab_rails to be overridden' do
       expect(chef_run.node['gitlab']['gitlab_rails']['enable']).to be true
     end
   end

@@ -17,7 +17,7 @@ RSpec.describe GitlabGeoHelper do
       expect(subject.migrated?).to eq true
     end
 
-    it 'returns false when migration file doesnt exist' do
+    it 'returns false when migration file does not exist' do
       allow(File).to receive(:exist?).with(state_file) { false }
 
       expect(subject.migrated?).to eq false
