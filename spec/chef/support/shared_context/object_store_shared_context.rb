@@ -11,6 +11,7 @@ RSpec.shared_context 'object storage config' do
       packages: { bucket: 'packages' },
       terraform_state: { enabled: false, bucket: 'terraform' },
       ci_secure_files: { bucket: 'ci_secure_files' },
+      agent_plan_content: { bucket: 'agent_plan_content' },
       uploads: { bucket: 'uploads' },
       pages: { bucket: 'pages' }
     }

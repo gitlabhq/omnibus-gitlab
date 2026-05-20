@@ -423,6 +423,16 @@ production: &base
       remote_directory: <%= quote(@ci_secure_files_object_store_remote_directory) %>
       connection: <%= @ci_secure_files_object_store_connection.to_json %>
 
+  ## Agent Plan Content
+  agent_plan_content:
+    enabled: <%= @agent_plan_content_enabled %>
+    # The location where agent plan content is stored (default: shared/agent_plan_content).
+    storage_path: <%= @agent_plan_content_storage_path %>
+    object_store:
+      enabled: <%= @agent_plan_content_object_store_enabled %>
+      remote_directory: <%= quote(@agent_plan_content_object_store_remote_directory) %>
+      connection: <%= @agent_plan_content_object_store_connection.to_json %>
+
   ## Container Registry
   registry:
     enabled: <%= @registry_enabled %>
