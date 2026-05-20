@@ -16,13 +16,14 @@ action :run do
     code <<-EOH
     set -e
 
-    LOG_FILE="#{logging_settings[:log_directory]}/db-migrations-$(date +%Y-%m-%d-%H-%M-%S).log"
+    LOG_FILE="#{logging_settings[:log_directory]}/db-migrations.log"
 
     umask 077
+    echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) registry database migrate up#{' -s' if skip_post_deployment} ===" >> ${LOG_FILE}
     /opt/gitlab/embedded/bin/registry database migrate up \
       #{'-s' if skip_post_deployment} \
       #{::File.join(node['registry']['dir'], 'config.yml')} \
-      2>& 1 | tee ${LOG_FILE}
+      2>& 1 | tee -a ${LOG_FILE}
 
     STATUS=${PIPESTATUS[0]}
     chown #{account_helper.registry_user}:#{account_helper.registry_group} ${LOG_FILE}
