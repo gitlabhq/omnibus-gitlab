@@ -20,7 +20,9 @@ RSpec.describe 'gitlab_com', type: :rake do
       end
 
       it 'prints warning' do
-        expect { Rake::Task['gitlab_com:deployer'].invoke }.to raise_error(SystemExit, "This task requires DEPLOYER_TRIGGER_TOKEN to be set")
+        expect { Rake::Task['gitlab_com:deployer'].invoke }
+          .to raise_error(SystemExit, "This task requires DEPLOYER_TRIGGER_TOKEN to be set")
+          .and output(/This task requires DEPLOYER_TRIGGER_TOKEN to be set/).to_stderr
       end
     end
 
@@ -62,7 +64,10 @@ RSpec.describe 'gitlab_com', type: :rake do
           it 'triggers deployment to the patch environment' do
             expect(DeployerHelper).to receive(:new).with('dummy-token', 'patch-environment', :master)
 
-            Rake::Task['gitlab_com:deployer'].invoke
+            expect { Rake::Task['gitlab_com:deployer'].invoke }
+              .to output(
+                %r{Ready to send trigger for environment\(s\): patch-environment.*Deployer build triggered at dummy-url on master for the patch-environment environment}m
+              ).to_stdout
           end
         end
       end
