@@ -1,7 +1,7 @@
 ---
 stage: GitLab Delivery
 group: Operate
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see <https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments>
 title: SMTP設定
 ---
 
@@ -12,13 +12,10 @@ title: SMTP設定
 
 {{< /details >}}
 
-SendmailまたはPostfix経由ではなく、SMTPサーバー経由でアプリケーションメールを送信する場合は、以下の設定情報を`/etc/gitlab/gitlab.rb`に追加し、`gitlab-ctl reconfigure`を実行します。
+SendmailまたはPostfixの代わりにSMTPサーバー経由でアプリケーションメールを送信したい場合は、以下の設定情報を`/etc/gitlab/gitlab.rb`に追加し、`gitlab-ctl reconfigure`を実行してください。
 
-{{< alert type="warning" >}}
-
-設定の処理中に予期しない動作が発生しないように、`smtp_password`にRubyまたはYAMLで使用されている文字列区切り文字（例: `'`）を含めないでください。
-
-{{< /alert >}}
+> [!warning]
+> `smtp_password`には、RubyまたはYAMLで使用される文字列デリミタ（例: `'`）を含めないでください。これは、設定の処理中に予期せぬ動作が発生するのを避けるためです。
 
 このページの最後に[構成例](#example-configurations)があります。
 
@@ -47,7 +44,7 @@ gitlab_rails['smtp_ca_file'] = '/path/to/your/cacert.pem'
 
 ## SMTP接続プール {#smtp-connection-pooling}
 
-次の設定で、SMTP接続プールを有効にできます:
+以下の設定でSMTP接続プールを有効にできます:
 
 ```ruby
 gitlab_rails['smtp_pool'] = true
@@ -55,46 +52,44 @@ gitlab_rails['smtp_pool'] = true
 
 これにより、Sidekiqワーカーは複数のジョブに対してSMTP接続を再利用できます。プール内の最大接続数は、[Sidekiqの最大並行処理設定](https://docs.gitlab.com/administration/sidekiq/extra_sidekiq_processes/#concurrency)に従います。
 
-## 暗号化された認証情報を使用する。 {#using-encrypted-credentials}
+## 暗号化された認証情報の使用 {#using-encrypted-credentials}
 
-SMTP認証情報をプレーンテキストとして設定ファイルに保存する代わりに、オプションで暗号化されたファイルをSMTP認証情報に使用できます。この機能を使用するには、まず[GitLab暗号化設定](https://docs.gitlab.com/administration/encrypted_configuration/)を有効にする必要があります。
+SMTP認証情報を設定ファイルに平文で保存する代わりに、オプションでSMTP認証情報に暗号化されたファイルを使用できます。この機能を使用するには、まず[GitLabの暗号化された設定](https://docs.gitlab.com/administration/encrypted_configuration/)を有効にする必要があります。
 
-SMTPの暗号化された設定は、暗号化されたYAMLファイルとして存在します。デフォルトでは、ファイルは`/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/smtp.yaml.enc`に作成されます。この場所はGitLabの設定で設定可能です。
+SMTPの暗号化された設定は、暗号化されたYAMLファイルに存在します。デフォルトでは、ファイルは`/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/smtp.yaml.enc`に作成されます。この場所はGitLabの設定で設定可能です。
 
-このファイルに含める暗号化されていない内容は、`gitlab_rails`設定ブロックの`smtp_*'`の設定のサブセットである必要があります。
+ファイルの暗号化されていないコンテンツは、`gitlab_rails`の設定ブロック内の`smtp_*'`設定のサブセットである必要があります。
 
-暗号化されたファイルでサポートされている設定項目は次のとおりです:
+暗号化されたファイルでサポートされている設定項目は次のとおりです。
 
 - `user_name`
 - `password`
 
 暗号化されたコンテンツは、[SMTPシークレット編集Rakeコマンド](https://docs.gitlab.com/administration/raketasks/smtp/)で設定できます。
 
-**設定**
+例えば、`/etc/gitlab/gitlab.rb`のSMTP設定が次のようになっている場合:
 
-最初にSMTP設定が次のようになっている場合:
+```ruby
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.server"
+gitlab_rails['smtp_port'] = 465
+gitlab_rails['smtp_user_name'] = "smtp user"
+gitlab_rails['smtp_password'] = "smtp password"
+gitlab_rails['smtp_domain'] = "example.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
+```
 
-1. `/etc/gitlab/gitlab.rb`で:
+再設定するには:
 
-   ```ruby
-   gitlab_rails['smtp_enable'] = true
-   gitlab_rails['smtp_address'] = "smtp.server"
-   gitlab_rails['smtp_port'] = 465
-   gitlab_rails['smtp_user_name'] = "smtp user"
-   gitlab_rails['smtp_password'] = "smtp password"
-   gitlab_rails['smtp_domain'] = "example.com"
-   gitlab_rails['smtp_authentication'] = "login"
-   gitlab_rails['smtp_enable_starttls_auto'] = true
-   gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
-   ```
-
-1. 暗号化されたシークレットを編集します:
+1. 暗号化されたシークレットを編集します。
 
    ```shell
    sudo gitlab-rake gitlab:smtp:secret:edit EDITOR=vim
    ```
 
-1. SMTPシークレットの暗号化されていないコンテンツは、次のように入力する必要があります:
+1. 暗号化されていないSMTPシークレットのコンテンツは、次のように入力します:
 
    ```yaml
    user_name: 'smtp user'
@@ -110,9 +105,9 @@ SMTPの暗号化された設定は、暗号化されたYAMLファイルとして
 
 ## 設定例 {#example-configurations}
 
-### ローカルマシン上のSMTP {#smtp-on-localhost}
+### ローカルホスト上のSMTP {#smtp-on-localhost}
 
-SMTPを有効にするだけで、それ以外はデフォルト設定を使用するこの設定は、`sendmail`インターフェースを提供しないか、Eximなど、GitLabと互換性のない`sendmail`インターフェースを提供するローカルマシン上で実行されているMTAに使用できます。
+SMTPを単に有効にし、それ以外はデフォルトの設定を使用するこの設定は、`sendmail`インターフェースを提供しない、またはGitLabと互換性のない`sendmail`インターフェースを提供するローカルホストで実行されているMTA（Eximなど）に使用できます。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -120,7 +115,7 @@ gitlab_rails['smtp_enable'] = true
 
 ### SSLなしのSMTP {#smtp-without-ssl}
 
-デフォルトでは、SSLはSMTPに対して有効になっています。SMTPサーバーがSSL経由の通信をサポートしていない場合は、次の設定を使用します:
+デフォルトでは、SMTPでSSLが有効になっています。SMTPサーバーがSSL経由での通信をサポートしていない場合は、以下の設定を使用します:
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -136,16 +131,13 @@ gitlab_rails['smtp_force_ssl'] = false
 
 ### Gmail {#gmail}
 
-前提要件: 
+前提条件: 
 
-- [2段階認証が有効](https://support.google.com/accounts/answer/185839)になっている。
-- [アプリパスワード](https://support.google.com/mail/answer/185833)。
+- [2段階認証が有効](https://support.google.com/accounts/answer/185839)。
+- an [アプリパスワード](https://support.google.com/mail/answer/185833)。
 
-{{< alert type="note" >}}
-
-Gmailには[厳格な送信制限](https://support.google.com/a/answer/166852)があり、組織が成長するにつれて機能が損なわれる可能性があります。SMTP設定を使用するチームには、[SendGrid](https://sendgrid.com/en-us)や[Mailgun](https://www.mailgun.com/)のようなトランザクションサービスを使用することを強くお勧めします。
-
-{{< /alert >}}
+> [!note]
+> Gmailには、組織の成長に伴い機能が損なわれる可能性のある[厳格な送信制限](https://support.google.com/a/answer/166852)があります。SMTP設定を使用するチームには、[SendGrid](https://sendgrid.com/en-us)や[Mailgun](https://www.mailgun.com/)などの通知サービスのご利用を強くお勧めします。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -160,11 +152,11 @@ gitlab_rails['smtp_tls'] = false
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer' # Can be: 'none', 'peer', 'client_once', 'fail_if_no_peer_cert', see http://api.rubyonrails.org/classes/ActionMailer/Base.html
 ```
 
-_`my.email@gmail.com`を自分のメールアドレスに、`my-gmail-password`を自分のパスワードに必ず変更してください。_
+_`my.email@gmail.com`をあなたのメールアドレスに、`my-gmail-password`をあなたのパスワードに変更するのを忘れないでください。_
 
 ### Google SMTPリレー {#google-smtp-relay}
 
-Google SMTPリレーサービスを使用すると、Gmail以外の送信メッセージをGoogle経由で[ルーティングできます](https://support.google.com/a/answer/2956491?hl=en)。
+Google [SMTPリレーサービス](https://support.google.com/a/answer/2956491?hl=en)を使用して、Gmail以外の送信メッセージをGoogle経由でルーティングできます。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -188,7 +180,7 @@ gitlab_rails['smtp_password'] = "password"
 gitlab_rails['smtp_domain'] = "mg.gitlab.com"
 ```
 
-### Amazon SimpleメールService (AWS SES) {#amazon-simple-email-service-aws-ses}
+### Amazon Simple Email Service (AWS SES) {#amazon-simple-email-service-aws-ses}
 
 - STARTTLSの使用
 
@@ -203,7 +195,7 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
-ACLおよびセキュリティグループでポート587経由のエグレスを許可するようにしてください。
+ACLおよびセキュリティグループで、ポート587を介したエグレスを許可するようにしてください。
 
 - TLSラッパーの使用
 
@@ -219,7 +211,7 @@ gitlab_rails['smtp_ssl'] = true
 gitlab_rails['smtp_force_ssl'] = true
 ```
 
-ACLおよびセキュリティグループでポート465経由のエグレスを許可するようにしてください。
+ACLおよびセキュリティグループで、ポート465を介したエグレスを許可するようにしてください。
 
 ### Mandrill {#mandrill}
 
@@ -235,12 +227,12 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 
 ### SMTP.com {#smtpcom}
 
-[SMTP.com](https://www.smtp.com/)メールサービスを利用できます。[送信者のログイン名とパスワードを](https://knowledge.smtp.com/s/article/My-Account)アカウントから取得します。
+[SMTP.com](https://www.smtp.com/)のメールサービスを使用できます。アカウントから[送信者のログイン情報とパスワードを取得](https://knowledge.smtp.com/s/article/My-Account)します。
 
-`SMTP.com`がドメインの代わりにメールを送信することを承認して配信を改善するには、以下を実行する必要があります:
+ドメインに代わって`SMTP.com`がメールを送信することを承認して配信を改善するには、以下を行う必要があります:
 
-- GitLabドメイン名を使用して`from`アドレスと`reply_to`アドレスを指定します。
-- [ドメインのSPFとDKIMをセットアップ](https://knowledge.smtp.com/s/article/Email-authentication-SPF-DKIM-DMARC)します。
+- GitLabのドメイン名を使用して`from`および`reply_to`アドレスを指定します。
+- [ドメインのSPFとDKIMを設定](https://knowledge.smtp.com/s/article/Email-authentication-SPF-DKIM-DMARC)します。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -284,9 +276,9 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@domain.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@domain.com'
 ```
 
-### Zohoメール {#zoho-mail}
+### Zoho Mail {#zoho-mail}
 
-この設定は、カスタムドメインを使用したZohoメールでテストされています。
+この設定は、カスタムドメインのZoho Mailでテストされました。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -301,7 +293,7 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
-### SiteAge, LLC Zimbraメール {#siteage-llc-zimbra-mail}
+### SiteAge, LLC Zimbra Mail {#siteage-llc-zimbra-mail}
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -388,17 +380,17 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 
 ### Prolateral outMail {#prolateral-outmail}
 
-Prolateralの[outMail](https://www.prolateral.com/email-services/outmail-outgoing-smtp/outmail-outgoing-smtp-server.html)サービスを使用できます。
+Prolateralが提供する[outMail](https://www.prolateral.com/email-services/outmail-outgoing-smtp/outmail-outgoing-smtp-server.html)サービスを使用できます。
 
-outMailにドメインの代わりにメールを送信することを承認して配信を改善するには、以下を実行する必要があります:
+ドメインに代わってoutMailがメールを送信することを承認して配信を改善するには、以下を行う必要があります:
 
-- GitLabドメイン名を使用して、有効な送信元アドレスと返信先アドレスを指定します。
-- outMailを含めるように、有効な[SPF（送信者ポリシーフレームワーク）](https://www.prolateral.com/help/kb/dns-engine/457-what-is-a-spf-record.html)レコードをセットアップします。
-- GitLabメールに署名するために、outMailで[DKIM（DomainKeys Identified Mail）](https://www.prolateral.com/help/kb/outmail/643-how-do-i-enable-dkim-signing-of-emails-through-outmail.html)を有効にします。
+- GitLabのドメイン名を使用して、有効なfromおよびreply_toアドレスを指定します。
+- outMailを含めるように、有効な[SPF (Sender Policy Framework)](https://www.prolateral.com/help/kb/dns-engine/457-what-is-a-spf-record.html)レコードを設定します。
+- outMailでGitLabのメールに[DKIM (DomainKeys Identified Mail)](https://www.prolateral.com/help/kb/outmail/643-how-do-i-enable-dkim-signing-of-emails-through-outmail.html)署名ができるようにします。
 
-ドメイン名のメールの責任ある送信者として、[DMARC（ドメインベースのメッセージ認証、レポート、および準拠）](https://www.prolateral.com/help/kb/outmail/647-what-is-dmarc-what-is-its-purpose-and-why-it-is-important.html)ポリシーを追加することも検討する必要があります。
+ドメイン名のメールの責任ある送信者として、[DMARC (Domain-based Message Authentication, Reporting, and Conformance)](https://www.prolateral.com/help/kb/outmail/647-what-is-dmarc-what-is-its-purpose-and-why-it-is-important.html)ポリシーの追加も検討してください。
 
-outMailサービスの詳細にアクセスするには、Prolateral管理ポータルにログインし、outMailサービスの設定に移動して、次の適切な値でGitLabを設定します:
+outMailサービスの詳細にアクセスするには、Prolateral管理ポータルにログインし、outMailサービスの設定に移動して、GitLabを次のように適切な値で設定します:
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -465,7 +457,7 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 
 ### QQ exmail {#qq-exmail}
 
-QQ exmail（腾讯企业邮箱）
+QQ exmail (腾讯企业邮箱)
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -480,9 +472,9 @@ gitlab_rails['gitlab_email_from'] = 'xxxx@xx.com'
 gitlab_rails['smtp_domain'] = "exmail.qq.com"
 ```
 
-### NetEase Free Enterpriseメール {#netease-free-enterprise-email}
+### NetEase Free Enterprise Email {#netease-free-enterprise-email}
 
-NetEase Free Enterpriseメール（网易免费企业邮）
+NetEase Free Enterprise Email (网易免费企业邮)
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -532,13 +524,13 @@ gitlab_rails['gitlab_email_from'] = 'email@sender_owner_api'
 gitlab_rails['gitlab_email_reply_to'] = 'email@sender_owner_reply_api'
 ```
 
-`smtp_user_name`は文字どおり`"apikey"`に設定する必要があることに注意してください。作成したAPIキーは、`smtp_password`に入力する必要があります。
+`smtp_user_name`は文字通り`"apikey"`に設定する必要があります。作成したAPIキーは`smtp_password`に入力する必要があります。
 
 ### Brevo {#brevo}
 
-この設定は、Brevo [SMTPリレーサービス](https://www.brevo.com/free-smtp-server/)でテストされています。この例にコメントされているURLを介して関連するアカウント認証情報を取得するには、[Brevoアカウントにログインしてください](https://login.brevo.com)。
+この設定はBrevo [SMTPリレーサービス](https://www.brevo.com/free-smtp-server/)でテストされました。この例にコメントされているURLを介して関連するアカウント認証情報を取得するには、[Brevoアカウントにログイン](https://login.brevo.com)します。
 
-詳細については、Brevo [ヘルプページ](https://help.brevo.com/hc/en-us/articles/209462765-What-is-Brevo-SMTP)を参照してください。
+詳細については、Brevoの[ヘルプページ](https://help.brevo.com/hc/en-us/articles/209462765-What-is-Brevo-SMTP)を参照してください。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -556,7 +548,7 @@ gitlab_rails['gitlab_email_reply_to'] = '<noreply@example.com>'
 
 ### SMTP2GO {#smtp2go}
 
-この設定は、[SMTP2GO](https://www.smtp2go.com/)を使用してテストされています。この例にコメントされているURLを使用して関連するアカウント認証情報を取得するには、[SMTP2GOアカウントにサインイン](https://app.smtp2go.com/login/)します。
+この設定は[SMTP2GO](https://www.smtp2go.com/)を使用してテストされました。この例にコメントされているURLを使用して関連するアカウント認証情報を取得するには、[SMTP2GOアカウントにサインイン](https://app.smtp2go.com/login/)します。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -599,7 +591,7 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
-### Microsoft Exchange（認証なし） {#microsoft-exchange-no-authentication}
+### Microsoft Exchange (認証なし) {#microsoft-exchange-no-authentication}
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -609,7 +601,7 @@ gitlab_rails['smtp_domain'] = "example.com"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
-### Microsoft Exchange（認証あり） {#microsoft-exchange-with-authentication}
+### Microsoft Exchange (認証あり) {#microsoft-exchange-with-authentication}
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -685,9 +677,9 @@ gitlab_rails['smtp_ssl'] = true
 
 ### GoDaddy (TLS) {#godaddy-tls}
 
-- ヨーロッパサーバー: smtpout.europe.secureserver.net
-- アジアサーバー: smtpout.asia.secureserver.net
-- グローバル（US）サーバー: smtpout.secureserver.net
+- ヨーロッパのサーバー: smtpout.europe.secureserver.net
+- アジアのサーバー: smtpout.asia.secureserver.net
+- グローバル (米国) サーバー: smtpout.secureserver.net
 
 ```ruby
 gitlab_rails['gitlab_email_from'] = 'username@domain.com'
@@ -703,9 +695,9 @@ gitlab_rails['smtp_enable_starttls_auto'] = false
 gitlab_rails['smtp_tls'] = true
 ```
 
-### GoDaddy（TLSなし） {#godaddy-no-tls}
+### GoDaddy (TLSなし) {#godaddy-no-tls}
 
-メールサーバーリストについては、上記のGoDaddy（TLS）エントリを参照してください。
+メールサーバーのリストについては、上記のGoDaddy (TLS) エントリを参照してください。
 
 ```ruby
 gitlab_rails['gitlab_email_from'] = 'username@domain.com'
@@ -752,7 +744,7 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_ssl'] = true
 ```
 
-### Alibaba Cloud Directメール（TLSなし） {#alibaba-cloud-direct-mail-no-tls}
+### Alibaba Cloud Direct Mail (TLSなし) {#alibaba-cloud-direct-mail-no-tls}
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -768,7 +760,7 @@ gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 gitlab_rails['gitlab_email_from'] = "<username@example.com>"         # Email domain configured in Direct Mail
 ```
 
-### Alibaba Cloud Directメール（TLS） {#alibaba-cloud-direct-mail-tls}
+### Alibaba Cloud Direct Mail (TLS) {#alibaba-cloud-direct-mail-tls}
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -783,9 +775,9 @@ gitlab_rails['smtp_tls'] = true
 gitlab_rails['gitlab_email_from'] = "<username@example.com>"         # Email domain configured in Direct Mail
 ```
 
-### Aliyun Directメール {#aliyun-direct-mail}
+### Aliyun Direct Mail {#aliyun-direct-mail}
 
-Aliyun Directメール（阿里云邮件推送）
+Aliyun Direct Mail (阿里云邮件推送)
 
 ```ruby
 gitlab_rails['gitlab_email_from'] = 'username@your domain'
@@ -798,9 +790,9 @@ gitlab_rails['smtp_domain'] = "your domain"
 gitlab_rails['smtp_authentication'] = "login"
 ```
 
-### TLSを使用したAliyun Enterpriseメール {#aliyun-enterprise-mail-with-tls}
+### Aliyun Enterprise Mail (TLSあり) {#aliyun-enterprise-mail-with-tls}
 
-TLSを使用したAliyun Enterpriseメール（阿里企业邮箱）
+Aliyun Enterprise Mail with TLS (阿里企业邮箱)
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -816,7 +808,7 @@ gitlab_rails['smtp_tls'] = true
 
 ### FastMail {#fastmail}
 
-FastMailでは、2段階認証が有効になっていなくても、[アプリパスワード](https://www.fastmail.help/hc/en-us/articles/360058752854-App-passwords)が必要です。
+FastMailは、2段階認証が有効になっていない場合でも、[アプリパスワード](https://www.fastmail.help/hc/en-us/articles/360058752854-App-passwords)が必要です。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -845,7 +837,7 @@ gitlab_rails['smtp_tls'] = false
 gitlab_rails['smtp_openssl_verify_mode'] = 'peer'
 ```
 
-### GMXメール {#gmx-mail}
+### GMX Mail {#gmx-mail}
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -999,9 +991,9 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 ```
 
-### easyDNS（送信メール） {#easydns-outbound-mail}
+### easyDNS (送信メール) {#easydns-outbound-mail}
 
-[コントロールパネル](https://cp.easydns.com/manage/domains/mail/outbound/)で利用可能/有効になっているかどうかと、設定設定を確認します。
+[コントロールパネル](https://cp.easydns.com/manage/domains/mail/outbound/)で、それが利用可能/有効になっているか、および設定設定を確認してください。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1134,7 +1126,7 @@ gitlab_rails['gitlab_email_from'] = 'your-user@your-domain.de'
 
 ### AWS Workmail {#aws-workmail}
 
-[AWS Workmailドキュメント](https://docs.aws.amazon.com/workmail/latest/userguide/using_IMAP.html)から:
+[AWS WorkMailのドキュメント](https://docs.aws.amazon.com/workmail/latest/userguide/using_IMAP.html)より:
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1165,7 +1157,7 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@yourdomain'
 
 ### Uberspace 6 {#uberspace-6}
 
-[Uberspace Wiki](https://manual.uberspace.de/)から:
+[Uberspace Wiki](https://manual.uberspace.de/)より:
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1245,11 +1237,11 @@ gitlab_rails['gitlab_email_from'] = 'username@example.com'
 gitlab_rails['gitlab_email_reply_to'] = 'username@example.com'
 ```
 
-[ダッシュボード](https://docs.nifcloud.com/ess/help/dashboard.htm)から、SMTPユーザー名とSMTPユーザー名のパスワードを確認してください。`gitlab_email_from`と`gitlab_email_reply_to`は、ESS認証済みの送信者のメールアドレスである必要があります。
+ESS [ダッシュボード](https://docs.nifcloud.com/ess/help/dashboard.htm)からSMTPユーザー名とSMTPパスワードを確認してください。`gitlab_email_from`と`gitlab_email_reply_to`は、ESS認証済みの送信元メールアドレスである必要があります。
 
-### Sinaメール {#sina-mail}
+### Sina mail {#sina-mail}
 
-ユーザーは、最初にWebメールインターフェースを介してメールボックス設定からSMTPを有効にし、認証コードを取得する必要があります。詳細については、Sinaメールの[ヘルプページ](http://help.sina.com.cn/comquestiondetail/view/1566/)を参照してください。
+ユーザーはまず、Webメールインターフェース経由でメールボックスの設定からSMTPを有効にし、認証コードを取得する必要があります。Sinaメールの[ヘルプページ](http://help.sina.com.cn/comquestiondetail/view/1566/)で詳細を確認してください。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1263,9 +1255,9 @@ gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['gitlab_email_from'] = 'username@sina.com'
 ```
 
-### Feishuメール {#feishu-mail}
+### Feishu mail {#feishu-mail}
 
-詳細については、Feishuメールの[ヘルプページ](https://www.feishu.cn/hc/en-US/articles/360049068017-admin-allow-members-to-access-feishu-mail-using-third-party-email-clients)を参照してください。
+Feishuメールの[ヘルプページ](https://www.feishu.cn/hc/en-US/articles/360049068017-admin-allow-members-to-access-feishu-mail-using-third-party-email-clients)で詳細を確認してください。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1282,7 +1274,7 @@ gitlab_rails['smtp_tls'] = true
 
 ### Hostpoint {#hostpoint}
 
-Hostpointメールの詳細については、[ヘルプページ](https://support.hostpoint.ch/en/technical/e-mail/frequently-asked-questions/e-mail-settings-at-a-glance#hp-section3)を参照してください
+Hostpointメールの詳細については、[ヘルプページ](https://support.hostpoint.ch/en/technical/e-mail/frequently-asked-questions/e-mail-settings-at-a-glance#hp-section3)を参照してください。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1311,9 +1303,9 @@ gitlab_rails['smtp_tls'] = false
 gitlab_rails['smtp_openssl_verify_mode'] = 'none'
 ```
 
-### Scaleway Transactionalメール {#scaleway-transactional-email}
+### Scaleway通知メール {#scaleway-transactional-email}
 
-[ScalewayのTransactionalメール](https://www.scaleway.com/en/docs/transactional-email/how-to/generate-api-keys-for-tem-with-iam/)の詳細をご覧ください。
+[Scalewayの通知メール](https://www.scaleway.com/en/docs/transactional-email/how-to/generate-api-keys-for-tem-with-iam/)について詳しくはこちら。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1325,9 +1317,9 @@ gitlab_rails['smtp_authentication'] = "plain"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 ```
 
-### Protonメール {#proton-mail}
+### Proton Mail {#proton-mail}
 
-Protonドキュメント: [SMTPをセットアップして、Protonメールでビジネスアプリケーションまたはデバイスを使用する方法](https://proton.me/support/smtp-submission)
+Protonドキュメント: [Proton Mailでビジネスアプリケーションまたはデバイスを使用するためのSMTP設定方法](https://proton.me/support/smtp-submission)
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1344,7 +1336,7 @@ gitlab_rails['gitlab_email_reply_to'] = "<the Proton email address for which you
 
 ### Sendamatic {#sendamatic}
 
-Sendamaticの使用の詳細については、[Sendamatic Docs](https://docs.sendamatic.net)を参照してください。
+Sendamaticの使用に関する詳細については、[Sendamaticドキュメント](https://docs.sendamatic.net)を参照してください。
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1359,53 +1351,53 @@ gitlab_rails['gitlab_email_from'] = "example@<mail identity domain>"
 gitlab_rails['gitlab_email_reply_to'] = "example@<mail identity domain>"
 ```
 
-### 例をさらに募集しています {#more-examples-are-welcome}
+### その他の例を歓迎します {#more-examples-are-welcome}
 
-独自の構成例を理解した場合は、他のユーザーの時間を節約するためにマージリクエストを送信してください。
+自分で設定例を考案した場合は、他の人の時間を節約するためにマージリクエストを送信してください。
 
 ## SMTP設定のテスト {#testing-the-smtp-configuration}
 
-Railsコンソールを使用して、GitLabがメールを正しく送信できることを確認できます。GitLabサーバーで、`gitlab-rails console`を実行してコンソールに入ります。次に、コンソールプロンプトに次のコマンドを入力して、GitLabにテストメールを送信させることができます:
+GitLabがRailsコンソールを使用してメールを適切に送信できることを確認できます。GitLabサーバーで、`gitlab-rails console`を実行してコンソールに入ります。次に、コンソールプロンプトで次のコマンドを入力すると、GitLabからテストメールが送信されます:
 
 ```ruby
 Notify.test_email('destination_email@address.com', 'Message Subject', 'Message Body').deliver_now
 ```
 
-## SPF、DKIM、DMARCの設定 {#configuring-spf-dkim-and-dmarc}
+## SPF、DKIM、およびDMARCの設定 {#configuring-spf-dkim-and-dmarc}
 
-GitLabインスタンスでSMTPを設定したら、可能な限り次のプロトコルを設定する必要があります:
+GitLabインスタンスでSMTPを設定した後、以下のプロトコルを可能な限り多く設定してください:
 
-- [送信者ポリシーフレームワーク（SPF）](https://en.wikipedia.org/wiki/Sender_Policy_Framework)。
-- [DomainKeys Identified Mail（DKIM）](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail)。
-- [ドメインベースのメッセージ認証、レポート、および準拠（DMARC）](https://en.wikipedia.org/wiki/DMARC)。
+- [Sender Policy Framework (SPF)](https://en.wikipedia.org/wiki/Sender_Policy_Framework)。
+- [DomainKeys Identified Mail (DKIM)](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail)。
+- [Domain-based Message認証, Reporting and Conformance (DMARC)](https://en.wikipedia.org/wiki/DMARC)。
 
-これらのプロトコルは連携して、メール送信者の身元を確認し、メールスプーフィングを防止します。
+これらのプロトコルは連携してメール送信者のIDを検証し、メールスプーフィングを防ぎます。
 
-DNSプロバイダーは、設定できるプロトコルとその設定方法を決定します。例として、DNSプロバイダーがCloudflareの場合、[Cloudflare用にこれらのプロトコルを設定する](https://www.cloudflare.com/en-au/learning/email-security/dmarc-dkim-spf/)ことがわかります。
+どのプロトコルを設定できるか、またどのように設定するかは、DNSプロバイダーによって決まります。例として、CloudflareがDNSプロバイダーである場合、[Cloudflareでこれらのプロトコルを設定](https://www.cloudflare.com/en-au/learning/email-security/dmarc-dkim-spf/)することになります。
 
-詳細については、[SPF、DKIM、およびDMARCについてを参照してください: シンプルなガイド](https://github.com/nicanorflavier/spf-dkim-dmarc-simplified)。
+詳細については、[Understanding SPF, DKIM, and DMARC:を参照してください: A Simple Guide](https://github.com/nicanorflavier/spf-dkim-dmarc-simplified)。
 
 ## トラブルシューティング {#troubleshooting}
 
-### 主要なクラウドプロバイダーでポート25への送信接続がブロックされている {#outgoing-connections-to-port-25-is-blocked-on-major-cloud-providers}
+### 主要なクラウドプロバイダーでポート25への送信接続がブロックされています {#outgoing-connections-to-port-25-is-blocked-on-major-cloud-providers}
 
-クラウドプロバイダーを使用してGitLabインスタンスをホストしており、SMTPサーバーにポート25を使用している場合、クラウドプロバイダーがポート25への送信接続をブロックしている可能性があります。これにより、GitLabは送信メールを送信できなくなります。次の手順に従って、クラウドプロバイダーに応じてこの問題を回避できます:
+GitLabインスタンスをホストするためにクラウドプロバイダーを使用しており、SMTPサーバーにポート25を使用している場合、クラウドプロバイダーがポート25への送信接続をブロックしている可能性があります。これにより、GitLabから送信メールが送信されなくなります。クラウドプロバイダーに応じて、この問題を回避するために以下の手順を実行できます:
 
-- AWS: [Amazon EC2インスタンスまたはAWS Lambda関数からポート25の制限を削除するにはどうすればよいですか？](https://repost.aws/knowledge-center/ec2-port-25-throttle)
-- Azure: [Azureでの送信SMTP接続の問題のトラブルシューティング](https://learn.microsoft.com/en-us/azure/virtual-network/troubleshoot-outbound-smtp-connectivity)
-- GCP: [インスタンスからのメールの送信](https://cloud.google.com/compute/docs/tutorials/sending-mail)
+- AWS: [Amazon EC2インスタンスまたはAWS Lambda関数からポート25の制限を解除するにはどうすればよいですか？](https://repost.aws/knowledge-center/ec2-port-25-throttle)
+- Azure: [Azureにおける送信SMTP接続の問題のトラブルシューティング](https://learn.microsoft.com/en-us/azure/virtual-network/troubleshoot-outbound-smtp-connectivity)
+- GCP: [インスタンスからのメール送信](https://cloud.google.com/compute/docs/tutorials/sending-mail)
 
-### SSL/TLSの使用時に誤ったバージョン番号 {#wrong-version-number-when-using-ssltls}
+### SSL/TLS使用時のバージョン番号が間違っています {#wrong-version-number-when-using-ssltls}
 
-SMTPを設定すると、多くのユーザーが次のエラーに遭遇します:
+SMTPを設定した後、多くのユーザーが以下のエラーに遭遇します:
 
 ```plaintext
 OpenSSL::SSL::SSLError (SSL_connect returned=1 errno=0 state=error: wrong version number)
 ```
 
-このエラーは通常、設定が正しくないことが原因です:
+このエラーは通常、誤った設定が原因です:
 
-- SMTPプロバイダーがポート25または587を使用している場合、SMTP接続は**暗号化されていない**状態で開始されますが、[STARTTLS](https://en.wikipedia.org/wiki/Opportunistic_TLS)を介してアップグレードできます。次の設定が設定されていることを確認してください:
+- SMTPプロバイダーがポート25または587を使用している場合、SMTP接続は**unencrypted**状態で開始されますが、[STARTTLS](https://en.wikipedia.org/wiki/Opportunistic_TLS)を介してアップグレードできます。以下の設定がされていることを確認してください:
 
   ```ruby
   gitlab_rails['smtp_enable_starttls_auto'] = true
@@ -1413,50 +1405,47 @@ OpenSSL::SSL::SSLError (SSL_connect returned=1 errno=0 state=error: wrong versio
   gitlab_rails['smtp_ssl'] = false # This is the default and can be omitted
   ```
 
-- SMTPプロバイダーがポート465を使用している場合、SMTP接続はTLS経由で**暗号化された**状態で開始されます。次の行が存在することを確認します:
+- SMTPプロバイダーがポート465を使用している場合、SMTP接続はTLS経由で**encrypted**状態で開始されます。以下の行が存在することを確認してください:
 
   ```ruby
   gitlab_rails['smtp_tls'] = true
   ```
 
-詳細については、[SMTPポート、TLS、およびSTARTTLSに関する混乱](https://www.fastmail.help/hc/en-us/articles/360058753834-SSL-TLS-and-STARTTLS)についてお読みください。
+詳細については、[SMTPポート、TLS、STARTTLSに関する混乱](https://www.fastmail.help/hc/en-us/articles/360058753834-SSL-TLS-and-STARTTLS)についてお読みください。
 
 ### 外部Sidekiqを使用している場合にメールが送信されない {#emails-not-sending-when-using-external-sidekiq}
 
-お使いのインスタンスに[外部Sidekiq](https://docs.gitlab.com/administration/sidekiq/)が設定されている場合、SMTP設定は外部Sidekiqサーバー上の`/etc/gitlab/gitlab.rb`に存在する必要があります。SMTP設定が見つからない場合、多くのGitLabメールがSidekiq経由で送信されるため、メールがSMTP経由で送信されないことに気付くことがあります。
+インスタンスに[外部Sidekiq](https://docs.gitlab.com/administration/sidekiq/)が設定されている場合、SMTP設定は外部Sidekiqサーバー上の`/etc/gitlab/gitlab.rb`に存在する必要があります。SMTP設定がない場合、多くのGitLabメールはSidekiqを介して送信されるため、SMTP経由でメールが送信されないことがあります。
 
 ### Sidekiqルーティングルールを使用している場合にメールが送信されない {#emails-not-sending-when-using-sidekiq-routing-rules}
 
-Sidekiqの[ルーティングルール](https://docs.gitlab.com/administration/sidekiq/processing_specific_job_classes/#routing-rules)を使用している場合、送信メールに必要な`mailers`キューが設定にない可能性があります。
+Sidekiq [ルーティングルール](https://docs.gitlab.com/administration/sidekiq/processing_specific_job_classes/#routing-rules)を使用している場合、設定で送信メールに必要な`mailers`キューが不足している可能性があります。
 
-詳細については、[設定例](https://docs.gitlab.com/administration/sidekiq/processing_specific_job_classes/#detailed-example)を確認してください。
+詳細については、[構成例](https://docs.gitlab.com/administration/sidekiq/processing_specific_job_classes/#detailed-example)をレビューしてください。
 
-### メールが送信されませんでした {#email-not-sent}
+### メールが送信されません {#email-not-sent}
 
-{{< alert type="warning" >}}
+> [!warning]
+> データを直接変更するコマンドは、正しく実行されない場合、または適切な条件で実行されない場合、損害を与える可能性があります。念のため、インスタンスのバックアップを復元できるように準備し、Test環境で実行することを強くお勧めします。
 
-データを直接変更するコマンドは、正しく実行されなかった場合、または適切な条件下で実行されなかった場合、損害を与える可能性があります。念のため、インスタンスのバックアップを復元できるように準備し、Test環境で実行することを強くお勧めします。
-
-{{< /alert >}}
-
-メールサーバーが正しく設定されているにもかかわらず、メールが送信されない場合:
+メールサーバーを正しく設定したが、メールが送信されない場合:
 
 1. [Railsコンソール](https://docs.gitlab.com/administration/operations/rails_console/#starting-a-rails-console-session)を実行します。
-1. `ActionMailer` `delivery_method`を確認してください。使用しているサーバーのタイプ（SMTPサーバーの場合は`:smtp`、Sendmailの場合は`:sendmail`）と一致している必要があります。SMTPを設定した場合は、`:smtp`と表示されるはずです。Sendmailを使用している場合は、`:sendmail`と表示されるはずです:
+1. `ActionMailer` `delivery_method`を確認します。使用しているサーバーのタイプ（SMTPサーバーの場合は`:smtp`、Sendmailの場合は`:sendmail`）と一致している必要があります。SMTPを設定した場合、`:smtp`と表示されるはずです。Sendmailを使用している場合、`:sendmail`と表示されるはずです:
 
    ```ruby
    irb(main):001:0> ActionMailer::Base.delivery_method
    => :smtp
    ```
 
-1. SMTPを使用している場合は、メールの設定を確認してください:
+1. SMTPを使用している場合、メール設定を確認してください:
 
    ```ruby
    irb(main):002:0> ActionMailer::Base.smtp_settings
    => {:address=>"localhost", :port=>25, :domain=>"localhost.localdomain", :user_name=>nil, :password=>nil, :authentication=>nil, :enable_starttls_auto=>true}
    ```
 
-   上記の例では、SMTPサーバーはローカルマシン用に設定されています。これが意図されている場合は、詳細について、ローカルマシンのメールログ（たとえば、`/var/log/mail.log`）を確認してください。
+   上記の例では、SMTPサーバーはローカルマシン用に設定されています。これが意図されている場合は、詳細についてローカルのメールログ（例: `/var/log/mail.log`）を確認してください。
 
 1. コンソールを使用してテストメッセージを送信します:
 
@@ -1464,30 +1453,27 @@ Sidekiqの[ルーティングルール](https://docs.gitlab.com/administration/s
    irb(main):003:0> Notify.test_email('youremail@email.com', 'Hello World', 'This is a test message').deliver_now
    ```
 
-   メールを受信しない場合、またはエラーメッセージが表示される場合は、メールサーバーの設定を確認してください。
+   メールが届かない場合やエラーメッセージが表示される場合は、メールサーバーの設定を確認してください。
 
-### STARTTLSおよびSMTP TLSを使用している場合にメールが送信されない {#email-not-sent-when-using-starttls-and-smtp-tls}
+### STARTTLSとSMTP TLSを使用している場合にメールが送信されない {#email-not-sent-when-using-starttls-and-smtp-tls}
 
-STARTTLSとSMTP TLSの両方が有効になっている場合、次のエラーが発生することがあります:
+STARTTLSとSMTP TLSの両方が有効になっている場合、以下のエラーが発生する可能性があります:
 
 ```plaintext
 :enable_starttls and :tls are mutually exclusive. Set :tls if you're on an SMTPS connection. Set :enable_starttls if you're on an SMTP connection and using STARTTLS for secure TLS upgrade.
 ```
 
-このエラーは、`gitlab_rails['smtp_enable_starttls_auto']`と`gitlab_rails['smtp_tls']`の両方が`true`に設定されている場合に発生します。SMTPSを使用している場合は、`gitlab_rails['smtp_enable_starttls_auto']`を`false`に設定します。STARTTLSでSMTPを使用している場合は、`gitlab_rails['smtp_tls']`を`false`に設定します。変更を有効にするには、`sudo gitlab-ctl reconfigure`を実行します。
+このエラーは、`gitlab_rails['smtp_enable_starttls_auto']`と`gitlab_rails['smtp_tls']`の両方が`true`に設定されている場合に発生します。SMTPSを使用する場合は、`gitlab_rails['smtp_enable_starttls_auto']`を`false`に設定します。STARTTLSでSMTPを使用する場合は、`gitlab_rails['smtp_tls']`を`false`に設定します。変更を反映するため、`sudo gitlab-ctl reconfigure`を実行します。
 
 ## すべての送信メールを無効にする {#disable-all-outgoing-email}
 
-{{< alert type="note" >}}
+> [!note]
+> これにより、GitLabインスタンスからの**すべて**の送信メール（通知メール、ダイレクトメンション、パスワードリセットメールなどを含むがこれに限定されない）が無効になります。
 
-これにより、通知メール、ダイレクトメンション、パスワードリセットメールなどを含むがこれらに限定されない、GitLabインスタンスからの**すべて**の送信メールが無効になります。
-
-{{< /alert >}}
-
-**すべて**の送信メールを無効にするには、次の行を`/etc/gitlab/gitlab.rb`に編集または追加します:
+**すべて**の送信メールを無効にするには、`/etc/gitlab/gitlab.rb`に以下の行を編集または追加します:
 
 ```ruby
 gitlab_rails['gitlab_email_enabled'] = false
 ```
 
-変更を有効にするには、`sudo gitlab-ctl reconfigure`を実行します。
+変更を反映するため、`sudo gitlab-ctl reconfigure`を実行します。
