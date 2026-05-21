@@ -631,6 +631,8 @@ letsencrypt-test:
       when: never
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
   needs:
+    - job: generate-facts
+      artifacts: true
     - job: Docker-branch
       artifacts: false
 
@@ -648,6 +650,8 @@ OAK:smoke-test:
       when: manual
       allow_failure: true
   needs:
+    - job: generate-facts
+      artifacts: true
     - job: Docker-branch
       artifacts: false
 
@@ -662,8 +666,11 @@ patroni-ha-test:
       when: never
     - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
   needs:
+    - job: generate-facts
+      artifacts: true
     - job: Docker-branch
       artifacts: false
+
 
 redis-valkey-sentinel-test:
   extends: .docker_job
@@ -676,6 +683,8 @@ redis-valkey-sentinel-test:
       when: never
     - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
   needs:
+    - job: generate-facts
+      artifacts: true
     - job: Docker-branch
       artifacts: false
 
