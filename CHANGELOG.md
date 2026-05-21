@@ -3,6 +3,39 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.0.0 (2026-05-21)
+
+### Added (3 changes)
+
+- [Add BlueOak-1.0.0 as acceptable license](gitlab-org/omnibus-gitlab@e0c8d61eb92516ed76dd4feaa104820f42b8d7c7) ([merge request](gitlab-org/omnibus-gitlab!9379))
+- [Support dynamic redis/valkey CLI selection](gitlab-org/omnibus-gitlab@9ff1a67f2e3f6c336c60a7905a3a5c433dd0151d) ([merge request](gitlab-org/omnibus-gitlab!9127))
+- [OAK: add OpenBao NGINX reverse proxy and Rails URL inference](gitlab-org/omnibus-gitlab@834d13650f6636e11a90a888ea4be791f7197969) ([merge request](gitlab-org/omnibus-gitlab!9289))
+
+### Fixed (1 change)
+
+- [Fix semanage fcontext ValueError on EL8+ SELinux systems](gitlab-org/omnibus-gitlab@b5dc5ad7fd6022920709fd3e3a244f626e5fbd04) ([merge request](gitlab-org/omnibus-gitlab!9252))
+
+### Changed (13 changes)
+
+- [SUSE distribution support is dropped in 19.0](gitlab-org/omnibus-gitlab@836c1ff67f3b7b56835228a8f92e52471643a6df) ([merge request](gitlab-org/omnibus-gitlab!9389))
+- [Bump nginx to version 1.30.1](gitlab-org/omnibus-gitlab@259ca13208e712ced75e427d6d15267772980692) ([merge request](gitlab-org/omnibus-gitlab!9361))
+- [Promote Valkey to GA in 19.0](gitlab-org/omnibus-gitlab@9962909109cfc5d1f9b7fb8b5855f7bd4ef502f4) ([merge request](gitlab-org/omnibus-gitlab!9383))
+- [Update dependency bundler to v4.0.11](gitlab-org/omnibus-gitlab@662eef22f6fbbd92962851cdef7b8aaeaf6a34b4) ([merge request](gitlab-org/omnibus-gitlab!9376))
+- [Curl 8.18.0 update & use OS' Curl in FIPS Mode](gitlab-org/omnibus-gitlab@fce3b60d90d0053f16462a9b005c826d468d3c2e) ([merge request](gitlab-org/omnibus-gitlab!9128))
+- [Registry: default database.enabled to "prefer"](gitlab-org/omnibus-gitlab@cbd04d7790c727aa4a6d3d50a0f08370bf11f0c9) ([merge request](gitlab-org/omnibus-gitlab!9330))
+- [Upgrade Ruby to 3.3.11 and 3.4.9](gitlab-org/omnibus-gitlab@2407ae15d5a64c600f9a2f374ee2865e2c39c349) ([merge request](gitlab-org/omnibus-gitlab!9312))
+- [Make PG 17 minimum required version in 19.0 and up](gitlab-org/omnibus-gitlab@8aae2188026d1e52431cc687be1459e17875869c) ([merge request](gitlab-org/omnibus-gitlab!9350))
+- [Update dependency libxml2 to v2.15.3](gitlab-org/omnibus-gitlab@6910ce0f26a8e0d23586e603a09b7149c3748d34) ([merge request](gitlab-org/omnibus-gitlab!9348))
+- [Update dependency prometheus/prometheus to v3.11.2](gitlab-org/omnibus-gitlab@6816701e4ed4c5296a64209756b78933d3be696c) ([merge request](gitlab-org/omnibus-gitlab!9342))
+- [Update dependency gitlab-exporter to v16.7.0](gitlab-org/omnibus-gitlab@781bb7e7926bab8c141d11b1c3624da7dbe40e81) ([merge request](gitlab-org/omnibus-gitlab!9140))
+- [Update dependency prometheus/prometheus to v3.11.0](gitlab-org/omnibus-gitlab@1953339ba865e63ba53008bd57865326769e1357) ([merge request](gitlab-org/omnibus-gitlab!9064))
+- [Update dependency nginx/nginx to release-1.29.7](gitlab-org/omnibus-gitlab@6876463df92a6f39f18c353aaffed23ffaa32c1a) ([merge request](gitlab-org/omnibus-gitlab!9094))
+
+### Removed (2 changes)
+
+- [Remove Spamcheck from Omnibus-GitLab for 19.0](gitlab-org/omnibus-gitlab@ca64c4627e2b95a2dec19e44e3f76561ebf4afb2) ([merge request](gitlab-org/omnibus-gitlab!9366))
+- [Remove Mattermost for SLES-12.5](gitlab-org/omnibus-gitlab@580302851cb4486434e0db203d4a1062b9abc4e0) ([merge request](gitlab-org/omnibus-gitlab!9274))
+
 ## 18.11.3 (2026-05-13)
 
 No changes.
