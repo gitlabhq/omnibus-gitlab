@@ -419,8 +419,9 @@ GEM
     open4 (1.3.4)
     os (1.1.4)
     parallel (1.19.2)
-    parser (3.2.2.1)
+    parser (3.3.11.1)
       ast (~> 2.4.1)
+      racc
     parslet (2.0.0)
     pastel (0.8.0)
       tty-color (~> 0.5)

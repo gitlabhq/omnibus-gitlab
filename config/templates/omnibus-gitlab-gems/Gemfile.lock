@@ -262,7 +262,7 @@ GEM
       train-core
       wmi-lite (~> 1.0)
     parallel (1.24.0)
-    parser (3.3.0.5)
+    parser (3.3.11.1)
       ast (~> 2.4.1)
       racc
     parslet (1.8.2)
@@ -529,7 +529,7 @@ CHECKSUMS
   nori (2.7.1) sha256=6166cd336959854762073e2fbae888593809cac1b3e904f4fb009313d7226861
   ohai (18.1.18) sha256=42ee8196945cb935fdeec93ba7aaee757d1d552f7b933912a1f25863c3cc1ff0
   parallel (1.24.0) sha256=5bf38efb9b37865f8e93d7a762727f8c5fc5deb19949f4040c76481d5eee9397
-  parser (3.3.0.5) sha256=7748313e505ca87045dc0465c776c802043f777581796eb79b1654c5d19d2687
+  parser (3.3.11.1) sha256=d17ace7aabe3e72c3cc94043714be27cc6f852f104d81aa284c2281aecc65d54
   parslet (1.8.2) sha256=08d1ab3721cd3f175bfbee8788b2ddff71f92038f2d69bd65454c22bb9fbd98a
   pastel (0.8.0) sha256=481da9fb7d2f6e6b1a08faf11fa10363172dc40fd47848f096ae21209f805a75
   plist (3.7.1) sha256=3f9542db1115d10fb77d87604dcb426755174920cc89453755efacb34a1cc42c
