@@ -200,7 +200,9 @@ RSpec.describe PackageRepository::PulpRepository do
 
           expect(Gitlab::Util).to receive(:shellout_stdout).exactly(10).times
 
-          expect { repo.upload('my-staging-repository', false) }.to raise_error(PackageRepository::PackageUploadError)
+          expect { repo.upload('my-staging-repository', false) }
+            .to raise_error(PackageRepository::PackageUploadError)
+            .and output(/Upload to Pulp server failed!\./).to_stderr
         end
       end
 
@@ -233,7 +235,9 @@ RSpec.describe PackageRepository::PulpRepository do
           # Expects 10 retries for the first repository, then raises error before attempting second repository
           expect(Gitlab::Util).to receive(:shellout_stdout).exactly(10).times
 
-          expect { repo.upload('my-staging-repository', false) }.to raise_error(PackageRepository::PackageUploadError)
+          expect { repo.upload('my-staging-repository', false) }
+            .to raise_error(PackageRepository::PackageUploadError)
+            .and output(/Upload to Pulp server failed!\./).to_stderr
         end
       end
 
