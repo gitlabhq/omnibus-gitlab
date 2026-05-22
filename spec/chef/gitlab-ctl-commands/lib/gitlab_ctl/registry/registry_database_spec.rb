@@ -86,6 +86,28 @@ RSpec.describe GitlabCtl::Registry::Database do
     end
   end
 
+  describe '.config_path' do
+    context 'when using default registry directory' do
+      before do
+        allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({})
+      end
+
+      it 'returns the config path in the default registry directory' do
+        expect(described_class.config_path).to eq('/var/opt/gitlab/registry/config.yml')
+      end
+    end
+
+    context 'when using custom registry directory' do
+      before do
+        allow(GitlabCtl::Util).to receive(:get_public_node_attributes).and_return({ 'registry' => { 'dir' => '/custom/registry' } })
+      end
+
+      it 'returns the config path in the custom registry directory' do
+        expect(described_class.config_path).to eq('/custom/registry/config.yml')
+      end
+    end
+  end
+
   describe '.execute' do
     context "when service is disabled" do
       before do
@@ -109,12 +131,13 @@ RSpec.describe GitlabCtl::Registry::Database do
         'database',
         'migrate',
         'up',
-        '/var/opt/gitlab/registry/config.yml'
+        described_class.config_path
       ]
     end
 
     before do
       allow(described_class).to receive(:continue?)
+      allow(described_class).to receive(:registry_dir).and_return('/var/opt/gitlab/registry')
       # Mock Etc.getpwuid to return root user
       allow(Etc).to receive(:getpwuid).and_return(double(name: 'root'))
     end

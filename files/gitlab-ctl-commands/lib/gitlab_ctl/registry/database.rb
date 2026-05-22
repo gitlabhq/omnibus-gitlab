@@ -10,7 +10,6 @@ module GitlabCtl
   module Registry
     module Database
       EXEC_PATH = '/opt/gitlab/embedded/bin/registry'.freeze
-      CONFIG_PATH = '/var/opt/gitlab/registry/config.yml'.freeze
       DEFAULT_REGISTRY_DIR = '/var/opt/gitlab/registry'.freeze
 
       USAGE = <<~EOS.freeze
@@ -36,6 +35,10 @@ module GitlabCtl
 
         # Fall back to default if dir is nil
         dir || DEFAULT_REGISTRY_DIR
+      end
+
+      def self.config_path
+        File.join(registry_dir, 'config.yml')
       end
 
       def self.parse_options!(ctl, args)
@@ -113,7 +116,7 @@ module GitlabCtl
           return
         end
 
-        [EXEC_PATH, CONFIG_PATH].each do |path|
+        [EXEC_PATH, config_path].each do |path|
           next if File.exist?(path)
 
           Kernel.abort "Could not find '#{path}' file. Is this command being run on a Container Registry node?"
@@ -159,7 +162,7 @@ module GitlabCtl
         end
 
         # always set the config file at the end
-        command += [CONFIG_PATH]
+        command += [config_path]
 
         # Apply privilege drop pattern following gitlab-psql precedent
         registry_user, registry_group = get_registry_user_info
@@ -183,7 +186,7 @@ module GitlabCtl
       end
 
       def self.read_only?
-        config = YAML.load_file(CONFIG_PATH)
+        config = YAML.load_file(config_path)
         config.dig('storage', 'maintenance', 'readonly', 'enabled') == true
       end
 
