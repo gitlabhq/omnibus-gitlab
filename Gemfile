@@ -34,6 +34,7 @@ gem 'ohai', '~> 18.0'
 gem 'rainbow', '~> 2.2' # This is used by gitlab-ctl and the chef formatter
 gem 'json'
 gem 'rspec'
+gem 'syslog', '~> 0.4.0'
 # Avoid precompiled native gems because Omnibus specs need to run on older glibc versions.
 gem 'racc', '1.7.3', force_ruby_platform: true
 gem 'rake'
