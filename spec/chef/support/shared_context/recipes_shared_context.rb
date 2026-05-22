@@ -25,10 +25,15 @@ RSpec.shared_context 'recipes' do
         "monitoring::node-exporter",
         "monitoring::user"
       ]
+    # Mirror the dispatch in `files/gitlab-cookbooks/package/recipes/runit.rb`
+    # so role-dispatch tests pick the right runit recipe on macOS and other
+    # non-systemd hosts.
     runit_recipe = if File.directory?('/run/systemd/system')
                      ["package::runit_systemd"]
-                   else
+                   elsif File.exist?('/.dockerenv')
                      []
+                   else
+                     ["package::runit_sysvinit"]
                    end
     recipes + runit_recipe
   end

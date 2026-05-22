@@ -74,6 +74,11 @@ RSpec.configure do |config|
     allow_any_instance_of(ConsulHelper).to receive(:installed_version).and_return('1.9.6')
     allow_any_instance_of(ConsulHelper).to receive(:running_version).and_return('1.9.6')
 
+    # Gitaly.cgroups_v2? shells out with GNU-coreutils `stat -fc %T` syntax
+    # that emits stderr noise on macOS BSD stat; stub to the same `false` the
+    # shell-out happens to return there, so behavior is unchanged.
+    allow(Gitaly).to receive(:cgroups_v2?).and_return(false)
+
     # The `gitlab-6.1.0` API client gem's `Gitlab.method_missing` constructs
     # `Gitlab::Client` (which raises without credentials) before delegating
     # to super, shadowing Mixlib::Config's handler on our local `module
