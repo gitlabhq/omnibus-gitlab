@@ -58,14 +58,25 @@ RSpec.describe Registry do
   end
 
   describe '.parse_database_configuration' do
+    let(:node_attributes) do
+      { 'registry' => { 'database' => { 'enabled' => 'false' } } }
+    end
+
     before do
       allow(Gitlab).to receive(:[]).and_call_original
       allow(Gitlab).to receive(:warn)
-      allow(Gitlab['node']).to receive(:[]).with('registry').and_return({ 'database' => { 'enabled' => 'false' } })
+      allow(Gitlab).to receive(:[]).with('node').and_return(node_attributes)
     end
 
     describe 'host priority' do
       context 'with all possible hosts set' do
+        let(:node_attributes) do
+          {
+            'registry' => { 'database' => { 'enabled' => 'false' } },
+            'postgresql' => { 'listen_address' => 'node.db.host', 'dir' => 'node.db.dir' }
+          }
+        end
+
         before do
           stub_gitlab_rb(
             registry: {
@@ -78,7 +89,6 @@ RSpec.describe Registry do
               dir: 'postgresql.dir'
             }
           )
-          allow(Gitlab['node']).to receive(:[]).with('postgresql').and_return({ 'listen_address' => 'node.db.host', 'dir' => 'node.db.dir' })
         end
 
         it 'uses registry the explicitly set host' do
@@ -88,6 +98,13 @@ RSpec.describe Registry do
       end
 
       context 'with all host but the explicit registry' do
+        let(:node_attributes) do
+          {
+            'registry' => { 'database' => { 'enabled' => 'false' } },
+            'postgresql' => { 'listen_address' => 'node.db.host', 'dir' => 'node.db.dir' }
+          }
+        end
+
         before do
           stub_gitlab_rb(
             postgresql: {
@@ -95,7 +112,6 @@ RSpec.describe Registry do
               dir: 'postgresql.dir'
             }
           )
-          allow(Gitlab['node']).to receive(:[]).with('postgresql').and_return({ 'listen_address' => 'node.db.host', 'dir' => 'node.db.dir' })
         end
 
         it 'uses postgresql listen_address' do
@@ -105,8 +121,11 @@ RSpec.describe Registry do
       end
 
       context 'with both postgresql node hosts' do
-        before do
-          allow(Gitlab['node']).to receive(:[]).with('postgresql').and_return({ 'listen_address' => 'node.db.host', 'dir' => 'node.db.dir' })
+        let(:node_attributes) do
+          {
+            'registry' => { 'database' => { 'enabled' => 'false' } },
+            'postgresql' => { 'listen_address' => 'node.db.host', 'dir' => 'node.db.dir' }
+          }
         end
 
         it 'uses postgresql node listen_address' do
@@ -116,8 +135,11 @@ RSpec.describe Registry do
       end
 
       context 'with only postgresql node dir' do
-        before do
-          allow(Gitlab['node']).to receive(:[]).with('postgresql').and_return({ 'listen_address' => nil, 'dir' => 'node.db.dir' })
+        let(:node_attributes) do
+          {
+            'registry' => { 'database' => { 'enabled' => 'false' } },
+            'postgresql' => { 'listen_address' => nil, 'dir' => 'node.db.dir' }
+          }
         end
 
         it 'uses postgresql node listen_address' do
