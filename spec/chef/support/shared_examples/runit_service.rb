@@ -1,3 +1,10 @@
+# Skip re-registration if these shared examples are already in RSpec's
+# registry. Case-insensitive filesystems (macOS) can load this file twice
+# via different path casings, which prints "Shared example group 'X' has
+# been previously defined" warnings.
+return if RSpec.world.shared_example_group_registry
+              .find([Object], 'enabled runit service')
+
 def get_env_string(username, groupname)
   env_string = ""
   env_string << username if username
