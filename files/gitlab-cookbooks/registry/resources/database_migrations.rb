@@ -19,8 +19,9 @@ action :run do
     LOG_FILE="#{logging_settings[:log_directory]}/db-migrations-$(date +%Y-%m-%d-%H-%M-%S).log"
 
     umask 077
-    gitlab-ctl registry-database migrate up \
-      #{'--skip-post-deployment' if skip_post_deployment} \
+    /opt/gitlab/embedded/bin/registry database migrate up \
+      #{'-s' if skip_post_deployment} \
+      #{::File.join(node['registry']['dir'], 'config.yml')} \
       2>& 1 | tee ${LOG_FILE}
 
     STATUS=${PIPESTATUS[0]}
