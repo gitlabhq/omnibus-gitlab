@@ -6,14 +6,11 @@ RSpec.shared_examples 'geo promotion command accepts option' do |passed_option, 
 
     # ARGV contains the commands that were passed to rspec, which are
     # invalid for the omnibus-ctl commands
-    oldargv = ARGV
-    ARGV = [passed_option] # rubocop:disable Style/MutableConstant
+    stub_const('ARGV', [passed_option])
 
     expect(klass).to receive(:new).with(
       anything, expected_option).and_call_original
 
     ctl.send(command_script, ARGV)
-
-    ARGV = oldargv
   end
 end

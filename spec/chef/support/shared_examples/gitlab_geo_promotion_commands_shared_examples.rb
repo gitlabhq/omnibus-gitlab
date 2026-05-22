@@ -8,13 +8,10 @@ RSpec.shared_examples 'gitlab geo promotion commands' do
   it 'executes the command when called' do
     # ARGV contains the commands that were passed to rspec, which are
     # invalid for the omnibus-ctl commands
-    oldargv = ARGV
-    ARGV = [] # rubocop:disable Style/MutableConstant
+    stub_const('ARGV', [])
 
     expect_any_instance_of(klass).to receive(:execute)
 
     ctl.send(command_script)
-
-    ARGV = oldargv
   end
 end
