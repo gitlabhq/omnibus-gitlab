@@ -64,7 +64,7 @@ RSpec.describe Registry do
 
     before do
       allow(Gitlab).to receive(:[]).and_call_original
-      allow(Gitlab).to receive(:warn)
+      allow(described_class).to receive(:warn)
       allow(Gitlab).to receive(:[]).with('node').and_return(node_attributes)
     end
 
