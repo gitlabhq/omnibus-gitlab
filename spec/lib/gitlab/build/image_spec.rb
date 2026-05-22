@@ -93,7 +93,6 @@ RSpec.describe Build::Image do
   describe '.write_release_file' do
     before do
       stub_env_var('CI_JOB_TOKEN', 'NOT-CI-JOB-TOKEN')
-      stub_env_var('PACKAGECLOUD_REPO', 'download-package')
     end
 
     describe 'for builds in dev.gitlab.org' do
@@ -106,7 +105,6 @@ RSpec.describe Build::Image do
       describe 'for CE' do
         let(:release_file_content) do
           [
-            "PACKAGECLOUD_REPO=download-package",
             "RELEASE_PACKAGE=gitlab-ce",
             "RELEASE_VERSION=12.121.12-ce.0",
             "DOWNLOAD_URL_amd64=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-noble/gitlab-ce_12.121.12-ce.0_amd64.deb",
@@ -128,7 +126,6 @@ RSpec.describe Build::Image do
       describe 'for EE' do
         let(:release_file_content) do
           [
-            "PACKAGECLOUD_REPO=download-package",
             "RELEASE_PACKAGE=gitlab-ee",
             "RELEASE_VERSION=12.121.12-ee.0",
             "DOWNLOAD_URL_amd64=https://dev.gitlab.org/api/v4/projects/283/jobs/999999/artifacts/pkg/ubuntu-noble/gitlab-ee_12.121.12-ee.0_amd64.deb",
@@ -158,7 +155,6 @@ RSpec.describe Build::Image do
       describe 'for CE' do
         let(:release_file_content) do
           [
-            "PACKAGECLOUD_REPO=download-package",
             "RELEASE_PACKAGE=gitlab-ce",
             "RELEASE_VERSION=12.121.12-ce.0",
             "DOWNLOAD_URL_amd64=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-noble/gitlab-ce_12.121.12-ce.0_amd64.deb",
@@ -180,7 +176,6 @@ RSpec.describe Build::Image do
       describe 'for EE' do
         let(:release_file_content) do
           [
-            "PACKAGECLOUD_REPO=download-package",
             "RELEASE_PACKAGE=gitlab-ee",
             "RELEASE_VERSION=12.121.12-ee.0",
             "DOWNLOAD_URL_amd64=https://gitlab.com/api/v4/projects/20699/jobs/999999/artifacts/pkg/ubuntu-noble/gitlab-ee_12.121.12-ee.0_amd64.deb",
