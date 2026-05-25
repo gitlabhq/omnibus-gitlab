@@ -248,6 +248,16 @@ No changes.
 
 - [Mattermost Security Updates January 15, 2026](gitlab-org/omnibus-gitlab@0b48af1e6492d3f178e74e3e878302ee3faa9081) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9083))
 
+## 18.8.10 (2026-05-25)
+
+### Removed (1 change)
+
+- [Remove Mattermost for SLES-12.5](gitlab-org/omnibus-gitlab@9e3245c812975cc673c9babca2fd5eb7e63af4a7) ([merge request](gitlab-org/omnibus-gitlab!9317))
+
+### Security (1 change)
+
+- [Merge branch '595580-bump-rack-version' into 'master'](gitlab-org/omnibus-gitlab@07504f3936aad40c70a229de6e81aeb7f2d9631d) ([merge request](gitlab-org/omnibus-gitlab!9293))
+
 ## 18.8.9 (2026-04-07)
 
 No changes.
