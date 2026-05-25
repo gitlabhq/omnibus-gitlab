@@ -482,6 +482,10 @@ No changes.
 
 - [Update libxslt from 1.1.41 to 1.1.43](gitlab-org/omnibus-gitlab@5f3194f33a7303543d9e48e5791d7f7f284929f3)
 
+## 18.5.6 (2026-05-25)
+
+No changes.
+
 ## 18.5.5 (2026-01-07)
 
 ### Security (1 change)
