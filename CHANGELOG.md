@@ -159,6 +159,16 @@ No changes.
 - [Mattermost Security Updates February 23, 2026](gitlab-org/omnibus-gitlab@06bdb8a7037d64db1b24338ce6dae3925a10007a) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9189))
 - [Mattermost Security Updates February 13, 2026](gitlab-org/omnibus-gitlab@43ad3263651d869efea332e255365b61b391970b) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9139))
 
+## 18.9.8 (2026-05-25)
+
+### Changed (1 change)
+
+- [Bump nginx to version 1.30.1](gitlab-org/omnibus-gitlab@9c9d8fab046759a898ae6224ae7467e798c7de4a) ([merge request](gitlab-org/omnibus-gitlab!9403))
+
+### Security (1 change)
+
+- [Mattermost Security Updates May 13, 2026](gitlab-org/omnibus-gitlab@233be6ebb35767b54d0f74b30cfe59f45643d2da) by @Normo ([merge request](gitlab-org/omnibus-gitlab!9416))
+
 ## 18.9.7 (2026-05-13)
 
 No changes.
