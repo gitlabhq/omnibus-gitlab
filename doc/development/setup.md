@@ -196,6 +196,12 @@ gitlab_rails['env'] = {
 
 Run `gitlab-ctl reconfigure` to apply.
 
+To set the AI gateway URL, run the following in Rails console:
+
+```ruby
+Ai::Setting.instance.update!(ai_gateway_url: 'https://cloud.staging.gitlab.com/ai')
+```
+
 > [!note]
 > For [GitLab Geo](https://docs.gitlab.com/administration/geo/), deployments using the above configuration must be added to each secondary site.
 
