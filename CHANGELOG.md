@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.11.4 (2026-05-26)
+
+### Changed (1 change)
+
+- [Bump nginx to version 1.30.1](gitlab-org/security/omnibus-gitlab@297847401fd388a55b365e2c0995e1257c4e33d1)
+
+### Security (2 changes)
+
+- [Mattermost Security Updates May 21, 2026](gitlab-org/security/omnibus-gitlab@6f264ea4afeb1b3379d94f15b28effdf73e7c4c7)
+- [Mattermost Security Updates May 13, 2026](gitlab-org/security/omnibus-gitlab@75237faaaa339a453cfa786492bb702706d58975)
+
 ## 18.11.3 (2026-05-13)
 
 No changes.
