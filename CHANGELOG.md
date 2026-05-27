@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.0.1 (2026-05-26)
+
+No changes.
+
 ## 19.0.0 (2026-05-21)
 
 ### Added (3 changes)
@@ -35,6 +39,17 @@ omnibus-gitlab repository.
 
 - [Remove Spamcheck from Omnibus-GitLab for 19.0](gitlab-org/omnibus-gitlab@ca64c4627e2b95a2dec19e44e3f76561ebf4afb2) ([merge request](gitlab-org/omnibus-gitlab!9366))
 - [Remove Mattermost for SLES-12.5](gitlab-org/omnibus-gitlab@580302851cb4486434e0db203d4a1062b9abc4e0) ([merge request](gitlab-org/omnibus-gitlab!9274))
+
+## 18.11.4 (2026-05-26)
+
+### Changed (1 change)
+
+- [Bump nginx to version 1.30.1](gitlab-org/security/omnibus-gitlab@297847401fd388a55b365e2c0995e1257c4e33d1)
+
+### Security (2 changes)
+
+- [Mattermost Security Updates May 21, 2026](gitlab-org/security/omnibus-gitlab@6f264ea4afeb1b3379d94f15b28effdf73e7c4c7)
+- [Mattermost Security Updates May 13, 2026](gitlab-org/security/omnibus-gitlab@75237faaaa339a453cfa786492bb702706d58975)
 
 ## 18.11.3 (2026-05-13)
 
@@ -92,6 +107,16 @@ No changes.
 ### Other (1 change)
 
 - [Add Knowledge Graph Go module to license allowlist](gitlab-org/omnibus-gitlab@5b926604bd8492c3d5e7393e0080de3fabfd44ba) ([merge request](gitlab-org/omnibus-gitlab!9278))
+
+## 18.10.7 (2026-05-26)
+
+### Changed (1 change)
+
+- [Bump nginx to version 1.30.1](gitlab-org/security/omnibus-gitlab@8cdeaa2ac3e9fffa921ebf890d43efdcbfc8b454)
+
+### Security (1 change)
+
+- [Mattermost Security Updates May 13, 2026](gitlab-org/security/omnibus-gitlab@4ced20b473fd0292df464c78a5101920ba8a45bc)
 
 ## 18.10.6 (2026-05-13)
 
