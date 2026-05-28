@@ -145,9 +145,9 @@ Prerequisites:
 - An [app password](https://support.google.com/mail/answer/185833).
 
 > [!note]
-> Gmail has [strict sending limits](https://support.google.com/a/answer/166852)
+> Gmail has [strict sending limits](https://knowledge.workspace.google.com/admin/gmail/gmail-sending-limits-in-google-workspace)
 > that can impair functionality as your organization grows. We strongly recommend using a
-> transactional service like [SendGrid](https://sendgrid.com/en-us) or [Mailgun](https://www.mailgun.com/)
+> transactional service like [SendGrid](https://www.twilio.com/en-us/sendgrid) or [Mailgun](https://www.mailgun.com/)
 > for teams using SMTP configuration.
 
 ```ruby
@@ -167,7 +167,7 @@ _Don't forget to change `my.email@gmail.com` to your email address and `my-gmail
 
 ### Google SMTP relay
 
-You can route outgoing non-Gmail messages through Google [using the Google SMTP relay service](https://support.google.com/a/answer/2956491?hl=en).
+You can route outgoing non-Gmail messages through Google [using the Google SMTP relay service](https://knowledge.workspace.google.com/admin/gmail/advanced/route-outgoing-smtp-relay-messages-through-google).
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1412,8 +1412,8 @@ This prevents GitLab from sending any outgoing mail. You can follow the instruct
 around this depending on your cloud provider:
 
 - AWS: [How do I remove the restriction on port 25 from my Amazon EC2 instance or AWS Lambda function?](https://repost.aws/knowledge-center/ec2-port-25-throttle)
-- Azure: [Troubleshoot outbound SMTP connectivity problems in Azure](https://learn.microsoft.com/en-us/azure/virtual-network/troubleshoot-outbound-smtp-connectivity)
-- GCP: [Sending email from an instance](https://cloud.google.com/compute/docs/tutorials/sending-mail)
+- Azure: [Troubleshoot outbound SMTP connectivity problems in Azure](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-network/troubleshoot-outbound-smtp-connectivity)
+- GCP: [Sending email from an instance](https://docs.cloud.google.com/compute/docs/tutorials/sending-mail)
 
 ### Wrong version number when using SSL/TLS
 

@@ -322,7 +322,7 @@ Container Registry, GitLab Shell and Gitaly:
    ```
 
 > [!note]
-> You [cannot edit](https://gitlab.com/groups/gitlab-org/-/epics/6034)
+> You [cannot edit](https://gitlab.com/groups/gitlab-org/-/work_items/6034)
 > the `log_level` for certain GitLab logs, for example
 > `production_json.log`, `graphql_json.log`, and so on.
 > See also [Override default log level](https://docs.gitlab.com/administration/logs/#override-default-log-level).

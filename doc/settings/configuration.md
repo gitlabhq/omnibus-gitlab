@@ -309,7 +309,7 @@ If you're running Gitaly on a separate server, see
 
 If you're not looking to move all repositories, but instead want to move specific
 projects between existing repository storages, use the
-[Edit Project API](https://docs.gitlab.com/api/projects/#edit-a-project)
+[Update Project API](https://docs.gitlab.com/api/projects/#update-a-project)
 endpoint and specify the `repository_storage` attribute.
 
 ## Change the name of the Git user or group

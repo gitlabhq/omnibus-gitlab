@@ -139,7 +139,7 @@ Adjust any other environments you might have, such as monitoring checks.
 
 > [!note]
 > GitLab provides information on setting up a non-bundled web server for guidance only.
-> Troubleshooting a non-bundled component is considered [outside the scope of support](https://about.gitlab.com/support/statement-of-support/#out-of-scope-for-all-self-managed-and-saas-users).
+> Troubleshooting a non-bundled component is considered [outside the scope of support](https://support.gitlab.com/hc/en-us/articles/11625911285404-Statement-of-Support#out-of-scope).
 > If you have any questions or issues when using a non-bundled web server, see the non-bundled web server documentation.
 
 By default, the Linux package installs GitLab with bundled NGINX.

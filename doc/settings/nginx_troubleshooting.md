@@ -34,7 +34,7 @@ This issue occurs when you use an older Java-based IDE client to interact with y
 Those IDEs can use the TLS 1 protocol, which the Linux package installations don't support by default.
 
 To resolve this issue, upgrade ciphers on your server, similar to the user in
-[issue 624](https://gitlab.com/gitlab-org/gitlab-foss/-/issues/624#note_299061).
+[issue 624](https://gitlab.com/gitlab-org/gitlab-foss/-/work_items/624#note_299061).
 
 If it is not possible to make this server change, you can default back to the old
 behavior by changing the values in your `/etc/gitlab/gitlab.rb`:

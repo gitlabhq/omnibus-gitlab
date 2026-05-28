@@ -68,7 +68,7 @@ These systems provide adequate performance to run a small installations of GitLa
 - [Raspberry PI 4 2 GB](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/).
 - [DigitalOcean Basic 2 GB with SSD](https://www.digitalocean.com/pricing).
 - [Scaleway DEV1-S 2 GB/20 GB](https://www.scaleway.com/en/pricing/).
-- [GCS e2-small](https://cloud.google.com/compute/docs/machine-resource).
+- [GCS e2-small](https://docs.cloud.google.com/compute/docs/machine-resource).
 
 ## Configure Swap
 
