@@ -147,4 +147,4 @@ In this example, we implement a new receiver for VictorOps.
 
 Alertmanager will now route `severity = high` alerts to `victorops-receiver`.
 
-Read more about VictorOps options for Alertmanager at the [VictorOps documentation](https://help.victorops.com/knowledge-base/victorops-prometheus-integration/).
+Read more about [VictorOps options for Alertmanager](https://help.splunk.com/en/splunk-observability-cloud/splunk-on-call/integrations-with-splunk-on-call/prometheus-integration-for-splunk-on-call).

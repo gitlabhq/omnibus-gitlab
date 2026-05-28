@@ -14,7 +14,7 @@ title: Microsoft Graph Mailer settings
 
 {{< history >}}
 
-- [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/8259) in GitLab 15.5.
+- [Introduced](https://gitlab.com/groups/gitlab-org/-/work_items/8259) in GitLab 15.5.
 
 {{< /history >}}
 

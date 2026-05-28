@@ -89,7 +89,7 @@ You may need to configure a custom temporary directory if:
 
 - Your `/tmp` is mounted as `tmpfs` with limited space.
 - Large files (such as LFS objects or CI artifacts) cause `/tmp` to fill up.
-- [Geo secondary sites](https://docs.gitlab.com/ee/administration/geo/) run out
+- [Geo secondary sites](https://docs.gitlab.com/administration/geo/) run out
   of space in `/tmp` during object storage replication.
 
 To configure a custom temporary directory:

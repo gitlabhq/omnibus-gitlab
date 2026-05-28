@@ -445,7 +445,7 @@ packaged PostgreSQL server to a later version (if one is included in the
 package). This updates PostgreSQL to the [default shipped version](https://docs.gitlab.com/administration/package_information/postgresql_versions/)
 during package upgrades, unless specifically [opted out](#opt-out-of-automatic-postgresql-upgrades).
 
-Before upgrading GitLab to a newer version, refer to the [version-specific changes](https://docs.gitlab.com/update/#version-specific-upgrading-instructions)
+Before upgrading GitLab to a newer version, refer to the [version-specific changes](https://docs.gitlab.com/update/versions/)
 of the Linux package to see either:
 
 - When a database version has changed.

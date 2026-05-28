@@ -46,8 +46,7 @@ roles ['geo_primary_role']
 
 ## Roles
 
-The majority of the following roles will only work on a
-[GitLab Enterprise Edition](https://about.gitlab.com/install/ce-or-ee/), meaning
+The majority of the following roles will only work on a GitLab Enterprise Edition, meaning
 a `gitlab-ee` Linux package. It will be mentioned next to each role.
 
 ### GitLab App Role
