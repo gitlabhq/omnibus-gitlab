@@ -570,6 +570,14 @@ RSpec.describe 'registry' do
         expect(chef_run.node['gitlab']['gitlab_rails']['registry_notification_secret'])
           .to eql('mysecret')
       end
+
+      it 'uses threshold and does not inject maxretries' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"threshold":5/)
+        expect(chef_run).not_to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"maxretries":/)
+        expect_logged_warning("registry: notification endpoint 'geo_event': 'threshold' is deprecated. Please migrate to 'maxretries'.")
+      end
     end
 
     context 'when registry notification endpoint is configured with the minimum required' do
@@ -592,7 +600,9 @@ RSpec.describe 'registry' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"timeout":"500ms"/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-          .with_content(/"threshold":5/)
+          .with_content(/"maxretries":5/)
+        expect(chef_run).not_to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"threshold":/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"backoff":"1s"/)
       end
@@ -607,7 +617,6 @@ RSpec.describe 'registry' do
               url: 'https://registry.example.com/notify'
             ],
             default_notifications_timeout: '5000ms',
-            default_notifications_threshold: 10,
             default_notifications_maxretries: 5,
             default_notifications_backoff: '50s',
             default_notifications_headers: {
@@ -625,15 +634,15 @@ RSpec.describe 'registry' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"timeout":"5000ms"/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-          .with_content(/"threshold":10/)
-        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"maxretries":5/)
+        expect(chef_run).not_to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"threshold":/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"backoff":"50s"/)
       end
     end
 
-    context 'when registry notification endpoint is configured with all the available variables' do
+    context 'when registry notification endpoint is configured with threshold (deprecated)' do
       before do
         stub_gitlab_rb(
           registry: {
@@ -653,7 +662,7 @@ RSpec.describe 'registry' do
         )
       end
 
-      it 'creates the registry config with the specified endpoint config' do
+      it 'creates the registry config with threshold and does not inject maxretries' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"name":"test_endpoint"/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
@@ -662,8 +671,41 @@ RSpec.describe 'registry' do
           .with_content(/"timeout":"500ms"/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"threshold":5/)
+        expect(chef_run).not_to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"maxretries":/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"backoff":"1s"/)
+        expect_logged_warning("registry: notification endpoint 'test_endpoint': 'threshold' is deprecated. Please migrate to 'maxretries'.")
+      end
+    end
+
+    context 'when registry notification endpoint is configured with maxretries' do
+      before do
+        stub_gitlab_rb(
+          registry: {
+            notifications: [
+              {
+                'name' => 'test_endpoint',
+                'url' => 'https://registry.example.com/notify',
+                'timeout' => '500ms',
+                'maxretries' => 5,
+                'backoff' => '1s',
+                'headers' => {
+                  "Authorization" => ["AUTHORIZATION_EXAMPLE_TOKEN"]
+                }
+              }
+            ]
+          }
+        )
+      end
+
+      it 'does not add the deprecated threshold parameter to the config' do
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"name":"test_endpoint"/)
+        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"maxretries":5/)
+        expect(chef_run).not_to render_file('/var/opt/gitlab/registry/config.yml')
+          .with_content(/"threshold":/)
       end
     end
 
@@ -696,6 +738,7 @@ RSpec.describe 'registry' do
       end
 
       it 'creates the registry config with the specified endpoint config' do
+        # First endpoint: no explicit threshold/maxretries, gets maxretries default, no threshold
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"name":"test_endpoint"/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
@@ -703,10 +746,10 @@ RSpec.describe 'registry' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"timeout":"500ms"/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-          .with_content(/"threshold":5/)
+          .with_content(/"maxretries":5/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"backoff":"1s"/)
-        # Second endpoint
+        # Second endpoint: explicit threshold:2, uses threshold and does not inject maxretries
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"name":"test_endpoint2"/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
@@ -717,7 +760,7 @@ RSpec.describe 'registry' do
           .with_content(/"threshold":2/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"backoff":"4s"/)
-        # Third endpoint
+        # Third endpoint: no explicit threshold/maxretries, gets maxretries default, no threshold
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"name":"test_endpoint3"/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
@@ -725,9 +768,8 @@ RSpec.describe 'registry' do
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"timeout":"500ms"/)
         expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
-          .with_content(/"threshold":5/)
-        expect(chef_run).to render_file('/var/opt/gitlab/registry/config.yml')
           .with_content(/"backoff":"1s"/)
+        expect_logged_warning("registry: notification endpoint 'test_endpoint2': 'threshold' is deprecated. Please migrate to 'maxretries'.")
       end
     end
 
