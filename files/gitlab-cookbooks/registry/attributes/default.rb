@@ -52,7 +52,6 @@ default['registry']['http_draintimeout'] = 0
 ####
 default['registry']['notifications'] = nil
 default['registry']['default_notifications_timeout'] = "500ms"
-default['registry']['default_notifications_threshold'] = 5
 default['registry']['default_notifications_maxretries'] = 5
 default['registry']['default_notifications_backoff'] = "1s"
 default['registry']['default_notifications_headers'] = {}
