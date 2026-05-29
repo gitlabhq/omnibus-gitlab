@@ -138,7 +138,6 @@ module Registry
 
       # Use the registry defaults configured by the user but use the defaults from gitlab if they were not set
       user_configuration['default_notifications_timeout'] ||= gitlab_configuration['default_notifications_timeout']
-      user_configuration['default_notifications_threshold'] ||= gitlab_configuration['default_notifications_threshold']
       user_configuration['default_notifications_maxretries'] ||= gitlab_configuration['default_notifications_maxretries']
       user_configuration['default_notifications_backoff'] ||=  gitlab_configuration['default_notifications_backoff']
       user_configuration['default_notifications_headers'] ||=  gitlab_configuration['default_notifications_headers']
@@ -146,8 +145,20 @@ module Registry
       Gitlab['registry']['notifications'].each do |endpoint|
         # Get the values from default if they are not set
         endpoint['timeout'] ||= user_configuration['default_notifications_timeout']
-        endpoint['threshold'] ||= user_configuration['default_notifications_threshold']
-        endpoint['maxretries'] ||= user_configuration['default_notifications_maxretries']
+
+        # Priority for retry configuration:
+        # 1. If user specified maxretries, use it as-is.
+        # 2. Else if user specified threshold (deprecated), use it and emit a deprecation warning.
+        # 3. If neither is specified, fall back to the default maxretries value.
+        if endpoint['maxretries']
+          # maxretries explicitly set by user; nothing to do
+        elsif endpoint['threshold']
+          LoggingHelper.warning("registry: notification endpoint '#{endpoint['name']}': " \
+                                "'threshold' is deprecated. Please migrate to 'maxretries'.")
+        else
+          endpoint['maxretries'] = user_configuration['default_notifications_maxretries']
+        end
+
         endpoint['backoff'] ||= user_configuration['default_notifications_backoff']
 
         # And merge the default headers with the ones specific to this endpoint
