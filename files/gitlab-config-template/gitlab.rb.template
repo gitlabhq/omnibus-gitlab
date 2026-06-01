@@ -1292,10 +1292,10 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Duration to wait for all requests to finish (e.g. "10s" for 10
 ##! seconds). By default this is disabled to preserve the existing
-##! behavior of fast shutdown. This should not be set higher than 30
-##! seconds, since gitlab-ctl will wait up to 30 seconds (as defined by
-##! the SVWAIT variable) and report a timeout error if the process has
-##! not shut down.
+##! behavior of fast shutdown. This should not be set higher than
+##! the SVWAIT value (30 seconds by default), since gitlab-ctl will
+##! wait up to that amount of time and report a timeout error if the
+##! process has not shut down.
 # gitlab_workhorse['shutdown_timeout'] = nil
 # gitlab_workhorse['listen_network'] = "unix"
 # gitlab_workhorse['listen_umask'] = 000
