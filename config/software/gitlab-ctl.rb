@@ -66,7 +66,7 @@ done
 
 # This bumps the default svwait timeout from 7 seconds to 30 seconds
 # As documented at http://smarden.org/runit/sv.8.html
-export SVWAIT=30
+export SVWAIT=${SVWAIT:-30}
 
 if [ "$1" == "reconfigure" ] && [ "$UID" != "0" ]; then
   echo "This command must be executed as root user"
