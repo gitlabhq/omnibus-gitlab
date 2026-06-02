@@ -12,6 +12,20 @@ RSpec.describe 'database_objects' do
       it 'creates main database' do
         expect(chef_run).to create_postgresql_database('gitlabhq_production')
       end
+
+      it 'does not manage the gitlab-psql user password' do
+        expect(chef_run).not_to create_postgresql_user('gitlab-psql')
+      end
+    end
+
+    context 'when sql_superuser_password is set' do
+      before do
+        stub_gitlab_rb(postgresql: { sql_superuser_password: 'abc123hash' })
+      end
+
+      it 'sets the password on the gitlab-psql user' do
+        expect(chef_run).to create_postgresql_user('gitlab-psql').with(password: 'abc123hash')
+      end
     end
 
     context 'when additional databases are specified' do

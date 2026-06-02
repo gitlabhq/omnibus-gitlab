@@ -1635,6 +1635,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['group'] = "gitlab-psql"
 ##! `SQL_USER_PASSWORD_HASH` can be generated using the command `gitlab-ctl pg-password-md5 gitlab`
 # postgresql['sql_user_password'] = 'SQL_USER_PASSWORD_HASH'
+##! Password for the gitlab-psql superuser. Required when using md5_auth_cidr_addresses with Patroni.
+# postgresql['sql_superuser_password'] = nil
 # postgresql['uid'] = nil
 # postgresql['gid'] = nil
 # postgresql['shell'] = "/bin/sh"

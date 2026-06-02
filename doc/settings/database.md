@@ -299,6 +299,10 @@ The following settings are affected in the `postgresql` block:
   defaults to `gitlab`, and isn't a required setting.
 - `sql_user_password`: Sets the password that PostgreSQL will accept for MD5
   authentication.
+- `sql_superuser_password`: Sets the password for the `gitlab-psql` superuser. Required
+  when using `md5_auth_cidr_addresses` with Patroni so that Patroni can authenticate
+  for `pg_rewind` operations. When set, the password is also populated into the
+  Patroni configuration automatically.
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
