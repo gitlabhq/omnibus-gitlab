@@ -18,12 +18,20 @@ action :create do
   gitlab_sql_user_password = node['postgresql']['sql_user_password']
   sql_replication_user = node['postgresql']['sql_replication_user']
   sql_replication_password = node['postgresql']['sql_replication_password']
+  sql_superuser_password = node['postgresql']['sql_superuser_password']
 
   # Geo Database will be handled separately in gitlab-ee::geo-postgresql
   # recipe.
   ignored_databases = %w[geo]
   # We only create databases that are configured on the same DB host as the main database
   databases = node['gitlab']['gitlab_rails']['databases'].select { |db, details| details['enable'] && details['db_host'] == database_host && !ignored_databases.include?(db) }
+
+  unless sql_superuser_password.nil?
+    postgresql_user postgresql_username do
+      password sql_superuser_password
+      action :create
+    end
+  end
 
   postgresql_user gitlab_sql_user do
     password "md5#{gitlab_sql_user_password}" unless gitlab_sql_user_password.nil?
