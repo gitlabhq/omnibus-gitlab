@@ -24,7 +24,12 @@ pass() { log "PASS: $*"; }
 fail() { log "FAIL: $*" >&2; exit 1; }
 
 pg_major_from_software() {
-  grep "default_version" "${REPO_ROOT}/config/software/$1.rb" | grep -oE '[0-9]+' | head -1
+  local software_file="${REPO_ROOT}/config/software/$1.rb"
+  if [ ! -f "$software_file" ]; then
+    echo ""
+    return 0
+  fi
+  grep "default_version" "$software_file" | grep -oE '[0-9]+' | head -1
 }
 
 wait_for_healthy() {
@@ -144,6 +149,17 @@ main() {
   TO_MAJOR=$(pg_major_from_software postgresql_new)
 
   log "Starting Patroni PG upgrade test with image: $IMAGE"
+
+  if [ -z "$TO_MAJOR" ]; then
+    log "SKIP: config/software/postgresql_new.rb does not exist - no upgrade path defined yet"
+    exit 0
+  fi
+
+  if [ -z "$FROM_MAJOR" ]; then
+    log "SKIP: config/software/postgresql.rb does not exist - cannot determine current PG version"
+    exit 0
+  fi
+
   log "Detected PG versions: current=${FROM_MAJOR}, new=${TO_MAJOR}"
 
   if [ "$FROM_MAJOR" = "$TO_MAJOR" ]; then
@@ -164,7 +180,6 @@ main() {
 
   if [ "$RUNNING_VERSION" = "$TO_MAJOR" ]; then
     log "SKIP: Container is already running PG${TO_MAJOR}, no upgrade path available"
-    cleanup
     exit 0
   fi
 
