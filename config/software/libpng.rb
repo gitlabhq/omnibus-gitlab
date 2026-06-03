@@ -15,7 +15,7 @@
 #
 
 name 'libpng'
-version = Gitlab::Version.new('libpng', 'v1.6.51')
+version = Gitlab::Version.new('libpng', 'v1.6.54')
 
 default_version version.print(false)
 
@@ -27,10 +27,8 @@ skip_transitive_dependency_licensing true
 dependency 'zlib-ng'
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
-  # NOTE: We cannot use UBT binaries in FIPS builds
-  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  # FIXME: version has drifted in Omnibus vs UBT builds
-  source Build::UBT.source_args(name, "1.6.50", "99c482eeec1576fc2d27d4c04ab5ec583b28895347a74f5d9ed027565a770358", OhaiHelper.arch)
+  ubt_version = version.print(false).delete_prefix('v')
+  source Build::UBT.source_args(name, "#{ubt_version}-1ubt", "ef9ae0ba3003782e0efc580b3495c261b3c6a205417ae2b843567b51ee0ca487", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source git: version.remote
