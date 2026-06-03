@@ -124,7 +124,7 @@ class AWSHelper
                 "OperatingSystemVersion" => "24.04"
               },
               "UsageInstructions" => "https://docs.gitlab.com/ee/install/aws/",
-              "RecommendedInstanceType" => "c5.xlarge",
+              "RecommendedInstanceType" => "c5.2xlarge",
               "SecurityGroups" => [
                 {
                   "IpProtocol" => "tcp",
