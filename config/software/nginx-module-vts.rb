@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'nginx-module-vts'
-version = Gitlab::Version.new('nginx-module-vts', '0.2.4')
+version = Gitlab::Version.new('nginx-module-vts', '0.2.5')
 default_version version.print
 
 license 'BSD-2-Clause'
@@ -27,14 +27,19 @@ license_file 'LICENSE'
 
 skip_transitive_dependency_licensing true
 
-source git: version.remote
+if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
+  source Build::UBT.source_args(name, "#{display_version}-1ubt", "b50b9800e30ba126b87d399f4036d61bd9dccb2ee4b4883d456a91f174b60b33", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
 
-# This is a source-only package for nginx, but we need to populate /opt/gitlab
-# to ensure Omnibus build cache extracts the right tag.
-build do
-  dest_dir = File.join(install_dir, "src", "nginx_modules", name)
+  # This is a source-only package for nginx, but we need to populate /opt/gitlab
+  # to ensure Omnibus build cache extracts the right tag.
+  build do
+    dest_dir = File.join(install_dir, "src", "nginx_modules", name)
 
-  mkdir dest_dir
+    mkdir dest_dir
 
-  sync './', dest_dir
+    sync './', dest_dir
+  end
 end
