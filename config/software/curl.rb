@@ -16,7 +16,7 @@
 
 name 'curl'
 
-version = Gitlab::Version.new('curl', 'curl-8_18_0')
+version = Gitlab::Version.new('curl', 'curl-8_20_0')
 default_version version.print(false)
 display_version version.print(false).delete_prefix('curl-').tr('_', '.')
 
@@ -34,7 +34,7 @@ skip_transitive_dependency_licensing true
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
   # NOTE: We cannot use UBT binaries in FIPS builds
   # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  source Build::UBT.source_args(name, "#{display_version}-2ubt", "bb9c26eeddda9a864e043e3db8f0d0cccc6a43354d5bfab3b7c81377c0ddd1b3", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{display_version}-3ubt", "e862f444e2d19773fbfc6a87ba2b8f7de4c0ce075079cc1e28b7ff7ccdfd56c5", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source git: version.remote
