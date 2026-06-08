@@ -16,7 +16,7 @@
 #
 
 name 'jemalloc'
-version = Gitlab::Version.new('jemalloc', '5.3.0')
+version = Gitlab::Version.new('jemalloc', '5.3.1')
 default_version version.print(false)
 
 license 'jemalloc'
@@ -29,10 +29,7 @@ dependency 'redis'
 dependency 'valkey'
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
-  # NOTE: We cannot use UBT binaries in FIPS builds
-  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  # FIXME: version has drifted in Omnibus vs UBT builds
-  source Build::UBT.source_args(name, "5.3.0", "d21240f054c5d115c79a8158040525a14739e72d5c188bfc9ef1d1df38410abc", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{default_version}-1ubt", "e09474a4899a11b73ace65ba807b3dac154c090e695ec9af4295bb2ae53fa1de", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source git: version.remote
