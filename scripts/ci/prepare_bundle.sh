@@ -20,6 +20,16 @@ fi
 bundle config set frozen 'true'
 
 echo -e "section_start:`date +%s`:bundle_install[collapsed=true]\r\e[0Kbundle install -j $(nproc)"
+# Pre-install ffi and ffi-compiler sequentially to avoid a parallel install
+# race triggered by a gap in llhttp-ffi's declared dependencies.
+#
+# llhttp-ffi's gemspec declares ffi-compiler as a runtime dep but omits ffi
+# itself. At build time, ext/Rakefile does `require 'ffi-compiler/compile_task'`
+# which immediately does `require 'ffi'`. Because ffi is only a transitive dep
+# (llhttp-ffi -> ffi-compiler -> ffi), bundler's parallel installer can start
+# llhttp-ffi's native extension build as soon as ffi-compiler is queued, without
+# waiting for ffi to finish installing, causing a load error.
+gem install ffi ffi-compiler
 bundle install -j $(nproc)
 echo -e "section_end:`date +%s`:bundle_install\r\e[0K"
 bundle binstubs --all

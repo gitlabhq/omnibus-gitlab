@@ -27,30 +27,35 @@ skip_transitive_dependency_licensing true
 # Is libtool actually necessary? Doesn't configure generate one?
 dependency 'libtool'
 
-version('3.2.1') { source sha256: 'd06ebb8e1d9a22d19e38d63fdb83954253f39bedc5d46232a05645685722ca37' }
+if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
+  source Build::UBT.source_args(name, "#{default_version}-3ubt", "d001ed3b88bfcc54548a51d79d8836c6880e86575ffb9125f76ff17db43a072f", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  version('3.2.1') { source sha256: 'd06ebb8e1d9a22d19e38d63fdb83954253f39bedc5d46232a05645685722ca37' }
 
-source url: "https://sourceware.org/pub/libffi/libffi-#{version}.tar.gz"
+  source url: "https://sourceware.org/pub/libffi/libffi-#{version}.tar.gz"
 
-relative_path "libffi-#{version}"
+  relative_path "libffi-#{version}"
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
 
-  configure_command = []
+    configure_command = []
 
-  # Patch to disable multi-os-directory via configure flag (don't use /lib64)
-  # Works on all platforms, and is compatible on 32bit platforms as well
-  if version == '3.2.1'
-    patch source: 'libffi-3.2.1-disable-multi-os-directory.patch', plevel: 1, env: env
-    configure_command << '--disable-multi-os-directory'
-    configure_command << "--build=#{OhaiHelper.gcc_target}" if OhaiHelper.raspberry_pi?
+    # Patch to disable multi-os-directory via configure flag (don't use /lib64)
+    # Works on all platforms, and is compatible on 32bit platforms as well
+    if version == '3.2.1'
+      patch source: 'libffi-3.2.1-disable-multi-os-directory.patch', plevel: 1, env: env
+      configure_command << '--disable-multi-os-directory'
+      configure_command << "--build=#{OhaiHelper.gcc_target}" if OhaiHelper.raspberry_pi?
+    end
+
+    configure(*configure_command, env: env)
+
+    make "-j #{workers}", env: env
+    make "-j #{workers} install", env: env
+
+    # libffi's default install location of header files is awful...
+    copy "#{install_dir}/embedded/lib/libffi-#{version}/include/*", "#{install_dir}/embedded/include"
   end
-
-  configure(*configure_command, env: env)
-
-  make "-j #{workers}", env: env
-  make "-j #{workers} install", env: env
-
-  # libffi's default install location of header files is awful...
-  copy "#{install_dir}/embedded/lib/libffi-#{version}/include/*", "#{install_dir}/embedded/include"
 end

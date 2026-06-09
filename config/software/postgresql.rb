@@ -34,7 +34,7 @@ dependency 'config_guess'
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
   # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  source Build::UBT.source_args("postgresql-all", "#{default_version}-3ubt", "4d185ffb559765004b730fc06419e5a1c04344624ce3132babafd261483e703b", OhaiHelper.arch)
+  source Build::UBT.source_args("postgresql-all", "#{default_version}-5ubt", "b7b2f416860bb8635b36069b725fe5bd1c2ed00981473d165163cbe378f6d1f0", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   version default_version do
