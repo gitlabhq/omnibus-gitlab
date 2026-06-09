@@ -59,7 +59,10 @@ RSpec.describe Registry do
 
   describe '.parse_database_configuration' do
     let(:node_attributes) do
-      { 'registry' => { 'database' => { 'enabled' => 'false' } } }
+      {
+        'registry' => { 'database' => { 'enabled' => 'false' } },
+        'postgresql' => { 'port' => 5432 }
+      }
     end
 
     before do
@@ -167,6 +170,75 @@ RSpec.describe Registry do
             "Received multiple postgresql address values.\n  First address from 'primary.db.host,secondary.db.host,tertiary.db.host' will be used for registry database."
           )
           described_class.parse_database_configuration
+        end
+      end
+    end
+
+    describe 'port priority' do
+      context 'with an explicit registry database port' do
+        let(:node_attributes) do
+          {
+            'registry' => { 'database' => { 'enabled' => 'false' } },
+            'postgresql' => { 'port' => 5432 }
+          }
+        end
+
+        before do
+          stub_gitlab_rb(
+            registry: { database: { port: 6000 } },
+            postgresql: { port: 5433 }
+          )
+        end
+
+        it 'uses the explicitly set registry port' do
+          described_class.parse_database_configuration
+          expect(Gitlab['registry']['database']['port']).to eq(6000)
+        end
+      end
+
+      context 'with postgresql port set in gitlab.rb' do
+        let(:node_attributes) do
+          {
+            'registry' => { 'database' => { 'enabled' => 'false' } },
+            'postgresql' => { 'port' => 5432 }
+          }
+        end
+
+        before do
+          stub_gitlab_rb(postgresql: { port: 5433 })
+        end
+
+        it 'uses the postgresql port' do
+          described_class.parse_database_configuration
+          expect(Gitlab['registry']['database']['port']).to eq(5433)
+        end
+      end
+
+      context 'with postgresql port only set in node attributes' do
+        let(:node_attributes) do
+          {
+            'registry' => { 'database' => { 'enabled' => 'false' } },
+            'postgresql' => { 'port' => 5433 }
+          }
+        end
+
+        it 'uses the postgresql node port' do
+          described_class.parse_database_configuration
+          expect(Gitlab['registry']['database']['port']).to eq(5433)
+        end
+      end
+
+      context 'with no postgresql port configured anywhere' do
+        let(:node_attributes) do
+          {
+            'registry' => { 'database' => { 'enabled' => 'false', 'port' => 5432 } },
+            'postgresql' => { 'listen_address' => 'node.db.host' }
+          }
+        end
+
+        it 'falls back to the registry database default port' do
+          described_class.parse_database_configuration
+          expect(Gitlab['registry']['database']['port']).to eq(5432)
         end
       end
     end
