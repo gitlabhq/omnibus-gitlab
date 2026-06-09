@@ -25,7 +25,7 @@ dependency 'ncurses'
 dependency 'config_guess'
 if Build::Check.use_ubt?
   ubt_version = default_version.tr('-', '_')
-  source Build::UBT.source_args(name, "#{ubt_version}-2ubt", "cd8d493f8d4eb15ae10d66383a0a26a71ea95c311e0f584dd54388b23e801e39", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{ubt_version}-3ubt", "31269b33ce2e4293a7105e19591cb6f8ce281e44072f0fc7bb04b5f056da7b1f", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   version('20150325-3.1') { source sha256: 'c88a5e4af83c5f40dda8455886ac98923a9c33125699742603a88a0253fcc8c5' }

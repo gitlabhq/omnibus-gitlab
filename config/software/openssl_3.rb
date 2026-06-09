@@ -34,9 +34,8 @@ vendor 'openssl'
 
 # UBT does not produce Arm64 binaries yet.
 if Build::Check.use_ubt?
-  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  ubt_version = "#{version_string}-1ubt"
-  source Build::UBT.source_args(name, ubt_version, "bbddbe2b68cd733eb194db34e1dc78cd5f8ca718c550d4dca8970f328fa259ba", OhaiHelper.arch)
+  ubt_version = "#{version_string}-3ubt"
+  source Build::UBT.source_args(name, ubt_version, "fca3d9910be129aacf1bfb2af6e97c8c0277089bcdf7386f3465039f3b3694d3", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source git: version.remote

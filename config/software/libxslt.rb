@@ -31,7 +31,7 @@ version('1.1.43') { source sha256: '5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea33
 if Build::Check.use_ubt?
   # versions_list: url=https://download.gnome.org/sources/libxslt/1.1/ filter=*.tar.xz
   # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  source Build::UBT.source_args(name, "#{default_version}-2ubt", "bd9da0cbb5b2e07f1e5ed8f0b488f235cf4c894dcfc24fd833e4cdeabeaea1c9", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{default_version}-3ubt", "5b5100c53e6353272b71d47cef8836e7c5b8bae54b081916038cd3c7ebba6415", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source url: "https://download.gnome.org/sources/libxslt/1.1/libxslt-#{version}.tar.xz"

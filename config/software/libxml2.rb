@@ -26,8 +26,7 @@ dependency 'libiconv'
 dependency 'config_guess'
 
 if Build::Check.use_ubt?
-  # NOTE: We cannot use UBT binaries in FIPS builds
-  source Build::UBT.source_args(name, "#{default_version}-2ubt", "759a032a498da19b523c8cb68c5cf11aa3e5197884a716afb7c5526fdd24b373", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{default_version}-3ubt", "3c6558096eba50827ebdf204c91b203566c2a28c4a201710d84a454edf660160", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   # version_list: url=https://download.gnome.org/sources/libxml2/2.12/ filter=*.tar.xz

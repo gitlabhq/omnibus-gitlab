@@ -23,32 +23,36 @@ version = Gitlab::Version.new('libicu', 'release-63-1')
 default_version version.print(false)
 display_version version.print(false).delete_prefix('release-').tr('-', '.')
 
-source git: version.remote
-
 license 'MIT'
 license_file 'icu4c/LICENSE'
-
 skip_transitive_dependency_licensing true
 
-build do
-  env = with_standard_compiler_flags(with_embedded_path)
-  env['LD_RPATH'] = "#{install_dir}/embedded/lib"
-  cwd = "#{Omnibus::Config.source_dir}/libicu/icu4c/source"
+if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
+  source Build::UBT.source_args("icu4c", "#{display_version}-3ubt", "5e844e49a4735f6cbd0262eaab3dbc94d34a55d04e549b95a0117d51c3c4c105", OhaiHelper.arch)
+  build(&Build::UBT.install)
+else
+  source git: version.remote
 
-  command ['./runConfigureICU',
-           'Linux/gcc',
-           "--prefix=#{install_dir}/embedded",
-           '--with-data-packaging=archive',
-           '--without-samples'].join(' '), env: env, cwd: cwd
+  build do
+    env = with_standard_compiler_flags(with_embedded_path)
+    env['LD_RPATH'] = "#{install_dir}/embedded/lib"
+    cwd = "#{Omnibus::Config.source_dir}/libicu/icu4c/source"
 
-  make "-j #{workers}", env: env, cwd: cwd
-  make 'install', env: env, cwd: cwd
+    command ['./runConfigureICU',
+             'Linux/gcc',
+             "--prefix=#{install_dir}/embedded",
+             '--with-data-packaging=archive',
+             '--without-samples'].join(' '), env: env, cwd: cwd
 
-  # The git repository uses the format release-MAJ-MIN for the release tags
-  # We need to reference the actual version number to create this link, which
-  # is required by Gitaly
-  actual_version = default_version.split('-')[1..2].join('.')
-  link "#{install_dir}/embedded/share/icu/#{actual_version}", "#{install_dir}/embedded/share/icu/current", force: true
+    make "-j #{workers}", env: env, cwd: cwd
+    make 'install', env: env, cwd: cwd
+
+    # The git repository uses the format release-MAJ-MIN for the release tags
+    # We need to reference the actual version number to create this link, which
+    # is required by Gitaly
+    actual_version = default_version.split('-')[1..2].join('.')
+    link "#{install_dir}/embedded/share/icu/#{actual_version}", "#{install_dir}/embedded/share/icu/current", force: true
+  end
 end
 
 project.exclude 'embedded/bin/icu-config'
