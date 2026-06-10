@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.0.2 (2026-06-10)
+
+### Changed (2 changes)
+
+- [Bump the builder revision to 5.55](gitlab-org/security/omnibus-gitlab@986eba648511c3e38210e0d7ed238e09e361db9d)
+- [Bump Container Registry to v4.40.1-gitlab](gitlab-org/security/omnibus-gitlab@6c1c04ba926b46cc3537542c20d2a30a5d808410)
+
 ## 19.0.1 (2026-05-26)
 
 No changes.
