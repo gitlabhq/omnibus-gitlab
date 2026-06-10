@@ -18,3 +18,7 @@
 runit_service 'gitlab-kas' do
   action :disable
 end
+
+nginx_configuration 'kas' do
+  action :delete
+end

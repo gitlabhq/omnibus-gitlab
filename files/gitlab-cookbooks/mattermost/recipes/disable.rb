@@ -25,3 +25,11 @@
 runit_service "mattermost" do
   action :disable
 end
+
+# The bundled Mattermost reverse-proxy was removed in 19.0. Always delete its
+# rendered config to clean up leftovers from earlier installs. Safe to remove
+# once the `mattermost` deprecation entry is dropped at the next required
+# upgrade stop.
+nginx_configuration 'mattermost' do
+  action :delete
+end

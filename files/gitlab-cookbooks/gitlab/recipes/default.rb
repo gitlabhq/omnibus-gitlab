@@ -167,10 +167,19 @@ end
   gitlab-pages
   registry
   gitlab-kas
+  oak
   letsencrypt
+  nginx
 ).each do |cookbook|
-  node_attribute_key = SettingsDSL::Utils.node_attribute_key(cookbook)
-  if node[node_attribute_key]["enable"]
+  # Temporary, until nginx is out of gitlab attribute block
+  enabled = if cookbook == 'nginx'
+              node['gitlab']['nginx']['enable']
+            else
+              node_attribute_key = SettingsDSL::Utils.node_attribute_key(cookbook)
+              node[node_attribute_key]["enable"]
+            end
+
+  if enabled
     include_recipe "#{cookbook}::enable"
   else
     include_recipe "#{cookbook}::disable"

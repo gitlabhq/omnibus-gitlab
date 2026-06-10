@@ -20,6 +20,23 @@ RSpec.describe 'registry recipe' do
     expect(chef_run.node['registry']['database']['sslmode']).to eq('prefer')
   end
 
+  context 'with default values' do
+    it 'does not include Registry enable recipe' do
+      expect(chef_run).not_to include_recipe('registry::enable')
+      expect(chef_run).to include_recipe('registry::disable')
+    end
+
+    context 'registry::disable recipe' do
+      let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir nginx_configuration)).converge('gitlab-base::config', 'registry::disable') }
+
+      it_behaves_like 'disabled runit service', 'registry'
+
+      it 'deletes nginx configuration' do
+        expect(chef_run).to delete_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-registry.conf')
+      end
+    end
+  end
+
   describe 'letsencrypt' do
     before do
       stub_gitlab_rb(

@@ -1,7 +1,7 @@
 require 'chef_helper'
 
 RSpec.describe 'mattermost::disable' do
-  let(:chef_run) { ChefSpec::SoloRunner.converge('gitlab-ee::default') }
+  let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir nginx_configuration)).converge('gitlab-ee::default') }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -11,7 +11,9 @@ RSpec.describe 'mattermost::disable' do
     expect(chef_run).to include_recipe('mattermost::disable')
   end
 
-  it 'declares the mattermost runit service as disabled' do
-    expect(chef_run).to disable_runit_service('mattermost')
+  it_behaves_like 'disabled runit service', 'mattermost'
+
+  it 'deletes nginx configuration' do
+    expect(chef_run).to delete_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-mattermost.conf')
   end
 end

@@ -167,3 +167,32 @@ runit_service 'gitlab-kas' do
   log_options logging_settings[:options]
   sensitive true
 end
+
+include_recipe 'nginx::directory'
+
+gitlab_kas_nginx_vars = node['gitlab']['gitlab_kas_nginx'].to_hash
+gitlab_kas_nginx_vars['https'] = gitlab_kas_nginx_vars['listen_https'] unless gitlab_kas_nginx_vars['listen_https'].nil?
+generate_nginx_conf = if node['gitlab']['nginx']['enable']
+                        !!gitlab_kas_nginx_vars['enable']
+                      else
+                        false
+                      end
+
+nginx_configuration 'kas' do
+  cookbook 'gitlab-kas'
+  variables(gitlab_kas_nginx_vars.merge(
+              {
+                fqdn: node['gitlab']['gitlab_kas_nginx']['host'],
+                listen_port: node['gitlab']['gitlab_kas_nginx']['port'],
+                gitlab_kas_listen_address: node['gitlab_kas']['listen_address'],
+                gitlab_kas_k8s_proxy_listen_address: node['gitlab_kas']['kubernetes_api_listen_address'],
+                gitlab_kas_k8s_proxy_connect_timeout: gitlab_kas_nginx_vars['k8s_proxy_connect_timeout'],
+                gitlab_kas_k8s_proxy_send_timeout: gitlab_kas_nginx_vars['k8s_proxy_send_timeout'],
+                gitlab_kas_k8s_proxy_read_timeout: gitlab_kas_nginx_vars['k8s_proxy_read_timeout'],
+                gitlab_kas_k8s_proxy_max_temp_file_size: gitlab_kas_nginx_vars['k8s_proxy_max_temp_file_size'],
+                gitlab_kas_listen_https: gitlab_kas_nginx_vars['listen_https'],
+                letsencrypt_enable: node['letsencrypt']['enable']
+              }
+            ))
+  action generate_nginx_conf ? :create : :delete
+end

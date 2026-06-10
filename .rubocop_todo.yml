@@ -431,7 +431,7 @@ Style/WordArray:
     - 'files/gitlab-ctl-commands/lib/praefect.rb'
     - 'lib/gitlab/ohai_helper.rb'
     - 'spec/chef/cookbooks/gitlab/recipes/gitlab-rails/gitlab_yml/omniauth_spec.rb'
-    - 'spec/chef/cookbooks/gitlab/recipes/nginx_spec.rb'
+    - 'spec/chef/cookbooks/nginx/recipes/nginx_spec.rb'
     - 'spec/chef/cookbooks/logrotate/recipes/folders_and_configs_spec.rb'
     - 'spec/chef/cookbooks/monitoring/recipes/prometheus_spec.rb'
     - 'spec/chef/cookbooks/package/libraries/deprecations_spec.rb'

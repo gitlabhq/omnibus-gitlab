@@ -1,6 +1,8 @@
 require 'chef_helper'
 
-RSpec.describe 'gitlab::nginx' do
+# Note: This spec requires converging on `gitlab::default` because of the sheer
+# number of recipes involved otherwise
+RSpec.describe 'nginx::enable' do
   let(:chef_runner) do
     ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)) do |node|
       node.normal['gitlab']['nginx']['enable'] = true
@@ -9,7 +11,7 @@ RSpec.describe 'gitlab::nginx' do
   end
 
   let(:chef_run) do
-    chef_runner.converge('gitlab-base::config', 'gitlab::nginx')
+    chef_runner.converge('gitlab-base::config', 'gitlab::nginx', 'nginx::enable', 'oak::enable')
   end
 
   let(:gitlab_http_config) { '/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf' }
@@ -160,6 +162,7 @@ RSpec.describe 'gitlab::nginx' do
       let(:chef_runner) do
         ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)) do |node|
           node.normal['gitlab']['nginx']['enable'] = true
+          node.normal['gitlab']['external_url'] = 'https://gitlab.example.com'
           node.normal['package']['install-dir'] = '/opt/gitlab'
           node.normal['letsencrypt']['enable'] = true
           node.normal['oak']['enable'] = true
@@ -216,7 +219,7 @@ end
 
 RSpec.describe 'nginx' do
   def nginx_chef_run
-    ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)).converge('gitlab-base::config', 'gitlab::nginx', 'logrotate::folders_and_configs')
+    ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)).converge('gitlab::default')
   end
 
   let(:chef_run) { nginx_chef_run }
@@ -439,7 +442,7 @@ RSpec.describe 'nginx' do
         "pages_nginx" => verify_client,
         "gitlab_kas_nginx" => verify_client
       )
-      chef_run.converge('gitlab-base::config', 'gitlab::nginx')
+      chef_run.converge('gitlab::default')
       http_conf.each_value do |conf|
         expect(chef_run).to render_file(conf).with_content { |content|
           expect(content).to include("ssl_verify_depth 1")
@@ -453,7 +456,7 @@ RSpec.describe 'nginx' do
                        "ssl_verify_client" => "on",
                        "ssl_verify_depth" => "2",
                      })
-      chef_run.converge('gitlab-base::config', 'gitlab::nginx')
+      chef_run.converge('gitlab::default')
       expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
         expect(content).to include("ssl_client_certificate /etc/gitlab/ssl/gitlab-http-ca.crt")
         expect(content).to include("ssl_verify_client on")
@@ -479,7 +482,7 @@ RSpec.describe 'nginx' do
                        "ssl_verify_client" => "off",
                        "ssl_verify_depth" => "5",
                      })
-      chef_run.converge('gitlab-base::config', 'gitlab::nginx')
+      chef_run.converge('gitlab::default')
       expect(chef_run).to render_file(http_conf['registry']).with_content { |content|
         expect(content).to include("ssl_client_certificate /etc/gitlab/ssl/gitlab-registry-ca.crt")
         expect(content).to include("ssl_verify_client off")
@@ -493,7 +496,7 @@ RSpec.describe 'nginx' do
                        "ssl_verify_client" => "on",
                        "ssl_verify_depth" => "7",
                      })
-      chef_run.converge('gitlab-base::config', 'gitlab::nginx')
+      chef_run.converge('gitlab::default')
       expect(chef_run).to render_file(http_conf['pages']).with_content { |content|
         expect(content).to include("ssl_client_certificate /etc/gitlab/ssl/gitlab-pages-ca.crt")
         expect(content).to include("ssl_verify_client on")
@@ -509,7 +512,7 @@ RSpec.describe 'nginx' do
           "ssl_verify_depth" => "7",
         }
       )
-      chef_run.converge('gitlab-base::config', 'gitlab::nginx')
+      chef_run.converge('gitlab::default')
       expect(chef_run).to render_file(http_conf['gitlab_kas']).with_content { |content|
         expect(content).to include("ssl_client_certificate /etc/gitlab/ssl/gitlab-kas-ca.crt")
         expect(content).to include("ssl_verify_client on")
@@ -682,7 +685,7 @@ RSpec.describe 'nginx' do
                        "status" => custom_nginx_status_config
                      })
 
-      chef_run.converge('gitlab-base::config', 'gitlab::nginx')
+      chef_run.converge('gitlab::default')
 
       expect(chef_run.node['gitlab']['nginx']['status']).to eql(custom_nginx_status_config)
     end
@@ -1365,7 +1368,7 @@ RSpec.describe 'nginx' do
   end
 end
 
-RSpec.describe 'gitlab::nginx with no total CPUs' do
+RSpec.describe 'nginx::enable with no total CPUs' do
   let(:chef_runner) do
     ChefSpec::SoloRunner.new(
       step_into: %w(runit_service nginx_configuration),
@@ -1373,7 +1376,7 @@ RSpec.describe 'gitlab::nginx with no total CPUs' do
   end
 
   let(:chef_run) do
-    chef_runner.converge('gitlab-base::config', 'gitlab::nginx')
+    chef_runner.converge('gitlab-base::config', 'nginx::enable')
   end
 
   it 'sets worker_processes to 16' do

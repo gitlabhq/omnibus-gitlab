@@ -208,6 +208,33 @@ RSpec.describe 'gitlab-kas' do
     it 'sets OWN_PRIVATE_API_HOST' do
       expect(chef_run).to render_file('/opt/gitlab/etc/gitlab-kas/env/OWN_PRIVATE_API_HOST').with_content('fake-host.example.com')
     end
+
+    context 'when explicitly disabled' do
+      let(:chef_run) { kas_chef_run }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_kas: {
+            enable: false
+          }
+        )
+      end
+
+      it 'does not include KAS enable recipe' do
+        expect(chef_run).not_to include_recipe('gitlab-kas::enable')
+        expect(chef_run).to include_recipe('gitlab-kas::disable')
+      end
+
+      context 'gitlab-kas::disable recipe' do
+        let(:chef_run) { ChefSpec::SoloRunner.new(step_into: %w(runit_service env_dir nginx_configuration)).converge('gitlab-base::config', 'gitlab-kas::disable') }
+
+        it_behaves_like 'disabled runit service', 'gitlab-kas'
+
+        it 'deletes nginx configuration' do
+          expect(chef_run).to delete_file('/var/opt/gitlab/nginx/conf/service_conf/gitlab-kas.conf')
+        end
+      end
+    end
   end
 
   describe 'gitlab.yml configuration' do

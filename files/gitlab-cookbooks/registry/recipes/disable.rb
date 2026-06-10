@@ -18,3 +18,7 @@
 runit_service "registry" do
   action :disable
 end
+
+nginx_configuration 'registry' do
+  action :delete
+end

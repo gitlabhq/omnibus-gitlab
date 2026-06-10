@@ -18,3 +18,7 @@
 runit_service "gitlab-pages" do
   action :disable
 end
+
+nginx_configuration 'pages' do
+  action :delete
+end
