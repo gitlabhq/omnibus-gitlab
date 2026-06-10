@@ -13,14 +13,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-runit_service "nginx" do
-  action :disable
+nginx_helper = OmnibusGitlab::NginxHelper.new(node)
+
+nginx_configuration 'gitlab-workhorse-upstream' do
+  path nginx_helper.upstream_definition_conf_path('gitlab-workhorse')
+  action :delete
 end
 
-consul_service node['gitlab']['nginx']['consul_service_name'] do
-  id 'nginx'
+nginx_configuration 'rails' do
   action :delete
-  reload_service false unless Services.enabled?('consul')
+end
+
+nginx_configuration 'smartcard' do
+  action :delete
+end
+
+nginx_configuration 'health' do
+  path nginx_helper.service_conf_path('health', suffix: 'partial')
+  action :delete
+end
+
+nginx_configuration 'rails-metrics' do
+  path nginx_helper.extra_metrics_conf_path('gitlab-rails')
+  action :delete
 end

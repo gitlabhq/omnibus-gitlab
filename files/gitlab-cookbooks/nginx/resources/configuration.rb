@@ -9,7 +9,7 @@ default_action :create
 property :name, [String]
 property :path, [String, nil]
 property :source, [String, nil]
-property :cookbook, [String, nil], default: 'gitlab'
+property :cookbook, [String, nil], default: 'nginx'
 property :variables, [Hash], default: {}
 property :nginx_helper, default: lazy { OmnibusGitlab::NginxHelper.new(node) }, sensitive: true
 property :omnibus_helper, default: lazy { OmnibusHelper.new(node) }, sensitive: true

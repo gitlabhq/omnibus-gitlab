@@ -114,6 +114,31 @@ runit_service 'registry' do
   log_options logging_settings[:options]
 end
 
+include_recipe 'nginx::directory'
+
+registry_nginx_vars = node['gitlab']['registry_nginx'].to_hash
+registry_nginx_vars['https'] = registry_nginx_vars['listen_https'] unless registry_nginx_vars['listen_https'].nil?
+generate_nginx_conf = if node['gitlab']['nginx']['enable']
+                        !!registry_nginx_vars['enable']
+                      else
+                        false
+                      end
+
+nginx_configuration 'registry' do
+  cookbook 'registry'
+  variables(registry_nginx_vars.merge(
+              {
+                registry_api_url: node['gitlab']['gitlab_rails']['registry_api_url'],
+                fqdn: node['gitlab']['gitlab_rails']['registry_host'],
+                port: node['gitlab']['gitlab_rails']['registry_port'],
+                registry_http_addr: node['registry']['registry_http_addr'],
+                letsencrypt_enable: node['letsencrypt']['enable'],
+                redirect_http_to_https: node['gitlab']['registry_nginx']['redirect_http_to_https']
+              }
+            ))
+  action generate_nginx_conf ? :create : :delete
+end
+
 version_file 'Create version file for Registry' do
   version_file_path File.join(working_dir, 'VERSION')
   version_check_cmd '/opt/gitlab/embedded/bin/registry --version'

@@ -122,3 +122,26 @@ runit_service 'gitlab-pages' do
   }.merge(params))
   log_options logging_settings[:options]
 end
+
+include_recipe 'nginx::directory'
+
+pages_nginx_vars = node['gitlab']['pages_nginx'].to_hash
+pages_nginx_vars['https'] = pages_nginx_vars['listen_https'].nil? ? node['gitlab']['gitlab_rails']['pages_https'] : pages_nginx_vars['listen_https']
+generate_nginx_conf = if node['gitlab']['nginx']['enable']
+                        !!pages_nginx_vars['enable']
+                      else
+                        false
+                      end
+
+nginx_configuration 'pages' do
+  cookbook 'gitlab-pages'
+  variables(pages_nginx_vars.merge(
+              {
+                pages_path: node['gitlab']['gitlab_rails']['pages_path'],
+                pages_listen_proxy: node['gitlab_pages']['listen_proxy'],
+                letsencrypt_enable: node['letsencrypt']['enable']
+              }
+            ))
+
+  action generate_nginx_conf ? :create : :delete
+end
