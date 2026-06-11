@@ -5,7 +5,7 @@ module OmnibusGitlab
     end
 
     def nginx_dir
-      @node['gitlab']['nginx']['dir']
+      @node['nginx']['dir']
     end
 
     def conf_dir

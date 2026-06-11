@@ -1,16 +1,16 @@
 require 'chef_helper'
 
 RSpec.describe Gitlab::Deprecations do
-  let(:valid_config) { { gitlab: { nginx: { listen_addresses: "SomeRandomString" } } } }
+  let(:valid_config) { { nginx: { listen_addresses: "SomeRandomString" } } }
   let(:invalid_config) do
     {
       "gitlab" => {
-        "nginx" => {
-          "listen_address" => "SomeRandomString"
-        },
         "gitlab-rails" => {
           "stuck_ci_builds_worker_cron" => "5 * * * *"
         }
+      },
+      "nginx" => {
+        "listen_address" => "SomeRandomString"
       },
       "mattermost" => {
         "system_read_timeout" => 50,
@@ -26,7 +26,7 @@ RSpec.describe Gitlab::Deprecations do
 
   let(:conf1) do
     {
-      config_keys: %w(gitlab nginx listen_address),
+      config_keys: %w(nginx listen_address),
       deprecation: '8.10',
       removal: '11.0',
       note: "Use nginx['listen_addresses'] instead."

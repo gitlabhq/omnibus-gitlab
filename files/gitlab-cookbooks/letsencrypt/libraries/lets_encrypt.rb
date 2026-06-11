@@ -50,7 +50,7 @@ class LetsEncrypt
     def nginx_enabled?
       [
         Gitlab['nginx']['enable'],
-        Gitlab[:node]['gitlab']['nginx']['enable'],
+        Gitlab[:node]['nginx']['enable'],
         true
       ].find { |e| !e.nil? }
     end

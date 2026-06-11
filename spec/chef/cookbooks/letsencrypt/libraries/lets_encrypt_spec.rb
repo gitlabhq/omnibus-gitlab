@@ -49,7 +49,7 @@ RSpec.describe LetsEncrypt do
   end
 
   context '.should_auto_enable?' do
-    let(:node) { Mash.new(gitlab: { nginx: {} }) }
+    let(:node) { Mash.new(nginx: {}) }
 
     before do
       stub_gitlab_rb(
@@ -84,7 +84,7 @@ RSpec.describe LetsEncrypt do
     end
 
     it 'is false when nginx is disabled by roles' do
-      allow(node['gitlab']['nginx']).to receive(:[]).with('enable').and_return(false)
+      allow(node['nginx']).to receive(:[]).with('enable').and_return(false)
 
       expect(subject.should_auto_enable?).to be_falsey
     end

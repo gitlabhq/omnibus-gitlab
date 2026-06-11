@@ -65,6 +65,11 @@ module Gitlab
   attribute('letsencrypt', priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry
   attribute('crond')
   attribute('logrotate')
+  attribute('nginx', priority: 40).use { Nginx } # Parse after gitlab_rails and oak; ports and listen addresses depend on them
+  attribute('mattermost_nginx')
+  attribute('pages_nginx')
+  attribute('registry_nginx')
+  attribute('gitlab_kas_nginx')
 
   # If a new attribute block is added, add it also to the class handling
   # deprecation messages at
@@ -102,7 +107,6 @@ module Gitlab
     attribute('puma',             priority: 20).use { Puma }
     attribute('mailroom',         priority: 20).use { IncomingEmail }
     attribute('storage_check',    priority: 30).use { StorageCheck }
-    attribute('nginx',            priority: 40).use { Nginx } # Parse nginx last so all external_url are parsed before it
     attribute('git_data_dirs',           default: ConfigMash.new)
     attribute('external_url',            default: nil)
     attribute('registry_external_url',   default: nil)
@@ -118,10 +122,6 @@ module Gitlab
     attribute('user')
     attribute('gitlab_ci')
     attribute('sidekiq').use { Sidekiq }
-    attribute('mattermost_nginx')
-    attribute('pages_nginx')
-    attribute('registry_nginx')
-    attribute('gitlab_kas_nginx')
     attribute('remote_syslog')
     attribute('high_availability')
     attribute('web_server')

@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-require_relative 'nginx.rb'
+require_relative '../../nginx/libraries/nginx'
 require_relative 'postgresql.rb'
 
 module Registry
