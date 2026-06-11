@@ -30,6 +30,18 @@ RSpec.describe GitlabHealthcheckHelper do
         expect(subject.url).to eq('https://localhost:443/help')
       end
 
+      it 'uses http when administrators terminate TLS externally' do
+        # For cases when administrators terminate TLS via a reverse
+        # proxy, external_url will listen on `https` but `listen_https`
+        # will be set to false. Ensure the helper always understands how
+        # to evaluate and apply this scenario.
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          nginx: { listen_https: false }
+        )
+        expect(subject.url).to eq('http://localhost:443/help')
+      end
+
       it 'uses the custom port from external_url' do
         stub_gitlab_rb(external_url: 'http://gitlab.example.com:8080')
         expect(subject.url).to eq('http://localhost:8080/help')
