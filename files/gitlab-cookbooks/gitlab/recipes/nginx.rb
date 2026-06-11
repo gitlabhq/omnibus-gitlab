@@ -29,21 +29,21 @@ gitlab_rails_health_conf = nginx_helper.service_conf_path('health', suffix: 'par
 
 # If the service is enabled, check if we are using internal nginx
 gitlab_rails_enabled = if node['gitlab']['gitlab_rails']['enable']
-                         node['gitlab']['nginx']['enable']
+                         node['nginx']['enable']
                        else
                          false
                        end
 
 gitlab_rails_smartcard_enabled = if node['gitlab']['gitlab_rails']['enable']
-                                   node['gitlab']['nginx']['enable'] && node['gitlab']['gitlab_rails']['smartcard_enabled']
+                                   node['nginx']['enable'] && node['gitlab']['gitlab_rails']['smartcard_enabled']
                                  else
                                    false
                                  end
 
 # Include the config file for gitlab-rails in nginx.conf later
-nginx_vars = node['gitlab']['nginx'].to_hash.merge({
-                                                     gitlab_http_config: gitlab_rails_enabled ? gitlab_rails_http_conf : nil
-                                                   })
+nginx_vars = node['nginx'].to_hash.merge({
+                                           gitlab_http_config: gitlab_rails_enabled ? gitlab_rails_http_conf : nil
+                                         })
 
 # Include the config file for gitlab-rails-smartcard in nginx.conf later
 nginx_vars = nginx_vars.to_hash.merge!({
@@ -61,7 +61,7 @@ nginx_vars['https'] = if nginx_vars['listen_https'].nil?
                         nginx_vars['listen_https']
                       end
 
-nginx_vars['gzip'] = node['gitlab']['nginx']['gzip_enabled'] ? "on" : "off"
+nginx_vars['gzip'] = node['nginx']['gzip_enabled'] ? "on" : "off"
 
 root_path = node['gitlab']['gitlab_rails']['gitlab_relative_url'] || '/'
 api_path = root_path == "/" ? "/api" : File.join(root_path, "/api")
@@ -110,7 +110,7 @@ nginx_configuration 'rails' do
           kerberos_use_dedicated_port: node['gitlab']['gitlab_rails']['kerberos_use_dedicated_port'],
           kerberos_port: node['gitlab']['gitlab_rails']['kerberos_port'],
           kerberos_https: node['gitlab']['gitlab_rails']['kerberos_https'],
-          redirect_http_to_https: node['gitlab']['nginx']['redirect_http_to_https']
+          redirect_http_to_https: node['nginx']['redirect_http_to_https']
         }
       )
     end
@@ -129,7 +129,7 @@ gitlab_rails_smartcard_nginx_vars = {
       'X-SSL-Client-Certificate' => '$ssl_client_cert'
     }
   ),
-  redirect_http_to_https: node['gitlab']['nginx']['redirect_http_to_https']
+  redirect_http_to_https: node['nginx']['redirect_http_to_https']
 }
 
 gitlab_rails_smartcard_nginx_vars['fqdn'] = node['gitlab']['gitlab_rails']['smartcard_client_certificate_required_host'] unless node['gitlab']['gitlab_rails']['smartcard_client_certificate_required_host'].nil?
@@ -163,7 +163,7 @@ nginx_configuration 'rails-metrics' do
   cookbook 'gitlab'
   path nginx_helper.extra_metrics_conf_path('gitlab-rails')
   variables({
-              options: node['gitlab']['nginx']['status']['options'],
+              options: node['nginx']['status']['options'],
             })
 end
 

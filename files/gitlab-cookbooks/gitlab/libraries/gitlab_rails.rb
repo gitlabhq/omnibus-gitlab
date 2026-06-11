@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require_relative 'nginx.rb'
+require_relative '../../nginx/libraries/nginx'
 require_relative '../../gitaly/libraries/gitaly.rb'
 require_relative '../../package/libraries/settings_dsl.rb'
 require_relative '../../package/libraries/helpers/redis_helper/gitlab_rails'
@@ -399,7 +399,7 @@ module GitlabRails
     end
 
     def parse_gitlab_trusted_proxies
-      Gitlab['nginx']['real_ip_trusted_addresses'] ||= Gitlab['node']['gitlab']['nginx']['real_ip_trusted_addresses']
+      Gitlab['nginx']['real_ip_trusted_addresses'] ||= Gitlab['node']['nginx']['real_ip_trusted_addresses']
       Gitlab['gitlab_rails']['trusted_proxies'] = Gitlab['nginx']['real_ip_trusted_addresses'] if Gitlab['gitlab_rails']['trusted_proxies'].nil?
     end
 

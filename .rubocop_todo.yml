@@ -280,7 +280,7 @@ Style/HashTransformValues:
 Style/HashTransformation:
   Exclude:
     - 'files/gitlab-cookbooks/gitaly/libraries/gitaly.rb'
-    - 'files/gitlab-cookbooks/gitlab/libraries/nginx.rb'
+    - 'files/gitlab-cookbooks/nginx/libraries/nginx.rb'
     - 'lib/gitlab/deployer_helper.rb'
 
 # Offense count: 43
@@ -424,7 +424,7 @@ Style/TrailingCommaInHashLiteral:
 # SupportedStyles: percent, brackets
 Style/WordArray:
   Exclude:
-    - 'files/gitlab-cookbooks/gitlab/libraries/nginx.rb'
+    - 'files/gitlab-cookbooks/nginx/libraries/nginx.rb'
     - 'files/gitlab-cookbooks/package/libraries/config/services.rb'
     - 'files/gitlab-cookbooks/package/libraries/deprecations.rb'
     - 'files/gitlab-ctl-commands-ee/lib/gitlab_ctl/postgresql/ee.rb'

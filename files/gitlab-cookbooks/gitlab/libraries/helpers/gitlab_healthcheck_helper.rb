@@ -31,7 +31,7 @@ class GitlabHealthcheckHelper < BaseHelper
   private
 
   def nginx_enabled?
-    node['gitlab']['nginx']['enable']
+    node['nginx']['enable']
   end
 
   def workhorse_enabled?
@@ -46,14 +46,14 @@ class GitlabHealthcheckHelper < BaseHelper
     return 'http' unless nginx_enabled?
 
     # Fallback to the setting derived from external_url when listen_https is unset
-    listen_https = node['gitlab']['nginx']['listen_https']
+    listen_https = node['nginx']['listen_https']
     listen_https = node['gitlab']['gitlab_rails']['gitlab_https'] if listen_https.nil?
     listen_https ? 'https' : 'http'
   end
 
   def host
     if nginx_enabled?
-      "localhost:#{node['gitlab']['nginx']['listen_port']}"
+      "localhost:#{node['nginx']['listen_port']}"
     elsif workhorse_helper.unix_socket?
       'localhost'
     else
@@ -69,7 +69,7 @@ class GitlabHealthcheckHelper < BaseHelper
     flags = []
     allowed_hosts = node['gitlab']['gitlab_rails']['allowed_hosts']
     flags << "--header \"Host: #{allowed_hosts[0]}\"" unless allowed_hosts.empty?
-    flags << '--haproxy-protocol' if node['gitlab']['nginx']['proxy_protocol']
+    flags << '--haproxy-protocol' if node['nginx']['proxy_protocol']
     flags << '--insecure'
     flags
   end

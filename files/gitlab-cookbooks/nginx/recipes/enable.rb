@@ -23,11 +23,9 @@ nginx_conf_dir = nginx_helper.conf_dir
 
 # NGINX Status configuration
 nginx_status_conf = File.join(nginx_conf_dir, "nginx-status.conf")
-nginx_status_enabled = node['gitlab']['nginx']['status']['enable']
-
-nginx_vars = node['gitlab']['nginx'].to_hash
-nginx_vars['gzip'] = node['gitlab']['nginx']['gzip_enabled'] ? "on" : "off"
-
+nginx_status_enabled = node['nginx']['status']['enable']
+nginx_vars = node['nginx'].to_hash
+nginx_vars['gzip'] = node['nginx']['gzip_enabled'] ? "on" : "off"
 nginx_vars = nginx_vars.to_hash.merge!({
                                          nginx_status_config: nginx_status_enabled ? nginx_status_conf : nil
                                        })
@@ -54,19 +52,19 @@ nginx_consul_action = if nginx_status_enabled && Prometheus.service_discovery
                         :delete
                       end
 
-consul_service node['gitlab']['nginx']['consul_service_name'] do
+consul_service node['nginx']['consul_service_name'] do
   id 'nginx'
   action nginx_consul_action
-  ip_address node['gitlab']['nginx']['status']['listen_addresses'].first
-  port node['gitlab']['nginx']['status']['port']
+  ip_address node['nginx']['status']['listen_addresses'].first
+  port node['nginx']['status']['port']
   reload_service false unless Services.enabled?('consul')
 end
 
 # NGINX root configuration
 nginx_config = File.join(nginx_conf_dir, "nginx.conf")
 
-nginx_vars['gitlab_access_log_format'] = node['gitlab']['nginx']['log_format']
-nginx_vars['gitlab_nginx_log_format_escape'] = node['gitlab']['nginx']['log_format_escape']
+nginx_vars['gitlab_access_log_format'] = node['nginx']['log_format']
+nginx_vars['gitlab_nginx_log_format_escape'] = node['nginx']['log_format_escape']
 
 template nginx_config do
   source "nginx.conf.erb"
@@ -82,7 +80,7 @@ logfiles_helper = LogfilesHelper.new(node)
 logging_settings = logfiles_helper.logging_settings('nginx')
 
 runit_service "nginx" do
-  start_down node['gitlab']['nginx']['ha']
+  start_down node['nginx']['ha']
   options({
     log_directory: logging_settings[:log_directory],
     log_user: logging_settings[:runit_owner],
@@ -92,7 +90,7 @@ runit_service "nginx" do
 end
 
 version_file 'Create version file for NGINX' do
-  version_file_path File.join(node['gitlab']['nginx']['dir'], 'VERSION')
+  version_file_path File.join(node['nginx']['dir'], 'VERSION')
   version_check_cmd '/opt/gitlab/embedded/sbin/nginx -ver 2>&1'
   notifies :restart, 'runit_service[nginx]'
 end

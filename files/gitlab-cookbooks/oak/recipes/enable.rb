@@ -1,7 +1,7 @@
 include_recipe 'nginx::directory'
 
 node['oak']['components'].each do |name, config|
-  generate_nginx_conf = if node['gitlab']['nginx']['enable']
+  generate_nginx_conf = if node['nginx']['enable']
                           !!config['enable']
                         else
                           false
@@ -14,7 +14,7 @@ node['oak']['components'].each do |name, config|
       lazy do
         case name
         when 'openbao'
-          node['gitlab']['nginx'].to_hash.merge(
+          node['nginx'].to_hash.merge(
             fqdn: config['fqdn'],
             listen_port: config['listen_port'],
             openbao_internal_url: config['internal_url'],

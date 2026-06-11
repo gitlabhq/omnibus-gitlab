@@ -29,7 +29,7 @@ module Nginx
       return unless Gitlab['oak']['enable']
 
       listen_addresses = Gitlab['nginx']['listen_addresses'] ||
-        Gitlab['node']['gitlab']['nginx']['listen_addresses']
+        Gitlab['node']['nginx']['listen_addresses']
       return if listen_addresses.include?(Gitlab['oak']['network_address'])
 
       Gitlab['nginx']['listen_addresses'] = listen_addresses + [Gitlab['oak']['network_address']]
@@ -85,7 +85,7 @@ module Nginx
     def parse_proxy_headers(app, ssl, allow_other_schemes = false)
       values_from_gitlab_rb = Gitlab[app]['proxy_set_headers']
       dashed_app = SettingsDSL::Utils.node_attribute_key(app)
-      default_from_attributes = Gitlab['node']['gitlab'][dashed_app]['proxy_set_headers'].to_hash
+      default_from_attributes = Gitlab['node'][dashed_app]['proxy_set_headers'].to_hash
 
       default_from_attributes['X-Forwarded-Ssl'] = 'on' if ssl
 
@@ -104,7 +104,7 @@ module Nginx
       if values_from_gitlab_rb
         values_from_gitlab_rb.each do |key, value|
           if value.nil?
-            default_attrs = Gitlab['node'].default['gitlab'][dashed_app]['proxy_set_headers']
+            default_attrs = Gitlab['node'].default[dashed_app]['proxy_set_headers']
             default_attrs.delete(key)
           end
         end

@@ -4,8 +4,8 @@ omnibus_helper = OmnibusHelper.new(node)
 
 # ../resources/certificate.rb
 letsencrypt_certificate site do
-  crt node['gitlab']['nginx']['ssl_certificate']
-  key node['gitlab']['nginx']['ssl_certificate_key']
+  crt node['nginx']['ssl_certificate']
+  key node['nginx']['ssl_certificate_key']
   notifies :run, "execute[reload nginx]", :immediate
   notifies :run, 'ruby_block[display_le_message]'
   only_if { omnibus_helper.service_up?('nginx') }

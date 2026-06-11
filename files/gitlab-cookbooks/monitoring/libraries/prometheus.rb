@@ -509,7 +509,7 @@ module Prometheus
           'consul_sd_configs' => [{ 'services' => ['nginx'] }]
         }
       else
-        default_config = Gitlab['node']['gitlab']['nginx']['status'].to_hash
+        default_config = Gitlab['node']['nginx']['status'].to_hash
         user_config = Gitlab['nginx']
 
         if user_config['status']

@@ -93,7 +93,7 @@ RSpec.describe 'letsencrypt::enable' do
 
       with_them do
         it 'redirects http to https' do
-          expect(node['gitlab'][redirect_config_key]['redirect_http_to_https']).to be_truthy
+          expect(node[redirect_config_key]['redirect_http_to_https']).to be_truthy
         end
 
         it 'includes the well known acme challenge location block' do

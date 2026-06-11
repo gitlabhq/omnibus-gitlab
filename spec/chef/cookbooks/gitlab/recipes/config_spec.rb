@@ -14,7 +14,7 @@ RSpec.describe 'gitlab-base::config' do
       expect(node['gitlab']['sidekiq']['enable']).to eq false
       expect(node['gitlab']['gitlab_workhorse']['enable']).to eq false
       expect(node['gitaly']['enable']).to eq false
-      expect(node['gitlab']['nginx']['enable']).to eq false
+      expect(node['nginx']['enable']).to eq false
       expect(node['postgresql']['enable']).to eq false
       expect(node['gitlab']['mailroom']['enable']).to eq false
       expect(node['monitoring']['gitlab_exporter']['enable']).to eq false
@@ -65,7 +65,7 @@ RSpec.describe 'gitlab-base::config' do
     end
 
     it 'still leaves other default service enabled' do
-      expect(node['gitlab']['nginx']['enable']).to eq true
+      expect(node['nginx']['enable']).to eq true
       expect(node['postgresql']['enable']).to eq true
       expect(node['redis']['enable']).to eq true
       expect(node['monitoring']['prometheus']['enable']).to eq true
