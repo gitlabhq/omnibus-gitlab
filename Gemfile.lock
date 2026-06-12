@@ -173,6 +173,7 @@ GEM
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
     builder (3.2.4)
+    cgi (0.5.1)
     chef-cleanroom (1.0.5)
     chef-telemetry (1.1.1)
       chef-config
@@ -227,6 +228,8 @@ GEM
       multi_json
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
+    erb (4.0.3.1)
+      cgi (>= 0.3.3)
     erubi (1.12.0)
     erubis (2.7.0)
     excon (0.76.0)
@@ -650,6 +653,7 @@ DEPENDENCIES
   chefspec!
   debug
   docker-api
+  erb (= 4.0.3.1)
   fantaskspec
   fauxhai-chef (~> 9.4.10)!
   ffi (= 1.17.2)
