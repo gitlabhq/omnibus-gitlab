@@ -48,6 +48,7 @@ gem 'toml-rb'
 gem 'retriable'
 gem 'tomlib', '~> 0.6.0'
 gem 'google-cloud-storage'
+gem 'erb', '4.0.3.1'
 
 group :danger, optional: true do
   gem 'gitlab-dangerfiles', '~> 4.9', require: false
