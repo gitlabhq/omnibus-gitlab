@@ -549,7 +549,7 @@ update-knapsack:
 
 package_size_check:
   extends: .gems-cache
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/distribution_ci_tools:${BUILDER_IMAGE_REVISION}"
   stage: qa
   script:
     - bundle exec rake build:package:generate_sizefile
