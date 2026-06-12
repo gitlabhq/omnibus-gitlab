@@ -127,6 +127,7 @@ GEM
     base64 (0.2.0)
     bigdecimal (3.1.8)
     builder (3.2.4)
+    cgi (0.5.1)
     chef-licensing (0.7.5)
       activesupport (~> 7.0, < 7.1)
       chef-config (>= 15)
@@ -149,6 +150,8 @@ GEM
     diff-lcs (1.3)
     domain_name (0.6.20240107)
     em-resolv-replace (1.1.3)
+    erb (4.0.3.1)
+      cgi (>= 0.3.3)
     erubi (1.12.0)
     erubis (2.7.0)
     eventmachine (1.2.7)
@@ -420,6 +423,7 @@ DEPENDENCIES
   chef-cli (= 5.6.14)!
   chef-config (= 18.3.0)!
   chef-zero (= 15.0.11)!
+  erb (>= 4.0.3.1)
   faraday (= 2.8.1)
   faraday-net_http (= 3.0.2)
   ffi (= 1.17.4)
@@ -450,6 +454,8 @@ CHECKSUMS
   base64 (0.2.0) sha256=0f25e9b21a02a0cc0cea8ef92b2041035d39350946e8789c562b2d1a3da01507
   bigdecimal (3.1.8) sha256=a89467ed5a44f8ae01824af49cbc575871fa078332e8f77ea425725c1ffe27be
   builder (3.2.4) sha256=99caf08af60c8d7f3a6b004029c4c3c0bdaebced6c949165fe98f1db27fbbc10
+  bundler (4.0.12) sha256=7f8b757d28dfb636e7b24fba2344ac6dd13b5b24f4b46d62573d483f211825ac
+  cgi (0.5.1) sha256=e93fcafc69b8a934fe1e6146121fa35430efa8b4a4047c4893764067036f18e9
   chef (18.3.0) sha256=ef1ed56a52ad4c9008225906329e75da7ab03ccde8ad0671053ab5e11df849fa
   chef-bin (18.3.0) sha256=062be04cae6fc2b141374375ec5367ddd77bf88f6514962047af9b0a7a632e91
   chef-cli (5.6.14) sha256=6b5142f7e7ed354b9b5ab35dbf6a71657eae9a9f253eb1a0f04d58061e130a35
@@ -468,6 +474,7 @@ CHECKSUMS
   diff-lcs (1.3) sha256=ea7bf591567e391ef262a7c29edaf87c6205204afb5bb39dfa8f08f2e51282a3
   domain_name (0.6.20240107) sha256=5f693b2215708476517479bf2b3802e49068ad82167bcd2286f899536a17d933
   em-resolv-replace (1.1.3) sha256=e7e1a51fecb0c29719dd57243ca28942675ebc7a1c17b04d8936945b7f26bef0
+  erb (4.0.3.1) sha256=bcaaef8cbaa9c46674487c95636050820262ba61293cf33f10242a90dc80654f
   erubi (1.12.0) sha256=27bedb74dfb1e04ff60674975e182d8ca787f2224f2e8143268c7696f42e4723
   erubis (2.7.0) sha256=63653f5174a7997f6f1d6f465fbe1494dcc4bdab1fb8e635f6216989fb1148ba
   eventmachine (1.2.7) sha256=994016e42aa041477ba9cff45cbe50de2047f25dd418eba003e84f0d16560972
