@@ -43,7 +43,11 @@ gitlab_healthcheck_rc='/opt/gitlab/etc/gitlab-healthcheck-rc'
 
 
 if ! [ -f ${gitlab_healthcheck_rc} ] ; then
-  exit 1
+  # The rc file is only rendered when a web service (nginx/workhorse) is
+  # enabled.  For non-web roles (e.g. consul, pgbouncer) the file should
+  # not exist. Do not mark non-web roles as unhealthy due to lack of file.
+  error_echo "gitlab-healthcheck: ${gitlab_healthcheck_rc} not found; skipping HTTP health check (expected for non-web roles)"
+  exit 0
 fi
 
 . ${gitlab_healthcheck_rc}
