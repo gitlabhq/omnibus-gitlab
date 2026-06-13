@@ -23,7 +23,7 @@ name 'python3'
 # files/gitlab-cookbooks/gitlab/attributes/default.rb
 # spec/chef/cookbooks/gitaly/recipes/gitaly_spec.rb
 # spec/chef/cookbooks/gitlab/recipes/gitlab-rails_spec.rb
-default_version '3.12.12'
+default_version '3.12.13'
 
 dependency 'libedit'
 dependency 'ncurses'
@@ -40,7 +40,7 @@ license_file 'LICENSE'
 skip_transitive_dependency_licensing true
 
 source url: "https://www.python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       sha256: '487c908ddf4097a1b9ba859f25fe46d22ccaabfb335880faac305ac62bffb79b'
+       sha256: '0816c4761c97ecdb3f50a3924de0a93fd78cb63ee8e6c04201ddfaedca500b0b'
 
 relative_path "Python-#{version}"
 
