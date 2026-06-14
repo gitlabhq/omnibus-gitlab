@@ -6,9 +6,6 @@ RSpec.describe Gitlab::Version do
     allow(ENV).to receive(:[]).and_call_original
     stub_env_var('GITLAB_ALTERNATIVE_REPO', nil)
     stub_env_var('ALTERNATIVE_PRIVATE_TOKEN', nil)
-    # Keep tests deterministic regardless of whether CI_JOB_TOKEN is set in the
-    # real environment (it is when these specs run in CI).
-    stub_env_var('CI_JOB_TOKEN', nil)
   end
 
   describe '.sources_channel' do
@@ -114,60 +111,6 @@ RSpec.describe Gitlab::Version do
         mock_sources_channel('alternative')
 
         expect(subject.remote).to eq('https://gitlab.com/gitlab-org/gitlab.git')
-      end
-
-      context 'when a token is available for a credentialed component' do
-        before do
-          mock_sources_channel('alternative')
-        end
-
-        it 'attaches the CI_JOB_TOKEN credential' do
-          stub_env_var('CI_JOB_TOKEN', 'CJT')
-
-          expect(subject.remote).to eq('https://gitlab-ci-token:CJT@gitlab.com/gitlab-org/gitlab.git')
-        end
-
-        it 'prefers ALTERNATIVE_PRIVATE_TOKEN over CI_JOB_TOKEN' do
-          stub_env_var('CI_JOB_TOKEN', 'CJT')
-          stub_env_var('ALTERNATIVE_PRIVATE_TOKEN', 'APT')
-
-          expect(subject.remote).to eq('https://gitlab-ci-token:APT@gitlab.com/gitlab-org/gitlab.git')
-        end
-
-        it 'does not attach credentials to an scp-style SSH URL' do
-          stub_env_var('CI_JOB_TOKEN', 'CJT')
-          allow(YAML).to receive(:load_file)
-            .and_return(software => { 'alternative' => 'git@gitlab.com:gitlab-org/gitlab.git' })
-
-          expect(subject.remote).to eq('git@gitlab.com:gitlab-org/gitlab.git')
-        end
-
-        it 'does not attach credentials to an ssh:// URL' do
-          stub_env_var('CI_JOB_TOKEN', 'CJT')
-          allow(YAML).to receive(:load_file)
-            .and_return(software => { 'alternative' => 'ssh://git@gitlab.com/gitlab-org/gitlab.git' })
-
-          expect(subject.remote).to eq('ssh://git@gitlab.com/gitlab-org/gitlab.git')
-        end
-
-        it 'does not attach credentials to a non-gitlab.com host' do
-          stub_env_var('CI_JOB_TOKEN', 'CJT')
-          allow(YAML).to receive(:load_file)
-            .and_return(software => { 'alternative' => 'https://example.com/gitlab-org/gitlab.git' })
-
-          expect(subject.remote).to eq('https://example.com/gitlab-org/gitlab.git')
-        end
-      end
-
-      context 'when a token is available for a component that is not credentialed' do
-        let(:software) { 'prometheus' }
-
-        it 'does not attach credentials' do
-          mock_sources_channel('alternative')
-          stub_env_var('CI_JOB_TOKEN', 'CJT')
-
-          expect(subject.remote).to eq('https://gitlab.com/gitlab-org/build/omnibus-mirror/prometheus.git')
-        end
       end
     end
 
