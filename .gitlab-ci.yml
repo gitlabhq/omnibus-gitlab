@@ -103,6 +103,29 @@ default:
   - bundle exec rake build:component_shas
 
 before_script:
+  - |
+    # Write the gitlab.com auth config to the file GIT_CONFIG_GLOBAL points at,
+    # so every git invocation -- including those omnibus spawns -- honours it.
+    # This must run in before_script (not `variables:`): GitLab expands
+    # ${CI_JOB_TOKEN} when resolving variables, before the job token exists, so
+    # the credential helper must be written here where the token is available.
+    # The quoted heredoc (<<'GITCFG') keeps ${CI_JOB_TOKEN} literal so the
+    # helper's shell expands it at clone time -- the token never lands in the
+    # file on disk. proactiveAuth is path-scoped to gitlab-org/gitlab (the only
+    # project the CI job token is allowlisted for) so other gitlab.com mirrors
+    # keep cloning anonymously. The [user] identity is a fallback for omnibus'
+    # git cache, which only writes a --local identity when first created.
+    mkdir -p "$(dirname "${GIT_CONFIG_GLOBAL}")"
+    cat > "${GIT_CONFIG_GLOBAL}" <<'GITCFG'
+    [credential "https://gitlab.com"]
+        helper = "!f() { echo username=gitlab-ci-token; echo \"password=${CI_JOB_TOKEN}\"; }; f"
+    [http "https://gitlab.com/gitlab-org/gitlab.git"]
+        proactiveAuth = basic
+    [user]
+        name = Omnibus GitLab
+        email = omnibus@gitlab.com
+    GITCFG
+    chmod 600 "${GIT_CONFIG_GLOBAL}"
   - echo "PIPELINE_TYPE detected as ${PIPELINE_TYPE}"
   # Exit early if building on an OS for which we don't provide the specified
   # package edition (CE/EE). For child pipelines from
