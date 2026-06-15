@@ -39,13 +39,34 @@ module Pgbouncer
       @groupinfo = GitlabCtl::Util.groupinfo(options['host_group']) if options['host_group']
     end
 
+    # Component databases declared in postgresql['component_databases'].
+    # By definition these live on the same physical cluster as the Rails
+    # database, so every enabled entry should receive failover host
+    # updates. The PG name is the entry's `database` field, falling back
+    # to the registry key.
+    def component_database_names
+      entries = attributes.dig('postgresql', 'component_databases') || {}
+      entries.each_with_object([]) do |(key, config), acc|
+        next unless config.is_a?(Hash) && config['enable'] == true
+
+        acc << (config['database'] || key)
+      end
+    end
+
     def update_databases(original = {})
       rails_databases = attributes.dig('gitlab', 'gitlab_rails', 'databases')&.values
       rails_databases = rails_databases ? rails_databases.uniq : [DEFAULT_RAILS_DATABASE]
 
+      logical_databases = (component_database_names + rails_databases).uniq
+
       updated = {}
 
-      original = rails_databases.to_h { |db| [db, {}] } if original.empty?
+      # When databases.json is empty (clean bootstrap or stale-state
+      # recovery), seed the working set from the full Patroni-replicated
+      # universe -- Rails DBs plus every enabled component DB. Using
+      # rails_databases alone here silently drops every component entry
+      # from the failover update path.
+      original = logical_databases.to_h { |db| [db, {}] } if original.empty?
 
       original.each do |db, settings|
         settings.delete('password')
@@ -54,19 +75,9 @@ module Pgbouncer
 
         settings['auth_user'] = settings.delete('user') if settings.key?('user')
 
-        is_rails_db = rails_databases.include?(db)
+        is_logical_db = logical_databases.include?(db)
 
-        if db == @database || is_rails_db
-          settings['host'] = options['newhost'] if options['newhost']
-          settings['port'] = options['port'] if options['port']
-          settings['auth_user'] = options['user'] if options['user']
-
-          if is_rails_db
-            settings['dbname'] = db
-          elsif options['pg_database']
-            settings['dbname'] = options['pg_database']
-          end
-        end
+        apply_failover_updates(db, settings, is_logical_db) if db == @database || is_logical_db
 
         settings.each do |setting, value|
           updated[db] << " #{setting}=#{value}"
@@ -76,6 +87,25 @@ module Pgbouncer
       end
 
       updated
+    end
+
+    # Apply --newhost / --port / --user / dbname updates to a single
+    # entry that has been matched as either the explicitly-targeted DB
+    # or a known Patroni-replicated DB.
+    def apply_failover_updates(db, settings, is_logical_db)
+      settings['host'] = options['newhost'] if options['newhost']
+      settings['port'] = options['port'] if options['port']
+      settings['auth_user'] = options['user'] if options['user']
+
+      if is_logical_db
+        # For any DB on the local Patroni cluster (Rails or component),
+        # dbname always equals the entry name. The --pg-database CLI
+        # option is a single-target escape hatch for the explicitly
+        # selected DB (@database) when it is not in any known list.
+        settings['dbname'] = db
+      elsif db == @database && options['pg_database']
+        settings['dbname'] = options['pg_database']
+      end
     end
 
     def database_ini_template

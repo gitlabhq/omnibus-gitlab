@@ -30,6 +30,10 @@ default['pgbouncer']['databases_ini'] = '/var/opt/gitlab/pgbouncer/databases.ini
 default['pgbouncer']['databases_ini_user'] = 'root'
 default['pgbouncer']['databases_json'] = '/var/opt/gitlab/pgbouncer/databases.json'
 default['pgbouncer']['databases'] = {}
+# Whether to automatically add a pool entry for every enabled
+# postgresql['component_databases'] entry. Operator-supplied entries in
+# pgbouncer['databases'] always win.
+default['pgbouncer']['pool_component_databases'] = true
 default['pgbouncer']['logfile'] = nil
 default['pgbouncer']['unix_socket_dir'] = nil
 default['pgbouncer']['unix_socket_mode'] = '0777'

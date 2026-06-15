@@ -23,7 +23,7 @@ Cop/AvoidReturnFromBlocks:
 Cop/LineBreakAroundConditionalBlock:
   Enabled: false
 
-# Offense count: 8
+# Offense count: 10
 Fips/MD5:
   Exclude:
     - 'config/software/gitlab-geo-psql.rb'
@@ -35,8 +35,11 @@ Fips/MD5:
     - 'files/gitlab-cookbooks/gitlab/libraries/helpers/base_pg_helper.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/postgresql.rb'
     - 'files/gitlab-cookbooks/gitlab/libraries/rails_migration_helper.rb'
+    - 'files/gitlab-cookbooks/postgresql/libraries/component_database_registry.rb'
     - 'files/gitlab-ctl-commands/lib/gitlab_ctl/postgresql/password_hash.rb'
     - 'spec/chef/cookbooks/gitlab/libraries/postgresql_spec.rb'
+    - 'spec/chef/cookbooks/postgresql/libraries/component_database_registry_spec.rb'
+    - 'spec/chef/cookbooks/postgresql/recipes/managed_databases_spec.rb'
 
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
